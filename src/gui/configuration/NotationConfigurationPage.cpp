@@ -345,6 +345,48 @@ NotationConfigurationPage::NotationConfigurationPage(QWidget *parent) :
     layout->addWidget(m_pasteType, row, 1, 1, 2);
     ++row;
 
+    layout->setRowMinimumHeight(row, 20);
+    ++row;
+
+    bool preview = qStrToBool(settings.value("alwayspreview", "true")) ;
+
+    QLabel * previewLabel = new QLabel
+         (tr("Always show note preview"), frame);
+    layout->addWidget(previewLabel, row, 0, 1, 2);
+    m_preview = new QCheckBox(frame);
+    connect(m_preview, SIGNAL(stateChanged(int)), this, SLOT(slotModified()));
+    m_preview->setChecked(preview);
+    QString previewTip(tr(
+        "<p>If checked, a preview of the note or rest is always displayed"
+        " when inserting notes or rests with the mouse</p>"));
+    previewLabel->setToolTip(previewTip);
+    m_preview->setToolTip(previewTip);
+   layout->addWidget(m_preview, row, 2, 1, 1);
+    ++row;
+
+    bool quickEdit = qStrToBool(settings.value("quickedit", "true"));
+
+    QLabel * quickEditLabel = new QLabel(
+         tr("Quick edition mode"),
+         frame);
+    layout->addWidget(quickEditLabel, row, 0, 1, 2);
+    m_quickEdit = new QCheckBox(frame);
+    connect(m_quickEdit, SIGNAL(stateChanged(int)), this, SLOT(slotModified()));
+    m_quickEdit->setChecked(quickEdit);
+    QString quickEditTip(tr(
+        "<p>If checked, the following features are usable while inserting notes"
+        " with the mouse:<ul>"
+        "<li>The mouse wheel selects the note duration</li>"
+        "<li>Shift adds a sharp</li>"
+        "<li>Ctrl adds a flat</li>"
+        "<li>Shift + Ctrl adds a natural</li>"
+        "<li>A mouse mid button click switches between notes and rests</li>"
+        "</ul></p>"));
+    quickEditLabel->setToolTip(quickEditTip);
+    m_quickEdit->setToolTip(quickEditTip);
+    layout->addWidget(m_quickEdit, row, 2, 1, 1);
+    ++row;
+
     layout->setRowStretch(row, 10);
     frame->setLayout(layout);
 
@@ -757,6 +799,9 @@ NotationConfigurationPage::apply()
     settings.setValue("autotieatbarlines", m_autoTieBarlines->isChecked());
     settings.setValue("collapse", m_collapseRests->isChecked());
     settings.setValue("pastetype", m_pasteType->currentIndex());
+    settings.setValue("alwayspreview", m_preview->isChecked());
+    settings.setValue("quickedit", m_quickEdit->isChecked());
+    
     settings.setValue("accidentaloctavemode", m_accOctavePolicy->currentIndex());
     settings.setValue("accidentalbarmode", m_accBarPolicy->currentIndex());
     settings.setValue("keysigcancelmode", m_keySigCancelMode->currentIndex());

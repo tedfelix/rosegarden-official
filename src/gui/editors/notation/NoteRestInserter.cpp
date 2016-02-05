@@ -31,7 +31,9 @@
 #include "commands/notation/RestInsertionCommand.h"
 #include "commands/notation/TupletCommand.h"
 #include "document/CommandHistory.h"
+#include "gui/general/GUIPalette.h"
 #include "gui/general/IconLoader.h"
+#include "gui/widgets/Panned.h"
 #include "NotationProperties.h"
 #include "NotationMouseEvent.h"
 #include "NotationStrings.h"
@@ -50,18 +52,79 @@
 #include <QString>
 #include <QMenu>
 
+#include <QCursor>
+#include <QPixmap>
+#include <QGraphicsItem>
+
+
 namespace Rosegarden
 {
+
+// Table of durations and associated actions where mouse wheel is cycling
+static const struct wheelAction {
+            const char *action; int note; unsigned int dots;
+} wheelActions[] = {
+        { "hemidemisemi",      Note::Hemidemisemiquaver, 0 },
+        { "demisemi",          Note::Demisemiquaver,     0 },
+        { "dotted_demisemi",   Note::Demisemiquaver,     1 },
+        { "semiquaver",        Note::Semiquaver,         0 },
+        { "dotted_semiquaver", Note::Semiquaver,         1 },
+        { "quaver",            Note::Quaver,             0 },
+        { "dotted_quaver",     Note::Quaver,             1 },
+        { "crotchet",          Note::Crotchet,           0 },
+        { "dotted_crotchet",   Note::Crotchet,           1 },
+        { "minim",             Note::Minim,              0 },
+        { "dotted_minim",      Note::Minim,              1 },
+        { "semibreve",         Note::Semibreve,          0 },
+        { "dotted_semibreve",  Note::Semibreve,          1 },
+        { "breve",             Note::Breve,              0 },
+        { "dotted_breve",      Note::Breve,              1 }
+};
+
+static const int wheelActionsSize =
+    sizeof(wheelActions) / sizeof(struct wheelAction);
+
+// Resynchronize m_wheelIndex with the current note and dot
+void
+NoteRestInserter::synchronizeWheel()
+{
+    // Synchronisation may have a wrong result if a wheel event is
+    // currently in process
+    if (m_processingWheelTurned) return;
+
+    // If already synchronized, return
+    if ((wheelActions[m_wheelIndex].note == m_noteType) &&
+            (wheelActions[m_wheelIndex].dots == m_noteDots)) {
+        return;
+    }
+
+    // Look for a m_wheelIndex value related to {m_noteType, m_noteDots}
+    for (int i = 0; i < wheelActionsSize; i++) {
+        if ((wheelActions[i].note == m_noteType) &&
+                (wheelActions[i].dots == m_noteDots)) {
+            m_wheelIndex = i;
+            return;   // Found
+        }
+    }
+    // {m_noteType, m_noteDots} not found in wheelActions[]
+    // Something goes wrong : force a reset to quaver
+    m_wheelIndex = 5;   // Quaver without dot
+    m_noteType = wheelActions[m_wheelIndex].note;
+    m_noteDots = wheelActions[m_wheelIndex].dots;
+}
 
 NoteRestInserter::NoteRestInserter(NotationWidget* widget) :
     NotationTool("noterestinserter.rc", "NoteRestInserter", widget),
     m_noteType(Note::Quaver),
     m_noteDots(0),
     m_autoBeam(true),
+    m_leftButtonDown(false),
     m_accidental(Accidentals::NoAccidental),
     m_lastAccidental(Accidentals::NoAccidental),
     m_followAccidental(false),
-    m_isaRestInserter(false)
+    m_isaRestInserter(false),
+    m_wheelIndex(0),
+    m_processingWheelTurned(false)
 {
     QIcon icon;
 
@@ -72,6 +135,8 @@ NoteRestInserter::NoteRestInserter(NotationWidget* widget) :
     m_autoTieBarlines = qStrToBool( settings.value("autotieatbarlines","true"));
     m_matrixInsertType = (settings.value("inserttype", 0).toInt()  > 0);
     m_defaultStyle = settings.value("style", NoteStyleFactory::DefaultStyle).toString();
+    m_alwaysPreview = qStrToBool(settings.value("alwayspreview", "false"));
+    m_quickEdit = qStrToBool(settings.value("quickedit", "false"));
     settings.endGroup();
 
     QAction *a;
@@ -98,6 +163,8 @@ NoteRestInserter::NoteRestInserter(NotationWidget* widget) :
     // Push down the default RadioAction on Accidentals.
     invokeInParentView("no_accidental");
 
+    // Setup wheelIndex accordingly to m_noteType and m_noteDots
+    synchronizeWheel();
 }
 
 NoteRestInserter::NoteRestInserter(QString rcFileName, QString menuName,
@@ -106,12 +173,14 @@ NoteRestInserter::NoteRestInserter(QString rcFileName, QString menuName,
     m_noteType(Note::Quaver),  //OverRide value with NotationView::initializeNoteRestInserter.
     m_noteDots(0),
     m_autoBeam(false),
+    m_leftButtonDown(false),
     m_clickHappened(false),
     m_accidental(Accidentals::NoAccidental),
     m_lastAccidental(Accidentals::NoAccidental),
     m_followAccidental(false),
-    m_isaRestInserter(false)
-
+    m_isaRestInserter(false),
+    m_wheelIndex(0),
+    m_processingWheelTurned(false)
 {
     //connect(m_widget, SIGNAL(changeAccidental(Accidental, bool)),
     //        this, SLOT(slotSetAccidental(Accidental, bool)));
@@ -122,6 +191,9 @@ NoteRestInserter::NoteRestInserter(QString rcFileName, QString menuName,
     //!!! grace & triplet mode should be stored by this tool, not by widget!
 
     //!!! selection should be in scene, not widget!
+
+    // Setup wheelIndex accordingly to m_noteType and m_noteDots
+    synchronizeWheel();
 }
 
 NoteRestInserter::~NoteRestInserter()
@@ -131,36 +203,92 @@ void NoteRestInserter::ready()
 {
     m_clickHappened = false;
     m_clickStaff = 0;
-    m_widget->setCanvasCursor(Qt::CrossCursor);
+    
+    if (m_alwaysPreview) {
+        setCursorShape();
+        m_widget->getView()->setMouseTracking(true);
+    } else {
+        m_widget->setCanvasCursor(Qt::CrossCursor);
+    }
+
 //!!!   m_widget->setHeightTracking(true);
+
+}
+
+void NoteRestInserter::stow()
+{
+    if (m_alwaysPreview) {
+        clearPreview();
+        m_widget->getView()->setMouseTracking(false);
+    }
 }
 
 void
 NoteRestInserter::handleLeftButtonPress(const NotationMouseEvent *e)
 {
-    computeLocationAndPreview(e);
+    m_leftButtonDown = true;
+    m_clickHappened = false;   // Force to play the note
+    computeLocationAndPreview(e, true);
+}
+
+void
+NoteRestInserter::handleMidButtonPress(const NotationMouseEvent *)
+{
+    if (!m_quickEdit) return;
+    
+    if (isaRestInserter()) {
+        slotNotesSelected();
+    } else {
+        slotRestsSelected();
+    }
 }
 
 NoteRestInserter::FollowMode
 NoteRestInserter::handleMouseMove(const NotationMouseEvent *e)
 {
-    if (m_clickHappened) {
-        computeLocationAndPreview(e);
+    if (m_alwaysPreview) { 
+        m_lastMouseEvent = *e;
+        computeLocationAndPreview(e, (e->buttons & Qt::LeftButton));
+    } else {
+        if (m_clickHappened) {
+            computeLocationAndPreview(e, true);
+        }
     }
-
+    
     return NoFollow;
+}
+
+Accidental
+NoteRestInserter::getAccidentalFromDeadKeys(const NotationMouseEvent *e)
+{
+    Accidental accidental = Accidentals::NoAccidental;
+
+    if (!m_quickEdit) return accidental;
+        
+    // Use Maj or Ctrl keys to add sharp or flat on the fly
+    // Use Maj + Ctrl to add natural  
+    if (e->modifiers == Qt::ShiftModifier) {
+        accidental = Accidentals::Sharp;
+    } else if (e->modifiers == Qt::ControlModifier) {
+        accidental = Accidentals::Flat;
+    } else if (e->modifiers == (Qt::ControlModifier | Qt::ShiftModifier)) {
+        accidental = Accidentals::Natural;
+    }
+    return accidental;
 }
 
 void
 NoteRestInserter::handleMouseRelease(const NotationMouseEvent *e)
 {
+    m_leftButtonDown = false;
+
     NOTATION_DEBUG << "NoteRestInserter::handleMouseRelease: staff = " <<
         m_clickStaff << ", clicked = " << m_clickHappened << endl;
-    
-    NotationStaff *staff = m_clickStaff;
+
+        NotationStaff *staff = m_clickStaff;
     if (!m_clickHappened || !staff) return;
 
-    bool okay = computeLocationAndPreview(e);
+    bool okay = computeLocationAndPreview(e, true);
     clearPreview();
     m_clickHappened = false;
     m_clickStaff = 0;
@@ -178,11 +306,16 @@ NoteRestInserter::handleMouseRelease(const NotationMouseEvent *e)
         endTime = std::max(endTime, (*realEnd)->getNotationAbsoluteTime());
     }
 
+    Accidental accidental = getAccidentalFromDeadKeys(e);
+    if (accidental == Accidentals::NoAccidental) {
+        accidental =
+            (m_accidental == Accidentals::NoAccidental && m_followAccidental)
+                ? m_lastAccidental : m_accidental;
+    }
+
     Event *lastInsertedEvent =
-        doAddCommand
-        (segment, m_clickTime, endTime, note, m_clickPitch,
-         ((m_accidental == Accidentals::NoAccidental && m_followAccidental) ?
-          m_lastAccidental : m_accidental), 100);  // Velocity hard coded for now,
+        doAddCommand(segment, m_clickTime, endTime, note, m_clickPitch,
+                     accidental, 100);  // Velocity hard coded for now,
 
     // Note lastInsertedEvent can be null only when a note fails to insert.
     if (lastInsertedEvent) {
@@ -198,6 +331,104 @@ NoteRestInserter::handleMouseRelease(const NotationMouseEvent *e)
         } else {
             m_widget->setPointerPosition(m_clickTime);
         }
+    }
+}
+
+void
+NoteRestInserter::setCursorShape()
+{
+    if (!m_scene) {
+        if (m_widget) m_widget->setCanvasCursor(Qt::CrossCursor);
+        return;
+    }
+
+    NotePixmapParameters params(Note::QuarterNote,
+                         0,  // dots
+                         Accidentals::NoAccidental);
+    
+    NotePixmapFactory * pixmapFactory = m_scene->getNotePixmapFactory();
+    std::cout << "pixmap factory = " << pixmapFactory << "\n";
+
+    if (isaRestInserter()) {
+        // In rest inserter mode, the preview doesn't work (currently) and
+        // the shape of the cursor is the rest.
+        params.setNoteType(getCurrentNote().getNoteType());
+        params.setDots(getCurrentNote().getDots());
+        params.setForcedColor(GUIPalette::PreviewColor);
+
+        QGraphicsPixmapItem * gitem =
+            dynamic_cast<QGraphicsPixmapItem *>(pixmapFactory->makeRest(params));
+        std::cout << "rest: gitem = " << gitem << "\n";
+
+        QPixmap pixmap = gitem->pixmap();
+        QCursor cursor(pixmap);
+        m_widget->setCanvasCursor(cursor);
+    } else {
+        // In note inserter mode, the preview is working and the cursor
+        // keeps a cross shape.
+        m_widget->setCanvasCursor(Qt::CrossCursor);
+    }
+
+    // Resynchronize the wheel (needed if duration was not selected with it)
+    synchronizeWheel();
+}
+
+void
+NoteRestInserter::handleWheelTurned(int delta)
+{
+    if (!m_scene) return; 
+
+    if (m_quickEdit) {
+        // Set tool according to the new wheel position
+
+        // Prevent synchronizeWheel() from modifying m_wheelIndex
+        m_processingWheelTurned = true;
+    
+        // Uncheck current tool
+        QAction * action =
+            findActionInParentView(wheelActions[m_wheelIndex].action);
+        action->setChecked(false);
+        
+        // Select new tool
+        if (delta > 0) {
+            m_wheelIndex++;
+            if (m_wheelIndex >= wheelActionsSize) m_wheelIndex = 0;
+        } else {
+            m_wheelIndex--;
+            if (m_wheelIndex < 0) m_wheelIndex = wheelActionsSize - 1;
+        }
+
+        // Check dot tool related to the new tool
+        // Actions switch_dots_on et switch_dots_off trigs a toggle and
+        // have the same effect...
+        if (QString(wheelActions[m_wheelIndex].action).startsWith("dotted_")) {
+            if (m_noteDots == 0) {
+                invokeInParentView("switch_dots_on");
+            }
+        } else {
+            if (m_noteDots == 1) {
+                invokeInParentView("switch_dots_off");
+            }
+        }
+
+        // Check the new tool
+        action = findActionInParentView(wheelActions[m_wheelIndex].action);
+        action->setChecked(true);
+
+        // Prepare to use tool
+        invokeInParentView(wheelActions[m_wheelIndex].action);
+
+        if (m_alwaysPreview) {
+            // Set the new cursor shape
+            setCursorShape();
+
+            // Update preview
+            clearPreview();
+            computeLocationAndPreview(&m_lastMouseEvent, false);
+        }
+
+        // Allow synchronizeWheel() to modify m_wheelIndex if needed
+        m_processingWheelTurned = false;
     }
 }
 
@@ -287,7 +518,8 @@ NoteRestInserter::insertNote(Segment &segment, timeT insertionTime,
 }
 
 bool
-NoteRestInserter::computeLocationAndPreview(const NotationMouseEvent *e)
+NoteRestInserter::computeLocationAndPreview(const NotationMouseEvent *e,
+                                            bool play)
 {
     if (!e->staff || !e->element) {
         NOTATION_DEBUG << "computeLocationAndPreview: staff and/or element not supplied" << endl;
@@ -356,35 +588,41 @@ NoteRestInserter::computeLocationAndPreview(const NotationMouseEvent *e)
         m_clickInsertX += (x - el->getSceneX());
     }
 
-    Pitch p(e->height, e->clef, e->key, m_accidental);
-    int pitch = p.getPerformancePitch();
+    int pitch;
+    Accidental quickAccidental = getAccidentalFromDeadKeys(e);
+    if (quickAccidental != Accidentals::NoAccidental) {
+        Pitch p(e->height, e->clef, e->key, quickAccidental);
+        pitch = p.getPerformancePitch();
+    } else {
+        Pitch p(e->height, e->clef, e->key, m_accidental);
+        pitch = p.getPerformancePitch();
 
-    // [RFE 987960] When inserting via mouse, if no accidental is
-    // selected, we use the same accidental (and thus the same pitch)
-    // as of the previous note found at this height -- iff such a note
-    // is found more recently than the last key signature.
-
-    if (m_accidental == Accidentals::NoAccidental &&
-        m_followAccidental) {
-        Segment &segment = e->staff->getSegment();
-        m_lastAccidental = m_accidental;
-        Segment::iterator i = segment.findNearestTime(time);
-        while (i != segment.end()) {
-            if ((*i)->isa(Rosegarden::Key::EventType)) break;
-            if ((*i)->isa(Note::EventType)) {
-                if ((*i)->has(NotationProperties::HEIGHT_ON_STAFF) &&
-                    (*i)->has(BaseProperties::PITCH)) {
-                    int h = (*i)->get<Int>(NotationProperties::HEIGHT_ON_STAFF);
-                    if (h == e->height) {
-                        pitch = (*i)->get<Int>(BaseProperties::PITCH);
-                        (*i)->get<String>(BaseProperties::ACCIDENTAL,
-                                          m_lastAccidental);
-                        break;
+        // [RFE 987960] When inserting via mouse, if no accidental is
+        // selected, we use the same accidental (and thus the same pitch)
+        // as of the previous note found at this height -- if such a note
+        // is found more recently than the last key signature.
+        if (m_accidental == Accidentals::NoAccidental &&
+            m_followAccidental) {
+            Segment &segment = e->staff->getSegment();
+            m_lastAccidental = m_accidental;
+            Segment::iterator i = segment.findNearestTime(time);
+            while (i != segment.end()) {
+                if ((*i)->isa(Rosegarden::Key::EventType)) break;
+                if ((*i)->isa(Note::EventType)) {
+                    if ((*i)->has(NotationProperties::HEIGHT_ON_STAFF) &&
+                        (*i)->has(BaseProperties::PITCH)) {
+                        int h = (*i)->get<Int>(NotationProperties::HEIGHT_ON_STAFF);
+                        if (h == e->height) {
+                            pitch = (*i)->get<Int>(BaseProperties::PITCH);
+                            (*i)->get<String>(BaseProperties::ACCIDENTAL,
+                                            m_lastAccidental);
+                            break;
+                        }
                     }
                 }
+                if (i == segment.begin()) break;
+                --i;
             }
-            if (i == segment.begin()) break;
-            --i;
         }
     }
 
@@ -395,7 +633,8 @@ NoteRestInserter::computeLocationAndPreview(const NotationMouseEvent *e)
             subordering != m_clickSubordering ||
             pitch != m_clickPitch ||
             e->height != m_clickHeight ||
-            e->staff != m_clickStaff) {
+            e->staff != m_clickStaff ||
+            quickAccidental != m_clickQuickAccidental) {
             changed = true;
         }
     } else {
@@ -410,15 +649,16 @@ NoteRestInserter::computeLocationAndPreview(const NotationMouseEvent *e)
         m_clickPitch = pitch;
         m_clickHeight = e->height;
         m_clickStaff = e->staff;
+        m_clickQuickAccidental = quickAccidental;
         m_targetSubordering = targetSubordering;
 
-        showPreview();
+        showPreview(play);
     }
 
     return true;
 }
 
-void NoteRestInserter::showPreview()
+void NoteRestInserter::showPreview(bool play)
 {
     if (isaRestInserter()) {
         // Sorry, no preview available for rests.
@@ -430,11 +670,28 @@ void NoteRestInserter::showPreview()
     int pitch = m_clickPitch;
     pitch += getOttavaShift(segment, m_clickTime) * 12;
 
+    bool inRange = true;
+    if (pitch > segment.getHighestPlayable() ||
+            pitch < segment.getLowestPlayable()) {
+        inRange = false;
+    }
+
+    // Select the color of the preview
+    QColor color;
+    if (!inRange) {
+        color = GUIPalette::OutRangeColor;   // Red when out of range
+    } else if (m_leftButtonDown) {
+        color = GUIPalette::SelectionColor;  // Blue when button pressed
+    } else {
+        color = GUIPalette::PreviewColor;    // Dark green otherwise
+    }
+
     if (m_scene) {
         m_scene->showPreviewNote(m_clickStaff, m_clickInsertX,
                                  pitch, m_clickHeight,
                                  Note(m_noteType, m_noteDots),
-                                 m_widget->isInGraceMode());
+                                 m_widget->isInGraceMode(),
+                                 color, -1, play);
     }
 }
 
@@ -629,11 +886,9 @@ void NoteRestInserter::slotSetNote(Note::Type nt)
     m_noteType = nt;
 }
 
- void NoteRestInserter::slotSetDots(unsigned int dots)
+void NoteRestInserter::slotSetDots(unsigned int dots)
 {
-    if (m_noteDots != dots) {
-        m_noteDots = dots;
-    }
+    m_noteDots = dots;
 }
 
 void NoteRestInserter::slotSetAccidental(Accidental accidental,

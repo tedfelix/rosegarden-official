@@ -23,6 +23,7 @@
 #include "base/NotationTypes.h"
 #include "base/Composition.h"
 #include "gui/general/SelectionManager.h"
+#include "gui/general/GUIPalette.h"
 #include "StaffLayout.h"
 #include "NotePixmapFactory.h"
 #include "ClefKeyContext.h"
@@ -159,7 +160,10 @@ public:
                          int pitch, int height,
                          const Note &note,
                          bool grace,
-                         int velocity = -1);
+                         QColor color = GUIPalette::SelectionColor,
+                         int velocity = -1,
+                         bool play = true
+                        );
 
     /// Remove any visible preview note
     void clearPreviewNote(NotationStaff *);
@@ -217,6 +221,7 @@ signals:
     void mouseMoved(const NotationMouseEvent *e);
     void mouseReleased(const NotationMouseEvent *e);
     void mouseDoubleClicked(const NotationMouseEvent *e);
+    void wheelTurned(int);
 
     void sceneNeedsRebuilding();
 
@@ -256,6 +261,7 @@ protected:
     void mouseMoveEvent(QGraphicsSceneMouseEvent *);
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *);
     void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *);
+    void wheelEvent(QGraphicsSceneWheelEvent *);
 
     // CompositionObserver methods
     void segmentRemoved(const Composition *, Segment *);

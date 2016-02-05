@@ -27,6 +27,7 @@
 #include "NotePixmapFactory.h"
 #include "ClefKeyContext.h"
 #include "NotationProperties.h"
+#include "NotationTool.h"
 #include "NotationWidget.h"
 #include "NotationMouseEvent.h"
 #include "NoteFontFactory.h"
@@ -862,6 +863,17 @@ NotationScene::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *e)
     setupMouseEvent(e, nme);
     emit mouseDoubleClicked(&nme);
 }
+
+void
+NotationScene::wheelEvent(QGraphicsSceneWheelEvent *e)
+{
+    if (m_widget->getCurrentTool()->needsWheelEvents()) {
+        emit wheelTurned(e->delta());
+        e->accept();    // Don't pass the event to the view
+    }
+}
+
+
 
 int
 NotationScene::getPageWidth()
@@ -1903,11 +1915,14 @@ NotationScene::showPreviewNote(NotationStaff *staff, double layoutX,
                                int pitch, int height,
                                const Note &note,
                                bool grace,
-                               int velocity)
+                               QColor color,
+                               int velocity,
+                               bool play
+                              )
 {
     if (staff) {
-        staff->showPreviewNote(layoutX, height, note, grace);
-        playNote(staff->getSegment(), pitch, velocity);
+        staff->showPreviewNote(layoutX, height, note, grace, color);
+        if (play) playNote(staff->getSegment(), pitch, velocity);
     }
 }
 

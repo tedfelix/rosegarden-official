@@ -350,6 +350,14 @@ protected:
     /// draws selected/shaded status from m_selected/m_shaded:
     bool getCharacter(CharName name, NoteCharacter &ch, ColourType type, bool inverted);
 
+    /// Draw character with a specified QColor
+    //  This is a first step to a simpler use of colors
+    NoteCharacter getCharacter(CharName name, QColor color, bool inverted);
+
+    /// Draw character with a specified QColor
+    //  This is a first step to a simpler use of colors
+    bool getCharacter(CharName name, NoteCharacter &ch, QColor color, bool inverted);
+
     void drawNoteHalo(int x, int y, int w, int h);
 
     //--------------- Data members ---------------------------------

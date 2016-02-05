@@ -20,6 +20,9 @@
 #define RG_NOTEPIXMAPPARAMETERS_H
 
 #include "base/NotationTypes.h"
+
+#include <QColor>
+
 #include <vector>
 #include <cmath>
 
@@ -94,6 +97,10 @@ public:
     void removeMarks();
 
     void setInRange(bool inRange)         { m_inRange          = inRange;    }
+    
+    void setForcedColor(QColor color) { m_forcedColor = color;
+                                        m_forceColor = true; }
+    void clearForcedColour() { m_forceColor = false; }
 
     /** Return a list of normal marks that draw either above or below the note
      * head, opposite the stem direction
@@ -153,7 +160,12 @@ public:
 		m_inRange == p.m_inRange &&
 		m_marks == p.m_marks &&
 
-		m_memberOfParallel == p.m_memberOfParallel);
+		m_memberOfParallel == p.m_memberOfParallel &&
+		
+		m_forceColor == p.m_forceColor &&
+		((m_forcedColor == p.m_forcedColor) || !m_forceColor)
+
+        );
     }
 
 private:
@@ -208,6 +220,14 @@ private:
     std::vector<Mark> m_marks;
 
     bool    m_memberOfParallel;
+
+    // This is a first step to a simpler use of colors.
+    // If m_forceColor is set, the methods of NotePixmapFactory should
+    // use m_forcedColor rather than any other color. Currently, it should
+    // bypass NotePixmapFactory::m_selected and NotePixmapFactory::m_shaded and
+    // the others color flags members of NotePixmapParameters.
+    bool    m_forceColor;
+    QColor  m_forcedColor;
 };
 
 

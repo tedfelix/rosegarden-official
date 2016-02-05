@@ -1858,7 +1858,7 @@ NotationStaff::isSelected(NotationElementList::iterator it)
 
 void
 NotationStaff::showPreviewNote(double layoutX, int heightOnStaff,
-                               const Note &note, bool grace)
+                               const Note &note, bool grace, QColor color)
 {
     NotePixmapFactory *npf = m_notePixmapFactory;
     if (grace) npf = m_graceNotePixmapFactory;
@@ -1879,7 +1879,8 @@ NotationStaff::showPreviewNote(double layoutX, int heightOnStaff,
     params.setBeamed(false);
     params.setTupletCount(0);
     params.setSelected(false);
-    params.setHighlighted(true);
+    // params.setHighlighted(true);
+    params.setForcedColor(color);
 
     delete m_previewItem;
     m_previewItem = npf->makeNote(params);

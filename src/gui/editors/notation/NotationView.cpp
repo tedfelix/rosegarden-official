@@ -2197,7 +2197,6 @@ NotationView::slotSwitchToNotes()
             slotSetNoteRestInserter();
             NOTATION_DEBUG << "NotationView::slotSwitchToNotes() : " 
                     << "NoteRestInserter not current. Attempted to  switch. " << endl;
-            
             //Try again to see if tool is set.
             currentInserter = dynamic_cast<NoteRestInserter *>
                     (m_notationWidget->getCurrentTool());

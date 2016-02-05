@@ -23,6 +23,7 @@
 #include "NotationTool.h"
 #include "NotationElement.h"
 #include "NoteStyle.h"
+#include "NotationMouseEvent.h"
 #include <QString>
 
 namespace Rosegarden
@@ -48,12 +49,20 @@ public:
     ~NoteRestInserter();
 
     virtual void handleLeftButtonPress(const NotationMouseEvent *);
+    
+    virtual void handleMidButtonPress(const NotationMouseEvent *);
 
     virtual FollowMode handleMouseMove(const NotationMouseEvent *);
 
     virtual void handleMouseRelease(const NotationMouseEvent *);
+    
+    virtual void handleWheelTurned(int delta);
+
+    virtual bool needsWheelEvents() { return m_quickEdit; }
 
     virtual void ready();
+
+    virtual void stow();
 
     Note getCurrentNote() {
         return Note(m_noteType, m_noteDots);
@@ -93,7 +102,7 @@ public:
 
 public slots:
     /// Set the type of note (quaver, breve...) which will be inserted
-    void slotSetNote(Note::Type);
+    void slotSetNote(Note::Type nt);
 
     /// Set the number of dots the inserted note will have
     void slotSetDots(unsigned int dots);
@@ -119,9 +128,15 @@ protected:
                                 int pitch, Accidental,
                                 int velocity = 0);
 
-    virtual bool computeLocationAndPreview(const NotationMouseEvent *e);
-    virtual void showPreview();
+    virtual bool computeLocationAndPreview(const NotationMouseEvent *e,
+                                           bool play);
+    virtual void showPreview(bool play);
     virtual void clearPreview();
+    
+    void setCursorShape();
+    Accidental getAccidentalFromDeadKeys(const NotationMouseEvent *e);
+    
+    void synchronizeWheel();
 
 protected slots:
     // RMB menu slots
@@ -142,13 +157,17 @@ protected:
     bool m_autoTieBarlines;
     bool m_matrixInsertType;
     NoteStyleName m_defaultStyle;
+    bool m_alwaysPreview;
+    bool m_quickEdit;         // Select durations with mouse wheel
 
+    bool m_leftButtonDown;
     bool m_clickHappened;
     timeT m_clickTime;
     int m_clickSubordering;
     int m_clickPitch;
     int m_clickHeight;
     NotationStaff *m_clickStaff;
+    Accidental m_clickQuickAccidental;
     double m_clickInsertX;
     float m_targetSubordering;
 
@@ -156,6 +175,10 @@ protected:
     Accidental m_lastAccidental;
     bool m_followAccidental;
     bool m_isaRestInserter;
+    
+    int m_wheelIndex;              // Index of current duration
+    bool m_processingWheelTurned;  // Use by synchronizeWheel()
+    NotationMouseEvent m_lastMouseEvent;
 
 // Obsolete ?
 //    static const char* m_actionsAccidental[][4];

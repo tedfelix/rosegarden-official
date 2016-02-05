@@ -145,7 +145,7 @@ NotationWidget::NotationWidget() :
     bool texture = false;
     QSettings settings;
     settings.beginGroup(NotationViewConfigGroup);
-    texture =  settings.value("backgroundtextures", true).toBool();
+    texture = settings.value("backgroundtextures", true).toBool();
     settings.endGroup();
 
     QBrush bg = (texture ?
@@ -442,6 +442,9 @@ NotationWidget::setSegments(RosegardenDocument *document,
 
     connect(m_scene, SIGNAL(mouseDoubleClicked(const NotationMouseEvent *)),
             this, SLOT(slotDispatchMouseDoubleClick(const NotationMouseEvent *)));
+
+    connect(m_scene, SIGNAL(wheelTurned(int)),
+            this, SLOT(slotDispatchWheelTurned(int)));
 
     // Bug #2960243: the Qt::QueuedConnection flag is mandatory to avoid
     // a crash after deleting the notation scene from inside its own code.
@@ -929,14 +932,6 @@ NotationWidget::slotPointerPositionChanged(timeT t, bool moveView)
 void
 NotationWidget::slotDispatchMousePress(const NotationMouseEvent *e)
 {
-    if (e->buttons & Qt::LeftButton) {
-        if (e->modifiers & Qt::ControlModifier) {
-            // the function this used was an empty NOP
-            // if (m_scene) m_scene->slotSetInsertCursorPosition(e->time, true, true); //!!!
-            return;
-        }
-    }
-
     if (!m_currentTool) return;
 
     //!!! todo: handle equivalents of NotationView::slotXXXItemPressed
@@ -1021,6 +1016,13 @@ NotationWidget::slotDispatchMouseDoubleClick(const NotationMouseEvent *e)
 {
     if (!m_currentTool) return;
     m_currentTool->handleMouseDoubleClick(e);
+}
+
+void
+NotationWidget::slotDispatchWheelTurned(int delta)
+{
+    if (!m_currentTool) return;
+    m_currentTool->handleWheelTurned(delta);
 }
 
 EventSelection *

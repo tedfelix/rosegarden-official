@@ -87,6 +87,8 @@ protected:
     QCheckBox *m_autoTieBarlines;
     QCheckBox *m_collapseRests;
     QComboBox *m_pasteType;
+    QCheckBox *m_preview;
+    QCheckBox *m_quickEdit;
     QComboBox *m_accOctavePolicy;
     QComboBox *m_accBarPolicy;
     QComboBox *m_keySigCancelMode;

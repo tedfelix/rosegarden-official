@@ -43,6 +43,16 @@ namespace Rosegarden
 class GUIPalette
 {
 public:
+    /**
+     * Following definitions are intended to be used with a new and simpler way
+     * to directly define colors as QColor for graphics related to notation.
+     */
+    static const QColor SelectionColor;
+    static const QColor PreviewColor;
+    static const QColor OutRangeColor;
+
+
+public:
     static QColor getColour(const char* const colourName);
 
     static Colour convertColour(const QColor &input);

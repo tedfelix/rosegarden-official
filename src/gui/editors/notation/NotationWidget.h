@@ -76,6 +76,7 @@ public:
                      std::vector<Segment *> segments);
 
     NotationScene *getScene() { return m_scene; }
+    Panned *getView() { return m_view; }
     ControlRulerWidget *getControlsWidget(void)
         { return m_controlsWidget; }
 
@@ -183,6 +184,7 @@ protected slots:
     void slotDispatchMouseRelease(const NotationMouseEvent *);
     void slotDispatchMouseMove(const NotationMouseEvent *);
     void slotDispatchMouseDoubleClick(const NotationMouseEvent *);
+    void slotDispatchWheelTurned(int);
 
     // When moveView is false, the view is not scrolled toward the pointer
     void slotPointerPositionChanged(timeT t, bool moveView = true);

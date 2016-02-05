@@ -86,6 +86,9 @@ NotationTool::handleMouseMove(const NotationMouseEvent *)
 }
 
 void
+NotationTool::handleWheelTurned(int) { }
+
+void
 NotationTool::invokeInParentView(QString actionName)
 {
     QAction *a = findActionInParentView(actionName);

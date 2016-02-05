@@ -28,6 +28,12 @@
 namespace Rosegarden
 {
 
+
+const QColor GUIPalette::SelectionColor = QColor(0, 54, 232);
+const QColor GUIPalette::PreviewColor = Qt::darkGreen;
+const QColor GUIPalette::OutRangeColor = Qt::red;
+
+
 QColor GUIPalette::getColour(const char* const colourName)
 {
     QSettings config;
@@ -164,7 +170,7 @@ GUIPalette::GUIPalette()
     m_defaultsMap[MovementGuide] = QColor(62, 161, 194);
     //m_defaultsMap[MovementGuide] = QColor(255, 189, 89);
     m_defaultsMap[SelectionRectangle] = QColor(103, 128, 211);
-    m_defaultsMap[SelectedElement] = QColor(0, 54, 232);
+    m_defaultsMap[SelectedElement] = SelectionColor;
     m_defaultsMap[ControlItem] = QColor(210, 202, 138);
 
     //@@@  I decided to shut up these compiler warnings about unused variables.
@@ -229,6 +235,9 @@ GUIPalette* GUIPalette::getInstance()
     if (!m_instance) m_instance = new GUIPalette();
     return m_instance;
 }
+
+
+
 
 const char* const GUIPalette::ActiveRecordTrack = "activerecordtrack";
 

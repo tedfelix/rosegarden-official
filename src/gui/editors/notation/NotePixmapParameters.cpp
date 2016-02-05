@@ -62,7 +62,9 @@ NotePixmapParameters::NotePixmapParameters(Note::Type noteType,
         m_tiePositionExplicit(false),
         m_tieAbove(false),
         m_inRange(true),
-        m_memberOfParallel(false)
+        m_memberOfParallel(false),
+        m_forceColor(false),
+        m_forcedColor(Qt::black)
 {
     // nothing else
 }

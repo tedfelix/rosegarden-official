@@ -50,6 +50,8 @@ public:
      */ 
     virtual const QString getToolName() { return ToolName; }
 
+    virtual bool needsWheelEvents() { return false; }
+
     static const QString ToolName;
 
 public slots:
