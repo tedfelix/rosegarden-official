@@ -397,7 +397,7 @@ setProgram(const MidiProgram &program)
     emit changedChannelSetup();
     ControlBlock::getInstance()->instrumentChangedProgram(getId());
     if (hasFixedChannel()) {
-        StudioControl::sendChannelSetup(this, m_channel);
+        sendChannelSetup();
     }
 }
 
@@ -767,7 +767,7 @@ setFixedChannel(void)
         allocator->reserveFixedChannel(m_channel);
         m_fixed = true;
         emit channelBecomesFixed();
-        StudioControl::sendChannelSetup(this, m_channel);
+        sendChannelSetup();
         ControlBlock::getInstance()->instrumentChangedFixity(getId());
     }
 }

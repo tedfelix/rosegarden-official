@@ -15,6 +15,7 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[StudioControl]"
 
 #include "StudioControl.h"
 
@@ -227,17 +228,17 @@ sendChannelSetup(Instrument *instrument, int channel)
     // Insert bank selects and program change.
     // Acquire it from ChannelManager.  Passing -1 for trackId which
     // is unused here.
-    ChannelManager::sendProgramForInstrument(channel, instrument,
-                                             inserter,
-                                             RealTime::zeroTime, -1);
+    ChannelManager::insertProgramForInstrument(channel, instrument,
+                                               inserter,
+                                               RealTime::zeroTime, -1);
 
     ChannelManager::SimpleCallbacks callbacks;
 
     // Insert controllers (and pitch bend).
-    ChannelManager::setControllers(channel, instrument,
-                                   inserter, RealTime::zeroTime,
-                                   RealTime::zeroTime, 
-                                   &callbacks, -1);
+    ChannelManager::insertControllers(channel, instrument,
+                                      inserter, RealTime::zeroTime,
+                                      RealTime::zeroTime,
+                                      &callbacks, -1);
 
     // Send it out.
     sendMappedEventList(mappedEventList);

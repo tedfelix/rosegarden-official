@@ -95,7 +95,7 @@ insertController(ChannelId channel, const Instrument *instrument,
 
 void
 ChannelManager::
-setControllers(ChannelId channel, Instrument *instrument,
+insertControllers(ChannelId channel, Instrument *instrument,
                MappedInserterBase &inserter,
                RealTime reftime, RealTime insertTime,
                Callbacks *callbacks, int trackId)
@@ -109,6 +109,8 @@ setControllers(ChannelId channel, Instrument *instrument,
 
     if (instrument->hasFixedChannel()  &&  !sendControllers)
         return;
+
+    //RG_DEBUG << "insertControllers() : for channel" << (int)channel;
 
     // In case some controllers are on that we don't know about, turn
     // all controllers off.  (Reset All Controllers)
@@ -140,7 +142,7 @@ setControllers(ChannelId channel, Instrument *instrument,
         const MidiByte controlId    = cIt->first;
         const MidiByte controlValue = cIt->second;
 
-        RG_DEBUG << "setControllers() : sending controller " << (int)controlId << "value" << (int)controlValue << "on channel" << (int)channel << "for time" << reftime;
+        //RG_DEBUG << "insertControllers() : inserting controller " << (int)controlId << "value" << (int)controlValue << "on channel" << (int)channel << "for time" << reftime;
 
         try {
             // Put it in the inserter.
@@ -178,17 +180,11 @@ setControllers(ChannelId channel, Instrument *instrument,
 // Adapted from SequenceManager
 void
 ChannelManager::
-sendProgramForInstrument(ChannelId channel, Instrument *instrument,
-                         MappedInserterBase &inserter,
-                         RealTime insertTime, int trackId) 
+insertProgramForInstrument(ChannelId channel, Instrument *instrument,
+                           MappedInserterBase &inserter,
+                           RealTime insertTime, int trackId)
 {
-
-    RG_DEBUG << "sendProgramForInstrument() : sending prg change for "
-             << instrument->getPresentationName().c_str()
-             << "on channel"
-             << (int)channel
-             << endl;
-
+    //RG_DEBUG << "insertProgramForInstrument() : inserting prg change for " << instrument->getPresentationName().c_str() << "on channel" << (int)channel;
 
     // Send bank select before program change unless we have a fixed
     // channel and no sendsBankSelect.
@@ -317,26 +313,22 @@ ChannelManager::insertChannelSetup(MappedInserterBase &inserter,
                                    Callbacks *callbacks,
                                    int trackId)
 {
-    RG_DEBUG
-        << (m_instrument
-            ? "Got instrument"
-            : "No instrument")
-        << endl;
-    if (m_instrument) {
-        RG_DEBUG << "Instrument type is "
-                 << (int)m_instrument->getType()
-                 << endl;
-    }
+    RG_DEBUG << "insertChannelSetup() : " << (m_instrument ? "Got instrument" : "No instrument");
 
-    if (!m_channel.validChannel()) { return; }
+    if (!m_instrument)
+        return;
+    if (!m_channel.validChannel())
+        return;
+
+    //RG_DEBUG << "  Instrument type is " << (int)m_instrument->getType();
+
     // We don't do this for SoftSynth instruments.
-    if (m_instrument &&
-        (m_instrument->getType() == Instrument::Midi)) {
+    if (m_instrument->getType() == Instrument::Midi) {
         ChannelId channel = m_channel.getChannelId();
-        sendProgramForInstrument(channel, m_instrument, inserter,
-                                 insertTime, trackId);
-        setControllers(channel, m_instrument, inserter, reftime,
-                       insertTime, callbacks, trackId);
+        insertProgramForInstrument(channel, m_instrument, inserter,
+                                   insertTime, trackId);
+        insertControllers(channel, m_instrument, inserter, reftime,
+                          insertTime, callbacks, trackId);
     }
 }
 

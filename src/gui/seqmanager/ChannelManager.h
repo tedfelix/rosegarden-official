@@ -142,7 +142,7 @@ public:
     /**
      * Adapted from SequenceManager
      */
-    static void sendProgramForInstrument(
+    static void insertProgramForInstrument(
         ChannelId channel, 
         Instrument *instrument,
         MappedInserterBase &inserter,
@@ -160,7 +160,7 @@ public:
      *
      * Adapted from SequenceManager.
      */
-    static void setControllers(
+    static void insertControllers(
         ChannelId channel, 
         Instrument *instrument,
         MappedInserterBase &inserter,
