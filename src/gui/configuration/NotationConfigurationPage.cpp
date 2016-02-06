@@ -367,7 +367,7 @@ NotationConfigurationPage::NotationConfigurationPage(QWidget *parent) :
     bool quickEdit = qStrToBool(settings.value("quickedit", "true"));
 
     QLabel * quickEditLabel = new QLabel(
-         tr("Quick edition mode"),
+         tr("Quick mouse entry mode"),
          frame);
     layout->addWidget(quickEditLabel, row, 0, 1, 2);
     m_quickEdit = new QCheckBox(frame);
