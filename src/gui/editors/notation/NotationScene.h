@@ -222,6 +222,7 @@ signals:
     void mouseReleased(const NotationMouseEvent *e);
     void mouseDoubleClicked(const NotationMouseEvent *e);
     void wheelTurned(int);
+    void modifierChanged();
 
     void sceneNeedsRebuilding();
 
@@ -262,6 +263,9 @@ protected:
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *);
     void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *);
     void wheelEvent(QGraphicsSceneWheelEvent *);
+    
+    virtual void keyPressEvent(QKeyEvent * keyEvent);  // YGYGYG
+    virtual void keyReleaseEvent(QKeyEvent * keyEvent);
 
     // CompositionObserver methods
     void segmentRemoved(const Composition *, Segment *);

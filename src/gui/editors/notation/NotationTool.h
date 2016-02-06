@@ -26,7 +26,7 @@
 
 class QMenu;
 class QAction;
-
+class QKeyEvent;
 
 
 namespace Rosegarden
@@ -92,7 +92,9 @@ public:
     virtual void handleMouseDoubleClick(const NotationMouseEvent *);
     virtual FollowMode handleMouseMove(const NotationMouseEvent *);
     virtual void handleWheelTurned(int);
-    
+    virtual void handleModifierChanged();
+
+
     virtual const QString getToolName() = 0;
     virtual bool needsWheelEvents() = 0;
 

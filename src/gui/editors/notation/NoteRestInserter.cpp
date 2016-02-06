@@ -45,6 +45,7 @@
 #include "NoteStyleFactory.h"
 #include "document/Command.h"
 
+#include <QApplication>
 #include <QAction>
 #include <QSettings>
 #include <QIcon>
@@ -258,20 +259,36 @@ NoteRestInserter::handleMouseMove(const NotationMouseEvent *e)
     return NoFollow;
 }
 
+void
+NoteRestInserter::handleModifierChanged()
+{
+    if (m_alwaysPreview) { 
+        computeLocationAndPreview(&m_lastMouseEvent,
+                                  (m_lastMouseEvent.buttons & Qt::LeftButton));
+    } else {
+        if (m_clickHappened) {
+            computeLocationAndPreview(&m_lastMouseEvent, true);
+        }
+    }
+}
+    
 Accidental
-NoteRestInserter::getAccidentalFromDeadKeys(const NotationMouseEvent *e)
+NoteRestInserter::getAccidentalFromModifierKeys()
 {
     Accidental accidental = Accidentals::NoAccidental;
 
     if (!m_quickEdit) return accidental;
-        
+    
+    Qt::KeyboardModifiers modifiers;
+    modifiers = QApplication::queryKeyboardModifiers();
+    
     // Use Maj or Ctrl keys to add sharp or flat on the fly
     // Use Maj + Ctrl to add natural  
-    if (e->modifiers == Qt::ShiftModifier) {
+    if (modifiers == Qt::ShiftModifier) {
         accidental = Accidentals::Sharp;
-    } else if (e->modifiers == Qt::ControlModifier) {
+    } else if (modifiers == Qt::ControlModifier) {
         accidental = Accidentals::Flat;
-    } else if (e->modifiers == (Qt::ControlModifier | Qt::ShiftModifier)) {
+    } else if (modifiers == (Qt::ControlModifier | Qt::ShiftModifier)) {
         accidental = Accidentals::Natural;
     }
     return accidental;
@@ -306,7 +323,7 @@ NoteRestInserter::handleMouseRelease(const NotationMouseEvent *e)
         endTime = std::max(endTime, (*realEnd)->getNotationAbsoluteTime());
     }
 
-    Accidental accidental = getAccidentalFromDeadKeys(e);
+    Accidental accidental = getAccidentalFromModifierKeys();
     if (accidental == Accidentals::NoAccidental) {
         accidental =
             (m_accidental == Accidentals::NoAccidental && m_followAccidental)
@@ -493,8 +510,8 @@ NoteRestInserter::insertNote(Segment &segment, timeT insertionTime,
     }
 
     Event *lastInsertedEvent = doAddCommand
-                               (segment, insertionTime, endTime, note, pitch, accidental,
-                                velocity);
+                               (segment, insertionTime, endTime,
+                                note, pitch, accidental, velocity);
 
     // Note lastInsertedEvent can be null only when a note fails to insert.
     if (lastInsertedEvent) {
@@ -589,7 +606,7 @@ NoteRestInserter::computeLocationAndPreview(const NotationMouseEvent *e,
     }
 
     int pitch;
-    Accidental quickAccidental = getAccidentalFromDeadKeys(e);
+    Accidental quickAccidental = getAccidentalFromModifierKeys();
     if (quickAccidental != Accidentals::NoAccidental) {
         Pitch p(e->height, e->clef, e->key, quickAccidental);
         pitch = p.getPerformancePitch();

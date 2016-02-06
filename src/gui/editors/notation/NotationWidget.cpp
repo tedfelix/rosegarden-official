@@ -446,6 +446,9 @@ NotationWidget::setSegments(RosegardenDocument *document,
     connect(m_scene, SIGNAL(wheelTurned(int)),
             this, SLOT(slotDispatchWheelTurned(int)));
 
+    connect(m_scene, SIGNAL(modifierChanged()),
+            this, SLOT(slotDispatchModifierChanged()));
+
     // Bug #2960243: the Qt::QueuedConnection flag is mandatory to avoid
     // a crash after deleting the notation scene from inside its own code.
     connect(m_scene, SIGNAL(sceneNeedsRebuilding()),
@@ -1023,6 +1026,13 @@ NotationWidget::slotDispatchWheelTurned(int delta)
 {
     if (!m_currentTool) return;
     m_currentTool->handleWheelTurned(delta);
+}
+
+void
+NotationWidget::slotDispatchModifierChanged()
+{
+    if (!m_currentTool) return;
+    m_currentTool->handleModifierChanged();
 }
 
 EventSelection *

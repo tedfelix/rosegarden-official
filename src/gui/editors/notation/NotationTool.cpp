@@ -89,6 +89,9 @@ void
 NotationTool::handleWheelTurned(int) { }
 
 void
+NotationTool::handleModifierChanged() { }
+
+void
 NotationTool::invokeInParentView(QString actionName)
 {
     QAction *a = findActionInParentView(actionName);

@@ -44,6 +44,7 @@ public:
     virtual void handleLeftButtonPress(const NotationMouseEvent *);
 
 
+
     /**
      * Useful to get the tool name from a NotationTool object
      */ 

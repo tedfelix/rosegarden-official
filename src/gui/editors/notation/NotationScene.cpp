@@ -45,6 +45,7 @@
 
 #include <QSettings>
 #include <QGraphicsSceneMouseEvent>
+#include <QKeyEvent>
 
 using std::vector;
 
@@ -870,6 +871,24 @@ NotationScene::wheelEvent(QGraphicsSceneWheelEvent *e)
     if (m_widget->getCurrentTool()->needsWheelEvents()) {
         emit wheelTurned(e->delta());
         e->accept();    // Don't pass the event to the view
+    }
+}
+
+void 
+NotationScene::keyPressEvent(QKeyEvent * keyEvent)
+{
+    int key = keyEvent->key();
+    if ((key == Qt::Key_Shift) || (key == Qt::Key_Control)) {
+        emit modifierChanged();
+    }
+}
+
+void
+NotationScene::keyReleaseEvent(QKeyEvent * keyEvent)
+{
+    int key = keyEvent->key();
+    if ((key == Qt::Key_Shift) || (key == Qt::Key_Control)) {
+        emit modifierChanged();
     }
 }
 

@@ -57,6 +57,8 @@ public:
     virtual void handleMouseRelease(const NotationMouseEvent *);
     
     virtual void handleWheelTurned(int delta);
+    
+    virtual void handleModifierChanged();
 
     virtual bool needsWheelEvents() { return m_quickEdit; }
 
@@ -134,7 +136,7 @@ protected:
     virtual void clearPreview();
     
     void setCursorShape();
-    Accidental getAccidentalFromDeadKeys(const NotationMouseEvent *e);
+    Accidental getAccidentalFromModifierKeys();
     
     void synchronizeWheel();
 
