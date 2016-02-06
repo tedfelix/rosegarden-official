@@ -149,15 +149,16 @@ public:
         RealTime insertTime,
         int trackId);
 
-    /// Set default controllers for instrument on channel.
+    /// Insert controllers and pitch bend via inserter.
     /**
-     * Inserts the following via the inserter:
+     * Set default controllers for instrument on channel.  Inserts the
+     * following via the inserter:
      *
-     *   - All controllers off
+     *   - Reset All Controllers
      *   - Controllers obtained via callbacks
      *   - Pitchbend from callbacks
      *
-     * Adapted from SequenceManager
+     * Adapted from SequenceManager.
      */
     static void setControllers(
         ChannelId channel, 

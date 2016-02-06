@@ -93,8 +93,6 @@ insertController(ChannelId channel, const Instrument *instrument,
     inserter.insertCopy(mE);
 }
 
-// Set default controllers for instrument on channel.
-// Adapted from SequenceManager
 void
 ChannelManager::
 setControllers(ChannelId channel, Instrument *instrument,
@@ -105,59 +103,61 @@ setControllers(ChannelId channel, Instrument *instrument,
     // This is still desirable for some users.
     QSettings settings;
     settings.beginGroup(SequencerOptionsConfigGroup);
-    bool sendControllers = settings.value("alwayssendcontrollers", "false").toBool();
+    const bool sendControllers =
+            settings.value("alwayssendcontrollers", "false").toBool();
     settings.endGroup();
 
-    if (instrument->hasFixedChannel() && 
-        !sendControllers) { return; }
+    if (instrument->hasFixedChannel()  &&  !sendControllers)
+        return;
 
     // In case some controllers are on that we don't know about, turn
-    // all controllers off.
+    // all controllers off.  (Reset All Controllers)
     try {
-        const int controllerAllControllersOff = 121;
+        const int resetAllControllers = 121;
+
         MappedEvent mE(instrument->getId(),
                        MappedEvent::MidiController,
-                       controllerAllControllersOff,
+                       resetAllControllers,
                        0);
         mE.setRecordedChannel(channel);
         mE.setEventTime(insertTime);
         mE.setTrackId(trackId);
+
         inserter.insertCopy(mE);
-    } catch (...) { }
-        
-    // Get the appropriate controllers from the callback our mapper
-    // gave us.
-    ControllerAndPBList CAndPBlist =
-        callbacks->getControllers(instrument, reftime);
-    StaticControllers& list = CAndPBlist.m_controllers;
-    for (StaticControllerConstIterator cIt = list.begin();
-         cIt != list.end(); ++cIt) {
-        MidiByte controlId    = cIt->first;
-        MidiByte controlValue = cIt->second;
-
-    RG_DEBUG << "setControllers() : sending controller "
-                 << (int)controlId
-                 << "value"
-                 << (int)controlValue
-                 << "on channel"
-                 << (int)channel
-                 << "for time"
-                 << reftime
-                 << endl;
-
-        try {
-            insertController
-                (channel, instrument, inserter, insertTime, trackId,
-                 controlId, controlValue);
-        } catch (...) { continue; }
+    } catch (...) {
+        // Ignore.
     }
 
+    // Get the appropriate controllers and pitch bend from the callback our
+    // mapper gave us.
+    ControllerAndPBList controllerAndPBlist =
+        callbacks->getControllers(instrument, reftime);
+    StaticControllers &list = controllerAndPBlist.m_controllers;
+
+    // For each controller
+    for (StaticControllerConstIterator cIt = list.begin();
+         cIt != list.end(); ++cIt) {
+        const MidiByte controlId    = cIt->first;
+        const MidiByte controlValue = cIt->second;
+
+        RG_DEBUG << "setControllers() : sending controller " << (int)controlId << "value" << (int)controlValue << "on channel" << (int)channel << "for time" << reftime;
+
+        try {
+            // Put it in the inserter.
+            insertController(channel, instrument, inserter, insertTime,
+                             trackId, controlId, controlValue);
+        } catch (...) {
+            // Ignore.
+        }
+    }
+
+    // If there's a pitch bend, insert it...
     // We only do one type of pitchbend, though GM2 allows others.
-    if (CAndPBlist.m_havePitchbend) {
-        int raised = CAndPBlist.m_pitchbend + 8192;
-        int d1 = (raised >> 7) & 0x7f;
-        int d2 = raised & 0x7f;
-            
+    if (controllerAndPBlist.m_havePitchbend) {
+        const int raised = controllerAndPBlist.m_pitchbend + 8192;
+        const int d1 = (raised >> 7) & 0x7f;
+        const int d2 = raised & 0x7f;
+
         try {
             MappedEvent mE(instrument->getId(),
                            MappedEvent::MidiPitchBend,
@@ -166,8 +166,11 @@ setControllers(ChannelId channel, Instrument *instrument,
             mE.setRecordedChannel(channel);
             mE.setEventTime(insertTime);
             mE.setTrackId(trackId);
+
             inserter.insertCopy(mE);
-        } catch (...) { }
+        } catch (...) {
+            // Ignore.
+        }
     }
 }
 

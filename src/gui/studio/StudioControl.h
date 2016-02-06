@@ -129,6 +129,13 @@ public:
                                 int velocity, int nsecs,
                                 bool oneshot = true);
 
+    /// Send bank selects, program changes, and controllers immediately.
+    /**
+     * Set up a channel for output.
+     *
+     * This is used for fixed channel instruments and also to set up
+     * MIDI thru channels.
+     */
     static void sendChannelSetup(Instrument *instrument, int channel);
     static void sendController(const Instrument *instrument, int channel,
                                MidiByte controller, MidiByte value);
