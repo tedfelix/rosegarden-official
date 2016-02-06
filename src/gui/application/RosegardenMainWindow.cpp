@@ -1416,6 +1416,9 @@ RosegardenMainWindow::setDocument(RosegardenDocument* newDocument)
                 getView()->getTrackEditor(), SLOT(slotScrollToTrack(int)));
     }
 
+    // Make sure the view and the new document match.
+    m_view->slotSynchroniseWithComposition();
+
 #if 0
     // These three lines have been moved prior to the call to initView().
     // See the comments above for discussion.
