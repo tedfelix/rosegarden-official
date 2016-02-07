@@ -262,6 +262,9 @@ NoteRestInserter::handleMouseMove(const NotationMouseEvent *e)
 void
 NoteRestInserter::handleModifierChanged()
 {
+    // Avoid crash if m_lastMouseEvent has never been explicitely defined
+    if (!m_lastMouseEvent.staff || !m_lastMouseEvent.element) return;
+
     if (m_alwaysPreview) { 
         computeLocationAndPreview(&m_lastMouseEvent,
                                   (m_lastMouseEvent.buttons & Qt::LeftButton));
