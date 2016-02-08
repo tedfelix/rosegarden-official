@@ -1700,15 +1700,6 @@ Segment::countVerses()
     }
 }
 
-// return m_percussionPitch with bounds enforcement
-void
-Segment::setPercussionPitch(int pitch)
-{
-    if (pitch < -1) pitch = -1;
-    if (pitch > 127) pitch = 127;
-    m_percussionPitch = pitch;
-}
-
 SegmentMultiSet&
 Segment::
 getCompositionSegments(void)

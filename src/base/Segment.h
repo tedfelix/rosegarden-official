@@ -244,23 +244,6 @@ public:
      */
     void setLowestPlayable(int pitch) { m_lowestPlayable = pitch; }
 
-    /**
-     * Returns -1 for a standard melodic segment.  Returns a value 0 to 127 for
-     * percussion segments, indicating the MIDI pitch at which events from this
-     * segment should be notated.
-     */
-    int getPercussionPitch() { return m_percussionPitch; }
-
-    /**
-     * Sets the MIDI pitch at which events from this segment should be notated.
-     * This should be set to -1 for standard melodic segments, and to a value
-     * betwen 0 and 127 for percussion segments.  If you try to set this to a
-     * value that falls outside these bounds, values higher than 127 will be
-     * clipped to 127, and values lower than -1 will be clipped to -1.
-     */
-    void setPercussionPitch(int pitch);
-
-
 
     //////
     //
