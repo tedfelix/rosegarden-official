@@ -248,42 +248,24 @@ NoteRestInserter::FollowMode
 NoteRestInserter::handleMouseMove(const NotationMouseEvent *e)
 {
     if (m_alwaysPreview) { 
-        m_lastMouseEvent = *e;
         computeLocationAndPreview(e, (e->buttons & Qt::LeftButton));
     } else {
         if (m_clickHappened) {
-            computeLocationAndPreview(e, true);
+            showPreview(false);
         }
     }
-    
     return NoFollow;
 }
 
-void
-NoteRestInserter::handleModifierChanged()
-{
-    // Avoid crash if m_lastMouseEvent has never been explicitely defined
-    if (!m_lastMouseEvent.staff || !m_lastMouseEvent.element) return;
-
-    if (m_alwaysPreview) { 
-        computeLocationAndPreview(&m_lastMouseEvent,
-                                  (m_lastMouseEvent.buttons & Qt::LeftButton));
-    } else {
-        if (m_clickHappened) {
-            computeLocationAndPreview(&m_lastMouseEvent, true);
-        }
-    }
-}
-    
 Accidental
-NoteRestInserter::getAccidentalFromModifierKeys()
+NoteRestInserter::getAccidentalFromModifierKeys(Qt::KeyboardModifiers modifiers)
 {
     Accidental accidental = Accidentals::NoAccidental;
 
     if (!m_quickEdit) return accidental;
     
-    Qt::KeyboardModifiers modifiers;
-    modifiers = QApplication::queryKeyboardModifiers();
+//     Qt::KeyboardModifiers modifiers;
+//     modifiers = QApplication::queryKeyboardModifiers();
     
     // Use Maj or Ctrl keys to add sharp or flat on the fly
     // Use Maj + Ctrl to add natural  
@@ -326,7 +308,7 @@ NoteRestInserter::handleMouseRelease(const NotationMouseEvent *e)
         endTime = std::max(endTime, (*realEnd)->getNotationAbsoluteTime());
     }
 
-    Accidental accidental = getAccidentalFromModifierKeys();
+    Accidental accidental = getAccidentalFromModifierKeys(e->modifiers);
     if (accidental == Accidentals::NoAccidental) {
         accidental =
             (m_accidental == Accidentals::NoAccidental && m_followAccidental)
@@ -394,7 +376,7 @@ NoteRestInserter::setCursorShape()
 }
 
 void
-NoteRestInserter::handleWheelTurned(int delta)
+NoteRestInserter::handleWheelTurned(int delta, const NotationMouseEvent *e)
 {
     if (!m_scene) return; 
 
@@ -444,7 +426,7 @@ NoteRestInserter::handleWheelTurned(int delta)
 
             // Update preview
             clearPreview();
-            computeLocationAndPreview(&m_lastMouseEvent, false);
+            computeLocationAndPreview(e, false);
         }
 
         // Allow synchronizeWheel() to modify m_wheelIndex if needed
@@ -609,7 +591,7 @@ NoteRestInserter::computeLocationAndPreview(const NotationMouseEvent *e,
     }
 
     int pitch;
-    Accidental quickAccidental = getAccidentalFromModifierKeys();
+    Accidental quickAccidental = getAccidentalFromModifierKeys(e->modifiers);
     if (quickAccidental != Accidentals::NoAccidental) {
         Pitch p(e->height, e->clef, e->key, quickAccidental);
         pitch = p.getPerformancePitch();
@@ -696,6 +678,13 @@ void NoteRestInserter::showPreview(bool play)
         inRange = false;
     }
 
+    Accidental accidental = m_clickQuickAccidental;
+    if (accidental == Accidentals::NoAccidental) {
+        accidental =
+            (m_accidental == Accidentals::NoAccidental && m_followAccidental)
+                ? m_lastAccidental : m_accidental;
+    }
+
     // Select the color of the preview
     QColor color;
     if (!inRange) {
@@ -711,6 +700,7 @@ void NoteRestInserter::showPreview(bool play)
                                  pitch, m_clickHeight,
                                  Note(m_noteType, m_noteDots),
                                  m_widget->isInGraceMode(),
+                                 accidental,  // TODO: use staff context
                                  color, -1, play);
     }
 }

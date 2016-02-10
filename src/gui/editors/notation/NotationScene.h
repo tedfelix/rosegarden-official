@@ -160,6 +160,7 @@ public:
                          int pitch, int height,
                          const Note &note,
                          bool grace,
+                         Accidental accidental = Accidentals::NoAccidental,
                          QColor color = GUIPalette::SelectionColor,
                          int velocity = -1,
                          bool play = true
@@ -221,8 +222,7 @@ signals:
     void mouseMoved(const NotationMouseEvent *e);
     void mouseReleased(const NotationMouseEvent *e);
     void mouseDoubleClicked(const NotationMouseEvent *e);
-    void wheelTurned(int);
-    void modifierChanged();
+    void wheelTurned(int, const NotationMouseEvent *e);
 
     void sceneNeedsRebuilding();
 
@@ -264,7 +264,7 @@ protected:
     void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *);
     void wheelEvent(QGraphicsSceneWheelEvent *);
     
-    virtual void keyPressEvent(QKeyEvent * keyEvent);  // YGYGYG
+    virtual void keyPressEvent(QKeyEvent * keyEvent);
     virtual void keyReleaseEvent(QKeyEvent * keyEvent);
 
     // CompositionObserver methods
@@ -284,6 +284,7 @@ private:
     NotationStaff *getNextStaffHorizontally(int direction, bool cycle);
     NotationStaff *getStaffbyTrackAndTime(const Track *track, timeT targetTime);
     void initCurrentStaffIndex(void);
+    void processKeyboardEvent(QKeyEvent * keyEvent);
 
     NotationWidget *m_widget; // I do not own this
 
@@ -336,6 +337,10 @@ private:
     void getPageMargins(int &left, int &top);
 
     void setupMouseEvent(QGraphicsSceneMouseEvent *, NotationMouseEvent &);
+    void setupMouseEvent(QGraphicsSceneWheelEvent *, NotationMouseEvent &);
+    void setupMouseEvent(QPointF scenePos, Qt::MouseButtons buttons,
+                         Qt::KeyboardModifiers modifiers,
+                         NotationMouseEvent &nme);
 
     void checkUpdate();
     void positionStaffs();

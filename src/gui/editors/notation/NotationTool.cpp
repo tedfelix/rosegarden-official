@@ -86,10 +86,7 @@ NotationTool::handleMouseMove(const NotationMouseEvent *)
 }
 
 void
-NotationTool::handleWheelTurned(int) { }
-
-void
-NotationTool::handleModifierChanged() { }
+NotationTool::handleWheelTurned(int, const NotationMouseEvent *) { }
 
 void
 NotationTool::invokeInParentView(QString actionName)

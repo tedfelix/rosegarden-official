@@ -73,6 +73,7 @@
 #include "misc/Strings.h"
 #include "misc/ConfigGroups.h"
 
+#include <QApplication>
 #include <QGraphicsView>
 #include <QGridLayout>
 #include <QBoxLayout>
@@ -443,11 +444,8 @@ NotationWidget::setSegments(RosegardenDocument *document,
     connect(m_scene, SIGNAL(mouseDoubleClicked(const NotationMouseEvent *)),
             this, SLOT(slotDispatchMouseDoubleClick(const NotationMouseEvent *)));
 
-    connect(m_scene, SIGNAL(wheelTurned(int)),
-            this, SLOT(slotDispatchWheelTurned(int)));
-
-    connect(m_scene, SIGNAL(modifierChanged()),
-            this, SLOT(slotDispatchModifierChanged()));
+    connect(m_scene, SIGNAL(wheelTurned(int, const NotationMouseEvent *)),
+            this, SLOT(slotDispatchWheelTurned(int, const NotationMouseEvent *)));
 
     // Bug #2960243: the Qt::QueuedConnection flag is mandatory to avoid
     // a crash after deleting the notation scene from inside its own code.
@@ -1022,17 +1020,10 @@ NotationWidget::slotDispatchMouseDoubleClick(const NotationMouseEvent *e)
 }
 
 void
-NotationWidget::slotDispatchWheelTurned(int delta)
+NotationWidget::slotDispatchWheelTurned(int delta, const NotationMouseEvent *e)
 {
     if (!m_currentTool) return;
-    m_currentTool->handleWheelTurned(delta);
-}
-
-void
-NotationWidget::slotDispatchModifierChanged()
-{
-    if (!m_currentTool) return;
-    m_currentTool->handleModifierChanged();
+    m_currentTool->handleWheelTurned(delta, e);
 }
 
 EventSelection *

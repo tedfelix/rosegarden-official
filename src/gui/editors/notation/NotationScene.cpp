@@ -31,6 +31,7 @@
 #include "NotationWidget.h"
 #include "NotationMouseEvent.h"
 #include "NoteFontFactory.h"
+#include "gui/widgets/Panned.h"
 
 #include "misc/Debug.h"
 #include "misc/Strings.h"
@@ -43,6 +44,7 @@
 #include "gui/studio/StudioControl.h"
 #include "sound/MappedEvent.h"
 
+#include <QApplication>
 #include <QSettings>
 #include <QGraphicsSceneMouseEvent>
 #include <QKeyEvent>
@@ -697,17 +699,32 @@ void
 NotationScene::setupMouseEvent(QGraphicsSceneMouseEvent *e,
                                NotationMouseEvent &nme)
 {
+    setupMouseEvent(e->scenePos(), e->buttons(), e->modifiers(), nme);
+}
+
+void
+NotationScene::setupMouseEvent(QGraphicsSceneWheelEvent *e,
+                               NotationMouseEvent &nme)
+{
+    setupMouseEvent(e->scenePos(), e->buttons(), e->modifiers(), nme);
+}
+
+
+void
+NotationScene::setupMouseEvent(QPointF scenePos, Qt::MouseButtons buttons,
+                               Qt::KeyboardModifiers modifiers,
+                               NotationMouseEvent &nme)
+{
     Profiler profiler("NotationScene::setupMouseEvent");
 
-    double sx = e->scenePos().x();
-    int sy = lrint(e->scenePos().y());
+    double sx = scenePos.x();
+    int sy = lrint(scenePos.y());
 
     nme.sceneX = sx;
     nme.sceneY = sy;
 
-    nme.modifiers = e->modifiers();
-    nme.buttons = e->buttons();
-
+    nme.modifiers = modifiers;
+    nme.buttons = buttons;
     nme.element = 0;
     nme.staff = getStaffForSceneCoords(sx, sy);
 
@@ -747,7 +764,7 @@ NotationScene::setupMouseEvent(QGraphicsSceneMouseEvent *e,
     // we've discovered what the context is -- now check whether we're
     // clicking on something specific
 
-    const QList<QGraphicsItem *> collisions = items(e->scenePos());
+    const QList<QGraphicsItem *> collisions = items(scenePos);
 
     NotationElement *clickedNote = 0;
     NotationElement *clickedVagueNote = 0;
@@ -869,7 +886,9 @@ void
 NotationScene::wheelEvent(QGraphicsSceneWheelEvent *e)
 {
     if (m_widget->getCurrentTool()->needsWheelEvents()) {
-        emit wheelTurned(e->delta());
+        NotationMouseEvent nme;
+        setupMouseEvent(e, nme);
+        emit wheelTurned(e->delta(), &nme);
         e->accept();    // Don't pass the event to the view
     }
 }
@@ -877,22 +896,36 @@ NotationScene::wheelEvent(QGraphicsSceneWheelEvent *e)
 void 
 NotationScene::keyPressEvent(QKeyEvent * keyEvent)
 {
-    int key = keyEvent->key();
-    if ((key == Qt::Key_Shift) || (key == Qt::Key_Control)) {
-        emit modifierChanged();
-    }
+    processKeyboardEvent(keyEvent);
 }
 
 void
 NotationScene::keyReleaseEvent(QKeyEvent * keyEvent)
 {
-    int key = keyEvent->key();
-    if ((key == Qt::Key_Shift) || (key == Qt::Key_Control)) {
-        emit modifierChanged();
-    }
+    processKeyboardEvent(keyEvent);
 }
 
+void
+NotationScene::processKeyboardEvent(QKeyEvent * keyEvent)
+{
+    int key = keyEvent->key();
+    if ((key == Qt::Key_Shift) || (key == Qt::Key_Control)) {
 
+        // Get the global coordinates of the cursor and convert them to
+        // scene coordinates
+        QPoint globalPos = QCursor::pos();
+        QPoint pos = m_widget->getView()->viewport()->mapFromGlobal(globalPos);
+        QPointF scenePos = m_widget->getView()->mapToScene(pos);
+
+        // Create a NotationMouseEvent related to the QKeyEvent
+        NotationMouseEvent nme;
+        setupMouseEvent(scenePos, QApplication::mouseButtons(),
+                        QApplication::keyboardModifiers(), nme);
+
+        // Handle it as a mouse event
+        emit mouseMoved(&nme);
+    }
+}
 
 int
 NotationScene::getPageWidth()
@@ -1934,13 +1967,14 @@ NotationScene::showPreviewNote(NotationStaff *staff, double layoutX,
                                int pitch, int height,
                                const Note &note,
                                bool grace,
+                               Accidental accidental,
                                QColor color,
                                int velocity,
                                bool play
                               )
 {
     if (staff) {
-        staff->showPreviewNote(layoutX, height, note, grace, color);
+        staff->showPreviewNote(layoutX, height, note, grace, accidental, color);
         if (play) playNote(staff->getSegment(), pitch, velocity);
     }
 }

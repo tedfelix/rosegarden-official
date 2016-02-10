@@ -1858,7 +1858,8 @@ NotationStaff::isSelected(NotationElementList::iterator it)
 
 void
 NotationStaff::showPreviewNote(double layoutX, int heightOnStaff,
-                               const Note &note, bool grace, QColor color)
+                               const Note &note, bool grace,
+                               Accidental accidental, QColor color)
 {
     NotePixmapFactory *npf = m_notePixmapFactory;
     if (grace) npf = m_graceNotePixmapFactory;
@@ -1866,7 +1867,7 @@ NotationStaff::showPreviewNote(double layoutX, int heightOnStaff,
     NotePixmapParameters params(note.getNoteType(), note.getDots());
     NotationRules rules;
 
-    params.setAccidental(Accidentals::NoAccidental);
+    params.setAccidental(accidental);
     params.setNoteHeadShifted(false);
     params.setDrawFlag(true);
     params.setDrawStem(true);

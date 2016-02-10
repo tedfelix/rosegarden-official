@@ -250,7 +250,8 @@ public:
      * an insert. 
      */
     virtual void showPreviewNote(double layoutX, int heightOnStaff,
-                                 const Note &note, bool grace, QColor color);
+                                 const Note &note, bool grace,
+                                 Accidental accidental, QColor color);
 
     /**
      * Remove any visible preview note.

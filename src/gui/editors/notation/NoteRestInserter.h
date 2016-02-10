@@ -56,10 +56,8 @@ public:
 
     virtual void handleMouseRelease(const NotationMouseEvent *);
     
-    virtual void handleWheelTurned(int delta);
+    virtual void handleWheelTurned(int , const NotationMouseEvent *);
     
-    virtual void handleModifierChanged();
-
     virtual bool needsWheelEvents() { return m_quickEdit; }
 
     virtual void ready();
@@ -136,7 +134,7 @@ protected:
     virtual void clearPreview();
     
     void setCursorShape();
-    Accidental getAccidentalFromModifierKeys();
+    Accidental getAccidentalFromModifierKeys(Qt::KeyboardModifiers modifiers);
     
     void synchronizeWheel();
 
@@ -180,7 +178,6 @@ protected:
     
     int m_wheelIndex;              // Index of current duration
     bool m_processingWheelTurned;  // Use by synchronizeWheel()
-    NotationMouseEvent m_lastMouseEvent;
 
 // Obsolete ?
 //    static const char* m_actionsAccidental[][4];

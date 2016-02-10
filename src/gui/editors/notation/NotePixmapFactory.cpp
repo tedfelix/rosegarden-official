@@ -593,9 +593,7 @@ NotePixmapFactory::drawNoteAux(const NotePixmapParameters &params,
         drawFlags(flagCount, params, m_nd.stemStart, m_nd.stemEnd);
     }
 
-    if (params.m_accidental != NoAccidental) {
-        drawAccidental(params.m_accidental, params.m_cautionary);
-    }
+    drawAccidental(params);
 
     NoteStyle::CharNameRec charNameRec
         (m_style->getNoteHeadCharName(params.m_noteType));
@@ -834,13 +832,24 @@ NotePixmapFactory::makeRoomForAccidental(Accidental a,
 }
 
 void
-NotePixmapFactory::drawAccidental(Accidental a, bool cautionary)
+NotePixmapFactory::drawAccidental(const NotePixmapParameters &params)
 {
+    if (params.m_accidental == NoAccidental) return;   // Nothing to draw
+
+    Accidental a = params.m_accidental;
+    bool cautionary = params.m_cautionary;
+        
     // use the full font for this unless a grace size was supplied in ctor
     NoteFont *font = (m_haveGrace ? m_graceFont : m_font);
-
-    NoteCharacter ac = getCharacter
-        (m_style->getAccidentalCharName(a), PlainColour, false);
+    
+    NoteCharacter ac;
+    if (params.m_forceColor) {
+        ac = getCharacter
+            (m_style->getAccidentalCharName(a), params.m_forcedColor, false);
+    } else {
+        ac = getCharacter
+            (m_style->getAccidentalCharName(a), PlainColour, false);
+    }
 
     QPoint ah(font->getHotspot(m_style->getAccidentalCharName(a)));
 

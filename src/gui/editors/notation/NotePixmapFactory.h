@@ -302,7 +302,7 @@ protected:
     int getStemLength(const NotePixmapParameters &) const;
 
     void makeRoomForAccidental(Accidental, bool cautionary, int shift, bool extra);
-    void drawAccidental(Accidental, bool cautionary);
+    void drawAccidental(const NotePixmapParameters &params);
 
     void makeRoomForMarks(bool isStemmed, const NotePixmapParameters &params, int stemLength);
     void drawMarks(bool isStemmed, const NotePixmapParameters &params, int stemLength, bool overRestHack = false);
