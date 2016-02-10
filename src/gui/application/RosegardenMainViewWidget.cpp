@@ -2158,6 +2158,7 @@ RosegardenMainViewWidget::slotControllerDeviceEventReceived(MappedEvent *e, cons
                 if ((*i).getControllerValue() == controller) {
                     RG_DEBUG << "Setting controller " << controller << " for instrument " << instrument->getId() << " to " << value << endl;
                     instrument->setControllerValue(controller, value);
+                    instrument->sendController(controller, value);
                     instrument->changed();
                     break;
                 }

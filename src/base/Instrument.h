@@ -217,6 +217,7 @@ public:
 
     void setControllerValue(MidiByte controller, MidiByte value);
     MidiByte getControllerValue(MidiByte controller) const;
+    void sendController(MidiByte controller, MidiByte value);
 
     // This is retrieved from the reference MidiProgram in the Device
     const MidiKeyMapping *getKeyMapping() const;

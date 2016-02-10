@@ -24,6 +24,7 @@
 #include "base/AudioLevel.h"
 #include "gui/studio/StudioControl.h"
 #include "sound/ControlBlock.h"
+#include "misc/Debug.h"
 
 #include <cassert>
 
@@ -384,6 +385,8 @@ Instrument::sendChannelSetup()
     if (m_type != Midi)
         return;
 
+    //RG_DEBUG << "sendChannelSetup(): channel" << m_channel;
+
     if (hasFixedChannel()) {
         StudioControl::sendChannelSetup(this, m_channel);
     }
@@ -676,6 +679,13 @@ Instrument::getProgramName() const
 }
 
 void
+Instrument::sendController(MidiByte controller, MidiByte value)
+{
+    if (hasFixedChannel())
+        StudioControl::sendController(this, m_channel, controller, value);
+}
+
+void
 Instrument::setControllerValue(MidiByte controller, MidiByte value)
 {
     // two special cases
@@ -692,10 +702,6 @@ Instrument::setControllerValue(MidiByte controller, MidiByte value)
         {
             it->second = value;
             emit changedChannelSetup();
-            if (hasFixedChannel()) {
-                StudioControl::sendController(this, m_channel,
-                                              controller, value);
-            }
             return;
         }
     }

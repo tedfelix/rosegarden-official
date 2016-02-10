@@ -1237,7 +1237,11 @@ MIDIInstrumentParameterPanel::slotControllerChanged(int controllerNumber)
     }
 
     getSelectedInstrument()->setControllerValue(
-            MidiByte(controllerNumber), MidiByte(value));
+            static_cast<MidiByte>(controllerNumber),
+            static_cast<MidiByte>(value));
+    getSelectedInstrument()->sendController(
+            static_cast<MidiByte>(controllerNumber),
+            static_cast<MidiByte>(value));
     getSelectedInstrument()->changed();
 }
 
