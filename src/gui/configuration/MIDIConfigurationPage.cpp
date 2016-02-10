@@ -116,18 +116,18 @@ MIDIConfigurationPage::MIDIConfigurationPage(
     // Send Controllers
     //
     settings.beginGroup( SequencerOptionsConfigGroup );
-    label = new QLabel(tr("Send all MIDI Controllers at start of each playback"), frame);
+    label = new QLabel(tr("Allow Reset All Controllers (CC 121)"), frame);
 
-    QString controllerTip = tr("Rosegarden can send all MIDI Controllers (Pan, Reverb etc) to all MIDI devices every\ntime you hit play if you so wish.  Please note that this option will usually incur a\ndelay at the start of playback due to the amount of data being transmitted.");
-    label->setToolTip(controllerTip);
+    QString resetTip = tr("Rosegarden can send a MIDI Reset All Controllers event when setting up a channel.");
+    label->setToolTip(resetTip);
     layout->addWidget(label, row, 0, row- row+1, 1- 0+1);
 
-    m_sendControllersAtPlay = new QCheckBox(frame);
-    connect(m_sendControllersAtPlay, SIGNAL(stateChanged(int)), this, SLOT(slotModified()));
-    bool sendControllers = qStrToBool( settings.value("alwayssendcontrollers", "false" ) ) ;
-    m_sendControllersAtPlay->setChecked(sendControllers);
-    m_sendControllersAtPlay->setToolTip(controllerTip);
-    layout->addWidget(m_sendControllersAtPlay, row, 2);
+    m_allowResetAllControllers = new QCheckBox(frame);
+    connect(m_allowResetAllControllers, SIGNAL(stateChanged(int)), this, SLOT(slotModified()));
+    const bool sendResetAllControllers = qStrToBool( settings.value("allowresetallcontrollers", "true" ) ) ;
+    m_allowResetAllControllers->setChecked(sendResetAllControllers);
+    m_allowResetAllControllers->setToolTip(resetTip);
+    layout->addWidget(m_allowResetAllControllers, row, 2);
     ++row;
 
     // Timer selection
@@ -340,8 +340,8 @@ MIDIConfigurationPage::apply()
     QSettings settings;
     settings.beginGroup( SequencerOptionsConfigGroup );
 
-    settings.setValue("alwayssendcontrollers",
-                      m_sendControllersAtPlay->isChecked());
+    settings.setValue("allowresetallcontrollers",
+                      m_allowResetAllControllers->isChecked());
 
     settings.setValue("sfxloadenabled", m_sfxLoadEnabled->isChecked());
     settings.setValue("sfxloadpath", m_sfxLoadPath->text());

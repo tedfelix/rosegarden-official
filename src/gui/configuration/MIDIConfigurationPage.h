@@ -65,7 +65,7 @@ protected:
     //--------------- Data members ---------------------------------
 
     // General
-    QCheckBox *m_sendControllersAtPlay;
+    QCheckBox *m_allowResetAllControllers;
 
     QCheckBox   *m_sfxLoadEnabled;
     LineEdit    *m_sfxLoadPath;

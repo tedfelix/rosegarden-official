@@ -103,31 +103,30 @@ insertControllers(ChannelId channel, Instrument *instrument,
     // This is still desirable for some users.
     QSettings settings;
     settings.beginGroup(SequencerOptionsConfigGroup);
-    const bool sendControllers =
-            settings.value("alwayssendcontrollers", "false").toBool();
+    const bool allowReset =
+            settings.value("allowresetallcontrollers", "true").toBool();
     settings.endGroup();
-
-    if (instrument->hasFixedChannel()  &&  !sendControllers)
-        return;
 
     //RG_DEBUG << "insertControllers() : for channel" << (int)channel;
 
-    // In case some controllers are on that we don't know about, turn
-    // all controllers off.  (Reset All Controllers)
-    try {
-        const int resetAllControllers = 121;
+    if (allowReset) {
+        // In case some controllers are on that we don't know about, turn
+        // all controllers off.  (Reset All Controllers)
+        try {
+            const int resetAllControllers = 121;
 
-        MappedEvent mE(instrument->getId(),
-                       MappedEvent::MidiController,
-                       resetAllControllers,
-                       0);
-        mE.setRecordedChannel(channel);
-        mE.setEventTime(insertTime);
-        mE.setTrackId(trackId);
+            MappedEvent mE(instrument->getId(),
+                           MappedEvent::MidiController,
+                           resetAllControllers,
+                           0);
+            mE.setRecordedChannel(channel);
+            mE.setEventTime(insertTime);
+            mE.setTrackId(trackId);
 
-        inserter.insertCopy(mE);
-    } catch (...) {
-        // Ignore.
+            inserter.insertCopy(mE);
+        } catch (...) {
+            // Ignore.
+        }
     }
 
     // Get the appropriate controllers and pitch bend from the callback our
