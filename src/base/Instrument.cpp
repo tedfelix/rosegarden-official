@@ -452,8 +452,6 @@ void
 Instrument::setProgramChange(MidiByte program)
 {
     setProgram(MidiProgram(m_program.getBank(), program));
-    if (hasFixedChannel())
-        sendChannelSetup();
 }
 
 MidiByte
@@ -469,8 +467,6 @@ Instrument::setMSB(MidiByte msb)
                                     msb,
                                     m_program.getBank().getLSB()),
                            m_program.getProgram()));
-    if (hasFixedChannel())
-        sendChannelSetup();
 }
 
 MidiByte
@@ -523,8 +519,6 @@ Instrument::setPercussion(bool percussion)
                                     m_program.getBank().getMSB(),
                                     m_program.getBank().getLSB()),
                            m_program.getProgram()));
-    if (hasFixedChannel())
-        sendChannelSetup();
 }
 
 bool

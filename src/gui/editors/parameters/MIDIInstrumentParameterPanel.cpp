@@ -1056,8 +1056,7 @@ MIDIInstrumentParameterPanel::slotSelectBank(int index)
         }
     }
 
-    if (getSelectedInstrument()->hasFixedChannel())
-        getSelectedInstrument()->sendChannelSetup();
+    getSelectedInstrument()->sendChannelSetup();
 
     // This is why changed() isn't called within
     // the setters.  If it were, then each of the above changes would
@@ -1177,8 +1176,7 @@ MIDIInstrumentParameterPanel::slotSelectProgram(int index)
         }
     }
 
-    if (getSelectedInstrument()->hasFixedChannel())
-        getSelectedInstrument()->sendChannelSetup();
+    getSelectedInstrument()->sendChannelSetup();
 
     // Just one change notification for the two potential changes.
     // See comments in slotSelectBank() for further discussion.
@@ -1210,8 +1208,7 @@ MIDIInstrumentParameterPanel::slotSelectVariation(int index)
     if (!changed)
         return;
 
-    if (getSelectedInstrument()->hasFixedChannel())
-        getSelectedInstrument()->sendChannelSetup();
+    getSelectedInstrument()->sendChannelSetup();
 
     getSelectedInstrument()->changed();
 }
@@ -1254,12 +1251,12 @@ slotSelectChannel(int index)
         return;
 
     // Fixed
-    if (index == 1) {
+    if (index == 1)
         getSelectedInstrument()->setFixedChannel();
-        getSelectedInstrument()->sendChannelSetup();
-    } else {  // Auto
+    else  // Auto
         getSelectedInstrument()->releaseFixedChannel();
-    }
+
+    getSelectedInstrument()->sendChannelSetup();
 
     // A call to getSelectedInstrument()->changed() is not required as the
     // auto/fixed channel feature has its own notification mechanisms.

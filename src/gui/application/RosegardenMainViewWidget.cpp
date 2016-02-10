@@ -2113,6 +2113,7 @@ RosegardenMainViewWidget::slotControllerDeviceEventReceived(MappedEvent *e, cons
             if (!instrument)
                 return ;
             instrument->setProgramChange(program);
+            instrument->sendChannelSetup();
             instrument->changed();
         }
         return ;
