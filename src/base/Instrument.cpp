@@ -396,9 +396,6 @@ setProgram(const MidiProgram &program)
     m_program = program;
     emit changedChannelSetup();
     ControlBlock::getInstance()->instrumentChangedProgram(getId());
-    if (hasFixedChannel()) {
-        sendChannelSetup();
-    }
 }
 
 bool
@@ -455,6 +452,8 @@ void
 Instrument::setProgramChange(MidiByte program)
 {
     setProgram(MidiProgram(m_program.getBank(), program));
+    if (hasFixedChannel())
+        sendChannelSetup();
 }
 
 MidiByte
@@ -470,6 +469,8 @@ Instrument::setMSB(MidiByte msb)
                                     msb,
                                     m_program.getBank().getLSB()),
                            m_program.getProgram()));
+    if (hasFixedChannel())
+        sendChannelSetup();
 }
 
 MidiByte
@@ -485,6 +486,8 @@ Instrument::setLSB(MidiByte lsb)
                                     m_program.getBank().getMSB(),
                                     lsb),
                            m_program.getProgram()));
+    if (hasFixedChannel())
+        sendChannelSetup();
 }
 
 MidiByte
@@ -513,6 +516,8 @@ Instrument::pickFirstProgram(bool percussion)
     m_sendBankSelect = true;
     m_sendProgramChange = true;
     setProgram(programs.front());
+    if (hasFixedChannel())
+        sendChannelSetup();
 }
 
 void
@@ -522,6 +527,8 @@ Instrument::setPercussion(bool percussion)
                                     m_program.getBank().getMSB(),
                                     m_program.getBank().getLSB()),
                            m_program.getProgram()));
+    if (hasFixedChannel())
+        sendChannelSetup();
 }
 
 bool

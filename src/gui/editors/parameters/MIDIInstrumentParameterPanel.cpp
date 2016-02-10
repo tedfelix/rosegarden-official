@@ -1015,6 +1015,8 @@ MIDIInstrumentParameterPanel::slotSelectBank(int index)
             if (!programList.empty()) {
                 // Switch to the first program in this bank.
                 getSelectedInstrument()->setProgram(programList.front());
+                if (getSelectedInstrument()->hasFixedChannel())
+                    getSelectedInstrument()->sendChannelSetup();
             } else {
                 // No programs for this bank.  Just go with 0.
                 getSelectedInstrument()->setProgramChange(0);
@@ -1044,6 +1046,8 @@ MIDIInstrumentParameterPanel::slotSelectBank(int index)
                 if (!programList.empty()) {
                     // Pick the first program
                     getSelectedInstrument()->setProgram(programList.front());
+                    if (getSelectedInstrument()->hasFixedChannel())
+                        getSelectedInstrument()->sendChannelSetup();
                 }
             }
 

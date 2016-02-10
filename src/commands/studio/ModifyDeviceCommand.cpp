@@ -213,6 +213,8 @@ ModifyDeviceCommand::unexecute()
     InstrumentList instruments = midiDevice->getAllInstruments();
     for (size_t i = 0; i < instruments.size(); ++i) {
         instruments[i]->setProgram(m_oldInstrumentPrograms[i]);
+        if (instruments[i]->hasFixedChannel())
+            instruments[i]->sendChannelSetup();
     }
 
     // ??? Instead of this kludge, we should be calling a Studio::hasChanged()
