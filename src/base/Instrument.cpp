@@ -486,8 +486,6 @@ Instrument::setLSB(MidiByte lsb)
                                     m_program.getBank().getMSB(),
                                     lsb),
                            m_program.getProgram()));
-    if (hasFixedChannel())
-        sendChannelSetup();
 }
 
 MidiByte
@@ -516,8 +514,6 @@ Instrument::pickFirstProgram(bool percussion)
     m_sendBankSelect = true;
     m_sendProgramChange = true;
     setProgram(programs.front());
-    if (hasFixedChannel())
-        sendChannelSetup();
 }
 
 void

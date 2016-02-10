@@ -141,6 +141,8 @@ ModifyDeviceCommand::execute()
                 for (size_t i = 0; i < instruments.size(); ++i) {
                     instruments[i]->pickFirstProgram(
                             midiDevice->isPercussionNumber(i));
+                    if (instruments[i]->hasFixedChannel())
+                        instruments[i]->sendChannelSetup();
                 }
             }
         }

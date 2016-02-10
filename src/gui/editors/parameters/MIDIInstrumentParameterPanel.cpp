@@ -1015,8 +1015,6 @@ MIDIInstrumentParameterPanel::slotSelectBank(int index)
             if (!programList.empty()) {
                 // Switch to the first program in this bank.
                 getSelectedInstrument()->setProgram(programList.front());
-                if (getSelectedInstrument()->hasFixedChannel())
-                    getSelectedInstrument()->sendChannelSetup();
             } else {
                 // No programs for this bank.  Just go with 0.
                 getSelectedInstrument()->setProgramChange(0);
@@ -1046,8 +1044,6 @@ MIDIInstrumentParameterPanel::slotSelectBank(int index)
                 if (!programList.empty()) {
                     // Pick the first program
                     getSelectedInstrument()->setProgram(programList.front());
-                    if (getSelectedInstrument()->hasFixedChannel())
-                        getSelectedInstrument()->sendChannelSetup();
                 }
             }
 
@@ -1059,6 +1055,9 @@ MIDIInstrumentParameterPanel::slotSelectBank(int index)
 
         }
     }
+
+    if (getSelectedInstrument()->hasFixedChannel())
+        getSelectedInstrument()->sendChannelSetup();
 
     // This is why changed() isn't called within
     // the setters.  If it were, then each of the above changes would
@@ -1178,6 +1177,9 @@ MIDIInstrumentParameterPanel::slotSelectProgram(int index)
         }
     }
 
+    if (getSelectedInstrument()->hasFixedChannel())
+        getSelectedInstrument()->sendChannelSetup();
+
     // Just one change notification for the two potential changes.
     // See comments in slotSelectBank() for further discussion.
     getSelectedInstrument()->changed();
@@ -1207,6 +1209,9 @@ MIDIInstrumentParameterPanel::slotSelectVariation(int index)
 
     if (!changed)
         return;
+
+    if (getSelectedInstrument()->hasFixedChannel())
+        getSelectedInstrument()->sendChannelSetup();
 
     getSelectedInstrument()->changed();
 }
