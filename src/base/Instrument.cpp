@@ -767,7 +767,6 @@ setFixedChannel(void)
         allocator->reserveFixedChannel(m_channel);
         m_fixed = true;
         emit channelBecomesFixed();
-        sendChannelSetup();
         ControlBlock::getInstance()->instrumentChangedFixity(getId());
     }
 }

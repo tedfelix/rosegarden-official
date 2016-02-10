@@ -2026,10 +2026,12 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
                         // annoying problems with this behavior when loading
                         // old files.
                         m_instrument->setFixedChannel();
+                        m_instrument->sendChannelSetup();
 
                     } else if (valueText.toLower() == "true") {
                         // Fixed attribute is set.
                         m_instrument->setFixedChannel();
+                        m_instrument->sendChannelSetup();
                     } 
             }
         }

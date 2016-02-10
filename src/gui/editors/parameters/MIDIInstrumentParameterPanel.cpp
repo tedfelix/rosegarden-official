@@ -1245,10 +1245,12 @@ slotSelectChannel(int index)
         return;
 
     // Fixed
-    if (index == 1)
+    if (index == 1) {
         getSelectedInstrument()->setFixedChannel();
-    else  // Auto
+        getSelectedInstrument()->sendChannelSetup();
+    } else {  // Auto
         getSelectedInstrument()->releaseFixedChannel();
+    }
 
     // A call to getSelectedInstrument()->changed() is not required as the
     // auto/fixed channel feature has its own notification mechanisms.

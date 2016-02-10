@@ -42,30 +42,26 @@ public:
         Record = 1
     };
 
-    enum VariationType {
-        NoVariations,
-        VariationFromLSB,
-        VariationFromMSB
-    };
-
-    MidiDevice();
-    MidiDevice(const MidiDevice &);
-    MidiDevice(DeviceId id,
-               InstrumentId ibase,
-               const MidiDevice &);
     MidiDevice(DeviceId id,
                InstrumentId ibase,
                const std::string &name,
-               DeviceDirection dir);
-    MidiDevice(DeviceId id,
-               InstrumentId ibase,
-               const std::string &name,
-               const std::string &label,
                DeviceDirection dir);
     virtual ~MidiDevice();
 
-    // Assignment
-    MidiDevice &operator=(const MidiDevice &);
+    // Copy ctor.
+    // ??? Switch pointers to objects and rely on bitwise copy to take
+    //     care of this.  If that's workable, then this can go.
+    MidiDevice(const MidiDevice &);
+
+    //MidiDevice();
+    //MidiDevice(DeviceId id,
+    //           InstrumentId ibase,
+    //           const MidiDevice &);
+    //MidiDevice(DeviceId id,
+    //           InstrumentId ibase,
+    //           const std::string &name,
+    //           const std::string &label,
+    //           DeviceDirection dir);
 
     virtual AllocateChannels *getAllocator(void);
 
@@ -131,6 +127,12 @@ public:
 
     DeviceDirection getDirection() const { return m_direction; }
     void setDirection(DeviceDirection dir) { m_direction = dir; }
+
+    enum VariationType {
+        NoVariations,
+        VariationFromLSB,
+        VariationFromMSB
+    };
 
     VariationType getVariationType() const { return m_variationType; }
     void setVariationType(VariationType v) { m_variationType = v; }
@@ -242,6 +244,9 @@ protected:
 
     // The channel allocator.
     AllocateChannels  *m_allocator;
+
+private:
+    //MidiDevice &operator=(const MidiDevice &);
 };
 
 }

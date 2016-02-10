@@ -35,6 +35,7 @@
 namespace Rosegarden
 {
 
+#if 0
 MidiDevice::MidiDevice():
     Device(0, "Default Midi Device", Device::Midi),
     m_metronome(0),
@@ -51,6 +52,7 @@ MidiDevice::MidiDevice():
     // create a default Metronome
     m_metronome = new MidiMetronome(MidiInstrumentBase + 9);
 }
+#endif
 
 MidiDevice::MidiDevice(DeviceId id,
                        InstrumentId ibase,
@@ -72,6 +74,7 @@ MidiDevice::MidiDevice(DeviceId id,
     m_metronome = new MidiMetronome(MidiInstrumentBase + 9);
 }
 
+#if 0
 MidiDevice::MidiDevice(DeviceId id,
                        InstrumentId ibase,
                        const MidiDevice &dev) :
@@ -103,6 +106,7 @@ MidiDevice::MidiDevice(DeviceId id,
 
     generatePresentationList();
 }
+#endif
 
 MidiDevice::MidiDevice(const MidiDevice &dev) :
     Device(dev.getId(), dev.getName(), dev.getType()),
@@ -139,7 +143,7 @@ MidiDevice::MidiDevice(const MidiDevice &dev) :
     generatePresentationList();
 }
 
-
+#if 0
 MidiDevice &
 MidiDevice::operator=(const MidiDevice &dev)
 {
@@ -193,6 +197,7 @@ MidiDevice::operator=(const MidiDevice &dev)
 
     return (*this);
 }
+#endif
 
 MidiDevice::~MidiDevice()
 {
@@ -213,6 +218,9 @@ MidiDevice::createInstruments(InstrumentId base)
         Instrument *instrument = new Instrument
             (base + i, Instrument::Midi, "", i, this);
         instrument->setFixedChannel();
+        // ??? Since we don't have a connection yet, this makes
+        //     little sense.
+        //instrument->sendChannelSetup();
         addInstrument(instrument);
     }
     renameInstruments();

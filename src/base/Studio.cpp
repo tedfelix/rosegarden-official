@@ -585,6 +585,10 @@ Studio::unassignAllInstruments()
                     (*iit)->setNaturalChannel(channel);
                     channel = ( channel + 1 ) % 16;
                     (*iit)->setFixedChannel();
+                    // ??? This is a "reset" of the instrument.  It doesn't
+                    //     seem to make sense that we should send out the
+                    //     default values.
+                    //(*iit)->sendChannelSetup();
 
                     (*iit)->setSendPan(false);
                     (*iit)->setSendVolume(false);
