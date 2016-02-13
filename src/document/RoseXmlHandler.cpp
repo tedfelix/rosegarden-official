@@ -815,6 +815,16 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             track->setStaffBracket(staffBracketStr.toInt());
         }
 
+        QString inputDeviceStr = atts.value("inputDevice");
+        if (!inputDeviceStr.isEmpty()) {
+            track->setMidiInputDevice(inputDeviceStr.toUInt());
+        }
+
+        QString inputChannelStr = atts.value("inputChannel");
+        if (!inputChannelStr.isEmpty()) {
+            track->setMidiInputChannel(inputChannelStr.toInt());
+        }
+
         // If the composition tag had this track set to record, make sure
         // it is armed.
         if (getComposition().isTrackRecording(id)) {

@@ -166,6 +166,10 @@ std::string Track::toXmlString() const
 
     track << " staffSize=\"" << m_staffSize << "\"";
     track << " staffBracket=\"" << m_staffBracket << "\"";
+
+    track << " inputDevice=\"" << m_input_device << "\"";
+    track << " inputChannel=\"" << (int)m_input_channel << "\"";
+
     track << "/>";
 
     return track.str();
