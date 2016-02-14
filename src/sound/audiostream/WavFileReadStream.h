@@ -20,6 +20,8 @@
 
 #include "AudioReadStream.h"
 
+#include <rosegardenprivate_export.h>
+
 #ifdef HAVE_LIBSNDFILE
 
 #include <sndfile.h>
@@ -27,11 +29,13 @@
 namespace Rosegarden
 {
     
-class WavFileReadStream : public AudioReadStream
+class ROSEGARDENPRIVATE_EXPORT WavFileReadStream : public AudioReadStream
 {
 public:
     WavFileReadStream(QString path);
     virtual ~WavFileReadStream();
+    
+    static void initStaticObjects();
 
     virtual QString getError() const { return m_error; }
 

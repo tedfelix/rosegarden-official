@@ -20,6 +20,8 @@
 
 #include "AudioWriteStream.h"
 
+#include <rosegardenprivate_export.h>
+
 #ifdef HAVE_LIBSNDFILE
 
 #include <sndfile.h>
@@ -27,11 +29,13 @@
 namespace Rosegarden
 {
     
-class WavFileWriteStream : public AudioWriteStream
+class ROSEGARDENPRIVATE_EXPORT WavFileWriteStream : public AudioWriteStream
 {
 public:
     WavFileWriteStream(Target target);
     virtual ~WavFileWriteStream();
+
+    static void initStaticObjects();
 
     virtual QString getError() const { return m_error; }
 

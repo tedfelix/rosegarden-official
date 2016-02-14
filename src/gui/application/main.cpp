@@ -29,6 +29,11 @@
 #include "gui/application/RosegardenApplication.h"
 #include "base/RealTime.h"
 
+#include "sound/audiostream/WavFileReadStream.h"
+#include "sound/audiostream/WavFileWriteStream.h"
+#include "sound/audiostream/OggVorbisReadStream.h"
+#include "sound/audiostream/SimpleWavFileWriteStream.h"
+
 #include <svnversion.h> // generated file
 #include "rosegarden-version.h"
 
@@ -356,6 +361,29 @@ void usage()
 
 int main(int argc, char *argv[])
 {
+
+    // Initialization of static objects related to read and write of audio
+    // files.
+    // This fixes bug #1503 (Audio files can't be read when RG is built in
+    // release mode).
+
+#ifdef HAVE_LIBSNDFILE
+    WavFileReadStream::initStaticObjects();
+    WavFileWriteStream::initStaticObjects();
+#endif
+
+#ifdef HAVE_OGGZ
+#ifdef HAVE_FISHSOUND
+    OggVorbisReadStream::initStaticObjects();
+#endif
+#endif
+
+#ifndef HAVE_LIBSNDFILE
+    SimpleWavFileWriteStream::initStaticObjects();
+#endif
+
+
+
     for (int i = 1; i < argc; ++i) {
         if (!strcmp(argv[i], "--version")) {
             std::cout << "Rosegarden version: " << VERSION << " (\"" << CODENAME << "\")" << std::endl;

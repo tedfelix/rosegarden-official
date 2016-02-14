@@ -20,6 +20,8 @@
 
 #include "AudioWriteStream.h"
 
+#include <rosegardenprivate_export.h>
+
 // If we have libsndfile, we shouldn't be using this class
 #ifndef HAVE_LIBSNDFILE
 
@@ -29,11 +31,13 @@
 namespace Rosegarden
 {
     
-class SimpleWavFileWriteStream : public AudioWriteStream
+class ROSEGARDENPRIVATE_EXPORT SimpleWavFileWriteStream : public AudioWriteStream
 {
 public:
     SimpleWavFileWriteStream(Target target);
     virtual ~SimpleWavFileWriteStream();
+    
+    static void initStaticObjects();
 
     virtual QString getError() const { return m_error; }
 

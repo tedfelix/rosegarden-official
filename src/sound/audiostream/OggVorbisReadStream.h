@@ -20,17 +20,21 @@
 
 #include "AudioReadStream.h"
 
+#include <rosegardenprivate_export.h>
+
 #ifdef HAVE_OGGZ
 #ifdef HAVE_FISHSOUND
 
 namespace Rosegarden
 {
     
-class OggVorbisReadStream : public AudioReadStream
+class ROSEGARDENPRIVATE_EXPORT OggVorbisReadStream : public AudioReadStream
 {
 public:
     OggVorbisReadStream(QString path);
     virtual ~OggVorbisReadStream();
+    
+    static void initStaticObjects();
 
     virtual QString getError() const { return m_error; }
 

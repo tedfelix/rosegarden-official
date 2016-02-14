@@ -27,12 +27,27 @@ using std::endl;
 namespace Rosegarden
 {
 
-static 
-AudioWriteStreamBuilder<SimpleWavFileWriteStream>
-simplewavbuilder(
-    QUrl("http://breakfastquay.com/rdf/rosegarden/fileio/SimpleWavFileWriteStream"),
-    QStringList() << "wav"
+// Fix bug #1503:
+// Static object simplewavbuilder was no more initialized since
+// SimpleWavFileWriteStream.o is included in a static library when building RG
+// in release mode.
+// This fix allows it to be explicitely initialized from main.cpp by calling
+// SimpleWavFileWriteStream::initStaticObjects().
+// The *simplewavbuilder object itself is never used but its creation
+// initializes a needed "ThingBuilder" defined in Thingfactory.h.
+    
+static AudioWriteStreamBuilder<SimpleWavFileWriteStream> * simplewavbuilder;
+
+void
+SimpleWavFileWriteStream::initStaticObjects()
+{
+    simplewavbuilder = new AudioWriteStreamBuilder<SimpleWavFileWriteStream>(
+        QUrl("http://breakfastquay.com/rdf/rosegarden/fileio/SimpleWavFileWriteStream"),
+        QStringList() << "wav"
     );
+}
+
+
 
 SimpleWavFileWriteStream::SimpleWavFileWriteStream(Target target) :
     AudioWriteStream(target),

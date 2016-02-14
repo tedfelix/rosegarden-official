@@ -27,12 +27,26 @@
 namespace Rosegarden
 {
 
-static 
-AudioWriteStreamBuilder<WavFileWriteStream>
-wavbuilder(
-    QUrl("http://breakfastquay.com/rdf/rosegarden/fileio/WavFileWriteStream"),
-    QStringList() << "wav" << "aiff"
+// Fix bug #1503:
+// Static object wavbuilder was no more initialized since WavFileWriteStream.o
+// is included in a static library when building RG in release mode.
+// This fix allows it to be explicitely initialized from main.cpp by calling
+// WavFileWriteStream::initStaticObjects().
+// The *wavbuilder object itself is never used but its creation initializes
+// a needed "ThingBuilder" defined in Thingfactory.h.
+
+static AudioWriteStreamBuilder<WavFileWriteStream> * wavbuilder;
+
+void
+WavFileWriteStream::initStaticObjects()
+{
+    wavbuilder = new AudioWriteStreamBuilder<WavFileWriteStream>(
+        QUrl("http://breakfastquay.com/rdf/rosegarden/fileio/WavFileWriteStream"),
+        QStringList() << "wav" << "aiff"
     );
+}
+
+
 
 WavFileWriteStream::WavFileWriteStream(Target target) :
     AudioWriteStream(target),
