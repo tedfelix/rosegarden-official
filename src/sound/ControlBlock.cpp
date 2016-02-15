@@ -33,6 +33,22 @@
 namespace Rosegarden
 {
 
+void TrackInfo::clear()
+{
+    m_deleted = true;
+    m_muted = true;
+    m_armed = false;
+    m_deviceFilter = 0;
+    m_channelFilter = 0;
+    m_thruRouting = Track::Auto;
+    m_instrumentId = 0;
+    m_thruChannel = 0;
+    m_isThruChannelReady = false;
+    m_hasThruChannel = false;
+    m_selected = false;
+    m_useFixedChannel = true;
+}
+
 ControlBlock *
 ControlBlock::getInstance()
 {
@@ -62,17 +78,11 @@ clearTracks(void)
 {
     // ??? Giving TrackInfo a proper default ctor would simplify this.
     //       m_trackInfo[i] = TrackInfo();
+    //     It would also mean that this wouldn't need to be called in
+    //     the ctor.
 
-    for (unsigned int i = 0; i < CONTROLBLOCK_MAX_NB_TRACKS; ++i) {
-        m_trackInfo[i].m_muted = true;
-        m_trackInfo[i].m_deleted = true;
-        m_trackInfo[i].m_armed = false;
-        m_trackInfo[i].m_selected = false;
-        m_trackInfo[i].m_hasThruChannel = false;
-        m_trackInfo[i].m_instrumentId = 0;
-        // We don't set m_thruChannel or m_isThruChannelReady because they
-        // mean nothing when m_hasThruChannel is false.
-    }
+    for (unsigned int i = 0; i < CONTROLBLOCK_MAX_NB_TRACKS; ++i)
+        m_trackInfo[i].clear();
 }
 
 void
@@ -115,8 +125,9 @@ ControlBlock::updateTrackData(Track* t)
         setTrackArmed(t->getId(), t->isArmed());
         setTrackMuted(t->getId(), t->isMuted());
         setTrackDeleted(t->getId(), false);
-        setTrackChannelFilter(t->getId(), t->getMidiInputChannel());
         setTrackDeviceFilter(t->getId(), t->getMidiInputDevice());
+        setTrackChannelFilter(t->getId(), t->getMidiInputChannel());
+        setTrackThruRouting(t->getId(), t->getThruRouting());
         if (t->getId() > m_maxTrackId)
             m_maxTrackId = t->getId();
     }
@@ -228,6 +239,13 @@ ControlBlock::getTrackDeviceFilter(TrackId trackId) const
 }
 #endif
 
+void ControlBlock::setTrackThruRouting(
+        TrackId trackId, Track::ThruRouting thruRouting)
+{
+    if (trackId < CONTROLBLOCK_MAX_NB_TRACKS)
+        m_trackInfo[trackId].m_thruRouting = thruRouting;
+}
+
 bool 
 ControlBlock::isInstrumentMuted(InstrumentId instrumentId) const
 {
@@ -287,48 +305,67 @@ setSelectedTrack(TrackId track)
     m_selectedTrack = track;
 }
 
-// Return the instrument id and channel number for the selected track,
-// preparing the channel if needed.  If impossible, return an invalid
-// instrument and channel.
-// @author Tom Breton (Tehom)
 InstrumentAndChannel
 ControlBlock::
-getInsAndChanForSelectedTrack(void) 
+getInstAndChanForEvent(bool recording, DeviceId deviceId, char channel)
 {
-    if (!m_doc)
-        { return InstrumentAndChannel(); }
-
-    TrackId trackId = getSelectedTrack();
-    
-    if (trackId >= CONTROLBLOCK_MAX_NB_TRACKS)
-        { return InstrumentAndChannel(); }
-
-    TrackInfo &track = m_trackInfo[trackId];
-    return track.getChannelAsReady(m_doc->getStudio());
-}
-
-// Return the instrument id and channel number for the given DeviceId
-// and input Channel, preparing the channel if needed.  If impossible,
-// return an invalid instrument and channel.
-InstrumentAndChannel
-ControlBlock::
-getInsAndChanForEvent(unsigned int dev, 
-                      unsigned int chan) 
-{
-    for (unsigned int i = 0; i <= m_maxTrackId; ++i) {
+    // For each track
+    for (unsigned i = 0; i <= m_maxTrackId; ++i) {
         TrackInfo &track = m_trackInfo[i];
-        if (!track.m_deleted && track.m_armed) {
-            if (((track.m_deviceFilter == Device::ALL_DEVICES) ||
-		 (track.m_deviceFilter == dev)) &&
-		((track.m_channelFilter == -1) ||
-		 (track.m_channelFilter == int(chan)))) {
+
+        bool deviceMatch =
+                (track.m_deviceFilter == Device::ALL_DEVICES  ||
+                 track.m_deviceFilter == deviceId);
+        bool channelMatch =
+                (track.m_channelFilter == -1  ||  // all channels
+                 track.m_channelFilter == static_cast<int>(channel));
+
+        // if the event doesn't match this track's filters, try the next track
+        if (!deviceMatch  ||  !channelMatch)
+            continue;
+
+        switch(track.m_thruRouting) {
+        case Track::Auto:
+            // if we are recording
+            if (recording) {
+                // if this track is armed
+                if (track.m_armed) {
+                    // route to this track's inst/chan.
+                    return track.getChannelAsReady(m_doc->getStudio());
+                }
+            } else {  // we aren't recording
+                // if this track is selected
+                if (track.m_selected) {
+                    // route to this track's inst/chan.
+                    return track.getChannelAsReady(m_doc->getStudio());
+                }
+            }
+
+            // Try the next track...
+            break;
+
+        case Track::On:
+            // route to this track's inst/chan.
+            return track.getChannelAsReady(m_doc->getStudio());
+
+        case Track::Off:
+            // Try the next track...
+            break;
+
+        case Track::WhenArmed:
+            // If the track is armed
+            if (track.m_armed) {
+                // route to this track's inst/chan.
                 return track.getChannelAsReady(m_doc->getStudio());
             }
+
+            // Try the next track...
+            break;
         }
     }
 
-    // There is no matching filter so use the selected track.
-    return getInsAndChanForSelectedTrack();    
+    // Drop the event.
+    return InstrumentAndChannel();
 }
 
 // Kick all tracks' thru-channels off channel and arrange to find new

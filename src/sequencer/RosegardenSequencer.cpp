@@ -1352,17 +1352,15 @@ RosegardenSequencer::processRecordedMidi()
 
     // Handle "thru" first to reduce latency.
 
-    if (ControlBlock::getInstance()->isMidiRoutingEnabled()) {
-        // Make a copy so we don't mess up the list for recording.
-        MappedEventList thruList = recordList;
+    // Make a copy so we don't mess up the list for recording.
+    MappedEventList thruList = recordList;
 
-        // Remove events that match the thru filter
-        applyFiltering(&thruList, ControlBlock::getInstance()->getThruFilter(), true);
+    // Remove events that match the thru filter
+    applyFiltering(&thruList, ControlBlock::getInstance()->getThruFilter(), true);
 
-        // Route the MIDI thru events to MIDI out.  Use the instrument and
-        // track information from each event.
-        routeEvents(&thruList, false);
-    }
+    // Route the MIDI thru events to MIDI out.  Use the instrument and
+    // track information from each event.
+    routeEvents(&thruList, true);
 
 #ifdef DEBUG_ROSEGARDEN_SEQUENCER
     SEQUENCER_DEBUG << "RosegardenSequencer::processRecordedMidi: have " << mC.size() << " events";
@@ -1376,30 +1374,29 @@ RosegardenSequencer::processRecordedMidi()
 }
 
 void
-RosegardenSequencer::routeEvents(MappedEventList *mC, bool useSelectedTrack)
+RosegardenSequencer::routeEvents(
+        MappedEventList *mappedEventList, bool recording)
 {
-    ControlBlock *control = ControlBlock::getInstance();
-    if (useSelectedTrack) {
-        InstrumentAndChannel 
-            info = control->getInsAndChanForSelectedTrack();
-        
-        for (MappedEventList::iterator i = mC->begin();
-                i != mC->end(); ++i) {
-            (*i)->setInstrument(info.id);
-            (*i)->setRecordedChannel(info.channel);
-        }
-    } else {
-        for (MappedEventList::iterator i = mC->begin();
-                i != mC->end(); ++i) {
-            InstrumentAndChannel 
-                info = control->getInsAndChanForEvent
-                ((*i)->getRecordedDevice(), (*i)->getRecordedChannel());
-            
-            (*i)->setInstrument(info.id);
-            (*i)->setRecordedChannel(info.channel);
-        }
+    // For each event
+    for (MappedEventList::iterator i = mappedEventList->begin();
+         i != mappedEventList->end();
+         ++i) {
+        MappedEvent *event = (*i);
+
+        // Transform the output instrument and channel as needed.
+
+        InstrumentAndChannel info =
+                ControlBlock::getInstance()->getInstAndChanForEvent(
+                        recording,
+                        event->getRecordedDevice(),
+                        event->getRecordedChannel());
+
+        event->setInstrument(info.id);
+        event->setRecordedChannel(info.channel);
     }
-    m_driver->processEventsOut(*mC);
+
+    // Send the transformed events out...
+    m_driver->processEventsOut(*mappedEventList);
 }
 
 // Send an update
@@ -1440,12 +1437,10 @@ RosegardenSequencer::processAsynchronousEvents()
         m_asyncQueueMutex.lock();
         m_asyncInQueue.merge(mC);
         m_asyncQueueMutex.unlock();
-        if (ControlBlock::getInstance()->isMidiRoutingEnabled()) {
-            applyFiltering(&mC, ControlBlock::getInstance()->getThruFilter(), true);
-            // Send the incoming events back out using the instrument and
-            // track for the selected track.
-            routeEvents(&mC, true);
-        }
+        applyFiltering(&mC, ControlBlock::getInstance()->getThruFilter(), true);
+        // Send the incoming events back out using the instrument and
+        // track for the selected track.
+        routeEvents(&mC, false);
     }
 
     // Process any pending events (Note Offs or Audio) as part of same

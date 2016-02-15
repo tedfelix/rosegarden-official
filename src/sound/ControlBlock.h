@@ -45,6 +45,9 @@ struct InstrumentAndChannel
 struct TrackInfo 
 {
 public:
+    /// This should be the ctor.
+    void clear();
+
     /// Get instrument and channel, preparing the channel if needed.
     /**
      * Return the instrument id and channel number that this track plays on,
@@ -93,6 +96,8 @@ public:
     DeviceId m_deviceFilter;
     /// Recording filters: Channel
     char m_channelFilter;
+    /// Recording filters: Thru Routing
+    Track::ThruRouting m_thruRouting;
 
     InstrumentId m_instrumentId;
 
@@ -179,6 +184,9 @@ public:
     void setTrackChannelFilter(TrackId trackId, char channel);
     //char getTrackChannelFilter(TrackId trackId) const;
 
+    /// Recording filters: Thru Routing
+    void setTrackThruRouting(TrackId trackId, Track::ThruRouting thruRouting);
+
     void setInstrumentForMetronome(InstrumentId instId)
         { m_metronomeInfo.m_instrumentId = instId; }
     //InstrumentId getInstrumentForMetronome() const
@@ -201,21 +209,10 @@ public:
     
     void setMidiRoutingEnabled(bool enabled) { m_routing = enabled; }
     bool isMidiRoutingEnabled() const { return m_routing; } 
-    
-    /**
-     * Gets an instrument id and output channel for the given DeviceId
-     * and input Channel. If there is an armed track having a matching
-     * device and channel filters, this method returns the instrument
-     * assigned to the track, even if there are more tracks matching
-     * the same filters. If there is not a single match, it returns
-     * the value corresponding to the selected track.
-     */
-    InstrumentAndChannel
-        getInsAndChanForEvent(unsigned int dev, 
-                              unsigned int chan);
 
-    InstrumentAndChannel
-        getInsAndChanForSelectedTrack(void);
+    /// Get the output instrument and channel for an incoming event.
+    InstrumentAndChannel getInstAndChanForEvent(
+            bool recording, DeviceId deviceId, char channel);
 
     void vacateThruChannel(int channel);
     void instrumentChangedProgram(InstrumentId instrumentId);

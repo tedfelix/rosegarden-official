@@ -146,10 +146,8 @@ void Track::setThruRouting(ThruRouting thruRouting)
 
     m_thruRouting = thruRouting;
 
-    // ??? Is this needed?  Will it cause the value to get transferred
-    //     to the sequencer thread?
-    //if (m_owningComposition)
-    //    m_owningComposition->notifyTrackChanged(this);
+    if (m_owningComposition)
+        m_owningComposition->notifyTrackChanged(this);
 }
 
 

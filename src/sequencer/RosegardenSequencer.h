@@ -419,7 +419,7 @@ public:
      *
      * Used by processAsynchronousEvents() and processRecordedMidi().
      */
-    void routeEvents(MappedEventList *mC, bool useSelectedTrack);
+    void routeEvents(MappedEventList *mC, bool recording);
 
     /// Are we looping?
     bool isLooping() const { return !(m_loopStart == m_loopEnd); }
