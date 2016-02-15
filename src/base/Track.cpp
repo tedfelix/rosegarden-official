@@ -25,6 +25,7 @@
 namespace Rosegarden
 {
 
+#if 0
 Track::Track():
    m_id(0),
    m_muted(false),
@@ -33,6 +34,7 @@ Track::Track():
    m_owningComposition(0),
    m_input_device(Device::ALL_DEVICES),
    m_input_channel(-1),
+   m_thruRouting(Auto),
    m_armed(false),
    m_clef(0),
    m_transpose(0),
@@ -43,6 +45,7 @@ Track::Track():
    m_staffBracket(Brackets::None)
 {
 }
+#endif
 
 Track::Track(TrackId id,
              InstrumentId instrument,
@@ -58,6 +61,7 @@ Track::Track(TrackId id,
    m_owningComposition(0),
    m_input_device(Device::ALL_DEVICES),
    m_input_channel(-1),
+   m_thruRouting(Auto),
    m_armed(false),
    m_clef(0),
    m_transpose(0),
@@ -132,6 +136,20 @@ void Track::setMidiInputChannel(char ic)
 
     if (m_owningComposition)
         m_owningComposition->notifyTrackChanged(this);
+}
+
+void Track::setThruRouting(ThruRouting thruRouting)
+{
+    // No change, bail.
+    if (m_thruRouting == thruRouting)
+        return;
+
+    m_thruRouting = thruRouting;
+
+    // ??? Is this needed?  Will it cause the value to get transferred
+    //     to the sequencer thread?
+    //if (m_owningComposition)
+    //    m_owningComposition->notifyTrackChanged(this);
 }
 
 

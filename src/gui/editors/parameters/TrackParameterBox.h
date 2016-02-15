@@ -73,6 +73,8 @@ public slots:
     void slotInstrumentChanged(int index);
     void slotRecordingDeviceChanged(int index);
     void slotRecordingChannelChanged(int index);
+    void slotThruRoutingChanged(int index);
+
     /// Update all controls in the Track Parameters box.
     /** The "dummy" int is for compatibility with the
      *  TrackButtons::instrumentSelected() signal.  See
@@ -138,6 +140,9 @@ private:
 
     // Record Channel
     QComboBox *m_recChannel;
+
+    // Thru Routing
+    QComboBox *m_thruRouting;
 
     // --- Staff export options -------------------------------------
 

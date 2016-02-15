@@ -220,6 +220,20 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
     connect(m_recChannel, SIGNAL(activated(int)),
             this, SLOT(slotRecordingChannelChanged(int)));
 
+    // Thru Routing
+    QLabel *thruLabel = new QLabel(tr("Thru Routing"), recordingFilters);
+    thruLabel->setFont(m_font);
+    m_thruRouting = new QComboBox(recordingFilters);
+    m_thruRouting->setFont(m_font);
+    //m_thruRouting->setToolTip(tr("<qt><p>Routing from the input device and channel to the instrument.</p></qt>"));
+    m_thruRouting->setMinimumWidth(width11);
+    m_thruRouting->addItem(tr("Auto"), Track::Auto);
+    m_thruRouting->addItem(tr("On"), Track::On);
+    m_thruRouting->addItem(tr("Off"), Track::Off);
+    m_thruRouting->addItem(tr("When Armed"), Track::WhenArmed);
+    connect(m_thruRouting, SIGNAL(activated(int)),
+            this, SLOT(slotThruRoutingChanged(int)));
+
     // Recording filters layout
 
     groupLayout = new QGridLayout(recordingFilters);
@@ -227,12 +241,15 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
     groupLayout->setSpacing(2);
     // Row 0: Device
     groupLayout->addWidget(recordDeviceLabel, 0, 0);
-    groupLayout->addWidget(m_recDevice, 0, 1, 1, 2);
+    groupLayout->addWidget(m_recDevice, 0, 1);
     // Row 1: Channel
-    groupLayout->addWidget(channelLabel, 1, 0, 1, 2);
-    groupLayout->addWidget(m_recChannel, 1, 2);
-    // Let column 2 fill the rest of the space.
-    groupLayout->setColumnStretch(2, 1);
+    groupLayout->addWidget(channelLabel, 1, 0);
+    groupLayout->addWidget(m_recChannel, 1, 1);
+    // Row 2: Thru Routing
+    groupLayout->addWidget(thruLabel, 2, 0);
+    groupLayout->addWidget(m_thruRouting, 2, 1);
+    // Let column 1 fill the rest of the space.
+    groupLayout->setColumnStretch(1, 1);
 
     // Staff export options
 
@@ -594,6 +611,9 @@ TrackParameterBox::populateRecordingDeviceList()
             m_recDevice->setEnabled(false);
             m_recChannel->setEnabled(false);
 
+            m_thruRouting->setCurrentIndex(0);
+            m_thruRouting->setEnabled(false);
+
             // hide these for audio instruments
             m_createSegmentsWithFrame->setVisible(false);
 
@@ -627,6 +647,7 @@ TrackParameterBox::populateRecordingDeviceList()
 
             m_recDevice->setEnabled(true);
             m_recChannel->setEnabled(true);
+            m_thruRouting->setEnabled(true);
         }
     }
 
@@ -642,6 +663,7 @@ TrackParameterBox::populateRecordingDeviceList()
                 break;
             }
         }
+        m_thruRouting->setCurrentIndex((int)trk->getThruRouting());
     }
 }
 
@@ -957,6 +979,29 @@ TrackParameterBox::slotRecordingChannelChanged(int index)
     } else {
         trk->setMidiInputChannel(index - 1);
     }
+}
+
+void
+TrackParameterBox::slotThruRoutingChanged(int index)
+{
+    if (m_selectedTrackId == (int)NO_TRACK)
+        return;
+
+    Composition &comp = m_doc->getComposition();
+
+    if (!comp.haveTrack(m_selectedTrackId)) {
+        m_selectedTrackId = (int)NO_TRACK;
+        return;
+    }
+
+    Track *track = comp.getTrackById(m_selectedTrackId);
+
+    Instrument *inst = m_doc->getStudio().getInstrumentFor(track);
+    if (!inst)
+        return;
+
+    if (inst->getInstrumentType() == Instrument::Midi)
+        track->setThruRouting(static_cast<Track::ThruRouting>(index));
 }
 
 void

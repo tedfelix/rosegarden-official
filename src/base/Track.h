@@ -50,7 +50,7 @@ class Track : public XmlExportable
     friend class Composition;
 
 public:
-    Track();
+    //Track();
     Track(TrackId id,
           InstrumentId instrument = 0,
           int position =0 ,
@@ -98,6 +98,10 @@ public:
 
     void setMidiInputChannel(char ic);
     char getMidiInputChannel() const { return m_input_channel; }
+
+    enum ThruRouting { Auto, On, Off, WhenArmed };
+    void setThruRouting(ThruRouting thruRouting);
+    ThruRouting getThruRouting() const  { return m_thruRouting; }
 
     int getClef() { return m_clef; }
     void setClef(int clef) { m_clef = clef; }
@@ -148,6 +152,7 @@ private:
 
     DeviceId       m_input_device;
     char           m_input_channel;
+    ThruRouting    m_thruRouting;
     bool           m_armed;
 
     // default parameters for new segments created belonging to this track
