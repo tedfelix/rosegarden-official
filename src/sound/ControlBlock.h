@@ -133,6 +133,16 @@ private:
  * though nowadays it is a simple singleton class with no such
  * constraint.
  *
+ * SequenceManager monitors the Composition and updates the data here.
+ * RosegardenSequencer and the mappers (e.g. InternalSegmentMapper) use
+ * the data found here.
+ *
+ * ??? It seems strange that this class/object is used for communication
+ *     between threads, yet it is lock free.  I suspect this is OK since
+ *     we never move more than a word at a time.  The only issue might
+ *     be inconsistency across fields.  And in that case, there is little
+ *     that can really go wrong.
+ *
  * @see SequencerDataBlock
  */
 class ControlBlock
@@ -142,7 +152,7 @@ public:
 
     void setDocument(RosegardenDocument *doc);
 
-    unsigned int getMaxTrackId() const { return m_maxTrackId; }
+    //unsigned int getMaxTrackId() const { return m_maxTrackId; }
 
     /// Update m_trackInfo for the track.
     void updateTrackData(Track *);
@@ -152,36 +162,36 @@ public:
     bool isInstrumentUnused(InstrumentId instrumentId) const;
 
     void setTrackArmed(TrackId trackId, bool armed);
-    bool isTrackArmed(TrackId trackId) const;
+    //bool isTrackArmed(TrackId trackId) const;
 
     void setTrackMuted(TrackId trackId, bool muted);
     bool isTrackMuted(TrackId trackId) const;
     bool isInstrumentMuted(InstrumentId instrumentId) const;
 
     void setTrackDeleted(TrackId trackId, bool deleted);
-    bool isTrackDeleted(TrackId trackId) const;
+    //bool isTrackDeleted(TrackId trackId) const;
 
     /// Recording filters: Device
     void setTrackDeviceFilter(TrackId trackId, DeviceId);
-    DeviceId getTrackDeviceFilter(TrackId trackId) const;
+    //DeviceId getTrackDeviceFilter(TrackId trackId) const;
 
     /// Recording filters: Channel
     void setTrackChannelFilter(TrackId trackId, char channel);
-    char getTrackChannelFilter(TrackId trackId) const;
+    //char getTrackChannelFilter(TrackId trackId) const;
 
     void setInstrumentForMetronome(InstrumentId instId)
         { m_metronomeInfo.m_instrumentId = instId; }
-    InstrumentId getInstrumentForMetronome() const
-        { return m_metronomeInfo.m_instrumentId; }
+    //InstrumentId getInstrumentForMetronome() const
+    //    { return m_metronomeInfo.m_instrumentId; }
 
     void setMetronomeMuted(bool mute) { m_metronomeInfo.m_muted = mute; }
     bool isMetronomeMuted() const     { return m_metronomeInfo.m_muted; }
 
-    bool isSolo() const      { return m_solo; }
     void setSolo(bool value) { m_solo = value; }
+    bool isSolo() const      { return m_solo; }
 
-    TrackId getSelectedTrack() const     { return m_selectedTrack; }
     void setSelectedTrack(TrackId track);
+    TrackId getSelectedTrack() const     { return m_selectedTrack; }
 
     void setThruFilter(MidiFilter filter) { m_thruFilter = filter; }
     MidiFilter getThruFilter() const { return m_thruFilter; }

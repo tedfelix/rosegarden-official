@@ -164,6 +164,7 @@ ControlBlock::setTrackArmed(TrackId trackId, bool armed)
     track.conform(m_doc->getStudio());
 }
 
+#if 0
 bool 
 ControlBlock::isTrackArmed(TrackId trackId) const
 {
@@ -171,6 +172,7 @@ ControlBlock::isTrackArmed(TrackId trackId) const
         return m_trackInfo[trackId].m_armed;
     return false;
 }
+#endif
 
 void
 ControlBlock::setTrackDeleted(TrackId trackId, bool deleted)
@@ -182,6 +184,7 @@ ControlBlock::setTrackDeleted(TrackId trackId, bool deleted)
     track.conform(m_doc->getStudio());
 }
 
+#if 0
 bool 
 ControlBlock::isTrackDeleted(TrackId trackId) const
 {
@@ -189,6 +192,7 @@ ControlBlock::isTrackDeleted(TrackId trackId) const
         return m_trackInfo[trackId].m_deleted;
     return true;
 }
+#endif
 
 void
 ControlBlock::setTrackChannelFilter(TrackId trackId, char channel)
@@ -197,6 +201,7 @@ ControlBlock::setTrackChannelFilter(TrackId trackId, char channel)
         m_trackInfo[trackId].m_channelFilter = channel;
 }
 
+#if 0
 char
 ControlBlock::getTrackChannelFilter(TrackId trackId) const
 {
@@ -204,6 +209,7 @@ ControlBlock::getTrackChannelFilter(TrackId trackId) const
         return m_trackInfo[trackId].m_channelFilter;
     return -1;
 }
+#endif
 
 void
 ControlBlock::setTrackDeviceFilter(TrackId trackId, DeviceId device)
@@ -212,6 +218,7 @@ ControlBlock::setTrackDeviceFilter(TrackId trackId, DeviceId device)
         m_trackInfo[trackId].m_deviceFilter = device;
 }
 
+#if 0
 DeviceId 
 ControlBlock::getTrackDeviceFilter(TrackId trackId) const
 {
@@ -219,6 +226,7 @@ ControlBlock::getTrackDeviceFilter(TrackId trackId) const
         return m_trackInfo[trackId].m_deviceFilter;
     return Device::ALL_DEVICES;
 }
+#endif
 
 bool 
 ControlBlock::isInstrumentMuted(InstrumentId instrumentId) const
