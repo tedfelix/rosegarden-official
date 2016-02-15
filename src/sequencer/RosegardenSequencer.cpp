@@ -1385,8 +1385,8 @@ RosegardenSequencer::routeEvents(MappedEventList *mC, bool useSelectedTrack)
         
         for (MappedEventList::iterator i = mC->begin();
                 i != mC->end(); ++i) {
-            (*i)->setInstrument(info.m_id);
-            (*i)->setRecordedChannel(info.m_channel);
+            (*i)->setInstrument(info.id);
+            (*i)->setRecordedChannel(info.channel);
         }
     } else {
         for (MappedEventList::iterator i = mC->begin();
@@ -1395,8 +1395,8 @@ RosegardenSequencer::routeEvents(MappedEventList *mC, bool useSelectedTrack)
                 info = control->getInsAndChanForEvent
                 ((*i)->getRecordedDevice(), (*i)->getRecordedChannel());
             
-            (*i)->setInstrument(info.m_id);
-            (*i)->setRecordedChannel(info.m_channel);
+            (*i)->setInstrument(info.id);
+            (*i)->setRecordedChannel(info.channel);
         }
     }
     m_driver->processEventsOut(*mC);

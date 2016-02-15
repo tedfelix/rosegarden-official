@@ -60,6 +60,9 @@ void
 ControlBlock::
 clearTracks(void)
 {
+    // ??? Giving TrackInfo a proper default ctor would simplify this.
+    //       m_trackInfo[i] = TrackInfo();
+
     for (unsigned int i = 0; i < CONTROLBLOCK_MAX_NB_TRACKS; ++i) {
         m_trackInfo[i].m_muted = true;
         m_trackInfo[i].m_deleted = true;
@@ -374,9 +377,6 @@ instrumentChangedFixity(InstrumentId instrumentId)
 }
     /** TrackInfo members **/
 
-// Make track info conformant to its situation.  In particular,
-// acquire or release a channel for thru events to play on.
-// @author Tom Breton (Tehom)
 void
 TrackInfo::
 conform(Studio &studio)
@@ -400,10 +400,6 @@ conform(Studio &studio)
         { releaseThruChannel(studio); }
 }
 
-// Return the instrument id and channel number that this track plays on,
-// preparing the channel if needed.  If impossible, return an invalid
-// instrument and channel.
-// @author Tom Breton (Tehom)
 InstrumentAndChannel
 TrackInfo::getChannelAsReady(Studio &studio)
 {
@@ -416,8 +412,6 @@ TrackInfo::getChannelAsReady(Studio &studio)
     return InstrumentAndChannel(m_instrumentId, m_thruChannel);    
 }
 
-// Make the channel ready to play on.  Send the program, etc.
-// @author Tom Breton (Tehom)
 void
 TrackInfo::makeChannelReady(Studio &studio)
 {
@@ -519,8 +513,6 @@ TrackInfo::allocateThruChannel(Studio &studio)
     m_hasThruChannel = true;
 }
     
-// Release the channel that thru MIDI events played on.
-// @author Tom Breton (Tehom)
 void
 TrackInfo::releaseThruChannel(Studio &studio)
 {
