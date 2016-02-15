@@ -186,7 +186,8 @@ std::string Track::toXmlString() const
     track << " staffBracket=\"" << m_staffBracket << "\"";
 
     track << " inputDevice=\"" << m_input_device << "\"";
-    track << " inputChannel=\"" << (int)m_input_channel << "\"";
+    track << " inputChannel=\"" << static_cast<int>(m_input_channel) << "\"";
+    track << " thruRouting=\"" << static_cast<int>(m_thruRouting) << "\"";
 
     track << "/>";
 

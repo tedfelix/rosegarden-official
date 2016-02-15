@@ -825,6 +825,12 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             track->setMidiInputChannel(inputChannelStr.toInt());
         }
 
+        QString thruRoutingStr = atts.value("thruRouting");
+        if (!thruRoutingStr.isEmpty()) {
+            track->setThruRouting(
+                    static_cast<Track::ThruRouting>(thruRoutingStr.toInt()));
+        }
+
         // If the composition tag had this track set to record, make sure
         // it is armed.
         if (getComposition().isTrackRecording(id)) {
