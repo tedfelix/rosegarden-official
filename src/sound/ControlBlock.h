@@ -207,9 +207,6 @@ public:
     void setRecordFilter(MidiFilter filter) { m_recordFilter = filter; }
     MidiFilter getRecordFilter() const { return m_recordFilter; }
     
-    void setMidiRoutingEnabled(bool enabled) { m_routing = enabled; }
-    bool isMidiRoutingEnabled() const { return m_routing; } 
-
     /// Get the output instrument and channel for an incoming event.
     InstrumentAndChannel getInstAndChanForEvent(
             bool recording, DeviceId deviceId, char channel);
@@ -229,7 +226,6 @@ private:
     unsigned int m_maxTrackId;
 
     bool m_solo;
-    bool m_routing;
     bool m_isSelectedChannelReady;
     MidiFilter m_thruFilter;
     MidiFilter m_recordFilter;

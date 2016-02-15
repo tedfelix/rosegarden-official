@@ -712,7 +712,6 @@ RosegardenMainWindow::closeEvent(QCloseEvent *event)
         settings.setValue("show_previews", findAction("show_previews")->isChecked());
         settings.setValue("show_segment_labels", findAction("show_segment_labels")->isChecked());
         settings.setValue("show_inst_segment_parameters", findAction("show_inst_segment_parameters")->isChecked());
-        settings.setValue("enable_midi_routing", findAction("enable_midi_routing")->isChecked());
         settings.endGroup();
 
         event->accept();
@@ -862,7 +861,6 @@ RosegardenMainWindow::setupActions()
     createAction("manage_midi_devices", SLOT(slotManageMIDIDevices()));
     createAction("manage_synths", SLOT(slotManageSynths()));
     createAction("modify_midi_filters", SLOT(slotModifyMIDIFilters()));
-    createAction("enable_midi_routing", SLOT(slotEnableMIDIThruRouting()));
     createAction("manage_metronome", SLOT(slotManageMetronome()));
     createAction("save_default_studio", SLOT(slotSaveDefaultStudio()));
     createAction("load_default_studio", SLOT(slotImportDefaultStudio()));
@@ -1768,11 +1766,6 @@ RosegardenMainWindow::readOptions()
     opt = qStrToBool(settings.value("show_inst_segment_parameters", true));
     findAction("show_inst_segment_parameters")->setChecked(opt);
     slotDockParametersBack();
-
-    // MIDI Thru routing
-    opt = qStrToBool(settings.value("enable_midi_routing", "true")) ;
-    findAction("enable_midi_routing")->setChecked(opt);
-    slotEnableMIDIThruRouting();
 
     settings.endGroup();
 
@@ -8557,12 +8550,6 @@ void RosegardenMainWindow::slotShowToolHelp(const QString &s)
     QString msg = s;
     if (msg != "") msg = " " + msg;
     slotStatusMsg(msg);
-}
-
-void
-RosegardenMainWindow::slotEnableMIDIThruRouting()
-{
-    m_seqManager->enableMIDIThruRouting(findAction("enable_midi_routing")->isChecked());
 }
 
 TransportDialog* RosegardenMainWindow::getTransport() 

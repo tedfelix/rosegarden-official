@@ -1594,18 +1594,6 @@ public slots:
     
     void slotDebugDump();
 
-    /**
-     * Enable or disable the internal MIDI Thru routing. 
-     * 
-     * This policy is implemented at the sequencer side, controlled 
-     * by this flag and also by the MIDI Thru filters.
-     * 
-     * @see ControlBlock::isMidiRoutingEnabled()
-     * @see RosegardenSequencerApp::processAsynchronousEvents()
-     * @see RosegardenSequencerApp::processRecordedEvents()
-     */
-    void slotEnableMIDIThruRouting();
-
     void slotShowToolHelp(const QString &);
 
     void slotNewerVersionAvailable(QString);

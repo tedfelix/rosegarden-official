@@ -204,8 +204,6 @@ public:
 
     void setTransport(TransportDialog* t) { m_transport = t; }
     
-    void enableMIDIThruRouting(bool state);
-    
     int getSampleRate(); // may return 0 if sequencer uncontactable
 
 public slots:

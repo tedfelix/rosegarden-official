@@ -152,7 +152,6 @@
     <Action name="manage_metronome" text="Manage &amp;Metronome" />
   <Separator/>
     <Action name="modify_midi_filters" text="Modify MIDI &amp;Filters" icon="filter" />
-    <Action name="enable_midi_routing" text="MIDI &amp;Thru Routing" checked="true" />
   <Separator/>
     <Action name="reset_midi_network" text="&amp;Reset MIDI Network" />
   <Separator/>

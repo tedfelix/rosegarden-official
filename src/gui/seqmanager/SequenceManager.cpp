@@ -2024,12 +2024,6 @@ SequenceManager::slotScheduledCompositionMapperReset()
     populateCompositionMapper();
 }
 
-void
-SequenceManager::enableMIDIThruRouting(bool state)
-{
-    ControlBlock::getInstance()->setMidiRoutingEnabled(state);
-}
-
 int
 SequenceManager::getSampleRate() 
 {
