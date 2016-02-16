@@ -140,6 +140,7 @@ ControlBlock::setInstrumentForTrack(TrackId trackId, InstrumentId instId)
 
     track.releaseThruChannel(m_doc->getStudio());
     track.m_instrumentId = instId;
+    track.conform(m_doc->getStudio());
 }
 
 InstrumentId 
