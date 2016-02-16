@@ -841,6 +841,9 @@ TrackButtons::slotInstrumentSelected(int instrumentIndex)
             // For ControlBlock's representation of track.
             ControlBlock::getInstance()->
                 setInstrumentForTrack(m_popupTrackPos, inst->getId());
+            // Make sure the device is in sync with the instrument's
+            // settings.
+            inst->sendChannelSetup();
 
             // Update the instrument names
             initInstrumentNames(inst, m_trackLabels[m_popupTrackPos]);
