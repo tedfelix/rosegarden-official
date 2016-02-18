@@ -426,7 +426,8 @@ void
 TrackInfo::
 conform(Studio &studio)
 {
-    bool shouldHaveThru = (m_armed || m_selected) && !m_deleted;
+    bool thruAuto = (m_thruRouting == Track::Auto);
+    bool shouldHaveThru = (!thruAuto || m_armed || m_selected) && !m_deleted;
 #ifdef DEBUG_CONTROL_BLOCK
     RG_DEBUG << "TrackInfo::conform()"
              << (shouldHaveThru ?
