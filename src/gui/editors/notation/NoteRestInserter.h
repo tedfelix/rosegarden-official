@@ -160,6 +160,9 @@ protected:
     bool m_alwaysPreview;
     bool m_quickEdit;         // Select durations with mouse wheel
 
+    AccidentalTable::OctaveType m_octaveType;     // Cautionary accidental mode
+    AccidentalTable::BarResetType m_barResetType; // Cautionary accidental mode
+
     bool m_leftButtonDown;
     bool m_clickHappened;
     timeT m_clickTime;

@@ -138,6 +138,19 @@ NoteRestInserter::NoteRestInserter(NotationWidget* widget) :
     m_defaultStyle = settings.value("style", NoteStyleFactory::DefaultStyle).toString();
     m_alwaysPreview = qStrToBool(settings.value("alwayspreview", "false"));
     m_quickEdit = qStrToBool(settings.value("quickedit", "false"));
+
+    int accOctaveMode = settings.value("accidentaloctavemode", 1).toInt() ;
+    m_octaveType =
+        (accOctaveMode == 0 ? AccidentalTable::OctavesIndependent :
+         accOctaveMode == 1 ? AccidentalTable::OctavesCautionary :
+         AccidentalTable::OctavesEquivalent);
+
+    int accBarMode = settings.value("accidentalbarmode", 0).toInt() ;
+    m_barResetType =
+        (accBarMode == 0 ? AccidentalTable::BarResetNone :
+         accBarMode == 1 ? AccidentalTable::BarResetCautionary :
+         AccidentalTable::BarResetExplicit);
+
     settings.endGroup();
 
     QAction *a;
@@ -678,12 +691,112 @@ void NoteRestInserter::showPreview(bool play)
         inRange = false;
     }
 
-    Accidental accidental = m_clickQuickAccidental;
-    if (accidental == Accidentals::NoAccidental) {
-        accidental =
+
+    // Look for an accidental to preview
+
+    // Default is forced accidental
+    Accidental cursorAccidental = m_clickQuickAccidental;
+
+    // Maybe follow accidental if default is no accidental
+    if (cursorAccidental == Accidentals::NoAccidental) {
+        cursorAccidental =
             (m_accidental == Accidentals::NoAccidental && m_followAccidental)
                 ? m_lastAccidental : m_accidental;
     }
+    
+
+    // Get the start time of the bar where the insertion time is
+    timeT startOfBar = segment.getBarStartForTime(m_clickTime);
+    
+    // Get the clef and key signature in effect and the times of change
+    timeT currentKeyTime;
+    Key currentKey = segment.getKeyAtTime(m_clickTime, currentKeyTime);
+    timeT currentClefTime;
+    Clef currentClef = segment.getClefAtTime(m_clickTime, currentClefTime);
+    
+    // Pitch related to the cursor position
+    Pitch cursorPitch(pitch, cursorAccidental);
+    int cursorHeight = cursorPitch.getHeightOnStaff(currentClef, currentKey);
+
+    // Select a default accidental related to the current key signature
+    cursorAccidental = cursorPitch.getDisplayAccidental(currentKey);
+    if (cursorAccidental == Accidentals::Natural) {
+        // Don't use natural if not needed
+        if (currentKey.getAccidentalAtHeight(cursorHeight, currentClef)
+                                            == Accidentals::NoAccidental) {
+            cursorAccidental = Accidentals::NoAccidental;
+        }
+    }
+    
+    
+    // Get an iterator of the current event at m_clickTime
+    Segment::iterator it = segment.findNearestTime(m_clickTime);
+    
+    // If the insertion point is immediately following a key change
+    // there is no need to look at accidentals of previous notes
+    if (!(*it)->isa(Key::EventType)) {
+
+        // Else we have to look at the events inside the current bar
+
+        // Get an iterator of the first event of the bar
+        Segment::iterator itFirst = segment.findTime(startOfBar);
+        
+        // Get the elements of the bar in reverse order
+        typedef std::reverse_iterator<Segment::iterator> RevIt;
+        RevIt rit(it);
+        RevIt last(itFirst);
+
+        for ( ; rit != last; ++rit) {
+            Event *ev = *rit;
+
+            if (ev->isa(Key::EventType)) {
+                // Stop looking for notes as soon as a key signature is found
+                break;
+            }
+
+            // We are only interested by notes (ie events with pitch)
+            if (!ev->has(BaseProperties::PITCH)) {
+                // If the event is not a note, ignore it and continue
+                continue;
+            } else {
+                // Event is a note, get its performance pitch
+                int p = ev->get<Int>(BaseProperties::PITCH);
+
+                // get its accidental
+                const NotationProperties &prop(m_scene->getProperties());
+                Accidental accidental = Accidentals::NoAccidental;
+                (void)ev->get<String>(prop.DISPLAY_ACCIDENTAL, accidental);
+
+                // get its cautionary property
+                bool cautionary = false;
+                if (accidental != Accidentals::NoAccidental) {
+                    (void)ev->get<Bool>
+                        (prop.DISPLAY_ACCIDENTAL_IS_CAUTIONARY, cautionary);
+                }
+
+                // If a note is found at the same height than the cursor
+                Pitch notePitch(p, accidental);
+                if (notePitch.getHeightOnStaff(currentClef, currentKey)
+                                                        == cursorHeight) {
+                    if (p == pitch) {
+                        // If they have the same pitch, the accidental is
+                        // already drawn in the bar: no need to duplicate it
+                        cursorAccidental = Accidentals::NoAccidental;
+                    } else {
+                        // Else use the accidental the key signature requires
+                        cursorAccidental = cursorPitch.getAccidental(currentKey);
+                        // And if the key requires no accidental, use natural
+                        if (cursorAccidental == Accidentals::NoAccidental) {
+                            cursorAccidental = Accidentals::Natural;
+                        }
+                    }
+                    // Then stop walking through the bar
+                    break;
+                }
+            }
+        }
+    }
+
 
     // Select the color of the preview
     QColor color;
@@ -700,7 +813,7 @@ void NoteRestInserter::showPreview(bool play)
                                  pitch, m_clickHeight,
                                  Note(m_noteType, m_noteDots),
                                  m_widget->isInGraceMode(),
-                                 accidental,  // TODO: use staff context
+                                 cursorAccidental,
                                  color, -1, play);
     }
 }
