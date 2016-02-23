@@ -5277,12 +5277,12 @@
     <message>
         <location line="-262"/>
         <source>Split &amp;at Time...</source>
-        <translation type="unfinished"></translation>
+        <translation>Dividir p&amp;or tiempo...</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Split by &amp;Drum (EXPERIMENTAL!)</source>
-        <translation type="unfinished"></translation>
+        <translation>Dividir por &amp;Tambor (EXPERIMENTAL)</translation>
     </message>
     <message>
         <location line="+4"/>
@@ -7159,7 +7159,7 @@
     <message>
         <location line="+1"/>
         <source>D. Michael McIntyre</source>
-        <translation type="unfinished"></translation>
+        <translation>D. Michael McIntyre</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -10898,7 +10898,7 @@ Would you like to use
     <message>
         <location line="+6"/>
         <source>&lt;p&gt;Copyright 2000-2016 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Build key: %3&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;For more information about Rosegarden, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2 or later&lt;/p&gt;</source>
-        <translation type="unfinished">&lt;p&gt;Copyright 2000-2012 el equipo de Rosegarden&lt;/p&gt;&lt;p&gt;Versión: %1 &amp;nbsp; Versión de Qt: %2&lt;br&gt;Clave: %3&lt;/p&gt;&lt;p&gt;Rosegarden se realizó por un equipo de voluntarios ubicado por todas partes del mundo.  Para aprender quíen desarolló Rosegarden, consulte el &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;sitio Rosegarden&lt;/a&gt;&lt;br&gt;Para más información acerda de Rosegarden, consulte &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;Licencia: GNU General Public License Version 2 or later&lt;/p&gt; {2000-2015 ?} {1 ?} {2&lt;?} {3&lt;?} {2 ?} {2000-2016 ?} {1 ?} {2&lt;?} {3&lt;?} {2 ?}</translation>
+        <translation>&lt;p&gt;Copyright 2000-2016 el equipo de Rosegarden&lt;/p&gt;&lt;p&gt;Versión: %1 &amp;nbsp; Versión de Qt: %2&lt;br&gt;Clave: %3&lt;/p&gt;&lt;p&gt;Rosegarden se realizó por un equipo de voluntarios ubicado por todas partes del mundo.  Para aprender quíen desarolló Rosegarden, consulte el &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;sitio Rosegarden&lt;/a&gt;&lt;br&gt;Para más información acerda de Rosegarden, consulte &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;Licencia: GNU General Public License Version 2 or later&lt;/p&gt;</translation>
     </message>
     <message>
         <source>&lt;p&gt;Copyright 2000-2015 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Build key: %3&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;For more information about Rosegarden, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2 or later&lt;/p&gt;</source>
@@ -12807,7 +12807,7 @@ Por favor, seleccione cuáles de ellos quiere borrar permanentemente del disco d
     <message>
         <location line="+2"/>
         <source>Two-bar</source>
-        <translation type="unfinished"></translation>
+        <translation>Percusión</translation>
     </message>
 </context>
 <context>
@@ -12991,55 +12991,55 @@ Por favor, seleccione cuáles de ellos quiere borrar permanentemente del disco d
     <message>
         <location line="+1"/>
         <source>&lt;p&gt;If checked, these notes or their translation into the local language will pop up the next time the document is loaded&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;p&gt;Al marcar, estas anotaciones o su traducción aparecerán la próxima vez que se carge este documento&lt;/p&gt;</translation>
     </message>
     <message>
         <location line="+47"/>
         <source>Create another page</source>
-        <translation type="unfinished"></translation>
+        <translation>Hacer otra página</translation>
     </message>
     <message>
         <location line="+2"/>
         <location line="+57"/>
         <source>&lt;h3&gt;Main page&lt;/h3&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;h3&gt;Página principal&lt;/h3&gt;</translation>
     </message>
     <message>
         <location line="-56"/>
         <location line="+60"/>
         <source>Change page</source>
-        <translation type="unfinished"></translation>
+        <translation>Cambiar página</translation>
     </message>
     <message>
         <location line="-59"/>
         <source>&lt;p&gt;Display another existing page or create a new one.&lt;/p&gt;&lt;p&gt;If the page name is a language code name (as &quot;es&quot; or &quot;de&quot;) the page should be a translation of the main page and may be displayed at startup if matching the local language.&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;p&gt;Mostrar otra página o crear una nueva.&lt;/p&gt;&lt;p&gt;Si el nombre de la página es el de un código de lengua (p. ej. &quot;es&quot; o &quot;de&quot;) la página debe ser una traducción de la página principal, y puede mostrarse al iniciar Rosegarden en ese idioma.&lt;/p&gt;</translation>
     </message>
     <message>
         <location line="+36"/>
         <location line="+40"/>
         <source>Create a new page</source>
-        <translation type="unfinished"></translation>
+        <translation>Hacer página nueva</translation>
     </message>
     <message>
         <location line="-40"/>
         <source>Page name:</source>
-        <translation type="unfinished"></translation>
+        <translation>Nombre de página:</translation>
     </message>
     <message>
         <location line="+21"/>
         <source>&lt;h3&gt;Page &quot;%1&quot;&lt;/h3&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;h3&gt;Página &quot;%1&quot;&lt;/h3&gt;</translation>
     </message>
     <message>
         <location line="+24"/>
         <source>Go to the main page</source>
-        <translation type="unfinished"></translation>
+        <translation>Ir a la página principal</translation>
     </message>
     <message>
         <location line="+9"/>
         <source>Go to page &quot;%1&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>Ir a página &quot;%1&quot;</translation>
     </message>
     <message>
         <location line="+125"/>
@@ -13110,7 +13110,7 @@ Por favor, seleccione cuáles de ellos quiere borrar permanentemente del disco d
     <message>
         <location line="+1"/>
         <source>&lt;qt&gt;If checked, these notes will pop up the nexttime the document is loaded&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Al marcar, esta notas aparecerán la próxima vez que se carga la composición&lt;/qt&gt;</translation>
     </message>
     <message>
         <source>&lt;qt&gt;If checked, these notes will pop up the next time the document is loaded&lt;/qt&gt;</source>
@@ -16559,12 +16559,12 @@ delay at the start of playback due to the amount of data being transmitted.</sou
     <message>
         <location line="+13"/>
         <source>Allow Reset All Controllers (CC 121)</source>
-        <translation type="unfinished"></translation>
+        <translation>Permitir &quot;Reset All Controllers&quot; (CC 121)</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Rosegarden can send a MIDI Reset All Controllers event when setting up a channel.</source>
-        <translation type="unfinished"></translation>
+        <translation>Rosegarden puede emitir &quot;MIDI Reset All Controllers&quot; al iniciar un canal.</translation>
     </message>
     <message>
         <location line="+16"/>
@@ -18110,22 +18110,22 @@ Doble clic para abrir el editor de marcadores.</translation>
     <message>
         <location line="+27"/>
         <source>Always show note preview</source>
-        <translation type="unfinished"></translation>
+        <translation>Siempre mostrar previsualización de nota</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>&lt;p&gt;If checked, a preview of the note or rest is always displayed when inserting notes or rests with the mouse&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Al marcar, se mostra una previsualización de la nota al insertar una nota o una pausa con el ratón&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+11"/>
         <source>Quick mouse entry mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Modo de ratón rápido</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>&lt;p&gt;If checked, the following features are usable while inserting notes with the mouse:&lt;ul&gt;&lt;li&gt;The mouse wheel selects the note duration&lt;/li&gt;&lt;li&gt;Shift adds a sharp&lt;/li&gt;&lt;li&gt;Ctrl adds a flat&lt;/li&gt;&lt;li&gt;Shift + Ctrl adds a natural&lt;/li&gt;&lt;li&gt;A mouse mid button click switches between notes and rests&lt;/li&gt;&lt;/ul&gt;&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;p&gt;Al marcar, las funcciones siguientes serán disponibles mientras utilizando el ratón para dibujar notas:&lt;ul&gt;&lt;li&gt;La rueda del ratón selecciona la duración&lt;/li&gt;&lt;li&gt;Mayúsculas añade un agudo&lt;/li&gt;&lt;li&gt;Ctrl añade un bemol&lt;/li&gt;&lt;li&gt;Mayúsculas + Ctrl añade un natural&lt;/li&gt;&lt;li&gt;Clic con el botón de la rueda del ratón cambia entre notas y pausas&lt;/li&gt;&lt;/ul&gt;&lt;/p&gt;</translation>
     </message>
     <message>
         <location line="+17"/>
@@ -21453,15 +21453,15 @@ Para asistencia acerca de una correcta configuración de audio y MIDI, vaya ahtt
         <location line="-2473"/>
         <location line="+54"/>
         <source>Split %n Segment(s) by Drum</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Dividir %n segmento por tambor</numerusform>
+            <numerusform>Dividir %n segmentos por tambor</numerusform>
         </translation>
     </message>
     <message>
         <location line="+6"/>
         <source>No segment was split.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ningún segmento se dividió.</translation>
     </message>
     <message>
         <location line="+1478"/>
@@ -22240,17 +22240,17 @@ Por favor, configure el directorio de archivos de audio hacia un directorio vál
     <message numerus="yes">
         <location line="-385"/>
         <source>Copy %n Segment(s) as link(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Copiar %n segmento como vinculo</numerusform>
+            <numerusform>Copiar %n segmentos como vinculos</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location line="+3"/>
         <source>Copy %n Segment(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Copiar %n segmento</numerusform>
+            <numerusform>Copiar %n segmentos</numerusform>
         </translation>
     </message>
     <message numerus="yes">
@@ -22280,17 +22280,17 @@ Por favor, configure el directorio de archivos de audio hacia un directorio vál
     <message>
         <location filename="../../src/commands/segment/SegmentSplitByDrumCommand.h" line="+47"/>
         <source>Split by &amp;Drum...</source>
-        <translation type="unfinished"></translation>
+        <translation>Dividir por &amp;Tambor...</translation>
     </message>
     <message>
         <location filename="../../src/commands/segment/SegmentSplitByDrumCommand.cpp" line="+44"/>
         <source>Split by Drum</source>
-        <translation type="unfinished"></translation>
+        <translation>Dividir por Tambor</translation>
     </message>
     <message>
         <location line="+128"/>
         <source>Pitch %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Altura %1</translation>
     </message>
 </context>
 <context>
@@ -24224,27 +24224,27 @@ Cerrando otras aplicaciones en ejecución puede mejorar el rendimiento de Rosega
     <message>
         <location line="+11"/>
         <source>Thru Routing</source>
-        <translation type="unfinished"></translation>
+        <translation>Enrutamiento de MIDI THRU</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>Auto</source>
-        <translation type="unfinished">Auto</translation>
+        <translation>Auto</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>On</source>
-        <translation type="unfinished"></translation>
+        <translation>Activado</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Off</source>
-        <translation type="unfinished">Ningún</translation>
+        <translation>Ningún</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>When Armed</source>
-        <translation type="unfinished"></translation>
+        <translation>Al armar</translation>
     </message>
     <message>
         <location line="+24"/>
@@ -24451,7 +24451,7 @@ Cerrando otras aplicaciones en ejecución puede mejorar el rendimiento de Rosega
         <location line="+1"/>
         <source>twobar</source>
         <comment>Clef name</comment>
-        <translation type="unfinished"></translation>
+        <translation>percusión</translation>
     </message>
     <message>
         <location line="+30"/>
