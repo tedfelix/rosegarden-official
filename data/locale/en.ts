@@ -16,7 +16,6 @@
         <source>%1 (%n change(s))</source>
         <translation>
             <numerusform></numerusform>
-            <numerusform></numerusform>
         </translation>
     </message>
 </context>
@@ -5013,12 +5012,12 @@
     <message>
         <location line="-235"/>
         <source>Split &amp;at Time...</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Split by &amp;Drum (EXPERIMENTAL!)</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+155"/>
@@ -7150,7 +7149,7 @@
     <message>
         <location line="+1"/>
         <source>D. Michael McIntyre</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+1"/>
@@ -10613,7 +10612,7 @@ Would you like to use
     <message>
         <location line="+6"/>
         <source>&lt;p&gt;Copyright 2000-2016 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Build key: %3&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;For more information about Rosegarden, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2 or later&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -12513,7 +12512,7 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message>
         <location line="+2"/>
         <source>Two-bar</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -12693,55 +12692,55 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message>
         <location line="+1"/>
         <source>&lt;p&gt;If checked, these notes or their translation into the local language will pop up the next time the document is loaded&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+47"/>
         <source>Create another page</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+2"/>
         <location line="+57"/>
         <source>&lt;h3&gt;Main page&lt;/h3&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="-56"/>
         <location line="+60"/>
         <source>Change page</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="-59"/>
         <source>&lt;p&gt;Display another existing page or create a new one.&lt;/p&gt;&lt;p&gt;If the page name is a language code name (as &quot;es&quot; or &quot;de&quot;) the page should be a translation of the main page and may be displayed at startup if matching the local language.&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+36"/>
         <location line="+40"/>
         <source>Create a new page</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="-40"/>
         <source>Page name:</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+21"/>
         <source>&lt;h3&gt;Page &quot;%1&quot;&lt;/h3&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+24"/>
         <source>Go to the main page</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+9"/>
         <source>Go to page &quot;%1&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+125"/>
@@ -12812,7 +12811,7 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message>
         <location line="+1"/>
         <source>&lt;qt&gt;If checked, these notes will pop up the nexttime the document is loaded&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;If checked, these notes will pop up the next time the document is loaded&lt;/qt&gt;</translation>
     </message>
 </context>
 <context>
@@ -16170,12 +16169,12 @@ Example text from file:</source>
     <message>
         <location line="+13"/>
         <source>Allow Reset All Controllers (CC 121)</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Rosegarden can send a MIDI Reset All Controllers event when setting up a channel.</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+16"/>
@@ -17718,22 +17717,22 @@ Double-click to open the marker editor.</source>
     <message>
         <location line="+27"/>
         <source>Always show note preview</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+5"/>
         <source>&lt;p&gt;If checked, a preview of the note or rest is always displayed when inserting notes or rests with the mouse&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+11"/>
         <source>Quick mouse entry mode</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+6"/>
         <source>&lt;p&gt;If checked, the following features are usable while inserting notes with the mouse:&lt;ul&gt;&lt;li&gt;The mouse wheel selects the note duration&lt;/li&gt;&lt;li&gt;Shift adds a sharp&lt;/li&gt;&lt;li&gt;Ctrl adds a flat&lt;/li&gt;&lt;li&gt;Shift + Ctrl adds a natural&lt;/li&gt;&lt;li&gt;A mouse mid button click switches between notes and rests&lt;/li&gt;&lt;/ul&gt;&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+17"/>
@@ -20596,15 +20595,15 @@ No segment will be split.</source>
         <location line="-182"/>
         <location line="+54"/>
         <source>Split %n Segment(s) by Drum</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Split Segment by Drum</numerusform>
+            <numerusform>Split %n Segments by Drum</numerusform>
         </translation>
     </message>
     <message>
         <location line="+6"/>
         <source>No segment was split.</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+60"/>
@@ -21747,7 +21746,6 @@ Would you like to set it now?</source>
         <source>Move %n Segment(s)</source>
         <translation>
             <numerusform></numerusform>
-            <numerusform></numerusform>
         </translation>
     </message>
     <message>
@@ -21788,17 +21786,17 @@ Would you like to set it now?</source>
     <message numerus="yes">
         <location line="-385"/>
         <source>Copy %n Segment(s) as link(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Copy Segment as Link</numerusform>
+            <numerusform>Copy %n Segments as Links</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location line="+3"/>
         <source>Copy %n Segment(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Copy Segment</numerusform>
+            <numerusform>Copy %n Segments</numerusform>
         </translation>
     </message>
     <message>
@@ -21820,17 +21818,17 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/commands/segment/SegmentSplitByDrumCommand.h" line="+47"/>
         <source>Split by &amp;Drum...</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../src/commands/segment/SegmentSplitByDrumCommand.cpp" line="+44"/>
         <source>Split by Drum</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+128"/>
         <source>Pitch %1</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -23648,14 +23646,12 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
         <source>Turn %n Repeating Segment(s) into Real Copies</source>
         <translation>
             <numerusform></numerusform>
-            <numerusform></numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location line="+26"/>
         <source>Turn %n Linked Segment(s) into Real Copies</source>
         <translation>
-            <numerusform></numerusform>
             <numerusform></numerusform>
         </translation>
     </message>
@@ -23760,27 +23756,27 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location line="+11"/>
         <source>Thru Routing</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+6"/>
         <source>Auto</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+1"/>
         <source>On</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Off</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+1"/>
         <source>When Armed</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+24"/>
@@ -23987,7 +23983,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
         <location line="+1"/>
         <source>twobar</source>
         <comment>Clef name</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+30"/>
