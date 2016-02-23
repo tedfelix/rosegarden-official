@@ -12979,7 +12979,7 @@ Veuillez sélectionner ceux que vous souhaitez effacer définitivement du disque
     <message>
         <location line="+1"/>
         <source>&lt;p&gt;If checked, these notes or their translation into the local language will pop up the next time the document is loaded&lt;/p&gt;</source>
-        <translation>&lt;p&gt;Si coché, ces notes ou leur traduction dans la langue locale seront affiché au prochain chargement de ce document&lt;/p&gt;</translation>
+        <translation>&lt;p&gt;Si coché, ces notes ou leur traduction dans la langue locale seront affichées au prochain chargement de ce document&lt;/p&gt;</translation>
     </message>
     <message>
         <location line="+47"/>
@@ -13051,7 +13051,7 @@ Veuillez sélectionner ceux que vous souhaitez effacer définitivement du disque
         <location line="+1"/>
         <source>&lt;qt&gt;Reload text from the document (come back to the last time apply was pressed)&lt;/qt&gt;</source>
         <comment>Button tool tip</comment>
-        <translation>&lt;qt&gt;Recharge la totalité du texte depuis le document (Retour au texte présent au moment du dernier clic sur &quot;Appliquer&quot;)&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;Recharger la totalité du texte depuis le document (Retour au texte présent au moment du dernier clic sur &quot;Appliquer&quot;)&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+9"/>
@@ -13063,7 +13063,7 @@ Veuillez sélectionner ceux que vous souhaitez effacer définitivement du disque
         <location line="+1"/>
         <source>&lt;qt&gt;Restore to the last text before clear&lt;/qt&gt;</source>
         <comment>Button tool tip</comment>
-        <translation>&lt;qt&gt;Restaure le texte présent avant le dernier clic sur &quot;Effacer&quot;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;Restaurer le texte présent avant le dernier clic sur &quot;Effacer&quot;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+8"/>
