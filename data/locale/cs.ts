@@ -628,7 +628,7 @@
         <location filename="../QMenuStrings.cpp" line="293"/>
         <location filename="../QMenuStrings.cpp" line="690"/>
         <location filename="../QMenuStrings.cpp" line="1979"/>
-        <location filename="../QMenuStrings.cpp" line="4019"/>
+        <location filename="../QMenuStrings.cpp" line="4018"/>
         <source>Se&amp;gment</source>
         <translation>Čá&amp;st</translation>
     </message>
@@ -636,7 +636,7 @@
         <location filename="../QMenuStrings.cpp" line="294"/>
         <location filename="../QMenuStrings.cpp" line="691"/>
         <location filename="../QMenuStrings.cpp" line="1980"/>
-        <location filename="../QMenuStrings.cpp" line="4029"/>
+        <location filename="../QMenuStrings.cpp" line="4028"/>
         <source>Edit &amp;With</source>
         <translation>Upravit &amp;pomocí</translation>
     </message>
@@ -644,7 +644,7 @@
         <location filename="../QMenuStrings.cpp" line="295"/>
         <location filename="../QMenuStrings.cpp" line="694"/>
         <location filename="../QMenuStrings.cpp" line="1982"/>
-        <location filename="../QMenuStrings.cpp" line="4039"/>
+        <location filename="../QMenuStrings.cpp" line="4038"/>
         <location filename="../QMenuStrings.cpp" line="4410"/>
         <source>Open in Matri&amp;x Editor</source>
         <translation>Otevřít v &amp;tabulkovém editoru</translation>
@@ -652,7 +652,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="296"/>
         <location filename="../QMenuStrings.cpp" line="693"/>
-        <location filename="../QMenuStrings.cpp" line="4057"/>
+        <location filename="../QMenuStrings.cpp" line="4056"/>
         <location filename="../QMenuStrings.cpp" line="4428"/>
         <source>Open in &amp;Notation Editor</source>
         <translation>Otevřít v editoru &amp;notového zápisu</translation>
@@ -939,7 +939,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="692"/>
         <location filename="../QMenuStrings.cpp" line="1981"/>
-        <location filename="../QMenuStrings.cpp" line="4066"/>
+        <location filename="../QMenuStrings.cpp" line="4065"/>
         <location filename="../QMenuStrings.cpp" line="4437"/>
         <source>Open in &amp;Event List Editor</source>
         <translation>Otevřít v editoru seznamu &amp;událostí</translation>
@@ -1086,7 +1086,7 @@
         <location filename="../QMenuStrings.cpp" line="218"/>
         <location filename="../QMenuStrings.cpp" line="1350"/>
         <location filename="../QMenuStrings.cpp" line="3259"/>
-        <location filename="../QMenuStrings.cpp" line="4082"/>
+        <location filename="../QMenuStrings.cpp" line="4081"/>
         <location filename="../QMenuStrings.cpp" line="4453"/>
         <location filename="../QMenuStrings.cpp" line="4648"/>
         <source>I</source>
@@ -1106,7 +1106,7 @@
         <location filename="../QMenuStrings.cpp" line="236"/>
         <location filename="../QMenuStrings.cpp" line="1287"/>
         <location filename="../QMenuStrings.cpp" line="3196"/>
-        <location filename="../QMenuStrings.cpp" line="4073"/>
+        <location filename="../QMenuStrings.cpp" line="4072"/>
         <location filename="../QMenuStrings.cpp" line="4444"/>
         <location filename="../QMenuStrings.cpp" line="4675"/>
         <source>E</source>
@@ -1293,7 +1293,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="701"/>
         <location filename="../QMenuStrings.cpp" line="2457"/>
-        <location filename="../QMenuStrings.cpp" line="4085"/>
+        <location filename="../QMenuStrings.cpp" line="4084"/>
         <location filename="../QMenuStrings.cpp" line="4518"/>
         <source>&amp;Quantize...</source>
         <translation>&amp;Kvantizovat...</translation>
@@ -1301,7 +1301,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="708"/>
         <location filename="../QMenuStrings.cpp" line="2464"/>
-        <location filename="../QMenuStrings.cpp" line="4092"/>
+        <location filename="../QMenuStrings.cpp" line="4091"/>
         <location filename="../QMenuStrings.cpp" line="4525"/>
         <source>=</source>
         <comment>keyboard shortcut</comment>
@@ -1314,7 +1314,7 @@
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="717"/>
-        <location filename="../QMenuStrings.cpp" line="4101"/>
+        <location filename="../QMenuStrings.cpp" line="4100"/>
         <location filename="../QMenuStrings.cpp" line="4534"/>
         <source>+</source>
         <comment>keyboard shortcut</comment>
@@ -1340,14 +1340,14 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="737"/>
         <location filename="../QMenuStrings.cpp" line="2559"/>
-        <location filename="../QMenuStrings.cpp" line="4109"/>
+        <location filename="../QMenuStrings.cpp" line="4108"/>
         <source>Jog &amp;Left</source>
         <translation>Postrčit v&amp;levo</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="744"/>
         <location filename="../QMenuStrings.cpp" line="2566"/>
-        <location filename="../QMenuStrings.cpp" line="4116"/>
+        <location filename="../QMenuStrings.cpp" line="4115"/>
         <source>Alt+Left</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
@@ -1360,7 +1360,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="753"/>
         <location filename="../QMenuStrings.cpp" line="2575"/>
-        <location filename="../QMenuStrings.cpp" line="4125"/>
+        <location filename="../QMenuStrings.cpp" line="4124"/>
         <source>Alt+Right</source>
         <comment>keyboard shortcut</comment>
         <translation></translation>
@@ -1510,7 +1510,7 @@
         <location filename="../QMenuStrings.cpp" line="833"/>
         <location filename="../QMenuStrings.cpp" line="1992"/>
         <location filename="../QMenuStrings.cpp" line="2527"/>
-        <location filename="../QMenuStrings.cpp" line="4103"/>
+        <location filename="../QMenuStrings.cpp" line="4102"/>
         <location filename="../QMenuStrings.cpp" line="4537"/>
         <source>Transpose by &amp;Interval...</source>
         <translation>Převést o &amp;interval...</translation>
@@ -2062,7 +2062,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="1133"/>
         <location filename="../QMenuStrings.cpp" line="3042"/>
-        <location filename="../QMenuStrings.cpp" line="4055"/>
+        <location filename="../QMenuStrings.cpp" line="4054"/>
         <location filename="../QMenuStrings.cpp" line="4426"/>
         <source>D</source>
         <comment>keyboard shortcut</comment>
@@ -2441,7 +2441,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="1504"/>
         <location filename="../QMenuStrings.cpp" line="3413"/>
-        <location filename="../QMenuStrings.cpp" line="4064"/>
+        <location filename="../QMenuStrings.cpp" line="4063"/>
         <location filename="../QMenuStrings.cpp" line="4435"/>
         <source>N</source>
         <comment>keyboard shortcut</comment>
@@ -2465,7 +2465,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="1531"/>
         <location filename="../QMenuStrings.cpp" line="3440"/>
-        <location filename="../QMenuStrings.cpp" line="4046"/>
+        <location filename="../QMenuStrings.cpp" line="4045"/>
         <location filename="../QMenuStrings.cpp" line="4417"/>
         <source>M</source>
         <comment>keyboard shortcut</comment>
@@ -2722,7 +2722,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="695"/>
         <location filename="../QMenuStrings.cpp" line="1983"/>
-        <location filename="../QMenuStrings.cpp" line="4048"/>
+        <location filename="../QMenuStrings.cpp" line="4047"/>
         <location filename="../QMenuStrings.cpp" line="4419"/>
         <source>Open in &amp;Percussion Matrix Editor</source>
         <translation>Otevřít v tabulkovém editoru &amp;bicích</translation>
@@ -2750,7 +2750,7 @@
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1993"/>
-        <location filename="../QMenuStrings.cpp" line="4104"/>
+        <location filename="../QMenuStrings.cpp" line="4103"/>
         <source>&amp;Convert Notation for...</source>
         <translation>&amp;Převést notový zápis pro...</translation>
     </message>
@@ -3693,7 +3693,7 @@
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="2568"/>
-        <location filename="../QMenuStrings.cpp" line="4118"/>
+        <location filename="../QMenuStrings.cpp" line="4117"/>
         <source>Jog &amp;Right</source>
         <translation>Krokový posun v&amp;pravo</translation>
     </message>
@@ -4175,7 +4175,7 @@
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="1984"/>
-        <location filename="../QMenuStrings.cpp" line="4075"/>
+        <location filename="../QMenuStrings.cpp" line="4074"/>
         <location filename="../QMenuStrings.cpp" line="4446"/>
         <source>Open in &amp;Pitch Tracker</source>
         <translation>Otevřít sledování &amp;výšky tónu</translation>
@@ -4724,63 +4724,62 @@
         <translation>Upravit &amp;filtry MIDI</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4014"/>
         <source>MIDI &amp;Thru Routing</source>
-        <translation>Vedení MIDI &amp;přes</translation>
+        <translation type="obsolete">Vedení MIDI &amp;přes</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4015"/>
+        <location filename="../QMenuStrings.cpp" line="4014"/>
         <source>&amp;Reset MIDI Network</source>
         <translation>Provést &amp;přenastavení sítě MIDI</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4016"/>
+        <location filename="../QMenuStrings.cpp" line="4015"/>
         <source>Im&amp;port Studio from File...</source>
         <translation>Za&amp;vést studio ze souboru...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4017"/>
+        <location filename="../QMenuStrings.cpp" line="4016"/>
         <source>&amp;Import Default Studio</source>
         <translation>&amp;Zavést výchozí studio</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4018"/>
+        <location filename="../QMenuStrings.cpp" line="4017"/>
         <source>&amp;Save Current Document as Default Studio</source>
         <translation>&amp;Uložit současný dokument jako výchozí studio</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4020"/>
+        <location filename="../QMenuStrings.cpp" line="4019"/>
         <source>Toggle Repeat</source>
         <translation>Zapnout/Vypnout opakování</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4084"/>
+        <location filename="../QMenuStrings.cpp" line="4083"/>
         <location filename="../QMenuStrings.cpp" line="4536"/>
         <source>R&amp;elabel...</source>
         <translation>&amp;Znovu označit...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4094"/>
+        <location filename="../QMenuStrings.cpp" line="4093"/>
         <location filename="../QMenuStrings.cpp" line="4527"/>
         <source>Repe&amp;at Last Quantize</source>
         <translation>Opakovat poslední kv&amp;antizaci</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4105"/>
+        <location filename="../QMenuStrings.cpp" line="4104"/>
         <source>Stretch &amp;or Squash...</source>
         <translation>Prodloužit &amp;nebo zkrátit...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="697"/>
         <location filename="../QMenuStrings.cpp" line="1990"/>
-        <location filename="../QMenuStrings.cpp" line="4107"/>
+        <location filename="../QMenuStrings.cpp" line="4106"/>
         <source>Set Start &amp;Time...</source>
         <translation>Nastavit počáteční č&amp;as...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="698"/>
         <location filename="../QMenuStrings.cpp" line="1991"/>
-        <location filename="../QMenuStrings.cpp" line="4108"/>
+        <location filename="../QMenuStrings.cpp" line="4107"/>
         <source>Set &amp;Duration...</source>
         <translation>Nastavit &amp;dobu trvání...</translation>
     </message>
@@ -4860,41 +4859,40 @@
         <translation>Umístit stávající doby do části s dobami</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4030"/>
+        <location filename="../QMenuStrings.cpp" line="4029"/>
         <location filename="../QMenuStrings.cpp" line="4401"/>
         <source>Open in &amp;Default Editor</source>
         <translation>Otevřít ve &amp;výchozím editoru</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4127"/>
+        <location filename="../QMenuStrings.cpp" line="4126"/>
         <location filename="../QMenuStrings.cpp" line="4509"/>
         <source>Join</source>
         <translation>Spojit</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4136"/>
+        <location filename="../QMenuStrings.cpp" line="4135"/>
         <source>&amp;Split</source>
         <translation>&amp;Rozdělit</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4137"/>
+        <location filename="../QMenuStrings.cpp" line="4136"/>
         <source>&amp;Split on Silence</source>
         <translation>&amp;Rozdělit při odmlčení se</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4138"/>
+        <location filename="../QMenuStrings.cpp" line="4137"/>
         <source>Split by &amp;Pitch...</source>
         <translation>Rozdělit podle &amp;výšky tónu...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4139"/>
+        <location filename="../QMenuStrings.cpp" line="4138"/>
         <source>Split by &amp;Recording Source...</source>
         <translation>Rozdělit podle nahrávacího zd&amp;roje...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4140"/>
         <source> Split &amp;at Time...</source>
-        <translation>Rozdělit &amp;v čase...</translation>
+        <translation type="obsolete">Rozdělit &amp;v čase...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="4141"/>
@@ -5163,29 +5161,39 @@
         <translation>Ctrl+M</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4027"/>
+        <location filename="../QMenuStrings.cpp" line="4026"/>
         <source>Ctrl+Shift+R</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+Shift+R</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4037"/>
+        <location filename="../QMenuStrings.cpp" line="4036"/>
         <location filename="../QMenuStrings.cpp" line="4408"/>
         <source>Return</source>
         <comment>keyboard shortcut</comment>
         <translation>Return</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4106"/>
+        <location filename="../QMenuStrings.cpp" line="4105"/>
         <source>Create &amp;Anacrusis...</source>
         <translation>Vytvořit &amp;předtaktí...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="4134"/>
+        <location filename="../QMenuStrings.cpp" line="4133"/>
         <location filename="../QMenuStrings.cpp" line="4516"/>
         <source>Ctrl+J</source>
         <comment>keyboard shortcut</comment>
         <translation>Ctrl+J</translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="4139"/>
+        <source>Split &amp;at Time...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../QMenuStrings.cpp" line="4140"/>
+        <source>Split by &amp;Drum (EXPERIMENTAL!)</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="4142"/>
@@ -5382,7 +5390,7 @@
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="32"/>
-        <location filename="../AutoloadStrings.cpp" line="83"/>
+        <location filename="../AutoloadStrings.cpp" line="84"/>
         <source>Violin</source>
         <translation>Housle</translation>
     </message>
@@ -5393,7 +5401,7 @@
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="34"/>
-        <location filename="../AutoloadStrings.cpp" line="84"/>
+        <location filename="../AutoloadStrings.cpp" line="85"/>
         <source>Viola</source>
         <translation>Viola</translation>
     </message>
@@ -5414,7 +5422,7 @@
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="38"/>
-        <location filename="../AutoloadStrings.cpp" line="86"/>
+        <location filename="../AutoloadStrings.cpp" line="87"/>
         <source>Contrabass</source>
         <translation>Kontrabas (basa)</translation>
     </message>
@@ -5560,7 +5568,6 @@
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="67"/>
-        <location filename="../AutoloadStrings.cpp" line="203"/>
         <source>Mandolin</source>
         <translation>Mandolína</translation>
     </message>
@@ -5571,7 +5578,6 @@
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="69"/>
-        <location filename="../AutoloadStrings.cpp" line="180"/>
         <source>Ukulele</source>
         <translation>Ukulele</translation>
     </message>
@@ -5597,7 +5603,7 @@
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="74"/>
-        <location filename="../AutoloadStrings.cpp" line="150"/>
+        <location filename="../AutoloadStrings.cpp" line="151"/>
         <source>Koto</source>
         <translation>Koto (japonská citera s třinácti hedvábnými strunami)</translation>
     </message>
@@ -5608,7 +5614,7 @@
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="76"/>
-        <location filename="../AutoloadStrings.cpp" line="115"/>
+        <location filename="../AutoloadStrings.cpp" line="116"/>
         <source>Piccolo</source>
         <translation>Pikola</translation>
     </message>
@@ -5619,7 +5625,7 @@
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="78"/>
-        <location filename="../AutoloadStrings.cpp" line="116"/>
+        <location filename="../AutoloadStrings.cpp" line="117"/>
         <source>Flute</source>
         <translation>Flétna</translation>
     </message>
@@ -5760,7 +5766,7 @@
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="106"/>
-        <location filename="../AutoloadStrings.cpp" line="120"/>
+        <location filename="../AutoloadStrings.cpp" line="121"/>
         <source>Shakuhachi</source>
         <translation>Šakuhači (japonská bambusová flétna)</translation>
     </message>
@@ -5781,7 +5787,7 @@
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="110"/>
-        <location filename="../AutoloadStrings.cpp" line="111"/>
+        <location filename="../AutoloadStrings.cpp" line="112"/>
         <source>Oboe</source>
         <translation>Hoboj</translation>
     </message>
@@ -5892,7 +5898,7 @@
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="132"/>
-        <location filename="../AutoloadStrings.cpp" line="113"/>
+        <location filename="../AutoloadStrings.cpp" line="114"/>
         <source>Bassoon</source>
         <translation>Fagot</translation>
     </message>
@@ -6358,7 +6364,7 @@
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="225"/>
-        <location filename="../AutoloadStrings.cpp" line="90"/>
+        <location filename="../AutoloadStrings.cpp" line="91"/>
         <source>Timpani</source>
         <translation>Tympán</translation>
     </message>
@@ -6374,7 +6380,7 @@
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="228"/>
-        <location filename="../AutoloadStrings.cpp" line="52"/>
+        <location filename="../AutoloadStrings.cpp" line="53"/>
         <source>Glockenspiel</source>
         <translation>Zvonkohra</translation>
     </message>
@@ -6410,7 +6416,7 @@
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="235"/>
-        <location filename="../AutoloadStrings.cpp" line="54"/>
+        <location filename="../AutoloadStrings.cpp" line="55"/>
         <source>Vibraphone</source>
         <translation>Vibrafon</translation>
     </message>
@@ -6502,7 +6508,7 @@
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="253"/>
-        <location filename="../AutoloadStrings.cpp" line="56"/>
+        <location filename="../AutoloadStrings.cpp" line="57"/>
         <source>Xylophone</source>
         <translation>Xylofon</translation>
     </message>
@@ -6603,7 +6609,7 @@
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="273"/>
-        <location filename="../AutoloadStrings.cpp" line="269"/>
+        <location filename="../AutoloadStrings.cpp" line="200"/>
         <source>Tambourine</source>
         <translation>Tamburína</translation>
     </message>
@@ -6739,13 +6745,12 @@
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="301"/>
-        <location filename="../AutoloadStrings.cpp" line="290"/>
+        <location filename="../AutoloadStrings.cpp" line="221"/>
         <source>Claves</source>
         <translation>Kláves</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="302"/>
-        <location filename="../AutoloadStrings.cpp" line="196"/>
         <source>Castanets</source>
         <translation>Kastaněty</translation>
     </message>
@@ -6894,13 +6899,13 @@
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="304"/>
-        <location filename="../AutoloadStrings.cpp" line="285"/>
+        <location filename="../AutoloadStrings.cpp" line="216"/>
         <source>Maracas</source>
         <translation>Rumba koule</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="305"/>
-        <location filename="../AutoloadStrings.cpp" line="284"/>
+        <location filename="../AutoloadStrings.cpp" line="215"/>
         <source>Cabasa</source>
         <translation>Cabasa</translation>
     </message>
@@ -7046,7 +7051,7 @@
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="352"/>
-        <location filename="../AutoloadStrings.cpp" line="65"/>
+        <location filename="../AutoloadStrings.cpp" line="66"/>
         <source>Harmonica</source>
         <translation>Foukací harmonika</translation>
     </message>
@@ -7157,1188 +7162,1126 @@
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="42"/>
+        <source>D. Michael McIntyre</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../AutoloadStrings.cpp" line="43"/>
         <source>General MIDI</source>
         <translation>Obecné MIDI</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="43"/>
+        <location filename="../AutoloadStrings.cpp" line="44"/>
         <source>Acoustic Grand Piano</source>
         <translation>Akustické koncertní křídlo</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="44"/>
+        <location filename="../AutoloadStrings.cpp" line="45"/>
         <source>Bright Acoustic Piano</source>
         <translation>Zvučný akustický klavír</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="45"/>
+        <location filename="../AutoloadStrings.cpp" line="46"/>
         <source>Electric Grand Piano</source>
         <translation>Elektrické koncertní křídlo</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="46"/>
+        <location filename="../AutoloadStrings.cpp" line="47"/>
         <source>Honky-tonk Piano</source>
         <translation>Hra na klavír ve stylu ragtime (honky-tonk)</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="47"/>
+        <location filename="../AutoloadStrings.cpp" line="48"/>
         <source>Electric Piano 1</source>
         <translation>Elektrický klavír 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="48"/>
+        <location filename="../AutoloadStrings.cpp" line="49"/>
         <source>Electric Piano 2</source>
         <translation>Elektrický klavír 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="49"/>
+        <location filename="../AutoloadStrings.cpp" line="50"/>
         <source>Harpsichord</source>
         <translation>Cembalo</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="50"/>
+        <location filename="../AutoloadStrings.cpp" line="51"/>
         <source>Clavi</source>
         <translation>Kláves</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="51"/>
+        <location filename="../AutoloadStrings.cpp" line="52"/>
         <source>Celesta</source>
         <translation>Celesta</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="53"/>
+        <location filename="../AutoloadStrings.cpp" line="54"/>
         <source>Music Box</source>
         <translation>Hrací skříňka</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="55"/>
+        <location filename="../AutoloadStrings.cpp" line="56"/>
         <source>Marimba</source>
         <translation>Marimba</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="57"/>
+        <location filename="../AutoloadStrings.cpp" line="58"/>
         <source>Tubular Bells</source>
         <translation>Trubkové zvonky</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="58"/>
+        <location filename="../AutoloadStrings.cpp" line="59"/>
         <source>Dulcimer</source>
         <translation>Cimbál, dulcimer</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="59"/>
+        <location filename="../AutoloadStrings.cpp" line="60"/>
         <source>Drawbar Organ</source>
         <translation>Varhany s táhly</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="60"/>
+        <location filename="../AutoloadStrings.cpp" line="61"/>
         <source>Percussive Organ</source>
         <translation>Dunivé varhany</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="61"/>
+        <location filename="../AutoloadStrings.cpp" line="62"/>
         <source>Rock Organ</source>
         <translation>Rockové varhany</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="62"/>
+        <location filename="../AutoloadStrings.cpp" line="63"/>
         <source>Church Organ</source>
         <translation>Kostelní varhany</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="63"/>
+        <location filename="../AutoloadStrings.cpp" line="64"/>
         <source>Reed Organ</source>
         <translation>Harmonium, harmonika</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="64"/>
+        <location filename="../AutoloadStrings.cpp" line="65"/>
         <source>Accordion</source>
         <translation>Tahací harmonika (akordeon)</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="66"/>
+        <location filename="../AutoloadStrings.cpp" line="67"/>
         <source>Tango Accordion</source>
         <translation>Tango akordeon</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="67"/>
+        <location filename="../AutoloadStrings.cpp" line="68"/>
         <source>Acoustic Guitar (nylon)</source>
         <translation>Akustická kytara (nylonové struny)</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="68"/>
+        <location filename="../AutoloadStrings.cpp" line="69"/>
         <source>Acoustic Guitar (steel)</source>
         <translation>Akustická kytara (kovové struny)</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="69"/>
+        <location filename="../AutoloadStrings.cpp" line="70"/>
         <source>Electric Guitar (jazz)</source>
         <translation>Elektrická kytara (džez)</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="70"/>
+        <location filename="../AutoloadStrings.cpp" line="71"/>
         <source>Electric Guitar (clean)</source>
         <translation>Elektrická kytara (čistá)</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="71"/>
+        <location filename="../AutoloadStrings.cpp" line="72"/>
         <source>Electric Guitar (muted)</source>
         <translation>Elektrická kytara (ztlumená)</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="72"/>
+        <location filename="../AutoloadStrings.cpp" line="73"/>
         <source>Overdriven Guitar</source>
         <translation>Přemodulovaná kytara</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="73"/>
+        <location filename="../AutoloadStrings.cpp" line="74"/>
         <source>Distortion Guitar</source>
         <translation>Zkreslená kytara</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="74"/>
+        <location filename="../AutoloadStrings.cpp" line="75"/>
         <source>Guitar harmonics</source>
         <translation>Libozvučná kytara</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="75"/>
+        <location filename="../AutoloadStrings.cpp" line="76"/>
         <source>Acoustic Bass</source>
         <translation>Akustický bas</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="76"/>
+        <location filename="../AutoloadStrings.cpp" line="77"/>
         <source>Fingered Bass</source>
         <translation>Brnkaný bas</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="77"/>
+        <location filename="../AutoloadStrings.cpp" line="78"/>
         <source>Picked Bass</source>
         <translation>Vybrnkávaný bas</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="78"/>
+        <location filename="../AutoloadStrings.cpp" line="79"/>
         <source>Fretless Bass</source>
         <translation>Bezpražcový bas</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="79"/>
+        <location filename="../AutoloadStrings.cpp" line="80"/>
         <source>Slap Bass 1</source>
         <translation>Vyťukávaný bas 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="80"/>
+        <location filename="../AutoloadStrings.cpp" line="81"/>
         <source>Slap Bass 2</source>
         <translation>Vyťukávaný bas 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="81"/>
+        <location filename="../AutoloadStrings.cpp" line="82"/>
         <source>Synth Bass 1</source>
         <translation>Syntetizátorový bas 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="82"/>
+        <location filename="../AutoloadStrings.cpp" line="83"/>
         <source>Synth Bass 2</source>
         <translation>Syntetizátorový bas 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="85"/>
+        <location filename="../AutoloadStrings.cpp" line="86"/>
         <source>Cello</source>
         <translation>Violoncello</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="87"/>
+        <location filename="../AutoloadStrings.cpp" line="88"/>
         <source>Tremolo Strings</source>
         <translation>Chvění (tremolo) smyčcových nástrojů</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="88"/>
+        <location filename="../AutoloadStrings.cpp" line="89"/>
         <source>Pizzicato Strings</source>
         <translation>Drnkání (pizzicato) smyčcových nástrojů</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="89"/>
+        <location filename="../AutoloadStrings.cpp" line="90"/>
         <source>Orchestral Harp</source>
         <translation>Orchestrální harfa</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="91"/>
+        <location filename="../AutoloadStrings.cpp" line="92"/>
         <source>String Ensemble 1</source>
         <translation>Skupina smyčců 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="92"/>
+        <location filename="../AutoloadStrings.cpp" line="93"/>
         <source>String Ensemble 2</source>
         <translation>Skupina smyčců 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="93"/>
+        <location filename="../AutoloadStrings.cpp" line="94"/>
         <source>SynthStrings 1</source>
         <translation>Syntetizátorové smyčce 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="94"/>
+        <location filename="../AutoloadStrings.cpp" line="95"/>
         <source>SynthStrings 2</source>
         <translation>Syntetizátorové smyčce 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="95"/>
+        <location filename="../AutoloadStrings.cpp" line="96"/>
         <source>Choir Aahs</source>
         <translation>Sborové ááá</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="96"/>
+        <location filename="../AutoloadStrings.cpp" line="97"/>
         <source>Voice Oohs</source>
         <translation>Sborové óóó</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="97"/>
+        <location filename="../AutoloadStrings.cpp" line="98"/>
         <source>Synth Voice</source>
         <translation>Syntetizátorový hlas</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="98"/>
+        <location filename="../AutoloadStrings.cpp" line="99"/>
         <source>Orchestra Hit</source>
         <translation>Orchestr bicích</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="99"/>
+        <location filename="../AutoloadStrings.cpp" line="100"/>
         <source>Trumpet</source>
         <translation>Trubka</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="100"/>
+        <location filename="../AutoloadStrings.cpp" line="101"/>
         <source>Trombone</source>
         <translation>Pozoun (trombón)</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="101"/>
+        <location filename="../AutoloadStrings.cpp" line="102"/>
         <source>Tuba</source>
         <translation>Tuba</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="102"/>
+        <location filename="../AutoloadStrings.cpp" line="103"/>
         <source>Muted Trumpet</source>
         <translation>Tlumená trubka</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="103"/>
+        <location filename="../AutoloadStrings.cpp" line="104"/>
         <source>French Horn</source>
         <translation>Lesní roh</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="104"/>
+        <location filename="../AutoloadStrings.cpp" line="105"/>
         <source>Brass Section</source>
         <translation>Oddělení žesťových nástrojů</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="105"/>
+        <location filename="../AutoloadStrings.cpp" line="106"/>
         <source>SynthBrass 1</source>
         <translation>Syntetizátorové žestě 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="106"/>
+        <location filename="../AutoloadStrings.cpp" line="107"/>
         <source>SynthBrass 2</source>
         <translation>Syntetizátorové žestě 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="107"/>
+        <location filename="../AutoloadStrings.cpp" line="108"/>
         <source>Soprano Sax</source>
         <translation>Sopránový saxofon</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="108"/>
+        <location filename="../AutoloadStrings.cpp" line="109"/>
         <source>Alto Sax</source>
         <translation>Altový saxofon</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="109"/>
+        <location filename="../AutoloadStrings.cpp" line="110"/>
         <source>Tenor Sax</source>
         <translation>Tenorový saxofon</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="110"/>
+        <location filename="../AutoloadStrings.cpp" line="111"/>
         <source>Baritone Sax</source>
         <translation>Barytonový saxofon</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="112"/>
+        <location filename="../AutoloadStrings.cpp" line="113"/>
         <source>English Horn</source>
         <translation>Anglický roh</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="114"/>
+        <location filename="../AutoloadStrings.cpp" line="115"/>
         <source>Clarinet</source>
         <translation>Klarinet</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="117"/>
+        <location filename="../AutoloadStrings.cpp" line="118"/>
         <source>Recorder</source>
         <translation>Zobcová flétna</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="118"/>
+        <location filename="../AutoloadStrings.cpp" line="119"/>
         <source>Pan Flute</source>
         <translation>Panova flétna</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="119"/>
+        <location filename="../AutoloadStrings.cpp" line="120"/>
         <source>Blown Bottle</source>
         <translation>Hra na láhev</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="121"/>
+        <location filename="../AutoloadStrings.cpp" line="122"/>
         <source>Whistle</source>
         <translation>Píšťalka</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="122"/>
+        <location filename="../AutoloadStrings.cpp" line="123"/>
         <source>Ocarina</source>
         <translation>Okarína</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="123"/>
+        <location filename="../AutoloadStrings.cpp" line="124"/>
         <source>Lead 1 (square)</source>
         <translation>Hlavní hlas 1 (pravoúhelník)</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="124"/>
+        <location filename="../AutoloadStrings.cpp" line="125"/>
         <source>Lead 2 (sawtooth)</source>
         <translation>Hlavní hlas 2 (zub pily)</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="125"/>
+        <location filename="../AutoloadStrings.cpp" line="126"/>
         <source>Lead 3 (calliope)</source>
         <translation>Hlavní hlas 3 (hvězdicovitý)</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="126"/>
+        <location filename="../AutoloadStrings.cpp" line="127"/>
         <source>Lead 4 (chiff)</source>
         <translation>Hlavní hlas 4 (zřetelný projev)</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="127"/>
+        <location filename="../AutoloadStrings.cpp" line="128"/>
         <source>Lead 5 (charang)</source>
         <translation>Hlavní hlas 5 (xyz)</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="128"/>
+        <location filename="../AutoloadStrings.cpp" line="129"/>
         <source>Lead 6 (voice)</source>
         <translation>Hlavní hlas 6 (řeč)</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="129"/>
+        <location filename="../AutoloadStrings.cpp" line="130"/>
         <source>Lead 7 (fifths)</source>
         <translation>Hlavní hlas 7 (kvinty)</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="130"/>
+        <location filename="../AutoloadStrings.cpp" line="131"/>
         <source>Lead 8 (bass + lead)</source>
         <translation>Hlavní hlas 8 (bas + hlavní hlas)</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="131"/>
+        <location filename="../AutoloadStrings.cpp" line="132"/>
         <source>Pad 1 (new age)</source>
         <translation>Poduška 1 (nový věk)</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="132"/>
+        <location filename="../AutoloadStrings.cpp" line="133"/>
         <source>Pad 2 (warm)</source>
         <translation>Poduška 2 (teplá)</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="133"/>
+        <location filename="../AutoloadStrings.cpp" line="134"/>
         <source>Pad 3 (polysynth)</source>
         <translation>Poduška 3 (vícekrát syntetizátor)</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="134"/>
+        <location filename="../AutoloadStrings.cpp" line="135"/>
         <source>Pad 4 (choir)</source>
         <translation>Poduška 4 (sbor)</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="135"/>
+        <location filename="../AutoloadStrings.cpp" line="136"/>
         <source>Pad 5 (bowed)</source>
         <translation>Poduška 5 (hráč na smyčcový nástroj)</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="136"/>
+        <location filename="../AutoloadStrings.cpp" line="137"/>
         <source>Pad 6 (metallic)</source>
         <translation>Poduška 6 (kovová)</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="137"/>
+        <location filename="../AutoloadStrings.cpp" line="138"/>
         <source>Pad 7 (halo)</source>
         <translation>Poduška 7 (světelný kruh)</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="138"/>
+        <location filename="../AutoloadStrings.cpp" line="139"/>
         <source>Pad 8 (sweep)</source>
         <translation>Poduška 8 (mávnutí)</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="139"/>
+        <location filename="../AutoloadStrings.cpp" line="140"/>
         <source>FX 1 (rain)</source>
         <translation>FX 1 (déšť)</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="140"/>
+        <location filename="../AutoloadStrings.cpp" line="141"/>
         <source>FX 2 (soundtrack)</source>
         <translation>FX 2 (šelest)</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="141"/>
+        <location filename="../AutoloadStrings.cpp" line="142"/>
         <source>FX 3 (crystal)</source>
         <translation>FX 3 (krystal)</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="142"/>
+        <location filename="../AutoloadStrings.cpp" line="143"/>
         <source>FX 4 (atmosphere)</source>
         <translation>FX 4 (okolí)</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="143"/>
+        <location filename="../AutoloadStrings.cpp" line="144"/>
         <source>FX 5 (brightness)</source>
         <translation>FX 5 (jasnost)</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="144"/>
+        <location filename="../AutoloadStrings.cpp" line="145"/>
         <source>FX 6 (goblins)</source>
         <translation>FX 6 (skřeti)</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="145"/>
+        <location filename="../AutoloadStrings.cpp" line="146"/>
         <source>FX 7 (echoes)</source>
         <translation>FX 7 (ozvěny)</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="146"/>
+        <location filename="../AutoloadStrings.cpp" line="147"/>
         <source>FX 8 (sci-fi)</source>
         <translation>FX 8 (vědecké fantastično)</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="147"/>
+        <location filename="../AutoloadStrings.cpp" line="148"/>
         <source>Sitar</source>
         <translation>Sitár</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="148"/>
+        <location filename="../AutoloadStrings.cpp" line="149"/>
         <source>Banjo</source>
         <translation>Bendžo</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="149"/>
+        <location filename="../AutoloadStrings.cpp" line="150"/>
         <source>Shamisen</source>
         <translation>Šamisen</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="151"/>
+        <location filename="../AutoloadStrings.cpp" line="152"/>
         <source>Kalimba</source>
         <translation>Kalimba</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="152"/>
+        <location filename="../AutoloadStrings.cpp" line="153"/>
         <source>Bag pipe</source>
         <translation>Dudy</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="153"/>
+        <location filename="../AutoloadStrings.cpp" line="154"/>
         <source>Fiddle</source>
         <translation>Skřipky</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="154"/>
+        <location filename="../AutoloadStrings.cpp" line="155"/>
         <source>Shanai</source>
         <translation>Shanai</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="155"/>
+        <location filename="../AutoloadStrings.cpp" line="156"/>
         <source>Tinkle Bell</source>
         <translation>Zvoneček</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="156"/>
+        <location filename="../AutoloadStrings.cpp" line="157"/>
         <source>Agogo</source>
         <translation>Agogo</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="157"/>
+        <location filename="../AutoloadStrings.cpp" line="158"/>
         <source>Steel Drums</source>
         <translation>Kovové bubny</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="158"/>
+        <location filename="../AutoloadStrings.cpp" line="159"/>
         <source>Woodblock</source>
         <translation>Dřevěný špalíček</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="159"/>
+        <location filename="../AutoloadStrings.cpp" line="160"/>
         <source>Taiko Drum</source>
         <translation>Buben Taiko</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="160"/>
+        <location filename="../AutoloadStrings.cpp" line="161"/>
         <source>Melodic Tom</source>
         <translation>Libozvučný buben</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="161"/>
+        <location filename="../AutoloadStrings.cpp" line="162"/>
         <source>Synth Drum</source>
         <translation>Syntetizátorový buben</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="162"/>
+        <location filename="../AutoloadStrings.cpp" line="163"/>
         <source>Reverse Cymbal</source>
         <translation>Obrácený činel</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="163"/>
+        <location filename="../AutoloadStrings.cpp" line="164"/>
         <source>Guitar Fret Noise</source>
         <translation>Zvuk spojený s přitisknutím strun k hmatníku při hře na kytaru</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="164"/>
+        <location filename="../AutoloadStrings.cpp" line="165"/>
         <source>Breath Noise</source>
         <translation>Zvuky nádechu a výdechu</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="165"/>
+        <location filename="../AutoloadStrings.cpp" line="166"/>
         <source>Seashore</source>
         <translation>Příboj na mořském pobřeží</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="166"/>
+        <location filename="../AutoloadStrings.cpp" line="167"/>
         <source>Bird Tweet</source>
         <translation>Cvrlikání ptáků</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="167"/>
+        <location filename="../AutoloadStrings.cpp" line="168"/>
         <source>Telephone Ring</source>
         <translation>Vyzvánění telefonu</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="168"/>
+        <location filename="../AutoloadStrings.cpp" line="169"/>
         <source>Helicopter</source>
         <translation>Vrtulník</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="169"/>
+        <location filename="../AutoloadStrings.cpp" line="170"/>
         <source>Applause</source>
         <translation>Potlesk</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="170"/>
+        <location filename="../AutoloadStrings.cpp" line="171"/>
         <source>Gunshot</source>
         <translation>Výstřel z ručnice</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="171"/>
         <source>Bank 0:8</source>
-        <translation>Banka 0:8</translation>
+        <translation type="obsolete">Banka 0:8</translation>
+    </message>
+    <message>
+        <source>Detuned EP 1</source>
+        <translation type="obsolete">Rozladěný EP 1</translation>
+    </message>
+    <message>
+        <source>Detuned EP 2</source>
+        <translation type="obsolete">Rozladěný EP 2</translation>
+    </message>
+    <message>
+        <source>Coupled Harpsichord</source>
+        <translation type="obsolete">Dvojice cembal</translation>
+    </message>
+    <message>
+        <source>Church Bell</source>
+        <translation type="obsolete">Kostelní zvon</translation>
+    </message>
+    <message>
+        <source>Detuned Organ 1</source>
+        <translation type="obsolete">Rozladěné varhany 1</translation>
+    </message>
+    <message>
+        <source>Detuned Organ 2</source>
+        <translation type="obsolete">Rozladěné varhany 2</translation>
+    </message>
+    <message>
+        <source>Church Organ 2</source>
+        <translation type="obsolete">Kostelní varhany 2</translation>
+    </message>
+    <message>
+        <source>Italian Accordion</source>
+        <translation type="obsolete">Italská tahací harmonika</translation>
+    </message>
+    <message>
+        <source>12 String Guitar</source>
+        <translation type="obsolete">Dvanáctistrunná kytara</translation>
+    </message>
+    <message>
+        <source>Hawaiian Guitar</source>
+        <translation type="obsolete">Havajská kytara</translation>
+    </message>
+    <message>
+        <source>Funk Guitar</source>
+        <translation type="obsolete">Funková kytara</translation>
+    </message>
+    <message>
+        <source>Feedback Guitar</source>
+        <translation type="obsolete">Kytara s odezvou</translation>
+    </message>
+    <message>
+        <source>Guitar Feedback</source>
+        <translation type="obsolete">Kytara s odezvou</translation>
+    </message>
+    <message>
+        <source>Synth Bass 3</source>
+        <translation type="obsolete">Syntetizátorový bas 3</translation>
+    </message>
+    <message>
+        <source>Synth Bass 4</source>
+        <translation type="obsolete">Syntetizátorový bas 4</translation>
+    </message>
+    <message>
+        <source>Slow Violin</source>
+        <translation type="obsolete">Pomalé housle</translation>
+    </message>
+    <message>
+        <source>Orchestral Pad</source>
+        <translation type="obsolete">Orchestrální poduška</translation>
+    </message>
+    <message>
+        <source>Synth Strings 3</source>
+        <translation type="obsolete">Syntetizátorové smyčce 3</translation>
+    </message>
+    <message>
+        <source>Brass 2</source>
+        <translation type="obsolete">Žesťový nástroj 2</translation>
+    </message>
+    <message>
+        <source>Synth Brass 3</source>
+        <translation type="obsolete">Syntetizátorové žestě 3</translation>
+    </message>
+    <message>
+        <source>Synth Brass 4</source>
+        <translation type="obsolete">Syntetizátorové žestě 4</translation>
+    </message>
+    <message>
+        <source>Sine Wave</source>
+        <translation type="obsolete">Sinusová vlna</translation>
+    </message>
+    <message>
+        <source>Taisho Koto</source>
+        <translation type="obsolete">Taisho Koto</translation>
+    </message>
+    <message>
+        <source>Concert Bass Drum</source>
+        <translation type="obsolete">Koncertní velký buben</translation>
+    </message>
+    <message>
+        <source>Melo Tom 2</source>
+        <translation type="obsolete">Melo Tom 2</translation>
+    </message>
+    <message>
+        <source>808 Tom</source>
+        <translation type="obsolete">808 Tom</translation>
+    </message>
+    <message>
+        <source>Bank 0:9</source>
+        <translation type="obsolete">Banka 0:9</translation>
+    </message>
+    <message>
+        <source>Burst Noise</source>
+        <translation type="obsolete">Zvuk prasknutí</translation>
+    </message>
+    <message>
+        <source>Bank 0:16</source>
+        <translation type="obsolete">Banka 0:16</translation>
+    </message>
+    <message>
+        <source>Bank 1:0</source>
+        <translation type="obsolete">Banka 1:0</translation>
+    </message>
+    <message>
+        <source>Standard</source>
+        <translation type="obsolete">Standard</translation>
+    </message>
+    <message>
+        <source>Standard 1</source>
+        <translation type="obsolete">Standard 1</translation>
+    </message>
+    <message>
+        <source>Standard 2</source>
+        <translation type="obsolete">Standard 2</translation>
+    </message>
+    <message>
+        <source>Standard 3</source>
+        <translation type="obsolete">Standard 3</translation>
+    </message>
+    <message>
+        <source>Standard 4</source>
+        <translation type="obsolete">Standard 4</translation>
+    </message>
+    <message>
+        <source>Standard 5</source>
+        <translation type="obsolete">Standard 5</translation>
+    </message>
+    <message>
+        <source>Standard 6</source>
+        <translation type="obsolete">Standard 6</translation>
+    </message>
+    <message>
+        <source>Standard 7</source>
+        <translation type="obsolete">Standard 7</translation>
+    </message>
+    <message>
+        <source>Room</source>
+        <translation type="obsolete">Prostorově rozložený zvuk</translation>
+    </message>
+    <message>
+        <source>Room 1</source>
+        <translation type="obsolete">Prostorově rozložený zvuk 1</translation>
+    </message>
+    <message>
+        <source>Room 2</source>
+        <translation type="obsolete">Prostorově rozložený zvuk 2</translation>
+    </message>
+    <message>
+        <source>Room 3</source>
+        <translation type="obsolete">Prostorově rozložený zvuk 3</translation>
+    </message>
+    <message>
+        <source>Room 4</source>
+        <translation type="obsolete">Prostorově rozložený zvuk 4</translation>
+    </message>
+    <message>
+        <source>Room 5</source>
+        <translation type="obsolete">Prostorově rozložený zvuk 5</translation>
+    </message>
+    <message>
+        <source>Room 6</source>
+        <translation type="obsolete">Prostorově rozložený zvuk 6</translation>
+    </message>
+    <message>
+        <source>Room 7</source>
+        <translation type="obsolete">Prostorově rozložený zvuk 7</translation>
+    </message>
+    <message>
+        <source>Power</source>
+        <translation type="obsolete">Síla</translation>
+    </message>
+    <message>
+        <source>Power 1</source>
+        <translation type="obsolete">Síla 1</translation>
+    </message>
+    <message>
+        <source>Power 2</source>
+        <translation type="obsolete">Síla 2</translation>
+    </message>
+    <message>
+        <source>Power 3</source>
+        <translation type="obsolete">Síla 3</translation>
+    </message>
+    <message>
+        <source>Electronic</source>
+        <translation type="obsolete">Elektronický zvuk</translation>
+    </message>
+    <message>
+        <source>TR-808</source>
+        <translation type="obsolete">TR-808</translation>
+    </message>
+    <message>
+        <source>Jazz</source>
+        <translation type="obsolete">Džez</translation>
+    </message>
+    <message>
+        <source>Jazz 1</source>
+        <translation type="obsolete">Džez 1</translation>
+    </message>
+    <message>
+        <source>Jazz 2</source>
+        <translation type="obsolete">Džez 2</translation>
+    </message>
+    <message>
+        <source>Jazz 3</source>
+        <translation type="obsolete">Džez 3</translation>
+    </message>
+    <message>
+        <source>Jazz 4</source>
+        <translation type="obsolete">Džez 4</translation>
+    </message>
+    <message>
+        <source>Brush</source>
+        <translation type="obsolete">Kartáč</translation>
+    </message>
+    <message>
+        <source>Brush 1</source>
+        <translation type="obsolete">Kartáč 1</translation>
+    </message>
+    <message>
+        <source>Brush 2</source>
+        <translation type="obsolete">Kartáč 2</translation>
+    </message>
+    <message>
+        <source>Orchestra Kit</source>
+        <translation type="obsolete">Vybavení orchestru</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="172"/>
-        <source>Detuned EP 1</source>
-        <translation>Rozladěný EP 1</translation>
-    </message>
-    <message>
-        <location filename="../AutoloadStrings.cpp" line="173"/>
-        <source>Detuned EP 2</source>
-        <translation>Rozladěný EP 2</translation>
-    </message>
-    <message>
-        <location filename="../AutoloadStrings.cpp" line="174"/>
-        <source>Coupled Harpsichord</source>
-        <translation>Dvojice cembal</translation>
-    </message>
-    <message>
-        <location filename="../AutoloadStrings.cpp" line="175"/>
-        <source>Church Bell</source>
-        <translation>Kostelní zvon</translation>
-    </message>
-    <message>
-        <location filename="../AutoloadStrings.cpp" line="176"/>
-        <source>Detuned Organ 1</source>
-        <translation>Rozladěné varhany 1</translation>
-    </message>
-    <message>
-        <location filename="../AutoloadStrings.cpp" line="177"/>
-        <source>Detuned Organ 2</source>
-        <translation>Rozladěné varhany 2</translation>
-    </message>
-    <message>
-        <location filename="../AutoloadStrings.cpp" line="178"/>
-        <source>Church Organ 2</source>
-        <translation>Kostelní varhany 2</translation>
-    </message>
-    <message>
-        <location filename="../AutoloadStrings.cpp" line="179"/>
-        <source>Italian Accordion</source>
-        <translation>Italská tahací harmonika</translation>
-    </message>
-    <message>
-        <location filename="../AutoloadStrings.cpp" line="181"/>
-        <source>12 String Guitar</source>
-        <translation>Dvanáctistrunná kytara</translation>
-    </message>
-    <message>
-        <location filename="../AutoloadStrings.cpp" line="182"/>
-        <source>Hawaiian Guitar</source>
-        <translation>Havajská kytara</translation>
-    </message>
-    <message>
-        <location filename="../AutoloadStrings.cpp" line="183"/>
-        <source>Funk Guitar</source>
-        <translation>Funková kytara</translation>
-    </message>
-    <message>
-        <location filename="../AutoloadStrings.cpp" line="184"/>
-        <source>Feedback Guitar</source>
-        <translation>Kytara s odezvou</translation>
-    </message>
-    <message>
-        <location filename="../AutoloadStrings.cpp" line="185"/>
-        <source>Guitar Feedback</source>
-        <translation>Kytara s odezvou</translation>
-    </message>
-    <message>
-        <location filename="../AutoloadStrings.cpp" line="186"/>
-        <source>Synth Bass 3</source>
-        <translation>Syntetizátorový bas 3</translation>
-    </message>
-    <message>
-        <location filename="../AutoloadStrings.cpp" line="187"/>
-        <source>Synth Bass 4</source>
-        <translation>Syntetizátorový bas 4</translation>
-    </message>
-    <message>
-        <location filename="../AutoloadStrings.cpp" line="188"/>
-        <source>Slow Violin</source>
-        <translation>Pomalé housle</translation>
-    </message>
-    <message>
-        <location filename="../AutoloadStrings.cpp" line="189"/>
-        <source>Orchestral Pad</source>
-        <translation>Orchestrální poduška</translation>
-    </message>
-    <message>
-        <location filename="../AutoloadStrings.cpp" line="190"/>
-        <source>Synth Strings 3</source>
-        <translation>Syntetizátorové smyčce 3</translation>
-    </message>
-    <message>
-        <location filename="../AutoloadStrings.cpp" line="191"/>
-        <source>Brass 2</source>
-        <translation>Žesťový nástroj 2</translation>
-    </message>
-    <message>
-        <location filename="../AutoloadStrings.cpp" line="192"/>
-        <source>Synth Brass 3</source>
-        <translation>Syntetizátorové žestě 3</translation>
-    </message>
-    <message>
-        <location filename="../AutoloadStrings.cpp" line="193"/>
-        <source>Synth Brass 4</source>
-        <translation>Syntetizátorové žestě 4</translation>
-    </message>
-    <message>
-        <location filename="../AutoloadStrings.cpp" line="194"/>
-        <source>Sine Wave</source>
-        <translation>Sinusová vlna</translation>
-    </message>
-    <message>
-        <location filename="../AutoloadStrings.cpp" line="195"/>
-        <source>Taisho Koto</source>
-        <translation>Taisho Koto</translation>
-    </message>
-    <message>
-        <location filename="../AutoloadStrings.cpp" line="197"/>
-        <source>Concert Bass Drum</source>
-        <translation>Koncertní velký buben</translation>
-    </message>
-    <message>
-        <location filename="../AutoloadStrings.cpp" line="198"/>
-        <source>Melo Tom 2</source>
-        <translation>Melo Tom 2</translation>
-    </message>
-    <message>
-        <location filename="../AutoloadStrings.cpp" line="199"/>
-        <source>808 Tom</source>
-        <translation>808 Tom</translation>
-    </message>
-    <message>
-        <location filename="../AutoloadStrings.cpp" line="200"/>
-        <source>Bank 0:9</source>
-        <translation>Banka 0:9</translation>
-    </message>
-    <message>
-        <location filename="../AutoloadStrings.cpp" line="201"/>
-        <source>Burst Noise</source>
-        <translation>Zvuk prasknutí</translation>
-    </message>
-    <message>
-        <location filename="../AutoloadStrings.cpp" line="202"/>
-        <source>Bank 0:16</source>
-        <translation>Banka 0:16</translation>
-    </message>
-    <message>
-        <location filename="../AutoloadStrings.cpp" line="204"/>
-        <source>Bank 1:0</source>
-        <translation>Banka 1:0</translation>
-    </message>
-    <message>
-        <location filename="../AutoloadStrings.cpp" line="205"/>
-        <source>Standard</source>
-        <translation>Standard</translation>
-    </message>
-    <message>
-        <location filename="../AutoloadStrings.cpp" line="206"/>
-        <source>Standard 1</source>
-        <translation>Standard 1</translation>
-    </message>
-    <message>
-        <location filename="../AutoloadStrings.cpp" line="207"/>
-        <source>Standard 2</source>
-        <translation>Standard 2</translation>
-    </message>
-    <message>
-        <location filename="../AutoloadStrings.cpp" line="208"/>
-        <source>Standard 3</source>
-        <translation>Standard 3</translation>
-    </message>
-    <message>
-        <location filename="../AutoloadStrings.cpp" line="209"/>
-        <source>Standard 4</source>
-        <translation>Standard 4</translation>
-    </message>
-    <message>
-        <location filename="../AutoloadStrings.cpp" line="210"/>
-        <source>Standard 5</source>
-        <translation>Standard 5</translation>
-    </message>
-    <message>
-        <location filename="../AutoloadStrings.cpp" line="211"/>
-        <source>Standard 6</source>
-        <translation>Standard 6</translation>
-    </message>
-    <message>
-        <location filename="../AutoloadStrings.cpp" line="212"/>
-        <source>Standard 7</source>
-        <translation>Standard 7</translation>
-    </message>
-    <message>
-        <location filename="../AutoloadStrings.cpp" line="213"/>
-        <source>Room</source>
-        <translation>Prostorově rozložený zvuk</translation>
-    </message>
-    <message>
-        <location filename="../AutoloadStrings.cpp" line="214"/>
-        <source>Room 1</source>
-        <translation>Prostorově rozložený zvuk 1</translation>
-    </message>
-    <message>
-        <location filename="../AutoloadStrings.cpp" line="215"/>
-        <source>Room 2</source>
-        <translation>Prostorově rozložený zvuk 2</translation>
-    </message>
-    <message>
-        <location filename="../AutoloadStrings.cpp" line="216"/>
-        <source>Room 3</source>
-        <translation>Prostorově rozložený zvuk 3</translation>
-    </message>
-    <message>
-        <location filename="../AutoloadStrings.cpp" line="217"/>
-        <source>Room 4</source>
-        <translation>Prostorově rozložený zvuk 4</translation>
-    </message>
-    <message>
-        <location filename="../AutoloadStrings.cpp" line="218"/>
-        <source>Room 5</source>
-        <translation>Prostorově rozložený zvuk 5</translation>
-    </message>
-    <message>
-        <location filename="../AutoloadStrings.cpp" line="219"/>
-        <source>Room 6</source>
-        <translation>Prostorově rozložený zvuk 6</translation>
-    </message>
-    <message>
-        <location filename="../AutoloadStrings.cpp" line="220"/>
-        <source>Room 7</source>
-        <translation>Prostorově rozložený zvuk 7</translation>
-    </message>
-    <message>
-        <location filename="../AutoloadStrings.cpp" line="221"/>
-        <source>Power</source>
-        <translation>Síla</translation>
-    </message>
-    <message>
-        <location filename="../AutoloadStrings.cpp" line="222"/>
-        <source>Power 1</source>
-        <translation>Síla 1</translation>
-    </message>
-    <message>
-        <location filename="../AutoloadStrings.cpp" line="223"/>
-        <source>Power 2</source>
-        <translation>Síla 2</translation>
-    </message>
-    <message>
-        <location filename="../AutoloadStrings.cpp" line="224"/>
-        <source>Power 3</source>
-        <translation>Síla 3</translation>
-    </message>
-    <message>
-        <location filename="../AutoloadStrings.cpp" line="225"/>
-        <source>Electronic</source>
-        <translation>Elektronický zvuk</translation>
-    </message>
-    <message>
-        <location filename="../AutoloadStrings.cpp" line="226"/>
-        <source>TR-808</source>
-        <translation>TR-808</translation>
-    </message>
-    <message>
-        <location filename="../AutoloadStrings.cpp" line="227"/>
-        <source>Jazz</source>
-        <translation>Džez</translation>
-    </message>
-    <message>
-        <location filename="../AutoloadStrings.cpp" line="228"/>
-        <source>Jazz 1</source>
-        <translation>Džez 1</translation>
-    </message>
-    <message>
-        <location filename="../AutoloadStrings.cpp" line="229"/>
-        <source>Jazz 2</source>
-        <translation>Džez 2</translation>
-    </message>
-    <message>
         <location filename="../AutoloadStrings.cpp" line="230"/>
-        <source>Jazz 3</source>
-        <translation>Džez 3</translation>
-    </message>
-    <message>
-        <location filename="../AutoloadStrings.cpp" line="231"/>
-        <source>Jazz 4</source>
-        <translation>Džez 4</translation>
-    </message>
-    <message>
-        <location filename="../AutoloadStrings.cpp" line="232"/>
-        <source>Brush</source>
-        <translation>Kartáč</translation>
-    </message>
-    <message>
-        <location filename="../AutoloadStrings.cpp" line="233"/>
-        <source>Brush 1</source>
-        <translation>Kartáč 1</translation>
-    </message>
-    <message>
-        <location filename="../AutoloadStrings.cpp" line="234"/>
-        <source>Brush 2</source>
-        <translation>Kartáč 2</translation>
-    </message>
-    <message>
-        <location filename="../AutoloadStrings.cpp" line="235"/>
-        <source>Orchestra Kit</source>
-        <translation>Vybavení orchestru</translation>
-    </message>
-    <message>
-        <location filename="../AutoloadStrings.cpp" line="236"/>
-        <location filename="../AutoloadStrings.cpp" line="299"/>
-        <location filename="../AutoloadStrings.cpp" line="735"/>
+        <location filename="../AutoloadStrings.cpp" line="666"/>
         <source>Pan</source>
         <translation>Vyvážení (Pan)</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="237"/>
-        <location filename="../AutoloadStrings.cpp" line="300"/>
-        <location filename="../AutoloadStrings.cpp" line="736"/>
+        <location filename="../AutoloadStrings.cpp" line="173"/>
+        <location filename="../AutoloadStrings.cpp" line="231"/>
+        <location filename="../AutoloadStrings.cpp" line="667"/>
         <source>Chorus</source>
         <translation>Sbor</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="238"/>
-        <location filename="../AutoloadStrings.cpp" line="301"/>
-        <location filename="../AutoloadStrings.cpp" line="737"/>
+        <location filename="../AutoloadStrings.cpp" line="174"/>
+        <location filename="../AutoloadStrings.cpp" line="232"/>
+        <location filename="../AutoloadStrings.cpp" line="668"/>
         <source>Volume</source>
         <translation>Hlasitost</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="239"/>
-        <location filename="../AutoloadStrings.cpp" line="302"/>
-        <location filename="../AutoloadStrings.cpp" line="738"/>
+        <location filename="../AutoloadStrings.cpp" line="175"/>
+        <location filename="../AutoloadStrings.cpp" line="233"/>
+        <location filename="../AutoloadStrings.cpp" line="669"/>
         <source>Reverb</source>
         <translation>Dozvuk</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="240"/>
-        <location filename="../AutoloadStrings.cpp" line="303"/>
-        <location filename="../AutoloadStrings.cpp" line="739"/>
+        <location filename="../AutoloadStrings.cpp" line="176"/>
+        <location filename="../AutoloadStrings.cpp" line="234"/>
+        <location filename="../AutoloadStrings.cpp" line="670"/>
         <source>Sustain</source>
         <translation>Držení tónu</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="241"/>
-        <location filename="../AutoloadStrings.cpp" line="304"/>
-        <location filename="../AutoloadStrings.cpp" line="740"/>
+        <location filename="../AutoloadStrings.cpp" line="177"/>
+        <location filename="../AutoloadStrings.cpp" line="235"/>
+        <location filename="../AutoloadStrings.cpp" line="671"/>
         <source>Expression</source>
         <translation>Výraz</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="242"/>
-        <location filename="../AutoloadStrings.cpp" line="305"/>
-        <location filename="../AutoloadStrings.cpp" line="741"/>
+        <location filename="../AutoloadStrings.cpp" line="178"/>
+        <location filename="../AutoloadStrings.cpp" line="236"/>
+        <location filename="../AutoloadStrings.cpp" line="672"/>
         <source>Modulation</source>
         <translation>Obměňování (modulace)</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="243"/>
-        <location filename="../AutoloadStrings.cpp" line="306"/>
-        <location filename="../AutoloadStrings.cpp" line="742"/>
+        <location filename="../AutoloadStrings.cpp" line="179"/>
+        <location filename="../AutoloadStrings.cpp" line="237"/>
+        <location filename="../AutoloadStrings.cpp" line="673"/>
         <source>PitchBend</source>
         <translation>Změna výšky tónu</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="244"/>
+        <location filename="../AutoloadStrings.cpp" line="180"/>
         <source>General MIDI Percussion</source>
         <translation>Obecné bicí zařízení MIDI</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="245"/>
-        <location filename="../AutoloadStrings.cpp" line="246"/>
-        <location filename="../AutoloadStrings.cpp" line="247"/>
-        <location filename="../AutoloadStrings.cpp" line="248"/>
-        <location filename="../AutoloadStrings.cpp" line="249"/>
         <source> </source>
-        <translation> </translation>
+        <translation type="obsolete"> </translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="250"/>
+        <location filename="../AutoloadStrings.cpp" line="181"/>
         <source>Acoustic Bass Drum</source>
         <translation>Akustický velký buben</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="251"/>
+        <location filename="../AutoloadStrings.cpp" line="182"/>
         <source>Bass Drum 1</source>
         <translation>Velký buben 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="252"/>
+        <location filename="../AutoloadStrings.cpp" line="183"/>
         <source>Side Stick</source>
         <translation>Další klacek</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="253"/>
+        <location filename="../AutoloadStrings.cpp" line="184"/>
         <source>Acoustic Snare</source>
         <translation>Akustický malý buben</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="254"/>
+        <location filename="../AutoloadStrings.cpp" line="185"/>
         <source>Hand Clap</source>
         <translation>Zatleskání</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="255"/>
+        <location filename="../AutoloadStrings.cpp" line="186"/>
         <source>Electric Snare</source>
         <translation>Elektrický malý buben</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="256"/>
+        <location filename="../AutoloadStrings.cpp" line="187"/>
         <source>Low Floor Tom</source>
         <translation>Polohlasný velký Tom</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="257"/>
+        <location filename="../AutoloadStrings.cpp" line="188"/>
         <source>Closed Hi-Hat</source>
         <translation>Zavřená hajtka</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="258"/>
+        <location filename="../AutoloadStrings.cpp" line="189"/>
         <source>High Floor Tom</source>
         <translation>Hlasitý velký Tom</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="259"/>
+        <location filename="../AutoloadStrings.cpp" line="190"/>
         <source>Pedal Hi-Hat</source>
         <translation>Činely ovládané nožním pedálem (hajtka)</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="260"/>
+        <location filename="../AutoloadStrings.cpp" line="191"/>
         <source>Low Tom</source>
         <translation>Polohlasný Tom</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="261"/>
+        <location filename="../AutoloadStrings.cpp" line="192"/>
         <source>Open Hi-Hat</source>
         <translation>Otevřená hajtka</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="262"/>
+        <location filename="../AutoloadStrings.cpp" line="193"/>
         <source>Low-Mid Tom</source>
         <translation>Polohlasný střední Tom</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="263"/>
+        <location filename="../AutoloadStrings.cpp" line="194"/>
         <source>Hi-Mid Tom</source>
         <translation>Hlasitý střední Tom</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="264"/>
+        <location filename="../AutoloadStrings.cpp" line="195"/>
         <source>Crash Cymbal 1</source>
         <translation>Třesk činel 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="265"/>
+        <location filename="../AutoloadStrings.cpp" line="196"/>
         <source>High Tom</source>
         <translation>Hlasitý Tom</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="266"/>
+        <location filename="../AutoloadStrings.cpp" line="197"/>
         <source>Ride Cymbal 1</source>
         <translation>Jezdecké činely 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="267"/>
+        <location filename="../AutoloadStrings.cpp" line="198"/>
         <source>Chinese Cymbal</source>
         <translation>Čínské činely</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="268"/>
+        <location filename="../AutoloadStrings.cpp" line="199"/>
         <source>Ride Bell</source>
         <translation>Jezdecký zvonek</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="270"/>
+        <location filename="../AutoloadStrings.cpp" line="201"/>
         <source>Splash Cymbal</source>
         <translation>Plácající činely</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="271"/>
+        <location filename="../AutoloadStrings.cpp" line="202"/>
         <source>Cowbell</source>
         <translation>Kravský zvonec</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="272"/>
+        <location filename="../AutoloadStrings.cpp" line="203"/>
         <source>Crash Cymbal 2</source>
         <translation>Třesk činel 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="273"/>
+        <location filename="../AutoloadStrings.cpp" line="204"/>
         <source>Vibraslap</source>
         <translation>Vibraslap</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="274"/>
+        <location filename="../AutoloadStrings.cpp" line="205"/>
         <source>Ride Cymbal 2</source>
         <translation>Jezdecké činely 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="275"/>
+        <location filename="../AutoloadStrings.cpp" line="206"/>
         <source>Hi Bongo</source>
         <translation>Hlasitá bonga</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="276"/>
+        <location filename="../AutoloadStrings.cpp" line="207"/>
         <source>Low Bongo</source>
         <translation>Polohlasá bonga</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="277"/>
+        <location filename="../AutoloadStrings.cpp" line="208"/>
         <source>Mute Hi Conga</source>
         <translation>Ztlumená hlasitá konga</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="278"/>
+        <location filename="../AutoloadStrings.cpp" line="209"/>
         <source>Open Hi Conga</source>
         <translation>Otevřená hlasitá konga</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="279"/>
+        <location filename="../AutoloadStrings.cpp" line="210"/>
         <source>Low Conga</source>
         <translation>Polohlasá konga</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="280"/>
+        <location filename="../AutoloadStrings.cpp" line="211"/>
         <source>High Timbale</source>
         <translation>Hlasitá timbále</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="281"/>
+        <location filename="../AutoloadStrings.cpp" line="212"/>
         <source>Low Timbale</source>
         <translation>Polohlasá timbále</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="282"/>
+        <location filename="../AutoloadStrings.cpp" line="213"/>
         <source>High Agogo</source>
         <translation>Hlasitá agoga</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="283"/>
+        <location filename="../AutoloadStrings.cpp" line="214"/>
         <source>Low Agogo</source>
         <translation>Polohlasá agoga</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="286"/>
+        <location filename="../AutoloadStrings.cpp" line="217"/>
         <source>Short Whistle</source>
         <translation>Krátký hvizd</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="287"/>
+        <location filename="../AutoloadStrings.cpp" line="218"/>
         <source>Long Whistle</source>
         <translation>Dlouhý hvizd</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="288"/>
+        <location filename="../AutoloadStrings.cpp" line="219"/>
         <source>Short Guiro</source>
         <translation>Krátké guiro</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="289"/>
+        <location filename="../AutoloadStrings.cpp" line="220"/>
         <source>Long Guiro</source>
         <translation>Dlouhé guiro</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="291"/>
+        <location filename="../AutoloadStrings.cpp" line="222"/>
         <source>Hi Wood Block</source>
         <translation>Hlasitý dřevěný špalíček</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="292"/>
+        <location filename="../AutoloadStrings.cpp" line="223"/>
         <source>Low Wood Block</source>
         <translation>Polohlasý dřevěný špalíček</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="293"/>
+        <location filename="../AutoloadStrings.cpp" line="224"/>
         <source>Mute Cuica</source>
         <translation>Ztlumená kuíka</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="294"/>
+        <location filename="../AutoloadStrings.cpp" line="225"/>
         <source>Open Cuica</source>
         <translation>Otevřená kuíka</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="295"/>
+        <location filename="../AutoloadStrings.cpp" line="226"/>
         <source>Mute Triangle</source>
         <translation>Ztlumený triangl</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="296"/>
+        <location filename="../AutoloadStrings.cpp" line="227"/>
         <source>Open Triangle</source>
         <translation>Otevřený triangl</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="297"/>
+        <location filename="../AutoloadStrings.cpp" line="228"/>
         <source>MIDI input system device</source>
         <translation>Vstupní zařízení MIDI</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="298"/>
+        <location filename="../AutoloadStrings.cpp" line="229"/>
         <source>&amp;lt;none&amp;gt;</source>
         <translation>&amp;lt;žádné&amp;gt;</translation>
     </message>
     <message>
         <location filename="../../src/base/Studio.cpp" line="61"/>
         <location filename="../../src/sound/AlsaDriver.cpp" line="694"/>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="532"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="538"/>
         <location filename="../AutoloadStrings.cpp" line="40"/>
         <source>Synth plugin</source>
         <translation>Syntetizátorový přídavný modul</translation>
@@ -8351,2143 +8294,2143 @@
         <translation>Zvuk</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="308"/>
+        <location filename="../AutoloadStrings.cpp" line="239"/>
         <source>AudioDefault</source>
         <translation>Výchozí zvuk</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="309"/>
+        <location filename="../AutoloadStrings.cpp" line="240"/>
         <source>MidnightBlue</source>
         <translation>Tmavě modrá barva</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="310"/>
+        <location filename="../AutoloadStrings.cpp" line="241"/>
         <source>NavyBlue</source>
         <translation>Námořnická modř</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="311"/>
+        <location filename="../AutoloadStrings.cpp" line="242"/>
         <source>CornflowerBlue</source>
         <translation>Chrpová modř</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="312"/>
+        <location filename="../AutoloadStrings.cpp" line="243"/>
         <source>DarkSlateBlue</source>
         <translation>Tmavě břidlicově modrá</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="313"/>
+        <location filename="../AutoloadStrings.cpp" line="244"/>
         <source>SlateBlue</source>
         <translation>Břidlicově modrá</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="314"/>
+        <location filename="../AutoloadStrings.cpp" line="245"/>
         <source>MediumSlateBlue</source>
         <translation>Střední břidlicově modrá</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="315"/>
+        <location filename="../AutoloadStrings.cpp" line="246"/>
         <source>LightSlateBlue</source>
         <translation>Světle břidlicově modrá</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="316"/>
+        <location filename="../AutoloadStrings.cpp" line="247"/>
         <source>MediumBlue</source>
         <translation>Střední modrá</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="317"/>
+        <location filename="../AutoloadStrings.cpp" line="248"/>
         <source>RoyalBlue</source>
         <translation>Královská modř</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="318"/>
+        <location filename="../AutoloadStrings.cpp" line="249"/>
         <source>blue</source>
         <translation>Modrá</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="319"/>
+        <location filename="../AutoloadStrings.cpp" line="250"/>
         <source>DodgerBlue</source>
         <translation>Podraznická modř</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="320"/>
+        <location filename="../AutoloadStrings.cpp" line="251"/>
         <source>DeepSkyBlue</source>
         <translation>Sytá nebeská modř</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="321"/>
+        <location filename="../AutoloadStrings.cpp" line="252"/>
         <source>SkyBlue</source>
         <translation>Nebeská modř</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="322"/>
+        <location filename="../AutoloadStrings.cpp" line="253"/>
         <source>LightSkyBlue</source>
         <translation>Světlá nebeská modř</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="323"/>
+        <location filename="../AutoloadStrings.cpp" line="254"/>
         <source>SteelBlue</source>
         <translation>Ocelově modrá</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="324"/>
+        <location filename="../AutoloadStrings.cpp" line="255"/>
         <source>LightSteelBlue</source>
         <translation>Světlá ocelově modrá</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="325"/>
+        <location filename="../AutoloadStrings.cpp" line="256"/>
         <source>LightBlue</source>
         <translation>Světle modrá</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="326"/>
+        <location filename="../AutoloadStrings.cpp" line="257"/>
         <source>PowderBlue</source>
         <translation>Světle šedomodrá</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="327"/>
+        <location filename="../AutoloadStrings.cpp" line="258"/>
         <source>PaleTurquoise</source>
         <translation>Bledě tyrkysová</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="328"/>
+        <location filename="../AutoloadStrings.cpp" line="259"/>
         <source>DarkTurquoise</source>
         <translation>Tmavě tyrkysová</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="329"/>
+        <location filename="../AutoloadStrings.cpp" line="260"/>
         <source>MediumTurquoise</source>
         <translation>Střední tyrkysová</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="330"/>
+        <location filename="../AutoloadStrings.cpp" line="261"/>
         <source>turquoise</source>
         <translation>Tyrkysová</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="331"/>
+        <location filename="../AutoloadStrings.cpp" line="262"/>
         <source>cyan</source>
         <translation>Modrozelená</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="332"/>
+        <location filename="../AutoloadStrings.cpp" line="263"/>
         <source>LightCyan</source>
         <translation>Světle modrozelená</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="333"/>
+        <location filename="../AutoloadStrings.cpp" line="264"/>
         <source>CadetBlue</source>
         <translation>Námořnická modř</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="334"/>
+        <location filename="../AutoloadStrings.cpp" line="265"/>
         <source>MediumAquamarine</source>
         <translation>Střední modrozelená</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="335"/>
+        <location filename="../AutoloadStrings.cpp" line="266"/>
         <source>aquamarine</source>
         <translation>Modrozelená</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="336"/>
+        <location filename="../AutoloadStrings.cpp" line="267"/>
         <source>DarkGreen</source>
         <translation>Tmavě zelená</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="337"/>
+        <location filename="../AutoloadStrings.cpp" line="268"/>
         <source>DarkOliveGreen</source>
         <translation>Tmavá olivová zeleň</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="338"/>
+        <location filename="../AutoloadStrings.cpp" line="269"/>
         <source>DarkSeaGreen</source>
         <translation>Tmavá mořská zeleň</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="339"/>
+        <location filename="../AutoloadStrings.cpp" line="270"/>
         <source>SeaGreen</source>
         <translation>Mořská zeleň</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="340"/>
+        <location filename="../AutoloadStrings.cpp" line="271"/>
         <source>MediumSeaGreen</source>
         <translation>Střední mořská zeleň</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="341"/>
+        <location filename="../AutoloadStrings.cpp" line="272"/>
         <source>LightSeaGreen</source>
         <translation>Světlá mořská zeleň</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="342"/>
+        <location filename="../AutoloadStrings.cpp" line="273"/>
         <source>PaleGreen</source>
         <translation>Bledě zelená</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="343"/>
+        <location filename="../AutoloadStrings.cpp" line="274"/>
         <source>SpringGreen</source>
         <translation>Jarní zeleň</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="344"/>
+        <location filename="../AutoloadStrings.cpp" line="275"/>
         <source>LawnGreen</source>
         <translation>Trávníková zeleň</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="345"/>
+        <location filename="../AutoloadStrings.cpp" line="276"/>
         <source>green</source>
         <translation>Zelená</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="346"/>
+        <location filename="../AutoloadStrings.cpp" line="277"/>
         <source>chartreuse</source>
         <translation>Světle žlutozelená</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="347"/>
+        <location filename="../AutoloadStrings.cpp" line="278"/>
         <source>MediumSpringGreen</source>
         <translation>Střední jarní zeleň</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="348"/>
+        <location filename="../AutoloadStrings.cpp" line="279"/>
         <source>GreenYellow</source>
         <translation>Zelenožlutá</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="349"/>
+        <location filename="../AutoloadStrings.cpp" line="280"/>
         <source>LimeGreen</source>
         <translation>Světle žlutozelená</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="350"/>
+        <location filename="../AutoloadStrings.cpp" line="281"/>
         <source>YellowGreen</source>
         <translation>Žluto zelená</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="351"/>
+        <location filename="../AutoloadStrings.cpp" line="282"/>
         <source>ForestGreen</source>
         <translation>Listová zeleň</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="352"/>
+        <location filename="../AutoloadStrings.cpp" line="283"/>
         <source>OliveDrab</source>
         <translation>Šedozelená</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="353"/>
+        <location filename="../AutoloadStrings.cpp" line="284"/>
         <source>DarkKhaki</source>
         <translation>Tmavá olivově šedá</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="354"/>
+        <location filename="../AutoloadStrings.cpp" line="285"/>
         <source>khaki</source>
         <translation>Olivově šedá</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="355"/>
+        <location filename="../AutoloadStrings.cpp" line="286"/>
         <source>PaleGoldenrod</source>
         <translation>Bledá zlatobýlová žluť</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="356"/>
+        <location filename="../AutoloadStrings.cpp" line="287"/>
         <source>LightGoldenrodYellow</source>
         <translation>Světlá zlatobýlová žluť</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="357"/>
+        <location filename="../AutoloadStrings.cpp" line="288"/>
         <source>LightYellow</source>
         <translation>Světležlutá</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="358"/>
+        <location filename="../AutoloadStrings.cpp" line="289"/>
         <source>yellow</source>
         <translation>Žlutá</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="359"/>
+        <location filename="../AutoloadStrings.cpp" line="290"/>
         <source>gold</source>
         <translation>Zlatá</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="360"/>
+        <location filename="../AutoloadStrings.cpp" line="291"/>
         <source>LightGoldenrod</source>
         <translation>Světlá zlatobýlová</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="361"/>
+        <location filename="../AutoloadStrings.cpp" line="292"/>
         <source>goldenrod</source>
         <translation>Zlatobýlová</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="362"/>
+        <location filename="../AutoloadStrings.cpp" line="293"/>
         <source>DarkGoldenrod</source>
         <translation>Tmavá zlatobýlová</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="363"/>
+        <location filename="../AutoloadStrings.cpp" line="294"/>
         <source>RosyBrown</source>
         <translation>Červenohnědá</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="364"/>
+        <location filename="../AutoloadStrings.cpp" line="295"/>
         <source>IndianRed</source>
         <translation>Indická červeň</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="365"/>
+        <location filename="../AutoloadStrings.cpp" line="296"/>
         <source>SaddleBrown</source>
         <translation>Sedlová hněď</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="366"/>
+        <location filename="../AutoloadStrings.cpp" line="297"/>
         <source>sienna</source>
         <translation>Žlutohnědá</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="367"/>
+        <location filename="../AutoloadStrings.cpp" line="298"/>
         <source>peru</source>
         <translation>Peru</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="368"/>
+        <location filename="../AutoloadStrings.cpp" line="299"/>
         <source>burlywood</source>
         <translation>Hnědá barva vzrostlého lesa</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="369"/>
+        <location filename="../AutoloadStrings.cpp" line="300"/>
         <source>beige</source>
         <translation>Béžová</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="370"/>
+        <location filename="../AutoloadStrings.cpp" line="301"/>
         <source>wheat</source>
         <translation>Barva pšenice</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="371"/>
+        <location filename="../AutoloadStrings.cpp" line="302"/>
         <source>SandyBrown</source>
         <translation>Písková hnědá</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="372"/>
+        <location filename="../AutoloadStrings.cpp" line="303"/>
         <source>tan</source>
         <translation>Světlehnědá</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="373"/>
+        <location filename="../AutoloadStrings.cpp" line="304"/>
         <source>chocolate</source>
         <translation>Čokoládová</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="374"/>
+        <location filename="../AutoloadStrings.cpp" line="305"/>
         <source>firebrick</source>
         <translation>Cihlová barva</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="375"/>
+        <location filename="../AutoloadStrings.cpp" line="306"/>
         <source>brown</source>
         <translation>Hnědá</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="376"/>
+        <location filename="../AutoloadStrings.cpp" line="307"/>
         <source>DarkSalmon</source>
         <translation>Tmavá lososově červená</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="377"/>
+        <location filename="../AutoloadStrings.cpp" line="308"/>
         <source>salmon</source>
         <translation>Lososově červená</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="378"/>
+        <location filename="../AutoloadStrings.cpp" line="309"/>
         <source>LightSalmon</source>
         <translation>Světlá lososově červená</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="379"/>
+        <location filename="../AutoloadStrings.cpp" line="310"/>
         <source>orange</source>
         <translation>Oranžová</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="380"/>
+        <location filename="../AutoloadStrings.cpp" line="311"/>
         <source>DarkOrange</source>
         <translation>Tmavě oranžová</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="381"/>
+        <location filename="../AutoloadStrings.cpp" line="312"/>
         <source>coral</source>
         <translation>Korálově červená</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="382"/>
+        <location filename="../AutoloadStrings.cpp" line="313"/>
         <source>LightCoral</source>
         <translation>Světlá korálově červená</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="383"/>
+        <location filename="../AutoloadStrings.cpp" line="314"/>
         <source>tomato</source>
         <translation>Rajčatová červeň</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="384"/>
+        <location filename="../AutoloadStrings.cpp" line="315"/>
         <source>OrangeRed</source>
         <translation>Oranžovočervená</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="385"/>
+        <location filename="../AutoloadStrings.cpp" line="316"/>
         <source>red</source>
         <translation>Červená</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="386"/>
+        <location filename="../AutoloadStrings.cpp" line="317"/>
         <source>HotPink</source>
         <translation>Zářící růžová</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="387"/>
+        <location filename="../AutoloadStrings.cpp" line="318"/>
         <source>DeepPink</source>
         <translation>Plná růžová</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="388"/>
+        <location filename="../AutoloadStrings.cpp" line="319"/>
         <source>pink</source>
         <translation>Růžová</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="389"/>
+        <location filename="../AutoloadStrings.cpp" line="320"/>
         <source>LightPink</source>
         <translation>Světlá růžová</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="390"/>
+        <location filename="../AutoloadStrings.cpp" line="321"/>
         <source>PaleVioletRed</source>
         <translation>Bledá fialově červená</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="391"/>
+        <location filename="../AutoloadStrings.cpp" line="322"/>
         <source>maroon</source>
         <translation>Kaštanová hněď</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="392"/>
+        <location filename="../AutoloadStrings.cpp" line="323"/>
         <source>MediumVioletRed</source>
         <translation>Střední fialově červená</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="393"/>
+        <location filename="../AutoloadStrings.cpp" line="324"/>
         <source>VioletRed</source>
         <translation>Fialově červená</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="394"/>
+        <location filename="../AutoloadStrings.cpp" line="325"/>
         <source>magenta</source>
         <translation>Purpurová</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="395"/>
+        <location filename="../AutoloadStrings.cpp" line="326"/>
         <source>violet</source>
         <translation>Fialová</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="396"/>
+        <location filename="../AutoloadStrings.cpp" line="327"/>
         <source>plum</source>
         <translation>Švestková</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="397"/>
+        <location filename="../AutoloadStrings.cpp" line="328"/>
         <source>orchid</source>
         <translation>Fialová orchidej</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="398"/>
+        <location filename="../AutoloadStrings.cpp" line="329"/>
         <source>MediumOrchid</source>
         <translation>Střední fialová orchidej</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="399"/>
+        <location filename="../AutoloadStrings.cpp" line="330"/>
         <source>DarkOrchid</source>
         <translation>Tmavá fialová orchidej</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="400"/>
+        <location filename="../AutoloadStrings.cpp" line="331"/>
         <source>DarkViolet</source>
         <translation>Tmavě fialová</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="401"/>
+        <location filename="../AutoloadStrings.cpp" line="332"/>
         <source>BlueViolet</source>
         <translation>Modrofialová</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="402"/>
+        <location filename="../AutoloadStrings.cpp" line="333"/>
         <source>purple</source>
         <translation>Nachová</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="403"/>
+        <location filename="../AutoloadStrings.cpp" line="334"/>
         <source>MediumPurple</source>
         <translation>Střední purpurová</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="404"/>
+        <location filename="../AutoloadStrings.cpp" line="335"/>
         <source>thistle</source>
         <translation>Barva bodláku</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="405"/>
+        <location filename="../AutoloadStrings.cpp" line="336"/>
         <source>snow1</source>
         <translation>Sněhobílá 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="406"/>
+        <location filename="../AutoloadStrings.cpp" line="337"/>
         <source>snow2</source>
         <translation>Sněhobílá 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="407"/>
+        <location filename="../AutoloadStrings.cpp" line="338"/>
         <source>snow3</source>
         <translation>Sněhobílá 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="408"/>
+        <location filename="../AutoloadStrings.cpp" line="339"/>
         <source>snow4</source>
         <translation>Sněhobílá 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="409"/>
+        <location filename="../AutoloadStrings.cpp" line="340"/>
         <source>seashell1</source>
         <translation>Lasturová 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="410"/>
+        <location filename="../AutoloadStrings.cpp" line="341"/>
         <source>seashell2</source>
         <translation>Lasturová 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="411"/>
+        <location filename="../AutoloadStrings.cpp" line="342"/>
         <source>seashell3</source>
         <translation>Lasturová 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="412"/>
+        <location filename="../AutoloadStrings.cpp" line="343"/>
         <source>seashell4</source>
         <translation>Lasturová 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="413"/>
+        <location filename="../AutoloadStrings.cpp" line="344"/>
         <source>AntiqueWhite1</source>
         <translation>Antická bílá 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="414"/>
+        <location filename="../AutoloadStrings.cpp" line="345"/>
         <source>AntiqueWhite2</source>
         <translation>Antická bílá 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="415"/>
+        <location filename="../AutoloadStrings.cpp" line="346"/>
         <source>AntiqueWhite3</source>
         <translation>Antická bílá 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="416"/>
+        <location filename="../AutoloadStrings.cpp" line="347"/>
         <source>AntiqueWhite4</source>
         <translation>Antická bílá 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="417"/>
+        <location filename="../AutoloadStrings.cpp" line="348"/>
         <source>bisque1</source>
         <translation>Světle béžová barva 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="418"/>
+        <location filename="../AutoloadStrings.cpp" line="349"/>
         <source>bisque2</source>
         <translation>Světle béžová barva 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="419"/>
+        <location filename="../AutoloadStrings.cpp" line="350"/>
         <source>bisque3</source>
         <translation>Světle béžová barva 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="420"/>
+        <location filename="../AutoloadStrings.cpp" line="351"/>
         <source>bisque4</source>
         <translation>Světle béžová barva 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="421"/>
+        <location filename="../AutoloadStrings.cpp" line="352"/>
         <source>PeachPuff1</source>
         <translation>Broskvová 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="422"/>
+        <location filename="../AutoloadStrings.cpp" line="353"/>
         <source>PeachPuff2</source>
         <translation>Broskvová 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="423"/>
+        <location filename="../AutoloadStrings.cpp" line="354"/>
         <source>PeachPuff3</source>
         <translation>Broskvová 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="424"/>
+        <location filename="../AutoloadStrings.cpp" line="355"/>
         <source>PeachPuff4</source>
         <translation>Broskvová 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="425"/>
+        <location filename="../AutoloadStrings.cpp" line="356"/>
         <source>NavajoWhite1</source>
         <translation>Navajská bílá 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="426"/>
+        <location filename="../AutoloadStrings.cpp" line="357"/>
         <source>NavajoWhite2</source>
         <translation>Navajská bílá 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="427"/>
+        <location filename="../AutoloadStrings.cpp" line="358"/>
         <source>NavajoWhite3</source>
         <translation>Navajská bílá 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="428"/>
+        <location filename="../AutoloadStrings.cpp" line="359"/>
         <source>NavajoWhite4</source>
         <translation>Navajská bílá 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="429"/>
+        <location filename="../AutoloadStrings.cpp" line="360"/>
         <source>LemonChiffon1</source>
         <translation>Šifónová žluť 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="430"/>
+        <location filename="../AutoloadStrings.cpp" line="361"/>
         <source>LemonChiffon2</source>
         <translation>Šifónová žluť 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="431"/>
+        <location filename="../AutoloadStrings.cpp" line="362"/>
         <source>LemonChiffon3</source>
         <translation>Šifónová žluť 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="432"/>
+        <location filename="../AutoloadStrings.cpp" line="363"/>
         <source>LemonChiffon4</source>
         <translation>Šifónová žluť 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="433"/>
+        <location filename="../AutoloadStrings.cpp" line="364"/>
         <source>cornsilk1</source>
         <translation>Kukuřičná vlákna 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="434"/>
+        <location filename="../AutoloadStrings.cpp" line="365"/>
         <source>cornsilk2</source>
         <translation>Kukuřičná vlákna 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="435"/>
+        <location filename="../AutoloadStrings.cpp" line="366"/>
         <source>cornsilk3</source>
         <translation>Kukuřičná vlákna 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="436"/>
+        <location filename="../AutoloadStrings.cpp" line="367"/>
         <source>cornsilk4</source>
         <translation>Kukuřičná vlákna 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="437"/>
+        <location filename="../AutoloadStrings.cpp" line="368"/>
         <source>ivory1</source>
         <translation>Slonovinová kost 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="438"/>
+        <location filename="../AutoloadStrings.cpp" line="369"/>
         <source>ivory2</source>
         <translation>Slonovinová kost 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="439"/>
+        <location filename="../AutoloadStrings.cpp" line="370"/>
         <source>ivory3</source>
         <translation>Slonovinová kost 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="440"/>
+        <location filename="../AutoloadStrings.cpp" line="371"/>
         <source>ivory4</source>
         <translation>Slonovinová kost 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="441"/>
+        <location filename="../AutoloadStrings.cpp" line="372"/>
         <source>honeydew1</source>
         <translation>Zlatě hnědá 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="442"/>
+        <location filename="../AutoloadStrings.cpp" line="373"/>
         <source>honeydew2</source>
         <translation>Zlatě hnědá 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="443"/>
+        <location filename="../AutoloadStrings.cpp" line="374"/>
         <source>honeydew3</source>
         <translation>Zlatě hnědá 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="444"/>
+        <location filename="../AutoloadStrings.cpp" line="375"/>
         <source>honeydew4</source>
         <translation>Zlatě hnědá 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="445"/>
+        <location filename="../AutoloadStrings.cpp" line="376"/>
         <source>LavenderBlush1</source>
         <translation>Levandulová 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="446"/>
+        <location filename="../AutoloadStrings.cpp" line="377"/>
         <source>LavenderBlush2</source>
         <translation>Levandulová 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="447"/>
+        <location filename="../AutoloadStrings.cpp" line="378"/>
         <source>LavenderBlush3</source>
         <translation>Levandulová 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="448"/>
+        <location filename="../AutoloadStrings.cpp" line="379"/>
         <source>LavenderBlush4</source>
         <translation>Levandulová 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="449"/>
+        <location filename="../AutoloadStrings.cpp" line="380"/>
         <source>MistyRose1</source>
         <translation>Zamlžená růžová 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="450"/>
+        <location filename="../AutoloadStrings.cpp" line="381"/>
         <source>MistyRose2</source>
         <translation>Zamlžená růžová 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="451"/>
+        <location filename="../AutoloadStrings.cpp" line="382"/>
         <source>MistyRose3</source>
         <translation>Zamlžená růžová 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="452"/>
+        <location filename="../AutoloadStrings.cpp" line="383"/>
         <source>MistyRose4</source>
         <translation>Zamlžená růžová 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="453"/>
+        <location filename="../AutoloadStrings.cpp" line="384"/>
         <source>azure1</source>
         <translation>Blankytná 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="454"/>
+        <location filename="../AutoloadStrings.cpp" line="385"/>
         <source>azure2</source>
         <translation>Blankytná 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="455"/>
+        <location filename="../AutoloadStrings.cpp" line="386"/>
         <source>azure3</source>
         <translation>Blankytná 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="456"/>
+        <location filename="../AutoloadStrings.cpp" line="387"/>
         <source>azure4</source>
         <translation>Blankytná 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="457"/>
+        <location filename="../AutoloadStrings.cpp" line="388"/>
         <source>SlateBlue1</source>
         <translation>Břidlicově modrá 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="458"/>
+        <location filename="../AutoloadStrings.cpp" line="389"/>
         <source>SlateBlue2</source>
         <translation>Břidlicově modrá 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="459"/>
+        <location filename="../AutoloadStrings.cpp" line="390"/>
         <source>SlateBlue3</source>
         <translation>Břidlicově modrá 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="460"/>
+        <location filename="../AutoloadStrings.cpp" line="391"/>
         <source>SlateBlue4</source>
         <translation>Břidlicově modrá 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="461"/>
+        <location filename="../AutoloadStrings.cpp" line="392"/>
         <source>RoyalBlue1</source>
         <translation>Královská modř 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="462"/>
+        <location filename="../AutoloadStrings.cpp" line="393"/>
         <source>RoyalBlue2</source>
         <translation>Královská modř 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="463"/>
+        <location filename="../AutoloadStrings.cpp" line="394"/>
         <source>RoyalBlue3</source>
         <translation>Královská modř 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="464"/>
+        <location filename="../AutoloadStrings.cpp" line="395"/>
         <source>RoyalBlue4</source>
         <translation>Královská modř 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="465"/>
+        <location filename="../AutoloadStrings.cpp" line="396"/>
         <source>blue1</source>
         <translation>Modrá 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="466"/>
+        <location filename="../AutoloadStrings.cpp" line="397"/>
         <source>blue2</source>
         <translation>Modrá 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="467"/>
+        <location filename="../AutoloadStrings.cpp" line="398"/>
         <source>blue3</source>
         <translation>Modrá 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="468"/>
+        <location filename="../AutoloadStrings.cpp" line="399"/>
         <source>blue4</source>
         <translation>Modrá 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="469"/>
+        <location filename="../AutoloadStrings.cpp" line="400"/>
         <source>DodgerBlue1</source>
         <translation>Podraznická modř 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="470"/>
+        <location filename="../AutoloadStrings.cpp" line="401"/>
         <source>DodgerBlue2</source>
         <translation>Podraznická modř 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="471"/>
+        <location filename="../AutoloadStrings.cpp" line="402"/>
         <source>DodgerBlue3</source>
         <translation>Podraznická modř 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="472"/>
+        <location filename="../AutoloadStrings.cpp" line="403"/>
         <source>DodgerBlue4</source>
         <translation>Podraznická modř 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="473"/>
+        <location filename="../AutoloadStrings.cpp" line="404"/>
         <source>SteelBlue1</source>
         <translation>Ocelově modrá 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="474"/>
+        <location filename="../AutoloadStrings.cpp" line="405"/>
         <source>SteelBlue2</source>
         <translation>Ocelově modrá 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="475"/>
+        <location filename="../AutoloadStrings.cpp" line="406"/>
         <source>SteelBlue3</source>
         <translation>Ocelově modrá 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="476"/>
+        <location filename="../AutoloadStrings.cpp" line="407"/>
         <source>SteelBlue4</source>
         <translation>Ocelově modrá 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="477"/>
+        <location filename="../AutoloadStrings.cpp" line="408"/>
         <source>DeepSkyBlue1</source>
         <translation>Sytá nebeská modř 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="478"/>
+        <location filename="../AutoloadStrings.cpp" line="409"/>
         <source>DeepSkyBlue2</source>
         <translation>Sytá nebeská modř 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="479"/>
+        <location filename="../AutoloadStrings.cpp" line="410"/>
         <source>DeepSkyBlue3</source>
         <translation>Sytá nebeská modř 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="480"/>
+        <location filename="../AutoloadStrings.cpp" line="411"/>
         <source>DeepSkyBlue4</source>
         <translation>Sytá nebeská modř 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="481"/>
+        <location filename="../AutoloadStrings.cpp" line="412"/>
         <source>SkyBlue1</source>
         <translation>Nebeská modř 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="482"/>
+        <location filename="../AutoloadStrings.cpp" line="413"/>
         <source>SkyBlue2</source>
         <translation>Nebeská modř 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="483"/>
+        <location filename="../AutoloadStrings.cpp" line="414"/>
         <source>SkyBlue3</source>
         <translation>Nebeská modř 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="484"/>
+        <location filename="../AutoloadStrings.cpp" line="415"/>
         <source>SkyBlue4</source>
         <translation>Nebeská modř 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="485"/>
+        <location filename="../AutoloadStrings.cpp" line="416"/>
         <source>LightSkyBlue1</source>
         <translation>Světlá nebeská modř 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="486"/>
+        <location filename="../AutoloadStrings.cpp" line="417"/>
         <source>LightSkyBlue2</source>
         <translation>Světlá nebeská modř 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="487"/>
+        <location filename="../AutoloadStrings.cpp" line="418"/>
         <source>LightSkyBlue3</source>
         <translation>Světlá nebeská modř 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="488"/>
+        <location filename="../AutoloadStrings.cpp" line="419"/>
         <source>LightSkyBlue4</source>
         <translation>Světlá nebeská modř 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="489"/>
+        <location filename="../AutoloadStrings.cpp" line="420"/>
         <source>SlateGray1</source>
         <translation>Břidlicově šedá 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="490"/>
+        <location filename="../AutoloadStrings.cpp" line="421"/>
         <source>SlateGray2</source>
         <translation>Břidlicově šedá 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="491"/>
+        <location filename="../AutoloadStrings.cpp" line="422"/>
         <source>SlateGray3</source>
         <translation>Břidlicově šedá 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="492"/>
+        <location filename="../AutoloadStrings.cpp" line="423"/>
         <source>SlateGray4</source>
         <translation>Břidlicově šedá 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="493"/>
+        <location filename="../AutoloadStrings.cpp" line="424"/>
         <source>LightSteelBlue1</source>
         <translation>Světlá ocelově modrá 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="494"/>
+        <location filename="../AutoloadStrings.cpp" line="425"/>
         <source>LightSteelBlue2</source>
         <translation>Světlá ocelově modrá 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="495"/>
+        <location filename="../AutoloadStrings.cpp" line="426"/>
         <source>LightSteelBlue3</source>
         <translation>Světlá ocelově modrá 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="496"/>
+        <location filename="../AutoloadStrings.cpp" line="427"/>
         <source>LightSteelBlue4</source>
         <translation>Světlá ocelově modrá 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="497"/>
+        <location filename="../AutoloadStrings.cpp" line="428"/>
         <source>LightBlue1</source>
         <translation>Světle modrá 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="498"/>
+        <location filename="../AutoloadStrings.cpp" line="429"/>
         <source>LightBlue2</source>
         <translation>Světle modrá 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="499"/>
+        <location filename="../AutoloadStrings.cpp" line="430"/>
         <source>LightBlue3</source>
         <translation>Světle modrá 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="500"/>
+        <location filename="../AutoloadStrings.cpp" line="431"/>
         <source>LightBlue4</source>
         <translation>Světle modrá 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="501"/>
+        <location filename="../AutoloadStrings.cpp" line="432"/>
         <source>LightCyan1</source>
         <translation>Světle modrozelená 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="502"/>
+        <location filename="../AutoloadStrings.cpp" line="433"/>
         <source>LightCyan2</source>
         <translation>Světle modrozelená 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="503"/>
+        <location filename="../AutoloadStrings.cpp" line="434"/>
         <source>LightCyan3</source>
         <translation>Světle modrozelená 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="504"/>
+        <location filename="../AutoloadStrings.cpp" line="435"/>
         <source>LightCyan4</source>
         <translation>Světle modrozelená 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="505"/>
+        <location filename="../AutoloadStrings.cpp" line="436"/>
         <source>PaleTurquoise1</source>
         <translation>Bledě tyrkysová 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="506"/>
+        <location filename="../AutoloadStrings.cpp" line="437"/>
         <source>PaleTurquoise2</source>
         <translation>Bledě tyrkysová 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="507"/>
+        <location filename="../AutoloadStrings.cpp" line="438"/>
         <source>PaleTurquoise3</source>
         <translation>Bledě tyrkysová 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="508"/>
+        <location filename="../AutoloadStrings.cpp" line="439"/>
         <source>PaleTurquoise4</source>
         <translation>Bledě tyrkysová 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="509"/>
+        <location filename="../AutoloadStrings.cpp" line="440"/>
         <source>CadetBlue1</source>
         <translation>Námořnická modř 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="510"/>
+        <location filename="../AutoloadStrings.cpp" line="441"/>
         <source>CadetBlue2</source>
         <translation>Námořnická modř 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="511"/>
+        <location filename="../AutoloadStrings.cpp" line="442"/>
         <source>CadetBlue3</source>
         <translation>Námořnická modř 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="512"/>
+        <location filename="../AutoloadStrings.cpp" line="443"/>
         <source>CadetBlue4</source>
         <translation>Námořnická modř 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="513"/>
+        <location filename="../AutoloadStrings.cpp" line="444"/>
         <source>turquoise1</source>
         <translation>Tyrkysová 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="514"/>
+        <location filename="../AutoloadStrings.cpp" line="445"/>
         <source>turquoise2</source>
         <translation>Tyrkysová 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="515"/>
+        <location filename="../AutoloadStrings.cpp" line="446"/>
         <source>turquoise3</source>
         <translation>Tyrkysová 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="516"/>
+        <location filename="../AutoloadStrings.cpp" line="447"/>
         <source>turquoise4</source>
         <translation>Tyrkysová 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="517"/>
+        <location filename="../AutoloadStrings.cpp" line="448"/>
         <source>cyan1</source>
         <translation>Modrozelená 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="518"/>
+        <location filename="../AutoloadStrings.cpp" line="449"/>
         <source>cyan2</source>
         <translation>Modrozelená 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="519"/>
+        <location filename="../AutoloadStrings.cpp" line="450"/>
         <source>cyan3</source>
         <translation>Modrozelená 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="520"/>
+        <location filename="../AutoloadStrings.cpp" line="451"/>
         <source>cyan4</source>
         <translation>Modrozelená 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="521"/>
+        <location filename="../AutoloadStrings.cpp" line="452"/>
         <source>DarkSlateGray1</source>
         <translation>Tmavě břidlicově šedá 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="522"/>
+        <location filename="../AutoloadStrings.cpp" line="453"/>
         <source>DarkSlateGray2</source>
         <translation>Tmavě břidlicově šedá 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="523"/>
+        <location filename="../AutoloadStrings.cpp" line="454"/>
         <source>DarkSlateGray3</source>
         <translation>Tmavě břidlicově šedá 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="524"/>
+        <location filename="../AutoloadStrings.cpp" line="455"/>
         <source>DarkSlateGray4</source>
         <translation>Tmavě břidlicově šedá 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="525"/>
+        <location filename="../AutoloadStrings.cpp" line="456"/>
         <source>aquamarine1</source>
         <translation>Modrozelená 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="526"/>
+        <location filename="../AutoloadStrings.cpp" line="457"/>
         <source>aquamarine2</source>
         <translation>Modrozelená 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="527"/>
+        <location filename="../AutoloadStrings.cpp" line="458"/>
         <source>aquamarine3</source>
         <translation>Modrozelená 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="528"/>
+        <location filename="../AutoloadStrings.cpp" line="459"/>
         <source>aquamarine4</source>
         <translation>Modrozelená 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="529"/>
+        <location filename="../AutoloadStrings.cpp" line="460"/>
         <source>DarkSeaGreen1</source>
         <translation>Tmavá mořská zeleň 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="530"/>
+        <location filename="../AutoloadStrings.cpp" line="461"/>
         <source>DarkSeaGreen2</source>
         <translation>Tmavá mořská zeleň 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="531"/>
+        <location filename="../AutoloadStrings.cpp" line="462"/>
         <source>DarkSeaGreen3</source>
         <translation>Tmavá mořská zeleň 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="532"/>
+        <location filename="../AutoloadStrings.cpp" line="463"/>
         <source>DarkSeaGreen4</source>
         <translation>Tmavá mořská zeleň 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="533"/>
+        <location filename="../AutoloadStrings.cpp" line="464"/>
         <source>SeaGreen1</source>
         <translation>Mořská zeleň 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="534"/>
+        <location filename="../AutoloadStrings.cpp" line="465"/>
         <source>SeaGreen2</source>
         <translation>Mořská zeleň 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="535"/>
+        <location filename="../AutoloadStrings.cpp" line="466"/>
         <source>SeaGreen3</source>
         <translation>Mořská zeleň 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="536"/>
+        <location filename="../AutoloadStrings.cpp" line="467"/>
         <source>SeaGreen4</source>
         <translation>Mořská zeleň 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="537"/>
+        <location filename="../AutoloadStrings.cpp" line="468"/>
         <source>PaleGreen1</source>
         <translation>Bledě zelená 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="538"/>
+        <location filename="../AutoloadStrings.cpp" line="469"/>
         <source>PaleGreen2</source>
         <translation>Bledě zelená 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="539"/>
+        <location filename="../AutoloadStrings.cpp" line="470"/>
         <source>PaleGreen3</source>
         <translation>Bledě zelená 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="540"/>
+        <location filename="../AutoloadStrings.cpp" line="471"/>
         <source>PaleGreen4</source>
         <translation>Bledě zelená 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="541"/>
+        <location filename="../AutoloadStrings.cpp" line="472"/>
         <source>SpringGreen1</source>
         <translation>Jarní zeleň 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="542"/>
+        <location filename="../AutoloadStrings.cpp" line="473"/>
         <source>SpringGreen2</source>
         <translation>Jarní zeleň 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="543"/>
+        <location filename="../AutoloadStrings.cpp" line="474"/>
         <source>SpringGreen3</source>
         <translation>Jarní zeleň 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="544"/>
+        <location filename="../AutoloadStrings.cpp" line="475"/>
         <source>SpringGreen4</source>
         <translation>Jarní zeleň 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="545"/>
+        <location filename="../AutoloadStrings.cpp" line="476"/>
         <source>green1</source>
         <translation>Zelená 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="546"/>
+        <location filename="../AutoloadStrings.cpp" line="477"/>
         <source>green2</source>
         <translation>Zelená 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="547"/>
+        <location filename="../AutoloadStrings.cpp" line="478"/>
         <source>green3</source>
         <translation>Zelená 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="548"/>
+        <location filename="../AutoloadStrings.cpp" line="479"/>
         <source>green4</source>
         <translation>Zelená 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="549"/>
+        <location filename="../AutoloadStrings.cpp" line="480"/>
         <source>chartreuse1</source>
         <translation>Světle žlutozelená 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="550"/>
+        <location filename="../AutoloadStrings.cpp" line="481"/>
         <source>chartreuse2</source>
         <translation>Světle žlutozelená 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="551"/>
+        <location filename="../AutoloadStrings.cpp" line="482"/>
         <source>chartreuse3</source>
         <translation>Světle žlutozelená 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="552"/>
+        <location filename="../AutoloadStrings.cpp" line="483"/>
         <source>chartreuse4</source>
         <translation>Světle žlutozelená 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="553"/>
+        <location filename="../AutoloadStrings.cpp" line="484"/>
         <source>OliveDrab1</source>
         <translation>Šedozelená 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="554"/>
+        <location filename="../AutoloadStrings.cpp" line="485"/>
         <source>OliveDrab2</source>
         <translation>Šedozelená 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="555"/>
+        <location filename="../AutoloadStrings.cpp" line="486"/>
         <source>OliveDrab3</source>
         <translation>Šedozelená 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="556"/>
+        <location filename="../AutoloadStrings.cpp" line="487"/>
         <source>OliveDrab4</source>
         <translation>Šedozelená 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="557"/>
+        <location filename="../AutoloadStrings.cpp" line="488"/>
         <source>DarkOliveGreen1</source>
         <translation>Tmavá olivová zeleň 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="558"/>
+        <location filename="../AutoloadStrings.cpp" line="489"/>
         <source>DarkOliveGreen2</source>
         <translation>Tmavá olivová zeleň 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="559"/>
+        <location filename="../AutoloadStrings.cpp" line="490"/>
         <source>DarkOliveGreen3</source>
         <translation>Tmavá olivová zeleň 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="560"/>
+        <location filename="../AutoloadStrings.cpp" line="491"/>
         <source>DarkOliveGreen4</source>
         <translation>Tmavá olivová zeleň 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="561"/>
+        <location filename="../AutoloadStrings.cpp" line="492"/>
         <source>khaki1</source>
         <translation>Olivově šedá 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="562"/>
+        <location filename="../AutoloadStrings.cpp" line="493"/>
         <source>khaki2</source>
         <translation>Olivově šedá 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="563"/>
+        <location filename="../AutoloadStrings.cpp" line="494"/>
         <source>khaki3</source>
         <translation>Olivově šedá 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="564"/>
+        <location filename="../AutoloadStrings.cpp" line="495"/>
         <source>khaki4</source>
         <translation>Olivově šedá 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="565"/>
+        <location filename="../AutoloadStrings.cpp" line="496"/>
         <source>LightGoldenrod1</source>
         <translation>Světlá zlatobýlová žluť 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="566"/>
+        <location filename="../AutoloadStrings.cpp" line="497"/>
         <source>LightGoldenrod2</source>
         <translation>Světlá zlatobýlová žluť 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="567"/>
+        <location filename="../AutoloadStrings.cpp" line="498"/>
         <source>LightGoldenrod3</source>
         <translation>Světlá zlatobýlová žluť 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="568"/>
+        <location filename="../AutoloadStrings.cpp" line="499"/>
         <source>LightGoldenrod4</source>
         <translation>Světlá zlatobýlová žluť 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="569"/>
+        <location filename="../AutoloadStrings.cpp" line="500"/>
         <source>LightYellow1</source>
         <translation>Světležlutá 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="570"/>
+        <location filename="../AutoloadStrings.cpp" line="501"/>
         <source>LightYellow2</source>
         <translation>Světležlutá 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="571"/>
+        <location filename="../AutoloadStrings.cpp" line="502"/>
         <source>LightYellow3</source>
         <translation>Světležlutá 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="572"/>
+        <location filename="../AutoloadStrings.cpp" line="503"/>
         <source>LightYellow4</source>
         <translation>Světležlutá 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="573"/>
+        <location filename="../AutoloadStrings.cpp" line="504"/>
         <source>yellow1</source>
         <translation>Žlutá 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="574"/>
+        <location filename="../AutoloadStrings.cpp" line="505"/>
         <source>yellow2</source>
         <translation>Žlutá 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="575"/>
+        <location filename="../AutoloadStrings.cpp" line="506"/>
         <source>yellow3</source>
         <translation>Žlutá 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="576"/>
+        <location filename="../AutoloadStrings.cpp" line="507"/>
         <source>yellow4</source>
         <translation>Žlutá 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="577"/>
+        <location filename="../AutoloadStrings.cpp" line="508"/>
         <source>gold1</source>
         <translation>Zlatá 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="578"/>
+        <location filename="../AutoloadStrings.cpp" line="509"/>
         <source>gold2</source>
         <translation>Zlatá 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="579"/>
+        <location filename="../AutoloadStrings.cpp" line="510"/>
         <source>gold3</source>
         <translation>Zlatá 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="580"/>
+        <location filename="../AutoloadStrings.cpp" line="511"/>
         <source>gold4</source>
         <translation>Zlatá 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="581"/>
+        <location filename="../AutoloadStrings.cpp" line="512"/>
         <source>goldenrod1</source>
         <translation>Zlatobýlová žluť 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="582"/>
+        <location filename="../AutoloadStrings.cpp" line="513"/>
         <source>goldenrod2</source>
         <translation>Zlatobýlová žluť 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="583"/>
+        <location filename="../AutoloadStrings.cpp" line="514"/>
         <source>goldenrod3</source>
         <translation>Zlatobýlová žluť 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="584"/>
+        <location filename="../AutoloadStrings.cpp" line="515"/>
         <source>goldenrod4</source>
         <translation>Zlatobýlová žluť 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="585"/>
+        <location filename="../AutoloadStrings.cpp" line="516"/>
         <source>DarkGoldenrod1</source>
         <translation>Tmavá zlatobýlová žluť 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="586"/>
+        <location filename="../AutoloadStrings.cpp" line="517"/>
         <source>DarkGoldenrod2</source>
         <translation>Tmavá zlatobýlová žluť 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="587"/>
+        <location filename="../AutoloadStrings.cpp" line="518"/>
         <source>DarkGoldenrod3</source>
         <translation>Tmavá zlatobýlová žluť 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="588"/>
+        <location filename="../AutoloadStrings.cpp" line="519"/>
         <source>DarkGoldenrod4</source>
         <translation>Tmavá zlatobýlová žluť 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="589"/>
+        <location filename="../AutoloadStrings.cpp" line="520"/>
         <source>RosyBrown1</source>
         <translation>Červenohnědá 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="590"/>
+        <location filename="../AutoloadStrings.cpp" line="521"/>
         <source>RosyBrown2</source>
         <translation>Červenohnědá 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="591"/>
+        <location filename="../AutoloadStrings.cpp" line="522"/>
         <source>RosyBrown3</source>
         <translation>Červenohnědá 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="592"/>
+        <location filename="../AutoloadStrings.cpp" line="523"/>
         <source>RosyBrown4</source>
         <translation>Červenohnědá 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="593"/>
+        <location filename="../AutoloadStrings.cpp" line="524"/>
         <source>IndianRed1</source>
         <translation>Indická červeň 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="594"/>
+        <location filename="../AutoloadStrings.cpp" line="525"/>
         <source>IndianRed2</source>
         <translation>Indická červeň 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="595"/>
+        <location filename="../AutoloadStrings.cpp" line="526"/>
         <source>IndianRed3</source>
         <translation>Indická červeň 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="596"/>
+        <location filename="../AutoloadStrings.cpp" line="527"/>
         <source>IndianRed4</source>
         <translation>Indická červeň 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="597"/>
+        <location filename="../AutoloadStrings.cpp" line="528"/>
         <source>sienna1</source>
         <translation>Žlutohnědá 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="598"/>
+        <location filename="../AutoloadStrings.cpp" line="529"/>
         <source>sienna2</source>
         <translation>Žlutohnědá 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="599"/>
+        <location filename="../AutoloadStrings.cpp" line="530"/>
         <source>sienna3</source>
         <translation>Žlutohnědá 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="600"/>
+        <location filename="../AutoloadStrings.cpp" line="531"/>
         <source>sienna4</source>
         <translation>Žlutohnědá 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="601"/>
+        <location filename="../AutoloadStrings.cpp" line="532"/>
         <source>burlywood1</source>
         <translation>Hnědá barva vzrostlého lesa 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="602"/>
+        <location filename="../AutoloadStrings.cpp" line="533"/>
         <source>burlywood2</source>
         <translation>Hnědá barva vzrostlého lesa 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="603"/>
+        <location filename="../AutoloadStrings.cpp" line="534"/>
         <source>burlywood3</source>
         <translation>Hnědá barva vzrostlého lesa 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="604"/>
+        <location filename="../AutoloadStrings.cpp" line="535"/>
         <source>burlywood4</source>
         <translation>Hnědá barva vzrostlého lesa 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="605"/>
+        <location filename="../AutoloadStrings.cpp" line="536"/>
         <source>wheat1</source>
         <translation>Barva pšenice 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="606"/>
+        <location filename="../AutoloadStrings.cpp" line="537"/>
         <source>wheat2</source>
         <translation>Barva pšenice 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="607"/>
+        <location filename="../AutoloadStrings.cpp" line="538"/>
         <source>wheat3</source>
         <translation>Barva pšenice 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="608"/>
+        <location filename="../AutoloadStrings.cpp" line="539"/>
         <source>wheat4</source>
         <translation>Barva pšenice 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="609"/>
+        <location filename="../AutoloadStrings.cpp" line="540"/>
         <source>tan1</source>
         <translation>Světlehnědá 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="610"/>
+        <location filename="../AutoloadStrings.cpp" line="541"/>
         <source>tan2</source>
         <translation>Světlehnědá 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="611"/>
+        <location filename="../AutoloadStrings.cpp" line="542"/>
         <source>tan3</source>
         <translation>Světlehnědá 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="612"/>
+        <location filename="../AutoloadStrings.cpp" line="543"/>
         <source>tan4</source>
         <translation>Světlehnědá 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="613"/>
+        <location filename="../AutoloadStrings.cpp" line="544"/>
         <source>chocolate1</source>
         <translation>Čokoládová 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="614"/>
+        <location filename="../AutoloadStrings.cpp" line="545"/>
         <source>chocolate2</source>
         <translation>Čokoládová 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="615"/>
+        <location filename="../AutoloadStrings.cpp" line="546"/>
         <source>chocolate3</source>
         <translation>Čokoládová 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="616"/>
+        <location filename="../AutoloadStrings.cpp" line="547"/>
         <source>chocolate4</source>
         <translation>Čokoládová 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="617"/>
+        <location filename="../AutoloadStrings.cpp" line="548"/>
         <source>firebrick1</source>
         <translation>Cihlová barva 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="618"/>
+        <location filename="../AutoloadStrings.cpp" line="549"/>
         <source>firebrick2</source>
         <translation>Cihlová barva 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="619"/>
+        <location filename="../AutoloadStrings.cpp" line="550"/>
         <source>firebrick3</source>
         <translation>Cihlová barva 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="620"/>
+        <location filename="../AutoloadStrings.cpp" line="551"/>
         <source>firebrick4</source>
         <translation>Cihlová barva 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="621"/>
+        <location filename="../AutoloadStrings.cpp" line="552"/>
         <source>brown1</source>
         <translation>Hnědá 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="622"/>
+        <location filename="../AutoloadStrings.cpp" line="553"/>
         <source>brown2</source>
         <translation>Hnědá 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="623"/>
+        <location filename="../AutoloadStrings.cpp" line="554"/>
         <source>brown3</source>
         <translation>Hnědá 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="624"/>
+        <location filename="../AutoloadStrings.cpp" line="555"/>
         <source>brown4</source>
         <translation>Hnědá 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="625"/>
+        <location filename="../AutoloadStrings.cpp" line="556"/>
         <source>salmon1</source>
         <translation>Lososově červená 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="626"/>
+        <location filename="../AutoloadStrings.cpp" line="557"/>
         <source>salmon2</source>
         <translation>Lososově červená 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="627"/>
+        <location filename="../AutoloadStrings.cpp" line="558"/>
         <source>salmon3</source>
         <translation>Lososově červená 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="628"/>
+        <location filename="../AutoloadStrings.cpp" line="559"/>
         <source>salmon4</source>
         <translation>Lososově červená 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="629"/>
+        <location filename="../AutoloadStrings.cpp" line="560"/>
         <source>LightSalmon1</source>
         <translation>Světlá lososově červená 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="630"/>
+        <location filename="../AutoloadStrings.cpp" line="561"/>
         <source>LightSalmon2</source>
         <translation>Světlá lososově červená 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="631"/>
+        <location filename="../AutoloadStrings.cpp" line="562"/>
         <source>LightSalmon3</source>
         <translation>Světlá lososově červená 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="632"/>
+        <location filename="../AutoloadStrings.cpp" line="563"/>
         <source>LightSalmon4</source>
         <translation>Světlá lososově červená 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="633"/>
+        <location filename="../AutoloadStrings.cpp" line="564"/>
         <source>orange1</source>
         <translation>Oranžová 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="634"/>
+        <location filename="../AutoloadStrings.cpp" line="565"/>
         <source>orange2</source>
         <translation>Oranžová 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="635"/>
+        <location filename="../AutoloadStrings.cpp" line="566"/>
         <source>orange3</source>
         <translation>Oranžová 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="636"/>
+        <location filename="../AutoloadStrings.cpp" line="567"/>
         <source>orange4</source>
         <translation>Oranžová 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="637"/>
+        <location filename="../AutoloadStrings.cpp" line="568"/>
         <source>DarkOrange1</source>
         <translation>Tmavě oranžová 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="638"/>
+        <location filename="../AutoloadStrings.cpp" line="569"/>
         <source>DarkOrange2</source>
         <translation>Tmavě oranžová 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="639"/>
+        <location filename="../AutoloadStrings.cpp" line="570"/>
         <source>DarkOrange3</source>
         <translation>Tmavě oranžová 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="640"/>
+        <location filename="../AutoloadStrings.cpp" line="571"/>
         <source>DarkOrange4</source>
         <translation>Tmavě oranžová 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="641"/>
+        <location filename="../AutoloadStrings.cpp" line="572"/>
         <source>coral1</source>
         <translation>Korálově červená 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="642"/>
+        <location filename="../AutoloadStrings.cpp" line="573"/>
         <source>coral2</source>
         <translation>Korálově červená 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="643"/>
+        <location filename="../AutoloadStrings.cpp" line="574"/>
         <source>coral3</source>
         <translation>Korálově červená 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="644"/>
+        <location filename="../AutoloadStrings.cpp" line="575"/>
         <source>coral4</source>
         <translation>Korálově červená 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="645"/>
+        <location filename="../AutoloadStrings.cpp" line="576"/>
         <source>tomato1</source>
         <translation>Rajčatová červeň 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="646"/>
+        <location filename="../AutoloadStrings.cpp" line="577"/>
         <source>tomato2</source>
         <translation>Rajčatová červeň 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="647"/>
+        <location filename="../AutoloadStrings.cpp" line="578"/>
         <source>tomato3</source>
         <translation>Rajčatová červeň 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="648"/>
+        <location filename="../AutoloadStrings.cpp" line="579"/>
         <source>tomato4</source>
         <translation>Rajčatová červeň 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="649"/>
+        <location filename="../AutoloadStrings.cpp" line="580"/>
         <source>OrangeRed1</source>
         <translation>Oranžovočervená 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="650"/>
+        <location filename="../AutoloadStrings.cpp" line="581"/>
         <source>OrangeRed2</source>
         <translation>Oranžovočervená 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="651"/>
+        <location filename="../AutoloadStrings.cpp" line="582"/>
         <source>OrangeRed3</source>
         <translation>Oranžovočervená 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="652"/>
+        <location filename="../AutoloadStrings.cpp" line="583"/>
         <source>OrangeRed4</source>
         <translation>Oranžovočervená 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="653"/>
+        <location filename="../AutoloadStrings.cpp" line="584"/>
         <source>red1</source>
         <translation>Červená 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="654"/>
+        <location filename="../AutoloadStrings.cpp" line="585"/>
         <source>red2</source>
         <translation>Červená 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="655"/>
+        <location filename="../AutoloadStrings.cpp" line="586"/>
         <source>red3</source>
         <translation>Červená 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="656"/>
+        <location filename="../AutoloadStrings.cpp" line="587"/>
         <source>red4</source>
         <translation>Červená 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="657"/>
+        <location filename="../AutoloadStrings.cpp" line="588"/>
         <source>DeepPink1</source>
         <translation>Plná růžová 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="658"/>
+        <location filename="../AutoloadStrings.cpp" line="589"/>
         <source>DeepPink2</source>
         <translation>Plná růžová 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="659"/>
+        <location filename="../AutoloadStrings.cpp" line="590"/>
         <source>DeepPink3</source>
         <translation>Plná růžová 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="660"/>
+        <location filename="../AutoloadStrings.cpp" line="591"/>
         <source>DeepPink4</source>
         <translation>Plná růžová 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="661"/>
+        <location filename="../AutoloadStrings.cpp" line="592"/>
         <source>HotPink1</source>
         <translation>Zářící růžová 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="662"/>
+        <location filename="../AutoloadStrings.cpp" line="593"/>
         <source>HotPink2</source>
         <translation>Zářící růžová 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="663"/>
+        <location filename="../AutoloadStrings.cpp" line="594"/>
         <source>HotPink3</source>
         <translation>Zářící růžová 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="664"/>
+        <location filename="../AutoloadStrings.cpp" line="595"/>
         <source>HotPink4</source>
         <translation>Zářící růžová 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="665"/>
+        <location filename="../AutoloadStrings.cpp" line="596"/>
         <source>pink1</source>
         <translation>Růžová 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="666"/>
+        <location filename="../AutoloadStrings.cpp" line="597"/>
         <source>pink2</source>
         <translation>Růžová 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="667"/>
+        <location filename="../AutoloadStrings.cpp" line="598"/>
         <source>pink3</source>
         <translation>Růžová 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="668"/>
+        <location filename="../AutoloadStrings.cpp" line="599"/>
         <source>pink4</source>
         <translation>Růžová 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="669"/>
+        <location filename="../AutoloadStrings.cpp" line="600"/>
         <source>LightPink1</source>
         <translation>Světlá růžová 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="670"/>
+        <location filename="../AutoloadStrings.cpp" line="601"/>
         <source>LightPink2</source>
         <translation>Světlá růžová 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="671"/>
+        <location filename="../AutoloadStrings.cpp" line="602"/>
         <source>LightPink3</source>
         <translation>Světlá růžová 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="672"/>
+        <location filename="../AutoloadStrings.cpp" line="603"/>
         <source>LightPink4</source>
         <translation>Světlá růžová 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="673"/>
+        <location filename="../AutoloadStrings.cpp" line="604"/>
         <source>PaleVioletRed1</source>
         <translation>Bledá fialově červená 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="674"/>
+        <location filename="../AutoloadStrings.cpp" line="605"/>
         <source>PaleVioletRed2</source>
         <translation>Bledá fialově červená 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="675"/>
+        <location filename="../AutoloadStrings.cpp" line="606"/>
         <source>PaleVioletRed3</source>
         <translation>Bledá fialově červená 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="676"/>
+        <location filename="../AutoloadStrings.cpp" line="607"/>
         <source>PaleVioletRed4</source>
         <translation>Bledá fialově červená 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="677"/>
+        <location filename="../AutoloadStrings.cpp" line="608"/>
         <source>maroon1</source>
         <translation>Kaštanová hněď 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="678"/>
+        <location filename="../AutoloadStrings.cpp" line="609"/>
         <source>maroon2</source>
         <translation>Kaštanová hněď 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="679"/>
+        <location filename="../AutoloadStrings.cpp" line="610"/>
         <source>maroon3</source>
         <translation>Kaštanová hněď 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="680"/>
+        <location filename="../AutoloadStrings.cpp" line="611"/>
         <source>maroon4</source>
         <translation>Kaštanová hněď 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="681"/>
+        <location filename="../AutoloadStrings.cpp" line="612"/>
         <source>VioletRed1</source>
         <translation>Fialově červená 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="682"/>
+        <location filename="../AutoloadStrings.cpp" line="613"/>
         <source>VioletRed2</source>
         <translation>Fialově červená 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="683"/>
+        <location filename="../AutoloadStrings.cpp" line="614"/>
         <source>VioletRed3</source>
         <translation>Fialově červená 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="684"/>
+        <location filename="../AutoloadStrings.cpp" line="615"/>
         <source>VioletRed4</source>
         <translation>Fialově červená 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="685"/>
+        <location filename="../AutoloadStrings.cpp" line="616"/>
         <source>magenta1</source>
         <translation>Purpurová 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="686"/>
+        <location filename="../AutoloadStrings.cpp" line="617"/>
         <source>magenta2</source>
         <translation>Purpurová 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="687"/>
+        <location filename="../AutoloadStrings.cpp" line="618"/>
         <source>magenta3</source>
         <translation>Purpurová 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="688"/>
+        <location filename="../AutoloadStrings.cpp" line="619"/>
         <source>magenta4</source>
         <translation>Purpurová 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="689"/>
+        <location filename="../AutoloadStrings.cpp" line="620"/>
         <source>orchid1</source>
         <translation>Fialová orchidej 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="690"/>
+        <location filename="../AutoloadStrings.cpp" line="621"/>
         <source>orchid2</source>
         <translation>Fialová orchidej 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="691"/>
+        <location filename="../AutoloadStrings.cpp" line="622"/>
         <source>orchid3</source>
         <translation>Fialová orchidej 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="692"/>
+        <location filename="../AutoloadStrings.cpp" line="623"/>
         <source>orchid4</source>
         <translation>Fialová orchidej 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="693"/>
+        <location filename="../AutoloadStrings.cpp" line="624"/>
         <source>plum1</source>
         <translation>Švestková 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="694"/>
+        <location filename="../AutoloadStrings.cpp" line="625"/>
         <source>plum2</source>
         <translation>Švestková 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="695"/>
+        <location filename="../AutoloadStrings.cpp" line="626"/>
         <source>plum3</source>
         <translation>Švestková 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="696"/>
+        <location filename="../AutoloadStrings.cpp" line="627"/>
         <source>plum4</source>
         <translation>Švestková 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="697"/>
+        <location filename="../AutoloadStrings.cpp" line="628"/>
         <source>MediumOrchid1</source>
         <translation>Střední fialová orchidej 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="698"/>
+        <location filename="../AutoloadStrings.cpp" line="629"/>
         <source>MediumOrchid2</source>
         <translation>Střední fialová orchidej 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="699"/>
+        <location filename="../AutoloadStrings.cpp" line="630"/>
         <source>MediumOrchid3</source>
         <translation>Střední fialová orchidej 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="700"/>
+        <location filename="../AutoloadStrings.cpp" line="631"/>
         <source>MediumOrchid4</source>
         <translation>Střední fialová orchidej 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="701"/>
+        <location filename="../AutoloadStrings.cpp" line="632"/>
         <source>DarkOrchid1</source>
         <translation>Tmavá fialová orchidej 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="702"/>
+        <location filename="../AutoloadStrings.cpp" line="633"/>
         <source>DarkOrchid2</source>
         <translation>Tmavá fialová orchidej 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="703"/>
+        <location filename="../AutoloadStrings.cpp" line="634"/>
         <source>DarkOrchid3</source>
         <translation>Tmavá fialová orchidej 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="704"/>
+        <location filename="../AutoloadStrings.cpp" line="635"/>
         <source>DarkOrchid4</source>
         <translation>Tmavá fialová orchidej 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="705"/>
+        <location filename="../AutoloadStrings.cpp" line="636"/>
         <source>purple1</source>
         <translation>Nachová 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="706"/>
+        <location filename="../AutoloadStrings.cpp" line="637"/>
         <source>purple2</source>
         <translation>Nachová 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="707"/>
+        <location filename="../AutoloadStrings.cpp" line="638"/>
         <source>purple3</source>
         <translation>Nachová 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="708"/>
+        <location filename="../AutoloadStrings.cpp" line="639"/>
         <source>purple4</source>
         <translation>Nachová 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="709"/>
+        <location filename="../AutoloadStrings.cpp" line="640"/>
         <source>MediumPurple1</source>
         <translation>Střední purpurová 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="710"/>
+        <location filename="../AutoloadStrings.cpp" line="641"/>
         <source>MediumPurple2</source>
         <translation>Střední purpurová 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="711"/>
+        <location filename="../AutoloadStrings.cpp" line="642"/>
         <source>MediumPurple3</source>
         <translation>Střední purpurová 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="712"/>
+        <location filename="../AutoloadStrings.cpp" line="643"/>
         <source>MediumPurple4</source>
         <translation>Střední purpurová 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="713"/>
+        <location filename="../AutoloadStrings.cpp" line="644"/>
         <source>thistle1</source>
         <translation>Barva bodláku 1</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="714"/>
+        <location filename="../AutoloadStrings.cpp" line="645"/>
         <source>thistle2</source>
         <translation>Barva bodláku 2</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="715"/>
+        <location filename="../AutoloadStrings.cpp" line="646"/>
         <source>thistle3</source>
         <translation>Barva bodláku 3</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="716"/>
+        <location filename="../AutoloadStrings.cpp" line="647"/>
         <source>thistle4</source>
         <translation>Barva bodláku 4</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="717"/>
+        <location filename="../AutoloadStrings.cpp" line="648"/>
         <source>black</source>
         <translation>Černá</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="718"/>
+        <location filename="../AutoloadStrings.cpp" line="649"/>
         <source>DarkSlateGray</source>
         <translation>Tmavě břidlicově šedá</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="719"/>
+        <location filename="../AutoloadStrings.cpp" line="650"/>
         <source>DimGray</source>
         <translation>Tmavě šedá</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="720"/>
+        <location filename="../AutoloadStrings.cpp" line="651"/>
         <source>SlateGray</source>
         <translation>Břidlicově šedá</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="721"/>
+        <location filename="../AutoloadStrings.cpp" line="652"/>
         <source>LightSlateGray</source>
         <translation>Světle břidlicově šedá</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="722"/>
+        <location filename="../AutoloadStrings.cpp" line="653"/>
         <source>grey</source>
         <translation>Šedá</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="723"/>
+        <location filename="../AutoloadStrings.cpp" line="654"/>
         <source>LightGray</source>
         <translation>Světle šedá</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="724"/>
+        <location filename="../AutoloadStrings.cpp" line="655"/>
         <source>white</source>
         <translation>Bílá</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="725"/>
+        <location filename="../AutoloadStrings.cpp" line="656"/>
         <source>generalmap</source>
         <translation>Obecné</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="727"/>
+        <location filename="../AutoloadStrings.cpp" line="658"/>
         <source>Red pastel</source>
         <translation>Červená pastelová</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="728"/>
+        <location filename="../AutoloadStrings.cpp" line="659"/>
         <source>Green pastel</source>
         <translation>Zelená pastelová</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="729"/>
+        <location filename="../AutoloadStrings.cpp" line="660"/>
         <source>Orange pastel</source>
         <translation>Oranžová pastelová</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="730"/>
+        <location filename="../AutoloadStrings.cpp" line="661"/>
         <source>Yellow pastel</source>
         <translation>Žlutá pastelová</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="726"/>
+        <location filename="../AutoloadStrings.cpp" line="657"/>
         <source>default</source>
         <translation>Výchozí</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="731"/>
+        <location filename="../AutoloadStrings.cpp" line="662"/>
         <source>Copyright (c) xxxx Copyright Holder</source>
         <translation>Copyright (c) xxxx Držitel autorských práv</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="732"/>
+        <location filename="../AutoloadStrings.cpp" line="663"/>
         <source>Not Yet Titled</source>
         <translation>Zatím bez názvu</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="733"/>
+        <location filename="../AutoloadStrings.cpp" line="664"/>
         <source>not yet subtitled</source>
         <translation>Zatím bez podnázvu</translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="734"/>
+        <location filename="../AutoloadStrings.cpp" line="665"/>
         <source>Unknown</source>
         <translation>Neznámá</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="712"/>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="843"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="724"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="855"/>
         <source>%1. %2</source>
         <translation>%1. %2</translation>
     </message>
@@ -10509,7 +10452,7 @@
         <translation>%1 (%2)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="1683"/>
+        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="1686"/>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="907"/>
         <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="1046"/>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="468"/>
@@ -10521,37 +10464,37 @@
         <translation type="obsolete">Program Rosegarden - sekvencer a editor notového zápisu</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/main.cpp" line="463"/>
+        <location filename="../../src/gui/application/main.cpp" line="491"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/main.cpp" line="777"/>
+        <location filename="../../src/gui/application/main.cpp" line="805"/>
         <source>Welcome!</source>
         <translation>Vítejte!</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/main.cpp" line="793"/>
+        <location filename="../../src/gui/application/main.cpp" line="821"/>
         <source>http://rosegardenmusic.com/wiki/doc:manual-en</source>
         <translation>http://rosegardenmusic.com/wiki/doc:manual-en</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/main.cpp" line="794"/>
+        <location filename="../../src/gui/application/main.cpp" line="822"/>
         <source>&lt;h2&gt;Welcome to Rosegarden!&lt;/h2&gt;&lt;p&gt;Welcome to the Rosegarden audio and MIDI sequencer and musical notation editor.&lt;/p&gt;&lt;ul&gt;&lt;li&gt;If you have not already done so, you may wish to install some DSSI synth plugins, or a separate synth program such as QSynth.  Rosegarden does not synthesize sounds from MIDI on its own, so without these you will hear nothing.&lt;/li&gt;&lt;li&gt;Rosegarden uses the JACK audio server for recording and playback of audio, and for playback from DSSI synth plugins.  These features will only be available if the JACK server is running.&lt;/li&gt;&lt;li&gt;Rosegarden has comprehensive documentation: see the &lt;a style=&quot;color:gold&quot; href=&quot;http://rosegardenmusic.com&quot;&gt;Rosegarden website&lt;/a&gt; for the &lt;a style=&quot;color:gold&quot; href=&quot;%1&quot;&gt;manual&lt;/a&gt;, &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/tutorials/&quot;&gt;tutorials&lt;/a&gt;, and other information!&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  To learn more, go to the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/&quot;&gt;Rosegarden website&lt;/a&gt;.&lt;/p&gt;</source>
         <translation>&lt;h2&gt;Vítejte v Rosegardenu!&lt;/h2&gt;&lt;p&gt;Vítejte ve zvukovém a MIDI sekvenceru a hudebním editoru notového zápisu Rosegarden.&lt;/p&gt;&lt;ul&gt;&lt;li&gt;Pokud jste tak ještě neučinil, budete jistě chtít nainstalovat nějaké syntetizátorové přídavné moduly DSSI, nebo samostatný syntetizátorový program, například QSynth. Rosegarden sám o sobě nesyntetizuje zvuky z MIDI, takže bez uvedených programů neuslyšíte zhola nic.&lt;/li&gt;&lt;li&gt;Rosegarden používá pro nahrávání a přehrávání zvuku zvukový server JACK, a pro přehrávání z DSSI syntetizátorové přídavné moduly. Tyto funkce budou dostupné jen tehdy, když server JACK bude běžet.&lt;/li&gt;&lt;li&gt;Rosegarden má úplnou dokumentaci: podívejte se na &lt;a style=&quot;color:gold&quot; href=&quot;http://rosegardenmusic.com&quot;&gt;stránky programu Rosegarden&lt;/a&gt; na &lt;a style=&quot;color:gold&quot; href=&quot;%1&quot;&gt;příručku&lt;/a&gt;, &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/tutorials/&quot;&gt;návody&lt;/a&gt; a další informace!&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;Rosegarden vám přináší družstvo dobrovolníků z celého světa. Abyste se dozvěděl víc, jděte na &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/&quot;&gt;stránky programu Rosegarden&lt;/a&gt;.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="514"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="516"/>
         <source>Audio subsystem is not available - can&apos;t record audio</source>
         <translation>Zvukový směšovací podsystém není dostupný - zvuk nelze nahrávat</translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="613"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="615"/>
         <source>&lt;qt&gt;&lt;p&gt;No tracks were armed for recording.&lt;/p&gt;&lt;p&gt;Please arm at least one of the recording LEDs &lt;img src=&quot;:pixmaps/tooltip/record-leds.png&quot;&gt; and try again&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Pro nahrávání nebyly uvedeny v činnost žádné stopy.&lt;/p&gt;&lt;p&gt;Odjistěte, prosím, alespoň jednu z nahrávacích LED diod &lt;img src=&quot;:pixmaps/tooltip/record-leds.png&quot;&gt; a zkuste to znovu&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="794"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="793"/>
         <source>&lt;qt&gt;&lt;p&gt;Couldn&apos;t start recording audio.&lt;/p&gt;&lt;p&gt;Please set a valid recording path in &lt;b&gt;Composition -&gt; Edit Document Properties... -&gt; Audio&lt;/b&gt;&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Nepodařilo se spustit nahrávání zvuku.&lt;/p&gt;&lt;p&gt;Platnou nahrávací cestu nastavte, prosím, v &lt;b&gt;Skladba -&gt; Upravit vlastnosti dokumentu... -&gt; Zvuk&lt;/b&gt;&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
@@ -10946,8 +10889,12 @@ Chcete použít
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AboutDialog.cpp" line="57"/>
+        <source>&lt;p&gt;Copyright 2000-2016 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Build key: %3&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;For more information about Rosegarden, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2 or later&lt;/p&gt;</source>
+        <translation type="unfinished">&lt;p&gt;Copyright 2000-2012 Vývojářský tým programu Rosgarden&lt;/p&gt;&lt;p&gt;Verze: %1 &amp;nbsp; Verze Qt: %2&lt;br&gt;Klíč: %3&lt;/p&gt;&lt;p&gt;Rosegarden byl vyvíjen skupinou dobrovolníků z celého světa. Seznam přispěvatelů je k prohlédnutí na &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;. &lt;br&gt;Další informace o Rosegardenu jsou dostupné na &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;Povolení: GNU General Public License Version 2 nebo pozdější&lt;/p&gt; {2000-2015 ?} {1 ?} {2&lt;?} {3&lt;?} {2 ?} {2000-2016 ?} {1 ?} {2&lt;?} {3&lt;?} {2 ?}</translation>
+    </message>
+    <message>
         <source>&lt;p&gt;Copyright 2000-2015 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Build key: %3&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;For more information about Rosegarden, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2 or later&lt;/p&gt;</source>
-        <translation type="unfinished">&lt;p&gt;Copyright 2000-2012 Vývojářský tým programu Rosgarden&lt;/p&gt;&lt;p&gt;Verze: %1 &amp;nbsp; Verze Qt: %2&lt;br&gt;Klíč: %3&lt;/p&gt;&lt;p&gt;Rosegarden byl vyvíjen skupinou dobrovolníků z celého světa. Seznam přispěvatelů je k prohlédnutí na &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;. &lt;br&gt;Další informace o Rosegardenu jsou dostupné na &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;Povolení: GNU General Public License Version 2 nebo pozdější&lt;/p&gt; {2000-2015 ?} {1 ?} {2&lt;?} {3&lt;?} {2 ?}</translation>
+        <translation type="obsolete">&lt;p&gt;Copyright 2000-2012 Vývojářský tým programu Rosgarden&lt;/p&gt;&lt;p&gt;Verze: %1 &amp;nbsp; Verze Qt: %2&lt;br&gt;Klíč: %3&lt;/p&gt;&lt;p&gt;Rosegarden byl vyvíjen skupinou dobrovolníků z celého světa. Seznam přispěvatelů je k prohlédnutí na &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;. &lt;br&gt;Další informace o Rosegardenu jsou dostupné na &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;Povolení: GNU General Public License Version 2 nebo pozdější&lt;/p&gt; {2000-2015 ?} {1 ?} {2&lt;?} {3&lt;?} {2 ?}</translation>
     </message>
 </context>
 <context>
@@ -11521,24 +11468,24 @@ Chcete použít
 <context>
     <name>Rosegarden::AudioInstrumentParameterPanel</name>
     <message>
-        <location filename="../../src/gui/editors/parameters/AudioInstrumentParameterPanel.cpp" line="85"/>
+        <location filename="../../src/gui/editors/parameters/AudioInstrumentParameterPanel.cpp" line="79"/>
         <source>Click to rename this instrument</source>
         <translation>Klepněte kvůli přejmenování tohoto nástroje</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/AudioInstrumentParameterPanel.cpp" line="96"/>
+        <location filename="../../src/gui/editors/parameters/AudioInstrumentParameterPanel.cpp" line="87"/>
         <source>Click the button above to rename this instrument</source>
         <translation>Klepněte na tlačítko výše kvůli přejmenování tohoto nástroje</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/AudioInstrumentParameterPanel.cpp" line="200"/>
-        <location filename="../../src/gui/editors/parameters/AudioInstrumentParameterPanel.cpp" line="386"/>
+        <location filename="../../src/gui/editors/parameters/AudioInstrumentParameterPanel.cpp" line="202"/>
+        <location filename="../../src/gui/editors/parameters/AudioInstrumentParameterPanel.cpp" line="388"/>
         <source>&lt;no synth&gt;</source>
         <translation>&lt;žádný syntetizátor&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/AudioInstrumentParameterPanel.cpp" line="203"/>
-        <location filename="../../src/gui/editors/parameters/AudioInstrumentParameterPanel.cpp" line="390"/>
+        <location filename="../../src/gui/editors/parameters/AudioInstrumentParameterPanel.cpp" line="205"/>
+        <location filename="../../src/gui/editors/parameters/AudioInstrumentParameterPanel.cpp" line="392"/>
         <source>&lt;no plugin&gt;</source>
         <translation>&lt;žádný přídavný modul&gt;</translation>
     </message>
@@ -12613,113 +12560,113 @@ Vyberte ty, které chcete z pevného disku trvale odstranit.
 <context>
     <name>Rosegarden::CheckForParallelsDialog</name>
     <message>
-        <location filename="../../src/gui/dialogs/CheckForParallelsDialog.cpp" line="45"/>
+        <location filename="../../src/gui/dialogs/CheckForParallelsDialog.cpp" line="62"/>
         <source>Check for Parallels</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/CheckForParallelsDialog.cpp" line="73"/>
+        <location filename="../../src/gui/dialogs/CheckForParallelsDialog.cpp" line="90"/>
         <source>Check for Unisons</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/CheckForParallelsDialog.cpp" line="84"/>
+        <location filename="../../src/gui/dialogs/CheckForParallelsDialog.cpp" line="101"/>
         <source>Check for Hidden Parallels</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/CheckForParallelsDialog.cpp" line="92"/>
+        <location filename="../../src/gui/dialogs/CheckForParallelsDialog.cpp" line="109"/>
         <source>Start</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/CheckForParallelsDialog.cpp" line="93"/>
+        <location filename="../../src/gui/dialogs/CheckForParallelsDialog.cpp" line="110"/>
         <source>Clear</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/CheckForParallelsDialog.cpp" line="94"/>
+        <location filename="../../src/gui/dialogs/CheckForParallelsDialog.cpp" line="111"/>
         <source>Export</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/CheckForParallelsDialog.cpp" line="95"/>
+        <location filename="../../src/gui/dialogs/CheckForParallelsDialog.cpp" line="112"/>
         <source>Ok</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/CheckForParallelsDialog.cpp" line="301"/>
-        <location filename="../../src/gui/dialogs/CheckForParallelsDialog.cpp" line="489"/>
+        <location filename="../../src/gui/dialogs/CheckForParallelsDialog.cpp" line="318"/>
+        <location filename="../../src/gui/dialogs/CheckForParallelsDialog.cpp" line="506"/>
         <source>bar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/CheckForParallelsDialog.cpp" line="301"/>
-        <location filename="../../src/gui/dialogs/CheckForParallelsDialog.cpp" line="489"/>
+        <location filename="../../src/gui/dialogs/CheckForParallelsDialog.cpp" line="318"/>
+        <location filename="../../src/gui/dialogs/CheckForParallelsDialog.cpp" line="506"/>
         <source> </source>
         <translation type="unfinished"> </translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/CheckForParallelsDialog.cpp" line="301"/>
-        <location filename="../../src/gui/dialogs/CheckForParallelsDialog.cpp" line="489"/>
-        <location filename="../../src/gui/dialogs/CheckForParallelsDialog.cpp" line="621"/>
+        <location filename="../../src/gui/dialogs/CheckForParallelsDialog.cpp" line="318"/>
+        <location filename="../../src/gui/dialogs/CheckForParallelsDialog.cpp" line="506"/>
+        <location filename="../../src/gui/dialogs/CheckForParallelsDialog.cpp" line="638"/>
         <source>beat</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/CheckForParallelsDialog.cpp" line="301"/>
-        <location filename="../../src/gui/dialogs/CheckForParallelsDialog.cpp" line="489"/>
-        <location filename="../../src/gui/dialogs/CheckForParallelsDialog.cpp" line="621"/>
+        <location filename="../../src/gui/dialogs/CheckForParallelsDialog.cpp" line="318"/>
+        <location filename="../../src/gui/dialogs/CheckForParallelsDialog.cpp" line="506"/>
+        <location filename="../../src/gui/dialogs/CheckForParallelsDialog.cpp" line="638"/>
         <source>fraction</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/CheckForParallelsDialog.cpp" line="335"/>
+        <location filename="../../src/gui/dialogs/CheckForParallelsDialog.cpp" line="352"/>
         <source>Restart</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/CheckForParallelsDialog.cpp" line="487"/>
+        <location filename="../../src/gui/dialogs/CheckForParallelsDialog.cpp" line="504"/>
         <source>found multiple notes for</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/CheckForParallelsDialog.cpp" line="616"/>
+        <location filename="../../src/gui/dialogs/CheckForParallelsDialog.cpp" line="633"/>
         <source>parallel at bar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/CheckForParallelsDialog.cpp" line="618"/>
+        <location filename="../../src/gui/dialogs/CheckForParallelsDialog.cpp" line="635"/>
         <source>parallels at bar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/CheckForParallelsDialog.cpp" line="636"/>
+        <location filename="../../src/gui/dialogs/CheckForParallelsDialog.cpp" line="653"/>
         <source>unisons</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/CheckForParallelsDialog.cpp" line="640"/>
+        <location filename="../../src/gui/dialogs/CheckForParallelsDialog.cpp" line="657"/>
         <source>fifths</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/CheckForParallelsDialog.cpp" line="644"/>
+        <location filename="../../src/gui/dialogs/CheckForParallelsDialog.cpp" line="661"/>
         <source>octaves</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/CheckForParallelsDialog.cpp" line="648"/>
+        <location filename="../../src/gui/dialogs/CheckForParallelsDialog.cpp" line="665"/>
         <source>hidden fifths</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/CheckForParallelsDialog.cpp" line="652"/>
+        <location filename="../../src/gui/dialogs/CheckForParallelsDialog.cpp" line="669"/>
         <source>hidden octaves</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/CheckForParallelsDialog.cpp" line="656"/>
+        <location filename="../../src/gui/dialogs/CheckForParallelsDialog.cpp" line="673"/>
         <source>for</source>
         <translation type="unfinished"></translation>
     </message>
@@ -12853,6 +12800,11 @@ Vyberte ty, které chcete z pevného disku trvale odstranit.
         <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="336"/>
         <source>Sub-bass</source>
         <translation>Subbasový</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="338"/>
+        <source>Two-bar</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -13025,54 +12977,107 @@ Vyberte ty, které chcete z pevného disku trvale odstranit.
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/CommentsConfigurationPage.cpp" line="85"/>
+        <location filename="../../src/gui/configuration/CommentsConfigurationPage.cpp" line="84"/>
         <source>Show at startup</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../src/gui/configuration/CommentsConfigurationPage.cpp" line="85"/>
+        <source>&lt;p&gt;If checked, these notes or their translation into the local language will pop up the next time the document is loaded&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/configuration/CommentsConfigurationPage.cpp" line="132"/>
+        <source>Create another page</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/configuration/CommentsConfigurationPage.cpp" line="134"/>
+        <location filename="../../src/gui/configuration/CommentsConfigurationPage.cpp" line="191"/>
+        <source>&lt;h3&gt;Main page&lt;/h3&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/configuration/CommentsConfigurationPage.cpp" line="135"/>
         <location filename="../../src/gui/configuration/CommentsConfigurationPage.cpp" line="195"/>
+        <source>Change page</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/configuration/CommentsConfigurationPage.cpp" line="136"/>
+        <source>&lt;p&gt;Display another existing page or create a new one.&lt;/p&gt;&lt;p&gt;If the page name is a language code name (as &quot;es&quot; or &quot;de&quot;) the page should be a translation of the main page and may be displayed at startup if matching the local language.&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/configuration/CommentsConfigurationPage.cpp" line="172"/>
+        <location filename="../../src/gui/configuration/CommentsConfigurationPage.cpp" line="212"/>
+        <source>Create a new page</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/configuration/CommentsConfigurationPage.cpp" line="172"/>
+        <source>Page name:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/configuration/CommentsConfigurationPage.cpp" line="193"/>
+        <source>&lt;h3&gt;Page &quot;%1&quot;&lt;/h3&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/configuration/CommentsConfigurationPage.cpp" line="217"/>
+        <source>Go to the main page</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/configuration/CommentsConfigurationPage.cpp" line="226"/>
+        <source>Go to page &quot;%1&quot;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/configuration/CommentsConfigurationPage.cpp" line="351"/>
         <source>Clear</source>
         <comment>Button label</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/CommentsConfigurationPage.cpp" line="196"/>
+        <location filename="../../src/gui/configuration/CommentsConfigurationPage.cpp" line="352"/>
         <source>Clear text</source>
         <comment>Button tool tip</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/CommentsConfigurationPage.cpp" line="203"/>
+        <location filename="../../src/gui/configuration/CommentsConfigurationPage.cpp" line="359"/>
         <source>Reload</source>
         <comment>Button label</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/CommentsConfigurationPage.cpp" line="204"/>
+        <location filename="../../src/gui/configuration/CommentsConfigurationPage.cpp" line="360"/>
         <source>&lt;qt&gt;Reload text from the document (come back to the last time apply was pressed)&lt;/qt&gt;</source>
         <comment>Button tool tip</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/CommentsConfigurationPage.cpp" line="213"/>
+        <location filename="../../src/gui/configuration/CommentsConfigurationPage.cpp" line="369"/>
         <source>Undo last clear</source>
         <comment>Button label</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/CommentsConfigurationPage.cpp" line="214"/>
+        <location filename="../../src/gui/configuration/CommentsConfigurationPage.cpp" line="370"/>
         <source>&lt;qt&gt;Restore to the last text before clear&lt;/qt&gt;</source>
         <comment>Button tool tip</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/CommentsConfigurationPage.cpp" line="222"/>
+        <location filename="../../src/gui/configuration/CommentsConfigurationPage.cpp" line="378"/>
         <source>Undo last reload</source>
         <comment>Button label</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/CommentsConfigurationPage.cpp" line="223"/>
+        <location filename="../../src/gui/configuration/CommentsConfigurationPage.cpp" line="379"/>
         <source>&lt;qt&gt;Restore to the last text before reload&lt;/qt&gt;</source>
         <comment>Button tool tip</comment>
         <translation type="unfinished"></translation>
@@ -13081,23 +13086,23 @@ Vyberte ty, které chcete z pevného disku trvale odstranit.
 <context>
     <name>Rosegarden::CommentsPopupDialog</name>
     <message>
-        <location filename="../../src/gui/dialogs/CommentsPopupDialog.cpp" line="47"/>
+        <location filename="../../src/gui/dialogs/CommentsPopupDialog.cpp" line="48"/>
         <source>Notes about %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/CommentsPopupDialog.cpp" line="60"/>
+        <location filename="../../src/gui/dialogs/CommentsPopupDialog.cpp" line="61"/>
         <source>&lt;qt&gt;This is a short description of the current composition&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/CommentsPopupDialog.cpp" line="71"/>
+        <location filename="../../src/gui/dialogs/CommentsPopupDialog.cpp" line="84"/>
         <source>Show next time</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/CommentsPopupDialog.cpp" line="72"/>
-        <source>&lt;qt&gt;If checked, these notes will pop up the next time the document is loaded&lt;/qt&gt;</source>
+        <location filename="../../src/gui/dialogs/CommentsPopupDialog.cpp" line="85"/>
+        <source>&lt;qt&gt;If checked, these notes will pop up the nexttime the document is loaded&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -13132,7 +13137,7 @@ Vyberte ty, které chcete z pevného disku trvale odstranit.
 <context>
     <name>Rosegarden::CompositionView</name>
     <message>
-        <location filename="../../src/gui/editors/segment/compositionview/CompositionView.cpp" line="281"/>
+        <location filename="../../src/gui/editors/segment/compositionview/CompositionView.cpp" line="280"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
@@ -16531,18 +16536,26 @@ Chcete použít
         <translation>Při načítání souborů vždy používat výchozí studio</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="119"/>
         <source>Send all MIDI Controllers at start of each playback</source>
-        <translation>Odeslat všechny ovládací prvky MIDI na začátku přehrávání</translation>
+        <translation type="obsolete">Odeslat všechny ovládací prvky MIDI na začátku přehrávání</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="121"/>
         <source>Rosegarden can send all MIDI Controllers (Pan, Reverb etc) to all MIDI devices every
 time you hit play if you so wish.  Please note that this option will usually incur a
 delay at the start of playback due to the amount of data being transmitted.</source>
-        <translation>Program Rosegarden může odesílat všechny ovládací prvky MIDI (Vyvážení (Pan), Dozvuk (simulace ozvěny) atd.)
+        <translation type="obsolete">Program Rosegarden může odesílat všechny ovládací prvky MIDI (Vyvážení (Pan), Dozvuk (simulace ozvěny) atd.)
 na všechna zařízení MIDI pokaždé, když stisknete přehrávání. Uvědomte si, že s tím
 bude obvykle spojeno zpoždění začátku přehrávání, protože se bude napřed přenášet značný objem dat.</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="119"/>
+        <source>Allow Reset All Controllers (CC 121)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="121"/>
+        <source>Rosegarden can send a MIDI Reset All Controllers event when setting up a channel.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="137"/>
@@ -16666,92 +16679,92 @@ bude obvykle spojeno zpoždění začátku přehrávání, protože se bude nap�
 <context>
     <name>Rosegarden::MIDIInstrumentParameterPanel</name>
     <message>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="194"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="173"/>
         <source>&lt;qt&gt;Set variations on the program above, if available in the studio&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Nastavit obměny programu výše, pokud jsou dostupné ve studiu.&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="142"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="131"/>
         <source>&lt;qt&gt;Set the MIDI bank from which to select programs&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Stanovit banku MIDI, ze které se mají vybírat programy&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="168"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="152"/>
         <source>&lt;qt&gt;Set the MIDI program or &amp;quot;patch&amp;quot;&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Stanovit program MIDI nebo &amp;quot;patch&amp;quot;&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="114"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="105"/>
         <source>&lt;qt&gt;&lt;p&gt;Check this to tell Rosegarden that this is a percussion instrument.  This allows you access to any percussion key maps and drum kits you may have configured in the studio&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Zapněte tuto volbu, abyste tím pověděl Rosegardenu, že toto je nástroj bicích. Toto vám umožní přístup k jakémukoli přiřazení kláves bicích a bicím, které by vámi byly nastaveny ve studiu&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="207"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="182"/>
         <source>&lt;qt&gt;&lt;p&gt;&lt;i&gt;Auto&lt;/i&gt;, allocate channel automatically; &lt;i&gt;Fixed&lt;/i&gt;, fix channel to instrument number&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;&lt;i&gt;Automaticky&lt;/i&gt;, přidělit kanál automaticky; &lt;i&gt;Pevný&lt;/i&gt;, připevnit kanál k číslu nástroje&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="120"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="111"/>
         <source>Bank</source>
         <translation>Banka</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="179"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="160"/>
         <source>Variation</source>
         <translation>Rozdíl</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="153"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="139"/>
         <source>Program</source>
         <translation>Program</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="107"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="99"/>
         <source>Percussion</source>
         <translation>Bicí</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="127"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="117"/>
         <source>&lt;qt&gt;Send bank select&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="160"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="145"/>
         <source>&lt;qt&gt;Send program change&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="186"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="166"/>
         <source>&lt;qt&gt;Send bank select for variation&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="205"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="180"/>
         <source>Channel</source>
         <translation>Kanál</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="217"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="191"/>
         <source>Auto</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="218"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="192"/>
         <source>Fixed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="228"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="200"/>
         <source>&lt;qt&gt;Use program changes from an external source to manipulate these controls (only valid for the currently-active track) [Shift + P]&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Použít změny programu z vnějšího zdroje kvůli změně tohoto ovládacího prvku (platí pouze pro současně činnou stopu) [Shift + P]&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="226"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="198"/>
         <source>Receive external</source>
         <translation>Příjem od vnějšího</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="310"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="322"/>
         <source>No connection</source>
         <translation>Není připojení</translation>
     </message>
@@ -16977,8 +16990,8 @@ bude obvykle spojeno zpoždění začátku přehrávání, protože se bude nap�
 <context>
     <name>Rosegarden::MarkParallelCommand</name>
     <message>
-        <location filename="../../src/commands/notation/MarkParallelCommand.h" line="34"/>
-        <location filename="../../src/commands/notation/MarkParallelCommand.cpp" line="26"/>
+        <location filename="../../src/commands/notation/MarkParallelCommand.h" line="52"/>
+        <location filename="../../src/commands/notation/MarkParallelCommand.cpp" line="44"/>
         <source>Mark Parallel</source>
         <translation type="unfinished"></translation>
     </message>
@@ -17652,7 +17665,7 @@ Poklepáním otevřete editor značek.</translation>
         <translation>Nástroj</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/MidiMixerWindow.cpp" line="688"/>
+        <location filename="../../src/gui/studio/MidiMixerWindow.cpp" line="693"/>
         <source>http://rosegardenmusic.com/wiki/doc:midiMixerWindow-en</source>
         <translation>http://rosegardenmusic.com/wiki/doc:midiMixerWindow-en</translation>
     </message>
@@ -18087,168 +18100,188 @@ Poklepáním otevřete editor značek.</translation>
         <translation>Výchozí typ vložení</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="351"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="354"/>
+        <source>Always show note preview</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="359"/>
+        <source>&lt;p&gt;If checked, a preview of the note or rest is always displayed when inserting notes or rests with the mouse&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="370"/>
+        <source>Quick mouse entry mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="376"/>
+        <source>&lt;p&gt;If checked, the following features are usable while inserting notes with the mouse:&lt;ul&gt;&lt;li&gt;The mouse wheel selects the note duration&lt;/li&gt;&lt;li&gt;Shift adds a sharp&lt;/li&gt;&lt;li&gt;Ctrl adds a flat&lt;/li&gt;&lt;li&gt;Shift + Ctrl adds a natural&lt;/li&gt;&lt;li&gt;A mouse mid button click switches between notes and rests&lt;/li&gt;&lt;/ul&gt;&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="393"/>
         <source>Editing</source>
         <translation>Úpravy</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="363"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="405"/>
         <source>Accidentals in one octave...</source>
         <translation>Posuvky v jedné oktávě...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="366"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="408"/>
         <source>Affect only that octave</source>
         <translation>Ovlivní pouze tuto oktávu</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="367"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="409"/>
         <source>Require cautionaries in other octaves</source>
         <translation>Vyžadovat varovné posuvky v dalších oktávách</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="368"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="410"/>
         <source>Affect all subsequent octaves</source>
         <translation>Ovlivní všechny následující oktávy</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="376"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="418"/>
         <source>Accidentals in one bar...</source>
         <translation>Posuvky v jedné taktové čáře...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="379"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="421"/>
         <source>Affect only that bar</source>
         <translation>Ovlivní pouze tuto taktovou čáru</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="380"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="422"/>
         <source>Require cautionary resets in following bar</source>
         <translation>Vyžadovat varovná nová nastavení na následující taktové čáře</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="381"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="423"/>
         <source>Require explicit resets in following bar</source>
         <translation>Vyžadovat výslovné odrážky na následující taktové čáře</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="389"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="431"/>
         <source>Key signature cancellation style</source>
         <translation>Styl rušení předznamenání</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="392"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="434"/>
         <source>Cancel only when entering C major or A minor</source>
         <translation>Zrušit pouze při zadávání C dur nebo A moll</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="393"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="435"/>
         <source>Cancel whenever removing sharps or flats</source>
         <translation>Zrušit při každém odstraňování křížků nebo béček</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="394"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="436"/>
         <source>Cancel always</source>
         <translation>Zrušit pokaždé</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="405"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="447"/>
         <source>Accidentals</source>
         <translation>Posuvky</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="416"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="458"/>
         <source>Notation font</source>
         <translation>Písmo notace</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="422"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="464"/>
         <source>View</source>
         <translation>Pohled</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="443"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="485"/>
         <source>Origin:</source>
         <translation>Původ:</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="447"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="489"/>
         <source>Copyright:</source>
         <translation>Autorské právo:</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="451"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="493"/>
         <source>Mapped by:</source>
         <translation>Přiřazeno:</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="455"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="497"/>
         <source>Type:</source>
         <translation>Typ:</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="481"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="523"/>
         <source>Font size for single-staff views</source>
         <translation>Velikost písma pro zobrazení s jednou osnovou</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="490"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="532"/>
         <source>Font size for multi-staff views</source>
         <translation>Velikost písma pro zobrazení s více osnovami</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="508"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="550"/>
         <source>Text font</source>
         <translation>Písmo textu</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="520"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="562"/>
         <source>Sans-serif font</source>
         <translation>Písmo Sans-serif</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="533"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="575"/>
         <source>Font</source>
         <translation>Písmo</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="550"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="592"/>
         <source>Show repeated segments</source>
         <translation>Ukázat opakované části</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="563"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="605"/>
         <source>Allow direct edition of repeated segments</source>
         <translation>Povolit přímé úpravy opakovaných částí</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="576"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="618"/>
         <source>Hide redundant clefs and keys</source>
         <translation>Skrýt nadbytečné klíče a tóniny</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="589"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="631"/>
         <source>Distribute verses among repeated segments</source>
         <translation>Rozdělovat sloky mezi opakované části</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="604"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="646"/>
         <source>Segments</source>
         <translation>Části</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="631"/>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="711"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="673"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="753"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="703"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="745"/>
         <source>%1 (smooth)</source>
         <translation>%1 (vyhlazený)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="705"/>
+        <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="747"/>
         <source>%1 (jaggy)</source>
         <translation>%1 (nerovný)</translation>
     </message>
@@ -18556,19 +18589,19 @@ Jedná se o chybu programu (program již pravděpodobně v této chvíli havarov
         <translation>  Žádný výběr </translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3853"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3854"/>
         <source>Chord</source>
         <translation>Akord</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3854"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3855"/>
         <source>Grace</source>
         <translation>Příraz</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3861"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3865"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3869"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3862"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3866"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3870"/>
         <source>%1 %2</source>
         <translation>%1 %2</translation>
     </message>
@@ -18630,9 +18663,9 @@ Jedná se o chybu programu (program již pravděpodobně v této chvíli havarov
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1591"/>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1694"/>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1752"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2652"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3382"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4474"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2653"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3383"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4475"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
@@ -18669,7 +18702,7 @@ Jedná se o chybu programu (program již pravděpodobně v této chvíli havarov
         <translation>Nebylo možné provést vložení na tomto místě.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4561"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4562"/>
         <source>Move Events to Staff Above</source>
         <translation>Přesunout události na osnovu výše</translation>
     </message>
@@ -18684,105 +18717,105 @@ Jedná se o chybu programu (program již pravděpodobně v této chvíli havarov
         <translation>Probíhá zmenšování rychlostí...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4719"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4720"/>
         <source>Edit Text Event</source>
         <translation>Upravit textovou událost</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4767"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4768"/>
         <source>Normalizing rests...</source>
         <translation>Probíhá normalizace pomlk...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4780"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4781"/>
         <source>Collapsing notes...</source>
         <translation>Probíhá sjednocování not...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2652"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2653"/>
         <source>Unknown note insert action %1</source>
         <translation>Krok vložení neznámé noty %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2656"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2657"/>
         <source>Inserting note</source>
         <translation>Probíhá vložení noty</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4958"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4968"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4959"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4969"/>
         <source>Adding dot...</source>
         <translation>Probíhá přidání tečky...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3045"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3046"/>
         <source>Ornament track %1 bar %2</source>
         <translation>Melodická ozdoba - stopa %1, takt %2</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3047"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3048"/>
         <source>Ornament bar %1</source>
         <translation>Takt melodické ozdoby %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3085"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3086"/>
         <source>Use Ornament</source>
         <translation>Použít melodickou ozdobu</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3096"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3097"/>
         <source>Remove Ornaments</source>
         <translation>Odstranit melodické ozdoby</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3132"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3133"/>
         <source>Edit ornament inline</source>
         <translation>Upravit ozdobu řadově</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3159"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3160"/>
         <source>Show ornament expansion</source>
         <translation>Ukázat rozklad ozdoby</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3192"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3193"/>
         <source>Unadopt Segment</source>
         <translation>Zrušit přijetí části</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3308"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3309"/>
         <source>Estimated key signature shown</source>
         <translation>Ukazuje se zjištěné předznamenání</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3365"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3366"/>
         <source>Sustain</source>
         <translation>Držet tón</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3382"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3383"/>
         <source>There is no sustain controller defined for this device.
 Please ensure the device is configured correctly in the Manage MIDI Devices dialog in the main window.</source>
         <translation>Pro toto zařízení není určenn žádný ovládací prvek pro držení tónu.
 Ujistěte se, že je zařízení správně nastaveno v dialogu Správa zařízení MIDI v hlavním okně.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3551"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3552"/>
         <source>Estimated time signature shown</source>
         <translation>Ukazuje se odhadované označení taktu</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3719"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3720"/>
         <source>%1%2 - Segment Track #%3 - Notation</source>
         <translation>%1%2 - Stopa části #%3 - Notový zápis</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3726"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3727"/>
         <source>%1%2 - All Segments - Notation</source>
         <translation>%1%2 -  - Všechny části - Notový zápis</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3732"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3733"/>
         <source>%1%2 - %n Segment(s) - Notation</source>
         <translation>
             <numerusform>%1%2 část - Notový zápis</numerusform>
@@ -18791,67 +18824,67 @@ Ujistěte se, že je zařízení správně nastaveno v dialogu Správa zařízen
         </translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3852"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="3853"/>
         <source>Tuplet</source>
         <translation>Rytmická notová skupina</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4016"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4017"/>
         <source>Transpose</source>
         <translation>Převést</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4017"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4018"/>
         <source>By number of semitones: </source>
         <translation>Zadejte počet půltónů, o které se má převádět:</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4369"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4370"/>
         <source>Time: %1 (%2.%3s)</source>
         <translation>Čas: %1 (%2.%3s)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4447"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4448"/>
         <source>http://rosegardenmusic.com/wiki/doc:notation-en</source>
         <translation>http://rosegardenmusic.com/wiki/doc:notation-en</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4454"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4455"/>
         <source>http://www.rosegardenmusic.com/tutorials/en/chapter-0.html</source>
         <translation>http://www.rosegardenmusic.com/tutorials/en/chapter-0.html</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4461"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4462"/>
         <source>http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html</source>
         <translation>http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4562"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4563"/>
         <source>Move Events to Staff Below</source>
         <translation>Posunout události na notovou osnovu dole</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4641"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4642"/>
         <source>Edit Generated region mark</source>
         <translation>Upravit značku vytvořené oblasti</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4665"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4666"/>
         <source>Updated tags for aborted edit</source>
         <translation>Aktualizované značky pro zrušenou úpravu</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4983"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4984"/>
         <source>Set Note Type...</source>
         <translation>Nastavit typ noty...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="5007"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="5008"/>
         <source>Set Note Type notation only...</source>
         <translation>Nastavit typ noty pouze pro notový zápis...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="5027"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="5028"/>
         <source>Cycling slashes...</source>
         <translation>Točení šikmých čar...</translation>
     </message>
@@ -18859,38 +18892,38 @@ Ujistěte se, že je zařízení správně nastaveno v dialogu Správa zařízen
 <context>
     <name>Rosegarden::NotationWidget</name>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="222"/>
+        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="223"/>
         <source>Zoom</source>
         <translation>Zvětšení</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="238"/>
+        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="239"/>
         <source>Horizontal Zoom</source>
         <translation>Vodorovné zvětšení</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="250"/>
+        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="251"/>
         <source>Vertical Zoom</source>
         <translation>Svislé zvětšení</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="263"/>
+        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="264"/>
         <source>Reset Zoom</source>
         <translation>Nastavit znovu zvětšení</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="302"/>
+        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="303"/>
         <source>Close track headers</source>
         <translation>Uzavřít hlavičky stop</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="1773"/>
-        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="1774"/>
+        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="1776"/>
+        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="1777"/>
         <source>&lt;qt&gt;Rotate wheel to change the active segment&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Otáčet kolečkem kvůli změně činné části&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="1775"/>
+        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="1778"/>
         <source>&lt;qt&gt;Segment: &quot;%1&quot;&lt;br&gt;Track: %2 &quot;%3&quot;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Část: &quot;%1&quot;&lt;br&gt;Stopa: %2 &quot;%3&quot;&lt;/qt&gt;</translation>
     </message>
@@ -19333,7 +19366,7 @@ Ujistěte se, že je zařízení správně nastaveno v dialogu Správa zařízen
         <translation>&lt;qt&gt;Řada bude mít přesně tolik kroků.  Vibrato je možné, pokud je režim zvýšení lineární.&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="1061"/>
+        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="1072"/>
         <source>http://rosegardenmusic.com/wiki/doc:pitchbendsequencedialog-controllerbranch-en</source>
         <translation>http://rosegardenmusic.com/wiki/doc:pitchbendsequencedialog-controllerbranch-en</translation>
     </message>
@@ -19702,7 +19735,7 @@ Ujistěte se, že je zařízení správně nastaveno v dialogu Správa zařízen
 <context>
     <name>Rosegarden::ProgressDialog</name>
     <message>
-        <location filename="../../src/gui/widgets/ProgressDialog.cpp" line="65"/>
+        <location filename="../../src/gui/widgets/ProgressDialog.cpp" line="41"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
@@ -20356,7 +20389,7 @@ Formáty souborů mohou být z tohoto důvodu neslučitelné.</translation>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location filename="../../src/document/RoseXmlHandler.cpp" line="1788"/>
+        <location filename="../../src/document/RoseXmlHandler.cpp" line="1804"/>
         <source>Loading plugins...</source>
         <translation>Probíhá načítání přídavných modulů...</translation>
     </message>
@@ -20675,32 +20708,32 @@ Podívejte se na Úpravy -&gt; Nastavení -&gt; Zvuk.</translation>
 <context>
     <name>Rosegarden::RosegardenMainWindow</name>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="328"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="329"/>
         <source>Initializing plugin manager...</source>
         <translation>Probíhá inicializace správce přídavných modulů...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="367"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="368"/>
         <source>Initializing view...</source>
         <translation>Probíhá inicializace zobrazení...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="336"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="337"/>
         <source>Special Parameters</source>
         <translation>Zvláštní parametry</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="418"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="419"/>
         <source>Starting sequence manager...</source>
         <translation>Probíhá spuštění správce pořadí...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="461"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="462"/>
         <source>Clearing studio data...</source>
         <translation>Probíhá mazání dat studia...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="481"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="482"/>
         <source>Starting...</source>
         <translation>Spouští se...</translation>
     </message>
@@ -20711,54 +20744,54 @@ Podívejte se na Úpravy -&gt; Nastavení -&gt; Zvuk.</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1137"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1308"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1824"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2286"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1318"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1834"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2296"/>
         <source>%1 - %2</source>
         <translation>%1 %2</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1522"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1537"/>
         <source>File &quot;%1&quot; does not exist</source>
         <translation>Soubor &quot;%1&quot; neexistuje</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1527"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1542"/>
         <source>File &quot;%1&quot; is actually a directory</source>
         <translation>Soubor &quot;%1&quot; je vlastně adresář</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1535"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1550"/>
         <source>You do not have read permission for &quot;%1&quot;</source>
         <translation>Nemáte oprávnění ke čtení pro &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1625"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1640"/>
         <source>An auto-save file for this document has been found
 Do you want to open it instead ?</source>
         <translation>Pro tento dokument byl nalezen automaticky uložený soubor
 Chcete jej otevřít?</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1771"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6611"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1781"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6696"/>
         <source>Untitled</source>
         <translation>Bez názvu</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1784"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2109"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2275"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1794"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2119"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2285"/>
         <source>Could not save document at %1
 Error was : %2</source>
         <translation>Nepodařilo se uložit dokument v %1
 Chyba byla: %2</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1786"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2112"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2278"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8716"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1796"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2122"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2288"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8795"/>
         <source>Could not save document at %1</source>
         <translation>Nepodařilo se uložit dokument v %1</translation>
     </message>
@@ -20767,67 +20800,67 @@ Chyba byla: %2</translation>
         <translation type="obsolete">Otevírá se nové aplikační okno...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1854"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1864"/>
         <source>Creating new document...</source>
         <translation>Vytváří se nový dokument...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1920"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1930"/>
         <source>Malformed URL
 %1</source>
         <translation>Chybně formulovaná adresa URL
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1969"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2075"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1979"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2085"/>
         <source>Opening file...</source>
         <translation>Otevírá se soubor...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1996"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8260"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2006"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8345"/>
         <source>All supported files</source>
         <translation>Všechny podporované soubory</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1997"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2031"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2246"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2007"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2041"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2256"/>
         <source>Rosegarden files</source>
         <translation>Soubory programu Rosegarden</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1998"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3947"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3983"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2008"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4032"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4068"/>
         <source>MIDI files</source>
         <translation>Soubory MIDI</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1999"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2032"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2252"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3896"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3948"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3984"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4246"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4282"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4489"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4525"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5170"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5209"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5243"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5277"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5311"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5423"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8261"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2009"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2042"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2262"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3981"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4033"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4069"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4331"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4367"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4574"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4610"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5255"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5294"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5328"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5362"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5396"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5508"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8346"/>
         <source>All files</source>
         <translation>Všechny soubory</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1995"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2030"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2005"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2040"/>
         <source>Open File</source>
         <translation>Otevřít soubor</translation>
     </message>
@@ -20837,128 +20870,128 @@ Chyba byla: %2</translation>
         <translation>Ctrl+R</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1884"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1894"/>
         <source>%1%2 - %3</source>
         <translation>%1%2 - %3</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1940"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2050"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3913"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3965"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4001"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4263"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4299"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4506"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4542"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8274"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1950"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2060"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3998"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4050"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4086"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4348"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4384"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4591"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4627"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8359"/>
         <source>Cannot open file %1</source>
         <translation>Nelze otevřít soubor %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2092"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2102"/>
         <source>Saving file...</source>
         <translation>Ukládá se soubor...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2203"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2213"/>
         <source>&lt;qt&gt;Sorry.&lt;br&gt;&quot;%1&quot; is not a valid filename.&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Promiňte.&lt;br&gt;&quot;%1&quot; není platným souborovým názvem.&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2211"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2221"/>
         <source>You have specified a folder/directory.</source>
         <translation>Zadal jste složku/adresář.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2219"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2229"/>
         <source>The specified file exists.  Overwrite?</source>
         <translation>Zadaný soubor již existuje. Chcete jej přepsat?</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2246"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2256"/>
         <source>Rosegarden templates</source>
         <translation>Předlohy programu Rosegarden</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2248"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2258"/>
         <source>Save as template...</source>
         <translation>Uložit jako předlohu...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2248"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2258"/>
         <source>Save as...</source>
         <translation>Uložit jako...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2302"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2312"/>
         <source>Closing file...</source>
         <translation>Zavírá se soubor...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2315"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2325"/>
         <source>Exiting...</source>
         <translation>Probíhá ukončení...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2327"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2337"/>
         <source>Cutting selection...</source>
         <translation>Probíhá vyjmutí výběru...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2339"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2349"/>
         <source>Copying selection to clipboard...</source>
         <translation>Probíhá kopírování výběru do schránky...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2350"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2360"/>
         <source>Clipboard is empty</source>
         <translation>Schránka je prázdná</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2353"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2363"/>
         <source>Inserting clipboard contents...</source>
         <translation>Probíhá vkládání obsahu schránky...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2452"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2462"/>
         <source>Duration of empty range to insert</source>
         <translation>Doba trvání prázdného úseku k vložení</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2556"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2573"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2566"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2583"/>
         <source>This function needs no more than one segment to be selected.</source>
         <translation>Tato funkce nevyžaduje výběr více než jedné části.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2597"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2607"/>
         <source>Can&apos;t join Audio segments</source>
         <translation>Nelze spojit zvukové části</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2683"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2693"/>
         <source>rescaling an audio file</source>
         <translation>probíhá změna délky zvukového souboru</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2701"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2711"/>
         <source>Rescaling audio file...</source>
         <translation>Probíhá změna délky zvukového souboru...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2719"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2729"/>
         <source>Generating audio preview...</source>
         <translation>Probíhá vytváření náhledu na zvuk...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2752"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5579"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2762"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5664"/>
         <source>Warning</source>
         <translation>Upozornění</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2753"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2763"/>
         <source>The audio file path does not exist or is not writable.
 You must set the audio file path to a valid directory in Document Properties before %1.
 Would you like to set it now?</source>
@@ -20967,13 +21000,13 @@ Nastavte platný adresář jako cestu ke zvukovému souboru ve Vlastnostech doku
 Chcete cestu nastavit nyní?</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2824"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2834"/>
         <source>Jog Selection</source>
         <translation>Krokový posun výběru</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2968"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3002"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2978"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3012"/>
         <source>Split %n Segment(s) at Time</source>
         <translation>
             <numerusform>Rozdělit část v čase</numerusform>
@@ -20982,86 +21015,86 @@ Chcete cestu nastavit nyní?</translation>
         </translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3121"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3206"/>
         <source>Segment Start Time</source>
         <translation>Počáteční čas části</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3068"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3131"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3153"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3216"/>
         <source>Set Segment Start Times</source>
         <translation>Nastavit počáteční časy částí</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3069"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3132"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3154"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3217"/>
         <source>Set Segment Start Time</source>
         <translation>Nastavit počáteční čas části</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3165"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3250"/>
         <source>Segment Duration</source>
         <translation>Doba trvání části</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3178"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3263"/>
         <source>Set Segment Durations</source>
         <translation>Nastavit doby trvání částí</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3179"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3264"/>
         <source>Set Segment Duration</source>
         <translation>Nastavit dobu trvání části</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3290"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6266"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3375"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6351"/>
         <source>Set Global Tempo</source>
         <translation>Nastavit celkové tempo</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3363"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3448"/>
         <source>Toggle the toolbar...</source>
         <translation>Přepnout nástrojový pruh...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3374"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3459"/>
         <source>Toggle the tools toolbar...</source>
         <translation>Přepnout nástrojový pruh ovládacích nástrojů...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3385"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3470"/>
         <source>Toggle the tracks toolbar...</source>
         <translation>Přepnout nástrojový pruh pro stopy...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3396"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3481"/>
         <source>Toggle the editor toolbar...</source>
         <translation>Přepnout nástrojový pruh pro editor...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3407"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3492"/>
         <source>Toggle the transport toolbar...</source>
         <translation>Přepnout nástrojový pruh pro přesun...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3418"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3503"/>
         <source>Toggle the zoom toolbar...</source>
         <translation>Přepnout nástrojový pruh pro zvětšení...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3429"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3448"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3514"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3533"/>
         <source>Toggle the Transport</source>
         <translation>Přepnout přesun</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3563"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3648"/>
         <source>Toggle the statusbar...</source>
         <translation>Přepnout stavový řádek...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3631"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3716"/>
         <source>The join tool isn&apos;t implemented yet.  Instead please highlight the segments you want to join and then use the menu option:
 
         Segments-&gt;Collapse Segments.
@@ -21072,366 +21105,382 @@ Chcete cestu nastavit nyní?</translation>
 </translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3634"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3719"/>
         <source>Join tool not yet implemented</source>
         <translation>Nástroj pro spojování nebyl dosud proveden</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3875"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3960"/>
         <source>Revert modified document to previous saved version?</source>
         <translation>Chcete vrátit upravené dokumenty do stavu předešlých uložených verzí?</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3894"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3979"/>
         <source>Import Rosegarden Project File</source>
         <translation>Zavést soubor projektu programu Rosegarden</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3895"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5169"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3980"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5254"/>
         <source>Rosegarden Project files</source>
         <translation>Soubory s projekty programu Rosegarden</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6617"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6702"/>
         <source>&lt;qt&gt;&lt;p&gt;You must choose a filename for this composition before recording audio.&lt;/p&gt;&lt;p&gt;Audio files will be saved to &lt;b&gt;%1&lt;/b&gt; as &lt;b&gt;rg-[&lt;i&gt;filename&lt;/i&gt;]-[&lt;i&gt;instrument&lt;/i&gt;]-&lt;i&gt;date&lt;/i&gt;_&lt;i&gt;time&lt;/i&gt;-&lt;i&gt;n&lt;/i&gt;.wav&lt;/b&gt;.  You may wish to rename audio instruments before recording as well.  For more information, please see the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/wiki/doc:audio-filenames-en&quot;&gt;Rosegarden Wiki&lt;/a&gt;.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Předtím, než začnete s nahráváním zvuku, musíte pro tuto skladbu vybrat souborový název.&lt;/p&gt;&lt;p&gt;Zvukové soubory budou ukládány do &lt;b&gt;%1&lt;/b&gt; jako &lt;b&gt;rg-[&lt;i&gt;název souboru&lt;/i&gt;]-[&lt;i&gt;nástroj&lt;/i&gt;]-&lt;i&gt;datum&lt;/i&gt;_&lt;i&gt;čas&lt;/i&gt;-&lt;i&gt;n&lt;/i&gt;.wav&lt;/b&gt;. Před začátkem nahrávání můžete stejně tak přejmenovat zvukové nástroje. Podívejte se, prosím, kvůli více informacím na &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/wiki/doc:audio-filenames-en&quot;&gt;Rosegarden Wiki&lt;/a&gt;.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6922"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7007"/>
         <source>Input</source>
         <translation>Vstup</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8035"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8120"/>
         <source>http://rosegardenmusic.com/wiki/doc:manual-en</source>
         <translation>http://rosegardenmusic.com/wiki/doc:manual-en</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1199"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1537"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1624"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1784"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1786"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1922"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1940"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2050"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2109"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2112"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2202"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2210"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2218"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2275"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2278"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2556"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2573"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2597"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2622"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3007"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3033"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3874"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3913"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3965"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4001"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4120"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4263"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4299"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4334"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4506"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4542"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4577"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4894"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5150"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5154"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5190"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5231"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5265"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5299"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5365"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5406"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5454"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5571"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5593"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5618"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5631"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5653"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5711"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5713"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5747"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6613"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6709"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6831"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6844"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8062"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8201"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8219"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8222"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8232"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8274"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8714"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8716"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1200"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1552"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1639"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1794"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1796"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1932"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1950"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2060"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2119"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2122"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2212"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2220"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2228"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2285"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2288"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2566"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2583"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2607"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2632"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3017"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3093"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3118"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3959"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3998"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4050"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4086"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4205"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4348"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4384"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4419"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4591"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4627"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4662"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4979"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5235"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5239"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5275"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5316"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5350"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5384"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5450"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5491"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5539"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5656"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5678"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5703"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5716"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5738"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5796"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5798"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5832"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6698"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6794"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6916"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6929"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8147"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8286"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8304"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8307"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8317"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8359"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8793"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8795"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8042"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8127"/>
         <source>http://rosegardenmusic.com/tutorials/</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8526"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8605"/>
         <source>&lt;h3&gt;Newer version available&lt;/h3&gt;</source>
         <translation>&lt;h3&gt;Je dostupná novější verze&lt;/h3&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8527"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8606"/>
         <source>&lt;p&gt;You are using version %1.  Version %2 is now available.&lt;/p&gt;&lt;p&gt;Please consult the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/getting/&quot;&gt;Rosegarden website&lt;/a&gt; for more information.&lt;/p&gt;</source>
         <translation>&lt;p&gt;Používáte verzi %1.  Verze %2 je nyní dostupná.&lt;/p&gt;&lt;p&gt;Poraďte se, prosím, s &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/getting/&quot;&gt;stránkami programu Rosegarden &lt;/a&gt; kvůli dalším informacím.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3946"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4031"/>
         <source>Open MIDI File</source>
         <translation>Otevřít soubor MIDI</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3982"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4067"/>
         <source>Merge MIDI File</source>
         <translation>Připojit soubor MIDI</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4106"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4191"/>
         <source>Importing MIDI file...</source>
         <translation>Probíhá zavedení souboru MIDI...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4142"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4227"/>
         <source>Calculating notation...</source>
         <translation>Probíhá výpočet notového zápisu...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4195"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4280"/>
         <source>Calculate Notation</source>
         <translation>Vypočítat notový zápis</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4244"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4280"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4329"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4365"/>
         <source>Open X11 Rosegarden File</source>
         <translation>Otevřít soubor programu Rosegarden X 11</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4245"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4281"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4330"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4366"/>
         <source>X11 Rosegarden files</source>
         <translation>Soubory programu Rosegarden X11</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4314"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4399"/>
         <source>Importing X11 Rosegarden file...</source>
         <translation>Zavádí se soubor Rosegarden X11...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4335"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4420"/>
         <source>Can&apos;t load X11 Rosegarden file.  It appears to be corrupted.</source>
         <translation>Nelze nahrát soubor programu Rosegarden X 11. Vypadá to, že je poškozen.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5365"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5450"/>
         <source>&lt;qt&gt;&lt;p&gt;Failed to open a temporary file for LilyPond export.&lt;/p&gt;&lt;p&gt;This probably means you have run out of disk space on &lt;pre&gt;%1&lt;/pre&gt;&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Nepodařilo se otevřít dočasný soubor pro vyvedení z LilyPondu.&lt;/p&gt;&lt;p&gt;Pravděpodobně to znamená, že ukládací prostor na disku &lt;pre&gt;%1&lt;/pre&gt;je zcela zaplněn.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5150"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5235"/>
         <source>The Rosegarden sequencer process has exited unexpectedly.  Sound and recording will no longer be available for this session.
 Please exit and restart Rosegarden to restore sound capability.</source>
         <translation>Proces sekvenceru programu Rosegarden byl nečekaně ukončen.  Zvuk a záznam nebude pro toto sezení dostupný.
 Chcete-li obnovit funkci zvuku, ukončete a znovu spusťte program Rosegarden.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="322"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="323"/>
         <source>Starting sequencer...</source>
         <translation>Spouští se sekvencer...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2242"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2252"/>
         <source>Saving file%1with a new filename...</source>
         <comment>&apos;file%1with&apos; is correct. %1 will either become &apos; &apos; or &apos; as a template &apos; at runtime</comment>
         <translation>Probíhá ukládání souboru %1 pod novým názvem...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2244"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2254"/>
         <source> as a template </source>
         <translation> jako předloha </translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2623"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2633"/>
         <source>Can&apos;t expand Audio segments with figuration</source>
         <translation>Nelze rozbalit části se zvukem s figurací</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3008"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3018"/>
         <source>Split time is not within a selected segment.
 No segment will be split.</source>
         <translation>Čas rozdělení není uvnitř vybrané části.
 Nebude rozdělena žádná část.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3034"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3119"/>
         <source>&lt;qt&gt;&lt;p&gt;In order to create anacrusis, at least one of the segments in your selection must start at the beginning of the composition.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Pro vytvoření předtaktí misí alespoň jedna část ve vašem výběru začínat na začátku skladby.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3043"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3128"/>
         <source>Anacrusis Amount</source>
         <translation>Množství předtaktí</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3058"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3143"/>
         <source>Create Anacrusis</source>
         <translation>Vytvořit předtaktí</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3088"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3173"/>
         <source>Insert Corrected Tempo and Time Signature</source>
         <translation>Vložit opravené tempo a taktové označení</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3099"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3184"/>
         <source>Remove Original Tempo and Time Signature</source>
         <translation>Odstranit původní tempo a taktové označení</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4487"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4523"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4572"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4608"/>
         <source>Open MusicXML File</source>
         <translation>Otevřít soubor MusicXML</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4557"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4642"/>
         <source>Importing MusicXML file...</source>
         <translation>Zavádí se soubor MusicXML...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4578"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4663"/>
         <source>Can&apos;t load MusicXML file:
 </source>
         <translation>Nelze zavést soubor MusicXML:
 </translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5154"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5239"/>
         <source>The Rosegarden sequencer could not be started, so sound and recording will be unavailable for this session.
 For assistance with correct audio and MIDI configuration, go to http://rosegardenmusic.com.</source>
         <translation>Sekvencer programu Rosegarden nebylo možné spustit. Zvuk a záznam tedy nebude pro toto sezení dostupný.
 Informace o správném nastavení zvuku a MIDI naleznete na adrese http://rosegardenmusic.com.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5166"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5251"/>
         <source>Exporting Rosegarden Project file...</source>
         <translation>Vyvádí se soubor s projektem programu Rosegarden...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5171"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5210"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5244"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5278"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5312"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5424"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5256"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5295"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5329"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5363"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5397"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5509"/>
         <source>Export as...</source>
         <translation>Vyvést jako...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5190"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5275"/>
         <source>Saving Rosegarden file to package failed: %1</source>
         <translation>Ukládání souboru programu Rosegarden do balíku selhalo: %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5205"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5221"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5290"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5306"/>
         <source>Exporting MIDI file...</source>
         <translation>Probíhá vyvedení souboru MIDI...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5208"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5293"/>
         <source>Standard MIDI files</source>
         <translation>Běžné soubory MIDI</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5231"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5265"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5299"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5454"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5316"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5350"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5384"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5539"/>
         <source>Export failed.  The file could not be opened for writing.</source>
         <translation>Vyvedení se nepodařilo.  Soubor nebylo možné otevřít pro zápis.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5239"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5255"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5324"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5340"/>
         <source>Exporting Csound score file...</source>
         <translation>Probíhá vyvedení souboru s notovým zápisem pro Csound...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5242"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5327"/>
         <source>Csound files</source>
         <translation>Soubory Csound</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5273"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5288"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5358"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5373"/>
         <source>Exporting Mup file...</source>
         <translation>Probíhá vyvedení souboru Mup...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5276"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5361"/>
         <source>Mup files</source>
         <translation>Soubory Mup</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5307"/>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5392"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5477"/>
         <source>Exporting LilyPond file...</source>
         <translation>Probíhá vyvedení souboru programu LilyPond...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5310"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5395"/>
         <source>LilyPond files</source>
         <translation>Soubory programu LilyPond</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5324"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5409"/>
         <source>Printing with LilyPond...</source>
         <translation>Probíhá tisk s LilyPondem...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5340"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5425"/>
         <source>Previewing LilyPond file...</source>
         <translation>Zobrazuje se náhled na soubor programu LilyPond...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5383"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5468"/>
         <source>LilyPond Preview Options</source>
         <translation>Možnosti zobrazení náhledu pro program LilyPond</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5384"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5469"/>
         <source>LilyPond preview options</source>
         <translation>Možnosti zobrazení náhledu pro program LilyPond</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5419"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5440"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5504"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5525"/>
         <source>Exporting MusicXML file...</source>
         <translation>Probíhá vyvedení souboru MusicXML...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4488"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4524"/>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5422"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4573"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4609"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5507"/>
         <source>XML files</source>
         <translation>Soubory XML</translation>
     </message>
+    <message numerus="yes">
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3034"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3088"/>
+        <source>Split %n Segment(s) by Drum</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5580"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3094"/>
+        <source>No segment was split.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5665"/>
         <source>The audio file path does not exist or is not writable.
 Please set the audio file path to a valid directory in Document Properties before recording audio.
 Would you like to set it now?</source>
@@ -21440,12 +21489,12 @@ Nastavte platný adresář jako cestu ke zvukovému souboru ve Vlastnostech doku
 Chcete cestu nastavit nyní?</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5621"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5706"/>
         <source>Error</source>
         <translation>Chyba</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5622"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="5707"/>
         <source>The audio file path does not exist or is not writable.
 Please set the audio file path to a valid directory in Document Properties before you start to record audio.
 Would you like to set it now?</source>
@@ -21454,164 +21503,164 @@ Nastavte platný adresář jako cestu ke zvukovému souboru ve Vlastnostech doku
 Chcete cestu nastavit nyní?</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6170"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6255"/>
         <source>Move playback pointer to time</source>
         <translation>Přesunout ukazatel přehrávání na dobu</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6184"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6269"/>
         <source>%1%</source>
         <translation>%1%</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6252"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6337"/>
         <source>Replace Tempo Change at %1</source>
         <translation>Nahradit změnu tempa na místě %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6282"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6367"/>
         <source>Set Global and Default Tempo</source>
         <translation>Nastavit celkové a výchozí tempo</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6305"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6390"/>
         <source>Move Tempo Change</source>
         <translation>Přesunout změnu tempa</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6340"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6425"/>
         <source>new marker</source>
         <translation>nová značka</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6341"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6426"/>
         <source>no description</source>
         <translation>bez popisu</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6831"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6916"/>
         <source>Sequencer failed to add audio file %1</source>
         <translation>Sekvenceru se nepodařilo přidat zvukový soubor %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6844"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6929"/>
         <source>Sequencer failed to remove audio file id %1</source>
         <translation>Sekvenceru se nepodařilo odebrat id zvukového souboru %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6905"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6990"/>
         <source>Modify Segment label</source>
         <translation>Upravit označení části</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6907"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6992"/>
         <source>Modify Segments label</source>
         <translation>Upravit označení částí</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6909"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6994"/>
         <source>Relabelling selection...</source>
         <translation>Probíhá změna označení výběru...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="6922"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7007"/>
         <source>Enter new label</source>
         <translation>Zadat nové označení</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7998"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8083"/>
         <source>Play List</source>
         <translation>Seznam přehrávání</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8049"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8134"/>
         <source>http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html</source>
         <translation>http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8147"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8232"/>
         <source>Queueing MIDI panic events for tranmission...</source>
         <translation>Probíhá řazení nouzových událostí MIDI do řady pro přenos...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8201"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8286"/>
         <source>Are you sure you want to save this as your default studio?</source>
         <translation>Skutečně chcete toto uložit jako svoje výchozí studio?</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8207"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8292"/>
         <source>Saving current document as default studio...</source>
         <translation>Probíhá ukládání současného dokumentu jako výchozího studia...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8219"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8304"/>
         <source>Could not auto-save document at %1
 Error was : %2</source>
         <translation>Nepodařilo se automaticky uložit dokument v %1
 Chyba byla: %2</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8222"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8307"/>
         <source>Could not auto-save document at %1</source>
         <translation>Nepodařilo se automaticky uložit dokument pod %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8232"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8317"/>
         <source>Are you sure you want to import your default studio and lose the current one?</source>
         <translation>Skutečně chcete zavést svoje výchozí studio a ztratit to nynější?</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8259"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8344"/>
         <source>Import Studio from File</source>
         <translation>Zavést studio ze souboru</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8308"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8393"/>
         <source>Import Studio</source>
         <translation>Zavést studio</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8637"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8716"/>
         <source>&lt;h3&gt;Invalid audio path&lt;/h3&gt;</source>
         <translation>&lt;h3&gt;Neplatná cesta ke zvuku&lt;/h3&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8638"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8717"/>
         <source>&lt;p&gt;You will not be able to record audio or drag and drop audio files onto Rosegarden until you correct this in &lt;b&gt;View -&gt; Document Properties -&gt; Audio&lt;/b&gt;.&lt;/p&gt;</source>
         <translation>&lt;p&gt;Nebudete moci nahrávat zvuk nebo táhnout a upouštět zvukové soubory na Rosegarden, dokud to neopravíte v &lt;b&gt;Pohled -&gt; Vlastnosti dokumentu -&gt; Zvuk&lt;/b&gt;.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8642"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8721"/>
         <source>&lt;h3&gt;Created audio path&lt;/h3&gt;</source>
         <translation>&lt;h3&gt;Vytvořena cesta ke zvuku&lt;/h3&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8643"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8722"/>
         <source>&lt;qt&gt;&lt;p&gt;Rosegarden created the audio path &quot;%1&quot; to use for audio recording, and to receive dropped audio files.&lt;/p&gt;&lt;p&gt;If you wish to use a different path, change this in &lt;b&gt;View -&gt; Document Properties -&gt; Audio&lt;/b&gt;.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Rosegarden vytvořil cestu ke zvuku &quot;%1&quot; k použití pro nahrávání zvuku, a pro přijímání upuštěných zvukových souborů.&lt;/p&gt;&lt;p&gt;Pokud byste si přál používat jinou cestu, změnu proveďte v &lt;b&gt;Pohled -&gt; Vlastnosti dokumentu -&gt; Zvuk&lt;/b&gt;.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8649"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8728"/>
         <source>&lt;qt&gt;&lt;p&gt;The audio path &quot;%1&quot; did not exist, and could not be created.&lt;/p&gt;%2&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Cesta ke zvuku &quot;%1&quot; neexistovala, a nepodařilo se ji vytvořit.&lt;/p&gt;%2&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8654"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8733"/>
         <source>&lt;qt&gt;&lt;p&gt;The audio path &quot;%1&quot; exists, but is not writable.&lt;/p&gt;%2&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Cesta ke zvuku &quot;%1&quot; existuje, ale není zapisovatelná.&lt;/p&gt;%2&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8693"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8772"/>
         <source>Rosegarden - Warning</source>
         <translation type="unfinished">Rosegarden - Varování</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8693"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8772"/>
         <source>&lt;qt&gt;&lt;p&gt;The current file has been modified.&lt;/p&gt;&lt;p&gt;Do you want to save it?&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished">&lt;qt&gt;&lt;p&gt;Nynější soubor byl změněn.&lt;/p&gt;&lt;p&gt;Chcete jej uložit?&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8714"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8793"/>
         <source>Could not save document at %1
 (%2)</source>
         <translation type="unfinished">Nepodařilo se uložit dokument pod %1
@@ -21721,7 +21770,7 @@ Chyba byla: %2</translation>
 <context>
     <name>Rosegarden::SegmentEraser</name>
     <message>
-        <location filename="../../src/gui/editors/segment/compositionview/SegmentEraser.cpp" line="105"/>
+        <location filename="../../src/gui/editors/segment/compositionview/SegmentEraser.cpp" line="52"/>
         <source>Click on a segment to delete it</source>
         <translation>Chcete-li část odstranit, klepněte na ni</translation>
     </message>
@@ -21745,8 +21794,8 @@ Chyba byla: %2</translation>
 <context>
     <name>Rosegarden::SegmentInsertCommand</name>
     <message>
-        <location filename="../../src/commands/segment/SegmentInsertCommand.cpp" line="37"/>
-        <location filename="../../src/commands/segment/SegmentInsertCommand.cpp" line="50"/>
+        <location filename="../../src/commands/segment/SegmentInsertCommand.cpp" line="39"/>
+        <location filename="../../src/commands/segment/SegmentInsertCommand.cpp" line="52"/>
         <source>Create Segment</source>
         <translation>Vytvořit část</translation>
     </message>
@@ -21799,22 +21848,22 @@ Chyba byla: %2</translation>
 <context>
     <name>Rosegarden::SegmentMover</name>
     <message>
-        <location filename="../../src/gui/editors/segment/compositionview/SegmentMover.cpp" line="176"/>
+        <location filename="../../src/gui/editors/segment/compositionview/SegmentMover.cpp" line="178"/>
         <source>Move Segment</source>
         <translation>Přesunout část</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/segment/compositionview/SegmentMover.cpp" line="177"/>
+        <location filename="../../src/gui/editors/segment/compositionview/SegmentMover.cpp" line="179"/>
         <source>Move Segments</source>
         <translation>Přesunout části</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/segment/compositionview/SegmentMover.cpp" line="258"/>
+        <location filename="../../src/gui/editors/segment/compositionview/SegmentMover.cpp" line="349"/>
         <source>Hold Shift to avoid snapping to beat grid</source>
         <translation>Podržte tlačítko Shift, abyste se vyhnuli přichytávání na mřížku dob</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/segment/compositionview/SegmentMover.cpp" line="334"/>
+        <location filename="../../src/gui/editors/segment/compositionview/SegmentMover.cpp" line="357"/>
         <source>Click and drag to move a segment</source>
         <translation>Klepnutím a tažením přesunete část</translation>
     </message>
@@ -21827,182 +21876,182 @@ Chyba byla: %2</translation>
         <translation>Část</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="91"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="90"/>
         <source>Segment Parameters</source>
         <translation>Parametry části</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="139"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="127"/>
         <source>Label</source>
         <translation>Označení</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="140"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="148"/>
         <source>Repeat</source>
         <translation>Opakovat</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="141"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="177"/>
         <source>Quantize</source>
         <translation>Kvantizovat</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="142"/>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="288"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="162"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="243"/>
         <source>Transpose</source>
         <translation>Převést</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="143"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="196"/>
         <source>Delay</source>
         <translation>Zpoždění</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="144"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="212"/>
         <source>Color</source>
         <translation>Barva</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="158"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="136"/>
         <source>&lt;qt&gt;Click to edit the segment label for any selected segments&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="166"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="142"/>
         <source>Edit</source>
         <translation>Upravit</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="168"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="144"/>
         <source>&lt;qt&gt;Edit the segment label for any selected segments&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Upravit označení části pro jakoukoli vybranou část&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="176"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="153"/>
         <source>&lt;qt&gt;&lt;p&gt;When checked,     any selected segments will repeat until they run into another segment,  or the end of the composition.&lt;/p&gt;&lt;p&gt;When viewed in the notation editor or printed via LilyPond, the segments will be bracketed by repeat signs.&lt;/p&gt;&lt;p&gt;&lt;center&gt;&lt;img src=&quot;:pixmaps/tooltip/repeats.png&quot;&gt;&lt;/img&gt;&lt;/center&gt;&lt;/p&gt;&lt;br&gt;These can be used in conjunction with special LilyPond export directives to create repeats with first and second alternate endings. See rosegardenmusic.com for a tutorial. [Ctrl+Shift+R] &lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Když je zapnuto, budou se všechny vybrané části opakovat do té doby, než začne další část, nebo dokud skladba neskončí.&lt;/p&gt;&lt;p&gt;Při prohlížení v editoru notového zápisu nebo při tisku prostřednictvím programu LilyPond, budou tyto části označeny opakovacími závorkami.&lt;/p&gt;&lt;p&gt;&lt;center&gt;&lt;img src=&quot;:pixmaps/tooltip/repeats.png&quot;&gt;&lt;/img&gt;&lt;/center&gt;&lt;/p&gt;&lt;br&gt;Tyto lze používat ve spojení se zvláštními směrnicemi programu LilyPond pro vyvedení pro vytvoření opakování s prvními a druhými náhradními zakončeními. Prohlédněte si návod na rosegardenmusic.com. [Ctrl+Shift+R] &lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="207"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="167"/>
         <source>&lt;qt&gt;&lt;p&gt;Raise or lower playback of any selected segments by this number of semitones&lt;/p&gt;&lt;p&gt;&lt;i&gt;NOTE: This control changes segments that already exist.&lt;/i&gt;&lt;/p&gt;&lt;p&gt;&lt;i&gt;Use the transpose control in &lt;b&gt;Track Parameters&lt;/b&gt; under &lt;b&gt;Create segments with&lt;/b&gt; to pre-select this   setting before drawing or recording new segments.&lt;/i&gt;&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Zvýšit nebo snížit přehrávání všech vybraných částí o tento počet půltónů&lt;/p&gt;&lt;p&gt;&lt;i&gt;POZNÁMKA: Tento ovládací prvek mění části, které již existují.&lt;/i&gt;&lt;/p&gt;&lt;p&gt;&lt;i&gt;Použijte ovládací prvek pro převedení v &lt;b&gt;Parametry stopy&lt;/b&gt; pod &lt;b&gt;Vytvořit části&lt;/b&gt; kvůli výběru této hodnoty jako přednastavení pro nově skládané nebo nově nahrávané části.&lt;/i&gt;&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="224"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="201"/>
         <source>&lt;qt&gt;&lt;p&gt;Delay playback of any selected segments by this number of miliseconds&lt;/p&gt;&lt;p&gt;&lt;i&gt;NOTE: Rosegarden does not support negative delay.  If you need a negative delay effect, set the   composition to start before bar 1, and move segments to the left.  You can hold &lt;b&gt;shift&lt;/b&gt; while doing this for fine-grained control, though doing so will have harsh effects on music notation rendering as viewed in the notation editor.&lt;/i&gt;&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Zpozdit přehrávání všech částí o tento počet milisekund&lt;/p&gt;&lt;p&gt;&lt;i&gt;POZNÁMKA: Rosegarden nepodporuje záporné zpoždění. Pokud potřebujete účinek záporného zpoždění, nastavte začátek skladby před takt 1, a posuňte části doleva. Zatímco to budete provádět, můžete kvůli jemnému ovládání podržet &lt;b&gt;shift&lt;/b&gt;. Setkáte se ovšem se zvláštními účinky tohoto kroku na znázornění not v editoru notového zápisu .&lt;/i&gt;&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="247"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="218"/>
         <source>&lt;qt&gt;&lt;p&gt;Change the color of any selected segments&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Změnit barvu každé vybrané části&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="268"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="230"/>
         <source>Linked segment parameters</source>
         <translation>Parametry propojené části</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="293"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="247"/>
         <source>Change</source>
         <translation>Změnit</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="295"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="249"/>
         <source>&lt;qt&gt;Edit the relative transposition on the linked segment&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Upravit vztažné převedení na propojené části&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="303"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="254"/>
         <source>Reset</source>
         <translation>Nastavit znovu</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="305"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="256"/>
         <source>&lt;qt&gt;Reset the relative transposition on the linked segment to zero&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Nastavit vztažné převedení na propojené části znovu na nulu&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="361"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="313"/>
         <source>Off</source>
         <translation>Vypnuto</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="399"/>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="751"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="351"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="702"/>
         <source>%1 ms</source>
         <translation>%1 ms</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="466"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="417"/>
         <source>Default</source>
         <translation>Výchozí</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="482"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="433"/>
         <source>Add New Color</source>
         <translation>Přidat novou barvu</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="888"/>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="934"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="839"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="885"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="889"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="840"/>
         <source>Existing transpositions on selected linked segments must be removed
 before new transposition can be applied.</source>
         <translation>Stávající převedení na vybraných propojených částech musí být odstraněna,
 dříve než lze použít nové převedení.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="935"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="886"/>
         <source>Remove transposition on selected linked segments?</source>
         <translation>Odstranit převedení na vybraných propojených částech?</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="1028"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="979"/>
         <source>New Color Name</source>
         <translation>Název nové barvy</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="1029"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="980"/>
         <source>Enter new name</source>
         <translation>Zadat nový název</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="1031"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="982"/>
         <source>New</source>
         <translation>Nový</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="1068"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="1019"/>
         <source>Highest playable note</source>
         <translation>Nejvyšší hratelná nota</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="1088"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="1039"/>
         <source>Lowest playable note</source>
         <translation>Nejnižší hratelná nota</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="1119"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="1070"/>
         <source>Modify Segment label</source>
         <translation>Upravit označení části</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="1120"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="1071"/>
         <source>Modify Segments label</source>
         <translation>Upravit označení částí</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="1132"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="1083"/>
         <source>Enter new label:</source>
         <translation>Zadat nové označení:</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="1198"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="1149"/>
         <source>Instrument</source>
         <translation>Nástroj</translation>
     </message>
@@ -22010,17 +22059,17 @@ dříve než lze použít nové převedení.</translation>
 <context>
     <name>Rosegarden::SegmentPencil</name>
     <message>
-        <location filename="../../src/gui/editors/segment/compositionview/SegmentPencil.cpp" line="244"/>
+        <location filename="../../src/gui/editors/segment/compositionview/SegmentPencil.cpp" line="307"/>
         <source>Hold Shift to avoid snapping to bar lines</source>
         <translation>Podržením tlačítka Shift (přesmykače) se vyhnete přichytávání na taktové čáry</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/segment/compositionview/SegmentPencil.cpp" line="294"/>
+        <location filename="../../src/gui/editors/segment/compositionview/SegmentPencil.cpp" line="326"/>
         <source>Record or drop audio here</source>
         <translation>Sem přetáhněte nebo zde zaznamenejte zvuk</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/segment/compositionview/SegmentPencil.cpp" line="300"/>
+        <location filename="../../src/gui/editors/segment/compositionview/SegmentPencil.cpp" line="334"/>
         <source>Click and drag to draw an empty segment.  Control+Alt click and drag to draw in overlap mode.</source>
         <translation>Klepnutím a tažením vytvoříte prázdnou část. Klepnutím a tažením se stisknutým CTRL+Alt budete pracovat v překryvném režimu.</translation>
     </message>
@@ -22033,7 +22082,7 @@ dříve než lze použít nové převedení.</translation>
         <translation>Rychlé kopírování části</translation>
     </message>
     <message>
-        <location filename="../../src/commands/segment/SegmentQuickCopyCommand.cpp" line="52"/>
+        <location filename="../../src/commands/segment/SegmentQuickCopyCommand.cpp" line="56"/>
         <source>(copied)</source>
         <translation>(zkopírováno)</translation>
     </message>
@@ -22091,12 +22140,12 @@ dříve než lze použít nové převedení.</translation>
 <context>
     <name>Rosegarden::SegmentResizer</name>
     <message>
-        <location filename="../../src/gui/editors/segment/compositionview/SegmentResizer.cpp" line="161"/>
+        <location filename="../../src/gui/editors/segment/compositionview/SegmentResizer.cpp" line="163"/>
         <source>Warning</source>
         <translation>Upozornění</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/segment/compositionview/SegmentResizer.cpp" line="162"/>
+        <location filename="../../src/gui/editors/segment/compositionview/SegmentResizer.cpp" line="164"/>
         <source>The audio file path does not exist or is not writable.
 You must set the audio file path to a valid directory in Document Properties before rescaling an audio file.
 Would you like to set it now?</source>
@@ -22105,42 +22154,42 @@ Nastavte platný adresář jako cestu ke zvukovému souboru ve Vlastnostech doku
 Chcete cestu nastavit nyní?</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/segment/compositionview/SegmentResizer.cpp" line="181"/>
+        <location filename="../../src/gui/editors/segment/compositionview/SegmentResizer.cpp" line="183"/>
         <source>Rescaling audio file...</source>
         <translation>Probíhá změna délky zvukového souboru...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/segment/compositionview/SegmentResizer.cpp" line="191"/>
+        <location filename="../../src/gui/editors/segment/compositionview/SegmentResizer.cpp" line="193"/>
         <source>Generating audio preview...</source>
         <translation>Probíhá vytváření náhledu na zvuk...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/segment/compositionview/SegmentResizer.cpp" line="245"/>
+        <location filename="../../src/gui/editors/segment/compositionview/SegmentResizer.cpp" line="247"/>
         <source>Resize Segment</source>
         <translation type="unfinished">Změnit velikost části</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/segment/compositionview/SegmentResizer.cpp" line="289"/>
+        <location filename="../../src/gui/editors/segment/compositionview/SegmentResizer.cpp" line="399"/>
         <source>Hold Shift to avoid snapping to beat grid</source>
         <translation>Podržte tlačítko Shift, abyste se vyhnuli přichytávání na mřížku dob</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/segment/compositionview/SegmentResizer.cpp" line="296"/>
+        <location filename="../../src/gui/editors/segment/compositionview/SegmentResizer.cpp" line="406"/>
         <source>Hold Shift to avoid snapping to beat grid; hold Ctrl as well to rescale contents</source>
         <translation>Podržením tlačítka Shift (přesmykače) se vyhnete přichytávání na mřížku dob; podržíte-li tlačítko Ctrl, můžete také měnit délku obsahu</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/segment/compositionview/SegmentResizer.cpp" line="298"/>
+        <location filename="../../src/gui/editors/segment/compositionview/SegmentResizer.cpp" line="408"/>
         <source>Hold Ctrl to rescale contents</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/segment/compositionview/SegmentResizer.cpp" line="393"/>
+        <location filename="../../src/gui/editors/segment/compositionview/SegmentResizer.cpp" line="416"/>
         <source>Click and drag to resize a segment; hold Ctrl as well to rescale its contents</source>
         <translation>Klepnutím a tažením změníte velikost části; podržíte-li tlačítko Ctrl, změníte také délku jeho obsahu</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/segment/compositionview/SegmentResizer.cpp" line="395"/>
+        <location filename="../../src/gui/editors/segment/compositionview/SegmentResizer.cpp" line="418"/>
         <source>Click and drag to rescale segment</source>
         <translation>Klepnutím a tažením změníte délku části</translation>
     </message>
@@ -22152,7 +22201,7 @@ Chcete cestu nastavit nyní?</translation>
         <translation type="obsolete">Klepnutím a tažením části vyberete</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/gui/editors/segment/compositionview/SegmentSelector.cpp" line="298"/>
+        <location filename="../../src/gui/editors/segment/compositionview/SegmentSelector.cpp" line="314"/>
         <source>Move %n Segment(s)</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -22161,42 +22210,60 @@ Chcete cestu nastavit nyní?</translation>
         </translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/segment/compositionview/SegmentSelector.cpp" line="462"/>
+        <location filename="../../src/gui/editors/segment/compositionview/SegmentSelector.cpp" line="658"/>
         <source>Hold Shift to avoid snapping to beat grid</source>
         <translation>Podržte tlačítko Shift, abyste se vyhnuli přichytávání na mřížku dob</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/segment/compositionview/SegmentSelector.cpp" line="579"/>
+        <location filename="../../src/gui/editors/segment/compositionview/SegmentSelector.cpp" line="670"/>
         <source>Click and drag to select segments; middle-click and drag to draw an empty segment</source>
         <translation>Klepnutím a tažením části vyberete; klepnutím prostředním tlačítkem a tažením nakreslíte prázdnou část</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/segment/compositionview/SegmentSelector.cpp" line="591"/>
+        <location filename="../../src/gui/editors/segment/compositionview/SegmentSelector.cpp" line="683"/>
         <source>Click and drag to resize a segment; hold Ctrl as well to rescale its contents</source>
         <translation>Klepnutím a tažením změníte velikost části; podržíte-li tlačítko Ctrl, změníte také délku jeho obsahu</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/segment/compositionview/SegmentSelector.cpp" line="593"/>
+        <location filename="../../src/gui/editors/segment/compositionview/SegmentSelector.cpp" line="685"/>
         <source>Click and drag to rescale segment</source>
         <translation>Klepnutím a tažením změníte délku části</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/segment/compositionview/SegmentSelector.cpp" line="598"/>
+        <location filename="../../src/gui/editors/segment/compositionview/SegmentSelector.cpp" line="690"/>
         <source>Click and drag to move segments; hold Ctrl as well to copy them; Ctrl + Alt for linked copies</source>
         <translation>Klepnutím a tažením přesunete části; podržíte-li tlačítko Ctrl, můžete je také kopírovat; Ctrl+Alt pro propojené kopie</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/segment/compositionview/SegmentSelector.cpp" line="604"/>
+        <location filename="../../src/gui/editors/segment/compositionview/SegmentSelector.cpp" line="696"/>
         <source>Click and drag to move segment; hold Ctrl as well to copy it; Ctrl + Alt for a linked copy; double-click to edit</source>
         <translation>Klepnutím a tažením přesunete části; podržíte-li tlačítko Ctrl, můžete je také kopírovat; Ctrl+Alt pro propojené kopie; dvojité klepnutí pro úpravy</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/segment/compositionview/SegmentSelector.cpp" line="600"/>
+        <location filename="../../src/gui/editors/segment/compositionview/SegmentSelector.cpp" line="692"/>
         <source>Click and drag to copy segments</source>
         <translation>Klepnutím a tažením zkopírujete části</translation>
     </message>
+    <message numerus="yes">
+        <location filename="../../src/gui/editors/segment/compositionview/SegmentSelector.cpp" line="307"/>
+        <source>Copy %n Segment(s) as link(s)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../../src/gui/editors/segment/compositionview/SegmentSelector.cpp" line="310"/>
+        <source>Copy %n Segment(s)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
     <message>
-        <location filename="../../src/gui/editors/segment/compositionview/SegmentSelector.cpp" line="606"/>
+        <location filename="../../src/gui/editors/segment/compositionview/SegmentSelector.cpp" line="698"/>
         <source>Click and drag to copy segment</source>
         <translation>Klepnutím a tažením zkopírujete část</translation>
     </message>
@@ -22207,6 +22274,24 @@ Chcete cestu nastavit nyní?</translation>
         <location filename="../../src/commands/segment/SegmentSingleRepeatToCopyCommand.cpp" line="32"/>
         <source>Turn Single Repeat into Copy</source>
         <translation>Převést jeden úsek opakování na kopii</translation>
+    </message>
+</context>
+<context>
+    <name>Rosegarden::SegmentSplitByDrumCommand</name>
+    <message>
+        <location filename="../../src/commands/segment/SegmentSplitByDrumCommand.h" line="47"/>
+        <source>Split by &amp;Drum...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/commands/segment/SegmentSplitByDrumCommand.cpp" line="44"/>
+        <source>Split by Drum</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/commands/segment/SegmentSplitByDrumCommand.cpp" line="172"/>
+        <source>Pitch %1</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -22386,8 +22471,8 @@ Chcete cestu nastavit nyní?</translation>
 <context>
     <name>Rosegarden::SequenceManager</name>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="931"/>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1081"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="930"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1080"/>
         <source>The JACK Audio subsystem has failed or it has stopped Rosegarden from processing audio.
 Please restart Rosegarden to continue working with audio.
 Quitting other running applications may improve Rosegarden&apos;s performance.</source>
@@ -22396,8 +22481,8 @@ Pro pokračování v práci se zvukem spusťte program Rosegarden znovu.
 Ukončení ostatních běžících programů by mohlo zlepšit výkon programu Rosegarden.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="937"/>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1090"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="936"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1089"/>
         <source>The JACK Audio subsystem has stopped Rosegarden from processing audio, probably because of a processing overload.
 An attempt to restart the audio service has been made, but some problems may remain.
 Quitting other running applications may improve Rosegarden&apos;s performance.</source>
@@ -22406,87 +22491,87 @@ Byl proveden pokus o opětovné spuštění zvukových služeb, některé probl�
 Ukončení ostatních běžících programů by mohlo zlepšit výkon programu Rosegarden.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="948"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="947"/>
         <source>Out of processor power for real-time audio processing.  Cannot continue.</source>
         <translation>Rychlost procesoru nestačí na zpracovávání zvukových dat ve skutečném čase.  Nelze pokračovat.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="974"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="973"/>
         <source>A serious error has occurred in the ALSA MIDI subsystem.  It may not be possible to continue sequencing.  Please check console output for more information.</source>
         <translation>V subsystému ALSA MIDI došlo k vážné chybě. Nemusí být dále možné pokračovat v práci (sekvencer). Více informací naleznete na výstupu z ovládacího panelu (konzole).</translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1000"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="999"/>
         <source>JACK Audio subsystem is losing sample frames.</source>
         <translation>Zvukový subsystém JACK ztrácí vzorkové rámce.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1018"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1017"/>
         <source>Failed to read audio data from disk in time to service the audio subsystem.</source>
         <translation>Nepodařilo se včas přečíst zvuková data na disku pro posloužení zvukovému podsystému.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1022"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1021"/>
         <source>Failed to write audio data to disk fast enough to service the audio subsystem.</source>
         <translation>Nepodařilo se dostatečně rychle zapsat zvuková data na disk pro posloužení zvukovému podsystému.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1074"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1073"/>
         <source>&lt;h3&gt;System timer resolution is too low!&lt;/h3&gt;</source>
         <translation>&lt;h3&gt;Rozlišení systémového časovače je příliš nízké!&lt;/h3&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1109"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1108"/>
         <source>&lt;p&gt;Rosegarden was unable to find a high-resolution timing source for MIDI performance.&lt;/p&gt;&lt;p&gt;This may mean you are using a Linux system with the kernel timer resolution set too low.  Please contact your Linux distributor for more information.&lt;/p&gt;&lt;p&gt;Some Linux distributors already provide low latency kernels, see the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/wiki/low-latency_kernels&quot;&gt;Rosegarden website&lt;/a&gt; for instructions.&lt;/p&gt;</source>
         <translation>&lt;p&gt;Rosegarden nebyl schopen nalézt pro provedení MIDI časovací zdroj ve vysokém rozlišení.&lt;/p&gt;&lt;p&gt;Může to znamenat, že používáte linuxový systém s rozlišením časovače v jádru nastaveným na příliš nízkou hodnotu. Spojte se, prosím, s vaším distributorem Linuxu kvůli více informacím.&lt;/p&gt;&lt;p&gt;Někteří z distributorů Linuxu již poskytují jádra s nízkou prodlevou. Kvůli dalším pokynům se podívejte na &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/wiki/low-latency_kernels&quot;&gt;stránky programu Rosegarden&lt;/a&gt;.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1134"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1133"/>
         <source>&lt;p&gt;Rosegarden was unable to find a high-resolution timing source for MIDI performance.&lt;/p&gt;&lt;p&gt;You may be able to solve this problem by loading the RTC timer kernel module.  To do this, try running &lt;b&gt;sudo modprobe snd-rtctimer&lt;/b&gt; in a terminal window and then restarting Rosegarden.&lt;/p&gt;&lt;p&gt;Alternatively, check whether your Linux distributor provides a multimedia-optimized kernel.  See the &lt;a style=&quot;color:gold&quot;  href=&quot;http://www.rosegardenmusic.com/wiki/low-latency_kernels&quot;&gt;Rosegarden website&lt;/a&gt; for notes about this.&lt;/p&gt;</source>
         <translation>&lt;p&gt;Rosegarden nebyl schopen nalézt pro provedení MIDI časovací zdroj ve vysokém rozlišení.&lt;/p&gt;&lt;p&gt;Tento problém můžete vyřešit nahráním modulu jádra s RTC časovačem. Abyste to udělali, zkuste spustit &lt;b&gt;sudo modprobe snd-rtctimer&lt;/b&gt; v okně ovládacího panelu příkazového řádku a potom Rosegarden spusťte znovu.&lt;/p&gt;&lt;p&gt;Jako náhradní řešení můžete ověřit, zda váš distributor Linuxu poskytuje jádro vyladěné pro práci s multimédii Kvůli dalším poznámkám k této věci se podívejte na &lt;a style=&quot;color:gold&quot;  href=&quot;http://www.rosegardenmusic.com/wiki/low-latency_kernels&quot;&gt;stránky programu Rosegarden&lt;/a&gt;.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1244"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1243"/>
         <source>&lt;h3&gt;Sequencer engine unavailable!&lt;/h3&gt;</source>
         <translation>&lt;h3&gt;Stroj sekvenceru je nedostupný!&lt;/h3&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1245"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1244"/>
         <source>&lt;p&gt;Both MIDI and Audio subsystems have failed to initialize.&lt;/p&gt;&lt;p&gt;If you wish to run with no sequencer by design, then use &quot;rosegarden --nosequencer&quot; to avoid seeing this error in the future.  Otherwise, we recommend that you repair your system configuration and start Rosegarden again.&lt;/p&gt;</source>
         <translation>&lt;p&gt;Nepodařilo se spustit ani MIDI ani zvukový podsystém.&lt;/p&gt;&lt;p&gt;Pokud chcete jet dál bez sekvenceru, použijte příkaz &quot;rosegarden --nosequencer&quot;, abyste se na hlášení o této chybě nemuseli v budocnu koukat. Jinak vám doporučujeme opravit nastavení systému a spustit Rosegarden znovu.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1247"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1246"/>
         <source>&lt;h3&gt;MIDI sequencing unavailable!&lt;/h3&gt;</source>
         <translation>&lt;h3&gt;Sekvenční zpracování MIDI není dostupné!&lt;/h3&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1265"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1264"/>
         <source>&lt;h3&gt;Audio sequencing and synth plugins unavailable!&lt;/h3&gt;</source>
         <translation>&lt;h3&gt;Sekvenční zpracování zvuku a syntetizátorové přídavné moduly nejsou dostupné!&lt;/h3&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1266"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1265"/>
         <source>&lt;p&gt;Rosegarden could not connect to the JACK audio server.  This probably means that Rosegarden was unable to start the audio server due to a problem with your configuration, your system installation, or both.&lt;/p&gt;&lt;p&gt;If you want to be able to play or record audio files or use plugins, we suggest that you exit Rosegarden and use the JACK Control utility (qjackctl) to try different settings until you arrive at a configuration that permits JACK to start.  You may also need to install a realtime kernel, edit your system security configuration, and so on.  Unfortunately, this is an extremely complex subject.&lt;/p&gt;&lt;p&gt; Once you establish a working JACK configuration, Rosegarden will be able to start the audio server automatically in the future.&lt;/p&gt;</source>
         <translation>&lt;p&gt;Rosegardenu se nepodařilo spojit se zvukovým serverem JACK. Pravděpodobně to znamená, že Rosegardenu se nepodařilo spustit zvukový server kvůli problému s vaším nastavením, instalací vašeho systému, anebo kvůli obojímu.&lt;/p&gt;&lt;p&gt;Pokud chcete být schopen přehrávat a nahrávat zvukové soubory nebo používat přídavné moduly, navrhujeme vám ukončit Rosegarden a použít pomůcku pro ovládání serveru JACK (qjackctl) a vyzkoušet různá nastavení, dokud nepřijdete na to, které umožní spuštění serveru JACK. Možná budete rovněž muset nainstalovat jádro pracující ve skutečném čase, upravit nastavení bezpečnosti vašeho systému, atd. Naneštěstí je toto celé velice složitá věc.&lt;/p&gt;&lt;p&gt; Jakmile se vám podaří vytvořit nastavení serveru JACK, které bude pracovat, Rosegarden bude do budoucna schopen spustit zvukový server automaticky.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1026"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1025"/>
         <source>The audio mixing subsystem is failing to keep up.</source>
         <translation>Zvukový směšovací subsystém nestačí svým výkonem držet krok.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1030"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1029"/>
         <source>The audio subsystem is failing to keep up.</source>
         <translation>Zvukový subsystém nestačí svým výkonem držet krok.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1034"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1033"/>
         <source>Unknown sequencer failure mode!</source>
         <translation>Neznámý režim selhání sekvenceru!</translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1248"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1247"/>
         <source>&lt;p&gt;The MIDI subsystem has failed to initialize.&lt;/p&gt;&lt;p&gt;You may continue without the sequencer, but we suggest closing Rosegarden, running &quot;modprobe snd-seq-midi&quot; as root, and starting Rosegarden again.  If you wish to run with no sequencer by design, then use &quot;rosegarden --nosequencer&quot; to avoid seeing this error in the future.&lt;/p&gt;</source>
         <translation>&lt;p&gt;Spuštění subsystému MIDI selhalo.&lt;/p&gt;&lt;p&gt;Můžete pokračovat bez sekvenceru, ale doporučujeme spíše zavřít program Rosegarden, spustit jako uživatel root &quot;modprobe snd-seq-midi&quot; a znovu spustit Rosegarden. Pokud chcete pracovat bez sekvenceru záměrně, použijte možnost spuštění &quot;rosegarden --nosequencer&quot;, abyste se s touto chybou v budoucnosti již nesetkávali.&lt;/p&gt;</translation>
     </message>
@@ -24001,12 +24086,12 @@ Ukončení ostatních běžících programů by mohlo zlepšit výkon programu R
         <translation>&lt;bez názvu&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/segment/TrackButtons.cpp" line="1049"/>
+        <location filename="../../src/gui/editors/segment/TrackButtons.cpp" line="1052"/>
         <source>Mute track</source>
         <translation>Ztlumit stopu</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/segment/TrackButtons.cpp" line="1067"/>
+        <location filename="../../src/gui/editors/segment/TrackButtons.cpp" line="1070"/>
         <source>Record on this track</source>
         <translation>Nahrát do této stopy</translation>
     </message>
@@ -24093,13 +24178,13 @@ Ukončení ostatních běžících programů by mohlo zlepšit výkon programu R
         <translation>Stopa</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="93"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="92"/>
         <source>Track Parameters</source>
         <translation>Parametry stopy</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="141"/>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="798"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="140"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="809"/>
         <source>&lt;untitled&gt;</source>
         <translation>&lt;bez názvu&gt;</translation>
     </message>
@@ -24109,264 +24194,295 @@ Ukončení ostatních běžících programů by mohlo zlepšit výkon programu R
         <translation>Parametry přehrávání</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="164"/>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="206"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="158"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="203"/>
         <source>Device</source>
         <translation>Zařízení</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="176"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="168"/>
         <source>Instrument</source>
         <translation>Nástroj</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="181"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="172"/>
         <source>&lt;qt&gt;&lt;p&gt;Choose the instrument this track will use for playback. (Configure the instrument in &lt;b&gt;Instrument Parameters&lt;/b&gt;).&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Vyberte nástroj, který se bude používat při přehrávání této stopy. (Nástroj lze nastavit v &lt;b&gt;Parametry nástroje&lt;/b&gt;).&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="192"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="196"/>
         <source>Recording filters</source>
         <translation>Záznamové filtry</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="211"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="207"/>
         <source>&lt;qt&gt;&lt;p&gt;This track will only record Audio/MIDI from the selected device, filtering anything else out&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Tato stopa bude nahrávat pouze Audio/MIDI z vybraného zařízení, cokoli jiného se odfiltrovává pryč&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="218"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="213"/>
         <source>Channel</source>
         <translation>Kanál</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="234"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="224"/>
+        <source>Thru Routing</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="230"/>
+        <source>Auto</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="231"/>
+        <source>On</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="232"/>
+        <source>Off</source>
+        <translation type="unfinished">Vypnuto</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="233"/>
+        <source>When Armed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="257"/>
         <source>Staff export options</source>
         <translation>Možnosti vyvedení osnovy</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="253"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="270"/>
         <source>Notation size:</source>
         <translation>Velikost notace:</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="260"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="276"/>
         <source>Normal</source>
         <translation>Normální</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="261"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="277"/>
         <source>Small</source>
         <translation>Malá</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="262"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="278"/>
         <source>Tiny</source>
         <translation>Drobná</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="269"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="285"/>
         <source>Bracket type:</source>
         <translation>Typ závorky:</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="274"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="289"/>
         <source>&lt;qt&gt;&lt;p&gt;Bracket staffs in LilyPond&lt;br&gt;(fragile, use with caution)&lt;/p&gt;&lt;qt&gt;</source>
         <translation>&lt;qt&gt;Osnovy závorek v LilyPondu&lt;br&gt;(křehké, opatrně při použití)&lt;/p&gt;&lt;qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="276"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="291"/>
         <source>-----</source>
         <translation>-----</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="277"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="292"/>
         <source>[----</source>
         <translation>[----</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="278"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="293"/>
         <source>----]</source>
         <translation>----]</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="279"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="294"/>
         <source>[---]</source>
         <translation>[---]</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="280"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="295"/>
         <source>{----</source>
         <translation>{----</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="281"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="296"/>
         <source>----}</source>
         <translation>----}</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="282"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="297"/>
         <source>{[---</source>
         <translation>{[---</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="283"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="298"/>
         <source>---]}</source>
         <translation>---]}</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="292"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="318"/>
         <source>Create segments with</source>
         <translation>Vytvořit části s</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="305"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="325"/>
         <source>Preset</source>
         <translation>Přednastavení</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="309"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="328"/>
         <source>&lt;none&gt;</source>
         <translation>&lt;žádný&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="316"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="334"/>
         <source>Load</source>
         <translation>Načíst</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="324"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="341"/>
         <source>Clef</source>
         <translation>Klíč</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="329"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="345"/>
         <source>&lt;qt&gt;&lt;p&gt;New segments will be created with this clef inserted at the beginning&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Nové části budou vytvořeny s tímto klíčem, který byl vložen na začátku&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="331"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="347"/>
         <source>treble</source>
         <comment>Clef name</comment>
         <translation type="unfinished">houslový</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="332"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="348"/>
         <source>bass</source>
         <comment>Clef name</comment>
         <translation type="unfinished">basový</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="333"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="349"/>
         <source>crotales</source>
         <comment>Clef name</comment>
         <translation type="unfinished">chrastítka</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="334"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="350"/>
         <source>xylophone</source>
         <comment>Clef name</comment>
         <translation type="unfinished">xylofon</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="335"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="351"/>
         <source>guitar</source>
         <comment>Clef name</comment>
         <translation type="unfinished">kytara</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="336"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="352"/>
         <source>contrabass</source>
         <comment>Clef name</comment>
         <translation type="unfinished">kontrabas</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="337"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="353"/>
         <source>celesta</source>
         <comment>Clef name</comment>
         <translation type="unfinished">celesta</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="338"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="354"/>
         <source>old celesta</source>
         <comment>Clef name</comment>
         <translation type="unfinished">stará celesta</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="339"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="355"/>
         <source>french</source>
         <comment>Clef name</comment>
         <translation type="unfinished">francouzský</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="340"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="356"/>
         <source>soprano</source>
         <comment>Clef name</comment>
         <translation type="unfinished">sopránový</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="341"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="357"/>
         <source>mezzosoprano</source>
         <comment>Clef name</comment>
         <translation type="unfinished">mezosopránový</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="342"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="358"/>
         <source>alto</source>
         <comment>Clef name</comment>
         <translation type="unfinished">violový</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="343"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="359"/>
         <source>tenor</source>
         <comment>Clef name</comment>
         <translation type="unfinished">tenorový</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="344"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="360"/>
         <source>baritone</source>
         <comment>Clef name</comment>
         <translation type="unfinished">barytonový</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="345"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="361"/>
         <source>varbaritone</source>
         <comment>Clef name</comment>
         <translation type="unfinished">varbarytonový</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="346"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="362"/>
         <source>subbass</source>
         <comment>Clef name</comment>
         <translation type="unfinished">subbasový</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="385"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="363"/>
+        <source>twobar</source>
+        <comment>Clef name</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="393"/>
         <source>&lt;qt&gt;&lt;p&gt;Choose the lowest suggested playable note, using a staff&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;S pomocí osnovy vyberte nejnižší navrženou hratelnou notu&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="395"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="403"/>
         <source>&lt;qt&gt;&lt;p&gt;Choose the highest suggested playable note, using a staff&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;S pomocí osnovy vyberte nejvyšší navrženou hratelnou notu&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="168"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="161"/>
         <source>&lt;qt&gt;&lt;p&gt;Choose the device this track will use for playback.&lt;/p&gt;&lt;p&gt;Click &lt;img src=&quot;:pixmaps/toolbar/manage-midi-devices.xpm&quot;&gt; to connect this device to a useful output if you do not hear sound&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Vyberte zařízení, které tato stopa bude používat pro přehrávání.&lt;/p&gt;&lt;p&gt;Klepněte na &lt;img src=&quot;:pixmaps/toolbar/manage-midi-devices.xpm&quot;&gt; pro připojení tohoto zařízení k platnému výstupu, pokud neslyšíte zvuk&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="223"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="217"/>
         <source>&lt;qt&gt;&lt;p&gt;This track will only record Audio/MIDI from the selected channel, filtering anything else out&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Do této stopy se budou nahrávat pouze Audio/ MIDI data z vybraného kanálu. Vše ostatní bude odfiltrováno&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="258"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="274"/>
         <source>&lt;qt&gt;&lt;p&gt;Choose normal, \small or \tiny font size for notation elements on this (normal-sized) staff when exporting to LilyPond.&lt;/p&gt;&lt;p&gt;This is as close as we get to enabling you to print parts in cue size&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Vybrat obvyklou, malou nebo drobnou velikost písma pro prvky not v tomto notovém zápisu (o obvyklé velikosti) při vyvedení do LilyPondu.&lt;/p&gt;&lt;p&gt;Toto je nejlepší možná volba pro tisk ve správné velikosti&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="318"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="336"/>
         <source>&lt;qt&gt;&lt;p&gt;Load a segment parameters preset from our comprehensive database of real-world instruments.&lt;/p&gt;&lt;p&gt;When you create new segments, they will have these parameters at the moment of creation.  To use these parameters on existing segments (eg. to convert an existing part in concert pitch for playback on a Bb trumpet) use &lt;b&gt;Segments -&gt; Convert notation for&lt;/b&gt; in the notation editor.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Nahrát přednastavení pro parametr části z naší obsáhlé databáze skutečných nástrojů.&lt;/p&gt;&lt;p&gt;Když vytvoříte nové části, budou jim tyto parametry při vytvoření přiřazeny. Pro použití těchto parametrů na stávajících částech (např. pro převedení stávající části v koncertní výšce tónu pro přehrávání na B trubku) použijte &lt;b&gt;Části -&gt; Převést notový zápis pro&lt;/b&gt; v editoru notového zápisu.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
@@ -24435,116 +24551,116 @@ Ukončení ostatních běžících programů by mohlo zlepšit výkon programu R
         <translation type="obsolete">subbasový</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="354"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="368"/>
         <source>Transpose</source>
         <translation>Převést</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="359"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="372"/>
         <source>&lt;qt&gt;&lt;p&gt;New segments will be created with this transpose property set&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Nové části budou vytvořeny s tímto souborem vlastností převedení&lt;p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="375"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="384"/>
         <source>Pitch</source>
         <translation>Výška tónu</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="379"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="388"/>
         <source>Lowest</source>
         <translation>Nejnižší</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="383"/>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="393"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="391"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="401"/>
         <source>---</source>
         <translation>---</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="389"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="398"/>
         <source>Highest</source>
         <translation>Nejvyšší</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="406"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="410"/>
         <source>Color</source>
         <translation>Barva</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="411"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="414"/>
         <source>&lt;qt&gt;&lt;p&gt;New segments will be created using this color&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Nové části budou vytvořeny s touto barvou&lt;p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="602"/>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="603"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="608"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="609"/>
         <source>Audio</source>
         <translation>Zvuk</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="617"/>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="634"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="626"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="643"/>
         <source>All</source>
         <translation>Vše</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="691"/>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="695"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="702"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="706"/>
         <source> %1</source>
         <translation> %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="802"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="813"/>
         <source>[ Track %1 - %2 ]</source>
         <translation>[ Stopa %1 - %2 ]</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1049"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1083"/>
         <source>Default</source>
         <translation>Výchozí</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1065"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1099"/>
         <source>Add New Color</source>
         <translation>Přidat novou barvu</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1097"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1131"/>
         <source>New Color Name</source>
         <translation>Název nové barvy</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1098"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1132"/>
         <source>Enter new name:</source>
         <translation>Zadejte nový název:</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1100"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1134"/>
         <source>New</source>
         <translation>Nový</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1132"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1166"/>
         <source>Highest playable note</source>
         <translation>Nejvyšší hratelná nota</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1154"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1188"/>
         <source>Lowest playable note</source>
         <translation>Nejnižší hratelná nota</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1213"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1247"/>
         <source>The instrument preset database is corrupt.  Check your installation.</source>
         <translation>Databáze přednastavených nástrojů je porušená.  Zkontrolujte instalaci.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1213"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1247"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1257"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1291"/>
         <source>Segment</source>
         <translation>Část</translation>
     </message>
