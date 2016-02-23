@@ -3982,12 +3982,12 @@
     <message>
         <location line="+34"/>
         <source>Split &amp;at Time...</source>
-        <translation type="unfinished"></translation>
+        <translation>Séparer &amp;au temps...</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Split by &amp;Drum (EXPERIMENTAL!)</source>
-        <translation type="unfinished"></translation>
+        <translation>Séparer par &amp;Percussion (EXPERIMENTAL!)</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -7160,7 +7160,7 @@
     <message>
         <location line="+1"/>
         <source>D. Michael McIntyre</source>
-        <translation type="unfinished"></translation>
+        <translation>D. Michael McIntyre</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -10886,7 +10886,7 @@ Voulez-vous utiliser
     <message>
         <location line="+6"/>
         <source>&lt;p&gt;Copyright 2000-2016 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Build key: %3&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;For more information about Rosegarden, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2 or later&lt;/p&gt;</source>
-        <translation type="unfinished">&lt;p&gt;Copyright 2000-2015 par l&apos;équipe de développement de Rosegarden&lt;/p&gt;&lt;p&gt;Version : %1 &amp;nbsp; Qt version : %2&lt;br&gt;Build key : %3&lt;/p&gt;&lt;p&gt;Rosegarden vous a été apporté par un groupe de volontaires du monde entier.  Pour une liste des contributeurs, voir &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;pour plus d&apos;informations sur Rosegarden, voir &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;License : GNU General Public License Version 2 ou ultérieure&lt;/p&gt; {2000-2016 ?} {1 ?} {2&lt;?} {3&lt;?} {2 ?}</translation>
+        <translation>&lt;p&gt;Copyright 2000-2016 par l&apos;équipe de développement de Rosegarden&lt;/p&gt;&lt;p&gt;Version : %1 &amp;nbsp; Qt version : %2&lt;br&gt;Build key : %3&lt;/p&gt;&lt;p&gt;Rosegarden vous a été apporté par un groupe de volontaires du monde entier.  Pour une liste des contributeurs, voir &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;pour plus d&apos;informations sur Rosegarden, voir &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;License : GNU General Public License Version 2 ou ultérieure&lt;/p&gt; </translation>
     </message>
     <message>
         <source>&lt;p&gt;Copyright 2000-2015 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Build key: %3&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;For more information about Rosegarden, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2 or later&lt;/p&gt;</source>
@@ -12799,7 +12799,7 @@ Veuillez sélectionner ceux que vous souhaitez effacer définitivement du disque
     <message>
         <location line="+2"/>
         <source>Two-bar</source>
-        <translation type="unfinished"></translation>
+        <translation>Percussion</translation>
     </message>
 </context>
 <context>
@@ -12979,55 +12979,55 @@ Veuillez sélectionner ceux que vous souhaitez effacer définitivement du disque
     <message>
         <location line="+1"/>
         <source>&lt;p&gt;If checked, these notes or their translation into the local language will pop up the next time the document is loaded&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;p&gt;Si coché, ces notes ou leur traduction dans la langue locale seront affiché au prochain chargement de ce document&lt;/p&gt;</translation>
     </message>
     <message>
         <location line="+47"/>
         <source>Create another page</source>
-        <translation type="unfinished"></translation>
+        <translation>Créer une autre page</translation>
     </message>
     <message>
         <location line="+2"/>
         <location line="+57"/>
         <source>&lt;h3&gt;Main page&lt;/h3&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;h3&gt;Page principale&lt;/h3&gt;</translation>
     </message>
     <message>
         <location line="-56"/>
         <location line="+60"/>
         <source>Change page</source>
-        <translation type="unfinished"></translation>
+        <translation>Changer de page</translation>
     </message>
     <message>
         <location line="-59"/>
         <source>&lt;p&gt;Display another existing page or create a new one.&lt;/p&gt;&lt;p&gt;If the page name is a language code name (as &quot;es&quot; or &quot;de&quot;) the page should be a translation of the main page and may be displayed at startup if matching the local language.&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;p&gt;Afficher une autre page préexistante ou en créer une nouvelle.&lt;/p&gt;&lt;p&gt;Si le nom de la page est le code d&apos;une langue (comme &quot;es&quot; ou &quot;de&quot;) cette page devrait être une traduction de la page principale et pourra être affichée au démarrage si son nom correspond à la langue locale.&lt;/p&gt;</translation>
     </message>
     <message>
         <location line="+36"/>
         <location line="+40"/>
         <source>Create a new page</source>
-        <translation type="unfinished"></translation>
+        <translation>Créer une nouvelle page</translation>
     </message>
     <message>
         <location line="-40"/>
         <source>Page name:</source>
-        <translation type="unfinished"></translation>
+        <translation>Nom de la page :</translation>
     </message>
     <message>
         <location line="+21"/>
         <source>&lt;h3&gt;Page &quot;%1&quot;&lt;/h3&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;h3&gt;Page &quot;%1&quot;&lt;/h3&gt;</translation>
     </message>
     <message>
         <location line="+24"/>
         <source>Go to the main page</source>
-        <translation type="unfinished"></translation>
+        <translation>Aller à la page principale</translation>
     </message>
     <message>
         <location line="+9"/>
         <source>Go to page &quot;%1&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>Aller à la page &quot;%1&quot;</translation>
     </message>
     <message>
         <location line="+125"/>
@@ -13075,7 +13075,7 @@ Veuillez sélectionner ceux que vous souhaitez effacer définitivement du disque
         <location line="+1"/>
         <source>&lt;qt&gt;Restore to the last text before reload&lt;/qt&gt;</source>
         <comment>Button tool tip</comment>
-        <translation type="unfinished">&lt;qt&gt;Restaure le texte présent avant le dernier clic sur &quot;Recharger&quot;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;Restaurer le texte présent avant le dernier clic sur &quot;Recharger&quot;&lt;/qt&gt;</translation>
     </message>
 </context>
 <context>
@@ -13098,7 +13098,7 @@ Veuillez sélectionner ceux que vous souhaitez effacer définitivement du disque
     <message>
         <location line="+1"/>
         <source>&lt;qt&gt;If checked, these notes will pop up the nexttime the document is loaded&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Si coché, ces notes seront affichées au prochain chargement de ce document&lt;/qt&gt;</translation>
     </message>
     <message>
         <source>&lt;qt&gt;If checked, these notes will pop up the next time the document is loaded&lt;/qt&gt;</source>
@@ -16546,12 +16546,12 @@ un peu d&apos;attente au début de l&apos;exécution à cause du volume de donn�
     <message>
         <location line="+13"/>
         <source>Allow Reset All Controllers (CC 121)</source>
-        <translation type="unfinished"></translation>
+        <translation>Autorise la réinitialisation de tous les Contrôleurs (CC 121)</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Rosegarden can send a MIDI Reset All Controllers event when setting up a channel.</source>
-        <translation type="unfinished"></translation>
+        <translation>Rosegarden peut émettre un événement MIDI de réinitialisation de tous les Contrôleurs quand un canal est initialisé.</translation>
     </message>
     <message>
         <location line="+16"/>
@@ -18100,22 +18100,22 @@ MSB/LSB sont toujours uniques pour tous les périphériques)</translation>
     <message>
         <location line="+27"/>
         <source>Always show note preview</source>
-        <translation type="unfinished"></translation>
+        <translation>Toujours afficher une prévisualisation des notes</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>&lt;p&gt;If checked, a preview of the note or rest is always displayed when inserting notes or rests with the mouse&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;p&gt;Si coché, une prévisualisation de la note ou du silence est toujours affichée au cours de l&apos;insertion avec la souris&lt;/p&gt;</translation>
     </message>
     <message>
         <location line="+11"/>
         <source>Quick mouse entry mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Mode d&apos;édition rapide avec la souris</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>&lt;p&gt;If checked, the following features are usable while inserting notes with the mouse:&lt;ul&gt;&lt;li&gt;The mouse wheel selects the note duration&lt;/li&gt;&lt;li&gt;Shift adds a sharp&lt;/li&gt;&lt;li&gt;Ctrl adds a flat&lt;/li&gt;&lt;li&gt;Shift + Ctrl adds a natural&lt;/li&gt;&lt;li&gt;A mouse mid button click switches between notes and rests&lt;/li&gt;&lt;/ul&gt;&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;p&gt;Si coché, les fonctionnalités suivantes peuvent être utilisées quand des notes sont écrites avec la souris :&lt;ul&gt;&lt;li&gt;La molette de la souris sélectionne la durée de la note&lt;/li&gt;&lt;li&gt;La touche Maj ajoute un diéze&lt;/li&gt;&lt;li&gt;La touche Ctrl ajoute un bémol&lt;/li&gt;&lt;li&gt;La combinaison Maj + Ctrl ajoute un bécarre&lt;/li&gt;&lt;li&gt;Un clic central sur la souris commute entre le mode d&apos;insertion des notes et celui des silences&lt;/li&gt;&lt;/ul&gt;&lt;/p&gt;</translation>
     </message>
     <message>
         <location line="+17"/>
@@ -21442,15 +21442,15 @@ Afin de recevoir de l&apos;assistance pour configurer correctement votre audio e
         <location line="-2473"/>
         <location line="+54"/>
         <source>Split %n Segment(s) by Drum</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Séparer %n segment(s) par percussion</numerusform>
             <numerusform></numerusform>
         </translation>
     </message>
     <message>
         <location line="+6"/>
         <source>No segment was split.</source>
-        <translation type="unfinished"></translation>
+        <translation>Aucun segment n&apos;a été séparé</translation>
     </message>
     <message>
         <location line="+1478"/>
@@ -22237,16 +22237,16 @@ Souhaitez vous le faire tout de suite ?</translation>
     <message numerus="yes">
         <location line="-385"/>
         <source>Copy %n Segment(s) as link(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Copier %n segment(s) en tant que lien(s)</numerusform>
             <numerusform></numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location line="+3"/>
         <source>Copy %n Segment(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Copier %n segment(s)</numerusform>
             <numerusform></numerusform>
         </translation>
     </message>
@@ -22269,17 +22269,17 @@ Souhaitez vous le faire tout de suite ?</translation>
     <message>
         <location filename="../../src/commands/segment/SegmentSplitByDrumCommand.h" line="+47"/>
         <source>Split by &amp;Drum...</source>
-        <translation type="unfinished"></translation>
+        <translation>Séparer par &amp;Percussion...</translation>
     </message>
     <message>
         <location filename="../../src/commands/segment/SegmentSplitByDrumCommand.cpp" line="+44"/>
         <source>Split by Drum</source>
-        <translation type="unfinished"></translation>
+        <translation>Séparer par Percussion...</translation>
     </message>
     <message>
         <location line="+128"/>
         <source>Pitch %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Hauteur %1</translation>
     </message>
 </context>
 <context>
@@ -24213,27 +24213,27 @@ Si d&apos;autres applications sont actuellement en fonctionnement, les arrêter 
     <message>
         <location line="+11"/>
         <source>Thru Routing</source>
-        <translation type="unfinished"></translation>
+        <translation>Traversée MIDI</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>Auto</source>
-        <translation type="unfinished">Automatique</translation>
+        <translation>Auto</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>On</source>
-        <translation type="unfinished"></translation>
+        <translation>Marche</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Off</source>
-        <translation type="unfinished">Arrêté</translation>
+        <translation>Arrêt</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>When Armed</source>
-        <translation type="unfinished"></translation>
+        <translation>Si armé</translation>
     </message>
     <message>
         <location line="+24"/>
@@ -24440,7 +24440,7 @@ Si d&apos;autres applications sont actuellement en fonctionnement, les arrêter 
         <location line="+1"/>
         <source>twobar</source>
         <comment>Clef name</comment>
-        <translation type="unfinished"></translation>
+        <translation>Clef de percussions</translation>
     </message>
     <message>
         <location line="+30"/>
