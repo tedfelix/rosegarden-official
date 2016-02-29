@@ -1968,13 +1968,15 @@ NotationScene::showPreviewNote(NotationStaff *staff, double layoutX,
                                const Note &note,
                                bool grace,
                                Accidental accidental,
+                               bool cautious,
                                QColor color,
                                int velocity,
                                bool play
                               )
 {
     if (staff) {
-        staff->showPreviewNote(layoutX, height, note, grace, accidental, color);
+        staff->showPreviewNote(layoutX, height, note, grace,
+                               accidental, cautious, color);
         if (play) playNote(staff->getSegment(), pitch, velocity);
     }
 }

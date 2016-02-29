@@ -251,7 +251,8 @@ public:
      */
     virtual void showPreviewNote(double layoutX, int heightOnStaff,
                                  const Note &note, bool grace,
-                                 Accidental accidental, QColor color);
+                                 Accidental accidental, bool cautious,
+                                 QColor color);
 
     /**
      * Remove any visible preview note.

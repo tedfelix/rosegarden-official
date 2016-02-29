@@ -731,11 +731,16 @@ void NoteRestInserter::showPreview(bool play)
     
     // Get an iterator of the current event at m_clickTime
     Segment::iterator it = segment.findNearestTime(m_clickTime);
-    
+
+    bool cursorCautious = false;
+    bool lookForNoteOnSameOctave = false;
+
     // If the insertion point is immediately following a key change
     // there is no need to look at accidentals of previous notes
-    if (!(*it)->isa(Key::EventType)) {
-
+    if ((*it)->isa(Key::EventType)) {
+        // Nothing to do
+        // done = true;
+    } else {
         // Else we have to look at the events inside the current bar
 
         // Get an iterator of the first event of the bar
@@ -750,6 +755,31 @@ void NoteRestInserter::showPreview(bool play)
             Event *ev = *rit;
 
             if (ev->isa(Key::EventType)) {
+                if (lookForNoteOnSameOctave) {
+
+                    // If cautionnary and accidental is not one of the key
+                    // then remove cautionnary
+                    if (cursorCautious) {
+
+                        // Select a default accidental related to the current
+                        // key signature
+                        Accidental keyAccidental = 
+                            cursorPitch.getDisplayAccidental(currentKey);
+                        if (keyAccidental == Accidentals::Natural) {
+                            // Don't use natural if not needed
+                            if (currentKey.getAccidentalAtHeight(
+                                    cursorHeight, currentClef) ==
+                                            Accidentals::NoAccidental) {
+                                keyAccidental = Accidentals::NoAccidental;
+                            }
+                        }
+
+                        if (cursorAccidental == keyAccidental) {
+                            cursorCautious = false;
+                        } 
+                    }
+                }
+                
                 // Stop looking for notes as soon as a key signature is found
                 break;
             }
@@ -767,35 +797,139 @@ void NoteRestInserter::showPreview(bool play)
                 Accidental accidental = Accidentals::NoAccidental;
                 (void)ev->get<String>(prop.DISPLAY_ACCIDENTAL, accidental);
 
-                // get its cautionary property
-                bool cautionary = false;
-                if (accidental != Accidentals::NoAccidental) {
-                    (void)ev->get<Bool>
-                        (prop.DISPLAY_ACCIDENTAL_IS_CAUTIONARY, cautionary);
-                }
+                Pitch notePitch(p, accidental);
 
                 // If a note is found at the same height than the cursor
-                Pitch notePitch(p, accidental);
                 if (notePitch.getHeightOnStaff(currentClef, currentKey)
                                                         == cursorHeight) {
-                    if (p == pitch) {
-                        // If they have the same pitch, the accidental is
-                        // already drawn in the bar: no need to duplicate it
-                        cursorAccidental = Accidentals::NoAccidental;
+                    if (!lookForNoteOnSameOctave) {
+                        if (p == pitch) {
+                            // If they have the same pitch, the accidental is
+                            // already drawn in the bar: no need to duplicate it
+                            cursorAccidental = Accidentals::NoAccidental;
+                        } else {
+                            // Else use the accidental the key signature requires
+                            cursorAccidental = cursorPitch.getAccidental(currentKey);
+                            // And if the key requires no accidental, use natural
+                            if (cursorAccidental == Accidentals::NoAccidental) {
+                                cursorAccidental = Accidentals::Natural;
+                            }
+                        }
+                    // Same height on staff but maybe cautionnary accidental
+                    // is not needed
                     } else {
-                        // Else use the accidental the key signature requires
-                        cursorAccidental = cursorPitch.getAccidental(currentKey);
-                        // And if the key requires no accidental, use natural
-                        if (cursorAccidental == Accidentals::NoAccidental) {
-                            cursorAccidental = Accidentals::Natural;
+                        if (cursorCautious) {
+                            if (p != pitch) {
+                                cursorCautious = false;
+                            } else {
+                                if (cursorAccidental == Accidentals::NoAccidental) {
+                                    cursorAccidental = Accidentals::Natural;
+                                }
+                            }
+                        }
+                            
+                        if (!cursorCautious) {
+                            if (p == pitch) {
+                                // If they have the same pitch, the accidental is
+                                // already drawn in the bar: no need to duplicate it
+                                cursorAccidental = Accidentals::NoAccidental;
+                            } else {
+                                // Else use the accidental the key signature requires
+                                cursorAccidental = cursorPitch.getAccidental(currentKey);
+                                // And if the key requires no accidental, use natural
+                                if (cursorAccidental == Accidentals::NoAccidental) {
+                                    cursorAccidental = Accidentals::Natural;
+                                }
+                            }
                         }
                     }
                     // Then stop walking through the bar
                     break;
                 }
+                
+                // If a note is found with the same name in another octave (the
+                // octave is different otherwise we should have break in the
+                // preceding if)
+                if (cursorPitch.getNoteName(currentKey) ==
+                            notePitch.getNoteName(currentKey)) {
+                    
+                    if (lookForNoteOnSameOctave) continue;
+
+                    if (m_octaveType == AccidentalTable::OctavesCautionary) {
+                        
+                        if (cursorPitch.getPitchInOctave() ==
+                                notePitch.getPitchInOctave()) {
+                            // If they have the same pitch in octave, the
+                            // accidental is needed
+                            cursorAccidental =
+                                notePitch.getDisplayAccidental(currentKey);
+                            cursorCautious = false;
+                            // If Natural, force use of NoAccidental
+                            if (cursorAccidental == Accidentals::Natural) {
+                                cursorAccidental = Accidentals::NoAccidental;
+                            }
+                        } else {
+                            // Else use the accidental the key signature
+                            // requires
+                            cursorAccidental = 
+                                cursorPitch.getAccidental(currentKey);
+
+                            // Display it as cautionary if any accidental
+                            // of the key signature is matched
+                            Accidental accidentalForKey =
+                                currentKey.getAccidentalForStep(
+                                    cursorPitch.getNoteInScale(currentKey));
+                            // Always use Natural rather than NoAccidental
+                            // while comparing
+                            if (accidentalForKey == Accidentals::NoAccidental) {
+                                accidentalForKey = Accidentals::Natural;
+                            }
+                            Accidental cursorTestAccidental = cursorAccidental;
+                            if (cursorAccidental == Accidentals::NoAccidental) {
+                                cursorTestAccidental = Accidentals::Natural;
+                            }
+                            if (cursorTestAccidental != accidentalForKey) {
+                                cursorCautious = true;
+                                // If cautionnary, force use of natural
+                                cursorAccidental = cursorTestAccidental;
+                            }
+
+                cursorCautious = true; //!!! preceding code is useless
+                        }
+
+                        // We don't break here because we have to look for
+                        // another note with the same height in the same octave
+                        lookForNoteOnSameOctave = true;
+
+                    } else if (m_octaveType == AccidentalTable::OctavesEquivalent) {
+
+                        if (cursorPitch.getPitchInOctave() ==
+                                notePitch.getPitchInOctave()) {
+                            // If they have the same pitch in octave, the
+                            // accidental is already drawn in the bar: no need
+                            // to duplicate it
+                            cursorAccidental = Accidentals::NoAccidental;
+                        } else {
+                            // Else use the accidental the key signature
+                            // requires
+                            cursorAccidental = cursorPitch.getAccidental(currentKey);
+                            // And if the key requires no accidental, use
+                            // natural
+                            if (cursorAccidental == Accidentals::NoAccidental) {
+                                cursorAccidental = Accidentals::Natural;
+                            }
+                        }
+                        break;
+
+                    } else {
+                        // m_octaveType == AccidentalTable::OctavesIndependent
+                        // Do nothing
+                    }
+                }
             }
         }
     }
+
 
 
     // Select the color of the preview
@@ -813,7 +947,7 @@ void NoteRestInserter::showPreview(bool play)
                                  pitch, m_clickHeight,
                                  Note(m_noteType, m_noteDots),
                                  m_widget->isInGraceMode(),
-                                 cursorAccidental,
+                                 cursorAccidental, cursorCautious,
                                  color, -1, play);
     }
 }

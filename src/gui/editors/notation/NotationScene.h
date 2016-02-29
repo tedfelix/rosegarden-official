@@ -161,6 +161,7 @@ public:
                          const Note &note,
                          bool grace,
                          Accidental accidental = Accidentals::NoAccidental,
+                         bool cautious = false,
                          QColor color = GUIPalette::SelectionColor,
                          int velocity = -1,
                          bool play = true
