@@ -5,9 +5,8 @@ cmake_minimum_required(VERSION 2.8.12)
 project(rosegarden)
 
 # Version
-set(ROSEGARDEN_VERSION "16.02")
-set(ROSEGARDEN_CODENAME "Querida")
-#set(ROSEGARDEN_CODENAME "Rhapsody in Blue")
+set(ROSEGARDEN_VERSION "16.13")
+set(ROSEGARDEN_CODENAME "Rhapsody in Blue")
 #set(ROSEGARDEN_CODENAME "Seagull")
 #set(ROSEGARDEN_CODENAME "Twice in a Blue Moon")
 #set(ROSEGARDEN_CODENAME "Ultimate Pleasure")
@@ -16,6 +15,23 @@ set(ROSEGARDEN_CODENAME "Querida")
 #set(ROSEGARDEN_CODENAME "Xerxes")
 #set(ROSEGARDEN_CODENAME "Yesterday")
 #set(ROSEGARDEN_CODENAME "Zepherine Drouhin")
+#set(ROSEGARDEN_CODENAME "Altissimo")
+#set(ROSEGARDEN_CODENAME "Bouquet d'Or")
+#set(ROSEGARDEN_CODENAME "Cloud Nine")
+#set(ROSEGARDEN_CODENAME "Distant Drums")
+#set(ROSEGARDEN_CODENAME "Enchantress")
+#set(ROSEGARDEN_CODENAME "Flutterbye")
+#set(ROSEGARDEN_CODENAME "Grace Note")
+#set(ROSEGARDEN_CODENAME "Hermosa")
+#set(ROSEGARDEN_CODENAME "Incredible")
+#set(ROSEGARDEN_CODENAME "Joyfulness")
+#set(ROSEGARDEN_CODENAME "Keepsake")
+#set(ROSEGARDEN_CODENAME "Let Freedom Ring")
+#set(ROSEGARDEN_CODENAME "Mountain Music")
+#set(ROSEGARDEN_CODENAME "Night Owl")
+#set(ROSEGARDEN_CODENAME "Orange Flame")
+#set(ROSEGARDEN_CODENAME "Purple Rain")
+#set(ROSEGARDEN_CODENAME "Quietness")
 
 # Make the build type default to "Release"
 if(NOT CMAKE_BUILD_TYPE)
@@ -44,12 +60,14 @@ enable_testing()
 # and this defines the BUILD_TESTING option (and enabled CDash integration)
 include(CTest)
 
-# Check whether we explicitely select the Qt version to be used or autodetect
+# Check whether we explicitely select the Qt version to be used or autodetect.
 if(NOT USE_QT4 AND NOT USE_QT5)
-   # Autodetect, prefering Qt 4
+   # Autodetect, prefering Qt 5
    message(STATUS "Autodetecting Qt version to use")
-   find_package(Qt4 QUIET)
-   if(Qt4_FOUND)
+   find_package(Qt5 QUIET)
+   if(Qt5_FOUND)
+      set(USE_QT5 TRUE)
+   else()
       set(USE_QT4 TRUE)
    endif()
 endif()
@@ -70,7 +88,6 @@ if(USE_QT4)
    set(QT_QTTEST_LIBRARY Qt4::QtTest)
 
 else()
-   set(USE_QT5 TRUE)
 
    # Locate Qt5 on the system.
    find_package(Qt5 "5.1.0" REQUIRED COMPONENTS Core Gui Widgets Xml Network PrintSupport Test)
@@ -157,7 +174,8 @@ else()
     add_feature_info(JACK JACK_FOUND "WARNING: the library for accessing the JACK server (http://jackaudio.org) was not found. Audio will be unavailable!")
 endif()
 
-if(ENABLE_LIRC)
+# Build with LIRC support if LIRC detected, unless DISABLE_LIRC is set
+if(NOT DISABLE_LIRC)
     find_path(LIRCCLIENT_INCLUDE_DIR lirc/lirc_client.h)
     if(NOT LIRCCLIENT_INCLUDE_DIR)
         message(WARNING "Failed to find LIRC header lirc/lirc_client.h")
