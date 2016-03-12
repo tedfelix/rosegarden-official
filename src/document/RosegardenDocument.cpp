@@ -105,6 +105,7 @@
 #include <QTextStream>
 #include <QWidget>
 #include <QPointer>
+#include <QHostInfo>
 
 
 namespace Rosegarden
@@ -158,6 +159,8 @@ RosegardenDocument::~RosegardenDocument()
     //     ControlRulerCanvasRepository::clear();
 
     if (m_clearCommandHistory) CommandHistory::getInstance()->clear(); // before Composition is deleted
+
+    release();
 }
 
 unsigned int
@@ -331,7 +334,7 @@ void RosegardenDocument::slotAutoSave()
 
 }
 
-bool RosegardenDocument::isRegularDotRGFile()
+bool RosegardenDocument::isRegularDotRGFile() const
 {
     return getAbsFilePath().right(3).toLower() == ".rg";
 }
@@ -585,6 +588,8 @@ bool RosegardenDocument::openDocument(const QString& filename,
         
         return false;
     }
+
+    lock();
 
     RG_DEBUG << "RosegardenDocument::openDocument() end - "
              << "m_composition : " << &m_composition
@@ -2979,6 +2984,95 @@ RosegardenDocument::checkAudioPath(Track *track)
             RosegardenMainWindow::self()->slotOpenAudioPathSettings();
         }
     }
+}
+
+QString RosegardenDocument::lockFilename() const
+{
+    QFileInfo fileInfo(m_absFilePath);
+    return fileInfo.absolutePath() + "/.~lock." + fileInfo.fileName() + "#";
+}
+
+bool RosegardenDocument::lock() const
+{
+    // For now, locking only happens if the user enables it in the .conf file.
+    // It's not yet ready for prime-time.
+    QSettings settings;
+    const QString key = QString(GeneralOptionsConfigGroup) + "/document_locking";
+    const bool enabled = settings.value(key, false).toBool();
+    // In case it wasn't in the settings file, write it back out so
+    // I can find it.
+    settings.setValue(key, enabled);
+
+    if (!enabled)
+        return true;
+
+    // Can't lock something that isn't a file on the filesystem.
+    if (!isRegularDotRGFile())
+        return true;
+
+    QFile lockFile(lockFilename());
+
+    if (lockFile.exists()) {
+        // Read in the existing lock file.
+        QString message;
+        lockFile.open(QIODevice::ReadOnly | QIODevice::Text);
+        while (!lockFile.atEnd()) {
+            QByteArray line = lockFile.readLine(128);
+            message += line;
+        }
+
+        // Present a dialog to the user with the info.
+        QMessageBox::warning(
+                RosegardenMainWindow::self(),
+                tr("Rosegarden"),
+                tr("Could not lock file.\n"
+                   "If you are sure this file isn't really locked,\n"
+                   "delete the lock file manually and try again.\n"
+                   "Existing lock details...\n") + message);
+
+        return false;
+    }
+
+    // Write out the user/host/date/time.
+
+    // ??? This will be our first warning that there may be permissions
+    //     problems.  We will likely need to change our current permissions
+    //     checking to use this result.
+    if (!lockFile.open(QIODevice::WriteOnly | QIODevice::Text))
+        return false;
+
+    QTextStream out(&lockFile);
+    out << tr("Lock Filename: ") << lockFilename() << '\n';
+    // Note: Some systems might use "USERNAME".  There's also "LOGNAME".
+    out << tr("User: ") << qgetenv("USER") << '\n';
+    out << tr("Host: ") << QHostInfo::localHostName() << '\n';
+    out << tr("Date/Time: ") << QDateTime::currentDateTime().toString() << '\n';
+
+    return true;
+}
+
+void RosegardenDocument::release() const
+{
+    QSettings settings;
+    const QString key = QString(GeneralOptionsConfigGroup) + "/document_locking";
+    const bool enabled = settings.value(key, false).toBool();
+    // In case it wasn't in the settings file, write it back out so
+    // I can find it.
+    settings.setValue(key, enabled);
+
+    if (!enabled)
+        return;
+
+    if (m_absFilePath == "") {
+        // ??? Is this an issue?  If not, maybe just return?
+        RG_WARNING << "release(): m_absFilePath is empty";
+        return;
+    }
+
+    QFile lockFile(lockFilename());
+
+    // Just remove the lock file, ignoring errors.
+    lockFile.remove();
 }
 
 }

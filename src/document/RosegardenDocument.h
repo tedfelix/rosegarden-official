@@ -231,7 +231,7 @@ public:
      * Returns true if the file is a regular Rosegarden ".rg" file,
      * false if it's an imported file or a new file (not yet saved)
      */
-    bool isRegularDotRGFile();
+    bool isRegularDotRGFile() const;
 
     void setQuickMarker();
     void jumpToQuickMarker();    
@@ -620,6 +620,14 @@ private:
      * original recording.
      */
     void transposeRecordedSegment(Segment *s);
+
+    // File locking functions to prevent multiple users from editing
+    // the same file.
+
+    QString lockFilename() const;
+    /// Returns true if the lock was successful.
+    bool lock() const;
+    void release() const;
 
     //--------------- Data members ---------------------------------
 
