@@ -750,16 +750,16 @@ RosegardenDocument::mergeDocument(RosegardenDocument *doc,
 
 void RosegardenDocument::clearStudio()
 {
+    RG_DEBUG << "clearStudio() begin...";
     RosegardenSequencer::getInstance()->clearStudio();
-    RG_DEBUG << "cleared studio\n";
+    RG_DEBUG << "clearStudio() end...";
 }
 
 void RosegardenDocument::initialiseStudio()
 {
-    Profiler profiler("initialiseStudio", true);
+    //Profiler profiler("initialiseStudio", true);
 
-    RG_DEBUG << "RosegardenDocument::initialiseStudio - "
-             << "clearing down and initialising" << endl;
+    RG_DEBUG << "initialiseStudio() begin...";
 
     clearStudio();
 
@@ -781,17 +781,16 @@ void RosegardenDocument::initialiseStudio()
 
     std::vector<PluginContainer *> pluginContainers;
 
+    // For each buss
     for (unsigned int i = 0; i < (unsigned int)busses.size(); ++i) {
 
         // first one is master
         MappedObjectId mappedId =
-            StudioControl::createStudioObject(
-                MappedObject::AudioBuss);
+            StudioControl::createStudioObject(MappedObject::AudioBuss);
 
-        StudioControl::setStudioObjectProperty
-        (mappedId,
-         MappedAudioBuss::BussId,
-         MappedObjectValue(i));
+        StudioControl::setStudioObjectProperty(mappedId,
+                                               MappedAudioBuss::BussId,
+                                               MappedObjectValue(i));
 
         ids.push_back(mappedId);
         properties.push_back(MappedAudioBuss::Level);
@@ -806,45 +805,39 @@ void RosegardenDocument::initialiseStudio()
         pluginContainers.push_back(busses[i]);
     }
 
+    // For each record in
     for (size_t i = 0; i < recordIns.size(); ++i) {
 
         MappedObjectId mappedId =
-            StudioControl::createStudioObject(
-                MappedObject::AudioInput);
+            StudioControl::createStudioObject(MappedObject::AudioInput);
 
-        StudioControl::setStudioObjectProperty
-        (mappedId,
-         MappedAudioInput::InputNumber,
-         MappedObjectValue(i));
+        StudioControl::setStudioObjectProperty(mappedId,
+                                               MappedAudioInput::InputNumber,
+                                               MappedObjectValue(i));
 
         recordIns[i]->setMappedId(mappedId);
     }
 
     // For each instrument
     for (; it != list.end(); ++it) {
-        if ((*it)->getType() == Instrument::Audio ||
-                (*it)->getType() == Instrument::SoftSynth) {
+        if ((*it)->getType() == Instrument::Audio  ||
+            (*it)->getType() == Instrument::SoftSynth) {
 
             MappedObjectId mappedId =
-                StudioControl::createStudioObject(
-                    MappedObject::AudioFader);
+                StudioControl::createStudioObject(MappedObject::AudioFader);
 
             // Set the object id against the instrument
             //
             (*it)->setMappedId(mappedId);
 
-            /*
-            cout << "SETTING MAPPED OBJECT ID = " << mappedId
-                 << " - on Instrument " << (*it)->getId() << endl;
-                 */
-
+            //RG_DEBUG << "initialiseStudio(): Setting mapped object ID = " << mappedId << " - on Instrument " << (*it)->getId();
 
             // Set the instrument id against this object
             //
-            StudioControl::setStudioObjectProperty
-            (mappedId,
-             MappedObject::Instrument,
-             MappedObjectValue((*it)->getId()));
+            StudioControl::setStudioObjectProperty(
+                    mappedId,
+                    MappedObject::Instrument,
+                    MappedObjectValue((*it)->getId()));
 
             // Set the level
             //
@@ -881,9 +874,8 @@ void RosegardenDocument::initialiseStudio()
             if (outputBuss < (unsigned int)busses.size()) {
                 MappedObjectId bmi = busses[outputBuss]->getMappedId();
 
-                if (bmi > 0) {
+                if (bmi > 0)
                     StudioControl::connectStudioObjects(mappedId, bmi);
-                }
             }
 
             // then the input
@@ -894,22 +886,19 @@ void RosegardenDocument::initialiseStudio()
             MappedObjectId rmi = 0;
 
             if (isBuss) {
-                if (input < int(busses.size())) {
+                if (input < int(busses.size()))
                     rmi = busses[input]->getMappedId();
-                }
             } else {
-                if (input < int(recordIns.size())) {
+                if (input < int(recordIns.size()))
                     rmi = recordIns[input]->getMappedId();
-                }
             }
 
             ids.push_back(mappedId);
             properties.push_back(MappedAudioFader::InputChannel);
             values.push_back(MappedObjectValue(channel));
 
-            if (rmi > 0) {
+            if (rmi > 0)
                 StudioControl::connectStudioObjects(rmi, mappedId);
-            }
 
             pluginContainers.push_back(*it);
 
@@ -930,89 +919,90 @@ void RosegardenDocument::initialiseStudio()
         }
     }
 
-    RG_DEBUG << "RosegardenDocument::initialiseStudio: Have " << pluginContainers.size() << " plugin container(s)" << endl;
+    RG_DEBUG << "initialiseStudio(): Have " << pluginContainers.size() << " plugin container(s)";
 
     // For each plugin container
     for (std::vector<PluginContainer *>::iterator pci =
-             pluginContainers.begin(); pci != pluginContainers.end(); ++pci) {
+                 pluginContainers.begin();
+         pci != pluginContainers.end();
+         ++pci) {
 
         // Initialise all the plugins for this Instrument or Buss
 
         // For each plugin
         for (PluginInstanceIterator pli = (*pci)->beginPlugins();
-                pli != (*pci)->endPlugins(); ++pli) {
+             pli != (*pci)->endPlugins();
+             ++pli) {
 
             AudioPluginInstance *plugin = *pli;
 
-            RG_DEBUG << "Container id " << (*pci)->getId()
+            RG_DEBUG << "initialiseStudio(): Container id " << (*pci)->getId()
                      << ", plugin position " << plugin->getPosition()
                      << ", identifier " << plugin->getIdentifier()
-                     << ", assigned " << plugin->isAssigned()
-                     << endl;
+                     << ", assigned " << plugin->isAssigned();
 
             if (plugin->isAssigned()) {
                 
-                RG_DEBUG << "Found an assigned plugin" << endl;
+                RG_DEBUG << "initialiseStudio(): Found an assigned plugin";
 
                 // Create the plugin slot at the sequencer Studio
                 //
                 MappedObjectId pluginMappedId =
-                    StudioControl::createStudioObject(
-                        MappedObject::PluginSlot);
+                        StudioControl::createStudioObject(
+                                MappedObject::PluginSlot);
 
                 // Create the back linkage from the instance to the
                 // studio id
                 //
                 plugin->setMappedId(pluginMappedId);
 
-                RG_DEBUG << "CREATING PLUGIN ID = "
-                         << pluginMappedId << endl;
+                RG_DEBUG << "initialiseStudio(): Creating plugin ID = " << pluginMappedId;
 
                 // Set the position
-                StudioControl::setStudioObjectProperty
-                (pluginMappedId,
-                 MappedObject::Position,
-                 MappedObjectValue(plugin->getPosition()));
+                StudioControl::setStudioObjectProperty(
+                        pluginMappedId,
+                        MappedObject::Position,
+                        MappedObjectValue(plugin->getPosition()));
 
                 // Set the id of this instrument or buss on the plugin
                 //
-                StudioControl::setStudioObjectProperty
-                (pluginMappedId,
-                 MappedObject::Instrument,
-                 (*pci)->getId());
+                StudioControl::setStudioObjectProperty(
+                        pluginMappedId,
+                        MappedObject::Instrument,
+                        (*pci)->getId());
 
                 // Set the plugin type id - this will set it up ready
                 // for the rest of the settings.  String value, so can't
                 // go in the main property list.
                 //
-                StudioControl::setStudioObjectProperty
-                    (pluginMappedId,
-                     MappedPluginSlot::Identifier,
-                     plugin->getIdentifier().c_str());
+                StudioControl::setStudioObjectProperty(
+                        pluginMappedId,
+                        MappedPluginSlot::Identifier,
+                        plugin->getIdentifier().c_str());
 
-                plugin->setConfigurationValue
-                    (qstrtostr(PluginIdentifier::RESERVED_PROJECT_DIRECTORY_KEY),
-                     qstrtostr(getAudioFileManager().getAudioPath()));
+                plugin->setConfigurationValue(
+                        qstrtostr(PluginIdentifier::RESERVED_PROJECT_DIRECTORY_KEY),
+                        qstrtostr(getAudioFileManager().getAudioPath()));
 
                 // Set opaque string configuration data (e.g. for DSSI plugin)
                 //
                 MappedObjectPropertyList config;
-                for (AudioPluginInstance::ConfigMap::const_iterator
-                         i = plugin->getConfiguration().begin();
-                     i != plugin->getConfiguration().end(); ++i) {
+                for (AudioPluginInstance::ConfigMap::const_iterator i =
+                             plugin->getConfiguration().begin();
+                     i != plugin->getConfiguration().end();
+                     ++i) {
                     config.push_back(strtoqstr(i->first));
                     config.push_back(strtoqstr(i->second));
-                    RG_DEBUG << "plugin configuration: " << i->first << " -> "
-                             << i->second << endl;
+
+                    RG_DEBUG << "initialiseStudio(): plugin configuration: " << i->first << " -> " << i->second;
                 }
 
-                RG_DEBUG << "plugin configuration: " << config.size() << " values" << endl;
+                RG_DEBUG << "initialiseStudio(): plugin configuration: " << config.size() << " values";
 
-                QString error =
-                StudioControl::setStudioObjectPropertyList
-                    (pluginMappedId,
-                     MappedPluginSlot::Configuration,
-                     config);
+                QString error = StudioControl::setStudioObjectPropertyList(
+                        pluginMappedId,
+                        MappedPluginSlot::Configuration,
+                        config);
 
                 if (error != "") {
                     StartupLogo::hideIfStillThere();
@@ -1032,31 +1022,31 @@ void RosegardenDocument::initialiseStudio()
                 PortInstanceIterator portIt;
 
                 for (portIt = plugin->begin();
-                        portIt != plugin->end(); ++portIt) {
-                    StudioControl::setStudioPluginPort
-                    (pluginMappedId,
-                     (*portIt)->number,
-                     (*portIt)->value);
+                     portIt != plugin->end();
+                     ++portIt) {
+                    StudioControl::setStudioPluginPort(pluginMappedId,
+                                                       (*portIt)->number,
+                                                       (*portIt)->value);
                 }
 
                 // Set the program
                 //
                 if (plugin->getProgram() != "") {
-                    StudioControl::setStudioObjectProperty
-                    (pluginMappedId,
-                     MappedPluginSlot::Program,
-                     strtoqstr(plugin->getProgram()));
+                    StudioControl::setStudioObjectProperty(
+                            pluginMappedId,
+                            MappedPluginSlot::Program,
+                            strtoqstr(plugin->getProgram()));
                 }
 
                 // Set the post-program port values
                 //
                 for (portIt = plugin->begin();
-                        portIt != plugin->end(); ++portIt) {
+                     portIt != plugin->end();
+                     ++portIt) {
                     if ((*portIt)->changedSinceProgramChange) {
-                        StudioControl::setStudioPluginPort
-                        (pluginMappedId,
-                         (*portIt)->number,
-                         (*portIt)->value);
+                        StudioControl::setStudioPluginPort(pluginMappedId,
+                                                           (*portIt)->number,
+                                                           (*portIt)->value);
                     }
                 }
             }
@@ -1075,6 +1065,8 @@ void RosegardenDocument::initialiseStudio()
 
     settings.endGroup();
 
+    // Send System Audio Ports Event
+
     MidiByte ports = 0;
     if (faderOuts) {
         ports |= MappedEvent::FaderOuts;
@@ -1082,17 +1074,15 @@ void RosegardenDocument::initialiseStudio()
     if (submasterOuts) {
         ports |= MappedEvent::SubmasterOuts;
     }
-    MappedEvent mEports
-    (MidiInstrumentBase,
-     MappedEvent::SystemAudioPorts,
-     ports);
-
+    MappedEvent mEports(
+            MidiInstrumentBase, MappedEvent::SystemAudioPorts, ports);
     StudioControl::sendMappedEvent(mEports);
 
-    MappedEvent mEff
-    (MidiInstrumentBase,
-     MappedEvent::SystemAudioFileFormat,
-     audioFileFormat);
+    // Send System Audio File Format Event
+
+    MappedEvent mEff(MidiInstrumentBase,
+                     MappedEvent::SystemAudioFileFormat,
+                     audioFileFormat);
     StudioControl::sendMappedEvent(mEff);
 }
 
