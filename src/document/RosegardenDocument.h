@@ -413,11 +413,6 @@ public:
     void clearAllPlugins();
 
     /**
-     * Clear the studio at the sequencer
-     */
-    void clearStudio();
-
-    /**
      * Initialise the Studio with a new document's settings
      */
     void initialiseStudio();
