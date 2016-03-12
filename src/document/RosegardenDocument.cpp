@@ -812,7 +812,6 @@ void RosegardenDocument::initialiseStudio()
     }
 
     InstrumentList list = m_studio.getAllInstruments();
-    ;
 
     // For each instrument
     for (InstrumentList::iterator it = list.begin();
@@ -932,113 +931,102 @@ void RosegardenDocument::initialiseStudio()
                      << ", identifier " << plugin.getIdentifier()
                      << ", assigned " << plugin.isAssigned();
 
-            if (plugin.isAssigned()) {
-                
-                RG_DEBUG << "initialiseStudio(): Found an assigned plugin";
+            if (!plugin.isAssigned())
+                continue;
 
-                // Create the plugin slot at the sequencer Studio
-                //
-                MappedObjectId pluginMappedId =
-                        StudioControl::createStudioObject(
-                                MappedObject::PluginSlot);
+            RG_DEBUG << "initialiseStudio(): Found an assigned plugin";
 
-                // Create the back linkage from the instance to the
-                // studio id
-                //
-                plugin.setMappedId(pluginMappedId);
+            // Plugin Slot
+            MappedObjectId pluginMappedId =
+                    StudioControl::createStudioObject(
+                            MappedObject::PluginSlot);
 
-                RG_DEBUG << "initialiseStudio(): Creating plugin ID = " << pluginMappedId;
+            plugin.setMappedId(pluginMappedId);
 
-                // Set the position
+            RG_DEBUG << "initialiseStudio(): Creating plugin ID = " << pluginMappedId;
+
+            // Position
+            StudioControl::setStudioObjectProperty(
+                    pluginMappedId,
+                    MappedObject::Position,
+                    MappedObjectValue(plugin.getPosition()));
+
+            // Instrument
+            StudioControl::setStudioObjectProperty(
+                    pluginMappedId,
+                    MappedObject::Instrument,
+                    pluginContainer.getId());
+
+            // Identifier
+            StudioControl::setStudioObjectProperty(
+                    pluginMappedId,
+                    MappedPluginSlot::Identifier,
+                    plugin.getIdentifier().c_str());
+
+            plugin.setConfigurationValue(
+                    qstrtostr(PluginIdentifier::RESERVED_PROJECT_DIRECTORY_KEY),
+                    qstrtostr(getAudioFileManager().getAudioPath()));
+
+            // Set opaque string configuration data (e.g. for DSSI plugin)
+
+            MappedObjectPropertyList config;
+
+            for (AudioPluginInstance::ConfigMap::const_iterator i =
+                         plugin.getConfiguration().begin();
+                 i != plugin.getConfiguration().end();
+                 ++i) {
+                config.push_back(strtoqstr(i->first));
+                config.push_back(strtoqstr(i->second));
+
+                RG_DEBUG << "initialiseStudio(): plugin configuration: " << i->first << " -> " << i->second;
+            }
+
+            RG_DEBUG << "initialiseStudio(): plugin configuration: " << config.size() << " values";
+
+            QString error = StudioControl::setStudioObjectPropertyList(
+                    pluginMappedId,
+                    MappedPluginSlot::Configuration,
+                    config);
+
+            if (error != "") {
+                StartupLogo::hideIfStillThere();
+                CurrentProgressDialog::freeze();
+                QMessageBox::warning(dynamic_cast<QWidget *>(parent()), tr("Rosegarden"), error);
+                CurrentProgressDialog::thaw();
+            }
+
+            // Bypassed
+            ids.push_back(pluginMappedId);
+            properties.push_back(MappedPluginSlot::Bypassed);
+            values.push_back(MappedObjectValue(plugin.isBypassed()));
+
+            // Port Values
+
+            for (PortInstanceIterator portIt = plugin.begin();
+                 portIt != plugin.end();
+                 ++portIt) {
+                StudioControl::setStudioPluginPort(pluginMappedId,
+                                                   (*portIt)->number,
+                                                   (*portIt)->value);
+            }
+
+            // Program
+            if (plugin.getProgram() != "") {
                 StudioControl::setStudioObjectProperty(
                         pluginMappedId,
-                        MappedObject::Position,
-                        MappedObjectValue(plugin.getPosition()));
+                        MappedPluginSlot::Program,
+                        strtoqstr(plugin.getProgram()));
+            }
 
-                // Set the id of this instrument or buss on the plugin
-                //
-                StudioControl::setStudioObjectProperty(
-                        pluginMappedId,
-                        MappedObject::Instrument,
-                        pluginContainer.getId());
-
-                // Set the plugin type id - this will set it up ready
-                // for the rest of the settings.  String value, so can't
-                // go in the main property list.
-                //
-                StudioControl::setStudioObjectProperty(
-                        pluginMappedId,
-                        MappedPluginSlot::Identifier,
-                        plugin.getIdentifier().c_str());
-
-                plugin.setConfigurationValue(
-                        qstrtostr(PluginIdentifier::RESERVED_PROJECT_DIRECTORY_KEY),
-                        qstrtostr(getAudioFileManager().getAudioPath()));
-
-                // Set opaque string configuration data (e.g. for DSSI plugin)
-                //
-                MappedObjectPropertyList config;
-                for (AudioPluginInstance::ConfigMap::const_iterator i =
-                             plugin.getConfiguration().begin();
-                     i != plugin.getConfiguration().end();
-                     ++i) {
-                    config.push_back(strtoqstr(i->first));
-                    config.push_back(strtoqstr(i->second));
-
-                    RG_DEBUG << "initialiseStudio(): plugin configuration: " << i->first << " -> " << i->second;
-                }
-
-                RG_DEBUG << "initialiseStudio(): plugin configuration: " << config.size() << " values";
-
-                QString error = StudioControl::setStudioObjectPropertyList(
-                        pluginMappedId,
-                        MappedPluginSlot::Configuration,
-                        config);
-
-                if (error != "") {
-                    StartupLogo::hideIfStillThere();
-                    CurrentProgressDialog::freeze();
-                    QMessageBox::warning(dynamic_cast<QWidget *>(parent()), tr("Rosegarden"), error);
-                    CurrentProgressDialog::thaw();
-                }
-
-                // Set the bypass
-                //
-                ids.push_back(pluginMappedId);
-                properties.push_back(MappedPluginSlot::Bypassed);
-                values.push_back(MappedObjectValue(plugin.isBypassed()));
-
-                // Set all the port values
-                //
-                PortInstanceIterator portIt;
-
-                for (portIt = plugin.begin();
-                     portIt != plugin.end();
-                     ++portIt) {
+            // Set the post-program port values
+            // ??? Why?
+            for (PortInstanceIterator portIt = plugin.begin();
+                 portIt != plugin.end();
+                 ++portIt) {
+                if ((*portIt)->changedSinceProgramChange) {
                     StudioControl::setStudioPluginPort(pluginMappedId,
                                                        (*portIt)->number,
                                                        (*portIt)->value);
-                }
-
-                // Set the program
-                //
-                if (plugin.getProgram() != "") {
-                    StudioControl::setStudioObjectProperty(
-                            pluginMappedId,
-                            MappedPluginSlot::Program,
-                            strtoqstr(plugin.getProgram()));
-                }
-
-                // Set the post-program port values
-                //
-                for (portIt = plugin.begin();
-                     portIt != plugin.end();
-                     ++portIt) {
-                    if ((*portIt)->changedSinceProgramChange) {
-                        StudioControl::setStudioPluginPort(pluginMappedId,
-                                                           (*portIt)->number,
-                                                           (*portIt)->value);
-                    }
                 }
             }
         }
@@ -1048,10 +1036,10 @@ void RosegardenDocument::initialiseStudio()
     StudioControl::setStudioObjectProperties(ids, properties, values);
 
     QSettings settings;
-    settings.beginGroup( SequencerOptionsConfigGroup );
+    settings.beginGroup(SequencerOptionsConfigGroup);
 
-    bool faderOuts = qStrToBool( settings.value("audiofaderouts", "false" ) ) ;
-    bool submasterOuts = qStrToBool( settings.value("audiosubmasterouts", "false" ) ) ;
+    bool faderOuts = qStrToBool( settings.value("audiofaderouts", "false") ) ;
+    bool submasterOuts = qStrToBool( settings.value("audiosubmasterouts", "false") ) ;
     unsigned int audioFileFormat = settings.value("audiorecordfileformat", 1).toUInt() ;
 
     settings.endGroup();
@@ -1059,12 +1047,13 @@ void RosegardenDocument::initialiseStudio()
     // Send System Audio Ports Event
 
     MidiByte ports = 0;
-    if (faderOuts) {
+
+    if (faderOuts)
         ports |= MappedEvent::FaderOuts;
-    }
-    if (submasterOuts) {
+
+    if (submasterOuts)
         ports |= MappedEvent::SubmasterOuts;
-    }
+
     MappedEvent mEports(
             MidiInstrumentBase, MappedEvent::SystemAudioPorts, ports);
     StudioControl::sendMappedEvent(mEports);
