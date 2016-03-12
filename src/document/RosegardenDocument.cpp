@@ -620,9 +620,11 @@ bool RosegardenDocument::openDocument(const QString& filename,
 
         RG_DEBUG << "RosegardenDocument::openDocument: Sequencer is running, initialising studio" << endl;
 
-        // Initialise the whole studio - faders, plugins etc.
-        //
-        initialiseStudio();
+        // If we're loading the entire document
+        if (permanent) {
+            // Initialise the whole studio - faders, plugins etc.
+            initialiseStudio();
+        }
 
     } else {
         RG_DEBUG << "RosegardenDocument::openDocument: Sequencer is not running" << endl;
