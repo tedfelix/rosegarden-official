@@ -933,8 +933,8 @@ CompositionModelImpl::makeNotationPreview(
         if (width < 1)
             width = 1;
 
-        const int y0 = 0;
-        const int y1 = m_grid.getYSnap();
+        const int y0 = 1;
+        const int y1 = m_grid.getYSnap() - 5;
         int y = lround(y1 + ((y0 - y1) * (pitch - 16)) / 96.0);
 
         int height = 1;
