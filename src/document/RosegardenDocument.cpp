@@ -505,14 +505,16 @@ void RosegardenDocument::performAutoload()
         return ;
     }
 
-    bool permanent = true, squelch = true;
-    openDocument(autoloadFile, permanent, squelch);
+    bool permanent = true, squelchProgressDialog = true;
+    // Don't lock the autoload.rg file.
+    bool enableLock = false;
+    openDocument(autoloadFile, permanent, squelchProgressDialog, enableLock);
 }
 
 bool RosegardenDocument::openDocument(const QString& filename,
-                                    bool permanent,
-                                    bool squelch,
-                                    const char* /*format*/ /*=0*/)
+                                      bool permanent,
+                                      bool squelchProgressDialog,
+                                      bool enableLock)
 {
     RG_DEBUG << "RosegardenDocument::openDocument(" << filename << ")" << endl;
 
@@ -536,7 +538,7 @@ bool RosegardenDocument::openDocument(const QString& filename,
     //after user has closed it, by using a QPointer
     QPointer<ProgressDialog> progressDlg = 0;
    
-    if (!squelch) {
+    if (!squelchProgressDialog) {
         progressDlg = new ProgressDialog(tr("Reading file..."),
                                          (QWidget*)parent());
 
@@ -589,7 +591,21 @@ bool RosegardenDocument::openDocument(const QString& filename,
         return false;
     }
 
-    lock();
+    // ??? Should we really lock the file AFTER we've opened it?  Seems
+    //     like BEFORE would make more sense.
+
+    if (permanent  &&  enableLock) {
+        if (!lock()) {
+            if (progressDlg) {
+                CurrentProgressDialog::thaw();
+                progressDlg->close();
+            }
+            // Avoid deleting the lock file by clearing out this document.
+            newDocument();
+
+            return false;
+        }
+    }
 
     RG_DEBUG << "RosegardenDocument::openDocument() end - "
              << "m_composition : " << &m_composition
@@ -3025,21 +3041,21 @@ bool RosegardenDocument::lock() const
         QMessageBox::warning(
                 RosegardenMainWindow::self(),
                 tr("Rosegarden"),
-                tr("Could not lock file.\n"
+                tr("Could not lock file.\n\n"
                    "If you are sure this file isn't really locked,\n"
-                   "delete the lock file manually and try again.\n"
-                   "Existing lock details...\n") + message);
+                   "delete the lock file manually and try again.\n\n") +
+                   message);
 
         return false;
     }
 
     // Write out the user/host/date/time.
 
-    // ??? This will be our first warning that there may be permissions
-    //     problems.  We will likely need to change our current permissions
-    //     checking to use this result.
+    // If we can't create the lock file, the chances are good that we
+    // do not have permission.  Don't worry about it.  Pretend the lock
+    // was successful.  After all, we won't be able to save.
     if (!lockFile.open(QIODevice::WriteOnly | QIODevice::Text))
-        return false;
+        return true;
 
     QTextStream out(&lockFile);
     out << tr("Lock Filename: ") << lockFilename() << '\n';

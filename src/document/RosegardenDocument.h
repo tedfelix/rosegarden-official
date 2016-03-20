@@ -177,8 +177,8 @@ public:
      */
     bool openDocument(const QString &filename,
                       bool permanent = true,
-                      bool squelch = false,
-                      const char *format = 0);
+                      bool squelchProgressDialog = false,
+                      bool enableLock = true);
 
     /**
      * merge another document into this one
