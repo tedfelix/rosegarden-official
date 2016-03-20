@@ -1800,6 +1800,7 @@ RosegardenMainWindow::saveGlobalProperties()
     }
 }
 
+#if 0
 void
 RosegardenMainWindow::readGlobalProperties()
 {
@@ -1833,6 +1834,7 @@ RosegardenMainWindow::readGlobalProperties()
     QString caption = qApp->applicationName();
     setWindowTitle(tr("%1 - %2").arg(m_doc->getTitle()).arg(caption));
 }
+#endif
 
 void
 RosegardenMainWindow::showEvent(QShowEvent*)

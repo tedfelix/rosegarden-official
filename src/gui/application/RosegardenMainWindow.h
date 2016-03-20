@@ -478,7 +478,7 @@ protected:
      *
      * @see KTMainWindow#readProperties
      */
-    virtual void readGlobalProperties();
+    //virtual void readGlobalProperties();
 ///////////////////////////////////////////////////////////////////////
 
     QString getAudioFilePath();
