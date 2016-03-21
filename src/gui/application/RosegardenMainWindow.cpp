@@ -1534,11 +1534,13 @@ RosegardenMainWindow::createDocument(QString filePath, ImportType importType)
 
     if (!info.exists()) {
         // can happen with command-line arg, so...
+        StartupLogo::hideIfStillThere();
         QMessageBox::warning(dynamic_cast<QWidget*>(this), filePath, tr("File \"%1\" does not exist").arg(filePath), QMessageBox::Ok, QMessageBox::Ok);
         return 0;
     }
     
     if (info.isDir()) {
+        StartupLogo::hideIfStillThere();
         QMessageBox::warning(dynamic_cast<QWidget*>(this), filePath, tr("File \"%1\" is actually a directory").arg(filePath), QMessageBox::Ok, QMessageBox::Ok);
         return 0;
     }
@@ -1549,6 +1551,7 @@ RosegardenMainWindow::createDocument(QString filePath, ImportType importType)
         QString errStr =
             tr("You do not have read permission for \"%1\"").arg(filePath);
 
+        StartupLogo::hideIfStillThere();
         QMessageBox::warning(this, tr("Rosegarden"), errStr, QMessageBox::Ok, QMessageBox::Ok);
         return 0;
     }
@@ -1574,6 +1577,8 @@ RosegardenMainWindow::createDocument(QString filePath, ImportType importType)
                 importType = ImportMIDI;
         else if (testFileType.endsWith(".rg"))
             importType = ImportRG4;
+        else if (testFileType.endsWith(".rgd"))
+            importType = ImportRGD;
         else if (testFileType.endsWith(".rose"))
             importType = ImportRG21;
         /*
@@ -1599,6 +1604,11 @@ RosegardenMainWindow::createDocument(QString filePath, ImportType importType)
  */
     case ImportMusicXML:
         doc = createDocumentFromMusicXMLFile(filePath);
+        break;
+    case ImportRGD:
+        StartupLogo::hideIfStillThere();
+        QMessageBox::warning(this, filePath, tr("File \"%1\" is a Rosegarden Device, and must be imported using the MIDI device manager.").arg(filePath), QMessageBox::Ok, QMessageBox::Ok);
+        return 0;
         break;
     case ImportHydrogen:
     case ImportRG4:
