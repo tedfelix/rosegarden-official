@@ -3038,6 +3038,7 @@ bool RosegardenDocument::lock() const
         }
 
         // Present a dialog to the user with the info.
+        StartupLogo::hideIfStillThere();
         QMessageBox::warning(
                 RosegardenMainWindow::self(),
                 tr("Rosegarden"),
