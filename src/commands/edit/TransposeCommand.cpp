@@ -49,6 +49,11 @@ TransposeCommand::modifySegment()
                 timeT noteTime = (*i)->getAbsoluteTime();
                 Key key = m_selection->getSegment().getKeyAtTime(noteTime);
                 Pitch newPitch = oldPitch.transpose(key, m_semitones, m_steps);
+
+                // fix #1415: constrain results to valid MIDI pitches
+                if (newPitch.getPerformancePitch() > 127) newPitch = Pitch(127);
+                if (newPitch.getPerformancePitch() < 0) newPitch = Pitch(0);
+
                 Event * newNoteEvent = newPitch.getAsNoteEvent(0, 0);
                 Accidental newAccidental;
                 newNoteEvent->get<String>(BaseProperties::ACCIDENTAL, newAccidental);
@@ -59,6 +64,11 @@ TransposeCommand::modifySegment()
                 try {
                     long pitch = (*i)->get<Int>(PITCH);
                     pitch += m_semitones;
+
+                    // fix #1415: constrain results to valid MIDI pitches
+                    if (pitch > 127) pitch = 127;
+                    if (pitch < 0) pitch = 0;
+
                     (*i)->set<Int>(PITCH, pitch);
                     if ((m_semitones % 12) != 0) {
                         (*i)->unset(ACCIDENTAL);
