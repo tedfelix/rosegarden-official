@@ -50,6 +50,9 @@ EditViewBase::EditViewBase(RosegardenDocument *doc,
     m_shortcuts(0)
 {
     setAttribute(Qt::WA_DeleteOnClose);
+    // Address #1508:  Show the edit windows without activating them, so either
+    // they or the main window can continue to have focus in Qt5.
+    setAttribute(Qt::WA_ShowWithoutActivating);
 
     m_doc->attachEditView(this);
 
