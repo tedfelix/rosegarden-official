@@ -920,6 +920,11 @@ CompositionModelImpl::makeNotationPreview(
                 m_grid.getRulerScale()->getWidthForDuration(
                         eventStart, eventEnd - eventStart));
 
+        // reduce width by 1 pixel to try to keep the preview inside the segment
+        // without adding another set of calculations to bottleneck code (see
+        // #1513)
+        --width;
+
         // If the event starts on or before the segment border
         if (x <= segStartX) {
             // Move the left edge to the right by 1
