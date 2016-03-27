@@ -24,6 +24,12 @@ using std::endl;
 
 //#define DEBUG_RIFF
 
+// Constants related to RIFF/WAV files
+//
+static const char AUDIO_RIFF_ID[] = "RIFF";
+static const char AUDIO_WAVE_ID[] = "WAVE";
+static const char AUDIO_FORMAT_ID[] = "fmt ";    // Always four bytes
+static const char AUDIO_BWF_ID[] = "bext";       // BWF chunk id
 
 namespace Rosegarden
 {

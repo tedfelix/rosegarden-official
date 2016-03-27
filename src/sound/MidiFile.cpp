@@ -41,6 +41,9 @@
 #include <string>
 #include <sstream>
 
+static const char MIDI_FILE_HEADER[] = "MThd";
+static const char MIDI_TRACK_HEADER[] = "MTrk";
+
 namespace Rosegarden
 {
 
@@ -1355,7 +1358,7 @@ void
 MidiFile::writeHeader(std::ofstream *midiFile)
 {
     // Our identifying Header string
-    *midiFile << MIDI_FILE_HEADER.c_str();
+    *midiFile << MIDI_FILE_HEADER;
 
     // Write number of Bytes to follow
     *midiFile << static_cast<MidiByte>(0x00);
@@ -1472,7 +1475,7 @@ MidiFile::writeTrack(std::ofstream *midiFile, TrackId trackNumber)
 
     // Now we write the track to the file.
 
-    *midiFile << MIDI_TRACK_HEADER.c_str();
+    *midiFile << MIDI_TRACK_HEADER;
     writeLong(midiFile, trackBuffer.length());
     *midiFile << trackBuffer;
 }

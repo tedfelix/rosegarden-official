@@ -39,6 +39,11 @@ using std::endl;
 #define DEBUG_PEAKFILE_BRIEF 1
 #endif
 
+static const float SAMPLE_MAX_8BIT  = (float)(0xff);
+static const float SAMPLE_MAX_16BIT = (float)(0xffff/2);
+static const float SAMPLE_MAX_24BIT = (float)(0xffffff/2);
+static const char AUDIO_BWF_PEAK_ID[] = "levl";  // BWF peak chunk id
+
 namespace Rosegarden
 {
 
