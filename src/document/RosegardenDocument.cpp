@@ -550,10 +550,28 @@ bool RosegardenDocument::openDocument(const QString& filename,
 
     setAbsFilePath(fileInfo.absoluteFilePath());
 
+    // Lock.
+
+    if (permanent  &&  enableLock) {
+        if (!lock()) {
+            if (progressDlg) {
+                CurrentProgressDialog::thaw();
+                progressDlg->close();
+            }
+            // Avoid deleting the lock file by clearing out this document.
+            newDocument();
+
+            return false;
+        }
+    }
+
+    // Load.
+
     QString errMsg;
     QString fileContents;
     bool cancelled = false;
 
+    // Unzip
     bool okay = GzipFile::readFromFile(filename, fileContents);
     
     if (progressDlg)
@@ -561,6 +579,7 @@ bool RosegardenDocument::openDocument(const QString& filename,
     
     if (!okay) errMsg = tr("Could not open Rosegarden file");
     else {
+        // Parse the XML
         okay = xmlParse(fileContents,
                         errMsg,
                         progressDlg,
@@ -589,22 +608,6 @@ bool RosegardenDocument::openDocument(const QString& filename,
         newDocument();
         
         return false;
-    }
-
-    // ??? Should we really lock the file AFTER we've opened it?  Seems
-    //     like BEFORE would make more sense.
-
-    if (permanent  &&  enableLock) {
-        if (!lock()) {
-            if (progressDlg) {
-                CurrentProgressDialog::thaw();
-                progressDlg->close();
-            }
-            // Avoid deleting the lock file by clearing out this document.
-            newDocument();
-
-            return false;
-        }
     }
 
     RG_DEBUG << "RosegardenDocument::openDocument() end - "
