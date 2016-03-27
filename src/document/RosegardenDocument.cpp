@@ -160,7 +160,7 @@ RosegardenDocument::~RosegardenDocument()
 
     if (m_clearCommandHistory) CommandHistory::getInstance()->clear(); // before Composition is deleted
 
-    release();
+    release(m_absFilePath);
 }
 
 unsigned int
@@ -1629,16 +1629,36 @@ bool RosegardenDocument::saveAs(const QString &newName, QString &errMsg)
     if (newNameInfo.absoluteFilePath() == m_absFilePath)
         return saveDocument(newName, errMsg);
 
-    // Release the old name.
-    release();
+    QString oldTitle = m_title;
+    QString oldAbsFilePath = m_absFilePath;
 
     m_title = newNameInfo.fileName();
     m_absFilePath = newNameInfo.absoluteFilePath();
 
     // Lock the new name.
-    lock();
+    bool success = lock();
 
-    return saveDocument(newName, errMsg);
+    if (success)
+        success = saveDocument(newName, errMsg);
+
+    // If the lock/save fails,
+    if (!success) {
+        // Unlock the new name.
+        release(m_absFilePath);
+
+        // Put back the old title/name.
+        m_title = oldTitle;
+        m_absFilePath = oldAbsFilePath;
+
+        // Fail.
+        return false;
+    }
+
+    // Release the old lock
+    release(oldAbsFilePath);
+
+    // Success.
+    return true;
 }
 
 bool RosegardenDocument::isSequencerRunning()
@@ -3025,9 +3045,9 @@ RosegardenDocument::checkAudioPath(Track *track)
     }
 }
 
-QString RosegardenDocument::lockFilename() const
+QString RosegardenDocument::lockFilename(const QString &absFilePath) const
 {
-    QFileInfo fileInfo(m_absFilePath);
+    QFileInfo fileInfo(absFilePath);
     return fileInfo.absolutePath() + "/.~lock." + fileInfo.fileName() + "#";
 }
 
@@ -3049,7 +3069,7 @@ bool RosegardenDocument::lock() const
     if (!isRegularDotRGFile())
         return true;
 
-    QFile lockFile(lockFilename());
+    QFile lockFile(lockFilename(m_absFilePath));
 
     if (lockFile.exists()) {
         // Read in the existing lock file.
@@ -3082,7 +3102,7 @@ bool RosegardenDocument::lock() const
         return true;
 
     QTextStream out(&lockFile);
-    out << tr("Lock Filename: ") << lockFilename() << '\n';
+    out << tr("Lock Filename: ") << lockFilename(m_absFilePath) << '\n';
     // Note: Some systems might use "USERNAME".  There's also "LOGNAME".
     out << tr("User: ") << qgetenv("USER") << '\n';
     out << tr("Host: ") << QHostInfo::localHostName() << '\n';
@@ -3091,7 +3111,7 @@ bool RosegardenDocument::lock() const
     return true;
 }
 
-void RosegardenDocument::release() const
+void RosegardenDocument::release(const QString &absFilePath) const
 {
     QSettings settings;
     const QString key = QString(GeneralOptionsConfigGroup) + "/document_locking";
@@ -3103,13 +3123,13 @@ void RosegardenDocument::release() const
     if (!enabled)
         return;
 
-    if (m_absFilePath == "") {
+    if (absFilePath == "") {
         // ??? Is this an issue?  If not, maybe just return?
-        RG_WARNING << "release(): m_absFilePath is empty";
+        RG_WARNING << "release(): absFilePath is empty";
         return;
     }
 
-    QFile lockFile(lockFilename());
+    QFile lockFile(lockFilename(absFilePath));
 
     // Just remove the lock file, ignoring errors.
     lockFile.remove();

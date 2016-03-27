@@ -627,10 +627,10 @@ private:
     // File locking functions to prevent multiple users from editing
     // the same file.
 
-    QString lockFilename() const;
+    QString lockFilename(const QString &absFilePath) const;
     /// Returns true if the lock was successful.
     bool lock() const;
-    void release() const;
+    void release(const QString &absFilePath) const;
 
     //--------------- Data members ---------------------------------
 
