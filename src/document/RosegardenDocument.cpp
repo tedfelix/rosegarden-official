@@ -1618,6 +1618,26 @@ void RosegardenDocument::saveSegment(QTextStream& outStream, Segment *segment,
 
 }
 
+bool RosegardenDocument::saveAs(const QString &newName, QString &errMsg)
+{
+    QFileInfo newNameInfo(newName);
+
+    // If we're saving under the same name, just do a normal save.
+    if (newNameInfo.absoluteFilePath() == m_absFilePath)
+        return saveDocument(newName, errMsg);
+
+    // Release the old name.
+    release();
+
+    m_title = newNameInfo.fileName();
+    m_absFilePath = newNameInfo.absoluteFilePath();
+
+    // Lock the new name.
+    lock();
+
+    return saveDocument(newName, errMsg);
+}
+
 bool RosegardenDocument::isSequencerRunning()
 {
     return m_useSequencer;

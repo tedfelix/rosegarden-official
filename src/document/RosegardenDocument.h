@@ -193,6 +193,9 @@ public:
     bool saveDocument(const QString &filename, QString& errMsg,
                       bool autosave = false);
 
+    /// Save under a new name.
+    bool saveAs(const QString &newName, QString &errMsg);
+
     /**
      * exports all or part of the studio to a file.  If devices is
      * empty, exports all devices.

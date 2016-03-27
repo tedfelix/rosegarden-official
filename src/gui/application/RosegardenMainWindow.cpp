@@ -2277,14 +2277,13 @@ RosegardenMainWindow::slotFileSaveAs(bool asTemplate)
         return false;
 
     SetWaitCursor waitCursor;
-    QFileInfo saveAsInfo(newName);
-    m_doc->setTitle(saveAsInfo.fileName());
-    m_doc->setAbsFilePath(saveAsInfo.absoluteFilePath());
+
     QString errMsg;
-    bool res = m_doc->saveDocument(newName, errMsg);
+    bool res = m_doc->saveAs(newName, errMsg);
 
     // save template as read-only, even though this is largely pointless
     if (asTemplate) {
+        QFileInfo saveAsInfo(newName);
         QFile chmod(saveAsInfo.absoluteFilePath());
         chmod.setPermissions(QFile::ReadOwner |
                              QFile::ReadUser  | /* for potential platform-independence */
