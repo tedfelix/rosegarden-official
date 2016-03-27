@@ -64,7 +64,7 @@ include(CTest)
 if(NOT USE_QT4 AND NOT USE_QT5)
    # Autodetect, prefering Qt 5
    message(STATUS "Autodetecting Qt version to use")
-   find_package(Qt5 QUIET)
+   find_package(Qt5 QUIET COMPONENTS Core)
    if(Qt5_FOUND)
       set(USE_QT5 TRUE)
    else()
