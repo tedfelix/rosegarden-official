@@ -96,55 +96,55 @@ HeadersConfigurationPage::HeadersConfigurationPage(
                     m_parentDialog, SLOT(slotActivateApply()));
         }
         QString trName;
-        if (key == headerDedication) {  
+        if (key == headerDedication()) {
             m_editDedication = editHeader;
             row = 0; col = 2; width = 2;
             trName = tr("Dedication");
-        } else if (key == headerTitle) {       
+        } else if (key == headerTitle()) {
             m_editTitle = editHeader;    
             row = 1; col = 1; width = 4;
             trName = tr("Title");
-        } else if (key == headerSubtitle) {
+        } else if (key == headerSubtitle()) {
             m_editSubtitle = editHeader;
             row = 2; col = 1; width = 4;
             trName = tr("Subtitle");
-        } else if (key == headerSubsubtitle) { 
+        } else if (key == headerSubsubtitle()) {
             m_editSubsubtitle = editHeader;
             row = 3; col = 2; width = 2;
             trName = tr("Subsubtitle");
-        } else if (key == headerPoet) {        
+        } else if (key == headerPoet()) {
             m_editPoet = editHeader;
             row = 4; col = 0; width = 2;
             trName = tr("Poet");
-        } else if (key == headerInstrument) {  
+        } else if (key == headerInstrument()) {
             m_editInstrument = editHeader;
             row = 4; col = 2; width = 2;
             trName = tr("Instrument");
-        } else if (key == headerComposer) {    
+        } else if (key == headerComposer()) {
             m_editComposer = editHeader;
             row = 4; col = 4; width = 2; 
             trName = tr("Composer");
-        } else if (key == headerMeter) {       
+        } else if (key == headerMeter()) {
             m_editMeter = editHeader;
             row = 5; col = 0; width = 3; 
             trName = tr("Meter");
-        } else if (key == headerArranger) {    
+        } else if (key == headerArranger()) {
             m_editArranger = editHeader;
             row = 5; col = 3; width = 3; 
             trName = tr("Arranger");
-        } else if (key == headerPiece) {       
+        } else if (key == headerPiece()) {
             m_editPiece = editHeader;
             row = 6; col = 0; width = 3; 
             trName = tr("Piece");
-        } else if (key == headerOpus) {        
+        } else if (key == headerOpus()) {
             m_editOpus = editHeader;
             row = 6; col = 3; width = 3; 
             trName = tr("Opus");
-        } else if (key == headerCopyright) {   
+        } else if (key == headerCopyright()) {
             m_editCopyright = editHeader;
             row = 8; col = 1; width = 4; 
             trName = tr("Copyright");
-        } else if (key == headerTagline) {     
+        } else if (key == headerTagline()) {
             m_editTagline = editHeader;
             row = 9; col = 1; width = 4; 
             trName = tr("Tagline");

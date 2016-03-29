@@ -78,6 +78,20 @@
 namespace Rosegarden
 {
 
+const char* headerDedication() { return "dedication"; }
+const char* headerTitle() { return "title"; }
+const char* headerSubtitle() { return "subtitle"; }
+const char* headerSubsubtitle() { return "subsubtitle"; }
+const char* headerPoet() { return "poet"; }
+const char* headerComposer() { return "composer"; }
+const char* headerMeter() { return "meter"; }
+const char* headerOpus() { return "opus"; }
+const char* headerArranger() { return "arranger"; }
+const char* headerInstrument() { return "instrument"; }
+const char* headerPiece() { return "piece"; }
+const char* headerCopyright() { return "copyright"; }
+const char* headerTagline() { return "tagline"; }
+
 using namespace BaseProperties;
 
 const PropertyName LilyPondExporter::SKIP_PROPERTY = "LilyPondExportSkipThisEvent";
@@ -751,15 +765,15 @@ LilyPondExporter::write()
 
         for (size_t index = 0; index < propertyNames.size(); ++index) {
             std::string property = propertyNames [index];
-            if (property == headerDedication || property == headerTitle ||
-                property == headerSubtitle || property == headerSubsubtitle ||
-                property == headerPoet || property == headerComposer ||
-                property == headerMeter || property == headerOpus ||
-                property == headerArranger || property == headerInstrument ||
-                property == headerPiece || property == headerCopyright ||
-                property == headerTagline) {
+            if (property == headerDedication() || property == headerTitle() ||
+                property == headerSubtitle() || property == headerSubsubtitle() ||
+                property == headerPoet() || property == headerComposer() ||
+                property == headerMeter() || property == headerOpus() ||
+                property == headerArranger() || property == headerInstrument() ||
+                property == headerPiece() || property == headerCopyright() ||
+                property == headerTagline()) {
                 std::string header = protectIllegalChars(metadata.get<String>(property));
-                if (property == headerCopyright) {
+                if (property == headerCopyright()) {
                     // replace a (c) or (C) with a real Copyright symbol
                     size_t posCpy = header.find("(c)");
                     if (posCpy == std::string::npos) posCpy = header.find("(C)");
@@ -778,7 +792,7 @@ LilyPondExporter::write()
                     str << indent(col) << property << " = \"" << header << "\"" << std::endl;
                     // let users override defaults, but allow for providing
                     // defaults if they don't:
-                    if (property == headerTagline)
+                    if (property == headerTagline())
                         userTagline = true;
                 }
             }

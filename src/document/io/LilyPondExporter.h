@@ -68,19 +68,19 @@ class NotationView;
 class Key;
 class Composition;
 
-const std::string headerDedication = "dedication";
-const std::string headerTitle = "title";
-const std::string headerSubtitle = "subtitle";
-const std::string headerSubsubtitle = "subsubtitle";
-const std::string headerPoet = "poet";
-const std::string headerComposer = "composer";
-const std::string headerMeter = "meter";
-const std::string headerOpus = "opus";
-const std::string headerArranger = "arranger";
-const std::string headerInstrument = "instrument";
-const std::string headerPiece = "piece";
-const std::string headerCopyright = "copyright";
-const std::string headerTagline = "tagline";
+const char* headerDedication();
+const char* headerTitle();
+const char* headerSubtitle();
+const char* headerSubsubtitle();
+const char* headerPoet();
+const char* headerComposer();
+const char* headerMeter();
+const char* headerOpus();
+const char* headerArranger();
+const char* headerInstrument();
+const char* headerPiece();
+const char* headerCopyright();
+const char* headerTagline();
 
 /**
  * LilyPond scorefile export
