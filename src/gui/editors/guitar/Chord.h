@@ -22,9 +22,7 @@
 #include "base/Event.h"
 #include "misc/Debug.h"
 
-#include <vector>
 #include <QString>
-#include <QRegExp>
 
 namespace Rosegarden
 {
@@ -63,7 +61,7 @@ public:
     QString getExt() const { return m_ext; }
     void setExt(QString r) { m_ext = r.isEmpty() ? QString::null : r; } 
     
-    bool hasAltBass() const { return m_ext.contains(ALT_BASS_REGEXP); } 
+    bool hasAltBass() const;
 
     Fingering getFingering() const { return m_fingering; }
     void setFingering(Fingering f) { m_fingering = f; }
@@ -77,11 +75,9 @@ public:
             return *e1 < *e2;
         }
     };
-        
+
 protected:
 
-    static const QRegExp ALT_BASS_REGEXP;
-    
     QString m_root;
     QString m_ext;
     

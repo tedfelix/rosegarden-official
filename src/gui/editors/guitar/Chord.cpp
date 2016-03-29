@@ -20,6 +20,7 @@
 #include "misc/Strings.h"
 
 #include <QString>
+#include <QRegExp>
 
 namespace Rosegarden
 {
@@ -84,7 +85,11 @@ Event* Chord::getAsEvent(timeT absoluteTime) const
     return e;
 }
 
-const QRegExp Chord::ALT_BASS_REGEXP("/[A-G]");
+bool Chord::hasAltBass() const
+{
+    static const QRegExp ALT_BASS_REGEXP("/[A-G]");
+    return m_ext.contains(ALT_BASS_REGEXP);
+}
 
 bool operator<(const Chord& a, const Chord& b)
 {
