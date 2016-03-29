@@ -199,7 +199,7 @@ private:
 
 private:
     static const int MAX_DOTS = 4;
-    static const PropertyName SKIP_PROPERTY;
+    const PropertyName SKIP_PROPERTY;
     
     unsigned int m_paperSize;
     static const unsigned int PAPER_A3      = 0;

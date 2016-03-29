@@ -205,9 +205,6 @@ private:
     /*static*/ bool checkForHiddenParallels;
     QCheckBox *checkForHiddenParallelsCheckBox;
 
-    // last directory we exported the parallels list to
-    static QString lastExportDirectory;
-
     // hack to find line when user clicks into textBrowser
     // could not find how to do this with mouse events in reasonable time
     // so we follow the cursor changes but we have to ignore this as long as we are populating the window

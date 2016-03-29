@@ -36,10 +36,10 @@ namespace Rosegarden
 
 
 // Strings used in XML to embed the comments inside the metadata
-static const QString commentsKeyBase("comments_");
+static const QString commentsKeyBase() { return "comments_"; }
 
 // Strings used in XML to ask for a note popup at startup
-static const QString commentsPopup("comments_popup");
+static const QString commentsPopup() { return "comments_popup"; }
 
 // Size of the numeric part of the line key 
 static const int keyNumSize(6);
@@ -48,12 +48,13 @@ static const int keyNumSize(6);
 // If the line number is 123, the page name is "es" and commentsKeyBase is
 // "comments_" then the key is "comments_es_000123".
 // If there in no page name (reference page) then the key is "comments_000123".
-static QString lineKey(QString pageName, int lineNumber)
+static QString lineKey(const QString &pageName, int lineNumber)
 {
-    QString number = QString("%1").arg(lineNumber);
-    while (number.size() < keyNumSize) number = "0" + number;
-    QString sep = pageName.isEmpty() ? "" : "_";
-    return commentsKeyBase + pageName + sep + number;
+    QString number = QString::number(lineNumber);
+    while (number.size() < keyNumSize)
+        number.prepend(QLatin1Char('0'));
+    const QString sep = pageName.isEmpty() ? "" : "_";
+    return commentsKeyBase() + pageName + sep + number;
 }
 
 MetadataHelper::CommentsKey::CommentsKey(QString keyString) :
@@ -61,18 +62,18 @@ MetadataHelper::CommentsKey::CommentsKey(QString keyString) :
     m_isOK(false),
     m_pageName("")
 {
-    int baseKeyLength = commentsKeyBase.size();
+    int baseKeyLength = commentsKeyBase().size();
 
     // A valid comment key has a minimum length 
     m_isOK = keyString.size() >= (baseKeyLength + keyNumSize);
  
     // A valid comment key starts with the comment key base string
-    m_isOK = m_isOK && keyString.startsWith(commentsKeyBase);
+    m_isOK = m_isOK && keyString.startsWith(commentsKeyBase());
 
     // The character preceding the final line number must be "_"
-    m_isOK = m_isOK && (keyString.mid(commentsKeyBase.size() - 1,
+    m_isOK = m_isOK && (keyString.mid(baseKeyLength - 1,
                             keyString.size() - keyNumSize -
-                            commentsKeyBase.size() + 1).right(1) == "_");
+                            baseKeyLength + 1).right(1) == "_");
            
     if (!m_isOK) return;         // key is not a comments key
 
@@ -174,7 +175,7 @@ MetadataHelper::setComments(CommentsMap comments)
     for (Configuration::iterator
             it = metadata.begin(); it != metadata.end(); ++it) {
         QString key = strtoqstr(it->first);
-        if ((key == commentsPopup) || !key.startsWith(commentsKeyBase)) {
+        if ((key == commentsPopup()) || !key.startsWith(commentsKeyBase())) {
             notComments[key] = strtoqstr(metadata.get<String>(qstrtostr(key)));
         }
     }
@@ -231,7 +232,7 @@ MetadataHelper::getHeaders()
     for (Configuration::iterator
             it = metadata.begin(); it != metadata.end(); ++it) {
         QString key = strtoqstr(it->first);
-        if (!key.startsWith(commentsKeyBase)) {
+        if (!key.startsWith(commentsKeyBase())) {
             data[key] = strtoqstr(metadata.get<String>(qstrtostr(key)));
         }
     }
@@ -253,7 +254,7 @@ MetadataHelper::setHeaders(HeadersMap data)
     for (Configuration::iterator
             it = metadata.begin(); it != metadata.end(); ++it) {
         QString key = strtoqstr(it->first);
-        if (key.startsWith(commentsKeyBase)) {
+        if (key.startsWith(commentsKeyBase())) {
             comments[key] = strtoqstr(metadata.get<String>(qstrtostr(key)));
         }
     }
@@ -290,7 +291,7 @@ MetadataHelper::setPopupWanted(bool enabled)
     Configuration &metadata = (&m_doc->getComposition())->getMetadata();
     const Configuration origmetadata = metadata;
 
-    metadata.set<String>(qstrtostr(commentsPopup), enabled ? "true" : "false");
+    metadata.set<String>(qstrtostr(commentsPopup()), enabled ? "true" : "false");
 
     if (metadata != origmetadata) {
         m_doc->slotDocumentModified();
@@ -306,7 +307,7 @@ MetadataHelper::popupWanted()
         QString key = strtoqstr(it->first);
         QString value = strtoqstr(metadata.get<String>(it->first));
 
-        if ((key == commentsPopup) && (value == "true")) return true;
+        if ((key == commentsPopup()) && (value == "true")) return true;
     }
     return false;
 }

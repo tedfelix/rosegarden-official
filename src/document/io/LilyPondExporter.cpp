@@ -94,8 +94,6 @@ const char* headerTagline() { return "tagline"; }
 
 using namespace BaseProperties;
 
-const PropertyName LilyPondExporter::SKIP_PROPERTY = "LilyPondExportSkipThisEvent";
-
 LilyPondExporter::LilyPondExporter(RosegardenDocument *doc,
                                    const SegmentSelection &selection,
                                    const std::string &fileName,
@@ -104,7 +102,8 @@ LilyPondExporter::LilyPondExporter(RosegardenDocument *doc,
     m_doc(doc),
     m_fileName(fileName),
     m_lastClefFound(Clef::Treble),
-    m_selection(selection)
+    m_selection(selection),
+    SKIP_PROPERTY("LilyPondExportSkipThisEvent")
 {
     m_composition = &m_doc->getComposition();
     m_studio = &m_doc->getStudio();

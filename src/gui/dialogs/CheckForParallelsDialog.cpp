@@ -54,7 +54,6 @@ namespace Rosegarden
 {
 
 //bool CheckForParallelsDialog::checkForUnisons = false;
-QString CheckForParallelsDialog::lastExportDirectory = QString("");
 
 CheckForParallelsDialog::CheckForParallelsDialog(NotationView *p, RosegardenDocument *doc, NotationScene *ns, Composition *comp) :
         QDialog(p)
@@ -172,6 +171,8 @@ CheckForParallelsDialog::exportText()
 {
     QString label = "Export Parallels";
 
+    // last directory we exported the parallels list to
+    static QString lastExportDirectory;
     QString name = FileDialog::getSaveFileName(
             this, label, lastExportDirectory,
             QString(""), "*.txt", 0,
