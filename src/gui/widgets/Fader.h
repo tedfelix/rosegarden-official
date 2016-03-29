@@ -19,7 +19,6 @@
 #define RG_FADER_H
 
 #include "base/AudioLevel.h"
-#include <map>
 #include <QColor>
 #include <QWidget>
 #include <utility>
@@ -108,12 +107,6 @@ protected:
     QPixmap *buttonPixmap();
 
     QColor m_outlineColour;
-
-    typedef std::pair<int, int> SizeRec;
-    typedef std::map<unsigned int, QPixmap *> ColourPixmapRec; // key is QColor::pixel()
-    typedef std::pair<ColourPixmapRec, QPixmap *> PixmapRec;
-    typedef std::map<SizeRec, PixmapRec> PixmapCache;
-    static PixmapCache m_pixmapCache;
 };
 
 

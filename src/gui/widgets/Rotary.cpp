@@ -44,7 +44,7 @@
 #include <QSettings>
 
 #include <cmath>
-
+#include <map>
 
 namespace Rosegarden
 {
@@ -53,7 +53,35 @@ namespace Rosegarden
 #define ROTARY_MAX (1.75 * M_PI)
 #define ROTARY_RANGE (ROTARY_MAX - ROTARY_MIN)
 
-Rotary::PixmapCache Rotary::m_pixmaps;
+struct CacheIndex {
+
+    CacheIndex(int s, int c, int a, int n, int ct) :
+        size(s), colour(c), angle(a), numTicks(n), centred(ct) { }
+
+    bool operator<(const CacheIndex &i) const {
+        // woo!
+        if (size < i.size) return true;
+        else if (size > i.size) return false;
+        else if (colour < i.colour) return true;
+        else if (colour > i.colour) return false;
+        else if (angle < i.angle) return true;
+        else if (angle > i.angle) return false;
+        else if (numTicks < i.numTicks) return true;
+        else if (numTicks > i.numTicks) return false;
+        else if (centred == i.centred) return false;
+        else if (!centred) return true;
+        return false;
+    }
+
+    int          size;
+    unsigned int colour;
+    int          angle;
+    int          numTicks;
+    bool         centred;
+};
+
+typedef std::map<CacheIndex, QPixmap> PixmapCache;
+Q_GLOBAL_STATIC(PixmapCache, rotaryPixmapCache)
 
 
 Rotary::Rotary(QWidget *parent,
@@ -230,9 +258,11 @@ Rotary::paintEvent(QPaintEvent *)
 
     CacheIndex index(m_size, pixel, degrees, numTicks, m_centred);
 
-    if (m_pixmaps.find(index) != m_pixmaps.end()) {
+    PixmapCache *pixmapCache = rotaryPixmapCache();
+
+    if (pixmapCache->find(index) != pixmapCache->end()) {
         paint.begin(this);
-        paint.drawPixmap(0, 0, m_pixmaps[index]);
+        paint.drawPixmap(0, 0, (*pixmapCache)[index]);
         paint.end();
         return ;
     }
@@ -363,9 +393,9 @@ Rotary::paintEvent(QPaintEvent *)
     paint.end();
 
     QImage i = map.toImage().scaled(m_size, m_size, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-    m_pixmaps[index] = QPixmap::fromImage(i);
+    (*pixmapCache)[index] = QPixmap::fromImage(i);
     paint.begin(this);
-    paint.drawPixmap(0, 0, m_pixmaps[index]);
+    paint.drawPixmap(0, 0, (*pixmapCache)[index]);
     paint.end();
 }
 

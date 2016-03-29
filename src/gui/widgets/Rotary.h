@@ -18,7 +18,6 @@
 #ifndef RG_ROTARY_H
 #define RG_ROTARY_H
 
-#include <map>
 #include <QColor>
 #include <QWidget>
 
@@ -132,35 +131,6 @@ protected:
 
     QColor               m_knobColour;
 
-    struct CacheIndex {
-
-        CacheIndex(int s, int c, int a, int n, int ct) :
-            size(s), colour(c), angle(a), numTicks(n), centred(ct) { }
-
-        bool operator<(const CacheIndex &i) const {
-            // woo!
-            if (size < i.size) return true;
-            else if (size > i.size) return false;
-            else if (colour < i.colour) return true;
-            else if (colour > i.colour) return false;
-            else if (angle < i.angle) return true;
-            else if (angle > i.angle) return false;
-            else if (numTicks < i.numTicks) return true;
-            else if (numTicks > i.numTicks) return false;
-            else if (centred == i.centred) return false;
-            else if (!centred) return true;
-            return false;
-        }
-
-        int          size;
-        unsigned int colour;
-        int          angle;
-        int          numTicks;
-        bool         centred;
-    };
-
-    typedef std::map<CacheIndex, QPixmap> PixmapCache;
-    static PixmapCache m_pixmaps;
     bool m_Thorn;
 };
 

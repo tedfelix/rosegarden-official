@@ -36,12 +36,16 @@
 #include <QColormap>
 
 #include <cmath>
+#include <map>
 
 namespace Rosegarden
 {
 
-Fader::PixmapCache Fader::m_pixmapCache;
-
+typedef std::pair<int, int> SizeRec;
+typedef std::map<unsigned int, QPixmap *> ColourPixmapRec; // key is QColor::pixel()
+typedef std::pair<ColourPixmapRec, QPixmap *> PixmapRec;
+typedef std::map<SizeRec, PixmapRec> PixmapCache;
+Q_GLOBAL_STATIC(PixmapCache, faderPixmapCache);
 
 Fader::Fader(AudioLevel::FaderType type,
              int w, int h, QWidget *parent) :
@@ -153,8 +157,8 @@ Fader::setOutlineColour(QColor c)
 QPixmap *
 Fader::groovePixmap()
 {
-    PixmapCache::iterator i = m_pixmapCache.find(SizeRec(width(), height()));
-    if (i != m_pixmapCache.end()) {
+    PixmapCache::iterator i = faderPixmapCache()->find(SizeRec(width(), height()));
+    if (i != faderPixmapCache()->end()) {
         QColormap colorMap = QColormap::instance();
         uint pixel(colorMap.pixel(m_outlineColour));
         ColourPixmapRec::iterator j = i->second.first.find(pixel);
@@ -168,8 +172,8 @@ Fader::groovePixmap()
 QPixmap *
 Fader::buttonPixmap()
 {
-    PixmapCache::iterator i = m_pixmapCache.find(SizeRec(width(), height()));
-    if (i != m_pixmapCache.end()) {
+    PixmapCache::iterator i = faderPixmapCache()->find(SizeRec(width(), height()));
+    if (i != faderPixmapCache()->end()) {
         return i->second.second;
     } else
         return 0;
@@ -464,7 +468,7 @@ Fader::calculateGroovePixmap()
 {
     QColormap colorMap = QColormap::instance();
     uint pixel(colorMap.pixel(m_outlineColour));
-    QPixmap *& map = m_pixmapCache[SizeRec(width(), height())].first[pixel];
+    QPixmap *& map = (*faderPixmapCache())[SizeRec(width(), height())].first[pixel];
 
     delete map;
     map = new QPixmap(width(), height());
@@ -524,11 +528,11 @@ Fader::calculateGroovePixmap()
 void
 Fader::calculateButtonPixmap()
 {
-    PixmapCache::iterator i = m_pixmapCache.find(SizeRec(width(), height()));
-    if (i != m_pixmapCache.end() && i->second.second)
+    PixmapCache::iterator i = faderPixmapCache()->find(SizeRec(width(), height()));
+    if (i != faderPixmapCache()->end() && i->second.second)
         return ;
 
-    QPixmap *& map = m_pixmapCache[SizeRec(width(), height())].second;
+    QPixmap *& map = (*faderPixmapCache())[SizeRec(width(), height())].second;
 
     int h = height() - 1;
     int w = width() - 1;
