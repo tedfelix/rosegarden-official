@@ -1241,12 +1241,7 @@ void
 EventView::initStatusBar()
 {
     QStatusBar* sb = statusBar();
-
-    // qt4 note:
-    // addItem becomes addWidget (left aligned) or addPremanentWidget (right aligned)
-    // or showMessage
-    //    
-    sb->showMessage( TmpStatusMsg::getDefaultMsg() );
+    sb->showMessage(QString());
 }
 
 QSize

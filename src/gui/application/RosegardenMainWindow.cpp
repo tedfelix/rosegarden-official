@@ -1035,7 +1035,6 @@ RosegardenMainWindow::initZoomToolbar()
 void
 RosegardenMainWindow::initStatusBar()
 {
-    TmpStatusMsg::setDefaultMsg("");
     m_cpuBar = new ProgressBar(100, statusBar());
     m_cpuBar->setObjectName("Main Window progress bar"); // to help keep ProgressBar objects straight
     m_cpuBar->setFixedWidth(60);

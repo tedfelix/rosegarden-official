@@ -78,9 +78,6 @@ void RosegardenApplication::slotSetStatusMessage(QString msg)
     //### dtb: Using topLevelWidgets()[0] in place of mainWidget() is a big assumption on my part.
     QMainWindow* window = dynamic_cast<QMainWindow*>(topLevelWidgets()[0]);
     if (window) {
-        if (msg.isEmpty())
-            msg = TmpStatusMsg::getDefaultMsg();
-//@@@        mainWindow->statusBar()->changeItem(QString("  %1").arg(msg), TmpStatusMsg::getDefaultId());
         window->statusBar()->showMessage(QString("  %1").arg(msg)); 
     }
 

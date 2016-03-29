@@ -608,13 +608,7 @@ void
 TempoView::initStatusBar()
 {
     QStatusBar* sb = statusBar();
-
-    sb->showMessage(TmpStatusMsg::getDefaultMsg());
-    
-//     sb->addItem(TmpStatusMsg::getDefaultMsg(),
-//                    TmpStatusMsg::getDefaultId(), 1);
-//     sb->setItemAlignment(TmpStatusMsg::getDefaultId(),
-//                          AlignLeft | AlignVCenter);
+    sb->showMessage(QString());
 }
 
 QSize
