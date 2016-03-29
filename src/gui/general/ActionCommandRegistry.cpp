@@ -29,6 +29,7 @@
 #include <QWidget>
 
 #include "misc/Strings.h"
+#include "misc/Debug.h"
 
 #include <QCoreApplication>
 
@@ -78,18 +79,17 @@ ActionCommandRegistry::invokeCommand(QString actionName)
     if (sm) {
         selection = sm->getSelection();
     } else {
-        std::cerr << "ActionCommandRegistry::slotInvokeCommand: Action file client is not a SelectionManager" << std::endl;
+        RG_WARNING << "ActionCommandRegistry::slotInvokeCommand: Action file client is not a SelectionManager";
     }
 
     if (!selection) {
-        std::cerr << "ActionCommandRegistry::slotInvokeCommand: No selection"
-                  << std::endl;
+        RG_WARNING << "ActionCommandRegistry::slotInvokeCommand: No selection";
         return;
     }
 
     QWidget *widget = dynamic_cast<QWidget *>(m_client);
     if (!widget) {
-        std::cerr << "ActionCommandRegistry::slotInvokeCommand: Action file client is not a widget" << std::endl;
+        RG_WARNING << "ActionCommandRegistry::slotInvokeCommand: Action file client is not a widget";
     }
 
     try {

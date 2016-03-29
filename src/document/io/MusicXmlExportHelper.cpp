@@ -27,7 +27,7 @@
 
 #include "base/BaseProperties.h"
 #include "gui/editors/notation/NotationProperties.h"
-
+#include "misc/Debug.h"
 
 #include <sstream>
 
@@ -284,7 +284,7 @@ MusicXmlExportHelper::quantizePercussion()
         // Since we have to split up the events over two layer
         // usr defined layers are not allowed.
         if (m_staves[i].firstVoice != m_staves[i].lastVoice) {
-            std::cerr << "MusicXmlExportHelper::quantizePercussion: can not handle multi layer tracks.\n";
+            RG_WARNING << "MusicXmlExportHelper::quantizePercussion: can not handle multi layer tracks.";
             continue;
         }
 
@@ -516,8 +516,8 @@ MusicXmlExportHelper::handleEvent(Segment *segment, Event &event)
         } else if (text.getTextType() == Text::Chord) {
             addChord(event);
         } else {
-            std::cerr << "WARNING: MusicXmlExportHelper::handleEvent: unsupported TextEvent \""
-                    << text.getTextType() << "\"." << std::endl;
+            RG_WARNING << "WARNING: MusicXmlExportHelper::handleEvent: unsupported TextEvent \""
+                    << text.getTextType() << "\".";
         }
     } else if (event.isa(Rosegarden::Indication::EventType)) {
         Indication indication(event);
@@ -542,42 +542,41 @@ MusicXmlExportHelper::handleEvent(Segment *segment, Event &event)
         } else if (indication.getIndicationType() == Indication::Glissando) {
             addGlissando(event);
         } else  {
-            std::cerr << "WARNING: MusicXmlExportHelper::handleEvent: unsupported IndicationEvent \""
-                    << indication.getIndicationType() << "\"." << std::endl;
+            RG_WARNING << "WARNING: MusicXmlExportHelper::handleEvent: unsupported IndicationEvent \""
+                    << indication.getIndicationType() << "\".";
         }
     } else if (event.isa(Rosegarden::Note::EventRestType) ||
             (event.isa(Rosegarden::Note::EventType))) {
         updatePart(segment, event);
         addNote(*segment, event);
     } else {
-        std::cerr << "WARNING: MusicXmlExportHelper::handleEvent: Unknown EventType \""
-                << event.getType() << "\"." << std::endl;
+        RG_WARNING << "WARNING: MusicXmlExportHelper::handleEvent: Unknown EventType \""
+                << event.getType() << "\".";
     }
 }
 
 void
 MusicXmlExportHelper::printSummary()
 {
-    std::cerr << "Part " << m_partName << " : m_staves = " << m_staves.size();
-    if (m_percussionTrack) std::cerr << " (percussion, " << instrumentCount << ")";
-    std::cerr << std::endl;
-    if (getStaffCount() == 0) std::cerr << "  No staves found.\n";
+    RG_DEBUG << "Part " << m_partName << " : m_staves = " << m_staves.size();
+    if (m_percussionTrack) RG_DEBUG << " (percussion, " << instrumentCount << ")";
+    if (getStaffCount() == 0) RG_DEBUG << "  No staves found.";
     else {
         for (int i = 0; i < getStaffCount(); i++) {
             Track *track = m_composition->getTrackById(m_staves[i].trackId);
-            std::cerr << "  Staff " << i+1 << " (track \""
+            RG_DEBUG << "  Staff " << i+1 << " (track \""
                       << track->getLabel() << "\")   "
                       << m_staves[i].startTime << " - "
                       << m_staves[i].endTime
                       << "   voices " << m_staves[i].firstVoice << " - "
-                      << m_staves[i].lastVoice << std::endl;
+                      << m_staves[i].lastVoice;
             for (std::vector<Segment *>::iterator s = m_staves[i].segments.begin();
                  s != m_staves[i].segments.end(); ++s) {
                 Segment *segment = *s;
-                std::cerr << "     " << m_voices[segment] << " : \""
+                RG_DEBUG << "     " << m_voices[segment] << " : \""
                           << segment->getLabel() << "\"   "
                           << segment->getStartTime() << " <> "
-                          << segment->getEndMarkerTime() << std::endl;
+                          << segment->getEndMarkerTime();
             }
         }
     }
@@ -685,8 +684,8 @@ MusicXmlExportHelper::addClef(const Event &event)
                 clef.getClefType() == Clef::Baritone) {
             tmp << "          <sign>C</sign>\n";
         } else
-            std::cerr << "WARNING: MusicXmlExportHelper::addClef: bad clef \""
-                    <<  clef.getClefType() << "\"." << std::endl;
+            RG_WARNING << "WARNING: MusicXmlExportHelper::addClef: bad clef \""
+                    <<  clef.getClefType() << "\".";
         tmp << "          <line>" << clef.getAxisHeight()/2+1 << "</line>\n";
         if (clef.getOctaveOffset() != 0) {
             tmp << "          <clef-octave-change>" << clef.getOctaveOffset()
@@ -824,8 +823,8 @@ MusicXmlExportHelper::addChord(const Event &event)
     }
 
     if ((rx.cap(1) == "") || (kind == "")) {
-        std::cerr << "WARNING: MusicXmlExportHelper::addChord: bad chord \""
-                  << text.getText() << "\"." << std::endl;
+        RG_WARNING << "WARNING: MusicXmlExportHelper::addChord: bad chord \""
+                  << text.getText() << "\".";
     } else {
         std::stringstream tmp;
         tmp << "      <harmony>\n";
@@ -1288,8 +1287,8 @@ MusicXmlExportHelper::addNote(const Segment &segment, const Event &event)
         } else if (*m == Marks::Pause) {
             fermata = true;
         } else {
-            std::cerr << "WARNING: MusicXmlExportHelper::addNote: mark \""
-                      << *m << "\" not supported." << std::endl;
+            RG_WARNING << "WARNING: MusicXmlExportHelper::addNote: mark \""
+                      << *m << "\" not supported.";
             notations--;
         }
     }
@@ -1442,8 +1441,8 @@ MusicXmlExportHelper::getNoteName(int noteType) const
     };
 
     if (noteType < 0 || noteType >= int(sizeof(noteNames) / sizeof(noteNames[0]))) {
-        std::cerr << "WARNING: MusicXmlExportHelper::getNoteName: bad note type "
-                  << noteType << std::endl;
+        RG_WARNING << "WARNING: MusicXmlExportHelper::getNoteName: bad note type "
+                  << noteType;
         noteType = 4;
     }
 

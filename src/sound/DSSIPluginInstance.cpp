@@ -21,7 +21,6 @@
 
 #include <QtGlobal>
 
-#include <iostream>
 #include <cstdlib>
 
 

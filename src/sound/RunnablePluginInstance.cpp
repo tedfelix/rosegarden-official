@@ -16,7 +16,6 @@
 #include "RunnablePluginInstance.h"
 #include "PluginFactory.h"
 
-#include <iostream>
 
 namespace Rosegarden
 {

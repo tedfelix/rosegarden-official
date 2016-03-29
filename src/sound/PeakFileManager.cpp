@@ -22,16 +22,17 @@
 // by a WAV) or be accomodated inside a BWF format file.
 //
 //
+#include "PeakFileManager.h"
 
 #include <string>
 #include <vector>
 
 #include <QObject>
 
-#include "PeakFileManager.h"
 #include "AudioFile.h"
 #include "base/RealTime.h"
 #include "PeakFile.h"
+#include "misc/Debug.h"
 
 namespace Rosegarden
 {
@@ -57,10 +58,10 @@ PeakFileManager::insertAudioFile(AudioFile *audioFile)
     }
 
     /*
-    std::cout << "PeakFileManager::insertAudioFile - creating peak file "
+    RG_DEBUG << "PeakFileManager::insertAudioFile - creating peak file "
               << m_peakFiles.size() + 1
               << " for \"" << audioFile->getFilename()
-              << "\"" << std::endl;
+              << "\"";
     */
 
     // Insert
@@ -127,8 +128,7 @@ PeakFileManager::hasValidPeaks(AudioFile *audioFile)
 
         if (peakFile == 0) {
 #ifdef DEBUG_PEAKFILEMANAGER
-            std::cerr << "PeakFileManager::hasValidPeaks - no peak file found"
-            << std::endl;
+            RG_WARNING << "PeakFileManager::hasValidPeaks - no peak file found";
 #endif
 
             return false;
@@ -145,8 +145,7 @@ PeakFileManager::hasValidPeaks(AudioFile *audioFile)
         // check internal peak chunk
     } else {
 #ifdef DEBUG_PEAKFILEMANAGER
-        std::cout << "PeakFileManager::hasValidPeaks - unsupported file type"
-        << std::endl;
+        RG_WARNING << "PeakFileManager::hasValidPeaks - unsupported file type";
 #endif
 
         return false;
@@ -165,8 +164,8 @@ PeakFileManager::generatePeaks(AudioFile *audioFile,
                                unsigned short updatePercentage)
 {
 #ifdef DEBUG_PEAKFILEMANAGER
-    std::cout << "PeakFileManager::generatePeaks - generating peaks for \""
-    << audioFile->getFilename() << "\"" << std::endl;
+    RG_DEBUG << "PeakFileManager::generatePeaks - generating peaks for \""
+    << audioFile->getFilename() << "\"";
 #endif
 
     if (audioFile->getType() == WAV) {
@@ -178,7 +177,7 @@ PeakFileManager::generatePeaks(AudioFile *audioFile,
         // Just write out a peak file
         //
         if (m_currentPeakFile->write(updatePercentage) == false) {
-            std::cerr << "Can't write peak file for " << audioFile->getFilename() << " - no preview generated" << std::endl;
+            RG_WARNING << "Can't write peak file for " << audioFile->getFilename() << " - no preview generated";
             throw BadPeakFileException
             (audioFile->getFilename(), __FILE__, __LINE__);
         }
@@ -194,8 +193,7 @@ PeakFileManager::generatePeaks(AudioFile *audioFile,
         // write the file out and incorporate the peak chunk
     } else {
 #ifdef DEBUG_PEAKFILEMANAGER
-        std::cerr << "PeakFileManager::generatePeaks - unsupported file type"
-        << std::endl;
+        RG_WARNING << "PeakFileManager::generatePeaks - unsupported file type";
 #endif
 
         return ;
@@ -232,8 +230,7 @@ PeakFileManager::getPreview(AudioFile *audioFile,
                                       showMinima);
         } catch (SoundFile::BadSoundFileException e) {
 #ifdef DEBUG_PEAKFILEMANAGER
-            std::cout << "PeakFileManager::getPreview "
-            << "\"" << e << "\"" << std::endl;
+            RG_WARNING << "PeakFileManager::getPreview \"" << e << "\"";
 #else
 
             ;
@@ -246,8 +243,7 @@ PeakFileManager::getPreview(AudioFile *audioFile,
     }
 #ifdef DEBUG_PEAKFILEMANAGER
     else {
-        std::cerr << "PeakFileManager::getPreview - unsupported file type"
-        << std::endl;
+        RG_WARNING << "PeakFileManager::getPreview - unsupported file type";
     }
 #endif
 
@@ -301,10 +297,8 @@ PeakFileManager::stopPreview()
         bool removed = file.remove();
 
 #ifdef DEBUG_PEAKFILEMANAGER
-
         if (removed) {
-            std::cout << "PeakFileManager::stopPreview() - removed preview"
-            << std::endl;
+            RG_DEBUG << "PeakFileManager::stopPreview() - removed preview";
         }
 #else
         (void)removed;

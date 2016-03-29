@@ -17,7 +17,6 @@
 
 #include <QtGlobal>
 
-#include <iostream>
 #include <fstream>
 #include <cstring>
 

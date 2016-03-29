@@ -17,7 +17,6 @@
 #define RG_AUDIT_H
 
 #include <string>
-#include <iostream>
 
 #include <sstream>
 

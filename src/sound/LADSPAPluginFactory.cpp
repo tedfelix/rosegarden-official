@@ -17,7 +17,6 @@
 
 #include "LADSPAPluginFactory.h"
 
-#include <iostream>
 #include <cstdlib>
 #include "misc/Strings.h"
 #include "misc/Debug.h"
@@ -167,7 +166,7 @@ LADSPAPluginFactory::populatePluginSlot(QString identifier, MappedPluginSlot &sl
 
                 MappedStudio *studio = dynamic_cast<MappedStudio *>(slot.getParent());
                 if (!studio) {
-                    std::cerr << "WARNING: LADSPAPluginFactory::populatePluginSlot: can't find studio" << std::endl;
+                    RG_WARNING << "WARNING: LADSPAPluginFactory::populatePluginSlot: can't find studio";
                     return ;
                 }
 
@@ -430,8 +429,7 @@ LADSPAPluginFactory::releasePlugin(RunnablePluginInstance *instance,
                                    QString identifier)
 {
     if (m_instances.find(instance) == m_instances.end()) {
-        std::cerr << "WARNING: LADSPAPluginFactory::releasePlugin: Not one of mine!"
-        << std::endl;
+        RG_WARNING << "WARNING: LADSPAPluginFactory::releasePlugin: Not one of mine!";
         return ;
     }
 

@@ -14,7 +14,6 @@
 */
 
 #include "DSSIPluginFactory.h"
-#include <iostream>
 #include <cstdlib>
 #include "misc/Strings.h"
 

@@ -20,7 +20,6 @@
 
 #include <string>
 #include <QString>
-#include <iostream>
 #include <QVariant>
 #include <QTextStream>
 #include <QStringList>

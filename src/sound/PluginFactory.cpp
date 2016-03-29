@@ -16,11 +16,11 @@
 #include "PluginFactory.h"
 #include "PluginIdentifier.h"
 #include "misc/Strings.h"
+#include "misc/Debug.h"
 
 #include "LADSPAPluginFactory.h"
 #include "DSSIPluginFactory.h"
 
-#include <iostream>
 #include <locale.h>
 
 namespace Rosegarden
@@ -36,16 +36,14 @@ PluginFactory::instance(QString pluginType)
 {
     if (pluginType == "ladspa") {
         if (!ladspaInstance) {
-            std::cerr << "PluginFactory::instance(" << pluginType
-            << "): creating new LADSPAPluginFactory" << std::endl;
+            RG_DEBUG << "PluginFactory::instance(" << pluginType << "): creating new LADSPAPluginFactory";
             ladspaInstance = new LADSPAPluginFactory();
             ladspaInstance->discoverPlugins();
         }
         return ladspaInstance;
     } else if (pluginType == "dssi") {
         if (!dssiInstance) {
-            std::cerr << "PluginFactory::instance(" << pluginType
-            << "): creating new DSSIPluginFactory" << std::endl;
+            RG_DEBUG << "PluginFactory::instance(" << pluginType << "): creating new DSSIPluginFactory";
             dssiInstance = new DSSIPluginFactory();
             dssiInstance->discoverPlugins();
         }

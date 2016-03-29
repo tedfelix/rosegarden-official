@@ -19,7 +19,6 @@
 
 #define RG_MODULE_STRING "[AlsaDriver]"
 
-#include <iostream>
 #include "misc/Debug.h"
 #include <cstdlib>
 #include <cstdio>

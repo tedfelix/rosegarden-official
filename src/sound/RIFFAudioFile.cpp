@@ -17,10 +17,7 @@
 #include "base/RealTime.h"
 #include "base/Profiler.h"
 #include "misc/Strings.h"
-
-using std::cout;
-using std::cerr;
-using std::endl;
+#include "misc/Debug.h"
 
 //#define DEBUG_RIFF
 
@@ -75,14 +72,13 @@ RIFFAudioFile::~RIFFAudioFile()
 void
 RIFFAudioFile::printStats()
 {
-    cout << "filename         : " << m_fileName << endl
-    << "channels         : " << m_channels << endl
-    << "sample rate      : " << m_sampleRate << endl
-    << "bytes per second : " << m_bytesPerSecond << endl
-    << "bits per sample  : " << m_bitsPerSample << endl
-    << "bytes per frame  : " << m_bytesPerFrame << endl
-    << "file length      : " << m_fileSize << " bytes" << endl
-    << endl;
+    RG_DEBUG << "filename         : " << m_fileName << '\n'
+    << "channels         : " << m_channels << '\n'
+    << "sample rate      : " << m_sampleRate << '\n'
+    << "bytes per second : " << m_bytesPerSecond << '\n'
+    << "bits per sample  : " << m_bitsPerSample << '\n'
+    << "bytes per frame  : " << m_bytesPerFrame << '\n'
+    << "file length      : " << m_fileSize << " bytes" << '\n';
 }
 
 bool
@@ -178,18 +174,16 @@ RIFFAudioFile::scanTo(std::ifstream *file, const RealTime &time)
 
         while ((chunkName = getBytes(file, 4)) != "data") {
 	    if (file->eof()) {
-		std::cerr << "RIFFAudioFile::scanTo(): failed to find data "
-			  << std::endl;
+		RG_WARNING << "RIFFAudioFile::scanTo(): failed to find data";
 		return false;
 	    }
 //#ifdef DEBUG_RIFF
-	    std::cerr << "RIFFAudioFile::scanTo(): skipping chunk: "
-		      << chunkName << std::endl;
+	    RG_WARNING << "RIFFAudioFile::scanTo(): skipping chunk: " << chunkName;
 //#endif
 	    chunkLength = getIntegerFromLittleEndian(getBytes(file, 4));
 	    if (chunkLength < 0) {
-		std::cerr << "RIFFAudioFile::scanTo(): negative chunk length "
-			  << chunkLength << " for chunk " << chunkName << std::endl;
+		RG_WARNING << "RIFFAudioFile::scanTo(): negative chunk length "
+			  << chunkLength << " for chunk " << chunkName;
 		return false;
 	    }
 	    file->seekg(chunkLength, std::ios::cur);
@@ -198,15 +192,12 @@ RIFFAudioFile::scanTo(std::ifstream *file, const RealTime &time)
         // get the length of the data chunk, and scan past it as a side-effect
 	chunkLength = getIntegerFromLittleEndian(getBytes(file, 4));
 #ifdef DEBUG_RIFF
-
-        std::cout << "RIFFAudioFile::scanTo() - data chunk size = "
-        << chunkLength << std::endl;
+        RG_DEBUG << "RIFFAudioFile::scanTo() - data chunk size =" << chunkLength;
 #endif
 
     } catch (BadSoundFileException s) {
 #ifdef DEBUG_RIFF
-        std::cerr << "RIFFAudioFile::scanTo - EXCEPTION - \""
-        << s.getMessage() << "\"" << std::endl;
+        RG_WARNING << "RIFFAudioFile::scanTo - EXCEPTION - \"" << s.getMessage() << "\"";
 #endif
 
         return false;
@@ -223,17 +214,16 @@ RIFFAudioFile::scanTo(std::ifstream *file, const RealTime &time)
     //
     if (totalBytes > m_fileSize - (lengthOfFormat + 16 + 8)) {
 #ifdef DEBUG_RIFF
-        std::cerr << "RIFFAudioFile::scanTo() - attempting to move past end of "
-        << "data block" << std::endl;
+        RG_WARNING << "RIFFAudioFile::scanTo() - attempting to move past end of data block";
 #endif
 
         return false;
     }
 
 #ifdef DEBUG_RIFF
-    std::cout << "RIFFAudioFile::scanTo - seeking to " << time
+    RG_DEBUG << "RIFFAudioFile::scanTo - seeking to " << time
     << " (" << totalBytes << " bytes from current " << file->tellg()
-    << ")" << std::endl;
+    << ")";
 #endif
 
     file->seekg(totalBytes, std::ios::cur);
@@ -375,7 +365,7 @@ RIFFAudioFile::readFormatChunk()
     //
     if (hS.compare(0, 4, AUDIO_RIFF_ID) != 0) {
 #ifdef DEBUG_RIFF
-        std::cerr << "RIFFAudioFile::readFormatChunk - "
+        RG_WARNING << "RIFFAudioFile::readFormatChunk - "
         << "can't find RIFF identifier\n";
 #endif
 
@@ -386,7 +376,7 @@ RIFFAudioFile::readFormatChunk()
     //
     if (hS.compare(8, 4, AUDIO_WAVE_ID) != 0) {
 #ifdef DEBUG_RIFF
-        std::cerr << "Can't find WAV identifier\n";
+        RG_WARNING << "Can't find WAV identifier\n";
 #endif
 
         throw(BadSoundFileException(m_fileName, qstrtostr(QObject::tr("Can't find WAV identifier"))));
@@ -399,7 +389,7 @@ RIFFAudioFile::readFormatChunk()
     //
     if (hS.compare(12, 4, AUDIO_FORMAT_ID) != 0) {
 #ifdef DEBUG_RIFF
-        std::cerr << "Can't find FORMAT identifier\n";
+        RG_WARNING << "Can't find FORMAT identifier\n";
 #endif
 
         throw(BadSoundFileException(m_fileName, qstrtostr(QObject::tr("Can't find FORMAT identifier"))));
@@ -412,9 +402,8 @@ RIFFAudioFile::readFormatChunk()
     unsigned int length = getIntegerFromLittleEndian(hS.substr(4, 4)) + 8;
 
     if (length != m_fileSize) {
-        std::cerr << "WARNING: RIFFAudioFile: incorrect length ("
-        << length << ", file size is " << m_fileSize << "), ignoring"
-        << std::endl;
+        RG_WARNING << "WARNING: RIFFAudioFile: incorrect length ("
+        << length << ", file size is " << m_fileSize << "), ignoring";
         length = m_fileSize;
     }
 
@@ -427,18 +416,16 @@ RIFFAudioFile::readFormatChunk()
     //
     if (lengthOfFormat > 0x10) {
 #ifdef DEBUG_RIFF
-        std::cerr << "RIFFAudioFile::readFormatChunk - "
-        << "extended Format Chunk (" << lengthOfFormat << ")"
-        << std::endl;
+        RG_WARNING << "RIFFAudioFile::readFormatChunk - "
+        << "extended Format Chunk (" << lengthOfFormat << ")";
 #endif
 
         // ignore any overlapping bytes
         m_inFile->seekg(lengthOfFormat - 0x10, std::ios::cur);
     } else if (lengthOfFormat < 0x10) {
 #ifdef DEBUG_RIFF
-        std::cerr << "RIFFAudioFile::readFormatChunk - "
-        << "truncated Format Chunk (" << lengthOfFormat << ")"
-        << std::endl;
+        RG_WARNING << "RIFFAudioFile::readFormatChunk - "
+        << "truncated Format Chunk (" << lengthOfFormat << ")";
 #endif
 
         m_inFile->seekg(lengthOfFormat - 0x10, std::ios::cur);
@@ -522,7 +509,7 @@ RIFFAudioFile::writeFormatChunk()
     outString += AUDIO_FORMAT_ID;
 
     // length
-    //cout << "LENGTH = " << getLittleEndianFromInteger(0x10, 4) << endl;
+    //RG_DEBUG << "LENGTH = " << getLittleEndianFromInteger(0x10, 4);
     outString += getLittleEndianFromInteger(0x10, 4);
 
     // 1 for PCM, 3 for float

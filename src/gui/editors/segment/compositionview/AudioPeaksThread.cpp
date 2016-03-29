@@ -15,11 +15,13 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[AudioPeaksThread]"
 
 #include "AudioPeaksThread.h"
 #include "AudioPeaksReadyEvent.h"
 
 #include "base/RealTime.h"
+#include "misc/Debug.h"
 #include "sound/AudioFileManager.h"
 #include "sound/PeakFileManager.h"
 #include <QApplication>
@@ -50,8 +52,7 @@ AudioPeaksThread::run()
     bool emptyQueueSignalled = false;
 
 #ifdef DEBUG_AUDIO_PEAKS_THREAD
-
-    std::cerr << "AudioPeaksThread::run entering\n";
+    RG_DEBUG << "AudioPeaksThread::run entering";
 #endif
 
     while (!m_exiting) {
@@ -70,7 +71,7 @@ AudioPeaksThread::run()
     }
 
 #ifdef DEBUG_AUDIO_PEAKS_THREAD
-    std::cerr << "AudioPeaksThread::run exiting\n";
+    RG_DEBUG << "AudioPeaksThread::run exiting";
 #endif
 }
 
@@ -84,7 +85,7 @@ bool
 AudioPeaksThread::process()
 {
 #ifdef DEBUG_AUDIO_PEAKS_THREAD
-    std::cerr << "AudioPeaksThread::process()\n";
+    RG_DEBUG << "AudioPeaksThread::process()";
 #endif
 
     // ??? There appears to be a bug that causes this to run one extra time
@@ -121,7 +122,7 @@ AudioPeaksThread::process()
 
         try {
 #ifdef DEBUG_AUDIO_PEAKS_THREAD
-            std::cerr << "AudioPeaksThread::process() file id " << req.audioFileId << std::endl;
+            RG_DEBUG << "AudioPeaksThread::process() file id " << req.audioFileId;
 #endif
 
             // Requires thread-safe AudioFileManager::getPreview
@@ -134,7 +135,7 @@ AudioPeaksThread::process()
         } catch (AudioFileManager::BadAudioPathException e) {
 
 #ifdef DEBUG_AUDIO_PEAKS_THREAD
-            std::cerr << "AudioPeaksThread::process: failed to get peaks for audio file " << req.audioFileId << ": bad audio path: " << e.getMessage() << std::endl;
+            RG_DEBUG << "AudioPeaksThread::process: failed to get peaks for audio file " << req.audioFileId << ": bad audio path: " << e.getMessage();
 #endif
 
             // OK, we hope this just means we're still recording -- so
@@ -144,7 +145,7 @@ AudioPeaksThread::process()
         } catch (PeakFileManager::BadPeakFileException e) {
 
 #ifdef DEBUG_AUDIO_PEAKS_THREAD
-            std::cerr << "AudioPeaksThread::process: failed to get peaks for audio file " << req.audioFileId << ": bad peak file: " << e.getMessage() << std::endl;
+            RG_DEBUG << "AudioPeaksThread::process: failed to get peaks for audio file " << req.audioFileId << ": bad peak file: " << e.getMessage();
 #endif
 
             // As above
@@ -180,7 +181,7 @@ AudioPeaksThread::process()
 
         if (failed > 0 && failed == inQueue) {
 #ifdef DEBUG_AUDIO_PEAKS_THREAD
-            std::cerr << "AudioPeaksThread::process() - return true\n";
+            RG_DEBUG << "AudioPeaksThread::process() - return true";
 #endif
 
             return true; // delay and try again
@@ -188,7 +189,7 @@ AudioPeaksThread::process()
     }
 
 #ifdef DEBUG_AUDIO_PEAKS_THREAD
-    std::cerr << "AudioPeaksThread::process() - return false\n";
+    RG_DEBUG << "AudioPeaksThread::process() - return false";
 #endif
 
     return false;
@@ -201,7 +202,7 @@ AudioPeaksThread::requestPeaks(const Request &request)
 
 #ifdef DEBUG_AUDIO_PEAKS_THREAD
 
-    std::cerr << "AudioPeaksThread::requestPeaks() for file id " << request.audioFileId << ", start " << request.audioStartTime << ", end " << request.audioEndTime << ", width " << request.width << ", notify " << request.notify << std::endl;
+    RG_DEBUG << "AudioPeaksThread::requestPeaks() for file id " << request.audioFileId << ", start " << request.audioStartTime << ", end " << request.audioEndTime << ", width " << request.width << ", notify " << request.notify;
 #endif 
     /*!!!
         for (RequestQueue::iterator i = m_queue.begin(); i != m_queue.end(); ++i) {
@@ -220,7 +221,7 @@ AudioPeaksThread::requestPeaks(const Request &request)
     //     if (!running()) start();
 
 #ifdef DEBUG_AUDIO_PEAKS_THREAD
-    std::cerr << "AudioPeaksThread::requestPeaks() - token = " << token << std::endl;
+    RG_DEBUG << "AudioPeaksThread::requestPeaks() - token = " << token;
 #endif
 
     return token;
@@ -233,7 +234,7 @@ AudioPeaksThread::cancelPeaks(int token)
 
 #ifdef DEBUG_AUDIO_PEAKS_THREAD
 
-    std::cerr << "AudioPeaksThread::cancelPeaks() for token " << token << std::endl;
+    RG_DEBUG << "AudioPeaksThread::cancelPeaks() for token " << token;
 #endif
 
     for (RequestQueue::iterator i = m_queue.begin(); i != m_queue.end(); ++i) {

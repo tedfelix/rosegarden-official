@@ -28,7 +28,6 @@
 #include <stdlib.h>
 #include <qfile.h>
 #include <qstring.h>
-#include <iostream>
 #include <qtextstream.h>
 #include <math.h>
 #include <string>

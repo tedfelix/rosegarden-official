@@ -25,7 +25,6 @@
 #define RG_PEAKFILEMANAGER_H
 
 #include <string>
-#include <iostream>
 #include <fstream>
 #include <vector>
 

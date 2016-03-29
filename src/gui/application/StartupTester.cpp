@@ -49,7 +49,7 @@ StartupTester::StartupTester() :
 
     network = new QNetworkAccessManager(this);
     network->get(QNetworkRequest(url));
-    std::cerr << "StartupTester::StartupTester(): URL: " << url.toString() << std::endl;
+    RG_DEBUG << "StartupTester::StartupTester(): URL: " << url.toString();
 
     connect(network, SIGNAL(finished(QNetworkReply*)),
             this, SLOT(slotNetworkFinished(QNetworkReply*)));
@@ -144,7 +144,7 @@ StartupTester::slotNetworkFinished(QNetworkReply *reply)
 
     if (reply->error() != QNetworkReply::NoError) {
 //        m_versionHttpFailed = true;
-        std::cerr << "StartupTester::slotNetworkFinished(): Connection failed: " << reply->errorString() << std::endl;
+        RG_WARNING << "StartupTester::slotNetworkFinished(): Connection failed: " << reply->errorString();
         return;
     }
 
@@ -154,9 +154,8 @@ StartupTester::slotNetworkFinished(QNetworkReply *reply)
     if (lines.empty()) return;
 
     QString latestVersion = lines[0];
-    std::cerr << "StartupTester::slotNetworkFinished(): Comparing current version \"" << VERSION
-              << "\" with latest version \"" << latestVersion << "\""
-              << std::endl;
+    RG_DEBUG << "StartupTester::slotNetworkFinished(): Comparing current version \"" << VERSION
+              << "\" with latest version \"" << latestVersion << "\"";
     if (isVersionNewerThan(latestVersion, VERSION)) {
         emit newerVersionAvailable(latestVersion);
     }

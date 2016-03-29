@@ -32,6 +32,7 @@
 #include <QSettings>
 
 #include <sstream>
+#include <iostream>
 
 namespace Rosegarden
 {

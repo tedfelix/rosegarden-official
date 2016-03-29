@@ -33,8 +33,7 @@
 #include <QPoint>
 #include <QString>
 #include <QStringList>
-
-//#include <qgarray.h>
+#include <iostream>
 
 namespace Rosegarden
 {

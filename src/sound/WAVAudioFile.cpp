@@ -18,9 +18,7 @@
 
 #include <sstream>
 
-using std::cout;
-using std::cerr;
-using std::endl;
+#include "misc/Debug.h"
 
 //#define DEBUG_DECODE 1
 
@@ -70,7 +68,7 @@ WAVAudioFile::open()
     try {
         parseHeader();
     } catch (BadSoundFileException e) {
-        std::cerr << "ERROR: WAVAudioFile::open(): parseHeader: " << e.getMessage() << endl;
+        RG_WARNING << "ERROR: WAVAudioFile::open(): parseHeader: " << e.getMessage();
         return false;
     }
 
@@ -167,13 +165,12 @@ WAVAudioFile::decode(const unsigned char *ubuf,
             bitsPerSample != 16 &&
             bitsPerSample != 24 &&
             bitsPerSample != 32) { // 32-bit is IEEE-float (enforced in RIFFAudioFile)
-        std::cerr << "WAVAudioFile::decode: unsupported " <<
-        bitsPerSample << "-bit sample size" << std::endl;
+        RG_WARNING << "WAVAudioFile::decode: unsupported " << bitsPerSample << "-bit sample size";
         return false;
     }
 
 #ifdef DEBUG_DECODE
-    std::cerr << "WAVAudioFile::decode: " << sourceBytes << " bytes -> " << nframes << " frames, SSR " << getSampleRate() << ", TSR " << targetSampleRate << ", sch " << getChannels() << ", tch " << targetChannels << std::endl;
+    RG_DEBUG << "WAVAudioFile::decode: " << sourceBytes << " bytes -> " << nframes << " frames, SSR " << getSampleRate() << ", TSR " << targetSampleRate << ", sch " << getChannels() << ", tch " << targetChannels;
 #endif
 
     // If we're reading a stereo file onto a mono target, we mix the

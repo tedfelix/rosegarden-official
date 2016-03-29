@@ -30,7 +30,7 @@
 #include <QRegExp>
 #include <QString>
 #include <QStringList>
-
+#include <iostream>
 
 namespace Rosegarden
 {

@@ -22,7 +22,6 @@
 #include "misc/Debug.h"
 
 #include <cstring>
-#include <iostream>
 
 namespace Rosegarden
 {
@@ -60,16 +59,14 @@ WavFileWriteStream::WavFileWriteStream(Target target) :
     m_file = sf_open(getPath().toLocal8Bit().data(), SFM_WRITE, &m_fileInfo);
 
     if (!m_file) {
-	std::cerr << "WavFileWriteStream::initialize: Failed to open output file for writing ("
-		  << sf_strerror(m_file) << ")" << std::endl;
+        RG_WARNING << "WavFileWriteStream::initialize: Failed to open output file for writing (" << sf_strerror(m_file) << ")";
 
         m_error = QString("Failed to open audio file '") +
             getPath() + "' for writing";
         m_target.invalidate();
-	return;
     } else {
-        std::cerr << "WavFileWriteStream::initialize: Opened output file "
-                  << getPath().toStdString() << " for writing" << std::endl;
+        RG_DEBUG << "WavFileWriteStream::initialize: Opened output file"
+                 << getPath().toStdString() << "for writing";
     }
 }
 

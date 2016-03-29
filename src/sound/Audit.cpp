@@ -15,13 +15,15 @@
 
 #include "Audit.h"
 
+#include "misc/Debug.h"
+
 namespace Rosegarden
 {
 
 Audit::~Audit()
 {
     std::string s = str();
-    std::cerr << s;
+    RG_DEBUG << s;
     m_audit += s;
 }
 

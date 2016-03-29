@@ -19,9 +19,8 @@
 #include <cstdlib>
 #include <cmath>
 
-#include <iostream>
-
 #include <samplerate.h>
+#include <misc/Debug.h>
 
 namespace Rosegarden {
 
@@ -95,8 +94,7 @@ D_SRC::D_SRC(Resampler::Quality quality, int channels, int maxBufferSize,
     m_debugLevel(debugLevel)
 {
     if (m_debugLevel > 0) {
-        std::cerr << "Resampler::Resampler: using libsamplerate implementation"
-                  << std::endl;
+        RG_DEBUG << "Resampler::Resampler: using libsamplerate implementation";
     }
 
     int err = 0;
@@ -106,8 +104,8 @@ D_SRC::D_SRC(Resampler::Quality quality, int channels, int maxBufferSize,
                     channels, &err);
 
     if (err) {
-        std::cerr << "Resampler::Resampler: failed to create libsamplerate resampler: " 
-                  << src_strerror(err) << std::endl;
+        RG_WARNING << "Resampler::Resampler: failed to create libsamplerate resampler: " 
+                  << src_strerror(err);
         throw Resampler::ImplementationError; //!!! of course, need to catch this!
     }
 
@@ -169,8 +167,8 @@ D_SRC::resample(const float *const *const in,
     int err = src_process(m_src, &data);
 
     if (err) {
-        std::cerr << "Resampler::process: libsamplerate error: "
-                  << src_strerror(err) << std::endl;
+        RG_WARNING << "Resampler::process: libsamplerate error: "
+                  << src_strerror(err);
         throw Resampler::ImplementationError; //!!! of course, need to catch this!
     }
 
@@ -210,8 +208,8 @@ D_SRC::resampleInterleaved(const float *const in,
     int err = src_process(m_src, &data);
 
     if (err) {
-        std::cerr << "Resampler::process: libsamplerate error: "
-                  << src_strerror(err) << std::endl;
+        RG_WARNING << "Resampler::process: libsamplerate error: "
+                  << src_strerror(err);
         throw Resampler::ImplementationError; //!!! of course, need to catch this!
     }
 

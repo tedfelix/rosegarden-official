@@ -17,8 +17,8 @@
 #include "LADSPAPluginFactory.h"
 
 #include <QtGlobal>
+#include "misc/Debug.h"
 
-#include <iostream>
 
 //#define DEBUG_LADSPA 1
 
@@ -103,8 +103,8 @@ void
 LADSPAPluginInstance::init(int idealChannelCount)
 {
 #ifdef DEBUG_LADSPA
-    std::cerr << "LADSPAPluginInstance::init(" << idealChannelCount << "): plugin has "
-    << m_descriptor->PortCount << " ports" << std::endl;
+    RG_DEBUG << "LADSPAPluginInstance::init(" << idealChannelCount << "): plugin has"
+    << m_descriptor->PortCount << "ports";
 #endif
 
     // Discover ports numbers and identities
@@ -113,13 +113,13 @@ LADSPAPluginInstance::init(int idealChannelCount)
         if (LADSPA_IS_PORT_AUDIO(m_descriptor->PortDescriptors[i])) {
             if (LADSPA_IS_PORT_INPUT(m_descriptor->PortDescriptors[i])) {
 #ifdef DEBUG_LADSPA
-                std::cerr << "LADSPAPluginInstance::init: port " << i << " is audio in" << std::endl;
+                RC_DEBUG << "LADSPAPluginInstance::init: port " << i << " is audio in";
 #endif
 
                 m_audioPortsIn.push_back(i);
             } else {
 #ifdef DEBUG_LADSPA
-                std::cerr << "LADSPAPluginInstance::init: port " << i << " is audio out" << std::endl;
+                RG_DEBUG << "LADSPAPluginInstance::init: port " << i << " is audio out";
 #endif
 
                 m_audioPortsOut.push_back(i);
@@ -128,7 +128,7 @@ LADSPAPluginInstance::init(int idealChannelCount)
             if (LADSPA_IS_PORT_CONTROL(m_descriptor->PortDescriptors[i])) {
                 if (LADSPA_IS_PORT_INPUT(m_descriptor->PortDescriptors[i])) {
 #ifdef DEBUG_LADSPA
-                    std::cerr << "LADSPAPluginInstance::init: port " << i << " is control in" << std::endl;
+                    RG_DEBUG << "LADSPAPluginInstance::init: port " << i << " is control in";
 #endif
 
                     LADSPA_Data *data = new LADSPA_Data(0.0);
@@ -136,7 +136,7 @@ LADSPAPluginInstance::init(int idealChannelCount)
                         std::pair<unsigned long, LADSPA_Data*>(i, data));
                 } else {
 #ifdef DEBUG_LADSPA
-                    std::cerr << "LADSPAPluginInstance::init: port " << i << " is control out" << std::endl;
+                    RG_DEBUG << "LADSPAPluginInstance::init: port " << i << " is control out";
 #endif
 
                     LADSPA_Data *data = new LADSPA_Data(0.0);
@@ -145,7 +145,7 @@ LADSPAPluginInstance::init(int idealChannelCount)
                     if (!strcmp(m_descriptor->PortNames[i], "latency") ||
                             !strcmp(m_descriptor->PortNames[i], "_latency")) {
 #ifdef DEBUG_LADSPA
-                        std::cerr << "Wooo! We have a latency port!" << std::endl;
+                        RG_DEBUG << "Wooo! We have a latency port!";
 #endif
 
                         m_latencyPort = data;
@@ -154,8 +154,8 @@ LADSPAPluginInstance::init(int idealChannelCount)
             }
 #ifdef DEBUG_LADSPA
             else
-                std::cerr << "LADSPAPluginInstance::init - "
-                << "unrecognised port type" << std::endl;
+                RG_DEBUG << "LADSPAPluginInstance::init - "
+                << "unrecognised port type";
 #endif
 
     }
@@ -223,7 +223,7 @@ LADSPAPluginInstance::setIdealChannelCount(size_t channels)
 LADSPAPluginInstance::~LADSPAPluginInstance()
 {
 #ifdef DEBUG_LADSPA
-    std::cerr << "LADSPAPluginInstance::~LADSPAPluginInstance" << std::endl;
+    RG_DEBUG << "LADSPAPluginInstance::~LADSPAPluginInstance";
 #endif
 
     if (m_instanceHandles.size() != 0) { // "isOK()"
@@ -262,17 +262,17 @@ void
 LADSPAPluginInstance::instantiate(unsigned long sampleRate)
 {
 #ifdef DEBUG_LADSPA
-    std::cout << "LADSPAPluginInstance::instantiate - plugin unique id = "
-    << m_descriptor->UniqueID << std::endl;
+    RG_DEBUG << "LADSPAPluginInstance::instantiate - plugin unique id = "
+    << m_descriptor->UniqueID;
 #endif
 
     if (!m_descriptor)
         return ;
 
     if (!m_descriptor->instantiate) {
-        std::cerr << "Bad plugin: plugin id " << m_descriptor->UniqueID
+        RG_WARNING << "Bad plugin: plugin id " << m_descriptor->UniqueID
         << ":" << m_descriptor->Label
-        << " has no instantiate method!" << std::endl;
+        << " has no instantiate method!";
         return ;
     }
 
@@ -406,9 +406,9 @@ LADSPAPluginInstance::cleanup()
         return ;
 
     if (!m_descriptor->cleanup) {
-        std::cerr << "Bad plugin: plugin id " << m_descriptor->UniqueID
+        RG_WARNING << "Bad plugin: plugin id " << m_descriptor->UniqueID
         << ":" << m_descriptor->Label
-        << " has no cleanup method!" << std::endl;
+        << " has no cleanup method!";
         return ;
     }
 

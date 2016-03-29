@@ -20,6 +20,7 @@
 #include "DecoyAction.h"
 
 #include "misc/Strings.h"
+#include "misc/Debug.h"
 
 #include <QObject>
 #include <QAction>
@@ -43,10 +44,10 @@ ActionFileClient::~ActionFileClient()
 QAction *
 ActionFileClient::createAction(QString actionName, QString connection)
 {
-    //std::cerr << "ActionFileClient::createAction(" << actionName << ", " << connection << ")" << std::endl;
+    //RG_DEBUG << "ActionFileClient::createAction(" << actionName << ", " << connection << ")";
     QObject *obj = dynamic_cast<QObject *>(this);
     if (!obj) {
-        std::cerr << "ERROR: ActionFileClient::createAction: ActionFileClient subclass is not a QObject" << std::endl;
+        RG_WARNING << "ERROR: ActionFileClient::createAction: ActionFileClient subclass is not a QObject";
         return 0;
     }
     QAction *action = new QAction(obj);
@@ -63,7 +64,7 @@ ActionFileClient::createAction(QString actionName, QObject *target, QString conn
 {
     QObject *obj = dynamic_cast<QObject *>(this);
     if (!obj) {
-        std::cerr << "ERROR: ActionFileClient::createAction: ActionFileClient subclass is not a QObject" << std::endl;
+        RG_WARNING << "ERROR: ActionFileClient::createAction: ActionFileClient subclass is not a QObject";
         return 0;
     }
     QAction *action = new QAction(obj);
@@ -80,13 +81,13 @@ ActionFileClient::findAction(QString actionName)
 {
     QObject *obj = dynamic_cast<QObject *>(this);
     if (!obj) {
-        std::cerr << "ERROR: ActionFileClient::findAction: ActionFileClient subclass is not a QObject" << std::endl;
+        RG_WARNING << "ERROR: ActionFileClient::findAction: ActionFileClient subclass is not a QObject";
         return DecoyAction::getInstance();
     }
     QAction *a = obj->findChild<QAction *>(actionName);
     if (!a) {
-        std::cerr << "WARNING: ActionFileClient(\"" << obj->objectName()
-                  << "\")::findAction: No such action as \"" << actionName << "\"" << std::endl;
+        RG_WARNING << "WARNING: ActionFileClient(\"" << obj->objectName()
+                  << "\")::findAction: No such action as \"" << actionName << "\"";
         return DecoyAction::getInstance();
     }
     return a;
@@ -117,7 +118,7 @@ ActionFileClient::findGroup(QString groupName)
 {
     QObject *obj = dynamic_cast<QObject *>(this);
     if (!obj) {
-        std::cerr << "ERROR: ActionFileClient::findGroup: ActionFileClient subclass is not a QObject" << std::endl;
+        RG_WARNING << "ERROR: ActionFileClient::findGroup: ActionFileClient subclass is not a QObject";
         return 0;
     }
     QWidget *widget = dynamic_cast<QWidget *>(this);
@@ -125,8 +126,8 @@ ActionFileClient::findGroup(QString groupName)
     if (widget) {
         g = obj->findChild<QActionGroup *>(groupName);
         if (!g) {
-            std::cerr << "WARNING: ActionFileClient(\"" << obj->objectName()
-                      << "\")::findGroup: No such action-group as \"" << groupName << "\"" << std::endl;
+            RG_WARNING << "WARNING: ActionFileClient(\"" << obj->objectName()
+                      << "\")::findGroup: No such action-group as \"" << groupName << "\"";
         }
     }
     return g;
@@ -137,7 +138,7 @@ ActionFileClient::findMenu(QString menuName)
 {
     QObject *obj = dynamic_cast<QObject *>(this);
     if (!obj) {
-        std::cerr << "ERROR: ActionFileClient::findMenu: ActionFileClient subclass is not a QObject" << std::endl;
+        RG_WARNING << "ERROR: ActionFileClient::findMenu: ActionFileClient subclass is not a QObject";
         return 0;
     }
     QWidget *widget = dynamic_cast<QWidget *>(this);
@@ -145,15 +146,15 @@ ActionFileClient::findMenu(QString menuName)
     if (widget) {
         m = obj->findChild<QMenu *>(menuName);
         if (!m) {
-            std::cerr << "WARNING: ActionFileClient(\"" << obj->objectName()
-                      << "\")::findMenu: No such menu as \"" << menuName << "\"" << std::endl;
+            RG_WARNING << "WARNING: ActionFileClient(\"" << obj->objectName()
+                      << "\")::findMenu: No such menu as \"" << menuName << "\"";
         }
     } else {
         ActionFileMenuWrapper *w = obj->findChild<ActionFileMenuWrapper *>(menuName);
         if (w) m = w->getMenu();
         else {
-            std::cerr << "WARNING: ActionFileClient(\"" << obj->objectName()
-                      << "\")::findMenu: No such menu (wrapper) as \"" << menuName << "\"" << std::endl;
+            RG_WARNING << "WARNING: ActionFileClient(\"" << obj->objectName()
+                      << "\")::findMenu: No such menu (wrapper) as \"" << menuName << "\"";
         }
     }            
     return m;
@@ -164,13 +165,13 @@ ActionFileClient::findToolbar(QString toolbarName)
 {
     QWidget *w = dynamic_cast<QWidget *>(this);
     if (!w) {
-        std::cerr << "ERROR: ActionFileClient::findToolbar: ActionFileClient subclass is not a QWidget" << std::endl;
+        RG_WARNING << "ERROR: ActionFileClient::findToolbar: ActionFileClient subclass is not a QWidget";
         return 0;
     }
     QToolBar *t = w->findChild<QToolBar *>(toolbarName);
     if (!t) {
-        std::cerr << "WARNING: ActionFileClient(\"" << w->objectName()
-                  << "\")::findToolbar: No such toolbar as \"" << toolbarName << "\", creating one" << std::endl;
+        RG_WARNING << "WARNING: ActionFileClient(\"" << w->objectName()
+                  << "\")::findToolbar: No such toolbar as \"" << toolbarName << "\", creating one";
         t = new QToolBar(toolbarName, w);
         t->setObjectName(toolbarName);
         return t;
@@ -183,12 +184,12 @@ ActionFileClient::createGUI(QString rcFileName)
 {
     QObject *obj = dynamic_cast<QObject *>(this);
     if (!obj) {
-        std::cerr << "ERROR: ActionFileClient::createGUI: ActionFileClient subclass is not a QObject" << std::endl;
+        RG_WARNING << "ERROR: ActionFileClient::createGUI: ActionFileClient subclass is not a QObject";
         return 0;
     }
     if (!m_actionFileParser) m_actionFileParser = new ActionFileParser(obj);
     if (!m_actionFileParser->load(rcFileName)) {
-        std::cerr << "ActionFileClient::createGUI: ERROR: Failed to load action file" << std::endl;
+        RG_WARNING << "ActionFileClient::createGUI: ERROR: Failed to load action file";
         return false;
     }
     return true;

@@ -15,18 +15,17 @@
 
 #include "SF2PatchExtractor.h"
 
-#include <iostream>
 #include <fstream>
 #include <string>
 #include <map>
 #include <stdint.h>
 #include <sys/types.h>
+#include <iostream>
 
 namespace Rosegarden
 {
 
 using std::string;
-using std::cerr;
 using std::endl;
 using std::ifstream;
 using std::ios;

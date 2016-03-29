@@ -90,10 +90,10 @@ ResourceFinder::getUserResourcePrefix()
     if (home) {
         return QString("%1/%2/%3").arg(home).arg(homepath).arg(appname);
     } else {
-        std::cerr << "ResourceFinder::getUserResourcePrefix: ERROR: No home directory available?" << std::endl;
+        RG_WARNING << "ResourceFinder::getUserResourcePrefix: ERROR: No home directory available?";
         return "";
     }
-}    
+}
 
 QStringList
 ResourceFinder::getResourcePrefixList()
@@ -138,7 +138,7 @@ ResourceFinder::getResourcePath(QString resourceCat, QString fileName)
         }
     }
 
-    std::cerr << "getResourcePath(): Resource file \"" << fileName << "\" for category \"" << resourceCat << "\" not found.\n";
+    RG_WARNING << "getResourcePath(): Resource file \"" << fileName << "\" for category \"" << resourceCat << "\" not found.";
 
     return "";
 }
@@ -189,7 +189,7 @@ ResourceFinder::getResourceSaveDir(QString resourceCat)
     QDir userDir(user);
     if (!userDir.exists()) {
         if (!userDir.mkpath(user)) {
-            std::cerr << "ResourceFinder::getResourceSaveDir: ERROR: Failed to create user resource path \"" << user << "\"" << std::endl;
+            RG_WARNING << "ResourceFinder::getResourceSaveDir: ERROR: Failed to create user resource path \"" << user << "\"";
             return "";
         }
     }
@@ -199,7 +199,7 @@ ResourceFinder::getResourceSaveDir(QString resourceCat)
         QDir saveDir(save);
         if (!saveDir.exists()) {
             if (!userDir.mkpath(save)) {
-                std::cerr << "ResourceFinder::getResourceSaveDir: ERROR: Failed to create user resource path \"" << save << "\"" << std::endl;
+                RG_WARNING << "ResourceFinder::getResourceSaveDir: ERROR: Failed to create user resource path \"" << save << "\"";
                 return "";
             }
         }
@@ -273,7 +273,7 @@ ResourceFinder::unbundleResource(QString resourceCat, QString fileName)
     QString target = getResourceSavePath(resourceCat, fileName);
     QFile file(path);
     if (!file.copy(target)) {
-        std::cerr << "ResourceFinder::unbundleResource: ERROR: Failed to un-bundle resource file \"" << fileName << "\" to user location \"" << target << "\"" << std::endl;
+        RG_WARNING << "ResourceFinder::unbundleResource: ERROR: Failed to un-bundle resource file \"" << fileName << "\" to user location \"" << target << "\"";
         return false;
     }
 

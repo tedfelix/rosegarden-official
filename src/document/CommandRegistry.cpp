@@ -29,10 +29,10 @@
 #include <QFile>
 #include <QAction>
 
-//#include <kglobal.h>
 #include "document/Command.h"
 #include <misc/Strings.h>
 #include "gui/general/IconLoader.h"
+#include <iostream>
 
 namespace Rosegarden {
 

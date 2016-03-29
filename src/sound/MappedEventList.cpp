@@ -16,7 +16,6 @@
 #include "MappedEventList.h"
 #include "MappedEvent.h"
 #include "base/SegmentPerformanceHelper.h"
-#include <iostream>
 
 namespace Rosegarden
 {

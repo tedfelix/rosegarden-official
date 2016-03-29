@@ -14,7 +14,7 @@
 */
 
 #include "AudioCache.h"
-#include <iostream>
+#include "misc/Debug.h"
 
 //#define DEBUG_AUDIO_CACHE 1
 
@@ -47,13 +47,13 @@ void
 AudioCache::addData(void *index, size_t channels, size_t nframes, float **data)
 {
 #ifdef DEBUG_AUDIO_CACHE
-    std::cerr << "AudioCache::addData(" << index << ")" << std::endl;
+    RG_DEBUG << "AudioCache::addData(" << index << ")";
 #endif
 
     if (m_cache.find(index) != m_cache.end()) {
-        std::cerr << "WARNING: AudioCache::addData(" << index << ", "
+        RG_WARNING << "WARNING: AudioCache::addData(" << index << ", "
         << channels << ", " << nframes
-        << ": already cached" << std::endl;
+        << ": already cached";
         return ;
     }
 
@@ -64,15 +64,14 @@ void
 AudioCache::incrementReference(void *index)
 {
     if (m_cache.find(index) == m_cache.end()) {
-        std::cerr << "WARNING: AudioCache::incrementReference(" << index
-        << "): not found" << std::endl;
+        RG_WARNING << "WARNING: AudioCache::incrementReference(" << index
+        << "): not found";
         return ;
     }
     ++m_cache[index]->refCount;
 
 #ifdef DEBUG_AUDIO_CACHE
-
-    std::cerr << "AudioCache::incrementReference(" << index << ") [to " << (m_cache[index]->refCount) << "]" << std::endl;
+    RG_DEBUG << "AudioCache::incrementReference(" << index << ") [to " << (m_cache[index]->refCount) << "]";
 #endif
 }
 
@@ -82,23 +81,21 @@ AudioCache::decrementReference(void *index)
     std::map<void *, CacheRec *>::iterator i = m_cache.find(index);
 
     if (i == m_cache.end()) {
-        std::cerr << "WARNING: AudioCache::decrementReference(" << index
-        << "): not found" << std::endl;
+        RG_WARNING << "WARNING: AudioCache::decrementReference(" << index
+        << "): not found";
         return ;
     }
     if (i->second->refCount <= 1) {
         delete i->second;
         m_cache.erase(i);
 #ifdef DEBUG_AUDIO_CACHE
-
-        std::cerr << "AudioCache::decrementReference(" << index << ") [deleting]" << std::endl;
+        RG_DEBUG << "AudioCache::decrementReference(" << index << ") [deleting]";
 #endif
 
     } else {
         --i->second->refCount;
 #ifdef DEBUG_AUDIO_CACHE
-
-        std::cerr << "AudioCache::decrementReference(" << index << ") [to " << (m_cache[index]->refCount) << "]" << std::endl;
+        RG_DEBUG << "AudioCache::decrementReference(" << index << ") [to " << (m_cache[index]->refCount) << "]";
 #endif
 
     }
@@ -108,13 +105,13 @@ void
 AudioCache::clear()
 {
 #ifdef DEBUG_AUDIO_CACHE
-    std::cerr << "AudioCache::clear()" << std::endl;
+    RG_DEBUG << "AudioCache::clear()";
 #endif
 
     for (std::map<void *, CacheRec *>::iterator i = m_cache.begin();
             i != m_cache.end(); ++i) {
         if (i->second->refCount > 0) {
-            std::cerr << "WARNING: AudioCache::clear: deleting cached data with refCount " << i->second->refCount << std::endl;
+            RG_WARNING << "WARNING: AudioCache::clear: deleting cached data with refCount " << i->second->refCount;
         }
     }
     m_cache.clear();

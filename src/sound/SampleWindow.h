@@ -35,7 +35,6 @@
 
 #include <cmath>
 #include <cstdlib>
-#include <iostream>
 #include <map>
 
 namespace Rosegarden 

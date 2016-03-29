@@ -30,7 +30,6 @@
 #endif
 
 #ifdef DEBUG_RINGBUFFER_CREATE_DESTROY
-#include <iostream>
 static int extant_ringbuffers = 0;
 #endif
 

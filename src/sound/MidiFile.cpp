@@ -36,7 +36,6 @@
 #include "sound/MidiInserter.h"
 #include "sound/SortingInserter.h"
 
-#include <iostream>
 #include <fstream>
 #include <string>
 #include <sstream>

@@ -18,6 +18,7 @@
 #include "DocumentGet.h"
 #include "gui/application/RosegardenMainWindow.h"
 #include "document/RosegardenDocument.h"
+#include <iostream>
 
 namespace Rosegarden
 {

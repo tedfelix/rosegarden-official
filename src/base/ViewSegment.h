@@ -19,7 +19,6 @@
 #include "ViewElement.h"
 #include "base/Segment.h"
 
-#include <iostream>
 #include <cassert>
 
 namespace Rosegarden 

@@ -23,7 +23,6 @@
 
 #include <QApplication>
 
-#include <iostream>
 #include <fstream>
 
 #ifdef __FreeBSD__

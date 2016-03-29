@@ -16,7 +16,6 @@
 #ifndef RG_REAL_TIME_H
 #define RG_REAL_TIME_H
 
-#include <iostream>
 #include <string>
 
 #include <rosegardenprivate_export.h>

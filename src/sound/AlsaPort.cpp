@@ -13,7 +13,6 @@
 
 #include "AlsaPort.h"
 
-#include <iostream>
 #include <cstdlib>
 #include <cstdio>
 

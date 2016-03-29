@@ -15,7 +15,6 @@
 
 #define RG_MODULE_STRING "[MappedStudio]"
 
-#include <iostream>
 
 #include "MappedStudio.h"
 #include "SoundDriver.h"

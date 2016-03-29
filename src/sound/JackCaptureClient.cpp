@@ -16,8 +16,7 @@
 */
 
 #include "JackCaptureClient.h"
-
-#include <iostream>
+#include "misc/Debug.h"
 
 #define DEBUG_JACK_CAPTURE_CLIENT 0
 
@@ -40,7 +39,7 @@ JackCaptureClient::JackCaptureClient( const char *captureClientName, int fs ) :
         return;
     }
 #if DEBUG_JACK_CAPTURE_CLIENT
-    std::cout << "Registered as Jack client" << std::endl;
+    RG_DEBUG << "Registered as Jack client";
 #endif
 
     // get stream info
@@ -48,9 +47,9 @@ JackCaptureClient::JackCaptureClient( const char *captureClientName, int fs ) :
     m_jackBufferSize = jack_get_buffer_size( client );
     m_jackSampleSize = sizeof(jack_default_audio_sample_t);
 #if DEBUG_JACK_CAPTURE_CLIENT
-    std::cout << "Sample Rate " << m_jackSampleRate << std::endl;
-    std::cout << "Max buffer size " << m_jackBufferSize << std::endl;
-    std::cout << "Sample size (bytes) " << m_jackSampleSize << std::endl;
+    RG_DEBUG << "Sample Rate " << m_jackSampleRate;
+    RG_DEBUG << "Max buffer size " << m_jackBufferSize;
+    RG_DEBUG << "Sample size (bytes) " << m_jackSampleSize;
 #endif
 
     //setup ringbuffer
@@ -60,16 +59,16 @@ JackCaptureClient::JackCaptureClient( const char *captureClientName, int fs ) :
     jack_set_process_callback(client, &process, (void*)this);
     jack_on_shutdown(client, jackShutdown, (void*)this);
 #if DEBUG_JACK_CAPTURE_CLIENT
-    std::cout << "Process and shutdown calls registered\n";
+    RG_DEBUG << "Process and shutdown calls registered";
 #endif
 
     // Activate
     if ( jack_activate(client) ) {
-        std::cout << "Can't activate client\n";
+        RG_WARNING << "Can't activate client";
         throw("Cannot activate client");
     }
 #if DEBUG_JACK_CAPTURE_CLIENT
-    std::cout << "Activated\n";
+    RG_DEBUG << "Activated";
 #endif
 
     //set default port to the first available port
@@ -92,13 +91,12 @@ JackCaptureClient::setFrameSize(int nextFrameSize)
     m_frameSize = nextFrameSize + 1;
 
 #if DEBUG_JACK_CAPTURE_CLIENT
-    std::cout << "CaptureClient: setting framesize to at least "
-              << m_frameSize << std::endl;
+    RG_DEBUG << "CaptureClient: setting framesize to at least"
+              << m_frameSize;
 #endif
 
     if (m_processing) {
-        std::cout << "CaptureClient: Procesing, can't change framesize"
-                  << std::endl;
+        RG_DEBUG << "CaptureClient: Procesing, can't change framesize";
         return;
     }
 
@@ -112,12 +110,11 @@ JackCaptureClient::setFrameSize(int nextFrameSize)
     m_jackRingBuffer = jack_ringbuffer_create( m_jackRingBufferSize );
     jack_ringbuffer_reset( m_jackRingBuffer );
 #if DEBUG_JACK_CAPTURE_CLIENT
-    std::cout << "Created ringbuffer, write space: "
+    RG_DEBUG << "Created ringbuffer, write space: "
               << jack_ringbuffer_write_space(m_jackRingBuffer)
               << "read space: "
               << jack_ringbuffer_read_space(m_jackRingBuffer)
-              << " m_jackSampleSize " << m_jackSampleSize
-              << std::endl;;
+              << " m_jackSampleSize " << m_jackSampleSize;
 #endif
 }
 
@@ -138,7 +135,7 @@ JackCaptureClient::setupPorts(const char *portName,
                               const char *captureClientName)
 {
 #if DEBUG_JACK_CAPTURE_CLIENT
-    std::cout << "Connecting ports...\n";
+    RG_DEBUG << "Connecting ports...";
 #endif
 
     // register port
@@ -146,17 +143,17 @@ JackCaptureClient::setupPorts(const char *portName,
     inPortName.append(" In");
 
 #if DEBUG_JACK_CAPTURE_CLIENT
-    std::cout << "Registering input port as:" << inPortName << std::endl;
+    RG_DEBUG << "Registering input port as:" << inPortName;
 #endif
     inPort = jack_port_register(client, inPortName.c_str(),
                                 JACK_DEFAULT_AUDIO_TYPE, JackPortIsInput, 0 );
     if (inPort == 0) {
-        std::cout << "Cannot open Jack port";
+        RG_DEBUG << "Cannot open Jack port";
     }
 
     if ( jack_port_connected(inPort) ) {
 #if DEBUG_JACK_CAPTURE_CLIENT
-        std::cout << "Disconnecting ports\n";
+        RG_DEBUG << "Disconnecting ports";
 #endif
 
         const char **connectedPorts = jack_port_get_connections(inPort);
@@ -164,8 +161,7 @@ JackCaptureClient::setupPorts(const char *portName,
         while (connectedPorts[i] != NULL)
         {
 #if DEBUG_JACK_CAPTURE_CLIENT
-            std::cout << "disconnecting from " << connectedPorts[i]
-                      << std::endl;
+            RG_DEBUG << "disconnecting from " << connectedPorts[i];
 #endif
             jack_port_disconnect(client, inPort);
             i++;
@@ -175,21 +171,19 @@ JackCaptureClient::setupPorts(const char *portName,
     m_capturePort = jack_port_by_name(client, portName);
 
 #if DEBUG_JACK_CAPTURE_CLIENT
-    std::cout << std::endl << "Recording from "
-              << jack_port_name(m_capturePort) << std::endl;
+    RG_DEBUG << "Recording from" << jack_port_name(m_capturePort);
 #endif
 
     // Connect ports
     if (jack_connect( client, portName, jack_port_name(inPort) ) < 0 )
     {
-        std::cout << "------------------------------" << std::endl
-                  << "Jack Client: cant connect port" << std::endl
-                  << "------------------------------" << std::endl
-                  << std::endl;
+        RG_DEBUG << "------------------------------"
+                  << "Jack Client: cant connect port"
+                  << "------------------------------";
     }
 
 #if DEBUG_JACK_CAPTURE_CLIENT
-    std::cout << "Port connected" << std::endl;
+    RG_DEBUG << "Port connected";
 #endif
 }
 
@@ -215,8 +209,8 @@ JackCaptureClient::process(jack_nframes_t nframes, void *arg)
     int writeSamples = writeSpace / jcc->m_jackSampleSize;
 
 #if DEBUG_JACK_CAPTURE_CLIENT
-    std::cout << "Want to write " << nframes << "frames\t"
-              << writeSamples << " available\n";
+    RG_DEBUG << "Want to write" << nframes << "frames\t"
+              << writeSamples << "available";
 #endif
 
 
@@ -225,11 +219,11 @@ JackCaptureClient::process(jack_nframes_t nframes, void *arg)
         unsigned int advanceBytes = advance * jcc->m_jackSampleSize;
         jack_ringbuffer_read_advance( jcc->m_jackRingBuffer, advanceBytes );
 #if DEBUG_JACK_CAPTURE_CLIENT
-        std::cout << "Advancing read pointer " << advance << "frames, "
-                  << advanceBytes << " bytes\n";
+        RG_DEBUG << "Advancing read pointer" << advance << "frames,"
+                  << advanceBytes << "bytes";
         writeSpace = jack_ringbuffer_write_space( jcc->m_jackRingBuffer );
         writeSamples = writeSpace / jcc->m_jackSampleSize;
-        std::cout << writeSamples << " frames now available\n";
+        RG_DEBUG << writeSamples << "frames now available";
 #endif
     }
 
@@ -238,7 +232,7 @@ JackCaptureClient::process(jack_nframes_t nframes, void *arg)
                                            (char*)(inSamp),
                                            jcc->m_jackSampleSize * nframes);
 #if DEBUG_JACK_CAPTURE_CLIENT
-    std::cout << "I've written " << written / jcc->m_jackSampleSize << " frames\n";
+    RG_DEBUG << "I've written" << written / jcc->m_jackSampleSize << "frames";
 #else
     (void) written; // stops warning about unused variable
 #endif
@@ -246,8 +240,7 @@ JackCaptureClient::process(jack_nframes_t nframes, void *arg)
 #if DEBUG_JACK_CAPTURE_CLIENT
     uint readSpace = jack_ringbuffer_read_space( jcc->m_jackRingBuffer );
     uint readSamples = readSpace / jcc->m_jackSampleSize;
-    std::cout << "Now " << readSamples << " samples available to read\n";
-    std::cout << std::endl;
+    RG_DEBUG << "Now" << readSamples << "samples available to read";
 #endif
 
     return 0;
@@ -278,7 +271,7 @@ JackCaptureClient::jackShutdown(void *arg)
     (void)arg;
 #if DEBUG_JACK_CAPTURE_CLIENT
 //    JackCaptureClient *jcc = (JackCaptureClient*)arg;
-    std::cout << "Shutdown by Jack!!!!!!!!!" << std::endl;
+    RG_DEBUG << "Shutdown by Jack!!!!!!!!!";
 #endif
 }
 
@@ -299,16 +292,15 @@ JackCaptureClient::getFrame(float *frame, size_t captureSize)
                                            (sizeof(float)*captureSize) );
         (void) read; // stops warning about unused variable
 #if DEBUG_JACK_CAPTURE_CLIENT
-        std::cout << "JackCaptureClient::getFrame - Got frame!\n";
+        RG_DEBUG << "JackCaptureClient::getFrame - Got frame!";
 #endif
         return true;
     }
     else {
 #if DEBUG_JACK_CAPTURE_CLIENT
-        std::cout << "JackCaptureClient::getFrame - "
+        RG_DEBUG << "JackCaptureClient::getFrame - "
                   << availableSize << " samples available. "
-                  << captureSize << " samples wanted"
-                  << std::endl;
+                  << captureSize << " samples wanted";
 #endif
         return false;
     }

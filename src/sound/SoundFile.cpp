@@ -14,7 +14,7 @@
 
 #include "SoundFile.h"
 #include "base/Profiler.h"
-
+#include "misc/Debug.h"
 
 //#define DEBUG_SOUNDFILE 1
 
@@ -63,7 +63,7 @@ SoundFile::getBytes(std::ifstream *file, unsigned int numberOfBytes)
     }
 
     if (!(*file)) {
-        std::cerr << "SoundFile::getBytes() -  stream is not well";
+        RG_WARNING << "SoundFile::getBytes() -  stream is not well";
     }
 
 
@@ -79,9 +79,8 @@ SoundFile::getBytes(std::ifstream *file, unsigned int numberOfBytes)
     // complain but return
     //
     if (rS.length() < numberOfBytes)
-        std::cerr << "SoundFile::getBytes() - couldn't get all bytes ("
-        << rS.length() << " from " << numberOfBytes << ")"
-        << std::endl;
+        RG_WARNING << "SoundFile::getBytes() - couldn't get all bytes ("
+        << rS.length() << " from " << numberOfBytes << ")";
 #endif
 
     // clear down
@@ -96,7 +95,7 @@ size_t
 SoundFile::getBytes(std::ifstream *file, char *buf, size_t n)
 {
     if (!(*file)) {
-        std::cerr << "SoundFile::getBytes() -  stream is not well";
+        RG_WARNING << "SoundFile::getBytes() -  stream is not well";
         return 0;
     }
 
@@ -193,9 +192,8 @@ SoundFile::getBytes(unsigned int numberOfBytes)
     // complain but return
     //
     if (rS.length() < numberOfBytes)
-        std::cerr << "SoundFile::getBytes() buffered - couldn't get all bytes ("
-        << rS.length() << " from " << numberOfBytes << ")"
-        << std::endl;
+        RG_WARNING << "SoundFile::getBytes() buffered - couldn't get all bytes ("
+        << rS.length() << " from " << numberOfBytes << ")";
 #endif
 
     delete [] fileBytes;

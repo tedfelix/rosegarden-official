@@ -19,7 +19,6 @@
 
 #include "WavFileReadStream.h"
 
-#include <iostream>
 
 #include "misc/Debug.h"
 

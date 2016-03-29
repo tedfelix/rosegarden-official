@@ -14,7 +14,6 @@
 */
 
 #include "PluginIdentifier.h"
-#include <iostream>
 
 namespace Rosegarden
 {

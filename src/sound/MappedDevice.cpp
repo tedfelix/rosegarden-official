@@ -14,7 +14,6 @@
 
 #include "MappedDevice.h"
 #include "MappedInstrument.h"
-#include <iostream>
 #include <misc/Strings.h>
 
 namespace Rosegarden
