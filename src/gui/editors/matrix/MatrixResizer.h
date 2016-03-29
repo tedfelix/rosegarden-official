@@ -52,7 +52,7 @@ public:
     virtual void ready();
     virtual void stow();
 
-    static const QString ToolName;
+    static QString ToolName();
 
 protected slots:
 //!!!    void slotMatrixScrolled(int x, int y);

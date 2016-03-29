@@ -51,7 +51,7 @@ public:
     virtual void ready();
     virtual void stow();
 
-    static const QString ToolName;
+    static QString ToolName();
 
 signals:
     void hoveredOverNoteChanged(int evPitch, bool haveEvent, timeT evTime);

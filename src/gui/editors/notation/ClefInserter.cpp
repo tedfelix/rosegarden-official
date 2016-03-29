@@ -89,7 +89,7 @@ ClefInserter::handleLeftButtonPress(const NotationMouseEvent *e)
     }
 }
 
-const QString ClefInserter::ToolName = "clefinserter";
+QString ClefInserter::ToolName() { return "clefinserter"; }
 
 }
 

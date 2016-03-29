@@ -43,7 +43,7 @@ class SegmentSelector : public SegmentTool
     Q_OBJECT
 
 public:
-    static const QString ToolName;
+    static QString ToolName();
 
     SegmentSelector(CompositionView *, RosegardenDocument *);
     virtual ~SegmentSelector();

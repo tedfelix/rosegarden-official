@@ -89,7 +89,7 @@ SymbolInserter::handleLeftButtonPress(const NotationMouseEvent *e)
     }
 }
 
-const QString SymbolInserter::ToolName = "symbolinserter";
+QString SymbolInserter::ToolName() { return "symbolinserter"; }
 
 }
 

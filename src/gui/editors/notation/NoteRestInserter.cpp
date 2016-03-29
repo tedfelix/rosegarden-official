@@ -1235,7 +1235,7 @@ void NoteRestInserter::slotNotesSelected()
 //    { "1slotDoubleFlat()",    "double_flat_accidental" }
 //};
 
-const QString NoteRestInserter::ToolName     = "noterestinserter";
+QString NoteRestInserter::ToolName() { return "noterestinserter"; }
 
 }
 

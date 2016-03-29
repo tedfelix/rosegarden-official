@@ -347,7 +347,7 @@ void MatrixPainter::setBasicContextHelp()
     }        
 }
 
-const QString MatrixPainter::ToolName = "painter";
+QString MatrixPainter::ToolName() { return "painter"; }
 
 }
 

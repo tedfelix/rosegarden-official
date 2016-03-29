@@ -54,27 +54,27 @@ MatrixToolBox::createTool(QString toolName)
 
     QString toolNamelc = toolName.toLower();
 
-    if (toolNamelc == MatrixPainter::ToolName)
+    if (toolNamelc == MatrixPainter::ToolName())
 
         tool = new MatrixPainter(m_widget);
 
-    else if (toolNamelc == MatrixEraser::ToolName)
+    else if (toolNamelc == MatrixEraser::ToolName())
 
         tool = new MatrixEraser(m_widget);
 
-    else if (toolNamelc == MatrixSelector::ToolName)
+    else if (toolNamelc == MatrixSelector::ToolName())
 
         tool = new MatrixSelector(m_widget);
 
-    else if (toolNamelc == MatrixMover::ToolName)
+    else if (toolNamelc == MatrixMover::ToolName())
 
         tool = new MatrixMover(m_widget);
 
-    else if (toolNamelc == MatrixResizer::ToolName)
+    else if (toolNamelc == MatrixResizer::ToolName())
 
         tool = new MatrixResizer(m_widget);
 
-    else if (toolNamelc == MatrixVelocity::ToolName)
+    else if (toolNamelc == MatrixVelocity::ToolName())
 
         tool = new MatrixVelocity(m_widget);
     

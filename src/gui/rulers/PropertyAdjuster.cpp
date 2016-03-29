@@ -160,7 +160,7 @@ void PropertyAdjuster::stow()
 //    }
 //}
 
-const QString PropertyAdjuster::ToolName = "adjuster";
+QString PropertyAdjuster::ToolName() { return "adjuster"; }
 
 }
 

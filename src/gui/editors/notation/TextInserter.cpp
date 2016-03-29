@@ -134,7 +134,7 @@ TextInserter::handleLeftButtonPress(const NotationMouseEvent *e)
     delete dialog;
 }
 
-const QString TextInserter::ToolName = "textinserter";
+QString TextInserter::ToolName() { return "textinserter"; }
 
 }
 

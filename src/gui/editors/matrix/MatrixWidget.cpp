@@ -293,13 +293,13 @@ MatrixWidget::MatrixWidget(bool drumMode) :
     connect(m_toolBox, SIGNAL(showContextHelp(const QString &)),
             this, SIGNAL(showContextHelp(const QString &)));
 
-    MatrixMover *matrixMoverTool = dynamic_cast <MatrixMover *> (m_toolBox->getTool(MatrixMover::ToolName));
+    MatrixMover *matrixMoverTool = dynamic_cast <MatrixMover *> (m_toolBox->getTool(MatrixMover::ToolName()));
     if (matrixMoverTool) {
         connect(matrixMoverTool, SIGNAL(hoveredOverNoteChanged(int, bool, timeT)),
                 m_controlsWidget, SLOT(slotHoveredOverNoteChanged(int, bool, timeT)));
     }
 
-    MatrixVelocity *matrixVelocityTool = dynamic_cast <MatrixVelocity *> (m_toolBox->getTool(MatrixVelocity::ToolName));
+    MatrixVelocity *matrixVelocityTool = dynamic_cast <MatrixVelocity *> (m_toolBox->getTool(MatrixVelocity::ToolName()));
     if (matrixVelocityTool) {
         connect(matrixVelocityTool, SIGNAL(hoveredOverNoteChanged()),
                 m_controlsWidget, SLOT(slotHoveredOverNoteChanged()));
@@ -940,13 +940,13 @@ MatrixWidget::slotSetPaintTool()
 {
     //MATRIX_DEBUG << "slotSetPaintTool";
     
-    slotSetTool(MatrixPainter::ToolName);
+    slotSetTool(MatrixPainter::ToolName());
 }
 
 void
 MatrixWidget::slotSetEraseTool()
 {
-    slotSetTool(MatrixEraser::ToolName);
+    slotSetTool(MatrixEraser::ToolName());
 }
 
 void
@@ -954,7 +954,7 @@ MatrixWidget::slotSetSelectTool()
 {
     //MATRIX_DEBUG << "slotSetSelectTool";
     
-    slotSetTool(MatrixSelector::ToolName);
+    slotSetTool(MatrixSelector::ToolName());
     MatrixSelector *selector = dynamic_cast<MatrixSelector *>(m_currentTool);
     if (selector) {
         //MATRIX_DEBUG << "slotSetSelectTool: selector successfully set";
@@ -967,19 +967,19 @@ MatrixWidget::slotSetSelectTool()
 void
 MatrixWidget::slotSetMoveTool()
 {
-    slotSetTool(MatrixMover::ToolName);
+    slotSetTool(MatrixMover::ToolName());
 }
 
 void
 MatrixWidget::slotSetResizeTool()
 {
-    slotSetTool(MatrixResizer::ToolName);
+    slotSetTool(MatrixResizer::ToolName());
 }
 
 void
 MatrixWidget::slotSetVelocityTool()
 {
-    slotSetTool(MatrixVelocity::ToolName);
+    slotSetTool(MatrixVelocity::ToolName());
 }
 
 void

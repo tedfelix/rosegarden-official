@@ -49,35 +49,35 @@ NotationToolBox::createTool(QString toolName)
 
     QString toolNamelc = toolName.toLower();
     
-    if (toolNamelc == ClefInserter::ToolName)
+    if (toolNamelc == ClefInserter::ToolName())
 
         tool = new ClefInserter(m_widget);
 
-    else if (toolNamelc == SymbolInserter::ToolName)
+    else if (toolNamelc == SymbolInserter::ToolName())
 
         tool = new SymbolInserter(m_widget);
 
-    else if (toolNamelc == TextInserter::ToolName)
+    else if (toolNamelc == TextInserter::ToolName())
 
         tool = new TextInserter(m_widget);
 
-    else if (toolNamelc == GuitarChordInserter::ToolName)
+    else if (toolNamelc == GuitarChordInserter::ToolName())
 
         tool = new GuitarChordInserter(m_widget);
 
-    else if (toolNamelc == NotationEraser::ToolName)
+    else if (toolNamelc == NotationEraser::ToolName())
 
         tool = new NotationEraser(m_widget);
 
-    else if (toolNamelc == NotationSelector::ToolName)
+    else if (toolNamelc == NotationSelector::ToolName())
 
         tool = new NotationSelector(m_widget);
 
-    else if (toolNamelc == NotationSelectorNoTies::ToolName)
+    else if (toolNamelc == NotationSelectorNoTies::ToolName())
 
         tool = new NotationSelectorNoTies(m_widget);
 
-    else if (toolNamelc == NoteRestInserter::ToolName)
+    else if (toolNamelc == NoteRestInserter::ToolName())
 
         tool = new NoteRestInserter(m_widget);
 

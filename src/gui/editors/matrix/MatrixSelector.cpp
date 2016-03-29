@@ -128,11 +128,11 @@ MatrixSelector::handleLeftButtonPress(const MatrixMouseEvent *e)
         if (e->sceneX > resizeStart) {
             m_dispatchTool =
                 dynamic_cast<MatrixTool *>
-                (m_widget->getToolBox()->getTool(MatrixResizer::ToolName));
+                (m_widget->getToolBox()->getTool(MatrixResizer::ToolName()));
         } else {
             m_dispatchTool =
                 dynamic_cast<MatrixTool *>
-                (m_widget->getToolBox()->getTool(MatrixMover::ToolName));
+                (m_widget->getToolBox()->getTool(MatrixMover::ToolName()));
         }
 
         if (!m_dispatchTool) return;
@@ -187,7 +187,7 @@ MatrixSelector::handleMidButtonPress(const MatrixMouseEvent *e)
 
     m_dispatchTool =
         dynamic_cast<MatrixTool *>
-        (m_widget->getToolBox()->getTool(MatrixPainter::ToolName));
+        (m_widget->getToolBox()->getTool(MatrixPainter::ToolName()));
 
     if (!m_dispatchTool) return;
 
@@ -591,7 +591,7 @@ MatrixSelector::setContextHelpFor(const MatrixMouseEvent *e, bool ctrlPressed)
     }
 }
 
-const QString MatrixSelector::ToolName  = "selector";
+QString MatrixSelector::ToolName() { return "selector"; }
 
 }
 

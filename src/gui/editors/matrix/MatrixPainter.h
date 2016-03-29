@@ -48,7 +48,7 @@ public:
     virtual void ready();
     virtual void stow();
 
-    static const QString ToolName;
+    static QString ToolName();
 
 public slots:
     /**

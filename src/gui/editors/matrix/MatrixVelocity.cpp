@@ -263,6 +263,6 @@ MatrixVelocity::setBasicContextHelp()
     }
 }
 
-const QString MatrixVelocity::ToolName = "velocity";
+QString MatrixVelocity::ToolName() { return "velocity"; }
 
 }

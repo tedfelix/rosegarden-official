@@ -346,7 +346,7 @@ NotationWidget::NotationWidget() :
 
     m_toolBox = new NotationToolBox(this);
 
-    slotSetTool(NoteRestInserter::ToolName);
+    slotSetTool(NoteRestInserter::ToolName());
 
     // crude, but finally effective!
     //
@@ -768,45 +768,45 @@ NotationWidget::slotSetTool(QString name)
 void
 NotationWidget::slotSetEraseTool()
 {
-    slotSetTool(NotationEraser::ToolName);
+    slotSetTool(NotationEraser::ToolName());
 }
 
 void
 NotationWidget::slotSetSelectTool()
 {
-    slotSetTool(NotationSelector::ToolName);
+    slotSetTool(NotationSelector::ToolName());
 }
 
 void
 NotationWidget::slotSetSelectNoTiesTool()
 {
-    slotSetTool(NotationSelectorNoTies::ToolName);
+    slotSetTool(NotationSelectorNoTies::ToolName());
 }
 
 void
 NotationWidget::slotSetNoteRestInserter()
 {
-    slotSetTool(NoteRestInserter::ToolName);
+    slotSetTool(NoteRestInserter::ToolName());
 }
 
 void
 NotationWidget::slotSetNoteInserter()
 {
     NoteRestInserter *noteRestInserter = dynamic_cast<NoteRestInserter *>
-        (m_toolBox->getTool(NoteRestInserter::ToolName));
+        (m_toolBox->getTool(NoteRestInserter::ToolName()));
     noteRestInserter->setToRestInserter(false); // set to insert notes.
 
-    slotSetTool(NoteRestInserter::ToolName);
+    slotSetTool(NoteRestInserter::ToolName());
 }
 
 void
 NotationWidget::slotSetRestInserter()
 {
     NoteRestInserter *noteRestInserter = dynamic_cast<NoteRestInserter *>
-        (m_toolBox->getTool(NoteRestInserter::ToolName));
+        (m_toolBox->getTool(NoteRestInserter::ToolName()));
     noteRestInserter->setToRestInserter(true); // set to insert notes.
 
-    slotSetTool(NoteRestInserter::ToolName);
+    slotSetTool(NoteRestInserter::ToolName());
 }
 
 void
@@ -826,7 +826,7 @@ NotationWidget::slotSetAccidental(Accidental accidental, bool follow)
 {
     // You don't have to be in note insertion mode to change the accidental
     NoteRestInserter *ni = dynamic_cast<NoteRestInserter *>
-        (m_toolBox->getTool(NoteRestInserter::ToolName));
+        (m_toolBox->getTool(NoteRestInserter::ToolName()));
     if (ni) {
         ni->slotSetAccidental(accidental, follow);
         return;
@@ -836,7 +836,7 @@ NotationWidget::slotSetAccidental(Accidental accidental, bool follow)
 void
 NotationWidget::slotSetClefInserter()
 {
-    slotSetTool(ClefInserter::ToolName);
+    slotSetTool(ClefInserter::ToolName());
 }
 
 void
@@ -849,13 +849,13 @@ NotationWidget::slotSetInsertedClef(Clef type)
 void
 NotationWidget::slotSetTextInserter()
 {
-    slotSetTool(TextInserter::ToolName);
+    slotSetTool(TextInserter::ToolName());
 }
 
 void
 NotationWidget::slotSetGuitarChordInserter()
 {
-    slotSetTool(GuitarChordInserter::ToolName);
+    slotSetTool(GuitarChordInserter::ToolName());
 }
 
 void
@@ -1376,7 +1376,7 @@ NotationWidget::slotHeadersResized(int)
 void
 NotationWidget::slotSetSymbolInserter()
 {
-    slotSetTool(SymbolInserter::ToolName);
+    slotSetTool(SymbolInserter::ToolName());
 }
 
 void

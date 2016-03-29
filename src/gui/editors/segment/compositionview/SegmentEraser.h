@@ -47,7 +47,7 @@ public:
     virtual int mouseMoveEvent(QMouseEvent *);
     virtual void mouseReleaseEvent(QMouseEvent *);
 
-    static const QString ToolName;
+    static QString ToolName();
 
 protected:
     SegmentEraser(CompositionView*, RosegardenDocument*);

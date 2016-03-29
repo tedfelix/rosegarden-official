@@ -42,7 +42,7 @@ namespace Rosegarden
 {
 
 
-const QString SegmentSplitter::ToolName = "segmentsplitter";
+QString SegmentSplitter::ToolName() { return "segmentsplitter"; }
 
 SegmentSplitter::SegmentSplitter(CompositionView *c, RosegardenDocument *d)
         : SegmentTool(c, d),

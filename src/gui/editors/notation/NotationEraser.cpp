@@ -90,7 +90,7 @@ NotationEraser::slotSelectSelected()
     invokeInParentView("select");
 }
 
-const QString NotationEraser::ToolName = "notationeraser";
+QString NotationEraser::ToolName() { return "notationeraser"; }
 
 }
 

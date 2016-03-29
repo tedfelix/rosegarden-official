@@ -424,7 +424,7 @@ void MatrixMover::setBasicContextHelp(bool ctrlPressed)
     }
 }
 
-const QString MatrixMover::ToolName = "mover";
+QString MatrixMover::ToolName() { return "mover"; }
 
 }
 

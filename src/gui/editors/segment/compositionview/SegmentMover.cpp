@@ -48,7 +48,7 @@ namespace Rosegarden
 {
 
 
-const QString SegmentMover::ToolName = "segmentmover";
+QString SegmentMover::ToolName() { return "segmentmover"; }
 
 SegmentMover::SegmentMover(CompositionView *c, RosegardenDocument *d)
         : SegmentTool(c, d),

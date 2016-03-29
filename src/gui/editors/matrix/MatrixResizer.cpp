@@ -280,7 +280,7 @@ void MatrixResizer::setBasicContextHelp()
     }
 }
 
-const QString MatrixResizer::ToolName   = "resizer";
+QString MatrixResizer::ToolName() { return "resizer"; }
 
 }
 

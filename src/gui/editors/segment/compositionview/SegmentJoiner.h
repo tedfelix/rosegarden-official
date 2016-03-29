@@ -56,7 +56,7 @@ public:
     // don't do double clicks
     //virtual void contentsMouseDoubleClickEvent(QMouseEvent*);
 
-    static const QString ToolName;
+    static QString ToolName();
 
 protected:
     SegmentJoiner(CompositionView*, RosegardenDocument*);

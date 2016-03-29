@@ -138,6 +138,6 @@ ControlPainter::handleMouseMove(const ControlMouseEvent *e)
     return ControlTool::NoFollow;
 }
 
-const QString ControlPainter::ToolName = "painter";
+QString ControlPainter::ToolName() { return "painter"; }
 }
 

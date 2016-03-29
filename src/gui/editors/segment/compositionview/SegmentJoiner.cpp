@@ -35,7 +35,7 @@ namespace Rosegarden
 {
 
 
-const QString SegmentJoiner::ToolName = "segmentjoiner";
+QString SegmentJoiner::ToolName() { return "segmentjoiner"; }
 
 SegmentJoiner::SegmentJoiner(CompositionView *c, RosegardenDocument *d)
         : SegmentTool(c, d)

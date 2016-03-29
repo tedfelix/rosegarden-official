@@ -160,7 +160,7 @@ void ControlEraser::stow()
 //    }
 //}
 
-const QString ControlEraser::ToolName = "eraser";
+QString ControlEraser::ToolName() { return "eraser"; }
 
 }
 

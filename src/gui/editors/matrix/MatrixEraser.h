@@ -31,7 +31,7 @@ class MatrixEraser : public MatrixTool
 public:
     virtual void handleLeftButtonPress(const MatrixMouseEvent *);
 
-    static const QString ToolName;
+    static QString ToolName();
 
     virtual void ready();
 

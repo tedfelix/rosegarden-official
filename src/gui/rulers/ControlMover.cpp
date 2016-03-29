@@ -201,6 +201,6 @@ void ControlMover::stow()
 {
 }
 
-const QString ControlMover::ToolName = "mover";
+QString ControlMover::ToolName() { return "mover"; }
 }
 

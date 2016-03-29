@@ -3692,31 +3692,31 @@ RosegardenMainWindow::slotEnableTransport(bool enable)
 void
 RosegardenMainWindow::slotPointerSelected()
 {
-    m_view->selectTool(SegmentSelector::ToolName);
+    m_view->selectTool(SegmentSelector::ToolName());
 }
 
 void
 RosegardenMainWindow::slotEraseSelected()
 {
-    m_view->selectTool(SegmentEraser::ToolName);
+    m_view->selectTool(SegmentEraser::ToolName());
 }
 
 void
 RosegardenMainWindow::slotDrawSelected()
 {
-    m_view->selectTool(SegmentPencil::ToolName);
+    m_view->selectTool(SegmentPencil::ToolName());
 }
 
 void
 RosegardenMainWindow::slotMoveSelected()
 {
-    m_view->selectTool(SegmentMover::ToolName);
+    m_view->selectTool(SegmentMover::ToolName());
 }
 
 void
 RosegardenMainWindow::slotResizeSelected()
 {
-    m_view->selectTool(SegmentResizer::ToolName);
+    m_view->selectTool(SegmentResizer::ToolName());
 }
 
 void
@@ -3728,13 +3728,13 @@ RosegardenMainWindow::slotJoinSelected()
                                   "        Segments->Collapse Segments.\n"),
                              tr("Join tool not yet implemented"));
 
-    m_view->selectTool(SegmentJoiner::ToolName);
+    m_view->selectTool(SegmentJoiner::ToolName());
 }
 
 void
 RosegardenMainWindow::slotSplitSelected()
 {
-    m_view->selectTool(SegmentSplitter::ToolName);
+    m_view->selectTool(SegmentSplitter::ToolName());
 }
 
 void
@@ -5568,7 +5568,7 @@ RosegardenMainWindow::slotDeleteTransport()
 void
 RosegardenMainWindow::slotActivateTool(QString toolName)
 {
-    if (toolName == SegmentSelector::ToolName) {
+    if (toolName == SegmentSelector::ToolName()) {
         findAction("select")->trigger();
     }
 }

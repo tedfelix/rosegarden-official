@@ -140,7 +140,7 @@ void GuitarChordInserter::createNewGuitarChord(const NotationMouseEvent *e)
     processDialog(e->staff, insertionTime);
 }
 
-const QString GuitarChordInserter::ToolName = "guitarchordinserter";
+QString GuitarChordInserter::ToolName() { return "guitarchordinserter"; }
 
 }
 

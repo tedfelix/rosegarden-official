@@ -46,7 +46,7 @@
 namespace Rosegarden
 {
 
-const QString SegmentPencil::ToolName = "segmentpencil";
+QString SegmentPencil::ToolName() { return "segmentpencil"; }
 
 SegmentPencil::SegmentPencil(CompositionView *c, RosegardenDocument *d)
         : SegmentTool(c, d),

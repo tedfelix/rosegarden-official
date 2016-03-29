@@ -44,15 +44,15 @@ ControlToolBox::createTool(QString toolName)
 
     QString toolNamelc = toolName.toLower();
 
-    if (toolNamelc == PropertyAdjuster::ToolName)
+    if (toolNamelc == PropertyAdjuster::ToolName())
         tool = new PropertyAdjuster(m_ruler);
-    else if (toolNamelc == ControlPainter::ToolName)
+    else if (toolNamelc == ControlPainter::ToolName())
         tool = new ControlPainter(m_ruler);
-    else if (toolNamelc == ControlEraser::ToolName)
+    else if (toolNamelc == ControlEraser::ToolName())
         tool = new ControlEraser(m_ruler);
-    else if (toolNamelc == ControlSelector::ToolName)
+    else if (toolNamelc == ControlSelector::ToolName())
         tool = new ControlSelector(m_ruler);
-    else if (toolNamelc == ControlMover::ToolName)
+    else if (toolNamelc == ControlMover::ToolName())
         tool = new ControlMover(m_ruler);
     else
     {

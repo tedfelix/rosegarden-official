@@ -50,7 +50,7 @@ public:
      */
 //    virtual void handleEventRemoved(Event *event);
 
-    static const QString ToolName;
+    static QString ToolName();
 
 signals:
 //    void hoveredOverNoteChanged(int evPitch, bool haveEvent, timeT evTime);

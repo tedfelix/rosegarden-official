@@ -44,7 +44,7 @@ public:
     virtual FollowMode handleMouseMove(const MatrixMouseEvent *);
     virtual void handleMouseRelease(const MatrixMouseEvent *);
 
-    static const QString ToolName;
+    static QString ToolName();
 
     /**
      * Respond to an event being deleted -- it may be the one the tool

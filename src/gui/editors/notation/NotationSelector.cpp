@@ -885,8 +885,8 @@ NotationSelector::getEventsInSelectionRect()
     }
 }
 
-const QString NotationSelector::ToolName = "notationselector";
+QString NotationSelector::ToolName() { return "notationselector"; }
 
-const QString NotationSelectorNoTies::ToolName = "notationselectornoties";
+QString NotationSelectorNoTies::ToolName() { return "notationselectornoties"; }
 
 }

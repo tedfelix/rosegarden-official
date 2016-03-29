@@ -38,7 +38,7 @@ namespace Rosegarden
 {
 
 
-const QString SegmentEraser::ToolName = "segmenteraser";
+QString SegmentEraser::ToolName() { return "segmenteraser"; }
 
 SegmentEraser::SegmentEraser(CompositionView *c, RosegardenDocument *d)
         : SegmentTool(c, d)

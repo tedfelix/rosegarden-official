@@ -48,11 +48,11 @@ public:
     /**
      * Useful to get the tool name from a NotationTool object
      */ 
-    virtual const QString getToolName() { return ToolName; }
+    virtual const QString getToolName() { return ToolName(); }
 
     virtual bool needsWheelEvents() { return false; }
 
-    static const QString ToolName;
+    static QString ToolName();
 
 protected slots:
     void slotNotesSelected();

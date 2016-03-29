@@ -56,7 +56,7 @@ namespace Rosegarden
 {
 
 
-const QString SegmentResizer::ToolName = "segmentresizer";
+QString SegmentResizer::ToolName() { return "segmentresizer"; }
 
 SegmentResizer::SegmentResizer(CompositionView *c, RosegardenDocument *d) :
     SegmentTool(c, d),

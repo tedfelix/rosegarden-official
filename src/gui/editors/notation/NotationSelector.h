@@ -89,11 +89,11 @@ public:
     /**
      * Useful to get the tool name from a NotationTool object
      */ 
-    virtual const QString getToolName() { return ToolName; }
+    virtual const QString getToolName() { return ToolName(); }
 
     virtual bool needsWheelEvents() { return false; }
 
-    static const QString ToolName;
+    static QString ToolName();
 
 signals:
     void editElement(NotationStaff *, NotationElement *, bool advanced);
@@ -166,7 +166,7 @@ class NotationSelectorNoTies : public NotationSelector
 {
     friend class NotationToolBox;
  public:
-    static const QString ToolName;
+    static QString ToolName();
 
  private:
  NotationSelectorNoTies(NotationWidget *widget) :

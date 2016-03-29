@@ -65,7 +65,7 @@ void MatrixEraser::setBasicContextHelp()
     setContextHelp(tr("Click on a note to delete it"));
 }
 
-const QString MatrixEraser::ToolName = "eraser";
+QString MatrixEraser::ToolName() { return "eraser"; }
 
 }
 

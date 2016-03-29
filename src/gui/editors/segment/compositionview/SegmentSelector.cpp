@@ -47,7 +47,7 @@ namespace Rosegarden
 {
 
 
-const QString SegmentSelector::ToolName = "segmentselector";
+QString SegmentSelector::ToolName() { return "segmentselector"; }
 
 SegmentSelector::SegmentSelector(CompositionView *c, RosegardenDocument *d) :
     SegmentTool(c, d),
@@ -120,7 +120,7 @@ SegmentSelector::mousePressEvent(QMouseEvent *e)
     if (e->button() == Qt::MidButton) {
         // If clicked on the background, create a new segment.
         if (!item) {
-            m_dispatchTool = m_canvas->getToolBox()->getTool(SegmentPencil::ToolName);
+            m_dispatchTool = m_canvas->getToolBox()->getTool(SegmentPencil::ToolName());
 
             if (m_dispatchTool) {
                 m_dispatchTool->ready(); // set mouse cursor
@@ -174,7 +174,7 @@ SegmentSelector::mousePressEvent(QMouseEvent *e)
             isNearEdge(item->rect(), pos)) {
 
             SegmentResizer *segmentResizer = dynamic_cast<SegmentResizer *>(
-                m_canvas->getToolBox()->getTool(SegmentResizer::ToolName));
+                m_canvas->getToolBox()->getTool(SegmentResizer::ToolName()));
 
             // Turn it over to SegmentResizer.
             m_dispatchTool = segmentResizer;
@@ -219,7 +219,7 @@ SegmentSelector::mousePressEvent(QMouseEvent *e)
             // * Create Segment
 
             m_dispatchTool = m_canvas->getToolBox()->getTool(
-                    SegmentPencil::ToolName);
+                    SegmentPencil::ToolName());
 
             if (m_dispatchTool) {
                 m_dispatchTool->ready(); // set mouse cursor

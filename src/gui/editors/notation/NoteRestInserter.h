@@ -79,9 +79,9 @@ public:
     /**
      * Useful to get the tool name from a NotationTool object
      */ 
-    virtual const QString getToolName() { return ToolName; }
+    virtual const QString getToolName() { return ToolName(); }
 
-    static const QString ToolName;
+    static QString ToolName();
 
     /**
      * Returns the state of the tool.  true, if it in rest insertert mode.

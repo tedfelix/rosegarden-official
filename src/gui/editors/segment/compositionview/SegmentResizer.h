@@ -56,7 +56,7 @@ public:
     virtual void keyPressEvent(QKeyEvent *);
     virtual void keyReleaseEvent(QKeyEvent *);
 
-    static const QString ToolName;
+    static QString ToolName();
 
 protected:
     SegmentResizer(CompositionView*, RosegardenDocument*);

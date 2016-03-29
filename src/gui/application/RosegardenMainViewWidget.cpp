@@ -1196,7 +1196,7 @@ void RosegardenMainViewWidget::slotPropagateSegmentSelection(const SegmentSelect
     // to write the Segments into
     //
     if (!segments.empty()) {
-        emit activateTool(SegmentSelector::ToolName);
+        emit activateTool(SegmentSelector::ToolName());
     }
 
     // Send the segment list even if it's empty as we
@@ -1249,7 +1249,7 @@ void RosegardenMainViewWidget::slotSelectAllSegments()
     // to write the Segments into
     //
     if (!segments.empty()) {
-        emit activateTool(SegmentSelector::ToolName);
+        emit activateTool(SegmentSelector::ToolName());
     }
 
     // Send the segment list even if it's empty as we

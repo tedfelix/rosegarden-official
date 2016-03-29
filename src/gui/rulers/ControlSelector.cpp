@@ -124,7 +124,7 @@ ControlSelector::handleMouseRelease(const ControlMouseEvent *e)
     ControlMover::handleMouseRelease(e);
 }
 
-const QString ControlSelector::ToolName = "selector";
+QString ControlSelector::ToolName() { return "selector"; }
 
 }
 
