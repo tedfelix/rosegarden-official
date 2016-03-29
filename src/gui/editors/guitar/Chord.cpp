@@ -29,10 +29,10 @@ namespace Guitar
 {
 const std::string Chord::EventType              = "guitarchord";
 const short Chord::EventSubOrdering             = -60;
-const PropertyName Chord::RootPropertyName      = "root";
-const PropertyName Chord::ExtPropertyName       = "ext";
-const PropertyName Chord::FingeringPropertyName = "fingering";
 
+static const PropertyName RootPropertyName = "root";
+static const PropertyName ExtPropertyName = "ext";
+static const PropertyName FingeringPropertyName = "fingering";
 
 Chord::Chord()
     : m_isUserChord(false)

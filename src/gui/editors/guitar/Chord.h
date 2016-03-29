@@ -39,9 +39,6 @@ class Chord
 public:
     static const std::string EventType;
     static const short EventSubOrdering;
-    static const PropertyName RootPropertyName;
-    static const PropertyName ExtPropertyName;
-    static const PropertyName FingeringPropertyName;
 
 	Chord();
     Chord(const QString& root, const QString& ext = QString::null);
