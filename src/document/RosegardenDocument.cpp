@@ -3055,18 +3055,6 @@ QString RosegardenDocument::lockFilename(const QString &absFilePath) const
 
 bool RosegardenDocument::lock() const
 {
-    // For now, locking only happens if the user enables it in the .conf file.
-    // It's not yet ready for prime-time.
-    QSettings settings;
-    const QString key = QString(GeneralOptionsConfigGroup) + "/document_locking";
-    const bool enabled = settings.value(key, false).toBool();
-    // In case it wasn't in the settings file, write it back out so
-    // I can find it.
-    settings.setValue(key, enabled);
-
-    if (!enabled)
-        return true;
-
     // Can't lock something that isn't a file on the filesystem.
     if (!isRegularDotRGFile())
         return true;
@@ -3115,21 +3103,8 @@ bool RosegardenDocument::lock() const
 
 void RosegardenDocument::release(const QString &absFilePath) const
 {
-    QSettings settings;
-    const QString key = QString(GeneralOptionsConfigGroup) + "/document_locking";
-    const bool enabled = settings.value(key, false).toBool();
-    // In case it wasn't in the settings file, write it back out so
-    // I can find it.
-    settings.setValue(key, enabled);
-
-    if (!enabled)
+    if (absFilePath == "")
         return;
-
-    if (absFilePath == "") {
-        // ??? Is this an issue?  If not, maybe just return?
-        RG_WARNING << "release(): absFilePath is empty";
-        return;
-    }
 
     QFile lockFile(lockFilename(absFilePath));
 
