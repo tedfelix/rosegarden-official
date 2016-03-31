@@ -379,12 +379,13 @@ protected:
     /**
      * Create document from a file
      */
-    RosegardenDocument* createDocument(QString filePath, ImportType type = ImportRG4);
+    RosegardenDocument* createDocument(
+            QString filePath, ImportType type = ImportRG4, bool lock = true);
     
     /**
      * Create a document from RG file
      */
-    RosegardenDocument* createDocumentFromRGFile(QString filePath);
+    RosegardenDocument* createDocumentFromRGFile(QString filePath, bool lock = true);
 
     /**
      * Create document from MIDI file

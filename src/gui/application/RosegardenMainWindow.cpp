@@ -1476,14 +1476,28 @@ RosegardenMainWindow::setDocument(RosegardenDocument* newDocument)
 void
 RosegardenMainWindow::openFile(QString filePath, ImportType type)
 {
-    RG_DEBUG << "RosegardenMainWindow::openFile " << filePath << endl;
+    RG_DEBUG << "openFile(): " << filePath;
 
     if (type == ImportCheckType && filePath.endsWith(".rgp")) {
         importProject(filePath);
         return ;
     }
 
-    RosegardenDocument *doc = createDocument(filePath, type);
+    // Are we just reloading the original file?  In that case, we'll need
+    // to avoid locking/releasing the file.
+    bool revert = false;
+
+    if (m_doc) {
+        QFileInfo newFileInfo(filePath);
+        revert = (newFileInfo.absoluteFilePath() == m_doc->getAbsFilePath());
+
+        if (revert) {
+            // Prevent release of file lock on destruction.
+            m_doc->disableRelease();
+        }
+    }
+
+    RosegardenDocument *doc = createDocument(filePath, type, !revert);
     if (doc) {
         setDocument(doc);
 
@@ -1526,7 +1540,8 @@ RosegardenMainWindow::openFile(QString filePath, ImportType type)
 }
 
 RosegardenDocument*
-RosegardenMainWindow::createDocument(QString filePath, ImportType importType)
+RosegardenMainWindow::createDocument(
+        QString filePath, ImportType importType, bool lock)
 {
     QFileInfo info(filePath);
     RosegardenDocument *doc = 0;
@@ -1613,7 +1628,7 @@ RosegardenMainWindow::createDocument(QString filePath, ImportType importType)
     case ImportRG4:
     case ImportCheckType:
     default:
-        doc = createDocumentFromRGFile(filePath);
+        doc = createDocumentFromRGFile(filePath, lock);
     }
 
     slotEnableTransport(true);
@@ -1622,7 +1637,7 @@ RosegardenMainWindow::createDocument(QString filePath, ImportType importType)
 }
 
 RosegardenDocument*
-RosegardenMainWindow::createDocumentFromRGFile(QString filePath)
+RosegardenMainWindow::createDocumentFromRGFile(QString filePath, bool lock)
 {
     // Check for an autosaved file to recover
     QString effectiveFilePath = filePath;
@@ -1668,7 +1683,7 @@ RosegardenMainWindow::createDocumentFromRGFile(QString filePath)
 
     // ignore return thingy
     //
-    if (newDoc->openDocument(effectiveFilePath)) {
+    if (newDoc->openDocument(effectiveFilePath, true, false, lock)) {
         if (recovering) {
             // Mark the document as modified,
             // set the "regular" filepath and name (not those of

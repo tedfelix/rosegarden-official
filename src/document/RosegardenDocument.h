@@ -448,6 +448,8 @@ public:
 
     bool deleteOrphanedAudioFiles(bool documentWillNotBeSaved);
 
+    void disableRelease()  { m_release = false; }
+
 public slots:
     /**
      * calls repaint() on all views connected to the document object
@@ -754,6 +756,9 @@ private:
     bool m_clearCommandHistory;
 
     bool m_useSequencer;
+
+    /// Allow file lock to be released.
+    bool m_release;
 };
 
 

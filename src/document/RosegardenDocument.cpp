@@ -129,7 +129,8 @@ RosegardenDocument::RosegardenDocument(QObject *parent,
         m_autoSavePeriod(0),
         m_beingDestroyed(false),
         m_clearCommandHistory(clearCommandHistory),
-        m_useSequencer(useSequencer)
+        m_useSequencer(useSequencer),
+        m_release(true)
 {
     checkSequencerTimer();
 
@@ -160,7 +161,8 @@ RosegardenDocument::~RosegardenDocument()
 
     if (m_clearCommandHistory) CommandHistory::getInstance()->clear(); // before Composition is deleted
 
-    release(m_absFilePath);
+    if (m_release)
+        release(m_absFilePath);
 }
 
 unsigned int
@@ -516,7 +518,7 @@ bool RosegardenDocument::openDocument(const QString& filename,
                                       bool squelchProgressDialog,
                                       bool enableLock)
 {
-    RG_DEBUG << "RosegardenDocument::openDocument(" << filename << ")" << endl;
+    RG_DEBUG << "openDocument(" << filename << ")";
 
     if ( filename.isEmpty() )
         return false;
