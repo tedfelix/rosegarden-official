@@ -136,8 +136,7 @@ MetadataHelper::getComments()
                 CommentsKey ck(key);
                 int currentLine = ck.lineNumber();
                 if (currentLine == -1) {
-                    std::cerr << "ERROR: Bad comment key \"" << key << "\""
-                              << std::endl; 
+                    RG_WARNING << "ERROR: Bad comment key \"" << key << "\"";
                     continue;
                 }
                 if (currentLine == 0) {

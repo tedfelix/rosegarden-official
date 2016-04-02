@@ -408,7 +408,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         }
 
         if (!m_deprecation)
-            std::cerr << "WARNING: This Rosegarden file uses the deprecated element \"group\".  We recommend re-saving the file from this version of Rosegarden to assure your ability to re-load it in future versions" << std::endl;
+            RG_WARNING << "WARNING: This Rosegarden file uses the deprecated element \"group\".  We recommend re-saving the file from this version of Rosegarden to assure your ability to re-load it in future versions";
         m_deprecation = true;
 
         m_inGroup = true;
@@ -431,7 +431,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         QString smajor = atts.value("format-version-major");
         QString sminor = atts.value("format-version-minor");
 
-//        std::cerr << "\n\n\nRosegarden file version = \"" << version << "\"\n\n\n" << std::endl;
+//        RG_WARNING << "\n\n\nRosegarden file version = \"" << version << "\"\n";
 
         if (!smajor.isEmpty()) {
 
@@ -1051,7 +1051,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
     } else if (lcName == "resync") {
 
         if (!m_deprecation)
-            std::cerr << "WARNING: This Rosegarden file uses the deprecated element \"resync\".  We recommend re-saving the file from this version of Rosegarden to assure your ability to re-load it in future versions" << std::endl;
+            RG_WARNING << "WARNING: This Rosegarden file uses the deprecated element \"resync\".  We recommend re-saving the file from this version of Rosegarden to assure your ability to re-load it in future versions";
         m_deprecation = true;
 
         QString time(atts.value("time"));
@@ -1068,7 +1068,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         }
 
         if (m_skipAllAudio) {
-            std::cout << "SKIPPING audio file" << std::endl;
+            RG_DEBUG << "SKIPPING audio file";
             return true;
         }
 
@@ -1553,7 +1553,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             // but have no sequencer support, for example.  we need a separate m_inDevice
             // flag
             //        m_deprecation = true;
-            //        std::cerr << "WARNING: This Rosegarden file uses a deprecated control parameter structure.  We recommend re-saving the file from this version of Rosegarden to assure your ability to re-load it in future versions" << std::endl;
+            //        RG_WARNING << "WARNING: This Rosegarden file uses a deprecated control parameter structure.  We recommend re-saving the file from this version of Rosegarden to assure your ability to re-load it in future versions";
 
         } else if (m_device->getType() == Device::Midi) {
 
@@ -1592,7 +1592,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
     } else if (lcName == "reverb") { // deprecated but we still read 'em
 
         if (!m_deprecation)
-            std::cerr << "WARNING: This Rosegarden file uses the deprecated element \"reverb\" (now replaced by a control parameter).  We recommend re-saving the file from this version of Rosegarden to assure your ability to re-load it in future versions" << std::endl;
+            RG_WARNING << "WARNING: This Rosegarden file uses the deprecated element \"reverb\" (now replaced by a control parameter).  We recommend re-saving the file from this version of Rosegarden to assure your ability to re-load it in future versions";
         m_deprecation = true;
 
         if (m_section != InInstrument) {
@@ -1609,7 +1609,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
     } else if (lcName == "chorus") { // deprecated but we still read 'em
 
         if (!m_deprecation)
-            std::cerr << "WARNING: This Rosegarden file uses the deprecated element \"chorus\" (now replaced by a control parameter).  We recommend re-saving the file from this version of Rosegarden to assure your ability to re-load it in future versions" << std::endl;
+            RG_WARNING << "WARNING: This Rosegarden file uses the deprecated element \"chorus\" (now replaced by a control parameter).  We recommend re-saving the file from this version of Rosegarden to assure your ability to re-load it in future versions";
         m_deprecation = true;
 
         if (m_section != InInstrument) {
@@ -1625,7 +1625,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
     } else if (lcName == "filter") { // deprecated but we still read 'em
 
         if (!m_deprecation)
-            std::cerr << "WARNING: This Rosegarden file uses the deprecated element \"filter\" (now replaced by a control parameter).  We recommend re-saving the file from this version of Rosegarden to assure your ability to re-load it in future versions" << std::endl;
+            RG_WARNING << "WARNING: This Rosegarden file uses the deprecated element \"filter\" (now replaced by a control parameter).  We recommend re-saving the file from this version of Rosegarden to assure your ability to re-load it in future versions";
         m_deprecation = true;
 
         if (m_section != InInstrument) {
@@ -1642,7 +1642,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
     } else if (lcName == "resonance") { // deprecated but we still read 'em
 
         if (!m_deprecation)
-            std::cerr << "WARNING: This Rosegarden file uses the deprecated element \"resonance\" (now replaced by a control parameter).  We recommend re-saving the file from this version of Rosegarden to assure your ability to re-load it in future versions" << std::endl;
+            RG_WARNING << "WARNING: This Rosegarden file uses the deprecated element \"resonance\" (now replaced by a control parameter).  We recommend re-saving the file from this version of Rosegarden to assure your ability to re-load it in future versions";
         m_deprecation = true;
 
         if (m_section != InInstrument) {
@@ -1659,7 +1659,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
     } else if (lcName == "attack") { // deprecated but we still read 'em
 
         if (!m_deprecation)
-            std::cerr << "WARNING: This Rosegarden file uses the deprecated element \"attack\" (now replaced by a control parameter).  We recommend re-saving the file from this version of Rosegarden to assure your ability to re-load it in future versions" << std::endl;
+            RG_WARNING << "WARNING: This Rosegarden file uses the deprecated element \"attack\" (now replaced by a control parameter).  We recommend re-saving the file from this version of Rosegarden to assure your ability to re-load it in future versions";
         m_deprecation = true;
 
         if (m_section != InInstrument) {
@@ -1675,7 +1675,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
     } else if (lcName == "release") { // deprecated but we still read 'em
 
         if (!m_deprecation)
-            std::cerr << "WARNING: This Rosegarden file uses the deprecated element \"release\" (now replaced by a control parameter).  We recommend re-saving the file from this version of Rosegarden to assure your ability to re-load it in future versions" << std::endl;
+            RG_WARNING << "WARNING: This Rosegarden file uses the deprecated element \"release\" (now replaced by a control parameter).  We recommend re-saving the file from this version of Rosegarden to assure your ability to re-load it in future versions";
         m_deprecation = true;
 
         if (m_section != InInstrument) {
@@ -1713,7 +1713,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
         if (lcName == "velocity") {
             if (!m_deprecation)
-                std::cerr << "WARNING: This Rosegarden file uses the deprecated element \"velocity\" for an overall MIDI instrument level (now replaced by \"volume\").  We recommend re-saving the file from this version of Rosegarden to assure your ability to re-load it in future versions" << std::endl;
+                RG_WARNING << "WARNING: This Rosegarden file uses the deprecated element \"velocity\" for an overall MIDI instrument level (now replaced by \"volume\").  We recommend re-saving the file from this version of Rosegarden to assure your ability to re-load it in future versions";
             m_deprecation = true;
         }
 
@@ -1732,7 +1732,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
                 // Note that we have no such compatibility for
                 // "recordLevel", whose range has changed silently.
                 if (!m_deprecation)
-                    std::cerr << "WARNING: This Rosegarden file uses the deprecated element \"volume\" for an audio instrument (now replaced by \"level\").  We recommend re-saving the file from this version of Rosegarden to assure your ability to re-load it in future versions" << std::endl;
+                    RG_WARNING << "WARNING: This Rosegarden file uses the deprecated element \"volume\" for an audio instrument (now replaced by \"level\").  We recommend re-saving the file from this version of Rosegarden to assure your ability to re-load it in future versions";
                 m_deprecation = true;
                 m_instrument->setLevel
                     (AudioLevel::multiplier_to_dB(float(value) / 100.0));
@@ -1782,11 +1782,11 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         PluginContainer *container = 0;
 
         if (m_section == InInstrument) {
-//            std::cerr << "Found plugin in instrument" << std::endl;
+//            RG_WARNING << "Found plugin in instrument";
             container = m_instrument;
             m_pluginInBuss = false;
         } else if (m_section == InBuss) {
-//            std::cerr << "Found plugin in buss" << std::endl;
+//            RG_WARNING << "Found plugin in buss";
             container = m_buss;
             m_pluginInBuss = true;
         } else {
@@ -1799,7 +1799,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         //
         if (container) {
 
-//            std::cerr << "Have container" << std::endl;
+//            RG_WARNING << "Have container";
 
             emit setOperationName(tr("Loading plugins..."));
             qApp->processEvents(QEventLoop::AllEvents, 100);
@@ -1844,7 +1844,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
                     plugin = apm->getPluginByIdentifier(identifier);
             }
 
-            std::cerr << "Plugin identifier " << identifier << " -> plugin " << plugin << std::endl;
+            RG_DEBUG << "Plugin identifier " << identifier << " -> plugin " << plugin;
 
             // If we find the plugin all is well and good but if
             // we don't we just skip it.
@@ -1854,12 +1854,12 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
                 if (!m_plugin) {
                     RG_DEBUG << "WARNING: RoseXmlHandler: instrument/buss "
                     << container->getId() << " has no plugin position "
-                    << position << endl;
+                    << position;
                 } else {
                     m_plugin->setAssigned(true);
                     m_plugin->setBypass(bypassed);
                     m_plugin->setIdentifier( qstrtostr( plugin->getIdentifier() ) );
-                    std::cerr << "set identifier to plugin at position " << position << " of container " << container->getId() << std::endl;
+                    RG_DEBUG << "set identifier to plugin at position " << position << " of container " << container->getId();
                     if (program != "") {
                         m_plugin->setProgram(program);
                     }
@@ -2251,7 +2251,7 @@ RoseXmlHandler::endElement(const QString& namespaceURI,
 
         Profiler profiler("RoseXmlHandler::endElement: emit progress");
 
-//        std::cout << "emitting setValue(" << int(double(m_elementsSoFar) / double(m_totalElements) * 100.0) << ")" << std::endl;
+//       RG_DEBUG << "emitting setValue(" << int(double(m_elementsSoFar) / double(m_totalElements) * 100.0) << ")";
 
         emit setValue(int(double(m_elementsSoFar) / double(m_totalElements) * 100.0));
         qApp->processEvents(QEventLoop::AllEvents, 100);
@@ -2476,8 +2476,8 @@ RoseXmlHandler::addMIDIDevice(QString name, bool createAtSequencer, QString dir)
     } else if (dir == "record") {
         devDir = MidiDevice::Record;
     } else {
-        std::cerr << "Error: Device direction \"" << dir
-                  << "\" invalid in RoseXmlHandler::addMIDIDevice()" << std::endl;
+        RG_WARNING << "Error: Device direction \"" << dir
+                  << "\" invalid in RoseXmlHandler::addMIDIDevice()";
         return;
     }
 

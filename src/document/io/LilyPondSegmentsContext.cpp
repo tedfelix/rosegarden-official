@@ -24,7 +24,7 @@
 #include <map>
 #include <set>
 #include <sstream>
-
+#include <iostream>
 
 namespace Rosegarden
 {

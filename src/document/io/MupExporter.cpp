@@ -61,8 +61,7 @@ MupExporter::write()
 
     std::ofstream str(m_fileName.c_str(), std::ios::out);
     if (!str) {
-        std::cerr << "MupExporter::write() - can't write file " << m_fileName
-        << std::endl;
+        RG_WARNING << "MupExporter::write() - can't write file " << m_fileName;
         return false;
     }
 
@@ -136,9 +135,8 @@ MupExporter::write()
                                    timeSig.getBarDuration() - writtenDuration);
 
             } else if (writtenDuration > timeSig.getBarDuration()) {
-                std::cerr << "WARNING: overfull bar in Mup export: duration " << writtenDuration
-                << " into bar of duration " << timeSig.getBarDuration()
-                << std::endl;
+                RG_WARNING << "WARNING: overfull bar in Mup export: duration " << writtenDuration
+                << " into bar of duration " << timeSig.getBarDuration();
                 //!!! warn user
             }
 
@@ -191,7 +189,7 @@ MupExporter::writeBar(std::ofstream &str,
                            <Int>(NOTE_DOTS);
                 duration = Note(type, dots).getDuration();
             } catch (Exception e) { // no properties
-                std::cerr << "WARNING: MupExporter::writeBar: incomplete note properties: " << e.getMessage() << std::endl;
+                RG_WARNING << "WARNING: MupExporter::writeBar: incomplete note properties: " << e.getMessage();
             }
 
             timeT toNext = duration;

@@ -26,6 +26,7 @@
 #include "base/NotationTypes.h"
 #include "base/MidiTypes.h"
 #include "Quantizer.h"
+#include "misc/Debug.h"
 
 namespace Rosegarden
 {
@@ -709,7 +710,7 @@ GenericChord<Element, Container, singleStaff>::PitchGreater::operator()(const It
         long bp = get__Int(GenericChord::getAsEvent(b), BaseProperties::PITCH);
         return (ap < bp);
     } catch (Event::NoData) {
-        std::cerr << "Bad karma: PitchGreater failed to find one or both pitches" << std::endl;
+        RG_WARNING << "Bad karma: PitchGreater failed to find one or both pitches";
         return false;
     }
 }

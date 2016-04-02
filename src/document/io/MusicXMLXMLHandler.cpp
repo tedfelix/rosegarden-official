@@ -1535,30 +1535,30 @@ MusicXMLXMLHandler::checkFloat(const QString &element, float &value)
 void
 MusicXMLXMLHandler::cerrInfo(const QString &message)
 {
-    std::cerr << "**** At line " << m_locator->lineNumber() << "/"
-              << m_locator->columnNumber() << " *** : " << message << std::endl;
+    RG_DEBUG << "**** At line " << m_locator->lineNumber() << "/"
+             << m_locator->columnNumber() << " *** : " << message;
 }
 
 void
 MusicXMLXMLHandler::cerrWarning(const QString &message)
 {
-    std::cerr << "Warning at line " << m_locator->lineNumber() << "/"
-              << m_locator->columnNumber() << " : " << message << std::endl;
+    RG_WARNING << "Warning at line " << m_locator->lineNumber() << "/"
+               << m_locator->columnNumber() << " : " << message;
 }
 
 void
 MusicXMLXMLHandler::cerrError(const QString &message)
 {
-    std::cerr << "Error at line " << m_locator->lineNumber() << "/"
-              << m_locator->columnNumber() << " : " << message << std::endl;
+    RG_WARNING << "Error at line " << m_locator->lineNumber() << "/"
+               << m_locator->columnNumber() << " : " << message;
 }
 
 void
 MusicXMLXMLHandler::cerrElementNotSupported(const QString &element)
 {
-    std::cerr << "Warning at line " << m_locator->lineNumber() << "/"
-              << m_locator->columnNumber() << " : Element \"" << element
-              << "\" not supported, ignored." << std::endl;
+    RG_WARNING << "Warning at line " << m_locator->lineNumber() << "/"
+               << m_locator->columnNumber() << " : Element \"" << element
+               << "\" not supported, ignored.";
 }
 
 bool

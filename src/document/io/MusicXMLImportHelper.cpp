@@ -57,7 +57,7 @@ MusicXMLImportHelper::~MusicXMLImportHelper()
 bool
 MusicXMLImportHelper::setStaff(const QString &staff)
 {
-std::cerr << "setStaff(" << staff << ")\n";
+    RG_DEBUG << "setStaff(" << staff << ")";
     if (m_tracks.find(staff) == m_tracks.end()) {
         // No such track, create a new one.
         TrackId id = m_composition->getNewTrackId();
@@ -157,7 +157,7 @@ bool
 MusicXMLImportHelper::insertKey(const Key &key, int number)
 {
     if (number > 0) {
-        std::cerr << "Different keys on multistaff systems not supported yet.\n";
+        RG_WARNING << "Different keys on multistaff systems not supported yet.";
     } else {
         for (TrackMap::iterator i = m_tracks.begin(); i != m_tracks.end(); ++i) {
             m_segments[(*i).first+"/"+m_mainVoice[m_staff]]->insert(key.getAsEvent(m_curTime));
@@ -232,8 +232,8 @@ MusicXMLImportHelper::startIndication(const std::string name, int number,
                                       const std::string endName)
 {
     m_indications.push_back(IndicationStart(m_staff, m_voice, name, m_curTime, number, endName));
-std::cerr << m_curTime << " : startIndication(" << m_staff << ", " << m_voice << ", " << name << ", " << number
-          << ", " << endName << ")\n";
+    RG_DEBUG << m_curTime << " : startIndication(" << m_staff << ", " << m_voice << ", " << name << ", " << number
+          << ", " << endName << ")";
     return true;
 }
 
@@ -258,8 +258,8 @@ MusicXMLImportHelper::endIndication(const std::string name, int number, timeT ex
             ++i;
         }
     }
-std::cerr << m_curTime << " : endIndication(" << m_staff << ", " << m_voice << ", " << name << ", " << number
-          << ", " << extend << ") -> " << found << std::endl;
+    RG_DEBUG << m_curTime << " : endIndication(" << m_staff << ", " << m_voice << ", " << name << ", " << number
+          << ", " << extend << ") -> " << found;
     if (found) {
         Indication indication((*i).m_name, m_curTime - (*i).m_time + extend);
         m_segments[m_staff+"/"+m_voice]->insert(indication.getAsEvent((*i).m_time));

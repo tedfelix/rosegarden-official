@@ -156,17 +156,17 @@ LyricEditDialog::slotRemoveVerse()
 {
     NOTATION_DEBUG << "LyricEditDialog::slotRemoveVerse" << endl;
 
-    std::cerr << "deleting at position " << m_currentVerse << std::endl;
+    RG_DEBUG << "deleting at position " << m_currentVerse;
     std::vector<QString>::iterator itr = m_texts.begin();
     for (int i = 0; i < m_currentVerse; ++i) ++itr;
 
-    std::cerr << "text being deleted is: " << *itr << std::endl;
+    RG_DEBUG << "text being deleted is: " << *itr;
     if (m_verseCount > 1) {
         m_texts.erase(itr);
         m_verseCount--;
         if (m_currentVerse == m_verseCount) m_currentVerse--;
     } else {
-        std::cerr << "deleting last verse" << std::endl;
+        RG_DEBUG << "deleting last verse";
         m_texts.clear();
         m_texts.push_back(m_skeleton);
     }
@@ -318,7 +318,7 @@ LyricEditDialog::verseDialogRepopulate()
 
     m_verseNumber->setCurrentIndex(m_currentVerse);
 
-    std::cerr << "m_currentVerse = " << m_currentVerse << ", text = " << m_texts[m_currentVerse] << std::endl;
+    RG_DEBUG << "m_currentVerse = " << m_currentVerse << ", text = " << m_texts[m_currentVerse];
     m_textEdit->setPlainText(m_texts[m_currentVerse]);
 }
 

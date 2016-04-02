@@ -18,6 +18,7 @@
 
 #include "TextEventDialog.h"
 #include "misc/Strings.h"
+#include "misc/Debug.h"
 #include "misc/ConfigGroups.h"
 #include "base/NotationTypes.h"
 #include "gui/editors/notation/NotePixmapFactory.h"
@@ -624,7 +625,7 @@ TextEventDialog::slotUpdateSize(int i)
 {
     // (i is just the index of the active widget in the QStackedWidget and is
     // only interesting to track to make sure something is changing)
-    std::cerr << "TextEventDialog::slotUpdateSize(" << i << ")" << std::endl;
+    RG_DEBUG << "TextEventDialog::slotUpdateSize(" << i << ")";
     adjustSize();
 }
 

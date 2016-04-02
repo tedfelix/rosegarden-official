@@ -385,7 +385,7 @@ ManageMetronomeDialog::slotApply()
     }
 
     if (!dev || !isSuitable(dev)) {
-        std::cerr << "Warning: ManageMetronomeDialog::slotApply: no " << m_metronomeDevice->currentIndex() << "th device" << std::endl;
+        RG_WARNING << "Warning: ManageMetronomeDialog::slotApply: no " << m_metronomeDevice->currentIndex() << "th device";
         return ;
     }
 
@@ -393,7 +393,7 @@ ManageMetronomeDialog::slotApply()
     studio.setMetronomeDevice(deviceId);
 
     if (getMetronome(dev) == 0) {
-        std::cerr << "Warning: ManageMetronomeDialog::slotApply: unable to extract metronome from device " << deviceId << std::endl;
+        RG_WARNING << "Warning: ManageMetronomeDialog::slotApply: unable to extract metronome from device " << deviceId;
         return ;
     }
     MidiMetronome metronome(*getMetronome(dev));

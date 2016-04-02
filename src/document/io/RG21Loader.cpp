@@ -39,6 +39,7 @@
 #include <QTextStream>
 #include <string>
 #include <vector>
+#include <iostream>
 
 using std::vector;
 using std::string;
