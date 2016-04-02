@@ -593,8 +593,6 @@ NotePixmapFactory::drawNoteAux(const NotePixmapParameters &params,
         drawFlags(flagCount, params, m_nd.stemStart, m_nd.stemEnd);
     }
 
-    drawAccidental(params);
-
     NoteStyle::CharNameRec charNameRec
         (m_style->getNoteHeadCharName(params.m_noteType));
     CharName charName = charNameRec.first;
@@ -643,6 +641,17 @@ NotePixmapFactory::drawNoteAux(const NotePixmapParameters &params,
         }
     }
 
+    // Prepare color to draw accidental, stem, flags, etc...
+    if ((isStemmed && params.m_drawStem) || params.m_cautionary) {
+        if (m_selected) m_p->painter().setPen(GUIPalette::getColour(
+                                                GUIPalette::SelectedElement));
+        else if (m_shaded) m_p->painter().setPen(QColor(Qt::gray));
+        else m_p->painter().setPen(QColor(Qt::black));
+
+    }
+
+    drawAccidental(params);
+
     if (isStemmed && params.m_drawStem) {
 
         if (flagCount > 0 && !drawFlag && params.m_beamed) {
@@ -652,11 +661,6 @@ NotePixmapFactory::drawNoteAux(const NotePixmapParameters &params,
         if (slashCount > 0) {
             drawSlashes(m_nd.stemStart, params, slashCount);
         }
-
-        if (m_selected) m_p->painter().setPen(GUIPalette::getColour(
-                                                GUIPalette::SelectedElement));
-        else if (m_shaded) m_p->painter().setPen(QColor(Qt::gray));
-        else m_p->painter().setPen(QColor(Qt::black));
 
         // If we draw stems after beams, instead of beams after stems,
         // beam anti-aliasing won't damage stems but we have to shorten the
@@ -846,6 +850,8 @@ NotePixmapFactory::drawAccidental(const NotePixmapParameters &params)
     if (params.m_forceColor) {
         ac = getCharacter
             (m_style->getAccidentalCharName(a), params.m_forcedColor, false);
+        // Prepare color in case drawing brackets is needed
+        m_p->painter().setPen(params.m_forcedColor);
     } else {
         ac = getCharacter
             (m_style->getAccidentalCharName(a), PlainColour, false);
