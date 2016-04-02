@@ -22,6 +22,8 @@
 #include <string>
 #include <rosegardenprivate_export.h>
 
+#include <iostream>
+
 namespace Rosegarden {
 
 
