@@ -86,7 +86,7 @@ void MatrixPainter::handleMouseDoubleClick(const MatrixMouseEvent *e){
 
     // Don't create an overlapping event on the same note on the same channel
     if (e->element) {
-        //std::cerr << "MatrixPainter::handleLeftButtonPress : overlap with an other matrix element" << std::endl;
+        //RG_DEBUG << "MatrixPainter::handleLeftButtonPress : overlap with an other matrix element";
         // In percussion matrix, we delete the existing event rather
         // than just ignoring it -- this is reasonable as the event
         // has no meaningful duration, so we can just toggle it on and
@@ -137,7 +137,7 @@ void MatrixPainter::handleLeftButtonPress(const MatrixMouseEvent *e)
 
     // Don't create an overlapping event on the same note on the same channel
     if (e->element) {
-        std::cerr << "MatrixPainter::handleLeftButtonPress : overlap with an other matrix element" << std::endl;
+        RG_DEBUG << "MatrixPainter::handleLeftButtonPress : overlap with an other matrix element";
         // In percussion matrix, we delete the existing event rather
         // than just ignoring it -- this is reasonable as the event
         // has no meaningful duration, so we can just toggle it on and
@@ -174,8 +174,8 @@ void MatrixPainter::handleLeftButtonPress(const MatrixMouseEvent *e)
     ev->set<Int>(BaseProperties::PITCH, adjustedPitch);
     ev->set<Int>(BaseProperties::VELOCITY, velocity);
 
-    std::cout << "MATRIX PAINTER: I'm working from segment \"" << m_currentViewSegment->getSegment().getLabel() << "\"" << std::endl
-              << "  clicked pitch: " << e->pitch << " adjusted pitch: " << adjustedPitch << std::endl;
+    RG_DEBUG << "MATRIX PAINTER: I'm working from segment \"" << m_currentViewSegment->getSegment().getLabel() << "\""
+              << "  clicked pitch: " << e->pitch << " adjusted pitch: " << adjustedPitch;
 
     m_currentElement = new MatrixElement(m_scene, ev, m_widget->isDrumMode(), pitchOffset);
 

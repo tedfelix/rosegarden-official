@@ -19,6 +19,7 @@
 
 #include "base/NotationTypes.h"
 #include "gui/general/ResourceFinder.h"
+#include "misc/Debug.h"
 
 #include <QtDebug>
 #include <QXmlStreamReader>
@@ -252,8 +253,8 @@ void Tuning::parseSpelling(QString note,
     //insert into spelling list
     spellings->insert(Spelling(note.toStdString().c_str(), intervals->size()-1));
 #   if (TUNING_DEBUG > 1)
-    qDebug() << "Translated variation:" << note << "\n";
-#   endif                               
+    qDebug() << "Translated variation:" << note;
+#   endif
 }
 
 double Tuning::scalaIntervalToCents(const QString & interval,
@@ -275,8 +276,7 @@ double Tuning::scalaIntervalToCents(const QString & interval,
 #           endif
             ratio = intervalString.toInt(&ok);
             if (!ok) {
-                std::cerr << "Syntax Error in tunings file, line "
-                << lineNumber << std::endl;
+                RG_WARNING << "Syntax Error in tunings file, line " << lineNumber;
                 return -1.0;
             } else {
                 //convert ratio to cents          
@@ -288,8 +288,7 @@ double Tuning::scalaIntervalToCents(const QString & interval,
 #               endif
                 int numerator = numeratorString.toInt( &ok );
                 if (!ok) {
-                    std::cerr << "Syntax Error in tunings file, "
-                    "line " << lineNumber << std::endl;
+                    RG_WARNING << "Syntax Error in tunings file, line" << lineNumber;
                     return -1.0;
                 }
                 QString denominatorString = intervalString;
@@ -299,12 +298,10 @@ double Tuning::scalaIntervalToCents(const QString & interval,
 #               endif
                 int denominator = denominatorString.toInt( &ok );
                 if (!ok) {
-                    std::cerr << "Syntax Error in tunings file, "
-                                 "line " << lineNumber
-                              << std::endl;
+                    RG_WARNING << "Syntax Error in tunings file, line" << lineNumber;
                               return -1.0;
-                }      
-                                       
+                }
+
 #               if (TUNING_DEBUG > 1)
                 qDebug() << "Ratio:" << numeratorString
                          << "/" << denominatorString;
@@ -324,8 +321,8 @@ double Tuning::scalaIntervalToCents(const QString & interval,
 #       endif
         cents = intervalString.toDouble(&ok);
         if (!ok) {
-            std::cerr << "Syntax Error in tunings file, line "
-                      << lineNumber << std::endl;
+            RG_WARNING << "Syntax Error in tunings file, line "
+                      << lineNumber;
             return -1.0;
         }
 #       if (TUNING_DEBUG > 1)
@@ -412,22 +409,22 @@ Tuning::Tuning(const Tuning *tuning) :
     
     Rosegarden::Key keyofc; // use key of C to obtain unbiased accidental
     
-    std::cout << "Ref note " << p.getNoteName(keyofc)
+    RG_DEBUG << "Ref note " << p.getNoteName(keyofc)
     << p.getDisplayAccidental( keyofc )
-    << " " << m_refFreq << std::endl;
+    << " " << m_refFreq;
     
-    std::cout << "Ref note " << m_refPitch.getNoteName(keyofc)
+    RG_DEBUG << "Ref note " << m_refPitch.getNoteName(keyofc)
     << m_refPitch.getDisplayAccidental( keyofc )
-    << " " << m_refFreq << std::endl;
+    << " " << m_refFreq;
     
-    std::cout << "Ref freq for C " << m_cRefFreq << std::endl;
+    RG_DEBUG << "Ref freq for C " << m_cRefFreq;
     
-    std::cout << "Root note " <<  p2.getNoteName(keyofc)
+    RG_DEBUG << "Root note " <<  p2.getNoteName(keyofc)
     << p2.getDisplayAccidental(keyofc)
-    << std::endl;
-    std::cout << "Root note " <<  m_rootPitch.getNoteName(keyofc)
+   ;
+    RG_DEBUG << "Root note " <<  m_rootPitch.getNoteName(keyofc)
     << m_rootPitch.getDisplayAccidental(keyofc)
-    << std::endl;
+   ;
 }
 
 
@@ -440,8 +437,8 @@ void Tuning::setRootPitch(Rosegarden::Pitch pitch){
     std::string spelling = getSpelling( pitch );;
     const SpellingListIterator sit = m_spellings->find(spelling);
     if (sit == m_spellings->end()){
-        std::cerr << "\nFatal: Tuning::setRootPitch root pitch "
-                     "not found in tuning!!" << std::endl;
+        RG_WARNING << "Fatal: Tuning::setRootPitch root pitch "
+                     "not found in tuning!!";
         return;
     }
 #   if (TUNING_DEBUG > 1)    
@@ -479,9 +476,9 @@ void Tuning::setRefNote(Rosegarden::Pitch pitch, double freq) {
     // position in chromatic scale
     SpellingListIterator it = m_spellings->find(spelling);
     if (it == m_spellings->end()) {
-        std::cerr << "Tuning::setRefNote Spelling " << spelling 
+        RG_WARNING << "Tuning::setRefNote Spelling " << spelling 
                   << " not found in " << m_name
-                  << " tuning!" << std::endl;
+                  << " tuning!";
         return;
     }
     int refPosition = it->second;
@@ -491,8 +488,8 @@ void Tuning::setRefNote(Rosegarden::Pitch pitch, double freq) {
     
     it = m_spellings->find("C");
     if (it == m_spellings->end()){
-        std::cerr << "Tuning::setRefNote 'C' not found in "
-                  << m_name << " tuning!\n";
+        RG_WARNING << "Tuning::setRefNote 'C' not found in "
+                  << m_name << " tuning!";
         return;
     }
     
@@ -545,8 +542,8 @@ double Tuning::getFrequency(Rosegarden::Pitch p) const {
     // position in chromatic scale
     const SpellingListIterator it = m_spellings->find(spelling);
     if (it == m_spellings->end()) {
-        std::cerr << "Tuning::getFreq  Spelling '" << spelling 
-                  << "' not found in " << m_name << " tuning!\n";
+        RG_WARNING << "Tuning::getFreq  Spelling '" << spelling 
+                  << "' not found in " << m_name << " tuning!";
         return 0;
     }
     int position = it->second;
@@ -613,39 +610,34 @@ double Tuning::getFrequency(Rosegarden::Pitch p) const {
 */
 void Tuning::printTuning() const {
     
-    std::cout << "Tuning::printTuning()\n";
-    std::cout << "Name: '" << m_name << "'\n";
+    RG_DEBUG << "Tuning::printTuning()";
+    RG_DEBUG << "Name: '" << m_name << "'";
     
     Rosegarden::Key keyofc; // use key of C to obtain unbiased accidental
     
-    std::cout << "Ref note " << m_refPitch.getNoteName(keyofc)
+    RG_DEBUG << "Ref note " << m_refPitch.getNoteName(keyofc)
               << m_refPitch.getDisplayAccidental( keyofc )
-              << " " << m_refFreq << std::endl;
+              << " " << m_refFreq;
     
-    std::cout << "Ref freq for C " << m_cRefFreq << std::endl;
+    RG_DEBUG << "Ref freq for C " << m_cRefFreq;
     
-    std::cout << "Root note " <<  m_rootPitch.getNoteName(keyofc)
-              << m_rootPitch.getDisplayAccidental( keyofc )
-              << std::endl;
+    RG_DEBUG << "Root note " <<  m_rootPitch.getNoteName(keyofc)
+              << m_rootPitch.getDisplayAccidental( keyofc );
     
     for (SpellingListIterator sit = m_spellings->begin();
-    sit != m_spellings->end();
-    ++sit) {
-        
-        std::cout << "Spelling '" << sit->first
-                  << "'\tinterval " << sit->second
-                  << std::endl;
-        
+            sit != m_spellings->end();
+            ++sit) {
+        RG_DEBUG << "Spelling '" << sit->first
+                  << "'\tinterval " << sit->second;
     }
-    
+
     for(unsigned int i=0; i < m_intervals->size(); i++) { 
-        std::cout << "Interval '" << i
-                  << "'\tinterval " << m_intervals->at(i)
-                  << std::endl;
+        RG_DEBUG << "Interval '" << i
+                  << "'\tinterval " << m_intervals->at(i);
     }
-    
-    std::cout << "Done." << std::endl;
-    
+
+    RG_DEBUG << "Done.";
+
 }
 
 

@@ -23,6 +23,7 @@
 #include "base/NotationRules.h"
 #include "base/NotationTypes.h"
 #include "base/Quantizer.h"
+#include "misc/Debug.h"
 #include "NotationProperties.h"
 #include "NoteStyleFactory.h"
 
@@ -165,7 +166,7 @@ NotationChord::isNoteHeadShifted(const Iterator &itr) const
     }
 
     if (i == size()) {
-        std::cerr << "NotationChord::isNoteHeadShifted: Warning: Unable to find note head " << getAsEvent(itr) << std::endl;
+        RG_WARNING << "NotationChord::isNoteHeadShifted: Warning: Unable to find note head " << getAsEvent(itr);
         return false;
     }
 

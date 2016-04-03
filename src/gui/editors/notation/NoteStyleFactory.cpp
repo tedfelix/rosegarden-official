@@ -20,6 +20,7 @@
 
 #include <QDir>
 #include "misc/Strings.h"
+#include "misc/Debug.h"
 #include "base/Event.h"
 #include "base/Exception.h"
 #include "NotationProperties.h"
@@ -54,7 +55,7 @@ NoteStyleFactory::getAvailableStyleNames()
     }
 
     if (!foundDefault) {
-        std::cerr << "NoteStyleFactory::getAvailableStyleNames: WARNING: Default style name \"" << DefaultStyle << "\" not found" << std::endl;
+        RG_WARNING << "NoteStyleFactory::getAvailableStyleNames: WARNING: Default style name \"" << DefaultStyle << "\" not found";
     }
 
     return names;
@@ -73,9 +74,7 @@ NoteStyleFactory::getStyle(NoteStyleName name)
             return newStyle;
 
         } catch (NoteStyleFileReader::StyleFileReadFailed f) {
-            std::cerr
-                << "NoteStyleFactory::getStyle: Style file read failed: "
-                << f.getMessage() << std::endl;
+            RG_WARNING << "NoteStyleFactory::getStyle: Style file read failed:" << f.getMessage();
             throw StyleUnavailable("Style file read failed: " + f.getMessage());
         }
 

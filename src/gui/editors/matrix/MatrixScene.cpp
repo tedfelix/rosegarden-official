@@ -210,8 +210,7 @@ MatrixScene::setCurrentSegment(Segment *s)
             return;
         }
     }
-    std::cerr << "WARNING: MatrixScene::setCurrentSegment: unknown segment "
-              << s << std::endl;
+    RG_WARNING << "WARNING: MatrixScene::setCurrentSegment: unknown segment" << s;
 }
 
 Segment *
@@ -420,8 +419,7 @@ MatrixScene::recreatePitchHighlights()
         if (!segment->getNextKeyTime(k0, k1)) k1 = segment->getEndMarkerTime();
 
         if (k0 == k1) {
-            std::cerr << "WARNING: MatrixScene::recreatePitchHighlights: k0 == k1 == "
-                      << k0 << std::endl;
+            RG_WARNING << "WARNING: MatrixScene::recreatePitchHighlights: k0 == k1 ==" << k0;
             break;
         }
 
@@ -714,7 +712,7 @@ MatrixScene::setSelection(EventSelection *s, bool preview)
 void
 MatrixScene::slotRulerSelectionChanged(EventSelection *s)
 {
-    std::cout << "MatrixScene: caught " << (s ? "useful" : "null" ) << " selection change from ruler" << std::endl;
+    RG_DEBUG << "MatrixScene: caught " << (s ? "useful" : "null" ) << " selection change from ruler";
     if (m_selection) {
         if (s) m_selection->addFromSelection(s);
         setSelectionElementStatus(m_selection, true);
@@ -890,7 +888,7 @@ void
 MatrixScene::playNote(Segment &segment, int pitch, int velocity)
 {
 //    std::cout << "Scene is playing a note of pitch: " << pitch
-//              << " + " <<  segment.getTranspose() << std::endl;
+//              << " + " <<  segment.getTranspose();
     if (!m_document) return;
 
     Instrument *instrument = m_document->getStudio().getInstrumentFor(&segment);

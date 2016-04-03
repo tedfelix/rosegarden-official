@@ -21,6 +21,7 @@
 
 #include "base/BaseProperties.h"
 #include "misc/Strings.h"
+#include "misc/Debug.h"
 #include "misc/ConfigGroups.h"
 #include "base/Event.h"
 #include "base/NotationTypes.h"
@@ -298,7 +299,7 @@ NoteRestInserter::handleMouseRelease(const NotationMouseEvent *e)
     m_leftButtonDown = false;
 
     NOTATION_DEBUG << "NoteRestInserter::handleMouseRelease: staff = " <<
-        m_clickStaff << ", clicked = " << m_clickHappened << endl;
+        m_clickStaff << ", clicked = " << m_clickHappened;
 
         NotationStaff *staff = m_clickStaff;
     if (!m_clickHappened || !staff) return;
@@ -362,7 +363,7 @@ NoteRestInserter::setCursorShape()
                          Accidentals::NoAccidental);
     
     NotePixmapFactory * pixmapFactory = m_scene->getNotePixmapFactory();
-    std::cout << "pixmap factory = " << pixmapFactory << "\n";
+    NOTATION_DEBUG << "pixmap factory =" << pixmapFactory;
 
     if (isaRestInserter()) {
         // In rest inserter mode, the preview doesn't work (currently) and
@@ -373,7 +374,7 @@ NoteRestInserter::setCursorShape()
 
         QGraphicsPixmapItem * gitem =
             dynamic_cast<QGraphicsPixmapItem *>(pixmapFactory->makeRest(params));
-        std::cout << "rest: gitem = " << gitem << "\n";
+        NOTATION_DEBUG << "rest: gitem =" << gitem;
 
         QPixmap pixmap = gitem->pixmap();
         QCursor cursor(pixmap);
@@ -449,8 +450,7 @@ NoteRestInserter::handleWheelTurned(int delta, const NotationMouseEvent *e)
 
 void NoteRestInserter::showMenu()
 {
-    NOTATION_DEBUG << "NoteRestInserter::showMenu() : enter."
-        << endl;
+    NOTATION_DEBUG << "NoteRestInserter::showMenu() : enter.";
     if (!hasMenu())
         return ;
 
@@ -458,8 +458,7 @@ void NoteRestInserter::showMenu()
         createMenu();
 
     if (m_menu) {
-        NOTATION_DEBUG << "NoteRestInserter::showMenu() : morphing menu."
-            << endl;
+        NOTATION_DEBUG << "NoteRestInserter::showMenu() : morphing menu.";
         //Morph Context menu.
         if (isaRestInserter()) {
             leaveActionState("in_note_mode");
@@ -485,8 +484,7 @@ void NoteRestInserter::showMenu()
         }
 
     } else {
-        NOTATION_DEBUG << "NoteRestInserter::showMenu() : no menu to show."
-            << endl;
+        NOTATION_DEBUG << "NoteRestInserter::showMenu() : no menu to show.";
     }
 }
 
@@ -537,13 +535,13 @@ NoteRestInserter::computeLocationAndPreview(const NotationMouseEvent *e,
                                             bool play)
 {
     if (!e->staff || !e->element) {
-        NOTATION_DEBUG << "computeLocationAndPreview: staff and/or element not supplied" << endl;
+        NOTATION_DEBUG << "computeLocationAndPreview: staff and/or element not supplied";
         clearPreview();
         return false;
     }
 
     if (m_clickHappened && (e->staff != m_clickStaff)) {
-        NOTATION_DEBUG << "computeLocationAndPreview: staff changed from originally clicked one (" << e->staff << " vs " << m_clickStaff << ")" << endl;
+        NOTATION_DEBUG << "computeLocationAndPreview: staff changed from originally clicked one (" << e->staff << " vs " << m_clickStaff << ")";
         // abandon
         clearPreview();
         return false;
@@ -559,7 +557,7 @@ NoteRestInserter::computeLocationAndPreview(const NotationMouseEvent *e,
     NotationElement *el = e->element;
     ViewElementList::iterator itr = e->staff->getViewElementList()->findSingle(el);
     if (itr == e->staff->getViewElementList()->end()) {
-        NOTATION_DEBUG << "computeLocationAndPreview: element provided is not found in staff" << endl;
+        NOTATION_DEBUG << "computeLocationAndPreview: element provided is not found in staff";
         return false;
     }
 
@@ -571,9 +569,9 @@ NoteRestInserter::computeLocationAndPreview(const NotationMouseEvent *e,
 
     if (grace && el->getItem()) {
 
-        std::cerr << "x=" << x << ", el->getSceneX()=" << el->getSceneX() << std::endl;
+        NOTATION_DEBUG << "x=" << x << ", el->getSceneX()=" << el->getSceneX();
 
-        if (el->isRest()) std::cerr << "elt is a rest" << std::endl;
+        if (el->isRest()) NOTATION_DEBUG << "elt is a rest";
         if (x - el->getSceneX() >
             e->staff->getNotePixmapFactory(false).getNoteBodyWidth()) {
             NotationElementList::iterator j(itr);
@@ -1147,7 +1145,7 @@ NoteRestInserter::doAddCommand(Segment &segment, timeT time, timeT endTime,
 {
     NOTATION_DEBUG << "doAddCommand: time " << time << ", endTime " << endTime
                    << ", pitch " << pitch << ",isaRestInserter "
-                   << isaRestInserter() << endl;
+                   << isaRestInserter();
 
     Command *activeCommand = 0;  //Used in rest / note mode code
     NoteInsertionCommand *insertionCommand = 0; //Used in rest / note mode code
@@ -1228,7 +1226,7 @@ NoteRestInserter::doAddCommand(Segment &segment, timeT time, timeT endTime,
     CommandHistory::getInstance()->addCommand(activeCommand);
 
     NOTATION_DEBUG << "NoteRestInserter::doAddCommand: accidental is "
-                   << accidental << endl;
+                   << accidental;
 
     return insertionCommand->getLastInsertedEvent();
 }
@@ -1247,7 +1245,7 @@ void NoteRestInserter::slotSetAccidental(Accidental accidental,
                                      bool follow)
 {
     NOTATION_DEBUG << "NoteRestInserter::setAccidental: accidental is "
-                   << accidental << endl;
+                   << accidental;
     m_accidental = accidental;
     m_followAccidental = follow;
 }
@@ -1261,7 +1259,7 @@ void NoteRestInserter::slotToggleDot()
     // in parent view.  If changes, then a check
     // will need to be made.
     NOTATION_DEBUG << "NoteRestInserter::slotToggleDot: entered. "
-        << "Calling action name = " << actionName << endl;
+        << "Calling action name = " << actionName;
 
     invokeInParentView(actionName);
 
@@ -1291,7 +1289,7 @@ void NoteRestInserter::slotRestsSelected()
     QAction* action = findActionInParentView(actionName);
 
     if (!action) {
-        std::cerr << "WARNING: No such action as " << actionName << std::endl;
+        RG_WARNING << "WARNING: No such action as " << actionName;
     } else {
         setToRestInserter(true);
         action->setChecked(true);
@@ -1309,7 +1307,7 @@ void NoteRestInserter::slotNotesSelected()
     QAction *action = findActionInParentView(actionName);
 
     if (!action) {
-        std::cerr << "WARNING: No such action as " << actionName << std::endl;
+        RG_WARNING << "WARNING: No such action as " << actionName;
     } else {
         setToRestInserter(false);
         action->setChecked(true);

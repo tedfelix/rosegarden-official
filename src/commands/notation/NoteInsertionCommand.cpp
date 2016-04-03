@@ -30,6 +30,7 @@
 #include "base/BaseProperties.h"
 #include "base/Selection.h"
 #include "misc/Strings.h"
+#include "misc/Debug.h"
 
 
 namespace Rosegarden
@@ -120,8 +121,8 @@ NoteInsertionCommand::modifySegment()
     bool suborderingExact = (actualSubordering != 
                              (lrintf(floorf(m_targetSubordering - 0.01))));
 
-    std::cerr << "actualSubordering = " << actualSubordering
-              << " suborderingExact = " << suborderingExact << std::endl;
+    RG_DEBUG << "actualSubordering =" << actualSubordering
+             << "suborderingExact =" << suborderingExact;
 
     Event *e;
 
@@ -214,12 +215,12 @@ NoteInsertionCommand::modifySegment()
         segment.getTimeSlice(m_insertionTime, j, k);
         Segment::iterator bg0 = segment.end(), bg1 = segment.end();
         while (j != k) {
-            std::cerr << "testing for truthiness: time " << (*j)->getAbsoluteTime() << ", subordering " << (*j)->getSubOrdering() << std::endl;
+            RG_DEBUG << "testing for truthiness: time " << (*j)->getAbsoluteTime() << ", subordering " << (*j)->getSubOrdering();
             if ((*j)->isa(Note::EventType) &&
                 (*j)->getSubOrdering() < 0 &&
                 (*j)->has(IS_GRACE_NOTE) &&
                 (*j)->get<Bool>(IS_GRACE_NOTE)) {
-                std::cerr << "truthiful" << std::endl;
+                RG_DEBUG << "truthiful";
                 if (bg0 == segment.end()) bg0 = j;
                 bg1 = j;
             }

@@ -60,7 +60,7 @@ NoteSymbols::drawMuteSymbol ( bool big,
                               QPainter* p,
                               unsigned int position ) const
 {
-    std::cerr << "NoteSymbols::drawMuteSymbol()" << std::endl;
+    RG_DEBUG << "NoteSymbols::drawMuteSymbol()";
 
     QRect v = p->viewport();
 
@@ -98,7 +98,7 @@ NoteSymbols::drawOpenSymbol ( bool big,
                               QPainter* p,
                               unsigned int position ) const
 {
-    std::cerr << "NoteSymbols::drawOpenSymbol()" << std::endl;
+    RG_DEBUG << "NoteSymbols::drawOpenSymbol()";
     
     QRect v = p->viewport();
     posPair x_pos = getX ( v.width(), position, m_nbOfStrings );
@@ -146,7 +146,7 @@ NoteSymbols::drawNoteSymbol ( bool /* big */,
                               bool transient ) const
 {
 //    NOTATION_DEBUG << "NoteSymbols::drawNoteSymbol - string: " << stringNb << ", fret:" << fretNb << endl;
-    std::cerr << "NoteSymbols::drawNoteSymbol()" << std::endl;
+    RG_DEBUG << "NoteSymbols::drawNoteSymbol()";
 
     QRect v = p->viewport();
     posPair x_pos = getX ( v.width(), stringNb, m_nbOfStrings );

@@ -23,6 +23,7 @@
 #include "document/RosegardenDocument.h"
 #include "gui/seqmanager/SequenceManager.h"
 #include "sound/MappedEvent.h"
+#include "misc/Debug.h"
 #include <QDialog>
 #include <QDialogButtonBox>
 #include <QPushButton>
@@ -232,7 +233,7 @@ MidiFilterDialog::help()
 void
 MidiFilterDialog::slotApply()
 {
-    std::cerr << "MidiFilterDialog::slotApply()" << std::endl;
+    RG_DEBUG << "MidiFilterDialog::slotApply()";
 
     MidiFilter thruFilter = 0,
                recordFilter = 0;

@@ -127,7 +127,7 @@ AudioMixerWindow::AudioMixerWindow(QWidget *parent,
         ->setChecked(!(mixerOptions & MIXER_OMIT_PLUGINS));
 
     RG_DEBUG << "AudioMixerWindow::CTOR: action \"show_plugin_buttons\" has been created.  State should be: "
-             << ( !(mixerOptions & MIXER_OMIT_PLUGINS) ? "true" : "false") << endl;
+             << ( !(mixerOptions & MIXER_OMIT_PLUGINS) ? "true" : "false");
 
     createAction("show_unassigned_faders", SLOT(slotToggleUnassignedFaders()))
         ->setChecked(mixerOptions & MIXER_SHOW_UNASSIGNED_FADERS);
@@ -736,7 +736,7 @@ void
 AudioMixerWindow::slotPluginBypassed(InstrumentId instrumentId,
                                      int , bool)
 {
-    RG_DEBUG << "AudioMixerWindow::slotPluginBypassed(" << instrumentId << ")" << endl;
+    RG_DEBUG << "AudioMixerWindow::slotPluginBypassed(" << instrumentId << ")";
 
     updatePluginButtons(instrumentId);
 }
@@ -1448,7 +1448,7 @@ AudioMixerWindow::slotSetSubmasterCountFromAction()
         }
 //      busses = m_studio->getBusses();
 //      for (BussList::iterator it = busses.begin(); it != busses.end(); it++)
-//          std::cout << "******* BussId:" << (*it)->getId() << std::endl;
+//          RG_DEBUG << "******* BussId:" << (*it)->getId();
     }
 
     m_document->initialiseStudio();
@@ -1535,7 +1535,7 @@ AudioMixerWindow::slotUpdateFaderVisibility()
         action->setChecked(d);
     }
 
-    RG_DEBUG << "AudioMixerWindow::slotUpdateFaderVisibility: visiblility is " << d << " (options " << m_studio->getMixerDisplayOptions() << ")" << endl;
+    RG_DEBUG << "AudioMixerWindow::slotUpdateFaderVisibility: visiblility is " << d << " (options " << m_studio->getMixerDisplayOptions() << ")";
 
     for (FaderMap::iterator i = m_faders.begin(); i != m_faders.end(); ++i) {
         if (i->first < SoftSynthInstrumentBase) {
@@ -1630,7 +1630,7 @@ AudioMixerWindow::slotUpdatePluginButtonVisibility()
                          MIXER_OMIT_PLUGINS));
 
     RG_DEBUG << "AudioMixerWindow::slotUpdatePluginButtonVisibility() action->isChecked("
-             << (action->isChecked() ? "true" : "false") << ")" << endl;
+             << (action->isChecked() ? "true" : "false") << ")";
 
     for (FaderMap::iterator i = m_faders.begin(); i != m_faders.end(); ++i) {
         FaderRec rec = i->second;
@@ -1683,7 +1683,7 @@ AudioMixerWindow::slotRepopulate()
     // this destroys everything if it already exists and rebuilds it, so while
     // it's overkill for changing one label, it should get the job done without
     // the need for even more new plumbing
-    std::cout << "POPULATE" << std::endl;
+    RG_DEBUG << "POPULATE";
     populate();
 }
 

@@ -27,6 +27,7 @@
 // Might need the default pitch analysis frame size and overlap
 #include "gui/configuration/PitchTrackerConfigurationPage.h"
 #include "misc/ConfigGroups.h"
+#include "misc/Debug.h"
 // to add PitchGraphWidget to display
 #include "gui/editors/notation/NotationWidget.h"
 // to get the notes in the composition
@@ -85,11 +86,11 @@ PitchTrackerView::PitchTrackerView(RosegardenDocument *doc,
     // here and at least print a warning.
     if (m_framesize > 65536 || m_framesize < 64 ||
         m_stepsize > m_framesize || m_stepsize < m_framesize/16) {
-        std::cout << "PitchTrackerView: instantiation has these parameters: "
-                     "Framesize: " << m_framesize <<
-                     "Step size: " << m_stepsize <<
+        RG_WARNING << "PitchTrackerView: instantiation has these parameters: "
+                     "Framesize:" << m_framesize <<
+                     "Step size:" << m_stepsize <<
                      ". This seems rather unlikely; will continue anyway. "
-                     "(fingers crossed!)" << std::endl;
+                     "(fingers crossed!)";
     }
     
     // Find the current tuning index in use by the pitch tracker
@@ -114,7 +115,7 @@ PitchTrackerView::PitchTrackerView(RosegardenDocument *doc,
         m_tuning = m_availableTunings[tuning];
     } else {
         m_tuning = NULL;
-        std::cout << "WARNING: No available tunings!" << std::endl;
+        RG_WARNING << "WARNING: No available tunings!";
     }
     
     m_pitchGraphWidget = new PitchGraphWidget(m_history);
@@ -268,7 +269,7 @@ void
 PitchTrackerView::slotPlaybackJump()
 {
     m_transport_posn_change = true;
-    std::cout << "PitchTrackerView: User changed playback posn\n";
+    RG_DEBUG << "PitchTrackerView: User changed playback posn\n";
 }
     
 void
@@ -349,9 +350,8 @@ PitchTrackerView::addPitchTime(double freq, timeT time, RealTime realTime)
     }
 #if DEBUG_PRINT_ALL
     for (int i = 0; i < m_history.m_detectErrorsCents.size(); i++) {
-        std::cout << m_history.m_detectErrorsCents[i]<<" ";
+        RG_DEBUG << m_history.m_detectErrorsCents[i];
     }
-    std::cout << std::endl;
 #endif
     m_pitchGraphWidget->update();
 }
@@ -372,7 +372,7 @@ PitchTrackerView::slotUpdateValues(timeT time)
         
     // Gracefully handle repositioning of the play cursor by the user
     if (m_transport_posn_change) {
-        std::cout << "User changed transport position\n";
+        RG_DEBUG << "User changed transport position\n";
         m_transport_posn_change = false;
         m_history.clear();
         // Always record a note boundary if the transport posn's changed.
@@ -398,8 +398,8 @@ PitchTrackerView::slotUpdateValues(timeT time)
     // See whether the current note has changed since we last looked
     if (score_event_itr != m_notes_itr) {
         // if so, record the current note and issue record the note boundary
-        std::cout << "***** PitchTrackerView: New " << e->getType()
-                  << " at " << time << std::endl;
+        RG_DEBUG << "***** PitchTrackerView: New " << e->getType()
+                  << " at " << time;
         m_notes_itr = score_event_itr;
         // We can only register a note if this event isn't a rest
         // and there's a valid tuning
@@ -422,8 +422,8 @@ PitchTrackerView::slotUpdateValues(timeT time)
         }
 
     } else {
-        std::cout << "PitchTrackerView: ummm, what's a \""
-                  << e->getType() << "\"EventType?\n";
+        RG_WARNING << "PitchTrackerView: ummm, what's a \""
+                  << e->getType() << "\"EventType?";
     }
 }
 } // Rosegarden namespace

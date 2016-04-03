@@ -44,9 +44,9 @@ ReconnectDeviceCommand::execute()
             (m_deviceId, strtoqstr(m_newConnection));
         device->setConnection(m_newConnection);
 
-        std::cerr << "ReconnectDeviceCommand::execute - "
+        RG_DEBUG << "ReconnectDeviceCommand::execute - "
                      << " reconnected device " << m_deviceId
-                     << " to " << m_newConnection << std::endl;
+                     << " to " << m_newConnection;
     }
 
     // ??? Instead of this kludge, we should be calling a Studio::hasChanged()
@@ -65,9 +65,9 @@ ReconnectDeviceCommand::unexecute()
             (m_deviceId, strtoqstr(m_oldConnection));
         device->setConnection(m_oldConnection);
 
-        std::cerr << "ReconnectDeviceCommand::unexecute - "
+        RG_DEBUG << "ReconnectDeviceCommand::unexecute - "
                      << " reconnected device " << m_deviceId
-                     << " to " << m_oldConnection << std::endl;
+                     << " to " << m_oldConnection;
     }
 
     // ??? Instead of this kludge, we should be calling a Studio::hasChanged()

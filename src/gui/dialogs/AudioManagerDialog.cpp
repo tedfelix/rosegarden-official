@@ -237,7 +237,7 @@ void slotFileItemActivated(){
 
 AudioManagerDialog::~AudioManagerDialog()
 {
-    RG_DEBUG << "\n*** AudioManagerDialog::~AudioManagerDialog\n" << endl;
+    RG_DEBUG << "*** AudioManagerDialog::~AudioManagerDialog";
     
 //    m_fileList->saveLayout(m_listViewLayoutName);    //&&&
     QSettings settings;
@@ -317,21 +317,21 @@ AudioManagerDialog::slotPopulateFileList()
             it != m_doc->getAudioFileManager().end();
             ++it) {
         try {
-    std::cerr << "\n*** AudioManagerDialog:: 1" << std::endl;
+    RG_DEBUG << "\n*** AudioManagerDialog:: 1";
             m_doc->getAudioFileManager().
             drawPreview((*it)->getId(),
                         RealTime::zeroTime,
                         (*it)->getLength(),
                         audioPixmap);
-    std::cerr << "\n*** AudioManagerDialog:: 2" << std::endl;
+    RG_DEBUG << "\n*** AudioManagerDialog:: 2";
         } catch (Exception e) {
-    std::cerr << "\n*** AudioManagerDialog:: 3" << std::endl;
+    RG_DEBUG << "\n*** AudioManagerDialog:: 3";
             audioPixmap->fill(); // white
             QPainter p(audioPixmap);
             p.setPen(QColor(Qt::black));
             p.drawText(10, m_previewHeight / 2, QString("<no preview>"));
         }
-    std::cerr << "\n*** AudioManagerDialog:: 4" << std::endl;
+    RG_DEBUG << "\n*** AudioManagerDialog:: 4";
 
         //!!! Why isn't the label the label the user assigned to the file?
         // Why do we allow the user to assign a label at all, then?
@@ -464,12 +464,12 @@ AudioManagerDialog::getCurrentSelection()
     // try and get the selected item
     QList<QTreeWidgetItem *> til= m_fileList->selectedItems();
     if (til.isEmpty()){
-        std::cerr << "AudioManagerDialog::getCurrentSelection() - til.isEmpty() so we're returning 0 and this game is over. Fail." << std::endl;
+        RG_WARNING << "AudioManagerDialog::getCurrentSelection() - til.isEmpty() so we're returning 0 and this game is over. Fail.";
         return 0;
     }
     AudioListItem *item = dynamic_cast<AudioListItem*>(til[0]);
     if (item == 0) {
-        std::cerr << "AudioManagerDialog::getCurrentSelection() - item == 0 so we're returning 0 and this game is over. Epic fail." << std::endl;
+        RG_WARNING << "AudioManagerDialog::getCurrentSelection() - item == 0 so we're returning 0 and this game is over. Epic fail.";
         return 0;
     }
 
@@ -483,14 +483,14 @@ AudioManagerDialog::getCurrentSelection()
         if (item->getId() == (*it)->getId()) {
             return (*it);
         } else {
-            std::cerr << "AudioManagerDialog::getCurrentSelection() - item->getId() of "
+            RG_WARNING << "AudioManagerDialog::getCurrentSelection() - item->getId() of "
                       << item->getId() << " does not match (*it)->getId() of "
                       << (*it)->getId() << " so you are basically screwed.  Sorry about that."
-                      << std::endl;
+                     ;
         }
     }
 
-    std::cerr << "AudioManagerDialog::getCurrentSelection() - we tried so hard, but in the end it was all just bricks in the wall." << std::endl;
+    RG_WARNING << "AudioManagerDialog::getCurrentSelection() - we tried so hard, but in the end it was all just bricks in the wall.";
     return 0;
 }
 
@@ -502,7 +502,7 @@ AudioManagerDialog::slotExportAudio()
 
     QList<QTreeWidgetItem *> til= m_fileList->selectedItems();
     if (til.isEmpty()) {
-        std::cerr << "AudioManagerDialog::slotExportAudio() - nothing selected!" << std::endl;
+        RG_WARNING << "AudioManagerDialog::slotExportAudio() - nothing selected!";
         return;
     }
     AudioListItem *item = dynamic_cast<AudioListItem*>(til[0]);
@@ -577,7 +577,7 @@ AudioManagerDialog::slotRemove()
     AudioFile *audioFile = getCurrentSelection();
     QList<QTreeWidgetItem*> til = m_fileList->selectedItems();
     if (til.isEmpty()) {
-        std::cerr << "AudioManagerDialog::slotRemove() - nothing selected!" << std::endl;
+        RG_WARNING << "AudioManagerDialog::slotRemove() - nothing selected!";
         return;
     }
     AudioListItem *item = dynamic_cast<AudioListItem*>(til[0]);
@@ -681,7 +681,7 @@ AudioManagerDialog::slotPlayPreview()
     
     QList<QTreeWidgetItem*> til = m_fileList->selectedItems();
     if (til.isEmpty()) {
-        std::cerr << "AudioManagerDialog::slotPlayPreview() - nothing selected!" << std::endl;
+        RG_WARNING << "AudioManagerDialog::slotPlayPreview() - nothing selected!";
         return;
     }
     AudioListItem *item = dynamic_cast<AudioListItem*>(til[0]);
@@ -724,7 +724,7 @@ AudioManagerDialog::slotPlayPreview()
 void
 AudioManagerDialog::slotCancelPlayingAudio()
 {
-    //std::cout << "AudioManagerDialog::slotCancelPlayingAudio" << std::endl;
+    //std::cout << "AudioManagerDialog::slotCancelPlayingAudio";
     if (m_audioPlayingDialog) {
         m_playTimer->stop();
         delete m_audioPlayingDialog;
@@ -755,8 +755,8 @@ AudioManagerDialog::slotAdd()
     settings.beginGroup(LastUsedPathsConfigGroup);
     QString directory = settings.value("add_audio_file", QDir::homePath()).toString();
 
-    std::cerr << "AudioManagerDialog::slotAdd() - using stored/default path: "
-              << qstrtostr(directory) << std::endl;
+    RG_DEBUG << "AudioManagerDialog::slotAdd() - using stored/default path: "
+              << qstrtostr(directory);
 
     QStringList urlList;
     urlList = FileDialog::getOpenFileNames(this, tr("Select one or more audio files"), directory, extensionList);
@@ -775,11 +775,11 @@ AudioManagerDialog::slotAdd()
     if (!urlList.isEmpty()) {
         settings.setValue("add_audio_file", directory);
 
-        std::cerr << "AudioManagerDialog::slotAdd() - storing path: "
-                  << qstrtostr(directory) << std::endl;
+        RG_DEBUG << "AudioManagerDialog::slotAdd() - storing path: "
+                  << qstrtostr(directory);
     } else {
-        std::cerr << "AudioManagerDialog::slotAdd() - URL list was empty.  No files added.  Not storing path."
-                  << std::endl;
+        RG_DEBUG << "AudioManagerDialog::slotAdd() - URL list was empty.  No files added.  Not storing path."
+                 ;
     }
 
     settings.endGroup();
@@ -788,8 +788,8 @@ AudioManagerDialog::slotAdd()
 void
 AudioManagerDialog::updateActionState(bool haveSelection)
 {
-    std::cerr << "AudioManagerDialog::updateActionState(" << (haveSelection ? "true" : "false")
-              << ")" << std::endl;
+    RG_DEBUG << "AudioManagerDialog::updateActionState(" << (haveSelection ? "true" : "false")
+              << ")";
     if (m_doc->getAudioFileManager().begin() ==
             m_doc->getAudioFileManager().end()) {
         leaveActionState("have_audio_files"); //@@@ JAS orig. KXMLGUIClient::StateReverse
@@ -823,7 +823,7 @@ AudioManagerDialog::updateActionState(bool haveSelection)
 void
 AudioManagerDialog::slotInsert()
 {
-    std::cerr << "AudioManagerDialog::slotInsert() - firing..." << std::endl;
+    RG_DEBUG << "AudioManagerDialog::slotInsert() - firing...";
 
     AudioFile *audioFile = getCurrentSelection();
     if (audioFile == 0)
@@ -831,7 +831,7 @@ AudioManagerDialog::slotInsert()
 
     RG_DEBUG << "AudioManagerDialog::slotInsert\n";
 
-    std::cerr << "                                 - emitting insertAudioSegment(, ,)" << std::endl;
+    RG_DEBUG << "                                 - emitting insertAudioSegment(, ,)";
     emit insertAudioSegment(audioFile->getId(),
                             RealTime::zeroTime,
                             audioFile->getLength());
@@ -963,7 +963,7 @@ AudioManagerDialog::slotDeleteUnused()
             }
 
             for (unsigned int i = 0; i < names.size(); ++i) {
-                std::cerr << i << ": " << names[i] << std::endl;
+                RG_DEBUG << i << ": " << names[i];
                 QFile file(names[i]);
                 if (!file.remove()) {
                     QMessageBox::critical(this, tr("Rosegarden"), tr("File %1 could not be deleted.").arg(names[i]));
@@ -972,7 +972,7 @@ AudioManagerDialog::slotDeleteUnused()
                         m_doc->getAudioFileManager().removeFile(nameMap[names[i]]);
                         emit deleteAudioFile(nameMap[names[i]]);
                     } else {
-                        std::cerr << "WARNING: Audio file name " << names[i] << " not in name map" << std::endl;
+                        RG_WARNING << "WARNING: Audio file name " << names[i] << " not in name map";
                     }
 
                     QFile peakFile(QString("%1.pk").arg(names[i]));
@@ -1015,7 +1015,7 @@ AudioManagerDialog::slotRename()
 /*
 void AudioManagerDialog::slotItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous)
 {
-    //std::cerr << "Warning: AudioManagerDialog::slotItemChanged not implemented" << std::endl;
+    //RG_DEBUG << "Warning: AudioManagerDialog::slotItemChanged not implemented";
     return;
 }
 */
@@ -1156,7 +1156,7 @@ AudioManagerDialog::slotCancelPlayingAudioFile()
 void
 AudioManagerDialog::closePlayingDialog(AudioFileId id)
 {
-    //std::cout << "AudioManagerDialog::closePlayingDialog" << std::endl;
+    //std::cout << "AudioManagerDialog::closePlayingDialog";
     if (m_audioPlayingDialog && id == m_playingAudioFile) {
         m_playTimer->stop();
         delete m_audioPlayingDialog;
@@ -1259,7 +1259,7 @@ AudioManagerDialog::slotDropped(QDropEvent */* event */, QTreeWidget*, QStringLi
     /// signaled from AudioListView on dropEvent, sl = list of items (filenames)
     if( sl.empty() ) return;
     
-    RG_DEBUG << "AudioManagerDialog::slotDropped() - Adding DroppedFile " << sl[0] << endl;
+    RG_DEBUG << "AudioManagerDialog::slotDropped() - Adding DroppedFile " << sl[0];
     QUrl urlx;
     
     // iterate over dropped URIs
@@ -1286,8 +1286,7 @@ AudioManagerDialog::slotDropped(QDropEvent */* event */, QTreeWidget*, QStringLi
         for (int i=0; i < uri.size(); i++){
             QString url = uri.at(i);
             
-            RG_DEBUG << "AudioManagerDialog::dropEvent() : got "
-            << url << endl;
+            RG_DEBUG << "AudioManagerDialog::dropEvent() : got " << url;
 
             addFile(QUrl(url));
         }
@@ -1306,7 +1305,7 @@ AudioManagerDialog::closeEvent(QCloseEvent *e)
 void
 AudioManagerDialog::slotClose()
 {
-    std::cerr << "AudioManagerDialog::slotClose()" << std::endl;
+    RG_DEBUG << "AudioManagerDialog::slotClose()";
     emit closing();
     close();
 }
@@ -1324,7 +1323,7 @@ bool
 AudioManagerDialog::addAudioFile(const QString &filePath)
 {
     QString fp = QFileInfo(filePath).absoluteFilePath();
-    RG_DEBUG << "\\_AudioFilePath : " << fp << endl;
+    RG_DEBUG << "\\_AudioFilePath : " << fp;
     return addFile(fp);
 }
 
@@ -1353,7 +1352,7 @@ AudioManagerDialog::isSelectedTrackAudio()
 void
 AudioManagerDialog::slotDistributeOnMidiSegment()
 {
-    RG_DEBUG << "AudioManagerDialog::slotDistributeOnMidiSegment" << endl;
+    RG_DEBUG << "AudioManagerDialog::slotDistributeOnMidiSegment";
 
     //Composition &comp = m_doc->getComposition();
 
@@ -1387,8 +1386,7 @@ AudioManagerDialog::slotDistributeOnMidiSegment()
 
     for (unsigned int i = 0; i < insertTimes.size(); ++i) {
         RG_DEBUG << "AudioManagerDialog::slotDistributeOnMidiSegment - "
-        << "insert audio segment at " << insertTimes[i]
-        << endl;
+        << "insert audio segment at " << insertTimes[i];
     }
 }
 

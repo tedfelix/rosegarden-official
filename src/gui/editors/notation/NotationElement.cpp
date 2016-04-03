@@ -27,6 +27,8 @@
 #include "base/ViewElement.h"
 #include "base/Profiler.h"
 
+#include <iostream>
+
 namespace Rosegarden
 {
 

@@ -127,7 +127,7 @@ ControllerEventsRuler::setSegment(Segment *segment)
 void
 ControllerEventsRuler::setViewSegment(ViewSegment *segment)
 {
-    RG_DEBUG << "ControllerEventsRuler::setSegment(" << segment << ")" << endl;
+    RG_DEBUG << "ControllerEventsRuler::setSegment(" << segment << ")";
     setSegment(&segment->getSegment());
 }
 
@@ -352,7 +352,7 @@ ControlItem* ControllerEventsRuler::addControlItem2(float x, float y)
 void
 ControllerEventsRuler::addControlLine(float x1, float y1, float x2, float y2, bool eraseExistingControllers)
 {
-    std::cout << "ControllerEventsRuler::addControlLine()";
+    RG_DEBUG << "ControllerEventsRuler::addControlLine()";
     clearSelectedItems();
 
     // get a timeT for one end point of our line
@@ -402,10 +402,10 @@ ControllerEventsRuler::addControlLine(float x1, float y1, float x2, float y2, bo
     long rise = destinationValue - originValue;
     timeT run = destinationTime - originTime;
 
-    std::cout << "Drawing a line from origin time: " << originTime << " to " << destinationTime
+    RG_DEBUG << "Drawing a line from origin time: " << originTime << " to " << destinationTime
               << " rising from: " << originValue << " to " << destinationValue 
               << " with a rise of: " << rise << " and run of: " << run
-              << std::endl;
+             ;
 
     // avoid divide by 0 potential, rise is always at least 1
     if (rise == 0) rise = 1;
@@ -430,7 +430,7 @@ ControllerEventsRuler::addControlLine(float x1, float y1, float x2, float y2, bo
     if (m_controller) {
         controllerNumber = m_controller->getControllerValue();
     } else {
-        std::cout << "No controller number set.  Time to panic!  Line drawing aborted." << std::endl;
+        RG_WARNING << "No controller number set.  Time to panic!  Line drawing aborted.";
         return;
     }
 
@@ -469,7 +469,7 @@ ControllerEventsRuler::addControlLine(float x1, float y1, float x2, float y2, bo
         if (rising && intermediateValue > destinationValue) failsafe = true;
         else if (!rising && intermediateValue < destinationValue) failsafe = true;
 
-//        std::cout << "creating event at time: " << i << " of value: " << intermediateValue << std::endl;
+//        RG_DEBUG << "creating event at time: " << i << " of value: " << intermediateValue;
 //        continue;
 
         Event *controllerEvent = new Event(m_controller->getType(), (timeT) i);
@@ -490,7 +490,7 @@ ControllerEventsRuler::addControlLine(float x1, float y1, float x2, float y2, bo
                 i != originTime           &&
                 i != destinationTime) continue;
 
-            std::cout << "intermediate value: " << intermediateValue << std::endl;
+            RG_DEBUG << "intermediate value: " << intermediateValue;
 
             // Convert to PitchBend MSB/LSB
             int lsb = intermediateValue & 0x7f;
@@ -499,7 +499,7 @@ ControllerEventsRuler::addControlLine(float x1, float y1, float x2, float y2, bo
             controllerEvent->set<Rosegarden::Int>(Rosegarden::PitchBend::LSB, lsb);
         }
 
-        if (failsafe) std::cout << "intermediate value: " << intermediateValue << " exceeded target: " << destinationValue << std::endl;
+        if (failsafe) RG_DEBUG << "intermediate value: " << intermediateValue << " exceeded target: " << destinationValue;
 
         macro->addCommand(new EventInsertionCommand (*m_segment, controllerEvent));
     }
@@ -554,10 +554,8 @@ Event *ControllerEventsRuler::insertEvent(float x, float y)
 
     long initialValue = yToValue(y);
 
-    RG_DEBUG << "ControllerEventsRuler::insertControllerEvent() : inserting event at "
-    << insertTime
-    << " - initial value = " << initialValue
-    << endl;
+    RG_DEBUG << "ControllerEventsRuler::insertControllerEvent() : inserting event at"
+        << insertTime << "- initial value =" << initialValue;
 
     // ask controller number to user
     long number = 0;

@@ -20,6 +20,7 @@
 
 #include "base/Event.h"
 #include "misc/Strings.h"
+#include "misc/Debug.h"
 #include "base/Clipboard.h"
 #include "base/Composition.h"
 #include "base/NotationTypes.h"
@@ -111,12 +112,12 @@ PasteToTriggerSegmentWorker::~PasteToTriggerSegmentWorker()
 void
 PasteToTriggerSegmentWorker::execute()
 {
-    std::cerr << "PasteToTriggerSegmentWorker::execute()" << std::endl;
+    RG_DEBUG << "PasteToTriggerSegmentWorker::execute()";
 
     if (m_segment) {
         // Not the first time executing.
         
-        std::cerr << " - m_segment == TRUE" << std::endl;
+        RG_DEBUG << " - m_segment == TRUE";
 
         m_composition->addTriggerSegment(m_segment, m_id, m_basePitch, m_baseVelocity);
 
@@ -124,16 +125,16 @@ PasteToTriggerSegmentWorker::execute()
         // The first time executing, so get values for m_segment,
         // m_id.
 
-        std::cerr << " - m_segment == FALSE" << std::endl;
+        RG_DEBUG << " - m_segment == FALSE";
 
         if (m_clipboard->isEmpty()) {
-            std::cerr << " - Here's your problem.  The clipboard is empty." << std::endl;
+            RG_DEBUG << " - Here's your problem.  The clipboard is empty.";
             return ;
         }
 
         m_segment = new Segment();
 
-        std::cerr << " - making a new m_segment" << std::endl;
+        RG_DEBUG << " - making a new m_segment";
 
         timeT earliestStartTime = 0;
         timeT latestEndTime = 0;

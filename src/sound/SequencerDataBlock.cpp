@@ -16,7 +16,7 @@
 #include "SequencerDataBlock.h"
 #include "MappedEventList.h"
 
-//#include "misc/Debug.h"
+#include "misc/Debug.h"
 
 //#include <QThread>
 #include <QMutexLocker>
@@ -156,8 +156,8 @@ SequencerDataBlock::instrumentToIndexCreating(InstrumentId id)
     }
 
     if (i == SEQUENCER_DATABLOCK_MAX_NB_INSTRUMENTS) {
-        std::cerr << "ERROR: SequencerDataBlock::instrumentToIndexCreating("
-        << id << "): out of instrument index space" << std::endl;
+        RG_WARNING << "ERROR: SequencerDataBlock::instrumentToIndexCreating("
+        << id << "): out of instrument index space";
         return -1;
     }
 

@@ -398,7 +398,7 @@ void
 NotationWidget::setSegments(RosegardenDocument *document,
                             std::vector<Segment *> segments)
 {
-    std::cout << "*** NotationWidget::setSegments() - total segments: " << segments.size() << std::endl;
+    RG_DEBUG << "*** NotationWidget::setSegments() - total segments: " << segments.size();
 
     // The "hide redundant clefs and keys" mechanism can't work if
     // segments don't begin with default clef and key events.
@@ -886,7 +886,7 @@ NotationWidget::slotPointerPositionChanged(timeT t, bool moveView)
     QObject *s = sender();
     bool fromDocument = (s == m_document);
 
-    RG_DEBUG << "slotPointerPositionChanged to " << t << endl;
+    RG_DEBUG << "slotPointerPositionChanged to " << t;
 
     if (!m_scene) return;
 
@@ -899,7 +899,7 @@ NotationWidget::slotPointerPositionChanged(timeT t, bool moveView)
         rolling = true;
     }
 
-    RG_DEBUG << "slotPointerPositionChanged(" << t << "): rolling = " << rolling << endl;
+    RG_DEBUG << "slotPointerPositionChanged(" << t << "): rolling = " << rolling;
 
     QLineF p = cc.currentStaff;
     if (rolling) p = cc.allStaffs;
@@ -1106,12 +1106,12 @@ NotationWidget::slotAdjustHeadersHorizontalPos(bool last)
 //  RG run ? Or on the Qt version ?
 //  The previous solution seems better.
 
-//std::cerr << "\nXproxy0=" << m_headersProxy->scenePos().x() << "\n";
+//RG_DEBUG << "\nXproxy0=" << m_headersProxy->scenePos().x() << "\n";
 
     double xinit;
 
     double x = xinit = m_headersView->mapToScene(0, 0).x();
-//std::cerr << " x0=" << x << "\n";
+//RG_DEBUG << " x0=" << x << "\n";
 
     // First trial
     if ((x > 1) || (x < -1)) {
@@ -1120,13 +1120,13 @@ NotationWidget::slotAdjustHeadersHorizontalPos(bool last)
         m_headersView->setSceneRect(view);
         x = m_headersView->mapToScene(0, 0).x();
     }
-//std::cerr << "x1=" << x << "\n";
+//RG_DEBUG << "x1=" << x << "\n";
 
     // Second trial. Why isn't the first iteration always sufficient ?
     // Number of iterations is limited to 3.
     int n = 1;
     while ((x > 1) || (x < -1)) {
-//std::cerr << "n=" << n << " xt2=" << x << "\n";
+//RG_DEBUG << "n=" << n << " xt2=" << x << "\n";
         QRectF view = m_headersView->sceneRect();
         view.translate(-x, 0);
         m_headersView->setSceneRect(view);
@@ -1134,14 +1134,14 @@ NotationWidget::slotAdjustHeadersHorizontalPos(bool last)
         if (n++ > 3) break;
     }
 
-//std::cerr << "x2=" << x << "\n";
+//RG_DEBUG << "x2=" << x << "\n";
 
     // Third trial.
     // If precedent trial doesn't succeed, try again with a coefficient...
     // Number of iterations is limited to 6.    int m = 1;
     int m = 1;
     while ((x > 1) || (x < -1)) {
-//std::cerr << "m=" << m << " xt3=" << x << "\n";
+//RG_DEBUG << "m=" << m << " xt3=" << x << "\n";
         QRectF view = m_headersView->sceneRect();
         view.translate(-x * 0.477, 0);
         m_headersView->setSceneRect(view);
@@ -1149,7 +1149,7 @@ NotationWidget::slotAdjustHeadersHorizontalPos(bool last)
         if (m++ > 6) break;
     }
 
-//std::cerr << "x3=" << x << "\n";
+//RG_DEBUG << "x3=" << x << "\n";
 
     // Probably totally useless here.
     m_headersView->update();
@@ -1157,7 +1157,7 @@ NotationWidget::slotAdjustHeadersHorizontalPos(bool last)
     // Now, sometimes, although x is null or almost null, the headers are
     // not fully visible !!??
 
-//std::cerr << "Xproxy1=" << m_headersProxy->scenePos().x() << "\n";
+//RG_DEBUG << "Xproxy1=" << m_headersProxy->scenePos().x() << "\n";
 
     // Call again the current slot if we have some reason to think it
     // did not succeed and if it has been called in the current context
@@ -1431,7 +1431,7 @@ NotationWidget::slotHorizontalThumbwheelMoved(int v)
         m_Vzoom->setBright(true);
     }
 
-    //std::cout << "v is: " << v << " h zoom factor was: " << m_lastH << " now: " << newZoom << " zooming " << (zoomingIn ? "IN" : "OUT") << std::endl;
+    //RG_DEBUG << "v is: " << v << " h zoom factor was: " << m_lastH << " now: " << newZoom << " zooming " << (zoomingIn ? "IN" : "OUT");
 
     setHorizontalZoomFactor(newZoom);
     m_lastH = v;
@@ -1466,7 +1466,7 @@ NotationWidget::slotVerticalThumbwheelMoved(int v)
         m_Vzoom->setBright(true);
     }
 
-    //std::cout << "v is: " << v << " z zoom factor was: " << m_lastV << " now: " << newZoom << " zooming " << (zoomingIn ? "IN" : "OUT") << std::endl;
+    //RG_DEBUG << "v is: " << v << " z zoom factor was: " << m_lastV << " now: " << newZoom << " zooming " << (zoomingIn ? "IN" : "OUT");
 
     setVerticalZoomFactor(newZoom);
     m_lastV = v;
@@ -1517,7 +1517,7 @@ NotationWidget::slotPrimaryThumbwheelMoved(int v)
 void
 NotationWidget::slotResetZoomClicked()
 {
-    std::cerr << "NotationWidget::slotResetZoomClicked()" << std::endl;
+    RG_DEBUG << "NotationWidget::slotResetZoomClicked()";
 
     m_hZoomFactor = 1.0;
     m_vZoomFactor = 1.0;
@@ -1615,9 +1615,9 @@ NotationWidget::slotInitialHSliderHack(int)
 
     m_hSliderHacked = true;
 
-//    std::cout << "h slider position was: " << m_view->horizontalScrollBar()->sliderPosition() << std::endl;;
+//    RG_DEBUG << "h slider position was: " << m_view->horizontalScrollBar()->sliderPosition();;
     m_view->horizontalScrollBar()->setSliderPosition(0);
-//    std::cout << "h slider position now: " << m_view->horizontalScrollBar()->sliderPosition() << std::endl;;
+//    RG_DEBUG << "h slider position now: " << m_view->horizontalScrollBar()->sliderPosition();;
 }
 
 void
@@ -1627,9 +1627,9 @@ NotationWidget::slotInitialVSliderHack(int)
 
     m_vSliderHacked = true;
 
-//    std::cout << "v slider position was: " << m_view->verticalScrollBar()->sliderPosition() << std::endl;;
+//    RG_DEBUG << "v slider position was: " << m_view->verticalScrollBar()->sliderPosition();;
     m_view->verticalScrollBar()->setSliderPosition(0);
-//    std::cout << "v slider position now: " << m_view->verticalScrollBar()->sliderPosition() << std::endl;;
+//    RG_DEBUG << "v slider position now: " << m_view->verticalScrollBar()->sliderPosition();;
 }
 
 void
@@ -1649,7 +1649,7 @@ NotationWidget::slotAddControlRuler(QAction *action)
 {
     QString name = action->text();
 
-//    std::cout << "my name is " << name.toStdString() << std::endl;
+//    RG_DEBUG << "my name is " << name.toStdString();
 
     // we just cheaply paste the code from NotationView that created the menu to
     // figure out what its indices must point to (and thinking about this whole
@@ -1690,7 +1690,7 @@ NotationWidget::slotAddControlRuler(QAction *action)
 
         if (name != itemStr) continue;
 
-        std::cout << "name: " << name.toStdString() << " should match  itemStr: " << itemStr.toStdString() << std::endl;
+        RG_DEBUG << "name: " << name.toStdString() << " should match  itemStr: " << itemStr.toStdString();
 
         m_controlsWidget->slotAddControlRuler(*it);
 

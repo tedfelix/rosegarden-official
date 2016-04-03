@@ -152,7 +152,7 @@ NotationSelector::handleRightButtonPress(const NotationMouseEvent *e)
 {
     // if nothing selected, permit the possibility of selecting
     // something before showing the menu
-    std::cerr << "NotationSelector::handleRightButtonPress" << std::endl;
+    RG_DEBUG << "NotationSelector::handleRightButtonPress";
 
     const EventSelection *sel = m_scene->getSelection();
 

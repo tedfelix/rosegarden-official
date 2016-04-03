@@ -17,6 +17,7 @@
 #include "Midi.h"
 #include "base/MidiTypes.h"
 #include "base/NotationTypes.h" // for Note::EventType
+#include "misc/Debug.h"
 #include "misc/TempDir.h"
 
 #include <QDir>
@@ -121,41 +122,25 @@ MappedEvent::MappedEvent(InstrumentId id,
     } catch (MIDIValueOutOfRange r) {
 
 #ifdef DEBUG_MAPPEDEVENT
-        std::cerr << "MIDI value out of range in MappedEvent ctor"
-        << std::endl;
-#else
-
-        ;
+        RG_WARNING << "MIDI value out of range in MappedEvent ctor";
 #endif
 
     } catch (Event::NoData d) {
 
 #ifdef DEBUG_MAPPEDEVENT
-        std::cerr << "Caught Event::NoData in MappedEvent ctor, message is:"
-        << std::endl << d.getMessage() << std::endl;
-#else
-
-        ;
+        RG_WARNING << "Caught Event::NoData in MappedEvent ctor, message is:\n" << d.getMessage();
 #endif
 
     } catch (Event::BadType b) {
 
 #ifdef DEBUG_MAPPEDEVENT
-        std::cerr << "Caught Event::BadType in MappedEvent ctor, message is:"
-        << std::endl << b.getMessage() << std::endl;
-#else
-
-        ;
+        RG_WARNING << "Caught Event::BadType in MappedEvent ctor, message is:\n" << b.getMessage();
 #endif
 
     } catch (SystemExclusive::BadEncoding e) {
 
 #ifdef DEBUG_MAPPEDEVENT
-        std::cerr << "Caught bad SysEx encoding in MappedEvent ctor"
-        << std::endl;
-#else
-
-        ;
+        RG_WARNING << "Caught bad SysEx encoding in MappedEvent ctor";
 #endif
 
     }
@@ -360,15 +345,13 @@ void DataBlockRepository::setDataBlockForEvent(MappedEvent* e,
     blockid id = e->getDataBlockId();
     if (id == 0) {
 #ifdef DEBUG_MAPPEDEVENT
-        std::cerr << "Creating new datablock for event"
-                  << std::endl;
+        RG_DEBUG << "Creating new datablock for event";
 #endif
         getInstance()->registerDataBlockForEvent(s, e);
     } else {
 #ifdef DEBUG_MAPPEDEVENT
-        std::cerr << "Writing " << s.length()
-                  << " chars to file for datablock " << id
-                  << std::endl;
+        RG_DEBUG << "Writing" << s.length()
+                  << "chars to file for datablock" << id;
 #endif
         DataBlockFile dataBlockFile(id);
         if (extend)
@@ -421,7 +404,7 @@ DataBlockRepository::DataBlockRepository()
 void DataBlockRepository::clear()
 {
 #ifdef DEBUG_MAPPEDEVENT
-    std::cerr << "DataBlockRepository::clear()\n";
+    RG_DEBUG << "DataBlockRepository::clear()";
 #endif
 
     // Erase all 'datablock_*' files
@@ -431,9 +414,9 @@ void DataBlockRepository::clear()
     QDir segmentsDir(tmpPath, "rosegarden_datablock_*");
 
     if (segmentsDir.count() > 2000) {
-        std::cerr << "DataBlockRepository::clear(): A rather large number of rosegarden_datablock_*\n" <<
+        RG_DEBUG << "DataBlockRepository::clear(): A rather large number of rosegarden_datablock_*\n" <<
                      "  files (" << segmentsDir.count() << " of them) have been found in " << tmpPath.toStdString() << ".\n" <<
-                     "  It may take a while to delete them all.  Working...\n";
+                     "  It may take a while to delete them all.  Working...";
     }
 
     for (unsigned int i = 0; i < segmentsDir.count(); ++i) {

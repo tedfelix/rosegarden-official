@@ -78,7 +78,7 @@ NotationHLayout::NotationHLayout(Composition *c, NotePixmapFactory *npf,
     m_staffCount(0),
     m_scene(static_cast<NotationScene *>(parent))
 {
-    //    RG_DEBUG << "NotationHLayout()" << endl;
+    //    RG_DEBUG << "NotationHLayout()";
 
     QSettings settings;
     settings.beginGroup(NotationOptionsConfigGroup);
@@ -224,7 +224,7 @@ NotationHLayout::scanViewSegment(ViewSegment &staff, timeT startTime,
         npf->getNoteBodyWidth() * 2 +
         npf->getTextWidth(Text(name, Text::StaffName));
 
-    RG_DEBUG << "scanViewSegment: full scan " << full << ", times " << startTime << "->" << endTime << ", bars " << startBarNo << "->" << endBarNo << ", staff name \"" << segment.getLabel() << "\", width " << m_staffNameWidths[&staff] << endl;
+    RG_DEBUG << "scanViewSegment: full scan " << full << ", times " << startTime << "->" << endTime << ", bars " << startBarNo << "->" << endBarNo << ", staff name \"" << segment.getLabel() << "\", width " << m_staffNameWidths[&staff];
 
     SegmentNotationHelper helper(segment);
     if (full) {
@@ -246,13 +246,13 @@ NotationHLayout::scanViewSegment(ViewSegment &staff, timeT startTime,
 
     if (full) {
 
-        RG_DEBUG << "full scan: setting haveOttava false" << endl;
+        RG_DEBUG << "full scan: setting haveOttava false";
 
         m_haveOttavaSomewhere[&staff] = false;
 
     } else if (m_haveOttavaSomewhere[&staff]) {
 
-        RG_DEBUG << "not full scan but ottava is listed" << endl;
+        RG_DEBUG << "not full scan but ottava is listed";
 
         Segment::iterator i = segment.findTime(startTime);
         while (1) {
@@ -273,7 +273,7 @@ NotationHLayout::scanViewSegment(ViewSegment &staff, timeT startTime,
         }
     }
 
-    RG_DEBUG << "ottava shift at start:" << ottavaShift << ", ottavaEnd " << ottavaEnd << endl;
+    RG_DEBUG << "ottava shift at start:" << ottavaShift << ", ottavaEnd " << ottavaEnd;
 
     QSettings settings;
     settings.beginGroup(NotationOptionsConfigGroup);
@@ -322,7 +322,7 @@ NotationHLayout::scanViewSegment(ViewSegment &staff, timeT startTime,
 
         RG_DEBUG << "getStartOfQuantizedSlice returned " <<
         (from != notes->end() ? (*from)->getViewAbsoluteTime() : -1)
-        << " from " << barTimes.first << endl;
+        << " from " << barTimes.first;
 
         NotationElementList::iterator to =
             getStartOfQuantizedSlice(notes, barTimes.second);
@@ -335,7 +335,7 @@ NotationHLayout::scanViewSegment(ViewSegment &staff, timeT startTime,
         timeSignature = getComposition()->getTimeSignatureInBar
                         (barNo, newTimeSig);
         RG_DEBUG << "bar " << barNo << ", startBarOfViewSegment " << startBarOfViewSegment
-                       << ", newTimeSig " << newTimeSig << endl;
+                       << ", newTimeSig " << newTimeSig;
 
         // When bar is the first one in a segment, the delay computed here
         // is the difference between event position in bar and event position
@@ -358,7 +358,7 @@ NotationHLayout::scanViewSegment(ViewSegment &staff, timeT startTime,
             <long> GroupIdSet;
         GroupIdSet groupIds;
 
-        RG_DEBUG << "scanViewSegment: bar " << barNo << ", from " << barTimes.first << ", to " << barTimes.second << " (end " << segment.getEndMarkerTime() << "); from is at " << (from == notes->end() ? -1 : (*from)->getViewAbsoluteTime()) << ", to is at " << (to == notes->end() ? -1 : (*to)->getViewAbsoluteTime()) << endl;
+        RG_DEBUG << "scanViewSegment: bar " << barNo << ", from " << barTimes.first << ", to " << barTimes.second << " (end " << segment.getEndMarkerTime() << "); from is at " << (from == notes->end() ? -1 : (*from)->getViewAbsoluteTime()) << ", to is at " << (to == notes->end() ? -1 : (*to)->getViewAbsoluteTime());
 
         timeT actualBarEnd = barTimes.first;
 
@@ -367,11 +367,11 @@ NotationHLayout::scanViewSegment(ViewSegment &staff, timeT startTime,
         for (NotationElementList::iterator itr = from; itr != to; ++itr) {
 
             NotationElement *el = static_cast<NotationElement*>((*itr));
-            RG_DEBUG << "element is a " << el->event()->getType() << endl;
+            RG_DEBUG << "element is a " << el->event()->getType();
 
             if (ottavaShift != 0) {
                 if (el->event()->getAbsoluteTime() >= ottavaEnd) {
-                    RG_DEBUG << "reached end of ottava" << endl;
+                    RG_DEBUG << "reached end of ottava";
                     ottavaShift = 0;
                 }
             }
@@ -399,10 +399,10 @@ NotationHLayout::scanViewSegment(ViewSegment &staff, timeT startTime,
                 m_scene->isEventRedundant(el->event(), segment)) continue;
 
             if (el->event()->has(BEAMED_GROUP_ID)) {
-                RG_DEBUG << "element is beamed" << endl;
+                RG_DEBUG << "element is beamed";
                 long groupId = el->event()->get<Int>(BEAMED_GROUP_ID);
                 if (groupIds.find(groupId) == groupIds.end()) {
-                    RG_DEBUG << "it's a new beamed group, applying stem properties" << endl;
+                    RG_DEBUG << "it's a new beamed group, applying stem properties";
                     NotationGroup group(*staff.getViewElementList(),
                                         itr,
                                         m_notationQuantizer,
@@ -416,13 +416,13 @@ NotationHLayout::scanViewSegment(ViewSegment &staff, timeT startTime,
 
             if (el->event()->isa(Clef::EventType)) {
 
-                //              RG_DEBUG << "Found clef" << endl;
+                //              RG_DEBUG << "Found clef";
                 chunks.push_back(Chunk(el->event()->getSubOrdering(),
                                        getLayoutWidth(*el, npf, key)));
 
             } else if (el->event()->isa(::Rosegarden::Key::EventType)) {
 
-                //              RG_DEBUG << "Found key" << endl;
+                //              RG_DEBUG << "Found key";
                 chunks.push_back(Chunk(el->event()->getSubOrdering(),
                                        getLayoutWidth(*el, npf, oldKey)));
 
@@ -442,7 +442,7 @@ NotationHLayout::scanViewSegment(ViewSegment &staff, timeT startTime,
                     lyricWidth = std::max
                         (lyricWidth, float(npf->getTextWidth(Text(*el->event()))));
                     RG_DEBUG << "Setting lyric width to " << lyricWidth
-                                   << " for text " << el->event()->get<String>(Text::TextPropertyName) << endl;
+                                   << " for text " << el->event()->get<String>(Text::TextPropertyName);
                 }
 
                 chunks.push_back(Chunk(el->event()->getSubOrdering(), 0));
@@ -464,7 +464,7 @@ NotationHLayout::scanViewSegment(ViewSegment &staff, timeT startTime,
 
             } else if (el->event()->isa(Indication::EventType)) {
 
-                //              RG_DEBUG << "Found indication" << endl;
+                //              RG_DEBUG << "Found indication";
 
                 chunks.push_back(Chunk(el->event()->getSubOrdering(), 0));
 
@@ -477,12 +477,12 @@ NotationHLayout::scanViewSegment(ViewSegment &staff, timeT startTime,
                         m_haveOttavaSomewhere[&staff] = true;
                     }
                 } catch (...) {
-                    RG_DEBUG << "Bad indication!" << endl;
+                    RG_DEBUG << "Bad indication!";
                 }
 
             } else {
 
-//                RG_DEBUG << "Found something I don't know about (type is " << el->event()->getType() << ")" << endl;
+//                RG_DEBUG << "Found something I don't know about (type is " << el->event()->getType() << ")";
                 chunks.push_back(Chunk(el->event()->getSubOrdering(),
                                        getLayoutWidth(*el, npf, key)));
             }
@@ -496,7 +496,7 @@ NotationHLayout::scanViewSegment(ViewSegment &staff, timeT startTime,
             }
         }
 
-//        std::cout << "barTimes.first: " << barTimes.first << " .second: " << barTimes.second << " actualBarEnd: " << actualBarEnd << std::endl;
+//        RG_DEBUG << "barTimes.first: " << barTimes.first << " .second: " << barTimes.second << " actualBarEnd: " << actualBarEnd;
         if (actualBarEnd == barTimes.first) actualBarEnd = barTimes.second;
         barCorrect = (actualBarEnd == barTimes.second);
         setBarSizeData(staff, barNo, 0.0,
@@ -537,7 +537,7 @@ NotationHLayout::setBarBasicData(ViewSegment &staff,
                                  TrackId trackId
                                 )
 {
-    //    RG_DEBUG << "setBarBasicData for " << barNo << endl;
+    //    RG_DEBUG << "setBarBasicData for " << barNo;
 
     BarDataList &bdl(m_barData[&staff]);
 
@@ -564,7 +564,7 @@ NotationHLayout::setBarSizeData(ViewSegment &staff,
                                 float timeSigFixedWidth,
                                 timeT actualDuration)
 {
-    //    RG_DEBUG << "setBarSizeData for " << barNo << endl;
+    //    RG_DEBUG << "setBarSizeData for " << barNo;
 
     BarDataList &bdl(m_barData[&staff]);
 
@@ -602,14 +602,14 @@ NotationHLayout::scanChord(NotationElementList *notes,
     bool barEndsInChord = false;
     bool grace = false;
 
-//    std::cerr << "NotationHLayout::scanChord: "
+//    RG_DEBUG << "NotationHLayout::scanChord: "
 //              << chord.size() << "-voice chord at "
 //              << (*itr)->event()->getAbsoluteTime()
 //              << " unquantized, "
 //              << (*itr)->getViewAbsoluteTime()
-//              << " quantized" << std::endl;
+//              << " quantized";
 
-//    RG_DEBUG << "Contents:" << endl;
+//    RG_DEBUG << "Contents:";
 
     /*
         for (NotationElementList::iterator i = chord.getInitialElement();
@@ -640,7 +640,7 @@ NotationHLayout::scanChord(NotationElementList *notes,
         long pitch = 64;
         if (!el->event()->get<Int>(PITCH, pitch)) {
             RG_DEBUG <<
-            "WARNING: NotationHLayout::scanChord: couldn't get pitch for element, using default pitch of " << pitch << endl;
+            "WARNING: NotationHLayout::scanChord: couldn't get pitch for element, using default pitch of " << pitch;
         }
 
         Accidental explicitAccidental = Accidentals::NoAccidental;
@@ -713,24 +713,24 @@ NotationHLayout::scanChord(NotationElementList *notes,
     }
 /*!!!
     if (grace) {
-        std::cerr << "Grace note: subordering " << chord.getSubOrdering() << std::endl;
+        std::cerr << "Grace note: subordering " << chord.getSubOrdering();
         chunks.push_back(Chunk(-10 + graceCount,
                                extraWidth + npf->getNoteBodyWidth()));
         if (graceCount < 9) ++graceCount;
         return;
     } else {
-        std::cerr << "Non-grace note (grace count was " << graceCount << ")" << std::endl;
+        std::cerr << "Non-grace note (grace count was " << graceCount << ")";
         graceCount = 0;
     }
 */
     NotationElementList::iterator myLongest = chord.getLongestElement();
     if (myLongest == notes->end()) {
-        RG_DEBUG << "WARNING: NotationHLayout::scanChord: No longest element in chord!" << endl;
+        RG_DEBUG << "WARNING: NotationHLayout::scanChord: No longest element in chord!";
     }
 
     timeT d = (*myLongest)->getViewDuration();
 
-    RG_DEBUG << "Lyric width is " << lyricWidth << endl;
+    RG_DEBUG << "Lyric width is " << lyricWidth;
 
     if (grace) {
         chunks.push_back(Chunk(d, chord.getSubOrdering(),
@@ -886,7 +886,7 @@ NotationHLayout::preSquishBar(int barNo)
     float maxStretchy = 0.0;
 
     RG_DEBUG << "preSquishBar(" << barNo << "): have "
-    << columns.size() << " columns" << endl;
+    << columns.size() << " columns";
 
     for (ColumnMap::iterator i = columns.begin(); i != columns.end(); ++i) {
 
@@ -894,7 +894,7 @@ NotationHLayout::preSquishBar(int barNo)
         ChunkRefList &list = i->second;
 
         RG_DEBUG << "preSquishBar: "
-        << "column at " << time << " : " << i->first.subordering << endl;
+        << "column at " << time << " : " << i->first.subordering;
 
 
         double minRate = -1.0;
@@ -904,18 +904,18 @@ NotationHLayout::preSquishBar(int barNo)
         for (ChunkRefList::iterator j = list.begin(); j != list.end(); ++j) {
             if ((*j)->stretchy > 0.0) {
                 double rate = (*j)->duration / (*j)->stretchy; // time per px
-                RG_DEBUG << "preSquishBar: rate " << rate << endl;
+                RG_DEBUG << "preSquishBar: rate " << rate;
                 if (minRate < 0.0 || rate < minRate)
                     minRate = rate;
             } else {
-                RG_DEBUG << "preSquishBar: not stretchy" << endl;
+                RG_DEBUG << "preSquishBar: not stretchy";
             }
 
             maxStretchy = std::max(maxStretchy, (*j)->stretchy);
             totalFixed = std::max(totalFixed, (*j)->fixed);
         }
 
-        RG_DEBUG << "preSquishBar: minRate " << minRate << ", maxStretchy " << maxStretchy << ", totalFixed " << totalFixed << endl;
+        RG_DEBUG << "preSquishBar: minRate " << minRate << ", maxStretchy " << maxStretchy << ", totalFixed " << totalFixed;
 
         // we have the rate from this point, but we want to assign
         // these elements an x coord based on the rate and distance
@@ -928,7 +928,7 @@ NotationHLayout::preSquishBar(int barNo)
             x += (time - prevTime) / prevRate;
 
         for (ChunkRefList::iterator j = list.begin(); j != list.end(); ++j) {
-            RG_DEBUG << "Setting x for time " << time << " to " << x << " in chunk at " << *j << endl;
+            RG_DEBUG << "Setting x for time " << time << " to " << x << " in chunk at " << *j;
             (*j)->x = x;
         }
 
@@ -978,10 +978,10 @@ NotationHLayout::getViewSegmentWithWidestBar(int barNo)
         BarDataList::iterator li = list.find(barNo);
         if (li != list.end()) {
 
-            RG_DEBUG << "getViewSegmentWithWidestBar: idealWidth is " << li->second.sizeData.idealWidth << endl;
+            RG_DEBUG << "getViewSegmentWithWidestBar: idealWidth is " << li->second.sizeData.idealWidth;
 
             if (li->second.sizeData.idealWidth == 0.0) {
-                RG_DEBUG << "getViewSegmentWithWidestBar(" << barNo << "): found idealWidth of zero, presquishing" << endl;
+                RG_DEBUG << "getViewSegmentWithWidestBar(" << barNo << "): found idealWidth of zero, presquishing";
                 preSquishBar(barNo);
             }
 
@@ -1026,7 +1026,7 @@ NotationHLayout::getMaxRepeatedClefAndKeyWidth(int barNo)
     }
 
     RG_DEBUG << "getMaxRepeatedClefAndKeyWidth(" << barNo << "): " << max
-    << endl;
+   ;
 
     if (max > 0)
         return max + getFixedItemSpacing() * 2;
@@ -1065,7 +1065,7 @@ NotationHLayout::reconcileBarsLinear()
             } else {
                 m_totalWidth += m_spacing / 3;
                 RG_DEBUG << "Setting bar position for degenerate bar "
-                << barNo << " to " << m_totalWidth << endl;
+                << barNo << " to " << m_totalWidth;
 
                 m_barPositions[barNo] = m_totalWidth;
                 ++barNo;
@@ -1079,7 +1079,7 @@ NotationHLayout::reconcileBarsLinear()
         }
 
         RG_DEBUG << "Setting bar position for bar " << barNo
-        << " to " << m_totalWidth << endl;
+        << " to " << m_totalWidth;
 
         m_barPositions[barNo] = m_totalWidth;
         m_totalWidth += maxWidth;
@@ -1095,11 +1095,11 @@ NotationHLayout::reconcileBarsLinear()
 
                 BarData::SizeData &bd(bdli->second.sizeData);
 
-                RG_DEBUG << "Changing width from " << bd.reconciledWidth << " to " << maxWidth << endl;
+                RG_DEBUG << "Changing width from " << bd.reconciledWidth << " to " << maxWidth;
 
                 double diff = maxWidth - bd.reconciledWidth;
                 if (diff < -0.1 || diff > 0.1) {
-                    RG_DEBUG << "(So needsLayout becomes true)" << endl;
+                    RG_DEBUG << "(So needsLayout becomes true)";
                     bdli->second.layoutData.needsLayout = true;
                 }
                 bd.reconciledWidth = maxWidth;
@@ -1110,7 +1110,7 @@ NotationHLayout::reconcileBarsLinear()
     }
 
     RG_DEBUG << "Setting bar position for bar " << barNo
-    << " to " << m_totalWidth << endl;
+    << " to " << m_totalWidth;
 
     m_barPositions[barNo] = m_totalWidth;
 }
@@ -1140,7 +1140,7 @@ NotationHLayout::reconcileBarsPage()
     double pageWidthSoFar = maxViewSegmentNameWidth;
     m_totalWidth = maxViewSegmentNameWidth + getPreBarMargin();
 
-    RG_DEBUG << "reconcileBarsPage: pageWidthSoFar is " << pageWidthSoFar << endl;
+    RG_DEBUG << "reconcileBarsPage: pageWidthSoFar is " << pageWidthSoFar;
 
     for (;;) {
 
@@ -1162,7 +1162,7 @@ NotationHLayout::reconcileBarsPage()
         double nextPageWidth = pageWidthSoFar + maxWidth;
         double nextStretchFactor = m_pageWidth / nextPageWidth;
 
-        RG_DEBUG << "barNo is " << barNo << ", maxWidth " << maxWidth << ", nextPageWidth " << nextPageWidth << ", nextStretchFactor " << nextStretchFactor << ", m_pageWidth " << m_pageWidth << endl;
+        RG_DEBUG << "barNo is " << barNo << ", maxWidth " << maxWidth << ", nextPageWidth " << nextPageWidth << ", nextStretchFactor " << nextStretchFactor << ", m_pageWidth " << m_pageWidth;
 
         // We have to have at least one bar per row
 
@@ -1271,14 +1271,14 @@ NotationHLayout::reconcileBarsPage()
                 BarData &bd = m_barData[widest].find(barNo)->second;
                 maxWidth = (stretchFactor * bd.sizeData.idealWidth) +
                            bd.sizeData.clefKeyWidth;
-                RG_DEBUG << "setting maxWidth to " << (stretchFactor * bd.sizeData.idealWidth) << " + " << bd.sizeData.clefKeyWidth << " = " << maxWidth << endl;
+                RG_DEBUG << "setting maxWidth to " << (stretchFactor * bd.sizeData.idealWidth) << " + " << bd.sizeData.clefKeyWidth << " = " << maxWidth;
             }
 
             if (barNoThisRow == finalBarThisRow) {
                 if (!finalRow ||
                         (maxWidth > (m_pageWidth - pageWidthSoFar))) {
                     maxWidth = m_pageWidth - pageWidthSoFar;
-                    RG_DEBUG << "reset maxWidth to " << m_pageWidth << " - " << pageWidthSoFar << " = " << maxWidth << endl;
+                    RG_DEBUG << "reset maxWidth to " << m_pageWidth << " - " << pageWidthSoFar << " = " << maxWidth;
                 }
             }
 
@@ -1364,7 +1364,7 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime,
     //    bool haveSimpleOffset = false;
     //    double simpleOffset = 0;
 
-    RG_DEBUG << "layout: full layout " << full << ", times " << startTime << "->" << endTime << endl;
+    RG_DEBUG << "layout: full layout " << full << ", times " << startTime << "->" << endTime;
 
     double x = 0, barX = 0;
     TieMap tieMap;
@@ -1393,7 +1393,7 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime,
         if (!full && barNo < startBar) continue;
 
         RG_DEBUG << "looking for bar "
-                       << bpi->first << endl;
+                       << bpi->first;
         BarDataList::iterator bdi = barList.find(barNo);
         if (bdi == barList.end()) continue;
         barX = bpi->second;
@@ -1401,7 +1401,7 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime,
         NotationElementList::iterator from = bdi->second.basicData.start;
         NotationElementList::iterator to;
 
-        RG_DEBUG << "layout(): starting bar " << barNo << ", x = " << barX << ", width = " << bdi->second.sizeData.idealWidth << ", time = " << (from == notes->end() ? -1 : (*from)->getViewAbsoluteTime()) << endl;
+        RG_DEBUG << "layout(): starting bar " << barNo << ", x = " << barX << ", width = " << bdi->second.sizeData.idealWidth << ", time = " << (from == notes->end() ? -1 : (*from)->getViewAbsoluteTime());
 
         BarDataList::iterator nbdi(bdi);
         if (++nbdi == barList.end()) {
@@ -1411,20 +1411,20 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime,
         }
 
         if (from == notes->end()) {
-            RG_DEBUG << "Start is end" << endl;
+            RG_DEBUG << "Start is end";
         }
         if (from == to) {
-            RG_DEBUG << "Start is to" << endl;
+            RG_DEBUG << "Start is to";
         }
 
         if (!bdi->second.layoutData.needsLayout) {
 
             double offset = barX - bdi->second.layoutData.x;
 
-            RG_DEBUG << "layout(): bar " << barNo << " has needsLayout false and offset of " << offset << endl;
+            RG_DEBUG << "layout(): bar " << barNo << " has needsLayout false and offset of " << offset;
 
             if (offset > -0.1 && offset < 0.1) {
-                RG_DEBUG << "layout(): no offset, ignoring" << endl;
+                RG_DEBUG << "layout(): no offset, ignoring";
                 continue;
             }
 
@@ -1437,7 +1437,7 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime,
                     it != to && it != notes->end(); ++it) {
 
                 NotationElement* nel = static_cast<NotationElement*>(*it);
-                RG_DEBUG << "layout(): shifting element's x to " << ((*it)->getLayoutX() + offset) << " (was " << (*it)->getLayoutX() << ")" << endl;
+                RG_DEBUG << "layout(): shifting element's x to " << ((*it)->getLayoutX() + offset) << " (was " << (*it)->getLayoutX() << ")";
                 nel->setLayoutX((*it)->getLayoutX() + offset);
                 double airX, airWidth;
                 nel->getLayoutAirspace(airX, airWidth);
@@ -1456,7 +1456,7 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime,
             timeSigToPlace = !bdi->second.basicData.timeSignature.isHidden();
         }
         if (timeSigToPlace) {
-            RG_DEBUG << "layout(): there's a time sig in this bar" << endl;
+            RG_DEBUG << "layout(): there's a time sig in this bar";
         }
 
         bool repeatClefAndKey = false;
@@ -1464,7 +1464,7 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime,
             repeatClefAndKey = true;
         }
         if (repeatClefAndKey) {
-            RG_DEBUG << "layout(): need to repeat clef & key in this bar" << endl;
+            RG_DEBUG << "layout(): need to repeat clef & key in this bar";
         }
 
         double barInset = notationStaff.getBarInset(barNo, repeatClefAndKey);
@@ -1493,7 +1493,7 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime,
             reconcileRatio = reconciledWidth / bdi->second.sizeData.idealWidth;
         }
 
-        RG_DEBUG << "have " << chunks.size() << " chunks, reconciledWidth " << bdi->second.sizeData.reconciledWidth << ", idealWidth " << bdi->second.sizeData.idealWidth << ", ratio " << reconcileRatio << endl;
+        RG_DEBUG << "have " << chunks.size() << " chunks, reconciledWidth " << bdi->second.sizeData.reconciledWidth << ", idealWidth " << bdi->second.sizeData.idealWidth << ", ratio " << reconcileRatio;
 
         double delta = 0;
         float sigx = 0.f;
@@ -1509,9 +1509,9 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime,
             if (el->event()->isa(Note::EventType)) {
                 long pitch = 0;
                 el->event()->get<Int>(PITCH, pitch);
-                RG_DEBUG << "element is a " << el->event()->getType() << " (pitch " << pitch << ")" << endl;
+                RG_DEBUG << "element is a " << el->event()->getType() << " (pitch " << pitch << ")";
             } else {
-                RG_DEBUG << "element is a " << el->event()->getType() << endl;
+                RG_DEBUG << "element is a " << el->event()->getType();
             }
 
             bool invisible = false;
@@ -1525,12 +1525,12 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime,
 //            float sigx = 0;
 
             if (chunkitr != chunks.end()) {
-                RG_DEBUG << "new chunk: addr " << &(*chunkitr) << " duration=" << (*chunkitr).duration << " subordering=" << (*chunkitr).subordering << " fixed=" << (*chunkitr).fixed << " stretchy=" << (*chunkitr).stretchy << " x=" << (*chunkitr).x << endl;
+                RG_DEBUG << "new chunk: addr " << &(*chunkitr) << " duration=" << (*chunkitr).duration << " subordering=" << (*chunkitr).subordering << " fixed=" << (*chunkitr).fixed << " stretchy=" << (*chunkitr).stretchy << " x=" << (*chunkitr).x;
                 x = barX + offset + reconcileRatio * (*chunkitr).x;
                 fixed = (*chunkitr).fixed;
 //                sigx = barX + offset - fixed;
 //                sigx = x - fixed;
-                RG_DEBUG << "adjusted x is " << x << ", fixed is " << fixed << endl;
+                RG_DEBUG << "adjusted x is " << x << ", fixed is " << fixed;
 
                 if (timeSigToPlace) {
                     if (el->event()->isa(Clef::EventType) ||
@@ -1563,29 +1563,29 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime,
                     sigx = barX + offset;
                 }
 
-//                RG_DEBUG << "Placing timesig at " << (x - fixed) << endl;
+//                RG_DEBUG << "Placing timesig at " << (x - fixed);
 //                bdi->second.layoutData.timeSigX = (int)(x - fixed);
-                RG_DEBUG << "Placing timesig at " << sigx << " (would previously have been " << int(x-fixed) << "?)" << endl;
+                RG_DEBUG << "Placing timesig at " << sigx << " (would previously have been " << int(x-fixed) << "?)";
                 bdi->second.layoutData.timeSigX = (int)sigx;
                 double shift = getFixedItemSpacing() +
                                m_npf->getTimeSigWidth(timeSignature);
                 offset += shift;
                 x += shift;
-                RG_DEBUG << "and moving next elt to " << x << endl;
+                RG_DEBUG << "and moving next elt to " << x;
                 timeSigToPlace = false;
             }
 
             if (barInset >= 1.0) {
                 if (el->event()->isa(Clef::EventType) ||
                         el->event()->isa(::Rosegarden::Key::EventType)) {
-                    RG_DEBUG << "Pulling clef/key back by " << getPreBarMargin() << endl;
+                    RG_DEBUG << "Pulling clef/key back by " << getPreBarMargin();
                     x -= getPostBarMargin() * 2 / 3;
                 } else {
                     barInset = 0.0;
                 }
             }
 
-            RG_DEBUG << "layout(): setting element's x to " << x << " (was " << el->getLayoutX() << ")" << endl;
+            RG_DEBUG << "layout(): setting element's x to " << x << " (was " << el->getLayoutX() << ")";
 
             double displacedX = 0.0;
             long dxRaw = 0;
@@ -1688,7 +1688,7 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime,
         if (timeSigToPlace) {
             // no other events in this bar, so we never managed to place it
             x = barX + offset;
-            RG_DEBUG << "Placing timesig reluctantly at " << x << endl;
+            RG_DEBUG << "Placing timesig reluctantly at " << x;
             bdi->second.layoutData.timeSigX = (int)(x);
             timeSigToPlace = false;
         }
@@ -1725,9 +1725,9 @@ NotationHLayout::sampleGroupElement(ViewSegment &staff,
         // to determine this, as if that doesn't work, nothing will
 
         long groupId = el->event()->get<Int>(BEAMED_GROUP_ID);
-        RG_DEBUG << "group id: " << groupId << endl;
+        RG_DEBUG << "group id: " << groupId;
         if (m_groupsExtant.find(groupId) == m_groupsExtant.end()) {
-            RG_DEBUG << "(new group)" << endl;
+            RG_DEBUG << "(new group)";
             m_groupsExtant[groupId] =
                 new NotationGroup(*staff.getViewElementList(),
                                   m_notationQuantizer,
@@ -1795,7 +1795,7 @@ NotationHLayout::positionChord(ViewSegment &staff,
 
     bool barEndsInChord = false;
 
-    RG_DEBUG << "positionChord: x = " << baseX << endl;
+    RG_DEBUG << "positionChord: x = " << baseX;
 
     // #938545 (Broken notation: Duplicated note can float outside
     // stave) -- We need to iterate over all elements in the chord
@@ -1825,7 +1825,7 @@ NotationHLayout::positionChord(ViewSegment &staff,
         elt->setLayoutX(baseX + displacedX);
         elt->setLayoutAirspace(baseX, delta);
 
-        RG_DEBUG << "positionChord: assigned x to elt at " << elt->getViewAbsoluteTime() << endl;
+        RG_DEBUG << "positionChord: assigned x to elt at " << elt->getViewAbsoluteTime();
 
         if (citr == chord.getFinalElement())
             break;
@@ -1871,14 +1871,14 @@ NotationHLayout::positionChord(ViewSegment &staff,
                     (*otherItr)->getViewDuration() ==
                     note->getViewAbsoluteTime()) {
 
-                    RG_DEBUG << "Second note in tie at " << note->getViewAbsoluteTime() << ": found first note, it matches" << endl;
+                    RG_DEBUG << "Second note in tie at " << note->getViewAbsoluteTime() << ": found first note, it matches";
 
                     (*otherItr)->event()->setMaybe<Int>
                     (m_properties.TIE_LENGTH,
                      (int)(baseX - (*otherItr)->getLayoutX()));
 
                 } else {
-                    RG_DEBUG << "Second note in tie at " << note->getViewAbsoluteTime() << ": found first note but it ends at " << ((*otherItr)->getViewAbsoluteTime() + (*otherItr)->getViewDuration()) << endl;
+                    RG_DEBUG << "Second note in tie at " << note->getViewAbsoluteTime() << ": found first note but it ends at " << ((*otherItr)->getViewAbsoluteTime() + (*otherItr)->getViewDuration());
 
                     tieMap.erase(pitch);
                 }
@@ -1940,7 +1940,7 @@ NotationHLayout::getLayoutWidth(ViewElement &ve,
 
         double gap = m_npf->getNoteBodyWidth(noteType) * multiplier;
 
-        RG_DEBUG << "note type " << noteType << ", isNote " << e.isNote() << ", dots " << dots << ", multiplier " << multiplier << ", gap " << gap << ", result " << (bw + gap * m_spacing / 100.0) << endl;
+        RG_DEBUG << "note type " << noteType << ", isNote " << e.isNote() << ", dots " << dots << ", multiplier " << multiplier << ", gap " << gap << ", result " << (bw + gap * m_spacing / 100.0);
 
         gap = gap * m_spacing / 100.0;
         return bw + gap;
@@ -1983,7 +1983,7 @@ NotationHLayout::getLayoutWidth(ViewElement &ve,
             w = 0;
 
         } else {
-            //      RG_DEBUG << "getLayoutWidth(): no case for event type " << e.event()->getType() << endl;
+            //      RG_DEBUG << "getLayoutWidth(): no case for event type " << e.event()->getType();
             //      w += 24;
             w = 0;
         }
@@ -2039,7 +2039,7 @@ NotationHLayout::getFirstVisibleBar() const
         }
     }
 
-    //    RG_DEBUG << "getFirstVisibleBar: returning " << bar << endl;
+    //    RG_DEBUG << "getFirstVisibleBar: returning " << bar;
 
     return bar;
 }
@@ -2052,7 +2052,7 @@ NotationHLayout::getFirstVisibleBarOnViewSegment(ViewSegment &staff) const
     int bar = 0;
     if (bdl.begin() != bdl.end()) bar = bdl.begin()->first;
 
-    //    RG_DEBUG << "getFirstVisibleBarOnViewSegment: returning " << bar << endl;
+    //    RG_DEBUG << "getFirstVisibleBarOnViewSegment: returning " << bar;
     return bar;
 }
 
@@ -2072,7 +2072,7 @@ NotationHLayout::getLastVisibleBar() const
         }
     }
 
-    //    RG_DEBUG << "getLastVisibleBar: returning " << bar << endl;
+    //    RG_DEBUG << "getLastVisibleBar: returning " << bar;
 
     return bar;
 }
@@ -2088,7 +2088,7 @@ NotationHLayout::getLastVisibleBarOnViewSegment(ViewSegment &staff) const
         bar = ((--i)->first) + 1; // last visible bar_line_
     }
 
-    //    RG_DEBUG << "getLastVisibleBarOnViewSegment: returning " << bar << endl;
+    //    RG_DEBUG << "getLastVisibleBarOnViewSegment: returning " << bar;
 
     return bar;
 }
@@ -2119,7 +2119,7 @@ NotationHLayout::getBarPosition(int bar) const
         }
     }
 
-    //    RG_DEBUG << "getBarPosition: returning " << position << " for bar " << bar << endl;
+    //    RG_DEBUG << "getBarPosition: returning " << position << " for bar " << bar;
 
     return position;
 }
@@ -2166,7 +2166,7 @@ NotationHLayout::getXForTime(timeT t) const
 double
 NotationHLayout::getXForTimeByEvent(timeT time) const
 {
-    //    RG_DEBUG << "getXForTime(" << time << ")" << endl;
+    //    RG_DEBUG << "getXForTime(" << time << ")";
 
     for (BarDataMap::const_iterator i = m_barData.begin(); i != m_barData.end(); ++i) {
 
@@ -2232,41 +2232,35 @@ std::vector<int> NotationHLayout::m_availableProportions;
 void
 NotationHLayout::BarData::dump(std::string indent)
 {
-    std::cout << indent
-              << "basic(start=<x>"
-              << " correct=" << basicData.correct
-              << " timeSig=" << basicData.timeSignature.getNumerator()
-                      << "/" << basicData.timeSignature.getDenominator()
-              << " newTimeSig=" << basicData.newTimeSig
-              << " delayInBar=" << basicData.delayInBar
-              << " trackId=" << basicData.trackId << ")";
-    std::cout << "\n";
-    std::cout << indent
-              << "size(ideal=" << sizeData.idealWidth
-              << " reconcile=" << sizeData.reconciledWidth
-              << " fixed=" << sizeData.fixedWidth
-              << " timeSigFixed=" << sizeData.timeSigFixedWidth
-              << " clefKey=" << sizeData.clefKeyWidth
-              << " duration=" << sizeData.actualDuration << ")";
-    std::cout << "\n";
-    std::cout << indent;
-    std::cout << "layout(needs=" << layoutData.needsLayout
-              << " x=" << layoutData.x
-              << " timeSigX=" << layoutData.timeSigX << ")";
-    std::cout << "\n";
+    RG_DEBUG << indent
+             << "basic(start=<x>"
+             << " correct=" << basicData.correct
+             << " timeSig=" << basicData.timeSignature.getNumerator()
+                     << "/" << basicData.timeSignature.getDenominator()
+             << " newTimeSig=" << basicData.newTimeSig
+             << " delayInBar=" << basicData.delayInBar
+             << " trackId=" << basicData.trackId << ")";
+    RG_DEBUG << indent
+             << "size(ideal=" << sizeData.idealWidth
+             << "reconcile=" << sizeData.reconciledWidth
+             << "fixed=" << sizeData.fixedWidth
+             << "timeSigFixed=" << sizeData.timeSigFixedWidth
+             << "clefKey=" << sizeData.clefKeyWidth
+             << "duration=" << sizeData.actualDuration << ")";
+    RG_DEBUG << indent
+             << "layout(needs=" << layoutData.needsLayout
+             << " x=" << layoutData.x
+             << " timeSigX=" << layoutData.timeSigX << ")";
 
     ChunkList::iterator i;
     for (i=chunks.begin(); i!=chunks.end(); ++i) {
-        std::cout << indent
+        RG_DEBUG << indent
                   << "   Chunk duration=" << (*i).duration
                   << " subord=" << (*i).subordering
                   << " fixed=" << (*i).fixed
                   << " stretchy=" << (*i).stretchy
-                  << " x=" << (*i).x << "\n";
+                  << " x=" << (*i).x;
     }
-
-    std::cout << "\n";
-    std::cout.flush();
 }
 
 /// YG: Only for debug
@@ -2278,11 +2272,11 @@ NotationHLayout::dumpBarDataMap()
         ViewSegment *vs = (*i).first;
         BarDataList bdl = (*i).second;
 
-        std::cout << "------- ViewSegment=" << vs
+        RG_DEBUG << "------- ViewSegment=" << vs
                   << " seg=" << &vs->getSegment() << "\n";
         BarDataList::iterator j;
         for (j=bdl.begin(); j!=bdl.end(); ++j) {
-            std::cout << "       ------- BarData (" << (*j).first << ")\n";
+            RG_DEBUG << "       ------- BarData (" << (*j).first << ")\n";
             (*j).second.dump("       ");
         }
     }

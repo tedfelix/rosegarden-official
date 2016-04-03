@@ -177,11 +177,11 @@ MatrixView::MatrixView(RosegardenDocument *doc,
         toolAction = findAction("select");
     }
     if (toolAction) {
-        MATRIX_DEBUG << "initial state for action '" << toolAction->objectName() << "' is " << toolAction->isChecked() << endl;
+        MATRIX_DEBUG << "initial state for action '" << toolAction->objectName() << "' is " << toolAction->isChecked();
         if (toolAction->isChecked()) toolAction->toggle();
-        MATRIX_DEBUG << "newer state for action '" << toolAction->objectName() << "' is " << toolAction->isChecked() << endl;
+        MATRIX_DEBUG << "newer state for action '" << toolAction->objectName() << "' is " << toolAction->isChecked();
         toolAction->trigger();
-        MATRIX_DEBUG << "newest state for action '" << toolAction->objectName() << "' is " << toolAction->isChecked() << endl;
+        MATRIX_DEBUG << "newest state for action '" << toolAction->objectName() << "' is " << toolAction->isChecked();
     }
 
     m_matrixWidget->slotSetPlayTracking(m_tracking);
@@ -250,7 +250,7 @@ MatrixView::MatrixView(RosegardenDocument *doc,
 
 MatrixView::~MatrixView()
 {
-    RG_DEBUG << "MatrixView::~MatrixView()";
+    MATRIX_DEBUG << "MatrixView::~MatrixView()";
 }
 
 void
@@ -271,14 +271,14 @@ MatrixView::closeEvent(QCloseEvent *event)
 void
 MatrixView::slotSegmentDeleted(Segment *s)
 {
-    MATRIX_DEBUG << "MatrixView::slotSegmentDeleted: " << s << endl;
+    MATRIX_DEBUG << "MatrixView::slotSegmentDeleted: " << s;
 
     // remove from vector
     for (std::vector<Segment *>::iterator i = m_segments.begin();
          i != m_segments.end(); ++i) {
         if (*i == s) {
             m_segments.erase(i);
-            NOTATION_DEBUG << "MatrixView::slotSegmentDeleted: Erased segment from vector, have " << m_segments.size() << " segment(s) remaining" << endl;
+            NOTATION_DEBUG << "MatrixView::slotSegmentDeleted: Erased segment from vector, have " << m_segments.size() << " segment(s) remaining";
             return;
         }
     }
@@ -287,7 +287,7 @@ MatrixView::slotSegmentDeleted(Segment *s)
 void
 MatrixView::slotSceneDeleted()
 {
-    NOTATION_DEBUG << "MatrixView::slotSceneDeleted" << endl;
+    NOTATION_DEBUG << "MatrixView::slotSceneDeleted";
 
     m_segments.clear();
     close();
@@ -580,7 +580,7 @@ MatrixView::setupActions()
 void
 MatrixView::initActionsToolbar()
 {
-    MATRIX_DEBUG << "MatrixView::initActionsToolbar" << endl;
+    MATRIX_DEBUG << "MatrixView::initActionsToolbar";
 
     QToolBar *actionsToolbar = findToolbar("Actions Toolbar");
 //    QToolBar *actionsToolbar = m_actionsToolBar;
@@ -588,7 +588,7 @@ MatrixView::initActionsToolbar()
 
     if (!actionsToolbar) {
         MATRIX_DEBUG << "MatrixView::initActionsToolbar - "
-        << "tool bar not found" << endl;
+        << "tool bar not found";
         return ;
     }
 
@@ -694,7 +694,7 @@ MatrixView::initRulersToolbar()
 {
     QToolBar *rulersToolbar = findToolbar("Rulers Toolbar");
     if (!rulersToolbar) {
-        std::cerr << "MatrixView::initRulersToolbar() - rulers toolbar not found!" << std::endl;
+        RG_WARNING << "MatrixView::initRulersToolbar() - rulers toolbar not found!";
         return;
     }
 
@@ -776,7 +776,7 @@ MatrixView::slotSetEraseTool()
 void
 MatrixView::slotSetSelectTool()
 {
-    MATRIX_DEBUG << "MatrixView::slotSetSelectTool" << endl;
+    MATRIX_DEBUG << "MatrixView::slotSetSelectTool";
     if (m_matrixWidget) m_matrixWidget->slotSetSelectTool();
 }
 
@@ -860,7 +860,7 @@ MatrixView::slotSetSnapFromAction()
         } else if (name == "snap_unit") {
             slotSetSnap(SnapGrid::SnapToUnit);
         } else {
-            MATRIX_DEBUG << "Warning: MatrixView::slotSetSnapFromAction: unrecognised action " << name << endl;
+            MATRIX_DEBUG << "Warning: MatrixView::slotSetSnapFromAction: unrecognised action " << name;
         }
     }
 }
@@ -1172,7 +1172,7 @@ MatrixView::slotClearSelection()
 void
 MatrixView::slotFilterSelection()
 {
-    RG_DEBUG << "MatrixView::slotFilterSelection" << endl;
+    MATRIX_DEBUG << "MatrixView::slotFilterSelection";
 
     if (!m_matrixWidget) return;
 
@@ -1182,7 +1182,7 @@ MatrixView::slotFilterSelection()
 
     EventFilterDialog dialog(this);
     if (dialog.exec() == QDialog::Accepted) {
-        RG_DEBUG << "slotFilterSelection- accepted" << endl;
+        MATRIX_DEBUG << "slotFilterSelection- accepted";
 
         bool haveEvent = false;
 
@@ -1420,8 +1420,10 @@ void MatrixView::slotRescale()
 void MatrixView::slotTranspose()
 {
     EventSelection *selection = getSelection();
-    if (!selection) std::cout << "Hint: selection is NULL in slotTranpose() " << std::endl;
-    if (!selection) return;
+    if (!selection) {
+        RG_WARNING << "Hint: selection is NULL in slotTranpose()";
+        return;
+    }
 
     QSettings settings;
     settings.beginGroup(MatrixViewConfigGroup);
@@ -1471,12 +1473,12 @@ void MatrixView::slotDiatonicTranspose()
     
     if (intervalDialog.getChangeKey())
     {
-        std::cout << "Transposing changing keys is not currently supported on selections" << std::endl;
+        RG_WARNING << "Transposing changing keys is not currently supported on selections";
     }
     else
     {
     // Transpose within key
-        //std::cout << "Transposing semitones, steps: " << semitones << ", " << steps << std::endl;
+        //std::cout << "Transposing semitones, steps: " << semitones << ", " << steps;
         CommandHistory::getInstance()->addCommand(new TransposeCommand
                 (semitones, steps, *selection));
     }
@@ -1512,12 +1514,14 @@ void MatrixView::slotTransposeDownOctave()
 
 void MatrixView::slotInvert()
 {
-    std::cout << "slotInvert() called" << std::endl;
-    
+    RG_DEBUG << "slotInvert() called";
+
     EventSelection *selection = getSelection();
-    if (!selection) std::cout << "Hint: selection is NULL in slotInvert() " << std::endl;
-    if (!selection) return ;
-    
+    if (!selection) {
+        RG_WARNING << "Hint: selection is NULL in slotInvert()";
+        return;
+    }
+
     int semitones = 0;    
     CommandHistory::getInstance()->addCommand(new InvertCommand
             (semitones, *selection));
@@ -1644,7 +1648,7 @@ MatrixView::slotInsertableNoteEventReceived(int pitch, int velocity, bool noteOn
     QAction *action = findAction("toggle_step_by_step");
 
     if (!action) {
-        MATRIX_DEBUG << "WARNING: No toggle_step_by_step action" << endl;
+        MATRIX_DEBUG << "WARNING: No toggle_step_by_step action";
         return ;
     }
 
@@ -1716,7 +1720,7 @@ MatrixView::slotInsertableNoteEventReceived(int pitch, int velocity, bool noteOn
     numberOfNotesOn++;
     
 
-    MATRIX_DEBUG << "Inserting note at pitch " << pitch << endl;
+    MATRIX_DEBUG << "Inserting note at pitch " << pitch;
 
     Event modelEvent(Note::EventType, 0, 1);
     modelEvent.set<Int>(BaseProperties::PITCH, pitch);
@@ -1726,7 +1730,7 @@ MatrixView::slotInsertableNoteEventReceived(int pitch, int velocity, bool noteOn
     if ((insertionTime < segStartTime) ||
             (insertionTime > segment->getEndMarkerTime())) {
         MATRIX_DEBUG << "WARNING: off of segment -- "
-                     <<"moving to start of segment" << endl;
+                     <<"moving to start of segment";
         insertionTime = segStartTime;
     }
 
@@ -1751,14 +1755,14 @@ MatrixView::slotInsertableNoteEventReceived(int pitch, int velocity, bool noteOn
 void
 MatrixView::slotInsertableNoteOnReceived(int pitch, int velocity)
 {
-    MATRIX_DEBUG << "MatrixView::slotInsertableNoteOnReceived: " << pitch << endl;
+    MATRIX_DEBUG << "MatrixView::slotInsertableNoteOnReceived: " << pitch;
     slotInsertableNoteEventReceived(pitch, velocity, true);
 }
 
 void
 MatrixView::slotInsertableNoteOffReceived(int pitch, int velocity)
 {
-    MATRIX_DEBUG << "MatrixView::slotInsertableNoteOffReceived: " << pitch << endl;
+    MATRIX_DEBUG << "MatrixView::slotInsertableNoteOffReceived: " << pitch;
     slotInsertableNoteEventReceived(pitch, velocity, false);
 }
 
@@ -1815,7 +1819,7 @@ MatrixView::slotInsertNoteFromAction()
 
     timeT time(getInsertionTime());
     if (time >= segment->getEndMarkerTime()) {
-        MATRIX_DEBUG << "WARNING: off end of segment" << endl;
+        MATRIX_DEBUG << "WARNING: off end of segment";
         return ;
     }
     ::Rosegarden::Key key = segment->getKeyAtTime(time);
@@ -1833,7 +1837,7 @@ MatrixView::slotInsertNoteFromAction()
 
 //    TmpStatusMsg msg(tr("Inserting note"), this);
 
-    MATRIX_DEBUG << "Inserting note at pitch " << pitch << endl;
+    MATRIX_DEBUG << "Inserting note at pitch " << pitch;
 
     Event modelEvent(Note::EventType, 0, 1);
     modelEvent.set<Int>(BaseProperties::PITCH, pitch);
@@ -1904,7 +1908,7 @@ MatrixView::getPitchFromNoteInsertAction(QString name,
 
         if (scalePitch < 0 || scalePitch > 7) {
             NOTATION_DEBUG << "MatrixView::getPitchFromNoteInsertAction: pitch "
-            << scalePitch << " out of range, using 0" << endl;
+            << scalePitch << " out of range, using 0";
             scalePitch = 0;
         }
 
@@ -1912,11 +1916,11 @@ MatrixView::getPitchFromNoteInsertAction(QString name,
 
         int pitchOctave = clefPitch.getOctave() + octave;
 
-        std::cerr << "MatrixView::getPitchFromNoteInsertAction:"
+        MATRIX_DEBUG << "MatrixView::getPitchFromNoteInsertAction:"
                   << " key = " << key.getName() 
                   << ", clef = " << clef.getClefType() 
-                  << ", octaveoffset = " << clef.getOctaveOffset() << std::endl;
-        std::cerr << "MatrixView::getPitchFromNoteInsertAction: octave = " << pitchOctave << std::endl;
+                  << ", octaveoffset = " << clef.getOctaveOffset();
+        MATRIX_DEBUG << "MatrixView::getPitchFromNoteInsertAction: octave = " << pitchOctave;
 
         // We want still to make sure that when (i) octave = 0,
         //  (ii) one of the noteInScale = 0..6 is
@@ -1928,7 +1932,7 @@ MatrixView::getPitchFromNoteInsertAction(QString name,
         for (; heightToAdjust < 0; heightToAdjust += 7) pitchOctave++;
         for (; heightToAdjust > 6; heightToAdjust -= 7) pitchOctave--;
 
-        std::cerr << "MatrixView::getPitchFromNoteInsertAction: octave = " << pitchOctave << " (adjusted)" << std::endl;
+        MATRIX_DEBUG << "MatrixView::getPitchFromNoteInsertAction: octave = " << pitchOctave << " (adjusted)";
 
         Pitch pitch(scalePitch, pitchOctave, key, accidental);
         return pitch.getPerformancePitch();
@@ -1948,7 +1952,7 @@ MatrixView::toggleNamedToolBar(const QString& toolBarName, bool* force)
 
     if (!namedToolBar) {
         MATRIX_DEBUG << "MatrixView::toggleNamedToolBar() : toolBar "
-                       << toolBarName << " not found" << endl;
+                       << toolBarName << " not found";
         return ;
     }
 
@@ -2003,7 +2007,7 @@ MatrixView::slotToggleStepByStep()
     QAction *action = findAction("toggle_step_by_step");
             
     if (!action) {
-        MATRIX_DEBUG << "WARNING: No toggle_step_by_step action" << endl;
+        MATRIX_DEBUG << "WARNING: No toggle_step_by_step action";
         return ;
     }
     if (action->isChecked()) { // after toggling, that is
@@ -2019,7 +2023,7 @@ MatrixView::slotStepByStepTargetRequested(QObject *obj)
     QAction *action = findAction("toggle_step_by_step");
           
     if (!action) {
-        MATRIX_DEBUG << "WARNING: No toggle_step_by_step action" << endl;
+        MATRIX_DEBUG << "WARNING: No toggle_step_by_step action";
         return ;
     }
     action->setChecked(obj == this);
@@ -2249,7 +2253,7 @@ MatrixView::slotJogLeft()
     EventSelection *selection = getSelection();
     if (!selection) return ;
 
-    RG_DEBUG << "MatrixView::slotJogLeft" << endl;
+    MATRIX_DEBUG << "MatrixView::slotJogLeft";
 
     bool useNotationTimings = false;
 
@@ -2266,7 +2270,7 @@ MatrixView::slotJogRight()
     EventSelection *selection = getSelection();
     if (!selection) return ;
 
-    RG_DEBUG << "MatrixView::slotJogRight"<< endl;
+    MATRIX_DEBUG << "MatrixView::slotJogRight";
 
     bool useNotationTimings = false;
 

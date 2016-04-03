@@ -18,6 +18,7 @@
 
 #include "AudioPropertiesPage.h"
 #include "misc/Strings.h"
+#include "misc/Debug.h"
 #include "ConfigurationPage.h"
 #include "document/RosegardenDocument.h"
 #include "sequencer/RosegardenSequencer.h"
@@ -111,7 +112,7 @@ AudioPropertiesPage::calculateStats()
     if (!statvfs(m_path->text().toLocal8Bit().data(), &buf)) {
         // do the multiplies and divides in this order to reduce the
         // likelihood of arithmetic overflow
-        std::cerr << "statvfs(" << m_path->text().toLocal8Bit().data() << ") says available: " << buf.f_bavail << ", total: " << buf.f_blocks << ", block size: " << buf.f_bsize << std::endl;
+        RG_DEBUG << "statvfs(" << m_path->text().toLocal8Bit().data() << ") says available: " << buf.f_bavail << ", total: " << buf.f_blocks << ", block size: " << buf.f_bsize;
         uint64_t available = ((buf.f_bavail / 1024) * buf.f_bsize);
         uint64_t total = ((buf.f_blocks / 1024) * buf.f_bsize);
         uint64_t used = 0;

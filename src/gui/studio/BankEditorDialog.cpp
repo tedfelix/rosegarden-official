@@ -1666,7 +1666,7 @@ BankEditorDialog::slotImport()
 void
 BankEditorDialog::slotEdit(QTreeWidgetItem * item, int)
 {
-    std::cout << "BankEditorDialog::slotEdit()" << std::endl;
+    RG_DEBUG << "BankEditorDialog::slotEdit()";
 
     if (item->flags() & Qt::ItemIsEditable)
         m_treeWidget->editItem(item);

@@ -32,6 +32,7 @@
 #include "gui/editors/notation/NoteStyleFactory.h"
 #include "gui/editors/notation/NotePixmapFactory.h"
 #include "misc/Debug.h"
+#include <iostream>
 
 namespace Rosegarden
 {
@@ -58,13 +59,12 @@ NotationGroup::NotationGroup(NotationElementList &nel,
     initialise();
 
     /*
-    RG_DEBUG << "NotationGroup: id is " << m_groupNo << endl;
+    RG_DEBUG << "NotationGroup: id is " << m_groupNo;
     i = getInitialElement(); 
     while (i != getContainer().end()) {
         long gid = -1;
         (*i)->event()->get<Int>(BEAMED_GROUP_ID, gid);
-        RG_DEBUG << "Found element with group id "
-                             << gid << endl;
+        RG_DEBUG << "Found element with group id" << gid;
         if (i == getFinalElement()) break;
         ++i;
     }
@@ -119,7 +119,7 @@ NotationGroup::sample(const NELIterator &i, bool goingForwards)
 
     std::string t;
     if (!(*i)->event()->get<String>(BaseProperties::BEAMED_GROUP_TYPE, t)) {
-        RG_DEBUG << "NotationGroup: Rejecting sample() for non-beamed element" << endl;
+        RG_DEBUG << "NotationGroup: Rejecting sample() for non-beamed element";
         return false;
     }
 
@@ -128,7 +128,7 @@ NotationGroup::sample(const NELIterator &i, bool goingForwards)
     if (m_groupNo == -1) {
         m_groupNo = n;
     } else if (n != m_groupNo) {
-        RG_DEBUG << "NotationGroup: Rejecting sample() for event with group id " << n << " (mine is " << m_groupNo << ")" << endl;
+        RG_DEBUG << "NotationGroup: Rejecting sample() for event with group id " << n << " (mine is " << m_groupNo << ")";
         return false;
     }
 
@@ -137,14 +137,14 @@ NotationGroup::sample(const NELIterator &i, bool goingForwards)
     } else if (t == BaseProperties::GROUP_TYPE_TUPLED) {
         m_type = Tupled;
     } else if (t == BaseProperties::GROUP_TYPE_GRACE) {
-        std::cerr << "NotationGroup::NotationGroup: WARNING: Obsolete group type Grace found" << std::endl;
+        RG_WARNING << "NotationGroup::NotationGroup: WARNING: Obsolete group type Grace found";
         return false;
     } else {
-        RG_DEBUG << "NotationGroup: Warning: Rejecting sample() for unknown GroupType \"" << t << "\"" << endl;
+        RG_DEBUG << "NotationGroup: Warning: Rejecting sample() for unknown GroupType \"" << t << "\"";
         return false;
     }
 
-    RG_DEBUG << "sample: group id is " << m_groupNo << endl;
+    RG_DEBUG << "sample: group id is " << m_groupNo;
 
     AbstractSet<NotationElement, NotationElementList>::sample
         (i, goingForwards);
@@ -235,17 +235,17 @@ NotationGroup::applyStemProperties()
         // one note in the group, not none.  But we still won't have a
         // beam.
         RG_DEBUG << "applyStemProperties: no notes in group"
-                       << endl;
+                      ;
         return; // no notes, no case to answer
     }
 
     if (getHighestNote() == getContainer().end()) {
-        std::cerr << "ERROR: NotationGroup::applyStemProperties: no highest note!" << std::endl;
+        RG_WARNING << "ERROR: NotationGroup::applyStemProperties: no highest note!";
         abort();
     }
 
     if (getLowestNote() == getContainer().end()) {
-        std::cerr << "ERROR: NotationGroup::applyStemProperties: no lowest note!" << std::endl;
+        RG_WARNING << "ERROR: NotationGroup::applyStemProperties: no lowest note!";
         abort();
     }
 
@@ -263,9 +263,9 @@ NotationGroup::applyStemProperties()
         if (i == finalNote) break;
     }
 
-    RG_DEBUG << "applyStemProperties: weightAbove "
-                   << m_weightAbove << ", weightBelow " << m_weightBelow
-                   << ", up " << up << ", down " << down << endl;
+    RG_DEBUG << "applyStemProperties: weightAbove"
+                   << m_weightAbove << ", weightBelow" << m_weightBelow
+                   << ", up" << up << ", down" << down;
 
     bool aboveNotes = rules.isBeamAbove(height(getHighestNote()),
                                         height(getLowestNote()),
@@ -276,8 +276,7 @@ NotationGroup::applyStemProperties()
         else aboveNotes = false;
     }
 
-    RG_DEBUG << "applyStemProperties: hence aboveNotes "
-                   << aboveNotes << endl;
+    RG_DEBUG << "applyStemProperties: hence aboveNotes" << aboveNotes;
 
     /*!!!
         if ((*initialNote)->event()->has(STEM_UP) &&
@@ -399,7 +398,7 @@ NotationGroup::calculateBeam(NotationStaff &staff)
 
     // if (!beam.necessary) return beam;
 
-    RG_DEBUG << "calculateBeam: beam necessariness: " << beam.necessary << endl;
+    RG_DEBUG << "calculateBeam: beam necessariness:" << beam.necessary;
 
     NotationChord initialChord(getContainer(), initialNote, &getQuantizer(),
                                m_properties, m_clef, m_key),
@@ -492,8 +491,8 @@ NotationGroup::calculateBeam(NotationStaff &staff)
     long shortestNoteType = Note::Quaver;
     if (!(*getShortestElement())->event()->get<Int>(BaseProperties::NOTE_TYPE,
                                                     shortestNoteType)) {
-        RG_DEBUG << "calculateBeam: WARNING: Shortest element has no note-type; should this be possible?" << endl;
-        RG_DEBUG << "(Event dump follows)" << endl;
+        RG_DEBUG << "calculateBeam: WARNING: Shortest element has no note-type; should this be possible?";
+        RG_DEBUG << "(Event dump follows)";
         (*getShortestElement())->event()->dump(std::cerr);
     }
 
@@ -502,8 +501,8 @@ NotationGroup::calculateBeam(NotationStaff &staff)
     int ml = spacing * 2;
     int el = sl;
 
-    RG_DEBUG << "c0: " << c0 << ", c1: " << c1 << ", c2: " << c2 << endl;
-    RG_DEBUG << "sl: " << sl << ", ml: " << ml << ", el: " << el << endl;
+    RG_DEBUG << "c0:" << c0 << ", c1:" << c1 << ", c2:" << c2;
+    RG_DEBUG << "sl:" << sl << ", ml:" << ml << ", el:" << el;
 
     // If the stems are down, we will need to ensure they end at
     // heights lower than 0 if there's an internal rest -- likewise
@@ -520,8 +519,8 @@ NotationGroup::calculateBeam(NotationStaff &staff)
                 if (c0 - sl > topY) sl = c0 - topY;
                 if (c1 - ml > topY) ml = c1 - topY;
                 if (c2 - el > topY) el = c2 - topY;
-                RG_DEBUG << "made internal rest adjustment for above notes" << endl;
-                RG_DEBUG << "sl: " << sl << ", ml: " << ml << ", el: " << el << endl;
+                RG_DEBUG << "made internal rest adjustment for above notes";
+                RG_DEBUG << "sl:" << sl << ", ml:" << ml << ", el:" << el;
             }
         }
     } else {
@@ -532,8 +531,8 @@ NotationGroup::calculateBeam(NotationStaff &staff)
                 if (c0 + sl < bottomY) sl = bottomY - c0;
                 if (c1 + ml < bottomY) ml = bottomY - c1;
                 if (c2 + el < bottomY) el = bottomY - c2;
-                RG_DEBUG << "made internal rest adjustment for below notes" << endl;
-                RG_DEBUG << "sl: " << sl << ", ml: " << ml << ", el: " << el << endl;
+                RG_DEBUG << "made internal rest adjustment for below notes";
+                RG_DEBUG << "sl:" << sl << ", ml:" << ml << ", el:" << el;
             }
         }
     }
@@ -572,13 +571,13 @@ NotationGroup::calculateBeam(NotationStaff &staff)
         beam.startY = max(max(c0 + sl, c1 + ml), c2 + el);
     }
     /*
-        RG_DEBUG << "calculateBeam: beam data:" << endl
-                   << "gradient: " << beam.gradient << endl
-                   << "(c0 " << c0 << ", c2 " << c2 << ", extremeDX " << extremeDX << ")" << endl
-                   << "startY: " << beam.startY << endl
-                   << "aboveNotes: " << beam.aboveNotes << endl
-                   << "shortestNoteType: " << shortestNoteType << endl
-                   << "necessary: " << beam.necessary << endl;
+        RG_DEBUG << "calculateBeam: beam data:"
+                   << "gradient: " << beam.gradient
+                   << "(c0 " << c0 << ", c2 " << c2 << ", extremeDX " << extremeDX << ")"
+                   << "startY: " << beam.startY
+                   << "aboveNotes: " << beam.aboveNotes
+                   << "shortestNoteType: " << shortestNoteType
+                   << "necessary: " << beam.necessary;
     */ 
     return beam;
 }
@@ -586,11 +585,11 @@ NotationGroup::calculateBeam(NotationStaff &staff)
 void
 NotationGroup::applyBeam(NotationStaff &staff)
 {
-    //    RG_DEBUG << "applyBeam, group no is " << m_groupNo << endl;
+    //    RG_DEBUG << "applyBeam, group no is " << m_groupNo;
     /*
-        RG_DEBUG << "\nNotationGroup::applyBeam" << endl;
-        RG_DEBUG << "Group id: " << m_groupNo << ", type " << m_type << endl;
-        RG_DEBUG << "Coverage:" << endl;
+        RG_DEBUG << "\nNotationGroup::applyBeam";
+        RG_DEBUG << "Group id: " << m_groupNo << ", type " << m_type;
+        RG_DEBUG << "Coverage:";
         int i = 0;
         for (NELIterator i = getInitialElement(); i != getContainer().end(); ++i) {
         (*i)->event()->dump(cerr);
@@ -598,19 +597,19 @@ NotationGroup::applyBeam(NotationStaff &staff)
         }
         {
         NELIterator i(getInitialNote());
-        RG_DEBUG << "Initial note: " << (i == getContainer().end() ? -1 : (*i)->event()->getAbsoluteTime()) << endl;
+        RG_DEBUG << "Initial note: " << (i == getContainer().end() ? -1 : (*i)->event()->getAbsoluteTime());
         }
         {
         NELIterator i(getFinalNote());
-        RG_DEBUG << "Final note: " << (i == getContainer().end() ? -1 : (*i)->event()->getAbsoluteTime()) << endl;
+        RG_DEBUG << "Final note: " << (i == getContainer().end() ? -1 : (*i)->event()->getAbsoluteTime());
         }
         {
         NELIterator i(getHighestNote());
-        RG_DEBUG << "Highest note: " << (i == getContainer().end() ? -1 : (*i)->event()->getAbsoluteTime()) << endl;
+        RG_DEBUG << "Highest note: " << (i == getContainer().end() ? -1 : (*i)->event()->getAbsoluteTime());
         }
         {
         NELIterator i(getLowestNote());
-        RG_DEBUG << "Lowest note: " << (i == getContainer().end() ? -1 : (*i)->event()->getAbsoluteTime()) << endl;
+        RG_DEBUG << "Lowest note: " << (i == getContainer().end() ? -1 : (*i)->event()->getAbsoluteTime());
         }
     */
     Beam beam(calculateBeam(staff));
@@ -624,7 +623,7 @@ NotationGroup::applyBeam(NotationStaff &staff)
         return ;
     }
 
-    //    RG_DEBUG << "applyBeam: Beam is necessary" << endl;
+    //    RG_DEBUG << "applyBeam: Beam is necessary";
 
     NELIterator initialNote(getInitialNote()),
     finalNote( getFinalNote());
@@ -655,7 +654,7 @@ NotationGroup::applyBeam(NotationStaff &staff)
     NELIterator prev = getContainer().end(), prevprev = getContainer().end();
     double gradient = (double)beam.gradient / 100.0;
 
-    //    RG_DEBUG << "applyBeam starting for group "<< this << endl;
+    //    RG_DEBUG << "applyBeam starting for group" << this;
 
     for (NELIterator i = getInitialNote(); i != getContainer().end(); ++i) {
         NotationElement* el = static_cast<NotationElement*>(*i);
@@ -678,7 +677,7 @@ NotationGroup::applyBeam(NotationStaff &staff)
                                 m_properties, m_clef, m_key);
             unsigned int j;
 
-            //            RG_DEBUG << "applyBeam: Found chord" << endl;
+            //            RG_DEBUG << "applyBeam: Found chord";
 
             bool hasShifted = chord.hasNoteHeadShifted();
 
@@ -839,12 +838,12 @@ NotationGroup::applyBeam(NotationStaff &staff)
 void
 NotationGroup::applyTuplingLine(NotationStaff &staff)
 {
-    //    RG_DEBUG << "applyTuplingLine, group no is " << m_groupNo << ", group type is " << m_type << endl;
+    //    RG_DEBUG << "applyTuplingLine, group no is " << m_groupNo << ", group type is " << m_type;
 
     if (m_type != Tupled)
         return ;
 
-    //    RG_DEBUG << "applyTuplingLine: line is necessary" << endl;
+    //    RG_DEBUG << "applyTuplingLine: line is necessary";
 
     Beam beam(calculateBeam(staff));
 
@@ -878,7 +877,7 @@ NotationGroup::applyTuplingLine(NotationStaff &staff)
             (*initialNote)->event()->get<Bool>(BaseProperties::IS_GRACE_NOTE);
     }
 
-    //    RG_DEBUG << "applyTuplingLine: first element is " << (initialNoteOrRestEl->isNote() ? "Note" : "Non-Note") << ", last is " << (static_cast<NotationElement*>(*finalElement)->isNote() ? "Note" : "Non-Note") << endl;
+    //    RG_DEBUG << "applyTuplingLine: first element is " << (initialNoteOrRestEl->isNote() ? "Note" : "Non-Note") << ", last is " << (static_cast<NotationElement*>(*finalElement)->isNote() ? "Note" : "Non-Note");
 
     int initialX = (int)(*initialNoteOrRest)->getLayoutX();
     int finalX = (int)(*finalElement)->getLayoutX();
@@ -914,7 +913,7 @@ NotationGroup::applyTuplingLine(NotationStaff &staff)
         int endY = startY + (int)((finalX - initialX) *
                                   ((double)beam.gradient / 100.0));
 
-        //      RG_DEBUG << "applyTuplingLine: beam.startY is " << beam.startY << ", initialY is " << initialY << " so my startY is " << startY << ", endY " << endY << ", beam.gradient " << beam.gradient << endl;
+        //      RG_DEBUG << "applyTuplingLine: beam.startY is " << beam.startY << ", initialY is " << initialY << " so my startY is " << startY << ", endY " << endY << ", beam.gradient " << beam.gradient;
 
         int nh = staff.getNotePixmapFactory(isGrace).getNoteBodyHeight();
 

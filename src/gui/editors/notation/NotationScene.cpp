@@ -396,14 +396,14 @@ NotationScene::createClonesFromRepeatedSegments()
             timeT targetDuration = targetEnd - targetStart;
             TrackId track = (*it)->getTrack();
             int verse = (*it)->getVerse();
-//             std::cerr << "Creating clones   track=" << track
+//             RG_DEBUG << "Creating clones   track=" << track
 //                       << " targetStart=" << targetStart
 //                       << " targetEnd=" << targetEnd
 //                       << " repeatEnd=" << repeatEnd << "\n";
             for (timeT ts = targetStart + targetDuration;
                 ts < repeatEnd; ts += targetDuration) {
                 timeT te = ts + targetDuration;
-                // std::cerr << "   clone [" << ts << ", " << te << "]";
+                // RG_DEBUG << "   clone [" << ts << ", " << te << "]";
 
                 /// Segment *s = (*it)->clone();
                 Segment *s = SegmentLinker::createLinkedSegment(*it);
@@ -416,10 +416,9 @@ NotationScene::createClonesFromRepeatedSegments()
                               // with grey color
                 if (repeatEnd < te) {
                     s->setEndMarkerTime(repeatEnd);
-                    // std::cerr << " shortened to " << repeatEnd;
+                    // RG_DEBUG << " shortened to " << repeatEnd;
                 }
                 m_clones.push_back(s);
-                // std::cerr << std::endl;
             }
             (*it)->setAsReference();
         }
@@ -597,7 +596,7 @@ NotationScene::getNextStaffHorizontally(int direction, bool cycle)
         timeMap.find(current->getSegment().getClippedStartTime(), current);
 
     if (i == timeMap.end()) {
-        std::cerr << "Argh! Can't find staff I just put in map" << std::endl;
+        RG_WARNING << "Argh! Can't find staff I just put in map";
         return 0;
     }
 
@@ -659,7 +658,7 @@ NotationScene::initCurrentStaffIndex(void)
     }
     
     // We shouldn't reach here.
-    std::cerr << "Argh! Failed to find a staff!" << std::endl;
+    RG_WARNING << "Argh! Failed to find a staff!";
 }
 
 
@@ -745,11 +744,11 @@ NotationScene::setupMouseEvent(QPointF scenePos, Qt::MouseButtons buttons,
         }
         if (clefEvent) nme.clef = Clef(*clefEvent);
 
-//        std::cerr << "clef = " << nme.clef.getClefType() << " (have = " << (clefEvent != 0) << ")" << std::endl;
+//        RG_DEBUG << "clef = " << nme.clef.getClefType() << " (have = " << (clefEvent != 0) << ")";
 
         if (keyEvent) nme.key = ::Rosegarden::Key(*keyEvent);
 
-//        std::cerr << "key = " << nme.key.getName() << " (have = " << (keyEvent != 0) << ")" << std::endl;
+//        RG_DEBUG << "key = " << nme.key.getName() << " (have = " << (keyEvent != 0) << ")";
 
         nme.time = nme.staff->getTimeAtSceneCoords(sx, sy);
         nme.height = nme.staff->getHeightAtSceneCoords(sx, sy);
@@ -1004,7 +1003,7 @@ NotationScene::setPageMode(StaffLayout::PageMode mode)
     m_hlayout->setPageWidth(pageWidth - leftMargin * 2);
 
     NOTATION_DEBUG << "NotationScene::setPageMode: set layout's page width to "
-                   << (pageWidth - leftMargin * 2) << endl;
+                   << (pageWidth - leftMargin * 2);
 
     if (!m_updatesSuspended) {
         positionStaffs();
@@ -1173,39 +1172,34 @@ void
 NotationScene::dumpVectors()
 {
     for (unsigned int i=0; i<m_externalSegments.size(); ++i) {
-        std::cerr << "extern " << i << " : " << m_externalSegments[i];
-        if (m_externalSegments[i]->isTmp()) std::cerr << " TMP";
-        if (m_externalSegments[i]->isLinked()) std::cerr << " LINKED";
-        if (m_externalSegments[i]->isTrulyLinked()) std::cerr << " TRULYLINKED";
-        std::cerr << " start=" << m_externalSegments[i]->getStartTime()
-                  << " endMrkr=" << m_externalSegments[i]->getEndMarkerTime();
-        std::cerr << "\n";
+        RG_DEBUG << "extern" << i << ":" << m_externalSegments[i];
+        if (m_externalSegments[i]->isTmp()) RG_DEBUG << " TMP";
+        if (m_externalSegments[i]->isLinked()) RG_DEBUG << " LINKED";
+        if (m_externalSegments[i]->isTrulyLinked()) RG_DEBUG << " TRULYLINKED";
+        RG_DEBUG << "start=" << m_externalSegments[i]->getStartTime()
+                  << "endMrkr=" << m_externalSegments[i]->getEndMarkerTime();
     }
     for (unsigned int i=0; i<m_clones.size(); ++i) {
-        std::cerr << "clones " << i << " : " << m_clones[i];
-        if (m_clones[i]->isTmp()) std::cerr << " TMP";
-        std::cerr << " start=" << m_clones[i]->getStartTime()
-                  << " endMrkr=" << m_clones[i]->getEndMarkerTime();
-        std::cerr << "\n\n";
+        RG_DEBUG << "clones" << i << ":" << m_clones[i];
+        if (m_clones[i]->isTmp()) RG_DEBUG << " TMP";
+        RG_DEBUG << "start=" << m_clones[i]->getStartTime()
+                  << "endMrkr=" << m_clones[i]->getEndMarkerTime();
     }
     for (unsigned int i=0; i<m_segments.size(); ++i) {
-        std::cerr << "segmen " << i << " : " << m_segments[i];
-        if (m_segments[i]->isTmp()) std::cerr << " TMP";
-        std::cerr << "\n";
+        RG_DEBUG << "segment" << i << ":" << m_segments[i];
+        if (m_segments[i]->isTmp()) RG_DEBUG << " TMP";
         m_segments[i]->dumpObservers();
-        std::cerr << "\n";
     }
     for (unsigned int i=0; i<m_staffs.size(); ++i) {
-        std::cerr << "staffs " << i << " : " << &m_staffs[i]->getSegment();
-        if (m_staffs[i]->getSegment().isTmp()) std::cerr << " TMP";
-        std::cerr << "\n";
+        RG_DEBUG << "staff" << i << ":" << &m_staffs[i]->getSegment();
+        if (m_staffs[i]->getSegment().isTmp()) RG_DEBUG << " TMP";
     }
 }
 
 void
 NotationScene::segmentRemoved(const Composition *c, Segment *s)
 {
-    NOTATION_DEBUG << "NotationScene::segmentRemoved(" << c << "," << s << ")" << endl;
+    NOTATION_DEBUG << "NotationScene::segmentRemoved(" << c << "," << s << ")";
     if (!m_document || !c || (c != &m_document->getComposition())) return;
 
     for (std::vector<NotationStaff *>::iterator i = m_staffs.begin();
@@ -1386,7 +1380,7 @@ NotationScene::trackChanged(const Composition *c, Track *t)
 void
 NotationScene::positionStaffs()
 {
-    NOTATION_DEBUG << "NotationView::positionStaffs" << endl;
+    NOTATION_DEBUG << "NotationView::positionStaffs";
     if (m_staffs.empty()) return;
 
     QSettings settings;
@@ -1670,7 +1664,7 @@ NotationScene::positionStaffs()
         m_staffs[i]->setMargin(leftMargin);
 
         NOTATION_DEBUG << "NotationScene::positionStaffs: set staff's page width to "
-                       << (pageWidth - leftMargin * 2) << endl;
+                       << (pageWidth - leftMargin * 2);
 
     }
 
@@ -1690,7 +1684,7 @@ NotationScene::layout(NotationStaff *singleStaff,
                       timeT startTime, timeT endTime)
 {
     Profiler profiler("NotationScene::layout", true);
-    NOTATION_DEBUG << "NotationScene::layout: from " << startTime << " to " << endTime << endl;
+    NOTATION_DEBUG << "NotationScene::layout: from " << startTime << " to " << endTime;
 
     bool full = (singleStaff == 0 && startTime == endTime);
 
@@ -1721,8 +1715,7 @@ NotationScene::layout(NotationStaff *singleStaff,
         }
     }
 
-    NOTATION_DEBUG << "overall start time = " << startTime << ", end time = "
-                   << endTime << endl;
+    NOTATION_DEBUG << "overall start time =" << startTime << ", end time =" << endTime;
 
     {
         Profiler profiler("NotationScene::layout: Scan layouts", true);
@@ -1815,7 +1808,7 @@ void
 NotationScene::setSelection(EventSelection *s,
                             bool preview)
 {
-    NOTATION_DEBUG << "NotationScene::setSelection: " << s << endl;
+    NOTATION_DEBUG << "NotationScene::setSelection: " << s;
 
     if (!m_selection && !s) return;
     if (m_selection == s) return;

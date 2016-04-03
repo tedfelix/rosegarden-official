@@ -21,6 +21,7 @@
 #include "document/Command.h"
 #include "BaseProperties.h"
 #include "base/SegmentNotationHelper.h"
+#include "misc/Debug.h"
 
 #include <algorithm>
 
@@ -179,7 +180,7 @@ SegmentLinker::slotUpdateLinkedSegments(Command *command)
                 linkedSegmentsUpdated = true;
             }
         } else {
-            std::cout << "oops, trying to update linked segment set twice!" << std::endl;
+            RG_WARNING << "oops, trying to update linked segment set twice!";
         }
 
         rs.setNeedsRefresh(false);

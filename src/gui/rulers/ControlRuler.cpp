@@ -686,7 +686,7 @@ void ControlRuler::updateSelection()
         m_eventSelection->addEvent((*it)->getEvent());
     }
 
-    std::cout << "control ruler updating selection" << std::endl;
+    RG_DEBUG << "control ruler updating selection";
     emit rulerSelectionChanged(m_eventSelection);
 }
 
@@ -702,7 +702,7 @@ void ControlRuler::addToSelection(ControlItem *item)
     item->setSelected(true);
     m_eventSelection->addEvent(item->getEvent());
     emit rulerSelectionChanged(m_eventSelection);
-    std::cout << "control ruler add to selection" << std::endl;
+    RG_DEBUG << "control ruler add to selection";
 }
 
 void ControlRuler::removeFromSelection(ControlItem*item)

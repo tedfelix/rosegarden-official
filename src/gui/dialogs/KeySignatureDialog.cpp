@@ -19,6 +19,7 @@
 #include "KeySignatureDialog.h"
 
 #include "misc/Strings.h"
+#include "misc/Debug.h"
 #include "base/NotationTypes.h"
 #include "gui/editors/notation/NotePixmapFactory.h"
 #include "gui/widgets/BigArrowButton.h"
@@ -280,7 +281,7 @@ KeySignatureDialog::slotKeyUp()
         m_key = Rosegarden::Key(ac, sharp, m_key.isMinor());
         setValid(true);
     } catch (Rosegarden::Key::BadKeySpec s) {
-        std::cerr << s.getMessage() << std::endl;
+        RG_WARNING << s.getMessage();
         setValid(false);
     }
 
@@ -309,7 +310,7 @@ KeySignatureDialog::slotKeyDown()
         m_key = Rosegarden::Key(ac, sharp, m_key.isMinor());
         setValid(true);
     } catch (Rosegarden::Key::BadKeySpec s) {
-        std::cerr << s.getMessage() << std::endl;
+        RG_WARNING << s.getMessage();
         setValid(false);
     }
 
@@ -421,7 +422,7 @@ KeySignatureDialog::slotKeyNameChanged(int index)
         m_keyCombo->setEditText(strtoqstr(name));
 
     } catch (Rosegarden::Key::BadKeyName s) {
-        std::cerr << s.getMessage() << std::endl;
+        RG_WARNING << s.getMessage();
         setValid(false);
     }
 
@@ -441,7 +442,7 @@ KeySignatureDialog::slotMajorMinorChanged(const QString &s)
         m_key = Rosegarden::Key(name);
         setValid(true);
     } catch (Rosegarden::Key::BadKeyName s) {
-        std::cerr << s.getMessage() << std::endl;
+        RG_WARNING << s.getMessage();
         setValid(false);
     }
 

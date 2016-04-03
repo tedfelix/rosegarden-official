@@ -20,6 +20,7 @@
 
 #include "misc/AppendLabel.h"
 #include "misc/Strings.h"
+#include "misc/Debug.h"
 #include "base/Event.h"
 #include "base/Composition.h"
 #include "base/NotationTypes.h"
@@ -126,13 +127,13 @@ AudioSegmentRescaleCommand::execute()
         AudioFileId sourceFileId = m_segment->getAudioFileId();
         float absoluteRatio = m_ratio;
 
-        std::cerr << "AudioSegmentRescaleCommand: segment file id " << sourceFileId << ", given ratio " << m_ratio << std::endl;
+        RG_DEBUG << "AudioSegmentRescaleCommand: segment file id " << sourceFileId << ", given ratio " << m_ratio;
 
         if (m_segment->getStretchRatio() != 1.f &&
             m_segment->getStretchRatio() != 0.f) {
             sourceFileId = m_segment->getUnstretchedFileId();
             absoluteRatio *= m_segment->getStretchRatio();
-            std::cerr << "AudioSegmentRescaleCommand: unstretched file id " << sourceFileId << ", prev ratio " << m_segment->getStretchRatio() << ", resulting ratio " << absoluteRatio << std::endl;
+            RG_DEBUG << "AudioSegmentRescaleCommand: unstretched file id " << sourceFileId << ", prev ratio " << m_segment->getStretchRatio() << ", resulting ratio " << absoluteRatio;
         }
 
         if (!m_timesGiven) {
@@ -159,21 +160,21 @@ AudioSegmentRescaleCommand::execute()
                                               m_ratio);
             }
         } catch (SoundFile::BadSoundFileException e) {
-            std::cerr << "AudioSegmentRescaleCommand: ERROR: BadSoundFileException: "
-                      << e.getMessage() << std::endl;
+            RG_WARNING << "AudioSegmentRescaleCommand: ERROR: BadSoundFileException: "
+                      << e.getMessage();
             delete m_newSegment;
             m_newSegment = 0;
             m_fid = -1;
             failed = true;
         } catch (AudioFileManager::BadAudioPathException e) {
-            std::cerr << "AudioSegmentRescaleCommand: ERROR: BadAudioPathException: "
-                      << e.getMessage() << std::endl;
+            RG_WARNING << "AudioSegmentRescaleCommand: ERROR: BadAudioPathException: "
+                      << e.getMessage();
             delete m_newSegment;
             m_newSegment = 0;
             m_fid = -1;
             failed = true;
         } catch (AudioFileTimeStretcher::CancelledException e) {
-            std::cerr << "AudioSegmentRescaleCommand: ERROR: Rescale cancelled" << std::endl;
+            RG_WARNING << "AudioSegmentRescaleCommand: ERROR: Rescale cancelled";
             delete m_newSegment;
             m_newSegment = 0;
             m_fid = -1;

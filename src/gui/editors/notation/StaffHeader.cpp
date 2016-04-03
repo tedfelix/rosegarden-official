@@ -31,6 +31,7 @@
 #include "gui/general/GUIPalette.h"
 #include "document/RosegardenDocument.h"
 #include "misc/Strings.h"
+#include "misc/Debug.h"
 #include "NotePixmapFactory.h"
 #include "NotationScene.h"
 #include "NotationStaff.h"
@@ -247,7 +248,7 @@ StaffHeader::StaffHeader(HeadersGroup *group,
 
     m_firstSeg = *m_segments.begin();
     if (m_firstSeg == *m_segments.end()) {
-        std::cerr << "No segments on this track" << std::endl;
+        RG_WARNING << "No segments on this track";
         m_noSegment = true;
         return;
     } else {
@@ -345,13 +346,9 @@ StaffHeader::paintEvent(QPaintEvent *)
 
     // avoid common random crash by brute force
     if (!m_clefItem) {
-        std::cerr << "StaffHeader::paintEvent() - m_clefItem was NULL."
-                  << std::endl
-                  << "  Skipping this paintEvent to avoid a crash."
-                  << std::endl
-                  << "  This is a BUG which should no longer occur. (rev 11137)"
-                  << std::endl
-                  << std::endl;
+        RG_WARNING << "StaffHeader::paintEvent() - m_clefItem was NULL.\n"
+                   << "  Skipping this paintEvent to avoid a crash.\n"
+                   << "  This is a BUG which should no longer occur. (rev 11137)";
         return;
     }
         

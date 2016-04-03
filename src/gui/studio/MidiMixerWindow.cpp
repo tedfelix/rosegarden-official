@@ -319,16 +319,16 @@ MidiMixerWindow::slotFaderLevelChanged(float value)
                     int i = 0;
                     for (DeviceList::const_iterator dit = m_studio->begin();
                          dit != m_studio->end(); ++dit) {
-                        RG_DEBUG << "slotFaderLevelChanged: i = " << i << ", tabIndex " << tabIndex << endl;
+                        RG_DEBUG << "slotFaderLevelChanged: i = " << i << ", tabIndex " << tabIndex;
                         if (!dynamic_cast<MidiDevice*>(*dit))
                             continue;
                         if (i != tabIndex) {
                             ++i;
                             continue;
                         }
-                        RG_DEBUG << "slotFaderLevelChanged: device id = " << instrument->getDevice()->getId() << ", visible device id " << (*dit)->getId() << endl;
+                        RG_DEBUG << "slotFaderLevelChanged: device id = " << instrument->getDevice()->getId() << ", visible device id " << (*dit)->getId();
                         if (instrument->getDevice()->getId() == (*dit)->getId()) {
-                            RG_DEBUG << "slotFaderLevelChanged: sending control device mapped event for channel " << instrument->getNaturalChannel() << endl;
+                            RG_DEBUG << "slotFaderLevelChanged: sending control device mapped event for channel " << instrument->getNaturalChannel();
 
                             MappedEvent mE((*it)->m_id,
                                            MappedEvent::MidiController,
@@ -383,7 +383,7 @@ MidiMixerWindow::slotControllerChanged(float value)
     if (instrument) {
 
         //RG_DEBUG << "MidiMixerWindow::slotControllerChanged - "
-        //<< "got instrument to change" << endl;
+        //<< "got instrument to change";
 
         instrument->setControllerValue(
                 m_faders[i]->m_controllerRotaries[j].first,
@@ -403,16 +403,16 @@ MidiMixerWindow::slotControllerChanged(float value)
             int k = 0;
             for (DeviceList::const_iterator dit = m_studio->begin();
                  dit != m_studio->end(); ++dit) {
-                RG_DEBUG << "slotControllerChanged: k = " << k << ", tabIndex " << tabIndex << endl;
+                RG_DEBUG << "slotControllerChanged: k = " << k << ", tabIndex " << tabIndex;
                 if (!dynamic_cast<MidiDevice*>(*dit))
                     continue;
                 if (k != tabIndex) {
                     ++k;
                     continue;
                 }
-                RG_DEBUG << "slotControllerChanged: device id = " << instrument->getDevice()->getId() << ", visible device id " << (*dit)->getId() << endl;
+                RG_DEBUG << "slotControllerChanged: device id = " << instrument->getDevice()->getId() << ", visible device id " << (*dit)->getId();
                 if (instrument->getDevice()->getId() == (*dit)->getId()) {
-                    RG_DEBUG << "slotControllerChanged: sending control device mapped event for channel " << instrument->getNaturalChannel() << endl;
+                    RG_DEBUG << "slotControllerChanged: sending control device mapped event for channel " << instrument->getNaturalChannel();
                     // send out to external controllers as well.
                     //!!! really want some notification of whether we have any!
                     MappedEvent mE(m_faders[i]->m_id,
@@ -516,9 +516,9 @@ MidiMixerWindow::updateMeters()
         }
         if (m_faders[i]->m_vuMeter) {
             m_faders[i]->m_vuMeter->setLevel(double(info.level / 127.0));
-            RG_DEBUG << "MidiMixerWindow::updateMeters - level  " << info.level << endl;
+            RG_DEBUG << "MidiMixerWindow::updateMeters - level  " << info.level;
         } else {
-            RG_DEBUG << "MidiMixerWindow::updateMeters - m_vuMeter for m_faders[" << i << "] is NULL!" << endl;
+            RG_DEBUG << "MidiMixerWindow::updateMeters - m_vuMeter for m_faders[" << i << "] is NULL!";
         }
     }
 }
@@ -606,7 +606,7 @@ MidiMixerWindow::sendControllerRefresh()
     // as this is expensive
 
     int tabIndex = m_tabWidget->currentIndex();
-    RG_DEBUG << "MidiMixerWindow::slotCurrentTabChanged: current is " << tabIndex << endl;
+    RG_DEBUG << "MidiMixerWindow::slotCurrentTabChanged: current is " << tabIndex;
 
     if (tabIndex < 0)
         return ;
@@ -617,7 +617,7 @@ MidiMixerWindow::sendControllerRefresh()
             dit != m_studio->end(); ++dit) {
 
         MidiDevice *dev = dynamic_cast<MidiDevice*>(*dit);
-        RG_DEBUG << "device is " << (*dit)->getId() << ", dev " << dev << endl;
+        RG_DEBUG << "device is " << (*dit)->getId() << ", dev " << dev;
 
         if (!dev)
             continue;
@@ -629,7 +629,7 @@ MidiMixerWindow::sendControllerRefresh()
         InstrumentList instruments = dev->getPresentationInstruments();
         ControlList controls = getIPBForMidiMixer(dev);
 
-        RG_DEBUG << "device has " << instruments.size() << " presentation instruments, " << dev->getAllInstruments().size() << " instruments " << endl;
+        RG_DEBUG << "device has" << instruments.size() << "presentation instruments," << dev->getAllInstruments().size() << " instruments";
 
         for (InstrumentList::const_iterator iIt =
                     instruments.begin(); iIt != instruments.end(); ++iIt) {
@@ -638,7 +638,7 @@ MidiMixerWindow::sendControllerRefresh()
             if (!instrument->hasFixedChannel()) { continue; }
             int channel = instrument->getNaturalChannel();
 
-            RG_DEBUG << "instrument is " << instrument->getId() << endl;
+            RG_DEBUG << "instrument is " << instrument->getId();
 
             for (ControlList::const_iterator cIt =
                         controls.begin(); cIt != controls.end(); ++cIt) {
@@ -648,7 +648,7 @@ MidiMixerWindow::sendControllerRefresh()
                 try {
                     value = instrument->getControllerValue(controller);
                 } catch (std::string s) {
-                    std::cerr << "Exception in MidiMixerWindow::currentChanged: " << s << " (controller " << controller << ", instrument " << instrument->getId() << ")" << std::endl;
+                    RG_WARNING << "Exception in MidiMixerWindow::currentChanged: " << s << " (controller " << controller << ", instrument " << instrument->getId() << ")";
                     value = 0;
                 }
 
@@ -666,7 +666,7 @@ MidiMixerWindow::sendControllerRefresh()
                            instrument->getVolume());
             mE.setRecordedChannel(channel);
             mE.setRecordedDevice(Device::CONTROL_DEVICE);
-            RG_DEBUG << "sending controller mapped event for channel " << channel << ", volume " << instrument->getVolume() << endl;
+            RG_DEBUG << "sending controller mapped event for channel " << channel << ", volume " << instrument->getVolume();
             StudioControl::sendMappedEvent(mE);
         }
 
@@ -677,7 +677,7 @@ MidiMixerWindow::sendControllerRefresh()
 void
 MidiMixerWindow::slotSynchronise()
 {
-    RG_DEBUG << "MidiMixer::slotSynchronise" << endl;
+    RG_DEBUG << "MidiMixer::slotSynchronise";
     //setupTabs();
 }
 

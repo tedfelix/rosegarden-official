@@ -45,7 +45,7 @@ NotationTool::NotationTool(NotationWidget *widget) :
 
 NotationTool::~NotationTool()
 {
-    NOTATION_DEBUG << "NotationTool::~NotationTool()" << endl;
+    NOTATION_DEBUG << "NotationTool::~NotationTool()";
 //    delete m_menu;
 }
 
@@ -93,8 +93,8 @@ NotationTool::invokeInParentView(QString actionName)
 {
     QAction *a = findActionInParentView(actionName);
     if (!a) {
-        std::cerr << "NotationTool::invokeInParentView: No action \"" << actionName
-                  << "\" found in parent view" << std::endl;
+        RG_WARNING << "NotationTool::invokeInParentView: No action \"" << actionName
+                  << "\" found in parent view";
     } else {
         a->trigger();
     }
@@ -110,7 +110,7 @@ NotationTool::findActionInParentView(QString actionName)
         w = w->parentWidget();
     }
     if (!c) {
-        std::cerr << "NotationTool::findActionInParentView: Can't find ActionFileClient in parent widget hierarchy" << std::endl;
+        RG_WARNING << "NotationTool::findActionInParentView: Can't find ActionFileClient in parent widget hierarchy";
         return 0;
     }
     QAction *a = c->findAction(actionName);
@@ -120,19 +120,19 @@ NotationTool::findActionInParentView(QString actionName)
 void
 NotationTool::createMenu()
 {
-    NOTATION_DEBUG << "NotationTool::createMenu() " << m_rcFileName << " - " << m_menuName << endl;
+    NOTATION_DEBUG << "NotationTool::createMenu() " << m_rcFileName << " - " << m_menuName;
 
     if (!createGUI(m_rcFileName)) {
-        std::cerr << "NotationTool::createMenu(" << m_rcFileName << "): menu creation failed" << std::endl;
+        RG_WARNING << "NotationTool::createMenu(" << m_rcFileName << "): menu creation failed";
         m_menu = 0;
         return;
     }
 
     QMenu *menu = findMenu(m_menuName);
     if (!menu) {
-        std::cerr << "NotationTool::createMenu(" << m_rcFileName
-                  << "): menu name "
-                  << m_menuName << " not created by RC file\n";
+        RG_WARNING << "NotationTool::createMenu(" << m_rcFileName
+                   << "): menu name "
+                   << m_menuName << "not created by RC file";
         return;
     }
 

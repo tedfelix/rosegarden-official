@@ -20,10 +20,6 @@
 namespace Rosegarden
 {
 
-using std::cerr;
-using std::cout;
-using std::endl;
-
 MappedEventList::~MappedEventList()
 {
     clear();

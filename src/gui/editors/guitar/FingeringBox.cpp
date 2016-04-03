@@ -71,9 +71,9 @@ FingeringBox::init()
 }
 
 void
-FingeringBox::paintEvent(QPaintEvent */* e */)
+FingeringBox::paintEvent(QPaintEvent *)
 {
-    std::cerr << "FingeringBox::paintEvent()" << std::endl;
+    RG_DEBUG << "FingeringBox::paintEvent()";
     QPainter p;
     drawContents(&p);
 }
@@ -81,8 +81,7 @@ FingeringBox::paintEvent(QPaintEvent */* e */)
 void
 FingeringBox::drawContents(QPainter* p)
 {
-    std::cerr << "FingeringBox::drawContents()" << std::endl;
-//    NOTATION_DEBUG << "FingeringBox::drawContents()" << endl;
+    RG_DEBUG << "FingeringBox::drawContents()";
     
     // For all strings on guitar
     //   check state of string

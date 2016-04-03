@@ -582,7 +582,6 @@ MarkerEditor::slotMusicalTime()
 void
 MarkerEditor::slotRealTime()
 {
-    std::cout << "scooby dooby dooo!!" << std::endl;
     QSettings settings;
     settings.beginGroup(MarkerEditorConfigGroup);
 

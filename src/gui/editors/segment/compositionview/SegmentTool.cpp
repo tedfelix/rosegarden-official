@@ -128,17 +128,17 @@ SegmentTool::createMenu()
     //RG_DEBUG << "SegmentTool::createMenu() " << rcFileName << " - " << m_menuName << endl;
 
     if (!createGUI(rcFileName)) {
-        std::cerr << "SegmentTool::createMenu(" << rcFileName
-                  << "): menu creation failed\n";
+        RG_WARNING << "SegmentTool::createMenu(" << rcFileName
+                  << "): menu creation failed";
         m_menu = 0;
         return;
     }
 
     QMenu *menu = findMenu(m_menuName);
     if (!menu) {
-        std::cerr << "SegmentTool::createMenu(" << rcFileName
+        RG_WARNING << "SegmentTool::createMenu(" << rcFileName
                   << "): menu name "
-                  << m_menuName << " not created by RC file\n";
+                  << m_menuName << " not created by RC file";
         return;
     }
 

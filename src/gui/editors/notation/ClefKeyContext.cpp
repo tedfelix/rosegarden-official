@@ -21,6 +21,7 @@
 #include "NotationScene.h"
 #include "NotationStaff.h"
 #include "base/Segment.h"
+#include "misc/Debug.h"
 
 #include <map>
 #include <utility>
@@ -88,14 +89,14 @@ ClefKeyContext::setSegments(NotationScene *scene)
     std::vector<NotationStaff *>::iterator staffsIt;
     for (staffsIt = staffs->begin(); staffsIt != staffs->end(); ++staffsIt) {
         TrackId trackId = (*staffsIt)->getSegment().getTrack();
-        // std::cout << "Track=" << trackId << "\n";
+        // RG_DEBUG << "Track=" << trackId << "\n";
 
         icc = m_clefMaps.find(trackId);
         if (icc == m_clefMaps.end()) {
             ClefMap *clefMap = new ClefMap;
             icc = m_clefMaps.insert(
                       ClefMaps::value_type(trackId, clefMap)).first;
-//           std::cout << "INSERT track=" << trackId
+//           RG_DEBUG << "INSERT track=" << trackId
 //                     << " map@=" << clefMap << "\n";
         }
 
@@ -151,8 +152,8 @@ ClefKeyContext::getClefFromContext(TrackId track, timeT time)
 
     ClefMaps::iterator i = m_clefMaps.find(track);
     if (i == m_clefMaps.end()) {
-        std::cerr << "TrackId " << track << " not found in ClefKeyContext."
-                  << std::endl << "Probably this is a bug." << std::endl;
+        RG_WARNING << "TrackId " << track << " not found in ClefKeyContext."
+                  << "Probably this is a bug.";
         return Clef::UndefinedClef;
     }
 
@@ -169,8 +170,8 @@ ClefKeyContext::getKeyFromContext(TrackId track, timeT time)
 
     KeyMaps::iterator i = m_keyMaps.find(track);
     if (i == m_keyMaps.end()) {
-        std::cerr << "TrackId " << track << " not found in ClefKeyContext."
-                  << std::endl << "Probably this is a bug." << std::endl;
+        RG_WARNING << "TrackId" << track << "not found in ClefKeyContext.\n"
+                   << "Probably this is a bug.";
         return Key::UndefinedKey;
     }
 
@@ -187,19 +188,19 @@ ClefKeyContext::dumpClefContext()
     ClefMaps::iterator i;
     ClefMap::iterator j;
 
-    std::cout << "Begin of clef context dump =================" << std::endl;
+    RG_DEBUG << "Begin of clef context dump =================";
 
     for (i = m_clefMaps.begin(); i != m_clefMaps.end(); ++i) {
-        std::cout << "    Track = " << (*i).first << std::endl;
+        RG_DEBUG << "    Track = " << (*i).first;
         ClefMap *m = (*i).second;
 
         for (j = m->begin(); j != m->end(); ++j) {
-            std::cout << "        Time = " << (*j).first
-                      << " Clef = " << (*j).second.getClefType() << std::endl;
+            RG_DEBUG << "        Time = " << (*j).first
+                      << " Clef = " << (*j).second.getClefType();
         }
     }
 
-    std::cout << "End of clef context dump =================" << std::endl;
+    RG_DEBUG << "End of clef context dump =================";
 }
 
 // Only for debug
@@ -209,19 +210,19 @@ ClefKeyContext::dumpKeyContext()
     KeyMaps::iterator i;
     KeyMap::iterator j;
 
-    std::cout << "Begin of key context dump =================" << std::endl;
+    RG_DEBUG << "Begin of key context dump =================";
 
     for (i = m_keyMaps.begin(); i != m_keyMaps.end(); ++i) {
-        std::cout << "    Track = " << (*i).first << std::endl;
+        RG_DEBUG << "    Track = " << (*i).first;
         KeyMap *m = (*i).second;
 
         for (j = m->begin(); j != m->end(); ++j) {
-            std::cout << "        Time = " << (*j).first
-                      << " Key = " << (*j).second.getName() << std::endl;
+            RG_DEBUG << "        Time = " << (*j).first
+                      << " Key = " << (*j).second.getName();
         }
     }
 
-    std::cout << "End of key context dump =================" << std::endl;
+    RG_DEBUG << "End of key context dump =================";
 }
 
 

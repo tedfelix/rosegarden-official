@@ -93,9 +93,9 @@ AudioSegmentAutoSplitCommand::execute()
                                m_threshold,
                                RealTime(0, 200000000));
         } catch (AudioFileManager::BadAudioPathException e) {
-            std::cerr << "ERROR: AudioSegmentAutoSplitCommand: Bad audio path: " << e.getMessage() << std::endl;
+            RG_WARNING << "ERROR: AudioSegmentAutoSplitCommand: Bad audio path: " << e.getMessage();
         } catch (PeakFileManager::BadPeakFileException e) {
-            std::cerr << "ERROR: AudioSegmentAutoSplitCommand: Bad peak file: " << e.getMessage() << std::endl;
+            RG_WARNING << "ERROR: AudioSegmentAutoSplitCommand: Bad peak file: " << e.getMessage();
         }
 
         std::vector<SplitPointPair>::iterator it;
