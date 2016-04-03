@@ -22,10 +22,8 @@
 
 #include <string>
 #include <vector>
-#ifndef NDEBUG
-#include <iostream>
-#include <ctime>
-#endif
+#include <iostream> // TODO remove (after changing the dump() signature)
+#include "misc/Debug.h"
 
 
 namespace Rosegarden
@@ -60,9 +58,9 @@ public:
      */
     class NoData : public Exception {
     public:
-        NoData(std::string property) :
+        NoData(const std::string &property) :
             Exception("No data found for property " + property) { }
-        NoData(std::string property, std::string file, int line) :
+        NoData(const std::string &property, const std::string &file, int line) :
             Exception("No data found for property " + property, file, line) { }
     };
 
@@ -72,11 +70,11 @@ public:
      */
     class BadType : public Exception {
     public:
-        BadType(std::string property, std::string expected, std::string actl) :
+        BadType(const std::string &property, const std::string &expected, const std::string &actl) :
             Exception("Bad type for " + property + " (expected " +
                       expected + ", found " + actl + ")") { }
-        BadType(std::string property, std::string expected, std::string actual,
-                std::string file, int line) :
+        BadType(const std::string &property, const std::string &expected, const std::string &actual,
+                const std::string &file, int line) :
             Exception("Bad type for " + property + " (expected " +
                       expected + ", found " + actual + ")", file, line) { }
     };
@@ -521,9 +519,9 @@ Event::get(const PropertyName &name, typename PropertyDefn<P>::basic_type &val) 
         }
         else {
 #ifndef NDEBUG
-            std::cerr << "Event::get() Error: Attempt to get property \"" << name
-                 << "\" as " << PropertyDefn<P>::typeName() <<", actual type is "
-                 << sb->getTypeName() << std::endl;
+            qWarning() << "Event::get() Error: Attempt to get property \"" << name.getName()
+                 << "\" as" << PropertyDefn<P>::typeName() <<", actual type is"
+                 << sb->getTypeName();
 #endif
             return false;
         }
@@ -560,7 +558,7 @@ Event::get(const PropertyName &name) const
     } else {
 
 #ifndef NDEBUG
-        std::cerr << "Event::get(): Error dump follows:" << std::endl;
+        qWarning() << "Event::get(): Error dump follows:";
         dump(std::cerr);
 #endif
         throw NoData(name.getName(), __FILE__, __LINE__);
