@@ -36,8 +36,6 @@
 #include <set>
 #include <map>
 
-#include <iostream>
-
 namespace Rosegarden 
 {
 // We store tempo in quarter-notes per minute * 10^5 (hundred

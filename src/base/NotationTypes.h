@@ -23,8 +23,6 @@
 
 #include "Event.h"
 
-#include <iostream>
-
 /*
  * NotationTypes.h
  *
