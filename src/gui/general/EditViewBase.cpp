@@ -42,8 +42,9 @@ namespace Rosegarden
 
 EditViewBase::EditViewBase(RosegardenDocument *doc,
                            std::vector<Segment *> segments,
-                           QWidget *parent) :
-    QMainWindow(parent),
+                           QWidget * /* parent */) :
+//    QMainWindow(parent)   // See following comment
+    QMainWindow(0),
     m_doc(doc),
     m_segments(segments),
     m_configDialogPageIndex(0),
@@ -52,7 +53,18 @@ EditViewBase::EditViewBase(RosegardenDocument *doc,
     setAttribute(Qt::WA_DeleteOnClose);
     // Address #1508:  Show the edit windows without activating them, so either
     // they or the main window can continue to have focus in Qt5.
-    setAttribute(Qt::WA_ShowWithoutActivating);
+    //
+    // On my system (yg) and with parent passed to QMainWindow:
+    //   - With Qt5 Qt::WA_ShowWithoutActivating has no effect: the main
+    //     windows may always have focus but is always under the editors.
+    //   - With Qt4 and WA_ShowWithoutActivating the editors are always
+    //     opened under the main window.
+    //
+    // It seems that a Qt5 window is always under its child.
+    // So when passing 0 as parent to QMainWindow the editors are no more child
+    // of the main window and the problem is fixed.
+    //
+    // setAttribute(Qt::WA_ShowWithoutActivating);
 
     m_doc->attachEditView(this);
 
