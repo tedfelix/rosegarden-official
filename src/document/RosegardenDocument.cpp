@@ -1637,14 +1637,18 @@ bool RosegardenDocument::saveAs(const QString &newName, QString &errMsg)
     m_title = newNameInfo.fileName();
     m_absFilePath = newNameInfo.absoluteFilePath();
 
-    // Lock the new name.
-    bool success = lock();
+    // Lock the new name.  If the lock fails...
+    if (!lock()) {
+        // Put back the old title/name.
+        m_title = oldTitle;
+        m_absFilePath = oldAbsFilePath;
 
-    if (success)
-        success = saveDocument(newName, errMsg);
+        // Fail.
+        return false;
+    }
 
-    // If the lock/save fails,
-    if (!success) {
+    // Save.  If the save fails...
+    if (!saveDocument(newName, errMsg)) {
         // Unlock the new name.
         release(m_absFilePath);
 
