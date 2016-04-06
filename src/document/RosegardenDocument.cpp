@@ -3073,6 +3073,7 @@ bool RosegardenDocument::lock() const
             QByteArray line = lockFile.readLine(128);
             message += line;
         }
+        message = QString::fromLocal8Bit(message.toStdString().c_str());
 
         // Present a dialog to the user with the info.
         StartupLogo::hideIfStillThere();
