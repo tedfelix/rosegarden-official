@@ -13,6 +13,8 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[LSCPPatchExtractor]"
+
 #include "LSCPPatchExtractor.h"
 
 #include <QFile>

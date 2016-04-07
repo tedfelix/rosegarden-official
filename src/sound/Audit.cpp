@@ -13,6 +13,8 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[Audit]"
+
 #include "Audit.h"
 
 #include "misc/Debug.h"
@@ -23,7 +25,8 @@ namespace Rosegarden
 Audit::~Audit()
 {
     std::string s = str();
-    RG_DEBUG << s;
+    if (s != "")
+        RG_DEBUG << s;
     m_audit += s;
 }
 

@@ -13,6 +13,8 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[AudioCache]"
+
 #include "AudioCache.h"
 #include "misc/Debug.h"
 

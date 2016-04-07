@@ -22,6 +22,8 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[MusicXmlExportHelper]"
+
 #include "MusicXmlExportHelper.h"
 // #include "PercussionMap.h"
 

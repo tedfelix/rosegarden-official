@@ -13,6 +13,8 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[RIFFAudioFile]"
+
 #include "RIFFAudioFile.h"
 #include "base/RealTime.h"
 #include "base/Profiler.h"

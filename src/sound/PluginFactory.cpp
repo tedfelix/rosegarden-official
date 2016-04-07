@@ -13,6 +13,8 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[PluginFactory]"
+
 #include "PluginFactory.h"
 #include "PluginIdentifier.h"
 #include "misc/Strings.h"

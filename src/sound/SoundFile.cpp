@@ -11,6 +11,7 @@
   COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[SoundFile]"
 
 #include "SoundFile.h"
 #include "base/Profiler.h"

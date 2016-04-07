@@ -12,6 +12,7 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[Resampler]"
 
 #include "Resampler.h"
 #include "base/Profiler.h"

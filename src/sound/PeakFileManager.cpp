@@ -22,6 +22,9 @@
 // by a WAV) or be accomodated inside a BWF format file.
 //
 //
+
+#define RG_MODULE_STRING "[PeakFileManager]"
+
 #include "PeakFileManager.h"
 
 #include <string>

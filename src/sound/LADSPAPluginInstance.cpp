@@ -13,6 +13,8 @@
 */
 
 
+#define RG_MODULE_STRING "[LADSPAPluginInstance]"
+
 #include "LADSPAPluginInstance.h"
 #include "LADSPAPluginFactory.h"
 
