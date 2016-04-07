@@ -3081,8 +3081,9 @@ bool RosegardenDocument::lock() const
                 RosegardenMainWindow::self(),
                 tr("Rosegarden"),
                 tr("Could not lock file.\n\n"
-                   "If you are sure this file isn't really locked,\n"
-                   "delete the lock file manually and try again.\n\n") +
+                   "Another user or instance of Rosegarden may already be\n"
+                   "editing this file.  If you are sure no one else is\n"
+                   "editing this file, delete the lock file and try again.\n\n") +
                    message);
 
         return false;
