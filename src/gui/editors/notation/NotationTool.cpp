@@ -106,7 +106,7 @@ NotationTool::findActionInParentView(QString actionName)
     if (!m_widget) return 0;
     QWidget *w = m_widget;
     ActionFileClient *c = 0;
-    while (w->parentWidget() && !(c = dynamic_cast<ActionFileClient *>(w))) {
+    while (w && !(c = dynamic_cast<ActionFileClient *>(w))) {
         w = w->parentWidget();
     }
     if (!c) {

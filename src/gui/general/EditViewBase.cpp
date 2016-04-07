@@ -42,9 +42,9 @@ namespace Rosegarden
 
 EditViewBase::EditViewBase(RosegardenDocument *doc,
                            std::vector<Segment *> segments,
-                           QWidget * parent) :
-   QMainWindow(parent),   // See following comment
-//     QMainWindow(0),
+                           QWidget * /* parent */) :
+    // QMainWindow(parent),   // See following comments
+    QMainWindow(0),
     m_doc(doc),
     m_segments(segments),
     m_configDialogPageIndex(0),
@@ -64,9 +64,7 @@ EditViewBase::EditViewBase(RosegardenDocument *doc,
     // So when passing 0 as parent to QMainWindow the editors are no more child
     // of the main window and the problem is fixed.
     //
-    //!!! Fix temporarily remove (it introduces various problems)
-    //
-    setAttribute(Qt::WA_ShowWithoutActivating);
+    // setAttribute(Qt::WA_ShowWithoutActivating);
 
     m_doc->attachEditView(this);
 
