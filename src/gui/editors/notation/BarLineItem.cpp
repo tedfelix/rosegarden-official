@@ -28,6 +28,8 @@ BarLineItem::boundingRect() const
     int by = int(y());
     int x0 = bx, y0 = by, x1, y1 = by + m_barLineHeight;
 
+    x1 = 0;     // Avoid a "may be used uninitialized" compilation warning
+
     switch (m_style) {
 
     case StaffLayout::PlainBar:

@@ -41,6 +41,10 @@ RetrogradeInvertCommand::modifySegment()
 
     long highestPitch, lowestPitch;
 
+    // Avoid "may be used uninitialized" compilation warnings
+    highestPitch = 0;
+    lowestPitch = 0;
+    
     bool firstNote = true;
     for (i = m_selection->getSegmentEvents().begin();
             i != m_selection->getSegmentEvents().end(); ++i) {

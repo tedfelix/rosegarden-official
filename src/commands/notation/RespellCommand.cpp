@@ -188,6 +188,7 @@ RespellCommand::modifySegment()
                 // things as a consequence (fixes #1349782)
                 // 1 = C#, 3 = D#, 6 = F#, 8 = G#, 10 = A#
                 long pitch;
+                pitch = 0;  // Avoid a "may be used uninitialized" compilation warning
                 (*i)->get<Int>(PITCH, pitch);
                 pitch %= 12;
                 if ((pitch == 1 || pitch == 3 || pitch == 6 || pitch == 8 || pitch == 10 )
