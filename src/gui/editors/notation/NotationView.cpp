@@ -1421,8 +1421,7 @@ NotationView::exportLilyPondFile(QString file, bool forPreview)
         return false;
     }
 
-    // This is awful...
-    RosegardenMainViewWidget * view = static_cast<RosegardenMainViewWidget *>(parent());
+    RosegardenMainViewWidget * view = RosegardenMainWindow::self()->getView();
 
     LilyPondExporter e(m_doc, view->getSelection(), std::string(QFile::encodeName(file)), this);
 
