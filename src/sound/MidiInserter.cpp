@@ -30,7 +30,7 @@
 
 #include <string>
 
-// #define MIDI_DEBUG 1
+#define MIDI_DEBUG 1
 
 namespace Rosegarden
 {

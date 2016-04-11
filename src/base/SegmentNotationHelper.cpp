@@ -685,7 +685,18 @@ SegmentNotationHelper::makeThisNoteViable(iterator noteItr, bool splitAtBars)
         }
         timeT component = Note::getNearestNote(remaining).getDuration();
         timeT dur = (component > (required - acc) ? (required - acc) : component);
-        if (maxdur <= dur) {
+
+        // #1517: In the scenario where there is a whole note (4 beats) in a
+        // single measure of 2/2, maxdur == dur and this is exactly as it should
+        // be.  I dug around in here and all the numbers were perfect for that
+        // case, and the only fault was the <= test condition was kicking this
+        // out when the two values were ==.  I changed the test to a < and fixed
+        // the bug.  The most obvious consequence of this change is that it is
+        // no longer possible to put a semibreve into a single measure of 4/4
+        // time.  It splits into two tied whole notes.  This seems perfectly
+        // acceptable and reasonable to me (dmm) so I decided to just go with
+        // this and move along.
+        if (maxdur < dur) {
             // Split point doesn't preseve performance time
             break;
         }
