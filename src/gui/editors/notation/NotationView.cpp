@@ -533,6 +533,7 @@ NotationView::setupActions()
 
     // "layout" submenu 
     createAction("add_layer", SLOT(slotAddLayer()));
+    createAction("magic_layer", SLOT(slotMagicLayer()));
     createAction("linear_mode", SLOT(slotLinearMode()));
     createAction("continuous_page_mode", SLOT(slotContinuousPageMode()));
     createAction("multi_page_mode", SLOT(slotMultiPageMode()));
@@ -5064,6 +5065,77 @@ NotationView::slotAddLayer()
     // setSegments() until there was only one segment left, and then we'd blink
     // out of existence only after undoing that final one in a multi-segment
     // context.
+}
+
+void
+NotationView::slotMagicLayer()
+{
+    // grab selection; else abort cleanly
+    EventSelection *selection = getSelection();
+    if (!selection) return;
+
+    // switch to the pencil, as in slotAddLayer
+    slotSetNoteRestInserter();
+
+    //cunt
+    MacroCommand *macro = new MacroCommand(tr("New Layer from Selection"));
+
+    // make a new "layer" segment
+    AddLayerCommand *command = new AddLayerCommand(getCurrentSegment(), getDocument()->getComposition());
+    command->execute();
+
+    // Not sure how to handle this:  We have to execute() here to get the
+    // segment created for pasting, but if we do that, the command executes a
+    // second time later on, and you end up with two new segments, one of which
+    // is empty...  The only way I see to avoid that is to execute here, and
+    // skip adding this to the MacroCommand, which means if you undo this
+    // operation, it won't be clean.  The only alternative I can think of is to
+    // add a series of commands to the stack, so one operation requires multiple
+    // undos to reverse.  I don't like that either.  Meh.  
+//    macro->addCommand(command);
+
+    // get the new segment we just created; abort if there is no new segment or
+    // if it is exactly the same as the current segment, which means new segment
+    // creation failed
+    Segment *newLayer = command->getSegment();
+    if (!newLayer || newLayer == getCurrentSegment()) {
+        RG_DEBUG << "NotationView::slotMagicLayer(): newLayer: " 
+                 << newLayer
+                 << " currentSegment: "
+                 << getCurrentSegment()
+                 << " aborting!" << endl;
+        delete macro;
+        return;
+    }
+
+    // cut the selected events from the parent segment
+    timeT insertionTime = selection->getStartTime();
+
+    Clipboard *c = new Clipboard;
+    CopyCommand *cc = new CopyCommand(*selection, c);
+    cc->execute();
+
+    macro->addCommand(new EraseCommand(*selection));
+
+    // use overlay paste to avoid checking for space; paste to new "layer" 
+    PasteEventsCommand::PasteType type = PasteEventsCommand::NoteOverlay;
+    macro->addCommand(new PasteEventsCommand(*newLayer, c, insertionTime, type));
+    
+    delete c;
+
+    CommandHistory::getInstance()->addCommand(macro);
+
+    // normalize rests to clean up the weird double whole rest problem
+    newLayer->normalizeRests(newLayer->getStartTime(), newLayer->getEndTime());
+
+    // get the pointer to the segment we just created and add it to m_segments
+    m_segments.push_back(newLayer);
+
+    // re-invoke setSegments with the ammended m_segments
+    setWidgetSegments();
+
+    // try to make the new segment active immediately
+    slotCurrentSegmentNext();
 }
 
 void

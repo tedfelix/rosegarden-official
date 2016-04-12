@@ -375,6 +375,7 @@ protected slots:
     void slotCycleSlashes();
 
     void slotAddLayer();
+    void slotMagicLayer();
 
     virtual void slotConfigure();
 

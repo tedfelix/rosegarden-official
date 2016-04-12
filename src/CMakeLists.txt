@@ -698,7 +698,6 @@ set(rg_CPPS
   commands/segment/SegmentSingleRepeatToCopyCommand.cpp
   commands/segment/SegmentResizeFromStartCommand.cpp
   commands/segment/AddLayerCommand.cpp
-  commands/segment/MagicLayerCommand.cpp
   commands/segment/SegmentChangeQuantizationCommand.cpp
   commands/segment/RenameTrackCommand.cpp
   commands/segment/SegmentAutoSplitCommand.cpp

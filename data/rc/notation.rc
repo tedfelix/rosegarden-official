@@ -159,6 +159,7 @@
     <Action name="switch_preset" text="&amp;Convert Notation for..." />
   <Separator/>
     <Action name="add_layer" text="Add &amp;Layer" icon="add-layer" shortcut="Ctrl+Alt++" />
+    <Action name="magic_layer" text="New Layer from &amp;Selection" icon="magic-layer" shortcut="Ctrl+Shift++" />
   <Separator/>
     <Action name="unadopt_segment" text="Unadopt an Adopted Segment" />
   </Menu>
@@ -806,6 +807,7 @@
 <ToolBar name="Layer Toolbar" hidden="false">
   <text>Layer Toolbar</text>
   <Action name="add_layer" />
+  <Action name="magic_layer" />
 </ToolBar>
 
 <ToolBar name="Rulers Toolbar">
@@ -992,6 +994,7 @@
     <Action name="pitch_bend_sequence"/>
     <Action name="controller_sequence"/>
     <Action name="place_controllers"/>
+    <Action name="magic_layer"/>
     <Menu name="Stems"/>
     <Menu name="Slashes"/>
     <Menu name="Transpose"/>
