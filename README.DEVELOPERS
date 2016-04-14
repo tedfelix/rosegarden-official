@@ -34,7 +34,7 @@ make-ts           Update translation files.  Run before editing one of the .ts
                   changes in the course of development.  (Probably a good idea
                   to run this before a call to translators.)
 
-make-locale       Release all translations.  Run after editing any of the .ts
+make-lrelease     Release all translations.  Run after editing any of the .ts
                   files or applying a patch from a translator.  Be sure to run
                   this before doing a release, because the .ts files don't get
                   used directly.  They have to be converted into .qm files first
