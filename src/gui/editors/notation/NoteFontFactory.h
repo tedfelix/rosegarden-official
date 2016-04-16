@@ -26,11 +26,13 @@
 
 #include <QString>
 #include <QCoreApplication>
+#include <QMutex>
 
 
 namespace Rosegarden
 {
 
+class NoteFontFactoryStatic;
 class NoteFont;
 
 
@@ -63,11 +65,13 @@ public:
     static bool isAvailableInSize(QString fontName, int size);
 
 private:
-    static std::set<QString> m_fontNames;
-    static std::map<std::pair<QString, int>, NoteFont *> m_fonts;
+    NoteFontFactory() {}
+    friend class NoteFontFactoryStatic;
+
+    std::set<QString> m_fontNames;
+    std::map<std::pair<QString, int>, NoteFont *> m_fonts;
+    QMutex m_mutex;
 };
-
-
 
 }
 
