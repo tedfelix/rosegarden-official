@@ -2163,7 +2163,7 @@ NotePixmapFactory::makeKey(const Key &key,
         }
     }
 
-    return makeItem(m_pointZero);
+    return makeItem(QPoint());
 }
 
 QPixmap
@@ -3738,9 +3738,6 @@ NotePixmapFactory::getCharacter(CharName name,
     color.getHsv(&h, &s, &v);
     return font->getCharacterColoured(name, h, v, ch, charType, inverted, s);
 }
-
-QPoint
-NotePixmapFactory::m_pointZero;
 
 
 int NotePixmapFactory::getNoteBodyWidth(Note::Type type)

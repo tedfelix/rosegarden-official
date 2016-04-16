@@ -33,8 +33,6 @@
 #include <QPixmap>
 #include <QPoint>
 
-#include <QCoreApplication>
-
 class QPainter;
 class QBitmap;
 class QString;
@@ -410,8 +408,6 @@ protected:
 
     typedef std::map<const char *, QFont> TextFontCache;
     mutable TextFontCache m_textFontCache;
-
-    static QPoint m_pointZero;
 };
 
 
