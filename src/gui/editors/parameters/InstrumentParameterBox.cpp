@@ -38,8 +38,6 @@ namespace Rosegarden
 {
 
 
-InstrumentParameterBox::IPBVector InstrumentParameterBox::m_instrumentParamBoxes;
-
 InstrumentParameterBox::InstrumentParameterBox(RosegardenDocument *doc,
                                                QWidget *parent)
     : RosegardenParameterBox(tr("Instrument"),
@@ -58,17 +56,6 @@ InstrumentParameterBox::InstrumentParameterBox(RosegardenDocument *doc,
     m_noInstrumentParameters->setFont(m_font);
     m_midiInstrumentParameters->setFont(m_font);
     m_audioInstrumentParameters->setFont(m_font);
-
-    bool contains = false;
-
-    IPBVector::iterator it = m_instrumentParamBoxes.begin();
-
-    for (; it != m_instrumentParamBoxes.end(); ++it)
-        if ((*it) == this)
-            contains = true;
-
-    if (!contains)
-        m_instrumentParamBoxes.push_back(this);
 
     m_widgetStack->addWidget(m_midiInstrumentParameters);
     m_widgetStack->addWidget(m_audioInstrumentParameters);
@@ -95,17 +82,7 @@ InstrumentParameterBox::InstrumentParameterBox(RosegardenDocument *doc,
 
 InstrumentParameterBox::~InstrumentParameterBox()
 {
-    // deregister this parameter box
-    IPBVector::iterator it = m_instrumentParamBoxes.begin();
-
-    for (; it != m_instrumentParamBoxes.end(); ++it) {
-        if ((*it) == this) {
-            m_instrumentParamBoxes.erase(it);
-            break;
-        }
-    }
 }
-
 
 MIDIInstrumentParameterPanel * 
     InstrumentParameterBox::getMIDIInstrumentParameterPanel()

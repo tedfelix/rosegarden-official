@@ -23,7 +23,6 @@
 #include "RosegardenParameterBox.h"
 
 #include <QString>
-#include <vector>
 
 class QStackedWidget;
 class QWidget;
@@ -110,15 +109,6 @@ private:
     // So we can setModified()
     //
     RosegardenDocument              *m_doc;
-
-    // Global references
-    //
-    // Since there is only one instance of InstrumentParameterBox
-    // ever created, this is probably unnecessary.  Consider getting
-    // rid of it altogether.
-    // Used by: nobody
-    typedef std::vector<InstrumentParameterBox *> IPBVector;
-    static IPBVector m_instrumentParamBoxes;
 };
 
 
