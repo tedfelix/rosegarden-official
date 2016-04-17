@@ -149,6 +149,7 @@ void TestLilypondExport::testExamples_data()
     QTest::newRow("lilypond-alternative-endings_new-way") << "lilypond-alternative-endings_new-way" << defaultOptions;
     QTest::newRow("lilypond-alternative-endings") << "lilypond-alternative-endings" << defaultOptions;
     QTest::newRow("lilypond-directives") << "lilypond-directives" << defaultOptions;
+    QTest::newRow("lilypond-up-down") << "lilypond-up-down" << defaultOptions;
     QTest::newRow("lilypond-staff-groupings") << "lilypond-staff-groupings" << defaultOptions;
     QTest::newRow("logical-segments-4") << "logical-segments-4" << defaultOptions;
     QTest::newRow("mandolin-sonatina") << "mandolin-sonatina" << defaultOptions;

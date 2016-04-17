@@ -2403,22 +2403,25 @@ LilyPondExporter::writeBar(Segment *s,
                 str << "\\hideNotes ";
             }
 
-            if (e->has(NotationProperties::STEM_UP)) {
-                if (e->get<Bool>(NotationProperties::STEM_UP)) {
-                    if (lastStem != 1) {
-                        str << "\\stemUp ";
-                        lastStem = 1;
+            // Export stem direction - but don't change it in the middle of a beamed group
+            if (!m_exportBeams || !inBeamedGroup || startingBeamedGroup) {
+                if (e->has(NotationProperties::STEM_UP)) {
+                    if (e->get<Bool>(NotationProperties::STEM_UP)) {
+                        if (lastStem != 1) {
+                            str << "\\stemUp ";
+                            lastStem = 1;
+                        }
+                    } else {
+                        if (lastStem != -1) {
+                            str << "\\stemDown ";
+                            lastStem = -1;
+                        }
                     }
                 } else {
-                    if (lastStem != -1) {
-                        str << "\\stemDown ";
-                        lastStem = -1;
+                    if (lastStem != 0) {
+                        str << "\\stemNeutral ";
+                        lastStem = 0;
                     }
-                }
-            } else {
-                if (lastStem != 0) {
-                    str << "\\stemNeutral ";
-                    lastStem = 0;
                 }
             }
 
