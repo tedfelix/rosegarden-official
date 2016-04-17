@@ -175,6 +175,7 @@ Event *LilyPondExporter::nextNoteInGroup(Segment *s, Segment::iterator it, const
     const bool tuplet = groupType == GROUP_TYPE_TUPLED;
     const bool graceNotesGroup = event->has(IS_GRACE_NOTE) && event->get<Bool>(IS_GRACE_NOTE);
     timeT currentTime = m_composition->getNotationQuantizer()->getQuantizedAbsoluteTime(event);
+    int subOrdering = event->getSubOrdering();
 
     ++it;
     for ( ; s->isBeforeEndMarker(it) ; ++it ) {
@@ -204,10 +205,11 @@ Event *LilyPondExporter::nextNoteInGroup(Segment *s, Segment::iterator it, const
 
         // Within a chord, keep moving ahead
         const timeT eventTime = m_composition->getNotationQuantizer()->getQuantizedAbsoluteTime(event);
-        if (eventTime == currentTime && !isGrace) {
+        if (eventTime == currentTime && subOrdering == event->getSubOrdering()) {
             continue;
         }
         currentTime = eventTime;
+        subOrdering = event->getSubOrdering();
 
         long newGroupId = -1;
         event->get<Int>(BEAMED_GROUP_ID, newGroupId);

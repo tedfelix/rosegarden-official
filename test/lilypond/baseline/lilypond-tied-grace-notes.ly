@@ -2,16 +2,14 @@
 \include "nederlands.ly"
 \version "2.12.0"
 \header {
-    copyright =  \markup { "Copyright "\char ##x00A9" xxxx Copyright Holder" }
-    subtitle = "not yet subtitled"
-    title = "Not Yet Titled"
+    title = "Testcase for grace notes and ties"
     tagline = "Created using Rosegarden 16.13 and LilyPond"
 }
 #(set-global-staff-size 18)
 #(set-default-paper-size "a4")
 global = { 
     \time 4/4
-    \skip 1*2 
+    \skip 1*3 
 }
 globalTempo = {
     \override Score.MetronomeMark #'transparent = ##t
@@ -41,8 +39,9 @@ globalTempo = {
                 
                 \clef "treble"
                 \key c \major
-                a' 2 \grace { f' 8 [ fis' ] } g' 2  |
-                \grace { \times 2/3 { \stemUp b'' 16 [ a'' g'' ] } } \times 2/3 { \stemNeutral e'' 4 } r \stemUp < c'' e'' > 8 [ \grace { < bes' d'' > } < b' d'' > ] r4 \stemNeutral  |
+                a' 4 \grace { e' 16 } f' 4 \grace { f' 8 [ fis' ] } g' 2  |
+                \grace { \times 2/3 { \stemUp b'' 16 [ a'' g'' ] } } \stemNeutral e'' 4 r \stemUp < c'' e'' > 8 [ \grace { < bes' d'' > } < b' d'' > ] r4 \stemNeutral  |
+                \stemUp f'' 4 \grace { < des'' f'' > 8 } < d'' f'' > 4 \grace { \stemNeutral e' 16 } f' 4 r  |
                 \bar "|."
             } % Voice
         >> % Staff (final) ends
