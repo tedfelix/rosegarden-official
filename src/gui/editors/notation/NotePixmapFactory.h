@@ -32,6 +32,7 @@
 #include <QFontMetrics>
 #include <QPixmap>
 #include <QPoint>
+#include <QCoreApplication> // for Q_DECLARE_TR_FUNCTIONS
 
 class QPainter;
 class QBitmap;
@@ -56,7 +57,7 @@ class StaffHeader;
  * Generates pixmaps and graphics items for various notation items.
  * This class is not re-entrant.
  */
-class NotePixmapFactory 
+class NotePixmapFactory
 {
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::NotePixmapFactory)
 
