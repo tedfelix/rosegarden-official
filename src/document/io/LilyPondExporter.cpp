@@ -168,22 +168,24 @@ static bool canStartOrEndBeam(Event *event)
 
 Event *LilyPondExporter::nextNoteInGroup(Segment *s, Segment::iterator it, const std::string &groupType, int barEnd) const
 {
-    Event *currentEvent = *it;
+    Event *event = *it;
     long currentGroupId = -1;
-    currentEvent->get<Int>(BEAMED_GROUP_ID, currentGroupId);
+    event->get<Int>(BEAMED_GROUP_ID, currentGroupId);
     Q_ASSERT(currentGroupId != -1);
     const bool tuplet = groupType == GROUP_TYPE_TUPLED;
-    timeT currentTime = m_composition->getNotationQuantizer()->getQuantizedAbsoluteTime(currentEvent);
+    const bool graceNotesGroup = event->has(IS_GRACE_NOTE) && event->get<Bool>(IS_GRACE_NOTE);
+    timeT currentTime = m_composition->getNotationQuantizer()->getQuantizedAbsoluteTime(event);
 
     ++it;
     for ( ; s->isBeforeEndMarker(it) ; ++it ) {
-        Event *event = *it;
+        event = *it;
 
         if (event->getNotationAbsoluteTime() >= barEnd)
             break;
 
-        // Grace notes are not beamed, but shouldn't break the beaming group
-        if (event->has(IS_GRACE_NOTE) && event->get<Bool>(IS_GRACE_NOTE))
+        // Grace notes shouldn't break the beaming group of real notes
+        const bool isGrace = (event->has(IS_GRACE_NOTE) && event->get<Bool>(IS_GRACE_NOTE));
+        if (!graceNotesGroup && isGrace)
             continue;
 
         if (event->has(SKIP_PROPERTY))
@@ -202,7 +204,7 @@ Event *LilyPondExporter::nextNoteInGroup(Segment *s, Segment::iterator it, const
 
         // Within a chord, keep moving ahead
         const timeT eventTime = m_composition->getNotationQuantizer()->getQuantizedAbsoluteTime(event);
-        if (eventTime == currentTime) {
+        if (eventTime == currentTime && !isGrace) {
             continue;
         }
         currentTime = eventTime;

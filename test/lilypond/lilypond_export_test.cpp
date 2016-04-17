@@ -151,6 +151,7 @@ void TestLilypondExport::testExamples_data()
     QTest::newRow("lilypond-directives") << "lilypond-directives" << defaultOptions;
     QTest::newRow("lilypond-up-down") << "lilypond-up-down" << defaultOptions;
     QTest::newRow("lilypond-staff-groupings") << "lilypond-staff-groupings" << defaultOptions;
+    QTest::newRow("lilypond-tied-grace-notes") << "lilypond-tied-grace-notes" << defaultOptions;
     QTest::newRow("logical-segments-4") << "logical-segments-4" << defaultOptions;
     QTest::newRow("mandolin-sonatina") << "mandolin-sonatina" << defaultOptions;
     QTest::newRow("marks-test") << "marks-test" << defaultOptions;
