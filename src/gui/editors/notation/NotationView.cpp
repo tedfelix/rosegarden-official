@@ -4849,7 +4849,9 @@ NotationView::slotExtendSelectionBackward(bool bar)
             // reminder to someone that all of this is stupid.
 
             if ((*extendFrom)->event()->isa(Note::EventType)) {
-                es->addEvent((*extendFrom)->event());
+                // #1519: increment cursor for every event selected
+                int count = es->addEvent((*extendFrom)->event());
+                for (int c = 1; c < count; ++c) slotStepBackward();
             }
         }
 
@@ -4889,7 +4891,7 @@ void
 NotationView::slotExtendSelectionForward(bool bar)
 {
     // If there is no current selection, or the selection is entirely
-    // to the right of the cursor, move the cursor left and add to the
+    // to the right of the cursor, move the cursor right and add to the
     // selection
 
     timeT oldTime = getInsertionTime();
@@ -4924,7 +4926,9 @@ NotationView::slotExtendSelectionForward(bool bar)
         while (extendFrom != vel->end() &&
                 (*extendFrom)->getViewAbsoluteTime() < newTime) {
             if ((*extendFrom)->event()->isa(Note::EventType)) {
-                es->addEvent((*extendFrom)->event());
+                // #1519: increment cursor for every event selected
+                int count = es->addEvent((*extendFrom)->event());
+                for (int c = 1; c < count; ++c) slotStepForward();
             }
             ++extendFrom;
         }
@@ -5077,7 +5081,6 @@ NotationView::slotMagicLayer()
     // switch to the pencil, as in slotAddLayer
     slotSetNoteRestInserter();
 
-    //cunt
     MacroCommand *macro = new MacroCommand(tr("New Layer from Selection"));
 
     // make a new "layer" segment

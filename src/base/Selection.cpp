@@ -161,7 +161,7 @@ EventSelection::eraseThisEvent(Event *e)
     }
 }
 
-void
+int
 EventSelection::addRemoveEvent(Event *e, EventFuncPtr insertEraseFn,
                                bool ties)
 {
@@ -184,7 +184,10 @@ EventSelection::addRemoveEvent(Event *e, EventFuncPtr insertEraseFn,
     // Always add/remove at least the one Event we were called with.
     (this->*insertEraseFn)(e);
 
-    if (!ties) { return; }
+    int counter = 1;
+
+    if (!ties) { return counter; }
+
     
     // Now we handle the tied notes themselves.  If the event we're adding is
     // tied, then we iterate forward and back to try to find all of its linked
@@ -223,6 +226,7 @@ EventSelection::addRemoveEvent(Event *e, EventFuncPtr insertEraseFn,
                 if ((*si)->has(BaseProperties::TIED_BACKWARD)) {
                     // add the event
                     (this->*insertEraseFn)(*si);
+                    counter++;
 
                     // while looking ahead, we have to keep pushing our
                     // [selection]  search ahead to the end of the most
@@ -266,6 +270,7 @@ EventSelection::addRemoveEvent(Event *e, EventFuncPtr insertEraseFn,
                 if ((*si)->has(BaseProperties::TIED_FORWARD)) {
                     // add the event
                     (this->*insertEraseFn)(*si);
+                    counter++;
 
                     // while looking back, we have to keep pushing our
                     // [selection] search back to the end of the most
@@ -275,6 +280,8 @@ EventSelection::addRemoveEvent(Event *e, EventFuncPtr insertEraseFn,
             }
         }
     }
+
+    return counter;
 }
 
 void
@@ -288,10 +295,10 @@ EventSelection::removeObserver(EventSelectionObserver *obs) {
 }
 
 
-void
+int
 EventSelection::addEvent(Event *e, bool ties)
 {
-    addRemoveEvent(e, &EventSelection::insertThisEvent, ties);
+    return addRemoveEvent(e, &EventSelection::insertThisEvent, ties);
 }
 
 void
@@ -304,10 +311,10 @@ EventSelection::addFromSelection(EventSelection *sel, bool ties)
     }
 }
 
-void
+int
 EventSelection::removeEvent(Event *e, bool ties) 
 {
-    addRemoveEvent(e, &EventSelection::eraseThisEvent, ties);
+    return addRemoveEvent(e, &EventSelection::eraseThisEvent, ties);
 }
 
 bool

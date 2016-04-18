@@ -74,8 +74,11 @@ public:
      * Add an Event to the selection.  The Event should come from
      * the Segment that was passed to the constructor.  Will
      * silently drop any event that is already in the selection.
+     *
+     * Returns the number of events removed (could be > 1 if ties were
+     * encountered)
      */
-    void addEvent(Event* e, bool ties = true);
+    int addEvent(Event* e, bool ties = true);
 
     /**
      * Add all the Events in the given Selection to this one.
@@ -86,8 +89,11 @@ public:
 
     /**
      * If the given Event is in the selection, take it out.
+     *
+     * Returns the number of events removed (could be > 1 if ties were
+     * encountered)
      */
-    void removeEvent(Event *e, bool ties = true);
+    int removeEvent(Event *e, bool ties = true);
 
     /**
      * Test whether a given Event (in the Segment) is part of
@@ -190,9 +196,12 @@ private:
     /**
      * This method encapsulates all of the logic needed to add and remove events
      * from the selection set.
+     *
+     * Returns the number of events removed (could be > 1 if ties were
+     * encountered)
      */
-    void addRemoveEvent(Event *e, EventFuncPtr insertEraseFn,
-                        bool ties = true);
+    int addRemoveEvent(Event *e, EventFuncPtr insertEraseFn,
+                       bool ties = true);
         
     typedef std::list<EventSelectionObserver *> ObserverSet;
     ObserverSet m_observers;
