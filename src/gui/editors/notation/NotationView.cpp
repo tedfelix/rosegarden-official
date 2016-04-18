@@ -4850,7 +4850,8 @@ NotationView::slotExtendSelectionBackward(bool bar)
 
             if ((*extendFrom)->event()->isa(Note::EventType)) {
                 // #1519: increment cursor for every event selected
-                int count = es->addEvent((*extendFrom)->event());
+                bool forward = false;
+                int count = es->addEvent((*extendFrom)->event(), forward);
                 for (int c = 1; c < count; ++c) slotStepBackward();
             }
         }
@@ -4927,7 +4928,8 @@ NotationView::slotExtendSelectionForward(bool bar)
                 (*extendFrom)->getViewAbsoluteTime() < newTime) {
             if ((*extendFrom)->event()->isa(Note::EventType)) {
                 // #1519: increment cursor for every event selected
-                int count = es->addEvent((*extendFrom)->event());
+                bool forward = true;
+                int count = es->addEvent((*extendFrom)->event(), forward);
                 for (int c = 1; c < count; ++c) slotStepForward();
             }
             ++extendFrom;

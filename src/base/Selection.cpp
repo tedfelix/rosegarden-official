@@ -162,7 +162,7 @@ EventSelection::eraseThisEvent(Event *e)
 }
 
 int
-EventSelection::addRemoveEvent(Event *e, EventFuncPtr insertEraseFn,
+EventSelection::addRemoveEvent(Event *e, EventFuncPtr insertEraseFn, bool forward,
                                bool ties)
 {
     const Segment::const_iterator baseSegmentItr = m_originalSegment.find(e);
@@ -226,7 +226,7 @@ EventSelection::addRemoveEvent(Event *e, EventFuncPtr insertEraseFn,
                 if ((*si)->has(BaseProperties::TIED_BACKWARD)) {
                     // add the event
                     (this->*insertEraseFn)(*si);
-                    counter++;
+                    if (forward) counter++;
 
                     // while looking ahead, we have to keep pushing our
                     // [selection]  search ahead to the end of the most
@@ -270,7 +270,7 @@ EventSelection::addRemoveEvent(Event *e, EventFuncPtr insertEraseFn,
                 if ((*si)->has(BaseProperties::TIED_FORWARD)) {
                     // add the event
                     (this->*insertEraseFn)(*si);
-                    counter++;
+                    if (!forward) counter++;
 
                     // while looking back, we have to keep pushing our
                     // [selection] search back to the end of the most
@@ -296,9 +296,9 @@ EventSelection::removeObserver(EventSelectionObserver *obs) {
 
 
 int
-EventSelection::addEvent(Event *e, bool ties)
+EventSelection::addEvent(Event *e, bool forward, bool ties)
 {
-    return addRemoveEvent(e, &EventSelection::insertThisEvent, ties);
+    return addRemoveEvent(e, &EventSelection::insertThisEvent, forward, ties);
 }
 
 void
@@ -312,9 +312,9 @@ EventSelection::addFromSelection(EventSelection *sel, bool ties)
 }
 
 int
-EventSelection::removeEvent(Event *e, bool ties) 
+EventSelection::removeEvent(Event *e, bool forward, bool ties) 
 {
-    return addRemoveEvent(e, &EventSelection::eraseThisEvent, ties);
+    return addRemoveEvent(e, &EventSelection::eraseThisEvent, forward, ties);
 }
 
 bool
