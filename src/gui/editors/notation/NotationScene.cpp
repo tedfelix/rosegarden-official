@@ -638,7 +638,7 @@ NotationScene::initCurrentStaffIndex(void)
     // any segments from)
     {
         const Track *track = composition.getTrackById(composition.getSelectedTrack());
-        NotationStaff *staff = getStaffbyTrackAndTime(track, targetTime);
+        NotationStaff *staff = track ? getStaffbyTrackAndTime(track, targetTime) : 0;
         if (staff) {
             setCurrentStaff(staff);
             return;
@@ -1503,10 +1503,11 @@ NotationScene::positionStaffs()
             m_staffs[i]->setLegerLineCount(legerLines);
 
             int height = m_staffs[i]->getHeightOfRow();
-            TrackId trackId = m_staffs[i]->getSegment().getTrack();
-            Track *track =
-                m_staffs[i]->getSegment().getComposition()->
-                getTrackById(trackId);
+            Segment &segment = m_staffs[i]->getSegment();
+            TrackId trackId = segment.getTrack();
+            Composition *composition = segment.getComposition();
+            Q_ASSERT(composition);
+            Track *track = composition->getTrackById(trackId);
 
             if (!track)
                 continue; // This Should Not Happen, My Friend
@@ -1873,7 +1874,7 @@ NotationScene::setSelection(EventSelection *s,
     delete oldSelection;
 
     emit selectionChanged(m_selection);
-    emit selectionChanged();
+    emit QGraphicsScene::selectionChanged();
 }
 
 void

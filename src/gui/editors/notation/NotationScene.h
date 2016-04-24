@@ -229,7 +229,7 @@ signals:
 
     void eventRemoved(Event *);
 
-    void selectionChanged();
+    //void selectionChanged(); // defined in QGraphicsScene
     void selectionChanged(EventSelection *);
 
     void layoutUpdated(timeT,timeT);
