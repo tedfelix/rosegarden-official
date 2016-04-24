@@ -121,13 +121,6 @@ ControlRulerWidget::setSegments(RosegardenDocument *document, std::vector<Segmen
     SegmentSelection selection;
     selection.insert(segments.begin(), segments.end());
 
-    delete m_scale;
-
-    setRulerScale(new SegmentsRulerScale(&m_document->getComposition(),
-            selection,
-            0,
-            Note(Note::Shortest).getDuration() / 2.0));
-    
     // This is single segment code
     setSegment(segments[0]);
 }
