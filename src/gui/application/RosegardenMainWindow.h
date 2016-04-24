@@ -455,7 +455,7 @@ protected:
      * This is part of a legacy KDE mechanism, but has been left in place for
      * convenience
      */
-    virtual bool queryClose();
+    bool queryClose();
 
 
  //!!! I left the following code here, but this is related to KDE session

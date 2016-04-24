@@ -1861,14 +1861,13 @@ RosegardenMainWindow::readGlobalProperties()
 #endif
 
 void
-RosegardenMainWindow::showEvent(QShowEvent*)
+RosegardenMainWindow::showEvent(QShowEvent* e)
 {
-    RG_DEBUG << "RosegardenMainWindow::showEvent()\n";
+    RG_DEBUG << "RosegardenMainWindow::showEvent()";
 
     getTransport()->raise();
     
-    //KMainWindow::showEvent(e);  //&&& disabled. a debug function ?
-    //QMainWindow::showEvent(e);
+    QMainWindow::showEvent(e);
 }
 
 bool
@@ -2351,7 +2350,7 @@ RosegardenMainWindow::slotQuit()
 
     Profiles::getInstance()->dump();
 
-    if (queryClose()) close();
+    close(); // this calls closeEvent
 }
 
 void
