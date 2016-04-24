@@ -639,12 +639,12 @@ private:
     /**
      * the list of the views currently connected to the document
      */
-	QList<RosegardenMainViewWidget*> m_viewList;		//@@@ shouldn't this be a ptr: QList<RosegardenMainViewWidget*> instead QList<RosegardenMainViewWidget> ? changed !!
+    QList<RosegardenMainViewWidget*> m_viewList;
 
     /**
      * the list of the edit views currently editing a part of this document
      */
-    QList<EditViewBase*> m_editViewList;	//### added *
+    QList<EditViewBase*> m_editViewList;
 
     /**
      * the modified flag of the current document

@@ -22,11 +22,6 @@
 #include <QWidget>
 #include "base/Event.h"
 
-
-class QWidget;
-class QPaintEvent;
-
-
 namespace Rosegarden
 {
 
@@ -83,10 +78,6 @@ signals:
     /// reflected from the loop ruler
     void dragLoopToPosition(timeT);
 
-/*
-protected:
-    virtual void paintEvent(QPaintEvent *);
-*/
 private:
     //--------------- Data members ---------------------------------
     bool m_invert;

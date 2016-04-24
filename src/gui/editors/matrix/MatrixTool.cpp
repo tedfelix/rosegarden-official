@@ -150,7 +150,7 @@ MatrixTool::findActionInParentView(QString actionName)
 void
 MatrixTool::createMenu()
 {
-    MATRIX_DEBUG << "MatrixTool::createMenu() " << m_rcFileName << " - " << m_menuName << endl;
+    MATRIX_DEBUG << "MatrixTool::createMenu() " << m_rcFileName << " - " << m_menuName;
 
     if (!createGUI(m_rcFileName)) {
         RG_WARNING << "MatrixTool::createMenu(" << m_rcFileName << "): menu creation failed";

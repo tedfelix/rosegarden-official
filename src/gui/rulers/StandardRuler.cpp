@@ -95,8 +95,10 @@ void StandardRuler::setSnapGrid(const SnapGrid *grid)
 
 void StandardRuler::connectRulerToDocPointer(RosegardenDocument *doc)
 {
+    RG_DEBUG << "StandardRuler::connectRulerToDocPointer";
 
-    RG_DEBUG << "StandardRuler::connectRulerToDocPointer" << endl;
+    Q_ASSERT(m_loopRuler);
+    Q_ASSERT(m_markerRuler);
 
     // use the document as a hub for pointer and loop set related signals
     // pointer and loop drag signals are specific to the current view,
@@ -174,12 +176,4 @@ void StandardRuler::updateStandardRuler()
     m_loopRuler->update();
 }
 
-/*
-void StandardRuler::paintEvent(QPaintEvent *e)
-{
-    m_markerRuler->update();
-    m_loopRuler->update();
-    QWidget::paintEvent(e);
-}
-*/
 }

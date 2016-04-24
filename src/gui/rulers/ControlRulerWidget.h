@@ -41,7 +41,7 @@ class ViewSegment;
 class EventSelection;
 class ControllerEventsRuler;
  
-class ControlRulerWidget : public QWidget //, Observer
+class ControlRulerWidget : public QWidget
 {
 Q_OBJECT
 

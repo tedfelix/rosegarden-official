@@ -57,8 +57,6 @@ public:
           const std::string &label = "",
           bool muted = false);
 
-    void setId(TrackId id) { m_id = id; }
-
 private:
     Track(const Track &);
     Track operator=(const Track &);

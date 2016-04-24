@@ -1650,12 +1650,12 @@ Track* Composition::getTrackById(TrackId track) const
     if (i != m_tracks.end())
         return (*i).second;
 
-    std::cerr << "Composition::getTrackById("
+    RG_WARNING << "Composition::getTrackById("
               << track << ") - WARNING - track id not found, this is probably a BUG "
-              << __FILE__ << ":" << __LINE__ << std::endl;
-    std::cerr << "Available track ids are: " << std::endl;
+              << __FILE__ << ":" << __LINE__;
+    NOTATION_DEBUG << "Available track ids are:";
     for (trackconstiterator i = m_tracks.begin(); i != m_tracks.end(); ++i) {
-        std::cerr << (int)(*i).second->getId() << std::endl;
+        NOTATION_DEBUG << (int)(*i).second->getId();
     }
 
     return 0;

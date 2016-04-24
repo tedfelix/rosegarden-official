@@ -56,7 +56,7 @@ SystemFont::loadSystemFont(const SystemFontSpec &spec)
     QString name = spec.first;
     int size = spec.second;
 
-    NOTATION_DEBUG << "SystemFont::loadSystemFont: name is " << name << ", size " << size << endl;
+    NOTATION_DEBUG << "SystemFont::loadSystemFont: name is " << name << ", size " << size;
 
     if (name == "DEFAULT") {
         QFont font;
@@ -96,7 +96,7 @@ SystemFont::loadSystemFont(const SystemFontSpec &spec)
     if (!match || result != FcResultMatch) {
         NOTATION_DEBUG << "SystemFont::loadSystemFont[Xft]: No match for font "
         << name << " (result is " << result
-        << "), falling back on QFont" << endl;
+        << "), falling back on QFont";
         if (match)
             FcPatternDestroy(match);
         goto qfont;
@@ -104,10 +104,10 @@ SystemFont::loadSystemFont(const SystemFontSpec &spec)
 
     FcPatternGetString(match, FC_FAMILY, 0, &matchFamily);
     NOTATION_DEBUG << "SystemFont::loadSystemFont[Xft]: match family is "
-    << (char *)matchFamily << endl;
+    << (char *)matchFamily;
 
     if (QString((char *)matchFamily).toLower() != name.toLower()) {
-        NOTATION_DEBUG << "SystemFont::loadSystemFont[Xft]: Wrong family returned, falling back on QFont" << endl;
+        NOTATION_DEBUG << "SystemFont::loadSystemFont[Xft]: Wrong family returned, falling back on QFont";
         FcPatternDestroy(match);
         goto qfont;
     }
@@ -116,12 +116,12 @@ SystemFont::loadSystemFont(const SystemFontSpec &spec)
     if (!xfont) {
         FcPatternDestroy(match);
         NOTATION_DEBUG << "SystemFont::loadSystemFont[Xft]: Unable to load font "
-        << name << " via Xft, falling back on QFont" << endl;
+        << name << " via Xft, falling back on QFont";
         goto qfont;
     }
 
     NOTATION_DEBUG << "SystemFont::loadSystemFont[Xft]: successfully loaded font "
-                   << name << " through Xft" << endl;
+                   << name << " through Xft";
 
     return new SystemFontXft(dpy, xfont);
 
@@ -144,7 +144,7 @@ qfont:
 
     QFontInfo info(qfont);
 
-    std::cerr << "SystemFont::loadSystemFont[Qt]: wanted family " << name << " at size " << size << ", got family " << info.family() << " (exactMatch " << info.exactMatch() << ")" << std::endl;
+    NOTATION_DEBUG << "SystemFont::loadSystemFont[Qt]: wanted family " << name << " at size " << size << ", got family " << info.family() << " (exactMatch " << info.exactMatch() << ")";
 
     QString family = info.family().toLower();
 
@@ -160,7 +160,7 @@ qfont:
         }
     }
 
-    NOTATION_DEBUG << "SystemFont::loadSystemFont[Qt]: Wrong family returned, failing" << endl;
+    NOTATION_DEBUG << "SystemFont::loadSystemFont[Qt]: Wrong family returned, failing";
     qFontMap[name] = 0;
     return 0;
 }
@@ -174,7 +174,7 @@ SystemFont::unbundleFonts()
     fontFiles << ResourceFinder().getResourceFiles("fonts", "ttf");
     fontFiles << ResourceFinder().getResourceFiles("fonts", "otf");
 
-    NOTATION_DEBUG << "Found font files: " << fontFiles << endl;
+    NOTATION_DEBUG << "Found font files: " << fontFiles;
 
     for (QStringList::const_iterator i = fontFiles.begin();
          i != fontFiles.end(); ++i) {
@@ -198,13 +198,13 @@ SystemFont::addFont(QString fileName)
     if (!FcConfigAppFontAddFile
         (FcConfigGetCurrent(),
          (const FcChar8 *)fileName.toLocal8Bit().data())) {
-        NOTATION_DEBUG << "SystemFont::addFont[Xft]: Failed to add font file " << fileName << " to fontconfig, continuing without it" << endl;
+        NOTATION_DEBUG << "SystemFont::addFont[Xft]: Failed to add font file " << fileName << " to fontconfig, continuing without it";
     } else {
-        NOTATION_DEBUG << "Added font file \"" << fileName << "\" to fontconfig" << endl;
+        NOTATION_DEBUG << "Added font file \"" << fileName << "\" to fontconfig";
     }
 #else
     QFontDatabase::addApplicationFont(fileName);
-    NOTATION_DEBUG << "Added font file \"" << fileName << "\" to Qt font database" << endl;
+    NOTATION_DEBUG << "Added font file \"" << fileName << "\" to Qt font database";
 #endif
 }
 

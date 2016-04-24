@@ -160,8 +160,6 @@ AudioPropertiesPage::slotFoundMountPoint(const QString&,
 void
 AudioPropertiesPage::slotFileDialog()
 {
-    AudioFileManager &afm = m_doc->getAudioFileManager();
-
     QString selectedDirectory = FileDialog::getExistingDirectory(this, tr("Audio Recording Path"), m_path->text());
 
     if (!selectedDirectory.isEmpty()) {

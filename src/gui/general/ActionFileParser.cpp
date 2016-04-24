@@ -550,7 +550,7 @@ ActionFileParser::setMenuText(QString name, QString text)
 bool
 ActionFileParser::addMenuToMenu(QString parent, QString child)
 {
-    RG_DEBUG << "ActionFileParser::addMenuToMenu: " << parent << "," << child << endl;
+    RG_DEBUG << "ActionFileParser::addMenuToMenu:" << parent << "," << child;
     if (parent == "" || child == "") return false;
     QMenu *parentMenu = findMenu(parent);
     QMenu *childMenu = findMenu(child);
@@ -566,7 +566,7 @@ ActionFileParser::addMenuToMenu(QString parent, QString child)
 bool
 ActionFileParser::addMenuToMenubar(QString menuName)
 {
-    RG_DEBUG << "ActionFileParser::addMenuToMenubar: " << menuName << endl;
+    RG_DEBUG << "ActionFileParser::addMenuToMenubar:" << menuName;
     if (menuName == "") return false;
     QMenu *menu = findMenu(menuName);
     if (!menu) return false;
@@ -581,7 +581,7 @@ ActionFileParser::addMenuToMenubar(QString menuName)
 bool
 ActionFileParser::addActionToMenu(QString menuName, QString actionName)
 {
-    RG_DEBUG << "ActionFileParser::addActionToMenu: " << menuName << "," << actionName << endl;
+    RG_DEBUG << "ActionFileParser::addActionToMenu:" << menuName << "," << actionName;
     if (menuName == "" || actionName == "") return false;
     QAction *action = findAction(actionName);
     if (!action) action = findStandardAction(actionName);
@@ -595,7 +595,7 @@ ActionFileParser::addActionToMenu(QString menuName, QString actionName)
 bool
 ActionFileParser::addSeparatorToMenu(QString menuName)
 {
-    RG_DEBUG << "ActionFileParser::addSeparatorToMenu: " << menuName << endl;
+    RG_DEBUG << "ActionFileParser::addSeparatorToMenu:" << menuName;
     if (menuName == "") return false;
     QMenu *menu = findMenu(menuName);
     if (!menu) return false;
@@ -633,7 +633,7 @@ strippedText(QString s)
 bool
 ActionFileParser::addActionToToolbar(QString toolbarName, QString actionName)
 {
-    RG_DEBUG << "ActionFileParser::addActionToToolbar: " << toolbarName << "," << actionName << endl;
+    RG_DEBUG << "ActionFileParser::addActionToToolbar:" << toolbarName << "," << actionName;
     if (toolbarName == "" || actionName == "") return false;
     QAction *action = findAction(actionName);
     if (!action) action = findStandardAction(actionName);
@@ -674,7 +674,7 @@ ActionFileParser::addActionToToolbar(QString toolbarName, QString actionName)
 bool
 ActionFileParser::addSeparatorToToolbar(QString toolbarName)
 {
-    RG_DEBUG << "ActionFileParser::addSeparatorToToolbar: " << toolbarName << endl;
+    RG_DEBUG << "ActionFileParser::addSeparatorToToolbar:" << toolbarName;
     if (toolbarName == "") return false;
     QToolBar *toolbar = findToolbar(toolbarName, Default);
     if (!toolbar) return false;
@@ -880,5 +880,3 @@ ActionFileMenuWrapper::getMenu()
 }
 
 }
-
-

@@ -69,7 +69,7 @@ public:
     virtual void initLayoutToolbar();
     void initRulersToolbar();
     virtual void initStatusBar();
-    virtual timeT getInsertionTime() const;
+    timeT getInsertionTime() const;
     
     bool hasSegment(Segment * seg) const;
 

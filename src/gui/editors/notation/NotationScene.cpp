@@ -354,6 +354,7 @@ NotationScene::setStaffs(RosegardenDocument *document,
     for (std::set<TrackId>::iterator i = trackIds.begin();
          i != trackIds.end(); ++i) {
         Track *track = composition->getTrackById(*i);
+        Q_ASSERT(track);
         m_trackLabels[*i] = track->getLabel();
     }
 

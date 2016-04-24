@@ -28,9 +28,7 @@ const DeviceId Device::CONTROL_DEVICE = 10002;
 
 Device::~Device()
 {
-    SEQUENCER_DEBUG
-        << "~Device"
-        << endl;
+    SEQUENCER_DEBUG << "~Device";
     InstrumentList::iterator it = m_instruments.begin();
     for (; it != m_instruments.end(); ++it) {
         (*it)->sendWholeDeviceDestroyed();

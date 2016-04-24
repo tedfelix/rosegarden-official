@@ -46,23 +46,23 @@ public:
     // Any method passed a fontName argument may throw BadFont or
     // MappingFileReadFailed; any other method may throw NoFontsAvailable
 
-    static NoteFont *getFont(QString fontName, int size);
+    static NoteFont *getFont(const QString &fontName, int size);
 
     // This is called with forceRescan from the startup tester thread;
     // at all other times, the cached results are used
     static std::set<QString> getFontNames(bool forceRescan = false);
-    static std::vector<int> getAllSizes(QString fontName); // sorted
-    static std::vector<int> getScreenSizes(QString fontName); // sorted
+    static std::vector<int> getAllSizes(const QString &fontName); // sorted
+    static std::vector<int> getScreenSizes(const QString &fontName); // sorted
 
     static QString getDefaultFontName();
 
     /// Return the default single staff size (prefers 8)
-    static int getDefaultSize(QString fontName);
+    static int getDefaultSize(const QString &fontName);
 
     /// Return the default multi-staff size (prefers 6)
-    static int getDefaultMultiSize(QString fontName);
+    static int getDefaultMultiSize(const QString &fontName);
 
-    static bool isAvailableInSize(QString fontName, int size);
+    static bool isAvailableInSize(const QString &fontName, int size);
 
 private:
     NoteFontFactory() {}

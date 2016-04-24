@@ -141,7 +141,7 @@ ControlRulerWidget::setSegment(Segment *segment)
     }
     m_segment = segment;
 
-    RG_DEBUG << "ControlRulerWidget::setSegments Widget contains " << m_controlRulerList.size() << " rulers.";
+    RG_DEBUG << "ControlRulerWidget::setSegments Widget contains" << m_controlRulerList.size() << "rulers.";
 
     if (m_controlRulerList.size()) {
         std::list<ControlRuler *>::iterator it;

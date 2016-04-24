@@ -34,13 +34,13 @@ SystemFontQt::renderChar(CharName charName, int glyph, int code,
     success = false;
 
     if (strategy == OnlyGlyphs) {
-	NOTATION_DEBUG << "SystemFontQt::renderChar: OnlyGlyphs strategy not supported by Qt renderer, can't render character " << charName << " (glyph " << glyph << ")" << endl;
-	return QPixmap();
+        NOTATION_DEBUG << "SystemFontQt::renderChar: OnlyGlyphs strategy not supported by Qt renderer, can't render character" << charName << "(glyph" << glyph << ")";
+        return QPixmap();
     }
 
     if (code < 0) {
-	NOTATION_DEBUG << "SystemFontQt::renderChar: Can't render using Qt with only glyph value (" << glyph << ") for character " << charName << ", need a code point" << endl;
-	return QPixmap();
+        NOTATION_DEBUG << "SystemFontQt::renderChar: Can't render using Qt with only glyph value (" << glyph << ") for character" << charName << ", need a code point";
+        return QPixmap();
     }
 
     QFontMetrics metrics(m_font);
@@ -54,9 +54,7 @@ SystemFontQt::renderChar(CharName charName, int glyph, int code,
     painter.setFont(m_font);
     painter.setPen(QColor(Qt::black));
     
-    NOTATION_DEBUG << "NoteFont: Drawing character code "
-		   << code << " for " << charName
-		   << " using QFont" << endl;
+    NOTATION_DEBUG << "NoteFont: Drawing character code" << code << "for" << charName << "using QFont";
 
     painter.drawText(-bounding.x(), -bounding.y(), qc);
     

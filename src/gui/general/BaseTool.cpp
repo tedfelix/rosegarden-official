@@ -38,11 +38,7 @@ BaseTool::BaseTool(const QString& menuName, QObject* parent)
 
 BaseTool::~BaseTool()
 {
-    RG_DEBUG << "BaseTool::~BaseTool()\n";
-
-    //     delete m_menu;
-    //     m_parentView->factory()->removeClient(this);
-    //    m_instance = 0;
+    RG_DEBUG << "BaseTool::~BaseTool()";
 }
 
 void BaseTool::ready()
@@ -54,7 +50,7 @@ void BaseTool::stow()
 void BaseTool::showMenu()
 {
     if (!hasMenu())
-        return ;
+        return;
 
     if (!m_menu)
         createMenu();
@@ -62,7 +58,7 @@ void BaseTool::showMenu()
     if (m_menu)
         m_menu->exec(QCursor::pos());
     else
-        RG_DEBUG << "BaseTool::showMenu() : no menu to show\n";
+        RG_DEBUG << "BaseTool::showMenu() : no menu to show";
 }
 
 QString BaseTool::getCurrentContextHelp() const
