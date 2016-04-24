@@ -339,7 +339,7 @@ MatrixWidget::~MatrixWidget()
 
 void
 MatrixWidget::setSegments(RosegardenDocument *document,
-			  std::vector<Segment *> segments)
+                          std::vector<Segment *> segments)
 {
     if (m_document) {
         disconnect(m_document, SIGNAL(pointerPositionChanged(timeT)),

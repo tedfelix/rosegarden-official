@@ -105,9 +105,6 @@ public:
     void turnRepeatingSegmentToRealCopies();
     void turnLinkedSegmentsToRealCopies();
 
-    // Add a new segment - DCOP interface
-    //virtual void addSegment(int track, int start, unsigned int duration);
-
 public slots:
 
     /// Scroll the view such that the numbered track is on-screen
