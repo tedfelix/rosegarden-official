@@ -63,6 +63,8 @@ ResourceFinder::getSystemResourcePrefixList()
 {
     // returned in order of priority
 
+    // Qt5: use QStandardPaths::standardLocations(QStandardPaths::GenericDataLocation)
+
     QStringList list;
 
     static const char *prefixes[] = { "/usr/local/share", "/usr/share" };
@@ -85,13 +87,15 @@ ResourceFinder::getUserResourcePrefix()
 {
     static const char *homepath = ".local/share";
     static const char *appname = "rosegarden";
-    char *home = getenv("HOME");
+    const QString home = QDir::homePath();
 
-    if (home) {
-        return QString("%1/%2/%3").arg(home).arg(homepath).arg(appname);
+    // Qt5: use QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + "/rosegarden";
+
+    if (!home.isEmpty()) {
+        return home + '/' + QString(homepath) + '/' + QString(appname);
     } else {
         RG_WARNING << "ResourceFinder::getUserResourcePrefix: ERROR: No home directory available?";
-        return "";
+        return QString();
     }
 }
 
@@ -103,7 +107,7 @@ ResourceFinder::getResourcePrefixList()
     QStringList list;
 
     QString user = getUserResourcePrefix();
-    if (user != "") list << user;
+    if (!user.isEmpty()) list << user;
 
     list << getSystemResourcePrefixList();
 
@@ -113,34 +117,29 @@ ResourceFinder::getResourcePrefixList()
 }
 
 QString
-ResourceFinder::getResourcePath(QString resourceCat, QString fileName)
+ResourceFinder::getResourcePath(QString resourceCat, const QString &fileName)
 {
     // We don't simply call getResourceDir here, because that returns
     // only the "installed file" location.  We also want to search the
     // bundled resources and user-saved files.
 
-    QStringList prefixes = getResourcePrefixList();
+    const QStringList prefixes = getResourcePrefixList();
     
-    if (resourceCat != "") resourceCat = "/" + resourceCat;
+    if (!resourceCat.isEmpty()) resourceCat.prepend('/');
 
-    for (QStringList::const_iterator i = prefixes.begin();
-         i != prefixes.end(); ++i) {
-        
-        QString prefix = *i;
+    foreach (const QString &prefix, prefixes) {
+        //RG_DEBUG << "ResourceFinder::getResourcePath: Looking up file \"" << fileName << "\" for category \"" << resourceCat << "\" in prefix \"" << prefix << "\"";
 
-        RG_DEBUG << "ResourceFinder::getResourcePath: Looking up file \"" << fileName << "\" for category \"" << resourceCat << "\" in prefix \"" << prefix << "\"" << endl;
-
-        QString path =
-            QString("%1%2/%3").arg(prefix).arg(resourceCat).arg(fileName);
-        if (QFileInfo(path).exists() && QFileInfo(path).isReadable()) {
-            RG_DEBUG << "Found it!" << endl;
+        const QString path = prefix + resourceCat + '/' + fileName;
+        if (QFileInfo(path).isReadable()) {
+            //RG_DEBUG << "Found it!";
             return path;
         }
     }
 
     RG_WARNING << "getResourcePath(): Resource file \"" << fileName << "\" for category \"" << resourceCat << "\" not found.";
 
-    return "";
+    return QString();
 }
 
 QString
@@ -148,32 +147,29 @@ ResourceFinder::getResourceDir(QString resourceCat)
 {
     // Returns only the "installed file" location
 
-    QStringList prefixes = getSystemResourcePrefixList();
+    const QStringList prefixes = getSystemResourcePrefixList();
     
-    if (resourceCat != "") resourceCat = "/" + resourceCat;
+    if (!resourceCat.isEmpty()) resourceCat.prepend('/');
 
-    for (QStringList::const_iterator i = prefixes.begin();
-         i != prefixes.end(); ++i) {
-        
-        QString prefix = *i;
-        QString path = QString("%1%2").arg(prefix).arg(resourceCat);
-        if (QFileInfo(path).exists() &&
-            QFileInfo(path).isDir() &&
-            QFileInfo(path).isReadable()) {
+    foreach (const QString &prefix, prefixes) {
+        const QString path = prefix + resourceCat;
+        const QFileInfo fileInfo(path);
+        if (fileInfo.isDir() &&
+            fileInfo.isReadable()) {
             return path;
         }
     }
 
-    return "";
+    return QString();
 }
 
 QString
 ResourceFinder::getResourceSavePath(QString resourceCat, QString fileName)
 {
-    QString dir = getResourceSaveDir(resourceCat);
-    if (dir == "") return "";
+    const QString dir = getResourceSaveDir(resourceCat);
+    if (dir.isEmpty()) return QString();
 
-    return dir + "/" + fileName;
+    return dir + '/' + fileName;
 }
 
 QString
@@ -181,16 +177,16 @@ ResourceFinder::getResourceSaveDir(QString resourceCat)
 {
     // Returns the "user" location
 
-    QString user = getUserResourcePrefix();
-    if (user == "") return "";
+    const QString user = getUserResourcePrefix();
+    if (user.isEmpty()) return QString();
 
-    if (resourceCat != "") resourceCat = "/" + resourceCat;
+    if (!resourceCat.isEmpty()) resourceCat.prepend('/');
 
     QDir userDir(user);
     if (!userDir.exists()) {
         if (!userDir.mkpath(user)) {
             RG_WARNING << "ResourceFinder::getResourceSaveDir: ERROR: Failed to create user resource path \"" << user << "\"";
-            return "";
+            return QString();
         }
     }
 
@@ -200,7 +196,7 @@ ResourceFinder::getResourceSaveDir(QString resourceCat)
         if (!saveDir.exists()) {
             if (!userDir.mkpath(save)) {
                 RG_WARNING << "ResourceFinder::getResourceSaveDir: ERROR: Failed to create user resource path \"" << save << "\"";
-                return "";
+                return QString();
             }
         }
         return save;
@@ -216,16 +212,12 @@ ResourceFinder::getResourceFiles(QString resourceCat, QString fileExt)
     QStringList prefixes = getResourcePrefixList();
 
     QStringList filters;
-    filters << QString("*.%1").arg(fileExt);
+    filters << QString("*.") + fileExt;
 
-    for (QStringList::const_iterator i = prefixes.begin();
-         i != prefixes.end(); ++i) {
-        
-        QString prefix = *i;
+    foreach (const QString &prefix, prefixes) {
         QString path;
-
-        if (resourceCat != "") {
-            path = QString("%1/%2").arg(prefix).arg(resourceCat);
+        if (!resourceCat.isEmpty()) {
+            path = prefix + '/' + resourceCat;
         } else {
             path = prefix;
         }
@@ -269,7 +261,7 @@ ResourceFinder::unbundleResource(QString resourceCat, QString fileName)
     // This is the lowest-priority alternative path for this
     // resource, so we know that there must be no installed copy.
     // Install one to the user location.
-    RG_DEBUG << "ResourceFinder::unbundleResource: File " << fileName << " is bundled, un-bundling it" << endl;
+    RG_DEBUG << "ResourceFinder::unbundleResource: File " << fileName << " is bundled, un-bundling it";
     QString target = getResourceSavePath(resourceCat, fileName);
     QFile file(path);
     if (!file.copy(target)) {

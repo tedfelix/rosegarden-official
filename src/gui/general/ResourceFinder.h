@@ -41,7 +41,7 @@ public:
      * Use this when you know that a particular resource is required
      * and just need to locate it.
      */
-    QString getResourcePath(QString resourceCat, QString fileName);
+    QString getResourcePath(QString resourceCat, const QString &fileName);
 
     /**
      * Return a list of full file paths for files with the given file
