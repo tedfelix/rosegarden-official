@@ -4816,11 +4816,7 @@ NotationView::slotExtendSelectionBackward(bool bar)
     NotationStaff *currentStaff = m_notationWidget->getScene()->getCurrentStaff();
     if (!currentStaff) return;
 
-    // ho ho, there is no NotationViewSegment whatever because a NotationStaff
-    // is a subclass of ViewSegment
-    ViewSegment *vs = dynamic_cast<ViewSegment*>(currentStaff);
-
-    ViewElementList *vel = vs->getViewElementList(); 
+    ViewElementList *vel = currentStaff->getViewElementList();
     EventSelection *s = getSelection();
     EventSelection *es = new EventSelection(*segment);
 
@@ -4908,11 +4904,7 @@ NotationView::slotExtendSelectionForward(bool bar)
     NotationStaff *currentStaff = m_notationWidget->getScene()->getCurrentStaff();
     if (!currentStaff) return;
 
-    // ho ho, there is no NotationViewSegment whatever because a NotationStaff
-    // is a subclass of ViewSegment
-    ViewSegment *vs = dynamic_cast<ViewSegment*>(currentStaff);
-
-    ViewElementList *vel = vs->getViewElementList(); 
+    ViewElementList *vel = currentStaff->getViewElementList();
     EventSelection *s = getSelection();
     EventSelection *es = new EventSelection(*segment);
 
