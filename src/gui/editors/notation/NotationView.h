@@ -95,10 +95,6 @@ signals:
     void panic();
     void editTriggerSegment(int);
     void stepByStepTargetRequested(QObject *);
-    void changeTempo(timeT,  // tempo change time
-                     tempoT,  // tempo value
-                     tempoT,  // target value
-                     TempoDialog::TempoDialogAction); // tempo action
 
 protected:
     virtual void readOptions();

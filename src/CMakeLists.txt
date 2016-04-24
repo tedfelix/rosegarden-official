@@ -355,6 +355,7 @@ set(rg_CPPS
   gui/general/ThornStyle.cpp
   gui/general/ProjectPackager.cpp
   gui/general/FileSource.cpp
+  gui/general/EditTempoController.cpp
   gui/rulers/ControlItem.cpp
   gui/rulers/DefaultVelocityColour.cpp
   gui/rulers/ControllerEventsRuler.cpp

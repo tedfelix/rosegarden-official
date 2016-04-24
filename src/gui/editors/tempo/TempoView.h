@@ -42,7 +42,7 @@ namespace Rosegarden
 class Segment;
 class RosegardenDocument;
 class Composition;
-
+class EditTempoController;
 
 /**
  * Tempo and time signature list-style editor.  This has some code
@@ -63,7 +63,7 @@ class TempoView : public ListEditView, public CompositionObserver
     };
 
 public:
-    TempoView(RosegardenDocument *doc, QWidget *parent, timeT);
+    TempoView(RosegardenDocument *doc, QWidget *parent, EditTempoController *editTempoController, timeT openTime);
     virtual ~TempoView();
 
     virtual bool applyLayout(int staffNo = -1);
@@ -93,12 +93,6 @@ public:
     virtual void tempoChanged(const Composition *);
 
 signals:
-    // forwarded from tempo dialog:
-    void changeTempo(timeT,  // tempo change time
-                     tempoT,  // tempo value
-                     tempoT,  // tempo target
-                     TempoDialog::TempoDialogAction); // tempo action
-
     void closing();
 
 public slots:
@@ -135,16 +129,17 @@ protected slots:
     virtual void slotSaveOptions();
 
 protected:
+    virtual void closeEvent(QCloseEvent *);
 
+private:
     virtual void readOptions();
     void makeInitialSelection(timeT);
     QString makeTimeString(timeT time, int timeMode);
     virtual Segment *getCurrentSegment();
     virtual void updateViewCaption();
 
-    virtual void closeEvent(QCloseEvent *);
-
     //--------------- Data members ---------------------------------
+    EditTempoController *m_editTempoController;
     QTreeWidget   *m_list;
     int          m_filter;
 

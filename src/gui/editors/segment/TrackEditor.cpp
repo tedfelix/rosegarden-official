@@ -139,12 +139,10 @@ TrackEditor::init(RosegardenMainViewWidget *mainViewWidget)
 
     m_tempoRuler = new TempoRuler(m_rulerScale,
                                   m_doc,
-                                  RosegardenMainWindow::self(),
                                   0.0,
                                   24,
                                   true,
                                   this);
-    m_tempoRuler->connectSignals();
     grid->addWidget(m_tempoRuler, 1, 1);
 
     m_topStandardRuler = new StandardRuler(m_doc,

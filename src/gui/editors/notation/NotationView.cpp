@@ -133,6 +133,7 @@
 
 #include "gui/dialogs/CheckForParallelsDialog.h"
 
+#include "gui/general/EditTempoController.h"
 #include "gui/general/IconLoader.h"
 #include "gui/general/LilyPondProcessor.h"
 #include "gui/general/PresetHandlerDialog.h"
@@ -3491,29 +3492,11 @@ NotationView::slotToggleTempoRuler()
     settings.endGroup();
 }
 
-// start of code formerly located in EditView.cpp
-// --
-
 void
 NotationView::slotAddTempo()
 {
-    timeT insertionTime = getInsertionTime();
-
-    TempoDialog tempoDlg(this, getDocument());
-
-    connect(&tempoDlg,
-             SIGNAL(changeTempo(timeT,
-                    tempoT,
-                    tempoT,
-                    TempoDialog::TempoDialogAction)),
-                    this,
-                    SIGNAL(changeTempo(timeT,
-                           tempoT,
-                           tempoT,
-                           TempoDialog::TempoDialogAction)));
-
-    tempoDlg.setTempoPosition(insertionTime);
-    tempoDlg.exec();
+    const timeT insertionTime = getInsertionTime();
+    EditTempoController::self()->editTempo(this, insertionTime);
 }
 
 void

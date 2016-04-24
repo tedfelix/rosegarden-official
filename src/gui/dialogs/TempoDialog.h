@@ -20,11 +20,9 @@
 #define RG_TEMPODIALOG_H
 
 #include <QDialog>
-#include "base/Event.h"
-#include "base/Composition.h"
-#include <QPushButton>
-#include <QDateTime>
-
+#include <QTime>
+#include "base/Composition.h" // for tempoT (TODO: should move to a small header like basetypes.h)
+#include "base/Event.h" // for timeT (TODO: same)
 
 class QWidget;
 class QString;
@@ -32,7 +30,7 @@ class QRadioButton;
 class QLabel;
 class QCheckBox;
 class QDoubleSpinBox;
-
+class QPushButton;
 
 namespace Rosegarden
 {

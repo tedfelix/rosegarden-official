@@ -54,7 +54,6 @@
 #include "commands/notation/KeyInsertionCommand.h"
 #include "commands/segment/AddTempoChangeCommand.h"
 #include "commands/segment/AddTimeSignatureAndNormalizeCommand.h"
-#include "commands/segment/AddTimeSignatureCommand.h"
 #include "commands/segment/AudioSegmentAutoSplitCommand.h"
 #include "commands/segment/AudioSegmentRescaleCommand.h"
 #include "commands/segment/AudioSegmentSplitCommand.h"
@@ -121,9 +120,7 @@
 #include "gui/dialogs/RescaleDialog.h"
 #include "gui/dialogs/SplitByPitchDialog.h"
 #include "gui/dialogs/SplitByRecordingSrcDialog.h"
-#include "gui/dialogs/TempoDialog.h"
 #include "gui/dialogs/TimeDialog.h"
-#include "gui/dialogs/TimeSignatureDialog.h"
 #include "gui/dialogs/TransportDialog.h"
 #include "gui/editors/parameters/InstrumentParameterBox.h"
 #include "gui/editors/parameters/RosegardenParameterArea.h"
@@ -145,6 +142,7 @@
 #include "gui/editors/segment/TriggerSegmentManager.h"
 #include "gui/editors/tempo/TempoView.h"
 #include "gui/general/EditViewBase.h"
+#include "gui/general/EditTempoController.h"
 #include "gui/general/IconLoader.h"
 #include "gui/general/FileSource.h"
 #include "gui/general/ResourceFinder.h"
@@ -295,6 +293,7 @@ RosegardenMainWindow::RosegardenMainWindow(bool useSequencer,
     m_pluginGUIManager(new AudioPluginOSCGUIManager(this)),
     m_updateUITimer(new QTimer(this)),
     m_inputTimer(new QTimer(this)),
+    m_editTempoController(new EditTempoController(this)),
     m_startupTester(0),
     m_firstRun(false),
     m_haveAudioImporter(false),
@@ -318,6 +317,9 @@ RosegardenMainWindow::RosegardenMainWindow(bool useSequencer,
                          startupStatusMessageReceiver,
                          SLOT(slotShowStatusMessage(QString)));
     }
+
+    connect(m_editTempoController, SIGNAL(editTempos(timeT)),
+            this, SLOT(slotEditTempos(timeT)));
 
     if (m_useSequencer) {
         emit startupStatusMessage(tr("Starting sequencer..."));
@@ -1341,6 +1343,7 @@ RosegardenMainWindow::setDocument(RosegardenDocument* newDocument)
     m_trackParameterBox->setDocument(m_doc);
     m_segmentParameterBox->setDocument(m_doc);
     m_instrumentParameterBox->setDocument(m_doc);
+    m_editTempoController->setDocument(m_doc);
 
     if (m_pluginGUIManager) {
         m_pluginGUIManager->stopAllGUIs();
@@ -3213,7 +3216,6 @@ RosegardenMainWindow::slotCreateAnacrusis()
                     comp.getTempoChangeNumberAt(compOrigStart)));
 
         CommandHistory::getInstance()->addCommand(macro);
-
     }
 }
 
@@ -6205,22 +6207,8 @@ RosegardenMainWindow::slotEditTempo(QWidget *parent)
 void
 RosegardenMainWindow::slotEditTempo(QWidget *parent, timeT atTime)
 {
-    RG_DEBUG << "RosegardenMainWindow::slotEditTempo\n";
-
-    TempoDialog tempoDialog(parent, m_doc);
-
-    connect(&tempoDialog,
-            SIGNAL(changeTempo(timeT,
-                               tempoT,
-                               tempoT,
-                               TempoDialog::TempoDialogAction)),
-            SLOT(slotChangeTempo(timeT,
-                                 tempoT,
-                                 tempoT,
-                                 TempoDialog::TempoDialogAction)));
-
-    tempoDialog.setTempoPosition(atTime);
-    tempoDialog.exec();
+    RG_DEBUG << "RosegardenMainWindow::slotEditTempo";
+    m_editTempoController->editTempo(parent, atTime);
 }
 
 void
@@ -6245,26 +6233,7 @@ void
 RosegardenMainWindow::slotEditTimeSignature(QWidget *parent,
         timeT time)
 {
-    Composition &composition(m_doc->getComposition());
-
-    TimeSignature sig = composition.getTimeSignatureAt(time);
-
-    TimeSignatureDialog dialog(parent, &composition, time, sig);
-
-    if (dialog.exec() == QDialog::Accepted) {
-
-        time = dialog.getTime();
-
-        if (dialog.shouldNormalizeRests()) {
-            CommandHistory::getInstance()->addCommand
-            (new AddTimeSignatureAndNormalizeCommand
-             (&composition, time, dialog.getTimeSignature()));
-        } else {
-            CommandHistory::getInstance()->addCommand
-            (new AddTimeSignatureCommand
-             (&composition, time, dialog.getTimeSignature()));
-        }
-    }
+    m_editTempoController->editTimeSignature(parent, time);
 }
 
 void
@@ -6325,119 +6294,6 @@ void
 RosegardenMainWindow::slotZoomOut()
 {
     m_zoomSlider->decrement();
-}
-
-void
-RosegardenMainWindow::slotChangeTempo(timeT time,
-                                  tempoT value,
-                                  tempoT target,
-                                  TempoDialog::TempoDialogAction action)
-{
-    //!!! handle target
-
-    Composition &comp = m_doc->getComposition();
-
-    // We define a macro command here and build up the command
-    // label as we add commands on.
-    //
-    if (action == TempoDialog::AddTempo) {
-        CommandHistory::getInstance()->addCommand
-        (new AddTempoChangeCommand(&comp, time, value, target));
-    } else if (action == TempoDialog::ReplaceTempo) {
-        int index = comp.getTempoChangeNumberAt(time);
-
-        // if there's no previous tempo change then just set globally
-        //
-        if (index == -1) {
-            CommandHistory::getInstance()->addCommand
-            (new AddTempoChangeCommand(&comp, 0, value, target));
-            return ;
-        }
-
-        // get time of previous tempo change
-        timeT prevTime = comp.getTempoChange(index).first;
-
-        MacroCommand *macro =
-            new MacroCommand(tr("Replace Tempo Change at %1").arg(time));
-
-        macro->addCommand(new RemoveTempoChangeCommand(&comp, index));
-        macro->addCommand(new AddTempoChangeCommand(&comp, prevTime, value,
-                          target));
-
-        CommandHistory::getInstance()->addCommand(macro);
-
-    } else if (action == TempoDialog::AddTempoAtBarStart) {
-        CommandHistory::getInstance()->addCommand(new
-                                               AddTempoChangeCommand(&comp, comp.getBarStartForTime(time),
-                                                                     value, target));
-    } else if (action == TempoDialog::GlobalTempo ||
-               action == TempoDialog::GlobalTempoWithDefault) {
-        MacroCommand *macro = new MacroCommand(tr("Set Global Tempo"));
-
-        // Remove all tempo changes in reverse order so as the index numbers
-        // don't becoming meaningless as the command gets unwound.
-        //
-        for (int i = 0; i < comp.getTempoChangeCount(); i++)
-            macro->addCommand(new RemoveTempoChangeCommand(&comp,
-                              (comp.getTempoChangeCount() - 1 - i)));
-
-        // add tempo change at time zero
-        //
-        macro->addCommand(new AddTempoChangeCommand(&comp, 0, value, target));
-
-        // are we setting default too?
-        //
-        if (action == TempoDialog::GlobalTempoWithDefault) {
-            macro->setName(tr("Set Global and Default Tempo"));
-            macro->addCommand(new ModifyDefaultTempoCommand(&comp, value));
-        }
-
-        CommandHistory::getInstance()->addCommand(macro);
-
-    } else {
-        RG_DEBUG << "RosegardenMainWindow::slotChangeTempo() - "
-        << "unrecognised tempo command" << endl;
-    }
-}
-
-void
-RosegardenMainWindow::slotMoveTempo(timeT oldTime,
-                                timeT newTime)
-{
-    Composition &comp = m_doc->getComposition();
-    int index = comp.getTempoChangeNumberAt(oldTime);
-
-    if (index < 0)
-        return ;
-
-    MacroCommand *macro =
-        new MacroCommand(tr("Move Tempo Change"));
-
-    std::pair<timeT, tempoT> tc =
-        comp.getTempoChange(index);
-    std::pair<bool, tempoT> tr =
-        comp.getTempoRamping(index, false);
-
-    macro->addCommand(new RemoveTempoChangeCommand(&comp, index));
-    macro->addCommand(new AddTempoChangeCommand(&comp,
-                      newTime,
-                      tc.second,
-                      tr.first ? tr.second : -1));
-
-    CommandHistory::getInstance()->addCommand(macro);
-}
-
-void
-RosegardenMainWindow::slotDeleteTempo(timeT t)
-{
-    Composition &comp = m_doc->getComposition();
-    int index = comp.getTempoChangeNumberAt(t);
-
-    if (index < 0)
-        return ;
-
-    CommandHistory::getInstance()->addCommand(new RemoveTempoChangeCommand
-                                           (&comp, index));
 }
 
 void
@@ -7427,24 +7283,13 @@ RosegardenMainWindow::slotEditTempos(timeT t)
         return ;
     }
 
-    m_tempoView = new TempoView(m_doc, getView(), t);
+    m_tempoView = new TempoView(m_doc, getView(), m_editTempoController, t);
 
     connect(m_tempoView, SIGNAL(closing()),
             SLOT(slotTempoViewClosed()));
 
     connect(m_tempoView, SIGNAL(windowActivated()),
             getView(), SLOT(slotActiveMainWindowChanged()));
-
-    connect(m_tempoView,
-            SIGNAL(changeTempo(timeT,
-                               tempoT,
-                               tempoT,
-                               TempoDialog::TempoDialogAction)),
-            this,
-            SLOT(slotChangeTempo(timeT,
-                                 tempoT,
-                                 tempoT,
-                                 TempoDialog::TempoDialogAction)));
 
     connect(m_tempoView, SIGNAL(saveFile()), this, SLOT(slotFileSave()));
 

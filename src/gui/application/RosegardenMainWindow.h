@@ -89,6 +89,7 @@ class AudioPluginManager;
 class AudioPluginDialog;
 class AudioMixerWindow;
 class AudioManagerDialog;
+class EditTempoController;
 class SequencerThread;
 class TranzportClient;
 class WarningWidget;
@@ -1349,25 +1350,6 @@ public slots:
     void slotZoomOut();
 
     /**
-     * Modify tempo
-     */
-    void slotChangeTempo(timeT time,
-                         tempoT value,      
-                         tempoT target,
-                         TempoDialog::TempoDialogAction action);
-
-    /**
-     * Move a tempo change
-     */
-    void slotMoveTempo(timeT oldTime,
-                       timeT newTime);
-
-    /**
-     * Remove a tempo change
-     */
-    void slotDeleteTempo(timeT time);
-
-    /**
      * Add marker
      */
     void slotAddMarker(timeT time);
@@ -1611,7 +1593,6 @@ protected slots:
     void setupRecentFilesMenu();
 
 private:
-
     /** Use QTemporaryFile to obtain a tmp filename that is guaranteed to be
      * unique
      */
@@ -1732,6 +1713,8 @@ private:
 
     QTimer *m_updateUITimer;
     QTimer *m_inputTimer;
+
+    EditTempoController *m_editTempoController;
 
     StartupTester *m_startupTester;
 

@@ -35,12 +35,11 @@ class QMenu;
 class QPaintEvent;
 class QMouseEvent;
 class QEvent;
-class QMainWindow;
-
 
 namespace Rosegarden
 {
 
+class EditTempoController;
 class RulerScale;
 class RosegardenDocument;
 class Composition;
@@ -65,7 +64,6 @@ public:
      */
     TempoRuler(RulerScale *rulerScale,
                RosegardenDocument *doc,
-               QMainWindow *parentMainWindow,
                double xorigin = 0.0,
                int height = 0,
                bool small = false,
@@ -77,25 +75,6 @@ public:
     virtual QSize minimumSizeHint() const;
 
     void setMinimumWidth(int width) { m_width = width; }
-
-    void connectSignals();
-
-signals:
-    void doubleClicked(timeT);
-
-    void changeTempo(timeT,  // tempo change time
-                     tempoT,  // tempo value
-                     tempoT,  // tempo target
-                     TempoDialog::TempoDialogAction); // tempo action
-
-    void moveTempo(timeT, // old time
-                   timeT); // new time
-
-    void deleteTempo(timeT);
-
-    void editTempo(timeT);
-    void editTimeSignature(timeT);
-    void editTempos(timeT);
 
 public slots:
     void slotScrollHoriz(int x);
@@ -157,7 +136,7 @@ private:
     Composition *m_composition;
     RulerScale  *m_rulerScale;
     QMenu       *m_menu;
-    QMainWindow *m_parentMainWindow;
+    EditTempoController *m_editTempoController;
 
     QFont        m_font;
     QFont        m_boldFont;

@@ -512,7 +512,6 @@ NotationWidget::setSegments(RosegardenDocument *document,
 
     m_tempoRuler = new TempoRuler(m_referenceScale,
                                   document,
-                                  RosegardenMainWindow::self(),
                                   0,      // xorigin
                                   24,     // height
                                   true,   // small
@@ -550,8 +549,6 @@ NotationWidget::setSegments(RosegardenDocument *document,
 
     m_topStandardRuler->connectRulerToDocPointer(document);
     m_bottomStandardRuler->connectRulerToDocPointer(document);
-
-    m_tempoRuler->connectSignals();
 
     m_chordNameRuler->setReady();
 

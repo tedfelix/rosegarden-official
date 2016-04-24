@@ -408,19 +408,6 @@ RosegardenMainViewWidget::createNotationView(std::vector<Segment *> segmentsToEd
     NotationView *notationView =
         new NotationView(getDocument(), segmentsToEdit, this);
 
-    // For tempo changes (ugh -- it'd be nicer to make a tempo change
-    // command that could interpret all this stuff from the dialog)
-    //
-    connect(notationView, SIGNAL(changeTempo(timeT,
-                                 tempoT,
-                                 tempoT,
-                                 TempoDialog::TempoDialogAction)),
-            RosegardenMainWindow::self(), SLOT(slotChangeTempo(timeT,
-                                           tempoT,
-                                           tempoT,
-                                           TempoDialog::TempoDialogAction)));
-
-
     connect(notationView, SIGNAL(windowActivated()),
             this, SLOT(slotActiveMainWindowChanged()));
 
@@ -459,8 +446,6 @@ RosegardenMainViewWidget::createNotationView(std::vector<Segment *> segmentsToEd
     //        this, SLOT(slotChangeTrackLabel(TrackId, QString)));
     connect(notationView, SIGNAL(toggleSolo(bool)),
             RosegardenMainWindow::self(), SLOT(slotToggleSolo(bool)));
-    //connect(notationView, SIGNAL(editTimeSignature(timeT)),
-    //        RosegardenMainWindow::self(), SLOT(slotEditTempos(timeT)));
 
     SequenceManager *sM = getDocument()->getSequenceManager();
 
@@ -575,20 +560,6 @@ RosegardenMainViewWidget::createPitchTrackerView(std::vector<Segment *> segments
     PitchTrackerView *pitchTrackerView =
         new PitchTrackerView(getDocument(), segmentsToEdit, this);
 
-
-    // For tempo changes (ugh -- it'd be nicer to make a tempo change
-    // command that could interpret all this stuff from the dialog)
-    //
-    connect(pitchTrackerView, SIGNAL(changeTempo(timeT,
-                                 tempoT,
-                                 tempoT,
-                                 TempoDialog::TempoDialogAction)),
-            RosegardenMainWindow::self(), SLOT(slotChangeTempo(timeT,
-                                           tempoT,
-                                           tempoT,
-                                           TempoDialog::TempoDialogAction)));
-
-
     connect(pitchTrackerView, SIGNAL(windowActivated()),
             this, SLOT(slotActiveMainWindowChanged()));
 
@@ -634,8 +605,6 @@ RosegardenMainViewWidget::createPitchTrackerView(std::vector<Segment *> segments
     //        this, SLOT(slotChangeTrackLabel(TrackId, QString)));
     connect(pitchTrackerView, SIGNAL(toggleSolo(bool)),
             RosegardenMainWindow::self(), SLOT(slotToggleSolo(bool)));
-    //connect(pitchTrackerView, SIGNAL(editTimeSignature(timeT)),
-    //        RosegardenMainWindow::self(), SLOT(slotEditTempos(timeT)));
 
     SequenceManager *sM = getDocument()->getSequenceManager();
 
@@ -792,18 +761,6 @@ RosegardenMainViewWidget::createMatrixView(std::vector<Segment *> segmentsToEdit
                                                   drumMode,
                                                   this);
 
-    // For tempo changes (ugh -- it'd be nicer to make a tempo change
-    // command that could interpret all this stuff from the dialog)
-    //
-    connect(matrixView, SIGNAL(changeTempo(timeT,
-                                           tempoT,
-                                           tempoT,
-                                           TempoDialog::TempoDialogAction)),
-            RosegardenMainWindow::self(), SLOT(slotChangeTempo(timeT,
-                                           tempoT,
-                                           tempoT,
-                                           TempoDialog::TempoDialogAction)));
-
     connect(matrixView, SIGNAL(windowActivated()),
             this, SLOT(slotActiveMainWindowChanged()));
 
@@ -839,8 +796,6 @@ RosegardenMainViewWidget::createMatrixView(std::vector<Segment *> segmentsToEdit
             this, SLOT(slotEditTriggerSegment(int)));
     connect(matrixView, SIGNAL(toggleSolo(bool)),
             RosegardenMainWindow::self(), SLOT(slotToggleSolo(bool)));
-    //connect(matrixView, SIGNAL(editTimeSignature(timeT)),
-    //        RosegardenMainWindow::self(), SLOT(slotEditTempos(timeT)));
 
     SequenceManager *sM = getDocument()->getSequenceManager();
 
