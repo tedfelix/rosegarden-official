@@ -62,7 +62,7 @@ FileDialog::FileDialog(QWidget *parent,
     QString templates = home + "/.local/share/rosegarden/templates";
     QString rosegarden = home + "/rosegarden";
 
-    RG_DEBUG  << "FileDialog::FileDialog(...)" << endl
+    RG_DEBUG  << "FileDialog::FileDialog(...)"
               << "     using paths:  examples: " << examples << endl
               << "                  templates: " << templates << endl
               << "                 rosegarden: " << rosegarden << endl;

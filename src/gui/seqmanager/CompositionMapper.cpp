@@ -32,7 +32,7 @@ namespace Rosegarden
 CompositionMapper::CompositionMapper(RosegardenDocument *doc) :
     m_doc(doc)
 {
-    SEQMAN_DEBUG << "CompositionMapper() - doc = " << doc << endl;
+    SEQMAN_DEBUG << "CompositionMapper() - doc = " << doc;
 
     Composition &comp = m_doc->getComposition();
 
@@ -111,7 +111,7 @@ CompositionMapper::segmentDeleted(Segment *segment)
     // suspect.  However, I believe there is no operator<< for SegmentMapper.
     // In that case, this should do nothing more than write out the pointer
     // value.  Uncomment this line of code at your own risk.
-//    SEQMAN_DEBUG << "CompositionMapper::segmentDeleted() : releasing SegmentMapper " << mapper << endl;
+//    SEQMAN_DEBUG << "CompositionMapper::segmentDeleted() : releasing SegmentMapper " << mapper;
 
     mapper->removeOwner();
 }

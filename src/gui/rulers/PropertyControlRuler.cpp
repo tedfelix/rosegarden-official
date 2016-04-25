@@ -342,7 +342,7 @@ PropertyControlRuler::endMarkerTimeChanged(const Segment *s, bool)
 {
     timeT endMarkerTime = s->getEndMarkerTime();
 
-    RG_DEBUG << "PropertyControlRuler::endMarkerTimeChanged() " << endMarkerTime << endl;
+    RG_DEBUG << "PropertyControlRuler::endMarkerTimeChanged() " << endMarkerTime;
 
 //    clearSelectedItems();
 //    clear();

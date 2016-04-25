@@ -159,7 +159,7 @@ TriggerSegmentManager::TriggerSegmentManager(QWidget *parent,
 
 TriggerSegmentManager::~TriggerSegmentManager()
 {
-    RG_DEBUG << "TriggerSegmentManager::~TriggerSegmentManager" << endl;
+    RG_DEBUG << "TriggerSegmentManager::~TriggerSegmentManager";
 
 //     m_listView->saveLayout(TriggerManagerConfigGroup);    //&&&
 
@@ -170,14 +170,14 @@ TriggerSegmentManager::~TriggerSegmentManager()
 void
 TriggerSegmentManager::initDialog()
 {
-    RG_DEBUG << "TriggerSegmentManager::initDialog" << endl;
+    RG_DEBUG << "TriggerSegmentManager::initDialog";
     slotUpdate();
 }
 
 void
 TriggerSegmentManager::slotUpdate()
 {
-    RG_DEBUG << "TriggerSegmentManager::slotUpdate" << endl;
+    RG_DEBUG << "TriggerSegmentManager::slotUpdate";
 
     TriggerManagerItem *item;
 
@@ -279,7 +279,7 @@ TriggerSegmentManager::slotDeleteAll()
     if (QMessageBox::warning(this, tr("Rosegarden"), tr("This will remove all triggered segments from the whole composition.  Are you sure?"), QMessageBox::Yes|QMessageBox::Cancel, QMessageBox::Cancel ) != QMessageBox::Yes )
         return ;
 
-    RG_DEBUG << "TriggerSegmentManager::slotDeleteAll" << endl;
+    RG_DEBUG << "TriggerSegmentManager::slotDeleteAll";
     MacroCommand *command = new MacroCommand(tr("Remove all triggered segments"));
 
 //     QTreeWidgetItem *it = m_listView->firstChild();
@@ -319,7 +319,7 @@ TriggerSegmentManager::slotAdd()
 void
 TriggerSegmentManager::slotDelete()
 {
-    RG_DEBUG << "TriggerSegmentManager::slotDelete" << endl;
+    RG_DEBUG << "TriggerSegmentManager::slotDelete";
 
     TriggerManagerItem *item =
         dynamic_cast<TriggerManagerItem*>( m_listView->currentItem() );
@@ -360,7 +360,7 @@ TriggerSegmentManager::slotPasteAsNew()
 void
 TriggerSegmentManager::slotClose()
 {
-    RG_DEBUG << "TriggerSegmentManager::slotClose" << endl;
+    RG_DEBUG << "TriggerSegmentManager::slotClose";
 
 //     if (m_doc)
 //         CommandHistory::getInstance()->detachView(actionCollection());    //&&&
@@ -406,7 +406,7 @@ TriggerSegmentManager::addCommandToHistory(Command *command)
 void
 TriggerSegmentManager::setModified(bool modified)
 {
-    RG_DEBUG << "TriggerSegmentManager::setModified(" << modified << ")" << endl;
+    RG_DEBUG << "TriggerSegmentManager::setModified(" << modified << ")";
 
     m_modified = modified;
 }
@@ -422,7 +422,7 @@ TriggerSegmentManager::checkModified()
 void
 TriggerSegmentManager::slotEdit(QTreeWidgetItem *i)
 {
-    RG_DEBUG << "TriggerSegmentManager::slotEdit" << endl;
+    RG_DEBUG << "TriggerSegmentManager::slotEdit";
 
     TriggerManagerItem *item =
         dynamic_cast<TriggerManagerItem*>(i);
@@ -432,7 +432,7 @@ TriggerSegmentManager::slotEdit(QTreeWidgetItem *i)
 
     TriggerSegmentId id = item->getId();
 
-    RG_DEBUG << "id is " << id << endl;
+    RG_DEBUG << "id is " << id;
 
     emit editTriggerSegment(id);
 }
@@ -458,7 +458,7 @@ TriggerSegmentManager::setDocument(RosegardenDocument *doc)
 void
 TriggerSegmentManager::slotItemClicked(QTreeWidgetItem */* item */)
 {
-    RG_DEBUG << "TriggerSegmentManager::slotItemClicked" << endl;
+    RG_DEBUG << "TriggerSegmentManager::slotItemClicked";
 }
 
 QString

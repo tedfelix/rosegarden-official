@@ -78,7 +78,7 @@ bool ChordXmlHandler::endElement(const QString& /* namespaceURI */,
 
         m_inFingering = false;
         m_chordMap.insert(m_currentChord);
-        NOTATION_DEBUG << "ChordXmlHandler::endElement (fingering) : adding chord " << m_currentChord << endl;            
+        NOTATION_DEBUG << "ChordXmlHandler::endElement (fingering) : adding chord " << m_currentChord;            
 
     } else if (lcName == "chord") {
         
@@ -119,7 +119,7 @@ bool ChordXmlHandler::parseFingering(const QString& ch) {
     Guitar::Fingering fingering = Guitar::Fingering::parseFingering(ch, errString);
     
     if (m_errorString.isEmpty()) {
-        NOTATION_DEBUG << "ChordXmlHandler::parseFingering : fingering " << ch << endl;
+        NOTATION_DEBUG << "ChordXmlHandler::parseFingering : fingering " << ch;
         m_currentChord.setFingering(fingering);
         return true;    
     } else {

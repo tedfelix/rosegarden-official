@@ -123,7 +123,7 @@ MappedEventBuffer::reserve(int newSize)
     }
 
 #ifdef DEBUG_MAPPED_EVENT_BUFFER
-    SEQUENCER_DEBUG << "MappedEventBuffer::reserve: Resized to " << newSize << " events" << endl;
+    SEQUENCER_DEBUG << "MappedEventBuffer::reserve: Resized to " << newSize << " events";
 #endif
 
     delete[] oldBuffer;

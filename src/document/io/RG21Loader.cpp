@@ -339,7 +339,7 @@ bool RG21Loader::parseIndicationStart()
     unsigned int indicationId = m_tokens[2].toUInt();
     std::string indicationType = qstrtostr(m_tokens[3].toLower());
 
-    //    RG_DEBUG << "Indication start: type is \"" << indicationType << "\"" << endl;
+    //    RG_DEBUG << "Indication start: type is \"" << indicationType << "\"";
 
     if (indicationType == "tie") {
 
@@ -365,7 +365,7 @@ bool RG21Loader::parseIndicationStart()
         }
         m_tieStatus = 2;
 
-        RG_DEBUG << "rg21io: Indication start: it's a tie" << endl;
+        RG_DEBUG << "rg21io: Indication start: it's a tie";
 
     } else {
 
@@ -391,7 +391,7 @@ bool RG21Loader::parseIndicationStart()
 
         m_currentSegment->insert(e);
 
-        RG_DEBUG << "rg21io: Indication start: it's a real indication; id is " << indicationId << ", event is:" << endl;
+        RG_DEBUG << "rg21io: Indication start: it's a real indication; id is " << indicationId << ", event is:";
         e->dump(std::cerr);
 
     }
@@ -408,7 +408,7 @@ void RG21Loader::closeIndication()
     unsigned int indicationId = m_tokens[2].toUInt();
     EventIdMap::iterator i = m_indicationsExtant.find(indicationId);
 
-    RG_DEBUG << "rg21io: Indication close: indication id is " << indicationId << endl;
+    RG_DEBUG << "rg21io: Indication close: indication id is " << indicationId;
 
     // this is normal (for ties):
     if (i == m_indicationsExtant.end())
@@ -767,7 +767,7 @@ bool RG21Loader::load(const QString &fileName, Composition &comp)
 
         } else {
 
-            RG_DEBUG << "RG21Loader::parse: Unsupported element type \"" << firstToken << "\", ignoring" << endl;
+            RG_DEBUG << "RG21Loader::parse: Unsupported element type \"" << firstToken << "\", ignoring";
         }
     }
 

@@ -278,14 +278,14 @@ ControlParameterEditDialog::populate()
 void
 ControlParameterEditDialog::slotNameChanged(const QString &str)
 {
-    RG_DEBUG << "ControlParameterEditDialog::slotNameChanged" << endl;
+    RG_DEBUG << "ControlParameterEditDialog::slotNameChanged";
     m_dialogControl.setName(qstrtostr(str));
 }
 
 void
 ControlParameterEditDialog::slotTypeChanged(int value)
 {
-    RG_DEBUG << "ControlParameterEditDialog::slotTypeChanged" << endl;
+    RG_DEBUG << "ControlParameterEditDialog::slotTypeChanged";
     m_dialogControl.setType(qstrtostr(m_typeCombo->itemText(value)));
 
     populate();
@@ -294,14 +294,14 @@ ControlParameterEditDialog::slotTypeChanged(int value)
 void
 ControlParameterEditDialog::slotDescriptionChanged(const QString &str)
 {
-    RG_DEBUG << "ControlParameterEditDialog::slotDescriptionChanged" << endl;
+    RG_DEBUG << "ControlParameterEditDialog::slotDescriptionChanged";
     m_dialogControl.setDescription(qstrtostr(str));
 }
 
 void
 ControlParameterEditDialog::slotControllerChanged(int value)
 {
-    RG_DEBUG << "ControlParameterEditDialog::slotControllerChanged" << endl;
+    RG_DEBUG << "ControlParameterEditDialog::slotControllerChanged";
     m_dialogControl.setControllerValue(value);
 
     // set hex value
@@ -313,35 +313,35 @@ ControlParameterEditDialog::slotControllerChanged(int value)
 void
 ControlParameterEditDialog::slotMinChanged(int value)
 {
-    RG_DEBUG << "ControlParameterEditDialog::slotMinChanged" << endl;
+    RG_DEBUG << "ControlParameterEditDialog::slotMinChanged";
     m_dialogControl.setMin(value);
 }
 
 void
 ControlParameterEditDialog::slotMaxChanged(int value)
 {
-    RG_DEBUG << "ControlParameterEditDialog::slotMaxChanged" << endl;
+    RG_DEBUG << "ControlParameterEditDialog::slotMaxChanged";
     m_dialogControl.setMax(value);
 }
 
 void
 ControlParameterEditDialog::slotDefaultChanged(int value)
 {
-    RG_DEBUG << "ControlParameterEditDialog::slotDefaultChanged" << endl;
+    RG_DEBUG << "ControlParameterEditDialog::slotDefaultChanged";
     m_dialogControl.setDefault(value);
 }
 
 void
 ControlParameterEditDialog::slotColourChanged(int value)
 {
-    RG_DEBUG << "ControlParameterEditDialog::slotColourChanged" << endl;
+    RG_DEBUG << "ControlParameterEditDialog::slotColourChanged";
     m_dialogControl.setColourIndex(value);
 }
 
 void
 ControlParameterEditDialog::slotIPBPositionChanged(int value)
 {
-    RG_DEBUG << "ControlParameterEditDialog::slotIPBPositionChanged" << endl;
+    RG_DEBUG << "ControlParameterEditDialog::slotIPBPositionChanged";
     m_dialogControl.setIPBPosition(value - 1);
 }
 

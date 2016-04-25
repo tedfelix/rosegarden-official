@@ -107,17 +107,17 @@ FingeringBox::drawContents(QPainter* p)
                 
         switch (*pos) {
         case Guitar::Fingering::OPEN:
-//                NOTATION_DEBUG << "Fingering::drawContents - drawing Open symbol on string " << stringNb << endl;
+//                NOTATION_DEBUG << "Fingering::drawContents - drawing Open symbol on string " << stringNb;
                 m_noteSymbols.drawOpenSymbol(m_big, p, stringNb);
                 break;
 
         case Guitar::Fingering::MUTED:
-//                NOTATION_DEBUG << "Fingering::drawContents - drawing Mute symbol on string" << stringNb << endl;
+//                NOTATION_DEBUG << "Fingering::drawContents - drawing Mute symbol on string" << stringNb;
                 m_noteSymbols.drawMuteSymbol(m_big, p, stringNb);
                 break;
 
         default:
-//                NOTATION_DEBUG << "Fingering::drawContents - drawing note symbol at " << *pos << " on string " << stringNb << endl;
+//                NOTATION_DEBUG << "Fingering::drawContents - drawing note symbol at " << *pos << " on string " << stringNb;
                 m_noteSymbols.drawNoteSymbol(m_big, p, stringNb, *pos - (m_startFret - 1), false);
                 break;
         }
@@ -169,7 +169,7 @@ FingeringBox::getStringNumber(const QPoint& pos)
 
     if(result.first){
         stringNum = result.second;
-//        RG_DEBUG << "FingeringBox::getStringNumber : res = " << stringNum << endl; 
+//        RG_DEBUG << "FingeringBox::getStringNumber : res = " << stringNum; 
     }
 
     return stringNum;
@@ -188,7 +188,7 @@ FingeringBox::getFretNumber(const QPoint& pos)
 
         if(result.first) {
             fretNum = result.second + (m_startFret - 1);
-//            RG_DEBUG << "FingeringBox::getFretNumber : res = " << fretNum << " startFret = " << m_startFret << endl; 
+//            RG_DEBUG << "FingeringBox::getFretNumber : res = " << fretNum << " startFret = " << m_startFret; 
         } else {
 //            RG_DEBUG << "FingeringBox::getFretNumber : no res\n";
         }
@@ -293,7 +293,7 @@ FingeringBox::mouseMoveEvent( QMouseEvent *event )
         m_r1 = r1;
         m_r2 = r2;
         
-//    RG_DEBUG << "Fingering::updateTransientPos r1 = " << r1 << " - r2 = " << r2 << endl;
+//    RG_DEBUG << "Fingering::updateTransientPos r1 = " << r1 << " - r2 = " << r2;
      
 //        QRect updateRect = r1 | r2;
 //        update(updateRect);

@@ -30,7 +30,7 @@ namespace Rosegarden
 void SegmentOrderer::segmentClicked(const Segment* s)
 {
     m_segmentZs[s] = ++m_currentMaxZ;
-    RG_DEBUG << "SegmentOrderer::segmentClicked() s = " << s << " - max Z = " << m_currentMaxZ << endl;
+    RG_DEBUG << "SegmentOrderer::segmentClicked() s = " << s << " - max Z = " << m_currentMaxZ;
 }
 
 unsigned int SegmentOrderer::getZForSegment(const Rosegarden::Segment* s)

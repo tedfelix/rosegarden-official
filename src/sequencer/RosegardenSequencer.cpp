@@ -105,7 +105,7 @@ RosegardenSequencer::RosegardenSequencer() :
 
 RosegardenSequencer::~RosegardenSequencer()
 {
-    SEQUENCER_DEBUG << "RosegardenSequencer - shutting down" << endl;
+    SEQUENCER_DEBUG << "RosegardenSequencer - shutting down";
     m_driver->shutdown();
     delete m_studio;
     delete m_driver;
@@ -117,7 +117,7 @@ RosegardenSequencer::getInstance()
     m_instanceMutex.lock();
     if (!m_instance) {
 #ifdef DEBUG_ROSEGARDEN_SEQUENCER        
-        SEQUENCER_DEBUG << "RosegardenSequencer::getInstance: Creating" << endl;
+        SEQUENCER_DEBUG << "RosegardenSequencer::getInstance: Creating";
 #endif
         m_instance = new RosegardenSequencer();
     }
@@ -233,13 +233,13 @@ RosegardenSequencer::record(const RealTime &time,
     TransportStatus localRecordMode = (TransportStatus) recordMode;
 
 #ifdef DEBUG_ROSEGARDEN_SEQUENCER        
-    SEQUENCER_DEBUG << "RosegardenSequencer::record - recordMode is " << recordMode << ", transport status is " << m_transportStatus << endl;
+    SEQUENCER_DEBUG << "RosegardenSequencer::record - recordMode is " << recordMode << ", transport status is " << m_transportStatus;
 #endif
     // punch in recording
     if (m_transportStatus == PLAYING) {
         if (localRecordMode == STARTING_TO_RECORD) {
 #ifdef DEBUG_ROSEGARDEN_SEQUENCER        
-            SEQUENCER_DEBUG << "RosegardenSequencer::record: punching in" << endl;
+            SEQUENCER_DEBUG << "RosegardenSequencer::record: punching in";
 #endif
             localRecordMode = RECORDING; // no need to start playback
         }
@@ -341,7 +341,7 @@ RosegardenSequencer::stop()
     // report
     //
 #ifdef DEBUG_ROSEGARDEN_SEQUENCER        
-    SEQUENCER_DEBUG << "RosegardenSequencer::stop() - stopping" << endl;
+    SEQUENCER_DEBUG << "RosegardenSequencer::stop() - stopping";
 #endif
     // process pending NOTE OFFs and stop the Sequencer
     m_driver->stopPlayback();
@@ -414,7 +414,7 @@ RosegardenSequencer::jumpTo(const RealTime &pos)
 
     incrementTransportToken();
 
-    //    SEQUENCER_DEBUG << "RosegardenSequencer::jumpTo: pausing to simulate high-load environment" << endl;
+    //    SEQUENCER_DEBUG << "RosegardenSequencer::jumpTo: pausing to simulate high-load environment";
     //    ::sleep(1);
 
     m_driver->startClocks();
@@ -859,7 +859,7 @@ RosegardenSequencer::setMappedPort(int pluginId,
         slot->setPort(portId, value);
     } else {
 #ifdef DEBUG_ROSEGARDEN_SEQUENCER        
-        SEQUENCER_DEBUG << "no such slot" << endl;
+        SEQUENCER_DEBUG << "no such slot";
 #endif
     }
 }
@@ -880,7 +880,7 @@ RosegardenSequencer::getMappedPort(int pluginId,
         return slot->getPort(portId);
     } else {
 #ifdef DEBUG_ROSEGARDEN_SEQUENCER        
-        SEQUENCER_DEBUG << "no such slot" << endl;
+        SEQUENCER_DEBUG << "no such slot";
 #endif
     }
 
@@ -975,7 +975,7 @@ RosegardenSequencer::clearStudio()
     LOCKED;
 
 #ifdef DEBUG_ROSEGARDEN_SEQUENCER        
-    SEQUENCER_DEBUG << "clearStudio()" << endl;
+    SEQUENCER_DEBUG << "clearStudio()";
 #endif
     m_studio->clear();
     SequencerDataBlock::getInstance()->clearTemporaries();
@@ -1009,13 +1009,13 @@ void RosegardenSequencer::dumpFirstSegment()
 {
     LOCKED;
 
-    SEQUENCER_DEBUG << "Dumping 1st segment data :" << endl;
+    SEQUENCER_DEBUG << "Dumping 1st segment data :";
 
     unsigned int i = 0;
     
     std::set<MappedEventBuffer *> segs = m_metaIterator.getSegments();
     if (segs.empty()) {
-        SEQUENCER_DEBUG << "(no segments)" << endl;
+        SEQUENCER_DEBUG << "(no segments)";
         return;
     }
 
@@ -1165,11 +1165,11 @@ RosegardenSequencer::getSlice(MappedEventList &mappedEventList,
                                  const RealTime &end,
                                  bool firstFetch)
 {
-    //    SEQUENCER_DEBUG << "RosegardenSequencer::getSlice (" << start << " -> " << end << ", " << firstFetch << ")" << endl;
+    //    SEQUENCER_DEBUG << "RosegardenSequencer::getSlice (" << start << " -> " << end << ", " << firstFetch << ")";
 
     if (firstFetch || (start < m_lastStartTime)) {
 #ifdef DEBUG_ROSEGARDEN_SEQUENCER        
-        SEQUENCER_DEBUG << "[calling jumpToTime on start]" << endl;
+        SEQUENCER_DEBUG << "[calling jumpToTime on start]";
 #endif
         m_metaIterator.jumpToTime(start);
     }
@@ -1232,7 +1232,7 @@ RosegardenSequencer::startPlaying()
     m_metaIterator.getAudioEvents(audioEvents);
     m_driver->initialiseAudioQueue(audioEvents);
 
-    //SEQUENCER_DEBUG << "RosegardenSequencer::startPlaying: pausing to simulate high-load environment" << endl;
+    //SEQUENCER_DEBUG << "RosegardenSequencer::startPlaying: pausing to simulate high-load environment";
     //::sleep(2);
 
     // and only now do we signal to start the clock
@@ -1279,7 +1279,7 @@ RosegardenSequencer::updateClocks()
 
     m_driver->runTasks();
 
-    //SEQUENCER_DEBUG << "RosegardenSequencer::updateClocks" << endl;
+    //SEQUENCER_DEBUG << "RosegardenSequencer::updateClocks";
 
     // If we're not playing etc. then that's all we need to do
     //
@@ -1497,7 +1497,7 @@ RosegardenSequencer::checkForNewClients()
 
     if (m_driver->checkForNewClients()) {
 #ifdef DEBUG_ROSEGARDEN_SEQUENCER        
-        SEQUENCER_DEBUG << "client list changed" << endl;
+        SEQUENCER_DEBUG << "client list changed";
 #endif
     }
 }
@@ -1563,7 +1563,7 @@ RosegardenSequencer::incrementTransportToken()
 {
     ++m_transportToken;
 #ifdef DEBUG_ROSEGARDEN_SEQUENCER        
-    SEQUENCER_DEBUG << "RosegardenSequencer::incrementTransportToken: incrementing to " << m_transportToken << endl;
+    SEQUENCER_DEBUG << "RosegardenSequencer::incrementTransportToken: incrementing to " << m_transportToken;
 #endif
 }
 

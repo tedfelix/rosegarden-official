@@ -437,7 +437,7 @@ ManageMetronomeDialog::slotApply()
 void
 ManageMetronomeDialog::slotPreviewPitch(int pitch)
 {
-    RG_DEBUG << "ManageMetronomeDialog::slotPreviewPitch" << endl;
+    RG_DEBUG << "ManageMetronomeDialog::slotPreviewPitch";
 
     DeviceList *devices = m_doc->getStudio().getDevices();
     DeviceListConstIterator it;

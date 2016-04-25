@@ -163,7 +163,7 @@ RawNoteRuler::addChildren(Segment *s,
 
 #ifdef DEBUG_RAW_NOTE_RULER
 
-    RG_DEBUG << "addChildren called for extents " << iex.first << "->" << iex.second << ", rightBound " << rightBound << endl;
+    RG_DEBUG << "addChildren called for extents " << iex.first << "->" << iex.second << ", rightBound " << rightBound;
 #endif
 
     for (++j; j != to && s->isBeforeEndMarker(j); ) {
@@ -176,7 +176,7 @@ RawNoteRuler::addChildren(Segment *s,
 
 #ifdef DEBUG_RAW_NOTE_RULER
 
-        RG_DEBUG << "addChildren: event at " << (*j)->getAbsoluteTime() << ", extents " << jex.first << "->" << jex.second << endl;
+        RG_DEBUG << "addChildren: event at " << (*j)->getAbsoluteTime() << ", extents " << jex.first << "->" << jex.second;
 #endif
 
         if (jex.first == jex.second) {
@@ -188,7 +188,7 @@ RawNoteRuler::addChildren(Segment *s,
 
 #ifdef DEBUG_RAW_NOTE_RULER
 
-        RG_DEBUG << "addChildren: adding" << endl;
+        RG_DEBUG << "addChildren: adding";
 #endif
 
         EventTreeNode *subnode = new EventTreeNode(j);
@@ -231,7 +231,7 @@ RawNoteRuler::buildForest(Segment *s,
 
 #ifdef DEBUG_RAW_NOTE_RULER
 
-        RG_DEBUG << "buildForest: event at " << (*i)->getAbsoluteTime() << ", extents " << iex.first << "->" << iex.second << endl;
+        RG_DEBUG << "buildForest: event at " << (*i)->getAbsoluteTime() << ", extents " << iex.first << "->" << iex.second;
 #endif
 
         if (iex.first == iex.second) {
@@ -253,7 +253,7 @@ RawNoteRuler::buildForest(Segment *s,
         }
 
 #ifdef DEBUG_RAW_NOTE_RULER
-        RG_DEBUG << "findTime " << iex.second << " returned iterator at " << (i == s->end() ? -1 : (*i)->getAbsoluteTime()) << endl;
+        RG_DEBUG << "findTime " << iex.second << " returned iterator at " << (i == s->end() ? -1 : (*i)->getAbsoluteTime());
 #endif
 
     }
@@ -552,7 +552,7 @@ RawNoteRuler::paintEvent(QPaintEvent* e)
     //    PRINT_ELAPSED("RawNoteRuler::paintEvent: drawing bar lines and divisions");
 
 #ifdef DEBUG_RAW_NOTE_RULER
-    NOTATION_DEBUG << "RawNoteRuler: from is " << from << ", to is " << to << endl;
+    NOTATION_DEBUG << "RawNoteRuler: from is " << from << ", to is " << to;
 #endif
 
     Segment::iterator i = m_segment->findNearestTime(from);

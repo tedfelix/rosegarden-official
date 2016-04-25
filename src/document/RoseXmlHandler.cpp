@@ -313,10 +313,10 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
     if (lcName == "event") {
 
-        //        RG_DEBUG << "RoseXmlHandler::startElement: found event, current time is " << m_currentTime << endl;
+        //        RG_DEBUG << "RoseXmlHandler::startElement: found event, current time is " << m_currentTime;
 
         if (m_currentEvent) {
-            RG_DEBUG << "RoseXmlHandler::startElement: Warning: new event found at time " << m_currentTime << " before previous event has ended; previous event will be lost" << endl;
+            RG_DEBUG << "RoseXmlHandler::startElement: Warning: new event found at time " << m_currentTime << " before previous event has ended; previous event will be lost";
             delete m_currentEvent;
         }
 
@@ -367,7 +367,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
             m_currentTime = m_currentEvent->getAbsoluteTime() + duration;
 
-            //            RG_DEBUG << "RoseXmlHandler::startElement: (we're not in a chord) " << endl;
+            //            RG_DEBUG << "RoseXmlHandler::startElement: (we're not in a chord) ";
 
         } else if (duration != 0) {
 
@@ -383,7 +383,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
     } else if (lcName == "property") {
 
         if (!m_currentEvent) {
-            RG_DEBUG << "RoseXmlHandler::startElement: Warning: Found property outside of event at time " << m_currentTime << ", ignoring" << endl;
+            RG_DEBUG << "RoseXmlHandler::startElement: Warning: Found property outside of event at time " << m_currentTime << ", ignoring";
         } else {
             m_currentEvent->setPropertyFromAttributes(atts, true);
         }
@@ -391,7 +391,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
     } else if (lcName == "nproperty") {
 
         if (!m_currentEvent) {
-            RG_DEBUG << "RoseXmlHandler::startElement: Warning: Found nproperty outside of event at time " << m_currentTime << ", ignoring" << endl;
+            RG_DEBUG << "RoseXmlHandler::startElement: Warning: Found nproperty outside of event at time " << m_currentTime << ", ignoring";
         } else {
             m_currentEvent->setPropertyFromAttributes(atts, false);
         }
@@ -593,11 +593,11 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
         QString recordPlStr = atts.value("recordtracks");
         if (!recordPlStr.isEmpty()) {
-            RG_DEBUG << "Record tracks: " << recordPlStr << endl;
+            RG_DEBUG << "Record tracks: " << recordPlStr;
             QStringList recordList = recordPlStr.split(',');
             for (QStringList::iterator i = recordList.begin();
                     i != recordList.end(); ++i) {
-                RG_DEBUG << "Record track: " << (*i).toInt() << endl;
+                RG_DEBUG << "Record track: " << (*i).toInt();
                 getComposition().setTrackRecording((*i).toInt(), true);
             }
         }
@@ -905,9 +905,9 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
         QString delayStr = atts.value("delay");
         if (!delayStr.isEmpty()) {
-            RG_DEBUG << "Delay string is \"" << delayStr << "\"" << endl;
+            RG_DEBUG << "Delay string is \"" << delayStr << "\"";
             long delay = delayStr.toLong();
-            RG_DEBUG << "Delay is " << delay << endl;
+            RG_DEBUG << "Delay is " << delay;
             m_currentSegment->setDelay(delay);
         }
 
@@ -1037,7 +1037,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         }
 
         QString type = atts.value("type");
-        //RG_DEBUG << "RoseXmlHandler::startElement - controller type = " << type << endl;
+        //RG_DEBUG << "RoseXmlHandler::startElement - controller type = " << type;
 
         if (type == strtoqstr(PitchBend::EventType))
             m_currentSegment->addEventRuler(PitchBend::EventType);
@@ -1506,7 +1506,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
     } else if (lcName == "keymapping") {
 
         if (m_section == InInstrument) {
-            RG_DEBUG << "Old-style keymapping in instrument found, ignoring" << endl;
+            RG_DEBUG << "Old-style keymapping in instrument found, ignoring";
         } else {
 
             if (m_section != InStudio) {
@@ -1871,10 +1871,10 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
                 QString q = atts.value("id");
 
                 if (!identifier.isEmpty()) {
-                    RG_DEBUG << "WARNING: RoseXmlHandler: plugin " << identifier << " not found" << endl;
+                    RG_DEBUG << "WARNING: RoseXmlHandler: plugin " << identifier << " not found";
                     m_pluginsNotFound.insert(identifier);
                 } else if (!q.isEmpty()) {
-                    RG_DEBUG << "WARNING: RoseXmlHandler: plugin uid " << atts.value("id") << " not found" << endl;
+                    RG_DEBUG << "WARNING: RoseXmlHandler: plugin uid " << atts.value("id") << " not found";
                 } else {
                     m_errorString = "No plugin identifier or uid specified";
                     return false;
@@ -1885,7 +1885,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             if (lcName == "synth") {
                 QString identifier = atts.value("identifier");
                 if (!identifier.isEmpty()) {
-                    RG_DEBUG << "WARNING: RoseXmlHandler: no instrument for plugin " << identifier << endl;
+                    RG_DEBUG << "WARNING: RoseXmlHandler: no instrument for plugin " << identifier;
                     m_pluginsNotFound.insert(identifier);
                 }
             }
@@ -2013,7 +2013,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         //
         Instrument *instrument = getStudio().getInstrumentById(id);
 
-        RG_DEBUG << "Found Instrument in document: mapped actual id " << id << " to instrument " << instrument << endl;
+        RG_DEBUG << "Found Instrument in document: mapped actual id " << id << " to instrument " << instrument;
 
         // If we've got an instrument and the types match then
         // we use it from now on.
@@ -2225,7 +2225,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
         getComposition().addMarker(marker);
     } else {
-        RG_DEBUG << "RoseXmlHandler::startElement : Don't know how to parse this : " << qName << endl;
+        RG_DEBUG << "RoseXmlHandler::startElement : Don't know how to parse this : " << qName;
     }
 
     return true;
@@ -2591,7 +2591,7 @@ RoseXmlHandler::mapToActualInstrument(InstrumentId oldId)
 void
 RoseXmlHandler::skipToNextPlayDevice()
 {
-    SEQMAN_DEBUG << "RoseXmlHandler::skipToNextPlayDevice; m_deviceRunningId is " << m_deviceRunningId << endl;
+    SEQMAN_DEBUG << "RoseXmlHandler::skipToNextPlayDevice; m_deviceRunningId is " << m_deviceRunningId;
 
     for (DeviceList::iterator i = getStudio().getDevices()->begin();
             i != getStudio().getDevices()->end(); ++i) {
@@ -2602,7 +2602,7 @@ RoseXmlHandler::skipToNextPlayDevice()
             if (m_deviceRunningId == Device::NO_DEVICE ||
                 md->getId() > m_deviceRunningId) {
 
-                SEQMAN_DEBUG << "RoseXmlHandler::skipToNextPlayDevice: found next device: id " << md->getId() << endl;
+                SEQMAN_DEBUG << "RoseXmlHandler::skipToNextPlayDevice: found next device: id " << md->getId();
 
                 m_device = md;
                 m_deviceRunningId = md->getId();
@@ -2611,7 +2611,7 @@ RoseXmlHandler::skipToNextPlayDevice()
         }
     }
 
-    SEQMAN_DEBUG << "RoseXmlHandler::skipToNextPlayDevice: fresh out of devices" << endl;
+    SEQMAN_DEBUG << "RoseXmlHandler::skipToNextPlayDevice: fresh out of devices";
 
     m_device = 0;
 }
@@ -2619,7 +2619,7 @@ RoseXmlHandler::skipToNextPlayDevice()
 void
 RoseXmlHandler::setMIDIDeviceConnection(QString connection)
 {
-    SEQMAN_DEBUG << "RoseXmlHandler::setMIDIDeviceConnection(" << connection << ")" << endl;
+    SEQMAN_DEBUG << "RoseXmlHandler::setMIDIDeviceConnection(" << connection << ")";
 
     MidiDevice *md = dynamic_cast<MidiDevice *>(m_device);
     if (!md) return;
@@ -2634,7 +2634,7 @@ RoseXmlHandler::setMIDIDeviceConnection(QString connection)
 void
 RoseXmlHandler::setMIDIDeviceName(QString name)
 {
-    SEQMAN_DEBUG << "RoseXmlHandler::setMIDIDeviceName(" << name << ")" << endl;
+    SEQMAN_DEBUG << "RoseXmlHandler::setMIDIDeviceName(" << name << ")";
 
     MidiDevice *md = dynamic_cast<MidiDevice *>(m_device);
     if (!md) return;

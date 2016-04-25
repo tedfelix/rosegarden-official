@@ -67,7 +67,7 @@ MIDIConfigurationPage::MIDIConfigurationPage(
         TabbedConfigurationPage(parent),
         m_midiPitchOctave(0)
 {
-//    RG_DEBUG << "MIDI CONFIGURATION PAGE CTOR" << endl;
+//    RG_DEBUG << "MIDI CONFIGURATION PAGE CTOR";
     // set the document in the super class
     m_doc = doc;
 
@@ -336,7 +336,7 @@ MIDIConfigurationPage::slotSoundFontChoose()
 void
 MIDIConfigurationPage::apply()
 {
-    RG_DEBUG << "MIDI CONFIGURATION PAGE SETTINGS APPLIED" << endl;
+    RG_DEBUG << "MIDI CONFIGURATION PAGE SETTINGS APPLIED";
     QSettings settings;
     settings.beginGroup( SequencerOptionsConfigGroup );
 

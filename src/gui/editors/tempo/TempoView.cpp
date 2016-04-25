@@ -384,7 +384,7 @@ TempoView::refreshSegment(Segment * /*segment*/,
                           timeT /*startTime*/,
                           timeT /*endTime*/)
 {
-    RG_DEBUG << "TempoView::refreshSegment" << endl;
+    RG_DEBUG << "TempoView::refreshSegment";
     applyLayout();
 }
 
@@ -526,7 +526,7 @@ TempoView::slotEditInsertTimeSignature()
 void
 TempoView::slotEdit()
 {
-    RG_DEBUG << "TempoView::slotEdit" << endl;
+    RG_DEBUG << "TempoView::slotEdit";
 
     QList<QTreeWidgetItem*> selection = m_list->selectedItems();
 

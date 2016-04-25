@@ -940,7 +940,7 @@ TrackParameterBox::slotInstrumentChanged(int index)
 void
 TrackParameterBox::slotRecordingDeviceChanged(int index)
 {
-    RG_DEBUG << "TrackParameterBox::slotRecordingDeviceChanged(" << index << ")" << endl;
+    RG_DEBUG << "TrackParameterBox::slotRecordingDeviceChanged(" << index << ")";
     if (m_selectedTrackId == (int)NO_TRACK) return;
     Composition &comp = m_doc->getComposition();
     if (!comp.haveTrack(m_selectedTrackId)) {
@@ -962,7 +962,7 @@ TrackParameterBox::slotRecordingDeviceChanged(int index)
 void
 TrackParameterBox::slotRecordingChannelChanged(int index)
 {
-    RG_DEBUG << "TrackParameterBox::slotRecordingChannelChanged(" << index << ")" << endl;
+    RG_DEBUG << "TrackParameterBox::slotRecordingChannelChanged(" << index << ")";
     if (m_selectedTrackId == (int)NO_TRACK) return;
     Composition &comp = m_doc->getComposition();
     if (!comp.haveTrack(m_selectedTrackId)) {
@@ -1022,7 +1022,7 @@ TrackParameterBox::showAdditionalControls(bool)
 void
 TrackParameterBox::slotClefChanged(int clef)
 {
-    RG_DEBUG << "TrackParameterBox::slotClefChanged(" << clef << ")" << endl;
+    RG_DEBUG << "TrackParameterBox::slotClefChanged(" << clef << ")";
     if (m_selectedTrackId == (int)NO_TRACK) return;
     Composition &comp = m_doc->getComposition();
     if (!comp.haveTrack(m_selectedTrackId)) {
@@ -1037,7 +1037,7 @@ TrackParameterBox::slotClefChanged(int clef)
 void
 TrackParameterBox::slotTransposeChanged(int transpose)
 {
-    RG_DEBUG << "TrackParameterBox::slotTransposeChanged(" << transpose << ")" << endl;
+    RG_DEBUG << "TrackParameterBox::slotTransposeChanged(" << transpose << ")";
     if (m_selectedTrackId == (int)NO_TRACK) return;
     Composition &comp = m_doc->getComposition();
     if (!comp.haveTrack(m_selectedTrackId)) {
@@ -1066,7 +1066,7 @@ TrackParameterBox::slotTransposeTextChanged(QString text)
 void
 TrackParameterBox::slotDocColoursChanged()
 {
-    RG_DEBUG << "TrackParameterBox::slotDocColoursChanged()" << endl;
+    RG_DEBUG << "TrackParameterBox::slotDocColoursChanged()";
 
     m_colorCombo->clear();
     m_colourList.clear();
@@ -1110,7 +1110,7 @@ TrackParameterBox::slotDocColoursChanged()
 void
 TrackParameterBox::slotColorChanged(int index)
 {
-    RG_DEBUG << "TrackParameterBox::slotColorChanged(" << index << ")" << endl;
+    RG_DEBUG << "TrackParameterBox::slotColorChanged(" << index << ")";
 
     if (m_selectedTrackId == (int)NO_TRACK) return;
     Composition &comp = m_doc->getComposition();
@@ -1154,7 +1154,7 @@ TrackParameterBox::slotColorChanged(int index)
 void
 TrackParameterBox::slotHighestPressed()
 {
-    RG_DEBUG << "TrackParameterBox::slotHighestPressed()" << endl;
+    RG_DEBUG << "TrackParameterBox::slotHighestPressed()";
 
     if (m_selectedTrackId == (int)NO_TRACK) return;
     Composition &comp = m_doc->getComposition();
@@ -1176,7 +1176,7 @@ TrackParameterBox::slotHighestPressed()
 void
 TrackParameterBox::slotLowestPressed()
 {
-    RG_DEBUG << "TrackParameterBox::slotLowestPressed()" << endl;
+    RG_DEBUG << "TrackParameterBox::slotLowestPressed()";
 
     if (m_selectedTrackId == (int)NO_TRACK) return;
     Composition &comp = m_doc->getComposition();
@@ -1198,7 +1198,7 @@ TrackParameterBox::slotLowestPressed()
 void
 TrackParameterBox::slotPresetPressed()
 {
-    RG_DEBUG << "TrackParameterBox::slotPresetPressed()" << endl;
+    RG_DEBUG << "TrackParameterBox::slotPresetPressed()";
 
     if (m_selectedTrackId == (int)NO_TRACK) return;
     Composition &comp = m_doc->getComposition();
@@ -1252,7 +1252,7 @@ TrackParameterBox::slotPresetPressed()
 void
 TrackParameterBox::slotStaffSizeChanged(int index) 
 {
-    RG_DEBUG << "TrackParameterBox::sotStaffSizeChanged()" << endl;
+    RG_DEBUG << "TrackParameterBox::sotStaffSizeChanged()";
 
     if (m_selectedTrackId == (int)NO_TRACK) return;
     Composition &comp = m_doc->getComposition();
@@ -1270,7 +1270,7 @@ TrackParameterBox::slotStaffSizeChanged(int index)
 void
 TrackParameterBox::slotStaffBracketChanged(int index)
 {
-    RG_DEBUG << "TrackParameterBox::sotStaffBracketChanged()" << endl;
+    RG_DEBUG << "TrackParameterBox::sotStaffBracketChanged()";
 
     if (m_selectedTrackId == (int)NO_TRACK) return;
     Composition &comp = m_doc->getComposition();

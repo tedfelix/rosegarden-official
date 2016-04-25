@@ -286,11 +286,11 @@ MidiProgramsEditor::reset()
 void
 MidiProgramsEditor::slotNewPercussion()
 {
-    RG_DEBUG << "MidiProgramsEditor::slotNewPercussion" << endl;
+    RG_DEBUG << "MidiProgramsEditor::slotNewPercussion";
     bool percussion = false; // Doesn't matter
     MidiBank *newBank;
     if (banklistContains(MidiBank(percussion, m_msb->value(), m_lsb->value()))) {
-        RG_DEBUG << "MidiProgramsEditor::slotNewPercussion: calling setChecked(" << !percussion << ")" << endl;
+        RG_DEBUG << "MidiProgramsEditor::slotNewPercussion: calling setChecked(" << !percussion << ")";
         newBank = new MidiBank(m_percussion->isChecked(),
                          m_msb->value(),
                          m_lsb->value(), getCurrentBank()->getName());
@@ -408,18 +408,18 @@ MidiProgramsEditor::slotNameChanged(const QString& programName)
     unsigned int id = senderName.toUInt() - 1;
 //    std::cout << "id is: " << id << std::endl;
 
-    RG_DEBUG << "MidiProgramsEditor::slotNameChanged(" << programName << ") : id = " << id << endl;
+    RG_DEBUG << "MidiProgramsEditor::slotNameChanged(" << programName << ") : id = " << id;
     
     MidiBank* currBank;
     currBank = getCurrentBank();
     if (!currBank) {
-        RG_DEBUG << "Error: currBank is NULL in MidiProgramsEditor::slotNameChanged() " << endl;
+        RG_DEBUG << "Error: currBank is NULL in MidiProgramsEditor::slotNameChanged() ";
         return;
     } else {
-        RG_DEBUG << "currBank: " << currBank << endl;
+        RG_DEBUG << "currBank: " << currBank;
     }
 
-    RG_DEBUG << "current bank name: " << currBank->getName() << endl;
+    RG_DEBUG << "current bank name: " << currBank->getName();
     MidiProgram *program = getProgram(*currBank, id);
 //     MidiProgram *program = getProgram(*currBank, id);
 
@@ -449,7 +449,7 @@ MidiProgramsEditor::slotNameChanged(const QString& programName)
                 if (((unsigned int)it->getProgram()) == id) {
                     m_programList.erase(it);
                     m_bankEditor->slotApply();
-                    RG_DEBUG << "deleting empty program (" << id << ")" << endl;
+                    RG_DEBUG << "deleting empty program (" << id << ")";
                     return ;
                 }
             }
@@ -457,10 +457,10 @@ MidiProgramsEditor::slotNameChanged(const QString& programName)
     }
 
     if (!program) {
-        RG_DEBUG << "Error: program is NULL in MidiProgramsEditor::slotNameChanged() " << endl;
+        RG_DEBUG << "Error: program is NULL in MidiProgramsEditor::slotNameChanged() ";
         return;
     } else {
-        RG_DEBUG << "program: " << program << endl;
+        RG_DEBUG << "program: " << program;
     }
     
     if (qstrtostr(programName) != program->getName()) {
@@ -647,7 +647,7 @@ MidiProgramsEditor::getProgram(const MidiBank &bank, int programNo)
             it->getProgram() == programNo) {
 
             //Only show hits to avoid overflow of console.
-            RG_DEBUG << "it->getBank() " << "== bank" << endl;
+            RG_DEBUG << "it->getBank() " << "== bank";
             return &(*it);
         }
     }

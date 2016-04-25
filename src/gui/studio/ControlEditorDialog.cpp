@@ -79,7 +79,7 @@ ControlEditorDialog::ControlEditorDialog
         m_device(device),
         m_modified(false)
 {
-    RG_DEBUG << "ControlEditorDialog::ControlEditorDialog: device is " << m_device << endl;
+    RG_DEBUG << "ControlEditorDialog::ControlEditorDialog: device is " << m_device;
 
     QWidget *mainFrame = new QWidget(this);
     QVBoxLayout *mainFrameLayout = new QVBoxLayout;
@@ -184,12 +184,12 @@ ControlEditorDialog::ControlEditorDialog
 
 ControlEditorDialog::~ControlEditorDialog()
 {
-    RG_DEBUG << "\n*** ControlEditorDialog::~ControlEditorDialog\n" << endl;
+    RG_DEBUG << "\n*** ControlEditorDialog::~ControlEditorDialog\n";
 
     // Save window geometry and toolbar/dock state
     QSettings settings;
     settings.beginGroup(WindowGeometryConfigGroup);
-    RG_DEBUG << "[geometry] storing window geometry for ControlEditorDialog" << endl;
+    RG_DEBUG << "[geometry] storing window geometry for ControlEditorDialog";
     settings.setValue("Control_Editor_Dialog_Geometry", this->saveGeometry());
     settings.setValue("Control_Editor_Dialog_State", this->saveState());
     settings.endGroup();
@@ -198,11 +198,11 @@ ControlEditorDialog::~ControlEditorDialog()
 void
 ControlEditorDialog::initDialog()
 {
-    RG_DEBUG << "ControlEditorDialog::initDialog" << endl;
+    RG_DEBUG << "ControlEditorDialog::initDialog";
     slotUpdate();
 
     // Restore window geometry and toolbar/dock state
-    RG_DEBUG << "[geometry] ControlEditorDialog - Restoring saved geometry..." << endl;
+    RG_DEBUG << "[geometry] ControlEditorDialog - Restoring saved geometry...";
     QSettings settings;
     settings.beginGroup(WindowGeometryConfigGroup);
     this->restoreGeometry(settings.value("Control_Editor_Dialog_Geometry").toByteArray());
@@ -213,7 +213,7 @@ ControlEditorDialog::initDialog()
 void
 ControlEditorDialog::slotUpdate(bool added)
 {
-    RG_DEBUG << "ControlEditorDialog::slotUpdate" << endl;
+    RG_DEBUG << "ControlEditorDialog::slotUpdate";
 
     MidiDevice *md =
         dynamic_cast<MidiDevice *>(m_studio->getDevice(m_device));
@@ -329,7 +329,7 @@ ControlEditorDialog::slotUpdate(bool added)
     // ago, and reading it now, I have NO fscking idea what I was talking about)
     //
     if (added) {
-        RG_DEBUG << "ControlEditorDialog: detected new item entered; launching editor" << endl;
+        RG_DEBUG << "ControlEditorDialog: detected new item entered; launching editor";
         m_treeWidget->setCurrentItem(item);
         slotEdit(item, 0);
     }
@@ -339,20 +339,20 @@ ControlEditorDialog::slotUpdate(bool added)
 void
 ControlEditorDialog::slotEditCopy()
 {
-    RG_DEBUG << "ControlEditorDialog::slotEditCopy" << endl;
+    RG_DEBUG << "ControlEditorDialog::slotEditCopy";
 }
 
 void
 ControlEditorDialog::slotEditPaste()
 {
-    RG_DEBUG << "ControlEditorDialog::slotEditPaste" << endl;
+    RG_DEBUG << "ControlEditorDialog::slotEditPaste";
 }
 */
 
 void
 ControlEditorDialog::slotAdd()
 {
-    RG_DEBUG << "ControlEditorDialog::slotAdd to device " << m_device << endl;
+    RG_DEBUG << "ControlEditorDialog::slotAdd to device " << m_device;
 
     AddControlParameterCommand *command =
         new AddControlParameterCommand(m_studio, m_device,
@@ -365,7 +365,7 @@ ControlEditorDialog::slotAdd()
 void
 ControlEditorDialog::slotDelete()
 {
-    RG_DEBUG << "ControlEditorDialog::slotDelete" << endl;
+    RG_DEBUG << "ControlEditorDialog::slotDelete";
 
     if(! m_treeWidget->currentItem())
         return ;
@@ -384,7 +384,7 @@ ControlEditorDialog::slotDelete()
 void
 ControlEditorDialog::slotClose()
 {
-    RG_DEBUG << "ControlEditorDialog::slotClose" << endl;
+    RG_DEBUG << "ControlEditorDialog::slotClose";
 
     m_doc = 0;
 
@@ -413,7 +413,7 @@ ControlEditorDialog::addCommandToHistory(Command *command)
 void
 ControlEditorDialog::setModified(bool modified)
 {
-    RG_DEBUG << "ControlEditorDialog::setModified(" << modified << ")" << endl;
+    RG_DEBUG << "ControlEditorDialog::setModified(" << modified << ")";
 
     if (modified) {}
     else {}
@@ -432,7 +432,7 @@ ControlEditorDialog::checkModified()
 void
 ControlEditorDialog::slotEdit(QTreeWidgetItem *i, int)
 {
-    RG_DEBUG << "ControlEditorDialog::slotEdit" << endl;
+    RG_DEBUG << "ControlEditorDialog::slotEdit";
 
     ControlParameterItem *item =
         dynamic_cast<ControlParameterItem*>(i);

@@ -281,7 +281,7 @@ EventFilterDialog::populateDurationCombos()
 void
 EventFilterDialog::slotToggleAll()
 {
-    RG_DEBUG << "EventFilterDialog::slotToggleAll()" << endl;
+    RG_DEBUG << "EventFilterDialog::slotToggleAll()";
     m_pitchFromSpinBox ->setValue(0);
     m_pitchToSpinBox ->setValue(127);
     m_velocityFromSpinBox ->setValue(0);
@@ -293,7 +293,7 @@ EventFilterDialog::slotToggleAll()
 void
 EventFilterDialog::slotToggleNone()
 {
-    RG_DEBUG << "EventFilterDialog::slotToggleNone()" << endl;
+    RG_DEBUG << "EventFilterDialog::slotToggleNone()";
     m_pitchFromSpinBox ->setValue(0);
     m_pitchToSpinBox ->setValue(0);
     m_velocityFromSpinBox ->setValue(0);

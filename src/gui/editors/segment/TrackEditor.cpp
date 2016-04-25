@@ -747,7 +747,7 @@ void TrackEditor::dragEnterEvent(QDragEnterEvent *e)
         }
     } else {
         QStringList formats(mime->formats());
-        RG_DEBUG << "HINT: Unaccepted MimeFormat in TrackEditor::dragEnterEvent : " << formats << endl;
+        RG_DEBUG << "HINT: Unaccepted MimeFormat in TrackEditor::dragEnterEvent : " << formats;
     }
 }
 

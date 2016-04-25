@@ -51,13 +51,13 @@ AudioPeaksGenerator::AudioPeaksGenerator(AudioPeaksThread &thread,
         m_token( -1)
 {
     ++apuExtantCount;
-    RG_DEBUG << "ctor " << this << " (now " << apuExtantCount << " extant)" << endl;
+    RG_DEBUG << "ctor " << this << " (now " << apuExtantCount << " extant)";
 }
 
 AudioPeaksGenerator::~AudioPeaksGenerator()
 {
     --apuExtantCount;
-    RG_DEBUG << "dtor on " << this << " ( token " << m_token << ") (now " << apuExtantCount << " extant)" << endl;
+    RG_DEBUG << "dtor on " << this << " ( token " << m_token << ") (now " << apuExtantCount << " extant)";
     if (m_token >= 0)
         m_thread.cancelPeaks(m_token);
 }
@@ -98,7 +98,7 @@ void AudioPeaksGenerator::cancel()
 bool AudioPeaksGenerator::event(QEvent *e)
 {
     
-    RG_DEBUG << "AudioPeaksGenerator(" << this << ")::event (" << e << ")" << endl;
+    RG_DEBUG << "AudioPeaksGenerator(" << this << ")::event (" << e << ")";
 
     if (e->type() == AudioPeaksThread::AudioPeaksReady) {
         AudioPeaksReadyEvent *ev = dynamic_cast<AudioPeaksReadyEvent *>(e);
@@ -106,7 +106,7 @@ bool AudioPeaksGenerator::event(QEvent *e)
             int token = (int)ev->data();
             m_channels = 0; // to be filled as getComputedValues() return value
 
-            RG_DEBUG << "AudioPeaksGenerator::token " << token << ", my token " << m_token << endl;
+            RG_DEBUG << "AudioPeaksGenerator::token " << token << ", my token " << m_token;
 
             if (m_token >= 0 && token >= m_token) {
 

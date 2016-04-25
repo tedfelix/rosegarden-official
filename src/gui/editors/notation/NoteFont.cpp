@@ -271,7 +271,7 @@ NoteFont::getPixmap(CharName charName, QPixmap &pixmap, bool inverted) const
     else ok = m_fontMap.getInversionSrc(m_size, charName, src);
 
     if (ok) {
-        NOTATION_DEBUG << "NoteFont::getPixmap: Loading \"" << src << "\"" << endl;
+        NOTATION_DEBUG << "NoteFont::getPixmap: Loading \"" << src << "\"";
 
         found = new QPixmap(src);
 

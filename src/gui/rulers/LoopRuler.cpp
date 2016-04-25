@@ -116,7 +116,7 @@ void LoopRuler::scrollHoriz(int x)
 //    }
 
 /*### These bitBlts are not working
-    RG_DEBUG << "LoopRuler::scrollHoriz > Dodgy bitBlt start?" << endl;
+    RG_DEBUG << "LoopRuler::scrollHoriz > Dodgy bitBlt start?";
     if (dx > 0) { // moving right, so the existing stuff moves left
         bitBlt(this, 0, 0, this, dx, 0, w - dx, h);
         repaint(w - dx, 0, dx, h);
@@ -124,7 +124,7 @@ void LoopRuler::scrollHoriz(int x)
         bitBlt(this, -dx, 0, this, 0, 0, w + dx, h);
         repaint(0, 0, -dx, h);
     }
-    RG_DEBUG << "LoopRuler::scrollHoriz > Dodgy bitBlt end?" << endl;
+    RG_DEBUG << "LoopRuler::scrollHoriz > Dodgy bitBlt end?";
 */
     update();
 }
@@ -152,7 +152,7 @@ QSize LoopRuler::minimumSizeHint() const
 
 void LoopRuler::paintEvent(QPaintEvent* e)
 {
-//    RG_DEBUG << "LoopRuler::paintEvent" << endl;
+//    RG_DEBUG << "LoopRuler::paintEvent";
 
     QPainter paint(this);
 
@@ -274,7 +274,7 @@ LoopRuler::mouseEventToSceneX(QMouseEvent *mE)
 void
 LoopRuler::mousePressEvent(QMouseEvent *mE)
 {
-    RG_DEBUG << "LoopRuler::mousePressEvent: x = " << mE->x() << endl;
+    RG_DEBUG << "LoopRuler::mousePressEvent: x = " << mE->x();
 
     setLoopingMode((mE->modifiers() & Qt::ShiftModifier) != 0);
 
@@ -358,7 +358,7 @@ LoopRuler::mouseDoubleClickEvent(QMouseEvent *mE)
     if (x < 0)
         x = 0;
 
-    RG_DEBUG << "LoopRuler::mouseDoubleClickEvent: x = " << x << ", looping = " << m_loopingMode << endl;
+    RG_DEBUG << "LoopRuler::mouseDoubleClickEvent: x = " << x << ", looping = " << m_loopingMode;
 
 	if (mE->button() == Qt::LeftButton && !m_loopingMode)
         emit setPlayPosition(m_grid->snapX(x));

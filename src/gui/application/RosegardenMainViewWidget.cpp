@@ -223,7 +223,7 @@ RosegardenMainViewWidget::RosegardenMainViewWidget(bool showTrackLabels,
 
 RosegardenMainViewWidget::~RosegardenMainViewWidget()
 {
-    RG_DEBUG << "~RosegardenMainViewWidget()" << endl;
+    RG_DEBUG << "~RosegardenMainViewWidget()";
     delete m_rulerScale;
 }
 
@@ -355,7 +355,7 @@ void RosegardenMainViewWidget::slotEditSegmentNotation(Segment* p)
     SetWaitCursor waitCursor;
     std::vector<Segment *> segmentsToEdit;
 
-    RG_DEBUG << "\n\n\n\nRosegardenMainViewWidget::slotEditSegmentNotation: p is " << p << endl;
+    RG_DEBUG << "\n\n\n\nRosegardenMainViewWidget::slotEditSegmentNotation: p is " << p;
 
     // The logic here is: If we're calling for this operation to
     // happen on a particular segment, then open that segment and if
@@ -488,7 +488,7 @@ void RosegardenMainViewWidget::slotEditSegmentPitchTracker(Segment* p)
     SetWaitCursor waitCursor;
     std::vector<Segment *> segmentsToEdit;
 
-    RG_DEBUG << "\n\n\n\nRosegardenMainViewWidget::slotEditSegmentNotation: p is " << p << endl;
+    RG_DEBUG << "\n\n\n\nRosegardenMainViewWidget::slotEditSegmentNotation: p is " << p;
 
     // The logic here is: If we're calling for this operation to
     // happen on a particular segment, then open that segment and if
@@ -1532,7 +1532,7 @@ void RosegardenMainViewWidget::slotShowSegmentLabels(bool v)
 void RosegardenMainViewWidget::slotAddTracks(unsigned int nbTracks,
                                       InstrumentId id, int pos)
 {
-    RG_DEBUG << "RosegardenMainViewWidget::slotAddTracks(" << nbTracks << ", " << pos << ")" << endl;
+    RG_DEBUG << "RosegardenMainViewWidget::slotAddTracks(" << nbTracks << ", " << pos << ")";
     m_trackEditor->addTracks(nbTracks, id, pos);
 }
 
@@ -1617,7 +1617,7 @@ RosegardenMainViewWidget::slotAddAudioSegmentDefaultPosition(AudioFileId audioFi
         const RealTime &startTime,
         const RealTime &endTime)
 {
-    RG_DEBUG << "RosegardenMainViewWidget::slotAddAudioSegmentDefaultPosition()..." << endl;
+    RG_DEBUG << "RosegardenMainViewWidget::slotAddAudioSegmentDefaultPosition()...";
 
     // Add at current track if it's an audio track, otherwise at first
     // empty audio track if there is one, otherwise at first audio track.
@@ -1908,7 +1908,7 @@ RosegardenMainViewWidget::slotUpdateRecordingSegment(Segment *segment,
     if (tracking != 1)
         return ;
 
-    RG_DEBUG << "RosegardenMainViewWidget::slotUpdateRecordingSegment: segment is " << segment << ", lastRecordingSegment is " << lastRecordingSegment << ", opening a new view" << endl;
+    RG_DEBUG << "RosegardenMainViewWidget::slotUpdateRecordingSegment: segment is " << segment << ", lastRecordingSegment is " << lastRecordingSegment << ", opening a new view";
 
     std::vector<Segment *> segments;
     segments.push_back(segment);
@@ -1967,7 +1967,7 @@ RosegardenMainViewWidget::slotActiveMainWindowChanged()
 void
 RosegardenMainViewWidget::slotControllerDeviceEventReceived(MappedEvent *e)
 {
-    RG_DEBUG << "Controller device event received - send to " << (void *)m_lastActiveMainWindow << " (I am " << this << ")" << endl;
+    RG_DEBUG << "Controller device event received - send to " << (void *)m_lastActiveMainWindow << " (I am " << this << ")";
 
     //!!! So, what _should_ we do with these?
 
@@ -2038,10 +2038,10 @@ RosegardenMainViewWidget::slotControllerDeviceEventReceived(MappedEvent *e, cons
 {
     if (preferredCustomer != this)
         return ;
-    RG_DEBUG << "RosegardenMainViewWidget::slotControllerDeviceEventReceived: this one's for me" << endl;
+    RG_DEBUG << "RosegardenMainViewWidget::slotControllerDeviceEventReceived: this one's for me";
     raise();
 
-    RG_DEBUG << "Event is type: " << int(e->getType()) << ", channel " << int(e->getRecordedChannel()) << ", data1 " << int(e->getData1()) << ", data2 " << int(e->getData2()) << endl;
+    RG_DEBUG << "Event is type: " << int(e->getType()) << ", channel " << int(e->getRecordedChannel()) << ", data1 " << int(e->getData1()) << ", data2 " << int(e->getData2());
 
     Composition &comp = getDocument()->getComposition();
     Studio &studio = getDocument()->getStudio();
@@ -2111,7 +2111,7 @@ RosegardenMainViewWidget::slotControllerDeviceEventReceived(MappedEvent *e, cons
             ControlList cl = md->getControlParameters();
             for (ControlList::const_iterator i = cl.begin(); i != cl.end(); ++i) {
                 if ((*i).getControllerValue() == controller) {
-                    RG_DEBUG << "Setting controller " << controller << " for instrument " << instrument->getId() << " to " << value << endl;
+                    RG_DEBUG << "Setting controller " << controller << " for instrument " << instrument->getId() << " to " << value;
                     instrument->setControllerValue(controller, value);
                     instrument->sendController(controller, value);
                     instrument->changed();
@@ -2127,14 +2127,14 @@ RosegardenMainViewWidget::slotControllerDeviceEventReceived(MappedEvent *e, cons
         switch (controller) {
 
         case MIDI_CONTROLLER_VOLUME:
-            RG_DEBUG << "Setting volume for instrument " << instrument->getId() << " to " << value << endl;
+            RG_DEBUG << "Setting volume for instrument " << instrument->getId() << " to " << value;
             instrument->setLevel(AudioLevel::fader_to_dB
                                  (value, 127, AudioLevel::ShortFader));
             instrument->changed();
             break;
 
         case MIDI_CONTROLLER_PAN:
-            RG_DEBUG << "Setting pan for instrument " << instrument->getId() << " to " << value << endl;
+            RG_DEBUG << "Setting pan for instrument " << instrument->getId() << " to " << value;
             instrument->setControllerValue(MIDI_CONTROLLER_PAN, MidiByte((value / 64.0) * 100.0 + 0.01));
             instrument->changed();
             break;

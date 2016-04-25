@@ -119,7 +119,7 @@ MidiKeyMappingEditor::reset()
     const MidiKeyMapping *m = m_device->getKeyMappingByName(m_mappingName);
 
     if (!m) {
-        RG_DEBUG << "WARNING: MidiKeyMappingEditor::reset: No such mapping as " << m_mappingName << endl;
+        RG_DEBUG << "WARNING: MidiKeyMappingEditor::reset: No such mapping as " << m_mappingName;
         return;
     }
 

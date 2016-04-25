@@ -166,7 +166,7 @@ ListEditView::paintEvent(QPaintEvent* e)
     // again at the end of the call.
     /*
         if (m_inPaintEvent) {
-    	NOTATION_DEBUG << "ListEditView::paintEvent: in paint event already" << endl;
+    	NOTATION_DEBUG << "ListEditView::paintEvent: in paint event already";
     	if (e) {
     	    if (m_havePendingPaintEvent) {
     		if (m_pendingPaintEvent) {
@@ -185,7 +185,7 @@ ListEditView::paintEvent(QPaintEvent* e)
     */ 
     //!!!    m_inPaintEvent = true;
 
-    RG_DEBUG << "ListEditView::paintEvent" << endl;
+    RG_DEBUG << "ListEditView::paintEvent";
 
     if (isCompositionModified()) {
 
@@ -319,7 +319,7 @@ void ListEditView::toggleWidget(QWidget* widget,
     QAction *toggleAction = findAction(toggleActionName);
 
     if (!toggleAction) {
-        RG_DEBUG << "!!! Unknown toggle action : " << toggleActionName << endl;
+        RG_DEBUG << "!!! Unknown toggle action : " << toggleActionName;
         return ;
     }
 

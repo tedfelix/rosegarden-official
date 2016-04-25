@@ -174,13 +174,13 @@ void PlayList::slotPlay()
     PlayListViewItem *item;
     item = dynamic_cast<PlayListViewItem*>( m_listView->currentItem() );
     
-    RG_DEBUG << "PlayList::slotPlay() - called. " << endl;
+    RG_DEBUG << "PlayList::slotPlay() - called. ";
     if (item){
         fname = item->text(1); // 1==column1==filename
         emit play(fname);
 //         emit play( item->getURL().toString() );
     }else{
-        RG_DEBUG << "PlayList::slotPlay() - No item selected. " << endl;
+        RG_DEBUG << "PlayList::slotPlay() - No item selected. ";
     }
 }
 
@@ -251,7 +251,7 @@ void PlayList::slotDeleteCurrent()
 
 void PlayList::slotCurrentItemChanged(QTreeWidgetItem* currentItem, QTreeWidgetItem* /* prevItem */)
 {
-//     RG_DEBUG << "PlayList::slotCurrentItemChanged() - selection Changed. " << endl;
+//     RG_DEBUG << "PlayList::slotCurrentItemChanged() - selection Changed. ";
     enableButtons(currentItem);
 }
 

@@ -108,7 +108,7 @@ PasteEventsCommand::getEffectiveEndTime(Segment &segment,
                                         timeT pasteTime)
 {
     if (!clipboard->isSingleSegment()) {
-        RG_DEBUG << "PasteEventsCommand::getEffectiveEndTime: not single segment" << endl;
+        RG_DEBUG << "PasteEventsCommand::getEffectiveEndTime: not single segment";
         return pasteTime;
     }
 
@@ -162,7 +162,7 @@ PasteEventsCommand::isPossible()
         }
     }
 
-    RG_DEBUG << "PasteEventsCommand::isPossible: paste time is " << pasteTime << ", origin is " << origin << ", duration is " << duration << endl;
+    RG_DEBUG << "PasteEventsCommand::isPossible: paste time is " << pasteTime << ", origin is " << origin << ", duration is " << duration;
 
     if (pasteTime + duration > destination->getEndTime()) {
         return false;
@@ -196,7 +196,7 @@ PasteEventsCommand::isPossible()
 void
 PasteEventsCommand::modifySegment()
 {
-    RG_DEBUG << "PasteEventsCommand::modifySegment" << endl;
+    RG_DEBUG << "PasteEventsCommand::modifySegment";
 
     if (!m_clipboard->isSingleSegment())
         return ;

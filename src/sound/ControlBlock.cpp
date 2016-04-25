@@ -273,7 +273,7 @@ ControlBlock::
 setSelectedTrack(TrackId track)
 {
 #ifdef DEBUG_CONTROL_BLOCK
-    RG_DEBUG << "ControlBlock::setSelectedTrack()" << endl;
+    RG_DEBUG << "ControlBlock::setSelectedTrack()";
 #endif
      
     // Undo the old selected track.  Safe even if it referred to the

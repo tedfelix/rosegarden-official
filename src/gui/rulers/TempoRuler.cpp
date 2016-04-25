@@ -366,7 +366,7 @@ TempoRuler::mouseMoveEvent(QMouseEvent *e)
         int bar, beat, fraction, remainder;
         m_composition->getMusicalTimeForAbsoluteTime(tc.first, bar, beat,
                 fraction, remainder);
-        //RG_DEBUG << "Tempo change: tempo " << m_composition->getTempoQpm(tc.second) << " at " << bar << ":" << beat << ":" << fraction << ":" << remainder << endl;
+        //RG_DEBUG << "Tempo change: tempo " << m_composition->getTempoQpm(tc.second) << " at " << bar << ":" << beat << ":" << fraction << ":" << remainder;
 
         m_illuminate = tcn;
         m_illuminatePoint = false;
@@ -701,7 +701,7 @@ TempoRuler::paintEvent(QPaintEvent* e)
         paint.setBrush(colour);
 
         if (!m_refreshLinesOnly) {
-            //         RG_DEBUG << "TempoRuler: draw rect from " << x0 << " to " << x1 << endl;
+            //         RG_DEBUG << "TempoRuler: draw rect from " << x0 << " to " << x1;
             paint.drawRect(int(x0), 0, int(x1 - x0) + 1, height());
         }
 

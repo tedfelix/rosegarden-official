@@ -181,7 +181,7 @@ void PianoKeyboard::leaveEvent(QEvent*)
 void PianoKeyboard::drawHoverNote(int evPitch)
 {
     if (m_lastHoverHighlight != evPitch) {
-        //MATRIX_DEBUG << "PianoKeyboard::drawHoverNote : note = " << evPitch << endl;
+        //MATRIX_DEBUG << "PianoKeyboard::drawHoverNote : note = " << evPitch;
         m_lastHoverHighlight = evPitch;
 
         int count = 0;
@@ -217,7 +217,7 @@ void PianoKeyboard::drawHoverNote(int evPitch)
                             tIt = wIt;
 
                             if (++tIt != m_whiteKeyPos.end()) {
-                                //MATRIX_DEBUG << "WHITE KEY HEIGHT = " << *tIt - *wIt << endl;
+                                //MATRIX_DEBUG << "WHITE KEY HEIGHT = " << *tIt - *wIt;
                                 if (*tIt - *wIt == whiteKeyHeight) {
                                     yPos += 2;
                                 }

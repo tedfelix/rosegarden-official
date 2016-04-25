@@ -97,7 +97,7 @@ FileLocateDialog::slotUser3()
              tr("WAV files") + " (*.wav *.WAV)" + ";;" +
              tr("All files") + " (*)");
 
-        RG_DEBUG << "FileLocateDialog::slotUser3() : m_file = " << m_file << endl;
+        RG_DEBUG << "FileLocateDialog::slotUser3() : m_file = " << m_file;
 
         if (m_file.isEmpty()) {
             RG_DEBUG << "FileLocateDialog::slotUser3() : reject\n";

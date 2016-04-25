@@ -77,7 +77,7 @@ void SegmentResizer::stow()
 
 void SegmentResizer::mousePressEvent(QMouseEvent *e)
 {
-    RG_DEBUG << "SegmentResizer::mousePressEvent" << endl;
+    RG_DEBUG << "SegmentResizer::mousePressEvent";
 
     // Let the baseclass have a go.
     SegmentTool::mousePressEvent(e);
@@ -94,7 +94,7 @@ void SegmentResizer::mousePressEvent(QMouseEvent *e)
     ChangingSegmentPtr item = m_canvas->getModel()->getSegmentAt(pos);
 
     if (item) {
-        RG_DEBUG << "SegmentResizer::mousePressEvent - got item" << endl;
+        RG_DEBUG << "SegmentResizer::mousePressEvent - got item";
         setChangingSegment(item);
 
         // Are we resizing from start or end?
@@ -272,7 +272,7 @@ void SegmentResizer::mouseReleaseEvent(QMouseEvent *e)
 
 int SegmentResizer::mouseMoveEvent(QMouseEvent *e)
 {
-    //     RG_DEBUG << "SegmentResizer::mouseMoveEvent" << endl;
+    //     RG_DEBUG << "SegmentResizer::mouseMoveEvent";
 
     // No need to propagate.
     e->accept();

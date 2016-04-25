@@ -101,7 +101,7 @@ Fingering::parseFingering(const QString& ch, QString& errorString)
         bool b = false;
         unsigned int fn = t.toUInt(&b);
         if (b) {
-//            NOTATION_DEBUG << "Fingering::parseFingering : '" << t << "' = " << fn << endl;  
+//            NOTATION_DEBUG << "Fingering::parseFingering : '" << t << "' = " << fn;  
             fingering[idx] = fn;
         } else if (t.toLower() == "x") {
 //            NOTATION_DEBUG << "Fingering::parseFingering : '" << t << "' = MUTED\n";  

@@ -74,7 +74,7 @@ GuitarChordEditorDialog::GuitarChordEditorDialog(Guitar::Chord& chord, const Gui
     m_fingeringBox->setFingering(m_chord.getFingering());
     topLayout->addWidget(m_fingeringBox, 0, 0, 7- 0+1, 0- 0+1);
 
-    NOTATION_DEBUG << "GuitarChordEditorDialog : chord = " << m_chord << endl;
+    NOTATION_DEBUG << "GuitarChordEditorDialog : chord = " << m_chord;
 
 
     QStringList rootList = m_chordMap.getRootList();

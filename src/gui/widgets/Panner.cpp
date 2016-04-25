@@ -65,13 +65,13 @@ Panner::setScene(QGraphicsScene *s)
     m_cache = QPixmap();
     connect(scene(), SIGNAL(sceneRectChanged(const QRectF &)),
             this, SLOT(slotSceneRectChanged(const QRectF &)));
-    RG_DEBUG << "Panner::setScene: scene is " << scene() << endl;
+    RG_DEBUG << "Panner::setScene: scene is " << scene();
 }
 
 void
 Panner::slotSetPannedRect(QRectF rect) 
 {
-    RG_DEBUG << "Panner::slotSetPannedRect(" << rect << ")" << endl;
+    RG_DEBUG << "Panner::slotSetPannedRect(" << rect << ")";
     
     m_pannedRect = rect;
     viewport()->update();
@@ -154,7 +154,7 @@ Panner::paintEvent(QPaintEvent *e)
         paint.drawLine(top, bottom);
     }
 
-    RG_DEBUG << "draw polygon: " << mapFromScene(m_pannedRect) << endl;
+    RG_DEBUG << "draw polygon: " << mapFromScene(m_pannedRect);
     paint.end();
 
     emit pannerChanged(m_pannedRect);

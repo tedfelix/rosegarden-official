@@ -224,7 +224,7 @@ KeyInsertionCommand::modifySegment()
         // create a new key with the newly derived name, and swap it for the
         // user-specified version
         Key k(newKeyName);
-        RG_DEBUG << "KeyInsertCommand: inserting transposed key" << endl
+        RG_DEBUG << "KeyInsertCommand: inserting transposed key"
         << "        user key was: " << m_key.getName() << endl
         << "    tranposed key is: " << k.getName() << endl;
         m_key = k;

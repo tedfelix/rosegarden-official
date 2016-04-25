@@ -72,7 +72,7 @@ ExpandFigurationCommand::initialise(SegmentSelection selection)
     int figSourceID = -1;
     bool gotFigSource = false;
 
-    RG_DEBUG << "Initializing ExpandFigurationCommand" << endl;
+    RG_DEBUG << "Initializing ExpandFigurationCommand";
 
     // Update, because if we need new IDs they mustn't duplicate old
     // IDs, so we must be up to date on what IDs are there.

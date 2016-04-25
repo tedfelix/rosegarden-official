@@ -69,7 +69,7 @@ PresetHandlerDialog::~PresetHandlerDialog()
 void
 PresetHandlerDialog::initDialog()
 {
-    RG_DEBUG << "PresetHandlerDialog::initDialog()" << endl;
+    RG_DEBUG << "PresetHandlerDialog::initDialog()";
 
     setModal(true);
     setWindowTitle(tr("Load track parameters preset"));
@@ -263,13 +263,13 @@ PresetHandlerDialog::getConvertOnlySelectedSegments()
 void
 PresetHandlerDialog::populateCategoryCombo()
 {
-    RG_DEBUG << "PresetHandlerDialog::populateCategoryCombo()" << endl;
+    RG_DEBUG << "PresetHandlerDialog::populateCategoryCombo()";
 
     for (CategoriesContainer::iterator i = m_categories.begin();
             i != m_categories.end(); ++i) {
 
 #ifdef DEBUG_CATEGORIES
-        RG_DEBUG << "    adding category: " << (*i).getName() << endl;
+        RG_DEBUG << "    adding category: " << (*i).getName();
 #endif
 
         m_categoryCombo->addItem(QObject::tr((*i).getName().toStdString().c_str()));
@@ -279,7 +279,7 @@ PresetHandlerDialog::populateCategoryCombo()
 void
 PresetHandlerDialog::slotCategoryIndexChanged(int index)
 {
-    RG_DEBUG << "PresetHandlerDialog::slotCategoryIndexChanged(" << index << ")" << endl;
+    RG_DEBUG << "PresetHandlerDialog::slotCategoryIndexChanged(" << index << ")";
 
     CategoryElement e = m_categories[index];
     ElementContainer c = e.getPresets();
@@ -290,7 +290,7 @@ PresetHandlerDialog::slotCategoryIndexChanged(int index)
             i != c.end(); ++i) {
 
 #ifdef DEBUG_CATEGORIES
-        RG_DEBUG << "    adding instrument: " << (*i).getName() << endl;
+        RG_DEBUG << "    adding instrument: " << (*i).getName();
 #endif
 
         m_instrumentCombo->addItem(QObject::tr((*i).getName().toStdString().c_str()));
@@ -301,7 +301,7 @@ PresetHandlerDialog::slotCategoryIndexChanged(int index)
 void
 PresetHandlerDialog::accept()
 {
-    RG_DEBUG << "PresetHandlerDialog::accept()" << endl;
+    RG_DEBUG << "PresetHandlerDialog::accept()";
 
     QSettings settings;
     settings.beginGroup( PresetDialogConfigGroup );

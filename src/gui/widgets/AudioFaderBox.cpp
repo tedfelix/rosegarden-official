@@ -238,16 +238,16 @@ AudioFaderBox::slotSetInstrument(Studio *studio,
         setAudioChannels(instrument->getAudioChannels());
     if (instrument) {
 
-        RG_DEBUG << "AudioFaderBox::slotSetInstrument(" << instrument->getId() << ")" << endl;
+        RG_DEBUG << "AudioFaderBox::slotSetInstrument(" << instrument->getId() << ")";
 
         setIsSynth(instrument->getType() == Instrument::SoftSynth);
         if (instrument->getType() == Instrument::SoftSynth) {
             bool gui = false;
-            RG_DEBUG << "AudioFaderBox::slotSetInstrument(" << instrument->getId() << "): is soft synth" << endl;
+            RG_DEBUG << "AudioFaderBox::slotSetInstrument(" << instrument->getId() << "): is soft synth";
 
             gui = RosegardenMainWindow::self()->getPluginGUIManager()->hasGUI
                   (instrument->getId(), Instrument::SYNTH_PLUGIN_POSITION);
-            RG_DEBUG << "AudioFaderBox::slotSetInstrument(" << instrument->getId() << "): has gui = " << gui << endl;
+            RG_DEBUG << "AudioFaderBox::slotSetInstrument(" << instrument->getId() << "): has gui = " << gui;
 
             m_synthGUIButton->setEnabled(gui);
         }

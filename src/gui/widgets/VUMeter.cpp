@@ -217,7 +217,7 @@ VUMeter::setLevel(double leftLevel, double rightLevel, bool record)
     if (!isVisible())
         return ;
 
-    //    RG_DEBUG << "setLevel(" << (void *)this << "): record=" << record << ", leftLevel=" << leftLevel << ", hasRecord=" << m_hasRecord << endl;
+    //    RG_DEBUG << "setLevel(" << (void *)this << "): record=" << record << ", leftLevel=" << leftLevel << ", hasRecord=" << m_hasRecord;
 
     if (record && !m_hasRecord)
         return ;
@@ -352,7 +352,7 @@ VUMeter::setLevel(double leftLevel, double rightLevel, bool record)
 void
 VUMeter::paintEvent(QPaintEvent *e)
 {
-//    RG_DEBUG << "VUMeter::paintEvent - height = " << height() << endl;
+//    RG_DEBUG << "VUMeter::paintEvent - height = " << height();
     QPainter paint(this);
 
     paint.setRenderHint(QPainter::Antialiasing, false);
@@ -454,7 +454,7 @@ VUMeter::drawColouredBar(QPainter *paint, int channel,
             mixedColour = m_velocityColour->getColour(m_levelRight);
         }
 
-        //        RG_DEBUG << "VUMeter::drawColouredBar - level = " << m_levelLeft << endl;
+        //        RG_DEBUG << "VUMeter::drawColouredBar - level = " << m_levelLeft;
 
         paint->fillRect(x, y, w, h, mixedColour);
     }

@@ -377,7 +377,7 @@ TrackButtons::slotUpdateTracks()
                     m_trackHBoxes.push_back(trackHBox);
                 }
             } else
-                RG_DEBUG << "TrackButtons::slotUpdateTracks - can't find TrackId for position " << i << endl;
+                RG_DEBUG << "TrackButtons::slotUpdateTracks - can't find TrackId for position " << i;
         }
     }
 

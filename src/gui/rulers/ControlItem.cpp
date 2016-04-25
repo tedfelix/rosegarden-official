@@ -47,7 +47,7 @@ ControlItem::~ControlItem()
 
 void ControlItem::setValue(float v)
 {
-//     RG_DEBUG << "ControlItem::setValue(" << v << ") x = " << x() << endl;
+//     RG_DEBUG << "ControlItem::setValue(" << v << ") x = " << x();
 
     m_y = v;
 }

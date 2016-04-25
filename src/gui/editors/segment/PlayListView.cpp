@@ -128,7 +128,7 @@ void PlayListView::mouseMoveEvent(QMouseEvent *event){
     //mimeData->setData( line.toUtf8(), "text/uri-list" );
     drag->setMimeData(mimeData);
     
-    RG_DEBUG << "Starting drag from PlayListView::mouseMoveEvent() with mime : " << mimeData->formats() << " - " << mimeData->urls()[0] << endl;
+    RG_DEBUG << "Starting drag from PlayListView::mouseMoveEvent() with mime : " << mimeData->formats() << " - " << mimeData->urls()[0];
     
     // start drag
     drag->start(Qt::CopyAction | Qt::MoveAction);
@@ -180,12 +180,12 @@ void PlayListView::dropEvent(QDropEvent* e)
         }
     } else {
         e->ignore();
-        RG_DEBUG << "PlayListView::dropEvent: ignored dropEvent (invalid mime) " << endl;
+        RG_DEBUG << "PlayListView::dropEvent: ignored dropEvent (invalid mime) ";
         return;
     }
 
     if (uriList.empty() && text == "") {
-        RG_DEBUG << "PlayListView::dropEvent: Nothing dropped" << endl;
+        RG_DEBUG << "PlayListView::dropEvent: Nothing dropped";
         return;
     }
     if( text != "" ){

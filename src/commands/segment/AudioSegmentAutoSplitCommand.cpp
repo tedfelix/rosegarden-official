@@ -114,7 +114,7 @@ AudioSegmentAutoSplitCommand::execute()
             // into as an offset from the original segment's start
             // time
 
-            RG_DEBUG << "AudioSegmentAutoSplitCommand::execute: range " << it->first << " -> " << it->second << endl;
+            RG_DEBUG << "AudioSegmentAutoSplitCommand::execute: range " << it->first << " -> " << it->second;
 
             absStartTime = m_composition->getElapsedTimeForRealTime
                            (origStartRT - audioStart + it->first);
@@ -157,7 +157,7 @@ AudioSegmentAutoSplitCommand::execute()
         }
     }
 
-    RG_DEBUG << "AudioSegmentAutoSplitCommand::execute: have " << m_newSegments.size() << " new segments" << endl;
+    RG_DEBUG << "AudioSegmentAutoSplitCommand::execute: have " << m_newSegments.size() << " new segments";
 
     for (size_t i = 0; i < m_newSegments.size(); ++i) {
         m_composition->addSegment(m_newSegments[i]);

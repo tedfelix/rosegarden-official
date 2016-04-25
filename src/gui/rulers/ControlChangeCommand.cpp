@@ -30,7 +30,7 @@ ControlChangeCommand::ControlChangeCommand(ControlItemList selectedItems,
             start, (start==end)?start+10:end, true),
       m_selectedItems(selectedItems)
 {
-    RG_DEBUG << "ControlChangeCommand : from " << start << " to " << end << endl;
+    RG_DEBUG << "ControlChangeCommand : from " << start << " to " << end;
 }
 
 

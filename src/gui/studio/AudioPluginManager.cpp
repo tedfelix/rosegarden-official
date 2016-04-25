@@ -45,7 +45,7 @@ AudioPluginManager::AudioPluginManager() :
     m_sampleRate(0),
     m_enumerator(this)
 {
-    RG_DEBUG << "AudioPluginManager::AudioPluginManager" << endl;
+    RG_DEBUG << "AudioPluginManager::AudioPluginManager";
 
     // Clear the plugin clipboard
     //
@@ -55,7 +55,7 @@ AudioPluginManager::AudioPluginManager() :
     
     m_enumerator.start();
 
-    RG_DEBUG << "AudioPluginManager::AudioPluginManager done" << endl;
+    RG_DEBUG << "AudioPluginManager::AudioPluginManager done";
 }
 
 AudioPluginManager::Enumerator::Enumerator(AudioPluginManager *manager) :
@@ -69,7 +69,7 @@ AudioPluginManager::Enumerator::run()
     QMutexLocker locker(&(m_manager->m_mutex));
     MappedObjectPropertyList rawPlugins;
 
-    RG_DEBUG << "\n\nAudioPluginManager::Enumerator::run()\n\n" << endl;
+    RG_DEBUG << "\n\nAudioPluginManager::Enumerator::run()\n\n";
 
     if (!RosegardenApplication::noSequencerMode()) {
         // We only waste the time looking for plugins here if we
@@ -128,7 +128,7 @@ AudioPluginManager::Enumerator::run()
 
     m_done = true;
 
-    RG_DEBUG << "\n\nAudioPluginManager::Enumerator::run() - done\n\n" << endl;
+    RG_DEBUG << "\n\nAudioPluginManager::Enumerator::run() - done\n\n";
 }
 
 AudioPlugin*
@@ -277,7 +277,7 @@ void
 AudioPluginManager::awaitEnumeration()
 {
     while (!m_enumerator.isDone()) {
-        RG_DEBUG << "\n\nAudioPluginManager::awaitEnumeration() - waiting\n\n" << endl;
+        RG_DEBUG << "\n\nAudioPluginManager::awaitEnumeration() - waiting\n\n";
 //        m_mutex.lock();
         usleep(100000);
 //        m_mutex.unlock();

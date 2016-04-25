@@ -53,7 +53,7 @@ public:
 	m_externalPainter = 0;
 
         if (m_myPainter.isActive()) {
-            NOTATION_DEBUG << "WARNING: NotePixmapPainter::begin(): Painter already active" << endl;
+            NOTATION_DEBUG << "WARNING: NotePixmapPainter::begin(): Painter already active";
             assert(!m_myPainter.isActive());
         }
         

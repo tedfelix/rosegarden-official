@@ -222,7 +222,7 @@ Fader::position_to_value(int position)
             if (value < m_min) value = float(m_min);
         }
 
-        RG_DEBUG << "Fader::position_to_value - limited value = " << value << endl;
+        RG_DEBUG << "Fader::position_to_value - limited value = " << value;
     */
     return value;
 }
@@ -416,10 +416,10 @@ Fader::wheelEvent(QWheelEvent *e)
         else
             buttonPosition -= 1;
     }
-    RG_DEBUG << "Fader::wheelEvent - button position = " << buttonPosition << endl;
+    RG_DEBUG << "Fader::wheelEvent - button position = " << buttonPosition;
     setFader(position_to_value(buttonPosition));
     emit faderChanged(m_value);
-    RG_DEBUG << "Fader::wheelEvent - value = " << m_value << endl;
+    RG_DEBUG << "Fader::wheelEvent - value = " << m_value;
 
     showFloatText();
 }

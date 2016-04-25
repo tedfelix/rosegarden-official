@@ -120,7 +120,7 @@ SequenceManager::~SequenceManager()
         m_doc->getComposition().removeObserver(this);
     }
 
-    SEQMAN_DEBUG << "SequenceManager::~SequenceManager()" << endl;
+    SEQMAN_DEBUG << "SequenceManager::~SequenceManager()";
     delete m_compositionMapper;
     m_metronomeMapper->removeOwner();
     m_tempoSegmentMapper->removeOwner();
@@ -130,7 +130,7 @@ SequenceManager::~SequenceManager()
 void
 SequenceManager::setDocument(RosegardenDocument *doc)
 {
-    SEQMAN_DEBUG << "SequenceManager::setDocument(" << doc << ")" << endl;
+    SEQMAN_DEBUG << "SequenceManager::setDocument(" << doc << ")";
 
     DataBlockRepository::clear();
 
@@ -227,9 +227,9 @@ SequenceManager::play()
     if (comp.getCurrentTempo() == 0) {
         comp.setCompositionDefaultTempo(comp.getTempoForQpm(120.0));
 
-        SEQMAN_DEBUG << "SequenceManager::play() - setting Tempo to Default value of 120.000" << endl;
+        SEQMAN_DEBUG << "SequenceManager::play() - setting Tempo to Default value of 120.000";
     } else {
-        SEQMAN_DEBUG << "SequenceManager::play() - starting to play" << endl;
+        SEQMAN_DEBUG << "SequenceManager::play() - starting to play";
     }
 
     // Send initial tempo
@@ -335,8 +335,8 @@ SequenceManager::stopping()
         return ;
     }
 
-    SEQMAN_DEBUG << "SequenceManager::stopping() - preparing to stop" << endl;
-    //    SEQMAN_DEBUG << kdBacktrace() << endl;
+    SEQMAN_DEBUG << "SequenceManager::stopping() - preparing to stop";
+    //    SEQMAN_DEBUG << kdBacktrace();
 
     stop();
 
@@ -397,7 +397,7 @@ SequenceManager::stop()
         m_doc->stopRecordingMidi();
         m_doc->stopRecordingAudio();
 
-        SEQMAN_DEBUG << "SequenceManager::stop() - stopped recording" << endl;
+        SEQMAN_DEBUG << "SequenceManager::stop() - stopped recording";
     } else {
         m_doc->stopPlaying();
     }
@@ -405,7 +405,7 @@ SequenceManager::stop()
     // always untoggle the play button at this stage
     //
     m_transport->PlayButton()->setChecked(false);
-    SEQMAN_DEBUG << "SequenceManager::stop() - stopped playing" << endl;
+    SEQMAN_DEBUG << "SequenceManager::stop() - stopped playing";
     // We don't reset controllers at this point - what happens with static
     // controllers the next time we play otherwise?  [rwb]
     //resetControllers();
@@ -431,7 +431,7 @@ SequenceManager::rewind()
         clock_t now = clock();
         int elapsed = (now - m_lastRewoundAt) * 1000 / CLOCKS_PER_SEC;
 
-        SEQMAN_DEBUG << "That was " << m_lastRewoundAt << ", this is " << now << ", elapsed is " << elapsed << endl;
+        SEQMAN_DEBUG << "That was " << m_lastRewoundAt << ", this is " << now << ", elapsed is " << elapsed;
         if (elapsed >= 0 && elapsed <= 200) {
             if (position > barRange.first &&
                     position < barRange.second &&
@@ -489,7 +489,7 @@ SequenceManager::record(bool toggled)
 {
     if (!m_doc) return;
 
-    SEQMAN_DEBUG << "SequenceManager::record(" << toggled << ")" << endl;
+    SEQMAN_DEBUG << "SequenceManager::record(" << toggled << ")";
     Composition &comp = m_doc->getComposition();
     Studio &studio = m_doc->getStudio();
 
@@ -524,7 +524,7 @@ SequenceManager::record(bool toggled)
     if (toggled) { // preparing record or punch-in record
 
         if (m_transportStatus == RECORDING_ARMED) {
-            SEQMAN_DEBUG << "SequenceManager::record - unarming record" << endl;
+            SEQMAN_DEBUG << "SequenceManager::record - unarming record";
             m_transportStatus = STOPPED;
 
             // Toggle the buttons
@@ -535,7 +535,7 @@ SequenceManager::record(bool toggled)
         }
 
         if (m_transportStatus == STOPPED) {
-            SEQMAN_DEBUG << "SequenceManager::record - armed record" << endl;
+            SEQMAN_DEBUG << "SequenceManager::record - armed record";
             m_transportStatus = RECORDING_ARMED;
 
             // Toggle the buttons
@@ -546,7 +546,7 @@ SequenceManager::record(bool toggled)
         }
 
         if (m_transportStatus == RECORDING) {
-            SEQMAN_DEBUG << "SequenceManager::record - stop recording and keep playing" << endl;
+            SEQMAN_DEBUG << "SequenceManager::record - stop recording and keep playing";
             if (!RosegardenSequencer::getInstance()->punchOut()) {
 
                 // #1797873 - set new transport status first, so that
@@ -570,7 +570,7 @@ SequenceManager::record(bool toggled)
         }
 
         if (m_transportStatus == PLAYING) {
-            SEQMAN_DEBUG << "SequenceManager::record - punch in recording" << endl;
+            SEQMAN_DEBUG << "SequenceManager::record - punch in recording";
             punchIn = true;
             goto punchin;
         }
@@ -664,7 +664,7 @@ punchin:
 
                 // If this is a MIDI instrument
                 if (inst && (inst->getType() != Instrument::Audio)) {
-                    SEQMAN_DEBUG << "SequenceManager:  mdoc->addRecordMIDISegment(" << *i << ")" << endl;
+                    SEQMAN_DEBUG << "SequenceManager:  mdoc->addRecordMIDISegment(" << *i << ")";
                     // Create the record MIDI segment now, so that the
                     // composition view has a real segment to display.  It
                     // won't actually be added to the composition until the
@@ -691,10 +691,10 @@ punchin:
         m_transport->PlayButton()->setChecked(true);
 
         if (comp.getCurrentTempo() == 0) {
-            SEQMAN_DEBUG << "SequenceManager::play() - setting Tempo to Default value of 120.000" << endl;
+            SEQMAN_DEBUG << "SequenceManager::play() - setting Tempo to Default value of 120.000";
             comp.setCompositionDefaultTempo(comp.getTempoForQpm(120.0));
         } else {
-            SEQMAN_DEBUG << "SequenceManager::record() - starting to record" << endl;
+            SEQMAN_DEBUG << "SequenceManager::record() - starting to record";
         }
 
         // set the tempo in the transport
@@ -911,7 +911,7 @@ SequenceManager::processAsynchronousMidi(const MappedEventList &mC,
                 m_transportStatus == RECORDING) {
                 if ((*i)->getType() == MappedEvent::SystemFailure) {
 
-                    SEQMAN_DEBUG << "Failure of some sort..." << endl;
+                    SEQMAN_DEBUG << "Failure of some sort...";
                     bool handling = true;
 
                     /* These are the ones that we always report or handle. */
@@ -1164,7 +1164,7 @@ SequenceManager::processAsynchronousMidi(const MappedEventList &mC,
             }
         }
         if ((*i)->getRecordedDevice() == Device::CONTROL_DEVICE) {
-            SEQMAN_DEBUG << "controllerDeviceEventReceived" << endl;
+            SEQMAN_DEBUG << "controllerDeviceEventReceived";
             emit controllerDeviceEventReceived(*i);
         }
     }
@@ -1173,14 +1173,14 @@ SequenceManager::processAsynchronousMidi(const MappedEventList &mC,
 void
 SequenceManager::rewindToBeginning()
 {
-    SEQMAN_DEBUG << "SequenceManager::rewindToBeginning()" << endl;
+    SEQMAN_DEBUG << "SequenceManager::rewindToBeginning()";
     m_doc->slotSetPointerPosition(m_doc->getComposition().getStartMarker());
 }
 
 void
 SequenceManager::fastForwardToEnd()
 {
-    SEQMAN_DEBUG << "SequenceManager::fastForwardToEnd()" << endl;
+    SEQMAN_DEBUG << "SequenceManager::fastForwardToEnd()";
     Composition &comp = m_doc->getComposition();
     m_doc->slotSetPointerPosition(comp.getEndMarker());
 }
@@ -1221,7 +1221,7 @@ SequenceManager::checkSoundDriverStatus(bool warnUser)
     m_soundDriverStatus = RosegardenSequencer::getInstance()->
         getSoundDriverStatus(VERSION);
 
-    SEQMAN_DEBUG << "Sound driver status is: " << m_soundDriverStatus << endl;
+    SEQMAN_DEBUG << "Sound driver status is: " << m_soundDriverStatus;
     
     if (!warnUser) return;
 
@@ -1296,7 +1296,7 @@ SequenceManager::sendAudioLevel(MappedEvent *mE)
 void
 SequenceManager::resetMidiNetwork()
 {
-    SEQMAN_DEBUG << "SequenceManager::resetMidiNetwork - resetting" << endl;
+    SEQMAN_DEBUG << "SequenceManager::resetMidiNetwork - resetting";
     MappedEventList mC;
 
     // Should do all Midi Instrument - not just guess like this is doing
@@ -1358,7 +1358,7 @@ SequenceManager::reinitialiseSequencerStudio()
 void
 SequenceManager::panic()
 {
-    SEQMAN_DEBUG << "panic button" << endl;
+    SEQMAN_DEBUG << "panic button";
     
     stopping();
 
@@ -1428,7 +1428,7 @@ SequenceManager::applyFiltering(const MappedEventList &mC,
 
 void SequenceManager::resetCompositionMapper()
 {
-    SEQMAN_DEBUG << "SequenceManager::resetCompositionMapper()" << endl;
+    SEQMAN_DEBUG << "SequenceManager::resetCompositionMapper()";
     
     RosegardenSequencer::getInstance()->compositionAboutToBeDeleted();
 
@@ -1462,7 +1462,7 @@ void SequenceManager::populateCompositionMapper()
 }
 void SequenceManager::resetMetronomeMapper()
 {
-    SEQMAN_DEBUG << "SequenceManager::resetMetronomeMapper()" << endl;
+    SEQMAN_DEBUG << "SequenceManager::resetMetronomeMapper()";
     
     if (m_metronomeMapper) {
         RosegardenSequencer::getInstance()->segmentAboutToBeDeleted
@@ -1478,7 +1478,7 @@ void SequenceManager::resetMetronomeMapper()
 
 void SequenceManager::resetTempoSegmentMapper()
 {
-    SEQMAN_DEBUG << "SequenceManager::resetTempoSegmentMapper()" << endl;
+    SEQMAN_DEBUG << "SequenceManager::resetTempoSegmentMapper()";
     
     if (m_tempoSegmentMapper) {
         RosegardenSequencer::getInstance()->segmentAboutToBeDeleted
@@ -1494,7 +1494,7 @@ void SequenceManager::resetTempoSegmentMapper()
 
 void SequenceManager::resetTimeSigSegmentMapper()
 {
-    SEQMAN_DEBUG << "SequenceManager::resetTimeSigSegmentMapper()" << endl;
+    SEQMAN_DEBUG << "SequenceManager::resetTimeSigSegmentMapper()";
     
     if (m_timeSigSegmentMapper) {
         RosegardenSequencer::getInstance()->segmentAboutToBeDeleted
@@ -1510,7 +1510,7 @@ void SequenceManager::resetTimeSigSegmentMapper()
 
 void SequenceManager::resetControlBlock()
 {
-    SEQMAN_DEBUG << "SequenceManager::resetControlBlockMapper()" << endl;
+    SEQMAN_DEBUG << "SequenceManager::resetControlBlockMapper()";
     
     ControlBlock::getInstance()->setDocument(m_doc);
 }
@@ -1518,7 +1518,7 @@ void SequenceManager::resetControlBlock()
 bool SequenceManager::event(QEvent *e)
 {
     if (e->type() == QEvent::User) {
-        SEQMAN_DEBUG << "SequenceManager::event() with user event" << endl;
+        SEQMAN_DEBUG << "SequenceManager::event() with user event";
         if (m_updateRequested) {
             SEQMAN_DEBUG << "SequenceManager::event(): update requested"
                          << endl;
@@ -1533,7 +1533,7 @@ bool SequenceManager::event(QEvent *e)
 
 void SequenceManager::update()
 {
-    SEQMAN_DEBUG << "SequenceManager::update()" << endl;
+    SEQMAN_DEBUG << "SequenceManager::update()";
     // schedule a refresh-status check for the next event loop
     QEvent *e = new QEvent(QEvent::User);
     m_updateRequested = true;
@@ -1542,7 +1542,7 @@ void SequenceManager::update()
 
 void SequenceManager::checkRefreshStatus()
 {
-    SEQMAN_DEBUG << "SequenceManager::checkRefreshStatus()" << endl;
+    SEQMAN_DEBUG << "SequenceManager::checkRefreshStatus()";
     
     // Look at trigger segments first: if one of those has changed, we'll
     // need to be aware of it when scanning segments subsequently
@@ -1573,11 +1573,11 @@ void SequenceManager::checkRefreshStatus()
     m_triggerSegments = newTriggerMap;
 
 #ifdef DEBUG_SEQUENCE_MANAGER
-    SEQMAN_DEBUG << "SequenceManager::checkRefreshStatus: segments modified by changes to trigger segments are:" << endl;
+    SEQMAN_DEBUG << "SequenceManager::checkRefreshStatus: segments modified by changes to trigger segments are:";
     int x = 0;
     for (TriggerSegmentRec::SegmentRuntimeIdSet::iterator i = ridset.begin();
             i != ridset.end(); ++i) {
-        SEQMAN_DEBUG << x << ": " << *i << endl;
+        SEQMAN_DEBUG << x << ": " << *i;
         ++x;
     }
 #endif
@@ -1726,7 +1726,7 @@ void SequenceManager::processAddedSegment(Segment* s)
 
 void SequenceManager::processRemovedSegment(Segment* s)
 {
-    SEQMAN_DEBUG << "SequenceManager::processRemovedSegment()" << endl;
+    SEQMAN_DEBUG << "SequenceManager::processRemovedSegment()";
     // !!! WARNING !!!
     // The "s" segment pointer that is coming in to this routine has already
     // been deleted.  This is a POINTER TO DELETED MEMORY.  It cannot be
@@ -1752,7 +1752,7 @@ void SequenceManager::processRemovedSegment(Segment* s)
 
 void SequenceManager::endMarkerTimeChanged(const Composition *, bool /*shorten*/)
 {
-    SEQMAN_DEBUG << "SequenceManager::endMarkerTimeChanged()" << endl;
+    SEQMAN_DEBUG << "SequenceManager::endMarkerTimeChanged()";
 
     if (m_transportStatus == RECORDING) {
         // When recording, we just need to extend the metronome segment
@@ -1893,7 +1893,7 @@ void SequenceManager::soloChanged(const Composition *, bool solo, TrackId select
 
 void SequenceManager::tempoChanged(const Composition *c)
 {
-    SEQMAN_DEBUG << "SequenceManager::tempoChanged()" << endl;
+    SEQMAN_DEBUG << "SequenceManager::tempoChanged()";
     // Refresh all segments
     //
     for (SegmentRefreshMap::iterator i = m_segments.begin();

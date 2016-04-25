@@ -2167,7 +2167,7 @@ RosegardenDocument::updateRecordingMIDISegment()
 {
     Profiler profiler("RosegardenDocument::updateRecordingMIDISegment()");
 
-//    RG_DEBUG << "RosegardenDocument::updateRecordingMIDISegment" << endl;
+//    RG_DEBUG << "RosegardenDocument::updateRecordingMIDISegment";
 
     if (m_recordMIDISegments.size() == 0) {
         // make this call once to create one

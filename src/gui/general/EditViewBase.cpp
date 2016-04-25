@@ -88,7 +88,7 @@ Clipboard *EditViewBase::getClipboard()
 void
 EditViewBase::slotSegmentDeleted(Segment *s)
 {
-    RG_DEBUG << "EditViewBase::slotSegmentDeleted" << endl;
+    RG_DEBUG << "EditViewBase::slotSegmentDeleted";
     for (std::vector<Segment *>::iterator i = m_segments.begin();
          i != m_segments.end(); ++i) {
         if (*i == s) {
@@ -266,11 +266,11 @@ void
 EditViewBase::slotTestClipboard()
 {
     if (getClipboard()->isEmpty()) {
-        RG_DEBUG << "EditViewBase::slotTestClipboard(): empty" << endl;
+        RG_DEBUG << "EditViewBase::slotTestClipboard(): empty";
         leaveActionState("have_clipboard");
         leaveActionState("have_clipboard_single_segment");
     } else {
-        RG_DEBUG << "EditViewBase::slotTestClipboard(): not empty" << endl;
+        RG_DEBUG << "EditViewBase::slotTestClipboard(): not empty";
         enterActionState("have_clipboard");
         if (getClipboard()->isSingleSegment()) {
             enterActionState("have_clipboard_single_segment");

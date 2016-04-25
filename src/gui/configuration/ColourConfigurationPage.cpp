@@ -118,7 +118,7 @@ ColourConfigurationPage::apply()
     SegmentColourMapCommand *command = new SegmentColourMapCommand(m_doc, m_map);
     CommandHistory::getInstance()->addCommand(command);
 
-    RG_DEBUG << "ColourConfigurationPage::apply() emitting docColoursChanged()" << endl;
+    RG_DEBUG << "ColourConfigurationPage::apply() emitting docColoursChanged()";
     emit docColoursChanged();
 }
 

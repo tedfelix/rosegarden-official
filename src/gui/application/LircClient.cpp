@@ -60,7 +60,7 @@ LircClient::LircClient(void)
     m_socketNotifier = new QSocketNotifier(m_socket, QSocketNotifier::Read, 0);
     connect(m_socketNotifier, SIGNAL(activated(int)), this, SLOT(readButton()) );
 
-    RG_DEBUG << "LircClient::LircClient: connected to socket: " << m_socket << endl;
+    RG_DEBUG << "LircClient::LircClient: connected to socket: " << m_socket;
 }
 
 LircClient::~LircClient()
@@ -69,7 +69,7 @@ LircClient::~LircClient()
     delete m_socketNotifier;
     lirc_deinit();
 
-    RG_DEBUG << "LircClient::~LircClient: cleaned up" << endl;
+    RG_DEBUG << "LircClient::~LircClient: cleaned up";
 }
 
 void LircClient::readButton()
@@ -77,7 +77,7 @@ void LircClient::readButton()
     char *code;
     int ret;
 
-    RG_DEBUG << "LircClient::readButton" << endl;
+    RG_DEBUG << "LircClient::readButton";
 
     if (lirc_nextcode(&code) == 0 && code != NULL) {   // no error && a string is available
         // handle any command attached to that button

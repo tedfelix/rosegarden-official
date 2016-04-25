@@ -419,7 +419,7 @@ BankEditorDialog::initDialog()
             m_deviceNameMap[midiDevice->getId()] = midiDevice->getName();
             QString itemName = strtoqstr(midiDevice->getName());
 
-            RG_DEBUG << "BankEditorDialog::initDialog - adding " << itemName << endl;
+            RG_DEBUG << "BankEditorDialog::initDialog - adding " << itemName;
 
             twItemDevice = new MidiDeviceTreeWidgetItem(midiDevice->getId(), m_treeWidget, itemName);
             //twItemDevice->setFlags(Qt::ItemIsEditable | Qt::ItemIsSelectable);
@@ -773,7 +773,7 @@ BankEditorDialog::getCurrentMidiDevice()
 
 void BankEditorDialog::slotPopulateDeviceEditors(QTreeWidgetItem* item, QTreeWidgetItem*)
 {
-    RG_DEBUG << "BankEditorDialog::slotPopulateDeviceEditors" << endl;
+    RG_DEBUG << "BankEditorDialog::slotPopulateDeviceEditors";
 
     if (!item)
         return ;
@@ -888,7 +888,7 @@ void BankEditorDialog::populateDeviceEditors(QTreeWidgetItem* item)
     m_bankList = device->getBanks();
     setProgramList(device);
 
-    RG_DEBUG << "BankEditorDialog::populateDeviceEditors : not a bank item - disabling" << endl;
+    RG_DEBUG << "BankEditorDialog::populateDeviceEditors : not a bank item - disabling";
     m_delete->setEnabled(false);
     m_copyPrograms->setEnabled(false);
     m_pastePrograms->setEnabled(false);
@@ -1048,7 +1048,7 @@ BankEditorDialog::getParentDeviceItem(QTreeWidgetItem* item)
     }
 
     if (!item) {
-        RG_DEBUG << "BankEditorDialog::getParentDeviceItem : missing parent device item for bank item - this SHOULD NOT HAPPEN" << endl;
+        RG_DEBUG << "BankEditorDialog::getParentDeviceItem : missing parent device item for bank item - this SHOULD NOT HAPPEN";
         return 0;
     }
 
@@ -1098,7 +1098,7 @@ BankEditorDialog::slotAddBank()
                          qstrtostr(name));
         m_bankList.push_back(newBank);
 
-RG_DEBUG << "BankEditorDialog::slotAddBank() : deviceItem->getDeviceId() = " << deviceItem->getDeviceId() << endl;
+RG_DEBUG << "BankEditorDialog::slotAddBank() : deviceItem->getDeviceId() = " << deviceItem->getDeviceId();
         QTreeWidgetItem* newBankItem =
             new MidiBankTreeWidgetItem(deviceItem->getDeviceId(),
                                      m_bankList.size() - 1,
@@ -1255,20 +1255,20 @@ BankEditorDialog::slotDelete()
             for (KeyMappingList::iterator i = kml.begin();
                     i != kml.end(); ++i) {
                 if (i->getName() == keyMappingName) {
-                    RG_DEBUG << "erasing " << keyMappingName << endl;
+                    RG_DEBUG << "erasing " << keyMappingName;
                     kml.erase(i);
                     break;
                 }
             }
 
-            RG_DEBUG << " setting " << kml.size() << " key mappings to device " << endl;
+            RG_DEBUG << " setting " << kml.size() << " key mappings to device ";
 
             command->setKeyMappingList(kml);
             command->setOverwrite(true);
 
             addCommandToHistory(command);
 
-            RG_DEBUG << " device has " << device->getKeyMappings().size() << " key mappings now " << endl;
+            RG_DEBUG << " device has " << device->getKeyMappings().size() << " key mappings now ";
 
             updateDialog();
         }
@@ -1387,7 +1387,7 @@ BankEditorDialog::getFirstFreeBank(QTreeWidgetItem* /* item */)
 void
 BankEditorDialog::slotModifyDeviceOrBankName(QTreeWidgetItem* item, int)
 {
-    RG_DEBUG << "BankEditorDialog::slotModifyDeviceOrBankName" << endl;
+    RG_DEBUG << "BankEditorDialog::slotModifyDeviceOrBankName";
 
     MidiDeviceTreeWidgetItem* deviceItem =
         dynamic_cast<MidiDeviceTreeWidgetItem*>(item);

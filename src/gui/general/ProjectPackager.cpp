@@ -408,7 +408,7 @@ RG_DEBUG << "old line: " << line;
 
             line = extract;
 
-RG_DEBUG << "new line: " << line << endl;
+RG_DEBUG << "new line: " << line;
 
         } else if (line.contains(audioPathKey)) {
 
@@ -425,7 +425,7 @@ RG_DEBUG << "old line: " << line;
 
             line = extract;
 
-RG_DEBUG << "new line: " << line << endl;
+RG_DEBUG << "new line: " << line;
 
         } else if (line.contains(audioFileKey) && 
                    m_mode == ProjectPackager::Pack) {
@@ -451,7 +451,7 @@ RG_DEBUG << "new line: " << line << endl;
 
 RG_DEBUG << "\"" << line << "\" contains? \"" << (fileInfo.baseName()) << "\"";
 RG_DEBUG << "Qt says " << (line.contains(fileInfo.baseName()) ? "yes" : "no");
-RG_DEBUG << endl;
+RG_DEBUG;
 
                 if (line.contains(fileInfo.baseName())) {
                     keep = true;

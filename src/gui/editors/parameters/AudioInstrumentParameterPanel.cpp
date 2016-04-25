@@ -311,7 +311,7 @@ AudioInstrumentParameterPanel::setButtonColour(
 void
 AudioInstrumentParameterPanel::slotSynthButtonClicked()
 {
-    RG_DEBUG << "AudioInstrumentParameterPanel::slotSynthButtonClicked()" << endl;
+    RG_DEBUG << "AudioInstrumentParameterPanel::slotSynthButtonClicked()";
     slotSelectPlugin(Instrument::SYNTH_PLUGIN_POSITION);
 }
 
@@ -357,7 +357,7 @@ AudioInstrumentParameterPanel::setupForInstrument(Instrument* instrument)
 {
     blockSignals(true);
 
-    RG_DEBUG << "AudioInstrumentParameterPanel[" << this << "]::setupForInstrument(" << instrument << ")" << endl;
+    RG_DEBUG << "AudioInstrumentParameterPanel[" << this << "]::setupForInstrument(" << instrument << ")";
 
     QString l = QString::fromStdString(instrument->getAlias());
     if (l.isEmpty()) l = instrument->getLocalizedPresentationName();

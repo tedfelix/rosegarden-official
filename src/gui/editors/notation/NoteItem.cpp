@@ -69,7 +69,7 @@ NoteItem::paint(QPainter *painter,
 
     QTransform t = painter->worldTransform();
 
-//    NOTATION_DEBUG << "note: transform " << t << " differs from last transform " << m_lastTransform << ", or is not a small transform" << endl;
+//    NOTATION_DEBUG << "note: transform " << t << " differs from last transform " << m_lastTransform << ", or is not a small transform";
 
     bool tiny = (t.m11() < 0.15 || t.m22() < 0.15);
     if (!tiny) {

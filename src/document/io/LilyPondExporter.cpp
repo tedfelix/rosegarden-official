@@ -1151,7 +1151,7 @@ LilyPondExporter::write()
             }
         
             timeT markerTime = m_composition->getBarStartForTime((*i_marker)->getTime());
-            RG_DEBUG << "Marker: " << (*i_marker)->getTime() << " previous: " << prevMarkerTime << endl;
+            RG_DEBUG << "Marker: " << (*i_marker)->getTime() << " previous: " << prevMarkerTime;
             // how to cope with time signature changes?
             if (markerTime > prevMarkerTime) {
                 str << indent(col);
@@ -2185,7 +2185,7 @@ void LilyPondExporter::handleGuitarChord(Segment::iterator i, std::ofstream &str
         str << "\" ";
 
     } catch (Exception e) { // GuitarChord ctor failed
-        RG_DEBUG << "Bad GuitarChord event in LilyPond export" << endl;
+        RG_DEBUG << "Bad GuitarChord event in LilyPond export";
     }
 }
 

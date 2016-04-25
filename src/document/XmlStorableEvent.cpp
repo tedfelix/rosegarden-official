@@ -44,7 +44,7 @@ XmlStorableEvent::XmlStorableEvent(const QXmlAttributes &attributes,
 
         if (attrName == "package") {
 
-            RG_DEBUG << "XmlStorableEvent::XmlStorableEvent: Warning: XML still uses deprecated \"package\" attribute" << endl;
+            RG_DEBUG << "XmlStorableEvent::XmlStorableEvent: Warning: XML still uses deprecated \"package\" attribute";
 
         } else if (attrName == "type") {
 
@@ -56,7 +56,7 @@ XmlStorableEvent::XmlStorableEvent(const QXmlAttributes &attributes,
             int o = attrVal.toInt(&isNumeric);
 
             if (!isNumeric) {
-                RG_DEBUG << "XmlStorableEvent::XmlStorableEvent: Bad subordering: " << attrVal << endl;
+                RG_DEBUG << "XmlStorableEvent::XmlStorableEvent: Bad subordering: " << attrVal;
             } else {
                 if (o != 0)
                     setSubOrdering(o);
@@ -72,7 +72,7 @@ XmlStorableEvent::XmlStorableEvent(const QXmlAttributes &attributes,
                     Note n(NotationStrings::getNoteForName(attrVal));
                     setDuration(n.getDuration());
                 } catch (NotationStrings::MalformedNoteName m) {
-                    RG_DEBUG << "XmlStorableEvent::XmlStorableEvent: Bad duration: " << attrVal << " (" << m.getMessage() << ")" << endl;
+                    RG_DEBUG << "XmlStorableEvent::XmlStorableEvent: Bad duration: " << attrVal << " (" << m.getMessage() << ")";
                 }
             } else {
                 setDuration(d);
@@ -84,7 +84,7 @@ XmlStorableEvent::XmlStorableEvent(const QXmlAttributes &attributes,
             timeT t = attrVal.toInt(&isNumeric);
 
             if (!isNumeric) {
-                RG_DEBUG << "XmlStorableEvent::XmlStorableEvent: Bad absolute time: " << attrVal << endl;
+                RG_DEBUG << "XmlStorableEvent::XmlStorableEvent: Bad absolute time: " << attrVal;
             } else {
                 absoluteTime = t;
             }
@@ -95,7 +95,7 @@ XmlStorableEvent::XmlStorableEvent(const QXmlAttributes &attributes,
             timeT t = attrVal.toInt(&isNumeric);
 
             if (!isNumeric) {
-                RG_DEBUG << "XmlStorableEvent::XmlStorableEvent: Bad time offset: " << attrVal << endl;
+                RG_DEBUG << "XmlStorableEvent::XmlStorableEvent: Bad time offset: " << attrVal;
             } else {
                 absoluteTime += t;
             }
@@ -153,7 +153,7 @@ XmlStorableEvent::setPropertyFromAttributes(const QXmlAttributes &attributes,
     bool have = false;
     QString name = attributes.value("name");
     if (name == "") {
-        RG_DEBUG << "XmlStorableEvent::setProperty: no property name found, ignoring" << endl;
+        RG_DEBUG << "XmlStorableEvent::setProperty: no property name found, ignoring";
         return ;
     }
 
@@ -164,7 +164,7 @@ XmlStorableEvent::setPropertyFromAttributes(const QXmlAttributes &attributes,
         if (attrName == "name") {
             continue;
         } else if (have) {
-            RG_DEBUG << "XmlStorableEvent::setProperty: multiple values found, ignoring all but the first" << endl;
+            RG_DEBUG << "XmlStorableEvent::setProperty: multiple values found, ignoring all but the first";
             continue;
         } else if (attrName == "bool") {
             set<Bool>(qstrtostr(name), attrVal.toLower() == "true", persistent);
@@ -176,12 +176,12 @@ XmlStorableEvent::setPropertyFromAttributes(const QXmlAttributes &attributes,
             set<String>(qstrtostr(name), qstrtostr(attrVal), persistent);
             have = true;
         } else {
-            RG_DEBUG << "XmlStorableEvent::setProperty: unknown attribute name \"" << name << "\", ignoring" << endl;
+            RG_DEBUG << "XmlStorableEvent::setProperty: unknown attribute name \"" << name << "\", ignoring";
         }
     }
 
     if (!have)
-        RG_DEBUG << "XmlStorableEvent::setProperty: Warning: no property value found for property " << name << endl;
+        RG_DEBUG << "XmlStorableEvent::setProperty: Warning: no property value found for property " << name;
 }
 
 }

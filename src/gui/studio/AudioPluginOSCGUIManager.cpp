@@ -152,7 +152,7 @@ AudioPluginOSCGUIManager::startGUI(InstrumentId instrument, int position)
 
     if (m_guis.find(instrument) != m_guis.end() &&
             m_guis[instrument].find(position) != m_guis[instrument].end()) {
-        RG_DEBUG << "stopping GUI first" << endl;
+        RG_DEBUG << "stopping GUI first";
         stopGUI(instrument, position);
     }
 
@@ -231,7 +231,7 @@ AudioPluginOSCGUIManager::stopAllGUIs()
 void
 AudioPluginOSCGUIManager::postMessage(OSCMessage *message)
 {
-    RG_DEBUG << "AudioPluginOSCGUIManager::postMessage" << endl;
+    RG_DEBUG << "AudioPluginOSCGUIManager::postMessage";
     m_oscBuffer.write(&message, 1);
 }
 
@@ -355,7 +355,7 @@ bool
 AudioPluginOSCGUIManager::parseOSCPath(QString path, InstrumentId &instrument,
                                        int &position, QString &method)
 {
-    RG_DEBUG << "AudioPluginOSCGUIManager::parseOSCPath(" << path << ")" << endl;
+    RG_DEBUG << "AudioPluginOSCGUIManager::parseOSCPath(" << path << ")";
     if (!m_studio)
         return false;
 
@@ -380,7 +380,7 @@ AudioPluginOSCGUIManager::parseOSCPath(QString path, InstrumentId &instrument,
     method = path.section('/', -1, -1);
 
     if (instrumentStr.isEmpty() || positionStr.isEmpty() ) {
-        RG_DEBUG << "AudioPluginOSCGUIManager::parseOSCPath: no instrument or position in " << path << endl;
+        RG_DEBUG << "AudioPluginOSCGUIManager::parseOSCPath: no instrument or position in " << path;
         return false;
     }
 
@@ -630,7 +630,7 @@ AudioPluginOSCGUIManager::dispatch()
 
             if (key.startsWith(DSSI_RESERVED_CONFIGURE_PREFIX) ||
                     key == PluginIdentifier::RESERVED_PROJECT_DIRECTORY_KEY) {
-                RG_DEBUG << "AudioPluginOSCGUIManager: illegal reserved configure call from gui: " << key << " -> " << value << endl;
+                RG_DEBUG << "AudioPluginOSCGUIManager: illegal reserved configure call from gui: " << key << " -> " << value;
                 goto done;
             }
 #endif
@@ -660,7 +660,7 @@ AudioPluginOSCGUIManager::dispatch()
                 goto done;
             }
 
-            RG_DEBUG << "AudioPluginOSCGUIManager: handling MIDI message" << endl;
+            RG_DEBUG << "AudioPluginOSCGUIManager: handling MIDI message";
 
             // let's only handle note on and note off
 
@@ -682,13 +682,13 @@ AudioPluginOSCGUIManager::dispatch()
 
         } else if (method == "exiting") {
 
-            RG_DEBUG << "AudioPluginOSCGUIManager: GUI exiting" << endl;
+            RG_DEBUG << "AudioPluginOSCGUIManager: GUI exiting";
             stopGUI(instrument, position);
             m_mainWindow->slotPluginGUIExited(instrument, position);
 
         } else {
 
-            RG_DEBUG << "AudioPluginOSCGUIManager: unknown method " << method << endl;
+            RG_DEBUG << "AudioPluginOSCGUIManager: unknown method " << method;
         }
 
 done:

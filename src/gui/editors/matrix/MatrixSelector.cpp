@@ -87,7 +87,7 @@ MatrixSelector::slotClickTimeout()
 void
 MatrixSelector::handleLeftButtonPress(const MatrixMouseEvent *e)
 {
-    MATRIX_DEBUG << "MatrixSelector::handleLeftButtonPress" << endl;
+    MATRIX_DEBUG << "MatrixSelector::handleLeftButtonPress";
 
     m_previousCollisions.clear();
 
@@ -354,7 +354,7 @@ MatrixSelector::handleMouseMove(const MatrixMouseEvent *e)
 void
 MatrixSelector::handleMouseRelease(const MatrixMouseEvent *e)
 {
-    MATRIX_DEBUG << "MatrixSelector::handleMouseRelease" << endl;
+    MATRIX_DEBUG << "MatrixSelector::handleMouseRelease";
 
     if (m_dispatchTool) {
         m_dispatchTool->handleMouseRelease(e);

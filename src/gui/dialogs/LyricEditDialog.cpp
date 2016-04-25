@@ -128,7 +128,7 @@ LyricEditDialog::LyricEditDialog(QWidget *parent,
 void
 LyricEditDialog::slotVerseNumberChanged(int verse)
 {
-    NOTATION_DEBUG << "LyricEditDialog::slotVerseNumberChanged(" << verse << ")" << endl;
+    NOTATION_DEBUG << "LyricEditDialog::slotVerseNumberChanged(" << verse << ")";
 
     QString text = m_textEdit->toPlainText();
     m_texts[m_currentVerse] = text;
@@ -139,7 +139,7 @@ LyricEditDialog::slotVerseNumberChanged(int verse)
 void
 LyricEditDialog::slotAddVerse()
 {
-    NOTATION_DEBUG << "LyricEditDialog::slotAddVerse" << endl;
+    NOTATION_DEBUG << "LyricEditDialog::slotAddVerse";
 
     m_texts.push_back(m_skeleton);
 
@@ -154,7 +154,7 @@ LyricEditDialog::slotAddVerse()
 void
 LyricEditDialog::slotRemoveVerse()
 {
-    NOTATION_DEBUG << "LyricEditDialog::slotRemoveVerse" << endl;
+    NOTATION_DEBUG << "LyricEditDialog::slotRemoveVerse";
 
     RG_DEBUG << "deleting at position " << m_currentVerse;
     std::vector<QString>::iterator itr = m_texts.begin();

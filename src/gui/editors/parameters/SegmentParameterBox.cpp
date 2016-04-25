@@ -398,7 +398,7 @@ SegmentParameterBox::useSegments(const SegmentSelection &segments)
 void
 SegmentParameterBox::slotDocColoursChanged()
 {
-    RG_DEBUG << "SegmentParameterBox::slotDocColoursChanged()" << endl;
+    RG_DEBUG << "SegmentParameterBox::slotDocColoursChanged()";
 
     m_colourComboBox->clear();
     m_colourList.clear();
@@ -443,7 +443,7 @@ SegmentParameterBox::slotDocColoursChanged()
 
 void SegmentParameterBox::update()
 {
-    RG_DEBUG << "SegmentParameterBox::update()" << endl;
+    RG_DEBUG << "SegmentParameterBox::update()";
 
     populateBoxFromSegments();
 }
@@ -1014,7 +1014,7 @@ SegmentParameterBox::updateHighLow()
 void
 SegmentParameterBox::slotHighestPressed()
 {
-    RG_DEBUG << "SegmentParameterBox::slotHighestPressed()" << endl;
+    RG_DEBUG << "SegmentParameterBox::slotHighestPressed()";
 
     PitchPickerDialog dialog(0, m_highestPlayable, tr("Highest playable note"));
     std::vector<Segment*>::iterator it;
@@ -1034,7 +1034,7 @@ SegmentParameterBox::slotHighestPressed()
 void
 SegmentParameterBox::slotLowestPressed()
 {
-    RG_DEBUG << "SegmentParameterBox::slotLowestPressed()" << endl;
+    RG_DEBUG << "SegmentParameterBox::slotLowestPressed()";
 
     PitchPickerDialog dialog(0, m_lowestPlayable, tr("Lowest playable note"));
     std::vector<Segment*>::iterator it;

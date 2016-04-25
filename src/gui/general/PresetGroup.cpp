@@ -72,7 +72,7 @@ PresetGroup::PresetGroup() :
 
     if (presetFileName == "" || !QFileInfo(presetFileName).isReadable()) {
 
-        RG_DEBUG << "Failed to open " << presetFileName << endl;
+        RG_DEBUG << "Failed to open " << presetFileName;
 
         throw PresetFileReadFailed
         (qstrtostr(tr("Can't open preset file %1").arg(presetFileName)));
@@ -104,7 +104,7 @@ PresetGroup::startElement(const QString &, const QString &,
 {
     QString lcName = qName.toLower();
 
-    //    RG_DEBUG << "PresetGroup::startElement: processing starting element: " << lcName << endl;
+    //    RG_DEBUG << "PresetGroup::startElement: processing starting element: " << lcName;
 
     if (lcName == "category") {
 
@@ -219,7 +219,7 @@ PresetGroup::startElement(const QString &, const QString &,
 bool
 PresetGroup::error(const QXmlParseException& exception)
 {
-    RG_DEBUG << "PresetGroup::error(): jubilation and glee, we have an error, whee!" << endl;
+    RG_DEBUG << "PresetGroup::error(): jubilation and glee, we have an error, whee!";
 
     m_errorString = QString("%1 at line %2, column %3: %4")
                     .arg(exception.message())
@@ -232,7 +232,7 @@ PresetGroup::error(const QXmlParseException& exception)
 bool
 PresetGroup::fatalError(const QXmlParseException& exception)
 {
-    RG_DEBUG << "PresetGroup::fatalError(): double your jubilation, and triple your glee, a fatal error doth it be!" << endl;
+    RG_DEBUG << "PresetGroup::fatalError(): double your jubilation, and triple your glee, a fatal error doth it be!";
     m_errorString = QString("%1 at line %2, column %3: %4")
                     .arg(exception.message())
                     .arg(exception.lineNumber())

@@ -66,7 +66,7 @@ MatrixMover::handleEventRemoved(Event *event)
 void
 MatrixMover::handleLeftButtonPress(const MatrixMouseEvent *e)
 {
-    MATRIX_DEBUG << "MatrixMover::handleLeftButtonPress() : snapped time = " << e->snappedLeftTime << ", el = " << e->element << endl;
+    MATRIX_DEBUG << "MatrixMover::handleLeftButtonPress() : snapped time = " << e->snappedLeftTime << ", el = " << e->element;
 
     if (!e->element) return;
 
@@ -89,7 +89,7 @@ MatrixMover::handleLeftButtonPress(const MatrixMouseEvent *e)
     }
 
     if (!found) {
-        MATRIX_DEBUG << "Clicked element not owned by active segment.  Returning..." << endl;
+        MATRIX_DEBUG << "Clicked element not owned by active segment.  Returning...";
         return;
     }
 

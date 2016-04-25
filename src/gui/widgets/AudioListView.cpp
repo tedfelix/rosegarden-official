@@ -67,7 +67,7 @@ void AudioListView::mouseMoveEvent(QMouseEvent *event){
         item = dynamic_cast<QTreeWidgetItem*>( item->parent() );  // assign parent/topLevelItem
      }
      if( ! item ){
-        RG_DEBUG << "AudioListView::mouseMoveEvent() - item is NULL (cast failed?) " << endl;
+        RG_DEBUG << "AudioListView::mouseMoveEvent() - item is NULL (cast failed?) ";
         return;
      }
     
@@ -122,7 +122,7 @@ void AudioListView::mouseMoveEvent(QMouseEvent *event){
     
     drag->setMimeData(mimeData);
     
-    RG_DEBUG << "Starting drag from AudioListView::mouseMoveEvent() with mime : " << mimeData->formats() << " - " << mimeData->urls()[0] << endl;
+    RG_DEBUG << "Starting drag from AudioListView::mouseMoveEvent() with mime : " << mimeData->formats() << " - " << mimeData->urls()[0];
     
     // start drag
     drag->start(Qt::CopyAction | Qt::MoveAction);
@@ -148,7 +148,7 @@ void AudioListView::dragEnterEvent(QDragEnterEvent *e){
     if (e->mimeData()->hasUrls() || e->mimeData()->hasText()) {
 
         if (uriList.empty() && text == "") {
-            RG_DEBUG << "AudioListView::dragEnterEvent: Drop Empty ! " << endl;
+            RG_DEBUG << "AudioListView::dragEnterEvent: Drop Empty ! ";
         }
         if (e->proposedAction() & Qt::CopyAction) {
             e->acceptProposedAction();
@@ -171,7 +171,7 @@ void AudioListView::dropEvent(QDropEvent* e)
     if (e->mimeData()->hasUrls() || e->mimeData()->hasText()) {
         
         if( e->source() ){
-            RG_DEBUG << "AudioListView::dropEvent() - objectName : " << e->source()->objectName() << endl;
+            RG_DEBUG << "AudioListView::dropEvent() - objectName : " << e->source()->objectName();
         }
         
         // if (drag-source == this)  (or a child item) disallow drop
@@ -200,16 +200,16 @@ void AudioListView::dropEvent(QDropEvent* e)
         }
     } else {
         e->ignore();
-        RG_DEBUG << "AudioListView::dropEvent: ignored dropEvent (invalid mime) " << endl;
+        RG_DEBUG << "AudioListView::dropEvent: ignored dropEvent (invalid mime) ";
         return;
     }
 
     if (uriList.empty() && text == "") {
-        RG_DEBUG << "AudioListView::dropEvent: Nothing dropped" << endl;
+        RG_DEBUG << "AudioListView::dropEvent: Nothing dropped";
         return;
     }
     
-    RG_DEBUG << "AudioListView::dropEvent() - Dropped this: \n " << uriList << endl;
+    RG_DEBUG << "AudioListView::dropEvent() - Dropped this: \n " << uriList;
     
     
     if( text != "" ){

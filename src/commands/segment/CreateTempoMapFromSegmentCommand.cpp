@@ -125,7 +125,7 @@ CreateTempoMapFromSegmentCommand::initialise(Segment *s)
             prevTempo = tempoChange.second;
     }
 
-    RG_DEBUG << "starting tempo: " << prevTempo << endl;
+    RG_DEBUG << "starting tempo: " << prevTempo;
 
     timeT quarter = Note(Note::Crotchet).getDuration();
 
@@ -145,8 +145,8 @@ CreateTempoMapFromSegmentCommand::initialise(Segment *s)
         double qpm = (60.0 * beatTime) / (beatSec * quarter);
         tempoT tempo = Composition::getTempoForQpm(int(qpm + 0.001));
 
-        RG_DEBUG << "prev beat: " << beatTimeTs[beat] << ", prev beat real time " << beatRealTimes[beat] << endl;
-        RG_DEBUG << "time " << beatTime << ", rt " << beatRealTime << ", beatSec " << beatSec << ", tempo " << tempo << endl;
+        RG_DEBUG << "prev beat: " << beatTimeTs[beat] << ", prev beat real time " << beatRealTimes[beat];
+        RG_DEBUG << "time " << beatTime << ", rt " << beatRealTime << ", beatSec " << beatSec << ", tempo " << tempo;
 
         if (tempo != prevTempo) {
             m_newTempi[beatTimeTs[beat - 1]] = tempo;

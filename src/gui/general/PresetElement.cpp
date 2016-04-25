@@ -46,7 +46,7 @@ PresetElement::PresetElement(QString name,
         m_lowPro (lowPro)
 {
 #ifdef DEBUG_CATEGORIES
-    RG_DEBUG << "PresetElement::PresetElement(" << endl
+    RG_DEBUG << "PresetElement::PresetElement("
     << "    name = " << name << endl
     << "    clef = " << clef << endl
     << "    trns.= " << transpose << endl

@@ -108,9 +108,9 @@ void AudioPreviewPainter::paintPreviewImage()
 
     int centre = m_image.height() / 2;
 
-    RG_DEBUG << "AudioPreviewPainter::paintPreviewImage width = " << m_rect.baseWidth << ", height = " << m_rect.rect.height() << ", halfRectHeight = " << m_halfRectHeight << endl;
+    RG_DEBUG << "AudioPreviewPainter::paintPreviewImage width = " << m_rect.baseWidth << ", height = " << m_rect.rect.height() << ", halfRectHeight = " << m_halfRectHeight;
 
-    RG_DEBUG << "AudioPreviewPainter::paintPreviewImage: channels = " << channels << ", gain left = " << gain[0] << ", right = " << gain[1] << endl;
+    RG_DEBUG << "AudioPreviewPainter::paintPreviewImage: channels = " << channels << ", gain left = " << gain[0] << ", right = " << gain[1];
 
     // double audioDuration = double(m_segment->getAudioEndTime().sec) +
     //     double(m_segment->getAudioEndTime().nsec) / 1000000000.0;
@@ -305,7 +305,7 @@ void AudioPreviewPainter::initializeNewSlice()
 
 void AudioPreviewPainter::finalizeCurrentSlice()
 {
-//     RG_DEBUG << "AudioPreviewPainter::finalizeCurrentSlice : copying pixmap to image at " << m_sliceNb * tileWidth() << endl;
+//     RG_DEBUG << "AudioPreviewPainter::finalizeCurrentSlice : copying pixmap to image at " << m_sliceNb * tileWidth();
 
     m_previewPixmaps.push_back(m_image.copy());
     ++m_sliceNb;

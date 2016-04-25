@@ -293,7 +293,7 @@ FitToBeatsCommand::getCurrentTempi(Composition &composition, TempoMap &Tempos)
 void
 FitToBeatsCommand::execute()
 {
-    RG_DEBUG << "Executing FitToBeatsCommand" << endl;
+    RG_DEBUG << "Executing FitToBeatsCommand";
     changeAllTempi(m_newTempi);
     changeSegments(m_oldSegments, m_newSegments);
     m_executed = true;

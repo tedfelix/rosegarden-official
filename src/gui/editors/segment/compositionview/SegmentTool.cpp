@@ -125,7 +125,7 @@ SegmentTool::createMenu()
 
     const QString rcFileName = "segmenttool.rc";
 
-    //RG_DEBUG << "SegmentTool::createMenu() " << rcFileName << " - " << m_menuName << endl;
+    //RG_DEBUG << "SegmentTool::createMenu() " << rcFileName << " - " << m_menuName;
 
     if (!createGUI(rcFileName)) {
         RG_WARNING << "SegmentTool::createMenu(" << rcFileName

@@ -176,7 +176,7 @@ void NotationSelector::slotClickTimeout()
 
 void NotationSelector::handleMouseDoubleClick(const NotationMouseEvent *e)
 {
-    RG_DEBUG << "NotationSelector::handleMouseDoubleClick" << endl;
+    RG_DEBUG << "NotationSelector::handleMouseDoubleClick";
 
     // Only double click on left mouse button is currently used (fix #1493)
     if (e->buttons != Qt::LeftButton) return;
@@ -209,7 +209,7 @@ void NotationSelector::handleMouseDoubleClick(const NotationMouseEvent *e)
 
 void NotationSelector::handleMouseTripleClick(const NotationMouseEvent *e)
 {
-    RG_DEBUG << "NotationSelector::handleMouseTripleClick" << endl;
+    RG_DEBUG << "NotationSelector::handleMouseTripleClick";
 
     if (!m_justSelectedBar) return;
     m_justSelectedBar = false;
@@ -382,22 +382,22 @@ void NotationSelector::handleMouseRelease(const NotationMouseEvent *e)
 
 void NotationSelector::drag(int x, int y, bool final)
 {
-    RG_DEBUG << "NotationSelector::drag " << x << ", " << y << endl;
+    RG_DEBUG << "NotationSelector::drag " << x << ", " << y;
 
     if (!m_clickedElement || !m_selectedStaff) return ;
 
     EventSelection *selection = m_scene->getSelection();
 
-    RG_DEBUG << "NotationSelector::drag: scene currently has selection with " << (selection ? selection->getSegmentEvents().size() : 0) << " event(s)" << endl;
+    RG_DEBUG << "NotationSelector::drag: scene currently has selection with " << (selection ? selection->getSegmentEvents().size() : 0) << " event(s)";
 
     if (!selection || !selection->contains(m_clickedElement->event())) {
         selection = new EventSelection(m_selectedStaff->getSegment());
-        RG_DEBUG << "(selection does not contain our event " << m_clickedElement->event() << " of type " << m_clickedElement->event()->getType() << ", adding it)" << endl;
+        RG_DEBUG << "(selection does not contain our event " << m_clickedElement->event() << " of type " << m_clickedElement->event()->getType() << ", adding it)";
         selection->addEvent(m_clickedElement->event(), m_ties);
     }
     m_scene->setSelection(selection, false);
 
-    RG_DEBUG << "Sorted out selection" << endl;
+    RG_DEBUG << "Sorted out selection";
 
     NotationStaff *targetStaff = m_scene->getStaffForSceneCoords(x, y);
     if (!targetStaff) targetStaff = m_selectedStaff;
@@ -446,7 +446,7 @@ void NotationSelector::drag(int x, int y, bool final)
 
                 int parts = restDuration / duration;
                 double encroachment = x - restX;
-                RG_DEBUG << "encroachment is " << encroachment << ", restWidth is " << restWidth << endl;
+                RG_DEBUG << "encroachment is " << encroachment << ", restWidth is " << restWidth;
                 int part = (int)((encroachment / restWidth) * parts);
                 if (part >= parts) part = parts - 1;
 
@@ -588,10 +588,10 @@ void NotationSelector::dragFine(int x, int y, bool final)
     // Nobody has complained about how broken this has been since the port, so I
     // intend to leave it broken, and try to compensate by improving the layout
     // code instead.
-    RG_DEBUG << "NotationSelector::dragFine: Fine drag is broken and has been bypassed.  Seeing this message is a BUG!" << endl;
+    RG_DEBUG << "NotationSelector::dragFine: Fine drag is broken and has been bypassed.  Seeing this message is a BUG!";
     return;
 
-    RG_DEBUG << "NotationSelector::dragFine (micro-position) x:" << x << " y: " << y << endl;
+    RG_DEBUG << "NotationSelector::dragFine (micro-position) x:" << x << " y: " << y;
 
     if (!m_clickedElement || !m_selectedStaff)
         return ;

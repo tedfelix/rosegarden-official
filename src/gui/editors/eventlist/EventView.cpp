@@ -309,7 +309,7 @@ EventView::EventView(RosegardenDocument *doc,
 EventView::~EventView()
 {
     for (unsigned int i = 0; i < m_segments.size(); ++i) {
-        RG_DEBUG << "~EventView - removing this observer from " << m_segments[i] << endl;
+        RG_DEBUG << "~EventView - removing this observer from " << m_segments[i];
         m_segments[i]->removeObserver(this);
     }
 }
@@ -773,7 +773,7 @@ EventView::refreshSegment(Segment * /*segment*/,
                           timeT /*startTime*/,
                           timeT /*endTime*/)
 {
-    RG_DEBUG << "EventView::refreshSegment" << endl;
+    RG_DEBUG << "EventView::refreshSegment";
     applyLayout(0);
 }
 
@@ -1085,7 +1085,7 @@ EventView::slotEditDelete()
 void
 EventView::slotEditInsert()
 {
-    RG_DEBUG << "EventView::slotEditInsert" << endl;
+    RG_DEBUG << "EventView::slotEditInsert";
 
     timeT insertTime = m_segments[0]->getStartTime();
     timeT insertDuration = 960;
@@ -1126,7 +1126,7 @@ EventView::slotEditInsert()
 void
 EventView::slotEditEvent()
 {
-    RG_DEBUG << "EventView::slotEditEvent" << endl;
+    RG_DEBUG << "EventView::slotEditEvent";
 
     QList<QTreeWidgetItem*> selection = m_eventList->selectedItems();
 
@@ -1153,7 +1153,7 @@ EventView::slotEditEvent()
 void
 EventView::slotEditEventAdvanced()
 {
-    RG_DEBUG << "EventView::slotEditEventAdvanced" << endl;
+    RG_DEBUG << "EventView::slotEditEventAdvanced";
 
     QList<QTreeWidgetItem*> selection = m_eventList->selectedItems();
 
@@ -1450,7 +1450,7 @@ EventView::createMenu()
 void
 EventView::slotMenuActivated(int value)
 {
-    RG_DEBUG << "EventView::slotMenuActivated - value = " << value << endl;
+    RG_DEBUG << "EventView::slotMenuActivated - value = " << value;
 
     if (value == 0) {
         EventViewItem *eItem = dynamic_cast<EventViewItem*>(m_eventList->currentItem());

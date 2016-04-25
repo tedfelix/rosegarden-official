@@ -36,28 +36,28 @@ namespace Rosegarden {
 int
 staticMoveTo(FT_Vector *to, void *)
 {
-    NOTATION_DEBUG << "moveTo: (" << to->x << "," << to->y << ")" << endl;
+    NOTATION_DEBUG << "moveTo: (" << to->x << "," << to->y << ")";
     return 0;
 }
 
 int
 staticLineTo(FT_Vector *to, void *)
 {
-    NOTATION_DEBUG << "lineTo: (" << to->x << "," << to->y << ")" << endl;
+    NOTATION_DEBUG << "lineTo: (" << to->x << "," << to->y << ")";
     return 0;
 }
 
 int
 staticConicTo(FT_Vector *control, FT_Vector *to, void *)
 {
-    NOTATION_DEBUG << "conicTo: (" << to->x << "," << to->y << ") control (" << control->x << "," << control->y << ")" << endl;
+    NOTATION_DEBUG << "conicTo: (" << to->x << "," << to->y << ") control (" << control->x << "," << control->y << ")";
     return 0;
 }
 
 int
 staticCubicTo(FT_Vector *control1, FT_Vector *control2, FT_Vector *to, void *)
 {
-    NOTATION_DEBUG << "cubicTo: (" << to->x << "," << to->y << ") control1 (" << control1->x << "," << control1->y << ") control2 (" << control2->x << "," << control2->y << ")" << endl;
+    NOTATION_DEBUG << "cubicTo: (" << to->x << "," << to->y << ") control1 (" << control1->x << "," << control1->y << ") control2 (" << control2->x << "," << control2->y << ")";
     return 0;
 }
 
@@ -70,17 +70,17 @@ SystemFontXft::renderChar(CharName charName, int glyph, int code,
     success = false;
 
     if (glyph < 0 && code < 0) {
-	NOTATION_DEBUG << "SystemFontXft::renderChar: Have neither glyph nor code point for character " << charName << ", can't render" << endl;
+	NOTATION_DEBUG << "SystemFontXft::renderChar: Have neither glyph nor code point for character " << charName << ", can't render";
 	return QPixmap();
     }
 
     if (code < 0 && strategy == OnlyCodes) {
-	NOTATION_DEBUG << "SystemFontXft::renderChar: strategy is OnlyCodes but no code point provided for character " << charName << " (glyph is " << glyph << ")" << endl;
+	NOTATION_DEBUG << "SystemFontXft::renderChar: strategy is OnlyCodes but no code point provided for character " << charName << " (glyph is " << glyph << ")";
 	return QPixmap();
     }
 
     if (glyph < 0 && strategy == OnlyGlyphs) {
-	NOTATION_DEBUG << "SystemFontXft::renderChar: strategy is OnlyGlyphs but no glyph index provided for character " << charName << " (code is " << code << ")" << endl;
+	NOTATION_DEBUG << "SystemFontXft::renderChar: strategy is OnlyGlyphs but no glyph index provided for character " << charName << " (code is " << code << ")";
 	return QPixmap();
     }
 
@@ -89,7 +89,7 @@ SystemFontXft::renderChar(CharName charName, int glyph, int code,
     bool useGlyph = true;
     if (glyph < 0 || (strategy == PreferCodes && code >= 0)) useGlyph = false;
     if (glyph >= 0 && useGlyph == false && !XftCharExists(m_dpy, m_font, code)) {
-	NOTATION_DEBUG << "SystemFontXft::renderChar: code " << code << " is preferred for character " << charName << ", but it doesn't exist in font!  Falling back to glyph " << glyph << endl;
+	NOTATION_DEBUG << "SystemFontXft::renderChar: code " << code << " is preferred for character " << charName << ", but it doesn't exist in font!  Falling back to glyph " << glyph;
 	useGlyph = true;
     }
 
@@ -180,13 +180,13 @@ SystemFontXft::renderChar(CharName charName, int glyph, int code,
 /*!!!
     FT_Face face = XftLockFace(m_font);
     if (!face) {
-	NOTATION_DEBUG << "Couldn't lock face" << endl;
+	NOTATION_DEBUG << "Couldn't lock face";
 	return map;
     }
     // not checking return value here
     FT_Load_Glyph(face, glyph, 0);
     if (face->glyph->format != FT_GLYPH_FORMAT_OUTLINE) {
-	NOTATION_DEBUG << "Glyph " << glyph << " isn't an outline" << endl;
+	NOTATION_DEBUG << "Glyph " << glyph << " isn't an outline";
 	XftUnlockFace(m_font);
 	return map;
     }

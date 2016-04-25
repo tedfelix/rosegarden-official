@@ -663,7 +663,7 @@ TimeWidget::slotSetRealTime(RealTime rt)
             slotSetTime(m_composition->getElapsedTimeForRealTime(startRT + rt) -
                         m_startTime);
         } else {
-            RG_DEBUG << "WARNING: TimeWidget::slotSetRealTime: rt must be >0 for duration widget (was " << rt << ")" << endl;
+            RG_DEBUG << "WARNING: TimeWidget::slotSetRealTime: rt must be >0 for duration widget (was " << rt << ")";
         }
     } else {
         slotSetTime(m_composition->getElapsedTimeForRealTime(rt));
@@ -687,7 +687,7 @@ TimeWidget::slotNoteChanged(int n)
 void
 TimeWidget::slotTimeTChanged(int t)
 {
-    RG_DEBUG << "slotTimeTChanged: t is " << t << ", value is " << m_timeT->value() << endl;
+    RG_DEBUG << "slotTimeTChanged: t is " << t << ", value is " << m_timeT->value();
 
     m_delayUpdateTimer->stop();
 

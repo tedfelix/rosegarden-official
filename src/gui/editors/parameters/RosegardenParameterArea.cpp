@@ -81,7 +81,7 @@ RosegardenParameterArea::RosegardenParameterArea(
 void RosegardenParameterArea::addRosegardenParameterBox(
     RosegardenParameterBox *b)
 {
-    RG_DEBUG << "RosegardenParameterArea::addRosegardenParameterBox" << endl;
+    RG_DEBUG << "RosegardenParameterArea::addRosegardenParameterBox";
     
     // Check that the box hasn't been added before.
 
@@ -128,7 +128,7 @@ void RosegardenParameterArea::setScrollAreaWidget()
     
 void RosegardenParameterArea::setArrangement(Arrangement style)
 {
-    RG_DEBUG << "RosegardenParameterArea::setArrangement(" << style << ") is deprecated, and non-functional!" << endl;
+    RG_DEBUG << "RosegardenParameterArea::setArrangement(" << style << ") is deprecated, and non-functional!";
 }
 
 void RosegardenParameterArea::hideEvent(QHideEvent *)
@@ -140,7 +140,7 @@ void RosegardenParameterArea::moveWidget(QWidget *old_container,
         QWidget *new_container,
         RosegardenParameterBox *box)
 {
-    RG_DEBUG << "RosegardenParameterArea::moveWidget" << endl;
+    RG_DEBUG << "RosegardenParameterArea::moveWidget";
 
     // Remove any state that is associated with the parameter boxes,
     // from the active container.

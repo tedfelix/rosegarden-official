@@ -230,7 +230,7 @@ Rotary::paintEvent(QPaintEvent *)
                        (double(m_maximum) - double(m_minimum))));
     int degrees = int(angle * 180.0 / M_PI);
 
-    //    RG_DEBUG << "degrees: " << degrees << ", size " << m_size << ", pixel " << m_knobColour.pixel() << endl;
+    //    RG_DEBUG << "degrees: " << degrees << ", size " << m_size << ", pixel " << m_knobColour.pixel();
 
     int numTicks = 0;
     switch (m_tickMode) {

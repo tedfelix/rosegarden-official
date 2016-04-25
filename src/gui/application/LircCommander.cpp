@@ -128,7 +128,7 @@ void LircCommander::slotExecute(const char *command)
 {
     struct command tmp, *res;
 
-    RG_DEBUG << "LircCommander::slotExecute: invoking command: " << command << endl;
+    RG_DEBUG << "LircCommander::slotExecute: invoking command: " << command;
 
     // find the function for the name
     tmp.name = command;
@@ -207,10 +207,10 @@ void LircCommander::slotExecute(const char *command)
             emit toggleTransportVisibility(); 
             break;
         default:
-            RG_DEBUG <<  "LircCommander::slotExecute: unhandled command " << command << endl;
+            RG_DEBUG <<  "LircCommander::slotExecute: unhandled command " << command;
             return;
         }
-        RG_DEBUG <<  "LircCommander::slotExecute: handled command: " << command << endl;
+        RG_DEBUG <<  "LircCommander::slotExecute: handled command: " << command;
     }
     else
     {

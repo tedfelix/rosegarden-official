@@ -427,13 +427,13 @@ StaffLayout::getHeightAtSceneCoords(double x, int y) const
         //                              << " -> " << (ph + mi) << " (mi is " << mi << ", distance "
         //                              << md << ")" << endl;
         //         if (mi == 0) {
-        //             RG_DEBUG << "GOOD APPROXIMATION" << endl;
+        //             RG_DEBUG << "GOOD APPROXIMATION";
         //         } else {
-        //             RG_DEBUG << "BAD APPROXIMATION" << endl;
+        //             RG_DEBUG << "BAD APPROXIMATION";
         //         }
         return ph + mi;
     } else {
-        RG_DEBUG << "StaffLayout::getHeightAtSceneCoords: heuristic got " << ph << ", nothing within range (closest was " << (ph + testi) << " which is " << testMd << " away)" << endl;
+        RG_DEBUG << "StaffLayout::getHeightAtSceneCoords: heuristic got " << ph << ", nothing within range (closest was " << (ph + testi) << " which is " << testMd << " away)";
         return 0;
     }
 }
@@ -443,7 +443,7 @@ StaffLayout::getBarExtents(double x, int y) const
 {
     int row = getRowForSceneCoords(x, y);
 
-    RG_DEBUG << "getBarExtents(" << x << "," << y << "), row " << row << ", have " << m_barLines.size() << " bar records" << endl;
+    RG_DEBUG << "getBarExtents(" << x << "," << y << "), row " << row << ", have " << m_barLines.size() << " bar records";
 
     for (BarLineList::const_iterator i = m_barLines.begin();
          i != m_barLines.end(); ++i) {
@@ -453,7 +453,7 @@ StaffLayout::getBarExtents(double x, int y) const
         double layoutX = line->getLayoutX();
         int barRow = getRowForLayoutX(layoutX);
 
-        RG_DEBUG << "bar layoutX " << layoutX << ", row " << barRow << ", page mode " << m_pageMode << ", x " << line->x() << endl;
+        RG_DEBUG << "bar layoutX " << layoutX << ", row " << barRow << ", page mode " << m_pageMode << ", x " << line->x();
 
         if (m_pageMode != LinearMode && (barRow < row)) continue;
 
@@ -468,7 +468,7 @@ StaffLayout::getBarExtents(double x, int y) const
                         getSceneYForTopOfStaff(barRow),
                         int(line->x() - prevline->x()),
                         getHeightOfRow());
-        RG_DEBUG << "Returning rect " << r << endl;
+        RG_DEBUG << "Returning rect " << r;
         return r;
     }
 
@@ -589,7 +589,7 @@ StaffLayout::sizeStaff(HorizontalLayoutEngine &layout)
     deleteRepeatedClefsAndKeys();
     deleteTimeSignatures();
 
-    //    RG_DEBUG << "StaffLayout::sizeStaff" << endl;
+    //    RG_DEBUG << "StaffLayout::sizeStaff";
 
     int lastBar = layout.getLastVisibleBarOnViewSegment(*m_viewSegment);
 
@@ -621,10 +621,10 @@ StaffLayout::sizeStaff(HorizontalLayoutEngine &layout)
             // Ask for a gray color if the segment is a repetition
             bool grayed = m_viewSegment->getSegment().isTmp();
             insertTimeSignature(timeSigX, currentTimeSignature, grayed);
-            RG_DEBUG << "StaffLayout[" << this << "]::sizeStaff: bar no " << barNo << " has time signature at " << timeSigX << endl;
+            RG_DEBUG << "StaffLayout[" << this << "]::sizeStaff: bar no " << barNo << " has time signature at " << timeSigX;
         }
 
-        RG_DEBUG << "StaffLayout::sizeStaff: inserting bar at " << x << " on staff " << this << " (isNew " << isNew << ", timeSigX " << timeSigX << ")" << endl;
+        RG_DEBUG << "StaffLayout::sizeStaff: inserting bar at " << x << " on staff " << this << " (isNew " << isNew << ", timeSigX " << timeSigX << ")";
 
         bool showBarNo =
             (showBarNumbersEvery() > 0 &&

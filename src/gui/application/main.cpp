@@ -742,7 +742,7 @@ int main(int argc, char *argv[])
             // setup sfxload Process
             QProcess* sfxLoadProcess = new QProcess;
 
-            RG_DEBUG << "Starting sfxload : " << sfxLoadPath << " " << soundFontPath << endl;
+            RG_DEBUG << "Starting sfxload : " << sfxLoadPath << " " << soundFontPath;
 
             // NOTE: we used to have a broken connect here to hook to a slot
             // that never existed.  This omission doesn't seem to have ever
@@ -843,11 +843,11 @@ int main(int argc, char *argv[])
     try {
         mainWindow->launchSequencer();
     } catch (std::string e) {
-        RG_DEBUG << "mainWindow->launchSequencer() - " << e << endl;
+        RG_DEBUG << "mainWindow->launchSequencer() - " << e;
     } catch (QString e) {
-        RG_DEBUG << "mainWindow->launchSequencer() - " << e << endl;
+        RG_DEBUG << "mainWindow->launchSequencer() - " << e;
     } catch (Exception e) {
-        RG_DEBUG << "mainWindow->launchSequencer() - " << e.getMessage() << endl;
+        RG_DEBUG << "mainWindow->launchSequencer() - " << e.getMessage();
     }
 
 //#define STYLE_TEST

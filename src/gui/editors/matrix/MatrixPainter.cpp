@@ -109,7 +109,7 @@ void MatrixPainter::handleMouseDoubleClick(const MatrixMouseEvent *e){
     
     int velocity = m_widget->getCurrentVelocity();
     
-    MATRIX_DEBUG << "velocity = " << velocity << endl;
+    MATRIX_DEBUG << "velocity = " << velocity;
     
     m_clickTime = e->snappedLeftTime;
     
@@ -159,7 +159,7 @@ void MatrixPainter::handleLeftButtonPress(const MatrixMouseEvent *e)
 
     int velocity = m_widget->getCurrentVelocity();
 
-    MATRIX_DEBUG << "velocity = " << velocity << endl;
+    MATRIX_DEBUG << "velocity = " << velocity;
 
     m_clickTime = e->snappedLeftTime;
 

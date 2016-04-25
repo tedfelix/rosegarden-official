@@ -126,13 +126,13 @@ TranzportClient::TranzportClient(RosegardenMainWindow* rgGUIApp) :
     m_socketWriteNotifier->setEnabled(false);
     stateUpdate();
 
-    RG_DEBUG << "TranzportClient::TranzportClient: connected to tranzport device: " << m_descriptor << endl;
+    RG_DEBUG << "TranzportClient::TranzportClient: connected to tranzport device: " << m_descriptor;
 }
 
 void
 TranzportClient::pointerPositionChanged(timeT time)
 {
-    RG_DEBUG << "TranzportClient, pointerPositionChanged" << endl;
+    RG_DEBUG << "TranzportClient, pointerPositionChanged";
 
     if (device_online) {
         static int prevbeat = 0;
@@ -151,7 +151,7 @@ TranzportClient::pointerPositionChanged(timeT time)
 void
 TranzportClient::documentChanged(RosegardenDocument* doc)
 {
-    RG_DEBUG << "TranzportClient::DocumentChanged " << endl;
+    RG_DEBUG << "TranzportClient::DocumentChanged ";
 
     m_rgDocument = doc;
     m_composition = &m_rgDocument->getComposition();

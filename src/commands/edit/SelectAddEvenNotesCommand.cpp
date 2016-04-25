@@ -373,7 +373,7 @@ SelectAddEvenNotesCommand::modifySegment()
 EventSelection *
 SelectAddEvenNotesCommand::getSubsequentSelection()
 {
-    RG_DEBUG << "SelectAddEvenNotesCommand::getSubsequentSelection" << endl;
+    RG_DEBUG << "SelectAddEvenNotesCommand::getSubsequentSelection";
     EventSelection *selection = new EventSelection(getSegment());
 
     RG_DEBUG << (int)m_beatEventVector.size()

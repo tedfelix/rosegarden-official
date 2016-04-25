@@ -295,7 +295,7 @@ MusicXMLXMLHandler::characters(const QString& chars)
 bool
 MusicXMLXMLHandler::endDocument()
 {
-    RG_DEBUG << "MusicXMLXMLHandler::endDocument" << endl;
+    RG_DEBUG << "MusicXMLXMLHandler::endDocument";
     return true;
 }
 

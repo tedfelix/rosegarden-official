@@ -145,7 +145,7 @@ NoteSymbols::drawNoteSymbol ( bool /* big */,
                               int fretNb,
                               bool transient ) const
 {
-//    NOTATION_DEBUG << "NoteSymbols::drawNoteSymbol - string: " << stringNb << ", fret:" << fretNb << endl;
+//    NOTATION_DEBUG << "NoteSymbols::drawNoteSymbol - string: " << stringNb << ", fret:" << fretNb;
     RG_DEBUG << "NoteSymbols::drawNoteSymbol()";
 
     QRect v = p->viewport();
@@ -169,7 +169,7 @@ NoteSymbols::drawNoteSymbol ( bool /* big */,
 
 //        y = y_pos.first - (radius / 2) - y_pos.second + TOP_GUITAR_CHORD_MARGIN;
 
-//    RG_DEBUG << "NoteSymbols::drawNoteSymbol : rect = " << QRect(x,y, radius, radius) << endl;
+//    RG_DEBUG << "NoteSymbols::drawNoteSymbol : rect = " << QRect(x,y, radius, radius);
 
     p->drawEllipse( x,
                     y,
@@ -284,7 +284,7 @@ NoteSymbols::drawFrets ( QPainter* p ) const
     p->setPen(pen);
     unsigned int y_pos = (getY ( imgHeight, 0, m_nbOfFrets )).first + TOP_GUITAR_CHORD_MARGIN;
     
-//    NOTATION_DEBUG << "NoteSymbols::drawFrets : " << m_nbOfFrets << endl;
+//    NOTATION_DEBUG << "NoteSymbols::drawFrets : " << m_nbOfFrets;
     
     // Horizontal lines
     for ( unsigned int i = 0; i <= m_nbOfFrets; ++i ) {

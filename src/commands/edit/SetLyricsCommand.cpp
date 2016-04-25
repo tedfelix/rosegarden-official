@@ -94,7 +94,7 @@ SetLyricsCommand::execute()
 
     QStringList::Iterator bsi = barStrings.begin();
     while ( bsi != barStrings.end() ) {
-        NOTATION_DEBUG << "Parsing lyrics for bar number " << barNo << ": \"" << *bsi << "\"" << endl;
+        NOTATION_DEBUG << "Parsing lyrics for bar number " << barNo << ": \"" << *bsi << "\"";
 
         std::pair<timeT, timeT> barRange = comp->getBarRange(barNo++);
         QString syllables = *bsi;
@@ -138,7 +138,7 @@ SetLyricsCommand::execute()
             if (syllable == ".")
                 continue;
 
-            NOTATION_DEBUG << "Syllable \"" << syllable << "\" at time " << time << endl;
+            NOTATION_DEBUG << "Syllable \"" << syllable << "\" at time " << time;
 
             Text text(qstrtostr(syllable), Text::Lyric);
             Event *event = text.getAsEvent(time);

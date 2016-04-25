@@ -237,7 +237,7 @@ InterpretCommand::getVelocityForDynamic(std::string text)
     else if (text == "d125")
         velocity = 125;
     
-    NOTATION_DEBUG << "InterpretCommand::getVelocityForDynamic: unrecognised dynamic " << text << endl;
+    NOTATION_DEBUG << "InterpretCommand::getVelocityForDynamic: unrecognised dynamic " << text;
 
     return velocity;
 }
@@ -350,7 +350,7 @@ InterpretCommand::applyHairpins()
             int((endingVelocity - startingVelocity) * proportion +
                 startingVelocity);
 
-        NOTATION_DEBUG << "InterpretCommand::applyHairpins: velocity of note at " << e->getAbsoluteTime() << " is " << velocity << " (" << proportion << " through hairpin from " << startingVelocity << " to " << endingVelocity << ")" << endl;
+        NOTATION_DEBUG << "InterpretCommand::applyHairpins: velocity of note at " << e->getAbsoluteTime() << " is " << velocity << " (" << proportion << " through hairpin from " << startingVelocity << " to " << endingVelocity << ")";
         if (velocity < 10)
             velocity = 10;
         if (velocity > 127)
@@ -536,14 +536,14 @@ InterpretCommand::articulate()
                 durationChange = -10;
         }
 
-        NOTATION_DEBUG << "InterpretCommand::modifySegment: chord has " << chord.size() << " notes in it" << endl;
+        NOTATION_DEBUG << "InterpretCommand::modifySegment: chord has " << chord.size() << " notes in it";
 
         for (Chord::iterator ci = chord.begin();
                 ci != chord.end(); ++ci) {
 
             e = **ci;
 
-            NOTATION_DEBUG << "InterpretCommand::modifySegment: For note at " << e->getAbsoluteTime() << ", velocityChange is " << velocityChange << " and durationChange is " << durationChange << endl;
+            NOTATION_DEBUG << "InterpretCommand::modifySegment: For note at " << e->getAbsoluteTime() << ", velocityChange is " << velocityChange << " and durationChange is " << durationChange;
 
             // do this even if velocityChange == 0, in case the event
             // has no velocity yet
@@ -584,7 +584,7 @@ InterpretCommand::articulate()
 
             if (eventDuration != newDuration) {
 
-                NOTATION_DEBUG << "InterpretCommand::modifySegment: durationChange is " << durationChange << "; e->getDuration() is " << eventDuration << "; newDuration is " << newDuration << endl;
+                NOTATION_DEBUG << "InterpretCommand::modifySegment: durationChange is " << durationChange << "; e->getDuration() is " << eventDuration << "; newDuration is " << newDuration;
 
                 if (toErase.find(e) == toErase.end()) {
 

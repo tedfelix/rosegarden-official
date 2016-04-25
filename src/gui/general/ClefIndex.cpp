@@ -88,7 +88,7 @@ int clefNameToClefIndex(QString s)
         else if (s == "two-bar")
             m_elClef = TwoBarClef;
         else {
-            RG_DEBUG << "startElement: processed unrecognized clef type: " << s << endl;
+            RG_DEBUG << "startElement: processed unrecognized clef type: " << s;
         }
     }
     return m_elClef;

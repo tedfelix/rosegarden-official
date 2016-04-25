@@ -45,7 +45,7 @@ CategoryElement::addPreset(QString name,
                            int highPro,
                            int lowPro)
 {
-    RG_DEBUG << "CategoryElement::addPreset(...): adding new PresetElement" << endl;
+    RG_DEBUG << "CategoryElement::addPreset(...): adding new PresetElement";
 
     PresetElement e(name, clef, transpose, highAm, lowAm,
                     highPro, lowPro);

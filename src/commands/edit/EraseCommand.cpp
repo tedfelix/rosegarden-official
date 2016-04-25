@@ -54,7 +54,7 @@ EraseCommand::modifySegment()
 bool
 EraseCommand::eraseInSegment(EventSelection *selection)
 {
-    RG_DEBUG << "EraseCommand::eraseInSegment" << endl;
+    RG_DEBUG << "EraseCommand::eraseInSegment";
     timeT startTime  = selection->getStartTime();
     timeT endTime    = selection->getEndTime();
     Segment &segment = selection->getSegment();

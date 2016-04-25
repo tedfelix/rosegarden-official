@@ -424,7 +424,7 @@ MarkerRuler::paintEvent(QPaintEvent*)
 void
 MarkerRuler::mousePressEvent(QMouseEvent *e)
 {
-    RG_DEBUG << "MarkerRuler::mousePressEvent: x = " << e->x() << endl;
+    RG_DEBUG << "MarkerRuler::mousePressEvent: x = " << e->x();
 
     if (!m_doc || !e)
         return;
@@ -486,7 +486,7 @@ MarkerRuler::mousePressEvent(QMouseEvent *e)
 void
 MarkerRuler::mouseDoubleClickEvent(QMouseEvent *)
 {
-    RG_DEBUG << "MarkerRuler::mouseDoubleClickEvent" << endl;
+    RG_DEBUG << "MarkerRuler::mouseDoubleClickEvent";
 
     emit editMarkers();
 }

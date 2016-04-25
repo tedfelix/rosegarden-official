@@ -49,7 +49,7 @@ MultiKeyInsertionCommand::MultiKeyInsertionCommand(RosegardenDocument* doc,
 
 	Instrument *instrument = s.getInstrumentFor(segment);
 	// if (instrument) {
-	//    RG_DEBUG << endl <<
+	//    RG_DEBUG <<
 	//                "PERC DEBUG: instrument->isPercussion " << instrument->isPercussion() <<
 	//                " ignorePercussion " << ignorePercussion << endl << endl << endl;
 	//}

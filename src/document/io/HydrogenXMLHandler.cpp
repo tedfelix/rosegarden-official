@@ -73,7 +73,7 @@ HydrogenXMLHandler::HydrogenXMLHandler(Composition *composition,
 bool
 HydrogenXMLHandler::startDocument()
 {
-    RG_DEBUG << "HydrogenXMLHandler::startDocument" << endl;
+    RG_DEBUG << "HydrogenXMLHandler::startDocument";
 
     m_inNote = false;
     m_inInstrument = false;
@@ -134,7 +134,7 @@ bool HydrogenXMLHandler::startElement_093(const QString& /*namespaceURI*/,
 {
     QString lcName = qName.toLower();
 
-    RG_DEBUG << "HydrogenXMLHandler::startElement - " << lcName << endl;
+    RG_DEBUG << "HydrogenXMLHandler::startElement - " << lcName;
 
     if (lcName == "note") {
 
@@ -319,7 +319,7 @@ HydrogenXMLHandler::endElement_093(const QString& /*namespaceURI*/,
         canHandleVersion.qstrtoversion("0.9.3");
         versionInFile.qstrtoversion(strtoqstr(m_version));
 
-        RG_DEBUG << "HydrogenXMLHandler::endElement version " << m_version << endl;
+        RG_DEBUG << "HydrogenXMLHandler::endElement version " << m_version;
         RG_DEBUG << "ch_major: " << canHandleVersion.Major() << 
                     "  ch_minor: " << canHandleVersion.Minor() << 
                     "  ch_micro: " << canHandleVersion.Micro() << endl;
@@ -331,11 +331,11 @@ HydrogenXMLHandler::endElement_093(const QString& /*namespaceURI*/,
 
         if (bCanHandleFile==true) {
           // go on, this is a good version 
-          RG_DEBUG << "HydrogenXMLHandler::endElement version: version ok " << endl;
+          RG_DEBUG << "HydrogenXMLHandler::endElement version: version ok ";
         }
         else {
           // error 
-          RG_DEBUG << "HydrogenXMLHandler::endElement version: bad version (file created with hydrogen version " << m_version << " can not be parsed)" << endl;
+          RG_DEBUG << "HydrogenXMLHandler::endElement version: bad version (file created with hydrogen version " << m_version << " can not be parsed)";
           return false;
         }
     }
@@ -483,7 +483,7 @@ HydrogenXMLHandler::characters(const QString& chars)
 bool
 HydrogenXMLHandler::endDocument()
 {
-    RG_DEBUG << "HydrogenXMLHandler::endDocument" << endl;
+    RG_DEBUG << "HydrogenXMLHandler::endDocument";
     return true;
 }
 

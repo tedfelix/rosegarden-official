@@ -36,7 +36,7 @@ SegmentMapper::SegmentMapper(RosegardenDocument *doc,
     MappedEventBuffer(doc),
     m_segment(segment)
 {
-    SEQMAN_DEBUG << "SegmentMapper : " << this << endl;
+    SEQMAN_DEBUG << "SegmentMapper : " << this;
 }
 
 
@@ -53,7 +53,7 @@ initSpecial(void)
 
 SegmentMapper::~SegmentMapper()
 {
-    SEQMAN_DEBUG << "~SegmentMapper : " << this << endl;
+    SEQMAN_DEBUG << "~SegmentMapper : " << this;
 }
 
 SegmentMapper *

@@ -149,7 +149,7 @@ CutAndCloseCommand::CloseCommand::unexecute()
     }
 
     timeT endTime = m_segment->getEndTime();
-    NOTATION_DEBUG << "setting end time to " << (endTime - timeDifference) << endl;
+    NOTATION_DEBUG << "setting end time to " << (endTime - timeDifference);
     //!!! this following is not working for bugaccidentals.rg:
     m_segment->setEndTime(endTime - timeDifference);
 

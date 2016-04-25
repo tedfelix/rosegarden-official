@@ -304,7 +304,7 @@ SynthPluginManagerDialog::slotGUIButtonClicked(){
     }
 
     if ( instrumentNo == -1 ){
-        RG_DEBUG << "WARNING: SynthPluginManagerDialog::slotGUIButtonClicked: unknown sender" << endl;
+        RG_DEBUG << "WARNING: SynthPluginManagerDialog::slotGUIButtonClicked: unknown sender";
         return ;
     }
 
@@ -326,7 +326,7 @@ void SynthPluginManagerDialog:: slotControlsButtonClicked(){
     }
 
     if ( instrumentNo == -1 ){
-        RG_DEBUG << "WARNING: SynthPluginManagerDialog::slotControlsButtonClicked: unknown sender" << endl;
+        RG_DEBUG << "WARNING: SynthPluginManagerDialog::slotControlsButtonClicked: unknown sender";
         return ;
     }
 
@@ -352,7 +352,7 @@ void SynthPluginManagerDialog::slotPluginChanged ( int index ){
     }
 
     if ( instrumentNo == -1 ){
-        RG_DEBUG << "WARNING: SynthPluginManagerDialog::slotValueChanged: unknown sender" << endl;
+        RG_DEBUG << "WARNING: SynthPluginManagerDialog::slotValueChanged: unknown sender";
         return ;
     }
 
@@ -377,7 +377,7 @@ void SynthPluginManagerDialog::slotPluginChanged ( int index ){
         if ( pluginInstance ){
 
             if ( plugin ){
-                RG_DEBUG << "plugin is " << plugin->getIdentifier() << endl;
+                RG_DEBUG << "plugin is " << plugin->getIdentifier();
                 pluginInstance->setIdentifier ( qstrtostr ( plugin->getIdentifier() ) );
 
                 // set ports to defaults

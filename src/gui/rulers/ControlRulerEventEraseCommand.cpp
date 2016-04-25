@@ -35,7 +35,7 @@ ControlRulerEventEraseCommand::ControlRulerEventEraseCommand(ControlItemList sel
                    true),
       m_selectedItems(selectedItems)
 {
-    RG_DEBUG << "ControllerEventEraseCommand : from " << start << " to " << end << endl;
+    RG_DEBUG << "ControllerEventEraseCommand : from " << start << " to " << end;
 }
 
 

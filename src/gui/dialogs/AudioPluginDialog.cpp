@@ -194,7 +194,7 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
                  QDialogButtonBox::Close | QDialogButtonBox::Help);
 
     m_editorButton = new QPushButton(tr("Editor"));
-    //RG_DEBUG << "AudioPluginDialog::ctor - created Editor button" << endl;
+    //RG_DEBUG << "AudioPluginDialog::ctor - created Editor button";
     buttonBox->addButton(m_editorButton, QDialogButtonBox::ActionRole);
     connect(m_editorButton, SIGNAL(clicked(bool)), this, SLOT(slotEditor()));
     m_editorButton->setEnabled(false);
@@ -243,7 +243,7 @@ AudioPluginDialog::slotShowGUI()
 void
 AudioPluginDialog::populatePluginCategoryList()
 {
-    RG_DEBUG << "AudioPluginDialog::populatePluginCategoryList()" << endl;
+    RG_DEBUG << "AudioPluginDialog::populatePluginCategoryList()";
     AudioPluginInstance *inst = m_pluginContainer->getPlugin(m_index);
     std::set
         <QString> categories;
@@ -267,7 +267,7 @@ AudioPluginDialog::populatePluginCategoryList()
     }
 
     if (inst) {
-        RG_DEBUG << "AudioPluginDialog::populatePluginCategoryList: inst id " << inst->getIdentifier() << ", cat " << currentCategory << endl;
+        RG_DEBUG << "AudioPluginDialog::populatePluginCategoryList: inst id " << inst->getIdentifier() << ", cat " << currentCategory;
     }
 
     if (categories.empty()) {
@@ -298,7 +298,7 @@ AudioPluginDialog::populatePluginCategoryList()
 void
 AudioPluginDialog::populatePluginList()
 {
-    RG_DEBUG << "AudioPluginDialog::populatePluginList()" << endl;
+    RG_DEBUG << "AudioPluginDialog::populatePluginList()";
 
     m_pluginList->clear();
     m_pluginsInList.clear();
@@ -390,7 +390,7 @@ AudioPluginDialog::populatePluginList()
 void
 AudioPluginDialog::makePluginParamsBox(QWidget *parent)
 {
-    RG_DEBUG << "AudioPluginDialog::makePluginParamsBox()" << endl;
+    RG_DEBUG << "AudioPluginDialog::makePluginParamsBox()";
     //@@@ //!!!
     // There really isn't anything to do here now.  It used to calculate how
     // many rows and columns to use to create a QGridLayout, but in Qt4 there is
@@ -408,7 +408,7 @@ AudioPluginDialog::makePluginParamsBox(QWidget *parent)
 void
 AudioPluginDialog::slotCategorySelected(int)
 {
-    RG_DEBUG << "AudioPluginDialog::slotCategorySelected" << endl;
+    RG_DEBUG << "AudioPluginDialog::slotCategorySelected";
     populatePluginList();
 }
 
@@ -446,7 +446,7 @@ AudioPluginDialog::slotPluginSelected(int i)
     QWidget* parent = dynamic_cast<QWidget*>(m_pluginParamsBox->parent());
 
     delete m_pluginParamsBox;
-    RG_DEBUG << "AudioPluginDialog::slotPluginSelected - deleted m_pluginParamsBox" << endl;
+    RG_DEBUG << "AudioPluginDialog::slotPluginSelected - deleted m_pluginParamsBox";
     m_pluginWidgets.clear(); // The widgets are deleted with the parameter box
     m_programCombo = 0;
 
@@ -717,7 +717,7 @@ AudioPluginDialog::getProgramsForInstance(AudioPluginInstance *inst, int &curren
 void
 AudioPluginDialog::slotPluginPortChanged(float value)
 {
-    RG_DEBUG << "AudioPluginDialog::slotPluginPortChanged(" << value << ")" << endl;
+    RG_DEBUG << "AudioPluginDialog::slotPluginPortChanged(" << value << ")";
     const QObject* object = sender();
 
     const PluginControl* control = dynamic_cast<const PluginControl*>(object);
@@ -780,7 +780,7 @@ AudioPluginDialog::updatePluginPortControl(int port)
 void
 AudioPluginDialog::updatePluginProgramControl()
 {
-    RG_DEBUG << "AudioPluginDialog::updatePluginProgramControl()" << endl;
+    RG_DEBUG << "AudioPluginDialog::updatePluginProgramControl()";
 
     AudioPluginInstance *inst = m_pluginContainer->getPlugin(m_index);
     if (inst) {
@@ -803,7 +803,7 @@ AudioPluginDialog::updatePluginProgramControl()
 void
 AudioPluginDialog::updatePluginProgramList()
 {
-    RG_DEBUG << "AudioPluginDialog::updatePluginProgramList()" << endl;
+    RG_DEBUG << "AudioPluginDialog::updatePluginProgramList()";
 
     if (!m_programLabel)
         return ;

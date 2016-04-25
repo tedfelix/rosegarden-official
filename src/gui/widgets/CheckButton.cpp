@@ -38,7 +38,7 @@ CheckButton::CheckButton(QString iconName, bool wantsMemory,  QWidget *parent) :
     setIcon(IconLoader().load(m_iconName));
 
     if (m_wantsMemory) { 
-        RG_DEBUG << "CheckButton: recall for: " << iconName << endl;
+        RG_DEBUG << "CheckButton: recall for: " << iconName;
         // memory recall
         QSettings settings;
         settings.beginGroup(CheckButtonConfigGroup);
@@ -77,7 +77,7 @@ CheckButton::toggle(bool state)
 {
     if (m_wantsMemory) {
         // Memory storage
-        RG_DEBUG << "CheckButton, storing value of " << m_iconName << " as: " << state << endl;
+        RG_DEBUG << "CheckButton, storing value of " << m_iconName << " as: " << state;
         QSettings settings;
         settings.beginGroup(CheckButtonConfigGroup);
         settings.setValue(m_iconName, state);

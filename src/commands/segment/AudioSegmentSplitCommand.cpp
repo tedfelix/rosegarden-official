@@ -104,7 +104,7 @@ AudioSegmentSplitCommand::execute()
         //        m_previousEndAudioTime = m_segment->getAudioEndTime();
         //        m_segment->setAudioEndTime(m_newSegment->getAudioStartTime());
 
-        RG_DEBUG << "AudioSegmentSplitCommand::execute: Set end audio of left segment to " << m_newSegment->getAudioStartTime() << endl;
+        RG_DEBUG << "AudioSegmentSplitCommand::execute: Set end audio of left segment to " << m_newSegment->getAudioStartTime();
 
 
         // Set labels
@@ -127,7 +127,7 @@ AudioSegmentSplitCommand::execute()
         m_previousEndMarkerTime = 0;
     }
 
-    RG_DEBUG << "AudioSegmentSplitCommand::execute: Setting end marker of left segment to " << m_splitTime << endl;
+    RG_DEBUG << "AudioSegmentSplitCommand::execute: Setting end marker of left segment to " << m_splitTime;
 
     m_segment->setEndMarkerTime(m_splitTime);
 
@@ -143,7 +143,7 @@ void
 AudioSegmentSplitCommand::unexecute()
 {
     if (m_previousEndMarkerTime) {
-        RG_DEBUG << "AudioSegmentSplitCommand::unexecute: Restoring end marker of left segment to " << *m_previousEndMarkerTime << endl;
+        RG_DEBUG << "AudioSegmentSplitCommand::unexecute: Restoring end marker of left segment to " << *m_previousEndMarkerTime;
 
         m_segment->setEndMarkerTime(*m_previousEndMarkerTime);
         delete m_previousEndMarkerTime;
@@ -152,7 +152,7 @@ AudioSegmentSplitCommand::unexecute()
         m_segment->clearEndMarker();
     }
 
-    //    RG_DEBUG << "AudioSegmentSplitCommand::unexecute: Setting audio end time of left segment to " << m_previousEndAudioTime << endl;
+    //    RG_DEBUG << "AudioSegmentSplitCommand::unexecute: Setting audio end time of left segment to " << m_previousEndAudioTime;
     //    m_segment->setAudioEndTime(m_previousEndAudioTime);
     m_segment->getComposition()->detachSegment(m_newSegment);
     m_detached = true;

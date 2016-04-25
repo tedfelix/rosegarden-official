@@ -52,7 +52,7 @@ void RosegardenParameterBox::init()
     plainFont.setBold(false);
     m_font = plainFont;
 
-    RG_DEBUG << "RosegardenParameterBox::init: " << this << ": m_font size is " << m_font.pixelSize() << "px (" << m_font.pointSize() << "pt)" << endl;
+    RG_DEBUG << "RosegardenParameterBox::init: " << this << ": m_font size is " << m_font.pixelSize() << "px (" << m_font.pointSize() << "pt)";
 
     QFont boldFont;
     boldFont.setPointSize(int(boldFont.pointSize() * 9.5 / 10.0 + 0.5));

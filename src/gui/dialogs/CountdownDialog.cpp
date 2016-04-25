@@ -132,7 +132,7 @@ CountdownDialog::setElapsedTime(int elapsedSeconds)
 	// zero error, though the trace just listed it as an "Arithmetic
 	// exception."
         if (m_totalTime == 0) {
-	    RG_DEBUG << "CountdownDialog::setElapsedTime: FAILSAFE CODE FIRED, see bug #1838190 for details" << endl;
+	    RG_DEBUG << "CountdownDialog::setElapsedTime: FAILSAFE CODE FIRED, see bug #1838190 for details";
 	    m_totalTime = 1;
 	}
         int barPosition = m_progressBarWidth -

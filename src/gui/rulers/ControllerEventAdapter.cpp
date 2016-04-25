@@ -41,7 +41,7 @@ bool ControllerEventAdapter::getValue(long& val)
         value <<= 7;
         value |= lsb;
 
-        //RG_DEBUG << "PitchBend Get Value = " << value << endl;
+        //RG_DEBUG << "PitchBend Get Value = " << value;
 
         val = value;
         return true;
@@ -64,7 +64,7 @@ void ControllerEventAdapter::setValue(long val)
     }
     else if (m_event->getType() == Rosegarden::PitchBend::EventType)
     {
-        RG_DEBUG << "PitchBend Set Value = " << val << endl;
+        RG_DEBUG << "PitchBend Set Value = " << val;
 
         int lsb = val & 0x7f;
         int msb = (val >> 7) & 0x7f;
