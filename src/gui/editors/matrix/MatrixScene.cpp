@@ -82,6 +82,7 @@ MatrixScene::~MatrixScene()
     delete m_snapGrid;
     delete m_referenceScale;
     delete m_scale;
+    delete m_selection;
 
     RG_DEBUG << "MatrixScene::~MatrixScene() - end";
 }

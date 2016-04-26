@@ -110,6 +110,7 @@ NotationScene::~NotationScene()
     delete m_subtitle;
     delete m_composer;
     delete m_copyright;
+    delete m_selection;
 
     for (unsigned int i = 0; i < m_segments.size(); ++i)
         m_segments[i]->removeObserver(m_clefKeyContext);
