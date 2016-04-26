@@ -14,6 +14,7 @@ endmacro()
 RG_UNIT_TESTS(
    accidentals
    segmenttransposecommand
+   test_notationview_selection
    transpose
 )
 

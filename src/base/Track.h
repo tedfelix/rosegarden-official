@@ -21,6 +21,8 @@
 #ifndef RG_TRACK_H
 #define RG_TRACK_H
 
+#include "rosegardenprivate_export.h"
+
 #include <string>
 
 #include "XmlExportable.h"
@@ -45,7 +47,7 @@ typedef unsigned int TrackId;
  * Instrument relationship.
  *
  */
-class Track : public XmlExportable
+class ROSEGARDENPRIVATE_EXPORT Track : public XmlExportable
 {
     friend class Composition;
 

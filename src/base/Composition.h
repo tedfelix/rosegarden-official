@@ -60,7 +60,7 @@ class CompositionObserver;
  * The Composition owns the Segment objects it holds, and deletes them on
  * destruction.  See deleteSegment() and detachSegment().
  */
-class Composition : public XmlExportable
+class ROSEGARDENPRIVATE_EXPORT Composition : public XmlExportable
 {
     friend class Track; // to call notifyTrackChanged()
     friend class Segment; // to call notifySegmentRepeatChanged()
