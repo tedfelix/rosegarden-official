@@ -155,10 +155,8 @@ EventQuantizeCommand::modifySegment()
     if (m_progressTotal > 0) {
         if (rebeam || makeviable || decounterpoint) {
             emit setValue(m_progressTotal + m_progressPerCall / 2);
-            rosegardenApplication->refreshGUI(50);
         } else {
             emit setValue(m_progressTotal + m_progressPerCall);
-            rosegardenApplication->refreshGUI(50);
         }
     }
 
@@ -193,7 +191,6 @@ EventQuantizeCommand::modifySegment()
     if (m_progressTotal > 0) {
         if (rebeam || makeviable || decounterpoint) {
             emit setValue(m_progressTotal  + m_progressPerCall / 2);
-            rosegardenApplication->refreshGUI(50);
         }
     }
 }

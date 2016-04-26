@@ -76,7 +76,6 @@ CsoundExporter::write()
             i != m_composition->end(); ++i) {
 
         emit setValue(int(double(trackNo++) / double(m_composition->getNbTracks()) * 100.0));
-        rosegardenApplication->refreshGUI(50);
 
         str << "\n;; Segment: \"" << (*i)->getLabel() << "\"\n";
         str << ";; on Track: \""

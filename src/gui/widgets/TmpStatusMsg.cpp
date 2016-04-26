@@ -26,12 +26,9 @@ TmpStatusMsg::TmpStatusMsg(const QString& msg, QMainWindow* window)
         : m_mainWindow(window)
 {
     m_mainWindow->statusBar()->showMessage( QString("  %1").arg(msg) );
-    Rosegarden::rosegardenApplication->refreshGUI(50);
 }
 
 TmpStatusMsg::~TmpStatusMsg()
 {
     m_mainWindow->statusBar()->clearMessage();
-    Rosegarden::rosegardenApplication->refreshGUI(50);
 }
-

@@ -52,8 +52,6 @@ public:
      */
 //&&&    virtual int newInstance();
 
-    void refreshGUI(int maxTime);
-
     static RosegardenApplication* ApplicationObject();
 
     static void setNoSequencerMode(bool m=true);
@@ -68,10 +66,6 @@ signals:
     // connect this to RosegardenMainWindow
     void aboutToSaveState();
     
-public slots:
-    void sfxLoadExited(QProcess *proc);
-    void slotSetStatusMessage(QString txt);
-
 protected:
 
     virtual bool notify(QObject * receiver, QEvent * event);
