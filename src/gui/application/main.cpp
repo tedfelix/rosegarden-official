@@ -685,11 +685,7 @@ int main(int argc, char *argv[])
     struct timeval logoShowTime;
     gettimeofday(&logoShowTime, 0);
 
-#ifndef NO_SOUND
     RosegardenApplication::setNoSequencerMode(nosequencer);
-#else
-    RosegardenApplication::setNoSequencerMode(true);
-#endif // NO_SOUND
 
     RG_INFO << "Creating RosegardenMainWindow instance...";
 
