@@ -225,9 +225,6 @@ protected slots:
      */
     virtual void slotSaveOptions();
     virtual void slotConfigure();
-    virtual void slotEditKeys();
-    virtual void slotEditToolbars();
-    virtual void slotUpdateToolbars();
 
 protected:
     /**

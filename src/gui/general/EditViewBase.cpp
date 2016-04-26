@@ -127,8 +127,6 @@ void EditViewBase::setupBaseActions(bool haveClipboard)
 //    createAction("options_show_toolbar", SLOT(slotToggleToolBar()));
     createAction("options_show_statusbar", SLOT(slotToggleStatusBar()));
     createAction("options_configure", SLOT(slotConfigure()));
-//    createAction("options_configure_keybindings", SLOT(slotEditKeys()));
-//    createAction("options_configure_toolbars", SLOT(slotEditToolbars()));
 
     createAction("file_save", SIGNAL(saveFile()));
     createAction("file_close", SLOT(slotCloseWindow()));
@@ -154,28 +152,6 @@ void EditViewBase::slotConfigure()
         new ConfigureDialog(getDocument(), this);
 
     configDlg->show();
-}
-
-void EditViewBase::slotEditKeys()
-{
-//&&&    KKeyDialog::configure(actionCollection());
-}
-
-void EditViewBase::slotEditToolbars()
-{
-//&&&
-//    KEditToolbar dlg(actionCollection(), getRCFileName());
-
-//    connect(&dlg, SIGNAL(newToolbarConfig()),
-//            SLOT(slotUpdateToolbars()));
-
-//    dlg.exec();
-}
-
-void EditViewBase::slotUpdateToolbars()
-{
-//!!!    createGUI(getRCFileName());
-    //m_viewToolBar->setChecked(!toolBar()->isHidden());
 }
 
 void

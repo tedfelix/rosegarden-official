@@ -1326,17 +1326,6 @@ public slots:
     void slotConfigure();
 
     /**
-     * Show the key mappings
-     *
-     */
-    void slotEditKeys();
-
-    /**
-     * Edit toolbars
-     */
-    void slotEditToolbars();
-
-    /**
      * Update the toolbars after edition
      */
     void slotUpdateToolbars();

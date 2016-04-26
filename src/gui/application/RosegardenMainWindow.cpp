@@ -6156,33 +6156,9 @@ RosegardenMainWindow::slotResetDocConfigDlg()
     m_docConfigDlg = 0;
 }
 
-
-void
-RosegardenMainWindow::slotEditKeys()
-{
-    //&&&
- //   KKeyDialog::configure(actionCollection());    //&&& disabled KKeyDialog for now
-}
-
-void
-RosegardenMainWindow::slotEditToolbars()
-{
-    //&&&
-// KEditToolbar dlg(actionCollection(), "rosegardenui.rc");    //&&& disabled Toolbar config. no qt4 equival.
-    /*
-    QToolBar dlg;
-
-    connect(&dlg, SIGNAL(newToolbarConfig()),
-            SLOT(slotUpdateToolbars()));
-
-    dlg.exec();
-    */
-}
-
 void
 RosegardenMainWindow::slotUpdateToolbars()
 {
-//    createGUI("rosegardenui.rc");
     findAction("show_stock_toolbar")->setChecked(!(findToolbar("Main Toolbar")->isHidden()));
 }
 
