@@ -86,6 +86,23 @@ StandardRuler::StandardRuler(RosegardenDocument *doc,
         (CommandHistory::getInstance(), SIGNAL(commandExecuted()),
          this, SLOT(update()));
 
+    if (RosegardenMainWindow::self()) {
+        QObject::connect
+                (m_markerRuler, SIGNAL(editMarkers()),
+                 RosegardenMainWindow::self(), SLOT(slotEditMarkers()));
+
+        QObject::connect
+                (m_markerRuler, SIGNAL(addMarker(timeT)),
+                 RosegardenMainWindow::self(), SLOT(slotAddMarker(timeT)));
+
+        QObject::connect
+                (m_markerRuler, SIGNAL(deleteMarker(int, timeT, QString, QString)),
+                 RosegardenMainWindow::self(), SLOT(slotDeleteMarker(int, timeT, QString, QString)));
+
+        QObject::connect
+                (m_loopRuler, SIGNAL(setPlayPosition(timeT)),
+                 RosegardenMainWindow::self(), SLOT(slotSetPlayPosition(timeT)));
+    }
 }
 
 void StandardRuler::setSnapGrid(const SnapGrid *grid)
@@ -113,28 +130,12 @@ void StandardRuler::connectRulerToDocPointer(RosegardenDocument *doc)
      doc, SLOT(slotSetPointerPosition(timeT)));
 
     QObject::connect
-    (m_markerRuler, SIGNAL(editMarkers()),
-     RosegardenMainWindow::self(), SLOT(slotEditMarkers()));
-
-    QObject::connect
-    (m_markerRuler, SIGNAL(addMarker(timeT)),
-     RosegardenMainWindow::self(), SLOT(slotAddMarker(timeT)));
-
-    QObject::connect
-    (m_markerRuler, SIGNAL(deleteMarker(int, timeT, QString, QString)),
-     RosegardenMainWindow::self(), SLOT(slotDeleteMarker(int, timeT, QString, QString)));
-
-    QObject::connect
     (m_loopRuler, SIGNAL(dragPointerToPosition(timeT)),
      this, SIGNAL(dragPointerToPosition(timeT)));
 
     QObject::connect
     (m_loopRuler, SIGNAL(dragLoopToPosition(timeT)),
      this, SIGNAL(dragLoopToPosition(timeT)));
-
-    QObject::connect
-    (m_loopRuler, SIGNAL(setPlayPosition(timeT)),
-     RosegardenMainWindow::self(), SLOT(slotSetPlayPosition(timeT)));
 
     QObject::connect
     (m_markerRuler, SIGNAL(setLoop(timeT, timeT)),
