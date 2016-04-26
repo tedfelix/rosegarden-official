@@ -78,14 +78,14 @@ public:
      * Returns the number of events removed (could be > 1 if ties were
      * encountered) in the selected direction.
      */
-    int addEvent(Event* e, bool forward = true, bool ties = true);
+    int addEvent(Event* e, bool ties = true, bool forward = true);
 
     /**
      * Add all the Events in the given Selection to this one.
      * Will silently drop any events that are already in the
      * selection.
      */
-    void addFromSelection(EventSelection *sel, bool ties = true);
+    void addFromSelection(EventSelection *sel);
 
     /**
      * If the given Event is in the selection, take it out.
@@ -93,7 +93,7 @@ public:
      * Returns the number of events removed (could be > 1 if ties were
      * encountered)
      */
-    int removeEvent(Event *e, bool forward = true, bool ties = false);
+    int removeEvent(Event *e, bool ties = true, bool forward = true);
 
     /**
      * Test whether a given Event (in the Segment) is part of
@@ -198,10 +198,10 @@ private:
      * from the selection set.
      *
      * Returns the number of events removed (could be > 1 if ties were
-     * encountered) in the selected direction.
+     * encountered) in the selected direction (forward or !forward).
      */
-    int addRemoveEvent(Event *e, EventFuncPtr insertEraseFn, bool forward, 
-                       bool ties = true);
+    int addRemoveEvent(Event *e, EventFuncPtr insertEraseFn,
+                       bool ties, bool forward);
         
     typedef std::list<EventSelectionObserver *> ObserverSet;
     ObserverSet m_observers;

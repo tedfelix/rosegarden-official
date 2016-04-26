@@ -162,8 +162,8 @@ EventSelection::eraseThisEvent(Event *e)
 }
 
 int
-EventSelection::addRemoveEvent(Event *e, EventFuncPtr insertEraseFn, bool forward,
-                               bool ties)
+EventSelection::addRemoveEvent(Event *e, EventFuncPtr insertEraseFn,
+                               bool ties, bool forward)
 {
     const Segment::const_iterator baseSegmentItr = m_originalSegment.find(e);
     
@@ -296,25 +296,25 @@ EventSelection::removeObserver(EventSelectionObserver *obs) {
 
 
 int
-EventSelection::addEvent(Event *e, bool forward, bool ties)
+EventSelection::addEvent(Event *e, bool ties, bool forward)
 {
-    return addRemoveEvent(e, &EventSelection::insertThisEvent, forward, ties);
+    return addRemoveEvent(e, &EventSelection::insertThisEvent, ties, forward);
 }
 
 void
-EventSelection::addFromSelection(EventSelection *sel, bool ties)
+EventSelection::addFromSelection(EventSelection *sel)
 {
     for (EventContainer::iterator i = sel->getSegmentEvents().begin();
 	 i != sel->getSegmentEvents().end(); ++i) {
-	// contains() checked a bit deeper now
-	addEvent(*i, ties);
+        // contains() checked a bit deeper now
+        addEvent(*i);
     }
 }
 
 int
-EventSelection::removeEvent(Event *e, bool forward, bool ties) 
+EventSelection::removeEvent(Event *e, bool ties, bool forward)
 {
-    return addRemoveEvent(e, &EventSelection::eraseThisEvent, forward, ties);
+    return addRemoveEvent(e, &EventSelection::eraseThisEvent, ties, forward);
 }
 
 bool

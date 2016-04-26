@@ -4830,7 +4830,7 @@ NotationView::slotExtendSelectionBackward(bool bar)
             if ((*extendFrom)->event()->isa(Note::EventType)) {
                 // #1519: increment cursor for every event selected
                 bool forward = false;
-                int count = es->addEvent((*extendFrom)->event(), forward);
+                int count = es->addEvent((*extendFrom)->event(), true, forward);
                 for (int c = 1; c < count; ++c) slotStepBackward();
             }
         }
@@ -4904,7 +4904,7 @@ NotationView::slotExtendSelectionForward(bool bar)
             if ((*extendFrom)->event()->isa(Note::EventType)) {
                 // #1519: increment cursor for every event selected
                 bool forward = true;
-                int count = es->addEvent((*extendFrom)->event(), forward);
+                int count = es->addEvent((*extendFrom)->event(), true, forward);
                 for (int c = 1; c < count; ++c) slotStepForward();
             }
             ++extendFrom;

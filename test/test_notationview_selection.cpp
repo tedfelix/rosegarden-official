@@ -138,26 +138,11 @@ void TestNotationViewSelection::testSelectForward()
         QCOMPARE(selectionNotes(m_view->getSelection()->getSegmentEvents()), expectedSelections.at(i));
     }
 
-    // When selecting backwards, for some reason selection stops between tied notes
+    return; // ## the rest of this test is disabled for now
 
-    QStringList expectedSelectionsBack;
-    expectedSelectionsBack
-            << "ABCCBBGGGCCGDBDB"
-            << "ABCCBBGGGCCGDB"
-            << "ABCCBBGGGCCG"
-            << "ABCCBBGGGCC"
-            << "ABCCBBGGGC"
-            << "ABCCBBGGG"
-            << "ABCCBBGG"
-            << "ABCCBBG"
-            << "ABCCBB"
-            << "ABCCB"
-            << "ABCC"
-            << "ABC"
-            << "AB"
-            << "A" // after the rest
-            << "A" // before the rest
-            << "";
+    QStringList expectedSelectionsBack = expectedSelections;
+    std::reverse(expectedSelectionsBack.begin(), expectedSelectionsBack.end());
+    expectedSelectionsBack.append(QString());
 
     for (int i = 0 ; i < expectedSelections.size(); ++i) {
         m_view->slotExtendSelectionBackward();
