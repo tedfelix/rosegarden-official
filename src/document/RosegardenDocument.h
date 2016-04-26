@@ -284,9 +284,21 @@ public:
         { return m_config; }
 
     /**
-     * Returns whether the sequencer us running
+     * Returns whether the sequencer is running
      */
-    bool isSequencerRunning();
+    bool isSequencerRunning() const;
+
+    /**
+     * Enables/disables playing sounds.
+     * Useful for the unittest to avoid initializing the sound system,
+     * and playing sounds when selecting notes.
+     */
+    void setSoundEnabled(bool b);
+
+    /**
+     * Returns whether playing sound is enabled at all
+     */
+    bool isSoundEnabled() const;
 
     /// Insert some recorded MIDI events into our recording Segment.
     /**
@@ -756,6 +768,9 @@ private:
     bool m_clearCommandHistory;
 
     bool m_useSequencer;
+
+    /// Enable/disable playing sounds
+    bool m_soundEnabled;
 
     /// Allow file lock to be released.
     bool m_release;

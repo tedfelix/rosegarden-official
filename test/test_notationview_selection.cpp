@@ -46,6 +46,8 @@ static QString findFile(const QString &fileName) {
 
 void TestNotationViewSelection::initTestCase()
 {
+    m_doc.setSoundEnabled(false);
+
     // Loading from a file
     const QString input = findFile("../data/examples/test_selection.rg");
     QVERIFY(!input.isEmpty()); // file not found
@@ -106,6 +108,8 @@ static QString selectionNotes(const EventContainer &eventContainer)
         Event *ev = *it;
         if (ev->isa(Note::EventType)) {
             ret += Pitch(*ev).getNoteName(defaultKey);
+        } else if (ev->isa(Note::EventRestType)) {
+            ret += 'R';
         }
     }
     return ret;
@@ -115,8 +119,50 @@ void TestNotationViewSelection::testSelectForward()
 {
     m_doc.slotSetPointerPosition(0);
 
-    m_view->slotExtendSelectionForward();
-    selectionNotes(m_view->getSelection()->getSegmentEvents());
+    QStringList expectedSelections;
+    expectedSelections << "A"
+                       << "A" // the rest doesn't get selected
+                       << "AB"
+                       << "ABCC" // tied notes get selected together
+                       << "ABCCBB"
+                       << "ABCCBBGGG"
+                       << "ABCCBBGGGCC"
+                       << "ABCCBBGGGCCG"
+                       << "ABCCBBGGGCCGDBDB"
+                       //<< "ABCCBBGGGCCGDBDBG" // BUG!
+                       //<< "ABCCBBGGGCCGDBDBGC"
+                       ;
+
+    for (int i = 0 ; i < expectedSelections.size(); ++i) {
+        m_view->slotExtendSelectionForward();
+        QCOMPARE(selectionNotes(m_view->getSelection()->getSegmentEvents()), expectedSelections.at(i));
+    }
+
+    // When selecting backwards, for some reason selection stops between tied notes
+
+    QStringList expectedSelectionsBack;
+    expectedSelectionsBack
+            << "ABCCBBGGGCCGDBDB"
+            << "ABCCBBGGGCCGDB"
+            << "ABCCBBGGGCCG"
+            << "ABCCBBGGGCC"
+            << "ABCCBBGGGC"
+            << "ABCCBBGGG"
+            << "ABCCBBGG"
+            << "ABCCBBG"
+            << "ABCCBB"
+            << "ABCCB"
+            << "ABCC"
+            << "ABC"
+            << "AB"
+            << "A" // after the rest
+            << "A" // before the rest
+            << "";
+
+    for (int i = 0 ; i < expectedSelections.size(); ++i) {
+        m_view->slotExtendSelectionBackward();
+        QCOMPARE(selectionNotes(m_view->getSelection()->getSegmentEvents()), expectedSelectionsBack.at(i));
+    }
 }
 
 QTEST_MAIN(TestNotationViewSelection)

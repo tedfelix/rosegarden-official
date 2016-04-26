@@ -795,6 +795,7 @@ MatrixScene::previewSelection(EventSelection *s,
                               EventSelection *oldSelection)
 {
     if (!s) return;
+    if (!m_document->isSoundEnabled()) return;
 
     for (EventSelection::eventcontainer::iterator i = s->getSegmentEvents().begin();
          i != s->getSegmentEvents().end(); ++i) {

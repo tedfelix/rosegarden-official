@@ -130,6 +130,7 @@ RosegardenDocument::RosegardenDocument(QObject *parent,
         m_beingDestroyed(false),
         m_clearCommandHistory(clearCommandHistory),
         m_useSequencer(useSequencer),
+        m_soundEnabled(true),
         m_release(true)
 {
     checkSequencerTimer();
@@ -1665,9 +1666,19 @@ bool RosegardenDocument::saveAs(const QString &newName, QString &errMsg)
     return true;
 }
 
-bool RosegardenDocument::isSequencerRunning()
+bool RosegardenDocument::isSequencerRunning() const
 {
-    return m_useSequencer;
+    return m_useSequencer && m_soundEnabled;
+}
+
+void RosegardenDocument::setSoundEnabled(bool b)
+{
+    m_soundEnabled = b;
+}
+
+bool RosegardenDocument::isSoundEnabled() const
+{
+    return m_soundEnabled;
 }
 
 bool
