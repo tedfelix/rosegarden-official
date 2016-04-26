@@ -1510,7 +1510,7 @@ INCLUDE_FILE_PATTERNS  =
 # instead of the = operator.
 
 PREDEFINED             = HAVE_ALSA HAVE_LIBJACK HAVE_DSSI HAVE_LADSPA \
-                         HAVE_LIBLO HAVE_LIBLRDF HAVE_XFT HAVE_LIRC
+                         HAVE_LIBLO HAVE_LIBLRDF HAVE_LIRC
 
 # If the MACRO_EXPANSION and EXPAND_ONLY_PREDEF tags are set to YES then
 # this tag can be used to specify a list of macro names that should be expanded.

@@ -56,7 +56,6 @@ public:
 protected slots:
     void slotFontComboChanged(int);
     void slotPopulateFontCombo(bool rescan);
-    void slotViewButtonPressed();
 
 protected:
 
@@ -68,7 +67,6 @@ protected:
     FontRequester* m_textFont;
     FontRequester* m_sansFont;
     FontRequester* m_timeSigFont;
-    QPushButton *m_viewButton;
     QLabel *m_fontOriginLabel;
     QLabel *m_fontCopyrightLabel;
     QLabel *m_fontMappedByLabel;

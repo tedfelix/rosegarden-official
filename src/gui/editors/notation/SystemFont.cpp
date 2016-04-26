@@ -37,7 +37,6 @@
 
 #include "SystemFont.h"
 #include "SystemFontQt.h"
-#include "SystemFontXft.h"
 
 #include <iostream>
 
@@ -69,66 +68,6 @@ SystemFont::loadSystemFont(const SystemFontSpec &spec)
         unbundleFonts();
         haveFonts = true;
     }
-
-#ifdef HAVE_XFT
-
-    FcPattern *pattern, *match;
-    FcResult result;
-    FcChar8 *matchFamily;
-    XftFont *xfont = 0;
-
-    Display *dpy = QPaintDevice::x11AppDisplay();
-
-    if (!dpy) {
-        std::cerr << "SystemFont::loadSystemFont[Xft]: Xft support requested but no X11 display available!" << std::endl;
-        goto qfont;
-    }
-	
-    pattern = FcPatternCreate();
-    FcPatternAddString(pattern, FC_FAMILY, (FcChar8 *)name.toLatin1().data());
-    FcPatternAddInteger(pattern, FC_PIXEL_SIZE, size);
-    FcConfigSubstitute(FcConfigGetCurrent(), pattern, FcMatchPattern);
-
-    result = FcResultMatch;
-    match = FcFontMatch(FcConfigGetCurrent(), pattern, &result);
-    FcPatternDestroy(pattern);
-
-    if (!match || result != FcResultMatch) {
-        NOTATION_DEBUG << "SystemFont::loadSystemFont[Xft]: No match for font "
-        << name << " (result is " << result
-        << "), falling back on QFont";
-        if (match)
-            FcPatternDestroy(match);
-        goto qfont;
-    }
-
-    FcPatternGetString(match, FC_FAMILY, 0, &matchFamily);
-    NOTATION_DEBUG << "SystemFont::loadSystemFont[Xft]: match family is "
-    << (char *)matchFamily;
-
-    if (QString((char *)matchFamily).toLower() != name.toLower()) {
-        NOTATION_DEBUG << "SystemFont::loadSystemFont[Xft]: Wrong family returned, falling back on QFont";
-        FcPatternDestroy(match);
-        goto qfont;
-    }
-
-    xfont = XftFontOpenPattern(dpy, match);
-    if (!xfont) {
-        FcPatternDestroy(match);
-        NOTATION_DEBUG << "SystemFont::loadSystemFont[Xft]: Unable to load font "
-        << name << " via Xft, falling back on QFont";
-        goto qfont;
-    }
-
-    NOTATION_DEBUG << "SystemFont::loadSystemFont[Xft]: successfully loaded font "
-                   << name << " through Xft";
-
-    return new SystemFontXft(dpy, xfont);
-
-
-qfont:
-
-#endif
 
     static QHash<QString, QFont *> qFontMap;
 
@@ -194,18 +133,8 @@ SystemFont::unbundleFonts()
 void
 SystemFont::addFont(QString fileName)
 {
-#ifdef HAVE_XFT
-    if (!FcConfigAppFontAddFile
-        (FcConfigGetCurrent(),
-         (const FcChar8 *)fileName.toLocal8Bit().data())) {
-        NOTATION_DEBUG << "SystemFont::addFont[Xft]: Failed to add font file " << fileName << " to fontconfig, continuing without it";
-    } else {
-        NOTATION_DEBUG << "Added font file \"" << fileName << "\" to fontconfig";
-    }
-#else
     QFontDatabase::addApplicationFont(fileName);
     NOTATION_DEBUG << "Added font file \"" << fileName << "\" to Qt font database";
-#endif
 }
 
 }

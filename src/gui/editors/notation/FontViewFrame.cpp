@@ -30,14 +30,6 @@
 
 #include "misc/Strings.h"
 
-#ifdef HAVE_XFT
-#include <ft2build.h>
-#include FT_FREETYPE_H 
-#include FT_OUTLINE_H
-#include FT_GLYPH_H
-#include <X11/Xft/Xft.h>
-#endif
-
 #include <iostream>
 
 namespace Rosegarden
@@ -58,7 +50,7 @@ FontViewFrame::FontViewFrame( int pixelSize, QWidget* parent) :
 
 FontViewFrame::~FontViewFrame()
 {
-    // empty
+    delete m_tableFont;
 }
 
 void
@@ -72,49 +64,7 @@ FontViewFrame::setFont(QString font)
 void
 FontViewFrame::loadFont()
 {
-#ifdef HAVE_XFT
-    if (m_tableFont) {
-        XftFontClose(x11AppDisplay(), (XftFont *)m_tableFont);
-    }
-    m_tableFont = 0;
-
-    static bool haveDir = false;
-    if (!haveDir) {
-        FcConfigAppFontAddDir(FcConfigGetCurrent(),
-                              (const FcChar8 *)"/opt/kde3/share/apps/rosegarden/fonts");
-        haveDir = true;
-    }
-
-    FcPattern *pattern = FcPatternCreate();
-    FcPatternAddString(pattern, FC_FAMILY, (FcChar8 *)m_fontName.toLatin1().data());
-    FcPatternAddInteger(pattern, FC_PIXEL_SIZE, m_fontSize);
-
-    FcConfigSubstitute(FcConfigGetCurrent(), pattern, FcMatchPattern);
-
-    FcResult result = FcResultMatch;
-    FcPattern *match = FcFontMatch(FcConfigGetCurrent(), pattern, &result);
-    FcPatternDestroy(pattern);
-
-    if (!match || result != FcResultMatch) {
-        QMessageBox::critical(this, tr("Rosegarden"), tr("Error: Unable to match font name %1", m_fontName));
-        return ;
-    }
-
-    FcChar8 *matchFamily;
-    FcPatternGetString(match, FC_FAMILY, 0, &matchFamily);
-
-    if (QString((const char *)matchFamily).toLower() != m_fontName.toLower()) {
-        QMessageBox::warning(this, tr("Rosegarden"), tr("Warning: No good match for font name %1 (best is %2)")
-                           .arg(m_fontName).arg(QString((const char *)matchFamily)) );
-        m_fontName = (const char *)matchFamily;
-    }
-
-    m_tableFont = XftFontOpenPattern(x11AppDisplay(), match);
-    if (!m_tableFont) {
-        QMessageBox::critical(this, tr("Rosegarden"), tr("Error: Unable to open best-match font %1")
-                           .arg(QString((const char *)matchFamily)));
-    }
-#else
+    delete m_tableFont;
     QFont *qf = new QFont(m_fontName);
     qf->setPixelSize(m_fontSize);
     qf->setWeight(QFont::Normal);
@@ -122,7 +72,6 @@ FontViewFrame::loadFont()
     QFontInfo fi(*qf);
     std::cerr << "Loaded Qt font \"" << fi.family() << "\" (exactMatch = " << (fi.exactMatch() ? "true" : "false") << ")" << std::endl;
     m_tableFont = qf;
-#endif
 
     m_ascent = QFontMetrics(font()).ascent(); // ascent of numbering font, not notation font
 }
@@ -171,20 +120,6 @@ void FontViewFrame::paintEvent( QPaintEvent* e )
     if ( !cell.width() || !cell.height() )
         return ;
 
-#ifdef HAVE_XFT
-    Drawable drawable = (Drawable)handle();
-    XftDraw *draw = XftDrawCreate(x11AppDisplay(), drawable,
-                                  (Visual *)x11Visual(), x11Colormap());
-
-    QColor pen(QColor(Qt::black));
-    XftColor col;
-    col.color.red = pen.red () | pen.red() << 8;
-    col.color.green = pen.green () | pen.green() << 8;
-    col.color.blue = pen.blue () | pen.blue() << 8;
-    col.color.alpha = 0xffff;
-    col.pixel = pen.pixel();
-#endif
-
     p.setPen(Qt::black);
 
     for (int j = 0; j <= 16; j++) {
@@ -218,31 +153,7 @@ void FontViewFrame::paintEvent( QPaintEvent* e )
         }
     }
 
-#ifdef HAVE_XFT
-    p.end();
-
-    for (int j = 1; j <= 16; j++) {
-        for (int i = 1; i <= 16; i++) {
-
-            int x = i * cell.width();
-            int y = j * cell.height();
-
-            x += ml;
-            y += mt;
-
-            if (m_glyphs) {
-                FT_UInt ui = m_row * 256 + (j - 1) * 16 + i - 1;
-                XftDrawGlyphs(draw, &col, (XftFont *)m_tableFont, x, y, &ui, 1);
-            } else {
-                FcChar32 ch = m_row * 256 + (j - 1) * 16 + i - 1;
-                if (XftCharExists(x11AppDisplay(), (XftFont *)m_tableFont, ch)) {
-                    XftDrawString32(draw, &col, (XftFont *)m_tableFont, x, y, &ch, 1);
-                }
-            }
-        }
-    }
-#else
-    p.setFont(*(QFont *)m_tableFont);
+    p.setFont(*m_tableFont);
 
     for (int j = 1; j <= 16; j++) {
         for (int i = 1; i <= 16; i++) {
@@ -257,29 +168,12 @@ void FontViewFrame::paintEvent( QPaintEvent* e )
             p.drawText(x, y, QString(c));
         }
     }
-
-    p.end();
-#endif
 }
 
 bool
 FontViewFrame::hasRow(int r) const
 {
-#ifdef HAVE_XFT
-    if (m_glyphs) {
-        if (r < 256) return true;
-    } else {
-
-        for (int c = 0; c < 256; ++c) {
-            FcChar32 ch = r * 256 + c;
-            if (XftCharExists(x11AppDisplay(), (XftFont *)m_tableFont, ch)) {
-                return true;
-            }
-        }
-    }
-#else
     if (r < 256) return true;
-#endif
     return false;
 }
 

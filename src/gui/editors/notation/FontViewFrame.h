@@ -56,7 +56,7 @@ protected:
 private:
     QString m_fontName;
     int m_fontSize;
-    void *m_tableFont;
+    QFont *m_tableFont;
     int m_ascent;
     int m_row;
     bool m_glyphs;

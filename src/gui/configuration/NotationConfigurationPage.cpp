@@ -453,22 +453,12 @@ NotationConfigurationPage::NotationConfigurationPage(QWidget *parent) :
     layout = new QGridLayout(frame);
     layout->setSpacing(5);
 
-    m_viewButton = 0;
-
     layout->addWidget(new QLabel(tr("Notation font"), frame), 0, 0);
 
     m_font = new QComboBox(frame);
     connect(m_font, SIGNAL(activated(int)), this, SLOT(slotModified()));
 
-#ifdef HAVE_XFT
-    m_viewButton = new QPushButton(tr("View"), frame);
-    layout->addWidget(m_font, row, 1, 1, 2);
-    layout->addWidget(m_viewButton, row, 3);
-    QObject::connect(m_viewButton, SIGNAL(clicked()),
-                     this, SLOT(slotViewButtonPressed()));
-#else
     layout->addWidget(m_font, row, 1, 1, 3);
-#endif
     m_font->setEditable(false);
     QObject::connect(m_font, SIGNAL(activated(int)),
                      this, SLOT(slotFontComboChanged(int)));
@@ -651,31 +641,6 @@ NotationConfigurationPage::NotationConfigurationPage(QWidget *parent) :
 }
 
 void
-NotationConfigurationPage::slotViewButtonPressed()
-{
-#ifdef HAVE_XFT
-    QString fontName = m_untranslatedFont[m_font->currentIndex()];
-
-    try {
-        NoteFont *noteFont = NoteFontFactory::getFont
-            (fontName, NoteFontFactory::getDefaultSize(fontName));
-        const NoteFontMap &map(noteFont->getNoteFontMap());
-        QStringList systemFontNames(map.getSystemFontNames());
-        if (systemFontNames.count() == 0) {
-            m_viewButton->setEnabled(false); // oops
-        } else {
-            NoteFontViewer *viewer =
-                new NoteFontViewer(0, m_untranslatedFont[m_font->currentIndex()],
-                                   systemFontNames, 24);
-            (void)viewer->exec(); // no return value
-        }
-    } catch (Exception f) {
-        QMessageBox::critical(0, tr("Rosegarden"), tr(f.getMessage().c_str()));
-    }
-#endif
-}
-
-void
 NotationConfigurationPage::slotPopulateFontCombo(bool rescan)
 {
     QSettings settings;
@@ -745,9 +710,6 @@ NotationConfigurationPage::slotFontComboChanged(int index)
             m_fontTypeLabel->setText(tr("%1 (smooth)").arg(tr(map.getType().toStdString().c_str())));
         } else {
             m_fontTypeLabel->setText(tr("%1 (jaggy)").arg(tr(map.getType().toStdString().c_str())));
-        }
-        if (m_viewButton) {
-            m_viewButton->setEnabled(map.getSystemFontNames().count() > 0);
         }
     } catch (Exception f) {
         QMessageBox::critical(0, tr("Rosegarden"), strtoqstr(f.getMessage()));

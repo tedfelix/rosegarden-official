@@ -246,7 +246,6 @@ set(rg_CPPS
   gui/editors/notation/NoteRestInserter.cpp
   gui/editors/notation/NoteStyleFactory.cpp
   gui/editors/notation/NoteStyleFileReader.cpp
-  gui/editors/notation/SystemFontXft.cpp
   gui/editors/notation/NotationTool.cpp
   gui/editors/notation/NotationProperties.cpp
   gui/editors/notation/NoteFontViewer.cpp
