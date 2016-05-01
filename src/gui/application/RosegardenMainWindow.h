@@ -353,8 +353,6 @@ public:
      */
     virtual void setCursor(const QCursor&);
 
-    bool isTrackEditorPlayTracking() const;
-
     /** Query the AudioFileManager to see if the audio path exists, is readable,
      * writable, etc., and offer to dump the user in the document properties
      * editor if some problem is found.  This is older code that simply tests

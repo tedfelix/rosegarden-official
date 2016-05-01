@@ -111,11 +111,6 @@ public:
      */
     void selectTool(QString toolName);
 
-    /**
-     * Show output levels
-     */
-    void showVisuals(const MappedEvent *mE);
-
     void updateMeters();
     void updateMonitorMeters();
 
@@ -139,6 +134,11 @@ public:
     }
 
 public slots:
+    /**
+     * Show output levels
+     */
+    void showVisuals(const MappedEvent *mE);
+
     void slotEditSegment(Segment*);
     void slotEditSegmentNotation(Segment*);
     void slotEditSegmentsNotation(std::vector<Segment*>);

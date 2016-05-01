@@ -42,6 +42,7 @@ namespace Rosegarden
 
 class TransportDialog;
 class Track;
+class TrackEditor;
 class TimeSigSegmentMapper;
 class TempoSegmentMapper;
 class Segment;
@@ -79,6 +80,12 @@ public:
      * Return the current internal document
      */
     RosegardenDocument* getDocument();
+
+    /**
+     * Lets SequenceManager know about the TrackEditor,
+     * for the special handling of "when the tempo changes during playback"
+     */
+    void setTrackEditor(TrackEditor *trackEditor);
 
     //
     // Transport controls
@@ -222,12 +229,16 @@ signals:
     /// signal RosegardenMainWindow to display a warning on the WarningWidget
     void sendWarning(int type, QString text, QString informativeText);
 
+    /// signal GUI changes to the TransportDialog
     void signalTempoChanged(tempoT);
     void signalMidiInLabel(const MappedEvent *event);
     void signalMidiOutLabel(const MappedEvent *event);
     void signalPlaying(bool checked);
     void signalRecording(bool checked);
     void signalMetronomeActivated(bool checked);
+
+    /// signals the view to show audio levels
+    void signalAudioLevel(const MappedEvent *event);
 
 protected slots:
     void slotCountdownTimerTimeout();
@@ -263,6 +274,7 @@ protected:
     MetronomeMapper       *m_metronomeMapper;
     TempoSegmentMapper    *m_tempoSegmentMapper;
     TimeSigSegmentMapper  *m_timeSigSegmentMapper;
+    TrackEditor           *m_trackEditor;
 
     std::vector<Segment *> m_addedSegments;
     std::vector<Segment *> m_removedSegments;

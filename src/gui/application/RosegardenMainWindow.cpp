@@ -428,7 +428,6 @@ RosegardenMainWindow::RosegardenMainWindow(bool useSequencer,
             this,
             SLOT(slotDisplayWarning(int, QString, QString)));
 
-
     if (m_useSequencer) {
         // Check the sound driver status and warn the user of any
         // problems.  This warning has to happen early, in case it
@@ -466,6 +465,8 @@ RosegardenMainWindow::RosegardenMainWindow(bool useSequencer,
     // Send the transport control statuses for MMC and JACK
     //
     m_seqManager->sendTransportControlStatuses();
+
+    m_seqManager->setTrackEditor(m_view->getTrackEditor());
 
     // Now autoload
     //
@@ -1250,6 +1251,9 @@ RosegardenMainWindow::initView()
             SIGNAL(showContextHelp(const QString &)),
             this,
             SLOT(slotShowToolHelp(const QString &)));
+
+    connect(m_seqManager, SIGNAL(signalAudioLevel(const MappedEvent*)),
+            m_view, SLOT(showVisuals(const MappedEvent*)));
 
     // We have to do this to make sure that the 2nd call ("select")
     // actually has any effect. Activating the same radio action
@@ -5104,12 +5108,6 @@ RosegardenMainWindow::slotRefreshTimeDisplay()
         return ; // it'll be refreshed in a moment anyway
     }
     slotSetPointerPosition(m_doc->getComposition().getPosition());
-}
-
-bool
-RosegardenMainWindow::isTrackEditorPlayTracking() const
-{
-    return m_view->getTrackEditor()->isTracking();
 }
 
 void

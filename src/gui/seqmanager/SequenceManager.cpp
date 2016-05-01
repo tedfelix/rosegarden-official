@@ -42,12 +42,9 @@
 #include "CompositionMapper.h"
 #include "document/RosegardenDocument.h"
 #include "document/CommandHistory.h"
-#include "gui/application/RosegardenApplication.h"
-#include "gui/application/RosegardenMainWindow.h"
-#include "gui/application/RosegardenMainViewWidget.h"
 #include "gui/dialogs/AudioManagerDialog.h"
 #include "gui/dialogs/CountdownDialog.h"
-#include "gui/dialogs/TransportDialog.h"
+#include "gui/editors/segment/TrackEditor.h"
 #include "gui/widgets/StartupLogo.h"
 #include "gui/studio/StudioControl.h"
 #include "gui/dialogs/DialogSuppressor.h"
@@ -90,6 +87,7 @@ SequenceManager::SequenceManager() :
     m_metronomeMapper(0),
     m_tempoSegmentMapper(0),
     m_timeSigSegmentMapper(0),
+    m_trackEditor(0),
     m_transportStatus(STOPPED),
     m_soundDriverStatus(NO_DRIVER),
     m_lastRewoundAt(clock()),
@@ -176,6 +174,12 @@ SequenceManager::setDocument(RosegardenDocument *doc)
     resetCompositionMapper();
     
     populateCompositionMapper();
+}
+
+void SequenceManager::setTrackEditor(TrackEditor *trackEditor)
+{
+    Q_ASSERT(trackEditor);
+    m_trackEditor = trackEditor;
 }
 
 void
@@ -1278,9 +1282,7 @@ SequenceManager::preparePlayback(bool /*forceProgramChanges*/)
 void
 SequenceManager::sendAudioLevel(MappedEvent *mE)
 {
-    foreach(RosegardenMainViewWidget* v, m_doc->getViewList()) {
-        v->showVisuals(mE);
-    }
+    emit signalAudioLevel(mE);
 }
 
 void
@@ -1927,12 +1929,12 @@ void SequenceManager::tempoChanged(const Composition *c)
         // so that we don't jump about in the main window while the
         // user's trying to drag the tempo in it.  (That doesn't help
         // for matrix or notation though, sadly)
-        bool tracking = RosegardenMainWindow::self()->isTrackEditorPlayTracking();
+        bool tracking = m_trackEditor && m_trackEditor->isTracking();
         if (tracking)
-            RosegardenMainWindow::self()->slotToggleTracking();
+            m_trackEditor->toggleTracking();
         m_doc->slotSetPointerPosition(c->getPosition());
         if (tracking)
-            RosegardenMainWindow::self()->slotToggleTracking();
+            m_trackEditor->toggleTracking();
     }
 }
 
