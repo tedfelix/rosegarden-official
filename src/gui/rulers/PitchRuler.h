@@ -51,6 +51,15 @@ signals:
     void keyPressed(unsigned int y, bool repeating);
 
     /**
+     * A key has been released on the keyboard.
+     *
+     * The repeating flag is there to tell the MatrixView not to send
+     * the same note again as we're in the middle of a swoosh.
+     * MatrixView does the y -> Note calculation.
+     */
+    void keyReleased(unsigned int y, bool repeating);
+
+    /**
      * A pitch has been clicked with the selection modifier pressed.
      * y is the simple event y-coordinate.
      * If the user is in the middle of dragging, repeating will be set.

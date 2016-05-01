@@ -51,44 +51,6 @@ public:
 
     void hideHoverNote();
 
-signals:
-
-    /**
-     * A key has been clicked on the keyboard.
-     *
-     * The repeating flag is there to tell the MatrixView not to send
-     * the same note again as we're in the middle of a swoosh.
-     * MatrixView does the y -> Note calculation.
-     */
-    void keyPressed(unsigned int y, bool repeating);
-
-    /**
-     * A key has been clicked with the selection modifier pressed.
-     * The MatrixView will probably interpret this as meaning to
-     * select all notes of that pitch.
-     *
-     * The repeating flag is there to tell the MatrixView not to
-     * clear the selection as we're in the middle of a swoosh.
-     * MatrixView does the y -> Note calculation.
-     */
-    void keySelected(unsigned int y, bool repeating);
-
-    /**
-     * A key has been released on the keyboard.
-     *
-     * The repeating flag is there to tell the MatrixView not to send
-     * the same note again as we're in the middle of a swoosh.
-     * MatrixView does the y -> Note calculation.
-     */
-    void keyReleased(unsigned int y, bool repeating);
-
-    /**
-     * Emitted when the mouse cursor moves to a different key when
-     * not clicking or selecting.
-     * MatrixView does the y -> Note calculation.
-     */
-    void hoveredOverKeyChanged(unsigned int y);
-
 protected:
 
     virtual void paintEvent(QPaintEvent*);

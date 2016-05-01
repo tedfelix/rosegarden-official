@@ -51,12 +51,6 @@ public:
     void drawHoverNote(int evPitch);
     void hideHoverNote();
 
-signals:
-    void keyPressed(unsigned int y, bool repeating);
-    void keySelected(unsigned int y, bool repeating);
-    void keyReleased(unsigned int y, bool repeating);
-    void hoveredOverKeyChanged(unsigned int y);
-
 protected:
     virtual void paintEvent(QPaintEvent*);
     virtual void mouseMoveEvent(QMouseEvent*);
