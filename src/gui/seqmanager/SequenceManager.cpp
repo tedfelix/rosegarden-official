@@ -84,7 +84,7 @@
 namespace Rosegarden
 {
 
-SequenceManager::SequenceManager(TransportDialog *transport) :
+SequenceManager::SequenceManager() :
     m_doc(0),
     m_compositionMapper(0),
     m_metronomeMapper(0),
@@ -92,7 +92,6 @@ SequenceManager::SequenceManager(TransportDialog *transport) :
     m_timeSigSegmentMapper(0),
     m_transportStatus(STOPPED),
     m_soundDriverStatus(NO_DRIVER),
-    m_transport(transport),
     m_lastRewoundAt(clock()),
     m_countdownDialog(0),
     m_countdownTimer(0),
@@ -104,7 +103,8 @@ SequenceManager::SequenceManager(TransportDialog *transport) :
     m_canReport(true),
     m_lastLowLatencySwitchSent(false),
     m_lastTransportStartPosition(0),
-    m_sampleRate(0)
+    m_sampleRate(0),
+    m_tempo(0)
 {
     // The owner of this sequence manager will need to call
     // checkSoundDriverStatus on it to set up its status appropriately
@@ -216,7 +216,7 @@ SequenceManager::play()
 
     // make sure we toggle the play button
     //
-    m_transport->PlayButton()->setChecked(true);
+    emit signalPlaying(true);
 
     //!!! disable the record button, because recording while playing is horribly
     // broken, and disabling it is less complicated than fixing it
@@ -234,14 +234,7 @@ SequenceManager::play()
 
     // Send initial tempo
     //
-    double qnD = 60.0 / comp.getTempoQpm(comp.getCurrentTempo());
-    RealTime qnTime =
-        RealTime(long(qnD),
-                 long((qnD - double(long(qnD))) * 1000000000.0));
-    StudioControl::sendQuarterNoteLength(qnTime);
-
-    // set the tempo in the transport
-    m_transport->setTempo(comp.getCurrentTempo());
+    setTempo(comp.getCurrentTempo());
 
     // The arguments for the Sequencer
     RealTime startPos = comp.getElapsedRealTime(comp.getPosition());
@@ -329,9 +322,8 @@ SequenceManager::stopping()
     //
     if (m_transportStatus == RECORDING_ARMED) {
         m_transportStatus = STOPPED;
-        m_transport->RecordButton()->setChecked(false);
-        m_transport->MetronomeButton()->
-          setChecked(m_doc->getComposition().usePlayMetronome());
+        emit signalRecording(false);
+        emit signalMetronomeActivated(m_doc->getComposition().usePlayMetronome());
         return ;
     }
 
@@ -351,9 +343,8 @@ SequenceManager::stop()
     // Toggle off the buttons - first record
     //
     if (m_transportStatus == RECORDING) {
-        m_transport->RecordButton()->setChecked(false);
-        m_transport->MetronomeButton()->
-          setChecked(m_doc->getComposition().usePlayMetronome());
+        emit signalRecording(false);
+        emit signalMetronomeActivated(m_doc->getComposition().usePlayMetronome());
 
         // Remove the countdown dialog and stop the timer
         //
@@ -362,7 +353,7 @@ SequenceManager::stop()
     }
 
     // Now playback
-    m_transport->PlayButton()->setChecked(false);
+    emit signalPlaying(false);
 
     // re-enable the record button if it was previously disabled when
     // going into play mode - DMM
@@ -404,7 +395,7 @@ SequenceManager::stop()
 
     // always untoggle the play button at this stage
     //
-    m_transport->PlayButton()->setChecked(false);
+    emit signalPlaying(false);
     SEQMAN_DEBUG << "SequenceManager::stop() - stopped playing";
     // We don't reset controllers at this point - what happens with static
     // controllers the next time we play otherwise?  [rwb]
@@ -512,7 +503,7 @@ SequenceManager::record(bool toggled)
 
         if (instr && instr->getType() == Instrument::Audio) {
             if (!m_doc || !(m_soundDriverStatus & AUDIO_OK)) {
-                m_transport->RecordButton()->setChecked(false);
+                emit signalRecording(false);
                 throw(Exception(QObject::tr("Audio subsystem is not available - can't record audio")));
             }
             // throws BadAudioPathException if path is not valid:
@@ -528,8 +519,8 @@ SequenceManager::record(bool toggled)
             m_transportStatus = STOPPED;
 
             // Toggle the buttons
-            m_transport->MetronomeButton()->setChecked(comp.usePlayMetronome());
-            m_transport->RecordButton()->setChecked(false);
+            emit signalMetronomeActivated(comp.usePlayMetronome());
+            emit signalRecording(false);
 
             return ;
         }
@@ -539,8 +530,8 @@ SequenceManager::record(bool toggled)
             m_transportStatus = RECORDING_ARMED;
 
             // Toggle the buttons
-            m_transport->MetronomeButton()->setChecked(comp.useRecordMetronome());
-            m_transport->RecordButton()->setChecked(true);
+            emit signalMetronomeActivated(comp.useRecordMetronome());
+            emit signalRecording(true);
 
             return ;
         }
@@ -609,7 +600,6 @@ punchin:
         }
 
         if (!haveInstrument) {
-            m_transport->RecordButton()->setDown(false);
             // TRANSLATORS: the pixmap in this error string contains no English
             // text and is suitable for use by all languages
             throw(Exception(QObject::tr("<qt><p>No tracks were armed for recording.</p><p>Please arm at least one of the recording LEDs <img src=\":pixmaps/tooltip/record-leds.png\"> and try again</p></qt>")));
@@ -619,7 +609,7 @@ punchin:
         checkSoundDriverStatus(false);
 
         // toggle the Metronome button if it's in use
-        m_transport->MetronomeButton()->setChecked(comp.useRecordMetronome());
+        emit signalMetronomeActivated(comp.useRecordMetronome());
 
         // Update record metronome status
         //
@@ -687,8 +677,8 @@ punchin:
         }
 
         // set the buttons
-        m_transport->RecordButton()->setChecked(true);
-        m_transport->PlayButton()->setChecked(true);
+        emit signalRecording(true);
+        emit signalPlaying(true);
 
         if (comp.getCurrentTempo() == 0) {
             SEQMAN_DEBUG << "SequenceManager::play() - setting Tempo to Default value of 120.000";
@@ -699,7 +689,7 @@ punchin:
 
         // set the tempo in the transport
         //
-        m_transport->setTempo(comp.getCurrentTempo());
+        setTempo(comp.getCurrentTempo());
 
         // The arguments for the Sequencer - record is similar to playback,
         // we must being playing to record.
@@ -855,13 +845,13 @@ SequenceManager::processAsynchronousMidi(const MappedEventList &mC,
     // send to the MIDI labels (which can only hold one event at a time)
     i = mC.begin();
     if (i != mC.end()) {
-        m_transport->setMidiInLabel(*i);
+        emit signalMidiInLabel(*i);
     }
 
     i = tempMC.begin();
     while (i != tempMC.end()) {
         if ((*i)->getRecordedDevice() != Device::CONTROL_DEVICE) {
-            m_transport->setMidiOutLabel(*i);
+            emit signalMidiOutLabel(*i);
             break;
         }
         ++i;
@@ -1403,12 +1393,32 @@ SequenceManager::panic()
     //    resetControllers();
 }
 
+void SequenceManager::setTempo(const tempoT tempo)
+{
+    if (m_tempo == tempo)
+        return;
+    m_tempo = tempo;
+
+    // Send the quarter note length to the sequencer.
+    // Quarter Note Length is sent (MIDI CLOCK) at 24ppqn.
+    //
+    double qnD = 60.0 / Composition::getTempoQpm(tempo);
+    RealTime qnTime =
+        RealTime(long(qnD),
+                 long((qnD - double(long(qnD))) * 1000000000.0));
+
+    StudioControl::sendQuarterNoteLength(qnTime);
+
+    // set the tempo in the transport
+    emit signalTempoChanged(tempo);
+}
+
 void
 SequenceManager::showVisuals(const MappedEventList &mC)
 {
     MappedEventList::const_iterator it = mC.begin();
     if (it != mC.end())
-        m_transport->setMidiOutLabel(*it);
+        emit signalMidiOutLabel(*it);
 }
 
 MappedEventList

@@ -85,7 +85,6 @@ TransportDialog::TransportDialog(QWidget *parent):
     m_hundreths(0),
     m_thousandths(0),
     m_tenThousandths(0),
-    m_tempo(0),
     m_numerator(0),
     m_denominator(0),
     m_framesPerSecond(24),
@@ -853,31 +852,6 @@ TransportDialog::updateTimeDisplay()
 }
 
 void
-TransportDialog::setTempo(const tempoT &tempo)
-{
-    if (m_tempo == tempo)
-        return ;
-    m_tempo = tempo;
-
-    // Send the quarter note length to the sequencer - shouldn't
-    // really hang this off here but at least it's a single point
-    // where the tempo should always be consistent.  Quarter Note
-    // Length is sent (MIDI CLOCK) at 24ppqn.
-    //
-    double qnD = 60.0 / Composition::getTempoQpm(tempo);
-    RealTime qnTime =
-        RealTime(long(qnD),
-                 long((qnD - double(long(qnD))) * 1000000000.0));
-
-    StudioControl::sendQuarterNoteLength(qnTime);
-
-    QString tempoString;
-    tempoString.sprintf("%4.3f", Composition::getTempoQpm(tempo));
-
-    ui->TempoDisplay->setText(tempoString);
-}
-
-void
 TransportDialog::setTimeSignature(const TimeSignature &timeSig)
 {
     int numerator = timeSig.getNumerator();
@@ -893,7 +867,7 @@ TransportDialog::setTimeSignature(const TimeSignature &timeSig)
 }
 
 void
-TransportDialog::setMidiInLabel(const MappedEvent *mE)
+TransportDialog::slotMidiInLabel(const MappedEvent *mE)
 {
     // If MIDI label updates have been turned off, bail.
     if (!m_enableMIDILabels)
@@ -986,7 +960,7 @@ TransportDialog::slotClearMidiInLabel()
 }
 
 void
-TransportDialog::setMidiOutLabel(const MappedEvent *mE)
+TransportDialog::slotMidiOutLabel(const MappedEvent *mE)
 {
     // If MIDI label updates have been turned off, bail.
     if (!m_enableMIDILabels)
@@ -1110,6 +1084,28 @@ void
 TransportDialog::slotSetStopLoopingPointAtMarkerPos()
 {
     emit setLoopStopTime();
+}
+
+void TransportDialog::slotTempoChanged(tempoT tempo)
+{
+    QString tempoString;
+    tempoString.sprintf("%4.3f", Composition::getTempoQpm(tempo));
+    ui->TempoDisplay->setText(tempoString);
+}
+
+void TransportDialog::slotPlaying(bool checked)
+{
+    ui->PlayButton->setChecked(checked);
+}
+
+void TransportDialog::slotRecording(bool checked)
+{
+    ui->RecordButton->setChecked(checked);
+}
+
+void TransportDialog::slotMetronomeActivated(bool checked)
+{
+    ui->MetronomeButton->setChecked(checked);
 }
 
 void

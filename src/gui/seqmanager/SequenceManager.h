@@ -62,7 +62,7 @@ public:
      * designed to operate without a document; you must call
      * setDocument before you do anything with it.
      */
-    SequenceManager(TransportDialog *transport);
+    SequenceManager();
     ~SequenceManager();
 
     /** Used to transmit the type of sequencer warning, so the WarningWidget
@@ -155,6 +155,9 @@ public:
     /// Send all note offs and resets to MIDI devices
     void panic();
 
+    /// Set tempo (also notifies StudioControl and TransportDialog)
+    void setTempo(const tempoT tempo);
+
     /// Send an MC to the view
     void showVisuals(const MappedEventList &mC);
 
@@ -202,8 +205,6 @@ public:
     void filtersChanged(MidiFilter thruFilter,
                         MidiFilter recordFilter);
 
-    void setTransport(TransportDialog* t) { m_transport = t; }
-    
     int getSampleRate(); // may return 0 if sequencer uncontactable
 
 public slots:
@@ -220,6 +221,13 @@ signals:
 
     /// signal RosegardenMainWindow to display a warning on the WarningWidget
     void sendWarning(int type, QString text, QString informativeText);
+
+    void signalTempoChanged(tempoT);
+    void signalMidiInLabel(const MappedEvent *event);
+    void signalMidiOutLabel(const MappedEvent *event);
+    void signalPlaying(bool checked);
+    void signalRecording(bool checked);
+    void signalMetronomeActivated(bool checked);
 
 protected slots:
     void slotCountdownTimerTimeout();
@@ -264,9 +272,6 @@ protected:
     TransportStatus            m_transportStatus;
     unsigned int               m_soundDriverStatus;
 
-    // pointer to the transport dialog
-    TransportDialog *m_transport;
-
     clock_t                    m_lastRewoundAt;
 
     CountdownDialog           *m_countdownDialog;
@@ -304,6 +309,7 @@ protected:
 
     int                        m_sampleRate;
 
+    tempoT m_tempo;
 };
 
 

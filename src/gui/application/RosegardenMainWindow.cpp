@@ -414,14 +414,13 @@ RosegardenMainWindow::RosegardenMainWindow(bool useSequencer,
 //    connect(m_parameterArea, SIGNAL(hidden()),
 //            this, SLOT(slotParameterAreaHidden()));
 
+    m_seqManager = new SequenceManager();
+
     // Load the initial document (this includes doc's own autoload)
     //
     setDocument(doc);
 
     emit startupStatusMessage(tr("Starting sequence manager..."));
-
-    // transport is created by setupActions()
-    m_seqManager = new SequenceManager(getTransport());
     m_seqManager->setDocument(m_doc);
 
     connect(m_seqManager,
@@ -1151,7 +1150,7 @@ RosegardenMainWindow::initView()
 
     // set the tempo in the transport
     //
-    getTransport()->setTempo(comp.getCurrentTempo());
+    m_seqManager->setTempo(comp.getCurrentTempo());
 
     // bring the transport to the front
     //
@@ -2910,9 +2909,14 @@ RosegardenMainWindow::createAndSetupTransport()
     connect(m_transport, SIGNAL(setLoopStartTime()), SLOT(slotSetLoopStart()));
     connect(m_transport, SIGNAL(setLoopStopTime()), SLOT(slotSetLoopStop()));
 
-    if (m_seqManager != 0)
-        m_seqManager->setTransport(m_transport);
-
+    if (m_seqManager != 0) {
+        connect(m_seqManager, SIGNAL(signalTempoChanged(tempoT)), m_transport, SLOT(slotTempoChanged(tempoT)));
+        connect(m_seqManager, SIGNAL(signalMidiInLabel(const MappedEvent*)), m_transport, SLOT(slotMidiInLabel(const MappedEvent*)));
+        connect(m_seqManager, SIGNAL(signalMidiOutLabel(const MappedEvent*)), m_transport, SLOT(slotMidiOutLabel(const MappedEvent*)));
+        connect(m_seqManager, SIGNAL(signalPlaying(bool)), m_transport, SLOT(slotPlaying(bool)));
+        connect(m_seqManager, SIGNAL(signalRecording(bool)), m_transport, SLOT(slotRecording(bool)));
+        connect(m_seqManager, SIGNAL(signalMetronomeActivated(bool)), m_transport, SLOT(slotMetronomeActivated(bool)));
+    }
 }
 
 void
@@ -4858,7 +4862,7 @@ RosegardenMainWindow::slotUpdateUI()
 
     MappedEvent ev;
     bool haveEvent = SequencerDataBlock::getInstance()->getVisual(ev);
-    if (haveEvent) getTransport()->setMidiOutLabel(&ev);
+    if (haveEvent) getTransport()->slotMidiOutLabel(&ev);
 
 
     // Update the playback position pointer
@@ -5010,7 +5014,7 @@ RosegardenMainWindow::slotSetPointerPosition(timeT t)
     getTransport()->setTimeSignature(comp.getTimeSignatureAt(t));
 
     // and the tempo
-    getTransport()->setTempo(comp.getTempoAtTime(t));
+    m_seqManager->setTempo(comp.getTempoAtTime(t));
 
     // and the time
     //
