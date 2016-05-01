@@ -133,7 +133,7 @@ signals:
     void eventRemoved(Event *e);
 
     void currentViewSegmentChanged(ViewSegment *);
-    void selectionChanged();
+    //void selectionChanged(); // already defined in QGraphicsScene
     void selectionChanged(EventSelection *s);
     void segmentDeleted(Segment *);
     void sceneDeleted(); // all segments have been removed
