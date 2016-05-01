@@ -919,7 +919,7 @@ PitchBendSequenceDialog::addStepwiseEvents(MacroCommand *macro)
         {
             const int rawStepSize = spinboxToControlDelta(m_stepSize);
             if (rawStepSize == 0) { return; }
-            numSteps = abs(float(valueChange) / float(rawStepSize) + 0.5);
+            numSteps = fabs(float(valueChange) / float(rawStepSize) + 0.5);
             break;
         }
     }
