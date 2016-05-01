@@ -58,7 +58,7 @@ namespace Rosegarden
 
 TransportDialog::TransportDialog(QWidget *parent):
     QDialog(parent, 0),
-    m_transport(0),
+    ui(0),
     //m_lcdList(),
     //m_lcdListDefault(),
     //m_lcdNegative(),
@@ -114,8 +114,8 @@ TransportDialog::TransportDialog(QWidget *parent):
 
     QFrame *frame = new QFrame;
     vboxLay->addWidget(frame);
-    m_transport = new Ui_RosegardenTransport();
-    m_transport->setupUi(frame);
+    ui = new Ui_RosegardenTransport();
+    ui->setupUi(frame);
 	
     setWindowTitle(tr("Rosegarden Transport"));
     setWindowIcon(IconLoader().loadPixmap("window-transport"));
@@ -129,30 +129,30 @@ TransportDialog::TransportDialog(QWidget *parent):
     //@@@ I hope we don't need to set more of the palette's colors.
     QPalette backgroundPalette;
     backgroundPalette.setColor(QPalette::Window, QColor(Qt::black));
-    m_transport->LCDBoxFrame->setPalette(backgroundPalette);
+    ui->LCDBoxFrame->setPalette(backgroundPalette);
 
     // set all the pixmap backgrounds to black to avoid
     // flickering when we update
     //
-    m_transport->TenThousandthsPixmap->setPalette(backgroundPalette);
-    m_transport->ThousandthsPixmap->setPalette(backgroundPalette);
-    m_transport->HundredthsPixmap->setPalette(backgroundPalette);
-    m_transport->TenthsPixmap->setPalette(backgroundPalette);
-    m_transport->UnitSecondsPixmap->setPalette(backgroundPalette);
-    m_transport->TenSecondsPixmap->setPalette(backgroundPalette);
-    m_transport->UnitMinutesPixmap->setPalette(backgroundPalette);
-    m_transport->TenMinutesPixmap->setPalette(backgroundPalette);
-    m_transport->UnitHoursPixmap->setPalette(backgroundPalette);
-    m_transport->TenHoursPixmap->setPalette(backgroundPalette);
-    m_transport->NegativePixmap->setPalette(backgroundPalette);
+    ui->TenThousandthsPixmap->setPalette(backgroundPalette);
+    ui->ThousandthsPixmap->setPalette(backgroundPalette);
+    ui->HundredthsPixmap->setPalette(backgroundPalette);
+    ui->TenthsPixmap->setPalette(backgroundPalette);
+    ui->UnitSecondsPixmap->setPalette(backgroundPalette);
+    ui->TenSecondsPixmap->setPalette(backgroundPalette);
+    ui->UnitMinutesPixmap->setPalette(backgroundPalette);
+    ui->TenMinutesPixmap->setPalette(backgroundPalette);
+    ui->UnitHoursPixmap->setPalette(backgroundPalette);
+    ui->TenHoursPixmap->setPalette(backgroundPalette);
+    ui->NegativePixmap->setPalette(backgroundPalette);
 
     // unset the negative sign to begin with
-    m_transport->NegativePixmap->clear();
+    ui->NegativePixmap->clear();
 
     // Set our toggle buttons
     //
-    m_transport->PlayButton->setCheckable(true);
-    m_transport->RecordButton->setCheckable(true);
+    ui->PlayButton->setCheckable(true);
+    ui->RecordButton->setCheckable(true);
 
 // Disable the loop button if JACK transport enabled, because this
 // causes a nasty race condition, and it just seems our loops are not JACK compatible
@@ -161,7 +161,7 @@ TransportDialog::TransportDialog(QWidget *parent):
 //    settings.beginGroup(SequencerOptionsConfigGroup);
 //    if ( qStrToBool( settings.value("jacktransport", "false" ) ) )
 //    {
-//        m_transport->LoopButton->setEnabled(false);
+//        ui->LoopButton->setEnabled(false);
 //    }
 //      settings.endGroup();
 
@@ -187,33 +187,33 @@ TransportDialog::TransportDialog(QWidget *parent):
     connect(m_clearMetronomeTimer, SIGNAL(timeout()),
             SLOT(slotResetBackground()));
 
-    m_transport->TimeDisplayLabel->hide();
-    m_transport->ToEndLabel->hide();
+    ui->TimeDisplayLabel->hide();
+    ui->ToEndLabel->hide();
 
-    connect(m_transport->TimeDisplayButton, SIGNAL(clicked()),
+    connect(ui->TimeDisplayButton, SIGNAL(clicked()),
             SLOT(slotChangeTimeDisplay()));
 
-    connect(m_transport->ToEndButton, SIGNAL(clicked()),
+    connect(ui->ToEndButton, SIGNAL(clicked()),
             SLOT(slotChangeToEnd()));
 
-    connect(m_transport->LoopButton, SIGNAL(clicked()),
+    connect(ui->LoopButton, SIGNAL(clicked()),
             SLOT(slotLoopButtonClicked()));
 
-    connect(m_transport->PanelOpenButton, SIGNAL(clicked()),
+    connect(ui->PanelOpenButton, SIGNAL(clicked()),
             SLOT(slotPanelOpenButtonClicked()));
 
-    connect(m_transport->PanelCloseButton, SIGNAL(clicked()),
+    connect(ui->PanelCloseButton, SIGNAL(clicked()),
             SLOT(slotPanelCloseButtonClicked()));
 
-    connect(m_transport->PanicButton, SIGNAL(clicked()), SIGNAL(panic()));
+    connect(ui->PanicButton, SIGNAL(clicked()), SIGNAL(panic()));
 /*
-    const QPixmap *p = m_transport->PanelOpenButton->pixmap();
+    const QPixmap *p = ui->PanelOpenButton->pixmap();
     if (p) m_panelOpen = *p;
-    p = m_transport->PanelCloseButton->pixmap();
+    p = ui->PanelCloseButton->pixmap();
     if (p) m_panelClosed = *p;
 */
-    connect(m_transport->SetStartLPButton, SIGNAL(clicked()), SLOT(slotSetStartLoopingPointAtMarkerPos()));
-    connect(m_transport->SetStopLPButton, SIGNAL(clicked()), SLOT(slotSetStopLoopingPointAtMarkerPos()));
+    connect(ui->SetStartLPButton, SIGNAL(clicked()), SLOT(slotSetStartLoopingPointAtMarkerPos()));
+    connect(ui->SetStopLPButton, SIGNAL(clicked()), SLOT(slotSetStopLoopingPointAtMarkerPos()));
 
     // clear labels
     //
@@ -222,16 +222,16 @@ TransportDialog::TransportDialog(QWidget *parent):
 
     // and by default we close the lower panel
     //
-//    int rfh = m_transport->RecordingFrame->height();
-    m_transport->RecordingFrame->hide();
+//    int rfh = ui->RecordingFrame->height();
+    ui->RecordingFrame->hide();
 //    setFixedSize(width(), height() - rfh);
-//    m_transport->PanelOpenButton->setPixmap(m_panelClosed);
+//    ui->PanelOpenButton->setPixmap(m_panelClosed);
 
     // and since by default we show real time (not SMPTE), by default
     // we hide the small colon pixmaps
     //
-    m_transport->SecondColonPixmap->hide();
-    m_transport->HundredthColonPixmap->hide();
+    ui->SecondColonPixmap->hide();
+    ui->HundredthColonPixmap->hide();
 
     // We have to specify these settings in this class (copied
     // from rosegardentransport.cpp) as we're using a specialised
@@ -243,58 +243,58 @@ TransportDialog::TransportDialog(QWidget *parent):
     //@@@ I'm totally guessing that the palette role for this color is window text.
     pal.setColor(QPalette::Active, QPalette::WindowText, QColor(192, 216, 255));
 
-    m_transport->TempoDisplay->setPalette(pal);
-    m_transport->TempoDisplay->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
+    ui->TempoDisplay->setPalette(pal);
+    ui->TempoDisplay->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
 
-    m_transport->TimeSigDisplay->setPalette(pal);
-    m_transport->TimeSigDisplay->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
+    ui->TimeSigDisplay->setPalette(pal);
+    ui->TimeSigDisplay->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
 
-    QFont localFont(m_transport->OutDisplay->font() );
+    QFont localFont(ui->OutDisplay->font() );
     localFont.setFamily( "lucida" );
     localFont.setBold( true );
 
-    m_transport->TempoDisplay->setFont( localFont );
-    m_transport->TimeSigDisplay->setFont( localFont );
+    ui->TempoDisplay->setFont( localFont );
+    ui->TimeSigDisplay->setFont( localFont );
 
-    connect(m_transport->TempoDisplay, SIGNAL(doubleClicked()),
+    connect(ui->TempoDisplay, SIGNAL(doubleClicked()),
             this, SLOT(slotEditTempo()));
 
-    connect(m_transport->TempoDisplay, SIGNAL(scrollWheel(int)),
+    connect(ui->TempoDisplay, SIGNAL(scrollWheel(int)),
             this, SIGNAL(scrollTempo(int)));
 
-    connect(m_transport->TimeSigDisplay, SIGNAL(doubleClicked()),
+    connect(ui->TimeSigDisplay, SIGNAL(doubleClicked()),
             this, SLOT(slotEditTimeSignature()));
 
     // toil through the individual pixmaps
-    connect(m_transport->NegativePixmap, SIGNAL(doubleClicked()),
+    connect(ui->NegativePixmap, SIGNAL(doubleClicked()),
             this, SLOT(slotEditTime()));
-    connect(m_transport->TenHoursPixmap, SIGNAL(doubleClicked()),
+    connect(ui->TenHoursPixmap, SIGNAL(doubleClicked()),
             this, SLOT(slotEditTime()));
-    connect(m_transport->UnitHoursPixmap, SIGNAL(doubleClicked()),
+    connect(ui->UnitHoursPixmap, SIGNAL(doubleClicked()),
             this, SLOT(slotEditTime()));
-    connect(m_transport->HourColonPixmap, SIGNAL(doubleClicked()),
+    connect(ui->HourColonPixmap, SIGNAL(doubleClicked()),
             this, SLOT(slotEditTime()));
-    connect(m_transport->TenMinutesPixmap, SIGNAL(doubleClicked()),
+    connect(ui->TenMinutesPixmap, SIGNAL(doubleClicked()),
             this, SLOT(slotEditTime()));
-    connect(m_transport->UnitMinutesPixmap, SIGNAL(doubleClicked()),
+    connect(ui->UnitMinutesPixmap, SIGNAL(doubleClicked()),
             this, SLOT(slotEditTime()));
-    connect(m_transport->MinuteColonPixmap, SIGNAL(doubleClicked()),
+    connect(ui->MinuteColonPixmap, SIGNAL(doubleClicked()),
             this, SLOT(slotEditTime()));
-    connect(m_transport->TenSecondsPixmap, SIGNAL(doubleClicked()),
+    connect(ui->TenSecondsPixmap, SIGNAL(doubleClicked()),
             this, SLOT(slotEditTime()));
-    connect(m_transport->UnitSecondsPixmap, SIGNAL(doubleClicked()),
+    connect(ui->UnitSecondsPixmap, SIGNAL(doubleClicked()),
             this, SLOT(slotEditTime()));
-    connect(m_transport->SecondColonPixmap, SIGNAL(doubleClicked()),
+    connect(ui->SecondColonPixmap, SIGNAL(doubleClicked()),
             this, SLOT(slotEditTime()));
-    connect(m_transport->TenthsPixmap, SIGNAL(doubleClicked()),
+    connect(ui->TenthsPixmap, SIGNAL(doubleClicked()),
             this, SLOT(slotEditTime()));
-    connect(m_transport->HundredthsPixmap, SIGNAL(doubleClicked()),
+    connect(ui->HundredthsPixmap, SIGNAL(doubleClicked()),
             this, SLOT(slotEditTime()));
-    connect(m_transport->HundredthColonPixmap, SIGNAL(doubleClicked()),
+    connect(ui->HundredthColonPixmap, SIGNAL(doubleClicked()),
             this, SLOT(slotEditTime()));
-    connect(m_transport->TenThousandthsPixmap, SIGNAL(doubleClicked()),
+    connect(ui->TenThousandthsPixmap, SIGNAL(doubleClicked()),
             this, SLOT(slotEditTime()));
-    connect(m_transport->ThousandthsPixmap, SIGNAL(doubleClicked()),
+    connect(ui->ThousandthsPixmap, SIGNAL(doubleClicked()),
             this, SLOT(slotEditTime()));
 
     // shortcut object
@@ -420,18 +420,18 @@ TransportDialog::loadPixmaps()
 void
 TransportDialog::resetFonts()
 {
-    resetFont(m_transport->TimeSigLabel);
-    resetFont(m_transport->TimeSigDisplay);
-    resetFont(m_transport->TempoLabel);
-    resetFont(m_transport->TempoDisplay);
-    resetFont(m_transport->DivisionLabel);
-    resetFont(m_transport->DivisionDisplay);
-    resetFont(m_transport->InLabel);
-    resetFont(m_transport->InDisplay);
-    resetFont(m_transport->OutLabel);
-    resetFont(m_transport->OutDisplay);
-    resetFont(m_transport->ToEndLabel);
-    resetFont(m_transport->TimeDisplayLabel);
+    resetFont(ui->TimeSigLabel);
+    resetFont(ui->TimeSigDisplay);
+    resetFont(ui->TempoLabel);
+    resetFont(ui->TempoDisplay);
+    resetFont(ui->DivisionLabel);
+    resetFont(ui->DivisionDisplay);
+    resetFont(ui->InLabel);
+    resetFont(ui->InDisplay);
+    resetFont(ui->OutLabel);
+    resetFont(ui->OutDisplay);
+    resetFont(ui->ToEndLabel);
+    resetFont(ui->TimeDisplayLabel);
 }
 
 void
@@ -502,32 +502,32 @@ TransportDialog::displayTime()
     switch (m_currentMode) {
     case RealMode:
         m_clearMetronomeTimer->stop();
-        m_transport->TimeDisplayLabel->hide();
+        ui->TimeDisplayLabel->hide();
         break;
 
     case SMPTEMode:
         m_clearMetronomeTimer->stop();
-        m_transport->TimeDisplayLabel->setText("SMPTE"); // DO NOT i18n
-        m_transport->TimeDisplayLabel->show();
+        ui->TimeDisplayLabel->setText("SMPTE"); // DO NOT i18n
+        ui->TimeDisplayLabel->show();
         break;
 
     case BarMode:
         m_clearMetronomeTimer->stop();
-        m_transport->TimeDisplayLabel->setText("BAR"); // DO NOT i18n
-        m_transport->TimeDisplayLabel->show();
+        ui->TimeDisplayLabel->setText("BAR"); // DO NOT i18n
+        ui->TimeDisplayLabel->show();
         break;
 
     case BarMetronomeMode:
         m_clearMetronomeTimer->setSingleShot(false);
         m_clearMetronomeTimer->start(1700);
-        m_transport->TimeDisplayLabel->setText("MET"); // DO NOT i18n
-        m_transport->TimeDisplayLabel->show();
+        ui->TimeDisplayLabel->setText("MET"); // DO NOT i18n
+        ui->TimeDisplayLabel->show();
         break;
 
     case FrameMode:
         m_clearMetronomeTimer->stop();
-        m_transport->TimeDisplayLabel->setText(QString("%1").arg(m_sampleRate));
-        m_transport->TimeDisplayLabel->show();
+        ui->TimeDisplayLabel->setText(QString("%1").arg(m_sampleRate));
+        ui->TimeDisplayLabel->show();
         break;
     }
 }
@@ -574,17 +574,17 @@ TransportDialog::slotChangeTimeDisplay()
 void
 TransportDialog::slotChangeToEnd()
 {
-    if (m_transport->ToEndButton->isChecked()) {
-        m_transport->ToEndLabel->show();
+    if (ui->ToEndButton->isChecked()) {
+        ui->ToEndLabel->show();
     } else {
-        m_transport->ToEndLabel->hide();
+        ui->ToEndLabel->hide();
     }
 }
 
 bool
 TransportDialog::isShowingTimeToEnd()
 {
-    return m_transport->ToEndButton->isChecked();
+    return ui->ToEndButton->isChecked();
 }
 
 void
@@ -595,10 +595,10 @@ TransportDialog::displayRealTime(const RealTime &rt)
     slotResetBackground();
 
     if (m_lastMode != RealMode) {
-        m_transport->HourColonPixmap->show();
-        m_transport->MinuteColonPixmap->show();
-        m_transport->SecondColonPixmap->hide();
-        m_transport->HundredthColonPixmap->hide();
+        ui->HourColonPixmap->show();
+        ui->MinuteColonPixmap->show();
+        ui->SecondColonPixmap->hide();
+        ui->HundredthColonPixmap->hide();
         m_lastMode = RealMode;
     }
 
@@ -607,13 +607,13 @@ TransportDialog::displayRealTime(const RealTime &rt)
     if (st < RealTime::zeroTime) {
         st = RealTime::zeroTime - st;
         if (!m_lastNegative) {
-            m_transport->NegativePixmap->setPixmap(m_lcdNegative);
+            ui->NegativePixmap->setPixmap(m_lcdNegative);
             m_lastNegative = true;
         }
     } else // don't show the flag
     {
         if (m_lastNegative) {
-            m_transport->NegativePixmap->clear();
+            ui->NegativePixmap->clear();
             m_lastNegative = false;
         }
     }
@@ -643,10 +643,10 @@ TransportDialog::displayFrameTime(const RealTime &rt)
     slotResetBackground();
 
     if (m_lastMode != FrameMode) {
-        m_transport->HourColonPixmap->hide();
-        m_transport->MinuteColonPixmap->hide();
-        m_transport->SecondColonPixmap->hide();
-        m_transport->HundredthColonPixmap->hide();
+        ui->HourColonPixmap->hide();
+        ui->MinuteColonPixmap->hide();
+        ui->SecondColonPixmap->hide();
+        ui->HundredthColonPixmap->hide();
         m_lastMode = FrameMode;
     }
 
@@ -655,13 +655,13 @@ TransportDialog::displayFrameTime(const RealTime &rt)
     if (st < RealTime::zeroTime) {
         st = RealTime::zeroTime - st;
         if (!m_lastNegative) {
-            m_transport->NegativePixmap->setPixmap(m_lcdNegative);
+            ui->NegativePixmap->setPixmap(m_lcdNegative);
             m_lastNegative = true;
         }
     } else // don't show the flag
     {
         if (m_lastNegative) {
-            m_transport->NegativePixmap->clear();
+            ui->NegativePixmap->clear();
             m_lastNegative = false;
         }
     }
@@ -700,10 +700,10 @@ TransportDialog::displaySMPTETime(const RealTime &rt)
     slotResetBackground();
 
     if (m_lastMode != SMPTEMode) {
-        m_transport->HourColonPixmap->show();
-        m_transport->MinuteColonPixmap->show();
-        m_transport->SecondColonPixmap->show();
-        m_transport->HundredthColonPixmap->show();
+        ui->HourColonPixmap->show();
+        ui->MinuteColonPixmap->show();
+        ui->SecondColonPixmap->show();
+        ui->HundredthColonPixmap->show();
         m_lastMode = SMPTEMode;
     }
 
@@ -712,13 +712,13 @@ TransportDialog::displaySMPTETime(const RealTime &rt)
     if (st < RealTime::zeroTime) {
         st = RealTime::zeroTime - st;
         if (!m_lastNegative) {
-            m_transport->NegativePixmap->setPixmap(m_lcdNegative);
+            ui->NegativePixmap->setPixmap(m_lcdNegative);
             m_lastNegative = true;
         }
     } else // don't show the flag
     {
         if (m_lastNegative) {
-            m_transport->NegativePixmap->clear();
+            ui->NegativePixmap->clear();
             m_lastNegative = false;
         }
     }
@@ -749,10 +749,10 @@ void
 TransportDialog::displayBarTime(int bar, int beat, int unit)
 {
     if (m_lastMode != BarMode) {
-        m_transport->HourColonPixmap->hide();
-        m_transport->MinuteColonPixmap->show();
-        m_transport->SecondColonPixmap->hide();
-        m_transport->HundredthColonPixmap->hide();
+        ui->HourColonPixmap->hide();
+        ui->MinuteColonPixmap->show();
+        ui->SecondColonPixmap->hide();
+        ui->HundredthColonPixmap->hide();
         m_lastMode = BarMode;
     }
 
@@ -761,13 +761,13 @@ TransportDialog::displayBarTime(int bar, int beat, int unit)
     if (bar < 0) {
         bar = -bar;
         if (!m_lastNegative) {
-            m_transport->NegativePixmap->setPixmap(m_lcdNegative);
+            ui->NegativePixmap->setPixmap(m_lcdNegative);
             m_lastNegative = true;
         }
     } else // don't show the flag
     {
         if (m_lastNegative) {
-            m_transport->NegativePixmap->clear();
+            ui->NegativePixmap->clear();
             m_lastNegative = false;
         }
     }
@@ -831,11 +831,11 @@ TransportDialog::updateTimeDisplay()
 #define UPDATE(NEW,OLD,WIDGET)                                     \
     if (NEW != OLD) {                                              \
         if (NEW < 0) {                                             \
-            m_transport->WIDGET->clear();                          \
+            ui->WIDGET->clear();                          \
         } else if (!m_isBackgroundSet) {                           \
-            m_transport->WIDGET->setPixmap(m_lcdListDefault[NEW]); \
+            ui->WIDGET->setPixmap(m_lcdListDefault[NEW]); \
         } else {                                                   \
-            m_transport->WIDGET->setPixmap(m_lcdList[NEW]);        \
+            ui->WIDGET->setPixmap(m_lcdList[NEW]);        \
         }                                                          \
         OLD = NEW;                                                 \
     }
@@ -874,7 +874,7 @@ TransportDialog::setTempo(const tempoT &tempo)
     QString tempoString;
     tempoString.sprintf("%4.3f", Composition::getTempoQpm(tempo));
 
-    m_transport->TempoDisplay->setText(tempoString);
+    ui->TempoDisplay->setText(tempoString);
 }
 
 void
@@ -889,7 +889,7 @@ TransportDialog::setTimeSignature(const TimeSignature &timeSig)
 
     QString timeSigString;
     timeSigString.sprintf("%d/%d", numerator, denominator);
-    m_transport->TimeSigDisplay->setText(timeSigString);
+    ui->TimeSigDisplay->setText(timeSigString);
 }
 
 void
@@ -911,31 +911,31 @@ TransportDialog::setMidiInLabel(const MappedEvent *mE)
             return ;
 
         MidiPitchLabel mPL(mE->getPitch());
-        m_transport->InDisplay->setText
+        ui->InDisplay->setText
             (mPL.getQString() +
              QString("  %1").arg(mE->getVelocity()));
     }
     break;
 
     case MappedEvent::MidiPitchBend:
-        m_transport->InDisplay->setText(tr("PITCH WHEEL"));
+        ui->InDisplay->setText(tr("PITCH WHEEL"));
         break;
 
     case MappedEvent::MidiController:
-        m_transport->InDisplay->setText(tr("CONTROLLER"));
+        ui->InDisplay->setText(tr("CONTROLLER"));
         break;
 
     case MappedEvent::MidiProgramChange:
-        m_transport->InDisplay->setText(tr("PROG CHNGE"));
+        ui->InDisplay->setText(tr("PROG CHNGE"));
         break;
 
     case MappedEvent::MidiKeyPressure:
     case MappedEvent::MidiChannelPressure:
-        m_transport->InDisplay->setText(tr("PRESSURE"));
+        ui->InDisplay->setText(tr("PRESSURE"));
         break;
 
     case MappedEvent::MidiSystemMessage:
-        m_transport->InDisplay->setText(tr("SYS MESSAGE"));
+        ui->InDisplay->setText(tr("SYS MESSAGE"));
         break;
 
         // Pacify compiler warnings about missed cases.
@@ -979,7 +979,7 @@ TransportDialog::setMidiInLabel(const MappedEvent *mE)
 void
 TransportDialog::slotClearMidiInLabel()
 {
-    m_transport->InDisplay->setText(tr("NO EVENTS"));
+    ui->InDisplay->setText(tr("NO EVENTS"));
 
     // also, just to be sure:
     slotResetBackground();
@@ -999,31 +999,31 @@ TransportDialog::setMidiOutLabel(const MappedEvent *mE)
     case MappedEvent::MidiNoteOneShot:
     {
         MidiPitchLabel mPL(mE->getPitch());
-        m_transport->OutDisplay->setText
+        ui->OutDisplay->setText
             (mPL.getQString() +
              QString("  %1").arg(mE->getVelocity()));
     }
     break;
 
     case MappedEvent::MidiPitchBend:
-        m_transport->OutDisplay->setText(tr("PITCH WHEEL"));
+        ui->OutDisplay->setText(tr("PITCH WHEEL"));
         break;
 
     case MappedEvent::MidiController:
-        m_transport->OutDisplay->setText(tr("CONTROLLER"));
+        ui->OutDisplay->setText(tr("CONTROLLER"));
         break;
 
     case MappedEvent::MidiProgramChange:
-        m_transport->OutDisplay->setText(tr("PROG CHNGE"));
+        ui->OutDisplay->setText(tr("PROG CHNGE"));
         break;
 
     case MappedEvent::MidiKeyPressure:
     case MappedEvent::MidiChannelPressure:
-        m_transport->OutDisplay->setText(tr("PRESSURE"));
+        ui->OutDisplay->setText(tr("PRESSURE"));
         break;
 
     case MappedEvent::MidiSystemMessage:
-        m_transport->OutDisplay->setText(tr("SYS MESSAGE"));
+        ui->OutDisplay->setText(tr("SYS MESSAGE"));
         break;
 
         // Pacify compiler warnings about missed cases.
@@ -1067,7 +1067,7 @@ TransportDialog::setMidiOutLabel(const MappedEvent *mE)
 void
 TransportDialog::slotClearMidiOutLabel()
 {
-    m_transport->OutDisplay->setText(tr("NO EVENTS")); 
+    ui->OutDisplay->setText(tr("NO EVENTS"));
 }
 
 void
@@ -1087,13 +1087,13 @@ TransportDialog::slotLoopButtonClicked()
     //    if ( qStrToBool( settings.value("jacktransport", "false" ) ) )
     //    {
     //    //!!! - this will fail silently
-    //    m_transport->LoopButton->setEnabled(false);
-    //    m_transport->LoopButton->setOn(false);
+    //    ui->LoopButton->setEnabled(false);
+    //    ui->LoopButton->setOn(false);
     //        return;
     //    }
     //    settings.endGroup();
 
-    if (m_transport->LoopButton->isChecked()) {
+    if (ui->LoopButton->isChecked()) {
         emit setLoop();
     } else {
         emit unsetLoop();
@@ -1115,12 +1115,12 @@ TransportDialog::slotSetStopLoopingPointAtMarkerPos()
 void
 TransportDialog::slotPanelOpenButtonClicked()
 {
-    // int rfh = m_transport->RecordingFrame->height();
+    // int rfh = ui->RecordingFrame->height();
 
-    if (m_transport->RecordingFrame->isVisible()) {
-        m_transport->RecordingFrame->hide();
+    if (ui->RecordingFrame->isVisible()) {
+        ui->RecordingFrame->hide();
 //        setFixedSize(width(), height() - rfh);
-//        m_transport->PanelOpenButton->setPixmap(m_panelClosed);
+//        ui->PanelOpenButton->setPixmap(m_panelClosed);
 //        adjustSize();
         setFixedSize(416, 87);
 //        cerr << "size hint: " << sizeHint().width() << "x" << sizeHint().height() << endl;
@@ -1130,8 +1130,8 @@ TransportDialog::slotPanelOpenButtonClicked()
     } else {
 //        setFixedSize(width(), height() + rfh);
         setFixedSize(416, 132);
-        m_transport->RecordingFrame->show();
-//        m_transport->PanelOpenButton->setPixmap(m_panelOpen);
+        ui->RecordingFrame->show();
+//        ui->PanelOpenButton->setPixmap(m_panelOpen);
 //        adjustSize();
 //        cerr << "size hint: " << sizeHint().width() << "x" << sizeHint().height() << endl;
 //        setFixedSize(sizeHint());
@@ -1143,12 +1143,12 @@ TransportDialog::slotPanelOpenButtonClicked()
 void
 TransportDialog::slotPanelCloseButtonClicked()
 {
-    // int rfh = m_transport->RecordingFrame->height();
+    // int rfh = ui->RecordingFrame->height();
 
-    if (m_transport->RecordingFrame->isVisible()) {
-        m_transport->RecordingFrame->hide();
+    if (ui->RecordingFrame->isVisible()) {
+        ui->RecordingFrame->hide();
 //        setFixedSize(width(), height() - rfh);
-//        m_transport->PanelOpenButton->setPixmap(m_panelClosed);
+//        ui->PanelOpenButton->setPixmap(m_panelClosed);
         setFixedSize(416, 87);
 //        adjustSize();
 //        cerr << "size hint: " << sizeHint().width() << "x" << sizeHint().height() << endl;
@@ -1186,7 +1186,7 @@ void
 TransportDialog::slotSetBackground(QString c)
 {
     if (!m_haveOriginalBackground) {
-        //m_originalBackground = m_transport->LCDBoxFrame->paletteBackgroundColor();
+        //m_originalBackground = ui->LCDBoxFrame->paletteBackgroundColor();
         m_originalBackground = "black";
         m_haveOriginalBackground = true;
     }
@@ -1200,7 +1200,7 @@ TransportDialog::slotSetBackground(QString c)
     // their palettes individually.  I redid the LCD pixmaps (actually these are
     // LEDs aren't they?) with transparent backgrounds, and now the whole thing
     // flashes evenly.  I like it. (dmm)
-    m_transport->LCDBoxFrame->setStyleSheet(localStyle);
+    ui->LCDBoxFrame->setStyleSheet(localStyle);
 
     m_isBackgroundSet = true;
 }

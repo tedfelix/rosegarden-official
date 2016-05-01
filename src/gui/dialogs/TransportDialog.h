@@ -92,18 +92,18 @@ public:
     QShortcut* getShortcuts() { return m_shortcuts; }
 
     // RosegardenTransport member accessors
-    QPushButton* MetronomeButton()   { return m_transport->MetronomeButton; }
-    QPushButton* SoloButton()        { return m_transport->SoloButton; }
-    QPushButton* LoopButton()        { return m_transport->LoopButton; }
-    QPushButton* PlayButton()        { return m_transport->PlayButton; }
-    QPushButton* StopButton()        { return m_transport->StopButton; }
-    QPushButton* FfwdButton()        { return m_transport->FfwdButton; }
-    QPushButton* RewindButton()      { return m_transport->RewindButton; }
-    QPushButton* RecordButton()      { return m_transport->RecordButton; }
-    QPushButton* RewindEndButton()   { return m_transport->RewindEndButton; }
-    QPushButton* FfwdEndButton()     { return m_transport->FfwdEndButton; }
-    QPushButton* TimeDisplayButton() { return m_transport->TimeDisplayButton; }
-    QPushButton* ToEndButton()       { return m_transport->ToEndButton; }
+    QPushButton* MetronomeButton()   { return ui->MetronomeButton; }
+    QPushButton* SoloButton()        { return ui->SoloButton; }
+    QPushButton* LoopButton()        { return ui->LoopButton; }
+    QPushButton* PlayButton()        { return ui->PlayButton; }
+    QPushButton* StopButton()        { return ui->StopButton; }
+    QPushButton* FfwdButton()        { return ui->FfwdButton; }
+    QPushButton* RewindButton()      { return ui->RewindButton; }
+    QPushButton* RecordButton()      { return ui->RecordButton; }
+    QPushButton* RewindEndButton()   { return ui->RewindEndButton; }
+    QPushButton* FfwdEndButton()     { return ui->FfwdEndButton; }
+    QPushButton* TimeDisplayButton() { return ui->TimeDisplayButton; }
+    QPushButton* ToEndButton()       { return ui->ToEndButton; }
 
     virtual void show();
     virtual void hide();
@@ -166,7 +166,7 @@ private:
 
     //--------------- Data members ---------------------------------
 
-    Ui_RosegardenTransport* m_transport;
+    Ui_RosegardenTransport* ui;
 
     QHash<int, QPixmap> m_lcdList;
     QHash<int, QPixmap> m_lcdListDefault;
