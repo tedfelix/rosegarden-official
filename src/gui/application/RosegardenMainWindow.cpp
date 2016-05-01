@@ -251,7 +251,7 @@ namespace Rosegarden
 {
 
 
-RosegardenMainWindow::RosegardenMainWindow(bool useSequencer,
+RosegardenMainWindow::RosegardenMainWindow(bool enableSound,
                                            QObject *startupStatusMessageReceiver) :
     QMainWindow(0),
     m_alwaysUseDefaultStudio(false),
@@ -276,7 +276,7 @@ RosegardenMainWindow::RosegardenMainWindow(bool useSequencer,
     m_originatingJump(false),
     m_storedLoopStart(0),
     m_storedLoopEnd(0),
-    m_useSequencer(useSequencer),
+    m_useSequencer(enableSound),
     m_dockVisible(true),
     m_autoSaveTimer(new QTimer(this)),
     m_clipboard(Clipboard::mainClipboard()),
@@ -329,7 +329,7 @@ RosegardenMainWindow::RosegardenMainWindow(bool useSequencer,
     // Plugin manager
     //
     emit startupStatusMessage(tr("Initializing plugin manager..."));
-    m_pluginManager = new AudioPluginManager();
+    m_pluginManager = new AudioPluginManager(enableSound);
 
     // start of docking code 
     this->setDockOptions(QMainWindow::AnimatedDocks);

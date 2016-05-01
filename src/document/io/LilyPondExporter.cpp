@@ -1263,7 +1263,6 @@ LilyPondExporter::write()
                                     double(m_composition->getNbTracks()) * 100.0));
                                     
                     qApp->processEvents(QEventLoop::AllEvents, 100);
-                    //            rosegardenApplication->refreshGUI(50);
 
                     if ((int) seg->getTrack() != lastTrackIndex) {
                         if (lastTrackIndex != -1) {

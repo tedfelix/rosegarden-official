@@ -38,8 +38,6 @@
 
 using namespace Rosegarden;
 
-static bool s_noSequencerMode = false;
-
 // to be outside the Rosegarden namespace
 static void initResources()
 {
@@ -57,21 +55,6 @@ RosegardenApplication::RosegardenApplication(int &argc, char **argv) :
 void RosegardenApplication::saveState(QSessionManager& /* sm */)
 {
     emit aboutToSaveState();
-}
-
-RosegardenApplication* RosegardenApplication::ApplicationObject()
-{
-    return dynamic_cast<RosegardenApplication*>(qApp);
-}
-
-void RosegardenApplication::setNoSequencerMode(bool m)
-{
-    s_noSequencerMode = m;
-}
-
-bool RosegardenApplication::noSequencerMode()
-{
-    return s_noSequencerMode;
 }
 
 bool

@@ -354,7 +354,7 @@ enum GraphicsSystem
 void usage()
 {
     std::cerr << "Rosegarden: A sequencer and musical notation editor" << std::endl;
-    std::cerr << "Usage: rosegarden [--nosplash] [--nosequencer] [file.rg]" << std::endl;
+    std::cerr << "Usage: rosegarden [--nosplash] [--nosound] [file.rg]" << std::endl;
     std::cerr << "       rosegarden --version" << std::endl;
     exit(2);
 }
@@ -529,13 +529,13 @@ int main(int argc, char *argv[])
     }
 
     bool nosplash = false;
-    bool nosequencer = false;
+    bool nosound = false;
     int nonOptArgs = 0;
 
     for (int i = 1; i < args.size(); ++i) {
         if (args[i].startsWith("-")) {
             if (args[i] == "--nosplash") nosplash = true;
-            else if (args[i] == "--nosequencer") nosequencer = true;
+            else if (args[i] == "--nosound") nosound = true;
             else usage();
         } else {
             ++nonOptArgs;
@@ -685,12 +685,10 @@ int main(int argc, char *argv[])
     struct timeval logoShowTime;
     gettimeofday(&logoShowTime, 0);
 
-    RosegardenApplication::setNoSequencerMode(nosequencer);
-
     RG_INFO << "Creating RosegardenMainWindow instance...";
 
     RosegardenMainWindow *mainWindow =
-            new RosegardenMainWindow(!RosegardenApplication::noSequencerMode(), startLogo);
+            new RosegardenMainWindow(!nosound, startLogo);
 
     mainWindow->setIsFirstRun(newVersion);
 

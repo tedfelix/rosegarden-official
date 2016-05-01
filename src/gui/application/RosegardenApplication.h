@@ -31,8 +31,6 @@ class QProcess;
 namespace Rosegarden
 {
 
-
-
 /**
  * RosegardenApplication
  *
@@ -44,18 +42,6 @@ class ROSEGARDENPRIVATE_EXPORT RosegardenApplication : public QApplication
     Q_OBJECT
 public:
     RosegardenApplication(int &argc, char **argv);
-
-    /**
-     * Handle the attempt at creation of a new instance - 
-     * only accept new file names which we attempt to load
-     * into the existing instance (if it exists)
-     */
-//&&&    virtual int newInstance();
-
-    static RosegardenApplication* ApplicationObject();
-
-    static void setNoSequencerMode(bool m=true);
-    static bool noSequencerMode();
 
     virtual void saveState(QSessionManager&);
     
@@ -70,9 +56,6 @@ protected:
 
     virtual bool notify(QObject * receiver, QEvent * event);
 };
-
-#define rosegardenApplication RosegardenApplication::ApplicationObject()
-
 
 }
 

@@ -130,7 +130,7 @@ public:
      * \arg useSequencer : if true, the sequencer is launched
      * @see initMenuBar initToolBar
      */
-    RosegardenMainWindow(bool useSequencer = true,
+    RosegardenMainWindow(bool enableSound = true,
                          QObject *startupStatusMessageReceiver = 0);
 
     virtual ~RosegardenMainWindow();
@@ -298,11 +298,9 @@ public:
 
 
     /**
-     * Returns whether we're using a sequencer.
-     * false if the '--nosequencer' option was given
+     * Returns whether sound is enabled.
+     * false if the '--nosound' option was given
      * true otherwise.
-     * This doesn't give the state of the sequencer
-     * @see #isSequencerRunning
      */
     bool isUsingSequencer();
 

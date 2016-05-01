@@ -24,7 +24,6 @@
 #include "AudioPlugin.h"
 #include "base/AudioPluginInstance.h"
 #include "sequencer/RosegardenSequencer.h"
-#include "gui/application/RosegardenApplication.h"
 #include "sound/PluginFactory.h"
 #include "sound/PluginIdentifier.h"
 
@@ -41,9 +40,10 @@
 namespace Rosegarden
 {
 
-AudioPluginManager::AudioPluginManager() :
+AudioPluginManager::AudioPluginManager(bool enableSound) :
     m_sampleRate(0),
-    m_enumerator(this)
+    m_enumerator(this),
+    m_enableSound(enableSound)
 {
     RG_DEBUG << "AudioPluginManager::AudioPluginManager";
 
@@ -71,7 +71,7 @@ AudioPluginManager::Enumerator::run()
 
     RG_DEBUG << "\n\nAudioPluginManager::Enumerator::run()\n\n";
 
-    if (!RosegardenApplication::noSequencerMode()) {
+    if (!m_manager->m_enableSound) {
         // We only waste the time looking for plugins here if we
         // know we're actually going to be able to use them.
         PluginFactory::enumerateAllPlugins(rawPlugins);
@@ -276,11 +276,10 @@ AudioPluginManager::end()
 void
 AudioPluginManager::awaitEnumeration()
 {
+    // TODO: this should use a QSemaphore instead
     while (!m_enumerator.isDone()) {
         RG_DEBUG << "\n\nAudioPluginManager::awaitEnumeration() - waiting\n\n";
-//        m_mutex.lock();
-        usleep(100000);
-//        m_mutex.unlock();
+        usleep(100000); // 100 ms
     }
 }
 

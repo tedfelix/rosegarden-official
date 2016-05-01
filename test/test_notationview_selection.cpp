@@ -20,7 +20,7 @@ class TestNotationViewSelection : public QObject
 
 public:
     TestNotationViewSelection()
-        : m_doc(0, 0, true /*skip autoload*/, true, false /*no sequencer*/),
+        : m_doc(0, 0, true /*skip autoload*/, true, false /*no sound*/),
           m_view(0) {}
 
 private Q_SLOTS:
@@ -46,8 +46,6 @@ static QString findFile(const QString &fileName) {
 
 void TestNotationViewSelection::initTestCase()
 {
-    m_doc.setSoundEnabled(false);
-
     // Loading from a file
     const QString input = findFile("../data/examples/test_selection.rg");
     QVERIFY(!input.isEmpty()); // file not found

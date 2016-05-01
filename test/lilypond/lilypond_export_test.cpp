@@ -95,7 +95,7 @@ void TestLilypondExport::init()
 void TestLilypondExport::testEmptyDocument()
 {
     // GIVEN a document and a lilypond exporter
-    RosegardenDocument doc(0, 0, true /*skip autoload*/, true, false /*no sequencer*/);
+    RosegardenDocument doc(0, 0, true /*skip autoload*/, true, false /*no sound*/);
     const QString fileName = "out.ly";
     LilyPondExporter exporter(&doc, SegmentSelection(), qstrtostr(fileName));
 

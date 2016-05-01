@@ -117,7 +117,7 @@ RosegardenDocument::RosegardenDocument(QObject *parent,
                                    AudioPluginManager *pluginManager,
                                    bool skipAutoload,
                                    bool clearCommandHistory,
-                                       bool useSequencer)
+                                       bool enableSound)
         : QObject(parent),
         m_modified(false),
         m_autoSaved(false),
@@ -129,8 +129,7 @@ RosegardenDocument::RosegardenDocument(QObject *parent,
         m_autoSavePeriod(0),
         m_beingDestroyed(false),
         m_clearCommandHistory(clearCommandHistory),
-        m_useSequencer(useSequencer),
-        m_soundEnabled(true),
+        m_enableSound(enableSound),
         m_release(true)
 {
     checkSequencerTimer();
@@ -642,7 +641,7 @@ bool RosegardenDocument::openDocument(const QString& filename,
         if (progressDlg) CurrentProgressDialog::thaw();
     }
 
-    if (isSequencerRunning()) {
+    if (m_soundEnabled) {
 
         RG_DEBUG << "RosegardenDocument::openDocument: Sequencer is running, initialising studio";
 
@@ -1666,16 +1665,6 @@ bool RosegardenDocument::saveAs(const QString &newName, QString &errMsg)
     return true;
 }
 
-bool RosegardenDocument::isSequencerRunning() const
-{
-    return m_useSequencer && m_soundEnabled;
-}
-
-void RosegardenDocument::setSoundEnabled(bool b)
-{
-    m_soundEnabled = b;
-}
-
 bool RosegardenDocument::isSoundEnabled() const
 {
     return m_soundEnabled;
@@ -2526,7 +2515,7 @@ RosegardenDocument::stopRecordingMidi()
 void
 RosegardenDocument::prepareAudio()
 {
-    if (!isSequencerRunning()) return;
+    if (!m_soundEnabled) return;
 
     // Clear down the sequencer AudioFilePlayer object
     //
@@ -2565,7 +2554,7 @@ RosegardenDocument::checkSequencerTimer()
 {
     Profiler profiler("RosegardenDocument::checkSequencerTimer", true);
 
-    if (!isSequencerRunning()) return;
+    if (!m_soundEnabled) return;
 
     // Set the default timer.  We only do this first time and when
     // changed in the configuration dialog.

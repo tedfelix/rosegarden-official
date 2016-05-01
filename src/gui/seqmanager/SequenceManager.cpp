@@ -1230,18 +1230,18 @@ SequenceManager::checkSoundDriverStatus(bool warnUser)
     StartupLogo::hideIfStillThere();
     CurrentProgressDialog::freeze();
 
-    QString text("");
-    QString informativeText("");
+    QString text;
+    QString informativeText;
 
     if (m_soundDriverStatus == NO_DRIVER) {
         text = tr("<h3>Sequencer engine unavailable!</h3>");
-        informativeText = tr("<p>Both MIDI and Audio subsystems have failed to initialize.</p><p>If you wish to run with no sequencer by design, then use \"rosegarden --nosequencer\" to avoid seeing this error in the future.  Otherwise, we recommend that you repair your system configuration and start Rosegarden again.</p>");
+        informativeText = tr("<p>Both MIDI and Audio subsystems have failed to initialize.</p><p>If you wish to run with no sequencer by design, then use \"rosegarden --nosound\" to avoid seeing this error in the future.  Otherwise, we recommend that you repair your system configuration and start Rosegarden again.</p>");
     } else if (!(m_soundDriverStatus & MIDI_OK)) {
         text = tr("<h3>MIDI sequencing unavailable!</h3>");
-        informativeText = tr("<p>The MIDI subsystem has failed to initialize.</p><p>You may continue without the sequencer, but we suggest closing Rosegarden, running \"modprobe snd-seq-midi\" as root, and starting Rosegarden again.  If you wish to run with no sequencer by design, then use \"rosegarden --nosequencer\" to avoid seeing this error in the future.</p>");
+        informativeText = tr("<p>The MIDI subsystem has failed to initialize.</p><p>You may continue without the sequencer, but we suggest closing Rosegarden, running \"modprobe snd-seq-midi\" as root, and starting Rosegarden again.  If you wish to run with no sequencer by design, then use \"rosegarden --nosound\" to avoid seeing this error in the future.</p>");
     }
 
-    if (text != "") {
+    if (!text.isEmpty()) {
         emit sendWarning(WarningWidget::Midi, text, informativeText);
         return;
     } 

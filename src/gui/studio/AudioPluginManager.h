@@ -37,7 +37,7 @@ class AudioPlugin;
 class AudioPluginManager
 {
 public:
-    AudioPluginManager();
+    AudioPluginManager(bool enableSound);
 
     // Get a straight list of names
     //
@@ -100,6 +100,7 @@ protected:
     AudioPluginClipboard      m_pluginClipboard;
     Enumerator                m_enumerator;
     QMutex                    m_mutex;
+    bool                      m_enableSound;
 };
 
 
