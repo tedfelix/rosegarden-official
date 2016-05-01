@@ -449,7 +449,7 @@ public:
     /**
      * return the list of the views currently connected to the document
      */
-    QList<RosegardenMainViewWidget*>& getViewList() { return m_viewList; } //### prepended *
+    QList<RosegardenMainViewWidget*>& getViewList() { return m_viewList; }
 
     bool isBeingDestroyed() { return m_beingDestroyed; }
 
