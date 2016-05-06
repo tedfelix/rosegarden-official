@@ -1112,7 +1112,7 @@ NotationView::setupActions()
 void 
 NotationView::slotUpdateMenuStates()
 {
-    NOTATION_DEBUG << "NotationView::slotUpdateMenuStates";
+    //NOTATION_DEBUG << "NotationView::slotUpdateMenuStates";
 
     // 1. set selection-related states
 
@@ -1132,7 +1132,7 @@ NotationView::slotUpdateMenuStates()
 
     if (selection) {
 
-        NOTATION_DEBUG << "NotationView::slotUpdateMenuStates: Have selection; it's " << selection << " covering range from " << selection->getStartTime() << " to " << selection->getEndTime() << " (" << selection->getSegmentEvents().size() << " events)";
+        //NOTATION_DEBUG << "NotationView::slotUpdateMenuStates: Have selection; it's " << selection << " covering range from " << selection->getStartTime() << " to " << selection->getEndTime() << " (" << selection->getSegmentEvents().size() << " events)";
 
         enterActionState("have_selection");
         if (selection->contains(Note::EventType)) {
@@ -1149,18 +1149,17 @@ NotationView::slotUpdateMenuStates()
         }
 
     } else {
-
-        NOTATION_DEBUG << "Do not have a selection";
+        //NOTATION_DEBUG << "Do not have a selection";
     }
 
     // 2. set inserter-related states
     NoteRestInserter *currentTool = dynamic_cast<NoteRestInserter *>(m_notationWidget->getCurrentTool());
     if (currentTool) {
-        NOTATION_DEBUG << "Have NoteRestInserter ";
+        //NOTATION_DEBUG << "Have NoteRestInserter ";
         enterActionState("note_rest_tool_current");
         
     } else {
-        NOTATION_DEBUG << "Do not have NoteRestInserter ";
+        //NOTATION_DEBUG << "Do not have NoteRestInserter ";
         leaveActionState("note_rest_tool_current");
     }
 
