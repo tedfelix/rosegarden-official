@@ -40,6 +40,7 @@ private:
     RosegardenDocument m_doc;
     Segment *m_segment;
     NotationView *m_view;
+    SequenceManager m_seqManager;
 };
 
 // Qt5 has a nice QFINDTESTDATA, but to support Qt4 we'll have our own function
@@ -69,6 +70,19 @@ void TestNotationViewSelection::initTestCase()
     QVERIFY(!m_view->getSelection());
     QCOMPARE(m_view->getCurrentSegment(), m_segment);
     QCOMPARE(m_segment->getStartTime(), timeT(0));
+
+    m_seqManager.setDocument(&m_doc, 0);
+
+    // The mainwindow connects fast-forward and rewind (to intercept them when recording), so we need to do it ourselves here.
+    connect(m_view, SIGNAL(fastForwardPlayback()),
+            &m_seqManager, SLOT(fastforward()));
+    connect(m_view, SIGNAL(rewindPlayback()),
+            &m_seqManager, SLOT(rewind()));
+    connect(m_view, SIGNAL(fastForwardPlaybackToEnd()),
+            &m_seqManager, SLOT(fastForwardToEnd()));
+    connect(m_view, SIGNAL(rewindPlaybackToBeginning()),
+            &m_seqManager, SLOT(rewindToBeginning()));
+
 }
 
 void TestNotationViewSelection::cleanupTestCase()
@@ -111,9 +125,7 @@ void TestNotationViewSelection::testNavigate()
     QCOMPARE(m_doc.getComposition().getPosition(), timeT(960)); // one quarter
 
     // Go to next bar
-    SequenceManager seqManager;
-    seqManager.setDocument(&m_doc, 0);
-    seqManager.fastforward();
+    m_seqManager.fastforward();
     QCOMPARE(m_doc.getComposition().getPosition(), timeT(3840)); // one quarter
 
     QVector<timeT> expectedPositions;
@@ -147,14 +159,17 @@ void TestNotationViewSelection::testKeyboardSelection_data()
 
     // Syntax for keyPressed:
     // l = left, r = right, L = shift-left, R = shift right
+    // n = next bar (ctrl+right), N = select until next bar (ctrl+shift+right)
+    // p = prev bar (ctrl+left), P = select until previous bar (ctrl+shift+left)
 
     // To understand expectedSelections, note that the beginning of the file says: ABCDG[rest]...
     QTest::newRow("1-3-5") << "RrRrR" << (QStringList() << "A" << "A" << "AC" << "AC" << "ACG");
     QTest::newRow("shift_change_direction_1") << "RRLR" << (QStringList() << "A" << "AB" << "A" << "AB");
-    QTest::newRow("shift_change_direction_2") << "rrrrLLRL" << (QStringList() << "" << "" << "" << "" << "D" << "CD" << "D" << "CD");
+    QTest::newRow("shift_change_direction_2") << "nLLRL" << (QStringList() << "" << "D" << "CD" << "D" << "CD");
     QTest::newRow("bug_1519_testcase_2") << "RrL" << (QStringList() << "A" << "A" << "AB");
     QTest::newRow("shift_right_again_same_note") << "RRlR" << (QStringList() << "A" << "AB" << "AB" << "A");
-    QTest::newRow("shift_left_again_same_note") << "rrrrLLrL" << (QStringList() << "" << "" << "" << "" << "D" << "CD" << "CD" << "D");
+    QTest::newRow("shift_left_again_same_note") << "nLLrL" << (QStringList() << "" << "D" << "CD" << "CD" << "D");
+    QTest::newRow("select_unselect_bar") << "NprNP" << (QStringList() << "ABCD" << "ABCD" << "ABCD" << "A" << "ABCD");
 }
 
 void TestNotationViewSelection::testKeyboardSelection()
@@ -175,6 +190,18 @@ void TestNotationViewSelection::testKeyboardSelection()
             break;
         case 'R':
             m_view->slotExtendSelectionForward();
+            break;
+        case 'n':
+            m_seqManager.fastforward();
+            break;
+        case 'N':
+            m_view->slotExtendSelectionForwardBar();
+            break;
+        case 'p':
+            m_seqManager.rewind();
+            break;
+        case 'P':
+            m_view->slotExtendSelectionBackwardBar();
             break;
         }
         const QString prefix = QString("step %1, key %2: ").arg(i).arg(key); // more info in case of failure

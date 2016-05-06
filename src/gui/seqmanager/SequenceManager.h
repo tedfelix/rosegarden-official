@@ -100,11 +100,7 @@ public:
     void stop();
 
     void stopping();
-    void rewind();
-    void fastforward();
     void record(bool countIn);
-    void rewindToBeginning();
-    void fastForwardToEnd();
 
     void setLoop(const timeT &lhs, const timeT &rhs);
     void notifySequencerStatus(TransportStatus status);
@@ -217,6 +213,10 @@ public:
 public slots:
 
     void update();
+    void rewind();
+    void fastforward();
+    void rewindToBeginning();
+    void fastForwardToEnd();
 
 signals:
     void signalSelectProgramNoSend(int, int, int);
