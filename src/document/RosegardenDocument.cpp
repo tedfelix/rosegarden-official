@@ -129,7 +129,7 @@ RosegardenDocument::RosegardenDocument(QObject *parent,
         m_autoSavePeriod(0),
         m_beingDestroyed(false),
         m_clearCommandHistory(clearCommandHistory),
-        m_enableSound(enableSound),
+        m_soundEnabled(enableSound),
         m_release(true)
 {
     checkSequencerTimer();
@@ -1687,7 +1687,7 @@ RosegardenDocument::xmlParse(QString fileContents, QString &errMsg,
         }
     }
 
-    if (permanent) RosegardenSequencer::getInstance()->removeAllDevices();
+    if (permanent && m_soundEnabled) RosegardenSequencer::getInstance()->removeAllDevices();
 
     RoseXmlHandler handler(this, elementCount, permanent);
 

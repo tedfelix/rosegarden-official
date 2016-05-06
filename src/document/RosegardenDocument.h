@@ -755,8 +755,6 @@ private:
      */
     bool m_clearCommandHistory;
 
-    bool m_enableSound;
-
     /// Enable/disable playing sounds
     bool m_soundEnabled;
 
