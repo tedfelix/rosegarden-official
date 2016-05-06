@@ -4766,6 +4766,35 @@ NotationView::slotTransformsCollapseNotes()
             addCommand(new CollapseNotesCommand(*selection));
 }
 
+void NotationView::extendSelectionHelper(bool forward, EventSelection *es, const std::vector<Event *> &eventVec, bool select)
+{
+    int moveCount = 0;
+    int prevEventTime = 0;
+    int prevSubOrdering = 0;
+    for (unsigned int j = 0; j < eventVec.size(); ++j) {
+        Event *event = eventVec[j];
+        int count;
+        if (select) { // select
+            count = es->addEvent(event, true, forward);
+        } else { // unselect
+            count = es->removeEvent(event, true, forward);
+        }
+        if (prevEventTime != event->getAbsoluteTime() || prevSubOrdering != event->getSubOrdering()) {
+            moveCount = qMax(moveCount, count);
+        }
+        prevEventTime = event->getAbsoluteTime();
+        prevSubOrdering = event->getSubOrdering();
+    }
+
+    // #1519: increment cursor for every event selected/unselected
+    for (int c = 1; c < moveCount; ++c) {
+        if (forward)
+            slotStepForward();
+        else
+            slotStepBackward();
+    }
+}
+
 void
 NotationView::slotExtendSelectionBackward()
 {
@@ -4811,7 +4840,9 @@ NotationView::slotExtendSelectionBackward(bool bar)
     --firstNote;
     const bool wasSelected = es->contains((*firstNote)->event());
 
-    std::vector<Event *> toErase;
+    // store events in a separate data structure, to avoid
+    // breaking iteration while removing events from the segment.
+    std::vector<Event *> eventVec;
 
     while (extendFrom != vel->begin() &&
            (*--extendFrom)->getViewAbsoluteTime() >= newTime) {
@@ -4830,20 +4861,12 @@ NotationView::slotExtendSelectionBackward(bool bar)
         // reminder to someone that all of this is stupid.
         Event *event = (*extendFrom)->event();
         if (event->isa(Note::EventType)) {
-            if (!wasSelected) { // select
-                // #1519: increment cursor for every event selected
-                bool forward = false;
-                int count = es->addEvent(event, true, forward);
-                for (int c = 1; c < count; ++c) slotStepBackward();
-            } else { // unselect
-                toErase.push_back(event);
-            }
+            eventVec.push_back(event);
         }
     }
 
-    for (unsigned int j = 0; j < toErase.size(); ++j) {
-        es->removeEvent(toErase[j]);
-    }
+    const bool forward = false;
+    extendSelectionHelper(forward, es, eventVec, !wasSelected);
 
     setSelection(es, true);
 }
@@ -4891,31 +4914,22 @@ NotationView::slotExtendSelectionForward(bool bar)
         return;
     const bool wasSelected = es->contains((*extendFrom)->event());
 
-    std::vector<Event *> toErase;
+    std::vector<Event *> eventVec;
 
     while (extendFrom != vel->end() &&
            (*extendFrom)->getViewAbsoluteTime() < newTime) {
         Event *event = (*extendFrom)->event();
         // Only grab notes for now, see slotExtendSelectionBackward()
         if (event->isa(Note::EventType)) {
-
-            if (!wasSelected) { // select
-                // #1519: increment cursor for every event selected
-                bool forward = true;
-                int count = es->addEvent(event, true, forward);
-                for (int c = 1; c < count; ++c) slotStepForward();
-            } else { // unselect
-                toErase.push_back(event);
-            }
+            eventVec.push_back(event);
         }
         ++extendFrom;
     }
 
-    for (unsigned int j = 0; j < toErase.size(); ++j) {
-        es->removeEvent(toErase[j]);
-    }
+    const bool forward = true;
+    extendSelectionHelper(forward, es, eventVec, !wasSelected);
 
-    setSelection(es, true); 
+    setSelection(es, true);
 }
 
 

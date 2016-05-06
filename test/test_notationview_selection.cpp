@@ -211,40 +211,48 @@ void TestNotationViewSelection::testKeyboardSelection()
 
 void TestNotationViewSelection::testSelectForwardAndBackward()
 {
-    QSKIP("this test is disabled for now, TODO re-enable once the rest passes"
-#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
-          , SkipAll
-#endif
-          );
+    m_seqManager.fastforward();
 
     QStringList expectedSelections;
     expectedSelections << "G"
-                       << "G" // the rest doesn't get selected
+                       << "G" // the rest doesn't get selected, currently
                        << "GB"
                        << "GBCC" // tied notes get selected together
                        << "GBCCBB"
                        << "GBCCBBGGG"
                        << "GBCCBBGGGCC"
                        << "GBCCBBGGGCCG"
-                       << "GBCCBBGGGCCGDBDB"
-                       //<< "GBCCBBGGGCCGDBDBG" // BUG!
-                       //<< "GBCCBBGGGCCGDBDBGC"
+                       << "GBCCBBGGGCCGBDBD"
+                       << "GBCCBBGGGCCGBDBDG"
+                       << "GBCCBBGGGCCGBDBDGC"
                        ;
 
+    // select forward
     for (int i = 0 ; i < expectedSelections.size(); ++i) {
         m_view->slotExtendSelectionForward();
         QCOMPARE(selectedNotes(), expectedSelections.at(i));
     }
 
+    const int pos = m_doc.getComposition().getPosition();
 
+    // unselect backward
     QStringList expectedSelectionsBack = expectedSelections;
     std::reverse(expectedSelectionsBack.begin(), expectedSelectionsBack.end());
     expectedSelectionsBack.append(QString());
 
     for (int i = 0 ; i < expectedSelections.size(); ++i) {
-        m_view->slotExtendSelectionBackward();
+        if (i > 0)
+            m_view->slotExtendSelectionBackward();
         QCOMPARE(selectedNotes(), expectedSelectionsBack.at(i));
     }
+
+    // select everything backward, check at end
+    m_doc.slotSetPointerPosition(pos);
+    for (int i = 0 ; i < expectedSelections.size(); ++i) {
+        m_view->slotExtendSelectionBackward();
+    }
+    QCOMPARE(m_doc.getComposition().getPosition(), timeT(3840)); // one quarter
+    // TODO QCOMPARE(selectedNotes(), expectedSelectionsBack.at(0));
 }
 
 QTEST_MAIN(TestNotationViewSelection)

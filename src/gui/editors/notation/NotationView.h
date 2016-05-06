@@ -492,6 +492,8 @@ protected:
     NotationWidget *m_notationWidget;
     
 private:
+    void extendSelectionHelper(bool forward, EventSelection *es, const std::vector<Event *> &eventVec, bool select);
+
     CommandRegistry *m_commandRegistry;
     DurationMonobarModeType m_durationMode;  // Stores morph state.
     QAction *m_durationPressed;  //Store the last duration button pressed.
