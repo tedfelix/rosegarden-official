@@ -4782,9 +4782,7 @@ NotationView::slotExtendSelectionBackwardBar()
 void
 NotationView::slotExtendSelectionBackward(bool bar)
 {
-    // If there is no current selection, or the selection is entirely
-    // to the right of the cursor, move the cursor left and add to the
-    // selection
+    // Move the cursor left and toggle selection between oldTime and newTime
 
     timeT oldTime = getInsertionTime();
 
@@ -4805,51 +4803,45 @@ NotationView::slotExtendSelectionBackward(bool bar)
 
     if (s && &s->getSegment() == segment) es->addFromSelection(s);
 
-    if (!s || &s->getSegment() != segment
-           || s->getSegmentEvents().size() == 0
-           || s->getStartTime() >= oldTime) {
+    ViewElementList::iterator extendFrom = vel->findTime(oldTime);
+    if (extendFrom == vel->begin()) // shouldn't happen
+        return;
+    ViewElementList::iterator firstNote = extendFrom;
+    --firstNote;
+    const bool wasSelected = es->contains((*firstNote)->event());
 
-        ViewElementList::iterator extendFrom = vel->findTime(oldTime);
+    std::vector<Event *> toErase;
 
-        while (extendFrom != vel->begin() &&
-                (*--extendFrom)->getViewAbsoluteTime() >= newTime) {
+    while (extendFrom != vel->begin() &&
+           (*--extendFrom)->getViewAbsoluteTime() >= newTime) {
 
-            //!!! This should actually grab every sort of event, and not just
-            // notes, but making that change makes the selection die every time
-            // the endpoint of an indication is encountered, and I'm just not
-            // seeing why, so I'm giving up on that and leaving it in the same
-            // stupid state I found it in (and it's probably in this state
-            // because the last guy had the same problem with indications.)
-            //
-            // I don't like this, because it makes it very easy to go along and
-            // orphan indications, text events, controllers, and all sorts of
-            // whatnot.  However, I have to call it quits for today, and have no
-            // idea if I'll ever remember to come back to this, so I'm leaving a
-            // reminder to someone that all of this is stupid.
-
-            if ((*extendFrom)->event()->isa(Note::EventType)) {
+        //!!! This should actually grab every sort of event, and not just
+        // notes, but making that change makes the selection die every time
+        // the endpoint of an indication is encountered, and I'm just not
+        // seeing why, so I'm giving up on that and leaving it in the same
+        // stupid state I found it in (and it's probably in this state
+        // because the last guy had the same problem with indications.)
+        //
+        // I don't like this, because it makes it very easy to go along and
+        // orphan indications, text events, controllers, and all sorts of
+        // whatnot.  However, I have to call it quits for today, and have no
+        // idea if I'll ever remember to come back to this, so I'm leaving a
+        // reminder to someone that all of this is stupid.
+        Event *event = (*extendFrom)->event();
+        if (event->isa(Note::EventType)) {
+            if (!wasSelected) { // select
                 // #1519: increment cursor for every event selected
                 bool forward = false;
-                int count = es->addEvent((*extendFrom)->event(), true, forward);
+                int count = es->addEvent(event, true, forward);
                 for (int c = 1; c < count; ++c) slotStepBackward();
+            } else { // unselect
+                toErase.push_back(event);
             }
         }
+    }
 
-    } else { // remove an event
-
-        EventSelection::eventcontainer::iterator i =
-            es->getSegmentEvents().end();
-
-        std::vector<Event *> toErase;
-
-        while (i != es->getSegmentEvents().begin() &&
-                (*--i)->getAbsoluteTime() >= newTime) {
-            toErase.push_back(*i);
-        }
-
-        for (unsigned int j = 0; j < toErase.size(); ++j) {
-            es->removeEvent(toErase[j]);
-        }
+    for (unsigned int j = 0; j < toErase.size(); ++j) {
+        es->removeEvent(toErase[j]);
     }
 
     setSelection(es, true);
@@ -4870,9 +4862,7 @@ NotationView::slotExtendSelectionForwardBar()
 void
 NotationView::slotExtendSelectionForward(bool bar)
 {
-    // If there is no current selection, or the selection is entirely
-    // to the right of the cursor, move the cursor right and add to the
-    // selection
+    // Move the cursor right and toggle selection between oldTime and newTime
 
     timeT oldTime = getInsertionTime();
 
@@ -4893,39 +4883,33 @@ NotationView::slotExtendSelectionForward(bool bar)
 
     if (s && &s->getSegment() == segment) es->addFromSelection(s);
 
-    if (!s || &s->getSegment() != segment
-           || s->getSegmentEvents().size() == 0
-           || s->getEndTime() <= oldTime) {
+    ViewElementList::iterator extendFrom = vel->findTime(oldTime);
+    if (extendFrom == vel->end()) // shouldn't happen
+        return;
+    const bool wasSelected = es->contains((*extendFrom)->event());
 
-        ViewElementList::iterator extendFrom = vel->findTime(oldTime);
+    std::vector<Event *> toErase;
 
-        while (extendFrom != vel->end() &&
-                (*extendFrom)->getViewAbsoluteTime() < newTime) {
-            if ((*extendFrom)->event()->isa(Note::EventType)) {
+    while (extendFrom != vel->end() &&
+           (*extendFrom)->getViewAbsoluteTime() < newTime) {
+        Event *event = (*extendFrom)->event();
+        // Only grab notes for now, see slotExtendSelectionBackward()
+        if (event->isa(Note::EventType)) {
+
+            if (!wasSelected) { // select
                 // #1519: increment cursor for every event selected
                 bool forward = true;
-                int count = es->addEvent((*extendFrom)->event(), true, forward);
+                int count = es->addEvent(event, true, forward);
                 for (int c = 1; c < count; ++c) slotStepForward();
+            } else { // unselect
+                toErase.push_back(event);
             }
-            ++extendFrom;
         }
+        ++extendFrom;
+    }
 
-    } else { // remove an event
-
-        EventSelection::eventcontainer::iterator i =
-            es->getSegmentEvents().begin();
-
-        std::vector<Event *> toErase;
-
-        while (i != es->getSegmentEvents().end() &&
-                (*i)->getAbsoluteTime() < newTime) {
-            toErase.push_back(*i);
-            ++i;
-        }
-
-        for (unsigned int j = 0; j < toErase.size(); ++j) {
-            es->removeEvent(toErase[j]);
-        }
+    for (unsigned int j = 0; j < toErase.size(); ++j) {
+        es->removeEvent(toErase[j]);
     }
 
     setSelection(es, true); 

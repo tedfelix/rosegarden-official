@@ -54,7 +54,7 @@ class Composition;
 class AudioManagerDialog;
 class MappedBufMetaIterator;
 
-class SequenceManager : public QObject, public CompositionObserver
+class ROSEGARDENPRIVATE_EXPORT SequenceManager : public QObject, public CompositionObserver
 {
     Q_OBJECT
 public:
