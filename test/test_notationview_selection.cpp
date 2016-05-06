@@ -240,11 +240,12 @@ void TestNotationViewSelection::testSelectForwardAndBackward()
     std::reverse(expectedSelectionsBack.begin(), expectedSelectionsBack.end());
     expectedSelectionsBack.append(QString());
 
-    for (int i = 0 ; i < expectedSelections.size(); ++i) {
+    for (int i = 0 ; i < expectedSelectionsBack.size(); ++i) {
         if (i > 0)
             m_view->slotExtendSelectionBackward();
         QCOMPARE(selectedNotes(), expectedSelectionsBack.at(i));
     }
+    QCOMPARE(selectedNotes(), QString());
 
     // select everything backward, check at end
     m_doc.slotSetPointerPosition(pos);
@@ -252,7 +253,7 @@ void TestNotationViewSelection::testSelectForwardAndBackward()
         m_view->slotExtendSelectionBackward();
     }
     QCOMPARE(m_doc.getComposition().getPosition(), timeT(3840)); // one quarter
-    // TODO QCOMPARE(selectedNotes(), expectedSelectionsBack.at(0));
+    QCOMPARE(selectedNotes(), QString("GBCCBBGGGCCGDBDBGC")); // order of notes in the chords is reversed, doesn't matter
 }
 
 QTEST_MAIN(TestNotationViewSelection)
