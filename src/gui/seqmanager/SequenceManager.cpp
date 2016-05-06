@@ -126,7 +126,7 @@ SequenceManager::~SequenceManager()
 }
 
 void
-SequenceManager::setDocument(RosegardenDocument *doc)
+SequenceManager::setDocument(RosegardenDocument *doc, QWidget *parentWidget)
 {
     SEQMAN_DEBUG << "SequenceManager::setDocument(" << doc << ")";
 
@@ -150,8 +150,7 @@ SequenceManager::setDocument(RosegardenDocument *doc)
     delete m_countdownTimer;
     //delete m_compositionMapperResetTimer;
 
-    m_countdownDialog = new CountdownDialog(dynamic_cast<QWidget*>
-                                            (m_doc->parent())->parentWidget());
+    m_countdownDialog = new CountdownDialog(parentWidget);
 
     // Bug 933041: no longer connect the CountdownDialog from
     // SequenceManager; instead let the RosegardenMainWindow connect it to

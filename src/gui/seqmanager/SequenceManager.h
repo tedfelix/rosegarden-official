@@ -72,9 +72,9 @@ public:
     //typedef enum { Midi, Audio, Timer } WarningType;
 
     /**
-     * Replaces the internal document
+     * Sets (replaces) the internal document, and sets a parent widget for the CountDownDialog
      */
-    void setDocument(RosegardenDocument *);
+    void setDocument(RosegardenDocument *doc, QWidget *parentWidget);
 
     /**
      * Return the current internal document

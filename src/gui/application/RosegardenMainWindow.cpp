@@ -421,7 +421,7 @@ RosegardenMainWindow::RosegardenMainWindow(bool enableSound,
     setDocument(doc);
 
     emit startupStatusMessage(tr("Starting sequence manager..."));
-    m_seqManager->setDocument(m_doc);
+    m_seqManager->setDocument(m_doc, this);
 
     connect(m_seqManager,
             SIGNAL(sendWarning(int, QString, QString)),
@@ -1332,7 +1332,7 @@ RosegardenMainWindow::setDocument(RosegardenDocument* newDocument)
     m_doc = newDocument;
 
     if (m_seqManager) // when we're called at startup, the seq. man. isn't created yet
-        m_seqManager->setDocument(m_doc);
+        m_seqManager->setDocument(m_doc, this);
 
     if (m_markerEditor)
         m_markerEditor->setDocument(m_doc);
