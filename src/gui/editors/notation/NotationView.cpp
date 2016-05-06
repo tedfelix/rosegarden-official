@@ -4798,9 +4798,11 @@ NotationView::slotExtendSelectionBackward(bool bar)
 
     ViewElementList *vel = currentStaff->getViewElementList();
     EventSelection *s = getSelection();
-    EventSelection *es = new EventSelection(*segment);
-
-    if (s && &s->getSegment() == segment) es->addFromSelection(s);
+    EventSelection *es;
+    if (s && &s->getSegment() == segment)
+        es = new EventSelection(*s);
+    else
+        es = new EventSelection(*segment);
 
     ViewElementList::iterator extendFrom = vel->findTime(oldTime);
     if (extendFrom == vel->begin()) // shouldn't happen
@@ -4878,9 +4880,11 @@ NotationView::slotExtendSelectionForward(bool bar)
 
     ViewElementList *vel = currentStaff->getViewElementList();
     EventSelection *s = getSelection();
-    EventSelection *es = new EventSelection(*segment);
-
-    if (s && &s->getSegment() == segment) es->addFromSelection(s);
+    EventSelection *es;
+    if (s && &s->getSegment() == segment)
+        es = new EventSelection(*s);
+    else
+        es = new EventSelection(*segment);
 
     ViewElementList::iterator extendFrom = vel->findTime(oldTime);
     if (extendFrom == vel->end()) // shouldn't happen
