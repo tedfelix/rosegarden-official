@@ -105,6 +105,15 @@ SegmentMapper::getSegmentRepeatCount()
     return repeatCount;
 }
 
+TrackId
+SegmentMapper::getTrackID() const
+{
+    if (m_segment)
+        return m_segment->getTrack();
+
+    return UINT_MAX;
+}
+
 bool
 SegmentMapper::
 mutedEtc(void)

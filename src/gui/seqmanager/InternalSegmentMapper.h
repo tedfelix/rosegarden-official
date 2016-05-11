@@ -95,8 +95,11 @@ private:
 
     ~InternalSegmentMapper(void);
 
-    // Do channel-setup
+    // Do channel-setup for Auto channel mode.
     virtual void makeReady(MappedInserterBase &inserter, RealTime time);
+
+    // Do channel-setup for Fixed channel mode.
+    virtual void insertChannelSetup(MappedInserterBase &);
 
     // Insert the event "evt"
     virtual void doInsert(MappedInserterBase &inserter, MappedEvent &evt,

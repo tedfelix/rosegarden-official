@@ -160,6 +160,30 @@ MappedBufMetaIterator::moveIteratorToTime(MappedEventBuffer::iterator &iter,
 }
 
 void
+MappedBufMetaIterator::fetchFixedChannelSetup(MappedInserterBase &inserter)
+{
+    // Tracks we've seen.
+    std::set<TrackId> tracks;
+
+    // for each MappedEventBuffer/segment in m_segments
+    for (MappedSegments::iterator i = m_segments.begin();
+         i != m_segments.end(); ++i) {
+        MappedEventBuffer *mappedEventBuffer = *i;
+
+        TrackId trackID = mappedEventBuffer->getTrackID();
+
+        // If we've already seen this track, try the next segment.
+        if (tracks.find(trackID) != tracks.end())
+            continue;
+
+        tracks.insert(trackID);
+
+        // Insert channel setup if this track is in Fixed channel mode.
+        mappedEventBuffer->insertChannelSetup(inserter);
+    }
+}
+
+void
 MappedBufMetaIterator::fetchEvents(MappedInserterBase &inserter,
                                    const RealTime &startTime,
                                    const RealTime &endTime)

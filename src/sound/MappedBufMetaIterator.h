@@ -60,6 +60,8 @@ public:
     /// Delete all iterators and forget all segments
     void clear();
 
+    void fetchFixedChannelSetup(MappedInserterBase &inserter);
+
     void jumpToTime(const RealTime &);
 
     /// Fetch events from start to end into a mapped event list (via inserter).

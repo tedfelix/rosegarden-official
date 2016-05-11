@@ -19,6 +19,8 @@
 #define RG_MAPPEDEVENTBUFFER_H
 
 #include "base/RealTime.h"
+#include "base/Track.h"
+
 #include <QReadWriteLock>
 #include <QAtomicInt>
 
@@ -233,6 +235,9 @@ public:
         start = m_start;
         end   = m_end;
     }
+
+    virtual TrackId getTrackID() const  { return UINT_MAX; }
+    virtual void insertChannelSetup(MappedInserterBase &)  { }
 
     class iterator 
     {

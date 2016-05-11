@@ -297,9 +297,12 @@ ChannelManager::makeReady(MappedInserterBase &inserter, RealTime time,
         if (!m_channel.validChannel()) { return false; }
     }
     
+    // If this instrument is in auto channels mode
+    if (!m_instrument->hasFixedChannel()) {
+        insertChannelSetup(inserter, time, time,
+                           callbacks, trackId);
+    }
     
-    insertChannelSetup(inserter, time, time,
-                       callbacks, trackId);
     setInitted(true);
     return true;
 }

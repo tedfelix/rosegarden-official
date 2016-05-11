@@ -1288,6 +1288,9 @@ MidiFile::convertToMidi(Composition &comp, const QString &filename)
     // right, so we sort events first.
     SortingInserter sorter;
 
+    // Fetch the channel setup for all MIDI tracks in Fixed channel mode.
+    metaIterator->fetchFixedChannelSetup(sorter);
+
     metaIterator->jumpToTime(start);
     // Copy the events from metaIterator to sorter.
     // Give the end a little margin to make it insert noteoffs at the

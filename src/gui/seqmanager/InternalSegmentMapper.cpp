@@ -15,6 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[InternalSegmentMapper]"
+
 #include "InternalSegmentMapper.h"
 #include "base/BaseProperties.h"
 #include "base/Composition.h"
@@ -400,6 +402,22 @@ makeReady(MappedInserterBase &inserter, RealTime time)
     m_channelManager.setInstrument(m_doc->getInstrument(m_segment));
     m_channelManager.makeReady(inserter, time, &callbacks,
                                m_segment->getTrack());
+}
+
+void
+InternalSegmentMapper::insertChannelSetup(MappedInserterBase &inserter)
+{
+    Instrument *instrument = m_doc->getInstrument(m_segment);
+
+    // If this segment's Instrument is in Auto channels mode, bail.
+    if (!instrument->hasFixedChannel())
+        return;
+
+    Callbacks callbacks(this);
+    m_channelManager.setInstrument(instrument);
+    m_channelManager.insertChannelSetup(
+            inserter, RealTime::zeroTime, RealTime::zeroTime, &callbacks,
+            m_segment->getTrack());
 }
 
 void

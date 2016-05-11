@@ -221,6 +221,10 @@ public:
     bool makeReady(MappedInserterBase &inserter, RealTime time,
                    Callbacks *callbacks, TrackId trackId);
 
+    /// Insert appropriate MIDI channel-setup.
+    void insertChannelSetup(MappedInserterBase &inserter,
+                            RealTime reftime, RealTime insertTime,
+                            Callbacks *callbacks, int trackId);
 
     /// Set the instrument we are playing on, releasing any old one.
     void setInstrument(Instrument *instrument);
@@ -292,11 +296,6 @@ protected:
 
     void setInitted(bool initted)  { m_inittedForOutput = initted; }
     bool needsInit(void)  { return !m_inittedForOutput; }
-
-    /// Insert appropriate MIDI channel-setup.
-    void insertChannelSetup(MappedInserterBase &inserter,
-                            RealTime reftime, RealTime insertTime,
-                            Callbacks *callbacks, int trackId);
 
     /********************/
     /*** Data members ***/

@@ -38,6 +38,7 @@ public:
     static SegmentMapper *makeMapperForSegment(RosegardenDocument *, Segment *);
 
     virtual int getSegmentRepeatCount();
+    virtual TrackId getTrackID() const;
 
     virtual void initSpecial(void);
 
