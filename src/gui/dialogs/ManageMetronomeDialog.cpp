@@ -462,7 +462,7 @@ ManageMetronomeDialog::slotPreviewPitch(int pitch)
 
     Instrument *inst =
         list[m_metronomeInstrument->currentIndex()];
-    StudioControl::playPreviewNote(inst, pitch, MidiMaxValue, 10000000);
+    StudioControl::playPreviewNote(inst, pitch, MidiMaxValue, RealTime(0, 10000000));
 }
 
 void

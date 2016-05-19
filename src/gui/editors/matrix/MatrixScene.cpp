@@ -898,7 +898,7 @@ MatrixScene::playNote(Segment &segment, int pitch, int velocity)
     StudioControl::playPreviewNote(instrument,
                                    pitch + segment.getTranspose(),
                                    velocity,
-                                   250000000);
+                                   RealTime(0, 250000000));
 }
 
 }

@@ -210,11 +210,11 @@ StudioControl::sendQuarterNoteLength(const RealTime &length)
 void
 StudioControl::
 playPreviewNote(Instrument *instrument, int pitch,
-                int velocity, int nsecs, bool oneshot)
+                int velocity, RealTime duration, bool oneshot)
 {
     MappedEventList mC;
     ImmediateNote * filler = getFiller();
-    filler->fillWithNote(mC, instrument, pitch, velocity, nsecs, oneshot);
+    filler->fillWithNote(mC, instrument, pitch, velocity, duration, oneshot);
     sendMappedEventList(mC);
 }
 

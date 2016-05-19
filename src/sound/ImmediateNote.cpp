@@ -57,7 +57,7 @@ canPreviewAnotherNote()
 void
 ImmediateNote::
 fillWithNote(MappedEventList &mC, Instrument *instrument,
-             int pitch, int velocity, int nsecs, bool oneshot)
+             int pitch, int velocity, RealTime duration, bool oneshot)
 {
   if (!instrument) { return; }
 #ifdef DEBUG_PREVIEW_NOTES
@@ -82,7 +82,7 @@ fillWithNote(MappedEventList &mC, Instrument *instrument,
                  pitch,
                  velocity,
                  RealTime::zeroTime,
-                 RealTime(0, nsecs),
+                 duration,
                  RealTime::zeroTime);
   // Since we're not going thru MappedBufMetaIterator::acceptEvent
   // which checks tracks for muting, we needn't set a track.

@@ -254,8 +254,11 @@ private:
     Thumbwheel  *m_segmentChanger;
     int m_lastSegmentChangerValue;
 
+    /// Either a PercussionPitchRuler or a PianoKeyboard object.
     PitchRuler *m_pitchRuler; // I own this
+    /// Contains m_pianoScene.
     Panned *m_pianoView; // I own this
+    /// Contains m_pitchRuler.
     QGraphicsScene *m_pianoScene; // I own this
 
     ControlRulerWidget *m_controlsWidget; // I own this

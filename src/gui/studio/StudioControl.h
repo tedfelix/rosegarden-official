@@ -126,7 +126,7 @@ public:
     static void sendQuarterNoteLength(const RealTime &length);
 
     static void playPreviewNote(Instrument *instrument, int pitch,
-                                int velocity, int nsecs,
+                                int velocity, RealTime duration,
                                 bool oneshot = true);
 
     /// Send bank selects, program changes, and controllers immediately.

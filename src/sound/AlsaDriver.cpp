@@ -3779,12 +3779,6 @@ AlsaDriver::processMidiOut(const MappedEventList &mC,
         switch ((*i)->getType()) {
 
         case MappedEvent::MidiNote:
-            // We always use plain NOTE ON here, not ALSA
-            // time+duration notes, because we have our own NOTE
-            // OFF stack (which will be augmented at the bottom of
-            // this function) and we want to ensure it gets used
-            // for the purposes of e.g. soft synths
-            //
             if ((*i)->getVelocity() == 0) {
                 snd_seq_ev_set_noteoff(&event,
                                        channel,
@@ -3792,6 +3786,17 @@ AlsaDriver::processMidiOut(const MappedEventList &mC,
                                        NOTE_OFF_VELOCITY);
                 break;
             }
+
+            // !!! FALLTHROUGH
+            //
+            // MidiNote behaves exactly like MidiNoteOneShot, except that
+            // a velocity of 0 results in a note-off instead of a note-on.
+            //
+            // Why "OneShot" is used to differentiate is unclear.  Renaming
+            // may be in order.  A duration of RealTime(-1,0) results in
+            // the sending of only a note-on and no note-off.  This seems
+            // more like a kind of "one-shot" than treating a 0 velocity
+            // in a special way.
 
         case MappedEvent::MidiNoteOneShot:
             snd_seq_ev_set_noteon(&event,

@@ -35,7 +35,8 @@ class ImmediateNote
   // Fill mC with a corresponding note and its appropriate setup events.
   void
       fillWithNote(MappedEventList &mC, Instrument *instrument,
-                   int pitch, int velocity, int nsecs, bool oneshot);
+                   int pitch, int velocity,
+                   RealTime duration, bool oneshot);
 
  private:
   EternalChannelManager m_channelManager;

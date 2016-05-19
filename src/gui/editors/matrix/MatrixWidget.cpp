@@ -15,6 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[MatrixWidget]"
+
 #include "MatrixWidget.h"
 
 #include "MatrixScene.h"
@@ -1388,7 +1390,7 @@ MatrixWidget::slotMouseLeavesView()
 
 void MatrixWidget::slotKeyPressed(unsigned int y, bool repeating)
 {
-    //MATRIX_DEBUG << "MatrixWidget::slotKeyPressed(" << y << ")";
+    //RG_DEBUG << "slotKeyPressed(" << y << ")";
 
     slotHoveredOverKeyChanged(y);
     int evPitch = m_scene->calculatePitchFromY(y);
@@ -1414,13 +1416,17 @@ void MatrixWidget::slotKeyPressed(unsigned int y, bool repeating)
         playPreviewNote(ins,
                         evPitch + current->getSegment().getTranspose(),
                         MidiMaxValue,
-                        0,
-                        false);
+                        RealTime(-1, 0),  // Note-on, no note-off.
+                        false);  // "MidiNote"
 }
 
 void MatrixWidget::slotKeySelected(unsigned int y, bool repeating)
 {
-    //MATRIX_DEBUG << "MatrixWidget::slotKeySelected(" << y << ")";
+    //RG_DEBUG << "slotKeySelected(" << y << ")";
+
+    // This is called when shift is held down and a key is pressed on the
+    // pitch ruler.  This will select all notes with this pitch in the
+    // segment.
 
     slotHoveredOverKeyChanged(y);
 
@@ -1477,12 +1483,14 @@ void MatrixWidget::slotKeySelected(unsigned int y, bool repeating)
         playPreviewNote(ins,
                         evPitch + current->getSegment().getTranspose(),
                         MidiMaxValue,
-                        0,
-                        false);
+                        RealTime(-1, 0),  // Note-on, no note-off.
+                        false);  // "MidiNote"
 }
 
 void MatrixWidget::slotKeyReleased(unsigned int y, bool repeating)
 {
+    //RG_DEBUG << "slotKeyReleased(" << y << ")";
+
     int evPitch = m_scene->calculatePitchFromY(y);
 
     if (m_lastNote == evPitch && repeating) return;
@@ -1501,9 +1509,9 @@ void MatrixWidget::slotKeyReleased(unsigned int y, bool repeating)
     StudioControl::
         playPreviewNote(ins,
                         evPitch + current->getSegment().getTranspose(),
-                        0,
-                        0,
-                        false);
+                        0,  // Velocity 0 => note-off
+                        RealTime(0, 1),  // Need a non-zero duration to get through.
+                        false);  // "MidiNote"
 }
 
 void
