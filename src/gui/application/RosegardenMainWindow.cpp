@@ -7320,7 +7320,7 @@ RosegardenMainWindow::slotShowPluginDialog(QWidget *parent,
     RG_DEBUG << "  key:" << key;
 
     // If we already have a dialog for this plugin, show it.
-    if (m_pluginDialogs[key]) {
+    if (m_pluginDialogs.find(key) != m_pluginDialogs.end()) {
         m_pluginDialogs[key]->show();
         m_pluginDialogs[key]->raise();
         m_pluginDialogs[key]->activateWindow();
@@ -7864,7 +7864,7 @@ RosegardenMainWindow::slotPluginDialogDestroyed(InstrumentId instrumentId,
 
     RG_DEBUG << "  key:" << key;
 
-    m_pluginDialogs[key] = 0;
+    m_pluginDialogs.erase(key);
 }
 
 void
