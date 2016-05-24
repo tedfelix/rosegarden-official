@@ -45,7 +45,7 @@ AudioPluginManager::AudioPluginManager(bool enableSound) :
     m_enumerator(this),
     m_enableSound(enableSound)
 {
-    RG_DEBUG << "AudioPluginManager::AudioPluginManager";
+    //RG_DEBUG << "ctor";
 
     // Clear the plugin clipboard
     //
@@ -55,7 +55,7 @@ AudioPluginManager::AudioPluginManager(bool enableSound) :
     
     m_enumerator.start();
 
-    RG_DEBUG << "AudioPluginManager::AudioPluginManager done";
+    //RG_DEBUG << "ctor done";
 }
 
 AudioPluginManager::Enumerator::Enumerator(AudioPluginManager *manager) :
@@ -69,9 +69,11 @@ AudioPluginManager::Enumerator::run()
     QMutexLocker locker(&(m_manager->m_mutex));
     MappedObjectPropertyList rawPlugins;
 
-    RG_DEBUG << "\n\nAudioPluginManager::Enumerator::run()\n\n";
+    //RG_DEBUG << "Enumerator::run()...";
 
-    if (!m_manager->m_enableSound) {
+    if (m_manager->m_enableSound) {
+        //RG_DEBUG << "  sound was enabled, enumerating plugins...";
+
         // We only waste the time looking for plugins here if we
         // know we're actually going to be able to use them.
         PluginFactory::enumerateAllPlugins(rawPlugins);
@@ -92,7 +94,7 @@ AudioPluginManager::Enumerator::run()
         QString category = rawPlugins[i++];
         unsigned int portCount = rawPlugins[i++].toInt();
 
-        //	std::cerr << "PLUGIN: " << i << ": " << (identifier ? identifier : "(null)") << " unique id " << uniqueId << " / CATEGORY: \"" << (category ? category : "(null)") << "\"" << std::endl;
+        //RG_DEBUG << "PLUGIN: " << i << ": " << (identifier != "" ? identifier : "(null)") << " unique id " << uniqueId << " / CATEGORY: \"" << (category != "" ? category : "(null)") << "\"";
 
         AudioPlugin *aP = m_manager->addPlugin(identifier,
                                                name,
@@ -128,7 +130,7 @@ AudioPluginManager::Enumerator::run()
 
     m_done = true;
 
-    RG_DEBUG << "\n\nAudioPluginManager::Enumerator::run() - done\n\n";
+    //RG_DEBUG << "Enumerator::run() - done";
 }
 
 AudioPlugin*
