@@ -91,12 +91,14 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
     vboxLayout->setMargin(0);
     metagrid->addWidget(vbox, 0, 0);
   
+    // Plugin group box
     QGroupBox *pluginSelectionBox = new QGroupBox(tr("Plugin"), vbox);
     QVBoxLayout *pluginSelectionBoxLayout = new QVBoxLayout(pluginSelectionBox);
 //    pluginSelectionBoxLayout->setMargin(0);
     vboxLayout->addWidget(pluginSelectionBox);
 
-    makePluginParamsBox(vbox); // creates a GroupBox
+    // Plugin parameters group box (m_pluginParamsBox).
+    makePluginParamsBox(vbox);
     vboxLayout->addWidget(m_pluginParamsBox);
 
     // the Category label/combo
@@ -117,8 +119,10 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
     pluginPluginBoxLayout->setMargin(0);
     pluginSelectionBoxLayout->addWidget(pluginPluginBox);
 
+    // Plugin label
     pluginPluginBoxLayout->addWidget(new QLabel(tr("Plugin:"), pluginPluginBox));
 
+    // Plugin combo box
     m_pluginList = new QComboBox(pluginPluginBox);
     pluginPluginBoxLayout->addWidget(m_pluginList);
     m_pluginList->setMaxVisibleItems(20);
@@ -298,7 +302,7 @@ AudioPluginDialog::populatePluginCategoryList()
 void
 AudioPluginDialog::populatePluginList()
 {
-    RG_DEBUG << "AudioPluginDialog::populatePluginList()";
+    //RG_DEBUG << "populatePluginList()";
 
     m_pluginList->clear();
     m_pluginsInList.clear();
@@ -309,6 +313,7 @@ AudioPluginDialog::populatePluginList()
     QString category;
     bool needCategory = false;
 
+    // If a category other than the first is selected in the combobox
     if (m_pluginCategoryList->currentIndex() > 0) {
         needCategory = true;
         if (m_pluginCategoryList->currentIndex() == 1) {
@@ -318,41 +323,42 @@ AudioPluginDialog::populatePluginList()
         }
     }
 
-    // Check for plugin and setup as required
-    AudioPluginInstance *inst = m_pluginContainer->getPlugin(m_index);
-    if (inst) m_bypass->setChecked(inst->isBypassed());
-
     // Use this temporary map to ensure that the plugins are sorted
-    // by name when they go into the combobox
-    typedef std::pair<int, AudioPlugin *> PluginPair;
+    // by name when they go into the combobox.
+    // The count is the AudioPluginManager index.
+    typedef std::pair<int /* count */, AudioPlugin *> PluginPair;
     typedef std::map<QString, PluginPair> PluginMap;
-    PluginMap plugins;
+    PluginMap pluginsSorted;
     int count = 0;
 
+    // For each plugin in the AudioPluginManager
     for (PluginIterator i = m_pluginManager->begin();
          i != m_pluginManager->end(); ++i) {
 
+        AudioPlugin *plugin = (*i);
+
         ++count;
 
-        if (( isSynth() && (*i)->isSynth()) ||
-            (!isSynth() && (*i)->isEffect())) {
+        // If this is the kind of plugin we are displaying
+        if ((isSynth()  &&  plugin->isSynth())  ||
+            (!isSynth()  &&  plugin->isEffect())) {
 
             if (needCategory) {
                 QString cat = "";
-                if (!(*i)->getCategory().isEmpty())
-                    cat = (*i)->getCategory();
+                if (!plugin->getCategory().isEmpty())
+                    cat = plugin->getCategory();
                 if (cat != category)
                     continue;
             }
 
-            QString name = (*i)->getName();
+            QString name = plugin->getName();
             bool store = true;
 
-            if (plugins.find(name) != plugins.end()) {
+            if (pluginsSorted.find(name) != pluginsSorted.end()) {
                 // We already have a plugin of this name.  If it's a
                 // LADSPA plugin, replace it (this one might be
                 // something better); otherwise leave it alone.
-                QString id = plugins[name].second->getIdentifier();
+                QString id = pluginsSorted[name].second->getIdentifier();
                 QString type, soname, label;
                 PluginIdentifier::parseIdentifier(id, type, soname, label);
                 if (type != "ladspa") {
@@ -361,16 +367,27 @@ AudioPluginDialog::populatePluginList()
             }
 
             if (store) {
-                plugins[(*i)->getName()] = PluginPair(count, *i);
+                pluginsSorted[plugin->getName()] = PluginPair(count, plugin);
             }
         }
     }
 
-    const char *currentId = 0;
-    if (inst && inst->isAssigned())
-        currentId = inst->getIdentifier().c_str();
+    // Check for plugin and setup as required
+    AudioPluginInstance *plugin = m_pluginContainer->getPlugin(m_index);
+    if (plugin)
+        m_bypass->setChecked(plugin->isBypassed());
 
-    for (PluginMap::iterator i = plugins.begin(); i != plugins.end(); ++i) {
+    QString currentId;
+
+    if (plugin  &&  plugin->isAssigned()) {
+        RG_DEBUG << "  plugin->getIdentifier(): " << plugin->getIdentifier();
+        currentId = plugin->getIdentifier().c_str();
+    }
+
+    // For each plugin in the sorted map
+    for (PluginMap::iterator i = pluginsSorted.begin();
+         i != pluginsSorted.end();
+         ++i) {
 
         QString name = i->first;
         if (name.endsWith(" VST"))
@@ -379,7 +396,8 @@ AudioPluginDialog::populatePluginList()
         m_pluginList->addItem(name);
         m_pluginsInList.push_back(i->second.first);
 
-        if (currentId && currentId == i->second.second->getIdentifier()) {
+        // If this is the plugin that is selected, select it in the combobox.
+        if (currentId == i->second.second->getIdentifier()) {
             m_pluginList->setCurrentIndex(m_pluginList->count() - 1);
         }
     }
