@@ -58,9 +58,10 @@ public:
     static CommandHistory *getInstance();
 
     void clear();
-    
-    void registerMenu(QMenu *menu);
-    void registerToolbar(QToolBar *toolbar);
+
+    // These are done by the .rc file these days.
+    //void registerMenu(QMenu *menu);
+    //void registerToolbar(QToolBar *toolbar);
 
     /**
      * Add a command to the command history.
