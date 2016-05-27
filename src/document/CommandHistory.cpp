@@ -47,12 +47,14 @@ CommandHistory::CommandHistory() :
     m_bundleTimer(0),
     m_bundleTimeout(5000)
 {
+    // All Edit > Undo menu items share this QAction object.
     m_undoAction = new QAction(QIcon(":/icons/undo.png"), tr("&Undo"), this);
     m_undoAction->setObjectName("edit_undo");
     m_undoAction->setShortcut(tr("Ctrl+Z"));
     m_undoAction->setStatusTip(tr("Undo the last editing operation"));
     connect(m_undoAction, SIGNAL(triggered()), this, SLOT(undo()));
-    
+
+    // Undo button for the main window toolbar.
     m_undoMenuAction = new QAction(QIcon(":/icons/undo.png"), tr("&Undo"), this);
     m_undoMenuAction->setObjectName("edit_toolbar_undo");
     connect(m_undoMenuAction, SIGNAL(triggered()), this, SLOT(undo()));
@@ -62,12 +64,14 @@ CommandHistory::CommandHistory() :
     connect(m_undoMenu, SIGNAL(triggered(QAction *)),
             this, SLOT(undoActivated(QAction*)));
 
+    // All Edit > Redo menu items share this QAction object.
     m_redoAction = new QAction(QIcon(":/icons/redo.png"), tr("Re&do"), this);
     m_redoAction->setObjectName("edit_redo");
     m_redoAction->setShortcut(tr("Ctrl+Shift+Z"));
     m_redoAction->setStatusTip(tr("Redo the last operation that was undone"));
     connect(m_redoAction, SIGNAL(triggered()), this, SLOT(redo()));
     
+    // Redo button for the main window toolbar.
     m_redoMenuAction = new QAction(QIcon(":/icons/redo.png"), tr("Re&do"), this);
     m_redoMenuAction->setObjectName("edit_toolbar_redo");
     connect(m_redoMenuAction, SIGNAL(triggered()), this, SLOT(redo()));
