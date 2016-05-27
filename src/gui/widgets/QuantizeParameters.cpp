@@ -256,6 +256,7 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
         m_notationBox->hide();
         m_durationCheckBox->hide();
         m_typeCombo->setCurrentIndex(1);
+        break;
     case 2:  // notation
         m_gridBox->hide();
         m_notationBox->show();
@@ -357,10 +358,9 @@ QuantizeParameters::getQuantizer() const
                            m_maxTuplet->currentIndex() + 1);
         settings.setValue("quantizecounterpoint",
                            m_counterpoint->isChecked());
-        settings.setValue("quantizearticulate",
-                           m_articulate->isChecked());
     }
     settings.setValue("quantizerebeam", m_rebeam->isChecked());
+    settings.setValue("quantizearticulate", m_articulate->isChecked());
     settings.setValue("quantizemakeviable", m_makeViable->isChecked());
     settings.setValue("quantizedecounterpoint", m_deCounterpoint->isChecked());
 
