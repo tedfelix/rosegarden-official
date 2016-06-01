@@ -23,6 +23,11 @@
 #include "base/Composition.h"
 #include "base/MidiProgram.h"
 #include "base/Track.h"
+#include "base/Instrument.h"
+#include "base/Studio.h"
+#include "document/RosegardenDocument.h"
+#include "gui/application/RosegardenMainWindow.h"
+
 #include <QString>
 
 
@@ -127,6 +132,12 @@ void AddTracksCommand::execute()
     }
 
     m_composition->notifyTracksAdded(trackIds);
+
+    // Send channel setup in case it hasn't been sent for this instrument.
+    RosegardenDocument *document = RosegardenMainWindow::self()->getDocument();
+    Instrument *instrument =
+            document->getStudio().getInstrumentById(m_instrumentId);
+    instrument->sendChannelSetup();
 }
 
 void AddTracksCommand::unexecute()

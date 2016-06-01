@@ -919,19 +919,49 @@ void RosegardenDocument::initialiseStudio()
 
             pluginContainers.push_back(&instrument);
 
-        } else if (instrument.getType() == Instrument::Midi) {
-            // Call Instrument::sendChannelSetup() to make sure the program
-            // change for this track has been sent out.
-            // The test case (MIPP #35) for this is a bit esoteric:
-            //   1. Load a composition and play it.
-            //   2. Load a different composition, DO NOT play it.
-            //   3. Select tracks in the new composition and play the MIDI
-            //      input keyboard.
-            //   4. Verify that you hear the programs for the new composition.
-            // Without the following, you'll hear the programs for the old
-            // composition.
-            instrument.sendChannelSetup();
         }
+    }
+
+    std::set<InstrumentId> instrumentsSeen;
+
+    // For each track in the composition, send the channel setup
+    for (Composition::trackcontainer::const_iterator i =
+             m_composition.getTracks().begin();
+         i != m_composition.getTracks().end();
+         ++i) {
+
+        //const TrackId trackId = i->first;
+        const Track *track = i->second;
+
+        InstrumentId instrumentId = track->getInstrument();
+
+        // If we've already seen this instrument, try the next track.
+        if (instrumentsSeen.find(instrumentId) != instrumentsSeen.end())
+            continue;
+
+        instrumentsSeen.insert(instrumentId);
+
+        Instrument *instrument = m_studio.getInstrumentById(instrumentId);
+
+        // If this isn't a MIDI instrument, try the next track.
+        if (instrument->getType() != Instrument::Midi)
+            continue;
+
+        // If this instrument isn't in fixed channel mode, try the next track.
+        if (!instrument->hasFixedChannel())
+            continue;
+
+        // Call Instrument::sendChannelSetup() to make sure the program
+        // change for this track has been sent out.
+        // The test case (MIPP #35) for this is a bit esoteric:
+        //   1. Load a composition and play it.
+        //   2. Load a different composition, DO NOT play it.
+        //   3. Select tracks in the new composition and play the MIDI
+        //      input keyboard.
+        //   4. Verify that you hear the programs for the new composition.
+        // Without the following, you'll hear the programs for the old
+        // composition.
+        instrument->sendChannelSetup();
     }
 
     RG_DEBUG << "initialiseStudio(): Have " << pluginContainers.size() << " plugin container(s)";
