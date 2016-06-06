@@ -159,7 +159,7 @@
     <Action name="switch_preset" text="&amp;Convert Notation for..." />
   <Separator/>
     <Action name="add_layer" text="Add &amp;Layer" icon="add-layer" shortcut="Ctrl+Alt++" />
-    <Action name="magic_layer" text="New Layer from &amp;Selection" icon="magic-layer" shortcut="Ctrl+Shift++" />
+    <Action name="magic_layer" text="New Layer from &amp;Selection" icon="layer-from-selection" shortcut="Ctrl+Shift++" />
   <Separator/>
     <Action name="unadopt_segment" text="Unadopt an Adopted Segment" />
   </Menu>
