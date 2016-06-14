@@ -61,7 +61,6 @@ ControlBlock::getInstance()
 ControlBlock::ControlBlock() :
     m_doc(0),
     m_maxTrackId(0),
-    m_solo(false),
     m_thruFilter(0),
     m_recordFilter(0),
     m_selectedTrack(0)

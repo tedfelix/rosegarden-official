@@ -200,9 +200,6 @@ public:
     void setMetronomeMuted(bool mute) { m_metronomeInfo.m_muted = mute; }
     bool isMetronomeMuted() const     { return m_metronomeInfo.m_muted; }
 
-    void setSolo(bool value) { m_solo = value; }
-    bool isSolo() const      { return m_solo; }
-
     void setSelectedTrack(TrackId track);
     TrackId getSelectedTrack() const     { return m_selectedTrack; }
 
@@ -230,7 +227,6 @@ private:
 
     unsigned int m_maxTrackId;
 
-    bool m_solo;
     bool m_isSelectedChannelReady;
     MidiFilter m_thruFilter;
     MidiFilter m_recordFilter;
