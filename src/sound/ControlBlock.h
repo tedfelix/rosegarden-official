@@ -91,6 +91,7 @@ public:
 
     bool m_muted;
     bool m_armed;
+    bool m_solo;
 
     /// Recording filters: Device
     DeviceId m_deviceFilter;
@@ -172,6 +173,9 @@ public:
     void setTrackMuted(TrackId trackId, bool muted);
     bool isTrackMuted(TrackId trackId) const;
     bool isInstrumentMuted(InstrumentId instrumentId) const;
+
+    void setSolo(TrackId trackId, bool solo);
+    bool isSolo(TrackId trackId) const;
 
     void setTrackDeleted(TrackId trackId, bool deleted);
     //bool isTrackDeleted(TrackId trackId) const;

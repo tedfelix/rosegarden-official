@@ -38,6 +38,7 @@ void TrackInfo::clear()
     m_deleted = true;
     m_muted = true;
     m_armed = false;
+    m_solo = false;
     m_deviceFilter = 0;
     m_channelFilter = 0;
     m_thruRouting = Track::Auto;
@@ -163,6 +164,19 @@ bool ControlBlock::isTrackMuted(TrackId trackId) const
     if (trackId < CONTROLBLOCK_MAX_NB_TRACKS)
         return m_trackInfo[trackId].m_muted;
     return true;
+}
+
+void ControlBlock::setSolo(TrackId trackId, bool solo)
+{
+    if (trackId < CONTROLBLOCK_MAX_NB_TRACKS)
+        m_trackInfo[trackId].m_solo = solo;
+}
+
+bool ControlBlock::isSolo(TrackId trackId) const
+{
+    if (trackId < CONTROLBLOCK_MAX_NB_TRACKS)
+        return m_trackInfo[trackId].m_solo;
+    return false;
 }
 
 void
