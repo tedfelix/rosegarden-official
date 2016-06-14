@@ -46,6 +46,7 @@
 #include "sound/PluginIdentifier.h"
 #include "sequencer/RosegardenSequencer.h"
 
+#include <QApplication>
 #include <QLayout>
 #include <QMessageBox>
 #include <QCursor>
@@ -347,9 +348,11 @@ TrackButtons::slotToggleSolo(int pos)
 
     bool state = !track->isSolo();
 
-    // If we're setting solo on this track, clear solo on all tracks.
-    // Canceling mode.
-    if (state) {
+    // If we're setting solo on this track and shift isn't being held down,
+    // clear solo on all tracks (canceling mode).  If shift is being held
+    // down, multiple tracks can be put into solo (latching mode).
+    if (state  &&
+        QApplication::keyboardModifiers() != Qt::ShiftModifier) {
         // For each track
         for (int i = 0; i < m_tracks; ++i) {
             // Except the one that is being toggled.
