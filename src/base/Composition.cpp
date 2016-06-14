@@ -178,7 +178,6 @@ Composition::ReferenceSegment::findNearestRealTime(RealTime t)
 int Composition::m_defaultNbBars = 100;
 
 Composition::Composition() :
-    m_solo(false),   // default is not soloing
     m_selectedTrackId(0),
     m_timeSigSegment(TimeSignature::EventType),
     m_tempoSegment(TempoEventType),
@@ -659,7 +658,6 @@ Composition::clear()
     m_position = 0;
     m_startMarker = 0;
     m_endMarker = getBarRange(m_defaultNbBars).first;
-    m_solo = false;
     m_selectedTrackId = 0;
     updateRefreshStatuses();
 }
@@ -1712,13 +1710,10 @@ void Composition::resetTrackIdAndPosition(TrackId oldId, TrackId newId,
 void Composition::setSelectedTrack(TrackId trackId)
 {
     m_selectedTrackId = trackId;
-    notifySoloChanged();
-}
 
-void Composition::setSolo(bool value)
-{
-    m_solo = value;
-    notifySoloChanged();
+    // SequenceManager needs to update ControlBlock for auto thru routing
+    // to work.
+    notifySelectedTrackChanged();
 }
 
 // Insert a Track representation into the Composition
@@ -1798,7 +1793,10 @@ void Composition::checkSelectedAndRecordTracks()
     if (m_tracks.find(m_selectedTrackId) == m_tracks.end()) {
 
         m_selectedTrackId = getClosestValidTrackId(m_selectedTrackId);
-        notifySoloChanged();
+
+        // SequenceManager needs to update ControlBlock for auto thru routing
+        // to work.
+        notifySelectedTrackChanged();
         
     }
 
@@ -2326,20 +2324,20 @@ Composition::notifyTimeSignatureChanged() const
 }
 
 void
-Composition::notifySoloChanged() const
-{
-    for (ObserverSet::const_iterator i = m_observers.begin();
-         i != m_observers.end(); ++i) {
-        (*i)->soloChanged(this, isSolo(), getSelectedTrack());
-    }
-}
-
-void
 Composition::notifyTempoChanged() const
 {
     for (ObserverSet::const_iterator i = m_observers.begin();
          i != m_observers.end(); ++i) {
         (*i)->tempoChanged(this);
+    }
+}
+
+void
+Composition::notifySelectedTrackChanged() const
+{
+    for (ObserverSet::const_iterator i = m_observers.begin();
+         i != m_observers.end(); ++i) {
+        (*i)->selectedTrackChanged(this);
     }
 }
 

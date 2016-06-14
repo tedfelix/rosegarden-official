@@ -191,7 +191,7 @@ public:
     virtual void tracksDeleted             (const Composition*, std::vector<TrackId> &/*trackIds*/);
     virtual void timeSignatureChanged      (const Composition*);
     virtual void metronomeChanged          (const Composition*);
-    virtual void soloChanged               (const Composition*, bool solo, TrackId selectedTrack);
+    virtual void selectedTrackChanged      (const Composition *);
     virtual void tempoChanged              (const Composition*);
 
     void processAddedSegment(Segment*);

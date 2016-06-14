@@ -329,17 +329,7 @@ EditViewBase::slotSetSegmentDuration()
 void
 EditViewBase::slotCompositionStateUpdate()
 {
-    // update state of 'solo' toggle
-    //
-    QAction *toggleSolo = findAction("toggle_solo");
-    if (!toggleSolo) return;
-
-    toggleSolo->setChecked(getDocument()->getComposition().isSolo());
-    RG_DEBUG << "EditViewBase::slotCompositionStateUpdate(): set solo to "
-             << (toggleSolo->isChecked() ? "true" : "false") << endl;
-
     // update the window caption
-    //
     updateViewCaption();
 }
 

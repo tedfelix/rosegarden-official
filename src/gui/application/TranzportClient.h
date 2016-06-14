@@ -179,9 +179,6 @@ private:
     std::queue<CommandType> commands;
       
     // CompositionObserver overrides
-    virtual void soloChanged(const Composition *,
-                             bool solo,
-                             TrackId selectedTrack);
     virtual void trackChanged(const Composition *c, Track* t);
     // tracksAdded() need not be overridden as adding a track will not change
     // anything the TranzPort would display.

@@ -168,7 +168,12 @@ TranzportClient::documentChanged(RosegardenDocument* doc)
     }
     stateUpdate();
 }
-    
+
+#if 0
+// soloChanged() has been removed.  Solo has moved from Composition to
+// Track.  The new CompositionObserver::selectedTrackChanged() might be
+// of interest in bringing this back to life.
+
 /**
  * Called when solo status changes (solo on/off, and selected track)
  */
@@ -203,6 +208,7 @@ TranzportClient::soloChanged(const Composition * c,
         LCDWrite(track->getLabel(), Bottom);
     }
 }
+#endif
 
 /**
  * Called when a track is changed (instrument id, muted status...)
@@ -258,11 +264,12 @@ TranzportClient::stateUpdate()
     if (device_online) {
         LCDWrite("Rosegarden");
 
-        if (m_composition->isSolo()) {
-            LightOn(LightAnysolo);
-        } else {
+        // No longer supported.  Solo has moved to Track.
+        //if (m_composition->isSolo()) {
+        //    LightOn(LightAnysolo);
+        //} else {
             LightOff(LightAnysolo);
-        }
+        //}
 
         if (m_composition->isLooping()) {
             LightOn(LightLoop);
@@ -441,6 +448,8 @@ TranzportClient::readData()
             return;
         }
 
+        // Solo has moved to Track.
+#if 0
         if (new_buttons & TrackSolo  and
             current_buttons & TrackSolo) {
             if (current_buttons & Shift) {
@@ -448,6 +457,7 @@ TranzportClient::readData()
                 emit solo(not soloflag);
             }
         }
+#endif
 
         if (new_buttons & Add  and
             current_buttons & Add) {

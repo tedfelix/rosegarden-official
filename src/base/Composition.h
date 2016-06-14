@@ -150,7 +150,6 @@ public:
      * rename: getSelectedTrackId()
      *
      * @see setSelectedTrack()
-     * @see setSolo()
      */
     TrackId getSelectedTrack() const { return m_selectedTrackId; }
     /**
@@ -159,19 +158,6 @@ public:
      * @see getSelectedTrack()
      */
     void setSelectedTrack(TrackId trackId);
-
-    /// Are we soloing the selected track?
-    /**
-     * @see setSolo()
-     * @see getSelectedTrack()
-     */
-    bool isSolo() const { return m_solo; }
-    /// Enable or disable solo of the selected track.
-    /**
-     * @see isSolo()
-     * @see getSelectedTrack()
-     */
-    void setSolo(bool value);
 
     /// Total number of tracks in the composition.
     unsigned int getNbTracks() const { return m_tracks.size(); }
@@ -969,9 +955,6 @@ protected:
     //
     recordtrackcontainer m_recordTracks;
 
-    /// Are we soloing the selected Track?
-    bool m_solo;
-
     TrackId m_selectedTrackId;
 
     /**
@@ -1061,8 +1044,8 @@ protected:
     void notifyEndMarkerChange(bool shorten) const;
     void notifyMetronomeChanged() const;
     void notifyTimeSignatureChanged() const;
-    void notifySoloChanged() const;
     void notifyTempoChanged() const;
+    void notifySelectedTrackChanged() const;
     void notifySourceDeletion() const;
 
     void clearVoiceCaches();
@@ -1232,12 +1215,10 @@ public:
      */
     virtual void metronomeChanged(const Composition *) { }
 
-    /// Called when solo status changes (solo on/off, and selected track)
-    virtual void soloChanged(const Composition *, bool /* solo */,
-                             TrackId /* selectedTrack */) { }
-
     virtual void tempoChanged(const Composition *) { }
     
+    virtual void selectedTrackChanged(const Composition *) { }
+
     /**
      * Called from the composition dtor
      */
