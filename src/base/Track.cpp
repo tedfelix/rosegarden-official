@@ -25,28 +25,6 @@
 namespace Rosegarden
 {
 
-#if 0
-Track::Track():
-   m_id(0),
-   m_muted(false),
-   m_position(-1),
-   m_instrument(0),
-   m_owningComposition(0),
-   m_input_device(Device::ALL_DEVICES),
-   m_input_channel(-1),
-   m_thruRouting(Auto),
-   m_armed(false),
-   m_clef(0),
-   m_transpose(0),
-   m_color(0),
-   m_highestPlayable(127),
-   m_lowestPlayable(0),
-   m_staffSize(StaffTypes::Normal),
-   m_staffBracket(Brackets::None)
-{
-}
-#endif
-
 Track::Track(TrackId id,
              InstrumentId instrument,
              int position,
