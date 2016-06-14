@@ -831,6 +831,10 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
                     static_cast<Track::ThruRouting>(thruRoutingStr.toInt()));
         }
 
+        QString soloStr = atts.value("solo");
+        if (soloStr == "true")
+            track->setSolo(true);
+
         // If the composition tag had this track set to record, make sure
         // it is armed.
         if (getComposition().isTrackRecording(id)) {

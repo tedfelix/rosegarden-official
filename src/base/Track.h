@@ -72,6 +72,9 @@ public:
     void setMuted(bool muted);
     bool isMuted() const { return m_muted; }
 
+    void setSolo(bool solo)  { m_solo = solo; }
+    bool isSolo() const  { return m_solo; }
+
     void setPosition(int position) { m_position = position; }
     int getPosition() const { return m_position; }
 
@@ -142,6 +145,7 @@ private:
 
     TrackId        m_id;
     bool           m_muted;
+    bool           m_solo;
     std::string    m_label;
     std::string    m_shortLabel;
     std::string    m_presetLabel;
