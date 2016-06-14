@@ -124,6 +124,7 @@ ControlBlock::updateTrackData(Track* t)
         setInstrumentForTrack(t->getId(), t->getInstrument());
         setTrackArmed(t->getId(), t->isArmed());
         setTrackMuted(t->getId(), t->isMuted());
+        setSolo(t->getId(), t->isSolo());
         setTrackDeleted(t->getId(), false);
         setTrackDeviceFilter(t->getId(), t->getMidiInputDevice());
         setTrackChannelFilter(t->getId(), t->getMidiInputChannel());
