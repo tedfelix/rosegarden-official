@@ -1919,11 +1919,6 @@ std::string Composition::toXmlString() const
     if (m_autoExpand)
         composition << "\" autoExpand=\"" << m_autoExpand;
 
-    // Add the Solo if set
-    //
-    if (m_solo)
-        composition << "\" solo=\"" << m_solo;
-
     composition << "\" selected=\"" << m_selectedTrackId;
     composition << "\" playmetronome=\"" << m_playMetronome;
     composition << "\" recordmetronome=\"" << m_recordMetronome;

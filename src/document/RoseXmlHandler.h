@@ -188,6 +188,10 @@ protected:
     bool                              m_cancelled;
     bool                              m_skipAllAudio;
     bool                              m_hasActiveAudio;
+
+    // In case we encounter an old solo attribute at the composition level,
+    // hold onto it and use it to set the solo for the proper track.
+    bool m_oldSolo;
 };
 
 

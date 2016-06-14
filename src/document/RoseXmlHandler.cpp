@@ -236,8 +236,8 @@ RoseXmlHandler::RoseXmlHandler(RosegardenDocument *doc,
     m_haveControls(false),
     m_cancelled(false),
     m_skipAllAudio(false),
-    m_hasActiveAudio(false)
-
+    m_hasActiveAudio(false),
+    m_oldSolo(false)
 {}
 
 RoseXmlHandler::~RoseXmlHandler()
@@ -657,13 +657,10 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         }
 
         QString soloTrackStr = atts.value("solo");
-        if (!soloTrackStr.isEmpty()) {
+        m_oldSolo = false;
+        if (!soloTrackStr.isEmpty())
             if (soloTrackStr.toInt() == 1)
-                getComposition().setSolo(true);
-            else
-                getComposition().setSolo(false);
-        }
-
+                m_oldSolo = true;
 
         QString playMetStr = atts.value("playmetronome");
         if (!playMetStr.isEmpty()) {
@@ -765,6 +762,14 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
                                  position,
                                  label,
                                  muted);
+
+        if (m_oldSolo) {
+            // if this is the selected track
+            if (static_cast<TrackId>(id) ==
+                    getComposition().getSelectedTrack()) {
+                track->setSolo(true);
+            }
+        }
 
         QString shortLabelStr = atts.value("shortLabel");
         if (!shortLabelStr.isEmpty()) {
