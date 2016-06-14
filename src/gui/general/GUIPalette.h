@@ -171,6 +171,7 @@ public:
     static const char* const QuickMarker;
 
     static const char* const MuteTrackLED;
+    static const char* const SoloTrackLED;
     static const char* const RecordMIDITrackLED;
     static const char* const RecordAudioTrackLED;
     static const char* const RecordSoftSynthTrackLED;

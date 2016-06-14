@@ -218,6 +218,7 @@ GUIPalette::GUIPalette()
 
     //    m_defaultsMap[MuteTrackLED] = QColor(218, 190, 230, QColor::Hsv);
     m_defaultsMap[MuteTrackLED] = QColor::fromHsv(211, 194, 238);
+    m_defaultsMap[SoloTrackLED] = QColor::fromHsv(120, 255, 144);
     m_defaultsMap[RecordMIDITrackLED] = QColor::fromHsv(45, 250, 225);
     m_defaultsMap[RecordAudioTrackLED] = QColor::fromHsv(0, 250, 225);
     m_defaultsMap[RecordSoftSynthTrackLED] = QColor(255, 120, 0);
@@ -352,6 +353,7 @@ const char* const GUIPalette::MarkerBackground = "markerbackground";
 const char* const GUIPalette::QuickMarker = "quickmarker";
 
 const char* const GUIPalette::MuteTrackLED = "mutetrackled";
+const char* const GUIPalette::SoloTrackLED = "solotrackled";
 const char* const GUIPalette::RecordMIDITrackLED = "recordmiditrackled";
 const char* const GUIPalette::RecordAudioTrackLED = "recordaudiotrackled";
 const char* const GUIPalette::RecordSoftSynthTrackLED = "recordsoftsynthtrackled";

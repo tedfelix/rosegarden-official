@@ -85,6 +85,7 @@ TrackButtons::TrackButtons(RosegardenDocument* doc,
         m_layout(new QVBoxLayout(this)),
         m_recordSigMapper(new QSignalMapper(this)),
         m_muteSigMapper(new QSignalMapper(this)),
+        m_soloSigMapper(new QSignalMapper(this)),
         m_clickedSigMapper(new QSignalMapper(this)),
         m_instListSigMapper(new QSignalMapper(this)),
         m_tracks(doc->getComposition().getNbTracks()),
@@ -119,6 +120,9 @@ TrackButtons::TrackButtons(RosegardenDocument* doc,
 
     connect(m_muteSigMapper, SIGNAL(mapped(int)),
             this, SLOT(slotToggleMute(int)));
+
+    connect(m_soloSigMapper, SIGNAL(mapped(int)),
+            this, SLOT(slotToggleSolo(int)));
 
     // connect signal mappers
     connect(m_instListSigMapper, SIGNAL(mapped(int)),
@@ -179,6 +183,12 @@ TrackButtons::updateUI(Track *track)
     bool recording =
         m_doc->getComposition().isTrackRecording(track->getId());
     setRecordButton(pos, recording);
+
+
+    // *** Solo LED
+
+    // ??? An Led::setState(bool) would be handy.
+    m_soloLeds[pos]->setState(track->isSolo() ? Led::On : Led::Off);
 
 
     // *** Track Label
@@ -305,6 +315,55 @@ TrackButtons::slotToggleMute(int pos)
 }
 
 void
+TrackButtons::slotToggleSolo(int pos)
+{
+    //RG_DEBUG << "slotToggleSolo( position =" << pos << ")";
+
+    if (!m_doc)
+        return;
+
+    if (pos < 0  ||  pos >= m_tracks)
+        return;
+
+    Composition &comp = m_doc->getComposition();
+    Track *track = comp.getTrackByPosition(pos);
+
+    if (!track)
+        return;
+
+    bool state = !track->isSolo();
+
+    // If we're setting solo on this track, clear solo on all tracks.
+    // Canceling mode.
+    if (state) {
+        // For each track
+        for (int i = 0; i < m_tracks; ++i) {
+            // Except the one that is being toggled.
+            if (i == pos)
+                continue;
+
+            Track *track2 = comp.getTrackByPosition(i);
+
+            if (!track2)
+                continue;
+
+            if (track2->isSolo()) {
+                // Clear solo
+                track2->setSolo(false);
+                comp.notifyTrackChanged(track2);
+            }
+        }
+    }
+
+    // Toggle the solo state
+    track->setSolo(state);
+
+    // Notify observers
+    comp.notifyTrackChanged(track);
+    m_doc->slotDocumentModified();
+}
+
+void
 TrackButtons::removeButtons(int position)
 {
     //RG_DEBUG << "removeButtons() - deleting track button at position:" << position;
@@ -329,6 +388,8 @@ TrackButtons::removeButtons(int position)
     mit = m_recordLeds.begin();
     mit += position;
     m_recordLeds.erase(mit);
+
+    m_soloLeds.erase(m_soloLeds.begin() + position);
 
     // Delete all child widgets (button, led, label...)
     delete m_trackHBoxes[position];
@@ -1077,6 +1138,22 @@ TrackButtons::makeButton(Track *track)
     m_recordLeds.push_back(record);
 
     record->setFixedSize(m_cellSize - m_buttonGap, m_cellSize - m_buttonGap);
+
+
+    // *** Solo LED ***
+
+    LedButton *solo = new LedButton(
+            GUIPalette::getColour(GUIPalette::SoloTrackLED), trackHBox);
+    solo->setToolTip(tr("Solo track"));
+    hblayout->addWidget(solo);
+
+    connect(solo, SIGNAL(stateChanged(bool)),
+            m_soloSigMapper, SLOT(map()));
+    m_soloSigMapper->setMapping(solo, track->getPosition());
+
+    m_soloLeds.push_back(solo);
+
+    solo->setFixedSize(m_cellSize - m_buttonGap, m_cellSize - m_buttonGap);
 
 
     // *** Track Label ***

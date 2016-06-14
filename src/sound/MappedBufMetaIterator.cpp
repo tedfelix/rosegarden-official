@@ -462,17 +462,6 @@ MappedBufMetaIterator::getAudioEvents(std::vector<MappedEvent> &audioEvents)
                 continue;
             }
 
-#if 1
-            // If we're in solo mode and this event isn't on the solo track,
-            // try the next event.
-            if (controlBlock->isSolo() == true  &&
-                trackId != controlBlock->getSelectedTrack()) {
-#ifdef DEBUG_PLAYING_AUDIO_FILES
-                RG_DEBUG << "getAudioEvents(): track " << trackId << " is not solo track";
-#endif
-                continue;
-            }
-#else
             // If we're in solo mode and this event isn't on the solo track,
             // try the next event.
             if (controlBlock->isAnyTrackInSolo()  &&
@@ -482,7 +471,6 @@ MappedBufMetaIterator::getAudioEvents(std::vector<MappedEvent> &audioEvents)
 #endif
                 continue;
             }
-#endif
 
             // ??? Why does this need to contain copies?  Can we simplify
             //     to pointers to the originals?

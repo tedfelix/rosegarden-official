@@ -223,6 +223,13 @@ protected slots:
      */
     void slotToggleMute(int position);
 
+    /// Toggles the solo state for the track at the given position.
+    /**
+     * Called when the user clicks on a solo button.
+     * @see m_soloSigMapper
+     */
+    void slotToggleSolo(int position);
+
 protected:
 
     /// Initializes the instrument names.
@@ -307,6 +314,7 @@ protected:
     std::vector<TrackVUMeter *>       m_trackMeters;
     std::vector<LedButton *>          m_muteLeds;
     std::vector<LedButton *>          m_recordLeds;
+    std::vector<LedButton *>          m_soloLeds;
     std::vector<TrackLabel *>         m_trackLabels;
 
     /**
@@ -317,6 +325,7 @@ protected:
 
     QSignalMapper                    *m_recordSigMapper;
     QSignalMapper                    *m_muteSigMapper;
+    QSignalMapper                    *m_soloSigMapper;
     QSignalMapper                    *m_clickedSigMapper;
     QSignalMapper                    *m_instListSigMapper;
 
