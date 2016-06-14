@@ -106,6 +106,12 @@ public:
      */
     void populateInstrumentPopup(Instrument *thisTrackInstr, QMenu* instrumentPopup);
 
+    /// Toggle solo on the selected track.
+    /**
+     * Used by the solo buttons/menu items on the various editors.
+     */
+    void toggleSolo();
+
 signals:
     /// Emitted when a track button has been clicked.
     /**

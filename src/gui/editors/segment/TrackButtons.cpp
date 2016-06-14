@@ -314,6 +314,20 @@ TrackButtons::slotToggleMute(int pos)
     m_doc->slotDocumentModified();
 }
 
+void TrackButtons::toggleSolo()
+{
+    if (!m_doc)
+        return;
+
+    Composition &comp = m_doc->getComposition();
+    int pos = comp.getTrackPositionById(comp.getSelectedTrack());
+
+    if (pos == -1)
+        return;
+
+    slotToggleSolo(pos);
+}
+
 void
 TrackButtons::slotToggleSolo(int pos)
 {

@@ -1160,9 +1160,6 @@ RosegardenMainWindow::initView()
     // set the play metronome button
     getTransport()->MetronomeButton()->setChecked(comp.usePlayMetronome());
 
-    // Set the solo button
-    getTransport()->SoloButton()->setChecked(comp.isSolo());
-
     // set the transport mode found in the configuration
     getTransport()->setNewMode(transportMode);
 
@@ -5930,16 +5927,10 @@ RosegardenMainWindow::slotSetLoopStop()
 }
 
 void
-RosegardenMainWindow::slotToggleSolo(bool value)
+RosegardenMainWindow::slotToggleSolo(bool)
 {
-    RG_DEBUG << "RosegardenMainWindow::slotToggleSolo value = " << value;
-
-    m_doc->getComposition().setSolo(value);
-    getTransport()->SoloButton()->setChecked(value);
-
-    m_doc->slotDocumentModified();
-
-    emit compositionStateUpdate();
+    // Delegate to TrackButtons.
+    getView()->getTrackEditor()->getTrackButtons()->toggleSolo();
 }
 
 void
@@ -6487,7 +6478,7 @@ RosegardenMainWindow::plugShortcuts(QWidget *widget, QShortcut * /*acc*/)
                 SLOT(slotToggleMetronome()));
 
         connect(transport->SoloButton(),
-                SIGNAL(toggled(bool)),
+                SIGNAL(clicked(bool)),
                 this,
                 SLOT(slotToggleSolo(bool)));
 

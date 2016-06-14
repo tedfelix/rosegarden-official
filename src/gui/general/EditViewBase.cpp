@@ -259,25 +259,17 @@ EditViewBase::slotTestClipboard()
 void
 EditViewBase::slotToggleSolo()
 {
-    QAction *toggleSoloAction = findAction("toggle_solo");
-    if (!toggleSoloAction) return;
+    // Select the track for this segment.
+    getDocument()->getComposition().setSelectedTrack(
+            getCurrentSegment()->getTrack());
+    getDocument()->getComposition().notifyTrackSelectionChanged(
+            getCurrentSegment()->getTrack());
+    // Old notification mechanism.
+    emit selectTrack(getCurrentSegment()->getTrack());
 
-    bool newSoloState = toggleSoloAction->isChecked();
-
-    //RG_DEBUG << "EditViewBase::slotToggleSolo() : solo action is " << (toggleSoloAction->isCheckable() ? "" : "NOT") << " checkable.";
-    //RG_DEBUG << "EditViewBase::slotToggleSolo() : solo  = " << newSoloState;
-
-    emit toggleSolo(newSoloState);
-
-    if (newSoloState) {
-        getDocument()->getComposition().setSelectedTrack(
-                getCurrentSegment()->getTrack());
-        getDocument()->getComposition().notifyTrackSelectionChanged(
-                getCurrentSegment()->getTrack());
-
-        // Old notification mechanism.
-        emit selectTrack(getCurrentSegment()->getTrack());
-    }
+    // Toggle solo on the selected track.
+    // The "false" is ignored.  It was used for the checked state.
+    emit toggleSolo(false);
 }
 
 void
