@@ -146,23 +146,31 @@ public:
     void setTrackRecording(TrackId track, bool recording);
     bool isTrackRecording(TrackId track) const;
 
-    /// Get the selected (solo) track.
-    /// rename: getSelectedTrackId()
-    /// @see setSelectedTrack()
-    /// @see setSolo()
+    /**
+     * rename: getSelectedTrackId()
+     *
+     * @see setSelectedTrack()
+     * @see setSolo()
+     */
     TrackId getSelectedTrack() const { return m_selectedTrackId; }
-    /// Set the selected (solo) track.
-    /// rename: setSelectedTrackId()
-    /// @see getSelectedTrack()
+    /**
+     * rename: setSelectedTrackId()
+     *
+     * @see getSelectedTrack()
+     */
     void setSelectedTrack(TrackId trackId);
 
     /// Are we soloing the selected track?
-    /// @see setSolo()
-    /// @see getSelectedTrack()
+    /**
+     * @see setSolo()
+     * @see getSelectedTrack()
+     */
     bool isSolo() const { return m_solo; }
     /// Enable or disable solo of the selected track.
-    /// @see isSolo()
-    /// @see getSelectedTrack()
+    /**
+     * @see isSolo()
+     * @see getSelectedTrack()
+     */
     void setSolo(bool value);
 
     /// Total number of tracks in the composition.
@@ -961,8 +969,7 @@ protected:
     //
     recordtrackcontainer m_recordTracks;
 
-    // Are we soloing and if so which Track?
-    //
+    /// Are we soloing the selected Track?
     bool m_solo;
 
     TrackId m_selectedTrackId;
@@ -1225,15 +1232,10 @@ public:
      */
     virtual void metronomeChanged(const Composition *) { }
 
-    /**
-     * Called when solo status changes (solo on/off, and selected track)
-     */
+    /// Called when solo status changes (solo on/off, and selected track)
     virtual void soloChanged(const Composition *, bool /* solo */,
                              TrackId /* selectedTrack */) { }
 
-    /**
-     * Called when solo status changes (solo on/off, and selected track)
-     */
     virtual void tempoChanged(const Composition *) { }
     
     /**
