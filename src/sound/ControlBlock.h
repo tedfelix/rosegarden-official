@@ -176,6 +176,7 @@ public:
 
     void setSolo(TrackId trackId, bool solo);
     bool isSolo(TrackId trackId) const;
+    bool isAnyTrackInSolo() const;
 
     void setTrackDeleted(TrackId trackId, bool deleted);
     //bool isTrackDeleted(TrackId trackId) const;

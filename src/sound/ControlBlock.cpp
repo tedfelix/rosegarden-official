@@ -168,14 +168,35 @@ bool ControlBlock::isTrackMuted(TrackId trackId) const
 
 void ControlBlock::setSolo(TrackId trackId, bool solo)
 {
-    if (trackId < CONTROLBLOCK_MAX_NB_TRACKS)
-        m_trackInfo[trackId].m_solo = solo;
+    // Bail on invalid track ID.
+    if (trackId >= CONTROLBLOCK_MAX_NB_TRACKS)
+        return;
+
+    m_trackInfo[trackId].m_solo = solo;
 }
 
 bool ControlBlock::isSolo(TrackId trackId) const
 {
-    if (trackId < CONTROLBLOCK_MAX_NB_TRACKS)
-        return m_trackInfo[trackId].m_solo;
+    if (trackId >= CONTROLBLOCK_MAX_NB_TRACKS)
+        return false;
+
+    return m_trackInfo[trackId].m_solo;
+}
+
+bool ControlBlock::isAnyTrackInSolo() const
+{
+    // For each track
+    for (unsigned int i = 0; i <= m_maxTrackId; ++i) {
+        const TrackInfo &track = m_trackInfo[i];
+
+        // If this track was deleted, try the next.
+        if (track.m_deleted)
+            continue;
+
+        if (track.m_solo)
+            return true;
+    }
+
     return false;
 }
 

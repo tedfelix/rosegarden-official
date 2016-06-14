@@ -433,6 +433,8 @@ resetIteratorForSegment(MappedEventBuffer *mappedEventBuffer, bool immediate)
 void
 MappedBufMetaIterator::getAudioEvents(std::vector<MappedEvent> &audioEvents)
 {
+    ControlBlock *controlBlock = ControlBlock::getInstance();
+
     audioEvents.clear();
 
     // For each segment
@@ -443,34 +445,47 @@ MappedBufMetaIterator::getAudioEvents(std::vector<MappedEvent> &audioEvents)
 
         // For each event
         while (!iter.atEnd()) {
-
-            // Skip any non-Audio events.
-            if ((*iter).getType() != MappedEvent::Audio) {
-                ++iter;
-                continue;
-            }
-
-            MappedEvent event(*iter);
+            const MappedEvent &event = *iter;
             ++iter;
 
+            // Skip any non-Audio events.
+            if (event.getType() != MappedEvent::Audio)
+                continue;
+
+            TrackId trackId = event.getTrackId();
+
             // If the track for this event is muted, try the next event.
-            if (ControlBlock::getInstance()->isTrackMuted(event.getTrackId())) {
+            if (controlBlock->isTrackMuted(trackId)) {
 #ifdef DEBUG_PLAYING_AUDIO_FILES
-                RG_DEBUG << "getAudioEvents() - " << "track " << event.getTrackId() << " is muted";
+                RG_DEBUG << "getAudioEvents(): track " << trackId << " is muted";
 #endif
                 continue;
             }
 
+#if 1
             // If we're in solo mode and this event isn't on the solo track,
             // try the next event.
-            if (ControlBlock::getInstance()->isSolo() == true &&
-                    event.getTrackId() != ControlBlock::getInstance()->getSelectedTrack()) {
+            if (controlBlock->isSolo() == true  &&
+                trackId != controlBlock->getSelectedTrack()) {
 #ifdef DEBUG_PLAYING_AUDIO_FILES
-                RG_DEBUG << "getAudioEvents() - " << "track " << event.getTrackId() << " is not solo track";
+                RG_DEBUG << "getAudioEvents(): track " << trackId << " is not solo track";
 #endif
                 continue;
             }
+#else
+            // If we're in solo mode and this event isn't on the solo track,
+            // try the next event.
+            if (controlBlock->isAnyTrackInSolo()  &&
+                !controlBlock->isSolo(trackId)) {
+#ifdef DEBUG_PLAYING_AUDIO_FILES
+                RG_DEBUG << "getAudioEvents(): track " << trackId << " is not solo track";
+#endif
+                continue;
+            }
+#endif
 
+            // ??? Why does this need to contain copies?  Can we simplify
+            //     to pointers to the originals?
             audioEvents.push_back(event);
         }
     }

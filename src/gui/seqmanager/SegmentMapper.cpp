@@ -118,17 +118,25 @@ bool
 SegmentMapper::
 mutedEtc(void)
 {
+    const ControlBlock *controlBlock = ControlBlock::getInstance();
     TrackId trackId = m_segment->getTrack();
 
+#if 1
     // If we're soloing (i.e. playing only a selected track), that
     // overrides the usual muting logic.  We're effectively muted if
     // the solo track isn't ours.
-    if (ControlBlock::getInstance()->isSolo()) {
-        return (trackId != ControlBlock::getInstance()->getSelectedTrack());
+    if (controlBlock->isSolo()) {
+        return (trackId != controlBlock->getSelectedTrack());
     }
+#else
+    // If we are in solo mode, mute based on whether we are the track that
+    // is being soloed.
+    if (controlBlock->isAnyTrackInSolo())
+        return !controlBlock->isSolo(trackId);
+#endif
 
     // Otherwise use the normal muting logic.
-    return ControlBlock::getInstance()->isTrackMuted(trackId);
+    return controlBlock->isTrackMuted(trackId);
 }
 
 }
