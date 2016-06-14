@@ -1893,17 +1893,16 @@ void SequenceManager::filtersChanged(MidiFilter thruFilter,
 
 void SequenceManager::soloChanged(const Composition *, bool solo, TrackId selectedTrack)
 {
-    bool changed = false;
-    ControlBlock *cb = ControlBlock::getInstance();
-    if (solo != cb->isSolo() ||
-        (solo && selectedTrack != cb->getSelectedTrack())) {
-        changed = true;
-    }
-    cb->setSolo(solo);
-    cb->setSelectedTrack(selectedTrack);
-    if (changed && m_transportStatus == PLAYING) {
+    ControlBlock *controlBlock = ControlBlock::getInstance();
+
+    bool soloChanged = (solo != controlBlock->isSolo()  ||
+            (solo  &&  selectedTrack != controlBlock->getSelectedTrack()));
+
+    controlBlock->setSolo(solo);
+    controlBlock->setSelectedTrack(selectedTrack);
+
+    if (soloChanged  &&  m_transportStatus == PLAYING)
         RosegardenSequencer::getInstance()->remapTracks();
-    }
 }
 
 void SequenceManager::tempoChanged(const Composition *c)
