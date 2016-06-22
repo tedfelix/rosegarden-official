@@ -67,10 +67,6 @@ private:
   const int m_darkFactor;
   QColor m_offColor;
 
-  // Cached pixmaps
-  QPixmap *m_offPixmap;
-  QPixmap *m_onPixmap;
-
   void draw(QPainter &painter);
 };
 
