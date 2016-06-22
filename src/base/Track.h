@@ -13,63 +13,53 @@
     COPYING included with this distribution for more information.
 */
 
-// Representation of a Track
-//
-//
-
-
 #ifndef RG_TRACK_H
 #define RG_TRACK_H
 
 #include "rosegardenprivate_export.h"
 
-#include <string>
-
 #include "XmlExportable.h"
 #include "Instrument.h"
 #include "Device.h"
+
+#include <string>
 
 #define NO_TRACK 0xDEADBEEF
 
 
 namespace Rosegarden
 {
+
+
 class Composition;
 
 typedef unsigned int TrackId;
 
+/// Representation of a Track.
 /**
  * A Track represents a line on the SegmentCanvas on the
  * Rosegarden GUI.  A Track is owned by a Composition and
  * has reference to an Instrument from which the playback
  * characteristics of the Track can be derived.  A Track
- * has no type itself - the type comes only from the
+ * has no type (Audio or MIDI) itself - the type comes only from the
  * Instrument relationship.
  *
  */
 class ROSEGARDENPRIVATE_EXPORT Track : public XmlExportable
 {
-    friend class Composition;
-
 public:
-    //Track();
     Track(TrackId id,
           InstrumentId instrument = 0,
-          int position =0 ,
+          int position = 0,
           const std::string &label = "",
           bool muted = false);
+    virtual ~Track()  { }
 
-private:
-    Track(const Track &);
-    Track operator=(const Track &);
-
-public:
-
-    ~Track();
+    // Accessors/Mutators
 
     TrackId getId() const { return m_id; }
 
-    void setMuted(bool muted);
+    void setMuted(bool muted)  { m_muted = muted; }
     bool isMuted() const { return m_muted; }
 
     void setSolo(bool solo)  { m_solo = solo; }
@@ -78,10 +68,11 @@ public:
     void setPosition(int position) { m_position = position; }
     int getPosition() const { return m_position; }
 
-    void setLabel(const std::string &label);
+    void setLabel(const std::string &label)  { m_label = label; }
     std::string getLabel() const { return m_label; }
 
-    void setShortLabel(const std::string &shortLabel);
+    void setShortLabel(const std::string &shortLabel)
+            { m_shortLabel = shortLabel; }
     std::string getShortLabel() const { return m_shortLabel; }
 
     void setPresetLabel(const std::string &label);
@@ -90,11 +81,9 @@ public:
     void setInstrument(InstrumentId instrument);
     InstrumentId getInstrument() const { return m_instrument; }
 
-    // Implementation of virtual
-    //
-    virtual std::string toXmlString() const;
-
-    Composition* getOwningComposition() { return m_owningComposition; }
+    // For Composition use only
+    void setOwningComposition(Composition *comp) { m_owningComposition = comp; }
+    Composition *getOwningComposition() { return m_owningComposition; }
 
     void setMidiInputDevice(DeviceId id);
     DeviceId getMidiInputDevice() const { return m_input_device; }
@@ -135,12 +124,18 @@ public:
      * Composition maintains a list of tracks that are recording.  Calling
      * this routine directly will bypass that.
      */
-    void setArmed(bool armed);
+    void setArmed(bool armed)  { m_armed = armed; }
 
-protected: // For Composition use only
-    void setOwningComposition(Composition* comp) { m_owningComposition = comp; }
+
+    // XmlExportable override.
+
+    virtual std::string toXmlString() const;
 
 private:
+    // Hide copy ctor and op=.
+    Track(const Track &);
+    Track operator=(const Track &);
+
     //--------------- Data members ---------------------------------
 
     TrackId        m_id;
@@ -152,7 +147,7 @@ private:
     int            m_position;
     InstrumentId   m_instrument;
 
-    Composition*   m_owningComposition;
+    Composition   *m_owningComposition;
 
     DeviceId       m_input_device;
     char           m_input_channel;
@@ -171,7 +166,7 @@ private:
     int            m_staffBracket;
 };
 
+
 }
 
 #endif // RG_TRACK_H
- 

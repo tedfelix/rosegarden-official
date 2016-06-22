@@ -14,22 +14,22 @@
 */
 
 #include "Track.h"
-#include <iostream>
-#include <cstdio>
-
-#include <sstream>
 
 #include "Composition.h"
-#include "StaffExportTypes.h"
+#include "StaffExportTypes.h"  // StaffTypes and Brackets
+
+#include <sstream>  // std::stringstream
+
 
 namespace Rosegarden
 {
+
 
 Track::Track(TrackId id,
              InstrumentId instrument,
              int position,
              const std::string &label,
-             bool muted):
+             bool muted) :
    m_id(id),
    m_muted(muted),
    m_solo(false),
@@ -52,25 +52,6 @@ Track::Track(TrackId id,
 {
 }
 
-Track::~Track()
-{
-}
-
-void Track::setMuted(bool muted)
-{
-    m_muted = muted;
-}
-
-void Track::setLabel(const std::string &label)
-{
-    m_label = label;
-}
-
-void Track::setShortLabel(const std::string &shortLabel)
-{
-    m_shortLabel = shortLabel;
-}
-
 void Track::setPresetLabel(const std::string &label)
 {
     if (m_presetLabel == label) return;
@@ -90,12 +71,6 @@ void Track::setInstrument(InstrumentId instrument)
     if (m_owningComposition)
         m_owningComposition->notifyTrackChanged(this);
 }
-
-
-void Track::setArmed(bool armed) 
-{ 
-    m_armed = armed; 
-} 
 
 void Track::setMidiInputDevice(DeviceId id) 
 { 
@@ -179,6 +154,5 @@ std::string Track::toXmlString() const
 
 }
 
+
 }
-
-
