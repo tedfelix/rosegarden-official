@@ -71,6 +71,7 @@ public slots:
     void slotSelectedTrackChanged();
     void slotPlaybackDeviceChanged(int index);
     void slotInstrumentChanged(int index);
+    void slotArchiveChanged(bool checked);
     void slotRecordingDeviceChanged(int index);
     void slotRecordingChannelChanged(int index);
     void slotThruRoutingChanged(int index);
@@ -114,6 +115,7 @@ private:
     RosegardenDocument *m_doc;
 
     int m_selectedTrackId;
+    Track *getTrack();
 
     // Track number and name
     QLabel *m_trackLabel;
@@ -130,6 +132,9 @@ private:
     QComboBox *m_instrument;
     std::map<DeviceId, IdsVector> m_instrumentIds;
     std::map<DeviceId, QStringList> m_instrumentNames;
+
+    // Archive
+    QCheckBox *m_archive;
 
     // --- Record filters -------------------------------------------
 

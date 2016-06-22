@@ -175,20 +175,33 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
     connect(m_instrument, SIGNAL(activated(int)),
             this, SLOT(slotInstrumentChanged(int)));
 
+    // Archive
+    QLabel *archiveLabel = new QLabel(tr("Archive"), playbackParameters);
+    archiveLabel->setFont(m_font);
+    m_archive = new QCheckBox(playbackParameters);
+    m_archive->setFont(m_font);
+    m_archive->setToolTip(tr("<qt><p>Check this to archive a track.  Archived tracks will not make sound.</p></qt>"));
+    connect(m_archive, SIGNAL(clicked(bool)),
+            this, SLOT(slotArchiveChanged(bool)));
+
     // Playback parameters layout
 
     // This automagically becomes playbackParameters's layout.
     QGridLayout *groupLayout = new QGridLayout(playbackParameters);
     groupLayout->setContentsMargins(5,0,0,5);
-    groupLayout->setSpacing(2);
+    groupLayout->setVerticalSpacing(2);
+    groupLayout->setHorizontalSpacing(5);
     // Row 0: Device
     groupLayout->addWidget(playbackDeviceLabel, 0, 0);
-    groupLayout->addWidget(m_playDevice, 0, 1, 1, 2);
+    groupLayout->addWidget(m_playDevice, 0, 1);
     // Row 1: Instrument
-    groupLayout->addWidget(instrumentLabel, 1, 0, 1, 2);
-    groupLayout->addWidget(m_instrument, 1, 2);
-    // Let column 2 fill the rest of the space.
-    groupLayout->setColumnStretch(2, 1);
+    groupLayout->addWidget(instrumentLabel, 1, 0);
+    groupLayout->addWidget(m_instrument, 1, 1);
+    // Row 2: Archive
+    groupLayout->addWidget(archiveLabel, 2, 0);
+    groupLayout->addWidget(m_archive, 2, 1);
+    // Let column 1 fill the rest of the space.
+    groupLayout->setColumnStretch(1, 1);
 
     // Recording filters
 
@@ -238,7 +251,8 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
 
     groupLayout = new QGridLayout(recordingFilters);
     groupLayout->setContentsMargins(5,0,0,5);
-    groupLayout->setSpacing(2);
+    groupLayout->setVerticalSpacing(2);
+    groupLayout->setHorizontalSpacing(5);
     // Row 0: Device
     groupLayout->addWidget(recordDeviceLabel, 0, 0);
     groupLayout->addWidget(m_recDevice, 0, 1);
@@ -303,7 +317,8 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
 
     groupLayout = new QGridLayout(staffExportOptions);
     groupLayout->setContentsMargins(5,0,0,5);
-    groupLayout->setSpacing(2);
+    groupLayout->setVerticalSpacing(2);
+    groupLayout->setHorizontalSpacing(5);
     groupLayout->setColumnStretch(1, 1);
     // Row 0: Notation size
     groupLayout->addWidget(notationSizeLabel, 0, 0, Qt::AlignLeft);
@@ -421,7 +436,8 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
 
     groupLayout = new QGridLayout(createSegmentsWith);
     groupLayout->setContentsMargins(5,0,0,5);
-    groupLayout->setSpacing(2);
+    groupLayout->setVerticalSpacing(2);
+    groupLayout->setHorizontalSpacing(5);
     // Row 0: Preset/Load
     groupLayout->addWidget(presetLabel, 0, 0, Qt::AlignLeft);
     groupLayout->addWidget(m_preset, 0, 1, 1, 3);
@@ -714,7 +730,9 @@ TrackParameterBox::slotUpdateControls(int /*dummy*/)
 {
     RG_DEBUG << "TrackParameterBox::slotUpdateControls()\n";
 
+    // Device
     slotPlaybackDeviceChanged(-1);
+    // Instrument
     slotInstrumentChanged(-1);
 
     if (m_selectedTrackId == (int)NO_TRACK) return;
@@ -726,6 +744,10 @@ TrackParameterBox::slotUpdateControls(int /*dummy*/)
 
     Track *trk = comp.getTrackById(m_selectedTrackId);
 
+    // Playback parameters
+    m_archive->setChecked(trk->isArchived());
+
+    // Create segments with
     m_clefCombo->setCurrentIndex(trk->getClef());
     m_transposeCombo->setCurrentIndex(m_transposeCombo->findText(QString("%1").arg(trk->getTranspose())));
     m_colorCombo->setCurrentIndex(trk->getColor());
@@ -736,6 +758,7 @@ TrackParameterBox::slotUpdateControls(int /*dummy*/)
     m_preset->setText(strtoqstr(trk->getPresetLabel()));
     m_preset->setEnabled(true);
 
+    // Staff export options
     m_notationSizeCombo->setCurrentIndex(trk->getStaffSize());
     m_bracketTypeCombo->setCurrentIndex(trk->getStaffBracket());
 }
@@ -935,6 +958,24 @@ TrackParameterBox::slotInstrumentChanged(int index)
             emit instrumentSelected(m_selectedTrackId, index);
         }
     }
+}
+
+void
+TrackParameterBox::slotArchiveChanged(bool checked)
+{
+    //RG_DEBUG << "slotArchiveChanged(" << checked << ")";
+
+    Track *track = getTrack();
+
+    if (!track)
+        return;
+
+    track->setArchived(checked);
+    m_doc->slotDocumentModified();
+
+    // Notify observers
+    Composition &comp = m_doc->getComposition();
+    comp.notifyTrackChanged(track);
 }
 
 void
@@ -1293,5 +1334,25 @@ TrackParameterBox::getPreviousBox(RosegardenParameterArea::Arrangement arrangeme
         return "";
     }
 }
+
+Track *
+TrackParameterBox::getTrack()
+{
+    if (m_selectedTrackId == (int)NO_TRACK)
+        return NULL;
+
+    if (!m_doc)
+        return NULL;
+
+    Composition &comp = m_doc->getComposition();
+    // If the track is gone, bail.
+    if (!comp.haveTrack(m_selectedTrackId)) {
+        m_selectedTrackId = (int)NO_TRACK;
+        return NULL;
+    }
+
+    return comp.getTrackById(m_selectedTrackId);
+}
+
 
 }
