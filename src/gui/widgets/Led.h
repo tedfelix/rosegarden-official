@@ -22,8 +22,9 @@
 #define RG_LED_H
 
 #include <QWidget>
+#include <QColor>
 
-class QColor;
+class QPixmap;
 
 namespace Rosegarden
 {
@@ -62,15 +63,18 @@ public slots:
 protected:
   void paintEvent(QPaintEvent *);
   bool paintCachedPixmap();
-  bool m_Thorn;
 
 private:
   State led_state;
-  QColor led_color;
 
-private:
-  class LedPrivate;
-  LedPrivate *d;
+  QColor led_color;
+  int m_dark_factor;
+  QColor m_offcolor;
+  bool m_Thorn;
+
+  // Cached pixmaps
+  QPixmap *m_off_map;
+  QPixmap *m_on_map;
 };
 
 }

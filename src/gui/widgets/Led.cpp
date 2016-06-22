@@ -24,36 +24,27 @@
 
 #include <QPainter>
 #include <QImage>
-#include <QColor>
-#include <QApplication>
 #include <QSettings>
+#include <QPixmap>
 
 #include "misc/ConfigGroups.h"
 
 namespace Rosegarden
 {
 
-class Led::LedPrivate
-{
-    friend class Led;
-
-    int dark_factor;
-    QColor offcolor;
-    QPixmap *off_map;
-    QPixmap *on_map;
-};
-
 
 Led::Led(const QColor& col, QWidget *parent) :
     QWidget(parent),
-    led_state(On)
+    led_state(On),
+    led_color(),
+    m_dark_factor(300),
+    m_offcolor(),
+    m_Thorn(false),
+    m_off_map(NULL),
+    m_on_map(NULL)
 {
-    d = new Led::LedPrivate;
-    d->dark_factor = 300;
-    d->offcolor = col.dark(300);
-    d->off_map = 0;
-    d->on_map = 0;
     setColor(col);
+    m_offcolor = col.dark(300);
 
     QSettings settings;
     settings.beginGroup(GeneralOptionsConfigGroup);
@@ -63,9 +54,8 @@ Led::Led(const QColor& col, QWidget *parent) :
 
 Led::~Led()
 {
-    delete d->off_map;
-    delete d->on_map;
-    delete d;
+    delete m_off_map;
+    delete m_on_map;
 }
 
 void
@@ -96,16 +86,16 @@ Led::paintEvent(QPaintEvent *)
         // do, use them and bail.
 
         if (led_state) {
-            if (d->on_map) {
+            if (m_on_map) {
                 paint.begin(this);
-                paint.drawPixmap(0, 0, *d->on_map);
+                paint.drawPixmap(0, 0, *m_on_map);
                 paint.end();
                 return ;
             }
         } else {
-            if (d->off_map) {
+            if (m_off_map) {
                 paint.begin(this);
-                paint.drawPixmap(0, 0, *d->off_map);
+                paint.drawPixmap(0, 0, *m_off_map);
                 paint.end();
                 return ;
             }
@@ -133,7 +123,7 @@ Led::paintEvent(QPaintEvent *)
     paint.setRenderHint(QPainter::Antialiasing, false);
 
     // Set the color of the LED according to given parameters
-    QColor color = ( led_state ) ? led_color : d->offcolor;
+    QColor color = ( led_state ) ? led_color : m_offcolor;
 
     // Set the brush to SolidPattern, this fills the entire area
     // of the ellipse which is drawn first
@@ -217,7 +207,7 @@ Led::paintEvent(QPaintEvent *)
 
     if (smooth)
     {
-        QPixmap *&dest = led_state ? d->on_map : d->off_map;
+        QPixmap *&dest = led_state ? m_on_map : m_off_map;
 
         // Convert to a QImage for scaling.  We scale the image down to
         // make it look smooth.
@@ -262,11 +252,11 @@ Led::setColor(const QColor& col)
 {
     if (led_color != col) {
         led_color = col;
-        d->offcolor = col.dark(d->dark_factor);
-        delete d->on_map;
-        d->on_map = 0;
-        delete d->off_map;
-        d->off_map = 0;
+        m_offcolor = col.dark(m_dark_factor);
+        delete m_on_map;
+        m_on_map = 0;
+        delete m_off_map;
+        m_off_map = 0;
         update();
     }
 }
@@ -274,9 +264,9 @@ Led::setColor(const QColor& col)
 void
 Led::setDarkFactor(int darkfactor)
 {
-    if (d->dark_factor != darkfactor) {
-        d->dark_factor = darkfactor;
-        d->offcolor = led_color.dark(darkfactor);
+    if (m_dark_factor != darkfactor) {
+        m_dark_factor = darkfactor;
+        m_offcolor = led_color.dark(darkfactor);
         update();
     }
 }
@@ -284,7 +274,7 @@ Led::setDarkFactor(int darkfactor)
 int
 Led::darkFactor() const
 {
-    return d->dark_factor;
+    return m_dark_factor;
 }
 
 void
