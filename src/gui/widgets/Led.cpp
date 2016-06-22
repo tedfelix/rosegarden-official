@@ -35,27 +35,27 @@ namespace Rosegarden
 
 Led::Led(const QColor& col, QWidget *parent) :
     QWidget(parent),
-    led_state(On),
-    led_color(),
-    m_dark_factor(300),
-    m_offcolor(),
-    m_Thorn(false),
-    m_off_map(NULL),
-    m_on_map(NULL)
+    m_state(On),
+    m_color(),
+    m_darkFactor(300),
+    m_offColor(),
+    m_thorn(false),
+    m_offPixmap(NULL),
+    m_onPixmap(NULL)
 {
     setColor(col);
-    m_offcolor = col.dark(300);
+    m_offColor = col.dark(300);
 
     QSettings settings;
     settings.beginGroup(GeneralOptionsConfigGroup);
-    m_Thorn = settings.value("use_thorn_style", true).toBool();
+    m_thorn = settings.value("use_thorn_style", true).toBool();
     settings.endGroup();
 }
 
 Led::~Led()
 {
-    delete m_off_map;
-    delete m_on_map;
+    delete m_offPixmap;
+    delete m_onPixmap;
 }
 
 void
@@ -85,17 +85,17 @@ Led::paintEvent(QPaintEvent *)
         // Check to see if we already have pixmaps cached.  If we
         // do, use them and bail.
 
-        if (led_state) {
-            if (m_on_map) {
+        if (m_state) {
+            if (m_onPixmap) {
                 paint.begin(this);
-                paint.drawPixmap(0, 0, *m_on_map);
+                paint.drawPixmap(0, 0, *m_onPixmap);
                 paint.end();
                 return ;
             }
         } else {
-            if (m_off_map) {
+            if (m_offPixmap) {
                 paint.begin(this);
-                paint.drawPixmap(0, 0, *m_off_map);
+                paint.drawPixmap(0, 0, *m_offPixmap);
                 paint.end();
                 return ;
             }
@@ -111,7 +111,7 @@ Led::paintEvent(QPaintEvent *)
         tmpMap = new QPixmap(width, width);
 
         // Fill in the pixmap's background.
-        QColor bg = m_Thorn ? QColor::fromRgb(0xDD, 0xDD, 0xDD) : palette().window().color();
+        QColor bg = m_thorn ? QColor::fromRgb(0xDD, 0xDD, 0xDD) : palette().window().color();
         tmpMap->fill(bg);
 
         paint.begin(tmpMap);
@@ -123,7 +123,7 @@ Led::paintEvent(QPaintEvent *)
     paint.setRenderHint(QPainter::Antialiasing, false);
 
     // Set the color of the LED according to given parameters
-    QColor color = ( led_state ) ? led_color : m_offcolor;
+    QColor color = ( m_state ) ? m_color : m_offColor;
 
     // Set the brush to SolidPattern, this fills the entire area
     // of the ellipse which is drawn first
@@ -207,7 +207,7 @@ Led::paintEvent(QPaintEvent *)
 
     if (smooth)
     {
-        QPixmap *&dest = led_state ? m_on_map : m_off_map;
+        QPixmap *&dest = m_state ? m_onPixmap : m_offPixmap;
 
         // Convert to a QImage for scaling.  We scale the image down to
         // make it look smooth.
@@ -229,20 +229,20 @@ Led::paintEvent(QPaintEvent *)
 Led::State
 Led::state() const
 {
-    return led_state;
+    return m_state;
 }
 
 QColor
 Led::color() const
 {
-    return led_color;
+    return m_color;
 }
 
 void
 Led::setState( State state )
 {
-    if (led_state != state) {
-        led_state = state;
+    if (m_state != state) {
+        m_state = state;
         update();
     }
 }
@@ -250,13 +250,13 @@ Led::setState( State state )
 void
 Led::setColor(const QColor& col)
 {
-    if (led_color != col) {
-        led_color = col;
-        m_offcolor = col.dark(m_dark_factor);
-        delete m_on_map;
-        m_on_map = 0;
-        delete m_off_map;
-        m_off_map = 0;
+    if (m_color != col) {
+        m_color = col;
+        m_offColor = col.dark(m_darkFactor);
+        delete m_onPixmap;
+        m_onPixmap = 0;
+        delete m_offPixmap;
+        m_offPixmap = 0;
         update();
     }
 }
@@ -264,9 +264,9 @@ Led::setColor(const QColor& col)
 void
 Led::setDarkFactor(int darkfactor)
 {
-    if (m_dark_factor != darkfactor) {
-        m_dark_factor = darkfactor;
-        m_offcolor = led_color.dark(darkfactor);
+    if (m_darkFactor != darkfactor) {
+        m_darkFactor = darkfactor;
+        m_offColor = m_color.dark(darkfactor);
         update();
     }
 }
@@ -274,13 +274,13 @@ Led::setDarkFactor(int darkfactor)
 int
 Led::darkFactor() const
 {
-    return m_dark_factor;
+    return m_darkFactor;
 }
 
 void
 Led::toggle()
 {
-    led_state = (led_state == On) ? Off : On;
+    m_state = (m_state == On) ? Off : On;
     update();
 }
 

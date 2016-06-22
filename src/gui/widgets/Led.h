@@ -33,25 +33,27 @@ namespace Rosegarden
 class Led : public QWidget
 {
     Q_OBJECT
-    Q_ENUMS( State )
-    Q_PROPERTY( State state READ state WRITE setState )
-    Q_PROPERTY( QColor color READ color WRITE setColor )
-    Q_PROPERTY( int darkFactor READ darkFactor WRITE setDarkFactor )
+    Q_ENUMS(State)
+    Q_PROPERTY(State state READ state WRITE setState)
+    Q_PROPERTY(QColor color READ color WRITE setColor)
+    Q_PROPERTY(int darkFactor READ darkFactor WRITE setDarkFactor)
 
 public:
 
-  enum State { Off, On };
-
-  Led(const QColor &col, QWidget *parent=0);
+  Led(const QColor &color, QWidget *parent = NULL);
   ~Led();
 
+  enum State { Off, On };
+  void setState(State state);
   State state() const;
-  QColor color() const;
-  int darkFactor() const;
-  void setState( State state );
-  void setColor(const QColor& color);
-  void setDarkFactor(int darkfactor);
 
+  void setColor(const QColor &color);
+  QColor color() const;
+
+  void setDarkFactor(int darkfactor);
+  int darkFactor() const;
+
+  // QWidget overrides
   virtual QSize sizeHint() const;
   virtual QSize minimumSizeHint() const;
 
@@ -61,21 +63,23 @@ public slots:
   void off();
 
 protected:
+  // QWidget override
   void paintEvent(QPaintEvent *);
-  bool paintCachedPixmap();
 
 private:
-  State led_state;
+  State m_state;
 
-  QColor led_color;
-  int m_dark_factor;
-  QColor m_offcolor;
-  bool m_Thorn;
+  QColor m_color;
+  int m_darkFactor;
+  QColor m_offColor;
+  bool m_thorn;
 
   // Cached pixmaps
-  QPixmap *m_off_map;
-  QPixmap *m_on_map;
+  QPixmap *m_offPixmap;
+  QPixmap *m_onPixmap;
+  bool paintCachedPixmap();
 };
+
 
 }
 
