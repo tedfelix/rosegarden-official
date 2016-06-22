@@ -90,6 +90,7 @@ public:
     bool m_deleted;
 
     bool m_muted;
+    bool m_archived;
     bool m_armed;
     bool m_solo;
 
@@ -173,6 +174,9 @@ public:
     void setTrackMuted(TrackId trackId, bool muted);
     bool isTrackMuted(TrackId trackId) const;
     bool isInstrumentMuted(InstrumentId instrumentId) const;
+
+    void setTrackArchived(TrackId trackId, bool archived);
+    bool isTrackArchived(TrackId trackId) const;
 
     void setSolo(TrackId trackId, bool solo);
     bool isSolo(TrackId trackId) const;

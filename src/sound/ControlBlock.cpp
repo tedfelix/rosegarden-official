@@ -37,6 +37,7 @@ void TrackInfo::clear()
 {
     m_deleted = true;
     m_muted = true;
+    m_archived = false;
     m_armed = false;
     m_solo = false;
     m_deviceFilter = 0;
@@ -166,6 +167,20 @@ bool ControlBlock::isTrackMuted(TrackId trackId) const
     return true;
 }
 
+void
+ControlBlock::setTrackArchived(TrackId trackId, bool archived)
+{
+    if (trackId < CONTROLBLOCK_MAX_NB_TRACKS)
+        m_trackInfo[trackId].m_archived = archived;
+}
+
+bool ControlBlock::isTrackArchived(TrackId trackId) const
+{
+    if (trackId < CONTROLBLOCK_MAX_NB_TRACKS)
+        return m_trackInfo[trackId].m_archived;
+    return true;
+}
+
 void ControlBlock::setSolo(TrackId trackId, bool solo)
 {
     // Bail on invalid track ID.
@@ -285,8 +300,10 @@ bool
 ControlBlock::isInstrumentMuted(InstrumentId instrumentId) const
 {
     for (unsigned int i = 0; i <= m_maxTrackId; ++i) {
-        if (m_trackInfo[i].m_instrumentId == instrumentId &&
-                !m_trackInfo[i].m_deleted && !m_trackInfo[i].m_muted)
+        if (m_trackInfo[i].m_instrumentId == instrumentId  &&
+            !m_trackInfo[i].m_deleted  &&
+            !m_trackInfo[i].m_muted  &&
+            !m_trackInfo[i].m_archived)
             return false;
     }
     return true;
