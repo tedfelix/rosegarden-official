@@ -32,6 +32,7 @@ Track::Track(TrackId id,
              bool muted) :
    m_id(id),
    m_muted(muted),
+   m_archived(false),
    m_solo(false),
    m_label(label),
    m_shortLabel(""),
@@ -116,21 +117,13 @@ std::string Track::toXmlString() const
     track << "<track id=\"" << m_id;
     track << "\" label=\"" << encode(m_label);
     track << "\" shortLabel=\"" << encode(m_shortLabel);
-    track << "\" position=\"" << m_position;
+    track << "\" position=\"" << m_position << "\"";
 
-    track << "\" muted=";
+    track << " muted=\"" << (m_muted ? "true" : "false") << "\"";
 
-    if (m_muted)
-        track << "\"true\"";
-    else
-        track << "\"false\"";
+    track << " archived=\"" << (m_archived ? "true" : "false") <<"\"";
 
-    track << " solo=";
-
-    if (m_solo)
-        track << "\"true\"";
-    else
-        track << "\"false\"";
+    track << " solo=\"" << (m_solo ? "true" : "false") << "\"";
 
     track << " instrument=\"" << m_instrument << "\"";
 

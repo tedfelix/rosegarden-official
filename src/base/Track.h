@@ -62,6 +62,9 @@ public:
     void setMuted(bool muted)  { m_muted = muted; }
     bool isMuted() const { return m_muted; }
 
+    void setArchived(bool archived)  { m_archived = archived; }
+    bool isArchived() const { return m_archived; }
+
     void setSolo(bool solo)  { m_solo = solo; }
     bool isSolo() const  { return m_solo; }
 
@@ -129,6 +132,7 @@ public:
 
     // XmlExportable override.
 
+    /// For writing.  See RoseXmlHandler for reading.
     virtual std::string toXmlString() const;
 
 private:
@@ -140,6 +144,7 @@ private:
 
     TrackId        m_id;
     bool           m_muted;
+    bool           m_archived;
     bool           m_solo;
     std::string    m_label;
     std::string    m_shortLabel;

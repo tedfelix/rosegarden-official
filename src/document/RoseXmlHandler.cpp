@@ -840,6 +840,10 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         if (soloStr == "true")
             track->setSolo(true);
 
+        QString archivedStr = atts.value("archived");
+        if (archivedStr == "true")
+            track->setArchived(true);
+
         // If the composition tag had this track set to record, make sure
         // it is armed.
         if (getComposition().isTrackRecording(id)) {
