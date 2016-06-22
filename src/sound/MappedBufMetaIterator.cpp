@@ -454,8 +454,10 @@ MappedBufMetaIterator::getAudioEvents(std::vector<MappedEvent> &audioEvents)
 
             TrackId trackId = event.getTrackId();
 
-            // If the track for this event is muted, try the next event.
-            if (controlBlock->isTrackMuted(trackId)) {
+            // If the track for this event is muted or archived, try
+            // the next event.
+            if (controlBlock->isTrackMuted(trackId)  ||
+                controlBlock->isTrackArchived(trackId)) {
 #ifdef DEBUG_PLAYING_AUDIO_FILES
                 RG_DEBUG << "getAudioEvents(): track " << trackId << " is muted";
 #endif

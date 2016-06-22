@@ -121,12 +121,16 @@ mutedEtc(void)
     const ControlBlock *controlBlock = ControlBlock::getInstance();
     TrackId trackId = m_segment->getTrack();
 
+    // Archived overrides everything.  Check it first.
+    if (controlBlock->isTrackArchived(trackId))
+        return true;
+
     // If we are in solo mode, mute based on whether our track
     // is being soloed.
     if (controlBlock->isAnyTrackInSolo())
         return !controlBlock->isSolo(trackId);
 
-    // Otherwise use the normal muting logic.
+    // Otherwise use the normal muting/archiving logic.
     return controlBlock->isTrackMuted(trackId);
 }
 

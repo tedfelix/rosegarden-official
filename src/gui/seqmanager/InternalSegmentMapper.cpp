@@ -307,7 +307,9 @@ void InternalSegmentMapper::fillBuffer()
     m_channelManager.setRequiredInterval(minRealTime, maxRealTime,
                                          RealTime::zeroTime, RealTime(1,0));
 
-    if (!ControlBlock::getInstance()->isTrackMuted(track->getId())) {
+    // If the track is making sound
+    if (!ControlBlock::getInstance()->isTrackMuted(track->getId())  &&
+        !ControlBlock::getInstance()->isTrackArchived(track->getId())) {
         // Track is unmuted, so get a channel interval to play on.
         // This also releases the old channel interval (possibly
         // getting it again)
