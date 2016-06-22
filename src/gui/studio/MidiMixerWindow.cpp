@@ -120,8 +120,8 @@ MidiMixerWindow::setupTabs()
     m_tabWidget = new QTabWidget;
     centralLayout->addWidget(m_tabWidget);
 
-    connect(m_tabWidget, SIGNAL(currentChanged(QWidget *)),
-            this, SLOT(slotCurrentTabChanged(QWidget *)));
+    connect(m_tabWidget, SIGNAL(currentChanged(int)),
+            this, SLOT(slotCurrentTabChanged(int)));
     m_tabWidget->setTabPosition(QTabWidget::South);
     setWindowTitle(tr("MIDI Mixer"));
     setWindowIcon(IconLoader().loadPixmap("window-midimixer"));
@@ -594,7 +594,7 @@ MidiMixerWindow::slotControllerDeviceEventReceived(MappedEvent *e,
 }
 
 void
-MidiMixerWindow::slotCurrentTabChanged(QWidget *)
+MidiMixerWindow::slotCurrentTabChanged(int)
 {
     sendControllerRefresh();
 }

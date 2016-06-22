@@ -72,7 +72,7 @@ public slots:
     void slotControllerDeviceEventReceived(MappedEvent *,
                                            const void *preferredCustomer);
 
-    void slotCurrentTabChanged(QWidget *);
+    void slotCurrentTabChanged(int);
     void slotHelpRequested();
     void slotHelpAbout();
 
