@@ -62,10 +62,10 @@ protected:
 private:
   State m_state;
 
+  QColor m_backgroundColor;
   QColor m_color;
   const int m_darkFactor;
   QColor m_offColor;
-  bool m_thorn;
 
   // Cached pixmaps
   QPixmap *m_offPixmap;

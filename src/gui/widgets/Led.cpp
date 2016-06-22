@@ -26,7 +26,6 @@
 
 #include <QPainter>
 #include <QImage>
-#include <QSettings>
 #include <QPixmap>
 
 namespace Rosegarden
@@ -36,19 +35,14 @@ namespace Rosegarden
 Led::Led(const QColor &color, QWidget *parent) :
     QWidget(parent),
     m_state(On),
+    m_backgroundColor(),
     m_color(),
     m_darkFactor(300),
     m_offColor(),
-    m_thorn(false),
     m_offPixmap(NULL),
     m_onPixmap(NULL)
 {
     setColor(color);
-
-    QSettings settings;
-    settings.beginGroup(GeneralOptionsConfigGroup);
-    m_thorn = settings.value("use_thorn_style", true).toBool();
-    settings.endGroup();
 }
 
 Led::~Led()
@@ -60,13 +54,8 @@ Led::~Led()
     m_onPixmap = NULL;
 }
 
-#if 0
-// Original version.  This version has a problem.  It draws a solid background
-// block.  This block is cached in m_onPixmap and m_offPixmap.  However, when
-// the background color changes, these aren't invalidated.  Instead of making
-// the caching more complex, I'm going to rewrite this without the caching.
-// Might re-introduce the caching at a later point, however I doubt it really
-// saves much CPU.
+#if 1
+// Original version.
 void
 Led::paintEvent(QPaintEvent *)
 {
@@ -88,9 +77,23 @@ Led::paintEvent(QPaintEvent *)
     QPixmap *tmpMap = 0;
     const bool smooth = true;
 
-    // If smooth is enabled, we draw to the two pixmaps, on_map and off_map.
+    // If smooth is enabled, we draw to tmpMap scaled up.
     if (smooth)
     {
+        QColor backgroundColor = palette().window().color();
+
+        // If the background color has changed.
+        if (backgroundColor != m_backgroundColor) {
+            // Invalidate the cached pixmaps.
+            delete m_onPixmap;
+            m_onPixmap = NULL;
+            delete m_offPixmap;
+            m_offPixmap = NULL;
+
+            // Cache the background color so we can detect changes.
+            m_backgroundColor = backgroundColor;
+        }
+
         // Check to see if we already have pixmaps cached.  If we
         // do, use them and bail.
 
@@ -120,10 +123,7 @@ Led::paintEvent(QPaintEvent *)
         tmpMap = new QPixmap(width2, width2);
 
         // Fill in the pixmap's background.
-        QColor bg = m_thorn ?
-                QColor::fromRgb(0xDD, 0xDD, 0xDD) :
-                palette().window().color();
-        tmpMap->fill(bg);
+        tmpMap->fill(backgroundColor);
 
         paint.begin(tmpMap);
 
@@ -245,8 +245,8 @@ Led::paintEvent(QPaintEvent *)
     }
 }
 #else
-// Simpler version which doesn't mess up the background, but isn't as
-// nice looking as the original version.  In progress....
+// Simpler version.  Not as nice looking as the original version.
+// In progress....
 void
 Led::paintEvent(QPaintEvent *)
 {
