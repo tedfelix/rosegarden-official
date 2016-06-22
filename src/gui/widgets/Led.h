@@ -33,10 +33,6 @@ namespace Rosegarden
 class Led : public QWidget
 {
     Q_OBJECT
-    Q_ENUMS(State)
-    Q_PROPERTY(State state READ state WRITE setState)
-    Q_PROPERTY(QColor color READ color WRITE setColor)
-    Q_PROPERTY(int darkFactor READ darkFactor WRITE setDarkFactor)
 
 public:
 
@@ -49,9 +45,6 @@ public:
 
   void setColor(const QColor &color);
   QColor color() const;
-
-  void setDarkFactor(int darkfactor);
-  int darkFactor() const;
 
   // QWidget overrides
   virtual QSize sizeHint() const;
@@ -70,14 +63,13 @@ private:
   State m_state;
 
   QColor m_color;
-  int m_darkFactor;
+  const int m_darkFactor;
   QColor m_offColor;
   bool m_thorn;
 
   // Cached pixmaps
   QPixmap *m_offPixmap;
   QPixmap *m_onPixmap;
-  bool paintCachedPixmap();
 };
 
 
