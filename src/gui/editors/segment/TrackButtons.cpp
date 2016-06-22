@@ -163,6 +163,14 @@ TrackButtons::updateUI(Track *track)
         return;
 
 
+    // *** Archive Background
+
+    if (track->isArchived())
+        m_trackHBoxes[pos]->setStyleSheet("background-color: #888888;");
+    else
+        m_trackHBoxes[pos]->setStyleSheet("");
+
+
     // *** Mute LED
 
     if (track->isMuted()) {
@@ -1098,10 +1106,8 @@ TrackButtons::makeButton(Track *track)
     trackHBox->setMinimumSize(labelWidth(), trackHeight(trackId));
     trackHBox->setFixedHeight(trackHeight(trackId));
 
-    // Try a style for the box
-    trackHBox->setFrameStyle(StyledPanel);
-    trackHBox->setFrameShape(StyledPanel);
-    trackHBox->setFrameShadow(Raised);
+    trackHBox->setFrameShape(QFrame::StyledPanel);
+    trackHBox->setFrameShadow(QFrame::Raised);
 
     // Insert a little gap
     hblayout->addSpacing(m_vuSpacing);
