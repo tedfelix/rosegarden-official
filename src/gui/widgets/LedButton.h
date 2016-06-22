@@ -37,14 +37,13 @@ class LedButton : public Led
     Q_OBJECT
 
 public: 
-    LedButton(const QColor& col, QWidget *parent=0);
-    ~LedButton();       
+    LedButton(const QColor &color, QWidget *parent = 0);
 
 signals:
-    void stateChanged( bool newState );
+    void stateChanged(bool newState);
 
 protected:    
-    void mousePressEvent ( QMouseEvent *e );
+    void mousePressEvent(QMouseEvent *e);
 };
 
 

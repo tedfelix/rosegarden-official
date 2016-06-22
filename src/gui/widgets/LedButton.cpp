@@ -20,36 +20,25 @@
 
 
 #include "LedButton.h"
-#include "Led.h"
 
 #include <QMouseEvent>
-#include <QColor>
-#include <QWidget>
-
 
 namespace Rosegarden
 {
 
-LedButton::LedButton(const QColor &col, QWidget *parent) :
-    Led( col, parent )
+
+LedButton::LedButton(const QColor &color, QWidget *parent) :
+    Led(color, parent)
 {
-    // enable styling; internal string, no tr()
-    // According to rosegarden.qss they were going for transparency here.
-    // Does appear to have worked.  Need to rework this so that the background
-    // is inherited from the parent.
-    //setObjectName("LED");
 }
 
-LedButton::~LedButton()
-{}
-
-void LedButton::mousePressEvent( QMouseEvent *e )
+void LedButton::mousePressEvent(QMouseEvent *e)
 {
     if (e->button() == Qt::LeftButton) {
         toggle();
-        emit stateChanged( state() );
+        emit stateChanged(state());
     }
 }
 
-}
 
+}
