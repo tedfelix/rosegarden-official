@@ -60,6 +60,13 @@ Led::~Led()
     m_onPixmap = NULL;
 }
 
+#if 0
+// Original version.  This version has a problem.  It draws a solid background
+// block.  This block is cached in m_onPixmap and m_offPixmap.  However, when
+// the background color changes, these aren't invalidated.  Instead of making
+// the caching more complex, I'm going to rewrite this without the caching.
+// Might re-introduce the caching at a later point, however I doubt it really
+// saves much CPU.
 void
 Led::paintEvent(QPaintEvent *)
 {
@@ -236,6 +243,146 @@ Led::paintEvent(QPaintEvent *)
         paint.drawPixmap(0, 0, *dest);
         paint.end();
     }
+}
+#else
+// Simpler version which doesn't mess up the background, but isn't as
+// nice looking as the original version.  In progress....
+void
+Led::paintEvent(QPaintEvent *)
+{
+    QPainter painter(this);
+
+    draw(painter);
+}
+#endif
+
+void
+Led::draw(QPainter &painter)
+{
+    QRect window = painter.window();
+
+    int width2 = window.width();
+
+    // Make sure the LED is round!
+    if (width2 > window.height())
+        width2 = window.height();
+
+    // leave one pixel border
+    width2 -= 2;
+
+    // Can't be seen?  Bail.
+    if (width2 <= 0)
+        return;
+
+    // This shouldn't matter.  We need to rewrite this code so that it
+    // does a great job no matter the scale.  Then we can scale it up/down
+    // all we want to make it look smoother.  The key will be to make the
+    // parts sized based on a percentage of the width.  Of course, at small
+    // sizes, it will start to look bad.  That's when scaling up/down will
+    // help.
+    int scale = 1;
+
+    // This actually looks ok.  It's not as good as the scaled up/down
+    // version, but it's close.  I think with some tweaking, we can get
+    // this looking better.  Then we can think about scaling to make
+    // it even better if needed.  This is faster anyway.
+    painter.setRenderHint(QPainter::Antialiasing, true);
+
+    // Set the color of the LED according to given parameters
+    QColor color = m_state ? m_color : m_offColor;
+
+    // Set the brush to SolidPattern, this fills the entire area
+    // of the ellipse which is drawn first
+    QBrush brush;
+    brush.setStyle(Qt::SolidPattern);
+    brush.setColor(color);
+    painter.setBrush(brush);
+
+
+    // *** Draw the flat LED
+
+    painter.drawEllipse(scale, scale, width2 - scale*2, width2 - scale*2);
+
+
+    // *** Draw the catchlight (specular highlight or bright spot) on the LED.
+
+    // The catchlight gives the LED a 3D bulb-like appearance.
+
+    // Draw using modified "old" painter routine taken from KDEUI's Led widget.
+
+    QPen pen;
+    // Setting the new width of the pen is essential to avoid "pixelized"
+    // shadow like it can be observed with the old LED code
+    pen.setWidth(2 * scale);
+
+    // Compute the center of the catchlight, (pos, pos).
+    int pos = width2 / 5 + 1;
+    // Shrink the catchlight to about 2/3 of the complete LED.
+    int catchlightWidth = width2 * 2 / 3;
+
+    int lightFactor = (130 * 2 / (catchlightWidth ? catchlightWidth : 1)) + 100;
+
+    // Now draw the catchlight on the LED:
+    while (catchlightWidth)
+    {
+        // make color lighter
+        color = color.lighter(lightFactor);
+        pen.setColor(color);
+        painter.setPen(pen);
+
+        painter.drawEllipse(pos, pos, catchlightWidth, catchlightWidth);
+        --catchlightWidth;
+        if (!catchlightWidth)
+            break;
+
+        painter.drawEllipse(pos, pos, catchlightWidth, catchlightWidth);
+        --catchlightWidth;
+        if (!catchlightWidth)
+            break;
+
+        painter.drawEllipse(pos, pos, catchlightWidth, catchlightWidth);
+        --catchlightWidth;
+
+        ++pos;
+    }
+
+    painter.drawPoint(pos, pos);
+
+
+    // *** Draw the round sunken frame around the LED.
+
+    // ??? Shouldn't this value be smaller for smaller LEDs?  Yes.  It should
+    //     be a percentage of the width.
+    int penWidth = 2;
+    int w = width2 - penWidth;
+    pen.setWidth(penWidth);
+    // Switch off the brush to avoid filling the ellipse.
+    brush.setStyle(Qt::NoBrush);
+    painter.setBrush(brush);
+
+    // Set the initial color value to palette().lighter() (bright) and start
+    // drawing the shadow border at 45 degrees (45*16 = 720).
+
+    // -45 degrees (-720/16) is where the highlight is.
+    int angle = -720;
+    //color = palette().lighter();
+    color = Qt::white;
+
+    // For every 15 degrees (240/16).
+    for (int arc = 120; arc < 2880; arc += 240)
+    {
+        pen.setColor(color);
+        painter.setPen(pen);
+
+        // x, y, w, h,start angle, span angle
+        painter.drawArc(penWidth / 2, penWidth / 2, w, w, angle + arc, 240);
+        painter.drawArc(penWidth / 2, penWidth / 2, w, w, angle - arc, 240);
+
+        //FIXME: this should somehow use the contrast value
+        color = color.darker(110);
+    }
+
+    painter.end();
 }
 
 void

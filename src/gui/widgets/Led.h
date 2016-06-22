@@ -70,6 +70,8 @@ private:
   // Cached pixmaps
   QPixmap *m_offPixmap;
   QPixmap *m_onPixmap;
+
+  void draw(QPainter &painter);
 };
 
 
