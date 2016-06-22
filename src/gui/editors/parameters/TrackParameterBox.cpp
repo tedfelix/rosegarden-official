@@ -599,14 +599,10 @@ TrackParameterBox::populateRecordingDeviceList()
 {
     RG_DEBUG << "TrackParameterBox::populateRecordingDeviceList()\n";
 
-    if (m_selectedTrackId == (int)NO_TRACK) return;
-    Composition &comp = m_doc->getComposition();
-    if (!comp.haveTrack(m_selectedTrackId)) {
-        m_selectedTrackId = (int)NO_TRACK;
+    Track *trk = getTrack();
+    if (!trk)
         return;
-    }
 
-    Track *trk = comp.getTrackById(m_selectedTrackId);
     Instrument *inst = m_doc->getStudio().getInstrumentFor(trk);
     if (!inst)
         return ;
@@ -735,14 +731,9 @@ TrackParameterBox::slotUpdateControls(int /*dummy*/)
     // Instrument
     slotInstrumentChanged(-1);
 
-    if (m_selectedTrackId == (int)NO_TRACK) return;
-    Composition &comp = m_doc->getComposition();
-    if (!comp.haveTrack(m_selectedTrackId)) {
-        m_selectedTrackId = (int)NO_TRACK;
+    Track *trk = getTrack();
+    if (!trk)
         return;
-    }
-
-    Track *trk = comp.getTrackById(m_selectedTrackId);
 
     // Playback parameters
     m_archive->setChecked(trk->isArchived());
@@ -817,16 +808,10 @@ TrackParameterBox::selectedTrackNameChanged()
 {
     RG_DEBUG << "TrackParameterBox::selectedTrackNameChanged()";
 
-    if (m_selectedTrackId == (int)NO_TRACK) return;
-
-    Composition &comp = m_doc->getComposition();
-
-    if (!comp.haveTrack(m_selectedTrackId)) {
-        m_selectedTrackId = (int)NO_TRACK;
+    Track *trk = getTrack();
+    if (!trk)
         return;
-    }
 
-    Track *trk = comp.getTrackById(m_selectedTrackId);
     QString trackName = strtoqstr(trk->getLabel());
     if (trackName.isEmpty())
         trackName = tr("<untitled>");
@@ -842,11 +827,10 @@ TrackParameterBox::slotPlaybackDeviceChanged(int index)
     RG_DEBUG << "TrackParameterBox::slotPlaybackDeviceChanged(" << index << ")\n";
     DeviceId devId;
     if (index == -1) {
-        if (m_selectedTrackId == (int)NO_TRACK) return ;
-        Composition &comp = m_doc->getComposition();
-        Track *trk = comp.getTrackById(m_selectedTrackId);
+        Track *trk = getTrack();
         if (!trk)
-            return ;
+            return;
+
         Instrument *inst = m_doc->getStudio().getInstrumentFor(trk);
         if (!inst)
             return ;
@@ -982,14 +966,10 @@ void
 TrackParameterBox::slotRecordingDeviceChanged(int index)
 {
     RG_DEBUG << "TrackParameterBox::slotRecordingDeviceChanged(" << index << ")";
-    if (m_selectedTrackId == (int)NO_TRACK) return;
-    Composition &comp = m_doc->getComposition();
-    if (!comp.haveTrack(m_selectedTrackId)) {
-        m_selectedTrackId = (int)NO_TRACK;
-        return;
-    }
 
-    Track *trk = comp.getTrackById(m_selectedTrackId);
+    Track *trk = getTrack();
+    if (!trk)
+        return;
 
     Instrument *inst = m_doc->getStudio().getInstrumentFor(trk);
     if (!inst) return ;
@@ -1004,14 +984,10 @@ void
 TrackParameterBox::slotRecordingChannelChanged(int index)
 {
     RG_DEBUG << "TrackParameterBox::slotRecordingChannelChanged(" << index << ")";
-    if (m_selectedTrackId == (int)NO_TRACK) return;
-    Composition &comp = m_doc->getComposition();
-    if (!comp.haveTrack(m_selectedTrackId)) {
-        m_selectedTrackId = (int)NO_TRACK;
-        return;
-    }
 
-    Track *trk = comp.getTrackById(m_selectedTrackId);
+    Track *trk = getTrack();
+    if (!trk)
+        return;
 
     Instrument *inst = m_doc->getStudio().getInstrumentFor(trk);
     if (!inst) return ;
@@ -1025,17 +1001,9 @@ TrackParameterBox::slotRecordingChannelChanged(int index)
 void
 TrackParameterBox::slotThruRoutingChanged(int index)
 {
-    if (m_selectedTrackId == (int)NO_TRACK)
+    Track *track = getTrack();
+    if (!track)
         return;
-
-    Composition &comp = m_doc->getComposition();
-
-    if (!comp.haveTrack(m_selectedTrackId)) {
-        m_selectedTrackId = (int)NO_TRACK;
-        return;
-    }
-
-    Track *track = comp.getTrackById(m_selectedTrackId);
 
     Instrument *inst = m_doc->getStudio().getInstrumentFor(track);
     if (!inst)
@@ -1064,13 +1032,11 @@ void
 TrackParameterBox::slotClefChanged(int clef)
 {
     RG_DEBUG << "TrackParameterBox::slotClefChanged(" << clef << ")";
-    if (m_selectedTrackId == (int)NO_TRACK) return;
-    Composition &comp = m_doc->getComposition();
-    if (!comp.haveTrack(m_selectedTrackId)) {
-        m_selectedTrackId = (int)NO_TRACK;
+
+    Track *trk = getTrack();
+    if (!trk)
         return;
-    }
-    Track *trk = comp.getTrackById(m_selectedTrackId);
+
     trk->setClef(clef);
     m_preset->setEnabled(false);
 }
@@ -1079,13 +1045,11 @@ void
 TrackParameterBox::slotTransposeChanged(int transpose)
 {
     RG_DEBUG << "TrackParameterBox::slotTransposeChanged(" << transpose << ")";
-    if (m_selectedTrackId == (int)NO_TRACK) return;
-    Composition &comp = m_doc->getComposition();
-    if (!comp.haveTrack(m_selectedTrackId)) {
-        m_selectedTrackId = (int)NO_TRACK;
+
+    Track *trk = getTrack();
+    if (!trk)
         return;
-    }
-    Track *trk = comp.getTrackById(m_selectedTrackId);
+
     trk->setTranspose(transpose);
     m_preset->setEnabled(false);
 }
@@ -1153,13 +1117,9 @@ TrackParameterBox::slotColorChanged(int index)
 {
     RG_DEBUG << "TrackParameterBox::slotColorChanged(" << index << ")";
 
-    if (m_selectedTrackId == (int)NO_TRACK) return;
-    Composition &comp = m_doc->getComposition();
-    if (!comp.haveTrack(m_selectedTrackId)) {
-        m_selectedTrackId = (int)NO_TRACK;
+    Track *trk = getTrack();
+    if (!trk)
         return;
-    }
-    Track *trk = comp.getTrackById(m_selectedTrackId);
 
     trk->setColor(index);
 
@@ -1241,22 +1201,19 @@ TrackParameterBox::slotPresetPressed()
 {
     RG_DEBUG << "TrackParameterBox::slotPresetPressed()";
 
-    if (m_selectedTrackId == (int)NO_TRACK) return;
-    Composition &comp = m_doc->getComposition();
-    if (!comp.haveTrack(m_selectedTrackId)) {
-        m_selectedTrackId = (int)NO_TRACK;
-        return;
-    }
-
     //PresetHandlerDialog dialog(this);
     PresetHandlerDialog dialog(0); // no parent means no style from group box parent, but what about popup location?
 
-    Track *trk = comp.getTrackById(m_selectedTrackId);
+    Track *trk = getTrack();
+    if (!trk)
+        return;
+
     try {
         if (dialog.exec() == QDialog::Accepted) {
             m_preset->setText(dialog.getName());
             trk->setPresetLabel(qstrtostr(dialog.getName()));
             if (dialog.getConvertAllSegments()) {
+                Composition &comp = m_doc->getComposition();
                 SegmentSyncCommand* command = new SegmentSyncCommand(
                         comp.getSegments(), m_selectedTrackId,
                         dialog.getTranspose(), dialog.getLowRange(), 
@@ -1295,14 +1252,9 @@ TrackParameterBox::slotStaffSizeChanged(int index)
 {
     RG_DEBUG << "TrackParameterBox::sotStaffSizeChanged()";
 
-    if (m_selectedTrackId == (int)NO_TRACK) return;
-    Composition &comp = m_doc->getComposition();
-    if (!comp.haveTrack(m_selectedTrackId)) {
-        m_selectedTrackId = (int)NO_TRACK;
+    Track *trk = getTrack();
+    if (!trk)
         return;
-    }
-
-    Track *trk = comp.getTrackById(m_selectedTrackId);
 
     trk->setStaffSize(index);
 }
@@ -1313,14 +1265,9 @@ TrackParameterBox::slotStaffBracketChanged(int index)
 {
     RG_DEBUG << "TrackParameterBox::sotStaffBracketChanged()";
 
-    if (m_selectedTrackId == (int)NO_TRACK) return;
-    Composition &comp = m_doc->getComposition();
-    if (!comp.haveTrack(m_selectedTrackId)) {
-        m_selectedTrackId = (int)NO_TRACK;
+    Track *trk = getTrack();
+    if (!trk)
         return;
-    }
-
-    Track *trk = comp.getTrackById(m_selectedTrackId);
 
     trk->setStaffBracket(index);
 }
