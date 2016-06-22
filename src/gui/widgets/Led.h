@@ -41,19 +41,19 @@ public:
 
   enum State { Off, On };
   void setState(State state);
-  State state() const;
+  State state() const  { return m_state; }
 
   void setColor(const QColor &color);
-  QColor color() const;
+  QColor color() const  { return m_color; }
 
   // QWidget overrides
-  virtual QSize sizeHint() const;
-  virtual QSize minimumSizeHint() const;
+  virtual QSize sizeHint() const  { return QSize(16, 16); }
+  virtual QSize minimumSizeHint() const  { return QSize(16, 16); }
 
 public slots:
-  void toggle();
-  void on();
-  void off();
+  void toggle()  { setState((m_state == On) ? Off : On); }
+  void on()  { setState(On); }
+  void off()  { setState(Off); }
 
 protected:
   // QWidget override

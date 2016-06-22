@@ -202,15 +202,16 @@ Led::paintEvent(QPaintEvent *)
     //color = palette().lighter();
     color = Qt::white;
 
-    for ( int arc = 120; arc < 2880; arc += 240 )
+    for (int arc = 120; arc < 2880; arc += 240)
     {
-        pen.setColor( color );
-        paint.setPen( pen );
+        pen.setColor(color);
+        paint.setPen(pen);
         int w = width2 - pen.width() / 2 - scale + 1;
-        paint.drawArc( pen.width() / 2, pen.width() / 2, w, w, angle + arc, 240 );
-        paint.drawArc( pen.width() / 2, pen.width() / 2, w, w, angle - arc, 240 );
-        color = color.darker( 110 ); //FIXME: this should somehow use the contrast value
-    }	// end for ( angle = 720; angle < 6480; angle += 160 )
+        paint.drawArc(pen.width() / 2, pen.width() / 2, w, w, angle + arc, 240);
+        paint.drawArc(pen.width() / 2, pen.width() / 2, w, w, angle - arc, 240);
+        //FIXME: this should somehow use the contrast value
+        color = color.darker(110);
+    }
 
     paint.end();
 
@@ -223,7 +224,9 @@ Led::paintEvent(QPaintEvent *)
         QImage i = tmpMap->toImage();
         width2 /= 3;
         i = i.scaled(width2, width2, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+
         delete tmpMap;
+        tmpMap = NULL;
 
         // Save the pixmap to on_map or off_map.
         dest = new QPixmap(QPixmap::fromImage(i));
@@ -235,72 +238,35 @@ Led::paintEvent(QPaintEvent *)
     }
 }
 
-Led::State
-Led::state() const
-{
-    return m_state;
-}
-
-QColor
-Led::color() const
-{
-    return m_color;
-}
-
 void
-Led::setState( State state )
+Led::setState(State state)
 {
-    if (m_state != state) {
-        m_state = state;
-        update();
-    }
-}
+    // No change?  Bail.
+    if (state == m_state)
+        return;
 
-void
-Led::setColor(const QColor& col)
-{
-    if (m_color != col) {
-        m_color = col;
-        m_offColor = col.darker(m_darkFactor);
-        delete m_onPixmap;
-        m_onPixmap = 0;
-        delete m_offPixmap;
-        m_offPixmap = 0;
-        update();
-    }
-}
-
-void
-Led::toggle()
-{
-    m_state = (m_state == On) ? Off : On;
+    m_state = state;
     update();
 }
 
 void
-Led::on()
+Led::setColor(const QColor &color)
 {
-    setState(On);
-}
+    // No change?  Bail.
+    if (color == m_color)
+        return;
 
-void
-Led::off()
-{
-    setState(Off);
-}
+    m_color = color;
+    m_offColor = color.darker(m_darkFactor);
 
-QSize
-Led::sizeHint() const
-{
-    return QSize(16, 16);
-}
+    // Cached pixmaps are obsolete.
+    delete m_onPixmap;
+    m_onPixmap = NULL;
+    delete m_offPixmap;
+    m_offPixmap = NULL;
 
-QSize
-Led::minimumSizeHint() const
-{
-    return QSize(16, 16 );
-}
-
+    update();
 }
 
 
+}
