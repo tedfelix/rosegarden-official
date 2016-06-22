@@ -30,6 +30,8 @@ class QColor;
 namespace Rosegarden
 {
 
+
+/// Adds button behavior to Led.
 class LedButton : public Led
 {
     Q_OBJECT
@@ -44,6 +46,7 @@ signals:
 protected:    
     void mousePressEvent ( QMouseEvent *e );
 };
+
 
 }
 

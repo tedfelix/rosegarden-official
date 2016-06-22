@@ -34,7 +34,10 @@ LedButton::LedButton(const QColor &col, QWidget *parent) :
     Led( col, parent )
 {
     // enable styling; internal string, no tr()
-    setObjectName("LED");
+    // According to rosegarden.qss they were going for transparency here.
+    // Does appear to have worked.  Need to rework this so that the background
+    // is inherited from the parent.
+    //setObjectName("LED");
 }
 
 LedButton::~LedButton()

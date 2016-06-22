@@ -6,7 +6,7 @@
     Copyright 2000-2016 the Rosegarden development team.
 
     This file is based on KLed from the KDE libraries
-    Copyright (C) 1998 Jörg Habenicht (j.habenicht@europemail.com)
+    Copyright (C) 1998 JÃ¶rg Habenicht (j.habenicht@europemail.com)
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -28,6 +28,7 @@ class QColor;
 namespace Rosegarden
 {
 
+/// An LED class based on KLed from KDE.
 class Led : public QWidget
 {
     Q_OBJECT

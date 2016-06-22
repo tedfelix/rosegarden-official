@@ -6,7 +6,7 @@
     Copyright 2000-2016 the Rosegarden development team.
 
     This file is based on KLed from the KDE libraries
-    Copyright (C) 1998 Jörg Habenicht (j.habenicht@europemail.com)
+    Copyright (C) 1998 JÃ¶rg Habenicht (j.habenicht@europemail.com)
 
     Including antialiasing implementation from Chris Cannam, April 2004
 
@@ -71,30 +71,30 @@ Led::~Led()
 void
 Led::paintEvent(QPaintEvent *)
 {
-    QPainter paint;
-    QColor color;
-    QBrush brush;
-    QPen pen;
-
-    // First of all we want to know what area should be updated
-    // Initialize coordinates, width, and height of the LED
     int	width = this->width();
 
     // Make sure the LED is round!
     if (width > this->height())
         width = this->height();
-    width -= 2; // leave one pixel border
-    if (width < 0)
-        width = 0;
 
-    // maybe we could stop HERE, if width <=0 ?
+    // leave one pixel border
+    width -= 2;
 
+    // Can't be seen?  Bail.
+    if (width <= 0)
+        return;
+
+    QPainter paint;
     int scale = 1;
     QPixmap *tmpMap = 0;
-    bool smooth = true;
+    const bool smooth = true;
 
+    // If smooth is enabled, we draw to the two pixmaps, on_map and off_map.
     if (smooth)
     {
+        // Check to see if we already have pixmaps cached.  If we
+        // do, use them and bail.
+
         if (led_state) {
             if (d->on_map) {
                 paint.begin(this);
@@ -111,57 +111,70 @@ Led::paintEvent(QPaintEvent *)
             }
         }
 
+        // We don't have any pixmaps cached.  Generate them.
+
+        // Draw it at three times the size we need.  Then we'll scale it down
+        // to make it look smooth and anti-aliased.
         scale = 3;
         width *= scale;
 
         tmpMap = new QPixmap(width, width);
-        QColor bg = m_Thorn ? QColor::fromRgb(0xDD, 0xDD, 0xDD) : palette().window().color();
 
+        // Fill in the pixmap's background.
+        QColor bg = m_Thorn ? QColor::fromRgb(0xDD, 0xDD, 0xDD) : palette().window().color();
         tmpMap->fill(bg);
+
         paint.begin(tmpMap);
 
-    } else
-    {
+    } else {
         paint.begin(this);
     }
 
     paint.setRenderHint(QPainter::Antialiasing, false);
 
     // Set the color of the LED according to given parameters
-    color = ( led_state ) ? led_color : d->offcolor;
+    QColor color = ( led_state ) ? led_color : d->offcolor;
 
     // Set the brush to SolidPattern, this fills the entire area
     // of the ellipse which is drawn first
+    QBrush brush;
     brush.setStyle( Qt::SolidPattern );
     brush.setColor( color );
     paint.setBrush( brush );                // Assign the brush to the painter
 
-    // Draws a "flat" LED with the given color:
+
+    // *** Draw the flat LED
+
     paint.drawEllipse( scale, scale, width - scale*2, width - scale*2 );
 
-    // Draw the bright light spot of the LED now, using modified "old"
-    // painter routine taken from KDEUI´s Led widget:
 
+    // *** Draw the catchlight (specular highlight or bright spot) on the LED.
+
+    // The catchlight gives the LED a 3D bulb-like appearance.
+
+    // Draw using modified "old" painter routine taken from KDEUI's Led widget.
+
+    QPen pen;
     // Setting the new width of the pen is essential to avoid "pixelized"
     // shadow like it can be observed with the old LED code
     pen.setWidth( 2 * scale );
 
-    // shrink the light on the LED to a size about 2/3 of the complete LED
+    // Compute the center of the catchlight, (pos, pos).
     int pos = width / 5 + 1;
-    int light_width = width;
-    light_width *= 2;
-    light_width /= 3;
+    // Shrink the catchlight to about 2/3 of the complete LED.
+    int light_width = width * 2 / 3;
 
-    // Calculate the LED´s "light factor":
+    // Calculate the LED's "light factor":
     int light_quote = (130 * 2 / (light_width ? light_width : 1)) + 100;
 
     // Now draw the bright spot on the LED:
     while (light_width)
     {
-        color = color.light( light_quote );                      // make color lighter
-        pen.setColor( color );                                   // set color as pen color
-        paint.setPen( pen );                                     // select the pen for drawing
-        paint.drawEllipse( pos, pos, light_width, light_width ); // draw the ellipse (circle)
+        // make color lighter
+        color = color.light( light_quote );
+        pen.setColor( color );
+        paint.setPen( pen );
+        paint.drawEllipse( pos, pos, light_width, light_width );
         light_width--;
         if (!light_width)
             break;
@@ -176,16 +189,15 @@ Led::paintEvent(QPaintEvent *)
 
     paint.drawPoint(pos, pos);
 
-    // Drawing of bright spot finished, now draw a thin border
-    // around the LED which resembles a shadow with light coming
-    // from the upper left.
+
+    // *** Draw the round sunken frame around the LED.
 
     pen.setWidth( 2 * scale + 1 ); // ### shouldn't this value be smaller for smaller LEDs?
     brush.setStyle( Qt::NoBrush );              // Switch off the brush
     paint.setBrush( brush );                        // This avoids filling of the ellipse
 
     // Set the initial color value to palette().light() (bright) and start
-    // drawing the shadow border at 45° (45*16 = 720).
+    // drawing the shadow border at 45 degrees (45*16 = 720).
 
     int angle = -720;
     //color = palette().light();
@@ -202,17 +214,22 @@ Led::paintEvent(QPaintEvent *)
     }	// end for ( angle = 720; angle < 6480; angle += 160 )
 
     paint.end();
-    //
-    // painting done
 
     if (smooth)
     {
         QPixmap *&dest = led_state ? d->on_map : d->off_map;
+
+        // Convert to a QImage for scaling.  We scale the image down to
+        // make it look smooth.
         QImage i = tmpMap->toImage();
         width /= 3;
         i = i.scaled(width, width, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
         delete tmpMap;
+
+        // Save the pixmap to on_map or off_map.
         dest = new QPixmap(QPixmap::fromImage(i));
+
+        // Draw the pixmap to the display.
         paint.begin(this);
         paint.drawPixmap(0, 0, *dest);
         paint.end();
