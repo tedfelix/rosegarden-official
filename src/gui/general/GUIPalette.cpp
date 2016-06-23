@@ -218,7 +218,7 @@ GUIPalette::GUIPalette()
 
     //    m_defaultsMap[MuteTrackLED] = QColor(218, 190, 230, QColor::Hsv);
     m_defaultsMap[MuteTrackLED] = QColor::fromHsv(211, 194, 238);
-    m_defaultsMap[SoloTrackLED] = QColor::fromHsv(120, 255, 144);
+    m_defaultsMap[SoloTrackLED] = QColor::fromHsv(120, 250, 144);
     m_defaultsMap[RecordMIDITrackLED] = QColor::fromHsv(45, 250, 225);
     m_defaultsMap[RecordAudioTrackLED] = QColor::fromHsv(0, 250, 225);
     m_defaultsMap[RecordSoftSynthTrackLED] = QColor(255, 120, 0);
