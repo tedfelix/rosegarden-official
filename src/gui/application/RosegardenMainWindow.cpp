@@ -415,6 +415,13 @@ RosegardenMainWindow::RosegardenMainWindow(bool enableSound,
 //            this, SLOT(slotParameterAreaHidden()));
 
     m_seqManager = new SequenceManager();
+    Q_ASSERT(m_transport);
+    connect(m_seqManager, SIGNAL(signalTempoChanged(tempoT)), m_transport, SLOT(slotTempoChanged(tempoT)));
+    connect(m_seqManager, SIGNAL(signalMidiInLabel(const MappedEvent*)), m_transport, SLOT(slotMidiInLabel(const MappedEvent*)));
+    connect(m_seqManager, SIGNAL(signalMidiOutLabel(const MappedEvent*)), m_transport, SLOT(slotMidiOutLabel(const MappedEvent*)));
+    connect(m_seqManager, SIGNAL(signalPlaying(bool)), m_transport, SLOT(slotPlaying(bool)));
+    connect(m_seqManager, SIGNAL(signalRecording(bool)), m_transport, SLOT(slotRecording(bool)));
+    connect(m_seqManager, SIGNAL(signalMetronomeActivated(bool)), m_transport, SLOT(slotMetronomeActivated(bool)));
 
     // Load the initial document (this includes doc's own autoload)
     //
@@ -2909,15 +2916,6 @@ RosegardenMainWindow::createAndSetupTransport()
     //
     connect(m_transport, SIGNAL(setLoopStartTime()), SLOT(slotSetLoopStart()));
     connect(m_transport, SIGNAL(setLoopStopTime()), SLOT(slotSetLoopStop()));
-
-    if (m_seqManager != 0) {
-        connect(m_seqManager, SIGNAL(signalTempoChanged(tempoT)), m_transport, SLOT(slotTempoChanged(tempoT)));
-        connect(m_seqManager, SIGNAL(signalMidiInLabel(const MappedEvent*)), m_transport, SLOT(slotMidiInLabel(const MappedEvent*)));
-        connect(m_seqManager, SIGNAL(signalMidiOutLabel(const MappedEvent*)), m_transport, SLOT(slotMidiOutLabel(const MappedEvent*)));
-        connect(m_seqManager, SIGNAL(signalPlaying(bool)), m_transport, SLOT(slotPlaying(bool)));
-        connect(m_seqManager, SIGNAL(signalRecording(bool)), m_transport, SLOT(slotRecording(bool)));
-        connect(m_seqManager, SIGNAL(signalMetronomeActivated(bool)), m_transport, SLOT(slotMetronomeActivated(bool)));
-    }
 }
 
 void
