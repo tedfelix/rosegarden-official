@@ -930,6 +930,7 @@ RosegardenMainWindow::setupRecentFilesMenu()
     std::vector<QString> files = m_recentFiles.getRecent();
     for (size_t i = 0; i < files.size(); ++i) {
         QAction *action = new QAction(files[i], this);
+        action->setObjectName(files[i]);
         connect(action, SIGNAL(triggered()), this, SLOT(slotFileOpenRecent()));
         menu->addAction(action);
         if (i == 0) action->setShortcut(tr("Ctrl+R"));
@@ -2109,13 +2110,13 @@ RosegardenMainWindow::slotFileOpenRecent()
     QAction *action = dynamic_cast<QAction *>(obj);
     
     if (!action) {
-    std::cerr << "WARNING: RosegardenMainWindow::slotFileOpenRecent: sender is not an action"
-          << std::endl;
-    return;
+        std::cerr << "WARNING: RosegardenMainWindow::slotFileOpenRecent: sender is not an action"
+            << std::endl;
+        return;
     }
 
-    QString path = action->text();
-    if (path == "") return;
+    QString path = action->objectName();
+    if (path.isEmpty()) return;
 
     TmpStatusMsg msg(tr("Opening file..."), this);
 
