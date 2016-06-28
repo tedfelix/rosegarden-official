@@ -91,6 +91,10 @@ FileDialog::FileDialog(QWidget *parent,
     // stylesheet.  This fixes #1396, by ensuring that the file dialog has white
     // in the right places, even at deep levels of style inheritance.
     setStyleSheet("QAbstractScrollArea { background: #FFFFFF;} QLineEdit { background: #FFFFFF; }");
+
+#if QT_VERSION >= 0x050000
+    setOption(QFileDialog::DontUseNativeDialog);
+#endif
 }
 
 
