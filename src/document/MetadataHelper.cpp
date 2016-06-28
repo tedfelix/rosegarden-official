@@ -230,7 +230,7 @@ MetadataHelper::getHeaders()
     data.clear();
     for (Configuration::iterator
             it = metadata.begin(); it != metadata.end(); ++it) {
-        QString key = strtoqstr(it->first);
+        QString key = strtoqstr(it->first.getName());
         if (!key.startsWith(commentsKeyBase())) {
             data[key] = strtoqstr(metadata.get<String>(qstrtostr(key)));
         }
