@@ -3825,7 +3825,7 @@
     <message>
         <location line="+17"/>
         <source>New Layer from &amp;Selection</source>
-        <translation type="unfinished"></translation>
+        <translation>Transformer &amp;sélection en voix</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -13865,22 +13865,22 @@ Veuillez sélectionner ceux que vous souhaitez effacer définitivement du disque
     <message>
         <location filename="../../src/gui/general/EditTempoController.cpp" line="+103"/>
         <source>Move Tempo Change</source>
-        <translation type="unfinished">Déplacer un changement de tempo</translation>
+        <translation>Déplacer un changement de tempo</translation>
     </message>
     <message>
         <location line="+49"/>
         <source>Replace Tempo Change at %1</source>
-        <translation type="unfinished">Remplacer le changement de tempo à %1</translation>
+        <translation>Remplacer le changement de tempo à %1</translation>
     </message>
     <message>
         <location line="+14"/>
         <source>Set Global Tempo</source>
-        <translation type="unfinished">Régler le tempo global</translation>
+        <translation>Régler le tempo global</translation>
     </message>
     <message>
         <location line="+16"/>
         <source>Set Global and Default Tempo</source>
-        <translation type="unfinished">Régler les tempos global et par défaut</translation>
+        <translation>Régler les tempos global et par défaut</translation>
     </message>
 </context>
 <context>
@@ -18912,7 +18912,7 @@ Veuillez vérifier que le périphérique est configuré correctement dans le dia
     <message>
         <location line="+52"/>
         <source>New Layer from Selection</source>
-        <translation type="unfinished"></translation>
+        <translation>Transformer sélection en voix</translation>
     </message>
 </context>
 <context>
@@ -20583,27 +20583,31 @@ editing this file.  If you are sure no one else is
 editing this file, delete the lock file and try again.
 
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Ce fichier est verrouillé.
+
+Il est peut-être déjà édité par un autre utilisateur ou par une autre instance de Rosegarden. Si vous êtes sûr que ce n&apos;est pas le cas, vous pouvez effacer le fichier verrou puis réessayer.
+
+</translation>
     </message>
     <message>
         <location line="+18"/>
         <source>Lock Filename: </source>
-        <translation type="unfinished"></translation>
+        <translation>Fichier verrou : </translation>
     </message>
     <message>
         <location line="+2"/>
         <source>User: </source>
-        <translation type="unfinished"></translation>
+        <translation>Utilisateur : </translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Host: </source>
-        <translation type="unfinished"></translation>
+        <translation>Système hôte : </translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Date/Time: </source>
-        <translation type="unfinished"></translation>
+        <translation>Date/Heure : </translation>
     </message>
     <message>
         <location line="-1721"/>
@@ -21343,7 +21347,7 @@ Veuillez quitter puis relancer Rosegarden pour rétablir ces fonctionnalités.</
     <message>
         <location line="+1310"/>
         <source>File &quot;%1&quot; is a Rosegarden Device, and must be imported using the MIDI device manager.</source>
-        <translation type="unfinished"></translation>
+        <translation>Le fichier &quot;%1&quot; est un fichier de description de périphérique et doit être importé en utilisant le gestionnaire de périphériques MIDI (menu &quot;Studio&quot;).</translation>
     </message>
     <message>
         <location line="+653"/>
@@ -22589,7 +22593,7 @@ Si d&apos;autres applications sont actuellement en fonctionnement, les arrêter 
     <message>
         <location line="+1"/>
         <source>&lt;p&gt;Both MIDI and Audio subsystems have failed to initialize.&lt;/p&gt;&lt;p&gt;If you wish to run with no sequencer by design, then use &quot;rosegarden --nosound&quot; to avoid seeing this error in the future.  Otherwise, we recommend that you repair your system configuration and start Rosegarden again.&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;p&gt;Les sous-systèmes MIDI et Audio n&apos;ont pas pu démarrer.&lt;/p&gt;&lt;p&gt;Si vous souhaitez cependant utiliser Rosegarden sans séquenceur, utilisez la ligne de commande &quot;rosegarden --nosound&quot; afin que cette erreur n&apos;apparraise pas.  Sinon, nous vous recommandons de corriger la configuration de votre système avant de redémarrer Rosegarden.&lt;/p&gt;</translation>
     </message>
     <message>
         <source>&lt;p&gt;Both MIDI and Audio subsystems have failed to initialize.&lt;/p&gt;&lt;p&gt;If you wish to run with no sequencer by design, then use &quot;rosegarden --nosequencer&quot; to avoid seeing this error in the future.  Otherwise, we recommend that you repair your system configuration and start Rosegarden again.&lt;/p&gt;</source>
@@ -22603,7 +22607,7 @@ Si d&apos;autres applications sont actuellement en fonctionnement, les arrêter 
     <message>
         <location line="+1"/>
         <source>&lt;p&gt;The MIDI subsystem has failed to initialize.&lt;/p&gt;&lt;p&gt;You may continue without the sequencer, but we suggest closing Rosegarden, running &quot;modprobe snd-seq-midi&quot; as root, and starting Rosegarden again.  If you wish to run with no sequencer by design, then use &quot;rosegarden --nosound&quot; to avoid seeing this error in the future.&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;p&gt;Le sous-système MIDI n&apos;a pas pu démarrer.&lt;/p&gt;&lt;p&gt;Vous pouvez continuer sans le séquenceur, mais nous vous suggérons de fermer Rosegarden, d&apos;exécuter &quot;modprobe snd-seq-midi&quot; en tant que superutilisateur, puis de relancer Rosegarden. Si vous ne souhaitez pas utiliser le séquenceur, il est possible d&apos;utiliser la ligne de commande &quot;rosegarden --nosound&quot; pour que cette erreur n&apos;apparaisse plus.&lt;/p&gt;</translation>
     </message>
     <message>
         <location line="+17"/>
