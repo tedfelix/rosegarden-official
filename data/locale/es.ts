@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="es" sourcelanguage="en_US">
+<TS version="2.1" language="es" sourcelanguage="en_US">
 <context>
     <name>:</name>
     <message>
@@ -2285,13 +2285,13 @@
     <message>
         <location line="+2"/>
         <source>New Layer from &amp;Selection</source>
-        <translation type="unfinished"></translation>
+        <translation>Capa nueva desde &amp;selección</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Ctrl+Shift++</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Shift++</translation>
     </message>
     <message>
         <location line="+265"/>
@@ -13881,22 +13881,22 @@ Por favor, seleccione cuáles de ellos quiere borrar permanentemente del disco d
     <message>
         <location filename="../../src/gui/general/EditTempoController.cpp" line="+103"/>
         <source>Move Tempo Change</source>
-        <translation type="unfinished">Mover Cambio de Tempo</translation>
+        <translation>Mover cambio de tempo</translation>
     </message>
     <message>
         <location line="+49"/>
         <source>Replace Tempo Change at %1</source>
-        <translation type="unfinished">Reemplazar Cambio de Tempo en %1</translation>
+        <translation>Reemplazar cambio de tempo en %1</translation>
     </message>
     <message>
         <location line="+14"/>
         <source>Set Global Tempo</source>
-        <translation type="unfinished">Establecer tempo global</translation>
+        <translation>Establecer tempo global</translation>
     </message>
     <message>
         <location line="+16"/>
         <source>Set Global and Default Tempo</source>
-        <translation type="unfinished">Establecer Tempo Global y Predeterminado</translation>
+        <translation>Establecer tempo global y predeterminado</translation>
     </message>
 </context>
 <context>
@@ -18922,7 +18922,7 @@ Por favor, asegúrese de que está correctamente configurado en el cuadro de di�
     <message>
         <location line="+52"/>
         <source>New Layer from Selection</source>
-        <translation type="unfinished"></translation>
+        <translation>Capa nueva desde selección</translation>
     </message>
 </context>
 <context>
@@ -20651,27 +20651,33 @@ editing this file.  If you are sure no one else is
 editing this file, delete the lock file and try again.
 
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Fallo al bloquear archivo.
+
+Quizá otro usuario u otra instancia de Rosegarden ya
+esté editando este archivo. Asegúrese de que nadie
+edita este archivo, borre el archivo de bloqueo y empiece
+de nuevo.
+</translation>
     </message>
     <message>
         <location line="+18"/>
         <source>Lock Filename: </source>
-        <translation type="unfinished"></translation>
+        <translation>Nombre del archivo de bloqueo:</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>User: </source>
-        <translation type="unfinished"></translation>
+        <translation>Usuario:</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Host: </source>
-        <translation type="unfinished"></translation>
+        <translation>Servidor:</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Date/Time: </source>
-        <translation type="unfinished"></translation>
+        <translation>Fecha/tiempo:</translation>
     </message>
     <message>
         <location line="-623"/>
@@ -20937,7 +20943,7 @@ Error fue: %2</translation>
     <message>
         <location line="+699"/>
         <source>File &quot;%1&quot; is a Rosegarden Device, and must be imported using the MIDI device manager.</source>
-        <translation type="unfinished"></translation>
+        <translation>Archivo &quot;%1% es un Dispositivo de Rosegarden y es necesario importarlo por el administrador de dispositivos MIDI.</translation>
     </message>
     <message>
         <location line="+295"/>
@@ -22600,7 +22606,7 @@ Cerrando otras aplicaciones en ejecución puede mejorar el rendimiento de Rosega
     <message>
         <location line="+1"/>
         <source>&lt;p&gt;Both MIDI and Audio subsystems have failed to initialize.&lt;/p&gt;&lt;p&gt;If you wish to run with no sequencer by design, then use &quot;rosegarden --nosound&quot; to avoid seeing this error in the future.  Otherwise, we recommend that you repair your system configuration and start Rosegarden again.&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&quot;&lt;p&gt;Los subsistemas MIDI y Audio han fallado en su inicialización.&lt;/p&gt;&lt;p&gt;Si desea ejecutar sin secuenciador, puede ejecutar Rosegarden con «rosegarden --nosound» para evitar este mensaje de error en el futuro.  Si no, se sugiere que arregle la configuración de su sistema e reinicie Rosegarden.&lt;/p&gt;</translation>
     </message>
     <message>
         <source>&lt;p&gt;Both MIDI and Audio subsystems have failed to initialize.&lt;/p&gt;&lt;p&gt;If you wish to run with no sequencer by design, then use &quot;rosegarden --nosequencer&quot; to avoid seeing this error in the future.  Otherwise, we recommend that you repair your system configuration and start Rosegarden again.&lt;/p&gt;</source>
@@ -22614,7 +22620,7 @@ Cerrando otras aplicaciones en ejecución puede mejorar el rendimiento de Rosega
     <message>
         <location line="+1"/>
         <source>&lt;p&gt;The MIDI subsystem has failed to initialize.&lt;/p&gt;&lt;p&gt;You may continue without the sequencer, but we suggest closing Rosegarden, running &quot;modprobe snd-seq-midi&quot; as root, and starting Rosegarden again.  If you wish to run with no sequencer by design, then use &quot;rosegarden --nosound&quot; to avoid seeing this error in the future.&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;p&gt;El subsistema MIDI ha fallado en su inicialización.&lt;/p&gt;&lt;p&gt; El usuario puede continuar sin el secuenciador, pero sugerimos que cierre Rosegarden, ejecute «modprobe snd-seq-midi» como usuario administrador, y reinicie Rosegarden de nuevo. Si desea utilizar Rosegarden sin el secuenciador, entonces ejecute «rosegarden --nosound» para evitar la aparición de este mensaje de error en el futuro.&lt;/p&gt;</translation>
     </message>
     <message>
         <location line="+17"/>
@@ -24168,7 +24174,7 @@ Cerrando otras aplicaciones en ejecución puede mejorar el rendimiento de Rosega
     <message>
         <location line="+16"/>
         <source>Solo track</source>
-        <translation type="unfinished"></translation>
+        <translation>Solo</translation>
     </message>
 </context>
 <context>
@@ -24285,12 +24291,12 @@ Cerrando otras aplicaciones en ejecución puede mejorar el rendimiento de Rosega
     <message>
         <location line="+7"/>
         <source>Archive</source>
-        <translation type="unfinished"></translation>
+        <translation>Archivar</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>&lt;qt&gt;&lt;p&gt;Check this to archive a track.  Archived tracks will not make sound.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Pistas archivadas no suenan.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+26"/>
