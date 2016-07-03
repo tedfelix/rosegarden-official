@@ -3831,7 +3831,7 @@
         <location line="+7"/>
         <source>Ctrl+Shift++</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Shift++</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -12945,7 +12945,7 @@ Veuillez sélectionner ceux que vous souhaitez effacer définitivement du disque
     <message>
         <location line="-9"/>
         <source>Ctrl+Shift+Z</source>
-        <translation>Ctrl+Maj+Z</translation>
+        <translation>Ctrl+Shift+Z</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -24161,7 +24161,7 @@ Si d&apos;autres applications sont actuellement en fonctionnement, les arrêter 
     <message>
         <location line="+16"/>
         <source>Solo track</source>
-        <translation type="unfinished"></translation>
+        <translation>Rendre cette piste solo</translation>
     </message>
 </context>
 <context>
@@ -24278,12 +24278,12 @@ Si d&apos;autres applications sont actuellement en fonctionnement, les arrêter 
     <message>
         <location line="+7"/>
         <source>Archive</source>
-        <translation type="unfinished"></translation>
+        <translation>Archivée</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>&lt;qt&gt;&lt;p&gt;Check this to archive a track.  Archived tracks will not make sound.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Cocher pour archiver la piste.  Une piste archivée ne sera pas exécutée.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+26"/>
