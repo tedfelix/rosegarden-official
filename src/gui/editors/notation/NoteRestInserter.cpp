@@ -126,7 +126,8 @@ NoteRestInserter::NoteRestInserter(NotationWidget* widget) :
     m_followAccidental(false),
     m_isaRestInserter(false),
     m_wheelIndex(0),
-    m_processingWheelTurned(false)
+    m_processingWheelTurned(false),
+    m_ready(false)
 {
     QIcon icon;
 
@@ -195,7 +196,8 @@ NoteRestInserter::NoteRestInserter(QString rcFileName, QString menuName,
     m_followAccidental(false),
     m_isaRestInserter(false),
     m_wheelIndex(0),
-    m_processingWheelTurned(false)
+    m_processingWheelTurned(false),
+    m_ready(false)
 {
     //connect(m_widget, SIGNAL(changeAccidental(Accidental, bool)),
     //        this, SLOT(slotSetAccidental(Accidental, bool)));
@@ -216,6 +218,7 @@ NoteRestInserter::~NoteRestInserter()
 
 void NoteRestInserter::ready()
 {
+    m_ready = true;
     m_clickHappened = false;
     m_clickStaff = 0;
     
@@ -232,10 +235,18 @@ void NoteRestInserter::ready()
 
 void NoteRestInserter::stow()
 {
+    // Fix bug #1528: NotationScene::clearPreviewNote() crash
+    // This is a hack to avoid calling stow() twice, which causes this crash
+    // when notation scene has been removed before the second call to stow().
+    // Of course it would be better to call stow() only once, but this would
+    // need some rework of notation editor code I have no time to deal with now.
+    if (!m_ready) return;
+
     if (m_alwaysPreview) {
         clearPreview();
         m_widget->getView()->setMouseTracking(false);
     }
+    m_ready = false;
 }
 
 void

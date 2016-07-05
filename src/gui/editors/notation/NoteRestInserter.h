@@ -182,6 +182,8 @@ protected:
     int m_wheelIndex;              // Index of current duration
     bool m_processingWheelTurned;  // Use by synchronizeWheel()
 
+    bool m_ready;                  // True when the tool is ready
+
 // Obsolete ?
 //    static const char* m_actionsAccidental[][4];
 };
