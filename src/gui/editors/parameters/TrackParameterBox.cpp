@@ -559,24 +559,24 @@ TrackParameterBox::populateRecordingDeviceList()
 {
     RG_DEBUG << "TrackParameterBox::populateRecordingDeviceList()\n";
 
-    Track *trk = getTrack();
-    if (!trk)
+    Track *track = getTrack();
+    if (!track)
         return;
 
-    Instrument *inst = m_doc->getStudio().getInstrumentFor(trk);
-    if (!inst)
-        return ;
+    Instrument *instrument = m_doc->getStudio().getInstrumentFor(track);
+    if (!instrument)
+        return;
 
     // If we've changed instrument type, e.g. from Audio to MIDI,
     // reload the combos.
-    if (m_lastInstrumentType != inst->getInstrumentType()) {
-        m_lastInstrumentType = inst->getInstrumentType();
+    if (m_lastInstrumentType != instrument->getInstrumentType()) {
+        m_lastInstrumentType = instrument->getInstrumentType();
 
         m_recordingDevice->clear();
         m_recordingDeviceIds.clear();
         m_recordingChannel->clear();
 
-        if (inst->getInstrumentType() == Instrument::Audio) {
+        if (instrument->getInstrumentType() == Instrument::Audio) {
 
             m_recordingDeviceIds.push_back(Device::NO_DEVICE);
             m_recordingDevice->addItem(tr("Audio"));
@@ -600,17 +600,25 @@ TrackParameterBox::populateRecordingDeviceList()
             m_recordingDevice->addItem(tr("All"));
 
             DeviceList *devices = m_doc->getStudio().getDevices();
-            DeviceListConstIterator it;
-            for (it = devices->begin(); it != devices->end(); it++) {
-                MidiDevice *dev =
-                    dynamic_cast<MidiDevice*>(*it);
-                if (dev) {
-                    if (dev->getDirection() == MidiDevice::Record
-                        && dev->isRecording()) {
-                        QString deviceName = QObject::tr(dev->getName().c_str());
-                        m_recordingDevice->addItem(deviceName);
-                        m_recordingDeviceIds.push_back(dev->getId());
-                    }
+
+            // For each device
+            for (DeviceListConstIterator it = devices->begin();
+                 it != devices->end();
+                 ++it) {
+                MidiDevice *device = dynamic_cast<MidiDevice *>(*it);
+
+                // If this isn't a MIDI device, try the next.
+                if (!device)
+                    continue;
+
+                // If this is a device capable of being recorded
+                if (device->getDirection() == MidiDevice::Record  &&
+                    device->isRecording()) {
+                    // Add it to the recording device list.
+
+                    QString deviceName = QObject::tr(device->getName().c_str());
+                    m_recordingDevice->addItem(deviceName);
+                    m_recordingDeviceIds.push_back(device->getId());
                 }
             }
 
@@ -625,45 +633,52 @@ TrackParameterBox::populateRecordingDeviceList()
         }
     }
 
-    if (inst->getInstrumentType() == Instrument::Audio) {
+    // Set the comboboxes to the proper items.
+
+    if (instrument->getInstrumentType() == Instrument::Audio) {
         m_recordingDevice->setCurrentIndex(0);
         m_recordingChannel->setCurrentIndex(0);
     } else {
         m_recordingDevice->setCurrentIndex(0);
-        m_recordingChannel->setCurrentIndex((int)trk->getMidiInputChannel() + 1);
+        m_recordingChannel->setCurrentIndex((int)track->getMidiInputChannel() + 1);
+        // Search for the track's recording device and set the combo to match.
         for (unsigned int i = 0; i < m_recordingDeviceIds.size(); ++i) {
-            if (m_recordingDeviceIds[i] == trk->getMidiInputDevice()) {
+            if (m_recordingDeviceIds[i] == track->getMidiInputDevice()) {
                 m_recordingDevice->setCurrentIndex(i);
                 break;
             }
         }
-        m_thruRouting->setCurrentIndex((int)trk->getThruRouting());
+        m_thruRouting->setCurrentIndex((int)track->getThruRouting());
     }
 }
 
 void
 TrackParameterBox::updateHighLow()
 {
-    Composition &comp = m_doc->getComposition();
-    Track *trk = comp.getTrackById(comp.getSelectedTrack());
-    if (!trk)
-        return ;
+    Composition &composition = m_doc->getComposition();
+    Track *track = composition.getTrackById(composition.getSelectedTrack());
+    if (!track)
+        return;
 
-    trk->setHighestPlayable(m_highestPlayable);
-    trk->setLowestPlayable(m_lowestPlayable);
+    // Set the highest/lowest in the Track.
 
-    Accidental accidental = Accidentals::NoAccidental;
+    track->setHighestPlayable(m_highestPlayable);
+    track->setLowestPlayable(m_lowestPlayable);
 
-    Pitch highest(m_highestPlayable, accidental);
-    Pitch lowest(m_lowestPlayable, accidental);
+    // Update the text on the highest/lowest pushbuttons.
+
+    const Accidental accidental = Accidentals::NoAccidental;
+
+    const Pitch highest(m_highestPlayable, accidental);
+    const Pitch lowest(m_lowestPlayable, accidental);
 
     QSettings settings;
     settings.beginGroup(GeneralOptionsConfigGroup);
 
-    int base = settings.value("midipitchoctave", -2).toInt() ;
+    const int octaveBase = settings.value("midipitchoctave", -2).toInt() ;
     settings.endGroup();
 
-    bool includeOctave = false;
+    const bool includeOctave = false;
 
     // NOTE: this now uses a new, overloaded version of Pitch::getAsString()
     // that explicitly works with the key of C major, and does not allow the
@@ -672,12 +687,12 @@ TrackParameterBox::updateHighLow()
     // Separate the note letter from the octave to avoid undue burden on
     // translators having to retranslate the same thing but for a number
     // difference
-    QString tmp = QObject::tr(highest.getAsString(includeOctave, base).c_str(), "note name");
-    tmp += tr(" %1").arg(highest.getOctave(base));
+    QString tmp = QObject::tr(highest.getAsString(includeOctave, octaveBase).c_str(), "note name");
+    tmp += tr(" %1").arg(highest.getOctave(octaveBase));
     m_highest->setText(tmp);
 
-    tmp = QObject::tr(lowest.getAsString(includeOctave, base).c_str(), "note name");
-    tmp += tr(" %1").arg(lowest.getOctave(base));
+    tmp = QObject::tr(lowest.getAsString(includeOctave, octaveBase).c_str(), "note name");
+    tmp += tr(" %1").arg(lowest.getOctave(octaveBase));
     m_lowest->setText(tmp);
 
     m_preset->setEnabled(false);
