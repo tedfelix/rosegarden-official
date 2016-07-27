@@ -298,20 +298,20 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
     // rendering would be nice in the future!) //!!! 
     QLabel *bracketTypeLabel = new QLabel(tr("Bracket type:"), staffExportOptions);
     bracketTypeLabel->setFont(m_font);
-    m_bracketTypeCombo = new QComboBox(staffExportOptions);
-    m_bracketTypeCombo->setFont(m_font);
-    m_bracketTypeCombo->setToolTip(tr("<qt><p>Bracket staffs in LilyPond<br>(fragile, use with caution)</p><qt>"));
-    m_bracketTypeCombo->setMinimumWidth(width11);
-    m_bracketTypeCombo->addItem(tr("-----"), Brackets::None);
-    m_bracketTypeCombo->addItem(tr("[----"), Brackets::SquareOn);
-    m_bracketTypeCombo->addItem(tr("----]"), Brackets::SquareOff);
-    m_bracketTypeCombo->addItem(tr("[---]"), Brackets::SquareOnOff);
-    m_bracketTypeCombo->addItem(tr("{----"), Brackets::CurlyOn);
-    m_bracketTypeCombo->addItem(tr("----}"), Brackets::CurlyOff);
-    m_bracketTypeCombo->addItem(tr("{[---"), Brackets::CurlySquareOn);
-    m_bracketTypeCombo->addItem(tr("---]}"), Brackets::CurlySquareOff);
-    connect(m_bracketTypeCombo, SIGNAL(activated(int)),
-            this, SLOT(slotStaffBracketChanged(int)));
+    m_bracketType = new QComboBox(staffExportOptions);
+    m_bracketType->setFont(m_font);
+    m_bracketType->setToolTip(tr("<qt><p>Bracket staffs in LilyPond<br>(fragile, use with caution)</p><qt>"));
+    m_bracketType->setMinimumWidth(width11);
+    m_bracketType->addItem(tr("-----"), Brackets::None);
+    m_bracketType->addItem(tr("[----"), Brackets::SquareOn);
+    m_bracketType->addItem(tr("----]"), Brackets::SquareOff);
+    m_bracketType->addItem(tr("[---]"), Brackets::SquareOnOff);
+    m_bracketType->addItem(tr("{----"), Brackets::CurlyOn);
+    m_bracketType->addItem(tr("----}"), Brackets::CurlyOff);
+    m_bracketType->addItem(tr("{[---"), Brackets::CurlySquareOn);
+    m_bracketType->addItem(tr("---]}"), Brackets::CurlySquareOff);
+    connect(m_bracketType, SIGNAL(activated(int)),
+            this, SLOT(slotBracketTypeChanged(int)));
 
     // Staff export options layout
 
@@ -325,7 +325,7 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
     groupLayout->addWidget(m_notationSize, 0, 1, 1, 2);
     // Row 1: Bracket type
     groupLayout->addWidget(bracketTypeLabel, 1, 0, Qt::AlignLeft);
-    groupLayout->addWidget(m_bracketTypeCombo, 1, 1, 1, 2);
+    groupLayout->addWidget(m_bracketType, 1, 1, 1, 2);
 
     // Create segments with
 
@@ -346,53 +346,53 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
     m_preset->setFrameStyle(QFrame::Panel | QFrame::Sunken);
     m_preset->setMinimumWidth(width20);
 
-    m_loadButton = new QPushButton(tr("Load"), createSegmentsWith);
-    m_loadButton->setFont(m_font);
-    m_loadButton->setToolTip(tr("<qt><p>Load a segment parameters preset from our comprehensive database of real-world instruments.</p><p>When you create new segments, they will have these parameters at the moment of creation.  To use these parameters on existing segments (eg. to convert an existing part in concert pitch for playback on a Bb trumpet) use <b>Segments -> Convert notation for</b> in the notation editor.</p></qt>"));
-    connect(m_loadButton, SIGNAL(released()),
-            SLOT(slotPresetPressed()));
+    m_load = new QPushButton(tr("Load"), createSegmentsWith);
+    m_load->setFont(m_font);
+    m_load->setToolTip(tr("<qt><p>Load a segment parameters preset from our comprehensive database of real-world instruments.</p><p>When you create new segments, they will have these parameters at the moment of creation.  To use these parameters on existing segments (eg. to convert an existing part in concert pitch for playback on a Bb trumpet) use <b>Segments -> Convert notation for</b> in the notation editor.</p></qt>"));
+    connect(m_load, SIGNAL(released()),
+            SLOT(slotLoadPressed()));
 
     // Clef
     QLabel *clefLabel = new QLabel(tr("Clef"), createSegmentsWith);
     clefLabel->setFont(m_font);
-    m_clefCombo = new QComboBox(createSegmentsWith);
-    m_clefCombo->setFont(m_font);
-    m_clefCombo->setToolTip(tr("<qt><p>New segments will be created with this clef inserted at the beginning</p></qt>"));
-    m_clefCombo->setMinimumWidth(width11);
-    m_clefCombo->addItem(tr("treble", "Clef name"), TrebleClef);
-    m_clefCombo->addItem(tr("bass", "Clef name"), BassClef);
-    m_clefCombo->addItem(tr("crotales", "Clef name"), CrotalesClef);
-    m_clefCombo->addItem(tr("xylophone", "Clef name"), XylophoneClef);
-    m_clefCombo->addItem(tr("guitar", "Clef name"), GuitarClef);
-    m_clefCombo->addItem(tr("contrabass", "Clef name"), ContrabassClef);
-    m_clefCombo->addItem(tr("celesta", "Clef name"), CelestaClef);
-    m_clefCombo->addItem(tr("old celesta", "Clef name"), OldCelestaClef);
-    m_clefCombo->addItem(tr("french", "Clef name"), FrenchClef);
-    m_clefCombo->addItem(tr("soprano", "Clef name"), SopranoClef);
-    m_clefCombo->addItem(tr("mezzosoprano", "Clef name"), MezzosopranoClef);
-    m_clefCombo->addItem(tr("alto", "Clef name"), AltoClef);
-    m_clefCombo->addItem(tr("tenor", "Clef name"), TenorClef);
-    m_clefCombo->addItem(tr("baritone", "Clef name"), BaritoneClef);
-    m_clefCombo->addItem(tr("varbaritone", "Clef name"), VarbaritoneClef);
-    m_clefCombo->addItem(tr("subbass", "Clef name"), SubbassClef);
-    m_clefCombo->addItem(tr("twobar", "Clef name"), TwoBarClef);
-    connect(m_clefCombo, SIGNAL(activated(int)),
+    m_clef = new QComboBox(createSegmentsWith);
+    m_clef->setFont(m_font);
+    m_clef->setToolTip(tr("<qt><p>New segments will be created with this clef inserted at the beginning</p></qt>"));
+    m_clef->setMinimumWidth(width11);
+    m_clef->addItem(tr("treble", "Clef name"), TrebleClef);
+    m_clef->addItem(tr("bass", "Clef name"), BassClef);
+    m_clef->addItem(tr("crotales", "Clef name"), CrotalesClef);
+    m_clef->addItem(tr("xylophone", "Clef name"), XylophoneClef);
+    m_clef->addItem(tr("guitar", "Clef name"), GuitarClef);
+    m_clef->addItem(tr("contrabass", "Clef name"), ContrabassClef);
+    m_clef->addItem(tr("celesta", "Clef name"), CelestaClef);
+    m_clef->addItem(tr("old celesta", "Clef name"), OldCelestaClef);
+    m_clef->addItem(tr("french", "Clef name"), FrenchClef);
+    m_clef->addItem(tr("soprano", "Clef name"), SopranoClef);
+    m_clef->addItem(tr("mezzosoprano", "Clef name"), MezzosopranoClef);
+    m_clef->addItem(tr("alto", "Clef name"), AltoClef);
+    m_clef->addItem(tr("tenor", "Clef name"), TenorClef);
+    m_clef->addItem(tr("baritone", "Clef name"), BaritoneClef);
+    m_clef->addItem(tr("varbaritone", "Clef name"), VarbaritoneClef);
+    m_clef->addItem(tr("subbass", "Clef name"), SubbassClef);
+    m_clef->addItem(tr("twobar", "Clef name"), TwoBarClef);
+    connect(m_clef, SIGNAL(activated(int)),
             this, SLOT(slotClefChanged(int)));
 
     // Transpose
     QLabel *transposeLabel = new QLabel(tr("Transpose"), createSegmentsWith);
     transposeLabel->setFont(m_font);
-    m_transposeCombo = new QComboBox(createSegmentsWith);
-    m_transposeCombo->setFont(m_font);
-    m_transposeCombo->setToolTip(tr("<qt><p>New segments will be created with this transpose property set</p></qt>"));
-    connect(m_transposeCombo, SIGNAL(activated(int)),
-            SLOT(slotTransposeIndexChanged(int)));
+    m_transpose = new QComboBox(createSegmentsWith);
+    m_transpose->setFont(m_font);
+    m_transpose->setToolTip(tr("<qt><p>New segments will be created with this transpose property set</p></qt>"));
+    connect(m_transpose, SIGNAL(activated(int)),
+            SLOT(slotTransposeChanged(int)));
 
     int transposeRange = 48;
     for (int i = -transposeRange; i < transposeRange + 1; i++) {
-        m_transposeCombo->addItem(QString("%1").arg(i));
+        m_transpose->addItem(QString("%1").arg(i));
         if (i == 0)
-            m_transposeCombo->setCurrentIndex(m_transposeCombo->count() - 1);
+            m_transpose->setCurrentIndex(m_transpose->count() - 1);
     }
 
     // Pitch
@@ -441,12 +441,12 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
     // Row 0: Preset/Load
     groupLayout->addWidget(presetLabel, 0, 0, Qt::AlignLeft);
     groupLayout->addWidget(m_preset, 0, 1, 1, 3);
-    groupLayout->addWidget(m_loadButton, 0, 4, 1, 2);
+    groupLayout->addWidget(m_load, 0, 4, 1, 2);
     // Row 1: Clef/Transpose
     groupLayout->addWidget(clefLabel, 1, 0, Qt::AlignLeft);
-    groupLayout->addWidget(m_clefCombo, 1, 1, 1, 2);
+    groupLayout->addWidget(m_clef, 1, 1, 1, 2);
     groupLayout->addWidget(transposeLabel, 1, 3, 1, 2, Qt::AlignRight);
-    groupLayout->addWidget(m_transposeCombo, 1, 5, 1, 1);
+    groupLayout->addWidget(m_transpose, 1, 5, 1, 1);
     // Row 2: Pitch/Lowest/Highest
     groupLayout->addWidget(pitchLabel, 2, 0, Qt::AlignLeft);
     groupLayout->addWidget(lowestLabel, 2, 1, Qt::AlignRight);
@@ -734,8 +734,8 @@ TrackParameterBox::slotUpdateControls(int /*dummy*/)
     m_archive->setChecked(trk->isArchived());
 
     // Create segments with
-    m_clefCombo->setCurrentIndex(trk->getClef());
-    m_transposeCombo->setCurrentIndex(m_transposeCombo->findText(QString("%1").arg(trk->getTranspose())));
+    m_clef->setCurrentIndex(trk->getClef());
+    m_transpose->setCurrentIndex(m_transpose->findText(QString("%1").arg(trk->getTranspose())));
     m_colorCombo->setCurrentIndex(trk->getColor());
     m_highestPlayable = trk->getHighestPlayable();
     m_lowestPlayable = trk->getLowestPlayable();
@@ -746,7 +746,7 @@ TrackParameterBox::slotUpdateControls(int /*dummy*/)
 
     // Staff export options
     m_notationSize->setCurrentIndex(trk->getStaffSize());
-    m_bracketTypeCombo->setCurrentIndex(trk->getStaffBracket());
+    m_bracketType->setCurrentIndex(trk->getStaffBracket());
 }
 
 void
@@ -1043,9 +1043,9 @@ TrackParameterBox::transposeChanged(int transpose)
 }
 
 void
-TrackParameterBox::slotTransposeIndexChanged(int index)
+TrackParameterBox::slotTransposeChanged(int index)
 {
-    transposeTextChanged(m_transposeCombo->itemText(index));
+    transposeTextChanged(m_transpose->itemText(index));
 }
 
 void
@@ -1185,9 +1185,9 @@ TrackParameterBox::slotLowestPressed()
 }
 
 void
-TrackParameterBox::slotPresetPressed()
+TrackParameterBox::slotLoadPressed()
 {
-    RG_DEBUG << "TrackParameterBox::slotPresetPressed()";
+    RG_DEBUG << "TrackParameterBox::slotLoadPressed()";
 
     //PresetHandlerDialog dialog(this);
     PresetHandlerDialog dialog(0); // no parent means no style from group box parent, but what about popup location?
@@ -1209,9 +1209,9 @@ TrackParameterBox::slotPresetPressed()
                         clefIndexToClef(dialog.getClef()));
                 CommandHistory::getInstance()->addCommand(command);
             }
-            m_clefCombo->setCurrentIndex(dialog.getClef());
+            m_clef->setCurrentIndex(dialog.getClef());
                      
-            m_transposeCombo->setCurrentIndex(m_transposeCombo->findText(QString("%1").arg(dialog.getTranspose())));
+            m_transpose->setCurrentIndex(m_transpose->findText(QString("%1").arg(dialog.getTranspose())));
 
             m_highestPlayable = dialog.getHighRange();
             m_lowestPlayable = dialog.getLowRange();
@@ -1249,7 +1249,7 @@ TrackParameterBox::slotNotationSizeChanged(int index)
 
 
 void
-TrackParameterBox::slotStaffBracketChanged(int index)
+TrackParameterBox::slotBracketTypeChanged(int index)
 {
     RG_DEBUG << "TrackParameterBox::sotStaffBracketChanged()";
 

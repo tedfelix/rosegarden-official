@@ -72,37 +72,6 @@ public:
     virtual void trackSelectionChanged(const Composition *, TrackId);
 
 public slots:
-    // Signals from widgets.
-    // ??? These should be private slots.
-    /// Playback parameters: Device
-    void slotPlaybackDeviceChanged(int index);
-    /// Playback parameters: Instrument
-    void slotInstrumentChanged(int index);
-    /// Playback parameters: Archive
-    void slotArchiveChanged(bool checked);
-    /// Recording filters: Device
-    void slotRecordingDeviceChanged(int index);
-    /// Recording filters: Channel
-    void slotRecordingChannelChanged(int index);
-    /// Recording filters: Thru Routing
-    void slotThruRoutingChanged(int index);
-    /// Staff export options: Notation size
-    void slotNotationSizeChanged(int index);
-    /// Staff export options: Bracket type
-    void slotStaffBracketChanged(int index);
-    /// Create segments with: Preset Load
-    void slotPresetPressed();
-    /// Create segments with: Clef
-    void slotClefChanged(int clef);
-    /// Create segments with: Transpose
-    void slotTransposeIndexChanged(int index);
-    /// Create segments with: Pitch Lowest
-    void slotLowestPressed();
-    /// Create segments with: Pitch Highest
-    void slotHighestPressed();
-    /// Create segments with: Color
-    void slotColorChanged(int index);
-
     /// Connected to RosegardenDocument::docColoursChanged().
     void slotDocColoursChanged();
 
@@ -130,6 +99,40 @@ public slots:
 
 signals:
     void instrumentSelected(TrackId, int);
+
+private slots:
+    // Signals from widgets.
+    /// Playback parameters: Device
+    void slotPlaybackDeviceChanged(int index);
+    /// Playback parameters: Instrument
+    void slotInstrumentChanged(int index);
+    /// Playback parameters: Archive
+    void slotArchiveChanged(bool checked);
+
+    /// Recording filters: Device
+    void slotRecordingDeviceChanged(int index);
+    /// Recording filters: Channel
+    void slotRecordingChannelChanged(int index);
+    /// Recording filters: Thru Routing
+    void slotThruRoutingChanged(int index);
+
+    /// Staff export options: Notation size
+    void slotNotationSizeChanged(int index);
+    /// Staff export options: Bracket type
+    void slotBracketTypeChanged(int index);
+
+    /// Create segments with: Preset Load
+    void slotLoadPressed();
+    /// Create segments with: Clef
+    void slotClefChanged(int clef);
+    /// Create segments with: Transpose
+    void slotTransposeChanged(int index);
+    /// Create segments with: Pitch Lowest
+    void slotLowestPressed();
+    /// Create segments with: Pitch Highest
+    void slotHighestPressed();
+    /// Create segments with: Color
+    void slotColorChanged(int index);
 
 private:
     RosegardenDocument *m_doc;
@@ -175,7 +178,7 @@ private:
     QComboBox *m_notationSize;
 
     /// Staff export options: Bracket type
-    QComboBox *m_bracketTypeCombo;
+    QComboBox *m_bracketType;
 
     // --- Create segments with -------------------------------------
 
@@ -183,13 +186,13 @@ private:
 
     /// Create segments with: Preset Load
     QLabel *m_preset;
-    QPushButton *m_loadButton;
+    QPushButton *m_load;
 
     /// Create segments with: Clef
-    QComboBox *m_clefCombo;
+    QComboBox *m_clef;
 
     /// Create segments with: Transpose
-    QComboBox *m_transposeCombo;
+    QComboBox *m_transpose;
 
     /// Create segments with: Pitch (Lowest/Highest)
     QPushButton *m_lowestButton;
