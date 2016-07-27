@@ -154,6 +154,8 @@ private:
 
     // --- Recording filters -------------------------------------------
 
+    CollapsingFrame *m_recordingFiltersFrame;
+
     /// Recording filters: Device
     QComboBox *m_recordingDevice;
     IdsVector m_recordingDeviceIds;
@@ -168,6 +170,8 @@ private:
     QComboBox *m_thruRouting;
 
     // --- Staff export options -------------------------------------
+
+    CollapsingFrame *m_staffExportOptionsFrame;
 
     /// Staff export options: Notation size
     QComboBox *m_notationSize;
@@ -193,9 +197,9 @@ private:
     /// Create segments with: Pitch (Lowest/Highest)
     QPushButton *m_lowest;
     QPushButton *m_highest;
-    /// MIDI Pitch.  (??? Why not use Pitch for this?)
+    /// MIDI Pitch.
     int m_lowestPlayable;
-    /// MIDI Pitch.  (??? Why not use Pitch for this?)
+    /// MIDI Pitch.
     int m_highestPlayable;
     void updateHighLow();
 

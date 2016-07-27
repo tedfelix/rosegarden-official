@@ -159,11 +159,11 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
 
     // Recording filters
 
-    CollapsingFrame *recordingFiltersFrame = new CollapsingFrame(
+    m_recordingFiltersFrame = new CollapsingFrame(
             tr("Recording filters"), this, "trackparametersrecord", false);
 
-    QWidget *recordingFilters = new QWidget(recordingFiltersFrame);
-    recordingFiltersFrame->setWidget(recordingFilters);
+    QWidget *recordingFilters = new QWidget(m_recordingFiltersFrame);
+    m_recordingFiltersFrame->setWidget(recordingFilters);
     recordingFilters->setContentsMargins(3, 3, 3, 3);
 
     // Device
@@ -221,11 +221,11 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
 
     // Staff export options
 
-    CollapsingFrame *staffExportOptionsFrame = new CollapsingFrame(
+    m_staffExportOptionsFrame = new CollapsingFrame(
             tr("Staff export options"), this, "trackstaffgroup", false);
 
-    QWidget *staffExportOptions = new QWidget(staffExportOptionsFrame);
-    staffExportOptionsFrame->setWidget(staffExportOptions);
+    QWidget *staffExportOptions = new QWidget(m_staffExportOptionsFrame);
+    m_staffExportOptionsFrame->setWidget(staffExportOptions);
     staffExportOptions->setContentsMargins(2, 2, 2, 2);
 
     // Notation size (export only)
@@ -440,8 +440,8 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
     mainLayout->setSpacing(1);
     mainLayout->addWidget(m_trackLabel, 0, 0);
     mainLayout->addWidget(playbackParametersFrame, 1, 0);
-    mainLayout->addWidget(recordingFiltersFrame, 2, 0);
-    mainLayout->addWidget(staffExportOptionsFrame, 3, 0);
+    mainLayout->addWidget(m_recordingFiltersFrame, 2, 0);
+    mainLayout->addWidget(m_staffExportOptionsFrame, 3, 0);
     mainLayout->addWidget(m_createSegmentsWithFrame, 4, 0);
 
     // Box
@@ -576,26 +576,16 @@ TrackParameterBox::populateRecordingDeviceList()
 
         if (instrument->getInstrumentType() == Instrument::Audio) {
 
-            m_recordingDeviceIds.push_back(Device::NO_DEVICE);
-
-            m_recordingDevice->addItem(tr("Audio"));
-            m_recordingDevice->setEnabled(false);
-
-            m_recordingChannel->addItem(tr("Audio"));
-            m_recordingChannel->setEnabled(false);
-
-            m_thruRouting->setCurrentIndex(0);
-            m_thruRouting->setEnabled(false);
-
             // hide these for audio instruments
-            // ??? We should probably do the same for the "Recording filters"
-            //     and "Staff export options" frames.  That would simplify
-            //     things.  The above code would go away.
+            m_recordingFiltersFrame->setVisible(false);
+            m_staffExportOptionsFrame->setVisible(false);
             m_createSegmentsWithFrame->setVisible(false);
 
         } else { // InstrumentType::Midi and InstrumentType::SoftSynth
 
             // show these if not audio instrument
+            m_recordingFiltersFrame->setVisible(true);
+            m_staffExportOptionsFrame->setVisible(true);
             m_createSegmentsWithFrame->setVisible(true);
 
             m_recordingDeviceIds.push_back(Device::ALL_DEVICES);
