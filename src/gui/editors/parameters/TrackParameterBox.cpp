@@ -701,8 +701,6 @@ TrackParameterBox::updateHighLow()
 void
 TrackParameterBox::slotUpdateControls(int /*dummy*/)
 {
-    RG_DEBUG << "TrackParameterBox::slotUpdateControls()\n";
-
     // Device
     slotPlaybackDeviceChanged(-1);
     // Instrument
@@ -722,7 +720,7 @@ TrackParameterBox::slotUpdateControls(int /*dummy*/)
     m_highestPlayable = trk->getHighestPlayable();
     m_lowestPlayable = trk->getLowestPlayable();
     updateHighLow();
-    // set this down here because updateHighLow just disabled the label
+    // set this down here because updateHighLow() just disabled the label
     m_preset->setText(strtoqstr(trk->getPresetLabel()));
     m_preset->setEnabled(true);
 
@@ -768,22 +766,25 @@ TrackParameterBox::trackSelectionChanged(const Composition *, TrackId)
 void
 TrackParameterBox::selectedTrackChanged2()
 {
-    RG_DEBUG << "selectedTrackChanged2()";
+    //RG_DEBUG << "selectedTrackChanged2()";
 
     Composition &comp = m_doc->getComposition();
-    TrackId newTrack = comp.getSelectedTrack();
-    if ((int)newTrack != m_selectedTrackId) {
-        m_preset->setEnabled(true);
-        m_selectedTrackId = newTrack;
-        selectedTrackNameChanged();
-        slotUpdateControls(-1);
-    }
+    TrackId newTrackId = comp.getSelectedTrack();
+
+    // No change?  Bail.
+    if ((int)newTrackId == m_selectedTrackId)
+        return;
+
+    m_preset->setEnabled(true);
+    m_selectedTrackId = newTrackId;
+    selectedTrackNameChanged();
+    slotUpdateControls(-1);
 }
 
 void
 TrackParameterBox::selectedTrackNameChanged()
 {
-    RG_DEBUG << "TrackParameterBox::selectedTrackNameChanged()";
+    //RG_DEBUG << "selectedTrackNameChanged()";
 
     Track *trk = getTrack();
     if (!trk)
@@ -794,15 +795,20 @@ TrackParameterBox::selectedTrackNameChanged()
         trackName = tr("<untitled>");
     else
         trackName.truncate(20);
+
     int trackNum = trk->getPosition() + 1;
+
     m_trackLabel->setText(tr("[ Track %1 - %2 ]").arg(trackNum).arg(trackName));
 }
 
 void
 TrackParameterBox::slotPlaybackDeviceChanged(int index)
 {
-    RG_DEBUG << "TrackParameterBox::slotPlaybackDeviceChanged(" << index << ")\n";
-    DeviceId devId;
+    //RG_DEBUG << "slotPlaybackDeviceChanged(" << index << ")";
+
+    DeviceId deviceId = Device::NO_DEVICE;
+
+    // Nothing is selected, sync with the track's device.
     if (index == -1) {
         Track *trk = getTrack();
         if (!trk)
@@ -810,26 +816,34 @@ TrackParameterBox::slotPlaybackDeviceChanged(int index)
 
         Instrument *inst = m_doc->getStudio().getInstrumentFor(trk);
         if (!inst)
-            return ;
-        devId = inst->getDevice()->getId();
+            return;
+
+        deviceId = inst->getDevice()->getId();
+
+        // Assume not found.
         int pos = -1;
-        IdsVector::const_iterator it;
+
+        // Find the device in the playback devices.
         // this works because we don't have a usable index, and we're having to
-        // figure out what to set to.  the external change was to 10001, so we
+        // figure out what to set to.  the external change was to 10001
+        // (ALL_DEVICES), so we
         // hunt through our mangled data structure to find that.  this jibes
         // with the notion that our own representation of what's what does not
         // remotely match the TB menu representation.  Our data is the same, but
         // in a completely different and utterly nonsensical order, so we can
         // find it accurately if we know what we're hunting for, otherwise,
         // we're fucked
-        for (it = m_playbackDeviceIds.begin(); it != m_playbackDeviceIds.end(); ++it) {
-            pos++;
-            if ((*it) == devId) break;
+        for (IdsVector::const_iterator it = m_playbackDeviceIds.begin();
+             it != m_playbackDeviceIds.end();
+             ++it) {
+            ++pos;
+            if ((*it) == deviceId)
+                break;
         }
 
         m_playbackDevice->setCurrentIndex(pos);
     } else {
-        devId = m_playbackDeviceIds[index];
+        deviceId = m_playbackDeviceIds[index];
     }
 
     // used to be "General MIDI Device #7" now we change to "QSynth Device" and
@@ -838,12 +852,13 @@ TrackParameterBox::slotPlaybackDeviceChanged(int index)
 
     // clear the instrument combo and re-populate it from the new device
     m_instrument->clear();
-    m_instrument->addItems(m_instrumentNames[devId]);
+    m_instrument->addItems(m_instrumentNames[deviceId]);
 
     // try to keep the same index (the #7 bit) as was in use previously, unless
     // the new instrument has fewer indices available than the previous one did,
     // in which case we just go with the highest valid index available
-    if (previousIndex > m_instrument->count()) previousIndex = m_instrument->count();
+    if (previousIndex > m_instrument->count())
+        previousIndex = m_instrument->count();
 
     populateRecordingDeviceList();
 
@@ -856,32 +871,41 @@ TrackParameterBox::slotPlaybackDeviceChanged(int index)
 void
 TrackParameterBox::slotInstrumentChanged(int index)
 {
-    RG_DEBUG << "TrackParameterBox::slotInstrumentChanged(" << index << ")\n";
-    DeviceId devId;
-    Instrument *inst;
+    //RG_DEBUG << "slotInstrumentChanged(" << index << ")";
+
+    // If nothing is selected, sync with the tracks instrument.
     if (index == -1) {
         Composition &comp = m_doc->getComposition();
+
         Track *trk = comp.getTrackById(comp.getSelectedTrack());
         if (!trk)
-            return ;
-        inst = m_doc->getStudio().getInstrumentFor(trk);
-        if (!inst)
-            return ;
-        devId = inst->getDevice()->getId();
+            return;
 
+        Instrument *inst = m_doc->getStudio().getInstrumentFor(trk);
+        if (!inst)
+            return;
+
+        DeviceId devId = inst->getDevice()->getId();
+
+        // Assume not found.
         int pos = -1;
-        IdsVector::const_iterator it;
-        for (it = m_instrumentIds[devId].begin(); it != m_instrumentIds[devId].end(); ++it) {
-            pos++;
-            if ((*it) == trk->getInstrument()) break;
+
+        // Find the instrument in the instrument list.
+        for (IdsVector::const_iterator it = m_instrumentIds[devId].begin();
+             it != m_instrumentIds[devId].end();
+             ++it) {
+            ++pos;
+            if ((*it) == trk->getInstrument())
+                break;
         }
+
         m_instrument->setCurrentIndex(pos);
     } else {
-        devId = m_playbackDeviceIds[m_playbackDevice->currentIndex()];
+        //devId = m_playbackDeviceIds[m_playbackDevice->currentIndex()];
 
         // Calculate an index to use in Studio::getInstrumentFromList() which
         // gets emitted to TrackButtons, and TrackButtons actually does the work
-        // of assigning the track to the instrument, for some bizarre reason.
+        // of assigning the instrument to the track, for some bizarre reason.
         //
         // This new method for calculating the index works by:
         //
@@ -901,24 +925,32 @@ TrackParameterBox::slotInstrumentChanged(int index)
         // swallowing two entire days of my life to put back with the following
         // magic lines of code:
         int prepend = 0;
-        for (int n = 0; n < m_playbackDevice->currentIndex(); n++) {
+        // For each device that needs to be skipped.
+        for (int n = 0; n < m_playbackDevice->currentIndex(); ++n) {
             DeviceId id = m_playbackDeviceIds[n];
             Device *dev = m_doc->getStudio().getDevice(id);
 
+            InstrumentList il = dev->getPresentationInstruments();
+
+            // Accumulate the number of instruments that need to be skipped.
             // get the number of instruments belonging to the device (not the
             // studio)
-            InstrumentList il = dev->getPresentationInstruments();
             prepend += il.size();
         }
 
+        // Convert from TrackParameterBox index to TrackButtons index.
         index += prepend;
 
-        // emit the index we've calculated, relative to the studio list
-        RG_DEBUG << "TrackParameterBox::slotInstrumentChanged() index = " << index << "\n";
+        //RG_DEBUG << "slotInstrumentChanged() index = " << index;
+        // ??? This check can be done before the for loop to avoid unnecessary
+        //     work.
         if (m_doc->getComposition().haveTrack(m_selectedTrackId)) {
+            // emit the index we've calculated, relative to the studio list
             // TrackButtons does the rest of the work for us.
             // ??? Why not make the change directly to the Composition, then
             //     fire off an existing CompositionObserver notification?
+            //     That should get rid of the for loop above.  See
+            //     slotArchiveChanged() for an example.
             emit instrumentSelected(m_selectedTrackId, index);
         }
     }
@@ -945,37 +977,41 @@ TrackParameterBox::slotArchiveChanged(bool checked)
 void
 TrackParameterBox::slotRecordingDeviceChanged(int index)
 {
-    RG_DEBUG << "TrackParameterBox::slotRecordingDeviceChanged(" << index << ")";
+    //RG_DEBUG << "TrackParameterBox::slotRecordingDeviceChanged(" << index << ")";
 
     Track *trk = getTrack();
     if (!trk)
         return;
 
     Instrument *inst = m_doc->getStudio().getInstrumentFor(trk);
-    if (!inst) return ;
-    if (inst->getInstrumentType() == Instrument::Audio) {
-        //Not implemented yet
-    } else {
-        trk->setMidiInputDevice(m_recordingDeviceIds[index]);
-    }
+    if (!inst)
+        return;
+
+    // Audio instruments do not support different recording devices.
+    if (inst->getInstrumentType() == Instrument::Audio)
+        return;
+
+    trk->setMidiInputDevice(m_recordingDeviceIds[index]);
 }
 
 void
 TrackParameterBox::slotRecordingChannelChanged(int index)
 {
-    RG_DEBUG << "TrackParameterBox::slotRecordingChannelChanged(" << index << ")";
+    //RG_DEBUG << "slotRecordingChannelChanged(" << index << ")";
 
     Track *trk = getTrack();
     if (!trk)
         return;
 
     Instrument *inst = m_doc->getStudio().getInstrumentFor(trk);
-    if (!inst) return ;
-    if (inst->getInstrumentType() == Instrument::Audio) {
-        //Not implemented yet
-    } else {
-        trk->setMidiInputChannel(index - 1);
-    }
+    if (!inst)
+        return;
+
+    // Audio instruments do not support different recording channels.
+    if (inst->getInstrumentType() == Instrument::Audio)
+        return;
+
+    trk->setMidiInputChannel(index - 1);
 }
 
 void
