@@ -211,6 +211,19 @@ private:
      *     into a single full refresh (updateWidgets()) and optimize.
      */
     void updateWidgets();
+
+    void updatePlaybackDevice();
+    void updateInstrument();
+    void updateRecordDevice();
+    /// Update all widgets from RosegardenDocument.
+    /**
+     * This new routine will replace all other update routines.  It will
+     * update all widgets, but do it efficiently so that it can be called
+     * in any situation without worrying about performance.
+     *
+     * See MIDIInstrumentParameterPanel::updateWidgets().
+     */
+    void updateWidgets2();
 };
 
 

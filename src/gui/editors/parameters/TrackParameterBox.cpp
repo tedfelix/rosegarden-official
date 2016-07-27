@@ -1297,5 +1297,115 @@ TrackParameterBox::getTrack()
     return comp.getTrackById(m_selectedTrackId);
 }
 
+void
+TrackParameterBox::updatePlaybackDevice()
+{
+    // The list of output devices will rarely change.  But since it is
+    // a QComboBox, it's a bit costly to clear and update.  So, we need
+    // to detect relevant changes and skip updating if there's no point.
+    // Cached device names and IDs can be used to detect an actual change.
+
+    // If there has been an actual change
+        // Reload the combobox
+
+    // Set the index.
+}
+
+void
+TrackParameterBox::updateInstrument()
+{
+    // As with the Device field above, this will rarely change and it is
+    // expensive to clear and reload.  So, we should cache enough info to
+    // detect a real change.  This would be Instrument names and IDs.
+
+    // If there has been an actual change
+        // Reload the combobox
+
+    // Set the index.
+}
+
+void
+TrackParameterBox::updateRecordDevice()
+{
+    // As with playback devices, the list of input devices will rarely
+    // change and it is expensive to clear and reload.  Handle like the
+    // others.  Cache names and IDs and only reload if a real change is
+    // detected.
+
+    // If there has been an actual change
+        // Reload the combobox
+
+    // Set the index.
+}
+
+void
+TrackParameterBox::updateWidgets2()
+{
+    // *** Playback parameters
+
+    // Device
+    updatePlaybackDevice();
+
+    // Instrument
+    updateInstrument();
+
+    // Archive
+
+    // Straightforward.  Just set here.
+
+    // *** Recording filters
+
+    // If the current track is an Audio track, bail.
+    //if (instrument->getInstrumentType() == Instrument::Audio)
+    //    return;
+
+    // Device
+    updateRecordDevice();
+
+    // Channel
+
+    // Straightforward.  Load in ctor.  Set here.
+
+    // Thru Routing
+
+    // Straightforward.  Load in ctor.  Set here.
+
+    // *** Staff export options
+
+    // Notation size
+
+    // Straightforward.  Load in ctor.  Set here.
+
+    // Bracket type
+
+    // Straightforward.  Load in ctor.  Set here.
+
+    // *** Create segments with
+
+    // Preset (Label)
+
+    // Straightforward.  Just set here.
+
+    // Clef
+
+    // Straightforward.  Load in ctor.  Set here.
+
+    // Transpose
+
+    // Straightforward.  Load in ctor.  Set here.
+
+    // Pitch Lowest
+
+    // Straightforward.  Just set here.
+
+    // Pitch Highest
+
+    // Straightforward.  Just set here.
+
+    // Color
+
+    // Straightforward.  Load in ctor.  Set here.
+}
+
 
 }
