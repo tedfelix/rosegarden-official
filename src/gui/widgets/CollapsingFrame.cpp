@@ -36,13 +36,22 @@
 namespace Rosegarden
 {
 
-CollapsingFrame::CollapsingFrame(QString label, QWidget *parent, const QString &name) :
-        QFrame(parent),
-        m_widget(0),
-        m_fill(false),
-        m_collapsed(false)
+CollapsingFrame::CollapsingFrame(
+        QString label, QWidget *parent, const QString &name,
+        bool defaultExpanded) :
+    QFrame(parent),
+    m_widget(0),
+    m_fill(false),
+    m_collapsed(false)
 {
     setObjectName(name);
+
+    // Set up the initial default state if needed.
+    QSettings settings;
+    settings.beginGroup(CollapsingFrameConfigGroup);
+    bool expanded = qStrToBool(settings.value(
+            name, defaultExpanded ? "true" : "false"));
+    settings.setValue(name, expanded);
 
     setContentsMargins(0, 0, 0, 0);
     m_layout = new QGridLayout(this);

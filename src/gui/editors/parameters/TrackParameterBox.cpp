@@ -88,36 +88,6 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
     const int width22 = metrics.width("1234567890123456789012");
     const int width25 = metrics.width("1234567890123456789012345");
 
-    // Set up default expansions for the collapsing elements.  These
-    // CollapsingFrame objects keep track of their own settings per object name
-    // internally, however, they do not provide a way to specify an initial
-    // default setting, so we have to do that here.
-    // See the "name" parameter to CollapsingFrame's ctor.
-    // ??? CollapsingFrame should provide a way to pass a default so this
-    //     code can be moved into its ctor.
-    QSettings settings;
-    settings.beginGroup(CollapsingFrameConfigGroup);
-
-    // ??? Move these down with their widgets.  Then move into
-    //     CollapsingFrame's ctor.
-    const QString trackParametersPlayback = "trackparametersplayback";
-    bool expanded = qStrToBool(settings.value(trackParametersPlayback, "true")) ;
-    settings.setValue(trackParametersPlayback, expanded);
-
-    const QString trackParametersRecord = "trackparametersrecord";
-    expanded = qStrToBool(settings.value(trackParametersRecord, "false")) ;
-    settings.setValue(trackParametersRecord, expanded);
-
-    const QString trackParametersDefaults = "trackparametersdefaults";
-    expanded = qStrToBool(settings.value(trackParametersDefaults, "false")) ;
-    settings.setValue(trackParametersDefaults, expanded);
-
-    const QString trackStaffGroup = "trackstaffgroup";
-    expanded = qStrToBool(settings.value(trackStaffGroup, "false")) ;
-    settings.setValue(trackStaffGroup, expanded);
-
-    settings.endGroup();
-
     // Widgets
 
     // Label
@@ -129,7 +99,7 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
 
     // Outer collapsing frame
     CollapsingFrame *playbackParametersFrame = new CollapsingFrame(
-            tr("Playback parameters"), this, trackParametersPlayback);
+            tr("Playback parameters"), this, "trackparametersplayback", true);
 
     // Inner fixed widget
     // We need an inner widget so that we can have a layout.  The outer
@@ -190,7 +160,7 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
     // Recording filters
 
     CollapsingFrame *recordingFiltersFrame = new CollapsingFrame(
-            tr("Recording filters"), this, trackParametersRecord);
+            tr("Recording filters"), this, "trackparametersrecord", false);
 
     QWidget *recordingFilters = new QWidget(recordingFiltersFrame);
     recordingFiltersFrame->setWidget(recordingFilters);
@@ -252,7 +222,7 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
     // Staff export options
 
     CollapsingFrame *staffExportOptionsFrame = new CollapsingFrame(
-            tr("Staff export options"), this, trackStaffGroup);
+            tr("Staff export options"), this, "trackstaffgroup", false);
 
     QWidget *staffExportOptions = new QWidget(staffExportOptionsFrame);
     staffExportOptionsFrame->setWidget(staffExportOptions);
@@ -314,7 +284,7 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
     // Create segments with
 
     m_createSegmentsWithFrame = new CollapsingFrame(
-            tr("Create segments with"), this, trackParametersDefaults);
+            tr("Create segments with"), this, "trackparametersdefaults", false);
 
     QWidget *createSegmentsWith = new QWidget(m_createSegmentsWithFrame);
     m_createSegmentsWithFrame->setWidget(createSegmentsWith);

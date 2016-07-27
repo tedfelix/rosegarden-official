@@ -53,7 +53,7 @@ class RosegardenDocument;
 class TrackParameterBox : public RosegardenParameterBox,
                           public CompositionObserver
 {
-Q_OBJECT
+    Q_OBJECT
         
 public:
     TrackParameterBox(RosegardenDocument *doc, QWidget *parent = 0);
@@ -226,7 +226,9 @@ private:
     /// Create segments with: Pitch (Lowest/Highest)
     QPushButton *m_lowest;
     QPushButton *m_highest;
+    /// MIDI Pitch.  (??? Why not use Pitch for this?)
     int m_lowestPlayable;
+    /// MIDI Pitch.  (??? Why not use Pitch for this?)
     int m_highestPlayable;
     void updateHighLow();
 

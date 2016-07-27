@@ -114,15 +114,6 @@ SegmentParameterBox::~SegmentParameterBox()
 void
 SegmentParameterBox::initBox()
 {
-    QSettings settings;
-    settings.beginGroup(CollapsingFrameConfigGroup);
-    const QString segmentParametersLinked = "segmentparameterslinked";
-    // ??? CollapsingFrame should take a default so we don't have to
-    //     do this.  See the comments in TrackParameterBox's ctor.
-    bool expanded = qStrToBool(settings.value(segmentParametersLinked, "false")) ;
-    settings.setValue(segmentParametersLinked, expanded);
-    settings.endGroup();
-
     // Label
     QLabel *label = new QLabel(tr("Label"), this);
     label->setFont(m_font);
@@ -227,7 +218,7 @@ SegmentParameterBox::initBox()
 
     // Outer collapsing frame
     CollapsingFrame *linkedSegmentParametersFrame = new CollapsingFrame(
-            tr("Linked segment parameters"), this, segmentParametersLinked);
+            tr("Linked segment parameters"), this, "segmentparameterslinked", false);
 
     // Unhide this if you want to play with the linked segment
     // transpose parameters.  I've hidden it for the time being until
