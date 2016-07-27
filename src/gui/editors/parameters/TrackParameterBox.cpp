@@ -493,15 +493,17 @@ TrackParameterBox::populatePlaybackDeviceList()
     m_instrumentIds.clear();
     m_instrumentNames.clear();
 
+    // Haven't found a valid device yet.
+    DeviceId currentDeviceId = Device::NO_DEVICE;
+
     // Get the instruments
     InstrumentList instrumentList = m_doc->getStudio().getPresentationInstruments();
-    int currentDevId = -1;
 
     // For each instrument in the studio.
-    for (InstrumentList::iterator it = instrumentList.begin();
-         it != instrumentList.end();
-         ++it) {
-        const Instrument *instrument = (*it);
+    for (InstrumentList::const_iterator instrumentIter = instrumentList.begin();
+         instrumentIter != instrumentList.end();
+         ++instrumentIter) {
+        const Instrument *instrument = (*instrumentIter);
 
         // Not valid?  Try the next.
         if (!instrument)
@@ -510,38 +512,48 @@ TrackParameterBox::populatePlaybackDeviceList()
         QString instrumentName(QObject::tr(instrument->getName().c_str()));
         QString programName(QObject::tr(instrument->getProgramName().c_str()));
 
-        Device *device = instrument->getDevice();
-        DeviceId devId = device->getId();
-
         if (instrument->getType() == Instrument::SoftSynth) {
             instrumentName.replace(QObject::tr("Synth plugin"), "");
+
             programName = "";
-            AudioPluginInstance *plugin = instrument->getPlugin
-                                          (Instrument::SYNTH_PLUGIN_POSITION);
+
+            AudioPluginInstance *plugin =
+                    instrument->getPlugin(Instrument::SYNTH_PLUGIN_POSITION);
             if (plugin) {
+
+                // ??? A search on getProgram() reveals that the following
+                //     code is copy/pasted all over the place.  Investigate
+                //     whether there are variations, then move this into
+                //     a new AudioPluginInstance member and call it everywhere
+                //     instead.
+
                 programName = strtoqstr(plugin->getProgram());
+
                 QString identifier = strtoqstr(plugin->getIdentifier());
                 if (identifier != "") {
                     QString type, soName, label;
-                    PluginIdentifier::parseIdentifier
-                    (identifier, type, soName, label);
-                    if (programName == "") {
+                    PluginIdentifier::parseIdentifier(identifier, type, soName, label);
+
+                    if (programName == "")
                         programName = strtoqstr(plugin->getDistinctiveConfigurationText());
-                    }
-                    if (programName != "") {
+
+                    if (programName != "")
                         programName = QString("%1: %2").arg(label).arg(programName);
-                    } else {
+                    else
                         programName = label;
-                    }
                 }
             }
         }
 
-        if (devId != (DeviceId)(currentDevId)) {
-            currentDevId = int(devId);
-            QString deviceName = QObject::tr(device->getName().c_str());
-            m_playbackDevice->addItem(deviceName);
-            m_playbackDeviceIds.push_back(currentDevId);
+        Device *device = instrument->getDevice();
+        DeviceId deviceId = device->getId();
+
+        // If we've encountered a new device, add it to the combo.
+        if (deviceId != currentDeviceId) {
+            currentDeviceId = deviceId;
+
+            m_playbackDevice->addItem(QObject::tr(device->getName().c_str()));
+            m_playbackDeviceIds.push_back(currentDeviceId);
         }
 
         if (programName != "")
@@ -549,14 +561,19 @@ TrackParameterBox::populatePlaybackDeviceList()
 
         // cut off the redundant eg. "General MIDI Device" that appears in the
         // combo right above here anyway
-        instrumentName = instrumentName.mid(instrumentName.indexOf("#"), instrumentName.length());
+        instrumentName = instrumentName.mid(
+                instrumentName.indexOf("#"), instrumentName.length());
 
-        m_instrumentIds[currentDevId].push_back(instrument->getId());
-        m_instrumentNames[currentDevId].append(instrumentName);
+        m_instrumentIds[currentDeviceId].push_back(instrument->getId());
+        m_instrumentNames[currentDeviceId].append(instrumentName);
     }
 
     m_playbackDevice->setCurrentIndex(-1);
     m_instrument->setCurrentIndex(-1);
+
+    // Note that the instrument combo (m_instrument) is not updated
+    // by this routine.  slotPlaybackDeviceChanged() copies the strings
+    // from m_instrumentNames to m_instrument.
 }
 
 void
