@@ -519,30 +519,8 @@ TrackParameterBox::populatePlaybackDeviceList()
 
             AudioPluginInstance *plugin =
                     instrument->getPlugin(Instrument::SYNTH_PLUGIN_POSITION);
-            if (plugin) {
-
-                // ??? A search on getProgram() reveals that the following
-                //     code is copy/pasted all over the place.  Investigate
-                //     whether there are variations, then move this into
-                //     a new AudioPluginInstance member and call it everywhere
-                //     instead.
-
-                programName = strtoqstr(plugin->getProgram());
-
-                QString identifier = strtoqstr(plugin->getIdentifier());
-                if (identifier != "") {
-                    QString type, soName, label;
-                    PluginIdentifier::parseIdentifier(identifier, type, soName, label);
-
-                    if (programName == "")
-                        programName = strtoqstr(plugin->getDistinctiveConfigurationText());
-
-                    if (programName != "")
-                        programName = QString("%1: %2").arg(label).arg(programName);
-                    else
-                        programName = label;
-                }
-            }
+            if (plugin)
+                programName = strtoqstr(plugin->getDisplayName());
         }
 
         Device *device = instrument->getDevice();

@@ -280,42 +280,27 @@ ManageMetronomeDialog::populate(int deviceIndex)
 
             QString iname(QObject::tr((*iit)->getName().c_str()));
             QString ipname((*iit)->getLocalizedPresentationName());
-            QString pname(QObject::tr((*iit)->getProgramName().c_str()));
+            QString programName(QObject::tr((*iit)->getProgramName().c_str()));
 
             QString text;
 
             if ((*iit)->getType() == Instrument::SoftSynth) {
 
                 iname.replace(QObject::tr("Synth plugin "), "");
-                pname = "";
+                programName = "";
 
                 AudioPluginInstance *plugin = (*iit)->getPlugin
                     (Instrument::SYNTH_PLUGIN_POSITION);
-                if (plugin) {
-                    pname = strtoqstr(plugin->getProgram());
-                    QString identifier = strtoqstr(plugin->getIdentifier());
-                    if (identifier != "") {
-                        QString type, soName, label;
-                        PluginIdentifier::parseIdentifier
-                            (identifier, type, soName, label);
-                        if (pname == "") {
-                            pname = strtoqstr(plugin->getDistinctiveConfigurationText());
-                        }
-                        if (pname != "") {
-                            pname = QString("%1: %2").arg(label).arg(pname);
-                        } else {
-                            pname = label;
-                        }
-                    }
-                }
+                if (plugin)
+                    programName = strtoqstr(plugin->getDisplayName());
 
             } else {
 
                 iname = ipname;
             }
 
-            if (pname != "") {
-                text = tr("%1 (%2)").arg(iname).arg(pname);
+            if (programName != "") {
+                text = tr("%1 (%2)").arg(iname).arg(programName);
             } else {
                 text = iname;
             }

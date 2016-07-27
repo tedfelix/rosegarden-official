@@ -721,13 +721,13 @@ TrackButtons::populateInstrumentPopup(Instrument *thisTrackInstr, QMenu* instrum
         // translate the program name
         //
         // Note we are converting the string from std to Q back to std then to
-        // C.  This is obviously ridiculous, but the fact that we have pname
+        // C.  This is obviously ridiculous, but the fact that we have programName
         // here at all makes me think it exists as some kind of necessary hack
         // to coax tr() into behaving nicely.  I decided to change it as little
         // as possible to get it to compile, and not refactor this down to the
         // simplest way to call tr() on a C string.
-        QString pname(strtoqstr((*it)->getProgramName()));
-        pname = QObject::tr(pname.toStdString().c_str());
+        QString programName(strtoqstr((*it)->getProgramName()));
+        programName = QObject::tr(programName.toStdString().c_str());
 
         Device *device = (*it)->getDevice();
         DeviceId devId = device->getId();
@@ -736,30 +736,13 @@ TrackButtons::populateInstrumentPopup(Instrument *thisTrackInstr, QMenu* instrum
         // Determine the proper program name and whether it is connected
 
         if ((*it)->getType() == Instrument::SoftSynth) {
-            pname = "";
+            programName = "";
             AudioPluginInstance *plugin =
                     (*it)->getPlugin(Instrument::SYNTH_PLUGIN_POSITION);
             if (plugin) {
                 // we don't translate any plugin program names or other texts
-                pname = strtoqstr(plugin->getProgram());
-                QString identifier = strtoqstr(plugin->getIdentifier());
-                if (identifier != "") {
-                    connectedIcon = true;
-                    QString type, soName, label;
-                    PluginIdentifier::parseIdentifier(
-                            identifier, type, soName, label);
-                    if (pname == "") {
-                        pname = strtoqstr(
-                                plugin->getDistinctiveConfigurationText());
-                    }
-                    if (pname != "") {
-                        pname = QString("%1: %2").arg(label).arg(pname);
-                    } else {
-                        pname = label;
-                    }
-                } else {
-                    connectedIcon = false;
-                }
+                programName = strtoqstr(plugin->getDisplayName());
+                connectedIcon = (plugin->getIdentifier() != "");
             }
         } else if ((*it)->getType() == Instrument::Audio) {
             connectedIcon = true;
@@ -871,7 +854,7 @@ TrackButtons::populateInstrumentPopup(Instrument *thisTrackInstr, QMenu* instrum
         //action->setIconVisibleInMenu(true);
 
         // Action text
-        if (pname != "") iname += " (" + pname + ")";
+        if (programName != "") iname += " (" + programName + ")";
         action->setText(iname);
 
         // Item index used to find the proper instrument once the user makes
@@ -992,33 +975,12 @@ TrackButtons::slotInstrumentChanged(Instrument *instrument)
             // For a SoftSynth, use the plugin's name.
             if (instrument->getType() == Instrument::SoftSynth) {
 
-                // ??? This code is in at least four places.  Twice here, once
-                //     in TrackParameterBox, once in ManageMetronomeDialog, ...
-                //     Search on "strtoqstr(plugin->getIdentifier())" to find
-                //     them.
-                //     Probably should factor out into an AudioPluginInstance
-                //     member.  getDisplayName()?
-
                 AudioPluginInstance *plugin =
                         instrument->getPlugin(Instrument::SYNTH_PLUGIN_POSITION);
                 if (plugin) {
                     // we don't translate any plugin program names or other texts
-                    QString pname = strtoqstr(plugin->getProgram());
-                    QString identifier = strtoqstr(plugin->getIdentifier());
-                    if (identifier != "") {
-                        QString type, soName, label;
-                        PluginIdentifier::parseIdentifier(identifier, type, soName, label);
-                        if (pname == "") {
-                            pname = strtoqstr(plugin->getDistinctiveConfigurationText());
-                        }
-                        if (pname != "") {
-                            pname = QString("%1: %2").arg(label).arg(pname);
-                        } else {
-                            pname = label;
-                        }
-                    }
-
-                    m_trackLabels[i]->setProgramChangeName(pname);
+                    m_trackLabels[i]->setProgramChangeName(
+                            strtoqstr(plugin->getDisplayName()));
                 }
             } else {
                 m_trackLabels[i]->setProgramChangeName(QObject::tr(instrument->getProgramName().c_str()));

@@ -12,8 +12,14 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[AudioPluginInstance]"
+
 #include "base/AudioPluginInstance.h"
+
 #include "Instrument.h"
+#include "sound/PluginIdentifier.h"
+#include "misc/Strings.h"
+#include "misc/Debug.h"
 
 #include <iostream>
 #include <cstring>
@@ -232,7 +238,32 @@ AudioPluginInstance::getDistinctiveConfigurationText() const
 
     return base;
 }
-    
+
+std::string
+AudioPluginInstance::getDisplayName() const
+{
+    QString displayName = strtoqstr(getProgram());
+
+    // The identifier contains the name of the soft synth in the "label"
+    // part.
+    QString identifier = strtoqstr(getIdentifier());
+
+    if (identifier != "") {
+        QString type, soName, label;
+        PluginIdentifier::parseIdentifier(identifier, type, soName, label);
+
+        if (displayName == "")
+            displayName = strtoqstr(getDistinctiveConfigurationText());
+
+        if (displayName != "")
+            displayName = label + ": " + displayName;
+        else
+            displayName = label;
+    }
+
+    return qstrtostr(displayName);
+}
+
 
 }
 

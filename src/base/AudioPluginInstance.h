@@ -100,7 +100,9 @@ public:
     AudioPluginInstance(std::string identifier,
                         unsigned int position);
 
+    /// E.g. "dssi:/usr/lib/dssi/hexter.so:hexter"
     void setIdentifier(std::string identifier) { m_identifier = identifier; }
+    /// E.g. "dssi:/usr/lib/dssi/hexter.so:hexter"
     std::string getIdentifier() const { return m_identifier; }
 
     void setPosition(unsigned int position) { m_position = position; }
@@ -143,9 +145,12 @@ public:
 
     std::string getDistinctiveConfigurationText() const;
 
+    std::string getDisplayName() const;
+
 protected:
 
     int                                m_mappedId;
+    /// E.g. "dssi:/usr/lib/dssi/hexter.so:hexter"
     std::string                        m_identifier;
     std::vector<PluginPortInstance*>   m_ports;
     unsigned int                       m_position;
