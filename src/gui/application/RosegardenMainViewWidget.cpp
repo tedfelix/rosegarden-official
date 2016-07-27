@@ -194,11 +194,6 @@ RosegardenMainViewWidget::RosegardenMainViewWidget(bool showTrackLabels,
             this,
             SLOT(slotDroppedNewAudio(QString)));
 
-    connect(m_trackEditor->getTrackButtons(),
-            SIGNAL(instrumentSelected(int)),
-            m_trackParameterBox,
-            SLOT(slotUpdateControls(int)));
-
     connect(m_trackParameterBox,
             SIGNAL(instrumentSelected(TrackId, int)),
             m_trackEditor->getTrackButtons(),

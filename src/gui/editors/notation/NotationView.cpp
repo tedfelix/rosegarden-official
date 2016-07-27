@@ -3413,9 +3413,6 @@ NotationView::slotEditTranspose()
                 intervalDialog.getChangeKey(), steps, semitones, 
                 intervalDialog.getTransposeSegmentBack()));
     }
-
-    // Fix #1885520 (Update track parameter widget when transpose changed from notation)
-    RosegardenMainWindow::self()->getView()->getTrackParameterBox()->slotUpdateControls(-1);
 }
 
 void
@@ -3450,6 +3447,9 @@ NotationView::slotEditSwitchPreset()
                             dialog.getLowRange(), 
                             dialog.getHighRange(),
                             clefIndexToClef(dialog.getClef())));
+
+        comp.notifyTrackChanged(track);
+
     } else {
         CommandHistory::getInstance()->addCommand(new SegmentSyncCommand(
                             m_segments, 
@@ -3460,9 +3460,6 @@ NotationView::slotEditSwitchPreset()
     }
 
     m_doc->slotDocumentModified();
-
-    // Fix #1885520 (Update track parameter widget when preset changed from notation)
-    RosegardenMainWindow::self()->getView()->getTrackParameterBox()->slotUpdateControls(-1);
 }
 
 void

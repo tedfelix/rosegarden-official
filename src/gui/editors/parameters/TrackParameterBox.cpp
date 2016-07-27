@@ -448,7 +448,7 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
 
     setContentsMargins(2, 7, 2, 2);
 
-    slotUpdateControls(-1);
+    updateWidgets();
 }
 
 void
@@ -475,7 +475,7 @@ TrackParameterBox::slotPopulateDeviceLists()
     m_lastInstrumentType = Instrument::InvalidInstrument;
     populateRecordingDeviceList();
 
-    slotUpdateControls(-1);
+    updateWidgets();
 }
 
 void
@@ -701,7 +701,7 @@ TrackParameterBox::updateHighLow()
 }
 
 void
-TrackParameterBox::slotUpdateControls(int /*dummy*/)
+TrackParameterBox::updateWidgets()
 {
     // Device
     slotPlaybackDeviceChanged(-1);
@@ -742,6 +742,8 @@ TrackParameterBox::trackChanged(const Composition *, Track *track)
 
     // Update the track name in case it has changed.
     selectedTrackNameChanged();
+
+    updateWidgets();
 }
 
 void
@@ -755,7 +757,7 @@ TrackParameterBox::trackSelectionChanged(const Composition *, TrackId newTrackId
 
     m_selectedTrackId = newTrackId;
     selectedTrackNameChanged();
-    slotUpdateControls(-1);
+    updateWidgets();
 }
 
 void
@@ -924,7 +926,7 @@ TrackParameterBox::slotInstrumentChanged(int index)
             // emit the index we've calculated, relative to the studio list
             // TrackButtons does the rest of the work for us.
             // ??? Why not make the change directly to the Composition, then
-            //     fire off an existing CompositionObserver notification?
+            //     call Composition::notifyTrackChanged()?
             //     That should get rid of the for loop above.  See
             //     slotArchiveChanged() for an example.
             emit instrumentSelected(m_selectedTrackId, index);
@@ -1017,7 +1019,7 @@ void
 TrackParameterBox::slotInstrumentChanged(Instrument *)
 {
     populatePlaybackDeviceList();
-    slotUpdateControls(-1);
+    updateWidgets();
 }
 
 void

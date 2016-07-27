@@ -8530,6 +8530,9 @@ RosegardenMainWindow::slotSwitchPreset()
                             dialog.getLowRange(), 
                             dialog.getHighRange(),
                             clefIndexToClef(dialog.getClef())));
+
+        comp.notifyTrackChanged(track);
+
     } else {
         CommandHistory::getInstance()->addCommand(new SegmentSyncCommand(
                             m_view->getSelection(), 
@@ -8540,9 +8543,6 @@ RosegardenMainWindow::slotSwitchPreset()
     }
 
     m_doc->slotDocumentModified();
-
-    // Fix #1885520 (Update track parameter widget when preset changed from notation)
-    getView()->getTrackParameterBox()->slotUpdateControls(-1);
 }
 
 void

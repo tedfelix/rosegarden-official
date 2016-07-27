@@ -60,6 +60,12 @@ public:
     
     void setDocument(RosegardenDocument *doc);
 
+    /**
+     * ??? This is a selective refresh.  Recommend combining with all others
+     *     into a single full refresh (updateWidgets()) and optimize.
+     */
+    void updateWidgets();
+
     // CompositionObserver overrides.
     virtual void trackChanged(const Composition *comp, Track *track);
     virtual void trackSelectionChanged(const Composition *, TrackId);
@@ -71,19 +77,6 @@ public slots:
      *     into a single full refresh (updateWidgets()) and optimize.
      */
     void slotDocColoursChanged();
-
-    /// Update all controls in the Track Parameters box.
-    /** The "dummy" int is for compatibility with the
-     *  TrackButtons::instrumentSelected() signal.  See
-     *  RosegardenMainViewWidget's ctor which connects the two.
-     *
-     *  ??? This would probably be better handled with a separate
-     *      slotInstrumentSelected() that takes the instrument ID, ignores it,
-     *      and calls a new public updateControls() (which would no longer need
-     *      the dummy).  Then callers of updateControls() would no longer need
-     *      the cryptic "-1".
-     */
-    void slotUpdateControls(int dummy);
 
     /// Connected to InstrumentStaticSignals::changed().
     /**
@@ -105,7 +98,8 @@ signals:
     /// Connected to TrackButtons::slotTPBInstrumentSelected().
     /**
      * ??? A connection between TrackParameterBox and TrackButtons can
-     *     likely be simplified by going through Composition instead.
+     *     likely be simplified by using Composition::notifyTrackChanged()
+     *     instead of this direct connection.
      */
     void instrumentSelected(TrackId, int);
 
