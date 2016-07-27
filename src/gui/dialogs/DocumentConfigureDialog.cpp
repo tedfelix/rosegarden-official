@@ -15,8 +15,10 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[DocumentConfigureDialog]"
 
 #include "DocumentConfigureDialog.h"
+
 #include "ConfigureDialogBase.h"
 #include "document/RosegardenDocument.h"
 #include "gui/configuration/AudioPropertiesPage.h"
@@ -24,6 +26,7 @@
 #include "gui/configuration/DocumentMetaConfigurationPage.h"
 #include "gui/configuration/GeneralConfigurationPage.h"
 #include "gui/general/IconLoader.h"
+#include "misc/Debug.h"
 
 #include <QLayout>
 #include <QString>
@@ -39,6 +42,7 @@ DocumentConfigureDialog::DocumentConfigureDialog(RosegardenDocument *doc,
     : ConfigureDialogBase(parent, tr("Document Properties"), name )//, QMessageBox::StandardButtons buttons )
 {
     QWidget *page = 0;
+
     // Document Meta Page
     //
     IconLoader il;

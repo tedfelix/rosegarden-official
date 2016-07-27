@@ -15,8 +15,10 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[DocumentMetaConfigurationPage]"
 
 #include "DocumentMetaConfigurationPage.h"
+
 #include "TabbedConfigurationPage.h"
 
 #include "base/Event.h"
@@ -37,6 +39,7 @@
 #include "gui/configuration/CommentsConfigurationPage.h"
 #include "gui/dialogs/ConfigureDialogBase.h"
 #include "gui/general/GUIPalette.h"
+#include "misc/Debug.h"
 
 #include <QSettings>
 #include <QFrame>
@@ -317,7 +320,6 @@ DocumentMetaConfigurationPage::DocumentMetaConfigurationPage(
     layout->addWidget(table, 0, 0);
 
     addTab(frame, tr("Segment Summary"));
-
 }
 
 void
