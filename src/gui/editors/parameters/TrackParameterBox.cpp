@@ -647,8 +647,7 @@ TrackParameterBox::populateRecordingDeviceList()
 void
 TrackParameterBox::updateHighLow()
 {
-    Composition &composition = m_doc->getComposition();
-    Track *track = composition.getTrackById(composition.getSelectedTrack());
+    Track *track = getTrack();
     if (!track)
         return;
 
@@ -842,9 +841,7 @@ TrackParameterBox::slotInstrumentChanged(int index)
 
     // If nothing is selected, sync with the Track's instrument.
     if (index == -1) {
-        Composition &comp = m_doc->getComposition();
-
-        Track *trk = comp.getTrackById(comp.getSelectedTrack());
+        Track *trk = getTrack();
         if (!trk)
             return;
 
@@ -868,6 +865,10 @@ TrackParameterBox::slotInstrumentChanged(int index)
 
         m_instrument->setCurrentIndex(pos);
     } else {
+        // Invalid Track?  Bail.
+        if (!getTrack())
+            return;
+
         //devId = m_playbackDeviceIds[m_playbackDevice->currentIndex()];
 
         // Calculate an index to use in Studio::getInstrumentFromList() which
@@ -910,14 +911,10 @@ TrackParameterBox::slotInstrumentChanged(int index)
 
         //RG_DEBUG << "slotInstrumentChanged() index = " << index;
 
-        // ??? This check can be done before the for loop to avoid unnecessary
-        //     work.
-        if (m_doc->getComposition().haveTrack(m_selectedTrackId)) {
-            // Emit the index we've calculated, relative to the studio list.
-            // TrackButtons::slotTPBInstrumentSelected() does the rest of the
-            // work for us.
-            emit instrumentSelected(m_selectedTrackId, index);
-        }
+        // Emit the index we've calculated, relative to the studio list.
+        // TrackButtons::slotTPBInstrumentSelected() does the rest of the
+        // work for us.
+        emit instrumentSelected(m_selectedTrackId, index);
 
         // ??? This entire "else" block should reduce to this:
         //
