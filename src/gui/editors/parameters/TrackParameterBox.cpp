@@ -745,37 +745,14 @@ TrackParameterBox::trackChanged(const Composition *, Track *track)
 }
 
 void
-TrackParameterBox::tracksDeleted(const Composition *, std::vector<TrackId> &trackIds)
+TrackParameterBox::trackSelectionChanged(const Composition *, TrackId newTrackId)
 {
-    //RG_DEBUG << "tracksDeleted(), selected is " << m_selectedTrackId;
-
-    // For each deleted track
-    for (unsigned i = 0; i < trackIds.size(); ++i) {
-        // If this is the selected track
-        if ((int)trackIds[i] == m_selectedTrackId) {
-            selectedTrackChanged2();
-            return;
-        }
-    }
-}
-
-void
-TrackParameterBox::trackSelectionChanged(const Composition *, TrackId)
-{
-    selectedTrackChanged2();
-}
-
-void
-TrackParameterBox::selectedTrackChanged2()
-{
-    Composition &comp = m_doc->getComposition();
-    TrackId newTrackId = comp.getSelectedTrack();
-
     // No change?  Bail.
     if ((int)newTrackId == m_selectedTrackId)
         return;
 
     m_preset->setEnabled(true);
+
     m_selectedTrackId = newTrackId;
     selectedTrackNameChanged();
     slotUpdateControls(-1);

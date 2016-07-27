@@ -60,20 +60,8 @@ public:
     
     void setDocument(RosegardenDocument *doc);
 
-    /**
-     * ??? What about CompositionObserver::selectedTrackChanged()?  Should
-     *     we use that instead of having our own?  Is this redundant?
-     *     And what about trackSelectionChanged() which we already override?
-     *
-     * ??? This is a selective refresh.  Recommend combining with all others
-     *     into a single full refresh (updateWidgets()) and optimize.
-     */
-    void selectedTrackChanged2();
-
-
     // CompositionObserver overrides.
     virtual void trackChanged(const Composition *comp, Track *track);
-    virtual void tracksDeleted(const Composition *comp, std::vector<TrackId> &trackIds);
     virtual void trackSelectionChanged(const Composition *, TrackId);
 
 public slots:
