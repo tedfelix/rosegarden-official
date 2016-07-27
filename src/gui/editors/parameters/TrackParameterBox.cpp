@@ -557,8 +557,6 @@ TrackParameterBox::populatePlaybackDeviceList()
 void
 TrackParameterBox::populateRecordingDeviceList()
 {
-    RG_DEBUG << "TrackParameterBox::populateRecordingDeviceList()\n";
-
     Track *track = getTrack();
     if (!track)
         return;
@@ -745,7 +743,7 @@ TrackParameterBox::trackChanged(const Composition *, Track *track)
 void
 TrackParameterBox::tracksDeleted(const Composition *, std::vector<TrackId> &trackIds)
 {
-    //RG_DEBUG << "TrackParameterBox::tracksDeleted(), selected is " << m_selectedTrackId;
+    //RG_DEBUG << "tracksDeleted(), selected is " << m_selectedTrackId;
 
     // For each deleted track
     for (unsigned i = 0; i < trackIds.size(); ++i) {
@@ -766,8 +764,6 @@ TrackParameterBox::trackSelectionChanged(const Composition *, TrackId)
 void
 TrackParameterBox::selectedTrackChanged2()
 {
-    //RG_DEBUG << "selectedTrackChanged2()";
-
     Composition &comp = m_doc->getComposition();
     TrackId newTrackId = comp.getSelectedTrack();
 
@@ -784,8 +780,6 @@ TrackParameterBox::selectedTrackChanged2()
 void
 TrackParameterBox::selectedTrackNameChanged()
 {
-    //RG_DEBUG << "selectedTrackNameChanged()";
-
     Track *trk = getTrack();
     if (!trk)
         return;
@@ -942,6 +936,7 @@ TrackParameterBox::slotInstrumentChanged(int index)
         index += prepend;
 
         //RG_DEBUG << "slotInstrumentChanged() index = " << index;
+
         // ??? This check can be done before the for loop to avoid unnecessary
         //     work.
         if (m_doc->getComposition().haveTrack(m_selectedTrackId)) {
@@ -977,7 +972,7 @@ TrackParameterBox::slotArchiveChanged(bool checked)
 void
 TrackParameterBox::slotRecordingDeviceChanged(int index)
 {
-    //RG_DEBUG << "TrackParameterBox::slotRecordingDeviceChanged(" << index << ")";
+    //RG_DEBUG << "slotRecordingDeviceChanged(" << index << ")";
 
     Track *trk = getTrack();
     if (!trk)
@@ -1085,8 +1080,6 @@ TrackParameterBox::slotTransposeChanged(int index)
 void
 TrackParameterBox::slotDocColoursChanged()
 {
-    //RG_DEBUG << "slotDocColoursChanged()";
-
     m_color->clear();
 
     // Populate it from Composition::m_segmentColourMap
@@ -1171,8 +1164,6 @@ TrackParameterBox::slotColorChanged(int index)
 void
 TrackParameterBox::slotHighestPressed()
 {
-    //RG_DEBUG << "slotHighestPressed()";
-
     if (m_selectedTrackId == (int)NO_TRACK)
         return;
 
@@ -1197,8 +1188,6 @@ TrackParameterBox::slotHighestPressed()
 void
 TrackParameterBox::slotLowestPressed()
 {
-    //RG_DEBUG << "slotLowestPressed()";
-
     if (m_selectedTrackId == (int)NO_TRACK)
         return;
 
@@ -1223,10 +1212,10 @@ TrackParameterBox::slotLowestPressed()
 void
 TrackParameterBox::slotLoadPressed()
 {
-    RG_DEBUG << "TrackParameterBox::slotLoadPressed()";
-
+    // Inherits style.  Centers on main window.
     //PresetHandlerDialog dialog(this);
-    PresetHandlerDialog dialog(0); // no parent means no style from group box parent, but what about popup location?
+    // Does not inherit style?  Centers on monitor #1?
+    PresetHandlerDialog dialog(0);
 
     Track *trk = getTrack();
     if (!trk)
@@ -1236,6 +1225,8 @@ TrackParameterBox::slotLoadPressed()
         if (dialog.exec() == QDialog::Accepted) {
             m_preset->setText(dialog.getName());
             trk->setPresetLabel(qstrtostr(dialog.getName()));
+
+            // If we need to convert the track's segments
             if (dialog.getConvertAllSegments()) {
                 Composition &comp = m_doc->getComposition();
                 SegmentSyncCommand* command = new SegmentSyncCommand(
@@ -1245,37 +1236,41 @@ TrackParameterBox::slotLoadPressed()
                         clefIndexToClef(dialog.getClef()));
                 CommandHistory::getInstance()->addCommand(command);
             }
+
             m_clef->setCurrentIndex(dialog.getClef());
+            trk->setClef(dialog.getClef());
                      
-            m_transpose->setCurrentIndex(m_transpose->findText(QString("%1").arg(dialog.getTranspose())));
+            m_transpose->setCurrentIndex(m_transpose->findText(
+                    QString("%1").arg(dialog.getTranspose())));
+            trk->setTranspose(dialog.getTranspose());
 
             m_highestPlayable = dialog.getHighRange();
             m_lowestPlayable = dialog.getLowRange();
             updateHighLow();
-            slotClefChanged(dialog.getClef());
-            transposeChanged(dialog.getTranspose());
 
-            // the preceding slots will have set this disabled, so we
+            // updateHighLow() will have set this disabled, so we
             // re-enable it until it is subsequently re-disabled by the
             // user overriding the preset, calling one of the above slots
             // in the normal course
+            // ??? This is really subtle.  We should probably just clear it
+            //     when modifications are made.  After all, it's no longer
+            //     the selected preset.  Or add "(modified)"?  Or change
+            //     color?  Maybe we should just get rid of
+            //     m_preset?  It doesn't really help much.  It's not even
+            //     saved to the .rg file.
             m_preset->setEnabled(true);
         }
-    } catch (Exception e) {
-        //!!! This should be a more verbose error to pass along the
-        // row/column of the corruption, but I can't be bothered to work
-        // that out just at the moment.  Hopefully this code will never
-        // execute anyway.
-        QMessageBox::warning(0, tr("Rosegarden"), tr("The instrument preset database is corrupt.  Check your installation."));
+    } catch (Exception e) {  // from PresetHandlerDialog
+        // !!! This should be a more verbose error to pass along the
+        //     row/column of the corruption.
+        QMessageBox::warning(0, tr("Rosegarden"),
+                tr("The instrument preset database is corrupt.  Check your installation."));
     }
-
 }
 
 void
 TrackParameterBox::slotNotationSizeChanged(int index)
 {
-    RG_DEBUG << "TrackParameterBox::sotStaffSizeChanged()";
-
     Track *trk = getTrack();
     if (!trk)
         return;
@@ -1283,12 +1278,9 @@ TrackParameterBox::slotNotationSizeChanged(int index)
     trk->setStaffSize(index);
 }
 
-
 void
 TrackParameterBox::slotBracketTypeChanged(int index)
 {
-    RG_DEBUG << "TrackParameterBox::sotStaffBracketChanged()";
-
     Track *trk = getTrack();
     if (!trk)
         return;
@@ -1306,6 +1298,7 @@ TrackParameterBox::getTrack()
         return NULL;
 
     Composition &comp = m_doc->getComposition();
+
     // If the track is gone, bail.
     if (!comp.haveTrack(m_selectedTrackId)) {
         m_selectedTrackId = (int)NO_TRACK;
