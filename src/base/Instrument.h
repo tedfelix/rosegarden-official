@@ -107,7 +107,7 @@ class Instrument : public QObject, public XmlExportable, public PluginContainer
 public:
     static const unsigned int SYNTH_PLUGIN_POSITION;
 
-    enum InstrumentType { Midi, Audio, SoftSynth };
+    enum InstrumentType { Midi, Audio, SoftSynth, InvalidInstrument = -1 };
 
     Instrument(InstrumentId id,
                InstrumentType it,

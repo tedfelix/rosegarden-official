@@ -410,6 +410,7 @@ setAllocationMode(Instrument *instrument)
                 m_usingAllocator = false;
                 break;
             case Instrument::Audio:
+            case Instrument::InvalidInstrument:
             default:
                 RG_DEBUG << "setAllocationMode() : Got an "
                     "audio or unrecognizable instrument type."

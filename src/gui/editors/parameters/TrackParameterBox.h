@@ -28,6 +28,7 @@
 #include "base/Composition.h"
 #include "gui/widgets/ColourTable.h"
 #include "base/Device.h"  // For DeviceId
+#include "base/Instrument.h"
 
 #include <QString>
 
@@ -59,9 +60,14 @@ public:
     
     void setDocument(RosegardenDocument *doc);
 
-    // ??? What about CompositionObserver::selectedTrackChanged()?  Should
-    //     we use that instead of having our own?  Is this redundant?
-    //     And what about trackSelectionChanged() which we already override?
+    /**
+     * ??? What about CompositionObserver::selectedTrackChanged()?  Should
+     *     we use that instead of having our own?  Is this redundant?
+     *     And what about trackSelectionChanged() which we already override?
+     *
+     * ??? This is a selective refresh.  Recommend combining with all others
+     *     into a single full refresh (updateWidgets()) and optimize.
+     */
     void selectedTrackChanged2();
 
 
@@ -72,6 +78,10 @@ public:
 
 public slots:
     /// Connected to RosegardenDocument::docColoursChanged().
+    /**
+     * ??? This is a selective refresh.  Recommend combining with all others
+     *     into a single full refresh (updateWidgets()) and optimize.
+     */
     void slotDocColoursChanged();
 
     /// Update all controls in the Track Parameters box.
@@ -84,19 +94,34 @@ public slots:
      *      and calls a new public updateControls() (which would no longer need
      *      the dummy).  Then callers of updateControls() would no longer need
      *      the cryptic "-1".
+     *
+     *  ??? Is this the updateWidgets() I'm looking for?
      */
     void slotUpdateControls(int dummy);
 
     /// Connected to InstrumentStaticSignals::changed().
+    /**
+     * ??? This is a selective refresh.  Recommend combining with all others
+     *     into a single full refresh (updateWidgets()) and optimize.
+     */
     void slotInstrumentChanged(Instrument *instrument);
 
+    /// Refresh the Playback and Recording Device lists.
     /**
      * Connected to DeviceManagerDialog::deviceNamesChanged() and
      * BankEditorDialog::deviceNamesChanged().
+     *
+     * ??? This is a selective refresh.  Recommend combining with all others
+     *     into a single full refresh (updateWidgets()) and optimize.
      */
     void slotPopulateDeviceLists();
 
 signals:
+    /// Connected to TrackButtons::slotTPBInstrumentSelected().
+    /**
+     * ??? A connection between TrackParameterBox and TrackButtons can
+     *     likely be simplified by going through Composition instead.
+     */
     void instrumentSelected(TrackId, int);
 
 private slots:
@@ -164,7 +189,8 @@ private:
     /// Recording filters: Device
     QComboBox *m_recordingDevice;
     IdsVector m_recordingDeviceIds;
-    char m_lastInstrumentType;
+    /// Cache to detect change.
+    Instrument::InstrumentType m_lastInstrumentType;
     void populateRecordingDeviceList();
 
     /// Recording filters: Channel

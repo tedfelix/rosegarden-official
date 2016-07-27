@@ -2144,6 +2144,7 @@ RosegardenMainViewWidget::slotControllerDeviceEventReceived(MappedEvent *e, cons
         }
         break;
 
+    case Instrument::InvalidInstrument:
     default:
         break;
     }

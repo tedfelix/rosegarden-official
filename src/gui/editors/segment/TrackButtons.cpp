@@ -1225,7 +1225,8 @@ TrackButtons::getRecordLedColour(Instrument *ins)
 
     case Instrument::Midi:
         return GUIPalette::getColour(GUIPalette::RecordMIDITrackLED);
-            
+
+    case Instrument::InvalidInstrument:
     default:
         RG_DEBUG << "TrackButtons::slotUpdateTracks() - invalid instrument type, this is probably a BUG!";
         return Qt::green;

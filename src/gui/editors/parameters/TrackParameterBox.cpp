@@ -76,7 +76,7 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
     RosegardenParameterBox(tr("Track"), tr("Track Parameters"), parent),
     m_doc(doc),
     m_selectedTrackId((int)NO_TRACK),
-    m_lastInstrumentType(-1),
+    m_lastInstrumentType(Instrument::InvalidInstrument),
     m_lowestPlayable(0),
     m_highestPlayable(127)
 {
@@ -497,7 +497,8 @@ TrackParameterBox::slotPopulateDeviceLists()
 {
     RG_DEBUG << "TrackParameterBox::slotPopulateDeviceLists()\n";
     populatePlaybackDeviceList();
-    m_lastInstrumentType = -1;  // Attempt to force initial record device populate
+    // Force a record device populate.
+    m_lastInstrumentType = Instrument::InvalidInstrument;
     populateRecordingDeviceList();
     slotUpdateControls(-1);
 }
@@ -586,8 +587,10 @@ TrackParameterBox::populateRecordingDeviceList()
     if (!inst)
         return ;
 
-    if (m_lastInstrumentType != (char)inst->getInstrumentType()) {
-        m_lastInstrumentType = (char)inst->getInstrumentType();
+    // If we've changed instrument type, e.g. from Audio to MIDI,
+    // reload the combos.
+    if (m_lastInstrumentType != inst->getInstrumentType()) {
+        m_lastInstrumentType = inst->getInstrumentType();
 
         m_recordingDevice->clear();
         m_recordingDeviceIds.clear();
@@ -918,6 +921,9 @@ TrackParameterBox::slotInstrumentChanged(int index)
         // emit the index we've calculated, relative to the studio list
         RG_DEBUG << "TrackParameterBox::slotInstrumentChanged() index = " << index << "\n";
         if (m_doc->getComposition().haveTrack(m_selectedTrackId)) {
+            // TrackButtons does the rest of the work for us.
+            // ??? Why not make the change directly to the Composition, then
+            //     fire off an existing CompositionObserver notification?
             emit instrumentSelected(m_selectedTrackId, index);
         }
     }
@@ -1035,6 +1041,8 @@ TrackParameterBox::slotTransposeChanged(int index)
 void
 TrackParameterBox::transposeTextChanged(QString text)
 {
+    // ??? inline into only caller.
+
     if (text.isEmpty()) return;
     int value = text.toInt();
     transposeChanged(value);
