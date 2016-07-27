@@ -158,6 +158,7 @@ private slots:
 private:
     RosegardenDocument *m_doc;
 
+    // ??? Why isn't this TrackId?  Switch it.
     int m_selectedTrackId;
     Track *getTrack();
 
@@ -218,7 +219,6 @@ private:
     /// Create segments with: Transpose
     QComboBox *m_transpose;
     void transposeChanged(int transpose);
-    void transposeTextChanged(QString text);
 
     /// Create segments with: Pitch (Lowest/Highest)
     QPushButton *m_lowest;
@@ -233,7 +233,6 @@ private:
     QComboBox *m_color;
     // Position of the Add Colour item in m_color.
     int m_addColourPos;
-    ColourTable::ColourList m_colourList;
 };
 
 

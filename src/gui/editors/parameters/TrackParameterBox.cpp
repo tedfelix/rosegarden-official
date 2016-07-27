@@ -1025,14 +1025,21 @@ TrackParameterBox::slotThruRoutingChanged(int index)
     if (!inst)
         return;
 
-    if (inst->getInstrumentType() == Instrument::Midi)
-        track->setThruRouting(static_cast<Track::ThruRouting>(index));
+    // Thru routing is only supported for MIDI instruments.
+    if (inst->getInstrumentType() != Instrument::Midi)
+        return;
+
+    track->setThruRouting(static_cast<Track::ThruRouting>(index));
+    m_doc->slotDocumentModified();
+
+    // Notify observers
+    Composition &comp = m_doc->getComposition();
+    comp.notifyTrackChanged(track);
 }
 
 void
-TrackParameterBox::slotInstrumentChanged(Instrument * /*instrument*/)
+TrackParameterBox::slotInstrumentChanged(Instrument *)
 {
-    //RG_DEBUG << "TrackParameterBox::slotInstrumentChanged()";
     populatePlaybackDeviceList();
     slotUpdateControls(-1);
 }
@@ -1040,7 +1047,7 @@ TrackParameterBox::slotInstrumentChanged(Instrument * /*instrument*/)
 void
 TrackParameterBox::slotClefChanged(int clef)
 {
-    RG_DEBUG << "TrackParameterBox::slotClefChanged(" << clef << ")";
+    //RG_DEBUG << "slotClefChanged(" << clef << ")";
 
     Track *trk = getTrack();
     if (!trk)
@@ -1053,7 +1060,7 @@ TrackParameterBox::slotClefChanged(int clef)
 void
 TrackParameterBox::transposeChanged(int transpose)
 {
-    RG_DEBUG << "TrackParameterBox::transposeChanged(" << transpose << ")";
+    //RG_DEBUG << "transposeChanged(" << transpose << ")";
 
     Track *trk = getTrack();
     if (!trk)
@@ -1066,15 +1073,11 @@ TrackParameterBox::transposeChanged(int transpose)
 void
 TrackParameterBox::slotTransposeChanged(int index)
 {
-    transposeTextChanged(m_transpose->itemText(index));
-}
+    QString text = m_transpose->itemText(index);
 
-void
-TrackParameterBox::transposeTextChanged(QString text)
-{
-    // ??? inline into only caller.
+    if (text.isEmpty())
+        return;
 
-    if (text.isEmpty()) return;
     int value = text.toInt();
     transposeChanged(value);
 }
@@ -1082,42 +1085,40 @@ TrackParameterBox::transposeTextChanged(QString text)
 void
 TrackParameterBox::slotDocColoursChanged()
 {
-    RG_DEBUG << "TrackParameterBox::slotDocColoursChanged()";
+    //RG_DEBUG << "slotDocColoursChanged()";
 
     m_color->clear();
-    m_colourList.clear();
-    // Populate it from composition.m_segmentColourMap
+
+    // Populate it from Composition::m_segmentColourMap
     ColourMap temp = m_doc->getComposition().getSegmentColourMap();
 
-    unsigned int i = 0;
+    // For each color in the segment color map
+    for (RCMap::const_iterator colourIter = temp.begin();
+         colourIter != temp.end();
+         ++colourIter) {
+        QString colourName(QObject::tr(colourIter->second.second.c_str()));
 
-    for (RCMap::const_iterator it = temp.begin(); it != temp.end(); ++it) {
-        QString qtrunc(QObject::tr(it->second.second.c_str()));
-        QPixmap colour(15, 15);
-        colour.fill(GUIPalette::convertColour(it->second.first));
-        if (qtrunc == "") {
-            m_color->addItem(colour, tr("Default"), i);
+        QPixmap colourIcon(15, 15);
+        colourIcon.fill(GUIPalette::convertColour(colourIter->second.first));
+
+        if (colourName == "") {
+            m_color->addItem(colourIcon, tr("Default"));
         } else {
             // truncate name to 25 characters to avoid the combo forcing the
             // whole kit and kaboodle too wide (This expands from 15 because the
             // translators wrote books instead of copying the style of
             // TheShortEnglishNames, and because we have that much room to
             // spare.)
-            if (qtrunc.length() > 25)
-                qtrunc = qtrunc.left(22) + "...";
-            m_color->addItem(colour, qtrunc, i);
+            if (colourName.length() > 25)
+                colourName = colourName.left(22) + "...";
+
+            m_color->addItem(colourIcon, colourName);
         }
-        m_colourList[it->first] = i; // maps colour number to menu index
-        ++i;
     }
 
-    m_addColourPos = i;
-    m_color->addItem(tr("Add New Color"), m_addColourPos);
-
-    // remove the item we just inserted; this leaves the translation alone, but
-    // eliminates the useless option
-    //
-    //!!! fix after release
+    m_color->addItem(tr("Add New Color"));
+    m_addColourPos = m_color->count() - 1;
+    // ??? Remove since this isn't working?
     m_color->removeItem(m_addColourPos);
 
     m_color->setCurrentIndex(0);
@@ -1126,7 +1127,7 @@ TrackParameterBox::slotDocColoursChanged()
 void
 TrackParameterBox::slotColorChanged(int index)
 {
-    RG_DEBUG << "TrackParameterBox::slotColorChanged(" << index << ")";
+    //RG_DEBUG << "slotColorChanged(" << index << ")";
 
     Track *trk = getTrack();
     if (!trk)
@@ -1134,6 +1135,9 @@ TrackParameterBox::slotColorChanged(int index)
 
     trk->setColor(index);
 
+#if 0
+    // ??? This will never happen since the "Add Color" option is
+    //     removed.
     if (index == m_addColourPos) {
         ColourMap newMap = m_doc->getComposition().getSegmentColourMap();
         QColor newColour;
@@ -1161,15 +1165,20 @@ TrackParameterBox::slotColorChanged(int index)
         // Else we don't do anything as they either didn't give a name
         // or didn't give a colour
     }
+#endif
 }
 
 void
 TrackParameterBox::slotHighestPressed()
 {
-    RG_DEBUG << "TrackParameterBox::slotHighestPressed()";
+    //RG_DEBUG << "slotHighestPressed()";
 
-    if (m_selectedTrackId == (int)NO_TRACK) return;
+    if (m_selectedTrackId == (int)NO_TRACK)
+        return;
+
     Composition &comp = m_doc->getComposition();
+
+    // Make sure the selected track is valid.
     if (!comp.haveTrack(m_selectedTrackId)) {
         m_selectedTrackId = (int)NO_TRACK;
         return;
@@ -1188,10 +1197,14 @@ TrackParameterBox::slotHighestPressed()
 void
 TrackParameterBox::slotLowestPressed()
 {
-    RG_DEBUG << "TrackParameterBox::slotLowestPressed()";
+    //RG_DEBUG << "slotLowestPressed()";
 
-    if (m_selectedTrackId == (int)NO_TRACK) return;
+    if (m_selectedTrackId == (int)NO_TRACK)
+        return;
+
     Composition &comp = m_doc->getComposition();
+
+    // Make sure the selected track is valid.
     if (!comp.haveTrack(m_selectedTrackId)) {
         m_selectedTrackId = (int)NO_TRACK;
         return;
