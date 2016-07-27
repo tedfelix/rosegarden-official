@@ -205,8 +205,6 @@ private:
 
     /// Create segments with: Color
     QComboBox *m_color;
-    // Position of the Add Colour item in m_color.
-    int m_addColourPos;
 
     /**
      * ??? This is a selective refresh.  Recommend combining with all others

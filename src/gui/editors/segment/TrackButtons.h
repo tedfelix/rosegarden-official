@@ -59,6 +59,9 @@ class InstrumentStaticSignals;
  *
  * These widgets are created based on the RosegardenDocument.
  *
+ * TrackEditor owns the single instance of this class.  See
+ * TrackEditor::m_trackButtons.
+ *
  * Suggestion: This class appears to be the focus for track related changes.
  * It would probably be better to have the system make direct changes to
  * Composition, then call a notification routine which would trigger an

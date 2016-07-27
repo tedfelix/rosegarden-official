@@ -865,6 +865,7 @@ TrackParameterBox::slotInstrumentChanged(int index)
 
         m_instrument->setCurrentIndex(pos);
     } else {
+#if 1
         // Invalid Track?  Bail.
         if (!getTrack())
             return;
@@ -907,23 +908,36 @@ TrackParameterBox::slotInstrumentChanged(int index)
         }
 
         // Convert from TrackParameterBox index to TrackButtons index.
-        index += prepend;
+        int trackButtonsInstrumentIndex = index + prepend;
 
-        //RG_DEBUG << "slotInstrumentChanged() index = " << index;
+        //RG_DEBUG << "slotInstrumentChanged() trackButtonsIndex = " << trackButtonsIndex;
 
         // Emit the index we've calculated, relative to the studio list.
         // TrackButtons::slotTPBInstrumentSelected() does the rest of the
         // work for us.
-        emit instrumentSelected(m_selectedTrackId, index);
+        emit instrumentSelected(m_selectedTrackId, trackButtonsInstrumentIndex);
+        // Or directly, avoiding the signal/slot:
+        //RosegardenMainWindow::self()->getView()->getTrackEditor()->
+        //        getTrackButtons()->slotTPBInstrumentSelected(
+        //                m_selectedTrackId, trackButtonsInstrumentIndex);
 
-        // ??? This entire "else" block should reduce to this:
-        //
-        //         track->setInstrument(m_instrumentIds[index]);
-        //         comp.notifyTrackChanged(track);
-        //
-        //     All of the work that is done by
-        //     TrackButtons::slotTPBInstrumentSelected() should be spread out
-        //     into the trackChanged() handlers for those that care.
+#else
+// ??? This is how it should be done.  All of the work that is done by
+//     TrackButtons::slotTPBInstrumentSelected() should be spread out
+//     into the trackChanged() handlers for those that care.  In fact,
+//     that should already be the case.  This might "just work" right now.
+
+        Track *track = getTrack();
+        if (!track)
+            return;
+
+        track->setInstrument(m_instrumentIds[index]);
+
+        // Notify observers
+        Composition &comp = m_doc->getComposition();
+        comp.notifyTrackChanged(track);
+
+#endif
     }
 }
 
@@ -1085,10 +1099,11 @@ TrackParameterBox::slotDocColoursChanged()
         }
     }
 
+#if 0
+// Removing this since it has never been in there.
     m_color->addItem(tr("Add New Color"));
     m_addColourPos = m_color->count() - 1;
-    // ??? Remove since this isn't working?
-    m_color->removeItem(m_addColourPos);
+#endif
 
     m_color->setCurrentIndex(0);
 }
@@ -1105,8 +1120,7 @@ TrackParameterBox::slotColorChanged(int index)
     trk->setColor(index);
 
 #if 0
-    // ??? This will never happen since the "Add Color" option is
-    //     removed.
+// This will never happen since the "Add Color" option is never added.
     if (index == m_addColourPos) {
         ColourMap newMap = m_doc->getComposition().getSegmentColourMap();
         QColor newColour;
@@ -1228,12 +1242,11 @@ TrackParameterBox::slotLoadPressed()
             // re-enable it until it is subsequently re-disabled by the
             // user overriding the preset, calling one of the above slots
             // in the normal course
-            // ??? This is really subtle.  We should probably just clear it
+            // ??? This is too subtle.  We should probably just clear it
             //     when modifications are made.  After all, it's no longer
             //     the selected preset.  Or add "(modified)"?  Or change
-            //     color?  Maybe we should just get rid of
-            //     m_preset?  It doesn't really help much.  It's not even
-            //     saved to the .rg file.
+            //     color?  Or allow the user to edit it and save it to the
+            //     .rg file as part of the Track.
             m_preset->setEnabled(true);
         }
     } catch (Exception e) {  // from PresetHandlerDialog
