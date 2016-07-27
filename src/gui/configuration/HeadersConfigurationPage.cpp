@@ -81,6 +81,8 @@ HeadersConfigurationPage::HeadersConfigurationPage(
     std::vector<PropertyName> fixedKeys = CompositionMetadataKeys::getFixedKeys();
 
     std::set<QString> shown;
+
+    // For each Composition metadata key
     for (unsigned int index = 0; index < fixedKeys.size(); index++) {
         std::string key = fixedKeys[index].getName();
         QString value = headers[strtoqstr(key)];
@@ -170,6 +172,7 @@ HeadersConfigurationPage::HeadersConfigurationPage(
 
         shown.insert(strtoqstr(key));
     }
+
     QLabel *separator = new QLabel(tr("The composition comes here."), frameHeaders);
     separator->setAlignment(Qt::AlignCenter);
     layoutHeaders->addWidget(separator, 7, 1, 1, 4 - 1+1);
@@ -182,18 +185,8 @@ HeadersConfigurationPage::HeadersConfigurationPage(
     // LilyPond export: Non-printable headers
     //
 
-    // set default expansion to false for this group -- what a faff
-    // (see note in TrackParameterBox.cpp for an explanation of this baffling
-    // but necessary code)
-    QSettings settings;
-    settings.beginGroup(CollapsingFrameConfigGroup);
-
-    bool expanded = qStrToBool(settings.value("nonprintableheaders", "false")) ;
-    settings.setValue("nonprintableheaders", expanded);
-    settings.endGroup();
-
     CollapsingFrame *otherHeadersBox = new CollapsingFrame
-        (tr("Additional headers"), this, "nonprintableheaders");
+        (tr("Additional headers"), this, "nonprintableheaders", false);
         
     layout->addWidget(otherHeadersBox);
     setLayout(layout);        
