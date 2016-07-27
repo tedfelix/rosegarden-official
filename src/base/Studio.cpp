@@ -194,35 +194,32 @@ Studio::getAllInstruments()
 }
 
 InstrumentList
-Studio::getPresentationInstruments()
+Studio::getPresentationInstruments() const
 {
-    InstrumentList list, subList;
+    InstrumentList list;
 
-    std::vector<Device*>::iterator it;
-    MidiDevice *midiDevice;
-
-    // Append lists
-    //
-    for (it = m_devices.begin(); it != m_devices.end(); ++it)
+    // For each device...
+    for (DeviceList::const_iterator it = m_devices.begin();
+         it != m_devices.end();
+         ++it)
     {
-        midiDevice = dynamic_cast<MidiDevice*>(*it);
+        const MidiDevice *midiDevice = dynamic_cast<MidiDevice *>(*it);
 
         if (midiDevice)
-	{
-	    // skip read-only devices
-	    if (midiDevice->getDirection() == MidiDevice::Record)
-		continue;
-	}
-	
+        {
+            // skip read-only devices
+            if (midiDevice->getDirection() == MidiDevice::Record)
+                continue;
+        }
+
         // get sub list
-        subList = (*it)->getPresentationInstruments();
+        InstrumentList subList = (*it)->getPresentationInstruments();
 
         // concatenate
         list.insert(list.end(), subList.begin(), subList.end());
     }
 
     return list;
-
 }
 
 Instrument*

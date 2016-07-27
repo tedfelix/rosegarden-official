@@ -454,38 +454,48 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
 void
 TrackParameterBox::setDocument(RosegardenDocument *doc)
 {
-    if (m_doc != doc) {
-        RG_DEBUG << "TrackParameterBox::setDocument\n";
-        m_doc = doc;
-        m_doc->getComposition().addObserver(this);
-        slotPopulateDeviceLists();
-    }
+    // No change?  Bail.
+    if (m_doc == doc)
+        return;
+
+    m_doc = doc;
+
+    m_doc->getComposition().addObserver(this);
+
+    // updateWidgets()
+    slotPopulateDeviceLists();
 }
 
 void
 TrackParameterBox::slotPopulateDeviceLists()
 {
-    RG_DEBUG << "TrackParameterBox::slotPopulateDeviceLists()\n";
     populatePlaybackDeviceList();
+
     // Force a record device populate.
     m_lastInstrumentType = Instrument::InvalidInstrument;
     populateRecordingDeviceList();
+
     slotUpdateControls(-1);
 }
 
 void
 TrackParameterBox::populatePlaybackDeviceList()
 {
-    RG_DEBUG << "TrackParameterBox::populatePlaybackDeviceList()\n";
+    // ??? Make this smart enough to realize there is no need to change
+    //     anything.  Then it can be called more frequently.  E.g. cache
+    //     the list of Devices and Instruments and check to see if there
+    //     have been any changes.
+
     m_playbackDevice->clear();
     m_playbackDeviceIds.clear();
+
     m_instrument->clear();
     m_instrumentIds.clear();
     m_instrumentNames.clear();
 
-    Studio &studio = m_doc->getStudio();
+    const Studio &studio = m_doc->getStudio();
 
-    // Get the list
+    // Get the instruments
     InstrumentList list = studio.getPresentationInstruments();
     InstrumentList::iterator it;
     int currentDevId = -1;

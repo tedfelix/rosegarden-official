@@ -94,8 +94,6 @@ public slots:
      *      and calls a new public updateControls() (which would no longer need
      *      the dummy).  Then callers of updateControls() would no longer need
      *      the cryptic "-1".
-     *
-     *  ??? Is this the updateWidgets() I'm looking for?
      */
     void slotUpdateControls(int dummy);
 
@@ -111,8 +109,7 @@ public slots:
      * Connected to DeviceManagerDialog::deviceNamesChanged() and
      * BankEditorDialog::deviceNamesChanged().
      *
-     * ??? This is a selective refresh.  Recommend combining with all others
-     *     into a single full refresh (updateWidgets()) and optimize.
+     * ??? Is this the updateWidgets() I'm looking for?
      */
     void slotPopulateDeviceLists();
 

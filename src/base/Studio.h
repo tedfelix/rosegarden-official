@@ -78,7 +78,7 @@ public:
     // Return the combined instrument list from all devices
     //
     InstrumentList getAllInstruments();
-    InstrumentList getPresentationInstruments();
+    InstrumentList getPresentationInstruments() const;
 
     // Return an Instrument
     Instrument* getInstrumentById(InstrumentId id);
