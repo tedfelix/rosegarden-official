@@ -73,6 +73,7 @@ public:
 
 public slots:
     // Signals from widgets.
+    // ??? These should be private slots.
     /// Playback parameters: Device
     void slotPlaybackDeviceChanged(int index);
     /// Playback parameters: Instrument
@@ -86,7 +87,7 @@ public slots:
     /// Recording filters: Thru Routing
     void slotThruRoutingChanged(int index);
     /// Staff export options: Notation size
-    void slotStaffSizeChanged(int index);
+    void slotNotationSizeChanged(int index);
     /// Staff export options: Bracket type
     void slotStaffBracketChanged(int index);
     /// Create segments with: Preset Load
@@ -143,9 +144,9 @@ private:
     // --- Playback parameters --------------------------------------
 
     /// Playback parameters: Device
-    QComboBox *m_playDevice;
+    QComboBox *m_playbackDevice;
     typedef std::vector<DeviceId> IdsVector;
-    IdsVector m_playDeviceIds;
+    IdsVector m_playbackDeviceIds;
 
     /// Playback parameters: Instrument
     QComboBox *m_instrument;
@@ -158,12 +159,12 @@ private:
     // --- Recording filters -------------------------------------------
 
     /// Recording filters: Device
-    QComboBox *m_recDevice;
-    IdsVector m_recDeviceIds;
+    QComboBox *m_recordingDevice;
+    IdsVector m_recordingDeviceIds;
     char m_lastInstrumentType;
 
     /// Recording filters: Channel
-    QComboBox *m_recChannel;
+    QComboBox *m_recordingChannel;
 
     /// Recording filters: Thru Routing
     QComboBox *m_thruRouting;
@@ -171,7 +172,7 @@ private:
     // --- Staff export options -------------------------------------
 
     /// Staff export options: Notation size
-    QComboBox *m_notationSizeCombo;
+    QComboBox *m_notationSize;
 
     /// Staff export options: Bracket type
     QComboBox *m_bracketTypeCombo;

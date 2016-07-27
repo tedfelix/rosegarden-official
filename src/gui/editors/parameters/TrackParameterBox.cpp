@@ -157,11 +157,11 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
     // Device
     QLabel *playbackDeviceLabel = new QLabel(tr("Device"), playbackParameters);
     playbackDeviceLabel->setFont(m_font);
-    m_playDevice = new QComboBox(playbackParameters);
-    m_playDevice->setToolTip(tr("<qt><p>Choose the device this track will use for playback.</p><p>Click <img src=\":pixmaps/toolbar/manage-midi-devices.xpm\"> to connect this device to a useful output if you do not hear sound</p></qt>"));
-    m_playDevice->setMinimumWidth(width25);
-    m_playDevice->setFont(m_font);
-    connect(m_playDevice, SIGNAL(activated(int)),
+    m_playbackDevice = new QComboBox(playbackParameters);
+    m_playbackDevice->setToolTip(tr("<qt><p>Choose the device this track will use for playback.</p><p>Click <img src=\":pixmaps/toolbar/manage-midi-devices.xpm\"> to connect this device to a useful output if you do not hear sound</p></qt>"));
+    m_playbackDevice->setMinimumWidth(width25);
+    m_playbackDevice->setFont(m_font);
+    connect(m_playbackDevice, SIGNAL(activated(int)),
             this, SLOT(slotPlaybackDeviceChanged(int)));
 
     // Instrument
@@ -193,7 +193,7 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
     groupLayout->setHorizontalSpacing(5);
     // Row 0: Device
     groupLayout->addWidget(playbackDeviceLabel, 0, 0);
-    groupLayout->addWidget(m_playDevice, 0, 1);
+    groupLayout->addWidget(m_playbackDevice, 0, 1);
     // Row 1: Instrument
     groupLayout->addWidget(instrumentLabel, 1, 0);
     groupLayout->addWidget(m_instrument, 1, 1);
@@ -215,22 +215,22 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
     // Device
     QLabel *recordDeviceLabel = new QLabel(tr("Device"), recordingFilters);
     recordDeviceLabel->setFont(m_font);
-    m_recDevice = new QComboBox(recordingFilters);
-    m_recDevice->setFont(m_font);
-    m_recDevice->setToolTip(tr("<qt><p>This track will only record Audio/MIDI from the selected device, filtering anything else out</p></qt>"));
-    m_recDevice->setMinimumWidth(width25);
-    connect(m_recDevice, SIGNAL(activated(int)),
+    m_recordingDevice = new QComboBox(recordingFilters);
+    m_recordingDevice->setFont(m_font);
+    m_recordingDevice->setToolTip(tr("<qt><p>This track will only record Audio/MIDI from the selected device, filtering anything else out</p></qt>"));
+    m_recordingDevice->setMinimumWidth(width25);
+    connect(m_recordingDevice, SIGNAL(activated(int)),
             this, SLOT(slotRecordingDeviceChanged(int)));
 
     // Channel
     QLabel *channelLabel = new QLabel(tr("Channel"), recordingFilters);
     channelLabel->setFont(m_font);
-    m_recChannel = new QComboBox(recordingFilters);
-    m_recChannel->setFont(m_font);
-    m_recChannel->setToolTip(tr("<qt><p>This track will only record Audio/MIDI from the selected channel, filtering anything else out</p></qt>"));
-    m_recChannel->setMaxVisibleItems(17);
-    m_recChannel->setMinimumWidth(width11);
-    connect(m_recChannel, SIGNAL(activated(int)),
+    m_recordingChannel = new QComboBox(recordingFilters);
+    m_recordingChannel->setFont(m_font);
+    m_recordingChannel->setToolTip(tr("<qt><p>This track will only record Audio/MIDI from the selected channel, filtering anything else out</p></qt>"));
+    m_recordingChannel->setMaxVisibleItems(17);
+    m_recordingChannel->setMinimumWidth(width11);
+    connect(m_recordingChannel, SIGNAL(activated(int)),
             this, SLOT(slotRecordingChannelChanged(int)));
 
     // Thru Routing
@@ -255,10 +255,10 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
     groupLayout->setHorizontalSpacing(5);
     // Row 0: Device
     groupLayout->addWidget(recordDeviceLabel, 0, 0);
-    groupLayout->addWidget(m_recDevice, 0, 1);
+    groupLayout->addWidget(m_recordingDevice, 0, 1);
     // Row 1: Channel
     groupLayout->addWidget(channelLabel, 1, 0);
-    groupLayout->addWidget(m_recChannel, 1, 1);
+    groupLayout->addWidget(m_recordingChannel, 1, 1);
     // Row 2: Thru Routing
     groupLayout->addWidget(thruLabel, 2, 0);
     groupLayout->addWidget(m_thruRouting, 2, 1);
@@ -283,15 +283,15 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
     // which is not as nice, but actually a lot easier to implement.
     QLabel *notationSizeLabel = new QLabel(tr("Notation size:"), staffExportOptions);
     notationSizeLabel->setFont(m_font);
-    m_notationSizeCombo = new QComboBox(staffExportOptions);
-    m_notationSizeCombo->setFont(m_font);
-    m_notationSizeCombo->setToolTip(tr("<qt><p>Choose normal, \\small or \\tiny font size for notation elements on this (normal-sized) staff when exporting to LilyPond.</p><p>This is as close as we get to enabling you to print parts in cue size</p></qt>"));
-    m_notationSizeCombo->setMinimumWidth(width11);
-    m_notationSizeCombo->addItem(tr("Normal"), StaffTypes::Normal);
-    m_notationSizeCombo->addItem(tr("Small"), StaffTypes::Small);
-    m_notationSizeCombo->addItem(tr("Tiny"), StaffTypes::Tiny);
-    connect(m_notationSizeCombo, SIGNAL(activated(int)),
-            this, SLOT(slotStaffSizeChanged(int)));
+    m_notationSize = new QComboBox(staffExportOptions);
+    m_notationSize->setFont(m_font);
+    m_notationSize->setToolTip(tr("<qt><p>Choose normal, \\small or \\tiny font size for notation elements on this (normal-sized) staff when exporting to LilyPond.</p><p>This is as close as we get to enabling you to print parts in cue size</p></qt>"));
+    m_notationSize->setMinimumWidth(width11);
+    m_notationSize->addItem(tr("Normal"), StaffTypes::Normal);
+    m_notationSize->addItem(tr("Small"), StaffTypes::Small);
+    m_notationSize->addItem(tr("Tiny"), StaffTypes::Tiny);
+    connect(m_notationSize, SIGNAL(activated(int)),
+            this, SLOT(slotNotationSizeChanged(int)));
 
     // Bracket type
     // Staff bracketing (export only at the moment, but using this for GUI
@@ -322,7 +322,7 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
     groupLayout->setColumnStretch(1, 1);
     // Row 0: Notation size
     groupLayout->addWidget(notationSizeLabel, 0, 0, Qt::AlignLeft);
-    groupLayout->addWidget(m_notationSizeCombo, 0, 1, 1, 2);
+    groupLayout->addWidget(m_notationSize, 0, 1, 1, 2);
     // Row 1: Bracket type
     groupLayout->addWidget(bracketTypeLabel, 1, 0, Qt::AlignLeft);
     groupLayout->addWidget(m_bracketTypeCombo, 1, 1, 1, 2);
@@ -522,8 +522,8 @@ void
 TrackParameterBox::populatePlaybackDeviceList()
 {
     RG_DEBUG << "TrackParameterBox::populatePlaybackDeviceList()\n";
-    m_playDevice->clear();
-    m_playDeviceIds.clear();
+    m_playbackDevice->clear();
+    m_playbackDeviceIds.clear();
     m_instrument->clear();
     m_instrumentIds.clear();
     m_instrumentNames.clear();
@@ -572,8 +572,8 @@ TrackParameterBox::populatePlaybackDeviceList()
         if (devId != (DeviceId)(currentDevId)) {
             currentDevId = int(devId);
             QString deviceName = QObject::tr(device->getName().c_str());
-            m_playDevice->addItem(deviceName);
-            m_playDeviceIds.push_back(currentDevId);
+            m_playbackDevice->addItem(deviceName);
+            m_playbackDeviceIds.push_back(currentDevId);
         }
 
         if (pname != "") iname += " (" + pname + ")";
@@ -585,7 +585,7 @@ TrackParameterBox::populatePlaybackDeviceList()
 
     }
 
-    m_playDevice->setCurrentIndex(-1);
+    m_playbackDevice->setCurrentIndex(-1);
     m_instrument->setCurrentIndex(-1);
 }
 
@@ -605,18 +605,18 @@ TrackParameterBox::populateRecordingDeviceList()
     if (m_lastInstrumentType != (char)inst->getInstrumentType()) {
         m_lastInstrumentType = (char)inst->getInstrumentType();
 
-        m_recDevice->clear();
-        m_recDeviceIds.clear();
-        m_recChannel->clear();
+        m_recordingDevice->clear();
+        m_recordingDeviceIds.clear();
+        m_recordingChannel->clear();
 
         if (inst->getInstrumentType() == Instrument::Audio) {
 
-            m_recDeviceIds.push_back(Device::NO_DEVICE);
-            m_recDevice->addItem(tr("Audio"));
-            m_recChannel->addItem(tr("Audio"));
+            m_recordingDeviceIds.push_back(Device::NO_DEVICE);
+            m_recordingDevice->addItem(tr("Audio"));
+            m_recordingChannel->addItem(tr("Audio"));
 
-            m_recDevice->setEnabled(false);
-            m_recChannel->setEnabled(false);
+            m_recordingDevice->setEnabled(false);
+            m_recordingChannel->setEnabled(false);
 
             m_thruRouting->setCurrentIndex(0);
             m_thruRouting->setEnabled(false);
@@ -629,8 +629,8 @@ TrackParameterBox::populateRecordingDeviceList()
             // show these if not audio instrument
             m_createSegmentsWithFrame->setVisible(true);
 
-            m_recDeviceIds.push_back(Device::ALL_DEVICES);
-            m_recDevice->addItem(tr("All"));
+            m_recordingDeviceIds.push_back(Device::ALL_DEVICES);
+            m_recordingDevice->addItem(tr("All"));
 
             DeviceList *devices = m_doc->getStudio().getDevices();
             DeviceListConstIterator it;
@@ -641,32 +641,32 @@ TrackParameterBox::populateRecordingDeviceList()
                     if (dev->getDirection() == MidiDevice::Record
                         && dev->isRecording()) {
                         QString deviceName = QObject::tr(dev->getName().c_str());
-                        m_recDevice->addItem(deviceName);
-                        m_recDeviceIds.push_back(dev->getId());
+                        m_recordingDevice->addItem(deviceName);
+                        m_recordingDeviceIds.push_back(dev->getId());
                     }
                 }
             }
 
-            m_recChannel->addItem(tr("All"));
+            m_recordingChannel->addItem(tr("All"));
             for (int i = 1; i < 17; ++i) {
-                m_recChannel->addItem(QString::number(i));
+                m_recordingChannel->addItem(QString::number(i));
             }
 
-            m_recDevice->setEnabled(true);
-            m_recChannel->setEnabled(true);
+            m_recordingDevice->setEnabled(true);
+            m_recordingChannel->setEnabled(true);
             m_thruRouting->setEnabled(true);
         }
     }
 
     if (inst->getInstrumentType() == Instrument::Audio) {
-        m_recDevice->setCurrentIndex(0);
-        m_recChannel->setCurrentIndex(0);
+        m_recordingDevice->setCurrentIndex(0);
+        m_recordingChannel->setCurrentIndex(0);
     } else {
-        m_recDevice->setCurrentIndex(0);
-        m_recChannel->setCurrentIndex((int)trk->getMidiInputChannel() + 1);
-        for (unsigned int i = 0; i < m_recDeviceIds.size(); ++i) {
-            if (m_recDeviceIds[i] == trk->getMidiInputDevice()) {
-                m_recDevice->setCurrentIndex(i);
+        m_recordingDevice->setCurrentIndex(0);
+        m_recordingChannel->setCurrentIndex((int)trk->getMidiInputChannel() + 1);
+        for (unsigned int i = 0; i < m_recordingDeviceIds.size(); ++i) {
+            if (m_recordingDeviceIds[i] == trk->getMidiInputDevice()) {
+                m_recordingDevice->setCurrentIndex(i);
                 break;
             }
         }
@@ -745,7 +745,7 @@ TrackParameterBox::slotUpdateControls(int /*dummy*/)
     m_preset->setEnabled(true);
 
     // Staff export options
-    m_notationSizeCombo->setCurrentIndex(trk->getStaffSize());
+    m_notationSize->setCurrentIndex(trk->getStaffSize());
     m_bracketTypeCombo->setCurrentIndex(trk->getStaffBracket());
 }
 
@@ -840,14 +840,14 @@ TrackParameterBox::slotPlaybackDeviceChanged(int index)
         // in a completely different and utterly nonsensical order, so we can
         // find it accurately if we know what we're hunting for, otherwise,
         // we're fucked
-        for (it = m_playDeviceIds.begin(); it != m_playDeviceIds.end(); ++it) {
+        for (it = m_playbackDeviceIds.begin(); it != m_playbackDeviceIds.end(); ++it) {
             pos++;
             if ((*it) == devId) break;
         }
 
-        m_playDevice->setCurrentIndex(pos);
+        m_playbackDevice->setCurrentIndex(pos);
     } else {
-        devId = m_playDeviceIds[index];
+        devId = m_playbackDeviceIds[index];
     }
 
     // used to be "General MIDI Device #7" now we change to "QSynth Device" and
@@ -895,7 +895,7 @@ TrackParameterBox::slotInstrumentChanged(int index)
         }
         m_instrument->setCurrentIndex(pos);
     } else {
-        devId = m_playDeviceIds[m_playDevice->currentIndex()];
+        devId = m_playbackDeviceIds[m_playbackDevice->currentIndex()];
 
         // Calculate an index to use in Studio::getInstrumentFromList() which
         // gets emitted to TrackButtons, and TrackButtons actually does the work
@@ -919,8 +919,8 @@ TrackParameterBox::slotInstrumentChanged(int index)
         // swallowing two entire days of my life to put back with the following
         // magic lines of code:
         int prepend = 0;
-        for (int n = 0; n < m_playDevice->currentIndex(); n++) {
-            DeviceId id = m_playDeviceIds[n];
+        for (int n = 0; n < m_playbackDevice->currentIndex(); n++) {
+            DeviceId id = m_playbackDeviceIds[n];
             Device *dev = m_doc->getStudio().getDevice(id);
 
             // get the number of instruments belonging to the device (not the
@@ -971,7 +971,7 @@ TrackParameterBox::slotRecordingDeviceChanged(int index)
     if (inst->getInstrumentType() == Instrument::Audio) {
         //Not implemented yet
     } else {
-        trk->setMidiInputDevice(m_recDeviceIds[index]);
+        trk->setMidiInputDevice(m_recordingDeviceIds[index]);
     }
 }
 
@@ -1236,7 +1236,7 @@ TrackParameterBox::slotPresetPressed()
 }
 
 void
-TrackParameterBox::slotStaffSizeChanged(int index) 
+TrackParameterBox::slotNotationSizeChanged(int index)
 {
     RG_DEBUG << "TrackParameterBox::sotStaffSizeChanged()";
 
