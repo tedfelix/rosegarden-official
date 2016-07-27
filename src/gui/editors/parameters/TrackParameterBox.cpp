@@ -75,7 +75,7 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
                                      QWidget *parent) :
     RosegardenParameterBox(tr("Track"), tr("Track Parameters"), parent),
     m_doc(doc),
-    m_selectedTrackId((int)NO_TRACK),
+    m_selectedTrackId(NO_TRACK),
     m_lastInstrumentType(Instrument::InvalidInstrument),
     m_lowestPlayable(0),
     m_highestPlayable(127)
@@ -737,7 +737,7 @@ TrackParameterBox::trackChanged(const Composition *, Track *track)
     if (!track)
         return;
 
-    if (track->getId() != (unsigned)m_selectedTrackId)
+    if (track->getId() != m_selectedTrackId)
         return;
 
     // Update the track name in case it has changed.
@@ -750,7 +750,7 @@ void
 TrackParameterBox::trackSelectionChanged(const Composition *, TrackId newTrackId)
 {
     // No change?  Bail.
-    if ((int)newTrackId == m_selectedTrackId)
+    if (newTrackId == m_selectedTrackId)
         return;
 
     m_preset->setEnabled(true);
@@ -850,7 +850,7 @@ TrackParameterBox::slotInstrumentChanged(int index)
 {
     //RG_DEBUG << "slotInstrumentChanged(" << index << ")";
 
-    // If nothing is selected, sync with the tracks instrument.
+    // If nothing is selected, sync with the Track's instrument.
     if (index == -1) {
         Composition &comp = m_doc->getComposition();
 
@@ -923,14 +923,20 @@ TrackParameterBox::slotInstrumentChanged(int index)
         // ??? This check can be done before the for loop to avoid unnecessary
         //     work.
         if (m_doc->getComposition().haveTrack(m_selectedTrackId)) {
-            // emit the index we've calculated, relative to the studio list
-            // TrackButtons does the rest of the work for us.
-            // ??? Why not make the change directly to the Composition, then
-            //     call Composition::notifyTrackChanged()?
-            //     That should get rid of the for loop above.  See
-            //     slotArchiveChanged() for an example.
+            // Emit the index we've calculated, relative to the studio list.
+            // TrackButtons::slotTPBInstrumentSelected() does the rest of the
+            // work for us.
             emit instrumentSelected(m_selectedTrackId, index);
         }
+
+        // ??? This entire "else" block should reduce to this:
+        //
+        //         track->setInstrument(m_instrumentIds[index]);
+        //         comp.notifyTrackChanged(track);
+        //
+        //     All of the work that is done by
+        //     TrackButtons::slotTPBInstrumentSelected() should be spread out
+        //     into the trackChanged() handlers for those that care.
     }
 }
 
@@ -1147,14 +1153,14 @@ TrackParameterBox::slotColorChanged(int index)
 void
 TrackParameterBox::slotHighestPressed()
 {
-    if (m_selectedTrackId == (int)NO_TRACK)
+    if (m_selectedTrackId == NO_TRACK)
         return;
 
     Composition &comp = m_doc->getComposition();
 
     // Make sure the selected track is valid.
     if (!comp.haveTrack(m_selectedTrackId)) {
-        m_selectedTrackId = (int)NO_TRACK;
+        m_selectedTrackId = NO_TRACK;
         return;
     }
 
@@ -1171,14 +1177,14 @@ TrackParameterBox::slotHighestPressed()
 void
 TrackParameterBox::slotLowestPressed()
 {
-    if (m_selectedTrackId == (int)NO_TRACK)
+    if (m_selectedTrackId == NO_TRACK)
         return;
 
     Composition &comp = m_doc->getComposition();
 
     // Make sure the selected track is valid.
     if (!comp.haveTrack(m_selectedTrackId)) {
-        m_selectedTrackId = (int)NO_TRACK;
+        m_selectedTrackId = NO_TRACK;
         return;
     }
 
@@ -1274,7 +1280,7 @@ TrackParameterBox::slotBracketTypeChanged(int index)
 Track *
 TrackParameterBox::getTrack()
 {
-    if (m_selectedTrackId == (int)NO_TRACK)
+    if (m_selectedTrackId == NO_TRACK)
         return NULL;
 
     if (!m_doc)
@@ -1284,7 +1290,7 @@ TrackParameterBox::getTrack()
 
     // If the track is gone, bail.
     if (!comp.haveTrack(m_selectedTrackId)) {
-        m_selectedTrackId = (int)NO_TRACK;
+        m_selectedTrackId = NO_TRACK;
         return NULL;
     }
 

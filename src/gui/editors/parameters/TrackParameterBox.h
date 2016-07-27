@@ -60,12 +60,6 @@ public:
     
     void setDocument(RosegardenDocument *doc);
 
-    /**
-     * ??? This is a selective refresh.  Recommend combining with all others
-     *     into a single full refresh (updateWidgets()) and optimize.
-     */
-    void updateWidgets();
-
     // CompositionObserver overrides.
     virtual void trackChanged(const Composition *comp, Track *track);
     virtual void trackSelectionChanged(const Composition *, TrackId);
@@ -96,11 +90,6 @@ public slots:
 
 signals:
     /// Connected to TrackButtons::slotTPBInstrumentSelected().
-    /**
-     * ??? A connection between TrackParameterBox and TrackButtons can
-     *     likely be simplified by using Composition::notifyTrackChanged()
-     *     instead of this direct connection.
-     */
     void instrumentSelected(TrackId, int);
 
 private slots:
@@ -140,8 +129,7 @@ private slots:
 private:
     RosegardenDocument *m_doc;
 
-    // ??? Why isn't this TrackId?  Switch it.
-    int m_selectedTrackId;
+    TrackId m_selectedTrackId;
     Track *getTrack();
 
     // Track number and name
@@ -215,6 +203,12 @@ private:
     QComboBox *m_color;
     // Position of the Add Colour item in m_color.
     int m_addColourPos;
+
+    /**
+     * ??? This is a selective refresh.  Recommend combining with all others
+     *     into a single full refresh (updateWidgets()) and optimize.
+     */
+    void updateWidgets();
 };
 
 
