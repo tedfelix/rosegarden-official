@@ -1130,7 +1130,7 @@ void RosegardenMainViewWidget::slotSelectTrackSegments(int trackId)
     //
     comp.setSelectedTrack(trackId);
 
-    m_trackParameterBox->slotSelectedTrackChanged();
+    m_trackParameterBox->selectedTrackChanged2();
 
     // update the instrument parameter box
     slotUpdateInstrumentParameterBox(comp.getTrackById(trackId)->

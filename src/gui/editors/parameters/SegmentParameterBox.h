@@ -82,10 +82,6 @@ public:
     virtual void segmentRemoved(const Composition *,
                                 Segment *);
 
-    virtual void showAdditionalControls(bool showThem);
-
-    virtual QString getPreviousBox(RosegardenParameterArea::Arrangement) const;
-
 public slots:
     void slotRepeatPressed();
     void slotQuantizeSelected(int);

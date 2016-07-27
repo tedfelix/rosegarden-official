@@ -1135,19 +1135,5 @@ SegmentParameterBox::slotFadeOutChanged(int value)
     << value << endl;
 }
 
-void
-SegmentParameterBox::showAdditionalControls(bool /* showThem */)
-{
-}
-
-QString
-SegmentParameterBox::getPreviousBox(RosegardenParameterArea::Arrangement arrangement) const
-{
-    if (arrangement == RosegardenParameterArea::CLASSIC_STYLE) {
-        return "";
-    } else {
-        return tr("Instrument");
-    }
-}
 
 }

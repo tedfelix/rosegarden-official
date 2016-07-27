@@ -54,11 +54,6 @@ public:
     // Ask for the full label (e.g. short-label "Parameters")
     QString getLongLabel() const;
 
-    // Get the short label of the prior parameter box (to establish an ordering)
-    virtual QString getPreviousBox(RosegardenParameterArea::Arrangement) const;
-
-    virtual void showAdditionalControls(bool) = 0; 
-
 protected:
     void init();
 

@@ -73,10 +73,5 @@ QString RosegardenParameterBox::getLongLabel() const
     return m_longLabel;
 }
 
-QString RosegardenParameterBox::getPreviousBox(RosegardenParameterArea::Arrangement) const
-{
-    // No ordering known -- depends on subclasses
-    return "";
-}
 
 }

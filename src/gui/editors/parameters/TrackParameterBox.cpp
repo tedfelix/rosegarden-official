@@ -497,12 +497,7 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
     slotUpdateControls(-1);
 }
 
-TrackParameterBox::~TrackParameterBox()
-{
-}
-
 void
-
 TrackParameterBox::setDocument(RosegardenDocument *doc)
 {
     if (m_doc != doc) {
@@ -776,7 +771,7 @@ TrackParameterBox::tracksDeleted(const Composition *, std::vector<TrackId> &trac
     for (unsigned i = 0; i < trackIds.size(); ++i) {
         // If this is the selected track
         if ((int)trackIds[i] == m_selectedTrackId) {
-            slotSelectedTrackChanged();
+            selectedTrackChanged2();
             return;
         }
     }
@@ -785,13 +780,13 @@ TrackParameterBox::tracksDeleted(const Composition *, std::vector<TrackId> &trac
 void
 TrackParameterBox::trackSelectionChanged(const Composition *, TrackId)
 {
-    slotSelectedTrackChanged();
+    selectedTrackChanged2();
 }
 
 void
-TrackParameterBox::slotSelectedTrackChanged()
+TrackParameterBox::selectedTrackChanged2()
 {
-    RG_DEBUG << "TrackParameterBox::slotSelectedTrackChanged()";
+    RG_DEBUG << "selectedTrackChanged2()";
 
     Composition &comp = m_doc->getComposition();
     TrackId newTrack = comp.getSelectedTrack();
@@ -1019,13 +1014,6 @@ TrackParameterBox::slotInstrumentChanged(Instrument * /*instrument*/)
     //RG_DEBUG << "TrackParameterBox::slotInstrumentChanged()";
     populatePlaybackDeviceList();
     slotUpdateControls(-1);
-}
-
-void
-TrackParameterBox::showAdditionalControls(bool)
-{
-    // No longer needed.  Remove when we strip the last of the classic vs.
-    // tabbed garbage out of the other parameter boxes
 }
 
 void
@@ -1270,16 +1258,6 @@ TrackParameterBox::slotStaffBracketChanged(int index)
         return;
 
     trk->setStaffBracket(index);
-}
-
-QString
-TrackParameterBox::getPreviousBox(RosegardenParameterArea::Arrangement arrangement) const
-{
-    if (arrangement == RosegardenParameterArea::CLASSIC_STYLE) {
-        return tr("Segment");
-    } else {
-        return "";
-    }
 }
 
 Track *

@@ -25,50 +25,47 @@
 #include "RosegardenParameterArea.h"
 #include "RosegardenParameterBox.h"
 
-#include "base/MidiProgram.h"
 #include "base/Track.h"
 #include "base/Composition.h"
 #include "gui/widgets/ColourTable.h"
+#include "base/Device.h"  // For DeviceId
 
 #include <QString>
-#include <QSharedPointer>
-
-#include <map>
-#include <vector>
-
 
 class QWidget;
 class QPushButton;
 class QLabel;
-class QFrame;
 class QComboBox;
 class QCheckBox;
+
+#include <map>
+#include <vector>
 
 namespace Rosegarden
 {
 
+
 class CollapsingFrame;
 class RosegardenDocument;
-class InstrumentStaticSignals;
 
 
+/// The "Track Parameters" box in the left pane of the main window.
 class TrackParameterBox : public RosegardenParameterBox,
                           public CompositionObserver
 {
 Q_OBJECT
         
 public:
-    TrackParameterBox( RosegardenDocument *doc,
-                       QWidget *parent=0);
-    ~TrackParameterBox();
+    TrackParameterBox(RosegardenDocument *doc, QWidget *parent = 0);
     
-    void setDocument( RosegardenDocument *doc );
-    virtual void showAdditionalControls(bool); // no longer needed; preserved because it's in the base class
+    void setDocument(RosegardenDocument *doc);
 
-    virtual QString getPreviousBox(RosegardenParameterArea::Arrangement) const;
+    // ??? What about CompositionObserver::selectedTrackChanged()?  Should
+    //     we use that instead of having our own?  Is this redundant?
+    void selectedTrackChanged2();
 
 public slots:
-    void slotSelectedTrackChanged();
+    // Signals from widgets.
     void slotPlaybackDeviceChanged(int index);
     void slotInstrumentChanged(int index);
     void slotArchiveChanged(bool checked);
@@ -79,12 +76,13 @@ public slots:
     /// Update all controls in the Track Parameters box.
     /** The "dummy" int is for compatibility with the
      *  TrackButtons::instrumentSelected() signal.  See
-     *  RosegardenMainViewWidget's ctor which connects the two.  This
-     *  would probably be better handled with a separate
-     *  slotInstrumentSelected() that takes the instrument ID, ignores it,
-     *  and calls a new public updateControls() (which would no longer need
-     *  the dummy).  Then callers of updateControls() would no longer need
-     *  the cryptic "-1".
+     *  RosegardenMainViewWidget's ctor which connects the two.
+     *
+     *  ??? This would probably be better handled with a separate
+     *      slotInstrumentSelected() that takes the instrument ID, ignores it,
+     *      and calls a new public updateControls() (which would no longer need
+     *      the dummy).  Then callers of updateControls() would no longer need
+     *      the cryptic "-1".
      */
     void slotUpdateControls(int dummy);
     void slotInstrumentChanged(Instrument *instrument);

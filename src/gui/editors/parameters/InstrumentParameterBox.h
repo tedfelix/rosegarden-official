@@ -73,10 +73,6 @@ public:
 
     MIDIInstrumentParameterPanel *getMIDIInstrumentParameterPanel();
 
-    virtual void showAdditionalControls(bool)  { }
-
-    virtual QString getPreviousBox(RosegardenParameterArea::Arrangement) const;
-
     /// Update the MatrixWidget's PitchRuler.
     void emitInstrumentPercussionSetChanged();
 

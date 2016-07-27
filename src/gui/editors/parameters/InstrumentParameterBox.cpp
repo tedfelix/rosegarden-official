@@ -100,12 +100,6 @@ InstrumentParameterBox::getSelectedInstrument()
     return m_doc->getStudio().getInstrumentById(m_selectedInstrument);
 }
 
-QString
-InstrumentParameterBox::getPreviousBox(RosegardenParameterArea::Arrangement /* arrangement */) const
-{
-    return tr("Track");
-}
-
 void
 InstrumentParameterBox::setAudioMeter(float ch1, float ch2, float ch1r, float ch2r)
 {
