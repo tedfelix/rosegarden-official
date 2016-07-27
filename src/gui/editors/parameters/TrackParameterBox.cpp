@@ -577,16 +577,20 @@ TrackParameterBox::populateRecordingDeviceList()
         if (instrument->getInstrumentType() == Instrument::Audio) {
 
             m_recordingDeviceIds.push_back(Device::NO_DEVICE);
-            m_recordingDevice->addItem(tr("Audio"));
-            m_recordingChannel->addItem(tr("Audio"));
 
+            m_recordingDevice->addItem(tr("Audio"));
             m_recordingDevice->setEnabled(false);
+
+            m_recordingChannel->addItem(tr("Audio"));
             m_recordingChannel->setEnabled(false);
 
             m_thruRouting->setCurrentIndex(0);
             m_thruRouting->setEnabled(false);
 
             // hide these for audio instruments
+            // ??? We should probably do the same for the "Recording filters"
+            //     and "Staff export options" frames.  That would simplify
+            //     things.  The above code would go away.
             m_createSegmentsWithFrame->setVisible(false);
 
         } else { // InstrumentType::Midi and InstrumentType::SoftSynth

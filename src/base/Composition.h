@@ -1103,6 +1103,7 @@ protected:
 };
 
 
+/// Base class for those that want notification of Composition changes.
 /**
  * If you subclass from CompositionObserver, you can then attach to a
  * Composition to receive notification when something changes.
@@ -1115,118 +1116,100 @@ protected:
  * more care to make sure you really are making the correct
  * declarations in the subclass.
  */
-
 class CompositionObserver
 {
 public:
-    CompositionObserver() : m_compositionDeleted(false) {}
+    CompositionObserver() : m_compositionDeleted(false)  { }
     
-    virtual ~CompositionObserver() {}
+    virtual ~CompositionObserver()  { }
     
-    /**
-     * Called after the segment has been added to the composition
-     */
+    /// A segment has been added to the Composition.
     virtual void segmentAdded(const Composition *, Segment *) { }
 
+    /// A Segment has been removed from the Composition.
     /**
-     * Called after the segment has been removed from the segment,
-     * and just before it is deleted
+     * Called before the Segment is deleted.
      */
     virtual void segmentRemoved(const Composition *, Segment *) { }
 
-    /**
-     * Called when the segment's repeat status has changed
-     */
+    /// The Segment's repeat status has changed
     virtual void segmentRepeatChanged(const Composition *, Segment *, bool) { }
 
-    /**
-     * Called when the segment's repeat end time has changed
-     */
+    /// The Segment's repeat end time has changed.
     virtual void segmentRepeatEndChanged(const Composition *, Segment *, timeT) { }
 
-    /**
-     * Called when the segment's delay timing has changed
-     */
+    /// The Segment's delay timing has changed.
     virtual void segmentEventsTimingChanged(const Composition *, Segment *,
                                             timeT /* delay */,
                                             RealTime /* rtDelay */) { }
 
-    /**
-     * Called when the segment's transpose value has changed
-     */
+    /// The Segment's transpose value has changed
     virtual void segmentTransposeChanged(const Composition *, Segment *,
                                          int /* transpose */) { }
 
-    /**
-     * Called when the segment's start time has changed
-     */
+    /// The Segment's start time has changed.
     virtual void segmentStartChanged(const Composition *, Segment *,
 				     timeT /* newStartTime */) { }
 
-    /**
-     * Called when the segment's end marker time has changed
-     */
+    /// The Segment's end marker time has changed
     virtual void segmentEndMarkerChanged(const Composition *, Segment *,
                                          bool /* shorten */) { }
 
-    /**
-     * Called when the segment's track has changed
-     */
+    /// The Segment's track has changed.
     virtual void segmentTrackChanged(const Composition *, Segment *,
-                                     TrackId /* id */) { }
+                                     TrackId) { }
 
+    /// The Composition's end time has been changed.
     /**
-     * Called after the composition's end marker time has been
-     * changed
-     *
      * ??? rename: endTimeChanged() to differentiate from SegmentObserver.
      */
-    virtual void endMarkerTimeChanged(const Composition *, bool /* shorten */) { }
+    virtual void endMarkerTimeChanged(const Composition *,
+                                      bool /* shorten */) { }
 
+    /// A different track has been selected.
     /**
-     * Called when a different track is selected.  This can happen when
-     * the user clicks on a track label, or presses the up/down arrow keys
-     * to change which track is currently selected.
+     * This can happen when the user clicks on a track label, or presses
+     * the up/down arrow keys to change which track is currently selected.
+     *
+     * See selectedTrackChanged().
      */
     virtual void trackSelectionChanged(const Composition *, TrackId) { }
 
-    /**
-     * Called when a track is changed (instrument id, muted status...)
-     */
-    virtual void trackChanged(const Composition *, Track*) { }
+    /// A Track has changed (instrument id, muted status...)
+    virtual void trackChanged(const Composition *, Track *) { }
 
-    /**
-     * Called when tracks have been deleted
-     */
-    virtual void tracksDeleted(const Composition *, std::vector<TrackId> &/*trackIds*/) { }
+    virtual void tracksDeleted(const Composition *,
+                               std::vector<TrackId> & /*trackIds*/) { }
 
-    /**
-     * Called when tracks have been added
-     */
-    virtual void tracksAdded(const Composition *, std::vector<TrackId> &/*trackIds*/) { }
+    virtual void tracksAdded(const Composition *,
+                             std::vector<TrackId> & /*trackIds*/) { }
 
-    /**
-     * Called when some time signature has changed
-     */
+    /// Some time signature has changed.
     virtual void timeSignatureChanged(const Composition *) { }
     
-    /**
-     * Called when metronome status has changed (on/off)
-     */
+    /// Metronome status has changed (on/off)
     virtual void metronomeChanged(const Composition *) { }
 
     virtual void tempoChanged(const Composition *) { }
     
+    /// Like trackChanged() but for the Track that is selected.
+    /**
+     * This avoids the need to check the TrackId with trackChanged().
+     *
+     * See trackChanged().
+     *
+     * ??? We can probably get rid of this easily and just use
+     *     trackChanged().
+     */
     virtual void selectedTrackChanged(const Composition *) { }
 
-    /**
-     * Called from the composition dtor
-     */
+
+    /// Called from the Composition dtor.
     virtual void compositionDeleted(const Composition *) {
         m_compositionDeleted = true;
     }
 
-    bool isCompositionDeleted() { return m_compositionDeleted; }
+    bool isCompositionDeleted()  { return m_compositionDeleted; }
 
 protected:
     bool m_compositionDeleted;
