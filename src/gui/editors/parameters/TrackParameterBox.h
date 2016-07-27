@@ -62,16 +62,48 @@ public:
 
     // ??? What about CompositionObserver::selectedTrackChanged()?  Should
     //     we use that instead of having our own?  Is this redundant?
+    //     And what about trackSelectionChanged() which we already override?
     void selectedTrackChanged2();
+
+
+    // CompositionObserver overrides.
+    virtual void trackChanged(const Composition *comp, Track *track);
+    virtual void tracksDeleted(const Composition *comp, std::vector<TrackId> &trackIds);
+    virtual void trackSelectionChanged(const Composition *, TrackId);
 
 public slots:
     // Signals from widgets.
+    /// Playback parameters: Device
     void slotPlaybackDeviceChanged(int index);
+    /// Playback parameters: Instrument
     void slotInstrumentChanged(int index);
+    /// Playback parameters: Archive
     void slotArchiveChanged(bool checked);
+    /// Recording filters: Device
     void slotRecordingDeviceChanged(int index);
+    /// Recording filters: Channel
     void slotRecordingChannelChanged(int index);
+    /// Recording filters: Thru Routing
     void slotThruRoutingChanged(int index);
+    /// Staff export options: Notation size
+    void slotStaffSizeChanged(int index);
+    /// Staff export options: Bracket type
+    void slotStaffBracketChanged(int index);
+    /// Create segments with: Preset Load
+    void slotPresetPressed();
+    /// Create segments with: Clef
+    void slotClefChanged(int clef);
+    /// Create segments with: Transpose
+    void slotTransposeIndexChanged(int index);
+    /// Create segments with: Pitch Lowest
+    void slotLowestPressed();
+    /// Create segments with: Pitch Highest
+    void slotHighestPressed();
+    /// Create segments with: Color
+    void slotColorChanged(int index);
+
+    /// Connected to RosegardenDocument::docColoursChanged().
+    void slotDocColoursChanged();
 
     /// Update all controls in the Track Parameters box.
     /** The "dummy" int is for compatibility with the
@@ -85,29 +117,18 @@ public slots:
      *      the cryptic "-1".
      */
     void slotUpdateControls(int dummy);
+
+    /// Connected to InstrumentStaticSignals::changed().
     void slotInstrumentChanged(Instrument *instrument);
 
-    void slotClefChanged(int clef);
-    void slotTransposeChanged(int transpose);
-    void slotTransposeIndexChanged(int index);
-    void slotTransposeTextChanged(QString text);
-    void slotDocColoursChanged();
-    void slotColorChanged(int index);
-    void slotHighestPressed();
-    void slotLowestPressed();
-    void slotPresetPressed();
-
-    void slotStaffSizeChanged(int index);
-    void slotStaffBracketChanged(int index);
+    /**
+     * Connected to DeviceManagerDialog::deviceNamesChanged() and
+     * BankEditorDialog::deviceNamesChanged().
+     */
     void slotPopulateDeviceLists();
 
 signals:
     void instrumentSelected(TrackId, int);
-
-protected:
-    void populatePlaybackDeviceList();
-    void populateRecordingDeviceList();
-    void updateHighLow();
 
 private:
     RosegardenDocument *m_doc;
@@ -121,71 +142,71 @@ private:
 
     // --- Playback parameters --------------------------------------
 
-    // Playback Device
+    /// Playback parameters: Device
     QComboBox *m_playDevice;
     typedef std::vector<DeviceId> IdsVector;
     IdsVector m_playDeviceIds;
 
-    // Playback Instrument
+    /// Playback parameters: Instrument
     QComboBox *m_instrument;
     std::map<DeviceId, IdsVector> m_instrumentIds;
     std::map<DeviceId, QStringList> m_instrumentNames;
 
-    // Archive
+    /// Playback parameters: Archive
     QCheckBox *m_archive;
 
-    // --- Record filters -------------------------------------------
+    // --- Recording filters -------------------------------------------
 
-    // Record Device
+    /// Recording filters: Device
     QComboBox *m_recDevice;
     IdsVector m_recDeviceIds;
     char m_lastInstrumentType;
 
-    // Record Channel
+    /// Recording filters: Channel
     QComboBox *m_recChannel;
 
-    // Thru Routing
+    /// Recording filters: Thru Routing
     QComboBox *m_thruRouting;
 
     // --- Staff export options -------------------------------------
 
-    // Notation size
+    /// Staff export options: Notation size
     QComboBox *m_notationSizeCombo;
 
-    // Bracket type
+    /// Staff export options: Bracket type
     QComboBox *m_bracketTypeCombo;
 
     // --- Create segments with -------------------------------------
 
     CollapsingFrame *m_createSegmentsWithFrame;
 
-    // Preset
+    /// Create segments with: Preset Load
     QLabel *m_preset;
     QPushButton *m_loadButton;
 
-    // Clef
+    /// Create segments with: Clef
     QComboBox *m_clefCombo;
 
-    // Transpose
+    /// Create segments with: Transpose
     QComboBox *m_transposeCombo;
 
-    // Pitch
+    /// Create segments with: Pitch (Lowest/Highest)
     QPushButton *m_lowestButton;
     QPushButton *m_highestButton;
     int m_lowestPlayable;
     int m_highestPlayable;
 
-    // Color
+    /// Create segments with: Color
     QComboBox *m_colorCombo;
     // Position of the Add Colour item in m_colorCombo.
     int m_addColourPos;
     ColourTable::ColourList m_colourList;
 
-
-    // CompositionObserver interface
-    virtual void trackChanged(const Composition *comp, Track *track);
-    virtual void tracksDeleted(const Composition *comp, std::vector<TrackId> &trackIds);
-    virtual void trackSelectionChanged(const Composition *, TrackId);
+    void populatePlaybackDeviceList();
+    void populateRecordingDeviceList();
+    void updateHighLow();
+    void transposeChanged(int transpose);
+    void transposeTextChanged(QString text);
 };
 
 

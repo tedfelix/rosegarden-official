@@ -1030,9 +1030,9 @@ TrackParameterBox::slotClefChanged(int clef)
 }
 
 void
-TrackParameterBox::slotTransposeChanged(int transpose)
+TrackParameterBox::transposeChanged(int transpose)
 {
-    RG_DEBUG << "TrackParameterBox::slotTransposeChanged(" << transpose << ")";
+    RG_DEBUG << "TrackParameterBox::transposeChanged(" << transpose << ")";
 
     Track *trk = getTrack();
     if (!trk)
@@ -1045,15 +1045,15 @@ TrackParameterBox::slotTransposeChanged(int transpose)
 void
 TrackParameterBox::slotTransposeIndexChanged(int index)
 {
-    slotTransposeTextChanged(m_transposeCombo->itemText(index));
+    transposeTextChanged(m_transposeCombo->itemText(index));
 }
 
 void
-TrackParameterBox::slotTransposeTextChanged(QString text)
+TrackParameterBox::transposeTextChanged(QString text)
 {
     if (text.isEmpty()) return;
     int value = text.toInt();
-    slotTransposeChanged(value);
+    transposeChanged(value);
 }
 
 void
@@ -1217,7 +1217,7 @@ TrackParameterBox::slotPresetPressed()
             m_lowestPlayable = dialog.getLowRange();
             updateHighLow();
             slotClefChanged(dialog.getClef());
-            slotTransposeChanged(dialog.getTranspose());
+            transposeChanged(dialog.getTranspose());
 
             // the preceding slots will have set this disabled, so we
             // re-enable it until it is subsequently re-disabled by the
