@@ -128,6 +128,8 @@ bool ConfigurationXmlSubHandler::startElement(const QString&, const QString&,
 
 bool ConfigurationXmlSubHandler::characters(const QString& chars)
 {
+    //RG_DEBUG << "ConfigurationXmlSubHandler::characters()";
+
     QString ch = chars.trimmed();
     // this method is also called on newlines - skip these cases
     if (ch.isEmpty()) return true;
@@ -135,8 +137,7 @@ bool ConfigurationXmlSubHandler::characters(const QString& chars)
 
     if (m_propertyType == "Int") {
         long i = ch.toInt();
-        RG_DEBUG << "\"" << m_propertyName << "\" "
-                 << "value = " << i << endl;
+        //RG_DEBUG << "  setting (int) " << m_propertyName << "=" << i;
         m_configuration->set<Int>(qstrtostr(m_propertyName), i);
 
         return true;
@@ -149,8 +150,7 @@ bool ConfigurationXmlSubHandler::characters(const QString& chars)
         rt.sec = ch.left(sepIdx).toInt();
         rt.nsec = ch.mid(sepIdx + 1).toInt();
 
-        RG_DEBUG << "\"" << m_propertyName << "\" "
-                 << "sec = " << rt.sec << ", nsec = " << rt.nsec << endl;
+        //RG_DEBUG << "  setting (RealTimeT) " << m_propertyName << "=" << rt.sec << "(sec) " << rt.nsec << "(nsec)";
 
         m_configuration->set<Rosegarden::RealTimeT>(qstrtostr(m_propertyName), rt);
 
@@ -164,6 +164,8 @@ bool ConfigurationXmlSubHandler::characters(const QString& chars)
                   chLc == "1"    ||
                   chLc == "on");
         
+        //RG_DEBUG << "  setting (Bool) " << m_propertyName << "=" << b;
+
         m_configuration->set<Rosegarden::Bool>(qstrtostr(m_propertyName), b);
 
         return true;
@@ -172,6 +174,8 @@ bool ConfigurationXmlSubHandler::characters(const QString& chars)
     if (m_propertyType.isEmpty() ||
     m_propertyType == "String") {
         
+        //RG_DEBUG << "  setting (String) " << m_propertyName << "=" << ch;
+
         m_configuration->set<Rosegarden::String>(qstrtostr(m_propertyName),
                          qstrtostr(ch));
 

@@ -1878,6 +1878,7 @@ RosegardenDocument::xmlParse(QString fileContents, QString &errMsg,
         disconnect(&handler, 0, progress, 0);
         disconnect(progress, 0, &handler, 0);
     }
+
     return ok;
 }
 

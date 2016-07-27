@@ -224,16 +224,27 @@ MetadataHelper::setComments(CommentsMap comments)
 MetadataHelper::HeadersMap
 MetadataHelper::getHeaders()
 {
-    Configuration &metadata = (&m_doc->getComposition())->getMetadata();
     HeadersMap data;
 
-    data.clear();
-    for (Configuration::iterator
-            it = metadata.begin(); it != metadata.end(); ++it) {
+    Configuration &metadata = m_doc->getComposition().getMetadata();
+
+    // For each Composition Property
+    for (Configuration::iterator it = metadata.begin();
+         it != metadata.end();
+         ++it) {
         QString key = strtoqstr(it->first.getName());
-        if (!key.startsWith(commentsKeyBase())) {
-            data[key] = strtoqstr(metadata.get<String>(qstrtostr(key)));
+
+        // If it's a comment, try the next one.
+        if (key.startsWith(commentsKeyBase()))
+            continue;
+
+        // This should never happen.  See r14693.
+        if (!metadata.has(qstrtostr(key))) {
+            RG_WARNING << "getHeaders() WARNING: Key " << key << "not found";
+            continue;
         }
+
+        data[key] = strtoqstr(metadata.get<String>(qstrtostr(key)));
     }
 
     return data;
