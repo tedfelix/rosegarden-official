@@ -41,6 +41,7 @@ namespace Rosegarden
 // plugins
 class AudioPluginInstance;
 typedef std::vector<AudioPluginInstance*>::iterator PluginInstanceIterator;
+typedef std::vector<AudioPluginInstance*>::const_iterator PluginInstanceConstIterator;
 
 typedef std::vector<std::pair<MidiByte, MidiByte> > StaticControllers;
 typedef std::vector<std::pair<MidiByte, MidiByte> >::iterator StaticControllerIterator;
@@ -86,7 +87,7 @@ public:
 
     // Get a plugin for this container
     //
-    AudioPluginInstance* getPlugin(unsigned int position);
+    AudioPluginInstance *getPlugin(unsigned int position) const;
 
     virtual unsigned int getId() const = 0;
     virtual std::string getName() const = 0;

@@ -106,12 +106,14 @@ PluginContainer::emptyPlugins()
 
 // Get an instance for an index
 //
-AudioPluginInstance*
-PluginContainer::getPlugin(unsigned int position)
+AudioPluginInstance *
+PluginContainer::getPlugin(unsigned int position) const
 {
-    PluginInstanceIterator it = m_audioPlugins.begin();
-    for (; it != m_audioPlugins.end(); ++it)
-    {
+    // For each plugin
+    for (PluginInstanceConstIterator it = m_audioPlugins.begin();
+         it != m_audioPlugins.end();
+         ++it) {
+        // Found?  Return it.
         if ((*it)->getPosition() == position)
             return *it;
     }

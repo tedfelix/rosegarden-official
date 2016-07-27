@@ -201,12 +201,10 @@ Studio::getPresentationInstruments() const
     // For each device...
     for (DeviceList::const_iterator it = m_devices.begin();
          it != m_devices.end();
-         ++it)
-    {
+         ++it) {
         const MidiDevice *midiDevice = dynamic_cast<MidiDevice *>(*it);
 
-        if (midiDevice)
-        {
+        if (midiDevice) {
             // skip read-only devices
             if (midiDevice->getDirection() == MidiDevice::Record)
                 continue;
