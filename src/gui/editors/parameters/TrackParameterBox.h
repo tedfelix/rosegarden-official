@@ -22,7 +22,6 @@
 #ifndef RG_TRACKPARAMETERBOX_H
 #define RG_TRACKPARAMETERBOX_H
 
-#include "RosegardenParameterArea.h"
 #include "RosegardenParameterBox.h"
 
 #include "base/Track.h"
@@ -150,6 +149,7 @@ private:
     QComboBox *m_playbackDevice;
     typedef std::vector<DeviceId> IdsVector;
     IdsVector m_playbackDeviceIds;
+    void populatePlaybackDeviceList();
 
     /// Playback parameters: Instrument
     QComboBox *m_instrument;
@@ -165,6 +165,7 @@ private:
     QComboBox *m_recordingDevice;
     IdsVector m_recordingDeviceIds;
     char m_lastInstrumentType;
+    void populateRecordingDeviceList();
 
     /// Recording filters: Channel
     QComboBox *m_recordingChannel;
@@ -193,24 +194,21 @@ private:
 
     /// Create segments with: Transpose
     QComboBox *m_transpose;
-
-    /// Create segments with: Pitch (Lowest/Highest)
-    QPushButton *m_lowestButton;
-    QPushButton *m_highestButton;
-    int m_lowestPlayable;
-    int m_highestPlayable;
-
-    /// Create segments with: Color
-    QComboBox *m_colorCombo;
-    // Position of the Add Colour item in m_colorCombo.
-    int m_addColourPos;
-    ColourTable::ColourList m_colourList;
-
-    void populatePlaybackDeviceList();
-    void populateRecordingDeviceList();
-    void updateHighLow();
     void transposeChanged(int transpose);
     void transposeTextChanged(QString text);
+
+    /// Create segments with: Pitch (Lowest/Highest)
+    QPushButton *m_lowest;
+    QPushButton *m_highest;
+    int m_lowestPlayable;
+    int m_highestPlayable;
+    void updateHighLow();
+
+    /// Create segments with: Color
+    QComboBox *m_color;
+    // Position of the Add Colour item in m_color.
+    int m_addColourPos;
+    ColourTable::ColourList m_colourList;
 };
 
 

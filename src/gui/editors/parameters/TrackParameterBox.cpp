@@ -23,69 +23,53 @@
 
 #include "TrackParameterBox.h"
 
-#include "gui/widgets/SqueezedLabel.h"
-#include "misc/Debug.h"
-#include "misc/Strings.h"
-#include "gui/general/ClefIndex.h"
-#include "misc/ConfigGroups.h"
 #include "base/AudioPluginInstance.h"
+#include "gui/general/ClefIndex.h"  // Clef enum
+#include "gui/widgets/CollapsingFrame.h"
 #include "base/Colour.h"
 #include "base/ColourMap.h"
 #include "base/Composition.h"
+#include "misc/ConfigGroups.h"
+#include "misc/Debug.h"
 #include "base/Device.h"
 #include "base/Exception.h"
+#include "gui/general/GUIPalette.h"
+#include "gui/widgets/InputDialog.h"
 #include "base/Instrument.h"
 #include "base/InstrumentStaticSignals.h"
+#include "gui/widgets/LineEdit.h"
 #include "base/MidiDevice.h"
-#include "base/MidiProgram.h"
-#include "base/NotationTypes.h"
+#include "gui/dialogs/PitchPickerDialog.h"
+#include "sound/PluginIdentifier.h"
+#include "gui/general/PresetHandlerDialog.h"
+#include "document/RosegardenDocument.h"
+#include "RosegardenParameterBox.h"
+#include "commands/segment/SegmentSyncCommand.h"
+#include "gui/widgets/SqueezedLabel.h"
+#include "base/StaffExportTypes.h"  // StaffTypes, Brackets
 #include "base/Studio.h"
 #include "base/Track.h"
-#include "base/StaffExportTypes.h"
-#include "gui/widgets/TmpStatusMsg.h"
-#include "commands/segment/SegmentSyncCommand.h"
-#include "document/RosegardenDocument.h"
-#include "gui/dialogs/PitchPickerDialog.h"
-#include "gui/general/GUIPalette.h"
-#include "gui/general/PresetHandlerDialog.h"
-#include "gui/widgets/CollapsingFrame.h"
-#include "gui/widgets/ColourTable.h"
-#include "gui/general/GUIPalette.h"
-#include "RosegardenParameterArea.h"
-#include "RosegardenParameterBox.h"
-#include "sound/PluginIdentifier.h"
-#include "gui/widgets/LineEdit.h"
-#include "gui/widgets/InputDialog.h"
-#include "misc/Debug.h"
-#include "sequencer/RosegardenSequencer.h"
 
-#include <QColorDialog>
-#include <QLayout>
-#include <QApplication>
-#include <QComboBox>
-#include <QSettings>
-#include <QMessageBox>
-#include <QTabWidget>
+#include <QCheckBox>
 #include <QColor>
+#include <QColorDialog>
+#include <QComboBox>
 #include <QDialog>
-#include <QFont>
 #include <QFontMetrics>
 #include <QFrame>
+#include <QGridLayout>
 #include <QLabel>
+#include <QMessageBox>
 #include <QPixmap>
 #include <QPushButton>
-#include <QRegExp>
-#include <QScrollArea>
+#include <QSettings>
 #include <QString>
-#include <QToolTip>
 #include <QWidget>
-#include <QVBoxLayout>
-#include <QStackedWidget>
-#include <QCheckBox>
 
 
 namespace Rosegarden
 {
+
 
 TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
                                      QWidget *parent) :
@@ -403,20 +387,20 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
     QLabel *lowestLabel = new QLabel(tr("Lowest"), createSegmentsWith);
     lowestLabel->setFont(m_font);
 
-    m_lowestButton = new QPushButton(tr("---"), createSegmentsWith);
-    m_lowestButton->setFont(m_font);
-    m_lowestButton->setToolTip(tr("<qt><p>Choose the lowest suggested playable note, using a staff</p></qt>"));
-    connect(m_lowestButton, SIGNAL(released()),
+    m_lowest = new QPushButton(tr("---"), createSegmentsWith);
+    m_lowest->setFont(m_font);
+    m_lowest->setToolTip(tr("<qt><p>Choose the lowest suggested playable note, using a staff</p></qt>"));
+    connect(m_lowest, SIGNAL(released()),
             SLOT(slotLowestPressed()));
 
     // Highest playable note
     QLabel *highestLabel = new QLabel(tr("Highest"), createSegmentsWith);
     highestLabel->setFont(m_font);
 
-    m_highestButton = new QPushButton(tr("---"), createSegmentsWith);
-    m_highestButton->setFont(m_font);
-    m_highestButton->setToolTip(tr("<qt><p>Choose the highest suggested playable note, using a staff</p></qt>"));
-    connect(m_highestButton, SIGNAL(released()),
+    m_highest = new QPushButton(tr("---"), createSegmentsWith);
+    m_highest->setFont(m_font);
+    m_highest->setToolTip(tr("<qt><p>Choose the highest suggested playable note, using a staff</p></qt>"));
+    connect(m_highest, SIGNAL(released()),
             SLOT(slotHighestPressed()));
 
     updateHighLow();
@@ -424,12 +408,12 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
     // Color
     QLabel *colorLabel = new QLabel(tr("Color"), createSegmentsWith);
     colorLabel->setFont(m_font);
-    m_colorCombo = new QComboBox(createSegmentsWith);
-    m_colorCombo->setFont(m_font);
-    m_colorCombo->setToolTip(tr("<qt><p>New segments will be created using this color</p></qt>"));
-    m_colorCombo->setEditable(false);
-    m_colorCombo->setMaxVisibleItems(20);
-    connect(m_colorCombo, SIGNAL(activated(int)),
+    m_color = new QComboBox(createSegmentsWith);
+    m_color->setFont(m_font);
+    m_color->setToolTip(tr("<qt><p>New segments will be created using this color</p></qt>"));
+    m_color->setEditable(false);
+    m_color->setMaxVisibleItems(20);
+    connect(m_color, SIGNAL(activated(int)),
             SLOT(slotColorChanged(int)));
 
     // "Create segments with" layout
@@ -450,12 +434,12 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
     // Row 2: Pitch/Lowest/Highest
     groupLayout->addWidget(pitchLabel, 2, 0, Qt::AlignLeft);
     groupLayout->addWidget(lowestLabel, 2, 1, Qt::AlignRight);
-    groupLayout->addWidget(m_lowestButton, 2, 2, 1, 1);
+    groupLayout->addWidget(m_lowest, 2, 2, 1, 1);
     groupLayout->addWidget(highestLabel, 2, 3, Qt::AlignRight);
-    groupLayout->addWidget(m_highestButton, 2, 4, 1, 2);
+    groupLayout->addWidget(m_highest, 2, 4, 1, 2);
     // Row 3: Color
     groupLayout->addWidget(colorLabel, 3, 0, Qt::AlignLeft);
-    groupLayout->addWidget(m_colorCombo, 3, 1, 1, 5);
+    groupLayout->addWidget(m_color, 3, 1, 1, 5);
 
     groupLayout->setColumnStretch(1, 1);
     groupLayout->setColumnStretch(2, 2);
@@ -707,11 +691,11 @@ TrackParameterBox::updateHighLow()
     // difference
     QString tmp = QObject::tr(highest.getAsString(includeOctave, base).c_str(), "note name");
     tmp += tr(" %1").arg(highest.getOctave(base));
-    m_highestButton->setText(tmp);
+    m_highest->setText(tmp);
 
     tmp = QObject::tr(lowest.getAsString(includeOctave, base).c_str(), "note name");
     tmp += tr(" %1").arg(lowest.getOctave(base));
-    m_lowestButton->setText(tmp);
+    m_lowest->setText(tmp);
 
     m_preset->setEnabled(false);
 }
@@ -736,7 +720,7 @@ TrackParameterBox::slotUpdateControls(int /*dummy*/)
     // Create segments with
     m_clef->setCurrentIndex(trk->getClef());
     m_transpose->setCurrentIndex(m_transpose->findText(QString("%1").arg(trk->getTranspose())));
-    m_colorCombo->setCurrentIndex(trk->getColor());
+    m_color->setCurrentIndex(trk->getColor());
     m_highestPlayable = trk->getHighestPlayable();
     m_lowestPlayable = trk->getLowestPlayable();
     updateHighLow();
@@ -1061,7 +1045,7 @@ TrackParameterBox::slotDocColoursChanged()
 {
     RG_DEBUG << "TrackParameterBox::slotDocColoursChanged()";
 
-    m_colorCombo->clear();
+    m_color->clear();
     m_colourList.clear();
     // Populate it from composition.m_segmentColourMap
     ColourMap temp = m_doc->getComposition().getSegmentColourMap();
@@ -1073,7 +1057,7 @@ TrackParameterBox::slotDocColoursChanged()
         QPixmap colour(15, 15);
         colour.fill(GUIPalette::convertColour(it->second.first));
         if (qtrunc == "") {
-            m_colorCombo->addItem(colour, tr("Default"), i);
+            m_color->addItem(colour, tr("Default"), i);
         } else {
             // truncate name to 25 characters to avoid the combo forcing the
             // whole kit and kaboodle too wide (This expands from 15 because the
@@ -1082,22 +1066,22 @@ TrackParameterBox::slotDocColoursChanged()
             // spare.)
             if (qtrunc.length() > 25)
                 qtrunc = qtrunc.left(22) + "...";
-            m_colorCombo->addItem(colour, qtrunc, i);
+            m_color->addItem(colour, qtrunc, i);
         }
         m_colourList[it->first] = i; // maps colour number to menu index
         ++i;
     }
 
     m_addColourPos = i;
-    m_colorCombo->addItem(tr("Add New Color"), m_addColourPos);
+    m_color->addItem(tr("Add New Color"), m_addColourPos);
 
     // remove the item we just inserted; this leaves the translation alone, but
     // eliminates the useless option
     //
     //!!! fix after release
-    m_colorCombo->removeItem(m_addColourPos);
+    m_color->removeItem(m_addColourPos);
 
-    m_colorCombo->setCurrentIndex(0);
+    m_color->setCurrentIndex(0);
 }
 
 void
