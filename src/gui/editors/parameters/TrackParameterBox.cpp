@@ -184,6 +184,10 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
     m_recordingChannel->setToolTip(tr("<qt><p>This track will only record Audio/MIDI from the selected channel, filtering anything else out</p></qt>"));
     m_recordingChannel->setMaxVisibleItems(17);
     m_recordingChannel->setMinimumWidth(width11);
+    m_recordingChannel->addItem(tr("All"));
+    for (int i = 1; i < 17; ++i) {
+        m_recordingChannel->addItem(QString::number(i));
+    }
     connect(m_recordingChannel, SIGNAL(activated(int)),
             this, SLOT(slotRecordingChannelChanged(int)));
 
@@ -572,7 +576,6 @@ TrackParameterBox::populateRecordingDeviceList()
 
         m_recordingDevice->clear();
         m_recordingDeviceIds.clear();
-        m_recordingChannel->clear();
 
         if (instrument->getInstrumentType() == Instrument::Audio) {
 
@@ -612,11 +615,6 @@ TrackParameterBox::populateRecordingDeviceList()
                     m_recordingDevice->addItem(deviceName);
                     m_recordingDeviceIds.push_back(device->getId());
                 }
-            }
-
-            m_recordingChannel->addItem(tr("All"));
-            for (int i = 1; i < 17; ++i) {
-                m_recordingChannel->addItem(QString::number(i));
             }
 
             m_recordingDevice->setEnabled(true);
@@ -1341,6 +1339,14 @@ TrackParameterBox::updateRecordDevice()
 void
 TrackParameterBox::updateWidgets2()
 {
+    Track *track = getTrack();
+    if (!track)
+        return;
+
+    Instrument *instrument = m_doc->getStudio().getInstrumentFor(track);
+    if (!instrument)
+        return;
+
     // *** Playback parameters
 
     // Device
@@ -1350,61 +1356,95 @@ TrackParameterBox::updateWidgets2()
     updateInstrument();
 
     // Archive
+    m_archive->setChecked(track->isArchived());
 
-    // Straightforward.  Just set here.
+    // If the current Instrument is an Audio Instrument...
+    if (instrument->getInstrumentType() == Instrument::Audio)
+    {
+        // Hide the remaining three sections.
+        m_recordingFiltersFrame->setVisible(false);
+        m_staffExportOptionsFrame->setVisible(false);
+        m_createSegmentsWithFrame->setVisible(false);
+
+        // And bail.
+        return;
+    }
+    else  // MIDI or soft synth
+    {
+        // Show the remaining three sections.
+        m_recordingFiltersFrame->setVisible(true);
+        m_staffExportOptionsFrame->setVisible(true);
+        m_createSegmentsWithFrame->setVisible(true);
+    }
 
     // *** Recording filters
-
-    // If the current track is an Audio track, bail.
-    //if (instrument->getInstrumentType() == Instrument::Audio)
-    //    return;
 
     // Device
     updateRecordDevice();
 
     // Channel
-
-    // Straightforward.  Load in ctor.  Set here.
+    m_recordingChannel->setCurrentIndex((int)track->getMidiInputChannel() + 1);
 
     // Thru Routing
-
-    // Straightforward.  Load in ctor.  Set here.
+    m_thruRouting->setCurrentIndex((int)track->getThruRouting());
 
     // *** Staff export options
 
     // Notation size
-
-    // Straightforward.  Load in ctor.  Set here.
+    m_notationSize->setCurrentIndex(track->getStaffSize());
 
     // Bracket type
-
-    // Straightforward.  Load in ctor.  Set here.
+    m_bracketType->setCurrentIndex(track->getStaffBracket());
 
     // *** Create segments with
 
     // Preset (Label)
-
-    // Straightforward.  Just set here.
+    m_preset->setText(strtoqstr(track->getPresetLabel()));
 
     // Clef
-
-    // Straightforward.  Load in ctor.  Set here.
+    m_clef->setCurrentIndex(track->getClef());
 
     // Transpose
-
-    // Straightforward.  Load in ctor.  Set here.
+    m_transpose->setCurrentIndex(
+            m_transpose->findText(QString("%1").arg(track->getTranspose())));
 
     // Pitch Lowest
 
-    // Straightforward.  Just set here.
+    QSettings settings;
+    settings.beginGroup(GeneralOptionsConfigGroup);
+    const int octaveBase = settings.value("midipitchoctave", -2).toInt() ;
+    settings.endGroup();
+
+    const bool includeOctave = false;
+
+    // ??? Do we really need m_lowestPlayable now?
+    m_lowestPlayable = track->getLowestPlayable();
+    const Pitch lowest(m_lowestPlayable, Accidentals::NoAccidental);
+
+    // NOTE: this now uses a new, overloaded version of Pitch::getAsString()
+    // that explicitly works with the key of C major, and does not allow the
+    // calling code to specify how the accidentals should be written out.
+    //
+    // Separate the note letter from the octave to avoid undue burden on
+    // translators having to retranslate the same thing but for a number
+    // difference
+    QString tmp = QObject::tr(lowest.getAsString(includeOctave, octaveBase).c_str(), "note name");
+    tmp += tr(" %1").arg(lowest.getOctave(octaveBase));
+    m_lowest->setText(tmp);
 
     // Pitch Highest
 
-    // Straightforward.  Just set here.
+    // ??? Do we really need m_highestPlayable now?
+    m_highestPlayable = track->getHighestPlayable();
+    const Pitch highest(m_highestPlayable, Accidentals::NoAccidental);
+
+    tmp = QObject::tr(highest.getAsString(includeOctave, octaveBase).c_str(), "note name");
+    tmp += tr(" %1").arg(highest.getOctave(octaveBase));
+    m_highest->setText(tmp);
 
     // Color
-
-    // Straightforward.  Load in ctor.  Set here.
+    // ??? This is not loaded in the ctor.
+    m_color->setCurrentIndex(track->getColor());
 }
 
 
