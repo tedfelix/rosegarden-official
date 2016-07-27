@@ -519,6 +519,16 @@ signals:
 
     void playPositionChanged(timeT);
     void loopChanged(timeT, timeT);
+    /**
+     * We probably want to keep this notification as a special case.
+     * The reason being that to detect a change to the color list will
+     * require comparing a list of 420 strings.  That's a bit too much.
+     * I guess we could implement some sort of trickery like a hash
+     * or a change count that clients can cache and compare with the
+     * current value to detect a change.  Clever.  But is it too
+     * clever?  Which is easier to understand?  A special notification
+     * or a change count?
+     */
     void docColoursChanged();
     void devicesResyncd();
 

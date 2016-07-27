@@ -1307,6 +1307,7 @@ TrackParameterBox::updatePlaybackDevice()
         // Reload the combobox
 
     // Set the index.
+    //m_playbackDevice->setCurrentIndex(???);
 }
 
 void
@@ -1320,6 +1321,7 @@ TrackParameterBox::updateInstrument()
         // Reload the combobox
 
     // Set the index.
+    //m_instrument->setCurrentIndex(???);
 }
 
 void
@@ -1334,6 +1336,31 @@ TrackParameterBox::updateRecordDevice()
         // Reload the combobox
 
     // Set the index.
+    //m_recordingDevice->setCurrentIndex(???);
+}
+
+void
+TrackParameterBox::updateColor()
+{
+    Track *track = getTrack();
+
+    // As with playback devices, the list of colors will rarely
+    // change and it is expensive to clear and reload.  Handle like the
+    // others.  Cache names and only reload if a real change is
+    // detected.
+
+    // ??? This is a pretty huge list to compare.  420 strings of
+    //     up to 25 characters each.  We might want to handle this
+    //     as a special case.  Load it when we start.  And only reload
+    //     it when a change notification comes in.
+    //     See the comments on RosegardenDocument::docColoursChanged()
+    //     in RosegardenDocument.h.
+
+    // If there has been an actual change
+        // Reload the combobox
+
+    // Set the index.
+    m_color->setCurrentIndex(track->getColor());
 }
 
 void
@@ -1346,6 +1373,18 @@ TrackParameterBox::updateWidgets2()
     Instrument *instrument = m_doc->getStudio().getInstrumentFor(track);
     if (!instrument)
         return;
+
+    // *** Track Label
+
+    QString trackName = strtoqstr(track->getLabel());
+    if (trackName.isEmpty())
+        trackName = tr("<untitled>");
+    else
+        trackName.truncate(20);
+
+    const int trackNum = track->getPosition() + 1;
+
+    m_trackLabel->setText(tr("[ Track %1 - %2 ]").arg(trackNum).arg(trackName));
 
     // *** Playback parameters
 
@@ -1443,8 +1482,7 @@ TrackParameterBox::updateWidgets2()
     m_highest->setText(tmp);
 
     // Color
-    // ??? This is not loaded in the ctor.
-    m_color->setCurrentIndex(track->getColor());
+    updateColor();
 }
 
 

@@ -212,9 +212,11 @@ private:
      */
     void updateWidgets();
 
+    // ComboBox update routines for updateWidgets2().
     void updatePlaybackDevice();
     void updateInstrument();
     void updateRecordDevice();
+    void updateColor();
     /// Update all widgets from RosegardenDocument.
     /**
      * This new routine will replace all other update routines.  It will
