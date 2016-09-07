@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE rosegarden-data>
+<rosegarden-data>
+<studio thrufilter="0" recordfilter="0">
+<device id="0" name="Hammond SK1" direction="play" variation="" type="midi">
+	<librarian name="Created using ins2rgd.pl" email="rosegarden-devel@lists.sourceforge.net"/>
+	<metronome instrument="0" msb="0" lsb="0" program="0" pitch="37" />
+	<bank name="Hammond SK1 ROM" percussion="false" msb="1" lsb="0">
+		<program id="0" name="The Rock!"/>
+		<program id="1" name="Jazz Tune"/>
+		<program id="2" name="Testify!"/>
+		<program id="3" name="Glory Pipes"/>
+		<program id="4" name="Light&apos;n Up"/>
+		<program id="5" name="Absolutely Richard"/>
+		<program id="6" name="Respect Piano"/>
+		<program id="7" name="Groovy Donny"/>
+		<program id="8" name="Trust Clav."/>
+		<program id="9" name="Splitted Brass Prochord"/>
+		<program id="10" name="Purple"/>
+		<program id="11" name="The Gnome"/>
+		<program id="12" name="Some Lovin"/>
+		<program id="13" name="White Shade"/>
+		<program id="14" name="Soloist"/>
+		<program id="15" name="Ring Heaven"/>
+		<program id="16" name="Light Fire"/>
+		<program id="17" name="Neon Shuf"/>
+		<program id="18" name="Don&apos;t Run"/>
+		<program id="19" name="Lucy&apos;s Sky"/>
+		<program id="20" name="Stereo Grand Piano"/>
+		<program id="21" name="Bright Grand Piano"/>
+		<program id="22" name="Mono Grand Piano"/>
+		<program id="23" name="Saturday Park"/>
+		<program id="24" name="Panning E. Piano"/>
+		<program id="25" name="Phasing E. Piano"/>
+		<program id="26" name="Chorus E. Piano"/>
+		<program id="27" name="Galaxy FM"/>
+		<program id="28" name="Ballad Wurly"/>
+		<program id="29" name="Rock Wurly"/>
+		<program id="30" name="Super Wonder"/>
+		<program id="31" name="Rock Nuts"/>
+		<program id="32" name="Wah Clav."/>
+		<program id="33" name="Flanged Clav."/>
+		<program id="34" name="Macarena Clav."/>
+		<program id="35" name="Harpsichord"/>
+		<program id="36" name="Coupled Harpsichord"/>
+		<program id="37" name="Accordion MMM"/>
+		<program id="38" name="Enka Lead"/>
+		<program id="39" name="Tornaido"/>
+		<program id="40" name="Prochorded Flute Sect."/>
+		<program id="41" name="Prochorded Big Band"/>
+		<program id="42" name="Prochorded Sax Sect."/>
+		<program id="43" name="Prochorded Brass Sect."/>
+		<program id="44" name="Prochorded Mute Combo"/>
+		<program id="45" name="Solo Flute"/>
+		<program id="46" name="Solo Alto Sax"/>
+		<program id="47" name="Solo Trumpet"/>
+		<program id="48" name="Trumpet + Trombone"/>
+		<program id="49" name="Muted Tp + Tb"/>
+		<program id="50" name="Hey! Jimmy"/>
+		<program id="51" name="Crazy! Baby"/>
+		<program id="52" name="Mack The Knife"/>
+		<program id="53" name="The Lower Manual"/>
+		<program id="54" name="Full Swing"/>
+		<program id="55" name="Mighty Burner"/>
+		<program id="56" name="Groove Richard"/>
+		<program id="57" name="Five Spot"/>
+		<program id="58" name="Sweet Ballad"/>
+		<program id="59" name="Walter&apos;s Summer"/>
+		<program id="60" name="Classic Gospel"/>
+		<program id="61" name="Slow Gospel"/>
+		<program id="62" name="Contemp. Gospel"/>
+		<program id="63" name="Shout Gospel"/>
+		<program id="64" name="Quiet Praise"/>
+		<program id="65" name="Reflective Praise"/>
+		<program id="66" name="Dramatic Praise"/>
+		<program id="67" name="Total Praise"/>
+		<program id="68" name="Meditation"/>
+		<program id="69" name="Full Gospel"/>
+		<program id="70" name="Pianissimo"/>
+		<program id="71" name="Piano"/>
+		<program id="72" name="Mezzo Piano"/>
+		<program id="73" name="Mezzo Forte"/>
+		<program id="74" name="Forte"/>
+		<program id="75" name="Fortissimo"/>
+		<program id="76" name="Reed Solo"/>
+		<program id="77" name="Sforzando"/>
+		<program id="78" name="Split Positiv Org / Piano"/>
+		<program id="79" name="Split Positiv Org / Strings"/>
+		<program id="80" name="Theater Glock Org"/>
+		<program id="81" name="Jazz Vibes + Organ"/>
+		<program id="82" name="Electro Strings"/>
+		<program id="83" name="SX/CX Strings"/>
+		<program id="84" name="Fake Arpeggio"/>
+		<program id="85" name="Sleng Teng"/>
+		<program id="86" name="Chameleon"/>
+		<program id="87" name="Slice Pad"/>
+		<program id="88" name="Pcd Duo Lead"/>
+		<program id="89" name="1960&apos;s Sci-Fi"/>
+		<program id="90" name="TW Organ / E. Pf"/>
+		<program id="91" name="Brass / Tonewheel"/>
+		<program id="92" name="Tonewheel / Funny"/>
+		<program id="93" name="A. Piano Pad"/>
+		<program id="94" name="Breathy T. Sax"/>
+		<program id="95" name="Growl T. Sax"/>
+		<program id="96" name="Drawbars Flute"/>
+		<program id="97" name="Drawbars Reed"/>
+		<program id="98" name="Drawbars Diapason"/>
+		<program id="99" name="Drawbars String"/>
+	</bank>
+
+	<bank name="Hammond SK1 USER" percussion="false" msb="0" lsb="0">
+		<program id="0" name="User 00"/>
+		<program id="1" name="User 01"/>
+		<program id="2" name="User 02"/>
+		<program id="3" name="User 03"/>
+		<program id="4" name="User 04"/>
+		<program id="5" name="User 05"/>
+		<program id="6" name="User 06"/>
+		<program id="7" name="User 07"/>
+		<program id="8" name="User 08"/>
+		<program id="9" name="User 09"/>
+		<program id="10" name="User 10"/>
+		<program id="11" name="User 11"/>
+		<program id="12" name="User 12"/>
+		<program id="13" name="User 13"/>
+		<program id="14" name="User 14"/>
+		<program id="15" name="User 15"/>
+		<program id="16" name="User 16"/>
+		<program id="17" name="User 17"/>
+		<program id="18" name="User 18"/>
+		<program id="19" name="User 19"/>
+		<program id="20" name="User 20"/>
+		<program id="21" name="User 21"/>
+		<program id="22" name="User 22"/>
+		<program id="23" name="User 23"/>
+		<program id="24" name="User 24"/>
+		<program id="25" name="User 25"/>
+		<program id="26" name="User 26"/>
+		<program id="27" name="User 27"/>
+		<program id="28" name="User 28"/>
+		<program id="29" name="User 29"/>
+		<program id="30" name="User 30"/>
+		<program id="31" name="User 31"/>
+		<program id="32" name="User 32"/>
+		<program id="33" name="User 33"/>
+		<program id="34" name="User 34"/>
+		<program id="35" name="User 35"/>
+		<program id="36" name="User 36"/>
+		<program id="37" name="User 37"/>
+		<program id="38" name="User 38"/>
+		<program id="39" name="User 39"/>
+		<program id="40" name="User 40"/>
+		<program id="41" name="User 41"/>
+		<program id="42" name="User 42"/>
+		<program id="43" name="User 43"/>
+		<program id="44" name="User 44"/>
+		<program id="45" name="User 45"/>
+		<program id="46" name="User 46"/>
+		<program id="47" name="User 47"/>
+		<program id="48" name="User 48"/>
+		<program id="49" name="User 49"/>
+		<program id="50" name="User 50"/>
+		<program id="51" name="User 51"/>
+		<program id="52" name="User 52"/>
+		<program id="53" name="User 53"/>
+		<program id="54" name="User 54"/>
+		<program id="55" name="User 55"/>
+		<program id="56" name="User 56"/>
+		<program id="57" name="User 57"/>
+		<program id="58" name="User 58"/>
+		<program id="59" name="User 59"/>
+		<program id="60" name="User 60"/>
+		<program id="61" name="User 61"/>
+		<program id="62" name="User 62"/>
+		<program id="63" name="User 63"/>
+		<program id="64" name="User 64"/>
+		<program id="65" name="User 65"/>
+		<program id="66" name="User 66"/>
+		<program id="67" name="User 67"/>
+		<program id="68" name="User 68"/>
+		<program id="69" name="User 69"/>
+		<program id="70" name="User 70"/>
+		<program id="71" name="User 71"/>
+		<program id="72" name="User 72"/>
+		<program id="73" name="User 73"/>
+		<program id="74" name="User 74"/>
+		<program id="75" name="User 75"/>
+		<program id="76" name="User 76"/>
+		<program id="77" name="User 77"/>
+		<program id="78" name="User 78"/>
+		<program id="79" name="User 79"/>
+		<program id="80" name="User 80"/>
+		<program id="81" name="User 81"/>
+		<program id="82" name="User 82"/>
+		<program id="83" name="User 83"/>
+		<program id="84" name="User 84"/>
+		<program id="85" name="User 85"/>
+		<program id="86" name="User 86"/>
+		<program id="87" name="User 87"/>
+		<program id="88" name="User 88"/>
+		<program id="89" name="User 89"/>
+		<program id="90" name="User 90"/>
+		<program id="91" name="User 91"/>
+		<program id="92" name="User 92"/>
+		<program id="93" name="User 93"/>
+		<program id="94" name="User 94"/>
+		<program id="95" name="User 95"/>
+		<program id="96" name="User 96"/>
+		<program id="97" name="User 97"/>
+		<program id="98" name="User 98"/>
+		<program id="99" name="User 99"/>
+	</bank>
+
+ 
+	<controls>
+		<control name="Pan" type="controller" description="&lt;none&gt;" min="0" max="127" default="64" controllervalue="10" colourindex="2" ipbposition="0"/>
+		<control name="Chorus" type="controller" description="&lt;none&gt;" min="0" max="127" default="0" controllervalue="93" colourindex="3" ipbposition="1"/>
+		<control name="Volume" type="controller" description="&lt;none&gt;" min="0" max="127" default="0" controllervalue="7" colourindex="1" ipbposition="2"/>
+		<control name="Reverb" type="controller" description="&lt;none&gt;" min="0" max="127" default="0" controllervalue="91" colourindex="3" ipbposition="3"/>
+		<control name="Sustain" type="controller" description="&lt;none&gt;" min="0" max="127" default="0" controllervalue="64" colourindex="4" ipbposition="4"/>
+		<control name="Expression" type="controller" description="&lt;none&gt;" min="0" max="127" default="100" controllervalue="11" colourindex="2" ipbposition="5"/>
+		<control name="Modulation" type="controller" description="&lt;none&gt;" min="0" max="127" default="0" controllervalue="1" colourindex="4" ipbposition="-1"/>
+		<control name="PitchBend" type="pitchbend" description="&lt;none&gt;" min="0" max="16383" default="8192" controllervalue="1" colourindex="4" ipbposition="-1"/>
+	</controls>
+
+</device>
+</studio>
+</rosegarden-data>
