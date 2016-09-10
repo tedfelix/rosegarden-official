@@ -54,9 +54,9 @@ FileDialog::FileDialog(QWidget *parent,
     QList<QUrl> urls;
 
 #if QT_VERSION >= 0x050000
-    QString home = QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::HomeLocation)).path();
+    QString home = QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
 #else
-    QString home = QUrl::fromLocalFile(QDesktopServices::storageLocation(QDesktopServices::HomeLocation)).path();
+    QString home = QDesktopServices::storageLocation(QDesktopServices::HomeLocation);
 #endif
     QString examples = home + "/.local/share/rosegarden/examples";
     QString templates = home + "/.local/share/rosegarden/templates";
@@ -67,11 +67,7 @@ FileDialog::FileDialog(QWidget *parent,
               << "                  templates: " << templates << endl
               << "                 rosegarden: " << rosegarden << endl;
 
-#if QT_VERSION >= 0x050000
-    urls << QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::HomeLocation))
-#else
-    urls << QUrl::fromLocalFile(QDesktopServices::storageLocation(QDesktopServices::HomeLocation))
-#endif
+    urls << QUrl::fromLocalFile(home)
          << QUrl::fromLocalFile(examples)
          << QUrl::fromLocalFile(templates)
 #if QT_VERSION >= 0x050000
