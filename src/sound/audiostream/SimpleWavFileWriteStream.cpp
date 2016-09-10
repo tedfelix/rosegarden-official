@@ -19,6 +19,7 @@
 
 #ifndef HAVE_LIBSNDFILE
 
+#include <iostream>
 
 using std::cerr;
 using std::endl;
