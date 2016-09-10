@@ -53,6 +53,8 @@ StartupLogo::StartupLogo(QWidget * parent) :
     setGeometry(QApplication::desktop()->width() / 2 - m_pixmap.width() / 2,
                 QApplication::desktop()->height() / 2 - m_pixmap.height() / 2,
                 m_pixmap.width(), m_pixmap.height());
+
+    setAttribute(Qt::WA_DeleteOnClose);
 }
 
 StartupLogo::~StartupLogo()
@@ -109,8 +111,7 @@ void StartupLogo::paintEvent(QPaintEvent*)
 void StartupLogo::slotShowStatusMessage(QString message)
 {
     m_statusMessage = message;
-    repaint(); //paintEvent(0);
-    QApplication::flush();
+    repaint();
 }
 
 void StartupLogo::close()
