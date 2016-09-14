@@ -16,6 +16,8 @@
 */
 
 
+#define RG_MODULE_STRING "[ReconnectDeviceCommand]"
+
 #include "ReconnectDeviceCommand.h"
 
 #include "misc/Strings.h"
@@ -32,21 +34,23 @@
 namespace Rosegarden
 {
 
+
 void
 ReconnectDeviceCommand::execute()
 {
     Device *device = m_studio->getDevice(m_deviceId);
 
     if (device) {
-        m_oldConnection = qstrtostr(RosegardenSequencer::getInstance()
-                                    ->getConnection(device->getId()));
-        RosegardenSequencer::getInstance()->setConnection
-            (m_deviceId, strtoqstr(m_newConnection));
-        device->setConnection(m_newConnection);
+        RosegardenSequencer *sequencer = RosegardenSequencer::getInstance();
 
-        RG_DEBUG << "ReconnectDeviceCommand::execute - "
-                     << " reconnected device " << m_deviceId
-                     << " to " << m_newConnection;
+        m_oldConnection = qstrtostr(
+                sequencer->getConnection(device->getId()));
+
+        sequencer->setConnection(m_deviceId, strtoqstr(m_newConnection));
+        device->setConnection(m_newConnection);
+        //device->sendChannelSetups();
+
+        //RG_DEBUG << "execute(): reconnected device " << m_deviceId << " to " << m_newConnection;
     }
 
     // ??? Instead of this kludge, we should be calling a Studio::hasChanged()
@@ -61,13 +65,12 @@ ReconnectDeviceCommand::unexecute()
     Device *device = m_studio->getDevice(m_deviceId);
 
     if (device) {
-        RosegardenSequencer::getInstance()->setConnection
-            (m_deviceId, strtoqstr(m_oldConnection));
+        RosegardenSequencer::getInstance()->setConnection(
+                m_deviceId, strtoqstr(m_oldConnection));
         device->setConnection(m_oldConnection);
+        //device->sendChannelSetups();
 
-        RG_DEBUG << "ReconnectDeviceCommand::unexecute - "
-                     << " reconnected device " << m_deviceId
-                     << " to " << m_oldConnection;
+        //RG_DEBUG << "unexecute(): reconnected device " << m_deviceId << " to " << m_oldConnection;
     }
 
     // ??? Instead of this kludge, we should be calling a Studio::hasChanged()
@@ -75,5 +78,6 @@ ReconnectDeviceCommand::unexecute()
     //     would update themselves.
     RosegardenMainWindow::self()->uiUpdateKludge();
 }
+
 
 }
