@@ -204,11 +204,5 @@ SoftSynthDevice::addInstrument(Instrument *instrument)
     m_instruments.push_back(instrument);
 }
 
-// !!! It appears to me that this doesn't need to do anything.
-void
-SoftSynthDevice::
-refreshForConnection(void) {}
 
 }
-
-

@@ -108,10 +108,5 @@ AudioDevice::getPreviewInstrument()
     return AudioInstrumentBase;
 }
 
-// !!! It appears to me that this doesn't need to do anything.
-void
-AudioDevice::
-refreshForConnection(void) {}
+
 }
-
-

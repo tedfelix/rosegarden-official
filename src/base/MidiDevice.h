@@ -190,8 +190,6 @@ public:
 
     virtual std::string toXmlString() const;
 
-    virtual void refreshForConnection(void)  { }
-
     // Accessors for recording property
     bool isRecording() {return m_recording; }
 

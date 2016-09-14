@@ -54,8 +54,6 @@ public:
     virtual const ControlParameter *getControlParameter(int index) const;
     virtual const ControlParameter *getControlParameter(const std::string &type,
                                                         MidiByte controllerNumber) const;
-    virtual void refreshForConnection(void);
-
     void setMetronome(const MidiMetronome &);
     const MidiMetronome* getMetronome() const { return m_metronome; }
 

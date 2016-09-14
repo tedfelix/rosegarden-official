@@ -54,7 +54,6 @@ public:
     virtual InstrumentList getAllInstruments() const { return m_instruments; }
     virtual InstrumentList getPresentationInstruments() const
         { return m_instruments; }
-    virtual void refreshForConnection(void);
 
 private:
     void createInstruments();

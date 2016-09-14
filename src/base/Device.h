@@ -86,21 +86,8 @@ public:
     virtual InstrumentList getAllInstruments() const = 0;
     virtual InstrumentList getPresentationInstruments() const = 0;
 
-    // Historically Device didn't always know what it was connected to.
-    // Now it gets updated when the connection changes in the
-    // sequencer.
-    void setConnection(std::string connection) {
-        // compare returns 0 if strings match.
-        if (connection.compare(m_connection)) {
-            m_connection = connection;
-            refreshForConnection();
-        }
-    }
+    void setConnection(std::string connection)  { m_connection = connection; }
 
-    // Refresh this device for a possibly new connection.  
-    // Non-trivial only in MidiDevice.
-    virtual void refreshForConnection(void) = 0;
-    
 protected:
     virtual void addInstrument(Instrument *) = 0;
     virtual void renameInstruments() = 0;
