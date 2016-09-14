@@ -30,6 +30,7 @@ Device::~Device()
 {
     SEQUENCER_DEBUG << "~Device";
     InstrumentList::iterator it = m_instruments.begin();
+    // For each Instrument
     for (; it != m_instruments.end(); ++it) {
         (*it)->sendWholeDeviceDestroyed();
         delete (*it);
@@ -55,5 +56,17 @@ Device::getControllable(void)
 AllocateChannels *
 Device::getAllocator(void)
 { return 0; }
+
+void
+Device::sendChannelSetups()
+{
+    // For each Instrument, send channel setup
+    for (InstrumentList::iterator it = m_instruments.begin();
+         it != m_instruments.end();
+         ++it) {
+        (*it)->sendChannelSetup();
+    }
+}
+
 
 }

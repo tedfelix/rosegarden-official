@@ -86,6 +86,12 @@ public:
     virtual InstrumentList getAllInstruments() const = 0;
     virtual InstrumentList getPresentationInstruments() const = 0;
 
+    /// Send channel setups to each instrument in the device.
+    /**
+     * This is mainly a MidiDevice thing.  Not sure if we should push it down.
+     */
+    void sendChannelSetups();
+
     void setConnection(std::string connection)  { m_connection = connection; }
 
 protected:
