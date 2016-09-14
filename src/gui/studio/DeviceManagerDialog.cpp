@@ -631,59 +631,33 @@ DeviceManagerDialog::updateCheckStatesOfPortsList(QTreeWidget *treeWid_ports,
 
 
 void
-DeviceManagerDialog::connectMidiDeviceToPort(MidiDevice *mdev,
-                                             QString portName)
+DeviceManagerDialog::connectMidiDeviceToPort(MidiDevice *device,
+                                             QString newPort)
 {
-    RG_DEBUG << "DeviceManagerDialog::connectMidiDeviceToPort(" << mdev->getId()
-             << ", " << portName << ")";
+    //RG_DEBUG << "connectMidiDeviceToPort(" << device->getId() << ", " << newPort << ")";
 
-    if (!mdev) {
-        RG_DEBUG << "Warning: mdev is NULL in DeviceManagerDialog::connectPlaybackDeviceToOutputPort() "
-                ;
+    if (!device) {
+        RG_WARNING << "connectMidiDeviceToPort() WARNING: Device is NULL";
         return;
     }
-    if (mdev->getType() != Device::Midi) {
-        RG_DEBUG << "Warning: Type of mdev is not Device::Midi in DeviceManagerDialog::connectMidiDeviceToPort() "
-                ;
-        //return;
+
+    if (device->getType() != Device::Midi) {
+        RG_WARNING << "connectMidiDeviceToPort() WARNING: Device is not MIDI";
     }
-    
-    // RosegardenSequencer *seq;
-    // seq = RosegardenSequencer::getInstance();
-    
-    QString outPort = RosegardenSequencer::getInstance()->getConnection(mdev->getId());
 
-    DeviceId devId = mdev->getId();
+    QString oldPort = RosegardenSequencer::getInstance()->getConnection(device->getId());
 
-    if (outPort != portName) {  // then: port changed
-        if ((portName == "") || (portName == m_noPortName)) {   // disconnect
-            RG_DEBUG << "DeviceManagerDialog: portName: " << portName 
-                     << " devId " << devId << " (disconnecting)";
+    DeviceId deviceId = device->getId();
 
-            CommandHistory::getInstance()->addCommand
-                (new ReconnectDeviceCommand(m_studio, devId, ""));
-            
-            // note: 
-            // seq->removeConnection() (in sequencer/RosegardenSequencer.cpp) 
-            // calls SoundDriver->removeConnection(), (in sound/SoundDriver.cpp) 
-            // which is implemented in the subclass sound/AlsaDriver.cpp
-            // 
-//            seq->removeConnection( mdev->getId(), strtoqstr(mdev->getConnection()) );
-            // mdev->getDirection()
-//!DEVPUSH            mdev->setConnection("");
-            //### FIXME ports are being disconnected now. Still buggy ? Verify !
-            
-        } else {    // re-connect
-            RG_DEBUG << "DeviceManagerDialog: portName: " << portName 
-                     << " devId " << devId;
-
-            CommandHistory::getInstance()->addCommand
-                (new ReconnectDeviceCommand(m_studio, devId,
-                                            qstrtostr(portName)));
-
-            // ah HAH!  here was the culprit preventing the various intended
-            // updates from working correctly
-//!DEVPUSH            mdev->setConnection(qstrtostr(portName));
+    if (oldPort != newPort) {  // then: port changed
+        // Disconnect (connect to nothing)
+        if ((newPort == "") || (newPort == m_noPortName)) {
+            CommandHistory::getInstance()->addCommand(
+                    new ReconnectDeviceCommand(m_studio, deviceId, ""));
+        } else {  // Connect
+            CommandHistory::getInstance()->addCommand(
+                    new ReconnectDeviceCommand(m_studio, deviceId,
+                                               qstrtostr(newPort)));
         }
     }
 }

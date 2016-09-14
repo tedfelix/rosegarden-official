@@ -40,8 +40,8 @@ typedef std::vector<MidiDevice *> MidiDeviceList;
 class RosegardenDocument;
 class Studio;
 
-/** Creates a device manager dialog
- *
+/// The Manage MIDI Devices dialog
+/**
  * \author Emanuel Rumpf
  */
 class DeviceManagerDialog : public QMainWindow, public Ui::DeviceManagerDialogUi
