@@ -224,7 +224,6 @@ private:
     void updatePlaybackDevice(DeviceId deviceId);
     void updateInstrument(const Instrument *instrument);
     void updateRecordDevice(DeviceId deviceId);
-    void updateColor();
     /// Update all widgets from RosegardenDocument.
     /**
      * This new routine will replace all other update routines.  It will

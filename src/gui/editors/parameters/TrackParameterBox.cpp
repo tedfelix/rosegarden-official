@@ -1084,6 +1084,20 @@ TrackParameterBox::slotTransposeChanged(int index)
 void
 TrackParameterBox::slotDocColoursChanged()
 {
+    // The color combobox is handled differently from the others.  Since
+    // there are 420 strings of up to 25 chars in here, it would be
+    // expensive to detect changes by comparing vectors of strings.
+
+    // For now, we'll handle the document colors changed notification
+    // and reload the combobox then.
+
+    // See the comments on RosegardenDocument::docColoursChanged()
+    // in RosegardenDocument.h.
+
+    // Note that as of this writing (August 2016) there is no way
+    // to modify the document colors.  See ColourConfigurationPage
+    // which was probably meant to be used by DocumentConfigureDialog.
+
     m_color->clear();
 
     // Populate it from Composition::m_segmentColourMap
@@ -1119,7 +1133,10 @@ TrackParameterBox::slotDocColoursChanged()
     m_addColourPos = m_color->count() - 1;
 #endif
 
-    m_color->setCurrentIndex(0);
+    const Track *track = getTrack();
+
+    if (track)
+        m_color->setCurrentIndex(track->getColor());
 }
 
 void
@@ -1586,30 +1603,6 @@ TrackParameterBox::updateRecordDevice(DeviceId deviceId)
 }
 
 void
-TrackParameterBox::updateColor()
-{
-    Track *track = getTrack();
-
-    // As with playback devices, the list of colors will rarely
-    // change and it is expensive to clear and reload.  Handle like the
-    // others.  Cache names and only reload if a real change is
-    // detected.
-
-    // ??? This is a pretty huge list to compare.  420 strings of
-    //     up to 25 characters each.  We might want to handle this
-    //     as a special case.  Load it when we start.  And only reload
-    //     it when a change notification comes in.
-    //     See the comments on RosegardenDocument::docColoursChanged()
-    //     in RosegardenDocument.h.
-
-    // If there has been an actual change
-        // Reload the combobox
-
-    // Set the index.
-    m_color->setCurrentIndex(track->getColor());
-}
-
-void
 TrackParameterBox::updateWidgets2()
 {
     Track *track = getTrack();
@@ -1731,7 +1724,9 @@ TrackParameterBox::updateWidgets2()
     m_highest->setText(tmp);
 
     // Color
-    updateColor();
+    // Note: We only update the combobox contents if there is an actual
+    //       change to the document's colors.  See slotDocColoursChanged().
+    m_color->setCurrentIndex(track->getColor());
 }
 
 
