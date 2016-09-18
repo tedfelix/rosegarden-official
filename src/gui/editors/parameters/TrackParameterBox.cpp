@@ -377,8 +377,6 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
     connect(m_highest, SIGNAL(released()),
             SLOT(slotHighestPressed()));
 
-    updateHighLow();
-
     // Color
     QLabel *colorLabel = new QLabel(tr("Color"), createSegmentsWith);
     colorLabel->setFont(m_font);
@@ -966,49 +964,49 @@ TrackParameterBox::slotLoadPressed()
     // Does not inherit style?  Centers on monitor #1?
     PresetHandlerDialog dialog(0);
 
-    Track *trk = getTrack();
-    if (!trk)
+    Track *track = getTrack();
+    if (!track)
         return;
 
     try {
+        // Launch the PresetHandlerDialog.  If the user selects OK...
         if (dialog.exec() == QDialog::Accepted) {
-            m_preset->setText(dialog.getName());
-            trk->setPresetLabel(qstrtostr(dialog.getName()));
+            // Update the Track.
+            track->setPresetLabel(qstrtostr(dialog.getName()));
+            track->setClef(dialog.getClef());
+            track->setTranspose(dialog.getTranspose());
+            track->setHighestPlayable(dialog.getHighRange());
+            track->setLowestPlayable(dialog.getLowRange());
 
-            // If we need to convert the track's segments
-            if (dialog.getConvertAllSegments()) {
-                Composition &comp = m_doc->getComposition();
-                SegmentSyncCommand* command = new SegmentSyncCommand(
-                        comp.getSegments(), m_selectedTrackId,
-                        dialog.getTranspose(), dialog.getLowRange(), 
-                        dialog.getHighRange(),
-                        clefIndexToClef(dialog.getClef()));
-                CommandHistory::getInstance()->addCommand(command);
-            }
-
-            m_clef->setCurrentIndex(dialog.getClef());
-            trk->setClef(dialog.getClef());
-                     
-            m_transpose->setCurrentIndex(m_transpose->findText(
-                    QString("%1").arg(dialog.getTranspose())));
-            trk->setTranspose(dialog.getTranspose());
-
-            m_highestPlayable = dialog.getHighRange();
-            m_lowestPlayable = dialog.getLowRange();
-            updateHighLow();
-
-            // updateHighLow() will have set this disabled, so we
-            // re-enable it until it is subsequently re-disabled by the
-            // user overriding the preset, calling one of the above slots
-            // in the normal course
+            // Enable this until it is subsequently re-disabled by the
+            // user overriding the preset, calling one of the other slots
+            // in the normal course.
             // ??? This is too subtle.  We should probably just clear it
             //     when modifications are made.  After all, it's no longer
             //     the selected preset.  Or add "(modified)"?  Or change
             //     color?  Or allow the user to edit it and save it to the
             //     .rg file as part of the Track.
             m_preset->setEnabled(true);
+
+            // If we need to convert the track's segments
+            if (dialog.getConvertAllSegments()) {
+                Composition &comp = m_doc->getComposition();
+                SegmentSyncCommand* command = new SegmentSyncCommand(
+                        comp.getSegments(), m_selectedTrackId,
+                        dialog.getTranspose(), dialog.getLowRange(),
+                        dialog.getHighRange(),
+                        clefIndexToClef(dialog.getClef()));
+                CommandHistory::getInstance()->addCommand(command);
+            }
+
+            m_doc->slotDocumentModified();
+
+            // Notify observers
+            // This will trigger a call to updateWidgets2().
+            Composition &comp = m_doc->getComposition();
+            comp.notifyTrackChanged(track);
         }
-    } catch (Exception e) {  // from PresetHandlerDialog
+    } catch (Exception &e) {  // from PresetHandlerDialog
         // !!! This should be a more verbose error to pass along the
         //     row/column of the corruption.
         QMessageBox::warning(0, tr("Rosegarden"),
