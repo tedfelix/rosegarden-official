@@ -76,9 +76,7 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
     RosegardenParameterBox(tr("Track"), tr("Track Parameters"), parent),
     m_doc(doc),
     m_selectedTrackId(NO_TRACK),
-    m_lastInstrumentType(Instrument::InvalidInstrument),
-    m_lowestPlayable(0),
-    m_highestPlayable(127)
+    m_lastInstrumentType(Instrument::InvalidInstrument)
 {
     setObjectName("Track Parameter Box");
 
@@ -468,51 +466,6 @@ void
 TrackParameterBox::devicesChanged()
 {
     updateWidgets2();
-}
-
-void
-TrackParameterBox::updateHighLow()
-{
-    Track *track = getTrack();
-    if (!track)
-        return;
-
-    // Set the highest/lowest in the Track.
-
-    track->setHighestPlayable(m_highestPlayable);
-    track->setLowestPlayable(m_lowestPlayable);
-
-    // Update the text on the highest/lowest pushbuttons.
-
-    const Accidental accidental = Accidentals::NoAccidental;
-
-    const Pitch highest(m_highestPlayable, accidental);
-    const Pitch lowest(m_lowestPlayable, accidental);
-
-    QSettings settings;
-    settings.beginGroup(GeneralOptionsConfigGroup);
-
-    const int octaveBase = settings.value("midipitchoctave", -2).toInt() ;
-    settings.endGroup();
-
-    const bool includeOctave = false;
-
-    // NOTE: this now uses a new, overloaded version of Pitch::getAsString()
-    // that explicitly works with the key of C major, and does not allow the
-    // calling code to specify how the accidentals should be written out.
-    //
-    // Separate the note letter from the octave to avoid undue burden on
-    // translators having to retranslate the same thing but for a number
-    // difference
-    QString tmp = QObject::tr(highest.getAsString(includeOctave, octaveBase).c_str(), "note name");
-    tmp += tr(" %1").arg(highest.getOctave(octaveBase));
-    m_highest->setText(tmp);
-
-    tmp = QObject::tr(lowest.getAsString(includeOctave, octaveBase).c_str(), "note name");
-    tmp += tr(" %1").arg(lowest.getOctave(octaveBase));
-    m_lowest->setText(tmp);
-
-    m_preset->setEnabled(false);
 }
 
 void
@@ -1418,9 +1371,7 @@ TrackParameterBox::updateWidgets2()
 
     const bool includeOctave = false;
 
-    // ??? Do we really need m_lowestPlayable now?
-    m_lowestPlayable = track->getLowestPlayable();
-    const Pitch lowest(m_lowestPlayable, Accidentals::NoAccidental);
+    const Pitch lowest(track->getLowestPlayable(), Accidentals::NoAccidental);
 
     // NOTE: this now uses a new, overloaded version of Pitch::getAsString()
     // that explicitly works with the key of C major, and does not allow the
@@ -1435,9 +1386,7 @@ TrackParameterBox::updateWidgets2()
 
     // Pitch Highest
 
-    // ??? Do we really need m_highestPlayable now?
-    m_highestPlayable = track->getHighestPlayable();
-    const Pitch highest(m_highestPlayable, Accidentals::NoAccidental);
+    const Pitch highest(track->getHighestPlayable(), Accidentals::NoAccidental);
 
     tmp = QObject::tr(highest.getAsString(includeOctave, octaveBase).c_str(), "note name");
     tmp += tr(" %1").arg(highest.getOctave(octaveBase));

@@ -188,11 +188,6 @@ private:
     /// Create segments with: Pitch (Lowest/Highest)
     QPushButton *m_lowest;
     QPushButton *m_highest;
-    /// MIDI Pitch.
-    int m_lowestPlayable;
-    /// MIDI Pitch.
-    int m_highestPlayable;
-    void updateHighLow();
 
     /// Create segments with: Color
     QComboBox *m_color;
