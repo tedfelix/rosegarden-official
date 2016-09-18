@@ -69,10 +69,6 @@ public slots:
     void slotDocColoursChanged();
 
     /// Connected to InstrumentStaticSignals::changed().
-    /**
-     * ??? This is a selective refresh.  Recommend combining with all others
-     *     into a single full refresh (updateWidgets2()) and optimize.
-     */
     void slotInstrumentChanged(Instrument *instrument);
 
     /// Refresh the Playback and Recording Device lists.
@@ -80,7 +76,7 @@ public slots:
      * Connected to DeviceManagerDialog::deviceNamesChanged() and
      * BankEditorDialog::deviceNamesChanged().
      *
-     * ??? Is this the updateWidgets() I'm looking for?
+     * ??? rename: devicesChanged()
      */
     void slotPopulateDeviceLists();
 
@@ -90,6 +86,7 @@ signals:
 
 private slots:
     // Signals from widgets.
+
     /// Playback parameters: Device
     void slotPlaybackDeviceChanged(int index);
     /// Playback parameters: Instrument
@@ -130,15 +127,11 @@ private:
 
     // Track number and name
     QLabel *m_trackLabel;
-    void selectedTrackNameChanged();
 
     // --- Playback parameters --------------------------------------
 
     /// Playback parameters: Device
     QComboBox *m_playbackDevice;
-    typedef std::vector<DeviceId> IdsVector;
-    IdsVector m_playbackDeviceIds;
-    void populatePlaybackDeviceList();
     /// Cache for detecting changes.
     std::vector<DeviceId> m_playbackDeviceIds2;
     /// Cache for detecting changes.
@@ -146,8 +139,6 @@ private:
 
     /// Playback parameters: Instrument
     QComboBox *m_instrument;
-    std::map<DeviceId, IdsVector> m_instrumentIds;
-    std::map<DeviceId, QStringList> m_instrumentNames;
     std::vector<InstrumentId> m_instrumentIds2;
     std::vector<QString> m_instrumentNames2;
 
@@ -160,12 +151,10 @@ private:
 
     /// Recording filters: Device
     QComboBox *m_recordingDevice;
-    IdsVector m_recordingDeviceIds;
     std::vector<DeviceId> m_recordingDeviceIds2;
     std::vector<QString> m_recordingDeviceNames;
     /// Cache to detect change.
     Instrument::InstrumentType m_lastInstrumentType;
-    void populateRecordingDeviceList();
 
     /// Recording filters: Channel
     QComboBox *m_recordingChannel;
@@ -210,12 +199,6 @@ private:
     /// Create segments with: Color
     QComboBox *m_color;
 
-    /**
-     * ??? This is a selective refresh.  Recommend combining with all others
-     *     into a single full refresh (updateWidgets2()) and optimize.
-     */
-    void updateWidgets();
-
     // ComboBox update routines for updateWidgets2().
     void updatePlaybackDevice(DeviceId deviceId);
     void updateInstrument(const Instrument *instrument);
@@ -229,11 +212,6 @@ private:
      * See MIDIInstrumentParameterPanel::updateWidgets().
      */
     void updateWidgets2();
-
-    // DEBUG
-    // Enables the use of updateWidgets2() for testing.  Use this while
-    // updateWidgets2() is in progress.
-    bool m_testNewUpdate;
 };
 
 
