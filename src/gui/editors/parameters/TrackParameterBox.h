@@ -183,7 +183,6 @@ private:
 
     /// Create segments with: Transpose
     QComboBox *m_transpose;
-    void transposeChanged(int transpose);
 
     /// Create segments with: Pitch (Lowest/Highest)
     QPushButton *m_lowest;

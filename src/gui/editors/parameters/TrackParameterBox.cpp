@@ -594,6 +594,7 @@ TrackParameterBox::slotPlaybackDeviceChanged(int index)
     m_doc->slotDocumentModified();
 
     // Notify observers
+    // This will trigger a call to updateWidgets2().
     // ??? Redundant notification.  Track::setInstrument() already does
     //     this.  It shouldn't.
     Composition &comp = m_doc->getComposition();
@@ -624,6 +625,7 @@ TrackParameterBox::slotInstrumentChanged(int index)
     m_doc->slotDocumentModified();
 
     // Notify observers
+    // This will trigger a call to updateWidgets2().
     // ??? Redundant notification.  Track::setInstrument() already does
     //     this.  It shouldn't.
     Composition &comp = m_doc->getComposition();
@@ -647,6 +649,7 @@ TrackParameterBox::slotArchiveChanged(bool checked)
     m_doc->slotDocumentModified();
 
     // Notify observers
+    // This will trigger a call to updateWidgets2().
     Composition &comp = m_doc->getComposition();
     comp.notifyTrackChanged(track);
 }
@@ -656,19 +659,19 @@ TrackParameterBox::slotRecordingDeviceChanged(int index)
 {
     //RG_DEBUG << "slotRecordingDeviceChanged(" << index << ")";
 
-    Track *trk = getTrack();
-    if (!trk)
+    Track *track = getTrack();
+    if (!track)
         return;
 
-    Instrument *inst = m_doc->getStudio().getInstrumentFor(trk);
-    if (!inst)
-        return;
+    track->setMidiInputDevice(m_recordingDeviceIds2[index]);
+    m_doc->slotDocumentModified();
 
-    // Audio instruments do not support different recording devices.
-    if (inst->getInstrumentType() == Instrument::Audio)
-        return;
-
-    trk->setMidiInputDevice(m_recordingDeviceIds2[index]);
+    // Notify observers
+    // This will trigger a call to updateWidgets2().
+    // ??? Redundant notification.  Track::setMidiInputDevice() already does
+    //     this.  It shouldn't.
+    Composition &comp = m_doc->getComposition();
+    comp.notifyTrackChanged(track);
 }
 
 void
@@ -676,19 +679,19 @@ TrackParameterBox::slotRecordingChannelChanged(int index)
 {
     //RG_DEBUG << "slotRecordingChannelChanged(" << index << ")";
 
-    Track *trk = getTrack();
-    if (!trk)
+    Track *track = getTrack();
+    if (!track)
         return;
 
-    Instrument *inst = m_doc->getStudio().getInstrumentFor(trk);
-    if (!inst)
-        return;
+    track->setMidiInputChannel(index - 1);
+    m_doc->slotDocumentModified();
 
-    // Audio instruments do not support different recording channels.
-    if (inst->getInstrumentType() == Instrument::Audio)
-        return;
-
-    trk->setMidiInputChannel(index - 1);
+    // Notify observers
+    // This will trigger a call to updateWidgets2().
+    // ??? Redundant notification.  Track::setMidiInputChannel() already does
+    //     this.  It shouldn't.
+    Composition &comp = m_doc->getComposition();
+    comp.notifyTrackChanged(track);
 }
 
 void
@@ -698,18 +701,13 @@ TrackParameterBox::slotThruRoutingChanged(int index)
     if (!track)
         return;
 
-    Instrument *inst = m_doc->getStudio().getInstrumentFor(track);
-    if (!inst)
-        return;
-
-    // Thru routing is only supported for MIDI instruments.
-    if (inst->getInstrumentType() != Instrument::Midi)
-        return;
-
     track->setThruRouting(static_cast<Track::ThruRouting>(index));
     m_doc->slotDocumentModified();
 
     // Notify observers
+    // This will trigger a call to updateWidgets2().
+    // ??? Redundant notification.  Track::setThruRouting() already does
+    //     this.  It shouldn't.
     Composition &comp = m_doc->getComposition();
     comp.notifyTrackChanged(track);
 }
@@ -725,39 +723,44 @@ TrackParameterBox::slotClefChanged(int clef)
 {
     //RG_DEBUG << "slotClefChanged(" << clef << ")";
 
-    Track *trk = getTrack();
-    if (!trk)
+    Track *track = getTrack();
+    if (!track)
         return;
 
-    trk->setClef(clef);
-    m_preset->setEnabled(false);
-}
+    track->setClef(clef);
+    m_doc->slotDocumentModified();
 
-void
-TrackParameterBox::transposeChanged(int transpose)
-{
-    //RG_DEBUG << "transposeChanged(" << transpose << ")";
+    // Notify observers
+    // This will trigger a call to updateWidgets2().
+    Composition &comp = m_doc->getComposition();
+    comp.notifyTrackChanged(track);
 
-    // ??? Inline into only caller.
-
-    Track *trk = getTrack();
-    if (!trk)
-        return;
-
-    trk->setTranspose(transpose);
     m_preset->setEnabled(false);
 }
 
 void
 TrackParameterBox::slotTransposeChanged(int index)
 {
-    QString text = m_transpose->itemText(index);
+    const QString text = m_transpose->itemText(index);
 
     if (text.isEmpty())
         return;
 
-    int value = text.toInt();
-    transposeChanged(value);
+    const int transpose = text.toInt();
+
+    Track *track = getTrack();
+    if (!track)
+        return;
+
+    track->setTranspose(transpose);
+    m_doc->slotDocumentModified();
+
+    // Notify observers
+    // This will trigger a call to updateWidgets2().
+    Composition &comp = m_doc->getComposition();
+    comp.notifyTrackChanged(track);
+
+    m_preset->setEnabled(false);
 }
 
 void
