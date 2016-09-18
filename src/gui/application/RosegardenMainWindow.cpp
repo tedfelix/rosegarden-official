@@ -5244,7 +5244,7 @@ RosegardenMainWindow::slotDocumentDevicesResyncd()
 {
     //!DEVPUSH how to replace this?
     m_sequencerCheckedIn = true;
-    m_trackParameterBox->slotPopulateDeviceLists();
+    m_trackParameterBox->devicesChanged();
 }
 
 void
@@ -6933,7 +6933,7 @@ RosegardenMainWindow::slotManageMIDIDevices()
         }
         
         connect(m_deviceManager, SIGNAL(deviceNamesChanged()),
-                     m_trackParameterBox, SLOT(slotPopulateDeviceLists()));
+                     m_trackParameterBox, SLOT(devicesChanged()));
     }
     
     QToolButton *tb = findChild<QToolButton*>("manage_midi_devices");
@@ -7178,7 +7178,7 @@ RosegardenMainWindow::slotEditBanks(DeviceId device)
     m_bankEditor->show();
 
     connect(m_bankEditor, SIGNAL(deviceNamesChanged()),
-            m_trackParameterBox, SLOT(slotPopulateDeviceLists()));
+            m_trackParameterBox, SLOT(devicesChanged()));
 }
 
 void

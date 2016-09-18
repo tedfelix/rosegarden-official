@@ -467,7 +467,7 @@ TrackParameterBox::setDocument(RosegardenDocument *doc)
 }
 
 void
-TrackParameterBox::slotPopulateDeviceLists()
+TrackParameterBox::devicesChanged()
 {
     updateWidgets2();
 }

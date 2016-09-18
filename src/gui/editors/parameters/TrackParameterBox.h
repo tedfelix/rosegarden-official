@@ -75,10 +75,8 @@ public slots:
     /**
      * Connected to DeviceManagerDialog::deviceNamesChanged() and
      * BankEditorDialog::deviceNamesChanged().
-     *
-     * ??? rename: devicesChanged()
      */
-    void slotPopulateDeviceLists();
+    void devicesChanged();
 
 signals:
     /// Connected to TrackButtons::slotTPBInstrumentSelected().
