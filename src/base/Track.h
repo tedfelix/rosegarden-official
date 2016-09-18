@@ -98,27 +98,27 @@ public:
     void setThruRouting(ThruRouting thruRouting);
     ThruRouting getThruRouting() const  { return m_thruRouting; }
 
-    int getClef() { return m_clef; }
+    int getClef() const  { return m_clef; }
     void setClef(int clef) { m_clef = clef; }
 
-    int getTranspose() { return m_transpose; }
+    int getTranspose() const  { return m_transpose; }
     void setTranspose(int transpose) { m_transpose = transpose; }
 
-    int getColor() { return m_color; }
+    int getColor() const  { return m_color; }
     void setColor(int color) { m_color = color; }
 
-    int getHighestPlayable() { return m_highestPlayable; }
+    int getHighestPlayable() const  { return m_highestPlayable; }
     void setHighestPlayable(int pitch) { m_highestPlayable = pitch; }
     
-    int getLowestPlayable() { return m_lowestPlayable; }
+    int getLowestPlayable() const  { return m_lowestPlayable; }
     void setLowestPlayable(int pitch) { m_lowestPlayable = pitch; }
 
     // Controls size of exported staff in LilyPond
-    int getStaffSize() { return m_staffSize; }
+    int getStaffSize() const  { return m_staffSize; }
     void setStaffSize(int index) { m_staffSize = index; }
     
     // Staff bracketing in LilyPond
-    int getStaffBracket() { return m_staffBracket; }
+    int getStaffBracket() const  { return m_staffBracket; }
     void setStaffBracket(int index) { m_staffBracket = index; }
     
     bool isArmed() const { return m_armed; }
