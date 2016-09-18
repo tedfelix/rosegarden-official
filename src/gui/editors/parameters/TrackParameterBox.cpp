@@ -1360,6 +1360,7 @@ TrackParameterBox::updatePlaybackDevice(DeviceId deviceId)
         m_playbackDevice->clear();
 
         // For each playback Device, add the name to the combobox.
+        // ??? If we used a QStringList, we could just call addItems().
         for (size_t deviceIndex = 0;
              deviceIndex < m_playbackDeviceNames.size();
              ++deviceIndex)
@@ -1391,17 +1392,100 @@ TrackParameterBox::updatePlaybackDevice(DeviceId deviceId)
 }
 
 void
-TrackParameterBox::updateInstrument()
+TrackParameterBox::updateInstrument(const Instrument *instrument)
 {
     // As with the Device field above, this will rarely change and it is
     // expensive to clear and reload.  So, we should cache enough info to
     // detect a real change.  This would be Instrument names and IDs.
 
+    const DeviceId deviceId = instrument->getDevice()->getId();
+    const Device &device = *(m_doc->getStudio().getDevice(deviceId));
+
+    const InstrumentList instrumentList = device.getPresentationInstruments();
+
+    // Generate local instrument name and ID lists to compare against the
+    // members.
+
+    std::vector<InstrumentId> instrumentIds;
+    std::vector<QString> instrumentNames;
+
+    // For each instrument
+    for (size_t instrumentIndex = 0;
+         instrumentIndex < instrumentList.size();
+         ++instrumentIndex) {
+        const Instrument &loopInstrument = *(instrumentList[instrumentIndex]);
+
+        instrumentIds.push_back(loopInstrument.getId());
+
+        QString instrumentName(QObject::tr(loopInstrument.getName().c_str()));
+        QString programName(
+                QObject::tr(loopInstrument.getProgramName().c_str()));
+
+        if (loopInstrument.getType() == Instrument::SoftSynth) {
+            instrumentName.replace(QObject::tr("Synth plugin"), "");
+
+            programName = "";
+
+            AudioPluginInstance *plugin =
+                    instrument->getPlugin(Instrument::SYNTH_PLUGIN_POSITION);
+            if (plugin)
+                programName = strtoqstr(plugin->getDisplayName());
+        }
+
+        if (programName != "")
+            instrumentName += " (" + programName + ")";
+
+        // cut off the redundant eg. "General MIDI Device" that appears in the
+        // combo right above here anyway
+        instrumentName = instrumentName.mid(
+                instrumentName.indexOf("#"), instrumentName.length());
+
+        instrumentNames.push_back(instrumentName);
+    }
+
     // If there has been an actual change
+    if (instrumentIds != m_instrumentIds2  ||
+        instrumentNames != m_instrumentNames2) {
+
+        // Update the cache.
+        m_instrumentIds2 = instrumentIds;
+        m_instrumentNames2 = instrumentNames;
+
         // Reload the combobox
 
+        m_instrument->clear();
+
+        // For each instrument, add the name to the combobox.
+        // ??? If we used a QStringList, we could just call addItems().
+        for (size_t instrumentIndex = 0;
+             instrumentIndex < m_instrumentNames2.size();
+             ++instrumentIndex)
+        {
+            m_instrument->addItem(m_instrumentNames2[instrumentIndex]);
+        }
+    }
+
+    // Find the current instrument in the instrument ID list.
+
+    const InstrumentId instrumentId = instrument->getId();
+
+    // Assume not found.
+    int currentIndex = -1;
+
+    // For each Instrument
+    for (size_t instrumentIndex = 0;
+         instrumentIndex < m_instrumentIds2.size();
+         ++instrumentIndex)
+    {
+        // If this is the selected Instrument
+        if (m_instrumentIds2[instrumentIndex] == instrumentId) {
+            currentIndex = instrumentIndex;
+            break;
+        }
+    }
+
     // Set the index.
-    //m_instrument->setCurrentIndex(???);
+    m_instrument->setCurrentIndex(currentIndex);
 }
 
 void
@@ -1474,7 +1558,7 @@ TrackParameterBox::updateWidgets2()
     updatePlaybackDevice(instrument->getDevice()->getId());
 
     // Instrument
-    updateInstrument();
+    updateInstrument(instrument);
 
     // Archive
     m_archive->setChecked(track->isArchived());
@@ -1485,6 +1569,7 @@ TrackParameterBox::updateWidgets2()
         // Hide the remaining three sections.
         m_recordingFiltersFrame->setVisible(false);
         m_staffExportOptionsFrame->setVisible(false);
+        // ??? Overzealous.  The color combobox is still useful.
         m_createSegmentsWithFrame->setVisible(false);
 
         // And bail.

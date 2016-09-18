@@ -148,11 +148,12 @@ private:
     /// Cache for detecting changes.
     std::vector<std::string> m_playbackDeviceNames;
 
-
     /// Playback parameters: Instrument
     QComboBox *m_instrument;
     std::map<DeviceId, IdsVector> m_instrumentIds;
     std::map<DeviceId, QStringList> m_instrumentNames;
+    std::vector<InstrumentId> m_instrumentIds2;
+    std::vector<QString> m_instrumentNames2;
 
     /// Playback parameters: Archive
     QCheckBox *m_archive;
@@ -219,7 +220,7 @@ private:
 
     // ComboBox update routines for updateWidgets2().
     void updatePlaybackDevice(DeviceId deviceId);
-    void updateInstrument();
+    void updateInstrument(const Instrument *instrument);
     void updateRecordDevice();
     void updateColor();
     /// Update all widgets from RosegardenDocument.
