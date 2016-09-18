@@ -1489,18 +1489,100 @@ TrackParameterBox::updateInstrument(const Instrument *instrument)
 }
 
 void
-TrackParameterBox::updateRecordDevice()
+TrackParameterBox::updateRecordDevice(DeviceId deviceId)
 {
-    // As with playback devices, the list of input devices will rarely
+    // As with playback devices, the list of record devices will rarely
     // change and it is expensive to clear and reload.  Handle like the
     // others.  Cache names and IDs and only reload if a real change is
     // detected.
 
+    const DeviceList &deviceList = *(m_doc->getStudio().getDevices());
+
+    // Generate local recording device name and ID lists to compare against
+    // the members.
+
+    std::vector<DeviceId> recordingDeviceIds;
+    std::vector<QString> recordingDeviceNames;
+
+    recordingDeviceIds.push_back(Device::ALL_DEVICES);
+    recordingDeviceNames.push_back(tr("All"));
+
+    // For each Device
+    for (size_t deviceIndex = 0;
+         deviceIndex < deviceList.size();
+         ++deviceIndex)
+    {
+        const Device &device = *(deviceList[deviceIndex]);
+
+        // ??? A Device::isOutput() would be simpler.  Derivers would
+        //     implement appropriately.  Then this would simplify to:
+        //
+        //        // If this is an output device, skip it.
+        //        if (device.isOutput())
+        //            continue;
+        //
+        //        // Add it to the recording device lists.
+        //        ...
+
+        const MidiDevice *midiDevice =
+                dynamic_cast<const MidiDevice *>(deviceList[deviceIndex]);
+
+        // If this isn't a MIDI device, try the next.
+        if (!midiDevice)
+            continue;
+
+        // If this is a device capable of being recorded
+        // ??? What does isRecording() really mean?
+        if (midiDevice->getDirection() == MidiDevice::Record  &&
+            midiDevice->isRecording()) {
+            // Add it to the recording device lists.
+            recordingDeviceIds.push_back(device.getId());
+            recordingDeviceNames.push_back(
+                    QObject::tr(midiDevice->getName().c_str()));
+        }
+    }
+
     // If there has been an actual change
+    if (recordingDeviceIds != m_recordingDeviceIds2  ||
+        recordingDeviceNames != m_recordingDeviceNames)
+    {
+        // Update the cache
+        m_recordingDeviceIds2 = recordingDeviceIds;
+        m_recordingDeviceNames = recordingDeviceNames;
+
         // Reload the combobox
 
+        m_recordingDevice->clear();
+
+        // For each playback Device, add the name to the combobox.
+        // ??? If we used a QStringList, we could just call addItems().
+        for (size_t deviceIndex = 0;
+             deviceIndex < m_recordingDeviceNames.size();
+             ++deviceIndex)
+        {
+            m_recordingDevice->addItem(m_recordingDeviceNames[deviceIndex]);
+        }
+    }
+
+    // Find the current record device in the record device ID list.
+
+    // Assume not found.
+    int currentIndex = -1;
+
+    // For each ID
+    for (size_t deviceIndex = 0;
+         deviceIndex < m_recordingDeviceIds2.size();
+         ++deviceIndex)
+    {
+        // If this is the selected device
+        if (m_recordingDeviceIds2[deviceIndex] == deviceId) {
+            currentIndex = deviceIndex;
+            break;
+        }
+    }
+
     // Set the index.
-    //m_recordingDevice->setCurrentIndex(???);
+    m_recordingDevice->setCurrentIndex(currentIndex);
 }
 
 void
@@ -1586,7 +1668,7 @@ TrackParameterBox::updateWidgets2()
     // *** Recording filters
 
     // Device
-    updateRecordDevice();
+    updateRecordDevice(track->getMidiInputDevice());
 
     // Channel
     m_recordingChannel->setCurrentIndex((int)track->getMidiInputChannel() + 1);

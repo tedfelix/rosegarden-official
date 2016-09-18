@@ -191,7 +191,7 @@ public:
     virtual std::string toXmlString() const;
 
     // Accessors for recording property
-    bool isRecording() {return m_recording; }
+    bool isRecording() const  { return m_recording; }
 
     static bool isPercussionNumber(int channel)
     { return channel == 9; }

@@ -165,6 +165,8 @@ private:
     /// Recording filters: Device
     QComboBox *m_recordingDevice;
     IdsVector m_recordingDeviceIds;
+    std::vector<DeviceId> m_recordingDeviceIds2;
+    std::vector<QString> m_recordingDeviceNames;
     /// Cache to detect change.
     Instrument::InstrumentType m_lastInstrumentType;
     void populateRecordingDeviceList();
@@ -221,7 +223,7 @@ private:
     // ComboBox update routines for updateWidgets2().
     void updatePlaybackDevice(DeviceId deviceId);
     void updateInstrument(const Instrument *instrument);
-    void updateRecordDevice();
+    void updateRecordDevice(DeviceId deviceId);
     void updateColor();
     /// Update all widgets from RosegardenDocument.
     /**
