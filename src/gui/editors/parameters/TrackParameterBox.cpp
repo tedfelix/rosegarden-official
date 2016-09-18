@@ -452,7 +452,18 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
 
     setContentsMargins(2, 7, 2, 2);
 
-    updateWidgets();
+    // DEBUG
+    QSettings settings;
+    m_testNewUpdate = settings.value("Debug/tpb_new_update", false).toBool();
+    // Write it back out to make it easier to find.
+    settings.setValue("Debug/tpb_new_update", m_testNewUpdate);
+
+    if (m_testNewUpdate) {
+        RG_DEBUG << "ctor, testing new update";
+        updateWidgets2();
+    } else {
+        updateWidgets();
+    }
 }
 
 void
@@ -743,8 +754,13 @@ TrackParameterBox::trackSelectionChanged(const Composition *, TrackId newTrackId
     m_preset->setEnabled(true);
 
     m_selectedTrackId = newTrackId;
-    selectedTrackNameChanged();
-    updateWidgets();
+
+    if (m_testNewUpdate) {
+        updateWidgets2();
+    } else {
+        selectedTrackNameChanged();
+        updateWidgets();
+    }
 }
 
 void
@@ -1298,7 +1314,6 @@ TrackParameterBox::getTrack()
 void
 TrackParameterBox::updatePlaybackDevice(DeviceId deviceId)
 {
-    // ??? Will this include input devices too?  How do we filter?
     const DeviceList &deviceList = *(m_doc->getStudio().getDevices());
 
     // Generate local device name and ID lists to compare against the members.
@@ -1312,6 +1327,21 @@ TrackParameterBox::updatePlaybackDevice(DeviceId deviceId)
          ++deviceIndex)
     {
         const Device &device = *(deviceList[deviceIndex]);
+
+        // ??? A Device::isInput() would be simpler.  Derivers would
+        //     implement appropriately.  Then this would simplify to:
+        //
+        //        // If this is an input device, skip it.
+        //        if (device.isInput())
+        //            continue;
+
+        const MidiDevice *midiDevice =
+                dynamic_cast<const MidiDevice *>(deviceList[deviceIndex]);
+
+        // If this is a MIDI input device, skip it.
+        if (midiDevice  &&
+            midiDevice->getDirection() == MidiDevice::Record)
+            continue;
 
         deviceIds.push_back(device.getId());
         deviceNames.push_back(device.getName());
@@ -1329,14 +1359,13 @@ TrackParameterBox::updatePlaybackDevice(DeviceId deviceId)
 
         m_playbackDevice->clear();
 
-        // For each Device
+        // For each playback Device, add the name to the combobox.
         for (size_t deviceIndex = 0;
-             deviceIndex < deviceList.size();
+             deviceIndex < m_playbackDeviceNames.size();
              ++deviceIndex)
         {
-            const Device &device = *(deviceList[deviceIndex]);
-
-            m_playbackDevice->addItem(QObject::tr(device.getName().c_str()));
+            m_playbackDevice->addItem(
+                    QObject::tr(m_playbackDeviceNames[deviceIndex].c_str()));
         }
     }
 
@@ -1347,14 +1376,14 @@ TrackParameterBox::updatePlaybackDevice(DeviceId deviceId)
 
     // For each Device
     for (size_t deviceIndex = 0;
-         deviceIndex < deviceList.size();
+         deviceIndex < m_playbackDeviceIds2.size();
          ++deviceIndex)
     {
-        const Device &device = *(deviceList[deviceIndex]);
-
         // If this is the selected device
-        if (device.getId() == deviceId)
+        if (m_playbackDeviceIds2[deviceIndex] == deviceId) {
             currentIndex = deviceIndex;
+            break;
+        }
     }
 
     // Set the index.
@@ -1424,6 +1453,8 @@ TrackParameterBox::updateWidgets2()
     Instrument *instrument = m_doc->getStudio().getInstrumentFor(track);
     if (!instrument)
         return;
+
+    RG_DEBUG << "updateWidgets2()";
 
     // *** Track Label
 

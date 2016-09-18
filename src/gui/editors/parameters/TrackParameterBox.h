@@ -231,6 +231,11 @@ private:
      * See MIDIInstrumentParameterPanel::updateWidgets().
      */
     void updateWidgets2();
+
+    // DEBUG
+    // Enables the use of updateWidgets2() for testing.  Use this while
+    // updateWidgets2() is in progress.
+    bool m_testNewUpdate;
 };
 
 
