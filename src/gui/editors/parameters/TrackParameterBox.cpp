@@ -826,11 +826,17 @@ TrackParameterBox::slotColorChanged(int index)
 {
     //RG_DEBUG << "slotColorChanged(" << index << ")";
 
-    Track *trk = getTrack();
-    if (!trk)
+    Track *track = getTrack();
+    if (!track)
         return;
 
-    trk->setColor(index);
+    track->setColor(index);
+    m_doc->slotDocumentModified();
+
+    // Notify observers
+    // This will trigger a call to updateWidgets2().
+    Composition &comp = m_doc->getComposition();
+    comp.notifyTrackChanged(track);
 
 #if 0
 // This will never happen since the "Add Color" option is never added.
@@ -975,21 +981,33 @@ TrackParameterBox::slotLoadPressed()
 void
 TrackParameterBox::slotNotationSizeChanged(int index)
 {
-    Track *trk = getTrack();
-    if (!trk)
+    Track *track = getTrack();
+    if (!track)
         return;
 
-    trk->setStaffSize(index);
+    track->setStaffSize(index);
+    m_doc->slotDocumentModified();
+
+    // Notify observers
+    // This will trigger a call to updateWidgets2().
+    Composition &comp = m_doc->getComposition();
+    comp.notifyTrackChanged(track);
 }
 
 void
 TrackParameterBox::slotBracketTypeChanged(int index)
 {
-    Track *trk = getTrack();
-    if (!trk)
+    Track *track = getTrack();
+    if (!track)
         return;
 
-    trk->setStaffBracket(index);
+    track->setStaffBracket(index);
+    m_doc->slotDocumentModified();
+
+    // Notify observers
+    // This will trigger a call to updateWidgets2().
+    Composition &comp = m_doc->getComposition();
+    comp.notifyTrackChanged(track);
 }
 
 Track *
