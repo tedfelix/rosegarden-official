@@ -68,14 +68,14 @@ public slots:
     /// Connected to RosegardenDocument::docColoursChanged().
     /**
      * ??? This is a selective refresh.  Recommend combining with all others
-     *     into a single full refresh (updateWidgets()) and optimize.
+     *     into a single full refresh (updateWidgets2()) and optimize.
      */
     void slotDocColoursChanged();
 
     /// Connected to InstrumentStaticSignals::changed().
     /**
      * ??? This is a selective refresh.  Recommend combining with all others
-     *     into a single full refresh (updateWidgets()) and optimize.
+     *     into a single full refresh (updateWidgets2()) and optimize.
      */
     void slotInstrumentChanged(Instrument *instrument);
 
@@ -143,6 +143,11 @@ private:
     typedef std::vector<DeviceId> IdsVector;
     IdsVector m_playbackDeviceIds;
     void populatePlaybackDeviceList();
+    /// Cache for detecting changes.
+    std::vector<DeviceId> m_playbackDeviceIds2;
+    /// Cache for detecting changes.
+    std::vector<std::string> m_playbackDeviceNames;
+
 
     /// Playback parameters: Instrument
     QComboBox *m_instrument;
@@ -208,12 +213,12 @@ private:
 
     /**
      * ??? This is a selective refresh.  Recommend combining with all others
-     *     into a single full refresh (updateWidgets()) and optimize.
+     *     into a single full refresh (updateWidgets2()) and optimize.
      */
     void updateWidgets();
 
     // ComboBox update routines for updateWidgets2().
-    void updatePlaybackDevice();
+    void updatePlaybackDevice(DeviceId deviceId);
     void updateInstrument();
     void updateRecordDevice();
     void updateColor();

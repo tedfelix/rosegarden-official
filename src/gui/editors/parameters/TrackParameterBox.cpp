@@ -1296,18 +1296,69 @@ TrackParameterBox::getTrack()
 }
 
 void
-TrackParameterBox::updatePlaybackDevice()
+TrackParameterBox::updatePlaybackDevice(DeviceId deviceId)
 {
-    // The list of output devices will rarely change.  But since it is
-    // a QComboBox, it's a bit costly to clear and update.  So, we need
-    // to detect relevant changes and skip updating if there's no point.
-    // Cached device names and IDs can be used to detect an actual change.
+    // ??? Will this include input devices too?  How do we filter?
+    const DeviceList &deviceList = *(m_doc->getStudio().getDevices());
+
+    // Generate local device name and ID lists to compare against the members.
+
+    std::vector<DeviceId> deviceIds;
+    std::vector<std::string> deviceNames;
+
+    // For each Device
+    for (size_t deviceIndex = 0;
+         deviceIndex < deviceList.size();
+         ++deviceIndex)
+    {
+        const Device &device = *(deviceList[deviceIndex]);
+
+        deviceIds.push_back(device.getId());
+        deviceNames.push_back(device.getName());
+    }
 
     // If there has been an actual change
+    if (deviceIds != m_playbackDeviceIds2  ||
+        deviceNames != m_playbackDeviceNames)
+    {
+        // Update the cache.
+        m_playbackDeviceIds2 = deviceIds;
+        m_playbackDeviceNames = deviceNames;
+
         // Reload the combobox
 
+        m_playbackDevice->clear();
+
+        // For each Device
+        for (size_t deviceIndex = 0;
+             deviceIndex < deviceList.size();
+             ++deviceIndex)
+        {
+            const Device &device = *(deviceList[deviceIndex]);
+
+            m_playbackDevice->addItem(QObject::tr(device.getName().c_str()));
+        }
+    }
+
+    // Find the current device in the device ID list.
+
+    // Assume not found.
+    int currentIndex = -1;
+
+    // For each Device
+    for (size_t deviceIndex = 0;
+         deviceIndex < deviceList.size();
+         ++deviceIndex)
+    {
+        const Device &device = *(deviceList[deviceIndex]);
+
+        // If this is the selected device
+        if (device.getId() == deviceId)
+            currentIndex = deviceIndex;
+    }
+
     // Set the index.
-    //m_playbackDevice->setCurrentIndex(???);
+    m_playbackDevice->setCurrentIndex(currentIndex);
 }
 
 void
@@ -1389,7 +1440,7 @@ TrackParameterBox::updateWidgets2()
     // *** Playback parameters
 
     // Device
-    updatePlaybackDevice();
+    updatePlaybackDevice(instrument->getDevice()->getId());
 
     // Instrument
     updateInstrument();
