@@ -911,49 +911,51 @@ TrackParameterBox::slotColorChanged(int index)
 void
 TrackParameterBox::slotHighestPressed()
 {
-    if (m_selectedTrackId == NO_TRACK)
+    Track *track = getTrack();
+    if (!track)
         return;
 
-    Composition &comp = m_doc->getComposition();
+    PitchPickerDialog dialog(
+            0, track->getHighestPlayable(), tr("Highest playable note"));
 
-    // Make sure the selected track is valid.
-    if (!comp.haveTrack(m_selectedTrackId)) {
-        m_selectedTrackId = NO_TRACK;
-        return;
-    }
-
-    PitchPickerDialog dialog(0, m_highestPlayable, tr("Highest playable note"));
-
+    // Launch the PitchPickerDialog.  If the user clicks OK...
     if (dialog.exec() == QDialog::Accepted) {
-        m_highestPlayable = dialog.getPitch();
-        updateHighLow();
-    }
+        track->setHighestPlayable(dialog.getPitch());
 
-    m_preset->setEnabled(false);
+        m_doc->slotDocumentModified();
+
+        // Notify observers
+        // This will trigger a call to updateWidgets2().
+        Composition &comp = m_doc->getComposition();
+        comp.notifyTrackChanged(track);
+
+        m_preset->setEnabled(false);
+    }
 }
 
 void
 TrackParameterBox::slotLowestPressed()
 {
-    if (m_selectedTrackId == NO_TRACK)
+    Track *track = getTrack();
+    if (!track)
         return;
 
-    Composition &comp = m_doc->getComposition();
+    PitchPickerDialog dialog(
+            0, track->getLowestPlayable(), tr("Lowest playable note"));
 
-    // Make sure the selected track is valid.
-    if (!comp.haveTrack(m_selectedTrackId)) {
-        m_selectedTrackId = NO_TRACK;
-        return;
-    }
-
-    PitchPickerDialog dialog(0, m_lowestPlayable, tr("Lowest playable note"));
-
+    // Launch the PitchPickerDialog.  If the user clicks OK...
     if (dialog.exec() == QDialog::Accepted) {
-        m_lowestPlayable = dialog.getPitch();
-        updateHighLow();
-    }
+        track->setLowestPlayable(dialog.getPitch());
 
-    m_preset->setEnabled(false);
+        m_doc->slotDocumentModified();
+
+        // Notify observers
+        // This will trigger a call to updateWidgets2().
+        Composition &comp = m_doc->getComposition();
+        comp.notifyTrackChanged(track);
+
+        m_preset->setEnabled(false);
+    }
 }
 
 void
