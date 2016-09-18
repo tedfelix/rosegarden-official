@@ -66,10 +66,6 @@ public:
 
 public slots:
     /// Connected to RosegardenDocument::docColoursChanged().
-    /**
-     * ??? This is a selective refresh.  Recommend combining with all others
-     *     into a single full refresh (updateWidgets2()) and optimize.
-     */
     void slotDocColoursChanged();
 
     /// Connected to InstrumentStaticSignals::changed().
@@ -223,7 +219,7 @@ private:
     // ComboBox update routines for updateWidgets2().
     void updatePlaybackDevice(DeviceId deviceId);
     void updateInstrument(const Instrument *instrument);
-    void updateRecordDevice(DeviceId deviceId);
+    void updateRecordingDevice(DeviceId deviceId);
     /// Update all widgets from RosegardenDocument.
     /**
      * This new routine will replace all other update routines.  It will

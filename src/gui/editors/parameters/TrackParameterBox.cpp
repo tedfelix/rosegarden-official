@@ -1341,8 +1341,8 @@ TrackParameterBox::updatePlaybackDevice(DeviceId deviceId)
     // For each Device
     for (size_t deviceIndex = 0;
          deviceIndex < deviceList.size();
-         ++deviceIndex)
-    {
+         ++deviceIndex) {
+
         const Device &device = *(deviceList[deviceIndex]);
 
         // ??? A Device::isInput() would be simpler.  Derivers would
@@ -1366,8 +1366,8 @@ TrackParameterBox::updatePlaybackDevice(DeviceId deviceId)
 
     // If there has been an actual change
     if (deviceIds != m_playbackDeviceIds2  ||
-        deviceNames != m_playbackDeviceNames)
-    {
+        deviceNames != m_playbackDeviceNames) {
+
         // Update the cache.
         m_playbackDeviceIds2 = deviceIds;
         m_playbackDeviceNames = deviceNames;
@@ -1380,8 +1380,7 @@ TrackParameterBox::updatePlaybackDevice(DeviceId deviceId)
         // ??? If we used a QStringList, we could just call addItems().
         for (size_t deviceIndex = 0;
              deviceIndex < m_playbackDeviceNames.size();
-             ++deviceIndex)
-        {
+             ++deviceIndex) {
             m_playbackDevice->addItem(
                     QObject::tr(m_playbackDeviceNames[deviceIndex].c_str()));
         }
@@ -1395,8 +1394,7 @@ TrackParameterBox::updatePlaybackDevice(DeviceId deviceId)
     // For each Device
     for (size_t deviceIndex = 0;
          deviceIndex < m_playbackDeviceIds2.size();
-         ++deviceIndex)
-    {
+         ++deviceIndex) {
         // If this is the selected device
         if (m_playbackDeviceIds2[deviceIndex] == deviceId) {
             currentIndex = deviceIndex;
@@ -1439,6 +1437,7 @@ TrackParameterBox::updateInstrument(const Instrument *instrument)
                 QObject::tr(loopInstrument.getProgramName().c_str()));
 
         if (loopInstrument.getType() == Instrument::SoftSynth) {
+
             instrumentName.replace(QObject::tr("Synth plugin"), "");
 
             programName = "";
@@ -1476,8 +1475,7 @@ TrackParameterBox::updateInstrument(const Instrument *instrument)
         // ??? If we used a QStringList, we could just call addItems().
         for (size_t instrumentIndex = 0;
              instrumentIndex < m_instrumentNames2.size();
-             ++instrumentIndex)
-        {
+             ++instrumentIndex) {
             m_instrument->addItem(m_instrumentNames2[instrumentIndex]);
         }
     }
@@ -1492,8 +1490,7 @@ TrackParameterBox::updateInstrument(const Instrument *instrument)
     // For each Instrument
     for (size_t instrumentIndex = 0;
          instrumentIndex < m_instrumentIds2.size();
-         ++instrumentIndex)
-    {
+         ++instrumentIndex) {
         // If this is the selected Instrument
         if (m_instrumentIds2[instrumentIndex] == instrumentId) {
             currentIndex = instrumentIndex;
@@ -1506,7 +1503,7 @@ TrackParameterBox::updateInstrument(const Instrument *instrument)
 }
 
 void
-TrackParameterBox::updateRecordDevice(DeviceId deviceId)
+TrackParameterBox::updateRecordingDevice(DeviceId deviceId)
 {
     // As with playback devices, the list of record devices will rarely
     // change and it is expensive to clear and reload.  Handle like the
@@ -1527,8 +1524,8 @@ TrackParameterBox::updateRecordDevice(DeviceId deviceId)
     // For each Device
     for (size_t deviceIndex = 0;
          deviceIndex < deviceList.size();
-         ++deviceIndex)
-    {
+         ++deviceIndex) {
+
         const Device &device = *(deviceList[deviceIndex]);
 
         // ??? A Device::isOutput() would be simpler.  Derivers would
@@ -1561,8 +1558,8 @@ TrackParameterBox::updateRecordDevice(DeviceId deviceId)
 
     // If there has been an actual change
     if (recordingDeviceIds != m_recordingDeviceIds2  ||
-        recordingDeviceNames != m_recordingDeviceNames)
-    {
+        recordingDeviceNames != m_recordingDeviceNames) {
+
         // Update the cache
         m_recordingDeviceIds2 = recordingDeviceIds;
         m_recordingDeviceNames = recordingDeviceNames;
@@ -1575,8 +1572,7 @@ TrackParameterBox::updateRecordDevice(DeviceId deviceId)
         // ??? If we used a QStringList, we could just call addItems().
         for (size_t deviceIndex = 0;
              deviceIndex < m_recordingDeviceNames.size();
-             ++deviceIndex)
-        {
+             ++deviceIndex) {
             m_recordingDevice->addItem(m_recordingDeviceNames[deviceIndex]);
         }
     }
@@ -1589,8 +1585,7 @@ TrackParameterBox::updateRecordDevice(DeviceId deviceId)
     // For each ID
     for (size_t deviceIndex = 0;
          deviceIndex < m_recordingDeviceIds2.size();
-         ++deviceIndex)
-    {
+         ++deviceIndex) {
         // If this is the selected device
         if (m_recordingDeviceIds2[deviceIndex] == deviceId) {
             currentIndex = deviceIndex;
@@ -1639,8 +1634,7 @@ TrackParameterBox::updateWidgets2()
     m_archive->setChecked(track->isArchived());
 
     // If the current Instrument is an Audio Instrument...
-    if (instrument->getInstrumentType() == Instrument::Audio)
-    {
+    if (instrument->getInstrumentType() == Instrument::Audio) {
         // Hide the remaining three sections.
         m_recordingFiltersFrame->setVisible(false);
         m_staffExportOptionsFrame->setVisible(false);
@@ -1649,9 +1643,7 @@ TrackParameterBox::updateWidgets2()
 
         // And bail.
         return;
-    }
-    else  // MIDI or soft synth
-    {
+    } else {  // MIDI or soft synth
         // Show the remaining three sections.
         m_recordingFiltersFrame->setVisible(true);
         m_staffExportOptionsFrame->setVisible(true);
@@ -1661,7 +1653,7 @@ TrackParameterBox::updateWidgets2()
     // *** Recording filters
 
     // Device
-    updateRecordDevice(track->getMidiInputDevice());
+    updateRecordingDevice(track->getMidiInputDevice());
 
     // Channel
     m_recordingChannel->setCurrentIndex((int)track->getMidiInputChannel() + 1);
