@@ -495,74 +495,13 @@ TrackParameterBox::trackSelectionChanged(const Composition *, TrackId newTrackId
 }
 
 void
-TrackParameterBox::slotPlaybackDeviceChanged(int index)
+TrackParameterBox::sendInstrumentToTrackButtons(int index)
 {
-    //RG_DEBUG << "slotPlaybackDeviceChanged(" << index << ")";
-
-    // If nothing is selected
-    // ??? Can this ever happen?
-    if (index == -1) {
-        // Update from the Track.
-        updateWidgets2();
-        return;
-    }
-
-    DeviceId deviceId = m_playbackDeviceIds2[index];
-
-    Track *track = getTrack();
-    if (!track)
-        return;
-
-    // Switch the Track to the same instrument # on this new Device.
-
-    Device *device = m_doc->getStudio().getDevice(deviceId);
-    if (!device)
-        return;
-
-    // Query the Studio to get an Instrument for this Device.
-    InstrumentList instrumentList = device->getPresentationInstruments();
-
-    // Try to preserve the Instrument number (channel) if possible.
-    int instrumentIndex = m_instrument->currentIndex();
-    if (instrumentIndex >= static_cast<int>(instrumentList.size()))
-        instrumentIndex = 0;
-
-    // Set the Track's Instrument to the new Instrument.
-    track->setInstrument(instrumentList[instrumentIndex]->getId());
-
-    m_doc->slotDocumentModified();
-
-    // Notify observers
-    // ??? Redundant notification.  Track::setInstrument() already does
-    //     this.  It shouldn't.
-    Composition &comp = m_doc->getComposition();
-    comp.notifyTrackChanged(track);
-
+    // ??? This really needs to go away.
     // ??? Ugh.  This is so that TrackButtons updates properly.  This in
     //     turn causes the IPB to update.  TrackButtons and the IPB
     //     should take care of themselves in response to the TrackChanged
-    //     notification above!  This needs to go.
-    // ??? Redundant notification.
-    slotInstrumentChanged(instrumentIndex);
-}
-
-void
-TrackParameterBox::slotInstrumentChanged(int index)
-{
-    //RG_DEBUG << "slotInstrumentChanged(" << index << ")";
-
-    // If nothing is selected
-    // ??? Can this ever happen?
-    if (index == -1) {
-        // Update from the Track.
-        updateWidgets2();
-        return;
-    }
-
-#if 1
-    // Invalid Track?  Bail.
-    if (!getTrack())
-        return;
+    //     notification!  This needs to go.
 
     //devId = m_playbackDeviceIds[m_playbackDevice->currentIndex()];
 
@@ -614,23 +553,84 @@ TrackParameterBox::slotInstrumentChanged(int index)
     //RosegardenMainWindow::self()->getView()->getTrackEditor()->
     //        getTrackButtons()->slotTPBInstrumentSelected(
     //                m_selectedTrackId, trackButtonsInstrumentIndex);
+}
 
-#else
-// ??? This is how it should be done.  All of the work that is done by
-//     TrackButtons::slotTPBInstrumentSelected() should be spread out
-//     into the trackChanged() handlers for those that care.
+void
+TrackParameterBox::slotPlaybackDeviceChanged(int index)
+{
+    //RG_DEBUG << "slotPlaybackDeviceChanged(" << index << ")";
+
+    // If nothing is selected, bail.
+    if (index < 0)
+        return;
+
+    // Out of range?  Bail.
+    if (index >= static_cast<int>(m_playbackDeviceIds2.size()))
+        return;
 
     Track *track = getTrack();
     if (!track)
         return;
 
-    track->setInstrument(m_instrumentIds[index]);
+    // Switch the Track to the same instrument # on this new Device.
+
+    DeviceId deviceId = m_playbackDeviceIds2[index];
+
+    Device *device = m_doc->getStudio().getDevice(deviceId);
+    if (!device)
+        return;
+
+    // Query the Studio to get an Instrument for this Device.
+    InstrumentList instrumentList = device->getPresentationInstruments();
+
+    // Try to preserve the Instrument number (channel) if possible.
+    int instrumentIndex = m_instrument->currentIndex();
+    if (instrumentIndex >= static_cast<int>(instrumentList.size()))
+        instrumentIndex = 0;
+
+    // Set the Track's Instrument to the new Instrument.
+    track->setInstrument(instrumentList[instrumentIndex]->getId());
+
+    m_doc->slotDocumentModified();
 
     // Notify observers
+    // ??? Redundant notification.  Track::setInstrument() already does
+    //     this.  It shouldn't.
     Composition &comp = m_doc->getComposition();
     comp.notifyTrackChanged(track);
 
-#endif
+    // ??? This needs to go away.
+    sendInstrumentToTrackButtons(instrumentIndex);
+}
+
+void
+TrackParameterBox::slotInstrumentChanged(int index)
+{
+    //RG_DEBUG << "slotInstrumentChanged(" << index << ")";
+
+    // If nothing is selected, bail.
+    if (index < 0)
+        return;
+
+    // Out of range?  Bail.
+    if (index >= static_cast<int>(m_instrumentIds2.size()))
+        return;
+
+    Track *track = getTrack();
+    if (!track)
+        return;
+
+    track->setInstrument(m_instrumentIds2[index]);
+    m_doc->slotDocumentModified();
+
+    // Notify observers
+    // ??? Redundant notification.  Track::setInstrument() already does
+    //     this.  It shouldn't.
+    Composition &comp = m_doc->getComposition();
+    comp.notifyTrackChanged(track);
+
+    // ??? This needs to go away.
+    sendInstrumentToTrackButtons(index);
 }
 
 void
