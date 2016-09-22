@@ -291,8 +291,8 @@ TrackParameterBox::TrackParameterBox(QWidget *parent) :
     createSegmentsWith->setContentsMargins(3, 3, 3, 3);
 
     // Preset
-    QLabel *presetLabel = new QLabel(tr("Preset"), createSegmentsWith);
-    presetLabel->setFont(m_font);
+    m_presetLabel = new QLabel(tr("Preset"), createSegmentsWith);
+    m_presetLabel->setFont(m_font);
 
     m_preset = new QLabel(tr("<none>"), createSegmentsWith);
     m_preset->setFont(m_font);
@@ -307,8 +307,8 @@ TrackParameterBox::TrackParameterBox(QWidget *parent) :
             SLOT(slotLoadPressed()));
 
     // Clef
-    QLabel *clefLabel = new QLabel(tr("Clef"), createSegmentsWith);
-    clefLabel->setFont(m_font);
+    m_clefLabel = new QLabel(tr("Clef"), createSegmentsWith);
+    m_clefLabel->setFont(m_font);
     m_clef = new QComboBox(createSegmentsWith);
     m_clef->setFont(m_font);
     m_clef->setToolTip(tr("<qt><p>New segments will be created with this clef inserted at the beginning</p></qt>"));
@@ -334,8 +334,8 @@ TrackParameterBox::TrackParameterBox(QWidget *parent) :
             this, SLOT(slotClefChanged(int)));
 
     // Transpose
-    QLabel *transposeLabel = new QLabel(tr("Transpose"), createSegmentsWith);
-    transposeLabel->setFont(m_font);
+    m_transposeLabel = new QLabel(tr("Transpose"), createSegmentsWith);
+    m_transposeLabel->setFont(m_font);
     m_transpose = new QComboBox(createSegmentsWith);
     m_transpose->setFont(m_font);
     m_transpose->setToolTip(tr("<qt><p>New segments will be created with this transpose property set</p></qt>"));
@@ -350,12 +350,12 @@ TrackParameterBox::TrackParameterBox(QWidget *parent) :
     }
 
     // Pitch
-    QLabel *pitchLabel = new QLabel(tr("Pitch"), createSegmentsWith);
-    pitchLabel->setFont(m_font);
+    m_pitchLabel = new QLabel(tr("Pitch"), createSegmentsWith);
+    m_pitchLabel->setFont(m_font);
 
     // Lowest playable note
-    QLabel *lowestLabel = new QLabel(tr("Lowest"), createSegmentsWith);
-    lowestLabel->setFont(m_font);
+    m_lowestLabel = new QLabel(tr("Lowest"), createSegmentsWith);
+    m_lowestLabel->setFont(m_font);
 
     m_lowest = new QPushButton(tr("---"), createSegmentsWith);
     m_lowest->setFont(m_font);
@@ -364,8 +364,8 @@ TrackParameterBox::TrackParameterBox(QWidget *parent) :
             SLOT(slotLowestPressed()));
 
     // Highest playable note
-    QLabel *highestLabel = new QLabel(tr("Highest"), createSegmentsWith);
-    highestLabel->setFont(m_font);
+    m_highestLabel = new QLabel(tr("Highest"), createSegmentsWith);
+    m_highestLabel->setFont(m_font);
 
     m_highest = new QPushButton(tr("---"), createSegmentsWith);
     m_highest->setFont(m_font);
@@ -391,19 +391,19 @@ TrackParameterBox::TrackParameterBox(QWidget *parent) :
     groupLayout->setVerticalSpacing(2);
     groupLayout->setHorizontalSpacing(5);
     // Row 0: Preset/Load
-    groupLayout->addWidget(presetLabel, 0, 0, Qt::AlignLeft);
+    groupLayout->addWidget(m_presetLabel, 0, 0, Qt::AlignLeft);
     groupLayout->addWidget(m_preset, 0, 1, 1, 3);
     groupLayout->addWidget(m_load, 0, 4, 1, 2);
     // Row 1: Clef/Transpose
-    groupLayout->addWidget(clefLabel, 1, 0, Qt::AlignLeft);
+    groupLayout->addWidget(m_clefLabel, 1, 0, Qt::AlignLeft);
     groupLayout->addWidget(m_clef, 1, 1, 1, 2);
-    groupLayout->addWidget(transposeLabel, 1, 3, 1, 2, Qt::AlignRight);
+    groupLayout->addWidget(m_transposeLabel, 1, 3, 1, 2, Qt::AlignRight);
     groupLayout->addWidget(m_transpose, 1, 5, 1, 1);
     // Row 2: Pitch/Lowest/Highest
-    groupLayout->addWidget(pitchLabel, 2, 0, Qt::AlignLeft);
-    groupLayout->addWidget(lowestLabel, 2, 1, Qt::AlignRight);
+    groupLayout->addWidget(m_pitchLabel, 2, 0, Qt::AlignLeft);
+    groupLayout->addWidget(m_lowestLabel, 2, 1, Qt::AlignRight);
     groupLayout->addWidget(m_lowest, 2, 2, 1, 1);
-    groupLayout->addWidget(highestLabel, 2, 3, Qt::AlignRight);
+    groupLayout->addWidget(m_highestLabel, 2, 3, Qt::AlignRight);
     groupLayout->addWidget(m_highest, 2, 4, 1, 2);
     // Row 3: Color
     groupLayout->addWidget(colorLabel, 3, 0, Qt::AlignLeft);
@@ -1339,19 +1339,47 @@ TrackParameterBox::updateWidgets2()
 
     // If the current Instrument is an Audio Instrument...
     if (instrument->getInstrumentType() == Instrument::Audio) {
-        // Hide the remaining three sections.
+
+        // Hide irrelevant portions.
+
         m_recordingFiltersFrame->setVisible(false);
         m_staffExportOptionsFrame->setVisible(false);
-        // ??? Overzealous.  The color combobox is still useful.
-        m_createSegmentsWithFrame->setVisible(false);
 
-        // And bail.
-        return;
+        // In the Create segments with... frame, only the color combo is
+        // useful for an Audio track.
+        m_presetLabel->setVisible(false);
+        m_preset->setVisible(false);
+        m_load->setVisible(false);
+        m_clefLabel->setVisible(false);
+        m_clef->setVisible(false);
+        m_transposeLabel->setVisible(false);
+        m_transpose->setVisible(false);
+        m_pitchLabel->setVisible(false);
+        m_lowestLabel->setVisible(false);
+        m_lowest->setVisible(false);
+        m_highestLabel->setVisible(false);
+        m_highest->setVisible(false);
+
     } else {  // MIDI or soft synth
-        // Show the remaining three sections.
+
+        // Show everything.
+
         m_recordingFiltersFrame->setVisible(true);
         m_staffExportOptionsFrame->setVisible(true);
-        m_createSegmentsWithFrame->setVisible(true);
+
+        // Create segments with... frame
+        m_presetLabel->setVisible(true);
+        m_preset->setVisible(true);
+        m_load->setVisible(true);
+        m_clefLabel->setVisible(true);
+        m_clef->setVisible(true);
+        m_transposeLabel->setVisible(true);
+        m_transpose->setVisible(true);
+        m_pitchLabel->setVisible(true);
+        m_lowestLabel->setVisible(true);
+        m_lowest->setVisible(true);
+        m_highestLabel->setVisible(true);
+        m_highest->setVisible(true);
     }
 
     // *** Recording filters

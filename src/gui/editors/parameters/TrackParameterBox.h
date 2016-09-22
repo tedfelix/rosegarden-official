@@ -177,17 +177,23 @@ private:
     CollapsingFrame *m_createSegmentsWithFrame;
 
     /// Create segments with: Preset Load
+    QLabel *m_presetLabel;
     QLabel *m_preset;
     QPushButton *m_load;
 
     /// Create segments with: Clef
+    QLabel *m_clefLabel;
     QComboBox *m_clef;
 
     /// Create segments with: Transpose
+    QLabel *m_transposeLabel;
     QComboBox *m_transpose;
 
     /// Create segments with: Pitch (Lowest/Highest)
+    QLabel *m_pitchLabel;
+    QLabel *m_lowestLabel;
     QPushButton *m_lowest;
+    QLabel *m_highestLabel;
     QPushButton *m_highest;
 
     /// Create segments with: Color
