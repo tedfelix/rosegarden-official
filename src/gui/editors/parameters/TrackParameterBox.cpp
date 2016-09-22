@@ -45,7 +45,6 @@
 #include "document/RosegardenDocument.h"
 #include "RosegardenParameterBox.h"
 #include "commands/segment/SegmentSyncCommand.h"
-#include "gui/widgets/SqueezedLabel.h"
 #include "base/StaffExportTypes.h"  // StaffTypes, Brackets
 #include "base/Studio.h"
 #include "base/Track.h"
@@ -71,10 +70,9 @@ namespace Rosegarden
 {
 
 
-TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
-                                     QWidget *parent) :
+TrackParameterBox::TrackParameterBox(QWidget *parent) :
     RosegardenParameterBox(tr("Track"), tr("Track Parameters"), parent),
-    m_doc(doc),
+    m_doc(NULL),
     m_selectedTrackId(NO_TRACK),
     m_lastInstrumentType(Instrument::InvalidInstrument)
 {
@@ -414,21 +412,12 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
     groupLayout->setColumnStretch(1, 1);
     groupLayout->setColumnStretch(2, 2);
 
-    // populate combo from doc colors
-    slotDocColoursChanged();
-
     // Connections
-
-    // Detect when the document colours are updated
-    connect(m_doc, SIGNAL(docColoursChanged()),
-            this, SLOT(slotDocColoursChanged()));
 
     connect(Instrument::getStaticSignals().data(),
             SIGNAL(changed(Instrument *)),
             this,
             SLOT(slotInstrumentChanged(Instrument *)));
-
-    m_doc->getComposition().addObserver(this);
 
     // Layout
 
@@ -458,6 +447,21 @@ TrackParameterBox::setDocument(RosegardenDocument *doc)
     m_doc = doc;
 
     m_doc->getComposition().addObserver(this);
+
+    // Populate color combo from the document colors.
+    // ??? Now that we actually load these from the new document, we can
+    //     see what's actually in .rg files.  Older ones have almost no
+    //     colors at all (e.g. the Vivaldi op44 example file).  Since we
+    //     don't allow editing of the colors, we should probably just
+    //     always put the standard color list into a document when it is
+    //     loaded.
+    slotDocColoursChanged();
+
+    // Detect when the document colours are updated.
+    // ??? Document colors can never be updated.  See explanation in
+    //     slotDocColoursChanged().
+    //connect(m_doc, SIGNAL(docColoursChanged()),
+    //        this, SLOT(slotDocColoursChanged()));
 
     updateWidgets2();
 }
@@ -1309,8 +1313,6 @@ TrackParameterBox::updateWidgets2()
     Instrument *instrument = m_doc->getStudio().getInstrumentFor(track);
     if (!instrument)
         return;
-
-    RG_DEBUG << "updateWidgets2()";
 
     // *** Track Label
 

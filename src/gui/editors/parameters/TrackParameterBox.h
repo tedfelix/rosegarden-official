@@ -29,6 +29,8 @@
 #include "gui/widgets/ColourTable.h"
 #include "base/Device.h"  // For DeviceId
 #include "base/Instrument.h"
+#include "gui/widgets/SqueezedLabel.h"
+
 
 #include <QString>
 
@@ -56,7 +58,7 @@ class TrackParameterBox : public RosegardenParameterBox,
     Q_OBJECT
         
 public:
-    TrackParameterBox(RosegardenDocument *doc, QWidget *parent = 0);
+    TrackParameterBox(QWidget *parent = 0);
     
     void setDocument(RosegardenDocument *doc);
 
@@ -124,7 +126,7 @@ private:
     Track *getTrack();
 
     // Track number and name
-    QLabel *m_trackLabel;
+    SqueezedLabel *m_trackLabel;
 
     // --- Playback parameters --------------------------------------
 
