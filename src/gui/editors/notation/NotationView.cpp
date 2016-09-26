@@ -3166,7 +3166,7 @@ ForAllSelection(opOnEvent op)
     EventSelection *selection = getSelection();
     if (!selection) { return; }
 
-    EventSelection::eventcontainer &ec =
+    EventSelection::eventcontainer ec =
         selection->getSegmentEvents();
 
     for (EventSelection::eventcontainer::iterator i = ec.begin();
