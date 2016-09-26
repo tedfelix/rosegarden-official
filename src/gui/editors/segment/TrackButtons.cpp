@@ -967,48 +967,8 @@ TrackButtons::slotInstrumentSelected(int instrumentIndex)
 
     m_doc->slotDocumentModified();
 
-#if 1
-
     // Notify IPB, ControlBlock, and SequenceManager.
     selectInstrument(track, instrument);
-
-#else
-    // For IPB
-    // RosegardenMainViewWidget::slotUpdateInstrumentParameterBox()
-    emit instrumentSelected((int)instrument->getId());
-
-    // For ControlBlock
-    ControlBlock::getInstance()->
-            setInstrumentForTrack(m_popupTrackPos, instrument->getId());
-
-    // Make sure the Device is in sync with the Instrument's settings.
-    instrument->sendChannelSetup();
-
-    // For SequenceManager
-
-    // In case the sequencer is currently playing, we need to regenerate
-    // all the events with the new channel number.
-
-    SequenceManager *sequenceManager = m_doc->getSequenceManager();
-
-    // For each segment in the composition
-    for (Composition::iterator i = comp.begin();
-         i != comp.end();
-         ++i) {
-
-        Segment *segment = (*i);
-
-        // If this Segment is on this Track, let SequenceManager know
-        // that the Instrument has changed.
-        // Segments on this track are now playing on a new
-        // instrument, so they're no longer ready (making them
-        // ready is done just-in-time elsewhere), nor is thru
-        // channel ready.
-        if (((int)segment->getTrack()) == m_popupTrackPos)
-            sequenceManager->segmentInstrumentChanged(segment);
-
-    }
-#endif
 }
 
 void
