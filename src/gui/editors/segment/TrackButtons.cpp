@@ -883,66 +883,83 @@ TrackButtons::slotInstrumentSelected(QAction* action)
 void
 TrackButtons::slotInstrumentSelected(int instrumentIndex)
 {
-    //RG_DEBUG << "TrackButtons::slotInstrumentSelected()  instrumentIndex =" << instrumentIndex;
+    //RG_DEBUG << "slotInstrumentSelected(): instrumentIndex =" << instrumentIndex;
 
-    Instrument *inst = m_doc->getStudio().getInstrumentFromList(instrumentIndex);
+    Instrument *instrument =
+            m_doc->getStudio().getInstrumentFromList(instrumentIndex);
 
-    // debug dump
-//    for (int n = 0; n < 100; n++) {
-//        inst = studio.getInstrumentFromList(n);
-//        RG_DEBUG << "Studio returned instrument \"" << inst->getPresentationName() << "\" for index " << n;
-//    }
+    //RG_DEBUG << "slotInstrumentSelected(): instrument " << inst;
 
-    //RG_DEBUG << "TrackButtons::slotInstrumentSelected: instrument " << inst;
-
-    if (inst != 0) {
-        Composition &comp = m_doc->getComposition();
-        Track *track =
-                comp.getTrackByPosition(m_popupTrackPos);
-
-        if (track != 0) {
-            // Select the new instrument for the track.  Seems like we
-            // need to do all 3 ways:
-            // For Track.cpp
-            track->setInstrument(inst->getId());
-            // For TrackParameterBox
-            emit instrumentSelected((int)inst->getId());
-            // For ControlBlock's representation of track.
-            ControlBlock::getInstance()->
-                setInstrumentForTrack(m_popupTrackPos, inst->getId());
-            // Make sure the device is in sync with the instrument's
-            // settings.
-            inst->sendChannelSetup();
-
-            // Update the instrument names
-            initInstrumentNames(inst, m_trackLabels[m_popupTrackPos]);
-            m_trackLabels[m_popupTrackPos]->updateLabel();
-
-            // Udpate the LED color
-            m_recordLeds[m_popupTrackPos]->setColor(getRecordLedColour(inst));
-
-            SequenceManager *sM =
-                m_doc->getSequenceManager();
-
-            // Segments on this track are now playing on a new
-            // instrument, so they're no longer ready (making them
-            // ready is done just-in-time elsewhere), nor is thru
-            // channel ready.
-            for (Composition::iterator i =
-                     comp.begin();
-                 i != comp.end(); ++i) {
-                if (((int)(*i)->getTrack()) == m_popupTrackPos) {
-                    sM->segmentInstrumentChanged(*i);
-                }
-            }    
-        } else {
-            RG_DEBUG << "slotInstrumentSelected() - can't find track!\n";
-        }
-
-    } else {
-        RG_DEBUG << "slotInstrumentSelected() - can't find item!\n";
+    if (!instrument) {
+        RG_WARNING << "slotInstrumentSelected(): WARNING: Can't find Instrument";
+        return;
     }
 
+    Composition &comp = m_doc->getComposition();
+    Track *track = comp.getTrackByPosition(m_popupTrackPos);
+
+    if (!track) {
+        RG_WARNING << "slotInstrumentSelected(): WARNING: Can't find Track";
+        return;
+    }
+
+    // No change?  Bail.
+    if (instrument->getId() == track->getInstrument())
+        return;
+
+    // Select the new instrument for the track.
+
+    // Seems like we need to do this 4 ways.  This is a sign of coupling
+    // that is too tight.  The UI knows too much about all the parts of
+    // the system.  CompositionObserver::trackChanged() should be used to
+    // decouple all of these.  #2 (IPB), #3 (ControlBlock), and #4
+    // (SequenceManager) should take care of themselves in response to the
+    // trackChanged() notification.
+
+    // #1. For Track.cpp
+    // ??? This sends a trackChanged() notification.  It shouldn't.  We should
+    //     send one here.
+    track->setInstrument(instrument->getId());
+    // ??? This is what we should do.
+    //comp.notifyTrackChanged(track);
+
+    m_doc->slotDocumentModified();
+
+    // #2. For IPB
+    // RosegardenMainViewWidget::slotUpdateInstrumentParameterBox()
+    emit instrumentSelected((int)instrument->getId());
+
+    // #3. For ControlBlock's representation of track.
+    ControlBlock::getInstance()->
+            setInstrumentForTrack(m_popupTrackPos, instrument->getId());
+
+    // Make sure the Device is in sync with the Instrument's settings.
+    instrument->sendChannelSetup();
+
+    // #4. SequenceManager::segmentInstrumentChanged()
+
+    // In case the sequencer is currently playing, we need to regenerate
+    // all the events with the new channel number.
+
+    SequenceManager *sequenceManager = m_doc->getSequenceManager();
+
+    // For each segment in the composition
+    for (Composition::iterator i = comp.begin();
+         i != comp.end();
+         ++i) {
+
+        Segment *segment = (*i);
+
+        // If this Segment is on this Track, let SequenceManager know
+        // that the Instrument has changed.
+        // Segments on this track are now playing on a new
+        // instrument, so they're no longer ready (making them
+        // ready is done just-in-time elsewhere), nor is thru
+        // channel ready.
+        if (((int)segment->getTrack()) == m_popupTrackPos)
+            sequenceManager->segmentInstrumentChanged(segment);
+
+    }
 }
 
 void
