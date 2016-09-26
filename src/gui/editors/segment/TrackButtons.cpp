@@ -881,6 +881,56 @@ TrackButtons::slotInstrumentSelected(QAction* action)
 }
 
 void
+TrackButtons::selectInstrument(Track *track, Instrument *instrument)
+{
+    // Inform the rest of the system of the instrument change.
+
+    // ??? This routine needs to go.  The UI shouldn't know so much about
+    //     the other objects in the system.  The following updates should
+    //     be done by their respective objects in response to a
+    //     CompositionObserver::trackChanged() notification.
+
+    // *** For IPB
+
+    // Calls RosegardenMainViewWidget::slotUpdateInstrumentParameterBox().
+    emit instrumentSelected((int)instrument->getId());
+
+    // *** For ControlBlock
+
+    ControlBlock::getInstance()->
+            setInstrumentForTrack(m_popupTrackPos, instrument->getId());
+
+    // Make sure the Device is in sync with the Instrument's settings.
+    instrument->sendChannelSetup();
+
+    // *** For SequenceManager
+
+    // In case the sequencer is currently playing, we need to regenerate
+    // all the events with the new channel number.
+
+    Composition &comp = m_doc->getComposition();
+    SequenceManager *sequenceManager = m_doc->getSequenceManager();
+
+    // For each segment in the composition
+    for (Composition::iterator i = comp.begin();
+         i != comp.end();
+         ++i) {
+
+        Segment *segment = (*i);
+
+        // If this Segment is on this Track, let SequenceManager know
+        // that the Instrument has changed.
+        // Segments on this track are now playing on a new
+        // instrument, so they're no longer ready (making them
+        // ready is done just-in-time elsewhere), nor is thru
+        // channel ready.
+        if (((int)segment->getTrack()) == m_popupTrackPos)
+            sequenceManager->segmentInstrumentChanged(segment);
+
+    }
+}
+
+void
 TrackButtons::slotInstrumentSelected(int instrumentIndex)
 {
     //RG_DEBUG << "slotInstrumentSelected(): instrumentIndex =" << instrumentIndex;
@@ -909,14 +959,6 @@ TrackButtons::slotInstrumentSelected(int instrumentIndex)
 
     // Select the new instrument for the track.
 
-    // Seems like we need to do this 4 ways.  This is a sign of coupling
-    // that is too tight.  The UI knows too much about all the parts of
-    // the system.  CompositionObserver::trackChanged() should be used to
-    // decouple all of these.  #2 (IPB), #3 (ControlBlock), and #4
-    // (SequenceManager) should take care of themselves in response to the
-    // trackChanged() notification.
-
-    // #1. For Track.cpp
     // ??? This sends a trackChanged() notification.  It shouldn't.  We should
     //     send one here.
     track->setInstrument(instrument->getId());
@@ -925,18 +967,24 @@ TrackButtons::slotInstrumentSelected(int instrumentIndex)
 
     m_doc->slotDocumentModified();
 
-    // #2. For IPB
+#if 1
+
+    // Notify IPB, ControlBlock, and SequenceManager.
+    selectInstrument(track, instrument);
+
+#else
+    // For IPB
     // RosegardenMainViewWidget::slotUpdateInstrumentParameterBox()
     emit instrumentSelected((int)instrument->getId());
 
-    // #3. For ControlBlock's representation of track.
+    // For ControlBlock
     ControlBlock::getInstance()->
             setInstrumentForTrack(m_popupTrackPos, instrument->getId());
 
     // Make sure the Device is in sync with the Instrument's settings.
     instrument->sendChannelSetup();
 
-    // #4. SequenceManager::segmentInstrumentChanged()
+    // For SequenceManager
 
     // In case the sequencer is currently playing, we need to regenerate
     // all the events with the new channel number.
@@ -960,6 +1008,7 @@ TrackButtons::slotInstrumentSelected(int instrumentIndex)
             sequenceManager->segmentInstrumentChanged(segment);
 
     }
+#endif
 }
 
 void

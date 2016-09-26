@@ -115,6 +115,8 @@ public:
      */
     void toggleSolo();
 
+    void selectInstrument(Track *track, Instrument *instrument);
+
 signals:
     /// Emitted when a track button has been clicked.
     /**
