@@ -890,6 +890,8 @@ TrackButtons::selectInstrument(Track *track, Instrument *instrument)
     //     be done by their respective objects in response to a
     //     CompositionObserver::trackChanged() notification.
 
+    const TrackId trackId = track->getId();
+
     // *** For IPB
 
     // Calls RosegardenMainViewWidget::slotUpdateInstrumentParameterBox().
@@ -898,7 +900,7 @@ TrackButtons::selectInstrument(Track *track, Instrument *instrument)
     // *** For ControlBlock
 
     ControlBlock::getInstance()->
-            setInstrumentForTrack(m_popupTrackPos, instrument->getId());
+            setInstrumentForTrack(trackId, instrument->getId());
 
     // *** ???
 
@@ -926,7 +928,7 @@ TrackButtons::selectInstrument(Track *track, Instrument *instrument)
         // instrument, so they're no longer ready (making them
         // ready is done just-in-time elsewhere), nor is thru
         // channel ready.
-        if (((int)segment->getTrack()) == m_popupTrackPos)
+        if (((int)segment->getTrack()) == trackId)
             sequenceManager->segmentInstrumentChanged(segment);
 
     }
