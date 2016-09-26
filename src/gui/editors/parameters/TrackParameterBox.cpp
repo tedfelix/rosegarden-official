@@ -43,6 +43,8 @@
 #include "sound/PluginIdentifier.h"
 #include "gui/general/PresetHandlerDialog.h"
 #include "document/RosegardenDocument.h"
+#include "gui/application/RosegardenMainWindow.h"
+#include "gui/application/RosegardenMainViewWidget.h"
 #include "RosegardenParameterBox.h"
 #include "commands/segment/SegmentSyncCommand.h"
 #include "base/StaffExportTypes.h"  // StaffTypes, Brackets
@@ -499,67 +501,6 @@ TrackParameterBox::trackSelectionChanged(const Composition *, TrackId newTrackId
 }
 
 void
-TrackParameterBox::sendInstrumentToTrackButtons(int index)
-{
-    // ??? This really needs to go away.
-    // ??? Ugh.  This is so that TrackButtons updates properly.  This in
-    //     turn causes the IPB to update.  TrackButtons and the IPB
-    //     should take care of themselves in response to the TrackChanged
-    //     notification!  This needs to go.
-
-    //devId = m_playbackDeviceIds[m_playbackDevice->currentIndex()];
-
-    // Calculate an index to use in Studio::getInstrumentFromList() which
-    // gets emitted to TrackButtons, and TrackButtons actually does the work
-    // of assigning the instrument to the track, for some bizarre reason.
-    //
-    // This new method for calculating the index works by:
-    //
-    // 1. for every play device combo index between 0 and its current index,
-    //
-    // 2. get the device that corresponds with that combo box index, and
-    //
-    // 3. figure out how many instruments that device contains, then
-    //
-    // 4. Add it all up.  That's how many slots we have to jump over to get
-    //    to the point where the instrument combo box index we're working
-    //    with here will target the correct instrument in the studio list.
-    //
-    // I'm sure this whole architecture seemed clever once, but it's an
-    // unmaintainable pain in the ass is what it is.  We changed one
-    // assumption somewhere, and the whole thing fell on its head,
-    // swallowing two entire days of my life to put back with the following
-    // magic lines of code:
-    int prepend = 0;
-    // For each device that needs to be skipped.
-    for (int n = 0; n < m_playbackDevice->currentIndex(); ++n) {
-        DeviceId id = m_playbackDeviceIds2[n];
-        Device *dev = m_doc->getStudio().getDevice(id);
-
-        InstrumentList il = dev->getPresentationInstruments();
-
-        // Accumulate the number of instruments that need to be skipped.
-        // get the number of instruments belonging to the device (not the
-        // studio)
-        prepend += il.size();
-    }
-
-    // Convert from TrackParameterBox index to TrackButtons index.
-    int trackButtonsInstrumentIndex = index + prepend;
-
-    //RG_DEBUG << "slotInstrumentChanged() trackButtonsIndex = " << trackButtonsIndex;
-
-    // Emit the index we've calculated, relative to the studio list.
-    // TrackButtons::slotTPBInstrumentSelected() does the rest of the
-    // work for us.
-    emit instrumentSelected(m_selectedTrackId, trackButtonsInstrumentIndex);
-    // Or directly, avoiding the signal/slot:
-    //RosegardenMainWindow::self()->getView()->getTrackEditor()->
-    //        getTrackButtons()->slotTPBInstrumentSelected(
-    //                m_selectedTrackId, trackButtonsInstrumentIndex);
-}
-
-void
 TrackParameterBox::slotPlaybackDeviceChanged(int index)
 {
     //RG_DEBUG << "slotPlaybackDeviceChanged(" << index << ")";
@@ -604,8 +545,11 @@ TrackParameterBox::slotPlaybackDeviceChanged(int index)
     Composition &comp = m_doc->getComposition();
     comp.notifyTrackChanged(track);
 
-    // ??? This needs to go away.
-    sendInstrumentToTrackButtons(instrumentIndex);
+    // ??? The following needs to go away.
+
+    RosegardenMainWindow::self()->getView()->getTrackEditor()->
+            getTrackButtons()->selectInstrument(
+                    track, instrumentList[instrumentIndex]);
 }
 
 void
@@ -635,8 +579,15 @@ TrackParameterBox::slotInstrumentChanged(int index)
     Composition &comp = m_doc->getComposition();
     comp.notifyTrackChanged(track);
 
-    // ??? This needs to go away.
-    sendInstrumentToTrackButtons(index);
+    // ??? The following needs to go away.
+
+    Instrument *instrument =
+            m_doc->getStudio().getInstrumentById(m_instrumentIds2[index]);
+    if (!instrument)
+        return;
+    RosegardenMainWindow::self()->getView()->getTrackEditor()->
+            getTrackButtons()->selectInstrument(
+                    track, instrument);
 }
 
 void

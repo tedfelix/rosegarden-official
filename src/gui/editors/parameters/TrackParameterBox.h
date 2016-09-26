@@ -212,9 +212,6 @@ private:
      * See MIDIInstrumentParameterPanel::updateWidgets().
      */
     void updateWidgets2();
-
-    // ??? This needs to go away.
-    void sendInstrumentToTrackButtons(int index);
 };
 
 

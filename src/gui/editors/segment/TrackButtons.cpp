@@ -900,6 +900,8 @@ TrackButtons::selectInstrument(Track *track, Instrument *instrument)
     ControlBlock::getInstance()->
             setInstrumentForTrack(m_popupTrackPos, instrument->getId());
 
+    // *** ???
+
     // Make sure the Device is in sync with the Instrument's settings.
     instrument->sendChannelSetup();
 
