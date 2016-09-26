@@ -928,7 +928,7 @@ TrackButtons::selectInstrument(Track *track, Instrument *instrument)
         // instrument, so they're no longer ready (making them
         // ready is done just-in-time elsewhere), nor is thru
         // channel ready.
-        if (((int)segment->getTrack()) == trackId)
+        if (segment->getTrack() == trackId)
             sequenceManager->segmentInstrumentChanged(segment);
 
     }
