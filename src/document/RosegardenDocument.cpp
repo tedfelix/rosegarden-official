@@ -648,6 +648,10 @@ bool RosegardenDocument::openDocument(const QString& filename,
         // If we're loading the entire document
         if (permanent) {
             // Initialise the whole studio - faders, plugins etc.
+            // ??? This is too early.  Some of the devices might not have
+            //     connections yet.  AlsaDriver::connectSomething() hasn't
+            //     been called yet to match up any ambiguous connection
+            //     names with real ports.
             initialiseStudio();
         }
 

@@ -1393,13 +1393,6 @@ RosegardenMainWindow::setDocument(RosegardenDocument* newDocument)
     // start the autosave timer
     m_autoSaveTimer->start(m_doc->getAutoSavePeriod() * 1000);
 
-#if 1
-    // Moving these three lines prior to the initView() call ensures that
-    // the Instruments are properly connected to their devices prior to
-    // the MIPP attempting to display the connection field.  With this
-    // after initView(), you will see "No connection" on the MIPP until
-    // you change tracks.
-
     connect(m_doc, SIGNAL(devicesResyncd()),
             this, SLOT(slotDocumentDevicesResyncd()));
 
@@ -1407,7 +1400,16 @@ RosegardenMainWindow::setDocument(RosegardenDocument* newDocument)
     // is connection information for the MIPP to display.
     RosegardenSequencer::getInstance()->connectSomething();
     newDocument->getStudio().resyncDeviceConnections();
-#endif
+
+    // Send out the channel setup.  (And a lot more.  Is this overkill?)
+    // Since the device connections might have changed due to the
+    // connectSomething() call above, we need to send out the channel setups
+    // at this point.  Otherwise if we load a Composition with empty
+    // connections (like the example Vivaldi op.44), we get piano on every
+    // track.  Problem is that this is redundant.  We've already called
+    // initialiseStudio() previously in the createDocument() call.  Can
+    // we just remove that and only do this here?
+    //newDocument->initialiseStudio();
 
     // Create a new RosegardenMainViewWidget and delete the old.
     initView();
@@ -1426,19 +1428,6 @@ RosegardenMainWindow::setDocument(RosegardenDocument* newDocument)
 
     // Make sure the view and the new document match.
     m_view->slotSynchroniseWithComposition();
-
-#if 0
-    // These three lines have been moved prior to the call to initView().
-    // See the comments above for discussion.
-    // ??? This was done April 2015.  If there have been no problems after
-    //     a year, it's probably safe to clean this up.
-
-    connect(m_doc, SIGNAL(devicesResyncd()),
-            this, SLOT(slotDocumentDevicesResyncd()));
-
-    RosegardenSequencer::getInstance()->connectSomething();
-    newDocument->getStudio().resyncDeviceConnections();
-#endif
 
     m_doc->checkSequencerTimer();
     m_doc->clearModifiedStatus();
