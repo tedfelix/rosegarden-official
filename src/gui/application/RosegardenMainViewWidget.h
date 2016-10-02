@@ -167,7 +167,7 @@ public slots:
 
     void slotSelectAllSegments();
 
-    void slotUpdateInstrumentParameterBox(int id);
+    void slotUpdateInstrumentParameterBox(int instrumentId);
 
     /*
      * This is called from the canvas (actually the selector tool) moving out

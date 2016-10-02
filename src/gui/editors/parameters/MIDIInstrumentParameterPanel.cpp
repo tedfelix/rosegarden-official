@@ -275,14 +275,6 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(
 }
 
 void
-MIDIInstrumentParameterPanel::clearReceiveExternal()
-{
-    RG_DEBUG << "clearReceiveExternal()";
-
-    m_receiveExternalCheckBox->setChecked(false);
-}
-
-void
 MIDIInstrumentParameterPanel::displayInstrument(Instrument *instrument)
 {
     if (!instrument)
@@ -290,6 +282,8 @@ MIDIInstrumentParameterPanel::displayInstrument(Instrument *instrument)
 
     setSelectedInstrument(instrument);
     m_instrumentLabel->setText(instrument->getLocalizedPresentationName());
+    // Clear the "Receive external" checkbox.
+    m_receiveExternalCheckBox->setChecked(false);
 
     updateWidgets();
 }

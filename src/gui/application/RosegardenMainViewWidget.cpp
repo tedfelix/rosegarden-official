@@ -1232,41 +1232,13 @@ void RosegardenMainViewWidget::slotSelectAllSegments()
     emit segmentsSelected(segments);
 }
 
-void RosegardenMainViewWidget::slotUpdateInstrumentParameterBox(int id)
+void RosegardenMainViewWidget::slotUpdateInstrumentParameterBox(int instrumentId)
 {
     Studio &studio = getDocument()->getStudio();
-    Instrument *instrument = studio.getInstrumentById(id);
-    // Composition &comp = getDocument()->getComposition();
+    Instrument *instrument = studio.getInstrumentById(instrumentId);
 
-    // Track *track = comp.getTrackById(comp.getSelectedTrack());
-
-    // Reset the instrument
-    //
     m_instrumentParameterBox->useInstrument(instrument);
-    
-    // set prog-change select-box unchecked (if selected TrackChanged)
-    MIDIInstrumentParameterPanel *mipp;
-    mipp = m_instrumentParameterBox->getMIDIInstrumentParameterPanel();
-    mipp->clearReceiveExternal();
-    
-    // Then do this instrument/track fiddling
-    //
-    /*
-        if (track && instrument &&
-                instrument->getType() == Instrument::Audio)
-        {
-            // Set the mute status
-            m_instrumentParameterBox->setMute(track->isMuted());
-     
-            // Set the record track
-            m_instrumentParameterBox->setRecord(
-                        track->getId() == comp.getRecordTrack());
-     
-            // Set solo
-            m_instrumentParameterBox->setSolo(
-                    comp.isSolo() && (track->getId() == comp.getSelectedTrack()));
-        }
-    */
+
     emit checkTrackAssignments();
 }
 

@@ -63,14 +63,6 @@ public:
      */
     void displayInstrument(Instrument *);
 
-    /// Uncheck the Receive External checkbox.
-    /**
-     * Called by RosegardenMainViewWidget::slotUpdateInstrumentParameterBox()
-     * to clear the "Receive External" checkbox when the user selects a
-     * different track.
-     */
-    void clearReceiveExternal();
-
 public slots:
 
     /// Handle external Bank Selects and Program Changes.
