@@ -591,6 +591,7 @@ AudioMixerWindow::slotTrackAssignmentsChanged()
     for (FaderMap::iterator i = m_faders.begin(); i != m_faders.end(); ++i) {
 
         InstrumentId id = i->first;
+        // If we are pointing to the correct Instrument.
         bool assigned = isInstrumentAssigned(id);
 
         if (assigned != i->second.m_populated) {

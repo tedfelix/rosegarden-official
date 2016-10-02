@@ -51,6 +51,7 @@ class Instrument;
 class InstrumentStaticSignals;
 
 
+/// The "Audio Mixer" window.
 class AudioMixerWindow : public MixerWindow, public ActionFileClient
 {
     Q_OBJECT
@@ -96,6 +97,13 @@ protected slots:
     // to be called if something changes in an instrument parameter box
     void slotInstrumentChanged(Instrument *);
 
+    /// Ensure the faders are in sync with the document.
+    /**
+     * In case a Track's Instrument has been changed, this routine updates
+     * the relevant fader.
+     *
+     * Called by RosegardenMainViewWidget::slotUpdateInstrumentParameterBox().
+     */
     void slotTrackAssignmentsChanged();
 
     // from Plugin dialog
