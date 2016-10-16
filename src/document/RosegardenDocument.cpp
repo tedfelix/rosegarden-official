@@ -947,6 +947,10 @@ void RosegardenDocument::initialiseStudio()
 
         Instrument *instrument = m_studio.getInstrumentById(instrumentId);
 
+        // If this instrument doesn't exist, try the next track.
+        if (!instrument)
+            continue;
+
         // If this isn't a MIDI instrument, try the next track.
         if (instrument->getType() != Instrument::Midi)
             continue;
