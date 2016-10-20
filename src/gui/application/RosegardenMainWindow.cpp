@@ -2004,55 +2004,46 @@ RosegardenMainWindow::slotFileOpen()
     slotStatusHelpMsg(tr("Opening file..."));
 
     QSettings settings;
-    settings.beginGroup(GeneralOptionsConfigGroup);
 
-    QString lastOpenedVersion = settings.value("Last File Opened Version", "none").toString();
-    settings.endGroup();
-
-    if (lastOpenedVersion != VERSION) {
-
-        // We haven't opened any files with this version of the
-        // program before.  Default to the examples directory.
-                          
-        QString examplesDir = ResourceFinder().getResourceDir("examples");
-        settings.beginGroup(RecentDirsConfigGroup);
-
-        QString recentString = settings.value("ROSEGARDEN", "").toString() ;
-        settings.setValue
-            ("ROSEGARDEN", QString("file:%1,%2").arg(examplesDir).arg(recentString));
-
-        settings.endGroup();
-    }
-
+    // Get the last used path for File > Open.
     settings.beginGroup(LastUsedPathsConfigGroup);
     QString directory = settings.value("open_file", QDir::homePath()).toString();
+    settings.endGroup();
 
+    // Launch the Open File dialog.
     QString fname = FileDialog::getOpenFileName(this, tr("Open File"), directory,
                     tr("All supported files") + " (*.rg *.RG *.rgt *.RGT *.rgp *.RGP *.mid *.MID *.midi *.MIDI)" + ";;" +
                     tr("Rosegarden files") + " (*.rg *.RG *.rgp *.RGP *.rgt *.RGT)" + ";;" +
                     tr("MIDI files") + " (*.mid *.MID *.midi *.MIDI)" + ";;" +
                     tr("All files") + " (*)", 0, 0);
-    
+
+    // If the user has cancelled, bail.
+    if (fname == "")
+        return;
+
     QUrl url(fname);
-    
-    if (url.isEmpty()) {
-        return ;
-    }
-    
-    QDir d = QFileInfo(url.path()).dir();
-    directory = d.canonicalPath();
+
+    if (!url.isValid())
+        return;
+
+    // Update the last used path for File > Open.
+    directory = QFileInfo(url.path()).canonicalPath();
+    settings.beginGroup(LastUsedPathsConfigGroup);
     settings.setValue("open_file", directory);
     settings.endGroup();
 
-    if (m_doc && !saveIfModified())
-        return ;
+    // If a document is currently loaded
+    if (m_doc) {
+        // Check to see if the user needs/wants to save the current document.
+        bool okToOpen = saveIfModified();
 
-    settings.beginGroup(GeneralOptionsConfigGroup);
-    settings.setValue("Last File Opened Version", VERSION);
+        // If the user has cancelled, bail.
+        if (!okToOpen)
+            return;
+    }
 
+    // Continue opening the file.
     openURL(url);
-
-    settings.endGroup();
 }
 
 void
