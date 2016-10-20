@@ -171,7 +171,15 @@ public:
 
     TransportDialog* getTransport();
 
-    enum ImportType { ImportRG4, ImportMIDI, ImportRG21, ImportHydrogen, ImportMusicXML, ImportCheckType, ImportRGD };
+    enum ImportType {
+        ImportRG4,
+        ImportMIDI,
+        ImportRG21,
+        //ImportHydrogen,
+        ImportMusicXML,
+        ImportCheckType,
+        ImportRGD
+    };
 
     /**
      * open a Rosegarden file

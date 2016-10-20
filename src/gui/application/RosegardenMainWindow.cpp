@@ -1530,103 +1530,115 @@ RosegardenMainWindow::openFile(QString filePath, ImportType type)
 
     // As an empty composition can be saved, we need to look if
     // segments exist before enabling print options in menu
-    if(doc->getComposition().getSegments().size()) {
+    // ??? This should be done in response to a Composition change
+    //     notification.
+    if (doc->getComposition().getSegments().size())
         enterActionState("have_segments");
-    } else {
+    else
         leaveActionState("have_segments");
-    }
 }
 
-RosegardenDocument*
+RosegardenDocument *
 RosegardenMainWindow::createDocument(
         QString filePath, ImportType importType, bool lock)
 {
-    QFileInfo info(filePath);
-    RosegardenDocument *doc = 0;
+    // ??? This and the create functions it calls might make more sense in
+    //     RosegardenDocument.
 
-    if (!info.exists()) {
+    QFileInfo fileInfo(filePath);
+
+    if (!fileInfo.exists()) {
         // can happen with command-line arg, so...
         StartupLogo::hideIfStillThere();
-        QMessageBox::warning(dynamic_cast<QWidget*>(this), filePath, tr("File \"%1\" does not exist").arg(filePath), QMessageBox::Ok, QMessageBox::Ok);
+        QMessageBox::warning(this, tr("Rosegarden"),
+                tr("File \"%1\" does not exist").arg(filePath),
+                QMessageBox::Ok, QMessageBox::Ok);
         return 0;
     }
     
-    if (info.isDir()) {
+    if (fileInfo.isDir()) {
         StartupLogo::hideIfStillThere();
-        QMessageBox::warning(dynamic_cast<QWidget*>(this), filePath, tr("File \"%1\" is actually a directory").arg(filePath), QMessageBox::Ok, QMessageBox::Ok);
+        QMessageBox::warning(this, tr("Rosegarden"),
+                tr("File \"%1\" is actually a directory").arg(filePath),
+                QMessageBox::Ok, QMessageBox::Ok);
         return 0;
     }
 
     QFile file(filePath);
 
     if (!file.open(QIODevice::ReadOnly)) {
-        QString errStr =
-            tr("You do not have read permission for \"%1\"").arg(filePath);
-
         StartupLogo::hideIfStillThere();
-        QMessageBox::warning(this, tr("Rosegarden"), errStr, QMessageBox::Ok, QMessageBox::Ok);
+        QMessageBox::warning(this, tr("Rosegarden"),
+                tr("You do not have read permission for \"%1\"").arg(filePath),
+                QMessageBox::Ok, QMessageBox::Ok);
         return 0;
     }
 
-    // Stop if playing
-    //
-    if (m_seqManager && m_seqManager->getTransportStatus() == PLAYING)
-        slotStop();
-
-    slotEnableTransport(false);
-
+    // If we need to import based on the filename extension
     if (importType == ImportCheckType) {
-        //KMimeType::Ptr fileMimeType = KMimeType::findByPath(filePath); //&&& disabled mime, used file-ext. instead
-        /*
-        if (fileMimeType->objectName() == "audio/x-midi")
+        QString extension = fileInfo.suffix().toLower();
+
+        if (extension == "mid"  ||  extension == "midi")
             importType = ImportMIDI;
-        else if (fileMimeType->objectName() == "audio/x-rosegarden")
-            */
-        
-        QString testFileType = filePath.toLower();
-        
-        if(testFileType.endsWith(".mid") || testFileType.endsWith(".midi"))
-                importType = ImportMIDI;
-        else if (testFileType.endsWith(".rg"))
+        else if (extension == "rg"  ||  extension == "rgt")
             importType = ImportRG4;
-        else if (testFileType.endsWith(".rgd"))
+        else if (extension == "rgd")
             importType = ImportRGD;
-        else if (testFileType.endsWith(".rose"))
+        else if (extension == "rose")
             importType = ImportRG21;
-        /*
-        else if (testFileType.endsWith(".h2song"))
-            importType = ImportHydrogen;
-        */
-        else if (testFileType.endsWith(".xml"))
+        else if (extension == "xml")
             importType = ImportMusicXML;
+        //else if (extension == "h2song")
+        //    importType = ImportHydrogen;
     }
 
+    if (importType == ImportRGD) {
+        StartupLogo::hideIfStillThere();
+        QMessageBox::warning(this, tr("Rosegarden"),
+                tr("File \"%1\" is a Rosegarden Device, and must be imported using the MIDI device manager.").arg(filePath),
+                QMessageBox::Ok, QMessageBox::Ok);
+        return 0;
+    }
+
+    // If the sequencer is playing, stop it.
+    if (m_seqManager  &&  m_seqManager->getTransportStatus() == PLAYING)
+        slotStop();
+
+    // Prevent playback while loading.
+    // ??? This only disables the buttons on the TransportDialog.  It
+    //     does not disable the toolbar buttons or the menu items.
+    //     Luckily, we do not crash if we are playing and a document
+    //     is loading.
+    slotEnableTransport(false);
+
+    RosegardenDocument *doc;
 
     switch (importType) {
     case ImportMIDI:
         doc = createDocumentFromMIDIFile(filePath);
         break;
+
     case ImportRG21:
         doc = createDocumentFromRG21File(filePath);
         break;
-/*
-    case ImportHydrogen:
-        doc = createDocumentFromHydrogenFile(filePath);
-        break;
- */
+
+    //case ImportHydrogen:
+    //    doc = createDocumentFromHydrogenFile(filePath);
+    //    break;
+
     case ImportMusicXML:
         doc = createDocumentFromMusicXMLFile(filePath);
         break;
-    case ImportRGD:
-        StartupLogo::hideIfStillThere();
-        QMessageBox::warning(this, filePath, tr("File \"%1\" is a Rosegarden Device, and must be imported using the MIDI device manager.").arg(filePath), QMessageBox::Ok, QMessageBox::Ok);
-        return 0;
-        break;
-    case ImportHydrogen:
+
     case ImportRG4:
     case ImportCheckType:
     default:
         doc = createDocumentFromRGFile(filePath, lock);
+        break;
+
+    case ImportRGD:  // Satisfy compiler warning.
+        // Handled above.
+        break;
     }
 
     slotEnableTransport(true);
@@ -3689,6 +3701,10 @@ RosegardenMainWindow::slotStatusHelpMsg(QString text)
 void
 RosegardenMainWindow::slotEnableTransport(bool enable)
 {
+    // ??? What about the menu items and the toolbar buttons?  Also
+    //     note that the TransportDialog buttons do not gray or
+    //     indicate that they've been disabled in any way.
+
     if (m_transport)
         getTransport()->setEnabled(enable);
 }
@@ -4451,7 +4467,7 @@ RosegardenMainWindow::createDocumentFromRG21File(QString file)
 
 }
 
-/*
+#if 0
 void
 RosegardenMainWindow::slotImportHydrogen()
 {
@@ -4571,7 +4587,7 @@ RosegardenMainWindow::createDocumentFromHydrogenFile(QString file)
     return newDoc;
 
 }
-*/
+#endif
 
 void
 RosegardenMainWindow::slotImportMusicXML()
