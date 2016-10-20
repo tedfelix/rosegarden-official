@@ -1143,8 +1143,6 @@ RosegardenMainWindow::initView()
 
     m_doc->attachView(swapView);
 
-    setWindowTitle(tr("%1 - %2").arg(m_doc->getTitle()).arg(qApp->applicationName()));
-    
     // Transport setup
     //
     std::string transportMode = m_doc->getConfiguration().get<String>
@@ -1321,12 +1319,6 @@ RosegardenMainWindow::setDocument(RosegardenDocument* newDocument)
 
     // Take care of all subparts which depend on the document
 
-    // Caption
-    //
-    QString caption = qApp->applicationName();
-    setWindowTitle(tr("%1 - %2").arg(newDocument->getTitle()).arg(caption));
-    
-
     //     // reset AudioManagerDialog
     //     //
     //     delete m_audioManagerDialog; // TODO : replace this with a connection to documentAboutToChange() sig.
@@ -1335,6 +1327,8 @@ RosegardenMainWindow::setDocument(RosegardenDocument* newDocument)
     RosegardenDocument* oldDoc = m_doc;
 
     m_doc = newDocument;
+
+    updateTitle();
 
     if (m_seqManager) // when we're called at startup, the seq. man. isn't created yet
         m_seqManager->setDocument(m_doc, this);
@@ -1855,8 +1849,7 @@ RosegardenMainWindow::readGlobalProperties()
         }
     }
 
-    QString caption = qApp->applicationName();
-    setWindowTitle(tr("%1 - %2").arg(m_doc->getTitle()).arg(caption));
+    updateTitle();
 }
 #endif
 
@@ -1906,17 +1899,44 @@ RosegardenMainWindow::slotFileNew()
 void
 RosegardenMainWindow::slotUpdateTitle(bool modified)
 {
-    //NB: I seems like using doc->isModified() would be a more accurate state
-    // test than the value of modified, but in practice there is a lag factor of a few
-    // ms where we have gotten one value in m here, and isModified() is in the
-    // opposite state briefly.  I don't think there's any real concern there, so
-    // I just switched everything over to use the state of the bool passed with
-    // the signal and ignore isModified()
-    RG_DEBUG << "RosegardenMainWindow::slotUpdateTitle(" << modified << ")";
+    // NB: I seems like using doc->isModified() would be a more accurate state
+    // test than the value of "modified", but in practice there is a lag factor
+    // of a few ms where we have gotten one value in "modified" here, and
+    // isModified() is in the opposite state briefly.  I don't think there's
+    // any real concern there, so I just switched everything over to use the
+    // state of the bool passed with the signal and ignore isModified()
+    //RG_DEBUG << "slotUpdateTitle(" << modified << ")";
 
-    QString caption = qApp->applicationName();
-    QString indicator = (modified ? "*" : "");
-    setWindowTitle(tr("%1%2 - %3").arg(indicator).arg(m_doc->getTitle()).arg(caption));
+    // Preferences: Show full path in window titles.
+    QSettings settings;
+    settings.beginGroup(GeneralOptionsConfigGroup);
+    bool showFullPath =
+            settings.value("long_window_titles", false).toBool();
+    settings.endGroup();
+
+    QString filename;
+
+    if (showFullPath) {
+        // If it's not "Untitled", use the full path.
+        if (m_doc->getAbsFilePath() != "")
+            filename = m_doc->getAbsFilePath();
+        else  // Otherwise use the title.  Which is probably "Untitled".
+            filename = m_doc->getTitle();
+    } else {
+        filename = m_doc->getTitle();
+    }
+
+    setWindowTitle(
+            tr("%1%2 - %3").
+                arg((modified ? "*" : "")).
+                arg(filename).
+                arg(qApp->applicationName()));
+}
+
+void
+RosegardenMainWindow::updateTitle()
+{
+    slotUpdateTitle(m_doc->isModified());
 }
 
 void
@@ -1975,20 +1995,6 @@ RosegardenMainWindow::openURL(const QUrl& url)
     source.waitForData();
 
     openFile(source.getLocalFilename());
-
-    // Preferences: Show full path in window titles.
-    // ??? This doesn't work.  It's not good enough.  It works fine for
-    //     an open, but then try a save as.  It goes back to just the
-    //     name.  Need to re-implement this feature properly.  A search
-    //     on setWindowTitle() should find the places that need to be fixed.
-    QSettings settings;
-    settings.beginGroup(GeneralOptionsConfigGroup);
-    bool showFullPath =
-            settings.value("long_window_titles", false).toBool();
-    settings.endGroup();
-
-    if (showFullPath)
-        setWindowTitle(url.path());
 }
 
 void
@@ -2301,8 +2307,8 @@ RosegardenMainWindow::slotFileSaveAs(bool asTemplate)
 
         m_recentFiles.add(newName);
 
-        QString caption = qApp->applicationName();
-        setWindowTitle(tr("%1 - %2").arg(m_doc->getTitle()).arg(caption));
+        updateTitle();
+
         // update the edit view's captions too
         emit compositionStateUpdate();
     }

@@ -1730,6 +1730,8 @@ private:
 
     void muteAllTracks(bool mute = true);
 
+    void updateTitle();
+
 private slots:
     void signalAction(int);
 
