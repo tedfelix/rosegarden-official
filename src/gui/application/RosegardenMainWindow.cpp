@@ -1904,18 +1904,18 @@ RosegardenMainWindow::slotFileNew()
 }
 
 void
-RosegardenMainWindow::slotUpdateTitle(bool m)
+RosegardenMainWindow::slotUpdateTitle(bool modified)
 {
     //NB: I seems like using doc->isModified() would be a more accurate state
-    // test than the value of m, but in practice there is a lag factor of a few
+    // test than the value of modified, but in practice there is a lag factor of a few
     // ms where we have gotten one value in m here, and isModified() is in the
     // opposite state briefly.  I don't think there's any real concern there, so
     // I just switched everything over to use the state of the bool passed with
     // the signal and ignore isModified()
-    RG_DEBUG << "RosegardenMainWindow::slotUpdateTitle(" << m << ")";
+    RG_DEBUG << "RosegardenMainWindow::slotUpdateTitle(" << modified << ")";
 
     QString caption = qApp->applicationName();
-    QString indicator = (m ? "*" : "");
+    QString indicator = (modified ? "*" : "");
     setWindowTitle(tr("%1%2 - %3").arg(indicator).arg(m_doc->getTitle()).arg(caption));
 }
 
@@ -1936,7 +1936,8 @@ RosegardenMainWindow::slotOpenDroppedURL(QString url)
 void
 RosegardenMainWindow::openURL(QString url)
 {
-    RG_DEBUG << "RosegardenMainWindow::openURL: QString " << url;
+    //RG_DEBUG << "openURL(): url =" << url;
+
     openURL(QUrl(url));
 }
 
@@ -1945,57 +1946,49 @@ RosegardenMainWindow::openURL(const QUrl& url)
 {
     SetWaitCursor waitCursor;
     
-    // related: http://doc.trolltech.com/4.3/qurl.html#FormattingOption-enum
-    QString netFile = url.toString(QUrl::None);
-    
-    RG_DEBUG << "RosegardenMainWindow::openURL: QUrl " << netFile;
+    //RG_DEBUG << "openURL(): url =" << url;
 
     if (!url.isValid()) {
-        QString string;
-        string = tr("Malformed URL\n%1").arg(netFile);
+        QMessageBox::warning(this, tr("Rosegarden"),
+                tr("Malformed URL\n%1").arg(url.toString()));
 
-        QMessageBox::warning(this, tr("Rosegarden"), string);
-        return ;
+        return;
     }
-
-    QString target;
-
-    QSettings settings;
-    settings.beginGroup(GeneralOptionsConfigGroup);
-    bool useBrokenLegacyWindowTitles = settings.value("long_window_titles", false).toBool();
-    settings.endGroup();
-
-    QString caption(url.path());
-
-    //&&& KIO used to show a progress dialog of its own; we need to
-    //replicate that
 
     FileSource source(url);
+
     if (!source.isAvailable()) {
-        QMessageBox::critical(this, tr("Rosegarden"), tr("Cannot open file %1").arg(url.toString()));
-        return ;
+        QMessageBox::critical(this, tr("Rosegarden"),
+                tr("Cannot open file %1").arg(url.toString()));
+        return;
     }
 
-    target = source.getLocalFilename();
-    
-    RG_DEBUG << "RosegardenMainWindow::openURL: target : " << target;
+    //RG_DEBUG << "openURL(): local filename =" << source.getLocalFilename();
 
+    // Let the user save the current document if it's been modified.
+    // ??? rename: safeToClobber()?  Might be too geared toward the result.
     if (!saveIfModified())
-        return ;
+        return;
 
+    // In case the source is remote, wait for the file to be downloaded to
+    // the local file.
     source.waitForData();
-    openFile(target);
 
-    // A curious thing here.  The original intent everywhere is clear, and
-    // the document title was supposed to be set with (QFileInfo).fileName(),
-    // which changes "/home/foo/bar/blee/dog/rat/bob/dungleflungie/Foobar.rg"
-    // into "Foobar.rg" but that never worked, because of this next line.
-    //
-    // Chris Cherrett prefers the broken behavior, so I've added a config option
-    // to re-enable this line, which derives the caption from (QUrl).path().  If
-    // we don't set this here, it gets set in three or four other places shortly
-    // after loading a file, so there's nothing else to do here.
-    if (useBrokenLegacyWindowTitles) setWindowTitle(caption);
+    openFile(source.getLocalFilename());
+
+    // Preferences: Show full path in window titles.
+    // ??? This doesn't work.  It's not good enough.  It works fine for
+    //     an open, but then try a save as.  It goes back to just the
+    //     name.  Need to re-implement this feature properly.  A search
+    //     on setWindowTitle() should find the places that need to be fixed.
+    QSettings settings;
+    settings.beginGroup(GeneralOptionsConfigGroup);
+    bool showFullPath =
+            settings.value("long_window_titles", false).toBool();
+    settings.endGroup();
+
+    if (showFullPath)
+        setWindowTitle(url.path());
 }
 
 void
@@ -2035,6 +2028,7 @@ RosegardenMainWindow::slotFileOpen()
     // If a document is currently loaded
     if (m_doc) {
         // Check to see if the user needs/wants to save the current document.
+        // ??? openURL() does this too.  Should we defer to it?
         bool okToOpen = saveIfModified();
 
         // If the user has cancelled, bail.
