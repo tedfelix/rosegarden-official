@@ -1602,7 +1602,6 @@ private:
 
     //--------------- Data members ---------------------------------
 
-    bool m_alwaysUseDefaultStudio;
     bool m_actionsSetup;
 
     RosegardenMainViewWidget* m_view;

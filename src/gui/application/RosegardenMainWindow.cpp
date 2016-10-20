@@ -254,7 +254,6 @@ namespace Rosegarden
 RosegardenMainWindow::RosegardenMainWindow(bool enableSound,
                                            QObject *startupStatusMessageReceiver) :
     QMainWindow(0),
-    m_alwaysUseDefaultStudio(false),
     m_actionsSetup(false),
     m_view(0),
     m_mainDockWidget(0),
@@ -707,7 +706,6 @@ RosegardenMainWindow::closeEvent(QCloseEvent *event)
         settings.setValue("show_editors_toolbar", !findToolbar("Editors Toolbar")->isHidden());
         settings.setValue("show_transport_toolbar", !findToolbar("Transport Toolbar")->isHidden());
         settings.setValue("show_zoom_toolbar", !findToolbar("Zoom Toolbar")->isHidden());
-        settings.setValue("alwaysusedefaultstudio", m_alwaysUseDefaultStudio);
         settings.setValue("show_transport", findAction("show_transport")->isChecked());
 
         if (m_transport) {
@@ -1470,11 +1468,12 @@ RosegardenMainWindow::setDocument(RosegardenDocument* newDocument)
 void
 RosegardenMainWindow::openFile(QString filePath, ImportType type)
 {
-    RG_DEBUG << "openFile(): " << filePath;
+    //RG_DEBUG << "openFile(): " << filePath;
 
-    if (type == ImportCheckType && filePath.endsWith(".rgp")) {
+    // If we're opening a .rgp file, delegate to importProject()
+    if (type == ImportCheckType  &&  filePath.endsWith(".rgp")) {
         importProject(filePath);
-        return ;
+        return;
     }
 
     // Are we just reloading the original file?  In that case, we'll need
@@ -1492,44 +1491,49 @@ RosegardenMainWindow::openFile(QString filePath, ImportType type)
     }
 
     RosegardenDocument *doc = createDocument(filePath, type, !revert);
-    if (doc) {
-        setDocument(doc);
 
-        // fix # 1235755, "SPB combo not updating after document swap"
-        RG_DEBUG << "RosegardenMainWindow::openFile(): calling slotDocColoursChanged() in doc";
-        doc->slotDocColoursChanged();
+    if (!doc)
+        return;
 
-        QSettings settings;
-        settings.beginGroup(GeneralOptionsConfigGroup);
+    setDocument(doc);
 
-        if (qStrToBool(settings.value("alwaysusedefaultstudio", "false"))) {
+    // fix #782, "SPB combo not updating after document swap"
+    //RG_DEBUG << "openFile(): calling slotDocColoursChanged() in doc";
+    doc->slotDocColoursChanged();
 
-            m_alwaysUseDefaultStudio = true;
 
-            QString autoloadFile = ResourceFinder().getAutoloadPath();
+    // Preferences: Always use default studio when loading files
 
-            QFileInfo autoloadFileInfo(autoloadFile);
-            if (autoloadFile != "" && autoloadFileInfo.isReadable()) {
+    QSettings settings;
+    settings.beginGroup(GeneralOptionsConfigGroup);
+    bool alwaysUseDefaultStudio =
+            qStrToBool(settings.value("alwaysusedefaultstudio", "false"));
+    settings.endGroup();
 
-                RG_DEBUG << "Importing default studio from " << autoloadFile;
+    if (alwaysUseDefaultStudio) {
 
-                slotImportStudioFromFile(autoloadFile);
-            }
+        QString autoloadFile = ResourceFinder().getAutoloadPath();
+        QFileInfo autoloadFileInfo(autoloadFile);
+
+        if (autoloadFile != ""  &&  autoloadFileInfo.isReadable()) {
+
+            //RG_DEBUG << "openFile(): Importing default studio from " << autoloadFile;
+
+            slotImportStudioFromFile(autoloadFile);
         }
+    }
 
-        QFileInfo fInfo(filePath);
-        QString tmp (fInfo.absoluteFilePath());
-        m_recentFiles.add(tmp);
-        
-        settings.endGroup();
 
-        // As an empty composition can be saved, we need to look if
-        // segments exist before enabling print options in menu
-        if(doc->getComposition().getSegments().size()) {
-            enterActionState("have_segments"); 
-        } else {
-            leaveActionState("have_segments"); 
-        }
+    // Add to the MRU list
+    QFileInfo fileInfo(filePath);
+    m_recentFiles.add(fileInfo.absoluteFilePath());
+
+    // As an empty composition can be saved, we need to look if
+    // segments exist before enabling print options in menu
+    if(doc->getComposition().getSegments().size()) {
+        enterActionState("have_segments");
+    } else {
+        leaveActionState("have_segments");
     }
 }
 
@@ -1965,7 +1969,7 @@ void
 RosegardenMainWindow::openURL(const QUrl& url)
 {
     SetWaitCursor waitCursor;
-    
+
     //RG_DEBUG << "openURL(): url =" << url;
 
     if (!url.isValid()) {
