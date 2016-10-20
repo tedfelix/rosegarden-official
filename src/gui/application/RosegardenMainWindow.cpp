@@ -8580,15 +8580,22 @@ RosegardenMainWindow::checkAudioPath()
 
 bool RosegardenMainWindow::saveIfModified()
 {
-    RG_DEBUG << "saveIfModified()";
+    //RG_DEBUG << "saveIfModified()";
+
+    // If the current document hasn't been modified, it's ok to continue.
+    if (!m_doc->isModified())
+        return true;
+
+    // The current document has been modified.
+
     bool completed = true;
 
-    if (!m_doc->isModified())
-        return completed;
+    // Ask the user if they want to save changes to the current document.
+    int wantSave = QMessageBox::warning( this, tr("Rosegarden - Warning"),
+            tr("<qt><p>The current file has been modified.</p><p>Do you want to save it?</p></qt>"),
+            QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel, QMessageBox::Cancel );
 
-    int wantSave = QMessageBox::warning( this, tr("Rosegarden - Warning"), tr("<qt><p>The current file has been modified.</p><p>Do you want to save it?</p></qt>"), QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel, QMessageBox::Cancel );
-
-    RG_DEBUG << "wantSave = " << wantSave;
+    //RG_DEBUG << "saveIfModified(): wantSave = " << wantSave;
 
     switch (wantSave) {
 
@@ -8596,12 +8603,14 @@ bool RosegardenMainWindow::saveIfModified()
 
         if (!m_doc->isRegularDotRGFile()) {
 
-            RG_DEBUG << "saveIfModified() : new or imported file\n";
+            //RG_DEBUG << "saveIfModified() : new or imported file";
+
             completed = slotFileSaveAs();
 
         } else {
 
-            RG_DEBUG << "saveIfModified() : regular file\n";
+            //RG_DEBUG << "saveIfModified() : regular file";
+
             QString errMsg;
             completed = m_doc->saveDocument(m_doc->getAbsFilePath(), errMsg);
 
@@ -8620,6 +8629,7 @@ bool RosegardenMainWindow::saveIfModified()
         // delete the autosave file so it won't annoy
         // the user when reloading the file.
         m_doc->deleteAutoSaveFile();
+
         completed = true;
         break;
 
@@ -8632,6 +8642,7 @@ bool RosegardenMainWindow::saveIfModified()
         break;
     }
 
+    // Clean up audio files.
     if (completed) {
         completed = m_doc->deleteOrphanedAudioFiles(wantSave == QMessageBox::No);
         if (completed) {
@@ -8639,6 +8650,7 @@ bool RosegardenMainWindow::saveIfModified()
         }
     }
 
+    // If all's well, mark the document as ok to toss.
     if (completed)
         m_doc->clearModifiedStatus();
 
