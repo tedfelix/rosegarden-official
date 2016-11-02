@@ -98,6 +98,8 @@ signals:
                      tempoT,  // tempo value
                      tempoT,  // target value
                      TempoDialog::TempoDialogAction); // tempo action
+    
+    void noteInsertedFromKeyboard(Segment * segment, int pitch);
 
 protected slots:
     /// Remove a segment from our list when it is deleted from the composition

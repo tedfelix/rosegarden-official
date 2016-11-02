@@ -236,6 +236,8 @@ MatrixView::MatrixView(RosegardenDocument *doc,
     connect(m_matrixWidget, SIGNAL(sceneDeleted()),
             this, SLOT(slotSceneDeleted()));
 
+    connect(this, SIGNAL(noteInsertedFromKeyboard(Segment *, int)),
+            m_matrixWidget, SLOT(slotPlayPreviewNote(Segment *, int)));
 
     // do the auto repeat thingie on the <<< << >> >>> buttons
     setRewFFwdToAutoRepeat();
@@ -1852,6 +1854,9 @@ MatrixView::slotInsertNoteFromAction()
     if (!m_inChordMode) {
         m_document->slotSetPointerPosition(endTime);
     }
+
+    emit noteInsertedFromKeyboard(segment, pitch);
+    //  ==> MatrixWidget::slotPlayPreviewNote() ==> MatrixScene::playNote()
 }
 
 void

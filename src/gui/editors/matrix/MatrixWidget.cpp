@@ -1536,12 +1536,18 @@ MatrixWidget::showInitialPointer()
         m_hpanner->slotShowPositionPointer(sceneX);
     }
 }
+
 /// Instrument is destroyed
 void
 MatrixWidget::
 slotInstrumentGone(void)
 { m_instrument = 0; }
 
+void
+MatrixWidget::slotPlayPreviewNote(Segment * segment, int pitch)
+{
+    m_scene->playNote(*segment, pitch, 100);
 }
 
+}
 

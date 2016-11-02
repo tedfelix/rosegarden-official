@@ -158,6 +158,8 @@ public slots:
      * the pointer is visible initially.
      */
     void showInitialPointer();
+    
+    void slotPlayPreviewNote(Segment * segment, int pitch);
 
 protected slots:
     void slotDispatchMousePress(const MatrixMouseEvent *);
