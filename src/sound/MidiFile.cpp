@@ -1386,6 +1386,8 @@ MidiFile::writeTrack(std::ofstream *midiFile, TrackId trackNumber)
 
     int progressTotal = static_cast<int>(m_midiComposition[trackNumber].size());
     int progressCount = 0;
+    // Used to accumulate time deltas for skipped events.
+    timeT skippedTime = 0;
 
     for (MidiTrack::iterator i = m_midiComposition[trackNumber].begin();
          i != m_midiComposition[trackNumber].end();
@@ -1397,14 +1399,26 @@ MidiFile::writeTrack(std::ofstream *midiFile, TrackId trackNumber)
         // were originating, and decided to try just stripping them.  If
         // you can't do it right, do it badly, and somebody will
         // eventually freak out, then fix it the right way.
-        // ??? This is created in ChannelManager::setControllers().
+        // ??? This is created in ChannelManager::insertControllers().
+        // ??? Since we now have the "Allow Reset All Controllers" config
+        //     option, we can probably get rid of this and tell people to
+        //     use the config option.  If someone complains that 121's
+        //     aren't appearing in MIDI files, that's probably the route
+        //     we'll have to go.
         if (midiEvent.getData1() == MIDI_CONTROLLER_RESET) {
             RG_WARNING << "writeTrack(): Found controller 121.  Skipping.  This is a HACK to address BUG #1404.";
+
+            // Keep track of the timestamps from skipped events so we can
+            // add them to the next event that makes it through.
+            skippedTime += midiEvent.getTime();
+
             continue;
         }
 
         // Add the time to the buffer in MIDI format
-        trackBuffer += longToVarBuffer(midiEvent.getTime());
+        trackBuffer += longToVarBuffer(midiEvent.getTime() + skippedTime);
+
+        skippedTime = 0;
 
         RG_DEBUG << "MIDI event for channel "
                   << static_cast<int>(midiEvent.getChannelNumber())
