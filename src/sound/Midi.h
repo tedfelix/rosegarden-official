@@ -159,7 +159,7 @@ const MidiByte MIDI_CONTROLLER_RPN_1         = 0x64;
 const MidiByte MIDI_CONTROLLER_RPN_2         = 0x65;
 
 const MidiByte MIDI_CONTROLLER_SOUNDS_OFF    = 0x78;
-const MidiByte MIDI_CONTROLLER_RESET         = 0x79; // reset all controllers
+const MidiByte MIDI_CONTROLLER_RESET         = 0x79; // 121 reset all controllers
 const MidiByte MIDI_CONTROLLER_LOCAL         = 0x7A; // 0 = off, 127 = on
 const MidiByte MIDI_CONTROLLER_ALL_NOTES_OFF = 0x7B;
 

@@ -113,11 +113,9 @@ insertControllers(ChannelId channel, Instrument *instrument,
         // In case some controllers are on that we don't know about, turn
         // all controllers off.  (Reset All Controllers)
         try {
-            const int resetAllControllers = 121;
-
             MappedEvent mE(instrument->getId(),
                            MappedEvent::MidiController,
-                           resetAllControllers,
+                           MIDI_CONTROLLER_RESET,
                            0);
             mE.setRecordedChannel(channel);
             mE.setEventTime(insertTime);
