@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="fr_FR">
+<TS version="2.1" language="fr_FR">
 <context>
     <name>:</name>
     <message>
@@ -21405,17 +21405,17 @@ No segment will be split.</source>
         <location line="+1270"/>
         <location line="+35"/>
         <source>Open Hydrogen File</source>
-        <translation type="unfinished"></translation>
+        <translation>Ouvrir un fichier Hydrogen</translation>
     </message>
     <message>
         <location line="+34"/>
         <source>Importing Hydrogen file...</source>
-        <translation type="unfinished"></translation>
+        <translation>Importation d&apos;un fichier Hydrogen...</translation>
     </message>
     <message>
         <location line="+21"/>
         <source>Can&apos;t load Hydrogen file.  It appears to be corrupted.</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossible de charger le fichier Hydrogen.  Il semble être corrompu.</translation>
     </message>
     <message>
         <location line="+692"/>
