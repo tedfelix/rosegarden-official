@@ -8286,7 +8286,7 @@
     <message>
         <location filename="../../src/base/Studio.cpp" line="+61"/>
         <location filename="../../src/sound/AlsaDriver.cpp" line="+693"/>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="+554"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="+1098"/>
         <location filename="../AutoloadStrings.cpp" line="-189"/>
         <source>Synth plugin</source>
         <translation>合成器插件</translation>
@@ -10434,7 +10434,7 @@
         <translation>未知</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="+724"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="+718"/>
         <location line="+131"/>
         <source>%1. %2</source>
         <translation>%1. %2</translation>
@@ -10460,7 +10460,7 @@
         <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="+1683"/>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="+909"/>
         <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="+1045"/>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="+468"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="+470"/>
         <source>%1 Controller %2 %3</source>
         <translation>%1 控制器 %2 %3</translation>
     </message>
@@ -11733,14 +11733,14 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message>
         <location line="+11"/>
         <location line="+125"/>
-        <location line="+147"/>
+        <location line="+148"/>
         <location line="+57"/>
         <location line="+185"/>
         <source>&lt;none&gt;</source>
         <translation>&lt;无&gt;</translation>
     </message>
     <message>
-        <location line="-512"/>
+        <location line="-513"/>
         <location line="+125"/>
         <source>Click to load an audio plugin</source>
         <translation>点击加载一个音频插件</translation>
@@ -11782,7 +11782,7 @@ Please select the ones you wish to delete permanently from the hard disk.
         <translation>主控制器</translation>
     </message>
     <message>
-        <location line="+94"/>
+        <location line="+95"/>
         <location line="+57"/>
         <location line="+185"/>
         <source>&lt;no plugin&gt;</source>
@@ -13545,7 +13545,7 @@ Please select the ones you wish to delete permanently from the hard disk.
 <context>
     <name>Rosegarden::DeviceManagerDialog</name>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="+344"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="+318"/>
         <location line="+11"/>
         <location line="+16"/>
         <source>New Device</source>
@@ -13557,7 +13557,7 @@ Please select the ones you wish to delete permanently from the hard disk.
         <translation>http://rosegardenmusic.com/wiki/doc:device-manager-en</translation>
     </message>
     <message>
-        <location line="-844"/>
+        <location line="-818"/>
         <source>[ No port ]</source>
         <translation>[ 无端口 ]</translation>
     </message>
@@ -13685,7 +13685,7 @@ Please select the ones you wish to delete permanently from the hard disk.
 <context>
     <name>Rosegarden::DocumentConfigureDialog</name>
     <message>
-        <location filename="../../src/gui/dialogs/DocumentConfigureDialog.cpp" line="+39"/>
+        <location filename="../../src/gui/dialogs/DocumentConfigureDialog.cpp" line="+42"/>
         <source>Document Properties</source>
         <translation>文档属性</translation>
     </message>
@@ -13704,7 +13704,7 @@ Please select the ones you wish to delete permanently from the hard disk.
         <translation>%1 分 %2.%3%4 秒 (%5 单元, %6 小节)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="+95"/>
+        <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="+98"/>
         <source>Headers</source>
         <translation>题头</translation>
     </message>
@@ -15099,7 +15099,7 @@ Would you like to try and locate this file or skip it?</source>
         <translation>可打印的题头</translation>
     </message>
     <message>
-        <location line="+35"/>
+        <location line="+37"/>
         <source>Dedication</source>
         <translation>贡献</translation>
     </message>
@@ -15164,12 +15164,12 @@ Would you like to try and locate this file or skip it?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+23"/>
+        <location line="+24"/>
         <source>The composition comes here.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+23"/>
+        <location line="+13"/>
         <source>Additional headers</source>
         <translation>附加题头</translation>
     </message>
@@ -15516,9 +15516,8 @@ Example text from file:</source>
         <translation>乐器参数</translation>
     </message>
     <message>
-        <location line="+62"/>
         <source>Track</source>
-        <translation>音轨</translation>
+        <translation type="obsolete">音轨</translation>
     </message>
 </context>
 <context>
@@ -16651,7 +16650,7 @@ delay at the start of playback due to the amount of data being transmitted.</sou
 <context>
     <name>Rosegarden::MIDIInstrumentParameterPanel</name>
     <message>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="-682"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="-676"/>
         <source>&lt;qt&gt;Set variations on the program above, if available in the studio&lt;/qt&gt;</source>
         <translation type="unfinished">&lt;qt&gt;Set variations on the program above, if available in the studio&lt;/qt&gt;</translation>
     </message>
@@ -16736,7 +16735,7 @@ delay at the start of playback due to the amount of data being transmitted.</sou
         <translation>从外部接收</translation>
     </message>
     <message>
-        <location line="+124"/>
+        <location line="+118"/>
         <source>No connection</source>
         <translation>无连接</translation>
     </message>
@@ -16954,7 +16953,7 @@ delay at the start of playback due to the amount of data being transmitted.</sou
         <translation>正在录音</translation>
     </message>
     <message>
-        <location line="+124"/>
+        <location line="+109"/>
         <source>%1 (%2)</source>
         <translation>%1 (%2)</translation>
     </message>
@@ -17439,12 +17438,12 @@ Double-click to open the marker editor.</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location line="+382"/>
+        <location line="+385"/>
         <source>Estimated key signature shown</source>
         <translation type="unfinished">估计的调号显示</translation>
     </message>
     <message>
-        <location line="-867"/>
+        <location line="-870"/>
         <source>Estimated time signature shown</source>
         <translation type="unfinished">估计的时间标记显示为</translation>
     </message>
@@ -18554,7 +18553,7 @@ This is a bug (the program would previously have crashed by now)</source>
         <translation>  未选中 </translation>
     </message>
     <message>
-        <location line="+2664"/>
+        <location line="+2661"/>
         <source>Chord</source>
         <translation>和弦</translation>
     </message>
@@ -18571,7 +18570,7 @@ This is a bug (the program would previously have crashed by now)</source>
         <translation>%1 %2</translation>
     </message>
     <message>
-        <location line="-2261"/>
+        <location line="-2258"/>
         <source>Unknown spacing action %1</source>
         <translation type="unfinished">未知的间隔行为 %1</translation>
     </message>
@@ -18628,12 +18627,12 @@ This is a bug (the program would previously have crashed by now)</source>
         <location line="+58"/>
         <location line="+901"/>
         <location line="+730"/>
-        <location line="+1075"/>
+        <location line="+1072"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location line="-3017"/>
+        <location line="-3014"/>
         <source>Printing with LilyPond...</source>
         <translation>正在使用 LilyPond 打印...</translation>
     </message>
@@ -18665,12 +18664,12 @@ This is a bug (the program would previously have crashed by now)</source>
         <translation>无法粘贴到这点.</translation>
     </message>
     <message>
-        <location line="+2791"/>
+        <location line="+2788"/>
         <source>Move Events to Staff Above</source>
         <translation>移动事件到上一谱表</translation>
     </message>
     <message>
-        <location line="-2648"/>
+        <location line="-2645"/>
         <source>Raising velocities...</source>
         <translation>正在提升力度...</translation>
     </message>
@@ -18680,7 +18679,7 @@ This is a bug (the program would previously have crashed by now)</source>
         <translation>正在降低力度...</translation>
     </message>
     <message>
-        <location line="+2795"/>
+        <location line="+2792"/>
         <source>Edit Text Event</source>
         <translation>编辑文本事件</translation>
     </message>
@@ -18695,7 +18694,7 @@ This is a bug (the program would previously have crashed by now)</source>
         <translation>正在压缩音符...</translation>
     </message>
     <message>
-        <location line="-2111"/>
+        <location line="-2108"/>
         <source>Unknown note insert action %1</source>
         <translation>未知的音符插入行为 %1</translation>
     </message>
@@ -18705,13 +18704,13 @@ This is a bug (the program would previously have crashed by now)</source>
         <translation>正在插入音符</translation>
     </message>
     <message>
-        <location line="+2285"/>
+        <location line="+2282"/>
         <location line="+10"/>
         <source>Adding dot...</source>
         <translation>正在添加附点...</translation>
     </message>
     <message>
-        <location line="-1906"/>
+        <location line="-1903"/>
         <source>Ornament track %1 bar %2</source>
         <translation type="unfinished"></translation>
     </message>
@@ -18762,7 +18761,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+151"/>
+        <location line="+148"/>
         <source>Estimated time signature shown</source>
         <translation type="unfinished">估计的时间标记显示为</translation>
     </message>
@@ -20335,7 +20334,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
 <context>
     <name>Rosegarden::RoseXmlHandler</name>
     <message>
-        <location filename="../../src/document/RoseXmlHandler.cpp" line="+442"/>
+        <location filename="../../src/document/RoseXmlHandler.cpp" line="+446"/>
         <source>This file was written by Rosegarden %1, and it uses
 a different file format that cannot be read by this version.</source>
         <translation>此文件由 Rosegarden %1 制作, 它使用了一个不能由此版本阅读的文件格式.</translation>
@@ -20386,7 +20385,7 @@ There may be some incompatibilities with the file format.</source>
         <location line="+57"/>
         <location line="+64"/>
         <location line="+42"/>
-        <location line="+411"/>
+        <location line="+419"/>
         <location line="+696"/>
         <location line="+25"/>
         <location line="+3"/>
@@ -20394,7 +20393,7 @@ There may be some incompatibilities with the file format.</source>
         <location line="+10"/>
         <location line="+29"/>
         <location line="+13"/>
-        <location line="+1019"/>
+        <location line="+1020"/>
         <location line="+226"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
@@ -20404,7 +20403,7 @@ There may be some incompatibilities with the file format.</source>
         <translation type="obsolete">无法保存文档到 %1</translation>
     </message>
     <message numerus="yes">
-        <location line="-2678"/>
+        <location line="-2687"/>
         <source>Delete the %n audio file(s) recorded during the unsaved session?</source>
         <translation>
             <numerusform>要删除未保存录音中的 %n 个音频文件吗?</numerusform>
@@ -20464,12 +20463,12 @@ Please select any you wish to delete permanently from the hard disk.
         <translation>正在生成音频预览...</translation>
     </message>
     <message>
-        <location line="+44"/>
+        <location line="+48"/>
         <source>Merge</source>
         <translation>合并</translation>
     </message>
     <message>
-        <location line="+509"/>
+        <location line="+513"/>
         <source>&apos;%1&apos; is read-only.  Please save to a different file.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -20489,7 +20488,7 @@ Please select any you wish to delete permanently from the hard disk.
         <translation>将临时输出文件 &apos;%1&apos;重命名为输出文件 &apos;%2&apos; 失败</translation>
     </message>
     <message>
-        <location line="+1851"/>
+        <location line="+1852"/>
         <source>Warning</source>
         <translation type="unfinished">警告</translation>
     </message>
@@ -20534,7 +20533,7 @@ editing this file, delete the lock file and try again.
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-1721"/>
+        <location line="-1722"/>
         <source>Error while writing on &apos;%1&apos;</source>
         <translation>写入 &apos;%1&apos; 时出错</translation>
     </message>
@@ -20591,7 +20590,7 @@ We recommend you re-save this file from this version of Rosegarden to ensure tha
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+650"/>
+        <location line="+651"/>
         <source>Insert Recorded MIDI</source>
         <translation>插入录制好的 MIDI</translation>
     </message>
@@ -20610,7 +20609,7 @@ We recommend you re-save this file from this version of Rosegarden to ensure tha
 <context>
     <name>Rosegarden::RosegardenMainViewWidget</name>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="+292"/>
+        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="+287"/>
         <source>Selection must contain only audio or non-audio segments</source>
         <translation>选择只能包括音频或非音频片段</translation>
     </message>
@@ -20621,7 +20620,7 @@ We recommend you re-save this file from this version of Rosegarden to ensure tha
         <location line="+39"/>
         <location line="+127"/>
         <location line="+77"/>
-        <location line="+757"/>
+        <location line="+728"/>
         <location line="+3"/>
         <location line="+61"/>
         <location line="+6"/>
@@ -20630,7 +20629,7 @@ We recommend you re-save this file from this version of Rosegarden to ensure tha
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location line="-1394"/>
+        <location line="-1365"/>
         <location line="+133"/>
         <location line="+172"/>
         <location line="+39"/>
@@ -20651,7 +20650,7 @@ See Edit -&gt; Preferences -&gt; Audio.</source>
 见 编辑 -&gt; 选项 -&gt; 音频.</translation>
     </message>
     <message>
-        <location line="+757"/>
+        <location line="+728"/>
         <source>Cannot add dropped file.  JACK audio server is not available.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -20690,7 +20689,7 @@ See Edit -&gt; Preferences -&gt; Audio.</source>
 <context>
     <name>Rosegarden::RosegardenMainWindow</name>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="+331"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="+330"/>
         <source>Initializing plugin manager...</source>
         <translation>正在初始化插件管理器...</translation>
     </message>
@@ -20720,35 +20719,31 @@ See Edit -&gt; Preferences -&gt; Audio.</source>
         <translation>正在启动...</translation>
     </message>
     <message>
-        <location line="+517"/>
+        <location line="+516"/>
         <source>  Zoom:  </source>
         <translation>  缩放:  </translation>
     </message>
     <message>
-        <location line="+138"/>
-        <location line="+181"/>
-        <location line="+543"/>
-        <location line="+461"/>
         <source>%1 - %2</source>
-        <translation>%1 - %2</translation>
+        <translation type="obsolete">%1 - %2</translation>
     </message>
     <message>
-        <location line="-768"/>
+        <location line="+548"/>
         <source>File &quot;%1&quot; does not exist</source>
         <translation>文件 %1 不存在</translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+8"/>
         <source>File &quot;%1&quot; is actually a directory</source>
         <translation>文件 &quot;%1&quot; 实际上是一个目录</translation>
     </message>
     <message>
-        <location line="+8"/>
+        <location line="+10"/>
         <source>You do not have read permission for &quot;%1&quot;</source>
         <translation>您没有读文件 &quot;%1&quot; 的权限</translation>
     </message>
     <message>
-        <location line="+98"/>
+        <location line="+102"/>
         <source>An auto-save file for this document has been found
 Do you want to open it instead ?</source>
         <translation>找到一个为该文档自动保存的文件
@@ -20756,13 +20751,13 @@ Do you want to open it instead ?</source>
     </message>
     <message>
         <location line="+141"/>
-        <location line="+4728"/>
+        <location line="+4729"/>
         <source>Untitled</source>
         <translation>未命名</translation>
     </message>
     <message>
-        <location line="-4715"/>
-        <location line="+326"/>
+        <location line="-4716"/>
+        <location line="+323"/>
         <location line="+165"/>
         <source>Could not save document at %1
 Error was : %2</source>
@@ -20770,10 +20765,10 @@ Error was : %2</source>
 错误信息是 : %2</translation>
     </message>
     <message>
-        <location line="-489"/>
-        <location line="+327"/>
+        <location line="-486"/>
+        <location line="+324"/>
         <location line="+165"/>
-        <location line="+6309"/>
+        <location line="+6322"/>
         <source>Could not save document at %1</source>
         <translation>无法保存文档于 %1</translation>
     </message>
@@ -20782,53 +20777,55 @@ Error was : %2</source>
         <translation type="obsolete">正在打开一个新的应用程序窗口...</translation>
     </message>
     <message>
-        <location line="-6732"/>
+        <location line="-6743"/>
         <source>Creating new document...</source>
         <translation>正在创建新文档...</translation>
     </message>
     <message>
-        <location line="+66"/>
+        <location line="+91"/>
         <source>Malformed URL
 %1</source>
         <translation>格式不正确的 URL
 %1</translation>
     </message>
     <message>
-        <location line="+49"/>
-        <location line="+106"/>
+        <location line="+30"/>
+        <location line="+98"/>
         <source>Opening file...</source>
         <translation>正在打开文件...</translation>
     </message>
     <message>
-        <location line="-79"/>
-        <location line="+6140"/>
+        <location line="-87"/>
+        <location line="+6152"/>
         <source>All supported files</source>
         <translation>所有支持的文件</translation>
     </message>
     <message>
-        <location line="-6139"/>
-        <location line="+34"/>
+        <location line="-6151"/>
+        <location line="+42"/>
         <location line="+215"/>
         <source>Rosegarden files</source>
         <translation>Rosegarden 文件</translation>
     </message>
     <message>
-        <location line="-248"/>
-        <location line="+2018"/>
+        <location line="-256"/>
+        <location line="+2030"/>
         <location line="+36"/>
         <source>MIDI files</source>
         <translation>MIDI 文件</translation>
     </message>
     <message>
-        <location line="-2053"/>
-        <location line="+33"/>
+        <location line="-2065"/>
+        <location line="+41"/>
         <location line="+220"/>
-        <location line="+1713"/>
+        <location line="+1717"/>
         <location line="+52"/>
         <location line="+36"/>
         <location line="+262"/>
         <location line="+36"/>
-        <location line="+207"/>
+        <location line="+85"/>
+        <location line="+35"/>
+        <location line="+87"/>
         <location line="+36"/>
         <location line="+639"/>
         <location line="+39"/>
@@ -20841,37 +20838,39 @@ Error was : %2</source>
         <translation>所有文件</translation>
     </message>
     <message>
-        <location line="-6142"/>
-        <location line="+35"/>
+        <location line="-6154"/>
+        <location line="+43"/>
         <source>Open File</source>
         <translation>打开文件</translation>
     </message>
     <message>
-        <location line="-1140"/>
+        <location line="-1138"/>
         <source>Ctrl+R</source>
         <translation>Ctrl+R</translation>
     </message>
     <message>
-        <location line="+994"/>
+        <location line="+1012"/>
         <source>%1%2 - %3</source>
         <translation>%1%2 - %3</translation>
     </message>
     <message>
-        <location line="+56"/>
-        <location line="+110"/>
-        <location line="+1932"/>
+        <location line="+52"/>
+        <location line="+94"/>
+        <location line="+1936"/>
         <location line="+52"/>
         <location line="+36"/>
         <location line="+262"/>
         <location line="+36"/>
-        <location line="+207"/>
+        <location line="+85"/>
+        <location line="+35"/>
+        <location line="+87"/>
         <location line="+36"/>
         <location line="+3539"/>
         <source>Cannot open file %1</source>
         <translation>无法打开文件“%1”</translation>
     </message>
     <message>
-        <location line="-6058"/>
+        <location line="-6062"/>
         <source>Saving file...</source>
         <translation>正在保存文件...</translation>
     </message>
@@ -20968,12 +20967,12 @@ Error was : %2</source>
     </message>
     <message>
         <location line="+33"/>
-        <location line="+2891"/>
+        <location line="+2895"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location line="-2819"/>
+        <location line="-2823"/>
         <source>Jog Selection</source>
         <translation type="unfinished">清除选择</translation>
     </message>
@@ -21064,7 +21063,7 @@ Error was : %2</source>
         <translation>切换状态栏...</translation>
     </message>
     <message>
-        <location line="+68"/>
+        <location line="+72"/>
         <source>The join tool isn&apos;t implemented yet.  Instead please highlight the segments you want to join and then use the menu option:
 
         Segments-&gt;Collapse Segments.
@@ -21108,14 +21107,17 @@ Error was : %2</source>
         <translation>http://rosegardenmusic.com/wiki/doc:manual-en</translation>
     </message>
     <message>
-        <location line="-6751"/>
-        <location line="+374"/>
-        <location line="+94"/>
+        <location line="-6755"/>
+        <location line="+351"/>
+        <location line="+8"/>
+        <location line="+10"/>
+        <location line="+26"/>
+        <location line="+76"/>
         <location line="+155"/>
         <location line="+2"/>
-        <location line="+137"/>
-        <location line="+18"/>
-        <location line="+110"/>
+        <location line="+158"/>
+        <location line="+9"/>
+        <location line="+95"/>
         <location line="+59"/>
         <location line="+3"/>
         <location line="+90"/>
@@ -21130,7 +21132,7 @@ Error was : %2</source>
         <location line="+381"/>
         <location line="+76"/>
         <location line="+25"/>
-        <location line="+840"/>
+        <location line="+844"/>
         <location line="+39"/>
         <location line="+52"/>
         <location line="+36"/>
@@ -21138,7 +21140,10 @@ Error was : %2</source>
         <location line="+143"/>
         <location line="+36"/>
         <location line="+35"/>
-        <location line="+172"/>
+        <location line="+50"/>
+        <location line="+35"/>
+        <location line="+36"/>
+        <location line="+51"/>
         <location line="+36"/>
         <location line="+35"/>
         <location line="+317"/>
@@ -21169,13 +21174,13 @@ Error was : %2</source>
         <location line="+3"/>
         <location line="+10"/>
         <location line="+42"/>
-        <location line="+434"/>
+        <location line="+443"/>
         <location line="+2"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location line="-668"/>
+        <location line="-677"/>
         <source>http://rosegardenmusic.com/tutorials/</source>
         <translation type="unfinished"></translation>
     </message>
@@ -21248,17 +21253,17 @@ Please exit and restart Rosegarden to restore sound capability.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-4934"/>
+        <location line="-4935"/>
         <source>Starting sequencer...</source>
         <translation>启动音序器...</translation>
     </message>
     <message>
-        <location line="+1310"/>
+        <location line="+1274"/>
         <source>File &quot;%1&quot; is a Rosegarden Device, and must be imported using the MIDI device manager.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+653"/>
+        <location line="+686"/>
         <source>Saving file%1with a new filename...</source>
         <comment>&apos;file%1with&apos; is correct. %1 will either become &apos; &apos; or &apos; as a template &apos; at runtime</comment>
         <translation>正在将文件%1保存为新的文件名...</translation>
@@ -21306,7 +21311,23 @@ No segment will be split.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+1387"/>
+        <location line="+1270"/>
+        <location line="+35"/>
+        <source>Open Hydrogen File</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+34"/>
+        <source>Importing Hydrogen file...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+21"/>
+        <source>Can&apos;t load Hydrogen file.  It appears to be corrupted.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+31"/>
         <location line="+36"/>
         <source>Open MusicXML File</source>
         <translation type="unfinished"></translation>
@@ -21434,7 +21455,7 @@ For assistance with correct audio and MIDI configuration, go to http://rosegarde
         <translation>XML 文件</translation>
     </message>
     <message numerus="yes">
-        <location line="-2466"/>
+        <location line="-2470"/>
         <location line="+54"/>
         <source>Split %n Segment(s) by Drum</source>
         <translation type="unfinished">
@@ -21447,7 +21468,7 @@ For assistance with correct audio and MIDI configuration, go to http://rosegarde
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+2564"/>
+        <location line="+2568"/>
         <source>The audio file path does not exist or is not writable.
 Please set the audio file path to a valid directory in Document Properties before recording audio.
 Would you like to set it now?</source>
@@ -21614,24 +21635,24 @@ Error was : %2</source>
         <translation>&lt;qt&gt;&lt;p&gt;音频文件路径 &quot;%1&quot; 可用, 但是不可写.&lt;/p&gt;%2&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+39"/>
+        <location line="+44"/>
         <source>Rosegarden - Warning</source>
         <translation type="unfinished">Rosegarden - 警告</translation>
     </message>
     <message>
-        <location line="+0"/>
+        <location line="+1"/>
         <source>&lt;qt&gt;&lt;p&gt;The current file has been modified.&lt;/p&gt;&lt;p&gt;Do you want to save it?&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished">&lt;qt&gt;&lt;p&gt;当前文件已经被修改.&lt;/p&gt;&lt;p&gt;要保存吗?&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+21"/>
+        <location line="+24"/>
         <source>Could not save document at %1
 (%2)</source>
         <translation type="unfinished">无法保存文件到 %1
 (%2)</translation>
     </message>
     <message>
-        <location line="-5832"/>
+        <location line="-5845"/>
         <source>The audio file path does not exist or is not writable.
 You must set the audio file path to a valid directory in Document Properties before %1.
 Would you like to set it now?</source>
@@ -21854,7 +21875,7 @@ Would you like to set it now?</source>
         <translation>片段参数</translation>
     </message>
     <message>
-        <location line="+37"/>
+        <location line="+28"/>
         <source>Label</source>
         <translation>标签</translation>
     </message>
@@ -22023,9 +22044,8 @@ before new transposition can be applied.</source>
         <translation>输入新标签:</translation>
     </message>
     <message>
-        <location line="+66"/>
         <source>Instrument</source>
-        <translation>乐器</translation>
+        <translation type="obsolete">乐器</translation>
     </message>
 </context>
 <context>
@@ -24048,7 +24068,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
         <translation>&lt;未命名&gt;</translation>
     </message>
     <message>
-        <location line="+917"/>
+        <location line="+909"/>
         <source>Mute track</source>
         <translation>音轨静音</translation>
     </message>
@@ -24136,7 +24156,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
 <context>
     <name>Rosegarden::TrackParameterBox</name>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="-462"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="-1022"/>
         <source>Track</source>
         <translation>音轨</translation>
     </message>
@@ -24146,13 +24166,13 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
         <translation>音轨参数</translation>
     </message>
     <message>
-        <location line="+48"/>
-        <location line="+677"/>
+        <location line="+16"/>
+        <location line="+1180"/>
         <source>&lt;untitled&gt;</source>
         <translation>&lt;未命名&gt;</translation>
     </message>
     <message>
-        <location line="-669"/>
+        <location line="-1172"/>
         <source>Playback parameters</source>
         <translation>播放参数</translation>
     </message>
@@ -24198,7 +24218,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
         <translation>通道</translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location line="+15"/>
         <source>Thru Routing</source>
         <translation type="unfinished"></translation>
     </message>
@@ -24440,7 +24460,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
         <translation>&lt;qt&gt;&lt;p&gt;在一个谱表上选择建议播放的最高音符&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="-257"/>
+        <location line="-261"/>
         <source>&lt;qt&gt;&lt;p&gt;Choose the device this track will use for playback.&lt;/p&gt;&lt;p&gt;Click &lt;img src=&quot;:pixmaps/toolbar/manage-midi-devices.xpm&quot;&gt; to connect this device to a useful output if you do not hear sound&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -24450,7 +24470,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
         <translation type="unfinished">&lt;qt&gt;&lt;p&gt;This track will only record Audio/MIDI from the selected channel, filtering anything else out&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+58"/>
+        <location line="+62"/>
         <source>&lt;qt&gt;&lt;p&gt;Choose normal, \small or \tiny font size for notation elements on this (normal-sized) staff when exporting to LilyPond.&lt;/p&gt;&lt;p&gt;This is as close as we get to enabling you to print parts in cue size&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -24555,7 +24575,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
         <translation>最高</translation>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="+10"/>
         <source>Color</source>
         <translation>颜色</translation>
     </message>
@@ -24565,30 +24585,28 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
         <translation>&lt;qt&gt;&lt;p&gt;新的片段将使用此颜色创建&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+191"/>
-        <location line="+1"/>
         <source>Audio</source>
-        <translation>音频</translation>
+        <translation type="obsolete">音频</translation>
     </message>
     <message>
-        <location line="+17"/>
-        <location line="+17"/>
+        <location line="-198"/>
+        <location line="+994"/>
         <source>All</source>
         <translation>全部</translation>
     </message>
     <message>
-        <location line="+59"/>
-        <location line="+4"/>
+        <location line="+207"/>
+        <location line="+8"/>
         <source> %1</source>
         <translation> %1</translation>
     </message>
     <message>
-        <location line="+103"/>
+        <location line="-116"/>
         <source>[ Track %1 - %2 ]</source>
         <translation>[ 音轨 %1 - %2 ]</translation>
     </message>
     <message>
-        <location line="+267"/>
+        <location line="-525"/>
         <source>Default</source>
         <translation>默认</translation>
     </message>
@@ -24598,7 +24616,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
         <translation>添加新颜色</translation>
     </message>
     <message>
-        <location line="+28"/>
+        <location line="+35"/>
         <source>New Color Name</source>
         <translation>新颜色名称</translation>
     </message>
@@ -24613,29 +24631,28 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
         <translation>新建</translation>
     </message>
     <message>
-        <location line="+32"/>
+        <location line="+29"/>
         <source>Highest playable note</source>
         <translation>可播放的最高音</translation>
     </message>
     <message>
-        <location line="+22"/>
+        <location line="+25"/>
         <source>Lowest playable note</source>
         <translation>可播放的最低音</translation>
     </message>
     <message>
-        <location line="+56"/>
+        <location line="+71"/>
         <source>The instrument preset database is corrupt.  Check your installation.</source>
         <translation>乐器预设数据库损坏. 请检查软件安装.</translation>
     </message>
     <message>
-        <location line="+0"/>
+        <location line="-1"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location line="+34"/>
         <source>Segment</source>
-        <translation>片段</translation>
+        <translation type="obsolete">片段</translation>
     </message>
 </context>
 <context>

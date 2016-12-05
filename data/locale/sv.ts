@@ -8277,7 +8277,7 @@
     <message>
         <location filename="../../src/base/Studio.cpp" line="+61"/>
         <location filename="../../src/sound/AlsaDriver.cpp" line="+693"/>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="+554"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="+1098"/>
         <location filename="../AutoloadStrings.cpp" line="-189"/>
         <source>Synth plugin</source>
         <translation>Syntinsticksmodul</translation>
@@ -10425,7 +10425,7 @@
         <translation>Okänd</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="+724"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="+718"/>
         <location line="+131"/>
         <source>%1. %2</source>
         <translation>%1. %2</translation>
@@ -10451,7 +10451,7 @@
         <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="+1683"/>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="+909"/>
         <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="+1045"/>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="+468"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="+470"/>
         <source>%1 Controller %2 %3</source>
         <translation>%1 effekt %2 %3</translation>
     </message>
@@ -11746,14 +11746,14 @@ Välj de du vill ta bort permanent från hårddisken.
     <message>
         <location line="+11"/>
         <location line="+125"/>
-        <location line="+147"/>
+        <location line="+148"/>
         <location line="+57"/>
         <location line="+185"/>
         <source>&lt;none&gt;</source>
         <translation>&lt;ingen&gt;</translation>
     </message>
     <message>
-        <location line="-512"/>
+        <location line="-513"/>
         <location line="+125"/>
         <source>Click to load an audio plugin</source>
         <translation>Klicka för att läsa in en ljudmodul</translation>
@@ -11795,7 +11795,7 @@ Välj de du vill ta bort permanent från hårddisken.
         <translation>Huvudnivå</translation>
     </message>
     <message>
-        <location line="+94"/>
+        <location line="+95"/>
         <location line="+57"/>
         <location line="+185"/>
         <source>&lt;no plugin&gt;</source>
@@ -13563,7 +13563,7 @@ Välj de du vill ta bort permanent från hårddisken.
         <translation>[ Ingen port ]</translation>
     </message>
     <message>
-        <location line="+720"/>
+        <location line="+694"/>
         <location line="+11"/>
         <location line="+16"/>
         <source>New Device</source>
@@ -13698,7 +13698,7 @@ Välj de du vill ta bort permanent från hårddisken.
 <context>
     <name>Rosegarden::DocumentConfigureDialog</name>
     <message>
-        <location filename="../../src/gui/dialogs/DocumentConfigureDialog.cpp" line="+39"/>
+        <location filename="../../src/gui/dialogs/DocumentConfigureDialog.cpp" line="+42"/>
         <source>Document Properties</source>
         <translation>Dokumentegenskaper</translation>
     </message>
@@ -13717,7 +13717,7 @@ Välj de du vill ta bort permanent från hårddisken.
         <translation>%1 minuter %2,%3%4 sekunder (%5 enheter, %6 takter)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="+95"/>
+        <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="+98"/>
         <source>Headers</source>
         <translation>Rubriker</translation>
     </message>
@@ -15116,7 +15116,7 @@ Vill du försöka söka efter filen eller hoppa över den?</translation>
         <translation>Utskrivningsbara rubriker</translation>
     </message>
     <message>
-        <location line="+35"/>
+        <location line="+37"/>
         <source>Dedication</source>
         <translation>Dedikation</translation>
     </message>
@@ -15181,12 +15181,12 @@ Vill du försöka söka efter filen eller hoppa över den?</translation>
         <translation>Etikettlinje</translation>
     </message>
     <message>
-        <location line="+23"/>
+        <location line="+24"/>
         <source>The composition comes here.</source>
         <translation>Kompositionen följer här.</translation>
     </message>
     <message>
-        <location line="+23"/>
+        <location line="+13"/>
         <source>Additional headers</source>
         <translation>Ytterligare rubriker</translation>
     </message>
@@ -15533,9 +15533,8 @@ Exempeltext från filen:</translation>
         <translation>Instrumentparametrar</translation>
     </message>
     <message>
-        <location line="+62"/>
         <source>Track</source>
-        <translation>Spår</translation>
+        <translation type="obsolete">Spår</translation>
     </message>
 </context>
 <context>
@@ -16683,7 +16682,7 @@ fördröjning vid uppspelningens start, på grund av mängden data som skickas.<
 <context>
     <name>Rosegarden::MIDIInstrumentParameterPanel</name>
     <message>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="-682"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="-676"/>
         <source>&lt;qt&gt;Set variations on the program above, if available in the studio&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Ställ in variationer av programmet ovan, om tillgängliga i studion&lt;/qt&gt;</translation>
     </message>
@@ -16768,7 +16767,7 @@ fördröjning vid uppspelningens start, på grund av mängden data som skickas.<
         <translation>Ta emot extern</translation>
     </message>
     <message>
-        <location line="+124"/>
+        <location line="+118"/>
         <source>No connection</source>
         <translation>Ingen anslutning</translation>
     </message>
@@ -16986,7 +16985,7 @@ fördröjning vid uppspelningens start, på grund av mängden data som skickas.<
         <translation>vid inspelning</translation>
     </message>
     <message>
-        <location line="+124"/>
+        <location line="+109"/>
         <source>%1 (%2)</source>
         <translation>%1 (%2)</translation>
     </message>
@@ -17472,12 +17471,12 @@ Dubbel-klicka för att öppna markeringsredigeraren.</translation>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location line="+382"/>
+        <location line="+385"/>
         <source>Estimated key signature shown</source>
         <translation>Uppskattad tonartssignatur visas</translation>
     </message>
     <message>
-        <location line="-867"/>
+        <location line="-870"/>
         <source>Estimated time signature shown</source>
         <translation>Uppskattad taktart visas</translation>
     </message>
@@ -18589,7 +18588,7 @@ Detta är ett programfel (tidigare skulle programmet redan ha kraschat)</transla
         <translation>  Ingen markering </translation>
     </message>
     <message>
-        <location line="+2664"/>
+        <location line="+2661"/>
         <source>Chord</source>
         <translation>Ackord</translation>
     </message>
@@ -18606,7 +18605,7 @@ Detta är ett programfel (tidigare skulle programmet redan ha kraschat)</transla
         <translation>%1 %2</translation>
     </message>
     <message>
-        <location line="-2261"/>
+        <location line="-2258"/>
         <source>Unknown spacing action %1</source>
         <translation>Okänd avståndsåtgärd %1</translation>
     </message>
@@ -18664,12 +18663,12 @@ Detta är ett programfel (tidigare skulle programmet redan ha kraschat)</transla
         <location line="+58"/>
         <location line="+901"/>
         <location line="+730"/>
-        <location line="+1075"/>
+        <location line="+1072"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location line="-3017"/>
+        <location line="-3014"/>
         <source>Printing with LilyPond...</source>
         <translation>Skriver ut med Lilypond...</translation>
     </message>
@@ -18701,12 +18700,12 @@ Detta är ett programfel (tidigare skulle programmet redan ha kraschat)</transla
         <translation>Kunde inte klistra in på den här platsen.</translation>
     </message>
     <message>
-        <location line="+2791"/>
+        <location line="+2788"/>
         <source>Move Events to Staff Above</source>
         <translation>Flytta händelser till systemet ovanför</translation>
     </message>
     <message>
-        <location line="-2648"/>
+        <location line="-2645"/>
         <source>Raising velocities...</source>
         <translation>Ökar ljudstyrkor...</translation>
     </message>
@@ -18716,7 +18715,7 @@ Detta är ett programfel (tidigare skulle programmet redan ha kraschat)</transla
         <translation>Minskar ljudstyrkor...</translation>
     </message>
     <message>
-        <location line="+2795"/>
+        <location line="+2792"/>
         <source>Edit Text Event</source>
         <translation>Redigera texthändelse</translation>
     </message>
@@ -18731,7 +18730,7 @@ Detta är ett programfel (tidigare skulle programmet redan ha kraschat)</transla
         <translation>Lägger ihop noter...</translation>
     </message>
     <message>
-        <location line="-2111"/>
+        <location line="-2108"/>
         <source>Unknown note insert action %1</source>
         <translation>Okänd notinfogningsåtgärd %1</translation>
     </message>
@@ -18741,13 +18740,13 @@ Detta är ett programfel (tidigare skulle programmet redan ha kraschat)</transla
         <translation>Infogar not</translation>
     </message>
     <message>
-        <location line="+2285"/>
+        <location line="+2282"/>
         <location line="+10"/>
         <source>Adding dot...</source>
         <translation>Lägger till punkt...</translation>
     </message>
     <message>
-        <location line="-1906"/>
+        <location line="-1903"/>
         <source>Ornament track %1 bar %2</source>
         <translation>Ornament spår %1 takt %2</translation>
     </message>
@@ -18799,7 +18798,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
 Försäkra dig om att enheten är riktigt inställd i dialogrutan Hantera MIDI-enheter i huvudfönstret.</translation>
     </message>
     <message>
-        <location line="+151"/>
+        <location line="+148"/>
         <source>Estimated time signature shown</source>
         <translation>Uppskattad taktart visas</translation>
     </message>
@@ -20373,7 +20372,7 @@ Försäkra dig om att enheten är riktigt inställd i dialogrutan Hantera MIDI-e
 <context>
     <name>Rosegarden::RoseXmlHandler</name>
     <message>
-        <location filename="../../src/document/RoseXmlHandler.cpp" line="+442"/>
+        <location filename="../../src/document/RoseXmlHandler.cpp" line="+446"/>
         <source>This file was written by Rosegarden %1, and it uses
 a different file format that cannot be read by this version.</source>
         <translation>Den här filen är skriven av Rosegarden %1, och använder
@@ -20425,7 +20424,7 @@ här versionen. Det kan finnas vissa problem med filformatet.</translation>
         <location line="+57"/>
         <location line="+64"/>
         <location line="+42"/>
-        <location line="+411"/>
+        <location line="+419"/>
         <location line="+696"/>
         <location line="+25"/>
         <location line="+3"/>
@@ -20433,7 +20432,7 @@ här versionen. Det kan finnas vissa problem med filformatet.</translation>
         <location line="+10"/>
         <location line="+29"/>
         <location line="+13"/>
-        <location line="+1019"/>
+        <location line="+1020"/>
         <location line="+226"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
@@ -20443,7 +20442,7 @@ här versionen. Det kan finnas vissa problem med filformatet.</translation>
         <translation type="obsolete">Kunde inte spara dokument i %1</translation>
     </message>
     <message numerus="yes">
-        <location line="-2678"/>
+        <location line="-2687"/>
         <source>Delete the %n audio file(s) recorded during the unsaved session?</source>
         <translation>
             <numerusform>Radera %n ljudfil inspelad under den osparade sessionen?</numerusform>
@@ -20511,12 +20510,12 @@ Välj alla du vill ta bort permanent från hårddisken.
         <translation>Skapar förhandsgranskning av ljud...</translation>
     </message>
     <message>
-        <location line="+44"/>
+        <location line="+48"/>
         <source>Merge</source>
         <translation>Sammanfoga</translation>
     </message>
     <message>
-        <location line="+509"/>
+        <location line="+513"/>
         <source>&apos;%1&apos; is read-only.  Please save to a different file.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -20536,7 +20535,7 @@ Välj alla du vill ta bort permanent från hårddisken.
         <translation>Misslyckades byta namn på tillfällig utdatafil &apos;%1&apos; till den önskade utdatafilen &apos;%2&apos;</translation>
     </message>
     <message>
-        <location line="+1851"/>
+        <location line="+1852"/>
         <source>Warning</source>
         <translation>Varning</translation>
     </message>
@@ -20581,7 +20580,7 @@ editing this file, delete the lock file and try again.
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-1721"/>
+        <location line="-1722"/>
         <source>Error while writing on &apos;%1&apos;</source>
         <translation>Fel vid skrivning till &apos;%1&apos;</translation>
     </message>
@@ -20641,7 +20640,7 @@ Du rekommenderas att spara filen med den här versionen av Rosegarden,
 för att försäkra dig om att den kan läsas in igen i framtida versioner.</translation>
     </message>
     <message>
-        <location line="+650"/>
+        <location line="+651"/>
         <source>Insert Recorded MIDI</source>
         <translation>Infoga inspelad MIDI</translation>
     </message>
@@ -20660,7 +20659,7 @@ för att försäkra dig om att den kan läsas in igen i framtida versioner.</tra
 <context>
     <name>Rosegarden::RosegardenMainViewWidget</name>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="+292"/>
+        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="+287"/>
         <source>Selection must contain only audio or non-audio segments</source>
         <translation>Markering får bara innehålla segment med eller utan ljud</translation>
     </message>
@@ -20671,7 +20670,7 @@ för att försäkra dig om att den kan läsas in igen i framtida versioner.</tra
         <location line="+39"/>
         <location line="+127"/>
         <location line="+77"/>
-        <location line="+757"/>
+        <location line="+728"/>
         <location line="+3"/>
         <location line="+61"/>
         <location line="+6"/>
@@ -20680,7 +20679,7 @@ för att försäkra dig om att den kan läsas in igen i framtida versioner.</tra
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location line="-1394"/>
+        <location line="-1365"/>
         <location line="+133"/>
         <location line="+172"/>
         <location line="+39"/>
@@ -20701,7 +20700,7 @@ See Edit -&gt; Preferences -&gt; Audio.</source>
 Se Redigera -&gt; Inställningar -&gt; Ljud.</translation>
     </message>
     <message>
-        <location line="+757"/>
+        <location line="+728"/>
         <source>Cannot add dropped file.  JACK audio server is not available.</source>
         <translation>Kan inte lägga till släppt fil. Ljudservern JACK är inte tillgänglig.</translation>
     </message>
@@ -20740,7 +20739,7 @@ Se Redigera -&gt; Inställningar -&gt; Ljud.</translation>
 <context>
     <name>Rosegarden::RosegardenMainWindow</name>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="+331"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="+330"/>
         <source>Initializing plugin manager...</source>
         <translation>Initierar instickshantering...</translation>
     </message>
@@ -20770,35 +20769,31 @@ Se Redigera -&gt; Inställningar -&gt; Ljud.</translation>
         <translation>Startar...</translation>
     </message>
     <message>
-        <location line="+517"/>
+        <location line="+516"/>
         <source>  Zoom:  </source>
         <translation>  Zooma:  </translation>
     </message>
     <message>
-        <location line="+138"/>
-        <location line="+181"/>
-        <location line="+543"/>
-        <location line="+461"/>
         <source>%1 - %2</source>
-        <translation>%1 %2</translation>
+        <translation type="obsolete">%1 %2</translation>
     </message>
     <message>
-        <location line="-768"/>
+        <location line="+548"/>
         <source>File &quot;%1&quot; does not exist</source>
         <translation>Filen &quot;%1&quot; finns inte</translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+8"/>
         <source>File &quot;%1&quot; is actually a directory</source>
         <translation>Filen &quot;%1&quot; är i själva verket en katalog</translation>
     </message>
     <message>
-        <location line="+8"/>
+        <location line="+10"/>
         <source>You do not have read permission for &quot;%1&quot;</source>
         <translation>Du har inte läsrättigheter till &quot;%1&quot;</translation>
     </message>
     <message>
-        <location line="+98"/>
+        <location line="+102"/>
         <source>An auto-save file for this document has been found
 Do you want to open it instead ?</source>
         <translation>En automatiskt sparad fil för det här dokumentet har hittats.
@@ -20806,13 +20801,13 @@ Vill du öppna den istället?</translation>
     </message>
     <message>
         <location line="+141"/>
-        <location line="+4728"/>
+        <location line="+4729"/>
         <source>Untitled</source>
         <translation>Namnlös</translation>
     </message>
     <message>
-        <location line="-4715"/>
-        <location line="+326"/>
+        <location line="-4716"/>
+        <location line="+323"/>
         <location line="+165"/>
         <source>Could not save document at %1
 Error was : %2</source>
@@ -20820,10 +20815,10 @@ Error was : %2</source>
 Felet är: %2</translation>
     </message>
     <message>
-        <location line="-489"/>
-        <location line="+327"/>
+        <location line="-486"/>
+        <location line="+324"/>
         <location line="+165"/>
-        <location line="+6309"/>
+        <location line="+6322"/>
         <source>Could not save document at %1</source>
         <translation>Kunde inte spara dokument i %1</translation>
     </message>
@@ -20832,53 +20827,55 @@ Felet är: %2</translation>
         <translation type="obsolete">Öppnar ett nytt programfönster...</translation>
     </message>
     <message>
-        <location line="-6732"/>
+        <location line="-6743"/>
         <source>Creating new document...</source>
         <translation>Skapar nytt dokument...</translation>
     </message>
     <message>
-        <location line="+66"/>
+        <location line="+91"/>
         <source>Malformed URL
 %1</source>
         <translation>Felaktig webbadress
 %1</translation>
     </message>
     <message>
-        <location line="+49"/>
-        <location line="+106"/>
+        <location line="+30"/>
+        <location line="+98"/>
         <source>Opening file...</source>
         <translation>Öppnar fil...</translation>
     </message>
     <message>
-        <location line="-79"/>
-        <location line="+6140"/>
+        <location line="-87"/>
+        <location line="+6152"/>
         <source>All supported files</source>
         <translation>Alla filer som stöds</translation>
     </message>
     <message>
-        <location line="-6139"/>
-        <location line="+34"/>
+        <location line="-6151"/>
+        <location line="+42"/>
         <location line="+215"/>
         <source>Rosegarden files</source>
         <translation>Rosegardenfiler</translation>
     </message>
     <message>
-        <location line="-248"/>
-        <location line="+2018"/>
+        <location line="-256"/>
+        <location line="+2030"/>
         <location line="+36"/>
         <source>MIDI files</source>
         <translation>MIDI-filer</translation>
     </message>
     <message>
-        <location line="-2053"/>
-        <location line="+33"/>
+        <location line="-2065"/>
+        <location line="+41"/>
         <location line="+220"/>
-        <location line="+1713"/>
+        <location line="+1717"/>
         <location line="+52"/>
         <location line="+36"/>
         <location line="+262"/>
         <location line="+36"/>
-        <location line="+207"/>
+        <location line="+85"/>
+        <location line="+35"/>
+        <location line="+87"/>
         <location line="+36"/>
         <location line="+639"/>
         <location line="+39"/>
@@ -20891,37 +20888,39 @@ Felet är: %2</translation>
         <translation>Alla filer</translation>
     </message>
     <message>
-        <location line="-6142"/>
-        <location line="+35"/>
+        <location line="-6154"/>
+        <location line="+43"/>
         <source>Open File</source>
         <translation>Öppna fil</translation>
     </message>
     <message>
-        <location line="-1140"/>
+        <location line="-1138"/>
         <source>Ctrl+R</source>
         <translation>Ctrl+R</translation>
     </message>
     <message>
-        <location line="+994"/>
+        <location line="+1012"/>
         <source>%1%2 - %3</source>
         <translation>%1%2 - %3</translation>
     </message>
     <message>
-        <location line="+56"/>
-        <location line="+110"/>
-        <location line="+1932"/>
+        <location line="+52"/>
+        <location line="+94"/>
+        <location line="+1936"/>
         <location line="+52"/>
         <location line="+36"/>
         <location line="+262"/>
         <location line="+36"/>
-        <location line="+207"/>
+        <location line="+85"/>
+        <location line="+35"/>
+        <location line="+87"/>
         <location line="+36"/>
         <location line="+3539"/>
         <source>Cannot open file %1</source>
         <translation>Kan inte öppna filen %1</translation>
     </message>
     <message>
-        <location line="-6058"/>
+        <location line="-6062"/>
         <source>Saving file...</source>
         <translation>Sparar fil...</translation>
     </message>
@@ -21023,12 +21022,12 @@ Felet är: %2</translation>
     </message>
     <message>
         <location line="+33"/>
-        <location line="+2891"/>
+        <location line="+2895"/>
         <source>Warning</source>
         <translation>Varning</translation>
     </message>
     <message>
-        <location line="-2890"/>
+        <location line="-2894"/>
         <source>The audio file path does not exist or is not writable.
 You must set the audio file path to a valid directory in Document Properties before %1.
 Would you like to set it now?</source>
@@ -21129,7 +21128,7 @@ Vill du ange den nu?</translation>
         <translation>Växla statuslisten...</translation>
     </message>
     <message>
-        <location line="+68"/>
+        <location line="+72"/>
         <source>The join tool isn&apos;t implemented yet.  Instead please highlight the segments you want to join and then use the menu option:
 
         Segments-&gt;Collapse Segments.
@@ -21171,14 +21170,17 @@ Segment -&gt; Sammanfoga segment.
         <translation>http://rosegardenmusic.com/wiki/doc:manual-en</translation>
     </message>
     <message>
-        <location line="-6751"/>
-        <location line="+374"/>
-        <location line="+94"/>
+        <location line="-6755"/>
+        <location line="+351"/>
+        <location line="+8"/>
+        <location line="+10"/>
+        <location line="+26"/>
+        <location line="+76"/>
         <location line="+155"/>
         <location line="+2"/>
-        <location line="+137"/>
-        <location line="+18"/>
-        <location line="+110"/>
+        <location line="+158"/>
+        <location line="+9"/>
+        <location line="+95"/>
         <location line="+59"/>
         <location line="+3"/>
         <location line="+90"/>
@@ -21193,7 +21195,7 @@ Segment -&gt; Sammanfoga segment.
         <location line="+381"/>
         <location line="+76"/>
         <location line="+25"/>
-        <location line="+840"/>
+        <location line="+844"/>
         <location line="+39"/>
         <location line="+52"/>
         <location line="+36"/>
@@ -21201,7 +21203,10 @@ Segment -&gt; Sammanfoga segment.
         <location line="+143"/>
         <location line="+36"/>
         <location line="+35"/>
-        <location line="+172"/>
+        <location line="+50"/>
+        <location line="+35"/>
+        <location line="+36"/>
+        <location line="+51"/>
         <location line="+36"/>
         <location line="+35"/>
         <location line="+317"/>
@@ -21232,13 +21237,13 @@ Segment -&gt; Sammanfoga segment.
         <location line="+3"/>
         <location line="+10"/>
         <location line="+42"/>
-        <location line="+434"/>
+        <location line="+443"/>
         <location line="+2"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location line="-668"/>
+        <location line="-677"/>
         <source>http://rosegardenmusic.com/tutorials/</source>
         <translation>http://rosegardenmusic.com/tutorials/</translation>
     </message>
@@ -21312,17 +21317,17 @@ Please exit and restart Rosegarden to restore sound capability.</source>
 Avsluta och starta om Rosegarden för att återställa ljudfunktionen.</translation>
     </message>
     <message>
-        <location line="-4934"/>
+        <location line="-4935"/>
         <source>Starting sequencer...</source>
         <translation>Startar spelarhanteraren...</translation>
     </message>
     <message>
-        <location line="+1310"/>
+        <location line="+1274"/>
         <source>File &quot;%1&quot; is a Rosegarden Device, and must be imported using the MIDI device manager.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+653"/>
+        <location line="+686"/>
         <source>Saving file%1with a new filename...</source>
         <comment>&apos;file%1with&apos; is correct. %1 will either become &apos; &apos; or &apos; as a template &apos; at runtime</comment>
         <translation>Spara filen%1med ett nytt filnamn...</translation>
@@ -21365,7 +21370,23 @@ Inget segment kommer att delas.</translation>
         <translation>Ta bort ursprungligt tempo och taktart</translation>
     </message>
     <message>
-        <location line="+1387"/>
+        <location line="+1270"/>
+        <location line="+35"/>
+        <source>Open Hydrogen File</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+34"/>
+        <source>Importing Hydrogen file...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+21"/>
+        <source>Can&apos;t load Hydrogen file.  It appears to be corrupted.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+31"/>
         <location line="+36"/>
         <source>Open MusicXML File</source>
         <translation>Öppna MusicXML-fil</translation>
@@ -21494,7 +21515,7 @@ För hjälp med riktig inställning av ljud och MIDI, besök http://www.rosegard
         <translation>XML-filer</translation>
     </message>
     <message numerus="yes">
-        <location line="-2466"/>
+        <location line="-2470"/>
         <location line="+54"/>
         <source>Split %n Segment(s) by Drum</source>
         <translation type="unfinished">
@@ -21508,7 +21529,7 @@ För hjälp med riktig inställning av ljud och MIDI, besök http://www.rosegard
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+2564"/>
+        <location line="+2568"/>
         <source>The audio file path does not exist or is not writable.
 Please set the audio file path to a valid directory in Document Properties before recording audio.
 Would you like to set it now?</source>
@@ -21680,17 +21701,17 @@ Felet är: %2</translation>
         <translation>&lt;qt&gt;&lt;p&gt;Ljudsökvägen &quot;%1&quot; finns, men går inte att skriva till.&lt;/p&gt;%2&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+39"/>
+        <location line="+44"/>
         <source>Rosegarden - Warning</source>
         <translation type="unfinished">Rosegarden - Varning</translation>
     </message>
     <message>
-        <location line="+0"/>
+        <location line="+1"/>
         <source>&lt;qt&gt;&lt;p&gt;The current file has been modified.&lt;/p&gt;&lt;p&gt;Do you want to save it?&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished">&lt;qt&gt;&lt;p&gt;Den aktuella filen har ändrats.&lt;/p&gt;&lt;p&gt;Vill du spara den?&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+21"/>
+        <location line="+24"/>
         <source>Could not save document at %1
 (%2)</source>
         <translation type="unfinished">Kunde inte spara dokument i %1
@@ -21911,7 +21932,7 @@ Felet är: %2</translation>
         <translation>Segmentparametrar</translation>
     </message>
     <message>
-        <location line="+37"/>
+        <location line="+28"/>
         <source>Label</source>
         <translation>Namn</translation>
     </message>
@@ -22081,9 +22102,8 @@ innan en ny transponering kan utföras.</translation>
         <translation>Ange nytt namn:</translation>
     </message>
     <message>
-        <location line="+66"/>
         <source>Instrument</source>
-        <translation>Instrument</translation>
+        <translation type="obsolete">Instrument</translation>
     </message>
 </context>
 <context>
@@ -24121,7 +24141,7 @@ Att avsluta andra program som körs kan förbättra Rosegardens prestanda.</tran
         <translation>&lt;namnlös&gt;</translation>
     </message>
     <message>
-        <location line="+917"/>
+        <location line="+909"/>
         <source>Mute track</source>
         <translation>Gör spår stumt</translation>
     </message>
@@ -24211,7 +24231,7 @@ Att avsluta andra program som körs kan förbättra Rosegardens prestanda.</tran
 <context>
     <name>Rosegarden::TrackParameterBox</name>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="-462"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="-1022"/>
         <source>Track</source>
         <translation>Spår</translation>
     </message>
@@ -24221,13 +24241,13 @@ Att avsluta andra program som körs kan förbättra Rosegardens prestanda.</tran
         <translation>Spårparametrar</translation>
     </message>
     <message>
-        <location line="+48"/>
-        <location line="+677"/>
+        <location line="+16"/>
+        <location line="+1180"/>
         <source>&lt;untitled&gt;</source>
         <translation>&lt;namnlös&gt;</translation>
     </message>
     <message>
-        <location line="-669"/>
+        <location line="-1172"/>
         <source>Playback parameters</source>
         <translation>Uppspelningsparametrar</translation>
     </message>
@@ -24273,7 +24293,7 @@ Att avsluta andra program som körs kan förbättra Rosegardens prestanda.</tran
         <translation>Kanal</translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location line="+15"/>
         <source>Thru Routing</source>
         <translation type="unfinished"></translation>
     </message>
@@ -24515,7 +24535,7 @@ Att avsluta andra program som körs kan förbättra Rosegardens prestanda.</tran
         <translation>&lt;qt&gt;&lt;p&gt;Välj den högsta föreslagna spelbara tonen, med användning av ett notsystem&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="-257"/>
+        <location line="-261"/>
         <source>&lt;qt&gt;&lt;p&gt;Choose the device this track will use for playback.&lt;/p&gt;&lt;p&gt;Click &lt;img src=&quot;:pixmaps/toolbar/manage-midi-devices.xpm&quot;&gt; to connect this device to a useful output if you do not hear sound&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Välj enhet som spåret ska använda för uppspelning.&lt;/p&gt;&lt;p&gt;Klicka på &lt;img src=&quot;:pixmaps/toolbar/manage-midi-devices.xpm&quot;&gt; för att ansluta enheten till en användbar utgång om du inte hör något ljud&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
@@ -24525,7 +24545,7 @@ Att avsluta andra program som körs kan förbättra Rosegardens prestanda.</tran
         <translation>&lt;qt&gt;&lt;p&gt;Detta spår spelar bara in ljud eller MIDI från vald kanal, och filtrerar bort allting annat&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+58"/>
+        <location line="+62"/>
         <source>&lt;qt&gt;&lt;p&gt;Choose normal, \small or \tiny font size for notation elements on this (normal-sized) staff when exporting to LilyPond.&lt;/p&gt;&lt;p&gt;This is as close as we get to enabling you to print parts in cue size&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Välj normal, \small (liten) eller \tiny (pytteliten) teckenstorlek för notskrift för detta notsystem (med normal storlek) vid export till LilyPond.&lt;/p&gt;&lt;p&gt;Detta är det närmaste vi kommer att göra det möjligt att skriva ut delar som antydningar&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
@@ -24630,7 +24650,7 @@ Att avsluta andra program som körs kan förbättra Rosegardens prestanda.</tran
         <translation>Högsta</translation>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="+10"/>
         <source>Color</source>
         <translation>Färg</translation>
     </message>
@@ -24640,30 +24660,28 @@ Att avsluta andra program som körs kan förbättra Rosegardens prestanda.</tran
         <translation>&lt;qt&gt;&lt;p&gt;Nya segment skapas med den här färgen&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+191"/>
-        <location line="+1"/>
         <source>Audio</source>
-        <translation>Ljud</translation>
+        <translation type="obsolete">Ljud</translation>
     </message>
     <message>
-        <location line="+17"/>
-        <location line="+17"/>
+        <location line="-198"/>
+        <location line="+994"/>
         <source>All</source>
         <translation>Alla</translation>
     </message>
     <message>
-        <location line="+59"/>
-        <location line="+4"/>
+        <location line="+207"/>
+        <location line="+8"/>
         <source> %1</source>
         <translation> %1</translation>
     </message>
     <message>
-        <location line="+103"/>
+        <location line="-116"/>
         <source>[ Track %1 - %2 ]</source>
         <translation>[ Spår %1 - %2 ]</translation>
     </message>
     <message>
-        <location line="+267"/>
+        <location line="-525"/>
         <source>Default</source>
         <translation>Förval</translation>
     </message>
@@ -24673,7 +24691,7 @@ Att avsluta andra program som körs kan förbättra Rosegardens prestanda.</tran
         <translation>Lägg till ny färg</translation>
     </message>
     <message>
-        <location line="+28"/>
+        <location line="+35"/>
         <source>New Color Name</source>
         <translation>Nytt färgnamn</translation>
     </message>
@@ -24688,29 +24706,28 @@ Att avsluta andra program som körs kan förbättra Rosegardens prestanda.</tran
         <translation>Ny</translation>
     </message>
     <message>
-        <location line="+32"/>
+        <location line="+29"/>
         <source>Highest playable note</source>
         <translation>Högsta spelbara ton</translation>
     </message>
     <message>
-        <location line="+22"/>
+        <location line="+25"/>
         <source>Lowest playable note</source>
         <translation>Lägsta spelbara ton</translation>
     </message>
     <message>
-        <location line="+56"/>
+        <location line="+71"/>
         <source>The instrument preset database is corrupt.  Check your installation.</source>
         <translation>Instrumentdatabasen är korrupt. Kontrollera din installation.</translation>
     </message>
     <message>
-        <location line="+0"/>
+        <location line="-1"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location line="+34"/>
         <source>Segment</source>
-        <translation>Segment</translation>
+        <translation type="obsolete">Segment</translation>
     </message>
 </context>
 <context>
