@@ -406,7 +406,12 @@ int main(int argc, char *argv[])
     QSettings preAppSettings("rosegardenmusic", "Rosegarden");
     preAppSettings.beginGroup(GeneralOptionsConfigGroup);
 #pragma GCC diagnostic ignored "-Wunused-variable"
+    // See comments below on the choice of "Native" as the default.
     unsigned int graphicsSystem = preAppSettings.value("graphics_system", Native).toUInt();
+    // Write this back out in case it was the default.  This prevents the
+    // default in the config dialog (see GeneralConfigurationPage's ctor)
+    // from having any effect.  Just in case it doesn't match the one above.
+    preAppSettings.setValue("graphics_system", graphicsSystem);
     preAppSettings.endGroup();
 
 
@@ -435,7 +440,8 @@ int main(int argc, char *argv[])
         // rendering problems, and it's just such a mixed bag we've got to offer
         // the option.  (And after two more users with reports of crashes in Qt
         // code that have "Raster" written all over them, it's time to make the
-        // only reliable system the default out of the box, and do up a FAQ
+        // only reliable system (Native) the default out of the box (see
+        // "graphics_system" above), and do up a FAQ
         // about bad graphics performance suggesting to give the less stable
         // alternatives a shot.)
 
