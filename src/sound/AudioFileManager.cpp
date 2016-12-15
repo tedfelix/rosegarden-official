@@ -26,7 +26,6 @@
 #include <signal.h>
 #include <sstream>
 
-
 #include <QApplication>
 #include <QMessageBox>
 #include <QProcess>
@@ -139,7 +138,7 @@ AudioFileManager::addFile(const QString &filePath)
 
         if (subType == BWF) {
 #ifdef DEBUG_AUDIOFILEMANAGER
-            std::cout << "FOUND BWF" << std::endl;
+            RG_DEBUG << "FOUND BWF";
 #endif
 
             try {
@@ -160,7 +159,7 @@ AudioFileManager::addFile(const QString &filePath)
         // Ensure we have a valid file handle
         //
         if (aF == 0) {
-            std::cerr << "AudioFileManager: Unknown WAV audio file subtype in " << filePath << std::endl;
+            RG_WARNING << "addFile(): Unknown WAV audio file subtype in " << filePath;
             throw BadAudioPathException(filePath, __FILE__, __LINE__);
         }
 
@@ -168,7 +167,7 @@ AudioFileManager::addFile(const QString &filePath)
         try {
             if (aF->open() == false) {
                 delete aF;
-                std::cerr << "AudioFileManager: Malformed audio file in " << filePath << std::endl;
+                RG_WARNING << "addFile(): Malformed audio file in " << filePath;
                 throw BadAudioPathException(filePath, __FILE__, __LINE__);
             }
         } catch (SoundFile::BadSoundFileException e) {
@@ -177,7 +176,7 @@ AudioFileManager::addFile(const QString &filePath)
         }
     }
     else {
-        std::cerr << "AudioFileManager: Unsupported audio file extension in " << filePath << std::endl;
+        RG_WARNING << "addFile(): Unsupported audio file extension in " << filePath;
         throw BadAudioPathException(filePath, __FILE__, __LINE__);
     }
 
@@ -240,10 +239,7 @@ AudioFileManager::insertFile(const std::string &name,
         foundFileName = getFileInPath(foundFileName);
 
 #ifdef DEBUG_AUDIOFILEMANAGER_INSERT_FILE
-
-    std::cout << "AudioFileManager::insertFile - "
-    << "expanded fileName = \""
-    << foundFileName << "\"" << std::endl;
+    RG_DEBUG << "insertFile() - expanded fileName = \"" << foundFileName << "\"";
 #endif
 
     // bail if we haven't found any reasonable filename
@@ -262,7 +258,7 @@ AudioFileManager::insertFile(const std::string &name,
         //
         if (aF->open() == false) {
             delete aF;
-            std::cerr << "AudioFileManager::insertFile - don't recognise file type in " << foundFileName << std::endl;
+            RG_WARNING << "insertFile() - don't recognise file type in " << foundFileName;
             throw BadAudioPathException(foundFileName, __FILE__, __LINE__);
         }
         m_audioFiles.push_back(aF);
@@ -333,10 +329,7 @@ AudioFileManager::insertFile(const std::string &name,
         foundFileName = getFileInPath(foundFileName);
 
 #ifdef DEBUG_AUDIOFILEMANAGER_INSERT_FILE
-
-    std::cout << "AudioFileManager::insertFile - "
-    << "expanded fileName = \""
-    << foundFileName << "\"" << std::endl;
+    RG_DEBUG << "insertFile() - expanded fileName = \"" << foundFileName << "\"";
 #endif
 
     // If no joy here then we can't find this file
@@ -397,8 +390,7 @@ AudioFileManager::setAudioPath(const QString &path)
     }
     else {
 #ifdef DEBUG_AUDIOFILEMANAGER
-        std::cout << "AudioFileManager::setAudioPath - zero length path, do nothing"
-        << std::endl;
+        RG_DEBUG << "setAudioPath() - zero length path, do nothing";
 #endif
     }
 
@@ -438,8 +430,7 @@ AudioFileManager::getFileInPath(const QString &file)
     if (searchInfo.exists())
         return searchFile.toLatin1().data();
 
-    std::cout << "AudioFileManager::getFileInPath - "
-    << "searchInfo = " << searchFile << std::endl;
+    RG_DEBUG << "getFileInPath() - searchInfo = " << searchFile;
 
     return "";
 }
@@ -515,7 +506,7 @@ AudioFileManager::createRecordingAudioFile(QString projectName, QString instrume
 {
     MutexLock lock (&audioFileManagerLock);
 
-std::cerr << "XXX createRecordingAudioFile: " << projectName << std::endl;
+    RG_DEBUG << "createRecordingAudioFile(): " << projectName;
 
     // just throw an _ in place of any characters that should be avoided
     instrumentAlias.replace(QRegExp("&"),   "_");
@@ -668,7 +659,7 @@ AudioFileManager::importURL(const QUrl &url, int sampleRate,
 AudioFileId
 AudioFileManager::importFile(const QString &fileName, int sampleRate)
 {
-    std::cerr << "AudioFileManager::importFile("<< fileName << ", " << sampleRate << ")" << std::endl;
+    RG_DEBUG << "importFile("<< fileName << ", " << sampleRate << ")";
 
     emit setOperationName(tr("Importing audio file..."));
 
@@ -731,14 +722,12 @@ AudioFileManager::importFile(const QString &fileName, int sampleRate)
 
 int AudioFileManager::convertAudioFile(const QString &inFile, const QString &outFile)
 {
-    std::cerr << "AudioFileManager::convertAudioFile: inFile = "
-              << inFile << ", outFile = " << outFile << std::endl;
+    RG_DEBUG << "convertAudioFile(): inFile = " << inFile << ", outFile = " << outFile;
 
     AudioReadStream *rs = AudioReadStreamFactory::createReadStream( inFile);
     if (!rs || !rs->isOK()) {
-        std::cerr << "ERROR: Failed to read audio file";
-        if (rs) std::cerr << ": " << rs->getError() << std::endl;
-        else std::cerr << std::endl;
+        RG_WARNING << "convertAudioFile(): ERROR: Failed to read audio file";
+        if (rs) RG_WARNING << "convertAudioFile(): Error: " << rs->getError();
         return -1;
     }
 
@@ -752,9 +741,8 @@ int AudioFileManager::convertAudioFile(const QString &inFile, const QString &out
             (outFile, channels, rate);
 
     if (!ws || !ws->isOK()) {
-        std::cerr << "ERROR: Failed to write audio file";
-        if (ws) std::cerr << ": " << ws->getError() << std::endl;
-        else std::cerr << std::endl;
+        RG_WARNING << "convertAudioFile(): ERROR: Failed to write audio file";
+        if (ws) RG_WARNING << "convertAudioFile(): Error: " << ws->getError();
         return -1;
     }
 
@@ -879,9 +867,7 @@ AudioFileManager::toXmlString() const
         // then swap this out for a tilde '~'
         //
 #ifdef DEBUG_AUDIOFILEMANAGER
-
-        std::cout << "DIR = " << getDirectory(fileName) << " : "
-        " PATH = " << m_audioPath << std::endl;
+        RG_DEBUG << "toXmlString(): DIR = " << getDirectory(fileName) << " :  PATH = " << m_audioPath;
 #endif
 
         if (getDirectory(fileName) == m_audioPath)
@@ -918,10 +904,7 @@ AudioFileManager::generatePreviews(QPointer<QProgressDialog> progressDialog)
     //m_peakManager.setProgressDialog(m_progressDialog)
 
 #ifdef DEBUG_AUDIOFILEMANAGER
-
-    std::cout << "AudioFileManager::generatePreviews - "
-    << "for " << m_audioFiles.size() << " files"
-    << std::endl;
+    RG_DEBUG << "generatePreviews() - for " << m_audioFiles.size() << " files";
 #endif
 
 
@@ -1005,7 +988,7 @@ AudioFileManager::getPreview(AudioFileId id,
     }
 
     if (!m_peakManager.hasValidPeaks(audioFile)) {
-        std::cerr << "AudioFileManager::getPreview: No peaks for audio file " << audioFile->getFilename() << std::endl;
+        RG_WARNING << "getPreview(): No peaks for audio file " << audioFile->getFilename();
         throw PeakFileManager::BadPeakFileException
         (audioFile->getFilename(), __FILE__, __LINE__);
     }
@@ -1031,7 +1014,7 @@ AudioFileManager::drawPreview(AudioFileId id,
         return ;
 
     if (!m_peakManager.hasValidPeaks(audioFile)) {
-        std::cerr << "AudioFileManager::getPreview: No peaks for audio file " << audioFile->getFilename() << std::endl;
+        RG_WARNING << "drawPreview(): No peaks for audio file " << audioFile->getFilename();
         throw PeakFileManager::BadPeakFileException
         (audioFile->getFilename(), __FILE__, __LINE__);
     }
@@ -1051,8 +1034,7 @@ AudioFileManager::drawPreview(AudioFileId id,
 
     if (values.size() == 0) {
 #ifdef DEBUG_AUDIOFILEMANAGER
-        std::cerr << "AudioFileManager::drawPreview - "
-        << "no preview values returned!" << std::endl;
+        RG_WARNING << "drawPreview() - no preview values returned!";
 #endif
 
         return ;
@@ -1064,8 +1046,7 @@ AudioFileManager::drawPreview(AudioFileId id,
 
     if (channels == 0) {
 #ifdef DEBUG_AUDIOFILEMANAGER
-        std::cerr << "AudioFileManager::drawPreview - "
-        << "no channels in audio file!" << std::endl;
+        RG_WARNING << "drawPreview() - no channels in audio file!";
 #endif
 
         return ;
@@ -1107,7 +1088,7 @@ AudioFileManager::drawHighlightedPreview(AudioFileId id,
         return ;
 
     if (!m_peakManager.hasValidPeaks(audioFile)) {
-        std::cerr << "AudioFileManager::getPreview: No peaks for audio file " << audioFile->getFilename() << std::endl;
+        RG_WARNING << "getPreview(): No peaks for audio file " << audioFile->getFilename();
         throw PeakFileManager::BadPeakFileException
         (audioFile->getFilename(), __FILE__, __LINE__);
     }
@@ -1171,20 +1152,11 @@ AudioFileManager::print()
         ;
 
 #ifdef DEBUG_AUDIOFILEMANAGER
-
-    std::cout << "AudioFileManager - " << m_audioFiles.size() << " entr";
-
-    if (m_audioFiles.size() == 1)
-        std::cout << "y";
-    else
-        std::cout << "ies";
-
-    std::cout << std::endl << std::endl;
+    RG_DEBUG << "print():" << m_audioFiles.size() << "entries";
 
     std::vector<AudioFile*>::iterator it;
     for (it = m_audioFiles.begin(); it != m_audioFiles.end(); ++it) {
-        std::cout << (*it)->getId() << " : " << (*it)->getLabel()
-        << " : \"" << (*it)->getFilename() << "\"" << std::endl;
+        RG_DEBUG << "  " << (*it)->getId() << " : " << (*it)->getLabel() << " : \"" << (*it)->getFilename() << "\"";
     }
 #endif
 }
