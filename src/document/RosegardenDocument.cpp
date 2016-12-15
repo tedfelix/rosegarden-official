@@ -104,7 +104,6 @@
 #include <QStringList>
 #include <QTextStream>
 #include <QWidget>
-#include <QPointer>
 #include <QHostInfo>
 
 
@@ -541,26 +540,29 @@ bool RosegardenDocument::openDocument(const QString &filename,
         return false;
     }
 
-    // ??? Why is RosegardenDocument launching a dialog?  It shouldn't.
-    //     It should offer the ability to subscribe for progress updates
-    //     and the client should be responsible for UI stuff.
-    // ??? Looking through ProgressDialog, we find that WA_DeleteOnClose
-    //     is set which is not normal.  Also, the QProgressDialog isn't
-    //     modal.  This makes things unnecessarily complicated.
-    // ??? We still crash if the user closes the progress dialog.
-#if 0
-    QPointer<ProgressDialog> progressDlg;
+    // Progress Dialog
+    QProgressDialog progressDialog(tr("Reading file..."), tr("Cancel"),
+                                   0, 0, dynamic_cast<QWidget *>(parent()));
+    progressDialog.setWindowModality(Qt::WindowModal);
+    // We're usually a bit late to the game here as it is.  Shave off a
+    // couple of seconds to make up for it.
+    // ??? We should move the progress dialog further up the call chain
+    //     to include the additional time.
+    progressDialog.setMinimumDuration(2000);
+    // For now, remove the Cancel button.  The user can still close the
+    // progress dialog, but it will do nothing.  And it won't crash.
+    progressDialog.setCancelButton(0);
+    m_progressDialog = &progressDialog;
 
-    if (!squelchProgressDialog) {
-        progressDlg = new ProgressDialog(tr("Reading file..."),
-                                         dynamic_cast<QWidget *>(parent()));
+    // For testing, get rid of it.
+    if (squelchProgressDialog)
+        progressDialog.close();
 
-        connect(progressDlg, SIGNAL(canceled()),
-                &m_audioFileManager, SLOT(slotStopPreview()));
-
-        CurrentProgressDialog::set(progressDlg);
-    }
-#endif
+    // Since we're in indeterminate progress mode (min=max=0), force the
+    // progress dialog up.  Would be nice to do this on a timer, but this
+    // is an interim approach.
+    if (m_progressDialog)
+        m_progressDialog->show();
 
     setAbsFilePath(fileInfo.absoluteFilePath());
 
@@ -598,9 +600,6 @@ bool RosegardenDocument::openDocument(const QString &filename,
     if (!okay) {
         StartupLogo::hideIfStillThere();
 
-//        if (m_progressDialog)
-//            m_progressDialog->hide();
-
         QString msg(tr("Error when parsing file '%1': \"%2\"")
                      .arg(filename)
                      .arg(errMsg));
@@ -626,27 +625,23 @@ bool RosegardenDocument::openDocument(const QString &filename,
         RG_DEBUG << "First segment starts at " << (*m_composition.begin())->getStartTime();
     }
 
-#if 0
-    if (progressDlg) {
-        
-        progressDlg->setLabelText(tr("Generating audio previews..."));
-        progressDlg->setValue(0);
+    if (m_progressDialog) {
+        m_progressDialog->setLabelText(tr("Generating audio previews..."));
 
-        connect(&m_audioFileManager, SIGNAL(setValue(int)),
-                progressDlg, SLOT(setValue(int)));
+        // Connect audio file manager for progress.
+        //m_progressDialog->setValue(0);
+        //connect(&m_audioFileManager, SIGNAL(setValue(int)),
+        //        m_progressDialog, SLOT(setValue(int)));
+        //connect(m_progressDialog, SIGNAL(canceled()),
+        //        &m_audioFileManager, SLOT(slotStopPreview()));
     }
-#endif
     
     try {
         // generate any audio previews after loading the files
         m_audioFileManager.generatePreviews();
     } catch (Exception e) {
         StartupLogo::hideIfStillThere();
-//        if (m_progressDialog)
-//            m_progressDialog->hide();
         QMessageBox::critical(dynamic_cast<QWidget *>(parent()), tr("Rosegarden"), strtoqstr(e.getMessage()));
-//        if (m_progressDialog)
-//            m_progressDialog->show();
     }
 
     if (m_soundEnabled) {

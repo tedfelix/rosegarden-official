@@ -33,6 +33,8 @@
 #include <QObject>
 #include <QString>
 #include <QStringList>
+#include <QProgressDialog>
+#include <QPointer>
 
 #include <map>
 #include <vector>
@@ -769,6 +771,8 @@ private:
 
     /// Allow file lock to be released.
     bool m_release;
+
+    QPointer<QProgressDialog> m_progressDialog;
 };
 
 
