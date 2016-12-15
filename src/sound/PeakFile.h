@@ -51,22 +51,21 @@ public:
     PeakFile(AudioFile *audioFile);
     virtual ~PeakFile();
 
-    // Standard file methods
-    //
     virtual bool open();
     virtual void close();
 
-    // Write to standard peak file
-    //
+    /// Write to standard peak file
     virtual bool write();
 
-    // Is the peak file valid and up to date?
-    //
+    /// Is the peak file valid and up to date?
+    /**
+     * If the audio file is more recently modified that the modification time
+     * on this peak file then we're invalid.  The action to rectify this is
+     * usually to regenerate the peak data.
+     */
     bool isValid();
 
-    // Get a preview of a section of the audio file where that section
-    // is "width" pixels.
-    //
+    /// Get a preview of a section of the audio file.
     std::vector<float> getPreview(const RealTime &startTime,
                                   const RealTime &endTime,
                                   int width,
@@ -75,8 +74,11 @@ public:
     AudioFile *getAudioFile()  { return m_audioFile; }
     const AudioFile *getAudioFile() const  { return m_audioFile; }
 
-    // Find threshold crossing points
-    //
+    /// Find threshold crossing points
+    /**
+     * Get pairs of split points for areas that exceed a percentage
+     * threshold.
+     */
     std::vector<SplitPointPair> getSplitPoints(const RealTime &startTime,
                                                const RealTime &endTime,
                                                int threshold,
@@ -85,12 +87,11 @@ public:
     //bool isProcessingPeaks() const { return m_keepProcessing; }
     void setProcessingPeaks(bool value) { m_keepProcessing = value; }
 
-    // For debugging
+    /// For debugging
     void printStats();
 
-    // Write peak chunk to file handle (BWF)
-    //
-//    bool writeToHandle(std::ofstream *file, unsigned short updatePercentage);
+    /// Write peak chunk to file handle (BWF)
+    //bool writeToHandle(std::ofstream *file, unsigned short updatePercentage);
 
     //int getVersion() const { return m_version; }
     //int getFormat() const { return m_format; }
@@ -109,6 +110,7 @@ signals:
     void setValue(int);
 
 protected:
+    /// Build up a header string and then pump it out to the file handle
     void writeHeader(std::ofstream *file);
     void writePeaks(std::ofstream *file);
 
@@ -123,10 +125,10 @@ protected:
 
     void parseHeader();
 
+    /// The AudioFile that this peak file is based on.
     AudioFile *m_audioFile;
 
-    // Some Peak Envelope Chunk parameters
-
+    // Peak Envelope Chunk parameters
     int m_version;
     int m_format;  // bytes in peak value (1 or 2)
     int m_pointsPerValue;
@@ -137,26 +139,25 @@ protected:
     int m_offsetToPeaks;
     int m_bodyBytes;
 
-    // Peak timestamp
-    //
+    /// Used to determine whether the peak file is out of sync with the audio file.
     QDateTime m_modificationTime;
 
+    /// Always zero since we don't support adding a peak chunk to an audio file.
     std::streampos m_chunkStartPosition;
 
-    // For cacheing of peak information in memory we use the last query 
-    // parameters as our key to the cached data.
-    //
+    // Parameters from the last call to getPreview() to determine whether
+    // m_lastPreviewCache is valid for a specific request.
     RealTime           m_lastPreviewStartTime;
     RealTime           m_lastPreviewEndTime;
     int                m_lastPreviewWidth;
     bool               m_lastPreviewShowMinima;
+    /// Cached preview to speed up getPreview().
     std::vector<float> m_lastPreviewCache;
 
-    // Do we actually want to keep processing this peakfile?
-    // In case we get a cancel.
-    //
+    /// Cleared by setProcessingPeaks() to indicate processing should stop.
     bool               m_keepProcessing;
 
+    /// Cached in-memory copy of the peak file for getPreview().
     std::string        m_peakCache;
     
     bool scanToPeak(int peak);

@@ -14,23 +14,21 @@
 
 #define RG_MODULE_STRING "[PeakFile]"
 
-#include <cmath>
-#include <cstdlib>
+#include <algorithm>  // std::max()
+#include <cmath>  // std::fabs()
+#include <iostream>
+#include <string>
+#include <utility>  // std::pair
+#include <vector>
 
 #include <QDateTime>
 #include <QStringList>
-#include <QPalette>
-#include <QApplication>
 
 #include "PeakFile.h"
 #include "AudioFile.h"
 #include "base/Profiler.h"
 #include "misc/Debug.h"
 #include "misc/Strings.h"
-
-#include <iostream>
-
-#include "rosegarden-version.h"
 
 //#define DEBUG_PEAKFILE 1
 //#define DEBUG_PEAKFILE_BRIEF 1
@@ -48,7 +46,7 @@ static const char AUDIO_BWF_PEAK_ID[] = "levl";  // BWF peak chunk id
 namespace Rosegarden
 {
 
-PeakFile::PeakFile(AudioFile *audioFile):
+PeakFile::PeakFile(AudioFile *audioFile) :
         SoundFile(audioFile->getPeakFilename()),
         m_audioFile(audioFile),
         m_version( -1),                          // -1 defines new file - start at 0
@@ -59,16 +57,20 @@ PeakFile::PeakFile(AudioFile *audioFile):
         m_numberOfPeaks(0),
         m_positionPeakOfPeaks(0),
         m_offsetToPeaks(0),
+        m_bodyBytes(0),
         m_modificationTime(QDate(1970, 1, 1), QTime(0, 0, 0)),
         m_chunkStartPosition(0),
         m_lastPreviewStartTime(0, 0),
         m_lastPreviewEndTime(0, 0),
         m_lastPreviewWidth( -1),
-        m_lastPreviewShowMinima(false)
-{}
+        m_lastPreviewShowMinima(false),
+        m_keepProcessing(true)
+{
+}
 
 PeakFile::~PeakFile()
-{}
+{
+}
 
 bool
 PeakFile::open()
@@ -227,8 +229,6 @@ PeakFile::write()
     return true;
 }
 
-// Close the peak file and tidy up
-//
 void
 PeakFile::close()
 {
@@ -301,10 +301,6 @@ PeakFile::close()
     m_outFile = 0;
 }
 
-// If the audio file is more recently modified that the modification time
-// on this peak file then we're invalid.  The action to rectify this is
-// usually to regenerate the peak data.
-//
 bool
 PeakFile::isValid()
 {
@@ -328,8 +324,6 @@ PeakFile::writeToHandle(std::ofstream *file,
 }
 #endif
 
-// Build up a header string and then pump it out to the file handle
-//
 void
 PeakFile::writeHeader(std::ofstream *file)
 {
@@ -626,11 +620,6 @@ PeakFile::writePeaks(std::ofstream *file)
 
 }
 
-// Get a normalised vector for the preview at a given horizontal resolution.
-// We return a value for each channel and if returnLow is set we also return
-// an interleaved low value for each channel.
-//
-//
 std::vector<float>
 PeakFile::getPreview(const RealTime &startTime,
                      const RealTime &endTime,
@@ -878,9 +867,9 @@ PeakFile::getPreview(const RealTime &startTime,
             if (showMinima) {
                 m_lastPreviewCache.push_back(loValues[ch] / divisor);
             } else {
-                value = fabs(value);
+                value = std::fabs(value);
                 if (m_pointsPerValue == 2) {
-                    value = std::max(value, fabsf(loValues[ch] / divisor));
+                    value = std::max(value, std::fabs(loValues[ch] / divisor));
                 }
                 m_lastPreviewCache.push_back(value);
             }
@@ -922,9 +911,6 @@ PeakFile::getTime(int peak)
     return RealTime(usecs / 1000000, (usecs % 1000000) * 1000);
 }
 
-// Get pairs of split points for areas that exceed a percentage
-// threshold
-//
 std::vector<SplitPointPair>
 PeakFile::getSplitPoints(const RealTime &startTime,
                          const RealTime &endTime,
@@ -979,7 +965,7 @@ PeakFile::getSplitPoints(const RealTime &startTime,
                 int peakValue =
                     getIntegerFromLittleEndian(peakData.substr(0, m_format));
 
-                value += fabs(float(peakValue) / divisor);
+                value += std::fabs(float(peakValue) / divisor);
             }
         }
 
