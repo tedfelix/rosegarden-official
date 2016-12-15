@@ -113,24 +113,25 @@ namespace Rosegarden
 
 using namespace BaseProperties;
 
-RosegardenDocument::RosegardenDocument(QObject *parent,
-                                   AudioPluginManager *pluginManager,
-                                   bool skipAutoload,
-                                   bool clearCommandHistory,
-                                       bool enableSound)
-        : QObject(parent),
-        m_modified(false),
-        m_autoSaved(false),
-        m_audioPeaksThread(&m_audioFileManager),
-        m_seqManager(0),
-        m_pluginManager(pluginManager),
-        m_audioRecordLatency(0, 0),
-        m_quickMarkerTime(-1),
-        m_autoSavePeriod(0),
-        m_beingDestroyed(false),
-        m_clearCommandHistory(clearCommandHistory),
-        m_soundEnabled(enableSound),
-        m_release(true)
+RosegardenDocument::RosegardenDocument(
+        QObject *parent,
+        AudioPluginManager *pluginManager,
+        bool skipAutoload,
+        bool clearCommandHistory,
+        bool enableSound) :
+    QObject(parent),
+    m_modified(false),
+    m_autoSaved(false),
+    m_audioPeaksThread(&m_audioFileManager),
+    m_seqManager(0),
+    m_pluginManager(pluginManager),
+    m_audioRecordLatency(0, 0),
+    m_quickMarkerTime(-1),
+    m_autoSavePeriod(0),
+    m_beingDestroyed(false),
+    m_clearCommandHistory(clearCommandHistory),
+    m_soundEnabled(enableSound),
+    m_release(true)
 {
     checkSequencerTimer();
 
@@ -141,7 +142,8 @@ RosegardenDocument::RosegardenDocument(QObject *parent,
             this, SLOT(slotDocumentRestored()));
 
     // autoload a new document
-    if (!skipAutoload) performAutoload();
+    if (!skipAutoload)
+        performAutoload();
 
     // now set it up as a "new document"
     newDocument();
