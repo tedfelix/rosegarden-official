@@ -91,7 +91,7 @@ public:
                                   const RealTime &endTime,
                                   int   width,
                                   bool  showMinima);
-    
+    /// Removes peak file from PeakFileManager - doesn't affect audioFile
     bool removeAudioFile(AudioFile *audioFile);
 
     void clear();
@@ -123,7 +123,9 @@ signals:
     void setValue(int);
 
 protected:
+    /// Insert PeakFile based on AudioFile if it doesn't already exist.
     bool insertAudioFile(AudioFile *audioFile);
+    /// Auto-inserts PeakFile into manager if it doesn't already exist.
     PeakFile *getPeakFile(AudioFile *audioFile);
 
     std::vector<PeakFile *> m_peakFiles;
