@@ -114,6 +114,7 @@ AudioFileManager::addFile(const QString &filePath)
     QString ext;
 
     if (filePath.length() > 3) {
+        // ??? Use QFileInfo::suffix().
         ext = filePath.mid(filePath.length() - 3, 3).toLower();
     }
 
@@ -184,10 +185,11 @@ AudioFileManager::addFile(const QString &filePath)
     return 0;
 }
 
-// Convert long filename to shorter version
 QString
 AudioFileManager::getShortFilename(const QString &fileName) const
 {
+    // ??? Use QFileInfo::fileName().
+
     QString rS = fileName;
     int pos = rS.lastIndexOf("/");
 
@@ -197,11 +199,11 @@ AudioFileManager::getShortFilename(const QString &fileName) const
     return rS;
 }
 
-// Turn a long path into a directory ending with a slash
-//
 QString
 AudioFileManager::getDirectory(const QString &path) const
 {
+    // ??? Use QFileInfo::dir().
+
     QString rS = path;
     int pos = rS.lastIndexOf("/");
 
@@ -210,7 +212,6 @@ AudioFileManager::getDirectory(const QString &path) const
 
     return rS;
 }
-
 
 #if 0
 // Create a new AudioFile with unique ID and label - insert from
@@ -274,11 +275,10 @@ AudioFileManager::removeFile(AudioFileId id)
     MutexLock lock (&audioFileManagerLock)
         ;
 
-    std::vector<AudioFile*>::iterator it;
-
-    for (it = m_audioFiles.begin();
-            it != m_audioFiles.end();
-            ++it) {
+    // For each AudioFile
+    for (std::vector<AudioFile *>::iterator it = m_audioFiles.begin();
+         it != m_audioFiles.end();
+         ++it) {
         if ((*it)->getId() == id) {
             m_peakManager.removeAudioFile(*it);
             m_recordedAudioFiles.erase(*it);
@@ -314,7 +314,7 @@ AudioFileManager::insertFile(const std::string &name,
     MutexLock lock (&audioFileManagerLock)
         ;
 
-    // first try to expany any beginning tilde
+    // first try to expand any beginning tilde
     QString foundFileName = substituteTildeForHome(fileName);
 
     // If we've expanded and we can't find the file
@@ -359,32 +359,29 @@ AudioFileManager::insertFile(const std::string &name,
     return true;
 }
 
-// Add a given path to our sample search path
-//
 void
 AudioFileManager::setAudioPath(const QString &path)
 {
     MutexLock lock (&audioFileManagerLock)
         ;
 
-    if (path.size()!=0) {
+    if (path.size() != 0) {
         QString hPath = path;
         QString homePath = getenv("HOME");
     
         // add a trailing / if we don't have one
-        //
         if (hPath[hPath.size() - 1] != '/')
             hPath += "/";
 
         // get the home directory
+        // ??? Use substituteTildeForHome().
         if (hPath[0] == '~') {
             hPath.remove(0, 1);
             hPath = homePath + hPath;
         }
 
         m_audioPath = hPath;
-    }
-    else {
+    } else {
 #ifdef DEBUG_AUDIOFILEMANAGER
         RG_DEBUG << "setAudioPath() - zero length path, do nothing";
 #endif
@@ -401,11 +398,6 @@ AudioFileManager::testAudioPath()
         throw BadAudioPathException(m_audioPath);
 }
 
-
-// See if we can find a given file in our search path
-// return the first occurence of a match or the empty
-// std::string if no match.
-//
 QString
 AudioFileManager::getFileInPath(const QString &file)
 {
@@ -431,20 +423,16 @@ AudioFileManager::getFileInPath(const QString &file)
     return "";
 }
 
-
-// Check for file path existence
-//
 int
 AudioFileManager::fileExists(const QString &path)
 {
     MutexLock lock (&audioFileManagerLock)
         ;
 
-    std::vector<AudioFile*>::iterator it;
-
-    for (it = m_audioFiles.begin();
-            it != m_audioFiles.end();
-            ++it) {
+    // For each AudioFile
+    for (std::vector<AudioFile *>::const_iterator it = m_audioFiles.begin();
+         it != m_audioFiles.end();
+         ++it) {
         if ((*it)->getFilename() == path)
             return (*it)->getId();
     }
@@ -453,19 +441,16 @@ AudioFileManager::fileExists(const QString &path)
 
 }
 
-// Does a specific file id exist on the manager?
-//
 bool
 AudioFileManager::fileExists(AudioFileId id)
 {
     MutexLock lock (&audioFileManagerLock)
         ;
 
-    std::vector<AudioFile*>::iterator it;
-
-    for (it = m_audioFiles.begin();
-            it != m_audioFiles.end();
-            ++it) {
+    // For each AudioFile
+    for (std::vector<AudioFile *>::const_iterator it = m_audioFiles.begin();
+         it != m_audioFiles.end();
+         ++it) {
         if ((*it)->getId() == id)
             return true;
     }
@@ -480,11 +465,10 @@ AudioFileManager::clear()
     MutexLock lock (&audioFileManagerLock)
         ;
 
-    std::vector<AudioFile*>::iterator it;
-
-    for (it = m_audioFiles.begin();
-            it != m_audioFiles.end();
-            ++it) {
+    // For each AudioFile
+    for (std::vector<AudioFile *>::const_iterator it = m_audioFiles.begin();
+         it != m_audioFiles.end();
+         ++it) {
         m_recordedAudioFiles.erase(*it);
         m_derivedAudioFiles.erase(*it);
         delete(*it);
@@ -492,8 +476,6 @@ AudioFileManager::clear()
 
     m_audioFiles.erase(m_audioFiles.begin(), m_audioFiles.end());
 
-    // Clear the PeakFileManager too
-    //
     m_peakManager.clear();
 }
 
@@ -776,14 +758,14 @@ AudioFileManager::slotStopImport()
 }
 
 #if 0
-AudioFile*
+AudioFile *
 AudioFileManager::getLastAudioFile()
 {
     MutexLock lock (&audioFileManagerLock)
         ;
 
-    std::vector<AudioFile*>::iterator it = m_audioFiles.begin();
-    AudioFile* audioFile = 0;
+    std::vector<AudioFile *>::iterator it = m_audioFiles.begin();
+    AudioFile * audioFile = 0;
 
     while (it != m_audioFiles.end()) {
         audioFile = (*it);
@@ -851,9 +833,11 @@ AudioFileManager::toXmlString() const
     << audioPath << "\"/>" << std::endl;
 
     QString fileName;
-    std::vector<AudioFile*>::const_iterator it;
 
-    for (it = m_audioFiles.begin(); it != m_audioFiles.end(); ++it) {
+    // For each AudioFile
+    for (std::vector<AudioFile *>::const_iterator it = m_audioFiles.begin();
+         it != m_audioFiles.end();
+         ++it) {
         fileName = (*it)->getFilename();
 
         // attempt two substitutions - If the prefix to the filename
@@ -905,9 +889,11 @@ AudioFileManager::generatePreviews(QPointer<QProgressDialog> progressDialog)
 
 
     // Generate peaks if we need to
-    //
-    std::vector<AudioFile*>::iterator it;
-    for (it = m_audioFiles.begin(); it != m_audioFiles.end(); ++it) {
+
+    // For each AudioFile
+    for (std::vector<AudioFile *>::const_iterator it = m_audioFiles.begin();
+         it != m_audioFiles.end();
+         ++it) {
         if (!m_peakManager.hasValidPeaks(*it))
             m_peakManager.generatePeaks(*it, 1);
     }
@@ -950,17 +936,16 @@ AudioFileManager::generatePreview(AudioFileId id)
     return true;
 }
 
-AudioFile*
+AudioFile *
 AudioFileManager::getAudioFile(AudioFileId id)
 {
     MutexLock lock (&audioFileManagerLock)
         ;
 
-    std::vector<AudioFile*>::iterator it;
-
-    for (it = m_audioFiles.begin();
-            it != m_audioFiles.end();
-            ++it) {
+    // For each AudioFile
+    for (std::vector<AudioFile *>::const_iterator it = m_audioFiles.begin();
+         it != m_audioFiles.end();
+         ++it) {
         if ((*it)->getId() == id)
             return (*it);
     }
@@ -1150,8 +1135,10 @@ AudioFileManager::print()
 #ifdef DEBUG_AUDIOFILEMANAGER
     RG_DEBUG << "print():" << m_audioFiles.size() << "entries";
 
-    std::vector<AudioFile*>::iterator it;
-    for (it = m_audioFiles.begin(); it != m_audioFiles.end(); ++it) {
+    // For each AudioFile
+    for (std::vector<AudioFile *>::const_iterator it = m_audioFiles.begin();
+         it != m_audioFiles.end();
+         ++it) {
         RG_DEBUG << "  " << (*it)->getId() << " : " << (*it)->getLabel() << " : \"" << (*it)->getFilename() << "\"";
     }
 #endif
@@ -1184,8 +1171,10 @@ AudioFileManager::getActualSampleRates() const
 {
     std::set<int> rates;
 
+    // For each AudioFile
     for (std::vector<AudioFile *>::const_iterator i = m_audioFiles.begin();
-         i != m_audioFiles.end(); ++i) {
+         i != m_audioFiles.end();
+         ++i) {
 
         unsigned int sr = (*i)->getSampleRate();
         if (sr != 0) rates.insert(int(sr));

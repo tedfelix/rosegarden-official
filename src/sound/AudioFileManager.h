@@ -222,8 +222,15 @@ public:
                                 const RealTime &highlightEnd,
                                 QPixmap *pixmap);
 
-    /// Expand "~" to the user's home directory.
+    /// Convert the user's home directory to a "~".
+    /**
+     * ??? rename: homeToTilde()
+     */
     QString substituteHomeForTilde(const QString &path) const;
+    /// Expand "~" to the user's home directory.
+    /**
+     * ??? rename: tildeToHome()
+     */
     QString substituteTildeForHome(const QString &path) const;
 
     /// Get a split point vector from a peak file
@@ -328,6 +335,11 @@ private:
     /// Get a directory from a full file path
     QString getDirectory(const QString &path) const;
 
+    /// See if we can find a given file in our search path
+    /**
+     * Returns the first occurrence of a match or the empty
+     * std::string if no match.
+     */
     QString getFileInPath(const QString &file);
 
     /// Reset ID counter based on actual Audio Files in Composition
