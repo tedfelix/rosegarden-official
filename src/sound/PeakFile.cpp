@@ -99,7 +99,7 @@ PeakFile::open()
     } catch (BadSoundFileException s) {
 
 #ifdef DEBUG_PEAKFILE
-        RG_WARNING << "PeakFile::open - EXCEPTION \"" << s.getMessage() << "\"";
+        RG_WARNING << "open() - EXCEPTION \"" << s.getMessage() << "\"";
 #endif
 
         return false;
@@ -157,39 +157,34 @@ PeakFile::parseHeader()
                                      dateTime[6].toInt()));
 
     //printStats();
-
 }
 
 void
 PeakFile::printStats()
 {
-    using std::cout;
-    using std::endl;
-    cout << endl;
-    cout << "STATS for PeakFile \"" << m_fileName << "\"" << endl
-    << "-----" << endl << endl;
+    RG_DEBUG << "printStats()";
 
-    cout << "  VERSION = " << m_version << endl
-    << "  FORMAT  = " << m_format << endl
-    << "  BYTES/VALUE = " << m_pointsPerValue << endl
-    << "  BLOCKSIZE   = " << m_blockSize << endl
-    << "  CHANNELS    = " << m_channels << endl
-    << "  PEAK FRAMES = " << m_numberOfPeaks << endl
-    << "  PEAK OF PKS = " << m_positionPeakOfPeaks << endl
-    << endl;
+    RG_DEBUG << "  STATS for PeakFile" << m_fileName;
+    RG_DEBUG << "  ----------------------------";
+    RG_DEBUG << "    VERSION =" << m_version;
+    RG_DEBUG << "    FORMAT  =" << m_format;
+    RG_DEBUG << "    BYTES/VALUE =" << m_pointsPerValue;
+    RG_DEBUG << "    BLOCKSIZE   =" << m_blockSize;
+    RG_DEBUG << "    CHANNELS    =" << m_channels;
+    RG_DEBUG << "    PEAK FRAMES =" << m_numberOfPeaks;
+    RG_DEBUG << "    PEAK OF PKS =" << m_positionPeakOfPeaks;
+    RG_DEBUG << "";
 
-    cout << "DATE" << endl
-    << "----" << endl << endl
-    << "  YEAR    = " << m_modificationTime.date().year() << endl
-    << "  MONTH   = " << m_modificationTime.date().month() << endl
-    << "  DAY     = " << m_modificationTime.date().day() << endl
-    << "  HOUR    = " << m_modificationTime.time().hour() << endl
-    << "  MINUTE  = " << m_modificationTime.time().minute()
-    << endl
-    << "  SECOND  = " << m_modificationTime.time().second()
-    << endl
-    << "  MSEC    = " << m_modificationTime.time().msec()
-    << endl << endl;
+    RG_DEBUG << "  DATE";
+    RG_DEBUG << "  ----------------";
+    RG_DEBUG << "    YEAR   =" << m_modificationTime.date().year();
+    RG_DEBUG << "    MONTH  =" << m_modificationTime.date().month();
+    RG_DEBUG << "    DAY    =" << m_modificationTime.date().day();
+    RG_DEBUG << "    HOUR   =" << m_modificationTime.time().hour();
+    RG_DEBUG << "    MINUTE =" << m_modificationTime.time().minute();
+    RG_DEBUG << "    SECOND =" << m_modificationTime.time().second();
+    RG_DEBUG << "    MSEC   =" << m_modificationTime.time().msec();
+    RG_DEBUG << "";
 }
 
 bool
@@ -208,7 +203,7 @@ PeakFile::write()
             return false;
     } catch (BadSoundFileException e) {
 #ifdef DEBUG_PEAKFILE
-        RG_WARNING << "PeakFile::write - \"" << e.getMessage() << "\"";
+        RG_WARNING << "write() - \"" << e.getMessage() << "\"";
 #endif
 
         return false;
@@ -390,7 +385,7 @@ PeakFile::writeHeader(std::ofstream *file)
     // reserved space - 60 bytes
     header += getLittleEndianFromInteger(0, 60);
 
-    //RG_DEBUG << "HEADER LENGTH =" << header.length();
+    //RG_DEBUG << "writeHeader(): HEADER LENGTH =" << header.length();
 
     // write out the header
     //
@@ -416,7 +411,7 @@ PeakFile::scanToPeak(int peak)
     if (off == 0) {
         return true;
     } else if (off < 0) {
-        //    RG_WARNING << "PeakFile::scanToPeak: warning: seeking backwards for peak " << peak << " (" << m_inFile->tellg() << " -> " << pos << ")";
+        //RG_WARNING << "scanToPeak(): warning: seeking backwards for peak " << peak << " (" << m_inFile->tellg() << " -> " << pos << ")";
         m_inFile->seekg(pos);
     } else {
         m_inFile->seekg(off, std::ios::cur);
@@ -470,7 +465,7 @@ PeakFile::writePeaks(std::ofstream *file)
     m_keepProcessing = true;
 
 #ifdef DEBUG_PEAKFILE
-    RG_DEBUG << "PeakFile::writePeaks - calculating peaks";
+    RG_DEBUG << "writePeaks() - calculating peaks";
 #endif
 
     // Scan to beginning of audio data
@@ -512,7 +507,7 @@ PeakFile::writePeaks(std::ofstream *file)
             samples = m_audioFile->
                       getBytes(m_blockSize * channels * bytes);
         } catch (BadSoundFileException e) {
-            RG_WARNING << "PeakFile::writePeaks:" << e.getMessage();
+            RG_WARNING << "writePeaks():" << e.getMessage();
             break;
         }
 
@@ -529,8 +524,8 @@ PeakFile::writePeaks(std::ofstream *file)
         if (ct % 100 == 0) {
             emit setValue((int)(double(byteCount) /
                                 double(apprxTotalBytes) * 100.0));
-//        RG_DEBUG << "peak file is emitting to file manager is emitting to progress dialog...";
-        
+            //RG_DEBUG << "writePeaks(): peak file is emitting to file manager is emitting to progress dialog...";
+
             qApp->processEvents(QEventLoop::AllEvents);
         }
         ++ct;
@@ -615,7 +610,7 @@ PeakFile::writePeaks(std::ofstream *file)
     }
 
 #ifdef DEBUG_PEAKFILE
-    RG_DEBUG << "PeakFile::writePeaks - completed peaks";
+    RG_DEBUG << "writePeaks() - completed peaks";
 #endif
 
 }
@@ -627,15 +622,14 @@ PeakFile::getPreview(const RealTime &startTime,
                      bool showMinima)
 {
 #ifdef DEBUG_PEAKFILE_BRIEF
-    RG_DEBUG << "PeakFile::getPreview - "
-    << "startTime = " << startTime
-    << ", endTime = " << endTime
-    << ", width = " << width
-    << ", showMinima = " << showMinima;
+    RG_DEBUG << "getPreview() - startTime = " << startTime
+             << ", endTime = " << endTime
+             << ", width = " << width
+             << ", showMinima = " << showMinima;
 #endif
 
     if (getSize() == 0) {
-        RG_DEBUG << "PeakFile::getPreview - PeakFile size == 0";
+        RG_DEBUG << "getPreview() - PeakFile size == 0";
         return std::vector<float>();
     }
 
@@ -643,7 +637,7 @@ PeakFile::getPreview(const RealTime &startTime,
     //
     if (!m_peakCache.length()) {
 #ifdef DEBUG_PEAKFILE_CACHE
-        RG_DEBUG << "PeakFile::getPreview - no peak cache";
+        RG_DEBUG << "getPreview() - no peak cache";
 #endif
 
         if (getSize() < (256 *1024)) // if less than 256K PeakFile
@@ -659,14 +653,12 @@ PeakFile::getPreview(const RealTime &startTime,
             }
 
 #ifdef DEBUG_PEAKFILE_CACHE
-            RG_DEBUG << "PeakFile::getPreview - generated peak cache - "
-            << "size = " << m_peakCache.length();
+            RG_DEBUG << "getPreview() - generated peak cache - size = " << m_peakCache.length();
 #endif
 
         } else {
 #ifdef DEBUG_PEAKFILE_CACHE
-            RG_DEBUG << "PeakFile::getPreview - file size = " << getSize()
-            << ", not generating cache";
+            RG_DEBUG << "getPreview() - file size = " << getSize() << ", not generating cache";
 #endif
 
         }
@@ -678,14 +670,13 @@ PeakFile::getPreview(const RealTime &startTime,
     if (startTime == m_lastPreviewStartTime && endTime == m_lastPreviewEndTime
             && width == m_lastPreviewWidth && showMinima == m_lastPreviewShowMinima) {
 #ifdef DEBUG_PEAKFILE_CACHE
-        RG_DEBUG << "PeakFile::getPreview - hit last preview cache";
+        RG_DEBUG << "getPreview() - hit last preview cache";
 #endif
 
         return m_lastPreviewCache;
     } else {
 #ifdef DEBUG_PEAKFILE_CACHE
-        RG_DEBUG << "PeakFile::getPreview - last preview " << m_lastPreviewStartTime
-        << " -> " << m_lastPreviewEndTime << ", w " << m_lastPreviewWidth << "; this " << startTime << " -> " << endTime << ", w " << width;
+        RG_DEBUG << "getPreview() - last preview " << m_lastPreviewStartTime << " -> " << m_lastPreviewEndTime << ", w " << m_lastPreviewWidth << "; this " << startTime << " -> " << endTime << ", w " << width;
 #endif
 
     }
@@ -708,9 +699,7 @@ PeakFile::getPreview(const RealTime &startTime,
     int peakNumber;
 
 #ifdef DEBUG_PEAKFILE_BRIEF
-
-    RG_DEBUG << "PeakFile::getPreview - getting preview for \""
-    << m_audioFile->getFilename() << "\"";
+    RG_DEBUG << "getPreview() - getting preview for \"" << m_audioFile->getFilename() << "\"";
 #endif
 
     // Get a divisor
@@ -727,8 +716,7 @@ PeakFile::getPreview(const RealTime &startTime,
 
     default:
 #ifdef DEBUG_PEAKFILE_BRIEF
-        RG_DEBUG << "PeakFile::getPreview - "
-        << "unsupported peak length format (" << m_format << ")";
+        RG_DEBUG << "getPreview() - unsupported peak length format (" << m_format << ")";
 #endif
 
         return m_lastPreviewCache;
@@ -748,15 +736,15 @@ PeakFile::getPreview(const RealTime &startTime,
 
             if (scanToPeak(peakNumber) == false) {
 #ifdef DEBUG_PEAKFILE
-                RG_DEBUG << "PeakFile::getPreview: scanToPeak(" << peakNumber << ") failed";
+                RG_DEBUG << "getPreview(): scanToPeak(" << peakNumber << ") failed";
 #endif
 
                 m_lastPreviewCache.push_back(0.0f);
             }
         }
 #ifdef DEBUG_PEAKFILE
-        RG_DEBUG << "PeakFile::getPreview: step is " << step << ", format * pointsPerValue * chans is " << (m_format * m_pointsPerValue * m_channels);
-        RG_DEBUG << "i = " << i << ", peakNumber = " << peakNumber << ", nextPeakNumber = " << nextPeakNumber;
+        RG_DEBUG << "getPreview(): step is " << step << ", format * pointsPerValue * chans is " << (m_format * m_pointsPerValue * m_channels);
+        RG_DEBUG << "              i = " << i << ", peakNumber = " << peakNumber << ", nextPeakNumber = " << nextPeakNumber;
 #endif
 
         for (int ch = 0; ch < m_channels; ch++) {
@@ -779,13 +767,13 @@ PeakFile::getPreview(const RealTime &startTime,
                         // return the results so far.
                         //
 #ifdef DEBUG_PEAKFILE
-                        RG_DEBUG << "PeakFile::getPreview - \"" << e.getMessage() << "\"\n";
+                        RG_DEBUG << "getPreview() - \"" << e.getMessage() << "\"";
 #endif
 
                         goto done;
                     }
 #ifdef DEBUG_PEAKFILE
-                    RG_DEBUG << "PeakFile::getPreview - read from file";
+                    RG_DEBUG << "getPreview() - read from file";
 #endif
 
                 } else {
@@ -801,7 +789,7 @@ PeakFile::getPreview(const RealTime &startTime,
                         peakData = m_peakCache.substr(charNum, charLength);
 #ifdef DEBUG_PEAKFILE
 
-                        RG_DEBUG << "PeakFile::getPreview - hit peakCache";
+                        RG_DEBUG << "getPreview() - hit peakCache";
 #endif
 
                     }
@@ -814,8 +802,7 @@ PeakFile::getPreview(const RealTime &startTime,
                     // we've got so far
                     //
 #ifdef DEBUG_PEAKFILE
-                    RG_DEBUG << "PeakFile::getPreview - "
-                    << "failed to get complete peak block";
+                    RG_DEBUG << "getPreview() - failed to get complete peak block";
 #endif
 
                     goto done;
@@ -830,7 +817,7 @@ PeakFile::getPreview(const RealTime &startTime,
                 }
 
 #ifdef DEBUG_PEAKFILE
-                RG_DEBUG << "found potential hivalue " << inValue;
+                RG_DEBUG << "getPreview() - found potential hivalue " << inValue;
 #endif
 
                 if (k == 0 || inValue > hiValues[ch]) {
@@ -861,7 +848,7 @@ PeakFile::getPreview(const RealTime &startTime,
             float value = hiValues[ch] / divisor;
 
 #ifdef DEBUG_PEAKFILE_BRIEF
-            RG_DEBUG << "VALUE = " << hiValues[ch] / divisor;
+            RG_DEBUG << "getPreview() - VALUE = " << hiValues[ch] / divisor;
 #endif
 
             if (showMinima) {
@@ -889,7 +876,7 @@ done:
     m_lastPreviewShowMinima = showMinima;
 
 #ifdef DEBUG_PEAKFILE_BRIEF
-    RG_DEBUG << "Returning " << m_lastPreviewCache.size() << " items";
+    RG_DEBUG << "getPreview() - Returning " << m_lastPreviewCache.size() << " items";
 #endif
 
     return m_lastPreviewCache;
@@ -955,8 +942,7 @@ PeakFile::getSplitPoints(const RealTime &startTime,
             try {
                 peakData = getBytes(m_inFile, m_format * m_pointsPerValue);
             } catch (BadSoundFileException e) {
-                RG_WARNING << "PeakFile::getSplitPoints: "
-                << e.getMessage();
+                RG_WARNING << "getSplitPoints(): " << e.getMessage();
                 break;
             }
 

@@ -59,7 +59,7 @@ public:
 
     /// Is the peak file valid and up to date?
     /**
-     * If the audio file is more recently modified that the modification time
+     * If the audio file is more recently modified than the modification time
      * on this peak file then we're invalid.  The action to rectify this is
      * usually to regenerate the peak data.
      */
