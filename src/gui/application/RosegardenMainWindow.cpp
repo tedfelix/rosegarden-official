@@ -1312,6 +1312,13 @@ RosegardenMainWindow::setDocument(RosegardenDocument* newDocument)
 {
     if (m_doc == newDocument) return;
 
+    // Save the modified status so that we can put it back after we
+    // are done here.
+    // ??? Probably worth investigating why this is necessary, and
+    //     thinking through an alternate approach.  Perhaps this
+    //     check/restore could be moved into the culprit at least.
+    bool modified = newDocument->isModified();
+
     emit documentAboutToChange();
     qApp->processEvents(); // to make sure all opened dialogs (mixer, midi devices...) are closed
 
@@ -1422,7 +1429,6 @@ RosegardenMainWindow::setDocument(RosegardenDocument* newDocument)
     m_view->slotSynchroniseWithComposition();
 
     m_doc->checkSequencerTimer();
-    m_doc->clearModifiedStatus();
 
     if (newDocument->getStudio().haveMidiDevices()) {
         enterActionState("got_midi_devices"); //@@@ JAS orig. 0
@@ -1453,9 +1459,11 @@ RosegardenMainWindow::setDocument(RosegardenDocument* newDocument)
 
     emit documentChanged(m_doc);
 
-    m_doc->clearModifiedStatus(); // because it's set as modified by the various
-    // init operations
-    // TODO: this sucks, have to sort it out somehow.
+    // Restore the document's original modified status.
+    if (modified)
+        m_doc->slotDocumentModified();
+    else
+        m_doc->clearModifiedStatus();
 
     // Readjust canvas size
     //
@@ -1710,7 +1718,6 @@ RosegardenMainWindow::createDocumentFromRGFile(
     }
 
     if (recovering) {
-        // ??? This gets clobbered later.  setDocument() is the culprit.
         newDoc->slotDocumentModified();
 
         // Replace the auto-save filepath with the filepath of
@@ -1718,8 +1725,6 @@ RosegardenMainWindow::createDocumentFromRGFile(
         QFileInfo fileInfo(filePath);
         newDoc->setAbsFilePath(fileInfo.absoluteFilePath());
         newDoc->setTitle(fileInfo.fileName());
-    } else {
-        newDoc->clearModifiedStatus();
     }
 
     return newDoc;
@@ -4771,7 +4776,7 @@ RosegardenMainWindow::mergeFile(QString filePath, ImportType type)
 
             delete doc;
 
-        } else {
+        } else {  // ??? I don't think it's possible for m_doc to be NULL.
             setDocument(doc);
         }
     }
