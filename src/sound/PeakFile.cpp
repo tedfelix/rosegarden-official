@@ -525,8 +525,8 @@ PeakFile::writePeaks(std::ofstream *file)
 
         byteCount += samples.length();
 
-        // ??? Every 100 blocks?  That's around 100kbytes.
-        if (ct % 100 == 0) {
+        // ??? Every 2000 blocks?  That's around 2Mbytes?
+        if (ct % 2000 == 0) {
             int progress = static_cast<int>(double(byteCount) /
                     double(apprxTotalBytes) * 100.0);
 

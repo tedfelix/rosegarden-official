@@ -1176,76 +1176,56 @@ AudioManagerDialog::addFile(const QUrl& kurl)
         return false;
     }
     
-    // If mulitple audio files are added concurrently, this implementation
+    // If multiple audio files are added concurrently, this implementation
     // looks funny to the user, but it is functional for now.  NO time for
     // a more robust solution.
+    // ??? By "looks funny" I assume this means that it pops up a new
+    //     progress dialog for each file being added.  Moving the
+    //     QProgressDialog up the call stack shouldn't be too hard.
+    //     That might cover one of the cases anyway.
 
-    //cc 20150508: avoid dereferencing self-deleted progress dialog
-    //after user has closed it, by using a QPointer
-    QPointer<ProgressDialog> progressDlg = new ProgressDialog(tr("Adding audio file..."),
-                                                              (QWidget*)this);
+    // Start out in indeterminate mode since AudioFileManager::importUrl()
+    // has no way to give us proper progress.
+    QProgressDialog progressDialog(tr("Adding audio file..."), tr("Cancel"),
+                                   0, 0, dynamic_cast<QWidget *>(this));
+    progressDialog.setWindowTitle(tr("Rosegarden"));
+    progressDialog.setWindowModality(Qt::WindowModal);
+    // This is required for indeterminate mode.  It's unfortunate since
+    // that means it will appear even for very short wait times.  Remove
+    // this if importUrl() is ever upgraded to provide proper progress.
+    progressDialog.show();
 
-    CurrentProgressDialog::set(progressDlg);
-    progressDlg->setIndeterminate(true);
-    
-    // Connect the progress dialog
-    //
-    connect(&aFM, SIGNAL(setValue(int)),
-            progressDlg, SLOT(setValue(int)));
-    connect(&aFM, SIGNAL(setOperationName(QString)),
-            progressDlg, SLOT(setLabelText(QString)));
-    connect(progressDlg, SIGNAL(canceled()),
-            &aFM, SLOT(slotStopImport()));
+    aFM.setProgressDialog(QPointer<QProgressDialog>(&progressDialog));
+
+    // Flush the event queue.
+    qApp->processEvents(QEventLoop::AllEvents);
 
     try {
         id = aFM.importURL(kurl, m_sampleRate);
     } catch (AudioFileManager::BadAudioPathException e) {
-        CurrentProgressDialog::freeze();
         QString errorString = tr("Failed to add audio file. ") + strtoqstr(e.getMessage());
         QMessageBox::warning(this, tr("Rosegarden"), errorString);
-        if (progressDlg) progressDlg->close();
         return false;
     } catch (SoundFile::BadSoundFileException e) {
-        CurrentProgressDialog::freeze();
         QString errorString = tr("Failed to add audio file. ") + strtoqstr(e.getMessage());
         QMessageBox::warning(this, tr("Rosegarden"), errorString);
-        if (progressDlg) progressDlg->close();
         return false;
     }
 
-    if (progressDlg) {
-        disconnect(progressDlg, SIGNAL(canceled()),
-                   &aFM, SLOT(slotStopImport()));
-
-        progressDlg->setIndeterminate(false);
-        progressDlg->setValue(0);
-    
-        progressDlg->setLabelText(tr("Generating audio preview..."));
-
-        connect(progressDlg, SIGNAL(canceled()),
-                &aFM, SLOT(slotStopPreview()));
-    }
+    progressDialog.setLabelText(tr("Generating audio preview..."));
+    // Leave indeterminate mode since generatePreview() provides
+    // proper progress.
+    progressDialog.setRange(0, 100);
 
     try {
         aFM.generatePreview(id);
     } catch (Exception e) {
-        CurrentProgressDialog::freeze();
-
         QString message = strtoqstr(e.getMessage()) + "\n\n" +
                           tr("Try copying this file to a directory where you have write permission and re-add it");
         QMessageBox::information(this, tr("Rosegarden"), message);
     }
 
-    //Disconnect all signals from &aFM from the Progress Bar
-    if (progressDlg) {
-        disconnect(progressDlg, 0, &aFM, 0);
-    }
-
     slotPopulateFileList();
-
-    if (progressDlg) {
-        progressDlg->close();
-    }
 
     // tell the sequencer
     emit addAudioFile(id);

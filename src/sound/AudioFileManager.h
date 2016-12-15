@@ -256,6 +256,10 @@ public:
 
     std::set<int> getActualSampleRates() const;
 
+    /// Provide a progress dialog to be used to show progress.
+    void setProgressDialog(QPointer<QProgressDialog> progressDialog)
+            { m_progressDialog = progressDialog; }
+
     /// Show entries for debug purposes
     void print();
 
