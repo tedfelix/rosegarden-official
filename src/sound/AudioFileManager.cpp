@@ -217,6 +217,7 @@ AudioFileManager::getDirectory(const QString &path) const
 }
 
 
+#if 0
 // Create a new AudioFile with unique ID and label - insert from
 // our RG4 file
 //
@@ -273,7 +274,7 @@ AudioFileManager::insertFile(const std::string &name,
 
     return id;
 }
-
+#endif
 
 bool
 AudioFileManager::removeFile(AudioFileId id)

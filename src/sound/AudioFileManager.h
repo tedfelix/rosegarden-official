@@ -21,9 +21,7 @@
 #include <string>
 #include <vector>
 #include <set>
-#include <map>
 
-#include <QStringList>
 #include <QPixmap>
 #include <QObject>
 #include <QUrl>
@@ -32,40 +30,39 @@
 
 #include "AudioFile.h"
 #include "PeakFileManager.h"
-#include "PeakFile.h"
 
 #include "base/XmlExportable.h"
 #include "base/Exception.h"
-#include "misc/Strings.h"
-
-// AudioFileManager loads and maps audio files to their
-// internal references (ids).  A point of contact for
-// AudioFile information - loading a Composition should
-// use this class to pick up the AudioFile references,
-// editing the AudioFiles in a Composition will be
-// made through this manager.
-
-// This is in the sound library because it's so closely
-// connected to other sound classes like the AudioFile
-// ones.  However, the audio file manager itself within
-// Rosegarden is stored in the GUI process.  This class
-// is not (and should not be) used elsewhere within the
-// sound or sequencer libraries.
 
 class QProcess;
 
 namespace Rosegarden
 {
 
-typedef std::vector<AudioFile*>::const_iterator AudioFileManagerIterator;
+typedef std::vector<AudioFile *>::const_iterator AudioFileManagerIterator;
 
+/**
+ * AudioFileManager loads and maps audio files to their
+ * internal references (ids).  A point of contact for
+ * AudioFile information - loading a Composition should
+ * use this class to pick up the AudioFile references,
+ * editing the AudioFiles in a Composition will be
+ * made through this manager.
+ *
+ * This is in the sound library because it's so closely
+ * connected to other sound classes like the AudioFile
+ * ones.  However, the audio file manager itself within
+ * Rosegarden is stored in the GUI process.  This class
+ * is not (and should not be) used elsewhere within the
+ * sound or sequencer libraries.
+ */
 class AudioFileManager : public QObject, public XmlExportable
 {
     Q_OBJECT
 public:
     AudioFileManager();
     virtual ~AudioFileManager();
-    
+
     class BadAudioPathException : public Exception
     {
     public:
@@ -86,42 +83,49 @@ public:
 
 private:
     AudioFileManager(const AudioFileManager &aFM);
-    AudioFileManager& operator=(const AudioFileManager &);
+    AudioFileManager &operator=(const AudioFileManager &);
 
 public:
 
-    // Create an audio file from an absolute path - we use this
-    // interface to add an actual file.  This only works with files
-    // that are already in a format RG understands natively.  If you
-    // are not sure about that, use importFile or importURL instead.
-    //
+    /// Create an audio file from an absolute path
+    /**
+     * We use this interface to add an actual file.  This only works
+     * with files that are already in a format RG understands natively.
+     * If you are not sure about that, use importFile() or importURL()
+     * instead.
+     *
+     * throws BadAudioPathException
+     */
     AudioFileId addFile(const QString &filePath);
-    // throw BadAudioPathException
 
-    // Create an audio file by importing (i.e. converting and/or
-    // resampling) an existing file using the conversion library.  If
-    // you are not sure whether to use addFile or importFile, go for
-    // importFile.
-    //
+    /**
+     * Create an audio file by importing (i.e. converting and/or
+     * resampling) an existing file using the conversion library.  If
+     * you are not sure whether to use addFile() or importFile(), go for
+     * importFile().
+     *
+     * throws BadAudioPathException, BadSoundFileException
+     */
     AudioFileId importFile(const QString &filePath,
-			   int targetSampleRate);
-    // throw BadAudioPathException, BadSoundFileException
+                           int targetSampleRate);
 
     /// Create an audio file by importing from a URL
     /**
      * throws BadAudioPathException, BadSoundFileException
      */
     AudioFileId importURL(const QUrl &filePath,
-			  int targetSampleRate,
-			  QPointer<QProgressDialog> progressDialog = 0);
+                          int targetSampleRate,
+                          QPointer<QProgressDialog> progressDialog = 0);
 
-    // Insert an audio file into the AudioFileManager and get the
-    // first allocated id for it.  Used from the RG file as we already
-    // have both name and filename/path.
-    //
-    AudioFileId insertFile(const std::string &name,
-                           const QString &fileName);
-    // throw BadAudioPathException
+    /**
+     * Insert an audio file into the AudioFileManager and get the
+     * first allocated id for it.  Used from the RG file as we already
+     * have both name and filename/path.
+     *
+     * throw BadAudioPathException
+     */
+    //AudioFileId insertFile(const std::string &name,
+    //                       const QString &fileName);
 
     // Convert an audio file from arbitrary external format to an
     // internal format suitable for use by addFile, using packages in
@@ -153,10 +157,10 @@ public:
 
     // Get the list of files
     //
-    std::vector<AudioFile*>::const_iterator begin() const
+    AudioFileManagerIterator begin() const
         { return m_audioFiles.begin(); }
 
-    std::vector<AudioFile*>::const_iterator end() const
+    AudioFileManagerIterator end() const
         { return m_audioFiles.end(); }
 
     // Clear down all audio file references
@@ -196,7 +200,7 @@ public:
     // Create an empty file "derived from" the source (used by e.g. stretcher)
     // 
     AudioFile *createDerivedAudioFile(AudioFileId source,
-				      const char *prefix);
+                                      const char *prefix);
 
     // return the last file in the vector - the last created
     //
