@@ -303,15 +303,9 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
                              const QString& localName,
                              const QString& qName, const QXmlAttributes& atts)
 {
-#if 0
-    // If the user pressed Cancel on the progress dialog...
-    if (m_progressDialog  &&  m_progressDialog->wasCanceled()) {
-        // Ideally, we'd throw here, but at this point Qt is in the stack
-        // and Qt is very often compiled without exception support.
-        //
+    // If the user cancelled, bail.
+    if (m_progressDialog  &&  m_progressDialog->wasCanceled())
         return false;
-    }
-#endif
 
     QString lcName = qName.toLower();
 
@@ -2273,11 +2267,9 @@ RoseXmlHandler::endElement(const QString& namespaceURI,
         (++m_elementsSoFar % 300 == 0)) {
 
         if (m_progressDialog) {
-            // Check for canceled.
-            //if (m_progressDialog->wasCanceled()) {
-                // ??? Bail?
-                //return false;
-            //}
+            // If the user cancelled, bail.
+            if (m_progressDialog->wasCanceled())
+                return false;
 
             m_progressDialog->setValue(static_cast<int>(
                     static_cast<double>(m_elementsSoFar) /

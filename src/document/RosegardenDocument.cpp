@@ -550,9 +550,7 @@ bool RosegardenDocument::openDocument(const QString &filename,
     // ??? We should move the progress dialog further up the call chain
     //     to include the additional time.
     progressDialog.setMinimumDuration(2000);
-    // For now, remove the Cancel button.  The user can still close the
-    // progress dialog, but it will do nothing.  And it won't crash.
-    progressDialog.setCancelButton(0);
+
     m_progressDialog = &progressDialog;
 
     // For testing, get rid of it.
@@ -561,12 +559,6 @@ bool RosegardenDocument::openDocument(const QString &filename,
         // Apparently, close() isn't strong enough...
         m_progressDialog = 0;
     }
-
-    // Since we're in indeterminate progress mode (min=max=0), force the
-    // progress dialog up.  Would be nice to do this on a timer, but this
-    // is an interim approach.
-    if (m_progressDialog)
-        m_progressDialog->show();
 
     setAbsFilePath(fileInfo.absoluteFilePath());
 
@@ -613,6 +605,9 @@ bool RosegardenDocument::openDocument(const QString &filename,
     }
 
     if (cancelled) {
+        // Don't leave a lock file around.
+        release(m_absFilePath);
+
         newDocument();
 
         return false;
@@ -1737,6 +1732,12 @@ RosegardenDocument::xmlParse(QString fileContents, QString &errMsg,
     reader.setErrorHandler(&handler);
 
     bool ok = reader.parse(source);
+
+    if (m_progressDialog  &&  m_progressDialog->wasCanceled()) {
+        QMessageBox::information(dynamic_cast<QWidget *>(parent()), tr("Rosegarden"), tr("File load cancelled"));
+        cancelled = true;
+        return true;
+    }
 
     if (!ok) {
 

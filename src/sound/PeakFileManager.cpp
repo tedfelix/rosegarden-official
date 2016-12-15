@@ -19,6 +19,8 @@
 
 #include <vector>
 
+#include <QProgressDialog>
+
 #include "AudioFile.h"
 #include "base/RealTime.h"
 #include "PeakFile.h"
@@ -161,6 +163,11 @@ PeakFileManager::generatePeaks(AudioFile *audioFile)
             throw BadPeakFileException(
                     audioFile->getFilename(), __FILE__, __LINE__);
         }
+
+        // If we were cancelled, don't leave a partial peak file lying
+        // around.
+        if (m_progressDialog  &&  m_progressDialog->wasCanceled())
+            stopPreview();
 
         // The m_currentPeakFile might have been cancelled (see stopPreview())
         //

@@ -532,8 +532,12 @@ PeakFile::writePeaks(std::ofstream *file)
 
             //RG_DEBUG << "writePeaks(): progress" << progress;
 
-            if (m_progressDialog)
+            if (m_progressDialog) {
+                if (m_progressDialog->wasCanceled())
+                    break;
+
                 m_progressDialog->setValue(progress);
+            }
 
             emit setValue(progress);
 

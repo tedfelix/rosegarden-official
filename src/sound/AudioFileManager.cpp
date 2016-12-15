@@ -880,6 +880,9 @@ AudioFileManager::generatePreviews(QPointer<QProgressDialog> progressDialog)
          ++it) {
         if (!m_peakManager.hasValidPeaks(*it))
             m_peakManager.generatePeaks(*it);
+
+        if (m_progressDialog  &&  m_progressDialog->wasCanceled())
+            break;
     }
 
     // Even if we didn't do anything, reset the progress dialog.
