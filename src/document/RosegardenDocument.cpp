@@ -1475,7 +1475,7 @@ bool RosegardenDocument::exportStudio(const QString& filename,
 }
 
 void RosegardenDocument::saveSegment(QTextStream& outStream, Segment *segment,
-                                   long totalEvents, long &count,
+                                   long /*totalEvents*/, long &/*count*/,
                                    QString extraAttributes)
 {
     QString time;
