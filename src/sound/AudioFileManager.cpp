@@ -52,7 +52,8 @@ namespace Rosegarden
 
 static pthread_mutex_t audioFileManagerLock;
 
-
+// ??? Why not use QMutexLocker and QMutex?  Probably need to go through
+//     all the code and replace pthread_mutex_lock() with QMutex/QMutexLocker.
 class MutexLock
 {
 public:
@@ -109,7 +110,8 @@ AudioFileManager::~AudioFileManager()
 AudioFileId
 AudioFileManager::addFile(const QString &filePath)
 {
-    MutexLock lock (&audioFileManagerLock);
+    MutexLock lock (&audioFileManagerLock)
+        ;
 
     QString ext;
 
@@ -482,25 +484,13 @@ AudioFileManager::clear()
 AudioFile *
 AudioFileManager::createRecordingAudioFile(QString projectName, QString instrumentAlias)
 {
-    MutexLock lock (&audioFileManagerLock);
+    MutexLock lock (&audioFileManagerLock)
+        ;
 
     RG_DEBUG << "createRecordingAudioFile(): " << projectName;
 
-    // just throw an _ in place of any characters that should be avoided
-    instrumentAlias.replace(QRegExp("&"),   "_");
-    instrumentAlias.replace(QRegExp("\\\\"),"_");
-    instrumentAlias.replace(QRegExp("\\/"), "_");
-    instrumentAlias.replace(QRegExp("%"),   "_");
-    instrumentAlias.replace(QRegExp("\\*"), "_");
-    instrumentAlias.replace(QRegExp("\\?"), "_");
-    instrumentAlias.replace(QRegExp("\""),  "_");
-    instrumentAlias.replace(QRegExp("'"),   "_");
-    instrumentAlias.replace(QRegExp(">"),   "_");
-    instrumentAlias.replace(QRegExp("<"),   "_");
-    instrumentAlias.replace(QRegExp("\\|"), "_");
-    instrumentAlias.replace(QRegExp("~"),   "_");
-    instrumentAlias.replace(QRegExp(":"),   "_");
-    instrumentAlias.replace(QRegExp(" "),   "_");
+    // Replace invalid filename characters with "_".
+    instrumentAlias.replace(QRegExp("[&\\\\\\/%\\*\\?\"'><\\|~: ]"), "_");
 
     if (instrumentAlias.isEmpty()) instrumentAlias = "not_specified";
 
@@ -571,7 +561,8 @@ AudioFile *
 AudioFileManager::createDerivedAudioFile(AudioFileId source,
                                          const char *prefix)
 {
-    MutexLock lock (&audioFileManagerLock);
+    MutexLock lock (&audioFileManagerLock)
+        ;
 
     AudioFile *sourceFile = getAudioFile(source);
     if (!sourceFile) return 0;
@@ -645,7 +636,8 @@ AudioFileManager::importFile(const QString &fileName, int sampleRate)
     AudioFileId newId = 0;
 
     {
-        MutexLock lock (&audioFileManagerLock);
+        MutexLock lock (&audioFileManagerLock)
+            ;
 
         newId = getUniqueAudioFileID();
 
@@ -680,7 +672,8 @@ AudioFileManager::importFile(const QString &fileName, int sampleRate)
     }
 
     {
-        MutexLock lock (&audioFileManagerLock);
+        MutexLock lock (&audioFileManagerLock)
+            ;
 
         // insert file into vector
         WAVAudioFile *aF = 0;
@@ -809,15 +802,11 @@ AudioFileManager::tildeToHome(const QString &path) const
     return rS;
 }
 
-// Export audio files and assorted bits and bobs - make sure
-// that we store the files in a format that's user independent
-// so that people can pack up and swap their songs (including
-// audio files) and shift them about easily.
-//
 std::string
 AudioFileManager::toXmlString() const
 {
-    MutexLock lock (&audioFileManagerLock);
+    MutexLock lock (&audioFileManagerLock)
+        ;
 
     std::stringstream audioFiles;
     QString audioPath = homeToTilde(m_audioPath);
@@ -827,8 +816,7 @@ AudioFileManager::toXmlString() const
         audioFiles << " expectedRate=\"" << m_expectedSampleRate << "\"";
     }
     audioFiles << ">" << std::endl;
-    audioFiles << "    <audioPath value=\""
-    << audioPath << "\"/>" << std::endl;
+    audioFiles << "    <audioPath value=\"" << audioPath << "\"/>" << std::endl;
 
     QString fileName;
 
@@ -853,13 +841,10 @@ AudioFileManager::toXmlString() const
         else
             fileName = homeToTilde(fileName);
 
-        audioFiles << "    <audio id=\""
-        << (*it)->getId()
-        << "\" file=\""
-        << fileName
-        << "\" label=\""
-        << encode((*it)->getLabel())
-        << "\"/>" << std::endl;
+        audioFiles << "    <audio id=\"" << (*it)->getId()
+                   << "\" file=\"" << fileName
+                   << "\" label=\"" << encode((*it)->getLabel())
+                   << "\"/>" << std::endl;
     }
 
     audioFiles << "</audiofiles>" << std::endl;
@@ -869,9 +854,6 @@ AudioFileManager::toXmlString() const
     return audioFiles.str();
 }
 
-// Generate preview peak files or peak chunks according
-// to file type.
-//
 void
 AudioFileManager::generatePreviews(QPointer<QProgressDialog> progressDialog)
 {
@@ -902,21 +884,16 @@ AudioFileManager::generatePreviews(QPointer<QProgressDialog> progressDialog)
         m_progressDialog->setValue(100);
 }
 
-// Attempt to stop a preview
-//
 void
 AudioFileManager::slotStopPreview()
 {
-    MutexLock lock (&audioFileManagerLock);
+    MutexLock lock (&audioFileManagerLock)
+        ;
+
     m_peakManager.stopPreview();
 }
 
 
-// Generate a preview for a specific audio file - say if
-// one has just been added to the AudioFileManager.
-// Also used for generating previews if the file has been
-// modified.
-//
 bool
 AudioFileManager::generatePreview(AudioFileId id)
 {
@@ -968,8 +945,8 @@ AudioFileManager::getPreview(AudioFileId id,
 
     if (!m_peakManager.hasValidPeaks(audioFile)) {
         RG_WARNING << "getPreview(): No peaks for audio file " << audioFile->getFilename();
-        throw PeakFileManager::BadPeakFileException
-        (audioFile->getFilename(), __FILE__, __LINE__);
+        throw PeakFileManager::BadPeakFileException(
+                audioFile->getFilename(), __FILE__, __LINE__);
     }
 
     return m_peakManager.getPreview(audioFile,
@@ -990,12 +967,12 @@ AudioFileManager::drawPreview(AudioFileId id,
 
     AudioFile *audioFile = getAudioFile(id);
     if (!audioFile)
-        return ;
+        return;
 
     if (!m_peakManager.hasValidPeaks(audioFile)) {
         RG_WARNING << "drawPreview(): No peaks for audio file " << audioFile->getFilename();
-        throw PeakFileManager::BadPeakFileException
-        (audioFile->getFilename(), __FILE__, __LINE__);
+        throw PeakFileManager::BadPeakFileException(
+                audioFile->getFilename(), __FILE__, __LINE__);
     }
 
     std::vector<float> values = m_peakManager.getPreview
@@ -1016,7 +993,7 @@ AudioFileManager::drawPreview(AudioFileId id,
         RG_WARNING << "drawPreview() - no preview values returned!";
 #endif
 
-        return ;
+        return;
     }
 
     float yStep = pixmap->height() / 2;
@@ -1028,7 +1005,7 @@ AudioFileManager::drawPreview(AudioFileId id,
         RG_WARNING << "drawPreview() - no channels in audio file!";
 #endif
 
-        return ;
+        return;
     }
 
 
@@ -1064,7 +1041,7 @@ AudioFileManager::drawHighlightedPreview(AudioFileId id,
 
     AudioFile *audioFile = getAudioFile(id);
     if (!audioFile)
-        return ;
+        return;
 
     if (!m_peakManager.hasValidPeaks(audioFile)) {
         RG_WARNING << "getPreview(): No peaks for audio file " << audioFile->getFilename();

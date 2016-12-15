@@ -171,16 +171,29 @@ public:
     AudioFile *createDerivedAudioFile(AudioFileId source,
                                       const char *prefix);
 
+    /// Export audio files and assorted bits and bobs
+    /**
+     * The files are stored in a format that's user independent so
+     * that people can pack up and swap their songs (including audio
+     * files) and shift them about easily.
+     */
     virtual std::string toXmlString() const;
 
     /// Generate previews for all audio files.
     /**
+     * Generates preview peak files or peak chunks according to file type.
+     *
      * throw BadSoundFileException, BadPeakFileException
      */
     void generatePreviews(QPointer<QProgressDialog> progressDialog);
 
     /// Generate preview for a single audio file.
     /**
+     * Generate a preview for a specific audio file - say if
+     * one has just been added to the AudioFileManager.
+     * Also used for generating previews if the file has been
+     * modified.
+     *
      * throws BadSoundFileException, BadPeakFileException
      */
     bool generatePreview(AudioFileId id);
