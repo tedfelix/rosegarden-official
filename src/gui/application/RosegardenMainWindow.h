@@ -390,7 +390,8 @@ protected:
     /**
      * Create a document from RG file
      */
-    RosegardenDocument* createDocumentFromRGFile(QString filePath, bool lock = true);
+    RosegardenDocument* createDocumentFromRGFile(
+            const QString &filePath, bool lock = true);
 
     /**
      * Create document from MIDI file

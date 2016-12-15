@@ -1646,69 +1646,80 @@ RosegardenMainWindow::createDocument(
     return doc;
 }
 
-RosegardenDocument*
-RosegardenMainWindow::createDocumentFromRGFile(QString filePath, bool lock)
+RosegardenDocument *
+RosegardenMainWindow::createDocumentFromRGFile(
+        const QString &filePath, bool lock)
 {
-    // Check for an autosaved file to recover
-    QString effectiveFilePath = filePath;
+    // ??? This and its caller should probably be moved into
+    //     RosegardenDocument as static factory functions.
 
+    // The file we are going to open in the end.  This could be either
+    // the requested file or the auto-saved version of that file.
+    QString openFilePath = filePath;
+
+    // Check for an auto-save file to recover
     QString autoSaveFileName = AutoSaveFinder().checkAutoSaveFile(filePath);
+
     bool recovering = (autoSaveFileName != "");
 
     if (recovering) {
+        QFileInfo fileInfo(filePath);
+        QFileInfo autoSaveFileInfo(autoSaveFileName);
 
-        // First check if the auto-save file is more recent than the doc
-        QFileInfo docFileInfo(filePath), autoSaveFileInfo(autoSaveFileName);
-
-        if (docFileInfo.lastModified() < autoSaveFileInfo.lastModified()) {
-
-            RG_DEBUG << "RosegardenMainWindow::openFile : "
-                     << "found a more recent autosave file\n";
-
-            // At this point the splash screen may still be there, hide it if
-            // it's the case
+        // If the auto-save file is more recent
+        if (autoSaveFileInfo.lastModified() > fileInfo.lastModified()) {
+            // At this point the splash screen may still be there, hide it
+            // before showing the messagebox.
             StartupLogo::hideIfStillThere();
 
-            // It is, so ask the user if he wants to use the autosave file
-            int reply = QMessageBox::question(this, tr("Rosegarden"),
-                                              tr("An auto-save file for this document has been found\nDo you want to open it instead ?"), QMessageBox::Yes | QMessageBox::No);
+            // Ask the user if they want to use the auto-save file
+            QMessageBox::StandardButton reply = QMessageBox::question(
+                    this, tr("Rosegarden"),
+                    tr("An auto-save file for this document has been found\nDo you want to open it instead ?"),
+                    QMessageBox::Yes | QMessageBox::No);
 
-            if (reply == QMessageBox::Yes)
-                // open the autosave file instead
-                effectiveFilePath = autoSaveFileName;
-            else {
-                // user doesn't want the autosave, so delete it
+            if (reply == QMessageBox::Yes) {
+                // open the auto-save file instead
+                openFilePath = autoSaveFileName;
+            } else {
+                // user doesn't want the auto-save, so delete it
                 // so it won't bother us again if we reload
                 QFile::remove(autoSaveFileName);
                 recovering = false;
             }
-        } else {
+        } else {  // Auto-save file is older.  Ignore it.
             recovering = false;
         }
     }
 
     // Create a new blank document
-    //
-    RosegardenDocument *newDoc = newDocument(true); // skipAutoload
+    RosegardenDocument *newDoc =
+            new RosegardenDocument(this,
+                    m_pluginManager,
+                    true,  // skipAutoload
+                    true,  // clearCommandHistory
+                    m_useSequencer);  // enableSound
 
-    // ignore return thingy
-    //
-    if (newDoc->openDocument(effectiveFilePath, true, false, lock)) {
-        if (recovering) {
-            // Mark the document as modified,
-            // set the "regular" filepath and name (not those of
-            // the autosaved doc)
-            //
-            newDoc->slotDocumentModified();
-            QFileInfo info(filePath);
-            newDoc->setAbsFilePath(info.absoluteFilePath());
-            newDoc->setTitle(info.fileName());
-        } else {
-            newDoc->clearModifiedStatus();
-        }
-    } else {
+    // Read the document from the file.
+    bool readOk = newDoc->openDocument(openFilePath, true, false, lock);
+
+    // If the read failed, bail.
+    if (!readOk) {
         delete newDoc;
         return 0;
+    }
+
+    if (recovering) {
+        // ??? This gets clobbered later.  setDocument() is the culprit.
+        newDoc->slotDocumentModified();
+
+        // Replace the auto-save filepath with the filepath of
+        // the original file.
+        QFileInfo fileInfo(filePath);
+        newDoc->setAbsFilePath(fileInfo.absoluteFilePath());
+        newDoc->setTitle(fileInfo.fileName());
+    } else {
+        newDoc->clearModifiedStatus();
     }
 
     return newDoc;
