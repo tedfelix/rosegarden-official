@@ -47,7 +47,6 @@
 #include "gui/application/RosegardenMainWindow.h"
 #include "sequencer/RosegardenSequencer.h"
 #include "gui/dialogs/FileLocateDialog.h"
-#include "gui/general/ProgressReporter.h"
 #include "gui/widgets/StartupLogo.h"
 #include "gui/studio/AudioPlugin.h"
 #include "gui/studio/AudioPluginManager.h"
@@ -207,7 +206,6 @@ RoseXmlHandler::RoseXmlHandler(RosegardenDocument *doc,
                                unsigned int elementCount,
                                QPointer<QProgressDialog> progressDialog,
                                bool createNewDevicesWhenNeeded) :
-    ProgressReporter(0),
     m_doc(doc),
     m_currentSegment(0),
     m_currentEvent(0),
@@ -217,17 +215,23 @@ RoseXmlHandler::RoseXmlHandler(RosegardenDocument *doc,
     m_inChord(false),
     m_inGroup(false),
     m_inComposition(false),
+    m_inColourMap(false),
     m_groupId(0),
+    m_groupTupletBase(0),
+    m_groupTupledCount(0),
+    m_groupUntupledCount(0),
     m_foundTempo(false),
     m_section(NoSection),
     m_device(0),
     m_deviceRunningId(Device::NO_DEVICE),
     m_deviceInstrumentBase(MidiInstrumentBase),
     m_deviceReadInstrumentBase(0),
+    m_percussion(false),
     m_sendBankSelect(false),
     m_msb(0),
     m_lsb(0),
     m_instrument(0),
+    m_buss(0),
     m_plugin(0),
     m_pluginInBuss(false),
     m_colourMap(0),
@@ -239,7 +243,6 @@ RoseXmlHandler::RoseXmlHandler(RosegardenDocument *doc,
     m_deprecation(false),
     m_createDevices(createNewDevicesWhenNeeded),
     m_haveControls(false),
-    m_cancelled(false),
     m_skipAllAudio(false),
     m_hasActiveAudio(false),
     m_oldSolo(false),
@@ -300,16 +303,15 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
                              const QString& localName,
                              const QString& qName, const QXmlAttributes& atts)
 {
-    // First check if user pressed cancel button on the value()
-    // dialog
-    //
-    if (isOperationCancelled()) {
+#if 0
+    // If the user pressed Cancel on the progress dialog...
+    if (m_progressDialog  &&  m_progressDialog->wasCanceled()) {
         // Ideally, we'd throw here, but at this point Qt is in the stack
         // and Qt is very often compiled without exception support.
         //
-        m_cancelled = true;
         return false;
     }
+#endif
 
     QString lcName = qName.toLower();
 
@@ -1820,7 +1822,9 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
 //            RG_WARNING << "Have container";
 
-            emit setOperationName(tr("Loading plugins..."));
+            if (m_progressDialog)
+                m_progressDialog->setLabelText(tr("Loading plugins..."));
+
             qApp->processEvents(QEventLoop::AllEvents, 100);
 
             // Get the details

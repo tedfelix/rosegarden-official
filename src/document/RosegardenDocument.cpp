@@ -1744,15 +1744,19 @@ RosegardenDocument::xmlParse(QString fileContents, QString &errMsg,
 
     if (!ok) {
 
-        if (handler.isCancelled()) {
+#if 0
+        if (m_progressDialog  &&  m_progressDialog->wasCanceled()) {
             RG_DEBUG << "File load cancelled";
             StartupLogo::hideIfStillThere();
             QMessageBox::information(dynamic_cast<QWidget *>(parent()), tr("Rosegarden"), tr("File load cancelled"));
             cancelled = true;
             return true;
         } else {
+#endif
             errMsg = handler.errorString();
+#if 0
         }
+#endif
 
     } else {
 

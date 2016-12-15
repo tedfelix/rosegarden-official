@@ -20,7 +20,6 @@
 
 #include "base/Device.h"
 #include "base/MidiProgram.h"
-#include "gui/general/ProgressReporter.h"
 #include "base/Event.h"
 
 #include <QString>
@@ -60,7 +59,7 @@ class AudioFileManager;
 /**
  * Handler for the Rosegarden XML format
  */
-class RoseXmlHandler : public ProgressReporter, public QXmlDefaultHandler
+class RoseXmlHandler : public QObject, public QXmlDefaultHandler
 {
     //Q_OBJECT
 public:
@@ -105,8 +104,6 @@ public:
     virtual bool endDocument (); // [rwb] - for tempo element catch
 
     bool isDeprecated() { return m_deprecation; }
-
-    bool isCancelled() { return m_cancelled; }
 
     /// Return the error string set during the parsing (if any)
     QString errorString() const;
@@ -190,7 +187,6 @@ protected:
     bool                              m_deprecation;
     bool                              m_createDevices;
     bool                              m_haveControls;
-    bool                              m_cancelled;
     bool                              m_skipAllAudio;
     bool                              m_hasActiveAudio;
 
