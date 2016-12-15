@@ -24,7 +24,6 @@
 
 #include "sound/SoundFile.h"
 #include "PeakFile.h"  // for SplitPointPair
-//#include "misc/Strings.h"
 
 namespace Rosegarden
 {
@@ -84,25 +83,19 @@ public:
      */
     void generatePeaks(AudioFile *audioFile);
 
-    // Get a vector of floats as the preview
-    //
-    // throw BadSoundFileException, BadPeakFileException
+    /**
+     * throws BadSoundFileException, BadPeakFileException
+     */
     std::vector<float> getPreview(AudioFile *audioFile,
                                   const RealTime &startTime,
                                   const RealTime &endTime,
                                   int   width,
                                   bool  showMinima);
     
-    // Remove cache for a single audio file (if audio file to be deleted etc)
-    // 
     bool removeAudioFile(AudioFile *audioFile);
 
-    // Clear down
-    //
     void clear();
                     
-    // Get split points for a peak file
-    //
     std::vector<SplitPointPair> 
         getSplitPoints(AudioFile *audioFile,
                        const RealTime &startTime,
@@ -116,23 +109,30 @@ public:
     std::vector<PeakFile *>::const_iterator end() const
                 { return m_peakFiles.end(); }
 
-    // Stop a preview during its build
-    //
+    /**
+     * ??? Once the signals/slots progress dialog approach is removed, this
+     *     can go.
+     */
     void stopPreview();
 
 signals:
+    /**
+     * ??? Once the signals/slots progress dialog approach is removed, this
+     *     can go.
+     */
     void setValue(int);
 
 protected:
-    // Add and remove from our PeakFile cache
-    //
     bool insertAudioFile(AudioFile *audioFile);
     PeakFile *getPeakFile(AudioFile *audioFile);
 
     std::vector<PeakFile *> m_peakFiles;
 
-    // Whilst processing - the current PeakFile
-    //
+    /// Used by stopPreview() to stop generation of the peak file.
+    /**
+     * ??? Once the signals/slots progress dialog approach is removed, this
+     *     can go.
+     */
     PeakFile *m_currentPeakFile;
 };
 
