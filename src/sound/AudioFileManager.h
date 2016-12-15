@@ -223,15 +223,9 @@ public:
                                 QPixmap *pixmap);
 
     /// Convert the user's home directory to a "~".
-    /**
-     * ??? rename: homeToTilde()
-     */
-    QString substituteHomeForTilde(const QString &path) const;
+    QString homeToTilde(const QString &path) const;
     /// Expand "~" to the user's home directory.
-    /**
-     * ??? rename: tildeToHome()
-     */
-    QString substituteTildeForHome(const QString &path) const;
+    QString tildeToHome(const QString &path) const;
 
     /// Get a split point vector from a peak file
     /**

@@ -363,7 +363,7 @@ AudioManagerDialog::slotPopulateFileList()
         // File location
         //
         item->setText(6,  m_doc->getAudioFileManager().
-                          substituteHomeForTilde((*it)->getFilename()));
+                homeToTilde((*it)->getFilename()));
 
         // Resolution
         //

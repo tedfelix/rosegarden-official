@@ -226,7 +226,7 @@ AudioFileManager::insertFile(const std::string &name,
 
     // first try to expand any beginning tilde
     //
-    QString foundFileName = substituteTildeForHome(fileName);
+    QString foundFileName = tildeToHome(fileName);
 
     // If we've expanded and we can't find the file
     // then try to find it in audio file directory.
@@ -315,7 +315,7 @@ AudioFileManager::insertFile(const std::string &name,
         ;
 
     // first try to expand any beginning tilde
-    QString foundFileName = substituteTildeForHome(fileName);
+    QString foundFileName = tildeToHome(fileName);
 
     // If we've expanded and we can't find the file
     // then try to find it in audio file directory.
@@ -374,7 +374,7 @@ AudioFileManager::setAudioPath(const QString &path)
             hPath += "/";
 
         // get the home directory
-        // ??? Use substituteTildeForHome().
+        // ??? Use tildeToHome().
         if (hPath[0] == '~') {
             hPath.remove(0, 1);
             hPath = homePath + hPath;
@@ -777,7 +777,7 @@ AudioFileManager::getLastAudioFile()
 #endif
 
 QString
-AudioFileManager::substituteHomeForTilde(const QString &path) const
+AudioFileManager::homeToTilde(const QString &path) const
 {
     QString rS = path;
     QString homePath = getenv("HOME");
@@ -796,7 +796,7 @@ AudioFileManager::substituteHomeForTilde(const QString &path) const
 }
 
 QString
-AudioFileManager::substituteTildeForHome(const QString &path) const
+AudioFileManager::tildeToHome(const QString &path) const
 {
     QString rS = path;
     const QString homePath = QDir::homePath();
@@ -809,8 +809,6 @@ AudioFileManager::substituteTildeForHome(const QString &path) const
     return rS;
 }
 
-
-
 // Export audio files and assorted bits and bobs - make sure
 // that we store the files in a format that's user independent
 // so that people can pack up and swap their songs (including
@@ -822,7 +820,7 @@ AudioFileManager::toXmlString() const
     MutexLock lock (&audioFileManagerLock);
 
     std::stringstream audioFiles;
-    QString audioPath = substituteHomeForTilde(m_audioPath);
+    QString audioPath = homeToTilde(m_audioPath);
 
     audioFiles << "<audiofiles";
     if (m_expectedSampleRate != 0) {
@@ -853,7 +851,7 @@ AudioFileManager::toXmlString() const
         if (getDirectory(fileName) == m_audioPath)
             fileName = getShortFilename(fileName);
         else
-            fileName = substituteHomeForTilde(fileName);
+            fileName = homeToTilde(fileName);
 
         audioFiles << "    <audio id=\""
         << (*it)->getId()
