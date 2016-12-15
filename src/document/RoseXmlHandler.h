@@ -21,13 +21,17 @@
 #include "base/Device.h"
 #include "base/MidiProgram.h"
 #include "gui/general/ProgressReporter.h"
+#include "base/Event.h"
+
+#include <QString>
+#include <QXmlDefaultHandler>
+#include <QtCore/QSharedPointer>
+#include <QPointer>
+#include <QProgressDialog>
+
 #include <map>
 #include <set>
 #include <string>
-#include <QString>
-#include "base/Event.h"
-#include <QXmlDefaultHandler>
-#include <QtCore/QSharedPointer>
 
 
 class QXmlParseException;
@@ -80,6 +84,7 @@ public:
      */
     RoseXmlHandler(RosegardenDocument *doc,
                    unsigned int elementCount,
+                   QPointer<QProgressDialog> progressDialog,
                    bool createNewDevicesWhenNeeded);
 
     virtual ~RoseXmlHandler();
@@ -192,6 +197,8 @@ protected:
     // In case we encounter an old solo attribute at the composition level,
     // hold onto it and use it to set the solo for the proper track.
     bool m_oldSolo;
+
+    QPointer<QProgressDialog> m_progressDialog;
 };
 
 

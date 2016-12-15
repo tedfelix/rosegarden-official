@@ -542,7 +542,7 @@ bool RosegardenDocument::openDocument(const QString &filename,
 
     // Progress Dialog
     QProgressDialog progressDialog(tr("Reading file..."), tr("Cancel"),
-                                   0, 0, dynamic_cast<QWidget *>(parent()));
+                                   0, 100, dynamic_cast<QWidget *>(parent()));
     progressDialog.setWindowModality(Qt::WindowModal);
     // We're usually a bit late to the game here as it is.  Shave off a
     // couple of seconds to make up for it.
@@ -555,8 +555,11 @@ bool RosegardenDocument::openDocument(const QString &filename,
     m_progressDialog = &progressDialog;
 
     // For testing, get rid of it.
-    if (squelchProgressDialog)
+    if (squelchProgressDialog) {
         progressDialog.close();
+        // Apparently, close() isn't strong enough...
+        m_progressDialog = 0;
+    }
 
     // Since we're in indeterminate progress mode (min=max=0), force the
     // progress dialog up.  Would be nice to do this on a timer, but this
@@ -629,6 +632,8 @@ bool RosegardenDocument::openDocument(const QString &filename,
         m_progressDialog->setLabelText(tr("Generating audio previews..."));
 
         // Connect audio file manager for progress.
+        // ??? For now, just go into indeterminate mode.
+        m_progressDialog->setRange(0, 0);
         //m_progressDialog->setValue(0);
         //connect(&m_audioFileManager, SIGNAL(setValue(int)),
         //        m_progressDialog, SLOT(setValue(int)));
@@ -1727,19 +1732,7 @@ RosegardenDocument::xmlParse(QString fileContents, QString &errMsg,
 
     if (permanent && m_soundEnabled) RosegardenSequencer::getInstance()->removeAllDevices();
 
-    RoseXmlHandler handler(this, elementCount, permanent);
-
-#if 0
-    if (progress) {
-        RG_DEBUG << "RosegardenDocument::xmlParse(), have progress dialog.";
-
-        connect(&handler, SIGNAL(setValue(int)),
-                progress, SLOT(setValue(int)));
-        
-        connect(progress, SIGNAL(canceled()),
-                &handler, SLOT(slotCancel()));                
-    }
-#endif
+    RoseXmlHandler handler(this, elementCount, m_progressDialog, permanent);
 
     QXmlInputSource source;
     source.setData(fileContents);
@@ -1756,13 +1749,6 @@ RosegardenDocument::xmlParse(QString fileContents, QString &errMsg,
             StartupLogo::hideIfStillThere();
             QMessageBox::information(dynamic_cast<QWidget *>(parent()), tr("Rosegarden"), tr("File load cancelled"));
             cancelled = true;
-#if 0
-            if (progress) {
-                // Disconnect all signals /slots
-                disconnect(&handler, 0, progress, 0);
-                disconnect(progress, 0, &handler, 0);
-            }
-#endif
             return true;
         } else {
             errMsg = handler.errorString();
@@ -1774,7 +1760,6 @@ RosegardenDocument::xmlParse(QString fileContents, QString &errMsg,
             !(getSequenceManager()->getSoundDriverStatus() & AUDIO_OK)) {
 
             StartupLogo::hideIfStillThere();
-//            CurrentProgressDialog::freeze();
 
             if (handler.hasActiveAudio() ||
                 (m_pluginManager && !handler.pluginsNotFound().empty())) {
@@ -1787,7 +1772,6 @@ RosegardenDocument::xmlParse(QString fileContents, QString &errMsg,
                     (dynamic_cast<QWidget *>(parent()), tr("Rosegarden"), tr("<h3>Audio and plugins not available</h3><p>This composition uses audio files or plugins, but you are running a version of Rosegarden that was compiled without audio support.</p><p><b>WARNING:</b> If you re-save this composition from this version of Rosegarden, all audio and plugin data and settings in it will be lost.</p>"));
 #endif
             }
-//            CurrentProgressDialog::thaw();
 
         } else {
            
@@ -1819,23 +1803,19 @@ RosegardenDocument::xmlParse(QString fileContents, QString &errMsg,
                 if (er == 0) er = *rates.begin();
 
                 StartupLogo::hideIfStillThere();
-//                CurrentProgressDialog::freeze();
 
                 QMessageBox::information(dynamic_cast<QWidget *>(parent()), tr("Rosegarden"), tr("<h3>Incorrect audio sample rate</h3><p>This composition contains audio files that were recorded or imported with the audio server running at a different sample rate (%1 Hz) from the current JACK server sample rate (%2 Hz).</p><p>Rosegarden will play this composition at the correct speed, but any audio files in it will probably sound awful.</p><p>Please consider re-starting the JACK server at the correct rate (%3 Hz) and re-loading this composition before you do any more work with it.</p>").arg(er).arg(sr).arg(er));
 
-//                CurrentProgressDialog::thaw();
                 shownWarning = true;
  
             } else if (sr != 0 && mixed) {
                     
                 StartupLogo::hideIfStillThere();
-//                CurrentProgressDialog::freeze();
                 
                 QMessageBox::information(dynamic_cast<QWidget *>(parent()), tr("Rosegarden"), tr("<h3>Inconsistent audio sample rates</h3><p>This composition contains audio files at more than one sample rate.</p><p>Rosegarden will play them at the correct speed, but any audio files that were recorded or imported at rates different from the current JACK server sample rate (%1 Hz) will probably sound awful.</p><p>Please see the audio file manager dialog for more details, and consider resampling any files that are at the wrong rate.</p>").arg(sr),
                                          tr("Inconsistent sample rates"),
                                          "file-load-inconsistent-samplerates");
                     
-//                CurrentProgressDialog::thaw();
                 shownWarning = true;
             }
  
@@ -1859,9 +1839,7 @@ RosegardenDocument::xmlParse(QString fileContents, QString &errMsg,
                 msg += "</ul>";
                 
                 StartupLogo::hideIfStillThere();
-//                CurrentProgressDialog::freeze();
                 QMessageBox::information(dynamic_cast<QWidget *>(parent()), tr("Rosegarden"), msg);
-//                CurrentProgressDialog::thaw();
                 shownWarning = true;
                 
             }
@@ -1872,26 +1850,13 @@ RosegardenDocument::xmlParse(QString fileContents, QString &errMsg,
                 slotDocumentModified(); // so file can be re-saved immediately
                 
                 StartupLogo::hideIfStillThere();
-//                CurrentProgressDialog::freeze();
                 QMessageBox::information(dynamic_cast<QWidget *>(parent()), tr("Rosegarden"), msg);
-//                CurrentProgressDialog::thaw();
             }
 
         }
         
         getComposition().resetLinkedSegmentRefreshStatuses();
     }
-
-#if 0
-    // Set to maximum just incase reading did not do this.
-    if (progress) {
-        progress->setValue(progress->maximum());
-
-        // Disconnect all signals /slots
-        disconnect(&handler, 0, progress, 0);
-        disconnect(progress, 0, &handler, 0);
-    }
-#endif
 
     return ok;
 }

@@ -205,6 +205,7 @@ ConfigurationXmlSubHandler::endElement(const QString&,
 
 RoseXmlHandler::RoseXmlHandler(RosegardenDocument *doc,
                                unsigned int elementCount,
+                               QPointer<QProgressDialog> progressDialog,
                                bool createNewDevicesWhenNeeded) :
     ProgressReporter(0),
     m_doc(doc),
@@ -241,7 +242,8 @@ RoseXmlHandler::RoseXmlHandler(RosegardenDocument *doc,
     m_cancelled(false),
     m_skipAllAudio(false),
     m_hasActiveAudio(false),
-    m_oldSolo(false)
+    m_oldSolo(false),
+    m_progressDialog(progressDialog)
 {}
 
 RoseXmlHandler::~RoseXmlHandler()
@@ -2266,11 +2268,20 @@ RoseXmlHandler::endElement(const QString& namespaceURI,
     if ((m_totalElements > m_elementsSoFar) &&
         (++m_elementsSoFar % 300 == 0)) {
 
-        Profiler profiler("RoseXmlHandler::endElement: emit progress");
+        if (m_progressDialog) {
+            // Check for canceled.
+            //if (m_progressDialog->wasCanceled()) {
+                // ??? Bail?
+                //return false;
+            //}
 
-//       RG_DEBUG << "emitting setValue(" << int(double(m_elementsSoFar) / double(m_totalElements) * 100.0) << ")";
+            m_progressDialog->setValue(static_cast<int>(
+                    static_cast<double>(m_elementsSoFar) /
+                    static_cast<double>(m_totalElements) * 100.0));
+        }
 
-        emit setValue(int(double(m_elementsSoFar) / double(m_totalElements) * 100.0));
+        // Kick the event loop so that we don't appear to be in
+        // an endless loop.
         qApp->processEvents(QEventLoop::AllEvents, 100);
     }
 
