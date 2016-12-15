@@ -141,8 +141,7 @@ TrackEditor::init(RosegardenMainViewWidget *mainViewWidget)
                                   m_doc,
                                   0.0,
                                   24,
-                                  true,
-                                  this);
+                                  true);
     grid->addWidget(m_tempoRuler, 1, 1);
 
     m_topStandardRuler = new StandardRuler(m_doc,
