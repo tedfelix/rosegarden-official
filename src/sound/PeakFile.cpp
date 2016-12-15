@@ -22,6 +22,7 @@
 #include <vector>
 
 #include <QDateTime>
+#include <QProgressDialog>
 #include <QStringList>
 
 #include "PeakFile.h"
@@ -500,10 +501,13 @@ PeakFile::writePeaks(std::ofstream *file)
     m_bodyBytes = 0;
     m_positionPeakOfPeaks = 0;
 
+    // ??? Block count?  How does this differ from m_numberOfPeaks?
     int ct = 0;
 
+    // ??? for each block...?
     while (m_keepProcessing) {
         try {
+            // Read a block
             samples = m_audioFile->
                       getBytes(m_blockSize * channels * bytes);
         } catch (BadSoundFileException e) {
@@ -521,10 +525,17 @@ PeakFile::writePeaks(std::ofstream *file)
 
         byteCount += samples.length();
 
+        // ??? Every 100 blocks?  That's around 100kbytes.
         if (ct % 100 == 0) {
-            emit setValue((int)(double(byteCount) /
-                                double(apprxTotalBytes) * 100.0));
-            //RG_DEBUG << "writePeaks(): peak file is emitting to file manager is emitting to progress dialog...";
+            int progress = static_cast<int>(double(byteCount) /
+                    double(apprxTotalBytes) * 100.0);
+
+            //RG_DEBUG << "writePeaks(): progress" << progress;
+
+            if (m_progressDialog)
+                m_progressDialog->setValue(progress);
+
+            emit setValue(progress);
 
             qApp->processEvents(QEventLoop::AllEvents);
         }
@@ -585,8 +596,8 @@ PeakFile::writePeaks(std::ofstream *file)
 
                 // Store peak of peaks if it fits
                 //
-                if (abs(sampleValue) > sampleMax) {
-                    sampleMax = abs(sampleValue);
+                if (std::abs(sampleValue) > sampleMax) {
+                    sampleMax = std::abs(sampleValue);
                     m_positionPeakOfPeaks = sampleFrameCount;
                 }
             }

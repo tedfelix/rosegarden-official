@@ -152,7 +152,7 @@ PeakFileManager::generatePeaks(AudioFile *audioFile)
 
         QObject::connect(m_currentPeakFile, SIGNAL(setValue(int)),
                          this, SIGNAL(setValue(int)));
-        //m_currentPeakFile->setProgressDialog(m_progressDialog);
+        m_currentPeakFile->setProgressDialog(m_progressDialog);
 
         // Just write out a peak file
         //

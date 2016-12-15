@@ -16,6 +16,9 @@
 
 #include <QObject>
 #include <QDateTime>
+#include <QPointer>
+
+class QProgressDialog;
 
 #include "SoundFile.h"
 #include "base/RealTime.h"
@@ -53,6 +56,10 @@ public:
 
     virtual bool open();
     virtual void close();
+
+    /// Set up a progress dialog for write().
+    void setProgressDialog(QPointer<QProgressDialog> progressDialog)
+            { m_progressDialog = progressDialog; }
 
     /// Write to standard peak file
     virtual bool write();
@@ -156,6 +163,9 @@ protected:
 
     /// Cleared by setProcessingPeaks() to indicate processing should stop.
     bool               m_keepProcessing;
+
+    /// Optional progress dialog for write().
+    QPointer<QProgressDialog> m_progressDialog;
 
     /// Cached in-memory copy of the peak file for getPreview().
     std::string        m_peakCache;
