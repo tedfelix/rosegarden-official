@@ -314,6 +314,7 @@ PeakFile::isValid()
     return true;
 }
 
+#if 0
 bool
 PeakFile::writeToHandle(std::ofstream *file,
                         unsigned short /*updatePercentage*/)
@@ -325,6 +326,7 @@ PeakFile::writeToHandle(std::ofstream *file,
 
     return false;
 }
+#endif
 
 // Build up a header string and then pump it out to the file handle
 //
@@ -439,6 +441,7 @@ PeakFile::scanToPeak(int peak)
     return true;
 }
 
+#if 0
 bool
 PeakFile::scanForward(int numberOfPeaks)
 {
@@ -463,7 +466,7 @@ PeakFile::scanForward(int numberOfPeaks)
 
     return true;
 }
-
+#endif
 
 void
 PeakFile::writePeaks(std::ofstream *file)
