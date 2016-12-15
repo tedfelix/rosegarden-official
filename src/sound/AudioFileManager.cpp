@@ -17,36 +17,32 @@
 
 #define RG_MODULE_STRING "[AudioFileManager]"
 
-#include <fstream>
-#include <string>
-#include <dirent.h> // for new recording file
-#include <cstdio>   // sprintf
-#include <cstdlib>
-#include <pthread.h>
-#include <signal.h>
-#include <sstream>
+#include <pthread.h>  // pthread_mutex_lock() and friends
 
-#include <QApplication>
+#include <string>
+#include <sstream>  // std::stringstream
+
 #include <QMessageBox>
-#include <QProcess>
 #include <QPixmap>
 #include <QPainter>
 #include <QDateTime>
 #include <QFile>
+#include <QFileInfo>
 #include <QDir>
 
 #include "gui/general/FileSource.h"
 #include "AudioFile.h"
-#include "AudioFileManager.h"
 #include "WAVAudioFile.h"
 #include "BWFAudioFile.h"
 #include "misc/Debug.h"
-#include "misc/Strings.h"
+#include "misc/Strings.h"  // qstrtostr() and friends
 #include "sequencer/RosegardenSequencer.h"
 #include "sound/audiostream/AudioReadStream.h"
 #include "sound/audiostream/AudioReadStreamFactory.h"
 #include "sound/audiostream/AudioWriteStream.h"
 #include "sound/audiostream/AudioWriteStreamFactory.h"
+
+#include "AudioFileManager.h"
 
 // #define DEBUG_AUDIOFILEMANAGER
 // #define DEBUG_AUDIOFILEMANAGER_INSERT_FILE
@@ -55,6 +51,7 @@ namespace Rosegarden
 {
 
 static pthread_mutex_t audioFileManagerLock;
+
 
 class MutexLock
 {
@@ -70,6 +67,7 @@ public:
 private:
     pthread_mutex_t *m_mutex;
 };
+
 
 AudioFileManager::AudioFileManager() :
     m_lastAudioFileID(0),
@@ -108,8 +106,6 @@ AudioFileManager::~AudioFileManager()
     clear();
 }
 
-// Add a file from an absolute path
-//
 AudioFileId
 AudioFileManager::addFile(const QString &filePath)
 {
@@ -118,7 +114,7 @@ AudioFileManager::addFile(const QString &filePath)
     QString ext;
 
     if (filePath.length() > 3) {
-	ext = filePath.mid(filePath.length() - 3, 3).toLower();
+        ext = filePath.mid(filePath.length() - 3, 3).toLower();
     }
 
     // Check for file existing already in manager by path
@@ -286,7 +282,7 @@ AudioFileManager::removeFile(AudioFileId id)
         if ((*it)->getId() == id) {
             m_peakManager.removeAudioFile(*it);
             m_recordedAudioFiles.erase(*it);
-	    m_derivedAudioFiles.erase(*it);
+            m_derivedAudioFiles.erase(*it);
             delete(*it);
             m_audioFiles.erase(it);
             return true;
@@ -490,7 +486,7 @@ AudioFileManager::clear()
             it != m_audioFiles.end();
             ++it) {
         m_recordedAudioFiles.erase(*it);
-	m_derivedAudioFiles.erase(*it);
+        m_derivedAudioFiles.erase(*it);
         delete(*it);
     }
 
@@ -546,13 +542,13 @@ AudioFileManager::createRecordingAudioFile(QString projectName, QString instrume
     // insert file into vector
     WAVAudioFile *aF = 0;
 
-	QString aup( m_audioPath );
-	QString fnm(fileName);
-	const QString fpath = m_audioPath + fileName;
+    QString aup( m_audioPath );
+    QString fnm(fileName);
+    const QString fpath = m_audioPath + fileName;
     try {
-		aF = new WAVAudioFile( static_cast<const unsigned int>(newId), qstrtostr(fileName), fpath );
-		//aF = new WAVAudioFile(newId, fileName.data(), m_audioPath + qstrtostr(fileName) );
-		m_audioFiles.push_back(aF);
+        aF = new WAVAudioFile( static_cast<const unsigned int>(newId), qstrtostr(fileName), fpath );
+        //aF = new WAVAudioFile(newId, fileName.data(), m_audioPath + qstrtostr(fileName) );
+        m_audioFiles.push_back(aF);
         m_recordedAudioFiles.insert(aF);
     } catch (SoundFile::BadSoundFileException e) {
         delete aF;
@@ -591,7 +587,7 @@ AudioFileManager::resetRecentlyCreatedFiles()
 
 AudioFile *
 AudioFileManager::createDerivedAudioFile(AudioFileId source,
-					 const char *prefix)
+                                         const char *prefix)
 {
     MutexLock lock (&audioFileManagerLock);
 
@@ -603,17 +599,17 @@ AudioFileManager::createDerivedAudioFile(AudioFileId source,
 
     QString sourceBase = sourceFile->getShortFilename();
     if (sourceBase.length() > 4 && sourceBase.mid(0, 3) == "rg-") {
-	sourceBase = sourceBase.mid(3);
+        sourceBase = sourceBase.mid(3);
     }
     if (sourceBase.length() > 15) sourceBase = sourceBase.mid(0, 15);
 
     while (fileName == "") {
 
         fileName = QString("%1-%2-%3-%4.wav")
-	    .arg(prefix)
-	    .arg( sourceBase )
-	    .arg(QDateTime::currentDateTime().toString("yyyyMMdd-hhmmss"))
-	    .arg(newId + 1);
+            .arg(prefix)
+            .arg( sourceBase )
+            .arg(QDateTime::currentDateTime().toString("yyyyMMdd-hhmmss"))
+            .arg(newId + 1);
 
         if (QFile(m_audioPath + fileName).exists()) {
             fileName = "";
@@ -626,10 +622,10 @@ AudioFileManager::createDerivedAudioFile(AudioFileId source,
 
     try {
         aF = new WAVAudioFile(newId,
-			      qstrtostr(fileName),
-			      m_audioPath + fileName );
+                              qstrtostr(fileName),
+                              m_audioPath + fileName );
         m_audioFiles.push_back(aF);
-	m_derivedAudioFiles.insert(aF);
+        m_derivedAudioFiles.insert(aF);
     } catch (SoundFile::BadSoundFileException e) {
         delete aF;
         throw BadAudioPathException(e);
@@ -697,7 +693,7 @@ AudioFileManager::importFile(const QString &fileName, int sampleRate)
     int ec = convertAudioFile(fileName, outFileName);
 
     if (ec) {
-	throw SoundFile::BadSoundFileException
+        throw SoundFile::BadSoundFileException
             (fileName, qstrtostr(tr("Failed to convert or resample audio file on import")) );
     }
 
@@ -848,7 +844,7 @@ AudioFileManager::toXmlString() const
 
     audioFiles << "<audiofiles";
     if (m_expectedSampleRate != 0) {
-	audioFiles << " expectedRate=\"" << m_expectedSampleRate << "\"";
+        audioFiles << " expectedRate=\"" << m_expectedSampleRate << "\"";
     }
     audioFiles << ">" << std::endl;
     audioFiles << "    <audioPath value=\""
@@ -1189,10 +1185,10 @@ AudioFileManager::getActualSampleRates() const
     std::set<int> rates;
 
     for (std::vector<AudioFile *>::const_iterator i = m_audioFiles.begin();
-	 i != m_audioFiles.end(); ++i) {
+         i != m_audioFiles.end(); ++i) {
 
-	unsigned int sr = (*i)->getSampleRate();
-	if (sr != 0) rates.insert(int(sr));
+        unsigned int sr = (*i)->getSampleRate();
+        if (sr != 0) rates.insert(int(sr));
     }
 
     return rates;

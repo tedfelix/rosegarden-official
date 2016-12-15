@@ -87,7 +87,7 @@ private:
 
 public:
 
-    /// Create an audio file from an absolute path
+    /// Create an AudioFile object from an absolute path
     /**
      * We use this interface to add an actual file.  This only works
      * with files that are already in a format RG understands natively.
