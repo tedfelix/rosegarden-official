@@ -193,12 +193,6 @@ PeakFile::printStats()
 bool
 PeakFile::write()
 {
-    return write(5); // default update every 5%
-}
-
-bool
-PeakFile::write(unsigned short updatePercentage)
-{
     if (m_outFile) {
         m_outFile->close();
         delete m_outFile;
@@ -228,7 +222,7 @@ PeakFile::write(unsigned short updatePercentage)
     writeHeader(m_outFile);
 
     // and now the peak values
-    writePeaks(updatePercentage, m_outFile);
+    writePeaks(m_outFile);
 
     return true;
 }
@@ -472,8 +466,7 @@ PeakFile::scanForward(int numberOfPeaks)
 
 
 void
-PeakFile::writePeaks(unsigned short /*updatePercentage*/,
-                     std::ofstream *file)
+PeakFile::writePeaks(std::ofstream *file)
 {
     if (!file || !(*file))
         return ;

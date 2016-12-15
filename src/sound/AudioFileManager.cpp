@@ -879,7 +879,7 @@ AudioFileManager::generatePreviews(QPointer<QProgressDialog> progressDialog)
          it != m_audioFiles.end();
          ++it) {
         if (!m_peakManager.hasValidPeaks(*it))
-            m_peakManager.generatePeaks(*it, 1);
+            m_peakManager.generatePeaks(*it);
     }
 
     // Even if we didn't do anything, reset the progress dialog.
@@ -910,7 +910,7 @@ AudioFileManager::generatePreview(AudioFileId id)
         return false;
 
     if (!m_peakManager.hasValidPeaks(audioFile))
-        m_peakManager.generatePeaks(audioFile, 1);
+        m_peakManager.generatePeaks(audioFile);
 
     return true;
 }

@@ -42,7 +42,6 @@ namespace Rosegarden
 
 
 PeakFileManager::PeakFileManager():
-        m_updatePercentage(0),
         m_currentPeakFile(0)
 {}
 
@@ -163,8 +162,7 @@ PeakFileManager::hasValidPeaks(AudioFile *audioFile)
 // regenerate.
 //
 void
-PeakFileManager::generatePeaks(AudioFile *audioFile,
-                               unsigned short updatePercentage)
+PeakFileManager::generatePeaks(AudioFile *audioFile)
 {
 #ifdef DEBUG_PEAKFILEMANAGER
     RG_DEBUG << "PeakFileManager::generatePeaks - generating peaks for \""
@@ -179,7 +177,7 @@ PeakFileManager::generatePeaks(AudioFile *audioFile,
 
         // Just write out a peak file
         //
-        if (m_currentPeakFile->write(updatePercentage) == false) {
+        if (m_currentPeakFile->write() == false) {
             RG_WARNING << "Can't write peak file for " << audioFile->getFilename() << " - no preview generated";
             throw BadPeakFileException
             (audioFile->getFilename(), __FILE__, __LINE__);

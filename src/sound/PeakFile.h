@@ -66,10 +66,6 @@ public:
     //
     virtual bool write();
 
-    // Write the file, emit value() signal and process app events
-    //
-    virtual bool write(unsigned short updatePercentage);
-
     // Write peak chunk to file handle (BWF)
     //
     bool writeToHandle(std::ofstream *file, unsigned short updatePercentage);
@@ -129,8 +125,7 @@ protected:
     // Write the peak header and the peaks themselves
     //
     void writeHeader(std::ofstream *file);
-    void writePeaks(unsigned short updatePercentage,
-                    std::ofstream *file);
+    void writePeaks(std::ofstream *file);
 
     // Get the position of a peak for a given time
     //

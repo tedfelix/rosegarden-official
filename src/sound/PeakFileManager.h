@@ -14,42 +14,33 @@
 */
 
 
-// Accepts an AudioFIle and turns the sample data into peak data for
-// storage in a peak file or a BWF format peak chunk.  Pixmaps or
-// sample data is returned to callers on demand using these cached
-// values.
-//
-//
-
 #ifndef RG_PEAKFILEMANAGER_H
 #define RG_PEAKFILEMANAGER_H
 
-#include <string>
-#include <fstream>
 #include <vector>
 
 #include <QObject>
+#include <QString>
 
-
-#include "PeakFile.h"
-#include "misc/Strings.h"
+#include "sound/SoundFile.h"
+#include "PeakFile.h"  // for SplitPointPair
+//#include "misc/Strings.h"
 
 namespace Rosegarden
 {
 
 class AudioFile;
+class PeakFile;
 class RealTime;
 
+/**
+ * Accepts an AudioFIle and turns the sample data into peak data for
+ * storage in a peak file or a BWF format peak chunk.
+ */
 class PeakFileManager : public QObject
 {
     Q_OBJECT
 public:
-    // updatePercentage tells this object how often to throw a
-    // percentage complete message - active between 0-100 only
-    // if it's set to 5 then we send an update exception every
-    // five percent.  The percentage complete is sent with 
-    // each exception.
-    //
     PeakFileManager();
     virtual ~PeakFileManager();
     
@@ -76,29 +67,31 @@ private:
     PeakFileManager& operator=(const PeakFileManager &);
 
 public:
-    // Check that a given audio file has a valid and up to date
-    // peak file or peak chunk.
-    //
+    /**
+     * Check that a given audio file has a valid and up to date
+     * peak file or peak chunk.
+     *
+     * throws BadSoundFileException, BadPeakFileException
+     */
     bool hasValidPeaks(AudioFile *audioFile);
-    // throw BadSoundFileException, BadPeakFileException
 
-    // Generate a peak file from file details - if the peak file already
-    // exists _and_ it's up to date then we don't do anything.  For BWF
-    // files we generate an internal peak chunk.
-    //
-    //
-    void generatePeaks(AudioFile *audioFile,
-                       unsigned short updatePercentage);
-    // throw BadSoundFileException, BadPeakFileException
+    /// Generate a peak file from file details.
+    /**
+     * if the peak file already exists _and_ it's up to date then we don't
+     * do anything.  For BWF files we generate an internal peak chunk.
+     *
+     * throw BadSoundFileException, BadPeakFileException
+     */
+    void generatePeaks(AudioFile *audioFile);
 
     // Get a vector of floats as the preview
     //
+    // throw BadSoundFileException, BadPeakFileException
     std::vector<float> getPreview(AudioFile *audioFile,
                                   const RealTime &startTime,
                                   const RealTime &endTime,
                                   int   width,
                                   bool  showMinima);
-    // throw BadSoundFileException, BadPeakFileException
     
     // Remove cache for a single audio file (if audio file to be deleted etc)
     // 
@@ -117,10 +110,10 @@ public:
                        int threshold,
                        const RealTime &minTime);
 
-    std::vector<PeakFile*>::const_iterator begin() const
+    std::vector<PeakFile *>::const_iterator begin() const
                 { return m_peakFiles.begin(); }
 
-    std::vector<PeakFile*>::const_iterator end() const
+    std::vector<PeakFile *>::const_iterator end() const
                 { return m_peakFiles.end(); }
 
     // Stop a preview during its build
@@ -131,20 +124,16 @@ signals:
     void setValue(int);
 
 protected:
-
     // Add and remove from our PeakFile cache
     //
     bool insertAudioFile(AudioFile *audioFile);
-    PeakFile* getPeakFile(AudioFile *audioFile);
+    PeakFile *getPeakFile(AudioFile *audioFile);
 
-    std::vector<PeakFile*> m_peakFiles;
-    unsigned short m_updatePercentage;  // how often we send updates 
+    std::vector<PeakFile *> m_peakFiles;
 
     // Whilst processing - the current PeakFile
     //
-    PeakFile              *m_currentPeakFile;
-
-
+    PeakFile *m_currentPeakFile;
 };
 
 
@@ -152,5 +141,3 @@ protected:
 
 
 #endif // RG_PEAKFILEMANAGER_H
-
-
