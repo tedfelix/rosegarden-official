@@ -631,6 +631,8 @@ AudioFileManager::importFile(const QString &fileName, int sampleRate)
     RG_DEBUG << "importFile("<< fileName << ", " << sampleRate << ")";
 
     emit setOperationName(tr("Importing audio file..."));
+    if (m_progressDialog)
+        m_progressDialog->setLabelText(tr("Importing audio file..."));
 
     QString targetName = "";
     AudioFileId newId = 0;
@@ -662,6 +664,8 @@ AudioFileManager::importFile(const QString &fileName, int sampleRate)
     }
 
     emit setOperationName(tr("Converting audio file..."));
+    if (m_progressDialog)
+        m_progressDialog->setLabelText(tr("Converting audio file..."));
 
     QString outFileName = m_audioPath + targetName;
     int ec = convertAudioFile(fileName, outFileName);
