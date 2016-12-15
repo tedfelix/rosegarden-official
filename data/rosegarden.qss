@@ -784,15 +784,15 @@ state set. */
 
 QProgressBar
 {
-    border: 1px solid #AAAAAA;
-    border-radius: 3px;
+    color: #000000;
     text-align: center;
     background: #FFFFFF;
+    border: 1px solid #AAAAAA;
+    border-radius: 3px;
 }
-
 QProgressBar::chunk
 {
-    background-color: #89B8E7;
+    background-color: #D6E8FB;
     width: 20px;
 }
 
