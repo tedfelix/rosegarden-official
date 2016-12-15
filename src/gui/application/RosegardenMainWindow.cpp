@@ -1619,7 +1619,7 @@ RosegardenMainWindow::createDocument(
     //     is loading.
     slotEnableTransport(false);
 
-    RosegardenDocument *doc;
+    RosegardenDocument *doc = 0;
 
     switch (importType) {
     case ImportMIDI:

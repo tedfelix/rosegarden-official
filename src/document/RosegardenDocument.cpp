@@ -514,14 +514,14 @@ void RosegardenDocument::performAutoload()
     openDocument(autoloadFile, permanent, squelchProgressDialog, enableLock);
 }
 
-bool RosegardenDocument::openDocument(const QString& filename,
+bool RosegardenDocument::openDocument(const QString &filename,
                                       bool permanent,
                                       bool squelchProgressDialog,
                                       bool enableLock)
 {
     RG_DEBUG << "openDocument(" << filename << ")";
 
-    if ( filename.isEmpty() )
+    if (filename.isEmpty())
         return false;
 
     newDocument();
@@ -529,21 +529,29 @@ bool RosegardenDocument::openDocument(const QString& filename,
     QFileInfo fileInfo(filename);
     setTitle(fileInfo.fileName());
 
-    // Check if file readable with fileInfo ?
+    // If the file cannot be read, or it's a directory
     if (!fileInfo.isReadable() || fileInfo.isDir()) {
         StartupLogo::hideIfStillThere();
+
         QString msg(tr("Can't open file '%1'").arg(filename));
-        QMessageBox::warning(dynamic_cast<QWidget *>(parent()), tr("Rosegarden"), msg);
+        QMessageBox::warning(dynamic_cast<QWidget *>(parent()),
+                             tr("Rosegarden"), msg);
+
         return false;
     }
 
-    //cc 20150508: avoid dereferencing self-deleted progress dialog
-    //after user has closed it, by using a QPointer
-    QPointer<ProgressDialog> progressDlg = 0;
-   
+    // ??? Why is RosegardenDocument launching a dialog?  It shouldn't.
+    //     It should offer the ability to subscribe for progress updates
+    //     and the client should be responsible for UI stuff.
+    // ??? Looking through ProgressDialog, we find that WA_DeleteOnClose
+    //     is set which is not normal.  Also, the QProgressDialog isn't
+    //     modal.  This makes things unnecessarily complicated.
+    // ??? We still crash if the user closes the progress dialog.
+    QPointer<ProgressDialog> progressDlg;
+
     if (!squelchProgressDialog) {
         progressDlg = new ProgressDialog(tr("Reading file..."),
-                                         (QWidget*)parent());
+                                         dynamic_cast<QWidget *>(parent()));
 
         connect(progressDlg, SIGNAL(canceled()),
                 &m_audioFileManager, SLOT(slotStopPreview()));
@@ -570,9 +578,7 @@ bool RosegardenDocument::openDocument(const QString& filename,
 
     // Load.
 
-    QString errMsg;
     QString fileContents;
-    bool cancelled = false;
 
     // Unzip
     bool okay = GzipFile::readFromFile(filename, fileContents);
@@ -580,8 +586,12 @@ bool RosegardenDocument::openDocument(const QString& filename,
     if (progressDlg)
         progressDlg->show();
     
-    if (!okay) errMsg = tr("Could not open Rosegarden file");
-    else {
+    QString errMsg;
+    bool cancelled = false;
+
+    if (!okay) {
+        errMsg = tr("Could not open Rosegarden file");
+    } else {
         // Parse the XML
         okay = xmlParse(fileContents,
                         errMsg,
@@ -592,19 +602,24 @@ bool RosegardenDocument::openDocument(const QString& filename,
 
     if (!okay) {
         StartupLogo::hideIfStillThere();
+
+        if (progressDlg)
+            CurrentProgressDialog::freeze();
+
         QString msg(tr("Error when parsing file '%1': \"%2\"")
                      .arg(filename)
                      .arg(errMsg));
-
-        if (progressDlg) CurrentProgressDialog::freeze();
         QMessageBox::warning(dynamic_cast<QWidget *>(parent()), tr("Rosegarden"), msg);
+
         if (progressDlg) {
             CurrentProgressDialog::thaw();
             progressDlg->close();
         }
-        return false;
 
-    } else if (cancelled) {
+        return false;
+    }
+
+    if (cancelled) {
         if (progressDlg) {
             progressDlg->close();
         }
