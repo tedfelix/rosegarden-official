@@ -26,7 +26,7 @@
 #include "base/Segment.h"
 #include "base/Studio.h"
 #include "gui/editors/segment/compositionview/AudioPeaksThread.h"
-#include "gui/widgets/ProgressDialog.h"
+//#include "gui/widgets/ProgressDialog.h"
 #include "sound/AudioFileManager.h"
 #include "base/Event.h"
 
@@ -47,7 +47,7 @@ namespace Rosegarden
 
 class SequenceManager;
 class RosegardenMainViewWidget;
-class ProgressDialog;
+//class ProgressDialog;
 class MappedEventList;
 class Event;
 class EditViewBase;
@@ -553,7 +553,6 @@ private:
      * @see RoseXmlHandler
      */
     bool xmlParse(QString fileContents, QString &errMsg,
-                  ProgressDialog *progress,
                   bool permanent,
                   bool &cancelled);
 
@@ -587,7 +586,7 @@ private:
     /**
      * Save one segment to the given text stream
      */
-    void saveSegment(QTextStream&, Segment*, ProgressDialog*,
+    void saveSegment(QTextStream&, Segment*,
                      long totalNbOfEvents, long &count,
                      QString extraAttributes = QString::null);
 

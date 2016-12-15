@@ -508,7 +508,8 @@ void RosegardenDocument::performAutoload()
         return ;
     }
 
-    bool permanent = true, squelchProgressDialog = true;
+    bool permanent = true;
+    bool squelchProgressDialog = true;
     // Don't lock the autoload.rg file.
     bool enableLock = false;
     openDocument(autoloadFile, permanent, squelchProgressDialog, enableLock);
@@ -547,6 +548,7 @@ bool RosegardenDocument::openDocument(const QString &filename,
     //     is set which is not normal.  Also, the QProgressDialog isn't
     //     modal.  This makes things unnecessarily complicated.
     // ??? We still crash if the user closes the progress dialog.
+#if 0
     QPointer<ProgressDialog> progressDlg;
 
     if (!squelchProgressDialog) {
@@ -558,6 +560,7 @@ bool RosegardenDocument::openDocument(const QString &filename,
 
         CurrentProgressDialog::set(progressDlg);
     }
+#endif
 
     setAbsFilePath(fileInfo.absoluteFilePath());
 
@@ -565,10 +568,6 @@ bool RosegardenDocument::openDocument(const QString &filename,
 
     if (permanent  &&  enableLock) {
         if (!lock()) {
-            if (progressDlg) {
-                CurrentProgressDialog::thaw();
-                progressDlg->close();
-            }
             // Avoid deleting the lock file by clearing out this document.
             newDocument();
 
@@ -583,9 +582,6 @@ bool RosegardenDocument::openDocument(const QString &filename,
     // Unzip
     bool okay = GzipFile::readFromFile(filename, fileContents);
     
-    if (progressDlg)
-        progressDlg->show();
-    
     QString errMsg;
     bool cancelled = false;
 
@@ -595,7 +591,6 @@ bool RosegardenDocument::openDocument(const QString &filename,
         // Parse the XML
         okay = xmlParse(fileContents,
                         errMsg,
-                        progressDlg,
                         permanent,
                         cancelled);
     }
@@ -603,28 +598,20 @@ bool RosegardenDocument::openDocument(const QString &filename,
     if (!okay) {
         StartupLogo::hideIfStillThere();
 
-        if (progressDlg)
-            CurrentProgressDialog::freeze();
+//        if (m_progressDialog)
+//            m_progressDialog->hide();
 
         QString msg(tr("Error when parsing file '%1': \"%2\"")
                      .arg(filename)
                      .arg(errMsg));
         QMessageBox::warning(dynamic_cast<QWidget *>(parent()), tr("Rosegarden"), msg);
 
-        if (progressDlg) {
-            CurrentProgressDialog::thaw();
-            progressDlg->close();
-        }
-
         return false;
     }
 
     if (cancelled) {
-        if (progressDlg) {
-            progressDlg->close();
-        }
         newDocument();
-        
+
         return false;
     }
 
@@ -639,6 +626,7 @@ bool RosegardenDocument::openDocument(const QString &filename,
         RG_DEBUG << "First segment starts at " << (*m_composition.begin())->getStartTime();
     }
 
+#if 0
     if (progressDlg) {
         
         progressDlg->setLabelText(tr("Generating audio previews..."));
@@ -647,15 +635,18 @@ bool RosegardenDocument::openDocument(const QString &filename,
         connect(&m_audioFileManager, SIGNAL(setValue(int)),
                 progressDlg, SLOT(setValue(int)));
     }
+#endif
     
     try {
         // generate any audio previews after loading the files
         m_audioFileManager.generatePreviews();
     } catch (Exception e) {
         StartupLogo::hideIfStillThere();
-        if (progressDlg) CurrentProgressDialog::freeze();
+//        if (m_progressDialog)
+//            m_progressDialog->hide();
         QMessageBox::critical(dynamic_cast<QWidget *>(parent()), tr("Rosegarden"), strtoqstr(e.getMessage()));
-        if (progressDlg) CurrentProgressDialog::thaw();
+//        if (m_progressDialog)
+//            m_progressDialog->show();
     }
 
     if (m_soundEnabled) {
@@ -677,10 +668,6 @@ bool RosegardenDocument::openDocument(const QString &filename,
     }
 
     std::cerr << "RosegardenDocument::openDocument: Successfully opened document \"" << filename << "\"" << std::endl;
-
-    if (progressDlg) {
-        progressDlg->close();
-    }
 
     return true;
 }
@@ -1072,9 +1059,11 @@ void RosegardenDocument::initialiseStudio()
 
             if (error != "") {
                 StartupLogo::hideIfStillThere();
-                CurrentProgressDialog::freeze();
+//                if (m_progressDialog)
+//                    m_progressDialog->hide();
                 QMessageBox::warning(dynamic_cast<QWidget *>(parent()), tr("Rosegarden"), error);
-                CurrentProgressDialog::thaw();
+//                if (m_progressDialog)
+//                    m_progressDialog->show();
             }
 
             // Bypassed
@@ -1273,7 +1262,7 @@ bool RosegardenDocument::saveDocumentActual(const QString& filename,
     << "\" format-version-point=\"" << FILE_FORMAT_VERSION_POINT
     << "\">\n";
 
-    ProgressDialog *progress = 0;
+//    ProgressDialog *progress = 0;
 
 // Disable the progress dialog on saving in all cases, because the alternative
 // is really complicated, and this progress dialog adds little, if any, value.
@@ -1289,9 +1278,9 @@ bool RosegardenDocument::saveDocumentActual(const QString& filename,
     //
     m_studio.resyncDeviceConnections();
 
-    if (progress) {
-        progress->setValue(10);
-    }
+//    if (progress) {
+//        progress->setValue(10);
+//    }
 
     // Send out Composition (this includes Tracks, Instruments, Tempo
     // and Time Signature changes and any other sub-objects)
@@ -1299,23 +1288,23 @@ bool RosegardenDocument::saveDocumentActual(const QString& filename,
     outStream << strtoqstr(getComposition().toXmlString())
               << endl << endl;
 
-    if (progress) {
-        progress->setValue(20);
-    }
+//    if (progress) {
+//        progress->setValue(20);
+//    }
 
     outStream << strtoqstr(getAudioFileManager().toXmlString())
               << endl << endl;
 
-    if (progress) {
-        progress->setValue(30);
-    }
+//    if (progress) {
+//        progress->setValue(30);
+//    }
 
     outStream << strtoqstr(getConfiguration().toXmlString())
               << endl << endl;
 
-    if (progress) {
-        progress->setValue(40);
-    }
+//    if (progress) {
+//        progress->setValue(40);
+//    }
 
     long totalEvents = 0;
     for (Composition::iterator segitr = m_composition.begin();
@@ -1323,9 +1312,9 @@ bool RosegardenDocument::saveDocumentActual(const QString& filename,
         totalEvents += (long)(*segitr)->size();
     }
 
-    if (progress) {
-        progress->setValue(50);
-    }
+//    if (progress) {
+//        progress->setValue(50);
+//    }
 
     for (Composition::triggersegmentcontaineriterator ci =
              m_composition.getTriggerSegments().begin();
@@ -1333,9 +1322,9 @@ bool RosegardenDocument::saveDocumentActual(const QString& filename,
         totalEvents += (long)(*ci)->getSegment()->size();
     }
 
-    if (progress) {
-        progress->setValue(60);
-    }
+//    if (progress) {
+//        progress->setValue(60);
+//    }
 
     // output all elements
     //
@@ -1369,17 +1358,17 @@ bool RosegardenDocument::saveDocumentActual(const QString& filename,
               .arg(segment->getLinkTransposeParams().m_transposeSegmentBack
                                                          ? "true" : "false");
 
-            saveSegment(outStream, segment, progress, totalEvents, 
+            saveSegment(outStream, segment, totalEvents,
                                             eventCount, linkedSegAtts);
         } else {
-            saveSegment(outStream, segment, progress, totalEvents, eventCount);
+            saveSegment(outStream, segment, totalEvents, eventCount);
         }
 
     }
 
-    if (progress) {
-        progress->setValue(70);
-    }
+//    if (progress) {
+//        progress->setValue(70);
+//    }
 
     // Put a break in the file
     //
@@ -1398,12 +1387,12 @@ bool RosegardenDocument::saveDocumentActual(const QString& filename,
                               .arg(strtoqstr((*ci)->getDefaultTimeAdjust()));
 
         Segment *segment = (*ci)->getSegment();
-        saveSegment(outStream, segment, progress, totalEvents, eventCount, triggerAtts);
+        saveSegment(outStream, segment, totalEvents, eventCount, triggerAtts);
     }
 
-    if (progress) {
-        progress->setValue(80);
-    }
+//    if (progress) {
+//        progress->setValue(80);
+//    }
 
     // Put a break in the file
     //
@@ -1413,9 +1402,9 @@ bool RosegardenDocument::saveDocumentActual(const QString& filename,
     //
     outStream << strtoqstr(m_studio.toXmlString()) << endl << endl;
 
-    if (progress) {
-        progress->setValue(90);
-    }
+//    if (progress) {
+//        progress->setValue(90);
+//    }
 
     // Send out the appearance data
     outStream << "<appearance>" << endl;
@@ -1423,9 +1412,9 @@ bool RosegardenDocument::saveDocumentActual(const QString& filename,
     outStream << strtoqstr(getComposition().getGeneralColourMap().toXmlString("generalmap"));
     outStream << "</appearance>" << endl << endl << endl;
 
-    if (progress) {
-        progress->setValue(95);
-    }
+//    if (progress) {
+//        progress->setValue(95);
+//    }
 
     // close the top-level XML tag
     //
@@ -1437,9 +1426,9 @@ bool RosegardenDocument::saveDocumentActual(const QString& filename,
         return false;
     }
 
-    if (progress) {
-        progress->setValue(100);
-    }
+//    if (progress) {
+//        progress->setValue(100);
+//    }
 
     RG_DEBUG << "RosegardenDocument::saveDocument() finished";
 
@@ -1448,10 +1437,10 @@ bool RosegardenDocument::saveDocumentActual(const QString& filename,
         setModified(false);
         CommandHistory::getInstance()->documentSaved();
     }
-    if (progress) {
-        progress->close();     // is deleteOnClose
-        progress = 0;
-    }
+//    if (progress) {
+//        progress->close();     // is deleteOnClose
+//        progress = 0;
+//    }
 
     setAutoSaved(true);
 
@@ -1495,7 +1484,7 @@ bool RosegardenDocument::exportStudio(const QString& filename,
 }
 
 void RosegardenDocument::saveSegment(QTextStream& outStream, Segment *segment,
-                                   ProgressDialog* progress, long totalEvents, long &count,
+                                   long totalEvents, long &count,
                                    QString extraAttributes)
 {
     QString time;
@@ -1640,9 +1629,9 @@ void RosegardenDocument::saveSegment(QTextStream& outStream, Segment *segment,
                 expectedTime = absTime + (*i)->getDuration();
             }
 
-            if ((++count % 500 == 0) && progress) {
-                progress->setValue(count * 100 / totalEvents);
-            }
+//            if ((++count % 500 == 0) && progress) {
+//                progress->setValue(count * 100 / totalEvents);
+//            }
         }
 
         if (inChord) {
@@ -1727,7 +1716,6 @@ bool RosegardenDocument::isSoundEnabled() const
 
 bool
 RosegardenDocument::xmlParse(QString fileContents, QString &errMsg,
-                           ProgressDialog *progress,
                            bool permanent,
                            bool &cancelled)
 {
@@ -1746,6 +1734,7 @@ RosegardenDocument::xmlParse(QString fileContents, QString &errMsg,
 
     RoseXmlHandler handler(this, elementCount, permanent);
 
+#if 0
     if (progress) {
         RG_DEBUG << "RosegardenDocument::xmlParse(), have progress dialog.";
 
@@ -1755,6 +1744,7 @@ RosegardenDocument::xmlParse(QString fileContents, QString &errMsg,
         connect(progress, SIGNAL(canceled()),
                 &handler, SLOT(slotCancel()));                
     }
+#endif
 
     QXmlInputSource source;
     source.setData(fileContents);
@@ -1771,11 +1761,13 @@ RosegardenDocument::xmlParse(QString fileContents, QString &errMsg,
             StartupLogo::hideIfStillThere();
             QMessageBox::information(dynamic_cast<QWidget *>(parent()), tr("Rosegarden"), tr("File load cancelled"));
             cancelled = true;
+#if 0
             if (progress) {
                 // Disconnect all signals /slots
                 disconnect(&handler, 0, progress, 0);
                 disconnect(progress, 0, &handler, 0);
             }
+#endif
             return true;
         } else {
             errMsg = handler.errorString();
@@ -1787,7 +1779,7 @@ RosegardenDocument::xmlParse(QString fileContents, QString &errMsg,
             !(getSequenceManager()->getSoundDriverStatus() & AUDIO_OK)) {
 
             StartupLogo::hideIfStillThere();
-            CurrentProgressDialog::freeze();
+//            CurrentProgressDialog::freeze();
 
             if (handler.hasActiveAudio() ||
                 (m_pluginManager && !handler.pluginsNotFound().empty())) {
@@ -1800,7 +1792,7 @@ RosegardenDocument::xmlParse(QString fileContents, QString &errMsg,
                     (dynamic_cast<QWidget *>(parent()), tr("Rosegarden"), tr("<h3>Audio and plugins not available</h3><p>This composition uses audio files or plugins, but you are running a version of Rosegarden that was compiled without audio support.</p><p><b>WARNING:</b> If you re-save this composition from this version of Rosegarden, all audio and plugin data and settings in it will be lost.</p>"));
 #endif
             }
-            CurrentProgressDialog::thaw();
+//            CurrentProgressDialog::thaw();
 
         } else {
            
@@ -1832,23 +1824,23 @@ RosegardenDocument::xmlParse(QString fileContents, QString &errMsg,
                 if (er == 0) er = *rates.begin();
 
                 StartupLogo::hideIfStillThere();
-                CurrentProgressDialog::freeze();
+//                CurrentProgressDialog::freeze();
 
                 QMessageBox::information(dynamic_cast<QWidget *>(parent()), tr("Rosegarden"), tr("<h3>Incorrect audio sample rate</h3><p>This composition contains audio files that were recorded or imported with the audio server running at a different sample rate (%1 Hz) from the current JACK server sample rate (%2 Hz).</p><p>Rosegarden will play this composition at the correct speed, but any audio files in it will probably sound awful.</p><p>Please consider re-starting the JACK server at the correct rate (%3 Hz) and re-loading this composition before you do any more work with it.</p>").arg(er).arg(sr).arg(er));
 
-                CurrentProgressDialog::thaw();
+//                CurrentProgressDialog::thaw();
                 shownWarning = true;
  
             } else if (sr != 0 && mixed) {
                     
                 StartupLogo::hideIfStillThere();
-                CurrentProgressDialog::freeze();
+//                CurrentProgressDialog::freeze();
                 
                 QMessageBox::information(dynamic_cast<QWidget *>(parent()), tr("Rosegarden"), tr("<h3>Inconsistent audio sample rates</h3><p>This composition contains audio files at more than one sample rate.</p><p>Rosegarden will play them at the correct speed, but any audio files that were recorded or imported at rates different from the current JACK server sample rate (%1 Hz) will probably sound awful.</p><p>Please see the audio file manager dialog for more details, and consider resampling any files that are at the wrong rate.</p>").arg(sr),
                                          tr("Inconsistent sample rates"),
                                          "file-load-inconsistent-samplerates");
                     
-                CurrentProgressDialog::thaw();
+//                CurrentProgressDialog::thaw();
                 shownWarning = true;
             }
  
@@ -1872,9 +1864,9 @@ RosegardenDocument::xmlParse(QString fileContents, QString &errMsg,
                 msg += "</ul>";
                 
                 StartupLogo::hideIfStillThere();
-                CurrentProgressDialog::freeze();
+//                CurrentProgressDialog::freeze();
                 QMessageBox::information(dynamic_cast<QWidget *>(parent()), tr("Rosegarden"), msg);
-                CurrentProgressDialog::thaw();
+//                CurrentProgressDialog::thaw();
                 shownWarning = true;
                 
             }
@@ -1885,9 +1877,9 @@ RosegardenDocument::xmlParse(QString fileContents, QString &errMsg,
                 slotDocumentModified(); // so file can be re-saved immediately
                 
                 StartupLogo::hideIfStillThere();
-                CurrentProgressDialog::freeze();
+//                CurrentProgressDialog::freeze();
                 QMessageBox::information(dynamic_cast<QWidget *>(parent()), tr("Rosegarden"), msg);
-                CurrentProgressDialog::thaw();
+//                CurrentProgressDialog::thaw();
             }
 
         }
@@ -1895,6 +1887,7 @@ RosegardenDocument::xmlParse(QString fileContents, QString &errMsg,
         getComposition().resetLinkedSegmentRefreshStatuses();
     }
 
+#if 0
     // Set to maximum just incase reading did not do this.
     if (progress) {
         progress->setValue(progress->maximum());
@@ -1903,6 +1896,7 @@ RosegardenDocument::xmlParse(QString fileContents, QString &errMsg,
         disconnect(&handler, 0, progress, 0);
         disconnect(progress, 0, &handler, 0);
     }
+#endif
 
     return ok;
 }
