@@ -117,108 +117,87 @@ public:
                           int targetSampleRate,
                           QPointer<QProgressDialog> progressDialog = 0);
 
+    /// Used by RoseXmlHandler to add an audio file.
     /**
-     * Insert an audio file into the AudioFileManager and get the
-     * first allocated id for it.  Used from the RG file as we already
-     * have both name and filename/path.
-     *
-     * throw BadAudioPathException
+     * throws BadAudioPathException
      */
-    //AudioFileId insertFile(const std::string &name,
-    //                       const QString &fileName);
-
-    // Convert an audio file from arbitrary external format to an
-    // internal format suitable for use by addFile, using packages in
-    // Rosegarden.  This replaces the Perl script previously used. It
-    // returns 0 for OK.  This is used by importFile and importURL
-    // which normally provide the more suitable interface for import.
-    // 
-    int convertAudioFile(const QString inFile, const QString outFile);
-
     bool insertFile(const std::string &name, const QString &fileName,
                     AudioFileId id);
-    // throw BadAudioPathException
 
-    // Remove a file from the AudioManager by id
-    //
-    bool removeFile(AudioFileId id);
-
-    // Does a specific file id exist?
-    //
+    /// Does a specific file id exist?
     bool fileExists(AudioFileId id);
 
-    // Does a specific file path exist?  Return ID or -1.
-    //
+    /// Does a specific file path exist?  Return ID or -1.
     int fileExists(const QString &path);
 
-    // get audio file by id
-    //
     AudioFile* getAudioFile(AudioFileId id);
 
-    // Get the list of files
-    //
+    /// Get an iterator into the list of AudioFile objects.
     AudioFileManagerIterator begin() const
         { return m_audioFiles.begin(); }
 
     AudioFileManagerIterator end() const
         { return m_audioFiles.end(); }
 
-    // Clear down all audio file references
-    //
+    /// Remove one audio file.
+    bool removeFile(AudioFileId id);
+    /// Remove all audio files.
     void clear();
 
-    // Get and set the record path
-    //
-    QString getAudioPath() const { return m_audioPath; }
+    /// Get the audio record path
+    QString getAudioPath() const  { return m_audioPath; }
+    /// Set the audio record path
     void setAudioPath(const QString &path);
 
-    // Throw if the current audio path does not exist or is not writable
-    //
-    void testAudioPath() throw(BadAudioPathException);
+    /// Throw if the current audio path does not exist or is not writable
+    /**
+     * throws BadAudioPathException
+     */
+    void testAudioPath();
 
-    // Get a new audio filename at the audio record path, inserting the
-    // projectFilename and instrumentAlias into the filename for easier
-    // recognition away from the file's original context
-    //
-    AudioFile *createRecordingAudioFile(QString projectName, QString instrumentAlias);
-    // throw BadAudioPathException
+    /**
+     * Get a new audio filename at the audio record path, inserting the
+     * projectFilename and instrumentAlias into the filename for easier
+     * recognition away from the file's original context.
+     *
+     * throws BadAudioPathException
+     */
+    AudioFile *createRecordingAudioFile(
+            QString projectName, QString instrumentAlias);
 
-    // Return whether a file was created by recording within this "session"
-    //
+    /// Return whether a file was created by recording within this "session"
     bool wasAudioFileRecentlyRecorded(AudioFileId id);
 
-    // Return whether a file was created by derivation within this "session"
-    //
+    /// Return whether a file was created by derivation within this "session"
     bool wasAudioFileRecentlyDerived(AudioFileId id);
 
-    // Indicate that a new "session" has started from the point of
-    // view of recorded and derived audio files (e.g. that the
-    // document has been saved)
-    //
+    /**
+     * Indicate that a new "session" has started from the point of
+     * view of recorded and derived audio files (e.g. that the
+     * document has been saved)
+     */
     void resetRecentlyCreatedFiles();
     
-    // Create an empty file "derived from" the source (used by e.g. stretcher)
-    // 
+    /// Create an empty file "derived from" the source (used by e.g. stretcher)
     AudioFile *createDerivedAudioFile(AudioFileId source,
                                       const char *prefix);
 
-    // return the last file in the vector - the last created
-    //
-    AudioFile* getLastAudioFile();
+    /// Get the last file in the vector - the last created.
+    AudioFile *getLastAudioFile();
 
-    // Export to XML
-    //
     virtual std::string toXmlString() const;
 
-    // Convenience function generate all previews on the audio file.
-    //
+    /// Generate previews for all audio files.
+    /**
+     * throw BadSoundFileException, BadPeakFileException
+     */
     void generatePreviews(QPointer<QProgressDialog> progressDialog);
-    // throw BadSoundFileException, BadPeakFileException
 
-    // Generate for a single audio file
-    //
+    /// Generate preview for a single audio file.
+    /**
+     * throws BadSoundFileException, BadPeakFileException
+     */
     bool generatePreview(AudioFileId id);
-    // throw BadSoundFileException, BadPeakFileException
 
     // Get a preview for an AudioFile adjusted to Segment start and
     // end parameters (assuming they fall within boundaries).
@@ -294,6 +273,16 @@ public:
 
     std::set<int> getActualSampleRates() const;
 
+    /**
+     * Insert an audio file into the AudioFileManager and get the
+     * first allocated id for it.  Used from the RG file as we already
+     * have both name and filename/path.
+     *
+     * throws BadAudioPathException
+     */
+    //AudioFileId insertFile(const std::string &name,
+    //                       const QString &fileName);
+
 signals:
     /// For progress dialogs.
     /**
@@ -319,6 +308,15 @@ public slots:
     void slotStopImport();
 
 private:
+    /**
+     * Convert an audio file from arbitrary external format to an
+     * internal format suitable for use by addFile, using packages in
+     * Rosegarden.  This replaces the Perl script previously used. It
+     * returns 0 for OK.  This is used by importFile and importURL
+     * which normally provide the more suitable interface for import.
+     */
+    int convertAudioFile(const QString &inFile, const QString &outFile);
+
     QString getFileInPath(const QString &file);
 
     /// Reset ID counter based on actual Audio Files in Composition

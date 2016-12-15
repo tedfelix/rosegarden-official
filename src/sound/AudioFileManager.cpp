@@ -405,7 +405,7 @@ AudioFileManager::setAudioPath(const QString &path)
 }
 
 void
-AudioFileManager::testAudioPath() throw (BadAudioPathException)
+AudioFileManager::testAudioPath()
 {
     QFileInfo info(m_audioPath);
     if (!(info.exists() && info.isDir() && !info.isRelative() &&
@@ -729,7 +729,7 @@ AudioFileManager::importFile(const QString &fileName, int sampleRate)
     }
 }
 
-int AudioFileManager::convertAudioFile(QString inFile, QString outFile)
+int AudioFileManager::convertAudioFile(const QString &inFile, const QString &outFile)
 {
     std::cerr << "AudioFileManager::convertAudioFile: inFile = "
               << inFile << ", outFile = " << outFile << std::endl;
