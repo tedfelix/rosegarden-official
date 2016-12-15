@@ -199,77 +199,72 @@ public:
      */
     bool generatePreview(AudioFileId id);
 
-    // Get a preview for an AudioFile adjusted to Segment start and
-    // end parameters (assuming they fall within boundaries).
-    // 
-    // We can get back a set of values (floats) or a Pixmap if we 
-    // supply the details.
-    //
+    /**
+     * Get a preview for an AudioFile adjusted to Segment start and
+     * end parameters (assuming they fall within boundaries).
+     *
+     * We can get back a set of values (floats) or a Pixmap if we
+     * supply the details.
+     *
+     * throws BadPeakFileException, BadAudioPathException
+     */
     std::vector<float> getPreview(AudioFileId id,
                                   const RealTime &startTime, 
                                   const RealTime &endTime,
                                   int width,
                                   bool withMinima);
-    // throw BadPeakFileException, BadAudioPathException
 
-    // Draw a fixed size (fixed by QPixmap) preview of an audio file
-    //
+    /// Draw a fixed size (fixed by QPixmap) preview of an audio file
+    /**
+     * throws BadPeakFileException, BadAudioPathException
+     */
     void drawPreview(AudioFileId id,
                      const RealTime &startTime, 
                      const RealTime &endTime,
                      QPixmap *pixmap);
-    // throw BadPeakFileException, BadAudioPathException
 
-    // Usually used to show how an audio Segment makes up part of
-    // an audio file.
-    //
+    /**
+     * Usually used to show how an audio Segment makes up part of
+     * an audio file.
+     *
+     * throws BadPeakFileException, BadAudioPathException
+     */
     void drawHighlightedPreview(AudioFileId it,
                                 const RealTime &startTime,
                                 const RealTime &endTime,
                                 const RealTime &highlightStart,
                                 const RealTime &highlightEnd,
                                 QPixmap *pixmap);
-    // throw BadPeakFileException, BadAudioPathException
 
-    // Get a short file name from a long one (with '/'s)
-    //
+    /// Get a short file name from a long one (with '/'s)
     QString getShortFilename(const QString &fileName) const;
 
-    // Get a directory from a full file path
-    //
+    /// Get a directory from a full file path
     QString getDirectory(const QString &path) const;
 
-    // Attempt to subsititute a tilde '~' for a home directory
-    // to make paths a little more generic when saving.  Also
-    // provide the inverse function as convenience here.
-    //
+    /// Expand "~" to the user's home directory.
     QString substituteHomeForTilde(const QString &path) const;
     QString substituteTildeForHome(const QString &path) const;
 
-    // Show entries for debug purposes
-    //
+    /// Show entries for debug purposes
     void print(); 
 
-    // Get a split point vector from a peak file
-    //
+    /// Get a split point vector from a peak file
+    /**
+     * throws BadPeakFileException, BadAudioPathException
+     */
     std::vector<SplitPointPair> 
         getSplitPoints(AudioFileId id,
                        const RealTime &startTime,
                        const RealTime &endTime,
                        int threshold,
                        const RealTime &minTime = RealTime(0, 100000000));
-    // throw BadPeakFileException, BadAudioPathException
 
-    // Get the peak file manager
-    //
-    const PeakFileManager& getPeakFileManager() const { return m_peakManager; }
+    const PeakFileManager &getPeakFileManager() const  { return m_peakManager; }
+    PeakFileManager &getPeakFileManager()  { return m_peakManager; }
 
-    // Get the peak file manager
-    //
-    PeakFileManager& getPeakFileManager() { return m_peakManager; }
-
-    int getExpectedSampleRate() const { return m_expectedSampleRate; }
-    void setExpectedSampleRate(int rate) { m_expectedSampleRate = rate; }
+    int getExpectedSampleRate() const  { return m_expectedSampleRate; }
+    void setExpectedSampleRate(int rate)  { m_expectedSampleRate = rate; }
 
     std::set<int> getActualSampleRates() const;
 
@@ -294,6 +289,18 @@ signals:
      */
     void setValue(int);
 
+    /// For progress dialogs.
+    /**
+     * This allows us to modify the progress dialog's text label.
+     *
+     * We need to get rid of this.  Clients should pass in a progress
+     * dialog and we should call setLabelText() directly.
+     *
+     * RosegardenMainViewWidget::slotDroppedNewAudio() and
+     * AudioManagerDialog::addFile() are the only users of this.
+     *
+     * ??? rename: progressLabel()
+     */
     void setOperationName(QString);
 
 public slots:
@@ -305,9 +312,13 @@ public slots:
      */
     void slotStopPreview();
 
+    /// Does nothing.
     void slotStopImport();
 
 private:
+    /// The audio files we are managing.
+    std::vector<AudioFile *> m_audioFiles;
+
     /**
      * Convert an audio file from arbitrary external format to an
      * internal format suitable for use by addFile, using packages in
@@ -322,10 +333,11 @@ private:
     /// Reset ID counter based on actual Audio Files in Composition
     void updateAudioFileID(AudioFileId id);
 
-    /// Fetch a unique ID for Audio Files
+    /// Fetch a new unique Audio File ID.
     AudioFileId getUniqueAudioFileID();
+    /// Last Audio File ID that was handed out by getUniqueAudioFileID().
+    unsigned int m_lastAudioFileID;
 
-    std::vector<AudioFile*> m_audioFiles;
     QString m_audioPath;
 
     PeakFileManager m_peakManager;
@@ -339,12 +351,11 @@ private:
     std::set<AudioFile *> m_derivedAudioFiles;
 
     int m_expectedSampleRate;
-    
-    //Audio ID tracking
-    unsigned int m_lastAudioFileID;
 
+    /// Progress Dialog passed in by clients.
     QPointer<QProgressDialog> m_progressDialog;
 };
+
 
 }
 

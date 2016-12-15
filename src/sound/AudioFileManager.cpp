@@ -73,8 +73,8 @@ private:
 };
 
 AudioFileManager::AudioFileManager() :
-    m_expectedSampleRate(0),
-    m_lastAudioFileID(0)
+    m_lastAudioFileID(0),
+    m_expectedSampleRate(0)
 {
     pthread_mutexattr_t attr;
     pthread_mutexattr_init(&attr);
