@@ -27,6 +27,8 @@
 #include <QPixmap>
 #include <QObject>
 #include <QUrl>
+#include <QPointer>
+#include <QProgressDialog>
 
 #include "AudioFile.h"
 #include "PeakFileManager.h"
@@ -102,14 +104,16 @@ public:
     // importFile.
     //
     AudioFileId importFile(const QString &filePath,
-			   int targetSampleRate = 0);
+			   int targetSampleRate);
     // throw BadAudioPathException, BadSoundFileException
 
-    // Create an audio file by importing from a URL
-    //
+    /// Create an audio file by importing from a URL
+    /**
+     * throws BadAudioPathException, BadSoundFileException
+     */
     AudioFileId importURL(const QUrl &filePath,
-			  int targetSampleRate = 0);
-    // throw BadAudioPathException, BadSoundFileException
+			  int targetSampleRate,
+			  QPointer<QProgressDialog> progressDialog = 0);
 
     // Insert an audio file into the AudioFileManager and get the
     // first allocated id for it.  Used from the RG file as we already
@@ -204,7 +208,7 @@ public:
 
     // Convenience function generate all previews on the audio file.
     //
-    void generatePreviews();
+    void generatePreviews(QPointer<QProgressDialog> progressDialog);
     // throw BadSoundFileException, BadPeakFileException
 
     // Generate for a single audio file
@@ -287,12 +291,25 @@ public:
     std::set<int> getActualSampleRates() const;
 
 signals:
+    /// For progress dialogs.
+    /**
+     * We need to get rid of this eventually and use m_progressDialog
+     * instead.  For now, though, there are many parts of the system
+     * that rely on this signal.
+     *
+     * ??? rename: progressValue() (Beware the perils of renaming signals!)
+     */
     void setValue(int);
+
     void setOperationName(QString);
 
 public slots:
-    // Cancel a running preview
-    //
+    /// Cancel a running preview.
+    /**
+     * This is used by the progress dialogs when Cancel is pressed.
+     *
+     * Once m_progressDialog is in place, this can likely go.
+     */
     void slotStopPreview();
 
     void slotStopImport();
@@ -324,6 +341,7 @@ private:
     //Audio ID tracking
     unsigned int m_lastAudioFileID;
 
+    QPointer<QProgressDialog> m_progressDialog;
 };
 
 }

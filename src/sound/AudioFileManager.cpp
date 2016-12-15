@@ -15,6 +15,7 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[AudioFileManager]"
 
 #include <fstream>
 #include <string>
@@ -40,6 +41,7 @@
 #include "AudioFileManager.h"
 #include "WAVAudioFile.h"
 #include "BWFAudioFile.h"
+#include "misc/Debug.h"
 #include "misc/Strings.h"
 #include "sequencer/RosegardenSequencer.h"
 #include "sound/audiostream/AudioReadStream.h"
@@ -645,12 +647,16 @@ AudioFileManager::createDerivedAudioFile(AudioFileId source,
 }
 
 AudioFileId
-AudioFileManager::importURL(const QUrl &url, int sampleRate)
+AudioFileManager::importURL(const QUrl &url, int sampleRate,
+                            QPointer<QProgressDialog> progressDialog)
 {
+    m_progressDialog = progressDialog;
+
     FileSource source(url);
     if (!source.isAvailable()) {
-	QMessageBox::critical(0, tr("Rosegarden"), tr("Cannot download file %1").arg(url.toString()));
-	throw SoundFile::BadSoundFileException(url.toString());
+        QMessageBox::critical(0, tr("Rosegarden"),
+                tr("Cannot download file %1").arg(url.toString()));
+        throw SoundFile::BadSoundFileException(url.toString());
     }
 
     source.waitForData();
@@ -758,7 +764,16 @@ int AudioFileManager::convertAudioFile(QString inFile, QString outFile)
         int got = rs->getInterleavedFrames(blockSize, block);
         ws->putInterleavedFrames(got, block);
         if (got < blockSize) break;
+
+        //RG_DEBUG << "convertAudioFile(): progress setValue(" << i%10 << ")";
+
+        // Make the progress dialog go from 0 to 9 over and over.
+        // ??? Why?  Shouldn't this be "i % 100"?
         emit setValue(i % 10);
+        // ??? We would need to take in a progress dialog via importURL().
+        if (m_progressDialog)
+            m_progressDialog->setValue(i % 10);
+
         qApp->processEvents(QEventLoop::AllEvents);
         ++i;
     }
@@ -891,10 +906,13 @@ AudioFileManager::toXmlString() const
 // to file type.
 //
 void
-AudioFileManager::generatePreviews()
+AudioFileManager::generatePreviews(QPointer<QProgressDialog> progressDialog)
 {
     MutexLock lock (&audioFileManagerLock)
         ;
+
+    m_progressDialog = progressDialog;
+    //m_peakManager.setProgressDialog(m_progressDialog)
 
 #ifdef DEBUG_AUDIOFILEMANAGER
 
@@ -912,10 +930,10 @@ AudioFileManager::generatePreviews()
             m_peakManager.generatePeaks(*it, 1);
     }
 
-    // if we didn't do anything, at least emit a 100% to reset the progress
-    // dialog
-    std::cout << "audio file manager emitting fake setValue(100)" << std::endl;
+    // Even if we didn't do anything, reset the progress dialog.
     emit setValue(100);
+    if (m_progressDialog)
+        m_progressDialog->setValue(100);
 }
 
 // Attempt to stop a preview

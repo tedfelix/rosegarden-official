@@ -633,18 +633,13 @@ bool RosegardenDocument::openDocument(const QString &filename,
         m_progressDialog->setLabelText(tr("Generating audio previews..."));
 
         // Connect audio file manager for progress.
-        // ??? For now, just go into indeterminate mode.
-        m_progressDialog->setRange(0, 0);
-        //m_progressDialog->setValue(0);
-        //connect(&m_audioFileManager, SIGNAL(setValue(int)),
-        //        m_progressDialog, SLOT(setValue(int)));
         //connect(m_progressDialog, SIGNAL(canceled()),
         //        &m_audioFileManager, SLOT(slotStopPreview()));
     }
     
     try {
         // generate any audio previews after loading the files
-        m_audioFileManager.generatePreviews();
+        m_audioFileManager.generatePreviews(m_progressDialog);
     } catch (Exception e) {
         StartupLogo::hideIfStillThere();
         QMessageBox::critical(dynamic_cast<QWidget *>(parent()), tr("Rosegarden"), strtoqstr(e.getMessage()));
