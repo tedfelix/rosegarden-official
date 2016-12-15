@@ -865,7 +865,7 @@ AudioFileManager::generatePreviews(QPointer<QProgressDialog> progressDialog)
         ;
 
     m_progressDialog = progressDialog;
-    //m_peakManager.setProgressDialog(m_progressDialog)
+    m_peakManager.setProgressDialog(m_progressDialog);
 
 #ifdef DEBUG_AUDIOFILEMANAGER
     RG_DEBUG << "generatePreviews() - for " << m_audioFiles.size() << " files";

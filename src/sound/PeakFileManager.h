@@ -21,6 +21,9 @@
 
 #include <QObject>
 #include <QString>
+#include <QPointer>
+
+class QProgressDialog;
 
 #include "sound/SoundFile.h"
 #include "PeakFile.h"  // for SplitPointPair
@@ -73,6 +76,10 @@ public:
      * throws BadSoundFileException, BadPeakFileException
      */
     bool hasValidPeaks(AudioFile *audioFile);
+
+    /// For callers of generatePeaks().
+    void setProgressDialog(QPointer<QProgressDialog> progressDialog)
+            { m_progressDialog = progressDialog; }
 
     /// Generate a peak file from file details.
     /**
@@ -136,6 +143,8 @@ protected:
      *     can go.
      */
     PeakFile *m_currentPeakFile;
+
+    QPointer<QProgressDialog> m_progressDialog;
 };
 
 
