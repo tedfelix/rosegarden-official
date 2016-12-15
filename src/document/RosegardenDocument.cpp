@@ -543,6 +543,7 @@ bool RosegardenDocument::openDocument(const QString &filename,
     // Progress Dialog
     QProgressDialog progressDialog(tr("Reading file..."), tr("Cancel"),
                                    0, 100, dynamic_cast<QWidget *>(parent()));
+    progressDialog.setWindowTitle(tr("Rosegarden"));
     progressDialog.setWindowModality(Qt::WindowModal);
     // We're usually a bit late to the game here as it is.  Shave off a
     // couple of seconds to make up for it.
