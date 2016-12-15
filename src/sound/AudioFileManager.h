@@ -98,17 +98,6 @@ public:
      */
     AudioFileId addFile(const QString &filePath);
 
-    /**
-     * Create an audio file by importing (i.e. converting and/or
-     * resampling) an existing file using the conversion library.  If
-     * you are not sure whether to use addFile() or importFile(), go for
-     * importFile().
-     *
-     * throws BadAudioPathException, BadSoundFileException
-     */
-    AudioFileId importFile(const QString &filePath,
-                           int targetSampleRate);
-
     /// Create an audio file by importing from a URL
     /**
      * throws BadAudioPathException, BadSoundFileException
@@ -177,13 +166,10 @@ public:
      * document has been saved)
      */
     void resetRecentlyCreatedFiles();
-    
+
     /// Create an empty file "derived from" the source (used by e.g. stretcher)
     AudioFile *createDerivedAudioFile(AudioFileId source,
                                       const char *prefix);
-
-    /// Get the last file in the vector - the last created.
-    AudioFile *getLastAudioFile();
 
     virtual std::string toXmlString() const;
 
@@ -236,18 +222,9 @@ public:
                                 const RealTime &highlightEnd,
                                 QPixmap *pixmap);
 
-    /// Get a short file name from a long one (with '/'s)
-    QString getShortFilename(const QString &fileName) const;
-
-    /// Get a directory from a full file path
-    QString getDirectory(const QString &path) const;
-
     /// Expand "~" to the user's home directory.
     QString substituteHomeForTilde(const QString &path) const;
     QString substituteTildeForHome(const QString &path) const;
-
-    /// Show entries for debug purposes
-    void print(); 
 
     /// Get a split point vector from a peak file
     /**
@@ -260,13 +237,13 @@ public:
                        int threshold,
                        const RealTime &minTime = RealTime(0, 100000000));
 
-    const PeakFileManager &getPeakFileManager() const  { return m_peakManager; }
-    PeakFileManager &getPeakFileManager()  { return m_peakManager; }
-
     int getExpectedSampleRate() const  { return m_expectedSampleRate; }
     void setExpectedSampleRate(int rate)  { m_expectedSampleRate = rate; }
 
     std::set<int> getActualSampleRates() const;
+
+    /// Show entries for debug purposes
+    void print();
 
     /**
      * Insert an audio file into the AudioFileManager and get the
@@ -277,6 +254,12 @@ public:
      */
     //AudioFileId insertFile(const std::string &name,
     //                       const QString &fileName);
+
+    //const PeakFileManager &getPeakFileManager() const  { return m_peakManager; }
+    //PeakFileManager &getPeakFileManager()  { return m_peakManager; }
+
+    /// Get the last file in the vector - the last created.
+    //AudioFile *getLastAudioFile();
 
 signals:
     /// For progress dialogs.
@@ -320,6 +303,17 @@ private:
     std::vector<AudioFile *> m_audioFiles;
 
     /**
+     * Create an audio file by importing (i.e. converting and/or
+     * resampling) an existing file using the conversion library.  If
+     * you are not sure whether to use addFile() or importFile(), go for
+     * importFile().
+     *
+     * throws BadAudioPathException, BadSoundFileException
+     */
+    AudioFileId importFile(const QString &filePath,
+                           int targetSampleRate);
+
+    /**
      * Convert an audio file from arbitrary external format to an
      * internal format suitable for use by addFile, using packages in
      * Rosegarden.  This replaces the Perl script previously used. It
@@ -327,6 +321,12 @@ private:
      * which normally provide the more suitable interface for import.
      */
     int convertAudioFile(const QString &inFile, const QString &outFile);
+
+    /// Get a short file name from a long one (with '/'s)
+    QString getShortFilename(const QString &fileName) const;
+
+    /// Get a directory from a full file path
+    QString getDirectory(const QString &path) const;
 
     QString getFileInPath(const QString &file);
 

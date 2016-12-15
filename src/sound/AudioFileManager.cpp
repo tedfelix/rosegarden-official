@@ -791,6 +791,7 @@ AudioFileManager::slotStopImport()
     //!!!
 }
 
+#if 0
 AudioFile*
 AudioFileManager::getLastAudioFile()
 {
@@ -807,6 +808,7 @@ AudioFileManager::getLastAudioFile()
 
     return audioFile;
 }
+#endif
 
 QString
 AudioFileManager::substituteHomeForTilde(const QString &path) const
