@@ -542,14 +542,23 @@ bool RosegardenDocument::openDocument(const QString &filename,
 
     // Progress Dialog
     QProgressDialog progressDialog(tr("Reading file..."), tr("Cancel"),
-                                   0, 100, dynamic_cast<QWidget *>(parent()));
+                                   0, 100, RosegardenMainWindow::self());
     progressDialog.setWindowTitle(tr("Rosegarden"));
     progressDialog.setWindowModality(Qt::WindowModal);
+    // Don't want to auto close since this is a multi-step
+    // process.  Any of the steps may set progress to 100.  We
+    // will close anyway when this object goes out of scope.
+    progressDialog.setAutoClose(false);
     // We're usually a bit late to the game here as it is.  Shave off a
     // couple of seconds to make up for it.
     // ??? We should move the progress dialog further up the call chain
     //     to include the additional time.
     progressDialog.setMinimumDuration(2000);
+#if QT_VERSION < 0x050000
+    // Qt4 has several bugs related to delayed showing of
+    // progress dialogs.  Just force it up.
+    progressDialog.show();
+#endif
 
     m_progressDialog = &progressDialog;
 

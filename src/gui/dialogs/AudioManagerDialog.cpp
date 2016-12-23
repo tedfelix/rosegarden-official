@@ -1187,13 +1187,18 @@ AudioManagerDialog::addFile(const QUrl& kurl)
     // Start out in indeterminate mode since AudioFileManager::importUrl()
     // has no way to give us proper progress.
     QProgressDialog progressDialog(tr("Adding audio file..."), tr("Cancel"),
-                                   0, 0, dynamic_cast<QWidget *>(this));
+                                   0, 0, this);
     progressDialog.setWindowTitle(tr("Rosegarden"));
     progressDialog.setWindowModality(Qt::WindowModal);
-    // This is required for indeterminate mode.  It's unfortunate since
-    // that means it will appear even for very short wait times.  Remove
-    // this if importUrl() is ever upgraded to provide proper progress.
+    // Don't want to auto close since this is a multi-step
+    // process.  Any of the steps may set progress to 100.  We
+    // will close anyway when this object goes out of scope.
+    progressDialog.setAutoClose(false);
+#if QT_VERSION < 0x050000
+    // Qt4 has several bugs related to delayed showing of
+    // progress dialogs.  Just force it up.
     progressDialog.show();
+#endif
 
     aFM.setProgressDialog(QPointer<QProgressDialog>(&progressDialog));
 
