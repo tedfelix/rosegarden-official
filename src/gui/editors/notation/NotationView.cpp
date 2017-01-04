@@ -4405,6 +4405,7 @@ NotationView::slotTogglePitchbendRuler()
 void
 NotationView::slotAddControlRuler(QAction *action)
 {
+    NOTATION_DEBUG << "NotationView::slotAddControlRuler(" << action << ")" << endl;
     m_notationWidget->slotAddControlRuler(action);
     conformRulerSelectionState();
 }
@@ -4467,7 +4468,7 @@ NotationView::slotToggleStepByStep()
     QAction *action = findAction("toggle_step_by_step");
 
     if (!action) {
-        MATRIX_DEBUG << "WARNING: No toggle_step_by_step action";
+        NOTATION_DEBUG << "WARNING: No toggle_step_by_step action";
         return ;
     }
     if (action->isChecked()) {
