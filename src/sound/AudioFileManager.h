@@ -279,43 +279,6 @@ public:
     /// Get the last file in the vector - the last created.
     //AudioFile *getLastAudioFile();
 
-signals:
-    /// For progress dialogs.
-    /**
-     * We need to get rid of this eventually and use m_progressDialog
-     * instead.  For now, though, there are many parts of the system
-     * that rely on this signal.
-     *
-     * ??? rename: progressValue() (Beware the perils of renaming signals!)
-     */
-    void setValue(int);
-
-    /// For progress dialogs.
-    /**
-     * This allows us to modify the progress dialog's text label.
-     *
-     * We need to get rid of this.  Clients should pass in a progress
-     * dialog and we should call setLabelText() directly.
-     *
-     * RosegardenMainViewWidget::slotDroppedNewAudio() and
-     * AudioManagerDialog::addFile() are the only users of this.
-     *
-     * ??? rename: progressLabel()
-     */
-    void setOperationName(QString);
-
-public slots:
-    /// Cancel a running preview.
-    /**
-     * This is used by the progress dialogs when Cancel is pressed.
-     *
-     * Once m_progressDialog is in place, this can likely go.
-     */
-    void slotStopPreview();
-
-    /// Does nothing.
-    void slotStopImport();
-
 private:
     /// The audio files we are managing.
     std::vector<AudioFile *> m_audioFiles;

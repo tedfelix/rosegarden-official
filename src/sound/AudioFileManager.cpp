@@ -95,11 +95,6 @@ AudioFileManager::AudioFileManager() :
     // shaken out.
     //
     setAudioPath("~/rosegarden");
-
-    // Retransmit value()
-    //
-    connect(&m_peakManager, SIGNAL(setValue(int)),
-            this, SIGNAL(setValue(int)));
 }
 
 AudioFileManager::~AudioFileManager()
@@ -638,7 +633,6 @@ AudioFileManager::importFile(const QString &fileName, int sampleRate)
 {
     RG_DEBUG << "importFile("<< fileName << ", " << sampleRate << ")";
 
-    emit setOperationName(tr("Importing audio file..."));
     if (m_progressDialog)
         m_progressDialog->setLabelText(tr("Importing audio file..."));
 
@@ -671,7 +665,6 @@ AudioFileManager::importFile(const QString &fileName, int sampleRate)
         }
     }
 
-    emit setOperationName(tr("Converting audio file..."));
     // ??? We should probably switch to indeterminate mode here.  This
     //     is closest to the place where we know that we don't support
     //     actual progress.
@@ -782,12 +775,6 @@ int AudioFileManager::convertAudioFile(const QString &inFile, const QString &out
 
     // Success.
     return 0;
-}
-
-void
-AudioFileManager::slotStopImport()
-{
-    //!!!
 }
 
 #if 0
@@ -927,20 +914,9 @@ AudioFileManager::generatePreviews()
     }
 
     // Even if we didn't do anything, reset the progress dialog.
-    emit setValue(100);
     if (m_progressDialog)
         m_progressDialog->setValue(100);
 }
-
-void
-AudioFileManager::slotStopPreview()
-{
-    MutexLock lock (&audioFileManagerLock)
-        ;
-
-    m_peakManager.stopPreview();
-}
-
 
 bool
 AudioFileManager::generatePreview(AudioFileId id)
