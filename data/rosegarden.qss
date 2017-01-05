@@ -784,16 +784,22 @@ state set. */
 
 QProgressBar
 {
+    /* Text color */
     color: #000000;
     text-align: center;
+    /* Empty background color. */
     background: #FFFFFF;
     border: 1px solid #AAAAAA;
     border-radius: 3px;
 }
+/* The progress bar fills with "chunks". */
 QProgressBar::chunk
 {
+    /* Filled background color. */
     background-color: #D6E8FB;
-    width: 20px;
+    /* Size of the chunks that fill the progress bar.  This dictates the
+       resolution of the bar as it fills.  Default is 1. */
+    /*width: 20px;*/
 }
 
 
