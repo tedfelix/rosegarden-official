@@ -5362,18 +5362,31 @@ RosegardenMainWindow::slotExportMIDI()
 void
 RosegardenMainWindow::exportMIDIFile(QString file)
 {
-    ProgressDialog * progressDlg = new ProgressDialog(tr("Exporting MIDI file..."),
-                               (QWidget*)this);
+    // Progress Dialog
+    QProgressDialog progressDialog(
+            tr("Exporting MIDI file..."),  // labelText
+            tr("Cancel"),  // cancelButtonText
+            0, 100,  // min, max
+            this);  // parent
+    progressDialog.setWindowTitle(tr("Rosegarden"));
+    progressDialog.setWindowModality(Qt::WindowModal);
+    // No sense in auto close since we will close anyway when
+    // this object goes out of scope.
+    progressDialog.setAutoClose(false);
+#if QT_VERSION < 0x050000
+    // Qt4 has several bugs related to delayed showing of
+    // progress dialogs.  Just force it up.
+    progressDialog.show();
+#endif
 
     MidiFile midiFile;
 
-    connect(&midiFile, SIGNAL(progress(int)),
-            progressDlg, SLOT(setValue(int)));
+    midiFile.setProgressDialog(&progressDialog);
 
     if (!midiFile.convertToMidi(m_doc->getComposition(), file)) {
-        QMessageBox::warning(this, tr("Rosegarden"), tr("Export failed.  The file could not be opened for writing."));
+        QMessageBox::warning(this, tr("Rosegarden"),
+                tr("Export failed.  The file could not be opened for writing."));
     }
-    progressDlg->close();
 }
 
 void

@@ -42,6 +42,8 @@
 #include <string>
 #include <sstream>
 
+#define MIDIFILE_DEBUG 0
+
 static const char MIDI_FILE_HEADER[] = "MThd";
 static const char MIDI_TRACK_HEADER[] = "MTrk";
 
@@ -1408,11 +1410,10 @@ MidiFile::writeTrack(std::ofstream *midiFile, TrackId trackNumber)
 
     std::string trackBuffer;
 
-    int progressTotal = static_cast<int>(m_midiComposition[trackNumber].size());
-    int progressCount = 0;
     // Used to accumulate time deltas for skipped events.
     timeT skippedTime = 0;
 
+    // For each event in the Track
     for (MidiTrack::iterator i = m_midiComposition[trackNumber].begin();
          i != m_midiComposition[trackNumber].end();
          ++i) {
@@ -1444,11 +1445,13 @@ MidiFile::writeTrack(std::ofstream *midiFile, TrackId trackNumber)
 
         skippedTime = 0;
 
+#if MIDIFILE_DEBUG
         RG_DEBUG << "MIDI event for channel "
                   << static_cast<int>(midiEvent.getChannelNumber())
                   << " (track " << trackNumber << ") "
                   << " time" << midiEvent.getTime();
         RG_DEBUG << midiEvent;
+#endif
 
         if (midiEvent.isMeta()) {
             trackBuffer += MIDI_FILE_META_EVENT;
@@ -1503,17 +1506,8 @@ MidiFile::writeTrack(std::ofstream *midiFile, TrackId trackNumber)
             }
         }
 
-        ++progressCount;
-
-        // Every 500 times through...
-        if (progressCount % 500 == 0) {
-            int progressValue = progressCount * 100 / progressTotal;
-            if (m_progressDialog)
-                m_progressDialog->setValue(progressValue);
-            emit progress(progressValue);
-            // Kick the event loop to keep the UI responsive.
-            qApp->processEvents();
-        }
+        // Kick the event loop to keep the UI responsive.
+        qApp->processEvents();
     }
 
     // Now we write the track to the file.
@@ -1539,8 +1533,19 @@ MidiFile::write(const QString &filename)
     writeHeader(midiFile);
 
     // For each track, write it out.
-    for (TrackId i = 0; i < m_numberOfTracks; i++ )
+    for (TrackId i = 0; i < m_numberOfTracks; ++i) {
         writeTrack(midiFile, i);
+
+        if (m_progressDialog  &&  m_progressDialog->wasCanceled())
+            return false;
+
+        int progressValue = i * 100 / m_numberOfTracks;
+
+        if (m_progressDialog)
+            m_progressDialog->setValue(progressValue);
+
+        emit progress(progressValue);
+    }
 
     midiFile->close();
 
