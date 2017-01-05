@@ -2758,24 +2758,28 @@ RosegardenMainWindow::slotRescaleSelection()
     // For each selected segment
     for (SegmentSelection::iterator i = selection.begin();
          i != selection.end(); ++i) {
-        if ((*i)->getType() == Segment::Audio) {
-            AudioSegmentRescaleCommand *asrc = new AudioSegmentRescaleCommand
-                (m_doc, *i, ratio);
+        Segment *segment = *i;
+
+        if (segment->getType() == Segment::Audio) {
+            AudioSegmentRescaleCommand *asrc =
+                    new AudioSegmentRescaleCommand(m_doc, segment, ratio);
             command->addCommand(asrc);
+
             audioRescaleCommands.push_back(asrc);
         } else {
-            command->addCommand(new SegmentRescaleCommand(*i, multiplier, divisor));
+            command->addCommand(
+                    new SegmentRescaleCommand(segment, multiplier, divisor));
         }
     }
-    
-    
+
     //cc 20150508: avoid dereferencing self-deleted progress dialog
     //after user has closed it, by using a QPointer
     QPointer<ProgressDialog> progressDlg = 0;
 
     if (!audioRescaleCommands.empty()) {
-        progressDlg = new ProgressDialog (tr("Rescaling audio file..."),
-                                          (QWidget*)this);
+        progressDlg = new ProgressDialog(tr("Rescaling audio file..."),
+                                         dynamic_cast<QWidget *>(this));
+        // For each AudioSegmentRescaleCommand
         for (size_t i = 0; i < audioRescaleCommands.size(); ++i) {
             audioRescaleCommands[i]->connectProgressDialog(progressDlg);
         }
@@ -2785,13 +2789,12 @@ RosegardenMainWindow::slotRescaleSelection()
 
     if (!audioRescaleCommands.empty()) {
 
-        for (size_t i = 0; i < audioRescaleCommands.size(); ++i) {
-            if (progressDlg) {
+        if (progressDlg) {
+            // For each AudioSegmentRescaleCommand
+            for (size_t i = 0; i < audioRescaleCommands.size(); ++i) {
                 audioRescaleCommands[i]->disconnectProgressDialog(progressDlg);    //&&& obsolete (?)
             }
-        }
 
-        if (progressDlg) {
             progressDlg->setLabelText(tr("Generating audio preview..."));
 
             connect(&m_doc->getAudioFileManager(), SIGNAL(setValue(int)),
@@ -2801,20 +2804,22 @@ RosegardenMainWindow::slotRescaleSelection()
             //        &m_doc->getAudioFileManager(), SLOT(slotStopPreview()));
         }
 
+        // For each AudioSegmentRescaleCommand
         for (size_t i = 0; i < audioRescaleCommands.size(); ++i) {
-            int fid = audioRescaleCommands[i]->getNewAudioFileId();
-            if (fid >= 0) {
-                slotAddAudioFile(fid);
-                m_doc->getAudioFileManager().generatePreview(fid);
-            }
-            int complete = i + 1 / audioRescaleCommands.size();
-            if (progressDlg) progressDlg->setValue(complete);
+            int fileId = audioRescaleCommands[i]->getNewAudioFileId();
+            if (fileId < 0)
+                continue;
+
+            // Add to the sequencer
+            slotAddAudioFile(fileId);
+
+            // Generate a preview
+            m_doc->getAudioFileManager().generatePreview(fileId);
         }
     }
 
-    if (progressDlg) {
+    if (progressDlg)
         progressDlg->close();
-    }
 }
 
 bool
