@@ -18,7 +18,10 @@
 #include "base/Composition.h"
 
 #include <QObject>
+#include <QPointer>
 #include <QString>
+
+class QProgressDialog;
 
 #include <fstream>
 #include <string>
@@ -64,8 +67,16 @@ public:
      */
     bool convertToMidi(Composition &, const QString &filename);
 
+    void setProgressDialog(QPointer<QProgressDialog> progressDialog)
+            { m_progressDialog = progressDialog; }
+
 signals:
     /// Progress in percent.  Connect to a progress dialog's setValue(int).
+    /**
+     * DEPRECATED
+     *
+     * Use setProgressDialog() instead.
+     */
     void progress(int);
 
 private:
@@ -183,6 +194,10 @@ private:
     // Conversion
     /// Convert a value to a "variable-length quantity" in a std::string.
     std::string longToVarBuffer(unsigned long value);
+
+    // *** Misc
+
+    QPointer<QProgressDialog> m_progressDialog;
 };
 
 

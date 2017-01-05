@@ -4254,11 +4254,29 @@ RosegardenMainWindow::createDocumentFromMIDIFile(QString file)
     MidiFile midiFile;
 
     StartupLogo::hideIfStillThere();
-    ProgressDialog *progressDlg = new ProgressDialog(tr("Importing MIDI file..."),
-                               (QWidget*)this);
 
-    connect(&midiFile, SIGNAL(progress(int)),
-            progressDlg, SLOT(setValue(int)));
+    // Progress Dialog
+    // Note: The label text and range will be set later as needed.
+    QProgressDialog progressDialog(
+            tr("Importing MIDI file..."),  // labelText
+            tr("Cancel"),  // cancelButtonText
+            0, 100,  // min, max
+            this);  // parent
+    progressDialog.setWindowTitle(tr("Rosegarden"));
+    progressDialog.setWindowModality(Qt::WindowModal);
+    // Don't want to auto close since this is a multi-step
+    // process.  Any of the steps may set progress to 100.  We
+    // will close anyway when this object goes out of scope.
+    progressDialog.setAutoClose(false);
+    // ??? Get rid of the cancel button for the moment.
+    progressDialog.setCancelButton(NULL);
+#if QT_VERSION < 0x050000
+    // Qt4 has several bugs related to delayed showing of
+    // progress dialogs.  Just force it up.
+    progressDialog.show();
+#endif
+
+    midiFile.setProgressDialog(&progressDialog);
 
     if (!midiFile.convertToRosegarden(file, newDoc)) {
         // NOTE: Someone flagged midiFile.getError() with a warning about tr().
@@ -4267,11 +4285,8 @@ RosegardenMainWindow::createDocumentFromMIDIFile(QString file)
         // underlying filesystem, a library, etc.)
         QMessageBox::critical(this, tr("Rosegarden"), strtoqstr(midiFile.getError()));
         delete newDoc;
-        progressDlg->close();
         return 0;
     }
-
-    disconnect(&midiFile, 0, progressDlg, 0);
 
     fixTextEncodings(&newDoc->getComposition());
 
@@ -4287,9 +4302,9 @@ RosegardenMainWindow::createDocumentFromMIDIFile(QString file)
     // Clean up for notation purposes (after reinitialise, because that
     // sets the composition's end marker time which is needed here)
 
-    progressDlg->setLabelText(tr("Calculating notation..."));
-    progressDlg->setValue(0);
-    qApp->processEvents(QEventLoop::AllEvents, 100);
+    progressDialog.setLabelText(tr("Calculating notation..."));
+    progressDialog.setValue(0);
+    qApp->processEvents();
 
     Composition *comp = &newDoc->getComposition();
 
@@ -4303,7 +4318,7 @@ RosegardenMainWindow::createDocumentFromMIDIFile(QString file)
                        .getAsEvent(segment.getStartTime()));
     }
 
-    progressDlg->setValue(10);
+    progressDialog.setValue(10);
 
     for (Composition::iterator i = comp->begin();
             i != comp->end(); ++i) {
@@ -4331,35 +4346,38 @@ RosegardenMainWindow::createDocumentFromMIDIFile(QString file)
         }
     }
 
-    progressDlg->setValue(20);
+    progressDialog.setValue(20);
 
-    int totalProgress = 20;
-    int progressPer = 80;
-    int nbSegments = comp->getNbSegments();
+    int segmentCount = 1;
+    const int nbSegments = comp->getNbSegments();
 
+    double progressPerSegment = 80;
     if (nbSegments > 0)
-        progressPer = (int)(80.0 / double(comp->getNbSegments()));
+        progressPerSegment = 80.0 / nbSegments;
 
     MacroCommand *command = new MacroCommand(tr("Calculate Notation"));
 
+    // For each segment in the composition.
     for (Composition::iterator i = comp->begin(); i != comp->end(); ++i) {
-         
         Segment &segment = **i;
+
         timeT startTime(segment.getStartTime());
         timeT endTime(segment.getEndMarkerTime());
 
-//        std::cerr << "segment: start time " << segment.getStartTime() << ", end time " << segment.getEndTime() << ", end marker time " << segment.getEndMarkerTime() << ", events " << segment.size() << std::endl;
+        //RG_DEBUG << "segment: start time " << segment.getStartTime() << ", end time " << segment.getEndTime() << ", end marker time " << segment.getEndMarkerTime() << ", events " << segment.size();
 
         EventQuantizeCommand *subCommand = new EventQuantizeCommand
             (segment, startTime, endTime, NotationOptionsConfigGroup,
              EventQuantizeCommand::QUANTIZE_NOTATION_ONLY);
+        subCommand->setProgressDialog(&progressDialog);
 
-        //Compute progress so far.
-        totalProgress += progressPer;
+        // Compute progress so far.
+        double totalProgress = 20 + segmentCount * progressPerSegment;
+        ++segmentCount;
 
-        subCommand->setProgressTotal(totalProgress, progressPer + 1);
-        QObject::connect(subCommand, SIGNAL(setValue(int)),
-                         progressDlg, SLOT(setValue(int)));
+        //RG_DEBUG << "createDocumentFromMIDIFile() totalProgress: " << totalProgress;
+
+        subCommand->setProgressTotal(totalProgress, progressPerSegment + 1);
 
         command->addCommand(subCommand);
     }
@@ -4374,8 +4392,6 @@ RosegardenMainWindow::createDocumentFromMIDIFile(QString file)
         comp->addTimeSignature(0, timeSig);
     }
     
-    progressDlg->close();
-
     return newDoc;
 }
 

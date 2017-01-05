@@ -22,7 +22,10 @@
 #include "base/Event.h"
 
 #include <QObject>
+#include <QPointer>
 #include <QString>
+
+class QProgressDialog;
 
 
 namespace Rosegarden
@@ -69,10 +72,14 @@ public:
     ~EventQuantizeCommand();
     
     static QString getGlobalName(Quantizer *quantizer = 0);
+
+    void setProgressDialog(QPointer<QProgressDialog> progressDialog)
+            { m_progressDialog = progressDialog; }
     void setProgressTotal(int total, int perCall) { m_progressTotal = total;
                                                     m_progressPerCall = perCall; };
 
 signals:
+    /// DEPRECATED.  Use setProgressDialog() instead.
     void setValue(int);
 
 protected:
@@ -82,6 +89,8 @@ private:
     Quantizer *m_quantizer; // I own this
     EventSelection *m_selection;
     QString m_settingsGroup;
+
+    QPointer<QProgressDialog> m_progressDialog;
     int m_progressTotal;
     int m_progressPerCall;
 

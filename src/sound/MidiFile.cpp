@@ -36,6 +36,8 @@
 #include "sound/MidiInserter.h"
 #include "sound/SortingInserter.h"
 
+#include <QProgressDialog>
+
 #include <fstream>
 #include <string>
 #include <sstream>
@@ -149,10 +151,14 @@ MidiFile::read(std::ifstream *midiFile, unsigned long numberOfBytes)
     if (m_bytesRead >= 2000) {
         m_bytesRead = 0;
 
+        // This is the first 20% of the "reading" process.
+        int progressValue = static_cast<int>(
+                static_cast<double>(midiFile->tellg()) /
+                static_cast<double>(m_fileSize) * 20.0);
         // Update the progress dialog if one is connected.
-        emit progress(static_cast<int>(
-                          static_cast<double>(midiFile->tellg()) /
-                          static_cast<double>(m_fileSize) * 20.0));
+        if (m_progressDialog)
+            m_progressDialog->setValue(progressValue);
+        emit progress(progressValue);
 
         // Kick the event loop to make sure the UI doesn't become
         // unresponsive during a long load.
@@ -681,10 +687,14 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
          trackId < m_midiComposition.size();
          ++trackId) {
 
-        // progress - 20% total in file import itself and then 80%
-        // split over these tracks
-        emit progress(20 + static_cast<int>(
-                      80.0 * trackId / m_midiComposition.size()));
+        // 20% total in file import itself (see read()) and then 80%
+        // split over the tracks.
+        int progressValue = 20 + static_cast<int>(
+                80.0 * trackId / m_midiComposition.size());
+        RG_DEBUG << "convertToRosegarden() progressValue: " << progressValue;
+        if (m_progressDialog)
+            m_progressDialog->setValue(progressValue);
+        emit progress(progressValue);
         // Kick the event loop.
         qApp->processEvents();
 
@@ -1483,7 +1493,10 @@ MidiFile::writeTrack(std::ofstream *midiFile, TrackId trackNumber)
 
         // Every 500 times through...
         if (progressCount % 500 == 0) {
-            emit progress(progressCount * 100 / progressTotal);
+            int progressValue = progressCount * 100 / progressTotal;
+            if (m_progressDialog)
+                m_progressDialog->setValue(progressValue);
+            emit progress(progressValue);
             // Kick the event loop to keep the UI responsive.
             qApp->processEvents();
         }

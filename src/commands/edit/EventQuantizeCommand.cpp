@@ -33,6 +33,7 @@
 #include "gui/application/RosegardenApplication.h"
 
 #include <QApplication>
+#include <QProgressDialog>
 #include <QSettings>
 #include <QString>
 
@@ -119,6 +120,9 @@ EventQuantizeCommand::modifySegment()
 {
     Profiler profiler("EventQuantizeCommand::modifySegment", true);
 
+    // Kick the event loop.
+    qApp->processEvents();
+
     Segment &segment = getSegment();
     SegmentNotationHelper helper(segment);
 
@@ -148,15 +152,24 @@ EventQuantizeCommand::modifySegment()
                               segment.findTime(getEndTime()));
     }
 
+    // Kick the event loop.
+    qApp->processEvents();
+
     if (segment.getEndTime() < endTime) {
         segment.setEndTime(endTime);
     }
 
     if (m_progressTotal > 0) {
         if (rebeam || makeviable || decounterpoint) {
-            emit setValue(m_progressTotal + m_progressPerCall / 2);
+            int progressValue = m_progressTotal + m_progressPerCall / 2;
+            if (m_progressDialog)
+                m_progressDialog->setValue(progressValue);
+            emit setValue(progressValue);
         } else {
-            emit setValue(m_progressTotal + m_progressPerCall);
+            int progressValue = m_progressTotal + m_progressPerCall;
+            if (m_progressDialog)
+                m_progressDialog->setValue(progressValue);
+            emit setValue(progressValue);
         }
     }
 
@@ -167,30 +180,45 @@ EventQuantizeCommand::modifySegment()
             if (makeviable) {
                 helper.makeNotesViable(i->first, i->second, true);
             }
+            // Kick the event loop.
+            qApp->processEvents();
             if (decounterpoint) {
                 helper.deCounterpoint(i->first, i->second);
             }
+            // Kick the event loop.
+            qApp->processEvents();
             if (rebeam) {
                 helper.autoBeam(i->first, i->second, GROUP_TYPE_BEAMED);
                 helper.autoSlur(i->first, i->second, true);
             }
+            // Kick the event loop.
+            qApp->processEvents();
         }
     } else {
         if (makeviable) {
             helper.makeNotesViable(getStartTime(), getEndTime(), true);
         }
+        // Kick the event loop.
+        qApp->processEvents();
         if (decounterpoint) {
             helper.deCounterpoint(getStartTime(), getEndTime());
         }
+        // Kick the event loop.
+        qApp->processEvents();
         if (rebeam) {
             helper.autoBeam(getStartTime(), getEndTime(), GROUP_TYPE_BEAMED);
             helper.autoSlur(getStartTime(), getEndTime(), true);
         }
+        // Kick the event loop.
+        qApp->processEvents();
     }
 
     if (m_progressTotal > 0) {
         if (rebeam || makeviable || decounterpoint) {
-            emit setValue(m_progressTotal  + m_progressPerCall / 2);
+            int progressValue = m_progressTotal  + m_progressPerCall / 2;
+            if (m_progressDialog)
+                m_progressDialog->setValue(progressValue);
+            emit setValue(progressValue);
         }
     }
 }
