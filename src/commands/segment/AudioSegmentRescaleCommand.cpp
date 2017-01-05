@@ -95,20 +95,16 @@ AudioSegmentRescaleCommand::setProgressDialog(
 void
 AudioSegmentRescaleCommand::execute()
 {
-    /* timeT startTime = m_segment->getStartTime(); */
-
+    // Audio segments only.
     if (m_segment->getType() != Segment::Audio) {
+        RG_WARNING << "WARNING: execute() called with a non-audio segment.";
         return;
     }
 
-    bool failed = false;
-
+    // If we don't have the rescaled segment yet, create it.
     if (!m_newSegment) {
 
-        m_newSegment = m_segment->clone(false);
-
-        std::string label = m_newSegment->getLabel();
-        m_newSegment->setLabel(appendLabel(label, qstrtostr(tr("(rescaled)"))));
+        // Rescale the audio file.
 
         AudioFileId sourceFileId = m_segment->getAudioFileId();
         float absoluteRatio = m_ratio;
@@ -127,48 +123,35 @@ AudioSegmentRescaleCommand::execute()
                 (m_segment->getEndMarkerTime() - m_segment->getStartTime()) * m_ratio;
         }
 
-        try {
-            m_fid = m_stretcher->getStretchedAudioFile(sourceFileId,
-                                                       absoluteRatio);
-            m_newSegment->setAudioFileId(m_fid);
-            m_newSegment->setUnstretchedFileId(sourceFileId);
-            m_newSegment->setStretchRatio(absoluteRatio);
-            m_newSegment->setAudioStartTime(m_segment->getAudioStartTime() *
-                                            m_ratio);
-            if (m_timesGiven) {
-                m_newSegment->setStartTime(m_startTime);
-                m_newSegment->setAudioEndTime(m_segment->getAudioEndTime() *
-                                              m_ratio);
-                m_newSegment->setEndMarkerTime(m_endMarkerTime);
-            } else {
-                m_newSegment->setEndMarkerTime(m_endMarkerTime);
-                m_newSegment->setAudioEndTime(m_segment->getAudioEndTime() *
-                                              m_ratio);
-            }
-        } catch (SoundFile::BadSoundFileException e) {
-            RG_WARNING << "AudioSegmentRescaleCommand: ERROR: BadSoundFileException: "
-                      << e.getMessage();
-            delete m_newSegment;
-            m_newSegment = 0;
-            m_fid = -1;
-            failed = true;
-        } catch (AudioFileManager::BadAudioPathException e) {
-            RG_WARNING << "AudioSegmentRescaleCommand: ERROR: BadAudioPathException: "
-                      << e.getMessage();
-            delete m_newSegment;
-            m_newSegment = 0;
-            m_fid = -1;
-            failed = true;
-        } catch (AudioFileTimeStretcher::CancelledException e) {
-            RG_DEBUG << "execute(): Rescale cancelled";
-            delete m_newSegment;
-            m_newSegment = 0;
-            m_fid = -1;
-            failed = true;
+        m_fid = m_stretcher->getStretchedAudioFile(sourceFileId,
+                                                   absoluteRatio);
+        // If the stretch failed, bail.
+        if (m_fid < 0)
+            return;
+
+        // Audio file was rescaled successfully.  Create the new Segment.
+
+        m_newSegment = m_segment->clone(false);
+
+        std::string label = m_newSegment->getLabel();
+        m_newSegment->setLabel(appendLabel(label, qstrtostr(tr("(rescaled)"))));
+
+        m_newSegment->setAudioFileId(m_fid);
+        m_newSegment->setUnstretchedFileId(sourceFileId);
+        m_newSegment->setStretchRatio(absoluteRatio);
+        m_newSegment->setAudioStartTime(m_segment->getAudioStartTime() *
+                                        m_ratio);
+        if (m_timesGiven) {
+            m_newSegment->setStartTime(m_startTime);
+            m_newSegment->setAudioEndTime(m_segment->getAudioEndTime() *
+                                          m_ratio);
+            m_newSegment->setEndMarkerTime(m_endMarkerTime);
+        } else {
+            m_newSegment->setEndMarkerTime(m_endMarkerTime);
+            m_newSegment->setAudioEndTime(m_segment->getAudioEndTime() *
+                                          m_ratio);
         }
     }
-
-    if (failed) return;
 
     m_segment->getComposition()->addSegment(m_newSegment);
     m_segment->getComposition()->detachSegment(m_segment);

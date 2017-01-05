@@ -41,18 +41,12 @@ public:
 
     /**
      * Stretch an audio file and return the ID of the stretched
-     * version.  May throw SoundFile::BadSoundFileException,
-     * AudioFileManager::BadAudioPathException, CancelledException
+     * version.
+     *
+     * Returns -1 on error.
      */
     AudioFileId getStretchedAudioFile(AudioFileId source,
                                       float ratio);
-
-    class CancelledException : public Exception
-    {
-    public:
-        CancelledException() : Exception(qstrtostr(QObject::tr("Cancelled"))) { }
-        ~CancelledException() throw() { }
-    };
 
     void setProgressDialog(QPointer<QProgressDialog> progressDialog)
             { m_progressDialog = progressDialog; }

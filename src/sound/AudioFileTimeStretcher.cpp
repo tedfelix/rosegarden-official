@@ -53,9 +53,8 @@ AudioFileTimeStretcher::getStretchedAudioFile(AudioFileId source,
 {
     AudioFile *sourceFile = m_manager->getAudioFile(source);
     if (!sourceFile) {
-        throw SoundFile::BadSoundFileException
-            ("<unknown source>",
-             "Source file not found in AudioFileTimeStretcher::getStretchedAudioFile");
+        RG_WARNING << "getStretchedAudioFile(): WARNING: Source file not found for ID" << source;
+        return -1;
     }
 
     std::cerr << "AudioFileTimeStretcher: got source file id " << source
@@ -63,7 +62,8 @@ AudioFileTimeStretcher::getStretchedAudioFile(AudioFileId source,
 
     AudioFile *file = m_manager->createDerivedAudioFile(source, "stretch");
     if (!file) {
-        throw AudioFileManager::BadAudioPathException(m_manager->getAudioPath());
+        RG_WARNING << "getStretchedAudioFile(): WARNING: createDerivedAudioFile() failed for ID" << source << ", using path: " << m_manager->getAudioPath();
+        return -1;
     }
 
     std::cerr << "AudioFileTimeStretcher: got derived file id " << file->getId()
@@ -72,9 +72,8 @@ AudioFileTimeStretcher::getStretchedAudioFile(AudioFileId source,
     std::ifstream streamIn(sourceFile->getFilename().toLocal8Bit(),
                            std::ios::in | std::ios::binary);
     if (!streamIn) {
-        throw SoundFile::BadSoundFileException
-            (file->getFilename(),
-             "Failed to open source stream for time stretcher");
+        RG_WARNING << "getStretchedAudioFile(): WARNING: Creation of ifstream failed for file " << sourceFile->getFilename();
+        return -1;
     }
     
     //!!!
@@ -92,8 +91,8 @@ AudioFileTimeStretcher::getStretchedAudioFile(AudioFileId source,
          32);
 
     if (!writeFile.write()) {
-        throw AudioFileManager::BadAudioPathException
-            (file->getFilename());
+        RG_WARNING << "getStretchedAudioFile(): WARNING: write() failed for file " << file->getFilename();
+        return -1;
     }
     
     int obs = 1024;
@@ -157,9 +156,9 @@ AudioFileTimeStretcher::getStretchedAudioFile(AudioFileId source,
             
         if (m_progressDialog  &&  m_progressDialog->wasCanceled()) {
             RG_DEBUG << "getStretchedAudioFile(): cancelled";
-            throw CancelledException();
+            return -1;
         }
-            
+
         unsigned int thisRead = 0;
 
         if (!inputExhausted) {
