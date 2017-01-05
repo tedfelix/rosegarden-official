@@ -65,7 +65,6 @@
 #include "gui/seqmanager/SequenceManager.h"
 #include "gui/studio/AudioPluginManager.h"
 #include "gui/studio/StudioControl.h"
-#include "gui/widgets/CurrentProgressDialog.h"
 #include "gui/widgets/ProgressDialog.h"
 #include "gui/general/AutoSaveFinder.h"
 #include "sequencer/RosegardenSequencer.h"
@@ -2838,60 +2837,54 @@ RosegardenDocument::finalizeAudioFile(InstrumentId iid)
 {
     RG_DEBUG << "RosegardenDocument::finalizeAudioFile(" << iid << ")";
 
-    Segment *recordSegment = 0;
-    recordSegment = m_recordAudioSegments[iid];
+    Segment *recordSegment = m_recordAudioSegments[iid];
 
     if (!recordSegment) {
-        RG_DEBUG << "RosegardenDocument::finalizeAudioFile: Failed to find segment";
-        return ;
+        RG_WARNING << "finalizeAudioFile() WARNING: Failed to find segment";
+        return;
     }
 
-    AudioFile *newAudioFile = m_audioFileManager.getAudioFile
-                              (recordSegment->getAudioFileId());
+    AudioFile *newAudioFile = m_audioFileManager.getAudioFile(
+            recordSegment->getAudioFileId());
     if (!newAudioFile) {
-        std::cerr << "WARNING: RosegardenDocument::finalizeAudioFile: No audio file found for instrument " << iid << " (audio file id " << recordSegment->getAudioFileId() << ")" << std::endl;
-        return ;
+        RG_WARNING << "finalizeAudioFile() WARNING: No audio file found for instrument " << iid << " (audio file id " << recordSegment->getAudioFileId() << ")";
+        return;
     }
 
-    // Create a progress dialog
-    //
-    ProgressDialog *progressDlg = new ProgressDialog ( tr("Generating audio preview..."), (QWidget*)parent() );
+    // Progress Dialog
+    ProgressDialog *progressDlg = new ProgressDialog(
+            tr("Generating audio preview..."),
+            dynamic_cast<QWidget *>(parent()));
 
     connect(progressDlg, SIGNAL(canceled()),
             &m_audioFileManager, SLOT(slotStopPreview()));
-
     connect(&m_audioFileManager, SIGNAL(setValue(int)),
-             progressDlg, SLOT(setValue(int)));
+            progressDlg, SLOT(setValue(int)));
 
     try {
         m_audioFileManager.generatePreview(newAudioFile->getId());
-        //!!! mtr just for now?: or better to do this once after the fact?
-        //!!!    m_audioFileManager.generatePreviews();
     } catch (Exception e) {
         StartupLogo::hideIfStillThere();
-        CurrentProgressDialog::freeze();
         QMessageBox::critical(dynamic_cast<QWidget *>(parent()), tr("Rosegarden"), strtoqstr(e.getMessage()));
-        CurrentProgressDialog::thaw();
     }
 
+    // ??? Crash if user closed?
     progressDlg->close();    // is deleteOnClose
     progressDlg = 0;
 
-    if (!recordSegment->getComposition()) {
+    if (!recordSegment->getComposition())
         getComposition().addSegment(recordSegment);
-    }
 
-    CommandHistory::getInstance()->addCommand
-        (new SegmentRecordCommand(recordSegment));
+    CommandHistory::getInstance()->addCommand(
+            new SegmentRecordCommand(recordSegment));
 
     // update views
     slotUpdateAllViews(0);
 
-    // Now install the file in the sequencer
-    //
-    RosegardenSequencer::getInstance()->addAudioFile
-        (newAudioFile->getFilename(),
-         newAudioFile->getId());
+    // Add the file to the sequencer
+    RosegardenSequencer::getInstance()->addAudioFile(
+            newAudioFile->getFilename(),
+            newAudioFile->getId());
 
     // clear down
     m_recordAudioSegments.erase(iid);
