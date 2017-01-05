@@ -14,6 +14,8 @@
 */
 
 #define RG_MODULE_STRING "[MidiFile]"
+// Turn off all debugging here.
+#define RG_NO_DEBUG_PRINT
 
 #include "MidiFile.h"
 
@@ -41,8 +43,6 @@
 #include <fstream>
 #include <string>
 #include <sstream>
-
-#define MIDIFILE_DEBUG 0
 
 static const char MIDI_FILE_HEADER[] = "MThd";
 static const char MIDI_TRACK_HEADER[] = "MTrk";
@@ -1448,13 +1448,11 @@ MidiFile::writeTrack(std::ofstream *midiFile, TrackId trackNumber)
 
         skippedTime = 0;
 
-#if MIDIFILE_DEBUG
         RG_DEBUG << "MIDI event for channel "
                   << static_cast<int>(midiEvent.getChannelNumber())
                   << " (track " << trackNumber << ") "
                   << " time" << midiEvent.getTime();
         RG_DEBUG << midiEvent;
-#endif
 
         if (midiEvent.isMeta()) {
             trackBuffer += MIDI_FILE_META_EVENT;
