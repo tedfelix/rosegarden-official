@@ -70,15 +70,6 @@ public:
     void setProgressDialog(QPointer<QProgressDialog> progressDialog)
             { m_progressDialog = progressDialog; }
 
-signals:
-    /// Progress in percent.  Connect to a progress dialog's setValue(int).
-    /**
-     * DEPRECATED
-     *
-     * Use setProgressDialog() instead.
-     */
-    void progress(int);
-
 private:
     // convertToMidi() uses MidiInserter.
     // MidiInserter uses:

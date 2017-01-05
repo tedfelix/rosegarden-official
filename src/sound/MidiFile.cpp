@@ -159,18 +159,18 @@ MidiFile::read(std::ifstream *midiFile, unsigned long numberOfBytes)
     if (m_bytesRead >= 2000) {
         m_bytesRead = 0;
 
-        // This is the first 20% of the "reading" process.
-        int progressValue = static_cast<int>(
-                static_cast<double>(midiFile->tellg()) /
-                static_cast<double>(m_fileSize) * 20.0);
         // Update the progress dialog if one is connected.
         if (m_progressDialog) {
             if (m_progressDialog->wasCanceled())
                 throw Exception(qstrtostr(QObject::tr("Cancelled by user.")));
 
+            // This is the first 20% of the "reading" process.
+            int progressValue = static_cast<int>(
+                    static_cast<double>(midiFile->tellg()) /
+                    static_cast<double>(m_fileSize) * 20.0);
+
             m_progressDialog->setValue(progressValue);
         }
-        emit progress(progressValue);
     }
 
     return stringRet;
@@ -695,19 +695,22 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
          trackId < m_midiComposition.size();
          ++trackId) {
 
-        // 20% total in file import itself (see read()) and then 80%
-        // split over the tracks.
-        int progressValue = 20 + static_cast<int>(
-                80.0 * trackId / m_midiComposition.size());
-        RG_DEBUG << "convertToRosegarden() progressValue: " << progressValue;
         if (m_progressDialog) {
             if (m_progressDialog->wasCanceled()) {
                 m_error = qstrtostr(QObject::tr("Cancelled by user."));
                 return false;
             }
+
+            // 20% total in file import itself (see read()) and then 80%
+            // split over the tracks.
+            int progressValue = 20 + static_cast<int>(
+                    80.0 * trackId / m_midiComposition.size());
+
+            //RG_DEBUG << "convertToRosegarden() progressValue: " << progressValue;
+
             m_progressDialog->setValue(progressValue);
         }
-        emit progress(progressValue);
+
         // Kick the event loop.
         qApp->processEvents();
 
@@ -1539,12 +1542,8 @@ MidiFile::write(const QString &filename)
         if (m_progressDialog  &&  m_progressDialog->wasCanceled())
             return false;
 
-        int progressValue = i * 100 / m_numberOfTracks;
-
         if (m_progressDialog)
-            m_progressDialog->setValue(progressValue);
-
-        emit progress(progressValue);
+            m_progressDialog->setValue(i * 100 / m_numberOfTracks);
     }
 
     midiFile->close();

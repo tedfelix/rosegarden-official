@@ -182,6 +182,9 @@ signals:
     /**
      * Emitted during URL retrieval, when the retrieval progress
      * notches up to a new percentage.
+     *
+     * ??? It looks like this is unused.  A search on "SIGNAL(progress"
+     *     turns up nothing.
      */
     void progress(int percent);
 
