@@ -30,7 +30,7 @@
 #include <QObject>
 #include <QThread>
 
-#define DEBUG_AUDIO_PEAKS_THREAD 1
+#define DEBUG_AUDIO_PEAKS_THREAD 0
 
 namespace Rosegarden
 {
@@ -51,8 +51,8 @@ AudioPeaksThread::run()
 {
     bool emptyQueueSignalled = false;
 
-#ifdef DEBUG_AUDIO_PEAKS_THREAD
-    RG_DEBUG << "AudioPeaksThread::run entering";
+#if DEBUG_AUDIO_PEAKS_THREAD
+    RG_DEBUG << "run() entering";
 #endif
 
     while (!m_exiting) {
@@ -70,8 +70,8 @@ AudioPeaksThread::run()
         }
     }
 
-#ifdef DEBUG_AUDIO_PEAKS_THREAD
-    RG_DEBUG << "AudioPeaksThread::run exiting";
+#if DEBUG_AUDIO_PEAKS_THREAD
+    RG_DEBUG << "run() exiting";
 #endif
 }
 
@@ -84,8 +84,8 @@ AudioPeaksThread::finish()
 bool
 AudioPeaksThread::process()
 {
-#ifdef DEBUG_AUDIO_PEAKS_THREAD
-    RG_DEBUG << "AudioPeaksThread::process()";
+#if DEBUG_AUDIO_PEAKS_THREAD
+    RG_DEBUG << "process()";
 #endif
 
     // ??? There appears to be a bug that causes this to run one extra time
@@ -121,8 +121,8 @@ AudioPeaksThread::process()
         std::vector<float> results;
 
         try {
-#ifdef DEBUG_AUDIO_PEAKS_THREAD
-            RG_DEBUG << "AudioPeaksThread::process() file id " << req.audioFileId;
+#if DEBUG_AUDIO_PEAKS_THREAD
+            RG_DEBUG << "process() file id " << req.audioFileId;
 #endif
 
             // Requires thread-safe AudioFileManager::getPreview
@@ -134,8 +134,8 @@ AudioPeaksThread::process()
                                             req.showMinima);
         } catch (AudioFileManager::BadAudioPathException e) {
 
-#ifdef DEBUG_AUDIO_PEAKS_THREAD
-            RG_DEBUG << "AudioPeaksThread::process: failed to get peaks for audio file " << req.audioFileId << ": bad audio path: " << e.getMessage();
+#if DEBUG_AUDIO_PEAKS_THREAD
+            RG_DEBUG << "process(): failed to get peaks for audio file " << req.audioFileId << ": bad audio path: " << e.getMessage();
 #endif
 
             // OK, we hope this just means we're still recording -- so
@@ -144,8 +144,8 @@ AudioPeaksThread::process()
 
         } catch (PeakFileManager::BadPeakFileException e) {
 
-#ifdef DEBUG_AUDIO_PEAKS_THREAD
-            RG_DEBUG << "AudioPeaksThread::process: failed to get peaks for audio file " << req.audioFileId << ": bad peak file: " << e.getMessage();
+#if DEBUG_AUDIO_PEAKS_THREAD
+            RG_DEBUG << "process(): failed to get peaks for audio file " << req.audioFileId << ": bad peak file: " << e.getMessage();
 #endif
 
             // As above
@@ -180,16 +180,16 @@ AudioPeaksThread::process()
         m_mutex.unlock();
 
         if (failed > 0 && failed == inQueue) {
-#ifdef DEBUG_AUDIO_PEAKS_THREAD
-            RG_DEBUG << "AudioPeaksThread::process() - return true";
+#if DEBUG_AUDIO_PEAKS_THREAD
+            RG_DEBUG << "process() - return true";
 #endif
 
             return true; // delay and try again
         }
     }
 
-#ifdef DEBUG_AUDIO_PEAKS_THREAD
-    RG_DEBUG << "AudioPeaksThread::process() - return false";
+#if DEBUG_AUDIO_PEAKS_THREAD
+    RG_DEBUG << "process() - return false";
 #endif
 
     return false;
@@ -200,9 +200,8 @@ AudioPeaksThread::requestPeaks(const Request &request)
 {
     m_mutex.lock();
 
-#ifdef DEBUG_AUDIO_PEAKS_THREAD
-
-    RG_DEBUG << "AudioPeaksThread::requestPeaks() for file id " << request.audioFileId << ", start " << request.audioStartTime << ", end " << request.audioEndTime << ", width " << request.width << ", notify " << request.notify;
+#if DEBUG_AUDIO_PEAKS_THREAD
+    RG_DEBUG << "requestPeaks() for file id " << request.audioFileId << ", start " << request.audioStartTime << ", end " << request.audioEndTime << ", width " << request.width << ", notify " << request.notify;
 #endif 
     /*!!!
         for (RequestQueue::iterator i = m_queue.begin(); i != m_queue.end(); ++i) {
@@ -220,8 +219,8 @@ AudioPeaksThread::requestPeaks(const Request &request)
 
     //     if (!running()) start();
 
-#ifdef DEBUG_AUDIO_PEAKS_THREAD
-    RG_DEBUG << "AudioPeaksThread::requestPeaks() - token = " << token;
+#if DEBUG_AUDIO_PEAKS_THREAD
+    RG_DEBUG << "requestPeaks() - token = " << token;
 #endif
 
     return token;
@@ -232,9 +231,8 @@ AudioPeaksThread::cancelPeaks(int token)
 {
     m_mutex.lock();
 
-#ifdef DEBUG_AUDIO_PEAKS_THREAD
-
-    RG_DEBUG << "AudioPeaksThread::cancelPeaks() for token " << token;
+#if DEBUG_AUDIO_PEAKS_THREAD
+    RG_DEBUG << "cancelPeaks() for token " << token;
 #endif
 
     for (RequestQueue::iterator i = m_queue.begin(); i != m_queue.end(); ++i) {

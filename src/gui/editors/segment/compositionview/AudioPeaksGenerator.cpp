@@ -71,9 +71,9 @@ void AudioPeaksGenerator::update()
                             m_composition.getElapsedRealTime(m_segment->getEndMarkerTime()) -
                             m_composition.getElapsedRealTime(m_segment->getStartTime()) ;
 
-    RG_DEBUG << "AudioPeaksGenerator(" << this << ")::update() - for file id "
-    << m_segment->getAudioFileId() << " requesting values - thread running : "
-    << m_thread.isRunning() << " - thread finished : " << m_thread.isFinished() << endl;
+    //RG_DEBUG << "AudioPeaksGenerator(" << this << ")::update() - for file id "
+    //         << m_segment->getAudioFileId() << " requesting values - thread running : "
+    //         << m_thread.isRunning() << " - thread finished : " << m_thread.isFinished() << endl;
 
     AudioPeaksThread::Request request;
     request.audioFileId = m_segment->getAudioFileId();
@@ -98,7 +98,7 @@ void AudioPeaksGenerator::cancel()
 bool AudioPeaksGenerator::event(QEvent *e)
 {
     
-    RG_DEBUG << "AudioPeaksGenerator(" << this << ")::event (" << e << ")";
+    //RG_DEBUG << "AudioPeaksGenerator(" << this << ")::event (" << e << ")";
 
     if (e->type() == AudioPeaksThread::AudioPeaksReady) {
         AudioPeaksReadyEvent *ev = dynamic_cast<AudioPeaksReadyEvent *>(e);
@@ -106,21 +106,21 @@ bool AudioPeaksGenerator::event(QEvent *e)
             int token = (int)ev->data();
             m_channels = 0; // to be filled as getComputedValues() return value
 
-            RG_DEBUG << "AudioPeaksGenerator::token " << token << ", my token " << m_token;
+            //RG_DEBUG << "AudioPeaksGenerator::token " << token << ", my token " << m_token;
 
             if (m_token >= 0 && token >= m_token) {
 
                 m_token = -1;
                 m_thread.getPeaks(token, m_channels, m_values);
-
+#if 0
                 if (m_channels == 0) {
                     RG_DEBUG << "failed to find peaks!\n";
                 } else {
 
                     RG_DEBUG << "got correct peaks (" << m_channels
-                    << " channels, " << m_values.size() << " samples)\n";
+                             << " channels, " << m_values.size() << " samples)\n";
                 }
-
+#endif
                 emit audioPeaksComplete(this);
 
             } else {
@@ -130,8 +130,8 @@ bool AudioPeaksGenerator::event(QEvent *e)
                 unsigned int tmpChannels;
                 m_thread.getPeaks(token, tmpChannels, tmp);
 
-                RG_DEBUG << "got obsolete peaks (" << tmpChannels
-                << " channels, " << tmp.size() << " samples)\n";
+                //RG_DEBUG << "got obsolete peaks (" << tmpChannels
+                //         << " channels, " << tmp.size() << " samples)\n";
             }
 
             return true;
