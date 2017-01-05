@@ -18,6 +18,7 @@
 #define RG_MODULE_STRING "[AudioFileTimeStretcher]"
 
 #include "AudioFileTimeStretcher.h"
+
 #include "AudioTimeStretcher.h"
 #include "AudioFileManager.h"
 #include "WAVAudioFile.h"
@@ -38,8 +39,8 @@
 namespace Rosegarden {
 
 
-AudioFileTimeStretcher::AudioFileTimeStretcher(AudioFileManager *manager) :
-    m_manager(manager)
+AudioFileTimeStretcher::AudioFileTimeStretcher(AudioFileManager *afm) :
+        m_audioFileManager(afm)
 {
 }
 
@@ -51,23 +52,21 @@ AudioFileId
 AudioFileTimeStretcher::getStretchedAudioFile(AudioFileId source,
                                               float ratio)
 {
-    AudioFile *sourceFile = m_manager->getAudioFile(source);
+    AudioFile *sourceFile = m_audioFileManager->getAudioFile(source);
     if (!sourceFile) {
         RG_WARNING << "getStretchedAudioFile(): WARNING: Source file not found for ID" << source;
         return -1;
     }
 
-    std::cerr << "AudioFileTimeStretcher: got source file id " << source
-              << ", name " << sourceFile->getFilename() << std::endl;
+    RG_DEBUG << "getStretchedAudioFile(): got source file id " << source << ", name " << sourceFile->getFilename();
 
-    AudioFile *file = m_manager->createDerivedAudioFile(source, "stretch");
+    AudioFile *file = m_audioFileManager->createDerivedAudioFile(source, "stretch");
     if (!file) {
-        RG_WARNING << "getStretchedAudioFile(): WARNING: createDerivedAudioFile() failed for ID" << source << ", using path: " << m_manager->getAudioPath();
+        RG_WARNING << "getStretchedAudioFile(): WARNING: createDerivedAudioFile() failed for ID" << source << ", using path: " << m_audioFileManager->getAudioPath();
         return -1;
     }
 
-    std::cerr << "AudioFileTimeStretcher: got derived file id " << file->getId()
-              << ", name " << file->getFilename() << std::endl;
+    RG_DEBUG << "getStretchedAudioFile(): got derived file id " << file->getId() << ", name " << file->getFilename();
 
     std::ifstream streamIn(sourceFile->getFilename().toLocal8Bit(),
                            std::ios::in | std::ios::binary);
@@ -184,7 +183,7 @@ AudioFileTimeStretcher::getStretchedAudioFile(AudioFileId source,
                                 thisRead * sourceFile->getBytesPerFrame(),
                                 sr, ch,
                                 thisRead, dbfs, false)) {
-            std::cerr << "ERROR: Stupid audio file class failed to decode its own output" << std::endl;
+            RG_WARNING << "getStretchedAudioFile(): ERROR: AudioFile failed to decode its own output";
             break;
         }
             
@@ -236,8 +235,7 @@ AudioFileTimeStretcher::getStretchedAudioFile(AudioFileId source,
         }
             
         if (++progressCount == 100) {
-            int progress = int
-                ((100.f * float(totalIn)) / float(fileTotalIn));
+            int progress = static_cast<int>(100.0 * totalIn / fileTotalIn);
             if (m_progressDialog)
                 m_progressDialog->setValue(progress);
 
@@ -254,8 +252,7 @@ AudioFileTimeStretcher::getStretchedAudioFile(AudioFileId source,
 
     writeFile.close();
     
-    std::cerr << "AudioFileTimeStretcher::getStretchedAudioFile: success, id is "
-                 << file->getId() << std::endl;
+    RG_DEBUG << "getStretchedAudioFile(): success, id is " << file->getId();
 
     return file->getId();
 }

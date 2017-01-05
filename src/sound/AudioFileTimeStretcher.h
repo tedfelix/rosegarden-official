@@ -18,11 +18,11 @@
 #ifndef RG_AUDIO_FILE_TIME_STRETCHER_H
 #define RG_AUDIO_FILE_TIME_STRETCHER_H
 
-#include <QObject>
 #include "AudioFile.h"
 #include "base/Exception.h"
 #include "misc/Strings.h"
 
+#include <QObject>
 #include <QPointer>
 
 class QProgressDialog;
@@ -36,7 +36,7 @@ class AudioFileTimeStretcher : public QObject
     Q_OBJECT
     
 public:
-    AudioFileTimeStretcher(AudioFileManager *mgr);
+    AudioFileTimeStretcher(AudioFileManager *afm);
     virtual ~AudioFileTimeStretcher();
 
     /**
@@ -52,7 +52,7 @@ public:
             { m_progressDialog = progressDialog; }
 
 protected:
-    AudioFileManager *m_manager;
+    AudioFileManager *m_audioFileManager;
 
     QPointer<QProgressDialog> m_progressDialog;
 };
