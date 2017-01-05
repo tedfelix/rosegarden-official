@@ -1349,9 +1349,7 @@ SequenceManager::panic()
     stopping();
 
     MappedEvent mE(MidiInstrumentBase, MappedEvent::Panic, 0, 0);
-    emit setValue(40);
     StudioControl::sendMappedEvent(mE);
-    emit setValue(100);
 
     //    Studio &studio = m_doc->getStudio();
     //

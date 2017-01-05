@@ -8069,22 +8069,15 @@ RosegardenMainWindow::slotAudioManagerClosed()
 void
 RosegardenMainWindow::slotPanic()
 {
-    if (m_seqManager) {
-        // Stop the transport before we send a panic as the
-        // playback goes all to hell anyway.
-        //
-        slotStop();
+    if (!m_seqManager)
+        return;
 
-        ProgressDialog *progressDlg = new ProgressDialog(
-                tr("Queueing MIDI panic events for tranmission..."), (QWidget*)this);
+    // Stop the transport before we send a panic as the
+    // playback goes all to hell anyway.
+    //
+    slotStop();
 
-        connect(m_seqManager, SIGNAL(setValue(int)),
-                progressDlg, SLOT(setValue(int)));
-
-        m_seqManager->panic();
-        
-        progressDlg->close();
-    }
+    m_seqManager->panic();
 }
 
 void
