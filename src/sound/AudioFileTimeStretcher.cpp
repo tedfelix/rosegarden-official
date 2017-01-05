@@ -75,6 +75,11 @@ AudioFileTimeStretcher::getStretchedAudioFile(AudioFileId source,
         return -1;
     }
     
+    if (m_progressDialog) {
+        m_progressDialog->setLabelText(tr("Rescaling audio file..."));
+        m_progressDialog->setRange(0, 100);
+    }
+
     //!!!
     //...
     // Need to make SoundDriver::getAudioRecFileFormat available?

@@ -540,8 +540,12 @@ bool RosegardenDocument::openDocument(const QString &filename,
     }
 
     // Progress Dialog
-    QProgressDialog progressDialog(tr("Reading file..."), tr("Cancel"),
-                                   0, 100, RosegardenMainWindow::self());
+    // Note: The label text and range will be set later as needed.
+    QProgressDialog progressDialog(
+            "...",  // labelText
+            tr("Cancel"),  // cancelButtonText
+            0, 100,  // min, max
+            RosegardenMainWindow::self());  // parent
     progressDialog.setWindowTitle(tr("Rosegarden"));
     progressDialog.setWindowModality(Qt::WindowModal);
     // Don't want to auto close since this is a multi-step
@@ -632,17 +636,11 @@ bool RosegardenDocument::openDocument(const QString &filename,
         RG_DEBUG << "First segment starts at " << (*m_composition.begin())->getStartTime();
     }
 
-    if (m_progressDialog) {
-        m_progressDialog->setLabelText(tr("Generating audio previews..."));
+    m_audioFileManager.setProgressDialog(m_progressDialog);
 
-        // Connect audio file manager for progress.
-        //connect(m_progressDialog, SIGNAL(canceled()),
-        //        &m_audioFileManager, SLOT(slotStopPreview()));
-    }
-    
     try {
         // generate any audio previews after loading the files
-        m_audioFileManager.generatePreviews(m_progressDialog);
+        m_audioFileManager.generatePreviews();
     } catch (Exception e) {
         StartupLogo::hideIfStillThere();
         QMessageBox::critical(dynamic_cast<QWidget *>(parent()), tr("Rosegarden"), strtoqstr(e.getMessage()));
@@ -2852,8 +2850,9 @@ RosegardenDocument::finalizeAudioFile(InstrumentId iid)
     }
 
     // Progress Dialog
+    // Note: The label text and range will be set later as needed.
     QProgressDialog progressDialog(
-            tr("Generating audio preview..."),  // labelText
+            "...",  // labelText
             tr("Cancel"),  // cancelButtonText
             0, 100,  // min, max
             RosegardenMainWindow::self());  // parent

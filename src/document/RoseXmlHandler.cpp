@@ -281,6 +281,11 @@ RoseXmlHandler::getAudioPluginManager()
 bool
 RoseXmlHandler::startDocument()
 {
+    if (m_progressDialog) {
+        m_progressDialog->setLabelText(tr("Reading file..."));
+        m_progressDialog->setRange(0, 100);
+    }
+
     // Clear tracks
     //
     getComposition().clearTracks();

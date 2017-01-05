@@ -2773,13 +2773,14 @@ RosegardenMainWindow::slotRescaleSelection()
     }
 
     // Progress Dialog
+    // Note: The label text and range will be set later as needed.
     // ??? We should make the label text the more generic
     //     "Rescaling segment...".  Then this is OK for audio or MIDI
     //     segments.
     QProgressDialog progressDialog(
             tr("Rescaling audio file..."),  // labelText
             tr("Cancel"),  // cancelButtonText
-            0, 100,  // min, max
+            0, 0,  // min, max
             this);  // parent
     progressDialog.setWindowTitle(tr("Rosegarden"));
     progressDialog.setWindowModality(Qt::WindowModal);
@@ -2804,7 +2805,6 @@ RosegardenMainWindow::slotRescaleSelection()
         return;
 
     if (!audioRescaleCommands.empty()) {
-        progressDialog.setLabelText(tr("Generating audio preview..."));
         m_doc->getAudioFileManager().setProgressDialog(&progressDialog);
 
         // For each AudioSegmentRescaleCommand

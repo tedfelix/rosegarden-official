@@ -136,8 +136,9 @@ void SegmentResizer::resizeAudioSegment(
                                        newStartTime, newEndTime);
 
     // Progress Dialog
+    // Note: The label text and range will be set later as needed.
     QProgressDialog progressDialog(
-            tr("Rescaling audio file..."),  // labelText
+            "...",  // labelText
             tr("Cancel"),  // cancelButtonText
             0, 100,  // min, max
             RosegardenMainWindow::self());  // parent
@@ -168,7 +169,6 @@ void SegmentResizer::resizeAudioSegment(
     // Add to sequencer
     RosegardenMainWindow::self()->slotAddAudioFile(fileId);
 
-    progressDialog.setLabelText(tr("Generating audio preview..."));
     m_doc->getAudioFileManager().setProgressDialog(&progressDialog);
     m_doc->getAudioFileManager().generatePreview(fileId);
 }

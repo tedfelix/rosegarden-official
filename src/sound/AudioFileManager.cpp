@@ -614,6 +614,13 @@ AudioFileManager::importURL(const QUrl &url, int sampleRate,
     if (progressDialog)
         m_progressDialog = progressDialog;
 
+    if (m_progressDialog) {
+        m_progressDialog->setLabelText(tr("Adding audio file..."));
+        // Switch to indeterminate mode since we do not provide
+        // proper progress.
+        m_progressDialog->setRange(0, 0);
+    }
+
     FileSource source(url);
     if (!source.isAvailable()) {
         QMessageBox::critical(0, tr("Rosegarden"),
@@ -888,13 +895,16 @@ AudioFileManager::toXmlString() const
 }
 
 void
-AudioFileManager::generatePreviews(QPointer<QProgressDialog> progressDialog)
+AudioFileManager::generatePreviews()
 {
     MutexLock lock (&audioFileManagerLock)
         ;
 
-    if (progressDialog)
-        m_progressDialog = progressDialog;
+    if (m_progressDialog) {
+        // Or should we push this all the way down into PeakFile?
+        m_progressDialog->setLabelText(tr("Generating audio previews..."));
+        m_progressDialog->setRange(0, 100);
+    }
 
     m_peakManager.setProgressDialog(m_progressDialog);
 
@@ -937,6 +947,12 @@ AudioFileManager::generatePreview(AudioFileId id)
 {
     MutexLock lock (&audioFileManagerLock)
         ;
+
+    if (m_progressDialog) {
+        // Or should we push this all the way down into PeakFile?
+        m_progressDialog->setLabelText(tr("Generating audio preview..."));
+        m_progressDialog->setRange(0, 100);
+    }
 
     // Pass on any progress dialog we might have.
     m_peakManager.setProgressDialog(m_progressDialog);

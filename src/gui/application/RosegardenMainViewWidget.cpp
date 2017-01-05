@@ -1686,10 +1686,11 @@ RosegardenMainViewWidget::slotDroppedNewAudio(QString audioDesc)
         return;
 
     // Progress Dialog
+    // Note: The label text and range will be set later as needed.
     QProgressDialog progressDialog(
-            tr("Adding audio file..."),  // labelText
+            "...",  // labelText
             tr("Cancel"),  // cancelButtonText
-            0, 0,  // min, max
+            0, 100,  // min, max
             RosegardenMainWindow::self());  // parent
     progressDialog.setWindowTitle(tr("Rosegarden"));
     progressDialog.setWindowModality(Qt::WindowModal);
@@ -1729,11 +1730,6 @@ RosegardenMainViewWidget::slotDroppedNewAudio(QString audioDesc)
         QMessageBox::warning(this, tr("Rosegarden"), errorString);
         return;
     }
-
-    progressDialog.setLabelText(tr("Generating audio preview..."));
-    // Leave indeterminate mode since generatePreview() provides
-    // proper progress.
-    progressDialog.setRange(0, 100);
 
     try {
         aFM.generatePreview(audioFileId);

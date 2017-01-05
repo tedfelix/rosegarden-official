@@ -185,7 +185,7 @@ public:
      *
      * throw BadSoundFileException, BadPeakFileException
      */
-    void generatePreviews(QPointer<QProgressDialog> progressDialog);
+    void generatePreviews();
 
     /// Generate preview for a single audio file.
     /**

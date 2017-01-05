@@ -1184,10 +1184,13 @@ AudioManagerDialog::addFile(const QUrl& kurl)
     //     QProgressDialog up the call stack shouldn't be too hard.
     //     That might cover one of the cases anyway.
 
-    // Start out in indeterminate mode since AudioFileManager::importUrl()
-    // has no way to give us proper progress.
-    QProgressDialog progressDialog(tr("Adding audio file..."), tr("Cancel"),
-                                   0, 0, this);
+    // Progress Dialog
+    // Note: The label text and range will be set later as needed.
+    QProgressDialog progressDialog(
+            "...",  // labelText
+            tr("Cancel"),  // cancelButtonText
+            0, 100,  // min, max
+            this);  // parent
     progressDialog.setWindowTitle(tr("Rosegarden"));
     progressDialog.setWindowModality(Qt::WindowModal);
     // Don't want to auto close since this is a multi-step
@@ -1216,11 +1219,6 @@ AudioManagerDialog::addFile(const QUrl& kurl)
         QMessageBox::warning(this, tr("Rosegarden"), errorString);
         return false;
     }
-
-    progressDialog.setLabelText(tr("Generating audio preview..."));
-    // Leave indeterminate mode since generatePreview() provides
-    // proper progress.
-    progressDialog.setRange(0, 100);
 
     try {
         aFM.generatePreview(id);
