@@ -665,6 +665,9 @@ AudioFileManager::importFile(const QString &fileName, int sampleRate)
     }
 
     emit setOperationName(tr("Converting audio file..."));
+    // ??? We should probably switch to indeterminate mode here.  This
+    //     is closest to the place where we know that we don't support
+    //     actual progress.
     if (m_progressDialog)
         m_progressDialog->setLabelText(tr("Converting audio file..."));
 
@@ -734,7 +737,9 @@ int AudioFileManager::convertAudioFile(const QString &inFile, const QString &out
     int i = 0;
     while (1) {
         int got = rs->getInterleavedFrames(blockSize, block);
+        qApp->processEvents();
         ws->putInterleavedFrames(got, block);
+        qApp->processEvents();
         if (got < blockSize) break;
 
         // ??? It would be nice if we could provide progress to the
@@ -760,7 +765,6 @@ int AudioFileManager::convertAudioFile(const QString &inFile, const QString &out
             return -1;
         }
 
-        qApp->processEvents(QEventLoop::AllEvents);
         ++i;
     }
 
