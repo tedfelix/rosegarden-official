@@ -16,6 +16,7 @@
 
 #include <algorithm>  // std::max()
 #include <cmath>  // std::fabs()
+#include <unistd.h>  // usleep()
 #include <iostream>
 #include <string>
 #include <utility>  // std::pair
@@ -38,6 +39,12 @@
 #ifdef DEBUG_PEAKFILE
 #define DEBUG_PEAKFILE_BRIEF 1
 #endif
+
+// Slow down the process so the progress dialog can be seen even with
+// very small files.
+// !!! DO NOT SHIP WITH THIS SET TO 1 !!!
+#define TEST_PROGRESS_DIALOG 0
+// !!! DO NOT SHIP WITH THIS SET TO 1 !!!
 
 static const float SAMPLE_MAX_8BIT  = (float)(0xff);
 static const float SAMPLE_MAX_16BIT = (float)(0xffff/2);
@@ -525,8 +532,17 @@ PeakFile::writePeaks(std::ofstream *file)
 
         byteCount += samples.length();
 
+#if !TEST_PROGRESS_DIALOG
         // ??? Every 2000 blocks?  That's around 2Mbytes?
         if (ct % 2000 == 0) {
+#else
+// Testing the progress dialogs.
+        // Slow things down so we can test the progress dialog.
+        usleep(10000);
+
+        // ??? Every 10 blocks?  That's around 10kbytes!
+        if (ct % 10 == 0) {
+#endif
             int progress = static_cast<int>(double(byteCount) /
                     double(apprxTotalBytes) * 100.0);
 
