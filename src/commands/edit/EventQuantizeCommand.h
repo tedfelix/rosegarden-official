@@ -78,10 +78,6 @@ public:
     void setProgressTotal(int total, int perCall) { m_progressTotal = total;
                                                     m_progressPerCall = perCall; };
 
-signals:
-    /// DEPRECATED.  Use setProgressDialog() instead.
-    void setValue(int);
-
 protected:
     virtual void modifySegment();
 

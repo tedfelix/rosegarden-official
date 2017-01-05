@@ -162,15 +162,12 @@ EventQuantizeCommand::modifySegment()
 
     if (m_progressTotal > 0) {
         if (rebeam || makeviable || decounterpoint) {
-            int progressValue = m_progressTotal + m_progressPerCall / 2;
             if (m_progressDialog)
-                m_progressDialog->setValue(progressValue);
-            emit setValue(progressValue);
+                m_progressDialog->setValue(
+                        m_progressTotal + m_progressPerCall / 2);
         } else {
-            int progressValue = m_progressTotal + m_progressPerCall;
             if (m_progressDialog)
-                m_progressDialog->setValue(progressValue);
-            emit setValue(progressValue);
+                m_progressDialog->setValue(m_progressTotal + m_progressPerCall);
         }
     }
 
@@ -216,10 +213,9 @@ EventQuantizeCommand::modifySegment()
 
     if (m_progressTotal > 0) {
         if (rebeam || makeviable || decounterpoint) {
-            int progressValue = m_progressTotal  + m_progressPerCall / 2;
             if (m_progressDialog)
-                m_progressDialog->setValue(progressValue);
-            emit setValue(progressValue);
+                m_progressDialog->setValue(
+                        m_progressTotal  + m_progressPerCall / 2);
         }
     }
 
