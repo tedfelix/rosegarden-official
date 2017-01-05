@@ -241,6 +241,7 @@
 
 // Ladish lv1 support
 #include <cerrno>   // for errno
+#include <climits>  // for LONG_MAX
 #include <csignal>  // for sigaction()
 #include <cstring>  // for strerror()
 #include <unistd.h> // for pipe()
@@ -2695,57 +2696,75 @@ RosegardenMainWindow::slotUpdateFigurations(void)
 void
 RosegardenMainWindow::slotRescaleSelection()
 {
+    // ??? This routine might make more sense in RosegardenMainViewWidget.
+
+    // Nothing selected?  Bail.
     if (!m_view->haveSelection())
-        return ;
+        return;
 
-    //!!! this should all be in rosegardenguiview
-    //!!! should it?
+    const SegmentSelection selection = m_view->getSelection();
 
-    SegmentSelection selection = m_view->getSelection();
+    // Find the time range for the selection.
 
-    timeT startTime = 0, endTime = 0;
-    for (SegmentSelection::iterator i = selection.begin();
-            i != selection.end(); ++i) {
-        if ((i == selection.begin()) || ((*i)->getStartTime() < startTime)) {
-            startTime = (*i)->getStartTime();
-        }
-        if ((i == selection.begin()) || ((*i)->getEndMarkerTime() > endTime)) {
-            endTime = (*i)->getEndMarkerTime();
-        }
+    timeT startTime = LONG_MAX;
+    timeT endTime = 0;
+    bool haveAudioSegment = false;
+
+    // For each segment
+    for (SegmentSelection::const_iterator i = selection.begin();
+         i != selection.end(); ++i) {
+        const Segment *segment = (*i);
+
+        if (segment->getStartTime() < startTime)
+            startTime = segment->getStartTime();
+
+        if (segment->getEndMarkerTime() > endTime)
+            endTime = segment->getEndMarkerTime();
+
+        if (segment->getType() == Segment::Audio)
+            haveAudioSegment = true;
     }
 
-    RescaleDialog dialog(m_view, &m_doc->getComposition(),
-                         startTime, endTime - startTime,
-                         Note(Note::Shortest).getDuration(), false, false);
+    // If there's an audio segment, make sure the audio path is ok.
+    if (haveAudioSegment)
+        testAudioPath(tr("rescaling an audio file"));
+
+    RescaleDialog dialog(
+            m_view,  // parent
+            &m_doc->getComposition(),  // composition
+            startTime,  // startTime
+            endTime - startTime,  // originalDuration
+            Note(Note::Shortest).getDuration(),  // minimumDuration
+            false,  // showCloseGapOption
+            false);  // constrainToCompositionDuration
+
     if (dialog.exec() != QDialog::Accepted)
-        return ;
+        return;
 
-    std::vector<AudioSegmentRescaleCommand *> asrcs;
+    // Just the audio rescale commands for various housekeeping.
+    std::vector<AudioSegmentRescaleCommand *> audioRescaleCommands;
 
-    int mult = dialog.getNewDuration();
-    int div = endTime - startTime;
-    float ratio = float(mult) / float(div);
+    int multiplier = dialog.getNewDuration();
+    int divisor = endTime - startTime;
+    double ratio = static_cast<double>(multiplier) / divisor;
 
-    std::cerr << "slotRescaleSelection: mult = " << mult << ", div = " << div << ", ratio = " << ratio << std::endl;
+    RG_DEBUG << "slotRescaleSelection(): multiplier = " << multiplier << ", divisor = " << divisor << ", ratio = " << ratio;
 
-    MacroCommand *command = new MacroCommand
-                             (SegmentRescaleCommand::getGlobalName());
+    // All of the rescale commands, both MIDI and Audio are added to this
+    // macro command.
+    MacroCommand *command = new MacroCommand(
+            SegmentRescaleCommand::getGlobalName());
 
-    bool pathTested = false;
-
+    // For each selected segment
     for (SegmentSelection::iterator i = selection.begin();
-            i != selection.end(); ++i) {
+         i != selection.end(); ++i) {
         if ((*i)->getType() == Segment::Audio) {
-            if (!pathTested) {
-            testAudioPath(tr("rescaling an audio file"));
-                pathTested = true;
-            }
             AudioSegmentRescaleCommand *asrc = new AudioSegmentRescaleCommand
                 (m_doc, *i, ratio);
             command->addCommand(asrc);
-            asrcs.push_back(asrc);
+            audioRescaleCommands.push_back(asrc);
         } else {
-            command->addCommand(new SegmentRescaleCommand(*i, mult, div));
+            command->addCommand(new SegmentRescaleCommand(*i, multiplier, divisor));
         }
     }
     
@@ -2754,21 +2773,21 @@ RosegardenMainWindow::slotRescaleSelection()
     //after user has closed it, by using a QPointer
     QPointer<ProgressDialog> progressDlg = 0;
 
-    if (!asrcs.empty()) {
+    if (!audioRescaleCommands.empty()) {
         progressDlg = new ProgressDialog (tr("Rescaling audio file..."),
                                           (QWidget*)this);
-        for (size_t i = 0; i < asrcs.size(); ++i) {
-            asrcs[i]->connectProgressDialog(progressDlg);
+        for (size_t i = 0; i < audioRescaleCommands.size(); ++i) {
+            audioRescaleCommands[i]->connectProgressDialog(progressDlg);
         }
     }
 
     m_view->slotAddCommandToHistory(command);
 
-    if (!asrcs.empty()) {
+    if (!audioRescaleCommands.empty()) {
 
-        for (size_t i = 0; i < asrcs.size(); ++i) {
+        for (size_t i = 0; i < audioRescaleCommands.size(); ++i) {
             if (progressDlg) {
-                asrcs[i]->disconnectProgressDialog(progressDlg);    //&&& obsolete (?)
+                audioRescaleCommands[i]->disconnectProgressDialog(progressDlg);    //&&& obsolete (?)
             }
         }
 
@@ -2782,13 +2801,13 @@ RosegardenMainWindow::slotRescaleSelection()
             //        &m_doc->getAudioFileManager(), SLOT(slotStopPreview()));
         }
 
-        for (size_t i = 0; i < asrcs.size(); ++i) {
-            int fid = asrcs[i]->getNewAudioFileId();
+        for (size_t i = 0; i < audioRescaleCommands.size(); ++i) {
+            int fid = audioRescaleCommands[i]->getNewAudioFileId();
             if (fid >= 0) {
                 slotAddAudioFile(fid);
                 m_doc->getAudioFileManager().generatePreview(fid);
             }
-            int complete = i + 1 / asrcs.size();
+            int complete = i + 1 / audioRescaleCommands.size();
             if (progressDlg) progressDlg->setValue(complete);
         }
     }
