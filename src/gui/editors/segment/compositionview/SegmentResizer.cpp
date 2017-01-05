@@ -135,37 +135,39 @@ void SegmentResizer::resizeAudioSegment(
         new AudioSegmentRescaleCommand(m_doc, segment, ratio,
                                        newStartTime, newEndTime);
 
-    //cc 20150508: avoid dereferencing self-deleted
-    //progress dialog after user has closed it, by
-    //using a QPointer
-    QPointer<ProgressDialog> progressDlg = new ProgressDialog(
-            tr("Rescaling audio file..."), (QWidget*)parent());
-    command->connectProgressDialog(progressDlg);
+    // Progress Dialog
+    QProgressDialog progressDialog(
+            tr("Rescaling audio file..."),  // labelText
+            tr("Cancel"),  // cancelButtonText
+            0, 100,  // min, max
+            dynamic_cast<QWidget *>(parent()));  // parent
+    progressDialog.setWindowTitle(tr("Rosegarden"));
+    progressDialog.setWindowModality(Qt::WindowModal);
+    // Don't want to auto close since there are two steps to
+    // this process.  Any of them may set progress to 100.  We
+    // will close anyway when this object goes out of scope.
+    progressDialog.setAutoClose(false);
+    // ??? Forcing this up since there appears to be a bug in Qt 4.
+    //     Intermittently it will not show the progress dialog at all.
+    progressDialog.show();
+
+    command->setProgressDialog(&progressDialog);
 
     CommandHistory::getInstance()->addCommand(command);
 
-    if (progressDlg) {
-        command->disconnectProgressDialog(progressDlg);
-        progressDlg->close();
-    }
+    if (progressDialog.wasCanceled())
+        return;
 
-    progressDlg = new ProgressDialog(tr("Generating audio preview..."),
-                                     (QWidget*)parent());
+    int fileId = command->getNewAudioFileId();
+    if (fileId < 0)
+        return;
 
-    connect(&m_doc->getAudioFileManager(), SIGNAL(setValue(int)),
-            progressDlg, SLOT(setValue(int)));
-    // Removed since ProgressDialog::cancelClicked() does not exist.
-    //connect(progressDlg, SIGNAL(cancelClicked()),
-    //        &m_doc->getAudioFileManager(), SLOT(slotStopPreview()));
+    // Add to sequencer
+    RosegardenMainWindow::self()->slotAddAudioFile(fileId);
 
-    int fid = command->getNewAudioFileId();
-    if (fid >= 0) {
-        RosegardenMainWindow::self()->slotAddAudioFile(fid);
-        m_doc->getAudioFileManager().generatePreview(fid);
-    }
-
-    if (progressDlg)
-        progressDlg->close();
+    progressDialog.setLabelText(tr("Generating audio preview..."));
+    m_doc->getAudioFileManager().setProgressDialog(&progressDialog);
+    m_doc->getAudioFileManager().generatePreview(fileId);
 }
 
 void SegmentResizer::mouseReleaseEvent(QMouseEvent *e)
