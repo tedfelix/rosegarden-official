@@ -2861,6 +2861,11 @@ RosegardenDocument::finalizeAudioFile(InstrumentId iid)
     progressDialog.setWindowModality(Qt::WindowModal);
     // Auto-close is ok for this since there is only one step.
     progressDialog.setAutoClose(true);
+#if QT_VERSION < 0x050000
+    // Qt4 has several bugs related to delayed showing of
+    // progress dialogs.  Just force it up.
+    progressDialog.show();
+#endif
 
     m_audioFileManager.setProgressDialog(&progressDialog);
 

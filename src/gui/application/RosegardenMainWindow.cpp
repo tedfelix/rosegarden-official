@@ -2787,9 +2787,11 @@ RosegardenMainWindow::slotRescaleSelection()
     // process.  Any of the steps may set progress to 100.  We
     // will close anyway when this object goes out of scope.
     progressDialog.setAutoClose(false);
-    // ??? Forcing this up since there appears to be a bug in Qt 4.
-    //     Intermittently it will not show the progress dialog at all.
+#if QT_VERSION < 0x050000
+    // Qt4 has several bugs related to delayed showing of
+    // progress dialogs.  Just force it up.
     progressDialog.show();
+#endif
 
     // For each AudioSegmentRescaleCommand, pass on the progress dialog.
     for (size_t i = 0; i < audioRescaleCommands.size(); ++i) {
