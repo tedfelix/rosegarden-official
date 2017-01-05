@@ -23,6 +23,10 @@
 #include "base/Exception.h"
 #include "misc/Strings.h"
 
+#include <QPointer>
+
+class QProgressDialog;
+
 namespace Rosegarden {
 
 class AudioFileManager;
@@ -50,6 +54,9 @@ public:
         ~CancelledException() throw() { }
     };
 
+    void setProgressDialog(QPointer<QProgressDialog> progressDialog)
+            { m_progressDialog = progressDialog; }
+
 signals:
     // DEPRECATED
     void setValue(int);
@@ -66,6 +73,8 @@ protected:
     AudioFileManager *m_manager;
 
     bool m_timestretchCancelled;
+
+    QPointer<QProgressDialog> m_progressDialog;
 };
 
 }

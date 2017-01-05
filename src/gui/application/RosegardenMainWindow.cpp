@@ -2772,37 +2772,38 @@ RosegardenMainWindow::slotRescaleSelection()
         }
     }
 
-    //cc 20150508: avoid dereferencing self-deleted progress dialog
-    //after user has closed it, by using a QPointer
-    QPointer<ProgressDialog> progressDlg = 0;
+    // Progress Dialog
+    // ??? We should make the label text the more generic
+    //     "Rescaling segment...".  Then this is OK for audio or MIDI
+    //     segments.
+    QProgressDialog progressDialog(
+            tr("Rescaling audio file..."),  // labelText
+            tr("Cancel"),  // cancelButtonText
+            0, 100,  // min, max
+            this);  // parent
+    progressDialog.setWindowTitle(tr("Rosegarden"));
+    progressDialog.setWindowModality(Qt::WindowModal);
+    // Don't want to auto close since there are several steps to
+    // this process.  Any of them may set progress to 100.  We
+    // will close anyway when this object goes out of scope.
+    progressDialog.setAutoClose(false);
+    // ??? Forcing this up since there appears to be a bug in Qt 4.
+    //     Intermittently it will not show the progress dialog at all.
+    progressDialog.show();
 
-    if (!audioRescaleCommands.empty()) {
-        progressDlg = new ProgressDialog(tr("Rescaling audio file..."),
-                                         dynamic_cast<QWidget *>(this));
-        // For each AudioSegmentRescaleCommand
-        for (size_t i = 0; i < audioRescaleCommands.size(); ++i) {
-            audioRescaleCommands[i]->connectProgressDialog(progressDlg);
-        }
+    // For each AudioSegmentRescaleCommand, pass on the progress dialog.
+    for (size_t i = 0; i < audioRescaleCommands.size(); ++i) {
+        audioRescaleCommands[i]->setProgressDialog(&progressDialog);
     }
 
     m_view->slotAddCommandToHistory(command);
 
+    if (progressDialog.wasCanceled())
+        return;
+
     if (!audioRescaleCommands.empty()) {
-
-        if (progressDlg) {
-            // For each AudioSegmentRescaleCommand
-            for (size_t i = 0; i < audioRescaleCommands.size(); ++i) {
-                audioRescaleCommands[i]->disconnectProgressDialog(progressDlg);    //&&& obsolete (?)
-            }
-
-            progressDlg->setLabelText(tr("Generating audio preview..."));
-
-            connect(&m_doc->getAudioFileManager(), SIGNAL(setValue(int)),
-                    progressDlg, SLOT(setValue(int)));
-            // Removed since ProgressDialog::cancelClicked() does not exist.
-            //connect(progressDlg, SIGNAL(cancelClicked()),
-            //        &m_doc->getAudioFileManager(), SLOT(slotStopPreview()));
-        }
+        progressDialog.setLabelText(tr("Generating audio preview..."));
+        m_doc->getAudioFileManager().setProgressDialog(&progressDialog);
 
         // For each AudioSegmentRescaleCommand
         for (size_t i = 0; i < audioRescaleCommands.size(); ++i) {
@@ -2815,11 +2816,11 @@ RosegardenMainWindow::slotRescaleSelection()
 
             // Generate a preview
             m_doc->getAudioFileManager().generatePreview(fileId);
+
+            if (progressDialog.wasCanceled())
+                return;
         }
     }
-
-    if (progressDlg)
-        progressDlg->close();
 }
 
 bool

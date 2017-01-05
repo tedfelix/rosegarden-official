@@ -23,6 +23,10 @@
 #include "base/Event.h"
 #include <QCoreApplication>
 
+#include <QPointer>
+
+class QProgressDialog;
+
 namespace Rosegarden
 {
 
@@ -51,8 +55,12 @@ public:
     AudioFileTimeStretcher *getStretcher() { return m_stretcher; }
     int getNewAudioFileId() const { return m_fid; }
 
+    // Deprecated.
     void connectProgressDialog(ProgressDialog *dlg);
+    // Deprecated.
     void disconnectProgressDialog(ProgressDialog *dlg);
+    // New approach
+    void setProgressDialog(QPointer<QProgressDialog> progressDialog);
     
     static QString getGlobalName() { return tr("Stretch or S&quash..."); }
 

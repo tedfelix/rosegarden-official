@@ -15,13 +15,17 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[AudioFileTimeStretcher]"
+
 #include "AudioFileTimeStretcher.h"
 #include "AudioTimeStretcher.h"
 #include "AudioFileManager.h"
 #include "WAVAudioFile.h"
 #include "base/RealTime.h"
+#include "misc/Debug.h"
 
 #include <QApplication>
+#include <QProgressDialog>
 
 #include <fstream>
 
@@ -157,6 +161,10 @@ AudioFileTimeStretcher::getStretchedAudioFile(AudioFileId source,
             std::cerr << "AudioFileTimeStretcher::getStretchedAudioFile: cancelled" << std::endl;
             throw CancelledException();
         }
+        if (m_progressDialog  &&  m_progressDialog->wasCanceled()) {
+            RG_DEBUG << "getStretchedAudioFile(): cancelled";
+            throw CancelledException();
+        }
             
         unsigned int thisRead = 0;
 
@@ -238,13 +246,21 @@ AudioFileTimeStretcher::getStretchedAudioFile(AudioFileId source,
             int progress = int
                 ((100.f * float(totalIn)) / float(fileTotalIn));
             emit setValue(progress);
-            qApp->processEvents();
+            if (m_progressDialog)
+                m_progressDialog->setValue(progress);
+
             progressCount = 0;
         }
+
+        qApp->processEvents();
     }
         
     emit setValue(100);
+    if (m_progressDialog)
+        m_progressDialog->setValue(100);
+
     qApp->processEvents();
+
     writeFile.close();
     
     std::cerr << "AudioFileTimeStretcher::getStretchedAudioFile: success, id is "

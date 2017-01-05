@@ -94,7 +94,7 @@ AudioSegmentRescaleCommand::connectProgressDialog(ProgressDialog *dlg)
     //QObject::connect(dlg, SIGNAL(cancelClicked()),
     //                 m_stretcher, SLOT(slotStopTimestretch()));
 }
- 
+
 void
 AudioSegmentRescaleCommand::disconnectProgressDialog(ProgressDialog *dlg)
 {
@@ -104,6 +104,14 @@ AudioSegmentRescaleCommand::disconnectProgressDialog(ProgressDialog *dlg)
     // Removed since ProgressDialog::cancelClicked() does not exist.
     //QObject::disconnect(dlg, SIGNAL(cancelClicked()),
     //                    m_stretcher, SLOT(slotStopTimestretch()));
+}
+
+void
+AudioSegmentRescaleCommand::setProgressDialog(
+        QPointer<QProgressDialog> progressDialog)
+{
+    if (m_stretcher)
+        m_stretcher->setProgressDialog(progressDialog);
 }
 
 void
