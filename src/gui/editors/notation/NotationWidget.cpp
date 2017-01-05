@@ -1646,6 +1646,11 @@ NotationWidget::slotAddControlRuler(QAction *action)
 {
     QString name = action->text();
 
+    // FIX #1543: If name happens to come to us with an & included somewhere,
+    // strip the & so the string will match the one we are comparing later on.
+    //
+    name.replace(QRegExp("&"), "");
+
 //    RG_DEBUG << "my name is " << name.toStdString();
 
     // we just cheaply paste the code from NotationView that created the menu to
