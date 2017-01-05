@@ -58,7 +58,6 @@
 #include "gui/editors/notation/NotationView.h"
 #include "gui/editors/guitar/Chord.h"
 #include "gui/general/ProgressReporter.h"
-#include "gui/widgets/CurrentProgressDialog.h"
 
 #include "rosegarden-version.h"
 
@@ -695,7 +694,6 @@ LilyPondExporter::write()
     tmpName = dirName + '/' + baseName;
 
     if (illegalFilename) {
-        CurrentProgressDialog::freeze();
         int reply = QMessageBox::question(
                 dynamic_cast<QWidget*>(qApp),
                 baseName, 

@@ -166,7 +166,6 @@
 #include "gui/studio/StudioControl.h"
 #include "gui/studio/SynthPluginManagerDialog.h"
 #include "gui/studio/ControlEditorDialog.h"
-#include "gui/widgets/CurrentProgressDialog.h"
 #include "gui/widgets/ProgressBar.h"
 #include "gui/widgets/ProgressDialog.h"
 #include "gui/widgets/FileDialog.h"
@@ -1199,9 +1198,7 @@ RosegardenMainWindow::initView()
             leaveActionState("have_range"); //@@@ JAS orig. KXMLGUIClient::StateReverse
         } catch (QString s) {
             StartupLogo::hideIfStillThere();
-            CurrentProgressDialog::freeze();
             QMessageBox::critical(dynamic_cast<QWidget*>(this), tr("Rosegarden"), s, QMessageBox::Ok, QMessageBox::Ok);
-            CurrentProgressDialog::thaw();
         }
 
         connect(m_seqManager, SIGNAL(controllerDeviceEventReceived(MappedEvent *)),
@@ -4173,16 +4170,12 @@ RosegardenMainWindow::guessTextCodec(std::string text)
 
     for (int c = 0; c < int(text.length()); ++c) {
         if (text[c] & 0x80) {
-
-            CurrentProgressDialog::freeze();
             StartupLogo::hideIfStillThere();
 
             IdentifyTextCodecDialog dialog(0, text);
             dialog.exec();
 
             QString codecName = dialog.getCodec();
-
-            CurrentProgressDialog::thaw();
 
             if (codecName != "") {
                 codec = QTextCodec::codecForName(codecName.toLatin1());
@@ -4264,13 +4257,10 @@ RosegardenMainWindow::createDocumentFromMIDIFile(QString file)
     ProgressDialog *progressDlg = new ProgressDialog(tr("Importing MIDI file..."),
                                (QWidget*)this);
 
-    CurrentProgressDialog::set(progressDlg);
-
     connect(&midiFile, SIGNAL(progress(int)),
             progressDlg, SLOT(setValue(int)));
 
     if (!midiFile.convertToRosegarden(file, newDoc)) {
-        CurrentProgressDialog::freeze();
         // NOTE: Someone flagged midiFile.getError() with a warning about tr().
         // This stuff either gets translated at the source, if we own it, or it
         // doesn't get translated at all, if we don't (eg. errors from the
@@ -4471,8 +4461,6 @@ RosegardenMainWindow::createDocumentFromRG21File(QString file)
     ProgressDialog *progressDlg = new ProgressDialog(
         tr("Importing X11 Rosegarden file..."), (QWidget*)this);
 
-    CurrentProgressDialog::set(progressDlg);
-
     // Inherent autoload
     //
     RosegardenDocument *newDoc = newDocument();
@@ -4488,7 +4476,6 @@ RosegardenMainWindow::createDocumentFromRG21File(QString file)
     progressDlg->setValue(40);
 
     if (!rg21Loader.load(file, newDoc->getComposition())) {
-        CurrentProgressDialog::freeze();
         QMessageBox::critical(this, tr("Rosegarden"), 
                            tr("Can't load X11 Rosegarden file.  It appears to be corrupted."));
         delete newDoc;
@@ -4592,8 +4579,6 @@ RosegardenMainWindow::createDocumentFromHydrogenFile(QString file)
     ProgressDialog *progressDlg = new ProgressDialog(
         tr("Importing Hydrogen file..."), (QWidget*) this);
 
-    CurrentProgressDialog::set(progressDlg);
-
     // Inherent autoload
     //
     RosegardenDocument *newDoc = newDocument();
@@ -4609,7 +4594,6 @@ RosegardenMainWindow::createDocumentFromHydrogenFile(QString file)
     progressDlg->setValue(40);
 
     if (!hydrogenLoader.load(file, newDoc->getComposition())) {
-        CurrentProgressDialog::freeze();
         QMessageBox::critical(this, tr("Rosegarden"),
                            tr("Can't load Hydrogen file.  It appears to be corrupted."));
         delete newDoc;
@@ -4714,8 +4698,6 @@ RosegardenMainWindow::createDocumentFromMusicXMLFile(QString file)
     ProgressDialog *progressDlg = new ProgressDialog(
         tr("Importing MusicXML file..."), (QWidget*) this);
 
-    CurrentProgressDialog::set(progressDlg);
-
     // Inherent autoload
     //
     RosegardenDocument *newDoc = newDocument();
@@ -4731,7 +4713,6 @@ RosegardenMainWindow::createDocumentFromMusicXMLFile(QString file)
     progressDlg->setValue(40);
 
     if (!musicxmlLoader.load(file, newDoc->getComposition(), newDoc->getStudio())) {
-        CurrentProgressDialog::freeze();
         QMessageBox::critical(this, tr("Rosegarden"),
                            tr("Can't load MusicXML file:\n")+
                               musicxmlLoader.errorMessage());
@@ -5334,13 +5315,10 @@ RosegardenMainWindow::slotExportProject()
     RG_DEBUG << "getValidWriteFileName() returned " << fileName.toStdString()
              << "                         rgFile: " << fileName.toStdString() << endl;
 
-    CurrentProgressDialog::freeze();
-
     QString errMsg;
     if (!m_doc->saveDocument(rgFile, errMsg,
                              true)) { // pretend it's autosave
         QMessageBox::warning(this, tr("Rosegarden"), tr("Saving Rosegarden file to package failed: %1").arg(errMsg));
-        CurrentProgressDialog::thaw();
         return ;
     }
 
@@ -5379,7 +5357,6 @@ RosegardenMainWindow::exportMIDIFile(QString file)
             progressDlg, SLOT(setValue(int)));
 
     if (!midiFile.convertToMidi(m_doc->getComposition(), file)) {
-        CurrentProgressDialog::freeze();
         QMessageBox::warning(this, tr("Rosegarden"), tr("Export failed.  The file could not be opened for writing."));
     }
     progressDlg->close();
@@ -5413,7 +5390,6 @@ RosegardenMainWindow::exportCsoundFile(QString file)
             progressDlg, SLOT(setValue(int)));
 
     if (!e.write()) {
-        CurrentProgressDialog::freeze();
         QMessageBox::warning(this, tr("Rosegarden"), tr("Export failed.  The file could not be opened for writing."));
     }
     progressDlg->close();
@@ -5447,7 +5423,6 @@ RosegardenMainWindow::exportMupFile(QString file)
             progressDlg, SLOT(setValue(int)));
 
     if (!e.write()) {
-        CurrentProgressDialog::freeze();
         QMessageBox::warning(this, tr("Rosegarden"), tr("Export failed.  The file could not be opened for writing."));
     }
     progressDlg->close();
@@ -5511,9 +5486,6 @@ RosegardenMainWindow::getLilyPondTmpFilename()
     QTemporaryFile *file = new QTemporaryFile(mask);
     file->setAutoRemove(true);
     if (!file->open()) {
-        // getLilyPondTmpFilename() in RosegardenMainWindow:: and in NotationView:: are nearly in sync.
-        // However, the following line is commented out in NotationView::getLilyPondTmpFilename()
-        CurrentProgressDialog::freeze();
         QMessageBox::warning(this, tr("Rosegarden"), tr("<qt><p>Failed to open a temporary file for LilyPond export.</p>"
                                           "<p>This probably means you have run out of disk space on <pre>%1</pre></p></qt>").
                                        arg(QDir::tempPath()));
@@ -5553,7 +5525,6 @@ RosegardenMainWindow::exportLilyPondFile(QString file, bool forPreview)
             &e, SLOT(slotCancel()));
 
     if (!e.write()) {
-        CurrentProgressDialog::freeze();
         if (!e.isOperationCancelled()) {
             QMessageBox::warning(this, tr("Rosegarden"), e.getMessage());
         }
@@ -5602,7 +5573,6 @@ RosegardenMainWindow::exportMusicXmlFile(QString file)
             &e, SLOT(slotCancel()));
 
     if (!e.write()) {
-        CurrentProgressDialog::freeze();
         QMessageBox::warning(this, tr("Rosegarden"), tr("Export failed.  The file could not be opened for writing."));
     }
     progressDlg->close();
@@ -6672,7 +6642,6 @@ void
 RosegardenMainWindow::showError(QString error)
 {
     StartupLogo::hideIfStillThere();
-    CurrentProgressDialog::freeze();
 
     // This is principally used for return values from DSSI plugin
     // configure() calls.  It seems some plugins return a string
@@ -6683,8 +6652,6 @@ RosegardenMainWindow::showError(QString error)
     // information one
 
     QMessageBox::warning(0, tr("Rosegarden"), error);
-
-    CurrentProgressDialog::thaw();
 }
 
 void
@@ -8110,7 +8077,6 @@ RosegardenMainWindow::slotPanic()
 
         ProgressDialog *progressDlg = new ProgressDialog(
                 tr("Queueing MIDI panic events for tranmission..."), (QWidget*)this);
-        CurrentProgressDialog::set(progressDlg);
 
         connect(m_seqManager, SIGNAL(setValue(int)),
                 progressDlg, SLOT(setValue(int)));

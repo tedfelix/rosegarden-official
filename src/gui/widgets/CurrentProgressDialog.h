@@ -30,9 +30,15 @@ class ProgressDialog;
 
 /// Global freeze() and thaw() for the progress dialog that is up.
 /**
- * DEPRECATED
+ * DEPRECATED and UNUSED
+ *
+ * DELETE ME
+ *
  * Since the freeze() and thaw() functionality does nothing now, this
  * class can probably just be removed without any effect.
+ *
+ * Qt4 and up handle message boxes over top of a progress dialog just
+ * fine.  This is no longer needed.
  */
 class ROSEGARDENPRIVATE_EXPORT CurrentProgressDialog : public QObject
 {

@@ -20,7 +20,6 @@
 #include "misc/Debug.h"
 #include "gui/application/RosegardenMainWindow.h"
 #include "gui/widgets/ProgressDialog.h"
-#include "gui/widgets/CurrentProgressDialog.h"
 #include "document/RosegardenDocument.h"
 #include "gui/widgets/StartupLogo.h"
 #include "gui/general/ResourceFinder.h"
@@ -798,7 +797,6 @@ int main(int argc, char *argv[])
 
     if (newVersion) {
         StartupLogo::hideIfStillThere();
-        CurrentProgressDialog::freeze();
 
         QDialog *dialog = new QDialog;
         dialog->setModal(true);
@@ -833,8 +831,6 @@ int main(int argc, char *argv[])
 
         mainWindow->awaitDialogClearance();
         dialog->exec();
-
-        CurrentProgressDialog::thaw();
     }
     settings.endGroup();
 

@@ -48,7 +48,6 @@
 #include "gui/widgets/StartupLogo.h"
 #include "gui/studio/StudioControl.h"
 #include "gui/dialogs/DialogSuppressor.h"
-#include "gui/widgets/CurrentProgressDialog.h"
 #include "gui/widgets/WarningWidget.h"
 #include "sequencer/RosegardenSequencer.h"
 #include "MarkerMapper.h"
@@ -1091,7 +1090,6 @@ SequenceManager::processAsynchronousMidi(const MappedEventList &mC,
                         std::cerr << "Rosegarden: WARNING: No accurate sequencer timer available" << std::endl;
 
 //                        StartupLogo::hideIfStillThere();
-//                        CurrentProgressDialog::freeze();
 //
 //                        RosegardenMainWindow::self()->awaitDialogClearance();
 
@@ -1108,15 +1106,12 @@ SequenceManager::processAsynchronousMidi(const MappedEventList &mC,
                             showTimerWarning = false;
                         }
                         
-                        CurrentProgressDialog::thaw();
-
                     } else if ((*i)->getData1() == MappedEvent::WarningImpreciseTimerTryRTC &&
                                shouldWarnForImpreciseTimer()) {
 
                         std::cerr << "Rosegarden: WARNING: No accurate sequencer timer available (and kernel is new enough for RTC addendum)" << std::endl;
 
 //                        StartupLogo::hideIfStillThere();
-//                        CurrentProgressDialog::freeze();
 //
 //                        RosegardenMainWindow::self()->awaitDialogClearance();
                         
@@ -1137,8 +1132,6 @@ SequenceManager::processAsynchronousMidi(const MappedEventList &mC,
                         // warning widget queue
                         if (informativeText != "")
                             emit sendWarning(WarningWidget::Timer, text, informativeText);
-
-//                        CurrentProgressDialog::thaw();
                     } 
                 } 
             }
@@ -1231,7 +1224,6 @@ SequenceManager::checkSoundDriverStatus(bool warnUser)
 #endif
 
     StartupLogo::hideIfStillThere();
-    CurrentProgressDialog::freeze();
 
     QString text;
     QString informativeText;
@@ -1266,7 +1258,6 @@ SequenceManager::checkSoundDriverStatus(bool warnUser)
         } 
     }
 #endif
-    CurrentProgressDialog::thaw();
 }
 
 void

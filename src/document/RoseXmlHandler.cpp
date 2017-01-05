@@ -50,7 +50,6 @@
 #include "gui/widgets/StartupLogo.h"
 #include "gui/studio/AudioPlugin.h"
 #include "gui/studio/AudioPluginManager.h"
-#include "gui/widgets/CurrentProgressDialog.h"
 #include "RosegardenDocument.h"
 #include "sound/AudioFileManager.h"
 #include "XmlStorableEvent.h"
@@ -452,12 +451,10 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             if (major == RosegardenDocument::FILE_FORMAT_VERSION_MAJOR &&
                     minor > RosegardenDocument::FILE_FORMAT_VERSION_MINOR) {
 
-                CurrentProgressDialog::freeze();
                 StartupLogo::hideIfStillThere();
 
                 QMessageBox::information(0, tr("Rosegarden"), tr("This file was written by Rosegarden %1, which is more recent than this version.\nThere may be some incompatibilities with the file format.").arg(version));
 
-                CurrentProgressDialog::thaw();
             }
         }
 
@@ -1135,9 +1132,6 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             if (getAudioFileManager().insertFile(qstrtostr(label),
                                                  file, id.toInt()) == false) {
 
-                // Freeze the progress dialog
-                CurrentProgressDialog::freeze();
-
                 // Hide splash screen if present on startup
                 StartupLogo::hideIfStillThere();
 
@@ -1167,7 +1161,6 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
                     } else {
                         // don't process any more audio files
                         m_skipAllAudio = true;
-                        CurrentProgressDialog::thaw();
                         return true;
                     }
 
@@ -1184,8 +1177,6 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
                 getAudioFileManager().print();
 
-                // Restore progress dialog's normal state
-                CurrentProgressDialog::thaw();
             } else {
                 // AudioPath is modified so set a document post modify flag
                 //
