@@ -130,9 +130,15 @@ MidiFile::read(std::ifstream *midiFile, unsigned long numberOfBytes)
     char fileMidiByte;
     std::string stringRet;
 
+    // ??? Reading one byte at a time is terribly slow.  However, this
+    //     routine is usually called with numberOfBytes == 1.
     while (stringRet.length() < numberOfBytes  &&
            midiFile->read(&fileMidiByte, 1)) {
         stringRet += fileMidiByte;
+
+        // Kick the event loop to make sure the UI doesn't become
+        // unresponsive during a long load.
+        qApp->processEvents();
     }
 
     // Unexpected EOF
@@ -156,13 +162,13 @@ MidiFile::read(std::ifstream *midiFile, unsigned long numberOfBytes)
                 static_cast<double>(midiFile->tellg()) /
                 static_cast<double>(m_fileSize) * 20.0);
         // Update the progress dialog if one is connected.
-        if (m_progressDialog)
-            m_progressDialog->setValue(progressValue);
-        emit progress(progressValue);
+        if (m_progressDialog) {
+            if (m_progressDialog->wasCanceled())
+                throw Exception(qstrtostr(QObject::tr("Cancelled by user.")));
 
-        // Kick the event loop to make sure the UI doesn't become
-        // unresponsive during a long load.
-        qApp->processEvents();
+            m_progressDialog->setValue(progressValue);
+        }
+        emit progress(progressValue);
     }
 
     return stringRet;
@@ -692,8 +698,13 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
         int progressValue = 20 + static_cast<int>(
                 80.0 * trackId / m_midiComposition.size());
         RG_DEBUG << "convertToRosegarden() progressValue: " << progressValue;
-        if (m_progressDialog)
+        if (m_progressDialog) {
+            if (m_progressDialog->wasCanceled()) {
+                m_error = qstrtostr(QObject::tr("Cancelled by user."));
+                return false;
+            }
             m_progressDialog->setValue(progressValue);
+        }
         emit progress(progressValue);
         // Kick the event loop.
         qApp->processEvents();
@@ -748,6 +759,9 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
              midiEventIter != m_midiComposition[trackId].end();
              ++midiEventIter) {
             const MidiEvent &midiEvent = **midiEventIter;
+
+            // Kick the event loop.
+            qApp->processEvents();
 
             const timeT midiAbsoluteTime = midiEvent.getTime();
             const timeT midiDuration = midiEvent.getDuration();

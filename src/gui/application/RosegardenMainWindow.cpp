@@ -4268,8 +4268,6 @@ RosegardenMainWindow::createDocumentFromMIDIFile(QString file)
     // process.  Any of the steps may set progress to 100.  We
     // will close anyway when this object goes out of scope.
     progressDialog.setAutoClose(false);
-    // ??? Get rid of the cancel button for the moment.
-    progressDialog.setCancelButton(NULL);
 #if QT_VERSION < 0x050000
     // Qt4 has several bugs related to delayed showing of
     // progress dialogs.  Just force it up.

@@ -28,6 +28,7 @@
 #include "base/SegmentNotationHelper.h"
 #include "base/Selection.h"
 #include "document/BasicCommand.h"
+#include "document/CommandRegistry.h"
 #include "misc/Strings.h"
 #include "base/BaseProperties.h"
 #include "gui/application/RosegardenApplication.h"
@@ -221,6 +222,9 @@ EventQuantizeCommand::modifySegment()
             emit setValue(progressValue);
         }
     }
+
+    if (m_progressDialog  &&  m_progressDialog->wasCanceled())
+        throw CommandCancelled();
 }
 
 Quantizer *
