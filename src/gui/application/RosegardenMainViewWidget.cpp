@@ -1690,7 +1690,7 @@ RosegardenMainViewWidget::slotDroppedNewAudio(QString audioDesc)
             tr("Adding audio file..."),  // labelText
             tr("Cancel"),  // cancelButtonText
             0, 0,  // min, max
-            dynamic_cast<QWidget *>(this));  // parent
+            RosegardenMainWindow::self());  // parent
     progressDialog.setWindowTitle(tr("Rosegarden"));
     progressDialog.setWindowModality(Qt::WindowModal);
     // This is required for indeterminate mode.  It's unfortunate since

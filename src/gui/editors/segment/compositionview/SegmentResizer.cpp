@@ -140,7 +140,8 @@ void SegmentResizer::resizeAudioSegment(
             tr("Rescaling audio file..."),  // labelText
             tr("Cancel"),  // cancelButtonText
             0, 100,  // min, max
-            dynamic_cast<QWidget *>(parent()));  // parent
+            RosegardenMainWindow::self());  // parent
+
     progressDialog.setWindowTitle(tr("Rosegarden"));
     progressDialog.setWindowModality(Qt::WindowModal);
     // Don't want to auto close since there are two steps to

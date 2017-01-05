@@ -2856,7 +2856,7 @@ RosegardenDocument::finalizeAudioFile(InstrumentId iid)
             tr("Generating audio preview..."),  // labelText
             tr("Cancel"),  // cancelButtonText
             0, 100,  // min, max
-            dynamic_cast<QWidget *>(parent()));  // parent
+            RosegardenMainWindow::self());  // parent
     progressDialog.setWindowTitle(tr("Rosegarden"));
     progressDialog.setWindowModality(Qt::WindowModal);
 
