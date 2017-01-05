@@ -603,12 +603,8 @@ AudioFileManager::createDerivedAudioFile(AudioFileId source,
 }
 
 AudioFileId
-AudioFileManager::importURL(const QUrl &url, int sampleRate,
-                            QPointer<QProgressDialog> progressDialog)
+AudioFileManager::importURL(const QUrl &url, int sampleRate)
 {
-    if (progressDialog)
-        m_progressDialog = progressDialog;
-
     if (m_progressDialog) {
         m_progressDialog->setLabelText(tr("Adding audio file..."));
         // Switch to indeterminate mode since we do not provide

@@ -103,8 +103,7 @@ public:
      * throws BadAudioPathException, BadSoundFileException
      */
     AudioFileId importURL(const QUrl &filePath,
-                          int targetSampleRate,
-                          QPointer<QProgressDialog> progressDialog = 0);
+                          int targetSampleRate);
 
     /// Used by RoseXmlHandler to add an audio file.
     /**
