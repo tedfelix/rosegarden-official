@@ -71,8 +71,7 @@ PeakFile::PeakFile(AudioFile *audioFile) :
         m_lastPreviewStartTime(0, 0),
         m_lastPreviewEndTime(0, 0),
         m_lastPreviewWidth( -1),
-        m_lastPreviewShowMinima(false),
-        m_keepProcessing(true)
+        m_lastPreviewShowMinima(false)
 {
 }
 
@@ -470,7 +469,6 @@ PeakFile::writePeaks(std::ofstream *file)
 {
     if (!file || !(*file))
         return ;
-    m_keepProcessing = true;
 
 #ifdef DEBUG_PEAKFILE
     RG_DEBUG << "writePeaks() - calculating peaks";
@@ -512,7 +510,7 @@ PeakFile::writePeaks(std::ofstream *file)
     int ct = 0;
 
     // ??? for each block...?
-    while (m_keepProcessing) {
+    while (true) {
         try {
             // Read a block
             samples = m_audioFile->
@@ -554,8 +552,6 @@ PeakFile::writePeaks(std::ofstream *file)
 
                 m_progressDialog->setValue(progress);
             }
-
-            emit setValue(progress);
 
             qApp->processEvents(QEventLoop::AllEvents);
         }

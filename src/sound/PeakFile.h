@@ -91,9 +91,6 @@ public:
                                                int threshold,
                                                const RealTime &minLength);
 
-    //bool isProcessingPeaks() const { return m_keepProcessing; }
-    void setProcessingPeaks(bool value) { m_keepProcessing = value; }
-
     /// For debugging
     void printStats();
 
@@ -112,9 +109,6 @@ public:
     //QDateTime getModificationTime() const { return m_modificationTime; }
     //std::streampos getChunkStartPosition() const
     //    { return m_chunkStartPosition; }
-
-signals:
-    void setValue(int);
 
 protected:
     /// Build up a header string and then pump it out to the file handle
@@ -160,9 +154,6 @@ protected:
     bool               m_lastPreviewShowMinima;
     /// Cached preview to speed up getPreview().
     std::vector<float> m_lastPreviewCache;
-
-    /// Cleared by setProcessingPeaks() to indicate processing should stop.
-    bool               m_keepProcessing;
 
     /// Optional progress dialog for write().
     QPointer<QProgressDialog> m_progressDialog;
