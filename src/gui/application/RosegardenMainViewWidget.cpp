@@ -1693,6 +1693,10 @@ RosegardenMainViewWidget::slotDroppedNewAudio(QString audioDesc)
             RosegardenMainWindow::self());  // parent
     progressDialog.setWindowTitle(tr("Rosegarden"));
     progressDialog.setWindowModality(Qt::WindowModal);
+    // Don't want to auto close since this is a multi-step
+    // process.  Any of the steps may set progress to 100.  We
+    // will close anyway when this object goes out of scope.
+    progressDialog.setAutoClose(false);
     // This is required for indeterminate mode.  It's unfortunate since
     // that means it will appear even for very short wait times.  Remove
     // this if importUrl() is ever upgraded to provide proper progress.

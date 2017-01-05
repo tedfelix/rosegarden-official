@@ -2859,6 +2859,8 @@ RosegardenDocument::finalizeAudioFile(InstrumentId iid)
             RosegardenMainWindow::self());  // parent
     progressDialog.setWindowTitle(tr("Rosegarden"));
     progressDialog.setWindowModality(Qt::WindowModal);
+    // Auto-close is ok for this since there is only one step.
+    progressDialog.setAutoClose(true);
 
     m_audioFileManager.setProgressDialog(&progressDialog);
 

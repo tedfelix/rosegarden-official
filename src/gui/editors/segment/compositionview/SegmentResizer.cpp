@@ -144,8 +144,8 @@ void SegmentResizer::resizeAudioSegment(
 
     progressDialog.setWindowTitle(tr("Rosegarden"));
     progressDialog.setWindowModality(Qt::WindowModal);
-    // Don't want to auto close since there are two steps to
-    // this process.  Any of them may set progress to 100.  We
+    // Don't want to auto close since this is a multi-step
+    // process.  Any of the steps may set progress to 100.  We
     // will close anyway when this object goes out of scope.
     progressDialog.setAutoClose(false);
     // ??? Forcing this up since there appears to be a bug in Qt 4.
