@@ -1669,31 +1669,21 @@ RosegardenMainViewWidget::slotDroppedNewAudio(QString audioDesc)
         return;
     }
 
-    QTextStream s(&audioDesc, QIODevice::ReadWrite); //### use QIODevice::ReadOnly instead ?
-    
-    QString url;
+    QTextStream s(&audioDesc, QIODevice::ReadOnly);
+
+    QString url = s.readLine();
+
     int trackId;
-    timeT time;
-    url = s.readLine();
     s >> trackId;
+
+    timeT time;
     s >> time;
 
     RG_DEBUG << "slotDroppedNewAudio(): url " << url << ", trackId " << trackId << ", time " << time;
 
-    // RosegardenMainWindow *mainWindow = RosegardenMainWindow::self();
-    AudioFileManager &aFM = getDocument()->getAudioFileManager();
-
-    AudioFileId audioFileId = 0;
-
-    int sampleRate = 0;
-    if (getDocument()->getSequenceManager()) {
-        sampleRate = getDocument()->getSequenceManager()->getSampleRate();
-    }
-
-    QUrl qurl(url);
-    if (!RosegardenMainWindow::self()->testAudioPath(tr("importing an audio file that needs to be converted or resampled"))) {
+    // If we don't have a valid path for audio files, bail.
+    if (!RosegardenMainWindow::self()->testAudioPath(tr("importing an audio file that needs to be converted or resampled")))
         return;
-    }
 
     // Progress Dialog
     QProgressDialog progressDialog(
@@ -1708,10 +1698,20 @@ RosegardenMainViewWidget::slotDroppedNewAudio(QString audioDesc)
     // this if importUrl() is ever upgraded to provide proper progress.
     progressDialog.show();
 
+    AudioFileManager &aFM = getDocument()->getAudioFileManager();
+
     aFM.setProgressDialog(&progressDialog);
-    
+
     // Flush the event queue.
     qApp->processEvents(QEventLoop::AllEvents);
+
+    AudioFileId audioFileId = 0;
+
+    QUrl qurl(url);
+
+    int sampleRate = 0;
+    if (getDocument()->getSequenceManager())
+        sampleRate = getDocument()->getSequenceManager()->getSampleRate();
 
     try {
         audioFileId = aFM.importURL(qurl, sampleRate);
@@ -1743,19 +1743,14 @@ RosegardenMainViewWidget::slotDroppedNewAudio(QString audioDesc)
     emit addAudioFile(audioFileId);
 
     // Now fetch file details
-    //
     AudioFile *aF = aFM.getAudioFile(audioFileId);
 
     if (aF) {
-        
-        RG_DEBUG << "RosegardenMainViewWidget::slotDroppedNewAudio("
-        << "file = " << url
-        << ", trackid = " << trackId
-        << ", time = " << time << endl;
-        
+        RG_DEBUG << "slotDroppedNewAudio(file = " << url << ", trackid = " << trackId << ", time = " << time;
+
+        // Add the audio segment to the Composition.
         slotAddAudioSegment(audioFileId, trackId, time,
                             RealTime(0, 0), aF->getLength());
-        
     }
 }
 
