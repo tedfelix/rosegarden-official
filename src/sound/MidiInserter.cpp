@@ -34,7 +34,6 @@
 
 namespace Rosegarden
 {
-using std::string;
     /*** TrackData ***/
 
 // Insert and take ownership of a MidiEvent.  The event's time is
@@ -78,7 +77,7 @@ insertTempo(timeT t, long tempo)
     double qpm = Composition::getTempoQpm(tempo);
     long tempoValue = long(60000000.0 / qpm + 0.01);
 
-    string tempoString;
+    std::string tempoString;
     tempoString += (MidiByte) ( tempoValue >> 16 & 0xFF );
     tempoString += (MidiByte) ( tempoValue >> 8 & 0xFF );
     tempoString += (MidiByte) ( tempoValue & 0xFF );
@@ -150,8 +149,7 @@ MidiInserter::
 getTrackData(TrackId RGTrackPos, int channelNb)
 {
 #ifdef MIDI_DEBUG
-    std::cerr << "Getting track " << (int)RGTrackPos
-              << std::endl;
+    RG_DEBUG << "Getting track " << (int)RGTrackPos;
 #endif
     // Some events like TimeSig and Tempo have invalid trackId and
     // should be written on the conductor track.
@@ -245,9 +243,7 @@ insertCopy(const MappedEvent &evt)
         m_previousTime     = midiEventAbsoluteTime;
     }
 #ifdef MIDI_DEBUG
-    std::cerr << "Inserting an event for channel "
-              << (int)midiChannel + 1
-              << std::endl;
+    RG_DEBUG << "Inserting an event for channel " << (int)midiChannel + 1;
 #endif
 
     try {
@@ -270,7 +266,7 @@ insertCopy(const MappedEvent &evt)
                         TimeSignature(numerator, denominator).
                         getBeatDuration();
 
-                    string timeSigString;
+                    std::string timeSigString;
                     timeSigString += (MidiByte) numerator;
                     int denPowerOf2 = 0;
 
@@ -469,28 +465,22 @@ insertCopy(const MappedEvent &evt)
             }
     } catch (MIDIValueOutOfRange r) {
 #ifdef MIDI_DEBUG
-        std::cerr << "MIDI value out of range at "
-                  << midiEventAbsoluteTime << std::endl;
+        RG_DEBUG << "MIDI value out of range at " << midiEventAbsoluteTime;
 #endif
 
     } catch (Event::NoData d) {
 #ifdef MIDI_DEBUG
-        std::cerr << "Caught Event::NoData at "
-                  << midiEventAbsoluteTime << ", message is:"
-                  << std::endl << d.getMessage() << std::endl;
+        RG_DEBUG << "Caught Event::NoData at " << midiEventAbsoluteTime << ", message is:" << d.getMessage();
 #endif
 
     } catch (Event::BadType b) {
 #ifdef MIDI_DEBUG
-        std::cerr << "Caught Event::BadType at "
-                  << midiEventAbsoluteTime << ", message is:"
-                  << std::endl << b.getMessage() << std::endl;
+        RG_DEBUG << "Caught Event::BadType at " << midiEventAbsoluteTime << ", message is:" << b.getMessage();
 #endif
 
     } catch (SystemExclusive::BadEncoding e) {
 #ifdef MIDI_DEBUG
-        std::cerr << "Caught bad SysEx encoding at "
-                  << midiEventAbsoluteTime << std::endl;
+        RG_DEBUG << "Caught bad SysEx encoding at " << midiEventAbsoluteTime;
 #endif
 
     }
