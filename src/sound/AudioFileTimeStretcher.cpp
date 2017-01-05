@@ -50,9 +50,9 @@ AudioFileTimeStretcher::getStretchedAudioFile(AudioFileId source,
 {
     AudioFile *sourceFile = m_manager->getAudioFile(source);
     if (!sourceFile) {
-	throw SoundFile::BadSoundFileException
-	    ("<unknown source>",
-	     "Source file not found in AudioFileTimeStretcher::getStretchedAudioFile");
+        throw SoundFile::BadSoundFileException
+            ("<unknown source>",
+             "Source file not found in AudioFileTimeStretcher::getStretchedAudioFile");
     }
 
     std::cerr << "AudioFileTimeStretcher: got source file id " << source
@@ -60,18 +60,18 @@ AudioFileTimeStretcher::getStretchedAudioFile(AudioFileId source,
 
     AudioFile *file = m_manager->createDerivedAudioFile(source, "stretch");
     if (!file) {
-	throw AudioFileManager::BadAudioPathException(m_manager->getAudioPath());
+        throw AudioFileManager::BadAudioPathException(m_manager->getAudioPath());
     }
 
     std::cerr << "AudioFileTimeStretcher: got derived file id " << file->getId()
               << ", name " << file->getFilename() << std::endl;
 
     std::ifstream streamIn(sourceFile->getFilename().toLocal8Bit(),
-			   std::ios::in | std::ios::binary);
+                           std::ios::in | std::ios::binary);
     if (!streamIn) {
-	throw SoundFile::BadSoundFileException
-	    (file->getFilename(),
-	     "Failed to open source stream for time stretcher");
+        throw SoundFile::BadSoundFileException
+            (file->getFilename(),
+             "Failed to open source stream for time stretcher");
     }
     
     //!!!
@@ -97,7 +97,7 @@ AudioFileTimeStretcher::getStretchedAudioFile(AudioFileId source,
     int ibs = obs / ratio;
     int ch = sourceFile->getChannels();
     int sr = sourceFile->getSampleRate();
-	    
+
     AudioTimeStretcher stretcher(sr, ch, ratio, true, obs);
 
     // We'll first prime the timestretcher with half its window size
@@ -143,7 +143,7 @@ AudioFileTimeStretcher::getStretchedAudioFile(AudioFileId source,
     long fileTotalIn = RealTime::realTime2Frame
         (totalTime, sourceFile->getSampleRate());
     int progressCount = 0;
-	
+
     long expectedOut = ceil(fileTotalIn * ratio);
 
     m_timestretchCancelled = false;
@@ -241,7 +241,7 @@ AudioFileTimeStretcher::getStretchedAudioFile(AudioFileId source,
             qApp->processEvents();
             progressCount = 0;
         }
-    }		
+    }
         
     emit setValue(100);
     qApp->processEvents();

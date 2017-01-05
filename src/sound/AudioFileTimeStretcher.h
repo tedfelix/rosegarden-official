@@ -46,16 +46,19 @@ public:
     class CancelledException : public Exception
     {
     public:
-	CancelledException() : Exception(qstrtostr(QObject::tr("Cancelled"))) { }
-	~CancelledException() throw() { }
+        CancelledException() : Exception(qstrtostr(QObject::tr("Cancelled"))) { }
+        ~CancelledException() throw() { }
     };
 
 signals:
+    // DEPRECATED
     void setValue(int);
 
 public slots:
     /**
      * Cancel an ongoing getStretchedAudioFile
+     *
+     * ??? UNUSED
      */
     void slotStopTimestretch();
     
