@@ -62,6 +62,12 @@ protected:
     SegmentResizer(CompositionView*, RosegardenDocument*);
     void setContextHelp2(Qt::KeyboardModifiers modifiers = 0);
 
+    void resizeAudioSegment(
+            Segment *segment,
+            double ratio,
+            timeT newStartTime,
+            timeT newEndTime);
+
     //--------------- Data members ---------------------------------
 
     bool m_resizeStart;

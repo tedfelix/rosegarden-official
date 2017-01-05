@@ -62,7 +62,7 @@ SegmentResizer::SegmentResizer(CompositionView *c, RosegardenDocument *d) :
     SegmentTool(c, d),
     m_resizeStart(false)
 {
-    RG_DEBUG << "SegmentResizer()\n";
+    //RG_DEBUG << "ctor";
 }
 
 void SegmentResizer::ready()
@@ -77,7 +77,7 @@ void SegmentResizer::stow()
 
 void SegmentResizer::mousePressEvent(QMouseEvent *e)
 {
-    RG_DEBUG << "SegmentResizer::mousePressEvent";
+    //RG_DEBUG << "mousePressEvent()";
 
     // Let the baseclass have a go.
     SegmentTool::mousePressEvent(e);
@@ -94,7 +94,7 @@ void SegmentResizer::mousePressEvent(QMouseEvent *e)
     ChangingSegmentPtr item = m_canvas->getModel()->getSegmentAt(pos);
 
     if (item) {
-        RG_DEBUG << "SegmentResizer::mousePressEvent - got item";
+        //RG_DEBUG << "mousePressEvent() - got item";
         setChangingSegment(item);
 
         // Are we resizing from start or end?
@@ -112,6 +112,60 @@ void SegmentResizer::mousePressEvent(QMouseEvent *e)
     }
 
     setContextHelp2(e->modifiers());
+}
+
+void SegmentResizer::resizeAudioSegment(
+        Segment *segment,
+        double ratio,
+        timeT newStartTime,
+        timeT newEndTime)
+{
+    try {
+        m_doc->getAudioFileManager().testAudioPath();
+    } catch (AudioFileManager::BadAudioPathException) {
+        if (QMessageBox::warning(0, tr("Warning"), //tr("Set audio file path"),
+                tr("The audio file path does not exist or is not writable.\nYou must set the audio file path to a valid directory in Document Properties before rescaling an audio file.\nWould you like to set it now?"),
+                QMessageBox::Yes | QMessageBox::Cancel, QMessageBox::Cancel) ==
+                    QMessageBox::Yes) {
+            RosegardenMainWindow::self()->slotOpenAudioPathSettings();
+        }
+    }
+
+    AudioSegmentRescaleCommand *command =
+        new AudioSegmentRescaleCommand(m_doc, segment, ratio,
+                                       newStartTime, newEndTime);
+
+    //cc 20150508: avoid dereferencing self-deleted
+    //progress dialog after user has closed it, by
+    //using a QPointer
+    QPointer<ProgressDialog> progressDlg = new ProgressDialog(
+            tr("Rescaling audio file..."), (QWidget*)parent());
+    command->connectProgressDialog(progressDlg);
+
+    CommandHistory::getInstance()->addCommand(command);
+
+    if (progressDlg) {
+        command->disconnectProgressDialog(progressDlg);
+        progressDlg->close();
+    }
+
+    progressDlg = new ProgressDialog(tr("Generating audio preview..."),
+                                     (QWidget*)parent());
+
+    connect(&m_doc->getAudioFileManager(), SIGNAL(setValue(int)),
+            progressDlg, SLOT(setValue(int)));
+    // Removed since ProgressDialog::cancelClicked() does not exist.
+    //connect(progressDlg, SIGNAL(cancelClicked()),
+    //        &m_doc->getAudioFileManager(), SLOT(slotStopPreview()));
+
+    int fid = command->getNewAudioFileId();
+    if (fid >= 0) {
+        RosegardenMainWindow::self()->slotAddAudioFile(fid);
+        m_doc->getAudioFileManager().generatePreview(fid);
+    }
+
+    if (progressDlg)
+        progressDlg->close();
 }
 
 void SegmentResizer::mouseReleaseEvent(QMouseEvent *e)
@@ -157,56 +211,12 @@ void SegmentResizer::mouseReleaseEvent(QMouseEvent *e)
 
                 if (segment->getType() == Segment::Audio) {
 
-                    try {
-                        m_doc->getAudioFileManager().testAudioPath();
-                    } catch (AudioFileManager::BadAudioPathException) {
-                        if (QMessageBox::warning(0, tr("Warning"), //tr("Set audio file path"), 
-                                 tr("The audio file path does not exist or is not writable.\nYou must set the audio file path to a valid directory in Document Properties before rescaling an audio file.\nWould you like to set it now?"),
-                                QMessageBox::Yes | QMessageBox::Cancel, QMessageBox::Cancel
-                                ) 
-                                == QMessageBox::Yes ) {
-                            RosegardenMainWindow::self()->slotOpenAudioPathSettings();
-                        }
-                    }
+                    double ratio =
+                            static_cast<double>(newEndTime - newStartTime) /
+                            (oldEndTime - oldStartTime);
 
-                    float ratio = float(newEndTime - newStartTime) /
-                        float(oldEndTime - oldStartTime);
+                    resizeAudioSegment(segment, ratio, newStartTime, newEndTime);
 
-                    AudioSegmentRescaleCommand *command =
-                        new AudioSegmentRescaleCommand(m_doc, segment, ratio,
-                                                       newStartTime, newEndTime);
-
-                    //cc 20150508: avoid dereferencing self-deleted
-                    //progress dialog after user has closed it, by
-                    //using a QPointer
-                    QPointer<ProgressDialog> progressDlg = new ProgressDialog(
-                            tr("Rescaling audio file..."), (QWidget*)parent());
-                    command->connectProgressDialog(progressDlg);
-                    
-                    CommandHistory::getInstance()->addCommand(command);
-
-                    if (progressDlg) {
-                        command->disconnectProgressDialog(progressDlg);
-                        progressDlg->close();
-                    }
-                    
-                    progressDlg = new ProgressDialog(tr("Generating audio preview..."),
-                                                     (QWidget*)parent());
-
-                    connect(&m_doc->getAudioFileManager(), SIGNAL(setValue(int)),
-                            progressDlg, SLOT(setValue(int)));
-                    // Removed since ProgressDialog::cancelClicked() does not exist.
-                    //connect(progressDlg, SIGNAL(cancelClicked()),
-                    //        &m_doc->getAudioFileManager(), SLOT(slotStopPreview()));
-
-                    int fid = command->getNewAudioFileId();
-                    if (fid >= 0) {
-                        RosegardenMainWindow::self()->slotAddAudioFile(fid);
-                        m_doc->getAudioFileManager().generatePreview(fid);
-                    }
-
-                    if (progressDlg) progressDlg->close();
-                
                 } else {
                     
                     SegmentRescaleCommand *command =
@@ -272,7 +282,7 @@ void SegmentResizer::mouseReleaseEvent(QMouseEvent *e)
 
 int SegmentResizer::mouseMoveEvent(QMouseEvent *e)
 {
-    //     RG_DEBUG << "SegmentResizer::mouseMoveEvent";
+    //RG_DEBUG << "SegmentResizer::mouseMoveEvent";
 
     // No need to propagate.
     e->accept();
@@ -323,11 +333,10 @@ int SegmentResizer::mouseMoveEvent(QMouseEvent *e)
 
         timeT duration = itemEndTime - time;
 
-        //         RG_DEBUG << "SegmentResizer::mouseMoveEvent() resize start : duration = "
-        //                  << duration << " - snap = " << snapSize
-        //                  << " - itemEndTime : " << itemEndTime
-        //                  << " - time : " << time
-        //                  << endl;
+        //RG_DEBUG << "mouseMoveEvent() resize start : duration = " << duration
+        //         << " - snap = " << snapSize
+        //         << " - itemEndTime : " << itemEndTime
+        //         << " - time : " << time;
 
         timeT newStartTime = time;
 
@@ -349,11 +358,10 @@ int SegmentResizer::mouseMoveEvent(QMouseEvent *e)
 
         timeT newEndTime = time;
 
-        //         RG_DEBUG << "SegmentResizer::mouseMoveEvent() resize end : duration = "
-        //                  << duration << " - snap = " << snapSize
-        //                  << " - itemStartTime : " << itemStartTime
-        //                  << " - time : " << time
-        //                  << endl;
+        //RG_DEBUG << "mouseMoveEvent() resize end : duration = " << duration
+        //         << " - snap = " << snapSize
+        //         << " - itemStartTime : " << itemStartTime
+        //         << " - time : " << time;
 
         if (duration < snapSize) {
 
