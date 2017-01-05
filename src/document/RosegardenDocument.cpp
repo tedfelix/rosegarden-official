@@ -2835,7 +2835,7 @@ RosegardenDocument::stopRecordingAudio()
 void
 RosegardenDocument::finalizeAudioFile(InstrumentId iid)
 {
-    RG_DEBUG << "RosegardenDocument::finalizeAudioFile(" << iid << ")";
+    RG_DEBUG << "finalizeAudioFile(" << iid << ")";
 
     Segment *recordSegment = m_recordAudioSegments[iid];
 
@@ -2852,14 +2852,15 @@ RosegardenDocument::finalizeAudioFile(InstrumentId iid)
     }
 
     // Progress Dialog
-    ProgressDialog *progressDlg = new ProgressDialog(
-            tr("Generating audio preview..."),
-            dynamic_cast<QWidget *>(parent()));
+    QProgressDialog progressDialog(
+            tr("Generating audio preview..."),  // labelText
+            tr("Cancel"),  // cancelButtonText
+            0, 100,  // min, max
+            dynamic_cast<QWidget *>(parent()));  // parent
+    progressDialog.setWindowTitle(tr("Rosegarden"));
+    progressDialog.setWindowModality(Qt::WindowModal);
 
-    connect(progressDlg, SIGNAL(canceled()),
-            &m_audioFileManager, SLOT(slotStopPreview()));
-    connect(&m_audioFileManager, SIGNAL(setValue(int)),
-            progressDlg, SLOT(setValue(int)));
+    m_audioFileManager.setProgressDialog(&progressDialog);
 
     try {
         m_audioFileManager.generatePreview(newAudioFile->getId());
@@ -2867,10 +2868,6 @@ RosegardenDocument::finalizeAudioFile(InstrumentId iid)
         StartupLogo::hideIfStillThere();
         QMessageBox::critical(dynamic_cast<QWidget *>(parent()), tr("Rosegarden"), strtoqstr(e.getMessage()));
     }
-
-    // ??? Crash if user closed?
-    progressDlg->close();    // is deleteOnClose
-    progressDlg = 0;
 
     if (!recordSegment->getComposition())
         getComposition().addSegment(recordSegment);
