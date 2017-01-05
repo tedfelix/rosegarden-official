@@ -1200,7 +1200,7 @@ AudioManagerDialog::addFile(const QUrl& kurl)
     progressDialog.show();
 #endif
 
-    aFM.setProgressDialog(QPointer<QProgressDialog>(&progressDialog));
+    aFM.setProgressDialog(&progressDialog);
 
     // Flush the event queue.
     qApp->processEvents(QEventLoop::AllEvents);
