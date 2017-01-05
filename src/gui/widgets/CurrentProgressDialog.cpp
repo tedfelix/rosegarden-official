@@ -33,13 +33,6 @@ CurrentProgressDialog* CurrentProgressDialog::getInstance()
     return m_instance;
 }
 
-
-ProgressDialog*
-CurrentProgressDialog::get()
-{
-    return m_currentProgressDialog;
-}
-
 void
 CurrentProgressDialog::set(ProgressDialog* d)
 {

@@ -28,18 +28,22 @@ namespace Rosegarden
 
 class ProgressDialog;
 
-
+/// Global freeze() and thaw() for the progress dialog that is up.
+/**
+ * DEPRECATED
+ * Since the freeze() and thaw() functionality does nothing now, this
+ * class can probably just be removed without any effect.
+ */
 class ROSEGARDENPRIVATE_EXPORT CurrentProgressDialog : public QObject
 {
     Q_OBJECT
 public:
     static CurrentProgressDialog* getInstance();
 
-    static ProgressDialog* get();
     static void set(ProgressDialog*);
 
     /**
-     * Block the current value() so that it won't appear
+     * Block the current progress dialog so that it won't appear
      * regardless of passing time and occurring events.
      * This is useful when you want to show another dialog
      * and you want to make sure the value() dialog is out of the way
@@ -47,25 +51,25 @@ public:
     static void freeze();
 
     /**
-     * Restores the value() dialog to its normal state atfer a freeze()
+     * Restores the progress dialog to its normal state after a freeze()
      */
     static void thaw();
 
 public slots:
-    /// Called then the current value() dialog is being destroyed
+    /// Called then the current progress dialog is being destroyed
     void slotCurrentProgressDialogDestroyed();
 
-protected:
+private:
+    // Global Singleton.  Instance is created when needed by getInstance().
     CurrentProgressDialog(QObject* parent) : QObject(parent) {}
-    
+
+    //static ProgressDialog* get()  { return m_currentProgressDialog; }
+
     //--------------- Data members ---------------------------------
     static CurrentProgressDialog* m_instance;
     static ProgressDialog* m_currentProgressDialog;
 };
 
-
-// A Text popup - a tooltip we can control.
-//
 
 }
 

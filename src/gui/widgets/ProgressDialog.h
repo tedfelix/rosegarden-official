@@ -31,6 +31,19 @@ namespace Rosegarden
 /// A simple dialog for reporting progress.
 /**
  * This was originally a subclass of KProgressDialog from KDE 3.
+ *
+ * QProgressDialog should be used directly instead of this class.
+ * See RosegardenDocument::openDocument() for an example.
+ *
+ * There is one thing this class does slightly better than the native
+ * QProgressDialog.  This class handles hiding the progress dialog
+ * for the first few seconds better.  See m_showAfterTimer.
+ * The native QProgressDialog requires that the dialog be explicitly
+ * shown (via show()) when it is in indeterminate mode.  It also
+ * forces the dialog up when the label text is changed (setLabelText()).
+ * These things might eventually be fixed in Qt.  Or we could derive
+ * a new ProgressDialog class from QProgressDialog that will fix these
+ * issues in the meantime.
  */
 class ProgressDialog : public QProgressDialog
 {
