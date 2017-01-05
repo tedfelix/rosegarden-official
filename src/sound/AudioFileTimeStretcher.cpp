@@ -39,8 +39,7 @@ namespace Rosegarden {
 
 
 AudioFileTimeStretcher::AudioFileTimeStretcher(AudioFileManager *manager) :
-    m_manager(manager),
-    m_timestretchCancelled(false)
+    m_manager(manager)
 {
 }
 
@@ -150,17 +149,12 @@ AudioFileTimeStretcher::getStretchedAudioFile(AudioFileId source,
 
     long expectedOut = ceil(fileTotalIn * ratio);
 
-    m_timestretchCancelled = false;
     bool inputExhausted = false;
 
     sourceFile->scanTo(&streamIn, RealTime::zeroTime);
 
     while (1) {
             
-        if (m_timestretchCancelled) {
-            std::cerr << "AudioFileTimeStretcher::getStretchedAudioFile: cancelled" << std::endl;
-            throw CancelledException();
-        }
         if (m_progressDialog  &&  m_progressDialog->wasCanceled()) {
             RG_DEBUG << "getStretchedAudioFile(): cancelled";
             throw CancelledException();
@@ -245,7 +239,6 @@ AudioFileTimeStretcher::getStretchedAudioFile(AudioFileId source,
         if (++progressCount == 100) {
             int progress = int
                 ((100.f * float(totalIn)) / float(fileTotalIn));
-            emit setValue(progress);
             if (m_progressDialog)
                 m_progressDialog->setValue(progress);
 
@@ -255,7 +248,6 @@ AudioFileTimeStretcher::getStretchedAudioFile(AudioFileId source,
         qApp->processEvents();
     }
         
-    emit setValue(100);
     if (m_progressDialog)
         m_progressDialog->setValue(100);
 
@@ -267,12 +259,6 @@ AudioFileTimeStretcher::getStretchedAudioFile(AudioFileId source,
                  << file->getId() << std::endl;
 
     return file->getId();
-}
-
-void
-AudioFileTimeStretcher::slotStopTimestretch()
-{
-    m_timestretchCancelled = true;
 }
 
 

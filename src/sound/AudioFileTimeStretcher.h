@@ -57,22 +57,8 @@ public:
     void setProgressDialog(QPointer<QProgressDialog> progressDialog)
             { m_progressDialog = progressDialog; }
 
-signals:
-    // DEPRECATED
-    void setValue(int);
-
-public slots:
-    /**
-     * Cancel an ongoing getStretchedAudioFile
-     *
-     * ??? UNUSED
-     */
-    void slotStopTimestretch();
-    
 protected:
     AudioFileManager *m_manager;
-
-    bool m_timestretchCancelled;
 
     QPointer<QProgressDialog> m_progressDialog;
 };

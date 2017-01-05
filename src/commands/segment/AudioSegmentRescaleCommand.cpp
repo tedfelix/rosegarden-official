@@ -85,28 +85,6 @@ AudioSegmentRescaleCommand::~AudioSegmentRescaleCommand()
 }
 
 void
-AudioSegmentRescaleCommand::connectProgressDialog(ProgressDialog *dlg)
-{
-    QObject::connect(m_stretcher, SIGNAL(setValue(int)),
-					 dlg, SLOT(setValue(int)));
-					//dlg->progressBar(), SLOT(setValue(int)));
-    // Removed since ProgressDialog::cancelClicked() does not exist.
-    //QObject::connect(dlg, SIGNAL(cancelClicked()),
-    //                 m_stretcher, SLOT(slotStopTimestretch()));
-}
-
-void
-AudioSegmentRescaleCommand::disconnectProgressDialog(ProgressDialog *dlg)
-{
-    QObject::disconnect(m_stretcher, SIGNAL(setValue(int)),
-						dlg, SLOT(setValue(int)));
-						//dlg->progressBar(), SLOT(setValue(int)));
-    // Removed since ProgressDialog::cancelClicked() does not exist.
-    //QObject::disconnect(dlg, SIGNAL(cancelClicked()),
-    //                    m_stretcher, SLOT(slotStopTimestretch()));
-}
-
-void
 AudioSegmentRescaleCommand::setProgressDialog(
         QPointer<QProgressDialog> progressDialog)
 {
@@ -182,7 +160,7 @@ AudioSegmentRescaleCommand::execute()
             m_fid = -1;
             failed = true;
         } catch (AudioFileTimeStretcher::CancelledException e) {
-            RG_WARNING << "AudioSegmentRescaleCommand: ERROR: Rescale cancelled";
+            RG_DEBUG << "execute(): Rescale cancelled";
             delete m_newSegment;
             m_newSegment = 0;
             m_fid = -1;
