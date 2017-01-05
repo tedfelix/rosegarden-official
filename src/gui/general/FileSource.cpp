@@ -19,7 +19,6 @@
 
 #include "TempDirectory.h"
 #include "misc/Strings.h"
-#include "gui/widgets/ProgressDialog.h"
 
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
@@ -73,7 +72,8 @@ static void decCount(QString url) {
 
 static QThreadStorage<QNetworkAccessManager *> nms;
 
-FileSource::FileSource(QString fileOrUrl, ProgressDialog *progress,
+#if 0
+FileSource::FileSource(QString fileOrUrl,
                        QString preferredContentType) :
     m_rawFileOrUrl(fileOrUrl),
     m_url(fileOrUrl, QUrl::StrictMode),
@@ -86,7 +86,6 @@ FileSource::FileSource(QString fileOrUrl, ProgressDialog *progress,
     m_remote(isRemote(fileOrUrl)),
     m_done(false),
     m_leaveLocalFile(false),
-    m_progress(progress),
     m_refCounted(false)
 {
     if (m_resource) { // qrc file
@@ -164,8 +163,9 @@ FileSource::FileSource(QString fileOrUrl, ProgressDialog *progress,
     std::cerr << "FileSource::FileSource(string) exiting" << std::endl;
 #endif
 }
+#endif
 
-FileSource::FileSource(QUrl url, ProgressDialog *progress) :
+FileSource::FileSource(QUrl url) :
     m_url(url),
     m_localFile(0),
     m_reply(0),
@@ -175,7 +175,6 @@ FileSource::FileSource(QUrl url, ProgressDialog *progress) :
     m_remote(isRemote(url.toString())),
     m_done(false),
     m_leaveLocalFile(false),
-    m_progress(progress),
     m_refCounted(false)
 {
 #ifdef DEBUG_FILE_SOURCE
@@ -207,7 +206,6 @@ FileSource::FileSource(const FileSource &rf) :
     m_remote(rf.m_remote),
     m_done(false),
     m_leaveLocalFile(false),
-    m_progress(rf.m_progress),
     m_refCounted(false)
 {
 #ifdef DEBUG_FILE_SOURCE
@@ -442,13 +440,13 @@ FileSource::init()
         m_refCountMap[m_url]++;
         m_refCounted = true;
 
-        if (m_progress && !m_done) {
-            m_progress->setLabelText
-                (tr("Downloading %1...").arg(m_url.toString()));
-            connect(m_progress, SIGNAL(canceled()), this, SLOT(cancelled()));
-            connect(this, SIGNAL(progress(int)),
-                    m_progress, SLOT(setValue(int)));
-        }
+//        if (m_progress && !m_done) {
+//            m_progress->setLabelText
+//                (tr("Downloading %1...").arg(m_url.toString()));
+//            connect(m_progress, SIGNAL(canceled()), this, SLOT(cancelled()));
+//            connect(this, SIGNAL(progress(int)),
+//                    m_progress, SLOT(setValue(int)));
+//        }
     }
 }
 

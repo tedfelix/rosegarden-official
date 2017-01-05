@@ -65,7 +65,7 @@ public:
     bool convertToMidi(Composition &, const QString &filename);
 
 signals:
-    /// Progress in percent.  Connect to ProgressDialog::setValue(int).
+    /// Progress in percent.  Connect to a progress dialog's setValue(int).
     void progress(int);
 
 private:

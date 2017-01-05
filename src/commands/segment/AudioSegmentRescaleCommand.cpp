@@ -28,7 +28,6 @@
 #include "document/RosegardenDocument.h"
 #include "sound/AudioFileTimeStretcher.h"
 #include "sound/AudioFileManager.h"
-#include "gui/widgets/ProgressDialog.h"
 #include <QString>
 
 

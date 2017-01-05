@@ -38,7 +38,6 @@
 #include "gui/general/BaseTool.h"
 #include "gui/application/RosegardenMainWindow.h"
 #include "gui/general/RosegardenScrollView.h"
-#include "gui/widgets/ProgressDialog.h"
 #include "SegmentTool.h"
 #include "document/Command.h"
 #include "document/CommandHistory.h"

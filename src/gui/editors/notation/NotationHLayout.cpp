@@ -41,7 +41,6 @@
 #include "gui/editors/notation/NotationStaff.h"
 #include "gui/editors/notation/NotePixmapFactory.h"
 #include "gui/general/ProgressReporter.h"
-#include "gui/widgets/ProgressDialog.h"
 #include "misc/Strings.h"
 #include "misc/Debug.h"
 #include "misc/ConfigGroups.h"
@@ -505,7 +504,6 @@ NotationHLayout::scanViewSegment(ViewSegment &staff, timeT startTime,
         if ((endTime > startTime) && (barNo % 20 == 0)) {
             emit setValue((barTimes.second - startTime) * 95 /
                              (endTime - startTime));
-//            ProgressDialog::processEvents();
         }
 
         throwIfCancelled();
@@ -1322,7 +1320,6 @@ NotationHLayout::finishLayout(timeT startTime, timeT endTime, bool full)
          i != m_barData.end(); ++i) {
 
         emit setValue(100 * staffNo / m_barData.size());
-//        ProgressDialog::processEvents();
 
         throwIfCancelled();
 

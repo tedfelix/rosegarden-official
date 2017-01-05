@@ -51,7 +51,6 @@
 #include "gui/studio/AudioPlugin.h"
 #include "gui/studio/AudioPluginManager.h"
 #include "gui/widgets/CurrentProgressDialog.h"
-#include "gui/widgets/ProgressDialog.h"
 #include "RosegardenDocument.h"
 #include "sound/AudioFileManager.h"
 #include "XmlStorableEvent.h"

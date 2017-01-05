@@ -26,7 +26,6 @@
 #include "base/Segment.h"
 #include "base/Studio.h"
 #include "gui/editors/segment/compositionview/AudioPeaksThread.h"
-//#include "gui/widgets/ProgressDialog.h"
 #include "sound/AudioFileManager.h"
 #include "base/Event.h"
 
@@ -49,7 +48,6 @@ namespace Rosegarden
 
 class SequenceManager;
 class RosegardenMainViewWidget;
-//class ProgressDialog;
 class MappedEventList;
 class Event;
 class EditViewBase;

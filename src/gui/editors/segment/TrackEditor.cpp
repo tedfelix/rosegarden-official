@@ -48,7 +48,6 @@
 #include "gui/rulers/ChordNameRuler.h"
 #include "gui/rulers/TempoRuler.h"
 #include "gui/rulers/LoopRuler.h"
-#include "gui/widgets/ProgressDialog.h"
 #include "gui/widgets/DeferScrollArea.h"
 #include "sound/AudioFile.h"
 #include "document/Command.h"
@@ -338,7 +337,6 @@ void TrackEditor::slotTrackButtonsWidthChanged()
 {
     // We need to make sure the trackButtons geometry is fully updated
     //
-//    ProgressDialog::processEvents();
 
     m_trackButtonScroll->setMinimumWidth(m_trackButtons->width());
     m_doc->slotDocumentModified();

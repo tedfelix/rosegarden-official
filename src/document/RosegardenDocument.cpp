@@ -65,7 +65,6 @@
 #include "gui/seqmanager/SequenceManager.h"
 #include "gui/studio/AudioPluginManager.h"
 #include "gui/studio/StudioControl.h"
-#include "gui/widgets/ProgressDialog.h"
 #include "gui/general/AutoSaveFinder.h"
 #include "sequencer/RosegardenSequencer.h"
 #include "sound/AudioFile.h"
@@ -1259,25 +1258,9 @@ bool RosegardenDocument::saveDocumentActual(const QString& filename,
     << "\" format-version-point=\"" << FILE_FORMAT_VERSION_POINT
     << "\">\n";
 
-//    ProgressDialog *progress = 0;
-
-// Disable the progress dialog on saving in all cases, because the alternative
-// is really complicated, and this progress dialog adds little, if any, value.
-//
-//    if (!autosave) {
-//
-//        progress = new ProgressDialog(tr("Saving file..."),
-//                                         (QWidget*)parent());
-//
-//    }
-
     // First make sure all MIDI devices know their current connections
     //
     m_studio.resyncDeviceConnections();
-
-//    if (progress) {
-//        progress->setValue(10);
-//    }
 
     // Send out Composition (this includes Tracks, Instruments, Tempo
     // and Time Signature changes and any other sub-objects)
@@ -1285,23 +1268,11 @@ bool RosegardenDocument::saveDocumentActual(const QString& filename,
     outStream << strtoqstr(getComposition().toXmlString())
               << endl << endl;
 
-//    if (progress) {
-//        progress->setValue(20);
-//    }
-
     outStream << strtoqstr(getAudioFileManager().toXmlString())
               << endl << endl;
 
-//    if (progress) {
-//        progress->setValue(30);
-//    }
-
     outStream << strtoqstr(getConfiguration().toXmlString())
               << endl << endl;
-
-//    if (progress) {
-//        progress->setValue(40);
-//    }
 
     long totalEvents = 0;
     for (Composition::iterator segitr = m_composition.begin();
@@ -1309,19 +1280,11 @@ bool RosegardenDocument::saveDocumentActual(const QString& filename,
         totalEvents += (long)(*segitr)->size();
     }
 
-//    if (progress) {
-//        progress->setValue(50);
-//    }
-
     for (Composition::triggersegmentcontaineriterator ci =
              m_composition.getTriggerSegments().begin();
          ci != m_composition.getTriggerSegments().end(); ++ci) {
         totalEvents += (long)(*ci)->getSegment()->size();
     }
-
-//    if (progress) {
-//        progress->setValue(60);
-//    }
 
     // output all elements
     //
@@ -1363,10 +1326,6 @@ bool RosegardenDocument::saveDocumentActual(const QString& filename,
 
     }
 
-//    if (progress) {
-//        progress->setValue(70);
-//    }
-
     // Put a break in the file
     //
     outStream << endl << endl;
@@ -1387,10 +1346,6 @@ bool RosegardenDocument::saveDocumentActual(const QString& filename,
         saveSegment(outStream, segment, totalEvents, eventCount, triggerAtts);
     }
 
-//    if (progress) {
-//        progress->setValue(80);
-//    }
-
     // Put a break in the file
     //
     outStream << endl << endl;
@@ -1399,19 +1354,11 @@ bool RosegardenDocument::saveDocumentActual(const QString& filename,
     //
     outStream << strtoqstr(m_studio.toXmlString()) << endl << endl;
 
-//    if (progress) {
-//        progress->setValue(90);
-//    }
-
     // Send out the appearance data
     outStream << "<appearance>" << endl;
     outStream << strtoqstr(getComposition().getSegmentColourMap().toXmlString("segmentmap"));
     outStream << strtoqstr(getComposition().getGeneralColourMap().toXmlString("generalmap"));
     outStream << "</appearance>" << endl << endl << endl;
-
-//    if (progress) {
-//        progress->setValue(95);
-//    }
 
     // close the top-level XML tag
     //
@@ -1423,10 +1370,6 @@ bool RosegardenDocument::saveDocumentActual(const QString& filename,
         return false;
     }
 
-//    if (progress) {
-//        progress->setValue(100);
-//    }
-
     RG_DEBUG << "RosegardenDocument::saveDocument() finished";
 
     if (!autosave) {
@@ -1434,10 +1377,6 @@ bool RosegardenDocument::saveDocumentActual(const QString& filename,
         setModified(false);
         CommandHistory::getInstance()->documentSaved();
     }
-//    if (progress) {
-//        progress->close();     // is deleteOnClose
-//        progress = 0;
-//    }
 
     setAutoSaved(true);
 

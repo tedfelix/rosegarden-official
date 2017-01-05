@@ -34,7 +34,6 @@ class Segment;
 class AudioFileManager;
 class AudioFileTimeStretcher;
 class RosegardenDocument;
-class ProgressDialog;
 
 class AudioSegmentRescaleCommand : public NamedCommand
 {
