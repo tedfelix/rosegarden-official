@@ -30,8 +30,7 @@ namespace Rosegarden
 {
 
 
-PeakFileManager::PeakFileManager() :
-        m_currentPeakFile(0)
+PeakFileManager::PeakFileManager()
 {
 }
 
@@ -66,8 +65,6 @@ PeakFileManager::removeAudioFile(AudioFile *audioFile)
          it != m_peakFiles.end();
          ++it) {
         if ((*it)->getAudioFile()->getId() == audioFile->getId()) {
-            if (m_currentPeakFile == *it)
-                m_currentPeakFile = 0;
             delete *it;
             m_peakFiles.erase(it);
             return true;
@@ -150,15 +147,13 @@ PeakFileManager::generatePeaks(AudioFile *audioFile)
 #endif
 
     if (audioFile->getType() == WAV) {
-        m_currentPeakFile = getPeakFile(audioFile);
+        PeakFile *currentPeakFile = getPeakFile(audioFile);
 
-        QObject::connect(m_currentPeakFile, SIGNAL(setValue(int)),
-                         this, SIGNAL(setValue(int)));
-        m_currentPeakFile->setProgressDialog(m_progressDialog);
+        currentPeakFile->setProgressDialog(m_progressDialog);
 
         // Just write out a peak file
         //
-        if (m_currentPeakFile->write() == false) {
+        if (currentPeakFile->write() == false) {
             RG_WARNING << "generatePeaks() - Can't write peak file for " << audioFile->getFilename() << " - no preview generated";
             throw BadPeakFileException(
                     audioFile->getFilename(), __FILE__, __LINE__);
@@ -166,28 +161,21 @@ PeakFileManager::generatePeaks(AudioFile *audioFile)
 
         // If we were cancelled, don't leave a partial peak file lying
         // around.
-        if (m_progressDialog  &&  m_progressDialog->wasCanceled())
-            stopPreview();
-
-        // The m_currentPeakFile might have been cancelled (see stopPreview())
-        //
-        if (m_currentPeakFile) {
-            // close writes out important things
-            m_currentPeakFile->close();
-            m_currentPeakFile->disconnect();
+        if (m_progressDialog  &&  m_progressDialog->wasCanceled()) {
+            QFile file(currentPeakFile->getFilename());
+            file.remove();
+            return;
         }
+
+        // close writes out important things
+        currentPeakFile->close();
+
     } else if (audioFile->getType() == BWF) {
         // write the file out and incorporate the peak chunk
+        RG_WARNING << "generatePeaks() - unsupported file type: BWF";
     } else {
-#ifdef DEBUG_PEAKFILEMANAGER
-        RG_WARNING << "generatePeaks() - unsupported file type";
-#endif
-
-        return;
+        RG_WARNING << "generatePeaks() - unknown file type";
     }
-
-    m_currentPeakFile = 0;
-
 }
 
 std::vector<float>
@@ -244,8 +232,6 @@ PeakFileManager::clear()
         delete (*it);
 
     m_peakFiles.erase(m_peakFiles.begin(), m_peakFiles.end());
-
-    m_currentPeakFile = 0;
 }
 
 std::vector<SplitPointPair>
@@ -264,31 +250,6 @@ PeakFileManager::getSplitPoints(AudioFile *audioFile,
                                     endTime,
                                     threshold,
                                     minTime);
-}
-
-void
-PeakFileManager::stopPreview()
-{
-    if (m_currentPeakFile) {
-        // Stop processing
-        //
-        QString fileName = m_currentPeakFile->getFilename();
-        m_currentPeakFile->setProcessingPeaks(false);
-        m_currentPeakFile->disconnect();
-
-        QFile file(fileName);
-        bool removed = file.remove();
-
-#ifdef DEBUG_PEAKFILEMANAGER
-        if (removed) {
-            RG_DEBUG << "stopPreview() - removed preview";
-        }
-#else
-        (void)removed;
-#endif
-        //delete m_currentPeakFile;
-        m_currentPeakFile = 0;
-    }
 }
 
 

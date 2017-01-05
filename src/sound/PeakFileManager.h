@@ -116,19 +116,6 @@ public:
     std::vector<PeakFile *>::const_iterator end() const
                 { return m_peakFiles.end(); }
 
-    /**
-     * ??? Once the signals/slots progress dialog approach is removed, this
-     *     can go.
-     */
-    void stopPreview();
-
-signals:
-    /**
-     * ??? Once the signals/slots progress dialog approach is removed, this
-     *     can go.
-     */
-    void setValue(int);
-
 protected:
     /// Insert PeakFile based on AudioFile if it doesn't already exist.
     bool insertAudioFile(AudioFile *audioFile);
@@ -136,13 +123,6 @@ protected:
     PeakFile *getPeakFile(AudioFile *audioFile);
 
     std::vector<PeakFile *> m_peakFiles;
-
-    /// Used by stopPreview() to stop generation of the peak file.
-    /**
-     * ??? Once the signals/slots progress dialog approach is removed, this
-     *     can go.
-     */
-    PeakFile *m_currentPeakFile;
 
     QPointer<QProgressDialog> m_progressDialog;
 };
