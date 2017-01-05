@@ -13,6 +13,10 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[SegmentNotationHelper]"
+// Turn off all debugging here.
+//#define RG_NO_DEBUG_PRINT
+
 #include "SegmentNotationHelper.h"
 #include "base/NotationTypes.h"
 #include "Quantizer.h"
@@ -26,10 +30,10 @@
 #include <iterator>
 #include <list>
 
+//#define DEBUG_DECOUNTERPOINT
+
 namespace Rosegarden 
 {
-using std::cerr;
-using std::endl;
 using std::string;
 using std::list;
 
@@ -121,8 +125,8 @@ SegmentNotationHelper::setNotationProperties(timeT startTime, timeT endTime)
 	    int ucount = (*i)->get<Int>(BEAMED_GROUP_UNTUPLED_COUNT);
 
 	    if (tcount == 0) {
-		std::cerr << "WARNING: SegmentNotationHelper::setNotationProperties: zero tuplet count:" << std::endl;
-		(*i)->dump(std::cerr);
+		RG_DEBUG << "WARNING: SegmentNotationHelper::setNotationProperties: zero tuplet count:";
+		RG_DEBUG << (**i);
 	    } else {
 		// nominal duration is longer than actual (sounding) duration
 		duration = (duration / tcount) * ucount;
@@ -516,18 +520,18 @@ SegmentNotationHelper::splitIntoTie(iterator &from, iterator to,
 	    // no way to really cope with an error, because at this
 	    // point we may already have splut some events. Best to
 	    // skip this event
-	    cerr << "WARNING: SegmentNotationHelper::splitIntoTie(): (*i)->getAbsoluteTime() != baseTime (" << (*i)->getAbsoluteTime() << " vs " << baseTime << "), ignoring this event\n";
+	    RG_DEBUG << "WARNING: SegmentNotationHelper::splitIntoTie(): (*i)->getAbsoluteTime() != baseTime (" << (*i)->getAbsoluteTime() << " vs " << baseTime << "), ignoring this event\n";
 	    continue;
 	}
 
         if ((*i)->getDuration() != eventDuration) {
 	    if ((*i)->getDuration() == 0) continue;
-	    cerr << "WARNING: SegmentNotationHelper::splitIntoTie(): (*i)->getDuration() != eventDuration (" << (*i)->getDuration() << " vs " << eventDuration << "), changing eventDuration to match\n";
+	    RG_DEBUG << "WARNING: SegmentNotationHelper::splitIntoTie(): (*i)->getDuration() != eventDuration (" << (*i)->getDuration() << " vs " << eventDuration << "), changing eventDuration to match\n";
             eventDuration = (*i)->getDuration();
         }
 
         if (baseDuration >= eventDuration) {
-//            cerr << "SegmentNotationHelper::splitIntoTie() : baseDuration >= eventDuration, ignoring event\n";
+//            RG_DEBUG << "SegmentNotationHelper::splitIntoTie() : baseDuration >= eventDuration, ignoring event\n";
             continue;
         }
 
@@ -538,7 +542,7 @@ SegmentNotationHelper::splitIntoTie(iterator &from, iterator to,
 	Event *evb = split.second;
 
 	if (!eva || !evb) {
-	    cerr << "WARNING: SegmentNotationHelper::splitIntoTie(): No valid split for event of duration " << eventDuration << " at " << baseTime << " (baseDuration " << baseDuration << "), ignoring this event\n";
+	    RG_DEBUG << "WARNING: SegmentNotationHelper::splitIntoTie(): No valid split for event of duration " << eventDuration << " at " << baseTime << " (baseDuration " << baseDuration << "), ignoring this event\n";
 	    continue;
 	}
 
@@ -620,7 +624,7 @@ SegmentNotationHelper::isViable(timeT duration, int dots)
     timeT nearestDuration =
 	Note::getNearestNote(duration, dots >= 0 ? dots : 2).getDuration();
 
-//    std::cerr << "SegmentNotationHelper::isViable: nearestDuration is " << nearestDuration << ", duration is " << duration << std::endl;
+//    RG_DEBUG << "SegmentNotationHelper::isViable: nearestDuration is " << nearestDuration << ", duration is " << duration;
     viable = (nearestDuration == duration);
 
     return viable;
@@ -736,12 +740,11 @@ SegmentNotationHelper::makeThisNoteViable(iterator noteItr, bool splitAtBars)
                 splitPreservingPerformanceTimes(e, *dli);
 
         if (!splits.first || !splits.second) {
-            cerr
+            RG_DEBUG
                     << "WARNING: SegmentNotationHelper::makeThisNoteViable(): No valid split for event of duration "
                     << e->getDuration() << " at " << e->getAbsoluteTime()
                     << " (split duration " << *dli << "), ignoring remainder\n";
-            cerr << "WARNING: This is probably a bug; fix required"
-                    << std::endl;
+            RG_DEBUG << "WARNING: This is probably a bug; fix required";
 
             // Bug #3466912
             // There's a situation where an event might be unsplittable, and
@@ -965,9 +968,9 @@ SegmentNotationHelper::insertSomething(iterator i, int duration,
 
     timeT existingDuration = (*i)->getNotationDuration();
 
-//    cerr << "SegmentNotationHelper::insertSomething: asked to insert duration " << duration
-//	 << " over event of duration " << existingDuration << ":" << endl;
-    (*i)->dump(cerr);
+//    RG_DEBUG << "SegmentNotationHelper::insertSomething: asked to insert duration " << duration
+//	 << " over event of duration " << existingDuration << ":";
+    RG_DEBUG << (**i);
 
     if (duration == existingDuration) {
 
@@ -975,7 +978,7 @@ SegmentNotationHelper::insertSomething(iterator i, int duration,
         // existing note or rest at that position, chord the existing
         // note or delete the existing rest and insert.
 
-//	cerr << "Durations match; doing simple insert" << endl;
+//	RG_DEBUG << "Durations match; doing simple insert";
 
 	return insertSingleSomething(i, duration, modelEvent, tiedBack);
 
@@ -988,19 +991,19 @@ SegmentNotationHelper::insertSomething(iterator i, int duration,
 
 	    if (!isSplitValid(duration, existingDuration - duration)) {
 
-//		cerr << "Bad split, coercing new note" << endl;
+//		RG_DEBUG << "Bad split, coercing new note";
 
 		// not reasonable to split existing note, so force new one
 		// to same duration instead
 		duration = (*i)->getNotationDuration();
 
 	    } else {
-//		cerr << "Good split, splitting old event" << endl;
+//		RG_DEBUG << "Good split, splitting old event";
 		splitIntoTie(i, duration);
 	    }
 	} else if ((*i)->isa(Note::EventRestType)) {
 
-//	    cerr << "Found rest, splitting" << endl;
+//	    RG_DEBUG << "Found rest, splitting";
 	    iterator last = splitIntoTie(i, duration);
 
             // Recover viability for the second half of any split rest
@@ -1043,7 +1046,7 @@ SegmentNotationHelper::insertSomething(iterator i, int duration,
 	    //is-note/is-rest decisions here to make it possibly worth
 	    //splitting this method into note and rest versions again
 
-//	    cerr << "Need to split new note" << endl;
+//	    RG_DEBUG << "Need to split new note";
 
 	    i = insertSingleSomething
 		(i, existingDuration, modelEvent, tiedBack);
@@ -1060,7 +1063,7 @@ SegmentNotationHelper::insertSomething(iterator i, int duration,
 		(i, duration - existingDuration, modelEvent, true);
 
 	} else {
-//	    cerr << "No need to split new note" << endl;
+//	    RG_DEBUG << "No need to split new note";
 	    return insertSingleSomething(i, duration, modelEvent, tiedBack);
 	}
     }
@@ -1369,14 +1372,14 @@ void
 SegmentNotationHelper::makeBeamedGroupAux(iterator from, iterator to,
 					  string type, bool groupGraces)
 {
-//    cerr << "SegmentNotationHelper::makeBeamedGroupAux: type " << type << endl;
-//    if (from == to) cerr << "from == to" <<endl;
+//    RG_DEBUG << "SegmentNotationHelper::makeBeamedGroupAux: type " << type;
+//    if (from == to) RG_DEBUG << "from == to";
 
     int groupId = segment().getNextId();
     bool beamedSomething = false;
 
     for (iterator i = from; i != to; ++i) {
-//	std::cerr << "looking at " << (*i)->getType() << " at " << (*i)->getAbsoluteTime() << std::endl;
+//	RG_DEBUG << "looking at " << (*i)->getType() << " at " << (*i)->getAbsoluteTime();
 
 	// don't permit ourselves to change the type of an
 	// already-grouped event here
@@ -1398,7 +1401,7 @@ SegmentNotationHelper::makeBeamedGroupAux(iterator from, iterator to,
 
 	if ((*i)->isa(Note::EventType) &&
 	    (*i)->getNotationDuration() >= Note(Note::Crotchet).getDuration()) {
-//	    std::cerr << "too long" <<std::endl;
+//	    RG_DEBUG << "too long";
 	    if (!beamedSomething) continue;
 	    iterator j = i;
 	    bool somethingLeft = false;
@@ -1413,7 +1416,7 @@ SegmentNotationHelper::makeBeamedGroupAux(iterator from, iterator to,
 	    if (!somethingLeft) continue;
 	}
 
-//	std::cerr << "beaming it" <<std::endl;
+//	RG_DEBUG << "beaming it";
         (*i)->set<Int>(BEAMED_GROUP_ID, groupId);
         (*i)->set<String>(BEAMED_GROUP_TYPE, type);
     }
@@ -1425,7 +1428,7 @@ SegmentNotationHelper::makeTupletGroup(timeT t, int untupled, int tupled,
 {
     int groupId = segment().getNextId();
 
-    cerr << "SegmentNotationHelper::makeTupletGroup: time " << t << ", unit "<< unit << ", params " << untupled << "/" << tupled << ", id " << groupId << endl;
+    RG_DEBUG << "SegmentNotationHelper::makeTupletGroup: time " << t << ", unit "<< unit << ", params " << untupled << "/" << tupled << ", id " << groupId;
 
     list<Event *> toInsert;
     list<iterator> toErase;
@@ -1462,7 +1465,7 @@ SegmentNotationHelper::makeTupletGroup(timeT t, int untupled, int tupled,
 			     notationTime + (offset * tupled / untupled),
 			     duration * tupled / untupled);
 
-	cerr << "SegmentNotationHelper::makeTupletGroup: made event at time " << e->getAbsoluteTime() << ", duration " << e->getDuration() << endl;
+	RG_DEBUG << "SegmentNotationHelper::makeTupletGroup: made event at time " << e->getAbsoluteTime() << ", duration " << e->getDuration();
 
 	e->set<Int>(BEAMED_GROUP_ID, groupId);
 	e->set<String>(BEAMED_GROUP_TYPE, GROUP_TYPE_TUPLED);
@@ -1531,7 +1534,7 @@ void
 SegmentNotationHelper::autoBeam(timeT from, timeT to, string type)
 {
     /*
-    std::cerr << "autoBeam from " << from << " to " << to << " on segment start time " << segment().getStartTime() << ", end time " << segment().getEndTime() << ", end marker " << segment().getEndMarkerTime() << std::endl;
+    RG_DEBUG << "autoBeam from " << from << " to " << to << " on segment start time " << segment().getStartTime() << ", end time " << segment().getEndTime() << ", end marker " << segment().getEndMarkerTime();
     */
 
     autoBeam(segment().findTime(from), segment().findTime(to), type);
@@ -1545,7 +1548,7 @@ SegmentNotationHelper::autoBeam(iterator from, iterator to, string type)
     // each occur
 
     if (!segment().getComposition()) {
-	cerr << "WARNING: SegmentNotationHelper::autoBeam requires Segment be in a Composition" << endl;
+	RG_DEBUG << "WARNING: SegmentNotationHelper::autoBeam requires Segment be in a Composition";
 	return;
     }
 
@@ -1835,8 +1838,8 @@ SegmentNotationHelper::removeRests(timeT time, timeT &duration, bool testOnly)
 {
     Event dummy("dummy", time, 0, MIN_SUBORDERING);
     
-    std::cerr << "SegmentNotationHelper::removeRests(" << time
-	      << ", " << duration << ")" << std::endl;
+    RG_DEBUG << "SegmentNotationHelper::removeRests(" << time
+	      << ", " << duration << ")";
 
     iterator from = segment().lower_bound(&dummy);
 
@@ -1935,8 +1938,8 @@ SegmentNotationHelper::reorganizeRests(timeT startTime, timeT endTime,
     std::vector<iterator> erasable;
     std::vector<Event *> insertable;
 
-//    cerr << "SegmentNotationHelper::reorganizeRests (" << startTime << ","
-//	 << endTime << ")" << endl;
+//    RG_DEBUG << "SegmentNotationHelper::reorganizeRests (" << startTime << ","
+//	 << endTime << ")";
 
     for (iterator i = ia; i != ib; ++i) {
 
@@ -1977,9 +1980,9 @@ SegmentNotationHelper::normalizeContiguousRests(timeT startTime,
     timeT sigTime =
 	segment().getComposition()->getTimeSignatureAt(startTime, ts);
 
-//    cerr << "SegmentNotationHelper::normalizeContiguousRests:"
+//    RG_DEBUG << "SegmentNotationHelper::normalizeContiguousRests:"
 //	 << " startTime = " << startTime << ", duration = "
-//	 << duration << endl;
+//	 << duration;
 
     DurationList dl;
     ts.getDurationListForInterval(dl, duration, startTime - sigTime);
@@ -2065,7 +2068,7 @@ SegmentNotationHelper::splitPreservingPerformanceTimes(Event *e, timeT q1)
     timeT u1 = (qt + q1) - ut;
     timeT u2 = (ut + ud) - (qt + q1);
 
-    cerr << "splitPreservingPerformanceTimes: (ut,ud) (" << ut << "," << ud << "), (qt,qd) (" << qt << "," << qd << ") q1 " << q1 << ", u1 " << u1 << ", u2 " << u2 << endl;
+    RG_DEBUG << "splitPreservingPerformanceTimes: (ut,ud) (" << ut << "," << ud << "), (qt,qd) (" << qt << "," << qd << ") q1 " << q1 << ", u1 " << u1 << ", u2 " << u2;
 
     if (u1 <= 0 || u2 <= 0) { // can't do a meaningful split
         return std::pair<Event *, Event *>(0, 0);
@@ -2098,7 +2101,7 @@ SegmentNotationHelper::deCounterpoint(timeT startTime, timeT endTime)
 	if (t >= endTime) break;
 
 #ifdef DEBUG_DECOUNTERPOINT
-	std::cerr << "SegmentNotationHelper::deCounterpoint: event at " << (*i)->getAbsoluteTime() << " notation " << (*i)->getNotationAbsoluteTime() << ", duration " << (*i)->getNotationDuration() << ", type " << (*i)->getType() << std::endl;
+	RG_DEBUG << "SegmentNotationHelper::deCounterpoint: event at " << (*i)->getAbsoluteTime() << " notation " << (*i)->getNotationAbsoluteTime() << ", duration " << (*i)->getNotationDuration() << ", type " << (*i)->getType();
 #endif	    
 
 	if (!(*i)->isa(Note::EventType)) { ++i; continue; }
@@ -2107,7 +2110,7 @@ SegmentNotationHelper::deCounterpoint(timeT startTime, timeT endTime)
 	timeT di = (*i)->getNotationDuration();
 
 #ifdef DEBUG_DECOUNTERPOINT
-	std::cerr<<"looking for k"<<std::endl;
+	RG_DEBUG<<"looking for k";
 #endif	    
 
 	// find next event that's either at a different time or (if a
@@ -2116,7 +2119,7 @@ SegmentNotationHelper::deCounterpoint(timeT startTime, timeT endTime)
 	while (segment().isBeforeEndMarker(k)) {
 	    if ((*k)->isa(Note::EventType)) {
 #ifdef DEBUG_DECOUNTERPOINT
-		std::cerr<<"abstime "<<(*k)->getAbsoluteTime()<< std::endl;
+		RG_DEBUG<<"abstime "<<(*k)->getAbsoluteTime();
 #endif	    
 		if ((*k)->getNotationAbsoluteTime() > ti ||
 		    (*k)->getNotationDuration() != di) break;
@@ -2127,7 +2130,7 @@ SegmentNotationHelper::deCounterpoint(timeT startTime, timeT endTime)
 	if (!segment().isBeforeEndMarker(k)) break; // no split, no more notes
 
 #ifdef DEBUG_DECOUNTERPOINT
-	std::cerr << "k is at " << (k == segment().end() ? -1 : (*k)->getAbsoluteTime()) << ", notation " << (*k)->getNotationAbsoluteTime() << ", duration " << (*k)->getNotationDuration() << std::endl;
+	RG_DEBUG << "k is at " << (k == segment().end() ? -1 : (*k)->getAbsoluteTime()) << ", notation " << (*k)->getNotationAbsoluteTime() << ", duration " << (*k)->getNotationDuration();
 #endif	    
 
 	timeT tk = (*k)->getNotationAbsoluteTime();
@@ -2141,14 +2144,14 @@ SegmentNotationHelper::deCounterpoint(timeT startTime, timeT endTime)
 	    // do the same-time-different-durations case
 	    if (di > dk) { // split *i
 #ifdef DEBUG_DECOUNTERPOINT
-		std::cerr << "splitting i into " << dk << " and "<< (di-dk) << std::endl;
+		RG_DEBUG << "splitting i into " << dk << " and "<< (di-dk);
 #endif	    
 		splits = splitPreservingPerformanceTimes(*i, dk);
 
 		toGo = i;
 	    } else { // split *k
 #ifdef DEBUG_DECOUNTERPOINT
-		std::cerr << "splitting k into " << di << " and "<< (dk-di) << std::endl;
+		RG_DEBUG << "splitting k into " << di << " and "<< (dk-di);
 #endif	    
 		splits = splitPreservingPerformanceTimes(*k, di);
 
@@ -2156,7 +2159,7 @@ SegmentNotationHelper::deCounterpoint(timeT startTime, timeT endTime)
 	    }
 	} else if (tk - ti > 0 && tk - ti < di) { // split *i
 #ifdef DEBUG_DECOUNTERPOINT
-	    std::cerr << "splitting i[*] into " << (tk-ti) << " and "<< (di-(tk-ti)) << std::endl;
+	    RG_DEBUG << "splitting i[*] into " << (tk-ti) << " and "<< (di-(tk-ti));
 #endif	    
 	    splits = splitPreservingPerformanceTimes(*i, tk - ti);
 
@@ -2172,22 +2175,22 @@ SegmentNotationHelper::deCounterpoint(timeT startTime, timeT endTime)
 	    e2->set<Bool>(TIED_BACKWARD, true);
 
 #ifdef DEBUG_DECOUNTERPOINT
-	    std::cerr<<"Erasing:"<<std::endl;
-	    (*toGo)->dump(std::cerr);
+	    RG_DEBUG<<"Erasing:";
+	    RG_DEBUG << (**toGo);
 #endif	    
 
 	    segment().erase(toGo);
 
 #ifdef DEBUG_DECOUNTERPOINT
-	    std::cerr<<"Inserting:"<<std::endl;
-	    e1->dump(std::cerr);
+	    RG_DEBUG<<"Inserting:";
+	    RG_DEBUG << *e1;
 #endif	    
 
 	    segment().insert(e1);
 
 #ifdef DEBUG_DECOUNTERPOINT
-	    std::cerr<<"Inserting:"<<std::endl;
-	    e2->dump(std::cerr);
+	    RG_DEBUG<<"Inserting:";
+	    RG_DEBUG << *e2;
 #endif	    
 
 	    segment().insert(e2);
@@ -2195,9 +2198,9 @@ SegmentNotationHelper::deCounterpoint(timeT startTime, timeT endTime)
 	    i = segment().findTime(t);
 
 #ifdef DEBUG_DECOUNTERPOINT
-	    std::cerr<<"resync at " << t << ":" << std::endl;
-	    if (i != segment().end()) (*i)->dump(std::cerr);
-	    else std::cerr << "(end)" << std::endl;
+	    RG_DEBUG<<"resync at " << t << ":";
+	    if (i != segment().end()) RG_DEBUG << (**i);
+	    else RG_DEBUG << "(end)";
 #endif	    
 
 	} else {
@@ -2205,7 +2208,7 @@ SegmentNotationHelper::deCounterpoint(timeT startTime, timeT endTime)
 	    // no split here
 
 #ifdef DEBUG_DECOUNTERPOINT
-	    std::cerr<<"no split"<<std::endl;
+	    RG_DEBUG<<"no split";
 #endif	    
 	    ++i;
 	}
