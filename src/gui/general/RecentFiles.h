@@ -41,7 +41,7 @@ public:
      * given QSettings group and truncates when the given count of
      * strings is reached.
      */
-    RecentFiles(QString settingsGroup = "RecentFiles", size_t maxCount = 10);
+    RecentFiles(QString settingsGroup = "RecentFiles", size_t maxCount = 20);
 
     virtual ~RecentFiles();
 
