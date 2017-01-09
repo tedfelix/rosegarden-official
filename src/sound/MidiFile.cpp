@@ -162,7 +162,7 @@ MidiFile::read(std::ifstream *midiFile, unsigned long numberOfBytes)
         // Update the progress dialog if one is connected.
         if (m_progressDialog) {
             if (m_progressDialog->wasCanceled())
-                throw Exception(qstrtostr(QObject::tr("Cancelled by user.")));
+                throw Exception(qstrtostr(QObject::tr("Cancelled by user")));
 
             // This is the first 20% of the "reading" process.
             int progressValue = static_cast<int>(
@@ -697,7 +697,7 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
 
         if (m_progressDialog) {
             if (m_progressDialog->wasCanceled()) {
-                m_error = qstrtostr(QObject::tr("Cancelled by user."));
+                m_error = qstrtostr(QObject::tr("Cancelled by user"));
                 return false;
             }
 
