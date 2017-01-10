@@ -556,9 +556,21 @@ FileSource::isAvailable()
     return available;
 }
 
+
+// #########################################
+// The nested event loops below are horribly fragile.
+// They can lead to all sorts of bugs due to unexpected reentrancy
+// (e.g. the user closes the window while in that while loop)
+// There is no easy solution for synchronous networking operations
+// in the main thread. Change this API to emit signals and connect to them, instead.
+// i.e. make it asynchronous, just like KIO or QNetworkReply.
+// #########################################
+
+
 void
 FileSource::waitForStatus()
 {
+    // ### BAD, see comment above
     while (m_ok && (!m_done && m_lastStatus == 0)) {
 //        std::cerr << "waitForStatus: processing (last status " << m_lastStatus << ")" << std::endl;
         QCoreApplication::processEvents();
@@ -568,6 +580,7 @@ FileSource::waitForStatus()
 void
 FileSource::waitForData()
 {
+    // ### BAD, see comment above
     while (m_ok && !m_done) {
 //        std::cerr << "FileSource::waitForData: calling QApplication::processEvents" << std::endl;
         QCoreApplication::processEvents();
