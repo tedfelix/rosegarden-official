@@ -481,10 +481,10 @@ MusicXmlExporter::write()
 {
     std::ofstream str(m_fileName.c_str(), std::ios::out);
     if (!str) {
-        std::cerr << "MusicXmlExporter::write() - can't write file " << m_fileName << std::endl;
+        RG_WARNING << "write(): Can't write file" << m_fileName;
         return false;
     }
-    std::cerr << "writing MusicXML to " << m_fileName << std::endl;
+    RG_DEBUG << "write(): Writing MusicXML to" << m_fileName;
     std::string version;
     switch (m_MusicXmlVersion) {
 
@@ -598,7 +598,7 @@ MusicXmlExporter::write()
             delete *c;
     }
     str.close();
-    std::cerr << "MusicXML generated.\n";
+    RG_DEBUG << "write(): MusicXML generated.";
     return true;
 }
 
