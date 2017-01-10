@@ -339,7 +339,6 @@ set(rg_CPPS
   gui/general/DecoyAction.cpp
   gui/general/PresetGroup.cpp
   gui/general/ActionCommandRegistry.cpp
-  gui/general/ProgressReporter.cpp
   gui/general/GUIPalette.cpp
   gui/general/HZoomable.cpp
   gui/general/ClefIndex.cpp
