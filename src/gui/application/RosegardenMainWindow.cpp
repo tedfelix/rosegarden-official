@@ -2043,16 +2043,11 @@ RosegardenMainWindow::slotFileOpen()
                     tr("All files") + " (*)", 0, 0);
 
     // If the user has cancelled, bail.
-    if (fname == "")
-        return;
-
-    QUrl url(fname);
-
-    if (!url.isValid())
+    if (fname.isEmpty())
         return;
 
     // Update the last used path for File > Open.
-    directory = QFileInfo(url.path()).canonicalPath();
+    directory = QFileInfo(fname).canonicalPath();
     settings.beginGroup(LastUsedPathsConfigGroup);
     settings.setValue("open_file", directory);
     settings.endGroup();
@@ -2069,7 +2064,7 @@ RosegardenMainWindow::slotFileOpen()
     }
 
     // Continue opening the file.
-    openURL(url);
+    openURL(QUrl::fromLocalFile(fname));
 }
 
 void
@@ -2079,34 +2074,20 @@ RosegardenMainWindow::slotMerge()
     settings.beginGroup(LastUsedPathsConfigGroup);
     QString directory = settings.value("merge_file", QDir::homePath()).toString();
 
-    QUrl url = FileDialog::getOpenFileName(this, tr("Open File"), directory,
+    const QString file = FileDialog::getOpenFileName(this, tr("Open File"), directory,
                tr("Rosegarden files") + " (*.rg *.RG)" + ";;" +
                tr("All files") + " (*)", 0, 0);
 
-    if (url.isEmpty()) {
+    if (file.isEmpty()) {
         return ;
     }
 
-    QDir d = QFileInfo(url.path()).dir();
+    QDir d = QFileInfo(file).dir();
     directory = d.canonicalPath();
     settings.setValue("merge_file", directory);
     settings.endGroup();
 
-    QString target;
-
-    //&&& KIO used to show a progress dialog of its own; we need to
-    //replicate that
-
-    FileSource source(url);
-    if (!source.isAvailable()) {
-        QMessageBox::critical(this, tr("Rosegarden"), tr("Cannot open file %1").arg(url.toString()));
-        return;
-    }
-
-    source.waitForData();
-    target = source.getLocalFilename();
-
-    mergeFile(target);
+    mergeFile(file);
 }
 
 void
@@ -2121,8 +2102,8 @@ RosegardenMainWindow::slotFileOpenRecent()
         return;
     }
 
-    QString path = action->objectName();
-    if (path.isEmpty()) return;
+    QString pathOrUrl = action->objectName();
+    if (pathOrUrl.isEmpty()) return;
 
     TmpStatusMsg msg(tr("Opening file..."), this);
 
@@ -2132,7 +2113,7 @@ RosegardenMainWindow::slotFileOpenRecent()
         }
     }
 
-    openURL(path);
+    openURL(QUrl::fromUserInput(pathOrUrl));
 }
 
 void
@@ -2248,14 +2229,6 @@ RosegardenMainWindow::getValidWriteFileName(QString descriptiveExtension,
 
     }
 
-    QUrl *u = new QUrl(name);
-
-    if (!u->isValid()) {
-        QMessageBox::warning(this, tr("Rosegarden"), 
-            tr("<qt>Sorry.<br>\"%1\" is not a valid filename.</qt>").arg(name));
-        return "";
-    }
-
     QFileInfo info(name);
 
     if (info.isDir()) {
@@ -2277,7 +2250,7 @@ RosegardenMainWindow::getValidWriteFileName(QString descriptiveExtension,
     }
 
     // Write the directory to the settings
-    QDir d = QFileInfo(u->path()).dir();
+    QDir d = QFileInfo(name).dir();
     directory = d.canonicalPath();
     settings.setValue(path_key, directory);
     settings.endGroup();
@@ -4042,32 +4015,20 @@ RosegardenMainWindow::slotImportProject()
     settings.beginGroup(LastUsedPathsConfigGroup);
     QString directory = settings.value("import_project", QDir::homePath()).toString();
 
-    QUrl url = FileDialog::getOpenFileName(this, tr("Import Rosegarden Project File"), directory,
+    const QString file = FileDialog::getOpenFileName(this, tr("Import Rosegarden Project File"), directory,
                tr("Rosegarden Project files") + " (*.rgp *.RGP)" + ";;" +
                tr("All files") + " (*)", 0, 0);
 
-    if (url.isEmpty()) {
+    if (file.isEmpty()) {
         return ;
     }
 
-    QDir d = QFileInfo(url.path()).dir();
+    QDir d = QFileInfo(file).dir();
     directory = d.canonicalPath();
     settings.setValue("import_project", directory);
     settings.endGroup();
 
-    //&&& KIO used to show a progress dialog of its own; we need to
-    //replicate that
-
-    QString tmpfile;
-    FileSource source(url);
-    if (!source.isAvailable()) {
-        QMessageBox::critical(this, tr("Rosegarden"), tr("Cannot open file %1").arg(url.toString()));
-        return ;
-    }
-    source.waitForData();
-    tmpfile = source.getLocalFilename();
-
-    importProject(tmpfile);
+    importProject(file);
 }
 
 void
@@ -4094,33 +4055,20 @@ RosegardenMainWindow::slotImportMIDI()
     settings.beginGroup(LastUsedPathsConfigGroup);
     QString directory = settings.value("import_midi", QDir::homePath()).toString();
 
-    QUrl url = FileDialog::getOpenFileName(this, tr("Open MIDI File"), directory,
+    const QString file = FileDialog::getOpenFileName(this, tr("Open MIDI File"), directory,
                tr("MIDI files") + " (*.mid *.midi *.MID *.MIDI)" + ";;" +
                tr("All files") + " (*)", 0, 0);
 
-    if (url.isEmpty()) {
+    if (file.isEmpty()) {
         return ;
     }
 
-    QDir d = QFileInfo(url.path()).dir();
+    QDir d = QFileInfo(file).dir();
     directory = d.canonicalPath();
     settings.setValue("import_midi", directory);
     settings.endGroup();
 
-    //&&& KIO used to show a progress dialog of its own; we need to
-    //replicate that
-
-    QString tmpfile;
-    FileSource source(url);
-    if (!source.isAvailable()) {
-        QMessageBox::critical(this, tr("Rosegarden"), tr("Cannot open file %1").arg(url.toString()));
-        return ;
-    }
-
-    source.waitForData();
-    tmpfile = source.getLocalFilename();
-
-    openFile(tmpfile, ImportMIDI); // does everything including setting the document
+    openFile(file, ImportMIDI); // does everything including setting the document
 }
 
 void
@@ -4130,33 +4078,20 @@ RosegardenMainWindow::slotMergeMIDI()
     settings.beginGroup(LastUsedPathsConfigGroup);
     QString directory = settings.value("merge_midi", QDir::homePath()).toString();
 
-    QUrl url = FileDialog::getOpenFileName(this, tr("Merge MIDI File"), directory,
+    const QString file = FileDialog::getOpenFileName(this, tr("Merge MIDI File"), directory,
                tr("MIDI files") + " (*.mid *.midi *.MID *.MIDI)" + ";;" +
                tr("All files") + " (*)", 0, 0);
 
-    if (url.isEmpty()) {
+    if (file.isEmpty()) {
         return ;
     }
 
-    QDir d = QFileInfo(url.path()).dir();
+    QDir d = QFileInfo(file).dir();
     directory = d.canonicalPath();
     settings.setValue("merge_midi", directory);
     settings.endGroup();
 
-    //&&& KIO used to show a progress dialog of its own; we need to
-    //replicate that
-
-    QString tmpfile;
-    FileSource source(url);
-    if (!source.isAvailable()) {
-        QMessageBox::critical(this, tr("Rosegarden"), tr("Cannot open file %1").arg(url.toString()));
-        return ;
-    }
-
-    tmpfile = source.getLocalFilename();
-    source.waitForData();
-
-    mergeFile(tmpfile, ImportMIDI);
+    mergeFile(file, ImportMIDI);
 }
 
 QTextCodec *
@@ -4399,33 +4334,20 @@ RosegardenMainWindow::slotImportRG21()
     settings.beginGroup(LastUsedPathsConfigGroup);
     QString directory = settings.value("import_relic", QDir::homePath()).toString();
 
-    QUrl url = FileDialog::getOpenFileName(this, tr("Open X11 Rosegarden File"), directory,
+    const QString file = FileDialog::getOpenFileName(this, tr("Open X11 Rosegarden File"), directory,
                tr("X11 Rosegarden files") + " (*.rose)" + ";;" +
                tr("All files") + " (*)", 0, 0);
 
-    if (url.isEmpty()) {
+    if (file.isEmpty()) {
         return ;
     }
 
-    QDir d = QFileInfo(url.path()).dir();
+    QDir d = QFileInfo(file).dir();
     directory = d.canonicalPath();
     settings.setValue("import_relic", directory);
     settings.endGroup();
 
-    //&&& KIO used to show a progress dialog of its own; we need to
-    //replicate that
-
-    QString tmpfile;
-    FileSource source(url);
-    if (!source.isAvailable()) {
-        QMessageBox::critical(this, tr("Rosegarden"), tr("Cannot open file %1").arg(url.toString()));
-        return ;
-    }
-
-    tmpfile = source.getLocalFilename();
-    source.waitForData();
-
-    openFile(tmpfile, ImportRG21);
+    openFile(file, ImportRG21);
 }
 
 void
@@ -4435,33 +4357,20 @@ RosegardenMainWindow::slotMergeRG21()
     settings.beginGroup(LastUsedPathsConfigGroup);
     QString directory = settings.value("merge_relic", QDir::homePath()).toString();
 
-    QUrl url = FileDialog::getOpenFileName(this, tr("Open X11 Rosegarden File"), directory,
+    const QString file = FileDialog::getOpenFileName(this, tr("Open X11 Rosegarden File"), directory,
                tr("X11 Rosegarden files") + " (*.rose)" + ";;" +
                tr("All files") + " (*)", 0, 0);
 
-    if (url.isEmpty()) {
+    if (file.isEmpty()) {
         return ;
     }
 
-    QDir d = QFileInfo(url.path()).dir();
+    QDir d = QFileInfo(file).dir();
     directory = d.canonicalPath();
     settings.setValue("import_relic", directory);
     settings.endGroup();
 
-    //&&& KIO used to show a progress dialog of its own; we need to
-    //replicate that
-
-    QString tmpfile;
-    FileSource source(url);
-    if (!source.isAvailable()) {
-        QMessageBox::critical(this, tr("Rosegarden"), tr("Cannot open file %1").arg(url.toString()));
-        return ;
-    }
-
-    tmpfile = source.getLocalFilename();
-    source.waitForData();
-
-    mergeFile(tmpfile, ImportRG21);
+    mergeFile(file, ImportRG21);
 }
 
 RosegardenDocument*
@@ -4523,32 +4432,19 @@ RosegardenMainWindow::slotImportHydrogen()
     settings.beginGroup(LastUsedPathsConfigGroup);
     QString directory = settings.value("import_hydrogen", QDir::homePath()).toString();
 
-    QUrl url = FileDialog::getOpenFileName(this, tr("Open Hydrogen File"), directory,
+    const QString file = FileDialog::getOpenFileName(this, tr("Open Hydrogen File"), directory,
                tr("All files") + " (*)", 0, 0);
 
-    if (url.isEmpty()) {
+    if (file.isEmpty()) {
         return ;
     }
 
-    QDir d = QFileInfo(url.path()).dir();
+    QDir d = QFileInfo(file).dir();
     directory = d.canonicalPath();
     settings.setValue("import_hydrogen", directory);
     settings.endGroup();
 
-    //&&& KIO used to show a progress dialog of its own; we need to
-    //replicate that
-
-    QString tmpfile;
-    FileSource source(url);
-    if (!source.isAvailable()) {
-        QMessageBox::critical(this, tr("Rosegarden"), tr("Cannot open file %1").arg(url.toString()));
-        return ;
-    }
-
-    tmpfile = source.getLocalFilename();
-    source.waitForData();
-
-    openFile(tmpfile, ImportHydrogen);
+    openFile(file, ImportHydrogen);
 }
 
 void
@@ -4558,32 +4454,19 @@ RosegardenMainWindow::slotMergeHydrogen()
     settings.beginGroup(LastUsedPathsConfigGroup);
     QString directory = settings.value("merge_hydrogen", QDir::homePath()).toString();
 
-    QUrl url = FileDialog::getOpenFileName(this, tr("Open Hydrogen File"), directory,
+    const QString file = FileDialog::getOpenFileName(this, tr("Open Hydrogen File"), directory,
                tr("All files") + " (*)", 0, 0);
 
-    if (url.isEmpty()) {
+    if (file.isEmpty()) {
         return ;
     }
 
-    QDir d = QFileInfo(url.path()).dir();
+    QDir d = QFileInfo(file).dir();
     directory = d.canonicalPath();
     settings.setValue("merge_hydrogen", directory);
     settings.endGroup();
 
-    //&&& KIO used to show a progress dialog of its own; we need to
-    //replicate that
-
-    QString tmpfile;
-    FileSource source(url);
-    if (!source.isAvailable()) {
-        QMessageBox::critical(this, tr("Rosegarden"), tr("Cannot open file %1").arg(url.toString()));
-        return ;
-    }
-
-    tmpfile = source.getLocalFilename();
-    source.waitForData();
-
-    mergeFile(tmpfile, ImportHydrogen);
+    mergeFile(file, ImportHydrogen);
 }
 
 
@@ -4646,33 +4529,20 @@ RosegardenMainWindow::slotImportMusicXML()
     settings.beginGroup(LastUsedPathsConfigGroup);
     QString directory = settings.value("import_musicxml", QDir::homePath()).toString();
 
-    QUrl url = FileDialog::getOpenFileName(this, tr("Open MusicXML File"), directory,
+    const QString file = FileDialog::getOpenFileName(this, tr("Open MusicXML File"), directory,
                tr("XML files") + " (*.xml *.XML)" + ";;" +
                tr("All files") + " (*)", 0, 0);
 
-    if (url.isEmpty()) {
+    if (file.isEmpty()) {
         return ;
     }
 
-    QDir d = QFileInfo(url.path()).dir();
+    QDir d = QFileInfo(file).dir();
     directory = d.canonicalPath();
     settings.setValue("import_musicxml", directory);
     settings.endGroup();
 
-    //&&& KIO used to show a progress dialog of its own; we need to
-    //replicate that
-
-    QString tmpfile;
-    FileSource source(url);
-    if (!source.isAvailable()) {
-        QMessageBox::critical(this, tr("Rosegarden"), tr("Cannot open file %1").arg(url.toString()));
-        return ;
-    }
-
-    tmpfile = source.getLocalFilename();
-    source.waitForData();
-
-    openFile(tmpfile, ImportMusicXML);
+    openFile(file, ImportMusicXML);
 }
 
 void
@@ -4682,33 +4552,20 @@ RosegardenMainWindow::slotMergeMusicXML()
     settings.beginGroup(LastUsedPathsConfigGroup);
     QString directory = settings.value("merge_musicxml", QDir::homePath()).toString();
 
-    QUrl url = FileDialog::getOpenFileName(this, tr("Open MusicXML File"), directory,
+    const QString file = FileDialog::getOpenFileName(this, tr("Open MusicXML File"), directory,
                tr("XML files") + " (*.xml *.XML)" + ";;" +
                tr("All files") + " (*)", 0, 0);
 
-    if (url.isEmpty()) {
+    if (file.isEmpty()) {
         return ;
     }
 
-    QDir d = QFileInfo(url.path()).dir();
+    QDir d = QFileInfo(file).dir();
     directory = d.canonicalPath();
     settings.setValue("merge_musicxml", directory);
     settings.endGroup();
 
-    //&&& KIO used to show a progress dialog of its own; we need to
-    //replicate that
-
-    QString tmpfile;
-    FileSource source(url);
-    if (!source.isAvailable()) {
-        QMessageBox::critical(this, tr("Rosegarden"), tr("Cannot open file %1").arg(url.toString()));
-        return ;
-    }
-
-    tmpfile = source.getLocalFilename();
-    source.waitForData();
-
-    mergeFile(tmpfile, ImportMusicXML);
+    mergeFile(file, ImportMusicXML);
 }
 
 RosegardenDocument*
@@ -8284,29 +8141,19 @@ RosegardenMainWindow::slotImportStudio()
     settings.beginGroup(LastUsedPathsConfigGroup);
     QString directory = settings.value("import_studio", ResourceFinder().getResourceDir("library")).toString();
 
-    QUrl url = FileDialog::getOpenFileName(this, tr("Import Studio from File"), directory,
+    const QString file = FileDialog::getOpenFileName(this, tr("Import Studio from File"), directory,
                     tr("All supported files") + " (*.rg *.RG *.rgt *.RGT *.rgp *.RGP)" + ";;" +
                     tr("All files") + " (*)", 0, 0);
 
-    if (url.isEmpty())
+    if (file.isEmpty())
         return ;
 
-    QDir d = QFileInfo(url.path()).dir();
+    QDir d = QFileInfo(file).dir();
     directory = d.canonicalPath();
     settings.setValue("import_studio", directory);
     settings.endGroup();
 
-    QString target;
-    FileSource source(url);
-    if (!source.isAvailable()) {
-        QMessageBox::critical(this, tr("Rosegarden"), tr("Cannot open file %1").arg(url.toString()));
-        return ;
-    }
-
-    target = source.getLocalFilename();
-    source.waitForData();
-
-    slotImportStudioFromFile(target);
+    slotImportStudioFromFile(file);
 }
 
 void

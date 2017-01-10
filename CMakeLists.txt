@@ -108,6 +108,7 @@ else()
     add_definitions(-DNDEBUG -DBUILD_RELEASE -DNO_TIMING)
 endif()
 
+add_definitions(-DQT_NO_URL_CAST_FROM_STRING)
 add_definitions(-DUNSTABLE) # this is changed to STABLE by the release script
 
 # Compiler flags

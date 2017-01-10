@@ -284,7 +284,7 @@ FileSource::init()
 #ifdef DEBUG_FILE_SOURCE
             std::cerr << "FileSource::init: Resource file of this name does not exist, switching to non-resource URL" << std::endl;
 #endif
-            m_url = resourceFile;
+            m_url = QUrl(resourceFile);
             m_resource = false;
         }
     }

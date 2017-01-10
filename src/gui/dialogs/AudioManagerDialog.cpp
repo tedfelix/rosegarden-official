@@ -189,8 +189,8 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
     connect(m_fileList, SIGNAL(itemSelectionChanged()),
             this, SLOT(slotSelectionChanged()));
     
-    connect(m_fileList, SIGNAL(dropped(QDropEvent*, QTreeWidget*, QStringList)),
-            SLOT(slotDropped(QDropEvent*, QTreeWidget*, QStringList)));
+    connect(m_fileList, SIGNAL(dropped(QDropEvent*, QTreeWidget*, QList<QUrl>)),
+            SLOT(slotDropped(QDropEvent*, QTreeWidget*, QList<QUrl>)));
     
     
     //
@@ -768,13 +768,12 @@ AudioManagerDialog::slotAdd()
     RG_DEBUG << "AudioManagerDialog::slotAdd() - using stored/default path: "
               << qstrtostr(directory);
 
-    QStringList urlList;
-    urlList = FileDialog::getOpenFileNames(this, tr("Select one or more audio files"), directory, extensionList);
+    const QStringList fileList = FileDialog::getOpenFileNames(this, tr("Select one or more audio files"), directory, extensionList);
 
     QDir d;
-    for (int i = 0 ; i < urlList.size(); i++) {
-        addFile(urlList.at(i));
-        d = QFileInfo(urlList.at(i)).dir();
+    for (int i = 0 ; i < fileList.size(); i++) {
+        addFile(QUrl::fromLocalFile(fileList.at(i)));
+        d = QFileInfo(fileList.at(i)).dir();
     }
 
     // pick the directory from the last URL encountered to save for future
@@ -782,7 +781,7 @@ AudioManagerDialog::slotAdd()
     // user hit cancel on the file dialog without choosing anything)
     directory = d.canonicalPath();
 
-    if (!urlList.isEmpty()) {
+    if (!fileList.isEmpty()) {
         settings.setValue("add_audio_file", directory);
 
         RG_DEBUG << "AudioManagerDialog::slotAdd() - storing path: "
@@ -1248,18 +1247,14 @@ AudioManagerDialog::addFile(const QUrl& kurl)
 
 
 void
-AudioManagerDialog::slotDropped(QDropEvent */* event */, QTreeWidget*, QStringList sl){
-    /// signaled from AudioListView on dropEvent, sl = list of items (filenames)
+AudioManagerDialog::slotDropped(QDropEvent* /* event */, QTreeWidget*, const QList<QUrl> &sl){
+    /// signaled from AudioListView on dropEvent, sl = list of items (URLs)
     if( sl.empty() ) return;
-    
-    RG_DEBUG << "AudioManagerDialog::slotDropped() - Adding DroppedFile " << sl[0];
-    QUrl urlx;
-    
+
     // iterate over dropped URIs
-    for( int i=0; i<sl.count(); i++ ){
-        urlx = sl[i];
-        
-        addFile( urlx );
+    for( int i=0; i<sl.count(); i++ ) {
+        RG_DEBUG << "AudioManagerDialog::slotDropped() - Adding DroppedFile " << sl.at(i);
+        addFile( sl.at(i) );
     }
 }
 
@@ -1317,7 +1312,7 @@ AudioManagerDialog::addAudioFile(const QString &filePath)
 {
     QString fp = QFileInfo(filePath).absoluteFilePath();
     RG_DEBUG << "\\_AudioFilePath : " << fp;
-    return addFile(fp);
+    return addFile(QUrl::fromLocalFile(fp));
 }
 
 bool

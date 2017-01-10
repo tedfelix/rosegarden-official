@@ -164,23 +164,21 @@ void AudioListView::dragEnterEvent(QDragEnterEvent *e){
 
 void AudioListView::dropEvent(QDropEvent* e)
 {
-    QList<QUrl> uList;
-    QStringList uriList;
-    QString text;
+    QList<QUrl> uriList;
 
     if (e->mimeData()->hasUrls() || e->mimeData()->hasText()) {
-        
+
         if( e->source() ){
             RG_DEBUG << "AudioListView::dropEvent() - objectName : " << e->source()->objectName();
         }
-        
+
         // if (drag-source == this)  (or a child item) disallow drop
         if( e->source() && ((e->source() == this) || (e->source()->parent() && (e->source()->parent() == this )))){
             // don't accept dropped items inside the ListView
             // moving items not supported yet.
             return;
         }
-        
+
         if (e->proposedAction() & Qt::CopyAction) {
             e->acceptProposedAction();
         } else {
@@ -189,14 +187,9 @@ void AudioListView::dropEvent(QDropEvent* e)
         }
 
         if (e->mimeData()->hasUrls()) {
-            uList = e->mimeData()->urls();
-            if (!uList.isEmpty()) {
-                for (int i = 0; i < uList.size(); ++i)  {
-                    uriList.append(QString::fromLocal8Bit(uList.value(i).toEncoded().data()));
-               }
-            }
+            uriList = e->mimeData()->urls();
         } else {  // text/plain
-            text = e->mimeData()->text();
+            uriList << QUrl::fromUserInput(e->mimeData()->text()); // supports paths and URLs
         }
     } else {
         e->ignore();
@@ -204,22 +197,15 @@ void AudioListView::dropEvent(QDropEvent* e)
         return;
     }
 
-    if (uriList.empty() && text == "") {
+    if (uriList.empty()) {
         RG_DEBUG << "AudioListView::dropEvent: Nothing dropped";
         return;
     }
-    
+
     RG_DEBUG << "AudioListView::dropEvent() - Dropped this: \n " << uriList;
-    
-    
-    if( text != "" ){
-        uriList << text;
-    }
-    
+
     emit dropped(e, dynamic_cast<QTreeWidget*>(this), uriList);
     // send to AudioManagerDialog::slotDropped()
-    
-    // signal: dropped(QDropEvent*, QTreeWidgetItem*)
 }
 
 

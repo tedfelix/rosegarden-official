@@ -32,7 +32,7 @@ public:
 protected:
 signals:
     
-    void dropped(QDropEvent*, QTreeWidget*, QStringList );
+    void dropped(QDropEvent*, QTreeWidget*, const QList<QUrl>&);
     
 protected:
 //     bool acceptDrag(QDropEvent* e) const;

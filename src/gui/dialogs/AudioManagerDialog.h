@@ -168,8 +168,7 @@ signals:
 
     void closing();
 protected slots:
-    //void slotDropped(QDropEvent*, QTreeWidgetItem*);
-    void slotDropped(QDropEvent *event, QTreeWidget*, QStringList sl ); // new
+    void slotDropped(QDropEvent *event, QTreeWidget*, const QList<QUrl> &sl );
     void slotCancelPlayingAudio();
 
 protected:
