@@ -168,7 +168,6 @@ set(rg_CPPS
   gui/widgets/AudioFaderBox.cpp
   gui/widgets/QuantizeParameters.cpp
   gui/widgets/ColourTableItem.cpp
-  gui/widgets/ProgressDialog.cpp
   gui/widgets/VUMeter.cpp
   gui/widgets/TmpStatusMsg.cpp
   gui/widgets/BaseTextFloat.cpp
