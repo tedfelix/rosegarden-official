@@ -19,7 +19,9 @@
 #include "PitchGraphWidget.h"
 #include "PitchHistory.h"
 
+#ifdef HAVE_LIBJACK
 #include "sound/JackCaptureClient.h"
+#endif
 #include "sound/PitchDetector.h"
 
 // Need to find actions for <<< and >>> transport buttons
@@ -123,14 +125,17 @@ PitchTrackerView::PitchTrackerView(RosegardenDocument *doc,
     // m_notationWidget is owned by our parent, NotationView
     m_notationWidget->addWidgetToBottom(m_pitchGraphWidget);
 
+#ifdef HAVE_LIBJACK
     // jack capture client
     m_jackCaptureClient =
         new JackCaptureClient("Rosegarden PitchTracker",
                               m_framesize + m_stepsize);
-                              
+
     if (m_jackCaptureClient->isConnected()) {
         m_jackConnected = true;
-    } else {
+    } else
+#endif
+    {
         QMessageBox::critical(this, "",
                               tr("Cannot connect to jack! "
                               "Ensure jack server is running and no other "
@@ -138,6 +143,7 @@ PitchTrackerView::PitchTrackerView(RosegardenDocument *doc,
         return;
     }
     
+#ifdef HAVE_LIBJACK
     int sampleRate = m_jackCaptureClient->getSampleRate();
 
     // pitch detector
@@ -149,12 +155,17 @@ PitchTrackerView::PitchTrackerView(RosegardenDocument *doc,
     setSegments(doc, segments);
     
     setupActions(tuning, method);
+#else
+    Q_UNUSED(method);
+#endif
 }
 
 PitchTrackerView::~PitchTrackerView()
 {
-    if (m_pitchDetector) delete m_pitchDetector;
-    if (m_jackCaptureClient) delete m_jackCaptureClient;
+    delete m_pitchDetector;
+#ifdef HAVE_LIBJACK
+    delete m_jackCaptureClient;
+#endif
 }
 
 void PitchTrackerView::setupActions(int initialTuning, int initialMethod)
@@ -282,7 +293,9 @@ PitchTrackerView::slotStartTracker()
         slotStopTracker();
     } else {
         m_history.clear();
+#ifdef HAVE_LIBJACK
         m_jackCaptureClient->startProcessing();
+#endif
         m_running = true;
 
         NotationStaff *currentStaff = 
@@ -301,7 +314,9 @@ void
 PitchTrackerView::slotStopTracker()
 {
     m_running = false;
+#ifdef HAVE_LIBJACK
     m_jackCaptureClient->stopProcessing();
+#endif
 }
 
 
@@ -415,11 +430,13 @@ PitchTrackerView::slotUpdateValues(timeT time)
         addPitchTime(PitchDetector::NONE, time, rt);
  
     } else if (e->isa(Note::EventType)) {
+#ifdef HAVE_LIBJACK
         if (m_jackCaptureClient->getFrame(m_pitchDetector->getInBuffer(),
                                           m_pitchDetector->getBufferSize())) {
             const double freq = m_pitchDetector->getPitch();
             addPitchTime(freq, time, rt);
         }
+#endif
 
     } else {
         RG_WARNING << "PitchTrackerView: ummm, what's a \""

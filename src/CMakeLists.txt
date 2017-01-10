@@ -542,7 +542,6 @@ set(rg_CPPS
   sound/PlayableAudioFile.cpp
   sound/SoundDriver.cpp
   sound/AudioCache.cpp
-  sound/JackCaptureClient.cpp
   sound/Tuning.cpp
   sound/AudioFileManager.cpp
   sound/AudioPlayQueue.cpp
@@ -714,6 +713,12 @@ set(rg_CPPS
   sequencer/SequencerThread.cpp
   sequencer/RosegardenSequencer.cpp
 )
+
+if (JACK_FOUND)
+  set(rg_CPPS ${rg_CPPS}
+    sound/JackCaptureClient.cpp
+  )
+endif()
 
 set(rg_UIS
   gui/dialogs/RosegardenTransportUi.ui
