@@ -519,7 +519,7 @@ Event::get(const PropertyName &name, typename PropertyDefn<P>::basic_type &val) 
         }
         else {
 #ifndef NDEBUG
-            qWarning() << "Event::get() Error: Attempt to get property \"" << name.getName()
+            RG_DEBUG << "get() Error: Attempt to get property \"" << name.getName()
                  << "\" as" << PropertyDefn<P>::typeName() <<", actual type is"
                  << sb->getTypeName();
 #endif
@@ -558,7 +558,7 @@ Event::get(const PropertyName &name) const
     } else {
 
 #ifndef NDEBUG
-        qWarning() << "Event::get(): Error dump follows:";
+        RG_DEBUG << "get(): Error dump follows:";
         dump(std::cerr);
 #endif
         throw NoData(name.getName(), __FILE__, __LINE__);
