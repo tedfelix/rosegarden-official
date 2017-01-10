@@ -20,7 +20,6 @@
 #define RG_MUPEXPORTER_H
 
 #include "base/Track.h"
-#include "gui/general/ProgressReporter.h"
 #include <map>
 #include <string>
 #include <utility>
@@ -45,7 +44,7 @@ class Composition;
  * Mup file export
  */
 
-class MupExporter : public ProgressReporter
+class MupExporter
 {
 public:
     MupExporter(QObject *parent, Composition *, std::string fileName);

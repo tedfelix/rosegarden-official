@@ -32,7 +32,6 @@
 #include "base/SegmentNotationHelper.h"
 #include "base/Sets.h"
 #include "base/Track.h"
-#include "gui/general/ProgressReporter.h"
 #include <QObject>
 
 using std::string;
@@ -41,10 +40,9 @@ namespace Rosegarden
 {
 using namespace BaseProperties;
 
-MupExporter::MupExporter(QObject *parent,
+MupExporter::MupExporter(QObject * /*parent*/,
                          Composition *composition,
                          string fileName) :
-        ProgressReporter(parent),
         m_composition(composition),
         m_fileName(fileName)
 {
