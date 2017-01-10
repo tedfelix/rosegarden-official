@@ -5424,18 +5424,38 @@ RosegardenMainWindow::slotExportCsound()
 void
 RosegardenMainWindow::exportCsoundFile(QString file)
 {
-    ProgressDialog *progressDlg = new ProgressDialog(tr("Exporting Csound score file..."),
-                               (QWidget*)this);
-//    CsoundExporter e(this, &m_doc->getComposition(), std::string(QFile::encodeName(file)));
-    CsoundExporter e(this, &m_doc->getComposition(), std::string(file.toLocal8Bit()));
+    // Progress Dialog
+    // ??? The Csound export process is so fast, this never has a
+    //     chance to appear.  Even with a huge composition.  I'm
+    //     just going to leave this as an indeterminate progress
+    //     dialog.  It can probably just be removed.
+    QProgressDialog progressDialog(
+            tr("Exporting Csound score file..."),  // labelText
+            tr("Cancel"),  // cancelButtonText
+            0, 0,  // min, max
+            this);  // parent
+    progressDialog.setWindowTitle(tr("Rosegarden"));
+    progressDialog.setWindowModality(Qt::WindowModal);
+    // No sense in auto close since we will close anyway when
+    // this object goes out of scope.
+    progressDialog.setAutoClose(false);
+    // Get rid of the cancel button for now.
+    progressDialog.setCancelButton(NULL);
+#if QT_VERSION < 0x050000
+    // Qt4 has several bugs related to delayed showing of
+    // progress dialogs.  Just force it up.
+    progressDialog.show();
+#endif
 
-    connect(&e, SIGNAL(setValue(int)),
-            progressDlg, SLOT(setValue(int)));
+    CsoundExporter csoundExporter(
+            this,  // parent
+            &m_doc->getComposition(),  // composition
+            std::string(file.toLocal8Bit()));  // fileName
 
-    if (!e.write()) {
-        QMessageBox::warning(this, tr("Rosegarden"), tr("Export failed.  The file could not be opened for writing."));
+    if (!csoundExporter.write()) {
+        QMessageBox::warning(this, tr("Rosegarden"),
+                tr("Export failed.  The file could not be opened for writing."));
     }
-    progressDlg->close();
 }
 
 void

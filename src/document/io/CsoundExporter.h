@@ -19,7 +19,6 @@
 #ifndef RG_CSOUNDEXPORTER_H
 #define RG_CSOUNDEXPORTER_H
 
-#include "gui/general/ProgressReporter.h"
 #include <string>
 
 
@@ -36,7 +35,7 @@ class Composition;
  * Csound scorefile export
  */
 
-class CsoundExporter : public ProgressReporter
+class CsoundExporter
 {
 public:
     CsoundExporter(QObject *parent, Composition *, std::string fileName);

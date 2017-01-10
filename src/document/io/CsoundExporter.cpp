@@ -23,7 +23,6 @@
 #include "base/NotationTypes.h"
 #include "base/Segment.h"
 #include "base/Track.h"
-#include "gui/general/ProgressReporter.h"
 #include "gui/application/RosegardenApplication.h"
 
 #include <QObject>
@@ -34,10 +33,9 @@
 namespace Rosegarden
 {
 
-CsoundExporter::CsoundExporter(QObject *parent,
+CsoundExporter::CsoundExporter(QObject * /*parent*/,
                                Composition *composition,
                                std::string fileName) :
-        ProgressReporter(parent),
         m_composition(composition),
         m_fileName(fileName)
 {
@@ -71,11 +69,13 @@ CsoundExporter::write()
         << m_composition->getCopyrightNote() << "\n";
     }
 
-    int trackNo = 0;
+    //int trackNo = 0;
+
     for (Composition::iterator i = m_composition->begin();
             i != m_composition->end(); ++i) {
 
-        emit setValue(int(double(trackNo++) / double(m_composition->getNbTracks()) * 100.0));
+        // ??? The Csound export process is so fast, this is unnecessary.
+        //emit setValue(int(double(trackNo++) / double(m_composition->getNbTracks()) * 100.0));
 
         str << "\n;; Segment: \"" << (*i)->getLabel() << "\"\n";
         str << ";; on Track: \""
