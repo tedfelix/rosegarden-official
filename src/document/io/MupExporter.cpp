@@ -16,6 +16,8 @@
 */
 
 #define RG_MODULE_STRING "[MupExporter]"
+// Turn off RG_DEBUG output.
+//#define RG_NO_DEBUG_PRINT
 
 #include "MupExporter.h"
 
@@ -76,8 +78,10 @@ MupExporter::write()
     << tspair.second.getNumerator() << "/"
     << tspair.second.getDenominator() << "\n";
 
+    // For each bar
     for (int barNo = -1; barNo < c->getNbBars(); ++barNo) {
 
+        // For each Track
         for (TrackId trackNo = c->getMinTrackId();
                 trackNo <= c->getMaxTrackId(); ++trackNo) {
 
@@ -96,7 +100,11 @@ MupExporter::write()
             timeT barStart = c->getBarStart(barNo);
             timeT barEnd = c->getBarEnd(barNo);
 
+            // For each Segment
             for (Composition::iterator ci = c->begin(); ci != c->end(); ++ci) {
+                qApp->processEvents();
+
+                // If this segment is on the current Track
                 if ((*ci)->getTrack() == trackNo &&
                         (*ci)->getStartTime() < barEnd &&
                         (*ci)->getEndMarkerTime() > barStart) {

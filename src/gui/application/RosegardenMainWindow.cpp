@@ -5476,19 +5476,34 @@ RosegardenMainWindow::slotExportMup()
 void
 RosegardenMainWindow::exportMupFile(QString file)
 {
-    ProgressDialog *progressDlg = new ProgressDialog(tr("Exporting Mup file..."),
-                                                     (QWidget*)this);
+    // Progress Dialog
+    QProgressDialog progressDialog(
+            tr("Exporting Mup file..."),  // labelText
+            tr("Cancel"),  // cancelButtonText
+            0, 0,  // min, max
+            this);  // parent
+    progressDialog.setWindowTitle(tr("Rosegarden"));
+    progressDialog.setWindowModality(Qt::WindowModal);
+    // No sense in auto close since we will close anyway when
+    // this object goes out of scope.
+    progressDialog.setAutoClose(false);
+    // Get rid of the cancel button for now.
+    progressDialog.setCancelButton(NULL);
+#if QT_VERSION < 0x050000
+    // Qt4 has several bugs related to delayed showing of
+    // progress dialogs.  Just force it up.
+    progressDialog.show();
+#endif
 
-//    MupExporter e(this, &m_doc->getComposition(), std::string(QFile::encodeName(file)));
-    MupExporter e(this, &m_doc->getComposition(), std::string(file.toLocal8Bit()));
+    MupExporter mupExporter(
+            this,  // parent
+            &m_doc->getComposition(),  // composition
+            std::string(file.toLocal8Bit()));  // fileName
 
-    connect(&e, SIGNAL(setValue(int)),
-            progressDlg, SLOT(setValue(int)));
-
-    if (!e.write()) {
-        QMessageBox::warning(this, tr("Rosegarden"), tr("Export failed.  The file could not be opened for writing."));
+    if (!mupExporter.write()) {
+        QMessageBox::warning(this, tr("Rosegarden"),
+                tr("Export failed.  The file could not be opened for writing."));
     }
-    progressDlg->close();
 }
 
 void
