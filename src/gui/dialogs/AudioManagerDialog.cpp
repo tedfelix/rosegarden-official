@@ -559,9 +559,7 @@ AudioManagerDialog::slotExportAudio()
         clipDuration = segment->getAudioEndTime() - clipStartTime;
     }
 
-    // ??? Why dynamically allocate this?  Why not just put it on
-    //     the stack?  Then all the "delete destFile" goes away.
-    WAVAudioFile *destFile = new WAVAudioFile(
+    WAVAudioFile destFile(
             destFileName,
             sourceFile->getChannels(),
             sourceFile->getSampleRate(),
@@ -569,22 +567,19 @@ AudioManagerDialog::slotExportAudio()
             sourceFile->getBytesPerFrame(),
             sourceFile->getBitsPerSample());
 
-    if (sourceFile->open() == false) {
-        delete destFile;
+    if (sourceFile->open() == false)
         return;
-    }
 
-    destFile->write();
+    destFile.write();
 
     sourceFile->scanTo(clipStartTime);
 
     // appendSamples() takes the longest.  Would be nice if it would
     // take a progress dialog.
-    destFile->appendSamples(sourceFile->getSampleFrameSlice(clipDuration));
+    destFile.appendSamples(sourceFile->getSampleFrameSlice(clipDuration));
 
-    destFile->close();
+    destFile.close();
     sourceFile->close();
-    delete destFile;
 }
 
 void
