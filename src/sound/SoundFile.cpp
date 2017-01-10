@@ -214,8 +214,13 @@ void
 SoundFile::putBytes(std::ofstream *file,
                     const std::string oS)
 {
-    for (size_t i = 0; i < oS.length(); i++)
+    for (size_t i = 0; i < oS.length(); i++) {
         *file << (FileByte) oS[i];
+
+        // Every 1024 bytes, kick the event loop.
+        if (i % 1024 == 0)
+            qApp->processEvents();
+    }
 }
 
 void
