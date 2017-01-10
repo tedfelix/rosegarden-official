@@ -22,9 +22,12 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[MusicXmlExporter]"
+
 #include "MusicXmlExporter.h"
 
 #include "misc/ConfigGroups.h"
+#include "misc/Debug.h"
 #include "base/StaffExportTypes.h"
 
 #include "rosegarden-version.h"
@@ -241,8 +244,11 @@ MusicXmlExporter::initalisePart(timeT compositionEndTime, int curTrackPos,
     retValue = false;
     exporting = false;
 
+    // For each track
     for (int trackPos = 0;
          (track = m_composition->getTrackByPosition(trackPos)) != 0; ++trackPos) {
+        qApp->processEvents();
+
         if (trackPos == curTrackPos) curTrack = track;
         if (!inMultiStaffGroup) {
             if (((m_multiStave == MULTI_STAVE_CURLY) &&
@@ -326,8 +332,10 @@ MusicXmlExporter::writeScorePart(timeT compositionEndTime, std::ostream &str)
     int writeCurlyOpen = 0;
     int writeCurlyClose = 0;
     Track *track = 0;
+    // For each Track in the Composition
     for (int trackPos = 0;
          (track = m_composition->getTrackByPosition(trackPos)) != 0; ++trackPos) {
+        qApp->processEvents();
 
         bool exporting = false;
         bool inMultiStaffGroup = false;
@@ -395,11 +403,14 @@ MusicXmlExporter::writeScorePart(timeT compositionEndTime, std::ostream &str)
             if (instrument != NULL) {
                 InstrumentMap instruments;
                 if (isPercussionTrack(track)) {
+                    // For each Segment in the Composition
                     for (Composition::iterator s = m_composition->begin();
                          s != m_composition->end(); ++s) {
                         if ((*s)->getTrack() != track->getId()) continue;
+                        // For each Event in the Segment
                         for (Segment::iterator e = (*s)->begin();
                             e != (*s)->end(); ++e) {
+                            qApp->processEvents();
                             if ((*e)->isa(Rosegarden::Note::EventType)) {
                                 int pitch = (*e)->get<Int>(BaseProperties::PITCH);
                                 std::stringstream id;
@@ -518,6 +529,8 @@ MusicXmlExporter::write()
 
         // Write the MusicXML header
         writeHeader(str);
+
+        // ??? This takes a long time with large files.
         PartsVector parts = writeScorePart(compositionEndTime, str);
 //         for (PartsVector::iterator c = parts.begin(); c != parts.end(); c++)
 //             (*c)->printSummary();
@@ -526,6 +539,8 @@ MusicXmlExporter::write()
             str << "  <part id=\"" << (*c)->getPartName() << "\">" << std::endl;
             int bar = pickup ? -1 : 0;
             while (m_composition->getBarStart(bar) < compositionEndTime) {
+                qApp->processEvents();
+
                 // Allow some oportunities for user to cancel
                 if (isOperationCancelled()) {return false;}
 
@@ -544,7 +559,7 @@ MusicXmlExporter::write()
         str << "</score-partwise>" << std::endl;
         for (PartsVector::iterator c = parts.begin(); c != parts.end(); ++c)
             delete *c;
-    } else {
+    } else {  // DTD_TIMEWISE
         // XML header information
         str << "<?xml version=\"1.0\"?>" << std::endl;
         str << "<!DOCTYPE score-timewise PUBLIC \"-//Recordare//DTD MusicXML " << version
@@ -553,6 +568,8 @@ MusicXmlExporter::write()
 
         // Write the MusicXML header
         writeHeader(str);
+
+        // ??? This takes a long time with large files.
         PartsVector parts = writeScorePart(compositionEndTime, str);
 //         for (PartsVector::iterator c = parts.begin(); c != parts.end(); c++)
 //             (*c)->printSummary();
@@ -561,6 +578,8 @@ MusicXmlExporter::write()
         while (m_composition->getBarStart(bar) < compositionEndTime) {
             str << "  <measure number=\"" << bar+1 << "\">" << std::endl;
             for (PartsVector::iterator c = parts.begin(); c != parts.end(); ++c) {
+                qApp->processEvents();
+
                 // Allow some oportunities for user to cancel
                 if (isOperationCancelled()) {return false;}
 
