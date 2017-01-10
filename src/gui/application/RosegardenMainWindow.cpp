@@ -5598,26 +5598,32 @@ RosegardenMainWindow::slotExportMusicXml()
 void
 RosegardenMainWindow::exportMusicXmlFile(QString file)
 {
-
     MusicXMLOptionsDialog dialog(this, m_doc, "", "");
-    if (dialog.exec() != QDialog::Accepted) {
+
+    if (dialog.exec() != QDialog::Accepted)
         return;
-    }
-    ProgressDialog *progressDlg = new ProgressDialog(tr("Exporting MusicXML file..."),
-                                                     (QWidget*)this);
 
-//    MusicXmlExporter e(this, m_doc, std::string(QFile::encodeName(file)));
-    MusicXmlExporter e(this, m_doc, std::string(file.toLocal8Bit()));
+    ProgressDialog *progressDlg = new ProgressDialog(
+            tr("Exporting MusicXML file..."),
+            this);
 
-    connect(&e, SIGNAL(setValue(int)),
+    MusicXmlExporter musicXmlExporter(
+            this,  // parent
+            m_doc,  // document
+            std::string(file.toLocal8Bit()));  // fileName
+
+    connect(&musicXmlExporter, SIGNAL(setValue(int)),
             progressDlg, SLOT(setValue(int)));
 
     connect(progressDlg, SIGNAL(canceled()),
-            &e, SLOT(slotCancel()));
+            &musicXmlExporter, SLOT(slotCancel()));
 
-    if (!e.write()) {
-        QMessageBox::warning(this, tr("Rosegarden"), tr("Export failed.  The file could not be opened for writing."));
+    if (!musicXmlExporter.write()) {
+        QMessageBox::warning(this,
+                tr("Rosegarden"),
+                tr("Export failed.  The file could not be opened for writing."));
     }
+
     progressDlg->close();
 }
 
