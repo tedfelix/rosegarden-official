@@ -5603,28 +5603,38 @@ RosegardenMainWindow::exportMusicXmlFile(QString file)
     if (dialog.exec() != QDialog::Accepted)
         return;
 
-    ProgressDialog *progressDlg = new ProgressDialog(
-            tr("Exporting MusicXML file..."),
-            this);
+    // Progress Dialog
+    // Note: Label text will be set later in the process.
+    QProgressDialog progressDialog(
+            "...",  // labelText
+            tr("Cancel"),  // cancelButtonText
+            0, 100,  // min, max
+            this);  // parent
+    progressDialog.setWindowTitle(tr("Rosegarden"));
+    progressDialog.setWindowModality(Qt::WindowModal);
+    // No sense in auto close since we will close anyway when
+    // this object goes out of scope.
+    progressDialog.setAutoClose(false);
+    // Get rid of the cancel button for now.
+    progressDialog.setCancelButton(NULL);
+#if QT_VERSION < 0x050000
+    // Qt4 has several bugs related to delayed showing of
+    // progress dialogs.  Just force it up.
+    progressDialog.show();
+#endif
 
     MusicXmlExporter musicXmlExporter(
             this,  // parent
             m_doc,  // document
             std::string(file.toLocal8Bit()));  // fileName
 
-    connect(&musicXmlExporter, SIGNAL(setValue(int)),
-            progressDlg, SLOT(setValue(int)));
-
-    connect(progressDlg, SIGNAL(canceled()),
-            &musicXmlExporter, SLOT(slotCancel()));
+    musicXmlExporter.setProgressDialog(&progressDialog);
 
     if (!musicXmlExporter.write()) {
         QMessageBox::warning(this,
                 tr("Rosegarden"),
                 tr("Export failed.  The file could not be opened for writing."));
     }
-
-    progressDlg->close();
 }
 
 void

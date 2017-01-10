@@ -32,6 +32,7 @@
 
 #include "rosegarden-version.h"
 
+#include <QProgressDialog>
 #include <QSettings>
 
 #include <sstream>
@@ -312,6 +313,9 @@ MusicXmlExporter::initalisePart(timeT compositionEndTime, int curTrackPos,
 MusicXmlExporter::PartsVector
 MusicXmlExporter::writeScorePart(timeT compositionEndTime, std::ostream &str)
 {
+    if (m_progressDialog)
+        m_progressDialog->setLabelText(tr("Writing score part..."));
+
     std::string squareOpen  = "    <part-group type=\"start\" number=\"1\">\n"
                               "      <group-symbol>bracket</group-symbol>\n"
                               "      <group-barline>yes</group-barline>\n"
@@ -332,9 +336,15 @@ MusicXmlExporter::writeScorePart(timeT compositionEndTime, std::ostream &str)
     int writeCurlyOpen = 0;
     int writeCurlyClose = 0;
     Track *track = 0;
+
     // For each Track in the Composition
     for (int trackPos = 0;
-         (track = m_composition->getTrackByPosition(trackPos)) != 0; ++trackPos) {
+         (track = m_composition->getTrackByPosition(trackPos)) != 0;
+         ++trackPos) {
+        if (m_progressDialog) {
+            m_progressDialog->setValue(
+                    trackPos * 100 / m_composition->getNbTracks());
+        }
         qApp->processEvents();
 
         bool exporting = false;
@@ -530,22 +540,29 @@ MusicXmlExporter::write()
         // Write the MusicXML header
         writeHeader(str);
 
-        // ??? This takes a long time with large files.
         PartsVector parts = writeScorePart(compositionEndTime, str);
 //         for (PartsVector::iterator c = parts.begin(); c != parts.end(); c++)
 //             (*c)->printSummary();
 
+        if (m_progressDialog)
+            m_progressDialog->setLabelText(tr("Exporting MusicXML file..."));
+
+        size_t partIndex = 0;
+
         for (PartsVector::iterator c = parts.begin(); c != parts.end(); ++c) {
+            if (m_progressDialog) {
+                m_progressDialog->setValue(partIndex * 100 / parts.size());
+                ++partIndex;
+            }
+
             str << "  <part id=\"" << (*c)->getPartName() << "\">" << std::endl;
             int bar = pickup ? -1 : 0;
+            // For each bar
             while (m_composition->getBarStart(bar) < compositionEndTime) {
                 qApp->processEvents();
 
-                // Allow some oportunities for user to cancel
+                // Allow some opportunities for user to cancel
                 if (isOperationCancelled()) {return false;}
-
-                emit setValue(int(double(bar) /
-                              double(m_composition->getNbTracks()) * 100.0));
 
                 str << "    <measure number=\"" << bar+1 << "\"";
                 if (bar < 0) str << " implicit=\"yes\"";
@@ -569,22 +586,32 @@ MusicXmlExporter::write()
         // Write the MusicXML header
         writeHeader(str);
 
-        // ??? This takes a long time with large files.
         PartsVector parts = writeScorePart(compositionEndTime, str);
 //         for (PartsVector::iterator c = parts.begin(); c != parts.end(); c++)
 //             (*c)->printSummary();
 
+        if (m_progressDialog)
+            m_progressDialog->setLabelText(tr("Exporting MusicXML file..."));
+
         int bar = 0;
+        // For each bar
         while (m_composition->getBarStart(bar) < compositionEndTime) {
+            if (m_progressDialog) {
+                // ??? Probably a costly call.  Might want to consolidate with
+                //     the call above.
+                timeT barStart = m_composition->getBarStart(bar);
+                int progress = static_cast<int>(
+                        barStart * 100 /
+                        (compositionEndTime - compositionStartTime));
+                m_progressDialog->setValue(progress);
+            }
+
             str << "  <measure number=\"" << bar+1 << "\">" << std::endl;
             for (PartsVector::iterator c = parts.begin(); c != parts.end(); ++c) {
                 qApp->processEvents();
 
-                // Allow some oportunities for user to cancel
+                // Allow some opportunities for user to cancel
                 if (isOperationCancelled()) {return false;}
-
-                emit setValue(int(double(bar) /
-                              double(m_composition->getNbTracks()) * 100.0));
 
                 str << "    <part id=\"" << (*c)->getPartName() << "\">" << std::endl;
                 (*c)->writeEvents(bar, str);
@@ -592,7 +619,7 @@ MusicXmlExporter::write()
             } // for (int trackPos = 0....
             str << "  </measure>" << std::endl;
             bar++;
-        } // while (m_composition->getBarEnd(bar) < ...
+        }
         str << "</score-timewise>" << std::endl;
         for (PartsVector::iterator c = parts.begin(); c != parts.end(); ++c)
             delete *c;

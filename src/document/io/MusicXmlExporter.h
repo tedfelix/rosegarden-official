@@ -31,6 +31,10 @@
 #include "gui/general/ProgressReporter.h"
 #include "document/RosegardenDocument.h"
 
+#include <QPointer>
+
+class QProgressDialog;
+
 namespace Rosegarden
 {
 
@@ -146,7 +150,11 @@ public:
      * @param filename name of the outfile MusicXML file.
      */
     ~MusicXmlExporter();
+
     bool write();
+
+    void setProgressDialog(QPointer<QProgressDialog> progressDialog)
+            { m_progressDialog = progressDialog; }
 
 protected:
     unsigned int m_exportSelection;
@@ -196,6 +204,9 @@ protected:
     MusicXmlExportHelper* initalisePart(timeT compositionEndTime, int curTrackPos,
                             bool &exporting, bool &inMultiStaffGroup);
     PartsVector writeScorePart(timeT compositionEndTime, std::ostream &str);
+
+private:
+    QPointer<QProgressDialog> m_progressDialog;
 };
 
 }
