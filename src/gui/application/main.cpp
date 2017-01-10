@@ -19,7 +19,6 @@
 #include "misc/Strings.h"
 #include "misc/Debug.h"
 #include "gui/application/RosegardenMainWindow.h"
-#include "gui/widgets/ProgressDialog.h"
 #include "document/RosegardenDocument.h"
 #include "gui/widgets/StartupLogo.h"
 #include "gui/general/ResourceFinder.h"
@@ -591,12 +590,6 @@ int main(int argc, char *argv[])
     }
 
     settings.beginGroup(GeneralOptionsConfigGroup);
-
-//#define DEBUG_PROGRESS
-#ifdef DEBUG_PROGRESS
-    ProgressDialog *pd = new ProgressDialog("Hoopty!", 300, 0);
-    pd->show();
-#endif
 
     QString lastVersion = settings.value("lastversion", "").toString();
     bool newVersion = (lastVersion != VERSION);
