@@ -313,7 +313,9 @@ MusicXmlExporter::PartsVector
 MusicXmlExporter::writeScorePart(timeT compositionEndTime, std::ostream &str)
 {
     if (m_progressDialog)
-        m_progressDialog->setLabelText(QObject::tr("Writing score part..."));
+        m_progressDialog->setLabelText(
+                QCoreApplication::translate(
+                        "MusicXmlExporter", "Writing score part..."));
 
     std::string squareOpen  = "    <part-group type=\"start\" number=\"1\">\n"
                               "      <group-symbol>bracket</group-symbol>\n"
@@ -538,7 +540,9 @@ MusicXmlExporter::write()
 //             (*c)->printSummary();
 
         if (m_progressDialog)
-            m_progressDialog->setLabelText(QObject::tr("Exporting MusicXML file..."));
+            m_progressDialog->setLabelText(
+                    QCoreApplication::translate(
+                            "MusicXmlExporter", "Exporting MusicXML file..."));
 
         size_t partIndex = 0;
 
@@ -581,7 +585,9 @@ MusicXmlExporter::write()
 //             (*c)->printSummary();
 
         if (m_progressDialog)
-            m_progressDialog->setLabelText(QObject::tr("Exporting MusicXML file..."));
+            m_progressDialog->setLabelText(
+                    QCoreApplication::translate(
+                            "MusicXmlExporter", "Exporting MusicXML file..."));
 
         int bar = 0;
         // For each bar
