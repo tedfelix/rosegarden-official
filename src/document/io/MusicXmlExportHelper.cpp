@@ -518,8 +518,7 @@ MusicXmlExportHelper::handleEvent(Segment *segment, Event &event)
         } else if (text.getTextType() == Text::Chord) {
             addChord(event);
         } else {
-            RG_WARNING << "WARNING: MusicXmlExportHelper::handleEvent: unsupported TextEvent \""
-                    << text.getTextType() << "\".";
+            RG_DEBUG << "handleEvent() WARNING unsupported TextType:" << text.getTextType();
         }
     } else if (event.isa(Rosegarden::Indication::EventType)) {
         Indication indication(event);
@@ -544,16 +543,14 @@ MusicXmlExportHelper::handleEvent(Segment *segment, Event &event)
         } else if (indication.getIndicationType() == Indication::Glissando) {
             addGlissando(event);
         } else  {
-            RG_WARNING << "WARNING: MusicXmlExportHelper::handleEvent: unsupported IndicationEvent \""
-                    << indication.getIndicationType() << "\".";
+            RG_DEBUG << "handleEvent() WARNING unsupported IndicationType:" << indication.getIndicationType();
         }
     } else if (event.isa(Rosegarden::Note::EventRestType) ||
             (event.isa(Rosegarden::Note::EventType))) {
         updatePart(segment, event);
         addNote(*segment, event);
     } else {
-        RG_WARNING << "WARNING: MusicXmlExportHelper::handleEvent: Unknown EventType \""
-                << event.getType() << "\".";
+        RG_DEBUG << "handleEvent() WARNING Unknown EventType:" << event.getType();
     }
 }
 
