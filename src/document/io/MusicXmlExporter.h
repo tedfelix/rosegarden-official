@@ -28,7 +28,6 @@
 
 #include "MusicXmlExportHelper.h"
 
-#include "gui/general/ProgressReporter.h"
 #include "document/RosegardenDocument.h"
 
 #include <QPointer>
@@ -109,7 +108,7 @@ class Instrument;
  *              However, this is not checked!
  */
 
-class MusicXmlExporter : public ProgressReporter
+class MusicXmlExporter
 {
 public:
 

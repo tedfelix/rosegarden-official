@@ -55,7 +55,6 @@ MidiInstrument(Instrument * instrument, int pitch) :
 MusicXmlExporter::MusicXmlExporter(RosegardenMainWindow *parent,
                                    RosegardenDocument *doc,
                                    std::string fileName) :
-        ProgressReporter(parent),
         m_doc(doc),
         m_fileName(fileName)
 {
@@ -314,7 +313,7 @@ MusicXmlExporter::PartsVector
 MusicXmlExporter::writeScorePart(timeT compositionEndTime, std::ostream &str)
 {
     if (m_progressDialog)
-        m_progressDialog->setLabelText(tr("Writing score part..."));
+        m_progressDialog->setLabelText(QObject::tr("Writing score part..."));
 
     std::string squareOpen  = "    <part-group type=\"start\" number=\"1\">\n"
                               "      <group-symbol>bracket</group-symbol>\n"
@@ -515,12 +514,6 @@ MusicXmlExporter::write()
     timeT compositionStartTime = 0;
     timeT compositionEndTime = 0;
     for ( Composition::iterator i = m_composition->begin(); i != m_composition->end(); ++i) {
-
-        // Allow some oportunities for user to cancel
-        if (isOperationCancelled()) {
-            return false;
-        }
-
         if (compositionStartTime > (*i)->getStartTime()) {
             compositionStartTime = (*i)->getStartTime();
         }
@@ -545,7 +538,7 @@ MusicXmlExporter::write()
 //             (*c)->printSummary();
 
         if (m_progressDialog)
-            m_progressDialog->setLabelText(tr("Exporting MusicXML file..."));
+            m_progressDialog->setLabelText(QObject::tr("Exporting MusicXML file..."));
 
         size_t partIndex = 0;
 
@@ -560,9 +553,6 @@ MusicXmlExporter::write()
             // For each bar
             while (m_composition->getBarStart(bar) < compositionEndTime) {
                 qApp->processEvents();
-
-                // Allow some opportunities for user to cancel
-                if (isOperationCancelled()) {return false;}
 
                 str << "    <measure number=\"" << bar+1 << "\"";
                 if (bar < 0) str << " implicit=\"yes\"";
@@ -591,7 +581,7 @@ MusicXmlExporter::write()
 //             (*c)->printSummary();
 
         if (m_progressDialog)
-            m_progressDialog->setLabelText(tr("Exporting MusicXML file..."));
+            m_progressDialog->setLabelText(QObject::tr("Exporting MusicXML file..."));
 
         int bar = 0;
         // For each bar
@@ -609,9 +599,6 @@ MusicXmlExporter::write()
             str << "  <measure number=\"" << bar+1 << "\">" << std::endl;
             for (PartsVector::iterator c = parts.begin(); c != parts.end(); ++c) {
                 qApp->processEvents();
-
-                // Allow some opportunities for user to cancel
-                if (isOperationCancelled()) {return false;}
 
                 str << "    <part id=\"" << (*c)->getPartName() << "\">" << std::endl;
                 (*c)->writeEvents(bar, str);
