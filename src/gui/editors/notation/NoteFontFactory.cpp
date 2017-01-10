@@ -100,7 +100,7 @@ NoteFontFactory::getFontNames(bool forceRescan)
 
     for (QStringList::const_iterator i = names.constBegin(); i != names.constEnd(); ++i) {
         that.m_fontNames.insert(*i);
-        if (i != names.begin()) savedNames += ",";
+        if (i != names.constBegin()) savedNames += ",";
         savedNames += *i;
     }
 

@@ -115,8 +115,8 @@ SystemFont::unbundleFonts()
 
     NOTATION_DEBUG << "Found font files: " << fontFiles;
 
-    for (QStringList::const_iterator i = fontFiles.begin();
-         i != fontFiles.end(); ++i) {
+    for (QStringList::const_iterator i = fontFiles.constBegin();
+         i != fontFiles.constEnd(); ++i) {
         QString fontFile(*i);
         QString name = QFileInfo(fontFile).fileName();
         if (fontFile.startsWith(":")) {

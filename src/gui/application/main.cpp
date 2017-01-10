@@ -602,9 +602,8 @@ int main(int argc, char *argv[])
     RG_INFO << "Unbundling examples...";
     
     // unbundle examples
-    QStringList exampleFiles;
-    exampleFiles << ResourceFinder().getResourceFiles("examples", "rg");
-    for (QStringList::const_iterator i = exampleFiles.begin(); i != exampleFiles.end(); ++i) {
+    const QStringList exampleFiles = ResourceFinder().getResourceFiles("examples", "rg");
+    for (QStringList::const_iterator i = exampleFiles.constBegin(); i != exampleFiles.constEnd(); ++i) {
         QString exampleFile(*i);
         QString name = QFileInfo(exampleFile).fileName();
         if (exampleFile.startsWith(":")) {
@@ -619,8 +618,7 @@ int main(int argc, char *argv[])
     RG_INFO << "Unbundling templates...";
 
     // unbundle templates
-    QStringList templateFiles;
-    templateFiles << ResourceFinder().getResourceFiles("templates", "rgt");
+    const QStringList templateFiles = ResourceFinder().getResourceFiles("templates", "rgt");
     for (QStringList::const_iterator i = templateFiles.begin(); i != templateFiles.end(); ++i) {
         QString templateFile(*i);
         QString name = QFileInfo(templateFile).fileName();
@@ -636,8 +634,7 @@ int main(int argc, char *argv[])
     RG_INFO << "Unbundling libraries (device files)...";
 
     // unbundle libraries
-    QStringList libraryFiles;
-    libraryFiles << ResourceFinder().getResourceFiles("library", "rgd");
+    const QStringList libraryFiles = ResourceFinder().getResourceFiles("library", "rgd");
     for (QStringList::const_iterator i = libraryFiles.begin(); i != libraryFiles.end(); ++i) {
         QString libraryFile(*i);
         QString name = QFileInfo(libraryFile).fileName();

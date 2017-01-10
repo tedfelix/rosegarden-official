@@ -221,17 +221,16 @@ ResourceFinder::getResourceFiles(QString resourceCat, QString fileExt)
         } else {
             path = prefix;
         }
-        
+
         QDir dir(path);
         if (!dir.exists()) continue;
 
         dir.setNameFilters(filters);
-        QStringList entries = dir.entryList
-            (QDir::Files | QDir::Readable, QDir::Name);
-        
+        const QStringList entries = dir.entryList(QDir::Files | QDir::Readable, QDir::Name);
+
         for (QStringList::const_iterator j = entries.begin();
              j != entries.end(); ++j) {
-            results << QString("%1/%2").arg(path).arg(*j);
+            results << path + '/' + *j;
         }
     }
 
