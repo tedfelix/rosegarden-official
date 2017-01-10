@@ -5592,31 +5592,39 @@ RosegardenMainWindow::exportLilyPondFile(QString file, bool forPreview)
     if (dialog.exec() != QDialog::Accepted)
         return false;
 
-    ProgressDialog *progressDlg = new ProgressDialog(
-            tr("Exporting LilyPond file..."), this);
+    // Progress Dialog
+    QProgressDialog progressDialog(
+            tr("Exporting LilyPond file..."),  // labelText
+            tr("Cancel"),  // cancelButtonText
+            0, 100,  // min, max
+            this);  // parent
+    progressDialog.setWindowTitle(tr("Rosegarden"));
+    progressDialog.setWindowModality(Qt::WindowModal);
+    // No sense in auto close since we will close anyway when
+    // this object goes out of scope.
+    progressDialog.setAutoClose(false);
+#if QT_VERSION < 0x050000
+    // Qt4 has several bugs related to delayed showing of
+    // progress dialogs.  Just force it up.
+    progressDialog.show();
+#endif
 
     LilyPondExporter lilyPondExporter(
             m_doc,  // document
             m_view->getSelection(),  // selection
             std::string(QFile::encodeName(file)));  // fileName
 
-    connect(&lilyPondExporter, SIGNAL(setValue(int)),
-            progressDlg, SLOT(setValue(int)));
-
-    connect(progressDlg, SIGNAL(canceled()),
-            &lilyPondExporter, SLOT(slotCancel()));
+    lilyPondExporter.setProgressDialog(&progressDialog);
 
     if (!lilyPondExporter.write()) {
-        if (!lilyPondExporter.isOperationCancelled()) {
+        if (!progressDialog.wasCanceled()) {
             QMessageBox::warning(this, tr("Rosegarden"),
                     lilyPondExporter.getMessage());
         }
 
-        progressDlg->close();
         return false;
     }
 
-    progressDlg->close();
     return true;
 }
 

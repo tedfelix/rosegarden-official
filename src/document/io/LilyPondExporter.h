@@ -34,15 +34,16 @@
 #include "base/Segment.h"
 #include "base/Selection.h"
 #include "document/io/LilyPondLanguage.h"
-#include "gui/general/ProgressReporter.h"
 #include "gui/editors/notation/NotationView.h"
 #include <fstream>
 #include <set>
 #include <string>
 #include <utility>
 
+#include <QPointer>
 
 class QObject;
+class QProgressDialog;
 class QString;
 
 
@@ -86,9 +87,8 @@ const char* headerTagline();
  * LilyPond scorefile export
  */
 
-class ROSEGARDENPRIVATE_EXPORT LilyPondExporter : public ProgressReporter
+class ROSEGARDENPRIVATE_EXPORT LilyPondExporter
 {
-    //Q_OBJECT
 public:
     typedef EventContainer eventstartlist;
     typedef std::multiset<Event*, Event::EventEndCmp> eventendlist;
@@ -111,6 +111,9 @@ public:
     * call to write().
     */
     QString getMessage() { return m_warningMessage; }
+
+    void setProgressDialog(QPointer<QProgressDialog> progressDialog)
+            { m_progressDialog = progressDialog; }
 
 private:
     NotationView *m_notationView;
@@ -279,6 +282,8 @@ private:
     bool m_cancelAccidentals;
     bool m_fingeringsInStaff;
     QString m_warningMessage;
+
+    QPointer<QProgressDialog> m_progressDialog;
 
     std::pair<int,int> fractionSum(std::pair<int,int> x,std::pair<int,int> y) {
 	std::pair<int,int> z(

@@ -57,7 +57,6 @@
 #include "gui/editors/notation/NotationProperties.h"
 #include "gui/editors/notation/NotationView.h"
 #include "gui/editors/guitar/Chord.h"
-#include "gui/general/ProgressReporter.h"
 
 #include "rosegarden-version.h"
 
@@ -65,6 +64,7 @@
 #include <QMessageBox>
 #include <QFileInfo>
 #include <QObject>
+#include <QProgressDialog>
 #include <QRegExp>
 #include <QString>
 #include <QTextCodec>
@@ -97,7 +97,6 @@ LilyPondExporter::LilyPondExporter(RosegardenDocument *doc,
                                    const SegmentSelection &selection,
                                    const std::string &fileName,
                                    NotationView *parent) :
-    ProgressReporter(parent),
     m_doc(doc),
     m_fileName(fileName),
     m_lastClefFound(Clef::Treble),
@@ -885,7 +884,7 @@ LilyPondExporter::write()
     for (; i != m_composition->end(); ++i) {
         
         // Allow some oportunities for user to cancel
-        if (isOperationCancelled()) {
+        if (m_progressDialog  &&  m_progressDialog->wasCanceled()) {
             return false;
         }
         
@@ -994,7 +993,7 @@ LilyPondExporter::write()
         /// composition is writing a blank measure at the end of the score.
         do {
             // Allow some oportunities for user to cancel
-            if (isOperationCancelled()) {
+            if (m_progressDialog  &&  m_progressDialog->wasCanceled()) {
                 return false;
             }
             
@@ -1079,7 +1078,7 @@ LilyPondExporter::write()
         for (int i = 0; i < tempoCount; ++i) {
 
             // Allow some oportunities for user to cancel
-            if (isOperationCancelled()) {
+            if (m_progressDialog  &&  m_progressDialog->wasCanceled()) {
                 return false;
             }
 
@@ -1144,7 +1143,7 @@ LilyPondExporter::write()
 
         while  (i_marker != markers.end()) {
             // Allow some oportunities for user to cancel
-            if (isOperationCancelled()) {
+            if (m_progressDialog  &&  m_progressDialog->wasCanceled()) {
                 return false;
             }
         
@@ -1200,7 +1199,7 @@ LilyPondExporter::write()
         trackPos = lsc.getTrackPos();
 
         // Allow some oportunities for user to cancel
-        if (isOperationCancelled()) {
+        if (m_progressDialog  &&  m_progressDialog->wasCanceled()) {
             return false;
         }
         
@@ -1257,10 +1256,11 @@ LilyPondExporter::write()
                         }
                     }
 
-                    emit setValue(int(double(trackPos) /
-                                    double(m_composition->getNbTracks()) * 100.0));
+                    if (m_progressDialog)
+                        m_progressDialog->setValue(
+                                trackPos * 100 / m_composition->getNbTracks());
                                     
-                    qApp->processEvents(QEventLoop::AllEvents, 100);
+                    qApp->processEvents();
 
                     if ((int) seg->getTrack() != lastTrackIndex) {
                         if (lastTrackIndex != -1) {
@@ -1615,6 +1615,7 @@ LilyPondExporter::write()
                 for (int barNo = m_composition->getBarNumber(seg->getStartTime());
                     barNo <= m_composition->getBarNumber(seg->getEndMarkerTime());
                     ++barNo) {
+                    qApp->processEvents();
 
                     timeT barStart = m_composition->getBarStart(barNo);
                     timeT barEnd = m_composition->getBarEnd(barNo);
