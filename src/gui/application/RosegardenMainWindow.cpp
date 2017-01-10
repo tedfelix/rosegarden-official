@@ -5580,32 +5580,38 @@ RosegardenMainWindow::getLilyPondTmpFilename()
 bool
 RosegardenMainWindow::exportLilyPondFile(QString file, bool forPreview)
 {
-    QString caption = "", heading = "";
+    QString caption;
+    QString heading;
+
     if (forPreview) {
         caption = tr("LilyPond Preview Options");
         heading = tr("LilyPond preview options");
     }
 
     LilyPondOptionsDialog dialog(this, m_doc, caption, heading);
-    if (dialog.exec() != QDialog::Accepted) {
+    if (dialog.exec() != QDialog::Accepted)
         return false;
-    }
 
-    ProgressDialog *progressDlg = new ProgressDialog(tr("Exporting LilyPond file..."),
-                               (QWidget*)this);
+    ProgressDialog *progressDlg = new ProgressDialog(
+            tr("Exporting LilyPond file..."), this);
 
-    LilyPondExporter e(m_doc, m_view->getSelection(), std::string(QFile::encodeName(file)));
+    LilyPondExporter lilyPondExporter(
+            m_doc,  // document
+            m_view->getSelection(),  // selection
+            std::string(QFile::encodeName(file)));  // fileName
 
-    connect(&e, SIGNAL(setValue(int)),
+    connect(&lilyPondExporter, SIGNAL(setValue(int)),
             progressDlg, SLOT(setValue(int)));
 
     connect(progressDlg, SIGNAL(canceled()),
-            &e, SLOT(slotCancel()));
+            &lilyPondExporter, SLOT(slotCancel()));
 
-    if (!e.write()) {
-        if (!e.isOperationCancelled()) {
-            QMessageBox::warning(this, tr("Rosegarden"), e.getMessage());
+    if (!lilyPondExporter.write()) {
+        if (!lilyPondExporter.isOperationCancelled()) {
+            QMessageBox::warning(this, tr("Rosegarden"),
+                    lilyPondExporter.getMessage());
         }
+
         progressDlg->close();
         return false;
     }
