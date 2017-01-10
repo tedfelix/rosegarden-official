@@ -4595,8 +4595,24 @@ RosegardenDocument*
 RosegardenMainWindow::createDocumentFromHydrogenFile(QString file)
 {
     StartupLogo::hideIfStillThere();
-    ProgressDialog *progressDlg = new ProgressDialog(
-        tr("Importing Hydrogen file..."), (QWidget*) this);
+
+    // Progress Dialog
+    QProgressDialog progressDialog(
+            tr("Importing Hydrogen file..."),  // labelText
+            tr("Cancel"),  // cancelButtonText
+            0, 0,  // min, max
+            this);  // parent
+    progressDialog.setWindowTitle(tr("Rosegarden"));
+    progressDialog.setWindowModality(Qt::WindowModal);
+    // We will close anyway when this object goes out of scope.
+    progressDialog.setAutoClose(false);
+    // Remove the cancel button since HydrogenLoader doesn't support cancel.
+    progressDialog.setCancelButton(NULL);
+#if QT_VERSION < 0x050000
+    // Qt4 has several bugs related to delayed showing of
+    // progress dialogs.  Just force it up.
+    progressDialog.show();
+#endif
 
     // Inherent autoload
     //
@@ -4604,19 +4620,10 @@ RosegardenMainWindow::createDocumentFromHydrogenFile(QString file)
 
     HydrogenLoader hydrogenLoader(&newDoc->getStudio());
 
-    // TODO: make RG21Loader to actually emit these signals
-    //
-    connect(&hydrogenLoader, SIGNAL(setValue(int)),
-             progressDlg, SLOT(setValue(int)));
-
-    // "your starter for 40%" - helps the "freeze" work
-    progressDlg->setValue(40);
-
     if (!hydrogenLoader.load(file, newDoc->getComposition())) {
         QMessageBox::critical(this, tr("Rosegarden"),
                            tr("Can't load Hydrogen file.  It appears to be corrupted."));
         delete newDoc;
-        progressDlg->close();
         return 0;
     }
 
@@ -4629,9 +4636,7 @@ RosegardenMainWindow::createDocumentFromHydrogenFile(QString file)
     newDoc->setTitle(QFileInfo(file).fileName());
     newDoc->setAbsFilePath(QFileInfo(file).absoluteFilePath());
 
-    progressDlg->close();
     return newDoc;
-
 }
 #endif
 

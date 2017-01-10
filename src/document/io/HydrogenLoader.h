@@ -20,7 +20,6 @@
 #define RG_HYDROGENLOADER_H
 
 #include "base/PropertyName.h"
-#include "gui/general/ProgressReporter.h"
 #include <string>
 #include <vector>
 
@@ -43,11 +42,10 @@ class Composition;
  *
  */
 
-class HydrogenLoader : public ProgressReporter
+class HydrogenLoader
 {
 public:
-    HydrogenLoader(Studio *,
-            QObject *parent = 0);
+    HydrogenLoader(Studio *);
 
     /**
       * Load and parse the Hydrogen file \a fileName, and write it into the

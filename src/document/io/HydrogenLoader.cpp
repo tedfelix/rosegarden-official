@@ -23,7 +23,6 @@
 #include "base/PropertyName.h"
 #include "base/Segment.h"
 #include "base/Studio.h"
-#include "gui/general/ProgressReporter.h"
 #include "HydrogenXMLHandler.h"
 #include <QFile>
 #include <QObject>
@@ -33,9 +32,7 @@
 namespace Rosegarden
 {
 
-HydrogenLoader::HydrogenLoader(Studio *studio,
-                               QObject *parent):
-        ProgressReporter(parent),
+HydrogenLoader::HydrogenLoader(Studio *studio):
         m_studio(studio)
 {}
 
