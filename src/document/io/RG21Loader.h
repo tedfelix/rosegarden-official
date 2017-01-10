@@ -47,11 +47,10 @@ class Composition;
 /**
  * Rosegarden 2.1 file import
  */
-class RG21Loader : public ProgressReporter
+class RG21Loader
 {
 public:
-    RG21Loader(Studio *,
-               QObject *parent = 0);
+    RG21Loader(Studio *);
     ~RG21Loader();
     
     /**

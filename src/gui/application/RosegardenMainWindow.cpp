@@ -4472,8 +4472,24 @@ RosegardenDocument*
 RosegardenMainWindow::createDocumentFromRG21File(QString file)
 {
     StartupLogo::hideIfStillThere();
-    ProgressDialog *progressDlg = new ProgressDialog(
-        tr("Importing X11 Rosegarden file..."), (QWidget*)this);
+
+    // Progress Dialog
+    QProgressDialog progressDialog(
+            tr("Importing X11 Rosegarden file..."),  // labelText
+            tr("Cancel"),  // cancelButtonText
+            0, 0,  // min, max
+            this);  // parent
+    progressDialog.setWindowTitle(tr("Rosegarden"));
+    progressDialog.setWindowModality(Qt::WindowModal);
+    // We will close anyway when this object goes out of scope.
+    progressDialog.setAutoClose(false);
+    // Remove the cancel button since RG21Loader doesn't support cancel.
+    progressDialog.setCancelButton(NULL);
+#if QT_VERSION < 0x050000
+    // Qt4 has several bugs related to delayed showing of
+    // progress dialogs.  Just force it up.
+    progressDialog.show();
+#endif
 
     // Inherent autoload
     //
@@ -4481,19 +4497,10 @@ RosegardenMainWindow::createDocumentFromRG21File(QString file)
 
     RG21Loader rg21Loader(&newDoc->getStudio());
 
-    // TODO: make RG21Loader to actually emit these signals
-    //
-    connect(&rg21Loader, SIGNAL(setValue(int)),
-            progressDlg, SLOT(setValue(int)));
-
-    // "your starter for 40%" - helps the "freeze" work
-    progressDlg->setValue(40);
-
     if (!rg21Loader.load(file, newDoc->getComposition())) {
         QMessageBox::critical(this, tr("Rosegarden"), 
                            tr("Can't load X11 Rosegarden file.  It appears to be corrupted."));
         delete newDoc;
-        progressDlg->close();
         return 0;
     }
 
@@ -4506,9 +4513,7 @@ RosegardenMainWindow::createDocumentFromRG21File(QString file)
     newDoc->setTitle(QFileInfo(file).fileName());
     newDoc->setAbsFilePath(QFileInfo(file).absoluteFilePath());
 
-    progressDlg->close();
     return newDoc;
-
 }
 
 #if 0

@@ -52,9 +52,8 @@ using namespace BaseProperties;
 using namespace Accidentals;
 using namespace Marks;
 
-RG21Loader::RG21Loader(Studio *studio,
-                       QObject *parent)
-        : ProgressReporter(parent),
+RG21Loader::RG21Loader(Studio *studio)
+        :
         m_stream(0),
         m_studio(studio),
         m_composition(0),
@@ -687,6 +686,8 @@ bool RG21Loader::load(const QString &fileName, Composition &comp)
     m_studio->unassignAllInstruments();
 
     while (!m_stream->atEnd()) {
+
+        qApp->processEvents();
 
         if (!readNextLine())
             break;
