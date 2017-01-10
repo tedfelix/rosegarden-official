@@ -118,6 +118,8 @@ MusicXMLXMLHandler::startElement(const QString& /*namespaceURI*/,
                                  const QString& qName,
                                  const QXmlAttributes& atts)
 {
+    qApp->processEvents();
+
     // If m_ignored is not an empty string it contains the name of an element
     // which will be ignored, including all it children.
     if (m_ignored != "") return true;

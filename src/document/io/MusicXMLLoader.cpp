@@ -33,9 +33,8 @@
 namespace Rosegarden
 {
 
-MusicXMLLoader::MusicXMLLoader(Studio *studio,
-                               QObject *parent, const char */* name */):
-        ProgressReporter(parent),
+MusicXMLLoader::MusicXMLLoader(Studio *studio) :
+        m_composition(NULL),
         m_studio(studio)
 {}
 
