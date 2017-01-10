@@ -496,36 +496,48 @@ AudioManagerDialog::getCurrentSelection()
 void
 AudioManagerDialog::slotExportAudio()
 {
-    WAVAudioFile *sourceFile
-    = dynamic_cast<WAVAudioFile*>(getCurrentSelection());
+    WAVAudioFile *sourceFile =
+            dynamic_cast<WAVAudioFile *>(getCurrentSelection());
 
-    QList<QTreeWidgetItem *> til= m_fileList->selectedItems();
-    if (til.isEmpty()) {
-        RG_WARNING << "AudioManagerDialog::slotExportAudio() - nothing selected!";
+    if (!sourceFile)
+        return;
+
+    QList<QTreeWidgetItem *> selectedItems = m_fileList->selectedItems();
+
+    if (selectedItems.isEmpty()) {
+        RG_WARNING << "slotExportAudio() - nothing selected!";
         return;
     }
-    AudioListItem *item = dynamic_cast<AudioListItem*>(til[0]);
+
+    // ??? All we ever look at is the first one.
+    AudioListItem *item = dynamic_cast<AudioListItem *>(selectedItems[0]);
+
+    if (!item)
+        return;
 
     Segment *segment = item->getSegment();
 
-    QString saveFile =
-            FileDialog::getSaveFileName(this,
-                                         tr("Save File As"),
-                                         QDir::currentPath(),
-                                         tr("*.wav|WAV files (*.wav)"));
+    QString destFileName =
+            FileDialog::getSaveFileName(
+                    this,  // parent
+                    tr("Save File As"),  // caption
+                    QDir::currentPath(),  // dir
+                    sourceFile->getFilename(),  // defaultName
+                    tr("*.wav|WAV files (*.wav)"));  // filter
 
-    if (sourceFile == 0 || item == 0 || saveFile.isEmpty())
-        return ;
+    if (destFileName.isEmpty())
+        return;
 
     // Check for a dot extension and append ".wav" if not found
-    //
-    if (saveFile.contains(".") == 0)
-        saveFile += ".wav";
+    // ??? Should use QFileInfo::suffix() to check for an extension.
+    if (destFileName.contains(".") == 0)
+        destFileName += ".wav";
 
     //cc 20150508: avoid dereferencing self-deleted progress dialog
     //after user has closed it, by using a QPointer
-    QPointer<ProgressDialog> progressDlg = new ProgressDialog(tr("Exporting audio file..."),
-                                                              (QWidget*)this);
+    QPointer<ProgressDialog> progressDlg =
+            new ProgressDialog(tr("Exporting audio file..."),
+                               this);
 
     RealTime clipStartTime = RealTime::zeroTime;
     RealTime clipDuration = sourceFile->getLength();
@@ -535,28 +547,37 @@ AudioManagerDialog::slotExportAudio()
         clipDuration = segment->getAudioEndTime() - clipStartTime;
     }
 
-    WAVAudioFile *destFile
-    = new WAVAudioFile(saveFile,
-                       sourceFile->getChannels(),
-                       sourceFile->getSampleRate(),
-                       sourceFile->getBytesPerSecond(),
-                       sourceFile->getBytesPerFrame(),
-                       sourceFile->getBitsPerSample());
+    // ??? Why dynamically allocate this?  Why not just put it on
+    //     the stack?  Then all the "delete destFile" goes away.
+    WAVAudioFile *destFile = new WAVAudioFile(
+            destFileName,
+            sourceFile->getChannels(),
+            sourceFile->getSampleRate(),
+            sourceFile->getBytesPerSecond(),
+            sourceFile->getBytesPerFrame(),
+            sourceFile->getBitsPerSample());
 
     progressDlg->show();
     progressDlg->setValue(40);
+
     if (sourceFile->open() == false) {
         delete destFile;
-        if (progressDlg) progressDlg->close();
-        return ;
+
+        if (progressDlg)
+            progressDlg->close();
+
+        return;
     }
-    qApp->processEvents(QEventLoop::AllEvents, 100);
+
+    qApp->processEvents();
     
     destFile->write();
 
-    qApp->processEvents(QEventLoop::AllEvents, 100);
-    if (progressDlg) progressDlg->setValue(80);
+    qApp->processEvents();
     
+    if (progressDlg)
+        progressDlg->setValue(80);
+
     sourceFile->scanTo(clipStartTime);
     destFile->appendSamples(sourceFile->getSampleFrameSlice(clipDuration));
 
