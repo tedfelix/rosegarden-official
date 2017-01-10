@@ -21,7 +21,6 @@
 
 #include "base/FastVector.h"
 #include "base/LayoutEngine.h"
-#include "gui/general/ProgressReporter.h"
 #include <map>
 #include "base/Event.h"
 
@@ -50,8 +49,8 @@ class Composition;
  * computes the Y coordinate of notation elements
  */
 
-class NotationVLayout : public ProgressReporter,
-                        public VerticalLayoutEngine
+class NotationVLayout : public VerticalLayoutEngine,
+                        public QObject  // For tr().  Can probably be cleaned up.
 {
     //Q_OBJECT
 public:

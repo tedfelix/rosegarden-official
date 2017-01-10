@@ -28,7 +28,6 @@
 #include "base/NotationQuantizer.h"
 #include "base/Profiler.h"
 #include "base/ViewSegment.h"
-#include "gui/general/ProgressReporter.h"
 #include "gui/editors/guitar/Chord.h"
 #include "misc/ConfigGroups.h"
 #include "NotationChord.h"
@@ -52,8 +51,7 @@ using namespace BaseProperties;
 
 NotationVLayout::NotationVLayout(Composition *c, NotePixmapFactory *npf,
                                  const NotationProperties &properties,
-                                 QObject* parent) :
-        ProgressReporter(parent),
+                                 QObject* /*parent*/) :
         m_composition(c),
         m_npf(npf),
         m_notationQuantizer(c->getNotationQuantizer()),

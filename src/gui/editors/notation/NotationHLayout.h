@@ -21,7 +21,6 @@
 #include "base/LayoutEngine.h"
 #include "base/NotationTypes.h"
 #include "NotationElement.h"
-#include "gui/general/ProgressReporter.h"
 #include <map>
 #include <vector>
 #include "base/Event.h"
@@ -54,8 +53,7 @@ class NotationScene;
  * computes the X coordinates of notation elements
  */
 
-class NotationHLayout : public ProgressReporter,
-                        public HorizontalLayoutEngine
+class NotationHLayout : public HorizontalLayoutEngine
 {
 public:
     NotationHLayout(Composition *c,

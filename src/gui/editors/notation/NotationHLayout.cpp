@@ -40,7 +40,6 @@
 #include "gui/editors/notation/NotationScene.h"
 #include "gui/editors/notation/NotationStaff.h"
 #include "gui/editors/notation/NotePixmapFactory.h"
-#include "gui/general/ProgressReporter.h"
 #include "misc/Strings.h"
 #include "misc/Debug.h"
 #include "misc/ConfigGroups.h"
@@ -61,7 +60,6 @@ using namespace BaseProperties;
 NotationHLayout::NotationHLayout(Composition *c, NotePixmapFactory *npf,
                                  const NotationProperties &properties,
                                  QObject* parent) :
-    ProgressReporter(parent),
     HorizontalLayoutEngine(c),
     m_totalWidth(0.),
     m_pageMode(false),
@@ -179,7 +177,7 @@ void
 NotationHLayout::scanViewSegment(ViewSegment &staff, timeT startTime,
                                  timeT endTime, bool full)
 {
-    throwIfCancelled();
+    //throwIfCancelled();
     Profiler profiler("NotationHLayout::scanViewSegment");
 
     Segment &segment(staff.getSegment());
@@ -501,12 +499,12 @@ NotationHLayout::scanViewSegment(ViewSegment &staff, timeT startTime,
         setBarSizeData(staff, barNo, 0.0,
                        timeSigWidth, actualBarEnd - barTimes.first);
 
-        if ((endTime > startTime) && (barNo % 20 == 0)) {
-            emit setValue((barTimes.second - startTime) * 95 /
-                             (endTime - startTime));
-        }
+        //if ((endTime > startTime) && (barNo % 20 == 0)) {
+        //    emit setValue((barTimes.second - startTime) * 95 /
+        //                     (endTime - startTime));
+        //}
 
-        throwIfCancelled();
+        //throwIfCancelled();
     }
     /*
         BarDataList::iterator ei(barList.end());
@@ -1319,9 +1317,9 @@ NotationHLayout::finishLayout(timeT startTime, timeT endTime, bool full)
     for (BarDataMap::iterator i(m_barData.begin());
          i != m_barData.end(); ++i) {
 
-        emit setValue(100 * staffNo / m_barData.size());
+        //emit setValue(100 * staffNo / m_barData.size());
 
-        throwIfCancelled();
+        //throwIfCancelled();
 
         timeT timeCovered = endTime - startTime;
 
@@ -1672,12 +1670,11 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime,
                 count = 0;
                 timeT sinceIncrement = el->getViewAbsoluteTime() - lastIncrement;
                 if (sinceIncrement > m_timePerProgressIncrement) {
-                    emit setValue
-                    (sinceIncrement / m_timePerProgressIncrement);
+                    //emit setValue(sinceIncrement / m_timePerProgressIncrement);
                     lastIncrement +=
                         (sinceIncrement / m_timePerProgressIncrement)
                         * m_timePerProgressIncrement;
-                    throwIfCancelled();
+                    //throwIfCancelled();
                 }
             }
         }

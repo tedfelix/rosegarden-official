@@ -20,8 +20,7 @@ namespace Rosegarden
 {
 
 ChordXmlHandler::ChordXmlHandler(Guitar::ChordMap& map)
-    : ProgressReporter(0),
-      m_chordMap(map)
+    : m_chordMap(map)
 {
 }
 

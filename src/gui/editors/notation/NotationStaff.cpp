@@ -52,7 +52,6 @@
 #include "gui/editors/notation/NoteStyleFactory.h"
 #include "gui/editors/notation/StaffLayout.h"
 #include "gui/general/PixmapFunctions.h"
-#include "gui/general/ProgressReporter.h"
 #include "misc/ConfigGroups.h"
 #include "misc/Debug.h"
 #include "misc/Strings.h"
@@ -83,7 +82,6 @@ NotationStaff::NotationStaff(NotationScene *scene, Segment *segment,
                 LinearMode, 0, 0,  // pageMode, pageWidth and pageHeight set later
                 0 // row spacing
         ),
-    ProgressReporter(0),
     m_notePixmapFactory(normalFactory),
     m_graceNotePixmapFactory(smallFactory),
     m_previewItem(0),
@@ -492,12 +490,12 @@ NotationStaff::renderElements(NotationElementList::iterator from,
     //    RG_DEBUG << "NotationStaff " << this << "::renderElements()";
     Profiler profiler("NotationStaff::renderElements");
 
-    emit setOperationName(tr("Rendering staff %1...").arg(getId() + 1));
-    emit setValue(0);
+    //emit setOperationName(tr("Rendering staff %1...").arg(getId() + 1));
+    //emit setValue(0);
 
-    throwIfCancelled();
+    //throwIfCancelled();
 
-    int elementCount = 0;
+    //int elementCount = 0;
     timeT endTime =
         (to != getViewElementList()->end() ? (*to)->getViewAbsoluteTime() :
          getSegment().getEndMarkerTime());
@@ -530,12 +528,11 @@ NotationStaff::renderElements(NotationElementList::iterator from,
 
         renderSingleElement(it, currentClef, currentKey, selected);
 
-        if ((endTime > startTime) && (++elementCount % 200 == 0)) {
-
-            timeT myTime = (*it)->getViewAbsoluteTime();
-            emit setValue((myTime - startTime) * 100 / (endTime - startTime));
-            throwIfCancelled();
-        }
+        //if ((endTime > startTime) && (++elementCount % 200 == 0)) {
+            //timeT myTime = (*it)->getViewAbsoluteTime();
+            //emit setValue((myTime - startTime) * 100 / (endTime - startTime));
+            //throwIfCancelled();
+        //}
     }
 
     //    RG_DEBUG << "NotationStaff " << this << "::renderElements: "
@@ -550,10 +547,10 @@ NotationStaff::renderPrintable(timeT from, timeT to)
 
     Profiler profiler("NotationStaff::renderElements");
 
-    emit setOperationName(tr("Rendering notes on staff %1...").arg(getId() + 1));
-    emit setValue(0);
+    //emit setOperationName(tr("Rendering notes on staff %1...").arg(getId() + 1));
+    //emit setValue(0);
 
-    throwIfCancelled();
+    //throwIfCancelled();
 
     // These are only used when rendering keys, and we don't do that
     // here, so we don't care what they are
@@ -566,7 +563,7 @@ NotationStaff::renderPrintable(timeT from, timeT to)
     NotationElementList::iterator endAt =
         getViewElementList()->findTime(composition->getBarEndForTime(to));
 
-    int elementCount = 0;
+    //int elementCount = 0;
 
     for (NotationElementList::iterator it = beginAt, nextIt = beginAt;
             it != endAt; it = nextIt) {
@@ -583,12 +580,11 @@ NotationStaff::renderPrintable(timeT from, timeT to)
 
         renderSingleElement(it, currentClef, currentKey, selected);
 
-        if ((to > from) && (++elementCount % 200 == 0)) {
-
-            timeT myTime = (*it)->getViewAbsoluteTime();
-            emit setValue((myTime - from) * 100 / (to - from));
-            throwIfCancelled();
-        }
+        //if ((to > from) && (++elementCount % 200 == 0)) {
+            //timeT myTime = (*it)->getViewAbsoluteTime();
+            //emit setValue((myTime - from) * 100 / (to - from));
+            //throwIfCancelled();
+        //}
     }
 
     //    RG_DEBUG << "NotationStaff " << this << "::renderElements: "
@@ -679,9 +675,9 @@ NotationStaff::positionElements(timeT from, timeT to)
     if (to < startTime) to = startTime;
     if (to == from) return;
 
-    emit setOperationName(tr("Positioning staff %1...").arg(getId() + 1));
-    emit setValue(0);
-    throwIfCancelled();
+    //emit setOperationName(tr("Positioning staff %1...").arg(getId() + 1));
+    //emit setValue(0);
+    //throwIfCancelled();
 
 // not used
 //    const NotationProperties &properties(getProperties());
@@ -774,11 +770,13 @@ NotationStaff::positionElements(timeT from, timeT to)
 
         el->setSelected(selected);
 
-        if ((to > from) && (++elementsPositioned % 300 == 0)) {
-            timeT myTime = el->getViewAbsoluteTime();
-            emit setValue((myTime - from) * 100 / (to - from));
-            throwIfCancelled();
-        }
+        ++elementsPositioned;
+
+        //if ((to > from) && (elementsPositioned % 300 == 0)) {
+            //timeT myTime = el->getViewAbsoluteTime();
+            //emit setValue((myTime - from) * 100 / (to - from));
+            //throwIfCancelled();
+        //}
     }
 
     RG_DEBUG << "NotationStaff " << this << "::positionElements "

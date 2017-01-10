@@ -21,7 +21,6 @@
 #include "base/ViewSegment.h"
 #include "base/ViewElement.h"
 #include "StaffLayout.h"
-#include "gui/general/ProgressReporter.h"
 #include <map>
 #include <set>
 #include <string>
@@ -54,7 +53,7 @@ class Clef;
 
 class NotationStaff : public ViewSegment,
                       public StaffLayout,
-                      public ProgressReporter //!!! maybe remove if we can make this fast enough
+                      public QObject  // Just for tr().  Could be cleaned up.
 {
     //Q_OBJECT
 public:

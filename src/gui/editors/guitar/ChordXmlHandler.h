@@ -19,7 +19,6 @@
 #ifndef RG_CHORDXMLHANDLER_H
 #define RG_CHORDXMLHANDLER_H
 
-#include "gui/general/ProgressReporter.h"
 #include "Chord.h"
 #include "ChordMap.h"
 
@@ -29,7 +28,7 @@
 namespace Rosegarden
 {
 
-class ChordXmlHandler : public ProgressReporter, public QXmlDefaultHandler
+class ChordXmlHandler : public QXmlDefaultHandler
 {
 public:
 	ChordXmlHandler(Guitar::ChordMap&);
