@@ -533,11 +533,23 @@ AudioManagerDialog::slotExportAudio()
     if (destFileName.contains(".") == 0)
         destFileName += ".wav";
 
-    //cc 20150508: avoid dereferencing self-deleted progress dialog
-    //after user has closed it, by using a QPointer
-    QPointer<ProgressDialog> progressDlg =
-            new ProgressDialog(tr("Exporting audio file..."),
-                               this);
+    // Progress Dialog
+    QProgressDialog progressDialog(
+            tr("Exporting audio file..."),  // labelText
+            tr("Cancel"),  // cancelButtonText
+            0, 0,  // min, max
+            this);  // parent
+    progressDialog.setWindowTitle(tr("Rosegarden"));
+    progressDialog.setWindowModality(Qt::WindowModal);
+    // We will close anyway when this object goes out of scope.
+    progressDialog.setAutoClose(false);
+    // No cancel button since appendSamples() doesn't support progress.
+    progressDialog.setCancelButton(NULL);
+#if QT_VERSION < 0x050000
+    // Qt4 has several bugs related to delayed showing of
+    // progress dialogs.  Just force it up.
+    progressDialog.show();
+#endif
 
     RealTime clipStartTime = RealTime::zeroTime;
     RealTime clipDuration = sourceFile->getLength();
@@ -557,38 +569,22 @@ AudioManagerDialog::slotExportAudio()
             sourceFile->getBytesPerFrame(),
             sourceFile->getBitsPerSample());
 
-    progressDlg->show();
-    progressDlg->setValue(40);
-
     if (sourceFile->open() == false) {
         delete destFile;
-
-        if (progressDlg)
-            progressDlg->close();
-
         return;
     }
 
-    qApp->processEvents();
-    
     destFile->write();
 
-    qApp->processEvents();
-    
-    if (progressDlg)
-        progressDlg->setValue(80);
-
     sourceFile->scanTo(clipStartTime);
+
+    // appendSamples() takes the longest.  Would be nice if it would
+    // take a progress dialog.
     destFile->appendSamples(sourceFile->getSampleFrameSlice(clipDuration));
 
     destFile->close();
     sourceFile->close();
     delete destFile;
-
-    if (progressDlg) {
-        progressDlg->setValue(100);
-        progressDlg->close();
-    }
 }
 
 void
