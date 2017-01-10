@@ -1639,10 +1639,10 @@ private:
     QProcess* m_jackProcess;
 #endif // HAVE_LIBJACK
 
-    /** This is the ProgressBar used for the CPU meter in the main window status
-     * bar.  This is NOT a general-purpose progress indicator.  You want to use
-     * ProgressDialog for that, and let it manage its own ProgressBar, which is
-     * now private.
+    /// CPU meter in the main window status bar.
+    /**
+     * This is NOT a general-purpose progress indicator.  You want to use
+     * QProgressDialog for that.
      */
     ProgressBar *m_cpuBar;
     

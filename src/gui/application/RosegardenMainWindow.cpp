@@ -167,7 +167,6 @@
 #include "gui/studio/SynthPluginManagerDialog.h"
 #include "gui/studio/ControlEditorDialog.h"
 #include "gui/widgets/ProgressBar.h"
-#include "gui/widgets/ProgressDialog.h"
 #include "gui/widgets/FileDialog.h"
 #include "LircClient.h"
 #include "LircCommander.h"
@@ -1973,9 +1972,6 @@ void
 RosegardenMainWindow::slotOpenDroppedURL(QString url)
 {
      qApp->processEvents(QEventLoop::AllEvents, 100);
-//    ProgressDialog::processEvents(); // or else we get a crash because the
-    // track editor is erased too soon - it is the originator of the signal
-    // this slot is connected to.
 
     if (!saveIfModified())
         return ;
@@ -4990,7 +4986,7 @@ RosegardenMainWindow::slotUpdateCPUMeter()
         lastIdle = idle;
 
         // correct use of m_cpuBar; it's the CPU meter, and from now on,
-        // nothing else (use ProgressDialog for reporting any kind of progress)
+        // nothing else (use QProgressDialog for reporting any kind of progress)
         if (m_cpuBar) {
             if (!modified) {
                 m_cpuBar->setTextVisible(true);
