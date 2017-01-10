@@ -31,7 +31,6 @@
 #include "base/Studio.h"
 #include "base/Track.h"
 #include "gui/editors/notation/NotationStrings.h"
-#include "gui/general/ProgressReporter.h"
 #include <QFile>
 #include <QObject>
 #include <QString>

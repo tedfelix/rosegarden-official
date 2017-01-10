@@ -20,7 +20,6 @@
 #define RG_MUSICXMLLOADER_H
 
 #include "base/PropertyName.h"
-#include "gui/general/ProgressReporter.h"
 #include "document/io/MusicXMLXMLHandler.h"
 #include <string>
 #include <vector>

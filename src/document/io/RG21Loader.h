@@ -21,7 +21,6 @@
 
 #include "base/MidiProgram.h"
 #include "base/NotationTypes.h"
-#include "gui/general/ProgressReporter.h"
 #include <map>
 #include <string>
 #include <QString>
