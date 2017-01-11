@@ -1380,33 +1380,38 @@ AlsaDriver::connectSomething()
     // something suitable to connect one play, and one record device to, and
     // connects it.  If nothing very appropriate beckons, leaves unconnected.
 
-    MappedDevice *toConnect = 0, *toConnectRecord = 0;
+    MappedDevice *toConnect = 0;
+    MappedDevice *toConnectRecord = 0;
 
-    // First check whether anything is connected.
+    // Check whether anything is connected.
+
+    // For each device
     for (size_t i = 0; i < m_devices.size(); ++i) {
         MappedDevice *device = m_devices[i];
-        if (device->getDirection() == MidiDevice::Play) {
-            if (m_devicePortMap.find(device->getId()) != m_devicePortMap.end()  &&
-                m_devicePortMap[device->getId()] != ClientPortPair()  &&
-                m_devicePortMap[device->getId()] != ClientPortPair(-1,-1)) {
-                return; // something is connected already
-            } else if (!toConnect) {
-                toConnect = device;
-            }
-        } else if (device->getDirection() == MidiDevice::Record) {
-            if (m_devicePortMap.find(device->getId()) != m_devicePortMap.end()  &&
-                m_devicePortMap[device->getId()] != ClientPortPair()  &&
-                m_devicePortMap[device->getId()] != ClientPortPair(-1,-1)) {
-                return; // something is connected already
-            } else if (!toConnectRecord) {
-                toConnectRecord = device;
-            }
+
+        // If something is connected, bail.
+        // ??? We need a getPairForDevice(DeviceId) so we can code this as:
+        //     if (getPairForDevice(device->getId()) != ClientPortPair(-1,-1))
+        if (m_devicePortMap.find(device->getId()) != m_devicePortMap.end()  &&
+            m_devicePortMap[device->getId()] != ClientPortPair()  &&
+            m_devicePortMap[device->getId()] != ClientPortPair(-1,-1)) {
+            return;
         }
+
+        if (device->getDirection() == MidiDevice::Play  &&  !toConnect)
+            toConnect = device;
+
+        if (device->getDirection() == MidiDevice::Record  &&  !toConnectRecord)
+            toConnectRecord = device;
     }            
 
-    // If the studio was absolutely empty, we'll make it to here with these still
-    // null, so in that case we'll simply move along without doing anything.
-    if (toConnect) setPlausibleConnection(toConnect->getId(), "");
+    // If the studio was absolutely empty, we'll make it to here with
+    // toConnect and toConnectRecord still null, so in that case we'll
+    // simply move along without doing anything.
+
+    if (toConnect)
+        setPlausibleConnection(toConnect->getId(), "");
+
     if (toConnectRecord) {
         bool recordDevice = true;
         setPlausibleConnection(toConnectRecord->getId(), "", recordDevice);
