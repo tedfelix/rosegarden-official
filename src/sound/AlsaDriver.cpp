@@ -1386,15 +1386,17 @@ AlsaDriver::connectSomething()
     for (size_t i = 0; i < m_devices.size(); ++i) {
         MappedDevice *device = m_devices[i];
         if (device->getDirection() == MidiDevice::Play) {
-            if (m_devicePortMap.find(device->getId()) != m_devicePortMap.end() &&
-                m_devicePortMap[device->getId()] != ClientPortPair()) {
+            if (m_devicePortMap.find(device->getId()) != m_devicePortMap.end()  &&
+                m_devicePortMap[device->getId()] != ClientPortPair()  &&
+                m_devicePortMap[device->getId()] != ClientPortPair(-1,-1)) {
                 return; // something is connected already
             } else if (!toConnect) {
                 toConnect = device;
             }
         } else if (device->getDirection() == MidiDevice::Record) {
-            if (m_devicePortMap.find(device->getId()) != m_devicePortMap.end() &&
-                m_devicePortMap[device->getId()] != ClientPortPair()) {
+            if (m_devicePortMap.find(device->getId()) != m_devicePortMap.end()  &&
+                m_devicePortMap[device->getId()] != ClientPortPair()  &&
+                m_devicePortMap[device->getId()] != ClientPortPair(-1,-1)) {
                 return; // something is connected already
             } else if (!toConnectRecord) {
                 toConnectRecord = device;
