@@ -1392,20 +1392,21 @@ RosegardenMainWindow::setDocument(RosegardenDocument* newDocument)
     connect(m_doc, SIGNAL(devicesResyncd()),
             this, SLOT(slotDocumentDevicesResyncd()));
 
-    // Connect the devices prior to calling initView() to make sure there
-    // is connection information for the MIPP to display.
-    RosegardenSequencer::getInstance()->connectSomething();
-    newDocument->getStudio().resyncDeviceConnections();
+    if (m_useSequencer) {
+        // Connect the devices prior to calling initView() to make sure there
+        // is connection information for the MIPP to display.
+        RosegardenSequencer::getInstance()->connectSomething();
 
-    // Send out the channel setup.  (And a lot more.  Is this overkill?)
-    // Since the device connections might have changed due to the
-    // connectSomething() call above, we need to send out the channel setups
-    // at this point.  Otherwise if we load a Composition with empty
-    // connections (like the example Vivaldi op.44), we get piano on every
-    // track.  Problem is that this is redundant.  We've already called
-    // initialiseStudio() previously in the createDocument() call.  Can
-    // we just remove that and only do this here?
-    //newDocument->initialiseStudio();
+        newDocument->getStudio().resyncDeviceConnections();
+
+        // Send out the channel setups.
+        // Since the device connections might have changed due to the
+        // connectSomething() call above, we need to send out the channel
+        // setups at this point.  Otherwise if we load a Composition with
+        // empty connections (like the example Vivaldi op.44), we get piano
+        // on every track.
+        newDocument->initialiseStudio();
+    }
 
     // Create a new RosegardenMainViewWidget and delete the old.
     initView();

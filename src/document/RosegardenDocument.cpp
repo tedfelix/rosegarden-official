@@ -624,7 +624,7 @@ bool RosegardenDocument::openDocument(const QString &filename,
         return false;
     }
 
-    RG_DEBUG << "RosegardenDocument::openDocument() end - "
+    RG_DEBUG << "openDocument() - "
              << "m_composition : " << &m_composition
              << " - m_composition->getNbSegments() : "
              << m_composition.getNbSegments()
@@ -645,25 +645,7 @@ bool RosegardenDocument::openDocument(const QString &filename,
         QMessageBox::critical(dynamic_cast<QWidget *>(parent()), tr("Rosegarden"), strtoqstr(e.getMessage()));
     }
 
-    if (m_soundEnabled) {
-
-        RG_DEBUG << "RosegardenDocument::openDocument: Sequencer is running, initialising studio";
-
-        // If we're loading the entire document
-        if (permanent) {
-            // Initialise the whole studio - faders, plugins etc.
-            // ??? This is too early.  Some of the devices might not have
-            //     connections yet.  AlsaDriver::connectSomething() hasn't
-            //     been called yet to match up any ambiguous connection
-            //     names with real ports.
-            initialiseStudio();
-        }
-
-    } else {
-        RG_DEBUG << "RosegardenDocument::openDocument: Sequencer is not running";
-    }
-
-    std::cerr << "RosegardenDocument::openDocument: Successfully opened document \"" << filename << "\"" << std::endl;
+    RG_DEBUG << "openDocument(): Successfully opened document \"" << filename << "\"";
 
     return true;
 }

@@ -1333,11 +1333,6 @@ SequenceManager::reinitialiseSequencerStudio()
      audioFileFormat);
     StudioControl::sendMappedEvent(mEff);
 
-
-    // Set the studio from the current document
-    //
-    m_doc->initialiseStudio();
-
     settings.endGroup();
 }
 
