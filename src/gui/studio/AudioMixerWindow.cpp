@@ -237,6 +237,7 @@ AudioMixerWindow::depopulate()
 void
 AudioMixerWindow::populate()
 {
+    //RG_DEBUG << "populate()";
 
     if (m_mainBox) {
 
@@ -572,14 +573,25 @@ AudioMixerWindow::populate()
 bool
 AudioMixerWindow::isInstrumentAssigned(InstrumentId id)
 {
-    Composition::trackcontainer &tracks =
+    // ...to a Track in the Composition.
+
+    // ??? This routine belongs in Composition.  Perhaps have
+    //     it return the TrackId?  Or a signal value for not found.
+    //     E.g. NO_TRACK from Track.h.
+
+    const Composition::trackcontainer &tracks =
         m_document->getComposition().getTracks();
 
-    for (Composition::trackcontainer::iterator ti =
-                tracks.begin(); ti != tracks.end(); ++ti) {
-        if (ti->second->getInstrument() == id) {
+    // For each Track in the Composition
+    for (Composition::trackcontainer::const_iterator trackIter =
+                 tracks.begin();
+         trackIter != tracks.end();
+         ++trackIter) {
+
+        // If this Track is using the Instrument
+        if (trackIter->second->getInstrument() == id)
             return true;
-        }
+
     }
 
     return false;
@@ -588,18 +600,32 @@ AudioMixerWindow::isInstrumentAssigned(InstrumentId id)
 void
 AudioMixerWindow::slotTrackAssignmentsChanged()
 {
-    for (FaderMap::iterator i = m_faders.begin(); i != m_faders.end(); ++i) {
+    //RG_DEBUG << "slotTrackAssignmentsChanged()";
 
+    // For each fader
+    for (FaderMap::const_iterator i = m_faders.begin();
+         i != m_faders.end();
+         ++i) {
         InstrumentId id = i->first;
-        // If we are pointing to the correct Instrument.
-        bool assigned = isInstrumentAssigned(id);
 
-        if (assigned != i->second.m_populated) {
+        // Do any Tracks in the Composition use this Instrument?
+        const bool assigned = isInstrumentAssigned(id);
+        const bool populated = i->second.m_populated;
+
+        // If we find a fader that is assigned but not populated,
+        // or we find a fader that is populated but not assigned...
+        if (assigned != populated) {
             // found an inconsistency
             populate();
-            return ;
+            return;
         }
     }
+
+    // ??? BUG.  What if a Track is switched from MIDI to Audio?
+    //     Since the above loop only goes through the faders here,
+    //     it doesn't see the new Audio track in the Composition.
+    //     The faders do not get updated so the new Audio fader
+    //     doesn't appear.
 }
 
 void
@@ -1681,10 +1707,11 @@ AudioMixerWindow::toggleNamedWidgets(bool show, const char* const name)
 void
 AudioMixerWindow::slotRepopulate()
 {
+    //RG_DEBUG << "slotRepopulate()";
+
     // this destroys everything if it already exists and rebuilds it, so while
     // it's overkill for changing one label, it should get the job done without
     // the need for even more new plumbing
-    RG_DEBUG << "POPULATE";
     populate();
 }
 
