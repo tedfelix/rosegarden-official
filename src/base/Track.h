@@ -24,8 +24,6 @@
 
 #include <string>
 
-#define NO_TRACK 0xDEADBEEF
-
 
 namespace Rosegarden
 {
@@ -34,6 +32,7 @@ namespace Rosegarden
 class Composition;
 
 typedef unsigned int TrackId;
+const TrackId NO_TRACK = 0xDEADBEEF;
 
 /// Representation of a Track.
 /**
