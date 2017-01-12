@@ -183,8 +183,7 @@ private:
 
     // Input strips.
     typedef std::map<InstrumentId, Strip> StripMap;
-    // ??? rename: m_inputs?
-    StripMap m_faders;
+    StripMap m_inputs;
 
     typedef std::vector<Strip> StripVector;
     StripVector m_submasters;

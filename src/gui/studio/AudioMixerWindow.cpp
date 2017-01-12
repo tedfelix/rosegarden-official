@@ -219,13 +219,13 @@ AudioMixerWindow::depopulate()
     // except that we need to delete the AudioRouteMenus first
     // because they aren't actually widgets but do contain them
 
-    for (StripMap::iterator i = m_faders.begin();
-            i != m_faders.end(); ++i) {
+    for (StripMap::iterator i = m_inputs.begin();
+            i != m_inputs.end(); ++i) {
         delete i->second.m_input;
         delete i->second.m_output;
     }
 
-    m_faders.clear();
+    m_inputs.clear();
     m_submasters.clear();
 
     if (m_surroundBoxLayout)
@@ -273,7 +273,7 @@ AudioMixerWindow::populate()
     m_monoPixmap = il.loadPixmap("mono-tiny");
     m_stereoPixmap = il.loadPixmap("stereo-tiny");
 
-    // Total cols: is 2 for each fader, submaster or master, plus 1
+    // Total cols: is 2 for each input, submaster or master, plus 1
     // for each spacer.
     QGridLayout *mainLayout = new QGridLayout(m_mainBox);
 
@@ -294,7 +294,7 @@ AudioMixerWindow::populate()
                 (*i)->getType() != Instrument::SoftSynth)
             continue;
 
-        Strip &strip = m_faders[(*i)->getId()];
+        Strip &strip = m_inputs[(*i)->getId()];
 
         if (!showUnassigned) {
             // Do any tracks use this instrument?
@@ -600,9 +600,9 @@ AudioMixerWindow::slotTrackAssignmentsChanged()
 {
     //RG_DEBUG << "slotTrackAssignmentsChanged()";
 
-    // For each fader
-    for (StripMap::const_iterator i = m_faders.begin();
-         i != m_faders.end();
+    // For each input
+    for (StripMap::const_iterator i = m_inputs.begin();
+         i != m_inputs.end();
          ++i) {
         InstrumentId id = i->first;
 
@@ -610,8 +610,8 @@ AudioMixerWindow::slotTrackAssignmentsChanged()
         const bool assigned = isInstrumentAssigned(id);
         const bool populated = i->second.m_populated;
 
-        // If we find a fader that is assigned but not populated,
-        // or we find a fader that is populated but not assigned...
+        // If we find an input that is assigned but not populated,
+        // or we find an input that is populated but not assigned...
         if (assigned != populated) {
             // found an inconsistency
             populate();
@@ -620,9 +620,9 @@ AudioMixerWindow::slotTrackAssignmentsChanged()
     }
 
     // ??? BUG.  What if a Track is switched from MIDI to Audio?
-    //     Since the above loop only goes through the faders here,
+    //     Since the above loop only goes through the inputs here,
     //     it doesn't see the new Audio track in the Composition.
-    //     The faders do not get updated so the new Audio fader
+    //     The inputs do not get updated so the new Audio input
     //     doesn't appear.
 }
 
@@ -653,7 +653,7 @@ AudioMixerWindow::slotPluginSelected(InstrumentId id,
 {
     if (id >= (int)AudioInstrumentBase) {
 
-        Strip &strip = m_faders[id];
+        Strip &strip = m_inputs[id];
         if (!strip.m_populated || !strip.m_pluginBox)
             return ;
 
@@ -771,12 +771,12 @@ AudioMixerWindow::updateFader(int id)
 {
     if (id == -1) {
 
-        // This used to be the special code for updating the monitor fader.
+        // This used to be the special code for updating the monitor strip.
         return ;
 
     } else if (id >= (int)AudioInstrumentBase) {
 
-        Strip &strip = m_faders[id];
+        Strip &strip = m_inputs[id];
         if (!strip.m_populated)
             return ;
         Instrument *instrument = m_studio->getInstrumentById(id);
@@ -811,7 +811,7 @@ void
 AudioMixerWindow::updateRouteButtons(int id)
 {
     if (id >= (int)AudioInstrumentBase) {
-        Strip &strip = m_faders[id];
+        Strip &strip = m_inputs[id];
         if (!strip.m_populated)
             return ;
         if (strip.m_input)
@@ -825,7 +825,7 @@ AudioMixerWindow::updateStereoButton(int id)
 {
     if (id >= (int)AudioInstrumentBase) {
 
-        Strip &strip = m_faders[id];
+        Strip &strip = m_inputs[id];
         if (!strip.m_populated)
             return ;
         Instrument *i = m_studio->getInstrumentById(id);
@@ -859,7 +859,7 @@ AudioMixerWindow::updatePluginButtons(int id)
     if (id >= (int)AudioInstrumentBase) {
 
         container = m_studio->getInstrumentById(id);
-        strip = &m_faders[id];
+        strip = &m_inputs[id];
         if (!strip->m_populated || !strip->m_pluginBox)
             return ;
 
@@ -928,8 +928,8 @@ AudioMixerWindow::slotSelectPlugin()
 {
     const QObject *s = sender();
 
-    for (StripMap::iterator i = m_faders.begin();
-            i != m_faders.end(); ++i) {
+    for (StripMap::iterator i = m_inputs.begin();
+            i != m_inputs.end(); ++i) {
 
         int index = 0;
         if (!i->second.m_populated || !i->second.m_pluginBox)
@@ -980,7 +980,7 @@ AudioMixerWindow::sendControllerRefresh()
     //!!! really want some notification of whether we have an external controller!
     int controllerChannel = 0;
 
-    for (StripMap::iterator i = m_faders.begin(); i != m_faders.end(); ++i) {
+    for (StripMap::iterator i = m_inputs.begin(); i != m_inputs.end(); ++i) {
 
         if (controllerChannel >= 16)
             break;
@@ -1057,8 +1057,8 @@ AudioMixerWindow::slotFaderLevelChanged(float dB)
 
     int controllerChannel = 0;
 
-    for (StripMap::iterator i = m_faders.begin();
-            i != m_faders.end(); ++i) {
+    for (StripMap::iterator i = m_inputs.begin();
+            i != m_inputs.end(); ++i) {
 
         if (i->second.m_fader == s) {
 
@@ -1121,8 +1121,8 @@ AudioMixerWindow::slotPanChanged(float pan)
 
     int controllerChannel = 0;
 
-    for (StripMap::iterator i = m_faders.begin();
-            i != m_faders.end(); ++i) {
+    for (StripMap::iterator i = m_inputs.begin();
+            i != m_inputs.end(); ++i) {
 
         if (i->second.m_pan == s) {
 
@@ -1170,8 +1170,8 @@ AudioMixerWindow::slotChannelsChanged()
     //!!! need to reconnect input, or change input channel number anyway
 
 
-    for (StripMap::iterator i = m_faders.begin();
-            i != m_faders.end(); ++i) {
+    for (StripMap::iterator i = m_inputs.begin();
+            i != m_inputs.end(); ++i) {
 
         if (s == i->second.m_stereoButton) {
 
@@ -1213,7 +1213,7 @@ AudioMixerWindow::slotRecordChanged()
 void
 AudioMixerWindow::updateMeters()
 {
-    for (StripMap::iterator i = m_faders.begin(); i != m_faders.end(); ++i) {
+    for (StripMap::iterator i = m_inputs.begin(); i != m_inputs.end(); ++i) {
 
         InstrumentId id = i->first;
         Strip &strip = i->second;
@@ -1286,7 +1286,7 @@ AudioMixerWindow::updateMonitorMeters()
     Composition &comp = m_document->getComposition();
     Composition::trackcontainer &tracks = comp.getTracks();
 
-    for (StripMap::iterator i = m_faders.begin(); i != m_faders.end(); ++i) {
+    for (StripMap::iterator i = m_inputs.begin(); i != m_inputs.end(); ++i) {
 
         InstrumentId id = i->first;
         Strip &strip = i->second;
@@ -1342,7 +1342,7 @@ AudioMixerWindow::slotControllerDeviceEventReceived(MappedEvent *e,
     raise();
 
     // get channel number n from event
-    // update instrument for nth fader in m_faders
+    // update instrument for nth input in m_inputs
 
     if (e->getType() != MappedEvent::MidiController)
         return ;
@@ -1351,7 +1351,7 @@ AudioMixerWindow::slotControllerDeviceEventReceived(MappedEvent *e,
     MidiByte value = e->getData2();
 
     unsigned int count = 0;
-    for (StripMap::iterator i = m_faders.begin(); i != m_faders.end(); ++i) {
+    for (StripMap::iterator i = m_inputs.begin(); i != m_inputs.end(); ++i) {
 
         if (count < channel) {
             ++count;
@@ -1395,7 +1395,7 @@ AudioMixerWindow::slotControllerDeviceEventReceived(MappedEvent *e,
         }
 
         // Inform everyone of the change.  Note that this will also call
-        // slotInstrumentChanged() to update the fader.
+        // slotInstrumentChanged() to update the input strip.
         instrument->changed();
 
         break;
@@ -1427,8 +1427,8 @@ AudioMixerWindow::slotSetInputCountFromAction()
 
     m_document->initialiseStudio();
 
-    for (StripMap::iterator i = m_faders.begin();
-            i != m_faders.end(); ++i) {
+    for (StripMap::iterator i = m_inputs.begin();
+            i != m_inputs.end(); ++i) {
         updateRouteButtons(i->first);
     }
 }
@@ -1562,7 +1562,7 @@ AudioMixerWindow::slotUpdateFaderVisibility()
 
     RG_DEBUG << "AudioMixerWindow::slotUpdateFaderVisibility: visiblility is " << d << " (options " << m_studio->getMixerDisplayOptions() << ")";
 
-    for (StripMap::iterator i = m_faders.begin(); i != m_faders.end(); ++i) {
+    for (StripMap::iterator i = m_inputs.begin(); i != m_inputs.end(); ++i) {
         if (i->first < SoftSynthInstrumentBase) {
             i->second.setVisible(d);
         }
@@ -1592,7 +1592,7 @@ AudioMixerWindow::slotUpdateSynthFaderVisibility()
     action->setChecked(!(m_studio->getMixerDisplayOptions() &
                          MIXER_OMIT_SYNTH_FADERS));
 
-    for (StripMap::iterator i = m_faders.begin(); i != m_faders.end(); ++i) {
+    for (StripMap::iterator i = m_inputs.begin(); i != m_inputs.end(); ++i) {
         if (i->first >= SoftSynthInstrumentBase) {
             i->second.setVisible(action->isChecked());
         }
@@ -1654,7 +1654,7 @@ AudioMixerWindow::slotUpdatePluginButtonVisibility()
     RG_DEBUG << "AudioMixerWindow::slotUpdatePluginButtonVisibility() action->isChecked("
              << (action->isChecked() ? "true" : "false") << ")";
 
-    for (StripMap::iterator i = m_faders.begin(); i != m_faders.end(); ++i) {
+    for (StripMap::iterator i = m_inputs.begin(); i != m_inputs.end(); ++i) {
         i->second.setPluginButtonsVisible(action->isChecked());
     }
 
