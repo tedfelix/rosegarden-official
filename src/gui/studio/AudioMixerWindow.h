@@ -167,6 +167,14 @@ private:
 
         QWidget *m_pluginBox;
         std::vector<PluginPushButton *> m_plugins;
+
+    private:
+        // Hide copy ctor and op=
+        // ??? Unfortunately, these are required for std::vector and
+        //     std::map.  Recommend storing QSharedPointer<Strip> instead.
+        //     It's a reasonable trade-off I think.
+        //Strip(const Strip &);
+        //Strip &operator=(const Strip &);
     };
 
     QWidget *m_surroundBox;

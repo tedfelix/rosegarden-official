@@ -294,7 +294,7 @@ AudioMixerWindow::populate()
                 (*i)->getType() != Instrument::SoftSynth)
             continue;
 
-        Strip strip;
+        Strip &strip = m_faders[(*i)->getId()];
 
         if (!showUnassigned) {
             // Do any tracks use this instrument?
@@ -434,8 +434,6 @@ AudioMixerWindow::populate()
             mainLayout->addWidget(strip.m_pluginBox, 7, col, 1, 2);
         }
 
-        // ??? COPY?!
-        m_faders[(*i)->getId()] = strip;
         updateFader((*i)->getId());
         updateRouteButtons((*i)->getId());
         updateStereoButton((*i)->getId());
@@ -537,29 +535,26 @@ AudioMixerWindow::populate()
 
     if (busses.size() > 0) {
 
-        Strip strip;
-        strip.m_populated = true;
+        m_master.m_populated = true;
 
-        strip.m_fader = new Fader
+        m_master.m_fader = new Fader
                       (AudioLevel::LongFader, 20, 240, m_mainBox);
-        strip.m_meter = new AudioVUMeter
+        m_master.m_meter = new AudioVUMeter
                       (m_mainBox, VUMeter::AudioPeakHoldIEC, true, false, 20, 240);
 
-        strip.m_fader->setToolTip(tr("Audio master output level"));
-        strip.m_meter->setToolTip(tr("Audio master output level"));
+        m_master.m_fader->setToolTip(tr("Audio master output level"));
+        m_master.m_meter->setToolTip(tr("Audio master output level"));
 
         QLabel *idLabel = new QLabel(tr("Master"), m_mainBox);
         idLabel->setFont(boldFont);
 
         mainLayout->addWidget(idLabel, 1, col, 1,  2, Qt::AlignLeft);
-        mainLayout->addWidget(strip.m_fader, 4, col, Qt::AlignCenter);
-        mainLayout->addWidget(strip.m_meter, 4, col + 1, Qt::AlignCenter);
+        mainLayout->addWidget(m_master.m_fader, 4, col, Qt::AlignCenter);
+        mainLayout->addWidget(m_master.m_meter, 4, col + 1, Qt::AlignCenter);
 
-        // ??? COPY?!
-        m_master = strip;
         updateFader(0);
 
-        connect(strip.m_fader, SIGNAL(faderChanged(float)),
+        connect(m_master.m_fader, SIGNAL(faderChanged(float)),
                 this, SLOT(slotFaderLevelChanged(float)));
     }
 
@@ -1569,9 +1564,7 @@ AudioMixerWindow::slotUpdateFaderVisibility()
 
     for (StripMap::iterator i = m_faders.begin(); i != m_faders.end(); ++i) {
         if (i->first < SoftSynthInstrumentBase) {
-            // ??? COPY?!  We should probably disable copy.
-            Strip strip = i->second;
-            strip.setVisible(d);
+            i->second.setVisible(d);
         }
     }
 
@@ -1601,9 +1594,7 @@ AudioMixerWindow::slotUpdateSynthFaderVisibility()
 
     for (StripMap::iterator i = m_faders.begin(); i != m_faders.end(); ++i) {
         if (i->first >= SoftSynthInstrumentBase) {
-            // ??? COPY?!
-            Strip strip = i->second;
-            strip.setVisible(action->isChecked());
+            i->second.setVisible(action->isChecked());
         }
     }
 
@@ -1633,9 +1624,7 @@ AudioMixerWindow::slotUpdateSubmasterVisibility()
                          MIXER_OMIT_SUBMASTERS));
 
     for (StripVector::iterator i = m_submasters.begin(); i != m_submasters.end(); ++i) {
-        // ??? COPY?!
-        Strip strip = *i;
-        strip.setVisible(action->isChecked());
+        i->setVisible(action->isChecked());
     }
 
     toggleNamedWidgets(action->isChecked(), "subMaster");
@@ -1666,9 +1655,7 @@ AudioMixerWindow::slotUpdatePluginButtonVisibility()
              << (action->isChecked() ? "true" : "false") << ")";
 
     for (StripMap::iterator i = m_faders.begin(); i != m_faders.end(); ++i) {
-        // ??? COPY?!
-        Strip strip = i->second;
-        strip.setPluginButtonsVisible(action->isChecked());
+        i->second.setPluginButtonsVisible(action->isChecked());
     }
 
     adjustSize();
