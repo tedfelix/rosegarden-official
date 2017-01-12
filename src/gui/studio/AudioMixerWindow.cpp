@@ -219,7 +219,7 @@ AudioMixerWindow::depopulate()
     // except that we need to delete the AudioRouteMenus first
     // because they aren't actually widgets but do contain them
 
-    for (FaderMap::iterator i = m_faders.begin();
+    for (StripMap::iterator i = m_faders.begin();
             i != m_faders.end(); ++i) {
         delete i->second.m_input;
         delete i->second.m_output;
@@ -294,7 +294,7 @@ AudioMixerWindow::populate()
                 (*i)->getType() != Instrument::SoftSynth)
             continue;
 
-        FaderRec rec;
+        Strip strip;
 
         if (!showUnassigned) {
             // Do any tracks use this instrument?
@@ -302,67 +302,67 @@ AudioMixerWindow::populate()
                 continue;
             }
         }
-        rec.m_populated = true;
+        strip.m_populated = true;
 
         if ((*i)->getType() == Instrument::Audio) {
-            rec.m_input = new AudioRouteMenu(m_mainBox,
+            strip.m_input = new AudioRouteMenu(m_mainBox,
                                              AudioRouteMenu::In,
                                              AudioRouteMenu::Compact,
                                              m_studio, *i);
-            rec.m_input->getWidget()->setToolTip(tr("Record input source"));
-            rec.m_input->getWidget()->setMaximumWidth(45);
+            strip.m_input->getWidget()->setToolTip(tr("Record input source"));
+            strip.m_input->getWidget()->setMaximumWidth(45);
         } else {
-            rec.m_input = 0;
+            strip.m_input = 0;
         }
 
-        rec.m_output = new AudioRouteMenu(m_mainBox,
+        strip.m_output = new AudioRouteMenu(m_mainBox,
                                           AudioRouteMenu::Out,
                                           AudioRouteMenu::Compact,
                                           m_studio, *i);
-        rec.m_output->getWidget()->setToolTip(tr("Output destination"));
-        rec.m_output->getWidget()->setMaximumWidth(45);
+        strip.m_output->getWidget()->setToolTip(tr("Output destination"));
+        strip.m_output->getWidget()->setMaximumWidth(45);
 
-        rec.m_pan = new Rotary
+        strip.m_pan = new Rotary
                     (m_mainBox, -100.0, 100.0, 1.0, 5.0, 0.0, 20,
                      Rotary::NoTicks, false, true);
 
         if ((*i)->getType() == Instrument::Audio) {
-            rec.m_pan->setKnobColour(GUIPalette::getColour(GUIPalette::RotaryPastelGreen));
+            strip.m_pan->setKnobColour(GUIPalette::getColour(GUIPalette::RotaryPastelGreen));
         } else {
-            rec.m_pan->setKnobColour(GUIPalette::getColour(GUIPalette::RotaryPastelYellow));
+            strip.m_pan->setKnobColour(GUIPalette::getColour(GUIPalette::RotaryPastelYellow));
         }
 
-        rec.m_pan->setToolTip(tr("Pan"));
+        strip.m_pan->setToolTip(tr("Pan"));
 
-        rec.m_fader = new Fader
+        strip.m_fader = new Fader
                       (AudioLevel::LongFader, 20, 240, m_mainBox);
-        rec.m_meter = new AudioVUMeter
-                      (m_mainBox, VUMeter::AudioPeakHoldIECLong, true, rec.m_input != 0,
+        strip.m_meter = new AudioVUMeter
+                      (m_mainBox, VUMeter::AudioPeakHoldIECLong, true, strip.m_input != 0,
                        20, 240);
 
-        rec.m_fader->setToolTip(tr("Audio level"));
-        rec.m_meter->setToolTip(tr("Audio level"));
+        strip.m_fader->setToolTip(tr("Audio level"));
+        strip.m_meter->setToolTip(tr("Audio level"));
 
-        rec.m_stereoButton = new QPushButton(m_mainBox);
-        rec.m_stereoButton->setIcon(m_monoPixmap);
-        rec.m_stereoButton->setFixedSize(20, 20);
-        rec.m_stereoButton->setFlat(true);
-        rec.m_stereoness = false;
-        rec.m_stereoButton->setToolTip(tr("Mono or stereo"));
+        strip.m_stereoButton = new QPushButton(m_mainBox);
+        strip.m_stereoButton->setIcon(m_monoPixmap);
+        strip.m_stereoButton->setFixedSize(20, 20);
+        strip.m_stereoButton->setFlat(true);
+        strip.m_stereoness = false;
+        strip.m_stereoButton->setToolTip(tr("Mono or stereo"));
 
-        rec.m_recordButton = new QPushButton(m_mainBox);
-        rec.m_recordButton->setText("R");
-        rec.m_recordButton->setCheckable(true);
-        rec.m_recordButton->setFixedWidth(rec.m_stereoButton->width());
-        rec.m_recordButton->setFixedHeight(rec.m_stereoButton->height());
-        rec.m_recordButton->setFlat(true);
-        rec.m_recordButton->setToolTip(tr("Arm recording"));
+        strip.m_recordButton = new QPushButton(m_mainBox);
+        strip.m_recordButton->setText("R");
+        strip.m_recordButton->setCheckable(true);
+        strip.m_recordButton->setFixedWidth(strip.m_stereoButton->width());
+        strip.m_recordButton->setFixedHeight(strip.m_stereoButton->height());
+        strip.m_recordButton->setFlat(true);
+        strip.m_recordButton->setToolTip(tr("Arm recording"));
 
-        rec.m_pluginBox = new QWidget(m_mainBox);
+        strip.m_pluginBox = new QWidget(m_mainBox);
         QVBoxLayout *pluginBoxLayout = new QVBoxLayout;
 
         for (int p = 0; p < 5; ++p) {
-            PluginPushButton *plugin = new PluginPushButton(rec.m_pluginBox);
+            PluginPushButton *plugin = new PluginPushButton(strip.m_pluginBox);
             pluginBoxLayout->addWidget(plugin);
             QFont font;
             font.setPointSize(6);
@@ -370,13 +370,13 @@ AudioMixerWindow::populate()
             plugin->setText(tr("<none>"));
             plugin->setMaximumWidth(45);
             plugin->setToolTip(tr("Click to load an audio plugin"));
-            rec.m_plugins.push_back(plugin);
+            strip.m_plugins.push_back(plugin);
             connect(plugin, SIGNAL(clicked()),
                     this, SLOT(slotSelectPlugin()));
         }
 
-        rec.m_pluginBox->setLayout(pluginBoxLayout);
-        rec.m_pluginBox->show();
+        strip.m_pluginBox->setLayout(pluginBoxLayout);
+        strip.m_pluginBox->show();
 
         InstrumentAliasButton *aliasButton = new InstrumentAliasButton(m_mainBox, (*i));
         aliasButton->setFixedSize(10, 6); // golden rectangle
@@ -416,40 +416,41 @@ AudioMixerWindow::populate()
         idLabel->setFont(boldFont);
         idLabel->setToolTip(tr("Click the button above to rename this instrument"));
 
-        if (rec.m_input) {
-            mainLayout->addWidget(rec.m_input->getWidget(), 2, col, 1, 2);
+        if (strip.m_input) {
+            mainLayout->addWidget(strip.m_input->getWidget(), 2, col, 1, 2);
         }
-        mainLayout->addWidget(rec.m_output->getWidget(), 3, col, 1, 2);
+        mainLayout->addWidget(strip.m_output->getWidget(), 3, col, 1, 2);
 
         mainLayout->addWidget(idLabel, 1, col, 1, 2, Qt::AlignLeft);
-        mainLayout->addWidget(rec.m_pan, 6, col, Qt::AlignCenter);
+        mainLayout->addWidget(strip.m_pan, 6, col, Qt::AlignCenter);
 
-        mainLayout->addWidget(rec.m_fader, 4, col, Qt::AlignCenter);
-        mainLayout->addWidget(rec.m_meter, 4, col + 1, Qt::AlignCenter);
+        mainLayout->addWidget(strip.m_fader, 4, col, Qt::AlignCenter);
+        mainLayout->addWidget(strip.m_meter, 4, col + 1, Qt::AlignCenter);
 
-        rec.m_recordButton->hide();
-        mainLayout->addWidget(rec.m_stereoButton, 6, col + 1);
+        strip.m_recordButton->hide();
+        mainLayout->addWidget(strip.m_stereoButton, 6, col + 1);
 
-        if (rec.m_pluginBox) {
-            mainLayout->addWidget(rec.m_pluginBox, 7, col, 1, 2);
+        if (strip.m_pluginBox) {
+            mainLayout->addWidget(strip.m_pluginBox, 7, col, 1, 2);
         }
 
-        m_faders[(*i)->getId()] = rec;
+        // ??? COPY?!
+        m_faders[(*i)->getId()] = strip;
         updateFader((*i)->getId());
         updateRouteButtons((*i)->getId());
         updateStereoButton((*i)->getId());
         updatePluginButtons((*i)->getId());
 
-        connect(rec.m_fader, SIGNAL(faderChanged(float)),
+        connect(strip.m_fader, SIGNAL(faderChanged(float)),
                 this, SLOT(slotFaderLevelChanged(float)));
 
-        connect(rec.m_pan, SIGNAL(valueChanged(float)),
+        connect(strip.m_pan, SIGNAL(valueChanged(float)),
                 this, SLOT(slotPanChanged(float)));
 
-        connect(rec.m_stereoButton, SIGNAL(clicked()),
+        connect(strip.m_stereoButton, SIGNAL(clicked()),
                 this, SLOT(slotChannelsChanged()));
 
-        connect(rec.m_recordButton, SIGNAL(clicked()),
+        connect(strip.m_recordButton, SIGNAL(clicked()),
                 this, SLOT(slotRecordChanged()));
 
         ++count;
@@ -465,29 +466,29 @@ AudioMixerWindow::populate()
         if (i == busses.begin())
             continue; // that one's the master
 
-        FaderRec rec;
-        rec.m_populated = true;
+        Strip strip;
+        strip.m_populated = true;
 
-        rec.m_pan = new Rotary
+        strip.m_pan = new Rotary
                     (m_mainBox, -100.0, 100.0, 1.0, 5.0, 0.0, 20,
                      Rotary::NoTicks, false, true);
-        rec.m_pan->setKnobColour(GUIPalette::getColour(GUIPalette::RotaryPastelBlue));
+        strip.m_pan->setKnobColour(GUIPalette::getColour(GUIPalette::RotaryPastelBlue));
 
-        rec.m_pan->setToolTip(tr("Pan"));
+        strip.m_pan->setToolTip(tr("Pan"));
 
-        rec.m_fader = new Fader
+        strip.m_fader = new Fader
                       (AudioLevel::LongFader, 20, 240, m_mainBox);
-        rec.m_meter = new AudioVUMeter
+        strip.m_meter = new AudioVUMeter
                       (m_mainBox, VUMeter::AudioPeakHoldIECLong, true, false, 20, 240);
 
-        rec.m_fader->setToolTip(tr("Audio level"));
-        rec.m_meter->setToolTip(tr("Audio level"));
+        strip.m_fader->setToolTip(tr("Audio level"));
+        strip.m_meter->setToolTip(tr("Audio level"));
 
-        rec.m_pluginBox = new QWidget(m_mainBox);
+        strip.m_pluginBox = new QWidget(m_mainBox);
         QVBoxLayout *pluginBoxLayout = new QVBoxLayout;
 
         for (int p = 0; p < 5; ++p) {
-            PluginPushButton *plugin = new PluginPushButton(rec.m_pluginBox);
+            PluginPushButton *plugin = new PluginPushButton(strip.m_pluginBox);
             pluginBoxLayout->addWidget(plugin);
             QFont font;
             font.setPointSize(6);
@@ -495,12 +496,12 @@ AudioMixerWindow::populate()
             plugin->setText(tr("<none>"));
             plugin->setMaximumWidth(45);
             plugin->setToolTip(tr("Click to load an audio plugin"));
-            rec.m_plugins.push_back(plugin);
+            strip.m_plugins.push_back(plugin);
             connect(plugin, SIGNAL(clicked()),
                     this, SLOT(slotSelectPlugin()));
         }
 
-        rec.m_pluginBox->setLayout(pluginBoxLayout);
+        strip.m_pluginBox->setLayout(pluginBoxLayout);
 
         QLabel *idLabel = new QLabel(tr("Sub %1").arg(count), m_mainBox);
         idLabel->setFont(boldFont);
@@ -509,23 +510,24 @@ AudioMixerWindow::populate()
 
         mainLayout->addWidget(idLabel, 1, col, 1, 2, Qt::AlignLeft);
 
-        mainLayout->addWidget(rec.m_pan, 6, col, 1, 2, Qt::AlignCenter);
+        mainLayout->addWidget(strip.m_pan, 6, col, 1, 2, Qt::AlignCenter);
 
-        mainLayout->addWidget(rec.m_fader, 4, col, Qt::AlignCenter);
-        mainLayout->addWidget(rec.m_meter, 4, col + 1, Qt::AlignCenter);
+        mainLayout->addWidget(strip.m_fader, 4, col, Qt::AlignCenter);
+        mainLayout->addWidget(strip.m_meter, 4, col + 1, Qt::AlignCenter);
 
-        if (rec.m_pluginBox) {
-            mainLayout->addWidget(rec.m_pluginBox, 7, col, 1, 2);
+        if (strip.m_pluginBox) {
+            mainLayout->addWidget(strip.m_pluginBox, 7, col, 1, 2);
         }
 
-        m_submasters.push_back(rec);
+        // ??? COPY?!
+        m_submasters.push_back(strip);
         updateFader(count);
         updatePluginButtons(count);
 
-        connect(rec.m_fader, SIGNAL(faderChanged(float)),
+        connect(strip.m_fader, SIGNAL(faderChanged(float)),
                 this, SLOT(slotFaderLevelChanged(float)));
 
-        connect(rec.m_pan, SIGNAL(valueChanged(float)),
+        connect(strip.m_pan, SIGNAL(valueChanged(float)),
                 this, SLOT(slotPanChanged(float)));
 
         ++count;
@@ -535,28 +537,29 @@ AudioMixerWindow::populate()
 
     if (busses.size() > 0) {
 
-        FaderRec rec;
-        rec.m_populated = true;
+        Strip strip;
+        strip.m_populated = true;
 
-        rec.m_fader = new Fader
+        strip.m_fader = new Fader
                       (AudioLevel::LongFader, 20, 240, m_mainBox);
-        rec.m_meter = new AudioVUMeter
+        strip.m_meter = new AudioVUMeter
                       (m_mainBox, VUMeter::AudioPeakHoldIEC, true, false, 20, 240);
 
-        rec.m_fader->setToolTip(tr("Audio master output level"));
-        rec.m_meter->setToolTip(tr("Audio master output level"));
+        strip.m_fader->setToolTip(tr("Audio master output level"));
+        strip.m_meter->setToolTip(tr("Audio master output level"));
 
         QLabel *idLabel = new QLabel(tr("Master"), m_mainBox);
         idLabel->setFont(boldFont);
 
         mainLayout->addWidget(idLabel, 1, col, 1,  2, Qt::AlignLeft);
-        mainLayout->addWidget(rec.m_fader, 4, col, Qt::AlignCenter);
-        mainLayout->addWidget(rec.m_meter, 4, col + 1, Qt::AlignCenter);
+        mainLayout->addWidget(strip.m_fader, 4, col, Qt::AlignCenter);
+        mainLayout->addWidget(strip.m_meter, 4, col + 1, Qt::AlignCenter);
 
-        m_master = rec;
+        // ??? COPY?!
+        m_master = strip;
         updateFader(0);
 
-        connect(rec.m_fader, SIGNAL(faderChanged(float)),
+        connect(strip.m_fader, SIGNAL(faderChanged(float)),
                 this, SLOT(slotFaderLevelChanged(float)));
     }
 
@@ -603,7 +606,7 @@ AudioMixerWindow::slotTrackAssignmentsChanged()
     //RG_DEBUG << "slotTrackAssignmentsChanged()";
 
     // For each fader
-    for (FaderMap::const_iterator i = m_faders.begin();
+    for (StripMap::const_iterator i = m_faders.begin();
          i != m_faders.end();
          ++i) {
         InstrumentId id = i->first;
@@ -655,22 +658,22 @@ AudioMixerWindow::slotPluginSelected(InstrumentId id,
 {
     if (id >= (int)AudioInstrumentBase) {
 
-        FaderRec &rec = m_faders[id];
-        if (!rec.m_populated || !rec.m_pluginBox)
+        Strip &strip = m_faders[id];
+        if (!strip.m_populated || !strip.m_pluginBox)
             return ;
 
         // nowhere to display synth plugin info yet
-        if (index >= int(rec.m_plugins.size()))
+        if (index >= int(strip.m_plugins.size()))
             return ;
 
         if (plugin == -1) {
 
-            rec.m_plugins[index]->setText(tr("<none>"));
-            rec.m_plugins[index]->setToolTip(tr("<no plugin>"));
+            strip.m_plugins[index]->setText(tr("<none>"));
+            strip.m_plugins[index]->setToolTip(tr("<no plugin>"));
 
             //QT3: color hackery simply ignored here.  
             //
-//            rec.m_plugins[index]->setPaletteBackgroundColor
+//            strip.m_plugins[index]->setPaletteBackgroundColor
 //            (qApp->palette().
 //             color(QPalette::Active, QColorGroup::Button));
 
@@ -686,9 +689,9 @@ AudioMixerWindow::slotPluginSelected(InstrumentId id,
             QColor pluginBgColour = Qt::blue;  // anything random will do
 
             if (pluginClass) {
-                rec.m_plugins[index]->
+                strip.m_plugins[index]->
                 setText(pluginClass->getLabel());
-                rec.m_plugins[index]->setToolTip(pluginClass->getLabel());
+                strip.m_plugins[index]->setToolTip(pluginClass->getLabel());
 
                 pluginBgColour = pluginClass->getColour();
             }
@@ -704,33 +707,33 @@ AudioMixerWindow::slotPluginSelected(InstrumentId id,
             // code gazelles don't need to write no stinkin' comments.
 
             if (pluginBgColour == Qt::darkRed) {
-                rec.m_plugins[index]->setState(PluginPushButton::Active);
+                strip.m_plugins[index]->setState(PluginPushButton::Active);
             } else if (pluginBgColour == Qt::black) {
-                rec.m_plugins[index]->setState(PluginPushButton::Bypassed);
+                strip.m_plugins[index]->setState(PluginPushButton::Bypassed);
             } else {
-                rec.m_plugins[index]->setState(PluginPushButton::Normal);
+                strip.m_plugins[index]->setState(PluginPushButton::Normal);
             }
 
         }
     } else if (id > 0 && id <= (unsigned int)m_submasters.size()) {
 
-        FaderRec &rec = m_submasters[id - 1];
-        if (!rec.m_populated || !rec.m_pluginBox)
+        Strip &strip = m_submasters[id - 1];
+        if (!strip.m_populated || !strip.m_pluginBox)
             return ;
-        if (index >= int(rec.m_plugins.size()))
+        if (index >= int(strip.m_plugins.size()))
             return ;
 
         if (plugin == -1) {
 
-            rec.m_plugins[index]->setText(tr("<none>"));
-            rec.m_plugins[index]->setToolTip(tr("<no plugin>"));
+            strip.m_plugins[index]->setText(tr("<none>"));
+            strip.m_plugins[index]->setToolTip(tr("<no plugin>"));
 
             //QT3: color hackery just plowed through and glossed over all
             // through here...  It's all too complicated to sort out without
             // being able to run and look at things, so this will just have to
             // be something where we take a look back and figure it out later.
 
-//            rec.m_plugins[index]->setPaletteBackgroundColor
+//            strip.m_plugins[index]->setPaletteBackgroundColor
 //            (qApp->palette().
 //             color(QPalette::Active, QColorGroup::Button));
 
@@ -743,16 +746,16 @@ AudioMixerWindow::slotPluginSelected(InstrumentId id,
 //                qApp->palette().color(QPalette::Active, QColorGroup::Light);
 
             if (pluginClass) {
-                rec.m_plugins[index]->
+                strip.m_plugins[index]->
                 setText(pluginClass->getLabel());
-                rec.m_plugins[index]->setToolTip(pluginClass->getLabel());
+                strip.m_plugins[index]->setToolTip(pluginClass->getLabel());
 
                 pluginBgColour = pluginClass->getColour();
             }
 
 
-//            rec.m_plugins[index]->setPaletteForegroundColor(QColor(Qt::white));
-//            rec.m_plugins[index]->setPaletteBackgroundColor(pluginBgColour);
+//            strip.m_plugins[index]->setPaletteForegroundColor(QColor(Qt::white));
+//            strip.m_plugins[index]->setPaletteBackgroundColor(pluginBgColour);
         }
     }
     // Force an immediate update of button colors.
@@ -778,33 +781,33 @@ AudioMixerWindow::updateFader(int id)
 
     } else if (id >= (int)AudioInstrumentBase) {
 
-        FaderRec &rec = m_faders[id];
-        if (!rec.m_populated)
+        Strip &strip = m_faders[id];
+        if (!strip.m_populated)
             return ;
         Instrument *instrument = m_studio->getInstrumentById(id);
 
-        rec.m_fader->blockSignals(true);
-        rec.m_fader->setFader(instrument->getLevel());
-        rec.m_fader->blockSignals(false);
+        strip.m_fader->blockSignals(true);
+        strip.m_fader->setFader(instrument->getLevel());
+        strip.m_fader->blockSignals(false);
 
-        rec.m_pan->blockSignals(true);
-        rec.m_pan->setPosition(instrument->getPan() - 100);
-        rec.m_pan->blockSignals(false);
+        strip.m_pan->blockSignals(true);
+        strip.m_pan->setPosition(instrument->getPan() - 100);
+        strip.m_pan->blockSignals(false);
 
     } else {
 
-        FaderRec &rec = (id == 0 ? m_master : m_submasters[id - 1]);
+        Strip &strip = (id == 0 ? m_master : m_submasters[id - 1]);
         BussList busses = m_studio->getBusses();
         Buss *buss = busses[id];
 
-        rec.m_fader->blockSignals(true);
-        rec.m_fader->setFader(buss->getLevel());
-        rec.m_fader->blockSignals(false);
+        strip.m_fader->blockSignals(true);
+        strip.m_fader->setFader(buss->getLevel());
+        strip.m_fader->blockSignals(false);
 
-        if (rec.m_pan) {
-            rec.m_pan->blockSignals(true);
-            rec.m_pan->setPosition(buss->getPan() - 100);
-            rec.m_pan->blockSignals(false);
+        if (strip.m_pan) {
+            strip.m_pan->blockSignals(true);
+            strip.m_pan->setPosition(buss->getPan() - 100);
+            strip.m_pan->blockSignals(false);
         }
     }
 }
@@ -813,12 +816,12 @@ void
 AudioMixerWindow::updateRouteButtons(int id)
 {
     if (id >= (int)AudioInstrumentBase) {
-        FaderRec &rec = m_faders[id];
-        if (!rec.m_populated)
+        Strip &strip = m_faders[id];
+        if (!strip.m_populated)
             return ;
-        if (rec.m_input)
-            rec.m_input->slotRepopulate();
-        rec.m_output->slotRepopulate();
+        if (strip.m_input)
+            strip.m_input->slotRepopulate();
+        strip.m_output->slotRepopulate();
     }
 }
 
@@ -827,21 +830,21 @@ AudioMixerWindow::updateStereoButton(int id)
 {
     if (id >= (int)AudioInstrumentBase) {
 
-        FaderRec &rec = m_faders[id];
-        if (!rec.m_populated)
+        Strip &strip = m_faders[id];
+        if (!strip.m_populated)
             return ;
         Instrument *i = m_studio->getInstrumentById(id);
 
         bool stereo = (i->getAudioChannels() > 1);
-        if (stereo == rec.m_stereoness)
+        if (stereo == strip.m_stereoness)
             return ;
 
-        rec.m_stereoness = stereo;
+        strip.m_stereoness = stereo;
 
         if (stereo)
-            rec.m_stereoButton->setIcon(m_stereoPixmap);
+            strip.m_stereoButton->setIcon(m_stereoPixmap);
         else
-            rec.m_stereoButton->setIcon(m_monoPixmap);
+            strip.m_stereoButton->setIcon(m_monoPixmap);
     }
 }
 
@@ -855,14 +858,14 @@ AudioMixerWindow::updateMiscButtons(int)
 void
 AudioMixerWindow::updatePluginButtons(int id)
 {
-    FaderRec *rec = 0;
+    Strip *strip = 0;
     PluginContainer *container = 0;
 
     if (id >= (int)AudioInstrumentBase) {
 
         container = m_studio->getInstrumentById(id);
-        rec = &m_faders[id];
-        if (!rec->m_populated || !rec->m_pluginBox)
+        strip = &m_faders[id];
+        if (!strip->m_populated || !strip->m_pluginBox)
             return ;
 
     } else {
@@ -871,21 +874,21 @@ AudioMixerWindow::updatePluginButtons(int id)
         if (int(busses.size()) > id) {
             container = busses[id];
         }
-        rec = &m_submasters[id - 1];
-        if (!rec->m_populated || !rec->m_pluginBox)
+        strip = &m_submasters[id - 1];
+        if (!strip->m_populated || !strip->m_pluginBox)
             return ;
     }
 
-    if (rec && container) {
+    if (strip && container) {
 
-        for (size_t i = 0; i < rec->m_plugins.size(); i++) {
+        for (size_t i = 0; i < strip->m_plugins.size(); i++) {
 
             bool used = false;
             bool bypass = false;
             QColor pluginBgColour = Qt::green;
 //                qApp->palette().color(QPalette::Active, QColorGroup::Light);
 
-            rec->m_plugins[i]->show();
+            strip->m_plugins[i]->show();
 
             AudioPluginInstance *inst = container->getPlugin(i);
 
@@ -896,8 +899,8 @@ AudioMixerWindow::updatePluginButtons(int id)
                       getPositionByIdentifier(inst->getIdentifier().c_str()));
 
                 if (pluginClass) {
-                    rec->m_plugins[i]->setText(pluginClass->getLabel());
-                    rec->m_plugins[i]->setToolTip(pluginClass->getLabel());
+                    strip->m_plugins[i]->setText(pluginClass->getLabel());
+                    strip->m_plugins[i]->setToolTip(pluginClass->getLabel());
 
                     pluginBgColour = pluginClass->getColour();
                 }
@@ -907,19 +910,19 @@ AudioMixerWindow::updatePluginButtons(int id)
 
             } else {
 
-                rec->m_plugins[i]->setText(tr("<none>"));
-                rec->m_plugins[i]->setToolTip(tr("<no plugin>"));
+                strip->m_plugins[i]->setText(tr("<none>"));
+                strip->m_plugins[i]->setToolTip(tr("<no plugin>"));
 
                 if (inst)
                     bypass = inst->isBypassed();
             }
 
             if (bypass) {
-                rec->m_plugins[i]->setState(PluginPushButton::Bypassed);
+                strip->m_plugins[i]->setState(PluginPushButton::Bypassed);
             } else if (used) {
-                rec->m_plugins[i]->setState(PluginPushButton::Active);
+                strip->m_plugins[i]->setState(PluginPushButton::Active);
             } else {
-                rec->m_plugins[i]->setState(PluginPushButton::Normal);
+                strip->m_plugins[i]->setState(PluginPushButton::Normal);
             }
         }
     }
@@ -930,7 +933,7 @@ AudioMixerWindow::slotSelectPlugin()
 {
     const QObject *s = sender();
 
-    for (FaderMap::iterator i = m_faders.begin();
+    for (StripMap::iterator i = m_faders.begin();
             i != m_faders.end(); ++i) {
 
         int index = 0;
@@ -953,7 +956,7 @@ AudioMixerWindow::slotSelectPlugin()
 
     int b = 1;
 
-    for (FaderVector::iterator i = m_submasters.begin();
+    for (StripVector::iterator i = m_submasters.begin();
             i != m_submasters.end(); ++i) {
 
         int index = 0;
@@ -982,7 +985,7 @@ AudioMixerWindow::sendControllerRefresh()
     //!!! really want some notification of whether we have an external controller!
     int controllerChannel = 0;
 
-    for (FaderMap::iterator i = m_faders.begin(); i != m_faders.end(); ++i) {
+    for (StripMap::iterator i = m_faders.begin(); i != m_faders.end(); ++i) {
 
         if (controllerChannel >= 16)
             break;
@@ -1039,7 +1042,7 @@ AudioMixerWindow::slotFaderLevelChanged(float dB)
 
     int index = 1;
 
-    for (FaderVector::iterator i = m_submasters.begin();
+    for (StripVector::iterator i = m_submasters.begin();
             i != m_submasters.end(); ++i) {
 
         if (i->m_fader == s) {
@@ -1059,7 +1062,7 @@ AudioMixerWindow::slotFaderLevelChanged(float dB)
 
     int controllerChannel = 0;
 
-    for (FaderMap::iterator i = m_faders.begin();
+    for (StripMap::iterator i = m_faders.begin();
             i != m_faders.end(); ++i) {
 
         if (i->second.m_fader == s) {
@@ -1104,7 +1107,7 @@ AudioMixerWindow::slotPanChanged(float pan)
 
     int index = 1;
 
-    for (FaderVector::iterator i = m_submasters.begin();
+    for (StripVector::iterator i = m_submasters.begin();
             i != m_submasters.end(); ++i) {
 
         if (i->m_pan == s) {
@@ -1123,7 +1126,7 @@ AudioMixerWindow::slotPanChanged(float pan)
 
     int controllerChannel = 0;
 
-    for (FaderMap::iterator i = m_faders.begin();
+    for (StripMap::iterator i = m_faders.begin();
             i != m_faders.end(); ++i) {
 
         if (i->second.m_pan == s) {
@@ -1172,7 +1175,7 @@ AudioMixerWindow::slotChannelsChanged()
     //!!! need to reconnect input, or change input channel number anyway
 
 
-    for (FaderMap::iterator i = m_faders.begin();
+    for (StripMap::iterator i = m_faders.begin();
             i != m_faders.end(); ++i) {
 
         if (s == i->second.m_stereoButton) {
@@ -1215,11 +1218,11 @@ AudioMixerWindow::slotRecordChanged()
 void
 AudioMixerWindow::updateMeters()
 {
-    for (FaderMap::iterator i = m_faders.begin(); i != m_faders.end(); ++i) {
+    for (StripMap::iterator i = m_faders.begin(); i != m_faders.end(); ++i) {
 
         InstrumentId id = i->first;
-        FaderRec &rec = i->second;
-        if (!rec.m_populated)
+        Strip &strip = i->second;
+        if (!strip.m_populated)
             continue;
 
         LevelInfo info;
@@ -1231,21 +1234,21 @@ AudioMixerWindow::updateMeters()
             float dBleft = AudioLevel::fader_to_dB
                            (info.level, 127, AudioLevel::LongFader);
 
-            if (rec.m_stereoness) {
+            if (strip.m_stereoness) {
                 float dBright = AudioLevel::fader_to_dB
                                 (info.levelRight, 127, AudioLevel::LongFader);
 
-                rec.m_meter->setLevel(dBleft, dBright);
+                strip.m_meter->setLevel(dBleft, dBright);
 
             } else {
-                rec.m_meter->setLevel(dBleft);
+                strip.m_meter->setLevel(dBleft);
             }
         }
     }
 
     for (unsigned int i = 0; i < m_submasters.size(); ++i) {
 
-        FaderRec &rec = m_submasters[i];
+        Strip &strip = m_submasters[i];
 
         LevelInfo info;
         if (!SequencerDataBlock::getInstance()->getSubmasterLevel(i, info)) {
@@ -1258,7 +1261,7 @@ AudioMixerWindow::updateMeters()
         float dBright = AudioLevel::fader_to_dB
                         (info.levelRight, 127, AudioLevel::LongFader);
 
-        rec.m_meter->setLevel(dBleft, dBright);
+        strip.m_meter->setLevel(dBleft, dBright);
     }
 
     updateMonitorMeters();
@@ -1288,11 +1291,11 @@ AudioMixerWindow::updateMonitorMeters()
     Composition &comp = m_document->getComposition();
     Composition::trackcontainer &tracks = comp.getTracks();
 
-    for (FaderMap::iterator i = m_faders.begin(); i != m_faders.end(); ++i) {
+    for (StripMap::iterator i = m_faders.begin(); i != m_faders.end(); ++i) {
 
         InstrumentId id = i->first;
-        FaderRec &rec = i->second;
-        if (!rec.m_populated)
+        Strip &strip = i->second;
+        if (!strip.m_populated)
             continue;
 
         LevelInfo info;
@@ -1319,14 +1322,14 @@ AudioMixerWindow::updateMonitorMeters()
             float dBleft = AudioLevel::fader_to_dB
                            (info.level, 127, AudioLevel::LongFader);
 
-            if (rec.m_stereoness) {
+            if (strip.m_stereoness) {
                 float dBright = AudioLevel::fader_to_dB
                                 (info.levelRight, 127, AudioLevel::LongFader);
 
-                rec.m_meter->setRecordLevel(dBleft, dBright);
+                strip.m_meter->setRecordLevel(dBleft, dBright);
 
             } else {
-                rec.m_meter->setRecordLevel(dBleft);
+                strip.m_meter->setRecordLevel(dBleft);
             }
         }
     }
@@ -1353,7 +1356,7 @@ AudioMixerWindow::slotControllerDeviceEventReceived(MappedEvent *e,
     MidiByte value = e->getData2();
 
     unsigned int count = 0;
-    for (FaderMap::iterator i = m_faders.begin(); i != m_faders.end(); ++i) {
+    for (StripMap::iterator i = m_faders.begin(); i != m_faders.end(); ++i) {
 
         if (count < channel) {
             ++count;
@@ -1429,7 +1432,7 @@ AudioMixerWindow::slotSetInputCountFromAction()
 
     m_document->initialiseStudio();
 
-    for (FaderMap::iterator i = m_faders.begin();
+    for (StripMap::iterator i = m_faders.begin();
             i != m_faders.end(); ++i) {
         updateRouteButtons(i->first);
     }
@@ -1494,7 +1497,7 @@ void AudioMixerWindow::slotSetPanLaw()
     }
 }
 
-void AudioMixerWindow::FaderRec::setVisible(bool visible)
+void AudioMixerWindow::Strip::setVisible(bool visible)
 {
     if (visible) {
         if (m_input)
@@ -1531,7 +1534,7 @@ void AudioMixerWindow::FaderRec::setVisible(bool visible)
 }
 
 void
-AudioMixerWindow::FaderRec::setPluginButtonsVisible(bool visible)
+AudioMixerWindow::Strip::setPluginButtonsVisible(bool visible)
 {
     if (!m_pluginBox)
         return ;
@@ -1564,10 +1567,11 @@ AudioMixerWindow::slotUpdateFaderVisibility()
 
     RG_DEBUG << "AudioMixerWindow::slotUpdateFaderVisibility: visiblility is " << d << " (options " << m_studio->getMixerDisplayOptions() << ")";
 
-    for (FaderMap::iterator i = m_faders.begin(); i != m_faders.end(); ++i) {
+    for (StripMap::iterator i = m_faders.begin(); i != m_faders.end(); ++i) {
         if (i->first < SoftSynthInstrumentBase) {
-            FaderRec rec = i->second;
-            rec.setVisible(d);
+            // ??? COPY?!  We should probably disable copy.
+            Strip strip = i->second;
+            strip.setVisible(d);
         }
     }
 
@@ -1595,10 +1599,11 @@ AudioMixerWindow::slotUpdateSynthFaderVisibility()
     action->setChecked(!(m_studio->getMixerDisplayOptions() &
                          MIXER_OMIT_SYNTH_FADERS));
 
-    for (FaderMap::iterator i = m_faders.begin(); i != m_faders.end(); ++i) {
+    for (StripMap::iterator i = m_faders.begin(); i != m_faders.end(); ++i) {
         if (i->first >= SoftSynthInstrumentBase) {
-            FaderRec rec = i->second;
-            rec.setVisible(action->isChecked());
+            // ??? COPY?!
+            Strip strip = i->second;
+            strip.setVisible(action->isChecked());
         }
     }
 
@@ -1627,9 +1632,10 @@ AudioMixerWindow::slotUpdateSubmasterVisibility()
     action->setChecked(!(m_studio->getMixerDisplayOptions() &
                          MIXER_OMIT_SUBMASTERS));
 
-    for (FaderVector::iterator i = m_submasters.begin(); i != m_submasters.end(); ++i) {
-        FaderRec rec = *i;
-        rec.setVisible(action->isChecked());
+    for (StripVector::iterator i = m_submasters.begin(); i != m_submasters.end(); ++i) {
+        // ??? COPY?!
+        Strip strip = *i;
+        strip.setVisible(action->isChecked());
     }
 
     toggleNamedWidgets(action->isChecked(), "subMaster");
@@ -1659,9 +1665,10 @@ AudioMixerWindow::slotUpdatePluginButtonVisibility()
     RG_DEBUG << "AudioMixerWindow::slotUpdatePluginButtonVisibility() action->isChecked("
              << (action->isChecked() ? "true" : "false") << ")";
 
-    for (FaderMap::iterator i = m_faders.begin(); i != m_faders.end(); ++i) {
-        FaderRec rec = i->second;
-        rec.setPluginButtonsVisible(action->isChecked());
+    for (StripMap::iterator i = m_faders.begin(); i != m_faders.end(); ++i) {
+        // ??? COPY?!
+        Strip strip = i->second;
+        strip.setPluginButtonsVisible(action->isChecked());
     }
 
     adjustSize();

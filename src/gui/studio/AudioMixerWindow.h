@@ -133,14 +133,16 @@ protected:
 private:
 
     void toggleNamedWidgets(bool show, const char* const);
-    
 
-    // manage the various bits of it in horizontal/vertical slices
-    // with other faders:
+    /// A vertical strip of controls representing a mixer channel.
+    /**
+     * ??? This object gets copied quite a bit.  While it turns out
+     *     to be harmless in the end, it's surprising.
+     *     Recommend hiding copy ctor and op= and using references.
+     */
+    struct Strip {
 
-    struct FaderRec {
-
-        FaderRec() :
+        Strip() :
             m_populated(false),
             m_input(0), m_output(0), m_pan(0), m_fader(0), m_meter(0),
             m_recordButton(0), m_stereoButton(0), m_stereoness(false),
@@ -171,13 +173,16 @@ private:
     QHBoxLayout *m_surroundBoxLayout;
     QFrame *m_mainBox;
 
-    typedef std::map<InstrumentId, FaderRec> FaderMap;
-    FaderMap m_faders;
+    // Input strips.
+    typedef std::map<InstrumentId, Strip> StripMap;
+    // ??? rename: m_inputs?
+    StripMap m_faders;
 
-    typedef std::vector<FaderRec> FaderVector;
-    FaderVector m_submasters;
-    FaderRec m_monitor;
-    FaderRec m_master;
+    typedef std::vector<Strip> StripVector;
+    StripVector m_submasters;
+
+    Strip m_monitor;
+    Strip m_master;
 
     void depopulate();
     void populate();
