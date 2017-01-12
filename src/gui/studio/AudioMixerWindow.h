@@ -19,13 +19,10 @@
 #ifndef RG_AUDIOMIXERWINDOW_H
 #define RG_AUDIOMIXERWINDOW_H
 
-#include "base/MidiProgram.h"
 #include "MixerWindow.h"
 #include "gui/general/ActionFileClient.h"
-#include "gui/widgets/PluginPushButton.h"
 
 #include <QPixmap>
-#include <QSharedPointer>
 
 #include <vector>
 #include <map>
@@ -48,7 +45,6 @@ class AudioVUMeter;
 class AudioRouteMenu;
 class PluginPushButton;
 class Instrument;
-class InstrumentStaticSignals;
 
 
 /// The "Audio Mixer" window.

@@ -23,53 +23,39 @@
 #include "AudioPluginManager.h"
 #include "MixerWindow.h"
 #include "StudioControl.h"
-#include "sound/Midi.h"
+#include "sound/Midi.h"  // MIDI_CONTROLLER_VOLUME, MIDI_CONTROLLER_PAN...
 #include "sound/SequencerDataBlock.h"
 #include "misc/Debug.h"
-#include "gui/application/TransportStatus.h"
 #include "base/AudioLevel.h"
 #include "base/AudioPluginInstance.h"
 #include "base/Composition.h"
 #include "base/Device.h"
 #include "base/Instrument.h"
 #include "base/InstrumentStaticSignals.h"
-#include "base/MidiProgram.h"
-#include "base/Studio.h"
 #include "document/RosegardenDocument.h"
-#include "gui/editors/notation/NotePixmapFactory.h"
 #include "gui/general/GUIPalette.h"
 #include "gui/general/IconLoader.h"
 #include "gui/general/ActionFileClient.h"
-#include "misc/Strings.h"
 #include "gui/seqmanager/SequenceManager.h"
 #include "gui/widgets/AudioRouteMenu.h"
 #include "gui/widgets/AudioVUMeter.h"
 #include "gui/widgets/Fader.h"
 #include "gui/widgets/Rotary.h"
 #include "gui/widgets/VUMeter.h"
-#include "sound/MappedCommon.h"
 #include "sound/MappedEvent.h"
-#include "sound/MappedStudio.h"
 #include "gui/widgets/PluginPushButton.h"
 #include "gui/widgets/InstrumentAliasButton.h"
 #include "gui/dialogs/AboutDialog.h"
 
-#include <QLayout>
-#include <QApplication>
-#include <QMainWindow>
-#include <QShortcut>
 #include <QAction>
 #include <QColor>
 #include <QFont>
 #include <QFrame>
-#include <QIcon>
 #include <QLabel>
 #include <QObject>
-#include <QPalette>
 #include <QPixmap>
 #include <QPushButton>
 #include <QString>
-#include <QToolTip>
 #include <QWidget>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
@@ -77,7 +63,6 @@
 #include <QDesktopServices>
 #include <QToolBar>
 #include <QToolButton>
-#include <QtGlobal>
 
 namespace Rosegarden
 {
