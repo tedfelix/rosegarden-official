@@ -20,7 +20,20 @@ foreach(_size 16;32;64;128)
 endforeach()
 
 # Install mimetype
-install(FILES mime/rosegarden.xml DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/mime/packages")
+set(RG_INSTALL_MIMEDIR "${CMAKE_INSTALL_DATAROOTDIR}/mime/packages")
+install(FILES mime/rosegarden.xml DESTINATION "${RG_INSTALL_MIMEDIR}")
+
+find_package(SharedMimeInfo 0.50)
+set_package_properties(SharedMimeInfo PROPERTIES
+                       TYPE OPTIONAL
+                       PURPOSE "Allows KDE applications to determine file types"
+                      )
+
+# update XDG mime-types if shared mime info is around
+if(SharedMimeInfo_FOUND)
+    update_xdg_mimetypes(${RG_INSTALL_MIMEDIR})
+endif()
+
 
 # Install desktop file
 install(FILES desktop/rosegarden.desktop DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/applications")
