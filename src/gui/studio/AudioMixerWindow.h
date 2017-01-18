@@ -28,6 +28,7 @@
 #include <map>
 
 
+class QGroupBox;
 class QWidget;
 class QPushButton;
 class QHBoxLayout;
@@ -202,26 +203,37 @@ private:
 
         Strip() :
             m_populated(false),
-            m_input(0), m_output(0), m_pan(0), m_fader(0), m_meter(0),
-            m_recordButton(0), m_stereoButton(0), m_stereoness(false),
+            m_input(0),
+            m_output(0),
+            m_fader(0),
+            m_meter(0),
+            m_pan(0),
+            m_stereoButton(0),
+            m_stereo(false),
+            m_recordButton(0),
             m_pluginBox(0)
         { }
 
         void setVisible(bool);
         void setPluginButtonsVisible(bool);
-        
+
+        /// Have the widgets been created?
         bool m_populated;
 
         AudioRouteMenu *m_input;
         AudioRouteMenu *m_output;
 
-        Rotary *m_pan;
         Fader *m_fader;
         AudioVUMeter *m_meter;
 
-        QPushButton *m_recordButton;
+        Rotary *m_pan;
         QPushButton *m_stereoButton;
-        bool m_stereoness;
+        bool m_stereo;
+
+        // ??? UNUSED.  Created, but never shown.  Looks like this was
+        //     going to be added, but someone realized this is per-Track
+        //     while this entire display is per-Instrument.
+        QPushButton *m_recordButton;
 
         QWidget *m_pluginBox;
         std::vector<PluginPushButton *> m_plugins;
@@ -235,8 +247,22 @@ private:
         //Strip &operator=(const Strip &);
     };
 
-    QWidget *m_surroundBox;
+    /// Provides the groupbox outline around everything in the client area.
+    /**
+     * Box around everything in the client area.  Parent is AudioMixerWindow.
+     * Only child is m_mainBox.
+     */
+    QGroupBox *m_surroundBox;
+    /// Layout manager to make sure we resize to fit the contents properly.
     QHBoxLayout *m_surroundBoxLayout;
+
+    /// Parent is m_surroundBox.  Children are the faders, etc....
+    /**
+     * This is the only child of m_surroundBox.
+     *
+     * ??? Seems unnecessary.  Can we get rid of this?  m_surroundBoxLayout
+     *     would become the QGridLayout.  Etc...
+     */
     QFrame *m_mainBox;
 
     // Input strips.
@@ -249,20 +275,35 @@ private:
     Strip m_monitor;
     Strip m_master;
 
+    /// Destroy all the widgets.
     void depopulate();
+    /// Create all the widgets.
     void populate();
 
+    /// Is the Instrument assigned to a Track in the Composition?
     bool isInstrumentAssigned(InstrumentId id);
 
-    void updateFader(int id); // instrument id if large enough, monitor if -1, master/sub otherwise
+    /// Update fader from Instrument.
+    /**
+     * If "id" is large enough, it is an instrument ID.
+     * If "id" is -1, monitor is updated.
+     * For other values of "id", master/sub is updated.
+     */
+    void updateFader(int id);
+    /// Update in/out routing buttons from the Instrument.
     void updateRouteButtons(int id);
+    /// Update stereo button from the Instrument.
     void updateStereoButton(int id);
+    /// Update plugin buttons from the Instrument.
     void updatePluginButtons(int id);
+    /// Does nothing.
     void updateMiscButtons(int id);
 
+    // Pixmaps for the stereo buttons.
     QPixmap m_monoPixmap;
     QPixmap m_stereoPixmap;
 
+    /// Call setAutoRepeat(true) on the fast-forward and rewind buttons.
     void setRewFFwdToAutoRepeat();
 };
 

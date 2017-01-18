@@ -250,6 +250,8 @@ AudioMixerWindow::populate()
     boldFont.setBold(true);
 
     m_mainBox = new QFrame(m_surroundBox);
+    //m_mainBox->setFrameStyle(QFrame::Panel | QFrame::Raised);
+    //m_mainBox->setLineWidth(2);
     m_surroundBoxLayout->addWidget(m_mainBox);
 
     InstrumentList instruments = m_studio->getPresentationInstruments();
@@ -337,7 +339,7 @@ AudioMixerWindow::populate()
         strip.m_stereoButton->setIcon(m_monoPixmap);
         strip.m_stereoButton->setFixedSize(20, 20);
         strip.m_stereoButton->setFlat(true);
-        strip.m_stereoness = false;
+        strip.m_stereo = false;
         strip.m_stereoButton->setToolTip(tr("Mono or stereo"));
 
         strip.m_recordButton = new QPushButton(m_mainBox);
@@ -821,10 +823,10 @@ AudioMixerWindow::updateStereoButton(int id)
         Instrument *i = m_studio->getInstrumentById(id);
 
         bool stereo = (i->getAudioChannels() > 1);
-        if (stereo == strip.m_stereoness)
+        if (stereo == strip.m_stereo)
             return ;
 
-        strip.m_stereoness = stereo;
+        strip.m_stereo = stereo;
 
         if (stereo)
             strip.m_stereoButton->setIcon(m_stereoPixmap);
@@ -1219,7 +1221,7 @@ AudioMixerWindow::updateMeters()
             float dBleft = AudioLevel::fader_to_dB
                            (info.level, 127, AudioLevel::LongFader);
 
-            if (strip.m_stereoness) {
+            if (strip.m_stereo) {
                 float dBright = AudioLevel::fader_to_dB
                                 (info.levelRight, 127, AudioLevel::LongFader);
 
@@ -1307,7 +1309,7 @@ AudioMixerWindow::updateMonitorMeters()
             float dBleft = AudioLevel::fader_to_dB
                            (info.level, 127, AudioLevel::LongFader);
 
-            if (strip.m_stereoness) {
+            if (strip.m_stereo) {
                 float dBright = AudioLevel::fader_to_dB
                                 (info.levelRight, 127, AudioLevel::LongFader);
 
