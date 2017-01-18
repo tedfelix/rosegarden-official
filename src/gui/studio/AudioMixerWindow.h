@@ -56,7 +56,9 @@ public:
     AudioMixerWindow(QWidget *parent, RosegardenDocument *document);
     ~AudioMixerWindow();
 
+    /// Update all meters with playback levels from SequencerDataBlock.
     void updateMeters();
+    /// Update the input meters with record levels from SequencerDataBlock.
     void updateMonitorMeters();
 
 public slots:
@@ -69,7 +71,15 @@ public slots:
                                            const void *preferredCustomer);
 
 signals:
+    /// Emitted when a plugin button is clicked.
+    /**
+     * Connected to RosegardenMainWindow::slotShowPluginDialog().
+     */
     void selectPlugin(QWidget *, InstrumentId id, int index);
+
+    // The following signals are emitted when the buttons are pressed.
+    // RosegardenMainWindow::slotOpenAudioMixer() connects these to
+    // appropriate handler slots.
 
     void play();
     void stop();
@@ -81,16 +91,34 @@ signals:
     void panic();
 
 protected slots:
+
+    // The following slots are connected to the various widgets.
+
     void slotFaderLevelChanged(float level);
     void slotPanChanged(float value);
     void slotChannelsChanged();
     void slotSoloChanged();
     void slotMuteChanged();
     void slotRecordChanged();
+
+    /// Handler for plugin button press.  Emits selectPlugin().
     void slotSelectPlugin();
+
+    /// Used only by the alias button to force a refresh of the widgets.
     void slotRepopulate();
-    
-    // to be called if something changes in an instrument parameter box
+
+    // The following slots handle updates from the outside.
+
+    // ??? These all (except maybe slotInstrumentChanged()) need to be
+    //     removed.  Observer pattern should be used to monitor changes to
+    //     the Composition.  In response, an updateWidgets() routine should
+    //     be called which will update all widgets *efficiently*.
+    // ??? Perhaps a special path/routine could be used for volume control
+    //     changes since they might be relatively high-frequency when the
+    //     user is dragging a volume control around.  This probably won't
+    //     be necessary, though.
+
+    /// Called when an Instrument changes.
     void slotInstrumentChanged(Instrument *);
 
     /// Ensure the faders are in sync with the document.
@@ -99,42 +127,76 @@ protected slots:
      * the relevant fader.
      *
      * Called by RosegardenMainViewWidget::slotUpdateInstrumentParameterBox().
+     *
+     * ??? The connection is made by RMW.  This should be public.
      */
     void slotTrackAssignmentsChanged();
 
-    // from Plugin dialog
+    /// Update the label for the plugin.
+    /**
+     * RosegardenMainWindow::pluginSelected() signal is connected to this by
+     * RosegardenMainWindow::slotOpenAudioMixer().
+     */
     void slotPluginSelected(InstrumentId id, int index, int plugin);
-    void slotPluginBypassed(InstrumentId id, int pluginIndex, bool bp);
+    /// Update the PluginPushButton's state.
+    /**
+     * RosegardenMainWindow::pluginBypassed() signal is connected to this by
+     * RosegardenMainWindow::slotOpenAudioMixer().
+     */
+    void slotPluginBypassed(InstrumentId id, int pluginIndex, bool bypass);
 
+    /// Handle the inputs_1, inputs_2, inputs_4, inputs_8, and inputs_16 actions.
     void slotSetInputCountFromAction();
+    /// Handle the submasters_0, submasters_2, submasters_4, and submasters_8 actions.
     void slotSetSubmasterCountFromAction();
+    /// Handle the panlaw_0, panlaw_1, panlaw_2, and panlaw_3 actions.
     void slotSetPanLaw();
 
+    // ??? Do any of these names, slots or actions, actually match the UI?
+    //     If not, make them match!
+
+    /// Handle show_audio_faders action.
     void slotToggleFaders();
+    /// Handle show_synth_faders action.
     void slotToggleSynthFaders();
+    /// Handle show_audio_submasters action.
     void slotToggleSubmasters();
+    /// Handle show_plugin_buttons action.
     void slotTogglePluginButtons();
+    /// Handle show_unassigned_faders action.
     void slotToggleUnassignedFaders();
 
-    void slotUpdateFaderVisibility();
-    void slotUpdateSynthFaderVisibility();
-    void slotUpdateSubmasterVisibility();
-    void slotUpdatePluginButtonVisibility();
+    /// Handle mixer_help action.
     void slotHelpRequested();
+    /// Handle help_about_app action.
     void slotHelpAbout();
 
 protected:
+    /// Send MIDI volume and pan messages to each device.
+    /**
+     * MixerWindow override.  Called by MixerWindow::windowActivationChange().
+     */
     virtual void sendControllerRefresh();
 
 private:
+    /// show_audio_faders
+    void updateFaderVisibility();
+    /// show_synth_faders
+    void updateSynthFaderVisibility();
+    /// show_audio_submasters
+    void updateSubmasterVisibility();
+    /// show_plugin_buttons
+    void updatePluginButtonVisibility();
 
-    void toggleNamedWidgets(bool show, const char* const);
+    /// Show/Hide widgets by name.  NOT WORKING.
+    void toggleNamedWidgets(bool show, const char *);
 
     /// A vertical strip of controls representing a mixer channel.
     /**
-     * ??? This object gets copied quite a bit.  While it turns out
-     *     to be harmless in the end, it's surprising.
-     *     Recommend hiding copy ctor and op= and using references.
+     * ??? This should derive from QWidget and act as a single widget.
+     *     It should manage all the widgets inside of it.  That should
+     *     reduce the burden on the client.  Then this should be moved
+     *     out of AudioMixerWindow and renamed AudioMixerStrip.
      */
     struct Strip {
 

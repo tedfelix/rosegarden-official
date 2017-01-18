@@ -122,6 +122,7 @@ AudioMixerWindow::AudioMixerWindow(QWidget *parent,
       ri_action[i] = 0;
     }
 
+    // For i in {1,2,4,8,16}
     for (int i = 1; i <= 16; i *= 2) {
         ri_action[i] = createAction
             (QString("inputs_%1").arg(i), SLOT(slotSetInputCountFromAction()));
@@ -134,6 +135,7 @@ AudioMixerWindow::AudioMixerWindow(QWidget *parent,
 
     createAction("submasters_0", SLOT(slotSetSubmasterCountFromAction()));
     
+    // For i in {2,4,8}
     for (int i = 2; i <= 8; i *= 2) {
         sm_action[i] = createAction
             (QString("submasters_%1").arg(i), SLOT(slotSetSubmasterCountFromAction()));
@@ -144,7 +146,10 @@ AudioMixerWindow::AudioMixerWindow(QWidget *parent,
         pl_action[i] = 0;
     }
 
-    for (int i = 0; i < 4; i++){
+    // For each pan law option
+    for (int i = 0; i < 4; i++) {
+        // ??? Can we do something better than panlaw_0, panlaw_1, etc...?
+        //     E.g. panlaw_0dB, panlaw_-3dB, panlaw_-6dB, panlaw_alt-3dB.
         pl_action[i] = createAction
                 (QString("panlaw_%1").arg(i), SLOT(slotSetPanLaw()));
     }
@@ -545,10 +550,10 @@ AudioMixerWindow::populate()
 
     m_mainBox->show();
 
-    slotUpdateFaderVisibility();
-    slotUpdateSynthFaderVisibility();
-    slotUpdateSubmasterVisibility();
-    slotUpdatePluginButtonVisibility();
+    updateFaderVisibility();
+    updateSynthFaderVisibility();
+    updateSubmasterVisibility();
+    updatePluginButtonVisibility();
 
     adjustSize();
 }
@@ -744,7 +749,7 @@ AudioMixerWindow::slotPluginSelected(InstrumentId id,
 
 void
 AudioMixerWindow::slotPluginBypassed(InstrumentId instrumentId,
-                                     int , bool)
+                                     int, bool)
 {
     RG_DEBUG << "AudioMixerWindow::slotPluginBypassed(" << instrumentId << ")";
 
@@ -1532,11 +1537,11 @@ AudioMixerWindow::slotToggleFaders()
     m_studio->setMixerDisplayOptions(m_studio->getMixerDisplayOptions() ^
                                      MIXER_OMIT_FADERS);
 
-    slotUpdateFaderVisibility();
+    updateFaderVisibility();
 }
 
 void
-AudioMixerWindow::slotUpdateFaderVisibility()
+AudioMixerWindow::updateFaderVisibility()
 {
     bool d = !(m_studio->getMixerDisplayOptions() & MIXER_OMIT_FADERS);
 
@@ -1545,7 +1550,7 @@ AudioMixerWindow::slotUpdateFaderVisibility()
         action->setChecked(d);
     }
 
-    RG_DEBUG << "AudioMixerWindow::slotUpdateFaderVisibility: visiblility is " << d << " (options " << m_studio->getMixerDisplayOptions() << ")";
+    RG_DEBUG << "AudioMixerWindow::updateFaderVisibility: visiblility is " << d << " (options " << m_studio->getMixerDisplayOptions() << ")";
 
     for (StripMap::iterator i = m_inputs.begin(); i != m_inputs.end(); ++i) {
         if (i->first < SoftSynthInstrumentBase) {
@@ -1564,11 +1569,11 @@ AudioMixerWindow::slotToggleSynthFaders()
     m_studio->setMixerDisplayOptions(m_studio->getMixerDisplayOptions() ^
                                      MIXER_OMIT_SYNTH_FADERS);
 
-    slotUpdateSynthFaderVisibility();
+    updateSynthFaderVisibility();
 }
 
 void
-AudioMixerWindow::slotUpdateSynthFaderVisibility()
+AudioMixerWindow::updateSynthFaderVisibility()
 {
     QAction *action = findAction("show_synth_faders");
     if (!action)
@@ -1594,11 +1599,11 @@ AudioMixerWindow::slotToggleSubmasters()
     m_studio->setMixerDisplayOptions(m_studio->getMixerDisplayOptions() ^
                                      MIXER_OMIT_SUBMASTERS);
 
-    slotUpdateSubmasterVisibility();
+    updateSubmasterVisibility();
 }
 
 void
-AudioMixerWindow::slotUpdateSubmasterVisibility()
+AudioMixerWindow::updateSubmasterVisibility()
 {
     QAction *action = findAction("show_audio_submasters");
 
@@ -1623,11 +1628,11 @@ AudioMixerWindow::slotTogglePluginButtons()
     m_studio->setMixerDisplayOptions(m_studio->getMixerDisplayOptions() ^
                                      MIXER_OMIT_PLUGINS);
 
-    slotUpdatePluginButtonVisibility();
+    updatePluginButtonVisibility();
 }
 
 void
-AudioMixerWindow::slotUpdatePluginButtonVisibility()
+AudioMixerWindow::updatePluginButtonVisibility()
 {
     QAction *action = findAction("show_plugin_buttons");
     if (!action)
@@ -1636,7 +1641,7 @@ AudioMixerWindow::slotUpdatePluginButtonVisibility()
     action->setChecked(!(m_studio->getMixerDisplayOptions() &
                          MIXER_OMIT_PLUGINS));
 
-    RG_DEBUG << "AudioMixerWindow::slotUpdatePluginButtonVisibility() action->isChecked("
+    RG_DEBUG << "AudioMixerWindow::updatePluginButtonVisibility() action->isChecked("
              << (action->isChecked() ? "true" : "false") << ")";
 
     for (StripMap::iterator i = m_inputs.begin(); i != m_inputs.end(); ++i) {
@@ -1663,14 +1668,24 @@ AudioMixerWindow::slotToggleUnassignedFaders()
 }
 
 void
-AudioMixerWindow::toggleNamedWidgets(bool show, const char* const name)
+AudioMixerWindow::toggleNamedWidgets(bool show, const char *name)
 {
+    //RG_DEBUG << "toggleNamedWidgets(" << show << ", " << name << ")";
+
     //NB. Completely rewritten to get around the disappearance of
     // QLayoutIterator.
+
+    // ??? This routine doesn't work at all.  All it finds is an
+    //     object named "Transport Toolbar" and an object named "".
+
     int i = 0;
     QLayoutItem *child;
     while ((child = layout()->itemAt(i)) != 0) {
         QWidget *widget = child->widget();
+
+        //if (widget)
+        //    RG_DEBUG << "  name:" << widget->objectName();
+
         if (widget &&
             widget->objectName() == QString::fromUtf8(name)) {
             if (show)
