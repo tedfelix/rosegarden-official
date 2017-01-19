@@ -69,6 +69,12 @@ namespace Rosegarden
 
 // We define these such that the default of no-bits-set for the
 // studio's mixer display options produces the most sensible result
+// These are used with Studio::setMixerDisplayOptions() and
+// Studio::getMixerDisplayOptions().
+// ??? Recommend expanding the Studio interface to be more explicit
+//     and avoid the bit-twiddling.
+//     E.g. Studio::setShowFaders(bool)/getShowFaders(bool) or just
+//     a public bool Studio::showFaders.
 static const unsigned int MIXER_OMIT_FADERS            = 1 << 0;
 static const unsigned int MIXER_OMIT_SUBMASTERS        = 1 << 1;
 static const unsigned int MIXER_OMIT_PLUGINS           = 1 << 2;
@@ -77,11 +83,14 @@ static const unsigned int MIXER_OMIT_SYNTH_FADERS      = 1 << 4;
 
 
 AudioMixerWindow::AudioMixerWindow(QWidget *parent,
-                                   RosegardenDocument *document):
+                                   RosegardenDocument *document) :
         MixerWindow(parent, document),
+        m_surroundBox(0),
         m_surroundBoxLayout(0),
-        m_mainBox (0)
+        m_mainBox(0)
 {
+    // ??? UNUSED.  A search on this string only yields this line.  A better
+    //     object name would be "AudioMixerWindow".
     setObjectName("MixerWindow");
 
     createAction("file_close", SLOT(slotClose()));
@@ -94,86 +103,64 @@ AudioMixerWindow::AudioMixerWindow(QWidget *parent,
     createAction("playback_pointer_end", SIGNAL(fastForwardPlaybackToEnd()));
     createAction("record", SIGNAL(record()));
     createAction("panic", SIGNAL(panic()));
+
+    // Help > Help
     createAction("mixer_help", SLOT(slotHelpRequested()));
+    // Help > About Rosegarden
     createAction("help_about_app", SLOT(slotHelpAbout()));
 
-    unsigned int mixerOptions = m_studio->getMixerDisplayOptions();
+    // Settings > Show Audio Faders
+    createAction("show_audio_faders", SLOT(slotToggleFaders()));
 
-    createAction("show_audio_faders", SLOT(slotToggleFaders()))
-        ->setChecked(!(mixerOptions & MIXER_OMIT_FADERS));
+    // Settings > Show Synth Faders
+    createAction("show_synth_faders", SLOT(slotToggleSynthFaders()));
 
-    createAction("show_synth_faders", SLOT(slotToggleSynthFaders()))
-        ->setChecked(!(mixerOptions & MIXER_OMIT_SYNTH_FADERS));
+    // Settings > Show Audio Submasters
+    createAction("show_audio_submasters", SLOT(slotToggleSubmasters()));
 
-    createAction("show_audio_submasters", SLOT(slotToggleSubmasters()))
-        ->setChecked(!(mixerOptions & MIXER_OMIT_SUBMASTERS));
+    // Settings > Show Plugin Buttons
+    createAction("show_plugin_buttons", SLOT(slotTogglePluginButtons()));
 
-    createAction("show_plugin_buttons", SLOT(slotTogglePluginButtons()))
-        ->setChecked(!(mixerOptions & MIXER_OMIT_PLUGINS));
+    // Settings > Show Unassigned Faders
+    createAction("show_unassigned_faders", SLOT(slotToggleUnassignedFaders()));
 
-    RG_DEBUG << "AudioMixerWindow::CTOR: action \"show_plugin_buttons\" has been created.  State should be: "
-             << ( !(mixerOptions & MIXER_OMIT_PLUGINS) ? "true" : "false");
-
-    createAction("show_unassigned_faders", SLOT(slotToggleUnassignedFaders()))
-        ->setChecked(mixerOptions & MIXER_SHOW_UNASSIGNED_FADERS);
-
-    QAction *ri_action[17];
-    for (int i = 0; i < 17; i++){
-      ri_action[i] = 0;
-    }
-
+    // "Settings > Number of Stereo Inputs" Actions
     // For i in {1,2,4,8,16}
     for (int i = 1; i <= 16; i *= 2) {
-        ri_action[i] = createAction
-            (QString("inputs_%1").arg(i), SLOT(slotSetInputCountFromAction()));
+        createAction(QString("inputs_%1").arg(i),
+                     SLOT(slotSetInputCountFromAction()));
     }
 
-    QAction *sm_action[9];
-    for (int i = 0; i < 9; i++){
-      sm_action[i] = 0;
-    }
-
+    // "Settings > Number of Submasters" Actions
     createAction("submasters_0", SLOT(slotSetSubmasterCountFromAction()));
-    
-    // For i in {2,4,8}
-    for (int i = 2; i <= 8; i *= 2) {
-        sm_action[i] = createAction
-            (QString("submasters_%1").arg(i), SLOT(slotSetSubmasterCountFromAction()));
-    }
+    createAction("submasters_2", SLOT(slotSetSubmasterCountFromAction()));
+    createAction("submasters_4", SLOT(slotSetSubmasterCountFromAction()));
+    createAction("submasters_8", SLOT(slotSetSubmasterCountFromAction()));
 
-    QAction *pl_action[4];
-    for (int i = 0; i < 4; i++){
-        pl_action[i] = 0;
-    }
-
-    // For each pan law option
-    for (int i = 0; i < 4; i++) {
-        // ??? Can we do something better than panlaw_0, panlaw_1, etc...?
-        //     E.g. panlaw_0dB, panlaw_-3dB, panlaw_-6dB, panlaw_alt-3dB.
-        pl_action[i] = createAction
-                (QString("panlaw_%1").arg(i), SLOT(slotSetPanLaw()));
-    }
+    // "Settings > Panning Law" Actions
+    // ??? Can we do something easier to understand than panlaw_0,
+    //     panlaw_1, etc...?  E.g. panlaw_0dB, panlaw_-3dB, panlaw_-6dB,
+    //     panlaw_alt-3dB.
+    createAction("panlaw_0", SLOT(slotSetPanLaw()));
+    createAction("panlaw_1", SLOT(slotSetPanLaw()));
+    createAction("panlaw_2", SLOT(slotSetPanLaw()));
+    createAction("panlaw_3", SLOT(slotSetPanLaw()));
 
     createGUI("mixer.rc");
 
     // The action->setChecked() stuff must be done after createGUI("mixer.rc").
-    for (int i = 1; i <= 16; i *= 2) {
-        if (i == int(m_studio->getRecordIns().size())) {
-            ri_action[i]->setChecked(true);
-        }
-    }
-    // "submasters_0" is checked by default in data/rc/mixer.rc
-    for (int i = 2; i <= 8; i *= 2) {
-        if (i == int(m_studio->getBusses().size()) - 1) {
-            sm_action[i]->setChecked(true);
-        }
-    }
 
-    for (int i = 0; i < 4; i++) {
-        if (i == AudioLevel::getPanLaw()) {
-            pl_action[i]->setChecked(true);
-        }
-    }
+    // Update "Settings > Number of Stereo Inputs"
+    findAction(QString("inputs_%1").arg(m_studio->getRecordIns().size()))->
+            setChecked(true);
+
+    // Update "Settings > Number of Submasters"
+    findAction(QString("submasters_%1").arg(m_studio->getBusses().size()-1))->
+            setChecked(true);
+
+    // Update "Settings > Panning Law"
+    findAction(QString("panlaw_%1").arg(AudioLevel::getPanLaw()))->
+            setChecked(true);
 
     setRewFFwdToAutoRepeat();
 
