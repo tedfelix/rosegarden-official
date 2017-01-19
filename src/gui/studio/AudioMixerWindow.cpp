@@ -149,6 +149,8 @@ AudioMixerWindow::AudioMixerWindow(QWidget *parent,
     createAction("panlaw_2", SLOT(slotSetPanLaw()));
     createAction("panlaw_3", SLOT(slotSetPanLaw()));
 
+    // Create the menu and toolbars.
+    // ??? createGUI() seems like too broad of a name.
     createGUI("mixer.rc");
 
     // The action->setChecked() stuff must be done after createGUI("mixer.rc").
@@ -166,6 +168,9 @@ AudioMixerWindow::AudioMixerWindow(QWidget *parent,
             setChecked(true);
 
     // Set the rewind and fast-forward buttons for auto-repeat.
+
+    // ??? A search on "setAutoRepeat" reveals a couple of other places
+    //     where code can be simplified like this.
 
     QToolBar *transportToolbar = findToolbar("Transport Toolbar");
 

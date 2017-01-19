@@ -877,8 +877,9 @@ RosegardenMainWindow::setupActions()
 
     createAction("play", SLOT(slotPlay()));
     createAction("stop", SLOT(slotStop()));
-    createAction("fast_forward", SLOT(slotFastforward()));
-    createAction("rewind", SLOT(slotRewind()));
+    QAction *fastForwardAction =
+            createAction("fast_forward", SLOT(slotFastforward()));
+    QAction *rewindAction = createAction("rewind", SLOT(slotRewind()));
     createAction("recordtoggle", SLOT(slotToggleRecord()));
     createAction("record", SLOT(slotRecord()));
     createAction("rewindtobeginning", SLOT(slotRewindToBeginning()));
@@ -911,9 +912,26 @@ RosegardenMainWindow::setupActions()
         RG_DEBUG << "RosegardenMainWindow::setupActions() : couldn't find set_track_instrument menu - check rosegardenui.rcn\n";
     }
 
-    setRewFFwdToAutoRepeat();
-}
+    // Set the rewind and fast-forward buttons for auto-repeat.
 
+    QToolBar *transportToolbar = findToolbar("Transport Toolbar");
+
+    if (transportToolbar) {
+        QToolButton *rewindButton = dynamic_cast<QToolButton *>(
+                transportToolbar->widgetForAction(rewindAction));
+
+        if (rewindButton)
+            rewindButton->setAutoRepeat(true);
+
+        QToolButton *fastForwardButton = dynamic_cast<QToolButton *>(
+                transportToolbar->widgetForAction(fastForwardAction));
+
+        if (fastForwardButton)
+            fastForwardButton->setAutoRepeat(true);
+    } else {
+        RG_WARNING << "setupActions(): Can't find the Transport Toolbar.";
+    }
+}
 
 void
 RosegardenMainWindow::setupRecentFilesMenu()
@@ -932,61 +950,6 @@ RosegardenMainWindow::setupRecentFilesMenu()
         menu->addAction(action);
         if (i == 0) action->setShortcut(tr("Ctrl+R"));
     }
-}
-
-void
-RosegardenMainWindow::setRewFFwdToAutoRepeat()
-{
-    // This one didn't work in Classic either.  Looking at it as a fresh
-    // problem, it was tricky.  The QAction has an objectName() of "rewind"
-    // but the QToolButton associated with that action has no object name at
-    // all.  We kind of have to go around our ass to get to our elbow on
-    // this one.
-    
-    // get pointers to the actual actions    
-    QAction *rewAction = findAction("rewind");
-    QAction *ffwAction = findAction("fast_forward");
-
-    QWidget* transportToolbar = this->findToolbar("Transport Toolbar");
-
-    if (transportToolbar) {
-
-        // get a list of all the toolbar's children (presumably they're
-        // QToolButtons, but use this kind of thing with caution on customized
-        // QToolBars!)
-        QList<QToolButton *> widgets = transportToolbar->findChildren<QToolButton *>();
-
-        // iterate through the entire list of children
-        for (QList<QToolButton *>::iterator i = widgets.begin(); i != widgets.end(); ++i) {
-
-            // get a pointer to the button's default action
-            QAction *act = (*i)->defaultAction();
-
-            // compare pointers, if they match, we've found the button
-            // associated with that action
-            //
-            // we then have to not only setAutoRepeat() on it, but also connect
-            // it up differently from what it got in createAction(), as
-            // determined empirically (bleargh!!)
-            if (act == rewAction) {
-                connect((*i), SIGNAL(clicked()), this, SLOT(slotRewind()));
-
-            } else if (act == ffwAction) {
-                connect((*i), SIGNAL(clicked()), this, SLOT(slotFastforward()));
-
-            } else  {
-                continue;
-            }
-
-            //  Must have found an button to update
-            (*i)->removeAction(act);
-            (*i)->setAutoRepeat(true);
-        }
-
-    } else {
-        RG_DEBUG << "transportToolbar == 0\n";
-    }
-
 }
 
 void
