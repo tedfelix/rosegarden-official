@@ -297,10 +297,7 @@ private:
 
     virtual void initStatusBar();
 
-    /**
-     * Set the <<< << >> >>> buttons in the transport toolbar to auto repeat
-     */
-    void setRewFFwdToAutoRepeat();
+    void enableAutoRepeat(const QString &actionName);
 
 };
 
