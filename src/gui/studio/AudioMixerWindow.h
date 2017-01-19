@@ -302,9 +302,6 @@ private:
     // Pixmaps for the stereo buttons.
     QPixmap m_monoPixmap;
     QPixmap m_stereoPixmap;
-
-    /// Call setAutoRepeat(true) on the fast-forward and rewind buttons.
-    void setRewFFwdToAutoRepeat();
 };
 
 
