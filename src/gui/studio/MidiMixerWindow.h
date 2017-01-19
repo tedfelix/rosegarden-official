@@ -116,8 +116,6 @@ protected:
 
     QFrame *m_tabFrame;
 
-    void  setRewFFwdToAutoRepeat();
-
     // Grab IPB controls and remove Volume.
     ControlList getIPBForMidiMixer(MidiDevice *) const;
 };

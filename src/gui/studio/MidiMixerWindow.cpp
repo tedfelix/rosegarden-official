@@ -79,8 +79,10 @@ MidiMixerWindow::MidiMixerWindow(QWidget *parent,
 
     createAction("play", SIGNAL(play()));
     createAction("stop", SIGNAL(stop()));
-    createAction("playback_pointer_back_bar", SIGNAL(rewindPlayback()));
-    createAction("playback_pointer_forward_bar", SIGNAL(fastForwardPlayback()));
+    QAction *rewindAction = createAction(
+            "playback_pointer_back_bar", SIGNAL(rewindPlayback()));
+    QAction *fastForwardAction = createAction(
+            "playback_pointer_forward_bar", SIGNAL(fastForwardPlayback()));
     createAction("playback_pointer_start", SIGNAL(rewindPlaybackToBeginning()));
     createAction("playback_pointer_end", SIGNAL(fastForwardPlaybackToEnd()));
     createAction("record", SIGNAL(record()));
@@ -89,7 +91,26 @@ MidiMixerWindow::MidiMixerWindow(QWidget *parent,
     createAction("help_about_app", SLOT(slotHelpAbout()));
 
     createGUI("midimixer.rc");
-    setRewFFwdToAutoRepeat();
+
+    // Set the rewind and fast-forward buttons for auto-repeat.
+
+    QToolBar *transportToolbar = findToolbar("Transport Toolbar");
+
+    if (transportToolbar) {
+        QToolButton *rewindButton = dynamic_cast<QToolButton *>(
+                transportToolbar->widgetForAction(rewindAction));
+
+        if (rewindButton)
+            rewindButton->setAutoRepeat(true);
+
+        QToolButton *fastForwardButton = dynamic_cast<QToolButton *>(
+                transportToolbar->widgetForAction(fastForwardAction));
+
+        if (fastForwardButton)
+            fastForwardButton->setAutoRepeat(true);
+    } else {
+        RG_WARNING << "ctor: Transport Toolbar not found.";
+    }
 
     connect(Instrument::getStaticSignals().data(),
             SIGNAL(changed(Instrument *)),
@@ -698,57 +719,6 @@ void
 MidiMixerWindow::slotHelpAbout()
 {
     new AboutDialog(this);
-}
-
-void
-MidiMixerWindow::setRewFFwdToAutoRepeat()
-{
-    // This one didn't work in Classic either.  Looking at it as a fresh
-    // problem, it was tricky.  The QAction has an objectName() of "rewind"
-    // but the QToolButton associated with that action has no object name at
-    // all.  We kind of have to go around our ass to get to our elbow on
-    // this one.
-    
-    // get pointers to the actual actions    
-    QAction *rewAction = findAction("playback_pointer_back_bar");    // rewind
-    QAction *ffwAction = findAction("playback_pointer_forward_bar"); // fast forward
-
-    QWidget* transportToolbar = this->findToolbar("Transport Toolbar");
-
-    if (transportToolbar) {
-
-        // get a list of all the toolbar's children (presumably they're
-        // QToolButtons, but use this kind of thing with caution on customized
-        // QToolBars!)
-        QList<QToolButton *> widgets = transportToolbar->findChildren<QToolButton *>();
-
-        // iterate through the entire list of children
-        for (QList<QToolButton *>::iterator i = widgets.begin(); i != widgets.end(); ++i) {
-
-            // get a pointer to the button's default action
-            QAction *act = (*i)->defaultAction();
-
-            // compare pointers, if they match, we've found the button
-            // associated with that action
-            //
-            // we then have to not only setAutoRepeat() on it, but also connect
-            // it up differently from what it got in createAction(), as
-            // determined empirically (bleargh!!)
-            if (act == rewAction) {
-                connect((*i), SIGNAL(clicked()), this, SIGNAL(rewindPlayback()));
-
-            } else if (act == ffwAction) {
-                connect((*i), SIGNAL(clicked()), this, SIGNAL(fastForwardPlayback()));
-
-            } else  {
-                continue;
-            }
-
-            //  Must have found an button to update
-            (*i)->removeAction(act);
-            (*i)->setAutoRepeat(true);
-        }
-    }
 }
 
 // Code stolen From src/base/MidiDevice

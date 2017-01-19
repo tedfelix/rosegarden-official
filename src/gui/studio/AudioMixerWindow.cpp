@@ -186,6 +186,8 @@ AudioMixerWindow::AudioMixerWindow(QWidget *parent,
 
         if (fastForwardButton)
             fastForwardButton->setAutoRepeat(true);
+    } else {
+        RG_WARNING << "ctor: Transport Toolbar not found.";
     }
 
     // We must populate AFTER the actions are created, or else all the
