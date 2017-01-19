@@ -877,9 +877,8 @@ RosegardenMainWindow::setupActions()
 
     createAction("play", SLOT(slotPlay()));
     createAction("stop", SLOT(slotStop()));
-    QAction *fastForwardAction =
-            createAction("fast_forward", SLOT(slotFastforward()));
-    QAction *rewindAction = createAction("rewind", SLOT(slotRewind()));
+    createAction("fast_forward", SLOT(slotFastforward()));
+    createAction("rewind", SLOT(slotRewind()));
     createAction("recordtoggle", SLOT(slotToggleRecord()));
     createAction("record", SLOT(slotRecord()));
     createAction("rewindtobeginning", SLOT(slotRewindToBeginning()));
@@ -913,24 +912,8 @@ RosegardenMainWindow::setupActions()
     }
 
     // Set the rewind and fast-forward buttons for auto-repeat.
-
-    QToolBar *transportToolbar = findToolbar("Transport Toolbar");
-
-    if (transportToolbar) {
-        QToolButton *rewindButton = dynamic_cast<QToolButton *>(
-                transportToolbar->widgetForAction(rewindAction));
-
-        if (rewindButton)
-            rewindButton->setAutoRepeat(true);
-
-        QToolButton *fastForwardButton = dynamic_cast<QToolButton *>(
-                transportToolbar->widgetForAction(fastForwardAction));
-
-        if (fastForwardButton)
-            fastForwardButton->setAutoRepeat(true);
-    } else {
-        RG_WARNING << "setupActions(): Can't find the Transport Toolbar.";
-    }
+    enableAutoRepeat("Transport Toolbar", "rewind");
+    enableAutoRepeat("Transport Toolbar", "fast_forward");
 }
 
 void

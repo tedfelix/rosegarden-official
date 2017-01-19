@@ -98,10 +98,8 @@ AudioMixerWindow::AudioMixerWindow(QWidget *parent,
     // Transport ToolBar
     createAction("play", SIGNAL(play()));
     createAction("stop", SIGNAL(stop()));
-    QAction *rewindAction = createAction("playback_pointer_back_bar",
-                                         SIGNAL(rewindPlayback()));
-    QAction *fastForwardAction = createAction("playback_pointer_forward_bar",
-                                              SIGNAL(fastForwardPlayback()));
+    createAction("playback_pointer_back_bar", SIGNAL(rewindPlayback()));
+    createAction("playback_pointer_forward_bar", SIGNAL(fastForwardPlayback()));
     createAction("playback_pointer_start", SIGNAL(rewindPlaybackToBeginning()));
     createAction("playback_pointer_end", SIGNAL(fastForwardPlaybackToEnd()));
     createAction("record", SIGNAL(record()));
@@ -168,27 +166,8 @@ AudioMixerWindow::AudioMixerWindow(QWidget *parent,
             setChecked(true);
 
     // Set the rewind and fast-forward buttons for auto-repeat.
-
-    // ??? A search on "setAutoRepeat" reveals a couple of other places
-    //     where code can be simplified like this.
-
-    QToolBar *transportToolbar = findToolbar("Transport Toolbar");
-
-    if (transportToolbar) {
-        QToolButton *rewindButton = dynamic_cast<QToolButton *>(
-                transportToolbar->widgetForAction(rewindAction));
-
-        if (rewindButton)
-            rewindButton->setAutoRepeat(true);
-
-        QToolButton *fastForwardButton = dynamic_cast<QToolButton *>(
-                transportToolbar->widgetForAction(fastForwardAction));
-
-        if (fastForwardButton)
-            fastForwardButton->setAutoRepeat(true);
-    } else {
-        RG_WARNING << "ctor: Transport Toolbar not found.";
-    }
+    enableAutoRepeat("Transport Toolbar", "playback_pointer_back_bar");
+    enableAutoRepeat("Transport Toolbar", "playback_pointer_forward_bar");
 
     // We must populate AFTER the actions are created, or else all the
     // action->isChecked() based tests will use a default false action on the

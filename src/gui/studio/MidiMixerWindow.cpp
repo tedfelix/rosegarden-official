@@ -79,10 +79,8 @@ MidiMixerWindow::MidiMixerWindow(QWidget *parent,
 
     createAction("play", SIGNAL(play()));
     createAction("stop", SIGNAL(stop()));
-    QAction *rewindAction = createAction(
-            "playback_pointer_back_bar", SIGNAL(rewindPlayback()));
-    QAction *fastForwardAction = createAction(
-            "playback_pointer_forward_bar", SIGNAL(fastForwardPlayback()));
+    createAction("playback_pointer_back_bar", SIGNAL(rewindPlayback()));
+    createAction("playback_pointer_forward_bar", SIGNAL(fastForwardPlayback()));
     createAction("playback_pointer_start", SIGNAL(rewindPlaybackToBeginning()));
     createAction("playback_pointer_end", SIGNAL(fastForwardPlaybackToEnd()));
     createAction("record", SIGNAL(record()));
@@ -93,24 +91,8 @@ MidiMixerWindow::MidiMixerWindow(QWidget *parent,
     createGUI("midimixer.rc");
 
     // Set the rewind and fast-forward buttons for auto-repeat.
-
-    QToolBar *transportToolbar = findToolbar("Transport Toolbar");
-
-    if (transportToolbar) {
-        QToolButton *rewindButton = dynamic_cast<QToolButton *>(
-                transportToolbar->widgetForAction(rewindAction));
-
-        if (rewindButton)
-            rewindButton->setAutoRepeat(true);
-
-        QToolButton *fastForwardButton = dynamic_cast<QToolButton *>(
-                transportToolbar->widgetForAction(fastForwardAction));
-
-        if (fastForwardButton)
-            fastForwardButton->setAutoRepeat(true);
-    } else {
-        RG_WARNING << "ctor: Transport Toolbar not found.";
-    }
+    enableAutoRepeat("Transport Toolbar", "playback_pointer_back_bar");
+    enableAutoRepeat("Transport Toolbar", "playback_pointer_forward_bar");
 
     connect(Instrument::getStaticSignals().data(),
             SIGNAL(changed(Instrument *)),
