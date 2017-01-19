@@ -480,11 +480,6 @@ private:
     void ForAllSelection(opOnEvent op);
     void setCurrentStaff(NotationStaff *staff);
 
-    /**
-     * Set the <<< << >> >>> buttons in the transport toolbar to auto repeat
-     */
-    void setRewFFwdToAutoRepeat();
-
 // FIXME: likely to be debated. --gp     Used for subclassing in pitchtracker
 protected:
     // !!! Duplicates m_doc in base class
@@ -538,6 +533,8 @@ private:
     // These Segments are not in Composition, they are dummies for
     // viewing a triggered segment's expansion.
     SegmentVector      m_adoptedSegments;    // I own these
+
+    void enableAutoRepeat(const QString &actionName);
 };
 
 }

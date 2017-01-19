@@ -342,8 +342,11 @@ NotationView::NotationView(RosegardenDocument *doc,
     connect(m_notationWidget, SIGNAL(sceneNeedsRebuilding()),
             this, SLOT(slotRegenerateScene()));
 
-    // do the auto repeat thingie on the <<< << >> >>> buttons
-    setRewFFwdToAutoRepeat();
+    // Set the rewind and fast-forward buttons for auto-repeat.
+    enableAutoRepeat("playback_pointer_back_bar");
+    enableAutoRepeat("playback_pointer_forward_bar");
+    enableAutoRepeat("cursor_back");
+    enableAutoRepeat("cursor_forward");
 
     m_notationWidget->resumeLayoutUpdates();
 
@@ -392,6 +395,34 @@ NotationView::~NotationView()
     }
     
     delete m_commandRegistry;
+}
+
+void
+NotationView::enableAutoRepeat(const QString &actionName)
+{
+    QToolBar *transportToolbar = findToolbar("Transport Toolbar");
+
+    if (!transportToolbar) {
+        RG_WARNING << "enableAutoRepeat(): Transport Toolbar not found";
+        return;
+    }
+
+    QAction *action = findAction(actionName);
+
+    if (!action) {
+        RG_WARNING << "enableAutoRepeat(): Action " << actionName << " not found.";
+        return;
+    }
+
+    QToolButton *button = dynamic_cast<QToolButton *>(
+            transportToolbar->widgetForAction(action));
+
+    if (!button) {
+        RG_WARNING << "enableAutoRepeat(): Button not found for action " << actionName;
+        return;
+    }
+
+    button->setAutoRepeat(true);
 }
 
 bool
@@ -5115,65 +5146,6 @@ NotationView::slotMagicLayer()
 
     // try to make the new segment active immediately
     slotCurrentSegmentNext();
-}
-
-void
-NotationView::setRewFFwdToAutoRepeat()
-{
-    // This one didn't work in Classic either.  Looking at it as a fresh
-    // problem, it was tricky.  The QAction has an objectName() of "rewind"
-    // but the QToolButton associated with that action has no object name at
-    // all.  We kind of have to go around our ass to get to our elbow on
-    // this one.
-    
-    // get pointers to the actual actions    
-    QAction *rewAction = findAction("playback_pointer_back_bar");    // rewind
-    QAction *ffwAction = findAction("playback_pointer_forward_bar"); // fast forward
-    QAction *cbkAction = findAction("cursor_back");                  // <<<
-    QAction *cfwAction = findAction("cursor_forward");               // >>>
-
-    QWidget* transportToolbar = this->findToolbar("Transport Toolbar");
-
-    if (transportToolbar) {
-
-        // get a list of all the toolbar's children (presumably they're
-        // QToolButtons, but use this kind of thing with caution on customized
-        // QToolBars!)
-        QList<QToolButton *> widgets = transportToolbar->findChildren<QToolButton *>();
-
-        // iterate through the entire list of children
-        for (QList<QToolButton *>::iterator i = widgets.begin(); i != widgets.end(); ++i) {
-
-            // get a pointer to the button's default action
-            QAction *act = (*i)->defaultAction();
-
-            // compare pointers, if they match, we've found the button
-            // associated with that action
-            //
-            // we then have to not only setAutoRepeat() on it, but also connect
-            // it up differently from what it got in createAction(), as
-            // determined empirically (bleargh!!)
-            if (act == rewAction) {
-                connect((*i), SIGNAL(clicked()), this, SIGNAL(rewindPlayback()));
-
-            } else if (act == ffwAction) {
-                connect((*i), SIGNAL(clicked()), this, SIGNAL(fastForwardPlayback()));
-
-            } else if (act == cbkAction) {
-                connect((*i), SIGNAL(clicked()), this, SIGNAL(stepBackward()));
-
-            } else if (act == cfwAction) {
-                connect((*i), SIGNAL(clicked()), this, SIGNAL(stepForward()));
-
-            } else  {
-                continue;
-            }
-
-            //  Must have found an button to update
-            (*i)->removeAction(act);
-            (*i)->setAutoRepeat(true);
-        }
-    }
 }
 
 void
