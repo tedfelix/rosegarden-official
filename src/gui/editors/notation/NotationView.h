@@ -533,8 +533,6 @@ private:
     // These Segments are not in Composition, they are dummies for
     // viewing a triggered segment's expansion.
     SegmentVector      m_adoptedSegments;    // I own these
-
-    void enableAutoRepeat(const QString &actionName);
 };
 
 }

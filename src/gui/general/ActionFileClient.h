@@ -96,6 +96,11 @@ protected:
     /// Enable/disable and show/hide actions based on leaving the state.
     virtual void leaveActionState(QString stateName);
 
+    /// Enable auto-repeat for a toolbar button.
+    void enableAutoRepeat(
+            const QString &toolBarName,
+            const QString &actionName);
+
 private:
     // ActionCommandRegistry calls createAction().
     friend class ActionCommandRegistry;

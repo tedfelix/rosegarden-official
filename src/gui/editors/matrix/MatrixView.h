@@ -297,8 +297,6 @@ private:
 
     virtual void initStatusBar();
 
-    void enableAutoRepeat(const QString &actionName);
-
 };
 
 }

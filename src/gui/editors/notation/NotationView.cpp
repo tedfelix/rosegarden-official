@@ -343,10 +343,10 @@ NotationView::NotationView(RosegardenDocument *doc,
             this, SLOT(slotRegenerateScene()));
 
     // Set the rewind and fast-forward buttons for auto-repeat.
-    enableAutoRepeat("playback_pointer_back_bar");
-    enableAutoRepeat("playback_pointer_forward_bar");
-    enableAutoRepeat("cursor_back");
-    enableAutoRepeat("cursor_forward");
+    enableAutoRepeat("Transport Toolbar", "playback_pointer_back_bar");
+    enableAutoRepeat("Transport Toolbar", "playback_pointer_forward_bar");
+    enableAutoRepeat("Transport Toolbar", "cursor_back");
+    enableAutoRepeat("Transport Toolbar", "cursor_forward");
 
     m_notationWidget->resumeLayoutUpdates();
 
@@ -395,34 +395,6 @@ NotationView::~NotationView()
     }
     
     delete m_commandRegistry;
-}
-
-void
-NotationView::enableAutoRepeat(const QString &actionName)
-{
-    QToolBar *transportToolbar = findToolbar("Transport Toolbar");
-
-    if (!transportToolbar) {
-        RG_WARNING << "enableAutoRepeat(): Transport Toolbar not found";
-        return;
-    }
-
-    QAction *action = findAction(actionName);
-
-    if (!action) {
-        RG_WARNING << "enableAutoRepeat(): Action " << actionName << " not found.";
-        return;
-    }
-
-    QToolButton *button = dynamic_cast<QToolButton *>(
-            transportToolbar->widgetForAction(action));
-
-    if (!button) {
-        RG_WARNING << "enableAutoRepeat(): Button not found for action " << actionName;
-        return;
-    }
-
-    button->setAutoRepeat(true);
 }
 
 bool

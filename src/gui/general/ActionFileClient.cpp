@@ -29,6 +29,7 @@
 #include <QActionGroup>
 #include <QMenu>
 #include <QToolBar>
+#include <QToolButton>
 
 namespace Rosegarden 
 {
@@ -196,6 +197,37 @@ ActionFileClient::createGUI(QString rcFileName)
     }
     return true;
 }
+
+void
+ActionFileClient::enableAutoRepeat(
+        const QString &toolBarName,
+        const QString &actionName)
+{
+    QToolBar *transportToolbar = findToolbar(toolBarName);
+
+    if (!transportToolbar) {
+        RG_WARNING << "enableAutoRepeat(): ToolBar " << toolBarName << " not found";
+        return;
+    }
+
+    QAction *action = findAction(actionName);
+
+    if (!action) {
+        RG_WARNING << "enableAutoRepeat(): Action " << actionName << " not found.";
+        return;
+    }
+
+    QToolButton *button = dynamic_cast<QToolButton *>(
+            transportToolbar->widgetForAction(action));
+
+    if (!button) {
+        RG_WARNING << "enableAutoRepeat(): Button not found for action " << actionName;
+        return;
+    }
+
+    button->setAutoRepeat(true);
+}
+
 
 }
 
