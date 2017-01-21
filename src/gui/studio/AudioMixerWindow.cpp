@@ -71,8 +71,8 @@ namespace Rosegarden
 AudioMixerWindow::AudioMixerWindow(QWidget *parent,
                                    RosegardenDocument *document) :
         MixerWindow(parent, document),
-        m_surroundBox(0),
-        m_surroundBoxLayout(0),
+        m_surroundBox(new QGroupBox(this)),
+        m_surroundBoxLayout(new QHBoxLayout),
         m_mainBox(0)
 {
     // ??? UNUSED.  A search on this string only yields this line.  A better
@@ -153,14 +153,18 @@ AudioMixerWindow::AudioMixerWindow(QWidget *parent,
     enableAutoRepeat("Transport Toolbar", "playback_pointer_back_bar");
     enableAutoRepeat("Transport Toolbar", "playback_pointer_forward_bar");
 
-    // We must populate AFTER the actions are created, or else all the
-    // action->isChecked() based tests will use a default false action on the
-    // first pass here in the ctor.  This is apparently a change from KDE/Qt3.
-    //
-    // This has the interesting side effect that the menu bar comes out with a
-    // much smaller font than normal, as do all the buttons.  (The button fonts
-    // returned to normal after I implemented Rosegarden::PluginPushButton.  Oh
-    // well.)
+    IconLoader il;
+
+    // perhaps due to the compression enacted through the stylesheet, the icons
+    // on these buttons were bug eyed monstrosities, so I created an alternate
+    // set for use here
+    m_monoPixmap = il.loadPixmap("mono-tiny");
+    m_stereoPixmap = il.loadPixmap("stereo-tiny");
+
+    m_surroundBox->setLayout(m_surroundBoxLayout);
+    setCentralWidget(m_surroundBox);
+
+    // Create all the widgets.
     populate();
 
     connect(Instrument::getStaticSignals().data(),
@@ -171,7 +175,9 @@ AudioMixerWindow::AudioMixerWindow(QWidget *parent,
 
 AudioMixerWindow::~AudioMixerWindow()
 {
-    RG_DEBUG << "AudioMixerWindow::~AudioMixerWindow\n";
+    //RG_DEBUG << "dtor";
+
+    // Destroy all the widgets.
     depopulate();
 }
 
@@ -179,14 +185,16 @@ void
 AudioMixerWindow::depopulate()
 {
     if (!m_mainBox)
-        return ;
+        return;
 
     // All the widgets will be deleted when the main box goes,
     // except that we need to delete the AudioRouteMenus first
-    // because they aren't actually widgets but do contain them
+    // because they aren't actually widgets but do contain them.
 
+    // For each input strip
     for (StripMap::iterator i = m_inputs.begin();
-            i != m_inputs.end(); ++i) {
+         i != m_inputs.end();
+         ++i) {
         delete i->second.m_input;
         delete i->second.m_output;
     }
@@ -196,6 +204,8 @@ AudioMixerWindow::depopulate()
 
     if (m_surroundBoxLayout)
         m_surroundBoxLayout->removeWidget(m_mainBox);   // Needed ???
+
+    // Delete the main box and all the widgets.
     delete m_mainBox;
     m_mainBox = 0;
 }
@@ -205,19 +215,16 @@ AudioMixerWindow::populate()
 {
     //RG_DEBUG << "populate()";
 
+    // If this isn't the first time we've been asked to create/update
+    // the widgets,
     if (m_mainBox) {
 
+        // Destroy all the widgets.  Start from scratch.
         depopulate();
 
-    } else {
-        m_surroundBox = new QGroupBox(this);
-        m_surroundBoxLayout = new QHBoxLayout;
-        m_surroundBox->setLayout(m_surroundBoxLayout);
-        setCentralWidget(m_surroundBox);
     }
 
     QFont font;
-//    font.setPointSize(font.pointSize() * 8 / 10);
     font.setPointSize(6);
     font.setBold(false);
     setFont(font);
@@ -226,20 +233,10 @@ AudioMixerWindow::populate()
     boldFont.setBold(true);
 
     m_mainBox = new QFrame(m_surroundBox);
+    // ??? Enable these to see the frame.
     //m_mainBox->setFrameStyle(QFrame::Panel | QFrame::Raised);
     //m_mainBox->setLineWidth(2);
     m_surroundBoxLayout->addWidget(m_mainBox);
-
-    InstrumentList instruments = m_studio->getPresentationInstruments();
-    BussList busses = m_studio->getBusses();
-
-    IconLoader il;
-    
-    // perhaps due to the compression enacted through the stylesheet, the icons
-    // on these buttons were bug eyed monstrosities, so I created an alternate
-    // set for use here
-    m_monoPixmap = il.loadPixmap("mono-tiny");
-    m_stereoPixmap = il.loadPixmap("stereo-tiny");
 
     // Total cols: is 2 for each input, submaster or master, plus 1
     // for each spacer.
@@ -253,28 +250,34 @@ AudioMixerWindow::populate()
 
     bool showUnassigned = m_studio->amwShowUnassignedFaders;
 
-    for (InstrumentList::iterator i = instruments.begin();
-            i != instruments.end(); ++i) {
+    InstrumentList instruments = m_studio->getPresentationInstruments();
 
-        if ((*i)->getType() != Instrument::Audio &&
-                (*i)->getType() != Instrument::SoftSynth)
+    // For each instrument
+    for (InstrumentList::iterator i = instruments.begin();
+         i != instruments.end();
+         ++i) {
+        Instrument *instrument = *i;
+
+        // Not audio or softsynth, try the next.
+        if (instrument->getType() != Instrument::Audio  &&
+            instrument->getType() != Instrument::SoftSynth)
             continue;
 
-        Strip &strip = m_inputs[(*i)->getId()];
+        Strip &strip = m_inputs[instrument->getId()];
 
         if (!showUnassigned) {
             // Do any tracks use this instrument?
-            if (!isInstrumentAssigned((*i)->getId())) {
+            if (!isInstrumentAssigned(instrument->getId())) {
                 continue;
             }
         }
         strip.m_populated = true;
 
-        if ((*i)->getType() == Instrument::Audio) {
+        if (instrument->getType() == Instrument::Audio) {
             strip.m_input = new AudioRouteMenu(m_mainBox,
                                              AudioRouteMenu::In,
                                              AudioRouteMenu::Compact,
-                                             m_studio, *i);
+                                             m_studio, instrument);
             strip.m_input->getWidget()->setToolTip(tr("Record input source"));
             strip.m_input->getWidget()->setMaximumWidth(45);
         } else {
@@ -284,7 +287,7 @@ AudioMixerWindow::populate()
         strip.m_output = new AudioRouteMenu(m_mainBox,
                                           AudioRouteMenu::Out,
                                           AudioRouteMenu::Compact,
-                                          m_studio, *i);
+                                          m_studio, instrument);
         strip.m_output->getWidget()->setToolTip(tr("Output destination"));
         strip.m_output->getWidget()->setMaximumWidth(45);
 
@@ -292,7 +295,7 @@ AudioMixerWindow::populate()
                     (m_mainBox, -100.0, 100.0, 1.0, 5.0, 0.0, 20,
                      Rotary::NoTicks, false, true);
 
-        if ((*i)->getType() == Instrument::Audio) {
+        if (instrument->getType() == Instrument::Audio) {
             strip.m_pan->setKnobColour(GUIPalette::getColour(GUIPalette::RotaryPastelGreen));
         } else {
             strip.m_pan->setKnobColour(GUIPalette::getColour(GUIPalette::RotaryPastelYellow));
@@ -330,8 +333,6 @@ AudioMixerWindow::populate()
         for (int p = 0; p < 5; ++p) {
             PluginPushButton *plugin = new PluginPushButton(strip.m_pluginBox);
             pluginBoxLayout->addWidget(plugin);
-            QFont font;
-            font.setPointSize(6);
             plugin->setFont(font);
             plugin->setText(tr("<none>"));
             plugin->setMaximumWidth(45);
@@ -344,25 +345,25 @@ AudioMixerWindow::populate()
         strip.m_pluginBox->setLayout(pluginBoxLayout);
         strip.m_pluginBox->show();
 
-        InstrumentAliasButton *aliasButton = new InstrumentAliasButton(m_mainBox, (*i));
+        InstrumentAliasButton *aliasButton = new InstrumentAliasButton(m_mainBox, instrument);
         aliasButton->setFixedSize(10, 6); // golden rectangle
         aliasButton->setToolTip(tr("Click to rename this instrument"));
         connect (aliasButton, SIGNAL(changed()), this, SLOT(slotRepopulate()));
         mainLayout->addWidget(aliasButton, 0, col, 1, 2, Qt::AlignLeft);
 
         // use the instrument alias if one is set, else a standard label
-        std::string alias = (*i)->getAlias();
+        std::string alias = instrument->getAlias();
         QString idString;
         QLabel *idLabel = NULL;
 
         //NB. The objectName property is used to address widgets in a nice piece
         // of old school Qt2 style faffery, so we DO need to set these.
-        if ((*i)->getType() == Instrument::Audio) {
+        if (instrument->getType() == Instrument::Audio) {
             // use the instrument alias if one is set, else a standard label
             if (alias.size()) {
                 idString = strtoqstr(alias);
             } else {
-                idString = tr("Audio %1").arg((*i)->getId() - AudioInstrumentBase + 1);
+                idString = tr("Audio %1").arg(instrument->getId() - AudioInstrumentBase + 1);
             }
             idLabel = new QLabel(idString, m_mainBox);
             idLabel->setObjectName("audioIdLabel");
@@ -371,7 +372,7 @@ AudioMixerWindow::populate()
             if (alias.size()) {
                 idString = strtoqstr(alias);
             } else {
-                idString = tr("Synth %1").arg((*i)->getId() - SoftSynthInstrumentBase + 1);
+                idString = tr("Synth %1").arg(instrument->getId() - SoftSynthInstrumentBase + 1);
             }
             idLabel = new QLabel(idString, m_mainBox);
             idLabel->setObjectName("synthIdLabel");
@@ -400,10 +401,10 @@ AudioMixerWindow::populate()
             mainLayout->addWidget(strip.m_pluginBox, 7, col, 1, 2);
         }
 
-        updateFader((*i)->getId());
-        updateRouteButtons((*i)->getId());
-        updateStereoButton((*i)->getId());
-        updatePluginButtons((*i)->getId());
+        updateFader(instrument->getId());
+        updateRouteButtons(instrument->getId());
+        updateStereoButton(instrument->getId());
+        updatePluginButtons(instrument->getId());
 
         connect(strip.m_fader, SIGNAL(faderChanged(float)),
                 this, SLOT(slotFaderLevelChanged(float)));
@@ -423,6 +424,8 @@ AudioMixerWindow::populate()
     }
 
     count = 1;
+
+    BussList busses = m_studio->getBusses();
 
     for (BussList::iterator i = busses.begin();
             i != busses.end(); ++i) {
@@ -454,8 +457,6 @@ AudioMixerWindow::populate()
         for (int p = 0; p < 5; ++p) {
             PluginPushButton *plugin = new PluginPushButton(strip.m_pluginBox);
             pluginBoxLayout->addWidget(plugin);
-            QFont font;
-            font.setPointSize(6);
             plugin->setFont(font);
             plugin->setText(tr("<none>"));
             plugin->setMaximumWidth(45);
