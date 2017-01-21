@@ -269,11 +269,11 @@ AudioMixerWindow::populate()
 
         // Instrument Alias Button (Click to rename)
 
-        InstrumentAliasButton *aliasButton = new InstrumentAliasButton(m_mainBox, instrument);
-        aliasButton->setFixedSize(10, 6); // golden rectangle
+        InstrumentAliasButton *aliasButton =
+                new InstrumentAliasButton(m_mainBox, instrument);
+        aliasButton->setFixedSize(10, 6);  // golden rectangle
         aliasButton->setToolTip(tr("Click to rename this instrument"));
         connect(aliasButton, SIGNAL(changed()), this, SLOT(slotRepopulate()));
-        mainLayout->addWidget(aliasButton, 0, column, 1, 2, Qt::AlignLeft);
 
         // Label
 
@@ -333,6 +333,24 @@ AudioMixerWindow::populate()
         strip.m_output->getWidget()->setToolTip(tr("Output destination"));
         strip.m_output->getWidget()->setMaximumWidth(45);
 
+        // Fader
+
+        strip.m_fader = new Fader
+                      (AudioLevel::LongFader, 20, 240, m_mainBox);
+        strip.m_fader->setToolTip(tr("Audio level"));
+
+        connect(strip.m_fader, SIGNAL(faderChanged(float)),
+                this, SLOT(slotFaderLevelChanged(float)));
+
+        // Meter
+
+        strip.m_meter = new AudioVUMeter
+                      (m_mainBox, VUMeter::AudioPeakHoldIECLong, true, strip.m_input != 0,
+                       20, 240);
+        strip.m_meter->setToolTip(tr("Audio level"));
+
+        // Pan
+
         strip.m_pan = new Rotary
                     (m_mainBox, -100.0, 100.0, 1.0, 5.0, 0.0, 20,
                      Rotary::NoTicks, false, true);
@@ -345,14 +363,10 @@ AudioMixerWindow::populate()
 
         strip.m_pan->setToolTip(tr("Pan"));
 
-        strip.m_fader = new Fader
-                      (AudioLevel::LongFader, 20, 240, m_mainBox);
-        strip.m_meter = new AudioVUMeter
-                      (m_mainBox, VUMeter::AudioPeakHoldIECLong, true, strip.m_input != 0,
-                       20, 240);
+        connect(strip.m_pan, SIGNAL(valueChanged(float)),
+                this, SLOT(slotPanChanged(float)));
 
-        strip.m_fader->setToolTip(tr("Audio level"));
-        strip.m_meter->setToolTip(tr("Audio level"));
+        // Stereo
 
         strip.m_stereoButton = new QPushButton(m_mainBox);
         strip.m_stereoButton->setIcon(m_monoPixmap);
@@ -361,6 +375,12 @@ AudioMixerWindow::populate()
         strip.m_stereo = false;
         strip.m_stereoButton->setToolTip(tr("Mono or stereo"));
 
+        connect(strip.m_stereoButton, SIGNAL(clicked()),
+                this, SLOT(slotChannelsChanged()));
+
+        // Record (UNUSED)
+
+#if 0
         strip.m_recordButton = new QPushButton(m_mainBox);
         strip.m_recordButton->setText("R");
         strip.m_recordButton->setCheckable(true);
@@ -368,6 +388,13 @@ AudioMixerWindow::populate()
         strip.m_recordButton->setFixedHeight(strip.m_stereoButton->height());
         strip.m_recordButton->setFlat(true);
         strip.m_recordButton->setToolTip(tr("Arm recording"));
+        strip.m_recordButton->hide();
+
+        connect(strip.m_recordButton, SIGNAL(clicked()),
+                this, SLOT(slotRecordChanged()));
+#endif
+
+        // Plugins
 
         strip.m_pluginBox = new QWidget(m_mainBox);
         QVBoxLayout *pluginBoxLayout = new QVBoxLayout;
@@ -387,42 +414,37 @@ AudioMixerWindow::populate()
         strip.m_pluginBox->setLayout(pluginBoxLayout);
         strip.m_pluginBox->show();
 
-        if (strip.m_input) {
-            mainLayout->addWidget(strip.m_input->getWidget(), 2, column, 1, 2);
-        }
-        mainLayout->addWidget(strip.m_output->getWidget(), 3, column, 1, 2);
+        // Layout
+
+        mainLayout->addWidget(aliasButton, 0, column, 1, 2, Qt::AlignLeft);
 
         mainLayout->addWidget(idLabel, 1, column, 1, 2, Qt::AlignLeft);
-        mainLayout->addWidget(strip.m_pan, 6, column, Qt::AlignCenter);
+
+        if (strip.m_input)
+            mainLayout->addWidget(strip.m_input->getWidget(), 2, column, 1, 2);
+
+        mainLayout->addWidget(strip.m_output->getWidget(), 3, column, 1, 2);
 
         mainLayout->addWidget(strip.m_fader, 4, column, Qt::AlignCenter);
         mainLayout->addWidget(strip.m_meter, 4, column + 1, Qt::AlignCenter);
 
-        strip.m_recordButton->hide();
+        // ??? row 5?
+
+        mainLayout->addWidget(strip.m_pan, 6, column, Qt::AlignCenter);
         mainLayout->addWidget(strip.m_stereoButton, 6, column + 1);
 
-        if (strip.m_pluginBox) {
+        if (strip.m_pluginBox)
             mainLayout->addWidget(strip.m_pluginBox, 7, column, 1, 2);
-        }
+
+        // Need to indicate Strip is populated for updates to work.
+        strip.m_populated = true;
+
+        // Update Widgets
 
         updateFader(instrument->getId());
         updateRouteButtons(instrument->getId());
         updateStereoButton(instrument->getId());
         updatePluginButtons(instrument->getId());
-
-        connect(strip.m_fader, SIGNAL(faderChanged(float)),
-                this, SLOT(slotFaderLevelChanged(float)));
-
-        connect(strip.m_pan, SIGNAL(valueChanged(float)),
-                this, SLOT(slotPanChanged(float)));
-
-        connect(strip.m_stereoButton, SIGNAL(clicked()),
-                this, SLOT(slotChannelsChanged()));
-
-        connect(strip.m_recordButton, SIGNAL(clicked()),
-                this, SLOT(slotRecordChanged()));
-
-        strip.m_populated = true;
 
         // Two for the controls and one for the spacer.
         column += 3;
