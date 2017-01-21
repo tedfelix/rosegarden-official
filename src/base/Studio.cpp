@@ -41,9 +41,13 @@ namespace Rosegarden
 {
 
 Studio::Studio() :
+    amwShowAudioFaders(true),
+    amwShowSynthFaders(true),
+    amwShowAudioSubmasters(true),
+    amwShowPluginButtons(true),
+    amwShowUnassignedFaders(false),
     m_midiThruFilter(0),
     m_midiRecordFilter(0),
-    m_mixerDisplayOptions(0),
     m_metronomeDevice(0)
 {
     // We _always_ have a buss with id zero, for the master out
@@ -368,13 +372,19 @@ Studio::toXmlString() const
 std::string
 Studio::toXmlString(const std::vector<DeviceId> &devices) const
 {
+    // See RoseXmlHandler for the read side of this.
+
     std::stringstream studio;
 
     studio << "<studio thrufilter=\"" << m_midiThruFilter
            << "\" recordfilter=\"" << m_midiRecordFilter
-	   << "\" audioinputpairs=\"" << m_recordIns.size()
-	   << "\" mixerdisplayoptions=\"" << m_mixerDisplayOptions
+           << "\" audioinputpairs=\"" << m_recordIns.size()
            << "\" metronomedevice=\"" << m_metronomeDevice
+           << "\" amwshowaudiofaders=\"" << amwShowAudioFaders
+           << "\" amwshowsynthfaders=\"" << amwShowSynthFaders
+           << "\" amwshowaudiosubmasters=\"" << amwShowAudioSubmasters
+           << "\" amwshowpluginbuttons=\"" << amwShowPluginButtons
+           << "\" amwshowunassignedfaders=\"" << amwShowUnassignedFaders
            << "\">" << endl << endl;
 
     studio << endl;

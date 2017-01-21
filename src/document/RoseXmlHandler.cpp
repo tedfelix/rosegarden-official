@@ -465,14 +465,16 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             return false;
         }
 
+        Studio &studio = m_doc->getStudio();
+
         // In the Studio we clear down everything apart from Devices and
         // Instruments before we reload.  Instruments are derived from
         // the Sequencer, the bank/program information is loaded from
         // the file we're currently examining.
         //
-        getStudio().clearMidiBanksAndPrograms();
-        getStudio().clearBusses();
-        getStudio().clearRecordIns();
+        studio.clearMidiBanksAndPrograms();
+        studio.clearBusses();
+        studio.clearRecordIns();
 
         m_section = InStudio; // set top level section
 
@@ -481,12 +483,12 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         QString thruStr = atts.value("thrufilter");
 
         if (!thruStr.isEmpty())
-            getStudio().setMIDIThruFilter(thruStr.toInt());
+            studio.setMIDIThruFilter(thruStr.toInt());
 
         QString recordStr = atts.value("recordfilter");
 
         if (!recordStr.isEmpty())
-            getStudio().setMIDIRecordFilter(recordStr.toInt());
+            studio.setMIDIRecordFilter(recordStr.toInt());
 
         QString inputStr = atts.value("audioinputpairs");
 
@@ -494,24 +496,39 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             int inputs = inputStr.toInt();
             if (inputs < 1)
                 inputs = 1; // we simply don't permit no inputs
-            while (int(getStudio().getRecordIns().size()) < inputs) {
-                getStudio().addRecordIn(new RecordIn());
+            while (int(studio.getRecordIns().size()) < inputs) {
+                studio.addRecordIn(new RecordIn());
             }
-        }
-
-        QString mixerStr = atts.value("mixerdisplayoptions");
-
-        if (!mixerStr.isEmpty()) {
-            unsigned int mixer = mixerStr.toUInt();
-            getStudio().setMixerDisplayOptions(mixer);
         }
 
         QString metronomeStr = atts.value("metronomedevice");
 
         if (!metronomeStr.isEmpty()) {
             DeviceId metronome = metronomeStr.toUInt();
-            getStudio().setMetronomeDevice(metronome);
+            studio.setMetronomeDevice(metronome);
         }
+
+        QString temp;
+
+        temp = atts.value("amwshowaudiofaders");
+        studio.amwShowAudioFaders =
+                temp.isEmpty() ? true : (temp.toInt() != 0);
+
+        temp = atts.value("amwshowsynthfaders");
+        studio.amwShowSynthFaders =
+                temp.isEmpty() ? true : (temp.toInt() != 0);
+
+        temp = atts.value("amwshowaudiosubmasters");
+        studio.amwShowAudioSubmasters =
+                temp.isEmpty() ? true : (temp.toInt() != 0);
+
+        temp = atts.value("amwshowpluginbuttons");
+        studio.amwShowPluginButtons =
+                temp.isEmpty() ? true : (temp.toInt() != 0);
+
+        temp = atts.value("amwshowunassignedfaders");
+        studio.amwShowUnassignedFaders =
+                temp.isEmpty() ? false : (temp.toInt() != 0);
 
     } else if (lcName == "timesignature") {
 

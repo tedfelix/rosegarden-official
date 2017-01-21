@@ -67,20 +67,6 @@
 namespace Rosegarden
 {
 
-// We define these such that the default of no-bits-set for the
-// studio's mixer display options produces the most sensible result
-// These are used with Studio::setMixerDisplayOptions() and
-// Studio::getMixerDisplayOptions().
-// ??? Recommend expanding the Studio interface to be more explicit
-//     and avoid the bit-twiddling.
-//     E.g. Studio::setShowFaders(bool)/getShowFaders(bool) or just
-//     a public bool Studio::showFaders.
-static const unsigned int MIXER_OMIT_FADERS            = 1 << 0;
-static const unsigned int MIXER_OMIT_SUBMASTERS        = 1 << 1;
-static const unsigned int MIXER_OMIT_PLUGINS           = 1 << 2;
-static const unsigned int MIXER_SHOW_UNASSIGNED_FADERS = 1 << 3;
-static const unsigned int MIXER_OMIT_SYNTH_FADERS      = 1 << 4;
-
 
 AudioMixerWindow::AudioMixerWindow(QWidget *parent,
                                    RosegardenDocument *document) :
@@ -267,9 +253,7 @@ AudioMixerWindow::populate()
     int count = 1;
     int col = 0;
 
-    unsigned int mixerOptions = m_studio->getMixerDisplayOptions();
-
-    bool showUnassigned = (mixerOptions & MIXER_SHOW_UNASSIGNED_FADERS);
+    bool showUnassigned = m_studio->amwShowUnassignedFaders;
 
     for (InstrumentList::iterator i = instruments.begin();
             i != instruments.end(); ++i) {
@@ -1528,8 +1512,7 @@ AudioMixerWindow::Strip::setPluginButtonsVisible(bool visible)
 void
 AudioMixerWindow::slotToggleFaders()
 {
-    m_studio->setMixerDisplayOptions(m_studio->getMixerDisplayOptions() ^
-                                     MIXER_OMIT_FADERS);
+    m_studio->amwShowAudioFaders = !m_studio->amwShowAudioFaders;
 
     updateFaderVisibility();
 }
@@ -1537,14 +1520,14 @@ AudioMixerWindow::slotToggleFaders()
 void
 AudioMixerWindow::updateFaderVisibility()
 {
-    bool d = !(m_studio->getMixerDisplayOptions() & MIXER_OMIT_FADERS);
+    bool d = m_studio->amwShowAudioFaders;
 
     QAction *action = findAction("show_audio_faders");
     if (action) {
         action->setChecked(d);
     }
 
-    RG_DEBUG << "AudioMixerWindow::updateFaderVisibility: visiblility is " << d << " (options " << m_studio->getMixerDisplayOptions() << ")";
+    RG_DEBUG << "updateFaderVisibility(): visiblility is " << d;
 
     for (StripMap::iterator i = m_inputs.begin(); i != m_inputs.end(); ++i) {
         if (i->first < SoftSynthInstrumentBase) {
@@ -1560,8 +1543,7 @@ AudioMixerWindow::updateFaderVisibility()
 void
 AudioMixerWindow::slotToggleSynthFaders()
 {
-    m_studio->setMixerDisplayOptions(m_studio->getMixerDisplayOptions() ^
-                                     MIXER_OMIT_SYNTH_FADERS);
+    m_studio->amwShowSynthFaders = !m_studio->amwShowSynthFaders;
 
     updateSynthFaderVisibility();
 }
@@ -1573,8 +1555,7 @@ AudioMixerWindow::updateSynthFaderVisibility()
     if (!action)
         return ;
 
-    action->setChecked(!(m_studio->getMixerDisplayOptions() &
-                         MIXER_OMIT_SYNTH_FADERS));
+    action->setChecked(m_studio->amwShowSynthFaders);
 
     for (StripMap::iterator i = m_inputs.begin(); i != m_inputs.end(); ++i) {
         if (i->first >= SoftSynthInstrumentBase) {
@@ -1590,8 +1571,7 @@ AudioMixerWindow::updateSynthFaderVisibility()
 void
 AudioMixerWindow::slotToggleSubmasters()
 {
-    m_studio->setMixerDisplayOptions(m_studio->getMixerDisplayOptions() ^
-                                     MIXER_OMIT_SUBMASTERS);
+    m_studio->amwShowAudioSubmasters = !m_studio->amwShowAudioSubmasters;
 
     updateSubmasterVisibility();
 }
@@ -1604,8 +1584,7 @@ AudioMixerWindow::updateSubmasterVisibility()
     if (!action)
         return ;
 
-    action->setChecked(!(m_studio->getMixerDisplayOptions() &
-                         MIXER_OMIT_SUBMASTERS));
+    action->setChecked(m_studio->amwShowAudioSubmasters);
 
     for (StripVector::iterator i = m_submasters.begin(); i != m_submasters.end(); ++i) {
         i->setVisible(action->isChecked());
@@ -1619,8 +1598,7 @@ AudioMixerWindow::updateSubmasterVisibility()
 void
 AudioMixerWindow::slotTogglePluginButtons()
 {
-    m_studio->setMixerDisplayOptions(m_studio->getMixerDisplayOptions() ^
-                                     MIXER_OMIT_PLUGINS);
+    m_studio->amwShowPluginButtons = !m_studio->amwShowPluginButtons;
 
     updatePluginButtonVisibility();
 }
@@ -1632,8 +1610,7 @@ AudioMixerWindow::updatePluginButtonVisibility()
     if (!action)
         return ;
 
-    action->setChecked(!(m_studio->getMixerDisplayOptions() &
-                         MIXER_OMIT_PLUGINS));
+    action->setChecked(m_studio->amwShowPluginButtons);
 
     RG_DEBUG << "AudioMixerWindow::updatePluginButtonVisibility() action->isChecked("
              << (action->isChecked() ? "true" : "false") << ")";
@@ -1652,11 +1629,9 @@ AudioMixerWindow::slotToggleUnassignedFaders()
     if (!action)
         return ;
 
-    m_studio->setMixerDisplayOptions(m_studio->getMixerDisplayOptions() ^
-                                     MIXER_SHOW_UNASSIGNED_FADERS);
+    m_studio->amwShowUnassignedFaders = !m_studio->amwShowUnassignedFaders;
 
-    action->setChecked(m_studio->getMixerDisplayOptions() &
-                       MIXER_SHOW_UNASSIGNED_FADERS);
+    action->setChecked(m_studio->amwShowUnassignedFaders);
 
     populate();
 }

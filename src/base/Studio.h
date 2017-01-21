@@ -189,13 +189,11 @@ public:
     MidiFilter getMIDIRecordFilter() const { return m_midiRecordFilter; }
 
     /// For the AudioMixerWindow.
-    /**
-     * ??? Recommend replacing this with a more explicit and easy-to-understand
-     *     interface.  E.g. m_showFaders, m_showSubmasters, m_showPlugins,
-     *     etc...
-     */
-    void setMixerDisplayOptions(unsigned int options) { m_mixerDisplayOptions = options; }
-    unsigned int getMixerDisplayOptions() const { return m_mixerDisplayOptions; }
+    bool amwShowAudioFaders;
+    bool amwShowSynthFaders;
+    bool amwShowAudioSubmasters;
+    bool amwShowPluginButtons;
+    bool amwShowUnassignedFaders;
 
     DeviceId getMetronomeDevice() const { return m_metronomeDevice; }
     void setMetronomeDevice(DeviceId device) { m_metronomeDevice = device; }
@@ -211,8 +209,6 @@ private:
 
     MidiFilter        m_midiThruFilter;
     MidiFilter        m_midiRecordFilter;
-
-    unsigned int      m_mixerDisplayOptions;
 
     DeviceId          m_metronomeDevice;
 };
