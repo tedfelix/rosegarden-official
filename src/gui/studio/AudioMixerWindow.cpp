@@ -244,6 +244,8 @@ AudioMixerWindow::populate()
     // Strips take up 3 columns, 2 for the controls and 1 for the spacer.
     QGridLayout *mainLayout = new QGridLayout(m_mainBox);
 
+    const int numberOfPlugins = 5;
+
     // Inputs
 
     int column = 0;
@@ -406,8 +408,8 @@ AudioMixerWindow::populate()
         pluginBoxLayout->setContentsMargins(0,0,0,0);
         strip.m_pluginBox->setLayout(pluginBoxLayout);
 
-        // 5 times
-        for (int p = 0; p < 5; ++p) {
+        // For each PluginPushButton
+        for (int p = 0; p < numberOfPlugins; ++p) {
             PluginPushButton *plugin = new PluginPushButton(strip.m_pluginBox);
             plugin->setFont(font);
             plugin->setText(tr("<none>"));
@@ -459,8 +461,7 @@ AudioMixerWindow::populate()
 
     // Submasters
 
-    // Submaster Number
-    int count = 1;
+    int submasterNumber = 1;
 
     BussList busses = m_studio->getBusses();
 
@@ -477,31 +478,48 @@ AudioMixerWindow::populate()
 
         // Label
 
-        QLabel *idLabel = new QLabel(tr("Sub %1").arg(count), m_mainBox);
+        QLabel *idLabel = new QLabel(
+                tr("Sub %1").arg(submasterNumber), m_mainBox);
         idLabel->setFont(boldFont);
         // Used by updateSubmasterVisibility() to show/hide the label.
         idLabel->setObjectName("subMaster");
 
         // Fader
 
-        strip.m_fader = new Fader
-                      (AudioLevel::LongFader, 20, 240, m_mainBox);
+        strip.m_fader = new Fader(
+                AudioLevel::LongFader,  // type
+                20, 240,  // width, height
+                m_mainBox);  // parent
         strip.m_fader->setToolTip(tr("Audio level"));
         connect(strip.m_fader, SIGNAL(faderChanged(float)),
                 this, SLOT(slotFaderLevelChanged(float)));
 
         // Meter
 
-        strip.m_meter = new AudioVUMeter
-                      (m_mainBox, VUMeter::AudioPeakHoldIECLong, true, false, 20, 240);
+        strip.m_meter = new AudioVUMeter(
+                m_mainBox,  // parent
+                VUMeter::AudioPeakHoldIECLong,  // type
+                true,  // stereo
+                false,  // hasRecord
+                20, 240);  // width, height
+
         strip.m_meter->setToolTip(tr("Audio level"));
 
         // Pan
 
-        strip.m_pan = new Rotary
-                    (m_mainBox, -100.0, 100.0, 1.0, 5.0, 0.0, 20,
-                     Rotary::NoTicks, false, true);
-        strip.m_pan->setKnobColour(GUIPalette::getColour(GUIPalette::RotaryPastelBlue));
+        strip.m_pan = new Rotary(
+                m_mainBox,  // parent
+                -100.0, 100.0,  // minimum, maximum
+                1.0,  // step
+                5.0,  // pageStep
+                0.0,  // initialPosition
+                20,  // size
+                Rotary::NoTicks,  // ticks
+                false,  // centred
+                true);  // logarithmic
+
+        strip.m_pan->setKnobColour(
+                GUIPalette::getColour(GUIPalette::RotaryPastelBlue));
 
         strip.m_pan->setToolTip(tr("Pan"));
 
@@ -515,24 +533,31 @@ AudioMixerWindow::populate()
         pluginBoxLayout->setContentsMargins(0,0,0,0);
         strip.m_pluginBox->setLayout(pluginBoxLayout);
 
-        // 5 times
-        for (int p = 0; p < 5; ++p) {
+        // For each PluginPushButton
+        for (int p = 0; p < numberOfPlugins; ++p) {
             PluginPushButton *plugin = new PluginPushButton(strip.m_pluginBox);
-            pluginBoxLayout->addWidget(plugin);
             plugin->setFont(font);
             plugin->setText(tr("<none>"));
             plugin->setMaximumWidth(45);
             plugin->setToolTip(tr("Click to load an audio plugin"));
-            strip.m_plugins.push_back(plugin);
+            pluginBoxLayout->addWidget(plugin);
+
             connect(plugin, SIGNAL(clicked()),
                     this, SLOT(slotSelectPlugin()));
+
+            strip.m_plugins.push_back(plugin);
         }
 
         strip.m_populated = true;
 
         // Layout
 
+        // Row 0, InstrumentAliasButton, don't need one.
+
         mainLayout->addWidget(idLabel, 1, column, 1, 2, Qt::AlignLeft);
+
+        // Row 2, In Button, don't need one.
+        // Row 3, Out Button, don't need one.
 
         mainLayout->addWidget(strip.m_fader, 4, column, Qt::AlignCenter);
         mainLayout->addWidget(strip.m_meter, 4, column + 1, Qt::AlignCenter);
@@ -549,38 +574,54 @@ AudioMixerWindow::populate()
 
         // Update Widgets
 
-        updateFader(count);
-        updatePluginButtons(count);
+        updateFader(submasterNumber);
+        updatePluginButtons(submasterNumber);
 
-        ++count;
+        ++submasterNumber;
 
         // Two columns for controls, one for the spacer.
         column += 3;
     }
 
+    // Master
+
     if (busses.size() > 0) {
+
+        // Widgets
+
+        // Label
+        QLabel *idLabel = new QLabel(tr("Master"), m_mainBox);
+        idLabel->setFont(boldFont);
+
+        // Fader
+        m_master.m_fader = new Fader(
+                AudioLevel::LongFader,  // type
+                20, 240,  // width, height
+                m_mainBox);  // parent
+        m_master.m_fader->setToolTip(tr("Audio master output level"));
+        connect(m_master.m_fader, SIGNAL(faderChanged(float)),
+                this, SLOT(slotFaderLevelChanged(float)));
+
+        // Meter
+        m_master.m_meter = new AudioVUMeter(
+                m_mainBox,  // parent
+                VUMeter::AudioPeakHoldIEC,  // type
+                true,  // stereo
+                false,  // hasRecord
+                20, 240);  // width, height
+        m_master.m_meter->setToolTip(tr("Audio master output level"));
 
         m_master.m_populated = true;
 
-        m_master.m_fader = new Fader
-                      (AudioLevel::LongFader, 20, 240, m_mainBox);
-        m_master.m_meter = new AudioVUMeter
-                      (m_mainBox, VUMeter::AudioPeakHoldIEC, true, false, 20, 240);
-
-        m_master.m_fader->setToolTip(tr("Audio master output level"));
-        m_master.m_meter->setToolTip(tr("Audio master output level"));
-
-        QLabel *idLabel = new QLabel(tr("Master"), m_mainBox);
-        idLabel->setFont(boldFont);
+        // Layout
 
         mainLayout->addWidget(idLabel, 1, column, 1,  2, Qt::AlignLeft);
         mainLayout->addWidget(m_master.m_fader, 4, column, Qt::AlignCenter);
         mainLayout->addWidget(m_master.m_meter, 4, column + 1, Qt::AlignCenter);
 
-        updateFader(0);
+        // Update Widgets
 
-        connect(m_master.m_fader, SIGNAL(faderChanged(float)),
-                this, SLOT(slotFaderLevelChanged(float)));
+        updateFader(0);
     }
 
     m_mainBox->show();
