@@ -36,40 +36,17 @@ const QColor GUIPalette::OutRangeColor = Qt::red;
 
 QColor GUIPalette::getColour(const char* const colourName)
 {
-    QSettings config;
+    QSettings config; // should probably become a member var for performance reasons
     config.beginGroup(ColoursConfigGroup);
 
-    //@@@ I'm not really sure what this used to do.  It doesn't make sense.
-    //
-    // First we getInstance() (of what?  I'm a linguist, not a programmer)
-    // m_defaultsMap[colourName] and then we use this QColor as a key in
-    // KConfig::readColorEntry() which used to be (3.5 API)
-    //
-    // QColor KConfigBase::readColorEntry (const QString &pKey,
-    //                                     const QColor *pDefault = 0L)
-    //
-    // where pKey   The key to search for.
-    //   pDefault   A default value (null QColor by default) returned if the key
-    //              was not found or if the value cannot be interpreted.
-    //
-    // So how did that old code work?  It doesn't make sense.  I don't
-    // understand what res being set to getInstance()->m_defaultsMap[colourName]
-    // was supposed to accomplish at all.
-    //
-    // Anyway, I grabbed an example of how to use QSettings to retrieve a
-    // color, and since colourName is already coming in here as a const char*,
-    // which we need to pass to QSettings as a search key, I'm hoping this
-    // modified pasted example code will do the same job as the old,
-    // incomprehensible code did.  If not, that's what this honking huge comment
-    // is for!
-//    QColor res = getInstance()->m_defaultsMap[colourName];
-//    config.readColorEntry(colourName, &res);
+    // First determine the default colour (see the GUIPalette constructor)
+    QColor defaultColour = getInstance()->m_defaultsMap[colourName];
 
-    // cc -- try half of the old and half of the new:
-    QColor res = getInstance()->m_defaultsMap[colourName];
-    QColor color = config.value(colourName, res).value<QColor>();
+    // Then read the user configuration, and if it doesn't have any setting
+    // then use the above default colour as fallback.
+    QColor color = config.value(colourName, defaultColour).value<QColor>();
+
     config.endGroup();
-
     return color;
 }
 
