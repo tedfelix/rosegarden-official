@@ -265,49 +265,38 @@ AudioMixerWindow::populate()
             !isInstrumentAssigned(instrument->getId()))
             continue;
 
+        // Create a new Strip.
         Strip &strip = m_inputs[instrument->getId()];
 
         // Instrument Alias Button (Click to rename)
+
+        // ??? Get rid of this.  This is a usability issue.  Let the user
+        //     click directly on the name to change it.  Note that AIPP
+        //     uses InstrumentAliasButton as well.  Remove it from there too.
+        //     Then remove InstrumentAliasButton from the sourcebase.
 
         InstrumentAliasButton *aliasButton =
                 new InstrumentAliasButton(m_mainBox, instrument);
         aliasButton->setFixedSize(10, 6);  // golden rectangle
         aliasButton->setToolTip(tr("Click to rename this instrument"));
+
         connect(aliasButton, SIGNAL(changed()), this, SLOT(slotRepopulate()));
 
         // Label
 
-        // use the instrument alias if one is set, else a standard label
-        std::string alias = instrument->getAlias();
-        QString idString;
-        QLabel *idLabel = NULL;
-
-        //NB. The objectName property is used to address widgets in a nice piece
-        // of old school Qt2 style faffery, so we DO need to set these.
-        if (instrument->getType() == Instrument::Audio) {
-            // use the instrument alias if one is set, else a standard label
-            if (alias.size()) {
-                idString = strtoqstr(alias);
-            } else {
-                idString = tr("Audio %1").arg(instrument->getId() - AudioInstrumentBase + 1);
-            }
-            idLabel = new QLabel(idString, m_mainBox);
-            idLabel->setObjectName("audioIdLabel");
-        } else {
-            // use the instrument alias if one is set, else a standard label
-            if (alias.size()) {
-                idString = strtoqstr(alias);
-            } else {
-                idString = tr("Synth %1").arg(instrument->getId() - SoftSynthInstrumentBase + 1);
-            }
-            idLabel = new QLabel(idString, m_mainBox);
-            idLabel->setObjectName("synthIdLabel");
-        }
-
-        Q_ASSERT(idLabel);
-
+        QLabel *idLabel = new QLabel(m_mainBox);
         idLabel->setFont(boldFont);
         idLabel->setToolTip(tr("Click the button above to rename this instrument"));
+        idLabel->setText(strtoqstr(instrument->getAlias()));
+
+        // Audio Instrument
+        if (instrument->getType() == Instrument::Audio) {
+            // Used by updateFaderVisibility() to show/hide this label.
+            idLabel->setObjectName("audioIdLabel");
+        } else {  // Softsynth Instrument
+            // Used by updateSynthFaderVisibility() to show/hide this label.
+            idLabel->setObjectName("synthIdLabel");
+        }
 
         // Input
 
@@ -335,8 +324,7 @@ AudioMixerWindow::populate()
 
         // Fader
 
-        strip.m_fader = new Fader
-                      (AudioLevel::LongFader, 20, 240, m_mainBox);
+        strip.m_fader = new Fader(AudioLevel::LongFader, 20, 240, m_mainBox);
         strip.m_fader->setToolTip(tr("Audio level"));
 
         connect(strip.m_fader, SIGNAL(faderChanged(float)),
@@ -344,21 +332,33 @@ AudioMixerWindow::populate()
 
         // Meter
 
-        strip.m_meter = new AudioVUMeter
-                      (m_mainBox, VUMeter::AudioPeakHoldIECLong, true, strip.m_input != 0,
-                       20, 240);
+        strip.m_meter = new AudioVUMeter(
+                m_mainBox,  // parent
+                VUMeter::AudioPeakHoldIECLong,  // type
+                true,  // stereo
+                strip.m_input != 0,  // hasRecord
+                20,  // width
+                240);  // height
         strip.m_meter->setToolTip(tr("Audio level"));
 
         // Pan
-
-        strip.m_pan = new Rotary
-                    (m_mainBox, -100.0, 100.0, 1.0, 5.0, 0.0, 20,
-                     Rotary::NoTicks, false, true);
+        strip.m_pan = new Rotary(
+                m_mainBox,  // parent
+                -100.0, 100.0,  // minimum, maximum
+                1.0,  // step
+                5.0,  // pageStep
+                0.0,  // initialPosition
+                20,  // size
+                Rotary::NoTicks,  // ticks
+                false,  // centred
+                true);  // logarithmic
 
         if (instrument->getType() == Instrument::Audio) {
-            strip.m_pan->setKnobColour(GUIPalette::getColour(GUIPalette::RotaryPastelGreen));
-        } else {
-            strip.m_pan->setKnobColour(GUIPalette::getColour(GUIPalette::RotaryPastelYellow));
+            strip.m_pan->setKnobColour(
+                    GUIPalette::getColour(GUIPalette::RotaryPastelGreen));
+        } else {  // Softsynth
+            strip.m_pan->setKnobColour(
+                    GUIPalette::getColour(GUIPalette::RotaryPastelYellow));
         }
 
         strip.m_pan->setToolTip(tr("Pan"));
@@ -372,11 +372,12 @@ AudioMixerWindow::populate()
         strip.m_stereoButton->setIcon(m_monoPixmap);
         strip.m_stereoButton->setFixedSize(20, 20);
         strip.m_stereoButton->setFlat(true);
-        strip.m_stereo = false;
         strip.m_stereoButton->setToolTip(tr("Mono or stereo"));
 
         connect(strip.m_stereoButton, SIGNAL(clicked()),
                 this, SLOT(slotChannelsChanged()));
+
+        strip.m_stereo = false;
 
         // Record (UNUSED)
 
@@ -1186,6 +1187,7 @@ AudioMixerWindow::slotChannelsChanged()
     }
 }
 
+#if 0
 void
 AudioMixerWindow::slotSoloChanged()
 {
@@ -1203,6 +1205,7 @@ AudioMixerWindow::slotRecordChanged()
 {
     //...
 }
+#endif
 
 void
 AudioMixerWindow::updateMeters()

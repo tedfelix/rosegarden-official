@@ -98,9 +98,10 @@ protected slots:
     void slotFaderLevelChanged(float level);
     void slotPanChanged(float value);
     void slotChannelsChanged();
-    void slotSoloChanged();
-    void slotMuteChanged();
-    void slotRecordChanged();
+    // Unused since this display is Instrument-based, not Track-based.
+    //void slotSoloChanged();
+    //void slotMuteChanged();
+    //void slotRecordChanged();
 
     /// Handler for plugin button press.  Emits selectPlugin().
     void slotSelectPlugin();
@@ -228,6 +229,8 @@ private:
 
         Rotary *m_pan;
         QPushButton *m_stereoButton;
+
+        // Used to detect changes and to decide how to treat m_meter.
         bool m_stereo;
 
         // ??? UNUSED.  Created, but never shown.  Looks like this was

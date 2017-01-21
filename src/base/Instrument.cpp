@@ -374,10 +374,11 @@ Instrument::getPresentationNumber() const
 std::string
 Instrument::getAlias() const
 {
-    // return the alias if available, else return the "presentation name" rather
-    // than an empty string
-    if (m_alias.size()) return m_alias;
-    else return m_name;
+    // If there is no alias, return the "presentation name".
+    if (m_alias.empty())
+        return m_name;
+
+    return m_alias;
 }
 
 void
