@@ -79,6 +79,12 @@ AudioMixerWindow::AudioMixerWindow(QWidget *parent,
     //     object name would be "AudioMixerWindow".
     setObjectName("MixerWindow");
 
+    setWindowTitle(tr("Audio Mixer"));
+    setWindowIcon(IconLoader().loadPixmap("window-audiomixer"));
+
+    m_surroundBox->setLayout(m_surroundBoxLayout);
+    setCentralWidget(m_surroundBox);
+
     createAction("file_close", SLOT(slotClose()));
 
     // Transport ToolBar
@@ -161,9 +167,6 @@ AudioMixerWindow::AudioMixerWindow(QWidget *parent,
     m_monoPixmap = il.loadPixmap("mono-tiny");
     m_stereoPixmap = il.loadPixmap("stereo-tiny");
 
-    m_surroundBox->setLayout(m_surroundBoxLayout);
-    setCentralWidget(m_surroundBox);
-
     // Create all the widgets.
     populate();
 
@@ -238,17 +241,10 @@ AudioMixerWindow::populate()
     //m_mainBox->setLineWidth(2);
     m_surroundBoxLayout->addWidget(m_mainBox);
 
-    // Total cols: is 2 for each input, submaster or master, plus 1
-    // for each spacer.
+    // Strips take up 3 columns, 2 for the controls and 1 for the spacer.
     QGridLayout *mainLayout = new QGridLayout(m_mainBox);
 
-    setWindowTitle(tr("Audio Mixer"));
-    setWindowIcon(IconLoader().loadPixmap("window-audiomixer"));
-
-    int count = 1;
-    int col = 0;
-
-    bool showUnassigned = m_studio->amwShowUnassignedFaders;
+    int column = 0;
 
     InstrumentList instruments = m_studio->getPresentationInstruments();
 
@@ -263,31 +259,77 @@ AudioMixerWindow::populate()
             instrument->getType() != Instrument::SoftSynth)
             continue;
 
+        // If we shouldn't show unassigned faders and this Instrument
+        // is unassigned, try the next.
+        if (!m_studio->amwShowUnassignedFaders  &&
+            !isInstrumentAssigned(instrument->getId()))
+            continue;
+
         Strip &strip = m_inputs[instrument->getId()];
 
-        if (!showUnassigned) {
-            // Do any tracks use this instrument?
-            if (!isInstrumentAssigned(instrument->getId())) {
-                continue;
+        // Instrument Alias Button (Click to rename)
+
+        InstrumentAliasButton *aliasButton = new InstrumentAliasButton(m_mainBox, instrument);
+        aliasButton->setFixedSize(10, 6); // golden rectangle
+        aliasButton->setToolTip(tr("Click to rename this instrument"));
+        connect(aliasButton, SIGNAL(changed()), this, SLOT(slotRepopulate()));
+        mainLayout->addWidget(aliasButton, 0, column, 1, 2, Qt::AlignLeft);
+
+        // Label
+
+        // use the instrument alias if one is set, else a standard label
+        std::string alias = instrument->getAlias();
+        QString idString;
+        QLabel *idLabel = NULL;
+
+        //NB. The objectName property is used to address widgets in a nice piece
+        // of old school Qt2 style faffery, so we DO need to set these.
+        if (instrument->getType() == Instrument::Audio) {
+            // use the instrument alias if one is set, else a standard label
+            if (alias.size()) {
+                idString = strtoqstr(alias);
+            } else {
+                idString = tr("Audio %1").arg(instrument->getId() - AudioInstrumentBase + 1);
             }
+            idLabel = new QLabel(idString, m_mainBox);
+            idLabel->setObjectName("audioIdLabel");
+        } else {
+            // use the instrument alias if one is set, else a standard label
+            if (alias.size()) {
+                idString = strtoqstr(alias);
+            } else {
+                idString = tr("Synth %1").arg(instrument->getId() - SoftSynthInstrumentBase + 1);
+            }
+            idLabel = new QLabel(idString, m_mainBox);
+            idLabel->setObjectName("synthIdLabel");
         }
-        strip.m_populated = true;
+
+        Q_ASSERT(idLabel);
+
+        idLabel->setFont(boldFont);
+        idLabel->setToolTip(tr("Click the button above to rename this instrument"));
+
+        // Input
 
         if (instrument->getType() == Instrument::Audio) {
             strip.m_input = new AudioRouteMenu(m_mainBox,
-                                             AudioRouteMenu::In,
-                                             AudioRouteMenu::Compact,
-                                             m_studio, instrument);
+                                               AudioRouteMenu::In,
+                                               AudioRouteMenu::Compact,
+                                               m_studio,
+                                               instrument);
             strip.m_input->getWidget()->setToolTip(tr("Record input source"));
             strip.m_input->getWidget()->setMaximumWidth(45);
         } else {
             strip.m_input = 0;
         }
 
+        // Output
+
         strip.m_output = new AudioRouteMenu(m_mainBox,
-                                          AudioRouteMenu::Out,
-                                          AudioRouteMenu::Compact,
-                                          m_studio, instrument);
+                                            AudioRouteMenu::Out,
+                                            AudioRouteMenu::Compact,
+                                            m_studio,
+                                            instrument);
         strip.m_output->getWidget()->setToolTip(tr("Output destination"));
         strip.m_output->getWidget()->setMaximumWidth(45);
 
@@ -345,60 +387,22 @@ AudioMixerWindow::populate()
         strip.m_pluginBox->setLayout(pluginBoxLayout);
         strip.m_pluginBox->show();
 
-        InstrumentAliasButton *aliasButton = new InstrumentAliasButton(m_mainBox, instrument);
-        aliasButton->setFixedSize(10, 6); // golden rectangle
-        aliasButton->setToolTip(tr("Click to rename this instrument"));
-        connect (aliasButton, SIGNAL(changed()), this, SLOT(slotRepopulate()));
-        mainLayout->addWidget(aliasButton, 0, col, 1, 2, Qt::AlignLeft);
-
-        // use the instrument alias if one is set, else a standard label
-        std::string alias = instrument->getAlias();
-        QString idString;
-        QLabel *idLabel = NULL;
-
-        //NB. The objectName property is used to address widgets in a nice piece
-        // of old school Qt2 style faffery, so we DO need to set these.
-        if (instrument->getType() == Instrument::Audio) {
-            // use the instrument alias if one is set, else a standard label
-            if (alias.size()) {
-                idString = strtoqstr(alias);
-            } else {
-                idString = tr("Audio %1").arg(instrument->getId() - AudioInstrumentBase + 1);
-            }
-            idLabel = new QLabel(idString, m_mainBox);
-            idLabel->setObjectName("audioIdLabel");
-        } else {
-            // use the instrument alias if one is set, else a standard label
-            if (alias.size()) {
-                idString = strtoqstr(alias);
-            } else {
-                idString = tr("Synth %1").arg(instrument->getId() - SoftSynthInstrumentBase + 1);
-            }
-            idLabel = new QLabel(idString, m_mainBox);
-            idLabel->setObjectName("synthIdLabel");
-        }
-
-        Q_ASSERT(idLabel);
-
-        idLabel->setFont(boldFont);
-        idLabel->setToolTip(tr("Click the button above to rename this instrument"));
-
         if (strip.m_input) {
-            mainLayout->addWidget(strip.m_input->getWidget(), 2, col, 1, 2);
+            mainLayout->addWidget(strip.m_input->getWidget(), 2, column, 1, 2);
         }
-        mainLayout->addWidget(strip.m_output->getWidget(), 3, col, 1, 2);
+        mainLayout->addWidget(strip.m_output->getWidget(), 3, column, 1, 2);
 
-        mainLayout->addWidget(idLabel, 1, col, 1, 2, Qt::AlignLeft);
-        mainLayout->addWidget(strip.m_pan, 6, col, Qt::AlignCenter);
+        mainLayout->addWidget(idLabel, 1, column, 1, 2, Qt::AlignLeft);
+        mainLayout->addWidget(strip.m_pan, 6, column, Qt::AlignCenter);
 
-        mainLayout->addWidget(strip.m_fader, 4, col, Qt::AlignCenter);
-        mainLayout->addWidget(strip.m_meter, 4, col + 1, Qt::AlignCenter);
+        mainLayout->addWidget(strip.m_fader, 4, column, Qt::AlignCenter);
+        mainLayout->addWidget(strip.m_meter, 4, column + 1, Qt::AlignCenter);
 
         strip.m_recordButton->hide();
-        mainLayout->addWidget(strip.m_stereoButton, 6, col + 1);
+        mainLayout->addWidget(strip.m_stereoButton, 6, column + 1);
 
         if (strip.m_pluginBox) {
-            mainLayout->addWidget(strip.m_pluginBox, 7, col, 1, 2);
+            mainLayout->addWidget(strip.m_pluginBox, 7, column, 1, 2);
         }
 
         updateFader(instrument->getId());
@@ -418,12 +422,13 @@ AudioMixerWindow::populate()
         connect(strip.m_recordButton, SIGNAL(clicked()),
                 this, SLOT(slotRecordChanged()));
 
-        ++count;
+        strip.m_populated = true;
 
-        col += 3;
+        // Two for the controls and one for the spacer.
+        column += 3;
     }
 
-    count = 1;
+    int count = 1;
 
     BussList busses = m_studio->getBusses();
 
@@ -473,15 +478,15 @@ AudioMixerWindow::populate()
         //NB. objectName matters here:
         idLabel->setObjectName("subMaster");
 
-        mainLayout->addWidget(idLabel, 1, col, 1, 2, Qt::AlignLeft);
+        mainLayout->addWidget(idLabel, 1, column, 1, 2, Qt::AlignLeft);
 
-        mainLayout->addWidget(strip.m_pan, 6, col, 1, 2, Qt::AlignCenter);
+        mainLayout->addWidget(strip.m_pan, 6, column, 1, 2, Qt::AlignCenter);
 
-        mainLayout->addWidget(strip.m_fader, 4, col, Qt::AlignCenter);
-        mainLayout->addWidget(strip.m_meter, 4, col + 1, Qt::AlignCenter);
+        mainLayout->addWidget(strip.m_fader, 4, column, Qt::AlignCenter);
+        mainLayout->addWidget(strip.m_meter, 4, column + 1, Qt::AlignCenter);
 
         if (strip.m_pluginBox) {
-            mainLayout->addWidget(strip.m_pluginBox, 7, col, 1, 2);
+            mainLayout->addWidget(strip.m_pluginBox, 7, column, 1, 2);
         }
 
         // ??? COPY?!
@@ -497,7 +502,7 @@ AudioMixerWindow::populate()
 
         ++count;
 
-        col += 3;
+        column += 3;
     }
 
     if (busses.size() > 0) {
@@ -515,9 +520,9 @@ AudioMixerWindow::populate()
         QLabel *idLabel = new QLabel(tr("Master"), m_mainBox);
         idLabel->setFont(boldFont);
 
-        mainLayout->addWidget(idLabel, 1, col, 1,  2, Qt::AlignLeft);
-        mainLayout->addWidget(m_master.m_fader, 4, col, Qt::AlignCenter);
-        mainLayout->addWidget(m_master.m_meter, 4, col + 1, Qt::AlignCenter);
+        mainLayout->addWidget(idLabel, 1, column, 1,  2, Qt::AlignLeft);
+        mainLayout->addWidget(m_master.m_fader, 4, column, Qt::AlignCenter);
+        mainLayout->addWidget(m_master.m_meter, 4, column + 1, Qt::AlignCenter);
 
         updateFader(0);
 
