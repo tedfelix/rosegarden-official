@@ -244,6 +244,8 @@ AudioMixerWindow::populate()
     // Strips take up 3 columns, 2 for the controls and 1 for the spacer.
     QGridLayout *mainLayout = new QGridLayout(m_mainBox);
 
+    // Inputs
+
     int column = 0;
 
     InstrumentList instruments = m_studio->getPresentationInstruments();
@@ -287,6 +289,7 @@ AudioMixerWindow::populate()
         QLabel *idLabel = new QLabel(m_mainBox);
         idLabel->setFont(boldFont);
         idLabel->setToolTip(tr("Click the button above to rename this instrument"));
+        idLabel->setMaximumWidth(45);
         idLabel->setText(strtoqstr(instrument->getAlias()));
 
         // Audio Instrument
@@ -342,6 +345,7 @@ AudioMixerWindow::populate()
         strip.m_meter->setToolTip(tr("Audio level"));
 
         // Pan
+
         strip.m_pan = new Rotary(
                 m_mainBox,  // parent
                 -100.0, 100.0,  // minimum, maximum
@@ -399,21 +403,23 @@ AudioMixerWindow::populate()
 
         strip.m_pluginBox = new QWidget(m_mainBox);
         QVBoxLayout *pluginBoxLayout = new QVBoxLayout;
+        pluginBoxLayout->setContentsMargins(0,0,0,0);
+        strip.m_pluginBox->setLayout(pluginBoxLayout);
 
+        // 5 times
         for (int p = 0; p < 5; ++p) {
             PluginPushButton *plugin = new PluginPushButton(strip.m_pluginBox);
-            pluginBoxLayout->addWidget(plugin);
             plugin->setFont(font);
             plugin->setText(tr("<none>"));
             plugin->setMaximumWidth(45);
             plugin->setToolTip(tr("Click to load an audio plugin"));
-            strip.m_plugins.push_back(plugin);
+            pluginBoxLayout->addWidget(plugin);
+
             connect(plugin, SIGNAL(clicked()),
                     this, SLOT(slotSelectPlugin()));
-        }
 
-        strip.m_pluginBox->setLayout(pluginBoxLayout);
-        strip.m_pluginBox->show();
+            strip.m_plugins.push_back(plugin);
+        }
 
         // Layout
 
@@ -429,13 +435,13 @@ AudioMixerWindow::populate()
         mainLayout->addWidget(strip.m_fader, 4, column, Qt::AlignCenter);
         mainLayout->addWidget(strip.m_meter, 4, column + 1, Qt::AlignCenter);
 
-        // ??? row 5?
+        mainLayout->addWidget(strip.m_pan, 5, column, Qt::AlignCenter);
+        mainLayout->addWidget(strip.m_stereoButton, 5, column + 1);
 
-        mainLayout->addWidget(strip.m_pan, 6, column, Qt::AlignCenter);
-        mainLayout->addWidget(strip.m_stereoButton, 6, column + 1);
+        mainLayout->addWidget(strip.m_pluginBox, 6, column, 1, 2);
 
-        if (strip.m_pluginBox)
-            mainLayout->addWidget(strip.m_pluginBox, 7, column, 1, 2);
+        // Spacer
+        mainLayout->setColumnMinimumWidth(column + 2, 4);
 
         // Need to indicate Strip is populated for updates to work.
         strip.m_populated = true;
@@ -447,22 +453,50 @@ AudioMixerWindow::populate()
         updateStereoButton(instrument->getId());
         updatePluginButtons(instrument->getId());
 
-        // Two for the controls and one for the spacer.
+        // Two for the controls, one for the spacer.
         column += 3;
     }
 
+    // Submasters
+
+    // Submaster Number
     int count = 1;
 
     BussList busses = m_studio->getBusses();
 
+    // For each buss.
     for (BussList::iterator i = busses.begin();
-            i != busses.end(); ++i) {
+         i != busses.end();
+         ++i) {
 
+        // The first one is the master, skip it.
         if (i == busses.begin())
-            continue; // that one's the master
+            continue;
 
         Strip strip;
-        strip.m_populated = true;
+
+        // Label
+
+        QLabel *idLabel = new QLabel(tr("Sub %1").arg(count), m_mainBox);
+        idLabel->setFont(boldFont);
+        // Used by updateSubmasterVisibility() to show/hide the label.
+        idLabel->setObjectName("subMaster");
+
+        // Fader
+
+        strip.m_fader = new Fader
+                      (AudioLevel::LongFader, 20, 240, m_mainBox);
+        strip.m_fader->setToolTip(tr("Audio level"));
+        connect(strip.m_fader, SIGNAL(faderChanged(float)),
+                this, SLOT(slotFaderLevelChanged(float)));
+
+        // Meter
+
+        strip.m_meter = new AudioVUMeter
+                      (m_mainBox, VUMeter::AudioPeakHoldIECLong, true, false, 20, 240);
+        strip.m_meter->setToolTip(tr("Audio level"));
+
+        // Pan
 
         strip.m_pan = new Rotary
                     (m_mainBox, -100.0, 100.0, 1.0, 5.0, 0.0, 20,
@@ -471,17 +505,17 @@ AudioMixerWindow::populate()
 
         strip.m_pan->setToolTip(tr("Pan"));
 
-        strip.m_fader = new Fader
-                      (AudioLevel::LongFader, 20, 240, m_mainBox);
-        strip.m_meter = new AudioVUMeter
-                      (m_mainBox, VUMeter::AudioPeakHoldIECLong, true, false, 20, 240);
+        connect(strip.m_pan, SIGNAL(valueChanged(float)),
+                this, SLOT(slotPanChanged(float)));
 
-        strip.m_fader->setToolTip(tr("Audio level"));
-        strip.m_meter->setToolTip(tr("Audio level"));
+        // Plugins
 
         strip.m_pluginBox = new QWidget(m_mainBox);
         QVBoxLayout *pluginBoxLayout = new QVBoxLayout;
+        pluginBoxLayout->setContentsMargins(0,0,0,0);
+        strip.m_pluginBox->setLayout(pluginBoxLayout);
 
+        // 5 times
         for (int p = 0; p < 5; ++p) {
             PluginPushButton *plugin = new PluginPushButton(strip.m_pluginBox);
             pluginBoxLayout->addWidget(plugin);
@@ -494,37 +528,33 @@ AudioMixerWindow::populate()
                     this, SLOT(slotSelectPlugin()));
         }
 
-        strip.m_pluginBox->setLayout(pluginBoxLayout);
+        strip.m_populated = true;
 
-        QLabel *idLabel = new QLabel(tr("Sub %1").arg(count), m_mainBox);
-        idLabel->setFont(boldFont);
-        //NB. objectName matters here:
-        idLabel->setObjectName("subMaster");
+        // Layout
 
         mainLayout->addWidget(idLabel, 1, column, 1, 2, Qt::AlignLeft);
-
-        mainLayout->addWidget(strip.m_pan, 6, column, 1, 2, Qt::AlignCenter);
 
         mainLayout->addWidget(strip.m_fader, 4, column, Qt::AlignCenter);
         mainLayout->addWidget(strip.m_meter, 4, column + 1, Qt::AlignCenter);
 
-        if (strip.m_pluginBox) {
-            mainLayout->addWidget(strip.m_pluginBox, 7, column, 1, 2);
-        }
+        mainLayout->addWidget(strip.m_pan, 5, column, 1, 2, Qt::AlignCenter);
+
+        mainLayout->addWidget(strip.m_pluginBox, 6, column, 1, 2);
+
+        // Spacer
+        mainLayout->setColumnMinimumWidth(column + 2, 4);
 
         // ??? COPY?!
         m_submasters.push_back(strip);
+
+        // Update Widgets
+
         updateFader(count);
         updatePluginButtons(count);
 
-        connect(strip.m_fader, SIGNAL(faderChanged(float)),
-                this, SLOT(slotFaderLevelChanged(float)));
-
-        connect(strip.m_pan, SIGNAL(valueChanged(float)),
-                this, SLOT(slotPanChanged(float)));
-
         ++count;
 
+        // Two columns for controls, one for the spacer.
         column += 3;
     }
 
