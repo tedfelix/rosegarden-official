@@ -127,7 +127,7 @@ SegmentTool::createMenu()
 
     //RG_DEBUG << "SegmentTool::createMenu() " << rcFileName << " - " << m_menuName;
 
-    if (!createGUI(rcFileName)) {
+    if (!createMenusAndToolbars(rcFileName)) {
         RG_WARNING << "SegmentTool::createMenu(" << rcFileName
                   << "): menu creation failed";
         m_menu = 0;

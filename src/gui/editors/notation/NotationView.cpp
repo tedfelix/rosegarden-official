@@ -209,7 +209,7 @@ NotationView::NotationView(RosegardenDocument *doc,
     m_commandRegistry = new NotationCommandRegistry(this);
 
     setupActions();
-    createGUI("notation.rc");
+    createMenusAndToolbars("notation.rc");
     slotUpdateMenuStates();
     slotTestClipboard();
 

@@ -1216,7 +1216,7 @@ EventView::setupActions()
     QAction *real = createAction("time_real", SLOT(slotRealTime()));
     QAction *raw = createAction("time_raw", SLOT(slotRawTime()));
 
-    createGUI(getRCFileName());
+    createMenusAndToolbars(getRCFileName());
 
     QSettings settings;
     settings.beginGroup(EventViewConfigGroup);

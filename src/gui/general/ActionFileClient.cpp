@@ -183,16 +183,16 @@ ActionFileClient::findToolbar(QString toolbarName)
 }
 
 bool
-ActionFileClient::createGUI(QString rcFileName)
+ActionFileClient::createMenusAndToolbars(QString rcFileName)
 {
     QObject *obj = dynamic_cast<QObject *>(this);
     if (!obj) {
-        RG_WARNING << "ERROR: ActionFileClient::createGUI: ActionFileClient subclass is not a QObject";
+        RG_WARNING << "createMenusAndToolbars(): ERROR: ActionFileClient subclass is not a QObject";
         return 0;
     }
     if (!m_actionFileParser) m_actionFileParser = new ActionFileParser(obj);
     if (!m_actionFileParser->load(rcFileName)) {
-        RG_WARNING << "ActionFileClient::createGUI: ERROR: Failed to load action file";
+        RG_WARNING << "createMenusAndToolbars(): ERROR: Failed to load action file" << rcFileName;
         return false;
     }
     return true;

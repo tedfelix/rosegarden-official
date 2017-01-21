@@ -588,7 +588,7 @@ TempoView::setupActions()
     a = createAction("time_raw", SLOT(slotRawTime()));
     if (timeMode == 2) { a->setCheckable(true); a->setChecked(true); }
 
-    createGUI(getRCFileName());
+    createMenusAndToolbars(getRCFileName());
 }
 
 void

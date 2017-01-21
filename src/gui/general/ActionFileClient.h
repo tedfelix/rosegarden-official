@@ -72,7 +72,7 @@ protected:
      * The QAction child objects must be present before calling this function.
      * See createAction().
      */
-    bool createGUI(QString rcname);
+    bool createMenusAndToolbars(QString rcname);
 
     /**
      * Find a group of the given name.  If it does not exist,

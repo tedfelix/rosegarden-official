@@ -152,7 +152,7 @@ MatrixTool::createMenu()
 {
     MATRIX_DEBUG << "MatrixTool::createMenu() " << m_rcFileName << " - " << m_menuName;
 
-    if (!createGUI(m_rcFileName)) {
+    if (!createMenusAndToolbars(m_rcFileName)) {
         RG_WARNING << "MatrixTool::createMenu(" << m_rcFileName << "): menu creation failed";
         m_menu = 0;
         return;

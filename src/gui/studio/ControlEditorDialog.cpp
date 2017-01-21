@@ -400,7 +400,7 @@ ControlEditorDialog::setupActions()
     createAction("control_help", SLOT(slotHelpRequested()));
     createAction("help_about_app", SLOT(slotHelpAbout()));
 
-    createGUI("controleditor.rc");
+    createMenusAndToolbars("controleditor.rc");
 }
 
 void

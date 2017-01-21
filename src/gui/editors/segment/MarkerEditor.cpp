@@ -417,7 +417,7 @@ MarkerEditor::setupActions()
     createAction("marker_help", SLOT(slotHelpRequested()));
     createAction("help_about_app", SLOT(slotHelpAbout()));
 
-    createGUI("markereditor.rc"); //@@@ JAS orig 0
+    createMenusAndToolbars("markereditor.rc"); //@@@ JAS orig 0
 
     settings.endGroup();
 }

@@ -139,7 +139,7 @@ MatrixView::MatrixView(RosegardenDocument *doc,
     
     setupActions();
     
-    createGUI("matrix.rc");
+    createMenusAndToolbars("matrix.rc");
      
     findToolbar("General Toolbar");
 

@@ -88,7 +88,7 @@ MidiMixerWindow::MidiMixerWindow(QWidget *parent,
     createAction("midimix_help", SLOT(slotHelpRequested()));
     createAction("help_about_app", SLOT(slotHelpAbout()));
 
-    createGUI("midimixer.rc");
+    createMenusAndToolbars("midimixer.rc");
 
     // Set the rewind and fast-forward buttons for auto-repeat.
     enableAutoRepeat("Transport Toolbar", "playback_pointer_back_bar");

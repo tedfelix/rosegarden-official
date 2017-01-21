@@ -381,7 +381,7 @@ BankEditorDialog::setupActions()
                             KStandardAction::stdName(KStandardAction::Redo));
     */
     
-    createGUI("bankeditor.rc"); //@@@ JAS orig. 0
+    createMenusAndToolbars("bankeditor.rc"); //@@@ JAS orig. 0
 }
 
 void

@@ -133,11 +133,9 @@ AudioMixerWindow::AudioMixerWindow(QWidget *parent,
     createAction("panlaw_2", SLOT(slotSetPanLaw()));
     createAction("panlaw_3", SLOT(slotSetPanLaw()));
 
-    // Create the menu and toolbars.
-    // ??? createGUI() seems like too broad of a name.
-    createGUI("mixer.rc");
+    createMenusAndToolbars("mixer.rc");
 
-    // The action->setChecked() stuff must be done after createGUI("mixer.rc").
+    // The action->setChecked() stuff must be done after createMenusAndToolbars().
 
     // Update "Settings > Number of Stereo Inputs"
     findAction(QString("inputs_%1").arg(m_studio->getRecordIns().size()))->

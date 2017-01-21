@@ -214,7 +214,7 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
             this, SLOT(slotCancelPlayingAudio()));
 
 
-    createGUI("audiomanager.rc"); //@@@ JAS orig. 0
+    createMenusAndToolbars("audiomanager.rc"); //@@@ JAS orig. 0
 
     updateActionState(false);
 

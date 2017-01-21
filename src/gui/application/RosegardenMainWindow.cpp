@@ -889,7 +889,7 @@ RosegardenMainWindow::setupActions()
     
     createAction("repeat_segment_onoff", m_segmentParameterBox, SLOT(slotRepeatPressed()));
 
-    createGUI("rosegardenmainwindow.rc");
+    createMenusAndToolbars("rosegardenmainwindow.rc");
 
     setupRecentFilesMenu();
     createAndSetupTransport();

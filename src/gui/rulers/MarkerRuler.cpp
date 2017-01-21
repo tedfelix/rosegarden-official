@@ -111,7 +111,7 @@ MarkerRuler::~MarkerRuler()
 void
 MarkerRuler::createMenu()
 {             
-    createGUI("markerruler.rc");
+    createMenusAndToolbars("markerruler.rc");
     
     m_menu = findChild<QMenu *>("marker_ruler_menu");
 

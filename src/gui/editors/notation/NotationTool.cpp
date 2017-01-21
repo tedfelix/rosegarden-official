@@ -122,7 +122,7 @@ NotationTool::createMenu()
 {
     NOTATION_DEBUG << "NotationTool::createMenu() " << m_rcFileName << " - " << m_menuName;
 
-    if (!createGUI(m_rcFileName)) {
+    if (!createMenusAndToolbars(m_rcFileName)) {
         RG_WARNING << "NotationTool::createMenu(" << m_rcFileName << "): menu creation failed";
         m_menu = 0;
         return;

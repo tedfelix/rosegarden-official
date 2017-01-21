@@ -391,7 +391,7 @@ TriggerSegmentManager::setupActions()
     createAction("trigger_help", SLOT(slotHelpRequested()));
     createAction("help_about_app", SLOT(slotHelpAbout()));
 
-    createGUI("triggermanager.rc"); //@@@ JAS orig. 0
+    createMenusAndToolbars("triggermanager.rc"); //@@@ JAS orig. 0
 
     settings.endGroup();
 }

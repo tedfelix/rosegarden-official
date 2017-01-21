@@ -970,7 +970,7 @@ TempoRuler::slotEditTempos()
 void
 TempoRuler::createMenu()
 {
-    createGUI("temporuler.rc");
+    createMenusAndToolbars("temporuler.rc");
 
     m_menu = findChild<QMenu *>("tempo_ruler_menu");
 
