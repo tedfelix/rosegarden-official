@@ -390,6 +390,7 @@ AudioMixerWindow::populate()
         strip.m_stereoButton->setFixedSize(20, 20);
         strip.m_stereoButton->setFlat(true);
         strip.m_stereoButton->setToolTip(tr("Mono or stereo"));
+        strip.m_stereoButton->setProperty("instrumentId", instrument->getId());
 
         connect(strip.m_stereoButton, SIGNAL(clicked()),
                 this, SLOT(slotChannelsChanged()));
@@ -1131,33 +1132,31 @@ AudioMixerWindow::slotPanChanged(float panValue)
 void
 AudioMixerWindow::slotChannelsChanged()
 {
-    const QObject *s = sender();
+    const QPushButton *stereoButton =
+            dynamic_cast<const QPushButton *>(sender());
 
-    // channels are only switchable on instruments
+    if (!stereoButton)
+        return;
 
+    InstrumentId instrumentId =
+            stereoButton->property("instrumentId").toUInt();
+
+    // Channels are only switchable on instruments.
+
+    Instrument *instrument = m_studio->getInstrumentById(instrumentId);
+
+    if (!instrument)
+        return;
+
+    // Toggle number of channels
+    instrument->setAudioChannels(
+            (instrument->getAudioChannels() > 1) ? 1 : 2);
+
+    updateStereoButton(instrumentId);
     //!!! need to reconnect input, or change input channel number anyway
+    updateRouteButtons(instrumentId);
 
-
-    for (StripMap::iterator i = m_inputs.begin();
-            i != m_inputs.end(); ++i) {
-
-        if (s == i->second.m_stereoButton) {
-
-            Instrument *instrument =
-                m_studio->getInstrumentById(i->first);
-
-            if (instrument) {
-                instrument->setAudioChannels(
-                        (instrument->getAudioChannels() > 1) ? 1 : 2);
-                updateStereoButton(instrument->getId());
-                updateRouteButtons(instrument->getId());
-
-                instrument->changed();
-
-                return ;
-            }
-        }
-    }
+    instrument->changed();
 }
 
 #if 0
