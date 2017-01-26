@@ -1483,13 +1483,20 @@ AudioMixerWindow::slotNumberOfSubmasters()
 
 void AudioMixerWindow::slotPanningLaw()
 {
-    const QObject *s = sender();
-    QString name = s->objectName();
+    const QAction *action = dynamic_cast<const QAction *>(sender());
 
-    if (name.left(7) == "panlaw_") {
-        int panLaw = name.right(name.length() - 7).toInt();
-        AudioLevel::setPanLaw(panLaw);
-    }
+    if (!action)
+        return;
+
+    QString name = action->objectName();
+
+    // Not the expected action name?  Bail.
+    if (name.left(7) != "panlaw_")
+        return;
+
+    int panLaw = name.mid(7).toInt();
+
+    AudioLevel::setPanLaw(panLaw);
 }
 
 void AudioMixerWindow::Strip::setVisible(bool visible)
