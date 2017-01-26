@@ -605,8 +605,14 @@ MidiMixerWindow::slotCurrentTabChanged(int)
 void
 MidiMixerWindow::sendControllerRefresh()
 {
-    //!!! need to know if we have a current external controller device,
-    // as this is expensive
+    // To keep the device connected to the "external controller" port in
+    // sync with the "MIDI Mixer" window, send out MIDI volume and pan
+    // messages to it.
+
+    // !!! Really want some notification of whether we have a device
+    //     connected to the "external controller" port!  Otherwise this
+    //     is a waste of time.  Is there a way in ALSA to ask if the port
+    //     is connected?
 
     int tabIndex = m_tabWidget->currentIndex();
     RG_DEBUG << "MidiMixerWindow::slotCurrentTabChanged: current is " << tabIndex;

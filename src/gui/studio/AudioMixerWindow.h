@@ -184,9 +184,12 @@ protected slots:
     void slotHelpAbout();
 
 protected:
-    /// Send MIDI volume and pan messages to each device.
+    /// Send MIDI volume and pan messages to the "external controller" port.
     /**
      * MixerWindow override.  Called by MixerWindow::windowActivationChange().
+     *
+     * This syncs up the device connected to the "external controller" port
+     * with the active mixer window (Audio or MIDI).
      */
     virtual void sendControllerRefresh();
 

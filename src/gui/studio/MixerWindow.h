@@ -54,6 +54,12 @@ protected:
     virtual void closeEvent(QCloseEvent *);
     virtual void windowActivationChange(bool);
 
+    /// Send MIDI volume and pan messages to the "external controller" port.
+    /**
+     * This is called when a Mixer window (MIDI or Audio) is activated by
+     * the user.  It allows the device connected to the "external controller"
+     * port to stay in sync with whichever Mixer window is active.
+     */
     virtual void sendControllerRefresh() = 0;
 
     RosegardenDocument *m_document;

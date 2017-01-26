@@ -823,7 +823,8 @@ AudioMixerWindow::updateInputPluginButtons(InstrumentId instrumentId)
         return;
 
     const PluginContainer *pluginContainer =
-            m_studio->getInstrumentById(instrumentId);
+            dynamic_cast<const PluginContainer *>(
+                    m_studio->getInstrumentById(instrumentId));
 
     Strip *strip = &m_inputs[instrumentId];
 
@@ -841,7 +842,8 @@ AudioMixerWindow::updateBussPluginButtons(unsigned bussId)
     if (bussId >= busses.size())
         return;
 
-    const PluginContainer *pluginContainer = busses[bussId];
+    const PluginContainer *pluginContainer =
+            dynamic_cast<const PluginContainer *>(busses[bussId]);
 
     Strip *strip = &m_submasters[bussId - 1];
 
@@ -920,11 +922,22 @@ AudioMixerWindow::slotSelectPlugin()
 void
 AudioMixerWindow::sendControllerRefresh()
 {
-    //!!! really want some notification of whether we have an external controller!
+    // To keep the device connected to the "external controller" port in
+    // sync with the "Audio Mixer" window, send out MIDI volume and pan
+    // messages to it.
+
+    // !!! Really want some notification of whether we have a device
+    //     connected to the "external controller" port!  Otherwise this
+    //     is a waste of time.  Is there a way in ALSA to ask if the port
+    //     is connected?
+
     int controllerChannel = 0;
 
+    // For each input Strip.
     for (StripMap::iterator i = m_inputs.begin(); i != m_inputs.end(); ++i) {
 
+        // Only do the first 16 since a single MIDI device can only handle
+        // 16 channels.
         if (controllerChannel >= 16)
             break;
 

@@ -48,6 +48,7 @@ public:
     // special device ids
     static const DeviceId NO_DEVICE;
     static const DeviceId ALL_DEVICES;
+    // The "external controller" ALSA port that we create.
     static const DeviceId CONTROL_DEVICE;
 
     Device(DeviceId id, const std::string &name, DeviceType type):
