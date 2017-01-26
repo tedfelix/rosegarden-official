@@ -46,9 +46,7 @@ public:
 
 
     PluginPushButton(QWidget *parent = 0) :
-        QPushButton(parent),
-        instrumentId(0),
-        pluginIndex(0)
+        QPushButton(parent)
     {
     };
 
@@ -61,11 +59,6 @@ public:
      *     Active    Style in the "loaded and active" scheme
      */
     void setState(State state);
-
-    /// Used by AudioMixerWindow.  This can also be a buss ID.
-    unsigned instrumentId;
-    /// Used by AudioMixerWindow.
-    unsigned pluginIndex;
 
 private:
 };

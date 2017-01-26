@@ -420,14 +420,14 @@ AudioMixerWindow::populate()
         strip.m_pluginBox->setLayout(pluginBoxLayout);
 
         // For each PluginPushButton
-        for (int p = 0; p < numberOfPlugins; ++p) {
+        for (unsigned p = 0; p < numberOfPlugins; ++p) {
             PluginPushButton *plugin = new PluginPushButton(strip.m_pluginBox);
             plugin->setFont(font);
             plugin->setText(tr("<none>"));
             plugin->setMaximumWidth(45);
             plugin->setToolTip(tr("Click to load an audio plugin"));
-            plugin->instrumentId = instrument->getId();
-            plugin->pluginIndex = p;
+            plugin->setProperty("instrumentId", instrument->getId());
+            plugin->setProperty("pluginIndex", p);
             pluginBoxLayout->addWidget(plugin);
 
             connect(plugin, SIGNAL(clicked()),
@@ -552,14 +552,14 @@ AudioMixerWindow::populate()
         strip.m_pluginBox->setLayout(pluginBoxLayout);
 
         // For each PluginPushButton
-        for (int p = 0; p < numberOfPlugins; ++p) {
+        for (unsigned p = 0; p < numberOfPlugins; ++p) {
             PluginPushButton *plugin = new PluginPushButton(strip.m_pluginBox);
             plugin->setFont(font);
             plugin->setText(tr("<none>"));
             plugin->setMaximumWidth(45);
             plugin->setToolTip(tr("Click to load an audio plugin"));
-            plugin->instrumentId = submasterNumber;
-            plugin->pluginIndex = p;
+            plugin->setProperty("instrumentId", submasterNumber);
+            plugin->setProperty("pluginIndex", p);
             pluginBoxLayout->addWidget(plugin);
 
             connect(plugin, SIGNAL(clicked()),
@@ -929,8 +929,8 @@ AudioMixerWindow::slotSelectPlugin()
 
     // Launch the AudioPluginDialog.
     emit selectPlugin(this,
-                      pluginButton->instrumentId,
-                      pluginButton->pluginIndex);
+                      pluginButton->property("instrumentId").toUInt(),
+                      pluginButton->property("pluginIndex").toUInt());
 }
 
 void
@@ -1059,10 +1059,6 @@ AudioMixerWindow::slotFaderLevelChanged(float dB)
 void
 AudioMixerWindow::slotPanChanged(float panValue)
 {
-    // ??? Let's do this one with QObject properties.  If it looks good,
-    //     redo Fader the same way.  Redo PluginPushButton the same way.
-    //     Then do the rest with properties.
-
     const Rotary *panRotary = dynamic_cast<const Rotary *>(sender());
 
     if (!panRotary)
