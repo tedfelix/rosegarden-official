@@ -66,7 +66,7 @@ private:
 public:
     void addDevice(const std::string &name,
                    DeviceId id,
-		   InstrumentId baseInstrumentId,
+                   InstrumentId baseInstrumentId,
                    Device::DeviceType type);
 
     void removeDevice(DeviceId id);

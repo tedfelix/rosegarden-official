@@ -60,11 +60,11 @@ Studio::Studio() :
     // IDs match the base instrument numbers (for no good reason
     // except easy identifiability)
     addDevice(QObject::tr("Audio").toUtf8().data(),
-	      AudioInstrumentBase, AudioInstrumentBase,
-	      Device::Audio);
+              AudioInstrumentBase, AudioInstrumentBase,
+              Device::Audio);
     addDevice(QObject::tr("Synth plugin").toUtf8().data(),
-	      SoftSynthInstrumentBase, SoftSynthInstrumentBase,
-	      Device::SoftSynth);
+              SoftSynthInstrumentBase, SoftSynthInstrumentBase,
+              Device::SoftSynth);
 }
 
 Studio::~Studio()
@@ -77,18 +77,18 @@ Studio::~Studio()
     m_devices.clear();
 
     for (size_t i = 0; i < m_busses.size(); ++i) {
-	delete m_busses[i];
+        delete m_busses[i];
     }
 
     for (size_t i = 0; i < m_recordIns.size(); ++i) {
-	delete m_recordIns[i];
+        delete m_recordIns[i];
     }
 }
 
 void
 Studio::addDevice(const std::string &name,
                   DeviceId id,
-		  InstrumentId baseInstrumentId,
+                  InstrumentId baseInstrumentId,
                   Device::DeviceType type)
 {
     Device *d = 0;
@@ -121,11 +121,11 @@ Studio::removeDevice(DeviceId id)
 {
     DeviceListIterator it;
     for (it = m_devices.begin(); it != m_devices.end(); it++) {
-	if ((*it)->getId() == id) {
-	    delete *it;
-	    m_devices.erase(it);
-	    return;
-	}
+        if ((*it)->getId() == id) {
+            delete *it;
+            m_devices.erase(it);
+            return;
+        }
     }
 }
 
@@ -152,22 +152,22 @@ Studio::getSpareDeviceId(InstrumentId &baseInstrumentId)
     std::set<DeviceId> ids;
     DeviceListIterator it;
     for (it = m_devices.begin(); it != m_devices.end(); it++) {
-	ids.insert((*it)->getId());
-	if ((*it)->getType() == Device::Midi) {
-	    InstrumentList il = (*it)->getAllInstruments();
-	    for (size_t i = 0; i < il.size(); ++i) {
-		if (il[i]->getId() > highestMidiInstrumentId) {
-		    highestMidiInstrumentId = il[i]->getId();
-		    foundInstrument = true;
-		}
-	    }
-	}
+        ids.insert((*it)->getId());
+        if ((*it)->getType() == Device::Midi) {
+            InstrumentList il = (*it)->getAllInstruments();
+            for (size_t i = 0; i < il.size(); ++i) {
+                if (il[i]->getId() > highestMidiInstrumentId) {
+                    highestMidiInstrumentId = il[i]->getId();
+                    foundInstrument = true;
+                }
+            }
+        }
     }
 
     if (!foundInstrument) {
-	baseInstrumentId = MidiInstrumentBase;
+        baseInstrumentId = MidiInstrumentBase;
     } else {
-	baseInstrumentId = ((highestMidiInstrumentId / 128) + 1) * 128;
+        baseInstrumentId = ((highestMidiInstrumentId / 128) + 1) * 128;
     }
 
     DeviceId id = 0;
@@ -260,7 +260,7 @@ Studio::getInstrumentFromList(int index)
         MidiDevice *midiDevice = dynamic_cast<MidiDevice*>(*it);
 
         if (midiDevice)
-	{
+        {
           // skip read-only devices
           if (midiDevice->getDirection() == MidiDevice::Record)
               continue;
@@ -310,7 +310,7 @@ Buss *
 Studio::getBussById(BussId id)
 {
     for (BussList::iterator i = m_busses.begin(); i != m_busses.end(); ++i) {
-	if ((*i)->getId() == id) return *i;
+        if ((*i)->getId() == id) return *i;
     }
     return 0;
 }
@@ -433,21 +433,21 @@ Studio::getMetronomeFromDevice(DeviceId id)
 
     for (it = m_devices.begin(); it != m_devices.end(); ++it) {
 
-	std::cerr << "Studio::getMetronomeFromDevice: Having a look at device " << (*it)->getId() << std::endl;
+        std::cerr << "Studio::getMetronomeFromDevice: Having a look at device " << (*it)->getId() << std::endl;
 
         MidiDevice *midiDevice = dynamic_cast<MidiDevice*>(*it);
         if (midiDevice && 
             midiDevice->getId() == id &&
             midiDevice->getMetronome()) {
-	    std::cerr << "Studio::getMetronomeFromDevice(" << id << "): device is a MIDI device" << std::endl;
+            std::cerr << "Studio::getMetronomeFromDevice(" << id << "): device is a MIDI device" << std::endl;
             return midiDevice->getMetronome();
         }
 
-	SoftSynthDevice *ssDevice = dynamic_cast<SoftSynthDevice *>(*it);
+        SoftSynthDevice *ssDevice = dynamic_cast<SoftSynthDevice *>(*it);
         if (ssDevice && 
             ssDevice->getId() == id &&
             ssDevice->getMetronome()) {
-	    std::cerr << "Studio::getMetronomeFromDevice(" << id << "): device is a soft synth device" << std::endl;
+            std::cerr << "Studio::getMetronomeFromDevice(" << id << "): device is a soft synth device" << std::endl;
             return ssDevice->getMetronome();
         }
     }
@@ -460,8 +460,8 @@ Studio::getMetronomeFromDevice(DeviceId id)
 
 Instrument*
 Studio::assignMidiProgramToInstrument(MidiByte program,
-				      int msb, int lsb,
-				      bool percussion)
+                                      int msb, int lsb,
+                                      bool percussion)
 {
     MidiDevice *midiDevice;
     std::vector<Device*>::iterator it;
@@ -475,8 +475,8 @@ Studio::assignMidiProgramToInstrument(MidiByte program,
 
     bool needBank = (msb >= 0 || lsb >= 0);
     if (needBank) {
-	if (msb < 0) msb = 0;
-	if (lsb < 0) lsb = 0;
+        if (msb < 0) msb = 0;
+        if (lsb < 0) lsb = 0;
     }
 
     // Pass one - search through all MIDI instruments looking for
@@ -500,10 +500,10 @@ Studio::assignMidiProgramToInstrument(MidiByte program,
                 //
                 if ((*iit)->sendsProgramChange() &&
                     (*iit)->getProgramChange() == program &&
-		    (!needBank || ((*iit)->sendsBankSelect() &&
-				   (*iit)->getMSB() == msb &&
-				   (*iit)->getLSB() == lsb &&
-				   (*iit)->isPercussion() == percussion)))
+                    (!needBank || ((*iit)->sendsBankSelect() &&
+                                   (*iit)->getMSB() == msb &&
+                                   (*iit)->getLSB() == lsb &&
+                                   (*iit)->isPercussion() == percussion)))
                 {
                     return (*iit);
                 }
@@ -522,8 +522,8 @@ Studio::assignMidiProgramToInstrument(MidiByte program,
                     //
                     if (newInstrument == 0 &&
                         (*iit)->sendsProgramChange() == false &&
-			(*iit)->sendsBankSelect() == false &&
-			(*iit)->isPercussion() == percussion)
+                        (*iit)->sendsBankSelect() == false &&
+                        (*iit)->isPercussion() == percussion)
                         newInstrument = *iit;
                 }
             }
@@ -539,12 +539,12 @@ Studio::assignMidiProgramToInstrument(MidiByte program,
         newInstrument->setSendProgramChange(true);
         newInstrument->setProgramChange(program);
 
-	if (needBank) {
-	    newInstrument->setSendBankSelect(true);
-	    newInstrument->setPercussion(percussion);
-	    newInstrument->setMSB(msb);
-	    newInstrument->setLSB(lsb);
-	}
+        if (needBank) {
+            newInstrument->setSendBankSelect(true);
+            newInstrument->setPercussion(percussion);
+            newInstrument->setMSB(msb);
+            newInstrument->setLSB(lsb);
+        }
     }
     else // Otherwise we just reuse the first Instrument we found
         newInstrument = firstInstrument;
@@ -640,7 +640,7 @@ void
 Studio::clearBusses()
 {
     for (size_t i = 0; i < m_busses.size(); ++i) {
-	delete m_busses[i];
+        delete m_busses[i];
     }
     m_busses.clear();
     m_busses.push_back(new Buss(0));
@@ -650,7 +650,7 @@ void
 Studio::clearRecordIns()
 {
     for (size_t i = 0; i < m_recordIns.size(); ++i) {
-	delete m_recordIns[i];
+        delete m_recordIns[i];
     }
     m_recordIns.clear();
     m_recordIns.push_back(new RecordIn());
@@ -672,7 +672,7 @@ Studio::getDevice(DeviceId id) const
         }
         
         // if (it != m_devices.begin()) cerr << ", ";
-        //	cerr << (*it)->getId();
+        //        cerr << (*it)->getId();
         if ((*it)->getId() == id) {
             //cerr << ". Found" << endl;
             return (*it);
@@ -690,7 +690,7 @@ Studio::getAudioDevice()
     std::vector<Device*>::iterator it;
 
     for (it = m_devices.begin(); it != m_devices.end(); ++it) {
-	if ((*it)->getType() == Device::Audio) return *it;
+        if ((*it)->getType() == Device::Audio) return *it;
     }
 
     return 0;
@@ -702,7 +702,7 @@ Studio::getSoftSynthDevice()
     std::vector<Device*>::iterator it;
 
     for (it = m_devices.begin(); it != m_devices.end(); ++it) {
-	if ((*it)->getType() == Device::SoftSynth) return *it;
+        if ((*it)->getType() == Device::SoftSynth) return *it;
     }
 
     return 0;
@@ -730,7 +730,7 @@ Studio::getSegmentName(InstrumentId id)
                 {
                     if ((*iit)->sendsProgramChange())
                     {
-			return (*iit)->getProgramName();
+                        return (*iit)->getProgramName();
                     }
                     else
                     {
