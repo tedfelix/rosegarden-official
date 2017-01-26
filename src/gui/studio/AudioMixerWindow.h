@@ -291,11 +291,11 @@ private:
     /// Update in/out routing buttons from the Instrument.
     void updateRouteButtons(InstrumentId instrumentId);
     /// Update stereo button from the Instrument.
-    void updateStereoButton(int id);
+    void updateStereoButton(InstrumentId instrumentId);
     /// Update plugin buttons from the Instrument.
     void updatePluginButtons(int id);
     /// Does nothing.
-    void updateMiscButtons(int id);
+    //void updateMiscButtons(int id);
 
     // Pixmaps for the stereo buttons.
     QPixmap m_monoPixmap;
