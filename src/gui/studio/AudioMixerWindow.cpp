@@ -98,46 +98,46 @@ AudioMixerWindow::AudioMixerWindow(QWidget *parent,
     createAction("panic", SIGNAL(panic()));
 
     // Help > Help
-    createAction("mixer_help", SLOT(slotHelpRequested()));
+    createAction("mixer_help", SLOT(slotHelp()));
     // Help > About Rosegarden
-    createAction("help_about_app", SLOT(slotHelpAbout()));
+    createAction("help_about_app", SLOT(slotAboutRosegarden()));
 
     // Settings > Show Audio Faders
-    createAction("show_audio_faders", SLOT(slotToggleFaders()));
+    createAction("show_audio_faders", SLOT(slotShowAudioFaders()));
 
     // Settings > Show Synth Faders
-    createAction("show_synth_faders", SLOT(slotToggleSynthFaders()));
+    createAction("show_synth_faders", SLOT(slotShowSynthFaders()));
 
     // Settings > Show Audio Submasters
-    createAction("show_audio_submasters", SLOT(slotToggleSubmasters()));
+    createAction("show_audio_submasters", SLOT(slotShowAudioSubmasters()));
 
     // Settings > Show Plugin Buttons
-    createAction("show_plugin_buttons", SLOT(slotTogglePluginButtons()));
+    createAction("show_plugin_buttons", SLOT(slotShowPluginButtons()));
 
     // Settings > Show Unassigned Faders
-    createAction("show_unassigned_faders", SLOT(slotToggleUnassignedFaders()));
+    createAction("show_unassigned_faders", SLOT(slotShowUnassignedFaders()));
 
     // "Settings > Number of Stereo Inputs" Actions
     // For i in {1,2,4,8,16}
     for (int i = 1; i <= 16; i *= 2) {
         createAction(QString("inputs_%1").arg(i),
-                     SLOT(slotSetInputCountFromAction()));
+                     SLOT(slotNumberOfStereoInputs()));
     }
 
     // "Settings > Number of Submasters" Actions
-    createAction("submasters_0", SLOT(slotSetSubmasterCountFromAction()));
-    createAction("submasters_2", SLOT(slotSetSubmasterCountFromAction()));
-    createAction("submasters_4", SLOT(slotSetSubmasterCountFromAction()));
-    createAction("submasters_8", SLOT(slotSetSubmasterCountFromAction()));
+    createAction("submasters_0", SLOT(slotNumberOfSubmasters()));
+    createAction("submasters_2", SLOT(slotNumberOfSubmasters()));
+    createAction("submasters_4", SLOT(slotNumberOfSubmasters()));
+    createAction("submasters_8", SLOT(slotNumberOfSubmasters()));
 
     // "Settings > Panning Law" Actions
     // ??? Can we do something easier to understand than panlaw_0,
     //     panlaw_1, etc...?  E.g. panlaw_0dB, panlaw_-3dB, panlaw_-6dB,
     //     panlaw_alt-3dB.
-    createAction("panlaw_0", SLOT(slotSetPanLaw()));
-    createAction("panlaw_1", SLOT(slotSetPanLaw()));
-    createAction("panlaw_2", SLOT(slotSetPanLaw()));
-    createAction("panlaw_3", SLOT(slotSetPanLaw()));
+    createAction("panlaw_0", SLOT(slotPanningLaw()));
+    createAction("panlaw_1", SLOT(slotPanningLaw()));
+    createAction("panlaw_2", SLOT(slotPanningLaw()));
+    createAction("panlaw_3", SLOT(slotPanningLaw()));
 
     createMenusAndToolbars("mixer.rc");
 
@@ -1416,7 +1416,7 @@ AudioMixerWindow::slotControllerDeviceEventReceived(MappedEvent *e,
 }
 
 void
-AudioMixerWindow::slotSetInputCountFromAction()
+AudioMixerWindow::slotNumberOfStereoInputs()
 {
     const QAction *action = dynamic_cast<const QAction *>(sender());
 
@@ -1457,7 +1457,7 @@ AudioMixerWindow::slotSetInputCountFromAction()
 }
 
 void
-AudioMixerWindow::slotSetSubmasterCountFromAction()
+AudioMixerWindow::slotNumberOfSubmasters()
 {
     const QAction *action = dynamic_cast<const QAction *>(sender());
 
@@ -1481,7 +1481,7 @@ AudioMixerWindow::slotSetSubmasterCountFromAction()
     populate();
 }
 
-void AudioMixerWindow::slotSetPanLaw()
+void AudioMixerWindow::slotPanningLaw()
 {
     const QObject *s = sender();
     QString name = s->objectName();
@@ -1542,7 +1542,7 @@ AudioMixerWindow::Strip::setPluginButtonsVisible(bool visible)
 }
 
 void
-AudioMixerWindow::slotToggleFaders()
+AudioMixerWindow::slotShowAudioFaders()
 {
     m_studio->amwShowAudioFaders = !m_studio->amwShowAudioFaders;
 
@@ -1573,7 +1573,7 @@ AudioMixerWindow::updateFaderVisibility()
 }
 
 void
-AudioMixerWindow::slotToggleSynthFaders()
+AudioMixerWindow::slotShowSynthFaders()
 {
     m_studio->amwShowSynthFaders = !m_studio->amwShowSynthFaders;
 
@@ -1601,7 +1601,7 @@ AudioMixerWindow::updateSynthFaderVisibility()
 }
 
 void
-AudioMixerWindow::slotToggleSubmasters()
+AudioMixerWindow::slotShowAudioSubmasters()
 {
     m_studio->amwShowAudioSubmasters = !m_studio->amwShowAudioSubmasters;
 
@@ -1628,7 +1628,7 @@ AudioMixerWindow::updateSubmasterVisibility()
 }
 
 void
-AudioMixerWindow::slotTogglePluginButtons()
+AudioMixerWindow::slotShowPluginButtons()
 {
     m_studio->amwShowPluginButtons = !m_studio->amwShowPluginButtons;
 
@@ -1655,7 +1655,7 @@ AudioMixerWindow::updatePluginButtonVisibility()
 }
 
 void
-AudioMixerWindow::slotToggleUnassignedFaders()
+AudioMixerWindow::slotShowUnassignedFaders()
 {
     // ??? When hiding these, the layout doesn't compress horizontally
     //     as it is supposed to.  Usually the calls to adjustSize() fix
@@ -1717,7 +1717,7 @@ AudioMixerWindow::slotRepopulate()
 
 
 void
-AudioMixerWindow::slotHelpRequested()
+AudioMixerWindow::slotHelp()
 {
     // TRANSLATORS: if the manual is translated into your language, you can
     // change the two-letter language code in this URL to point to your language
@@ -1729,7 +1729,7 @@ AudioMixerWindow::slotHelpRequested()
 }
 
 void
-AudioMixerWindow::slotHelpAbout()
+AudioMixerWindow::slotAboutRosegarden()
 {
     new AboutDialog(this);
 }

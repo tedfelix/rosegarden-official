@@ -158,30 +158,27 @@ protected slots:
     void slotPluginBypassed(InstrumentId id, int pluginIndex, bool bypass);
 
     /// Handle Settings > Number of Stereo Inputs.
-    void slotSetInputCountFromAction();
-    /// Handle the submasters_0, submasters_2, submasters_4, and submasters_8 actions.
-    void slotSetSubmasterCountFromAction();
-    /// Handle the panlaw_0, panlaw_1, panlaw_2, and panlaw_3 actions.
-    void slotSetPanLaw();
+    void slotNumberOfStereoInputs();
+    /// Handle Settings > Number of Submasters.
+    void slotNumberOfSubmasters();
+    /// Handle Settings > Panning Law
+    void slotPanningLaw();
 
-    // ??? Do any of these names, slots or actions, actually match the UI?
-    //     If not, make them match!
+    /// Handle Settings > Show Audio Faders.
+    void slotShowAudioFaders();
+    /// Handle Settings > Show Synth Faders.
+    void slotShowSynthFaders();
+    /// Handle Settings > Show Audio Submasters.
+    void slotShowAudioSubmasters();
+    /// Handle Settings > Show Plugin Buttons.
+    void slotShowPluginButtons();
+    /// Handle Settings > Show Unassigned Faders.
+    void slotShowUnassignedFaders();
 
-    /// Handle show_audio_faders action.
-    void slotToggleFaders();
-    /// Handle show_synth_faders action.
-    void slotToggleSynthFaders();
-    /// Handle show_audio_submasters action.
-    void slotToggleSubmasters();
-    /// Handle show_plugin_buttons action.
-    void slotTogglePluginButtons();
-    /// Handle show_unassigned_faders action.
-    void slotToggleUnassignedFaders();
-
-    /// Handle mixer_help action.
-    void slotHelpRequested();
-    /// Handle help_about_app action.
-    void slotHelpAbout();
+    /// Handle Help > Help.
+    void slotHelp();
+    /// Handle Help > About Rosegarden.
+    void slotAboutRosegarden();
 
 protected:
     /// Send MIDI volume and pan messages to the "external controller" port.
