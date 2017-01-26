@@ -418,6 +418,8 @@ AudioMixerWindow::populate()
             plugin->setText(tr("<none>"));
             plugin->setMaximumWidth(45);
             plugin->setToolTip(tr("Click to load an audio plugin"));
+            plugin->instrumentId = instrument->getId();
+            plugin->pluginIndex = p;
             pluginBoxLayout->addWidget(plugin);
 
             connect(plugin, SIGNAL(clicked()),
@@ -543,6 +545,8 @@ AudioMixerWindow::populate()
             plugin->setText(tr("<none>"));
             plugin->setMaximumWidth(45);
             plugin->setToolTip(tr("Click to load an audio plugin"));
+            plugin->instrumentId = submasterNumber;
+            plugin->pluginIndex = p;
             pluginBoxLayout->addWidget(plugin);
 
             connect(plugin, SIGNAL(clicked()),
@@ -860,16 +864,16 @@ AudioMixerWindow::updatePluginButtons(
     for (size_t i = 0; i < strip->m_plugins.size(); i++) {
         PluginPushButton *pluginButton = strip->m_plugins[i];
 
+        AudioPluginInstance *plugin = pluginContainer->getPlugin(i);
+
         bool used = false;
         bool bypass = false;
 
-        AudioPluginInstance *pluginInstance = pluginContainer->getPlugin(i);
-
-        if (pluginInstance  &&  pluginInstance->isAssigned()) {
+        if (plugin  &&  plugin->isAssigned()) {
 
             AudioPluginManager *pluginMgr = m_document->getPluginManager();
             AudioPlugin *pluginClass = pluginMgr->getPluginByIdentifier(
-                    pluginInstance->getIdentifier().c_str());
+                    plugin->getIdentifier().c_str());
 
             if (pluginClass) {
                 pluginButton->setText(pluginClass->getLabel());
@@ -877,15 +881,15 @@ AudioMixerWindow::updatePluginButtons(
             }
 
             used = true;
-            bypass = pluginInstance->isBypassed();
+            bypass = plugin->isBypassed();
 
         } else {
 
             pluginButton->setText(tr("<none>"));
             pluginButton->setToolTip(tr("<no plugin>"));
 
-            if (pluginInstance)
-                bypass = pluginInstance->isBypassed();
+            if (plugin)
+                bypass = plugin->isBypassed();
         }
 
         if (bypass) {
@@ -901,52 +905,16 @@ AudioMixerWindow::updatePluginButtons(
 void
 AudioMixerWindow::slotSelectPlugin()
 {
-    const QObject *s = sender();
+    const PluginPushButton *pluginButton =
+            dynamic_cast<const PluginPushButton *>(sender());
 
-    for (StripMap::iterator i = m_inputs.begin();
-            i != m_inputs.end(); ++i) {
+    if (!pluginButton)
+        return;
 
-        int index = 0;
-        if (!i->second.m_populated || !i->second.m_pluginBox)
-            continue;
-
-        for (std::vector<PluginPushButton *>::iterator pli = i->second.m_plugins.begin();
-                pli != i->second.m_plugins.end(); ++pli) {
-
-            if (*pli == s) {
-
-                emit selectPlugin(this, i->first, index);
-                return ;
-            }
-
-            ++index;
-        }
-    }
-
-
-    int b = 1;
-
-    for (StripVector::iterator i = m_submasters.begin();
-            i != m_submasters.end(); ++i) {
-
-        int index = 0;
-        if (!i->m_populated || !i->m_pluginBox)
-            continue;
-
-        for (std::vector<PluginPushButton *>::iterator pli = i->m_plugins.begin();
-                pli != i->m_plugins.end(); ++pli) {
-
-            if (*pli == s) {
-
-                emit selectPlugin(this, b, index);
-                return ;
-            }
-
-            ++index;
-        }
-
-        ++b;
-    }
+    // Launch the AudioPluginDialog.
+    emit selectPlugin(this,
+                      pluginButton->instrumentId,
+                      pluginButton->pluginIndex);
 }
 
 void

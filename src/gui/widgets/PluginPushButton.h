@@ -45,7 +45,10 @@ public:
     enum State {Normal, Bypassed, Active};
 
 
-    PluginPushButton(QWidget *parent = 0) : QPushButton(parent)
+    PluginPushButton(QWidget *parent = 0) :
+        QPushButton(parent),
+        instrumentId(0),
+        pluginIndex(0)
     {
     };
 
@@ -58,6 +61,11 @@ public:
      *     Active    Style in the "loaded and active" scheme
      */
     void setState(State state);
+
+    /// Used by AudioMixerWindow.  This can also be a buss ID.
+    unsigned instrumentId;
+    /// Used by AudioMixerWindow.
+    unsigned pluginIndex;
 
 private:
 };

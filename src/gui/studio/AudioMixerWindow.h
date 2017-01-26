@@ -75,9 +75,14 @@ public slots:
 signals:
     /// Emitted when a plugin button is clicked.
     /**
-     * Connected to RosegardenMainWindow::slotShowPluginDialog().
+     * Connected to RosegardenMainWindow::slotShowPluginDialog() which
+     * displays the AudioPluginDialog to allow the user to select or
+     * configure the plugin.
+     *
+     * "instrumentId" isn't an InstrumentId.  It can be a buss ID.
      */
-    void selectPlugin(QWidget *, InstrumentId id, int index);
+    void selectPlugin(
+            QWidget *parent, InstrumentId instrumentId, int pluginIndex);
 
     // The following signals are emitted when the buttons are pressed.
     // RosegardenMainWindow::slotOpenAudioMixer() connects these to
