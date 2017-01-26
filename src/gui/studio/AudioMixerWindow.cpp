@@ -453,7 +453,7 @@ AudioMixerWindow::populate()
 
         // Update Widgets
 
-        updateFader(instrument->getId());
+        updateInputFader(instrument->getId());
         updateRouteButtons(instrument->getId());
         updateStereoButton(instrument->getId());
         updatePluginButtons(instrument->getId());
@@ -577,7 +577,7 @@ AudioMixerWindow::populate()
 
         // Update Widgets
 
-        updateFader(submasterNumber);
+        updateBussFader(submasterNumber);
         updatePluginButtons(submasterNumber);
 
         ++submasterNumber;
@@ -624,7 +624,8 @@ AudioMixerWindow::populate()
 
         // Update Widgets
 
-        updateFader(0);
+        // Update the master fader
+        updateBussFader(0);
     }
 
     updateFaderVisibility();
@@ -691,7 +692,7 @@ AudioMixerWindow::slotInstrumentChanged(Instrument *instrument)
     // Prevent update loops.
     blockSignals(true);
 
-    updateFader(instrumentId);
+    updateInputFader(instrumentId);
     updateStereoButton(instrumentId);
     updateRouteButtons(instrumentId);
     updatePluginButtons(instrumentId);
@@ -709,65 +710,69 @@ AudioMixerWindow::slotPluginSelected(InstrumentId instrumentId,
 
 void
 AudioMixerWindow::slotPluginBypassed(InstrumentId instrumentId,
-                                     int, bool)
+                                     int /*index*/, bool /*bypass*/)
 {
-    RG_DEBUG << "AudioMixerWindow::slotPluginBypassed(" << instrumentId << ")";
+    //RG_DEBUG << "slotPluginBypassed(" << instrumentId << ")";
 
     updatePluginButtons(instrumentId);
 }
 
 void
-AudioMixerWindow::updateFader(int id)
+AudioMixerWindow::updateInputFader(InstrumentId instrumentId)
 {
-    if (id == -1) {
+    if (instrumentId < AudioInstrumentBase)
+        return;
 
-        // This used to be the special code for updating the monitor strip.
-        return ;
+    Strip &strip = m_inputs[instrumentId];
 
-    } else if (id >= (int)AudioInstrumentBase) {
+    if (!strip.m_populated)
+        return;
 
-        Strip &strip = m_inputs[id];
-        if (!strip.m_populated)
-            return ;
-        Instrument *instrument = m_studio->getInstrumentById(id);
+    Instrument *instrument = m_studio->getInstrumentById(instrumentId);
 
-        strip.m_fader->blockSignals(true);
-        strip.m_fader->setFader(instrument->getLevel());
-        strip.m_fader->blockSignals(false);
+    strip.m_fader->blockSignals(true);
+    strip.m_fader->setFader(instrument->getLevel());
+    strip.m_fader->blockSignals(false);
 
+    strip.m_pan->blockSignals(true);
+    strip.m_pan->setPosition(instrument->getPan() - 100);
+    strip.m_pan->blockSignals(false);
+}
+
+void
+AudioMixerWindow::updateBussFader(unsigned bussId)
+{
+    Strip &strip = (bussId == 0 ? m_master : m_submasters[bussId - 1]);
+
+    if (!strip.m_populated)
+        return;
+
+    BussList busses = m_studio->getBusses();
+    Buss *buss = busses[bussId];
+
+    strip.m_fader->blockSignals(true);
+    strip.m_fader->setFader(buss->getLevel());
+    strip.m_fader->blockSignals(false);
+
+    if (strip.m_pan) {
         strip.m_pan->blockSignals(true);
-        strip.m_pan->setPosition(instrument->getPan() - 100);
+        strip.m_pan->setPosition(buss->getPan() - 100);
         strip.m_pan->blockSignals(false);
-
-    } else {
-
-        Strip &strip = (id == 0 ? m_master : m_submasters[id - 1]);
-        BussList busses = m_studio->getBusses();
-        Buss *buss = busses[id];
-
-        strip.m_fader->blockSignals(true);
-        strip.m_fader->setFader(buss->getLevel());
-        strip.m_fader->blockSignals(false);
-
-        if (strip.m_pan) {
-            strip.m_pan->blockSignals(true);
-            strip.m_pan->setPosition(buss->getPan() - 100);
-            strip.m_pan->blockSignals(false);
-        }
     }
 }
 
 void
-AudioMixerWindow::updateRouteButtons(int id)
+AudioMixerWindow::updateRouteButtons(InstrumentId instrumentId)
 {
-    if (id >= (int)AudioInstrumentBase) {
-        Strip &strip = m_inputs[id];
-        if (!strip.m_populated)
-            return ;
-        if (strip.m_input)
-            strip.m_input->slotRepopulate();
-        strip.m_output->slotRepopulate();
-    }
+    Strip &strip = m_inputs[instrumentId];
+
+    if (!strip.m_populated)
+        return;
+
+    if (strip.m_input)
+        strip.m_input->slotRepopulate();
+
+    strip.m_output->slotRepopulate();
 }
 
 void

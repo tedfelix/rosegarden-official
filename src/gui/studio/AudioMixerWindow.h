@@ -284,14 +284,12 @@ private:
     void populate();
 
     /// Update fader from Instrument.
-    /**
-     * If "id" is large enough, it is an instrument ID.
-     * If "id" is -1, monitor is updated.
-     * For other values of "id", master/sub is updated.
-     */
-    void updateFader(int id);
+    void updateInputFader(InstrumentId instrumentId);
+    /// Update fader from buss.  0 is master.
+    void updateBussFader(unsigned bussId);
+
     /// Update in/out routing buttons from the Instrument.
-    void updateRouteButtons(int id);
+    void updateRouteButtons(InstrumentId instrumentId);
     /// Update stereo button from the Instrument.
     void updateStereoButton(int id);
     /// Update plugin buttons from the Instrument.
