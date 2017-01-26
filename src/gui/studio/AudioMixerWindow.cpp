@@ -1047,51 +1047,70 @@ AudioMixerWindow::slotFaderLevelChanged(float dB)
 }
 
 void
-AudioMixerWindow::slotPanChanged(float pan)
+AudioMixerWindow::slotPanChanged(float panValue)
 {
-    const QObject *s = sender();
+    // ??? Let's do this one with QObject properties.  If it looks good,
+    //     redo Fader the same way.  Redo PluginPushButton the same way.
+    //     Then do the rest with properties.
+
+    const Rotary *panRotary = dynamic_cast<const Rotary *>(sender());
+
+    if (!panRotary)
+        return;
 
     BussList busses = m_studio->getBusses();
 
-    int index = 1;
+    unsigned bussId = 1;
 
+    // For each submaster Strip
     for (StripVector::iterator i = m_submasters.begin();
-            i != m_submasters.end(); ++i) {
+         i != m_submasters.end();
+         ++i) {
 
-        if (i->m_pan == s) {
-            if ((int)busses.size() > index) {
-                StudioControl::setStudioObjectProperty
-                (MappedObjectId(busses[index]->getMappedId()),
-                 MappedAudioBuss::Pan,
-                 MappedObjectValue(pan));
-                busses[index]->setPan(MidiByte(pan + 100.0));
-            }
-            return ;
+        // If this is the one
+        if (panRotary == i->m_pan) {
+            if (bussId >= busses.size())
+                return;
+
+            StudioControl::setStudioObjectProperty(
+                    MappedObjectId(busses[bussId]->getMappedId()),
+                    MappedAudioBuss::Pan,
+                    MappedObjectValue(panValue));
+
+            busses[bussId]->setPan(MidiByte(panValue + 100.0));
+
+            return;
         }
 
-        ++index;
+        ++bussId;
     }
 
+    // For "external controller" port
     int controllerChannel = 0;
 
+    // For each input Strip
     for (StripMap::iterator i = m_inputs.begin();
-            i != m_inputs.end(); ++i) {
+         i != m_inputs.end();
+         ++i) {
 
-        if (i->second.m_pan == s) {
+        // If we found it
+        if (panRotary == i->second.m_pan) {
 
             Instrument *instrument =
                 m_studio->getInstrumentById(i->first);
 
-            if (instrument) {
-                StudioControl::setStudioObjectProperty(
-                        instrument->getMappedId(),
-                        MappedAudioFader::Pan,
-                        MappedObjectValue(pan));
-                instrument->setPan(MidiByte(pan + 100.0));
-                instrument->changed();
-            }
+            if (!instrument)
+                return;
 
-            // send out to external controllers as well.
+            StudioControl::setStudioObjectProperty(
+                    instrument->getMappedId(),
+                    MappedAudioFader::Pan,
+                    MappedObjectValue(panValue));
+
+            instrument->setPan(MidiByte(panValue + 100.0));
+            instrument->changed();
+
+            // Send out to "external controller" port as well.
             //!!! really want some notification of whether we have any!
             if (controllerChannel < 16) {
                 int ipan = (int(instrument->getPan()) * 64) / 100;
@@ -1099,14 +1118,18 @@ AudioMixerWindow::slotPanChanged(float pan)
                     ipan = 0;
                 if (ipan > 127)
                     ipan = 127;
+
                 MappedEvent mE(instrument->getId(),
                                MappedEvent::MidiController,
                                MIDI_CONTROLLER_PAN,
                                MidiByte(ipan));
                 mE.setRecordedChannel(controllerChannel);
                 mE.setRecordedDevice(Device::CONTROL_DEVICE);
+
                 StudioControl::sendMappedEvent(mE);
             }
+
+            return;
         }
 
         ++controllerChannel;
