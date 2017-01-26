@@ -200,8 +200,8 @@ private:
     /// show_plugin_buttons
     void updatePluginButtonVisibility();
 
-    /// Show/Hide widgets by name.  NOT WORKING.
-    void toggleNamedWidgets(bool show, const char *);
+    /// Show/Hide widgets by object name.
+    void toggleNamedWidgets(bool show, const QString &name);
 
     /// A vertical strip of controls representing a mixer channel.
     /**
@@ -232,8 +232,8 @@ private:
         bool m_populated;
 
         // ??? The InstrumentId might be handy here.  Along with a pointer
-        //     to the Instrument.  Although that could get dangerous.  A
-        //     change to the Studio could render the pointer invalid.
+        //     to the Instrument.  Should be safe since Audio and SoftSynth
+        //     Instruments never go away.
 
         AudioRouteMenu *m_input;
         AudioRouteMenu *m_output;

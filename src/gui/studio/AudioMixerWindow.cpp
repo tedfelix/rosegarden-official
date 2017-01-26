@@ -1624,18 +1624,18 @@ AudioMixerWindow::slotShowPluginButtons()
 void
 AudioMixerWindow::updatePluginButtonVisibility()
 {
+    bool visible = m_studio->amwShowPluginButtons;
+
     QAction *action = findAction("show_plugin_buttons");
-    if (!action)
-        return ;
+    if (action)
+        action->setChecked(visible);
 
-    action->setChecked(m_studio->amwShowPluginButtons);
-
-    RG_DEBUG << "AudioMixerWindow::updatePluginButtonVisibility() action->isChecked("
-             << (action->isChecked() ? "true" : "false") << ")";
-
+    // For each input Strip
     for (StripMap::iterator i = m_inputs.begin(); i != m_inputs.end(); ++i) {
-        i->second.setPluginButtonsVisible(action->isChecked());
+        i->second.setPluginButtonsVisible(visible);
     }
+
+    // ??? What about the submaster Strips?
 
     adjustSize();
 }
@@ -1647,45 +1647,38 @@ AudioMixerWindow::slotShowUnassignedFaders()
     //     as it is supposed to.  Usually the calls to adjustSize() fix
     //     this, but not in this case.
 
-    QAction *action = findAction("show_unassigned_faders");
-    if (!action)
-        return ;
-
     m_studio->amwShowUnassignedFaders = !m_studio->amwShowUnassignedFaders;
 
-    action->setChecked(m_studio->amwShowUnassignedFaders);
+    QAction *action = findAction("show_unassigned_faders");
+    if (action)
+        action->setChecked(m_studio->amwShowUnassignedFaders);
 
     populate();
 }
 
 void
-AudioMixerWindow::toggleNamedWidgets(bool show, const char *name)
+AudioMixerWindow::toggleNamedWidgets(bool show, const QString &name)
 {
     //RG_DEBUG << "toggleNamedWidgets(" << show << ", " << name << ")";
 
-    //NB. Completely rewritten to get around the disappearance of
-    // QLayoutIterator.
+    // ??? An alternative approach that would be more direct would
+    //     be to add the label to the Strip so they come and go
+    //     like all the others.
 
-    // ??? This routine doesn't work at all.  All it finds is an
-    //     object named "Transport Toolbar" and an object named "".
+    if (!m_mainBox)
+        return;
 
-    int i = 0;
-    QLayoutItem *child;
-    while ((child = layout()->itemAt(i)) != 0) {
-        QWidget *widget = child->widget();
+    const QObjectList &children = m_mainBox->children();
 
-        //if (widget)
-        //    RG_DEBUG << "  name:" << widget->objectName();
+    // For each child
+    for (int i = 0; i < children.size(); ++i)
+    {
+        QWidget *widget = dynamic_cast<QWidget *>(children.at(i));
+        if (!widget)
+            continue;
 
-        if (widget &&
-            widget->objectName() == QString::fromUtf8(name)) {
-            if (show)
-                widget->show();
-            else
-                widget->hide();
-        }
-
-        ++i;
+        if (widget->objectName() == name)
+            widget->setVisible(show);
     }
 }
 
