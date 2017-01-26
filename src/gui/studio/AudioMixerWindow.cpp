@@ -1501,51 +1501,27 @@ void AudioMixerWindow::slotPanningLaw()
 
 void AudioMixerWindow::Strip::setVisible(bool visible)
 {
-    if (visible) {
-        if (m_input)
-            m_input->getWidget()->show();
-        if (m_output)
-            m_output->getWidget()->show();
-        if (m_pan)
-            m_pan->show();
-        if (m_fader)
-            m_fader->show();
-        if (m_meter)
-            m_meter->show();
-        if (m_stereoButton)
-            m_stereoButton->show();
-
-    } else {
-
-        if (m_input)
-            m_input->getWidget()->hide();
-        if (m_output)
-            m_output->getWidget()->hide();
-        if (m_pan)
-            m_pan->hide();
-        if (m_fader)
-            m_fader->hide();
-        if (m_meter)
-            m_meter->hide();
-        if (m_stereoButton)
-            m_stereoButton->hide();
-    }
+    if (m_input)
+        m_input->getWidget()->setVisible(visible);
+    if (m_output)
+        m_output->getWidget()->setVisible(visible);
+    if (m_pan)
+        m_pan->setVisible(visible);
+    if (m_fader)
+        m_fader->setVisible(visible);
+    if (m_meter)
+        m_meter->setVisible(visible);
+    if (m_stereoButton)
+        m_stereoButton->setVisible(visible);
 
     setPluginButtonsVisible(visible);
-
 }
 
 void
 AudioMixerWindow::Strip::setPluginButtonsVisible(bool visible)
 {
-    if (!m_pluginBox)
-        return ;
-
-    if (visible) {
-        m_pluginBox->show();
-    } else {
-        m_pluginBox->hide();
-    }
+    if (m_pluginBox)
+        m_pluginBox->setVisible(visible);
 }
 
 void
@@ -1559,22 +1535,22 @@ AudioMixerWindow::slotShowAudioFaders()
 void
 AudioMixerWindow::updateFaderVisibility()
 {
-    bool d = m_studio->amwShowAudioFaders;
+    bool visible = m_studio->amwShowAudioFaders;
 
     QAction *action = findAction("show_audio_faders");
-    if (action) {
-        action->setChecked(d);
-    }
+    if (action)
+        action->setChecked(visible);
 
-    RG_DEBUG << "updateFaderVisibility(): visiblility is " << d;
+    //RG_DEBUG << "updateFaderVisibility(): visibility is " << d;
 
+    // For each input Strip.
     for (StripMap::iterator i = m_inputs.begin(); i != m_inputs.end(); ++i) {
-        if (i->first < SoftSynthInstrumentBase) {
-            i->second.setVisible(d);
-        }
+        // If it's an audio input, set its visibility.
+        if (i->first < SoftSynthInstrumentBase)
+            i->second.setVisible(visible);
     }
 
-    toggleNamedWidgets(d, "audioIdLabel");
+    toggleNamedWidgets(visible, "audioIdLabel");
 
     adjustSize();
 }
@@ -1590,19 +1566,20 @@ AudioMixerWindow::slotShowSynthFaders()
 void
 AudioMixerWindow::updateSynthFaderVisibility()
 {
+    bool visible = m_studio->amwShowSynthFaders;
+
     QAction *action = findAction("show_synth_faders");
-    if (!action)
-        return ;
+    if (action)
+        action->setChecked(visible);
 
-    action->setChecked(m_studio->amwShowSynthFaders);
-
+    // For each input Strip.
     for (StripMap::iterator i = m_inputs.begin(); i != m_inputs.end(); ++i) {
-        if (i->first >= SoftSynthInstrumentBase) {
-            i->second.setVisible(action->isChecked());
-        }
+        // If it's a softsynth input, set its visibility.
+        if (i->first >= SoftSynthInstrumentBase)
+            i->second.setVisible(visible);
     }
 
-    toggleNamedWidgets(action->isChecked(), "synthIdLabel");
+    toggleNamedWidgets(visible, "synthIdLabel");
 
     adjustSize();
 }
@@ -1618,18 +1595,20 @@ AudioMixerWindow::slotShowAudioSubmasters()
 void
 AudioMixerWindow::updateSubmasterVisibility()
 {
+    bool visible = m_studio->amwShowAudioSubmasters;
+
     QAction *action = findAction("show_audio_submasters");
+    if (action)
+        action->setChecked(visible);
 
-    if (!action)
-        return ;
-
-    action->setChecked(m_studio->amwShowAudioSubmasters);
-
-    for (StripVector::iterator i = m_submasters.begin(); i != m_submasters.end(); ++i) {
-        i->setVisible(action->isChecked());
+    // For each submaster
+    for (StripVector::iterator i = m_submasters.begin();
+         i != m_submasters.end();
+         ++i) {
+        i->setVisible(visible);
     }
 
-    toggleNamedWidgets(action->isChecked(), "subMaster");
+    toggleNamedWidgets(visible, "subMaster");
 
     adjustSize();
 }
