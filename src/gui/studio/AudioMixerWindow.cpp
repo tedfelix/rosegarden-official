@@ -1436,6 +1436,8 @@ AudioMixerWindow::slotSetInputCountFromAction()
     if (count == m_studio->getRecordIns().size())
         return;
 
+    // ??? Pull the next few lines into a Studio::setRecordInCount(int n).
+
     // Remove all except 1.
     m_studio->clearRecordIns();
 
@@ -1457,45 +1459,22 @@ AudioMixerWindow::slotSetInputCountFromAction()
 void
 AudioMixerWindow::slotSetSubmasterCountFromAction()
 {
-    const QObject *s = sender();
-    QString name = s->objectName();
+    const QAction *action = dynamic_cast<const QAction *>(sender());
 
-    if (name.left(11) == "submasters_") {
+    if (!action)
+        return;
 
-        int count = name.right(name.length() - 11).toInt();
+    QString name = action->objectName();
 
-        BussList busses = m_studio->getBusses();
-        int current = busses.size();
+    // Not the expected action name?  Bail.
+    if (name.left(11) != "submasters_")
+        return;
 
-        // offset by 1 generally to take into account the fact that
-        // the first buss in the studio is the master, not a submaster
-        if (count + 1 == current)
-            return ;
+    // Extract the count from the name.
+    int count = name.mid(11).toInt();
 
-        if (count + 1 < current) {
-
-            BussList::iterator it = busses.end();
-            --it;  // Now this actually points to something
-
-            while (count + 1 < current--) {
-                m_studio->removeBuss((*it--)->getId());
-            }
-
-        } else {
-
-            BussList::iterator it = busses.end();
-            --it;
-            unsigned int lastId = (*it)->getId();
-
-            while (count + 1 > current++) {
-                m_studio->addBuss(new Buss(++lastId));
-            }
-
-        }
-//      busses = m_studio->getBusses();
-//      for (BussList::iterator it = busses.begin(); it != busses.end(); it++)
-//          RG_DEBUG << "******* BussId:" << (*it)->getId();
-    }
+    // Add one for the master buss.
+    m_studio->setBussCount(count + 1);
 
     m_document->initialiseStudio();
 

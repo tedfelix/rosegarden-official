@@ -92,7 +92,8 @@ public:
     BussList getBusses();
     Buss *getBussById(BussId id);
     void addBuss(Buss *buss);
-    void removeBuss(BussId id);
+    //void removeBuss(BussId id);
+    void setBussCount(unsigned newBussCount);
 
     // Return an Instrument or a Buss
     PluginContainer *getContainerById(InstrumentId id);

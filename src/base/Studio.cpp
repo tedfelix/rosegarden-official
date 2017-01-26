@@ -13,6 +13,8 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[Studio]"
+
 #include <iostream>
 
 #include "base/Studio.h"
@@ -318,9 +320,14 @@ Studio::getBussById(BussId id)
 void
 Studio::addBuss(Buss *buss)
 {
+    if (buss->getId() != m_busses.size()) {
+        RG_WARNING << "addBuss() Precondition: Incoming buss has wrong ID.";
+    }
+
     m_busses.push_back(buss);
 }
 
+#if 0
 void
 Studio::removeBuss(BussId id)
 {
@@ -331,6 +338,53 @@ Studio::removeBuss(BussId id)
             return;
         }
     }
+}
+#endif
+
+void
+Studio::setBussCount(unsigned newBussCount)
+{
+    // We have to have at least one for the master.
+    if (newBussCount < 1)
+        return;
+    // Reasonable limit.  Adjust if needed.
+    if (newBussCount > 16)
+        return;
+    // No change?  Bail.
+    if (newBussCount == m_busses.size())
+        return;
+
+    // If we need to remove busses
+    if (newBussCount < m_busses.size()) {
+        int removeCount = m_busses.size() - newBussCount;
+
+        // For each one that needs removing.
+        for (int i = 0; i < removeCount; ++i) {
+            // Delete the last buss.
+            delete m_busses.back();
+            // Remove it from the list.
+            m_busses.pop_back();
+        }
+    } else {  // We need to add busses
+        int addCount = newBussCount - m_busses.size();
+
+        for (int i = 0; i < addCount; ++i) {
+            unsigned bussId = m_busses.size();
+            m_busses.push_back(new Buss(bussId));
+        }
+    }
+
+#if 0
+    Q_ASSERT_X(m_busses.size() == newBussCount,
+               "Studio::setBussCount()",
+               "Postcondition: Buss count is not as expected.");
+
+    for (BussId bussId = 0; bussId < m_busses.size(); ++bussId) {
+        Q_ASSERT_X(m_busses[bussId]->getId() == bussId,
+                   "Studio::setBussCount()",
+                   "Postcondition: Buss has wrong ID.");
+    }
+#endif
 }
 
 PluginContainer *
