@@ -769,17 +769,18 @@ CheckForParallelsDialog::hasParallels(std::vector<Transition> &tSet, std::vector
             // pitch2End shall be the upper voice
             // we need this later when testing for hidden parallels
 
-            if (pitch1End>pitch2End) {
-                int h = pitch2End;
-                pitch2End = pitch1End;
-                pitch1End = h;
-            }
-
             int pitch1Begin = QString::fromUtf8((*(tSet[i].predecessor))->getAsString("pitch").c_str()).toInt();
             int pitch2Begin = QString::fromUtf8((*(tSet[j].predecessor))->getAsString("pitch").c_str()).toInt();
 
-            if (pitch1Begin>pitch2Begin) {
-                int h = pitch2Begin;
+            if (pitch1End>pitch2End) {
+
+            	// we need to switch the voices
+
+                int h = pitch2End;
+                pitch2End = pitch1End;
+                pitch1End = h;
+
+                h = pitch2Begin;
                 pitch2Begin = pitch1Begin;
                 pitch1Begin = h;
             }
