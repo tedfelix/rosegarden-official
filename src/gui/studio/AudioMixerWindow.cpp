@@ -1182,62 +1182,81 @@ AudioMixerWindow::slotRecordChanged()
 void
 AudioMixerWindow::updateMeters()
 {
+    // Inputs
+
+    // For each input Strip
     for (StripMap::iterator i = m_inputs.begin(); i != m_inputs.end(); ++i) {
 
         InstrumentId id = i->first;
         Strip &strip = i->second;
+
         if (!strip.m_populated)
             continue;
 
         LevelInfo info;
 
-        if (SequencerDataBlock::getInstance()->
-            getInstrumentLevelForMixer(id, info)) {
+        // Get the level.  If there was no change, try the next Strip.
+        if (!SequencerDataBlock::getInstance()->
+                getInstrumentLevelForMixer(id, info))
+            continue;
 
-            // The values passed through are long-fader values
-            float dBleft = AudioLevel::fader_to_dB
-                           (info.level, 127, AudioLevel::LongFader);
+        // Convert to dB for display.
+        // The values passed through are long-fader values
+        float dBleft = AudioLevel::fader_to_dB(
+                info.level, 127, AudioLevel::LongFader);
 
-            if (strip.m_stereo) {
-                float dBright = AudioLevel::fader_to_dB
-                                (info.levelRight, 127, AudioLevel::LongFader);
+        if (strip.m_stereo) {
+            // Convert to dB for display.
+            float dBright = AudioLevel::fader_to_dB(
+                    info.levelRight, 127, AudioLevel::LongFader);
 
-                strip.m_meter->setLevel(dBleft, dBright);
-
-            } else {
-                strip.m_meter->setLevel(dBleft);
-            }
+            strip.m_meter->setLevel(dBleft, dBright);
+        } else {  // mono
+            strip.m_meter->setLevel(dBleft);
         }
     }
 
+    // Update the input Strip meters for record monitoring.
+    updateMonitorMeters();
+
+    // Submasters
+
+    // For each submaster Strip
     for (unsigned int i = 0; i < m_submasters.size(); ++i) {
 
         Strip &strip = m_submasters[i];
 
         LevelInfo info;
-        if (!SequencerDataBlock::getInstance()->getSubmasterLevel(i, info)) {
+
+        // Get the level.  If there was no change, try the next Strip.
+        if (!SequencerDataBlock::getInstance()->getSubmasterLevel(i, info))
             continue;
-        }
 
+        // Convert to dB for display.
         // The values passed through are long-fader values
-        float dBleft = AudioLevel::fader_to_dB
-                       (info.level, 127, AudioLevel::LongFader);
-        float dBright = AudioLevel::fader_to_dB
-                        (info.levelRight, 127, AudioLevel::LongFader);
+        float dBleft = AudioLevel::fader_to_dB(
+                info.level, 127, AudioLevel::LongFader);
+        float dBright = AudioLevel::fader_to_dB(
+                info.levelRight, 127, AudioLevel::LongFader);
 
+        // Update the meter.
         strip.m_meter->setLevel(dBleft, dBright);
     }
 
-    updateMonitorMeters();
+    // Master
 
     LevelInfo masterInfo;
+
+    // Get the master level.  If there was a change, update the meter.
     if (SequencerDataBlock::getInstance()->getMasterLevel(masterInfo)) {
 
-        float dBleft = AudioLevel::fader_to_dB
-                       (masterInfo.level, 127, AudioLevel::LongFader);
-        float dBright = AudioLevel::fader_to_dB
-                        (masterInfo.levelRight, 127, AudioLevel::LongFader);
+        // Convert to dB for display.
+        float dBleft = AudioLevel::fader_to_dB(
+                masterInfo.level, 127, AudioLevel::LongFader);
+        float dBright = AudioLevel::fader_to_dB(
+                masterInfo.levelRight, 127, AudioLevel::LongFader);
 
+        // Update the meter.
         m_master.m_meter->setLevel(dBleft, dBright);
     }
 }
@@ -1245,56 +1264,70 @@ AudioMixerWindow::updateMeters()
 void
 AudioMixerWindow::updateMonitorMeters()
 {
-    // only show monitor levels when quiescent or when recording (as
-    // record levels)
-    if (m_document->getSequenceManager() &&
-        m_document->getSequenceManager()->getTransportStatus() == PLAYING) {
-        return ;
-    }
+    // If we're playing, bail.
+    // We only show monitor levels when stopped or when recording (as
+    // record levels).
+    if (m_document->getSequenceManager()  &&
+        m_document->getSequenceManager()->getTransportStatus() == PLAYING)
+        return;
 
     Composition &comp = m_document->getComposition();
     Composition::trackcontainer &tracks = comp.getTracks();
 
+    // For each input Strip
     for (StripMap::iterator i = m_inputs.begin(); i != m_inputs.end(); ++i) {
 
         InstrumentId id = i->first;
         Strip &strip = i->second;
+
         if (!strip.m_populated)
             continue;
 
         LevelInfo info;
 
-        if (SequencerDataBlock::getInstance()->
-            getInstrumentRecordLevelForMixer(id, info)) {
+        // Get the record level.  If there was no change, try the next Strip.
+        if (!SequencerDataBlock::getInstance()->
+                getInstrumentRecordLevelForMixer(id, info))
+            continue;
 
-            bool armed = false;
+        bool armed = false;
 
-            for (Composition::trackcontainer::iterator ti =
-                        tracks.begin(); ti != tracks.end(); ++ti) {
-                if (ti->second->getInstrument() == id) {
-                    if (comp.isTrackRecording(ti->second->getId())) {
-                        armed = true;
-                        break;
-                    }
+        // For each Track in the Composition
+        // ??? Performance: LINEAR SEARCH
+        //     I see no easy fix.  Each Instrument would need to keep a list
+        //     of the Tracks it is on.  Or something equally complicated.
+        for (Composition::trackcontainer::iterator ti =
+                 tracks.begin();
+             ti != tracks.end();
+             ++ti) {
+            Track *track = ti->second;
+
+            // If this Track has this Instrument
+            if (track->getInstrument() == id) {
+                if (comp.isTrackRecording(track->getId())) {
+                    armed = true;
+                    // Only one Track can be armed per Instrument.
+                    break;
                 }
             }
+        }
 
-            if (!armed)
-                continue;
+        if (!armed)
+            continue;
 
-            // The values passed through are long-fader values
-            float dBleft = AudioLevel::fader_to_dB
-                           (info.level, 127, AudioLevel::LongFader);
+        // Convert to dB for display.
+        // The values passed through are long-fader values
+        float dBleft = AudioLevel::fader_to_dB(
+                info.level, 127, AudioLevel::LongFader);
 
-            if (strip.m_stereo) {
-                float dBright = AudioLevel::fader_to_dB
-                                (info.levelRight, 127, AudioLevel::LongFader);
+        if (strip.m_stereo) {
+            // Convert to dB for display.
+            float dBright = AudioLevel::fader_to_dB(
+                    info.levelRight, 127, AudioLevel::LongFader);
 
-                strip.m_meter->setRecordLevel(dBleft, dBright);
-
-            } else {
-                strip.m_meter->setRecordLevel(dBleft);
-            }
+            strip.m_meter->setRecordLevel(dBleft, dBright);
+        } else {
+            strip.m_meter->setRecordLevel(dBleft);
         }
     }
 }
