@@ -234,6 +234,10 @@ private:
         /// Have the widgets been created?
         bool m_populated;
 
+        // ??? The InstrumentId might be handy here.  Along with a pointer
+        //     to the Instrument.  Although that could get dangerous.  A
+        //     change to the Studio could render the pointer invalid.
+
         AudioRouteMenu *m_input;
         AudioRouteMenu *m_output;
 

@@ -1339,67 +1339,78 @@ AudioMixerWindow::slotControllerDeviceEventReceived(MappedEvent *e,
     if (preferredCustomer != this)
         return;
 
-    RG_DEBUG << "slotControllerDeviceEventReceived(): this one's for me";
+    //RG_DEBUG << "slotControllerDeviceEventReceived(): this one's for me";
 
     raise();
 
-    // get channel number n from event
-    // update instrument for nth input in m_inputs
-
+    // If this isn't a MIDI controller, bail.
     if (e->getType() != MappedEvent::MidiController)
-        return ;
+        return;
+
+    // Get channel number n from MappedEvent.
+    // Update Instrument for nth input Strip in m_inputs.
+
     unsigned int channel = e->getRecordedChannel();
+    if (channel >= m_inputs.size())
+        return;
+
     MidiByte controller = e->getData1();
     MidiByte value = e->getData2();
 
-    unsigned int count = 0;
-    for (StripMap::iterator i = m_inputs.begin(); i != m_inputs.end(); ++i) {
+    // ??? Yet another search.  Would anyone else benefit from a
+    //     std::vector<Strip *> for finding the nth Strip?
 
-        if (count < channel) {
-            ++count;
-            continue;
-        }
+    StripMap::iterator stripIter = m_inputs.begin();
 
-        Instrument *instrument =
-            m_studio->getInstrumentById(i->first);
-        if (!instrument)
-            continue;
+    // Skip to the requested input Strip.
+    for (unsigned i = 0; i < channel; ++i)
+        ++stripIter;
 
-        switch (controller) {
+    Instrument *instrument =
+        m_studio->getInstrumentById(stripIter->first);
 
-        case MIDI_CONTROLLER_VOLUME: {
-                float level = AudioLevel::fader_to_dB
-                              (value, 127, AudioLevel::LongFader);
+    if (!instrument)
+        return;
 
-                StudioControl::setStudioObjectProperty
-                (instrument->getMappedId(),
-                 MappedAudioFader::FaderLevel,
-                 MappedObjectValue(level));
+    switch (controller) {
 
-                instrument->setLevel(level);
-                break;
-            }
+    case MIDI_CONTROLLER_VOLUME:
+        {
+            float level = AudioLevel::fader_to_dB(
+                    value, 127, AudioLevel::LongFader);
 
-        case MIDI_CONTROLLER_PAN: {
-                MidiByte ipan = MidiByte((value / 64.0) * 100.0 + 0.01);
+            StudioControl::setStudioObjectProperty(
+                    instrument->getMappedId(),
+                    MappedAudioFader::FaderLevel,
+                    MappedObjectValue(level));
 
-                StudioControl::setStudioObjectProperty
-                (instrument->getMappedId(),
-                 MappedAudioFader::Pan,
-                 MappedObjectValue(float(ipan) - 100.0));
+            instrument->setLevel(level);
+            // Inform everyone of the change.  Note that this will also call
+            // slotInstrumentChanged() to update the input strip.
+            instrument->changed();
 
-                instrument->setPan(ipan);
-                break;
-            }
-
-        default:
             break;
         }
 
-        // Inform everyone of the change.  Note that this will also call
-        // slotInstrumentChanged() to update the input strip.
-        instrument->changed();
+    case MIDI_CONTROLLER_PAN:
+        {
+            // Convert to audio Instrument pan format, 0-200.
+            MidiByte ipan = MidiByte((value / 64.0) * 100.0 + 0.01);
 
+            StudioControl::setStudioObjectProperty(
+                    instrument->getMappedId(),
+                    MappedAudioFader::Pan,
+                    MappedObjectValue(float(ipan) - 100));  // -100 - 100
+
+            instrument->setPan(ipan);
+            // Inform everyone of the change.  Note that this will also call
+            // slotInstrumentChanged() to update the input strip.
+            instrument->changed();
+
+            break;
+        }
+
+    default:
         break;
     }
 }
