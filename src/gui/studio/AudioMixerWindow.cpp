@@ -456,7 +456,7 @@ AudioMixerWindow::populate()
         updateInputFader(instrument->getId());
         updateRouteButtons(instrument->getId());
         updateStereoButton(instrument->getId());
-        updatePluginButtons(instrument->getId());
+        updateInputPluginButtons(instrument->getId());
 
         // Two for the controls, one for the spacer.
         column += 3;
@@ -578,7 +578,7 @@ AudioMixerWindow::populate()
         // Update Widgets
 
         updateBussFader(submasterNumber);
-        updatePluginButtons(submasterNumber);
+        updateBussPluginButtons(submasterNumber);
 
         ++submasterNumber;
 
@@ -695,7 +695,7 @@ AudioMixerWindow::slotInstrumentChanged(Instrument *instrument)
     updateInputFader(instrumentId);
     updateStereoButton(instrumentId);
     updateRouteButtons(instrumentId);
-    updatePluginButtons(instrumentId);
+    updateInputPluginButtons(instrumentId);
     //updateMiscButtons(instrumentId);
 
     blockSignals(false);
@@ -705,7 +705,10 @@ void
 AudioMixerWindow::slotPluginSelected(InstrumentId instrumentId,
                                      int /*index*/, int /*plugin*/)
 {
-    updatePluginButtons(instrumentId);
+    if (instrumentId >= AudioInstrumentBase)
+        updateInputPluginButtons(instrumentId);
+    else
+        updateBussPluginButtons(instrumentId);
 }
 
 void
@@ -714,7 +717,10 @@ AudioMixerWindow::slotPluginBypassed(InstrumentId instrumentId,
 {
     //RG_DEBUG << "slotPluginBypassed(" << instrumentId << ")";
 
-    updatePluginButtons(instrumentId);
+    if (instrumentId >= AudioInstrumentBase)
+        updateInputPluginButtons(instrumentId);
+    else
+        updateBussPluginButtons(instrumentId);
 }
 
 void
@@ -807,36 +813,41 @@ AudioMixerWindow::updateMiscButtons(int)
 #endif
 
 void
-AudioMixerWindow::updatePluginButtons(int id)
+AudioMixerWindow::updateInputPluginButtons(InstrumentId instrumentId)
 {
-    // ??? split the first part of this into two routines.
-    //     updateInputPluginButtons() and updateBussPluginButtons().
+    if (instrumentId < AudioInstrumentBase)
+        return;
 
-    const PluginContainer *pluginContainer = 0;
-    Strip *strip = 0;
+    const PluginContainer *pluginContainer =
+            m_studio->getInstrumentById(instrumentId);
 
-    // Input Strip
-    if (id >= (int)AudioInstrumentBase) {
+    Strip *strip = &m_inputs[instrumentId];
 
-        pluginContainer = m_studio->getInstrumentById(id);
+    updatePluginButtons(pluginContainer, strip);
+}
 
-        strip = &m_inputs[id];
+void
+AudioMixerWindow::updateBussPluginButtons(unsigned bussId)
+{
+    // Master has no plugins.
+    if (bussId == 0)
+        return;
 
-    } else {  // Buss Strip
+    BussList busses = m_studio->getBusses();
+    if (bussId >= busses.size())
+        return;
 
-        BussList busses = m_studio->getBusses();
-        if (id >= int(busses.size()))
-            return;
+    const PluginContainer *pluginContainer = busses[bussId];
 
-        pluginContainer = busses[id];
+    Strip *strip = &m_submasters[bussId - 1];
 
-        strip = &m_submasters[id - 1];
+    updatePluginButtons(pluginContainer, strip);
+}
 
-    }
-
-    // ??? Pull the rest of this out into an
-    //     updatePluginButtons(const PluginContainer *, Strip *).
-
+void
+AudioMixerWindow::updatePluginButtons(
+        const PluginContainer *pluginContainer, Strip *strip)
+{
     if (!pluginContainer)
         return;
     if (!strip)
@@ -845,48 +856,44 @@ AudioMixerWindow::updatePluginButtons(int id)
     if (!strip->m_populated  ||  !strip->m_pluginBox)
         return;
 
+    // For each PluginPushButton on the Strip
     for (size_t i = 0; i < strip->m_plugins.size(); i++) {
+        PluginPushButton *pluginButton = strip->m_plugins[i];
 
         bool used = false;
         bool bypass = false;
-        QColor pluginBgColour = Qt::green;
-//                qApp->palette().color(QPalette::Active, QColorGroup::Light);
 
-        strip->m_plugins[i]->show();
+        AudioPluginInstance *pluginInstance = pluginContainer->getPlugin(i);
 
-        AudioPluginInstance *inst = pluginContainer->getPlugin(i);
+        if (pluginInstance  &&  pluginInstance->isAssigned()) {
 
-        if (inst && inst->isAssigned()) {
-
-            AudioPlugin *pluginClass = m_document->getPluginManager()->getPlugin(
-                  m_document->getPluginManager()->
-                  getPositionByIdentifier(inst->getIdentifier().c_str()));
+            AudioPluginManager *pluginMgr = m_document->getPluginManager();
+            AudioPlugin *pluginClass = pluginMgr->getPluginByIdentifier(
+                    pluginInstance->getIdentifier().c_str());
 
             if (pluginClass) {
-                strip->m_plugins[i]->setText(pluginClass->getLabel());
-                strip->m_plugins[i]->setToolTip(pluginClass->getLabel());
-
-                pluginBgColour = pluginClass->getColour();
+                pluginButton->setText(pluginClass->getLabel());
+                pluginButton->setToolTip(pluginClass->getLabel());
             }
 
             used = true;
-            bypass = inst->isBypassed();
+            bypass = pluginInstance->isBypassed();
 
         } else {
 
-            strip->m_plugins[i]->setText(tr("<none>"));
-            strip->m_plugins[i]->setToolTip(tr("<no plugin>"));
+            pluginButton->setText(tr("<none>"));
+            pluginButton->setToolTip(tr("<no plugin>"));
 
-            if (inst)
-                bypass = inst->isBypassed();
+            if (pluginInstance)
+                bypass = pluginInstance->isBypassed();
         }
 
         if (bypass) {
-            strip->m_plugins[i]->setState(PluginPushButton::Bypassed);
+            pluginButton->setState(PluginPushButton::Bypassed);
         } else if (used) {
-            strip->m_plugins[i]->setState(PluginPushButton::Active);
+            pluginButton->setState(PluginPushButton::Active);
         } else {
-            strip->m_plugins[i]->setState(PluginPushButton::Normal);
+            pluginButton->setState(PluginPushButton::Normal);
         }
     }
 }

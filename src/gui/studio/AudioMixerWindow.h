@@ -44,6 +44,7 @@ class MappedEvent;
 class Fader;
 class AudioVUMeter;
 class AudioRouteMenu;
+class PluginContainer;
 class PluginPushButton;
 class Instrument;
 
@@ -138,12 +139,16 @@ protected slots:
     /**
      * RosegardenMainWindow::pluginSelected() signal is connected to this by
      * RosegardenMainWindow::slotOpenAudioMixer().
+     *
+     * ??? "id" isn't an InstrumentId.  It can be a Buss ID.
      */
     void slotPluginSelected(InstrumentId id, int index, int plugin);
     /// Update the PluginPushButton's state.
     /**
      * RosegardenMainWindow::pluginBypassed() signal is connected to this by
      * RosegardenMainWindow::slotOpenAudioMixer().
+     *
+     * ??? "id" isn't an InstrumentId.  It can be a Buss ID.
      */
     void slotPluginBypassed(InstrumentId id, int pluginIndex, bool bypass);
 
@@ -293,7 +298,11 @@ private:
     /// Update stereo button from the Instrument.
     void updateStereoButton(InstrumentId instrumentId);
     /// Update plugin buttons from the Instrument.
-    void updatePluginButtons(int id);
+    void updateInputPluginButtons(InstrumentId instrumentId);
+    /// Update plugin buttons from the Buss.
+    void updateBussPluginButtons(unsigned bussId);
+    void updatePluginButtons(
+            const PluginContainer *pluginContainer, Strip *strip);
     /// Does nothing.
     //void updateMiscButtons(int id);
 
