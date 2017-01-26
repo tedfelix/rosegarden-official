@@ -641,7 +641,7 @@ AudioMixerWindow::slotTrackAssignmentsChanged()
 {
     //RG_DEBUG << "slotTrackAssignmentsChanged()";
 
-    // For each input
+    // For each input strip
     for (StripMap::const_iterator i = m_inputs.begin();
          i != m_inputs.end();
          ++i) {
@@ -653,6 +653,8 @@ AudioMixerWindow::slotTrackAssignmentsChanged()
 
         // If we find an input that is assigned but not populated,
         // or we find an input that is populated but not assigned...
+        // ??? But what if unassigned instruments are visible?  Then
+        //     this check is incorrect.
         if (assigned != populated) {
             // found an inconsistency
             populate();
@@ -664,7 +666,16 @@ AudioMixerWindow::slotTrackAssignmentsChanged()
     //     Since the above loop only goes through the inputs here,
     //     it doesn't see the new Audio track in the Composition.
     //     The inputs do not get updated so the new Audio input
-    //     doesn't appear.
+    //     doesn't appear.  Need something like the following.  However,
+    //     I think it's better to spend time on the redesign than to fix
+    //     bugs in the old design/implementation.
+    // for each Track in the Composition
+        // if the Track's Instrument isn't audio or softsynth, continue.
+        // if the Track's Instrument doesn't have a Strip
+            //populate();
+            //return;
+        // fi
+    // rof
 }
 
 void
@@ -673,129 +684,27 @@ AudioMixerWindow::slotInstrumentChanged(Instrument *instrument)
     if (!instrument)
         return;
 
-    InstrumentId id = instrument->getId();
+    const InstrumentId instrumentId = instrument->getId();
 
-    RG_DEBUG << "AudioMixerWindow::slotInstrumentChanged(): id = " << id;
+    RG_DEBUG << "slotInstrumentChanged(): instrument ID = " << instrumentId;
 
+    // Prevent update loops.
     blockSignals(true);
 
-    updateFader(id);
-    updateStereoButton(id);
-    updateRouteButtons(id);
-    updatePluginButtons(id);
-    updateMiscButtons(id);
+    updateFader(instrumentId);
+    updateStereoButton(instrumentId);
+    updateRouteButtons(instrumentId);
+    updatePluginButtons(instrumentId);
+    updateMiscButtons(instrumentId);
 
     blockSignals(false);
 }
 
 void
-AudioMixerWindow::slotPluginSelected(InstrumentId id,
-                                     int index, int plugin)
+AudioMixerWindow::slotPluginSelected(InstrumentId instrumentId,
+                                     int /*index*/, int /*plugin*/)
 {
-    if (id >= (int)AudioInstrumentBase) {
-
-        Strip &strip = m_inputs[id];
-        if (!strip.m_populated || !strip.m_pluginBox)
-            return ;
-
-        // nowhere to display synth plugin info yet
-        if (index >= int(strip.m_plugins.size()))
-            return ;
-
-        if (plugin == -1) {
-
-            strip.m_plugins[index]->setText(tr("<none>"));
-            strip.m_plugins[index]->setToolTip(tr("<no plugin>"));
-
-            //QT3: color hackery simply ignored here.  
-            //
-//            strip.m_plugins[index]->setPaletteBackgroundColor
-//            (qApp->palette().
-//             color(QPalette::Active, QColorGroup::Button));
-
-        } else {
-
-            AudioPlugin *pluginClass = m_document->getPluginManager()->getPlugin(plugin);
-
-            //!!! Hacky.  We still rely on the old "colour" property to figure
-            // out the state, instead of doing something far more pleasant and
-            // intelligible three years from now.  (Remember this when you wince
-            // in 2015.  Kind of like that photo of you wearing nothing but a
-            // sock and an electric guitar, drunk off your ass, innit?)
-            QColor pluginBgColour = Qt::blue;  // anything random will do
-
-            if (pluginClass) {
-                strip.m_plugins[index]->
-                setText(pluginClass->getLabel());
-                strip.m_plugins[index]->setToolTip(pluginClass->getLabel());
-
-                pluginBgColour = pluginClass->getColour();
-            }
-
-            //!!! NB - Before I added more code later on in slotUpdateButtons, I
-            // never saw this code here do anything.  I'm not at all sure I've
-            // hit on the correct assumptions about what the colo(u)r property
-            // was supposed to tell this code here, and this might well be a
-            // future source of mysterious bugs.  So far, I can't find any
-            // problems though, and I wonder exactly what this code here was
-            // really for at all.  If other people would write some comments
-            // once in awhile, I might already have a clear idea.  Oh wait,
-            // code gazelles don't need to write no stinkin' comments.
-
-            if (pluginBgColour == Qt::darkRed) {
-                strip.m_plugins[index]->setState(PluginPushButton::Active);
-            } else if (pluginBgColour == Qt::black) {
-                strip.m_plugins[index]->setState(PluginPushButton::Bypassed);
-            } else {
-                strip.m_plugins[index]->setState(PluginPushButton::Normal);
-            }
-
-        }
-    } else if (id > 0 && id <= (unsigned int)m_submasters.size()) {
-
-        Strip &strip = m_submasters[id - 1];
-        if (!strip.m_populated || !strip.m_pluginBox)
-            return ;
-        if (index >= int(strip.m_plugins.size()))
-            return ;
-
-        if (plugin == -1) {
-
-            strip.m_plugins[index]->setText(tr("<none>"));
-            strip.m_plugins[index]->setToolTip(tr("<no plugin>"));
-
-            //QT3: color hackery just plowed through and glossed over all
-            // through here...  It's all too complicated to sort out without
-            // being able to run and look at things, so this will just have to
-            // be something where we take a look back and figure it out later.
-
-//            strip.m_plugins[index]->setPaletteBackgroundColor
-//            (qApp->palette().
-//             color(QPalette::Active, QColorGroup::Button));
-
-        } else {
-
-            AudioPlugin *pluginClass
-            = m_document->getPluginManager()->getPlugin(plugin);
-
-            QColor pluginBgColour = Qt::yellow; // QT3: junk color replaces following:
-//                qApp->palette().color(QPalette::Active, QColorGroup::Light);
-
-            if (pluginClass) {
-                strip.m_plugins[index]->
-                setText(pluginClass->getLabel());
-                strip.m_plugins[index]->setToolTip(pluginClass->getLabel());
-
-                pluginBgColour = pluginClass->getColour();
-            }
-
-
-//            strip.m_plugins[index]->setPaletteForegroundColor(QColor(Qt::white));
-//            strip.m_plugins[index]->setPaletteBackgroundColor(pluginBgColour);
-        }
-    }
-    // Force an immediate update of button colors.
-    populate();
+    updatePluginButtons(instrumentId);
 }
 
 void
@@ -1805,15 +1714,19 @@ AudioMixer::updateWidgets()
     // inputs/submasters/masters, so all that is needed is to update the
     // widgets in each strip.
 
-    // for each input
+    // At this point, we should also have Strips for the unassigned
+    // Instruments if that is enabled.  So, we can just iterate over the
+    // input Strips without worrying about assigned/unassigned.
+
+    // for each input Strip
         // update the widgets
     // rof
 
-    // for each submaster
+    // for each submaster Strip
         // update the widgets
     // rof
 
-    // for the master, update the widgets.
+    // for the master Strip, update the widgets.
 }
 #endif
 
