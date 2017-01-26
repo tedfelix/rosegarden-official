@@ -21,6 +21,7 @@
 
 #include "MixerWindow.h"
 #include "gui/general/ActionFileClient.h"
+#include "gui/widgets/Fader.h"
 
 #include <QPixmap>
 
@@ -41,7 +42,6 @@ namespace Rosegarden
 class Rotary;
 class RosegardenDocument;
 class MappedEvent;
-class Fader;
 class AudioVUMeter;
 class AudioRouteMenu;
 class PluginContainer;
@@ -206,6 +206,26 @@ private:
     /// Show/Hide widgets by name.  NOT WORKING.
     void toggleNamedWidgets(bool show, const char *);
 
+    /// Wrapper to add a couple of handy fields
+    class AMWFader : public Fader
+    {
+    public:
+        AMWFader(AudioLevel::FaderType type,
+                 int width,
+                 int height,
+                 QWidget *parent) :
+             Fader(type, width, height, parent),
+             instrumentId(0),
+             externalControllerChannel(0)
+        {
+        }
+
+        /// Actually a Buss or Instrument ID.
+        unsigned instrumentId;
+        /// For the first 16 input Strips.
+        unsigned externalControllerChannel;
+    };
+
     /// A vertical strip of controls representing a mixer channel.
     /**
      * ??? This should derive from QWidget and act as a single widget.
@@ -237,7 +257,7 @@ private:
         AudioRouteMenu *m_input;
         AudioRouteMenu *m_output;
 
-        Fader *m_fader;
+        AMWFader *m_fader;
         AudioVUMeter *m_meter;
 
         Rotary *m_pan;

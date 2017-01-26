@@ -250,6 +250,8 @@ AudioMixerWindow::populate()
 
     int column = 0;
 
+    int externalControllerChannel = 0;
+
     InstrumentList instruments = m_studio->getPresentationInstruments();
 
     // For each instrument
@@ -332,8 +334,10 @@ AudioMixerWindow::populate()
 
         // Fader
 
-        strip.m_fader = new Fader(AudioLevel::LongFader, 20, 240, m_mainBox);
+        strip.m_fader = new AMWFader(AudioLevel::LongFader, 20, 240, m_mainBox);
         strip.m_fader->setToolTip(tr("Audio level"));
+        strip.m_fader->instrumentId = instrument->getId();
+        strip.m_fader->externalControllerChannel = externalControllerChannel;
 
         connect(strip.m_fader, SIGNAL(faderChanged(float)),
                 this, SLOT(slotFaderLevelChanged(float)));
@@ -460,6 +464,9 @@ AudioMixerWindow::populate()
         updateStereoButton(instrument->getId());
         updateInputPluginButtons(instrument->getId());
 
+        // Next "external controller" channel.
+        ++externalControllerChannel;
+
         // Two for the controls, one for the spacer.
         column += 3;
     }
@@ -491,11 +498,12 @@ AudioMixerWindow::populate()
 
         // Fader
 
-        strip.m_fader = new Fader(
+        strip.m_fader = new AMWFader(
                 AudioLevel::LongFader,  // type
                 20, 240,  // width, height
                 m_mainBox);  // parent
         strip.m_fader->setToolTip(tr("Audio level"));
+        strip.m_fader->instrumentId = submasterNumber;
         connect(strip.m_fader, SIGNAL(faderChanged(float)),
                 this, SLOT(slotFaderLevelChanged(float)));
 
@@ -601,11 +609,12 @@ AudioMixerWindow::populate()
         idLabel->setFont(boldFont);
 
         // Fader
-        m_master.m_fader = new Fader(
+        m_master.m_fader = new AMWFader(
                 AudioLevel::LongFader,  // type
                 20, 240,  // width, height
                 m_mainBox);  // parent
         m_master.m_fader->setToolTip(tr("Audio master output level"));
+        m_master.m_fader->instrumentId = 0;
         connect(m_master.m_fader, SIGNAL(faderChanged(float)),
                 this, SLOT(slotFaderLevelChanged(float)));
 
@@ -974,138 +983,21 @@ AudioMixerWindow::sendControllerRefresh()
 void
 AudioMixerWindow::slotFaderLevelChanged(float dB)
 {
-    const Fader *fader = dynamic_cast<const Fader *>(sender());
-
-    if (!fader)
-        return;
-
-    // ??? All this searching.  Ugh.  Especially in a routine that has
-    //     the potential to be called *very* frequently as the volume Fader
-    //     is moved up and down.
-    //     Qt solution: Since Fader is a QObject, add an instrumentId property
-    //         and an externalControllerChannel property for input faders.
-    //         - Simple and enticing.  However, it subverts the language
-    //           and renders tools useless.  It also requires knowledge of
-    //           Qt that goes beyond the norm.
-    //     C++ solution: Derive a new AMWFader from Fader that adds those as
-    //         members.
-    //         - A bit more code, but easy to understand.  Doesn't break
-    //           code analysis tools.
-    //         - Sketch the new version of this routine to see how it would
-    //           look...
-
-    BussList busses = m_studio->getBusses();
-
-    // If this is the master Fader
-    if (fader == m_master.m_fader) {
-
-        if (busses.size() > 0) {
-            StudioControl::setStudioObjectProperty(
-                    MappedObjectId(busses[0]->getMappedId()),
-                    MappedAudioBuss::Level,
-                    MappedObjectValue(dB));
-
-            busses[0]->setLevel(dB);
-        }
-
-        return;
-    }
-
-    // Submaster ID
-    int index = 1;
-
-    // For each submaster Strip
-    for (StripVector::iterator i = m_submasters.begin();
-         i != m_submasters.end();
-         ++i) {
-
-        // If we found the Fader that has changed
-        if (fader == i->m_fader) {
-            // If the index is reasonable
-            if (index < (int)busses.size()) {
-                StudioControl::setStudioObjectProperty(
-                        MappedObjectId(busses[index]->getMappedId()),
-                        MappedAudioBuss::Level,
-                        MappedObjectValue(dB));
-
-                busses[index]->setLevel(dB);
-            }
-
-            return;
-        }
-
-        ++index;
-    }
-
-    int controllerChannel = 0;
-
-    // For each input Strip
-    for (StripMap::iterator i = m_inputs.begin();
-            i != m_inputs.end(); ++i) {
-
-        // If we've found the Fader that has changed
-        if (fader == i->second.m_fader) {
-
-            Instrument *instrument =
-                m_studio->getInstrumentById(i->first);
-
-            if (instrument) {
-                StudioControl::setStudioObjectProperty(
-                        MappedObjectId(instrument->getMappedId()),
-                        MappedAudioFader::FaderLevel,
-                        MappedObjectValue(dB));
-
-                instrument->setLevel(dB);
-                instrument->changed();
-            }
-
-            // Send out to "external controller" port as well.
-            // ??? Would be nice to know whether anything is connected
-            //     to the "external controller" port.  Otherwise this is
-            //     a waste.  Especially with a potentially very frequent
-            //     update such as this.
-            if (controllerChannel < 16) {
-                int value = AudioLevel::dB_to_fader(
-                        dB, 127, AudioLevel::LongFader);
-
-                MappedEvent mE(instrument->getId(),
-                               MappedEvent::MidiController,
-                               MIDI_CONTROLLER_VOLUME,
-                               MidiByte(value));
-                mE.setRecordedChannel(controllerChannel);
-                mE.setRecordedDevice(Device::CONTROL_DEVICE);
-
-                StudioControl::sendMappedEvent(mE);
-            }
-
-            return;
-        }
-
-        ++controllerChannel;
-    }
-}
-
-#if 0
-// New version assuming an AMWFader that derives from Fader and provides
-// members that make this easier.
-void
-AudioMixerWindow::slotFaderLevelChanged(float dB)
-{
     const AMWFader *fader = dynamic_cast<const AMWFader *>(sender());
 
     if (!fader)
         return;
 
     // If this is an input Fader
-    if (fader.instrumentId >= AudioInstrumentBase) {
+    if (fader->instrumentId >= AudioInstrumentBase) {
         Instrument *instrument =
-            m_studio->getInstrumentById(fader.instrumentId);
+            m_studio->getInstrumentById(fader->instrumentId);
 
         if (!instrument)
             return;
 
         StudioControl::setStudioObjectProperty(
-                MappedObjectId(fader.instrumentId),
+                MappedObjectId(fader->instrumentId),
                 MappedAudioFader::FaderLevel,
                 MappedObjectValue(dB));
 
@@ -1117,15 +1009,15 @@ AudioMixerWindow::slotFaderLevelChanged(float dB)
         //     to the "external controller" port.  Otherwise this is
         //     a waste.  Especially with a potentially very frequent
         //     update such as this.
-        if (controllerChannel < 16) {
+        if (fader->externalControllerChannel < 16) {
             int value = AudioLevel::dB_to_fader(
                     dB, 127, AudioLevel::LongFader);
 
-            MappedEvent mE(fader.instrumentId,
+            MappedEvent mE(fader->instrumentId,
                            MappedEvent::MidiController,
                            MIDI_CONTROLLER_VOLUME,
                            MidiByte(value));
-            mE.setRecordedChannel(fader.externalControllerChannel);
+            mE.setRecordedChannel(fader->externalControllerChannel);
             mE.setRecordedDevice(Device::CONTROL_DEVICE);
 
             StudioControl::sendMappedEvent(mE);
@@ -1135,25 +1027,24 @@ AudioMixerWindow::slotFaderLevelChanged(float dB)
     }
 
     // If this is the master or a submaster Fader
-    if (fader.instrumendId < AudioInstrumentBase) {
+    if (fader->instrumentId < AudioInstrumentBase) {
 
         BussList busses = m_studio->getBusses();
 
         // If the buss ID is out of range, bail.
-        if (fader.instrumentId >= busses.size())
+        if (fader->instrumentId >= busses.size())
             return;
 
         StudioControl::setStudioObjectProperty(
-                MappedObjectId(busses[fader.instrumendId]->getMappedId()),
+                MappedObjectId(busses[fader->instrumentId]->getMappedId()),
                 MappedAudioBuss::Level,
                 MappedObjectValue(dB));
 
-        busses[fader.instrumendId]->setLevel(dB);
+        busses[fader->instrumentId]->setLevel(dB);
 
         return;
     }
 }
-#endif
 
 void
 AudioMixerWindow::slotPanChanged(float pan)
