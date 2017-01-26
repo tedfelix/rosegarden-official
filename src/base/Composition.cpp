@@ -2061,6 +2061,27 @@ Composition::getNewTrackId() const
     return highWater;
 }
 
+bool
+Composition::hasTrack(InstrumentId instrumentId) const
+{
+    // We don't return the TrackId since an Instrument can be on more than
+    // one Track.  That would require a std::vector<TrackId>.
+
+    // For each Track
+    for (trackcontainer::const_iterator trackIter =
+                 m_tracks.begin();
+         trackIter != m_tracks.end();
+         ++trackIter) {
+
+        // If this Track is using the Instrument
+        if (trackIter->second->getInstrument() == instrumentId)
+            return true;
+
+    }
+
+    return false;
+}
+
 // Get all the segments that the same instrument plays that plays
 // segment s.
 // @return a SegmentMultiSet that includes s itself.

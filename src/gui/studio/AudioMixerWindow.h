@@ -283,9 +283,6 @@ private:
     /// Create all the widgets.
     void populate();
 
-    /// Is the Instrument assigned to a Track in the Composition?
-    bool isInstrumentAssigned(InstrumentId id);
-
     /// Update fader from Instrument.
     /**
      * If "id" is large enough, it is an instrument ID.

@@ -191,6 +191,8 @@ public:
      */
     TrackId getNewTrackId() const;
 
+    bool hasTrack(InstrumentId) const;
+
     /**
      * Get the Instrument Id of a given segment.
      **/

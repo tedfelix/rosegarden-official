@@ -266,7 +266,7 @@ AudioMixerWindow::populate()
         // If we shouldn't show unassigned faders and this Instrument
         // is unassigned, try the next.
         if (!m_studio->amwShowUnassignedFaders  &&
-            !isInstrumentAssigned(instrument->getId()))
+            !m_document->getComposition().hasTrack(instrument->getId()))
             continue;
 
         // Create a new Strip.
@@ -290,7 +290,10 @@ AudioMixerWindow::populate()
 
         QLabel *idLabel = new QLabel(m_mainBox);
         idLabel->setFont(boldFont);
-        idLabel->setToolTip(tr("Click the button above to rename this instrument"));
+        //idLabel->setToolTip(tr("Click the button above to rename this instrument"));
+        // Switching to this since the strip width is frequently too narrow to
+        // see e.g. "Synth plugin #2".
+        idLabel->setToolTip(strtoqstr(instrument->getAlias()));
         idLabel->setMaximumWidth(45);
         idLabel->setText(strtoqstr(instrument->getAlias()));
 
@@ -624,41 +627,13 @@ AudioMixerWindow::populate()
         updateFader(0);
     }
 
-    m_mainBox->show();
-
     updateFaderVisibility();
     updateSynthFaderVisibility();
     updateSubmasterVisibility();
     updatePluginButtonVisibility();
 
-    adjustSize();
-}
-
-bool
-AudioMixerWindow::isInstrumentAssigned(InstrumentId id)
-{
-    // ...to a Track in the Composition.
-
-    // ??? This routine belongs in Composition.  Perhaps have
-    //     it return the TrackId?  Or a signal value for not found.
-    //     E.g. NO_TRACK from Track.h.
-
-    const Composition::trackcontainer &tracks =
-        m_document->getComposition().getTracks();
-
-    // For each Track in the Composition
-    for (Composition::trackcontainer::const_iterator trackIter =
-                 tracks.begin();
-         trackIter != tracks.end();
-         ++trackIter) {
-
-        // If this Track is using the Instrument
-        if (trackIter->second->getInstrument() == id)
-            return true;
-
-    }
-
-    return false;
+    // The update visibility routines already called this.
+    //adjustSize();
 }
 
 void
@@ -673,7 +648,7 @@ AudioMixerWindow::slotTrackAssignmentsChanged()
         InstrumentId id = i->first;
 
         // Do any Tracks in the Composition use this Instrument?
-        const bool assigned = isInstrumentAssigned(id);
+        const bool assigned = m_document->getComposition().hasTrack(id);
         const bool populated = i->second.m_populated;
 
         // If we find an input that is assigned but not populated,
@@ -1725,6 +1700,10 @@ AudioMixerWindow::updatePluginButtonVisibility()
 void
 AudioMixerWindow::slotToggleUnassignedFaders()
 {
+    // ??? When hiding these, the layout doesn't compress horizontally
+    //     as it is supposed to.  Usually the calls to adjustSize() fix
+    //     this, but not in this case.
+
     QAction *action = findAction("show_unassigned_faders");
     if (!action)
         return ;
@@ -1797,6 +1776,46 @@ AudioMixerWindow::slotHelpAbout()
 {
     new AboutDialog(this);
 }
+
+#if 0
+void
+AudioMixer::updateWidgets()
+{
+    // Updates all widgets based on the Composition.
+
+    // Note: Make sure that this routine is efficient enough to avoid doing
+    //       work when nothing has actually changed.  This will make it
+    //       safe to call in all situations.  Most of the Qt widgets are
+    //       very efficient.  E.g. calling QLabel::setText() with the same
+    //       text that is already being displayed is a no-op.  We need to
+    //       make sure that RG's custom widgets (e.g. Fader) are just as
+    //       efficient.
+
+    // Determine whether the number of inputs/submasters/masters is correct.
+    // If it isn't, adjust as needed.  Note that QGridLayout does not provide
+    // an easy way to insert/delete columns.  It might be easiest to make each
+    // strip its own QWidget-based class.  This way we are simply adding/
+    // removing single controls from the layout.  In fact, it could then
+    // become a QHBoxLayout.  QHBoxLayout just happens to offer an
+    // insertWidget() and a takeAt() which might be exactly what we need here
+    // to insert/delete columns.  Vertical alignment might be an issue,
+    // though.  QGridLayout has an advantage WRT that.
+
+    // At this point, the widgets in the layout will match the number of
+    // inputs/submasters/masters, so all that is needed is to update the
+    // widgets in each strip.
+
+    // for each input
+        // update the widgets
+    // rof
+
+    // for each submaster
+        // update the widgets
+    // rof
+
+    // for the master, update the widgets.
+}
+#endif
 
 
 }
