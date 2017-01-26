@@ -375,6 +375,9 @@ AudioMixerWindow::populate()
         }
 
         strip.m_pan->setToolTip(tr("Pan"));
+        strip.m_pan->setProperty("instrumentId", instrument->getId());
+        strip.m_pan->setProperty(
+                "externalControllerChannel", externalControllerChannel);
 
         connect(strip.m_pan, SIGNAL(valueChanged(float)),
                 this, SLOT(slotPanChanged(float)));
@@ -535,6 +538,7 @@ AudioMixerWindow::populate()
                 GUIPalette::getColour(GUIPalette::RotaryPastelBlue));
 
         strip.m_pan->setToolTip(tr("Pan"));
+        strip.m_pan->setProperty("instrumentId", submasterNumber);
 
         connect(strip.m_pan, SIGNAL(valueChanged(float)),
                 this, SLOT(slotPanChanged(float)));
@@ -1058,81 +1062,64 @@ AudioMixerWindow::slotPanChanged(float panValue)
     if (!panRotary)
         return;
 
-    BussList busses = m_studio->getBusses();
+    InstrumentId instrumentId = panRotary->property("instrumentId").toUInt();
 
-    unsigned bussId = 1;
+    // If this is an input pan widget
+    if (instrumentId >= AudioInstrumentBase) {
+        int externalControllerChannel =
+                panRotary->property("externalControllerChannel").toInt();
 
-    // For each submaster Strip
-    for (StripVector::iterator i = m_submasters.begin();
-         i != m_submasters.end();
-         ++i) {
+        Instrument *instrument =
+            m_studio->getInstrumentById(instrumentId);
 
-        // If this is the one
-        if (panRotary == i->m_pan) {
-            if (bussId >= busses.size())
-                return;
-
-            StudioControl::setStudioObjectProperty(
-                    MappedObjectId(busses[bussId]->getMappedId()),
-                    MappedAudioBuss::Pan,
-                    MappedObjectValue(panValue));
-
-            busses[bussId]->setPan(MidiByte(panValue + 100.0));
-
+        if (!instrument)
             return;
+
+        StudioControl::setStudioObjectProperty(
+                instrument->getMappedId(),
+                MappedAudioFader::Pan,
+                MappedObjectValue(panValue));
+
+        instrument->setPan(MidiByte(panValue + 100.0));
+        instrument->changed();
+
+        // Send out to "external controller" port as well.
+        //!!! really want some notification of whether we have any!
+        if (externalControllerChannel < 16) {
+            int ipan = (int(instrument->getPan()) * 64) / 100;
+            if (ipan < 0)
+                ipan = 0;
+            if (ipan > 127)
+                ipan = 127;
+
+            MappedEvent mE(instrument->getId(),
+                           MappedEvent::MidiController,
+                           MIDI_CONTROLLER_PAN,
+                           MidiByte(ipan));
+            mE.setRecordedChannel(externalControllerChannel);
+            mE.setRecordedDevice(Device::CONTROL_DEVICE);
+
+            StudioControl::sendMappedEvent(mE);
         }
 
-        ++bussId;
+        return;
     }
 
-    // For "external controller" port
-    int controllerChannel = 0;
+    // If this is a buss pan widget
+    if (instrumentId < AudioInstrumentBase) {
+        BussList busses = m_studio->getBusses();
 
-    // For each input Strip
-    for (StripMap::iterator i = m_inputs.begin();
-         i != m_inputs.end();
-         ++i) {
-
-        // If we found it
-        if (panRotary == i->second.m_pan) {
-
-            Instrument *instrument =
-                m_studio->getInstrumentById(i->first);
-
-            if (!instrument)
-                return;
-
-            StudioControl::setStudioObjectProperty(
-                    instrument->getMappedId(),
-                    MappedAudioFader::Pan,
-                    MappedObjectValue(panValue));
-
-            instrument->setPan(MidiByte(panValue + 100.0));
-            instrument->changed();
-
-            // Send out to "external controller" port as well.
-            //!!! really want some notification of whether we have any!
-            if (controllerChannel < 16) {
-                int ipan = (int(instrument->getPan()) * 64) / 100;
-                if (ipan < 0)
-                    ipan = 0;
-                if (ipan > 127)
-                    ipan = 127;
-
-                MappedEvent mE(instrument->getId(),
-                               MappedEvent::MidiController,
-                               MIDI_CONTROLLER_PAN,
-                               MidiByte(ipan));
-                mE.setRecordedChannel(controllerChannel);
-                mE.setRecordedDevice(Device::CONTROL_DEVICE);
-
-                StudioControl::sendMappedEvent(mE);
-            }
-
+        if (instrumentId >= busses.size())
             return;
-        }
 
-        ++controllerChannel;
+        StudioControl::setStudioObjectProperty(
+                MappedObjectId(busses[instrumentId]->getMappedId()),
+                MappedAudioBuss::Pan,
+                MappedObjectValue(panValue));
+
+        busses[instrumentId]->setPan(MidiByte(panValue + 100.0));
+
+        return;
     }
 }
 
