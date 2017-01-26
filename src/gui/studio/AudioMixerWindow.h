@@ -157,7 +157,7 @@ protected slots:
      */
     void slotPluginBypassed(InstrumentId id, int pluginIndex, bool bypass);
 
-    /// Handle the inputs_1, inputs_2, inputs_4, inputs_8, and inputs_16 actions.
+    /// Handle Settings > Number of Stereo Inputs.
     void slotSetInputCountFromAction();
     /// Handle the submasters_0, submasters_2, submasters_4, and submasters_8 actions.
     void slotSetSubmasterCountFromAction();

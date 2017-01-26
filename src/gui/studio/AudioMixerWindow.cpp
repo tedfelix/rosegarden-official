@@ -1418,30 +1418,38 @@ AudioMixerWindow::slotControllerDeviceEventReceived(MappedEvent *e,
 void
 AudioMixerWindow::slotSetInputCountFromAction()
 {
-    const QObject *s = sender();
-    QString name = s->objectName();
+    const QAction *action = dynamic_cast<const QAction *>(sender());
 
-    if (name.left(7) == "inputs_") {
+    if (!action)
+        return;
 
-        int count = name.right(name.length() - 7).toInt();
+    QString name = action->objectName();
 
-        RecordInList ins = m_studio->getRecordIns();
-        int current = ins.size();
+    // Not the expected action name?  Bail.
+    if (name.left(7) != "inputs_")
+        return;
 
-        if (count == current)
-            return ;
+    // Extract the number of inputs from the action name.
+    unsigned count = name.mid(7).toUInt();
 
-        m_studio->clearRecordIns(); // leaves the default 1
+    // No change?  Bail.
+    if (count == m_studio->getRecordIns().size())
+        return;
 
-        for (int i = 1; i < count; ++i) {
-            m_studio->addRecordIn(new RecordIn());
-        }
+    // Remove all except 1.
+    m_studio->clearRecordIns();
+
+    // Add the rest.
+    for (unsigned i = 1; i < count; ++i) {
+        m_studio->addRecordIn(new RecordIn());
     }
 
     m_document->initialiseStudio();
 
+    // For each input Strip
     for (StripMap::iterator i = m_inputs.begin();
-            i != m_inputs.end(); ++i) {
+         i != m_inputs.end();
+         ++i) {
         updateRouteButtons(i->first);
     }
 }
