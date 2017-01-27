@@ -101,6 +101,7 @@ public:
     RecordInList getRecordIns() { return m_recordIns; }
     RecordIn *getRecordIn(int number);
     void addRecordIn(RecordIn *ri) { m_recordIns.push_back(ri); }
+    void setRecordInCount(unsigned newRecordInCount);
 
     // A clever method to best guess MIDI file program mappings
     // to available MIDI channels across all MidiDevices.

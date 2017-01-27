@@ -398,8 +398,47 @@ Studio::getContainerById(InstrumentId id)
 RecordIn *
 Studio::getRecordIn(int number)
 {
-    if (number >= 0 && number < int(m_recordIns.size())) return m_recordIns[number];
-    else return 0;
+    if (number >= 0  &&  number < int(m_recordIns.size()))
+        return m_recordIns[number];
+    else
+        return 0;
+}
+
+void
+Studio::setRecordInCount(unsigned newRecordInCount)
+{
+    // Can't have zero.
+    if (newRecordInCount < 1)
+        return;
+    if (newRecordInCount > 32)
+        return;
+    // No change?  Bail.
+    if (newRecordInCount == m_recordIns.size())
+        return;
+
+    // If we need to add some RecordIns.
+    if (newRecordInCount > m_recordIns.size()) {
+
+        unsigned addCount = newRecordInCount - m_recordIns.size();
+
+        for (unsigned i = 0; i < addCount; ++i) {
+            m_recordIns.push_back(new RecordIn());
+        }
+
+    } else {  // We need to remove some.
+
+        unsigned removeCount = m_recordIns.size() - newRecordInCount;
+
+        // For each one that needs removing.
+        for (unsigned i = 0; i < removeCount; ++i) {
+            // Delete the last RecordIn.
+            delete m_recordIns.back();
+            // Remove it from the list.
+            m_recordIns.pop_back();
+        }
+    }
+
+    // The mapped IDs get set by RosegardenDocument::initialiseStudio().
 }
 
 // Clear down the devices  - the devices will clear down their

@@ -1439,21 +1439,9 @@ AudioMixerWindow::slotNumberOfStereoInputs()
     // Extract the number of inputs from the action name.
     unsigned count = name.mid(7).toUInt();
 
-    // No change?  Bail.
-    if (count == m_studio->getRecordIns().size())
-        return;
+    m_studio->setRecordInCount(count);
 
-    // ??? Pull the next few lines into a Studio::setRecordInCount(int n).
-    //     Like setBussCount().
-
-    // Remove all except 1.
-    m_studio->clearRecordIns();
-
-    // Add the rest.
-    for (unsigned i = 1; i < count; ++i) {
-        m_studio->addRecordIn(new RecordIn());
-    }
-
+    // Set the mapped IDs for the RecordIns.
     m_document->initialiseStudio();
 
     // For each input Strip
