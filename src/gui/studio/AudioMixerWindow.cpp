@@ -636,6 +636,9 @@ AudioMixerWindow::populate()
     updatePluginButtonVisibility();
 
     // The update visibility routines already called this.
+    // Always call this before adjustSize() to make sure the layout
+    // is updated.
+    //qApp->processEvents();
     //adjustSize();
 }
 
@@ -1452,6 +1455,7 @@ AudioMixerWindow::slotNumberOfStereoInputs()
         return;
 
     // ??? Pull the next few lines into a Studio::setRecordInCount(int n).
+    //     Like setBussCount().
 
     // Remove all except 1.
     m_studio->clearRecordIns();
@@ -1567,6 +1571,9 @@ AudioMixerWindow::updateFaderVisibility()
 
     toggleNamedWidgets(visible, "audioIdLabel");
 
+    // Always call this before adjustSize() to make sure the layout
+    // is updated.
+    qApp->processEvents();
     adjustSize();
 }
 
@@ -1596,6 +1603,9 @@ AudioMixerWindow::updateSynthFaderVisibility()
 
     toggleNamedWidgets(visible, "synthIdLabel");
 
+    // Always call this before adjustSize() to make sure the layout
+    // is updated.
+    qApp->processEvents();
     adjustSize();
 }
 
@@ -1625,6 +1635,9 @@ AudioMixerWindow::updateSubmasterVisibility()
 
     toggleNamedWidgets(visible, "subMaster");
 
+    // Always call this before adjustSize() to make sure the layout
+    // is updated.
+    qApp->processEvents();
     adjustSize();
 }
 
@@ -1650,18 +1663,20 @@ AudioMixerWindow::updatePluginButtonVisibility()
         i->second.setPluginButtonsVisible(visible);
     }
 
-    // ??? What about the submaster Strips?
+    // For each submaster Strip
+    for (unsigned int i = 0; i < m_submasters.size(); ++i) {
+        m_submasters[i].setPluginButtonsVisible(visible);
+    }
 
+    // Always call this before adjustSize() to make sure the layout
+    // is updated.
+    qApp->processEvents();
     adjustSize();
 }
 
 void
 AudioMixerWindow::slotShowUnassignedFaders()
 {
-    // ??? When hiding these, the layout doesn't compress horizontally
-    //     as it is supposed to.  Usually the calls to adjustSize() fix
-    //     this, but not in this case.
-
     m_studio->amwShowUnassignedFaders = !m_studio->amwShowUnassignedFaders;
 
     QAction *action = findAction("show_unassigned_faders");
