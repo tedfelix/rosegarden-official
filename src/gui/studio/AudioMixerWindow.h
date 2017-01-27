@@ -47,6 +47,7 @@ class AudioRouteMenu;
 class PluginContainer;
 class PluginPushButton;
 class Instrument;
+class Label;
 
 
 /// The "Audio Mixer" window.
@@ -101,6 +102,7 @@ protected slots:
 
     // The following slots are connected to the various widgets.
 
+    void slotLabelClicked();
     void slotFaderLevelChanged(float level);
     void slotPanChanged(float value);
     void slotChannelsChanged();
@@ -214,6 +216,7 @@ private:
 
         Strip() :
             m_populated(false),
+            m_label(0),
             m_input(0),
             m_output(0),
             m_fader(0),
@@ -221,7 +224,7 @@ private:
             m_pan(0),
             m_stereoButton(0),
             m_stereo(false),
-            m_recordButton(0),
+            //m_recordButton(0),
             m_pluginBox(0)
         { }
 
@@ -234,6 +237,8 @@ private:
         // ??? The InstrumentId might be handy here.  Along with a pointer
         //     to the Instrument.  Should be safe since Audio and SoftSynth
         //     Instruments never go away.
+
+        Label *m_label;
 
         AudioRouteMenu *m_input;
         AudioRouteMenu *m_output;
@@ -250,7 +255,7 @@ private:
         // ??? UNUSED.  Created, but never shown.  Looks like this was
         //     going to be added, but someone realized this is per-Track
         //     while this entire display is per-Instrument.
-        QPushButton *m_recordButton;
+        //QPushButton *m_recordButton;
 
         QWidget *m_pluginBox;
         std::vector<PluginPushButton *> m_plugins;

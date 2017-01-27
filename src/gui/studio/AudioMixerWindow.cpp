@@ -40,6 +40,8 @@
 #include "gui/widgets/AudioRouteMenu.h"
 #include "gui/widgets/AudioVUMeter.h"
 #include "gui/widgets/Fader.h"
+#include "gui/widgets/InputDialog.h"
+#include "gui/widgets/Label.h"
 #include "gui/widgets/Rotary.h"
 #include "gui/widgets/VUMeter.h"
 #include "sound/MappedEvent.h"
@@ -51,7 +53,6 @@
 #include <QColor>
 #include <QFont>
 #include <QFrame>
-#include <QLabel>
 #include <QObject>
 #include <QPixmap>
 #include <QPushButton>
@@ -75,9 +76,7 @@ AudioMixerWindow::AudioMixerWindow(QWidget *parent,
         m_surroundBoxLayout(new QHBoxLayout),
         m_mainBox(0)
 {
-    // ??? UNUSED.  A search on this string only yields this line.  A better
-    //     object name would be "AudioMixerWindow".
-    setObjectName("MixerWindow");
+    setObjectName("AudioMixerWindow");
 
     setWindowTitle(tr("Audio Mixer"));
     setWindowIcon(IconLoader().loadPixmap("window-audiomixer"));
@@ -205,9 +204,6 @@ AudioMixerWindow::depopulate()
     m_inputs.clear();
     m_submasters.clear();
 
-    if (m_surroundBoxLayout)
-        m_surroundBoxLayout->removeWidget(m_mainBox);   // Needed ???
-
     // Delete the main box and all the widgets.
     delete m_mainBox;
     m_mainBox = 0;
@@ -236,7 +232,7 @@ AudioMixerWindow::populate()
     boldFont.setBold(true);
 
     m_mainBox = new QFrame(m_surroundBox);
-    // ??? Enable these to see the frame.
+    // Uncomment these to see the frame.
     //m_mainBox->setFrameStyle(QFrame::Panel | QFrame::Raised);
     //m_mainBox->setLineWidth(2);
     m_surroundBoxLayout->addWidget(m_mainBox);
@@ -290,22 +286,24 @@ AudioMixerWindow::populate()
 
         // Label
 
-        QLabel *idLabel = new QLabel(m_mainBox);
-        idLabel->setFont(boldFont);
-        //idLabel->setToolTip(tr("Click the button above to rename this instrument"));
+        strip.m_label = new Label(strtoqstr(instrument->getAlias()), m_mainBox);
+        strip.m_label->setFont(boldFont);
+        //strip.m_label->setToolTip(tr("Click the button above to rename this instrument"));
         // Switching to this since the strip width is frequently too narrow to
         // see e.g. "Synth plugin #2".
-        idLabel->setToolTip(strtoqstr(instrument->getAlias()));
-        idLabel->setMaximumWidth(45);
-        idLabel->setText(strtoqstr(instrument->getAlias()));
+        strip.m_label->setToolTip(strtoqstr(instrument->getAlias()));
+        strip.m_label->setMaximumWidth(45);
+        strip.m_label->setProperty("instrumentId", instrument->getId());
+        connect(strip.m_label, SIGNAL(clicked()),
+                this, SLOT(slotLabelClicked()));
 
         // Audio Instrument
         if (instrument->getType() == Instrument::Audio) {
             // Used by updateFaderVisibility() to show/hide this label.
-            idLabel->setObjectName("audioIdLabel");
+            strip.m_label->setObjectName("audioIdLabel");
         } else {  // Softsynth Instrument
             // Used by updateSynthFaderVisibility() to show/hide this label.
-            idLabel->setObjectName("synthIdLabel");
+            strip.m_label->setObjectName("synthIdLabel");
         }
 
         // Input
@@ -441,7 +439,7 @@ AudioMixerWindow::populate()
 
         mainLayout->addWidget(aliasButton, 0, column, 1, 2, Qt::AlignLeft);
 
-        mainLayout->addWidget(idLabel, 1, column, 1, 2, Qt::AlignLeft);
+        mainLayout->addWidget(strip.m_label, 1, column, 1, 2, Qt::AlignLeft);
 
         if (strip.m_input)
             mainLayout->addWidget(strip.m_input->getWidget(), 2, column, 1, 2);
@@ -495,11 +493,12 @@ AudioMixerWindow::populate()
 
         // Label
 
-        QLabel *idLabel = new QLabel(
+        strip.m_label = new Label(
                 tr("Sub %1").arg(submasterNumber), m_mainBox);
-        idLabel->setFont(boldFont);
+        strip.m_label->setFont(boldFont);
         // Used by updateSubmasterVisibility() to show/hide the label.
-        idLabel->setObjectName("subMaster");
+        strip.m_label->setObjectName("subMaster");
+        strip.m_label->setProperty("instrumentId", submasterNumber);
 
         // Fader
 
@@ -575,7 +574,7 @@ AudioMixerWindow::populate()
 
         // Row 0, InstrumentAliasButton, don't need one.
 
-        mainLayout->addWidget(idLabel, 1, column, 1, 2, Qt::AlignLeft);
+        mainLayout->addWidget(strip.m_label, 1, column, 1, 2, Qt::AlignLeft);
 
         // Row 2, In Button, don't need one.
         // Row 3, Out Button, don't need one.
@@ -611,8 +610,9 @@ AudioMixerWindow::populate()
         // Widgets
 
         // Label
-        QLabel *idLabel = new QLabel(tr("Master"), m_mainBox);
-        idLabel->setFont(boldFont);
+        m_master.m_label = new Label(tr("Master"), m_mainBox);
+        m_master.m_label->setFont(boldFont);
+        m_master.m_label->setProperty("instrumentId", 0);
 
         // Fader
         m_master.m_fader = new Fader(
@@ -637,7 +637,7 @@ AudioMixerWindow::populate()
 
         // Layout
 
-        mainLayout->addWidget(idLabel, 1, column, 1,  2, Qt::AlignLeft);
+        mainLayout->addWidget(m_master.m_label, 1, column, 1,  2, Qt::AlignLeft);
         mainLayout->addWidget(m_master.m_fader, 4, column, Qt::AlignCenter);
         mainLayout->addWidget(m_master.m_meter, 4, column + 1, Qt::AlignCenter);
 
@@ -983,6 +983,38 @@ AudioMixerWindow::sendControllerRefresh()
         StudioControl::sendMappedEvent(mEp);
 
         ++controllerChannel;
+    }
+}
+
+void
+AudioMixerWindow::slotLabelClicked()
+{
+    const Label *label = dynamic_cast<const Label *>(sender());
+
+    if (!label)
+        return;
+
+    InstrumentId instrumentId = label->property("instrumentId").toUInt();
+
+    Instrument *instrument = m_studio->getInstrumentById(instrumentId);
+
+    if (!instrument)
+        return;
+
+    bool ok = false;
+
+    QString newAlias = InputDialog::getText(
+            this,  // parent
+            tr("Rosegarden"),  // title
+            tr("Enter instrument alias:"),  // label
+            LineEdit::Normal,  // mode (echo)
+            strtoqstr(instrument->getAlias()),  // text
+            &ok);  // ok
+
+    if (ok) {
+        instrument->setAlias(newAlias.toStdString());
+        instrument->changed();
+        populate();
     }
 }
 
@@ -1663,7 +1695,9 @@ AudioMixerWindow::toggleNamedWidgets(bool show, const QString &name)
 
     // ??? An alternative approach that would be more direct would
     //     be to add the label to the Strip so they come and go
-    //     like all the others.
+    //     like all the others.  m_label has been added to Strip.
+    //     Move away from this.  Should be able to get rid of this
+    //     routine.
 
     if (!m_mainBox)
         return;
