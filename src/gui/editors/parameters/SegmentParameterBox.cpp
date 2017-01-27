@@ -118,7 +118,7 @@ SegmentParameterBox::initBox()
     QLabel *label = new QLabel(tr("Label"), this);
     label->setFont(m_font);
 
-    m_label = new Label(this);
+    m_label = new Label("", this);
     m_label->setObjectName("SPECIAL_LABEL");
     m_label->setFont(m_font);
     QFontMetrics fontMetrics(m_font);
