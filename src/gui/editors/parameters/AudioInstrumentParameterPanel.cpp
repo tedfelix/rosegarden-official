@@ -72,8 +72,12 @@ AudioInstrumentParameterPanel::AudioInstrumentParameterPanel(
     // Widgets
 
     // Alias button
-    // we should have a change alias button here too (remember, it changes the
-    // alias by itself, so we just have to update to reflect the change)
+    // ??? Remove this alias button.  Instead, make the label clickable.
+    //     Use AudioMixerWindow as a guide.  It allows changing of the
+    //     Instrument alias by clicking on the Label.  SqueezedLabel will
+    //     need to be upgraded to offer a clicked() signal like Label does.
+    //     Once this is removed, remove InstrumentAliasButton from
+    //     the sourcebase since this is the last user.
     m_aliasButton = new InstrumentAliasButton(this);
     m_aliasButton->setFixedSize(10, 6); // golden rectangle
     m_aliasButton->setToolTip(tr("Click to rename this instrument"));

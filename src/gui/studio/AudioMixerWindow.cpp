@@ -46,7 +46,6 @@
 #include "gui/widgets/VUMeter.h"
 #include "sound/MappedEvent.h"
 #include "gui/widgets/PluginPushButton.h"
-#include "gui/widgets/InstrumentAliasButton.h"
 #include "gui/dialogs/AboutDialog.h"
 
 #include <QAction>
@@ -232,6 +231,7 @@ AudioMixerWindow::populate()
     boldFont.setBold(true);
 
     m_mainBox = new QFrame(m_surroundBox);
+    m_mainBox->setObjectName("m_mainBox");
     // Uncomment these to see the frame.
     //m_mainBox->setFrameStyle(QFrame::Panel | QFrame::Raised);
     //m_mainBox->setLineWidth(2);
@@ -270,20 +270,6 @@ AudioMixerWindow::populate()
         // Create a new Strip.
         Strip &strip = m_inputs[instrument->getId()];
 
-        // Instrument Alias Button (Click to rename)
-
-        // ??? Get rid of this.  This is a usability issue.  Let the user
-        //     click directly on the name to change it.  Note that AIPP
-        //     uses InstrumentAliasButton as well.  Remove it from there too.
-        //     Then remove InstrumentAliasButton from the sourcebase.
-
-        InstrumentAliasButton *aliasButton =
-                new InstrumentAliasButton(m_mainBox, instrument);
-        aliasButton->setFixedSize(10, 6);  // golden rectangle
-        aliasButton->setToolTip(tr("Click to rename this instrument"));
-
-        connect(aliasButton, SIGNAL(changed()), this, SLOT(slotRepopulate()));
-
         // Label
 
         strip.m_label = new Label(strtoqstr(instrument->getAlias()), m_mainBox);
@@ -291,7 +277,8 @@ AudioMixerWindow::populate()
         //strip.m_label->setToolTip(tr("Click the button above to rename this instrument"));
         // Switching to this since the strip width is frequently too narrow to
         // see e.g. "Synth plugin #2".
-        strip.m_label->setToolTip(strtoqstr(instrument->getAlias()));
+        strip.m_label->setToolTip(strtoqstr(instrument->getAlias()) + "\n" +
+                tr("Click to rename this instrument"));
         strip.m_label->setMaximumWidth(45);
         strip.m_label->setProperty("instrumentId", instrument->getId());
         connect(strip.m_label, SIGNAL(clicked()),
@@ -437,22 +424,20 @@ AudioMixerWindow::populate()
 
         // Layout
 
-        mainLayout->addWidget(aliasButton, 0, column, 1, 2, Qt::AlignLeft);
-
-        mainLayout->addWidget(strip.m_label, 1, column, 1, 2, Qt::AlignLeft);
+        mainLayout->addWidget(strip.m_label, 0, column, 1, 2, Qt::AlignLeft);
 
         if (strip.m_input)
-            mainLayout->addWidget(strip.m_input->getWidget(), 2, column, 1, 2);
+            mainLayout->addWidget(strip.m_input->getWidget(), 1, column, 1, 2);
 
-        mainLayout->addWidget(strip.m_output->getWidget(), 3, column, 1, 2);
+        mainLayout->addWidget(strip.m_output->getWidget(), 2, column, 1, 2);
 
-        mainLayout->addWidget(strip.m_fader, 4, column, Qt::AlignCenter);
-        mainLayout->addWidget(strip.m_meter, 4, column + 1, Qt::AlignCenter);
+        mainLayout->addWidget(strip.m_fader, 3, column, Qt::AlignCenter);
+        mainLayout->addWidget(strip.m_meter, 3, column + 1, Qt::AlignCenter);
 
-        mainLayout->addWidget(strip.m_pan, 5, column, Qt::AlignCenter);
-        mainLayout->addWidget(strip.m_stereoButton, 5, column + 1);
+        mainLayout->addWidget(strip.m_pan, 4, column, Qt::AlignCenter);
+        mainLayout->addWidget(strip.m_stereoButton, 4, column + 1);
 
-        mainLayout->addWidget(strip.m_pluginBox, 6, column, 1, 2);
+        mainLayout->addWidget(strip.m_pluginBox, 5, column, 1, 2);
 
         // Spacer
         mainLayout->setColumnMinimumWidth(column + 2, 4);
@@ -572,19 +557,17 @@ AudioMixerWindow::populate()
 
         // Layout
 
-        // Row 0, InstrumentAliasButton, don't need one.
+        mainLayout->addWidget(strip.m_label, 0, column, 1, 2, Qt::AlignLeft);
 
-        mainLayout->addWidget(strip.m_label, 1, column, 1, 2, Qt::AlignLeft);
+        // Row 1, In Button, don't need one.
+        // Row 2, Out Button, don't need one.
 
-        // Row 2, In Button, don't need one.
-        // Row 3, Out Button, don't need one.
+        mainLayout->addWidget(strip.m_fader, 3, column, Qt::AlignCenter);
+        mainLayout->addWidget(strip.m_meter, 3, column + 1, Qt::AlignCenter);
 
-        mainLayout->addWidget(strip.m_fader, 4, column, Qt::AlignCenter);
-        mainLayout->addWidget(strip.m_meter, 4, column + 1, Qt::AlignCenter);
+        mainLayout->addWidget(strip.m_pan, 4, column, 1, 2, Qt::AlignCenter);
 
-        mainLayout->addWidget(strip.m_pan, 5, column, 1, 2, Qt::AlignCenter);
-
-        mainLayout->addWidget(strip.m_pluginBox, 6, column, 1, 2);
+        mainLayout->addWidget(strip.m_pluginBox, 5, column, 1, 2);
 
         // Spacer
         mainLayout->setColumnMinimumWidth(column + 2, 4);
@@ -637,9 +620,9 @@ AudioMixerWindow::populate()
 
         // Layout
 
-        mainLayout->addWidget(m_master.m_label, 1, column, 1,  2, Qt::AlignLeft);
-        mainLayout->addWidget(m_master.m_fader, 4, column, Qt::AlignCenter);
-        mainLayout->addWidget(m_master.m_meter, 4, column + 1, Qt::AlignCenter);
+        mainLayout->addWidget(m_master.m_label, 0, column, 1,  2, Qt::AlignLeft);
+        mainLayout->addWidget(m_master.m_fader, 3, column, Qt::AlignCenter);
+        mainLayout->addWidget(m_master.m_meter, 3, column + 1, Qt::AlignCenter);
 
         // Update Widgets
 
