@@ -284,15 +284,6 @@ AudioMixerWindow::populate()
         connect(strip.m_label, SIGNAL(clicked()),
                 this, SLOT(slotLabelClicked()));
 
-        // Audio Instrument
-        if (instrument->getType() == Instrument::Audio) {
-            // Used by updateFaderVisibility() to show/hide this label.
-            strip.m_label->setObjectName("audioIdLabel");
-        } else {  // Softsynth Instrument
-            // Used by updateSynthFaderVisibility() to show/hide this label.
-            strip.m_label->setObjectName("synthIdLabel");
-        }
-
         // Input
 
         if (instrument->getType() == Instrument::Audio) {
@@ -481,8 +472,6 @@ AudioMixerWindow::populate()
         strip.m_label = new Label(
                 tr("Sub %1").arg(submasterNumber), m_mainBox);
         strip.m_label->setFont(boldFont);
-        // Used by updateSubmasterVisibility() to show/hide the label.
-        strip.m_label->setObjectName("subMaster");
         strip.m_label->setProperty("instrumentId", submasterNumber);
 
         // Fader
@@ -1520,6 +1509,8 @@ void AudioMixerWindow::slotPanningLaw()
 
 void AudioMixerWindow::Strip::setVisible(bool visible)
 {
+    if (m_label)
+        m_label->setVisible(visible);
     if (m_input)
         m_input->getWidget()->setVisible(visible);
     if (m_output)
@@ -1569,8 +1560,6 @@ AudioMixerWindow::updateFaderVisibility()
             i->second.setVisible(visible);
     }
 
-    toggleNamedWidgets(visible, "audioIdLabel");
-
     // Always call this before adjustSize() to make sure the layout
     // is updated.
     qApp->processEvents();
@@ -1601,8 +1590,6 @@ AudioMixerWindow::updateSynthFaderVisibility()
             i->second.setVisible(visible);
     }
 
-    toggleNamedWidgets(visible, "synthIdLabel");
-
     // Always call this before adjustSize() to make sure the layout
     // is updated.
     qApp->processEvents();
@@ -1632,8 +1619,6 @@ AudioMixerWindow::updateSubmasterVisibility()
          ++i) {
         i->setVisible(visible);
     }
-
-    toggleNamedWidgets(visible, "subMaster");
 
     // Always call this before adjustSize() to make sure the layout
     // is updated.
@@ -1687,34 +1672,6 @@ AudioMixerWindow::slotShowUnassignedFaders()
 }
 
 void
-AudioMixerWindow::toggleNamedWidgets(bool show, const QString &name)
-{
-    //RG_DEBUG << "toggleNamedWidgets(" << show << ", " << name << ")";
-
-    // ??? An alternative approach that would be more direct would
-    //     be to add the label to the Strip so they come and go
-    //     like all the others.  m_label has been added to Strip.
-    //     Move away from this.  Should be able to get rid of this
-    //     routine.
-
-    if (!m_mainBox)
-        return;
-
-    const QObjectList &children = m_mainBox->children();
-
-    // For each child
-    for (int i = 0; i < children.size(); ++i)
-    {
-        QWidget *widget = dynamic_cast<QWidget *>(children.at(i));
-        if (!widget)
-            continue;
-
-        if (widget->objectName() == name)
-            widget->setVisible(show);
-    }
-}
-
-void
 AudioMixerWindow::slotRepopulate()
 {
     //RG_DEBUG << "slotRepopulate()";
@@ -1724,8 +1681,6 @@ AudioMixerWindow::slotRepopulate()
     // the need for even more new plumbing
     populate();
 }
-
-
 
 void
 AudioMixerWindow::slotHelp()

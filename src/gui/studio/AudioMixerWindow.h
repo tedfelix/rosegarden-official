@@ -202,9 +202,6 @@ private:
     /// show_plugin_buttons
     void updatePluginButtonVisibility();
 
-    /// Show/Hide widgets by object name.
-    void toggleNamedWidgets(bool show, const QString &name);
-
     /// A vertical strip of controls representing a mixer channel.
     /**
      * ??? This should derive from QWidget and act as a single widget.
