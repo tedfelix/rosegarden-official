@@ -35,7 +35,6 @@
 #include "document/Command.h"
 
 #include <QSettings>
-#include <QDockWidget>
 #include <QAction>
 #include <QShortcut>
 #include <QDialog>
@@ -52,7 +51,6 @@
 #include <QApplication>
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
-#include <QToolBar>
 
 
 namespace Rosegarden
@@ -69,7 +67,6 @@ ListEditView::ListEditView(RosegardenDocument *doc,
     EditViewBase(doc, segments, parent),
     m_viewNumber( -1),
     m_viewLocalPropertyPrefix(makeViewLocalPropertyPrefix()),
-    m_mainDockWidget(0),
     m_centralFrame(0),
     m_grid(0),
     m_mainCol(cols - 1),
@@ -80,26 +77,9 @@ ListEditView::ListEditView(RosegardenDocument *doc,
     m_inCtor(true),
     m_timeSigNotifier(new EditViewTimeSigNotifier(doc))
 {
-    QPixmap dummyPixmap; // any icon will do
-	
-	
-	/*
-	m_mainDockWidget = new QDockWidget( "Rosegarden EditView DockWidget", this );
-	m_mainDockWidget->setAllowedAreas( Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea );
-	m_mainDockWidget->setFeatures( QDockWidget::AllDockWidgetFeatures );
-	
-	addDockWidget( Qt::LeftDockWidgetArea, m_mainDockWidget, Qt::Horizontal );
-	*/
-	m_mainDockWidget = 0;
-	
-	setStatusBar( new QStatusBar(this) );
-/*	
-	m_toolBar = new QToolBar( "Tool Bar", this );
-	addToolBar( Qt::TopToolBarArea, m_toolBar );
-	m_toolBar->setMinimumHeight( 16 );
-	m_toolBar->setMinimumWidth( 40 );
-*/	
-    m_centralFrame = new QFrame(this);		//m_mainDockWidget);
+    setStatusBar( new QStatusBar(this) );
+
+    m_centralFrame = new QFrame(this);
     m_centralFrame->setObjectName("centralframe");
 	m_centralFrame->setMinimumSize( 500, 300 );
 	m_centralFrame->setMaximumSize( 2200, 1400 );
@@ -117,8 +97,6 @@ ListEditView::ListEditView(RosegardenDocument *doc,
 	//this->layout()->addWidget( m_centralFrame );
 	setCentralWidget( m_centralFrame );
 	
-//    m_mainDockWidget->setWidget(m_centralFrame);
-
     initSegmentRefreshStatusIds();
 }
 
@@ -164,6 +142,10 @@ ListEditView::paintEvent(QPaintEvent* e)
     // responsive.  If that happens, we remember the events that came
     // in in the middle of one paintEvent call and process their union
     // again at the end of the call.
+
+    // Comment from David Faure: do NOT, I repeat, do NOT, relayout from within paintEvent.
+    // Do it before, i.e. all of this code here does not belong to a paintEvent.
+
     /*
         if (m_inPaintEvent) {
     	NOTATION_DEBUG << "ListEditView::paintEvent: in paint event already";

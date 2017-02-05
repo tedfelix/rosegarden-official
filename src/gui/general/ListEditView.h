@@ -21,7 +21,6 @@
 #include "EditViewBase.h"
 #include "document/CommandRegistry.h"
 
-#include <QDockWidget>
 #include <QFrame>
 #include <QAction>
 #include <QWidget>
@@ -133,9 +132,6 @@ protected:
 
     std::vector<unsigned int> m_segmentsRefreshStatusIds;
 
-//	QToolBar 	*m_toolBar;
-
-    QDockWidget *m_mainDockWidget;
     QFrame      *m_centralFrame;
     QGridLayout *m_grid;
 
