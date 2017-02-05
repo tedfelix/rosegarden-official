@@ -36,7 +36,8 @@ IconLoader::load(QString name)
 QPixmap
 IconLoader::loadPixmap(QString name)
 {
-    if (m_cache.find(name) != m_cache.end()) return m_cache[name];
+    std::map<QString, QPixmap>::const_iterator it = m_cache.find(name);
+    if (it != m_cache.end()) return it->second;
     QPixmap pixmap = loadPixmap(":pixmaps/toolbar", name);
     if (pixmap.isNull()) pixmap = loadPixmap(":pixmaps/transport", name);
     if (pixmap.isNull()) pixmap = loadPixmap(":pixmaps/misc", name);
