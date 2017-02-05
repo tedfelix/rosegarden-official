@@ -36,6 +36,7 @@
 #include <QDialogButtonBox>
 #include <QPushButton>
 #include <QComboBox>
+#include <QSpinBox>
 
 using namespace Rosegarden;
 
@@ -143,6 +144,8 @@ void AppEventFilter::polishWidget(QWidget *widget)
         }
     } else if (QComboBox *cb = qobject_cast<QComboBox *>(widget)) {
         cb->setAttribute(Qt::WA_Hover);
+    } else if (QAbstractSpinBox *sb = qobject_cast<QAbstractSpinBox *>(widget)) {
+        sb->setAttribute(Qt::WA_Hover);
     }
 }
 
@@ -1166,32 +1169,18 @@ void ThornStyle::drawComplexControl(QStyle::ComplexControl control, const QStyle
             framePath.addRoundedRect(frameRect, 4, 4);
             painter->setClipPath(framePath);
             painter->fillRect(frameRect, sb->palette.brush(QPalette::Base));
-            QStyleOptionSpinBox copy = *sb;
             const QRect spinupRect = subControlRect(CC_SpinBox, sb, SC_SpinBoxUp, widget);
             QLinearGradient gradient;
             gradient.setColorAt(0, QColor(0xDD, 0xDD, 0xDD));
             gradient.setColorAt(1, QColor(0x99, 0x99, 0x99));
             painter->setPen(QColor(0xAA, 0xAA, 0xAA));
             if (sb->subControls & SC_SpinBoxUp) {
-                copy.subControls = SC_SpinBoxUp;
-                QPalette pal2 = sb->palette;
-                if (!(sb->stepEnabled & QAbstractSpinBox::StepUpEnabled)) {
-                    pal2.setCurrentColorGroup(QPalette::Disabled);
-                    copy.state &= ~State_Enabled;
-                }
-
-                copy.palette = pal2;
-
-                if (sb->activeSubControls == SC_SpinBoxUp && (sb->state & State_Sunken)) {
-                    copy.state |= State_On;
-                    copy.state |= State_Sunken;
-                } else {
-                    copy.state |= State_Raised;
-                    copy.state &= ~State_Sunken;
-                }
                 gradient.setStart(spinupRect.topLeft());
                 gradient.setFinalStop(spinupRect.bottomLeft());
-                painter->setBrush(gradient);
+                if (sb->activeSubControls == SC_SpinBoxUp && !(option->state & State_Sunken))
+                    painter->setBrush(QColor(0xDD, 0xEF, 0xFF));
+                else
+                    painter->setBrush(gradient);
                 painter->drawRect(spinupRect);
 
                 QPixmap pixmap = enabled ? m_arrowUpSmallPixmap
@@ -1201,31 +1190,17 @@ void ThornStyle::drawComplexControl(QStyle::ComplexControl control, const QStyle
                 painter->drawPixmap(drawRect.topLeft(), pixmap);
             }
             if (sb->subControls & SC_SpinBoxDown) {
-                copy.subControls = SC_SpinBoxDown;
-                copy.state = sb->state;
-                QPalette pal2 = sb->palette;
-                if (!(sb->stepEnabled & QAbstractSpinBox::StepDownEnabled)) {
-                    pal2.setCurrentColorGroup(QPalette::Disabled);
-                    copy.state &= ~State_Enabled;
-                }
-                copy.palette = pal2;
-
-                if (sb->activeSubControls == SC_SpinBoxDown && (sb->state & State_Sunken)) {
-                    copy.state |= State_On;
-                    copy.state |= State_Sunken;
-                } else {
-                    copy.state |= State_Raised;
-                    copy.state &= ~State_Sunken;
-                }
-                // TODO use state
                 const QRect spindownRect = subControlRect(CC_SpinBox, sb, SC_SpinBoxDown, widget);
                 gradient.setStart(spindownRect.topLeft());
                 gradient.setFinalStop(spindownRect.bottomLeft());
-                painter->setBrush(gradient);
+                if (sb->activeSubControls == SC_SpinBoxDown && (option->state & State_MouseOver))
+                    painter->setBrush(QColor(0xDD, 0xEF, 0xFF));
+                else
+                    painter->setBrush(gradient);
                 painter->drawRect(spindownRect);
 
                 QPixmap pixmap = enabled ? m_arrowDownSmallPixmap
-                                               : m_arrowDownSmallInvertedPixmap; // off state when value is max
+                                         : m_arrowDownSmallInvertedPixmap; // off state when value is max
                 pixmap = pixmap.scaled(QSize(7, 7), Qt::KeepAspectRatio, Qt::SmoothTransformation); // TODO: edit the PNGs instead, would be faster
                 const QRect drawRect = alignedRect(option->direction, Qt::AlignCenter, pixmap.size(), spindownRect);
                 painter->drawPixmap(drawRect.topLeft(), pixmap);
@@ -1412,11 +1387,6 @@ QIcon ThornStyle::standardIcon(QStyle::StandardPixmap standardIcon, const QStyle
 
 // TODO
 #if 0
-QTabBar::tear // TODO how can I test this one? I don't see big tabbars in rosegarden (David)
-{
-    image: url(tear_indicator.png);
-}
-
 QTabBar QToolButton
 { /* the scroll buttons are tool buttons */
     border-image: url(:pixmaps/style/tab-scroll-button.png) 1;
