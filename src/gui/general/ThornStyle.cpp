@@ -252,13 +252,8 @@ QIcon ThornStyle::standardIconImplementation(StandardPixmap standardIcon,
     case SP_MessageBoxQuestion:
         return m_iconLoader.loadPixmap("messagebox-question");
 
-    case SP_TitleBarNormalButton: {
-        QIcon icon(m_titleUndockPixmap);
-        qDebug() << "pix" << m_titleUndockPixmap.size()
-                 << "icon sizes" << icon.availableSizes()
-                 << "actualSize" << icon.actualSize(QSize(16, 16));
+    case SP_TitleBarNormalButton:
         return m_titleUndockPixmap;
-    }
 
     case SP_DockWidgetCloseButton:
     case SP_TitleBarCloseButton:
