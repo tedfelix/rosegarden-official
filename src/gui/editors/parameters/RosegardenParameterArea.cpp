@@ -45,20 +45,16 @@ namespace Rosegarden
 
 RosegardenParameterArea::RosegardenParameterArea(
     QWidget *parent,
-    const char *name
-    )    //, WFlags f)
-    : QStackedWidget(parent),//, name),//, f),
-        m_style(RosegardenParameterArea::CLASSIC_STYLE),
+    const char *name)
+    : QStackedWidget(parent),
         m_scrollArea( new QScrollArea(this) ),
-         m_classic(new QWidget()),
-        m_classicLayout( new QVBoxLayout(m_classic) ),
-        m_tabBox(new QTabWidget(this)),
-        m_active(0),
+        m_boxContainer(new QWidget()),
+        m_boxContainerLayout( new QVBoxLayout(m_boxContainer) ),
         m_spacing(0)
 {
     setObjectName( name );
         
-    m_classic->setLayout(m_classicLayout);
+    m_boxContainer->setLayout(m_boxContainerLayout);
     
     // Setting vertical ScrollBarAlwaysOn resolves initial sizing problem
     m_scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
@@ -71,9 +67,8 @@ RosegardenParameterArea::RosegardenParameterArea(
     // (Too bad this fix is the last place I looked after a couple lost hours.)
     m_scrollArea->setWidgetResizable(true);
     
-    // add 2 wigets as stacked widgets
-    // Install the classic-style VBox widget in the widget-stack.
-    addWidget(m_scrollArea);//, CLASSIC_STYLE);    //&&& 
+    // Install the scroll area widget in the widget-stack.
+    addWidget(m_scrollArea);
 
     setCurrentWidget( m_scrollArea );
 }
@@ -93,14 +88,12 @@ void RosegardenParameterArea::addRosegardenParameterBox(
     // Append the parameter box to the list to be displayed.
      m_parameterBoxes.push_back(b);
  
-    // Create a titled group box for the parameter box, parented by the
-    // classic layout widget, so that it can be used to provide a title
-    // and outline, in classic mode. Add this container to an array that
+    // Create a titled group box for the parameter box, so that it can be
+    // used to provide a title and outline. Add this container to an array that
     // parallels the above array of parameter boxes.
 
-    QGroupBox *box = new QGroupBox(b->getLongLabel(), m_classic);
-    //box->setMinimumSize( 40,40 );
-    m_classicLayout->addWidget(box);
+    QGroupBox *box = new QGroupBox(b->getLongLabel(), m_boxContainer);
+    m_boxContainerLayout->addWidget(box);
     
     box->setLayout( new QVBoxLayout(box) );
     box->layout()->setMargin( 4 ); // about half the default value
@@ -113,65 +106,20 @@ void RosegardenParameterArea::addRosegardenParameterBox(
     // add the ParameterBox to the Layout
     box->layout()->addWidget(b);
     
-    if (m_spacing)
-        delete m_spacing;
-    m_spacing = new QFrame(m_classic);
-    m_classicLayout->addWidget(m_spacing);
-    m_classicLayout->setStretchFactor(m_spacing, 100);
-
+    delete m_spacing;
+    m_spacing = new QFrame(m_boxContainer);
+    m_boxContainerLayout->addWidget(m_spacing);
+    m_boxContainerLayout->setStretchFactor(m_spacing, 100);
 }
 
 void RosegardenParameterArea::setScrollAreaWidget()
 {
-    m_scrollArea->setWidget(m_classic);
-}
-    
-void RosegardenParameterArea::setArrangement(Arrangement style)
-{
-    RG_DEBUG << "RosegardenParameterArea::setArrangement(" << style << ") is deprecated, and non-functional!";
+    m_scrollArea->setWidget(m_boxContainer);
 }
 
 void RosegardenParameterArea::hideEvent(QHideEvent *)
 {
     emit hidden();
-}
-
-void RosegardenParameterArea::moveWidget(QWidget *old_container,
-        QWidget *new_container,
-        RosegardenParameterBox *box)
-{
-    RG_DEBUG << "RosegardenParameterArea::moveWidget";
-
-    // Remove any state that is associated with the parameter boxes,
-    // from the active container.
-
-    if (old_container == m_classic) {
-        ;
-    } else if (old_container == m_tabBox) {
-        m_tabBox->removeTab(indexOf(box));
-    }
-
-    // Reparent the parameter box, and perform any container-specific
-    // configuration.
-
-    if (new_container == m_classic) {
-        size_t index = 0;
-        while (index < m_parameterBoxes.size()) {
-            if (box == m_parameterBoxes[index])
-                break;
-            ++index;
-        }
-        if (index < m_parameterBoxes.size()) {
-            //box->reparent(m_groupBoxes[index], 0, QPoint(0, 0), FALSE);
-            m_groupBoxes[index]->setParent(this, 0);
-            m_groupBoxes[index]->move(QPoint(0,0));
-        }
-    } else if (new_container == m_tabBox) {
-        //box->reparent(new_container, 0, QPoint(0, 0), FALSE);
-        new_container->setParent(this, 0);
-        new_container->move(QPoint(0,0));
-        m_tabBox->insertTab(-1, box, box->getShortLabel());
-    }
 }
 
 }

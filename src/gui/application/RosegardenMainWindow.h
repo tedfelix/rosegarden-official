@@ -1442,10 +1442,6 @@ public slots:
     //
     void slotUpdateAutoSaveInterval(unsigned int interval);
 
-    // Update the side-bar when the configuration page changes its style.
-    //
-    void slotUpdateSidebarStyle(unsigned int style);
-
     /**
      * called when the PlayList is being closed
      */

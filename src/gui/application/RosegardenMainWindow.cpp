@@ -369,13 +369,6 @@ RosegardenMainWindow::RosegardenMainWindow(bool enableSound,
     setupActions();
     initZoomToolbar();
     
-    QSettings settings;
-    settings.beginGroup(GeneralOptionsConfigGroup);
-
-    m_parameterArea->setArrangement((RosegardenParameterArea::Arrangement)
-                                    settings.value("sidebarstyle",
-                                    RosegardenParameterArea::CLASSIC_STYLE).toUInt());
-
     //!!! The parameter area amnesia problem that's been annoying me for the
     // longest time was caused by this connection/mechanism.
     //
@@ -522,10 +515,9 @@ RosegardenMainWindow::RosegardenMainWindow(bool enableSound,
 
     QTimer::singleShot(1000, this, SLOT(slotTestStartupTester()));
 
-    settings.endGroup();
-
     // Restore window geometry and toolbar/dock state
     RG_DEBUG << "[geometry] RosegardenMainWindow - Restoring saved main window geometry...";
+    QSettings settings;
     settings.beginGroup(WindowGeometryConfigGroup);
     this->restoreGeometry(settings.value("Main_Window_Geometry").toByteArray());
     this->restoreState(settings.value("Main_Window_State").toByteArray());
@@ -5992,8 +5984,6 @@ RosegardenMainWindow::slotConfigure()
 
         connect(m_configDlg, SIGNAL(updateAutoSaveInterval(unsigned int)),
                 this, SLOT(slotUpdateAutoSaveInterval(unsigned int)));
-        connect(m_configDlg, SIGNAL(updateSidebarStyle(unsigned int)),
-                this, SLOT(slotUpdateSidebarStyle(unsigned int)));
         
         // Close the dialog if the document is changed : fix a potential crash
         connect(this, SIGNAL(documentAboutToChange()),
@@ -8262,14 +8252,6 @@ RosegardenMainWindow::slotUpdateAutoSaveInterval(unsigned int interval)
     RG_DEBUG << "RosegardenMainWindow::slotUpdateAutoSaveInterval - "
     << "changed interval to " << interval << endl;
     m_autoSaveTimer->setInterval(int(interval) * 1000);
-}
-
-void
-RosegardenMainWindow::slotUpdateSidebarStyle(unsigned int style)
-{
-    RG_DEBUG << "RosegardenMainWindow::slotUpdateSidebarStyle - "
-    << "changed style to " << style << endl;
-    if (m_parameterArea) m_parameterArea->setArrangement((RosegardenParameterArea::Arrangement) style);
 }
 
 void

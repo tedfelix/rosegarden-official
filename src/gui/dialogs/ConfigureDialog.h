@@ -47,7 +47,6 @@ public:
     
 signals:
     void updateAutoSaveInterval(unsigned int);
-    void updateSidebarStyle(unsigned int);    
     
 protected:
 };

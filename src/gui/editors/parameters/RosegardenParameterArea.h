@@ -25,12 +25,10 @@
 
 
 class QWidget;
-//class QVGroupBox;
 class QGroupBox;
 class QHBoxLayout;
 class QVBoxLayout;
 class QScrollArea;
-class QTabWidget;
 
 
 namespace Rosegarden
@@ -50,25 +48,13 @@ public:
 
     // Create the parameter display area.
 
-    RosegardenParameterArea(QWidget *parent=0, const char *name=0 ); //, WFlags f=0);
+    RosegardenParameterArea(QWidget *parent=0, const char *name=0 );
 
     // Add a rosegarden parameter box to the list that are to be displayed.
 
     void addRosegardenParameterBox(RosegardenParameterBox *b);
+
     void setScrollAreaWidget();
-
-    // List the supported methods of arranging the various parameter-box
-    // widgets within the parameter area.
-
-    enum Arrangement {
-        CLASSIC_STYLE,  // A simple vertical tiling of parameter-box widgets.
-        TAB_BOX_STYLE   // A horizontal list of tabs, displaying one box at a time.
-    };
-
-    // Redisplay the widgets with a different layout style.
-
-    void setArrangement(Arrangement style);
-
 protected:
     virtual void hideEvent(QHideEvent *);
 
@@ -76,8 +62,6 @@ signals:
     void hidden();
 
 private:
-    Arrangement m_style;                // The current layout style.
-
     // The list of parameter box widgets that are being displayed by this
     // widget.
 
@@ -89,18 +73,11 @@ private:
 
     std::vector<QGroupBox *> m_groupBoxes;
 
-    // Move a RosegardenParameterBox widget from one container to another.
-
-    void moveWidget(QWidget *old_container, QWidget *new_container,
-                    RosegardenParameterBox *box);
-
     QScrollArea *m_scrollArea;    
     
-    QWidget *m_classic;        // The container widget for m_style==CLASSIC_STYLE.
-    QVBoxLayout *m_classicLayout;
+    QWidget *m_boxContainer;
+    QVBoxLayout *m_boxContainerLayout;
     
-    QTabWidget *m_tabBox;     // The container widget for m_style==TAB_BOX_STYLE.
-    QWidget *m_active;         // The current container widget.
     QWidget *m_spacing;
 };
 
