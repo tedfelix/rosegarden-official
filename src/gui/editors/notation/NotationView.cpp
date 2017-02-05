@@ -1216,12 +1216,7 @@ NotationView::initLayoutToolbar()
         return;
     }
 
-    // something missed in the stylesheet and at this point I feel like just
-    // whacking the mole in the head with a hammer and moving on
-    QString labelStyle("color: black");
-
     QLabel *label = new QLabel(tr("  Font:  "), layoutToolbar);
-    if (m_Thorn) label->setStyleSheet("color: black");
     layoutToolbar->addWidget(label);
 
 
@@ -1264,7 +1259,6 @@ NotationView::initLayoutToolbar()
             this, SLOT(slotFontComboChanged(int)));
 
     label = new QLabel(tr("  Size:  "), layoutToolbar);
-    if (m_Thorn) label->setStyleSheet("color: black");
     layoutToolbar->addWidget(label);
 
     QString value;
@@ -1288,7 +1282,6 @@ NotationView::initLayoutToolbar()
             this, SLOT(slotSizeComboChanged(int)));
 
     label = new QLabel(tr("  Spacing:  "), layoutToolbar);
-    if (m_Thorn) label->setStyleSheet("color: black");
 
     layoutToolbar->addWidget(label);
     

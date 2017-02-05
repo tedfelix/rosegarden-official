@@ -35,20 +35,14 @@ Colour::Colour()
 
 Colour::Colour(unsigned int red, unsigned int green, unsigned int blue)
 {
-    setColour(red, green, blue);
+    m_r = red <= 255 ? red : 0;
+    m_g = green <= 255 ? green : 0;
+    m_b = blue <= 255 ? blue : 0;
 }
 
 Colour::~Colour()
 {
 
-}
-
-void
-Colour::setColour(unsigned int red, unsigned int green, unsigned int blue)
-{
-    (red<=255)   ? m_r=red   : m_r=0;
-    (green<=255) ? m_g=green : m_g=0;
-    (blue<=255)  ? m_b=blue  : m_b=0;
 }
 
 unsigned int

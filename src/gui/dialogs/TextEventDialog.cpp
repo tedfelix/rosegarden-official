@@ -73,7 +73,10 @@ TextEventDialog::TextEventDialog(QWidget *parent,
 
     // frame inside group box to contain white background
     QFrame *innerFrame = new QFrame;
-    innerFrame->setStyleSheet("background: white");
+    QPalette palette = innerFrame->palette();
+    palette.setColor(QPalette::Window, Qt::white);
+    innerFrame->setPalette(palette);
+    innerFrame->setAutoFillBackground(true);
     QVBoxLayout *innerFrameLayout = new QVBoxLayout;
     innerFrame->setLayout(innerFrameLayout);
     exampleBoxLayout->addWidget(innerFrame); 

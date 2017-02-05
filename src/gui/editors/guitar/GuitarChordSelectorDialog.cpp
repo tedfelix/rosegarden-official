@@ -43,18 +43,6 @@ namespace Rosegarden
 GuitarChordSelectorDialog::GuitarChordSelectorDialog(QWidget *parent)
     : QDialog(parent)
 {
-    QString localStyle = "QListView {background-color: #FFFFFF; alternate-background-color: #EEEEFF; color: #000000; selection-background-color: #80AFFF; selection-color: #FFFFFF;}";
-    // we'll use "localStyle" as a future search point, but switch over to a
-    // more meaningful variable name for the actual style assignment
-    //
-    // Note that I'm just slapping another local stylesheet on these damn
-    // QListView objects, because they're stubbornly refusing to be touched from
-    // the external stylesheet, and I'm beyond losing patience with dicking
-    // around to solve problems like this.  Our stylesheet and style code are a
-    // complete mess, and I will probably have to rewrite all of this one day,
-    // but not before Thorn/Abraham Darby releases.
-    QString listStyle = localStyle;
-
     setModal(true);
     setWindowTitle(tr("Guitar Chord Selector"));
     setWindowIcon(IconLoader().loadPixmap("window-guitar"));
@@ -67,12 +55,10 @@ GuitarChordSelectorDialog::GuitarChordSelectorDialog(QWidget *parent)
     
     topLayout->addWidget(new QLabel(tr("Root"), page), 0, 0);
     m_rootNotesList = new QListWidget(page);
-    m_rootNotesList->setStyleSheet(listStyle);
     topLayout->addWidget(m_rootNotesList, 1, 0);
     
     topLayout->addWidget(new QLabel(tr("Extension"), page), 0, 1);
     m_chordExtList = new QListWidget(page);
-    m_chordExtList->setStyleSheet(listStyle);
     topLayout->addWidget(m_chordExtList, 1, 1);
     
     m_newFingeringButton = new QPushButton(tr("New"), page);
@@ -107,7 +93,6 @@ GuitarChordSelectorDialog::GuitarChordSelectorDialog(QWidget *parent)
     
     topLayout->addWidget(new QLabel(tr("Fingerings"), page), 0, 3);
     m_fingeringsList = new QListWidget(page);
-    m_fingeringsList->setStyleSheet(listStyle);
 
     // try setting size to something 200 can be divided into evenly, in the hope
     // of avoiding fuzzy half pixel scaling problems (50 was no good, but 100

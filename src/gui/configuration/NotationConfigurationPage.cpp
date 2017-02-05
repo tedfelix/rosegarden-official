@@ -532,14 +532,11 @@ NotationConfigurationPage::NotationConfigurationPage(QWidget *parent) :
     layout->setRowMinimumHeight(row, 15);
     ++row;
 
-    QFont defaultTextFont(NotePixmapFactory::defaultSerifFontFamily),
-        defaultSansFont(NotePixmapFactory::defaultSansSerifFontFamily),
-        defaultTimeSigFont(NotePixmapFactory::defaultTimeSigFontFamily);
+    QFont defaultTextFont(NotePixmapFactory::defaultSerifFontFamily);
 
     layout->addWidget
         (new QLabel(tr("Text font"), frame), row, 0);
     m_textFont = new FontRequester(frame);
-    m_textFont->setStyleSheet("color: black; background: white");
     connect(m_textFont, SIGNAL(fontChanged(QFont)), this, SLOT(slotModified()));
     QFont textFont = defaultTextFont;
     QVariant fv = settings.value("textfont", textFont);
@@ -551,7 +548,6 @@ NotationConfigurationPage::NotationConfigurationPage(QWidget *parent) :
     layout->addWidget
         (new QLabel(tr("Sans-serif font"), frame), row, 0);
     m_sansFont = new FontRequester(frame);
-    m_sansFont->setStyleSheet("color: black; background: white");
     connect(m_sansFont, SIGNAL(fontChanged(QFont)), this, SLOT(slotModified()));
     QFont sansFont = defaultTextFont;
     fv = settings.value("sansfont", sansFont);

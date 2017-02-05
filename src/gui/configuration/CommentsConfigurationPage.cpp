@@ -69,11 +69,11 @@ CommentsConfigurationPage::CommentsConfigurationPage(
 
 
     // Text editor widget
-    QString localStyle("QPlainTextEdit "
-                       "{ background-color: #E8E8E8; color: #000000; }");
     m_textEdit = new QPlainTextEdit(this);
     m_textEdit->setBackgroundVisible(true);
-    m_textEdit->setStyleSheet(localStyle);
+    QPalette palette = m_textEdit->palette();
+    palette.setColor(QPalette::Base, QColor(0xE8, 0xE8, 0xE8));
+    m_textEdit->setPalette(palette);
     m_textEdit->setToolTip(tr("<qt>Notes inserted here will be stored in the .rg "
                               "file along with the composition</qt>"));
 

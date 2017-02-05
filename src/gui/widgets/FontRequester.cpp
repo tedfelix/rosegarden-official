@@ -35,21 +35,22 @@ FontRequester::FontRequester(QWidget *parent) :
     bool Thorn = settings.value("use_thorn_style", true).toBool();
     settings.endGroup();
 
-    // These buttons wanted white backgrounds.  I'm not even bothering to try to
-    // fix problems like this via the stylesheet anymore.  It would probably
-    // just have unintended side effects and lead to tail chasing anyway.
-    QString localStyle("QPushButton::enabled { border: 1px solid #AAAAAA;  border-radius: 3px; background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #999999, stop:1 #DDDDDD);  color: #000000; padding: 0 5px 0 5px; } QPushButton::!enabled { border: 1px solid #808080; border-radius: 3px; background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #999999, stop:1 #DDDDDD); color: #000000; padding: 0 5px 0 5px; } QPushButton:hover { border: 1px solid #AAAAAA; border-radius: 3px; background-color: #CCDFFF; color: #000000; } QPushButton::checked, QPushButton::pressed { border: 1px solid #E0E0E0; border-radius: 3px; background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #E0E0E0, stop:1 #EEEEEE); }");
+    QGridLayout *layout = new QGridLayout(this);
 
-    QGridLayout *layout = new QGridLayout();
-    setLayout(layout);
-    
     m_label = new QLabel();
+    m_label->setAutoFillBackground(true);
     m_label->setFrameStyle(QFrame::Panel | QFrame::Sunken);
     m_label->setLineWidth(2);
     layout->addWidget(m_label, 0, 0);
 
+    if (Thorn) {
+        QPalette pal = m_label->palette();
+        pal.setColor(QPalette::Window, Qt::white);
+        pal.setColor(QPalette::WindowText, Qt::black);
+        m_label->setPalette(pal);
+    }
+
     QPushButton *button = new QPushButton(tr("Choose..."));
-    if (Thorn) button->setStyleSheet(localStyle);
     layout->addWidget(button, 0, 1);
 
     layout->setColumnStretch(0, 20);

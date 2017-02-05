@@ -66,11 +66,6 @@ LoopRuler::LoopRuler(RosegardenDocument *doc,
     m_loopingMode(false),
     m_startLoop(0), m_endLoop(0)
 {
-    //setAutoFillBackground(true);
-    //setBackgroundColor(GUIPalette::getColour(GUIPalette::LoopRulerBackground));
-//    QString localStyle=("background: #787878; color: #FFFFFF;");
-//    setStyleSheet(localStyle);
-
     // Always snap loop extents to beats; by default apply no snap to
     // pointer position
     //

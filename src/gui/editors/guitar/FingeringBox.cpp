@@ -63,8 +63,10 @@ FingeringBox::init()
 {
     setFixedSize(IMG_WIDTH, IMG_HEIGHT);
    
-    QString localStyle = "background-color: white";
-    setStyleSheet(localStyle);
+    QPalette pal = palette();
+    pal.setColor(QPalette::Window, Qt::white);
+    setPalette(pal);
+    setAutoFillBackground(true);
 
     if (m_editable)
         setMouseTracking(true);    

@@ -66,7 +66,6 @@ protected:
     QComboBox *m_multiStaffSize;
     FontRequester* m_textFont;
     FontRequester* m_sansFont;
-    FontRequester* m_timeSigFont;
     QLabel *m_fontOriginLabel;
     QLabel *m_fontCopyrightLabel;
     QLabel *m_fontMappedByLabel;

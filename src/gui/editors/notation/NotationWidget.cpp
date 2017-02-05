@@ -167,7 +167,8 @@ NotationWidget::NotationWidget() :
 
     // the segment changer roller(s) (we have to have one horizontal one, and
     // one vertical one, to accommodate different layout modes)
-    m_changerWidget = new QFrame;
+    m_changerWidget = new QWidget;
+    m_changerWidget->setAutoFillBackground(true);
     QVBoxLayout *changerWidgetLayout = new QVBoxLayout;
     m_changerWidget->setLayout(changerWidgetLayout);
 
@@ -1755,16 +1756,9 @@ NotationWidget::slotUpdateSegmentChangerBackground()
     // background, and reset the tooltip style to compensate
     Colour c = m_document->getComposition().getSegmentColourMap().getColourByIndex(m_scene->getCurrentSegment()->getColourIndex());
 
-    // converting the Colour into a hex triplet seems to be the only consistent
-    // way to get this to work, and turns out to require obscure and little used
-    // .arg() syntax to get hex strings 2 chars wide with blanks padded as '0'
-    QChar fillChar('0');
-    QString newColorStr = QString("#%1%2%3")
-                                  .arg(QString::number(c.getRed(),   16), 2, fillChar)
-                                  .arg(QString::number(c.getGreen(), 16), 2, fillChar)
-                                  .arg(QString::number(c.getBlue(),  16), 2, fillChar);
-    QString localStyle = QString("QFrame {background: %1; color: %1; } QToolTip {background-color: #FFFBD4; color: #000000;}").arg(newColorStr);
-    m_changerWidget->setStyleSheet(localStyle);
+    QPalette palette = m_changerWidget->palette();
+    palette.setColor(QPalette::Window, c.toQColor());
+    m_changerWidget->setPalette(palette);
 
     // have to deal with all this ruckus to get a few pieces of info about the
     // track:

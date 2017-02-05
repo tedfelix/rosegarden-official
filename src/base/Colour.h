@@ -20,6 +20,7 @@
 #ifndef RG_COLOUR_H
 #define RG_COLOUR_H
 
+#include <QColor>
 #include <string>
 
 namespace Rosegarden 
@@ -64,46 +65,10 @@ public:
     /// Called by ColourMap::toXmlString().  INLINE and REMOVE.
     std::string dataToXmlString() const;
 
-    /**
-     * Sets the three pointers to the values stored in the colour.
-     */
-//    void getColour(unsigned int &red, unsigned int &green, unsigned int &blue) const;
-
-    /**
-     * Sets the Red value of the current colour.  If the value isn't
-     * between 0 and 255 inclusive, it will set to 0
-     */
-//    void setRed(unsigned int input);
-
-    /**
-     * Sets the Blue value of the current colour.  If the value isn't
-     * between 0 and 255 inclusive, it will set to 0
-     */
-//    void setBlue(unsigned int input);
-
-    /**
-     * Sets the Green value of the current colour.  If the value isn't
-     * between 0 and 255 inclusive, it will set to 0
-     */
-//    void setGreen(unsigned int input);
-
-    /**
-     * This uses a simple calculation to give us a contrasting colour.
-     * Useful for working out a visible text colour given
-     * any background colour
-     */
-//    Colour getContrastingColour() const;
-
-//    std::string toXmlString() const;
+    QColor toQColor() const { return QColor(m_r, m_g, m_b); }
 
 private:
     unsigned int m_r, m_g, m_b;
-
-    /**
-     * Set the colour as appropriate; as with the constructor invalid values
-     * will be set to 0.
-     */
-    void setColour(unsigned int red, unsigned int green, unsigned int blue);
 };
 
     /**

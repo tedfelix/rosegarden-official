@@ -77,11 +77,6 @@ StandardRuler::StandardRuler(RosegardenDocument *doc,
         layout->addWidget(m_markerRuler);
     }
 
-//    m_markerRuler->setStyleSheet(localStyle);
-//    m_loopRuler->setStyleSheet(localStyle);
-//    m_markerRuler->setToolTip(QString("I am m_markerRuler. My style is: %1").arg(localStyle));
-
-
     QObject::connect
         (CommandHistory::getInstance(), SIGNAL(commandExecuted()),
          this, SLOT(update()));

@@ -52,12 +52,12 @@ CommentsPopupDialog::CommentsPopupDialog(RosegardenDocument *doc,
 
     QPlainTextEdit *textEdit = new QPlainTextEdit(this);
     mainLayout->addWidget(textEdit);
-    QString localStyle("QPlainTextEdit { background-color: #D0D0D0;"
-                       " color: #000000; }");
+    QPalette palette = textEdit->palette();
+    palette.setColor(QPalette::Base, QColor(0xD0, 0xD0, 0xD0));
+    textEdit->setPalette(palette);
     textEdit->setMinimumSize(600, 500);  // About the size of the edit widget
     textEdit->setReadOnly(true);
     textEdit->setBackgroundVisible(true);
-    textEdit->setStyleSheet(localStyle);
     textEdit->setToolTip(tr("<qt>This is a short description of the current "
                             "composition</qt>"));
 
