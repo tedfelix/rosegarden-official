@@ -25,7 +25,6 @@
 #include <QDialogButtonBox>
 #include <QPushButton>
 #include <QGroupBox>
-#include <QSettings>
 
 
 namespace Rosegarden
@@ -35,14 +34,6 @@ InputDialog::InputDialog(const QString &title, const QString &label,
                          QWidget *parent, QWidget *input, Qt::WindowFlags f)
     : QDialog(parent, f)
 {
-    QSettings settings;
-    settings.beginGroup(GeneralOptionsConfigGroup);
-    bool Thorn = settings.value("use_thorn_style", true).toBool();
-    settings.endGroup();
-
-    QString localStyle("QDialog {background-color: #000000} QLabel{background-color: transparent; color: #FFFFFF}");
-    if (Thorn) setStyleSheet(localStyle);
-
     // set the window title
     setWindowTitle(tr("Rosegarden"));
     QVBoxLayout *vboxLayout = new QVBoxLayout(this);
@@ -69,7 +60,7 @@ InputDialog::InputDialog(const QString &title, const QString &label,
     gboxLayout->addStretch(1);
 
     // I have no idea what this is for, but Qt had it, so we'll keep it in our
-    // doctored version
+    // doctored version --- this is for the accelerator (Alt+letter marked with '&' gives focus to input)
 //    lbl->setBuddy(input);
 
     // Put some clicky buttons and hook them up

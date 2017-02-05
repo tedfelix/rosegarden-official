@@ -123,13 +123,6 @@ KeySignatureDialog::KeySignatureDialog(QWidget *parent,
     m_Thorn = settings.value("use_thorn_style", true).toBool();
     settings.endGroup();
 
-    // if no stylesheet, force a white background anyway, because the foreground
-    // will be dark, and this used to be bordering on illegible in Classic
-    QString localStyle = (m_Thorn ? 
-            QString("background: #404040; color: white;")
-                                :
-            QString("background: white; color: black;"));
-    m_keyPixmap->setStyleSheet(localStyle);
     keyBoxLayout->addWidget(m_keyPixmap);
     m_keyPixmap->setAlignment( Qt::AlignVCenter | Qt::AlignHCenter);
 

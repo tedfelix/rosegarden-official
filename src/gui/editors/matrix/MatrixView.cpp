@@ -607,7 +607,6 @@ MatrixView::initActionsToolbar()
     QLabel *sLabel = new QLabel(tr(" Grid: "), actionsToolbar);
     sLabel->setIndent(10);
     actionsToolbar->addWidget(sLabel);
-    sLabel->setObjectName("Humbug");
 
     QPixmap noMap = NotePixmapFactory::makeToolbarPixmap("menu-no-note");
 
@@ -648,7 +647,6 @@ MatrixView::initActionsToolbar()
 
     QLabel *vlabel = new QLabel(tr(" Velocity: "), actionsToolbar);
     vlabel->setIndent(10);
-    vlabel->setObjectName("Humbug");
     actionsToolbar->addWidget(vlabel);
 
     m_velocityCombo = new QComboBox(actionsToolbar);
@@ -666,7 +664,6 @@ MatrixView::initActionsToolbar()
     //
     QLabel *qLabel = new QLabel(tr(" Quantize: "), actionsToolbar);
     qLabel->setIndent(10);
-    qLabel->setObjectName("Humbug");
     actionsToolbar->addWidget(qLabel);
 
     m_quantizeCombo = new QComboBox(actionsToolbar);

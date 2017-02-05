@@ -151,7 +151,7 @@ void SqueezedLabel::setTextElideMode(Qt::TextElideMode mode)
 
 void SqueezedLabel::contextMenuEvent(QContextMenuEvent* ev)
 {
-    // "We" means the KDE team here.
+    // "We" means the KDE team here (comment written by David Faure).
     //
     // We want to reimplement "Copy" to include the elided text.
     // But this means reimplementing the full popup menu, so no more

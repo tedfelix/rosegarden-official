@@ -18,7 +18,6 @@
 #include "LineEdit.h"
 
 #include <QLineEdit>
-#include <QToolTip>
 
 
 namespace Rosegarden
@@ -27,24 +26,11 @@ namespace Rosegarden
 LineEdit::LineEdit(QWidget *parent) :
         QLineEdit(parent)
 {
-    // This just gets more and more ugly.  Even here, no selector is specific
-    // enough to avoid the colors getting broken, so we have to set the
-    // background in a stylesheet with no selector and no brackets to get the
-    // background color to work.  We also have to specify the foreground color
-    // here, it turns out, to make it work everywhere, as it only comes in from
-    // the external stylesheet about half the time, and white text on a white
-    // background isn't very useful.
-    QString localStyle = "QWidget {background-color: #FFFFFF; color: #000000;} QToolTip {background-color: #FFFBD4; color: #000000;}";
-    setStyleSheet(localStyle);
-    setToolTip("I am a LineEdit, not a QLineEdit");
 }
 
 LineEdit::LineEdit(const QString& string, QWidget *parent) :
         QLineEdit(string, parent)
 {
-    // Leave everything but the background to the external stylesheet
-    QString localStyle = "background-color: #FFFFFF;";
-    setStyleSheet(localStyle);
 }
 
 LineEdit::~LineEdit()

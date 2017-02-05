@@ -90,13 +90,6 @@ ClefDialog::ClefDialog(QWidget *parent,
     settings.endGroup();
     
     m_clefPixmap = new QLabel;
-    // if no stylesheet, force a white background anyway, because the foreground
-    // will be dark, and this used to be bordering on illegible in Classic
-    QString localStyle = (m_Thorn ? 
-            QString("background: #404040; color: white;")
-                                :
-            QString("background: white; color: black;"));
-    m_clefPixmap->setStyleSheet(localStyle);
     midChunkLayout->addWidget(m_clefPixmap);
 
     BigArrowButton *clefUp = new BigArrowButton(Qt::RightArrow);

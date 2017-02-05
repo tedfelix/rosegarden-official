@@ -161,13 +161,6 @@ HeadersConfigurationPage::HeadersConfigurationPage(
         //
         // ToolTips
         //
-        // (These particular LineEdit objects were still taking a mixture of styles
-        // from the external sheet and the internal hard coded stylesheet in the
-        // subclass LineEdit.  I guess I should have re-implemented QLineEdit
-        // instead of subclassing it.
-        QString localStyle("QToolTip {background-color: #FFFBD4; color: #000000;}"
-                           " QLineEdit {background-color: #FFFFFF; color: #000000;}");
-        editHeader->setStyleSheet(localStyle); 
         editHeader->setToolTip(trName);
 
         shown.insert(strtoqstr(key));

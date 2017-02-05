@@ -40,7 +40,7 @@ make-lrelease     Release all translations.  Run after editing any of the .ts
                   used directly.  They have to be converted into .qm files first
                   by this script.
 
-rebuild-qrc       Rebuild data/data.qrc to include all .pfa .png .qm .qss .rc
+rebuild-qrc       Rebuild data/data.qrc to include all .pfa .png .qm .rc
                   .rg .rgd .xml .xpm files under the data/ directory that have
                   been added to the Subversion repository.  Warns you if any
                   files exist which have not been added to the respository, and

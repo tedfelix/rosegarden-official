@@ -59,7 +59,6 @@
 #include <QGroupBox>
 #include <QPushButton>
 #include <QSizePolicy>
-#include <QSplitter>
 #include <QString>
 #include <QToolTip>
 #include <QWidget>

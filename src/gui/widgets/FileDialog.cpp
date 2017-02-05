@@ -81,16 +81,6 @@ FileDialog::FileDialog(QWidget *parent,
          ; // closing ; on this line to allow the lines above to be shuffled easily
 
     setSidebarUrls(urls);
-
-    // NOTE: This code only executes if the Thorn style is in use, so there is
-    // no need for conditional execution here.  Go straight to it, and hack the
-    // stylesheet.  This fixes #1396, by ensuring that the file dialog has white
-    // in the right places, even at deep levels of style inheritance.
-    setStyleSheet("QAbstractScrollArea { background: #FFFFFF;} QLineEdit { background: #FFFFFF; }");
-
-#if QT_VERSION >= 0x050000
-    setOption(QFileDialog::DontUseNativeDialog);
-#endif
 }
 
 

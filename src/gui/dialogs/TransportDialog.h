@@ -19,7 +19,6 @@
 #define RG_TRANSPORTDIALOG_H
 
 #include <QHash>
-#include <QDockWidget>
 #include <QColor>
 #include <QPixmap>
 #include <QtCore>
@@ -129,7 +128,7 @@ public slots:
     void slotEditTimeSignature();
     void slotEditTime();
 
-    void slotSetBackground(QString);
+    void setBackgroundColor(QColor color);
     void slotResetBackground();
 
     void slotSetStartLoopingPointAtMarkerPos();
@@ -219,9 +218,7 @@ private:
     QShortcut *m_shortcuts;
     bool    m_isExpanded;
 
-    bool m_haveOriginalBackground;
     bool m_isBackgroundSet;
-    QString m_originalBackground;
 
     int m_sampleRate;
 

@@ -97,9 +97,7 @@ TransportDialog::TransportDialog(QWidget *parent):
     //m_panelClosed(),
     m_shortcuts(0),
     m_isExpanded(true),
-    m_haveOriginalBackground(false),
     m_isBackgroundSet(false),
-    //m_originalBackground(),
     m_sampleRate(0)
     //m_modeMap()
 {
@@ -125,25 +123,10 @@ TransportDialog::TransportDialog(QWidget *parent):
 
     // set the LCD frame background to black
     //
-    //@@@ I hope we don't need to set more of the palette's colors.
-    QPalette backgroundPalette;
+    QPalette backgroundPalette = ui->LCDBoxFrame->palette();
     backgroundPalette.setColor(QPalette::Window, QColor(Qt::black));
-    ui->LCDBoxFrame->setPalette(backgroundPalette);
-
-    // set all the pixmap backgrounds to black to avoid
-    // flickering when we update
-    //
-    ui->TenThousandthsPixmap->setPalette(backgroundPalette);
-    ui->ThousandthsPixmap->setPalette(backgroundPalette);
-    ui->HundredthsPixmap->setPalette(backgroundPalette);
-    ui->TenthsPixmap->setPalette(backgroundPalette);
-    ui->UnitSecondsPixmap->setPalette(backgroundPalette);
-    ui->TenSecondsPixmap->setPalette(backgroundPalette);
-    ui->UnitMinutesPixmap->setPalette(backgroundPalette);
-    ui->TenMinutesPixmap->setPalette(backgroundPalette);
-    ui->UnitHoursPixmap->setPalette(backgroundPalette);
-    ui->TenHoursPixmap->setPalette(backgroundPalette);
-    ui->NegativePixmap->setPalette(backgroundPalette);
+    ui->LCDBoxFrame->setPalette(backgroundPalette); // this propagates to children, but they don't autofill their background anyway.
+    ui->LCDBoxFrame->setAutoFillBackground(true);
 
     // unset the negative sign to begin with
     ui->NegativePixmap->clear();
@@ -773,9 +756,9 @@ TransportDialog::displayBarTime(int bar, int beat, int unit)
 
     if (m_currentMode == BarMetronomeMode && unit < 2) {
         if (beat == 1) {
-            slotSetBackground("red");
+            setBackgroundColor(Qt::red);
         } else {
-            slotSetBackground("cyan");
+            setBackgroundColor(Qt::cyan);
         }
     } else {
         slotResetBackground();
@@ -1179,24 +1162,11 @@ TransportDialog::slotEditTime()
 }
 
 void
-TransportDialog::slotSetBackground(QString c)
+TransportDialog::setBackgroundColor(QColor color)
 {
-    if (!m_haveOriginalBackground) {
-        //m_originalBackground = ui->LCDBoxFrame->paletteBackgroundColor();
-        m_originalBackground = "black";
-        m_haveOriginalBackground = true;
-    }
-
-    QString localStyle = "QWidget { background-color: " + c + "; }";
-
-    // The upshot of stylesheets is we only have to set the style on this one
-    // widget now.  It hits the area behind the SIG, DIV and TEMPO panels, which
-    // didn't flash before.  My read of the code is that they weren't flashing
-    // because there was too much overhead hunting them down and setting all
-    // their palettes individually.  I redid the LCD pixmaps (actually these are
-    // LEDs aren't they?) with transparent backgrounds, and now the whole thing
-    // flashes evenly.  I like it. (dmm)
-    ui->LCDBoxFrame->setStyleSheet(localStyle);
+    QPalette palette = ui->LCDBoxFrame->palette();
+    palette.setColor(QPalette::Window, color);
+    ui->LCDBoxFrame->setPalette(palette);
 
     m_isBackgroundSet = true;
 }
@@ -1205,7 +1175,7 @@ void
 TransportDialog::slotResetBackground()
 {
     if (m_isBackgroundSet) {
-        slotSetBackground(m_originalBackground);
+        setBackgroundColor(Qt::black);
     }
     m_isBackgroundSet = false;
 }

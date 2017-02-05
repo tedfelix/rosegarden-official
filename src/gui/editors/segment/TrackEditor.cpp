@@ -214,7 +214,14 @@ TrackEditor::init(RosegardenMainViewWidget *mainViewWidget)
                                       canvasHeight,
                                       m_trackButtonScroll);
 
-    m_trackButtons->setObjectName("TRACK_BUTTONS"); // permit styling; internal string; no tr()
+    /* #TRACK_BUTTONS QWidget {
+           background-color: #DDDDDD;
+           color: #000000;
+       } */
+    QPalette palette = m_trackButtons->palette();
+    palette.setColor(m_trackButtons->backgroundRole(), QColor(0xDD, 0xDD, 0xDD));
+    palette.setColor(m_trackButtons->foregroundRole(), Qt::black);
+    m_trackButtons->setPalette(palette);
 
     m_trackButtonScroll->setWidget(m_trackButtons);
 
