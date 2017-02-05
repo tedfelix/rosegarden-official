@@ -49,8 +49,7 @@ RosegardenParameterArea::RosegardenParameterArea(
     : QStackedWidget(parent),
         m_scrollArea( new QScrollArea(this) ),
         m_boxContainer(new QWidget()),
-        m_boxContainerLayout( new QVBoxLayout(m_boxContainer) ),
-        m_spacing(0)
+        m_boxContainerLayout( new QVBoxLayout(m_boxContainer) )
 {
     setObjectName( name );
         
@@ -71,6 +70,8 @@ RosegardenParameterArea::RosegardenParameterArea(
     addWidget(m_scrollArea);
 
     setCurrentWidget( m_scrollArea );
+
+    m_boxContainerLayout->addStretch(100);
 }
 
 void RosegardenParameterArea::addRosegardenParameterBox(
@@ -93,7 +94,7 @@ void RosegardenParameterArea::addRosegardenParameterBox(
     // parallels the above array of parameter boxes.
 
     QGroupBox *box = new QGroupBox(b->getLongLabel(), m_boxContainer);
-    m_boxContainerLayout->addWidget(box);
+    m_boxContainerLayout->insertWidget(m_boxContainerLayout->count() - 1, box); // before the stretch
     
     box->setLayout( new QVBoxLayout(box) );
     box->layout()->setMargin( 4 ); // about half the default value
@@ -105,11 +106,6 @@ void RosegardenParameterArea::addRosegardenParameterBox(
 
     // add the ParameterBox to the Layout
     box->layout()->addWidget(b);
-    
-    delete m_spacing;
-    m_spacing = new QFrame(m_boxContainer);
-    m_boxContainerLayout->addWidget(m_spacing);
-    m_boxContainerLayout->setStretchFactor(m_spacing, 100);
 }
 
 void RosegardenParameterArea::setScrollAreaWidget()

@@ -77,8 +77,6 @@ private:
     
     QWidget *m_boxContainer;
     QVBoxLayout *m_boxContainerLayout;
-    
-    QWidget *m_spacing;
 };
 
 
