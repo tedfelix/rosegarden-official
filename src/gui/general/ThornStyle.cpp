@@ -557,6 +557,14 @@ void ThornStyle::drawPrimitive(QStyle::PrimitiveElement element, const QStyleOpt
             painter->restore();
         }
         return;
+    case PE_IndicatorProgressChunk:
+        if (const QStyleOptionProgressBar *pb = qstyleoption_cast<const QStyleOptionProgressBar *>(option)) {
+            QStyleOptionProgressBar copy = *pb;
+            // QProgressBar::chunk { background-color: #D6E8FB; }
+            copy.palette.setColor(QPalette::Highlight, QColor(0xD6, 0xE8, 0xFB)); // qwindowsstyle.cpp uses Highlight
+            QProxyStyle::drawPrimitive(element, &copy, painter, widget);
+        }
+        return;
     default:
         break;
     }
@@ -943,6 +951,24 @@ void ThornStyle::drawControl(QStyle::ControlElement element, const QStyleOption 
                 copy.palette.setColor(QPalette::WindowText, Qt::white);
             // Don't use QWindowsStyle for this, it uses black for the floating && !active case, cached from the initial app palette.
             QCommonStyle::drawControl(element, &copy, painter, widget);
+        }
+        return;
+    case CE_ProgressBarGroove:
+        if (const QStyleOptionProgressBar *pb = qstyleoption_cast<const QStyleOptionProgressBar *>(option)) {
+            // QProgressBar { background: #FFFFFF; border: 1px solid #AAAAAA; border-radius: 3px; }
+            painter->save();
+            painter->setBrush(Qt::white);
+            painter->setPen(QColor(0xAA, 0xAA, 0xAA));
+            painter->drawRoundedRect(pb->rect.adjusted(0, 0, -1, -1), 3, 3);
+            painter->restore();
+        }
+        return;
+    case CE_ProgressBarLabel:
+        if (const QStyleOptionProgressBar *pb = qstyleoption_cast<const QStyleOptionProgressBar *>(option)) {
+            // QProgressBar { color: #000000; text-align: center; }
+            QStyleOptionProgressBar copy = *pb;
+            copy.palette.setColor(QPalette::HighlightedText, Qt::black);
+            QProxyStyle::drawControl(element, &copy, painter, widget);
         }
         return;
     default:
@@ -1413,27 +1439,6 @@ QTabBar QToolButton::right-arrow
 QTabBar QToolButton::left-arrow
 {
     image: url(:pixmaps/style/arrow-left-small.png);
-}
-
-
-QProgressBar
-{
-    /* Text color */
-    color: #000000;
-    text-align: center;
-    /* Empty background color. */
-    background: #FFFFFF;
-    border: 1px solid #AAAAAA;
-    border-radius: 3px;
-}
-/* The progress bar fills with "chunks". */
-QProgressBar::chunk
-{
-    /* Filled background color. */
-    background-color: #D6E8FB;
-    /* Size of the chunks that fill the progress bar.  This dictates the
-       resolution of the bar as it fills.  Default is 1. */
-    /*width: 20px;*/
 }
 
 #endif

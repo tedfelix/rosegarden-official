@@ -805,6 +805,14 @@ int main(int argc, char *argv[])
 
 //#define STYLE_TEST
 #ifdef STYLE_TEST
+    QProgressDialog dialog;
+    dialog.setMaximum(500);
+    for (int i = 0; i <= 500; ++i) {
+        dialog.setValue(i);
+        QThread::msleep(1);
+        qApp->processEvents();
+    }
+
     QMessageBox::information(0, "Rosegarden", "Information.", QMessageBox::Ok, QMessageBox::Ok);
     QMessageBox::critical(0, "Rosegarden", "Critical!", QMessageBox::Ok, QMessageBox::Ok);
     QMessageBox::question(0, "Rosegarden", "Question?", QMessageBox::Ok, QMessageBox::Ok);
