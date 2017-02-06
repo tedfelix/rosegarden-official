@@ -39,12 +39,19 @@ namespace Rosegarden
 FileDialog::FileDialog(QWidget *parent,
                        const QString &caption,
                        const QString &dir,
-                       const QString &filter) :
+                       const QString &filter,
+                       QFileDialog::Options options) :
         QFileDialog(parent,
                     caption,
                     dir,
                     filter)
 {
+    setOptions(options);
+#if QT_VERSION >= 0x050000
+    // Most native dialogs don't show sidebar URLs
+    setOption(QFileDialog::DontUseNativeDialog);
+#endif
+
     // Since we're here anyway, there may be a way to style the directory
     // navigation arrows from inside here.  It never worked from the external
     // stylesheet, and I can't even remember what I tried unsuccessfully in the
@@ -107,12 +114,7 @@ FileDialog::getOpenFileName(QWidget *parent,
                                             selectedFilter, options);
     }
 
-    FileDialog dialog(parent, caption, dir, filter);
-
-#if QT_VERSION >= 0x040500
-    if (options)
-       dialog.setOptions(options);
-#endif
+    FileDialog dialog(parent, caption, dir, filter, options);
 
     // (code borrowed straight out of Qt 4.5.0 Copyright 2009 Nokia)
     if (selectedFilter)
@@ -146,12 +148,7 @@ FileDialog::getOpenFileNames(QWidget *parent,
                                              selectedFilter, options);
     }
 
-    FileDialog dialog(parent, caption, dir, filter);
-
-#if QT_VERSION >= 0x040500
-    if (options)
-        dialog.setOptions(options);
-#endif
+    FileDialog dialog(parent, caption, dir, filter, options);
 
     // (code borrowed straight out of Qt 4.5.0 Copyright 2009 Nokia)
     if (selectedFilter)
@@ -186,12 +183,7 @@ FileDialog::getSaveFileName(QWidget *parent,
                                             selectedFilter, options);
     }
 
-    FileDialog dialog(parent, caption, dir, filter);
-
-#if QT_VERSION >= 0x040500
-    if (options)
-        dialog.setOptions(options);
-#endif
+    FileDialog dialog(parent, caption, dir, filter, options);
 
     dialog.selectFile(defaultName);
 

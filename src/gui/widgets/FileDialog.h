@@ -89,7 +89,7 @@ protected:
     explicit FileDialog(QWidget *parent = 0,
                         const QString &caption = QString(),
                         const QString &dir = QString(),
-                        const QString &filter = QString());
+                        const QString &filter = QString(), Options options = Options());
 
 };
 
