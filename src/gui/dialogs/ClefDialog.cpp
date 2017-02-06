@@ -21,7 +21,7 @@
 #include "base/NotationTypes.h"
 #include "gui/editors/notation/NotePixmapFactory.h"
 #include "gui/widgets/BigArrowButton.h"
-#include "gui/general/GUIPalette.h"
+#include "gui/general/ThornStyle.h"
 #include "misc/ConfigGroups.h"
 
 #include <QDialog>
@@ -84,11 +84,6 @@ ClefDialog::ClefDialog(QWidget *parent,
     midChunkLayout->addWidget(clefDown);
     clefDown->setToolTip(tr("Lower clef"));
 
-    QSettings settings;
-    settings.beginGroup(GeneralOptionsConfigGroup);
-    m_Thorn = settings.value("use_thorn_style", true).toBool();
-    settings.endGroup();
-    
     m_clefPixmap = new QLabel;
     midChunkLayout->addWidget(m_clefPixmap);
 
@@ -142,6 +137,7 @@ ClefDialog::ClefDialog(QWidget *parent,
         //
         //m_transposeButton = new QRadioButton(tr("Maintain current positions on the staff"));
         
+        QSettings settings;
         settings.beginGroup("Clef_Dialog");        	
         m_changeOctaveButton->setChecked(settings.value("change_octave", true).toBool());
         m_noConversionButton->setChecked(settings.value("transpose", false).toBool());
@@ -272,7 +268,7 @@ void
 ClefDialog::redrawClefPixmap()
 {
     NotePixmapFactory::ColourType ct =
-        m_Thorn ? NotePixmapFactory::PlainColourLight
+        ThornStyle::isEnabled() ? NotePixmapFactory::PlainColourLight
                 : NotePixmapFactory::PlainColour;
     m_notePixmapFactory->setSelected(false);
     m_notePixmapFactory->setShaded(false);

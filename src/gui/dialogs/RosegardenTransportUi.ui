@@ -34,11 +34,8 @@
      <height>47</height>
     </rect>
    </property>
-   <property name="frameShape">
-    <enum>QFrame::StyledPanel</enum>
-   </property>
-   <property name="frameShadow">
-    <enum>QFrame::Raised</enum>
+   <property name="lineWidth">
+    <number>0</number>
    </property>
    <widget class="QPushButton" name="PanelCloseButton">
     <property name="geometry">
@@ -603,12 +600,6 @@
     </property>
     <property name="autoFillBackground">
      <bool>true</bool>
-    </property>
-    <property name="frameShape">
-     <enum>QFrame::StyledPanel</enum>
-    </property>
-    <property name="frameShadow">
-     <enum>QFrame::Sunken</enum>
     </property>
     <widget class="QLabel" name="InLabel">
      <property name="geometry">
@@ -2639,11 +2630,8 @@
      <height>87</height>
     </rect>
    </property>
-   <property name="frameShape">
-    <enum>QFrame::StyledPanel</enum>
-   </property>
-   <property name="frameShadow">
-    <enum>QFrame::Raised</enum>
+   <property name="lineWidth">
+    <number>0</number>
    </property>
    <widget class="QFrame" name="LCDBoxFrame">
     <property name="enabled">
@@ -3021,11 +3009,8 @@
     <property name="autoFillBackground">
      <bool>true</bool>
     </property>
-    <property name="frameShape">
-     <enum>QFrame::StyledPanel</enum>
-    </property>
-    <property name="frameShadow">
-     <enum>QFrame::Sunken</enum>
+    <property name="lineWidth">
+     <number>0</number>
     </property>
     <widget class="Rosegarden::Label" name="UnitHoursPixmap" native="true">
      <property name="geometry">

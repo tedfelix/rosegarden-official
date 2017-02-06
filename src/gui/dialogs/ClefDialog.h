@@ -69,7 +69,6 @@ public slots:
 
 protected:
     void redrawClefPixmap();
-    bool m_Thorn;
 
     //--------------- Data members ---------------------------------
 

@@ -24,6 +24,7 @@
 #include "base/Profiler.h"
 #include "misc/Debug.h"
 #include "misc/Strings.h"
+#include "gui/general/ThornStyle.h"
 #include "sequencer/RosegardenSequencer.h"
 #include "gui/application/TransportStatus.h"
 #include "gui/application/RosegardenApplication.h"
@@ -221,8 +222,7 @@ TransportDialog::TransportDialog(QWidget *parent):
     // if the rest of the Transport ever changes then this code
     // will have to as well.
     //
-    QPalette pal;
-    //@@@ I'm totally guessing that the palette role for this color is window text.
+    QPalette pal = palette();
     pal.setColor(QPalette::Active, QPalette::WindowText, QColor(192, 216, 255));
 
     ui->TempoDisplay->setPalette(pal);
@@ -283,6 +283,17 @@ TransportDialog::TransportDialog(QWidget *parent):
     //
     m_shortcuts = new QShortcut(this);
 
+    if (ThornStyle::isEnabled()) {
+        /* Give the non-LED parts of the dialog the groupbox "lighter black" background
+         * for improved constrast, and set foreground color to "LED blue" as used
+         * elsewhere
+         */
+        QPalette backgroundPalette = palette();
+        backgroundPalette.setColor(QPalette::Window, QColor(0x40, 0x40, 0x40));
+        backgroundPalette.setColor(QPalette::WindowText, QColor(0xC0, 0xD8, 0xFF));
+        setPalette(backgroundPalette); // this propagates to children
+        setAutoFillBackground(true);
+    }
 
     // Performance Testing
 

@@ -101,7 +101,7 @@ bool AppEventFilter::eventFilter(QObject *watched, QEvent *event)
         if (!shouldIgnoreThornStyle(toplevel)) {
             widget->setStyle(&m_style);
             //qDebug() << widget << "now using style" << widget->style();
-            if (widget->isWindow()) {
+            if (widget->isWindow() && widget->parent() == 0) {
                 widget->setPalette(m_style.standardPalette());
             }
             polishWidget(widget);
@@ -278,12 +278,20 @@ QSize ThornStyle::pixmapSize(const QPixmap &pixmap) const
 #endif
 }
 
+static bool s_thornStyleEnabled = false;
+
 // This method currently only supports being called once
 void ThornStyle::setEnabled(bool b)
 {
+    s_thornStyleEnabled = b;
     if (b) {
         qApp->installEventFilter(s_eventFilter());
     }
+}
+
+bool ThornStyle::isEnabled()
+{
+    return s_thornStyleEnabled;
 }
 
 QPalette ThornStyle::standardPalette() const
@@ -1443,25 +1451,7 @@ QTabBar QToolButton::left-arrow
 
 #endif
 
-#if 0 // All of the stuff below didn't apply because the object name of TransportDialog.cpp is "Rosegarden Transport" with a space.
-
-/* Give the non-LED parts of the dialog the groupbox "lighter black" background
- * for improved constrast, and set foreground color to "LED blue" as used
- * elsewhere
- */
-#RosegardenTransport QWidget
-{
-    background-color: #404040;
-    color: #C0D8FF;
-    border: 0 solid transparent; /* no sunken border on these */
-}
-
-#RosegardenTransport QFrame QWidget
-{
-    background-color: #000000;
-}
-
-
+#if 0 // TODO?
 /* Transport buttons are styled independently, with a smaller radius and a
  * lighter "pressed" state
  */
@@ -1493,9 +1483,6 @@ QTabBar QToolButton::left-arrow
     border-radius: 1px;
     background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #E0E0E0, stop:1 #EEEEEE);
 }
-
-// same with MatrixParameters, no such object anymore
-
 
 #endif
 

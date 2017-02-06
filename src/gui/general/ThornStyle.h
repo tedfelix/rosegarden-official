@@ -48,6 +48,7 @@ public:
     ~ThornStyle();
 
     static void setEnabled(bool b);
+    static bool isEnabled();
 
     QPalette standardPalette() const Q_DECL_OVERRIDE;
 
