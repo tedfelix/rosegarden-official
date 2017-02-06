@@ -403,20 +403,9 @@ ExpandInto(Segment *target,
            Segment *containing,
            ControllerContextParams *controllerContextParams) const
 {
-    // ??? With GCC 6.2.0, this results in a warning:
-    //     warning: nonnull argument ‘this’ compared to NULL [-Wnonnull-compare]
-    //     Assuming "this" is always non-null is overly optimistic.  The
-    //     following can happen:
-    //         TriggerSegmentRec *p = NULL;
-    //         p->ExpandInto(...);
-    //     Defending against this possibility shouldn't be punished with a
-    //     warning.  In this case, the warning is wrong, and we should
-    //     probably just suppress the warning until the compiler is fixed.
-    #pragma GCC diagnostic push
-    #pragma GCC diagnostic ignored "-Wnonnull-compare"
-    if (!this || !getSegment() || getSegment()->empty())
-        { return false; }
-    #pragma GCC diagnostic pop
+    if (!getSegment() || getSegment()->empty()) {
+        return false;
+    }
 
     const int maxDepth = 10;
 

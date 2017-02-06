@@ -178,7 +178,7 @@ void InternalSegmentMapper::fillBuffer()
 
                     // Add triggered events into m_triggeredEvents.
                     // This invalidates `implied'.
-                    bool insertedSomething =
+                    bool insertedSomething = rec &&
                         rec->ExpandInto(m_triggeredEvents,
                                         j, m_segment, &params);
                     if (insertedSomething) {
