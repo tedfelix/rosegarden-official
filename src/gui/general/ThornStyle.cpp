@@ -72,7 +72,8 @@ public:
 
     bool shouldIgnoreThornStyle(QWidget *widget) const {
         return qobject_cast<QFileDialog *>(widget)
-                || widget->inherits("KDEPlatformFileDialog");
+                || widget->inherits("KDEPlatformFileDialog")
+                || widget->inherits("KDirSelectDialog");
     }
 
     void polishWidget(QWidget *widget);
