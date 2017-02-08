@@ -276,8 +276,6 @@ private:
 
     bool m_hSliderHacked;
 
-    bool m_Thorn;
-
     /// The last note we sent in case we're swooshing up and
     /// down the keyboard and don't want repeat notes sending
     ///

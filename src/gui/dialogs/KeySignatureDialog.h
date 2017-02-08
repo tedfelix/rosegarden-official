@@ -80,7 +80,6 @@ protected:
     void regenerateKeyCombo();
     void setValid(bool valid);
     std::string getKeyName(const QString &s, bool minor);
-    bool m_Thorn;
 
     //--------------- Data members ---------------------------------
 

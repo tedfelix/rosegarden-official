@@ -75,6 +75,8 @@
 
 #include "gui/rulers/ControlRulerWidget.h"
 
+#include "gui/general/ThornStyle.h"
+
 #include "base/Quantizer.h"
 #include "base/BasicQuantizer.h"
 #include "base/LegatoQuantizer.h"
@@ -143,10 +145,7 @@ MatrixView::MatrixView(RosegardenDocument *doc,
      
     findToolbar("General Toolbar");
 
-    QSettings settings;
-    settings.beginGroup(GeneralOptionsConfigGroup);
-    m_Thorn = settings.value("use_thorn_style", true).toBool();
-    settings.endGroup();
+    m_Thorn = ThornStyle::isEnabled();
 
     initActionsToolbar();
     initRulersToolbar();
@@ -193,6 +192,7 @@ MatrixView::MatrixView(RosegardenDocument *doc,
     // Set initial visibility ...
     bool view;
 
+    QSettings settings;
     settings.beginGroup(MatrixViewConfigGroup);
 
     // ... of chord name ruler ...

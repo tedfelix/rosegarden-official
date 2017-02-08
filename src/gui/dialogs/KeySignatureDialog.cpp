@@ -23,6 +23,8 @@
 #include "base/NotationTypes.h"
 #include "gui/editors/notation/NotePixmapFactory.h"
 #include "gui/widgets/BigArrowButton.h"
+#include "gui/general/ThornStyle.h"
+
 #include "misc/ConfigGroups.h"
 
 #include <QComboBox>
@@ -39,7 +41,6 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QCheckBox>
-#include <QSettings>
 #include <QUrl>
 #include <QDesktopServices>
 
@@ -117,11 +118,6 @@ KeySignatureDialog::KeySignatureDialog(QWidget *parent,
     keyDown->setToolTip(tr("Flatten"));
 
     m_keyPixmap = new QLabel;
-
-    QSettings settings;
-    settings.beginGroup(GeneralOptionsConfigGroup);
-    m_Thorn = settings.value("use_thorn_style", true).toBool();
-    settings.endGroup();
 
     keyBoxLayout->addWidget(m_keyPixmap);
     m_keyPixmap->setAlignment( Qt::AlignVCenter | Qt::AlignHCenter);
@@ -382,8 +378,8 @@ KeySignatureDialog::redrawKeyPixmap()
 {
     if (m_valid) {
         NotePixmapFactory::ColourType ct =
-            m_Thorn ? NotePixmapFactory::PlainColourLight
-                    : NotePixmapFactory::PlainColour;
+                ThornStyle::isEnabled() ? NotePixmapFactory::PlainColourLight
+                                        : NotePixmapFactory::PlainColour;
         m_notePixmapFactory->setSelected(false);
         m_notePixmapFactory->setShaded(false);
         QPixmap pmap = m_notePixmapFactory->makeKeyDisplayPixmap(m_key, m_clef, ct);

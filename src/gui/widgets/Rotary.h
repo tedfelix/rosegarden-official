@@ -130,8 +130,6 @@ protected:
     int                  m_lastX;
 
     QColor               m_knobColour;
-
-    bool m_Thorn;
 };
 
 

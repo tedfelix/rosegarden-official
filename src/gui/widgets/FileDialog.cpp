@@ -27,10 +27,10 @@
 #include <QStandardPaths>
 #endif
 #include <QApplication>
-#include <QSettings>
 
 #include "misc/Debug.h"
 #include "misc/ConfigGroups.h"
+#include "gui/general/ThornStyle.h"
 
 namespace Rosegarden
 {
@@ -47,10 +47,6 @@ FileDialog::FileDialog(QWidget *parent,
                     filter)
 {
     setOptions(options);
-#if QT_VERSION >= 0x050000
-    // Most native dialogs don't show sidebar URLs
-    setOption(QFileDialog::DontUseNativeDialog);
-#endif
 
     // set up the sidebar stuff; the entire purpose of this class 
     QList<QUrl> urls;
@@ -99,12 +95,7 @@ FileDialog::getOpenFileName(QWidget *parent,
                             QString *selectedFilter,
                             QFileDialog::Options options)
 {
-    QSettings settings;
-    settings.beginGroup(GeneralOptionsConfigGroup);
-    bool Thorn = settings.value("use_thorn_style", true).toBool();
-    settings.endGroup();
-
-    if (!Thorn) {
+    if (!ThornStyle::isEnabled()) {
         return QFileDialog::getOpenFileName(parent, caption, dir, filter,
                                             selectedFilter, options);
     }
@@ -133,12 +124,7 @@ FileDialog::getOpenFileNames(QWidget *parent,
                              QString *selectedFilter,
                              QFileDialog::Options options)
 {
-    QSettings settings;
-    settings.beginGroup(GeneralOptionsConfigGroup);
-    bool Thorn = settings.value("use_thorn_style", true).toBool();
-    settings.endGroup();
-
-    if (!Thorn) {
+    if (!ThornStyle::isEnabled()) {
         return QFileDialog::getOpenFileNames(parent, caption, dir, filter,
                                              selectedFilter, options);
     }
@@ -168,12 +154,7 @@ FileDialog::getSaveFileName(QWidget *parent,
                             QString *selectedFilter,
                             QFileDialog::Options options)
 {
-    QSettings settings;
-    settings.beginGroup(GeneralOptionsConfigGroup);
-    bool Thorn = settings.value("use_thorn_style", true).toBool();
-    settings.endGroup();
-
-    if (!Thorn) {
+    if (!ThornStyle::isEnabled()) {
         return QFileDialog::getSaveFileName(parent, caption, dir, filter,
                                             selectedFilter, options);
     }
@@ -201,12 +182,7 @@ FileDialog::getExistingDirectory(QWidget *parent,
                                  const QString &caption,
                                  const QString &dir)
 {
-    QSettings settings;
-    settings.beginGroup(GeneralOptionsConfigGroup);
-    bool Thorn = settings.value("use_thorn_style", true).toBool();
-    settings.endGroup();
-
-    if (!Thorn) {
+    if (!ThornStyle::isEnabled()) {
         return QFileDialog::getExistingDirectory(parent, caption, dir, QFileDialog::ShowDirsOnly);
     }
 

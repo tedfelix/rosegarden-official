@@ -21,6 +21,7 @@
 #include "base/NotationTypes.h"
 #include "gui/editors/notation/NotePixmapFactory.h"
 #include "gui/general/GUIPalette.h"
+#include "gui/general/ThornStyle.h"
 #include "misc/ConfigGroups.h"
 
 #include <QWheelEvent>
@@ -29,8 +30,6 @@
 #include <QPixmap>
 #include <QSize>
 #include <QWidget>
-#include <QSettings>
-
 
 namespace Rosegarden
 {
@@ -45,11 +44,6 @@ PitchDragLabel::PitchDragLabel(QWidget *parent,
         m_usingSharps(defaultSharps),
         m_npf(new NotePixmapFactory())
 {
-    QSettings settings;
-    settings.beginGroup(GeneralOptionsConfigGroup);
-    m_Thorn = settings.value("use_thorn_style", true).toBool();
-    settings.endGroup();
-
     calculatePixmap();
 }
 
@@ -188,7 +182,7 @@ PitchDragLabel::paintEvent(QPaintEvent *)
 
     // use white if not using the Thorn stylesheet, because these widgets always
     // looked horrible in Classic against random system backgrounds
-    QColor background = (m_Thorn ? GUIPalette::getColour(GUIPalette::ThornGroupBoxBackground) : Qt::white);
+    QColor background = (ThornStyle::isEnabled() ? GUIPalette::getColour(GUIPalette::ThornGroupBoxBackground) : Qt::white);
 
     paint.fillRect(0, 0, width(), height(), background);
 
@@ -228,8 +222,8 @@ PitchDragLabel::calculatePixmap(int /* pitch */, int octave, int step) const
         }
     }
 
-    NotePixmapFactory::ColourType ct = (m_Thorn ? NotePixmapFactory::PlainColourLight :
-                                                  NotePixmapFactory::PlainColour);
+    NotePixmapFactory::ColourType ct = (ThornStyle::isEnabled() ? NotePixmapFactory::PlainColourLight :
+                                                                  NotePixmapFactory::PlainColour);
 
     m_pixmap = m_npf->makePitchDisplayPixmap
         (m_pitch, Clef(clefType, octaveOffset), octave, step, ct);
@@ -254,8 +248,8 @@ PitchDragLabel::calculatePixmap() const
         }
     }
 
-    NotePixmapFactory::ColourType ct = (m_Thorn ? NotePixmapFactory::PlainColourLight :
-                                                  NotePixmapFactory::PlainColour);
+    NotePixmapFactory::ColourType ct = (ThornStyle::isEnabled() ? NotePixmapFactory::PlainColourLight :
+                                                                  NotePixmapFactory::PlainColour);
 
     m_pixmap = m_npf->makePitchDisplayPixmap
         (m_pitch, Clef(clefType, octaveOffset), m_usingSharps, ct);

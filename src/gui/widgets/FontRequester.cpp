@@ -17,12 +17,12 @@
 
 #include "FontRequester.h"
 #include "misc/ConfigGroups.h"
+#include "gui/general/ThornStyle.h"
 
 #include <QLabel>
 #include <QPushButton>
 #include <QGridLayout>
 #include <QFontDialog>
-#include <QSettings>
 
 namespace Rosegarden
 {
@@ -30,11 +30,6 @@ namespace Rosegarden
 FontRequester::FontRequester(QWidget *parent) :
     QWidget(parent)
 {
-    QSettings settings;
-    settings.beginGroup(GeneralOptionsConfigGroup);
-    bool Thorn = settings.value("use_thorn_style", true).toBool();
-    settings.endGroup();
-
     QGridLayout *layout = new QGridLayout(this);
 
     m_label = new QLabel();
@@ -43,7 +38,7 @@ FontRequester::FontRequester(QWidget *parent) :
     m_label->setLineWidth(2);
     layout->addWidget(m_label, 0, 0);
 
-    if (Thorn) {
+    if (ThornStyle::isEnabled()) {
         QPalette pal = m_label->palette();
         pal.setColor(QPalette::Window, Qt::white);
         pal.setColor(QPalette::WindowText, Qt::black);

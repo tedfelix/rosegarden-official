@@ -194,8 +194,6 @@ protected:
     bool                     m_updateDeviceList;
 
     QFrame                  *m_rightSide;
-
-    bool                     m_Thorn;
 };
 
 // ----------------------- RemapInstrumentDialog ------------------------

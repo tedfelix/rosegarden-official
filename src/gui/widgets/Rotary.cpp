@@ -23,6 +23,7 @@
 #include "base/Profiler.h"
 #include "gui/dialogs/FloatEdit.h"
 #include "gui/general/GUIPalette.h"
+#include "gui/general/ThornStyle.h"
 #include "TextFloat.h"
 
 #include <QApplication>
@@ -41,7 +42,6 @@
 #include <QWidget>
 #include <QMouseEvent>
 #include <QColormap>
-#include <QSettings>
 
 #include <cmath>
 #include <map>
@@ -121,11 +121,6 @@ Rotary::Rotary(QWidget *parent,
     setFixedSize(size, size);
 
     emit valueChanged(m_snapPosition);
-
-    QSettings settings;
-    settings.beginGroup(GeneralOptionsConfigGroup);
-    m_Thorn = settings.value("use_thorn_style", true).toBool();
-    settings.endGroup();
 }
 
 Rotary::~Rotary()
@@ -270,7 +265,7 @@ Rotary::paintEvent(QPaintEvent *)
     int scale = 4;
     int width = m_size * scale;
     QPixmap map(width, width);
-    QColor bg = m_Thorn ? QColor::fromRgb(0x40, 0x40, 0x40) : palette().window().color();
+    QColor bg = ThornStyle::isEnabled() ? QColor::fromRgb(0x40, 0x40, 0x40) : palette().window().color();
     map.fill(bg);
     paint.begin(&map);
 

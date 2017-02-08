@@ -67,6 +67,7 @@
 #include "gui/rulers/LoopRuler.h"
 
 #include "gui/general/IconLoader.h"
+#include "gui/general/ThornStyle.h"
 
 #include "gui/studio/StudioControl.h"
 
@@ -315,11 +316,6 @@ MatrixWidget::MatrixWidget(bool drumMode) :
     connect(m_view->horizontalScrollBar(), SIGNAL(valueChanged(int)),
             this, SLOT(slotInitialHSliderHack(int)));
 
-    QSettings settings;
-    settings.beginGroup(GeneralOptionsConfigGroup);
-    m_Thorn = settings.value("use_thorn_style", true).toBool();
-    settings.endGroup();
-
     // Make sure MatrixScene always gets mouse move events even when the
     // button isn't pressed.  This way the keys on the piano keyboard
     // to the left are always highlighted to show which note we are on.
@@ -443,7 +439,7 @@ MatrixWidget::setSegments(RosegardenDocument *document,
                                   0.0,    // xorigin
                                   24,     // height
                                   true,   // small
-                                  m_Thorn);
+                                  ThornStyle::isEnabled());
 
     m_chordNameRuler = new ChordNameRuler(m_referenceScale,
                                           document,

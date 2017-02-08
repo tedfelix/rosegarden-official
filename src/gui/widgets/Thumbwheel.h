@@ -89,7 +89,6 @@ protected:
     float m_clickRotation;
     bool m_showTooltip;
     QImage m_cache;
-    bool m_Thorn;
     bool m_bright;
 
     // I wanted a red wheel for the segment changer.  It would be much nicer to

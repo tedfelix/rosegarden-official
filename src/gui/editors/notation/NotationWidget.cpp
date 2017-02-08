@@ -59,6 +59,7 @@
 #include "gui/widgets/Thumbwheel.h"
 
 #include "gui/general/IconLoader.h"
+#include "gui/general/ThornStyle.h"
 
 #include "gui/rulers/ControlRulerWidget.h"
 #include "gui/rulers/StandardRuler.h"
@@ -364,10 +365,6 @@ NotationWidget::NotationWidget() :
     connect(m_view->verticalScrollBar(), SIGNAL(valueChanged(int)),
             this, SLOT(slotInitialVSliderHack(int)));
 
-    settings.beginGroup(GeneralOptionsConfigGroup);
-    m_Thorn = settings.value("use_thorn_style", true).toBool();
-    settings.endGroup();
-
     // When a clef or a key is modified, the same signal "staffModified()" is
     // emitted three times from the concerned header.
     // Following timer is here to try limiting CPU usage by executing code
@@ -516,7 +513,7 @@ NotationWidget::setSegments(RosegardenDocument *document,
                                   0,      // xorigin
                                   24,     // height
                                   true,   // small
-                                  m_Thorn);
+                                  ThornStyle::isEnabled());
 
     m_chordNameRuler = new ChordNameRuler(m_referenceScale,
                                           document,

@@ -41,6 +41,7 @@
 #include "gui/widgets/TmpStatusMsg.h"
 #include "gui/widgets/FileDialog.h"
 #include "gui/general/ResourceFinder.h"
+#include "gui/general/ThornStyle.h"
 #include "gui/dialogs/AboutDialog.h"
 #include "document/Command.h"
 
@@ -70,7 +71,6 @@
 #include <QStandardPaths>
 #endif
 #include <QDialogButtonBox>
-#include <QSettings>
 
 
 namespace Rosegarden
@@ -191,18 +191,13 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     // Right side layout
     m_rightSide = new QFrame;
 
-    QSettings settings;
-    settings.beginGroup(GeneralOptionsConfigGroup);
-    m_Thorn = settings.value("use_thorn_style", true).toBool();
-    settings.endGroup();
-
     m_rightSide->setContentsMargins(8, 8, 8, 8);
     QVBoxLayout *rightSideLayout = new QVBoxLayout;
     rightSideLayout->setMargin(0);
     rightSideLayout->setSpacing(6);
     m_rightSide->setLayout(rightSideLayout);
 
-    if (m_Thorn) {
+    if (ThornStyle::isEnabled()) {
         QString localStyle("QWidget:!enabled { color: black }");
         m_rightSide->setStyleSheet(localStyle);
     }
@@ -891,11 +886,7 @@ void BankEditorDialog::populateDeviceEditors(QTreeWidgetItem* item)
     m_delete->setEnabled(false);
     m_copyPrograms->setEnabled(false);
     m_pastePrograms->setEnabled(false);
-    if (m_Thorn) {
-        m_rightSide->setEnabled(false);
-    } else {
-        m_rightSide->setEnabled(false);
-    }
+    m_rightSide->setEnabled(false);
 
     m_variationToggle->setChecked(device->getVariationType() !=
                                   MidiDevice::NoVariations);

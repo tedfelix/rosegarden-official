@@ -81,9 +81,6 @@ protected:
     
     bool m_usingSharps;
 
-    /** Are we using the Thorn style? */
-    bool m_Thorn;
-
     NotePixmapFactory *m_npf;
 };
 
