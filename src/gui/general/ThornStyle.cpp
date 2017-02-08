@@ -37,6 +37,8 @@
 #include <QPushButton>
 #include <QComboBox>
 #include <QSpinBox>
+#include <QScrollBar>
+#include <QAbstractScrollArea>
 
 using namespace Rosegarden;
 
@@ -81,31 +83,54 @@ private:
     QStyle *m_systemStyle;
 };
 
+// Apply the style to widget and its children, recursively
+// Even though every widget goes through the event filter, this is needed
+// for the case where a whole widget hierarchy is suddenly reparented into the file dialog.
+// Then we need to apply the app style again. Testcase: scrollbars in file dialog.
+static void applyStyleRecursive(QWidget* widget, QStyle *style)
+{
+    if (widget->style() != style) {
+        widget->setStyle(style);
+    }
+    foreach (QObject* obj, widget->children()) {
+        if (obj->isWidgetType()) {
+            QWidget *w = static_cast<QWidget *>(obj);
+            applyStyleRecursive(w, style);
+        }
+    }
+}
+
 bool AppEventFilter::eventFilter(QObject *watched, QEvent *event)
 {
-    if (watched->isWidgetType() && event->type() == QEvent::Polish) {
+    static bool s_insidePolish = false; // setStyle calls polish again, so skip doing the work twice
+    if (!s_insidePolish && watched->isWidgetType() && event->type() == QEvent::Polish) {
+        s_insidePolish = true;
         // This is called after every widget is created and just before being shown
         // (we use this so that it has a proper parent widget already)
         QWidget *widget = static_cast<QWidget *>(watched);
         if (shouldIgnoreThornStyle(widget)) {
             // The palette from the mainwindow propagated to the dialog, restore it.
             widget->setPalette(m_systemPalette);
-            // No need to call setStyle, it didn't propagate.
-            return false;
-        }
-        if (widget->style() == &m_style) {
-            // setStyle triggers polish again, no need to redo the checks below, exit
+            //qDebug() << widget << "now using app style (recursive)";
+            applyStyleRecursive(widget, qApp->style());
+            s_insidePolish = false;
             return false;
         }
         QWidget *toplevel = widget->window();
-        if (!shouldIgnoreThornStyle(toplevel)) {
+        //qDebug() << "current widget style=" << widget->style() << "shouldignore=" << shouldIgnoreThornStyle(toplevel);
+        if (shouldIgnoreThornStyle(toplevel)) {
+            // Here we should apply qApp->style() recursively on widget and its children, in case one was reparented
+            //qDebug() << widget << "in" << toplevel << "now using app style (recursive)";
+            applyStyleRecursive(widget, qApp->style());
+        } else if (widget->style() != &m_style) {
             widget->setStyle(&m_style);
-            //qDebug() << widget << "now using style" << widget->style();
+            //qDebug() << widget << "in" << toplevel << "now using style" << widget->style();
             if (widget->isWindow() && widget->parent() == 0) {
                 widget->setPalette(m_style.standardPalette());
             }
             polishWidget(widget);
         }
+        s_insidePolish = false;
     }
     return false; // don't eat the event
 }

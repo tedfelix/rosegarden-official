@@ -52,11 +52,6 @@ FileDialog::FileDialog(QWidget *parent,
     setOption(QFileDialog::DontUseNativeDialog);
 #endif
 
-    // Since we're here anyway, there may be a way to style the directory
-    // navigation arrows from inside here.  It never worked from the external
-    // stylesheet, and I can't even remember what I tried unsuccessfully in the
-    // past.
-
     // set up the sidebar stuff; the entire purpose of this class 
     QList<QUrl> urls;
 
