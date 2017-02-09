@@ -1,4 +1,4 @@
-/* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
+﻿/* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
     Rosegarden
@@ -561,6 +561,7 @@ RosegardenMainWindow::~RosegardenMainWindow()
     if (isSequencerRunning()) {
         RosegardenSequencer::getInstance()->quit();
         usleep(300000);
+        RosegardenSequencer::getInstance()->cleanup();
         delete m_sequencerThread;
     }
 

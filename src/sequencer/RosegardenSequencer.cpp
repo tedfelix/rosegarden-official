@@ -1,4 +1,4 @@
-/* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
+﻿/* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
     Rosegarden
@@ -106,9 +106,17 @@ RosegardenSequencer::RosegardenSequencer() :
 RosegardenSequencer::~RosegardenSequencer()
 {
     SEQUENCER_DEBUG << "RosegardenSequencer - shutting down";
-    m_driver->shutdown();
+    cleanup();
+}
+
+void
+RosegardenSequencer::cleanup()
+{
+    if (m_driver) m_driver->shutdown();
     delete m_studio;
+    m_studio = 0;
     delete m_driver;
+    m_driver = 0;
 }
 
 RosegardenSequencer *

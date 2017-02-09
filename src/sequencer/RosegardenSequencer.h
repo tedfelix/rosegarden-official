@@ -1,4 +1,4 @@
-/* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
+﻿/* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
     Rosegarden
@@ -59,6 +59,9 @@ public:
 	
     /// Close the sequencer.
     void quit();
+    
+    /// Cleanup before deleting the sequencer
+    void cleanup();
 
     /// Play from a given time with given parameters.
     /**
