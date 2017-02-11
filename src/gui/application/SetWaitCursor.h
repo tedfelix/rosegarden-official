@@ -40,7 +40,7 @@ public:
     ~SetWaitCursor();
 
 protected:
-    RosegardenMainWindow* m_guiApp;
+    RosegardenMainWindow* m_mainWindow;
     QCursor m_saveCursor;
     QCursor m_saveCompositionViewCursor;
 };

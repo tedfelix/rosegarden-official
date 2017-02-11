@@ -33,44 +33,44 @@ namespace Rosegarden
 
 //### dtb: Using topLevelWidgets()[0] in place of mainWidget() is a big assumption on my part.
 SetWaitCursor::SetWaitCursor()
-    : m_guiApp(dynamic_cast<RosegardenMainWindow*>(qApp->topLevelWidgets()[0]))
+    : m_mainWindow(dynamic_cast<RosegardenMainWindow*>(qApp->topLevelWidgets()[0]))
 {
-    if (m_guiApp) {
+    if (m_mainWindow) {
 
         // play it safe, so we can use this class at anytime even very early in the app init
-        if ((m_guiApp->getView() &&
-                m_guiApp->getView()->getTrackEditor() &&
-                m_guiApp->getView()->getTrackEditor()->getCompositionView() &&
-                m_guiApp->getView()->getTrackEditor()->getCompositionView()->viewport())) {
+        if ((m_mainWindow->getView() &&
+                m_mainWindow->getView()->getTrackEditor() &&
+                m_mainWindow->getView()->getTrackEditor()->getCompositionView() &&
+                m_mainWindow->getView()->getTrackEditor()->getCompositionView()->viewport())) {
 
-            m_saveCompositionViewCursor = m_guiApp->getView()->getTrackEditor()->getCompositionView()->viewport()->cursor();
+            m_saveCompositionViewCursor = m_mainWindow->getView()->getTrackEditor()->getCompositionView()->viewport()->cursor();
 
         }
 
         RG_DEBUG << "SetWaitCursor::SetWaitCursor() : setting waitCursor\n";
-        m_saveCursor = m_guiApp->cursor();
+        m_saveCursor = m_mainWindow->cursor();
 
-        m_guiApp->setCursor(Qt::WaitCursor);
+        m_mainWindow->setCursor(Qt::WaitCursor);
     }
 }
 
 SetWaitCursor::~SetWaitCursor()
 {
-    if (m_guiApp) {
+    if (m_mainWindow) {
 
         RG_DEBUG << "SetWaitCursor::SetWaitCursor() : restoring normal cursor\n";
         QWidget* viewport = 0;
         QCursor currentCompositionViewCursor;
 
-        if ((m_guiApp->getView() &&
-                m_guiApp->getView()->getTrackEditor() &&
-                m_guiApp->getView()->getTrackEditor()->getCompositionView() &&
-                m_guiApp->getView()->getTrackEditor()->getCompositionView()->viewport())) {
-            viewport = m_guiApp->getView()->getTrackEditor()->getCompositionView()->viewport();
+        if ((m_mainWindow->getView() &&
+                m_mainWindow->getView()->getTrackEditor() &&
+                m_mainWindow->getView()->getTrackEditor()->getCompositionView() &&
+                m_mainWindow->getView()->getTrackEditor()->getCompositionView()->viewport())) {
+            viewport = m_mainWindow->getView()->getTrackEditor()->getCompositionView()->viewport();
             currentCompositionViewCursor = viewport->cursor();
         }
 
-        m_guiApp->setCursor(m_saveCursor);
+        m_mainWindow->setCursor(m_saveCursor);
 
         if (viewport) {
             if (currentCompositionViewCursor.shape() == Qt::WaitCursor) {
