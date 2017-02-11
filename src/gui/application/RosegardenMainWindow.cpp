@@ -274,7 +274,6 @@ RosegardenMainWindow::RosegardenMainWindow(bool enableSound,
     m_storedLoopStart(0),
     m_storedLoopEnd(0),
     m_useSequencer(enableSound),
-    m_dockVisible(true),
     m_autoSaveTimer(new QTimer(this)),
     m_clipboard(Clipboard::mainClipboard()),
     m_playList(0),
@@ -1162,8 +1161,6 @@ RosegardenMainWindow::initView()
     m_triggerSegmentManager = 0;
 
     // !!! This also deletes oldView (via QObject::deleteLater()).
-    //     Since we call processEvents() below, that means this will be
-    //     deleted by the end of this routine.
     setCentralWidget(m_view);
 
     // set the highlighted track
@@ -1208,30 +1205,12 @@ RosegardenMainWindow::initView()
         actionx->trigger();
     }
     
-    
-/*    int zoomLevel = m_doc->getConfiguration().
-                    get
-                        <Int>
-                        (DocumentConfiguration::ZoomLevel);
-    */
-    //QSettings settings;
     int zoomLevel = m_doc->getConfiguration().get<Int>(DocumentConfiguration::ZoomLevel);
-
     m_zoomSlider->setSize(double(zoomLevel) / 1000.0);
     slotChangeZoom(zoomLevel);
 
-    //slotChangeZoom(int(m_zoomSlider->getCurrentSize()));
-
     enterActionState("new_file"); //@@@ JAS orig. 0
     
-    // !!! It is imperative that this be called here.  If it isn't, the old
-    //     RosegardenMainViewWidget will not be deleted by the end of this
-    //     routine (the call to setCentralWidget() uses
-    //     QObject::deleteLater()), leading to crashes when it is deleted
-    //     after the old RosegardenDocument that it has a pointer to is
-    //     deleted in setDocument().  QSharedPointer anyone?
-    qApp->processEvents(QEventLoop::AllEvents, 100);
-
     if (findAction("show_chord_name_ruler")->isChecked()) {
         SetWaitCursor swc;
         m_view->initChordNameRuler();
@@ -1348,9 +1327,6 @@ RosegardenMainWindow::setDocument(RosegardenDocument* newDocument)
     initView();
 
     // This will delete all edit views.
-    // This has to be done after the old RosegardenMainViewWidget is destroyed
-    // (in initView()) since RosegardenMainViewWidget depends on it.
-    // ??? QSharedPointer anyone?
     delete oldDoc;
     oldDoc = 0;
 
@@ -3581,19 +3557,6 @@ RosegardenMainWindow::slotDockParametersBack()
     } else {
         m_dockLeft->setVisible(false);
     }
-
-//    m_dockLeft->dockBack();
-/*&&&
-    m_dockLeft->setFloating(false);
-    m_dockLeft->setVisible(true);
-*/
-}
-
-void
-RosegardenMainWindow::slotParametersClosed()
-{
-    // ??? This code appears to be dead.
-    m_dockVisible = false;
 }
 
 void
@@ -3604,14 +3567,6 @@ RosegardenMainWindow::slotParameterAreaHidden()
     // Since the parameter area is now hidden, clear the checkbox in the
     // menu to keep things in sync.
     findAction("show_inst_segment_parameters")->setChecked(false);
-}
-
-void
-RosegardenMainWindow::slotParametersDockedBack(QDockWidget* dw, int) //qt4: Qt::DockWidgetAreas //qt3 was: QDockWidget::DockPosition)
-{
-    if (dw == m_dockLeft) {
-        m_dockVisible = true;
-    }
 }
 
 void
@@ -6404,7 +6359,6 @@ RosegardenMainWindow::plugShortcuts(QWidget *widget, QShortcut * /*acc*/)
 void
 RosegardenMainWindow::setCursor(const QCursor& cursor)
 {
-    //KDockMainWindow::setCursor(cursor);
 //    this->setCursor(cursor);    // note. this (qmainwindow) now contains main dock
 
     // play it safe, so we can use this class at anytime even very early in the app init

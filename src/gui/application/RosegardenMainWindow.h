@@ -1288,20 +1288,9 @@ public slots:
     void slotDockParametersBack();
 
     /**
-     * The parameters box was closed
-     */
-    void slotParametersClosed();
-
-    /**
      * The parameters box was hidden
      */
     void slotParameterAreaHidden();
-
-    /**
-     * The parameters box was docked back
-     */
-//    void slotParametersDockedBack(QDockWidget*, QDockWidget::DockPosition);    //&&& restore DockPosition
-    void slotParametersDockedBack(QDockWidget*, int );    
 
     /**
      * Display tip-of-day dialog on demand
@@ -1657,7 +1646,6 @@ private:
     timeT m_storedLoopEnd;
 
     bool m_useSequencer;
-    bool m_dockVisible;
 
     AudioPluginManager *m_pluginManager;
 

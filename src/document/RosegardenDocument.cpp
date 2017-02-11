@@ -203,9 +203,7 @@ void RosegardenDocument::deleteEditViews()
 {
     QList<EditViewBase*> views = m_editViewList;
     m_editViewList.clear();
-    for (int i = 0; i < int(views.size()); ++i) {
-        delete views[i];
-    }
+    qDeleteAll(views);
 }
 
 void RosegardenDocument::setAbsFilePath(const QString &filename)
