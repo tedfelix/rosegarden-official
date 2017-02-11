@@ -22,41 +22,28 @@
 #include "RosegardenParameterArea.h"
 
 #include "RosegardenParameterBox.h"
-#include <iostream>
-#include <set>
 
-#include <QTabWidget>
+#include <QScrollBar>
+#include <QEvent>
 #include <QFont>
-#include <QFrame>
-#include <QPoint>
-#include <QScrollArea>
-#include <QString>
-#include <QLayout>
 #include <QWidget>
 #include <QVBoxLayout>
-#include <QStackedWidget>
 #include <QGroupBox>
-//#include <QPushButton>
 
 #include "misc/Debug.h"
 
 namespace Rosegarden
 {
 
-RosegardenParameterArea::RosegardenParameterArea(
-    QWidget *parent,
-    const char *name)
-    : QStackedWidget(parent),
-        m_scrollArea( new QScrollArea(this) ),
+RosegardenParameterArea::RosegardenParameterArea(QWidget *parent)
+    : QScrollArea(parent),
         m_boxContainer(new QWidget()),
         m_boxContainerLayout( new QVBoxLayout(m_boxContainer) )
 {
-    setObjectName( name );
-        
-    m_boxContainer->setLayout(m_boxContainerLayout);
-    
-    // Setting vertical ScrollBarAlwaysOn resolves initial sizing problem
-    m_scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
+    // QScrollArea already installs an event filter on widget(), add one on the vertical scrollbar too
+    verticalScrollBar()->installEventFilter(this);
 
     // alleviate a number of really bad problems in the TPB and IPB by allowing
     // QScrollArea to resize as necessary.  This was done to solve the problem
@@ -64,12 +51,11 @@ RosegardenParameterArea::RosegardenParameterArea(
     // expanded, but I expect it also solves the "more than n controllers,
     // everything is hopelessly jammed together" problem too.  For cheap.
     // (Too bad this fix is the last place I looked after a couple lost hours.)
-    m_scrollArea->setWidgetResizable(true);
-    
-    // Install the scroll area widget in the widget-stack.
-    addWidget(m_scrollArea);
+    setWidgetResizable(true);
 
-    setCurrentWidget( m_scrollArea );
+    m_boxContainer->setLayout(m_boxContainerLayout);
+
+    setWidget(m_boxContainer);
 
     m_boxContainerLayout->addStretch(100);
 }
@@ -83,11 +69,11 @@ void RosegardenParameterArea::addRosegardenParameterBox(
 
     for (unsigned int i = 0; i < m_parameterBoxes.size(); i++) {
         if (m_parameterBoxes[i] == b)
-            return ;
+            return;
     }
 
     // Append the parameter box to the list to be displayed.
-     m_parameterBoxes.push_back(b);
+    m_parameterBoxes.push_back(b);
  
     // Create a titled group box for the parameter box, so that it can be
     // used to provide a title and outline. Add this container to an array that
@@ -106,16 +92,25 @@ void RosegardenParameterArea::addRosegardenParameterBox(
 
     // add the ParameterBox to the Layout
     box->layout()->addWidget(b);
+
+    // Strange bug, Qt5 doesn't ever polish the RosegardenParameterArea, so they don't end up getting the Thorn style unless we make it happen
+    box->ensurePolished();
 }
 
-void RosegardenParameterArea::setScrollAreaWidget()
+
+bool RosegardenParameterArea::eventFilter(QObject *object, QEvent *event)
 {
-    m_scrollArea->setWidget(m_boxContainer);
+    // Ensure the full width of the widget is always visible
+    // - when the widget gets resized
+    // - when the verticall scrollbar becomes visible or hidden
+    if ((object == widget() && event->type() == QEvent::Resize)
+            || (object == verticalScrollBar() && (event->type() == QEvent::Show || event->type() == QEvent::Hide))) {
+        const int minWidth = widget()->minimumSizeHint().width();
+        const int vsbWidth = verticalScrollBar()->isVisible() ? verticalScrollBar()->width() : 0;
+        setFixedWidth(minWidth + vsbWidth);
+    }
+
+    return QScrollArea::eventFilter(object, event);
 }
 
-void RosegardenParameterArea::hideEvent(QHideEvent *)
-{
-    emit hidden();
-}
-
-}
+} // namespace

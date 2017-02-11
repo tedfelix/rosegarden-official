@@ -113,11 +113,11 @@ const QWidget *RosegardenMainViewWidget::m_lastActiveMainWindow = 0;
 static int maxEditorsToOpen = 8;
 
 RosegardenMainViewWidget::RosegardenMainViewWidget(bool showTrackLabels,
-                                     SegmentParameterBox* segmentParameterBox,
-                                     InstrumentParameterBox* instrumentParameterBox,
-                                     TrackParameterBox* trackParameterBox,
-                                     QWidget *parent,
-                                     const char* /*name*/)
+                                                   SegmentParameterBox* segmentParameterBox,
+                                                   InstrumentParameterBox* instrumentParameterBox,
+                                                   TrackParameterBox* trackParameterBox,
+                                                   RosegardenParameterArea* parameterArea,
+                                                   QWidget *parent)
         : QWidget(parent),
         m_rulerScale(0),
         m_trackEditor(0),
@@ -128,7 +128,10 @@ RosegardenMainViewWidget::RosegardenMainViewWidget(bool showTrackLabels,
     setObjectName("View");
     RosegardenDocument* doc = getDocument();
     Composition *comp = &doc->getComposition();
-    QVBoxLayout *layout = new QVBoxLayout;
+    QHBoxLayout *layout = new QHBoxLayout;
+    layout->setMargin(0);
+    layout->setSpacing(0);
+    layout->addWidget(parameterArea);
 
     double unitsPerPixel =
         TimeSignature(4, 4).getBarDuration() / barWidth44;

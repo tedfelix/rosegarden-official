@@ -20,16 +20,13 @@
 #ifndef RG_ROSEGARDENPARAMETERAREA_H
 #define RG_ROSEGARDENPARAMETERAREA_H
 
-#include <QStackedWidget>
+#include <QScrollArea>
 #include <vector>
-
 
 class QWidget;
 class QGroupBox;
 class QHBoxLayout;
 class QVBoxLayout;
-class QScrollArea;
-
 
 namespace Rosegarden
 {
@@ -41,25 +38,21 @@ class RosegardenParameterBox;
  * A widget that arranges a set of Rosegarden parameter-box widgets
  * within a frame, in a dynamically configurable manner.
  */
-class RosegardenParameterArea : public QStackedWidget
+class RosegardenParameterArea : public QScrollArea
 {
     Q_OBJECT
 public:
 
     // Create the parameter display area.
 
-    RosegardenParameterArea(QWidget *parent=0, const char *name=0 );
+    RosegardenParameterArea(QWidget *parent = 0);
 
     // Add a rosegarden parameter box to the list that are to be displayed.
 
     void addRosegardenParameterBox(RosegardenParameterBox *b);
 
-    void setScrollAreaWidget();
 protected:
-    virtual void hideEvent(QHideEvent *);
-
-signals:
-    void hidden();
+    bool eventFilter(QObject *object, QEvent *event);
 
 private:
     // The list of parameter box widgets that are being displayed by this
@@ -73,8 +66,6 @@ private:
 
     std::vector<QGroupBox *> m_groupBoxes;
 
-    QScrollArea *m_scrollArea;    
-    
     QWidget *m_boxContainer;
     QVBoxLayout *m_boxContainerLayout;
 };

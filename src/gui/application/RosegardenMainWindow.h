@@ -28,7 +28,6 @@
 #include "sound/Midi.h"
 #include "gui/general/ActionFileClient.h"
 
-#include <QDockWidget>
 #include <QString>
 #include <QVector>
 #include <QMainWindow>
@@ -357,7 +356,7 @@ public:
      * Override from QWidget
      * Toolbars and docks need special treatment
      */
-    virtual void setCursor(const QCursor&);
+    //virtual void setCursor(const QCursor&);
 
     /** Query the AudioFileManager to see if the audio path exists, is readable,
      * writable, etc., and offer to dump the user in the document properties
@@ -1285,7 +1284,7 @@ public slots:
     /**
      * Re-dock the parameters box to its initial position
      */
-    void slotDockParametersBack();
+    void slotHideShowParameterArea();
 
     /**
      * The parameters box was hidden
@@ -1588,9 +1587,6 @@ private:
     bool m_actionsSetup;
 
     RosegardenMainViewWidget* m_view;
-
-    QDockWidget* m_dockLeft;
-    
 
     /**
      * doc represents your actual document and is created only

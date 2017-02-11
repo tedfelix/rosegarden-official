@@ -80,11 +80,11 @@ public:
      * Constructor for the main view
      */
     RosegardenMainViewWidget(bool showTrackLabels,
-                      SegmentParameterBox*,
-                      InstrumentParameterBox*,
-                      TrackParameterBox*,
-                      QWidget *parent = 0,
-                      const char *name=0);
+                             SegmentParameterBox*,
+                             InstrumentParameterBox*,
+                             TrackParameterBox*,
+                             RosegardenParameterArea* parameterArea,
+                             QWidget *parent = 0);
 
     /**
      * Destructor for the main view

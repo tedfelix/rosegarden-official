@@ -101,6 +101,9 @@ static void applyStyleRecursive(QWidget* widget, QStyle *style)
     }
 }
 
+// when we ditch Qt4, we can switch to qCDebug...
+//#define DEBUG_EVENTFILTER
+
 bool AppEventFilter::eventFilter(QObject *watched, QEvent *event)
 {
     static bool s_insidePolish = false; // setStyle calls polish again, so skip doing the work twice
@@ -112,20 +115,28 @@ bool AppEventFilter::eventFilter(QObject *watched, QEvent *event)
         if (shouldIgnoreThornStyle(widget)) {
             // The palette from the mainwindow propagated to the dialog, restore it.
             widget->setPalette(m_systemPalette);
-            //qDebug() << widget << "now using app style (recursive)";
+#ifdef DEBUG_EVENTFILTER
+            qDebug() << widget << "now using app style (recursive)";
+#endif
             applyStyleRecursive(widget, qApp->style());
             s_insidePolish = false;
             return false;
         }
         QWidget *toplevel = widget->window();
-        //qDebug() << "current widget style=" << widget->style() << "shouldignore=" << shouldIgnoreThornStyle(toplevel);
+#ifdef DEBUG_EVENTFILTER
+        qDebug() << "current widget style=" << widget->style() << "shouldignore=" << shouldIgnoreThornStyle(toplevel);
+#endif
         if (shouldIgnoreThornStyle(toplevel)) {
             // Here we should apply qApp->style() recursively on widget and its children, in case one was reparented
-            //qDebug() << widget << "in" << toplevel << "now using app style (recursive)";
+#ifdef DEBUG_EVENTFILTER
+            qDebug() << widget << "in" << toplevel << "now using app style (recursive)";
+#endif
             applyStyleRecursive(widget, qApp->style());
         } else if (widget->style() != &m_style) {
             widget->setStyle(&m_style);
-            //qDebug() << widget << "in" << toplevel << "now using style" << widget->style();
+#ifdef DEBUG_EVENTFILTER
+            qDebug() << widget << "in" << toplevel << "now using style" << widget->style();
+#endif
             if (widget->isWindow() && widget->parent() == 0) {
                 widget->setPalette(m_style.standardPalette());
             }
