@@ -19,16 +19,8 @@
 #ifndef RG_SETWAITCURSOR_H
 #define RG_SETWAITCURSOR_H
 
-#include <QCursor>
-
-
-
-
 namespace Rosegarden
 {
-
-class RosegardenMainWindow;
-
 
 /**
  * Temporarily change the global cursor to waitCursor
@@ -38,14 +30,8 @@ class SetWaitCursor
 public:
     SetWaitCursor();
     ~SetWaitCursor();
-
-protected:
-    RosegardenMainWindow* m_mainWindow;
-    QCursor m_saveCursor;
-    QCursor m_saveCompositionViewCursor;
 };
  
-
 }
 
 #endif

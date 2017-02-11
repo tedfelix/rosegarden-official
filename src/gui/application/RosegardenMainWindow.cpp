@@ -6299,27 +6299,6 @@ RosegardenMainWindow::plugShortcuts(QWidget *widget, QShortcut * /*acc*/)
     }
 }
 
-#if 0
-void
-RosegardenMainWindow::setCursor(const QCursor& cursor)
-{
-    //this->setCursor(cursor);
-
-    // play it safe, so we can use this class at anytime even very early in the app init
-    if ((getView() &&
-            getView()->getTrackEditor() &&
-            getView()->getTrackEditor()->getCompositionView() &&
-            getView()->getTrackEditor()->getCompositionView()->viewport())) {
-
-        getView()->getTrackEditor()->getCompositionView()->viewport()->setCursor(cursor);
-    }
-
-    // view, main window...
-    //
-    getView()->setCursor(cursor);
-}
-#endif
-
 QVector<QString>
 RosegardenMainWindow::createRecordAudioFiles(const QVector<InstrumentId> &recordInstruments)
 {

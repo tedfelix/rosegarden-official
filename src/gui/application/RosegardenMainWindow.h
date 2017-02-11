@@ -48,7 +48,6 @@ class QTextCodec;
 class QShowEvent;
 class QObject;
 class QLabel;
-class QCursor;
 class QShortcut;
 class QTemporaryFile;
 class QProcess;
@@ -351,12 +350,6 @@ public:
      * Plug a widget into our common shortcuts
      */
     void plugShortcuts(QWidget *widget, QShortcut *shortcut);
-
-    /**
-     * Override from QWidget
-     * Toolbars and docks need special treatment
-     */
-    //virtual void setCursor(const QCursor&);
 
     /** Query the AudioFileManager to see if the audio path exists, is readable,
      * writable, etc., and offer to dump the user in the document properties
