@@ -165,10 +165,15 @@ TrackButtons::updateUI(Track *track)
 
     // *** Archive Background
 
-    if (track->isArchived())
-        m_trackHBoxes[pos]->setStyleSheet("background-color: #888888;");
-    else
-        m_trackHBoxes[pos]->setStyleSheet("");
+    QFrame *hbox = m_trackHBoxes.at(pos);
+    if (track->isArchived()) {
+        hbox->setAutoFillBackground(true);
+        QPalette palette = hbox->palette();
+        palette.setColor(hbox->backgroundRole(), QColor(0x88, 0x88, 0x88));
+        hbox->setPalette(palette);
+    } else {
+        hbox->setAutoFillBackground(false);
+    }
 
 
     // *** Mute LED
