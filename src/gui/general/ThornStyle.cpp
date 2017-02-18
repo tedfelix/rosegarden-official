@@ -472,6 +472,9 @@ void ThornStyle::drawPrimitive(QStyle::PrimitiveElement element, const QStyleOpt
     case PE_FrameDockWidget: // only called when the dockwidget is floating
         // QDockWidget { border: none; }
         return;
+    case PE_PanelStatusBar: // no frame around the statusbar
+    case PE_FrameStatusBarItem: // no frame around the statusbar items
+        return;
     case PE_PanelLineEdit:
         // QLineEdit { border: 1px solid #AAAAAA; background-color: #FFFFFF; }
         if (const QStyleOptionFrame *frame = qstyleoption_cast<const QStyleOptionFrame *>(option)) {
