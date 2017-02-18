@@ -124,21 +124,31 @@ bool AppEventFilter::eventFilter(QObject *watched, QEvent *event)
         }
         QWidget *toplevel = widget->window();
 #ifdef DEBUG_EVENTFILTER
-        qDebug() << "current widget style=" << widget->style() << "shouldignore=" << shouldIgnoreThornStyle(toplevel);
+        qDebug() << widget << "current widget style=" << widget->style() << "shouldignore=" << shouldIgnoreThornStyle(toplevel);
 #endif
         if (shouldIgnoreThornStyle(toplevel)) {
             // Here we should apply qApp->style() recursively on widget and its children, in case one was reparented
 #ifdef DEBUG_EVENTFILTER
-            qDebug() << widget << "in" << toplevel << "now using app style (recursive)";
+            qDebug() << widget << widget->objectName() << "in" << toplevel << "now using app style (recursive)";
 #endif
             applyStyleRecursive(widget, qApp->style());
         } else if (widget->style() != &m_style) {
+#ifdef DEBUG_EVENTFILTER
+            qDebug() << "    ToolTipBase=" << widget->palette().color(QPalette::ToolTipBase).name();
+#endif
             widget->setStyle(&m_style);
 #ifdef DEBUG_EVENTFILTER
-            qDebug() << widget << "in" << toplevel << "now using style" << widget->style();
+            qDebug() << "    now using style" << widget->style();
 #endif
-            if (widget->isWindow() && widget->parent() == 0) {
+            if (widget->windowType() != Qt::Widget) { // window, tooltip, ...
                 widget->setPalette(m_style.standardPalette());
+#ifdef DEBUG_EVENTFILTER
+                qDebug() << "    after setPalette:     ToolTipBase=" << widget->palette().color(QPalette::ToolTipBase).name();
+#endif
+            } else {
+#ifdef DEBUG_EVENTFILTER
+                qDebug() << "    not a toplevel. ToolTipBase=" << widget->palette().color(QPalette::ToolTipBase).name();
+#endif
             }
             polishWidget(widget);
         }
