@@ -102,7 +102,7 @@ bool RosegardenParameterArea::eventFilter(QObject *object, QEvent *event)
 {
     // Ensure the full width of the widget is always visible
     // - when the widget gets resized
-    // - when the verticall scrollbar becomes visible or hidden
+    // - when the vertical scrollbar becomes visible or hidden
     if ((object == widget() && event->type() == QEvent::Resize)
             || (object == verticalScrollBar() && (event->type() == QEvent::Show || event->type() == QEvent::Hide))) {
         const int minWidth = widget()->minimumSizeHint().width();

@@ -905,7 +905,7 @@ void ThornStyle::drawControl(QStyle::ControlElement element, const QStyleOption 
             QStyleOptionHeader subopt = *header;
             subopt.rect = subElementRect(SE_HeaderLabel, header, widget);
             if (subopt.rect.isValid()) {
-                subopt.palette.setColor(QPalette::Text, Qt::white); // QHeaderView::section { color: #FFFFFF; }
+                subopt.palette.setColor(QPalette::ButtonText, Qt::white); // QHeaderView::section { color: #FFFFFF; }
                 drawControl(CE_HeaderLabel, &subopt, painter, widget);
             }
             if (header->sortIndicator != QStyleOptionHeader::None) {

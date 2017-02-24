@@ -37,6 +37,7 @@
 #include "document/RosegardenDocument.h"
 #include "sequencer/RosegardenSequencer.h"
 #include "gui/general/IconLoader.h"
+#include "gui/general/ThornStyle.h"
 
 #include <QWidget>
 #include <QMainWindow>
@@ -87,6 +88,9 @@ DeviceManagerDialog::DeviceManagerDialog(QWidget * parent,
     // enable sorting
     m_treeWidget_playbackDevices->setSortingEnabled(true);
     m_treeWidget_recordDevices->setSortingEnabled(true);
+
+    m_treeWidget_inputPorts->setRootIsDecorated(false);
+    m_treeWidget_outputPorts->setRootIsDecorated(false);
 
     connectSignalsToSlots();
 
@@ -361,32 +365,27 @@ DeviceManagerDialog::updateDevicesList(QTreeWidget * treeWid,
      * in_out_direction must be MidiDevice::Play or MidiDevice::Record
      **/
 //         * col: the column in the treeWidget to show the connection-name (port)
-    int i, cnt;
-    QTreeWidgetItem *twItem;
     DeviceId devId = Device::NO_DEVICE;
     Device *device;
-    DeviceList * devices;
     MidiDevice *mdev;
     QString outPort;
     QList < MidiDevice * >midiDevices;
-    QString devName;
 
-    //DeviceList *
-    devices = m_studio->getDevices();
+    DeviceList *devices = m_studio->getDevices();
 
 //         QStringList listEntries;
     QList <DeviceId> listEntries;
 
 
 //         cnt = m_treeWidget_playbackDevices->topLevelItemCount();
-    cnt = treeWid->topLevelItemCount();
+    int cnt = treeWid->topLevelItemCount();
     treeWid->blockSignals(true);
     // create a list of IDs of all listed devices
     //
     //for( i=0; i < cnt; i++ ){
-    i = 0;
+    int i = 0;
     while (i < cnt) {
-        twItem = treeWid->topLevelItem(i);
+        QTreeWidgetItem *twItem = treeWid->topLevelItem(i);
 
         devId = twItem->data(0, m_UserRole_DeviceId).toInt();
         mdev = getDeviceById(devId);
@@ -423,7 +422,6 @@ DeviceManagerDialog::updateDevicesList(QTreeWidget * treeWid,
         }               // end if MidiDevice
     }
 
-
     cnt = int(midiDevices.size());
     //
     for (i = 0; i < cnt; i++) {
@@ -447,7 +445,7 @@ DeviceManagerDialog::updateDevicesList(QTreeWidget * treeWid,
             std::string name = mdev->getName();
             QString nameStr = QObject::tr("%1").arg(strtoqstr(name));
             nameStr = QObject::tr(nameStr.toStdString().c_str());
-            twItem =  new QTreeWidgetItem(treeWid, QStringList() << nameStr);
+            QTreeWidgetItem *twItem = new QTreeWidgetItem(treeWid, QStringList() << nameStr);
             // set port text
             twItem->setText(1, outPort);
 
@@ -461,11 +459,11 @@ DeviceManagerDialog::updateDevicesList(QTreeWidget * treeWid,
             RG_DEBUG << "DeviceManagerDialog: device is already listed";
 
             // device is already listed
-            twItem = searchItemWithDeviceId(treeWid, devId);
+            QTreeWidgetItem *twItem = searchItemWithDeviceId(treeWid, devId);
             if (twItem) {
                 RG_DEBUG << "DeviceManagerDialog: twItem is non-zero";
 
-                devName = strtoqstr(mdev->getName());
+                QString devName = strtoqstr(mdev->getName());
 
                 RG_DEBUG << "DeviceManagerDialog: devName: " << devName;
 
@@ -688,7 +686,7 @@ DeviceManagerDialog::updatePortsList(QTreeWidget * treeWid,
      *    updates (adds/removes) the ports listed in the TreeWidget
      *    this does not update/set the checkStates !
      **/
-    int i, portsCount, cnt;
+    int portsCount;
     QTreeWidgetItem *twItem;
     QString portName;
     QStringList portNamesAvail;     // available ports names (connections)
@@ -699,15 +697,15 @@ DeviceManagerDialog::updatePortsList(QTreeWidget * treeWid,
 
     treeWid->blockSignals(true);
     portsCount = seq->getConnections(Device::Midi, PlayRecDir);     // MidiDevice::Play or MidiDevice::Record
-    for (i = 0; i < portsCount; ++i) {
+    for (int i = 0; i < portsCount; ++i) {
         portName = seq->getConnection(Device::Midi, PlayRecDir, i); // last: int connectionNr
         portNamesAvail << portName; // append
     }
 
 
     // create a list of all listed portNames
-    cnt = treeWid->topLevelItemCount();
-    i = 0;
+    int cnt = treeWid->topLevelItemCount();
+    int i = 0;
     while (i < cnt) {
         twItem = treeWid->topLevelItem(i);
 
@@ -730,7 +728,13 @@ DeviceManagerDialog::updatePortsList(QTreeWidget * treeWid,
     portNamesAvail << m_noPortName; // add nullPort
     portsCount += 1;        // inc count
 
-    for (i = 0; i < portsCount; ++i) {
+    const int itemHeight = 24; // ?
+    QLinearGradient gradient(0, itemHeight, 0, 0);
+    gradient.setColorAt(0, QColor(0x99, 0x99, 0x99));
+    gradient.setColorAt(1, QColor(0xDD, 0xDD, 0xDD));
+    QBrush bgBrush(gradient);
+
+    for (int i = 0; i < portsCount; ++i) {
 
         //portName = seq->getConnection( Device::Midi, PlayRecDir, i );    // last: int connectionNr
         portName = portNamesAvail.at(i);
@@ -743,7 +747,12 @@ DeviceManagerDialog::updatePortsList(QTreeWidget * treeWid,
                                         QStringList() << portName);
 
             //twItem->setCheckState( 0, Qt::Unchecked );
-            //itemx->setFlags( itemx->flags() &! Qt::ItemIsUserCheckable );
+
+            if (ThornStyle::isEnabled()) {
+                twItem->setBackground(0, bgBrush);
+                twItem->setBackground(1, bgBrush);
+            }
+
             treeWid->addTopLevelItem(twItem);
         }
 

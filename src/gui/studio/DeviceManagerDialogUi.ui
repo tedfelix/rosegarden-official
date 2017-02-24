@@ -64,27 +64,6 @@
           <property name="autoFillBackground">
            <bool>false</bool>
           </property>
-          <property name="styleSheet">
-           <string notr="true">QTreeView
-{
-    background-color: #FFFFFF;
-    alternate-background-color: #EEEEFF;
-    color: #000000;
-    selection-background-color: #80AFFF;
-    selection-color: #FFFFFF;
-}
-
-QLineEdit
-{
-    border: 1px solid #AAAAAA;
-    background-color: #FFFFFF;
-    selection-background-color: #80AFFF;
-    color: #000000;
-    selection-color: #FFFFFF;
-}
-
-</string>
-          </property>
           <property name="frameShape">
            <enum>QFrame::StyledPanel</enum>
           </property>
@@ -287,47 +266,6 @@ QLineEdit
           </property>
           <property name="toolTip">
            <string>&lt;qt&gt;&lt;p&gt;Available MIDI outputs (hardware or software)&lt;/p&gt;&lt;/qt&gt;</string>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">/*Style the QTreeWidget items in this widget to resemble and behave like push buttons.*/
-
-QTreeView {
-     show-decoration-selected: 1; 
-     background-color: #404040;
-     selection-background-color: #404040;
-}
-
-QTreeView::item {
-    border-top: 1px solid #AAAAAA;
-    border-bottom: 1px solid #AAAAAA;
-    border-right: 1px solid #AAAAAA;
-    background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #999999, stop:1 #DDDDDD);
-    color: #000000;
-    padding: 0 5px 0 5px;
-    margin: 1px 0 1px 0; /* force some space to better resemble buttons */
-}
-
-QTreeView::item:hover,
-QTreeView::branch:hover {
-    background-color: #CCDFFF;
-    color: #000000;
-}
-
-QTreeView::item:selected,
-QTreeView::branch:selected {
-    border-color: #E0E0E0;
-    background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #E0E0E0, stop:1 #EEEEEE);
-}
-
-QTreeView::branch {
-    border-top: 1px solid #AAAAAA;
-    border-bottom: 1px solid #AAAAAA;
-    border-left: 1px solid #AAAAAA;
-     background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #999999, stop:1 #DDDDDD);
-    color: #000000;
-    padding: 0 5px 0 5px;
-    margin: 1px 0 1px 0;
-}</string>
           </property>
           <column>
            <property name="text">
@@ -541,27 +479,6 @@ QTreeView::branch {
           <property name="autoFillBackground">
            <bool>false</bool>
           </property>
-          <property name="styleSheet">
-           <string notr="true">QTreeView
-{
-    background-color: #FFFFFF;
-    alternate-background-color: #EEEEFF;
-    color: #000000;
-    selection-background-color: #80AFFF;
-    selection-color: #FFFFFF;
-}
-
-QLineEdit
-{
-    border: 1px solid #AAAAAA;
-    background-color: #FFFFFF;
-    selection-background-color: #80AFFF;
-    color: #000000;
-    selection-color: #FFFFFF;
-}
-
-</string>
-          </property>
           <property name="frameShape">
            <enum>QFrame::StyledPanel</enum>
           </property>
@@ -631,47 +548,6 @@ QLineEdit
           </property>
           <property name="toolTip">
            <string>&lt;qt&gt;&lt;p&gt;Available MIDI inputs (from hardware or software)&lt;/p&gt;&lt;/qt&gt;</string>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">/*Style the QTreeWidget items in this widget to resemble and behave like push buttons.*/
-
-QTreeView {
-     show-decoration-selected: 1; 
-     background-color: #404040;
-     selection-background-color: #404040;
-}
-
-QTreeView::item {
-    border-top: 1px solid #AAAAAA;
-    border-bottom: 1px solid #AAAAAA;
-    border-right: 1px solid #AAAAAA;
-    background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #999999, stop:1 #DDDDDD);
-    color: #000000;
-    padding: 0 5px 0 5px;
-    margin: 1px 0 1px 0; /* force some space to better resemble buttons */
-}
-
-QTreeView::item:hover,
-QTreeView::branch:hover {
-    background-color: #CCDFFF;
-    color: #000000;
-}
-
-QTreeView::item:selected,
-QTreeView::branch:selected {
-    border-color: #E0E0E0;
-    background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #E0E0E0, stop:1 #EEEEEE);
-}
-
-QTreeView::branch {
-    border-top: 1px solid #AAAAAA;
-    border-bottom: 1px solid #AAAAAA;
-    border-left: 1px solid #AAAAAA;
-     background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #999999, stop:1 #DDDDDD);
-    color: #000000;
-    padding: 0 5px 0 5px;
-    margin: 1px 0 1px 0;
-}</string>
           </property>
           <column>
            <property name="text">
