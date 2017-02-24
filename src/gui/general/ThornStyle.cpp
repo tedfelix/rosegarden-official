@@ -19,6 +19,7 @@
 #include "ThornStyle.h"
 #include "gui/general/IconLoader.h"
 #include <QApplication>
+#include <QAbstractItemView>
 #include <QCheckBox>
 #include <QDebug>
 #include <qdrawutil.h>
@@ -134,9 +135,14 @@ bool AppEventFilter::eventFilter(QObject *watched, QEvent *event)
             applyStyleRecursive(widget, qApp->style());
         } else if (widget->style() != &m_style) {
 #ifdef DEBUG_EVENTFILTER
-            qDebug() << "    ToolTipBase=" << widget->palette().color(QPalette::ToolTipBase).name();
+            //qDebug() << "    ToolTipBase=" << widget->palette().color(QPalette::ToolTipBase).name();
 #endif
-            widget->setStyle(&m_style);
+            // Apply style recursively because some child widgets (e.g. QHeaderView in QTreeWidget, in DeviceManagerDialog) don't seem to get here.
+            if (qobject_cast<QAbstractItemView *>(widget)) {
+                applyStyleRecursive(widget, &m_style);
+            } else {
+                widget->setStyle(&m_style);
+            }
 #ifdef DEBUG_EVENTFILTER
             qDebug() << "    now using style" << widget->style();
 #endif
@@ -147,7 +153,7 @@ bool AppEventFilter::eventFilter(QObject *watched, QEvent *event)
 #endif
             } else {
 #ifdef DEBUG_EVENTFILTER
-                qDebug() << "    not a toplevel. ToolTipBase=" << widget->palette().color(QPalette::ToolTipBase).name();
+                //qDebug() << "    not a toplevel. ToolTipBase=" << widget->palette().color(QPalette::ToolTipBase).name();
 #endif
             }
             polishWidget(widget);
