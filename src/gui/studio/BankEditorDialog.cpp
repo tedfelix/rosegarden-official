@@ -197,11 +197,6 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     rightSideLayout->setSpacing(6);
     m_rightSide->setLayout(rightSideLayout);
 
-    if (ThornStyle::isEnabled()) {
-        QString localStyle("QWidget:!enabled { color: black }");
-        m_rightSide->setStyleSheet(localStyle);
-    }
-
     splitterLayout->addWidget(m_rightSide);
 
     m_programEditor = new MidiProgramsEditor(this, m_rightSide);
