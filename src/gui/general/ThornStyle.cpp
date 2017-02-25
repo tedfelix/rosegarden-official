@@ -1312,10 +1312,8 @@ QSize ThornStyle::sizeFromContents(QStyle::ContentsType type, const QStyleOption
     QSize sz = QProxyStyle::sizeFromContents(type, option, size, widget);
     switch (type) {
     case CT_LineEdit:
-        if (const QStyleOptionFrame *frame = qstyleoption_cast<const QStyleOptionFrame *>(option)) {
-            if (frame->lineWidth > 0) // i.e. not inside a QSpinBox
-                sz += QSize(2, 2); // line width of 1
-        }
+        // Reduce size of lineedits, to make the NameSetEditor more compact (in the BankEditorDialog)
+        sz -= QSize(2, 2);
         break;
     case CT_SpinBox:
         if (const QStyleOptionSpinBox *vopt = qstyleoption_cast<const QStyleOptionSpinBox *>(option)) {

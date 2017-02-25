@@ -20,18 +20,8 @@
 
 #include <QLineEdit>
 
-/**This subclass of QLineEdit uses a spot stylesheet to set its own background
- * color.
- *
- * The normal styling process has involved painting broad "widgetless" areas
- * with QWidget hacks.  These are necessary to paint certain void areas in the
- * main window background and in various other places that don't belong to
- * anything that can be addressed via a QSS selector.  These QWidget hacks
- * affect all child widgets, but it is normally possible to override the
- * background with highly specific selectors.  Not so for QLineEdit, it turns
- * out.  The only way to control its background after a QWidget hack upstream is
- * to use a local stylesheet directly in the code.  This class exists in order
- * to avoid having to pepper the code with stylesheet hacks for QLineEdit.
+/**
+ * This subclass of QLineEdit no longer serves any purpose :-)
  *
  * \author D. Michael McIntyre
  */
