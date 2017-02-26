@@ -363,7 +363,8 @@ int ThornStyle::styleHint(QStyle::StyleHint hint, const QStyleOption *option, co
     case SH_GroupBox_TextLabelColor:
         // QGroupBox::title { color: #FFFFFF; }
         // QGroupBox::title:!enabled { color: #000000; }
-        return option->state & State_Enabled ? qRgb(0xFF, 0xFF, 0xFF) : qRgb(0, 0, 0);
+        // but it was etched; plain black is unreadable, so let's use another color now
+        return option->state & State_Enabled ? qRgb(0xFF, 0xFF, 0xFF) : qRgb(0xAA, 0xAA, 0xAA);
     case SH_DialogButtonBox_ButtonsHaveIcons:
         return 0;
     case SH_DockWidget_ButtonsHaveFrame:
