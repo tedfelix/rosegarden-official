@@ -63,7 +63,7 @@ SystemFont::loadSystemFont(const SystemFontSpec &spec)
         return new SystemFontQt(font);
     }
 
-    bool haveFonts = false;
+    static bool haveFonts = false;
     if (!haveFonts) {
         unbundleFonts();
         haveFonts = true;
@@ -134,7 +134,7 @@ void
 SystemFont::addFont(QString fileName)
 {
     QFontDatabase::addApplicationFont(fileName);
-    NOTATION_DEBUG << "Added font file \"" << fileName << "\" to Qt font database";
+    NOTATION_DEBUG << "Added font file" << fileName << "to Qt font database";
 }
 
 }
