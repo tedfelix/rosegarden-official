@@ -976,23 +976,11 @@ RosegardenMainWindow::initView()
 
     // The plan is to set the new central view via setCentralWidget() in
     // a moment, which schedules the old one for deletion later via
-    // QObject::deleteLater().  However, we need to make sure that the old one
-    // behaves as if it's already been deleted -- i.e. that it and its
-    // entire tree of children send no signals between now and its
-    // actual deletion.
-    // 
+    // QObject::deleteLater().
     RosegardenMainViewWidget *oldView = m_view;
-    if (oldView) {
-        oldView->blockSignals(true);
-        // a qt-ism that I have never actually used before.  brief innit
-        foreach (QObject *o, oldView->findChildren<QObject *>()) {
-            o->blockSignals(true);
-        }
-    }
 
-    // We also need to make sure the parameter boxes don't send any
+    // We need to make sure the parameter boxes don't send any
     // signals to the old view!
-    //
     disconnect(m_segmentParameterBox, 0, oldView, 0);
     disconnect(m_instrumentParameterBox, 0, oldView, 0);
     disconnect(m_trackParameterBox, 0, oldView, 0);
@@ -3435,22 +3423,6 @@ RosegardenMainWindow::slotToggleTransportVisibility()
     }
     slotToggleTransport();
 }
-
-/*###
- * Not used anymore -- is here something valuable to save for slotToggleTransport ? (hjj)
- *
-void RosegardenMainWindow::slotHideTransport()
-{
-    QAction *a = findAction("show_transport");
-    if (a && a->isChecked()) {
-        a->blockSignals(true);
-        a->setChecked(false);
-        a->blockSignals(false);
-    }
-    getTransport()->hide();
-    getTransport()->blockSignals(true);
-}        
- */
 
 void
 RosegardenMainWindow::slotToggleTrackLabels()
