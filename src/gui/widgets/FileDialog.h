@@ -32,6 +32,14 @@
  * can imagine my pleasure upon realizing I really had no easier choice than
  * this.)
  *
+ * NOTE: FileDialog worked rather well until both Rosegarden and KDE migrated to
+ * Qt5.  New File->Open Example... and Open Template... have been provided, and
+ * there may not be any remaining use for this class.  We can probably switch
+ * everything back over to QFileDialog in all cases, but I don't feel like doing
+ * that much work to find out what breaks.  I decided to leave well enough
+ * alone, and I left this code and the hundreds of things referring to it in
+ * place.
+ *
  *
  * \author D. Michael McIntyre
  */

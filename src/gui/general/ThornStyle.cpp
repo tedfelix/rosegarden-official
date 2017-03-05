@@ -896,10 +896,8 @@ void ThornStyle::drawControl(QStyle::ControlElement element, const QStyleOption 
         if (option->state & State_Enabled) {
             painter->setPen(Qt::black);
         } else {
-            // QComboBox::!enabled { color: #AAAAAA; }
-            // but it was drawn etched with white, so using white is more readable
-            //painter->setPen(QColor(0xAA, 0xAA, 0xAA));
-            painter->setPen(Qt::white);
+            // disabled text light enough to be legible but not as stark as white
+            painter->setPen(QColor(0xEE, 0xEE, 0xEE));
         }
         QCommonStyle::drawControl(element, option, painter, widget);
         return;

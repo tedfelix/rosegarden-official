@@ -40,7 +40,8 @@
       <Action name="file_export_musicxml" text="Export Music&amp;XML File..." />
     </Menu>
     <Action name="file_open" text="&amp;Open..." icon="fileopen" shortcut="Ctrl+O" />
-    <!-- JAS Might need to place 'icon' tag elsewhere. -->
+    <Action name="file_open_example" text="Open Examp&amp;le..." />
+    <Action name="file_open_template" text="Open Tem&amp;plate..." />
     <Menu name="file_open_recent" icon="fileopen">
       <text>Open &amp;Recent</text>
       <!-- JAS custom coded menu -->

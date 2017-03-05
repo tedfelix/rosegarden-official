@@ -668,6 +668,8 @@ RosegardenMainWindow::setupActions()
 {
     createAction("file_new", SLOT(slotFileNew()));
     createAction("file_open", SLOT(slotFileOpen()));
+    createAction("file_open_example", SLOT(slotFileOpenExample()));
+    createAction("file_open_template", SLOT(slotFileOpenTemplate()));
     createAction("file_save", SLOT(slotFileSave()));
     createAction("file_save_as", SLOT(slotFileSaveAs()));
     createAction("file_save_as_template", SLOT(slotFileSaveAsTemplate()));
@@ -1872,16 +1874,23 @@ RosegardenMainWindow::openURL(const QUrl& url)
 }
 
 void
-RosegardenMainWindow::slotFileOpen()
+RosegardenMainWindow::openFileDialogAt(QString target)
 {
     slotStatusHelpMsg(tr("Opening file..."));
 
     QSettings settings;
+    QString directory;
 
-    // Get the last used path for File > Open.
-    settings.beginGroup(LastUsedPathsConfigGroup);
-    QString directory = settings.value("open_file", QDir::homePath()).toString();
-    settings.endGroup();
+    // if target is empty, this is a generic file open dialog, otherwise
+    // we open the specified target (examples, templates)
+    if (target.isEmpty()) {
+        // Get the last used path for File > Open.
+        settings.beginGroup(LastUsedPathsConfigGroup);
+        directory = settings.value("open_file", QDir::homePath()).toString();
+        settings.endGroup();
+    } else {
+        directory = target;
+    }
 
     // Launch the Open File dialog.
     QString fname = FileDialog::getOpenFileName(this, tr("Open File"), directory,
@@ -1894,11 +1903,13 @@ RosegardenMainWindow::slotFileOpen()
     if (fname.isEmpty())
         return;
 
-    // Update the last used path for File > Open.
-    directory = QFileInfo(fname).canonicalPath();
-    settings.beginGroup(LastUsedPathsConfigGroup);
-    settings.setValue("open_file", directory);
-    settings.endGroup();
+    if (target.isEmpty()) {
+        // Update the last used path for File > Open.
+        directory = QFileInfo(fname).canonicalPath();
+        settings.beginGroup(LastUsedPathsConfigGroup);
+        settings.setValue("open_file", directory);
+        settings.endGroup();
+    }
 
     // If a document is currently loaded
     if (m_doc) {
@@ -1913,6 +1924,38 @@ RosegardenMainWindow::slotFileOpen()
 
     // Continue opening the file.
     openURL(QUrl::fromLocalFile(fname));
+}
+
+void
+RosegardenMainWindow::slotFileOpen()
+{
+    openFileDialogAt("");
+}
+
+QString
+RosegardenMainWindow::getDataLocation()
+{
+#if QT_VERSION >= 0x050000
+    QString dataLocation = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation);
+#else
+    QString dataLocation = QDesktopServices::storageLocation(QDesktopServices::HomeLocation) + "/.local/share/";
+#endif
+    RG_DEBUG << "RosegardenMainWindow::getDataLocation(): returning: " << dataLocation << endl;
+    return dataLocation;
+}
+
+void
+RosegardenMainWindow::slotFileOpenExample()
+{
+    QString target = getDataLocation() + "/rosegarden/examples";
+    openFileDialogAt(target);
+}
+
+void
+RosegardenMainWindow::slotFileOpenTemplate()
+{
+    QString target = getDataLocation() + "/rosegarden/templates";
+    openFileDialogAt(target);
 }
 
 void

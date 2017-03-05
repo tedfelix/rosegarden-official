@@ -522,6 +522,18 @@ protected:
 
     void createAndSetupTransport();
 
+    /**
+     * Open a file dialog pointing to directory, if target is empty, this opens
+     * a generic file open dialog at the last location the user used
+     */
+    void openFileDialogAt(QString target);
+
+    /**
+     * Returns a suitable location for storing user data, typically
+     * ~/.local/share/ 
+     */
+    QString getDataLocation();
+
 signals:
     void startupStatusMessage(QString message);
 
@@ -576,6 +588,16 @@ public slots:
      * open a file and load it into the document
      */
     void slotFileOpen();
+
+    /**
+     * open a file dialog on the examples directory
+     */
+    void slotFileOpenExample();
+
+    /**
+     * open a file dialog on the templates directory
+     */
+    void slotFileOpenTemplate();
 
     /**
      * opens a file from the recent files menu (according to action name)
