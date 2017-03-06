@@ -40,13 +40,11 @@ IconStackedWidget::IconStackedWidget(QWidget *parent) :
     m_iconPanel->setFrameStyle(QFrame::Panel | QFrame::Sunken);
     m_iconPanel->setLineWidth(2);
 
-    // Since this code was born with hard coded colors anyway, and since we live
-    // in a stylesheet world now, let's dump the original QPalette
-    // implementation in favor of a spot stylesheet.  (I've never gotten
-    // QPalette backgrounds to play nice with stylesheets elsewhere, and this is
-    // probably the best solution anyway.)
-    QString localStyle("background-color: #FFFFFF; color: #000000;");
-    m_iconPanel->setStyleSheet(localStyle);
+    // background-color: #FFFFFF; color: #000000;
+    QPalette pal;
+    pal.setColor(QPalette::Base, Qt::white);
+    pal.setColor(QPalette::Text, Qt::black);
+    m_iconPanel->setPalette(pal);
 
     // Use a VBoxLayout for the icon buttons
     m_iconLayout = new QVBoxLayout;
