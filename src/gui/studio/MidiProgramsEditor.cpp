@@ -28,7 +28,6 @@
 #include "base/Device.h"
 #include "base/MidiDevice.h"
 #include "base/MidiProgram.h"
-#include "gui/widgets/RosegardenPopupMenu.h"
 #include "gui/widgets/LineEdit.h"
 #include "gui/general/IconLoader.h"
 
@@ -497,7 +496,7 @@ MidiProgramsEditor::slotKeyMapButtonPressed()
         return ;
     m_currentMenuProgram = id;
 
-    RosegardenPopupMenu *menu = new RosegardenPopupMenu(button);
+    QMenu *menu = new QMenu(button);
 
     const MidiKeyMapping *currentMapping =
         m_device->getKeyMappingForProgram(*program);

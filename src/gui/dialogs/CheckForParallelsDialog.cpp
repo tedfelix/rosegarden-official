@@ -70,7 +70,11 @@ CheckForParallelsDialog::CheckForParallelsDialog(NotationView *p, RosegardenDocu
 
     textBrowser = new QTextBrowser(this);
 
-    textBrowser->setStyleSheet("* { background-color: rgb(200, 200, 200); }");
+    //textBrowser->setStyleSheet("* { background-color: rgb(200, 200, 200); }");
+    QPalette pal;
+    pal.setColor(QPalette::Base, QColor(0xc8, 0xc8, 0xc8));
+    pal.setColor(QPalette::Text, Qt::black);
+    textBrowser->setPalette(pal);
 
     connect(textBrowser, SIGNAL(cursorPositionChanged()), this, SLOT(onTextBrowserclicked()));
 

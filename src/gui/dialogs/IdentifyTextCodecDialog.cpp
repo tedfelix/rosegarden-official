@@ -206,7 +206,13 @@ IdentifyTextCodecDialog::IdentifyTextCodecDialog(QWidget *parent,
 
     gl->addWidget(new QLabel(tr("\nExample text from file:")));
     m_example = new QLabel;
-    m_example->setStyleSheet("background: #fff3c3; color: black;");
+
+    //m_example->setStyleSheet("background: #fff3c3; color: black;");
+    QPalette pal;
+    pal.setColor(QPalette::Base, QColor(0xff, 0xf3, 0xc3));
+    pal.setColor(QPalette::Text, Qt::black);
+    m_example->setPalette(pal);
+
     gl->addWidget(m_example, 20);
     QFont font;
     font.setStyleHint(QFont::TypeWriter);

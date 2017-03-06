@@ -22,7 +22,6 @@
 #include "base/Instrument.h"
 #include "base/Studio.h"
 #include "gui/studio/StudioControl.h"
-#include "gui/widgets/RosegardenPopupMenu.h"
 #include "sound/MappedCommon.h"
 #include "sound/MappedStudio.h"
 
@@ -33,6 +32,7 @@
 #include <QString>
 #include <QWidget>
 #include <QAction>
+#include <QMenu>
 
 
 namespace Rosegarden
@@ -138,7 +138,7 @@ AudioRouteMenu::slotShowMenu()
     if (getNumEntries() == 0)
         return ;
 
-    RosegardenPopupMenu *menu = new RosegardenPopupMenu((QWidget *)parent());
+    QMenu *menu = new QMenu((QWidget *)parent());
 
     for (int i = 0; i < getNumEntries(); ++i) {
 
