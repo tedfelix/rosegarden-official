@@ -1209,8 +1209,13 @@ void ThornStyle::drawComplexControl(QStyle::ComplexControl control, const QStyle
                         gradient.setColorAt(0, QColor(0xEE, 0xEE, 0xEE));
                         gradient.setColorAt(1, QColor(0xE0, 0xE0, 0xE0));
                     } else {
-                        gradient.setColorAt(0, QColor(0xDD, 0xDD, 0xDD));
-                        gradient.setColorAt(1, QColor(0x99, 0x99, 0x99));
+                        if (qobject_cast<QToolBar*>(widget->parentWidget())) {
+                            gradient.setColorAt(0, QColor(0xEE, 0xEE, 0xEE));
+                            gradient.setColorAt(1, QColor(0xDD, 0xDD, 0xDD));
+                        } else {
+                            gradient.setColorAt(0, QColor(0xDD, 0xDD, 0xDD));
+                            gradient.setColorAt(1, QColor(0x99, 0x99, 0x99));
+                        }
                     }
                     painter->setBrush(gradient);
                 }
