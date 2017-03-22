@@ -892,8 +892,9 @@ TrackButtons::selectInstrument(Track *track, Instrument *instrument)
 
     // ??? This routine needs to go.  The UI shouldn't know so much about
     //     the other objects in the system.  The following updates should
-    //     be done by their respective objects in response to a
-    //     CompositionObserver::trackChanged() notification.
+    //     be done by their respective objects in response to the
+    //     CompositionObserver::trackChanged() notification that
+    //     we've already sent.
 
     const TrackId trackId = track->getId();
 
