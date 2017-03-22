@@ -15,15 +15,17 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[AudioMixerWindow]"
 
 #include "AudioRouteMenu.h"
-#include "WheelyButton.h"
 
+#include "gui/widgets/WheelyButton.h"
 #include "base/Instrument.h"
 #include "base/Studio.h"
 #include "gui/studio/StudioControl.h"
-#include "sound/MappedCommon.h"
-#include "sound/MappedStudio.h"
+#include "sound/MappedCommon.h"  // MappedObjectId, MappedObjectValue
+#include "sound/MappedStudio.h"  // MappedAudioFader
+#include "misc/Debug.h"
 
 #include <QComboBox>
 #include <QCursor>
@@ -38,12 +40,13 @@
 namespace Rosegarden
 {
 
-AudioRouteMenu::AudioRouteMenu(QWidget *par,
+
+AudioRouteMenu::AudioRouteMenu(QWidget *parent,
                                Direction direction,
                                Format format,
                                Studio *studio,
                                Instrument *instrument) :
-        QObject(par),
+        QObject(parent),
         m_studio(studio),
         m_instrument(instrument),
         m_direction(direction),
@@ -52,23 +55,26 @@ AudioRouteMenu::AudioRouteMenu(QWidget *par,
     if (instrument) {
         // Make instrument tell us if it gets destroyed.
         connect(instrument, SIGNAL(destroyed()),
-                this, SLOT(slotInstrumentGone()));
+                SLOT(slotInstrumentGone()));
     }
-    
+
     switch (format) {
 
     case Compact: {
             m_combo = 0;
-            m_button = new WheelyButton(par);
-            connect(m_button, SIGNAL(wheel(bool)), this, SLOT(slotWheel(bool)));
-            connect(m_button, SIGNAL(clicked()), this, SLOT(slotShowMenu()));
+            m_button = new WheelyButton(parent);
+            connect(m_button, SIGNAL(wheel(bool)),
+                    SLOT(slotWheel(bool)));
+            connect(m_button, SIGNAL(clicked()),
+                    SLOT(slotShowMenu()));
             break;
         }
 
     case Regular: {
             m_button = 0;
-            m_combo = new QComboBox(par);
-            connect(m_combo, SIGNAL(activated(int)), this, SLOT(slotEntrySelected(int)));
+            m_combo = new QComboBox(parent);
+            connect(m_combo, SIGNAL(activated(int)),
+                    SLOT(slotEntrySelected(int)));
             break;
         }
 
@@ -111,11 +117,13 @@ AudioRouteMenu::setInstrument(Studio *studio,
 {
     m_studio = studio;
     m_instrument = instrument;
+
     updateWidget();
+
     if (instrument) {
         // Make instrument tell us if it gets destroyed.
         connect(instrument, SIGNAL(destroyed()),
-                this, SLOT(slotInstrumentGone()));
+                SLOT(slotInstrumentGone()));
     }
 }
 
@@ -123,7 +131,8 @@ void
 AudioRouteMenu::slotWheel(bool up)
 {
     int current = getCurrentEntry();
-    if (up) { // actually moves down the list
+
+    if (up) {
         if (current > 0)
             slotEntrySelected(current - 1);
     } else {
@@ -135,25 +144,35 @@ AudioRouteMenu::slotWheel(bool up)
 void
 AudioRouteMenu::slotShowMenu()
 {
+    // No entries to show?  Bail.
     if (getNumEntries() == 0)
-        return ;
+        return;
 
-    QMenu *menu = new QMenu((QWidget *)parent());
+    QMenu *menu = new QMenu(qobject_cast<QWidget *>(parent()));
 
+    // Populate the menu.
     for (int i = 0; i < getNumEntries(); ++i) {
-
         QAction *a = menu->addAction(getEntryText(i));
         a->setObjectName(QString("%1").arg(i));
     }
 
-    connect(menu, SIGNAL(triggered(QAction *)), this, SLOT(slotEntrySelected(QAction *)));
+    connect(menu, SIGNAL(triggered(QAction *)),
+            SLOT(slotEntrySelected(QAction *)));
 
-    int itemHeight = menu->actionGeometry(menu->actions().value(0)).height() + 2;
+    // Compute the position for the pop-up menu.
+
+    // QMenu::popup() can do this for us, but it doesn't place the
+    // cursor over top of the current selection.
+
+    // Get the QRect for the current entry.
+    QRect actionRect =
+            menu->actionGeometry(menu->actions().value(getCurrentEntry()));
+
     QPoint pos = QCursor::pos();
-
     pos.rx() -= 10;
-    pos.ry() -= (itemHeight / 2 + getCurrentEntry() * itemHeight);
+    pos.ry() -= actionRect.top() + actionRect.height() / 2;
 
+    // Display the menu.
     menu->popup(pos);
 }
 
