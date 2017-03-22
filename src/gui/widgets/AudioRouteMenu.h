@@ -35,11 +35,12 @@ class WheelyButton;
 class Studio;
 class Instrument;
 
-/// A specialised menu for selecting audio inputs or outputs, that
-/// queries the studio and instrument to find out what it should show.
-/// Available in a "compact" size, which is a push button with a popup
-/// menu attached, or a regular size which is a combobox.
-///
+/// A specialised menu for selecting audio inputs or outputs.
+/**
+ * This class queries the studio and instrument to find out what it should
+ * show.  Available in a "compact" size, which is a push button with a popup
+ * menu attached, or a regular size which is a combobox.
+ */
 class AudioRouteMenu : public QObject
 {
     Q_OBJECT
@@ -54,24 +55,30 @@ public:
                    Studio *studio = 0,
                    Instrument *instrument = 0);
 
+    /// Connect to a different Instrument.
+    void setInstrument(Studio *, Instrument *);
+
+    /// Get the WheelyButton (Compact) or QComboBox (Regular).
     QWidget *getWidget();
 
-public slots:
-    void slotRepopulate();
-    void slotSetInstrument(Studio *, Instrument *);
-    
-protected slots:
+    /// Update the widget from the Instrument.
+    void updateWidget();
+
+private slots:
+    /// Handle wheel movement from WheelyButton.
     void slotWheel(bool up);
+    /// Handle click from WheelyButton.  Launch pop-up menu.
     void slotShowMenu();
-    void slotEntrySelected(int);
+    /// Handle selection from WheelyButton pop-up menu.
     void slotEntrySelected(QAction *);
 
-signals:
-    // The menu writes changes directly to the instrument, but it
-    // also emits this to let you know something has changed
-    void changed();
-private slots:
-    /// Instrument is being destroyed
+    /// Handle selection change from QComboBox.
+    void slotEntrySelected(int);
+
+    /// Instrument is being destroyed.
+    /**
+     * Connected to Instrument::destroyed().
+     */
     void slotInstrumentGone(void);
 
 private:
@@ -83,8 +90,11 @@ private:
     WheelyButton *m_button;
     QComboBox *m_combo;
 
+    /// Number of entries in the combo/menu.
     int getNumEntries();
-    int getCurrentEntry(); // for instrument
+    /// Selected entry based on Instrument.
+    int getCurrentEntry();
+    /// Text for a specific entry.
     QString getEntryText(int n);
 };
 

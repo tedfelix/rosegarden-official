@@ -770,9 +770,9 @@ AudioMixerWindow::updateRouteButtons(InstrumentId instrumentId)
         return;
 
     if (strip.m_input)
-        strip.m_input->slotRepopulate();
+        strip.m_input->updateWidget();
 
-    strip.m_output->slotRepopulate();
+    strip.m_output->updateWidget();
 }
 
 void
@@ -1659,6 +1659,7 @@ AudioMixerWindow::slotShowUnassignedFaders()
     populate();
 }
 
+#if 0
 void
 AudioMixerWindow::slotRepopulate()
 {
@@ -1669,6 +1670,7 @@ AudioMixerWindow::slotRepopulate()
     // the need for even more new plumbing
     populate();
 }
+#endif
 
 void
 AudioMixerWindow::slotHelp()

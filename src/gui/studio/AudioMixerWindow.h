@@ -115,7 +115,7 @@ protected slots:
     void slotSelectPlugin();
 
     /// Used only by the alias button to force a refresh of the widgets.
-    void slotRepopulate();
+    //void slotRepopulate();
 
     // The following slots handle updates from the outside.
 

@@ -231,9 +231,9 @@ AudioFaderBox::slotSetInstrument(Studio *studio,
                                  Instrument *instrument)
 {
     if (m_audioInput)
-        m_audioInput->slotSetInstrument(studio, instrument);
+        m_audioInput->setInstrument(studio, instrument);
     if (m_audioOutput)
-        m_audioOutput->slotSetInstrument(studio, instrument);
+        m_audioOutput->setInstrument(studio, instrument);
     if (instrument)
         setAudioChannels(instrument->getAudioChannels());
     if (instrument) {
@@ -287,9 +287,9 @@ AudioFaderBox::setAudioChannels(int channels)
     }
 
     if (m_audioInput)
-        m_audioInput->slotRepopulate();
+        m_audioInput->updateWidget();
     if (m_audioOutput)
-        m_audioOutput->slotRepopulate();
+        m_audioOutput->updateWidget();
 }
 
 void

@@ -74,7 +74,7 @@ AudioRouteMenu::AudioRouteMenu(QWidget *par,
 
     }
 
-    slotRepopulate();
+    updateWidget();
 }
 
 QWidget *
@@ -87,7 +87,7 @@ AudioRouteMenu::getWidget()
 }
 
 void
-AudioRouteMenu::slotRepopulate()
+AudioRouteMenu::updateWidget()
 {
     switch (m_format) {
 
@@ -106,12 +106,12 @@ AudioRouteMenu::slotRepopulate()
 }
 
 void
-AudioRouteMenu::slotSetInstrument(Studio *studio,
-                                  Instrument *instrument)
+AudioRouteMenu::setInstrument(Studio *studio,
+                              Instrument *instrument)
 {
     m_studio = studio;
     m_instrument = instrument;
-    slotRepopulate();
+    updateWidget();
     if (instrument) {
         // Make instrument tell us if it gets destroyed.
         connect(instrument, SIGNAL(destroyed()),
@@ -395,8 +395,7 @@ AudioRouteMenu::slotEntrySelected(int i)
         }
     }
 
-    slotRepopulate();
-    emit changed();
+    updateWidget();
 }
 
 void
