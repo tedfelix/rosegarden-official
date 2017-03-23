@@ -3673,7 +3673,7 @@
         <location line="+1918"/>
         <source>O</source>
         <comment>keyboard shortcut</comment>
-        <translation>Q</translation>
+        <translation>O</translation>
     </message>
     <message>
         <location line="-1908"/>
