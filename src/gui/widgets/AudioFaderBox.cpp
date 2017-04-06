@@ -230,7 +230,7 @@ void
 AudioFaderBox::slotSetInstrument(Studio * /*studio*/,
                                  Instrument *instrument)
 {
-    InstrumentId instrumentId = NO_INSTRUMENT;
+    InstrumentId instrumentId = NoInstrument;
     if (instrument)
         instrumentId = instrument->getId();
 

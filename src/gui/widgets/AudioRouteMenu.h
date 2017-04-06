@@ -18,7 +18,7 @@
 #ifndef RG_AUDIOROUTEMENU_H
 #define RG_AUDIOROUTEMENU_H
 
-#include "base/MidiProgram.h"  // InstrumentId
+#include "base/Instrument.h"  // InstrumentId
 
 #include <QObject>
 #include <QString>
@@ -35,7 +35,6 @@ namespace Rosegarden
 
 class WheelyButton;
 class Studio;
-class Instrument;
 
 /// A specialised menu for selecting audio inputs or outputs.
 /**
@@ -54,7 +53,7 @@ public:
     AudioRouteMenu(QWidget *parent,
                    Direction direction,
                    Format format,
-                   InstrumentId instrumentId = NO_INSTRUMENT);
+                   InstrumentId instrumentId = NoInstrument);
 
     /// Connect to a different Instrument.
     void setInstrument(InstrumentId instrumentId);

@@ -19,6 +19,7 @@
 #ifndef RG_SYNTHPLUGINMANAGERDIALOG_H
 #define RG_SYNTHPLUGINMANAGERDIALOG_H
 
+#include "base/Instrument.h"
 #include "base/MidiProgram.h"
 #include "gui/general/ActionFileClient.h"
 #include <QMainWindow>

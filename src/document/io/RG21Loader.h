@@ -19,6 +19,7 @@
 #ifndef RG_RG21LOADER_H
 #define RG_RG21LOADER_H
 
+#include "base/Instrument.h"
 #include "base/MidiProgram.h"
 #include "base/NotationTypes.h"
 #include <map>

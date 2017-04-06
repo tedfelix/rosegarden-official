@@ -18,6 +18,7 @@
 #ifndef RG_MIXERWINDOW_H
 #define RG_MIXERWINDOW_H
 
+#include "base/Instrument.h"
 #include "base/MidiProgram.h"
 
 #include <QMainWindow>

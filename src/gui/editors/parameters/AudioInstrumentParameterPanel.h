@@ -19,6 +19,7 @@
 #ifndef RG_AUDIOINSTRUMENTPARAMETERPANEL_H
 #define RG_AUDIOINSTRUMENTPARAMETERPANEL_H
 
+#include "base/Instrument.h"
 #include "base/MidiProgram.h"
 #include "InstrumentParameterPanel.h"
 

@@ -25,11 +25,6 @@ namespace Rosegarden
 {
 typedef unsigned char MidiByte;
 
-// ??? Shouldn't this be moved to Instrument.h?
-typedef unsigned int InstrumentId;
-#define NO_INSTRUMENT UINT_MAX
-// See Instrument.h for more InstrumentId constants like SystemInstrumentBase.
-
 /**
  * ??? This data structure doesn't match the concept of a bank.  A bank
  *     is a container of programs.  There is no such containment here.  If

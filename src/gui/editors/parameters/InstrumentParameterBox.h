@@ -19,6 +19,7 @@
 #ifndef RG_INSTRUMENTPARAMETERBOX_H
 #define RG_INSTRUMENTPARAMETERBOX_H
 
+#include "base/Instrument.h"
 #include "base/MidiProgram.h"
 #include "RosegardenParameterBox.h"
 

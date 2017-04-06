@@ -16,6 +16,7 @@
 #ifndef RG_MIDI_METRONOME_H
 #define RG_MIDI_METRONOME_H
 
+#include "Instrument.h"
 #include "MidiProgram.h"
 
 namespace Rosegarden {

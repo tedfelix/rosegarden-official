@@ -47,6 +47,8 @@ typedef std::vector<std::pair<MidiByte, MidiByte> > StaticControllers;
 typedef std::vector<std::pair<MidiByte, MidiByte> >::iterator StaticControllerIterator;
 typedef std::vector<std::pair<MidiByte, MidiByte> >::const_iterator StaticControllerConstIterator;
 
+typedef unsigned int InstrumentId;
+const InstrumentId NoInstrument = UINT_MAX;
 
 // Instrument number groups
 //

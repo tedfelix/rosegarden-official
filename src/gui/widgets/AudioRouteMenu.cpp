@@ -166,7 +166,7 @@ AudioRouteMenu::slotShowMenu()
 int
 AudioRouteMenu::getNumEntries()
 {
-    if (m_instrumentId == NO_INSTRUMENT)
+    if (m_instrumentId == NoInstrument)
         return 0;
 
     RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
@@ -205,7 +205,7 @@ AudioRouteMenu::getNumEntries()
 int
 AudioRouteMenu::getCurrentEntry()
 {
-    if (m_instrumentId == NO_INSTRUMENT)
+    if (m_instrumentId == NoInstrument)
         return 0;
 
     RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
@@ -258,7 +258,7 @@ AudioRouteMenu::getCurrentEntry()
 QString
 AudioRouteMenu::getEntryText(int entry)
 {
-    if (m_instrumentId == NO_INSTRUMENT)
+    if (m_instrumentId == NoInstrument)
         return tr("none");
 
     switch (m_direction) {
@@ -323,7 +323,7 @@ AudioRouteMenu::slotEntrySelected(QAction *a)
 void
 AudioRouteMenu::slotEntrySelected(int i)
 {
-    if (m_instrumentId == NO_INSTRUMENT)
+    if (m_instrumentId == NoInstrument)
         return;
 
     RosegardenDocument *doc =
