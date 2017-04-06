@@ -16,6 +16,7 @@
 #ifndef RG_INSTRUMENT_H
 #define RG_INSTRUMENT_H
 
+#include <climits>  // UINT_MAX
 #include <string>
 #include <vector>
 

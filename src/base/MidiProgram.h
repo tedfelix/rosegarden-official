@@ -16,7 +16,6 @@
 #ifndef RG_MIDIBANK_H
 #define RG_MIDIBANK_H
 
-#include <climits>  // UINT_MAX
 #include <string>
 #include <vector>
 #include <map>
