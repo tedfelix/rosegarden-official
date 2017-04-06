@@ -46,17 +46,12 @@ namespace Rosegarden
 AudioRouteMenu::AudioRouteMenu(QWidget *parent,
                                Direction direction,
                                Format format,
-                               Studio * /*studio*/,
-                               Instrument *instrument) :
+                               InstrumentId instrumentId) :
         QObject(parent),
-        m_instrumentId(-1),
+        m_instrumentId(instrumentId),
         m_direction(direction),
         m_format(format)
 {
-    if (instrument) {
-        m_instrumentId = instrument->getId();
-    }
-
     switch (format) {
 
     case Compact: {
@@ -111,13 +106,9 @@ AudioRouteMenu::updateWidget()
 }
 
 void
-AudioRouteMenu::setInstrument(Studio * /*studio*/,
-                              Instrument *instrument)
+AudioRouteMenu::setInstrument(InstrumentId instrumentId)
 {
-    if (instrument)
-        m_instrumentId = instrument->getId();
-    else
-        m_instrumentId = -1;
+    m_instrumentId = instrumentId;
 
     updateWidget();
 }
@@ -175,7 +166,7 @@ AudioRouteMenu::slotShowMenu()
 int
 AudioRouteMenu::getNumEntries()
 {
-    if (m_instrumentId == -1)
+    if (m_instrumentId == NO_INSTRUMENT)
         return 0;
 
     RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
@@ -214,7 +205,7 @@ AudioRouteMenu::getNumEntries()
 int
 AudioRouteMenu::getCurrentEntry()
 {
-    if (m_instrumentId == -1)
+    if (m_instrumentId == NO_INSTRUMENT)
         return 0;
 
     RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
@@ -267,7 +258,7 @@ AudioRouteMenu::getCurrentEntry()
 QString
 AudioRouteMenu::getEntryText(int entry)
 {
-    if (m_instrumentId == -1)
+    if (m_instrumentId == NO_INSTRUMENT)
         return tr("none");
 
     switch (m_direction) {
@@ -332,7 +323,7 @@ AudioRouteMenu::slotEntrySelected(QAction *a)
 void
 AudioRouteMenu::slotEntrySelected(int i)
 {
-    if (m_instrumentId == -1)
+    if (m_instrumentId == NO_INSTRUMENT)
         return;
 
     RosegardenDocument *doc =

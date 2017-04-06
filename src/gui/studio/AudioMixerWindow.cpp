@@ -290,8 +290,7 @@ AudioMixerWindow::populate()
             strip.m_input = new AudioRouteMenu(m_mainBox,
                                                AudioRouteMenu::In,
                                                AudioRouteMenu::Compact,
-                                               m_studio,
-                                               instrument);
+                                               instrument->getId());
             strip.m_input->getWidget()->setToolTip(tr("Record input source"));
             strip.m_input->getWidget()->setMaximumWidth(45);
         } else {
@@ -303,8 +302,7 @@ AudioMixerWindow::populate()
         strip.m_output = new AudioRouteMenu(m_mainBox,
                                             AudioRouteMenu::Out,
                                             AudioRouteMenu::Compact,
-                                            m_studio,
-                                            instrument);
+                                            instrument->getId());
         strip.m_output->getWidget()->setToolTip(tr("Output destination"));
         strip.m_output->getWidget()->setMaximumWidth(45);
 

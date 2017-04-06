@@ -16,6 +16,7 @@
 #ifndef RG_MIDIBANK_H
 #define RG_MIDIBANK_H
 
+#include <climits>  // UINT_MAX
 #include <string>
 #include <vector>
 #include <map>
@@ -23,7 +24,11 @@
 namespace Rosegarden
 {
 typedef unsigned char MidiByte;
+
+// ??? Shouldn't this be moved to Instrument.h?
 typedef unsigned int InstrumentId;
+#define NO_INSTRUMENT UINT_MAX
+// See Instrument.h for more InstrumentId constants like SystemInstrumentBase.
 
 /**
  * ??? This data structure doesn't match the concept of a bank.  A bank

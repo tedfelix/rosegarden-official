@@ -227,13 +227,17 @@ AudioFaderBox::setIsSynth(bool isSynth)
 }
 
 void
-AudioFaderBox::slotSetInstrument(Studio *studio,
+AudioFaderBox::slotSetInstrument(Studio * /*studio*/,
                                  Instrument *instrument)
 {
+    InstrumentId instrumentId = NO_INSTRUMENT;
+    if (instrument)
+        instrumentId = instrument->getId();
+
     if (m_audioInput)
-        m_audioInput->setInstrument(studio, instrument);
+        m_audioInput->setInstrument(instrumentId);
     if (m_audioOutput)
-        m_audioOutput->setInstrument(studio, instrument);
+        m_audioOutput->setInstrument(instrumentId);
     if (instrument)
         setAudioChannels(instrument->getAudioChannels());
     if (instrument) {

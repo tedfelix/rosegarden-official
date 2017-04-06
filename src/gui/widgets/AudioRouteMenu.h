@@ -18,6 +18,8 @@
 #ifndef RG_AUDIOROUTEMENU_H
 #define RG_AUDIOROUTEMENU_H
 
+#include "base/MidiProgram.h"  // InstrumentId
+
 #include <QObject>
 #include <QString>
 
@@ -52,16 +54,10 @@ public:
     AudioRouteMenu(QWidget *parent,
                    Direction direction,
                    Format format,
-                   Studio *studio = 0,
-                   Instrument *instrument = 0);
-//    AudioRouteMenu(QWidget *parent,
-//                   Direction direction,
-//                   Format format,
-//                   int instrumentId = -1);
+                   InstrumentId instrumentId = NO_INSTRUMENT);
 
     /// Connect to a different Instrument.
-    void setInstrument(Studio *, Instrument *);
-//    void setInstrument(int instrumentId);
+    void setInstrument(InstrumentId instrumentId);
 
     /// Get the WheelyButton (Compact) or QComboBox (Regular).
     QWidget *getWidget();
@@ -81,7 +77,7 @@ private slots:
     void slotEntrySelected(int);
 
 private:
-    int m_instrumentId;
+    InstrumentId m_instrumentId;
 
     Direction m_direction;
     Format m_format;
