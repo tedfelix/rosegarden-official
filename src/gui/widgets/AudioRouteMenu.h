@@ -54,9 +54,14 @@ public:
                    Format format,
                    Studio *studio = 0,
                    Instrument *instrument = 0);
+//    AudioRouteMenu(QWidget *parent,
+//                   Direction direction,
+//                   Format format,
+//                   int instrumentId = -1);
 
     /// Connect to a different Instrument.
     void setInstrument(Studio *, Instrument *);
+//    void setInstrument(int instrumentId);
 
     /// Get the WheelyButton (Compact) or QComboBox (Regular).
     QWidget *getWidget();
@@ -75,15 +80,9 @@ private slots:
     /// Handle selection change from QComboBox.
     void slotEntrySelected(int);
 
-    /// Instrument is being destroyed.
-    /**
-     * Connected to Instrument::destroyed().
-     */
-    void slotInstrumentGone(void);
-
 private:
-    Studio *m_studio;
-    Instrument *m_instrument;
+    int m_instrumentId;
+
     Direction m_direction;
     Format m_format;
 
