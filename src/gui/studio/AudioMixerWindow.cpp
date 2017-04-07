@@ -1010,7 +1010,7 @@ AudioMixerWindow::slotFaderLevelChanged(float dB)
             return;
 
         StudioControl::setStudioObjectProperty(
-                MappedObjectId(instrumentId),
+                MappedObjectId(instrument->getMappedId()),
                 MappedAudioFader::FaderLevel,
                 MappedObjectValue(dB));
 
