@@ -32,7 +32,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+57"/>
+        <location line="+36"/>
         <source>Sends its data through</source>
         <translation type="unfinished"></translation>
     </message>
@@ -47,12 +47,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-44"/>
+        <location line="-23"/>
         <source>&lt;qt&gt;&lt;p&gt;Create new playback devices here. Double-click the device name to change it. Select a device here and connect it to a MIDI output port by clicking on a port to the right.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+88"/>
+        <location line="+67"/>
         <source>&lt;qt&gt;&lt;p&gt;Bank definitions allow you to tell Rosegarden about the programs or patches available for use on the equipment (hardware or software synth) connected to this device.&lt;/p&gt;&lt;p&gt;You must have something defined for any program or bank changes you wish to transmit, as Rosegarden hides all bank and program numbers that are undefined.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -79,12 +79,12 @@
     </message>
     <message>
         <location line="+3"/>
-        <location line="+250"/>
+        <location line="+209"/>
         <source>New</source>
         <translation type="unfinished">Newydd</translation>
     </message>
     <message>
-        <location line="-228"/>
+        <location line="-187"/>
         <source>&lt;qt&gt;&lt;p&gt;Delete the selected playback device.  Any tracks using this device will need to be reassigned, and any program or bank changes on those tracks will be lost permanently&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -99,40 +99,40 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+69"/>
+        <location line="+28"/>
         <source>Available outputs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+5"/>
-        <location line="+344"/>
+        <location line="+282"/>
         <source>No port</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-334"/>
+        <location line="-272"/>
         <source>Internal Synth</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-60"/>
+        <location line="-19"/>
         <source>&lt;qt&gt;&lt;p&gt;Available MIDI outputs (hardware or software)&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+100"/>
-        <location line="+340"/>
+        <location line="+59"/>
+        <location line="+278"/>
         <source>&lt;qt&gt;&lt;p&gt;Click to refresh the port list after connecting a new piece of equipment or starting a new soft synth&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-337"/>
-        <location line="+340"/>
+        <location line="-275"/>
+        <location line="+278"/>
         <source>Refresh</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-303"/>
+        <location line="-241"/>
         <source>MIDI Recording</source>
         <translation type="unfinished"></translation>
     </message>
@@ -153,7 +153,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+82"/>
+        <location line="+61"/>
         <source>Receives its data from</source>
         <translation type="unfinished"></translation>
     </message>
@@ -173,12 +173,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+69"/>
+        <location line="+28"/>
         <source>Available inputs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-45"/>
+        <location line="-4"/>
         <source>&lt;qt&gt;&lt;p&gt;Available MIDI inputs (from hardware or software)&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -330,13 +330,13 @@
         <location line="+48"/>
         <location line="+73"/>
         <location line="+1951"/>
-        <location line="+860"/>
+        <location line="+862"/>
         <location line="+115"/>
         <source>&amp;File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-4696"/>
+        <location line="-4698"/>
         <source>&amp;Add Audio File...</source>
         <translation type="unfinished">Ychwanegu Ffeil Sain</translation>
     </message>
@@ -355,14 +355,14 @@
         <location line="+1207"/>
         <location line="+48"/>
         <location line="+75"/>
-        <location line="+2002"/>
+        <location line="+2004"/>
         <location line="+807"/>
         <location line="+106"/>
         <source>&amp;Close</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-4688"/>
+        <location line="-4690"/>
         <location line="+31"/>
         <location line="+70"/>
         <location line="+49"/>
@@ -371,7 +371,7 @@
         <location line="+1207"/>
         <location line="+48"/>
         <location line="+75"/>
-        <location line="+2002"/>
+        <location line="+2004"/>
         <location line="+807"/>
         <location line="+106"/>
         <source>Ctrl+W</source>
@@ -379,21 +379,21 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-4693"/>
+        <location line="-4695"/>
         <location line="+31"/>
         <location line="+70"/>
         <location line="+49"/>
         <location line="+134"/>
         <location line="+166"/>
         <location line="+1330"/>
-        <location line="+2011"/>
+        <location line="+2013"/>
         <location line="+798"/>
         <location line="+106"/>
         <source>&amp;Edit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-4694"/>
+        <location line="-4696"/>
         <source>&amp;Unload Audio File</source>
         <translation type="unfinished">Ychwanegu Ffeil Sain</translation>
     </message>
@@ -433,7 +433,7 @@
         <location line="+69"/>
         <location line="+1"/>
         <location line="+1702"/>
-        <location line="+880"/>
+        <location line="+882"/>
         <location line="+342"/>
         <location line="+1"/>
         <location line="+57"/>
@@ -442,7 +442,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-4711"/>
+        <location line="-4713"/>
         <location line="+59"/>
         <location line="+52"/>
         <location line="+135"/>
@@ -451,7 +451,7 @@
         <location line="+173"/>
         <location line="+70"/>
         <location line="+1703"/>
-        <location line="+880"/>
+        <location line="+882"/>
         <location line="+342"/>
         <location line="+58"/>
         <source>F1</source>
@@ -459,14 +459,14 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-3223"/>
+        <location line="-3225"/>
         <location line="+1946"/>
-        <location line="+880"/>
+        <location line="+882"/>
         <source>&amp;Bug Reporting Guidelines</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-4319"/>
+        <location line="-4321"/>
         <location line="+59"/>
         <location line="+52"/>
         <location line="+135"/>
@@ -475,14 +475,14 @@
         <location line="+171"/>
         <location line="+70"/>
         <location line="+1705"/>
-        <location line="+880"/>
+        <location line="+882"/>
         <location line="+340"/>
         <location line="+58"/>
         <source>&amp;About Rosegarden</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-4717"/>
+        <location line="-4719"/>
         <location line="+1496"/>
         <location line="+1946"/>
         <source>General Toolbar</source>
@@ -493,19 +493,19 @@
         <location line="+70"/>
         <location line="+49"/>
         <location line="+134"/>
-        <location line="+4305"/>
+        <location line="+4307"/>
         <location line="+106"/>
         <source>&amp;Nothing to undo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-4657"/>
+        <location line="-4659"/>
         <location line="+70"/>
         <location line="+49"/>
         <location line="+134"/>
         <location line="+166"/>
         <location line="+1330"/>
-        <location line="+2011"/>
+        <location line="+2013"/>
         <location line="+630"/>
         <location line="+168"/>
         <location line="+106"/>
@@ -514,23 +514,23 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-4662"/>
+        <location line="-4664"/>
         <location line="+70"/>
         <location line="+49"/>
         <location line="+134"/>
-        <location line="+4305"/>
+        <location line="+4307"/>
         <location line="+106"/>
         <source>N&amp;othing to redo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-4657"/>
+        <location line="-4659"/>
         <location line="+70"/>
         <location line="+49"/>
         <location line="+134"/>
         <location line="+166"/>
         <location line="+1330"/>
-        <location line="+2011"/>
+        <location line="+2013"/>
         <location line="+630"/>
         <location line="+168"/>
         <location line="+106"/>
@@ -539,49 +539,49 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-4662"/>
+        <location line="-4664"/>
         <location line="+156"/>
         <location line="+272"/>
         <location line="+1330"/>
-        <location line="+2011"/>
+        <location line="+2013"/>
         <location line="+630"/>
         <source>&amp;Copy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-4392"/>
+        <location line="-4394"/>
         <location line="+156"/>
         <location line="+272"/>
         <location line="+1330"/>
-        <location line="+2011"/>
+        <location line="+2013"/>
         <location line="+630"/>
         <source>Ctrl+C, F16, Ctrl+Ins</source>
         <comment>keyboard shortcut</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-4397"/>
+        <location line="-4399"/>
         <location line="+156"/>
         <location line="+272"/>
         <location line="+1330"/>
-        <location line="+2011"/>
+        <location line="+2013"/>
         <location line="+630"/>
         <source>&amp;Paste</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-4392"/>
+        <location line="-4394"/>
         <location line="+156"/>
         <location line="+272"/>
         <location line="+1330"/>
-        <location line="+2011"/>
+        <location line="+2013"/>
         <location line="+630"/>
         <source>Ctrl+V, F18, Shift+Ins</source>
         <comment>keyboard shortcut</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-4386"/>
+        <location line="-4388"/>
         <location line="+192"/>
         <location line="+52"/>
         <location line="+36"/>
@@ -590,21 +590,21 @@
         <location line="+72"/>
         <location line="+163"/>
         <location line="+1940"/>
-        <location line="+863"/>
+        <location line="+865"/>
         <location line="+123"/>
         <source>Switch to Select Tool</source>
         <translation type="unfinished">Newid i Erfyn Dewis</translation>
     </message>
     <message>
-        <location line="-4602"/>
+        <location line="-4604"/>
         <location line="+192"/>
-        <location line="+4288"/>
+        <location line="+4290"/>
         <location line="+123"/>
         <source>Switch to Inserting Notes</source>
         <translation type="unfinished">Newid i Fewnosod Nodau</translation>
     </message>
     <message>
-        <location line="-4602"/>
+        <location line="-4604"/>
         <location line="+192"/>
         <location line="+104"/>
         <location line="+36"/>
@@ -613,38 +613,38 @@
         <location line="+36"/>
         <location line="+2074"/>
         <location line="+12"/>
-        <location line="+864"/>
+        <location line="+866"/>
         <location line="+123"/>
         <source>Switch to Erase Tool</source>
         <translation type="unfinished">Newid i Erfyn Dileu</translation>
     </message>
     <message>
-        <location line="-4601"/>
+        <location line="-4603"/>
         <location line="+49"/>
         <location line="+300"/>
         <location line="+1207"/>
         <location line="+48"/>
         <location line="+73"/>
-        <location line="+1989"/>
+        <location line="+1991"/>
         <location line="+822"/>
         <source>&amp;Save</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-4481"/>
+        <location line="-4483"/>
         <location line="+49"/>
         <location line="+300"/>
         <location line="+1207"/>
         <location line="+48"/>
         <location line="+73"/>
-        <location line="+1989"/>
+        <location line="+1991"/>
         <location line="+822"/>
         <source>Ctrl+S</source>
         <comment>keyboard shortcut</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-4409"/>
+        <location line="-4411"/>
         <source>&amp;Insert Event</source>
         <translation type="unfinished">Mewnosod Di&amp;gwyddiad</translation>
     </message>
@@ -652,7 +652,7 @@
         <location line="+7"/>
         <location line="+1132"/>
         <location line="+1918"/>
-        <location line="+822"/>
+        <location line="+824"/>
         <location line="+372"/>
         <location line="+195"/>
         <source>I</source>
@@ -660,21 +660,21 @@
         <translation type="unfinished">I</translation>
     </message>
     <message>
-        <location line="-4437"/>
+        <location line="-4439"/>
         <source>&amp;Delete Event</source>
         <translation type="unfinished">Dileu Dig&amp;wyddiad</translation>
     </message>
     <message>
         <location line="+7"/>
         <location line="+1666"/>
-        <location line="+2002"/>
+        <location line="+2004"/>
         <location line="+621"/>
         <source>Delete</source>
         <comment>keyboard shortcut</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-4287"/>
+        <location line="-4289"/>
         <source>&amp;Edit Event</source>
         <translation type="unfinished">Golygu Digw&amp;yddiad</translation>
     </message>
@@ -682,7 +682,7 @@
         <location line="+7"/>
         <location line="+1051"/>
         <location line="+1918"/>
-        <location line="+876"/>
+        <location line="+878"/>
         <location line="+372"/>
         <location line="+231"/>
         <source>E</source>
@@ -690,7 +690,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-4446"/>
+        <location line="-4448"/>
         <source>&amp;Advanced Event Editor</source>
         <translation type="unfinished">Golygu Digwyddiadau yn &amp;Fanwl</translation>
     </message>
@@ -698,23 +698,23 @@
         <location line="+1"/>
         <location line="+272"/>
         <location line="+1330"/>
-        <location line="+2011"/>
+        <location line="+2013"/>
         <location line="+630"/>
         <source>Cu&amp;t</source>
         <translation type="unfinished">To&amp;rri</translation>
     </message>
     <message>
-        <location line="-4236"/>
+        <location line="-4238"/>
         <location line="+272"/>
         <location line="+1330"/>
-        <location line="+2011"/>
+        <location line="+2013"/>
         <location line="+630"/>
         <source>Ctrl+X, F20, Shift+Del</source>
         <comment>keyboard shortcut</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-4223"/>
+        <location line="-4225"/>
         <source>&amp;Select All</source>
         <translation type="unfinished"></translation>
     </message>
@@ -722,14 +722,14 @@
         <location line="+7"/>
         <location line="+281"/>
         <location line="+1354"/>
-        <location line="+2034"/>
+        <location line="+2036"/>
         <location line="+751"/>
         <source>Ctrl+A</source>
         <comment>keyboard shortcut</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-4418"/>
+        <location line="-4420"/>
         <location line="+281"/>
         <source>C&amp;lear Selection</source>
         <translation type="unfinished"></translation>
@@ -738,13 +738,13 @@
         <location line="-274"/>
         <location line="+281"/>
         <location line="+1354"/>
-        <location line="+2785"/>
+        <location line="+2787"/>
         <source>Escape</source>
         <comment>keyboard shortcut</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-4137"/>
+        <location line="-4139"/>
         <location line="+1363"/>
         <source>&amp;Filter Selection</source>
         <translation type="unfinished">Dewisiad &amp;Hidlen</translation>
@@ -771,78 +771,78 @@
         <location line="+58"/>
         <location line="+230"/>
         <location line="+1364"/>
-        <location line="+2006"/>
+        <location line="+2008"/>
         <location line="+760"/>
         <location line="+60"/>
         <source>&amp;View</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-4477"/>
+        <location line="-4479"/>
         <location line="+58"/>
-        <location line="+4360"/>
+        <location line="+4362"/>
         <location line="+60"/>
         <source>&amp;Musical Times</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-4477"/>
+        <location line="-4479"/>
         <location line="+58"/>
-        <location line="+4360"/>
+        <location line="+4362"/>
         <location line="+60"/>
         <source>&amp;Real Times</source>
         <translation type="unfinished">Gwir-amser:</translation>
     </message>
     <message>
-        <location line="-4477"/>
+        <location line="-4479"/>
         <location line="+58"/>
-        <location line="+4360"/>
+        <location line="+4362"/>
         <location line="+60"/>
         <source>Ra&amp;w Times</source>
         <translation type="unfinished">Gwir-amser:</translation>
     </message>
     <message>
-        <location line="-4475"/>
+        <location line="-4477"/>
         <location line="+397"/>
         <location line="+1289"/>
-        <location line="+2048"/>
+        <location line="+2050"/>
         <source>Se&amp;gment</source>
         <translation type="unfinished">Cylch&amp;rannau</translation>
     </message>
     <message>
-        <location line="-3733"/>
+        <location line="-3735"/>
         <location line="+397"/>
         <location line="+1289"/>
-        <location line="+2057"/>
+        <location line="+2059"/>
         <source>Edit &amp;With</source>
         <translation type="unfinished">%1 Traw</translation>
     </message>
     <message>
-        <location line="-3742"/>
+        <location line="-3744"/>
         <location line="+399"/>
         <location line="+1288"/>
-        <location line="+2065"/>
+        <location line="+2067"/>
         <location line="+372"/>
         <source>Open in Matri&amp;x Editor</source>
         <translation type="unfinished">Agor yn y Golygydd Matric&amp;s</translation>
     </message>
     <message>
-        <location line="-4123"/>
+        <location line="-4125"/>
         <location line="+397"/>
-        <location line="+3372"/>
+        <location line="+3374"/>
         <location line="+372"/>
         <source>Open in &amp;Notation Editor</source>
         <translation type="unfinished">Agor yn y Golygydd &amp;Nodiant</translation>
     </message>
     <message>
-        <location line="-2881"/>
+        <location line="-2883"/>
         <location line="+1946"/>
-        <location line="+880"/>
+        <location line="+882"/>
         <source>About &amp;Qt</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-1529"/>
+        <location line="-1531"/>
         <source>Add &amp;Segno</source>
         <translation type="unfinished"></translation>
     </message>
@@ -972,7 +972,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+20"/>
+        <location line="+22"/>
         <source>Save &amp;as...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -982,15 +982,15 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-2060"/>
-        <location line="+2069"/>
+        <location line="-2062"/>
+        <location line="+2071"/>
         <source>Ctrl+K</source>
         <comment>keyboard shortcut</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-1224"/>
-        <location line="+1243"/>
+        <location line="-1226"/>
+        <location line="+1245"/>
         <source>Ctrl+M</source>
         <comment>keyboard shortcut</comment>
         <translation type="unfinished"></translation>
@@ -1112,39 +1112,39 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-4402"/>
+        <location line="-4404"/>
         <location line="+3"/>
         <location line="+1250"/>
-        <location line="+3161"/>
+        <location line="+3163"/>
         <source>Actions Toolbar</source>
         <translation type="unfinished">Bar Gweithrediadau</translation>
     </message>
     <message>
-        <location line="-4413"/>
+        <location line="-4415"/>
         <location line="+51"/>
-        <location line="+4363"/>
+        <location line="+4365"/>
         <location line="+57"/>
         <source>Time Toolbar</source>
         <translation type="unfinished">Bar Chwyddo</translation>
     </message>
     <message>
-        <location line="-4470"/>
+        <location line="-4472"/>
         <location line="+1250"/>
         <location line="+167"/>
         <location line="+70"/>
         <location line="+1709"/>
-        <location line="+884"/>
+        <location line="+886"/>
         <source>Transport Toolbar</source>
         <translation type="unfinished">Bar Cludydd</translation>
     </message>
     <message>
-        <location line="-4078"/>
-        <location line="+4097"/>
+        <location line="-4080"/>
+        <location line="+4099"/>
         <source>Zoom Toolbar</source>
         <translation type="unfinished">Bar Chwyddo</translation>
     </message>
     <message>
-        <location line="-713"/>
+        <location line="-715"/>
         <source>Interpret Toolbar</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1221,14 +1221,14 @@
         <location line="+555"/>
         <location line="+72"/>
         <location line="+1176"/>
-        <location line="+1431"/>
+        <location line="+1433"/>
         <location line="+305"/>
         <source>F2</source>
         <comment>keyboard shortcut</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-4180"/>
+        <location line="-4182"/>
         <location line="+72"/>
         <location line="+1126"/>
         <location line="+36"/>
@@ -1243,14 +1243,14 @@
         <location line="+537"/>
         <location line="+36"/>
         <location line="+54"/>
-        <location line="+2607"/>
+        <location line="+2609"/>
         <location line="+287"/>
         <source>F5</source>
         <comment>keyboard shortcut</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-4180"/>
+        <location line="-4182"/>
         <location line="+27"/>
         <location line="+1171"/>
         <location line="+18"/>
@@ -1266,14 +1266,14 @@
         <location line="+18"/>
         <location line="+45"/>
         <location line="+1177"/>
-        <location line="+1430"/>
+        <location line="+1432"/>
         <location line="+314"/>
         <source>F3</source>
         <comment>keyboard shortcut</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-4180"/>
+        <location line="-4182"/>
         <location line="+36"/>
         <location line="+36"/>
         <location line="+1162"/>
@@ -1288,43 +1288,43 @@
         <location line="+580"/>
         <location line="+582"/>
         <location line="+45"/>
-        <location line="+2607"/>
+        <location line="+2609"/>
         <location line="+305"/>
         <source>F6</source>
         <comment>keyboard shortcut</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-4164"/>
+        <location line="-4166"/>
         <location line="+36"/>
         <location line="+571"/>
         <location line="+564"/>
         <location line="+27"/>
         <location line="+36"/>
         <location line="+1177"/>
-        <location line="+1430"/>
+        <location line="+1432"/>
         <location line="+314"/>
         <source>F4</source>
         <comment>keyboard shortcut</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-4043"/>
-        <location line="+3350"/>
+        <location line="-4045"/>
+        <location line="+3352"/>
         <location line="+621"/>
         <location line="+159"/>
         <source>&amp;Delete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-4123"/>
-        <location line="+4130"/>
+        <location line="-4125"/>
+        <location line="+4132"/>
         <source>Delete, Ctrl+D</source>
         <comment>keyboard shortcut</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-4099"/>
+        <location line="-4101"/>
         <source>&amp;Grid</source>
         <translation type="unfinished">&amp;Rhwydell</translation>
     </message>
@@ -1463,53 +1463,53 @@
     <message>
         <location line="-1282"/>
         <location line="+1288"/>
-        <location line="+2005"/>
+        <location line="+2007"/>
         <source>&amp;Composition</source>
         <translation type="unfinished">Lleoliad y cyrchydd</translation>
     </message>
     <message>
-        <location line="-3292"/>
+        <location line="-3294"/>
         <location line="+1288"/>
-        <location line="+2005"/>
+        <location line="+2007"/>
         <location line="+669"/>
         <source>Add Te&amp;mpo Change...</source>
         <translation type="unfinished">Ychwanegu Newid Te&amp;mpo...</translation>
     </message>
     <message>
-        <location line="-3961"/>
+        <location line="-3963"/>
         <location line="+1288"/>
-        <location line="+2005"/>
+        <location line="+2007"/>
         <location line="+677"/>
         <source>Add Time Si&amp;gnature Change...</source>
         <translation type="unfinished">Ychwanegu Newid Ar&amp;wydd Amseriad...</translation>
     </message>
     <message>
-        <location line="-3967"/>
+        <location line="-3969"/>
         <location line="+1289"/>
-        <location line="+2093"/>
+        <location line="+2095"/>
         <location line="+372"/>
         <source>Open in &amp;Event List Editor</source>
         <translation type="unfinished">Agor yn y Golygydd &amp;Rhestr Digwyddiadau</translation>
     </message>
     <message>
-        <location line="-3738"/>
+        <location line="-3740"/>
         <location line="+1765"/>
-        <location line="+1627"/>
+        <location line="+1629"/>
         <location line="+434"/>
         <source>=</source>
         <comment>keyboard shortcut</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-3817"/>
-        <location line="+3392"/>
+        <location line="-3819"/>
+        <location line="+3394"/>
         <location line="+434"/>
         <source>+</source>
         <comment>keyboard shortcut</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-3817"/>
+        <location line="-3819"/>
         <source>-</source>
         <comment>keyboard shortcut</comment>
         <translation type="unfinished"></translation>
@@ -1517,37 +1517,37 @@
     <message>
         <location line="+18"/>
         <location line="+1831"/>
-        <location line="+1549"/>
+        <location line="+1551"/>
         <source>Alt+Left</source>
         <comment>keyboard shortcut</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-3371"/>
+        <location line="-3373"/>
         <location line="+1831"/>
-        <location line="+1549"/>
+        <location line="+1551"/>
         <source>Alt+Right</source>
         <comment>keyboard shortcut</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-3371"/>
+        <location line="-3373"/>
         <location line="+1787"/>
-        <location line="+1650"/>
+        <location line="+1652"/>
         <source>Shift+Up</source>
         <comment>keyboard shortcut</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-3428"/>
+        <location line="-3430"/>
         <location line="+1787"/>
-        <location line="+1632"/>
+        <location line="+1634"/>
         <source>Shift+Down</source>
         <comment>keyboard shortcut</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-3407"/>
+        <location line="-3409"/>
         <location line="+1703"/>
         <source>Ctrl+H</source>
         <comment>keyboard shortcut</comment>
@@ -1563,21 +1563,21 @@
     <message>
         <location line="-1692"/>
         <location line="+1703"/>
-        <location line="+1711"/>
+        <location line="+1713"/>
         <source>Up</source>
         <comment>keyboard shortcut</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-3405"/>
+        <location line="-3407"/>
         <location line="+1703"/>
-        <location line="+1693"/>
+        <location line="+1695"/>
         <source>Down</source>
         <comment>keyboard shortcut</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-3387"/>
+        <location line="-3389"/>
         <location line="+1703"/>
         <source>Ctrl+Up</source>
         <comment>keyboard shortcut</comment>
@@ -1719,32 +1719,32 @@
     <message>
         <location line="-1752"/>
         <location line="+1791"/>
-        <location line="+1571"/>
+        <location line="+1573"/>
         <source>Pause</source>
         <comment>keyboard shortcut</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-3353"/>
+        <location line="-3355"/>
         <location line="+709"/>
         <location line="+48"/>
         <location line="+1040"/>
-        <location line="+1565"/>
+        <location line="+1567"/>
         <source>Alt+Ctrl+P</source>
         <comment>keyboard shortcut</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-3307"/>
+        <location line="-3309"/>
         <location line="+9"/>
-        <location line="+3225"/>
+        <location line="+3227"/>
         <location line="+305"/>
         <source>F7</source>
         <comment>keyboard shortcut</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-3527"/>
+        <location line="-3529"/>
         <location line="+154"/>
         <location line="+154"/>
         <location line="+1610"/>
@@ -1790,13 +1790,13 @@
     <message>
         <location line="-2219"/>
         <location line="+1918"/>
-        <location line="+792"/>
+        <location line="+794"/>
         <source>Ctrl+Shift+S</source>
         <comment>keyboard shortcut</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-2708"/>
+        <location line="-2710"/>
         <location line="+154"/>
         <location line="+154"/>
         <location line="+1610"/>
@@ -1859,14 +1859,14 @@
     <message>
         <location line="-2219"/>
         <location line="+1918"/>
-        <location line="+1012"/>
+        <location line="+1014"/>
         <location line="+372"/>
         <source>D</source>
         <comment>keyboard shortcut</comment>
         <translation type="unfinished">I</translation>
     </message>
     <message>
-        <location line="-3300"/>
+        <location line="-3302"/>
         <location line="+154"/>
         <location line="+154"/>
         <location line="+1610"/>
@@ -2080,13 +2080,13 @@
     <message>
         <location line="-1900"/>
         <location line="+1918"/>
-        <location line="+1021"/>
+        <location line="+1023"/>
         <source>R</source>
         <comment>keyboard shortcut</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-2930"/>
+        <location line="-2932"/>
         <location line="+1918"/>
         <source>Shift+R</source>
         <comment>keyboard shortcut</comment>
@@ -2102,13 +2102,13 @@
     <message>
         <location line="-1909"/>
         <location line="+1918"/>
-        <location line="+985"/>
+        <location line="+987"/>
         <source>U</source>
         <comment>keyboard shortcut</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-2894"/>
+        <location line="-2896"/>
         <location line="+1918"/>
         <source>Shift+U</source>
         <comment>keyboard shortcut</comment>
@@ -2159,13 +2159,13 @@
     <message>
         <location line="-1909"/>
         <location line="+1918"/>
-        <location line="+581"/>
+        <location line="+583"/>
         <source>Ctrl+Shift+X</source>
         <comment>keyboard shortcut</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-2490"/>
+        <location line="-2492"/>
         <location line="+1918"/>
         <source>X</source>
         <comment>keyboard shortcut</comment>
@@ -2181,13 +2181,13 @@
     <message>
         <location line="-1909"/>
         <location line="+1918"/>
-        <location line="+563"/>
+        <location line="+565"/>
         <source>Ctrl+Shift+C</source>
         <comment>keyboard shortcut</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-2472"/>
+        <location line="-2474"/>
         <location line="+1918"/>
         <source>C</source>
         <comment>keyboard shortcut</comment>
@@ -2238,14 +2238,14 @@
     <message>
         <location line="-1909"/>
         <location line="+1918"/>
-        <location line="+650"/>
+        <location line="+652"/>
         <location line="+372"/>
         <source>N</source>
         <comment>keyboard shortcut</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-2931"/>
+        <location line="-2933"/>
         <location line="+1918"/>
         <source>Shift+N</source>
         <comment>keyboard shortcut</comment>
@@ -2254,22 +2254,22 @@
     <message>
         <location line="-1909"/>
         <location line="+1918"/>
-        <location line="+565"/>
+        <location line="+567"/>
         <source>Ctrl+Shift+M</source>
         <comment>keyboard shortcut</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-2474"/>
+        <location line="-2476"/>
         <location line="+1918"/>
-        <location line="+605"/>
+        <location line="+607"/>
         <location line="+372"/>
         <source>M</source>
         <comment>keyboard shortcut</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-2886"/>
+        <location line="-2888"/>
         <location line="+1927"/>
         <source>H</source>
         <comment>keyboard shortcut</comment>
@@ -2283,22 +2283,22 @@
     </message>
     <message>
         <location line="-1676"/>
-        <location line="+2011"/>
+        <location line="+2013"/>
         <location line="+551"/>
         <location line="+79"/>
         <source>&amp;Nothing to Undo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-2632"/>
-        <location line="+2011"/>
+        <location line="-2634"/>
+        <location line="+2013"/>
         <location line="+543"/>
         <location line="+87"/>
         <source>N&amp;othing to Redo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-2598"/>
+        <location line="-2600"/>
         <source>Alt+Shift+X</source>
         <comment>keyboard shortcut</comment>
         <translation type="unfinished"></translation>
@@ -2464,13 +2464,13 @@
     </message>
     <message>
         <location line="+9"/>
-        <location line="+1968"/>
+        <location line="+1970"/>
         <source>Ctrl+T</source>
         <comment>keyboard shortcut</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-1959"/>
+        <location line="-1961"/>
         <source>Ctrl+R</source>
         <comment>keyboard shortcut</comment>
         <translation type="unfinished"></translation>
@@ -2521,13 +2521,13 @@
     <message>
         <location line="-1764"/>
         <location line="+1765"/>
-        <location line="+1627"/>
+        <location line="+1629"/>
         <location line="+434"/>
         <source>&amp;Quantize...</source>
         <translation type="unfinished">Cw&amp;anteiddio...</translation>
     </message>
     <message>
-        <location line="-3817"/>
+        <location line="-3819"/>
         <source>&amp;Repeat Last Quantize</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2545,12 +2545,12 @@
     <message>
         <location line="-1555"/>
         <location line="+1831"/>
-        <location line="+1549"/>
+        <location line="+1551"/>
         <source>Jog &amp;Left</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-3371"/>
+        <location line="-3373"/>
         <source>&amp;Jog Right</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2639,13 +2639,13 @@
         <location line="-1702"/>
         <location line="+1159"/>
         <location line="+544"/>
-        <location line="+1575"/>
+        <location line="+1577"/>
         <location line="+435"/>
         <source>Transpose by &amp;Interval...</source>
         <translation type="unfinished">&amp;Trawsgyweirio...</translation>
     </message>
     <message>
-        <location line="-3712"/>
+        <location line="-3714"/>
         <source>&amp;Convert</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2675,56 +2675,56 @@
     <message>
         <location line="+153"/>
         <location line="+1803"/>
-        <location line="+1431"/>
+        <location line="+1433"/>
         <source>&amp;Tools</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-3233"/>
+        <location line="-3235"/>
         <location line="+1803"/>
-        <location line="+1431"/>
+        <location line="+1433"/>
         <location line="+305"/>
         <source>&amp;Select and Edit</source>
         <translation type="unfinished">Dewis i Ddi&amp;wedd</translation>
     </message>
     <message>
-        <location line="-3530"/>
-        <location line="+3234"/>
+        <location line="-3532"/>
+        <location line="+3236"/>
         <location line="+314"/>
         <source>&amp;Draw</source>
         <translation type="unfinished">&amp;Dylunio</translation>
     </message>
     <message>
-        <location line="-3539"/>
+        <location line="-3541"/>
         <location line="+1804"/>
-        <location line="+1430"/>
+        <location line="+1432"/>
         <location line="+314"/>
         <source>&amp;Erase</source>
         <translation type="unfinished">&amp;Dileu</translation>
     </message>
     <message>
-        <location line="-3711"/>
+        <location line="-3713"/>
         <location line="+172"/>
         <location line="+1562"/>
-        <location line="+1672"/>
+        <location line="+1674"/>
         <location line="+287"/>
         <source>&amp;Move</source>
         <translation type="unfinished">&amp;Symud</translation>
     </message>
     <message>
-        <location line="-3512"/>
+        <location line="-3514"/>
         <source>Resi&amp;ze</source>
         <translation type="unfinished">Ail-f&amp;eintio</translation>
     </message>
     <message>
         <location line="+9"/>
-        <location line="+3234"/>
+        <location line="+3236"/>
         <location line="+305"/>
         <source>S&amp;plit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-3530"/>
+        <location line="-3532"/>
         <source>&amp;Velocity</source>
         <translation type="unfinished">&amp;Buanedd</translation>
     </message>
@@ -2754,48 +2754,48 @@
     <message>
         <location line="-944"/>
         <location line="+48"/>
-        <location line="+2549"/>
+        <location line="+2551"/>
         <source>T&amp;ransport</source>
         <translation type="unfinished">C&amp;ludydd</translation>
     </message>
     <message>
-        <location line="-3360"/>
+        <location line="-3362"/>
         <location line="+764"/>
         <location line="+48"/>
         <location line="+940"/>
-        <location line="+1609"/>
+        <location line="+1611"/>
         <source>&amp;Play</source>
         <translation type="unfinished">&amp;Chwarae</translation>
     </message>
     <message>
-        <location line="-3360"/>
+        <location line="-3362"/>
         <location line="+764"/>
         <location line="+48"/>
         <location line="+946"/>
-        <location line="+1611"/>
+        <location line="+1613"/>
         <source>&amp;Stop</source>
         <translation type="unfinished">&amp;Aros</translation>
     </message>
     <message>
-        <location line="-3338"/>
+        <location line="-3340"/>
         <location line="+734"/>
         <location line="+48"/>
         <location line="+982"/>
-        <location line="+1583"/>
+        <location line="+1585"/>
         <source>Re&amp;wind</source>
         <translation type="unfinished">Ail-&amp;ddirwyn</translation>
     </message>
     <message>
-        <location line="-3338"/>
+        <location line="-3340"/>
         <location line="+726"/>
         <location line="+48"/>
         <location line="+990"/>
-        <location line="+1583"/>
+        <location line="+1585"/>
         <source>&amp;Fast Forward</source>
         <translation type="unfinished">&amp;Brys Ymlaen </translation>
     </message>
     <message>
-        <location line="-3338"/>
+        <location line="-3340"/>
         <location line="+718"/>
         <location line="+48"/>
         <location line="+998"/>
@@ -2819,21 +2819,21 @@
     <message>
         <location line="-1784"/>
         <location line="+1791"/>
-        <location line="+1571"/>
+        <location line="+1573"/>
         <source>Scro&amp;ll to Follow Playback</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-3353"/>
+        <location line="-3355"/>
         <location line="+709"/>
         <location line="+48"/>
         <location line="+1040"/>
-        <location line="+1565"/>
+        <location line="+1567"/>
         <source>P&amp;anic</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-3135"/>
+        <location line="-3137"/>
         <location line="+1918"/>
         <source>&amp;Upper Octave</source>
         <translation type="unfinished">Wythfed &amp;Uwch</translation>
@@ -2853,19 +2853,19 @@
     <message>
         <location line="-2833"/>
         <location line="+1293"/>
-        <location line="+1999"/>
+        <location line="+2001"/>
         <source>&amp;Toolbars</source>
         <translation type="unfinished">Bar Ffontiau</translation>
     </message>
     <message>
-        <location line="-3285"/>
+        <location line="-3287"/>
         <location line="+1301"/>
-        <location line="+1991"/>
+        <location line="+1993"/>
         <source>&amp;Rulers</source>
         <translation type="unfinished">Dangos Rhes&amp;yddion</translation>
     </message>
     <message>
-        <location line="-3291"/>
+        <location line="-3293"/>
         <location line="+1301"/>
         <source>Show Ch&amp;ord Name Ruler</source>
         <translation type="unfinished">Dangos Rhesydd Enwau C&amp;ordiau</translation>
@@ -2879,19 +2879,19 @@
     <message>
         <location line="-407"/>
         <location line="+1946"/>
-        <location line="+882"/>
+        <location line="+884"/>
         <source>Tools Toolbar</source>
         <translation type="unfinished">Bar Offer</translation>
     </message>
     <message>
-        <location line="-2681"/>
+        <location line="-2683"/>
         <location line="+48"/>
-        <location line="+2579"/>
+        <location line="+2581"/>
         <source>&amp;Record</source>
         <translation type="unfinished">&amp;Recordio</translation>
     </message>
     <message>
-        <location line="-2569"/>
+        <location line="-2571"/>
         <source>&amp;Settings</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2987,12 +2987,12 @@
     </message>
     <message>
         <location line="+12"/>
-        <location line="+2000"/>
+        <location line="+2002"/>
         <source>&amp;Print...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-2001"/>
+        <location line="-2003"/>
         <source>P&amp;rint Preview...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3089,13 +3089,13 @@
     <message>
         <location line="-1275"/>
         <location line="+1288"/>
-        <location line="+2073"/>
+        <location line="+2075"/>
         <location line="+372"/>
         <source>Open in &amp;Percussion Matrix Editor</source>
         <translation type="unfinished">Agor yn y Golygydd Matric&amp;s</translation>
     </message>
     <message>
-        <location line="-2443"/>
+        <location line="-2445"/>
         <source>Add Cle&amp;f Change...</source>
         <translation type="unfinished">Ychwanegu Newid Cle&amp;ff...</translation>
     </message>
@@ -3123,12 +3123,12 @@
     </message>
     <message>
         <location line="+4"/>
-        <location line="+2119"/>
+        <location line="+2121"/>
         <source>&amp;Convert Notation for...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-2118"/>
+        <location line="-2120"/>
         <source>Add &amp;Layer</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3705,12 +3705,12 @@
     </message>
     <message>
         <location line="+10"/>
-        <location line="+1549"/>
+        <location line="+1551"/>
         <source>Jog &amp;Right</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-1540"/>
+        <location line="-1542"/>
         <source>&amp;Visibility</source>
         <translation type="unfinished">&amp;Buanedd</translation>
     </message>
@@ -3959,12 +3959,12 @@
     </message>
     <message>
         <location line="-1537"/>
-        <location line="+1999"/>
+        <location line="+2001"/>
         <source>Show T&amp;ools Toolbar</source>
         <translation type="unfinished">Dangos Bar &amp;Offer</translation>
     </message>
     <message>
-        <location line="-1998"/>
+        <location line="-2000"/>
         <source>Show &amp;Accidentals Toolbar</source>
         <translation type="unfinished">Dangos Bar &amp;Hapnodau</translation>
     </message>
@@ -3985,12 +3985,12 @@
     </message>
     <message>
         <location line="+2"/>
-        <location line="+1996"/>
+        <location line="+1998"/>
         <source>Show Trans&amp;port Toolbar</source>
         <translation type="unfinished">Dangos Bar C&amp;ludydd</translation>
     </message>
     <message>
-        <location line="-1995"/>
+        <location line="-1997"/>
         <source>Show &amp;Layout Toolbar</source>
         <translation type="unfinished">Dangos Bar &amp;Haenlunio</translation>
     </message>
@@ -4001,7 +4001,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+43"/>
+        <location line="+45"/>
         <source>Ctrl+Q</source>
         <comment>keyboard shortcut</comment>
         <translation type="unfinished"></translation>
@@ -4025,7 +4025,7 @@
         <translation type="unfinished">Dangos Rhesydd Enwau Co&amp;rdiau</translation>
     </message>
     <message>
-        <location line="-1991"/>
+        <location line="-1993"/>
         <source>Show Ra&amp;w Note Ruler</source>
         <translation type="unfinished">Dangos Rhesydd Nodau C&amp;raidd</translation>
     </message>
@@ -4082,12 +4082,12 @@
     <message>
         <location line="+886"/>
         <location line="+1946"/>
-        <location line="+880"/>
+        <location line="+882"/>
         <source>Rosegarden &amp;Manual</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-4084"/>
+        <location line="-4086"/>
         <location line="+288"/>
         <source>Preferences...</source>
         <translation type="unfinished"></translation>
@@ -4117,12 +4117,12 @@
     </message>
     <message>
         <location line="-1757"/>
-        <location line="+2006"/>
+        <location line="+2008"/>
         <source>&amp;Preferences...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-1985"/>
+        <location line="-1987"/>
         <source>Show &amp;Rulers Toolbar</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4250,13 +4250,13 @@
     </message>
     <message>
         <location line="+10"/>
-        <location line="+2099"/>
+        <location line="+2101"/>
         <location line="+372"/>
         <source>Open in &amp;Pitch Tracker</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-2180"/>
+        <location line="-2182"/>
         <source>&amp;Figuration</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4530,20 +4530,20 @@
     </message>
     <message>
         <location line="+478"/>
-        <location line="+516"/>
+        <location line="+518"/>
         <source>P</source>
         <comment>keyboard shortcut</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-498"/>
-        <location line="+1190"/>
+        <location line="-500"/>
+        <location line="+1192"/>
         <source>G</source>
         <comment>keyboard shortcut</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-1188"/>
+        <location line="-1190"/>
         <source>Tuplet Insert Mo&amp;de</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4850,6 +4850,16 @@
     </message>
     <message>
         <location line="+9"/>
+        <source>Open Examp&amp;le...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Open Tem&amp;plate...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
         <source>Open &amp;Recent</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4970,8 +4980,8 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-1234"/>
-        <location line="+1243"/>
+        <location line="-1236"/>
+        <location line="+1245"/>
         <source>&amp;Jump to Quick Marker</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5048,16 +5058,16 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-3416"/>
+        <location line="-3418"/>
         <location line="+1293"/>
-        <location line="+2125"/>
+        <location line="+2127"/>
         <source>Set Start &amp;Time...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-3417"/>
+        <location line="-3419"/>
         <location line="+1293"/>
-        <location line="+2125"/>
+        <location line="+2127"/>
         <source>Set &amp;Duration...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5194,10 +5204,10 @@
         <translation type="unfinished">Recordio gan Ddisg&amp;yn i Mewn</translation>
     </message>
     <message>
-        <location line="-4051"/>
+        <location line="-4053"/>
         <location line="+365"/>
         <location line="+1293"/>
-        <location line="+1999"/>
+        <location line="+2001"/>
         <source>Show Main &amp;Toolbar</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5217,10 +5227,10 @@
         <translation type="unfinished">Dangos Bar Ch&amp;wyddo</translation>
     </message>
     <message>
-        <location line="-3661"/>
+        <location line="-3663"/>
         <location line="+369"/>
         <location line="+1301"/>
-        <location line="+2017"/>
+        <location line="+2019"/>
         <source>Show St&amp;atusbar</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5286,21 +5296,21 @@
         <translation type="unfinished">Bar Golygyddion</translation>
     </message>
     <message>
-        <location line="-1634"/>
-        <location line="+1636"/>
+        <location line="-1636"/>
+        <location line="+1638"/>
         <source>Rewind to Beginning</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-1629"/>
-        <location line="+1638"/>
+        <location line="-1631"/>
+        <location line="+1640"/>
         <source>Fast Forward to End</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-2843"/>
+        <location line="-2845"/>
         <location line="+1946"/>
-        <location line="+880"/>
+        <location line="+882"/>
         <source>&amp;Support Rosegarden</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5390,7 +5400,7 @@
         <translation type="unfinished">Bas</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="-2626"/>
+        <location filename="../QMenuStrings.cpp" line="-2628"/>
         <location filename="../InstrumentStrings.cpp" line="-74"/>
         <source>Triangle</source>
         <translation type="unfinished">Tripled</translation>
@@ -8038,7 +8048,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/base/Studio.cpp" line="+61"/>
+        <location filename="../../src/base/Studio.cpp" line="+67"/>
         <location filename="../../src/sound/AlsaDriver.cpp" line="+693"/>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="+1098"/>
         <location filename="../AutoloadStrings.cpp" line="-189"/>
@@ -10194,7 +10204,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="+448"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="+446"/>
         <location filename="../../src/gui/general/ActionFileParser.cpp" line="+649"/>
         <location line="+7"/>
         <source>%1</source>
@@ -10211,10 +10221,10 @@
         <translation type="unfinished">&amp;%1%2</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="+1688"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="+909"/>
-        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="+1045"/>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="+470"/>
+        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="+1686"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="+911"/>
+        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="+1042"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="+472"/>
         <source>%1 Controller %2 %3</source>
         <translation type="unfinished">rheolydd %1</translation>
     </message>
@@ -10223,12 +10233,12 @@
         <translation type="obsolete">Rosegarden - Dilyniannydd a golygydd nodiant cerddorol</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/main.cpp" line="+495"/>
+        <location filename="../../src/gui/application/main.cpp" line="+492"/>
         <source>Rosegarden</source>
         <translation type="unfinished">Rosegarden</translation>
     </message>
     <message>
-        <location line="+301"/>
+        <location line="+268"/>
         <source>Welcome!</source>
         <translation type="unfinished"></translation>
     </message>
@@ -11243,7 +11253,7 @@ yn lle?</translation>
 <context>
     <name>Rosegarden::AudioInstrumentParameterPanel</name>
     <message>
-        <location filename="../../src/gui/editors/parameters/AudioInstrumentParameterPanel.cpp" line="+79"/>
+        <location filename="../../src/gui/editors/parameters/AudioInstrumentParameterPanel.cpp" line="+83"/>
         <source>Click to rename this instrument</source>
         <translation type="unfinished"></translation>
     </message>
@@ -11335,7 +11345,7 @@ yn lle?</translation>
     <message>
         <location line="-118"/>
         <location line="+122"/>
-        <location line="+193"/>
+        <location line="+192"/>
         <location line="+37"/>
         <location line="+75"/>
         <location line="+11"/>
@@ -11347,7 +11357,7 @@ yn lle?</translation>
         <translation type="unfinished">Rosegarden</translation>
     </message>
     <message>
-        <location line="-490"/>
+        <location line="-489"/>
         <location line="+8"/>
         <source>WAV files</source>
         <translation type="unfinished"></translation>
@@ -11379,7 +11389,7 @@ yn lle?</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="+12"/>
         <source>Select one or more audio files</source>
         <translation type="unfinished">Dewis un neu mwy o Ffeiliau Sain</translation>
     </message>
@@ -11436,8 +11446,8 @@ Please select the ones you wish to delete permanently from the hard disk.
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-647"/>
-        <location line="+663"/>
+        <location line="-646"/>
+        <location line="+662"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
@@ -11461,7 +11471,7 @@ Please select the ones you wish to delete permanently from the hard disk.
         <translation type="unfinished">Ceisiwch copio&apos;r ffeil yma i gyfeiriadur lle mae ganddoch ganiatadau ysgrifennu, a&apos;i ail-ychwanegu.</translation>
     </message>
     <message>
-        <location line="+157"/>
+        <location line="+153"/>
         <source>http://rosegardenmusic.com/wiki/doc:audioManager-en</source>
         <translation type="unfinished"></translation>
     </message>
@@ -11469,104 +11479,103 @@ Please select the ones you wish to delete permanently from the hard disk.
 <context>
     <name>Rosegarden::AudioMixerWindow</name>
     <message>
-        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="+279"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="+80"/>
         <source>Audio Mixer</source>
         <translation type="unfinished">Pylydd Sain</translation>
     </message>
     <message>
-        <location line="+32"/>
+        <location line="+214"/>
         <source>Record input source</source>
         <translation type="unfinished">Nid oes offeryn Recordio wedi&apos;i ddewis</translation>
     </message>
     <message>
-        <location line="+10"/>
+        <location line="+12"/>
         <source>Output destination</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+13"/>
-        <location line="+141"/>
+        <location line="+46"/>
+        <location line="+161"/>
         <source>Pan</source>
         <translation type="unfinished">Tremio</translation>
     </message>
     <message>
-        <location line="-133"/>
-        <location line="+1"/>
-        <location line="+139"/>
-        <location line="+1"/>
+        <location line="-201"/>
+        <location line="+17"/>
+        <location line="+152"/>
+        <location line="+14"/>
         <source>Audio level</source>
         <translation type="unfinished">Ychwanegu Ffeil Sain</translation>
     </message>
     <message>
-        <location line="-133"/>
+        <location line="-129"/>
         <source>Mono or stereo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+8"/>
+        <location line="+17"/>
         <source>Arm recording</source>
         <translation type="unfinished">Recordio</translation>
     </message>
     <message>
-        <location line="+11"/>
-        <location line="+125"/>
-        <location line="+148"/>
-        <location line="+57"/>
-        <location line="+185"/>
+        <location line="+18"/>
+        <location line="+129"/>
+        <location line="+348"/>
         <source>&lt;none&gt;</source>
         <translation type="unfinished">&lt;dim&gt;</translation>
     </message>
     <message>
-        <location line="-513"/>
-        <location line="+125"/>
+        <location line="-475"/>
+        <location line="+129"/>
         <source>Click to load an audio plugin</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-114"/>
+        <location line="-251"/>
         <source>Click to rename this instrument</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+16"/>
         <source>Audio %1</source>
-        <translation type="unfinished">Sain</translation>
+        <translation type="obsolete">Sain</translation>
     </message>
     <message>
-        <location line="+9"/>
         <source>Synth %1</source>
-        <translation type="unfinished">Dat-&amp;wneud %1</translation>
+        <translation type="obsolete">Dat-&amp;wneud %1</translation>
     </message>
     <message>
-        <location line="+9"/>
-        <source>Click the button above to rename this instrument</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+88"/>
+        <location line="+190"/>
         <source>Sub %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+41"/>
-        <location line="+1"/>
+        <location line="+121"/>
+        <location line="+12"/>
         <source>Audio master output level</source>
         <translation type="unfinished">Ychwanegu Ffeil Sain</translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location line="-21"/>
         <source>Master</source>
         <translation type="unfinished">Meistr MMC</translation>
     </message>
     <message>
-        <location line="+95"/>
-        <location line="+57"/>
-        <location line="+185"/>
+        <location line="+296"/>
         <source>&lt;no plugin&gt;</source>
         <translation type="unfinished">&lt;dim ategyn&gt;</translation>
     </message>
     <message>
-        <location line="+816"/>
+        <location line="+102"/>
+        <source>Rosegarden</source>
+        <translation type="unfinished">Rosegarden</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Enter instrument alias:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+699"/>
         <source>http://rosegardenmusic.com/wiki/doc:audioMixerWindow-en</source>
         <translation type="unfinished"></translation>
     </message>
@@ -11834,24 +11843,24 @@ Please select the ones you wish to delete permanently from the hard disk.
 <context>
     <name>Rosegarden::AudioRouteMenu</name>
     <message>
-        <location filename="../../src/gui/widgets/AudioRouteMenu.cpp" line="+233"/>
+        <location filename="../../src/gui/widgets/AudioRouteMenu.cpp" line="+262"/>
         <source>none</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+10"/>
+        <location line="+18"/>
         <source>In %1</source>
         <translation type="unfinished">Dat-&amp;wneud %1</translation>
     </message>
     <message>
         <location line="+2"/>
-        <location line="+23"/>
+        <location line="+26"/>
         <source>Master</source>
         <translation type="unfinished">Meistr MMC</translation>
     </message>
     <message>
-        <location line="-21"/>
-        <location line="+23"/>
+        <location line="-24"/>
+        <location line="+26"/>
         <source>Sub %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -12003,7 +12012,7 @@ Please select the ones you wish to delete permanently from the hard disk.
 <context>
     <name>Rosegarden::BankEditorDialog</name>
     <message>
-        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="+100"/>
+        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="+99"/>
         <source>Manage MIDI Banks and Programs</source>
         <translation type="unfinished">Rheoli Rhengau MIDI a Rhaglenni</translation>
     </message>
@@ -12019,18 +12028,18 @@ Please select the ones you wish to delete permanently from the hard disk.
     </message>
     <message>
         <location line="+1"/>
-        <location line="+114"/>
+        <location line="+104"/>
         <source>MSB</source>
         <translation type="unfinished">MSB</translation>
     </message>
     <message>
-        <location line="-113"/>
-        <location line="+112"/>
+        <location line="-103"/>
+        <location line="+102"/>
         <source>LSB</source>
         <translation type="unfinished">LSB</translation>
     </message>
     <message>
-        <location line="-92"/>
+        <location line="-82"/>
         <source>Add Bank</source>
         <translation type="unfinished">Ychwanegu Traciau...</translation>
     </message>
@@ -12110,7 +12119,7 @@ Please select the ones you wish to delete permanently from the hard disk.
         <translation type="unfinished">Gludo enwau Rhaglen o&apos;r gludfwrdd i&apos;r Rheng cyfredol</translation>
     </message>
     <message>
-        <location line="+37"/>
+        <location line="+27"/>
         <source>Options</source>
         <translation type="unfinished"></translation>
     </message>
@@ -12120,7 +12129,7 @@ Please select the ones you wish to delete permanently from the hard disk.
         <translation type="unfinished">Dangos rhestr Amrywiad wedi&apos;i seilio ar</translation>
     </message>
     <message>
-        <location line="+857"/>
+        <location line="+853"/>
         <source>&lt;new bank&gt;</source>
         <translation type="unfinished">&lt;rheng newydd&gt;</translation>
     </message>
@@ -12336,7 +12345,7 @@ Please select the ones you wish to delete permanently from the hard disk.
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+28"/>
+        <location line="+32"/>
         <source>Check for Unisons</source>
         <translation type="unfinished"></translation>
     </message>
@@ -12463,7 +12472,7 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message>
         <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="+54"/>
         <location line="+5"/>
-        <location line="+66"/>
+        <location line="+54"/>
         <source>Clef</source>
         <translation type="unfinished">Cleff</translation>
     </message>
@@ -12473,7 +12482,7 @@ Please select the ones you wish to delete permanently from the hard disk.
         <translation type="unfinished">Nodau mewn bod ar ol newid cleff</translation>
     </message>
     <message>
-        <location line="-46"/>
+        <location line="-34"/>
         <source>Lower clef</source>
         <translation type="unfinished">Clef is</translation>
     </message>
@@ -12483,7 +12492,7 @@ Please select the ones you wish to delete permanently from the hard disk.
         <translation type="unfinished">I Fyny Wythfed</translation>
     </message>
     <message>
-        <location line="+42"/>
+        <location line="+30"/>
         <source>Down an Octave</source>
         <translation type="unfinished">I lawr Wythfed</translation>
     </message>
@@ -12503,7 +12512,7 @@ Please select the ones you wish to delete permanently from the hard disk.
         <translation type="unfinished">Trawsgyweirio i&apos;r wythfed addas</translation>
     </message>
     <message>
-        <location line="+160"/>
+        <location line="+161"/>
         <source>%1 down an octave</source>
         <translation type="unfinished">I lawr Wythfed</translation>
     </message>
@@ -13322,7 +13331,7 @@ Please select the ones you wish to delete permanently from the hard disk.
 <context>
     <name>Rosegarden::DeviceManagerDialog</name>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="+318"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="+329"/>
         <location line="+11"/>
         <location line="+16"/>
         <source>New Device</source>
@@ -13334,7 +13343,7 @@ Please select the ones you wish to delete permanently from the hard disk.
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-818"/>
+        <location line="-826"/>
         <source>[ No port ]</source>
         <translation type="unfinished"></translation>
     </message>
@@ -14376,7 +14385,7 @@ Ydych eisiau ceisio lleoli&apos;r ffeil yma neu&apos;i osgoi?</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+519"/>
+        <location line="+532"/>
         <source>Download cancelled</source>
         <translation type="unfinished"></translation>
     </message>
@@ -14418,12 +14427,12 @@ Ydych eisiau ceisio lleoli&apos;r ffeil yma neu&apos;i osgoi?</translation>
 <context>
     <name>Rosegarden::FontRequester</name>
     <message>
-        <location filename="../../src/gui/widgets/FontRequester.cpp" line="+51"/>
+        <location filename="../../src/gui/widgets/FontRequester.cpp" line="+48"/>
         <source>Choose...</source>
         <translation type="unfinished">Dewis...</translation>
     </message>
     <message>
-        <location line="+18"/>
+        <location line="+17"/>
         <source>%1 %2</source>
         <translation type="unfinished">&amp;%1%2</translation>
     </message>
@@ -14785,7 +14794,7 @@ Ydych eisiau ceisio lleoli&apos;r ffeil yma neu&apos;i osgoi?</translation>
 <context>
     <name>Rosegarden::GuitarChordSelectorDialog</name>
     <message>
-        <location filename="../../src/gui/editors/guitar/GuitarChordSelectorDialog.cpp" line="+59"/>
+        <location filename="../../src/gui/editors/guitar/GuitarChordSelectorDialog.cpp" line="+47"/>
         <source>Guitar Chord Selector</source>
         <translation type="unfinished">Dewisydd Traw</translation>
     </message>
@@ -14795,12 +14804,12 @@ Ydych eisiau ceisio lleoli&apos;r ffeil yma neu&apos;i osgoi?</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location line="+4"/>
         <source>Extension</source>
         <translation type="unfinished">Trawiad</translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location line="+4"/>
         <source>New</source>
         <translation type="unfinished">Newydd</translation>
     </message>
@@ -14835,7 +14844,7 @@ Ydych eisiau ceisio lleoli&apos;r ffeil yma neu&apos;i osgoi?</translation>
         <translation type="unfinished">Ychwanegu llithriad...</translation>
     </message>
     <message>
-        <location line="+408"/>
+        <location line="+407"/>
         <source>couldn&apos;t open file &apos;%1&apos;</source>
         <translation type="unfinished">Methu agor ffeil &apos;%1&apos;</translation>
     </message>
@@ -14924,7 +14933,7 @@ Ydych eisiau ceisio lleoli&apos;r ffeil yma neu&apos;i osgoi?</translation>
         <translation type="unfinished">Tripled</translation>
     </message>
     <message>
-        <location line="+24"/>
+        <location line="+17"/>
         <source>The composition comes here.</source>
         <translation type="unfinished">Newid Hyd y Cyfansoddiad</translation>
     </message>
@@ -15205,7 +15214,7 @@ Example text from file:</source>
 <context>
     <name>Rosegarden::InputDialog</name>
     <message>
-        <location filename="../../src/gui/widgets/InputDialog.cpp" line="+47"/>
+        <location filename="../../src/gui/widgets/InputDialog.cpp" line="+38"/>
         <source>Rosegarden</source>
         <translation type="unfinished">Rosegarden</translation>
     </message>
@@ -15568,7 +15577,7 @@ Example text from file:</source>
 <context>
     <name>Rosegarden::KeySignatureDialog</name>
     <message>
-        <location filename="../../src/gui/dialogs/KeySignatureDialog.cpp" line="+71"/>
+        <location filename="../../src/gui/dialogs/KeySignatureDialog.cpp" line="+72"/>
         <source>Key Change</source>
         <translation type="unfinished">Newid Allwedd</translation>
     </message>
@@ -15598,7 +15607,7 @@ Example text from file:</source>
         <translation type="unfinished">Lleddfu</translation>
     </message>
     <message>
-        <location line="+22"/>
+        <location line="+10"/>
         <source>Sharpen</source>
         <translation type="unfinished">Meinhau</translation>
     </message>
@@ -16202,7 +16211,7 @@ yn lle?</translation>
 <context>
     <name>Rosegarden::LoopRuler</name>
     <message>
-        <location filename="../../src/gui/rulers/LoopRuler.cpp" line="+80"/>
+        <location filename="../../src/gui/rulers/LoopRuler.cpp" line="+75"/>
         <source>&lt;qt&gt;&lt;p&gt;Click and drag to move the playback pointer.&lt;/p&gt;&lt;p&gt;Shift-click and drag to set a range for looping or editing.&lt;/p&gt;&lt;p&gt;Shift-click to clear the loop or range.&lt;/p&gt;&lt;p&gt;Ctrl-click and drag to move the playback pointer with snap to beat.&lt;/p&gt;&lt;p&gt;Double-click to start playback.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -16210,7 +16219,7 @@ yn lle?</translation>
 <context>
     <name>Rosegarden::LyricEditDialog</name>
     <message>
-        <location filename="../../src/gui/dialogs/LyricEditDialog.cpp" line="+62"/>
+        <location filename="../../src/gui/dialogs/LyricEditDialog.cpp" line="+56"/>
         <source>Edit Lyrics</source>
         <translation type="unfinished">Golygu Geiriau</translation>
     </message>
@@ -16230,7 +16239,7 @@ yn lle?</translation>
         <translation type="unfinished">&amp;Gwaredu Arwydd</translation>
     </message>
     <message>
-        <location line="+218"/>
+        <location line="+208"/>
         <source>Verse %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -17105,12 +17114,12 @@ Double-click to open the marker editor.</source>
 <context>
     <name>Rosegarden::MatrixView</name>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="+1366"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="+1354"/>
         <source>Unknown note insert action %1</source>
         <translation type="unfinished">Gweithrediad anhysbys %1 wrth fewnosod nodyn</translation>
     </message>
     <message>
-        <location line="-1508"/>
+        <location line="-1496"/>
         <source>&lt;untitled&gt;</source>
         <translation type="unfinished">&lt;di-deitl&gt;</translation>
     </message>
@@ -17133,12 +17142,12 @@ Double-click to open the marker editor.</source>
         </translation>
     </message>
     <message>
-        <location line="+254"/>
+        <location line="+248"/>
         <source> Grid: </source>
         <translation type="unfinished">Rhwydell:</translation>
     </message>
     <message>
-        <location line="+16"/>
+        <location line="+14"/>
         <source>None</source>
         <translation type="unfinished">Dim</translation>
     </message>
@@ -17163,12 +17172,12 @@ Double-click to open the marker editor.</source>
         <translation type="unfinished">Buanedd:</translation>
     </message>
     <message>
-        <location line="+18"/>
+        <location line="+16"/>
         <source> Quantize: </source>
         <translation type="unfinished">Cwanteiddio:</translation>
     </message>
     <message>
-        <location line="+18"/>
+        <location line="+16"/>
         <source>Off</source>
         <translation type="unfinished"></translation>
     </message>
@@ -17224,7 +17233,7 @@ Double-click to open the marker editor.</source>
         <translation type="unfinished">&amp;Gwaredu Arwydd</translation>
     </message>
     <message>
-        <location line="-826"/>
+        <location line="-814"/>
         <source>Matrix</source>
         <translation type="unfinished">Matrics</translation>
     </message>
@@ -17232,7 +17241,7 @@ Double-click to open the marker editor.</source>
 <context>
     <name>Rosegarden::MatrixWidget</name>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="-847"/>
+        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="-842"/>
         <source>Zoom</source>
         <translation type="unfinished"></translation>
     </message>
@@ -17252,7 +17261,7 @@ Double-click to open the marker editor.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+1123"/>
+        <location line="+1111"/>
         <source>&lt;qt&gt;Rotate wheel to change the active segment&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -17375,7 +17384,7 @@ Double-click to open the marker editor.</source>
 <context>
     <name>Rosegarden::MidiMixerWindow</name>
     <message>
-        <location filename="../../src/gui/studio/MidiMixerWindow.cpp" line="+126"/>
+        <location filename="../../src/gui/studio/MidiMixerWindow.cpp" line="+129"/>
         <source>MIDI Mixer</source>
         <translation type="unfinished">Cyfuno MIDI</translation>
     </message>
@@ -17390,7 +17399,7 @@ Double-click to open the marker editor.</source>
         <translation type="unfinished">Offeryn</translation>
     </message>
     <message>
-        <location line="+522"/>
+        <location line="+528"/>
         <source>http://rosegardenmusic.com/wiki/doc:midiMixerWindow-en</source>
         <translation type="unfinished"></translation>
     </message>
@@ -17398,7 +17407,7 @@ Double-click to open the marker editor.</source>
 <context>
     <name>Rosegarden::MidiProgramsEditor</name>
     <message>
-        <location filename="../../src/gui/studio/MidiProgramsEditor.cpp" line="+66"/>
+        <location filename="../../src/gui/studio/MidiProgramsEditor.cpp" line="+65"/>
         <location line="+98"/>
         <source>Bank and Program details</source>
         <translation type="unfinished">Manylion Rheng a Rhaglen</translation>
@@ -17949,17 +17958,17 @@ Double-click to open the marker editor.</source>
         <translation type="unfinished">Maint ffont i olygon erwydd lluosol</translation>
     </message>
     <message>
-        <location line="+18"/>
+        <location line="+16"/>
         <source>Text font</source>
         <translation type="unfinished">Testun:</translation>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="+11"/>
         <source>Sans-serif font</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="+12"/>
         <source>Font</source>
         <translation type="unfinished"></translation>
     </message>
@@ -18278,12 +18287,12 @@ Nam yw hwn (o&apos;r blaen, buasai&apos;r rhaglen wedi chwalu erbyn rwan).</tran
         </translation>
     </message>
     <message>
-        <location line="+150"/>
+        <location line="+146"/>
         <source>  Font:  </source>
         <translation type="unfinished">Ffont:</translation>
     </message>
     <message>
-        <location line="+35"/>
+        <location line="+27"/>
         <source>Unknown font &quot;%1&quot;, using default</source>
         <translation type="unfinished">Ffont anhysbys &quot;%1&quot;; yn defnyddio&apos;r rhagosod</translation>
     </message>
@@ -18293,17 +18302,17 @@ Nam yw hwn (o&apos;r blaen, buasai&apos;r rhaglen wedi chwalu erbyn rwan).</tran
         <translation type="unfinished">Maint:</translation>
     </message>
     <message>
-        <location line="+24"/>
+        <location line="+22"/>
         <source>  Spacing:  </source>
         <translation type="unfinished">Bylchu:</translation>
     </message>
     <message>
-        <location line="-116"/>
+        <location line="-102"/>
         <source>  No selection </source>
         <translation type="unfinished">   Dim dewisiad</translation>
     </message>
     <message>
-        <location line="+2661"/>
+        <location line="+2645"/>
         <source>Chord</source>
         <translation type="unfinished">Cord</translation>
     </message>
@@ -18355,7 +18364,7 @@ Nam yw hwn (o&apos;r blaen, buasai&apos;r rhaglen wedi chwalu erbyn rwan).</tran
         <translation type="unfinished">Methu gludo Cylchrannau lluosol i mewn i un</translation>
     </message>
     <message>
-        <location line="-786"/>
+        <location line="-770"/>
         <source>&lt;qt&gt;&lt;p&gt;Apply the interpretations selected on this toolbar to the selection.&lt;/p&gt;&lt;p&gt;If there is no selection, interpretations apply to the entire segment automatically.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -18368,8 +18377,8 @@ Nam yw hwn (o&apos;r blaen, buasai&apos;r rhaglen wedi chwalu erbyn rwan).</tran
         </translation>
     </message>
     <message>
-        <location line="+87"/>
-        <location line="+175"/>
+        <location line="+75"/>
+        <location line="+171"/>
         <location line="+52"/>
         <location line="+57"/>
         <location line="+26"/>
@@ -18608,7 +18617,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
 <context>
     <name>Rosegarden::NotationWidget</name>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="-1465"/>
+        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="-1461"/>
         <source>Zoom</source>
         <translation type="unfinished"></translation>
     </message>
@@ -18633,7 +18642,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+1475"/>
+        <location line="+1464"/>
         <location line="+1"/>
         <source>&lt;qt&gt;Rotate wheel to change the active segment&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
@@ -19262,12 +19271,12 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
 <context>
     <name>Rosegarden::PitchTrackerView</name>
     <message>
-        <location filename="../../src/gui/editors/pitchtracker/PitchTrackerView.cpp" line="+135"/>
+        <location filename="../../src/gui/editors/pitchtracker/PitchTrackerView.cpp" line="+140"/>
         <source>Cannot connect to jack! Ensure jack server is running and no other tracker clients are open.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+30"/>
+        <location line="+36"/>
         <source>Tunings</source>
         <translation type="unfinished"></translation>
     </message>
@@ -20103,7 +20112,7 @@ There may be some incompatibilities with the file format.</source>
         <translation type="unfinished">Rosegarden</translation>
     </message>
     <message>
-        <location line="+1359"/>
+        <location line="+1376"/>
         <source>Loading plugins...</source>
         <translation type="unfinished">Rhifo ategynnau...</translation>
     </message>
@@ -20111,12 +20120,12 @@ There may be some incompatibilities with the file format.</source>
 <context>
     <name>Rosegarden::RosegardenDocument</name>
     <message>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="+476"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="+474"/>
         <location line="+60"/>
         <location line="+12"/>
         <location line="+65"/>
         <location line="+32"/>
-        <location line="+415"/>
+        <location line="+397"/>
         <location line="+622"/>
         <location line="+11"/>
         <location line="+22"/>
@@ -20132,7 +20141,7 @@ There may be some incompatibilities with the file format.</source>
         <translation type="unfinished">Rosegarden</translation>
     </message>
     <message numerus="yes">
-        <location line="-2604"/>
+        <location line="-2586"/>
         <source>Delete the %n audio file(s) recorded during the unsaved session?</source>
         <translation type="unfinished">
             <numerusform>
@@ -20188,7 +20197,7 @@ Please select any you wish to delete permanently from the hard disk.
         <translation type="obsolete">Creu rhagolygon sain...</translation>
     </message>
     <message>
-        <location line="+65"/>
+        <location line="+47"/>
         <source>Merge</source>
         <translation type="unfinished">Cyfuno</translation>
     </message>
@@ -20261,8 +20270,8 @@ editing this file, delete the lock file and try again.
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-824"/>
-        <location line="+2250"/>
+        <location line="-806"/>
+        <location line="+2232"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
@@ -20341,7 +20350,7 @@ er mwyn sicrhau y bydd o&apos;n dal i gael ei ail-lwytho mewn fersiynau dyfodol.
 <context>
     <name>Rosegarden::RosegardenMainViewWidget</name>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="+286"/>
+        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="+289"/>
         <source>Selection must contain only audio or non-audio segments</source>
         <translation type="unfinished">Rhaid i&apos;r dewisiad gynnwys dim ond cylchrannau sain neu di-sain</translation>
     </message>
@@ -20424,22 +20433,21 @@ See Edit -&gt; Preferences -&gt; Audio.</source>
 <context>
     <name>Rosegarden::RosegardenMainWindow</name>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="+329"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="+325"/>
         <source>Initializing plugin manager...</source>
         <translation type="unfinished">Ymgychwyn rheolydd ategynnau...</translation>
     </message>
     <message>
-        <location line="+39"/>
+        <location line="+22"/>
         <source>Initializing view...</source>
         <translation type="unfinished">Ymgychwyn golwg...</translation>
     </message>
     <message>
-        <location line="-31"/>
         <source>Special Parameters</source>
-        <translation type="unfinished">Paramedrau Cylchrannau</translation>
+        <translation type="obsolete">Paramedrau Cylchrannau</translation>
     </message>
     <message>
-        <location line="+91"/>
+        <location line="+18"/>
         <source>Starting sequence manager...</source>
         <translation type="unfinished">Cychwyn rheolydd dilyniannydd...</translation>
     </message>
@@ -20454,7 +20462,7 @@ See Edit -&gt; Preferences -&gt; Audio.</source>
         <translation type="unfinished">Dechrau...</translation>
     </message>
     <message>
-        <location line="+516"/>
+        <location line="+464"/>
         <source>  Zoom:  </source>
         <translation type="unfinished">Chwyddo:</translation>
     </message>
@@ -20463,7 +20471,7 @@ See Edit -&gt; Preferences -&gt; Audio.</source>
         <translation type="obsolete">&amp;%1%2</translation>
     </message>
     <message>
-        <location line="+554"/>
+        <location line="+519"/>
         <source>File &quot;%1&quot; does not exist</source>
         <translation type="unfinished">Nid yw&apos;r ffeil penodol mewn bod</translation>
     </message>
@@ -20486,23 +20494,23 @@ Ydych eisiau ei agor yn lle?</translation>
     </message>
     <message>
         <location line="+145"/>
-        <location line="+4833"/>
+        <location line="+4654"/>
         <source>Untitled</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-4820"/>
-        <location line="+320"/>
-        <location line="+165"/>
+        <location line="-4641"/>
+        <location line="+342"/>
+        <location line="+157"/>
         <source>Could not save document at %1
 Error was : %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-483"/>
-        <location line="+321"/>
-        <location line="+165"/>
-        <location line="+6418"/>
+        <location line="-497"/>
+        <location line="+343"/>
+        <location line="+157"/>
+        <location line="+6207"/>
         <source>Could not save document at %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -20511,7 +20519,7 @@ Error was : %2</source>
         <translation type="obsolete">Agor ffenestr cymhwysiad newydd...</translation>
     </message>
     <message>
-        <location line="-6836"/>
+        <location line="-6639"/>
         <source>Creating new document...</source>
         <translation type="unfinished">Creu dogfen newydd...</translation>
     </message>
@@ -20524,97 +20532,81 @@ Error was : %2</source>
     </message>
     <message>
         <location line="+30"/>
-        <location line="+98"/>
+        <location line="+120"/>
         <source>Opening file...</source>
         <translation type="unfinished">Agor ffeil...</translation>
     </message>
     <message>
-        <location line="-87"/>
-        <location line="+6248"/>
+        <location line="-102"/>
+        <location line="+6062"/>
         <source>All supported files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-6247"/>
-        <location line="+42"/>
-        <location line="+215"/>
+        <location line="-6061"/>
+        <location line="+71"/>
+        <location line="+193"/>
         <source>Rosegarden files</source>
         <translation type="unfinished">Ffeiliau Rosegarden-4</translation>
     </message>
     <message>
-        <location line="-256"/>
-        <location line="+2056"/>
-        <location line="+36"/>
+        <location line="-263"/>
+        <location line="+2010"/>
+        <location line="+23"/>
         <source>MIDI files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-2091"/>
-        <location line="+41"/>
-        <location line="+220"/>
-        <location line="+1743"/>
-        <location line="+52"/>
-        <location line="+36"/>
-        <location line="+269"/>
-        <location line="+36"/>
-        <location line="+87"/>
-        <location line="+35"/>
-        <location line="+89"/>
-        <location line="+36"/>
-        <location line="+642"/>
+        <location line="-2032"/>
+        <location line="+70"/>
+        <location line="+198"/>
+        <location line="+1702"/>
+        <location line="+40"/>
+        <location line="+23"/>
+        <location line="+256"/>
+        <location line="+23"/>
+        <location line="+74"/>
+        <location line="+22"/>
+        <location line="+76"/>
+        <location line="+23"/>
+        <location line="+629"/>
         <location line="+36"/>
         <location line="+46"/>
         <location line="+53"/>
         <location line="+48"/>
         <location line="+122"/>
-        <location line="+2655"/>
+        <location line="+2619"/>
         <source>All files</source>
         <translation type="unfinished">Pob ffeil</translation>
     </message>
     <message>
-        <location line="-6250"/>
-        <location line="+43"/>
+        <location line="-6064"/>
+        <location line="+72"/>
         <source>Open File</source>
         <translation type="unfinished">Agor Ffeil</translation>
     </message>
     <message>
-        <location line="-1149"/>
+        <location line="-1095"/>
         <source>Ctrl+R</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+1026"/>
+        <location line="+936"/>
         <source>%1%2 - %3</source>
         <translation type="unfinished">&amp;%1%3 {1%2 ?}</translation>
     </message>
     <message>
         <location line="+49"/>
-        <location line="+94"/>
-        <location line="+1962"/>
-        <location line="+52"/>
-        <location line="+36"/>
-        <location line="+269"/>
-        <location line="+36"/>
-        <location line="+87"/>
-        <location line="+35"/>
-        <location line="+89"/>
-        <location line="+36"/>
-        <location line="+3598"/>
         <source>Cannot open file %1</source>
         <translation type="unfinished">Methu agor ffeil &apos;%1&apos;</translation>
     </message>
     <message>
-        <location line="-6158"/>
+        <location line="+158"/>
         <source>Saving file...</source>
         <translation type="unfinished">Cadw ffeil...</translation>
     </message>
     <message>
         <location line="+111"/>
-        <source>&lt;qt&gt;Sorry.&lt;br&gt;&quot;%1&quot; is not a valid filename.&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+8"/>
         <source>You have specified a folder/directory.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -20700,12 +20692,12 @@ Error was : %2</source>
     </message>
     <message>
         <location line="+55"/>
-        <location line="+2976"/>
+        <location line="+2819"/>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-2904"/>
+        <location line="-2747"/>
         <source>Jog Selection</source>
         <translation type="unfinished">Gwaredu&apos;r Dewisiad</translation>
     </message>
@@ -20792,7 +20784,7 @@ Error was : %2</source>
         <translation type="unfinished">Dangos/cuddio&apos;r Cludiant</translation>
     </message>
     <message>
-        <location line="+115"/>
+        <location line="+74"/>
         <source>Toggle the statusbar...</source>
         <translation type="unfinished">Dangos/cuddio&apos;r bar cyflwr...</translation>
     </message>
@@ -20824,12 +20816,12 @@ Cylchrannau -&gt; Dat-ehangu Cylchrannau.
     </message>
     <message>
         <location line="+1"/>
-        <location line="+1282"/>
+        <location line="+1166"/>
         <source>Rosegarden Project files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+1339"/>
+        <location line="+1303"/>
         <source>&lt;qt&gt;&lt;p&gt;You must choose a filename for this composition before recording audio.&lt;/p&gt;&lt;p&gt;Audio files will be saved to &lt;b&gt;%1&lt;/b&gt; as &lt;b&gt;rg-[&lt;i&gt;filename&lt;/i&gt;]-[&lt;i&gt;instrument&lt;/i&gt;]-&lt;i&gt;date&lt;/i&gt;_&lt;i&gt;time&lt;/i&gt;-&lt;i&gt;n&lt;/i&gt;.wav&lt;/b&gt;.  You may wish to rename audio instruments before recording as well.  For more information, please see the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/wiki/doc:audio-filenames-en&quot;&gt;Rosegarden Wiki&lt;/a&gt;.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -20844,8 +20836,8 @@ Cylchrannau -&gt; Dat-ehangu Cylchrannau.
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-6871"/>
-        <location line="+358"/>
+        <location line="-6670"/>
+        <location line="+336"/>
         <location line="+8"/>
         <location line="+10"/>
         <location line="+26"/>
@@ -20854,11 +20846,9 @@ Cylchrannau -&gt; Dat-ehangu Cylchrannau.
         <location line="+2"/>
         <location line="+155"/>
         <location line="+9"/>
-        <location line="+95"/>
-        <location line="+59"/>
+        <location line="+176"/>
         <location line="+3"/>
         <location line="+90"/>
-        <location line="+8"/>
         <location line="+8"/>
         <location line="+56"/>
         <location line="+3"/>
@@ -20870,23 +20860,14 @@ Cylchrannau -&gt; Dat-ehangu Cylchrannau.
         <location line="+302"/>
         <location line="+76"/>
         <location line="+25"/>
-        <location line="+844"/>
-        <location line="+39"/>
-        <location line="+52"/>
-        <location line="+36"/>
-        <location line="+109"/>
+        <location line="+803"/>
+        <location line="+198"/>
         <location line="+19"/>
-        <location line="+141"/>
-        <location line="+36"/>
-        <location line="+21"/>
+        <location line="+172"/>
         <location line="+19"/>
-        <location line="+47"/>
-        <location line="+35"/>
-        <location line="+22"/>
+        <location line="+78"/>
         <location line="+19"/>
-        <location line="+48"/>
-        <location line="+36"/>
-        <location line="+21"/>
+        <location line="+79"/>
         <location line="+19"/>
         <location line="+315"/>
         <location line="+250"/>
@@ -20911,7 +20892,7 @@ Cylchrannau -&gt; Dat-ehangu Cylchrannau.
         <location line="+58"/>
         <location line="+2"/>
         <location line="+34"/>
-        <location line="+690"/>
+        <location line="+654"/>
         <location line="+95"/>
         <location line="+120"/>
         <location line="+13"/>
@@ -20920,19 +20901,18 @@ Cylchrannau -&gt; Dat-ehangu Cylchrannau.
         <location line="+18"/>
         <location line="+3"/>
         <location line="+10"/>
-        <location line="+42"/>
-        <location line="+443"/>
+        <location line="+467"/>
         <location line="+2"/>
         <source>Rosegarden</source>
         <translation type="unfinished">Rosegarden</translation>
     </message>
     <message>
-        <location line="-669"/>
+        <location line="-651"/>
         <source>http://rosegardenmusic.com/tutorials/</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+470"/>
+        <location line="+452"/>
         <source>&lt;h3&gt;Newer version available&lt;/h3&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -20942,17 +20922,17 @@ Cylchrannau -&gt; Dat-ehangu Cylchrannau.
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-4452"/>
+        <location line="-4294"/>
         <source>Open MIDI File</source>
         <translation type="unfinished">Agor Ffeil MIDI</translation>
     </message>
     <message>
-        <location line="+36"/>
+        <location line="+23"/>
         <source>Merge MIDI File</source>
         <translation type="unfinished">Cyfuno Ffeil MIDI</translation>
     </message>
     <message>
-        <location line="+124"/>
+        <location line="+111"/>
         <source>Importing MIDI file...</source>
         <translation type="unfinished">Mewnforio ffeil MIDI...</translation>
     </message>
@@ -20968,18 +20948,18 @@ Cylchrannau -&gt; Dat-ehangu Cylchrannau.
     </message>
     <message>
         <location line="+50"/>
-        <location line="+36"/>
+        <location line="+23"/>
         <source>Open X11 Rosegarden File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-35"/>
-        <location line="+36"/>
+        <location line="-22"/>
+        <location line="+23"/>
         <source>X11 Rosegarden files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+35"/>
+        <location line="+22"/>
         <source>Importing X11 Rosegarden file...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -20989,7 +20969,7 @@ Cylchrannau -&gt; Dat-ehangu Cylchrannau.
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+1065"/>
+        <location line="+1013"/>
         <source>&lt;qt&gt;&lt;p&gt;Failed to open a temporary file for LilyPond export.&lt;/p&gt;&lt;p&gt;This probably means you have run out of disk space on &lt;pre&gt;%1&lt;/pre&gt;&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -21000,17 +20980,17 @@ Please exit and restart Rosegarden to restore sound capability.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-4986"/>
+        <location line="-4697"/>
         <source>Starting sequencer...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+1280"/>
+        <location line="+1134"/>
         <source>File &quot;%1&quot; is a Rosegarden Device, and must be imported using the MIDI device manager.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+691"/>
+        <location line="+705"/>
         <source>Saving file%1with a new filename...</source>
         <comment>&apos;file%1with&apos; is correct. %1 will either become &apos; &apos; or &apos; as a template &apos; at runtime</comment>
         <translation type="unfinished"></translation>
@@ -21027,10 +21007,10 @@ Please exit and restart Rosegarden to restore sound capability.</source>
     </message>
     <message>
         <location line="+101"/>
-        <location line="+1483"/>
-        <location line="+217"/>
-        <location line="+123"/>
-        <location line="+124"/>
+        <location line="+1404"/>
+        <location line="+191"/>
+        <location line="+97"/>
+        <location line="+98"/>
         <location line="+658"/>
         <location line="+50"/>
         <location line="+48"/>
@@ -21040,7 +21020,7 @@ Please exit and restart Rosegarden to restore sound capability.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-2574"/>
+        <location line="-2417"/>
         <source>Split time is not within a selected segment.
 No segment will be split.</source>
         <translation type="unfinished"></translation>
@@ -21071,13 +21051,13 @@ No segment will be split.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+1279"/>
-        <location line="+35"/>
+        <location line="+1174"/>
+        <location line="+22"/>
         <source>Open Hydrogen File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+36"/>
+        <location line="+23"/>
         <source>Importing Hydrogen file...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -21087,7 +21067,7 @@ No segment will be split.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+692"/>
+        <location line="+666"/>
         <source>The Rosegarden sequencer could not be started, so sound and recording will be unavailable for this session.
 For assistance with correct audio and MIDI configuration, go to http://rosegardenmusic.com.</source>
         <translation type="unfinished"></translation>
@@ -21190,14 +21170,14 @@ For assistance with correct audio and MIDI configuration, go to http://rosegarde
         <translation type="unfinished">Allforio ffeil MusicXML...</translation>
     </message>
     <message>
-        <location line="-980"/>
-        <location line="+36"/>
-        <location line="+947"/>
+        <location line="-954"/>
+        <location line="+23"/>
+        <location line="+934"/>
         <source>XML files</source>
         <translation type="unfinished">Ffeiliau XML</translation>
     </message>
     <message numerus="yes">
-        <location line="-2536"/>
+        <location line="-2379"/>
         <location line="+54"/>
         <source>Split %n Segment(s) by Drum</source>
         <translation type="unfinished">
@@ -21210,13 +21190,13 @@ For assistance with correct audio and MIDI configuration, go to http://rosegarde
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+1492"/>
-        <location line="+36"/>
+        <location line="+1361"/>
+        <location line="+23"/>
         <source>Open MusicXML File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+36"/>
+        <location line="+23"/>
         <source>Importing MusicXML file...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -21246,7 +21226,7 @@ Would you like to set it now?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+485"/>
+        <location line="+483"/>
         <source>Move playback pointer to time</source>
         <translation type="unfinished">Pwyntydd Chwarae i&apos;r &amp;Cyrchydd</translation>
     </message>
@@ -21278,7 +21258,7 @@ Would you like to set it now?</source>
         <translation type="unfinished">Disgrifiad</translation>
     </message>
     <message>
-        <location line="+487"/>
+        <location line="+453"/>
         <source>Sequencer failed to add audio file %1</source>
         <translation type="unfinished">Methodd y dilyniannydd ychwanegu ffeil sain %1</translation>
     </message>
@@ -21349,12 +21329,12 @@ Error was : %2</source>
         <translation type="unfinished">Mewnforio Stiwdio o Ffeil</translation>
     </message>
     <message>
-        <location line="+49"/>
+        <location line="+39"/>
         <source>Import Studio</source>
         <translation type="unfinished">Mewnforio Stiwdio o Ffeil</translation>
     </message>
     <message>
-        <location line="+323"/>
+        <location line="+315"/>
         <source>&lt;h3&gt;Invalid audio path&lt;/h3&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -21400,7 +21380,7 @@ Error was : %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-5915"/>
+        <location line="-5704"/>
         <source>The audio file path does not exist or is not writable.
 You must set the audio file path to a valid directory in Document Properties before %1.
 Would you like to set it now?</source>
@@ -21415,7 +21395,7 @@ Would you like to set it now?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+414"/>
+        <location line="+409"/>
         <source>Select a new value</source>
         <translation type="unfinished">Dileu&apos;r priodwedd yma</translation>
     </message>
@@ -23235,7 +23215,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
         <translation type="unfinished">Rhagolygu</translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="+16"/>
         <source>Text:  </source>
         <translation type="unfinished">Testun:</translation>
     </message>
@@ -23601,7 +23581,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
 <context>
     <name>Rosegarden::Thumbwheel</name>
     <message>
-        <location filename="../../src/gui/widgets/Thumbwheel.cpp" line="+268"/>
+        <location filename="../../src/gui/widgets/Thumbwheel.cpp" line="+260"/>
         <source>Enter new value</source>
         <translation type="unfinished"></translation>
     </message>
@@ -23805,7 +23785,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
 <context>
     <name>Rosegarden::TrackButtons</name>
     <message>
-        <location filename="../../src/gui/editors/segment/TrackButtons.cpp" line="+280"/>
+        <location filename="../../src/gui/editors/segment/TrackButtons.cpp" line="+285"/>
         <source>&lt;no instrument&gt;</source>
         <translation type="unfinished">&lt;dim offeryn&gt;</translation>
     </message>
@@ -23820,7 +23800,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
         <translation type="unfinished">&lt;di-deitl&gt;</translation>
     </message>
     <message>
-        <location line="+909"/>
+        <location line="+910"/>
         <source>Mute track</source>
         <translation type="unfinished">Ymladd</translation>
     </message>
@@ -23838,7 +23818,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
 <context>
     <name>Rosegarden::TrackEditor</name>
     <message>
-        <location filename="../../src/gui/editors/segment/TrackEditor.cpp" line="+374"/>
+        <location filename="../../src/gui/editors/segment/TrackEditor.cpp" line="+381"/>
         <source>Delete Tracks</source>
         <translation type="unfinished"></translation>
     </message>
@@ -23875,12 +23855,12 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
 <context>
     <name>Rosegarden::TrackLabel</name>
     <message>
-        <location filename="../../src/gui/editors/segment/TrackLabel.cpp" line="+61"/>
+        <location filename="../../src/gui/editors/segment/TrackLabel.cpp" line="+59"/>
         <source>&lt;qt&gt;&lt;p&gt;Click to select all the segments on this track.&lt;/p&gt;&lt;p&gt;Shift+click to add to or to remove from the selection all the segments on this track.&lt;/p&gt;&lt;p&gt;Click and hold with either mouse button to assign this track to an instrument.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+103"/>
+        <location line="+92"/>
         <source>Change track name</source>
         <translation type="unfinished"></translation>
     </message>
@@ -24386,12 +24366,12 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
 <context>
     <name>Rosegarden::TransportDialog</name>
     <message>
-        <location filename="../../src/gui/dialogs/TransportDialog.cpp" line="+119"/>
+        <location filename="../../src/gui/dialogs/TransportDialog.cpp" line="+118"/>
         <source>Rosegarden Transport</source>
         <translation type="unfinished">Cludiant Rosegarden</translation>
     </message>
     <message>
-        <location line="+776"/>
+        <location line="+771"/>
         <location line="+88"/>
         <source>PITCH WHEEL</source>
         <translation type="unfinished">OLWYN TRAW</translation>
@@ -24949,7 +24929,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
         <translation type="unfinished">Cludiant Rosegarden</translation>
     </message>
     <message>
-        <location line="+34"/>
+        <location line="+31"/>
         <source>Hide additional controls</source>
         <translation type="unfinished">Cuddio rheolau ychwanegol</translation>
     </message>
@@ -24979,7 +24959,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
         <translation type="unfinished">Dangos gweithgarwch MIDI i mewn ac allan o Rosegarden</translation>
     </message>
     <message>
-        <location line="+469"/>
+        <location line="+463"/>
         <source>IN</source>
         <translation type="unfinished">I MEWN</translation>
     </message>
@@ -25035,7 +25015,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+1037"/>
+        <location line="+1031"/>
         <source>SIG</source>
         <translation type="unfinished">SIG</translation>
     </message>
