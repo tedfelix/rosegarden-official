@@ -17,5 +17,7 @@ rosegarden
 *.qm
 src/gui/dialogs/RosegardenTransportUi.h
 src/gui/studio/DeviceManagerDialogUi.h
-data/data.cpp
+data/AutoloadStrings.cpp
+data/InstrumentStrings.cpp
+data/QMenuStrings.cpp
 
