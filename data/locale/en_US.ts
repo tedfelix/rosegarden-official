@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="en_US" sourcelanguage="en_US">
+<TS version="2.1" language="en_US" sourcelanguage="en_US">
 <context>
     <name>:</name>
     <message>
@@ -4619,12 +4619,12 @@
     <message>
         <location line="+9"/>
         <source>Open Examp&amp;le...</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Open Tem&amp;plate...</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+1"/>
@@ -11546,12 +11546,12 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message>
         <location line="+102"/>
         <source>Rosegarden</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Enter instrument alias:</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+699"/>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="es" sourcelanguage="en_US">
+<TS version="2.1" language="es" sourcelanguage="en_US">
 <context>
     <name>:</name>
     <message>
@@ -4757,12 +4757,12 @@
     <message>
         <location line="+9"/>
         <source>Open Examp&amp;le...</source>
-        <translation type="unfinished"></translation>
+        <translation>Abrir e&amp;jemplo...</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Open Tem&amp;plate...</source>
-        <translation type="unfinished"></translation>
+        <translation>Abrir &amp;plantilla...</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -11567,12 +11567,12 @@ Por favor, seleccione cuáles de ellos quiere borrar permanentemente del disco d
     <message>
         <location line="+102"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Enter instrument alias:</source>
-        <translation type="unfinished">Introduzca alias del instrumento:</translation>
+        <translation>Introduzca alias del instrumento:</translation>
     </message>
     <message>
         <location line="+699"/>
