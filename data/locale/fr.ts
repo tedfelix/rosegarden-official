@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="fr_FR">
+<TS version="2.1" language="fr_FR">
 <context>
     <name>:</name>
     <message>
@@ -294,13 +294,13 @@
     <message>
         <location filename="../../src/document/io/MusicXmlExporter.cpp" line="+317"/>
         <source>Writing score part...</source>
-        <translation type="unfinished"></translation>
+        <translation>Ecriture de la partition...</translation>
     </message>
     <message>
         <location line="+227"/>
         <location line="+45"/>
         <source>Exporting MusicXML file...</source>
-        <translation type="unfinished">Exportation en fichier MusicXML...</translation>
+        <translation>Exportation du fichier MusicXML...</translation>
     </message>
 </context>
 <context>
@@ -3975,12 +3975,12 @@
     <message>
         <location line="+10"/>
         <source>Open Examp&amp;le...</source>
-        <translation type="unfinished"></translation>
+        <translation>Ouvrir un e&amp;xemple...</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Open Tem&amp;plate...</source>
-        <translation type="unfinished"></translation>
+        <translation>Ouvrir un mo&amp;dèle...</translation>
     </message>
     <message>
         <location line="+11"/>
@@ -11578,12 +11578,12 @@ Veuillez sélectionner ceux que vous souhaitez effacer définitivement du disque
     <message>
         <location line="+102"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Enter instrument alias:</source>
-        <translation type="unfinished"></translation>
+        <translation>Surnommer l&apos;instrument :</translation>
     </message>
     <message>
         <location line="+699"/>
