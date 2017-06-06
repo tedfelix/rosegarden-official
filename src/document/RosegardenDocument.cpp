@@ -539,7 +539,7 @@ bool RosegardenDocument::openDocument(const QString &filename,
     // Progress Dialog
     // Note: The label text and range will be set later as needed.
     QProgressDialog progressDialog(
-            "...",  // labelText
+            tr("Reading file..."),  // labelText
             tr("Cancel"),  // cancelButtonText
             0, 100,  // min, max
             RosegardenMainWindow::self());  // parent
@@ -553,12 +553,13 @@ bool RosegardenDocument::openDocument(const QString &filename,
     // couple of seconds to make up for it.
     // ??? We should move the progress dialog further up the call chain
     //     to include the additional time.
-    progressDialog.setMinimumDuration(2000);
-#if QT_VERSION < 0x050000
-    // Qt4 has several bugs related to delayed showing of
-    // progress dialogs.  Just force it up.
+    //progressDialog.setMinimumDuration(2000);
+
+    // Just force the progress dialog up.
+    // Both Qt4 and Qt5 have bugs related to delayed showing of progress
+    // dialogs.  In Qt4, the dialog sometimes won't show.  In Qt5, KDE
+    // based distros might lock up.  See Bug #1546.
     progressDialog.show();
-#endif
 
     m_progressDialog = &progressDialog;
 
