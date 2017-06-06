@@ -536,19 +536,6 @@ bool RosegardenDocument::openDocument(const QString &filename,
         return false;
     }
 
-    setAbsFilePath(fileInfo.absoluteFilePath());
-
-    // Lock.
-
-    if (permanent  &&  enableLock) {
-        if (!lock()) {
-            // Avoid deleting the lock file by clearing out this document.
-            newDocument();
-
-            return false;
-        }
-    }
-
     // Progress Dialog
     // Note: The label text and range will be set later as needed.
     QProgressDialog progressDialog(
@@ -580,6 +567,19 @@ bool RosegardenDocument::openDocument(const QString &filename,
         progressDialog.close();
         // Apparently, close() isn't strong enough...
         m_progressDialog = 0;
+    }
+
+    setAbsFilePath(fileInfo.absoluteFilePath());
+
+    // Lock.
+
+    if (permanent  &&  enableLock) {
+        if (!lock()) {
+            // Avoid deleting the lock file by clearing out this document.
+            newDocument();
+
+            return false;
+        }
     }
 
     // Load.
