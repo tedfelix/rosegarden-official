@@ -2645,11 +2645,11 @@ RosegardenMainWindow::slotRescaleSelection()
     // process.  Any of the steps may set progress to 100.  We
     // will close anyway when this object goes out of scope.
     progressDialog.setAutoClose(false);
-#if QT_VERSION < 0x050000
-    // Qt4 has several bugs related to delayed showing of
-    // progress dialogs.  Just force it up.
+    // Just force the progress dialog up.
+    // Both Qt4 and Qt5 have bugs related to delayed showing of progress
+    // dialogs.  In Qt4, the dialog sometimes won't show.  In Qt5, KDE
+    // based distros might lock up.  See Bug #1546.
     progressDialog.show();
-#endif
 
     // For each AudioSegmentRescaleCommand, pass on the progress dialog.
     for (size_t i = 0; i < audioRescaleCommands.size(); ++i) {
@@ -4049,11 +4049,11 @@ RosegardenMainWindow::createDocumentFromMIDIFile(QString file)
     // process.  Any of the steps may set progress to 100.  We
     // will close anyway when this object goes out of scope.
     progressDialog.setAutoClose(false);
-#if QT_VERSION < 0x050000
-    // Qt4 has several bugs related to delayed showing of
-    // progress dialogs.  Just force it up.
+    // Just force the progress dialog up.
+    // Both Qt4 and Qt5 have bugs related to delayed showing of progress
+    // dialogs.  In Qt4, the dialog sometimes won't show.  In Qt5, KDE
+    // based distros might lock up.  See Bug #1546.
     progressDialog.show();
-#endif
 
     midiFile.setProgressDialog(&progressDialog);
 
@@ -4240,11 +4240,11 @@ RosegardenMainWindow::createDocumentFromRG21File(QString file)
     progressDialog.setAutoClose(false);
     // Remove the cancel button since RG21Loader doesn't support cancel.
     progressDialog.setCancelButton(NULL);
-#if QT_VERSION < 0x050000
-    // Qt4 has several bugs related to delayed showing of
-    // progress dialogs.  Just force it up.
+    // Just force the progress dialog up.
+    // Both Qt4 and Qt5 have bugs related to delayed showing of progress
+    // dialogs.  In Qt4, the dialog sometimes won't show.  In Qt5, KDE
+    // based distros might lock up.  See Bug #1546.
     progressDialog.show();
-#endif
 
     // Inherent autoload
     //
@@ -4337,11 +4337,11 @@ RosegardenMainWindow::createDocumentFromHydrogenFile(QString file)
     progressDialog.setAutoClose(false);
     // Remove the cancel button since HydrogenLoader doesn't support cancel.
     progressDialog.setCancelButton(NULL);
-#if QT_VERSION < 0x050000
-    // Qt4 has several bugs related to delayed showing of
-    // progress dialogs.  Just force it up.
+    // Just force the progress dialog up.
+    // Both Qt4 and Qt5 have bugs related to delayed showing of progress
+    // dialogs.  In Qt4, the dialog sometimes won't show.  In Qt5, KDE
+    // based distros might lock up.  See Bug #1546.
     progressDialog.show();
-#endif
 
     // Inherent autoload
     //
@@ -4435,11 +4435,11 @@ RosegardenMainWindow::createDocumentFromMusicXMLFile(QString file)
     progressDialog.setAutoClose(false);
     // Remove the cancel button since MusicXMLLoader doesn't support cancel.
     progressDialog.setCancelButton(NULL);
-#if QT_VERSION < 0x050000
-    // Qt4 has several bugs related to delayed showing of
-    // progress dialogs.  Just force it up.
+    // Just force the progress dialog up.
+    // Both Qt4 and Qt5 have bugs related to delayed showing of progress
+    // dialogs.  In Qt4, the dialog sometimes won't show.  In Qt5, KDE
+    // based distros might lock up.  See Bug #1546.
     progressDialog.show();
-#endif
 
     // Inherent autoload
     //
@@ -5092,11 +5092,11 @@ RosegardenMainWindow::exportMIDIFile(QString file)
     // No sense in auto close since we will close anyway when
     // this object goes out of scope.
     progressDialog.setAutoClose(false);
-#if QT_VERSION < 0x050000
-    // Qt4 has several bugs related to delayed showing of
-    // progress dialogs.  Just force it up.
+    // Just force the progress dialog up.
+    // Both Qt4 and Qt5 have bugs related to delayed showing of progress
+    // dialogs.  In Qt4, the dialog sometimes won't show.  In Qt5, KDE
+    // based distros might lock up.  See Bug #1546.
     progressDialog.show();
-#endif
 
     MidiFile midiFile;
 
@@ -5144,11 +5144,11 @@ RosegardenMainWindow::exportCsoundFile(QString file)
     progressDialog.setAutoClose(false);
     // Get rid of the cancel button for now.
     progressDialog.setCancelButton(NULL);
-#if QT_VERSION < 0x050000
-    // Qt4 has several bugs related to delayed showing of
-    // progress dialogs.  Just force it up.
+    // Just force the progress dialog up.
+    // Both Qt4 and Qt5 have bugs related to delayed showing of progress
+    // dialogs.  In Qt4, the dialog sometimes won't show.  In Qt5, KDE
+    // based distros might lock up.  See Bug #1546.
     progressDialog.show();
-#endif
 
     CsoundExporter csoundExporter(
             this,  // parent
@@ -5192,11 +5192,11 @@ RosegardenMainWindow::exportMupFile(QString file)
     progressDialog.setAutoClose(false);
     // Get rid of the cancel button for now.
     progressDialog.setCancelButton(NULL);
-#if QT_VERSION < 0x050000
-    // Qt4 has several bugs related to delayed showing of
-    // progress dialogs.  Just force it up.
+    // Just force the progress dialog up.
+    // Both Qt4 and Qt5 have bugs related to delayed showing of progress
+    // dialogs.  In Qt4, the dialog sometimes won't show.  In Qt5, KDE
+    // based distros might lock up.  See Bug #1546.
     progressDialog.show();
-#endif
 
     MupExporter mupExporter(
             this,  // parent
@@ -5306,11 +5306,11 @@ RosegardenMainWindow::exportLilyPondFile(QString file, bool forPreview)
     // No sense in auto close since we will close anyway when
     // this object goes out of scope.
     progressDialog.setAutoClose(false);
-#if QT_VERSION < 0x050000
-    // Qt4 has several bugs related to delayed showing of
-    // progress dialogs.  Just force it up.
+    // Just force the progress dialog up.
+    // Both Qt4 and Qt5 have bugs related to delayed showing of progress
+    // dialogs.  In Qt4, the dialog sometimes won't show.  In Qt5, KDE
+    // based distros might lock up.  See Bug #1546.
     progressDialog.show();
-#endif
 
     LilyPondExporter lilyPondExporter(
             m_doc,  // document
@@ -5369,11 +5369,11 @@ RosegardenMainWindow::exportMusicXmlFile(QString file)
     progressDialog.setAutoClose(false);
     // Get rid of the cancel button for now.
     progressDialog.setCancelButton(NULL);
-#if QT_VERSION < 0x050000
-    // Qt4 has several bugs related to delayed showing of
-    // progress dialogs.  Just force it up.
+    // Just force the progress dialog up.
+    // Both Qt4 and Qt5 have bugs related to delayed showing of progress
+    // dialogs.  In Qt4, the dialog sometimes won't show.  In Qt5, KDE
+    // based distros might lock up.  See Bug #1546.
     progressDialog.show();
-#endif
 
     MusicXmlExporter musicXmlExporter(
             this,  // parent

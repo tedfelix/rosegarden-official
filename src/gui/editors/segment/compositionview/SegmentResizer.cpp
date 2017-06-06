@@ -137,7 +137,7 @@ void SegmentResizer::resizeAudioSegment(
     // Progress Dialog
     // Note: The label text and range will be set later as needed.
     QProgressDialog progressDialog(
-            "...",  // labelText
+            tr("Rescaling audio file..."),  // labelText
             tr("Cancel"),  // cancelButtonText
             0, 100,  // min, max
             RosegardenMainWindow::self());  // parent
@@ -148,11 +148,11 @@ void SegmentResizer::resizeAudioSegment(
     // process.  Any of the steps may set progress to 100.  We
     // will close anyway when this object goes out of scope.
     progressDialog.setAutoClose(false);
-#if QT_VERSION < 0x050000
-    // Qt4 has several bugs related to delayed showing of
-    // progress dialogs.  Just force it up.
+    // Just force the progress dialog up.
+    // Both Qt4 and Qt5 have bugs related to delayed showing of progress
+    // dialogs.  In Qt4, the dialog sometimes won't show.  In Qt5, KDE
+    // based distros might lock up.  See Bug #1546.
     progressDialog.show();
-#endif
 
     command->setProgressDialog(&progressDialog);
 
