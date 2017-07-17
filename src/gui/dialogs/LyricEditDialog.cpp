@@ -42,26 +42,107 @@
 #include <QUrl>
 #include <QDesktopServices>
 
+#include <QListWidget>
+#include <QMenu>
 
 namespace Rosegarden
 {
 
 LyricEditDialog::LyricEditDialog(QWidget *parent,
+                                 std::vector<Segment *> &segments,
                                  Segment *segment) :
     QDialog(parent),
     m_segment(segment),
+    m_segmentSelectMenu(0),
+    m_descr1(0),
+    m_descr2(0),
     m_verseCount(0)
 {
     setModal(true);
     setWindowTitle(tr("Edit Lyrics"));
 
+    // If several segments, setup a menu to change the selected one
+    if (segments.size() > 1) {
+        m_segmentSelectMenu = new QMenu(this);
+        m_menuActionsMap.clear();
+        Composition *comp = m_segment->getComposition();
+
+        // Associate a description with each segment and use a multimap
+        // to sort them
+        std::multimap<QString, Segment *> segDescriptionMap;
+
+        for (std::vector<Segment *>::iterator it = segments.begin();
+                it != segments.end(); ++it) {
+
+            // Get segment characteristics
+            timeT segStart = (*it)->getStartTime();
+            timeT segEnd = (*it)->getEndMarkerTime();
+            int barStart = comp->getBarNumber(segStart) + 1;
+            int barEnd = comp->getBarNumber(segEnd - 1) + 1;
+            QString label = strtoqstr((*it)->getLabel());
+
+            // Shorten too long labels
+            if (label.length() > 53) label = label.left(50) + "...";
+
+            // Create the description
+            QString segDescr = QString(tr("Track %1, bar %2 to %3: \"%4\""))
+                    .arg(comp->getTrackPositionById((*it)->getTrack()) + 1)
+                    .arg(barStart)
+                    .arg(barEnd)
+                    .arg(label);
+
+            //
+            segDescriptionMap.insert(std::pair<QString, Segment *>(segDescr, *it));
+        }
+
+        // Populate the menu with an entry for each segment
+        for (std::multimap<QString, Segment *>::iterator it = segDescriptionMap.begin();
+                it != segDescriptionMap.end(); ++it) {
+            m_menuActionsMap[m_segmentSelectMenu->addAction((*it).first)] = (*it).second;
+            std::cout << (*it).first << "\n";
+        }
+    }
+
+    // Begin dialog layout
     QGridLayout *metagrid = new QGridLayout;
     setLayout(metagrid);
     QWidget *vbox = new QWidget(this);
     QVBoxLayout *vboxLayout = new QVBoxLayout;
     metagrid->addWidget(vbox, 0, 0);
 
+    // Add the following elements of layout only if more than
+    // one segment is opened in the notation editor
+    if (m_segmentSelectMenu) {
 
+        // QLabels to display a description of the selected segment
+        m_descr1 = new QLabel("");
+        vboxLayout->addWidget(m_descr1);
+        m_descr2 = new QLabel("");
+        vboxLayout->addWidget(m_descr2);
+
+        // Write out the description
+        showDescriptionOfSelectedSegment();
+
+        // Add a button to give the user a chance to select another segment
+        QPushButton *selectSegment = new QPushButton(tr("Select another segment"));
+
+        // Avoid button to become exaggeratedly large when dialog is resized
+        QWidget *hb = new QWidget(vbox);
+        QHBoxLayout *hbl = new QHBoxLayout;
+        hb->setLayout(hbl);
+        vboxLayout->addWidget(hb);
+        QFrame *fr = new QFrame(hb);
+        hbl->addWidget(fr);
+        hbl->setStretchFactor(fr, 10);
+        hbl->addWidget(selectSegment);
+
+        // Connect the button to the menu and the menu to the appropriate slot
+        selectSegment->setMenu(m_segmentSelectMenu);
+        connect(m_segmentSelectMenu, SIGNAL(triggered(QAction *)),
+                this, SLOT(slotSegmentChanged(QAction *)));
+    }
+
+    // Continue dialog layout
     QGroupBox *groupBox = new QGroupBox( tr("Lyrics for this segment"), vbox );
     QVBoxLayout *groupBoxLayout = new QVBoxLayout;
     vboxLayout->addWidget(groupBox);
@@ -82,6 +163,8 @@ LyricEditDialog::LyricEditDialog(QWidget *parent,
     m_verseRemoveButton = new QPushButton(tr("Remove Verse"), hbox );
     hboxLayout->addWidget(m_verseRemoveButton);
     connect(m_verseRemoveButton, SIGNAL(clicked()), this, SLOT(slotRemoveVerse()));
+
+    // Avoid buttons to become exaggeratedly large when dialog is resized
     QFrame *f = new QFrame( hbox );
     hboxLayout->addWidget(f);
     hbox->setLayout(hboxLayout);
@@ -101,12 +184,62 @@ LyricEditDialog::LyricEditDialog(QWidget *parent,
 
     groupBox->setLayout(groupBoxLayout);
 
-    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::Help);
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok
+                                                     | QDialogButtonBox::Cancel
+                                                     | QDialogButtonBox::Help);
     metagrid->addWidget(buttonBox, 1, 0);
     metagrid->setRowStretch(0, 10);
     connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
     connect(buttonBox, SIGNAL(helpRequested()), this, SLOT(slotHelpRequested()));
+}
+
+void
+LyricEditDialog::showDescriptionOfSelectedSegment()
+{
+    // Get selected segment characteristics
+    Composition *comp = m_segment->getComposition();
+    timeT segStart = m_segment->getStartTime();
+    timeT segEnd = m_segment->getEndMarkerTime();
+    int barStart = comp->getBarNumber(segStart) + 1;
+    int barEnd = comp->getBarNumber(segEnd - 1) + 1;
+    QString label = strtoqstr(m_segment->getLabel());
+
+    // Shorten too long labels
+    if (label.length() > 53) label = label.left(50) + "...";
+
+    // Create the description (on two lines)
+    QString descr1 = QString(tr("Selected segment lays on track %1, bar %2 to %3"))
+            .arg(comp->getTrackPositionById(m_segment->getTrack()) + 1)
+            .arg(barStart)
+            .arg(barEnd);
+    QString descr2 = QString(tr("and is labeled \"%1\""))
+            .arg(label);
+
+    // Write out the two lines
+    m_descr1->setText(descr1);
+    m_descr2->setText(descr2);
+}
+
+void
+LyricEditDialog::slotSegmentChanged(QAction * a)
+{
+    std::cout << "slotSegmentChanged " << a << "\n";
+    Segment * newSeg= m_menuActionsMap[a];
+
+    // Do nothing if segment unchanged
+    if (m_segment == newSeg) return;
+
+    m_segment = newSeg;
+    showDescriptionOfSelectedSegment();
+
+    m_texts.clear();
+    m_currentVerse = 0;
+    unparse();
+    verseDialogRepopulate();
+
+    m_textEdit->setFocus();
+
 }
 
 void

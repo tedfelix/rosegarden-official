@@ -4285,9 +4285,13 @@ NotationView::slotEditLyrics()
     Segment *segment = getCurrentSegment();
     int oldVerseCount = segment->getVerseCount();
 
-    LyricEditDialog dialog(this, segment);
+    LyricEditDialog dialog(this, m_segments, segment);
 
     if (dialog.exec() == QDialog::Accepted) {
+
+        // User may have change segment from inside the dialog
+        // (see ticket #1547)
+        segment = dialog.getSegment();
 
         MacroCommand *macro = new MacroCommand
             (SetLyricsCommand::getGlobalName());
