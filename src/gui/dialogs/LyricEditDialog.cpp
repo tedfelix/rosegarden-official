@@ -28,22 +28,22 @@
 #include "base/NotationTypes.h"
 #include "base/Segment.h"
 
+#include <QComboBox>
+#include <QDesktopServices>
 #include <QDialog>
 #include <QDialogButtonBox>
 #include <QGroupBox>
+#include <QLabel>
+#include <QMenu>
+#include <QMessageBox>
+#include <QPushButton>
 #include <QRegExp>
 #include <QString>
 #include <QTextEdit>
-#include <QWidget>
-#include <QVBoxLayout>
-#include <QComboBox>
-#include <QLabel>
-#include <QPushButton>
 #include <QUrl>
-#include <QDesktopServices>
+#include <QVBoxLayout>
+#include <QWidget>
 
-#include <QListWidget>
-#include <QMenu>
 
 namespace Rosegarden
 {
@@ -56,7 +56,8 @@ LyricEditDialog::LyricEditDialog(QWidget *parent,
     m_segmentSelectMenu(0),
     m_descr1(0),
     m_descr2(0),
-    m_verseCount(0)
+    m_verseCount(0),
+    m_previousVerseCount(0)
 {
     setModal(true);
     setWindowTitle(tr("Edit Lyrics"));
@@ -91,15 +92,15 @@ LyricEditDialog::LyricEditDialog(QWidget *parent,
                     .arg(barEnd)
                     .arg(label);
 
-            //
+            // Insert description and segment in the map
             segDescriptionMap.insert(std::pair<QString, Segment *>(segDescr, *it));
         }
 
-        // Populate the menu with an entry for each segment
+        // Populate the menu with an entry for each segment.
+        // Reading the segments from the multimap sorts them by description.
         for (std::multimap<QString, Segment *>::iterator it = segDescriptionMap.begin();
                 it != segDescriptionMap.end(); ++it) {
             m_menuActionsMap[m_segmentSelectMenu->addAction((*it).first)] = (*it).second;
-            std::cout << (*it).first << "\n";
         }
     }
 
@@ -180,6 +181,9 @@ LyricEditDialog::LyricEditDialog(QWidget *parent,
     unparse();
     verseDialogRepopulate();
 
+    m_previousTexts = m_texts;
+    m_previousVerseCount = m_verseCount;
+
     m_textEdit->setFocus();
 
     groupBox->setLayout(groupBoxLayout);
@@ -224,11 +228,46 @@ LyricEditDialog::showDescriptionOfSelectedSegment()
 void
 LyricEditDialog::slotSegmentChanged(QAction * a)
 {
-    std::cout << "slotSegmentChanged " << a << "\n";
     Segment * newSeg= m_menuActionsMap[a];
 
     // Do nothing if segment unchanged
     if (m_segment == newSeg) return;
+
+    // Lyrics of current segment have been modified
+    //     (1) if verse count has decreased
+    //     (2) or if some preexisting verse have changed
+    //     (3) or if verse count has increased and new verses are not skeletons
+
+    bool changed = false;
+    if (m_verseCount < m_previousVerseCount) {
+        changed = true;                  // (1)
+    } else {
+        for (int i = 0; i < m_verseCount; i++) {
+            if (i < m_previousVerseCount) {
+                if (m_previousTexts[i] != getLyricData(i)) {
+                    changed = true;      // (2)
+                    break;
+                }
+            } else {
+                if (getLyricData(i) != m_skeleton) {
+                    changed = true;      // (3)
+                    break;
+                }
+            }
+        }
+    }
+
+    // If lyrics have been modified, give the user a chance to keep the changes
+    if (changed) {
+        int okToChange = QMessageBox::warning( this, tr("Rosegarden - Warning"),
+            tr("<qt><p>The current segment lyrics have been modified.</p>"
+               "<p>The modifications will be lost if a new segment is selected.</p>"
+               "<p>Do you really want to select a new segment?</p></qt>"),
+            QMessageBox::Yes | QMessageBox::No, QMessageBox::No );
+
+        // Do nothing if user replied no
+        if (okToChange != QMessageBox::Yes) return;
+    }
 
     m_segment = newSeg;
     showDescriptionOfSelectedSegment();
@@ -238,8 +277,10 @@ LyricEditDialog::slotSegmentChanged(QAction * a)
     unparse();
     verseDialogRepopulate();
 
-    m_textEdit->setFocus();
+    m_previousTexts = m_texts;
+    m_previousVerseCount = m_verseCount;
 
+    m_textEdit->setFocus();
 }
 
 void

@@ -52,7 +52,7 @@ public:
     QString getLyricData(int verse) const;
     Segment * getSegment() const { return m_segment; }
 
-    // Write out a description of m_segment in m_descr1 and m_descr2
+    // Write out a description of m_segment in widgets m_descr1 and m_descr2
     void showDescriptionOfSelectedSegment();
 
 protected slots:
@@ -79,6 +79,9 @@ protected:
     int m_verseCount;
     std::vector<QString> m_texts;
     QString m_skeleton;
+
+    int m_previousVerseCount;
+    std::vector<QString> m_previousTexts;
 
     void countVerses();
     void unparse();
