@@ -589,7 +589,13 @@ Segment::insert(Event *e)
 
     iterator i = EventContainer::insert(e);
     notifyAdd(e);
-    updateRefreshStatuses(e->getAbsoluteTime(), t1);
+
+    // Fix #1548: Last syllable of lyrics is not copied between two
+    // linked segments.
+    // Ensure event is inside the refresh status range
+    if (t1 == t0) t1 += 1;
+
+    updateRefreshStatuses(t0, t1);
     return i;
 }
 
