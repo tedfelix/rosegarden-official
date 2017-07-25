@@ -78,10 +78,23 @@ private:
     typedef std::list<LinkedSegmentParams> LinkedSegmentParamsList;
 
     void linkedSegmentChanged(Segment* s, const timeT from, const timeT to);
-    void eraseNonIgnored(Segment *s, Segment::const_iterator itrFrom, 
-                                     Segment::const_iterator itrTo);
-    void insertMappedEvent(Segment *seg, const Event *e, timeT t, timeT nt,
-                                         int semitones, int steps);
+
+    /**
+     * Return true if lyricsAlreadyErased is true or if some
+     * lyrics have been erased
+     */
+    bool eraseNonIgnored(Segment *s, Segment::const_iterator itrFrom,
+                                     Segment::const_iterator itrTo,
+                                     bool lyricsAlreadyErased);
+
+    /**
+     * Return true if lyricsAlreadyInserted is true or if a lyric
+     * event has been inserted
+     */
+    bool insertMappedEvent(Segment *seg, const Event *e, timeT t, timeT nt,
+                           int semitones, int steps,
+                           bool lyricsAlreadyInserted);
+
     LinkedSegmentParamsList::iterator findParamsItrForSegment(Segment *s);
     static void handleImpliedCMajor(Segment *s);
 

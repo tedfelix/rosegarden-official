@@ -335,6 +335,9 @@ void
 LyricEditDialog::countVerses()
 {
     m_verseCount = m_segment->getVerseCount();
+
+    // If no verse, add an empty one to give a workplace to the user
+    // (else the user would need to press the "add verse" button)
     if (m_verseCount == 0) m_verseCount = 1;
 }
 
