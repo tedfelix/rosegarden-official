@@ -2224,7 +2224,7 @@ JackDriver::getNextSliceStart(const RealTime &now) const
     if (rounded == frame)
         roundrt = RealTime::frame2RealTime(rounded, m_sampleRate);
     else if (neg)
-        roundrt = RealTime::frame2RealTime(rounded - m_bufferSize, m_sampleRate);
+        roundrt = RealTime::frame2RealTime(rounded, m_sampleRate);
     else
         roundrt = RealTime::frame2RealTime(rounded + m_bufferSize, m_sampleRate);
 
