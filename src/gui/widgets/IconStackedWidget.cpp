@@ -36,7 +36,7 @@ IconStackedWidget::IconStackedWidget(QWidget *parent) :
 {
     
     // Use a frame widget for the icon panel, it will hold a bunch of buttons
-    m_iconPanel = new QFrame(this);
+    m_iconPanel = new QFrame;
     m_iconPanel->setFrameStyle(QFrame::Panel | QFrame::Sunken);
     m_iconPanel->setLineWidth(2);
 
@@ -65,7 +65,7 @@ IconStackedWidget::IconStackedWidget(QWidget *parent) :
     m_iconPanel->setLayout(m_iconLayout);
     
     // Use a stacked widget for the pages so the selected on is displayed
-    m_pagePanel = new QStackedWidget(this);
+    m_pagePanel = new QStackedWidget;
 
     // Use a QHBoxLayout for icon and page panels
     m_layout = new QHBoxLayout;
