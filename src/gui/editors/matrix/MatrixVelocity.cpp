@@ -145,9 +145,6 @@ MatrixVelocity::handleMouseMove(const MatrixMouseEvent *e)
     m_velocityDelta*=2.0;
     */
 
-    // Preview velocity delta in contexthelp
-    setContextHelp(tr("Velocity change: %1").arg(m_velocityDelta));
-
 	// Preview calculated velocity info on element
 	// Dupe from MatrixMover
     EventSelection* selection = m_scene->getSelection();
@@ -176,6 +173,9 @@ MatrixVelocity::handleMouseMove(const MatrixMouseEvent *e)
 
 //    MatrixElement *element = 0;
 //    int maxY = m_currentViewSegment->getCanvasYForHeight(0);
+
+    int maxVelocity = 0;
+    int minVelocity = 127;
 
     for (EventSelection::eventcontainer::iterator it =
              selection->getSegmentEvents().begin();
@@ -211,8 +211,16 @@ MatrixVelocity::handleMouseMove(const MatrixMouseEvent *e)
 //                             element->getViewDuration(),
 //                             epitch + diffPitch);
 
-        element->reconfigure(velocity + m_velocityDelta);
+        velocity += m_velocityDelta;
+
+        element->reconfigure(velocity);
         element->setSelected(true);
+
+        if (velocity > 127) velocity = 127;
+        if (velocity < 0) velocity = 0;
+
+        if (velocity > maxVelocity) maxVelocity = velocity;
+        if (velocity < minVelocity) minVelocity = velocity;
     }
 
 //    emit hoveredOverNoteChanged();   // YG: Commented out
@@ -231,6 +239,15 @@ MatrixVelocity::handleMouseMove(const MatrixMouseEvent *e)
 	    }
 	}
 	*/
+
+    // Preview velocity delta in contexthelp
+    if (minVelocity == maxVelocity) {
+        setContextHelp(tr("Velocity change: %1   Velocity: %2")
+                           .arg(m_velocityDelta).arg(minVelocity));
+    } else {
+        setContextHelp(tr("Velocity change: %1   Velocity: %2 to %3")
+                           .arg(m_velocityDelta).arg(minVelocity).arg(maxVelocity));
+    }
 
     return NoFollow;
 }
