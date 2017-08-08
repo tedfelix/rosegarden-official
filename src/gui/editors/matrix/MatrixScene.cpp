@@ -88,12 +88,6 @@ MatrixScene::~MatrixScene()
 }
 
 void
-MatrixScene::setMatrixWidget(MatrixWidget *w)
-{
-    m_widget = w;
-}
-
-void
 MatrixScene::setSegments(RosegardenDocument *document,
                          std::vector<Segment *> segments)
 {

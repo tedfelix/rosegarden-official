@@ -81,6 +81,9 @@ public:
 //    ElementAdapter* getElementAdapter() { return m_elementAdapter; }
     virtual Event* getEvent() { return m_event; }
 
+    void setData(long data) { m_data = data; }
+    long getData() { return m_data; }
+
 protected:
     virtual void reconfigure();
     
@@ -93,6 +96,9 @@ protected:
     float m_y;
     bool m_handlingMouseMove;
     bool m_selected;
+
+    long m_data;  // Currently only used with velocity items
+                  // (Matrix velocity tool store initial velocity here)
 
     ControlRuler* m_controlRuler;
     Event* m_event;

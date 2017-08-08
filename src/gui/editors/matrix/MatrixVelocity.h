@@ -69,6 +69,8 @@ protected:
 
     MatrixElement *m_currentElement;
     MatrixViewSegment *m_currentViewSegment;
+
+    bool m_start;   // Indicator of the start of a velocity change sequence
 };
 
 

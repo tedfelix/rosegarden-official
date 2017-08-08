@@ -460,6 +460,14 @@ ControlRulerWidget::getActiveRuler(void)
     return dynamic_cast <ControllerEventsRuler *> (widget);
 }
 
+PropertyControlRuler *
+ControlRulerWidget::getActivePropertyRuler()
+{
+    QWidget * widget = m_stackedWidget->currentWidget ();
+    if (!widget) { return 0; }
+    return dynamic_cast <PropertyControlRuler *> (widget);
+}
+
 bool
 ControlRulerWidget::hasSelection(void)
 {

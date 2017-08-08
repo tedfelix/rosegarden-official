@@ -33,7 +33,9 @@
 #include "MatrixScene.h"
 #include "MatrixWidget.h"
 #include "misc/Debug.h"
-
+#include "gui/rulers/ControlItem.h"
+#include "gui/rulers/ControlRulerWidget.h"
+#include "gui/rulers/PropertyControlRuler.h"
 
 namespace Rosegarden
 {
@@ -45,7 +47,8 @@ MatrixVelocity::MatrixVelocity(MatrixWidget *widget) :
     m_screenPixelsScale(100),
     m_velocityScale(0),
     m_currentElement(0),
-    m_currentViewSegment(0)
+    m_currentViewSegment(0),
+    m_start(false)
 {
     createAction("select", SLOT(slotSelectSelected()));
     createAction("draw", SLOT(slotDrawSelected()));
@@ -96,6 +99,8 @@ MatrixVelocity::handleLeftButtonPress(const MatrixMouseEvent *e)
                                         m_currentElement,
                                         true);
     }
+
+    m_start = true;
 }
 
 MatrixVelocity::FollowMode
@@ -147,6 +152,28 @@ MatrixVelocity::handleMouseMove(const MatrixMouseEvent *e)
 	// Dupe from MatrixMover
     EventSelection* selection = m_scene->getSelection();
 
+
+    // Is a velocity ruler visible ?
+    ControlRulerWidget * controlRulerWidget =
+            m_scene->getMatrixWidget()->getControlsWidget();
+
+    // Velocity is the only one property ruler
+    PropertyControlRuler *velocityRuler = controlRulerWidget->getActivePropertyRuler();
+
+    if (velocityRuler) {
+
+        ControlItemList *items = velocityRuler->getSelectedItems();
+        for (ControlItemList::iterator it = items->begin(); it != items->end(); ++it) {
+            float y = (*it)->y();
+            if (m_start) (*it)->setData(velocityRuler->yToValue(y));
+            int velocity = (*it)->getData() + m_velocityDelta;
+            y = velocityRuler->valueToY(velocity);
+            (*it)->setValue(y);
+        }
+        velocityRuler->update();
+    }
+    m_start = false;
+
 //    MatrixElement *element = 0;
 //    int maxY = m_currentViewSegment->getCanvasYForHeight(0);
 
@@ -167,6 +194,9 @@ MatrixVelocity::handleMouseMove(const MatrixMouseEvent *e)
 //        timeT diffTime = element->getViewAbsoluteTime() -
 //            m_currentElement->getViewAbsoluteTime();
 
+
+
+
 //        int epitch = 0;
 //        if (element->event()->has(PITCH)) {
 //            epitch = element->event()->get<Int>(PITCH);
@@ -180,11 +210,12 @@ MatrixVelocity::handleMouseMove(const MatrixMouseEvent *e)
 //        element->reconfigure(newTime + diffTime,
 //                             element->getViewDuration(),
 //                             epitch + diffPitch);
-        element->reconfigure(velocity+m_velocityDelta);
+
+        element->reconfigure(velocity + m_velocityDelta);
         element->setSelected(true);
     }
 
-    emit hoveredOverNoteChanged();
+//    emit hoveredOverNoteChanged();   // YG: Commented out
 
 	/** Might be something for the feature
 	EventSelection* selection = m_mParentView->getCurrentSelection();
@@ -235,6 +266,7 @@ MatrixVelocity::handleMouseRelease(const MatrixMouseEvent *e)
     }
 
     // Reset the start of mousemove
+    m_start = false;
     m_velocityDelta = m_mouseStartY = 0;
     m_currentElement = 0;
     setBasicContextHelp();
@@ -245,11 +277,13 @@ MatrixVelocity::ready()
 {
     setBasicContextHelp();
     m_widget->setCanvasCursor(Qt::SizeVerCursor);
+    m_start = false;
 }
 
 void
 MatrixVelocity::stow()
 {
+    m_start = false;
 }
 
 void

@@ -40,6 +40,7 @@ class PropertyName;
 class ViewSegment;
 class EventSelection;
 class ControllerEventsRuler;
+class PropertyControlRuler;
  
 class ControlRulerWidget : public QWidget
 {
@@ -69,6 +70,11 @@ public:
     bool hasSelection(void);
     SelectionSituation *getSituation(void);
     ControlParameter   *getControlParameter(void);
+
+    /**
+     * Returns Velocity ruler if currently shown else return 0
+     */
+    PropertyControlRuler *getActivePropertyRuler();
 
 public slots:
     void slotTogglePropertyRuler(const PropertyName &);

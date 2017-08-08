@@ -34,6 +34,7 @@ ControlItem::ControlItem(ControlRuler *controlRuler,
     m_xstart(-1.0),
     m_y(0),
     m_selected(false),
+    m_data(0),
     m_controlRuler(controlRuler),
 //    m_elementAdapter(elementAdapter),
     m_event(event)
