@@ -146,6 +146,8 @@ signals:
      */
     void rulerSelectionChanged(EventSelection *);
 
+    void showContextHelp(const QString &);
+
 public slots:
     /// override RosegardenCanvasView - we don't want to change the main hscrollbar
     virtual void slotUpdate();

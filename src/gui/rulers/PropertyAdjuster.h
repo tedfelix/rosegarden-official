@@ -60,6 +60,9 @@ protected slots:
 protected:
     PropertyAdjuster(ControlRuler *);
     void setCursor(const ControlMouseEvent *);
+
+    void setBasicContextHelp();
+
     float m_mouseStartY;
     float m_mouseLastY;
     bool m_canSelect;

@@ -312,6 +312,9 @@ ControlRulerWidget::slotAddPropertyRuler(const PropertyName &propertyName)
     connect(controlruler, SIGNAL(rulerSelectionChanged(EventSelection *)),
             this, SLOT(slotChildRulerSelectionChanged(EventSelection *)));
 
+    connect(controlruler, SIGNAL(showContextHelp(const QString &)),
+            this,  SIGNAL(showContextHelp(const QString &)));
+
     controlruler->setXOffset(m_gutter);
     controlruler->updateSelection(&m_selectedElements);
 

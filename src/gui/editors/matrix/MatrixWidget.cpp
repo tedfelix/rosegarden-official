@@ -294,7 +294,12 @@ MatrixWidget::MatrixWidget(bool drumMode) :
     
     m_toolBox = new MatrixToolBox(this);
 
+    // Relay context help from matrix tools
     connect(m_toolBox, SIGNAL(showContextHelp(const QString &)),
+            this, SIGNAL(showContextHelp(const QString &)));
+
+    // Relay context help from matrix rulers
+    connect(m_controlsWidget, SIGNAL(showContextHelp(const QString &)),
             this, SIGNAL(showContextHelp(const QString &)));
 
     MatrixMover *matrixMoverTool = dynamic_cast <MatrixMover *> (m_toolBox->getTool(MatrixMover::ToolName()));

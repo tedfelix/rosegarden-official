@@ -32,6 +32,7 @@
 #include "ControllerEventsRuler.h"
 #include "ControlTool.h"
 #include "ControlMouseEvent.h"
+#include "PropertyControlRuler.h"
 #include "misc/Debug.h"
 
 #include <QCursor>
@@ -70,6 +71,8 @@ PropertyAdjuster::handleLeftButtonPress(const ControlMouseEvent *e)
 ControlTool::FollowMode
 PropertyAdjuster::handleMouseMove(const ControlMouseEvent *e)
 {
+    setBasicContextHelp();
+
     if (e->buttons == Qt::NoButton) {
         // No button pressed, set cursor style
         setCursor(e);
@@ -79,13 +82,33 @@ PropertyAdjuster::handleMouseMove(const ControlMouseEvent *e)
         // A property drag action is in progress
         float delta = (e->y-m_mouseLastY);
         m_mouseLastY = e->y;
+
+        // Assuming here that PropertyAdjuster is only used for velocity
+        int minVelocity = 127;
+        int maxVelocity = 0;
         ControlItemList *selected = m_ruler->getSelectedItems();
-        for (ControlItemList::iterator it = selected->begin(); it != selected->end(); ++it) {
-            (*it)->setValue((*it)->y()+delta);
+        for (ControlItemList::iterator it = selected->begin();
+                                        it != selected->end(); ++it) {
+            float newY = (*it)->y() + delta;
+            (*it)->setValue(newY);
+            int velocity =
+                dynamic_cast<PropertyControlRuler *>(m_ruler)->yToValue(newY);
+
+            if (velocity > 127) velocity = 127;
+            if (velocity < 0) velocity = 0;
+
+            if (velocity > maxVelocity) maxVelocity = velocity;
+            if (velocity < minVelocity) minVelocity = velocity;
         }
         m_ruler->update();
-    }
 
+        if (minVelocity == maxVelocity) {
+            setContextHelp(tr("Velocity: %1").arg(minVelocity));
+        } else {
+            setContextHelp(tr("Velocity: %1 to %2")
+                                .arg(minVelocity).arg(maxVelocity));
+        }
+    }
     return NoFollow;
 }
 
@@ -101,9 +124,12 @@ PropertyAdjuster::handleMouseRelease(const ControlMouseEvent *e)
 
     // May have moved off the item during a drag so use setCursor to correct its state
     setCursor(e);
+
+    setBasicContextHelp();
 }
 
-void PropertyAdjuster::setCursor(const ControlMouseEvent *e)
+void
+PropertyAdjuster::setCursor(const ControlMouseEvent *e)
 {
     bool isOverItem = false;
     std::vector<ControlItem*>::const_iterator it = e->itemList.begin();
@@ -127,23 +153,29 @@ void PropertyAdjuster::setCursor(const ControlMouseEvent *e)
     }
 }
 
-void PropertyAdjuster::ready()
+void
+PropertyAdjuster::ready()
 {
 //    connect(this, SIGNAL(hoveredOverNoteChanged(int, bool, timeT)),
 //            m_widget, SLOT(slotHoveredOverNoteChanged(int, bool, timeT)));
 
 //    m_widget->setCanvasCursor(Qt::sizeAllCursor);
-//    setBasicContextHelp();
+
+    setBasicContextHelp();
 }
 
-void PropertyAdjuster::stow()
+void
+PropertyAdjuster::stow()
 {
 //    disconnect(this, SIGNAL(hoveredOverNoteChanged(int, bool, timeT)),
 //               m_widget, SLOT(slotHoveredOverNoteChanged(int, bool, timeT)));
 }
 
-//void PropertyAdjuster::setBasicContextHelp(bool ctrlPressed)
-//{
+void
+PropertyAdjuster::setBasicContextHelp()
+{
+    setContextHelp("");
+
 //    EventSelection *selection = m_scene->getSelection();
 //    if (!selection || selection->getAddedEvents() < 2) {
 //        if (!ctrlPressed) {
@@ -158,9 +190,13 @@ void PropertyAdjuster::stow()
 //            setContextHelp(tr("Click and drag to copy selected notes"));
 //        }
 //    }
-//}
+}
 
-QString PropertyAdjuster::ToolName() { return "adjuster"; }
+QString
+PropertyAdjuster::ToolName()
+{
+    return "adjuster";
+}
 
 }
 

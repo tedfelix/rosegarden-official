@@ -95,7 +95,8 @@ public slots:
 signals:
     void dragScroll(timeT);
     void childRulerSelectionChanged(EventSelection *);
-    
+    void showContextHelp(const QString &);
+
 protected:
     ControllerEventsRuler *getActiveRuler(void);
     
