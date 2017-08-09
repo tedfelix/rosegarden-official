@@ -72,6 +72,8 @@ MatrixVelocity::handleLeftButtonPress(const MatrixMouseEvent *e)
 {
     if (!e->element) return;
 
+    m_widget->setHoverNoteVisible(false);
+
     m_currentViewSegment = e->viewSegment;
     m_currentElement = e->element;
 
@@ -223,6 +225,7 @@ MatrixVelocity::handleMouseRelease(const MatrixMouseEvent *e)
 {
     if (!e || !m_currentElement || !m_currentViewSegment) {
         m_mouseStartY = 0;
+        m_widget->setHoverNoteVisible(true);
         return;
     }
 
@@ -232,6 +235,7 @@ MatrixVelocity::handleMouseRelease(const MatrixMouseEvent *e)
 
     if (selection->getAddedEvents() == 0 || m_velocityDelta == 0) {
         delete selection;
+        m_widget->setHoverNoteVisible(true);
         return;
     } else {
         QString commandLabel = tr("Change Velocity");
@@ -253,6 +257,8 @@ MatrixVelocity::handleMouseRelease(const MatrixMouseEvent *e)
     m_velocityDelta = m_mouseStartY = 0;
     m_currentElement = 0;
     setBasicContextHelp();
+
+    m_widget->setHoverNoteVisible(true);
 }
 
 void
@@ -267,6 +273,7 @@ void
 MatrixVelocity::stow()
 {
     m_start = false;
+    m_widget->setHoverNoteVisible(true);
 }
 
 void

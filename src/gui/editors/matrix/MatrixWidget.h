@@ -116,6 +116,8 @@ public:
 
     void updateSegmentChangerBackground();
 
+    void setHoverNoteVisible(bool visible);
+
 signals:
     void editTriggerSegment(int);
     void toolChanged(QString);
@@ -285,6 +287,9 @@ private:
     /// doing effective sweep selections
     ///
     MidiByte m_firstNote;
+
+    // Use to hide hover note when mouse move is not related to a pitch change
+    bool m_hoverNoteIsVisible;
 
 
 
