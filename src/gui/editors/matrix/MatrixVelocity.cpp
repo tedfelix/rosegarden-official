@@ -72,6 +72,7 @@ MatrixVelocity::handleLeftButtonPress(const MatrixMouseEvent *e)
 {
     if (!e->element) return;
 
+    // Mouse position is no more related to pitch
     m_widget->setHoverNoteVisible(false);
 
     m_currentViewSegment = e->viewSegment;
@@ -225,6 +226,7 @@ MatrixVelocity::handleMouseRelease(const MatrixMouseEvent *e)
 {
     if (!e || !m_currentElement || !m_currentViewSegment) {
         m_mouseStartY = 0;
+        // Mouse position is again related to pitch
         m_widget->setHoverNoteVisible(true);
         return;
     }
@@ -235,6 +237,7 @@ MatrixVelocity::handleMouseRelease(const MatrixMouseEvent *e)
 
     if (selection->getAddedEvents() == 0 || m_velocityDelta == 0) {
         delete selection;
+        // Mouse position is again related to pitch
         m_widget->setHoverNoteVisible(true);
         return;
     } else {
@@ -258,6 +261,7 @@ MatrixVelocity::handleMouseRelease(const MatrixMouseEvent *e)
     m_currentElement = 0;
     setBasicContextHelp();
 
+    // Mouse position is again related to pitch
     m_widget->setHoverNoteVisible(true);
 }
 
