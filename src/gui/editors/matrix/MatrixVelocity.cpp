@@ -127,23 +127,10 @@ MatrixVelocity::handleMouseMove(const MatrixMouseEvent *e)
     } else {
         m_velocityScale =
             (double)(m_mouseStartY - e->sceneY) /
-//            (double)(m_screenPixelsScale * 2);
             (double)(m_screenPixelsScale);
     }
 
     m_velocityDelta = 128 * m_velocityScale;
-
-    /*m_velocityDelta=(m_mouseStartY-(e->pos()).y());
-
-        if (m_velocityDelta > m_screenPixelsScale)
-        m_velocityDelta=m_screenPixelsScale;
-    else if (m_velocityDelta < -m_screenPixelsScale)
-        m_velocityDelta=-m_screenPixelsScale;
-
-    m_velocityScale=1.0+(double)m_velocityDelta/(double)m_screenPixelsScale;
-
-    m_velocityDelta*=2.0;
-    */
 
 	// Preview calculated velocity info on element
 	// Dupe from MatrixMover
@@ -154,7 +141,7 @@ MatrixVelocity::handleMouseMove(const MatrixMouseEvent *e)
     ControlRulerWidget * controlRulerWidget =
             m_scene->getMatrixWidget()->getControlsWidget();
 
-    // Velocity is the only one property ruler
+    // Assuming velocity is the only one property ruler
     PropertyControlRuler *velocityRuler = controlRulerWidget->getActivePropertyRuler();
 
     if (velocityRuler) {
@@ -171,8 +158,6 @@ MatrixVelocity::handleMouseMove(const MatrixMouseEvent *e)
     }
     m_start = false;
 
-//    MatrixElement *element = 0;
-//    int maxY = m_currentViewSegment->getCanvasYForHeight(0);
 
     int maxVelocity = 0;
     int minVelocity = 127;
@@ -181,9 +166,6 @@ MatrixVelocity::handleMouseMove(const MatrixMouseEvent *e)
              selection->getSegmentEvents().begin();
          it != selection->getSegmentEvents().end(); ++it) {
 
-//        MatrixElement *element = m_currentViewSegment->getElement(*it);
-//        if (!element) continue;
-
         MatrixElement *element = 0;
         ViewElementList::iterator vi = m_currentViewSegment->findEvent(*it);
         if (vi != m_currentViewSegment->getViewElementList()->end()) {
@@ -191,25 +173,10 @@ MatrixVelocity::handleMouseMove(const MatrixMouseEvent *e)
         }
         if (!element) continue;
 
-//        timeT diffTime = element->getViewAbsoluteTime() -
-//            m_currentElement->getViewAbsoluteTime();
-
-
-
-
-//        int epitch = 0;
-//        if (element->event()->has(PITCH)) {
-//            epitch = element->event()->get<Int>(PITCH);
-//        }
-
         int velocity = 64;
         if (element->event()->has(BaseProperties::VELOCITY)) {
             velocity = element->event()->get<Int>(BaseProperties::VELOCITY);
         }
-
-//        element->reconfigure(newTime + diffTime,
-//                             element->getViewDuration(),
-//                             epitch + diffPitch);
 
         velocity += m_velocityDelta;
 
@@ -223,7 +190,6 @@ MatrixVelocity::handleMouseMove(const MatrixMouseEvent *e)
         if (velocity < minVelocity) minVelocity = velocity;
     }
 
-//    emit hoveredOverNoteChanged();   // YG: Commented out
 
 	/** Might be something for the feature
 	EventSelection* selection = m_mParentView->getCurrentSelection();

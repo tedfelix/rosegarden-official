@@ -23,9 +23,6 @@
 #include "base/Selection.h"
 #include "base/SnapGrid.h"
 #include "base/ViewElement.h"
-//#include "commands/matrix/MatrixModifyCommand.h"
-//#include "commands/matrix/MatrixInsertionCommand.h"
-//#include "commands/notation/NormalizeRestsCommand.h"
 #include "document/CommandHistory.h"
 #include "ControlItem.h"
 #include "ControlRuler.h"
@@ -175,21 +172,6 @@ void
 PropertyAdjuster::setBasicContextHelp()
 {
     setContextHelp("");
-
-//    EventSelection *selection = m_scene->getSelection();
-//    if (!selection || selection->getAddedEvents() < 2) {
-//        if (!ctrlPressed) {
-//            setContextHelp(tr("Click and drag to move a note; hold Ctrl as well to copy it"));
-//        } else {
-//            setContextHelp(tr("Click and drag to copy a note"));
-//        }
-//    } else {
-//        if (!ctrlPressed) {
-//            setContextHelp(tr("Click and drag to move selected notes; hold Ctrl as well to copy"));
-//        } else {
-//            setContextHelp(tr("Click and drag to copy selected notes"));
-//        }
-//    }
 }
 
 QString
