@@ -94,6 +94,12 @@ private slots:
     /// Settings > Show Unassigned Faders
     void slotShowUnassignedFaders();
 
+    /// Help > Help
+    void slotHelp();
+
+    /// Help > About Rosegarden
+    void slotAboutRosegarden();
+
 private:
     void updateWidgets();
 

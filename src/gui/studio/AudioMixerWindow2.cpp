@@ -19,6 +19,7 @@
 
 #include "AudioMixerWindow2.h"
 
+#include "gui/dialogs/AboutDialog.h"
 #include "base/AudioLevel.h"
 #include "misc/Debug.h"
 #include "gui/general/IconLoader.h"
@@ -26,6 +27,7 @@
 #include "gui/application/RosegardenMainWindow.h"
 #include "base/Studio.h"
 
+#include <QDesktopServices>
 
 namespace Rosegarden
 {
@@ -100,13 +102,11 @@ AudioMixerWindow2::AudioMixerWindow2(QWidget *parent) :
     // Settings > Show Unassigned Faders
     createAction("show_unassigned_faders", SLOT(slotShowUnassignedFaders()));
 
-#if 0
     // Help > Help
     createAction("mixer_help", SLOT(slotHelp()));
+
     // Help > About Rosegarden
     createAction("help_about_app", SLOT(slotAboutRosegarden()));
-
-#endif
 
     createMenusAndToolbars("mixer.rc");
 
@@ -379,6 +379,24 @@ AudioMixerWindow2::slotShowUnassignedFaders()
     studio.amwShowUnassignedFaders = !studio.amwShowUnassignedFaders;
 
     doc->slotDocumentModified();
+}
+
+void
+AudioMixerWindow2::slotHelp()
+{
+    // TRANSLATORS: if the manual is translated into your language, you can
+    // change the two-letter language code in this URL to point to your language
+    // version, eg. "http://rosegardenmusic.com/wiki/doc:audioMixerWindow-es" for the
+    // Spanish version. If your language doesn't yet have a translation, feel
+    // free to create one.
+    QString helpURL = tr("http://rosegardenmusic.com/wiki/doc:audioMixerWindow-en");
+    QDesktopServices::openUrl(QUrl(helpURL));
+}
+
+void
+AudioMixerWindow2::slotAboutRosegarden()
+{
+    new AboutDialog(this);
 }
 
 
