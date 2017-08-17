@@ -156,6 +156,7 @@
 #include "gui/seqmanager/MidiFilterDialog.h"
 #include "gui/seqmanager/SequenceManager.h"
 #include "gui/studio/AudioMixerWindow.h"
+#include "gui/studio/AudioMixerWindow2.h"
 #include "gui/studio/AudioPlugin.h"
 #include "gui/studio/AudioPluginManager.h"
 #include "gui/studio/AudioPluginOSCGUIManager.h"
@@ -277,6 +278,7 @@ RosegardenMainWindow::RosegardenMainWindow(bool enableSound,
     m_playList(0),
     m_synthManager(0),
     m_audioMixer(0),
+    m_audioMixerWindow2(),
     m_midiMixer(0),
     m_bankEditor(0),
     m_markerEditor(0),
@@ -1084,6 +1086,9 @@ RosegardenMainWindow::initView()
 
     delete m_audioMixer;
     m_audioMixer = 0;
+
+    if (m_audioMixerWindow2)
+        m_audioMixerWindow2->close();
 
     delete m_bankEditor;
     m_bankEditor = 0;
@@ -6777,6 +6782,26 @@ RosegardenMainWindow::slotManageSynths()
 void
 RosegardenMainWindow::slotOpenAudioMixer()
 {
+    QSettings settings;
+    settings.beginGroup("Test");
+    bool useAMW2 = settings.value("AudioMixerWindow2", false).toBool();
+    // Write it to the file to make it easier to find.
+    settings.setValue("AudioMixerWindow2", useAMW2);
+    settings.endGroup();
+
+    if (useAMW2) {
+
+        if (m_audioMixerWindow2) {
+            m_audioMixerWindow2->activateWindow();
+            m_audioMixerWindow2->raise();
+            return;
+        }
+
+        m_audioMixerWindow2 = new AudioMixerWindow2(this);
+
+        return;
+    }
+
     if (m_audioMixer) {
         m_audioMixer->show();
         m_audioMixer->raise();

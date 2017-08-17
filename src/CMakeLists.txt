@@ -408,6 +408,7 @@ set(rg_CPPS
   gui/studio/ControlParameterEditDialog.cpp
   gui/studio/TimerCallbackAssistant.cpp
   gui/studio/AudioMixerWindow.cpp
+  gui/studio/AudioMixerWindow2.cpp
   gui/studio/RemapInstrumentDialog.cpp
   gui/studio/MidiMixerVUMeter.cpp
   gui/seqmanager/MetronomeMapper.cpp
