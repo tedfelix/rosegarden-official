@@ -46,6 +46,30 @@ private slots:
     /// File > Close
     void slotClose();
 
+    /// Transport > Play
+    void slotPlay();
+
+    /// Transport > Stop
+    void slotStop();
+
+    /// Transport > Rewind
+    void slotRewind();
+
+    /// Transport > Fast Forward
+    void slotFastforward();
+
+    /// Transport > Rewind To Beginning
+    void slotRewindToBeginning();
+
+    /// Transport > Fast Forward To End
+    void slotFastForwardToEnd();
+
+    /// Transport > Record
+    void slotRecord();
+
+    /// Transport > Panic
+    void slotPanic();
+
     /// Settings > Number of Stereo Inputs
     void slotNumberOfStereoInputs();
 

@@ -53,20 +53,15 @@ AudioMixerWindow2::AudioMixerWindow2(QWidget *parent) :
     // File > Close
     createAction("file_close", SLOT(slotClose()));
 
-#if 0
     // Transport Menu
-    // ??? Can we do these with SLOTs and call directly into RMW?  That
-    //     would take the burden of connecting all these signals off of
-    //     RMW.  The more independent this window is, the better.
-    createAction("play", SIGNAL(play()));
-    createAction("stop", SIGNAL(stop()));
-    createAction("playback_pointer_back_bar", SIGNAL(rewindPlayback()));
-    createAction("playback_pointer_forward_bar", SIGNAL(fastForwardPlayback()));
-    createAction("playback_pointer_start", SIGNAL(rewindPlaybackToBeginning()));
-    createAction("playback_pointer_end", SIGNAL(fastForwardPlaybackToEnd()));
-    createAction("record", SIGNAL(record()));
-    createAction("panic", SIGNAL(panic()));
-#endif
+    createAction("play", SLOT(slotPlay()));
+    createAction("stop", SLOT(slotStop()));
+    createAction("playback_pointer_back_bar", SLOT(slotRewind()));
+    createAction("playback_pointer_forward_bar", SLOT(slotFastforward()));
+    createAction("playback_pointer_start", SLOT(slotRewindToBeginning()));
+    createAction("playback_pointer_end", SLOT(slotFastForwardToEnd()));
+    createAction("record", SLOT(slotRecord()));
+    createAction("panic", SLOT(slotPanic()));
 
     // "Settings > Number of Stereo Inputs" Actions
     // For i in {1,2,4,8,16}
@@ -115,11 +110,9 @@ AudioMixerWindow2::AudioMixerWindow2(QWidget *parent) :
 
     createMenusAndToolbars("mixer.rc");
 
-#if 0
     // Set the rewind and fast-forward buttons for auto-repeat.
     enableAutoRepeat("Transport Toolbar", "playback_pointer_back_bar");
     enableAutoRepeat("Transport Toolbar", "playback_pointer_forward_bar");
-#endif
 
     // Force an initial update to make sure we're in sync.
     updateWidgets();
@@ -184,6 +177,9 @@ void AudioMixerWindow2::updateWidgets()
 
 void AudioMixerWindow2::slotDocumentModified(bool /*modified*/)
 {
+    // ??? Does this get hit hard when recording???  Need to determine.
+    //     If so, then we need to figure out how to handle it.
+
     // It's really this simple.
     updateWidgets();
 }
@@ -192,6 +188,62 @@ void
 AudioMixerWindow2::slotClose()
 {
     close();
+}
+
+void
+AudioMixerWindow2::slotPlay()
+{
+    // Delegate to RMW.
+    RosegardenMainWindow::self()->slotPlay();
+}
+
+void
+AudioMixerWindow2::slotStop()
+{
+    // Delegate to RMW.
+    RosegardenMainWindow::self()->slotStop();
+}
+
+void
+AudioMixerWindow2::slotRewind()
+{
+    // Delegate to RMW.
+    RosegardenMainWindow::self()->slotRewind();
+}
+
+void
+AudioMixerWindow2::slotFastforward()
+{
+    // Delegate to RMW.
+    RosegardenMainWindow::self()->slotFastforward();
+}
+
+void
+AudioMixerWindow2::slotRewindToBeginning()
+{
+    // Delegate to RMW.
+    RosegardenMainWindow::self()->slotRewindToBeginning();
+}
+
+void
+AudioMixerWindow2::slotFastForwardToEnd()
+{
+    // Delegate to RMW.
+    RosegardenMainWindow::self()->slotFastForwardToEnd();
+}
+
+void
+AudioMixerWindow2::slotRecord()
+{
+    // Delegate to RMW.
+    RosegardenMainWindow::self()->slotRecord();
+}
+
+void
+AudioMixerWindow2::slotPanic()
+{
+    // Delegate to RMW.
+    RosegardenMainWindow::self()->slotPanic();
 }
 
 void
