@@ -24,16 +24,18 @@
 #include <QWidget>
 
 class QGridLayout;
+class QPushButton;
 
 
 namespace Rosegarden
 {
 
 
-class Label;
 class AudioRouteMenu;
-class Fader;
 class AudioVUMeter;
+class Fader;
+class Label;
+class Rotary;
 
 
 /// The strips on the "Audio Mixer" window.
@@ -56,6 +58,7 @@ private slots:
 
     void slotLabelClicked();
     void slotFaderLevelChanged(float dB);
+    void slotPanChanged(float pan);
 
     /// Called on a timer to keep the meter updated.
     void slotUpdateMeter();
@@ -75,6 +78,8 @@ private:
     AudioRouteMenu *m_output;
     Fader *m_fader;
     AudioVUMeter *m_meter;
+    Rotary *m_pan;
+    QPushButton *m_stereoButton;
 
     QGridLayout *m_layout;
 

@@ -23,11 +23,13 @@
 #include "gui/widgets/AudioVUMeter.h"
 #include "misc/Debug.h"
 #include "gui/widgets/Fader.h"
+#include "gui/general/GUIPalette.h"
 #include "gui/widgets/InputDialog.h"
 #include "base/InstrumentStaticSignals.h"
 #include "gui/widgets/Label.h"
 #include "document/RosegardenDocument.h"
 #include "gui/application/RosegardenMainWindow.h"
+#include "gui/widgets/Rotary.h"
 #include "gui/seqmanager/SequenceManager.h"
 #include "sound/SequencerDataBlock.h"
 #include "base/Studio.h"
@@ -48,6 +50,8 @@ AudioStrip::AudioStrip(QWidget *parent, InstrumentId id) :
     m_output(NULL),
     m_fader(NULL),
     m_meter(NULL),
+    m_pan(NULL),
+    m_stereoButton(NULL),
     m_layout(new QGridLayout(this))
 {
     QFont font;
@@ -57,11 +61,6 @@ AudioStrip::AudioStrip(QWidget *parent, InstrumentId id) :
 
     QFont boldFont(font);
     boldFont.setBold(true);
-
-    // Give the parent control over spacing between strips.
-    m_layout->setContentsMargins(0,0,0,0);
-    // Keep the widgets close together.
-    m_layout->setSpacing(2);
 
     connect(Instrument::getStaticSignals().data(),
             SIGNAL(changed(Instrument *)),
@@ -112,6 +111,14 @@ void AudioStrip::createWidgets()
     if (m_id == NoInstrument)
         return;
 
+    RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
+    Studio &studio = doc->getStudio();
+
+    // Get the appropriate instrument based on the ID.
+    Instrument *instrument = NULL;
+    if (isInput())
+        instrument = studio.getInstrumentById(m_id);
+
     QFont boldFont(font());
     boldFont.setBold(true);
 
@@ -123,6 +130,8 @@ void AudioStrip::createWidgets()
     m_label->setFont(boldFont);
     m_label->setMinimumWidth(maxWidth);
     m_label->setMaximumWidth(maxWidth);
+    m_label->setMinimumHeight(12);
+    m_label->setMaximumHeight(12);
     m_label->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     connect(m_label, SIGNAL(clicked()),
             SLOT(slotLabelClicked()));
@@ -170,18 +179,68 @@ void AudioStrip::createWidgets()
             240);  // height
     m_meter->setToolTip(tr("Audio level"));
 
+    // Pan
+
+    if (isInput()  ||  isSubmaster()) {
+        m_pan = new Rotary(
+                this,  // parent
+                -100.0, 100.0,  // minimum, maximum
+                1.0,  // step
+                5.0,  // pageStep
+                0.0,  // initialPosition
+                20,  // size
+                Rotary::NoTicks,  // ticks
+                false,  // centred
+                true);  // logarithmic
+        m_pan->setToolTip(tr("Pan"));
+
+        if (isSubmaster()) {
+            m_pan->setKnobColour(
+                    GUIPalette::getColour(GUIPalette::RotaryPastelBlue));
+        } else if (isInput()) {
+            if (instrument->getType() == Instrument::Audio) {
+                m_pan->setKnobColour(
+                        GUIPalette::getColour(GUIPalette::RotaryPastelGreen));
+            } else {  // Softsynth
+                m_pan->setKnobColour(
+                        GUIPalette::getColour(GUIPalette::RotaryPastelYellow));
+            }
+        }
+
+        connect(m_pan, SIGNAL(valueChanged(float)),
+                SLOT(slotPanChanged(float)));
+    }
+
+    // Stereo
+
     // Layout
 
-    m_layout->addWidget(m_label, 0, 0, 1, 2, Qt::AlignLeft);
+    // Give the parent control over spacing between strips.
+    m_layout->setContentsMargins(0,0,0,0);
+
+    // Keep the widgets close together.
+    const int spacing = 2;
+    m_layout->setSpacing(spacing);
+
+    m_layout->addWidget(m_label, 0, 0, 1, 2);
 
     if (m_input)
-        m_layout->addWidget(m_input->getWidget(), 1, 0, 1, 2, Qt::AlignLeft);
+        m_layout->addWidget(m_input->getWidget(), 1, 0, 1, 2);
+    else
+        m_layout->setRowMinimumHeight(1, 15 + spacing);
 
     if (m_output)
-        m_layout->addWidget(m_output->getWidget(), 2, 0, 1, 2, Qt::AlignLeft);
+        m_layout->addWidget(m_output->getWidget(), 2, 0, 1, 2);
+    else
+        m_layout->setRowMinimumHeight(2, 15 + spacing);
 
-    m_layout->addWidget(m_fader, 3, 0, Qt::AlignCenter);
-    m_layout->addWidget(m_meter, 3, 1, Qt::AlignCenter);
+    m_layout->addWidget(m_fader, 3, 0);
+    m_layout->addWidget(m_meter, 3, 1);
+
+    if (m_pan)
+        m_layout->addWidget(m_pan, 4, 0);
+    else
+        m_layout->setRowMinimumHeight(4, 20 + spacing);
 }
 
 void AudioStrip::updateWidgets()
@@ -348,6 +407,12 @@ AudioStrip::slotFaderLevelChanged(float dB)
 
         return;
     }
+}
+
+void
+AudioStrip::slotPanChanged(float pan)
+{
+
 }
 
 void
