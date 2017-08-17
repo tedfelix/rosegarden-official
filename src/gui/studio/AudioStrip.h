@@ -18,11 +18,18 @@
 #ifndef RG_AUDIOSTRIP_H
 #define RG_AUDIOSTRIP_H
 
+#include "base/Instrument.h"
+
 #include <QWidget>
+
+class QGridLayout;
 
 
 namespace Rosegarden
 {
+
+
+class Label;
 
 
 /// The strips on the "Audio Mixer" window.
@@ -39,7 +46,19 @@ public:
 
     void updateWidgets();
 
+private slots:
+    void slotLabelClicked();
+
 private:
+    bool isMaster() const  { return (id == 0); }
+    bool isSubmaster() const
+            { return (id > 0  &&  id < AudioInstrumentBase); }
+    bool isInput() const  { return (id >= AudioInstrumentBase); }
+
+    // Widgets
+    Label *m_label;
+
+    QGridLayout *m_layout;
 };
 
 

@@ -20,9 +20,13 @@
 #include "AudioStrip.h"
 
 #include "misc/Debug.h"
+#include "gui/widgets/Label.h"
 #include "document/RosegardenDocument.h"
 #include "gui/application/RosegardenMainWindow.h"
 #include "base/Studio.h"
+
+#include <QFont>
+#include <QGridLayout>
 
 namespace Rosegarden
 {
@@ -30,9 +34,30 @@ namespace Rosegarden
 
 AudioStrip::AudioStrip(QWidget *parent, unsigned i_id) :
     QWidget(parent),
-    id(i_id)
+    id(i_id),
+    m_layout(new QGridLayout(this))
 {
+    QFont font;
+    font.setPointSize(6);
+    font.setBold(false);
+    setFont(font);
 
+    QFont boldFont(font);
+    boldFont.setBold(true);
+
+    // Label
+
+    m_label = new Label(this);
+    m_label->setFont(boldFont);
+    m_label->setMaximumWidth(45);
+    connect(m_label, SIGNAL(clicked()),
+            SLOT(slotLabelClicked()));
+
+    // Layout
+
+    m_layout->addWidget(m_label, 0, 0, 1, 2, Qt::AlignLeft);
+
+    updateWidgets();
 }
 
 AudioStrip::~AudioStrip()
@@ -42,11 +67,32 @@ AudioStrip::~AudioStrip()
 
 void AudioStrip::updateWidgets()
 {
-    //RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
+    RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
+    Studio &studio = doc->getStudio();
 
-    // Get the appropriate instrument/buss based on the ID.
+    // Get the appropriate instrument based on the ID.
+    Instrument *instrument = NULL;
+    if (isInput())
+        instrument = studio.getInstrumentById(id);
 
     // Update each widget efficiently.
+
+    // Label
+
+    if (isInput()) {
+        m_label->setText(strtoqstr(instrument->getAlias()));
+        m_label->setToolTip(strtoqstr(instrument->getAlias()) + "\n" +
+                tr("Click to rename this instrument"));
+    } else if (isSubmaster()) {
+        m_label->setText(tr("Sub %1").arg(id));
+    } else {  // Master
+        m_label->setText(tr("Master"));
+    }
+}
+
+void AudioStrip::slotLabelClicked()
+{
+
 }
 
 

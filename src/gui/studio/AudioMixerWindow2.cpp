@@ -19,6 +19,8 @@
 
 #include "AudioMixerWindow2.h"
 
+#include "AudioStrip.h"
+
 #include "gui/dialogs/AboutDialog.h"
 #include "base/AudioLevel.h"
 #include "misc/Debug.h"
@@ -34,7 +36,8 @@ namespace Rosegarden
 
 
 AudioMixerWindow2::AudioMixerWindow2(QWidget *parent) :
-        QMainWindow(parent)
+        QMainWindow(parent),
+        m_masterStrip(new AudioStrip(this, 0))
 {
     setObjectName("AudioMixerWindow2");
 
@@ -114,6 +117,9 @@ AudioMixerWindow2::AudioMixerWindow2(QWidget *parent) :
     enableAutoRepeat("Transport Toolbar", "playback_pointer_back_bar");
     enableAutoRepeat("Transport Toolbar", "playback_pointer_forward_bar");
 
+    // ??? TESTING
+    setCentralWidget(m_masterStrip);
+
     // Force an initial update to make sure we're in sync.
     updateWidgets();
 
@@ -127,27 +133,104 @@ AudioMixerWindow2::~AudioMixerWindow2()
 void
 AudioMixerWindow2::updateStripCounts()
 {
-    // Verify strip counts against the Composition.  While we're at it,
-    // verify InstrumentIds in case something was shuffled.  Keep track
-    // of all issues found so the rest of the routine can proceed
-    // appropriately.
+    RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
+    Studio &studio = doc->getStudio();
+
+    // Verify Input Strips
+
+    InstrumentList instruments = studio.getPresentationInstruments();
+    std::vector<InstrumentId> instrumentIds;
+
+    // For each instrument
+    for (InstrumentList::iterator i = instruments.begin();
+         i != instruments.end();
+         ++i) {
+        Instrument *instrument = *i;
+
+        // Not audio or softsynth, try the next.
+        if (instrument->getType() != Instrument::Audio  &&
+            instrument->getType() != Instrument::SoftSynth)
+            continue;
+
+        // If we shouldn't show unassigned faders and this Instrument
+        // is unassigned, try the next.
+        if (!studio.amwShowUnassignedFaders  &&
+            !doc->getComposition().hasTrack(instrument->getId()))
+            continue;
+
+        // Add to list
+        instrumentIds.push_back(instrument->getId());
+    }
+
+    // First, make sure the sizes match.
+    bool inputStripsMatch = (instrumentIds.size() == m_inputStrips.size());
+
+    // If the sizes match, make sure the ids match.
+    if (inputStripsMatch) {
+        for (unsigned i = 0; i < instrumentIds.size(); ++i) {
+            if (instrumentIds[i] != m_inputStrips[i]->id) {
+                inputStripsMatch = false;
+                break;
+            }
+        }
+    }
+
+    bool submasterStripsMatch =
+            (m_submasterStrips.size() == studio.getBusses().size()-1);
 
     // If everything is in order, bail.
+    if (inputStripsMatch  &&  submasterStripsMatch)
+        return;
 
     // Changes to the strip counts and positions are very rare, so there is
     // no need to be very efficient from here on out.  Go for readable
     // instead.
 
+    bool recreateLayout = false;
+
     // If the input Strip count is wrong, fix it.
-        // Be sure to delete the AudioInputStrip objects.
+    if (m_inputStrips.size() != instrumentIds.size()) {
+        // ??? Adjust the size of m_inputStrips.
+
+        // Be sure to delete the AudioStrip objects.
+
+        recreateLayout = true;
+    }
 
     // If the submaster Strip count is wrong, fix it.
-        // Be sure to delete the AudioSubmasterStrip objects.
+    if (!submasterStripsMatch) {
+        // ??? Adjust the size of m_submasterStrips.
+
+        // Be sure to delete the AudioStrip objects.
+
+        recreateLayout = true;
+    }
 
     // If either Strip count was wrong, recreate the layout.
+    if (recreateLayout) {
+        // Can we clear the layout somehow, or do we need to delete it
+        // and then recreate it?  I would think that would be a problem
+        // since it is parent to all the widgets.  Deleting it will destroy
+        // all the child widgets.
+
+        // Docs for QLayout::takeAt() show how to safely remove all
+        // widgets from a layout:
+
+        //QLayoutItem *child;
+        //while ((child = m_layout->takeAt(0)) != 0) {
+        //    delete child;
+        //}
+
+    }
 
     // Make sure the InstrumentIds are correct in each Strip since
     // Strips may have been shuffled.
+    for (unsigned i = 0; i < m_inputStrips.size(); ++i) {
+        m_inputStrips[i]->id = instrumentIds[i];
+    }
+
+    // ??? Submasters too?  Since they are fixed ids, we can probably
+    //     handle it up where we adjust the count.
 }
 
 void AudioMixerWindow2::updateWidgets()
@@ -197,7 +280,7 @@ void AudioMixerWindow2::updateWidgets()
     if (action)
         action->setChecked(visible);
 
-    updateStripCounts();
+    //updateStripCounts();
 
     // At this point, the strips match the document.  We can just update them.
 
@@ -205,7 +288,7 @@ void AudioMixerWindow2::updateWidgets()
 
     // For each submaster strip, call updateWidgets().
 
-    //m_masterStrip->updateWidgets();
+    m_masterStrip->updateWidgets();
 }
 
 void AudioMixerWindow2::slotDocumentModified(bool /*modified*/)

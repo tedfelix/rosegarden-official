@@ -29,6 +29,9 @@ namespace Rosegarden
 {
 
 
+class AudioStrip;
+
+
 /// The "Audio Mixer" window (v2).
 class AudioMixerWindow2 : public QMainWindow, public ActionFileClient
 {
@@ -100,6 +103,10 @@ private slots:
     void slotAboutRosegarden();
 
 private:
+    std::vector<AudioStrip *> m_inputStrips;
+    std::vector<AudioStrip *> m_submasterStrips;
+    AudioStrip *m_masterStrip;
+
     void updateStripCounts();
     void updateWidgets();
 
