@@ -411,6 +411,7 @@ set(rg_CPPS
   gui/studio/AudioMixerWindow2.cpp
   gui/studio/RemapInstrumentDialog.cpp
   gui/studio/MidiMixerVUMeter.cpp
+  gui/studio/AudioStrip.cpp
   gui/seqmanager/MetronomeMapper.cpp
   gui/seqmanager/TempoSegmentMapper.cpp
   gui/seqmanager/MappedEventBuffer.cpp

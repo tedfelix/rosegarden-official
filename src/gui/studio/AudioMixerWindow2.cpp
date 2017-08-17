@@ -124,6 +124,32 @@ AudioMixerWindow2::~AudioMixerWindow2()
 {
 }
 
+void
+AudioMixerWindow2::updateStripCounts()
+{
+    // Verify strip counts against the Composition.  While we're at it,
+    // verify InstrumentIds in case something was shuffled.  Keep track
+    // of all issues found so the rest of the routine can proceed
+    // appropriately.
+
+    // If everything is in order, bail.
+
+    // Changes to the strip counts and positions are very rare, so there is
+    // no need to be very efficient from here on out.  Go for readable
+    // instead.
+
+    // If the input Strip count is wrong, fix it.
+        // Be sure to delete the AudioInputStrip objects.
+
+    // If the submaster Strip count is wrong, fix it.
+        // Be sure to delete the AudioSubmasterStrip objects.
+
+    // If either Strip count was wrong, recreate the layout.
+
+    // Make sure the InstrumentIds are correct in each Strip since
+    // Strips may have been shuffled.
+}
+
 void AudioMixerWindow2::updateWidgets()
 {
     RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
@@ -171,8 +197,15 @@ void AudioMixerWindow2::updateWidgets()
     if (action)
         action->setChecked(visible);
 
-    // Widgets?
+    updateStripCounts();
 
+    // At this point, the strips match the document.  We can just update them.
+
+    // For each input strip, call updateWidgets().
+
+    // For each submaster strip, call updateWidgets().
+
+    //m_masterStrip->updateWidgets();
 }
 
 void AudioMixerWindow2::slotDocumentModified(bool /*modified*/)

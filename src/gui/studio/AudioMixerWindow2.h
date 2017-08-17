@@ -18,7 +18,6 @@
 #ifndef RG_AUDIOMIXERWINDOW2_H
 #define RG_AUDIOMIXERWINDOW2_H
 
-#include "MixerWindow.h"
 #include "gui/general/ActionFileClient.h"
 
 #include <QMainWindow>
@@ -101,6 +100,7 @@ private slots:
     void slotAboutRosegarden();
 
 private:
+    void updateStripCounts();
     void updateWidgets();
 
 };
