@@ -35,6 +35,12 @@ PluginPushButton::setState(State state)
     // I'll save reworking and tidying all of this for some future release, and
     // just continue in the same haphazard fashion that got us this far for now.
     
+    // No change?  Bail.  The call to setStyleSheet() is *very* expensive.
+    if (state == m_currentState)
+        return;
+
+    m_currentState = state;
+
     QString tipStyle(" QToolTip {color: black;}");
 
     QString localStyle;

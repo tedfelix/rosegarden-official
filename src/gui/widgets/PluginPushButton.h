@@ -46,8 +46,10 @@ public:
 
 
     PluginPushButton(QWidget *parent = 0) :
-        QPushButton(parent)
+        QPushButton(parent),
+        m_currentState(Active)  // Anything but Normal to trigger first change.
     {
+        setState(Normal);
     };
 
     virtual ~PluginPushButton();
@@ -61,6 +63,8 @@ public:
     void setState(State state);
 
 private:
+    /// Cache to detect actual changes.
+    State m_currentState;
 };
 
 

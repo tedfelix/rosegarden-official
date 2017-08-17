@@ -396,9 +396,6 @@ void AudioStrip::updateWidgets()
         for (size_t i = 0; i < m_plugins.size(); i++) {
 
             PluginPushButton *pluginButton = m_plugins[i];
-#if 0
-// ??? Removing temporarily for performance reasons.  This code is using
-//     inordinate amounts of CPU.
 
             AudioPluginInstance *plugin = pluginContainer->getPlugin(i);
 
@@ -435,7 +432,7 @@ void AudioStrip::updateWidgets()
             } else {
                 pluginButton->setState(PluginPushButton::Normal);
             }
-#endif
+
         }
 
     }
