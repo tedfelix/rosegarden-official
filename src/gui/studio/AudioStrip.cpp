@@ -20,6 +20,7 @@
 #include "AudioStrip.h"
 
 #include "misc/Debug.h"
+#include "gui/widgets/InputDialog.h"
 #include "gui/widgets/Label.h"
 #include "document/RosegardenDocument.h"
 #include "gui/application/RosegardenMainWindow.h"
@@ -93,7 +94,40 @@ void AudioStrip::updateWidgets()
 
 void AudioStrip::slotLabelClicked()
 {
+    // Can only change alias on input strips.
+    if (!isInput())
+        return;
 
+    QString oldAlias = m_label->text();
+    bool ok = false;
+
+    QString newAlias = InputDialog::getText(
+            this,  // parent
+            tr("Rosegarden"),  // title
+            tr("Enter instrument alias:"),  // label
+            LineEdit::Normal,  // mode (echo)
+            m_label->text(),  // text
+            &ok);  // ok
+
+    // Cancelled?  Bail.
+    if (!ok)
+        return;
+
+    // No change?  Bail.
+    if (newAlias == oldAlias)
+        return;
+
+    RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
+    Studio &studio = doc->getStudio();
+
+    // Get the appropriate instrument based on the ID.
+    Instrument *instrument = studio.getInstrumentById(id);
+
+    instrument->setAlias(newAlias.toStdString());
+    // ??? For now, we need this to update AIPP.  Over time, this will go
+    //     away, and only the call to slotDocumentModified() will be needed.
+    instrument->changed();
+    doc->slotDocumentModified();
 }
 
 

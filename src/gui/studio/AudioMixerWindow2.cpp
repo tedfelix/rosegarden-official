@@ -242,9 +242,6 @@ AudioMixerWindow2::updateStripCounts()
 
     // If either Strip count was wrong, recreate the layout.
     if (recreateLayout) {
-
-        RG_DEBUG << __FUNCTION__ << "recreating layout...";
-
         // Remove the widgets from the layout.
         while (m_layout->takeAt(0) != 0) {
             // Do nothing.  Normally, we might delete the child widgets.
