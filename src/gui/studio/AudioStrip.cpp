@@ -623,6 +623,54 @@ AudioStrip::slotPanChanged(float pan)
 }
 
 void
+AudioStrip::updateExternalController()
+{
+    if (m_externalControllerChannel > 15)
+        return;
+
+    RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
+    Studio &studio = doc->getStudio();
+
+    Instrument *instrument = studio.getInstrumentById(m_id);
+
+    if (!instrument)
+        return;
+
+    // Send a volume controller message to the external controller port.
+
+    float dB = instrument->getLevel();
+
+    int value = AudioLevel::dB_to_fader(
+            dB, 127, AudioLevel::LongFader);
+
+    MappedEvent volumeEvent(m_id,
+                            MappedEvent::MidiController,
+                            MIDI_CONTROLLER_VOLUME,
+                            MidiByte(value));
+    volumeEvent.setRecordedChannel(m_externalControllerChannel);
+    volumeEvent.setRecordedDevice(Device::CONTROL_DEVICE);
+
+    StudioControl::sendMappedEvent(volumeEvent);
+
+    // Send a pan controller message to the external controller port.
+
+    int ipan = (int(instrument->getPan()) * 64) / 100;
+    if (ipan < 0)
+        ipan = 0;
+    if (ipan > 127)
+        ipan = 127;
+
+    MappedEvent panEvent(m_id,
+                         MappedEvent::MidiController,
+                         MIDI_CONTROLLER_PAN,
+                         MidiByte(ipan));
+    panEvent.setRecordedChannel(m_externalControllerChannel);
+    panEvent.setRecordedDevice(Device::CONTROL_DEVICE);
+
+    StudioControl::sendMappedEvent(panEvent);
+}
+
+void
 AudioStrip::slotChannelsChanged()
 {
     RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();

@@ -649,10 +649,17 @@ AudioMixerWindow2::changeEvent(QEvent *event)
     QWidget::changeEvent(event);
 
     if (event->type() == QEvent::ActivationChange) {
-        RG_DEBUG << "changeEvent(): Received activation change.";
+        //RG_DEBUG << "changeEvent(): Received activation change.";
         if (isActiveWindow()) {
             emit windowActivated();
-            //sendControllerRefresh();
+
+            size_t count = m_inputStrips.size();
+            if (count > 16)
+                count = 16;
+
+            // For each strip, send vol/pan to the external controller port.
+            for (unsigned i = 0; i < count; i++)
+                m_inputStrips[i]->updateExternalController();
         }
     }
 }

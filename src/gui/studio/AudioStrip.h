@@ -62,6 +62,9 @@ public:
     /// For "external controller" port support.
     void panChanged(float pan)  { slotPanChanged(pan); }
 
+    /// Send volume/pan to the external controller port for this strip.
+    void updateExternalController();
+
 signals:
     /// Launch AudioPluginDialog.
     /**
