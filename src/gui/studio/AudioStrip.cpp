@@ -293,7 +293,7 @@ AudioStrip::slotFaderLevelChanged(float dB)
             return;
 
         StudioControl::setStudioObjectProperty(
-                MappedObjectId(m_id),
+                MappedObjectId(instrument->getMappedId()),
                 MappedAudioFader::FaderLevel,
                 MappedObjectValue(dB));
 
