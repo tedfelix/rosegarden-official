@@ -91,6 +91,7 @@ protected:
     AudioFaderBox *m_audioFader;
 
 private slots:
+    void slotAliasChanged();
 
     /// Handle InstrumentStaticSignals::changed()
     void slotInstrumentChanged(Instrument *);

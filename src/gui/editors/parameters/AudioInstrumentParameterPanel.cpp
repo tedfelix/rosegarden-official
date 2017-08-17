@@ -81,6 +81,8 @@ AudioInstrumentParameterPanel::AudioInstrumentParameterPanel(
     m_aliasButton = new InstrumentAliasButton(this);
     m_aliasButton->setFixedSize(10, 6); // golden rectangle
     m_aliasButton->setToolTip(tr("Click to rename this instrument"));
+    connect(m_aliasButton, SIGNAL(changed()),
+            SLOT(slotAliasChanged()));
 
     // Instrument label
     QFontMetrics metrics(font);
@@ -456,6 +458,17 @@ AudioInstrumentParameterPanel::slotSelectPlugin(int index)
     if (getSelectedInstrument()) {
         emit selectPlugin(0, getSelectedInstrument()->getId(), index);
     }
+}
+
+void
+AudioInstrumentParameterPanel::slotAliasChanged()
+{
+    m_doc->slotDocumentModified();
+
+    // ??? This is wrong.  We should connect to the
+    //     RosegardenDocument::documentModified() signal and refresh
+    //     everything in response to it.
+    setupForInstrument(getSelectedInstrument());
 }
 
 void
