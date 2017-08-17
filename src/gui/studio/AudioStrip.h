@@ -54,6 +54,17 @@ public:
 
     void updateWidgets();
 
+signals:
+    /// Launch AudioPluginDialog.
+    /**
+     * Connected to RosegardenMainWindow::slotShowPluginDialog().
+     *
+     * ??? Get rid of this.  See caller and RMW::slotShowPluginDialog()
+     *     for details.
+     */
+    void selectPlugin(
+        QWidget *parent, InstrumentId instrumentId, int pluginIndex);
+
 private slots:
     /// This needs to go away.
     void slotInstrumentChanged(Instrument *instrument);

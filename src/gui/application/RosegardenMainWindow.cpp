@@ -7113,6 +7113,13 @@ RosegardenMainWindow::slotShowPluginDialog(QWidget *parent,
 {
     RG_DEBUG << "RosegardenMainWindow::slotShowPluginDialog(" << parent << ", " << instrumentId << ", " << index << ")";
 
+    // ??? AudioPluginDialog should be simplified to the point where this
+    //     routine is only a single line launching it.  Don't hold on
+    //     to the dialogs (AudioPluginDialog should do this).  Don't connect
+    //     all these signals (AudioPluginDialog should take care of itself).
+    //     Etc...  Then let all who are connected to this slot launch
+    //     AudioPluginDialog directly on their own.  Get rid of this routine.
+
     if (!parent)
         parent = this;
 

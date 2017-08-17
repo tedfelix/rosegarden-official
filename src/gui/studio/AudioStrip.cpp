@@ -75,6 +75,11 @@ AudioStrip::AudioStrip(QWidget *parent, InstrumentId id) :
             SIGNAL(changed(Instrument *)),
             SLOT(slotInstrumentChanged(Instrument *)));
 
+    connect(this,
+            SIGNAL(selectPlugin(QWidget *, InstrumentId, int)),
+            RosegardenMainWindow::self(),
+            SLOT(slotShowPluginDialog(QWidget *, InstrumentId, int)));
+
     // We have to have an id in order to create the proper widgets and
     // initialize them.  If we don't, don't worry about it.  Handle it
     // later in setId().
@@ -253,8 +258,7 @@ void AudioStrip::createWidgets()
             pluginPushButton->setMaximumWidth(45);
             pluginPushButton->setMaximumHeight(15);
             pluginPushButton->setToolTip(tr("Click to load an audio plugin"));
-            // ??? rename: index
-            pluginPushButton->setProperty("pluginIndex", i);
+            pluginPushButton->setProperty("index", i);
 
             connect(pluginPushButton, SIGNAL(clicked()),
                     SLOT(slotSelectPlugin()));
@@ -651,7 +655,19 @@ AudioStrip::slotChannelsChanged()
 void
 AudioStrip::slotSelectPlugin()
 {
+    const PluginPushButton *pluginButton =
+            dynamic_cast<const PluginPushButton *>(sender());
 
+    if (!pluginButton)
+        return;
+
+    // Launch AudioPluginDialog via
+    // RosegardenMainWindow::slotShowPluginDialog().
+    // ??? Ugh.  AudioPluginDialog should be so simple to use that
+    //     we can just launch it from here.
+    emit selectPlugin(this,
+                      m_id,
+                      pluginButton->property("index").toUInt());
 }
 
 void
