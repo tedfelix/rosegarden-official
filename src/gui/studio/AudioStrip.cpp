@@ -45,13 +45,17 @@
 #include <QGridLayout>
 #include <QPushButton>
 
+#include "limits.h"
+
 namespace Rosegarden
 {
 
+const unsigned InvalidChannel = UINT_MAX;
 
 AudioStrip::AudioStrip(QWidget *parent, InstrumentId id) :
     QWidget(parent),
     m_id(NoInstrument),
+    m_externalControllerChannel(InvalidChannel),
     m_label(NULL),
     m_input(NULL),
     m_output(NULL),
@@ -508,19 +512,13 @@ AudioStrip::slotFaderLevelChanged(float dB)
         instrument->setLevel(dB);
         instrument->changed();
 
-#if 0
-        // ??? We don't have this anymore.  Need to have AMW2 set this
-        //     for us.  It's just the physical position from the left
-        //     of each fader starting with 0.
-        int externalControllerChannel =
-                m_fader->property("externalControllerChannel").toInt();
-
         // Send out to "external controller" port as well.
         // ??? Would be nice to know whether anything is connected
         //     to the "external controller" port.  Otherwise this is
         //     a waste.  Especially with a potentially very frequent
         //     update such as this.
-        if (externalControllerChannel < 16) {
+
+        if (m_externalControllerChannel < 16) {
             int value = AudioLevel::dB_to_fader(
                     dB, 127, AudioLevel::LongFader);
 
@@ -528,12 +526,11 @@ AudioStrip::slotFaderLevelChanged(float dB)
                            MappedEvent::MidiController,
                            MIDI_CONTROLLER_VOLUME,
                            MidiByte(value));
-            mE.setRecordedChannel(externalControllerChannel);
+            mE.setRecordedChannel(m_externalControllerChannel);
             mE.setRecordedDevice(Device::CONTROL_DEVICE);
 
             StudioControl::sendMappedEvent(mE);
         }
-#endif
 
         return;
     }
@@ -579,19 +576,13 @@ AudioStrip::slotPanChanged(float pan)
         instrument->setPan(MidiByte(pan + 100.0));
         instrument->changed();
 
-#if 0
-        // ??? We don't have this anymore.  Need to have AMW2 set this
-        //     for us.  It's just the physical position from the left
-        //     of each fader starting with 0.
-        int externalControllerChannel =
-                panRotary->property("externalControllerChannel").toInt();
-
         // Send out to "external controller" port as well.
         // ??? Would be nice to know whether anything is connected
         //     to the "external controller" port.  Otherwise this is
         //     a waste.  Especially with a potentially very frequent
         //     update such as this.
-        if (externalControllerChannel < 16) {
+
+        if (m_externalControllerChannel < 16) {
             int ipan = (int(instrument->getPan()) * 64) / 100;
             if (ipan < 0)
                 ipan = 0;
@@ -602,12 +593,11 @@ AudioStrip::slotPanChanged(float pan)
                            MappedEvent::MidiController,
                            MIDI_CONTROLLER_PAN,
                            MidiByte(ipan));
-            mE.setRecordedChannel(externalControllerChannel);
+            mE.setRecordedChannel(m_externalControllerChannel);
             mE.setRecordedDevice(Device::CONTROL_DEVICE);
 
             StudioControl::sendMappedEvent(mE);
         }
-#endif
 
         return;
 

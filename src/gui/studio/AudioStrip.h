@@ -52,6 +52,9 @@ public:
     void setId(InstrumentId id);
     InstrumentId getId() const  { return m_id; }
 
+    void setExternalControllerChannel(unsigned channel)
+            { m_externalControllerChannel = channel; }
+
     void updateWidgets();
 
     /// For "external controller" port support.
@@ -93,7 +96,7 @@ private:
     bool isInput() const  { return (m_id >= AudioInstrumentBase); }
 
     /// Channel on the "external controller" port.
-    int m_externalControllerChannel;
+    unsigned m_externalControllerChannel;
 
     // Widgets
 

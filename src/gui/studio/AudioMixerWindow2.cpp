@@ -336,6 +336,9 @@ void AudioMixerWindow2::updateWidgets()
     // Update the input strips.
     for (unsigned i = 0; i < m_inputStrips.size(); ++i) {
         m_inputStrips[i]->updateWidgets();
+
+        if (i < 16)
+            m_inputStrips[i]->setExternalControllerChannel(i);
     }
 
     // Update the submaster strips.
