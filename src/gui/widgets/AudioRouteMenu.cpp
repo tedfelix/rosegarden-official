@@ -429,6 +429,8 @@ AudioRouteMenu::slotEntrySelected(int i)
 
             instrument->changed();
 
+            doc->slotDocumentModified();
+
             break;
         }
 
@@ -457,6 +459,8 @@ AudioRouteMenu::slotEntrySelected(int i)
 
             instrument->setAudioOutput(i);
             instrument->changed();
+
+            doc->slotDocumentModified();
 
             break;
         }

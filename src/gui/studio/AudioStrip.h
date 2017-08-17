@@ -39,11 +39,11 @@ class AudioStrip : public QWidget
     Q_OBJECT
 
 public:
-    AudioStrip(QWidget *parent, int i_id = -1);
+    AudioStrip(QWidget *parent, InstrumentId i_id = NoInstrument);
     virtual ~AudioStrip();
 
-    void setId(int id);
-    int getId() const  { return m_id; }
+    void setId(InstrumentId id);
+    InstrumentId getId() const  { return m_id; }
 
     void updateWidgets();
 
@@ -52,16 +52,17 @@ private slots:
 
 private:
     /// Buss/Instrument ID.
-    int m_id;
+    InstrumentId m_id;
 
     bool isMaster() const  { return (m_id == 0); }
     bool isSubmaster() const
-            { return (m_id > 0  &&  m_id < static_cast<int>(AudioInstrumentBase)); }
-    bool isInput() const  { return (m_id >= static_cast<int>(AudioInstrumentBase)); }
+            { return (m_id > 0  &&  m_id < AudioInstrumentBase); }
+    bool isInput() const  { return (m_id >= AudioInstrumentBase); }
 
     // Widgets
     Label *m_label;
     AudioRouteMenu *m_input;
+    AudioRouteMenu *m_output;
 
     QGridLayout *m_layout;
 

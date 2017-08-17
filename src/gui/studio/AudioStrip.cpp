@@ -34,11 +34,12 @@ namespace Rosegarden
 {
 
 
-AudioStrip::AudioStrip(QWidget *parent, int id) :
+AudioStrip::AudioStrip(QWidget *parent, InstrumentId id) :
     QWidget(parent),
-    m_id(-1),
+    m_id(NoInstrument),
     m_label(NULL),
     m_input(NULL),
+    m_output(NULL),
     m_layout(new QGridLayout(this))
 {
     QFont font;
@@ -52,7 +53,7 @@ AudioStrip::AudioStrip(QWidget *parent, int id) :
     // We have to have an id in order to create the proper widgets and
     // initialize them.  If we don't, don't worry about it.  Handle it
     // later in setId().
-    if (id != -1)
+    if (id != NoInstrument)
         setId(id);
 }
 
@@ -61,7 +62,7 @@ AudioStrip::~AudioStrip()
 
 }
 
-void AudioStrip::setId(int id)
+void AudioStrip::setId(InstrumentId id)
 {
     // No change?  Bail.
     if (m_id == id)
@@ -74,18 +75,18 @@ void AudioStrip::setId(int id)
         createWidgets();
 
     // Pass on the new id to widgets that care.
-#if 0
-    if (m_input) {
-        // ??? Consider upgrading AudioRouteMenu to just take an instrument ID.
-        m_input->slotSetInstrument(studio, instrument);
-    }
-#endif
+
+    if (m_input)
+        m_input->setInstrument(m_id);
+
+    if (m_output)
+        m_output->setInstrument(m_id);
 }
 
 void AudioStrip::createWidgets()
 {
     // No ID yet?  Bail.
-    if (m_id < 0)
+    if (m_id == NoInstrument)
         return;
 
     QFont boldFont(font());
@@ -101,22 +102,35 @@ void AudioStrip::createWidgets()
 
     // Input
 
-#if 0
     if (isInput()) {
-        // ??? Consider upgrading AudioRouteMenu to just take an instrument ID.
         m_input = new AudioRouteMenu(this,
                                      AudioRouteMenu::In,
                                      AudioRouteMenu::Compact,
-                                     m_studio,
-                                     instrument);
+                                     m_id);
         m_input->getWidget()->setToolTip(tr("Record input source"));
         m_input->getWidget()->setMaximumWidth(45);
     }
-#endif
+
+    // Output
+
+    if (isInput()) {
+        m_output = new AudioRouteMenu(this,
+                                      AudioRouteMenu::Out,
+                                      AudioRouteMenu::Compact,
+                                      m_id);
+        m_output->getWidget()->setToolTip(tr("Output destination"));
+        m_output->getWidget()->setMaximumWidth(45);
+    }
 
     // Layout
 
     m_layout->addWidget(m_label, 0, 0, 1, 2, Qt::AlignLeft);
+
+    if (m_input)
+        m_layout->addWidget(m_input->getWidget(), 1, 0, 1, 2, Qt::AlignLeft);
+
+    if (m_output)
+        m_layout->addWidget(m_output->getWidget(), 2, 0, 1, 2, Qt::AlignLeft);
 }
 
 void AudioStrip::updateWidgets()
@@ -142,6 +156,16 @@ void AudioStrip::updateWidgets()
     } else {  // Master
         m_label->setText(tr("Master"));
     }
+
+    // Input
+
+    if (m_input)
+        m_input->updateWidget();
+
+    // Output
+
+    if (m_output)
+        m_output->updateWidget();
 }
 
 void AudioStrip::slotLabelClicked()

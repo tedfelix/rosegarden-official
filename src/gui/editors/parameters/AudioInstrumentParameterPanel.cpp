@@ -32,7 +32,6 @@
 #include "gui/widgets/AudioVUMeter.h"
 #include "gui/widgets/Fader.h"
 #include "gui/widgets/Rotary.h"
-#include "gui/widgets/AudioRouteMenu.h"
 #include "gui/widgets/SqueezedLabel.h"
 #include "InstrumentParameterPanel.h"
 #include "sound/MappedCommon.h"
