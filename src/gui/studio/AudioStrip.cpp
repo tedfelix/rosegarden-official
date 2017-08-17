@@ -253,6 +253,13 @@ void AudioStrip::updateWidgets()
     if (isInput())
         instrument = studio.getInstrumentById(m_id);
 
+    // Get the appropriate buss based on the ID.
+    Buss *buss = NULL;
+    if (!isInput()) {
+        BussList busses = studio.getBusses();
+        buss = busses[m_id];
+    }
+
     // Update each widget efficiently.
 
     // Label
@@ -282,10 +289,15 @@ void AudioStrip::updateWidgets()
     if (isInput()) {
         m_fader->setFader(instrument->getLevel());
     } else {  // buss
-        BussList busses = studio.getBusses();
-        Buss *buss = busses[m_id];
-
         m_fader->setFader(buss->getLevel());
+    }
+
+    // Pan
+
+    if (isInput()) {
+        m_pan->setPosition(instrument->getPan() - 100);
+    } else if (isSubmaster()) {
+        m_pan->setPosition(buss->getPan() - 100);
     }
 }
 
@@ -344,9 +356,8 @@ AudioStrip::slotFaderLevelChanged(float dB)
     Studio &studio = doc->getStudio();
 
     // If this is an input Fader
-    if (m_id >= AudioInstrumentBase) {
-        Instrument *instrument =
-            studio.getInstrumentById(m_id);
+    if (isInput()) {
+        Instrument *instrument = studio.getInstrumentById(m_id);
 
         if (!instrument)
             return;
@@ -390,7 +401,7 @@ AudioStrip::slotFaderLevelChanged(float dB)
     }
 
     // If this is the master or a submaster Fader
-    if (m_id < AudioInstrumentBase) {
+    if (isSubmaster()  ||  isMaster()) {
 
         BussList busses = studio.getBusses();
 
@@ -412,7 +423,75 @@ AudioStrip::slotFaderLevelChanged(float dB)
 void
 AudioStrip::slotPanChanged(float pan)
 {
+    RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
+    Studio &studio = doc->getStudio();
 
+    if (isInput()) {
+
+        Instrument *instrument = studio.getInstrumentById(m_id);
+
+        if (!instrument)
+            return;
+
+        StudioControl::setStudioObjectProperty(
+                instrument->getMappedId(),
+                MappedAudioFader::Pan,
+                MappedObjectValue(pan));
+
+        instrument->setPan(MidiByte(pan + 100.0));
+        instrument->changed();
+
+#if 0
+        // ??? We don't have this anymore.  Need to have AMW2 set this
+        //     for us.  It's just the physical position from the left
+        //     of each fader starting with 0.
+        int externalControllerChannel =
+                panRotary->property("externalControllerChannel").toInt();
+
+        // Send out to "external controller" port as well.
+        // ??? Would be nice to know whether anything is connected
+        //     to the "external controller" port.  Otherwise this is
+        //     a waste.  Especially with a potentially very frequent
+        //     update such as this.
+        if (externalControllerChannel < 16) {
+            int ipan = (int(instrument->getPan()) * 64) / 100;
+            if (ipan < 0)
+                ipan = 0;
+            if (ipan > 127)
+                ipan = 127;
+
+            MappedEvent mE(m_id,
+                           MappedEvent::MidiController,
+                           MIDI_CONTROLLER_PAN,
+                           MidiByte(ipan));
+            mE.setRecordedChannel(externalControllerChannel);
+            mE.setRecordedDevice(Device::CONTROL_DEVICE);
+
+            StudioControl::sendMappedEvent(mE);
+        }
+#endif
+
+        return;
+
+    }
+
+    if (isSubmaster()  ||  isMaster()) {
+
+        BussList busses = studio.getBusses();
+
+        if (m_id >= busses.size())
+            return;
+
+        StudioControl::setStudioObjectProperty(
+                MappedObjectId(busses[m_id]->getMappedId()),
+                MappedAudioBuss::Pan,
+                MappedObjectValue(pan));
+
+        busses[m_id]->setPan(MidiByte(pan + 100.0));
+
+        return;
+
+    }
 }
 
 void
