@@ -19,6 +19,10 @@
 
 #include "AudioStrip.h"
 
+#include "base/AudioLevel.h"
+#include "AudioPlugin.h"
+#include "base/AudioPluginInstance.h"
+#include "AudioPluginManager.h"
 #include "gui/widgets/AudioRouteMenu.h"
 #include "gui/widgets/AudioVUMeter.h"
 #include "misc/Debug.h"
@@ -28,6 +32,7 @@
 #include "gui/widgets/InputDialog.h"
 #include "base/InstrumentStaticSignals.h"
 #include "gui/widgets/Label.h"
+#include "gui/widgets/PluginPushButton.h"
 #include "document/RosegardenDocument.h"
 #include "gui/application/RosegardenMainWindow.h"
 #include "gui/widgets/Rotary.h"
@@ -55,6 +60,7 @@ AudioStrip::AudioStrip(QWidget *parent, InstrumentId id) :
     m_pan(NULL),
     m_stereoButton(NULL),
     m_stereo(false),
+    m_plugins(),
     m_layout(new QGridLayout(this))
 {
     QFont font;
@@ -233,6 +239,31 @@ void AudioStrip::createWidgets()
 
     }
 
+    // Plugins
+
+    const size_t numberOfPlugins = 5;
+
+    if (isInput()  ||  isSubmaster()) {
+
+        // For each PluginPushButton
+        for (unsigned i = 0; i < numberOfPlugins; ++i) {
+            PluginPushButton *pluginPushButton = new PluginPushButton(this);
+            pluginPushButton->setFont(font());
+            pluginPushButton->setText(tr("<none>"));
+            pluginPushButton->setMaximumWidth(45);
+            pluginPushButton->setMaximumHeight(15);
+            pluginPushButton->setToolTip(tr("Click to load an audio plugin"));
+            // ??? rename: index
+            pluginPushButton->setProperty("pluginIndex", i);
+
+            connect(pluginPushButton, SIGNAL(clicked()),
+                    SLOT(slotSelectPlugin()));
+
+            m_plugins.push_back(pluginPushButton);
+        }
+
+    }
+
     // Layout
 
     // Give the parent control over spacing between strips.
@@ -264,6 +295,15 @@ void AudioStrip::createWidgets()
 
     if (m_stereoButton)
         m_layout->addWidget(m_stereoButton, 4, 1);
+
+    // For each plugin push button
+    for (size_t i = 0; i < numberOfPlugins; ++i) {
+        // If there's a plugin push button for this spot
+        if (i < m_plugins.size())
+            m_layout->addWidget(m_plugins[i], 5+i, 0, 1, 2);
+        else  // No button, just put in a spacer.
+            m_layout->setRowMinimumHeight(5+i, 15 + spacing);
+    }
 }
 
 void AudioStrip::updateWidgets()
@@ -328,6 +368,69 @@ void AudioStrip::updateWidgets()
     if (isInput()) {
         m_stereo = (instrument->getAudioChannels() > 1);
         m_stereoButton->setIcon(m_stereo ? m_stereoPixmap : m_monoPixmap);
+    }
+
+    // Plugin Buttons
+
+    const PluginContainer *pluginContainer = NULL;
+
+    if (isInput()) {
+        pluginContainer = dynamic_cast<const PluginContainer *>(
+                studio.getInstrumentById(m_id));
+    }
+    if (isSubmaster()) {
+        BussList busses = studio.getBusses();
+        if (m_id < busses.size()) {
+            pluginContainer =
+                    dynamic_cast<const PluginContainer *>(busses[m_id]);
+        }
+    }
+
+    if (pluginContainer) {
+
+        // For each PluginPushButton on the Strip
+        for (size_t i = 0; i < m_plugins.size(); i++) {
+
+            PluginPushButton *pluginButton = m_plugins[i];
+
+            AudioPluginInstance *plugin = pluginContainer->getPlugin(i);
+
+            bool used = false;
+            bool bypass = false;
+
+            if (plugin  &&  plugin->isAssigned()) {
+
+                AudioPluginManager *pluginMgr = doc->getPluginManager();
+                AudioPlugin *pluginClass = pluginMgr->getPluginByIdentifier(
+                        plugin->getIdentifier().c_str());
+
+                if (pluginClass) {
+                    pluginButton->setText(pluginClass->getLabel());
+                    pluginButton->setToolTip(pluginClass->getLabel());
+                }
+
+                used = true;
+                bypass = plugin->isBypassed();
+
+            } else {
+
+                pluginButton->setText(tr("<none>"));
+                pluginButton->setToolTip(tr("<no plugin>"));
+
+                if (plugin)
+                    bypass = plugin->isBypassed();
+            }
+
+            if (bypass) {
+                pluginButton->setState(PluginPushButton::Bypassed);
+            } else if (used) {
+                pluginButton->setState(PluginPushButton::Active);
+            } else {
+                pluginButton->setState(PluginPushButton::Normal);
+            }
+
+        }
+
     }
 
 }
@@ -543,6 +646,12 @@ AudioStrip::slotChannelsChanged()
     //     away, and only the call to slotDocumentModified() will be needed.
     instrument->changed();
     doc->slotDocumentModified();
+}
+
+void
+AudioStrip::slotSelectPlugin()
+{
+
 }
 
 void

@@ -36,6 +36,7 @@ class AudioRouteMenu;
 class AudioVUMeter;
 class Fader;
 class Label;
+class PluginPushButton;
 class Rotary;
 
 
@@ -61,6 +62,7 @@ private slots:
     void slotFaderLevelChanged(float dB);
     void slotPanChanged(float pan);
     void slotChannelsChanged();
+    void slotSelectPlugin();
 
     /// Called on a timer to keep the meter updated.
     void slotUpdateMeter();
@@ -88,6 +90,8 @@ private:
     QPushButton *m_stereoButton;
     // Cache for updateInputMeter().
     bool m_stereo;
+
+    std::vector<PluginPushButton *> m_plugins;
 
     QGridLayout *m_layout;
 
