@@ -30,6 +30,7 @@ namespace Rosegarden
 
 
 class Label;
+class AudioRouteMenu;
 
 
 /// The strips on the "Audio Mixer" window.
@@ -38,11 +39,11 @@ class AudioStrip : public QWidget
     Q_OBJECT
 
 public:
-    AudioStrip(QWidget *parent, unsigned i_id);
+    AudioStrip(QWidget *parent, int i_id = -1);
     virtual ~AudioStrip();
 
-    /// Buss/Instrument ID.
-    unsigned id;
+    void setId(int id);
+    int getId() const  { return m_id; }
 
     void updateWidgets();
 
@@ -50,15 +51,21 @@ private slots:
     void slotLabelClicked();
 
 private:
-    bool isMaster() const  { return (id == 0); }
+    /// Buss/Instrument ID.
+    int m_id;
+
+    bool isMaster() const  { return (m_id == 0); }
     bool isSubmaster() const
-            { return (id > 0  &&  id < AudioInstrumentBase); }
-    bool isInput() const  { return (id >= AudioInstrumentBase); }
+            { return (m_id > 0  &&  m_id < static_cast<int>(AudioInstrumentBase)); }
+    bool isInput() const  { return (m_id >= static_cast<int>(AudioInstrumentBase)); }
 
     // Widgets
     Label *m_label;
+    AudioRouteMenu *m_input;
 
     QGridLayout *m_layout;
+
+    void createWidgets();
 };
 
 

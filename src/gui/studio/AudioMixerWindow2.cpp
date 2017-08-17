@@ -172,7 +172,7 @@ AudioMixerWindow2::updateStripCounts()
     // If the sizes match, make sure the ids match.
     if (inputStripsMatch) {
         for (unsigned i = 0; i < instrumentIds.size(); ++i) {
-            if (instrumentIds[i] != m_inputStrips[i]->id) {
+            if (instrumentIds[i] != static_cast<InstrumentId>(m_inputStrips[i]->getId())) {
                 inputStripsMatch = false;
                 break;
             }
@@ -200,7 +200,7 @@ AudioMixerWindow2::updateStripCounts()
             // Add the appropriate number.
             for (unsigned i = 0; i < count; ++i) {
                 // Add a new one.  We'll fix the ID later.
-                m_inputStrips.push_back(new AudioStrip(this, 0));
+                m_inputStrips.push_back(new AudioStrip(this));
             }
         } else {  // We have too many input strips
             unsigned count = m_inputStrips.size() - instrumentIds.size();
@@ -264,7 +264,7 @@ AudioMixerWindow2::updateStripCounts()
 
     // Make sure the InstrumentIds are correct in each input Strip.
     for (unsigned i = 0; i < m_inputStrips.size(); ++i) {
-        m_inputStrips[i]->id = instrumentIds[i];
+        m_inputStrips[i]->setId(instrumentIds[i]);
     }
 }
 

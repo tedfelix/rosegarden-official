@@ -19,6 +19,7 @@
 
 #include "AudioStrip.h"
 
+#include "gui/widgets/AudioRouteMenu.h"
 #include "misc/Debug.h"
 #include "gui/widgets/InputDialog.h"
 #include "gui/widgets/Label.h"
@@ -33,9 +34,11 @@ namespace Rosegarden
 {
 
 
-AudioStrip::AudioStrip(QWidget *parent, unsigned i_id) :
+AudioStrip::AudioStrip(QWidget *parent, int id) :
     QWidget(parent),
-    id(i_id),
+    m_id(-1),
+    m_label(NULL),
+    m_input(NULL),
     m_layout(new QGridLayout(this))
 {
     QFont font;
@@ -46,6 +49,48 @@ AudioStrip::AudioStrip(QWidget *parent, unsigned i_id) :
     QFont boldFont(font);
     boldFont.setBold(true);
 
+    // We have to have an id in order to create the proper widgets and
+    // initialize them.  If we don't, don't worry about it.  Handle it
+    // later in setId().
+    if (id != -1)
+        setId(id);
+}
+
+AudioStrip::~AudioStrip()
+{
+
+}
+
+void AudioStrip::setId(int id)
+{
+    // No change?  Bail.
+    if (m_id == id)
+        return;
+
+    m_id = id;
+
+    // If the widgets haven't been created yet, create them.
+    if (!m_label)
+        createWidgets();
+
+    // Pass on the new id to widgets that care.
+#if 0
+    if (m_input) {
+        // ??? Consider upgrading AudioRouteMenu to just take an instrument ID.
+        m_input->slotSetInstrument(studio, instrument);
+    }
+#endif
+}
+
+void AudioStrip::createWidgets()
+{
+    // No ID yet?  Bail.
+    if (m_id < 0)
+        return;
+
+    QFont boldFont(font());
+    boldFont.setBold(true);
+
     // Label
 
     m_label = new Label(this);
@@ -54,17 +99,24 @@ AudioStrip::AudioStrip(QWidget *parent, unsigned i_id) :
     connect(m_label, SIGNAL(clicked()),
             SLOT(slotLabelClicked()));
 
+    // Input
+
+#if 0
+    if (isInput()) {
+        // ??? Consider upgrading AudioRouteMenu to just take an instrument ID.
+        m_input = new AudioRouteMenu(this,
+                                     AudioRouteMenu::In,
+                                     AudioRouteMenu::Compact,
+                                     m_studio,
+                                     instrument);
+        m_input->getWidget()->setToolTip(tr("Record input source"));
+        m_input->getWidget()->setMaximumWidth(45);
+    }
+#endif
+
     // Layout
 
     m_layout->addWidget(m_label, 0, 0, 1, 2, Qt::AlignLeft);
-
-    // Since we might not yet know our ID, this should be postponed.
-    //updateWidgets();
-}
-
-AudioStrip::~AudioStrip()
-{
-
 }
 
 void AudioStrip::updateWidgets()
@@ -75,7 +127,7 @@ void AudioStrip::updateWidgets()
     // Get the appropriate instrument based on the ID.
     Instrument *instrument = NULL;
     if (isInput())
-        instrument = studio.getInstrumentById(id);
+        instrument = studio.getInstrumentById(m_id);
 
     // Update each widget efficiently.
 
@@ -86,7 +138,7 @@ void AudioStrip::updateWidgets()
         m_label->setToolTip(strtoqstr(instrument->getAlias()) + "\n" +
                 tr("Click to rename this instrument"));
     } else if (isSubmaster()) {
-        m_label->setText(tr("Sub %1").arg(id));
+        m_label->setText(tr("Sub %1").arg(m_id));
     } else {  // Master
         m_label->setText(tr("Master"));
     }
@@ -121,7 +173,7 @@ void AudioStrip::slotLabelClicked()
     Studio &studio = doc->getStudio();
 
     // Get the appropriate instrument based on the ID.
-    Instrument *instrument = studio.getInstrumentById(id);
+    Instrument *instrument = studio.getInstrumentById(m_id);
 
     instrument->setAlias(newAlias.toStdString());
     // ??? For now, we need this to update AIPP.  Over time, this will go
