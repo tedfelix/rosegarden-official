@@ -194,18 +194,48 @@ AudioMixerWindow2::updateStripCounts()
 
     // If the input Strip count is wrong, fix it.
     if (m_inputStrips.size() != instrumentIds.size()) {
-        // ??? Adjust the size of m_inputStrips.
-
-        // Be sure to delete the AudioStrip objects.
+        // If we don't have enough strips
+        if (m_inputStrips.size() < instrumentIds.size()) {
+            unsigned count = instrumentIds.size() - m_inputStrips.size();
+            // Add the appropriate number.
+            for (unsigned i = 0; i < count; ++i) {
+                // Add a new one.  We'll fix the ID later.
+                m_inputStrips.push_back(new AudioStrip(this, 0));
+            }
+        } else {  // We have too many input strips
+            unsigned count = m_inputStrips.size() - instrumentIds.size();
+            // Remove the appropriate number.
+            for (unsigned i = 0; i < count; ++i) {
+                // Delete and remove.
+                delete m_inputStrips.back();
+                m_inputStrips.pop_back();
+            }
+        }
 
         recreateLayout = true;
     }
 
     // If the submaster Strip count is wrong, fix it.
     if (!submasterStripsMatch) {
-        // ??? Adjust the size of m_submasterStrips.
-
-        // Be sure to delete the AudioStrip objects.
+        // If we don't have enough strips
+        if (m_submasterStrips.size() < studio.getBusses().size()-1) {
+            unsigned count =
+                    (studio.getBusses().size()-1) - m_submasterStrips.size();
+            // Add the appropriate number
+            for (unsigned i = 0; i < count; ++i) {
+                int id = static_cast<int>(m_submasterStrips.size()) + 1;
+                m_submasterStrips.push_back(new AudioStrip(this, id));
+            }
+        } else {  // We have too many submaster strips
+            unsigned count =
+                    m_submasterStrips.size() - (studio.getBusses().size()-1);
+            // Remove the appropriate number
+            for (unsigned i = 0; i < count; ++i) {
+                // Delete and remove.
+                delete m_submasterStrips.back();
+                m_submasterStrips.pop_back();
+            }
+        }
 
         recreateLayout = true;
     }
@@ -222,21 +252,23 @@ AudioMixerWindow2::updateStripCounts()
         }
 
         // Add the input strips
+        for (unsigned i = 0; i < m_inputStrips.size(); ++i) {
+            m_layout->addWidget(m_inputStrips[i]);
+        }
 
         // Add the submaster strips
+        for (unsigned i = 0; i < m_submasterStrips.size(); ++i) {
+            m_layout->addWidget(m_submasterStrips[i]);
+        }
 
         // Add the master strip
         m_layout->addWidget(m_masterStrip);
     }
 
-    // Make sure the InstrumentIds are correct in each Strip since
-    // Strips may have been shuffled.
+    // Make sure the InstrumentIds are correct in each input Strip.
     for (unsigned i = 0; i < m_inputStrips.size(); ++i) {
         m_inputStrips[i]->id = instrumentIds[i];
     }
-
-    // ??? Submasters too?  Since they are fixed ids, we can probably
-    //     handle it up where we adjust the count.
 }
 
 void AudioMixerWindow2::updateWidgets()
@@ -290,10 +322,17 @@ void AudioMixerWindow2::updateWidgets()
 
     // At this point, the strips match the document.  We can just update them.
 
-    // For each input strip, call updateWidgets().
+    // Update the input strips.
+    for (unsigned i = 0; i < m_inputStrips.size(); ++i) {
+        m_inputStrips[i]->updateWidgets();
+    }
 
-    // For each submaster strip, call updateWidgets().
+    // Update the submaster strips.
+    for (unsigned i = 0; i < m_submasterStrips.size(); ++i) {
+        m_submasterStrips[i]->updateWidgets();
+    }
 
+    // Update the master strip.
     m_masterStrip->updateWidgets();
 }
 

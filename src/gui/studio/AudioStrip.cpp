@@ -57,7 +57,8 @@ AudioStrip::AudioStrip(QWidget *parent, unsigned i_id) :
 
     m_layout->addWidget(m_label, 0, 0, 1, 2, Qt::AlignLeft);
 
-    updateWidgets();
+    // Since we might not yet know our ID, this should be postponed.
+    //updateWidgets();
 }
 
 AudioStrip::~AudioStrip()
