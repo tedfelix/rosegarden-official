@@ -46,11 +46,23 @@ private slots:
     /// File > Close
     void slotClose();
 
+    /// "Settings > Number of Stereo Inputs" Actions
+    void slotNumberOfStereoInputs();
+
     /// Settings > Show Audio Faders
     void slotShowAudioFaders();
 
     /// Settings > Show Synth Faders
     void slotShowSynthFaders();
+
+    /// Settings > Show Audio Submasters
+    void slotShowAudioSubmasters();
+
+    // Settings > Show Plugin Buttons
+    void slotShowPluginButtons();
+
+    /// Settings > Show Unassigned Faders
+    void slotShowUnassignedFaders();
 
 private:
     void updateWidgets();

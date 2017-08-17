@@ -50,23 +50,23 @@ AudioMixerWindow2::AudioMixerWindow2(QWidget *parent) :
     connect(doc, SIGNAL(documentModified(bool)),
             SLOT(slotDocumentModified(bool)));
 
+    // File > Close
     createAction("file_close", SLOT(slotClose()));
 
-    // Settings > Show Audio Faders
-    createAction("show_audio_faders", SLOT(slotShowAudioFaders()));
-
-    // Settings > Show Synth Faders
-    createAction("show_synth_faders", SLOT(slotShowSynthFaders()));
-
 #if 0
-    // Settings > Show Audio Submasters
-    createAction("show_audio_submasters", SLOT(slotShowAudioSubmasters()));
-
-    // Settings > Show Plugin Buttons
-    createAction("show_plugin_buttons", SLOT(slotShowPluginButtons()));
-
-    // Settings > Show Unassigned Faders
-    createAction("show_unassigned_faders", SLOT(slotShowUnassignedFaders()));
+    // Transport Menu
+    // ??? Can we do these with SLOTs and call directly into RMW?  That
+    //     would take the burden of connecting all these signals off of
+    //     RMW.  The more independent this window is, the better.
+    createAction("play", SIGNAL(play()));
+    createAction("stop", SIGNAL(stop()));
+    createAction("playback_pointer_back_bar", SIGNAL(rewindPlayback()));
+    createAction("playback_pointer_forward_bar", SIGNAL(fastForwardPlayback()));
+    createAction("playback_pointer_start", SIGNAL(rewindPlaybackToBeginning()));
+    createAction("playback_pointer_end", SIGNAL(fastForwardPlaybackToEnd()));
+    createAction("record", SIGNAL(record()));
+    createAction("panic", SIGNAL(panic()));
+#endif
 
     // "Settings > Number of Stereo Inputs" Actions
     // For i in {1,2,4,8,16}
@@ -75,6 +75,7 @@ AudioMixerWindow2::AudioMixerWindow2(QWidget *parent) :
                      SLOT(slotNumberOfStereoInputs()));
     }
 
+#if 0
     // "Settings > Number of Submasters" Actions
     createAction("submasters_0", SLOT(slotNumberOfSubmasters()));
     createAction("submasters_2", SLOT(slotNumberOfSubmasters()));
@@ -89,24 +90,28 @@ AudioMixerWindow2::AudioMixerWindow2(QWidget *parent) :
     createAction("panlaw_1", SLOT(slotPanningLaw()));
     createAction("panlaw_2", SLOT(slotPanningLaw()));
     createAction("panlaw_3", SLOT(slotPanningLaw()));
+#endif
 
+    // Settings > Show Audio Faders
+    createAction("show_audio_faders", SLOT(slotShowAudioFaders()));
+
+    // Settings > Show Synth Faders
+    createAction("show_synth_faders", SLOT(slotShowSynthFaders()));
+
+    // Settings > Show Audio Submasters
+    createAction("show_audio_submasters", SLOT(slotShowAudioSubmasters()));
+
+    // Settings > Show Plugin Buttons
+    createAction("show_plugin_buttons", SLOT(slotShowPluginButtons()));
+
+    // Settings > Show Unassigned Faders
+    createAction("show_unassigned_faders", SLOT(slotShowUnassignedFaders()));
+
+#if 0
     // Help > Help
     createAction("mixer_help", SLOT(slotHelp()));
     // Help > About Rosegarden
     createAction("help_about_app", SLOT(slotAboutRosegarden()));
-
-    // Transport ToolBar
-    // ??? Can we do these with SLOTs and call directly into RMW?  That
-    //     would take the burden of connecting all these signals off of
-    //     RMW.  The more independent this window is, the better.
-    createAction("play", SIGNAL(play()));
-    createAction("stop", SIGNAL(stop()));
-    createAction("playback_pointer_back_bar", SIGNAL(rewindPlayback()));
-    createAction("playback_pointer_forward_bar", SIGNAL(fastForwardPlayback()));
-    createAction("playback_pointer_start", SIGNAL(rewindPlaybackToBeginning()));
-    createAction("playback_pointer_end", SIGNAL(fastForwardPlaybackToEnd()));
-    createAction("record", SIGNAL(record()));
-    createAction("panic", SIGNAL(panic()));
 
 #endif
 
@@ -135,6 +140,20 @@ void AudioMixerWindow2::updateWidgets()
 
     // Menu items.
 
+    // Update "Settings > Number of Stereo Inputs"
+    findAction(QString("inputs_%1").arg(studio.getRecordIns().size()))->
+            setChecked(true);
+
+#if 0
+    // Update "Settings > Number of Submasters"
+    findAction(QString("submasters_%1").arg(studio.getBusses().size()-1))->
+            setChecked(true);
+
+    // Update "Settings > Panning Law"
+    findAction(QString("panlaw_%1").arg(AudioLevel::getPanLaw()))->
+            setChecked(true);
+#endif
+
     bool visible = studio.amwShowAudioFaders;
     QAction *action = findAction("show_audio_faders");
     if (action)
@@ -148,19 +167,20 @@ void AudioMixerWindow2::updateWidgets()
     if (action)
         action->setChecked(visible);
 
-#if 0
-    // Update "Settings > Number of Stereo Inputs"
-    findAction(QString("inputs_%1").arg(studio.getRecordIns().size()))->
-            setChecked(true);
+    visible = studio.amwShowAudioSubmasters;
+    action = findAction("show_audio_submasters");
+    if (action)
+        action->setChecked(visible);
 
-    // Update "Settings > Number of Submasters"
-    findAction(QString("submasters_%1").arg(studio.getBusses().size()-1))->
-            setChecked(true);
+    visible = studio.amwShowPluginButtons;
+    action = findAction("show_plugin_buttons");
+    if (action)
+        action->setChecked(visible);
 
-    // Update "Settings > Panning Law"
-    findAction(QString("panlaw_%1").arg(AudioLevel::getPanLaw()))->
-            setChecked(true);
-#endif
+    visible = studio.amwShowUnassignedFaders;
+    action = findAction("show_unassigned_faders");
+    if (action)
+        action->setChecked(visible);
 
     // Widgets?
 
@@ -176,6 +196,35 @@ void
 AudioMixerWindow2::slotClose()
 {
     close();
+}
+
+void
+AudioMixerWindow2::slotNumberOfStereoInputs()
+{
+    const QAction *action = dynamic_cast<const QAction *>(sender());
+
+    if (!action)
+        return;
+
+    QString name = action->objectName();
+
+    // Not the expected action name?  Bail.
+    if (name.left(7) != "inputs_")
+        return;
+
+    // Extract the number of inputs from the action name.
+    unsigned count = name.mid(7).toUInt();
+
+    RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
+    Studio &studio = doc->getStudio();
+
+    studio.setRecordInCount(count);
+
+    // Set the mapped IDs for the RecordIns.
+    // ??? Overkill?  Can we do better?
+    doc->initialiseStudio();
+
+    doc->slotDocumentModified();
 }
 
 void
@@ -196,6 +245,39 @@ AudioMixerWindow2::slotShowSynthFaders()
     Studio &studio = doc->getStudio();
 
     studio.amwShowSynthFaders = !studio.amwShowSynthFaders;
+
+    doc->slotDocumentModified();
+}
+
+void
+AudioMixerWindow2::slotShowAudioSubmasters()
+{
+    RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
+    Studio &studio = doc->getStudio();
+
+    studio.amwShowAudioSubmasters = !studio.amwShowAudioSubmasters;
+
+    doc->slotDocumentModified();
+}
+
+void
+AudioMixerWindow2::slotShowPluginButtons()
+{
+    RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
+    Studio &studio = doc->getStudio();
+
+    studio.amwShowPluginButtons = !studio.amwShowPluginButtons;
+
+    doc->slotDocumentModified();
+}
+
+void
+AudioMixerWindow2::slotShowUnassignedFaders()
+{
+    RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
+    Studio &studio = doc->getStudio();
+
+    studio.amwShowUnassignedFaders = !studio.amwShowUnassignedFaders;
 
     doc->slotDocumentModified();
 }
