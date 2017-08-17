@@ -75,7 +75,6 @@ AudioMixerWindow2::AudioMixerWindow2(QWidget *parent) :
                      SLOT(slotNumberOfStereoInputs()));
     }
 
-#if 0
     // "Settings > Number of Submasters" Actions
     createAction("submasters_0", SLOT(slotNumberOfSubmasters()));
     createAction("submasters_2", SLOT(slotNumberOfSubmasters()));
@@ -90,7 +89,6 @@ AudioMixerWindow2::AudioMixerWindow2(QWidget *parent) :
     createAction("panlaw_1", SLOT(slotPanningLaw()));
     createAction("panlaw_2", SLOT(slotPanningLaw()));
     createAction("panlaw_3", SLOT(slotPanningLaw()));
-#endif
 
     // Settings > Show Audio Faders
     createAction("show_audio_faders", SLOT(slotShowAudioFaders()));
@@ -144,7 +142,6 @@ void AudioMixerWindow2::updateWidgets()
     findAction(QString("inputs_%1").arg(studio.getRecordIns().size()))->
             setChecked(true);
 
-#if 0
     // Update "Settings > Number of Submasters"
     findAction(QString("submasters_%1").arg(studio.getBusses().size()-1))->
             setChecked(true);
@@ -152,7 +149,6 @@ void AudioMixerWindow2::updateWidgets()
     // Update "Settings > Panning Law"
     findAction(QString("panlaw_%1").arg(AudioLevel::getPanLaw()))->
             setChecked(true);
-#endif
 
     bool visible = studio.amwShowAudioFaders;
     QAction *action = findAction("show_audio_faders");
@@ -223,6 +219,57 @@ AudioMixerWindow2::slotNumberOfStereoInputs()
     // Set the mapped IDs for the RecordIns.
     // ??? Overkill?  Can we do better?
     doc->initialiseStudio();
+
+    doc->slotDocumentModified();
+}
+
+void
+AudioMixerWindow2::slotNumberOfSubmasters()
+{
+    const QAction *action = dynamic_cast<const QAction *>(sender());
+
+    if (!action)
+        return;
+
+    QString name = action->objectName();
+
+    // Not the expected action name?  Bail.
+    if (name.left(11) != "submasters_")
+        return;
+
+    // Extract the count from the name.
+    int count = name.mid(11).toInt();
+
+    RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
+    Studio &studio = doc->getStudio();
+
+    // Add one for the master buss.
+    studio.setBussCount(count + 1);
+
+    doc->initialiseStudio();
+
+    doc->slotDocumentModified();
+}
+
+void
+AudioMixerWindow2::slotPanningLaw()
+{
+    const QAction *action = dynamic_cast<const QAction *>(sender());
+
+    if (!action)
+        return;
+
+    QString name = action->objectName();
+
+    // Not the expected action name?  Bail.
+    if (name.left(7) != "panlaw_")
+        return;
+
+    int panLaw = name.mid(7).toInt();
+
+    AudioLevel::setPanLaw(panLaw);
+
+    RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
 
     doc->slotDocumentModified();
 }

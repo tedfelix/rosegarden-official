@@ -46,8 +46,14 @@ private slots:
     /// File > Close
     void slotClose();
 
-    /// "Settings > Number of Stereo Inputs" Actions
+    /// Settings > Number of Stereo Inputs
     void slotNumberOfStereoInputs();
+
+    /// Settings > Number of Submasters
+    void slotNumberOfSubmasters();
+
+    /// Settings > Panning Law
+    void slotPanningLaw();
 
     /// Settings > Show Audio Faders
     void slotShowAudioFaders();
