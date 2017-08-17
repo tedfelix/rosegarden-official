@@ -22,6 +22,7 @@
 
 #include <QMainWindow>
 
+class QHBoxLayout;
 class QWidget;
 
 
@@ -103,6 +104,11 @@ private slots:
     void slotAboutRosegarden();
 
 private:
+    /// Central widget required for using a layout with QMainWindow.
+    QWidget *m_centralWidget;
+    /// Horizontal box layout that holds the strips.
+    QHBoxLayout *m_layout;
+
     std::vector<AudioStrip *> m_inputStrips;
     std::vector<AudioStrip *> m_submasterStrips;
     AudioStrip *m_masterStrip;

@@ -30,6 +30,7 @@
 #include "base/Studio.h"
 
 #include <QDesktopServices>
+#include <QHBoxLayout>
 
 namespace Rosegarden
 {
@@ -37,6 +38,8 @@ namespace Rosegarden
 
 AudioMixerWindow2::AudioMixerWindow2(QWidget *parent) :
         QMainWindow(parent),
+        m_centralWidget(new QWidget),
+        m_layout(new QHBoxLayout(m_centralWidget)),
         m_masterStrip(new AudioStrip(this, 0))
 {
     setObjectName("AudioMixerWindow2");
@@ -117,8 +120,9 @@ AudioMixerWindow2::AudioMixerWindow2(QWidget *parent) :
     enableAutoRepeat("Transport Toolbar", "playback_pointer_back_bar");
     enableAutoRepeat("Transport Toolbar", "playback_pointer_forward_bar");
 
-    // ??? TESTING
-    setCentralWidget(m_masterStrip);
+    // Since we can't set the layout for QMainWindow, we have to use
+    // a central widget and set the layout there.
+    setCentralWidget(m_centralWidget);
 
     // Force an initial update to make sure we're in sync.
     updateWidgets();
@@ -208,19 +212,21 @@ AudioMixerWindow2::updateStripCounts()
 
     // If either Strip count was wrong, recreate the layout.
     if (recreateLayout) {
-        // Can we clear the layout somehow, or do we need to delete it
-        // and then recreate it?  I would think that would be a problem
-        // since it is parent to all the widgets.  Deleting it will destroy
-        // all the child widgets.
 
-        // Docs for QLayout::takeAt() show how to safely remove all
-        // widgets from a layout:
+        RG_DEBUG << __FUNCTION__ << "recreating layout...";
 
-        //QLayoutItem *child;
-        //while ((child = m_layout->takeAt(0)) != 0) {
-        //    delete child;
-        //}
+        // Remove the widgets from the layout.
+        while (m_layout->takeAt(0) != 0) {
+            // Do nothing.  Normally, we might delete the child widgets.
+            // But we're about to re-add them below.
+        }
 
+        // Add the input strips
+
+        // Add the submaster strips
+
+        // Add the master strip
+        m_layout->addWidget(m_masterStrip);
     }
 
     // Make sure the InstrumentIds are correct in each Strip since
@@ -280,7 +286,7 @@ void AudioMixerWindow2::updateWidgets()
     if (action)
         action->setChecked(visible);
 
-    //updateStripCounts();
+    updateStripCounts();
 
     // At this point, the strips match the document.  We can just update them.
 
