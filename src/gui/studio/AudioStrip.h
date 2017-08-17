@@ -31,6 +31,8 @@ namespace Rosegarden
 
 class Label;
 class AudioRouteMenu;
+class Fader;
+class AudioVUMeter;
 
 
 /// The strips on the "Audio Mixer" window.
@@ -48,7 +50,11 @@ public:
     void updateWidgets();
 
 private slots:
+    /// This needs to go away.
+    void slotInstrumentChanged(Instrument *instrument);
+
     void slotLabelClicked();
+    void slotFaderLevelChanged(float dB);
 
 private:
     /// Buss/Instrument ID.
@@ -63,6 +69,8 @@ private:
     Label *m_label;
     AudioRouteMenu *m_input;
     AudioRouteMenu *m_output;
+    Fader *m_fader;
+    AudioVUMeter *m_meter;
 
     QGridLayout *m_layout;
 
