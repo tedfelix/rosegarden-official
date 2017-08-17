@@ -28,6 +28,8 @@
 #include "gui/widgets/Label.h"
 #include "document/RosegardenDocument.h"
 #include "gui/application/RosegardenMainWindow.h"
+#include "gui/seqmanager/SequenceManager.h"
+#include "sound/SequencerDataBlock.h"
 #include "base/Studio.h"
 #include "StudioControl.h"
 
@@ -70,6 +72,12 @@ AudioStrip::AudioStrip(QWidget *parent, InstrumentId id) :
     // later in setId().
     if (id != NoInstrument)
         setId(id);
+
+    // Meter timer.
+    connect(&m_timer, SIGNAL(timeout()),
+            SLOT(slotUpdateMeter()));
+    // 20fps should be responsive enough.
+    m_timer.start(50);
 }
 
 AudioStrip::~AudioStrip()
@@ -340,6 +348,161 @@ AudioStrip::slotFaderLevelChanged(float dB)
 
         return;
     }
+}
+
+void
+AudioStrip::slotUpdateMeter()
+{
+    if (m_meter == NULL)
+        return;
+    if (m_id == NoInstrument)
+        return;
+
+    if (isInput())
+        updateInputMeter();
+    else if (isSubmaster())
+        updateSubmasterMeter();
+    else if (isMaster())
+        updateMasterMeter();
+}
+
+void
+AudioStrip::updateInputMeter()
+{
+    RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
+
+    // No SequenceManager?  Bail.
+    if (!doc->getSequenceManager())
+        return;
+
+    // If we're playing, show the playback level on the meter.
+    if (doc->getSequenceManager()->getTransportStatus() == PLAYING) {
+
+        LevelInfo info;
+
+        // Get the level.  If there was no change, bail.
+        if (!SequencerDataBlock::getInstance()->
+                getInstrumentLevelForMixer(m_id, info))
+            return;
+
+        // Convert to dB for display.
+        // The values passed through are long-fader values
+        float dBleft = AudioLevel::fader_to_dB(
+                info.level, 127, AudioLevel::LongFader);
+
+        // ??? For now.  Need to handle stereo properly.
+        bool m_stereo = false;
+
+        if (m_stereo) {
+            // Convert to dB for display.
+            float dBright = AudioLevel::fader_to_dB(
+                    info.levelRight, 127, AudioLevel::LongFader);
+
+            m_meter->setLevel(dBleft, dBright);
+        } else {  // mono
+            m_meter->setLevel(dBleft);
+        }
+
+    } else {  // STOPPED or RECORDING, show the monitor level on the meter.
+
+        LevelInfo info;
+
+        // Get the record level.  If there was no change, bail.
+        if (!SequencerDataBlock::getInstance()->
+                getInstrumentRecordLevelForMixer(m_id, info))
+            return;
+
+        // Does this Instrument have a Track that is armed?
+        // ??? Pull out into a function.
+
+        bool armed = false;
+
+        Composition &comp = doc->getComposition();
+        Composition::trackcontainer &tracks = comp.getTracks();
+
+        // For each Track in the Composition
+        // ??? Performance: LINEAR SEARCH
+        //     I see no easy fix.  Each Instrument would need to keep a list
+        //     of the Tracks it is on.  Or something equally complicated.
+        for (Composition::trackcontainer::iterator ti =
+                 tracks.begin();
+             ti != tracks.end();
+             ++ti) {
+            Track *track = ti->second;
+
+            // If this Track has this Instrument
+            if (track->getInstrument() == m_id) {
+                // ??? Performance: LINEAR SEARCH
+                if (comp.isTrackRecording(track->getId())) {
+                    armed = true;
+                    // Only one Track can be armed per Instrument.  Regardless,
+                    // we only need to know that a Track is in record mode.
+                    break;
+                }
+            }
+        }
+
+        if (!armed)
+            return;
+
+        // Convert to dB for display.
+        // The values passed through are long-fader values
+        float dBleft = AudioLevel::fader_to_dB(
+                info.level, 127, AudioLevel::LongFader);
+
+        // ??? For now.  Need to handle stereo properly.
+        bool m_stereo = false;
+
+        if (m_stereo) {
+            // Convert to dB for display.
+            float dBright = AudioLevel::fader_to_dB(
+                    info.levelRight, 127, AudioLevel::LongFader);
+
+            m_meter->setRecordLevel(dBleft, dBright);
+        } else {
+            m_meter->setRecordLevel(dBleft);
+        }
+
+    }
+}
+
+void
+AudioStrip::updateSubmasterMeter()
+{
+    LevelInfo info;
+
+    // Get the level.  If there was no change, bail.
+    if (!SequencerDataBlock::getInstance()->getSubmasterLevel(m_id-1, info))
+        return;
+
+    // Convert to dB for display.
+    // The values passed through are long-fader values
+    float dBleft = AudioLevel::fader_to_dB(
+            info.level, 127, AudioLevel::LongFader);
+    float dBright = AudioLevel::fader_to_dB(
+            info.levelRight, 127, AudioLevel::LongFader);
+
+    // Update the meter.
+    m_meter->setLevel(dBleft, dBright);
+}
+
+void
+AudioStrip::updateMasterMeter()
+{
+    LevelInfo masterInfo;
+
+    // Get the master level.  If there was no change, bail.
+    if (!SequencerDataBlock::getInstance()->getMasterLevel(masterInfo))
+        return;
+
+    // Convert to dB for display.
+    float dBleft = AudioLevel::fader_to_dB(
+            masterInfo.level, 127, AudioLevel::LongFader);
+    float dBright = AudioLevel::fader_to_dB(
+            masterInfo.levelRight, 127, AudioLevel::LongFader);
+
+    // Update the meter.
+    m_meter->setLevel(dBleft, dBright);
 }
 
 

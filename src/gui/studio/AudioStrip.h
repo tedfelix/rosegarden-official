@@ -20,6 +20,7 @@
 
 #include "base/Instrument.h"
 
+#include <QTimer>
 #include <QWidget>
 
 class QGridLayout;
@@ -56,6 +57,9 @@ private slots:
     void slotLabelClicked();
     void slotFaderLevelChanged(float dB);
 
+    /// Called on a timer to keep the meter updated.
+    void slotUpdateMeter();
+
 private:
     /// Buss/Instrument ID.
     InstrumentId m_id;
@@ -75,6 +79,13 @@ private:
     QGridLayout *m_layout;
 
     void createWidgets();
+
+    // Timer for updating the meters.
+    QTimer m_timer;
+    void updateInputMeter();
+    void updateSubmasterMeter();
+    void updateMasterMeter();
+
 };
 
 
