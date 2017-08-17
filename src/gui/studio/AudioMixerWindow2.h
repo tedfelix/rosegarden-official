@@ -37,8 +37,11 @@ class AudioMixerWindow2 : public QMainWindow, public ActionFileClient
 
 public:
     AudioMixerWindow2(QWidget *parent);
-    ~AudioMixerWindow2();
+    virtual ~AudioMixerWindow2();
 
+private slots:
+    // File > Close
+    void slotClose();
 };
 
 
