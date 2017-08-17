@@ -60,9 +60,8 @@ static const int MERGE_KEEP_OLD_TIMINGS = (1 << 2);
 static const int MERGE_KEEP_NEW_TIMINGS = (1 << 3);
 
 
+/// The document object for a document-view model.
 /**
-  * RosegardenDocument provides a document object for a document-view model.
-  *
   * The RosegardenDocument class provides a document object that can be
   * used in conjunction with the classes RosegardenMainWindow and
   * RosegardenMainViewWidget to create a document-view model 
@@ -73,12 +72,17 @@ static const int MERGE_KEEP_NEW_TIMINGS = (1 << 3);
   * objects. Also, RosegardenDocument contains the methods for
   * serialization of the document data from and to files.
   *
+  * An instance of RosegardenDocument is owned by RosegardenMainWindow.
+  * The easiest way to get here without passing pointers around:
+  *
+  *   RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
+  *
   * RosegardenDocument owns the Composition in the document.
   */
-
 class ROSEGARDENPRIVATE_EXPORT RosegardenDocument : public QObject
 {
     Q_OBJECT
+
 public:
 
     /**

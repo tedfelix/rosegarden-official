@@ -40,8 +40,21 @@ public:
     virtual ~AudioMixerWindow2();
 
 private slots:
-    // File > Close
+    /// Connected to RosegardenDocument::documentModified(bool).
+    void slotDocumentModified(bool modified);
+
+    /// File > Close
     void slotClose();
+
+    /// Settings > Show Audio Faders
+    void slotShowAudioFaders();
+
+    /// Settings > Show Synth Faders
+    void slotShowSynthFaders();
+
+private:
+    void updateWidgets();
+
 };
 
 
