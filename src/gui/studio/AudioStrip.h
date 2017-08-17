@@ -20,6 +20,7 @@
 
 #include "base/Instrument.h"
 
+#include <QPixmap>
 #include <QTimer>
 #include <QWidget>
 
@@ -59,6 +60,7 @@ private slots:
     void slotLabelClicked();
     void slotFaderLevelChanged(float dB);
     void slotPanChanged(float pan);
+    void slotChannelsChanged();
 
     /// Called on a timer to keep the meter updated.
     void slotUpdateMeter();
@@ -73,13 +75,19 @@ private:
     bool isInput() const  { return (m_id >= AudioInstrumentBase); }
 
     // Widgets
+
     Label *m_label;
     AudioRouteMenu *m_input;
     AudioRouteMenu *m_output;
     Fader *m_fader;
     AudioVUMeter *m_meter;
     Rotary *m_pan;
+
+    QPixmap m_monoPixmap;
+    QPixmap m_stereoPixmap;
     QPushButton *m_stereoButton;
+    // Cache for updateInputMeter().
+    bool m_stereo;
 
     QGridLayout *m_layout;
 

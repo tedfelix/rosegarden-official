@@ -24,6 +24,7 @@
 #include "misc/Debug.h"
 #include "gui/widgets/Fader.h"
 #include "gui/general/GUIPalette.h"
+#include "gui/general/IconLoader.h"
 #include "gui/widgets/InputDialog.h"
 #include "base/InstrumentStaticSignals.h"
 #include "gui/widgets/Label.h"
@@ -37,6 +38,7 @@
 
 #include <QFont>
 #include <QGridLayout>
+#include <QPushButton>
 
 namespace Rosegarden
 {
@@ -52,6 +54,7 @@ AudioStrip::AudioStrip(QWidget *parent, InstrumentId id) :
     m_meter(NULL),
     m_pan(NULL),
     m_stereoButton(NULL),
+    m_stereo(false),
     m_layout(new QGridLayout(this))
 {
     QFont font;
@@ -213,6 +216,23 @@ void AudioStrip::createWidgets()
 
     // Stereo
 
+    if (isInput()) {
+
+        IconLoader iconLoader;
+        m_monoPixmap = iconLoader.loadPixmap("mono-tiny");
+        m_stereoPixmap = iconLoader.loadPixmap("stereo-tiny");
+
+        m_stereoButton = new QPushButton(this);
+        m_stereoButton->setIcon(m_monoPixmap);
+        m_stereoButton->setFixedSize(20, 20);
+        m_stereoButton->setFlat(true);
+        m_stereoButton->setToolTip(tr("Mono or stereo"));
+
+        connect(m_stereoButton, SIGNAL(clicked()),
+                SLOT(slotChannelsChanged()));
+
+    }
+
     // Layout
 
     // Give the parent control over spacing between strips.
@@ -241,6 +261,9 @@ void AudioStrip::createWidgets()
         m_layout->addWidget(m_pan, 4, 0);
     else
         m_layout->setRowMinimumHeight(4, 20 + spacing);
+
+    if (m_stereoButton)
+        m_layout->addWidget(m_stereoButton, 4, 1);
 }
 
 void AudioStrip::updateWidgets()
@@ -299,6 +322,14 @@ void AudioStrip::updateWidgets()
     } else if (isSubmaster()) {
         m_pan->setPosition(buss->getPan() - 100);
     }
+
+    // Stereo
+
+    if (isInput()) {
+        m_stereo = (instrument->getAudioChannels() > 1);
+        m_stereoButton->setIcon(m_stereo ? m_stereoPixmap : m_monoPixmap);
+    }
+
 }
 
 void
@@ -495,6 +526,26 @@ AudioStrip::slotPanChanged(float pan)
 }
 
 void
+AudioStrip::slotChannelsChanged()
+{
+    RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
+    Studio &studio = doc->getStudio();
+
+    Instrument *instrument = studio.getInstrumentById(m_id);
+    if (!instrument)
+        return;
+
+    // Toggle number of channels
+    instrument->setAudioChannels(
+            (instrument->getAudioChannels() > 1) ? 1 : 2);
+
+    // ??? For now, we need this to update AIPP.  Over time, this will go
+    //     away, and only the call to slotDocumentModified() will be needed.
+    instrument->changed();
+    doc->slotDocumentModified();
+}
+
+void
 AudioStrip::slotUpdateMeter()
 {
     if (m_meter == NULL)
@@ -533,9 +584,6 @@ AudioStrip::updateInputMeter()
         // The values passed through are long-fader values
         float dBleft = AudioLevel::fader_to_dB(
                 info.level, 127, AudioLevel::LongFader);
-
-        // ??? For now.  Need to handle stereo properly.
-        bool m_stereo = false;
 
         if (m_stereo) {
             // Convert to dB for display.
@@ -593,9 +641,6 @@ AudioStrip::updateInputMeter()
         // The values passed through are long-fader values
         float dBleft = AudioLevel::fader_to_dB(
                 info.level, 127, AudioLevel::LongFader);
-
-        // ??? For now.  Need to handle stereo properly.
-        bool m_stereo = false;
 
         if (m_stereo) {
             // Convert to dB for display.
