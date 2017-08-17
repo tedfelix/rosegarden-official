@@ -50,6 +50,11 @@ AudioStrip::AudioStrip(QWidget *parent, InstrumentId id) :
     QFont boldFont(font);
     boldFont.setBold(true);
 
+    // Give the parent control over spacing between strips.
+    m_layout->setContentsMargins(0,0,0,0);
+    // Keep the widgets close together.
+    m_layout->setSpacing(2);
+
     // We have to have an id in order to create the proper widgets and
     // initialize them.  If we don't, don't worry about it.  Handle it
     // later in setId().
@@ -92,11 +97,13 @@ void AudioStrip::createWidgets()
     QFont boldFont(font());
     boldFont.setBold(true);
 
+    const int maxWidth = 45;
+
     // Label
 
     m_label = new Label(this);
     m_label->setFont(boldFont);
-    m_label->setMaximumWidth(45);
+    m_label->setMaximumWidth(maxWidth);
     connect(m_label, SIGNAL(clicked()),
             SLOT(slotLabelClicked()));
 
@@ -108,7 +115,8 @@ void AudioStrip::createWidgets()
                                      AudioRouteMenu::Compact,
                                      m_id);
         m_input->getWidget()->setToolTip(tr("Record input source"));
-        m_input->getWidget()->setMaximumWidth(45);
+        m_input->getWidget()->setMaximumWidth(maxWidth);
+        m_input->getWidget()->setMaximumHeight(15);
     }
 
     // Output
@@ -119,7 +127,8 @@ void AudioStrip::createWidgets()
                                       AudioRouteMenu::Compact,
                                       m_id);
         m_output->getWidget()->setToolTip(tr("Output destination"));
-        m_output->getWidget()->setMaximumWidth(45);
+        m_output->getWidget()->setMaximumWidth(maxWidth);
+        m_output->getWidget()->setMaximumHeight(15);
     }
 
     // Layout

@@ -124,6 +124,9 @@ AudioMixerWindow2::AudioMixerWindow2(QWidget *parent) :
     // a central widget and set the layout there.
     setCentralWidget(m_centralWidget);
 
+    // Space between strips.
+    m_layout->setSpacing(5);
+
     // Force an initial update to make sure we're in sync.
     updateWidgets();
 
