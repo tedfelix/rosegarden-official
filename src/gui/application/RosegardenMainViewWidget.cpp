@@ -1910,7 +1910,7 @@ RosegardenMainViewWidget::slotActiveMainWindowChanged()
 void
 RosegardenMainViewWidget::slotControllerDeviceEventReceived(MappedEvent *e)
 {
-    RG_DEBUG << "Controller device event received - send to " << (void *)m_lastActiveMainWindow << " (I am " << this << ")";
+    //RG_DEBUG << "Controller device event received - send to " << (void *)m_lastActiveMainWindow << " (I am " << this << ")";
 
     //!!! So, what _should_ we do with these?
 

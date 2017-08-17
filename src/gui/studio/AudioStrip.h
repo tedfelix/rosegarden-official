@@ -54,6 +54,11 @@ public:
 
     void updateWidgets();
 
+    /// For "external controller" port support.
+    void faderLevelChanged(float dB)  { slotFaderLevelChanged(dB); }
+    /// For "external controller" port support.
+    void panChanged(float pan)  { slotPanChanged(pan); }
+
 signals:
     /// Launch AudioPluginDialog.
     /**
@@ -86,6 +91,9 @@ private:
     bool isSubmaster() const
             { return (m_id > 0  &&  m_id < AudioInstrumentBase); }
     bool isInput() const  { return (m_id >= AudioInstrumentBase); }
+
+    /// Channel on the "external controller" port.
+    int m_externalControllerChannel;
 
     // Widgets
 

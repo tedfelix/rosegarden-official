@@ -25,7 +25,9 @@
 #include "base/AudioLevel.h"
 #include "misc/Debug.h"
 #include "gui/general/IconLoader.h"
+#include "sound/MappedEvent.h"
 #include "document/RosegardenDocument.h"
+#include "gui/application/RosegardenMainViewWidget.h"
 #include "gui/application/RosegardenMainWindow.h"
 #include "base/Studio.h"
 
@@ -51,12 +53,21 @@ AudioMixerWindow2::AudioMixerWindow2(QWidget *parent) :
     // "closed" really just means "hidden".
     setAttribute(Qt::WA_DeleteOnClose);
 
-    RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
     // Connect for RosegardenDocument changes.
     // ??? If the doc changes, this will get disconnected.  Who do we have
     //     to connect to to get wind of document changes?
-    connect(doc, SIGNAL(documentModified(bool)),
+    connect(RosegardenMainWindow::self()->getDocument(),
+                SIGNAL(documentModified(bool)),
             SLOT(slotDocumentModified(bool)));
+    // Connect for External Controller events.
+    connect(RosegardenMainWindow::self()->getView(),
+                SIGNAL(controllerDeviceEventReceived(MappedEvent *, const void *)),
+            SLOT(slotExternalControllerEvent(MappedEvent *, const void *)));
+    // Connect to make sure "external controller" events get here when
+    // we are the active window.
+    connect(this, SIGNAL(windowActivated()),
+            RosegardenMainWindow::self()->getView(),
+                SLOT(slotActiveMainWindowChanged()));
 
     // File > Close
     createAction("file_close", SLOT(slotClose()));
@@ -558,6 +569,89 @@ void
 AudioMixerWindow2::slotAboutRosegarden()
 {
     new AboutDialog(this);
+}
+
+void
+AudioMixerWindow2::slotExternalControllerEvent(
+        MappedEvent *event,
+        const void *preferredCustomer)
+{
+    if (preferredCustomer != this)
+        return;
+
+    //RG_DEBUG << "slotExternalControllerEvent(): this one's for me";
+
+    raise();
+
+    // If this isn't a MIDI controller, bail.
+    if (event->getType() != MappedEvent::MidiController)
+        return;
+
+    unsigned channel = event->getRecordedChannel();
+    if (channel >= m_inputStrips.size())
+        return;
+
+    MidiByte controller = event->getData1();
+    MidiByte value = event->getData2();
+
+    switch (controller) {
+
+    case MIDI_CONTROLLER_VOLUME:
+        {
+            float level = AudioLevel::fader_to_dB(
+                    value, 127, AudioLevel::LongFader);
+
+            m_inputStrips[channel]->faderLevelChanged(level);
+
+            break;
+        }
+
+    case MIDI_CONTROLLER_PAN:
+        {
+            // Convert to approximately (-100, 100).
+            // ??? Why the epsilon (.01)?  To avoid -100?
+            double pan = static_cast<double>(value) / 64 * 100 + .01 - 100;
+
+            // ??? This gives -100 to 100:
+            //
+            //      double pan = 0;
+            //      if (value <= 64)
+            //          pan = static_cast<double>(value) / 64 * 100 - 100;
+            //      else
+            //          pan = (static_cast<double>(value) - 64) / 63 * 100;
+            //
+            //     Might be a good idea to factor out some standard
+            //     pan math functions to be reused everywhere.  The AudioLevel
+            //     class might be a good place to put them.
+            //
+            //     // Normal is [-1,1].  -1 = left, 0 = center, 1 = right.
+            //     MidiByte panNormalToMidi(double pan);
+            //     double panMidiToNormal(MidiByte pan);
+
+            m_inputStrips[channel]->panChanged(static_cast<float>(pan));
+
+            break;
+        }
+
+    default:
+        break;
+    }
+}
+
+void
+AudioMixerWindow2::changeEvent(QEvent *event)
+{
+    // Let baseclass handle first.
+    // ??? Is this really the right thing to do?
+    QWidget::changeEvent(event);
+
+    if (event->type() == QEvent::ActivationChange) {
+        RG_DEBUG << "changeEvent(): Received activation change.";
+        if (isActiveWindow()) {
+            emit windowActivated();
+            //sendControllerRefresh();
+        }
+    }
 }
 
 

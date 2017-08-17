@@ -31,6 +31,7 @@ namespace Rosegarden
 
 
 class AudioStrip;
+class MappedEvent;
 
 
 /// The "Audio Mixer" window (v2).
@@ -41,6 +42,16 @@ class AudioMixerWindow2 : public QMainWindow, public ActionFileClient
 public:
     AudioMixerWindow2(QWidget *parent);
     virtual ~AudioMixerWindow2();
+
+signals:
+    /// Let RMVW know we are now the active window for external controller events.
+    /**
+     * Connected to RosegardenMainViewWidget::slotActiveMainWindowChanged().
+     */
+    void windowActivated();
+
+protected:
+    void changeEvent(QEvent *event);
 
 private slots:
     /// Connected to RosegardenDocument::documentModified(bool).
@@ -102,6 +113,11 @@ private slots:
 
     /// Help > About Rosegarden
     void slotAboutRosegarden();
+
+    /// Event received on the "external controller" port.
+    void slotExternalControllerEvent(
+            MappedEvent *event,
+            const void *preferredCustomer);
 
 private:
     /// Central widget required for using a layout with QMainWindow.
