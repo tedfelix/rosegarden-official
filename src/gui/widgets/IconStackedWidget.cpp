@@ -40,11 +40,11 @@ IconStackedWidget::IconStackedWidget(QWidget *parent) :
     m_iconPanel->setFrameStyle(QFrame::Panel | QFrame::Sunken);
     m_iconPanel->setLineWidth(2);
 
-    // background-color: #FFFFFF; color: #000000;
-    QPalette pal;
-    pal.setColor(QPalette::Base, Qt::white);
-    pal.setColor(QPalette::Text, Qt::black);
-    m_iconPanel->setPalette(pal);
+    // Set a bright background so that the icons are visible.
+    QPalette palette = m_iconPanel->palette();
+    palette.setColor(backgroundRole(), QColor(221,221,221));
+    m_iconPanel->setPalette(palette);
+    m_iconPanel->setAutoFillBackground(true);
 
     // Use a VBoxLayout for the icon buttons
     m_iconLayout = new QVBoxLayout;
