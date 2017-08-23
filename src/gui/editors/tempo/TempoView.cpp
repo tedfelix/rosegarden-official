@@ -580,13 +580,16 @@ TempoView::setupActions()
 
     QAction *a;
     a = createAction("time_musical", SLOT(slotMusicalTime()));
-    if (timeMode == 0) { a->setCheckable(true); a->setChecked(true); }
+    a->setCheckable(true);
+    if (timeMode == 0)  a->setChecked(true);
 
     a = createAction("time_real", SLOT(slotRealTime()));
-    if (timeMode == 1) { a->setCheckable(true); a->setChecked(true); }
+    a->setCheckable(true);
+    if (timeMode == 1)  a->setChecked(true);
 
     a = createAction("time_raw", SLOT(slotRawTime()));
-    if (timeMode == 2) { a->setCheckable(true); a->setChecked(true); }
+    a->setCheckable(true);
+    if (timeMode == 2)  a->setChecked(true);
 
     createMenusAndToolbars(getRCFileName());
 }
@@ -662,6 +665,9 @@ TempoView::slotMusicalTime()
     settings.beginGroup(TempoViewConfigGroup);
 
     settings.setValue("timemode", 0);
+    findAction("time_musical")->setChecked(true);
+    findAction("time_real")->setChecked(false);
+    findAction("time_raw")->setChecked(false);
     applyLayout();
 
     settings.endGroup();
@@ -674,6 +680,9 @@ TempoView::slotRealTime()
     settings.beginGroup(TempoViewConfigGroup);
 
     settings.setValue("timemode", 1);
+    findAction("time_musical")->setChecked(false);
+    findAction("time_real")->setChecked(true);
+    findAction("time_raw")->setChecked(false);
     applyLayout();
 
     settings.endGroup();
@@ -686,6 +695,9 @@ TempoView::slotRawTime()
     settings.beginGroup(TempoViewConfigGroup);
 
     settings.setValue("timemode", 2);
+    findAction("time_musical")->setChecked(false);
+    findAction("time_real")->setChecked(false);
+    findAction("time_raw")->setChecked(true);
     applyLayout();
 
     settings.endGroup();

@@ -1213,8 +1213,13 @@ EventView::setupActions()
     createAction("help_about_app", SLOT(slotHelpAbout()));
 
     QAction *musical = createAction("time_musical", SLOT(slotMusicalTime()));
+    musical->setCheckable(true);
+
     QAction *real = createAction("time_real", SLOT(slotRealTime()));
+    real->setCheckable(true);
+
     QAction *raw = createAction("time_raw", SLOT(slotRawTime()));
+    raw->setCheckable(true);
 
     createMenusAndToolbars(getRCFileName());
 
@@ -1351,6 +1356,9 @@ EventView::slotMusicalTime()
     settings.beginGroup(EventViewConfigGroup);
 
     settings.setValue("timemode", 0);
+    findAction("time_musical")->setChecked(true);
+    findAction("time_real")->setChecked(false);
+    findAction("time_raw")->setChecked(false);
     applyLayout();
 
     settings.endGroup();
@@ -1363,6 +1371,9 @@ EventView::slotRealTime()
     settings.beginGroup(EventViewConfigGroup);
 
     settings.setValue("timemode", 1);
+    findAction("time_musical")->setChecked(false);
+    findAction("time_real")->setChecked(true);
+    findAction("time_raw")->setChecked(false);
     applyLayout();
 
     settings.endGroup();
@@ -1375,6 +1386,9 @@ EventView::slotRawTime()
     settings.beginGroup(EventViewConfigGroup);
 
     settings.setValue("timemode", 2);
+    findAction("time_musical")->setChecked(false);
+    findAction("time_real")->setChecked(false);
+    findAction("time_raw")->setChecked(true);
     applyLayout();
 
     settings.endGroup();

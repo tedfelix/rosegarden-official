@@ -381,13 +381,17 @@ TriggerSegmentManager::setupActions()
     
     QAction *a;
     a = createAction("time_musical", SLOT(slotMusicalTime()));
-    if (timeMode == 0) { a->setCheckable(true); a->setChecked(true); }
+    a->setCheckable(true);
+    if (timeMode == 0)  a->setChecked(true);
 
     a = createAction("time_real", SLOT(slotRealTime()));
-    if (timeMode == 1) { a->setCheckable(true); a->setChecked(true); }
+    a->setCheckable(true);
+    if (timeMode == 1)  a->setChecked(true);
 
     a = createAction("time_raw", SLOT(slotRawTime()));
-    if (timeMode == 2) { a->setCheckable(true); a->setChecked(true); }
+    a->setCheckable(true);
+    if (timeMode == 2)  a->setChecked(true);
+
     createAction("trigger_help", SLOT(slotHelpRequested()));
     createAction("help_about_app", SLOT(slotHelpAbout()));
 
@@ -507,6 +511,9 @@ TriggerSegmentManager::slotMusicalTime()
     settings.beginGroup( TriggerManagerConfigGroup );
 
     settings.setValue("timemode", 0);
+    findAction("time_musical")->setChecked(true);
+    findAction("time_real")->setChecked(false);
+    findAction("time_raw")->setChecked(false);
     slotUpdate();
 
     settings.endGroup();
@@ -519,6 +526,9 @@ TriggerSegmentManager::slotRealTime()
     settings.beginGroup( TriggerManagerConfigGroup );
 
     settings.setValue("timemode", 1);
+    findAction("time_musical")->setChecked(false);
+    findAction("time_real")->setChecked(true);
+    findAction("time_raw")->setChecked(false);
     slotUpdate();
 
     settings.endGroup();
@@ -531,6 +541,9 @@ TriggerSegmentManager::slotRawTime()
     settings.beginGroup( TriggerManagerConfigGroup );
 
     settings.setValue("timemode", 2);
+    findAction("time_musical")->setChecked(false);
+    findAction("time_real")->setChecked(false);
+    findAction("time_raw")->setChecked(true);
     slotUpdate();
 
     settings.endGroup();
