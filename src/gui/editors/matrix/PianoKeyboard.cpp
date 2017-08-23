@@ -55,11 +55,6 @@ PianoKeyboard::PianoKeyboard(QWidget *parent, int keys)
     m_hoverHighlight->setPalette(hoverHighlightPalette);
     m_hoverHighlight->setAutoFillBackground(true);
 
-    QPalette pal = palette();
-    pal.setColor(QPalette::Window, QColor(238, 238, 224));
-    setPalette(pal);
-    setAutoFillBackground(true);
-
     computeKeyPos();
     setMouseTracking(true);
 }
@@ -135,11 +130,20 @@ void PianoKeyboard::paintEvent(QPaintEvent*)
 
     QPainter paint(this);
 
-    paint.setFont(*pFont);
+    // Fill the keyboard with ivory.
+    paint.fillRect(rect(), QColor(255, 255, 240));
+
+    // White Keys
+
+    paint.setPen(Qt::black);
 
     for (unsigned int i = 0; i < m_whiteKeyPos.size(); ++i)
         paint.drawLine(0, m_whiteKeyPos[i],
                        m_keySize.width(), m_whiteKeyPos[i]);
+
+    // White Key Labels
+
+    paint.setFont(*pFont);
 
     for (unsigned int i = 0; i < m_labelKeyPos.size(); ++i) {
 
@@ -154,7 +158,9 @@ void PianoKeyboard::paintEvent(QPaintEvent*)
                        label.getQString());
     }
 
-    paint.setBrush(palette().foreground());
+    // Black Keys
+
+    paint.setBrush(Qt::black);
 
     for (unsigned int i = 0; i < m_blackKeyPos.size(); ++i)
         paint.drawRect(0, m_blackKeyPos[i],
