@@ -54,6 +54,11 @@
 #include <QtGlobal>
 
 
+namespace  // anonymous
+{
+    QColor ledBlue(192, 216, 255);
+}
+
 namespace Rosegarden
 {
 
@@ -222,13 +227,18 @@ TransportDialog::TransportDialog(QWidget *parent):
     // if the rest of the Transport ever changes then this code
     // will have to as well.
     //
-    QPalette pal = palette();
-    pal.setColor(QPalette::Active, QPalette::WindowText, QColor(192, 216, 255));
-
-    ui->TempoDisplay->setPalette(pal);
+    QPalette tempoPalette = ui->TempoDisplay->palette();
+    tempoPalette.setColor(
+            ui->TempoDisplay->foregroundRole(),
+            ledBlue);
+    ui->TempoDisplay->setPalette(tempoPalette);
     ui->TempoDisplay->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
 
-    ui->TimeSigDisplay->setPalette(pal);
+    QPalette timeSigPalette = ui->TimeSigDisplay->palette();
+    timeSigPalette.setColor(
+            ui->TimeSigDisplay->foregroundRole(),
+            ledBlue);
+    ui->TimeSigDisplay->setPalette(timeSigPalette);
     ui->TimeSigDisplay->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
 
     QFont localFont(ui->OutDisplay->font() );
@@ -288,11 +298,15 @@ TransportDialog::TransportDialog(QWidget *parent):
          * for improved constrast, and set foreground color to "LED blue" as used
          * elsewhere
          */
+#if 0
+        // ??? This is doing nothing.  My guess is that ThornStyle is
+        //     overriding this with its own palette.
         QPalette backgroundPalette = palette();
-        backgroundPalette.setColor(QPalette::Window, QColor(0x40, 0x40, 0x40));
-        backgroundPalette.setColor(QPalette::WindowText, QColor(0xC0, 0xD8, 0xFF));
+        backgroundPalette.setColor(backgroundRole(), QColor(0x40, 0x40, 0x40));
+        backgroundPalette.setColor(foregroundRole(), ledBlue);
         setPalette(backgroundPalette); // this propagates to children
         setAutoFillBackground(true);
+#endif
     }
 
     // Performance Testing
