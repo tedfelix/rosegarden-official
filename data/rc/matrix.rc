@@ -166,7 +166,7 @@
     <Action name="set_controllers" text="&amp;Set Controller Values" />
     <Action name="place_controllers" text="&amp;Place a Controller for Each Note" />
     <Action name="pitch_bend_sequence" text="Insert Pitch &amp;Bend Sequence..." />
-    <Action name="controller_sequence" text="Insert C&amp;ontroller  Sequence..." />
+    <Action name="controller_sequence" text="Insert C&amp;ontroller Sequence..." />
   </Menu>
 
   <Menu name="Move">

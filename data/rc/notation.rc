@@ -422,7 +422,7 @@
     <Action name="place_controllers" text="&amp;Place a Controller for Each Note" />
     <Action name="expression_sequence" text="Insert &amp;Expression Controller Sequence..." />
     <Action name="pitch_bend_sequence" text="Insert Pitch &amp;Bend Sequence..." />
-    <Action name="controller_sequence" text="Insert C&amp;ontroller  Sequence..." />
+    <Action name="controller_sequence" text="Insert C&amp;ontroller Sequence..." />
   </Menu>
   <Menu name="Move">
     <text>&amp;Move</text>
