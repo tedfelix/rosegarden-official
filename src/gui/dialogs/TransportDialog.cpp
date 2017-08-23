@@ -129,9 +129,9 @@ TransportDialog::TransportDialog(QWidget *parent):
 
     // set the LCD frame background to black
     //
-    QPalette backgroundPalette = ui->LCDBoxFrame->palette();
-    backgroundPalette.setColor(QPalette::Window, QColor(Qt::black));
-    ui->LCDBoxFrame->setPalette(backgroundPalette); // this propagates to children, but they don't autofill their background anyway.
+    QPalette lcdPalette = ui->LCDBoxFrame->palette();
+    lcdPalette.setColor(ui->LCDBoxFrame->backgroundRole(), QColor(Qt::black));
+    ui->LCDBoxFrame->setPalette(lcdPalette); // this propagates to children, but they don't autofill their background anyway.
     ui->LCDBoxFrame->setAutoFillBackground(true);
 
     // unset the negative sign to begin with
@@ -1190,7 +1190,7 @@ void
 TransportDialog::setBackgroundColor(QColor color)
 {
     QPalette palette = ui->LCDBoxFrame->palette();
-    palette.setColor(QPalette::Window, color);
+    palette.setColor(ui->LCDBoxFrame->backgroundRole(), color);
     ui->LCDBoxFrame->setPalette(palette);
 
     m_isBackgroundSet = true;
