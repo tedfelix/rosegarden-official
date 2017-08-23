@@ -42,7 +42,7 @@ IconStackedWidget::IconStackedWidget(QWidget *parent) :
 
     // Set a bright background so that the icons are visible.
     QPalette palette = m_iconPanel->palette();
-    palette.setColor(backgroundRole(), QColor(221,221,221));
+    palette.setColor(m_iconPanel->backgroundRole(), QColor(221,221,221));
     m_iconPanel->setPalette(palette);
     m_iconPanel->setAutoFillBackground(true);
 
