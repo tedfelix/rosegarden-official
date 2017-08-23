@@ -183,6 +183,13 @@ void AppEventFilter::polishWidget(QWidget *widget)
             palette.setColor(QPalette::Window, QColor(0x99, 0x99, 0x99));
             widget->setPalette(palette);
         }
+    } else if (widget->objectName() == "Rosegarden Transport") {
+        // Give the non-LED parts of the dialog the groupbox "lighter black"
+        // background for improved contrast.
+        QPalette transportPalette = widget->palette();
+        transportPalette.setColor(widget->backgroundRole(), QColor(0x40, 0x40, 0x40));
+        widget->setPalette(transportPalette);
+        widget->setAutoFillBackground(true);
     } else if (QCheckBox *cb = qobject_cast<QCheckBox *>(widget)) {
         cb->setAttribute(Qt::WA_Hover);
     } else if (QRadioButton *rb = qobject_cast<QRadioButton *>(widget)) {

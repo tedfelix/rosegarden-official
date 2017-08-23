@@ -293,21 +293,9 @@ TransportDialog::TransportDialog(QWidget *parent):
     //
     m_shortcuts = new QShortcut(this);
 
-    if (ThornStyle::isEnabled()) {
-        /* Give the non-LED parts of the dialog the groupbox "lighter black" background
-         * for improved constrast, and set foreground color to "LED blue" as used
-         * elsewhere
-         */
-#if 0
-        // ??? This is doing nothing.  My guess is that ThornStyle is
-        //     overriding this with its own palette.
-        QPalette backgroundPalette = palette();
-        backgroundPalette.setColor(backgroundRole(), QColor(0x40, 0x40, 0x40));
-        backgroundPalette.setColor(foregroundRole(), ledBlue);
-        setPalette(backgroundPalette); // this propagates to children
-        setAutoFillBackground(true);
-#endif
-    }
+    // Note: For Thorn style, ThornStyle sets the transport's background
+    //       to dark gray.  See AppEventFilter::polishWidget() in
+    //       ThornStyle.cpp.
 
     // Performance Testing
 
