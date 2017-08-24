@@ -25,6 +25,7 @@
 #include "ControlToolBox.h"
 #include "PropertyControlItem.h"
 #include "misc/Debug.h"
+#include "misc/Strings.h"
 #include "base/BaseProperties.h"
 #include "base/NotationTypes.h"
 #include "base/PropertyName.h"
@@ -147,7 +148,7 @@ PropertyControlRuler::~PropertyControlRuler()
 
 QString PropertyControlRuler::getName()
 {
-    return getPropertyName().c_str();
+    return strtoqstr(getPropertyName());
 }
 
 void PropertyControlRuler::addControlItem2(ViewElement *el)

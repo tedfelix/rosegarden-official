@@ -97,10 +97,6 @@ public:
         return m_value <  p.m_value;
     }
 
-    const char *c_str() const {
-        return getName().c_str();
-    }
-
     std::string getName() const /* throw (CorruptedValue) */;
 
     int getValue() const { return m_value; }

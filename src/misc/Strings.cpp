@@ -33,7 +33,7 @@ ROSEGARDENPRIVATE_EXPORT QString strtoqstr(const std::string &str)
 
 ROSEGARDENPRIVATE_EXPORT QString strtoqstr(const Rosegarden::PropertyName &p)
 {
-    return QString::fromUtf8(p.c_str());
+    return QString::fromUtf8(p.getName().c_str());
 }
 
 ROSEGARDENPRIVATE_EXPORT std::string qstrtostr(const QString &qstr)
