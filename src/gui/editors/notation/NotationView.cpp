@@ -332,6 +332,9 @@ NotationView::NotationView(RosegardenDocument *doc,
     connect(m_document, SIGNAL(documentModified(bool)),
             this, SLOT(slotUpdateWindowTitle(bool)));
 
+    connect(m_notationWidget, SIGNAL(showContextHelp(const QString &)),
+            this, SLOT(slotShowContextHelp(const QString &)));
+
     // Restore window geometry and toolbar/dock state
     settings.beginGroup(WindowGeometryConfigGroup);
     this->restoreGeometry(settings.value("Notation_View_Geometry").toByteArray());
@@ -1345,6 +1348,12 @@ NotationView::initStatusBar()
     sb->addWidget(m_selectionCounter);
 
     sb->setContentsMargins(0, 0, 0, 0);
+}
+
+void
+NotationView::slotShowContextHelp(const QString &help)
+{
+    statusBar()->showMessage(help, 10000);
 }
 
 void

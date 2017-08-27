@@ -486,6 +486,10 @@ NotationWidget::setSegments(RosegardenDocument *document,
     connect(m_controlsWidget, SIGNAL(dragScroll(timeT)),
             this, SLOT(slotEnsureTimeVisible(timeT)));
 
+    // Relay context help from notation rulers
+    connect(m_controlsWidget, SIGNAL(showContextHelp(const QString &)),
+            this, SIGNAL(showContextHelp(const QString &)));
+
     connect(m_scene, SIGNAL(layoutUpdated(timeT,timeT)),
             m_controlsWidget, SLOT(slotUpdateRulers(timeT,timeT)));
 

@@ -141,6 +141,7 @@ signals:
     void toolChanged(QString);
     void hoveredOverNoteChanged(QString);
     void headersVisibilityChanged(bool);
+    void showContextHelp(const QString &);
 
 public slots:
     void slotSetTool(QString name);

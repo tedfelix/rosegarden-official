@@ -341,6 +341,8 @@ protected slots:
      */
     void slotHoveredOverAbsoluteTimeChanged(unsigned int);
 
+    void slotShowContextHelp(const QString &);
+
     /** The old font size combo handling code was convoluted and unhappy in this
      * new home.  This is a new implementation that takes advantage of the fact
      * that someone already got the View -> Font Size menu working.
