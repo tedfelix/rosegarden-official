@@ -812,7 +812,7 @@ endforeach()
 add_custom_target(svnheader ALL DEPENDS svn_header) # svn_header never gets created, it's just a unique string
 
 # creates svnheader.h using cmake script
-add_custom_command(OUTPUT svn_header ${CMAKE_CURRENT_BINARY_DIR}/svnheader.h
+add_custom_command(OUTPUT svn_header ${CMAKE_CURRENT_BINARY_DIR}/svnversion.h
     COMMAND ${CMAKE_COMMAND} -DSOURCE_DIR=${CMAKE_CURRENT_SOURCE_DIR}
                          -P ${CMAKE_CURRENT_SOURCE_DIR}/buildkey.cmake)
 
