@@ -164,6 +164,26 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenDocument *doc,
     m_appendLabel->setChecked(settings.value("appendlabel", false).toBool());
     layout->addWidget(m_appendLabel, row, 1, row- row+1, 2);
     row++;
+
+    // Option to use track name as new segments label.
+    label = new QLabel(tr("Use track name for new segments"), frame);
+    layout->addWidget(label, row, 0);
+
+    m_useTrackName = new QCheckBox(frame);
+    QString useTrackNameTip(tr(
+            "<qt><p>If checked, the label for new segments will always be the "
+            "same as the track name.</p></qt>"));
+    label->setToolTip(useTrackNameTip);
+    m_useTrackName->setToolTip(useTrackNameTip);
+
+    connect(m_useTrackName, SIGNAL(stateChanged(int)), this, SLOT(slotModified()));
+
+    // Leaving unchecked by default to remain compatible with earlier behaviour
+    m_useTrackName->setChecked(settings.value("usetrackname", false).toBool());
+    layout->addWidget(m_useTrackName, row, 1, 1, 2);
+
+    ++row;
+
     settings.endGroup();
 
     // JACK Transport
@@ -493,6 +513,9 @@ void GeneralConfigurationPage::apply()
 
     bool appendLabel = getAppendLabel();
     settings.setValue("appendlabel", appendLabel);
+
+    bool useTrackName = getUseTrackName();
+    settings.setValue("usetrackname", useTrackName);
 
     settings.endGroup();
 

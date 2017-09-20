@@ -104,6 +104,7 @@ protected:
     int getDblClickClient()         { return m_client->currentIndex(); }
     int getNoteNameStyle()          { return m_nameStyle->currentIndex(); }
     int getAppendLabel()            { return m_appendLabel->isChecked(); }
+    int getUseTrackName()           { return m_useTrackName->isChecked(); }
     int getPdfViewer()              { return m_pdfViewer->currentIndex(); }
     int getFilePrinter()            { return m_filePrinter->currentIndex(); }
     int getGraphicsSystem()         { return m_graphicsSystem->currentIndex(); }
@@ -121,6 +122,7 @@ protected:
     QComboBox *m_nameStyle;
     QComboBox *m_globalStyle;
     QCheckBox *m_appendLabel;
+    QCheckBox *m_useTrackName;
     QCheckBox *m_jackTransport;
     QCheckBox *m_Thorn;
     QCheckBox *m_longTitles;

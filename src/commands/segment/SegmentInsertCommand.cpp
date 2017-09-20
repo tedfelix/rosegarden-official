@@ -24,10 +24,12 @@
 #include "base/Studio.h"
 #include "base/Track.h"
 #include "document/RosegardenDocument.h"
+#include "misc/ConfigGroups.h"
 #include "misc/Debug.h"
 
 
 #include <QApplication>
+#include <QSettings>
 
 namespace Rosegarden
 {
@@ -91,14 +93,24 @@ SegmentInsertCommand::execute()
         std::string label;
 
         if (track) {
-            // try to get a reasonable Segment name by Instrument
-            //
-            label = m_studio->getSegmentName(track->getInstrument());
+            // Get the settings value
+            QSettings settings;
+            settings.beginGroup(GeneralOptionsConfigGroup);
+            bool useTrackName = settings.value("usetrackname", false).toBool();
+            settings.endGroup();
 
-            // if not use the track label
-            //
-            if (label == "")
+            // If "Use track name" in configuration is selected
+            if (useTrackName) {
+                // Use the track name for the segment name.
                 label = track->getLabel();
+            } else {
+                // Try to get a reasonable Segment name by Instrument.
+                label = m_studio->getSegmentName(track->getInstrument());
+
+                // If that failed, use the track name.
+                if (label == "")
+                    label = track->getLabel();
+            }
 
             m_segment->setLabel(label);
         }
