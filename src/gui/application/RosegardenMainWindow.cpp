@@ -7127,7 +7127,7 @@ RosegardenMainWindow::slotShowPluginDialog(QWidget *parent,
     RG_DEBUG << "  key:" << key;
 
     // If we already have a dialog for this plugin, show it.
-    if (m_pluginDialogs.find(key) != m_pluginDialogs.end()) {
+    if (m_pluginDialogs[key]) {
         m_pluginDialogs[key]->show();
         m_pluginDialogs[key]->raise();
         m_pluginDialogs[key]->activateWindow();
@@ -7671,7 +7671,10 @@ RosegardenMainWindow::slotPluginDialogDestroyed(InstrumentId instrumentId,
 
     RG_DEBUG << "  key:" << key;
 
-    m_pluginDialogs.erase(key);
+    // We can't simply call erase() here to prevent the map from
+    // growing.  We would also need to change every check for
+    // m_pluginDialogs[key] to use find() instead.
+    m_pluginDialogs[key] = 0;
 }
 
 void
