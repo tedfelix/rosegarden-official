@@ -85,7 +85,6 @@ class BankEditorDialog;
 class AudioPluginOSCGUIManager;
 class AudioPluginManager;
 class AudioPluginDialog;
-class AudioMixerWindow;
 class AudioMixerWindow2;
 class AudioManagerDialog;
 class EditTempoController;
@@ -1464,7 +1463,6 @@ public slots:
     /**
      * called when the Mixer is being closed
      */
-    void slotAudioMixerClosed();
     void slotMidiMixerClosed();
 
     /**
@@ -1671,7 +1669,6 @@ private:
 
     PlayListDialog        *m_playList;
     SynthPluginManagerDialog *m_synthManager;
-    AudioMixerWindow      *m_audioMixer;
     QPointer<AudioMixerWindow2> m_audioMixerWindow2;
     MidiMixerWindow       *m_midiMixer;
     BankEditorDialog      *m_bankEditor;

@@ -1240,9 +1240,6 @@ void RosegardenMainViewWidget::slotUpdateInstrumentParameterBox(int instrumentId
     Instrument *instrument = studio.getInstrumentById(instrumentId);
 
     m_instrumentParameterBox->useInstrument(instrument);
-
-    // Call AudioMixerWindow::slotTrackAssignmentsChanged().
-    emit checkTrackAssignments();
 }
 
 void RosegardenMainViewWidget::showVisuals(const MappedEvent *mE)

@@ -72,7 +72,7 @@ AudioInstrumentParameterPanel::AudioInstrumentParameterPanel(
 
     // Alias button
     // ??? Remove this alias button.  Instead, make the label clickable.
-    //     Use AudioMixerWindow as a guide.  It allows changing of the
+    //     Use AudioMixerWindow2 as a guide.  It allows changing of the
     //     Instrument alias by clicking on the Label.  SqueezedLabel will
     //     need to be upgraded to offer a clicked() signal like Label does.
     //     Once this is removed, remove InstrumentAliasButton from
@@ -151,7 +151,7 @@ AudioInstrumentParameterPanel::slotSelectAudioLevel(float dB)
         //     the Instrument objects (InstrumentStaticSignals::changed())
         //     and update the properties whenever the Instrument changes.
         //     Then this StudioControl code which is spread all over this
-        //     class and duplicated in AudioMixerWindow would go away.
+        //     class and duplicated in AudioMixerWindow2 would go away.
         StudioControl::setStudioObjectProperty
         (MappedObjectId(getSelectedInstrument()->getMappedId()),
          MappedAudioFader::FaderLevel,

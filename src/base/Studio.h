@@ -190,7 +190,7 @@ public:
     void setMIDIRecordFilter(MidiFilter filter) { m_midiRecordFilter = filter; }
     MidiFilter getMIDIRecordFilter() const { return m_midiRecordFilter; }
 
-    /// For the AudioMixerWindow.
+    /// For the AudioMixerWindow2.
     bool amwShowAudioFaders;
     bool amwShowSynthFaders;
     bool amwShowAudioSubmasters;

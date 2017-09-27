@@ -155,7 +155,6 @@
 #include "gui/widgets/WarningWidget.h"
 #include "gui/seqmanager/MidiFilterDialog.h"
 #include "gui/seqmanager/SequenceManager.h"
-#include "gui/studio/AudioMixerWindow.h"
 #include "gui/studio/AudioMixerWindow2.h"
 #include "gui/studio/AudioPlugin.h"
 #include "gui/studio/AudioPluginManager.h"
@@ -277,7 +276,6 @@ RosegardenMainWindow::RosegardenMainWindow(bool enableSound,
     m_clipboard(Clipboard::mainClipboard()),
     m_playList(0),
     m_synthManager(0),
-    m_audioMixer(0),
     m_audioMixerWindow2(),
     m_midiMixer(0),
     m_bankEditor(0),
@@ -1084,9 +1082,11 @@ RosegardenMainWindow::initView()
     delete m_synthManager;
     m_synthManager = 0;
 
-    delete m_audioMixer;
-    m_audioMixer = 0;
-
+    // ??? Instead, AMW2 could connect for RMW::documentAboutToChange() which
+    //     it should probably connect for anyway.  Then it could close in
+    //     response.  That would remove these lines from RMW.  That's how the
+    //     old AMW did it.  Or even better, we might not close at all.  Just
+    //     handle the situation and stay up.
     if (m_audioMixerWindow2)
         m_audioMixerWindow2->close();
 
@@ -4648,7 +4648,6 @@ RosegardenMainWindow::slotUpdateUI()
 
 
     // Update the VU meters
-    if (m_audioMixer && m_audioMixer->isVisible()) m_audioMixer->updateMeters();
     if (m_midiMixer && m_midiMixer->isVisible()) m_midiMixer->updateMeters();
     if (m_view) m_view->updateMeters();
 }
@@ -4723,9 +4722,6 @@ RosegardenMainWindow::slotUpdateCPUMeter()
 void
 RosegardenMainWindow::slotUpdateMonitoring()
 {
-    if (m_audioMixer && m_audioMixer->isVisible())
-        m_audioMixer->updateMonitorMeters();
-
     if (m_midiMixer && m_midiMixer->isVisible())
         m_midiMixer->updateMonitorMeter();
 
@@ -6170,6 +6166,10 @@ RosegardenMainWindow::slotTestClipboard()
 void
 RosegardenMainWindow::plugShortcuts(QWidget *widget, QShortcut * /*acc*/)
 {
+    // ??? This routine now does nothing other than set up the transport.
+    //     It shouldn't be called by anyone and it should be inlined into
+    //     createAndSetupTransport().
+
     //
     // Shortcuts are now defined in *.rc files.
     //
@@ -6782,91 +6782,15 @@ RosegardenMainWindow::slotManageSynths()
 void
 RosegardenMainWindow::slotOpenAudioMixer()
 {
-    QSettings settings;
-    settings.beginGroup("Test");
-    bool useAMW2 = settings.value("AudioMixerWindow2", false).toBool();
-    // Write it to the file to make it easier to find.
-    settings.setValue("AudioMixerWindow2", useAMW2);
-    settings.endGroup();
-
-    if (useAMW2) {
-
-        if (m_audioMixerWindow2) {
-            m_audioMixerWindow2->activateWindow();
-            m_audioMixerWindow2->raise();
-            return;
-        }
-
-        m_audioMixerWindow2 = new AudioMixerWindow2(this);
-
+    if (m_audioMixerWindow2) {
+        m_audioMixerWindow2->activateWindow();
+        m_audioMixerWindow2->raise();
         return;
     }
 
-    if (m_audioMixer) {
-        m_audioMixer->show();
-        m_audioMixer->raise();
-        m_audioMixer->activateWindow();
-        return ;
-    }
+    m_audioMixerWindow2 = new AudioMixerWindow2(this);
 
-    m_audioMixer = new AudioMixerWindow(this, m_doc);
-
-    connect(m_audioMixer, SIGNAL(windowActivated()),
-            m_view, SLOT(slotActiveMainWindowChanged()));
-
-    connect(m_view, SIGNAL(controllerDeviceEventReceived(MappedEvent *, const void *)),
-            m_audioMixer, SLOT(slotControllerDeviceEventReceived(MappedEvent *, const void *)));
-
-    connect(m_audioMixer, SIGNAL(closing()),
-            this, SLOT(slotAudioMixerClosed()));
-
-    // this works
-    connect(m_audioMixer, SIGNAL(selectPlugin(QWidget *, InstrumentId, int)),
-            this, SLOT(slotShowPluginDialog(QWidget *, InstrumentId, int)));
-
-    connect(this,
-            SIGNAL(pluginSelected(InstrumentId, int, int)),
-            m_audioMixer,
-            SLOT(slotPluginSelected(InstrumentId, int, int)));
-
-    connect(this,
-            SIGNAL(pluginBypassed(InstrumentId, int, bool)),
-            m_audioMixer,
-            SLOT(slotPluginBypassed(InstrumentId, int, bool)));
-
-    connect(this, SIGNAL(documentAboutToChange()),
-            m_audioMixer, SLOT(close()));
-
-    connect(m_view, SIGNAL(checkTrackAssignments()),
-            m_audioMixer, SLOT(slotTrackAssignmentsChanged()));
-
-    connect(m_audioMixer, SIGNAL(play()),
-            this, SLOT(slotPlay()));
-    connect(m_audioMixer, SIGNAL(stop()),
-            this, SLOT(slotStop()));
-    connect(m_audioMixer, SIGNAL(fastForwardPlayback()),
-            this, SLOT(slotFastforward()));
-    connect(m_audioMixer, SIGNAL(rewindPlayback()),
-            this, SLOT(slotRewind()));
-    connect(m_audioMixer, SIGNAL(fastForwardPlaybackToEnd()),
-            this, SLOT(slotFastForwardToEnd()));
-    connect(m_audioMixer, SIGNAL(rewindPlaybackToBeginning()),
-            this, SLOT(slotRewindToBeginning()));
-    connect(m_audioMixer, SIGNAL(record()),
-            this, SLOT(slotRecord()));
-    connect(m_audioMixer, SIGNAL(panic()),
-            this, SLOT(slotPanic()));
-
-    if (m_synthManager) {
-        connect(m_synthManager,
-                SIGNAL(pluginSelected(InstrumentId, int, int)),
-                m_audioMixer,
-                SLOT(slotPluginSelected(InstrumentId, int, int)));
-    }
-
-    plugShortcuts(m_audioMixer, m_audioMixer->getShortcuts());
-
-    m_audioMixer->show();
+    return;
 }
 
 void
@@ -7838,14 +7762,6 @@ RosegardenMainWindow::slotSynthPluginManagerClosed()
     RG_DEBUG << "RosegardenMainWindow::slotSynthPluginManagerClosed()\n";
 
     m_synthManager = 0;
-}
-
-void
-RosegardenMainWindow::slotAudioMixerClosed()
-{
-    RG_DEBUG << "RosegardenMainWindow::slotAudioMixerClosed()\n";
-
-    m_audioMixer = 0;
 }
 
 void

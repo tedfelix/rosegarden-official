@@ -67,7 +67,7 @@ public slots:
     /// Handle events from the external controller port.
     /**
      * @see RosegardenMainViewWidget::slotControllerDeviceEventReceived()
-     * @see AudioMixerWindow::slotControllerDeviceEventReceived()
+     * @see AudioMixerWindow2::slotExternalControllerEvent()
      */
     void slotControllerDeviceEventReceived(MappedEvent *,
                                            const void *preferredCustomer);

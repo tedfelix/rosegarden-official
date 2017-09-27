@@ -275,7 +275,7 @@ public slots:
      * controllers control the track's volume and pan.
      *
      * @see MidiMixerWindow::slotControllerDeviceEventReceived()
-     * @see AudioMixerWindow::slotControllerDeviceEventReceived()
+     * @see AudioMixerWindow2::slotExternalControllerEvent()
      */
     void slotControllerDeviceEventReceived(
             MappedEvent *, const void *preferredCustomer);
@@ -313,8 +313,6 @@ signals:
      * on the segment canvas.
      */
     void addAudioFile(AudioFileId);
-
-    void checkTrackAssignments();
 
     void instrumentLevelsChanged(InstrumentId,
                                  const LevelInfo &);
