@@ -56,6 +56,7 @@ AudioMixerWindow2::AudioMixerWindow2(QWidget *parent) :
     // Connect for RosegardenDocument changes.
     // ??? If the doc changes, this will get disconnected.  Who do we have
     //     to connect to to get wind of document changes?
+    //     RMW::documentAboutToChange()?
     connect(RosegardenMainWindow::self()->getDocument(),
                 SIGNAL(documentModified(bool)),
             SLOT(slotDocumentModified(bool)));
@@ -73,14 +74,14 @@ AudioMixerWindow2::AudioMixerWindow2(QWidget *parent) :
     createAction("file_close", SLOT(slotClose()));
 
     // Transport Menu
-    createAction("play", SLOT(slotPlay()));
-    createAction("stop", SLOT(slotStop()));
-    createAction("playback_pointer_back_bar", SLOT(slotRewind()));
-    createAction("playback_pointer_forward_bar", SLOT(slotFastforward()));
-    createAction("playback_pointer_start", SLOT(slotRewindToBeginning()));
-    createAction("playback_pointer_end", SLOT(slotFastForwardToEnd()));
-    createAction("record", SLOT(slotRecord()));
-    createAction("panic", SLOT(slotPanic()));
+    createAction("play", RosegardenMainWindow::self(), SLOT(slotPlay()));
+    createAction("stop", RosegardenMainWindow::self(), SLOT(slotStop()));
+    createAction("playback_pointer_back_bar", RosegardenMainWindow::self(), SLOT(slotRewind()));
+    createAction("playback_pointer_forward_bar", RosegardenMainWindow::self(), SLOT(slotFastforward()));
+    createAction("playback_pointer_start", RosegardenMainWindow::self(), SLOT(slotRewindToBeginning()));
+    createAction("playback_pointer_end", RosegardenMainWindow::self(), SLOT(slotFastForwardToEnd()));
+    createAction("record", RosegardenMainWindow::self(), SLOT(slotRecord()));
+    createAction("panic", RosegardenMainWindow::self(), SLOT(slotPanic()));
 
     // "Settings > Number of Stereo Inputs" Actions
     // For i in {1,2,4,8,16}
@@ -363,62 +364,6 @@ void
 AudioMixerWindow2::slotClose()
 {
     close();
-}
-
-void
-AudioMixerWindow2::slotPlay()
-{
-    // Delegate to RMW.
-    RosegardenMainWindow::self()->slotPlay();
-}
-
-void
-AudioMixerWindow2::slotStop()
-{
-    // Delegate to RMW.
-    RosegardenMainWindow::self()->slotStop();
-}
-
-void
-AudioMixerWindow2::slotRewind()
-{
-    // Delegate to RMW.
-    RosegardenMainWindow::self()->slotRewind();
-}
-
-void
-AudioMixerWindow2::slotFastforward()
-{
-    // Delegate to RMW.
-    RosegardenMainWindow::self()->slotFastforward();
-}
-
-void
-AudioMixerWindow2::slotRewindToBeginning()
-{
-    // Delegate to RMW.
-    RosegardenMainWindow::self()->slotRewindToBeginning();
-}
-
-void
-AudioMixerWindow2::slotFastForwardToEnd()
-{
-    // Delegate to RMW.
-    RosegardenMainWindow::self()->slotFastForwardToEnd();
-}
-
-void
-AudioMixerWindow2::slotRecord()
-{
-    // Delegate to RMW.
-    RosegardenMainWindow::self()->slotRecord();
-}
-
-void
-AudioMixerWindow2::slotPanic()
-{
-    // Delegate to RMW.
-    RosegardenMainWindow::self()->slotPanic();
 }
 
 void
