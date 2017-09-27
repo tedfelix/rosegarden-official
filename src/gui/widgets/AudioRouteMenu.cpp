@@ -15,7 +15,7 @@
     COPYING included with this distribution for more information.
 */
 
-#define RG_MODULE_STRING "[AudioMixerWindow]"
+#define RG_MODULE_STRING "[AudioRouteMenu]"
 
 #include "AudioRouteMenu.h"
 
