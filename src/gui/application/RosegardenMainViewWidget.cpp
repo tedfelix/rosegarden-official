@@ -1979,10 +1979,12 @@ RosegardenMainViewWidget::slotControllerDeviceEventReceived(MappedEvent *e, cons
 {
     if (preferredCustomer != this)
         return ;
-    RG_DEBUG << "RosegardenMainViewWidget::slotControllerDeviceEventReceived: this one's for me";
+
+    //RG_DEBUG << "slotControllerDeviceEventReceived(): this one's for me";
+
     raise();
 
-    RG_DEBUG << "Event is type: " << int(e->getType()) << ", channel " << int(e->getRecordedChannel()) << ", data1 " << int(e->getData1()) << ", data2 " << int(e->getData2());
+    //RG_DEBUG << "  Event is type: " << int(e->getType()) << ", channel " << int(e->getRecordedChannel()) << ", data1 " << int(e->getData1()) << ", data2 " << int(e->getData2());
 
     Composition &comp = getDocument()->getComposition();
     Studio &studio = getDocument()->getStudio();
@@ -2045,14 +2047,14 @@ RosegardenMainViewWidget::slotControllerDeviceEventReceived(MappedEvent *e, cons
     case Instrument::Midi: {
             MidiDevice *md = dynamic_cast<MidiDevice *>(instrument->getDevice());
             if (!md) {
-                std::cerr << "WARNING: MIDI instrument has no MIDI device in slotControllerDeviceEventReceived" << std::endl;
+                RG_WARNING << "slotControllerDeviceEventReceived(): WARNING: MIDI instrument has no MIDI device in slotControllerDeviceEventReceived";
                 return ;
             }
 
             ControlList cl = md->getControlParameters();
             for (ControlList::const_iterator i = cl.begin(); i != cl.end(); ++i) {
                 if ((*i).getControllerValue() == controller) {
-                    RG_DEBUG << "Setting controller " << controller << " for instrument " << instrument->getId() << " to " << value;
+                    //RG_DEBUG << "  Setting controller " << controller << " for instrument " << instrument->getId() << " to " << value;
                     instrument->setControllerValue(controller, value);
                     instrument->sendController(controller, value);
                     instrument->changed();
@@ -2068,7 +2070,7 @@ RosegardenMainViewWidget::slotControllerDeviceEventReceived(MappedEvent *e, cons
         switch (controller) {
 
         case MIDI_CONTROLLER_VOLUME:
-            RG_DEBUG << "Setting volume for instrument " << instrument->getId() << " to " << value;
+            //RG_DEBUG << "  Setting volume for instrument " << instrument->getId() << " to " << value;
             instrument->setLevel(AudioLevel::fader_to_dB
                                  (value, 127, AudioLevel::ShortFader));
             Instrument::getStaticSignals()->
@@ -2081,7 +2083,7 @@ RosegardenMainViewWidget::slotControllerDeviceEventReceived(MappedEvent *e, cons
             break;
 
         case MIDI_CONTROLLER_PAN:
-            RG_DEBUG << "Setting pan for instrument " << instrument->getId() << " to " << value;
+            //RG_DEBUG << "  Setting pan for instrument " << instrument->getId() << " to " << value;
             instrument->setControllerValue(MIDI_CONTROLLER_PAN, MidiByte((value / 64.0) * 100.0 + 0.01));
             Instrument::getStaticSignals()->
                     emitControlChange(instrument, MIDI_CONTROLLER_PAN);
