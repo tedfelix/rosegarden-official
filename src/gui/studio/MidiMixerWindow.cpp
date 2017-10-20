@@ -312,7 +312,12 @@ MidiMixerWindow::slotFaderLevelChanged(float value)
 
                 instrument->setControllerValue(MIDI_CONTROLLER_VOLUME, MidiByte(value));
                 instrument->sendController(MIDI_CONTROLLER_VOLUME, MidiByte(value));
-                instrument->changed();
+                Instrument::getStaticSignals()->
+                        emitControlChange(instrument, MIDI_CONTROLLER_VOLUME);
+                // ??? This will send a notification.  We don't want that.  There
+                //     appears to be no variation that doesn't send a notification.
+                //     We need one.
+                //doc->slotDocumentModified();
 
                 if (instrument->hasFixedChannel())
                 {
@@ -391,13 +396,16 @@ MidiMixerWindow::slotControllerChanged(float value)
         //RG_DEBUG << "MidiMixerWindow::slotControllerChanged - "
         //<< "got instrument to change";
 
-        instrument->setControllerValue(
-                m_faders[i]->m_controllerRotaries[j].first,
-                MidiByte(value));
-        instrument->sendController(
-                m_faders[i]->m_controllerRotaries[j].first,
-                MidiByte(value));
-        instrument->changed();
+        MidiByte cc = m_faders[i]->m_controllerRotaries[j].first;
+
+        instrument->setControllerValue(cc, MidiByte(value));
+        instrument->sendController(cc, MidiByte(value));
+        Instrument::getStaticSignals()->
+                emitControlChange(instrument, cc);
+        // ??? This will send a notification.  We don't want that.  There
+        //     appears to be no variation that doesn't send a notification.
+        //     We need one.
+        //doc->slotDocumentModified();
 
         if (instrument->hasFixedChannel()) {
 
@@ -702,7 +710,12 @@ MidiMixerWindow::slotControllerDeviceEventReceived(MappedEvent *e,
                     RG_DEBUG << "slotControllerDeviceEventReceived(): Setting controller " << controller << " for instrument " << instrument->getId() << " to " << value;
                     instrument->setControllerValue(controller, value);
                     instrument->sendController(controller, value);
-                    instrument->changed();
+                    Instrument::getStaticSignals()->
+                            emitControlChange(instrument, controller);
+                    // ??? This will send a notification.  We don't want that.  There
+                    //     appears to be no variation that doesn't send a notification.
+                    //     We need one.
+                    //doc->slotDocumentModified();
                     break;
                 }
             }
