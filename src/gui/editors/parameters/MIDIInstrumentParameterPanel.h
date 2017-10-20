@@ -98,6 +98,11 @@ private slots:
     /// Handle InstrumentStaticSignals::changed()
     void slotInstrumentChanged(Instrument *);
 
+    /// Handle InstrumentStaticSignals::controlChange().
+    void slotControlChange(Instrument *instrument, int cc);
+
+    // Widgets
+
     /// Handle m_percussionCheckBox clicked()
     void slotPercussionClicked(bool checked);
 

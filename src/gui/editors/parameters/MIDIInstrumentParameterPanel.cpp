@@ -224,6 +224,9 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(
     connect(Instrument::getStaticSignals().data(),
             SIGNAL(changed(Instrument *)),
             SLOT(slotInstrumentChanged(Instrument *)));
+    connect(Instrument::getStaticSignals().data(),
+                SIGNAL(controlChange(Instrument *, int)),
+            SLOT(slotControlChange(Instrument *, int)));
 
     // Layout
 
@@ -888,6 +891,44 @@ MIDIInstrumentParameterPanel::slotInstrumentChanged(Instrument *instrument)
         return;
 
     updateWidgets();
+}
+
+void
+MIDIInstrumentParameterPanel::slotControlChange(Instrument *instrument, int cc)
+{
+    if (!instrument)
+        return;
+
+    if (!getSelectedInstrument())
+        return;
+
+    // If this isn't a change for the Instrument we are displaying, bail.
+    if (getSelectedInstrument()->getId() != instrument->getId())
+        return;
+
+    // Just update the relevant rotary.
+
+    // For each rotary...
+    for (RotaryInfoVector::iterator rotaryIter = m_rotaries.begin();
+            rotaryIter != m_rotaries.end(); ++rotaryIter) {
+
+        // If this is the one we want, update it.
+        if (rotaryIter->controller == cc)
+        {
+            try {
+
+                MidiByte value =
+                        getSelectedInstrument()->getControllerValue(cc);
+                rotaryIter->rotary->setPosition(static_cast<float>(value));
+
+            } catch (...) {
+                RG_WARNING << "slotControlChange(): WARNING: Encountered unexpected cc " << cc;
+            }
+
+            break;
+        }
+
+    }
 }
 
 void
