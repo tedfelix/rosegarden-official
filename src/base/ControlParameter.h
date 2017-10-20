@@ -36,7 +36,7 @@ public:
                      int min = 0,
                      int max = 127,
                      int def = 0,
-                     MidiByte controllerValue = 0,
+                     MidiByte controllerValue = 0,  // ??? rename: controllerNumber
                      unsigned int colour = 0,
                      int ipbPositon = -1);
     ControlParameter(const ControlParameter &control);
@@ -75,6 +75,10 @@ public:
         return value;
     }
 
+    /// Controller number.  E.g. 7 for volume, 10 for pan.
+    /**
+     * ??? rename: getControllerNumber()
+     */
     MidiByte getControllerValue() const { return m_controllerValue; }
 
     unsigned int getColourIndex() const { return m_colourIndex; }
@@ -89,6 +93,10 @@ public:
     void setMax(int max) { m_max = max; }
     void setDefault(int def) { m_default = def; }
 
+    /// Controller number.  E.g. 7 for volume, 10 for pan.
+    /**
+     * ??? rename: setControllerNumber()
+     */
     void setControllerValue(MidiByte con) { m_controllerValue = con; }
 
     void setColourIndex(unsigned int colour) { m_colourIndex = colour; }
@@ -121,6 +129,10 @@ protected:
     int            m_max;
     int            m_default;
 
+    /// Controller number.  E.g. 7 for volume, 10 for pan.
+    /**
+     * ??? rename: m_controllerNumber
+     */
     MidiByte       m_controllerValue;
 
     unsigned int   m_colourIndex;
