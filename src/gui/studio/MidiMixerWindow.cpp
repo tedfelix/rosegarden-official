@@ -98,6 +98,9 @@ MidiMixerWindow::MidiMixerWindow(QWidget *parent,
             SIGNAL(changed(Instrument *)),
             this,
             SLOT(slotInstrumentChanged(Instrument *)));
+    connect(Instrument::getStaticSignals().data(),
+                SIGNAL(controlChange(Instrument *, int)),
+            SLOT(slotControlChange(Instrument *, int)));
 }
 
 void
@@ -505,6 +508,116 @@ MidiMixerWindow::slotInstrumentChanged(Instrument *instrument)
             }
             count++;
         }
+    }
+}
+
+void
+MidiMixerWindow::slotControlChange(Instrument *instrument, int cc)
+{
+    if (!instrument)
+        return;
+
+    // Find the appropriate strip.
+
+    size_t stripCount = 0;
+    bool found = false;
+
+    // ??? Performance: LINEAR SEARCH
+    //     We've got to be able to do better.  A
+    //     std::map<InstrumentId, StripIndex> or similar should work well.
+
+    // For each device in the Studio
+    for (DeviceListConstIterator deviceIter = m_studio->begin();
+         deviceIter != m_studio->end();
+         ++deviceIter) {
+        MidiDevice *device = dynamic_cast<MidiDevice *>(*deviceIter);
+
+        // If this isn't a MidiDevice, try the next.
+        if (!device)
+            continue;
+
+        InstrumentList instruments = device->getPresentationInstruments();
+
+        // For each Instrument in the Device
+        for (InstrumentList::const_iterator instrumentIter =
+                    instruments.begin();
+             instrumentIter != instruments.end();
+             ++instrumentIter) {
+
+            Instrument *currentInstrument = *instrumentIter;
+
+            if (currentInstrument->getId() == instrument->getId()) {
+                found = true;
+                break;
+            }
+
+            ++stripCount;
+        }
+    }
+
+    // If the strip wasn't found, bail.
+    if (!found)
+        return;
+
+    if (stripCount >= m_faders.size())
+        return;
+
+    // At this point, stripCount is the proper index for m_faders.
+
+    if (cc == MIDI_CONTROLLER_VOLUME) {
+
+        // Update the volume fader.
+
+        MidiByte volumeValue;
+
+        try {
+            volumeValue = instrument->
+                    getControllerValue(MIDI_CONTROLLER_VOLUME);
+        } catch (...) {
+            // This should never get called.
+            volumeValue = instrument->getVolume();
+        }
+
+        // setFader() emits a signal.  If we don't block it, we crash
+        // due to an endless loop.
+        // ??? Need to examine more closely and see if we can redesign
+        //     things to avoid this crash and remove the
+        //     blockSignals() calls around every call to setFader().
+        m_faders[stripCount]->m_volumeFader->blockSignals(true);
+        m_faders[stripCount]->m_volumeFader->setFader(float(volumeValue));
+        m_faders[stripCount]->m_volumeFader->blockSignals(false);
+
+    } else {
+
+        // Update the appropriate cc rotary.
+
+        ControlList controls = getIPBForMidiMixer(
+                dynamic_cast<MidiDevice *>(instrument->getDevice()));
+
+        // For each controller
+        for (size_t i = 0; i < controls.size(); ++i) {
+            // If this is the one...
+            if (cc == controls[i].getControllerValue()) {
+
+                // The ControllerValues might not yet be set on
+                // the actual Instrument so don't always expect
+                // to find one.  There might be a hole here for
+                // deleted Controllers to hang around on
+                // Instruments..
+                //
+                try {
+                    MidiByte value = instrument->getControllerValue(cc);
+                    m_faders[stripCount]->m_controllerRotaries[i].second->
+                            setPosition(value);
+                } catch (...) {
+                    RG_WARNING << "slotControlChange(): WARNING: cc not found " << cc;
+                }
+
+                break;
+
+            }
+        }
+
     }
 }
 

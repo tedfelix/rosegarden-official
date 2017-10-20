@@ -87,7 +87,10 @@ signals:
     void panic();
 
 protected slots:
+    /// Handle InstrumentStaticSignals::changed().
     void slotInstrumentChanged(Instrument *);
+    /// Handle InstrumentStaticSignals::controlChange().
+    void slotControlChange(Instrument *instrument, int cc);
 
     //void slotPanChanged(float);
     void slotFaderLevelChanged(float);
