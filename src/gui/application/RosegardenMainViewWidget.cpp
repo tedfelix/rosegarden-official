@@ -2058,7 +2058,13 @@ RosegardenMainViewWidget::slotControllerDeviceEventReceived(MappedEvent *e, cons
                     //RG_DEBUG << "  Setting controller " << controller << " for instrument " << instrument->getId() << " to " << value;
                     instrument->setControllerValue(controller, value);
                     instrument->sendController(controller, value);
-                    instrument->changed();
+                    Instrument::getStaticSignals()->
+                            emitControlChange(instrument, controller);
+                    // ??? This will send a notification.  We don't want that.  There
+                    //     appears to be no variation that doesn't send a notification.
+                    //     We need one.
+                    //doc->slotDocumentModified();
+
                     break;
                 }
             }
