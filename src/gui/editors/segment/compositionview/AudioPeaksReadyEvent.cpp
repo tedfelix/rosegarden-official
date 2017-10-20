@@ -24,8 +24,8 @@ namespace Rosegarden
 {
 
 
-const QEvent::Type AudioPeaksReadyEvent::AudioPeaksReady      = QEvent::Type(QEvent::User + 1);
-const QEvent::Type AudioPeaksReadyEvent::AudioPeaksQueueEmpty = QEvent::Type(QEvent::User + 2);
+const QEvent::Type AudioPeaksReadyEvent::AudioPeaksReady =
+        QEvent::Type(QEvent::User + 1);
 
 AudioPeaksReadyEvent::AudioPeaksReadyEvent(int data) :
         QEvent(AudioPeaksReadyEvent::AudioPeaksReady),

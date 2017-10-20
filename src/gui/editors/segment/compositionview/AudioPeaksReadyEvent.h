@@ -37,7 +37,6 @@ public:
 
     int data();
     static const QEvent::Type AudioPeaksReady;
-    static const QEvent::Type AudioPeaksQueueEmpty;
 
 protected:
     int m_data;

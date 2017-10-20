@@ -36,8 +36,8 @@ namespace Rosegarden
 {
 
 
-const QEvent::Type AudioPeaksThread::AudioPeaksReady       = QEvent::Type(QEvent::User + 1);
-const QEvent::Type AudioPeaksThread::AudioPeaksQueueEmpty  = QEvent::Type(QEvent::User + 2);
+const QEvent::Type AudioPeaksThread::AudioPeaksQueueEmpty =
+        QEvent::Type(QEvent::User + 2);
 
 AudioPeaksThread::AudioPeaksThread(AudioFileManager *manager) :
         m_manager(manager),

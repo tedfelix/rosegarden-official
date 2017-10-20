@@ -100,7 +100,7 @@ bool AudioPeaksGenerator::event(QEvent *e)
     
     //RG_DEBUG << "AudioPeaksGenerator(" << this << ")::event (" << e << ")";
 
-    if (e->type() == AudioPeaksThread::AudioPeaksReady) {
+    if (e->type() == AudioPeaksReadyEvent::AudioPeaksReady) {
         AudioPeaksReadyEvent *ev = dynamic_cast<AudioPeaksReadyEvent *>(e);
         if (ev) {
             int token = (int)ev->data();
