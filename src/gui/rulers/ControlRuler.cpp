@@ -602,8 +602,10 @@ void ControlRuler::mousePressEvent(QMouseEvent* e)
     if (!m_currentTool)
         return;
 
-    ControlMouseEvent controlMouseEvent = createControlMouseEvent(e);
-    m_currentTool->handleLeftButtonPress(&controlMouseEvent);
+    if (e->button() == Qt::LeftButton) {
+        ControlMouseEvent controlMouseEvent = createControlMouseEvent(e);
+        m_currentTool->handleLeftButtonPress(&controlMouseEvent);
+    }
 }
 
 void ControlRuler::mouseReleaseEvent(QMouseEvent* e)
@@ -611,8 +613,10 @@ void ControlRuler::mouseReleaseEvent(QMouseEvent* e)
     if (!m_currentTool)
         return;
 
-    ControlMouseEvent controlMouseEvent = createControlMouseEvent(e);
-    m_currentTool->handleMouseRelease(&controlMouseEvent);
+    if (e->button() == Qt::LeftButton) {
+        ControlMouseEvent controlMouseEvent = createControlMouseEvent(e);
+        m_currentTool->handleMouseRelease(&controlMouseEvent);
+    }
 }
 
 void ControlRuler::mouseMoveEvent(QMouseEvent* e)
