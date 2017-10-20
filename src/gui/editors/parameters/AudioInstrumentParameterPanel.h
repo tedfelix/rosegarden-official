@@ -96,6 +96,8 @@ private slots:
     /// Handle InstrumentStaticSignals::changed()
     void slotInstrumentChanged(Instrument *);
 
+    /// Connected to InstrumentStaticSignals::controlChange().
+    void slotControlChange(Instrument *instrument, int cc);
 private:
 
     // This is the tiny button in the upper left that allows the user

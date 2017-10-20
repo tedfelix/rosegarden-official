@@ -36,6 +36,7 @@
 #include "InstrumentParameterPanel.h"
 #include "sound/MappedCommon.h"
 #include "sound/MappedStudio.h"
+#include "sound/Midi.h"
 #include "gui/widgets/PluginPushButton.h"
 #include "gui/widgets/InstrumentAliasButton.h"
 #include "gui/widgets/AudioFaderBox.h"
@@ -134,6 +135,10 @@ AudioInstrumentParameterPanel::AudioInstrumentParameterPanel(
             SIGNAL(changed(Instrument *)),
             this,
             SLOT(slotInstrumentChanged(Instrument *)));
+    // Connect for high-frequency control change notifications.
+    connect(Instrument::getStaticSignals().data(),
+                SIGNAL(controlChange(Instrument *, int)),
+            SLOT(slotControlChange(Instrument *, int)));
 }
 
 void
@@ -485,6 +490,33 @@ AudioInstrumentParameterPanel::slotInstrumentChanged(Instrument *instrument)
 
     // Update the parameters on the widgets
     setupForInstrument(instrument);
+}
+
+void
+AudioInstrumentParameterPanel::slotControlChange(Instrument *instrument, int cc)
+{
+    if (!instrument)
+        return;
+
+    if (!getSelectedInstrument())
+        return;
+
+    // If this isn't a change for the Instrument we are displaying, bail.
+    if (getSelectedInstrument()->getId() != instrument->getId())
+        return;
+
+    // Just update the relevant cc widget.
+    if (cc == MIDI_CONTROLLER_VOLUME) {
+
+        // Update only the volume slider.
+        m_audioFader->m_fader->setFader(instrument->getLevel());
+
+    } else if (cc == MIDI_CONTROLLER_PAN) {
+
+        // Update only the pan rotary.
+        m_audioFader->m_pan->setPosition(instrument->getPan() - 100);
+
+    }
 }
 
 
