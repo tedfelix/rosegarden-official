@@ -29,6 +29,7 @@
 #include "base/AudioLevel.h"
 #include "base/Composition.h"
 #include "base/Instrument.h"
+#include "base/InstrumentStaticSignals.h"
 #include "base/MidiDevice.h"
 #include "base/MidiProgram.h"
 #include "base/NotationTypes.h"
@@ -2070,13 +2071,25 @@ RosegardenMainViewWidget::slotControllerDeviceEventReceived(MappedEvent *e, cons
             RG_DEBUG << "Setting volume for instrument " << instrument->getId() << " to " << value;
             instrument->setLevel(AudioLevel::fader_to_dB
                                  (value, 127, AudioLevel::ShortFader));
-            instrument->changed();
+            Instrument::getStaticSignals()->
+                    emitControlChange(instrument, MIDI_CONTROLLER_VOLUME);
+            // ??? This will send a notification.  We don't want that.  There
+            //     appears to be no variation that doesn't send a notification.
+            //     We need one.
+            //doc->slotDocumentModified();
+
             break;
 
         case MIDI_CONTROLLER_PAN:
             RG_DEBUG << "Setting pan for instrument " << instrument->getId() << " to " << value;
             instrument->setControllerValue(MIDI_CONTROLLER_PAN, MidiByte((value / 64.0) * 100.0 + 0.01));
-            instrument->changed();
+            Instrument::getStaticSignals()->
+                    emitControlChange(instrument, MIDI_CONTROLLER_PAN);
+            // ??? This will send a notification.  We don't want that.  There
+            //     appears to be no variation that doesn't send a notification.
+            //     We need one.
+            //doc->slotDocumentModified();
+
             break;
 
         default:
