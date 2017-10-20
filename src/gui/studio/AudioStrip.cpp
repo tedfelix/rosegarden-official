@@ -552,7 +552,12 @@ AudioStrip::slotFaderLevelChanged(float dB)
                 MappedObjectValue(dB));
 
         instrument->setLevel(dB);
-        instrument->changed();
+        Instrument::getStaticSignals()->
+                emitControlChange(instrument, MIDI_CONTROLLER_VOLUME);
+        // ??? This will send a notification.  We don't want that.  There
+        //     appears to be no variation that doesn't send a notification.
+        //     We need one.
+        //doc->slotDocumentModified();
 
         // Send out to "external controller" port as well.
         // ??? Would be nice to know whether anything is connected
@@ -616,7 +621,12 @@ AudioStrip::slotPanChanged(float pan)
                 MappedObjectValue(pan));
 
         instrument->setPan(MidiByte(pan + 100.0));
-        instrument->changed();
+        Instrument::getStaticSignals()->
+                emitControlChange(instrument, MIDI_CONTROLLER_PAN);
+        // ??? This will send a notification.  We don't want that.  There
+        //     appears to be no variation that doesn't send a notification.
+        //     We need one.
+        //doc->slotDocumentModified();
 
         // Send out to "external controller" port as well.
         // ??? Would be nice to know whether anything is connected
