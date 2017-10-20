@@ -39,10 +39,23 @@ class Instrument;
  * would be to have observers connect directly to the Instrument
  * objects.  Studio would need to let the observers know when
  * new Instruments were created.
+ *
+ * Bigger picture, RosegardenDocument already has an app-wide change
+ * notification mechanism, slotDocumentModified().  We really should
+ * be using that for general Instrument change notifications instead
+ * of Instrument::changed().
  */
 class InstrumentStaticSignals : public QObject
 {
     Q_OBJECT
+
+public:
+    /// Public wrapper since Qt4 signals are protected.
+    /**
+     * Emits controlChange().  See comments on controlChange() for more.
+     */
+    void emitControlChange(Instrument *instrument, int cc)
+        { emit controlChange(instrument, cc); }
 
 signals:
     /// An Instrument object has changed.
@@ -51,17 +64,44 @@ signals:
      * the object instance.  Search the codebase on
      * "Instrument::getStaticSignals()" for connect() examples.
      *
-     * Controllers can cause a very high rate of update notification when
+     * Control changes can cause a very high rate of update notification when
      * the user makes rapid changes using a knob or slider.
      * Handlers of this signal should be prepared to deal with this.
      * They should check for changes relevant to them, and bail if there
      * are none.  As of this writing, only the MIPP has been rewritten
      * to deal with this properly.  All other handlers should be reviewed
-     * and modified as needed.
+     * and modified as needed.  Note that a new controlChange() notification
+     * is now available (see below) to reduce the burden on general
+     * notification handlers.
      *
      * Formerly RosegardenMainWindow::instrumentParametersChanged().
+     *
+     * ??? Future Direction: This should go away and RosegardenDocument's
+     *     "document modified" notification should be used instead.  When
+     *     that's done, Instrument::getStaticSignals() should be moved
+     *     into here and renamed "self()" or "instance()".
      */
     void changed(Instrument *);
+
+    /// Fine-grain, high-frequency notification mechanism.
+    /**
+     * Call this if you change the value for a control change for
+     * an Instrument.  Handlers should update only that part of the
+     * UI that displays this specific control change value.
+     *
+     * This is used for control change notifications which can happen
+     * very quickly as the user moves volume sliders, pan knobs, and
+     * other control change knobs.
+     *
+     * By separating these out from the other more general update
+     * notifications, we can avoid updating too much of the UI when
+     * these come in.  This should improve performance.
+     *
+     * Note that this only applies to the initial control change
+     * on a Track.  This has nothing to do with any control changes
+     * that may appear on the rulers as the Composition progresses.
+     */
+    void controlChange(Instrument *instrument, int cc);
 
 private:
     // Since Qt4 makes signals "protected" we do this to give Instrument
