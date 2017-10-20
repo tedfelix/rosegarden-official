@@ -247,8 +247,15 @@ void RosegardenDocument::slotUpdateAllViews(RosegardenMainViewWidget *sender)
 
 void RosegardenDocument::setModified()
 {
+    // Already set?  Bail.
+    if (m_modified)
+        return;
+
     m_modified = true;
     m_autoSaved = false;
+
+    // Make sure the star (*) appears in the title bar.
+    RosegardenMainWindow::self()->slotUpdateTitle(true);
 }
 
 void RosegardenDocument::clearModifiedStatus()
