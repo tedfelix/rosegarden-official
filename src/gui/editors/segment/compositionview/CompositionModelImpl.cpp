@@ -1164,16 +1164,8 @@ void CompositionModelImpl::deleteCachedPreview(const Segment *segment)
     }
 }
 
-void CompositionModelImpl::deleteCachedPreviews()
+void CompositionModelImpl::deleteCachedAudioPreviews()
 {
-    // Notation Previews
-
-    for (NotationPreviewCache::iterator i = m_notationPreviewCache.begin();
-         i != m_notationPreviewCache.end(); ++i) {
-        delete i->second;
-    }
-    m_notationPreviewCache.clear();
-
     // Stop Audio Peaks Generators
 
     for (AudioPeaksGeneratorMap::iterator i = m_audioPeaksGeneratorMap.begin();
@@ -1189,6 +1181,21 @@ void CompositionModelImpl::deleteCachedPreviews()
     }
     m_audioPeaksCache.clear();
     m_audioPreviewImageCache.clear();
+}
+
+void CompositionModelImpl::deleteCachedPreviews()
+{
+    // Notation Previews
+
+    for (NotationPreviewCache::iterator i = m_notationPreviewCache.begin();
+         i != m_notationPreviewCache.end(); ++i) {
+        delete i->second;
+    }
+    m_notationPreviewCache.clear();
+
+    // Audio Previews
+
+    deleteCachedAudioPreviews();
 }
 
 // --- Selection ----------------------------------------------------

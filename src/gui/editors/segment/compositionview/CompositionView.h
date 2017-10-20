@@ -112,7 +112,8 @@ public:
      * the following reasons only:
      *   1. The contents of a segment have changed.
      *   2. Zoom.
-     *   3. More?
+     *   3. Volume for an audio segment has changed.
+     *   4. More?
      */
     void deleteCachedPreviews();
 
@@ -354,6 +355,9 @@ private slots:
      */
     void slotStoppedRecording();
 
+    /// Connected to InstrumentStaticSignals::controlChange().
+    void slotControlChange(Instrument *instrument, int cc);
+
 private:
 
     CompositionModelImpl *m_model;
@@ -519,7 +523,14 @@ private:
 
     /// Drives slotUpdateTimer().
     QTimer m_updateTimer;
-    /// Lets slotUpdateTimer() know there's work to do.
+    /// Let slotUpdateTimer() know that audio previews need to be cleared.
+    /**
+     * Note that you'll also want to set m_updateNeeded and m_updateRect so
+     * that the display actually gets updated.  Use slotAllNeedRefresh() for
+     * that.
+     */
+    bool m_deleteAudioPreviewsNeeded;
+    /// Lets slotUpdateTimer() know that segments need to be redrawn.
     bool m_updateNeeded;
     /// Accumulated update rectangle.
     QRect m_updateRect;

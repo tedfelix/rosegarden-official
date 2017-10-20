@@ -153,6 +153,9 @@ public:
     /// A vector of NotationPreviewRange objects, one per segment.
     typedef std::vector<NotationPreviewRange> NotationPreviewRanges;
 
+    /// Delete all cached audio previews.
+    void deleteCachedAudioPreviews();
+
     /// Delete all cached notation and audio previews.
     void deleteCachedPreviews();
 

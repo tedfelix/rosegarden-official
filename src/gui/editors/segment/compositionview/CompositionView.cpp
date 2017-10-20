@@ -25,6 +25,8 @@
 #include "base/Segment.h"
 #include "base/SnapGrid.h"
 #include "base/Profiler.h"
+#include "base/Instrument.h"
+#include "base/InstrumentStaticSignals.h"
 #include "CompositionColourCache.h"
 #include "ChangingSegment.h"
 #include "SegmentRect.h"
@@ -36,6 +38,8 @@
 #include "gui/general/RosegardenScrollView.h"
 #include "SegmentSelector.h"
 #include "SegmentToolBox.h"
+#include "sound/Midi.h"
+
 
 #include <QBrush>
 #include <QColor>
@@ -80,6 +84,7 @@ CompositionView::CompositionView(RosegardenDocument *doc,
     //m_audioPreview(),
     //m_notationPreview(),
     //m_updateTimer(),
+    m_deleteAudioPreviewsNeeded(false),
     m_updateNeeded(false),
     //m_updateRect()
     m_drawTextFloat(false),
@@ -156,6 +161,11 @@ CompositionView::CompositionView(RosegardenDocument *doc,
             this, SLOT(slotStoppedRecording()));
     connect(doc, SIGNAL(audioFileFinalized(Segment*)),
             m_model, SLOT(slotAudioFileFinalized(Segment*)));
+
+    // Connect for high-frequency control change notifications.
+    connect(Instrument::getStaticSignals().data(),
+                SIGNAL(controlChange(Instrument *, int)),
+            SLOT(slotControlChange(Instrument *, int)));
 
     // Audio Preview Thread
     m_model->setAudioPeaksThread(&doc->getAudioPeaksThread());
@@ -341,6 +351,11 @@ void CompositionView::slotUpdateAll()
 
 void CompositionView::slotUpdateTimer()
 {
+    if (m_deleteAudioPreviewsNeeded) {
+        m_model->deleteCachedAudioPreviews();
+        m_deleteAudioPreviewsNeeded = false;
+    }
+
     if (m_updateNeeded) {
         updateAll2(m_updateRect);
         m_updateNeeded = false;
@@ -1463,6 +1478,33 @@ void CompositionView::drawTextFloat(int x, int y, const QString &text)
     m_drawTextFloat = true;
 
     slotUpdateArtifacts();
+}
+
+void CompositionView::slotControlChange(Instrument *instrument, int cc)
+{
+    // If an audio instrument's volume is changed, we need to redraw the
+    // previews since the audio previews show the effects of volume.
+
+    // This approach is a bit heavy-handed.  Even if the relevant audio
+    // segment isn't visible, we still force an update.  This is simple.
+    // Making it smarter probably isn't worth the time or the code.
+
+    if (cc != MIDI_CONTROLLER_VOLUME)
+        return;
+    if (instrument->getType() != Instrument::Audio)
+        return;
+
+    // Signal that the audio previews need to be deleted on the next timer.
+    m_deleteAudioPreviewsNeeded = true;
+
+    // The entire viewport in contents coords.
+    // ??? This is copied all over.  Factor into a getViewportContentsRect().
+    QRect viewportContentsRect(
+            contentsX(), contentsY(),
+            viewport()->rect().width(), viewport()->rect().height());
+
+    // Signal that a refresh is needed on the next timer.
+    slotAllNeedRefresh(viewportContentsRect);
 }
 
 
