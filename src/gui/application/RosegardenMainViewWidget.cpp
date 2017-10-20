@@ -66,6 +66,7 @@
 #include "gui/rulers/LoopRuler.h"
 #include "gui/rulers/TempoRuler.h"
 #include "gui/rulers/StandardRuler.h"
+#include "gui/studio/StudioControl.h"
 #include "RosegardenMainWindow.h"
 #include "SetWaitCursor.h"
 #include "sound/AudioFile.h"
@@ -2069,10 +2070,18 @@ RosegardenMainViewWidget::slotControllerDeviceEventReceived(MappedEvent *e, cons
 
         switch (controller) {
 
-        case MIDI_CONTROLLER_VOLUME:
+        case MIDI_CONTROLLER_VOLUME:  {
             //RG_DEBUG << "  Setting volume for instrument " << instrument->getId() << " to " << value;
-            instrument->setLevel(AudioLevel::fader_to_dB
-                                 (value, 127, AudioLevel::ShortFader));
+
+            float dB = AudioLevel::fader_to_dB(
+                    value, 127, AudioLevel::ShortFader);
+
+            StudioControl::setStudioObjectProperty(
+                    MappedObjectId(instrument->getMappedId()),
+                    MappedAudioFader::FaderLevel,
+                    MappedObjectValue(dB));
+
+            instrument->setLevel(dB);
             Instrument::getStaticSignals()->
                     emitControlChange(instrument, MIDI_CONTROLLER_VOLUME);
             // ??? This will send a notification.  We don't want that.  There
@@ -2081,10 +2090,21 @@ RosegardenMainViewWidget::slotControllerDeviceEventReceived(MappedEvent *e, cons
             //doc->slotDocumentModified();
 
             break;
+        }
 
-        case MIDI_CONTROLLER_PAN:
+        case MIDI_CONTROLLER_PAN:  {
             //RG_DEBUG << "  Setting pan for instrument " << instrument->getId() << " to " << value;
-            instrument->setControllerValue(MIDI_CONTROLLER_PAN, MidiByte((value / 64.0) * 100.0 + 0.01));
+
+            float pan = (value / 64.0) * 100.0 + 0.01;
+
+            // This wants -100 to 100.
+            StudioControl::setStudioObjectProperty(
+                    instrument->getMappedId(),
+                    MappedAudioFader::Pan,
+                    static_cast<MappedObjectValue>(pan - 100));
+
+            // This wants 0 to 200.
+            instrument->setControllerValue(MIDI_CONTROLLER_PAN, MidiByte(pan));
             Instrument::getStaticSignals()->
                     emitControlChange(instrument, MIDI_CONTROLLER_PAN);
             // ??? This will send a notification.  We don't want that.  There
@@ -2093,6 +2113,7 @@ RosegardenMainViewWidget::slotControllerDeviceEventReceived(MappedEvent *e, cons
             //doc->slotDocumentModified();
 
             break;
+        }
 
         default:
             break;
