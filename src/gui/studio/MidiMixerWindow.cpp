@@ -437,7 +437,7 @@ MidiMixerWindow::slotControllerChanged(float value)
 void
 MidiMixerWindow::slotInstrumentChanged(Instrument *instrument)
 {
-    //RG_DEBUG << "slotUpdateInstrument(): Instrument ID = " << instrument->getId();
+    //RG_DEBUG << "slotInstrumentChanged(): Instrument ID = " << instrument->getId();
 
     int count = 0;
 
@@ -553,6 +553,9 @@ MidiMixerWindow::slotControlChange(Instrument *instrument, int cc)
 
             ++stripCount;
         }
+
+        if (found)
+            break;
     }
 
     // If the strip wasn't found, bail.
