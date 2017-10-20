@@ -314,10 +314,7 @@ MidiMixerWindow::slotFaderLevelChanged(float value)
                 instrument->sendController(MIDI_CONTROLLER_VOLUME, MidiByte(value));
                 Instrument::getStaticSignals()->
                         emitControlChange(instrument, MIDI_CONTROLLER_VOLUME);
-                // ??? This will send a notification.  We don't want that.  There
-                //     appears to be no variation that doesn't send a notification.
-                //     We need one.
-                //doc->slotDocumentModified();
+                m_document->setModified();
 
                 if (instrument->hasFixedChannel())
                 {
@@ -402,10 +399,7 @@ MidiMixerWindow::slotControllerChanged(float value)
         instrument->sendController(cc, MidiByte(value));
         Instrument::getStaticSignals()->
                 emitControlChange(instrument, cc);
-        // ??? This will send a notification.  We don't want that.  There
-        //     appears to be no variation that doesn't send a notification.
-        //     We need one.
-        //doc->slotDocumentModified();
+        m_document->setModified();
 
         if (instrument->hasFixedChannel()) {
 
@@ -712,10 +706,8 @@ MidiMixerWindow::slotControllerDeviceEventReceived(MappedEvent *e,
                     instrument->sendController(controller, value);
                     Instrument::getStaticSignals()->
                             emitControlChange(instrument, controller);
-                    // ??? This will send a notification.  We don't want that.  There
-                    //     appears to be no variation that doesn't send a notification.
-                    //     We need one.
-                    //doc->slotDocumentModified();
+                    m_document->setModified();
+
                     break;
                 }
             }

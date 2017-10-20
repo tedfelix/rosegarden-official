@@ -153,10 +153,7 @@ AudioInstrumentParameterPanel::slotSelectAudioLevel(float dB)
         Instrument::getStaticSignals()->
                 emitControlChange(getSelectedInstrument(),
                                   MIDI_CONTROLLER_VOLUME);
-        // ??? This will send a notification.  We don't want that.  There
-        //     appears to be no variation that doesn't send a notification.
-        //     We need one.
-        //doc->slotDocumentModified();
+        m_doc->setModified();
 
         // ??? Perhaps it would be better for StudioControl to monitor
         //     the Instrument objects (InstrumentStaticSignals::changed())
@@ -350,10 +347,7 @@ AudioInstrumentParameterPanel::slotSetPan(float pan)
     Instrument::getStaticSignals()->
             emitControlChange(getSelectedInstrument(),
                               MIDI_CONTROLLER_PAN);
-    // ??? This will send a notification.  We don't want that.  There
-    //     appears to be no variation that doesn't send a notification.
-    //     We need one.
-    //doc->slotDocumentModified();
+    m_doc->setModified();
 }
 
 void

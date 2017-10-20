@@ -245,33 +245,32 @@ void RosegardenDocument::slotUpdateAllViews(RosegardenMainViewWidget *sender)
     }
 }
 
-void RosegardenDocument::setModified(bool m)
+void RosegardenDocument::setModified()
 {
-    m_modified = m;
-    RG_DEBUG << "[" << (void*)this << "] setModified(" << m << ")";
+    m_modified = true;
+    m_autoSaved = false;
 }
 
 void RosegardenDocument::clearModifiedStatus()
 {
-    setModified(false);
-    setAutoSaved(true);
-    RG_DEBUG << "RosegardenDocument EMITTING documentModified(false)";
+    m_modified = false;
+    m_autoSaved = true;
+
     emit documentModified(false);
 }
 
 void RosegardenDocument::slotDocumentModified()
 {
-    RG_DEBUG << "RosegardenDocument::slotDocumentModified()";
-    setModified(true);
-    setAutoSaved(false);
-    RG_DEBUG << "RosegardenDocument EMITTING documentModified(true)";
+    m_modified = true;
+    m_autoSaved = false;
+
     emit documentModified(true);
 }
 
 void RosegardenDocument::slotDocumentRestored()
 {
     RG_DEBUG << "RosegardenDocument::slotDocumentRestored()";
-    setModified(false);
+    m_modified = false;
 
     // if we hit the bottom of the undo stack, emit this so the modified flag
     // will be cleared from assorted title bars
@@ -485,7 +484,7 @@ RosegardenDocument::deleteOrphanedAudioFiles(bool documentWillNotBeSaved)
 
 void RosegardenDocument::newDocument()
 {
-    setModified(false);
+    m_modified = false;
     setAbsFilePath(QString::null);
     setTitle(tr("Untitled"));
     if (m_clearCommandHistory) CommandHistory::getInstance()->clear();
@@ -1355,7 +1354,7 @@ bool RosegardenDocument::saveDocumentActual(const QString& filename,
 
     if (!autosave) {
         emit documentModified(false);
-        setModified(false);
+        m_modified = false;
         CommandHistory::getInstance()->documentSaved();
     }
 

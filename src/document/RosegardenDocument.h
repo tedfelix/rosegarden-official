@@ -140,19 +140,17 @@ public:
      */
     void deleteEditViews();
 
-protected:
+    /// Set the modified flag but do not notify observers.
     /**
-     * sets the modified flag for the document after a modifying
-     * action on the view connected to the document.
+     * This also clears m_autoSaved.
      *
-     * this is just an accessor, other components should call
-     * slotDocumentModified() and clearModifiedStatus() instead of
-     * this method, which perform all the related housework.
-     * 
+     * Use this rather than slotDocumentModified() when you do not
+     * want the entire UI to refresh.  This can be used for very high
+     * frequency changes that might cause high CPU usage if the UI
+     * were refreshed every time.
      */
-    void setModified(bool m=true);
+    void setModified();
 
-public:
     /**
      * returns if the document is modified or not. Use this to
      * determine if your document needs saving by the user on closing.
@@ -463,11 +461,15 @@ public slots:
      */
     void slotUpdateAllViews(RosegardenMainViewWidget *sender);
 
+    /// Set the modified flag and notify observers via documentModified().
     /**
-     * set the 'modified' flag of the document to true,
-     * clears the 'autosaved' flag, emits the 'documentModified' signal.
+     * This also clears m_autoSaved and emits documentModified().
      *
-     * always call this when changes have occurred on the document.
+     * Call this when modifications have been made to the document and
+     * an immediate update to the UI is needed.  Do not call this too
+     * frequently as it causes a refresh of the entire UI which is very
+     * expensive.  For high-frequency changes, use setModified() and
+     * let the UI update on a timer at a reasonable pace.
      */
     void slotDocumentModified();
     void slotDocumentRestored();

@@ -1279,10 +1279,7 @@ MIDIInstrumentParameterPanel::slotControllerChanged(int controllerNumber)
             static_cast<MidiByte>(value));
     Instrument::getStaticSignals()->
             emitControlChange(getSelectedInstrument(), controllerNumber);
-    // ??? This will send a notification.  We don't want that.  There
-    //     appears to be no variation that doesn't send a notification.
-    //     We need one.
-    //doc->slotDocumentModified();
+    m_doc->setModified();
 }
 
 void

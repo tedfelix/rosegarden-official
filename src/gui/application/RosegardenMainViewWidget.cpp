@@ -2060,10 +2060,7 @@ RosegardenMainViewWidget::slotControllerDeviceEventReceived(MappedEvent *e, cons
                     instrument->sendController(controller, value);
                     Instrument::getStaticSignals()->
                             emitControlChange(instrument, controller);
-                    // ??? This will send a notification.  We don't want that.  There
-                    //     appears to be no variation that doesn't send a notification.
-                    //     We need one.
-                    //doc->slotDocumentModified();
+                    getDocument()->setModified();
 
                     break;
                 }
@@ -2090,10 +2087,7 @@ RosegardenMainViewWidget::slotControllerDeviceEventReceived(MappedEvent *e, cons
             instrument->setLevel(dB);
             Instrument::getStaticSignals()->
                     emitControlChange(instrument, MIDI_CONTROLLER_VOLUME);
-            // ??? This will send a notification.  We don't want that.  There
-            //     appears to be no variation that doesn't send a notification.
-            //     We need one.
-            //doc->slotDocumentModified();
+            getDocument()->setModified();
 
             break;
         }
@@ -2113,10 +2107,7 @@ RosegardenMainViewWidget::slotControllerDeviceEventReceived(MappedEvent *e, cons
             instrument->setControllerValue(MIDI_CONTROLLER_PAN, MidiByte(pan));
             Instrument::getStaticSignals()->
                     emitControlChange(instrument, MIDI_CONTROLLER_PAN);
-            // ??? This will send a notification.  We don't want that.  There
-            //     appears to be no variation that doesn't send a notification.
-            //     We need one.
-            //doc->slotDocumentModified();
+            getDocument()->setModified();
 
             break;
         }
