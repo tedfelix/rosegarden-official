@@ -150,7 +150,13 @@ AudioInstrumentParameterPanel::slotSelectAudioLevel(float dB)
     if (getSelectedInstrument()->getType() == Instrument::Audio ||
             getSelectedInstrument()->getType() == Instrument::SoftSynth) {
         getSelectedInstrument()->setLevel(dB);
-        getSelectedInstrument()->changed();
+        Instrument::getStaticSignals()->
+                emitControlChange(getSelectedInstrument(),
+                                  MIDI_CONTROLLER_VOLUME);
+        // ??? This will send a notification.  We don't want that.  There
+        //     appears to be no variation that doesn't send a notification.
+        //     We need one.
+        //doc->slotDocumentModified();
 
         // ??? Perhaps it would be better for StudioControl to monitor
         //     the Instrument objects (InstrumentStaticSignals::changed())
@@ -335,16 +341,19 @@ AudioInstrumentParameterPanel::slotSynthGUIButtonClicked()
 void
 AudioInstrumentParameterPanel::slotSetPan(float pan)
 {
-    RG_DEBUG << "AudioInstrumentParameterPanel::slotSetPan - "
-    << "pan = " << pan << endl;
-
     StudioControl::setStudioObjectProperty
     (MappedObjectId(getSelectedInstrument()->getMappedId()),
      MappedAudioFader::Pan,
      MappedObjectValue(pan));
 
     getSelectedInstrument()->setPan(MidiByte(pan + 100.0));
-    getSelectedInstrument()->changed();
+    Instrument::getStaticSignals()->
+            emitControlChange(getSelectedInstrument(),
+                              MIDI_CONTROLLER_PAN);
+    // ??? This will send a notification.  We don't want that.  There
+    //     appears to be no variation that doesn't send a notification.
+    //     We need one.
+    //doc->slotDocumentModified();
 }
 
 void
