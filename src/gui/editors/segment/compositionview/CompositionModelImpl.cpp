@@ -1058,11 +1058,11 @@ void CompositionModelImpl::updateAudioPeaksCache(const Segment *segment)
     } else {  // We have a peaks gen for this segment.
 
         // Adjust the size in case the segment was resized.
-        m_audioPeaksGeneratorMap[segment]->setDisplayExtent(segmentRect.rect);
+        m_audioPeaksGeneratorMap[segment]->setSegmentRect(segmentRect.rect);
     }
 
     // Queue a request for async generation of the peaks.
-    m_audioPeaksGeneratorMap[segment]->update();
+    m_audioPeaksGeneratorMap[segment]->generateAsync();
 }
 
 void CompositionModelImpl::slotAudioPeaksComplete(
@@ -1082,7 +1082,7 @@ void CompositionModelImpl::slotAudioPeaksComplete(
 
     unsigned channels = 0;
     const std::vector<float> &values =
-            generator->getComputedValues(channels);
+            generator->getPeaks(channels);
 
     // If we didn't get any peaks, bail.
     if (channels == 0)

@@ -21,8 +21,8 @@
 
 #include <QObject>
 #include <QRect>
+
 #include <vector>
-#include <inttypes.h>
 
 class QEvent;
 
@@ -35,8 +35,13 @@ class CompositionModelImpl;
 class Composition;
 class AudioPeaksThread;
 
-
-/// Sends a request to the AudioPeaksThread to generate audio peaks (m_values).
+/// Generates peaks for an audio Segment.
+/**
+ * Used by CompositionModelImpl to generate audio previews for an audio
+ * Segment.
+ *
+ * Uses AudioPeaksThread to generate the audio peaks (m_peaks).
+ */
 class AudioPeaksGenerator : public QObject
 {
     Q_OBJECT
@@ -45,40 +50,55 @@ public:
     AudioPeaksGenerator(AudioPeaksThread &thread,
                         const Composition &composition,
                         const Segment *segment,
-                        const QRect &displayExtent,
+                        const QRect &segmentRect,
                         CompositionModelImpl *parent);
     ~AudioPeaksGenerator();
 
-    // ??? rename: generateAsync()
-    void update();
+    void setSegmentRect(const QRect &rect)  { m_rect = rect; }
+
+    /// Generate audio peaks for the Segment.
+    /**
+     * The audioPeaksComplete() signal will be emitted on completion.
+     */
+    void generateAsync();
+
+    /// Stop a peak generation in progress.
     void cancel();
 
-    QRect getDisplayExtent() const { return m_rect; }
-    void setDisplayExtent(const QRect &rect) { m_rect = rect; }
+    const std::vector<float> &getPeaks(unsigned int &channels) const
+    {
+        channels = m_channels;
+        return m_peaks;
+    }
 
-    const Segment *getSegment() const { return m_segment; }
-
-    // ??? rename: getPeaks()
-    const std::vector<float> &getComputedValues(unsigned int &channels) const
-    { channels = m_channels; return m_values; }
+    const Segment *getSegment() const  { return m_segment; }
 
 signals:
+    /// Emitted once the asynchronous generation of peaks is complete.
     void audioPeaksComplete(AudioPeaksGenerator *);
 
 protected:
-    virtual bool event(QEvent*);
+    // QObject override.
+    virtual bool event(QEvent *);
 
+private:
+    // ??? Instead of requiring that this comes in via the ctor, why not
+    //     get it directly from RosegardenDocument?  Or, even better, since
+    //     this is the main user, it should own the instance and allow
+    //     RosegardenDocument and CompositionView to get it from here.
     AudioPeaksThread &m_thread;
 
-    const Composition& m_composition;
-    const Segment*     m_segment;
-    QRect                          m_rect;
-    bool                           m_showMinima;
-    unsigned int                   m_channels;
-    // ??? rename: m_peaks
-    std::vector<float>             m_values;
+    const Composition &m_composition;
 
-    intptr_t m_token;
+    const Segment *m_segment;
+    QRect m_rect;
+    bool m_showMinima;
+
+    /// Token from AudioPeaksThread to identify the work being done.
+    int m_token;
+
+    unsigned int m_channels;
+    std::vector<float> m_peaks;
 };
 
 

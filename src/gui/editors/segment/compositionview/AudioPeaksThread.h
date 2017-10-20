@@ -107,7 +107,7 @@ private:
     RequestQueue m_queue;
 
     typedef std::pair<unsigned int /* channels */,
-                      std::vector<float> /* results */ > ResultsPair;
+                      std::vector<float> /* peaks */ > ResultsPair;
     typedef std::map<int /* token */, ResultsPair> ResultsQueue;
     ResultsQueue m_results;
 

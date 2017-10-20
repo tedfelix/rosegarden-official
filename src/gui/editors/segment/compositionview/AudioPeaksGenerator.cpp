@@ -35,20 +35,24 @@
 namespace Rosegarden
 {
 
+
+// DEBUG
 static int apuExtantCount = 0;
 
-AudioPeaksGenerator::AudioPeaksGenerator(AudioPeaksThread &thread,
-        const Composition& c, const Segment* s,
-        const QRect& r,
-        CompositionModelImpl* parent)
-        : QObject(parent),
-        m_thread(thread),
-        m_composition(c),
-        m_segment(s),
-        m_rect(r),
-        m_showMinima(false),
-        m_channels(0),
-        m_token( -1)
+AudioPeaksGenerator::AudioPeaksGenerator(
+        AudioPeaksThread &thread,
+        const Composition &c,
+        const Segment *s,
+        const QRect &segmentRect,
+        CompositionModelImpl *parent) :
+    QObject(parent),
+    m_thread(thread),
+    m_composition(c),
+    m_segment(s),
+    m_rect(segmentRect),
+    m_showMinima(false),
+    m_token(-1),
+    m_channels(0)
 {
     ++apuExtantCount;
     RG_DEBUG << "ctor " << this << " (now " << apuExtantCount << " extant)";
@@ -62,7 +66,7 @@ AudioPeaksGenerator::~AudioPeaksGenerator()
         m_thread.cancelPeaks(m_token);
 }
 
-void AudioPeaksGenerator::update()
+void AudioPeaksGenerator::generateAsync()
 {
     // Get sample start and end times and work out duration
     //
@@ -71,7 +75,7 @@ void AudioPeaksGenerator::update()
                             m_composition.getElapsedRealTime(m_segment->getEndMarkerTime()) -
                             m_composition.getElapsedRealTime(m_segment->getStartTime()) ;
 
-    //RG_DEBUG << "AudioPeaksGenerator(" << this << ")::update() - for file id "
+    //RG_DEBUG << "AudioPeaksGenerator(" << this << ")::generateAsync() - for file id "
     //         << m_segment->getAudioFileId() << " requesting values - thread running : "
     //         << m_thread.isRunning() << " - thread finished : " << m_thread.isFinished() << endl;
 
@@ -104,21 +108,21 @@ bool AudioPeaksGenerator::event(QEvent *e)
         AudioPeaksReadyEvent *ev = dynamic_cast<AudioPeaksReadyEvent *>(e);
         if (ev) {
             int token = (int)ev->data();
-            m_channels = 0; // to be filled as getComputedValues() return value
+            m_channels = 0; // to be filled as getPeaks() return value
 
             //RG_DEBUG << "AudioPeaksGenerator::token " << token << ", my token " << m_token;
 
             if (m_token >= 0 && token >= m_token) {
 
                 m_token = -1;
-                m_thread.getPeaks(token, m_channels, m_values);
+                m_thread.getPeaks(token, m_channels, m_peaks);
 #if 0
                 if (m_channels == 0) {
                     RG_DEBUG << "failed to find peaks!\n";
                 } else {
 
                     RG_DEBUG << "got correct peaks (" << m_channels
-                             << " channels, " << m_values.size() << " samples)\n";
+                             << " channels, " << m_peaks.size() << " samples)\n";
                 }
 #endif
                 emit audioPeaksComplete(this);
