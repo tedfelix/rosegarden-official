@@ -32,6 +32,7 @@ namespace Rosegarden
 
 class AudioStrip;
 class MappedEvent;
+class Instrument;
 
 
 /// The "Audio Mixer" window (v2).
@@ -94,6 +95,9 @@ private slots:
     void slotExternalControllerEvent(
             MappedEvent *event,
             const void *preferredCustomer);
+
+    /// Connected to InstrumentStaticSignals::controlChange().
+    void slotControlChange(Instrument *instrument, int cc);
 
 private:
     /// Central widget required for using a layout with QMainWindow.

@@ -25,6 +25,8 @@
 #include "base/AudioLevel.h"
 #include "misc/Debug.h"
 #include "gui/general/IconLoader.h"
+#include "base/Instrument.h"
+#include "base/InstrumentStaticSignals.h"
 #include "sound/MappedEvent.h"
 #include "document/RosegardenDocument.h"
 #include "gui/application/RosegardenMainViewWidget.h"
@@ -69,6 +71,10 @@ AudioMixerWindow2::AudioMixerWindow2(QWidget *parent) :
     connect(this, SIGNAL(windowActivated()),
             RosegardenMainWindow::self()->getView(),
                 SLOT(slotActiveMainWindowChanged()));
+    // Connect for high-frequency control change notifications.
+    connect(Instrument::getStaticSignals().data(),
+                SIGNAL(controlChange(Instrument *, int)),
+            SLOT(slotControlChange(Instrument *, int)));
 
     // File > Close
     createAction("file_close", SLOT(slotClose()));
@@ -583,6 +589,22 @@ AudioMixerWindow2::slotExternalControllerEvent(
 
     default:
         break;
+    }
+}
+
+void
+AudioMixerWindow2::slotControlChange(Instrument *instrument, int cc)
+{
+    InstrumentId instrumentId = instrument->getId();
+
+    // for each input strip
+    // ??? Performance: LINEAR SEARCH.  std::map<id, strip> might be better.
+    for (unsigned i = 0; i < m_inputStrips.size(); ++i) {
+        // If this is the one
+        if (m_inputStrips[i]->getId() == instrumentId) {
+            m_inputStrips[i]->controlChange(cc);
+            break;
+        }
     }
 }
 

@@ -30,6 +30,7 @@
 #include "gui/general/GUIPalette.h"
 #include "gui/general/IconLoader.h"
 #include "gui/widgets/InputDialog.h"
+#include "base/Instrument.h"
 #include "base/InstrumentStaticSignals.h"
 #include "gui/widgets/Label.h"
 #include "gui/widgets/PluginPushButton.h"
@@ -441,6 +442,47 @@ void AudioStrip::updateWidgets()
 
     }
 
+}
+
+void
+AudioStrip::controlChange(int cc)
+{
+    // Just update the relevant cc widget.
+    if (cc == MIDI_CONTROLLER_VOLUME) {
+
+        // Code is duplicated into each of these cases for performance
+        // reasons.  Do not factor out to before the if.
+
+        if (!isInput())
+            return;
+
+        RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
+        Studio &studio = doc->getStudio();
+
+        // Get the appropriate instrument based on the ID.
+        // ??? Performance: LINEAR SEARCH
+        Instrument *instrument = studio.getInstrumentById(m_id);
+
+        m_fader->setFader(instrument->getLevel());
+
+    } else if (cc == MIDI_CONTROLLER_PAN) {
+
+        // Code is duplicated into each of these cases for performance
+        // reasons.  Do not factor out to before the if.
+
+        if (!isInput())
+            return;
+
+        RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
+        Studio &studio = doc->getStudio();
+
+        // Get the appropriate instrument based on the ID.
+        // ??? Performance: LINEAR SEARCH
+        Instrument *instrument = studio.getInstrumentById(m_id);
+
+        m_pan->setPosition(instrument->getPan() - 100);
+
+    }
 }
 
 void

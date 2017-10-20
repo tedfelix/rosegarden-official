@@ -57,6 +57,9 @@ public:
 
     void updateWidgets();
 
+    /// Just update the relevant control change widget.
+    void controlChange(int cc);
+
     /// For "external controller" port support.
     void faderLevelChanged(float dB)  { slotFaderLevelChanged(dB); }
     /// For "external controller" port support.
