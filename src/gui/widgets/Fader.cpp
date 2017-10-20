@@ -416,10 +416,10 @@ Fader::wheelEvent(QWheelEvent *e)
         else
             buttonPosition -= 1;
     }
-    RG_DEBUG << "Fader::wheelEvent - button position = " << buttonPosition;
+    //RG_DEBUG << "wheelEvent() - button position = " << buttonPosition;
     setFader(position_to_value(buttonPosition));
     emit faderChanged(m_value);
-    RG_DEBUG << "Fader::wheelEvent - value = " << m_value;
+    //RG_DEBUG << "wheelEvent() - value = " << m_value;
 
     showFloatText();
 }

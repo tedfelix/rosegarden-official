@@ -94,8 +94,7 @@ void AudioPreviewPainter::paintPreviewImage()
 
     unsigned int channels = m_apData->channels;
     if (channels == 0) {
-        RG_DEBUG << "AudioPreviewPainter::paintPreviewImage : problem with audio file for segment "
-                 << m_segment->getLabel().c_str() << endl;
+        RG_WARNING << "paintPreviewImage(): WARNING: problem with audio file for segment " << m_segment->getLabel().c_str();
         return;
     }
 
@@ -108,9 +107,8 @@ void AudioPreviewPainter::paintPreviewImage()
 
     int centre = m_image.height() / 2;
 
-    RG_DEBUG << "AudioPreviewPainter::paintPreviewImage width = " << m_rect.baseWidth << ", height = " << m_rect.rect.height() << ", halfRectHeight = " << m_halfRectHeight;
-
-    RG_DEBUG << "AudioPreviewPainter::paintPreviewImage: channels = " << channels << ", gain left = " << gain[0] << ", right = " << gain[1];
+    //RG_DEBUG << "paintPreviewImage(): width = " << m_rect.baseWidth << ", height = " << m_rect.rect.height() << ", halfRectHeight = " << m_halfRectHeight;
+    //RG_DEBUG << "paintPreviewImage(): channels = " << channels << ", gain left = " << gain[0] << ", right = " << gain[1];
 
     // double audioDuration = double(m_segment->getAudioEndTime().sec) +
     //     double(m_segment->getAudioEndTime().nsec) / 1000000000.0;
