@@ -1482,16 +1482,17 @@ void CompositionView::drawTextFloat(int x, int y, const QString &text)
 
 void CompositionView::slotControlChange(Instrument *instrument, int cc)
 {
-    // If an audio instrument's volume is changed, we need to redraw the
-    // previews since the audio previews show the effects of volume.
+    // If an audio instrument's volume or pan is changed, we need to redraw
+    // the previews since the audio previews show the effects of volume and
+    // pan.
 
     // This approach is a bit heavy-handed.  Even if the relevant audio
     // segment isn't visible, we still force an update.  This is simple.
     // Making it smarter probably isn't worth the time or the code.
 
-    if (cc != MIDI_CONTROLLER_VOLUME)
-        return;
     if (instrument->getType() != Instrument::Audio)
+        return;
+    if (cc != MIDI_CONTROLLER_VOLUME  &&  cc != MIDI_CONTROLLER_PAN)
         return;
 
     // Signal that the audio previews need to be deleted on the next timer.
