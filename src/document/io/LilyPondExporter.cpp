@@ -899,7 +899,7 @@ LilyPondExporter::write()
     // Gather all segments in a place where it will be possible
     // to see the repetitions in a global context and to compute
     // the place of the different voices in the Lilypond score.
-    LilyPondSegmentsContext lsc(this, m_composition);
+    LilyPondSegmentsContext lsc(m_composition);
     for (Composition::iterator i = m_composition->begin();
             i != m_composition->end(); ++i) {
         if (isSegmentToPrint(*i)) {
@@ -963,7 +963,6 @@ LilyPondExporter::write()
         lsc.fixVoltaStartTimes();
     }
 
-
     // If any segment is not starting at a bar boundary, adapted
     // \partial or \skip keywords must be added to the output file.
     // We have to know what segment is starting first to compute
@@ -992,7 +991,7 @@ LilyPondExporter::write()
         /// When using this code with repeats, the writeskip() to the end of the
         /// composition is writing a blank measure at the end of the score.
         do {
-            // Allow some oportunities for user to cancel
+            // Allow some opportunities for user to cancel
             if (m_progressDialog  &&  m_progressDialog->wasCanceled()) {
                 return false;
             }
@@ -1197,12 +1196,11 @@ LilyPondExporter::write()
 
     for (track = lsc.useFirstTrack(); track; track = lsc.useNextTrack()) {
         trackPos = lsc.getTrackPos();
-
-        // Allow some oportunities for user to cancel
+        // Allow some opportunities for user to cancel
         if (m_progressDialog  &&  m_progressDialog->wasCanceled()) {
             return false;
         }
-        
+
         int voiceIndex;
         for (voiceIndex = lsc.useFirstVoice();
                           voiceIndex != -1; voiceIndex = lsc.useNextVoice()) {
@@ -1211,6 +1209,7 @@ LilyPondExporter::write()
 
             Segment *seg;
             for (seg = lsc.useFirstSegment(); seg; seg = lsc.useNextSegment()) {
+
                 if (!lsc.isVolta()) {
                     // handle the bracket(s) for the first track, and if no brackets
                     // present, open with a <<
@@ -1259,7 +1258,7 @@ LilyPondExporter::write()
                     if (m_progressDialog)
                         m_progressDialog->setValue(
                                 trackPos * 100 / m_composition->getNbTracks());
-                                    
+
                     qApp->processEvents();
 
                     if ((int) seg->getTrack() != lastTrackIndex) {
@@ -1555,7 +1554,7 @@ LilyPondExporter::write()
                         writeSkip(timeSignature, compositionStartTime,
                                 lsc.getSegmentStartTime(), false, str);
                     }
-        
+
                     // If segment is not starting on a bar, but is starting at barTime + offset,
                     // we have to do :
                     //     if segment is the first one : add partial (barDuration - offset)
@@ -1643,7 +1642,8 @@ LilyPondExporter::write()
                     // Check for a time signature in the first bar of the segment
                     bool timeSigInFirstBar = false;
                     TimeSignature firstTimeSig =
-                        m_composition->getTimeSignatureInBar(firstBar, timeSigInFirstBar);
+                        m_composition->getTimeSignatureInBar(firstBar,
+                                                             timeSigInFirstBar);
                     // and write it here (to avoid multiple time signatures when
                     // a repeating segment is unfolded)
                     if (timeSigInFirstBar && (barNo == firstBar)) {
@@ -1652,14 +1652,19 @@ LilyPondExporter::write()
 
                     // open \repeat section if this is the first bar in the
                     // repeat
-                    if (seg->isRepeating() && !haveRepeating) {
+                    if ( (lsc.isRepeatingSegment()
+                           || (lsc.isSimpleRepeatedLinks() 
+                                  && (m_repeatMode == REPEAT_VOLTA)
+                              )
+                         ) && !haveRepeating) {
 
                         haveRepeating = true;
                         int numRepeats = 2; 
 
                         if (m_repeatMode == REPEAT_BASIC) {
                             // The old unfinished way
-                            str << std::endl << indent(col++) << "\\repeat volta " << numRepeats << " {";
+                            str << std::endl << indent(col++)
+                                << "\\repeat volta " << numRepeats << " {";
                         } else {
                             numRepeats = lsc.getNumberOfRepeats();
                             if ((m_repeatMode == REPEAT_VOLTA) && lsc.isSynchronous()) {
@@ -1668,7 +1673,8 @@ LilyPondExporter::write()
                             } else {
                                 // m_repeatMode == REPEAT_UNFOLD
                                 str << std::endl << indent(col++) 
-                                    << "\\repeat unfold " << numRepeats << " {";
+                                    << "\\repeat unfold "
+                                    << numRepeats << " {";
                             }
                         }
                     } else if (lsc.isRepeatWithVolta() &&
@@ -1686,8 +1692,20 @@ LilyPondExporter::write()
                                 << "% Segment: " << seg->getLabel();
                             haveRepeatingWithVolta = true;
                             if (!lsc.isAutomaticVoltaUsable()) {
-                            str << std::endl << indent(col)
-                                << "\\set Score.repeatCommands = #'(start-repeat)";
+                                if (lsc.wasRepeatingWithoutVolta()) {
+                                    // When automatic volta is not usable, the
+                                    // "start-repeat" bar hides the "end-repeat"
+                                    // bar issued by the previous automatic
+                                    // volta. In such a case, a "double-repeat"
+                                    // bar has to be writed. As #'(double-repeat)
+                                    // is currently not defined in
+                                    // LilyPond, the ":..:" string is used.
+                                    str << std::endl << indent(col)
+                                        << "\\bar \":..:\"";
+                                } else {
+                                    str << std::endl << indent(col)
+                                        << "\\set Score.repeatCommands = #'(start-repeat)";
+                                }
                             }
                         } else {
                             str << std::endl << indent(col) 
@@ -1937,9 +1955,9 @@ LilyPondExporter::write()
                     } // for (long currentVerse = 0....
                 } // if (m_exportLyrics....
                 firstTrack = false;
-            } // for (Composition::iterator i = m_composition->begin()....
-        } // for (voiceIndex = ...
-    } // for (int trackPos = 0....
+            } // for (seg = lsc.useFirstSegment(); seg; seg = ....
+        } // for (voiceIndex = lsc.useFirstVoice(); voiceIndex != -1; ....
+    } // for (track = lsc.useFirstTrack(); track; track = ....
 
     // close the last track (Staff context)
     if (voiceCounter > 0) {
@@ -3070,7 +3088,7 @@ LilyPondExporter::writePitch(const Event *note,
 
     if (note->has(BaseProperties::MEMBER_OF_PARALLEL)) {
 
-        bool memberOfParallel;
+        bool memberOfParallel = false;
 
         note->get<Bool>(BaseProperties::MEMBER_OF_PARALLEL, memberOfParallel);
 
