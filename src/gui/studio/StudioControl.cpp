@@ -116,11 +116,13 @@ StudioControl::setStudioObjectPropertyList(MappedObjectId id,
     return error;
 }
 
+#if 0
 MappedObjectId
 StudioControl::getStudioObjectByType(MappedObject::MappedObjectType type)
 {
     return RosegardenSequencer::getInstance()->getMappedObjectId(type);
 }
+#endif
 
 void
 StudioControl::setStudioPluginPort(MappedObjectId pluginId,
@@ -137,11 +139,13 @@ StudioControl::getStudioPluginPort(MappedObjectId pluginId,
     return RosegardenSequencer::getInstance()->getMappedPort(pluginId, portId);
 }
 
+#if 0
 MappedObjectPropertyList
 StudioControl::getPluginInformation()
 {
     return RosegardenSequencer::getInstance()->getPluginInformation();
 }
+#endif
 
 QString
 StudioControl::getPluginProgram(MappedObjectId id, int bank, int program)

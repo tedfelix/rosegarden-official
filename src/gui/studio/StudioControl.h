@@ -21,16 +21,14 @@
 #include "base/MidiProgram.h"
 #include "sound/MappedCommon.h"
 #include "sound/MappedStudio.h"
+
 #include <QMutex>
 #include <QString>
 
 
-class MappedObjectValueList;
-class MappedObjectIdList;
-
-
 namespace Rosegarden
 {
+
 
 class RealTime;
 class MappedInstrument;
@@ -39,49 +37,69 @@ class MappedEventList;
 class Instrument;
 class ImmediateNote;
 
-typedef std::pair<Rosegarden::MidiByte, Rosegarden::MidiByte> MidiControlPair;
 
+/// Global interface for plugin, audio, and MIDI configuration.
 class StudioControl
 {
 public:
 
-    // Object management
-    //
+    // *** Object management
+
+    /**
+     * RosegardenDocument calls this to create AudioBuss, AudioInput,
+     * AudioFader, and PluginSlot objects.  RosegardenMainWindow calls
+     * this to create PluginSlot objects.  This is never called to
+     * create Studio or PluginPort objects.
+     */
     static MappedObjectId
         createStudioObject(MappedObject::MappedObjectType type);
-    static MappedObjectId
-        getStudioObjectByType(MappedObject::MappedObjectType type);
+
+    //static MappedObjectId
+    //    getStudioObjectByType(MappedObject::MappedObjectType type);
+
+    /// This is used to destroy plugin (slot?) objects.
     static bool destroyStudioObject(MappedObjectId id);
 
-    // Properties
-    //
-    static MappedObjectPropertyList
-                  getStudioObjectProperty(MappedObjectId id,
-                                          const MappedObjectProperty &property);
 
-    // Set a value to a value
-    //
+    // *** Properties
+
+    /// Used by AudioPluginDialog to get programs for a plugin.
+    static MappedObjectPropertyList getStudioObjectProperty(
+            MappedObjectId id,
+            const MappedObjectProperty &property);
+
+    /// Used to set things like audio levels (MappedAudioFader::FaderLevel).
     static bool setStudioObjectProperty(MappedObjectId id,
                                         const MappedObjectProperty &property,
                                         MappedObjectValue value);
 
-    // Set many values to values
-    //
-    static bool setStudioObjectProperties(const MappedObjectIdList &ids,
-                                          const MappedObjectPropertyList &properties,
-                                          const MappedObjectValueList &values);
+    /// Set many properties.
+    /**
+     * Used by RosegardenDocument::initialiseStudio() to set up the studio.
+     */
+    static bool setStudioObjectProperties(
+            const MappedObjectIdList &ids,
+            const MappedObjectPropertyList &properties,
+            const MappedObjectValueList &values);
 
-    // Set a value to a string 
-    //
+    /// Set a value to a string
+    /**
+     * Used to set plugin identifier (name) and program.
+     */
     static bool setStudioObjectProperty(MappedObjectId id,
                                         const MappedObjectProperty &property,
                                         const QString &value);
 
-    // Set a value to a string list.  Return value is error if any.
-    //
+    /// Set a value to a string list.  Return value is error if any.
+    /**
+     * Used for plugin configuration (MappedPluginSlot::Configuration).
+     */
     static QString setStudioObjectPropertyList(MappedObjectId id,
 					       const MappedObjectProperty &property,
 					       const MappedObjectPropertyList &values);
+
+
+    // *** Plugins
 
     static void setStudioPluginPort(MappedObjectId pluginId,
                                     unsigned long portId,
@@ -90,41 +108,45 @@ public:
     static MappedObjectValue getStudioPluginPort(MappedObjectId pluginId,
                                                  unsigned long portId);
 
-    // Get all plugin information
-    //
-    static MappedObjectPropertyList getPluginInformation();
+    /// Get all plugin information.
+    //static MappedObjectPropertyList getPluginInformation();
 
-    // Get program name for a given program
-    // 
-    static QString getPluginProgram(MappedObjectId, int bank, int program);
+    /// Get program name for a given bank/program.
+    static QString getPluginProgram(MappedObjectId pluginId,
+                                    int bank, int program);
 
-    // Get program numbers for a given name (rv is bank << 16 + program)
-    // This is one of the nastiest hacks in the whole application
-    // 
-    static unsigned long getPluginProgram(MappedObjectId, QString name);
+    /// Get bank/program for a given name.
+    /**
+     * Return value is bank << 16 + program.
+     */
+    static unsigned long getPluginProgram(MappedObjectId pluginId,
+                                          QString name);
 
-    // Connection
-    //
+
+    // *** Audio Connections
+
+    /// Used to connect audio ins and outs to audio instruments.
     static void connectStudioObjects(MappedObjectId id1,
                                      MappedObjectId id2);
     static void disconnectStudioObjects(MappedObjectId id1,
                                         MappedObjectId id2);
     static void disconnectStudioObject(MappedObjectId id);
 
-    // Send controllers and other one off MIDI events using these
-    // interfaces.
-    //
-    static void sendMappedEvent(const MappedEvent& mE);
-    static void sendMappedEventList(const MappedEventList &mC);
 
-    // MappedInstrument
-    //
+    // *** Send via MIDI
+
+    /// Send a MIDI event immediately.
+    static void sendMappedEvent(const MappedEvent &event);
+    /// Send multiple MIDI events immediately.
+    static void sendMappedEventList(const MappedEventList &eventList);
+
+    /// Send mapped instrument to the sequencer.
     static void sendMappedInstrument(const MappedInstrument &mI);
 
-    // Send the Quarter Note Length has changed to the sequencer
-    //
+    /// Delegate to RosegardenSequencer.
     static void sendQuarterNoteLength(const RealTime &length);
 
+    /// Used by the matrix and notation editors to play notes.
     static void playPreviewNote(Instrument *instrument, int pitch,
                                 int velocity, RealTime duration,
                                 bool oneshot = true);
@@ -137,13 +159,26 @@ public:
      * MIDI thru channels.
      */
     static void sendChannelSetup(Instrument *instrument, int channel);
+
+    /// Send a control change immediately.
+    /**
+     * ??? rename: sendControlChange()
+     */
     static void sendController(const Instrument *instrument, int channel,
                                MidiByte controller, MidiByte value);
 
  private:
+    /// Creates the m_immediateNoteFiller in a thread-safe way and returns it.
+    /**
+     * Used by playPreviewNote() to generate the necessary events.
+     */
     static ImmediateNote *getFiller(void);
-
-    static QMutex         m_instanceMutex;
+    /**
+     * Used by getFiller() to make sure creation of m_immediateNoteFiller
+     * is thread safe.
+     */
+    static QMutex m_instanceMutex;
+    /// Created and returned by getFiller().
     static ImmediateNote *m_immediateNoteFiller;
 };
 
