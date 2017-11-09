@@ -39,6 +39,25 @@ class ImmediateNote;
 
 
 /// Global interface for plugin, audio, and MIDI configuration.
+/**
+ * Historically, this was an important class.  It's now a trivial layer
+ * that can be removed.
+ *
+ * StudioControl was first introduced in r3007, 9/9/2002.  It originally
+ * served to wrap the DCOP interface to the sequencer process.
+ * https://sourceforge.net/p/rosegarden/code/3007
+ *
+ * The sequencer process was moved into a thread in r9071, 9/1/2008.
+ * As a result, StudioControl was reduced to simply delegating directly
+ * to RosegardenSequencer.
+ * https://sourceforge.net/p/rosegarden/code/9071
+ *
+ * Since this class does little more than delegate to RosegardenSequencer,
+ * it should be removed and callers should call RosegardenSequencer
+ * directly.  There are portions of this that do more than delegation and
+ * they should be moved elsewhere (e.g. into RosegardenSequencer) to get
+ * rid of this class.
+ */
 class StudioControl
 {
 public:
