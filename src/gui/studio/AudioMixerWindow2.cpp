@@ -314,9 +314,6 @@ void AudioMixerWindow2::updateWidgets()
     if (action)
         action->setChecked(visible);
 
-    // ??? The strips will query studio.amwShowAudioFaders and show/hide
-    //     the faders as appropriate.
-
     visible = studio.amwShowSynthFaders;
     action = findAction("show_synth_faders");
     if (action)
@@ -360,10 +357,6 @@ void AudioMixerWindow2::updateWidgets()
 
 void AudioMixerWindow2::slotDocumentModified(bool /*modified*/)
 {
-    // ??? Does this get hit hard when recording???  Need to determine.
-    //     If so, then we need to figure out how to handle it.
-
-    // It's really this simple.
     updateWidgets();
 }
 
@@ -613,7 +606,6 @@ void
 AudioMixerWindow2::changeEvent(QEvent *event)
 {
     // Let baseclass handle first.
-    // ??? Is this really the right thing to do?
     QWidget::changeEvent(event);
 
     if (event->type() == QEvent::ActivationChange) {
