@@ -379,11 +379,7 @@ RosegardenMainWindow::RosegardenMainWindow(bool enableSound,
     }
 
     if (m_view) {
-        connect(m_seqManager, SIGNAL(controllerDeviceEventReceived(MappedEvent *)),
-                m_view, SLOT(slotControllerDeviceEventReceived(MappedEvent *)));
-                
-                
-        
+
         MIDIInstrumentParameterPanel *mipp;
         mipp = m_instrumentParameterBox->getMIDIInstrumentParameterPanel();
         if(! mipp){
