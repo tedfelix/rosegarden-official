@@ -546,11 +546,6 @@ AudioStrip::slotFaderLevelChanged(float dB)
         if (!instrument)
             return;
 
-        StudioControl::setStudioObjectProperty(
-                MappedObjectId(instrument->getMappedId()),
-                MappedAudioFader::FaderLevel,
-                MappedObjectValue(dB));
-
         instrument->setLevel(dB);
         Instrument::getStaticSignals()->
                 emitControlChange(instrument, MIDI_CONTROLLER_VOLUME);
@@ -611,11 +606,6 @@ AudioStrip::slotPanChanged(float pan)
 
         if (!instrument)
             return;
-
-        StudioControl::setStudioObjectProperty(
-                instrument->getMappedId(),
-                MappedAudioFader::Pan,
-                MappedObjectValue(pan));
 
         instrument->setPan(MidiByte(pan + 100.0));
         Instrument::getStaticSignals()->

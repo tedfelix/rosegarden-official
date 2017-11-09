@@ -86,7 +86,13 @@ signals:
     /// Fine-grain, high-frequency notification mechanism.
     /**
      * Call this if you change the value for a control change for
-     * an Instrument.  Handlers should update only that part of the
+     * an Instrument.  This will trigger an update of relevant portions
+     * of the UI (sliders and knobs) to reflect the new values.  This
+     * will also trigger RosegardenSequencer to send out appropriate
+     * control change messages via MIDI or update the level and pan
+     * settings for audio instruments.
+     *
+     * Handlers should update only that part of the
      * UI that displays this specific control change value.
      *
      * This is used for control change notifications which can happen

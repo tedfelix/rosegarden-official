@@ -154,16 +154,6 @@ AudioInstrumentParameterPanel::slotSelectAudioLevel(float dB)
                 emitControlChange(getSelectedInstrument(),
                                   MIDI_CONTROLLER_VOLUME);
         m_doc->setModified();
-
-        // ??? Perhaps it would be better for StudioControl to monitor
-        //     the Instrument objects (InstrumentStaticSignals::changed())
-        //     and update the properties whenever the Instrument changes.
-        //     Then this StudioControl code which is spread all over this
-        //     class and duplicated in AudioMixerWindow2 would go away.
-        StudioControl::setStudioObjectProperty
-        (MappedObjectId(getSelectedInstrument()->getMappedId()),
-         MappedAudioFader::FaderLevel,
-         MappedObjectValue(dB));
     }
 }
 
@@ -178,6 +168,8 @@ AudioInstrumentParameterPanel::slotSelectAudioRecordLevel(float dB)
 
     if (getSelectedInstrument()->getType() == Instrument::Audio) {
         getSelectedInstrument()->setRecordLevel(dB);
+        // ??? Another potential candidate for high-frequency update
+        //     treatment like the controlChange() signal.
         getSelectedInstrument()->changed();
 
         StudioControl::setStudioObjectProperty
@@ -338,11 +330,6 @@ AudioInstrumentParameterPanel::slotSynthGUIButtonClicked()
 void
 AudioInstrumentParameterPanel::slotSetPan(float pan)
 {
-    StudioControl::setStudioObjectProperty
-    (MappedObjectId(getSelectedInstrument()->getMappedId()),
-     MappedAudioFader::Pan,
-     MappedObjectValue(pan));
-
     getSelectedInstrument()->setPan(MidiByte(pan + 100.0));
     Instrument::getStaticSignals()->
             emitControlChange(getSelectedInstrument(),

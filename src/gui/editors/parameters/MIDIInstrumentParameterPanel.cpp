@@ -1274,9 +1274,6 @@ MIDIInstrumentParameterPanel::slotControllerChanged(int controllerNumber)
     getSelectedInstrument()->setControllerValue(
             static_cast<MidiByte>(controllerNumber),
             static_cast<MidiByte>(value));
-    getSelectedInstrument()->sendController(
-            static_cast<MidiByte>(controllerNumber),
-            static_cast<MidiByte>(value));
     Instrument::getStaticSignals()->
             emitControlChange(getSelectedInstrument(), controllerNumber);
     m_doc->setModified();

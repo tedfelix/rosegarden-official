@@ -2057,7 +2057,6 @@ RosegardenMainViewWidget::slotControllerDeviceEventReceived(MappedEvent *e, cons
                 if ((*i).getControllerValue() == controller) {
                     //RG_DEBUG << "  Setting controller " << controller << " for instrument " << instrument->getId() << " to " << value;
                     instrument->setControllerValue(controller, value);
-                    instrument->sendController(controller, value);
                     Instrument::getStaticSignals()->
                             emitControlChange(instrument, controller);
                     getDocument()->setModified();
@@ -2079,11 +2078,6 @@ RosegardenMainViewWidget::slotControllerDeviceEventReceived(MappedEvent *e, cons
             float dB = AudioLevel::fader_to_dB(
                     value, 127, AudioLevel::ShortFader);
 
-            StudioControl::setStudioObjectProperty(
-                    MappedObjectId(instrument->getMappedId()),
-                    MappedAudioFader::FaderLevel,
-                    MappedObjectValue(dB));
-
             instrument->setLevel(dB);
             Instrument::getStaticSignals()->
                     emitControlChange(instrument, MIDI_CONTROLLER_VOLUME);
@@ -2096,12 +2090,6 @@ RosegardenMainViewWidget::slotControllerDeviceEventReceived(MappedEvent *e, cons
             //RG_DEBUG << "  Setting pan for instrument " << instrument->getId() << " to " << value;
 
             float pan = (value / 64.0) * 100.0 + 0.01;
-
-            // This wants -100 to 100.
-            StudioControl::setStudioObjectProperty(
-                    instrument->getMappedId(),
-                    MappedAudioFader::Pan,
-                    static_cast<MappedObjectValue>(pan - 100));
 
             // This wants 0 to 200.
             instrument->setControllerValue(MIDI_CONTROLLER_PAN, MidiByte(pan));

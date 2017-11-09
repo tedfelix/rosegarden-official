@@ -25,6 +25,7 @@
 #include "base/MidiDevice.h"
 
 #include <QMutex>
+#include <QObject>
 #include <QString>
 
 #include <deque>
@@ -45,8 +46,10 @@ class SoundDriver;
  * the Rosegarden GUI application, the high level marshalling of data,
  * and the main event loop of the sequencer.
  */
-class RosegardenSequencer : public ExternalTransport
+class RosegardenSequencer : public QObject, public ExternalTransport
 {
+    Q_OBJECT
+
 public:
     virtual ~RosegardenSequencer();
 
@@ -451,7 +454,11 @@ public:
 
     // ---------- End of ExternalTransport Interface -----------
 
-protected:
+private slots:
+    /// Connected to InstrumentStaticSignals::controlChange().
+    void slotControlChange(Instrument *instrument, int cc);
+
+private:
     /// Singleton.  See getInstance().
     RosegardenSequencer();
 

@@ -37,6 +37,9 @@
 #include "sound/MappedEventInserter.h"
 #include "base/Profiler.h"
 #include "sound/PluginFactory.h"
+#include "base/Instrument.h"
+#include "base/InstrumentStaticSignals.h"
+#include "gui/studio/StudioControl.h"
 
 #include "gui/application/RosegardenApplication.h"
 #include "gui/application/RosegardenMainWindow.h"
@@ -101,6 +104,18 @@ RosegardenSequencer::RosegardenSequencer() :
                                   m_smallFileSize);
 
     m_driver->setExternalTransportControl(this);
+
+    // Connect for high-frequency control change notifications.
+    // Note that we must use a DirectConnection or else the signals may
+    // get lost.  I assume this is because the sequencer thread doesn't
+    // handle queued signals.  Perhaps it doesn't have a Qt event loop?
+    // Regardless, we really don't want something as high-frequency as
+    // this going through a message queue anyway.  We should probably
+    // request a DirectConnection for every controlChange() connection.
+    connect(Instrument::getStaticSignals().data(),
+                SIGNAL(controlChange(Instrument *, int)),
+            SLOT(slotControlChange(Instrument *, int)),
+            Qt::DirectConnection);
 }
 
 RosegardenSequencer::~RosegardenSequencer()
@@ -674,11 +689,7 @@ RosegardenSequencer::setMappedProperty(int id,
 {
     LOCKED;
 
-
-    //    SEQUENCER_DEBUG << "setProperty: id = " << id
-    //                    << " : property = \"" << property << "\""
-    //		    << ", value = " << value << endl;
-
+    //RG_DEBUG << "setMappedProperty(int, QString, float): id = " << id << "; property = \"" << property << "\"" << "; value = " << value;
 
     MappedObject *object = m_studio->getObjectById(id);
 
@@ -1574,5 +1585,45 @@ RosegardenSequencer::incrementTransportToken()
     SEQUENCER_DEBUG << "RosegardenSequencer::incrementTransportToken: incrementing to " << m_transportToken;
 #endif
 }
+
+void
+RosegardenSequencer::slotControlChange(Instrument *instrument, int cc)
+{
+    if (!instrument)
+        return;
+
+    // MIDI
+    if (instrument->getType() == Instrument::Midi)
+    {
+        //RG_DEBUG << "slotControlChange(): cc = " << cc << " value = " << instrument->getControllerValue(cc);
+
+        instrument->sendController(cc, instrument->getControllerValue(cc));
+
+        return;
+    }
+
+    // Audio
+    if (instrument->getType() == Instrument::Audio)
+    {
+        if (cc == MIDI_CONTROLLER_VOLUME) {
+
+            setMappedProperty(
+                    instrument->getMappedId(),
+                    MappedAudioFader::FaderLevel,
+                    instrument->getLevel());
+
+        } else if (cc == MIDI_CONTROLLER_PAN) {
+
+            setMappedProperty(
+                    instrument->getMappedId(),
+                    MappedAudioFader::Pan,
+                    static_cast<float>(instrument->getPan()) - 100);
+
+        }
+
+        return;
+    }
+}
+
 
 }
