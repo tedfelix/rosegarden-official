@@ -22,7 +22,7 @@
     <screenshots>
         <screenshot type="default">
             <caption>The score editing window.</caption>
-            <image type="source" width="650" height="453">ttp://rosegardenmusic.com/tour/notation/score-edit.png</image>
+            <image type="source" width="650" height="453">http://rosegardenmusic.com/tour/notation/score-edit.png</image>
         </screenshot>
     </screenshots>
     <categories>
