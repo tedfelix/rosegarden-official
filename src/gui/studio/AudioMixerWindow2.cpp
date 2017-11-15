@@ -210,8 +210,13 @@ AudioMixerWindow2::updateStripCounts()
         }
     }
 
+    unsigned submasterStripCount = 0;
+
+    if (studio.amwShowAudioSubmasters)
+        submasterStripCount = studio.getBusses().size()-1;
+
     bool submasterStripsMatch =
-            (m_submasterStrips.size() == studio.getBusses().size()-1);
+            (m_submasterStrips.size() == submasterStripCount);
 
     // If everything is in order, bail.
     if (inputStripsMatch  &&  submasterStripsMatch)
@@ -249,17 +254,15 @@ AudioMixerWindow2::updateStripCounts()
     // If the submaster Strip count is wrong, fix it.
     if (!submasterStripsMatch) {
         // If we don't have enough strips
-        if (m_submasterStrips.size() < studio.getBusses().size()-1) {
-            unsigned count =
-                    (studio.getBusses().size()-1) - m_submasterStrips.size();
+        if (m_submasterStrips.size() < submasterStripCount) {
+            unsigned count = submasterStripCount - m_submasterStrips.size();
             // Add the appropriate number
             for (unsigned i = 0; i < count; ++i) {
                 int id = static_cast<int>(m_submasterStrips.size()) + 1;
                 m_submasterStrips.push_back(new AudioStrip(this, id));
             }
         } else {  // We have too many submaster strips
-            unsigned count =
-                    m_submasterStrips.size() - (studio.getBusses().size()-1);
+            unsigned count = m_submasterStrips.size() - submasterStripCount;
             // Remove the appropriate number
             for (unsigned i = 0; i < count; ++i) {
                 // Delete and remove.
