@@ -46,7 +46,6 @@ Studio::Studio() :
     amwShowAudioFaders(true),
     amwShowSynthFaders(true),
     amwShowAudioSubmasters(true),
-    amwShowPluginButtons(true),
     amwShowUnassignedFaders(false),
     m_midiThruFilter(0),
     m_midiRecordFilter(0),
@@ -476,7 +475,6 @@ Studio::toXmlString(const std::vector<DeviceId> &devices) const
            << "\" amwshowaudiofaders=\"" << amwShowAudioFaders
            << "\" amwshowsynthfaders=\"" << amwShowSynthFaders
            << "\" amwshowaudiosubmasters=\"" << amwShowAudioSubmasters
-           << "\" amwshowpluginbuttons=\"" << amwShowPluginButtons
            << "\" amwshowunassignedfaders=\"" << amwShowUnassignedFaders
            << "\">" << endl << endl;
 

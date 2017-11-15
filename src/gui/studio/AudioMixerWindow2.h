@@ -79,9 +79,6 @@ private slots:
     /// Settings > Show Audio Submasters
     void slotShowAudioSubmasters();
 
-    // Settings > Show Plugin Buttons
-    void slotShowPluginButtons();
-
     /// Settings > Show Unassigned Faders
     void slotShowUnassignedFaders();
 

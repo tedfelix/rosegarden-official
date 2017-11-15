@@ -194,7 +194,6 @@ public:
     bool amwShowAudioFaders;
     bool amwShowSynthFaders;
     bool amwShowAudioSubmasters;
-    bool amwShowPluginButtons;
     bool amwShowUnassignedFaders;
 
     DeviceId getMetronomeDevice() const { return m_metronomeDevice; }

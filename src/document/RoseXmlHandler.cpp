@@ -522,10 +522,6 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         studio.amwShowAudioSubmasters =
                 temp.isEmpty() ? true : (temp.toInt() != 0);
 
-        temp = atts.value("amwshowpluginbuttons");
-        studio.amwShowPluginButtons =
-                temp.isEmpty() ? true : (temp.toInt() != 0);
-
         temp = atts.value("amwshowunassignedfaders");
         studio.amwShowUnassignedFaders =
                 temp.isEmpty() ? false : (temp.toInt() != 0);

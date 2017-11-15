@@ -121,9 +121,6 @@ AudioMixerWindow2::AudioMixerWindow2(QWidget *parent) :
     // Settings > Show Audio Submasters
     createAction("show_audio_submasters", SLOT(slotShowAudioSubmasters()));
 
-    // Settings > Show Plugin Buttons
-    createAction("show_plugin_buttons", SLOT(slotShowPluginButtons()));
-
     // Settings > Show Unassigned Faders
     createAction("show_unassigned_faders", SLOT(slotShowUnassignedFaders()));
 
@@ -324,11 +321,6 @@ void AudioMixerWindow2::updateWidgets()
     if (action)
         action->setChecked(visible);
 
-    visible = studio.amwShowPluginButtons;
-    action = findAction("show_plugin_buttons");
-    if (action)
-        action->setChecked(visible);
-
     visible = studio.amwShowUnassignedFaders;
     action = findAction("show_unassigned_faders");
     if (action)
@@ -475,17 +467,6 @@ AudioMixerWindow2::slotShowAudioSubmasters()
     Studio &studio = doc->getStudio();
 
     studio.amwShowAudioSubmasters = !studio.amwShowAudioSubmasters;
-
-    doc->slotDocumentModified();
-}
-
-void
-AudioMixerWindow2::slotShowPluginButtons()
-{
-    RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
-    Studio &studio = doc->getStudio();
-
-    studio.amwShowPluginButtons = !studio.amwShowPluginButtons;
 
     doc->slotDocumentModified();
 }
