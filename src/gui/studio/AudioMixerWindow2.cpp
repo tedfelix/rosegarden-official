@@ -175,6 +175,18 @@ AudioMixerWindow2::updateStripCounts()
             instrument->getType() != Instrument::SoftSynth)
             continue;
 
+        // If this is an audio instrument, and audio strips are hidden,
+        // try the next.
+        if (instrument->getType() == Instrument::Audio  &&
+            !studio.amwShowAudioFaders)
+            continue;
+
+        // If this is a softsynth, and softsynth strips are hidden,
+        // try the next.
+        if (instrument->getType() == Instrument::SoftSynth  &&
+            !studio.amwShowSynthFaders)
+            continue;
+
         // If we shouldn't show unassigned faders and this Instrument
         // is unassigned, try the next.
         if (!studio.amwShowUnassignedFaders  &&
