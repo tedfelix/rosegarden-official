@@ -1,20 +1,46 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<application>
- <id type="desktop">rosegarden.desktop</id>
- <licence>CC0</licence>
- <name>Rosegarden</name>
- <summary>Music composition and editing environment for MIDI and notation, with basic audio support</summary>
- <description>
-  <p>
-   Rosegarden is a general-purpose music composition and editing environment that offers a mixture of features inspired by MIDI sequencers, DAWs, and score editors.  Rosegarden offers a variety of extensions that work in conjunction with LilyPond to produce beautiful scores that often require little or no manual editing, and it generally does a good job of rendering human MIDI performances as legible notation.
-  </p>
-  <p>
-   Rosegarden is ideal for the small scale home artist who wishes to use one tool to handle a music project from start to finish.  For example, you can record your musical idea with a MIDI keyboard, write out transposing parts for the members of a brass band, and record the band playing these parts all in the same document in the same application.  Rosegarden supports a variety of import and export formats, and works well in conjunction with other applications.
-  </p>
- </description>
- <screenshots>
-     <screenshot type="default" width="650" height="453">http://rosegardenmusic.com/tour/notation/score-edit.png</screenshot>
- </screenshots>
- <url type="homepage">http://www.rosegardenmusic.com</url>
- <updatecontact>michael.mcintyre@rosegardenmusic.com</updatecontact>
-</application>
+<?xml version="1.0" encoding="utf-8"?>
+<component type="desktop-application">
+    <id>com.rosegardenmusic.rosegarden</id>
+    <name>Rosegarden</name>
+    <summary xml:lang="fr">Séquenceur MIDI/audio et éditeur de partitions</summary>
+    <summary>MIDI and Audio Sequencer and Notation Editor</summary>
+    <summary xml:lang="es">Secuenciador de MIDI y de audio y editor de partitura</summary>
+    <summary xml:lang="de">MIDI- und Audio-Sequencer und Notensatzprogramm</summary>
+    <summary xml:lang="ru">MIDI-секвенсер и нотный редактор</summary>
+    <metadata_license>CC0</metadata_license>
+    <project_license>GPL-2.0+</project_license>
+    <developer_name>Rosegarden development team</developer_name>
+    <url type="homepage">http://www.rosegardenmusic.com/</url>
+    <description>
+        <p>
+            Rosegarden is a general-purpose music composition and editing environment that offers a mixture of features inspired by MIDI sequencers, DAWs, and score editors.  Rosegarden offers a variety of extensions that work in conjunction with LilyPond to produce beautiful scores that often require little or no manual editing, and it generally does a good job of rendering human MIDI performances as legible notation.
+        </p>
+        <p>
+            Rosegarden is ideal for the small scale home artist who wishes to use one tool to handle a music project from start to finish.  For example, you can record your musical idea with a MIDI keyboard, write out transposing parts for the members of a brass band, and record the band playing these parts all in the same document in the same application.  Rosegarden supports a variety of import and export formats, and works well in conjunction with other applications.
+        </p>
+    </description>
+    <screenshots>
+        <screenshot type="default">
+            <caption>The score editing window.</caption>
+            <image type="source" width="650" height="453">ttp://rosegardenmusic.com/tour/notation/score-edit.png</image>
+        </screenshot>
+    </screenshots>
+    <categories>
+        <category>AudioVideo</category>
+        <category>Audio</category>
+        <category>Midi</category>
+        <category>Sequencer</category>
+    </categories>
+    <icon type="stock">rosegarden</icon>
+    <mimetypes>
+        <mimetype>audio/x-rosegarden-composition</mimetype>
+        <mimetype>audio/x-rosegarden-device</mimetype>
+        <mimetype>audio/x-rosegarden-project</mimetype>
+        <mimetype>audio/x-rosegarden-template</mimetype>
+        <mimetype>audio/x-wav</mimetype>
+        <mimetype>audio/midi</mimetype>
+        <mimetype>audio/ogg</mimetype>
+        <mimetype>audio/mp3</mimetype>
+        <mimetype>audio/x-flac</mimetype>
+    </mimetypes>
+</component>
