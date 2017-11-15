@@ -36,7 +36,7 @@ endif()
 
 
 # Install desktop file
-install(FILES desktop/rosegarden.desktop DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/applications")
+install(FILES desktop/com.rosegardenmusic.rosegarden.desktop DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/applications")
 
 # Install appdata file
 install(FILES appdata/rosegarden.appdata.xml DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/appdata")
