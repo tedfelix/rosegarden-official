@@ -375,34 +375,31 @@ LilyPondSegmentsContext::precompute()
 
     // Sort the volta in the print order and gather the duplicate ones
 
-    // Look for the repeat sequences in the first voice of the first track
-    tit = m_segments.begin();
-    if (tit == m_segments.end()) return;   // This should not happen
-    vit = tit->second.begin();
-    if (vit == tit->second.end()) return;  // This should not happen
-    for (sit = vit->second.begin(); sit != vit->second.end(); ++sit) {
-        if (sit->rawVoltaChain) {
-            SegmentDataList repeatList;
-            repeatList.clear();
-            const SegmentData * sd = &(*sit);
-            repeatList.push_back(sd);
-
-            // Gather data from the other tracks
-            for (sd = getFirstSynchronousSegment(sit->segment); sd;
-                sd = getNextSynchronousSegment()) {
-                repeatList.push_back(sd);
+    // Each repeating group of segments has one main repeating segment.
+    // First gather the main segments of the synchronous groups of segments
+    typedef std::map<timeT, SegmentDataList> RepeatMap;
+    RepeatMap repeatMap;
+    repeatMap.clear();  // Useful ???
+    for (tit = m_segments.begin(); tit != m_segments.end(); ++tit) {
+        for (vit = tit->second.begin(); vit != tit->second.end(); ++vit) {
+            for (sit = vit->second.begin(); sit != vit->second.end(); ++sit) {
+                if (sit->rawVoltaChain) {
+                    const SegmentData * sd = &(*sit);
+                    repeatMap[sit->segment->getStartTime()].push_back(sd);
+                }
             }
-
-            // The elements of repeatList are the data related to one group of
-            // synchronous repeated segments.
-            // There should be one and only one element of repeatList in each
-            // of the tracks/voices.
-
-            // Sort the volta
-            sortAndGatherVolta(repeatList);
         }
     }
+    // The elements of each SegmentDataList in repeatMap are the data related
+    // to a group of synchronous repeated segments.
+    // There should be at most one element of each SegmentDataList in each
+    // tracks/voices.
 
+    // Now sort and gather the volta in each synchronous group (the grouped
+    // volta have to be synchronous)
+    for (RepeatMap::iterator i = repeatMap.begin(); i != repeatMap.end(); ++i) {
+        sortAndGatherVolta(i->second);
+    }
 
 
     // Compute the LilyPond start times with all segments unfolded.
@@ -1243,10 +1240,12 @@ LilyPondSegmentsContext::sortAndGatherVolta(SegmentDataList & repeatList)
             (*it)->sortedVoltaChain->push_back((*(*it)->rawVoltaChain)[0]);
         } else {
             // DON'T CRASH...
-            std::cerr << "###########################################################################\n";
+            std::cerr << "###############################"
+                      << "############################################\n";
             std::cerr << "LilyPondSegmentsContext::sortAndGatherVolta:"
                       << " rawVoltaChain = 0 : THIS IS A BUG\n";
-            std::cerr << "###########################################################################\n";
+            std::cerr << "###############################"
+                      << "############################################\n";
             return;
         }
     }
