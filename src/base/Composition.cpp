@@ -1880,6 +1880,31 @@ Composition::isTrackRecording(TrackId track) const
     return m_recordTracks.find(track) != m_recordTracks.end();
 }
 
+bool
+Composition::isInstrumentRecording(InstrumentId instrumentID) const
+{
+    // For each Track in the Composition
+    // ??? Performance: LINEAR SEARCH
+    //     I see no easy fix.  Each Instrument would need to keep a list
+    //     of the Tracks it is on.  Or something equally complicated.
+    for (Composition::trackcontainer::const_iterator ti =
+             m_tracks.begin();
+         ti != m_tracks.end();
+         ++ti) {
+        Track *track = ti->second;
+
+        // If this Track has this Instrument
+        if (track->getInstrument() == instrumentID) {
+            if (isTrackRecording(track->getId())) {
+                // Only one Track can be armed per Instrument.  Regardless,
+                // we only need to know that a Track is in record mode.
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
 
 // Export the Composition as XML, also iterates through
 // Tracks and any further sub-objects

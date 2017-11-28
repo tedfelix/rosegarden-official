@@ -145,6 +145,7 @@ public:
     const recordtrackcontainer &getRecordTracks() const { return m_recordTracks; }
     void setTrackRecording(TrackId track, bool recording);
     bool isTrackRecording(TrackId track) const;
+    bool isInstrumentRecording(InstrumentId instrumentID) const;
 
     /**
      * rename: getSelectedTrackId()

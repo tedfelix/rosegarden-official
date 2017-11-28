@@ -803,37 +803,10 @@ AudioStrip::updateInputMeter()
                 getInstrumentRecordLevelForMixer(m_id, info))
             return;
 
-        // Does this Instrument have a Track that is armed?
-        // ??? Pull out into a function.
-
-        bool armed = false;
-
         Composition &comp = doc->getComposition();
-        Composition::trackcontainer &tracks = comp.getTracks();
 
-        // For each Track in the Composition
-        // ??? Performance: LINEAR SEARCH
-        //     I see no easy fix.  Each Instrument would need to keep a list
-        //     of the Tracks it is on.  Or something equally complicated.
-        for (Composition::trackcontainer::iterator ti =
-                 tracks.begin();
-             ti != tracks.end();
-             ++ti) {
-            Track *track = ti->second;
-
-            // If this Track has this Instrument
-            if (track->getInstrument() == m_id) {
-                // ??? Performance: LINEAR SEARCH
-                if (comp.isTrackRecording(track->getId())) {
-                    armed = true;
-                    // Only one Track can be armed per Instrument.  Regardless,
-                    // we only need to know that a Track is in record mode.
-                    break;
-                }
-            }
-        }
-
-        if (!armed)
+        // If this Instrument does not have a Track that is armed, bail.
+        if (!comp.isInstrumentRecording(m_id))
             return;
 
         // Convert to dB for display.
