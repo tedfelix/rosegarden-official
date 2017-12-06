@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="pl">
+<TS version="2.0" language="pl">
 <context>
     <name>:</name>
     <message>
@@ -214,14 +214,14 @@
         <translation type="unfinished">Zmienny - ustaw %1 dla maks. i min. wartości przypadków</translation>
     </message>
     <message>
+        <location line="+11"/>
         <location filename="../../src/base/parameterpattern/RingingParameterPattern.cpp" line="+39"/>
-        <location filename="../../src/base/parameterpattern/AlternatingParameterPattern.cpp" line="+11"/>
         <source>First Value</source>
         <translation type="unfinished">Pierwsza wartość</translation>
     </message>
     <message>
         <location line="+2"/>
-        <location filename="../../src/base/parameterpattern/AlternatingParameterPattern.cpp" line="+2"/>
+        <location filename="../../src/base/parameterpattern/RingingParameterPattern.cpp" line="+2"/>
         <source>Second Value</source>
         <translation type="unfinished">Druga wartość</translation>
     </message>
@@ -6640,11 +6640,12 @@
         <translation>Tabla</translation>
     </message>
     <message>
+        <location line="+1"/>
         <source>Cuíca</source>
-        <translation type="vanished">Cuíca</translation>
+        <translation>Cuíca</translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location line="+1"/>
         <source>Finger cymbals</source>
         <translation>Saggaty</translation>
     </message>
@@ -6925,12 +6926,7 @@
         <translation>Marakasy</translation>
     </message>
     <message>
-        <location line="-28"/>
-        <source>Cu�ca</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+29"/>
+        <location line="+1"/>
         <location filename="../AutoloadStrings.cpp" line="-1"/>
         <source>Cabasa</source>
         <translation>Cabasa</translation>
@@ -10488,10 +10484,10 @@
         <translation>%1 (%2)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="+472"/>
-        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="+1057"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="+914"/>
         <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="+1690"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="+914"/>
+        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="+1057"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="+472"/>
         <source>%1 Controller %2 %3</source>
         <translation>%1 Kontroler %2 %3</translation>
     </message>
@@ -11766,43 +11762,43 @@ Zaznacz te, które mają być na zawsze usunięte z dysku twardego.
     <name>Rosegarden::AudioMixerWindow</name>
     <message>
         <source>Audio Mixer</source>
-        <translation type="vanished">Mikser dźwięku</translation>
+        <translation type="obsolete">Mikser dźwięku</translation>
     </message>
     <message>
         <source>Record input source</source>
-        <translation type="vanished">Nagrywanie źródła</translation>
+        <translation type="obsolete">Nagrywanie źródła</translation>
     </message>
     <message>
         <source>Output destination</source>
-        <translation type="vanished">Przeznaczenie wyjścia</translation>
+        <translation type="obsolete">Przeznaczenie wyjścia</translation>
     </message>
     <message>
         <source>Pan</source>
-        <translation type="vanished">Panorama</translation>
+        <translation type="obsolete">Panorama</translation>
     </message>
     <message>
         <source>Audio level</source>
-        <translation type="vanished">Poziom dźwięku</translation>
+        <translation type="obsolete">Poziom dźwięku</translation>
     </message>
     <message>
         <source>Mono or stereo</source>
-        <translation type="vanished">Mono lub stereo</translation>
+        <translation type="obsolete">Mono lub stereo</translation>
     </message>
     <message>
         <source>Arm recording</source>
-        <translation type="vanished">Uzbrój nagrywanie</translation>
+        <translation type="obsolete">Uzbrój nagrywanie</translation>
     </message>
     <message>
         <source>&lt;none&gt;</source>
-        <translation type="vanished">&lt;brak&gt;</translation>
+        <translation type="obsolete">&lt;brak&gt;</translation>
     </message>
     <message>
         <source>Click to load an audio plugin</source>
-        <translation type="vanished">Kliknij, aby wczytać wtyczkę dźwiękową</translation>
+        <translation type="obsolete">Kliknij, aby wczytać wtyczkę dźwiękową</translation>
     </message>
     <message>
         <source>Click to rename this instrument</source>
-        <translation type="vanished">Kliknij, aby zmienić nazwę tego instrumentu</translation>
+        <translation type="obsolete">Kliknij, aby zmienić nazwę tego instrumentu</translation>
     </message>
     <message>
         <source>Audio %1</source>
@@ -11818,19 +11814,19 @@ Zaznacz te, które mają być na zawsze usunięte z dysku twardego.
     </message>
     <message>
         <source>Sub %1</source>
-        <translation type="vanished">Szyna %1</translation>
+        <translation type="obsolete">Szyna %1</translation>
     </message>
     <message>
         <source>Audio master output level</source>
-        <translation type="vanished">Poziom wyjścia sumy dźwięku</translation>
+        <translation type="obsolete">Poziom wyjścia sumy dźwięku</translation>
     </message>
     <message>
         <source>Master</source>
-        <translation type="vanished">Suma</translation>
+        <translation type="obsolete">Suma</translation>
     </message>
     <message>
         <source>&lt;no plugin&gt;</source>
-        <translation type="vanished">&lt;brak wtyczki&gt;</translation>
+        <translation type="obsolete">&lt;brak wtyczki&gt;</translation>
     </message>
     <message>
         <source>Rosegarden</source>
@@ -11842,7 +11838,7 @@ Zaznacz te, które mają być na zawsze usunięte z dysku twardego.
     </message>
     <message>
         <source>http://rosegardenmusic.com/wiki/doc:audioMixerWindow-en</source>
-        <translation type="vanished">http://rosegardenmusic.com/wiki/doc:audioMixerWindow-en</translation>
+        <translation type="obsolete">http://rosegardenmusic.com/wiki/doc:audioMixerWindow-en</translation>
     </message>
 </context>
 <context>
@@ -13282,7 +13278,7 @@ Zaznacz te, które mają być na zawsze usunięte z dysku twardego.
     <name>Rosegarden::ConfigureDialogBase</name>
     <message>
         <source>Configure Rosegarden</source>
-        <translation type="vanished">Konfiguruj Rosegarden</translation>
+        <translation type="obsolete">Konfiguruj Rosegarden</translation>
     </message>
 </context>
 <context>
@@ -17524,7 +17520,7 @@ Kliknij podwójnie myszką, aby otworzyć edytor znaczników.</translation>
     <name>Rosegarden::MatrixVelocity</name>
     <message>
         <source>Velocity change: %1</source>
-        <translation type="vanished">Zmiana głośności: %1</translation>
+        <translation type="obsolete">Zmiana głośności: %1</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixVelocity.cpp" line="+214"/>
@@ -23296,152 +23292,187 @@ Zamknięcie innych programów może spowodować wzrost wydajności Rosegarden.</
 <context>
     <name>Rosegarden::StaffHeader</name>
     <message>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="+146"/>
         <source>Track %1 : &quot;%2&quot;</source>
-        <translation type="vanished">Ścieżka %1 : &quot;%2&quot;</translation>
+        <translation>Ścieżka %1 : &quot;%2&quot;</translation>
     </message>
     <message>
+        <location line="+6"/>
         <source>&lt;br&gt;Notate for: %1</source>
-        <translation type="vanished">&lt;br&gt;Zapisuj dla: %1</translation>
+        <translation>&lt;br&gt;Zapisuj dla: %1</translation>
     </message>
     <message>
+        <location line="+2"/>
         <source>normal</source>
-        <translation type="vanished">normalny</translation>
+        <translation>normalny</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>small</source>
-        <translation type="vanished">mały</translation>
+        <translation>mały</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>tiny</source>
-        <translation type="vanished">miniaturowy</translation>
+        <translation>miniaturowy</translation>
     </message>
     <message>
+        <location line="+29"/>
         <source>&lt;br&gt;Size: %1,  Bracket: %2 </source>
-        <translation type="vanished">&lt;br&gt;Rozmiar: %1, Klamra: %2</translation>
+        <translation>&lt;br&gt;Rozmiar: %1, Klamra: %2</translation>
     </message>
     <message>
+        <location line="+28"/>
         <source>&lt;br&gt;bars [%1-%2] in %3 (tr=%4) : &quot;%5&quot;</source>
-        <translation type="vanished">&lt;br&gt;takty [%1-%2] w %3 (tr=%4) : &quot;%5&quot;</translation>
+        <translation>&lt;br&gt;takty [%1-%2] w %3 (tr=%4) : &quot;%5&quot;</translation>
     </message>
     <message>
+        <location line="+7"/>
         <source>&lt;br&gt;bars [%1-%2] (tr=%3) : &quot;%4&quot;</source>
-        <translation type="vanished">&lt;br&gt;takty [%1-%2] (tr=%3) : &quot;%4&quot;</translation>
+        <translation>&lt;br&gt;takty [%1-%2] (tr=%3) : &quot;%4&quot;</translation>
     </message>
     <message>
+        <location line="+48"/>
         <source>&lt;qt&gt;&lt;p&gt;Notation is not consistent&lt;/p&gt;&lt;p&gt;Click to get more information&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="vanished">&lt;qt&gt;&lt;p&gt;Notacja jest niespójna&lt;/p&gt;&lt;p&gt;Kliknij, aby uzyskać więcej informacji&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Notacja jest niespójna&lt;/p&gt;&lt;p&gt;Kliknij, aby uzyskać więcej informacji&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
+        <location line="+162"/>
+        <location line="+50"/>
         <source>...</source>
-        <translation type="vanished">...</translation>
+        <translation>...</translation>
     </message>
     <message>
+        <location line="+75"/>
         <source>C</source>
         <comment>note name</comment>
-        <translation type="vanished">C</translation>
+        <translation>C</translation>
     </message>
     <message>
+        <location line="+1"/>
         <source>C#</source>
         <comment>note name</comment>
-        <translation type="vanished">C#</translation>
+        <translation>C#</translation>
     </message>
     <message>
+        <location line="+1"/>
         <source>D</source>
         <comment>note name</comment>
-        <translation type="vanished">D</translation>
+        <translation>D</translation>
     </message>
     <message>
+        <location line="+1"/>
         <source>Eb</source>
         <comment>note name</comment>
-        <translation type="vanished">Eb</translation>
+        <translation>Eb</translation>
     </message>
     <message>
+        <location line="+1"/>
         <source>E</source>
         <comment>note name</comment>
-        <translation type="vanished">E</translation>
+        <translation>E</translation>
     </message>
     <message>
+        <location line="+1"/>
         <source>F</source>
         <comment>note name</comment>
-        <translation type="vanished">F</translation>
+        <translation>F</translation>
     </message>
     <message>
+        <location line="+1"/>
         <source>F#</source>
         <comment>note name</comment>
-        <translation type="vanished">F#</translation>
+        <translation>F#</translation>
     </message>
     <message>
+        <location line="+1"/>
         <source>G</source>
         <comment>note name</comment>
-        <translation type="vanished">G</translation>
+        <translation>G</translation>
     </message>
     <message>
+        <location line="+1"/>
         <source>G#</source>
         <comment>note name</comment>
-        <translation type="vanished">G#</translation>
+        <translation>G#</translation>
     </message>
     <message>
+        <location line="+1"/>
         <source>A</source>
         <comment>note name</comment>
-        <translation type="vanished">A</translation>
+        <translation>A</translation>
     </message>
     <message>
+        <location line="+1"/>
         <source>Bb</source>
         <comment>note name</comment>
-        <translation type="vanished">Bb</translation>
+        <translation>Bb</translation>
     </message>
     <message>
+        <location line="+1"/>
         <source>B</source>
         <comment>note name</comment>
-        <translation type="vanished">B</translation>
+        <translation>B</translation>
     </message>
     <message>
+        <location line="+112"/>
         <source>%1: %2</source>
-        <translation type="vanished">%1: %2</translation>
+        <translation>%1: %2</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source> in %1</source>
-        <translation type="vanished">w %1</translation>
+        <translation>w %1</translation>
     </message>
     <message>
+        <location line="+241"/>
         <source>&lt;h2&gt;Notation Inconsistencies&lt;/h2&gt;</source>
-        <translation type="vanished">&lt;h2&gt;Niespójność notacji&lt;/h2&gt;</translation>
+        <translation>&lt;h2&gt;Niespójność notacji&lt;/h2&gt;</translation>
     </message>
     <message>
+        <location line="+2"/>
         <source>&lt;h3&gt;Filename: %1 &lt;/h3&gt;</source>
-        <translation type="vanished">&lt;h3&gt;Nazwa pliku: %1 &lt;/h3&gt;</translation>
+        <translation>&lt;h3&gt;Nazwa pliku: %1 &lt;/h3&gt;</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>&lt;h3&gt;Track %1: &quot;%2&quot;&lt;/h3&gt;</source>
-        <translation type="vanished">&lt;h3&gt;Ścieżka %1: &quot;%2&quot;&lt;/h3&gt;</translation>
+        <translation>&lt;h3&gt;Ścieżka %1: &quot;%2&quot;&lt;/h3&gt;</translation>
     </message>
     <message>
+        <location line="+5"/>
         <source>Overlapping segments with inconsistent clefs:</source>
-        <translation type="vanished">Nakładające się segmenty z niespójnymi kluczami:</translation>
+        <translation>Nakładające się segmenty z niespójnymi kluczami:</translation>
     </message>
     <message>
+        <location line="+2"/>
         <source>Segment &quot;%1&quot;: %2 clef</source>
-        <translation type="vanished">Segment &quot;%1&quot;: %2 klucz</translation>
+        <translation>Segment &quot;%1&quot;: %2 klucz</translation>
     </message>
     <message>
+        <location line="+5"/>
         <source>Overlapping segments with inconsistent keys:</source>
-        <translation type="vanished">Nakładające się segmenty z niespójnymi oznaczeniami tonacji:</translation>
+        <translation>Nakładające się segmenty z niespójnymi oznaczeniami tonacji:</translation>
     </message>
     <message>
+        <location line="+2"/>
         <source>Segment &quot;%1&quot;: %2 key</source>
-        <translation type="vanished">Segment &quot;%1&quot;: %2 oznaczenie tonacji</translation>
+        <translation>Segment &quot;%1&quot;: %2 oznaczenie tonacji</translation>
     </message>
     <message>
+        <location line="+5"/>
         <source>Overlapping segments with inconsistent transpositions:</source>
-        <translation type="vanished">Nakładające się segmenty z niespójnymi transpozycjami:</translation>
+        <translation>Nakładające się segmenty z niespójnymi transpozycjami:</translation>
     </message>
     <message>
+        <location line="+2"/>
         <source>Segment &quot;%1&quot;: %2</source>
-        <translation type="vanished">Segment &quot;%1&quot;: %2</translation>
+        <translation>Segment &quot;%1&quot;: %2</translation>
     </message>
     <message>
+        <location line="+6"/>
         <source>Rosegarden</source>
-        <translation type="vanished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
 </context>
 <context>
@@ -25698,187 +25729,147 @@ Transponuj o półtony...</translation>
 <context>
     <name>StaffHeader</name>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="+146"/>
         <source>Track %1 : &quot;%2&quot;</source>
-        <translation type="unfinished">Ścieżka %1 : &quot;%2&quot;</translation>
+        <translation type="obsolete">Ścieżka %1 : &quot;%2&quot;</translation>
     </message>
     <message>
-        <location line="+6"/>
         <source>&lt;br&gt;Notate for: %1</source>
-        <translation type="unfinished">&lt;br&gt;Zapisuj dla: %1</translation>
+        <translation type="obsolete">&lt;br&gt;Zapisuj dla: %1</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>normal</source>
-        <translation type="unfinished">normalny</translation>
+        <translation type="obsolete">normalny</translation>
     </message>
     <message>
-        <location line="+3"/>
         <source>small</source>
-        <translation type="unfinished">mały</translation>
+        <translation type="obsolete">mały</translation>
     </message>
     <message>
-        <location line="+3"/>
         <source>tiny</source>
-        <translation type="unfinished">miniaturowy</translation>
+        <translation type="obsolete">miniaturowy</translation>
     </message>
     <message>
-        <location line="+29"/>
         <source>&lt;br&gt;Size: %1,  Bracket: %2 </source>
-        <translation type="unfinished">&lt;br&gt;Rozmiar: %1, Klamra: %2</translation>
+        <translation type="obsolete">&lt;br&gt;Rozmiar: %1, Klamra: %2</translation>
     </message>
     <message>
-        <location line="+28"/>
         <source>&lt;br&gt;bars [%1-%2] in %3 (tr=%4) : &quot;%5&quot;</source>
-        <translation type="unfinished">&lt;br&gt;takty [%1-%2] w %3 (tr=%4) : &quot;%5&quot;</translation>
+        <translation type="obsolete">&lt;br&gt;takty [%1-%2] w %3 (tr=%4) : &quot;%5&quot;</translation>
     </message>
     <message>
-        <location line="+7"/>
         <source>&lt;br&gt;bars [%1-%2] (tr=%3) : &quot;%4&quot;</source>
-        <translation type="unfinished">&lt;br&gt;takty [%1-%2] (tr=%3) : &quot;%4&quot;</translation>
+        <translation type="obsolete">&lt;br&gt;takty [%1-%2] (tr=%3) : &quot;%4&quot;</translation>
     </message>
     <message>
-        <location line="+48"/>
         <source>&lt;qt&gt;&lt;p&gt;Notation is not consistent&lt;/p&gt;&lt;p&gt;Click to get more information&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;Notacja jest niespójna&lt;/p&gt;&lt;p&gt;Kliknij, aby uzyskać więcej informacji&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Notacja jest niespójna&lt;/p&gt;&lt;p&gt;Kliknij, aby uzyskać więcej informacji&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+162"/>
-        <location line="+50"/>
         <source>...</source>
-        <translation type="unfinished">...</translation>
+        <translation type="obsolete">...</translation>
     </message>
     <message>
-        <location line="+75"/>
         <source>C</source>
         <comment>note name</comment>
-        <translation type="unfinished">C</translation>
+        <translation type="obsolete">C</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>C#</source>
         <comment>note name</comment>
-        <translation type="unfinished">C#</translation>
+        <translation type="obsolete">C#</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>D</source>
         <comment>note name</comment>
-        <translation type="unfinished">D</translation>
+        <translation type="obsolete">D</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Eb</source>
         <comment>note name</comment>
-        <translation type="unfinished">Eb</translation>
+        <translation type="obsolete">Eb</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>E</source>
         <comment>note name</comment>
-        <translation type="unfinished">E</translation>
+        <translation type="obsolete">E</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>F</source>
         <comment>note name</comment>
-        <translation type="unfinished">F</translation>
+        <translation type="obsolete">F</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>F#</source>
         <comment>note name</comment>
-        <translation type="unfinished">F#</translation>
+        <translation type="obsolete">F#</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>G</source>
         <comment>note name</comment>
-        <translation type="unfinished">G</translation>
+        <translation type="obsolete">G</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>G#</source>
         <comment>note name</comment>
-        <translation type="unfinished">G#</translation>
+        <translation type="obsolete">G#</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>A</source>
         <comment>note name</comment>
-        <translation type="unfinished">A</translation>
+        <translation type="obsolete">A</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Bb</source>
         <comment>note name</comment>
-        <translation type="unfinished">Bb</translation>
+        <translation type="obsolete">Bb</translation>
     </message>
     <message>
-        <location line="+1"/>
-        <source>B</source>
-        <comment>note name</comment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+112"/>
         <source>%1: %2</source>
-        <translation type="unfinished">%1: %2</translation>
+        <translation type="obsolete">%1: %2</translation>
     </message>
     <message>
-        <location line="+3"/>
         <source> in %1</source>
-        <translation type="unfinished">w %1</translation>
+        <translation type="obsolete">w %1</translation>
     </message>
     <message>
-        <location line="+241"/>
         <source>&lt;h2&gt;Notation Inconsistencies&lt;/h2&gt;</source>
-        <translation type="unfinished">&lt;h2&gt;Niespójność notacji&lt;/h2&gt;</translation>
+        <translation type="obsolete">&lt;h2&gt;Niespójność notacji&lt;/h2&gt;</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>&lt;h3&gt;Filename: %1 &lt;/h3&gt;</source>
-        <translation type="unfinished">&lt;h3&gt;Nazwa pliku: %1 &lt;/h3&gt;</translation>
+        <translation type="obsolete">&lt;h3&gt;Nazwa pliku: %1 &lt;/h3&gt;</translation>
     </message>
     <message>
-        <location line="+3"/>
         <source>&lt;h3&gt;Track %1: &quot;%2&quot;&lt;/h3&gt;</source>
-        <translation type="unfinished">&lt;h3&gt;Ścieżka %1: &quot;%2&quot;&lt;/h3&gt;</translation>
+        <translation type="obsolete">&lt;h3&gt;Ścieżka %1: &quot;%2&quot;&lt;/h3&gt;</translation>
     </message>
     <message>
-        <location line="+5"/>
         <source>Overlapping segments with inconsistent clefs:</source>
-        <translation type="unfinished">Nakładające się segmenty z niespójnymi kluczami:</translation>
+        <translation type="obsolete">Nakładające się segmenty z niespójnymi kluczami:</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>Segment &quot;%1&quot;: %2 clef</source>
-        <translation type="unfinished">Segment &quot;%1&quot;: %2 klucz</translation>
+        <translation type="obsolete">Segment &quot;%1&quot;: %2 klucz</translation>
     </message>
     <message>
-        <location line="+5"/>
         <source>Overlapping segments with inconsistent keys:</source>
-        <translation type="unfinished">Nakładające się segmenty z niespójnymi oznaczeniami tonacji:</translation>
+        <translation type="obsolete">Nakładające się segmenty z niespójnymi oznaczeniami tonacji:</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>Segment &quot;%1&quot;: %2 key</source>
-        <translation type="unfinished">Segment &quot;%1&quot;: %2 oznaczenie tonacji</translation>
+        <translation type="obsolete">Segment &quot;%1&quot;: %2 oznaczenie tonacji</translation>
     </message>
     <message>
-        <location line="+5"/>
         <source>Overlapping segments with inconsistent transpositions:</source>
-        <translation type="unfinished">Nakładające się segmenty z niespójnymi transpozycjami:</translation>
+        <translation type="obsolete">Nakładające się segmenty z niespójnymi transpozycjami:</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>Segment &quot;%1&quot;: %2</source>
-        <translation type="unfinished">Segment &quot;%1&quot;: %2</translation>
+        <translation type="obsolete">Segment &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location line="+6"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation type="obsolete">Rosegarden</translation>
     </message>
 </context>
 </TS>

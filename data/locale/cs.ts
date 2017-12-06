@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="cs">
+<TS version="2.0" language="cs">
 <context>
     <name>:</name>
     <message>
@@ -194,14 +194,14 @@
         <translation>Střídavé - nastavit %1 střídavě na největší a nejmenší při střídání událostí</translation>
     </message>
     <message>
-        <location filename="../../src/base/parameterpattern/RingingParameterPattern.cpp" line="39"/>
         <location filename="../../src/base/parameterpattern/AlternatingParameterPattern.cpp" line="41"/>
+        <location filename="../../src/base/parameterpattern/RingingParameterPattern.cpp" line="39"/>
         <source>First Value</source>
         <translation>První hodnota</translation>
     </message>
     <message>
-        <location filename="../../src/base/parameterpattern/RingingParameterPattern.cpp" line="41"/>
         <location filename="../../src/base/parameterpattern/AlternatingParameterPattern.cpp" line="43"/>
+        <location filename="../../src/base/parameterpattern/RingingParameterPattern.cpp" line="41"/>
         <source>Second Value</source>
         <translation>Druhá hodnota</translation>
     </message>
@@ -1920,7 +1920,7 @@
     </message>
     <message>
         <source>Insert C&amp;ontroller  Sequence...</source>
-        <translation type="vanished">Vložit pořadí &amp;ovládacího prvku</translation>
+        <translation type="obsolete">Vložit pořadí &amp;ovládacího prvku</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="882"/>
@@ -6663,8 +6663,9 @@
         <translation>Tabla</translation>
     </message>
     <message>
+        <location filename="../InstrumentStrings.cpp" line="276"/>
         <source>Cuíca</source>
-        <translation type="vanished">Cuíca</translation>
+        <translation>Cuíca</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="277"/>
@@ -6940,11 +6941,6 @@
         <location filename="../AutoloadStrings.cpp" line="216"/>
         <source>Maracas</source>
         <translation>Rumba koule</translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="276"/>
-        <source>Cu�ca</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="305"/>
@@ -10495,10 +10491,10 @@
         <translation>%1 (%2)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="472"/>
-        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="1057"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="914"/>
         <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="1690"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="914"/>
+        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="1057"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="472"/>
         <source>%1 Controller %2 %3</source>
         <translation>%1 Ovládací prvek %2 %3</translation>
     </message>
@@ -11781,43 +11777,43 @@ Vyberte ty, které chcete z pevného disku trvale odstranit.
     <name>Rosegarden::AudioMixerWindow</name>
     <message>
         <source>Audio Mixer</source>
-        <translation type="vanished">Zvukový směšovač</translation>
+        <translation type="obsolete">Zvukový směšovač</translation>
     </message>
     <message>
         <source>Record input source</source>
-        <translation type="vanished">Záznamový vstupní zdroj</translation>
+        <translation type="obsolete">Záznamový vstupní zdroj</translation>
     </message>
     <message>
         <source>Output destination</source>
-        <translation type="vanished">Výstupní cílové zařízení</translation>
+        <translation type="obsolete">Výstupní cílové zařízení</translation>
     </message>
     <message>
         <source>Pan</source>
-        <translation type="vanished">Vyvážení (Pan)</translation>
+        <translation type="obsolete">Vyvážení (Pan)</translation>
     </message>
     <message>
         <source>Audio level</source>
-        <translation type="vanished">Úroveň hlasitosti</translation>
+        <translation type="obsolete">Úroveň hlasitosti</translation>
     </message>
     <message>
         <source>Mono or stereo</source>
-        <translation type="vanished">Mono nebo stereo</translation>
+        <translation type="obsolete">Mono nebo stereo</translation>
     </message>
     <message>
         <source>Arm recording</source>
-        <translation type="vanished">Připravit záznam</translation>
+        <translation type="obsolete">Připravit záznam</translation>
     </message>
     <message>
         <source>&lt;none&gt;</source>
-        <translation type="vanished">&lt;žádný&gt;</translation>
+        <translation type="obsolete">&lt;žádný&gt;</translation>
     </message>
     <message>
         <source>Click to load an audio plugin</source>
-        <translation type="vanished">Klepněte pro nahrání zvukového přídavného modulu</translation>
+        <translation type="obsolete">Klepněte pro nahrání zvukového přídavného modulu</translation>
     </message>
     <message>
         <source>Click to rename this instrument</source>
-        <translation type="vanished">Klepněte kvůli přejmenování tohoto nástroje</translation>
+        <translation type="obsolete">Klepněte kvůli přejmenování tohoto nástroje</translation>
     </message>
     <message>
         <source>Audio %1</source>
@@ -11833,19 +11829,19 @@ Vyberte ty, které chcete z pevného disku trvale odstranit.
     </message>
     <message>
         <source>Sub %1</source>
-        <translation type="vanished">Řízený sekvencer %1</translation>
+        <translation type="obsolete">Řízený sekvencer %1</translation>
     </message>
     <message>
         <source>Audio master output level</source>
-        <translation type="vanished">Zvuková řídící výstupní úroveň</translation>
+        <translation type="obsolete">Zvuková řídící výstupní úroveň</translation>
     </message>
     <message>
         <source>Master</source>
-        <translation type="vanished">Řídící sekvencer</translation>
+        <translation type="obsolete">Řídící sekvencer</translation>
     </message>
     <message>
         <source>&lt;no plugin&gt;</source>
-        <translation type="vanished">&lt;žádný přídavný modul&gt;</translation>
+        <translation type="obsolete">&lt;žádný přídavný modul&gt;</translation>
     </message>
     <message>
         <source>Rosegarden</source>
@@ -11857,7 +11853,7 @@ Vyberte ty, které chcete z pevného disku trvale odstranit.
     </message>
     <message>
         <source>http://rosegardenmusic.com/wiki/doc:audioMixerWindow-en</source>
-        <translation type="vanished">http://rosegardenmusic.com/wiki/doc:audioMixerWindow-en</translation>
+        <translation type="obsolete">http://rosegardenmusic.com/wiki/doc:audioMixerWindow-en</translation>
     </message>
 </context>
 <context>
@@ -13297,7 +13293,7 @@ Vyberte ty, které chcete z pevného disku trvale odstranit.
     <name>Rosegarden::ConfigureDialogBase</name>
     <message>
         <source>Configure Rosegarden</source>
-        <translation type="vanished">Nastavení programu Rosegarden</translation>
+        <translation type="obsolete">Nastavení programu Rosegarden</translation>
     </message>
 </context>
 <context>
@@ -17549,7 +17545,7 @@ Poklepáním otevřete editor značek.</translation>
     <name>Rosegarden::MatrixVelocity</name>
     <message>
         <source>Velocity change: %1</source>
-        <translation type="vanished">Změna síly tónu: %1</translation>
+        <translation type="obsolete">Změna síly tónu: %1</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixVelocity.cpp" line="214"/>
@@ -23316,152 +23312,187 @@ Ukončení ostatních běžících programů by mohlo zlepšit výkon programu R
 <context>
     <name>Rosegarden::StaffHeader</name>
     <message>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="146"/>
         <source>Track %1 : &quot;%2&quot;</source>
-        <translation type="vanished">Stopa %1 : &quot;%2&quot;</translation>
+        <translation>Stopa %1 : &quot;%2&quot;</translation>
     </message>
     <message>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="152"/>
         <source>&lt;br&gt;Notate for: %1</source>
-        <translation type="vanished">&lt;br&gt;Zapsat do not pro: %1</translation>
+        <translation>&lt;br&gt;Zapsat do not pro: %1</translation>
     </message>
     <message>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="154"/>
         <source>normal</source>
-        <translation type="vanished">normální</translation>
+        <translation>normální</translation>
     </message>
     <message>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="157"/>
         <source>small</source>
-        <translation type="vanished">malé</translation>
+        <translation>malé</translation>
     </message>
     <message>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="160"/>
         <source>tiny</source>
-        <translation type="vanished">drobné</translation>
+        <translation>drobné</translation>
     </message>
     <message>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="189"/>
         <source>&lt;br&gt;Size: %1,  Bracket: %2 </source>
-        <translation type="vanished">&lt;br&gt;Velikost: %1,  Závorky: %2 </translation>
+        <translation>&lt;br&gt;Velikost: %1,  Závorky: %2 </translation>
     </message>
     <message>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="217"/>
         <source>&lt;br&gt;bars [%1-%2] in %3 (tr=%4) : &quot;%5&quot;</source>
-        <translation type="vanished">&lt;br&gt;Takty [%1-%2] v %3 (tr=%4) : &quot;%5&quot;</translation>
+        <translation>&lt;br&gt;Takty [%1-%2] v %3 (tr=%4) : &quot;%5&quot;</translation>
     </message>
     <message>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="224"/>
         <source>&lt;br&gt;bars [%1-%2] (tr=%3) : &quot;%4&quot;</source>
-        <translation type="vanished">&lt;br&gt;Takty [%1-%2] (tr=%3) : &quot;%4&quot;</translation>
+        <translation>&lt;br&gt;Takty [%1-%2] (tr=%3) : &quot;%4&quot;</translation>
     </message>
     <message>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="272"/>
         <source>&lt;qt&gt;&lt;p&gt;Notation is not consistent&lt;/p&gt;&lt;p&gt;Click to get more information&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="vanished">&lt;qt&gt;&lt;p&gt;Notový zápis není ve shodě&lt;/p&gt;&lt;p&gt;Klepněte pro získání více údajů&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Notový zápis není ve shodě&lt;/p&gt;&lt;p&gt;Klepněte pro získání více údajů&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="434"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="484"/>
         <source>...</source>
-        <translation type="vanished">...</translation>
+        <translation>...</translation>
     </message>
     <message>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="559"/>
         <source>C</source>
         <comment>note name</comment>
-        <translation type="vanished">C</translation>
+        <translation>C</translation>
     </message>
     <message>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="560"/>
         <source>C#</source>
         <comment>note name</comment>
-        <translation type="vanished">C#</translation>
+        <translation>C#</translation>
     </message>
     <message>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="561"/>
         <source>D</source>
         <comment>note name</comment>
-        <translation type="vanished">D</translation>
+        <translation>D</translation>
     </message>
     <message>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="562"/>
         <source>Eb</source>
         <comment>note name</comment>
-        <translation type="vanished">Eb</translation>
+        <translation>Eb</translation>
     </message>
     <message>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="563"/>
         <source>E</source>
         <comment>note name</comment>
-        <translation type="vanished">E</translation>
+        <translation>E</translation>
     </message>
     <message>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="564"/>
         <source>F</source>
         <comment>note name</comment>
-        <translation type="vanished">F</translation>
+        <translation>F</translation>
     </message>
     <message>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="565"/>
         <source>F#</source>
         <comment>note name</comment>
-        <translation type="vanished">F#</translation>
+        <translation>F#</translation>
     </message>
     <message>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="566"/>
         <source>G</source>
         <comment>note name</comment>
-        <translation type="vanished">G</translation>
+        <translation>G</translation>
     </message>
     <message>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="567"/>
         <source>G#</source>
         <comment>note name</comment>
-        <translation type="vanished">G#</translation>
+        <translation>G#</translation>
     </message>
     <message>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="568"/>
         <source>A</source>
         <comment>note name</comment>
-        <translation type="vanished">A</translation>
+        <translation>A</translation>
     </message>
     <message>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="569"/>
         <source>Bb</source>
         <comment>note name</comment>
-        <translation type="vanished">Hes</translation>
+        <translation>Hes</translation>
     </message>
     <message>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="570"/>
         <source>B</source>
         <comment>note name</comment>
-        <translation type="vanished">H</translation>
+        <translation>H</translation>
     </message>
     <message>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="926"/>
         <source>&lt;h2&gt;Notation Inconsistencies&lt;/h2&gt;</source>
-        <translation type="vanished">&lt;h2&gt;Nesrovnalosti notového zápisu&lt;/h2&gt;</translation>
+        <translation>&lt;h2&gt;Nesrovnalosti notového zápisu&lt;/h2&gt;</translation>
     </message>
     <message>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="928"/>
         <source>&lt;h3&gt;Filename: %1 &lt;/h3&gt;</source>
-        <translation type="vanished">&lt;h3&gt;Název souboru: %1 &lt;/h3&gt;</translation>
+        <translation>&lt;h3&gt;Název souboru: %1 &lt;/h3&gt;</translation>
     </message>
     <message>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="931"/>
         <source>&lt;h3&gt;Track %1: &quot;%2&quot;&lt;/h3&gt;</source>
-        <translation type="vanished">&lt;h3&gt;Stopa %1: &quot;%2&quot;&lt;/h3&gt;</translation>
+        <translation>&lt;h3&gt;Stopa %1: &quot;%2&quot;&lt;/h3&gt;</translation>
     </message>
     <message>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="936"/>
         <source>Overlapping segments with inconsistent clefs:</source>
-        <translation type="vanished">Překrývající se části s neshodnými notovými klíči:</translation>
+        <translation>Překrývající se části s neshodnými notovými klíči:</translation>
     </message>
     <message>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="938"/>
         <source>Segment &quot;%1&quot;: %2 clef</source>
-        <translation type="vanished">Část &quot;%1&quot;: %2 klíč</translation>
+        <translation>Část &quot;%1&quot;: %2 klíč</translation>
     </message>
     <message>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="943"/>
         <source>Overlapping segments with inconsistent keys:</source>
-        <translation type="vanished">Překrývající se části s neshodnými tóninami:</translation>
+        <translation>Překrývající se části s neshodnými tóninami:</translation>
     </message>
     <message>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="945"/>
         <source>Segment &quot;%1&quot;: %2 key</source>
-        <translation type="vanished">Část &quot;%1&quot;: %2 tónina</translation>
+        <translation>Část &quot;%1&quot;: %2 tónina</translation>
     </message>
     <message>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="950"/>
         <source>Overlapping segments with inconsistent transpositions:</source>
-        <translation type="vanished">Překrývající se části s neshodnými převedeními:</translation>
+        <translation>Překrývající se části s neshodnými převedeními:</translation>
     </message>
     <message>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="952"/>
         <source>Segment &quot;%1&quot;: %2</source>
-        <translation type="vanished">Část &quot;%1&quot;: %2</translation>
+        <translation>Část &quot;%1&quot;: %2</translation>
     </message>
     <message>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="958"/>
         <source>Rosegarden</source>
-        <translation type="vanished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="682"/>
         <source>%1: %2</source>
-        <translation type="vanished">%1: %2</translation>
+        <translation>%1: %2</translation>
     </message>
     <message>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="685"/>
         <source> in %1</source>
-        <translation type="vanished"> v %1</translation>
+        <translation> v %1</translation>
     </message>
 </context>
 <context>
@@ -25743,187 +25774,132 @@ Ukončení ostatních běžících programů by mohlo zlepšit výkon programu R
 <context>
     <name>StaffHeader</name>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="146"/>
         <source>Track %1 : &quot;%2&quot;</source>
-        <translation type="unfinished">Stopa %1 : &quot;%2&quot;</translation>
+        <translation type="obsolete">Stopa %1 : &quot;%2&quot;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="152"/>
         <source>&lt;br&gt;Notate for: %1</source>
-        <translation type="unfinished">&lt;br&gt;Zapsat do not pro: %1</translation>
+        <translation type="obsolete">&lt;br&gt;Zapsat do not pro: %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="154"/>
         <source>normal</source>
-        <translation type="unfinished">normální</translation>
+        <translation type="obsolete">normální</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="157"/>
         <source>small</source>
-        <translation type="unfinished">malé</translation>
+        <translation type="obsolete">malé</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="160"/>
         <source>tiny</source>
-        <translation type="unfinished">drobné</translation>
+        <translation type="obsolete">drobné</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="189"/>
         <source>&lt;br&gt;Size: %1,  Bracket: %2 </source>
-        <translation type="unfinished">&lt;br&gt;Velikost: %1,  Závorky: %2 </translation>
+        <translation type="obsolete">&lt;br&gt;Velikost: %1,  Závorky: %2 </translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="217"/>
         <source>&lt;br&gt;bars [%1-%2] in %3 (tr=%4) : &quot;%5&quot;</source>
-        <translation type="unfinished">&lt;br&gt;Takty [%1-%2] v %3 (tr=%4) : &quot;%5&quot;</translation>
+        <translation type="obsolete">&lt;br&gt;Takty [%1-%2] v %3 (tr=%4) : &quot;%5&quot;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="224"/>
         <source>&lt;br&gt;bars [%1-%2] (tr=%3) : &quot;%4&quot;</source>
-        <translation type="unfinished">&lt;br&gt;Takty [%1-%2] (tr=%3) : &quot;%4&quot;</translation>
+        <translation type="obsolete">&lt;br&gt;Takty [%1-%2] (tr=%3) : &quot;%4&quot;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="272"/>
         <source>&lt;qt&gt;&lt;p&gt;Notation is not consistent&lt;/p&gt;&lt;p&gt;Click to get more information&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;Notový zápis není ve shodě&lt;/p&gt;&lt;p&gt;Klepněte pro získání více údajů&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Notový zápis není ve shodě&lt;/p&gt;&lt;p&gt;Klepněte pro získání více údajů&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="434"/>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="484"/>
         <source>...</source>
-        <translation type="unfinished">...</translation>
+        <translation type="obsolete">...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="559"/>
         <source>C</source>
         <comment>note name</comment>
-        <translation type="unfinished">C</translation>
+        <translation type="obsolete">C</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="560"/>
-        <source>C#</source>
-        <comment>note name</comment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="561"/>
         <source>D</source>
         <comment>note name</comment>
-        <translation type="unfinished">D</translation>
+        <translation type="obsolete">D</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="562"/>
-        <source>Eb</source>
-        <comment>note name</comment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="563"/>
         <source>E</source>
         <comment>note name</comment>
-        <translation type="unfinished">E</translation>
+        <translation type="obsolete">E</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="564"/>
         <source>F</source>
         <comment>note name</comment>
-        <translation type="unfinished">F</translation>
+        <translation type="obsolete">F</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="565"/>
-        <source>F#</source>
-        <comment>note name</comment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="566"/>
         <source>G</source>
         <comment>note name</comment>
-        <translation type="unfinished">G</translation>
+        <translation type="obsolete">G</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="567"/>
-        <source>G#</source>
-        <comment>note name</comment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="568"/>
         <source>A</source>
         <comment>note name</comment>
-        <translation type="unfinished">A</translation>
+        <translation type="obsolete">A</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="569"/>
         <source>Bb</source>
         <comment>note name</comment>
-        <translation type="unfinished">Hes</translation>
+        <translation type="obsolete">Hes</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="570"/>
         <source>B</source>
         <comment>note name</comment>
-        <translation type="unfinished">H</translation>
+        <translation type="obsolete">H</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="682"/>
         <source>%1: %2</source>
-        <translation type="unfinished">%1: %2</translation>
+        <translation type="obsolete">%1: %2</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="685"/>
         <source> in %1</source>
-        <translation type="unfinished"> v %1</translation>
+        <translation type="obsolete"> v %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="926"/>
         <source>&lt;h2&gt;Notation Inconsistencies&lt;/h2&gt;</source>
-        <translation type="unfinished">&lt;h2&gt;Nesrovnalosti notového zápisu&lt;/h2&gt;</translation>
+        <translation type="obsolete">&lt;h2&gt;Nesrovnalosti notového zápisu&lt;/h2&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="928"/>
         <source>&lt;h3&gt;Filename: %1 &lt;/h3&gt;</source>
-        <translation type="unfinished">&lt;h3&gt;Název souboru: %1 &lt;/h3&gt;</translation>
+        <translation type="obsolete">&lt;h3&gt;Název souboru: %1 &lt;/h3&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="931"/>
         <source>&lt;h3&gt;Track %1: &quot;%2&quot;&lt;/h3&gt;</source>
-        <translation type="unfinished">&lt;h3&gt;Stopa %1: &quot;%2&quot;&lt;/h3&gt;</translation>
+        <translation type="obsolete">&lt;h3&gt;Stopa %1: &quot;%2&quot;&lt;/h3&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="936"/>
         <source>Overlapping segments with inconsistent clefs:</source>
-        <translation type="unfinished">Překrývající se části s neshodnými notovými klíči:</translation>
+        <translation type="obsolete">Překrývající se části s neshodnými notovými klíči:</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="938"/>
         <source>Segment &quot;%1&quot;: %2 clef</source>
-        <translation type="unfinished">Část &quot;%1&quot;: %2 klíč</translation>
+        <translation type="obsolete">Část &quot;%1&quot;: %2 klíč</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="943"/>
         <source>Overlapping segments with inconsistent keys:</source>
-        <translation type="unfinished">Překrývající se části s neshodnými tóninami:</translation>
+        <translation type="obsolete">Překrývající se části s neshodnými tóninami:</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="945"/>
         <source>Segment &quot;%1&quot;: %2 key</source>
-        <translation type="unfinished">Část &quot;%1&quot;: %2 tónina</translation>
+        <translation type="obsolete">Část &quot;%1&quot;: %2 tónina</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="950"/>
         <source>Overlapping segments with inconsistent transpositions:</source>
-        <translation type="unfinished">Překrývající se části s neshodnými převedeními:</translation>
+        <translation type="obsolete">Překrývající se části s neshodnými převedeními:</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="952"/>
         <source>Segment &quot;%1&quot;: %2</source>
-        <translation type="unfinished">Část &quot;%1&quot;: %2</translation>
+        <translation type="obsolete">Část &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="958"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation type="obsolete">Rosegarden</translation>
     </message>
 </context>
 </TS>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1">
+<TS version="2.0">
 <context>
     <name>:</name>
     <message>
@@ -192,14 +192,14 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/base/parameterpattern/RingingParameterPattern.cpp" line="39"/>
         <location filename="../../src/base/parameterpattern/AlternatingParameterPattern.cpp" line="41"/>
+        <location filename="../../src/base/parameterpattern/RingingParameterPattern.cpp" line="39"/>
         <source>First Value</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/base/parameterpattern/RingingParameterPattern.cpp" line="41"/>
         <location filename="../../src/base/parameterpattern/AlternatingParameterPattern.cpp" line="43"/>
+        <location filename="../../src/base/parameterpattern/RingingParameterPattern.cpp" line="41"/>
         <source>Second Value</source>
         <translation type="unfinished"></translation>
     </message>
@@ -617,10 +617,10 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="472"/>
-        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="1057"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="914"/>
         <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="1690"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="914"/>
+        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="1057"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="472"/>
         <source>%1 Controller %2 %3</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6962,7 +6962,7 @@
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="276"/>
-        <source>Cu�ca</source>
+        <source>Cuíca</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -22598,6 +22598,192 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     </message>
 </context>
 <context>
+    <name>Rosegarden::StaffHeader</name>
+    <message>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="146"/>
+        <source>Track %1 : &quot;%2&quot;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="152"/>
+        <source>&lt;br&gt;Notate for: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="154"/>
+        <source>normal</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="157"/>
+        <source>small</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="160"/>
+        <source>tiny</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="189"/>
+        <source>&lt;br&gt;Size: %1,  Bracket: %2 </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="217"/>
+        <source>&lt;br&gt;bars [%1-%2] in %3 (tr=%4) : &quot;%5&quot;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="224"/>
+        <source>&lt;br&gt;bars [%1-%2] (tr=%3) : &quot;%4&quot;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="272"/>
+        <source>&lt;qt&gt;&lt;p&gt;Notation is not consistent&lt;/p&gt;&lt;p&gt;Click to get more information&lt;/p&gt;&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="434"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="484"/>
+        <source>...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="559"/>
+        <source>C</source>
+        <comment>note name</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="560"/>
+        <source>C#</source>
+        <comment>note name</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="561"/>
+        <source>D</source>
+        <comment>note name</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="562"/>
+        <source>Eb</source>
+        <comment>note name</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="563"/>
+        <source>E</source>
+        <comment>note name</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="564"/>
+        <source>F</source>
+        <comment>note name</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="565"/>
+        <source>F#</source>
+        <comment>note name</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="566"/>
+        <source>G</source>
+        <comment>note name</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="567"/>
+        <source>G#</source>
+        <comment>note name</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="568"/>
+        <source>A</source>
+        <comment>note name</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="569"/>
+        <source>Bb</source>
+        <comment>note name</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="570"/>
+        <source>B</source>
+        <comment>note name</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="682"/>
+        <source>%1: %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="685"/>
+        <source> in %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="926"/>
+        <source>&lt;h2&gt;Notation Inconsistencies&lt;/h2&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="928"/>
+        <source>&lt;h3&gt;Filename: %1 &lt;/h3&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="931"/>
+        <source>&lt;h3&gt;Track %1: &quot;%2&quot;&lt;/h3&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="936"/>
+        <source>Overlapping segments with inconsistent clefs:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="938"/>
+        <source>Segment &quot;%1&quot;: %2 clef</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="943"/>
+        <source>Overlapping segments with inconsistent keys:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="945"/>
+        <source>Segment &quot;%1&quot;: %2 key</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="950"/>
+        <source>Overlapping segments with inconsistent transpositions:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="952"/>
+        <source>Segment &quot;%1&quot;: %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="958"/>
+        <source>Rosegarden</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Rosegarden::SustainInsertionCommand</name>
     <message>
         <location filename="../../src/commands/notation/SustainInsertionCommand.h" line="51"/>
@@ -24792,192 +24978,6 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
         <source></source>
         <comment>if the manual is translated into your language, you can</comment>
         <translation></translation>
-    </message>
-</context>
-<context>
-    <name>StaffHeader</name>
-    <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="146"/>
-        <source>Track %1 : &quot;%2&quot;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="152"/>
-        <source>&lt;br&gt;Notate for: %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="154"/>
-        <source>normal</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="157"/>
-        <source>small</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="160"/>
-        <source>tiny</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="189"/>
-        <source>&lt;br&gt;Size: %1,  Bracket: %2 </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="217"/>
-        <source>&lt;br&gt;bars [%1-%2] in %3 (tr=%4) : &quot;%5&quot;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="224"/>
-        <source>&lt;br&gt;bars [%1-%2] (tr=%3) : &quot;%4&quot;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="272"/>
-        <source>&lt;qt&gt;&lt;p&gt;Notation is not consistent&lt;/p&gt;&lt;p&gt;Click to get more information&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="434"/>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="484"/>
-        <source>...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="559"/>
-        <source>C</source>
-        <comment>note name</comment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="560"/>
-        <source>C#</source>
-        <comment>note name</comment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="561"/>
-        <source>D</source>
-        <comment>note name</comment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="562"/>
-        <source>Eb</source>
-        <comment>note name</comment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="563"/>
-        <source>E</source>
-        <comment>note name</comment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="564"/>
-        <source>F</source>
-        <comment>note name</comment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="565"/>
-        <source>F#</source>
-        <comment>note name</comment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="566"/>
-        <source>G</source>
-        <comment>note name</comment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="567"/>
-        <source>G#</source>
-        <comment>note name</comment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="568"/>
-        <source>A</source>
-        <comment>note name</comment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="569"/>
-        <source>Bb</source>
-        <comment>note name</comment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="570"/>
-        <source>B</source>
-        <comment>note name</comment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="682"/>
-        <source>%1: %2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="685"/>
-        <source> in %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="926"/>
-        <source>&lt;h2&gt;Notation Inconsistencies&lt;/h2&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="928"/>
-        <source>&lt;h3&gt;Filename: %1 &lt;/h3&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="931"/>
-        <source>&lt;h3&gt;Track %1: &quot;%2&quot;&lt;/h3&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="936"/>
-        <source>Overlapping segments with inconsistent clefs:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="938"/>
-        <source>Segment &quot;%1&quot;: %2 clef</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="943"/>
-        <source>Overlapping segments with inconsistent keys:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="945"/>
-        <source>Segment &quot;%1&quot;: %2 key</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="950"/>
-        <source>Overlapping segments with inconsistent transpositions:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="952"/>
-        <source>Segment &quot;%1&quot;: %2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="958"/>
-        <source>Rosegarden</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>
