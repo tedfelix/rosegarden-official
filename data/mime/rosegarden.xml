@@ -5,6 +5,7 @@
     <comment>Rosegarden composition</comment>
     <comment xml:lang="en">Rosegarden composition</comment>
     <comment xml:lang="es">Composición de Rosegarden</comment>
+    <comment xml:lang="fr">Composition musicale Rosegarden</comment>
     <glob pattern="*.rg"/>
   </mime-type>
   <mime-type type="application/x-rosegarden-device">
@@ -12,7 +13,7 @@
     <comment>Rosegarden MIDI device definition</comment>
     <comment xml:lang="en">Rosegarden MIDI device definition</comment>
     <comment xml:lang="es">Definición de dispositivo MIDI de Rosegarden</comment>
-    <comment xml:lang="fr">Description de peripherique Rosegarden</comment>
+    <comment xml:lang="fr">Description de peripherique MIDI pour Rosegarden</comment>
     <glob pattern="*.rgd"/>
   </mime-type>
   <mime-type type="application/x-rosegarden-project">
@@ -20,6 +21,7 @@
     <comment>Rosegarden project</comment>
     <comment xml:lang="en">Rosegarden project</comment>
     <comment xml:lang="es">Proyecto de Rosegarden</comment>
+    <comment xml:lang="fr">Projet Rosegarden</comment>
     <glob pattern="*.rgp"/>
   </mime-type>
   <mime-type type="application/x-rosegarden-template">
@@ -27,6 +29,7 @@
     <comment>Rosegarden template</comment>
     <comment xml:lang="en">Rosegarden template</comment>
     <comment xml:lang="es">Plantilla de Rosegarden</comment>
+    <comment xml:lang="fr">Modèle de composition Rosegarden</comment>
     <glob pattern="*.rgt"/>
   </mime-type>
 </mime-info>
