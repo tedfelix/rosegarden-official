@@ -77,16 +77,14 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QWidget *parent,
     mainboxLayout->addWidget(tabWidget);
 
     QFrame *layoutFrame = new QFrame();
+    layoutFrame->setContentsMargins(0, 0, 0, 0);
     tabWidget->addTab(layoutFrame, tr("Layout"));
 
-    layoutFrame->setContentsMargins(5, 5, 5, 5);
     QGridLayout *layoutGrid = new QGridLayout;
-    layoutGrid->setSpacing(5);
+    layoutGrid->setSpacing(4);
 
     m_headersPage = new HeadersConfigurationPage(this, m_doc);
     tabWidget->addTab(m_headersPage, tr("Headers"));
-//     m_headersPage->setSpacing(5);
-//     m_headersPage->setMargin(5);
     
     
     //
@@ -99,9 +97,9 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QWidget *parent,
     layoutGrid->addWidget(basicOptionsBox, 0, 0);
 
     QFrame *frameBasic = new QFrame(basicOptionsBox);
-    frameBasic->setContentsMargins(10, 10, 10, 10);
+    frameBasic->setContentsMargins(0, 0, 0, 0);
     QGridLayout *layoutBasic = new QGridLayout;
-    layoutBasic->setSpacing(5);
+    layoutBasic->setSpacing(4);
     basicOptionsBoxLayout->addWidget(frameBasic);
 
     layoutBasic->addWidget(new QLabel(
@@ -191,9 +189,9 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QWidget *parent,
     layoutGrid->addWidget(specificOptionsBox, 2, 0);
 
     QFrame *frameNotation = new QFrame(specificOptionsBox);
-    frameNotation->setContentsMargins(10, 10, 10, 10);
+    frameNotation->setContentsMargins(0, 0, 0, 0);
     QGridLayout *layoutNotation = new QGridLayout;
-    layoutNotation->setSpacing(5);
+    layoutNotation->setSpacing(4);
     specificOptionsBoxLayout->addWidget(frameNotation);
 
     m_lilyTempoMarks = new QComboBox(frameNotation);
