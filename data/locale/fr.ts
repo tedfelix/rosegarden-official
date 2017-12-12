@@ -5453,12 +5453,12 @@
         <location line="+1"/>
         <location filename="../AutoloadStrings.cpp" line="+2"/>
         <source>Contrabass</source>
-        <translation>Contrbasse</translation>
+        <translation>Contrebasse</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Baroque contrabass</source>
-        <translation>Contrbasse baroque</translation>
+        <translation>Contrebasse baroque</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -11997,7 +11997,7 @@ Veuillez sélectionner ceux que vous souhaitez effacer définitivement du disque
     <message>
         <location line="+33"/>
         <source>http://rosegardenmusic.com/wiki/doc:audioSplitDialog-en</source>
-        <translation>http://rosegardenmusic.com/wiki/doc:audioSplitDialog-fr</translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+8"/>
@@ -12648,7 +12648,7 @@ Veuillez sélectionner ceux que vous souhaitez effacer définitivement du disque
     <message>
         <location line="+2"/>
         <source>Bass</source>
-        <translation>Basse</translation>
+        <translation>Fa</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -17267,7 +17267,7 @@ Double-cliquer pour ouvrir l&apos;éditeur de marqueur.</translation>
     <message>
         <location line="+7"/>
         <source>http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html</source>
-        <translation>http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html</translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+13"/>
@@ -18654,7 +18654,7 @@ Veuillez vérifier que le périphérique est configuré correctement dans le dia
     <message>
         <location line="+7"/>
         <source>http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html</source>
-        <translation>http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html</translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+101"/>
@@ -21394,7 +21394,7 @@ Souhaitez vous le faire tout de suite ?</translation>
     <message>
         <location line="+51"/>
         <source>http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html</source>
-        <translation>http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html</translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+136"/>
