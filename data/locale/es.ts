@@ -14578,12 +14578,12 @@ Would you like to try and locate this file or skip it?</source>
     <message>
         <location line="+12"/>
         <source>Use track name for new segments</source>
-        <translation type="unfinished"></translation>
+        <translation>Utilizar nombre de pista al crear segmentos nuevos</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>&lt;qt&gt;&lt;p&gt;If checked, the label for new segments will always be the same as the track name.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Al marcar la etiqueta de segmentos nuevos es siempre el nombre de la pista.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+21"/>
@@ -16263,12 +16263,12 @@ Ejemplo de texto perteneciente del archivo:</translation>
     <message>
         <location line="+26"/>
         <source>Track %1, bar %2 to %3: &quot;%4&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>Pista %1, compás %2 a %3: %4</translation>
     </message>
     <message>
         <location line="+39"/>
         <source>Select another segment</source>
-        <translation type="unfinished"></translation>
+        <translation>Seleccionar otro segmento</translation>
     </message>
     <message>
         <location line="+19"/>
@@ -16288,22 +16288,22 @@ Ejemplo de texto perteneciente del archivo:</translation>
     <message>
         <location line="+52"/>
         <source>Selected segment lays on track %1, bar %2 to %3</source>
-        <translation type="unfinished"></translation>
+        <translation>Segmento seleccionado está en pista %1, compás %2 a %3</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>and is labeled &quot;%1&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>y su etiqueta es &quot;%1&quot;</translation>
     </message>
     <message>
         <location line="+42"/>
         <source>Rosegarden - Warning</source>
-        <translation type="unfinished">Rosegarden--Aviso</translation>
+        <translation>Rosegarden--Aviso</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>&lt;qt&gt;&lt;p&gt;The current segment lyrics have been modified.&lt;/p&gt;&lt;p&gt;The modifications will be lost if a new segment is selected.&lt;/p&gt;&lt;p&gt;Do you really want to select a new segment?&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;La letra del segmento actual se ha modificado.&lt;/p&gt;&lt;p&gt;Los cambios van a borrarse si se selecciona otro segmento.&lt;/p&gt;&lt;p&gt;¿Seleccionar otro segmento por cierto?&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+204"/>
@@ -17148,12 +17148,12 @@ Doble clic para abrir el editor de marcadores.</translation>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixVelocity.cpp" line="+214"/>
         <source>Velocity change: %1   Velocity: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Cambio de velocidad: %1   Velocidad: %2</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Velocity change: %1   Velocity: %2 to %3</source>
-        <translation type="unfinished"></translation>
+        <translation>Cambio de velocidad: %1   Velocidad: %2 a %3</translation>
     </message>
     <message>
         <location line="+27"/>
@@ -19722,12 +19722,12 @@ Por favor, asegúrese de que está correctamente configurado en el cuadro de di�
     <message>
         <location filename="../../src/gui/rulers/PropertyAdjuster.cpp" line="+103"/>
         <source>Velocity: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Velocidad: %1</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Velocity: %1 to %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Velocidad: %1 a %2</translation>
     </message>
 </context>
 <context>
@@ -20273,7 +20273,7 @@ Por favor, decida si quiere borrarlos permanentemente del disco duro.
     <message>
         <location line="+10"/>
         <source>Reading file...</source>
-        <translation type="unfinished">Leyendo archivo...</translation>
+        <translation>Leyendo archivo...</translation>
     </message>
     <message>
         <location line="+55"/>
@@ -20502,7 +20502,7 @@ Vea Editar -&gt; Preferencias -&gt; Audio.</translation>
     <message>
         <location line="+6"/>
         <source>Adding audio file...</source>
-        <translation type="unfinished">Añadiendo archivo de audio...</translation>
+        <translation>Añadiendo archivo de audio...</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -21957,7 +21957,7 @@ Por favor, configure el directorio de archivos de audio hacia un directorio vál
     <message>
         <location line="+14"/>
         <source>Rescaling audio file...</source>
-        <translation type="unfinished"></translation>
+        <translation>Escalando  archivo de audio...</translation>
     </message>
     <message>
         <location line="+1"/>
