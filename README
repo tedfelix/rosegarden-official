@@ -108,6 +108,9 @@ course of packaging it, please do keep upstream in the loop at
 rosegarden-devel@lists.sourceforge.net or by contacting
 michael.mcintyre@rosegardenmusic.com directly.  Thanks!
 
+An older version of the appdata file is kept with the current version in
+data/appdata.  It is named rosegarden.appdata-old.xml.
+
 
 Authors and copyright
 ---------------------
