@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="fr_FR">
+<TS version="2.0" language="fr_FR">
 <context>
     <name>:</name>
     <message>
@@ -15754,17 +15754,17 @@ Texte d&apos;exemple depuis le fichier:</translation>
         <translation>Exporter/prévisualiser vers Lilypond</translation>
     </message>
     <message>
-        <location line="+16"/>
+        <location line="+17"/>
         <source>Layout</source>
         <translation>Mise en page</translation>
     </message>
     <message>
-        <location line="+7"/>
+        <location line="+6"/>
         <source>Headers</source>
         <translation>En-têtes</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+7"/>
         <source>Basic options</source>
         <translation>Options de base</translation>
     </message>
@@ -15899,7 +15899,7 @@ Texte d&apos;exemple depuis le fichier:</translation>
     </message>
     <message>
         <location line="+2"/>
-        <source>&lt;qt&gt;When checked, natural signs are automatically printed to cancel any accidentals from previous key signatures. This cancelation behavior is separate from, and not related to how Rosegarden displays accidental cancelation in the notation editor.&lt;/qt&gt;</source>
+        <source>&lt;qt&gt;When checked, natural signs are automatically printed to cancel any accidentals from previous key signatures. This cancellation behavior is separate from, and not related to how Rosegarden displays accidental cancellation in the notation editor.&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Si coché, des bécarres sont imprimés automatiquement pour annuler les accidents de l&apos;armure précédente. Cette annulation diffère de la façon dont Rosegarden annule les accidents dans l&apos;éditeur de partition.&lt;/qt&gt;</translation>
     </message>
     <message>
@@ -19925,7 +19925,7 @@ Veuillez vérifier que le périphérique est configuré correctement dans le dia
     <name>Rosegarden::RemapInstrumentDialog</name>
     <message>
         <location filename="../../src/gui/studio/RemapInstrumentDialog.cpp" line="+51"/>
-        <source>Remap Instrument assigments...</source>
+        <source>Remap Instrument assignments...</source>
         <translation>Redéfinir les affectations des instruments...</translation>
     </message>
     <message>

@@ -5026,7 +5026,7 @@ NotationView::slotAddLayer()
     // get the pointer to the segment we just created and add it to m_segments
     m_segments.push_back(command->getSegment());
 
-    // re-invoke setSegments with the ammended m_segments
+    // re-invoke setSegments with the amended m_segments
     setWidgetSegments();
 
     // try to make the new segment active immediately
@@ -5109,7 +5109,7 @@ NotationView::slotMagicLayer()
     // get the pointer to the segment we just created and add it to m_segments
     m_segments.push_back(newLayer);
 
-    // re-invoke setSegments with the ammended m_segments
+    // re-invoke setSegments with the amended m_segments
     setWidgetSegments();
 
     // try to make the new segment active immediately

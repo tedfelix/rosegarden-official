@@ -15750,17 +15750,17 @@ yn lle?</translation>
         <translation type="unfinished">Lilypond</translation>
     </message>
     <message>
-        <location line="+16"/>
+        <location line="+17"/>
         <source>Layout</source>
         <translation type="unfinished">Haenlun</translation>
     </message>
     <message>
-        <location line="+7"/>
+        <location line="+6"/>
         <source>Headers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+7"/>
         <source>Basic options</source>
         <translation type="unfinished"></translation>
     </message>
@@ -15905,7 +15905,7 @@ yn lle?</translation>
     </message>
     <message>
         <location line="+2"/>
-        <source>&lt;qt&gt;When checked, natural signs are automatically printed to cancel any accidentals from previous key signatures. This cancelation behavior is separate from, and not related to how Rosegarden displays accidental cancelation in the notation editor.&lt;/qt&gt;</source>
+        <source>&lt;qt&gt;When checked, natural signs are automatically printed to cancel any accidentals from previous key signatures. This cancellation behavior is separate from, and not related to how Rosegarden displays accidental cancellation in the notation editor.&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -19925,7 +19925,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <name>Rosegarden::RemapInstrumentDialog</name>
     <message>
         <location filename="../../src/gui/studio/RemapInstrumentDialog.cpp" line="+51"/>
-        <source>Remap Instrument assigments...</source>
+        <source>Remap Instrument assignments...</source>
         <translation type="unfinished">Ail-fapio gosodiadau&apos;r Offerynnau ...</translation>
     </message>
     <message>

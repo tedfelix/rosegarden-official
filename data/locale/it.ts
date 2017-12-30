@@ -16069,17 +16069,17 @@ Vuoi usare
         <translation>Esportazione/Anteprima Lilypond</translation>
     </message>
     <message>
-        <location line="+16"/>
+        <location line="+17"/>
         <source>Layout</source>
         <translation>Aspetto</translation>
     </message>
     <message>
-        <location line="+7"/>
+        <location line="+6"/>
         <source>Headers</source>
         <translation>Intestazioni</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+7"/>
         <source>Basic options</source>
         <translation>Opzioni di base</translation>
     </message>
@@ -16224,7 +16224,7 @@ Vuoi usare
     </message>
     <message>
         <location line="+2"/>
-        <source>&lt;qt&gt;When checked, natural signs are automatically printed to cancel any accidentals from previous key signatures. This cancelation behavior is separate from, and not related to how Rosegarden displays accidental cancelation in the notation editor.&lt;/qt&gt;</source>
+        <source>&lt;qt&gt;When checked, natural signs are automatically printed to cancel any accidentals from previous key signatures. This cancellation behavior is separate from, and not related to how Rosegarden displays accidental cancellation in the notation editor.&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Se selezionati, i segni naturali vengono automaticamente stampati per annullare le alterazioni da precedenti segni di chiave. Questo comportamento è separato dalla cancellazione, e non correlate al modo in cui Rosegarden mostra la cancellazione delle alterazioni nell&apos;editor di notazione.&lt;/qt&gt;</translation>
     </message>
     <message>
@@ -20274,7 +20274,7 @@ Accertati che il dispositivo sia correttamente configurato alla voce
     <name>Rosegarden::RemapInstrumentDialog</name>
     <message>
         <location filename="../../src/gui/studio/RemapInstrumentDialog.cpp" line="+51"/>
-        <source>Remap Instrument assigments...</source>
+        <source>Remap Instrument assignments...</source>
         <translation>Rimappatura delle assegnazioni degli strumenti...</translation>
     </message>
     <message>

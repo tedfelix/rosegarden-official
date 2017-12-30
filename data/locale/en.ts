@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="en_US" sourcelanguage="en_US">
+<TS version="2.0" language="en_US" sourcelanguage="en_US">
 <context>
     <name>:</name>
     <message>
@@ -15636,17 +15636,17 @@ Example text from file:</source>
         <translation></translation>
     </message>
     <message>
-        <location line="+16"/>
+        <location line="+17"/>
         <source>Layout</source>
         <translation></translation>
     </message>
     <message>
-        <location line="+7"/>
+        <location line="+6"/>
         <source>Headers</source>
         <translation></translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+7"/>
         <source>Basic options</source>
         <translation></translation>
     </message>
@@ -15791,7 +15791,7 @@ Example text from file:</source>
     </message>
     <message>
         <location line="+2"/>
-        <source>&lt;qt&gt;When checked, natural signs are automatically printed to cancel any accidentals from previous key signatures. This cancelation behavior is separate from, and not related to how Rosegarden displays accidental cancelation in the notation editor.&lt;/qt&gt;</source>
+        <source>&lt;qt&gt;When checked, natural signs are automatically printed to cancel any accidentals from previous key signatures. This cancellation behavior is separate from, and not related to how Rosegarden displays accidental cancellation in the notation editor.&lt;/qt&gt;</source>
         <translation></translation>
     </message>
     <message>
@@ -19774,7 +19774,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <name>Rosegarden::RemapInstrumentDialog</name>
     <message>
         <location filename="../../src/gui/studio/RemapInstrumentDialog.cpp" line="+51"/>
-        <source>Remap Instrument assigments...</source>
+        <source>Remap Instrument assignments...</source>
         <translation></translation>
     </message>
     <message>

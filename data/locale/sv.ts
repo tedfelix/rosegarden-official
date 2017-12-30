@@ -16093,17 +16093,17 @@ Vill du använda
         <translation>Lilypond export och förhandsgranskning</translation>
     </message>
     <message>
-        <location line="+16"/>
+        <location line="+17"/>
         <source>Layout</source>
         <translation>Utläggning</translation>
     </message>
     <message>
-        <location line="+7"/>
+        <location line="+6"/>
         <source>Headers</source>
         <translation>Rubriker</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+7"/>
         <source>Basic options</source>
         <translation>Grundalternativ</translation>
     </message>
@@ -16248,7 +16248,7 @@ Vill du använda
     </message>
     <message>
         <location line="+2"/>
-        <source>&lt;qt&gt;When checked, natural signs are automatically printed to cancel any accidentals from previous key signatures. This cancelation behavior is separate from, and not related to how Rosegarden displays accidental cancelation in the notation editor.&lt;/qt&gt;</source>
+        <source>&lt;qt&gt;When checked, natural signs are automatically printed to cancel any accidentals from previous key signatures. This cancellation behavior is separate from, and not related to how Rosegarden displays accidental cancellation in the notation editor.&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Om markerat, skrivs återställningstecken automatiskt ut för att återställa eventuella förtecken från föregående tonartssignaturer. Återställningsbeteende är separat från, och inte relaterat till, hur Rosegarden visar återställning av förtecken i noteditorn.&lt;/qt&gt;</translation>
     </message>
     <message>
@@ -20295,7 +20295,7 @@ Försäkra dig om att enheten är riktigt inställd i dialogrutan Hantera MIDI-e
     <name>Rosegarden::RemapInstrumentDialog</name>
     <message>
         <location filename="../../src/gui/studio/RemapInstrumentDialog.cpp" line="+51"/>
-        <source>Remap Instrument assigments...</source>
+        <source>Remap Instrument assignments...</source>
         <translation>Ändra instrumenttilldelningar...</translation>
     </message>
     <message>

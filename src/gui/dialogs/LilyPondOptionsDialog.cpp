@@ -296,7 +296,7 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QWidget *parent,
 
     m_cancelAccidentals = new QCheckBox(tr("Cancel accidentals"));
     layoutNotation->addWidget(m_cancelAccidentals, 11, 0);
-    m_cancelAccidentals->setToolTip(tr("<qt>When checked, natural signs are automatically printed to cancel any accidentals from previous key signatures. This cancelation behavior is separate from, and not related to how Rosegarden displays accidental cancelation in the notation editor.</qt>"));
+    m_cancelAccidentals->setToolTip(tr("<qt>When checked, natural signs are automatically printed to cancel any accidentals from previous key signatures. This cancellation behavior is separate from, and not related to how Rosegarden displays accidental cancellation in the notation editor.</qt>"));
 
     m_lilyExportEmptyStaves = new QCheckBox(tr("Export empty staves"));
     layoutNotation->addWidget(m_lilyExportEmptyStaves, 12, 0);

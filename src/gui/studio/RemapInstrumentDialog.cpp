@@ -48,7 +48,7 @@ RemapInstrumentDialog::RemapInstrumentDialog(QWidget *parent,
         m_doc(doc)
 {
     setModal(true);
-    setWindowTitle(tr("Remap Instrument assigments..."));
+    setWindowTitle(tr("Remap Instrument assignments..."));
 
     QGridLayout *metagrid = new QGridLayout;
     setLayout(metagrid);

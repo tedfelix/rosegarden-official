@@ -16271,17 +16271,17 @@ Você gostaria de usar
         <translation>Exportar/Visualizar  LilyPond</translation>
     </message>
     <message>
-        <location line="+16"/>
+        <location line="+17"/>
         <source>Layout</source>
         <translation>Layout</translation>
     </message>
     <message>
-        <location line="+7"/>
+        <location line="+6"/>
         <source>Headers</source>
         <translation>Cabeçalhos</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+7"/>
         <source>Basic options</source>
         <translation>Opções básicas</translation>
     </message>
@@ -16612,7 +16612,7 @@ Você gostaria de usar
     </message>
     <message>
         <location line="+2"/>
-        <source>&lt;qt&gt;When checked, natural signs are automatically printed to cancel any accidentals from previous key signatures. This cancelation behavior is separate from, and not related to how Rosegarden displays accidental cancelation in the notation editor.&lt;/qt&gt;</source>
+        <source>&lt;qt&gt;When checked, natural signs are automatically printed to cancel any accidentals from previous key signatures. This cancellation behavior is separate from, and not related to how Rosegarden displays accidental cancellation in the notation editor.&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Quando marcada, notas naturais são automaticamente impressas para cancelar quaisquer acidentes anteriores da Armadura de clave . Este comportamento de cancelamento é separado, e não relacionado à forma como Rosegarden exibe cancelamento acidental no editor de partituras.&lt;/qt&gt;</translation>
     </message>
     <message>
@@ -20478,7 +20478,7 @@ Esta cadeia nunca é exibido, mas define a maior largura do texto (pitch e nome 
     <name>Rosegarden::RemapInstrumentDialog</name>
     <message>
         <location filename="../../src/gui/studio/RemapInstrumentDialog.cpp" line="+51"/>
-        <source>Remap Instrument assigments...</source>
+        <source>Remap Instrument assignments...</source>
         <translation>Remapear Instrumentos dos trabalhos relizados ...</translation>
     </message>
     <message>
@@ -25884,7 +25884,7 @@ Sair de outros aplicativos em execução pode melhorar o desempenho do Rosegarde
         <location filename="../../src/gui/dialogs/FileMergeDialog.cpp" line="-5"/>
         <location filename="../../src/gui/dialogs/InterpretDialog.cpp" line="-5"/>
         <location filename="../../src/gui/dialogs/KeySignatureDialog.cpp" line="-5"/>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="-40"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="-38"/>
         <location filename="../../src/gui/dialogs/LyricEditDialog.cpp" line="-150"/>
         <location filename="../../src/gui/dialogs/MusicXMLOptionsDialog.cpp" line="-5"/>
         <location filename="../../src/gui/dialogs/PasteNotationDialog.cpp" line="-31"/>

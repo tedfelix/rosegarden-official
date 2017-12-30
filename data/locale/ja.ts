@@ -16092,17 +16092,17 @@ Would you like to use
         <translation>Lilypond エクスポート/プレビュー</translation>
     </message>
     <message>
-        <location line="+16"/>
+        <location line="+17"/>
         <source>Layout</source>
         <translation>レイアウト</translation>
     </message>
     <message>
-        <location line="+7"/>
+        <location line="+6"/>
         <source>Headers</source>
         <translation>ヘッダ</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+7"/>
         <source>Basic options</source>
         <translation>基本オプション</translation>
     </message>
@@ -16247,7 +16247,7 @@ Would you like to use
     </message>
     <message>
         <location line="+2"/>
-        <source>&lt;qt&gt;When checked, natural signs are automatically printed to cancel any accidentals from previous key signatures. This cancelation behavior is separate from, and not related to how Rosegarden displays accidental cancelation in the notation editor.&lt;/qt&gt;</source>
+        <source>&lt;qt&gt;When checked, natural signs are automatically printed to cancel any accidentals from previous key signatures. This cancellation behavior is separate from, and not related to how Rosegarden displays accidental cancellation in the notation editor.&lt;/qt&gt;</source>
         <translation type="unfinished">&lt;qt&gt;チェックした場合、LilyPondは全ての譜面を空でも印刷します。  このオプションを切った場合はいくつかの音を長く発しない譜面を備える楽器に対しての混乱を抑える事ができます。&lt;/qt&gt;</translation>
     </message>
     <message>
@@ -20281,7 +20281,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <name>Rosegarden::RemapInstrumentDialog</name>
     <message>
         <location filename="../../src/gui/studio/RemapInstrumentDialog.cpp" line="+51"/>
-        <source>Remap Instrument assigments...</source>
+        <source>Remap Instrument assignments...</source>
         <translation>インストゥルメントの割り当て変更...</translation>
     </message>
     <message>

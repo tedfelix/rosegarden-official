@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="es" sourcelanguage="en_US">
+<TS version="2.0" language="es" sourcelanguage="en_US">
 <context>
     <name>:</name>
     <message>
@@ -15747,17 +15747,17 @@ Ejemplo de texto perteneciente del archivo:</translation>
         <translation>Exportación/Previsualización con LilyPond</translation>
     </message>
     <message>
-        <location line="+16"/>
+        <location line="+17"/>
         <source>Layout</source>
         <translation>Formato</translation>
     </message>
     <message>
-        <location line="+7"/>
+        <location line="+6"/>
         <source>Headers</source>
         <translation>Cabeceras</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+7"/>
         <source>Basic options</source>
         <translation>Opciones básicas</translation>
     </message>
@@ -15892,7 +15892,7 @@ Ejemplo de texto perteneciente del archivo:</translation>
     </message>
     <message>
         <location line="+2"/>
-        <source>&lt;qt&gt;When checked, natural signs are automatically printed to cancel any accidentals from previous key signatures. This cancelation behavior is separate from, and not related to how Rosegarden displays accidental cancelation in the notation editor.&lt;/qt&gt;</source>
+        <source>&lt;qt&gt;When checked, natural signs are automatically printed to cancel any accidentals from previous key signatures. This cancellation behavior is separate from, and not related to how Rosegarden displays accidental cancellation in the notation editor.&lt;/qt&gt;</source>
         <translation>Al marcar, becuadros siempre se imprimen para cancelar las alteraciones de armaduras anteriores.  Este comportamiento de cancelación no tiene nada que ver con cómo Rosegarden se comporta dentro del editor de partitura, porque las reglas de LilyPond y de Rosegarden no están de acuerdo, y es imposible duplicar el mismo comportamiento entre ellos.&lt;/qt&gt;</translation>
     </message>
     <message>
@@ -19913,7 +19913,7 @@ Por favor, asegúrese de que está correctamente configurado en el cuadro de di�
     <name>Rosegarden::RemapInstrumentDialog</name>
     <message>
         <location filename="../../src/gui/studio/RemapInstrumentDialog.cpp" line="+51"/>
-        <source>Remap Instrument assigments...</source>
+        <source>Remap Instrument assignments...</source>
         <translation>emapear asignación de instrumentos...</translation>
     </message>
     <message>

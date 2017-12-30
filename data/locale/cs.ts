@@ -16121,7 +16121,7 @@ Chcete použít
         <translation>Vyvedení do/Náhled programu LilyPond</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="80"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="81"/>
         <source>Layout</source>
         <translation>Uspořádání</translation>
     </message>
@@ -16131,362 +16131,362 @@ Chcete použít
         <translation>Hlavičky</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="96"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="94"/>
         <source>Basic options</source>
         <translation>Základní možnosti</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="127"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="125"/>
         <source>Compatibility level</source>
         <translation>Úroveň slučitelnosti</translation>
     </message>
     <message>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="130"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="131"/>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="132"/>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="133"/>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="134"/>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="135"/>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="136"/>
         <source>LilyPond %1</source>
         <translation>LilyPond %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="132"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="130"/>
         <source>2.6</source>
         <translation>2.6</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="133"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="131"/>
         <source>2.8</source>
         <translation>2.8</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="134"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="132"/>
         <source>2.10</source>
         <translation>2.10</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="135"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="133"/>
         <source>2.12</source>
         <translation>2.12</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="140"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="138"/>
         <source>Paper size</source>
         <translation>Velikost papíru</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="145"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="143"/>
         <source>A3</source>
         <translation>A3</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="146"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="144"/>
         <source>A4</source>
         <translation>A4</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="147"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="145"/>
         <source>A5</source>
         <translation>A5</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="148"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="146"/>
         <source>A6</source>
         <translation>A6</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="149"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="147"/>
         <source>Legal</source>
         <translation>Legal</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="150"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="148"/>
         <source>US Letter</source>
         <translation>Americký dopis</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="151"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="149"/>
         <source>Tabloid</source>
         <translation>Tabloid</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="152"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="150"/>
         <source>do not specify</source>
         <translation>nestanoveno</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="154"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="152"/>
         <source>Landscape</source>
         <translation>na šířku</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="350"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="348"/>
         <source>http://rosegardenmusic.com/wiki/doc:manual-lilypondoptions-en</source>
         <translation>http://rosegardenmusic.com/wiki/doc:manual-lilypondoptions-en</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="108"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="106"/>
         <source>Export content</source>
         <translation>Vyvést obsah</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="112"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="110"/>
         <source>All tracks</source>
         <translation>Všechny stopy</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="113"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="111"/>
         <source>Non-muted tracks</source>
         <translation>Neztlumené stopy</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="114"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="112"/>
         <source>Selected track</source>
         <translation>Vybraná stopa</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="115"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="113"/>
         <source>Selected segments</source>
         <translation>Vybrané části</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="119"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="117"/>
         <source>Edited segments</source>
         <translation>Upravené části</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="130"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="128"/>
         <source>&lt;qt&gt;Set the LilyPond version you have installed. If you have a newer version of LilyPond, choose the highest version Rosegarden supports.&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Nastavte verzi programu LilyPond, kterou jste nainstaloval. Pokud máte novější verzi programu LilyPond, vyberte nejvyšší verzi, kterou Rosegarden podporuje.&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="136"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="134"/>
         <source>2.14</source>
         <translation type="unfinished">2.14</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="144"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="142"/>
         <source>&lt;qt&gt;Set the paper size&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Nastavit velikost papíru.&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="155"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="153"/>
         <source>&lt;qt&gt;If checked, your score will print in landscape orientation instead of the default portrait orientation&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Je-li vybrána tato volba, bude váš notový zápis tisknut natočený na šířku namísto výchozího natočení na výšku&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="163"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="161"/>
         <source>Staff size</source>
         <translation>Velikost osnovy</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="166"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="164"/>
         <source>&lt;qt&gt;&lt;p&gt;Choose the staff size of the score.  LilyPond will scale staff contents relative to this size.&lt;/p&gt;&lt;p&gt;Sizes marked * may provide the best rendering quality.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Vyberte velikost osnovy pro notový zápis.  LilyPond bude měnit velikost obsahu osnovy poměrně k této velikost.&lt;/p&gt;&lt;p&gt;Velikosti označené * mohou poskytnout nejlepší kvalitu při vykreslování.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="180"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="178"/>
         <source>%1 pt %2</source>
         <translation>%1 pt %2</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="180"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="178"/>
         <source> *</source>
         <translation> *</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="189"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="187"/>
         <source>Advanced options</source>
         <translation>Rozšířené volby</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="200"/>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="212"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="198"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="210"/>
         <source>None</source>
         <translation>Žádný</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="201"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="199"/>
         <source>First</source>
         <translation>První</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="202"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="200"/>
         <source>All</source>
         <translation>Vše</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="205"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="203"/>
         <source>Export tempo marks </source>
         <translation>Vyvést značky tempa</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="230"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="228"/>
         <source>&lt;qt&gt;Track staff brackets are found in the &lt;b&gt;Track Parameters&lt;/b&gt; box, and may be used to group staffs in various ways&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Závorky pro notové osnovy stop lze nalézt v &lt;b&gt;Parametry stopy&lt;/b&gt; a lze jich použít k seskupování notových osnov různými způsoby&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="232"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="230"/>
         <source>Print short staff names</source>
         <translation>Tisknout krátké názvy osnov</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="246"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="244"/>
         <source>&lt;qt&gt;&lt;p&gt;Useful for multi-page scores: this may prevent ugly final pages&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Užitečné u notových zápisů s více stranami: zabrání ošklivým stranám na konci.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="256"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="254"/>
         <source>&lt;qt&gt;Markers are found on the &lt;b&gt;Marker Ruler&lt;/b&gt;.  They may be exported as text, or as rehearsal marks.&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Značky se nacházejí na &lt;b&gt;Pravítko značek&lt;/b&gt;.  Mohou být vyvedeny jako text, nebo jako zkušební značky.&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="274"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="272"/>
         <source>Notation language</source>
         <translation>Jazyk notace</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="276"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="274"/>
         <source>&lt;qt&gt;Outputs note names and accidentals in any of LilyPond&apos;s supported languages&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Provede výstup názvů not a posuvek do kteréhokoli z LilyPondem podporovaných jazyků&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="287"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="285"/>
         <source>Use repeat when possible</source>
         <translation>Použít opakování, když je to možné</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="288"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="286"/>
         <source>&lt;qt&gt;How to export repeating segments: When unchecked, repeating segments are always unfolded.&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Jak vyvést opakující se části: Když není zaškrtnuto, opakující se části jsou vždy nesložené.&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="293"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="291"/>
         <source>Draw bar line at volta</source>
         <translation>Nakreslit taktovou čáru na voltě</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="294"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="292"/>
         <source>&lt;qt&gt;If checked a bar line is always drawn when a volta begins even if it begins in the middle of a bar.&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Je-li vybrána tato volba, bude taktová čára vždy nakreslena, když volta začíná, i když začíná vprostřed taktu.&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="299"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="297"/>
         <source>Cancel accidentals</source>
         <translation>Zrušit posuvky</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="301"/>
-        <source>&lt;qt&gt;When checked, natural signs are automatically printed to cancel any accidentals from previous key signatures. This cancelation behavior is separate from, and not related to how Rosegarden displays accidental cancelation in the notation editor.&lt;/qt&gt;</source>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="299"/>
+        <source>&lt;qt&gt;When checked, natural signs are automatically printed to cancel any accidentals from previous key signatures. This cancellation behavior is separate from, and not related to how Rosegarden displays accidental cancellation in the notation editor.&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Když je zaškrtnuto, jsou automaticky tištěny značky bez předznamenání pro zrušení jakýchkoli posuvek z předchozích předznamenání. Toto rušící chování je odděleno a nevztahuje se k tomu, jak Rosegarden zobrazuje zrušení posuvky v editoru notového zápisu.&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="303"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="301"/>
         <source>Export empty staves</source>
         <translation>Vyvést prázdné osnovy</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="305"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="303"/>
         <source>&lt;qt&gt;When checked, LilyPond will print all staves, even if they are empty.  Turning this option off may reduce clutter on scores that feature long silences for some instruments.&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Je-li zaškrtnuto, LilyPond bude tisknout všechny osnovy, i když jsou prázdné.  Vypnutí této volby může zmenšit &quot;nepořádek&quot; v notových osnovách, což představuje dlouhá ticha pro některé nástroje.&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="308"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="306"/>
         <source>Allow fingerings inside staff</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="310"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="308"/>
         <source>&lt;qt&gt;When checked, LilyPond is allowed print fingerings inside the staff.  This can improve rendering in polyphonic scores with fingerings in different voices, and is on by default.&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="210"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="208"/>
         <source>Export lyrics</source>
         <translation>Vyvést text písně</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="221"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="219"/>
         <source>Export beamings</source>
         <translation>Vyvést trámce</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="228"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="226"/>
         <source>Export track staff brackets</source>
         <translation>Vyvést závorky osnovy této stopy</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="213"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="211"/>
         <source>Left</source>
         <translation>Vlevo</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="111"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="109"/>
         <source>&lt;qt&gt;Choose which tracks or segments to export&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Vybrat stopy nebo části, které se mají vyvést.&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="207"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="205"/>
         <source>&lt;qt&gt;Choose how often to show tempo marks in your score&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Vybrat, jak často ukazovat značkyk s tempem v notovém zápisu.&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="214"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="212"/>
         <source>Center</source>
         <translation>Umístit do středu</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="215"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="213"/>
         <source>Right</source>
         <translation>Vpravo</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="217"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="215"/>
         <source>&lt;qt&gt;Set the position of the &lt;b&gt;lyrics&lt;/b&gt; in relation to the notes&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Nastavit polohu &lt;b&gt;textu písně/slov&lt;/b&gt; ve vztahu k notám.&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="223"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="221"/>
         <source>&lt;qt&gt;If checked, Rosegarden&apos;s beamings will be exported.  Otherwise, LilyPond will calculate beams automatically.&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Je-li vybrána tato volba, budou vyvedeny trámce Rosegardenu.  Jinak spočítá LilyPond trámce automaticky.&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="233"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="231"/>
         <source>&lt;qt&gt;Useful for large, complex scores, this prints the short name every time there is a line break in the score, making it easier to follow which line belongs to which instrument across pages; requires LilyPond 2.10 or higher&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="244"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="242"/>
         <source>Ragged bottom (systems will not be spread vertically across the page)</source>
         <translation>Nevyrovnaná spodní část (osnovy nebudou svisle roztaženy po celé straně)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="239"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="237"/>
         <source>Interpret chord texts as lead sheet chord names</source>
         <translation>Vykládat texty u akordů jako názvy akordů u hlavního listu</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="241"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="239"/>
         <source>&lt;qt&gt;&lt;p&gt;There is a tutorial on how to use this feature at http://www.rosegardenmusic.com/tutorials/supplemental/chordnames/index.html&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Pro používání této funkce je návod na http://www.rosegardenmusic.com/tutorials/supplemental/chordnames/index.html&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="249"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="247"/>
         <source>No markers</source>
         <translation>Žádné značky</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="250"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="248"/>
         <source>Rehearsal marks</source>
         <translation>Cvičební značky</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="251"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="249"/>
         <source>Marker text</source>
         <translation>Text značky</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="254"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="252"/>
         <source>Export markers</source>
         <translation>Vyvést značky</translation>
     </message>
@@ -20327,7 +20327,7 @@ Ujistěte se, že je zařízení správně nastaveno v dialogu Správa zařízen
     <name>Rosegarden::RemapInstrumentDialog</name>
     <message>
         <location filename="../../src/gui/studio/RemapInstrumentDialog.cpp" line="51"/>
-        <source>Remap Instrument assigments...</source>
+        <source>Remap Instrument assignments...</source>
         <translation>Navrhnout nové přidělení nástrojů...</translation>
     </message>
     <message>

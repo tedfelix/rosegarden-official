@@ -15627,7 +15627,7 @@ Example text from file:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="80"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="81"/>
         <source>Layout</source>
         <translation type="unfinished"></translation>
     </message>
@@ -15637,362 +15637,362 @@ Example text from file:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="96"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="94"/>
         <source>Basic options</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="108"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="106"/>
         <source>Export content</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="111"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="109"/>
         <source>&lt;qt&gt;Choose which tracks or segments to export&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="112"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="110"/>
         <source>All tracks</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="113"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="111"/>
         <source>Non-muted tracks</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="114"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="112"/>
         <source>Selected track</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="115"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="113"/>
         <source>Selected segments</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="119"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="117"/>
         <source>Edited segments</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="127"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="125"/>
         <source>Compatibility level</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="130"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="128"/>
         <source>&lt;qt&gt;Set the LilyPond version you have installed. If you have a newer version of LilyPond, choose the highest version Rosegarden supports.&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="130"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="131"/>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="132"/>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="133"/>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="134"/>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="135"/>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="136"/>
         <source>LilyPond %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="132"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="130"/>
         <source>2.6</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="133"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="131"/>
         <source>2.8</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="134"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="132"/>
         <source>2.10</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="135"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="133"/>
         <source>2.12</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="136"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="134"/>
         <source>2.14</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="140"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="138"/>
         <source>Paper size</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="144"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="142"/>
         <source>&lt;qt&gt;Set the paper size&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="145"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="143"/>
         <source>A3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="146"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="144"/>
         <source>A4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="147"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="145"/>
         <source>A5</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="148"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="146"/>
         <source>A6</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="149"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="147"/>
         <source>Legal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="150"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="148"/>
         <source>US Letter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="151"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="149"/>
         <source>Tabloid</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="152"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="150"/>
         <source>do not specify</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="154"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="152"/>
         <source>Landscape</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="155"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="153"/>
         <source>&lt;qt&gt;If checked, your score will print in landscape orientation instead of the default portrait orientation&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="163"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="161"/>
         <source>Staff size</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="166"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="164"/>
         <source>&lt;qt&gt;&lt;p&gt;Choose the staff size of the score.  LilyPond will scale staff contents relative to this size.&lt;/p&gt;&lt;p&gt;Sizes marked * may provide the best rendering quality.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="180"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="178"/>
         <source>%1 pt %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="180"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="178"/>
         <source> *</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="189"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="187"/>
         <source>Advanced options</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="200"/>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="212"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="198"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="210"/>
         <source>None</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="201"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="199"/>
         <source>First</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="202"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="200"/>
         <source>All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="205"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="203"/>
         <source>Export tempo marks </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="207"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="205"/>
         <source>&lt;qt&gt;Choose how often to show tempo marks in your score&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="210"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="208"/>
         <source>Export lyrics</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="213"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="211"/>
         <source>Left</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="214"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="212"/>
         <source>Center</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="215"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="213"/>
         <source>Right</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="217"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="215"/>
         <source>&lt;qt&gt;Set the position of the &lt;b&gt;lyrics&lt;/b&gt; in relation to the notes&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="221"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="219"/>
         <source>Export beamings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="223"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="221"/>
         <source>&lt;qt&gt;If checked, Rosegarden&apos;s beamings will be exported.  Otherwise, LilyPond will calculate beams automatically.&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="228"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="226"/>
         <source>Export track staff brackets</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="230"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="228"/>
         <source>&lt;qt&gt;Track staff brackets are found in the &lt;b&gt;Track Parameters&lt;/b&gt; box, and may be used to group staffs in various ways&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="232"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="230"/>
         <source>Print short staff names</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="233"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="231"/>
         <source>&lt;qt&gt;Useful for large, complex scores, this prints the short name every time there is a line break in the score, making it easier to follow which line belongs to which instrument across pages; requires LilyPond 2.10 or higher&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="239"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="237"/>
         <source>Interpret chord texts as lead sheet chord names</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="241"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="239"/>
         <source>&lt;qt&gt;&lt;p&gt;There is a tutorial on how to use this feature at http://www.rosegardenmusic.com/tutorials/supplemental/chordnames/index.html&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="244"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="242"/>
         <source>Ragged bottom (systems will not be spread vertically across the page)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="246"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="244"/>
         <source>&lt;qt&gt;&lt;p&gt;Useful for multi-page scores: this may prevent ugly final pages&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="249"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="247"/>
         <source>No markers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="250"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="248"/>
         <source>Rehearsal marks</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="251"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="249"/>
         <source>Marker text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="254"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="252"/>
         <source>Export markers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="256"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="254"/>
         <source>&lt;qt&gt;Markers are found on the &lt;b&gt;Marker Ruler&lt;/b&gt;.  They may be exported as text, or as rehearsal marks.&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="274"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="272"/>
         <source>Notation language</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="276"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="274"/>
         <source>&lt;qt&gt;Outputs note names and accidentals in any of LilyPond&apos;s supported languages&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="287"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="285"/>
         <source>Use repeat when possible</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="288"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="286"/>
         <source>&lt;qt&gt;How to export repeating segments: When unchecked, repeating segments are always unfolded.&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="293"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="291"/>
         <source>Draw bar line at volta</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="294"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="292"/>
         <source>&lt;qt&gt;If checked a bar line is always drawn when a volta begins even if it begins in the middle of a bar.&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="299"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="297"/>
         <source>Cancel accidentals</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="301"/>
-        <source>&lt;qt&gt;When checked, natural signs are automatically printed to cancel any accidentals from previous key signatures. This cancelation behavior is separate from, and not related to how Rosegarden displays accidental cancelation in the notation editor.&lt;/qt&gt;</source>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="299"/>
+        <source>&lt;qt&gt;When checked, natural signs are automatically printed to cancel any accidentals from previous key signatures. This cancellation behavior is separate from, and not related to how Rosegarden displays accidental cancellation in the notation editor.&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="303"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="301"/>
         <source>Export empty staves</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="305"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="303"/>
         <source>&lt;qt&gt;When checked, LilyPond will print all staves, even if they are empty.  Turning this option off may reduce clutter on scores that feature long silences for some instruments.&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="308"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="306"/>
         <source>Allow fingerings inside staff</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="310"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="308"/>
         <source>&lt;qt&gt;When checked, LilyPond is allowed print fingerings inside the staff.  This can improve rendering in polyphonic scores with fingerings in different voices, and is on by default.&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="350"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="348"/>
         <source>http://rosegardenmusic.com/wiki/doc:manual-lilypondoptions-en</source>
         <translation type="unfinished"></translation>
     </message>
@@ -19761,7 +19761,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <name>Rosegarden::RemapInstrumentDialog</name>
     <message>
         <location filename="../../src/gui/studio/RemapInstrumentDialog.cpp" line="51"/>
-        <source>Remap Instrument assigments...</source>
+        <source>Remap Instrument assignments...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

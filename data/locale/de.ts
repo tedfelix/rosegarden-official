@@ -16111,17 +16111,17 @@ Wollen Sie stattdessen
         <translation>LilyPond Export/Vorschau</translation>
     </message>
     <message>
-        <location line="+16"/>
+        <location line="+17"/>
         <source>Layout</source>
         <translation>Layout</translation>
     </message>
     <message>
-        <location line="+7"/>
+        <location line="+6"/>
         <source>Headers</source>
         <translation>Vorspann</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+7"/>
         <source>Basic options</source>
         <translation>Grundlegende Optionen</translation>
     </message>
@@ -16256,7 +16256,7 @@ Wollen Sie stattdessen
     </message>
     <message>
         <location line="+2"/>
-        <source>&lt;qt&gt;When checked, natural signs are automatically printed to cancel any accidentals from previous key signatures. This cancelation behavior is separate from, and not related to how Rosegarden displays accidental cancelation in the notation editor.&lt;/qt&gt;</source>
+        <source>&lt;qt&gt;When checked, natural signs are automatically printed to cancel any accidentals from previous key signatures. This cancellation behavior is separate from, and not related to how Rosegarden displays accidental cancellation in the notation editor.&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Falls markiert werden automatisch Auflösungszeichen ausgegeben um Versetzungszeichen von vorhergehenden Vorzeichen aufzuheben. Dieses Verhalten ist unabhängig von der Art und Weise wie Rosegarden Versetzungszeichen im Notations-Editor aufhebt.&lt;/qt&gt;</translation>
     </message>
     <message>
@@ -20315,7 +20315,7 @@ Bitte überprüfen Sie die Einstellungen im Verwalte MIDI Geräte Dialog im Haup
     <name>Rosegarden::RemapInstrumentDialog</name>
     <message>
         <location filename="../../src/gui/studio/RemapInstrumentDialog.cpp" line="+51"/>
-        <source>Remap Instrument assigments...</source>
+        <source>Remap Instrument assignments...</source>
         <translation>Instrumentzuordnungen neu verteilen...</translation>
     </message>
     <message>
