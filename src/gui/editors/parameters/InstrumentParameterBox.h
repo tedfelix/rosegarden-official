@@ -74,9 +74,6 @@ public:
 
     MIDIInstrumentParameterPanel *getMIDIInstrumentParameterPanel();
 
-    /// Update the MatrixWidget's PitchRuler.
-    void emitInstrumentPercussionSetChanged();
-
 public slots:
 
     // From Plugin dialog

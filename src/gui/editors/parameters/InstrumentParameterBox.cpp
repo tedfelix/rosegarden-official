@@ -148,25 +148,6 @@ InstrumentParameterBox::useInstrument(Instrument *instrument)
 
 }
 
-void
-InstrumentParameterBox::emitInstrumentPercussionSetChanged()
-{
-    // ??? I don't think this routine is needed.
-
-    RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
-    Composition &comp = doc->getComposition();
-
-    InstrumentId instrumentId = comp.getSelectedInstrumentId();
-
-    if (instrumentId == NoInstrument)
-        return;
-
-    Studio &studio = doc->getStudio();
-
-    // Update the MatrixWidget's PitchRuler.
-    emit instrumentPercussionSetChanged(studio.getInstrumentById(instrumentId));
-}
-
 
 }
 
