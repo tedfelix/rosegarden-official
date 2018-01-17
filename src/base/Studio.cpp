@@ -35,7 +35,6 @@
 #include <QString>
 
 
-using std::cerr;
 using std::endl;
 
 
@@ -109,8 +108,7 @@ Studio::addDevice(const std::string &name,
             break;
 
         default:
-            std::cerr << "Studio::addDevice() - unrecognised device"
-                      << endl;
+            RG_WARNING << "addDevice(): WARNING: unrecognised device type " << type;
             return;
     }
 
@@ -499,8 +497,7 @@ Studio::toXmlString(const std::vector<DeviceId> &devices) const
              di != devices.end(); ++di) {
             Device *d = getDevice(*di);
             if (!d) {
-                std::cerr << "WARNING: Unknown device id " << (*di)
-                          << " in Studio::toXmlString" << std::endl;
+                RG_WARNING << "toXmlString(): WARNING: Unknown device id " << (*di);
             } else {
                 studio << d->toXmlString() << endl << endl;
             }
@@ -524,13 +521,13 @@ Studio::getMetronomeFromDevice(DeviceId id)
 
     for (it = m_devices.begin(); it != m_devices.end(); ++it) {
 
-        std::cerr << "Studio::getMetronomeFromDevice: Having a look at device " << (*it)->getId() << std::endl;
+        RG_DEBUG << "getMetronomeFromDevice(): Having a look at device " << (*it)->getId();
 
         MidiDevice *midiDevice = dynamic_cast<MidiDevice*>(*it);
         if (midiDevice && 
             midiDevice->getId() == id &&
             midiDevice->getMetronome()) {
-            std::cerr << "Studio::getMetronomeFromDevice(" << id << "): device is a MIDI device" << std::endl;
+            RG_DEBUG << "getMetronomeFromDevice(" << id << "): device is a MIDI device";
             return midiDevice->getMetronome();
         }
 
@@ -538,7 +535,7 @@ Studio::getMetronomeFromDevice(DeviceId id)
         if (ssDevice && 
             ssDevice->getId() == id &&
             ssDevice->getMetronome()) {
-            std::cerr << "Studio::getMetronomeFromDevice(" << id << "): device is a soft synth device" << std::endl;
+            RG_DEBUG << "getMetronomeFromDevice(" << id << "): device is a soft synth device";
             return ssDevice->getMetronome();
         }
     }
@@ -750,7 +747,7 @@ Studio::clearRecordIns()
 Device *
 Studio::getDevice(DeviceId id) const
 {
-    //cerr << "Studio[" << this << "]::getDevice(" << id << ")... ";
+    //RG_DEBUG << "Studio[" << this << "]::getDevice(" << id << ")... ";
     
     std::vector<Device*>::const_iterator it;
     
@@ -758,19 +755,19 @@ Studio::getDevice(DeviceId id) const
         
         // possibly fix a following seg.fault :
         if( ! (*it) ){ 
-            cerr << "WARNING: (*it) is NULL in Studio::getDevice() " << endl;
+            RG_WARNING << "getDevice(): WARNING: (*it) is NULL";
             continue;
         }
         
-        // if (it != m_devices.begin()) cerr << ", ";
-        //        cerr << (*it)->getId();
+        //RG_DEBUG << (*it)->getId();
+
         if ((*it)->getId() == id) {
-            //cerr << ". Found" << endl;
+            //RG_DEBUG << "Found";
             return (*it);
         }
     }
     
-    //cerr << ". Not found" << endl;
+    //RG_DEBUG << "NOT found";
     
     return 0;
 }
