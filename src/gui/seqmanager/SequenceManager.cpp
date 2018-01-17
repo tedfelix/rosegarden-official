@@ -883,9 +883,6 @@ SequenceManager::processAsynchronousMidi(const MappedEventList &mC,
                 }
             }
 
-            if ((*i)->getType() == MappedEvent::AudioLevel)
-                sendAudioLevel(*i);
-
             if ((*i)->getType() ==
                     MappedEvent::AudioGeneratePreview) {
                 SEQMAN_DEBUG << "Received AudioGeneratePreview: data1 is " 
@@ -1271,12 +1268,6 @@ SequenceManager::preparePlayback(bool /*forceProgramChanges*/)
     for (; it != list.end(); ++it) {
         StudioControl::sendMappedInstrument(MappedInstrument(*it));
     }
-}
-
-void
-SequenceManager::sendAudioLevel(MappedEvent *mE)
-{
-    emit signalAudioLevel(mE);
 }
 
 void

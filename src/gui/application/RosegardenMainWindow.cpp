@@ -1121,9 +1121,6 @@ RosegardenMainWindow::initView()
             this,
             SLOT(slotShowToolHelp(const QString &)));
 
-    connect(m_seqManager, SIGNAL(signalAudioLevel(const MappedEvent*)),
-            m_view, SLOT(showVisuals(const MappedEvent*)));
-
     // We have to do this to make sure that the 2nd call ("select")
     // actually has any effect. Activating the same radio action
     // doesn't work the 2nd time (like pressing down the same radio

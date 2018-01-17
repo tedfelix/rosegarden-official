@@ -137,9 +137,6 @@ public:
      */
     void suspendSequencer(bool value);
 
-    /// Send the audio level to VU meters
-    void sendAudioLevel(MappedEvent *mE);
-
     /// Find what has been initialised and what hasn't
     unsigned int getSoundDriverStatus() { return m_soundDriverStatus; }
 
@@ -235,9 +232,6 @@ signals:
     void signalPlaying(bool checked);
     void signalRecording(bool checked);
     void signalMetronomeActivated(bool checked);
-
-    /// signals the view to show audio levels
-    void signalAudioLevel(const MappedEvent *event);
 
 protected slots:
     void slotCountdownTimerTimeout();

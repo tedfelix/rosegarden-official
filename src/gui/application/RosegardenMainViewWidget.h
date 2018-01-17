@@ -134,11 +134,6 @@ public:
     }
 
 public slots:
-    /**
-     * Show output levels
-     */
-    void showVisuals(const MappedEvent *mE);
-
     void slotEditSegment(Segment*);
     void slotEditSegmentNotation(Segment*);
     void slotEditSegmentsNotation(std::vector<Segment*>);
