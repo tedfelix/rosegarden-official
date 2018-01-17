@@ -222,13 +222,6 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(QWidget *parent) :
     connect(m_rotaryMapper, SIGNAL(mapped(int)),
             SLOT(slotControllerChanged(int)));
 
-    connect(Instrument::getStaticSignals().data(),
-            SIGNAL(changed(Instrument *)),
-            SLOT(slotInstrumentChanged(Instrument *)));
-    connect(Instrument::getStaticSignals().data(),
-                SIGNAL(controlChange(Instrument *, int)),
-            SLOT(slotControlChange(Instrument *, int)));
-
     // Layout
 
     QGridLayout *mainGrid = new QGridLayout(this);
@@ -282,6 +275,14 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(QWidget *parent) :
     connect(RosegardenMainWindow::self(),
                 SIGNAL(documentChanged(RosegardenDocument *)),
             SLOT(slotNewDocument(RosegardenDocument *)));
+
+    connect(Instrument::getStaticSignals().data(),
+            SIGNAL(changed(Instrument *)),
+            SLOT(slotInstrumentChanged(Instrument *)));
+
+    connect(Instrument::getStaticSignals().data(),
+                SIGNAL(controlChange(Instrument *, int)),
+            SLOT(slotControlChange(Instrument *, int)));
 
     connect(RosegardenMainWindow::self()->getSequenceManager(),
                 SIGNAL(signalSelectProgramNoSend(int,int,int)),
@@ -901,6 +902,11 @@ MIDIInstrumentParameterPanel::slotDocumentModified(bool)
     // If an instrument has been selected.
     if (instrumentId != NoInstrument)
         instrument = doc->getStudio().getInstrumentById(instrumentId);
+
+    if (!instrument) {
+        setSelectedInstrument(NULL);
+        return;
+    }
 
     if (instrument->getType() != Instrument::Midi) {
         setSelectedInstrument(NULL);
