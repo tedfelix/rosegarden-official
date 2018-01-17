@@ -279,6 +279,10 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(QWidget *parent) :
 
     // Connections
 
+    connect(RosegardenMainWindow::self(),
+                SIGNAL(documentChanged(RosegardenDocument *)),
+            SLOT(slotNewDocument(RosegardenDocument *)));
+
     connect(RosegardenMainWindow::self()->getSequenceManager(),
                 SIGNAL(signalSelectProgramNoSend(int,int,int)),
             SLOT(slotExternalProgramChange(int,int,int)));
@@ -308,7 +312,7 @@ MIDIInstrumentParameterPanel::updateWidgets()
 
     MidiDevice *md = dynamic_cast<MidiDevice *>(getSelectedInstrument()->getDevice());
     if (!md) {
-        std::cerr << "WARNING: MIDIInstrumentParameterPanel::updateWidgets(): No MidiDevice for Instrument " << getSelectedInstrument()->getId() << '\n';
+        RG_WARNING << "updateWidgets(): WARNING: No MidiDevice for Instrument " << getSelectedInstrument()->getId();
         RG_DEBUG << "setupForInstrument() end";
         return;
     }
@@ -877,17 +881,40 @@ MIDIInstrumentParameterPanel::updateVariationComboBox()
 }
 
 void
+MIDIInstrumentParameterPanel::slotNewDocument(RosegardenDocument *doc)
+{
+    connect(doc, SIGNAL(documentModified(bool)),
+            SLOT(slotDocumentModified(bool)));
+}
+
+void
+MIDIInstrumentParameterPanel::slotDocumentModified(bool)
+{
+    RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
+
+    // Get the selected Track's Instrument.
+    InstrumentId instrumentId =
+            doc->getComposition().getSelectedInstrumentId();
+
+    Instrument *instrument = NULL;
+
+    // If an instrument has been selected.
+    if (instrumentId != NoInstrument)
+        instrument = doc->getStudio().getInstrumentById(instrumentId);
+
+    if (instrument->getType() != Instrument::Midi) {
+        setSelectedInstrument(NULL);
+        return;
+    }
+
+    setSelectedInstrument(instrument);
+
+    updateWidgets();
+}
+
+void
 MIDIInstrumentParameterPanel::slotInstrumentChanged(Instrument *instrument)
 {
-    // ??? Simplify: We don't need the instrument pointer.  We can simply
-    //     perform a full update every time we get this notification.  We
-    //     could also get clever, but I'm not sure the value.  If each of
-    //     the update routines is clever enough to avoid unnecessary updates,
-    //     there's no need for more cleverness.  However, one approach would
-    //     be to cache the last Instrument parameters we displayed.  Then
-    //     check the cache to see if anything has changed.  Unfortunately,
-    //     Instrument derives from QObject which makes copying inconvenient.
-
     if (!instrument)
         return;
 

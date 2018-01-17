@@ -85,13 +85,6 @@ InstrumentParameterBox::useInstrument(Instrument *instrument)
     if (!instrument)
         return;
 
-    // MIPP for MIDI
-    if (instrument->getType() == Instrument::Midi) {
-        // Update the MIPP.
-        m_mipp->displayInstrument(instrument);
-        return;
-    }
-
     // AIPP for Audio or SoftSynth
     if (instrument->getType() == Instrument::Audio ||
         instrument->getType() == Instrument::SoftSynth) {

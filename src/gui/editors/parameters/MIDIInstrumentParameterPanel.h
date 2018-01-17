@@ -95,7 +95,17 @@ public slots:
 
 private slots:
 
+    /// Called when a new document is loaded.
+    void slotNewDocument(RosegardenDocument *);
+    /// Called when the document is modified in some way.
+    void slotDocumentModified(bool);
+
     /// Handle InstrumentStaticSignals::changed()
+    /**
+     * ??? This should go away.  RosegardenDocument::documentModified() is
+     *     the preferred way to update the UI in response to changes to
+     *     the document.  See slotDocumentModified() above.
+     */
     void slotInstrumentChanged(Instrument *);
 
     /// Handle InstrumentStaticSignals::controlChange().
