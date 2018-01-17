@@ -42,14 +42,10 @@ class InstrumentParameterPanel : public QFrame
 {
     Q_OBJECT
 public:
-    InstrumentParameterPanel(RosegardenDocument *doc, QWidget *parent);
+    InstrumentParameterPanel(QWidget *parent);
     virtual ~InstrumentParameterPanel() {}
 
-    void setDocument(RosegardenDocument *doc);
-
 protected:
-    RosegardenDocument *m_doc;
-
     void setSelectedInstrument(Instrument *);
     Instrument *getSelectedInstrument();
 

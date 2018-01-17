@@ -26,6 +26,7 @@
 #include "base/InstrumentStaticSignals.h"
 #include "base/MidiProgram.h"
 #include "document/RosegardenDocument.h"
+#include "gui/application/RosegardenMainWindow.h"
 #include "gui/studio/AudioPluginManager.h"
 #include "gui/studio/AudioPlugin.h"
 #include "gui/studio/StudioControl.h"
@@ -59,9 +60,8 @@
 namespace Rosegarden
 {
 
-AudioInstrumentParameterPanel::AudioInstrumentParameterPanel(
-        RosegardenDocument *doc, QWidget *parent) :
-    InstrumentParameterPanel(doc, parent)
+AudioInstrumentParameterPanel::AudioInstrumentParameterPanel(QWidget *parent) :
+    InstrumentParameterPanel(parent)
 {
     setObjectName("Audio Instrument Parameter Panel");
 
@@ -153,7 +153,7 @@ AudioInstrumentParameterPanel::slotSelectAudioLevel(float dB)
         Instrument::getStaticSignals()->
                 emitControlChange(getSelectedInstrument(),
                                   MIDI_CONTROLLER_VOLUME);
-        m_doc->setModified();
+        RosegardenMainWindow::self()->getDocument()->setModified();
     }
 }
 
@@ -200,7 +200,9 @@ AudioInstrumentParameterPanel::slotPluginSelected(InstrumentId instrumentId,
     QString noneText;
 
     // updates synth gui button &c:
-    m_audioFader->slotSetInstrument(&m_doc->getStudio(), getSelectedInstrument());
+    m_audioFader->slotSetInstrument(
+            &(RosegardenMainWindow::self()->getDocument()->getStudio()),
+            getSelectedInstrument());
 
     if (index == (int)Instrument::SYNTH_PLUGIN_POSITION) {
         button = m_audioFader->m_synthButton;
@@ -220,7 +222,9 @@ AudioInstrumentParameterPanel::slotPluginSelected(InstrumentId instrumentId,
 
     } else {
 
-        AudioPlugin *pluginClass = m_doc->getPluginManager()->getPlugin(plugin);
+        AudioPlugin *pluginClass =
+                RosegardenMainWindow::self()->getDocument()->
+                    getPluginManager()->getPlugin(plugin);
 
         if (pluginClass) {
             button->setText(pluginClass->getLabel());
@@ -265,10 +269,11 @@ AudioInstrumentParameterPanel::slotPluginBypassed(InstrumentId instrumentId,
     QColor backgroundColour = QColor(Qt::black); // default background colour
 
     if (inst && inst->isAssigned()) {
-        AudioPlugin *pluginClass
-        = m_doc->getPluginManager()->getPlugin(
-              m_doc->getPluginManager()->
-              getPositionByIdentifier(inst->getIdentifier().c_str()));
+        AudioPluginManager *pluginMgr =
+                RosegardenMainWindow::self()->getDocument()->getPluginManager();
+        AudioPlugin *pluginClass = pluginMgr->getPlugin(
+                pluginMgr->getPositionByIdentifier(
+                        inst->getIdentifier().c_str()));
 
         /// Set the colour on the button
         //
@@ -334,7 +339,7 @@ AudioInstrumentParameterPanel::slotSetPan(float pan)
     Instrument::getStaticSignals()->
             emitControlChange(getSelectedInstrument(),
                               MIDI_CONTROLLER_PAN);
-    m_doc->setModified();
+    RosegardenMainWindow::self()->getDocument()->setModified();
 }
 
 void
@@ -370,7 +375,9 @@ AudioInstrumentParameterPanel::setupForInstrument(Instrument* instrument)
     m_audioFader->m_recordFader->setFader(instrument->getRecordLevel());
     m_audioFader->m_fader->setFader(instrument->getLevel());
 
-    m_audioFader->slotSetInstrument(&m_doc->getStudio(), instrument);
+    m_audioFader->slotSetInstrument(
+            &(RosegardenMainWindow::self()->getDocument()->getStudio()),
+            instrument);
 
     int start = 0;
 
@@ -397,10 +404,12 @@ AudioInstrumentParameterPanel::setupForInstrument(Instrument* instrument)
         AudioPluginInstance *inst = instrument->getPlugin(index);
 
         if (inst && inst->isAssigned()) {
-            AudioPlugin *pluginClass
-            = m_doc->getPluginManager()->getPlugin(
-                  m_doc->getPluginManager()->
-                  getPositionByIdentifier(inst->getIdentifier().c_str()));
+            AudioPluginManager *pluginMgr =
+                    RosegardenMainWindow::self()->getDocument()->
+                        getPluginManager();
+            AudioPlugin *pluginClass = pluginMgr->getPlugin(
+                    pluginMgr->getPositionByIdentifier(
+                        inst->getIdentifier().c_str()));
 
             if (pluginClass) {
                 button->setText(pluginClass->getLabel());
@@ -457,7 +466,7 @@ AudioInstrumentParameterPanel::slotSelectPlugin(int index)
 void
 AudioInstrumentParameterPanel::slotAliasChanged()
 {
-    m_doc->slotDocumentModified();
+    RosegardenMainWindow::self()->getDocument()->slotDocumentModified();
 
     // ??? This is wrong.  We should connect to the
     //     RosegardenDocument::documentModified() signal and refresh

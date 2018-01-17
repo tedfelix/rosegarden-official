@@ -47,7 +47,7 @@ class AudioInstrumentParameterPanel : public InstrumentParameterPanel
 {
     Q_OBJECT
 public:
-    AudioInstrumentParameterPanel(RosegardenDocument* doc, QWidget* parent);
+    AudioInstrumentParameterPanel(QWidget* parent);
 
     virtual void setupForInstrument(Instrument*);
 

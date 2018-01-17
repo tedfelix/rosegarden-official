@@ -26,6 +26,7 @@
 
 #include "InstrumentParameterPanel.h"
 #include "document/RosegardenDocument.h"
+#include "gui/application/RosegardenMainWindow.h"
 #include "gui/widgets/SqueezedLabel.h"
 #include "gui/widgets/Rotary.h"
 #include "sequencer/RosegardenSequencer.h"
@@ -61,9 +62,8 @@
 namespace Rosegarden
 {
 
-MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(
-        RosegardenDocument *doc, QWidget *parent) :
-    InstrumentParameterPanel(doc, parent),
+MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(QWidget *parent) :
+    InstrumentParameterPanel(parent),
     m_rotaryFrame(NULL),
     m_rotaryGrid(NULL)
 {
@@ -380,7 +380,8 @@ MIDIInstrumentParameterPanel::setupControllers(MidiDevice *md)
     // we just set its text; if a rotary exists, we only replace it
     // if we actually need a different one.
 
-    Composition &comp = m_doc->getComposition();
+    Composition &comp =
+            RosegardenMainWindow::self()->getDocument()->getComposition();
 
     ControlList list = md->getControlParameters();
 
@@ -1276,7 +1277,7 @@ MIDIInstrumentParameterPanel::slotControllerChanged(int controllerNumber)
             static_cast<MidiByte>(value));
     Instrument::getStaticSignals()->
             emitControlChange(getSelectedInstrument(), controllerNumber);
-    m_doc->setModified();
+    RosegardenMainWindow::self()->getDocument()->setModified();
 }
 
 void

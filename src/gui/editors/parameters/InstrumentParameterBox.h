@@ -19,10 +19,7 @@
 #define RG_INSTRUMENTPARAMETERBOX_H
 
 #include "base/Instrument.h"
-//#include "base/MidiProgram.h"
 #include "RosegardenParameterBox.h"
-
-#include <QString>
 
 class QStackedWidget;
 class QWidget;
@@ -57,8 +54,7 @@ class InstrumentParameterBox : public RosegardenParameterBox
 Q_OBJECT
 
 public:
-    InstrumentParameterBox(RosegardenDocument *doc,
-                           QWidget *parent = 0);
+    InstrumentParameterBox(QWidget *parent = 0);
     ~InstrumentParameterBox();
 
     void useInstrument(Instrument *instrument);
@@ -67,8 +63,6 @@ public:
 
     void setAudioMeter(float dBleft, float dBright,
                        float recDBleft, float recDBright);
-
-    void setDocument(RosegardenDocument *doc);
 
     MIDIInstrumentParameterPanel *getMIDIInstrumentParameterPanel();
 
@@ -92,18 +86,16 @@ signals:
 
 private:
 
-    //--------------- Data members ---------------------------------
-    QStackedWidget                  *m_widgetStack;
-    QFrame                          *m_noInstrumentParameters;
-    MIDIInstrumentParameterPanel    *m_midiInstrumentParameters;
-    AudioInstrumentParameterPanel   *m_audioInstrumentParameters;
+    // ??? rename: m_stackedWidget
+    QStackedWidget *m_widgetStack;
+
+    // ??? rename: m_emptyFrame
+    QFrame *m_noInstrumentParameters;
+    MIDIInstrumentParameterPanel *m_midiInstrumentParameters;
+    AudioInstrumentParameterPanel *m_audioInstrumentParameters;
 
     // -1 if no instrument, InstrumentId otherwise
-    int                              m_selectedInstrument;
-
-    // So we can setModified()
-    //
-    RosegardenDocument              *m_doc;
+    int m_selectedInstrument;
 };
 
 

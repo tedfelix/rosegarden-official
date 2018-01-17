@@ -336,7 +336,7 @@ RosegardenMainWindow::RosegardenMainWindow(bool enableSound,
     m_parameterArea->addRosegardenParameterBox(m_segmentParameterBox);
     m_trackParameterBox = new TrackParameterBox(m_parameterArea);
     m_parameterArea->addRosegardenParameterBox(m_trackParameterBox);
-    m_instrumentParameterBox = new InstrumentParameterBox(doc, m_parameterArea);
+    m_instrumentParameterBox = new InstrumentParameterBox(m_parameterArea);
     m_parameterArea->addRosegardenParameterBox(m_instrumentParameterBox);
 
     // Lookup the configuration parameter that specifies the default
@@ -1199,7 +1199,6 @@ RosegardenMainWindow::setDocument(RosegardenDocument* newDocument)
 
     m_trackParameterBox->setDocument(m_doc);
     m_segmentParameterBox->setDocument(m_doc);
-    m_instrumentParameterBox->setDocument(m_doc);
     m_editTempoController->setDocument(m_doc);
 
     if (m_pluginGUIManager) {

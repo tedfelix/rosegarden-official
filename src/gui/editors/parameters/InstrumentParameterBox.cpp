@@ -24,6 +24,7 @@
 #include "base/Instrument.h"
 #include "base/MidiProgram.h"
 #include "document/RosegardenDocument.h"
+#include "gui/application/RosegardenMainWindow.h"
 #include "MIDIInstrumentParameterPanel.h"
 #include "RosegardenParameterArea.h"
 #include "RosegardenParameterBox.h"
@@ -38,16 +39,14 @@ namespace Rosegarden
 {
 
 
-InstrumentParameterBox::InstrumentParameterBox(RosegardenDocument *doc,
-                                               QWidget *parent)
+InstrumentParameterBox::InstrumentParameterBox(QWidget *parent)
     : RosegardenParameterBox(tr("Instrument Parameters"),
                              parent),
       m_widgetStack(new QStackedWidget(this)),
       m_noInstrumentParameters(new QFrame(this)),
-      m_midiInstrumentParameters(new MIDIInstrumentParameterPanel(doc, this)),
-      m_audioInstrumentParameters(new AudioInstrumentParameterPanel(doc, this)),
-      m_selectedInstrument(-1),
-      m_doc(doc)
+      m_midiInstrumentParameters(new MIDIInstrumentParameterPanel(this)),
+      m_audioInstrumentParameters(new AudioInstrumentParameterPanel(this)),
+      m_selectedInstrument(-1)
 {
     setObjectName("Instrument Parameter Box");
 
@@ -94,23 +93,18 @@ MIDIInstrumentParameterPanel *
 Instrument *
 InstrumentParameterBox::getSelectedInstrument()
 {
-    if (m_selectedInstrument < 0) return 0;
-    if (!m_doc) return 0;
-    return m_doc->getStudio().getInstrumentById(m_selectedInstrument);
+    if (m_selectedInstrument < 0)
+        return 0;
+
+    Studio &studio = RosegardenMainWindow::self()->getDocument()->getStudio();
+
+    return studio.getInstrumentById(m_selectedInstrument);
 }
 
 void
 InstrumentParameterBox::setAudioMeter(float ch1, float ch2, float ch1r, float ch2r)
 {
     m_audioInstrumentParameters->setAudioMeter(ch1, ch2, ch1r, ch2r);
-}
-
-void
-InstrumentParameterBox::setDocument(RosegardenDocument *doc)
-{
-    m_doc = doc;
-    m_midiInstrumentParameters->setDocument(m_doc);
-    m_audioInstrumentParameters->setDocument(m_doc);
 }
 
 void

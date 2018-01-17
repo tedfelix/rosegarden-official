@@ -54,7 +54,7 @@ class MIDIInstrumentParameterPanel : public InstrumentParameterPanel
 
 public:
 
-    MIDIInstrumentParameterPanel(RosegardenDocument *doc, QWidget *parent);
+    MIDIInstrumentParameterPanel(QWidget *parent);
 
     /// Display a potentially different Instrument.
     /**
