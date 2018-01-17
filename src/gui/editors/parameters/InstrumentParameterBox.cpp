@@ -59,11 +59,6 @@ InstrumentParameterBox::InstrumentParameterBox(QWidget *parent)
     m_widgetStack->addWidget(m_audioInstrumentParameters);
     m_widgetStack->addWidget(m_noInstrumentParameters);
 
-    connect(m_audioInstrumentParameters,
-            SIGNAL(showPluginGUI(InstrumentId, int)),
-            this,
-            SIGNAL(showPluginGUI(InstrumentId, int)));
-
     // Layout the groups left to right.
 
     QBoxLayout *layout = new QVBoxLayout(this);

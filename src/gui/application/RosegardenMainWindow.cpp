@@ -456,7 +456,6 @@ RosegardenMainWindow::RosegardenMainWindow(bool enableSound,
     this->restoreState(settings.value("Main_Window_State").toByteArray());
     settings.endGroup();
 
-    connectOutsideCtorHack();
     checkAudioPath();
 
     if (!installSignalHandlers())
@@ -575,17 +574,6 @@ RosegardenMainWindow::signalAction(int fd)
             qWarning("Unexpected signal received: %d", message);
             break;
     }
-}
-
-void
-RosegardenMainWindow::connectOutsideCtorHack()
-{
-
-    connect(m_instrumentParameterBox,
-            SIGNAL(showPluginGUI(InstrumentId, int)),
-            this,
-            SLOT(slotShowPluginGUI(InstrumentId, int)));
-
 }
 
 void

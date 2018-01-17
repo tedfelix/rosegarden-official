@@ -82,10 +82,8 @@ public slots:
     void slotPluginBypassed(InstrumentId id, int pluginIndex, bool bp);
 
     void slotSynthButtonClicked();
+    /// Editor button.
     void slotSynthGUIButtonClicked();
-
-signals:
-    void showPluginGUI(InstrumentId, int index);
 
 protected:
     //--------------- Data members ---------------------------------

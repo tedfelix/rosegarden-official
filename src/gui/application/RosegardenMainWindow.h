@@ -133,15 +133,6 @@ public:
 
     virtual ~RosegardenMainWindow();
 
-    /** For some unfathomable reason, connections to the instrument parameter
-     * box have to be made outside the ctor, or they don't work.  It took me
-     * ages to figure this one out, due to the combination of having noticed
-     * Chris Fryer having a similar problem elsewhere, and observing that the
-     * working connections from the audio mixer were done outside the ctor.  I
-     * finally had a eureka moment on that, but not possibly soon enough.  Ugh.
-     */
-    void connectOutsideCtorHack();
-
     /** Qt generates a QCloseEvent when the user clicks the close button on the
      * title bar.  We also get a close event when slotQuit() calls close().
      *

@@ -80,10 +80,6 @@ public:
     void setAudioMeter(float dBleft, float dBright,
                        float recDBleft, float recDBright);
 
-signals:
-
-    void showPluginGUI(InstrumentId id, int index);
-
 private:
 
     // ??? rename: m_stackedWidget

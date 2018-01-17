@@ -335,8 +335,12 @@ AudioInstrumentParameterPanel::slotSynthButtonClicked()
 void
 AudioInstrumentParameterPanel::slotSynthGUIButtonClicked()
 {
-    emit showPluginGUI(getSelectedInstrument()->getId(),
-                       Instrument::SYNTH_PLUGIN_POSITION);
+    //RG_DEBUG << "slotSynthGUIButtonClicked()";
+
+    // Launch the Synth Plugin's parameter editor GUI.
+    RosegardenMainWindow::self()->slotShowPluginGUI(
+            getSelectedInstrument()->getId(),
+            Instrument::SYNTH_PLUGIN_POSITION);
 }
 
 void
