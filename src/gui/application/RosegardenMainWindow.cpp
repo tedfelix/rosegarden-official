@@ -3703,6 +3703,7 @@ RosegardenMainWindow::slotDeleteTrack()
     comp.setSelectedTrack(trackId);
     comp.notifyTrackSelectionChanged(trackId);
     m_view->slotSelectTrackSegments(trackId);
+    m_doc->emitDocumentModified();
 
 // unused:
 //    Instrument *inst = m_doc->getStudio().
@@ -5731,6 +5732,8 @@ RosegardenMainWindow::slotTrackUp()
     comp.notifyTrackSelectionChanged(comp.getSelectedTrack());
     if (m_view)
         m_view->slotSelectTrackSegments(comp.getSelectedTrack());
+
+    m_doc->emitDocumentModified();
 }
 
 void
@@ -5753,6 +5756,8 @@ RosegardenMainWindow::slotTrackDown()
     comp.notifyTrackSelectionChanged(comp.getSelectedTrack());
     if (m_view)
         m_view->slotSelectTrackSegments(comp.getSelectedTrack());
+
+    m_doc->emitDocumentModified();
 }
 
 void
@@ -7695,10 +7700,10 @@ RosegardenMainWindow::slotBankEditorClosed()
         if (m_view) {
             // ??? Can't just remove this when the time comes.
             // ??? I suspect this call is being made because the Track and
-            //     Instrument Parameters boxes need to be updated.  It
-            //     would be better to call
-            //     m_doc->getComposition().notifyTrackChanged() and have
-            //     the parameter boxes respond by updating.
+            //     Instrument Parameters boxes need to be updated.  But
+            //     they should have already updated in response to the
+            //     RosegardenDocument::documentModified() signal(s) sent
+            //     while modifying the banks.
             m_view->slotSelectTrackSegments(m_doc->getComposition().getSelectedTrack());
         }
     }
@@ -7961,9 +7966,9 @@ RosegardenMainWindow::slotImportStudioFromFile(const QString &file)
             // ??? Can't just remove this when the time comes.
             // ??? I suspect this call is being made because the Track and
             //     Instrument Parameters boxes need to be updated.  It
-            //     would be better to call
-            //     m_doc->getComposition().notifyTrackChanged() and have
-            //     the parameter boxes respond by updating.
+            //     would be better if the various boxes responded to
+            //     RosegardenDocument::documentModified() which should
+            //     have already been emitted.
             m_view->slotSelectTrackSegments
                 (m_doc->getComposition().getSelectedTrack());
         }
@@ -8343,9 +8348,8 @@ RosegardenMainWindow::uiUpdateKludge()
 {
     // Force an update to the UI.
     // ??? This is a kludge.  Callers to this should be using
-    //     notification mechanisms (e.g. hasChanged()) within the
-    //     objects they are modifying.  That, in turn, would cause
-    //     relevant portions of the UI (observers) to update.
+    //     RosegardenDocument::documentModified() to cause a
+    //     refresh of the UI.
     m_view->slotSelectTrackSegments(
                 m_doc->getComposition().getSelectedTrack());
 }

@@ -21,7 +21,11 @@
 
 #include "AudioInstrumentParameterPanel.h"
 #include "misc/Debug.h"
+#include "base/Instrument.h"
 #include "MIDIInstrumentParameterPanel.h"
+#include "document/RosegardenDocument.h"
+#include "gui/application/RosegardenMainWindow.h"
+#include "base/Studio.h"
 
 #include <QFrame>
 #include <QStackedWidget>
@@ -59,6 +63,10 @@ InstrumentParameterBox::InstrumentParameterBox(QWidget *parent) :
     // Prevent this layout from introducing even more margin space.
     layout->setMargin(0);
     setLayout(layout);
+
+    connect(RosegardenMainWindow::self(),
+                SIGNAL(documentChanged(RosegardenDocument *)),
+            SLOT(slotNewDocument(RosegardenDocument *)));
 }
 
 InstrumentParameterBox::~InstrumentParameterBox()
@@ -74,7 +82,47 @@ InstrumentParameterBox::setAudioMeter(float ch1, float ch2, float ch1r, float ch
 void
 InstrumentParameterBox::useInstrument(Instrument *instrument)
 {
-    // If the Track has no Instrument, go with a blank frame.
+    if (!instrument)
+        return;
+
+    // MIPP for MIDI
+    if (instrument->getType() == Instrument::Midi) {
+        // Update the MIPP.
+        m_mipp->displayInstrument(instrument);
+        return;
+    }
+
+    // AIPP for Audio or SoftSynth
+    if (instrument->getType() == Instrument::Audio ||
+        instrument->getType() == Instrument::SoftSynth) {
+        // Update the audio panel.
+        m_aipp->setupForInstrument(instrument);
+        return;
+    }
+
+}
+
+void InstrumentParameterBox::slotNewDocument(RosegardenDocument *doc)
+{
+    connect(doc, SIGNAL(documentModified(bool)),
+            SLOT(slotDocumentModified(bool)));
+}
+
+void InstrumentParameterBox::slotDocumentModified(bool)
+{
+    RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
+
+    // Get the selected Track's Instrument.
+    InstrumentId instrumentId =
+            doc->getComposition().getSelectedInstrumentId();
+
+    if (instrumentId == NoInstrument) {
+        m_stackedWidget->setCurrentWidget(m_emptyFrame);
+        return;
+    }
+
+    Instrument *instrument = doc->getStudio().getInstrumentById(instrumentId);
+
     if (!instrument) {
         m_stackedWidget->setCurrentWidget(m_emptyFrame);
         return;
@@ -82,7 +130,6 @@ InstrumentParameterBox::useInstrument(Instrument *instrument)
 
     // MIPP for MIDI
     if (instrument->getType() == Instrument::Midi) {
-        m_mipp->displayInstrument(instrument);
         m_stackedWidget->setCurrentWidget(m_mipp);
         return;
     }
@@ -90,14 +137,10 @@ InstrumentParameterBox::useInstrument(Instrument *instrument)
     // AIPP for Audio or SoftSynth
     if (instrument->getType() == Instrument::Audio ||
         instrument->getType() == Instrument::SoftSynth) {
-        // Update the audio panel and bring it to the top.
-        m_aipp->setupForInstrument(instrument);
         m_stackedWidget->setCurrentWidget(m_aipp);
         return;
     }
-
 }
 
 
 }
-

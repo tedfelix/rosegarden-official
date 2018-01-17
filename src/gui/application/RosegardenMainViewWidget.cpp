@@ -2014,6 +2014,11 @@ RosegardenMainViewWidget::slotControllerDeviceEventReceived(MappedEvent *e, cons
             comp.notifyTrackSelectionChanged(track->getId());
 
             slotSelectTrackSegments(track->getId());
+
+            // Emit a documentModified(), but don't set the document
+            // modified flag.  This refreshes the UI but doesn't make
+            // the star appear in the titlebar.
+            RosegardenMainWindow::self()->getDocument()->emitDocumentModified();
         }
         return ;
     }

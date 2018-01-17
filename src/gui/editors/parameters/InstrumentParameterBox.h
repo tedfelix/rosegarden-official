@@ -31,6 +31,7 @@ namespace Rosegarden
 class AudioInstrumentParameterPanel;
 class Instrument;
 class MIDIInstrumentParameterPanel;
+class RosegardenDocument;
 
 
 /// Display and allow modification of Instrument parameters for a Track
@@ -79,6 +80,13 @@ public:
      */
     void setAudioMeter(float dBleft, float dBright,
                        float recDBleft, float recDBright);
+
+private slots:
+
+    /// Called when a new document is loaded.
+    void slotNewDocument(RosegardenDocument *);
+    /// Called when the document is modified in some way.
+    void slotDocumentModified(bool);
 
 private:
 

@@ -1288,13 +1288,17 @@ TrackButtons::slotTrackSelected(int trackId)
     // Select the track.
     m_doc->getComposition().setSelectedTrack(trackId);
 
-    // New notification mechanism
-    // ??? Wouldn't a track pointer be more convenient for all involved?
+    // Old notification mechanism
+    // ??? This should be replaced with emitDocumentModified() below.
     m_doc->getComposition().notifyTrackSelectionChanged(trackId);
 
-    // Old mechanism.  Keeping this until we can completely replace it
-    // with the new mechanism above.
+    // Older mechanism.  Keeping this until we can completely replace it
+    // with emitDocumentModified() below.
     emit trackSelected(trackId);
+
+    // New notification mechanism.
+    // This should replace all others.
+    m_doc->emitDocumentModified();
 }
 
 
