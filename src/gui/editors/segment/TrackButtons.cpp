@@ -898,11 +898,6 @@ TrackButtons::selectInstrument(Track *track, Instrument *instrument)
 
     const TrackId trackId = track->getId();
 
-    // *** For IPB
-
-    // Calls RosegardenMainViewWidget::slotUpdateInstrumentParameterBox().
-    emit instrumentSelected((int)instrument->getId());
-
     // *** For ControlBlock
 
     ControlBlock::getInstance()->

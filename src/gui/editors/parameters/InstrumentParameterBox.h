@@ -59,15 +59,6 @@ public:
     InstrumentParameterBox(QWidget *parent);
     ~InstrumentParameterBox();
 
-    // ??? This should not be necessary.  This class should instead handle
-    //     the RosegardenDocument::documentModified() signal and select the
-    //     appropriate panel to bring to the top.  It should not
-    //     send the Instrument to the MIPP and AIPP.  They should also
-    //     handle documentModified() and figure this out on their own.
-    //     IOW, any responsibilities beyond selecting the panel should be
-    //     pushed down into other classes.
-    void useInstrument(Instrument *instrument);
-
     /// Set the audio meter levels on the AIPP.
     /**
      * This is called by RMVW::updateMeters() and updateMonitorMeters()

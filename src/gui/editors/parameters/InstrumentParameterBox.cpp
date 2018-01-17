@@ -79,12 +79,6 @@ InstrumentParameterBox::setAudioMeter(float ch1, float ch2, float ch1r, float ch
     m_aipp->setAudioMeter(ch1, ch2, ch1r, ch2r);
 }
 
-void
-InstrumentParameterBox::useInstrument(Instrument *)
-{
-    return;
-}
-
 void InstrumentParameterBox::slotNewDocument(RosegardenDocument *doc)
 {
     connect(doc, SIGNAL(documentModified(bool)),

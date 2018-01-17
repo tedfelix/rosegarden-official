@@ -233,9 +233,6 @@ TrackEditor::init(RosegardenMainViewWidget *mainViewWidget)
     connect(m_trackButtons, SIGNAL(trackSelected(int)),
             mainViewWidget, SLOT(slotSelectTrackSegments(int)));
 
-    connect(m_trackButtons, SIGNAL(instrumentSelected(int)),
-            mainViewWidget, SLOT(slotUpdateInstrumentParameterBox(int)));
-
     connect(this, SIGNAL(stateChange(QString, bool)),
             mainViewWidget, SIGNAL(stateChange(QString, bool)));
 

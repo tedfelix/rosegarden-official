@@ -82,6 +82,9 @@ public slots:
 
 signals:
     /// Connected to TrackButtons::slotTPBInstrumentSelected().
+    /**
+     *  ??? This is never emitted.
+     */
     void instrumentSelected(TrackId, int);
 
 private slots:

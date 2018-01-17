@@ -1129,10 +1129,6 @@ void RosegardenMainViewWidget::slotSelectTrackSegments(int trackId)
     //
     comp.setSelectedTrack(trackId);
 
-    // update the instrument parameter box
-    slotUpdateInstrumentParameterBox(comp.getTrackById(trackId)->
-                                     getInstrument());
-
 
     slotPropagateSegmentSelection(segments);
 
@@ -1212,13 +1208,6 @@ void RosegardenMainViewWidget::slotSelectAllSegments()
     // update the segment parameter box
     m_segmentParameterBox->useSegments(segments);
 
-    // update the instrument parameter box
-    if (haveInstrument && !multipleInstruments) {
-        slotUpdateInstrumentParameterBox(instrument);
-    } else {
-        m_instrumentParameterBox->useInstrument(0);
-    }
-
     //!!! similarly, how to set no selected track?
     //comp.setSelectedTrack(trackId);
 
@@ -1234,14 +1223,6 @@ void RosegardenMainViewWidget::slotSelectAllSegments()
     // inform
     //!!! inform what? is this signal actually used?
     emit segmentsSelected(segments);
-}
-
-void RosegardenMainViewWidget::slotUpdateInstrumentParameterBox(int instrumentId)
-{
-    Studio &studio = getDocument()->getStudio();
-    Instrument *instrument = studio.getInstrumentById(instrumentId);
-
-    m_instrumentParameterBox->useInstrument(instrument);
 }
 
 void
@@ -1797,8 +1778,6 @@ RosegardenMainViewWidget::slotSetRecord(InstrumentId id, bool value)
         if (comp.getSelectedTrack() == (*it).second->getId()) {
             //!!! MTR            m_trackEditor->getTrackButtons()->
             //                setRecordTrack((*it).second->getPosition());
-            //!!! MTR is this needed? I think probably not
-            slotUpdateInstrumentParameterBox((*it).second->getInstrument());
         }
     }
 #endif
@@ -1860,12 +1839,6 @@ RosegardenMainViewWidget::slotSynchroniseWithComposition()
     // Track buttons
     //
     m_trackEditor->getTrackButtons()->slotSynchroniseWithComposition();
-
-    // Update all IPBs
-    //
-    Composition &comp = getDocument()->getComposition();
-    Track *track = comp.getTrackById(comp.getSelectedTrack());
-    slotUpdateInstrumentParameterBox(track->getInstrument());
 }
 
 void

@@ -127,15 +127,6 @@ signals:
      */
     void trackSelected(int trackId);
 
-    /// Emitted when an instrument is selected from the popup.
-    /**
-     * Connected by TrackEditor::init() to
-     * RosegardenMainViewWidget::slotUpdateInstrumentParameterBox().
-     *
-     * @see slotInstrumentSelected()
-     */
-    void instrumentSelected(int instrumentId);
-
     /// Emitted when a track's name changes.
     /**
      * Appears unneeded as the width of the track button never changes.
