@@ -153,6 +153,9 @@ public:
      * @see setSelectedTrack()
      */
     TrackId getSelectedTrack() const { return m_selectedTrackId; }
+
+    InstrumentId getSelectedInstrumentId() const;
+
     /**
      * rename: setSelectedTrackId()
      *

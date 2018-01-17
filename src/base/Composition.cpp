@@ -16,6 +16,7 @@
 #define RG_MODULE_STRING "[Composition]"
 
 #include "Composition.h"
+
 #include "misc/Debug.h"
 #include "base/Segment.h"
 #include "base/SegmentLinker.h"
@@ -1706,6 +1707,19 @@ void Composition::resetTrackIdAndPosition(TrackId oldId, TrackId newId,
                   << std::endl;
 }
 #endif
+
+InstrumentId Composition::getSelectedInstrumentId() const
+{
+    if (m_selectedTrackId == NO_TRACK)
+        return NoInstrument;
+
+    Track *track = getTrackById(m_selectedTrackId);
+
+    if (!track)
+        return NoInstrument;
+
+    return track->getInstrument();
+}
 
 void Composition::setSelectedTrack(TrackId trackId)
 {
