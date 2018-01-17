@@ -77,8 +77,7 @@ public slots:
     // From the parameter box clicks
     void slotSetPan(float pan);
 
-    // From Plugin dialog
-    //
+    // From RosegardenMainWindow.
     void slotPluginSelected(InstrumentId id, int index, int plugin);
     void slotPluginBypassed(InstrumentId id, int pluginIndex, bool bp);
 

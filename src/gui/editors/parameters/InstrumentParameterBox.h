@@ -80,13 +80,6 @@ public:
     void setAudioMeter(float dBleft, float dBright,
                        float recDBleft, float recDBright);
 
-public slots:
-
-    // From Plugin dialog
-    //
-    void slotPluginSelected(InstrumentId id, int index, int plugin);
-    void slotPluginBypassed(InstrumentId id, int pluginIndex, bool bp);
-
 signals:
 
     void selectPlugin(QWidget *, InstrumentId id, int index);

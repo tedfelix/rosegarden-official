@@ -89,18 +89,6 @@ InstrumentParameterBox::setAudioMeter(float ch1, float ch2, float ch1r, float ch
 }
 
 void
-InstrumentParameterBox::slotPluginSelected(InstrumentId id, int index, int plugin)
-{
-    m_audioInstrumentParameters->slotPluginSelected(id, index, plugin);
-}
-
-void
-InstrumentParameterBox::slotPluginBypassed(InstrumentId id, int index, bool bypassState)
-{
-    m_audioInstrumentParameters->slotPluginBypassed(id, index, bypassState);
-}
-
-void
 InstrumentParameterBox::useInstrument(Instrument *instrument)
 {
     if (!instrument) {

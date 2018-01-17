@@ -131,6 +131,8 @@ AudioInstrumentParameterPanel::AudioInstrumentParameterPanel(QWidget *parent) :
     setLayout(gridLayout);
     setContentsMargins(5, 7, 5, 2);
 
+    // Connections
+
     connect(Instrument::getStaticSignals().data(),
             SIGNAL(changed(Instrument *)),
             this,
@@ -139,6 +141,14 @@ AudioInstrumentParameterPanel::AudioInstrumentParameterPanel(QWidget *parent) :
     connect(Instrument::getStaticSignals().data(),
                 SIGNAL(controlChange(Instrument *, int)),
             SLOT(slotControlChange(Instrument *, int)));
+
+    connect(RosegardenMainWindow::self(),
+                SIGNAL(pluginSelected(InstrumentId, int, int)),
+            SLOT(slotPluginSelected(InstrumentId, int, int)));
+
+    connect(RosegardenMainWindow::self(),
+                SIGNAL(pluginBypassed(InstrumentId, int, bool)),
+            SLOT(slotPluginBypassed(InstrumentId, int, bool)));
 }
 
 void
@@ -188,10 +198,7 @@ AudioInstrumentParameterPanel::slotPluginSelected(InstrumentId instrumentId,
         return;
     }
 
-    RG_DEBUG << "AudioInstrumentParameterPanel::slotPluginSelected - "
-             << "instrument = " << instrumentId
-             << ", index = " << index
-             << ", plugin = " << plugin << endl;
+    //RG_DEBUG << "slotPluginSelected() - " << "instrument = " << instrumentId << ", index = " << index << ", plugin = " << plugin;
 
     QColor pluginBackgroundColour = QColor(Qt::black);
     bool bypassed = false;
@@ -263,6 +270,8 @@ AudioInstrumentParameterPanel::slotPluginBypassed(InstrumentId instrumentId,
             instrumentId != getSelectedInstrument()->getId())
         return ;
 
+    //RG_DEBUG << "slotPluginBypassed()";
+
     AudioPluginInstance *inst =
         getSelectedInstrument()->getPlugin(pluginIndex);
 
@@ -288,10 +297,7 @@ void
 AudioInstrumentParameterPanel::setButtonColour(
     int pluginIndex, bool bypassState, const QColor &colour)
 {
-    RG_DEBUG << "AudioInstrumentParameterPanel::setButtonColour "
-    << "pluginIndex = " << pluginIndex
-    << ", bypassState = " << bypassState
-    << ", rgb = " << colour.name() << endl;
+    //RG_DEBUG << "setButtonColour() " << "pluginIndex = " << pluginIndex << ", bypassState = " << bypassState << ", rgb = " << colour.name();
 
     PluginPushButton *button = 0;
 
@@ -321,7 +327,8 @@ AudioInstrumentParameterPanel::setButtonColour(
 void
 AudioInstrumentParameterPanel::slotSynthButtonClicked()
 {
-    RG_DEBUG << "AudioInstrumentParameterPanel::slotSynthButtonClicked()";
+    //RG_DEBUG << "slotSynthButtonClicked()";
+
     slotSelectPlugin(Instrument::SYNTH_PLUGIN_POSITION);
 }
 
@@ -346,8 +353,7 @@ void
 AudioInstrumentParameterPanel::setAudioMeter(float dBleft, float dBright,
         float recDBleft, float recDBright)
 {
-    //    RG_DEBUG << "AudioInstrumentParameterPanel::setAudioMeter: (" << dBleft
-    //             << "," << dBright << ")" << endl;
+    //RG_DEBUG << "setAudioMeter: (" << dBleft << "," << dBright << ")";
 
     if (getSelectedInstrument()) {
         // Always set stereo, because we have to reflect what's happening
@@ -362,7 +368,7 @@ AudioInstrumentParameterPanel::setupForInstrument(Instrument* instrument)
 {
     blockSignals(true);
 
-    RG_DEBUG << "AudioInstrumentParameterPanel[" << this << "]::setupForInstrument(" << instrument << ")";
+    //RG_DEBUG << "this: " << this << " setupForInstrument(" << instrument << ")";
 
     QString l = QString::fromStdString(instrument->getAlias());
     if (l.isEmpty()) l = instrument->getLocalizedPresentationName();
@@ -442,8 +448,7 @@ AudioInstrumentParameterPanel::setupForInstrument(Instrument* instrument)
 void
 AudioInstrumentParameterPanel::slotAudioChannels(int channels)
 {
-    RG_DEBUG << "AudioInstrumentParameterPanel::slotAudioChannels - "
-    << "channels = " << channels << endl;
+    //RG_DEBUG << "slotAudioChannels() " << "channels = " << channels;
 
     getSelectedInstrument()->setAudioChannels(channels);
     getSelectedInstrument()->changed();

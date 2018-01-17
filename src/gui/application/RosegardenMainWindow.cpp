@@ -592,16 +592,6 @@ RosegardenMainWindow::connectOutsideCtorHack()
             this,
             SLOT(slotShowPluginGUI(InstrumentId, int)));
 
-    connect(this,
-            SIGNAL(pluginSelected(InstrumentId, int, int)),
-            m_instrumentParameterBox,
-            SLOT(slotPluginSelected(InstrumentId, int, int)));
-
-    connect(this,
-            SIGNAL(pluginBypassed(InstrumentId, int, bool)),
-            m_instrumentParameterBox,
-            SLOT(slotPluginBypassed(InstrumentId, int, bool)));
-
 }
 
 void
