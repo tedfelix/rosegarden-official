@@ -443,26 +443,26 @@ int main(int argc, char *argv[])
         // about bad graphics performance suggesting to give the less stable
         // alternatives a shot.)
 
-        std::cerr << "Setting graphics system for Qt 4.5+ to: ";
+        RG_WARNING << "Setting graphics system for Qt 4.5+ to:";
         switch (graphicsSystem) {
         case Raster:
             QApplication::setGraphicsSystem("raster");
-            std::cerr << "raster" << std::endl;
+            RG_WARNING << "  raster";
             break;
 
         case Native:
             QApplication::setGraphicsSystem("native");
-            std::cerr << "native" << std::endl;
+            RG_WARNING << "  native";
             break;
 
         case OpenGL:
             QApplication::setGraphicsSystem("opengl");
-            std::cerr << "opengl" << std::endl;
+            RG_WARNING << "  opengl";
             break;
 
         default:
             QApplication::setGraphicsSystem("raster");
-            std::cerr << "raster (DEFAULTED!)" << std::endl;
+            RG_WARNING << "  raster (DEFAULTED!)";
         }
     }
 #endif
@@ -484,7 +484,8 @@ int main(int argc, char *argv[])
 
     RosegardenApplication theApp(argc, argv);
 
-    std::cout << "Thorn - " << std::boolalpha << Thorn << std::endl;
+    RG_WARNING << "Thorn - " << Thorn;
+
     ThornStyle::setEnabled(Thorn);
 
     theApp.setOrganizationName("rosegardenmusic");
@@ -504,8 +505,8 @@ int main(int argc, char *argv[])
     }
 #endif
 
-    std::cerr << "System Locale: " << QLocale::system().name() << std::endl;
-    std::cerr << "Qt translations path: " << QLibraryInfo::location(QLibraryInfo::TranslationsPath) << std::endl;
+    RG_WARNING << "System Locale:" << QLocale::system().name();
+    RG_WARNING << "Qt translations path: " << QLibraryInfo::location(QLibraryInfo::TranslationsPath);
 
     QTranslator qtTranslator;
     bool qtTranslationsLoaded = 
@@ -513,20 +514,20 @@ int main(int argc, char *argv[])
             QLibraryInfo::location(QLibraryInfo::TranslationsPath));
     if (qtTranslationsLoaded) {
         theApp.installTranslator(&qtTranslator);
-        std::cerr << "Qt translations loaded successfully." << std::endl;
+        RG_WARNING << "Qt translations loaded successfully.";
     } else {
-        std::cerr << "Qt translations not loaded." << std::endl;
+        RG_WARNING << "Qt translations not loaded.";
     }
 
     QTranslator rgTranslator;
-    std::cerr << "RG Translation: trying to load :locale/" << QLocale::system().name() << std::endl;
+    RG_WARNING << "RG Translation: trying to load :locale/" << QLocale::system().name();
     bool rgTranslationsLoaded = 
       rgTranslator.load(QLocale::system().name(), ":locale/");
     if (rgTranslationsLoaded) {
-        std::cerr << "RG Translations loaded successfully." << std::endl;
+        RG_WARNING << "RG Translations loaded successfully.";
         theApp.installTranslator(&rgTranslator);
     } else {
-        std::cerr << "RG Translations not loaded." << std::endl;
+        RG_WARNING << "RG Translations not loaded.";
     }
 
     bool nosplash = false;
@@ -550,7 +551,7 @@ int main(int argc, char *argv[])
         QString name = QString("rg-rwb-rose3-%1x%2").arg(sizes[i]).arg(sizes[i]);
         QPixmap pixmap = IconLoader().loadPixmap(name);
         if (!pixmap.isNull()) {
-            std::cerr << "Loaded application icon \"" << name << "\"" << std::endl;
+            RG_WARNING << "Loaded application icon \"" << name << "\"";
             icon.addPixmap(pixmap);
         }
     }
@@ -561,7 +562,7 @@ int main(int argc, char *argv[])
     QString lastVersion = settings.value("lastversion", "").toString();
     bool newVersion = (lastVersion != VERSION);
     if (newVersion) {
-        std::cerr << "*** This is the first time running this Rosegarden version" << std::endl;
+        RG_WARNING << "*** This is the first time running this Rosegarden version";
         settings.setValue("lastversion", VERSION);
 
     }
