@@ -1169,26 +1169,11 @@ void RosegardenMainViewWidget::slotSelectAllSegments()
 {
     SegmentSelection segments;
 
-    InstrumentId instrument = 0;
-    bool haveInstrument = false;
-    bool multipleInstruments = false;
-
     Composition &comp = getDocument()->getComposition();
 
+    // For each Segment in the Composition
     for (Composition::iterator i = comp.begin(); i != comp.end(); ++i) {
-
-        InstrumentId myInstrument =
-            comp.getTrackById((*i)->getTrack())->getInstrument();
-
-        if (haveInstrument) {
-            if (myInstrument != instrument) {
-                multipleInstruments = true;
-            }
-        } else {
-            instrument = myInstrument;
-            haveInstrument = true;
-        }
-
+        // Add this Segment to segments.
         segments.insert(*i);
     }
 
