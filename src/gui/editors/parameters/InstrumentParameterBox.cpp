@@ -89,18 +89,6 @@ MIDIInstrumentParameterPanel *
     return m_midiInstrumentParameters;
 }
 
-
-Instrument *
-InstrumentParameterBox::getSelectedInstrument()
-{
-    if (m_selectedInstrument < 0)
-        return 0;
-
-    Studio &studio = RosegardenMainWindow::self()->getDocument()->getStudio();
-
-    return studio.getInstrumentById(m_selectedInstrument);
-}
-
 void
 InstrumentParameterBox::setAudioMeter(float ch1, float ch2, float ch1r, float ch2r)
 {
@@ -129,6 +117,7 @@ InstrumentParameterBox::useInstrument(Instrument *instrument)
         m_selectedInstrument = -1;
 
         // Update the MatrixWidget's PitchRuler.
+        // ??? I don't think this is needed.
         emit instrumentPercussionSetChanged(instrument);
 
         return;
@@ -152,6 +141,7 @@ InstrumentParameterBox::useInstrument(Instrument *instrument)
         m_widgetStack->setCurrentWidget(m_midiInstrumentParameters);
 
         // Update the MatrixWidget's PitchRuler.
+        // ??? I don't think this is needed.
         emit instrumentPercussionSetChanged(instrument);
 
     }
@@ -161,8 +151,20 @@ InstrumentParameterBox::useInstrument(Instrument *instrument)
 void
 InstrumentParameterBox::emitInstrumentPercussionSetChanged()
 {
+    // ??? I don't think this routine is needed.
+
+    RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
+    Composition &comp = doc->getComposition();
+
+    InstrumentId instrumentId = comp.getSelectedInstrumentId();
+
+    if (instrumentId == NoInstrument)
+        return;
+
+    Studio &studio = doc->getStudio();
+
     // Update the MatrixWidget's PitchRuler.
-    emit instrumentPercussionSetChanged(getSelectedInstrument());
+    emit instrumentPercussionSetChanged(studio.getInstrumentById(instrumentId));
 }
 
 

@@ -45,21 +45,29 @@ class AudioInstrumentParameterPanel;
  * Future Direction
  * The current design has each part of the UI connected to every other part
  * of the UI.  This results in a combinatorial explosion of connections.
- * A simpler design would move all notification mechanisms (Observer) out
- * of the UI and into the data objects.  This way the various parts of the
- * UI need only know about the data.  See CompositionObserver.
+ * A simpler design would use RosegardenDocument::documentModified().  This
+ * way the various parts of the UI need only know about RosegardenDocument,
+ * not each other.
  */
 class InstrumentParameterBox : public RosegardenParameterBox
 {
+
 Q_OBJECT
 
 public:
-    InstrumentParameterBox(QWidget *parent = 0);
+    InstrumentParameterBox(QWidget *parent);
     ~InstrumentParameterBox();
 
+    // ??? This should not be necessary.  This class should instead handle
+    //     the RosegardenDocument::documentModified() signal and select the
+    //     appropriate panel to bring to the top.  It should not send a
+    //     signal to the MatrixWidget as the MatrixWidget should take care
+    //     of itself in response to documentModified().  It also should not
+    //     send the Instrument to the MIPP and AIPP.  They should also
+    //     handle documentModified() and figure this out on their own.
+    //     IOW, all responsibilities beyond selecting the panel should be
+    //     pushed down into other classes.
     void useInstrument(Instrument *instrument);
-
-    Instrument *getSelectedInstrument();
 
     void setAudioMeter(float dBleft, float dBright,
                        float recDBleft, float recDBright);

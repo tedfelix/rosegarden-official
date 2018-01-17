@@ -1246,17 +1246,43 @@ void RosegardenMainViewWidget::slotUpdateInstrumentParameterBox(int instrumentId
 
 void RosegardenMainViewWidget::showVisuals(const MappedEvent *mE)
 {
+    // ??? Unused Code.  It appears that this routine is supposed to
+    //     run in response to a MappedEvent::AudioLevel event.
+    //     However, I cannot find a single place where a
+    //     MappedEvent::AudioLevel event is created.
+
+    RG_DEBUG << "showVisuals()";
+
     double valueLeft = ((double)mE->getData1()) / 127.0;
     double valueRight = ((double)mE->getData2()) / 127.0;
 
+    // ??? Note that this routine is *only* called for a
+    //     MappedEvent::AudioLevel, so this "if" will always evaluate true.
     if (mE->getType() == MappedEvent::AudioLevel) {
+
+        RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
+        Composition &comp = doc->getComposition();
+
+        InstrumentId selectedInstrumentId = comp.getSelectedInstrumentId();
+
+        Instrument *selectedInstrument = 0;
+
+        if (selectedInstrumentId != NoInstrument) {
+            // ??? Performance: LINEAR SEARCH
+            //     We can get rid of the three calls in here by maintaining
+            //     a local cache of the selected Instrument that is updated
+            //     when documentModified() comes in.  That is similar to
+            //     how this used to work.  InstrumentParameterBox used to
+            //     keep the selected Instrument cached for us.
+            selectedInstrument =
+                    doc->getStudio().getInstrumentById(selectedInstrumentId);
+        }
 
         // Send to the high sensitivity instrument parameter box
         // (if any)
         //
-        if (m_instrumentParameterBox->getSelectedInstrument() &&
-                mE->getInstrument() ==
-                m_instrumentParameterBox->getSelectedInstrument()->getId()) {
+        if (selectedInstrument  &&
+            mE->getInstrument() == selectedInstrument->getId()) {
             float dBleft = AudioLevel::fader_to_dB
                            (mE->getData1(), 127, AudioLevel::LongFader);
             float dBright = AudioLevel::fader_to_dB
@@ -1377,13 +1403,27 @@ RosegardenMainViewWidget::updateMeters()
                 toSet = true;
             }
 
-            if (toSet &&
-                m_instrumentParameterBox->getSelectedInstrument() &&
-                instrument->getId() ==
-                m_instrumentParameterBox->getSelectedInstrument()->getId()) {
+            if (toSet) {
+                RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
+                Composition &comp = doc->getComposition();
 
-                m_instrumentParameterBox->setAudioMeter(dBleft, dBright,
-                                                        recDBleft, recDBright);
+                InstrumentId selectedInstrumentId = comp.getSelectedInstrumentId();
+
+                Instrument *selectedInstrument = 0;
+
+                if (selectedInstrumentId != NoInstrument) {
+                    // ??? Performance: LINEAR SEARCH
+                    selectedInstrument =
+                            doc->getStudio().getInstrumentById(selectedInstrumentId);
+                }
+
+                if (selectedInstrument  &&
+                    instrument->getId() == selectedInstrument->getId()) {
+
+                    m_instrumentParameterBox->setAudioMeter(
+                            dBleft, dBright, recDBleft, recDBright);
+
+                }
             }
 
         } else {
@@ -1414,16 +1454,27 @@ RosegardenMainViewWidget::updateMeters()
 void
 RosegardenMainViewWidget::updateMonitorMeters()
 {
-    Instrument *instrument =
-        m_instrumentParameterBox->getSelectedInstrument();
-    if (!instrument ||
-        (instrument->getType() != Instrument::Audio)) {
+    RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
+    Composition &comp = doc->getComposition();
+
+    InstrumentId selectedInstrumentId = comp.getSelectedInstrumentId();
+
+    Instrument *selectedInstrument = 0;
+
+    if (selectedInstrumentId != NoInstrument) {
+        // ??? Performance: LINEAR SEARCH
+        selectedInstrument =
+                doc->getStudio().getInstrumentById(selectedInstrumentId);
+    }
+
+    if (!selectedInstrument ||
+        (selectedInstrument->getType() != Instrument::Audio)) {
         return;
     }
 
     LevelInfo level;
     if (!SequencerDataBlock::getInstance()->
-        getInstrumentRecordLevel(instrument->getId(), level)) {
+        getInstrumentRecordLevel(selectedInstrument->getId(), level)) {
         return;
     }
 
