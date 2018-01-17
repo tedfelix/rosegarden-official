@@ -19,33 +19,25 @@
 
 #include "InstrumentParameterBox.h"
 
-#include "misc/Debug.h"
 #include "AudioInstrumentParameterPanel.h"
-#include "base/Instrument.h"
-#include "base/MidiProgram.h"
-#include "document/RosegardenDocument.h"
-#include "gui/application/RosegardenMainWindow.h"
+#include "misc/Debug.h"
 #include "MIDIInstrumentParameterPanel.h"
-#include "RosegardenParameterArea.h"
-#include "RosegardenParameterBox.h"
 
 #include <QFrame>
-#include <QString>
 #include <QStackedWidget>
-#include <QLayout>
+#include <QVBoxLayout>
 
 
 namespace Rosegarden
 {
 
 
-InstrumentParameterBox::InstrumentParameterBox(QWidget *parent)
-    : RosegardenParameterBox(tr("Instrument Parameters"),
-                             parent),
-      m_stackedWidget(new QStackedWidget(this)),
-      m_emptyFrame(new QFrame(this)),
-      m_mipp(new MIDIInstrumentParameterPanel(this)),
-      m_aipp(new AudioInstrumentParameterPanel(this))
+InstrumentParameterBox::InstrumentParameterBox(QWidget *parent) :
+    RosegardenParameterBox(tr("Instrument Parameters"), parent),
+    m_stackedWidget(new QStackedWidget(this)),
+    m_emptyFrame(new QFrame),
+    m_mipp(new MIDIInstrumentParameterPanel(0)),
+    m_aipp(new AudioInstrumentParameterPanel(0))
 {
     setObjectName("Instrument Parameter Box");
 
@@ -54,17 +46,19 @@ InstrumentParameterBox::InstrumentParameterBox(QWidget *parent)
     m_mipp->setFont(m_font);
     m_aipp->setFont(m_font);
 
+    // ??? Use QStackedLayout instead of QStackedWidget.
+
     m_stackedWidget->addWidget(m_mipp);
     m_stackedWidget->addWidget(m_aipp);
     m_stackedWidget->addWidget(m_emptyFrame);
 
-    // Layout the groups left to right.
-
-    QBoxLayout *layout = new QVBoxLayout(this);
-    setLayout(layout);
-    layout->setMargin(0);
+    // Set up a layout manager to make sure the QFrame
+    // (RosegardenParameterBox) is always the right size for its contents.
+    QVBoxLayout *layout = new QVBoxLayout(this);
     layout->addWidget(m_stackedWidget);
-
+    // Prevent this layout from introducing even more margin space.
+    layout->setMargin(0);
+    setLayout(layout);
 }
 
 InstrumentParameterBox::~InstrumentParameterBox()
@@ -80,28 +74,26 @@ InstrumentParameterBox::setAudioMeter(float ch1, float ch2, float ch1r, float ch
 void
 InstrumentParameterBox::useInstrument(Instrument *instrument)
 {
+    // If the Track has no Instrument, go with a blank frame.
     if (!instrument) {
-        // Go with a blank frame.
         m_stackedWidget->setCurrentWidget(m_emptyFrame);
-
         return;
     }
 
-    // Hide or Show according to Instrument type
-    //
+    // MIPP for MIDI
+    if (instrument->getType() == Instrument::Midi) {
+        m_mipp->displayInstrument(instrument);
+        m_stackedWidget->setCurrentWidget(m_mipp);
+        return;
+    }
+
+    // AIPP for Audio or SoftSynth
     if (instrument->getType() == Instrument::Audio ||
         instrument->getType() == Instrument::SoftSynth) {
-
         // Update the audio panel and bring it to the top.
         m_aipp->setupForInstrument(instrument);
         m_stackedWidget->setCurrentWidget(m_aipp);
-
-    } else { // Midi
-
-        // Update the MIDI panel and bring it to the top.
-        m_mipp->displayInstrument(instrument);
-        m_stackedWidget->setCurrentWidget(m_mipp);
-
+        return;
     }
 
 }

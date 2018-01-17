@@ -18,7 +18,6 @@
 #ifndef RG_INSTRUMENTPARAMETERBOX_H
 #define RG_INSTRUMENTPARAMETERBOX_H
 
-#include "base/Instrument.h"
 #include "RosegardenParameterBox.h"
 
 class QStackedWidget;
@@ -29,9 +28,9 @@ class QFrame;
 namespace Rosegarden
 {
 
-class RosegardenDocument;
-class MIDIInstrumentParameterPanel;
 class AudioInstrumentParameterPanel;
+class Instrument;
+class MIDIInstrumentParameterPanel;
 
 
 /// Display and allow modification of Instrument parameters for a Track
@@ -43,6 +42,7 @@ class AudioInstrumentParameterPanel;
  * QFrame for no parameters (a track without an instrument).
  *
  * Future Direction
+ * Get rid if useInstrument().
  * The current design has each part of the UI connected to every other part
  * of the UI.  This results in a combinatorial explosion of connections.
  * A simpler design would use RosegardenDocument::documentModified().  This
