@@ -19,58 +19,35 @@
 
 #include "RosegardenParameterBox.h"
 
-#include "RosegardenParameterArea.h"
 #include "misc/Debug.h"
-#include <QTabWidget>
-#include <QFont>
-#include <QFrame>
-#include <QScrollArea>
-#include <QString>
-#include <QWidget>
-#include <QVBoxLayout>
-#include <QStackedWidget>
 
 
 namespace Rosegarden
 {
 
-RosegardenParameterBox::RosegardenParameterBox(const QString &shortLabel,
-        const QString &longLabel,
-        QWidget *parent) :
-        QFrame(parent),
-        m_shortLabel(shortLabel),
-        m_longLabel(longLabel),
-        m_mode(LANDSCAPE_MODE)
-{
-    init();
-}
 
-void RosegardenParameterBox::init()
+RosegardenParameterBox::RosegardenParameterBox(const QString &label,
+                                               QWidget *parent) :
+    QFrame(parent),
+    m_label(label)
 {
     QFont plainFont;
+    // Go with 9/10 the default point size.  On mine this goes from 11 to 9.
     plainFont.setPointSize(plainFont.pointSize() * 90 / 100);
     plainFont.setBold(false);
     m_font = plainFont;
 
-    RG_DEBUG << "RosegardenParameterBox::init: " << this << ": m_font size is " << m_font.pixelSize() << "px (" << m_font.pointSize() << "pt)";
-
+    // This font is picked up by the CollapsingFrame's in the
+    // TrackParameterBox.
+    // ??? Might want to make this more explicit.  Perhaps an m_boldFont and
+    //     then have TrackParameterBox pass it to CollapsingFrame?
     QFont boldFont;
-    boldFont.setPointSize(int(boldFont.pointSize() * 9.5 / 10.0 + 0.5));
-    if (boldFont.pixelSize() > 14)
-        boldFont.setPixelSize(14);
+    // 95/100 of the default point size.  On mine this goes from 11 to 10.
+    boldFont.setPointSize(
+            static_cast<int>(boldFont.pointSize() * 9.5 / 10.0 + 0.5));
     boldFont.setBold(true);
 
     setFont(boldFont);
-}
-
-QString RosegardenParameterBox::getShortLabel() const
-{
-    return m_shortLabel;
-}
-
-QString RosegardenParameterBox::getLongLabel() const
-{
-    return m_longLabel;
 }
 
 

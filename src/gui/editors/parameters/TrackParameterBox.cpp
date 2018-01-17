@@ -73,7 +73,7 @@ namespace Rosegarden
 
 
 TrackParameterBox::TrackParameterBox(QWidget *parent) :
-    RosegardenParameterBox(tr("Track"), tr("Track Parameters"), parent),
+    RosegardenParameterBox(tr("Track Parameters"), parent),
     m_doc(NULL),
     m_selectedTrackId(NO_TRACK),
     m_lastInstrumentType(Instrument::InvalidInstrument)

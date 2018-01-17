@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -20,7 +19,7 @@
 #define RG_INSTRUMENTPARAMETERBOX_H
 
 #include "base/Instrument.h"
-#include "base/MidiProgram.h"
+//#include "base/MidiProgram.h"
 #include "RosegardenParameterBox.h"
 
 #include <QString>
@@ -35,7 +34,6 @@ namespace Rosegarden
 
 class RosegardenDocument;
 class MIDIInstrumentParameterPanel;
-class Instrument;
 class AudioInstrumentParameterPanel;
 
 

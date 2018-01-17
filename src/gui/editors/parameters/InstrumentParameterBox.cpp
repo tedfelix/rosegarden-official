@@ -40,8 +40,7 @@ namespace Rosegarden
 
 InstrumentParameterBox::InstrumentParameterBox(RosegardenDocument *doc,
                                                QWidget *parent)
-    : RosegardenParameterBox(tr("Instrument"),
-                             tr("Instrument Parameters"),
+    : RosegardenParameterBox(tr("Instrument Parameters"),
                              parent),
       m_widgetStack(new QStackedWidget(this)),
       m_noInstrumentParameters(new QFrame(this)),

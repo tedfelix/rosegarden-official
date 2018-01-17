@@ -79,7 +79,7 @@ void RosegardenParameterArea::addRosegardenParameterBox(
     // used to provide a title and outline. Add this container to an array that
     // parallels the above array of parameter boxes.
 
-    QGroupBox *box = new QGroupBox(b->getLongLabel(), m_boxContainer);
+    QGroupBox *box = new QGroupBox(b->getLabel(), m_boxContainer);
     m_boxContainerLayout->insertWidget(m_boxContainerLayout->count() - 1, box); // before the stretch
     
     box->setLayout( new QVBoxLayout(box) );

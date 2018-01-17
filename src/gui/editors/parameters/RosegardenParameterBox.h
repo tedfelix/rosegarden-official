@@ -18,58 +18,35 @@
 #ifndef RG_ROSEGARDENPARAMETERBOX_H
 #define RG_ROSEGARDENPARAMETERBOX_H
 
-#include "RosegardenParameterArea.h"
 #include <QFont>
 #include <QFrame>
 #include <QString>
 
-
 class QWidget;
-
 
 namespace Rosegarden
 {
 
 
-
-/**
- * A flat QFrame, in which a group of parameters can be laid out.
- * Virtual method functions are defined for for requesting a layout
- * style, and returning the single-word to use for labelling the
- * box.
- */
-
+/// A QFrame with label and font support.
 class RosegardenParameterBox : public QFrame
 {
     Q_OBJECT
 
 public:
-    RosegardenParameterBox(const QString &shortLabel, // e.g. tr("Track")
-                           const QString &longLabel,  // e.g. tr("Track Parameters")
-                           QWidget *parent = 0);
+    RosegardenParameterBox(
+            const QString &label,  // e.g. tr("Track Parameters")
+            QWidget *parent);
 
-    // Ask for a one-word string that can be used to label the widget.
-    QString getShortLabel() const;
-
-    // Ask for the full label (e.g. short-label "Parameters")
-    QString getLongLabel() const;
+    const QString &getLabel() const  { return m_label; }
 
 protected:
-    void init();
-
-    // List the layout styles that may be requested via a call to setStyle().
-
-    enum LayoutMode {
-        LANDSCAPE_MODE,  // Optimize the layout for a tall and narrow parent.
-        PORTRAIT_MODE    // Optimize the layout for a short and wide parent.
-    };
-
-    void setLayoutMode(LayoutMode mode);
-
+    /// Font used by all derivers to give a consistent look.
     QFont m_font;
-    QString m_shortLabel;    // The string that containers can use for labelling and identification
-    QString m_longLabel;    // The full title
-    LayoutMode m_mode;  // The current layout mode.
+
+private:
+    QString m_label;
+
 };
 
 

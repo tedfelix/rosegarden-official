@@ -87,7 +87,7 @@ namespace Rosegarden
 
 SegmentParameterBox::SegmentParameterBox(RosegardenDocument* doc,
                                          QWidget *parent) :
-    RosegardenParameterBox(tr("Segment"), tr("Segment Parameters"), parent),
+    RosegardenParameterBox(tr("Segment Parameters"), parent),
     m_highestPlayable(127),
     m_lowestPlayable(0),
     m_standardQuantizations(BasicQuantizer::getStandardQuantizations()),
