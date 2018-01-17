@@ -148,6 +148,8 @@ public:
      * want the entire UI to refresh.  This can be used for very high
      * frequency changes that might cause high CPU usage if the UI
      * were refreshed every time.
+     *
+     * See slotDocumentModified() and emitDocumentModified().
      */
     void setModified();
 
@@ -162,6 +164,16 @@ public:
      * 
      */
     void clearModifiedStatus();
+
+    /// Emit the documentModified() signal.
+    /**
+     * Use this in situations where you need a UI refresh, but the document
+     * hasn't been modified to the point of requiring a save (e.g. the Track
+     * selection has changed).
+     *
+     * See setModified() and slotDocumentModified().
+     */
+    void emitDocumentModified()  { emit documentModified(true); }
 
     /**
      * get the autosave interval in seconds
@@ -470,6 +482,8 @@ public slots:
      * frequently as it causes a refresh of the entire UI which is very
      * expensive.  For high-frequency changes, use setModified() and
      * let the UI update on a timer at a reasonable pace.
+     *
+     * See setModified() and emitDocumentModified().
      */
     void slotDocumentModified();
     void slotDocumentRestored();
@@ -486,8 +500,14 @@ public slots:
     void slotDocColoursChanged();
 
 signals:
+    /// Emitted when the document is modified.
     /**
-     * Emitted when document is modified or saved
+     * See slotDocumentModified().
+     *
+     * ??? These signals should be moved out of RosegardenDocument into
+     *     a separate global signal class.  Then the document can come and
+     *     go, and the various observers of these signals can stay up and
+     *     connected.  RosegardenDocument should not derive from QObject.
      */
     void documentModified(bool);
 
