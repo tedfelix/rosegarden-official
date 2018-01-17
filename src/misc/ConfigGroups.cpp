@@ -17,6 +17,9 @@
 
 namespace Rosegarden 
 {
+
+    #pragma GCC diagnostic ignored "-Wattributes"
+
     //
     // QSettings group names
     //
