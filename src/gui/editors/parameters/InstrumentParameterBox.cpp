@@ -42,29 +42,28 @@ namespace Rosegarden
 InstrumentParameterBox::InstrumentParameterBox(QWidget *parent)
     : RosegardenParameterBox(tr("Instrument Parameters"),
                              parent),
-      m_widgetStack(new QStackedWidget(this)),
-      m_noInstrumentParameters(new QFrame(this)),
-      m_midiInstrumentParameters(new MIDIInstrumentParameterPanel(this)),
-      m_audioInstrumentParameters(new AudioInstrumentParameterPanel(this)),
-      m_selectedInstrument(-1)
+      m_stackedWidget(new QStackedWidget(this)),
+      m_emptyFrame(new QFrame(this)),
+      m_mipp(new MIDIInstrumentParameterPanel(this)),
+      m_aipp(new AudioInstrumentParameterPanel(this))
 {
     setObjectName("Instrument Parameter Box");
 
-    m_widgetStack->setFont(m_font);
-    m_noInstrumentParameters->setFont(m_font);
-    m_midiInstrumentParameters->setFont(m_font);
-    m_audioInstrumentParameters->setFont(m_font);
+    m_stackedWidget->setFont(m_font);
+    m_emptyFrame->setFont(m_font);
+    m_mipp->setFont(m_font);
+    m_aipp->setFont(m_font);
 
-    m_widgetStack->addWidget(m_midiInstrumentParameters);
-    m_widgetStack->addWidget(m_audioInstrumentParameters);
-    m_widgetStack->addWidget(m_noInstrumentParameters);
+    m_stackedWidget->addWidget(m_mipp);
+    m_stackedWidget->addWidget(m_aipp);
+    m_stackedWidget->addWidget(m_emptyFrame);
 
     // Layout the groups left to right.
 
     QBoxLayout *layout = new QVBoxLayout(this);
     setLayout(layout);
     layout->setMargin(0);
-    layout->addWidget(m_widgetStack);
+    layout->addWidget(m_stackedWidget);
 
 }
 
@@ -75,7 +74,7 @@ InstrumentParameterBox::~InstrumentParameterBox()
 void
 InstrumentParameterBox::setAudioMeter(float ch1, float ch2, float ch1r, float ch2r)
 {
-    m_audioInstrumentParameters->setAudioMeter(ch1, ch2, ch1r, ch2r);
+    m_aipp->setAudioMeter(ch1, ch2, ch1r, ch2r);
 }
 
 void
@@ -83,14 +82,10 @@ InstrumentParameterBox::useInstrument(Instrument *instrument)
 {
     if (!instrument) {
         // Go with a blank frame.
-        m_widgetStack->setCurrentWidget(m_noInstrumentParameters);
-
-        m_selectedInstrument = -1;
+        m_stackedWidget->setCurrentWidget(m_emptyFrame);
 
         return;
     }
-
-    m_selectedInstrument = instrument->getId();
 
     // Hide or Show according to Instrument type
     //
@@ -98,14 +93,14 @@ InstrumentParameterBox::useInstrument(Instrument *instrument)
         instrument->getType() == Instrument::SoftSynth) {
 
         // Update the audio panel and bring it to the top.
-        m_audioInstrumentParameters->setupForInstrument(instrument);
-        m_widgetStack->setCurrentWidget(m_audioInstrumentParameters);
+        m_aipp->setupForInstrument(instrument);
+        m_stackedWidget->setCurrentWidget(m_aipp);
 
     } else { // Midi
 
         // Update the MIDI panel and bring it to the top.
-        m_midiInstrumentParameters->displayInstrument(instrument);
-        m_widgetStack->setCurrentWidget(m_midiInstrumentParameters);
+        m_mipp->displayInstrument(instrument);
+        m_stackedWidget->setCurrentWidget(m_mipp);
 
     }
 

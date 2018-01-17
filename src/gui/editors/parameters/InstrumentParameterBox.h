@@ -82,16 +82,12 @@ public:
 
 private:
 
-    // ??? rename: m_stackedWidget
-    QStackedWidget *m_widgetStack;
+    QStackedWidget *m_stackedWidget;
 
-    // ??? rename: m_emptyFrame
-    QFrame *m_noInstrumentParameters;
-    MIDIInstrumentParameterPanel *m_midiInstrumentParameters;
-    AudioInstrumentParameterPanel *m_audioInstrumentParameters;
+    QFrame *m_emptyFrame;
+    MIDIInstrumentParameterPanel *m_mipp;
+    AudioInstrumentParameterPanel *m_aipp;
 
-    // -1 if no instrument, InstrumentId otherwise
-    int m_selectedInstrument;
 };
 
 
