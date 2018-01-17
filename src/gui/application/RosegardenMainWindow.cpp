@@ -8131,8 +8131,7 @@ RosegardenMainWindow::slotDisplayWarning(int type,
                                          QString text,
                                          QString informativeText)
 {
-    std::cerr << "MAIN WINDOW DISPLAY WARNING:  type " << type
-              << " text" << qstrtostr(text) << std::endl;
+    RG_WARNING << "slotDisplayWarning(): MAIN WINDOW DISPLAY WARNING:  type " << type << " text" << text;
 
 // I'll need a hack way to make it look like my system isn't broken, for
 // screenshots, even though in reality Ubuntu 9.04 is totally hopeless

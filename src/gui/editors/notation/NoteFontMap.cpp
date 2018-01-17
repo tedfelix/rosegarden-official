@@ -15,6 +15,7 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[NoteFontMap]"
 
 #include "NoteFontMap.h"
 #include "misc/Debug.h"
@@ -603,8 +604,7 @@ NoteFontMap::startElement(const QString &, const QString &,
                 }
             }
             if (!have) {
-                std::cerr << QString("Warning: Unable to load any of the fonts in \"%1\"").
-                arg(names) << std::endl;
+                RG_WARNING << "startElement(): WARNING: Unable to load any of the fonts in" << names;
                 m_ok = false;
             }
 

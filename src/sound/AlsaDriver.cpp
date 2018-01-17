@@ -776,7 +776,7 @@ AlsaDriver::createMidiDevice(DeviceId deviceId,
 
         if (outputPort >= 0) {
 
-            std::cerr << "CREATED OUTPUT PORT " << outputPort << ":" << portName << " for device " << deviceId << std::endl;
+            RG_WARNING << "createMidiDevice(): CREATED OUTPUT PORT " << outputPort << ":" << portName << " for device " << deviceId;
 
             m_outputPorts[deviceId] = outputPort;
         }
@@ -943,7 +943,7 @@ AlsaDriver::renameDevice(DeviceId id, QString name)
         }
     }
 
-    std::cerr << "Renamed " << m_client << ":" << i->second << " to " << name << std::endl;
+    RG_WARNING << "renameDevice(): Renamed " << m_client << ":" << i->second << " to " << name;
 }
 
 ClientPortPair
