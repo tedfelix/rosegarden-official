@@ -580,12 +580,6 @@ RosegardenMainWindow::signalAction(int fd)
 void
 RosegardenMainWindow::connectOutsideCtorHack()
 {
-    // AudioParameterPanel has the button, you click, it signals
-    // InstrumentParameterBox which relays the signal here via this connection:
-    connect(m_instrumentParameterBox,
-            SIGNAL(selectPlugin(QWidget *, InstrumentId, int)),
-            this,
-            SLOT(slotShowPluginDialog(QWidget *, InstrumentId, int)));
 
     connect(m_instrumentParameterBox,
             SIGNAL(showPluginGUI(InstrumentId, int)),

@@ -60,11 +60,6 @@ InstrumentParameterBox::InstrumentParameterBox(QWidget *parent)
     m_widgetStack->addWidget(m_noInstrumentParameters);
 
     connect(m_audioInstrumentParameters,
-            SIGNAL(selectPlugin(QWidget *, InstrumentId, int)),
-            this,
-            SIGNAL(selectPlugin(QWidget *, InstrumentId, int)));
-
-    connect(m_audioInstrumentParameters,
             SIGNAL(showPluginGUI(InstrumentId, int)),
             this,
             SIGNAL(showPluginGUI(InstrumentId, int)));

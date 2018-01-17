@@ -464,7 +464,9 @@ void
 AudioInstrumentParameterPanel::slotSelectPlugin(int index)
 {
     if (getSelectedInstrument()) {
-        emit selectPlugin(0, getSelectedInstrument()->getId(), index);
+        // Launch the plugin dialog.
+        RosegardenMainWindow::self()->slotShowPluginDialog(
+                0, getSelectedInstrument()->getId(), index);
     }
 }
 

@@ -82,7 +82,6 @@ public:
 
 signals:
 
-    void selectPlugin(QWidget *, InstrumentId id, int index);
     void showPluginGUI(InstrumentId id, int index);
 
 private:

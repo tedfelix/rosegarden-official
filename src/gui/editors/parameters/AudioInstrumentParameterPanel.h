@@ -85,7 +85,6 @@ public slots:
     void slotSynthGUIButtonClicked();
 
 signals:
-    void selectPlugin(QWidget *, InstrumentId, int index);
     void showPluginGUI(InstrumentId, int index);
 
 protected:
