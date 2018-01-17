@@ -32,8 +32,8 @@ RosegardenParameterBox::RosegardenParameterBox(const QString &label,
     m_label(label)
 {
     QFont plainFont;
-    // Go with 9/10 the default point size.  On mine this goes from 11 to 9.
-    plainFont.setPointSize(plainFont.pointSize() * 90 / 100);
+    // Go with 82/100 the default point size.  On mine this goes from 11 to 9.
+    plainFont.setPointSize(plainFont.pointSize() * 82 / 100);
     plainFont.setBold(false);
     m_font = plainFont;
 
@@ -42,9 +42,8 @@ RosegardenParameterBox::RosegardenParameterBox(const QString &label,
     // ??? Might want to make this more explicit.  Perhaps an m_boldFont and
     //     then have TrackParameterBox pass it to CollapsingFrame?
     QFont boldFont;
-    // 95/100 of the default point size.  On mine this goes from 11 to 10.
-    boldFont.setPointSize(
-            static_cast<int>(boldFont.pointSize() * 9.5 / 10.0 + 0.5));
+    // 91/100 of the default point size.  On mine this goes from 11 to 10.
+    boldFont.setPointSize(boldFont.pointSize() * 91 / 100);
     boldFont.setBold(true);
 
     setFont(boldFont);
