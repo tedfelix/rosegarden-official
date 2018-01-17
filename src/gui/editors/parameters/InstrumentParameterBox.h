@@ -60,19 +60,25 @@ public:
 
     // ??? This should not be necessary.  This class should instead handle
     //     the RosegardenDocument::documentModified() signal and select the
-    //     appropriate panel to bring to the top.  It should not send a
-    //     signal to the MatrixWidget as the MatrixWidget should take care
-    //     of itself in response to documentModified().  It also should not
+    //     appropriate panel to bring to the top.  It should not
     //     send the Instrument to the MIPP and AIPP.  They should also
     //     handle documentModified() and figure this out on their own.
-    //     IOW, all responsibilities beyond selecting the panel should be
+    //     IOW, any responsibilities beyond selecting the panel should be
     //     pushed down into other classes.
     void useInstrument(Instrument *instrument);
 
+    /// Set the audio meter levels on the AIPP.
+    /**
+     * This is called by RMVW::updateMeters() and updateMonitorMeters()
+     * which get the levels from SequencerDataBlock and display them
+     * with this routine.
+     *
+     * Delegates to AIPP::setAudioMeter().
+     *
+     * ??? This should go away.  See comments on AIPP::setAudioMeter().
+     */
     void setAudioMeter(float dBleft, float dBright,
                        float recDBleft, float recDBright);
-
-    MIDIInstrumentParameterPanel *getMIDIInstrumentParameterPanel();
 
 public slots:
 

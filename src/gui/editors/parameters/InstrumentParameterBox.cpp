@@ -82,13 +82,6 @@ InstrumentParameterBox::~InstrumentParameterBox()
 {
 }
 
-MIDIInstrumentParameterPanel * 
-    InstrumentParameterBox::getMIDIInstrumentParameterPanel()
-{
-    if (!m_midiInstrumentParameters) return 0;
-    return m_midiInstrumentParameters;
-}
-
 void
 InstrumentParameterBox::setAudioMeter(float ch1, float ch2, float ch1r, float ch2r)
 {

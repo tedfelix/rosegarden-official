@@ -51,9 +51,13 @@ public:
 
     virtual void setupForInstrument(Instrument*);
 
-    // Set the audio meter to a given level for a maximum of
-    // two channels.
-    //
+    /// Set the audio meter to a given level for a maximum of two channels.
+    /**
+     * ??? Recommend moving RMVW::updateMeters() and updateMonitorMeters()
+     *     into here.  AIPP should be responsible for sampling the levels in
+     *     SequencerDataBlock and displaying them.  This way AIPP is
+     *     autonomous and RMVW and IPB need not care.
+     */
     void setAudioMeter(float dBleft, float dBright,
                        float recDBleft, float recDBright);
 

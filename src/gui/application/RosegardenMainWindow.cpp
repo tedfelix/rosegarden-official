@@ -327,6 +327,8 @@ RosegardenMainWindow::RosegardenMainWindow(bool enableSound,
 
     RosegardenDocument* doc = newDocument();
 
+    m_seqManager = new SequenceManager();
+
     m_parameterArea = new RosegardenParameterArea(this);
     m_parameterArea->setObjectName("RosegardenParameterArea");
 
@@ -349,7 +351,8 @@ RosegardenMainWindow::RosegardenMainWindow(bool enableSound,
     setupActions();
     initZoomToolbar();
 
-    m_seqManager = new SequenceManager();
+    // ??? TransportDialog should connect itself to SequenceManager.  Move
+    //     all of this into TransportDialog.
     Q_ASSERT(m_transport);
     connect(m_seqManager, SIGNAL(signalTempoChanged(tempoT)), m_transport, SLOT(slotTempoChanged(tempoT)));
     connect(m_seqManager, SIGNAL(signalMidiInLabel(const MappedEvent*)), m_transport, SLOT(slotMidiInLabel(const MappedEvent*)));
@@ -376,17 +379,6 @@ RosegardenMainWindow::RosegardenMainWindow(bool enableSound,
         // affects the ability to load plugins etc from a file on the
         // command line.
         m_seqManager->checkSoundDriverStatus(true);
-    }
-
-    if (m_view) {
-
-        MIDIInstrumentParameterPanel *mipp;
-        mipp = m_instrumentParameterBox->getMIDIInstrumentParameterPanel();
-        if(! mipp){
-            RG_DEBUG << "Error: m_instrumentParameterBox->getMIDIInstrumentParameterPanel() is NULL in RosegardenMainWindow.cpp 445 \n";
-        }
-        connect(m_seqManager, SIGNAL(signalSelectProgramNoSend(int,int,int)), (QObject*)mipp, SLOT(slotExternalProgramChange(int,int,int)));
-                
     }
 
     if (m_seqManager->getSoundDriverStatus() & AUDIO_OK) {

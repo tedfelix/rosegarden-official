@@ -27,6 +27,7 @@
 #include "InstrumentParameterPanel.h"
 #include "document/RosegardenDocument.h"
 #include "gui/application/RosegardenMainWindow.h"
+#include "gui/seqmanager/SequenceManager.h"
 #include "gui/widgets/SqueezedLabel.h"
 #include "gui/widgets/Rotary.h"
 #include "sequencer/RosegardenSequencer.h"
@@ -275,6 +276,12 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(QWidget *parent) :
     setLayout(mainGrid);
 
     setContentsMargins(2, 7, 2, 2);
+
+    // Connections
+
+    connect(RosegardenMainWindow::self()->getSequenceManager(),
+                SIGNAL(signalSelectProgramNoSend(int,int,int)),
+            SLOT(slotExternalProgramChange(int,int,int)));
 }
 
 void
