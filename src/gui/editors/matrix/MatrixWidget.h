@@ -208,9 +208,6 @@ protected slots:
     /// Pitch ruler may need regeneration
     void slotInstrumentChanged(Instrument *instrument);
 
-    /// Pitch ruler may need regeneration
-    void slotPercussionSetChanged(Instrument *instr);
-
     /// Instrument is being destroyed
     void slotInstrumentGone(void);
 

@@ -410,10 +410,6 @@ MatrixWidget::setSegments(RosegardenDocument *document,
 
     generatePitchRuler();
 
-    connect(RosegardenMainWindow::self(),
-            SIGNAL(instrumentPercussionSetChanged(Instrument *)),
-            this, SLOT(slotPercussionSetChanged(Instrument *)));
-
     m_controlsWidget->setSegments(document, segments);
     m_controlsWidget->setViewSegment((ViewSegment *)m_scene->getCurrentViewSegment());
     m_controlsWidget->setRulerScale(m_referenceScale);
@@ -615,36 +611,6 @@ MatrixWidget::slotInstrumentChanged(Instrument *instrument)
         //     We probably need to cache this in a member.
 
         generatePitchRuler();
-    }
-}
-
-void
-MatrixWidget::slotPercussionSetChanged(Instrument *instr)
-{
-    // Regenerate the pitchruler if the instrument which changed
-    // is the current one...
-    if (instr == m_instrument) { 
-        generatePitchRuler();
-    } else {
-        // m_instrument might not be pointing at the Instrument we are
-        // displaying.  This will happen if the user changes the Instrument
-        // for the Segment that we are displaying.
-
-        Composition &comp = m_document->getComposition();
-
-        // Get the Track for the segment we (MatrixScene) are displaying.
-        Track *track = comp.getTrackById(
-                m_scene->getCurrentSegment()->getTrack());
-
-        // Get the Instrument for the segment we are displaying.
-        Instrument *currInstr =
-                m_document->getStudio().getInstrumentById(track->getInstrument());
-
-        // If the Instrument that is changing is indeed the Instrument for
-        // the segment we are displaying, update the pitch ruler.
-        if (currInstr == instr) {
-            generatePitchRuler();
-        }
     }
 }
 

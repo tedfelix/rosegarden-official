@@ -116,10 +116,6 @@ InstrumentParameterBox::useInstrument(Instrument *instrument)
 
         m_selectedInstrument = -1;
 
-        // Update the MatrixWidget's PitchRuler.
-        // ??? I don't think this is needed.
-        emit instrumentPercussionSetChanged(instrument);
-
         return;
     }
 
@@ -139,10 +135,6 @@ InstrumentParameterBox::useInstrument(Instrument *instrument)
         // Update the MIDI panel and bring it to the top.
         m_midiInstrumentParameters->displayInstrument(instrument);
         m_widgetStack->setCurrentWidget(m_midiInstrumentParameters);
-
-        // Update the MatrixWidget's PitchRuler.
-        // ??? I don't think this is needed.
-        emit instrumentPercussionSetChanged(instrument);
 
     }
 

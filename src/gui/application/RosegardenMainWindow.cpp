@@ -600,12 +600,6 @@ RosegardenMainWindow::connectOutsideCtorHack()
             this,
             SLOT(slotShowPluginGUI(InstrumentId, int)));
 
-    // relay this through our own signal so that others can use it too
-    connect(m_instrumentParameterBox,
-            SIGNAL(instrumentPercussionSetChanged(Instrument *)),
-            this,
-            SIGNAL(instrumentPercussionSetChanged(Instrument *)));
-
     connect(this,
             SIGNAL(pluginSelected(InstrumentId, int, int)),
             m_instrumentParameterBox,

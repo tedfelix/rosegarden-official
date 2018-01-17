@@ -86,9 +86,6 @@ signals:
     void selectPlugin(QWidget *, InstrumentId id, int index);
     void showPluginGUI(InstrumentId id, int index);
 
-    /// Update the MatrixWidget's PitchRuler.
-    void instrumentPercussionSetChanged(Instrument *);
-
 private:
 
     // ??? rename: m_stackedWidget
