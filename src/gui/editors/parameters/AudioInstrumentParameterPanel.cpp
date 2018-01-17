@@ -133,6 +133,10 @@ AudioInstrumentParameterPanel::AudioInstrumentParameterPanel(QWidget *parent) :
 
     // Connections
 
+    connect(RosegardenMainWindow::self(),
+                SIGNAL(documentChanged(RosegardenDocument *)),
+            SLOT(slotNewDocument(RosegardenDocument *)));
+
     connect(Instrument::getStaticSignals().data(),
             SIGNAL(changed(Instrument *)),
             this,
@@ -483,6 +487,45 @@ AudioInstrumentParameterPanel::slotAliasChanged()
     //     RosegardenDocument::documentModified() signal and refresh
     //     everything in response to it.
     setupForInstrument(getSelectedInstrument());
+}
+
+void
+AudioInstrumentParameterPanel::slotNewDocument(RosegardenDocument *doc)
+{
+    connect(doc, SIGNAL(documentModified(bool)),
+            SLOT(slotDocumentModified(bool)));
+}
+
+void
+AudioInstrumentParameterPanel::slotDocumentModified(bool)
+{
+    RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
+
+    // Get the selected Track's Instrument.
+    InstrumentId instrumentId =
+            doc->getComposition().getSelectedInstrumentId();
+
+    Instrument *instrument = NULL;
+
+    // If an instrument has been selected.
+    if (instrumentId != NoInstrument)
+        instrument = doc->getStudio().getInstrumentById(instrumentId);
+
+    if (!instrument) {
+        setSelectedInstrument(NULL);
+        return;
+    }
+
+    if (instrument->getType() != Instrument::Audio  &&
+        instrument->getType() != Instrument::SoftSynth) {
+        setSelectedInstrument(NULL);
+        return;
+    }
+
+    setSelectedInstrument(instrument);
+
+    // Update the parameters on the widgets
+    setupForInstrument(instrument);
 }
 
 void

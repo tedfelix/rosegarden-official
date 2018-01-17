@@ -80,19 +80,9 @@ InstrumentParameterBox::setAudioMeter(float ch1, float ch2, float ch1r, float ch
 }
 
 void
-InstrumentParameterBox::useInstrument(Instrument *instrument)
+InstrumentParameterBox::useInstrument(Instrument *)
 {
-    if (!instrument)
-        return;
-
-    // AIPP for Audio or SoftSynth
-    if (instrument->getType() == Instrument::Audio ||
-        instrument->getType() == Instrument::SoftSynth) {
-        // Update the audio panel.
-        m_aipp->setupForInstrument(instrument);
-        return;
-    }
-
+    return;
 }
 
 void InstrumentParameterBox::slotNewDocument(RosegardenDocument *doc)
