@@ -129,7 +129,8 @@ AlsaDriver::AlsaDriver(MappedStudio *studio):
     Audit audit;
     audit << "Rosegarden " << VERSION << " - AlsaDriver " << m_name << std::endl;
     m_pendSysExcMap = new DeviceEventMap();
-    std::cerr << "AlsaDriver::AlsaDriver [begin]" << std::endl;
+
+    RG_WARNING << "ctor begin...";
 
 #ifndef NDEBUG
     // Debugging Mode
@@ -146,7 +147,7 @@ AlsaDriver::AlsaDriver(MappedStudio *studio):
 AlsaDriver::~AlsaDriver()
 {
     if (!m_haveShutdown) {
-        std::cerr << "WARNING: AlsaDriver::shutdown() was not called before destructor, calling now" << std::endl;
+        RG_WARNING << "dtor: WARNING: AlsaDriver::shutdown() was not called before destructor, calling now";
         shutdown();
     }
 
@@ -165,11 +166,10 @@ AlsaDriver::checkAlsaError(int rc, const char *
 {
 #ifdef DEBUG_ALSA
     if (rc < 0) {
-        std::cerr << "AlsaDriver::"
-                  << message
-                  << ": " << rc
-                  << " (" << snd_strerror(rc) << ")"
-                  << std::endl;
+        RG_WARNING << "AlsaDriver::"
+                   << message
+                   << ": " << rc
+                   << " (" << snd_strerror(rc) << ")";
     }
 #endif
     return rc;
@@ -838,18 +838,13 @@ AlsaDriver::addDevice(Device::DeviceType type,
                       InstrumentId baseInstrumentId,
                       MidiDevice::DeviceDirection direction)
 {
-    std::cerr << "AlsaDriver::addDevice(" << type << "," << direction << ")" << std::endl;
+    RG_WARNING << "addDevice(" << type << "," << direction << ")";
 
     if (type == Device::Midi) {
 
         MappedDevice *device = createMidiDevice(deviceId, direction);
         if (!device) {
-#ifdef DEBUG_ALSA
-            std::cerr << "WARNING: Device creation failed" << std::endl;
-#else
-            ;
-#endif
-
+            RG_WARNING << "addDevice(): WARNING: Device creation failed";
         } else {
             addInstrumentsForDevice(device, baseInstrumentId);
             m_devices.push_back(device);
@@ -919,8 +914,7 @@ AlsaDriver::renameDevice(DeviceId id, QString name)
 {
     DeviceIntMap::iterator i = m_outputPorts.find(id);
     if (i == m_outputPorts.end()) {
-        std::cerr << "WARNING: AlsaDriver::renameDevice: Cannot find device "
-                  << id << " in port map" << std::endl;
+        RG_WARNING << "renameDevice(): WARNING: Cannot find device " << id << " in port map";
         return ;
     }
 
@@ -1530,7 +1524,7 @@ AlsaDriver::setCurrentTimer(QString timer)
     if (timer == getCurrentTimer())
         return ;
 
-    std::cerr << "AlsaDriver::setCurrentTimer(" << timer << ")" << std::endl;
+    RG_WARNING << "setCurrentTimer(" << timer << ")";
 
     std::string name(qstrtostr(timer));
 
@@ -4993,7 +4987,7 @@ AlsaDriver::setRecordDevice(DeviceId id, bool connectAction)
 {
     Audit audit;
 
-    std::cerr << "AlsaDriver::setRecordDevice: device " << id << ", action " << connectAction << std::endl;
+    RG_WARNING << "setRecordDevice(): device " << id << ", action " << connectAction;
 
     // Locate a suitable port
     //
@@ -5009,7 +5003,7 @@ AlsaDriver::setRecordDevice(DeviceId id, bool connectAction)
 
     ClientPortPair pair = m_devicePortMap[id];
 
-    std::cerr << "AlsaDriver::setRecordDevice: port is " << pair.first << ":" << pair.second << std::endl;
+    RG_WARNING << "setRecordDevice(): port is " << pair.first << ":" << pair.second;
 
     snd_seq_addr_t sender, dest;
     sender.client = pair.first;
