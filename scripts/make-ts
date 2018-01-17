@@ -1,22 +1,40 @@
 #!/bin/bash
 
-# Set $NOOBSOLETE to 1 to drop obsolete translations
+# make-ts
+
+# Set NOOBSOLETE to 1 to drop obsolete translations:
+#   $ NOOBSOLETE=1 scripts/make-ts
 
 PERL=perl
 
-$PERL scripts/extract_instrument_tr_strings.pl data/presets/presets.xml > data/InstrumentStrings.cpp
+# Get strings from presets.xml
+$PERL scripts/extract_instrument_tr_strings.pl data/presets/presets.xml \
+      >data/InstrumentStrings.cpp
 
-$PERL scripts/extract_menu_tr_strings.pl data/rc/*.rc > data/QMenuStrings.cpp
+# Get strings from the .rc files.
+$PERL scripts/extract_menu_tr_strings.pl data/rc/*.rc >data/QMenuStrings.cpp
 
+# Get strings from autoload.rg
 gunzip -c data/autoload/autoload.rg > data/autoload/autoload.xml
-$PERL scripts/extract_autoload_tr_strings.pl data/autoload/autoload.xml > data/AutoloadStrings.cpp
+$PERL scripts/extract_autoload_tr_strings.pl data/autoload/autoload.xml \
+      >data/AutoloadStrings.cpp
 rm -f data/autoload/autoload.xml
 
 mkdir -p data/locale
+
+# Get a list of the .ts files.
 TRANSLATIONS=`ls data/locale/*.ts | grep -v rosegarden.ts`
 
-if [ $NOOBSOLETE -eq 1 ]; then
+if [ "$NOOBSOLETE" == "1" ]; then
     NOOBSOPT="-noobsolete"
 fi
-lupdate $NOOBSOPT `find src -name '*.ui' -o -name '*.cpp' -o -name '*.h'` data/QMenuStrings.cpp data/InstrumentStrings.cpp data/AutoloadStrings.cpp -ts data/locale/rosegarden.ts $TRANSLATIONS
+
+# Update the .ts files.
+lupdate $NOOBSOPT `find src -name '*.ui' -o -name '*.cpp' -o -name '*.h'` \
+        data/QMenuStrings.cpp data/InstrumentStrings.cpp \
+        data/AutoloadStrings.cpp -ts data/locale/rosegarden.ts \
+        $TRANSLATIONS
+
+# Display statistics.
 scripts/ts-stats
+
