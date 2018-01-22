@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2017 the Rosegarden development team.
+    Copyright 2000-2018 the Rosegarden development team.
 
     This file is based on KLed from the KDE libraries
     Copyright (C) 1998 Jörg Habenicht (j.habenicht@europemail.com)
