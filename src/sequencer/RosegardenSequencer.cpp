@@ -1602,8 +1602,9 @@ RosegardenSequencer::slotControlChange(Instrument *instrument, int cc)
         return;
     }
 
-    // Audio
-    if (instrument->getType() == Instrument::Audio)
+    // Audio or SoftSynth
+    if (instrument->getType() == Instrument::Audio  ||
+        instrument->getType() == Instrument::SoftSynth)
     {
         if (cc == MIDI_CONTROLLER_VOLUME) {
 
