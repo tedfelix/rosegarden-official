@@ -330,11 +330,6 @@ MatrixWidget::MatrixWidget(bool drumMode) :
     connect(RosegardenMainWindow::self()->getDocument(),
                 SIGNAL(documentModified(bool)),
             SLOT(slotDocumentModified(bool)));
-
-    connect(Instrument::getStaticSignals().data(),
-            SIGNAL(changed(Instrument *)),
-            this,
-            SLOT(slotInstrumentChanged(Instrument *)));
 }
 
 MatrixWidget::~MatrixWidget()
@@ -600,20 +595,6 @@ MatrixWidget::generatePitchRuler()
     m_pianoView->centerOn(spr.center().x(), smr.center().y());
 
     m_pianoView->update();
-}
-
-void
-MatrixWidget::slotInstrumentChanged(Instrument *instrument)
-{
-    // This covers the test case when the user toggles the "Percussion"
-    // checkbox on the MIPP.  Also covers the test case where the key
-    // map changes due to a change in percussion program.
-
-    // If this isn't the Instrument we are displaying, bail.
-    if (m_instrument->getId() != instrument->getId())
-        return;
-
-    generatePitchRuler();
 }
 
 bool

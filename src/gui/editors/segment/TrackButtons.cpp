@@ -141,11 +141,6 @@ TrackButtons::TrackButtons(RosegardenDocument* doc,
     connect(RosegardenMainWindow::self(),
                 SIGNAL(documentChanged(RosegardenDocument *)),
             SLOT(slotNewDocument(RosegardenDocument *)));
-
-    connect(Instrument::getStaticSignals().data(),
-            SIGNAL(changed(Instrument *)),
-            this,
-            SLOT(slotInstrumentChanged(Instrument *)));
 }
 
 TrackButtons::~TrackButtons() {
@@ -990,40 +985,6 @@ TrackButtons::changeLabelDisplayMode(TrackLabel::DisplayMode mode)
     for (int i = 0; i < m_tracks; i++) {
         m_trackLabels[i]->setDisplayMode(mode);
         m_trackLabels[i]->updateLabel();
-    }
-}
-
-void
-TrackButtons::slotInstrumentChanged(Instrument *instrument)
-{
-    Composition &comp = m_doc->getComposition();
-
-    // For each track, search for the one with this instrument ID.
-    // This is essentially a Composition::getTrackByInstrumentId().
-    for (int i = 0; i < m_tracks; i++) {
-        Track *track = comp.getTrackByPosition(i);
-
-        if (track  &&  track->getInstrument() == instrument->getId()) {
-
-            // Set the program change name and update the UI.
-
-            // For a SoftSynth, use the plugin's name.
-            if (instrument->getType() == Instrument::SoftSynth) {
-
-                AudioPluginInstance *plugin =
-                        instrument->getPlugin(Instrument::SYNTH_PLUGIN_POSITION);
-                if (plugin) {
-                    // we don't translate any plugin program names or other texts
-                    m_trackLabels[i]->setProgramChangeName(
-                            strtoqstr(plugin->getDisplayName()));
-                }
-            } else {
-                m_trackLabels[i]->setProgramChangeName(QObject::tr(instrument->getProgramName().c_str()));
-            }
-
-            m_trackLabels[i]->updateLabel();
-
-        }
     }
 }
 

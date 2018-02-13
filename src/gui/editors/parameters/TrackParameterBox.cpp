@@ -420,11 +420,6 @@ TrackParameterBox::TrackParameterBox(QWidget *parent) :
                 SIGNAL(documentChanged(RosegardenDocument *)),
             SLOT(slotNewDocument(RosegardenDocument *)));
 
-    connect(Instrument::getStaticSignals().data(),
-            SIGNAL(changed(Instrument *)),
-            this,
-            SLOT(slotInstrumentChanged(Instrument *)));
-
     // Layout
 
     QGridLayout *mainLayout = new QGridLayout(this);
@@ -669,12 +664,6 @@ TrackParameterBox::slotThruRoutingChanged(int index)
     //     this.  It shouldn't.
     Composition &comp = m_doc->getComposition();
     comp.notifyTrackChanged(track);
-}
-
-void
-TrackParameterBox::slotInstrumentChanged(Instrument *)
-{
-    updateWidgets2();
 }
 
 void

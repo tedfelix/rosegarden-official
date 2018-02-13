@@ -205,14 +205,6 @@ protected slots:
     /// The mouse has left the view
     void slotMouseLeavesView();
 
-    /// Pitch ruler may need regeneration
-    /**
-     * ??? This should go away.  RosegardenDocument::documentModified() is
-     *     the preferred way to update the UI in response to changes to
-     *     the document.  See slotDocumentModified() above.
-     */
-    void slotInstrumentChanged(Instrument *instrument);
-
     /// Instrument is being destroyed
     void slotInstrumentGone(void);
 

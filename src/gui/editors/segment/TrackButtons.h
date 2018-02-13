@@ -371,14 +371,6 @@ private slots:
     /// Handles clicks from m_clickedSigMapper.
     void slotTrackSelected(int trackId);
 
-    /// Handles a change to the Program in the Instrument Parameters box.
-    /**
-     * ??? This should go away.  RosegardenDocument::documentModified() is
-     *     the preferred way to update the UI in response to changes to
-     *     the document.  See slotDocumentModified() above.
-     */
-    void slotInstrumentChanged(Instrument *instrument);
-
 private:
     // Hide copy ctor and op=
     TrackButtons(const TrackButtons &);

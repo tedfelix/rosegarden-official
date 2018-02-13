@@ -277,10 +277,6 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(QWidget *parent) :
             SLOT(slotNewDocument(RosegardenDocument *)));
 
     connect(Instrument::getStaticSignals().data(),
-            SIGNAL(changed(Instrument *)),
-            SLOT(slotInstrumentChanged(Instrument *)));
-
-    connect(Instrument::getStaticSignals().data(),
                 SIGNAL(controlChange(Instrument *, int)),
             SLOT(slotControlChange(Instrument *, int)));
 
@@ -906,22 +902,6 @@ MIDIInstrumentParameterPanel::slotDocumentModified(bool)
     }
 
     setSelectedInstrument(instrument);
-
-    updateWidgets();
-}
-
-void
-MIDIInstrumentParameterPanel::slotInstrumentChanged(Instrument *instrument)
-{
-    if (!instrument)
-        return;
-
-    if (!getSelectedInstrument())
-        return;
-
-    // If this isn't a change for the Instrument we are displaying, bail.
-    if (getSelectedInstrument()->getId() != instrument->getId())
-        return;
 
     updateWidgets();
 }

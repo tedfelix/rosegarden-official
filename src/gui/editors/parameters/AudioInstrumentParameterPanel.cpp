@@ -137,10 +137,6 @@ AudioInstrumentParameterPanel::AudioInstrumentParameterPanel(QWidget *parent) :
                 SIGNAL(documentChanged(RosegardenDocument *)),
             SLOT(slotNewDocument(RosegardenDocument *)));
 
-    connect(Instrument::getStaticSignals().data(),
-            SIGNAL(changed(Instrument *)),
-            this,
-            SLOT(slotInstrumentChanged(Instrument *)));
     // Connect for high-frequency control change notifications.
     connect(Instrument::getStaticSignals().data(),
                 SIGNAL(controlChange(Instrument *, int)),
@@ -519,23 +515,6 @@ AudioInstrumentParameterPanel::slotDocumentModified(bool)
     }
 
     setSelectedInstrument(instrument);
-
-    // Update the parameters on the widgets
-    setupForInstrument(instrument);
-}
-
-void
-AudioInstrumentParameterPanel::slotInstrumentChanged(Instrument *instrument)
-{
-    if (!instrument)
-        return;
-
-    if (!getSelectedInstrument())
-        return;
-
-    // If this isn't a change for the Instrument we are displaying, bail.
-    if (getSelectedInstrument()->getId() != instrument->getId())
-        return;
 
     // Update the parameters on the widgets
     setupForInstrument(instrument);

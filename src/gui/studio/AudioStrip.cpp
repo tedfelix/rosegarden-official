@@ -76,10 +76,6 @@ AudioStrip::AudioStrip(QWidget *parent, InstrumentId id) :
     QFont boldFont(font);
     boldFont.setBold(true);
 
-    connect(Instrument::getStaticSignals().data(),
-            SIGNAL(changed(Instrument *)),
-            SLOT(slotInstrumentChanged(Instrument *)));
-
     connect(this,
             SIGNAL(selectPlugin(QWidget *, InstrumentId, int)),
             RosegardenMainWindow::self(),
@@ -483,16 +479,6 @@ AudioStrip::controlChange(int cc)
         m_pan->setPosition(instrument->getPan() - 100);
 
     }
-}
-
-void
-AudioStrip::slotInstrumentChanged(Instrument * /*instrument*/)
-{
-    // ??? This routine needs to go away.  Instead, we should be using
-    //     RosegardenDocument::documentModified(bool) for low-frequency
-    //     updates, and a new high-frequency controller update notification.
-
-    updateWidgets();
 }
 
 void AudioStrip::slotLabelClicked()

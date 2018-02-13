@@ -80,9 +80,6 @@ signals:
         QWidget *parent, InstrumentId instrumentId, int pluginIndex);
 
 private slots:
-    /// This needs to go away.
-    void slotInstrumentChanged(Instrument *instrument);
-
     void slotLabelClicked();
     void slotFaderLevelChanged(float dB);
     void slotPanChanged(float pan);
