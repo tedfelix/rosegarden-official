@@ -95,10 +95,6 @@ MidiMixerWindow::MidiMixerWindow(QWidget *parent,
     enableAutoRepeat("Transport Toolbar", "playback_pointer_forward_bar");
 
     connect(Instrument::getStaticSignals().data(),
-            SIGNAL(changed(Instrument *)),
-            this,
-            SLOT(slotInstrumentChanged(Instrument *)));
-    connect(Instrument::getStaticSignals().data(),
                 SIGNAL(controlChange(Instrument *, int)),
             SLOT(slotControlChange(Instrument *, int)));
 }
@@ -272,7 +268,7 @@ MidiMixerWindow::setupTabs()
 
                 // Update all the faders and controllers
                 //
-                slotInstrumentChanged(*iIt);
+                updateWidgets(*iIt);
 
                 // Increment counters
                 //
@@ -435,9 +431,9 @@ MidiMixerWindow::slotControllerChanged(float value)
 }
 
 void
-MidiMixerWindow::slotInstrumentChanged(Instrument *instrument)
+MidiMixerWindow::updateWidgets(Instrument *instrument)
 {
-    //RG_DEBUG << "slotInstrumentChanged(): Instrument ID = " << instrument->getId();
+    //RG_DEBUG << "updateWidgets(): Instrument ID = " << instrument->getId();
 
     int count = 0;
 

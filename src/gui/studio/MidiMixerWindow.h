@@ -87,8 +87,6 @@ signals:
     void panic();
 
 protected slots:
-    /// Handle InstrumentStaticSignals::changed().
-    void slotInstrumentChanged(Instrument *);
     /// Handle InstrumentStaticSignals::controlChange().
     void slotControlChange(Instrument *instrument, int cc);
 
@@ -121,6 +119,14 @@ protected:
 
     // Grab IPB controls and remove Volume.
     ControlList getIPBForMidiMixer(MidiDevice *) const;
+
+private:
+    /**
+     * ??? This should not take an Instrument *.  It should update the
+     *     widgets for all Instruments.
+     */
+    void updateWidgets(Instrument *);
+
 };
 
 
