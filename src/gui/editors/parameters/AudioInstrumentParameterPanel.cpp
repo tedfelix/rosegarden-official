@@ -183,8 +183,15 @@ AudioInstrumentParameterPanel::slotSelectAudioRecordLevel(float dB)
     if (getSelectedInstrument()->getType() == Instrument::Audio) {
         getSelectedInstrument()->setRecordLevel(dB);
         // ??? Another potential candidate for high-frequency update
-        //     treatment like the controlChange() signal.
-        getSelectedInstrument()->changed();
+        //     treatment like the controlChange() signal.  Since no one
+        //     else seems to display this value, we could just set
+        //     the doc modified flag without sending a notification.
+        //     Or we could introduce a new high-frequency update
+        //     notification for this and the only one receiving it
+        //     would be whoever should do the setStudioObjectProperty()
+        //     below.  See the controlChange() signal and handlers for
+        //     more ideas.
+        RosegardenMainWindow::self()->getDocument()->slotDocumentModified();
 
         StudioControl::setStudioObjectProperty
         (MappedObjectId(getSelectedInstrument()->getMappedId()),
@@ -253,17 +260,6 @@ AudioInstrumentParameterPanel::slotPluginSelected(InstrumentId instrumentId,
         bypassed = inst->isBypassed();
 
     setButtonColour(index, bypassed, pluginBackgroundColour);
-
-    if (index == (int)Instrument::SYNTH_PLUGIN_POSITION) {
-        // A new plugin has been selected.  Let everyone know.
-        // This makes sure the TrackParameterBox and TrackButtons
-        // are updated to show the name of the plugin.
-        // ??? Yeah, but.  It would be better if the part of this that
-        //     actually changed the Instrument (AudioPluginDialog maybe?)
-        //     called changed() when it made the actual changes.  The
-        //     emitters of pluginSelected() would be a place to start.
-        getSelectedInstrument()->changed();
-    }
 }
 
 void
@@ -459,7 +455,7 @@ AudioInstrumentParameterPanel::slotAudioChannels(int channels)
     //RG_DEBUG << "slotAudioChannels() " << "channels = " << channels;
 
     getSelectedInstrument()->setAudioChannels(channels);
-    getSelectedInstrument()->changed();
+    RosegardenMainWindow::self()->getDocument()->slotDocumentModified();
 
     StudioControl::setStudioObjectProperty
     (MappedObjectId(getSelectedInstrument()->getMappedId()),
