@@ -20,6 +20,7 @@
 #include <string>
 #include <vector>
 
+#include "InstrumentStaticSignals.h"
 #include "XmlExportable.h"
 #include "MidiProgram.h"
 
@@ -70,8 +71,6 @@ typedef unsigned int BussId;
 // Predeclare Device
 //
 class Device;
-
-class InstrumentStaticSignals;
 
 class PluginContainer
 {
@@ -309,6 +308,10 @@ public:
      * instance is still around when your object is destroyed.
      */
     static QSharedPointer<InstrumentStaticSignals> getStaticSignals();
+
+    /// Emit InstrumentStaticSignals::controlChange().
+    static void emitControlChange(Instrument *instrument, int cc)
+        { getStaticSignals()->emitControlChange(instrument, cc); }
 
  signals:
     // Like QObject::destroyed, but implies that the whole device is

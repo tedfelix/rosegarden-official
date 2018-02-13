@@ -307,8 +307,7 @@ MidiMixerWindow::slotFaderLevelChanged(float value)
             if (instrument) {
 
                 instrument->setControllerValue(MIDI_CONTROLLER_VOLUME, MidiByte(value));
-                Instrument::getStaticSignals()->
-                        emitControlChange(instrument, MIDI_CONTROLLER_VOLUME);
+                Instrument::emitControlChange(instrument, MIDI_CONTROLLER_VOLUME);
                 m_document->setModified();
 
                 if (instrument->hasFixedChannel())
@@ -391,8 +390,7 @@ MidiMixerWindow::slotControllerChanged(float value)
         MidiByte cc = m_faders[i]->m_controllerRotaries[j].first;
 
         instrument->setControllerValue(cc, MidiByte(value));
-        Instrument::getStaticSignals()->
-                emitControlChange(instrument, cc);
+        Instrument::emitControlChange(instrument, cc);
         m_document->setModified();
 
         if (instrument->hasFixedChannel()) {
@@ -697,8 +695,7 @@ MidiMixerWindow::slotControllerDeviceEventReceived(MappedEvent *e,
                 if ((*controlIter).getControllerValue() == controller) {
                     RG_DEBUG << "slotControllerDeviceEventReceived(): Setting controller " << controller << " for instrument " << instrument->getId() << " to " << value;
                     instrument->setControllerValue(controller, value);
-                    Instrument::getStaticSignals()->
-                            emitControlChange(instrument, controller);
+                    Instrument::emitControlChange(instrument, controller);
                     m_document->setModified();
 
                     break;

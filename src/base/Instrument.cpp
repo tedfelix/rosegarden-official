@@ -16,7 +16,7 @@
 #define RG_MODULE_STRING "[Instrument]"
 
 #include "Instrument.h"
-#include "InstrumentStaticSignals.h"
+
 #include "sound/Midi.h"
 #include "MidiDevice.h"
 #include "base/AllocateChannels.h"

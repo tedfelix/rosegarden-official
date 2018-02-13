@@ -2004,8 +2004,7 @@ RosegardenMainViewWidget::slotControllerDeviceEventReceived(MappedEvent *e, cons
                 if ((*i).getControllerValue() == controller) {
                     //RG_DEBUG << "  Setting controller " << controller << " for instrument " << instrument->getId() << " to " << value;
                     instrument->setControllerValue(controller, value);
-                    Instrument::getStaticSignals()->
-                            emitControlChange(instrument, controller);
+                    Instrument::emitControlChange(instrument, controller);
                     getDocument()->setModified();
 
                     break;
@@ -2026,8 +2025,7 @@ RosegardenMainViewWidget::slotControllerDeviceEventReceived(MappedEvent *e, cons
                     value, 127, AudioLevel::ShortFader);
 
             instrument->setLevel(dB);
-            Instrument::getStaticSignals()->
-                    emitControlChange(instrument, MIDI_CONTROLLER_VOLUME);
+            Instrument::emitControlChange(instrument, MIDI_CONTROLLER_VOLUME);
             getDocument()->setModified();
 
             break;
@@ -2040,8 +2038,7 @@ RosegardenMainViewWidget::slotControllerDeviceEventReceived(MappedEvent *e, cons
 
             // This wants 0 to 200.
             instrument->setControllerValue(MIDI_CONTROLLER_PAN, MidiByte(pan));
-            Instrument::getStaticSignals()->
-                    emitControlChange(instrument, MIDI_CONTROLLER_PAN);
+            Instrument::emitControlChange(instrument, MIDI_CONTROLLER_PAN);
             getDocument()->setModified();
 
             break;

@@ -531,8 +531,7 @@ AudioStrip::slotFaderLevelChanged(float dB)
             return;
 
         instrument->setLevel(dB);
-        Instrument::getStaticSignals()->
-                emitControlChange(instrument, MIDI_CONTROLLER_VOLUME);
+        Instrument::emitControlChange(instrument, MIDI_CONTROLLER_VOLUME);
         doc->setModified();
 
         // Send out to "external controller" port as well.
@@ -592,8 +591,7 @@ AudioStrip::slotPanChanged(float pan)
             return;
 
         instrument->setPan(MidiByte(pan + 100.0));
-        Instrument::getStaticSignals()->
-                emitControlChange(instrument, MIDI_CONTROLLER_PAN);
+        Instrument::emitControlChange(instrument, MIDI_CONTROLLER_PAN);
         doc->setModified();
 
         // Send out to "external controller" port as well.

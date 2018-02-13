@@ -160,9 +160,8 @@ AudioInstrumentParameterPanel::slotSelectAudioLevel(float dB)
     if (getSelectedInstrument()->getType() == Instrument::Audio ||
             getSelectedInstrument()->getType() == Instrument::SoftSynth) {
         getSelectedInstrument()->setLevel(dB);
-        Instrument::getStaticSignals()->
-                emitControlChange(getSelectedInstrument(),
-                                  MIDI_CONTROLLER_VOLUME);
+        Instrument::emitControlChange(getSelectedInstrument(),
+                                      MIDI_CONTROLLER_VOLUME);
         RosegardenMainWindow::self()->getDocument()->setModified();
     }
 }
@@ -343,9 +342,8 @@ void
 AudioInstrumentParameterPanel::slotSetPan(float pan)
 {
     getSelectedInstrument()->setPan(MidiByte(pan + 100.0));
-    Instrument::getStaticSignals()->
-            emitControlChange(getSelectedInstrument(),
-                              MIDI_CONTROLLER_PAN);
+    Instrument::emitControlChange(getSelectedInstrument(),
+                                  MIDI_CONTROLLER_PAN);
     RosegardenMainWindow::self()->getDocument()->setModified();
 }
 

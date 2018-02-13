@@ -26,43 +26,33 @@ class Instrument;
 
 /// Signals related to Instrument.
 /**
- * It would be nice if Qt offered proper static signals so that
- * this class wasn't necessary.  An alternative non-static design
- * would be to have observers connect directly to the Instrument
- * objects.  Studio would need to let the observers know when
- * new Instruments were created.
+ * This class was created to allow for a single global signal
+ * for control change notifications across all Instruments.
  *
- * OTOH, pulling signals out of data objects like Instrument eliminates
- * the need for data objects to derive from QObject.  This is makes
- * it possible to copy data objects freely.
+ * As a side-effect, this also removes a signal from Instrument
+ * which means Instrument has one less reason to inherit from QObject.
+ * Deriving from QObject seems wrong for data objects like Instrument.
+ * It prevents them from being copied.
  *
  */
 class InstrumentStaticSignals : public QObject
 {
     Q_OBJECT
 
-public:
-
-    /*
-     * When connecting, use Instrument::getStaticSignals() to get
-     * the object instance.  Search the codebase on
-     * "Instrument::getStaticSignals()" for connect() examples.
-     *
-     * ??? Future Direction: Instrument::getStaticSignals() should be moved
-     *     into here and renamed "self()" or "instance()".
-     */
-
-    /// Public wrapper since Qt4 signals are protected.
-    /**
-     * Emits controlChange().  See comments on controlChange() for more.
-     */
-    void emitControlChange(Instrument *instrument, int cc)
-        { emit controlChange(instrument, cc); }
-
 signals:
     /// Fine-grain, high-frequency notification mechanism.
     /**
-     * Call this if you change the value for a control change for
+     * To emit:
+     *
+     *   Instrument::emitControlChange(instrument, cc);
+     *
+     * To connect:
+     *
+     *   connect(Instrument::getStaticSignals().data(),
+     *               SIGNAL(controlChange(Instrument *, int)),
+     *           SLOT(slotControlChange(Instrument *, int)));
+     *
+     * Emit this if you change the value for a control change for
      * an Instrument.  This will trigger an update of relevant portions
      * of the UI (sliders and knobs) to reflect the new values.  This
      * will also trigger RosegardenSequencer to send out appropriate
@@ -77,8 +67,9 @@ signals:
      * other control change knobs.
      *
      * By separating these out from the other more general update
-     * notifications, we can avoid updating too much of the UI when
-     * these come in.  This should improve performance.
+     * notifications (e.g. RD::documentModified()), we can avoid updating
+     * too much of the UI when these come in.  This should improve
+     * performance.
      *
      * Note that this only applies to the initial control change
      * on a Track.  This has nothing to do with any control changes
@@ -86,6 +77,14 @@ signals:
      */
     void controlChange(Instrument *instrument, int cc);
 
+private:
+    // Singleton.  Use Instrument::getStaticSignals() to get the instance.
+    InstrumentStaticSignals()  { }
+    friend Instrument;
+
+    /// Private wrapper called by Instrument::emitControlChange().
+    void emitControlChange(Instrument *instrument, int cc)
+        { emit controlChange(instrument, cc); }
 };
 
 

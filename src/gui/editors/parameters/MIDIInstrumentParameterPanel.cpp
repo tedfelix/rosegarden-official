@@ -1291,8 +1291,7 @@ MIDIInstrumentParameterPanel::slotControllerChanged(int controllerNumber)
     getSelectedInstrument()->setControllerValue(
             static_cast<MidiByte>(controllerNumber),
             static_cast<MidiByte>(value));
-    Instrument::getStaticSignals()->
-            emitControlChange(getSelectedInstrument(), controllerNumber);
+    Instrument::emitControlChange(getSelectedInstrument(), controllerNumber);
     RosegardenMainWindow::self()->getDocument()->setModified();
 }
 
