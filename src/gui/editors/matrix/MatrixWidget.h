@@ -206,6 +206,11 @@ protected slots:
     void slotMouseLeavesView();
 
     /// Pitch ruler may need regeneration
+    /**
+     * ??? This should go away.  RosegardenDocument::documentModified() is
+     *     the preferred way to update the UI in response to changes to
+     *     the document.  See slotDocumentModified() above.
+     */
     void slotInstrumentChanged(Instrument *instrument);
 
     /// Instrument is being destroyed
@@ -216,6 +221,10 @@ protected :
 
     /// (Re)generate the pitch ruler (useful when key mapping changed)
     void generatePitchRuler();
+
+private slots:
+    /// Called when the document is modified in some way.
+    void slotDocumentModified(bool);
 
 private:
     RosegardenDocument *m_document; // I do not own this

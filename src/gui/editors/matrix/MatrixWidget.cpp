@@ -327,6 +327,10 @@ MatrixWidget::MatrixWidget(bool drumMode) :
     // to the left are always highlighted to show which note we are on.
     m_view->setMouseTracking(true);
 
+    connect(RosegardenMainWindow::self()->getDocument(),
+                SIGNAL(documentModified(bool)),
+            SLOT(slotDocumentModified(bool)));
+
     connect(Instrument::getStaticSignals().data(),
             SIGNAL(changed(Instrument *)),
             this,
@@ -1517,6 +1521,21 @@ MatrixWidget::slotPlayPreviewNote(Segment * segment, int pitch)
 {
     m_scene->playNote(*segment, pitch, 100);
 }
+
+void
+MatrixWidget::slotDocumentModified(bool)
+{
+    // This covers the test case when the user toggles the "Percussion"
+    // checkbox on the MIPP.  Also covers the test case where the key
+    // map changes due to a change in percussion program.
+
+    // ??? Eventually, this should do a full refresh of the
+    //     entire MatrixWidget and should cover all test cases where
+    //     the UI must update.
+
+    generatePitchRuler();
+}
+
 
 }
 
