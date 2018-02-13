@@ -427,8 +427,6 @@ AudioRouteMenu::slotEntrySelected(int i)
                 instrument->setAudioInputToRecord(newInput, newChannel);
             }
 
-            instrument->changed();
-
             doc->slotDocumentModified();
 
             break;
@@ -458,7 +456,6 @@ AudioRouteMenu::slotEntrySelected(int i)
             // Update the Instrument
 
             instrument->setAudioOutput(i);
-            instrument->changed();
 
             doc->slotDocumentModified();
 
