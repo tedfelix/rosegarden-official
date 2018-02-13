@@ -401,7 +401,7 @@ MidiProgramsEditor::slotNameChanged(const QString& programName)
     }
 
     // Get ID and convert to zero based.
-    const unsigned id = sender()->objectName().toUInt() - 1;
+    const unsigned id = sender()->property("index").toUInt() - 1;
 
     //RG_DEBUG << "slotNameChanged(" << programName << ") : id = " << id;
     
