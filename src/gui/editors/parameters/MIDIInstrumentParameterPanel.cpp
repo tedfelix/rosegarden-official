@@ -974,7 +974,6 @@ MIDIInstrumentParameterPanel::slotPercussionClicked(bool checked)
 
     // Update the Instrument.
     getSelectedInstrument()->setPercussion(checked);
-    getSelectedInstrument()->changed();
 
     RosegardenMainWindow::self()->getDocument()->slotDocumentModified();
 
@@ -1000,7 +999,8 @@ MIDIInstrumentParameterPanel::slotBankClicked(bool checked)
 
     // Update the Instrument.
     getSelectedInstrument()->setSendBankSelect(checked);
-    getSelectedInstrument()->changed();
+
+    RosegardenMainWindow::self()->getDocument()->slotDocumentModified();
 }
 
 void
@@ -1013,7 +1013,8 @@ MIDIInstrumentParameterPanel::slotProgramClicked(bool checked)
 
     // Update the Instrument.
     getSelectedInstrument()->setSendProgramChange(checked);
-    getSelectedInstrument()->changed();
+
+    RosegardenMainWindow::self()->getDocument()->slotDocumentModified();
 }
 
 void
@@ -1033,7 +1034,8 @@ MIDIInstrumentParameterPanel::slotVariationClicked(bool checked)
 
     // Update the Instrument.
     getSelectedInstrument()->setSendBankSelect(checked);
-    getSelectedInstrument()->changed();
+
+    RosegardenMainWindow::self()->getDocument()->slotDocumentModified();
 }
 
 void
@@ -1128,7 +1130,7 @@ MIDIInstrumentParameterPanel::slotSelectBank(int index)
 
     getSelectedInstrument()->sendChannelSetup();
 
-    // This is why changed() isn't called within
+    // This is why slotDocumentModified() isn't called within
     // the setters.  If it were, then each of the above changes would
     // result in a change notification going out.  Worst case, that
     // would be three change notifications and the first two would be
@@ -1137,7 +1139,7 @@ MIDIInstrumentParameterPanel::slotSelectBank(int index)
     // Why?  It reduces the number of notifications which improves
     // performance.  It avoids sending notifications when an object's
     // state is inconsistent.  It avoids endless loops.
-    getSelectedInstrument()->changed();
+    RosegardenMainWindow::self()->getDocument()->slotDocumentModified();
 }
 
 void
@@ -1193,7 +1195,7 @@ MIDIInstrumentParameterPanel::slotExternalProgramChange(int programChange, int b
 
     // Just one change notification for the three potential changes.
     // See comments in slotSelectBank() for further discussion.
-    getSelectedInstrument()->changed();
+    RosegardenMainWindow::self()->getDocument()->slotDocumentModified();
 }
 
 void
@@ -1250,7 +1252,7 @@ MIDIInstrumentParameterPanel::slotSelectProgram(int index)
 
     // Just one change notification for the two potential changes.
     // See comments in slotSelectBank() for further discussion.
-    getSelectedInstrument()->changed();
+    RosegardenMainWindow::self()->getDocument()->slotDocumentModified();
 }
 
 void
@@ -1280,7 +1282,7 @@ MIDIInstrumentParameterPanel::slotSelectVariation(int index)
 
     getSelectedInstrument()->sendChannelSetup();
 
-    getSelectedInstrument()->changed();
+    RosegardenMainWindow::self()->getDocument()->slotDocumentModified();
 }
 
 // In place of the old sendBankAndProgram, instruments themselves now
