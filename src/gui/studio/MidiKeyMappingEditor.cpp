@@ -166,8 +166,7 @@ MidiKeyMappingEditor::slotNameChanged(const QString &name)
         return;
     }
 
-    // Get ID and convert to zero based.
-    const unsigned pitch = lineEdit->property("index").toUInt() - 1;
+    const unsigned pitch = lineEdit->property("index").toUInt();
 
     //RG_DEBUG << "slotNameChanged(" << name << ") : pitch = " << pitch;
 

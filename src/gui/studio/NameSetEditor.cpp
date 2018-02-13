@@ -151,8 +151,7 @@ NameSetEditor::NameSetEditor(BankEditorDialog *bankEditor,
 
                 if (showKeyMapButtons) {
                     QToolButton *button = new QToolButton;
-                    // 1-based
-                    button->setProperty("index", index + 1);
+                    button->setProperty("index", index);
                     connect(button, SIGNAL(clicked()),
                             this, SLOT(slotKeyMapButtonPressed()));
                     m_keyMapButtons.push_back(button);
@@ -163,8 +162,7 @@ NameSetEditor::NameSetEditor(BankEditorDialog *bankEditor,
                 // Note: ThornStyle::sizeFromContents() reduces the size
                 //       of these so they will fit on smaller displays.
                 LineEdit *lineEdit = new LineEdit("", rowWidget);
-                // 1-based
-                lineEdit->setProperty("index", index + 1);
+                lineEdit->setProperty("index", index);
                 lineEdit->setMinimumWidth(110);
                 lineEdit->setCompleter(new QCompleter(m_completions));
 
