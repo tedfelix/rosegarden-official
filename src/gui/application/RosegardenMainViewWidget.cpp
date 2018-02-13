@@ -1955,7 +1955,7 @@ RosegardenMainViewWidget::slotControllerDeviceEventReceived(MappedEvent *e, cons
                 return ;
             instrument->setProgramChange(program);
             instrument->sendChannelSetup();
-            instrument->changed();
+            RosegardenMainWindow::self()->getDocument()->slotDocumentModified();
         }
         return ;
     }
