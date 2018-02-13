@@ -685,6 +685,8 @@ void TrackEditor::slotCommandExecuted()
 
         // Redraw the contents.
         // ??? CompositionView should take care of this.
+        // ??? CompositionModelImpl now does this in response to doc
+        //     modified.  It is likely that this is redundant.
         m_compositionView->deleteCachedPreviews();
         m_compositionView->updateContents();
 

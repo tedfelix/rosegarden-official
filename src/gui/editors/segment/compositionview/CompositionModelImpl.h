@@ -42,6 +42,7 @@ namespace Rosegarden
 class Studio;
 class Segment;
 class RulerScale;
+class RosegardenDocument;
 class InstrumentStaticSignals;
 class Instrument;
 class Event;
@@ -345,10 +346,12 @@ public slots:
      */
     void slotAudioFileFinalized(Segment *);
 
-    /// Connected to InstrumentStaticSignals::changed()
-    void slotInstrumentChanged(Instrument *);
-
 private slots:
+    /// Called when a new document is loaded.
+    void slotNewDocument(RosegardenDocument *);
+    /// Called when the document is modified in some way.
+    void slotDocumentModified(bool);
+
     /// Connected to AudioPeaksGenerator::audioPeaksComplete()
     void slotAudioPeaksComplete(AudioPeaksGenerator *);
 

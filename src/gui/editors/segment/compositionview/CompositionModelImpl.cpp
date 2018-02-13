@@ -34,6 +34,8 @@
 #include "base/Instrument.h"
 #include "base/InstrumentStaticSignals.h"
 #include "base/Profiler.h"
+#include "document/RosegardenDocument.h"
+#include "gui/application/RosegardenMainWindow.h"
 #include "base/RulerScale.h"
 #include "base/Segment.h"
 #include "base/SegmentLinker.h"
@@ -102,10 +104,9 @@ CompositionModelImpl::CompositionModelImpl(
         (*i)->addObserver(this);
     }
 
-    connect(Instrument::getStaticSignals().data(),
-            SIGNAL(changed(Instrument *)),
-            this,
-            SLOT(slotInstrumentChanged(Instrument *)));
+    connect(RosegardenMainWindow::self(),
+                SIGNAL(documentChanged(RosegardenDocument *)),
+            SLOT(slotNewDocument(RosegardenDocument *)));
 
     connect(&m_updateTimer, SIGNAL(timeout()), SLOT(slotUpdateTimer()));
 }
@@ -1107,39 +1108,23 @@ void CompositionModelImpl::slotAudioPeaksComplete(
 
 // --- Previews -----------------------------------------------------
 
-void CompositionModelImpl::slotInstrumentChanged(Instrument *instrument)
+void
+CompositionModelImpl::slotNewDocument(RosegardenDocument *doc)
 {
-    //RG_DEBUG << "slotInstrumentChanged()";
+    connect(doc, SIGNAL(documentModified(bool)),
+            SLOT(slotDocumentModified(bool)));
+}
 
-    const SegmentMultiSet &segments = m_composition.getSegments();
-
-    // For each Segment in the Composition
-    for (SegmentMultiSet::const_iterator i = segments.begin();
-         i != segments.end();
-         ++i) {
-
-        const Segment *segment = *i;
-
-        const TrackId trackId = segment->getTrack();
-        const Track *track = getComposition().getTrackById(trackId);
-
-        // If this is the Instrument that changed
-        if (track  &&  track->getInstrument() == instrument->getId()) {
-            // We need to update the cache for audio segments, because the
-            // instrument playback level is reflected in the audio
-            // preview.  And we need to update it for midi segments,
-            // because the preview style differs depending on whether the
-            // segment is on a percussion instrument or not.  (On a
-            // percussion Instrument, event duration is ignored and
-            // all notes appear short.  Toggle the Percussion checkbox
-            // to test.)
-            deleteCachedPreview(segment);
-
-            QRect rect;
-            getSegmentQRect(*segment, rect);
-            emit needUpdate(rect);
-        }
-    }
+void
+CompositionModelImpl::slotDocumentModified(bool)
+{
+    // Full and immediate update.
+    // ??? Note that full updates are done elsewhere as well.  Search
+    //     for the callers to deleteCachedPreviews() for a (partial) list.
+    //     This results in duplicate updates.  The other updates
+    //     need to be removed and only this one should remain.
+    deleteCachedPreviews();
+    emit needUpdate();
 }
 
 void CompositionModelImpl::deleteCachedPreview(const Segment *segment)
@@ -1363,5 +1348,6 @@ CompositionModelImpl::YCoordVector CompositionModelImpl::getTrackYCoords(
 
     return yCoordVector;
 }
+
 
 }
