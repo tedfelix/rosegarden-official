@@ -60,19 +60,20 @@ namespace Rosegarden
 {
 
 MidiProgramsEditor::MidiProgramsEditor(BankEditorDialog* bankEditor,
-                                       QWidget* parent,
-                                       const char* name)
-        : NameSetEditor(bankEditor,
-                        tr("Bank and Program details"),
-                        parent, name, tr("Programs"), true),
-        m_device(0),
-        m_bankList(bankEditor->getBankList()),
-        m_programList(bankEditor->getProgramList()),
-        m_oldBank(false, 0, 0)
+                                       QWidget* parent) :
+    NameSetEditor(bankEditor,
+                  tr("Bank and Program details"),  // title
+                  parent,
+                  tr("Programs"),  // headingPrefix
+                  true),  // showKeyMapButtons
+    m_device(0),
+    m_bankList(bankEditor->getBankList()),
+    m_programList(bankEditor->getProgramList()),
+    m_oldBank(false, 0, 0)
 {
-    QWidget *additionalWidget = makeAdditionalWidget(m_mainFrame);
+    QWidget *additionalWidget = makeAdditionalWidget(m_topFrame);
     if (additionalWidget) {
-        m_mainLayout->addWidget(additionalWidget, 0, 0, 3, 3);
+        m_topLayout->addWidget(additionalWidget, 0, 0, 3, 3);
     }
 }
 

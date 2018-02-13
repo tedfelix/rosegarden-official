@@ -18,8 +18,6 @@
 #ifndef RG_NAMESETEDITOR_H
 #define RG_NAMESETEDITOR_H
 
-#include "gui/widgets/LineEdit.h"
-
 #include <QGroupBox>
 #include <QString>
 #include <QStringList>
@@ -37,7 +35,9 @@ class QTreeWidgetItem;
 namespace Rosegarden
 {
 
+
 class BankEditorDialog;
+class LineEdit;
 
 /// A tabbed editor for large lists of names.
 /**
@@ -79,7 +79,6 @@ protected:
     NameSetEditor(BankEditorDialog *bankEditor,
                   QString title,
                   QWidget *parent,
-                  const char *name,
                   QString headingPrefix = "",
                   bool showKeyMapButtons = false);
 
@@ -87,10 +86,23 @@ protected:
     const QToolButton *getKeyMapButton(int n) const { return m_keyMapButtons[n]; }
 
     /// Parent
+    /**
+     * ??? Arbitrary factoring.  Push back down into derived classes.
+     */
     BankEditorDialog *m_bankEditor;
 
-    QFrame *m_mainFrame;
-    QGridLayout *m_mainLayout;
+    /// Area above the tabbed widget.
+    /**
+     * This area contains the "Provided by" groupbox and the
+     * Percussion/MSB/LSB fields in the MidiProgramsEditor.
+     *
+     * ??? "Provided by" should be moved to a new panel that appears
+     *     when the root node on the tree is selected.  Once that's done,
+     *     the top frame is only needed by MidiProgramsEditor and can be
+     *     pushed down into there.
+     */
+    QFrame *m_topFrame;
+    QGridLayout *m_topLayout;
 
     QLabel *m_librarian;
     QLabel *m_librarianEmail;

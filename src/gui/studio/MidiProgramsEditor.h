@@ -44,8 +44,7 @@ class MidiProgramsEditor : public NameSetEditor
     Q_OBJECT
 public:
     MidiProgramsEditor(BankEditorDialog *bankEditor,
-                       QWidget *parent,
-                       const char *name = 0);
+                       QWidget *parent);
 
     void clearAll();
     void populate(QTreeWidgetItem*);

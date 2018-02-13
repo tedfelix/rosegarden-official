@@ -46,17 +46,19 @@
 namespace Rosegarden
 {
 
-MidiKeyMappingEditor::MidiKeyMappingEditor(BankEditorDialog* bankEditor,
-        QWidget* parent,
-        const char* name)
-        : NameSetEditor(bankEditor,
-                        tr("Key Mapping details"),
-                        parent, name, tr("Pitches"), false),
-        m_device(0)
+MidiKeyMappingEditor::MidiKeyMappingEditor(
+        BankEditorDialog *bankEditor,
+        QWidget *parent) :
+    NameSetEditor(bankEditor,
+                  tr("Key Mapping details"),  // title
+                  parent,
+                  tr("Pitches"),  // headingPrefix
+                  false),  // showKeyMapButtons
+    m_device(0)
 {
-    QWidget *additionalWidget = makeAdditionalWidget(m_mainFrame);
+    QWidget *additionalWidget = makeAdditionalWidget(m_topFrame);
     if (additionalWidget) {
-        m_mainLayout->addWidget(additionalWidget, 0, 0, 2- 0+1, 2- 0+1);
+        m_topLayout->addWidget(additionalWidget, 0, 0, 2- 0+1, 2- 0+1);
     }
 }
 

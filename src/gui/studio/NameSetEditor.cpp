@@ -15,44 +15,39 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[NameSetEditor]"
 
 #include "NameSetEditor.h"
-#include "BankEditorDialog.h"
-#include "gui/widgets/LineEdit.h"
 
+#include "BankEditorDialog.h"
+#include "misc/Debug.h"
+#include "gui/widgets/LineEdit.h"
 
 #include <QFrame>
 #include <QGroupBox>
 #include <QLabel>
-#include <QLayout>
-#include <QVBoxLayout>
 #include <QPushButton>
 #include <QString>
 #include <QTabWidget>
-#include <QToolTip>
 #include <QWidget>
 #include <QCompleter>
-#include <QTreeWidget>
-#include <QTreeWidgetItem>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QToolButton>
 
-#include <iostream>
-
 namespace Rosegarden
 {
 
-NameSetEditor::NameSetEditor(BankEditorDialog* bankEditor,
+
+NameSetEditor::NameSetEditor(BankEditorDialog *bankEditor,
                              QString title,
-                             QWidget* parent,
-                             const char* name,
+                             QWidget *parent,
                              QString headingPrefix,
                              bool showKeyMapButtons) :
     QGroupBox(title, parent),
     m_bankEditor(bankEditor),
-    m_mainFrame(new QFrame(this)),
-    m_mainLayout(new QGridLayout(m_mainFrame)),
+    m_topFrame(new QFrame(this)),
+    m_topLayout(new QGridLayout(m_topFrame)),
     m_librarian(NULL),
     m_librarianEmail(NULL),
     m_names(),
@@ -61,42 +56,40 @@ NameSetEditor::NameSetEditor(BankEditorDialog* bankEditor,
     m_labels(),
     m_keyMapButtons()
 {
-    setObjectName(name);  // probably not needed, but too lazy to research this time
-    QVBoxLayout *layout = new QVBoxLayout;
+    QVBoxLayout *mainLayout = new QVBoxLayout;
 
-    m_mainFrame->setContentsMargins(0, 1, 0, 1);
-    m_mainLayout->setSpacing(0);
-    m_mainFrame->setLayout(m_mainLayout);
-    layout->addWidget(m_mainFrame);
+    // Area above the tabbed widget.
 
-    // Librarian
-    //
-    QGroupBox *groupBox = new QGroupBox(tr("Provided by"), m_mainFrame);
+    m_topFrame->setContentsMargins(0, 1, 0, 1);
+    m_topLayout->setSpacing(0);
+    m_topFrame->setLayout(m_topLayout);
+    mainLayout->addWidget(m_topFrame);
+
+    // "Provided by" groupbox
+
+    QGroupBox *groupBox = new QGroupBox(tr("Provided by"), m_topFrame);
     QGridLayout *groupBoxLayout = new QGridLayout;
 
-    m_mainLayout->addWidget(groupBox, 0, 3, 3, 3);
+    m_topLayout->addWidget(groupBox, 0, 3, 3, 3);
 
-    //TODO convert to LineEdit or such, so end users can edit these fields (but
-    // not at this stage of sorting out; save this for polish afterwards)
+    // Librarian
+    // ??? Would be nice if we could edit this.
     m_librarian = new QLabel(groupBox);
     groupBoxLayout->addWidget(m_librarian, 0, 1);
 
+    // Librarian email
+    // ??? Would be nice if we could edit this.
     m_librarianEmail = new QLabel(groupBox);
     groupBoxLayout->addWidget(m_librarianEmail, 1, 1);
 
     groupBox->setLayout(groupBoxLayout);
-    //TODO add some message box to come up from a suitable context and explain
-    // where to send modified files, and that you can browse the latest
-    // available library at:
-    //
-    // http://rosegarden.svn.sourceforge.net/viewvc/rosegarden/trunk/rosegarden/data/library/
-    //
-//  groupBox->setToolTip(tr("<qt><p>The librarian maintains the Rosegarden device data for this device.</p><p>If you've made modifications to suit your own device, it might be worth\nliaising with the librarian in order to publish your information for the benefit\nof others."));
 
-    QTabWidget* tabw = new QTabWidget(this);
-    layout->addWidget(tabw);
+    // Tabbed widget.
 
-    setLayout(layout);
+    QTabWidget* tabWidget = new QTabWidget(this);
+    mainLayout->addWidget(tabWidget);
+
+    setLayout(mainLayout);
 
     QWidget *h;
     QHBoxLayout *hLayout;
@@ -112,7 +105,7 @@ NameSetEditor::NameSetEditor(BankEditorDialog* bankEditor,
     unsigned int labelId = 0;
 
     for (unsigned int tab = 0; tab < tabs; ++tab) {
-        h = new QWidget(tabw);
+        h = new QWidget(tabWidget);
         hLayout = new QHBoxLayout;
 
         for (unsigned int col = 0; col < cols; ++col) {
@@ -180,7 +173,7 @@ NameSetEditor::NameSetEditor(BankEditorDialog* bankEditor,
         }
         h->setLayout(hLayout);
 
-        tabw->addTab(h,
+        tabWidget->addTab(h,
                      (tab == 0 ? headingPrefix + QString(" %1 - %2") :
                       QString("%1 - %2")).
                      arg(tab * (128 / tabs) + 1).
@@ -204,11 +197,8 @@ NameSetEditor::slotToggleInitialLabel()
     unsigned index = initial.toUInt(&ok);
 
     if (!ok) {
-        std::cerr << "conversion of '"
-        << initial.toStdString().c_str()
-        << "' to number failed"
-        << std::endl;
-        return ;
+        RG_WARNING << "conversion of '" << initial << "' to number failed";
+        return;
     }
 
     if (index == 0)
