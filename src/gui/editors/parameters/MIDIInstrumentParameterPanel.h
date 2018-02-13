@@ -56,13 +56,6 @@ public:
 
     MIDIInstrumentParameterPanel(QWidget *parent);
 
-    /// Display a potentially different Instrument.
-    /**
-     * This is called whenever a different Instrument needs to be displayed.
-     * E.g. when the user selects a different track.
-     */
-    void displayInstrument(Instrument *);
-
 public slots:
 
     /// Handle external Bank Selects and Program Changes.

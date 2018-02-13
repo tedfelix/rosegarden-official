@@ -290,20 +290,6 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(QWidget *parent) :
 }
 
 void
-MIDIInstrumentParameterPanel::displayInstrument(Instrument *instrument)
-{
-    if (!instrument)
-        return;
-
-    setSelectedInstrument(instrument);
-    m_instrumentLabel->setText(instrument->getLocalizedPresentationName());
-    // Clear the "Receive external" checkbox.
-    m_receiveExternalCheckBox->setChecked(false);
-
-    updateWidgets();
-}
-
-void
 MIDIInstrumentParameterPanel::updateWidgets()
 {
     RG_DEBUG << "updateWidgets() begin";
@@ -902,6 +888,12 @@ MIDIInstrumentParameterPanel::slotDocumentModified(bool)
     // If an instrument has been selected.
     if (instrumentId != NoInstrument)
         instrument = doc->getStudio().getInstrumentById(instrumentId);
+
+    // If the user has selected a different instrument
+    if (getSelectedInstrument() != instrument) {
+        // Clear the "Receive external" checkbox.
+        m_receiveExternalCheckBox->setChecked(false);
+    }
 
     if (!instrument) {
         setSelectedInstrument(NULL);
