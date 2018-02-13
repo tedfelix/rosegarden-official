@@ -489,8 +489,7 @@ MidiProgramsEditor::slotKeyMapButtonPressed()
         return;
 
     // Get ID and convert to zero based.
-    const unsigned id = button->objectName().toUInt() - 1;
-    //const unsigned id = sender()->property("index").toUInt() - 1;
+    const unsigned id = sender()->property("index").toUInt() - 1;
 
     MidiProgram *program = getProgram(*getCurrentBank(), id);
     if (!program)
