@@ -138,6 +138,10 @@ TrackButtons::TrackButtons(RosegardenDocument* doc,
 
     m_doc->getComposition().addObserver(this);
 
+    connect(RosegardenMainWindow::self(),
+                SIGNAL(documentChanged(RosegardenDocument *)),
+            SLOT(slotNewDocument(RosegardenDocument *)));
+
     connect(Instrument::getStaticSignals().data(),
             SIGNAL(changed(Instrument *)),
             this,
@@ -1294,6 +1298,23 @@ TrackButtons::slotTrackSelected(int trackId)
     // New notification mechanism.
     // This should replace all others.
     m_doc->emitDocumentModified();
+}
+
+void
+TrackButtons::slotNewDocument(RosegardenDocument *doc)
+{
+    connect(doc, SIGNAL(documentModified(bool)),
+            SLOT(slotDocumentModified(bool)));
+}
+
+void
+TrackButtons::slotDocumentModified(bool)
+{
+    // Full and immediate update.
+    // ??? Note that updates probably happen elsewhere.  This will result
+    //     in duplicate updates.  All other updates should be removed and
+    //     this should be the only update.
+    slotUpdateTracks();
 }
 
 

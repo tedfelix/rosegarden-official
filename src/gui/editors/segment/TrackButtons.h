@@ -363,10 +363,20 @@ protected:
     static const int m_vuSpacing;
 
 private slots:
+    /// Called when a new document is loaded.
+    void slotNewDocument(RosegardenDocument *);
+    /// Called when the document is modified in some way.
+    void slotDocumentModified(bool);
+
     /// Handles clicks from m_clickedSigMapper.
     void slotTrackSelected(int trackId);
 
     /// Handles a change to the Program in the Instrument Parameters box.
+    /**
+     * ??? This should go away.  RosegardenDocument::documentModified() is
+     *     the preferred way to update the UI in response to changes to
+     *     the document.  See slotDocumentModified() above.
+     */
     void slotInstrumentChanged(Instrument *instrument);
 
 private:
