@@ -519,13 +519,20 @@ MidiProgramsEditor::slotKeyMapButtonPressed()
     connect(menu, SIGNAL(triggered(QAction *)),
             this, SLOT(slotKeyMapMenuItemSelected(QAction *)));
 
-    int itemHeight = menu->actionGeometry(actions().value(0)).height() + 2;
+    // Compute the position for the pop-up menu.
+
+    // QMenu::popup() can do this for us, but it doesn't place the
+    // cursor over top of the current selection.
+
+    // Get the QRect for the current entry.
+    QRect actionRect =
+            menu->actionGeometry(menu->actions().value(currentKeyMap));
+
     QPoint pos = QCursor::pos();
-
     pos.rx() -= 10;
-    pos.ry() -= (itemHeight / 2 + currentKeyMap * itemHeight);
+    pos.ry() -= actionRect.top() + actionRect.height() / 2;
 
-    // ??? Positioning doesn't seem to be working.
+    // Display the menu.
     menu->popup(pos);
 }
 
