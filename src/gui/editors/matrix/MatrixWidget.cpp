@@ -1512,7 +1512,9 @@ MatrixWidget::slotDocumentModified(bool)
 
     // ??? Eventually, this should do a full refresh of the
     //     entire MatrixWidget and should cover all test cases where
-    //     the UI must update.
+    //     the UI must update.  Unfortunately, the design of MatrixWidget
+    //     does not include an updateWidgets().  We'll probably have to
+    //     redesign and rewrite MatrixWidget before this becomes possible.
 
     generatePitchRuler();
 }
