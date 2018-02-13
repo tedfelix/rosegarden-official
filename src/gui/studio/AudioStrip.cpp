@@ -527,9 +527,7 @@ void AudioStrip::slotLabelClicked()
     Instrument *instrument = studio.getInstrumentById(m_id);
 
     instrument->setAlias(newAlias.toStdString());
-    // ??? For now, we need this to update AIPP.  Over time, this will go
-    //     away, and only the call to slotDocumentModified() will be needed.
-    instrument->changed();
+
     doc->slotDocumentModified();
 }
 
@@ -720,9 +718,6 @@ AudioStrip::slotChannelsChanged()
     instrument->setAudioChannels(
             (instrument->getAudioChannels() > 1) ? 1 : 2);
 
-    // ??? For now, we need this to update AIPP.  Over time, this will go
-    //     away, and only the call to slotDocumentModified() will be needed.
-    instrument->changed();
     doc->slotDocumentModified();
 }
 
