@@ -53,6 +53,7 @@ NameSetEditor::NameSetEditor(BankEditorDialog *bankEditor,
     m_names(),
     m_completions(),
     m_initialLabel(NULL),
+    m_numberingBase(1),
     m_labels(),
     m_keyMapButtons()
 {
@@ -99,7 +100,7 @@ NameSetEditor::NameSetEditor(BankEditorDialog *bankEditor,
     const unsigned rows = 128 / (tabs * cols);
     const unsigned entriesPerTab = 128 / tabs;
 
-    unsigned int labelId = 0;
+    unsigned int index = 0;
 
     // For each tab
     for (unsigned int tab = 0; tab < tabs; ++tab) {
@@ -128,12 +129,16 @@ NameSetEditor::NameSetEditor(BankEditorDialog *bankEditor,
 
                 columnLayout->addWidget(rowWidget);
 
-                QString numberText = QString("%1").arg(labelId + 1);
+                // ??? Switch from using the object name to using a property.
+                //     The setProperty() calls have been added below.  Just
+                //     need to switch the clients over to using them.  Then
+                //     remove the setObjectName() calls (and this).
+                QString numberText = QString("%1").arg(index + 1);
 
                 // If this is the very first number label, make it a button.
                 if (tab == 0  &&  col == 0  &&  row == 0) {
                     // Numbering base button.
-                    m_initialLabel = new QPushButton(numberText, rowWidget);
+                    m_initialLabel = new QPushButton("", rowWidget);
                     m_initialLabel->setFixedWidth(25);
                     connect(m_initialLabel,
                             SIGNAL(clicked()),
@@ -142,7 +147,7 @@ NameSetEditor::NameSetEditor(BankEditorDialog *bankEditor,
                     rowLayout->addWidget(m_initialLabel);
 
                 } else {  // All other numbers are QLabels.
-                    QLabel *label = new QLabel(numberText, rowWidget);
+                    QLabel *label = new QLabel("", rowWidget);
                     label->setFixedWidth(30);
                     label->setAlignment(Qt::AlignCenter);
                     m_labels.push_back(label);
@@ -153,7 +158,9 @@ NameSetEditor::NameSetEditor(BankEditorDialog *bankEditor,
 
                 if (showKeyMapButtons) {
                     QToolButton *button = new QToolButton;
+                    // 1-based
                     button->setObjectName(numberText);
+                    button->setProperty("index", index + 1);
                     rowLayout->addWidget(button);
                     connect(button, SIGNAL(clicked()),
                             this, SLOT(slotKeyMapButtonPressed()));
@@ -163,19 +170,21 @@ NameSetEditor::NameSetEditor(BankEditorDialog *bankEditor,
                 // Note: ThornStyle::sizeFromContents() reduces the size
                 //       of these so they will fit on smaller displays.
                 LineEdit *lineEdit = new LineEdit("", rowWidget);
+                // 1-based
                 lineEdit->setObjectName(numberText);
+                lineEdit->setProperty("index", index + 1);
                 lineEdit->setMinimumWidth(110);
                 lineEdit->setCompleter(new QCompleter(m_completions));
 
                 m_names.push_back(lineEdit);
-                connect(m_names[labelId],
+                connect(m_names[index],
                         SIGNAL(textChanged(const QString &)),
                         SLOT(slotNameChanged(const QString &)));
 
                 rowLayout->addWidget(lineEdit);
                 rowWidget->setLayout(rowLayout);
 
-                ++labelId;
+                ++index;
             }
 
             columnWidget->setLayout(columnLayout);
@@ -197,37 +206,29 @@ NameSetEditor::NameSetEditor(BankEditorDialog *bankEditor,
     }
 
     m_initialLabel->setMaximumSize(m_labels.front()->size());
+
+    updateLabels();
 }
 
 void
 NameSetEditor::slotToggleInitialLabel()
 {
-    QString initial = m_initialLabel->text();
+    m_numberingBase ^= 1;
+    updateLabels();
+}
 
-    // strip some unrequested nice-ification.. urg!
-    if (initial.startsWith("&")) {
-        initial = initial.right(initial.length() - 1);
-    }
+void NameSetEditor::updateLabels()
+{
+    unsigned index = m_numberingBase;
 
-    bool ok;
-    unsigned index = initial.toUInt(&ok);
-
-    if (!ok) {
-        RG_WARNING << "conversion of '" << initial << "' to number failed";
-        return;
-    }
-
-    if (index == 0)
-        index = 1;
-    else
-        index = 0;
-
+    // First label
     m_initialLabel->setText(QString("%1").arg(index++));
-    for (std::vector<QLabel*>::iterator it( m_labels.begin() );
-            it != m_labels.end();
-            ++it) {
-        (*it)->setText(QString("%1").arg(index++));
+
+    // For each subsequent label.
+    for (size_t i = 0; i < m_labels.size(); ++i) {
+        m_labels[i]->setText(QString("%1").arg(index++));
     }
 }
+
 
 }

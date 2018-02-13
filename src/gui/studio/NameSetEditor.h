@@ -111,12 +111,20 @@ protected:
     QStringList m_completions;
 
 private:
-    // ??? rename: m_numberingBase
+    // ??? rename: m_numberingBaseButton
     QPushButton *m_initialLabel;
+    unsigned m_numberingBase;
 
     /// Numbers to the left of each line edit.
     std::vector<QLabel *> m_labels;
+    void updateLabels();
+
     /// Key map buttons between the labels and the line edits.
+    /**
+     * Instead of key map buttons, we should have comboboxes that
+     * allow direct selection of the keymap (along with viewing of the
+     * current value which is currently impossible).
+     */
     std::vector<QToolButton *> m_keyMapButtons;
 };
 
