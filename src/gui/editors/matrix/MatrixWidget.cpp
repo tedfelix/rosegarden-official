@@ -602,16 +602,14 @@ void
 MatrixWidget::slotInstrumentChanged(Instrument *instrument)
 {
     // This covers the test case when the user toggles the "Percussion"
-    // checkbox on the MIPP.
+    // checkbox on the MIPP.  Also covers the test case where the key
+    // map changes due to a change in percussion program.
 
-    if (m_instrument->getId() == instrument->getId()) {
+    // If this isn't the Instrument we are displaying, bail.
+    if (m_instrument->getId() != instrument->getId())
+        return;
 
-        // ??? Can we further determine whether the Percussion state
-        //     (instrument->isPercussion()) has really changed?
-        //     We probably need to cache this in a member.
-
-        generatePitchRuler();
-    }
+    generatePitchRuler();
 }
 
 bool
