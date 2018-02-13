@@ -474,31 +474,31 @@ MidiProgramsEditor::slotNameChanged(const QString& programName)
 void
 MidiProgramsEditor::slotKeyMapButtonPressed()
 {
-    QToolButton* button = dynamic_cast<QToolButton*>(const_cast<QObject *>(sender()));
+    QToolButton *button = dynamic_cast<QToolButton *>(sender());
+
     if (!button) {
-        RG_DEBUG << "MidiProgramsEditor::slotKeyMapButtonPressed() : %%% ERROR - signal sender is not a QPushButton\n";
-        return ;
+        RG_WARNING << "slotKeyMapButtonPressed() : WARNING: Sender is not a QPushButton.";
+        return;
     }
 
-//    std::cout << "editor button name" << button->objectName().toStdString() << std::endl;
-
-    QString senderName = button->objectName();
-
     if (!m_device)
-        return ;
+        return;
 
     const KeyMappingList &kml = m_device->getKeyMappings();
     if (kml.empty())
-        return ;
+        return;
 
-    // Adjust value back to zero rated
-    //
-    unsigned int id = senderName.toUInt() - 1;
+    // Get ID and convert to zero based.
+    const unsigned id = button->objectName().toUInt() - 1;
+    //const unsigned id = sender()->property("index").toUInt() - 1;
+
     MidiProgram *program = getProgram(*getCurrentBank(), id);
     if (!program)
-        return ;
+        return;
+
     m_currentMenuProgram = id;
 
+    // Create a new popup menu.
     QMenu *menu = new QMenu(button);
 
     const MidiKeyMapping *currentMapping =
@@ -512,7 +512,9 @@ MidiProgramsEditor::slotKeyMapButtonPressed()
     for (size_t i = 0; i < kml.size(); ++i) {
         a = menu->addAction(strtoqstr(kml[i].getName()));
         a->setObjectName(QString("%1").arg(i+1));
-        if (currentMapping && (kml[i] == *currentMapping)) currentKeyMap = int(i + 1);
+
+        if (currentMapping  &&  (kml[i] == *currentMapping))
+            currentKeyMap = static_cast<int>(i + 1);
     }
 
     connect(menu, SIGNAL(triggered(QAction *)),
@@ -524,6 +526,7 @@ MidiProgramsEditor::slotKeyMapButtonPressed()
     pos.rx() -= 10;
     pos.ry() -= (itemHeight / 2 + currentKeyMap * itemHeight);
 
+    // ??? Positioning doesn't seem to be working.
     menu->popup(pos);
 }
 
