@@ -976,6 +976,8 @@ MIDIInstrumentParameterPanel::slotPercussionClicked(bool checked)
     getSelectedInstrument()->setPercussion(checked);
     getSelectedInstrument()->changed();
 
+    RosegardenMainWindow::self()->getDocument()->setModified();
+
     // At this point, the bank will be invalid.  We could select
     // the first valid bank/program for the current mode (percussion
     // or not percussion).  This seems to be the right thing to
