@@ -86,64 +86,72 @@ NameSetEditor::NameSetEditor(BankEditorDialog *bankEditor,
 
     // Tabbed widget.
 
-    QTabWidget* tabWidget = new QTabWidget(this);
+    QTabWidget *tabWidget = new QTabWidget(this);
     mainLayout->addWidget(tabWidget);
 
     setLayout(mainLayout);
 
-    QWidget *h;
-    QHBoxLayout *hLayout;
+    const unsigned tabs = 4;
+    const unsigned cols = 2;
+    const unsigned rows = 128 / (tabs * cols);
+    const unsigned entriesPerTab = 128 / tabs;
 
-    QWidget *v;
-    QVBoxLayout *vLayout;
-
-    QWidget *numBox;
-    QHBoxLayout *numBoxLayout;
-
-    unsigned int tabs = 4;
-    unsigned int cols = 2;
     unsigned int labelId = 0;
 
+    // For each tab
     for (unsigned int tab = 0; tab < tabs; ++tab) {
-        h = new QWidget(tabWidget);
-        hLayout = new QHBoxLayout;
+        // Widget and layout to hold each of the columns.
+        QWidget *pageWidget = new QWidget(tabWidget);
+        QHBoxLayout *pageLayout = new QHBoxLayout;
 
+        // For each column
         for (unsigned int col = 0; col < cols; ++col) {
-            v = new QWidget(h);
-            vLayout = new QVBoxLayout;
-            hLayout->addWidget(v);
+            // Widget and layout to hold each of the rows.
+            QWidget *columnWidget = new QWidget(pageWidget);
+            QVBoxLayout *columnLayout = new QVBoxLayout;
+            columnLayout->setSpacing(0);
 
-            for (unsigned int row = 0; row < 128 / (tabs*cols); ++row) {
-                numBox = new QWidget(v);
-                numBoxLayout = new QHBoxLayout;
-                vLayout->addWidget(numBox);
+            pageLayout->addWidget(columnWidget);
+
+            // For each row
+            for (unsigned int row = 0; row < rows; ++row) {
+                // Widget and layout to hold the row.  A row consists of the
+                // number label, optional keymap button, and name line edit.
+                QWidget *rowWidget = new QWidget(columnWidget);
+                QHBoxLayout *rowLayout = new QHBoxLayout;
+
+                columnLayout->addWidget(rowWidget);
+
                 // take out the excess vertical space that was making this
                 // dialog two screens tall
-                numBoxLayout->setMargin(2);
+                rowLayout->setMargin(2);
                 QString numberText = QString("%1").arg(labelId + 1);
 
-                if (tab == 0 && col == 0 && row == 0) {
-                    // Initial label; button to adjust whether labels start at 0 or 1
-                    m_initialLabel = new QPushButton(numberText, numBox);
+                // If this is the very first number label, make it a button.
+                if (tab == 0  &&  col == 0  &&  row == 0) {
+                    // Numbering base button.
+                    m_initialLabel = new QPushButton(numberText, rowWidget);
                     m_initialLabel->setFixedWidth(25);
-                    numBoxLayout->addWidget(m_initialLabel);
                     connect(m_initialLabel,
                             SIGNAL(clicked()),
-                            this,
                             SLOT(slotToggleInitialLabel()));
-                } else {
-                    QLabel *label = new QLabel(numberText, numBox);
-                    numBoxLayout->addWidget(label);
+
+                    rowLayout->addWidget(m_initialLabel);
+
+                } else {  // All other numbers are QLabels.
+                    QLabel *label = new QLabel(numberText, rowWidget);
                     label->setFixedWidth(30);
                     label->setAlignment(Qt::AlignCenter);
                     m_labels.push_back(label);
+
+                    rowLayout->addWidget(label);
                 }
 
 
                 if (showKeyMapButtons) {
                     QToolButton *button = new QToolButton;
                     button->setObjectName(numberText);
-                    numBoxLayout->addWidget(button);
+                    rowLayout->addWidget(button);
                     connect(button, SIGNAL(clicked()),
                             this, SLOT(slotKeyMapButtonPressed()));
                     m_keyMapButtons.push_back(button);
@@ -151,33 +159,38 @@ NameSetEditor::NameSetEditor(BankEditorDialog *bankEditor,
 
                 // Note: ThornStyle::sizeFromContents() reduces the size
                 //       of these so they will fit on smaller displays.
-                LineEdit* lineEdit = new LineEdit("", numBox);
+                LineEdit *lineEdit = new LineEdit("", rowWidget);
                 lineEdit->setObjectName(numberText);
-                numBoxLayout->addWidget(lineEdit);
-                numBox->setLayout(numBoxLayout);
                 lineEdit->setMinimumWidth(110);
-                
                 lineEdit->setCompleter(new QCompleter(m_completions));
-                
-                m_names.push_back(lineEdit);
 
+                m_names.push_back(lineEdit);
                 connect(m_names[labelId],
-                        SIGNAL(textChanged(const QString&)),
-                        this,
-                        SLOT(slotNameChanged(const QString&)));
+                        SIGNAL(textChanged(const QString &)),
+                        SLOT(slotNameChanged(const QString &)));
+
+                rowLayout->addWidget(lineEdit);
+                rowWidget->setLayout(rowLayout);
 
                 ++labelId;
             }
-            v->setLayout(vLayout);
-            vLayout->setSpacing(0);
-        }
-        h->setLayout(hLayout);
 
-        tabWidget->addTab(h,
-                     (tab == 0 ? headingPrefix + QString(" %1 - %2") :
-                      QString("%1 - %2")).
-                     arg(tab * (128 / tabs) + 1).
-                     arg((tab + 1) * (128 / tabs)));
+            columnWidget->setLayout(columnLayout);
+        }
+
+        pageWidget->setLayout(pageLayout);
+
+        const unsigned from = tab * entriesPerTab + 1;
+        const unsigned to = (tab + 1) * entriesPerTab;
+        QString range = QString("%1 - %2").arg(from).arg(to);
+
+        QString tabLabel;
+        if (tab == 0)
+            tabLabel = headingPrefix + " " + range;
+        else
+            tabLabel = range;
+
+        tabWidget->addTab(pageWidget, tabLabel);
     }
 
     m_initialLabel->setMaximumSize(m_labels.front()->size());
