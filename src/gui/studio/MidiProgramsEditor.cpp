@@ -401,7 +401,7 @@ MidiProgramsEditor::slotNameChanged(const QString& programName)
     }
 
     // Get ID and convert to zero based.
-    const unsigned id = sender()->property("index").toUInt() - 1;
+    const unsigned id = lineEdit->property("index").toUInt() - 1;
 
     //RG_DEBUG << "slotNameChanged(" << programName << ") : id = " << id;
     
@@ -489,7 +489,7 @@ MidiProgramsEditor::slotKeyMapButtonPressed()
         return;
 
     // Get ID and convert to zero based.
-    const unsigned id = sender()->property("index").toUInt() - 1;
+    const unsigned id = button->property("index").toUInt() - 1;
 
     MidiProgram *program = getProgram(*getCurrentBank(), id);
     if (!program)
