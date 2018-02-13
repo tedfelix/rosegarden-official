@@ -815,12 +815,6 @@ Instrument::getStaticSignals()
     return instrumentStaticSignals;
 }
 
-void
-Instrument::changed()
-{
-    emit getStaticSignals()->changed(this);
-}
-
 
 /***** Buss *****/
 

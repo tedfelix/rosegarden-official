@@ -309,8 +309,6 @@ public:
      * instance is still around when your object is destroyed.
      */
     static QSharedPointer<InstrumentStaticSignals> getStaticSignals();
-    /// Emit InstrumentStaticSignals::changed().
-    void changed();
 
  signals:
     // Like QObject::destroyed, but implies that the whole device is

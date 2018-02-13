@@ -24,32 +24,34 @@ namespace Rosegarden
 
 class Instrument;
 
-/// Signals for all Instrument instances.
+/// Signals related to Instrument.
 /**
- * Allows observers to subscribe for signals from all Instrument
- * objects.
- *
- * Previously, static signals for Instrument were kept in
- * RosegardenMainWindow.  This class moves them closer to Instrument.
- *
- * See Instrument::getStaticSignals().
- *
  * It would be nice if Qt offered proper static signals so that
  * this class wasn't necessary.  An alternative non-static design
  * would be to have observers connect directly to the Instrument
  * objects.  Studio would need to let the observers know when
  * new Instruments were created.
  *
- * Bigger picture, RosegardenDocument already has an app-wide change
- * notification mechanism, slotDocumentModified().  We really should
- * be using that for general Instrument change notifications instead
- * of Instrument::changed().
+ * OTOH, pulling signals out of data objects like Instrument eliminates
+ * the need for data objects to derive from QObject.  This is makes
+ * it possible to copy data objects freely.
+ *
  */
 class InstrumentStaticSignals : public QObject
 {
     Q_OBJECT
 
 public:
+
+    /*
+     * When connecting, use Instrument::getStaticSignals() to get
+     * the object instance.  Search the codebase on
+     * "Instrument::getStaticSignals()" for connect() examples.
+     *
+     * ??? Future Direction: Instrument::getStaticSignals() should be moved
+     *     into here and renamed "self()" or "instance()".
+     */
+
     /// Public wrapper since Qt4 signals are protected.
     /**
      * Emits controlChange().  See comments on controlChange() for more.
@@ -58,31 +60,6 @@ public:
         { emit controlChange(instrument, cc); }
 
 signals:
-    /// An Instrument object has changed.
-    /**
-     * When connecting, use Instrument::getStaticSignals() to get
-     * the object instance.  Search the codebase on
-     * "Instrument::getStaticSignals()" for connect() examples.
-     *
-     * Control changes can cause a very high rate of update notification when
-     * the user makes rapid changes using a knob or slider.
-     * Handlers of this signal should be prepared to deal with this.
-     * They should check for changes relevant to them, and bail if there
-     * are none.  As of this writing, only the MIPP has been rewritten
-     * to deal with this properly.  All other handlers should be reviewed
-     * and modified as needed.  Note that a new controlChange() notification
-     * is now available (see below) to reduce the burden on general
-     * notification handlers.
-     *
-     * Formerly RosegardenMainWindow::instrumentParametersChanged().
-     *
-     * ??? Future Direction: This should go away and RosegardenDocument's
-     *     "document modified" notification should be used instead.  When
-     *     that's done, Instrument::getStaticSignals() should be moved
-     *     into here and renamed "self()" or "instance()".
-     */
-    void changed(Instrument *);
-
     /// Fine-grain, high-frequency notification mechanism.
     /**
      * Call this if you change the value for a control change for
@@ -109,11 +86,6 @@ signals:
      */
     void controlChange(Instrument *instrument, int cc);
 
-private:
-    // Since Qt4 makes signals "protected" we do this to give Instrument
-    // the ability to directly emit the signals.  When we upgrade to
-    // Qt5, we can remove this.
-    friend class Instrument;
 };
 
 
