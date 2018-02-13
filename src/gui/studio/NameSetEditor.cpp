@@ -51,13 +51,20 @@ NameSetEditor::NameSetEditor(BankEditorDialog* bankEditor,
                              bool showKeyMapButtons) :
     QGroupBox(title, parent),
     m_bankEditor(bankEditor),
-    m_mainFrame(new QFrame(this))
+    m_mainFrame(new QFrame(this)),
+    m_mainLayout(new QGridLayout(m_mainFrame)),
+    m_librarian(NULL),
+    m_librarianEmail(NULL),
+    m_names(),
+    m_completions(),
+    m_initialLabel(NULL),
+    m_labels(),
+    m_keyMapButtons()
 {
     setObjectName(name);  // probably not needed, but too lazy to research this time
     QVBoxLayout *layout = new QVBoxLayout;
 
     m_mainFrame->setContentsMargins(0, 1, 0, 1);
-    m_mainLayout = new QGridLayout(m_mainFrame);
     m_mainLayout->setSpacing(0);
     m_mainFrame->setLayout(m_mainLayout);
     layout->addWidget(m_mainFrame);
@@ -149,6 +156,8 @@ NameSetEditor::NameSetEditor(BankEditorDialog* bankEditor,
                     m_keyMapButtons.push_back(button);
                 }
 
+                // Note: ThornStyle::sizeFromContents() reduces the size
+                //       of these so they will fit on smaller displays.
                 LineEdit* lineEdit = new LineEdit("", numBox);
                 lineEdit->setObjectName(numberText);
                 numBoxLayout->addWidget(lineEdit);

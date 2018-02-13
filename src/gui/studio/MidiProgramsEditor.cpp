@@ -47,6 +47,7 @@
 #include <QSpinBox>
 #include <QString>
 #include <QToolTip>
+#include <QToolButton>
 #include <QWidget>
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
