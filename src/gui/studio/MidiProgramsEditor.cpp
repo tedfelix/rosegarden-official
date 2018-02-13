@@ -393,77 +393,78 @@ struct ProgramCmp
 void
 MidiProgramsEditor::slotNameChanged(const QString& programName)
 {
-    const LineEdit* lineEdit = dynamic_cast<const LineEdit*>(sender());
+    const LineEdit *lineEdit = dynamic_cast<const LineEdit *>(sender());
+
     if (!lineEdit) {
-        RG_DEBUG << "MidiProgramsEditor::slotNameChanged() : %%% ERROR - signal sender is not a Rosegarden::LineEdit\n";
-        return ;
-    }
-
-    QString senderName = sender()->objectName();
-    // "Harpsichord" in default GM bank 1:0, "Coupled Harpsichord" in bank 8:0
-//    if (senderName == "7") std::cout << "senderName is: " << senderName.toStdString()
-//                                     << " programName is: " << programName.toStdString() << std::endl;
-
-    // Adjust value back to zero rated
-    //
-    unsigned int id = senderName.toUInt() - 1;
-//    std::cout << "id is: " << id << std::endl;
-
-    RG_DEBUG << "MidiProgramsEditor::slotNameChanged(" << programName << ") : id = " << id;
-    
-    MidiBank* currBank;
-    currBank = getCurrentBank();
-    if (!currBank) {
-        RG_DEBUG << "Error: currBank is NULL in MidiProgramsEditor::slotNameChanged() ";
+        RG_WARNING << "slotNameChanged(): WARNING: Signal sender is not a LineEdit.";
         return;
-    } else {
-        RG_DEBUG << "currBank: " << currBank;
     }
 
-    RG_DEBUG << "current bank name: " << currBank->getName();
-    MidiProgram *program = getProgram(*currBank, id);
-//     MidiProgram *program = getProgram(*currBank, id);
+    // Get ID and convert to zero based.
+    const unsigned id = sender()->objectName().toUInt() - 1;
 
-    if (program == 0) {
+    //RG_DEBUG << "slotNameChanged(" << programName << ") : id = " << id;
+    
+    MidiBank *currBank = getCurrentBank();
+
+    if (!currBank) {
+        RG_WARNING << "slotNameChanged(): WARNING: currBank is NULL.";
+        return;
+    }
+
+    //RG_DEBUG << "slotNameChanged(): currBank: " << currBank;
+
+    //RG_DEBUG << "slotNameChanged(): current bank name: " << currBank->getName();
+
+    MidiProgram *program = getProgram(*currBank, id);
+
+    // If the MidiProgram doesn't exist
+    if (!program) {
         // Do nothing if program name is empty
         if (programName.isEmpty())
-            return ;
+            return;
 
+        // Create a new MidiProgram and add it to m_programList.
+        // ??? To avoid memory leaks, create this on the stack:
+        //       MidiProgram newProgram(*getCurrentBank(), id);
+        //       m_programList.push_back(newProgram);
         program = new MidiProgram(*getCurrentBank(), id);
         m_programList.push_back(*program);
 
-        // Sort the program list by id
+        // Sort by program number.
         std::sort(m_programList.begin(), m_programList.end(), ProgramCmp());
 
-        // Now, get with the program
-        //
+        // Now, get the MidiProgram from the m_programList.
+        // ??? Memory leak?  We never deleted the one we used to point to.
         program = getProgram(*getCurrentBank(), id);
-    } else {
-        // If we've found a program and the label is now empty
-        // then remove it from the program list.
-        //
-        if (programName.isEmpty()) {
-            ProgramList::iterator it = m_programList.begin();
-            ProgramList tmpProg;
 
-            for (; it != m_programList.end(); ++it) {
-                if (((unsigned int)it->getProgram()) == id) {
+    } else {
+        // If we've found a program and the label is now empty,
+        // remove it from the program list.
+        if (programName.isEmpty()) {
+            for (ProgramList::iterator it = m_programList.begin();
+                 it != m_programList.end();
+                 ++it) {
+                if (static_cast<unsigned>(it->getProgram()) == id) {
                     m_programList.erase(it);
                     m_bankEditor->slotApply();
-                    RG_DEBUG << "deleting empty program (" << id << ")";
-                    return ;
+
+                    //RG_DEBUG << "slotNameChanged(): deleting empty program (" << id << ")";
+
+                    return;
                 }
             }
         }
     }
 
     if (!program) {
-        RG_DEBUG << "Error: program is NULL in MidiProgramsEditor::slotNameChanged() ";
+        RG_WARNING << "slotNameChanged(): WARNING: program is NULL.";
         return;
-    } else {
-        RG_DEBUG << "program: " << program;
     }
-    
+
+    //RG_DEBUG << "slotNameChanged(): program: " << program;
+
+    // If the name has actually changed
     if (qstrtostr(programName) != program->getName()) {
         program->setName(qstrtostr(programName));
         m_bankEditor->slotApply();
