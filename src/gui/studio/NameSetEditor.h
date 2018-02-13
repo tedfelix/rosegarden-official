@@ -43,6 +43,12 @@ class LineEdit;
 /**
  * MidiProgramsEditor and MidiKeyMappingEditor derive from this to provide
  * the program and key mapping lists in the BankEditorDialog.
+ *
+ * Other common parts of MidiProgramsEditor and MidiKeyMappingEditor have
+ * been factored up into the baseclass.  Those parts should be pushed
+ * back down into the derived classes, and this should become focused
+ * solely on providing the name list.  Then this should be switched
+ * from derivation to containment.
  */
 class NameSetEditor : public QGroupBox
 {
@@ -70,10 +76,8 @@ public slots:
     /// Handler for presses of the numbering base (0/1) button.
     /**
      * Connected to QPushButton::clicked() for the numbering base button.
-     *
-     * ??? rename: slotToggleNumberingBase()
      */
-    void slotToggleInitialLabel();
+    void slotToggleNumberingBase();
 
 protected:
     NameSetEditor(BankEditorDialog *bankEditor,
@@ -111,8 +115,7 @@ protected:
     QStringList m_completions;
 
 private:
-    // ??? rename: m_numberingBaseButton
-    QPushButton *m_initialLabel;
+    QPushButton *m_numberingBaseButton;
     unsigned m_numberingBase;
 
     /// Numbers to the left of each line edit.

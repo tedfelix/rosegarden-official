@@ -52,7 +52,7 @@ NameSetEditor::NameSetEditor(BankEditorDialog *bankEditor,
     m_librarianEmail(NULL),
     m_names(),
     m_completions(),
-    m_initialLabel(NULL),
+    m_numberingBaseButton(NULL),
     m_numberingBase(1),
     m_labels(),
     m_keyMapButtons()
@@ -137,14 +137,13 @@ NameSetEditor::NameSetEditor(BankEditorDialog *bankEditor,
 
                 // If this is the very first number label, make it a button.
                 if (tab == 0  &&  col == 0  &&  row == 0) {
-                    // Numbering base button.
-                    m_initialLabel = new QPushButton("", rowWidget);
-                    m_initialLabel->setFixedWidth(25);
-                    connect(m_initialLabel,
+                    m_numberingBaseButton = new QPushButton("", rowWidget);
+                    m_numberingBaseButton->setFixedWidth(25);
+                    connect(m_numberingBaseButton,
                             SIGNAL(clicked()),
-                            SLOT(slotToggleInitialLabel()));
+                            SLOT(slotToggleNumberingBase()));
 
-                    rowLayout->addWidget(m_initialLabel);
+                    rowLayout->addWidget(m_numberingBaseButton);
 
                 } else {  // All other numbers are QLabels.
                     QLabel *label = new QLabel("", rowWidget);
@@ -161,10 +160,11 @@ NameSetEditor::NameSetEditor(BankEditorDialog *bankEditor,
                     // 1-based
                     button->setObjectName(numberText);
                     button->setProperty("index", index + 1);
-                    rowLayout->addWidget(button);
                     connect(button, SIGNAL(clicked()),
                             this, SLOT(slotKeyMapButtonPressed()));
                     m_keyMapButtons.push_back(button);
+
+                    rowLayout->addWidget(button);
                 }
 
                 // Note: ThornStyle::sizeFromContents() reduces the size
@@ -205,24 +205,24 @@ NameSetEditor::NameSetEditor(BankEditorDialog *bankEditor,
         tabWidget->addTab(pageWidget, tabLabel);
     }
 
-    m_initialLabel->setMaximumSize(m_labels.front()->size());
+    m_numberingBaseButton->setMaximumSize(m_labels.front()->size());
 
     updateLabels();
 }
 
 void
-NameSetEditor::slotToggleInitialLabel()
+NameSetEditor::slotToggleNumberingBase()
 {
     m_numberingBase ^= 1;
     updateLabels();
 }
 
-void NameSetEditor::updateLabels()
+void
+NameSetEditor::updateLabels()
 {
     unsigned index = m_numberingBase;
 
-    // First label
-    m_initialLabel->setText(QString("%1").arg(index++));
+    m_numberingBaseButton->setText(QString("%1").arg(index++));
 
     // For each subsequent label.
     for (size_t i = 0; i < m_labels.size(); ++i) {
