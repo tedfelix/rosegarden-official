@@ -71,6 +71,11 @@ public slots:
     void slotDocColoursChanged();
 
     /// Connected to InstrumentStaticSignals::changed().
+    /**
+     * ??? This should go away.  RosegardenDocument::documentModified() is
+     *     the preferred way to update the UI in response to changes to
+     *     the document.  See slotDocumentModified() below.
+     */
     void slotInstrumentChanged(Instrument *instrument);
 
     /// Refresh the Playback and Recording Device lists.
@@ -88,6 +93,11 @@ signals:
     void instrumentSelected(TrackId, int);
 
 private slots:
+    /// Called when a new document is loaded.
+    void slotNewDocument(RosegardenDocument *);
+    /// Called when the document is modified in some way.
+    void slotDocumentModified(bool);
+
     // Signals from widgets.
 
     /// Playback parameters: Device

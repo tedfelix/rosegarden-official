@@ -416,6 +416,10 @@ TrackParameterBox::TrackParameterBox(QWidget *parent) :
 
     // Connections
 
+    connect(RosegardenMainWindow::self(),
+                SIGNAL(documentChanged(RosegardenDocument *)),
+            SLOT(slotNewDocument(RosegardenDocument *)));
+
     connect(Instrument::getStaticSignals().data(),
             SIGNAL(changed(Instrument *)),
             this,
@@ -1398,6 +1402,19 @@ TrackParameterBox::updateWidgets2()
     // Note: We only update the combobox contents if there is an actual
     //       change to the document's colors.  See slotDocColoursChanged().
     m_color->setCurrentIndex(track->getColor());
+}
+
+void
+TrackParameterBox::slotNewDocument(RosegardenDocument *doc)
+{
+    connect(doc, SIGNAL(documentModified(bool)),
+            SLOT(slotDocumentModified(bool)));
+}
+
+void
+TrackParameterBox::slotDocumentModified(bool)
+{
+    updateWidgets2();
 }
 
 
