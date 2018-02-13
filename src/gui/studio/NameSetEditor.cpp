@@ -57,11 +57,13 @@ NameSetEditor::NameSetEditor(BankEditorDialog *bankEditor,
     m_keyMapButtons()
 {
     QVBoxLayout *mainLayout = new QVBoxLayout;
+    mainLayout->setContentsMargins(6, 2, 6, 6);
 
     // Area above the tabbed widget.
 
-    m_topFrame->setContentsMargins(0, 1, 0, 1);
+    m_topFrame->setContentsMargins(0, 0, 0, 5);
     m_topLayout->setSpacing(0);
+    m_topLayout->setMargin(0);
     m_topFrame->setLayout(m_topLayout);
     mainLayout->addWidget(m_topFrame);
 
@@ -91,6 +93,7 @@ NameSetEditor::NameSetEditor(BankEditorDialog *bankEditor,
 
     setLayout(mainLayout);
 
+    // Note: For smaller displays, this can be increased to 8.
     const unsigned tabs = 4;
     const unsigned cols = 2;
     const unsigned rows = 128 / (tabs * cols);
@@ -109,7 +112,7 @@ NameSetEditor::NameSetEditor(BankEditorDialog *bankEditor,
             // Widget and layout to hold each of the rows.
             QWidget *columnWidget = new QWidget(pageWidget);
             QVBoxLayout *columnLayout = new QVBoxLayout;
-            columnLayout->setSpacing(0);
+            columnLayout->setSpacing(2);
 
             pageLayout->addWidget(columnWidget);
 
@@ -119,12 +122,12 @@ NameSetEditor::NameSetEditor(BankEditorDialog *bankEditor,
                 // number label, optional keymap button, and name line edit.
                 QWidget *rowWidget = new QWidget(columnWidget);
                 QHBoxLayout *rowLayout = new QHBoxLayout;
+                // take out the excess vertical space that was making this
+                // dialog two screens tall
+                rowLayout->setMargin(0);
 
                 columnLayout->addWidget(rowWidget);
 
-                // take out the excess vertical space that was making this
-                // dialog two screens tall
-                rowLayout->setMargin(2);
                 QString numberText = QString("%1").arg(labelId + 1);
 
                 // If this is the very first number label, make it a button.
