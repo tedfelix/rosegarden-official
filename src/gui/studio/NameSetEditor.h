@@ -81,9 +81,8 @@ public slots:
 
 protected:
     NameSetEditor(BankEditorDialog *bankEditor,
-                  QString title,
+                  QString title,  // Gets overridden by the bank/map name.
                   QWidget *parent,
-                  QString headingPrefix = "",
                   bool showKeyMapButtons = false);
 
     QToolButton *getKeyMapButton(int n) { return m_keyMapButtons[n]; }

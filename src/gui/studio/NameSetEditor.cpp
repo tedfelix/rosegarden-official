@@ -34,6 +34,7 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QToolButton>
+#include <QScrollArea>
 
 namespace Rosegarden
 {
@@ -42,7 +43,6 @@ namespace Rosegarden
 NameSetEditor::NameSetEditor(BankEditorDialog *bankEditor,
                              QString title,
                              QWidget *parent,
-                             QString headingPrefix,
                              bool showKeyMapButtons) :
     QGroupBox(title, parent),
     m_bankEditor(bankEditor),
@@ -87,113 +87,105 @@ NameSetEditor::NameSetEditor(BankEditorDialog *bankEditor,
 
     groupBox->setLayout(groupBoxLayout);
 
-    // Tabbed widget.
+    // QScrollArea
 
-    QTabWidget *tabWidget = new QTabWidget(this);
-    mainLayout->addWidget(tabWidget);
+    QScrollArea *scrollArea = new QScrollArea(this);
+    // Make sure widget is expanded to fill the scroll area.
+    scrollArea->setWidgetResizable(true);
+
+    mainLayout->addWidget(scrollArea);
 
     setLayout(mainLayout);
 
-    // Note: For smaller displays, this can be increased to 8.
-    const unsigned tabs = 4;
-    const unsigned cols = 2;
-    const unsigned rows = 128 / (tabs * cols);
-    const unsigned entriesPerTab = 128 / tabs;
+    // Widget and layout to hold each of the rows.
+    QWidget *listWidget = new QWidget;
+    QVBoxLayout *listLayout = new QVBoxLayout;
+    listLayout->setSpacing(2);
 
-    unsigned int index = 0;
+    unsigned index = 0;
 
-    // For each tab
-    for (unsigned int tab = 0; tab < tabs; ++tab) {
-        // Widget and layout to hold each of the columns.
-        QWidget *pageWidget = new QWidget(tabWidget);
-        QHBoxLayout *pageLayout = new QHBoxLayout;
+    // For each row
+    for (unsigned int row = 0; row < 128; ++row) {
+        // Widget and layout to hold the row.  A row consists of the
+        // number label, optional keymap button, and name line edit.
+        QWidget *rowWidget = new QWidget;
+        QHBoxLayout *rowLayout = new QHBoxLayout;
+        // take out the excess vertical space that was making this
+        // dialog two screens tall
+        rowLayout->setMargin(0);
 
-        // For each column
-        for (unsigned int col = 0; col < cols; ++col) {
-            // Widget and layout to hold each of the rows.
-            QWidget *columnWidget = new QWidget(pageWidget);
-            QVBoxLayout *columnLayout = new QVBoxLayout;
-            columnLayout->setSpacing(2);
+        // ??? I'd like to remove this and the setObjectName() calls
+        //     that use it.  However, doing that introduces a bug
+        //     that causes serious data loss when switching between
+        //     items on the tree.  I suspect someone might still be
+        //     using the widget object names.  However, if you fill
+        //     this up with garbage (and the number), it still works
+        //     fine.  It appears as if unique names are needed.
+        // Works.
+        //QString numberText = QString("xx %1 xx").arg(index + 1);
+        // Doesn't work.
+        //QString numberText = "CooCoo";
+        // Works.
+        QString numberText = QString("%1").arg(index + 1);
 
-            pageLayout->addWidget(columnWidget);
+        // If this is the very first number label, make it a button.
+        if (index == 0) {
+            m_numberingBaseButton = new QPushButton("", rowWidget);
+            m_numberingBaseButton->setFixedWidth(25);
+            connect(m_numberingBaseButton,
+                    SIGNAL(clicked()),
+                    SLOT(slotToggleNumberingBase()));
 
-            // For each row
-            for (unsigned int row = 0; row < rows; ++row) {
-                // Widget and layout to hold the row.  A row consists of the
-                // number label, optional keymap button, and name line edit.
-                QWidget *rowWidget = new QWidget(columnWidget);
-                QHBoxLayout *rowLayout = new QHBoxLayout;
-                // take out the excess vertical space that was making this
-                // dialog two screens tall
-                rowLayout->setMargin(0);
+            rowLayout->addWidget(m_numberingBaseButton);
 
-                columnLayout->addWidget(rowWidget);
+        } else {  // All other numbers are QLabels.
+            QLabel *label = new QLabel("", rowWidget);
+            label->setFixedWidth(30);
+            label->setAlignment(Qt::AlignCenter);
+            m_labels.push_back(label);
 
-                // If this is the very first number label, make it a button.
-                if (tab == 0  &&  col == 0  &&  row == 0) {
-                    m_numberingBaseButton = new QPushButton("", rowWidget);
-                    m_numberingBaseButton->setFixedWidth(25);
-                    connect(m_numberingBaseButton,
-                            SIGNAL(clicked()),
-                            SLOT(slotToggleNumberingBase()));
-
-                    rowLayout->addWidget(m_numberingBaseButton);
-
-                } else {  // All other numbers are QLabels.
-                    QLabel *label = new QLabel("", rowWidget);
-                    label->setFixedWidth(30);
-                    label->setAlignment(Qt::AlignCenter);
-                    m_labels.push_back(label);
-
-                    rowLayout->addWidget(label);
-                }
-
-
-                if (showKeyMapButtons) {
-                    QToolButton *button = new QToolButton;
-                    button->setProperty("index", index);
-                    connect(button, SIGNAL(clicked()),
-                            this, SLOT(slotKeyMapButtonPressed()));
-                    m_keyMapButtons.push_back(button);
-
-                    rowLayout->addWidget(button);
-                }
-
-                // Note: ThornStyle::sizeFromContents() reduces the size
-                //       of these so they will fit on smaller displays.
-                LineEdit *lineEdit = new LineEdit("", rowWidget);
-                lineEdit->setProperty("index", index);
-                lineEdit->setMinimumWidth(110);
-                lineEdit->setCompleter(new QCompleter(m_completions));
-
-                m_names.push_back(lineEdit);
-                connect(m_names[index],
-                        SIGNAL(textChanged(const QString &)),
-                        SLOT(slotNameChanged(const QString &)));
-
-                rowLayout->addWidget(lineEdit);
-                rowWidget->setLayout(rowLayout);
-
-                ++index;
-            }
-
-            columnWidget->setLayout(columnLayout);
+            rowLayout->addWidget(label);
         }
 
-        pageWidget->setLayout(pageLayout);
+        if (showKeyMapButtons) {
+            QToolButton *button = new QToolButton;
+            // 1-based
+            button->setObjectName(numberText);
+            // 0-based
+            button->setProperty("index", index);
+            connect(button, SIGNAL(clicked()),
+                    this, SLOT(slotKeyMapButtonPressed()));
+            m_keyMapButtons.push_back(button);
 
-        const unsigned from = tab * entriesPerTab + 1;
-        const unsigned to = (tab + 1) * entriesPerTab;
-        QString range = QString("%1 - %2").arg(from).arg(to);
+            rowLayout->addWidget(button);
+        }
 
-        QString tabLabel;
-        if (tab == 0)
-            tabLabel = headingPrefix + " " + range;
-        else
-            tabLabel = range;
+        // Note: ThornStyle::sizeFromContents() reduces the size
+        //       of these so they will fit on smaller displays.
+        LineEdit *lineEdit = new LineEdit("", rowWidget);
+        // 1-based
+        lineEdit->setObjectName(numberText);
+        // 0-based
+        lineEdit->setProperty("index", index);
+        lineEdit->setCompleter(new QCompleter(m_completions));
 
-        tabWidget->addTab(pageWidget, tabLabel);
+        m_names.push_back(lineEdit);
+        connect(m_names[index],
+                SIGNAL(textChanged(const QString &)),
+                SLOT(slotNameChanged(const QString &)));
+
+        rowLayout->addWidget(lineEdit, 1);
+
+        rowWidget->setLayout(rowLayout);
+
+        listLayout->addWidget(rowWidget);
+
+        ++index;
     }
+
+    listWidget->setLayout(listLayout);
+
+    scrollArea->setWidget(listWidget);
 
     m_numberingBaseButton->setMaximumSize(m_labels.front()->size());
 

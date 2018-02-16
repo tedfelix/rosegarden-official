@@ -52,7 +52,6 @@ MidiKeyMappingEditor::MidiKeyMappingEditor(
     NameSetEditor(bankEditor,
                   tr("Key Mapping details"),  // title
                   parent,
-                  tr("Pitches"),  // headingPrefix
                   false),  // showKeyMapButtons
     m_device(0)
 {

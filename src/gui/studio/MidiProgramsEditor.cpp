@@ -64,7 +64,6 @@ MidiProgramsEditor::MidiProgramsEditor(BankEditorDialog* bankEditor,
     NameSetEditor(bankEditor,
                   tr("Bank and Program details"),  // title
                   parent,
-                  tr("Programs"),  // headingPrefix
                   true),  // showKeyMapButtons
     m_device(0),
     m_bankList(bankEditor->getBankList()),
