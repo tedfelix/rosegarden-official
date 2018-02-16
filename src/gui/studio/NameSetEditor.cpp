@@ -114,20 +114,6 @@ NameSetEditor::NameSetEditor(BankEditorDialog *bankEditor,
         // dialog two screens tall
         rowLayout->setMargin(0);
 
-        // ??? I'd like to remove this and the setObjectName() calls
-        //     that use it.  However, doing that introduces a bug
-        //     that causes serious data loss when switching between
-        //     items on the tree.  I suspect someone might still be
-        //     using the widget object names.  However, if you fill
-        //     this up with garbage (and the number), it still works
-        //     fine.  It appears as if unique names are needed.
-        // Works.
-        //QString numberText = QString("xx %1 xx").arg(index + 1);
-        // Doesn't work.
-        //QString numberText = "CooCoo";
-        // Works.
-        QString numberText = QString("%1").arg(index + 1);
-
         // If this is the very first number label, make it a button.
         if (index == 0) {
             m_numberingBaseButton = new QPushButton("", rowWidget);
@@ -149,9 +135,10 @@ NameSetEditor::NameSetEditor(BankEditorDialog *bankEditor,
 
         if (showKeyMapButtons) {
             QToolButton *button = new QToolButton;
-            // 1-based
-            button->setObjectName(numberText);
-            // 0-based
+            // Object name is required or else serious data loss occurs.
+            // ??? Actually, this seems to work fine without this.  Leaving
+            //     it here for safety.
+            button->setObjectName(QString("Key Map Button %1").arg(index));
             button->setProperty("index", index);
             connect(button, SIGNAL(clicked()),
                     this, SLOT(slotKeyMapButtonPressed()));
@@ -163,9 +150,10 @@ NameSetEditor::NameSetEditor(BankEditorDialog *bankEditor,
         // Note: ThornStyle::sizeFromContents() reduces the size
         //       of these so they will fit on smaller displays.
         LineEdit *lineEdit = new LineEdit("", rowWidget);
-        // 1-based
-        lineEdit->setObjectName(numberText);
-        // 0-based
+        // A unique object name is required for each widget or else serious
+        // data loss occurs when switching between nodes on the tree.  Not
+        // sure why.
+        lineEdit->setObjectName(QString("Line Edit %1").arg(index));
         lineEdit->setProperty("index", index);
         lineEdit->setCompleter(new QCompleter(m_completions));
 
