@@ -525,6 +525,9 @@ AudioMixerWindow2::slotExternalControllerEvent(
 
     //RG_DEBUG << "slotExternalControllerEvent(): this one's for me";
 
+    // Some window managers (e.g. GNOME) do not allow the application to
+    // change focus on the user.  So, this might not work.
+    activateWindow();
     raise();
 
     // If this isn't a MIDI controller, bail.

@@ -1890,8 +1890,12 @@ RosegardenMainViewWidget::slotControllerDeviceEventReceived(MappedEvent *e)
             if (window < 10) { // me
 
                 show();
-                raise();
+
+                // Some window managers (e.g. GNOME) do not allow the
+                // application to change focus on the user.  So, this
+                // might not work.
                 activateWindow();
+                raise();
 
             } else if (window < 20) {
 
@@ -1925,6 +1929,9 @@ RosegardenMainViewWidget::slotControllerDeviceEventReceived(MappedEvent *e, cons
 
     //RG_DEBUG << "slotControllerDeviceEventReceived(): this one's for me";
 
+    // Some window managers (e.g. GNOME) do not allow the application to
+    // change focus on the user.  So, this might not work.
+    activateWindow();
     raise();
 
     //RG_DEBUG << "  Event is type: " << int(e->getType()) << ", channel " << int(e->getRecordedChannel()) << ", data1 " << int(e->getData1()) << ", data2 " << int(e->getData2());
