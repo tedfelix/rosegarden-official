@@ -889,25 +889,47 @@ TrackButtons::selectInstrument(Track *track, Instrument *instrument)
 {
     // Inform the rest of the system of the instrument change.
 
-    // ??? This routine needs to go.  The UI shouldn't know so much about
-    //     the other objects in the system.  The following updates should
-    //     be done by their respective objects in response to the
-    //     CompositionObserver::trackChanged() notification that
-    //     we've already sent.
+    // ??? This routine needs to go for two reasons:
+    //
+    //     1. TrackParameterBox calls this.  UI to UI connections should be
+    //        avoided.  It would be better to copy/paste this over to TPB
+    //        to avoid the connection.  But then we have double-maintenance.
+    //        See reason 2.
+    //
+    //     2. The UI shouldn't know so much about the other objects in the
+    //        system.  The following updates should be done by their
+    //        respective objects.
+    //
+    //     A "TrackStaticSignals::instrumentChanged(Track *, Instrument *)"
+    //     notification is probably the best way to get rid of this routine.
+    //     It could be emitted from Track::setInstrument().  Normally emitting
+    //     from setters is bad, but in this case, it is necessary.  We need
+    //     to know about every single change when it occurs.
+    //     Then ControlBlockSignalHandler (new class to avoid deriving
+    //     ControlBlock from QObject), InstrumentSignalHandler (new class to
+    //     handle signals for all Instrument instances), and
+    //     SequenceManager (already derives from QObject, might want to
+    //     consider a new SequenceManagerSignalHandler to avoid additional
+    //     dependency on QObject) can connect and do what needs to be done in
+    //     response.  Rationale for this over doc modified is that we
+    //     can't simply refresh everything (Instrument::sendChannelSetup()
+    //     sends out data), and it is expensive to detect what has actually
+    //     changed (we would have to cache the Track->Instrument mapping and
+    //     check it for changes).
 
     const TrackId trackId = track->getId();
 
-    // *** For ControlBlock
+    // *** ControlBlock
 
     ControlBlock::getInstance()->
             setInstrumentForTrack(trackId, instrument->getId());
 
-    // *** ???
+    // *** Send out BS/PC
 
     // Make sure the Device is in sync with the Instrument's settings.
     instrument->sendChannelSetup();
 
-    // *** For SequenceManager
+    // *** SequenceManager
 
     // In case the sequencer is currently playing, we need to regenerate
     // all the events with the new channel number.
