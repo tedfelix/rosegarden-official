@@ -797,7 +797,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         // here
         
         QString presetLabelStr = atts.value("defaultLabel");
-        if (!labelStr.isEmpty()) {
+        if (!presetLabelStr.isEmpty()) {
             track->setPresetLabel( qstrtostr(presetLabelStr) );
         }
     
