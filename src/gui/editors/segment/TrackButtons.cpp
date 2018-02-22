@@ -96,8 +96,12 @@ TrackButtons::TrackButtons(RosegardenDocument* doc,
         m_popupTrackPos(0),
         m_lastSelected(-1)
 {
-    m_layout->setMargin(0);
     setFrameStyle(Plain);
+
+    QPalette pal = palette();
+    pal.setColor(backgroundRole(), QColor(0xDD, 0xDD, 0xDD));
+    pal.setColor(foregroundRole(), Qt::black);
+    setPalette(pal);
 
     // when we create the widget, what are we looking at?
     if (showTrackLabels) {
@@ -106,8 +110,8 @@ TrackButtons::TrackButtons(RosegardenDocument* doc,
         m_labelDisplayMode = TrackLabel::ShowInstrument;
     }
 
+    m_layout->setMargin(0);
     // Set the spacing between vertical elements
-    //
     m_layout->setSpacing(m_borderGap);
 
     // Now draw the buttons and labels and meters
@@ -242,6 +246,8 @@ TrackButtons::makeButtons()
     if (!m_doc)
         return;
 
+    //RG_DEBUG << "makeButtons()";
+
     // Create a horizontal box filled with widgets for each track
 
     for (int i = 0; i < m_tracks; ++i) {
@@ -292,7 +298,7 @@ TrackButtons::initInstrumentNames(Instrument *ins, TrackLabel *label)
 void
 TrackButtons::populateButtons()
 {
-    //RG_DEBUG << "TrackButtons::populateButtons()";
+    //RG_DEBUG << "populateButtons()";
 
     // For each track, copy info from Track object to the widgets
     for (int i = 0; i < m_tracks; ++i) {
@@ -437,8 +443,9 @@ TrackButtons::removeButtons(int position)
 void
 TrackButtons::slotUpdateTracks()
 {
+    //RG_DEBUG << "slotUpdateTracks()";
+
 #if 0
-    RG_DEBUG << "TrackButtons::slotUpdateTracks()";
     static QTime t;
     RG_DEBUG << "  elapsed: " << t.restart();
 #endif
@@ -1022,7 +1029,7 @@ TrackButtons::changeLabelDisplayMode(TrackLabel::DisplayMode mode)
 void
 TrackButtons::slotSynchroniseWithComposition()
 {
-    //RG_DEBUG << "TrackButtons::slotSynchroniseWithComposition()";
+    //RG_DEBUG << "slotSynchroniseWithComposition()";
 
     Composition &comp = m_doc->getComposition();
 
@@ -1241,7 +1248,7 @@ TrackButtons::tracksAdded(const Composition *, std::vector<TrackId> &/*trackIds*
 void
 TrackButtons::trackChanged(const Composition *, Track* track)
 {
-    //RG_DEBUG << "TrackButtons::trackChanged()";
+    //RG_DEBUG << "trackChanged()";
     //RG_DEBUG << "  Position:" << track->getPosition();
     //RG_DEBUG << "  Armed:" << track->isArmed();
 
