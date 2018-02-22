@@ -33,6 +33,7 @@
 
 
 #include <QString>
+#include <QStringList>
 
 class QWidget;
 class QPushButton;
@@ -140,12 +141,12 @@ private:
     /// Cache for detecting changes.
     std::vector<DeviceId> m_playbackDeviceIds2;
     /// Cache for detecting changes.
-    std::vector<std::string> m_playbackDeviceNames;
+    QStringList m_playbackDeviceNames;
 
     /// Playback parameters: Instrument
     QComboBox *m_instrument;
     std::vector<InstrumentId> m_instrumentIds2;
-    std::vector<QString> m_instrumentNames2;
+    QStringList m_instrumentNames2;
 
     /// Playback parameters: Archive
     QCheckBox *m_archive;
@@ -157,7 +158,7 @@ private:
     /// Recording filters: Device
     QComboBox *m_recordingDevice;
     std::vector<DeviceId> m_recordingDeviceIds2;
-    std::vector<QString> m_recordingDeviceNames;
+    QStringList m_recordingDeviceNames;
     /// Cache to detect change.
     Instrument::InstrumentType m_lastInstrumentType;
 

@@ -967,7 +967,7 @@ TrackParameterBox::updatePlaybackDevice(DeviceId deviceId)
     // Generate local device name and ID lists to compare against the members.
 
     std::vector<DeviceId> deviceIds;
-    std::vector<std::string> deviceNames;
+    QStringList deviceNames;
 
     // For each Device
     for (size_t deviceIndex = 0;
@@ -984,7 +984,7 @@ TrackParameterBox::updatePlaybackDevice(DeviceId deviceId)
         // no need to check for them and skip.
 
         deviceIds.push_back(device.getId());
-        deviceNames.push_back(device.getName());
+        deviceNames.push_back(QObject::tr(device.getName().c_str()));
     }
 
     // If there has been an actual change
@@ -996,17 +996,8 @@ TrackParameterBox::updatePlaybackDevice(DeviceId deviceId)
         m_playbackDeviceNames = deviceNames;
 
         // Reload the combobox
-
         m_playbackDevice->clear();
-
-        // For each playback Device, add the name to the combobox.
-        // ??? If we used a QStringList, we could just call addItems().
-        for (size_t deviceIndex = 0;
-             deviceIndex < m_playbackDeviceNames.size();
-             ++deviceIndex) {
-            m_playbackDevice->addItem(
-                    QObject::tr(m_playbackDeviceNames[deviceIndex].c_str()));
-        }
+        m_playbackDevice->addItems(m_playbackDeviceNames);
     }
 
     // Find the current device in the device ID list.
@@ -1045,7 +1036,7 @@ TrackParameterBox::updateInstrument(const Instrument *instrument)
     // members.
 
     std::vector<InstrumentId> instrumentIds;
-    std::vector<QString> instrumentNames;
+    QStringList instrumentNames;
 
     // For each instrument
     for (size_t instrumentIndex = 0;
@@ -1091,16 +1082,8 @@ TrackParameterBox::updateInstrument(const Instrument *instrument)
         m_instrumentNames2 = instrumentNames;
 
         // Reload the combobox
-
         m_instrument->clear();
-
-        // For each instrument, add the name to the combobox.
-        // ??? If we used a QStringList, we could just call addItems().
-        for (size_t instrumentIndex = 0;
-             instrumentIndex < m_instrumentNames2.size();
-             ++instrumentIndex) {
-            m_instrument->addItem(m_instrumentNames2[instrumentIndex]);
-        }
+        m_instrument->addItems(m_instrumentNames2);
     }
 
     // Find the current instrument in the instrument ID list.
@@ -1139,7 +1122,7 @@ TrackParameterBox::updateRecordingDevice(DeviceId deviceId)
     // the members.
 
     std::vector<DeviceId> recordingDeviceIds;
-    std::vector<QString> recordingDeviceNames;
+    QStringList recordingDeviceNames;
 
     recordingDeviceIds.push_back(Device::ALL_DEVICES);
     recordingDeviceNames.push_back(tr("All"));
@@ -1175,16 +1158,8 @@ TrackParameterBox::updateRecordingDevice(DeviceId deviceId)
         m_recordingDeviceNames = recordingDeviceNames;
 
         // Reload the combobox
-
         m_recordingDevice->clear();
-
-        // For each playback Device, add the name to the combobox.
-        // ??? If we used a QStringList, we could just call addItems().
-        for (size_t deviceIndex = 0;
-             deviceIndex < m_recordingDeviceNames.size();
-             ++deviceIndex) {
-            m_recordingDevice->addItem(m_recordingDeviceNames[deviceIndex]);
-        }
+        m_recordingDevice->addItems(m_recordingDeviceNames);
     }
 
     // Find the current record device in the record device ID list.
