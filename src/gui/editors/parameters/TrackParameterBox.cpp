@@ -455,12 +455,13 @@ TrackParameterBox::setDocument(RosegardenDocument *doc)
     //     colors at all (e.g. the Vivaldi op44 example file).  Since we
     //     don't allow editing of the colors, we should probably just
     //     always put the standard color list into a document when it is
-    //     loaded.
+    //     loaded.  Or would that mess up the segment colors since the
+    //     indexes might point to the wrong colors?
     slotDocColoursChanged();
 
     // Detect when the document colours are updated.
-    // ??? Document colors can never be updated.  See explanation in
-    //     slotDocColoursChanged().
+    // Document colors can never be updated.  See explanation in
+    // slotDocColoursChanged().
     //connect(m_doc, SIGNAL(docColoursChanged()),
     //        this, SLOT(slotDocColoursChanged()));
 
@@ -533,19 +534,14 @@ TrackParameterBox::slotPlaybackDeviceChanged(int index)
         instrumentIndex = 0;
 
     // Set the Track's Instrument to the new Instrument.
+    // This also sends out a CompositionObserver::trackChanged()
+    // notification which will trigger a call to updateWidgets2().
     track->setInstrument(instrumentList[instrumentIndex]->getId());
 
     m_doc->slotDocumentModified();
 
-    // Notify observers
-    // This will trigger a call to updateWidgets2().
-    // ??? Redundant notification.  Track::setInstrument() already does
-    //     this.  It shouldn't.
-    Composition &comp = m_doc->getComposition();
-    comp.notifyTrackChanged(track);
-
-    // ??? The following needs to go away.
-
+    // ??? The following needs to go away.  See comments in
+    //     TrackButtons::selectInstrument().
     RosegardenMainWindow::self()->getView()->getTrackEditor()->
             getTrackButtons()->selectInstrument(
                     track, instrumentList[instrumentIndex]);
@@ -568,18 +564,14 @@ TrackParameterBox::slotInstrumentChanged(int index)
     if (!track)
         return;
 
+    // Set the Track's Instrument to the new Instrument.
+    // This also sends out a CompositionObserver::trackChanged()
+    // notification which will trigger a call to updateWidgets2().
     track->setInstrument(m_instrumentIds2[index]);
     m_doc->slotDocumentModified();
 
-    // Notify observers
-    // This will trigger a call to updateWidgets2().
-    // ??? Redundant notification.  Track::setInstrument() already does
-    //     this.  It shouldn't.
-    Composition &comp = m_doc->getComposition();
-    comp.notifyTrackChanged(track);
-
-    // ??? The following needs to go away.
-
+    // ??? The following needs to go away.  See comments in
+    //     TrackButtons::selectInstrument().
     Instrument *instrument =
             m_doc->getStudio().getInstrumentById(m_instrumentIds2[index]);
     if (!instrument)
@@ -617,15 +609,11 @@ TrackParameterBox::slotRecordingDeviceChanged(int index)
     if (!track)
         return;
 
+    // This also sends out a CompositionObserver::trackChanged()
+    // notification which will trigger a call to updateWidgets2().
     track->setMidiInputDevice(m_recordingDeviceIds2[index]);
-    m_doc->slotDocumentModified();
 
-    // Notify observers
-    // This will trigger a call to updateWidgets2().
-    // ??? Redundant notification.  Track::setMidiInputDevice() already does
-    //     this.  It shouldn't.
-    Composition &comp = m_doc->getComposition();
-    comp.notifyTrackChanged(track);
+    m_doc->slotDocumentModified();
 }
 
 void
@@ -637,15 +625,11 @@ TrackParameterBox::slotRecordingChannelChanged(int index)
     if (!track)
         return;
 
+    // This also sends out a CompositionObserver::trackChanged()
+    // notification which will trigger a call to updateWidgets2().
     track->setMidiInputChannel(index - 1);
-    m_doc->slotDocumentModified();
 
-    // Notify observers
-    // This will trigger a call to updateWidgets2().
-    // ??? Redundant notification.  Track::setMidiInputChannel() already does
-    //     this.  It shouldn't.
-    Composition &comp = m_doc->getComposition();
-    comp.notifyTrackChanged(track);
+    m_doc->slotDocumentModified();
 }
 
 void
@@ -655,15 +639,11 @@ TrackParameterBox::slotThruRoutingChanged(int index)
     if (!track)
         return;
 
+    // This also sends out a CompositionObserver::trackChanged()
+    // notification which will trigger a call to updateWidgets2().
     track->setThruRouting(static_cast<Track::ThruRouting>(index));
-    m_doc->slotDocumentModified();
 
-    // Notify observers
-    // This will trigger a call to updateWidgets2().
-    // ??? Redundant notification.  Track::setThruRouting() already does
-    //     this.  It shouldn't.
-    Composition &comp = m_doc->getComposition();
-    comp.notifyTrackChanged(track);
+    m_doc->slotDocumentModified();
 }
 
 void
@@ -1009,6 +989,9 @@ TrackParameterBox::updatePlaybackDevice(DeviceId deviceId)
         if (midiDevice  &&
             midiDevice->getDirection() == MidiDevice::Record)
             continue;
+
+        // Audio record devices are not in the device list.  So there's
+        // no need to check for them and skip.
 
         deviceIds.push_back(device.getId());
         deviceNames.push_back(device.getName());
