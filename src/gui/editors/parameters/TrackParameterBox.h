@@ -124,6 +124,8 @@ private slots:
     void slotHighestPressed();
     /// Create segments with: Color
     void slotColorChanged(int index);
+    /// Create segments with: Reset to Defaults
+    void slotResetToDefaultsPressed();
 
 private:
     RosegardenDocument *m_doc;
@@ -204,6 +206,8 @@ private:
 
     /// Create segments with: Color
     QComboBox *m_color;
+
+    QPushButton *m_resetToDefaults;
 
     // ComboBox update routines for updateWidgets2().
     void updatePlaybackDevice(DeviceId deviceId);

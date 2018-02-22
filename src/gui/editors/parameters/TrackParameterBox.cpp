@@ -386,6 +386,13 @@ TrackParameterBox::TrackParameterBox(QWidget *parent) :
     connect(m_color, SIGNAL(activated(int)),
             SLOT(slotColorChanged(int)));
 
+    // Reset to Defaults
+    m_resetToDefaults = new QPushButton(
+            tr("Reset to Defaults"), createSegmentsWith);
+    m_resetToDefaults->setFont(m_font);
+    connect(m_resetToDefaults, SIGNAL(released()),
+            SLOT(slotResetToDefaultsPressed()));
+
     // "Create segments with" layout
 
     groupLayout = new QGridLayout(createSegmentsWith);
@@ -410,6 +417,8 @@ TrackParameterBox::TrackParameterBox(QWidget *parent) :
     // Row 3: Color
     groupLayout->addWidget(colorLabel, 3, 0, Qt::AlignLeft);
     groupLayout->addWidget(m_color, 3, 1, 1, 5);
+    // Row 4: Reset to Defaults
+    groupLayout->addWidget(m_resetToDefaults, 4, 1, 1, 2);
 
     groupLayout->setColumnStretch(1, 1);
     groupLayout->setColumnStretch(2, 2);
@@ -908,6 +917,28 @@ TrackParameterBox::slotLoadPressed()
 }
 
 void
+TrackParameterBox::slotResetToDefaultsPressed()
+{
+    Track *track = getTrack();
+    if (!track)
+        return;
+
+    track->setPresetLabel("");
+    track->setClef(0);
+    track->setTranspose(0);
+    track->setLowestPlayable(0);
+    track->setHighestPlayable(127);
+    track->setColor(0);
+
+    m_doc->slotDocumentModified();
+
+    // Notify observers
+    // This will trigger a call to updateWidgets2().
+    Composition &comp = m_doc->getComposition();
+    comp.notifyTrackChanged(track);
+}
+
+void
 TrackParameterBox::slotNotationSizeChanged(int index)
 {
     Track *track = getTrack();
@@ -1238,6 +1269,7 @@ TrackParameterBox::updateWidgets2()
         m_lowest->setVisible(false);
         m_highestLabel->setVisible(false);
         m_highest->setVisible(false);
+        m_resetToDefaults->setVisible(false);
 
     } else {  // MIDI or soft synth
 
@@ -1259,6 +1291,7 @@ TrackParameterBox::updateWidgets2()
         m_lowest->setVisible(true);
         m_highestLabel->setVisible(true);
         m_highest->setVisible(true);
+        m_resetToDefaults->setVisible(true);
     }
 
     // *** Recording filters
