@@ -423,17 +423,13 @@ MidiProgramsEditor::slotNameChanged(const QString& programName)
             return;
 
         // Create a new MidiProgram and add it to m_programList.
-        // ??? To avoid memory leaks, create this on the stack:
-        //       MidiProgram newProgram(*getCurrentBank(), id);
-        //       m_programList.push_back(newProgram);
-        program = new MidiProgram(*getCurrentBank(), id);
-        m_programList.push_back(*program);
+        MidiProgram newProgram(*getCurrentBank(), id);
+        m_programList.push_back(newProgram);
 
         // Sort by program number.
         std::sort(m_programList.begin(), m_programList.end(), ProgramCmp());
 
         // Now, get the MidiProgram from the m_programList.
-        // ??? Memory leak?  We never deleted the one we used to point to.
         program = getProgram(*getCurrentBank(), id);
 
     } else {
