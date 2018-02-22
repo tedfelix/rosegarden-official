@@ -449,6 +449,11 @@ TrackButtons::slotUpdateTracks()
     Composition &comp = m_doc->getComposition();
     const int newNbTracks = comp.getNbTracks();
 
+    if (newNbTracks < 0) {
+        RG_WARNING << "slotUpdateTracks(): WARNING: New number of tracks was negative:" << newNbTracks;
+        return;
+    }
+
     //RG_DEBUG << "TrackButtons::slotUpdateTracks > newNbTracks = " << newNbTracks;
 
     // If a track or tracks were deleted
