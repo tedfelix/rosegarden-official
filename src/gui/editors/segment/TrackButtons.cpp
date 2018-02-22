@@ -166,12 +166,16 @@ TrackButtons::updateUI(Track *track)
 
     QFrame *hbox = m_trackHBoxes.at(pos);
     if (track->isArchived()) {
-        hbox->setAutoFillBackground(true);
+        // Go with the dark gray background.
         QPalette palette = hbox->palette();
         palette.setColor(hbox->backgroundRole(), QColor(0x88, 0x88, 0x88));
         hbox->setPalette(palette);
     } else {
-        hbox->setAutoFillBackground(false);
+        // Go with the parent's background color.
+        QColor parentBackground = palette().color(backgroundRole());
+        QPalette palette = hbox->palette();
+        palette.setColor(hbox->backgroundRole(), parentBackground);
+        hbox->setPalette(palette);
     }
 
 
@@ -1088,6 +1092,9 @@ TrackButtons::makeButton(Track *track)
 
     trackHBox->setFrameShape(QFrame::StyledPanel);
     trackHBox->setFrameShadow(QFrame::Raised);
+
+    // We will be changing the background color, so turn on auto-fill.
+    trackHBox->setAutoFillBackground(true);
 
     // Insert a little gap
     hblayout->addSpacing(m_vuSpacing);
