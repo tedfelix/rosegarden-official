@@ -38,6 +38,9 @@ public:
     //
     SoftSynthDevice(const SoftSynthDevice &);
 
+    virtual bool isOutput() const  { return true; }
+    virtual bool isInput() const  { return false; }
+
     virtual void addInstrument(Instrument*);
 
     // Turn into XML string

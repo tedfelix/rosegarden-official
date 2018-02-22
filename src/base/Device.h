@@ -77,6 +77,9 @@ public:
     void setId(DeviceId id) { m_id = id; }
     DeviceId getId() const { return m_id; }
 
+    virtual bool isInput() const = 0;
+    virtual bool isOutput() const = 0;
+
     // Accessing instrument lists - Devices should only
     // show the world what they want it to see
     //

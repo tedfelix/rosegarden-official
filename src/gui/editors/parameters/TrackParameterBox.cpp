@@ -878,6 +878,7 @@ TrackParameterBox::slotLoadPressed()
             //     the selected preset.  Or add "(modified)"?  Or change
             //     color?  Or allow the user to edit it and save it to the
             //     .rg file as part of the Track.
+            //     See discussion on devel list 2016-07-13 "TPB Preset Field".
             m_preset->setEnabled(true);
 
             // If we need to convert the track's segments
@@ -975,19 +976,8 @@ TrackParameterBox::updatePlaybackDevice(DeviceId deviceId)
 
         const Device &device = *(deviceList[deviceIndex]);
 
-        // ??? A Device::isInput() would be simpler.  Derivers would
-        //     implement appropriately.  Then this would simplify to:
-        //
-        //        // If this is an input device, skip it.
-        //        if (device.isInput())
-        //            continue;
-
-        const MidiDevice *midiDevice =
-                dynamic_cast<const MidiDevice *>(deviceList[deviceIndex]);
-
-        // If this is a MIDI input device, skip it.
-        if (midiDevice  &&
-            midiDevice->getDirection() == MidiDevice::Record)
+        // If this is an input device, skip it.
+        if (device.isInput())
             continue;
 
         // Audio record devices are not in the device list.  So there's
@@ -1159,18 +1149,6 @@ TrackParameterBox::updateRecordingDevice(DeviceId deviceId)
          deviceIndex < deviceList.size();
          ++deviceIndex) {
 
-        const Device &device = *(deviceList[deviceIndex]);
-
-        // ??? A Device::isOutput() would be simpler.  Derivers would
-        //     implement appropriately.  Then this would simplify to:
-        //
-        //        // If this is an output device, skip it.
-        //        if (device.isOutput())
-        //            continue;
-        //
-        //        // Add it to the recording device lists.
-        //        ...
-
         const MidiDevice *midiDevice =
                 dynamic_cast<const MidiDevice *>(deviceList[deviceIndex]);
 
@@ -1178,15 +1156,14 @@ TrackParameterBox::updateRecordingDevice(DeviceId deviceId)
         if (!midiDevice)
             continue;
 
-        // If this is a device capable of being recorded
-        // ??? What does isRecording() really mean?
-        if (midiDevice->getDirection() == MidiDevice::Record  &&
-            midiDevice->isRecording()) {
-            // Add it to the recording device lists.
-            recordingDeviceIds.push_back(device.getId());
-            recordingDeviceNames.push_back(
-                    QObject::tr(midiDevice->getName().c_str()));
-        }
+        // Playback device?  Skip.
+        if (midiDevice->isOutput())
+            continue;
+
+        // Add it to the recording device lists.
+        recordingDeviceIds.push_back(midiDevice->getId());
+        recordingDeviceNames.push_back(
+                QObject::tr(midiDevice->getName().c_str()));
     }
 
     // If there has been an actual change

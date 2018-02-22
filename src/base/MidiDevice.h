@@ -127,6 +127,8 @@ public:
 
     DeviceDirection getDirection() const { return m_direction; }
     void setDirection(DeviceDirection dir) { m_direction = dir; }
+    virtual bool isOutput() const  { return (m_direction == Play); }
+    virtual bool isInput() const  { return (m_direction == Record); }
 
     enum VariationType {
         NoVariations,
@@ -190,9 +192,6 @@ public:
 
     virtual std::string toXmlString() const;
 
-    // Accessors for recording property
-    bool isRecording() const  { return m_recording; }
-
     static bool isPercussionNumber(int channel)
     { return channel == 9; }
 
@@ -227,10 +226,6 @@ protected:
     // Is this device Play or Record?
     //
     DeviceDirection m_direction; 
-    
-    // Is this device recording?
-    //
-    static const bool m_recording = true;   
     
     // Should we present LSB or MSB of bank info as a Variation number?
     //

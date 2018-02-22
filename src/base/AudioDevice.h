@@ -18,17 +18,13 @@
 #include "Device.h"
 #include "Instrument.h"
 
-// An AudioDevice defines Instruments where we can play our
-// audio Segments.
-//
-//
-//
 #ifndef RG_AUDIODEVICE_H
 #define RG_AUDIODEVICE_H
 
 namespace Rosegarden
 {
 
+/// An AudioDevice defines Instruments where we can play our audio Segments.
 class AudioDevice : public Device
 {
 
@@ -40,6 +36,9 @@ public:
     // Copy constructor
     //
     AudioDevice(const AudioDevice &);
+
+    virtual bool isOutput() const  { return true; }
+    virtual bool isInput() const  { return false; }
 
     virtual void addInstrument(Instrument*);
 
