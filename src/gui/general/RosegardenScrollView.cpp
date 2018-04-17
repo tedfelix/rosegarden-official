@@ -22,7 +22,7 @@
 #include "misc/Debug.h"
 #include "gui/rulers/StandardRuler.h"
 
-//#include <QApplication>
+#include <QApplication>
 #include <QCursor>
 #include <QDesktopWidget>
 #include <QMouseEvent>
@@ -420,6 +420,10 @@ void RosegardenScrollView::updateBottomRulerGeometry()
 
 void RosegardenScrollView::wheelEvent(QWheelEvent *e)
 {
+    // We'll handle this.  Don't pass to parent.
+    e->accept();
+
+    // Ctrl+wheel to zoom
     if (e->modifiers() & Qt::CTRL) {
         if (e->delta() > 0)
             emit zoomIn();
@@ -428,8 +432,12 @@ void RosegardenScrollView::wheelEvent(QWheelEvent *e)
 
         return;
     }
-    
-    QAbstractScrollArea::wheelEvent(e);
+
+    // Shift+wheel to scroll left/right.
+    if (e->modifiers() == Qt::SHIFT)
+        QApplication::sendEvent(horizontalScrollBar(), e);
+    else  // Scroll up/down
+        QApplication::sendEvent(verticalScrollBar(), e);
 }
 
 
