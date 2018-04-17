@@ -333,6 +333,11 @@ NotationWidget::NotationWidget() :
     connect(m_view, SIGNAL(pannedContentsScrolled()),
             this, SLOT(slotHScroll()));
 
+    connect(m_view, SIGNAL(zoomIn()),
+            SLOT(slotZoomIn()));
+    connect(m_view, SIGNAL(zoomOut()),
+            SLOT(slotZoomOut()));
+
     connect(m_hpanner, SIGNAL(zoomIn()),
             this, SLOT(slotSyncPannerZoomIn()));
 
@@ -1800,6 +1805,24 @@ NotationWidget::slotRegenerateHeaders() {
     } else {
         m_headersNeedRegeneration = true;
     }
+}
+
+void
+NotationWidget::slotZoomIn()
+{
+    int v = m_lastH - 1;
+
+    m_Hzoom->setValue(v);
+    slotHorizontalThumbwheelMoved(v);
+}
+
+void
+NotationWidget::slotZoomOut()
+{
+    int v = m_lastH + 1;
+
+    m_Hzoom->setValue(v);
+    slotHorizontalThumbwheelMoved(v);
 }
 
 

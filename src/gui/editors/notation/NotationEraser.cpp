@@ -25,6 +25,7 @@
 #include "NotationStaff.h"
 #include "NotationElement.h"
 #include "NotationMouseEvent.h"
+#include "gui/widgets/Panned.h"
 #include "document/CommandHistory.h"
 
 #include <QSettings>
@@ -57,6 +58,9 @@ NotationEraser::ready()
 {
     m_widget->setCanvasCursor(Qt::PointingHandCursor);
 //!!!    m_nParentView->setHeightTracking(false);
+
+    // The eraser tool doesn't use the wheel.
+    m_widget->getView()->setWheelZoomPan(true);
 }
 
 void

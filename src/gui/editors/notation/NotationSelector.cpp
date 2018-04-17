@@ -43,6 +43,7 @@
 #include "commands/notation/IncrementDisplacementsCommand.h"
 
 #include "gui/general/GUIPalette.h"
+#include "gui/widgets/Panned.h"
 
 #include "document/CommandHistory.h"
 
@@ -686,6 +687,9 @@ void NotationSelector::dragFine(int x, int y, bool final)
 void NotationSelector::ready()
 {
     m_widget->setCanvasCursor(Qt::ArrowCursor);
+
+    // The arrow tool doesn't use the wheel.
+    m_widget->getView()->setWheelZoomPan(true);
 }
 
 void NotationSelector::stow()

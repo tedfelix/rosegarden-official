@@ -336,6 +336,12 @@ private:
         VPANNER_COL
     };
 
+private slots:
+    /// Connected to Panned::zoomIn() for ctrl+wheel.
+    void slotZoomIn();
+    /// Connected to Panned::zoomOut() for ctrl+wheel.
+    void slotZoomOut();
+
 };
 
 }

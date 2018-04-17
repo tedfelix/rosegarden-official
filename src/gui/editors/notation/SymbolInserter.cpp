@@ -25,6 +25,7 @@
 #include "NotationStaff.h"
 #include "NotationScene.h"
 #include "NotationMouseEvent.h"
+#include "gui/widgets/Panned.h"
 
 #include "document/CommandHistory.h"
 
@@ -63,6 +64,9 @@ SymbolInserter::ready()
 {
     m_widget->setCanvasCursor(Qt::CrossCursor);
 //!!!    m_nParentView->setHeightTracking(false);
+
+    // The symbol tool doesn't use the wheel.
+    m_widget->getView()->setWheelZoomPan(true);
 }
 
 void

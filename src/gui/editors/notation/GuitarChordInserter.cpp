@@ -29,6 +29,7 @@
 #include "NotationStaff.h"
 #include "NotationWidget.h"
 #include "NotePixmapFactory.h"
+#include "gui/widgets/Panned.h"
 
 namespace Rosegarden
 {
@@ -75,6 +76,9 @@ GuitarChordInserter::ready()
 {
     m_widget->setCanvasCursor(Qt::CrossCursor);
 //!!!    m_nParentView->setHeightTracking(false);
+
+    // The guitar chord tool doesn't use the wheel.
+    m_widget->getView()->setWheelZoomPan(true);
 }
 
 void

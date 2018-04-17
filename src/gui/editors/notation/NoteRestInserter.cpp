@@ -222,6 +222,10 @@ void NoteRestInserter::ready()
     m_clickHappened = false;
     m_clickStaff = 0;
     
+    // The pencil tool uses the wheel for selecting note values.
+    // Disable Panned's handling of the wheel.
+    m_widget->getView()->setWheelZoomPan(false);
+
     if (m_alwaysPreview) {
         setCursorShape();
         m_widget->getView()->setMouseTracking(true);
