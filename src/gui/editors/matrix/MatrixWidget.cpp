@@ -141,6 +141,7 @@ MatrixWidget::MatrixWidget(bool drumMode) :
 
     m_view = new Panned;
     m_view->setBackgroundBrush(Qt::white);
+    m_view->setWheelZoomPan(true);
     m_layout->addWidget(m_view, PANNED_ROW, MAIN_COL, 1, 1);
 
     m_pianoView = new Panned;
@@ -268,6 +269,11 @@ MatrixWidget::MatrixWidget(bool drumMode) :
 
     connect(m_view, SIGNAL(pannedRectChanged(QRectF)),
             m_controlsWidget, SLOT(slotSetPannedRect(QRectF)));
+
+    connect(m_view, SIGNAL(zoomIn()),
+            SLOT(slotZoomIn()));
+    connect(m_view, SIGNAL(zoomOut()),
+            SLOT(slotZoomOut()));
 
     connect(m_hpanner, SIGNAL(pannedRectChanged(QRectF)),
             m_view, SLOT(slotSetPannedRect(QRectF)));
@@ -1517,6 +1523,24 @@ MatrixWidget::slotDocumentModified(bool)
     //     redesign and rewrite MatrixWidget before this becomes possible.
 
     generatePitchRuler();
+}
+
+void
+MatrixWidget::slotZoomIn()
+{
+    int v = m_lastH - 1;
+
+    m_Hzoom->setValue(v);
+    slotHorizontalThumbwheelMoved(v);
+}
+
+void
+MatrixWidget::slotZoomOut()
+{
+    int v = m_lastH + 1;
+
+    m_Hzoom->setValue(v);
+    slotHorizontalThumbwheelMoved(v);
 }
 
 

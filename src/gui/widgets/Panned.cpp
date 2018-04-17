@@ -23,7 +23,9 @@
 #include "base/Profiler.h"
 #include "gui/general/GUIPalette.h"
 
+#include <QApplication>
 #include <QScrollBar>
+#include <QWheelEvent>
 
 #include <iostream>
 
@@ -31,7 +33,8 @@ namespace Rosegarden
 {
 
 Panned::Panned() :
-    m_pointerVisible(false)
+    m_pointerVisible(false),
+    m_wheelZoomPan(false)
 {
 }
 
@@ -250,13 +253,47 @@ void
 Panned::wheelEvent(QWheelEvent *ev)
 {
     emit wheelEventReceived(ev);
-    QGraphicsView::wheelEvent(ev);
+
+    if (m_wheelZoomPan)
+        processWheelEvent(ev);
+    else
+        QGraphicsView::wheelEvent(ev);
 }
 
 void
 Panned::slotEmulateWheelEvent(QWheelEvent *ev)
 {
-    QGraphicsView::wheelEvent(ev);
+    if (m_wheelZoomPan)
+        processWheelEvent(ev);
+    else
+        QGraphicsView::wheelEvent(ev);
+}
+
+void
+Panned::processWheelEvent(QWheelEvent *e)
+{
+    // We'll handle this.  Don't pass to parent.
+    e->accept();
+
+    // Ctrl+wheel to zoom
+    if (e->modifiers() & Qt::CTRL) {
+        if (e->delta() > 0)
+            emit zoomIn();
+        else if (e->delta() < 0)
+            emit zoomOut();
+        return;
+    }
+
+    // Shift+wheel to scroll left/right.
+    if (e->modifiers() & Qt::SHIFT) {
+        // Remove the shift modifier to avoid paging the scrollbar.
+        QWheelEvent e2(e->pos(), e->delta(), e->buttons(),
+                       static_cast<Qt::KeyboardModifiers>(e->modifiers() ^ Qt::SHIFT),
+                       e->orientation());
+        QApplication::sendEvent(horizontalScrollBar(), &e2);
+    } else {  // Scroll up/down
+        QApplication::sendEvent(verticalScrollBar(), e);
+    }
 }
 
 void

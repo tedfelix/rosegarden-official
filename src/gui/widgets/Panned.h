@@ -34,11 +34,23 @@ public:
     Panned();
     virtual ~Panned() { }
 
+    void setWheelZoomPan(bool wheelZoomPan)  { m_wheelZoomPan = wheelZoomPan; }
+
 signals:
     void pannedRectChanged(QRectF);
+    /// Use to synchronize two Panned views.
+    /**
+     * Connect this to the other Panned view's slotEmulateWheelEvent() and
+     * vice versa.
+     */
     void wheelEventReceived(QWheelEvent *);
     void pannedContentsScrolled();
     void mouseLeaves();
+
+    /// Emitted on ctrl+wheel.
+    void zoomIn();
+    /// Emitted on ctrl+wheel.
+    void zoomOut();
 
 public slots:
     void slotSetPannedRect(QRectF);
@@ -60,6 +72,14 @@ protected:
     virtual void drawForeground(QPainter *, const QRectF &);
     virtual void wheelEvent(QWheelEvent *);
     virtual void leaveEvent(QEvent *);
+
+private:
+    /// Enables wheel shift pan/ctrl zoom behavior.
+    bool m_wheelZoomPan;
+
+    /// Custom processing providing standard modifier key functions.
+    void processWheelEvent(QWheelEvent *e);
+
 };
 
 }

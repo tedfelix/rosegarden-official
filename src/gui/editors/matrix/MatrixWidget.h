@@ -218,6 +218,11 @@ private slots:
     /// Called when the document is modified in some way.
     void slotDocumentModified(bool);
 
+    /// Connected to Panned::zoomIn() for ctrl+wheel.
+    void slotZoomIn();
+    /// Connected to Panned::zoomOut() for ctrl+wheel.
+    void slotZoomOut();
+
 private:
     RosegardenDocument *m_document; // I do not own this
     Panned *m_view; // I own this
