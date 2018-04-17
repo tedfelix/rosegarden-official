@@ -34,6 +34,7 @@ public:
     Panned();
     virtual ~Panned() { }
 
+    /// Enable wheel shift pan/ctrl zoom behavior.
     void setWheelZoomPan(bool wheelZoomPan)  { m_wheelZoomPan = wheelZoomPan; }
 
 signals:
@@ -74,7 +75,6 @@ protected:
     virtual void leaveEvent(QEvent *);
 
 private:
-    /// Enables wheel shift pan/ctrl zoom behavior.
     bool m_wheelZoomPan;
 
     /// Custom processing providing standard modifier key functions.
