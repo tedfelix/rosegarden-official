@@ -3185,9 +3185,8 @@ AlsaDriver::insertMTCQFrames(RealTime sliceStart, RealTime sliceEnd)
     int fps = 25;
 
 #ifdef MTC_DEBUG
-
-    std::cout << "AlsaDriver::insertMTCQFrames(" << sliceStart << ","
-              << sliceEnd << "): first time " << m_mtcFirstTime << std::endl;
+    RG_DEBUG << "insertMTCQFrames(" << sliceStart << ","
+             << sliceEnd << "): first time " << m_mtcFirstTime;
 #endif
 
     RealTime t;
@@ -3217,8 +3216,7 @@ AlsaDriver::insertMTCQFrames(RealTime sliceStart, RealTime sliceEnd)
         snd_seq_ev_set_subs(&event);
 
 #ifdef MTC_DEBUG
-
-        std::cout << "Sending MTC quarter frame at " << t << std::endl;
+        RG_DEBUG << "insertMTCQFrames(): Sending MTC quarter frame at " << t;
 #endif
 
         unsigned char c = (type << 4);
@@ -3294,12 +3292,10 @@ AlsaDriver::testForMTCSysex(const snd_seq_event_t *event)
     // sysex we're interested in is full-frame transport location
 
 #ifdef MTC_DEBUG
-
-    std::cerr << "MTC: testing sysex of length " << event->data.ext.len << ":" << std::endl;
+    RG_DEBUG << "testForMTCSysex(): MTC: testing sysex of length " << event->data.ext.len << ":";
     for (int i = 0; i < event->data.ext.len; ++i) {
-        std::cerr << (int)*((unsigned char *)event->data.ext.ptr + i) << " ";
+        RG_DEBUG << "testForMTCSysex():     " << (int)*((unsigned char *)event->data.ext.ptr + i);
     }
-    std::cerr << endl;
 #endif
 
     if (event->data.ext.len != 10)
@@ -3363,8 +3359,7 @@ AlsaDriver::testForMTCSysex(const snd_seq_event_t *event)
     }
 
 #ifdef MTC_DEBUG
-    std::cerr << "MTC: MTC sysex found (frame type " << type
-              << "), jumping to " << m_mtcEncodedTime << std::endl;
+    RG_DEBUG << "testForMTCSysex(): MTC: MTC sysex found (frame type " << type << "), jumping to " << m_mtcEncodedTime;
 #endif
 
     ExternalTransport *transport = getExternalTransportControl();
@@ -3394,7 +3389,6 @@ AlsaDriver::calibrateMTC()
         RealTime diff_c = m_mtcReceiveTime - m_mtcLastReceive;
 
 #ifdef MTC_DEBUG
-
         printf("RG MTC: diffs %d %d %d\n", diff_c.nsec, diff_e.nsec, m_mtcSkew);
 #endif
 
@@ -3405,7 +3399,6 @@ AlsaDriver::calibrateMTC()
         int t_bias = (m_mtcSigmaE / m_mtcSigmaC) - 0x10000;
 
 #ifdef MTC_DEBUG
-
         printf("RG MTC: sigmas %lld %lld %d\n", m_mtcSigmaE, m_mtcSigmaC, t_bias);
 #endif
 
@@ -3450,15 +3443,13 @@ if(factor == 0) {
 
     unsigned int t_skew = snd_seq_queue_tempo_get_skew(q_ptr);
 #ifdef MTC_DEBUG
-
-    std::cerr << "RG MTC: skew: " << t_skew;
+    RG_DEBUG << "tweakSkewForMTC(): RG MTC: skew: " << t_skew;
 #endif
 
     t_skew = 0x10000 + factor + bias_factor;
 
 #ifdef MTC_DEBUG
-
-    std::cerr << " changed to " << factor << "+" << bias_factor << endl;
+    RG_DEBUG << "tweakSkewForMTC():     changed to " << factor << "+" << bias_factor;
 #endif
 
     snd_seq_queue_tempo_set_skew(q_ptr, t_skew);
@@ -3519,8 +3510,7 @@ AlsaDriver::processMidiOut(const MappedEventList &mC,
     bool now = (sliceStart == RealTime::zeroTime && sliceEnd == RealTime::zeroTime);
 
 #ifdef DEBUG_PROCESS_MIDI_OUT
-    std::cout << "AlsaDriver::processMidiOut(" << sliceStart << "," << sliceEnd
-              << "), " << mC.size() << " events, now is " << now << std::endl;
+    RG_DEBUG << "processMidiOut(" << sliceStart << "," << sliceEnd << "), " << mC.size() << " events, now is " << now;
 #endif
 
     if (!now) {
@@ -3570,7 +3560,7 @@ AlsaDriver::processMidiOut(const MappedEventList &mC,
 
         bool debug = throttledDebug();
         if (debug) {
-            RG_DEBUG << "AlsaDriver::processMidiOut() for each event...";
+            RG_DEBUG << "processMidiOut(): for each event...";
             QString eventType = "unknown";
             switch ((*i)->getType()) {
                 case MappedEvent::MidiNote: eventType = "MidiNote"; break;
@@ -3578,7 +3568,7 @@ AlsaDriver::processMidiOut(const MappedEventList &mC,
                 case MappedEvent::MidiController: eventType = "MidiController"; break;
                 default: break;
             }
-            RG_DEBUG << "  MappedEvent Event Type: " << (*i)->getType() << " (" << eventType << ")";
+            RG_DEBUG << "processMidiOut():   MappedEvent Event Type: " << (*i)->getType() << " (" << eventType << ")";
         }
 
         // ??? rename: alsaEvent
@@ -3598,7 +3588,7 @@ AlsaDriver::processMidiOut(const MappedEventList &mC,
             // stop queue to ensure exact timing and make sure the
             // event gets through right now
 #ifdef DEBUG_PROCESS_MIDI_OUT
-            std::cout << "processMidiOut: stopping queue for now-event" << std::endl;
+            RG_DEBUG << "processMidiOut(): stopping queue for now-event";
 #endif
 
             checkAlsaError(snd_seq_stop_queue(m_midiHandle, m_queue, NULL), "processMidiOut(): stop queue");
@@ -3619,7 +3609,7 @@ AlsaDriver::processMidiOut(const MappedEventList &mC,
         }
 
 #ifdef DEBUG_PROCESS_MIDI_OUT
-        std::cout << "processMidiOut[" << now << "]: event is at " << outputTime << " (" << outputTime - alsaTimeNow << " ahead of queue time), type " << int((*i)->getType()) << ", duration " << (*i)->getDuration() << std::endl;
+        RG_DEBUG << "processMidiOut[" << now << "]: event is at " << outputTime << " (" << outputTime - alsaTimeNow << " ahead of queue time), type " << int((*i)->getType()) << ", duration " << (*i)->getDuration();
 #endif
 
         if (!m_queueRunning && outputTime < alsaTimeNow) {
@@ -3627,20 +3617,20 @@ AlsaDriver::processMidiOut(const MappedEventList &mC,
             if ((*i)->getDuration() > RealTime::zeroTime) {
                 if ((*i)->getDuration() <= adjust) {
 #ifdef DEBUG_PROCESS_MIDI_OUT
-                    std::cout << "processMidiOut[" << now << "]: too late for this event, abandoning it" << std::endl;
+                    RG_DEBUG << "processMidiOut[" << now << "]: too late for this event, abandoning it";
 #endif
 
                     continue;
                 } else {
 #ifdef DEBUG_PROCESS_MIDI_OUT
-                    std::cout << "processMidiOut[" << now << "]: pushing event forward and reducing duration by " << adjust << std::endl;
+                    RG_DEBUG << "processMidiOut[" << now << "]: pushing event forward and reducing duration by " << adjust;
 #endif
 
                     (*i)->setDuration((*i)->getDuration() - adjust);
                 }
             } else {
 #ifdef DEBUG_PROCESS_MIDI_OUT
-                std::cout << "processMidiOut[" << now << "]: pushing zero-duration event forward by " << adjust << std::endl;
+                RG_DEBUG << "processMidiOut[" << now << "]: pushing zero-duration event forward by " << adjust;
 #endif
 
             }
@@ -3655,7 +3645,7 @@ AlsaDriver::processMidiOut(const MappedEventList &mC,
             size_t elapsed = frameCount - debug_jack_frame_count;
             RealTime rt = RealTime::frame2RealTime(elapsed, m_jackDriver->getSampleRate());
             rt = rt - getAlsaTime();
-            std::cout << "processMidiOut[" << now << "]: JACK time is " << rt << " ahead of ALSA time" << std::endl;
+            RG_DEBUG << "processMidiOut[" << now << "]: JACK time is " << rt << " ahead of ALSA time";
         }
 #endif
 
@@ -3667,8 +3657,8 @@ AlsaDriver::processMidiOut(const MappedEventList &mC,
         if (!isSoftSynth) {
 
 #ifdef DEBUG_PROCESS_MIDI_OUT
-            std::cout << "processMidiOut[" << now << "]: instrument " << (*i)->getInstrument() << std::endl;
-            std::cout << "pitch: " << (int)(*i)->getPitch() << ", velocity " << (int)(*i)->getVelocity() << ", duration " << (*i)->getDuration() << std::endl;
+            RG_DEBUG << "processMidiOut[" << now << "]: instrument " << (*i)->getInstrument();
+            RG_DEBUG << "processMidiOut():     pitch: " << (int)(*i)->getPitch() << ", velocity " << (int)(*i)->getVelocity() << ", duration " << (*i)->getDuration();
 #endif
 
             snd_seq_ev_set_subs(&event);
@@ -3707,19 +3697,17 @@ AlsaDriver::processMidiOut(const MappedEventList &mC,
         if (isControllerOut) {
             channel = (*i)->getRecordedChannel();
 #ifdef DEBUG_ALSA
-            std::cout << "processMidiOut() - Event of type " << (int)((*i)->getType()) << " (data1 " << (int)(*i)->getData1() << ", data2 " << (int)(*i)->getData2() << ") for external controller channel " << (int)channel << std::endl;
+            RG_DEBUG << "processMidiOut() - Event of type " << (int)((*i)->getType()) << " (data1 " << (int)(*i)->getData1() << ", data2 " << (int)(*i)->getData2() << ") for external controller channel " << (int)channel;
 #endif
         } else if (instrument != 0) {
             channel = (*i)->getRecordedChannel();
 #ifdef DEBUG_ALSA
-            std::cout << "processMidiOut() - Non-controller Event of type " << (int)((*i)->getType()) << " (data1 " << (int)(*i)->getData1() << ", data2 " << (int)(*i)->getData2() << ") for channel "
-                      << (int)(*i)->getRecordedChannel() << std::endl;
+            RG_DEBUG << "processMidiOut() - Non-controller Event of type " << (int)((*i)->getType()) << " (data1 " << (int)(*i)->getData1() << ", data2 " << (int)(*i)->getData2() << ") for channel " << (int)(*i)->getRecordedChannel();
 #endif
         } else {
 #ifdef DEBUG_ALSA
-            std::cout << "processMidiOut() - No instrument for event of type "
-                      << (int)(*i)->getType() << " at " << (*i)->getEventTime()
-                      << std::endl;
+            RG_DEBUG << "processMidiOut() - No instrument for event of type "
+                      << (int)(*i)->getType() << " at " << (*i)->getEventTime();
 #endif
             channel = 0;
         }
@@ -3844,9 +3832,7 @@ AlsaDriver::processMidiOut(const MappedEventList &mC,
                 break;
 
             default:
-                std::cerr << "AlsaDriver::processMidiOut - "
-                          << "unrecognised system message"
-                          << std::endl;
+                RG_WARNING << "processMidiOut(): WARNING: unrecognised system message";
                 break;
             }
         }
@@ -3887,10 +3873,7 @@ AlsaDriver::processMidiOut(const MappedEventList &mC,
         default:
         case MappedEvent::InvalidMappedEvent:
 #ifdef DEBUG_ALSA
-
-            std::cerr << "AlsaDriver::processMidiOut - "
-                      << "skipping unrecognised or invalid MappedEvent type"
-                      << std::endl;
+            RG_DEBUG << "processMidiOut() - skipping unrecognised or invalid MappedEvent type";
 #endif
 
             continue;
@@ -3927,7 +3910,7 @@ AlsaDriver::processMidiOut(const MappedEventList &mC,
                 if (m_queueRunning && !m_playing) {
                     // restart queue
 #ifdef DEBUG_PROCESS_MIDI_OUT
-                    std::cout << "processMidiOut: restarting queue after now-event" << std::endl;
+                    RG_DEBUG << "processMidiOut(): restarting queue after now-event";
 #endif
 
                     checkAlsaError(snd_seq_continue_queue(m_midiHandle, m_queue, NULL), "processMidiOut(): continue queue");
@@ -3946,8 +3929,7 @@ AlsaDriver::processMidiOut(const MappedEventList &mC,
                                  (*i)->getInstrument());
 
 #ifdef DEBUG_ALSA
-            std::cout << "Adding NOTE OFF at " << outputStopTime
-                      << std::endl;
+            RG_DEBUG << "processMidiOut(): Adding NOTE OFF at " << outputStopTime;
 #endif
 
             m_noteOffQueue.insert(noteOffEvent);
@@ -3965,15 +3947,14 @@ AlsaDriver::processMidiOut(const MappedEventList &mC,
         if (now && !m_playing) {
             // just to be sure
 #ifdef DEBUG_PROCESS_MIDI_OUT
-            std::cout << "processMidiOut: restarting queue after all now-events" << std::endl;
+            RG_DEBUG << "processMidiOut(): restarting queue after all now-events";
 #endif
 
             checkAlsaError(snd_seq_continue_queue(m_midiHandle, m_queue, NULL), "processMidiOut(): continue queue");
         }
 
 #ifdef DEBUG_PROCESS_MIDI_OUT 
-        //    std::cout << "processMidiOut: m_queueRunning " << m_queueRunning
-        //          << ", now " << now << std::endl;
+        //RG_DEBUG << "processMidiOut(): m_queueRunning " << m_queueRunning << ", now " << now;
 #endif
         checkAlsaError(snd_seq_drain_output(m_midiHandle), "processMidiOut(): draining");
     }
@@ -3983,7 +3964,7 @@ void
 AlsaDriver::processSoftSynthEventOut(InstrumentId id, const snd_seq_event_t *ev, bool now)
 {
 #ifdef DEBUG_PROCESS_SOFT_SYNTH_OUT
-    std::cerr << "AlsaDriver::processSoftSynthEventOut: instrument " << id << ", now " << now << std::endl;
+    RG_DEBUG << "processSoftSynthEventOut(): instrument " << id << ", now " << now;
 #endif
 
 #ifdef HAVE_LIBJACK
@@ -4002,15 +3983,14 @@ AlsaDriver::processSoftSynthEventOut(InstrumentId id, const snd_seq_event_t *ev,
             t = t + m_playStartPosition - m_alsaPlayStartTime;
 
 #ifdef DEBUG_PROCESS_SOFT_SYNTH_OUT
-
-        std::cerr << "AlsaDriver::processSoftSynthEventOut: event time " << t << std::endl;
+        RG_DEBUG << "processSoftSynthEventOut(): event time " << t;
 #endif
 
         synthPlugin->sendEvent(t, ev);
 
         if (now) {
 #ifdef DEBUG_PROCESS_SOFT_SYNTH_OUT
-            std::cerr << "AlsaDriver::processSoftSynthEventOut: setting haveAsyncAudioEvent" << std::endl;
+            RG_DEBUG << "processSoftSynthEventOut(): setting haveAsyncAudioEvent";
 #endif
 
             m_jackDriver->setHaveAsyncAudioEvent();
@@ -4025,13 +4005,12 @@ AlsaDriver::startClocks()
     int result;
 
 #ifdef DEBUG_ALSA
-
-    std::cerr << "AlsaDriver::startClocks" << std::endl;
+    RG_DEBUG << "startClocks() begin...";
 #endif
 
     if (m_needJackStart) {
 #ifdef DEBUG_ALSA
-        std::cerr << "AlsaDriver::startClocks: Need JACK start (m_playing = " << m_playing << ")" << std::endl;
+        RG_DEBUG << "startClocks: Need JACK start (m_playing = " << m_playing << ")";
 #endif
 
     }
@@ -4057,13 +4036,13 @@ AlsaDriver::startClocks()
             if (m_needJackStart == NeedJackStart ||
                 m_playing) {
 #ifdef DEBUG_ALSA
-                std::cerr << "AlsaDriver::startClocks: playing, prebuffer audio" << std::endl;
+                RG_DEBUG << "startClocks(): playing, prebuffer audio";
 #endif
 
                 m_jackDriver->prebufferAudio();
             } else {
 #ifdef DEBUG_ALSA
-                std::cerr << "AlsaDriver::startClocks: prepare audio only" << std::endl;
+                RG_DEBUG << "startClocks(): prepare audio only";
 #endif
 
                 m_jackDriver->prepareAudio();
@@ -4075,7 +4054,7 @@ AlsaDriver::startClocks()
                 rv = m_jackDriver->startTransport();
                 if (!rv) {
 #ifdef DEBUG_ALSA
-                    std::cerr << "AlsaDriver::startClocks: Waiting for startClocksApproved" << std::endl;
+                    RG_DEBUG << "startClocks(): Waiting for startClocksApproved";
 #endif
                     // need to wait for transport sync
                     debug_jack_frame_count = m_jackDriver->getFramesProcessed();
@@ -4088,14 +4067,12 @@ AlsaDriver::startClocks()
 
     // Restart the timer
     if ((result = snd_seq_continue_queue(m_midiHandle, m_queue, NULL)) < 0) {
-        std::cerr << "AlsaDriver::startClocks - couldn't start queue - "
-                  << snd_strerror(result)
-                  << std::endl;
+        RG_WARNING << "startClocks(): WARNING: Couldn't start queue - " << snd_strerror(result);
         reportFailure(MappedEvent::FailureALSACallFailed);
     }
 
 #ifdef DEBUG_ALSA
-    std::cerr << "AlsaDriver::startClocks: started clocks" << std::endl;
+    RG_DEBUG << "startClocks(): started clocks";
 #endif
 
     m_queueRunning = true;
@@ -4116,7 +4093,7 @@ AlsaDriver::startClocksApproved()
 {
     LOCKED;
 #ifdef DEBUG_ALSA
-    std::cerr << "AlsaDriver::startClocks: startClocksApproved" << std::endl;
+    RG_DEBUG << "startClocksApproved() begin...";
 #endif
 
     //!!!
@@ -4128,9 +4105,7 @@ AlsaDriver::startClocksApproved()
 
     // Restart the timer
     if ((result = snd_seq_continue_queue(m_midiHandle, m_queue, NULL)) < 0) {
-        std::cerr << "AlsaDriver::startClocks - couldn't start queue - "
-                  << snd_strerror(result)
-                  << std::endl;
+        RG_WARNING << "startClocksApproved(): WARNING: Couldn't start queue - " << snd_strerror(result);
         reportFailure(MappedEvent::FailureALSACallFailed);
     }
 
@@ -4144,7 +4119,7 @@ void
 AlsaDriver::stopClocks()
 {
 #ifdef DEBUG_ALSA
-    std::cerr << "AlsaDriver::stopClocks" << std::endl;
+    RG_DEBUG << "stopClocks() begin...";
 #endif
 
     if (checkAlsaError(snd_seq_stop_queue(m_midiHandle, m_queue, NULL), "stopClocks(): stopping queue") < 0) {
@@ -4170,8 +4145,7 @@ AlsaDriver::stopClocks()
     checkAlsaError(snd_seq_drain_output(m_midiHandle), "stopClocks(): draining output to zpos queue");
 
 #ifdef DEBUG_ALSA
-
-    std::cerr << "AlsaDriver::stopClocks: ALSA time now is " << getAlsaTime() << std::endl;
+    RG_DEBUG << "stopClocks(): ALSA time now is " << getAlsaTime();
 #endif
 
     m_alsaPlayStartTime = RealTime::zeroTime;
