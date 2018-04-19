@@ -213,9 +213,6 @@ JackDriver::initialise(bool reinitialise)
 {
     m_ok = false;
 
-    Audit audit;
-    audit << std::endl;
-
     std::string jackClientName = "rosegarden";
 
     // set up JackOpenOptions per user config
@@ -230,13 +227,8 @@ JackDriver::initialise(bool reinitialise)
     // attempt connection to JACK server
     //
     if ((m_client = jack_client_open(jackClientName.c_str(), jackOptions, 0)) == 0) {
-        audit << "JackDriver::initialiseAudio - "
-	      << "JACK server not running"
-	      << std::endl
-              << "Attempt to start JACK server was "
-              << (jackOptions & JackNoStartServer ? "NOT " : "")
-              << "made per user config"
-              << std::endl;
+        RG_WARNING << "initialise() - JACK server not running";
+        RG_WARNING << "  Attempt to start JACK server was " << (jackOptions & JackNoStartServer ? "NOT " : "") << "made per user config";
         return ;
     }
 
@@ -264,9 +256,7 @@ JackDriver::initialise(bool reinitialise)
     m_sampleRate = jack_get_sample_rate(m_client);
     m_bufferSize = jack_get_buffer_size(m_client);
 
-    audit << "JackDriver::initialiseAudio - JACK sample rate = "
-    << m_sampleRate << "Hz, buffer size = " << m_bufferSize
-    << std::endl;
+    RG_DEBUG << "initialise() - JACK sample rate = " << m_sampleRate << "Hz, buffer size = " << m_bufferSize;
 
     PluginFactory::setSampleRate(m_sampleRate);
 
@@ -279,8 +269,7 @@ JackDriver::initialise(bool reinitialise)
         //
         m_tempOutBuffer = new sample_t[m_bufferSize];
 
-        audit << "JackDriver::initialiseAudio - "
-        << "creating disk thread" << std::endl;
+        RG_DEBUG << "initialise() - creating disk thread...";
 
         m_fileReader = new AudioFileReader(m_alsaDriver, m_sampleRate);
         m_fileWriter = new AudioFileWriter(m_alsaDriver, m_sampleRate);
@@ -310,20 +299,17 @@ JackDriver::initialise(bool reinitialise)
     m_inputPorts.clear();
 
     if (!createMainOutputs()) { // one stereo pair master, one pair monitor
-        audit << "JackDriver::initialise - "
-        << "failed to create main outputs!" << std::endl;
+        RG_WARNING << "initialise() - failed to create main outputs!";
         return ;
     }
 
     if (!createRecordInputs(1)) {
-        audit << "JackDriver::initialise - "
-        << "failed to create record inputs!" << std::endl;
+        RG_WARNING << "initialise() - failed to create record inputs!";
         return ;
     }
 
     if (jack_activate(m_client)) {
-        audit << "JackDriver::initialise - "
-        << "client activation failed" << std::endl;
+        RG_WARNING << "initialise() - client activation failed";
         return ;
     }
 
@@ -350,63 +336,50 @@ JackDriver::initialise(bool reinitialise)
             unsigned int i = 0;
             for (i = 0; ports[i]; i++)
                 ;
-            audit << "JackDriver::initialiseAudio - "
-            << "found " << i << " JACK physical outputs"
-            << std::endl;
+            RG_DEBUG << "initialise() - found " << i << " JACK physical outputs";
 
             jack_free(ports);
 
-        } else
-            audit << "JackDriver::initialiseAudio - "
-            << "no JACK physical outputs found"
-            << std::endl;
+        } else {
+            RG_WARNING << "initialise() - no JACK physical outputs found";
+        }
 
         if (playback_1 != "") {
-            audit << "JackDriver::initialiseAudio - "
-            << "connecting from "
-            << "\"" << jack_port_name(m_outputMasters[0])
-            << "\" to \"" << playback_1.c_str() << "\""
-            << std::endl;
+            RG_DEBUG << "initialise() - connecting from " << "\"" << jack_port_name(m_outputMasters[0]) << "\" to \"" << playback_1.c_str() << "\"";
 
             // connect our client up to the ALSA ports - first left output
             //
             if (jack_connect(m_client, jack_port_name(m_outputMasters[0]),
                              playback_1.c_str())) {
-                audit << "JackDriver::initialiseAudio - "
-                << "cannot connect to JACK output port" << std::endl;
+                RG_WARNING << "initialise() - cannot connect to JACK output port";
                 return ;
             }
 
             /*
+                    // ??? monitors?
                     if (jack_connect(m_client, jack_port_name(m_outputMonitors[0]),
                                      playback_1.c_str()))
                     {
-                        audit << "JackDriver::initialiseAudio - "
-                              << "cannot connect to JACK output port" << std::endl;
+                        RG_WARNING << "initialise() - cannot connect to JACK output port";
                         return;
                     }
             */
         }
 
         if (playback_2 != "") {
-            audit << "JackDriver::initialiseAudio - "
-            << "connecting from "
-            << "\"" << jack_port_name(m_outputMasters[1])
-            << "\" to \"" << playback_2.c_str() << "\""
-            << std::endl;
+            RG_DEBUG << "initialise() - connecting from " << "\"" << jack_port_name(m_outputMasters[1]) << "\" to \"" << playback_2.c_str() << "\"";
 
             if (jack_connect(m_client, jack_port_name(m_outputMasters[1]),
                              playback_2.c_str())) {
-                audit << "JackDriver::initialiseAudio - "
-                << "cannot connect to JACK output port" << std::endl;
+                RG_WARNING << "initialise() - cannot connect to JACK output port";
             }
 
             /*
+                    // ??? monitors?
                     if (jack_connect(m_client, jack_port_name(m_outputMonitors[1]),
                                      playback_2.c_str()))
                     {
-                        audit << "JackDriver::initialiseAudio - "
-                              << "cannot connect to JACK output port" << std::endl;
+                        RG_WARNING << "initialise() - cannot connect to JACK output port";
                     }
             */
         }
@@ -431,51 +404,36 @@ JackDriver::initialise(bool reinitialise)
             unsigned int i = 0;
             for (i = 0; ports[i]; i++)
                 ;
-            audit << "JackDriver::initialiseAudio - "
-            << "found " << i << " JACK physical inputs"
-            << std::endl;
+            RG_DEBUG << "initialise() - found " << i << " JACK physical inputs";
 
             jack_free(ports);
 
-        } else
-            audit << "JackDriver::initialiseAudio - "
-            << "no JACK physical inputs found"
-            << std::endl;
+        } else {
+            RG_WARNING << "initialise() - no JACK physical inputs found";
+        }
 
         if (capture_1 != "") {
 
-            audit << "JackDriver::initialiseAudio - "
-            << "connecting from "
-            << "\"" << capture_1.c_str()
-            << "\" to \"" << jack_port_name(m_inputPorts[0]) << "\""
-            << std::endl;
+            RG_DEBUG << "initialise() - connecting from " << "\"" << capture_1.c_str() << "\" to \"" << jack_port_name(m_inputPorts[0]) << "\"";
 
             if (jack_connect(m_client, capture_1.c_str(),
                              jack_port_name(m_inputPorts[0]))) {
-                audit << "JackDriver::initialiseAudio - "
-                << "cannot connect to JACK input port" << std::endl;
+                RG_WARNING << "initialise() - cannot connect to JACK input port";
             }
         }
 
         if (capture_2 != "") {
 
-            audit << "JackDriver::initialiseAudio - "
-            << "connecting from "
-            << "\"" << capture_2.c_str()
-            << "\" to \"" << jack_port_name(m_inputPorts[1]) << "\""
-            << std::endl;
+            RG_DEBUG << "initialise() - connecting from " << "\"" << capture_2.c_str() << "\" to \"" << jack_port_name(m_inputPorts[1]) << "\"";
 
             if (jack_connect(m_client, capture_2.c_str(),
                              jack_port_name(m_inputPorts[1]))) {
-                audit << "JackDriver::initialiseAudio - "
-                << "cannot connect to JACK input port" << std::endl;
+                RG_WARNING << "initialise() - cannot connect to JACK input port";
             }
         }
     }
 
-    audit << "JackDriver::initialiseAudio - "
-    << "initialised JACK audio subsystem"
-    << std::endl;
+    RG_DEBUG << "initialise() - initialised JACK audio subsystem";
 
     m_ok = true;
 }
