@@ -277,10 +277,11 @@ Panned::processWheelEvent(QWheelEvent *e)
 
     // Ctrl+wheel to zoom
     if (e->modifiers() & Qt::CTRL) {
+        // Wheel down
         if (e->delta() > 0)
-            emit zoomIn();
-        else if (e->delta() < 0)
             emit zoomOut();
+        else if (e->delta() < 0)  // Wheel up
+            emit zoomIn();
         return;
     }
 
