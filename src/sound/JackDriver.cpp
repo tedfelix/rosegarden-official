@@ -210,6 +210,7 @@ JackDriver::initialise(bool reinitialise)
     audit << '\n';
     audit << "===============================================================\n";
     audit << "JackDriver::initialise() begin...\n";
+    RG_DEBUG << "initialise() begin...";
 
     std::string jackClientName = "rosegarden";
 
@@ -888,7 +889,7 @@ JackDriver::jackProcess(jack_nframes_t nframes)
                     m_alsaDriver->getExternalTransportControl();
                 if (transport) {
 #ifdef DEBUG_JACK_TRANSPORT
-                    RG_DEBUG << "jackProcess(): JACK transport stopped externally at " << position.frame <<;
+                    RG_DEBUG << "jackProcess(): JACK transport stopped externally at " << position.frame;
 #endif
 
                     m_waitingToken = transport->transportJump(
@@ -2061,7 +2062,7 @@ JackDriver::updateAudioData()
 
             if (!obj) {
 
-                std::cerr << "No such object as " << *connections.begin() << std::endl;
+                RG_WARNING << "updateAudioData(): WARNING: No such object as " << *connections.begin();
                 input = 1000;
             } else if (obj->getType() == MappedObject::AudioBuss) {
                 input = (int)((MappedAudioBuss *)obj)->getBussId();
@@ -2069,14 +2070,13 @@ JackDriver::updateAudioData()
                 input = (int)((MappedAudioInput *)obj)->getInputNumber()
                         + 1000;
             } else {
-                std::cerr << "Object " << *connections.begin() << " is not buss or input" << std::endl;
+                RG_WARNING << "updateAudioData(): WARNING: Object " << *connections.begin() << " is not buss or input";
                 input = 1000;
             }
         }
 
         if (m_recordInputs[id].input != input) {
-            std::cerr << "Changing record input for instrument "
-            << id << " to " << input << std::endl;
+            RG_DEBUG << "updateAudioData(): Changing record input for instrument " << id << " to " << input;
         }
         m_recordInputs[id] = RecordInputDesc(input, inputChannel, level);
 
@@ -2151,7 +2151,7 @@ JackDriver::updateAudioData()
     }
 
 #ifdef DEBUG_JACK_DRIVER 
-    //    std::cerr << "JackDriver::updateAudioData exiting" << std::endl;
+    //RG_DEBUG << "updateAudioData() end";
 #endif
 }
 
@@ -2215,7 +2215,7 @@ JackDriver::getAudioQueueLocks()
     int rv = 0;
     if (m_bussMixer) {
 #ifdef DEBUG_JACK_DRIVER
-        std::cerr << "JackDriver::getAudioQueueLocks: trying to lock buss mixer" << std::endl;
+        RG_DEBUG << "getAudioQueueLocks(): trying to lock buss mixer";
 #endif
 
         rv = m_bussMixer->getLock();
@@ -2224,7 +2224,7 @@ JackDriver::getAudioQueueLocks()
     }
     if (m_instrumentMixer) {
 #ifdef DEBUG_JACK_DRIVER
-        std::cerr << "JackDriver::getAudioQueueLocks: ok, now trying for instrument mixer" << std::endl;
+        RG_DEBUG << "getAudioQueueLocks(): ok, now trying for instrument mixer";
 #endif
 
         rv = m_instrumentMixer->getLock();
@@ -2233,7 +2233,7 @@ JackDriver::getAudioQueueLocks()
     }
     if (m_fileReader) {
 #ifdef DEBUG_JACK_DRIVER
-        std::cerr << "JackDriver::getAudioQueueLocks: ok, now trying for disk reader" << std::endl;
+        RG_DEBUG << "getAudioQueueLocks(): ok, now trying for disk reader";
 #endif
 
         rv = m_fileReader->getLock();
@@ -2242,13 +2242,13 @@ JackDriver::getAudioQueueLocks()
     }
     if (m_fileWriter) {
 #ifdef DEBUG_JACK_DRIVER
-        std::cerr << "JackDriver::getAudioQueueLocks: ok, now trying for disk writer" << std::endl;
+        RG_DEBUG << "getAudioQueueLocks(): ok, now trying for disk writer";
 #endif
 
         rv = m_fileWriter->getLock();
     }
 #ifdef DEBUG_JACK_DRIVER
-    std::cerr << "JackDriver::getAudioQueueLocks: ok" << std::endl;
+    RG_DEBUG << "getAudioQueueLocks(): ok";
 #endif
 
     return rv;
@@ -2304,8 +2304,7 @@ JackDriver::releaseAudioQueueLocks()
 {
     int rv = 0;
 #ifdef DEBUG_JACK_DRIVER
-
-    std::cerr << "JackDriver::releaseAudioQueueLocks" << std::endl;
+    RG_DEBUG << "releaseAudioQueueLocks()";
 #endif
 
     if (m_fileWriter)
@@ -2434,7 +2433,7 @@ JackDriver::clearSynthPluginEvents()
     if (!m_instrumentMixer) return;
 
 #ifdef DEBUG_JACK_DRIVER
-    std::cerr << "JackDriver::clearSynthPluginEvents" << std::endl;
+    RG_DEBUG << "clearSynthPluginEvents()";
 #endif
 
     m_instrumentMixer->discardPluginEvents();
@@ -2450,7 +2449,7 @@ JackDriver::openRecordFile(InstrumentId id,
         }
         return m_fileWriter->openRecordFile(id, filename);
     } else {
-        std::cerr << "JackDriver::openRecordFile: No file writer available!" << std::endl;
+        RG_WARNING << "openRecordFile(): WARNING: No file writer available!";
         return false;
     }
 }
