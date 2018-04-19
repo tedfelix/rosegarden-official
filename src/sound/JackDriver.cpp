@@ -21,7 +21,6 @@
 #include "AudioProcess.h"
 #include "base/Profiler.h"
 #include "base/AudioLevel.h"
-#include "Audit.h"
 #include "PluginFactory.h"
 
 #include "misc/ConfigGroups.h"
@@ -631,14 +630,12 @@ JackDriver::setAudioPorts(bool faderOuts, bool submasterOuts)
     if (!m_client)
         return ;
 
-    Audit audit;
 #ifdef DEBUG_JACK_DRIVER
-
-    std::cerr << "JackDriver::setAudioPorts(" << faderOuts << "," << submasterOuts << ")" << std::endl;
+    RG_DEBUG << "setAudioPorts(" << faderOuts << "," << submasterOuts << ")";
 #endif
 
     if (!m_client) {
-        std::cerr << "JackDriver::setAudioPorts(" << faderOuts << "," << submasterOuts << "): no client yet" << std::endl;
+        RG_WARNING << "setAudioPorts(" << faderOuts << "," << submasterOuts << "): no client yet";
         return ;
     }
 
@@ -650,7 +647,7 @@ JackDriver::setAudioPorts(bool faderOuts, bool submasterOuts)
         m_alsaDriver->getSoftSynthInstrumentNumbers(instrumentBase, synthInstruments);
         if (!createFaderOutputs(audioInstruments, synthInstruments)) {
             m_ok = false;
-            audit << "Failed to create fader outs!" << std::endl;
+            RG_WARNING << "setAudioPorts(): Failed to create fader outs!";
             return ;
         }
     } else {
@@ -664,13 +661,13 @@ JackDriver::setAudioPorts(bool faderOuts, bool submasterOuts)
 	    m_alsaDriver->getMappedStudio()->getObjectCount
 	    (MappedObject::AudioBuss);
 	if (count == 0) {
-	    audit << "Mapped studio contains no master buss!  Probably a symptom of a serious error" << std::endl;
+	    RG_WARNING << "setAudioPorts(): Mapped studio contains no master buss!  Probably a symptom of a serious error";
 	} else {
 	    count = count - 1;
 	}
         if (!createSubmasterOutputs(count)) {
             m_ok = false;
-            audit << "Failed to create submaster outs!" << std::endl;
+            RG_WARNING << "setAudioPorts(): Failed to create submaster outs!";
             return ;
         }
 
