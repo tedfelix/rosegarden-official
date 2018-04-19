@@ -1368,7 +1368,7 @@ JackDriver::jackProcessRecord(InstrumentId id,
     if (sourceBufferLeft) {
 
 #ifdef DEBUG_JACK_PROCESS
-        std::cerr << "JackDriver::jackProcessRecord(" << id << "): buss input provided" << std::endl;
+        RG_DEBUG << "jackProcessRecord(" << id << "): buss input provided";
 #endif
 
         inputBufferLeft = sourceBufferLeft;
@@ -1378,7 +1378,7 @@ JackDriver::jackProcessRecord(InstrumentId id,
     } else if (recInput < 1000) {
 
 #ifdef DEBUG_JACK_PROCESS
-        std::cerr << "JackDriver::jackProcessRecord(" << id << "): no known input" << std::endl;
+        RG_DEBUG << "jackProcessRecord(" << id << "): no known input";
 #endif
 
         return 0;
@@ -1386,7 +1386,7 @@ JackDriver::jackProcessRecord(InstrumentId id,
     } else {
 
 #ifdef DEBUG_JACK_PROCESS
-        std::cerr << "JackDriver::jackProcessRecord(" << id << "): record input " << recInput << std::endl;
+        RG_DEBUG << "jackProcessRecord(" << id << "): record input " << recInput;
 #endif
 
         int input = recInput - 1000;
@@ -1412,7 +1412,7 @@ JackDriver::jackProcessRecord(InstrumentId id,
         m_fileWriter->haveRecordFileOpen(id)) {
 
 #ifdef DEBUG_JACK_PROCESS
-        std::cerr << "JackDriver::jackProcessRecord(" << id << "): recording" << std::endl;
+        RG_DEBUG << "jackProcessRecord(" << id << "): recording";
 #endif
 
         memset(m_tempOutBuffer, 0, nframes * sizeof(sample_t));
@@ -1470,7 +1470,7 @@ JackDriver::jackProcessRecord(InstrumentId id,
         // want peak levels and monitors anyway, even if not recording
 
 #ifdef DEBUG_JACK_PROCESS
-        std::cerr << "JackDriver::jackProcessRecord(" << id << "): monitoring only" << std::endl;
+        RG_DEBUG << "jackProcessRecord(" << id << "): monitoring only";
 #endif
 
         if (inputBufferLeft) {
@@ -1547,11 +1547,9 @@ JackDriver::jackSyncCallback(jack_transport_state_t state,
 
 #ifdef DEBUG_JACK_TRANSPORT
 
-    std::cerr << "JackDriver::jackSyncCallback: state " << state << " [" << (state == 0 ? "stopped" : state == 1 ? "rolling" : state == 2 ? "looping" : state == 3 ? "starting" : "unknown") << "], frame " << position->frame << ", waiting " << inst->m_waiting << ", playing " << inst->m_alsaDriver->isPlaying() << std::endl;
-
-    std::cerr << "JackDriver::jackSyncCallback: m_waitingState " << inst->m_waitingState << ", unique_1 " << position->unique_1 << ", unique_2 " << position->unique_2 << std::endl;
-
-    std::cerr << "JackDriver::jackSyncCallback: rate " << position->frame_rate << ", bar " << position->bar << ", beat " << position->beat << ", tick " << position->tick << ", bpm " << position->beats_per_minute << std::endl;
+    RG_DEBUG << "jackSyncCallback(): state " << state << " [" << (state == 0 ? "stopped" : state == 1 ? "rolling" : state == 2 ? "looping" : state == 3 ? "starting" : "unknown") << "], frame " << position->frame << ", waiting " << inst->m_waiting << ", playing " << inst->m_alsaDriver->isPlaying();
+    RG_DEBUG << "jackSyncCallback(): m_waitingState " << inst->m_waitingState << ", unique_1 " << position->unique_1 << ", unique_2 " << position->unique_2;
+    RG_DEBUG << "jackSyncCallback(): rate " << position->frame_rate << ", bar " << position->bar << ", beat " << position->beat << ", tick " << position->tick << ", bpm " << position->beats_per_minute;
 
 #endif
 
@@ -1584,41 +1582,37 @@ JackDriver::jackSyncCallback(jack_transport_state_t state,
                                                    position->frame_rate);
 
 #ifdef DEBUG_JACK_TRANSPORT
-
-            std::cerr << "JackDriver::jackSyncCallback: Requesting jump to " << rt << std::endl;
+            RG_DEBUG << "jackSyncCallback(): Requesting jump to " << rt;
 #endif
 
             inst->m_waitingToken = transport->transportJump(request, rt);
 
 #ifdef DEBUG_JACK_TRANSPORT
-
-            std::cerr << "JackDriver::jackSyncCallback: My token is " << inst->m_waitingToken << std::endl;
+            RG_DEBUG << "jackSyncCallback(): My token is " << inst->m_waitingToken;
 #endif
 
         } else if (request == ExternalTransport::TransportStop) {
 
 #ifdef DEBUG_JACK_TRANSPORT
-            std::cerr << "JackDriver::jackSyncCallback: Requesting state change to " << request << std::endl;
+            RG_DEBUG << "jackSyncCallback(): Requesting state change to " << request;
 #endif
 
             inst->m_waitingToken = transport->transportChange(request);
 
 #ifdef DEBUG_JACK_TRANSPORT
-
-            std::cerr << "JackDriver::jackSyncCallback: My token is " << inst->m_waitingToken << std::endl;
+            RG_DEBUG << "jackSyncCallback(): My token is " << inst->m_waitingToken;
 #endif
 
         } else if (request == ExternalTransport::TransportNoChange) {
 
 #ifdef DEBUG_JACK_TRANSPORT
-            std::cerr << "JackDriver::jackSyncCallback: Requesting no state change!" << std::endl;
+            RG_DEBUG << "jackSyncCallback(): Requesting no state change!";
 #endif
 
             inst->m_waitingToken = transport->transportChange(request);
 
 #ifdef DEBUG_JACK_TRANSPORT
-
-            std::cerr << "JackDriver::jackSyncCallback: My token is " << inst->m_waitingToken << std::endl;
+            RG_DEBUG << "jackSyncCallback(): My token is " << inst->m_waitingToken;
 #endif
 
         }
@@ -1627,8 +1621,7 @@ JackDriver::jackSyncCallback(jack_transport_state_t state,
         inst->m_waitingState = state;
 
 #ifdef DEBUG_JACK_TRANSPORT
-
-        std::cerr << "JackDriver::jackSyncCallback: Setting waiting to " << inst->m_waiting << " and waiting state to " << inst->m_waitingState << " (request was " << request << ")" << std::endl;
+        RG_DEBUG << "jackSyncCallback(): Setting waiting to " << inst->m_waiting << " and waiting state to " << inst->m_waitingState << " (request was " << request << ")";
 #endif
 
         return 0;
@@ -1637,13 +1630,13 @@ JackDriver::jackSyncCallback(jack_transport_state_t state,
 
         if (transport->isTransportSyncComplete(inst->m_waitingToken)) {
 #ifdef DEBUG_JACK_TRANSPORT
-            std::cerr << "JackDriver::jackSyncCallback: Sync complete" << std::endl;
+            RG_DEBUG << "jackSyncCallback(): Sync complete";
 #endif
 
             return 1;
         } else {
 #ifdef DEBUG_JACK_TRANSPORT
-            std::cerr << "JackDriver::jackSyncCallback: Sync not complete" << std::endl;
+            RG_DEBUG << "jackSyncCallback(): Sync not complete";
 #endif
 
             return 0;
@@ -1658,19 +1651,16 @@ JackDriver::relocateTransportInternal(bool alsoStart)
         return true;
 
 #ifdef DEBUG_JACK_TRANSPORT
-
     const char *fn = (alsoStart ?
-                      "JackDriver::startTransport" :
-                      "JackDriver::relocateTransport");
+                      "JackDriver::startTransport()" :
+                      "JackDriver::relocateTransport()");
 #endif
 
 #ifdef DEBUG_JACK_TRANSPORT
-
-    std::cerr << fn << std::endl;
+    RG_DEBUG << "relocateTransportInternal(): called by " << fn;
 #else
 #ifdef DEBUG_JACK_DRIVER
-
-    std::cerr << "JackDriver::relocateTransportInternal" << std::endl;
+    RG_DEBUG << "relocateTransportInternal()";
 #endif
 #endif
 
@@ -1696,7 +1686,7 @@ JackDriver::relocateTransportInternal(bool alsoStart)
                 // Nope, this came from Rosegarden
 
 #ifdef DEBUG_JACK_TRANSPORT
-                std::cerr << fn << ": asking JACK transport to start, setting wait state" << std::endl;
+                RG_DEBUG << "relocateTransportInternal(): called by " << fn << ": asking JACK transport to start, setting wait state";
 #endif
 
                 m_waiting = true;
@@ -1724,7 +1714,7 @@ JackDriver::relocateTransportInternal(bool alsoStart)
                 }
             } else {
 #ifdef DEBUG_JACK_TRANSPORT
-                std::cerr << fn << ": waiting already" << std::endl;
+                RG_DEBUG << "relocateTransportInternal(): called by " << fn << ": waiting already";
 #endif
 
             }
@@ -1740,7 +1730,7 @@ JackDriver::relocateTransportInternal(bool alsoStart)
 #endif
 #ifdef DEBUG_JACK_TRANSPORT
 
-    std::cerr << fn << ": not on JACK transport, accepting right away" << std::endl;
+    RG_DEBUG << "relocateTransportInternal(): called by " << fn << ": not on JACK transport, accepting right away";
 #endif
 
     return true;
@@ -1765,7 +1755,8 @@ JackDriver::stopTransport()
     if (!m_client)
         return ;
 
-    std::cerr << "JackDriver::stopTransport: resetting m_haveAsyncAudioEvent" << std::endl;
+    RG_DEBUG << "stopTransport(): resetting m_haveAsyncAudioEvent";
+
     m_haveAsyncAudioEvent = false;
 
 #ifdef DEBUG_JACK_TRANSPORT
@@ -1773,7 +1764,7 @@ JackDriver::stopTransport()
     struct timeval tv;
     (void)gettimeofday(&tv, 0);
     RealTime endTime = RealTime(tv.tv_sec, tv.tv_usec * 1000); //!!!
-    std::cerr << "\nJackDriver::stop: frames this play: " << framesThisPlay << ", elapsed " << (endTime - startTime) << std::endl;
+    RG_DEBUG << "stopTransport(): frames this play: " << framesThisPlay << ", elapsed " << (endTime - startTime);
 #endif
 
     if (m_jackTransportEnabled) {
@@ -1792,7 +1783,7 @@ JackDriver::stopTransport()
                 // Rosegarden, so:
 
 #ifdef DEBUG_JACK_TRANSPORT
-                std::cerr << "JackDriver::stop: internal request, asking JACK transport to stop" << std::endl;
+                RG_DEBUG << "stopTransport(): internal request, asking JACK transport to stop";
 #endif
 
                 jack_transport_stop(m_client);
@@ -1801,7 +1792,7 @@ JackDriver::stopTransport()
                 // Nothing to do
 
 #ifdef DEBUG_JACK_TRANSPORT
-                std::cerr << "JackDriver::stop: external request, JACK transport is already stopped" << std::endl;
+                RG_DEBUG << "stopTransport(): external request, JACK transport is already stopped";
 #endif
 
             }
@@ -1821,9 +1812,7 @@ JackDriver::jackBufferSize(jack_nframes_t nframes, void *arg)
     JackDriver *inst = static_cast<JackDriver*>(arg);
 
 #ifdef DEBUG_JACK_DRIVER
-
-    std::cerr << "JackDriver::jackBufferSize - buffer size changed to "
-    << nframes << std::endl;
+    RG_DEBUG << "jackBufferSize() - buffer size changed to " << nframes;
 #endif
 
     inst->m_bufferSize = nframes;
@@ -1848,9 +1837,7 @@ JackDriver::jackSampleRate(jack_nframes_t nframes, void *arg)
     JackDriver *inst = static_cast<JackDriver*>(arg);
 
 #ifdef DEBUG_JACK_DRIVER
-
-    std::cerr << "JackDriver::jackSampleRate - sample rate changed to "
-    << nframes << std::endl;
+    RG_DEBUG << "jackSampleRate() - sample rate changed to " << nframes;
 #endif
 
     inst->m_sampleRate = nframes;
@@ -1862,13 +1849,11 @@ void
 JackDriver::jackShutdown(void *arg)
 {
 #ifdef DEBUG_JACK_DRIVER
-    std::cerr << "JackDriver::jackShutdown() - callback received - "
-    << "informing GUI" << std::endl;
+    RG_DEBUG << "jackShutdown() - callback received - informing GUI";
 #endif
 
 #ifdef DEBUG_JACK_XRUN
-
-    std::cerr << "JackDriver::jackShutdown" << std::endl;
+    RG_DEBUG << "jackShutdown()";
     Profiles::getInstance()->dump();
 #endif
 
@@ -1882,12 +1867,11 @@ int
 JackDriver::jackXRun(void *arg)
 {
 #ifdef DEBUG_JACK_DRIVER
-    std::cerr << "JackDriver::jackXRun" << std::endl;
+    RG_DEBUG << "jackXRun()";
 #endif
 
 #ifdef DEBUG_JACK_XRUN
-
-    std::cerr << "JackDriver::jackXRun" << std::endl;
+    RG_DEBUG << "jackXRun()";
     Profiles::getInstance()->dump();
 #endif
 
@@ -1909,7 +1893,7 @@ JackDriver::restoreIfRestorable()
 
     if (m_client) {
         jack_client_close(m_client);
-        std::cerr << "closed client" << std::endl;
+        RG_DEBUG << "restoreIfRestorable(): closed client";
         m_client = 0;
     }
 
@@ -1919,7 +1903,7 @@ JackDriver::restoreIfRestorable()
 
         if (m_instrumentMixer)
             m_instrumentMixer->resetAllPlugins(true);
-        std::cerr << "reset plugins" << std::endl;
+        RG_DEBUG << "restoreIfRestorable(): reset plugins";
 
         initialise(true);
 
@@ -1961,9 +1945,7 @@ JackDriver::prebufferAudio()
     m_instrumentMixer->resetAllPlugins(false);
 
 #ifdef DEBUG_JACK_DRIVER
-
-    std::cerr << "JackDriver::prebufferAudio: sequencer time is "
-    << m_alsaDriver->getSequencerTime() << std::endl;
+    RG_DEBUG << "prebufferAudio(): sequencer time is " << m_alsaDriver->getSequencerTime();
 #endif
 
     RealTime sliceStart = getNextSliceStart(m_alsaDriver->getSequencerTime());
@@ -1981,7 +1963,7 @@ void
 JackDriver::kickAudio()
 {
 #ifdef DEBUG_JACK_PROCESS
-    std::cerr << "JackDriver::kickAudio" << std::endl;
+    RG_DEBUG << "kickAudio()";
 #endif
 
     if (m_fileReader)
@@ -2001,7 +1983,7 @@ JackDriver::updateAudioData()
         return ;
 
 #ifdef DEBUG_JACK_DRIVER 
-    //    std::cerr << "JackDriver::updateAudioData starting" << std::endl;
+    //RG_DEBUG << "updateAudioData() begin...";
 #endif
 
     MappedAudioBuss *mbuss =
@@ -2063,8 +2045,7 @@ JackDriver::updateAudioData()
 
         if (connections.empty()) {
 
-            std::cerr << "No connections in for record instrument "
-            << (id) << " (mapped id " << fader->getId() << ")" << std::endl;
+            RG_WARNING << "updateAudioData(): WARNING: No connections in for record instrument " << (id) << " (mapped id " << fader->getId() << ")";
 
             // oh dear.
             input = 1000;
