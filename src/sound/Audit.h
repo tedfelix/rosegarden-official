@@ -29,19 +29,19 @@ namespace Rosegarden {
  * of this log can be examined by the user via the preferences dialog.
  * Edit > Preferences... > General tab > Details... button.
  *
- * There are some issues with this class as it stands:
+ * In the past, this class also dumped the logging to RG_DEBUG.  This
+ * way one only needed to log to Audit and the logging would also end
+ * up in the debug output.  The problem with this is that Audit delays
+ * logging to RG_DEBUG until the Audit object is destroyed.  This means
+ * that when there is a crash, logging it lost.
  *
- *   1. It batches the logging and sends it to RG_DEBUG on destruction
- *      of an Audit instance.  This means that if there is a crash,
- *      important debug output will be lost.
+ * Now, if you want logging to RG_DEBUG/RG_WARNING and Audit, you have
+ * to explicitly use both.  E.g.:
  *
- *   2. It uses std::stringstream which means it cannot take advantage
- *      of the insertion operators that have been coded for QDebug.
+ *   audit << "AlsaDriver::initialiseMidi(): initialised MIDI subsystem\n";
+ *   RG_DEBUG << "initialiseMidi(): initialised MIDI subsystem";
  *
- * Recommendation: Remove the RG_DEBUG from the dtor.
- *   Then use Audit in parallel with RG_DEBUG/RG_WARNING.  It's duplicated
- *   code, but it solves the key issue which is the loss of logging in the
- *   case of a crash.
+ * It's redundant, but there's no easy way around this.
  */
 class Audit : public std::stringstream
 {

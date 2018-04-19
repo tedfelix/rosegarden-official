@@ -25,8 +25,6 @@ namespace Rosegarden
 Audit::~Audit()
 {
     std::string s = str();
-    if (s != "")
-        RG_DEBUG << s;
     m_audit += s;
 }
 
