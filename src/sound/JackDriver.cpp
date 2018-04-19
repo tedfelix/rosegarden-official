@@ -353,11 +353,13 @@ JackDriver::initialise(bool reinitialise)
             audit << "JackDriver::initialiseAudio - "
             << "found " << i << " JACK physical outputs"
             << std::endl;
+
+            jack_free(ports);
+
         } else
             audit << "JackDriver::initialiseAudio - "
             << "no JACK physical outputs found"
             << std::endl;
-        free(ports);
 
         if (playback_1 != "") {
             audit << "JackDriver::initialiseAudio - "
@@ -432,11 +434,13 @@ JackDriver::initialise(bool reinitialise)
             audit << "JackDriver::initialiseAudio - "
             << "found " << i << " JACK physical inputs"
             << std::endl;
+
+            jack_free(ports);
+
         } else
             audit << "JackDriver::initialiseAudio - "
             << "no JACK physical inputs found"
             << std::endl;
-        free(ports);
 
         if (capture_1 != "") {
 
