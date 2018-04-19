@@ -21,6 +21,7 @@
 #include "AudioProcess.h"
 #include "base/Profiler.h"
 #include "base/AudioLevel.h"
+#include "Audit.h"
 #include "PluginFactory.h"
 
 #include "misc/ConfigGroups.h"
@@ -212,6 +213,13 @@ JackDriver::initialise(bool reinitialise)
 {
     m_ok = false;
 
+    // Create a log that the user can easily see through the preferences
+    // even in a release build.
+    Audit audit;
+    audit << '\n';
+    audit << "===============================================================\n";
+    audit << "JackDriver::initialise() begin...\n";
+
     std::string jackClientName = "rosegarden";
 
     // set up JackOpenOptions per user config
@@ -228,6 +236,9 @@ JackDriver::initialise(bool reinitialise)
     if ((m_client = jack_client_open(jackClientName.c_str(), jackOptions, 0)) == 0) {
         RG_WARNING << "initialise() - JACK server not running";
         RG_WARNING << "  Attempt to start JACK server was " << (jackOptions & JackNoStartServer ? "NOT " : "") << "made per user config";
+        // Also send to user log.
+        audit << "JACK server not running\n";
+        audit << "  Attempt to start JACK server was " << (jackOptions & JackNoStartServer ? "NOT " : "") << "made per user config\n";
         return ;
     }
 
@@ -256,6 +267,7 @@ JackDriver::initialise(bool reinitialise)
     m_bufferSize = jack_get_buffer_size(m_client);
 
     RG_DEBUG << "initialise() - JACK sample rate = " << m_sampleRate << "Hz, buffer size = " << m_bufferSize;
+    audit << "JACK sample rate = " << m_sampleRate << "Hz, buffer size = " << m_bufferSize << '\n';
 
     PluginFactory::setSampleRate(m_sampleRate);
 
@@ -269,6 +281,7 @@ JackDriver::initialise(bool reinitialise)
         m_tempOutBuffer = new sample_t[m_bufferSize];
 
         RG_DEBUG << "initialise() - creating disk thread...";
+        audit << "Creating audio file thread...\n";
 
         m_fileReader = new AudioFileReader(m_alsaDriver, m_sampleRate);
         m_fileWriter = new AudioFileWriter(m_alsaDriver, m_sampleRate);
@@ -299,16 +312,19 @@ JackDriver::initialise(bool reinitialise)
 
     if (!createMainOutputs()) { // one stereo pair master, one pair monitor
         RG_WARNING << "initialise() - failed to create main outputs!";
+        audit << "WARNING: failed to create main outputs!\n";
         return ;
     }
 
     if (!createRecordInputs(1)) {
         RG_WARNING << "initialise() - failed to create record inputs!";
+        audit << "WARNING: failed to create record inputs!\n";
         return ;
     }
 
     if (jack_activate(m_client)) {
         RG_WARNING << "initialise() - client activation failed";
+        audit << "WARNING: client activation failed\n";
         return ;
     }
 
@@ -336,21 +352,25 @@ JackDriver::initialise(bool reinitialise)
             for (i = 0; ports[i]; i++)
                 ;
             RG_DEBUG << "initialise() - found " << i << " JACK physical outputs";
+            audit << "Found " << i << " JACK physical outputs\n";
 
             jack_free(ports);
 
         } else {
             RG_WARNING << "initialise() - no JACK physical outputs found";
+            audit << "WARNING: no JACK physical outputs found\n";
         }
 
         if (playback_1 != "") {
             RG_DEBUG << "initialise() - connecting from " << "\"" << jack_port_name(m_outputMasters[0]) << "\" to \"" << playback_1.c_str() << "\"";
+            audit << "connecting from " << "\"" << jack_port_name(m_outputMasters[0]) << "\" to \"" << playback_1.c_str() << "\"\n";
 
             // connect our client up to the ALSA ports - first left output
             //
             if (jack_connect(m_client, jack_port_name(m_outputMasters[0]),
                              playback_1.c_str())) {
                 RG_WARNING << "initialise() - cannot connect to JACK output port";
+                audit << "WARNING: cannot connect to JACK output port\n";
                 return ;
             }
 
@@ -360,6 +380,7 @@ JackDriver::initialise(bool reinitialise)
                                      playback_1.c_str()))
                     {
                         RG_WARNING << "initialise() - cannot connect to JACK output port";
+                        audit << "WARNING: cannot connect to JACK output port\n";
                         return;
                     }
             */
@@ -367,10 +388,12 @@ JackDriver::initialise(bool reinitialise)
 
         if (playback_2 != "") {
             RG_DEBUG << "initialise() - connecting from " << "\"" << jack_port_name(m_outputMasters[1]) << "\" to \"" << playback_2.c_str() << "\"";
+            audit << "WARNING: connecting from " << "\"" << jack_port_name(m_outputMasters[1]) << "\" to \"" << playback_2.c_str() << "\"\n";
 
             if (jack_connect(m_client, jack_port_name(m_outputMasters[1]),
                              playback_2.c_str())) {
                 RG_WARNING << "initialise() - cannot connect to JACK output port";
+                audit << "WARNING: cannot connect to JACK output port\n";
             }
 
             /*
@@ -379,6 +402,7 @@ JackDriver::initialise(bool reinitialise)
                                      playback_2.c_str()))
                     {
                         RG_WARNING << "initialise() - cannot connect to JACK output port";
+                        audit << "WARNING: cannot connect to JACK output port\n";
                     }
             */
         }
@@ -404,35 +428,42 @@ JackDriver::initialise(bool reinitialise)
             for (i = 0; ports[i]; i++)
                 ;
             RG_DEBUG << "initialise() - found " << i << " JACK physical inputs";
+            audit << "found " << i << " JACK physical inputs\n";
 
             jack_free(ports);
 
         } else {
             RG_WARNING << "initialise() - no JACK physical inputs found";
+            audit << "WARNING: no JACK physical inputs found\n";
         }
 
         if (capture_1 != "") {
 
             RG_DEBUG << "initialise() - connecting from " << "\"" << capture_1.c_str() << "\" to \"" << jack_port_name(m_inputPorts[0]) << "\"";
+            audit << "connecting from " << "\"" << capture_1.c_str() << "\" to \"" << jack_port_name(m_inputPorts[0]) << "\"\n";
 
             if (jack_connect(m_client, capture_1.c_str(),
                              jack_port_name(m_inputPorts[0]))) {
                 RG_WARNING << "initialise() - cannot connect to JACK input port";
+                audit << "WARNING: cannot connect to JACK input port\n";
             }
         }
 
         if (capture_2 != "") {
 
             RG_DEBUG << "initialise() - connecting from " << "\"" << capture_2.c_str() << "\" to \"" << jack_port_name(m_inputPorts[1]) << "\"";
+            audit << "connecting from " << "\"" << capture_2.c_str() << "\" to \"" << jack_port_name(m_inputPorts[1]) << "\"\n";
 
             if (jack_connect(m_client, capture_2.c_str(),
                              jack_port_name(m_inputPorts[1]))) {
                 RG_WARNING << "initialise() - cannot connect to JACK input port";
+                audit << "WARNING: cannot connect to JACK input port\n";
             }
         }
     }
 
     RG_DEBUG << "initialise() - initialised JACK audio subsystem";
+    audit << "initialised JACK audio subsystem\n";
 
     m_ok = true;
 }
@@ -630,12 +661,20 @@ JackDriver::setAudioPorts(bool faderOuts, bool submasterOuts)
     if (!m_client)
         return ;
 
+    // Create a log that the user can easily see through the preferences
+    // even in a release build.
+    Audit audit;
+    audit << '\n';
+    audit << "===============================================================\n";
+    audit << "JackDriver::setAudioPorts() begin...\n";
+
 #ifdef DEBUG_JACK_DRIVER
     RG_DEBUG << "setAudioPorts(" << faderOuts << "," << submasterOuts << ")";
 #endif
 
     if (!m_client) {
         RG_WARNING << "setAudioPorts(" << faderOuts << "," << submasterOuts << "): no client yet";
+        audit << "WARNING: setAudioPorts(" << faderOuts << "," << submasterOuts << "): no client yet\n";
         return ;
     }
 
@@ -648,6 +687,7 @@ JackDriver::setAudioPorts(bool faderOuts, bool submasterOuts)
         if (!createFaderOutputs(audioInstruments, synthInstruments)) {
             m_ok = false;
             RG_WARNING << "setAudioPorts(): Failed to create fader outs!";
+            audit << "WARNING: Failed to create fader outs!\n";
             return ;
         }
     } else {
@@ -662,12 +702,14 @@ JackDriver::setAudioPorts(bool faderOuts, bool submasterOuts)
 	    (MappedObject::AudioBuss);
 	if (count == 0) {
 	    RG_WARNING << "setAudioPorts(): Mapped studio contains no master buss!  Probably a symptom of a serious error";
+        audit << "WARNING: Mapped studio contains no master buss!  Probably a symptom of a serious error\n";
 	} else {
 	    count = count - 1;
 	}
         if (!createSubmasterOutputs(count)) {
             m_ok = false;
             RG_WARNING << "setAudioPorts(): Failed to create submaster outs!";
+            audit << "WARNING(): Failed to create submaster outs!\n";
             return ;
         }
 
