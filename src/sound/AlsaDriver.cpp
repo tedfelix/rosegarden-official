@@ -126,11 +126,13 @@ AlsaDriver::AlsaDriver(MappedStudio *studio):
     m_timerRatioCalculated(false),
     m_debug(false)
 {
+    // Create a log that the user can easily see through the preferences
+    // even in a release build.
     Audit audit;
-    audit << "Rosegarden " << VERSION << " - AlsaDriver " << m_name << std::endl;
-    m_pendSysExcMap = new DeviceEventMap();
+    audit << "Rosegarden " << VERSION << " - AlsaDriver " << m_name << '\n';
+    RG_DEBUG << "ctor: Rosegarden " << VERSION << " - AlsaDriver " << m_name;
 
-    RG_WARNING << "ctor begin...";
+    m_pendSysExcMap = new DeviceEventMap();
 
 #ifndef NDEBUG
     // Debugging Mode
@@ -179,7 +181,7 @@ void
 AlsaDriver::shutdown()
 {
 #ifdef DEBUG_ALSA
-    std::cerr << "AlsaDriver::~AlsaDriver - shutting down" << std::endl;
+    RG_DEBUG << "shutdown(): shutting down";
 #endif
 
     if (m_midiHandle) {
@@ -193,20 +195,18 @@ AlsaDriver::shutdown()
 
     if (m_midiHandle) {
 #ifdef DEBUG_ALSA
-        std::cerr << "AlsaDriver::shutdown - closing MIDI client" << std::endl;
+        RG_DEBUG << "shutdown() - closing MIDI client";
 #endif
 
         checkAlsaError(snd_seq_stop_queue(m_midiHandle, m_queue, 0), "shutdown(): stopping queue");
         checkAlsaError(snd_seq_drain_output(m_midiHandle), "shutdown(): drain output");
 #ifdef DEBUG_ALSA
-
-        std::cerr << "AlsaDriver::shutdown - stopped queue" << std::endl;
+        RG_DEBUG << "shutdown() - stopped queue";
 #endif
 
         snd_seq_close(m_midiHandle);
 #ifdef DEBUG_ALSA
-
-        std::cerr << "AlsaDriver::shutdown - closed MIDI handle" << std::endl;
+        RG_DEBUG << "shutdown() - closed MIDI handle";
 #endif
 
         m_midiHandle = 0;
@@ -243,8 +243,7 @@ AlsaDriver::getSystemInfo()
     snd_seq_system_info_alloca(&sysinfo);
 
     if ((err = snd_seq_system_info(m_midiHandle, sysinfo)) < 0) {
-        std::cerr << "System info error: " << snd_strerror(err)
-                  << std::endl;
+        RG_WARNING << "getSystemInfo(): Error: " << snd_strerror(err);
         reportFailure(MappedEvent::FailureALSACallFailed);
         m_maxQueues = 0;
         m_maxClients = 0;
@@ -273,30 +272,17 @@ AlsaDriver::showQueueStatus(int queue)
             if (err == -ENOENT)
                 continue;
 
-            std::cerr << "Client " << idx << " info error: "
-                      << snd_strerror(err) << std::endl;
+            RG_WARNING << "showQueueStatus(): Client " << idx << " info error: " << snd_strerror(err);
 
             reportFailure(MappedEvent::FailureALSACallFailed);
             return ;
         }
 
 #ifdef DEBUG_ALSA
-        std::cerr << "Queue " << snd_seq_queue_status_get_queue(status)
-                  << std::endl;
-
-        std::cerr << "Tick       = "
-                  << snd_seq_queue_status_get_tick_time(status)
-                  << std::endl;
-
-        std::cerr << "Realtime   = "
-                  << snd_seq_queue_status_get_real_time(status)->tv_sec
-                  << "."
-                  << snd_seq_queue_status_get_real_time(status)->tv_nsec
-                  << std::endl;
-
-        std::cerr << "Flags      = 0x"
-                  << snd_seq_queue_status_get_status(status)
-                  << std::endl;
+        RG_DEBUG << "showQueueStatus(): Queue " << snd_seq_queue_status_get_queue(status);
+        RG_DEBUG << "showQueueStatus(): Tick       = " << snd_seq_queue_status_get_tick_time(status);
+        RG_DEBUG << "showQueueStatus(): Realtime   = " << snd_seq_queue_status_get_real_time(status)->tv_sec << "." << snd_seq_queue_status_get_real_time(status)->tv_nsec;
+        RG_DEBUG << "showQueueStatus(): Flags      = 0x" << snd_seq_queue_status_get_status(status);
 #endif
 
     }
@@ -350,13 +336,13 @@ AlsaDriver::generateTimerList()
             if (info.subdevice < 0)
                 info.subdevice = 0;
 
-            //        std::cerr << "got timer: class " << info.clas << std::endl;
+            //RG_DEBUG << "generateTimerList(): got timer: class " << info.clas;
 
             sprintf(timerName, "hw:CLASS=%i,SCLASS=%i,CARD=%i,DEV=%i,SUBDEV=%i",
                     info.clas, info.sclas, info.card, info.device, info.subdevice);
 
             if (snd_timer_open(&timerHandle, timerName, SND_TIMER_OPEN_NONBLOCK) < 0) {
-                std::cerr << "Failed to open timer: " << timerName << std::endl;
+                RG_WARNING << "generateTimerList(): Failed to open timer: " << timerName;
                 continue;
             }
 
@@ -367,7 +353,7 @@ AlsaDriver::generateTimerList()
             info.resolution = snd_timer_info_get_resolution(timerInfo);
             snd_timer_close(timerHandle);
 
-            //        std::cerr << "adding timer: " << info.name << std::endl;
+            //RG_DEBUG << "generateTimerList(): adding timer: " << info.name;
 
             m_timers.push_back(info);
         }
@@ -544,8 +530,10 @@ AlsaDriver::generatePortList(AlsaPortList *newPorts)
     snd_seq_client_info_alloca(&cinfo);
     snd_seq_client_info_set_client(cinfo, -1);
 
-    audit << std::endl << "  ALSA Client information:"
-          << std::endl << std::endl;
+    audit << '\n';
+    audit << "  ALSA Client information:\n";
+    audit << '\n';
+    RG_DEBUG << "generatePortList(): ALSA Client information:";
 
     // Get only the client ports we're interested in and store them
     // for sorting and then device creation.
@@ -577,6 +565,11 @@ AlsaDriver::generatePortList(AlsaPortList *newPorts)
                       << port << " - ("
                       << snd_seq_client_info_get_name(cinfo) << ", "
                       << snd_seq_port_info_get_name(pinfo) << ")";
+                RG_DEBUG << "    "
+                      << client << ","
+                      << port << " - ("
+                      << snd_seq_client_info_get_name(cinfo) << ", "
+                      << snd_seq_port_info_get_name(pinfo) << ")";
 
                 PortDirection direction;
 
@@ -594,6 +587,7 @@ AlsaDriver::generatePortList(AlsaPortList *newPorts)
                 }
 
                 audit << " [ctype " << clientType << ", ptype " << portType << ", cap " << capability << "]";
+                RG_DEBUG << "      [ctype " << clientType << ", ptype " << portType << ", cap " << capability << "]";
 
                 // Generate a unique name using the client id
                 //
@@ -659,12 +653,12 @@ AlsaDriver::generatePortList(AlsaPortList *newPorts)
 
                 alsaPorts.push_back(portDescription);
 
-                audit << std::endl;
+                audit << '\n';
             }
         }
     }
 
-    audit << std::endl;
+    audit << '\n';
 
     // Ok now sort by duplexicity
     //
@@ -776,7 +770,7 @@ AlsaDriver::createMidiDevice(DeviceId deviceId,
 
         if (outputPort >= 0) {
 
-            RG_WARNING << "createMidiDevice(): CREATED OUTPUT PORT " << outputPort << ":" << portName << " for device " << deviceId;
+            RG_DEBUG << "createMidiDevice(): CREATED OUTPUT PORT " << outputPort << ":" << portName << " for device " << deviceId;
 
             m_outputPorts[deviceId] = outputPort;
         }
@@ -838,13 +832,13 @@ AlsaDriver::addDevice(Device::DeviceType type,
                       InstrumentId baseInstrumentId,
                       MidiDevice::DeviceDirection direction)
 {
-    RG_WARNING << "addDevice(" << type << "," << direction << ")";
+    RG_DEBUG << "addDevice(" << type << "," << direction << ")";
 
     if (type == Device::Midi) {
 
         MappedDevice *device = createMidiDevice(deviceId, direction);
         if (!device) {
-            RG_WARNING << "addDevice(): WARNING: Device creation failed";
+            RG_WARNING << "addDevice(): WARNING: Device creation failed, type: " << type << " deviceId: " << deviceId << " baseInstrumentId: " << baseInstrumentId << " direction: " << direction;
         } else {
             addInstrumentsForDevice(device, baseInstrumentId);
             m_devices.push_back(device);
@@ -865,8 +859,7 @@ AlsaDriver::removeDevice(DeviceId id)
 {
     DeviceIntMap::iterator i1 = m_outputPorts.find(id);
     if (i1 == m_outputPorts.end()) {
-        std::cerr << "WARNING: AlsaDriver::removeDevice: Cannot find device "
-                  << id << " in port map" << std::endl;
+        RG_WARNING << "removeDevice(): WARNING: Cannot find device " << id << " in port map";
         return ;
     }
     checkAlsaError( snd_seq_delete_port(m_midiHandle, i1->second),
@@ -943,7 +936,7 @@ AlsaDriver::renameDevice(DeviceId id, QString name)
         }
     }
 
-    RG_WARNING << "renameDevice(): Renamed " << m_client << ":" << i->second << " to " << name;
+    RG_DEBUG << "renameDevice(): Renamed " << m_client << ":" << i->second << " to " << name;
 }
 
 ClientPortPair
@@ -1034,8 +1027,7 @@ AlsaDriver::setConnectionToDevice(MappedDevice &device, QString connection,
                                   const ClientPortPair &pair)
 {
 #ifdef DEBUG_ALSA
-    std::cerr << "AlsaDriver::setConnectionToDevice: connection "
-              << connection << std::endl;
+    RG_DEBUG << "setConnectionToDevice(): connection " << connection;
 #endif
 
     if (device.getDirection() == MidiDevice::Record) {
@@ -1058,7 +1050,7 @@ AlsaDriver::setConnectionToDevice(MappedDevice &device, QString connection,
                 ClientPortPair prevPair = getPortByName(qstrtostr(prevConnection));
                 if (prevPair.first >= 0 && prevPair.second >= 0) {
 
-                    std::cerr << "Disconnecting my port " << j->second << " from " << prevPair.first << ":" << prevPair.second << " on reconnection" << std::endl;
+                    RG_DEBUG << "setConnectionToDevice(): Disconnecting my port " << j->second << " from " << prevPair.first << ":" << prevPair.second << " on reconnection";
                     snd_seq_disconnect_to(m_midiHandle,
                                           j->second,
                                           prevPair.first,
@@ -1087,7 +1079,7 @@ AlsaDriver::setConnectionToDevice(MappedDevice &device, QString connection,
             }
 
             if (pair.first >= 0 && pair.second >= 0) {
-                std::cerr << "Connecting my port " << j->second << " to " << pair.first << ":" << pair.second << " on reconnection" << std::endl;
+                RG_DEBUG << "setConnectionToDevice(): Connecting my port " << j->second << " to " << pair.first << ":" << pair.second << " on reconnection";
                 snd_seq_connect_to(m_midiHandle,
                                    j->second,
                                    pair.first,
@@ -1114,16 +1106,16 @@ AlsaDriver::setConnection(DeviceId id, QString connection)
     ClientPortPair port(getPortByName(qstrtostr(connection)));
 
 #ifdef DEBUG_ALSA
-    std::cerr << "AlsaDriver::setConnection(" << id << "," << connection << ")" << std::endl;
+    RG_DEBUG << "setConnection(" << id << "," << connection << ")";
 #endif
 
     if ((connection == "") || (port.first != -1 && port.second != -1)) {
 
 #ifdef DEBUG_ALSA
         if (connection == "") {
-            std::cerr << "empty connection, disconnecting" << std::endl;
+            RG_DEBUG << "setConnection(): empty connection, disconnecting";
         } else {
-            std::cerr << "found port" << std::endl;
+            RG_DEBUG << "setConnection(): found port";
         }
 #endif
 
@@ -1131,7 +1123,7 @@ AlsaDriver::setConnection(DeviceId id, QString connection)
 
             if (m_devices[i]->getId() == id) {
 #ifdef DEBUG_ALSA
-                std::cerr << "and found device -- connecting" << std::endl;
+                RG_DEBUG << "setConnection(): and found device -- connecting";
 #endif
 
                 setConnectionToDevice(*m_devices[i], connection, port);
@@ -1140,7 +1132,7 @@ AlsaDriver::setConnection(DeviceId id, QString connection)
         }
     }
 #ifdef DEBUG_ALSA
-    std::cerr << "AlsaDriver::setConnection: port or device not found" << std::endl;
+    RG_DEBUG << "setConnection(): port or device not found";
 #endif
 }
 
@@ -1150,7 +1142,9 @@ AlsaDriver::setPlausibleConnection(DeviceId id, QString idealConnection, bool re
     Audit audit;
 
     audit << "AlsaDriver::setPlausibleConnection: connection like \""
-          << idealConnection << "\" requested for device " << id << std::endl;
+          << idealConnection << "\" requested for device " << id << '\n';
+    RG_DEBUG << "setPlausibleConnection(): connection like \""
+             << idealConnection << "\" requested for device " << id;
 
     if (idealConnection != "") {
 
@@ -1166,8 +1160,8 @@ AlsaDriver::setPlausibleConnection(DeviceId id, QString idealConnection, bool re
                 }
             }
 
-            audit << "AlsaDriver::setPlausibleConnection: exact match available"
-                  << std::endl;
+            audit << "AlsaDriver::setPlausibleConnection: exact match available\n";
+            RG_DEBUG << "setPlausibleConnection(): exact match available";
             return;
         }
     }
@@ -1342,7 +1336,10 @@ AlsaDriver::setPlausibleConnection(DeviceId id, QString idealConnection, bool re
 
         audit << "AlsaDriver::setPlausibleConnection: fuzzy match "
               << port->m_name << " available with fitness "
-              << fitness << std::endl;
+              << fitness << '\n';
+        RG_DEBUG << "setPlausibleConnection(): fuzzy match "
+              << port->m_name << " available with fitness "
+              << fitness;
 
         for (size_t j = 0; j < m_devices.size(); ++j) {
 
@@ -1360,8 +1357,8 @@ AlsaDriver::setPlausibleConnection(DeviceId id, QString idealConnection, bool re
             }
         }
     } else {
-        audit << "AlsaDriver::setPlausibleConnection: nothing suitable available"
-              << std::endl;
+        audit << "AlsaDriver::setPlausibleConnection: nothing suitable available\n";
+        RG_DEBUG << "setPlausibleConnection(): nothing suitable available\n";
     }
 }
 
