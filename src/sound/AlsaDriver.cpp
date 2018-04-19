@@ -66,9 +66,6 @@
 // This driver implements MIDI in and out via the ALSA (www.alsa-project.org)
 // sequencer interface.
 
-using std::cerr;
-using std::endl;
-
 #define AUTO_TIMER_NAME "(auto)"
 #define LOCKED QMutexLocker rg_alsa_locker(&m_mutex)
 
@@ -477,7 +474,8 @@ AlsaDriver::getAutoTimer(bool &wantTimerChecks)
                         wantTimerChecks = false; // pointless with PCM timer
                         return i->name;
                     } else {
-                        audit << "PCM timer: inadequate resolution " << i->resolution << std::endl;
+                        audit << "PCM timer: inadequate resolution " << i->resolution << '\n';
+                        RG_DEBUG << "getAutoTimer(): PCM timer: inadequate resolution " << i->resolution;
                     }
                 }
             }
@@ -492,7 +490,8 @@ AlsaDriver::getAutoTimer(bool &wantTimerChecks)
             continue;
         if (i->clas == SND_TIMER_CLASS_GLOBAL) {
             if (i->device == SND_TIMER_GLOBAL_SYSTEM) {
-                audit << "Using low-resolution system timer, sending a warning" << std::endl;
+                audit << "Using low-resolution system timer, sending a warning" << '\n';
+                RG_DEBUG << "getAutoTimer(): Using low-resolution system timer, sending a warning";
                 if (rtcCouldBeOK) {
                     reportFailure(MappedEvent::WarningImpreciseTimerTryRTC);
                 } else {
@@ -578,16 +577,19 @@ AlsaDriver::generatePortList(AlsaPortList *newPorts)
                      (capability & SND_SEQ_PORT_CAP_READ))) {
                     direction = Duplex;
                     audit << "\t\t\t(DUPLEX)";
+                    RG_DEBUG << "        (DUPLEX)";
                 } else if (capability & SND_SEQ_PORT_CAP_WRITE) {
                     direction = WriteOnly;
                     audit << "\t\t(WRITE ONLY)";
+                    RG_DEBUG << "        (WRITE ONLY)";
                 } else {
                     direction = ReadOnly;
                     audit << "\t\t(READ ONLY)";
+                    RG_DEBUG << "        (READ ONLY)";
                 }
 
                 audit << " [ctype " << clientType << ", ptype " << portType << ", cap " << capability << "]";
-                RG_DEBUG << "      [ctype " << clientType << ", ptype " << portType << ", cap " << capability << "]";
+                RG_DEBUG << "        [ctype " << clientType << ", ptype " << portType << ", cap " << capability << "]";
 
                 // Generate a unique name using the client id
                 //
@@ -1101,8 +1103,6 @@ AlsaDriver::setConnectionToDevice(MappedDevice &device, QString connection,
 void
 AlsaDriver::setConnection(DeviceId id, QString connection)
 {
-    Audit audit;
-
     ClientPortPair port(getPortByName(qstrtostr(connection)));
 
 #ifdef DEBUG_ALSA
@@ -1358,7 +1358,7 @@ AlsaDriver::setPlausibleConnection(DeviceId id, QString idealConnection, bool re
         }
     } else {
         audit << "AlsaDriver::setPlausibleConnection: nothing suitable available\n";
-        RG_DEBUG << "setPlausibleConnection(): nothing suitable available\n";
+        RG_DEBUG << "setPlausibleConnection(): nothing suitable available";
     }
 }
 
@@ -2265,10 +2265,7 @@ AlsaDriver::allNotesOff()
 
     m_noteOffQueue.erase(m_noteOffQueue.begin(), m_noteOffQueue.end());
 
-    /*
-      std::cerr << "AlsaDriver::allNotesOff - "
-      << " queue size = " << m_noteOffQueue.size() << std::endl;
-    */
+    //RG_DEBUG << "allNotesOff() - queue size = " << m_noteOffQueue.size();
 
     // flush
     checkAlsaError(snd_seq_drain_output(m_midiHandle), "allNotesOff(): draining");
@@ -3819,10 +3816,7 @@ AlsaDriver::processMidiOut(const MappedEventList &mC,
                 RealTime rt =
                     RealTime(time.tv_sec, time.tv_nsec);
 
-                /*
-                  std::cout << "AlsaDriver::processMidiOut - "
-                  << "send clock @ " << rt << std::endl;
-                */
+                //RG_DEBUG << "processMidiOut() - " << "send clock @ " << rt;
 
                 sendSystemQueued(SND_SEQ_EVENT_CLOCK, "", rt);
 
@@ -4646,7 +4640,7 @@ AlsaDriver::getPairForMappedInstrument(InstrumentId id)
     /*
       else
       {
-      cerr << "WARNING: AlsaDriver::getPairForMappedInstrument: couldn't find instrument for id " << id << ", falling through" << endl;
+      RG_DEBUG << "getPairForMappedInstrument(): WARNING: couldn't find instrument for id " << id << ", falling through";
       }
     */
 #endif
@@ -4666,7 +4660,7 @@ AlsaDriver::getOutputPortForMappedInstrument(InstrumentId id)
         }
 #ifdef DEBUG_ALSA
         else {
-            cerr << "WARNING: AlsaDriver::getOutputPortForMappedInstrument: couldn't find output port for device for instrument " << id << ", falling through" << endl;
+            RG_DEBUG << "getOutputPortForMappedInstrument(): WARNING: couldn't find output port for device for instrument " << id << ", falling through";
         }
 #endif
 
@@ -4738,7 +4732,8 @@ AlsaDriver::insertMappedEventForReturn(MappedEvent *mE)
 bool
 AlsaDriver::isRecording(AlsaPortDescription *port)
 {
-    std::cerr << "AlsaDriver::isRecording(), returning: ";
+    RG_DEBUG << "isRecording() begin...";
+
     if (port->isReadable()) {
 
         snd_seq_query_subscribe_t *qSubs;
@@ -4756,31 +4751,30 @@ AlsaDriver::isRecording(AlsaPortDescription *port)
             sender_addr = *snd_seq_query_subscribe_get_addr(qSubs);
             if (sender_addr.client == port->m_client &&
                 sender_addr.port == port->m_port) {
-                std::cerr << "true" << std::endl;
+                RG_DEBUG << "isRecording(): returning true";
                 return true;
             }
             snd_seq_query_subscribe_set_index(qSubs,
                                               snd_seq_query_subscribe_get_index(qSubs) + 1);
         }
     }
-    std::cerr << "false" << std::endl;
+    RG_DEBUG << "isRecording(): returning false";
     return false;
 }
 
 bool
 AlsaDriver::checkForNewClients()
 {
-    Audit audit;
     // bool madeChange = false; 
 
 #ifdef DEBUG_ALSA
-    std::cerr << "AlsaDriver::checkForNewClients" << std::endl;
+    RG_DEBUG << "checkForNewClients() begin...";
 #endif
 
     if (!m_portCheckNeeded) return false;
 
 #ifdef DEBUG_ALSA
-    std::cerr << "AlsaDriver::checkForNewClients: port check needed" << std::endl;
+    RG_DEBUG << "checkForNewClients(): port check needed";
 #endif
 
     AlsaPortList newPorts;
@@ -4868,15 +4862,13 @@ AlsaDriver::setRecordDevice(DeviceId id, bool connectAction)
 {
     Audit audit;
 
-    RG_WARNING << "setRecordDevice(): device " << id << ", action " << connectAction;
+    RG_DEBUG << "setRecordDevice(): device " << id << ", action " << connectAction;
 
     // Locate a suitable port
     //
     if (m_devicePortMap.find(id) == m_devicePortMap.end()) {
 #ifdef DEBUG_ALSA
-        audit << "AlsaDriver::setRecordDevice - "
-              << "couldn't match device id (" << id << ") to ALSA port"
-              << std::endl;
+        RG_DEBUG << "setRecordDevice() - couldn't match device id (" << id << ") to ALSA port";
 #endif
 
         return ;
@@ -4884,7 +4876,7 @@ AlsaDriver::setRecordDevice(DeviceId id, bool connectAction)
 
     ClientPortPair pair = m_devicePortMap[id];
 
-    RG_WARNING << "setRecordDevice(): port is " << pair.first << ":" << pair.second;
+    RG_DEBUG << "setRecordDevice(): port is " << pair.first << ":" << pair.second;
 
     snd_seq_addr_t sender, dest;
     sender.client = pair.first;
@@ -4899,25 +4891,19 @@ AlsaDriver::setRecordDevice(DeviceId id, bool connectAction)
             if (device->getDirection() == MidiDevice::Record) {
                 if (device->isRecording() && connectAction) {
 #ifdef DEBUG_ALSA
-                    audit << "AlsaDriver::setRecordDevice - "
-                          << "attempting to subscribe (" << id
-                          << ") already subscribed" << std::endl;
+                    RG_DEBUG << "setRecordDevice() - attempting to subscribe (" << id << ") already subscribed";
 #endif
                     return ;
                 }
                 if (!device->isRecording() && !connectAction) {
 #ifdef DEBUG_ALSA
-                    audit << "AlsaDriver::setRecordDevice - "
-                          << "attempting to unsubscribe (" << id
-                          << ") already unsubscribed" << std::endl;
+                    RG_DEBUG << "setRecordDevice() - attempting to unsubscribe (" << id << ") already unsubscribed";
 #endif
                     return ;
                 }
             } else {
 #ifdef DEBUG_ALSA
-                audit << "AlsaDriver::setRecordDevice - "
-                      << "attempting to set play device (" << id
-                      << ") to record device" << std::endl;
+                RG_DEBUG << "setRecordDevice() - attempting to set play device (" << id << ") to record device";
 #endif
                 return ;
             }
@@ -4949,12 +4935,15 @@ AlsaDriver::setRecordDevice(DeviceId id, bool connectAction)
             audit << "AlsaDriver::setRecordDevice - "
                   << int(sender.client) << ":" << int(sender.port)
                   << " failed to subscribe device "
-                  << id << " as record port" << std::endl;
+                  << id << " as record port\n";
+            RG_DEBUG << "setRecordDevice() - "
+                  << int(sender.client) << ":" << int(sender.port)
+                  << " failed to subscribe device "
+                  << id << " as record port";
         } else {
             m_midiInputPortConnected = true;
-            audit << "AlsaDriver::setRecordDevice - "
-                  << "successfully subscribed device "
-                  << id << " as record port" << std::endl;
+            audit << "AlsaDriver::setRecordDevice - successfully subscribed device " << id << " as record port\n";
+            RG_DEBUG << "setRecordDevice() - successfully subscribed device " << id << " as record port";
             device->setRecording(true);
         }
     } else {
@@ -4962,7 +4951,10 @@ AlsaDriver::setRecordDevice(DeviceId id, bool connectAction)
                            "setRecordDevice - failed to unsubscribe a device") == 0) {
             audit << "AlsaDriver::setRecordDevice - "
                   << "successfully unsubscribed device "
-                  << id << " as record port" << std::endl;
+                  << id << " as record port\n";
+            RG_DEBUG << "setRecordDevice() - "
+                  << "successfully unsubscribed device "
+                  << id << " as record port";
             device->setRecording(false);
         }
     }
@@ -5007,8 +4999,7 @@ AlsaDriver::unsetRecordDevices()
 
         if (error < 0) {
 #ifdef DEBUG_ALSA
-            std::cerr << "AlsaDriver::unsetRecordDevices - "
-                      << "can't unsubscribe record port" << std::endl;
+            RG_DEBUG << "unsetRecordDevices() - can't unsubscribe record port";
 #endif
 
         }
@@ -5077,9 +5068,7 @@ AlsaDriver::sendSystemDirect(MidiByte command, int *args)
 
     if (error < 0) {
 #ifdef DEBUG_ALSA
-        std::cerr << "AlsaDriver::sendSystemDirect - "
-                  << "can't send event (" << int(command) << ")"
-                  << std::endl;
+        RG_DEBUG << "sendSystemDirect() - can't send event (" << int(command) << ")";
 #endif
 
     }
@@ -5127,10 +5116,9 @@ AlsaDriver::sendSystemQueued(MidiByte command,
 
     if (error < 0) {
 #ifdef DEBUG_ALSA
-        std::cerr << "AlsaDriver::sendSystemQueued - "
-                  << "can't send event (" << int(command) << ")"
-                  << " - error = (" << error << ")"
-                  << std::endl;
+        RG_DEBUG << "sendSystemQueued() - "
+                 << "can't send event (" << int(command) << ")"
+                 << " - error = (" << error << ")";
 #endif
 
     }
@@ -5195,7 +5183,7 @@ AlsaDriver::runTasks()
 
         unsigned int t_base = snd_seq_queue_tempo_get_skew_base(q_ptr);
         if (!m_playing) {
-            std::cerr << "Skew: " << t_skew << "/" << t_base;
+            RG_DEBUG << "runTasks(): Skew: " << t_skew << "/" << t_base;
         }
 #endif
 
@@ -5204,18 +5192,11 @@ AlsaDriver::runTasks()
         if (newSkew != t_skew) {
 #ifdef DEBUG_ALSA
             if (!m_playing) {
-                std::cerr << " changed to " << newSkew << endl;
+                RG_DEBUG << "runTasks():     changed to " << newSkew;
             }
 #endif
             snd_seq_queue_tempo_set_skew(q_ptr, newSkew);
             snd_seq_set_queue_tempo( m_midiHandle, m_queue, q_ptr);
-        } else {
-#ifdef DEBUG_ALSA
-            if (!m_playing) {
-                std::cerr << endl;
-            }
-#endif
-
         }
 
         m_firstTimerCheck = true;
@@ -5342,7 +5323,7 @@ AlsaDriver::extractVersion(std::string v, int &major, int &minor, int &subminor,
     suffix = v.substr(sp);
 
 done:
-    std::cerr << "extractVersion: major = " << major << ", minor = " << minor << ", subminor = " << subminor << ", suffix = \"" << suffix << "\"" << std::endl;
+    RG_DEBUG << "extractVersion(): major = " << major << ", minor = " << minor << ", subminor = " << subminor << ", suffix = \"" << suffix << "\"";
 }
 
 bool
@@ -5372,7 +5353,7 @@ AlsaDriver::versionIsAtLeast(std::string v, int major, int minor, int subminor)
         }
     }
 
-    std::cerr << "AlsaDriver::versionIsAtLeast: is version " << v << " at least " << major << "." << minor << "." << subminor << "? " << (ok ? "yes" : "no") << std::endl;
+    RG_DEBUG << "versionIsAtLeast(): is version " << v << " at least " << major << "." << minor << "." << subminor << "? " << (ok ? "yes" : "no");
     return ok;
 }    
 
