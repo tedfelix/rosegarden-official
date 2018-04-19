@@ -4216,7 +4216,7 @@ AlsaDriver::processEventsOut(const MappedEventList &mC,
                     (getMappedStudio()->getAudioFader((*i)->getInstrument()));
 
                 if (!fader) {
-                    std::cerr << "WARNING: AlsaDriver::processEventsOut: no fader for audio instrument " << (*i)->getInstrument() << std::endl;
+                    RG_WARNING << "processEventsOut(): WARNING: No fader for audio instrument " << (*i)->getInstrument();
                     continue;
                 }
 
@@ -4234,9 +4234,8 @@ AlsaDriver::processEventsOut(const MappedEventList &mC,
 
                 //#define DEBUG_PLAYING_AUDIO
 #ifdef DEBUG_PLAYING_AUDIO
-                std::cout << "Creating playable audio file: id " << audioFile->getId() << ", event time " << (*i)->getEventTime() << ", time now " << getAlsaTime() << ", start marker " << (*i)->getAudioStartMarker() << ", duration " << (*i)->getDuration() << ", instrument " << (*i)->getInstrument() << " channels " << channels << std::endl;
-
-                std::cout << "Read buffer length is " << bufferLength << " (" << bufferFrames << " frames)" << std::endl;
+                RG_DEBUG << "processEventsOut(): Creating playable audio file: id " << audioFile->getId() << ", event time " << (*i)->getEventTime() << ", time now " << getAlsaTime() << ", start marker " << (*i)->getAudioStartMarker() << ", duration " << (*i)->getDuration() << ", instrument " << (*i)->getInstrument() << " channels " << channels;
+                RG_DEBUG << "processEventsOut(): Read buffer length is " << bufferLength << " (" << bufferFrames << " frames)";
 #endif
 
                 PlayableAudioFile *paf = 0;
@@ -4264,17 +4263,15 @@ AlsaDriver::processEventsOut(const MappedEventList &mC,
                     //#define DEBUG_AUTOFADING
 #ifdef DEBUG_AUTOFADING
 
-                    std::cout << "PlayableAudioFile is AUTOFADING - "
-                              << "in = " << (*i)->getFadeInTime()
-                              << ", out = " << (*i)->getFadeOutTime()
-                              << std::endl;
+                    RG_DEBUG << "processEventsOut(): PlayableAudioFile is AUTOFADING - "
+                             << "in = " << (*i)->getFadeInTime()
+                             << ", out = " << (*i)->getFadeOutTime();
 #endif
 
                 }
 #ifdef DEBUG_AUTOFADING
                 else {
-                    std::cout << "PlayableAudioFile has no AUTOFADE"
-                              << std::endl;
+                    RG_DEBUG << "processEventsOut(): PlayableAudioFile has no AUTOFADE";
                 }
 #endif
 
@@ -4287,13 +4284,8 @@ AlsaDriver::processEventsOut(const MappedEventList &mC,
                 haveNewAudio = true;
             } else {
 #ifdef DEBUG_ALSA
-                std::cerr << "AlsaDriver::processEventsOut - "
-                          << "can't find audio file reference"
-                          << std::endl;
-
-                std::cerr << "AlsaDriver::processEventsOut - "
-                          << "try reloading the current Rosegarden file"
-                          << std::endl;
+                RG_DEBUG << "processEventsOut(): Can't find audio file reference.";
+                RG_DEBUG << "processEventsOut(): Try reloading the current Rosegarden file.";
 #else
                 ;
 #endif
@@ -4314,9 +4306,7 @@ AlsaDriver::processEventsOut(const MappedEventList &mC,
             case 0:  // MIDI Clock and System messages: Off
                 m_midiClockEnabled = false;
 #ifdef DEBUG_ALSA
-                std::cerr << "AlsaDriver::processEventsOut - "
-                          << "Rosegarden MIDI CLOCK, START and STOP DISABLED"
-                          << std::endl;
+                RG_DEBUG << "processEventsOut(): Rosegarden MIDI CLOCK, START and STOP DISABLED";
 #endif
 
                 setMIDISyncStatus(TRANSPORT_OFF);
@@ -4325,9 +4315,7 @@ AlsaDriver::processEventsOut(const MappedEventList &mC,
             case 1:  // MIDI Clock and System messages: Send MIDI Clock, Start and Stop
                 m_midiClockEnabled = true;
 #ifdef DEBUG_ALSA
-                std::cerr << "AlsaDriver::processEventsOut - "
-                          << "Rosegarden send MIDI CLOCK, START and STOP ENABLED"
-                          << std::endl;
+                RG_DEBUG << "processEventsOut(): Rosegarden send MIDI CLOCK, START and STOP ENABLED";
 #endif
 
                 setMIDISyncStatus(TRANSPORT_MASTER);
@@ -4336,9 +4324,7 @@ AlsaDriver::processEventsOut(const MappedEventList &mC,
             case 2:  // MIDI Clock and System messages: Accept Start, Stop and Continue
                 m_midiClockEnabled = false;
 #ifdef DEBUG_ALSA
-                std::cerr << "AlsaDriver::processEventsOut - "
-                          << "Rosegarden accept START and STOP ENABLED"
-                          << std::endl;
+                RG_DEBUG << "processEventsOut(): Rosegarden accept START and STOP ENABLED";
 #endif
 
                 setMIDISyncStatus(TRANSPORT_SLAVE);
@@ -4350,9 +4336,7 @@ AlsaDriver::processEventsOut(const MappedEventList &mC,
             if ((*i)->getData1()) {
                 m_midiSyncAutoConnect = true;
 #ifdef DEBUG_ALSA
-                std::cerr << "AlsaDriver::processEventsOut - "
-                          << "Rosegarden MIDI SYNC AUTO ENABLED"
-                          << std::endl;
+                RG_DEBUG << "processEventsOut(): Rosegarden MIDI SYNC AUTO ENABLED";
 #endif
 
                 for (DevicePortMap::iterator dpmi = m_devicePortMap.begin();
@@ -4365,9 +4349,7 @@ AlsaDriver::processEventsOut(const MappedEventList &mC,
             } else {
                 m_midiSyncAutoConnect = false;
 #ifdef DEBUG_ALSA
-                std::cerr << "AlsaDriver::processEventsOut - "
-                          << "Rosegarden MIDI SYNC AUTO DISABLED"
-                          << std::endl;
+                RG_DEBUG << "processEventsOut(): Rosegarden MIDI SYNC AUTO DISABLED";
 #endif
             }
         }
@@ -4383,27 +4365,21 @@ AlsaDriver::processEventsOut(const MappedEventList &mC,
                 master = true;
                 enabled = true;
 #ifdef DEBUG_ALSA
-                std::cerr << "AlsaDriver::processEventsOut - "
-                          << "Rosegarden to follow JACK transport and request JACK timebase master role (not yet implemented)"
-                          << std::endl;
+                RG_DEBUG << "processEventsOut(): Rosegarden to follow JACK transport and request JACK timebase master role (not yet implemented)";
 #endif
                 break;
 
             case 1:
                 enabled = true;
 #ifdef DEBUG_ALSA
-                std::cerr << "AlsaDriver::processEventsOut - "
-                          << "Rosegarden to follow JACK transport"
-                          << std::endl;
+                RG_DEBUG << "processEventsOut(): Rosegarden to follow JACK transport";
 #endif
                 break;
 
             case 0:
             default:
 #ifdef DEBUG_ALSA
-                std::cerr << "AlsaDriver::processEventsOut - "
-                          << "Rosegarden to ignore JACK transport"
-                          << std::endl;
+                RG_DEBUG << "processEventsOut(): Rosegarden to ignore JACK transport";
 #endif
                 break;
             }
@@ -4420,9 +4396,7 @@ AlsaDriver::processEventsOut(const MappedEventList &mC,
             switch ((int)(*i)->getData1()) {
             case 1:
 #ifdef DEBUG_ALSA
-                std::cerr << "AlsaDriver::processEventsOut - "
-                          << "Rosegarden is MMC MASTER"
-                          << std::endl;
+                RG_DEBUG << "processEventsOut(): Rosegarden is MMC MASTER";
 #endif
 
                 setMMCStatus(TRANSPORT_MASTER);
@@ -4430,9 +4404,7 @@ AlsaDriver::processEventsOut(const MappedEventList &mC,
 
             case 2:
 #ifdef DEBUG_ALSA
-                std::cerr << "AlsaDriver::processEventsOut - "
-                          << "Rosegarden is MMC SLAVE"
-                          << std::endl;
+                RG_DEBUG << "processEventsOut(): Rosegarden is MMC SLAVE";
 #endif
                 setMMCStatus(TRANSPORT_SLAVE);
                 break;
@@ -4440,9 +4412,7 @@ AlsaDriver::processEventsOut(const MappedEventList &mC,
             case 0:
             default:
 #ifdef DEBUG_ALSA
-                std::cerr << "AlsaDriver::processEventsOut - "
-                          << "Rosegarden MMC Transport DISABLED"
-                          << std::endl;
+                RG_DEBUG << "processEventsOut(): Rosegarden MMC Transport DISABLED";
 #endif
 
                 setMMCStatus(TRANSPORT_OFF);
@@ -4454,9 +4424,7 @@ AlsaDriver::processEventsOut(const MappedEventList &mC,
             switch ((int)(*i)->getData1()) {
             case 1:
 #ifdef DEBUG_ALSA
-                std::cerr << "AlsaDriver::processEventsOut - "
-                          << "Rosegarden is MTC MASTER"
-                          << std::endl;
+                RG_DEBUG << "processEventsOut(): Rosegarden is MTC MASTER";
 #endif
 
                 setMTCStatus(TRANSPORT_MASTER);
@@ -4466,9 +4434,7 @@ AlsaDriver::processEventsOut(const MappedEventList &mC,
 
             case 2:
 #ifdef DEBUG_ALSA
-                std::cerr << "AlsaDriver::processEventsOut - "
-                          << "Rosegarden is MTC SLAVE"
-                          << std::endl;
+                RG_DEBUG << "processEventsOut(): Rosegarden is MTC SLAVE";
 #endif
 
                 setMTCStatus(TRANSPORT_SLAVE);
@@ -4478,9 +4444,7 @@ AlsaDriver::processEventsOut(const MappedEventList &mC,
             case 0:
             default:
 #ifdef DEBUG_ALSA
-                std::cerr << "AlsaDriver::processEventsOut - "
-                          << "Rosegarden MTC Transport DISABLED"
-                          << std::endl;
+                RG_DEBUG << "processEventsOut(): Rosegarden MTC Transport DISABLED";
 #endif
 
                 setMTCStatus(TRANSPORT_OFF);
@@ -4502,9 +4466,7 @@ AlsaDriver::processEventsOut(const MappedEventList &mC,
             }
 #else
 #ifdef DEBUG_ALSA
-            std::cerr << "AlsaDriver::processEventsOut - "
-                      << "MappedEvent::SystemAudioPorts - no audio subsystem"
-                      << std::endl;
+            RG_DEBUG << "processEventsOut(): MappedEvent::SystemAudioPorts - no audio subsystem";
 #endif
 #endif
 
@@ -4522,18 +4484,14 @@ AlsaDriver::processEventsOut(const MappedEventList &mC,
                 break;
             default:
 #ifdef DEBUG_ALSA
-                std::cerr << "AlsaDriver::processEventsOut - "
-                          << "MappedEvent::SystemAudioFileFormat - unexpected format number " << format
-                          << std::endl;
+                RG_DEBUG << "processEventsOut(): MappedEvent::SystemAudioFileFormat - unexpected format number " << format;
 #endif
 
                 break;
             }
 #else
 #ifdef DEBUG_ALSA
-            std::cerr << "AlsaDriver::processEventsOut - "
-                      << "MappedEvent::SystemAudioFileFormat - no audio subsystem"
-                      << std::endl;
+            RG_DEBUG << "processEventsOut(): MappedEvent::SystemAudioFileFormat - no audio subsystem";
 #endif
 #endif
 
@@ -4608,7 +4566,7 @@ AlsaDriver::record(RecordStatus recordStatus,
                     bool good = false;
 
 #ifdef DEBUG_ALSA
-                    std::cerr << "AlsaDriver::record: Requesting new record file \"" << fileName << "\" for instrument " << id << std::endl;
+                    RG_DEBUG << "record(): Requesting new record file \"" << fileName << "\" for instrument " << id;
 #endif
 
 #ifdef HAVE_LIBJACK
@@ -4620,7 +4578,7 @@ AlsaDriver::record(RecordStatus recordStatus,
 
                     if (!good) {
                         m_recordStatus = RECORD_OFF;
-                        std::cerr << "AlsaDriver::record: No JACK driver, or JACK driver failed to prepare for recording audio" << std::endl;
+                        RG_WARNING << "record(): No JACK driver, or JACK driver failed to prepare for recording audio";
                         return false;
                     }
 
@@ -4634,8 +4592,7 @@ AlsaDriver::record(RecordStatus recordStatus,
         }
 #ifdef DEBUG_ALSA
         else {
-            std::cerr << "AlsaDriver::record - unsupported recording mode"
-                      << std::endl;
+            RG_DEBUG << "record(): unsupported recording mode";
         }
 #endif
 
