@@ -3109,7 +3109,7 @@ AlsaDriver::handleMTCQFrame(unsigned int data_byte, RealTime the_time)
 
             ExternalTransport *transport = getExternalTransportControl();
             if (transport) {
-                tweakSkewForMTC(0);	/* JPM - reset it on start of playback, to be sure */
+                tweakSkewForMTC(0);  /* JPM - reset it on start of playback, to be sure */
                 transport->transportJump
                     (ExternalTransport::TransportStartAtTime,
                      m_mtcEncodedTime);
@@ -3417,8 +3417,8 @@ and the sequencer engine will be unusable until the program is quit and
 restarted.  Reset it to a sane default when called with factor of 0
 */
 
-if(factor == 0) {
-	bias_factor = 0;
+    if (factor == 0) {
+        bias_factor = 0;
     }
 
     if (factor > 50000) {

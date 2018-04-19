@@ -91,7 +91,7 @@ JackDriver::~JackDriver()
         if (jack_deactivate(m_client)) {
             std::cerr << "JackDriver::shutdown - deactivation failed"
             << std::endl;
-	}
+        }
     }
 
 #ifdef DEBUG_JACK_DRIVER
@@ -697,15 +697,14 @@ JackDriver::setAudioPorts(bool faderOuts, bool submasterOuts)
     if (submasterOuts) {
 
         // one fewer than returned here, because the master has a buss object too
-	int count =
-	    m_alsaDriver->getMappedStudio()->getObjectCount
-	    (MappedObject::AudioBuss);
-	if (count == 0) {
-	    RG_WARNING << "setAudioPorts(): Mapped studio contains no master buss!  Probably a symptom of a serious error";
-        audit << "WARNING: Mapped studio contains no master buss!  Probably a symptom of a serious error\n";
-	} else {
-	    count = count - 1;
-	}
+        int count = m_alsaDriver->getMappedStudio()->getObjectCount(
+                MappedObject::AudioBuss);
+        if (count == 0) {
+            RG_WARNING << "setAudioPorts(): Mapped studio contains no master buss!  Probably a symptom of a serious error";
+            audit << "WARNING: Mapped studio contains no master buss!  Probably a symptom of a serious error\n";
+        } else {
+            count = count - 1;
+        }
         if (!createSubmasterOutputs(count)) {
             m_ok = false;
             RG_WARNING << "setAudioPorts(): Failed to create submaster outs!";
@@ -1526,9 +1525,9 @@ JackDriver::jackProcessRecord(InstrumentId id,
 
     LevelInfo info;
     info.level = AudioLevel::multiplier_to_fader
-	    (peakLeft, 127, AudioLevel::LongFader);
+            (peakLeft, 127, AudioLevel::LongFader);
     info.levelRight = AudioLevel::multiplier_to_fader
-	    (peakRight, 127, AudioLevel::LongFader);
+            (peakRight, 127, AudioLevel::LongFader);
     SequencerDataBlock::getInstance()->setInstrumentRecordLevel(id, info);
 
     if (wroteSomething) {
