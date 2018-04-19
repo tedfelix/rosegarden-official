@@ -2331,7 +2331,7 @@ AlsaDriver::processNotesOff(const RealTime &time, bool now, bool everything)
             //
             int src = getOutputPortForMappedInstrument(noteOff->getInstrument());
             if (src < 0) {
-                std::cerr << "note off has no output port (instr = " << noteOff->getInstrument() << ")" << std::endl;
+                RG_WARNING << "processNotesOff(): WARNING: Note off has no output port (instr = " << noteOff->getInstrument() << ")";
                 delete noteOff;
                 m_noteOffQueue.erase(m_noteOffQueue.begin());
                 continue;
@@ -2368,8 +2368,7 @@ AlsaDriver::processNotesOff(const RealTime &time, bool now, bool everything)
     // processMidiOut, which does the flushing
 
 #ifdef DEBUG_PROCESS_MIDI_OUT
-    std::cerr << "AlsaDriver::processNotesOff - "
-              << " queue size now: " << m_noteOffQueue.size() << std::endl;
+    RG_DEBUG << "processNotesOff() - queue size now: " << m_noteOffQueue.size();
 #endif
 }
 
@@ -2383,8 +2382,7 @@ AlsaDriver::getSequencerTime()
 
     t = getAlsaTime() + m_playStartPosition - m_alsaPlayStartTime;
 
-    //    std::cerr << "AlsaDriver::getSequencerTime: alsa time is "
-    //          << getAlsaTime() << ", start time is " << m_alsaPlayStartTime << ", play start position is " << m_playStartPosition << endl;
+    //RG_DEBUG << "getSequencerTime(): alsa time is " << getAlsaTime() << ", start time is " << m_alsaPlayStartTime << ", play start position is " << m_playStartPosition;
 
     return t;
 }
@@ -2401,17 +2399,15 @@ AlsaDriver::getAlsaTime()
 
     if (snd_seq_get_queue_status(m_midiHandle, m_queue, status) < 0) {
 #ifdef DEBUG_ALSA
-        std::cerr << "AlsaDriver::getAlsaTime - can't get queue status"
-                  << std::endl;
+        RG_DEBUG << "getAlsaTime() - can't get queue status";
 #endif
-
         return sequencerTime;
     }
 
     sequencerTime.sec = snd_seq_queue_status_get_real_time(status)->tv_sec;
     sequencerTime.nsec = snd_seq_queue_status_get_real_time(status)->tv_nsec;
 
-    //    std::cerr << "AlsaDriver::getAlsaTime: alsa time is " << sequencerTime << std::endl;
+    //RG_DEBUG << "getAlsaTime(): alsa time is " << sequencerTime;
 
     return sequencerTime;
 }
@@ -2425,7 +2421,7 @@ AlsaDriver::getMappedEventList(MappedEventList &mappedEventList)
 {
     while (failureReportReadIndex != failureReportWriteIndex) {
         MappedEvent::FailureCode code = failureReports[failureReportReadIndex];
-        //    std::cerr << "AlsaDriver::reportFailure(" << code << ")" << std::endl;
+        //RG_DEBUG << "getMappedEventList(): failure code: " << code;
         MappedEvent *mE = new MappedEvent
             (0, MappedEvent::SystemFailure, code, 0);
         m_returnComposition.insert(mE);
@@ -2449,7 +2445,7 @@ AlsaDriver::getMappedEventList(MappedEventList &mappedEventList)
 
     RealTime eventTime(0, 0);
 
-    //    std::cerr << "AlsaDriver::getMappedEventList: looking for events" << std::endl;
+    //RG_DEBUG << "getMappedEventList(): looking for events";
 
     snd_seq_event_t *event;
 
@@ -2462,15 +2458,14 @@ AlsaDriver::getMappedEventList(MappedEventList &mappedEventList)
 
     // While there's an event available...
     while (snd_seq_event_input(m_midiHandle, &event) > 0) {
-        //        std::cerr << "AlsaDriver::getMappedEventList: found something" << std::endl;
+        //RG_DEBUG << "getMappedEventList(): found something";
 
         unsigned int channel = (unsigned int)event->data.note.channel;
         unsigned int chanNoteKey = ( channel << 8 ) +
             (unsigned int) event->data.note.note;
 #ifdef DEBUG_ALSA
-        std::cerr << "Got note " << chanNoteKey
-                  << " on channel " << channel
-                  << std::endl;
+        RG_DEBUG << "getMappedEventList(): Got note " << chanNoteKey
+                 << " on channel " << channel;
 #endif
 
         bool fromController = false;
@@ -2478,7 +2473,7 @@ AlsaDriver::getMappedEventList(MappedEventList &mappedEventList)
         if (event->dest.client == m_client &&
             event->dest.port == m_controllerPort) {
 #ifdef DEBUG_ALSA
-            std::cerr << "Received an external controller event" << std::endl;
+            RG_DEBUG << "getMappedEventList(): Received an external controller event";
 #endif
 
             fromController = true;
@@ -2507,7 +2502,7 @@ AlsaDriver::getMappedEventList(MappedEventList &mappedEventList)
 
 #ifdef DEBUG_ALSA
         if (!fromController) {
-            std::cerr << "Received normal event: type " << int(event->type) << ", chan " << channel << ", note " << int(event->data.note.note) << ", time " << eventTime << std::endl;
+            RG_DEBUG << "getMappedEventList(): Received normal event: type " << int(event->type) << ", chan " << channel << ", note " << int(event->data.note.note) << ", time " << eventTime;
         }
 #endif
 
@@ -2573,7 +2568,7 @@ AlsaDriver::getMappedEventList(MappedEventList &mappedEventList)
                 RealTime duration = eventTime - mE->getEventTime();
 
 #ifdef DEBUG_ALSA
-                std::cerr << "NOTE OFF: found NOTE ON at " << mE->getEventTime() << std::endl;
+                RG_DEBUG << "getMappedEventList(): NOTE OFF: found NOTE ON at " << mE->getEventTime();
 #endif
 
                 // Fix zero duration record bug.
@@ -2704,12 +2699,12 @@ AlsaDriver::getMappedEventList(MappedEventList &mappedEventList)
 #ifdef DEBUG_ALSA
 
                 if ((MidiByte)(data[1]) == MIDI_SYSEX_RT) {
-                    std::cerr << "REALTIME SYSEX" << endl;
+                    RG_DEBUG << "getMappedEventList(): REALTIME SYSEX";
                     for (unsigned int ii = 0; ii < event->data.ext.len; ++ii) {
                         printf("B %d = %02x\n", ii, ((char*)(event->data.ext.ptr))[ii]);
                     }
                 } else {
-                    std::cerr << "NON-REALTIME SYSEX" << endl;
+                    RG_DEBUG << "getMappedEventList(): NON-REALTIME SYSEX";
                     for (unsigned int ii = 0; ii < event->data.ext.len; ++ii) {
                         printf("B %d = %02x\n", ii, ((char*)(event->data.ext.ptr))[ii]);
                     }
@@ -2760,10 +2755,8 @@ AlsaDriver::getMappedEventList(MappedEventList &mappedEventList)
                     createNewEvent = true;
                 
                     if (!beginNewMessage) {
-                        std::cerr << "AlsaDriver::getMappedEventList - "
-                                  << "New ALSA message arrived with incorrect MIDI System "
-                                  << "Exclusive start byte" << std::endl
-                                  << "This is probably a bad transmission" << std::endl;
+                        RG_WARNING << "getMappedEventList(): WARNING: New ALSA message arrived with incorrect MIDI System Exclusive start byte.";
+                        RG_WARNING << "getMappedEventList():          This is probably a bad transmission.";
                     }
                 } else {
                     // We found a pending (unfinished) System Exclusive message.
@@ -2782,19 +2775,15 @@ AlsaDriver::getMappedEventList(MappedEventList &mappedEventList)
                     
                         // Decide how to handle previous (incomplete) message
                         if (sysExcData.size() > 0) {
-                            std::cerr << "AlsaDriver::getMappedEventList - "
-                                      << "Sending an incomplete ALSA message to the composition"
-                                      << std::endl  << "This is probably a bad transmission"
-                                      << std::endl;
+                            RG_WARNING << "getMappedEventList(): WARNING: Sending an incomplete ALSA message to the composition.";
+                            RG_WARNING << "getMappedEventList():          This is probably a bad transmission.";
 
                             // Push previous (incomplete) message to mapped event list
                             DataBlockRepository::setDataBlockForEvent(sysExcEvent, sysExcData);
                             mappedEventList.insert(sysExcEvent);
                         } else {
                             // Previous message has no meaningful data.
-                            std::cerr << "AlsaDriver::getMappedEventList - "
-                                      << "Discarding meaningless incomplete ALSA message"
-                                      << std::endl;
+                            RG_WARNING << "getMappedEventList(): WARNING: Discarding meaningless incomplete ALSA message";
 
                             delete sysExcEvent;
                         }
@@ -2834,10 +2823,8 @@ AlsaDriver::getMappedEventList(MappedEventList &mappedEventList)
                     // in the pending map.  This will resolve itself elsewhere.
                     // But if we are here, this is probably and error.
 
-                    std::cerr << "AlsaDriver::getMappedEventList - "
-                              << " ALSA message arrived with no useful System Exclusive"
-                              << "data bytes" << std::endl
-                              << "This is probably a bad transmission" << std::endl;
+                    RG_WARNING << "getMappedEventList(): WARNING: ALSA message arrived with no useful System Exclusive data bytes";
+                    RG_WARNING << "getMappedEventList():          This is probably a bad transmission";
 
                     pushOnMap = true;
                 }
@@ -2848,14 +2835,7 @@ AlsaDriver::getMappedEventList(MappedEventList &mappedEventList)
                                                            std::make_pair(sysExcEvent, data)));
 
                     if (beginNewMessage) { 
-                        // Let user know about pooling on first received event.
-
-                        // Yes, standard output.
-                        // It is used elsewhere in this file as well.
-                        std::cout << "AlsaDriver::getMappedEventList - "
-                                  << "Encountered long System Exclusive Message "
-                                  << "(pooling message until transmission complete)"
-                                  << std::endl;
+                        RG_DEBUG << "getMappedEventList(): Encountered long System Exclusive Message (pooling message until transmission complete)";
                     }
                 }
             }
@@ -2875,8 +2855,7 @@ AlsaDriver::getMappedEventList(MappedEventList &mappedEventList)
 
         case SND_SEQ_EVENT_CLOCK:
 #ifdef DEBUG_ALSA
-            std::cerr << "AlsaDriver::getMappedEventList - "
-                      << "got realtime MIDI clock" << std::endl;
+            RG_DEBUG << "getMappedEventList() - got realtime MIDI clock";
 #endif
             break;
 
@@ -2890,8 +2869,7 @@ AlsaDriver::getMappedEventList(MappedEventList &mappedEventList)
                 }
             }
 #ifdef DEBUG_ALSA
-            std::cerr << "AlsaDriver::getMappedEventList - "
-                      << "START" << std::endl;
+            RG_DEBUG << "getMappedEventList() - START";
 #endif
             break;
 
@@ -2903,8 +2881,7 @@ AlsaDriver::getMappedEventList(MappedEventList &mappedEventList)
                 }
             }
 #ifdef DEBUG_ALSA
-            std::cerr << "AlsaDriver::getMappedEventList - "
-                      << "CONTINUE" << std::endl;
+            RG_DEBUG << "getMappedEventList() - CONTINUE";
 #endif
             break;
 
@@ -2916,15 +2893,13 @@ AlsaDriver::getMappedEventList(MappedEventList &mappedEventList)
                 }
             }
 #ifdef DEBUG_ALSA
-            std::cerr << "AlsaDriver::getMappedEventList - "
-                      << "STOP" << std::endl;
+            RG_DEBUG << "getMappedEventList() - STOP";
 #endif
             break;
 
         case SND_SEQ_EVENT_SONGPOS:
 #ifdef DEBUG_ALSA
-            std::cerr << "AlsaDriver::getMappedEventList - "
-                      << "SONG POSITION" << std::endl;
+            RG_DEBUG << "getMappedEventList() - SONG POSITION";
 #endif
 
             break;
@@ -2941,18 +2916,14 @@ AlsaDriver::getMappedEventList(MappedEventList &mappedEventList)
         case SND_SEQ_EVENT_PORT_UNSUBSCRIBED:
             m_portCheckNeeded = true;
 #ifdef DEBUG_ALSA
-            std::cerr << "AlsaDriver::getMappedEventList - "
-                      << "got announce event ("
-                      << int(event->type) << ")" << std::endl;
+            RG_DEBUG << "getMappedEventList() - got announce event (" << int(event->type) << ")";
 #endif
 
             break;
         case SND_SEQ_EVENT_TICK:
         default:
 #ifdef DEBUG_ALSA
-            std::cerr << "AlsaDriver::getMappedEventList - "
-                      << "got unhandled MIDI event type from ALSA sequencer"
-                      << "(" << int(event->type) << ")" << std::endl;
+            RG_DEBUG << "getMappedEventList() - got unhandled MIDI event type from ALSA sequencer" << "(" << int(event->type) << ")";
 #endif
 
             break;
@@ -2963,8 +2934,8 @@ AlsaDriver::getMappedEventList(MappedEventList &mappedEventList)
 
     if (getMTCStatus() == TRANSPORT_SLAVE && isPlaying()) {
 #ifdef MTC_DEBUG
-        std::cerr << "seq time is " << getSequencerTime() << ", last MTC receive "
-                  << m_mtcLastReceive << ", first time " << m_mtcFirstTime << std::endl;
+        RG_DEBUG << "getMappedEventList(): seq time is " << getSequencerTime() << ", last MTC receive "
+                 << m_mtcLastReceive << ", first time " << m_mtcFirstTime;
 #endif
 
         if (m_mtcFirstTime == 0) { // have received _some_ MTC quarter-frame info
@@ -3094,16 +3065,14 @@ AlsaDriver::handleMTCQFrame(unsigned int data_byte, RealTime the_time)
          */
         if (m_playing) {
 #ifdef MTC_DEBUG
-            std::cerr << "RG MTC: Tstamp " << m_mtcEncodedTime;
-            std::cerr << " Received @ " << m_mtcReceiveTime << endl;
+            RG_DEBUG << "handleMTCQFrame(): RG MTC: Tstamp " << m_mtcEncodedTime << " Received @ " << m_mtcReceiveTime;
 #endif
 
             calibrateMTC();
 
             RealTime t_diff = m_mtcEncodedTime - m_mtcReceiveTime;
 #ifdef MTC_DEBUG
-
-            std::cerr << "Diff: " << t_diff << endl;
+            RG_DEBUG << "handleMTCQFrame(): Diff: " << t_diff;
 #endif
 
             /* -ve diff means ALSA time ahead of MTC time */
@@ -3131,14 +3100,14 @@ AlsaDriver::handleMTCQFrame(unsigned int data_byte, RealTime the_time)
 
         } else if (m_eat_mtc > 0) {
 #ifdef MTC_DEBUG
-            std::cerr << "MTC: Received quarter frame just after issuing MMC stop - ignore it" << std::endl;
+            RG_DEBUG << "handleMTCQFrame(): MTC: Received quarter frame just after issuing MMC stop - ignore it";
 #endif
 
             --m_eat_mtc;
         } else {
             /* If we're not playing, we should be. */
 #ifdef MTC_DEBUG
-            std::cerr << "MTC: Received quarter frame while not playing - starting now" << std::endl;
+            RG_DEBUG << "handleMTCQFrame(): MTC: Received quarter frame while not playing - starting now";
 #endif
 
             ExternalTransport *transport = getExternalTransportControl();
