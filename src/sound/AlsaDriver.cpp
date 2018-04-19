@@ -1452,8 +1452,8 @@ AlsaDriver::checkTimerSync(size_t frames)
 
 #ifdef DEBUG_ALSA
         if (!m_playing) {
-            std::cout << "\nALSA:" << startAlsaTime << "\t->" << nowAlsaTime << "\nJACK: " << startJackFrames << "\t\t-> " << nowJackFrames << std::endl;
-            std::cout << "ALSA diff:  " << alsaDiff << "\nJACK diff:  " << jackDiff << std::endl;
+            RG_DEBUG << "checkTimerSync(): ALSA:" << startAlsaTime << "\t->" << nowAlsaTime << "\nJACK: " << startJackFrames << "\t\t-> " << nowJackFrames;
+            RG_DEBUG << "checkTimerSync(): ALSA diff:  " << alsaDiff << "\nJACK diff:  " << jackDiff;
         }
 #endif
 
@@ -1462,9 +1462,7 @@ AlsaDriver::checkTimerSync(size_t frames)
         if (fabs(ratio) > 0.1) {
 #ifdef DEBUG_ALSA
             if (!m_playing) {
-                std::cout << "Ignoring excessive ratio " << ratio
-                          << ", hoping for a more likely result next time"
-                          << std::endl;
+                RG_DEBUG << "checkTimerSync(): Ignoring excessive ratio " << ratio << ", hoping for a more likely result next time";
             }
 #endif
 
@@ -1474,9 +1472,9 @@ AlsaDriver::checkTimerSync(size_t frames)
             if (alsaDiff > RealTime::zeroTime && jackDiff > RealTime::zeroTime) {
                 if (!m_playing) {
                     if (jackDiff < alsaDiff) {
-                        std::cout << "<<<< ALSA timer is faster by " << 100.0 * ((alsaDiff - jackDiff) / alsaDiff) << "% (1/" << int(1.0 / ratio) << ")" << std::endl;
+                        RG_DEBUG << "checkTimerSync(): <<<< ALSA timer is faster by " << 100.0 * ((alsaDiff - jackDiff) / alsaDiff) << "% (1/" << int(1.0 / ratio) << ")";
                     } else {
-                        std::cout << ">>>> JACK timer is faster by " << 100.0 * ((jackDiff - alsaDiff) / alsaDiff) << "% (1/" << int(1.0 / ratio) << ")" << std::endl;
+                        RG_DEBUG << "checkTimerSync(): >>>> JACK timer is faster by " << 100.0 * ((jackDiff - alsaDiff) / alsaDiff) << "% (1/" << int(1.0 / ratio) << ")";
                     }
                 }
             }
@@ -1521,7 +1519,7 @@ AlsaDriver::setCurrentTimer(QString timer)
     if (timer == getCurrentTimer())
         return ;
 
-    RG_WARNING << "setCurrentTimer(" << timer << ")";
+    RG_DEBUG << "setCurrentTimer(" << timer << ")";
 
     std::string name(qstrtostr(timer));
 
@@ -1570,19 +1568,19 @@ AlsaDriver::setCurrentTimer(QString timer)
             snd_seq_set_queue_timer(m_midiHandle, m_queue, timer);
 
             if (m_doTimerChecks) {
-                audit << "    Current timer set to \"" << name << "\" with timer checks"
-                      << std::endl;
+                audit << "    Current timer set to \"" << name << "\" with timer checks\n";
+                RG_DEBUG << "setCurrentTimer(): Current timer set to \"" << name << "\" with timer checks";
             } else {
-                audit << "    Current timer set to \"" << name << "\""
-                      << std::endl;
+                audit << "    Current timer set to \"" << name << "\"\n";
+                RG_DEBUG << "setCurrentTimer(): Current timer set to \"" << name << "\"";
             }
 
             if (m_timers[i].clas == SND_TIMER_CLASS_GLOBAL &&
                 m_timers[i].device == SND_TIMER_GLOBAL_SYSTEM) {
                 long hz = 1000000000 / m_timers[i].resolution;
                 if (hz < 900) {
-                    audit << "    WARNING: using system timer with only "
-                          << hz << "Hz resolution!" << std::endl;
+                    audit << "    WARNING: using system timer with only " << hz << "Hz resolution!\n";
+                    RG_WARNING << "setCurrentTimer(): WARNING: using system timer with only " << hz << "Hz resolution!";
                 }
             }
 
@@ -1630,8 +1628,10 @@ AlsaDriver::initialiseMidi()
                      SND_SEQ_NONBLOCK) < 0) {
         audit << "AlsaDriver::initialiseMidi - "
               << "couldn't open sequencer - " << snd_strerror(errno)
-              << " - perhaps you need to modprobe snd-seq-midi."
-              << std::endl;
+              << " - perhaps you need to modprobe snd-seq-midi.\n";
+        RG_WARNING << "initialiseMidi(): WARNING: couldn't open sequencer - "
+                   << snd_strerror(errno)
+                   << " - perhaps you need to modprobe snd-seq-midi.";
         reportFailure(MappedEvent::FailureALSACallFailed);
         return false;
     }
@@ -1643,11 +1643,7 @@ AlsaDriver::initialiseMidi()
     snd_seq_set_client_name(m_midiHandle, "rosegarden");
 
     if ((m_client = snd_seq_client_id(m_midiHandle)) < 0) {
-#ifdef DEBUG_ALSA
-        std::cerr << "AlsaDriver::initialiseMidi - can't create client"
-                  << std::endl;
-#endif
-
+        RG_WARNING << "initialiseMidi(): WARNING: Can't create client";
         return false;
     }
 
@@ -1655,11 +1651,7 @@ AlsaDriver::initialiseMidi()
     //
     if ((m_queue = snd_seq_alloc_named_queue(m_midiHandle,
                                              "Rosegarden queue")) < 0) {
-#ifdef DEBUG_ALSA
-        std::cerr << "AlsaDriver::initialiseMidi - can't allocate queue"
-                  << std::endl;
-#endif
-
+        RG_WARNING << "initialiseMidi(): WARNING: Can't allocate queue";
         return false;
     }
 
@@ -1698,12 +1690,7 @@ AlsaDriver::initialiseMidi()
     if (snd_seq_set_client_pool_output(m_midiHandle, 2000) < 0 ||
         snd_seq_set_client_pool_input(m_midiHandle, 2000) < 0 ||
         snd_seq_set_client_pool_output_room(m_midiHandle, 2000) < 0) {
-#ifdef DEBUG_ALSA
-        std::cerr << "AlsaDriver::initialiseMidi - "
-                  << "can't modify pool parameters"
-                  << std::endl;
-#endif
-
+        RG_WARNING << "initialiseMidi(): WARNING: Can't modify pool parameters";
         return false;
     }
 
@@ -1755,8 +1742,8 @@ AlsaDriver::initialiseMidi()
     // process anything pending
     checkAlsaError(snd_seq_drain_output(m_midiHandle), "initialiseMidi(): couldn't drain output");
 
-    audit << "AlsaDriver::initialiseMidi -  initialised MIDI subsystem"
-          << std::endl << std::endl;
+    audit << "AlsaDriver::initialiseMidi -  initialised MIDI subsystem\n\n";
+    RG_DEBUG << "initialiseMidi() - initialised MIDI subsystem";
 
     return true;
 }
@@ -1903,7 +1890,7 @@ void
 AlsaDriver::stopPlayback()
 {
 #ifdef DEBUG_ALSA
-    std::cerr << "\n\nAlsaDriver - stopPlayback" << std::endl;
+    RG_DEBUG << "stopPlayback() begin...";
 #endif
 
     if (getMIDISyncStatus() == TRANSPORT_MASTER) {
@@ -1958,7 +1945,7 @@ void
 AlsaDriver::punchOut()
 {
 #ifdef DEBUG_ALSA
-    std::cerr << "AlsaDriver::punchOut" << std::endl;
+    RG_DEBUG << "punchOut() begin...";
 #endif
 
     // Flush any incomplete System Exclusive received from ALSA devices
@@ -1979,7 +1966,7 @@ AlsaDriver::punchOut()
                 if (m_jackDriver && m_jackDriver->closeRecordFile(id, auid)) {
 
 #ifdef DEBUG_ALSA
-                    std::cerr << "AlsaDriver::stopPlayback: sending back to GUI for instrument " << id << std::endl;
+                    RG_DEBUG << "punchOut(): sending back to GUI for instrument " << id;
 #endif
 
                     // Create event to return to gui to say that we've
@@ -2021,7 +2008,7 @@ void
 AlsaDriver::resetPlayback(const RealTime &oldPosition, const RealTime &position)
 {
 #ifdef DEBUG_ALSA
-    std::cerr << "\n\nAlsaDriver - resetPlayback(" << oldPosition << "," << position << ")" << std::endl;
+    RG_DEBUG << "resetPlayback(" << oldPosition << "," << position << ")";
 #endif
 
     if (getMMCStatus() == TRANSPORT_MASTER) {
@@ -2039,8 +2026,8 @@ AlsaDriver::resetPlayback(const RealTime &oldPosition, const RealTime &position)
         unsigned char t_sbf = (unsigned char) ((position.nsec / 400000U) % 100U);
 #endif
 
-        std::cerr << "\n Jump using MMC LOCATE to" << position << std::endl;
-        std::cerr << "\t which is " << int(t_hrs) << ":" << int(t_min) << ":" << int(t_sec) << "." << int(t_frm) << "." << int(t_sbf) << std::endl;
+        RG_DEBUG << "resetPlayback(): Jump using MMC LOCATE to" << position;
+        RG_DEBUG << "resetPlayback():   which is " << int(t_hrs) << ":" << int(t_min) << ":" << int(t_sec) << "." << int(t_frm) << "." << int(t_sbf);
         unsigned char locateDataArr[7] = {
             0x06,
             0x01,
@@ -2064,7 +2051,7 @@ AlsaDriver::resetPlayback(const RealTime &oldPosition, const RealTime &position)
     RealTime jump = position - oldPosition;
 
 #ifdef DEBUG_PROCESS_MIDI_OUT
-    std::cerr << "Currently " << m_noteOffQueue.size() << " in note off queue" << std::endl;
+    RG_DEBUG << "resetPlayback(): Currently " << m_noteOffQueue.size() << " in note off queue";
 #endif
 
     // modify the note offs that exist as they're relative to the
@@ -2079,18 +2066,18 @@ AlsaDriver::resetPlayback(const RealTime &oldPosition, const RealTime &position)
             RealTime endTime = formerStartPosition + (*i)->getRealTime();
 
 #ifdef DEBUG_PROCESS_MIDI_OUT
-            std::cerr << "Forward jump of " << jump << ": adjusting note off from "
+            RG_DEBUG << "resetPlayback(): Forward jump of " << jump << ": adjusting note off from "
                       << (*i)->getRealTime() << " (absolute " << endTime
-                      << ") to ";
+                      << ") to:";
 #endif
             (*i)->setRealTime(endTime - position);
 #ifdef DEBUG_PROCESS_MIDI_OUT
-            std::cerr << (*i)->getRealTime() << std::endl;
+            RG_DEBUG << "resetPlayback():     " << (*i)->getRealTime();
 #endif
         } else // we're rewinding - kill the note immediately
             {
 #ifdef DEBUG_PROCESS_MIDI_OUT
-                std::cerr << "Rewind by " << jump << ": setting note off to zero" << std::endl;
+                RG_DEBUG << "resetPlayback(): Rewind by " << jump << ": setting note off to zero";
 #endif
                 (*i)->setRealTime(RealTime::zeroTime);
             }
@@ -2128,7 +2115,7 @@ void
 AlsaDriver::setMIDIClockInterval(RealTime interval)
 {
 #ifdef DEBUG_ALSA
-    std::cerr << "AlsaDriver::setMIDIClockInterval(" << interval << ")" << endl;
+    RG_DEBUG << "setMIDIClockInterval(" << interval << ")";
 #endif
 
     if (m_midiClockInterval == interval) return;
@@ -2155,8 +2142,7 @@ AlsaDriver::setMIDIClockInterval(RealTime interval)
             //snd_seq_remove_events_set_event_type(info,
             snd_seq_remove_events_set_condition(info, SND_SEQ_REMOVE_OUTPUT);
             snd_seq_remove_events_set_event_type(info, SND_SEQ_EVFLG_CONTROL);
-            std::cout << "AlsaDriver::setMIDIClockInterval - "
-                      << "MIDI CLOCK TYPE IS CONTROL" << std::endl;
+            RG_DEBUG << "setMIDIClockInterval(): MIDI CLOCK TYPE IS CONTROL";
             snd_seq_remove_events(m_midiHandle, info);
         }
 
@@ -2167,9 +2153,8 @@ AlsaDriver::clearPendSysExcMap()
 {
     // Flush incomplete system exclusive events and delete the map.
     if (!m_pendSysExcMap->empty()) {
-        std::cerr << "AlsaDriver::clearPendSysExcMap - erasing "
-                  << m_pendSysExcMap->size() << " incomplete system exclusive message(s). "
-                  << std::endl;
+        RG_WARNING << "clearPendSysExcMap(): WARNING: Erasing "
+                   << m_pendSysExcMap->size() << " incomplete system exclusive message(s). ";
         DeviceEventMap::iterator pendIt = m_pendSysExcMap->begin();
         for(; pendIt != m_pendSysExcMap->end(); ++pendIt) {
             delete pendIt->second.first;
@@ -2182,7 +2167,7 @@ void
 AlsaDriver::pushRecentNoteOffs()
 {
 #ifdef DEBUG_PROCESS_MIDI_OUT
-    std::cerr << "AlsaDriver::pushRecentNoteOffs: have " << m_recentNoteOffs.size() << " in queue" << std::endl;
+    RG_DEBUG << "pushRecentNoteOffs(): have " << m_recentNoteOffs.size() << " in queue";
 #endif
 
     for (NoteOffQueue::iterator i = m_recentNoteOffs.begin();
@@ -2201,7 +2186,7 @@ AlsaDriver::cropRecentNoteOffs(const RealTime &t)
     while (!m_recentNoteOffs.empty()) {
         NoteOffEvent *ev = *m_recentNoteOffs.begin();
 #ifdef DEBUG_PROCESS_MIDI_OUT
-        std::cout << "AlsaDriver::cropRecentNoteOffs: " << ev->getRealTime() << " vs " << t << std::endl;
+        RG_DEBUG << "cropRecentNoteOffs(): " << ev->getRealTime() << " vs " << t;
 #endif
         if (ev->getRealTime() >= t) break;
         delete ev;
@@ -2219,7 +2204,7 @@ AlsaDriver::weedRecentNoteOffs(unsigned int pitch, MidiByte channel,
             (*i)->getChannel() == channel && 
             (*i)->getInstrument() == instrument) {
 #ifdef DEBUG_PROCESS_MIDI_OUT
-            std::cerr << "AlsaDriver::weedRecentNoteOffs: deleting one" << std::endl;
+            RG_DEBUG << "weedRecentNoteOffs(): deleting one";
 #endif
             delete *i;
             m_recentNoteOffs.erase(i);
@@ -2270,8 +2255,7 @@ AlsaDriver::allNotesOff()
 
         if (error < 0) {
 #ifdef DEBUG_ALSA
-            std::cerr << "AlsaDriver::allNotesOff - "
-                      << "can't send event" << std::endl;
+            RG_WARNING << "allNotesOff() - can't send event";
 #endif
 
         }
@@ -2305,7 +2289,7 @@ AlsaDriver::processNotesOff(const RealTime &time, bool now, bool everything)
     RealTime alsaTime = getAlsaTime();
 
 #ifdef DEBUG_PROCESS_MIDI_OUT
-    std::cerr << "AlsaDriver::processNotesOff(" << time << "): alsaTime = " << alsaTime << ", now = " << now << std::endl;
+    RG_DEBUG << "processNotesOff(" << time << "): alsaTime = " << alsaTime << ", now = " << now;
 #endif
 
     // For each note-off event in the note-off queue
@@ -2315,13 +2299,13 @@ AlsaDriver::processNotesOff(const RealTime &time, bool now, bool everything)
 
         if (noteOff->getRealTime() > time) {
 #ifdef DEBUG_PROCESS_MIDI_OUT
-            std::cerr << "Note off time " << noteOff->getRealTime() << " is beyond current time " << time << std::endl;
+            RG_DEBUG << "processNotesOff(): Note off time " << noteOff->getRealTime() << " is beyond current time " << time;
 #endif
             if (!everything) break;
         }
 
 #ifdef DEBUG_PROCESS_MIDI_OUT
-        std::cerr << "AlsaDriver::processNotesOff(" << time << "): found event at " << noteOff->getRealTime() << ", instr " << noteOff->getInstrument() << ", channel " << int(noteOff->getChannel()) << ", pitch " << int(noteOff->getPitch()) << std::endl;
+        RG_DEBUG << "processNotesOff(" << time << "): found event at " << noteOff->getRealTime() << ", instr " << noteOff->getInstrument() << ", channel " << int(noteOff->getChannel()) << ", pitch " << int(noteOff->getPitch());
 #endif
 
         RealTime offTime = noteOff->getRealTime();
