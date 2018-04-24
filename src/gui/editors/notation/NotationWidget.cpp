@@ -1427,14 +1427,6 @@ NotationWidget::slotHorizontalThumbwheelMoved(int v)
         else newZoom /= 1.1;
     }
 
-    // switching from primary/panner to axis-independent
-    if (m_lastZoomWasHV) {
-        slotResetZoomClicked();
-        m_HVzoom->setBright(false);
-        m_Hzoom->setBright(true);
-        m_Vzoom->setBright(true);
-    }
-
     //RG_DEBUG << "v is: " << v << " h zoom factor was: " << m_lastH << " now: " << newZoom << " zooming " << (zoomingIn ? "IN" : "OUT");
 
     setHorizontalZoomFactor(newZoom);
@@ -1462,14 +1454,6 @@ NotationWidget::slotVerticalThumbwheelMoved(int v)
         else newZoom /= 1.1;
     }
 
-    // switching from primary/panner to axis-independent
-    if (m_lastZoomWasHV) {
-        slotResetZoomClicked();
-        m_HVzoom->setBright(false);
-        m_Hzoom->setBright(true);
-        m_Vzoom->setBright(true);
-    }
-
     //RG_DEBUG << "v is: " << v << " z zoom factor was: " << m_lastV << " now: " << newZoom << " zooming " << (zoomingIn ? "IN" : "OUT");
 
     setVerticalZoomFactor(newZoom);
@@ -1480,18 +1464,6 @@ NotationWidget::slotVerticalThumbwheelMoved(int v)
 void
 NotationWidget::slotPrimaryThumbwheelMoved(int v)
 {
-    // not sure what else to do; you can get things grotesquely out of whack
-    // changing H or V independently and then trying to use the big zoom, so now
-    // we reset when changing to the big zoom, and this behaves independently
-
-    // switching from axi-independent to primary/panner
-    if (!m_lastZoomWasHV) {
-        slotResetZoomClicked();
-        m_HVzoom->setBright(true);
-        m_Hzoom->setBright(false);
-        m_Vzoom->setBright(false);
-    }
-
     // little bit of kludge work to deal with value manipulations that are
     // outside of the constraints imposed by the primary zoom wheel itself
     if (v < -20) v = -20;
