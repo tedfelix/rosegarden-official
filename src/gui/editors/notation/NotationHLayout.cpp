@@ -105,6 +105,10 @@ NotationHLayout::getAvailableSpacings()
         m_availableSpacings.push_back(130);
         m_availableSpacings.push_back(170);
         m_availableSpacings.push_back(220);
+        m_availableSpacings.push_back(250);
+        m_availableSpacings.push_back(300);
+        m_availableSpacings.push_back(350);
+        m_availableSpacings.push_back(400);
     }
     return m_availableSpacings;
 }
