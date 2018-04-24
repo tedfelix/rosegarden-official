@@ -536,10 +536,7 @@ MatrixWidget::generatePitchRuler()
     }
 
     m_pitchRuler->setFixedSize(m_pitchRuler->sizeHint());
-    m_pianoView->setFixedWidth(m_pitchRuler->sizeHint().width() + 4);
-    //@@@ The 4 pixels have been added empirically in line above to
-    //    show the pitch ruler completely. (The pitch ruler contents was
-    //    horizontally moving with Alt + wheel)
+    m_pianoView->setFixedWidth(m_pitchRuler->sizeHint().width());
 
     m_pianoScene = new QGraphicsScene();
     QGraphicsProxyWidget *pianoKbd = m_pianoScene->addWidget(m_pitchRuler);
@@ -578,13 +575,14 @@ MatrixWidget::generatePitchRuler()
 
     // Apply current zoom to the new pitch ruler
     if (m_lastZoomWasHV) {
-        // Both horizontal and vertical zoom factors are applied to pitch ruler
         QMatrix m;
         m.scale(m_hZoomFactor, m_vZoomFactor);
         m_view->setMatrix(m);
-        m_pianoView->setMatrix(m);
-        m_pianoView->setFixedWidth(m_pitchRuler->sizeHint().width()
-                                                       * m_vZoomFactor);        
+        // Only vertical zoom factor is applied to pitch ruler
+        QMatrix m2;
+        m2.scale(1, m_vZoomFactor);
+        m_pianoView->setMatrix(m2);
+        m_pianoView->setFixedWidth(m_pitchRuler->sizeHint().width());
     } else {
         // Only vertical zoom factor is applied to pitch ruler
         QMatrix m;
@@ -624,6 +622,7 @@ MatrixWidget::setHorizontalZoomFactor(double factor)
     if (m_referenceScale) m_referenceScale->setXZoomFactor(m_hZoomFactor);
     m_view->resetMatrix();
     m_view->scale(m_hZoomFactor, m_vZoomFactor);
+    // Only vertical zoom factor is applied to pitch ruler
     QMatrix m;
     m.scale(1.0, m_vZoomFactor);
     m_pianoView->setMatrix(m);
@@ -638,6 +637,7 @@ MatrixWidget::setVerticalZoomFactor(double factor)
     if (m_referenceScale) m_referenceScale->setYZoomFactor(m_vZoomFactor);
     m_view->resetMatrix();
     m_view->scale(m_hZoomFactor, m_vZoomFactor);
+    // Only vertical zoom factor is applied to pitch ruler
     QMatrix m;
     m.scale(1.0, m_vZoomFactor);
     m_pianoView->setMatrix(m);
@@ -665,8 +665,11 @@ MatrixWidget::slotZoomInFromPanner()
     QMatrix m;
     m.scale(m_hZoomFactor, m_vZoomFactor);
     m_view->setMatrix(m);
-    m_pianoView->setMatrix(m);
-    m_pianoView->setFixedWidth(m_pitchRuler->sizeHint().width() * m_vZoomFactor);
+    // Only vertical zoom factor is applied to pitch ruler
+    QMatrix m2;
+    m2.scale(1, m_vZoomFactor);
+    m_pianoView->setMatrix(m2);
+    m_pianoView->setFixedWidth(m_pitchRuler->sizeHint().width());
     slotHScroll();
 }
 
@@ -679,8 +682,11 @@ MatrixWidget::slotZoomOutFromPanner()
     QMatrix m;
     m.scale(m_hZoomFactor, m_vZoomFactor);
     m_view->setMatrix(m);
-    m_pianoView->setMatrix(m);
-    m_pianoView->setFixedWidth(m_pitchRuler->sizeHint().width() * m_vZoomFactor);
+    // Only vertical zoom factor is applied to pitch ruler
+    QMatrix m2;
+    m2.scale(1, m_vZoomFactor);
+    m_pianoView->setMatrix(m2);
+    m_pianoView->setFixedWidth(m_pitchRuler->sizeHint().width());
     slotHScroll();
 }
 
@@ -1119,14 +1125,6 @@ MatrixWidget::slotHorizontalThumbwheelMoved(int v)
         else newZoom /= 1.1;
     }
 
-    // switching from primary/panner to axis-independent
-    if (m_lastZoomWasHV) {
-        slotResetZoomClicked();
-        m_HVzoom->setBright(false);
-        m_Hzoom->setBright(true);
-        m_Vzoom->setBright(true);
-    }
-
     //MATRIX_DEBUG << "v is: " << v << " h zoom factor was: " << m_lastH << " now: " << newZoom << " zooming " << (zoomingIn ? "IN" : "OUT");
 
     setHorizontalZoomFactor(newZoom);
@@ -1154,14 +1152,6 @@ MatrixWidget::slotVerticalThumbwheelMoved(int v)
         else newZoom /= 1.1;
     }
 
-    // switching from primary/panner to axis-independent
-    if (m_lastZoomWasHV) {
-        slotResetZoomClicked();
-        m_HVzoom->setBright(false);
-        m_Hzoom->setBright(true);
-        m_Vzoom->setBright(true);
-    }
-
     //MATRIX_DEBUG << "v is: " << v << " z zoom factor was: " << m_lastV << " now: " << newZoom << " zooming " << (zoomingIn ? "IN" : "OUT");
 
     setVerticalZoomFactor(newZoom);
@@ -1172,18 +1162,6 @@ MatrixWidget::slotVerticalThumbwheelMoved(int v)
 void
 MatrixWidget::slotPrimaryThumbwheelMoved(int v)
 {
-    // not sure what else to do; you can get things grotesquely out of whack
-    // changing H or V independently and then trying to use the big zoom, so now
-    // we reset when changing to the big zoom, and this behaves independently
-   
-    // switching from axi-independent to primary/panner
-    if (!m_lastZoomWasHV) {
-        slotResetZoomClicked();
-        m_HVzoom->setBright(true);
-        m_Hzoom->setBright(false);
-        m_Vzoom->setBright(false);
-    }
-
     // little bit of kludge work to deal with value manipulations that are
     // outside of the constraints imposed by the primary zoom wheel itself
     if (v < -20) v = -20;
@@ -1226,7 +1204,10 @@ MatrixWidget::slotResetZoomClicked()
     m.scale(m_hZoomFactor, m_vZoomFactor);
     m_view->setMatrix(m);
     m_view->scale(m_hZoomFactor, m_vZoomFactor);
-    m_pianoView->setMatrix(m);
+    // Only vertical zoom factor is applied to pitch ruler
+    QMatrix m2;
+    m2.scale(1, m_vZoomFactor);
+    m_pianoView->setMatrix(m2);
     m_pianoView->setFixedWidth(m_pitchRuler->sizeHint().width());
     slotHScroll();
 
