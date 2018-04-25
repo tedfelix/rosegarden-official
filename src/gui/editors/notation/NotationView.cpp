@@ -1083,8 +1083,8 @@ NotationView::setupActions()
     QMenu *spacingActionMenu = new QMenu(tr("S&pacing"), this);
     spacingActionMenu->setObjectName("stretch_actionmenu");
 
-    m_spacing = settings.value("spacing", m_notationWidget->getScene()->getHSpacing()).toInt();
-    m_notationWidget->getScene()->setHSpacing(m_spacing);
+    m_notationWidget->getScene()->setHSpacing(
+            m_doc->getComposition().m_notationSpacing);
     m_availableSpacings = NotationHLayout::getAvailableSpacings();
 
     ag = new QActionGroup(this);
@@ -1098,7 +1098,7 @@ NotationView::setupActions()
         ag->addAction(a);
         a->setText(QString("%1%").arg(*i));
         a->setCheckable(true);
-        a->setChecked(*i == m_spacing);
+        a->setChecked(*i == m_doc->getComposition().m_notationSpacing);
 
         spacingActionMenu->addAction(a);
     }
@@ -3654,7 +3654,8 @@ NotationView::slotRegenerateScene()
     // restore size and spacing of notation police
     m_notationWidget->slotSetFontName(m_fontName);
     m_notationWidget->slotSetFontSize(m_fontSize);
-    m_notationWidget->getScene()->setHSpacing(m_spacing);
+    m_notationWidget->getScene()->setHSpacing(
+            m_doc->getComposition().m_notationSpacing);
 
     // restore zoom factors
     m_notationWidget->setVerticalZoomFactor(vZoomFactor);
@@ -4382,7 +4383,10 @@ NotationView::slotSpacingComboChanged(int index)
 {
     int spacing = m_availableSpacings[index];
     if (m_notationWidget) m_notationWidget->getScene()->setHSpacing(spacing);
-    m_spacing = spacing;
+
+    m_doc->getComposition().m_notationSpacing = spacing;
+    m_doc->slotDocumentModified();
+
     QString action = QString("spacing_%1").arg(spacing);
     findAction(action)->setChecked(true);
 }

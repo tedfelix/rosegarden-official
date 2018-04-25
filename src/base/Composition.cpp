@@ -179,6 +179,7 @@ Composition::ReferenceSegment::findNearestRealTime(RealTime t)
 int Composition::m_defaultNbBars = 100;
 
 Composition::Composition() :
+    m_notationSpacing(100),
     m_selectedTrackId(0),
     m_timeSigSegment(TimeSignature::EventType),
     m_tempoSegment(TempoEventType),
@@ -1964,6 +1965,9 @@ std::string Composition::toXmlString() const
     // Place the number of the current pan law in the composition tag.
     int panLaw = AudioLevel::getPanLaw();
     composition << "\" panlaw=\"" << panLaw;
+
+    composition << "\" notationspacing=\"" << m_notationSpacing;
+
     composition << "\">" << endl << endl;
 
     composition << endl;

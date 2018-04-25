@@ -732,6 +732,14 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             AudioLevel::setPanLaw(0);
         }
 
+        QString notationSpacingStr = atts.value("notationspacing");
+        if (!notationSpacingStr.isEmpty()) {
+            getComposition().m_notationSpacing = notationSpacingStr.toInt();
+        } else {
+            // Default to 100.
+            getComposition().m_notationSpacing = 100;
+        }
+
     } else if (lcName == "track") {
 
         if (m_section != InComposition) {

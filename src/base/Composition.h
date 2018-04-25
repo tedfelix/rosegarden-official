@@ -821,6 +821,9 @@ public:
     ColourMap& getGeneralColourMap() { return m_generalColourMap; }
     void setGeneralColourMap(ColourMap &newmap);
 
+    /// NotationView spacing
+    int m_notationSpacing;
+
 
     //////
     //

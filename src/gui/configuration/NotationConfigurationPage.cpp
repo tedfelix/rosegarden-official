@@ -92,31 +92,6 @@ NotationConfigurationPage::NotationConfigurationPage(QWidget *parent) :
     layout->addWidget(m_layoutMode, row, 1, 1, 2);
     ++row;
 
-    layout->addWidget(new QLabel(tr("Default spacing"), frame), row, 0);
-
-    m_spacing = new QComboBox(frame);
-    connect(m_spacing, SIGNAL(activated(int)), this, SLOT(slotModified()));
-    m_spacing->setEditable(false);
-
-    std::vector<int> s = NotationHLayout::getAvailableSpacings();
-    int defaultSpacing = settings.value("spacing", 100).toInt() ;
-
-    for (std::vector<int>::iterator i = s.begin(); i != s.end(); ++i) {
-
-        QString text("%1 %");
-        if (*i == 100)
-            text = tr("%1 % (normal)");
-        m_spacing->addItem(text.arg(*i));
-
-        if (*i == defaultSpacing) {
-            m_spacing->setCurrentIndex(m_spacing->count() - 1);
-        }
-    }
-
-    layout->addWidget(m_spacing, row, 1, 1, 2);
-
-    ++row;
-
     layout->addWidget(new QLabel(tr("Show track headers (linear layout only)"),
                                       frame), row, 0);
 
@@ -740,8 +715,6 @@ NotationConfigurationPage::apply()
                       m_multiStaffSize->currentText().toUInt());
     settings.setValue("textfont", m_textFont->getFont());
     settings.setValue("sansfont", m_sansFont->getFont());
-    std::vector<int> s = NotationHLayout::getAvailableSpacings();
-    settings.setValue("spacing", s[m_spacing->currentIndex()]);
 
     settings.setValue("layoutmode", m_layoutMode->currentIndex());
     settings.setValue("colourquantize", m_colourQuantize->isChecked());

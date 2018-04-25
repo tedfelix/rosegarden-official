@@ -71,7 +71,6 @@ protected:
     QLabel *m_fontMappedByLabel;
     QLabel *m_fontTypeLabel;
     QComboBox *m_layoutMode;
-    QComboBox *m_spacing;
     QCheckBox *m_colourQuantize;
     QCheckBox *m_showUnknowns;
     QCheckBox *m_showInvisibles;
