@@ -193,14 +193,14 @@
         <translation>Alternar - establecer %1 al máximo y mínimo en eventos alternos</translation>
     </message>
     <message>
-        <location line="+11"/>
         <location filename="../../src/base/parameterpattern/RingingParameterPattern.cpp" line="+39"/>
+        <location filename="../../src/base/parameterpattern/AlternatingParameterPattern.cpp" line="+11"/>
         <source>First Value</source>
         <translation>Velocidad primera</translation>
     </message>
     <message>
         <location line="+2"/>
-        <location filename="../../src/base/parameterpattern/RingingParameterPattern.cpp" line="+2"/>
+        <location filename="../../src/base/parameterpattern/AlternatingParameterPattern.cpp" line="+2"/>
         <source>Second Value</source>
         <translation>Velocidad segunda</translation>
     </message>
@@ -307,7 +307,7 @@
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../../src/gui/editors/notation/NoteFontMap.cpp" line="+44"/>
+        <location filename="../../src/gui/editors/notation/NoteFontMap.cpp" line="+45"/>
         <source>unknown error</source>
         <translation>error desconocido</translation>
     </message>
@@ -8054,16 +8054,16 @@
         <translation>&amp;lt;nada&amp;gt;</translation>
     </message>
     <message>
-        <location filename="../../src/base/Studio.cpp" line="+66"/>
-        <location filename="../../src/sound/AlsaDriver.cpp" line="+693"/>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="+1098"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="+1086"/>
+        <location filename="../../src/sound/AlsaDriver.cpp" line="+689"/>
+        <location filename="../../src/base/Studio.cpp" line="+65"/>
         <location filename="../AutoloadStrings.cpp" line="-189"/>
         <source>Synth plugin</source>
         <translation>Plugin sinte</translation>
     </message>
     <message>
-        <location line="-3"/>
         <location filename="../../src/sound/AlsaDriver.cpp" line="+37"/>
+        <location filename="../../src/base/Studio.cpp" line="-3"/>
         <location filename="../AutoloadStrings.cpp" line="-1"/>
         <source>Audio</source>
         <translation>Audio </translation>
@@ -10204,7 +10204,7 @@
         <translation>Desconocida</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="+721"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="+716"/>
         <location line="+131"/>
         <source>%1. %2</source>
         <translation>%1. %2</translation>
@@ -10227,15 +10227,15 @@
         <translation>%1 (%2)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="+1690"/>
+        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="+1667"/>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="+914"/>
-        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="+1057"/>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="+472"/>
+        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="+1018"/>
         <source>%1 Controller %2 %3</source>
         <translation>%2 %3 controlador %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/main.cpp" line="+492"/>
+        <location filename="../../src/gui/application/main.cpp" line="+493"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
@@ -10658,8 +10658,12 @@ Would you like to use
     </message>
     <message>
         <location line="+6"/>
+        <source>&lt;p&gt;Copyright 2000-2018 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Build key: %3&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;For more information about Rosegarden, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2 or later&lt;/p&gt;</source>
+        <translation type="unfinished">&lt;p&gt;Copyright 2000-2017 el equipo de Rosegarden&lt;/p&gt;&lt;p&gt;Versión: %1 &amp;nbsp; Versión de Qt: %2&lt;br&gt;Clave: %3&lt;/p&gt;&lt;p&gt;Rosegarden se realizó por un equipo de voluntarios ubicado por todas partes del mundo.  Para aprender quíen desarolló Rosegarden, consulte el &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;sitio Rosegarden&lt;/a&gt;&lt;br&gt;Para más información acerda de Rosegarden, consulte &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;Licencia: GNU General Public License Version 2 or later&lt;/p&gt; {2000-2018 ?} {1 ?} {2&lt;?} {3&lt;?} {2 ?}</translation>
+    </message>
+    <message>
         <source>&lt;p&gt;Copyright 2000-2017 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Build key: %3&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;For more information about Rosegarden, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2 or later&lt;/p&gt;</source>
-        <translation>&lt;p&gt;Copyright 2000-2017 el equipo de Rosegarden&lt;/p&gt;&lt;p&gt;Versión: %1 &amp;nbsp; Versión de Qt: %2&lt;br&gt;Clave: %3&lt;/p&gt;&lt;p&gt;Rosegarden se realizó por un equipo de voluntarios ubicado por todas partes del mundo.  Para aprender quíen desarolló Rosegarden, consulte el &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;sitio Rosegarden&lt;/a&gt;&lt;br&gt;Para más información acerda de Rosegarden, consulte &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;Licencia: GNU General Public License Version 2 or later&lt;/p&gt;</translation>
+        <translation type="obsolete">&lt;p&gt;Copyright 2000-2017 el equipo de Rosegarden&lt;/p&gt;&lt;p&gt;Versión: %1 &amp;nbsp; Versión de Qt: %2&lt;br&gt;Clave: %3&lt;/p&gt;&lt;p&gt;Rosegarden se realizó por un equipo de voluntarios ubicado por todas partes del mundo.  Para aprender quíen desarolló Rosegarden, consulte el &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;sitio Rosegarden&lt;/a&gt;&lt;br&gt;Para más información acerda de Rosegarden, consulte &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;Licencia: GNU General Public License Version 2 or later&lt;/p&gt;</translation>
     </message>
 </context>
 <context>
@@ -11266,14 +11270,14 @@ Would you like to use
         <translation>Haga clic en el botón arriba para renombrar este instrumento</translation>
     </message>
     <message>
-        <location line="+114"/>
-        <location line="+181"/>
+        <location line="+129"/>
+        <location line="+177"/>
         <source>&lt;no synth&gt;</source>
         <translation>&lt;sin sinte&gt;</translation>
     </message>
     <message>
-        <location line="-178"/>
-        <location line="+182"/>
+        <location line="-174"/>
+        <location line="+178"/>
         <source>&lt;no plugin&gt;</source>
         <translation>&lt;sin plugin&gt;</translation>
     </message>
@@ -12001,7 +12005,7 @@ Por favor, seleccione cuáles de ellos quiere borrar permanentemente del disco d
 <context>
     <name>Rosegarden::AudioStrip</name>
     <message>
-        <location filename="../../src/gui/studio/AudioStrip.cpp" line="+165"/>
+        <location filename="../../src/gui/studio/AudioStrip.cpp" line="+161"/>
         <source>Record input source</source>
         <translation>Origen de entrada de grabación</translation>
     </message>
@@ -12058,7 +12062,7 @@ Por favor, seleccione cuáles de ellos quiere borrar permanentemente del disco d
         <translation>&lt;sin plugin&gt;</translation>
     </message>
     <message>
-        <location line="+82"/>
+        <location line="+72"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
@@ -15344,12 +15348,11 @@ Ejemplo de texto perteneciente del archivo:</translation>
 <context>
     <name>Rosegarden::InstrumentParameterBox</name>
     <message>
-        <location filename="../../src/gui/editors/parameters/InstrumentParameterBox.cpp" line="+43"/>
         <source>Instrument</source>
-        <translation>Instrumento</translation>
+        <translation type="obsolete">Instrumento</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location filename="../../src/gui/editors/parameters/InstrumentParameterBox.cpp" line="+40"/>
         <source>Instrument Parameters</source>
         <translation>Parámetros de instrumento</translation>
     </message>
@@ -15357,7 +15360,7 @@ Ejemplo de texto perteneciente del archivo:</translation>
 <context>
     <name>Rosegarden::InstrumentParameterPanel</name>
     <message>
-        <location filename="../../src/gui/editors/parameters/InstrumentParameterPanel.cpp" line="+69"/>
+        <location filename="../../src/gui/editors/parameters/InstrumentParameterPanel.cpp" line="+61"/>
         <source>none</source>
         <translation>nada</translation>
     </message>
@@ -16470,7 +16473,7 @@ Ejemplo de texto perteneciente del archivo:</translation>
 <context>
     <name>Rosegarden::MIDIInstrumentParameterPanel</name>
     <message>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="-679"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="-673"/>
         <source>&lt;qt&gt;Set variations on the program above, if available in the studio&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Establecer las variación del programa arriba, si disponible en el estudio&lt;/qt&gt;</translation>
     </message>
@@ -16555,7 +16558,7 @@ Ejemplo de texto perteneciente del archivo:</translation>
         <translation>Recibir externo</translation>
     </message>
     <message>
-        <location line="+121"/>
+        <location line="+114"/>
         <source>No connection</source>
         <translation>Sin conexión</translation>
     </message>
@@ -17306,7 +17309,7 @@ Doble clic para abrir el editor de marcadores.</translation>
 <context>
     <name>Rosegarden::MatrixWidget</name>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="-856"/>
+        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="-816"/>
         <source>Zoom</source>
         <translation>Ampliar</translation>
     </message>
@@ -17326,7 +17329,7 @@ Doble clic para abrir el editor de marcadores.</translation>
         <translation>Reiniciar ampliación</translation>
     </message>
     <message>
-        <location line="+1125"/>
+        <location line="+1060"/>
         <source>&lt;qt&gt;Rotate wheel to change the active segment&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Girar la rueda para cambiar el segmento activo&lt;/qt&gt;</translation>
     </message>
@@ -17436,20 +17439,19 @@ Doble clic para abrir el editor de marcadores.</translation>
     <name>Rosegarden::MidiKeyMappingEditor</name>
     <message>
         <location filename="../../src/gui/studio/MidiKeyMappingEditor.cpp" line="+53"/>
-        <location line="+24"/>
+        <location line="+25"/>
         <source>Key Mapping details</source>
         <translation>Detalles de Mapa del Teclado</translation>
     </message>
     <message>
-        <location line="-23"/>
         <source>Pitches</source>
-        <translation>Tonos</translation>
+        <translation type="obsolete">Tonos</translation>
     </message>
 </context>
 <context>
     <name>Rosegarden::MidiMixerWindow</name>
     <message>
-        <location filename="../../src/gui/studio/MidiMixerWindow.cpp" line="+132"/>
+        <location filename="../../src/gui/studio/MidiMixerWindow.cpp" line="+128"/>
         <source>MIDI Mixer</source>
         <translation>Mezclador MIDI</translation>
     </message>
@@ -17473,17 +17475,16 @@ Doble clic para abrir el editor de marcadores.</translation>
     <name>Rosegarden::MidiProgramsEditor</name>
     <message>
         <location filename="../../src/gui/studio/MidiProgramsEditor.cpp" line="+65"/>
-        <location line="+98"/>
+        <location line="+99"/>
         <source>Bank and Program details</source>
         <translation>Detalles de Bancos y Programas</translation>
     </message>
     <message>
-        <location line="-97"/>
         <source>Programs</source>
-        <translation>Programas</translation>
+        <translation type="obsolete">Programas</translation>
     </message>
     <message>
-        <location line="+25"/>
+        <location line="-72"/>
         <source>Percussion</source>
         <translation>Percusión</translation>
     </message>
@@ -17509,12 +17510,12 @@ Doble clic para abrir el editor de marcadores.</translation>
     </message>
     <message>
         <location line="+139"/>
-        <location line="+329"/>
+        <location line="+333"/>
         <source>Key Mapping: %1</source>
         <translation>Mapa del teclado: %1 </translation>
     </message>
     <message>
-        <location line="-72"/>
+        <location line="-82"/>
         <source>&lt;no key mapping&gt;</source>
         <translation>&lt;sin Mapa del Teclado&gt;</translation>
     </message>
@@ -17745,7 +17746,7 @@ Doble clic para abrir el editor de marcadores.</translation>
 <context>
     <name>Rosegarden::NameSetEditor</name>
     <message>
-        <location filename="../../src/gui/studio/NameSetEditor.cpp" line="+67"/>
+        <location filename="../../src/gui/studio/NameSetEditor.cpp" line="+73"/>
         <source>Provided by</source>
         <translation>Gracias a</translation>
     </message>
@@ -17787,17 +17788,15 @@ Doble clic para abrir el editor de marcadores.</translation>
         <translation>Distribución de página múltiple</translation>
     </message>
     <message>
-        <location line="+8"/>
         <source>Default spacing</source>
-        <translation>Espaciado predeterminado</translation>
+        <translation type="obsolete">Espaciado predeterminado</translation>
     </message>
     <message>
-        <location line="+13"/>
         <source>%1 % (normal)</source>
-        <translation>%1 % (normal)</translation>
+        <translation type="obsolete">%1 % (normal)</translation>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="+8"/>
         <source>Show track headers (linear layout only)</source>
         <translation>Mostrar cabeceras de pista (formato linear únicamente)</translation>
     </message>
@@ -18386,7 +18385,7 @@ Esto es un bug (el programa debería haber fallado ya)</translation>
         <translation>  Sin selección </translation>
     </message>
     <message>
-        <location line="+2651"/>
+        <location line="+2652"/>
         <source>Chord</source>
         <translation> Acorde</translation>
     </message>
@@ -18396,7 +18395,7 @@ Esto es un bug (el programa debería haber fallado ya)</translation>
         <translation>Apoyatura</translation>
     </message>
     <message>
-        <location line="-2243"/>
+        <location line="-2244"/>
         <source>Unknown spacing action %1</source>
         <translation>Acción de espaciado desconocida %1</translation>
     </message>
@@ -18446,12 +18445,12 @@ Esto es un bug (el programa debería haber fallado ya)</translation>
         <location line="+58"/>
         <location line="+901"/>
         <location line="+730"/>
-        <location line="+1077"/>
+        <location line="+1081"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location line="-3019"/>
+        <location line="-3023"/>
         <source>Printing with LilyPond...</source>
         <translation>Imprimiendo con LilyPond...</translation>
     </message>
@@ -18560,7 +18559,7 @@ Por favor, asegúrese de que está correctamente configurado en el cuadro de di�
         <translation>Se muestra la estimación de la medida del compás</translation>
     </message>
     <message>
-        <location line="+168"/>
+        <location line="+169"/>
         <source>%1%2 - Segment Track #%3 - Notation</source>
         <translation>%1%2 - Segmento Pista %3 - Partitura</translation>
     </message>
@@ -18605,7 +18604,7 @@ Por favor, asegúrese de que está correctamente configurado en el cuadro de di�
         <translation>Tiempo: %1 (%2.%3s)</translation>
     </message>
     <message>
-        <location line="+79"/>
+        <location line="+82"/>
         <source>http://rosegardenmusic.com/wiki/doc:notation-en</source>
         <translation>http://rosegardenmusic.com/wiki/doc:notation-es</translation>
     </message>
@@ -18684,7 +18683,7 @@ Por favor, asegúrese de que está correctamente configurado en el cuadro de di�
 <context>
     <name>Rosegarden::NotationWidget</name>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="-1465"/>
+        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="-1442"/>
         <source>Zoom</source>
         <translation>Ampliar</translation>
     </message>
@@ -18709,7 +18708,7 @@ Por favor, asegúrese de que está correctamente configurado en el cuadro de di�
         <translation>Cerrar cabeceras de pista</translation>
     </message>
     <message>
-        <location line="+1468"/>
+        <location line="+1445"/>
         <location line="+1"/>
         <source>&lt;qt&gt;Rotate wheel to change the active segment&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Girar la rueda para cambiar el segmento activo&lt;/qt&gt;</translation>
@@ -20194,7 +20193,7 @@ Pueden haber incompatibilidades con el formato del archivo.</translation>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location line="+1372"/>
+        <location line="+1380"/>
         <source>Loading plugins...</source>
         <translation>Enumerando plugins... </translation>
     </message>
@@ -20454,7 +20453,7 @@ de nuevo.
         <location line="+39"/>
         <location line="+127"/>
         <location line="+77"/>
-        <location line="+725"/>
+        <location line="+678"/>
         <location line="+3"/>
         <location line="+30"/>
         <location line="+31"/>
@@ -20464,7 +20463,7 @@ de nuevo.
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location line="-1350"/>
+        <location line="-1303"/>
         <location line="+133"/>
         <location line="+172"/>
         <location line="+39"/>
@@ -20485,7 +20484,7 @@ See Edit -&gt; Preferences -&gt; Audio.</source>
 Vea Editar -&gt; Preferencias -&gt; Audio.</translation>
     </message>
     <message>
-        <location line="+725"/>
+        <location line="+678"/>
         <source>Cannot add dropped file.  JACK audio server is not available.</source>
         <translation>No puede añadir archivo soltado.  Servidor de audio JACK no está disponible.</translation>
     </message>
@@ -20529,7 +20528,7 @@ Vea Editar -&gt; Preferencias -&gt; Audio.</translation>
         <translation>Inicializando gestor de plugins...</translation>
     </message>
     <message>
-        <location line="+22"/>
+        <location line="+24"/>
         <source>Initializing view...</source>
         <translation>Inicializando vista...</translation>
     </message>
@@ -20538,12 +20537,12 @@ Vea Editar -&gt; Preferencias -&gt; Audio.</translation>
         <translation type="obsolete">Parámetros especiales</translation>
     </message>
     <message>
-        <location line="+18"/>
+        <location line="+19"/>
         <source>Starting sequence manager...</source>
         <translation>Iniciando gestor del secuenciador...</translation>
     </message>
     <message>
-        <location line="+35"/>
+        <location line="+24"/>
         <source>Clearing studio data...</source>
         <translation>Limpiando datos del estudio...</translation>
     </message>
@@ -20553,12 +20552,12 @@ Vea Editar -&gt; Preferencias -&gt; Audio.</translation>
         <translation>Iniciando...</translation>
     </message>
     <message>
-        <location line="+464"/>
+        <location line="+430"/>
         <source>  Zoom:  </source>
         <translation>  Ampliar:  </translation>
     </message>
     <message>
-        <location line="+524"/>
+        <location line="+520"/>
         <source>File &quot;%1&quot; does not exist</source>
         <translation>El archivo &quot;%1&quot; no existe</translation>
     </message>
@@ -20581,12 +20580,12 @@ Do you want to open it instead ?</source>
     </message>
     <message>
         <location line="+145"/>
-        <location line="+4654"/>
+        <location line="+4659"/>
         <source>Untitled</source>
         <translation>Sin título</translation>
     </message>
     <message>
-        <location line="-4641"/>
+        <location line="-4646"/>
         <location line="+342"/>
         <location line="+157"/>
         <source>Could not save document at %1
@@ -20598,12 +20597,12 @@ Error fue: %2</translation>
         <location line="-497"/>
         <location line="+343"/>
         <location line="+157"/>
-        <location line="+6153"/>
+        <location line="+6157"/>
         <source>Could not save document at %1</source>
         <translation>Rosegarden no logró guardar el documento en %1</translation>
     </message>
     <message>
-        <location line="-6585"/>
+        <location line="-6589"/>
         <source>Creating new document...</source>
         <translation>Creando nuevo documento...</translation>
     </message>
@@ -20622,12 +20621,12 @@ Error fue: %2</translation>
     </message>
     <message>
         <location line="-102"/>
-        <location line="+6008"/>
+        <location line="+6013"/>
         <source>All supported files</source>
         <translation>Todos archivos soportados</translation>
     </message>
     <message>
-        <location line="-6007"/>
+        <location line="-6012"/>
         <location line="+71"/>
         <location line="+193"/>
         <source>Rosegarden files</source>
@@ -20635,16 +20634,16 @@ Error fue: %2</translation>
     </message>
     <message>
         <location line="-263"/>
-        <location line="+2010"/>
+        <location line="+2011"/>
         <location line="+23"/>
         <source>MIDI files</source>
         <translation>Archivos de MIDI</translation>
     </message>
     <message>
-        <location line="-2032"/>
+        <location line="-2033"/>
         <location line="+70"/>
         <location line="+198"/>
-        <location line="+1702"/>
+        <location line="+1703"/>
         <location line="+40"/>
         <location line="+23"/>
         <location line="+256"/>
@@ -20659,23 +20658,23 @@ Error fue: %2</translation>
         <location line="+53"/>
         <location line="+48"/>
         <location line="+122"/>
-        <location line="+2569"/>
+        <location line="+2573"/>
         <source>All files</source>
         <translation>Todos los archivos</translation>
     </message>
     <message>
-        <location line="-6010"/>
+        <location line="-6015"/>
         <location line="+72"/>
         <source>Open File</source>
         <translation>Abrir archivo</translation>
     </message>
     <message>
-        <location line="-1100"/>
+        <location line="-1096"/>
         <source>Ctrl+R</source>
         <translation>Ctrl+R</translation>
     </message>
     <message>
-        <location line="+585"/>
+        <location line="+581"/>
         <source>File &quot;%1&quot; is a Rosegarden Device, and must be imported using the MIDI device manager.</source>
         <translation>Archivo &quot;%1% es un Dispositivo de Rosegarden y es necesario importarlo por el administrador de dispositivos MIDI.</translation>
     </message>
@@ -20786,12 +20785,12 @@ Error fue: %2</translation>
     </message>
     <message>
         <location line="+55"/>
-        <location line="+2815"/>
+        <location line="+2816"/>
         <source>Warning</source>
         <translation>Advertencia</translation>
     </message>
     <message>
-        <location line="-2814"/>
+        <location line="-2815"/>
         <source>The audio file path does not exist or is not writable.
 You must set the audio file path to a valid directory in Document Properties before %1.
 Would you like to set it now?</source>
@@ -20908,7 +20907,7 @@ Usted debe establecer el directorio de archivos de audio en un directorio válid
         <translation>Herramienta de unión no implementada todavía</translation>
     </message>
     <message>
-        <location line="+241"/>
+        <location line="+242"/>
         <source>Revert modified document to previous saved version?</source>
         <translation>¿Volver a la versión anterior del documento modificado?</translation>
     </message>
@@ -20924,7 +20923,7 @@ Usted debe establecer el directorio de archivos de audio en un directorio válid
         <translation>Archivos de proyecto Rosegarden</translation>
     </message>
     <message>
-        <location line="+1307"/>
+        <location line="+1311"/>
         <source>&lt;qt&gt;&lt;p&gt;You must choose a filename for this composition before recording audio.&lt;/p&gt;&lt;p&gt;Audio files will be saved to &lt;b&gt;%1&lt;/b&gt; as &lt;b&gt;rg-[&lt;i&gt;filename&lt;/i&gt;]-[&lt;i&gt;instrument&lt;/i&gt;]-&lt;i&gt;date&lt;/i&gt;_&lt;i&gt;time&lt;/i&gt;-&lt;i&gt;n&lt;/i&gt;.wav&lt;/b&gt;.  You may wish to rename audio instruments before recording as well.  For more information, please see the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/wiki/doc:audio-filenames-en&quot;&gt;Rosegarden Wiki&lt;/a&gt;.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Es necesario establecer un nombre de archivo antes de grabar audio.&lt;/p&gt;&lt;p&gt;Los archivos de audio se guardarán en &lt;b&gt;%1&lt;/b&gt; como &lt;b&gt;rg-[&lt;i&gt;nombre&lt;/i&gt;]-[&lt;i&gt;instrumento&lt;/i&gt;]-&lt;i&gt;fecha&lt;/i&gt;_&lt;i&gt;hora&lt;/i&gt;-&lt;i&gt;n&lt;/i&gt;.wav&lt;/b&gt;.  Puede que quiera usted renombrar también los instrumentos de audio antes de grabar.  Véase el &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/wiki/doc:audio-filenames-es&quot;&gt;Wik de Rosegardeni&lt;/a&gt; para aprender más.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
@@ -20939,8 +20938,8 @@ Usted debe establecer el directorio de archivos de audio en un directorio válid
         <translation>http://rosegardenmusic.com/wiki/doc:manual-es</translation>
     </message>
     <message>
-        <location line="-6629"/>
-        <location line="+341"/>
+        <location line="-6630"/>
+        <location line="+337"/>
         <location line="+8"/>
         <location line="+10"/>
         <location line="+26"/>
@@ -20963,7 +20962,7 @@ Usted debe establecer el directorio de archivos de audio en un directorio válid
         <location line="+302"/>
         <location line="+76"/>
         <location line="+25"/>
-        <location line="+803"/>
+        <location line="+804"/>
         <location line="+198"/>
         <location line="+19"/>
         <location line="+172"/>
@@ -20995,7 +20994,7 @@ Usted debe establecer el directorio de archivos de audio en un directorio válid
         <location line="+58"/>
         <location line="+2"/>
         <location line="+34"/>
-        <location line="+658"/>
+        <location line="+662"/>
         <location line="+95"/>
         <location line="+120"/>
         <location line="+13"/>
@@ -21004,13 +21003,13 @@ Usted debe establecer el directorio de archivos de audio en un directorio válid
         <location line="+18"/>
         <location line="+3"/>
         <location line="+10"/>
-        <location line="+467"/>
+        <location line="+466"/>
         <location line="+2"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location line="-643"/>
+        <location line="-642"/>
         <source>http://rosegardenmusic.com/tutorials/</source>
         <translation>http://rosegardenmusic.com/tutorials/</translation>
     </message>
@@ -21025,7 +21024,7 @@ Usted debe establecer el directorio de archivos de audio en un directorio válid
         <translation>&lt;p&gt;La versión de esta aplicación es %1.  Versión %2 está disponible.&lt;/p&gt;&lt;p&gt;Consulte el &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/getting/&quot;&gt;web de Rosegarden&lt;/a&gt; para ver más información sobre esta versión más actualizada.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location line="-4240"/>
+        <location line="-4244"/>
         <source>Open MIDI File</source>
         <translation>Abrir archivo MIDI</translation>
     </message>
@@ -21084,12 +21083,12 @@ Please exit and restart Rosegarden to restore sound capability.</source>
 Por favor, finalice y reinicie Rosegarden para restaurar las funcionalidades de sonido.</translation>
     </message>
     <message>
-        <location line="-4694"/>
+        <location line="-4649"/>
         <source>Starting sequencer...</source>
         <translation>Iniciando secuenciador...</translation>
     </message>
     <message>
-        <location line="+1840"/>
+        <location line="+1794"/>
         <source>Saving file%1with a new filename...</source>
         <comment>&apos;file%1with&apos; is correct. %1 will either become &apos; &apos; or &apos; as a template &apos; at runtime</comment>
         <translation>Guardando archivo%1con nombre nuevo...</translation>
@@ -21101,7 +21100,7 @@ Por favor, finalice y reinicie Rosegarden para restaurar las funcionalidades de 
     </message>
     <message>
         <location line="+479"/>
-        <location line="+1404"/>
+        <location line="+1405"/>
         <location line="+191"/>
         <location line="+97"/>
         <location line="+98"/>
@@ -21114,7 +21113,7 @@ Por favor, finalice y reinicie Rosegarden para restaurar las funcionalidades de 
         <translation>Cancelar</translation>
     </message>
     <message>
-        <location line="-2413"/>
+        <location line="-2414"/>
         <source>Split time is not within a selected segment.
 No segment will be split.</source>
         <translation>Tiempo en que dividir el segmento no está
@@ -21147,7 +21146,7 @@ No se divide ningún segmento.</translation>
         <translation>Borrar tempo y armadura originales</translation>
     </message>
     <message>
-        <location line="+1174"/>
+        <location line="+1175"/>
         <location line="+22"/>
         <source>Open Hydrogen File</source>
         <translation>Importar archivo Hydrogen</translation>
@@ -21274,7 +21273,7 @@ Para asistencia acerca de una correcta configuración de audio y MIDI, vaya ahtt
         <translation>Archivos de XML</translation>
     </message>
     <message numerus="yes">
-        <location line="-2375"/>
+        <location line="-2376"/>
         <location line="+54"/>
         <source>Split %n Segment(s) by Drum</source>
         <translation>
@@ -21288,7 +21287,7 @@ Para asistencia acerca de una correcta configuración de audio y MIDI, vaya ahtt
         <translation>Ningún segmento se dividió.</translation>
     </message>
     <message>
-        <location line="+1361"/>
+        <location line="+1362"/>
         <location line="+23"/>
         <source>Open MusicXML File</source>
         <translation>Abrir archivo de MusicXML</translation>
@@ -21329,7 +21328,7 @@ Por favor, configura el directorio de archivos de audio hacia un directorio vál
 ¿Quiere configurarlo ahora? </translation>
     </message>
     <message>
-        <location line="+483"/>
+        <location line="+487"/>
         <source>Move playback pointer to time</source>
         <translation>Mover el apuntador de reproducción al tiempo</translation>
     </message>
@@ -21426,7 +21425,7 @@ Error fue : %2</translation>
         <translation>Importar Estudio</translation>
     </message>
     <message>
-        <location line="+315"/>
+        <location line="+314"/>
         <source>&lt;h3&gt;Invalid audio path&lt;/h3&gt;</source>
         <translation>&lt;h3&gt;Ruta de audio errónea&lt;/h3&gt;</translation>
     </message>
@@ -21677,12 +21676,11 @@ Error fue : %2</translation>
 <context>
     <name>Rosegarden::SegmentParameterBox</name>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="+90"/>
         <source>Segment</source>
-        <translation>Segmento</translation>
+        <translation type="obsolete">Segmento</translation>
     </message>
     <message>
-        <location line="+0"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="+90"/>
         <source>Segment Parameters</source>
         <translation>Parámetros de Segmento</translation>
     </message>
@@ -22270,7 +22268,7 @@ Por favor, configure el directorio de archivos de audio hacia un directorio vál
 <context>
     <name>Rosegarden::SequenceManager</name>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="+137"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="+134"/>
         <location line="+150"/>
         <source>The JACK Audio subsystem has failed or it has stopped Rosegarden from processing audio.
 Please restart Rosegarden to continue working with audio.
@@ -23870,12 +23868,12 @@ Cerrando otras aplicaciones en ejecución puede mejorar el rendimiento de Rosega
 <context>
     <name>Rosegarden::TrackButtons</name>
     <message>
-        <location filename="../../src/gui/editors/segment/TrackButtons.cpp" line="+285"/>
+        <location filename="../../src/gui/editors/segment/TrackButtons.cpp" line="+294"/>
         <source>&lt;no instrument&gt;</source>
         <translation>&lt;sin instrumento&gt;</translation>
     </message>
     <message>
-        <location line="-63"/>
+        <location line="-65"/>
         <source>&lt;untitled audio&gt;</source>
         <translation>&lt;audio sin título&gt;</translation>
     </message>
@@ -23885,7 +23883,7 @@ Cerrando otras aplicaciones en ejecución puede mejorar el rendimiento de Rosega
         <translation>&lt;sin título&gt;</translation>
     </message>
     <message>
-        <location line="+910"/>
+        <location line="+904"/>
         <source>Mute track</source>
         <translation>Silenciar pista</translation>
     </message>
@@ -23903,7 +23901,7 @@ Cerrando otras aplicaciones en ejecución puede mejorar el rendimiento de Rosega
 <context>
     <name>Rosegarden::TrackEditor</name>
     <message numerus="yes">
-        <location filename="../../src/gui/editors/segment/TrackEditor.cpp" line="+626"/>
+        <location filename="../../src/gui/editors/segment/TrackEditor.cpp" line="+614"/>
         <source>Turn %n Linked Segment(s) into Real Copies</source>
         <translation>
             <numerusform>Convertir %n segmento vinculado en copía real</numerusform>
@@ -23929,7 +23927,7 @@ Cerrando otras aplicaciones en ejecución puede mejorar el rendimiento de Rosega
         <translation>Borrar segmentos</translation>
     </message>
     <message>
-        <location line="+375"/>
+        <location line="+377"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
@@ -23975,23 +23973,22 @@ Cerrando otras aplicaciones en ejecución puede mejorar el rendimiento de Rosega
 <context>
     <name>Rosegarden::TrackParameterBox</name>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="-1022"/>
         <source>Track</source>
-        <translation>Pista</translation>
+        <translation type="obsolete">Pista</translation>
     </message>
     <message>
-        <location line="+0"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="-1010"/>
         <source>Track Parameters</source>
         <translation>Parámetros de Pista</translation>
     </message>
     <message>
         <location line="+16"/>
-        <location line="+1180"/>
+        <location line="+1139"/>
         <source>&lt;untitled&gt;</source>
         <translation>&lt;sin título&gt;</translation>
     </message>
     <message>
-        <location line="-1172"/>
+        <location line="-1131"/>
         <source>Playback parameters</source>
         <translation>Parámetros de reproducción</translation>
     </message>
@@ -24341,23 +24338,28 @@ Cerrando otras aplicaciones en ejecución puede mejorar el rendimiento de Rosega
     </message>
     <message>
         <location line="-198"/>
-        <location line="+994"/>
+        <location line="+974"/>
         <source>All</source>
         <translation>Todas</translation>
     </message>
     <message>
-        <location line="+207"/>
+        <location line="+188"/>
         <location line="+8"/>
         <source> %1</source>
         <translation> %1</translation>
     </message>
     <message>
-        <location line="-116"/>
+        <location line="-118"/>
         <source>[ Track %1 - %2 ]</source>
         <translation>[ Pista %1 - %2 ]</translation>
     </message>
     <message>
-        <location line="-525"/>
+        <location line="-846"/>
+        <source>Reset to Defaults</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+344"/>
         <source>Default</source>
         <translation>Predeterminado</translation>
     </message>
@@ -24392,7 +24394,7 @@ Cerrando otras aplicaciones en ejecución puede mejorar el rendimiento de Rosega
         <translation>La nota más baja que se puede tocar</translation>
     </message>
     <message>
-        <location line="+71"/>
+        <location line="+72"/>
         <source>The instrument preset database is corrupt.  Check your installation.</source>
         <translation>Hay un problema catastrófico con los parametros preprogramados.</translation>
     </message>
