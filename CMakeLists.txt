@@ -5,9 +5,8 @@ cmake_minimum_required(VERSION 2.8.12)
 project(rosegarden)
 
 # Version
-set(ROSEGARDEN_VERSION "18.06")
-set(ROSEGARDEN_CODENAME "Vesper")
-#set(ROSEGARDEN_CODENAME "Worcestershire")
+set(ROSEGARDEN_VERSION "18.12")
+set(ROSEGARDEN_CODENAME "Worcestershire")
 #set(ROSEGARDEN_CODENAME "Xerxes")
 #set(ROSEGARDEN_CODENAME "Yesterday")
 #set(ROSEGARDEN_CODENAME "Zepherine Drouhin")
