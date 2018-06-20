@@ -187,18 +187,9 @@ public:
                                MidiByte controller, MidiByte value);
 
  private:
-    /// Creates the m_immediateNoteFiller in a thread-safe way and returns it.
-    /**
-     * Used by playPreviewNote() to generate the necessary events.
-     */
-    static ImmediateNote *getFiller(void);
-    /**
-     * Used by getFiller() to make sure creation of m_immediateNoteFiller
-     * is thread safe.
-     */
-    static QMutex m_instanceMutex;
-    /// Created and returned by getFiller().
-    static ImmediateNote *m_immediateNoteFiller;
+    /// Used by playPreviewNote() to insert a note into a MappedEventList.
+    static ImmediateNote m_immediateNoteFiller;
+
 };
 
 }

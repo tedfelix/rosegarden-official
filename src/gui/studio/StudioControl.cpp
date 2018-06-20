@@ -42,24 +42,8 @@
 namespace Rosegarden
 {
 
-ImmediateNote *
-StudioControl::
-getFiller(void)
-{
-    m_instanceMutex.lock();
-    if (!m_immediateNoteFiller)
-        { m_immediateNoteFiller = new ImmediateNote(); }
-    m_instanceMutex.unlock();
-    return m_immediateNoteFiller;
-}
+ImmediateNote StudioControl::m_immediateNoteFiller;
 
-ImmediateNote *
-StudioControl::
-m_immediateNoteFiller = 0;
-
-QMutex
-StudioControl::m_instanceMutex;
-    
 MappedObjectId
 StudioControl::createStudioObject(MappedObject::MappedObjectType type)
 {
@@ -217,8 +201,8 @@ playPreviewNote(Instrument *instrument, int pitch,
                 int velocity, RealTime duration, bool oneshot)
 {
     MappedEventList mC;
-    ImmediateNote * filler = getFiller();
-    filler->fillWithNote(mC, instrument, pitch, velocity, duration, oneshot);
+    m_immediateNoteFiller.fillWithNote(
+            mC, instrument, pitch, velocity, duration, oneshot);
     sendMappedEventList(mC);
 }
 
