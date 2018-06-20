@@ -178,12 +178,6 @@ SequenceManager::setDocument(RosegardenDocument *doc, QWidget *parentWidget)
 }
 
 void
-SequenceManager::setTransportStatus(const TransportStatus &status)
-{
-    m_transportStatus = status;
-}
-
-void
 SequenceManager::play()
 {
     if (!m_doc)
@@ -202,8 +196,7 @@ SequenceManager::play()
     // This check may throw an exception
     checkSoundDriverStatus(false);
 
-    // Align Instrument lists and send initial program changes
-    //
+    // Align Instrument lists.
     preparePlayback();
 
     m_lastTransportStartPosition = comp.getPosition();
@@ -1193,6 +1186,16 @@ SequenceManager::checkSoundDriverStatus(bool warnUser)
     // Update local copy of status.
     // ??? Can we get rid of this member?  Only record() uses it.  Why
     //     not just let record() call getSoundDriverStatus(VERSION) directly?
+    //     Then we can get rid of all the callers that call this with warnUser
+    //     set to false.  Then we can get rid of warnUser.  No, it's worse
+    //     than that.  There's also a getSoundDriverStatus() in here that
+    //     provides access to this copy.  We would have to that over to
+    //     providing RosegardenSequencer::getSoundDriverStatus().  Then
+    //     probably inline that into each caller.  It's doable, but a bit
+    //     more involved than it appears at first glance.  I'm also a little
+    //     worried that this local status has more values than the
+    //     RosegardenSequencer one.  Or perhaps it is out of sync and there's
+    //     a reason.
     m_soundDriverStatus = RosegardenSequencer::getInstance()->
         getSoundDriverStatus(VERSION);
 
@@ -1252,8 +1255,14 @@ SequenceManager::checkSoundDriverStatus(bool warnUser)
 }
 
 void
-SequenceManager::preparePlayback(bool /*forceProgramChanges*/)
+SequenceManager::preparePlayback()
 {
+    // ??? Where does this function really belong?  It iterates over the
+    //     Instrument's in the Studio and calls
+    //     RosegardenSequencer::setMappedInstrument().  Seems like
+    //     RosegardenSequencer might be a better place.  Or would Studio
+    //     make more sense?
+
     Studio &studio = m_doc->getStudio();
     const InstrumentList list = studio.getAllInstruments();
 
@@ -1289,33 +1298,39 @@ SequenceManager::resetMidiNetwork()
 void
 SequenceManager::reinitialiseSequencerStudio()
 {
+    // ??? static function.  What class does this really belong in?
+    //     RosegardenSequencer seems logical since all this does is call
+    //     RosegardenSequencer::processMappedEvent() based on the config file.
+
     QSettings settings;
     settings.beginGroup( SequencerOptionsConfigGroup );
 
     // Toggle JACK audio ports appropriately
-    //
-    bool submasterOuts = qStrToBool( settings.value("audiosubmasterouts", "false" ) ) ;
-    bool faderOuts = qStrToBool( settings.value("audiofaderouts", "false" ) ) ;
-    unsigned int audioFileFormat = settings.value("audiorecordfileformat", 1).toUInt() ;
 
     MidiByte ports = 0;
-    if (faderOuts) {
-        ports |= MappedEvent::FaderOuts;
-    }
-    if (submasterOuts) {
-        ports |= MappedEvent::SubmasterOuts;
-    }
-    MappedEvent mEports
-    (MidiInstrumentBase,
-     MappedEvent::SystemAudioPorts,
-     ports);
 
+    bool faderOuts =
+            qStrToBool( settings.value("audiofaderouts", "false" ) ) ;
+    if (faderOuts)
+        ports |= MappedEvent::FaderOuts;
+
+    bool submasterOuts =
+            qStrToBool( settings.value("audiosubmasterouts", "false" ) ) ;
+    if (submasterOuts)
+        ports |= MappedEvent::SubmasterOuts;
+
+    MappedEvent mEports(
+            MidiInstrumentBase, MappedEvent::SystemAudioPorts, ports);
     StudioControl::sendMappedEvent(mEports);
 
-    MappedEvent mEff
-    (MidiInstrumentBase,
-     MappedEvent::SystemAudioFileFormat,
-     audioFileFormat);
+    // Audio File Format
+
+    unsigned int audioFileFormat =
+            settings.value("audiorecordfileformat", 1).toUInt() ;
+
+    MappedEvent mEff(
+            MidiInstrumentBase, MappedEvent::SystemAudioFileFormat,
+            audioFileFormat);
     StudioControl::sendMappedEvent(mEff);
 
     settings.endGroup();
@@ -1899,6 +1914,9 @@ void SequenceManager::tempoChanged(const Composition *c)
 void
 SequenceManager::sendTransportControlStatuses()
 {
+    // ??? static function.  Where does this really belong?  I suspect
+    //     RosegardenSequencer.
+
     QSettings settings;
     settings.beginGroup( SequencerOptionsConfigGroup );
 

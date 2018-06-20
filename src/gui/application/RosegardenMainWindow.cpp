@@ -7979,7 +7979,11 @@ RosegardenMainWindow::slotResetMidiNetwork()
 {
     if (m_seqManager) {
 
-        m_seqManager->preparePlayback(true);
+        // ??? Suspect this is no longer needed.  It used to send out
+        //     program changes, but it doesn't do that anymore.  Instead
+        //     it calls RosegardenSequencer::setMappedInstrument() for each
+        //     Instrument.  That probably does nothing at this point.
+        m_seqManager->preparePlayback();
 
         m_seqManager->resetMidiNetwork();
     }

@@ -87,6 +87,18 @@ public:
      */
     void checkSoundDriverStatus(bool warnUser);
 
+    /// Reinitialise the studio.
+    /**
+     * Sends a SystemAudioPorts and a SystemAudioFileFormat event to
+     * RosegardenSequencer.
+     *
+     * Called only by RosegardenMainWindow's ctor.
+     */
+    static void reinitialiseSequencerStudio();
+
+    /// Align Instrument lists before playback starts.
+    void preparePlayback();
+
     //
     // Transport controls
     //
@@ -101,6 +113,10 @@ public:
     void jumpTo(const RealTime &time);
 
     void setLoop(const timeT &lhs, const timeT &rhs);
+
+    void setTransportStatus(TransportStatus status)
+            { m_transportStatus = status; }
+    TransportStatus getTransportStatus() const  { return m_transportStatus; }
 
     /// Handle incoming MappedEvent's.
     /**
@@ -139,42 +155,14 @@ public:
     void processAsynchronousMidi(const MappedEventList &mC,
                                  AudioManagerDialog *aMD);
 
-    /**
-     * Send program changes and align Instrument lists before playback
-     * starts.
-     * Also called at document loading (with arg set to true) to reset all instruments
-     * (fix for bug 820174)
-     *
-     * @arg forceProgramChanges if true, always send program changes even if the instrument is
-     * set not to send any.
-     */
-    void preparePlayback(bool forceProgramChanges = false);
-
-    /// Check and set sequencer status
-    void setTransportStatus(const TransportStatus &status);
-    TransportStatus getTransportStatus() const { return m_transportStatus; }
-
-    /**
-     * Suspend the sequencer to allow for a safe DCOP call() i.e. one
-     * when we don't hang both clients 'cos they're blocking on each
-     * other.
-     */
-    void suspendSequencer(bool value);
-
     /// Find what has been initialised and what hasn't
-    unsigned int getSoundDriverStatus() { return m_soundDriverStatus; }
+    unsigned int getSoundDriverStatus() const  { return m_soundDriverStatus; }
 
-    /// Reset MIDI controllers
-    void resetControllers();
-
-    /// Reset MIDI network
+    /// Reset MIDI network.  Send an FF Reset on all devices and channels.
     void resetMidiNetwork();
 
-    /// Reinitialise the studio
-    void reinitialiseSequencerStudio();
-
     /// Send JACK and MMC transport control statuses
-    void sendTransportControlStatuses();
+    static void sendTransportControlStatuses();
 
     /// Send all note offs and resets to MIDI devices
     void panic();
