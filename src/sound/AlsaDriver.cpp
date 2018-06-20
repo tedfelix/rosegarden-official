@@ -15,6 +15,7 @@
 
 #ifdef __GNUG__
 #pragma GCC diagnostic ignored "-Wswitch-enum"
+#pragma GCC diagnostic ignored "-Wimplicit-fallthrough"
 #endif
 
 #define RG_MODULE_STRING "[AlsaDriver]"
