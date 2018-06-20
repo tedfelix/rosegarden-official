@@ -13,6 +13,10 @@
     COPYING included with this distribution for more information.
 */
 
+#ifdef __GNUG__
+#pragma GCC diagnostic ignored "-Wimplicit-fallthrough"
+#endif
+
 #include "base/NotationTypes.h"
 #include "NotationRules.h"
 #include "base/BaseProperties.h"
