@@ -44,6 +44,12 @@ class MappedInserterBase;
  * MappedEventList via a MappedEventInserter.  A better name for this class
  * might be MappedEventBufferMixer (or Combiner).
  *
+ * An instance of this class is owned by RosegardenSequencer and used
+ * for playback of the Composition.
+ *
+ * An instance of this class is created by MidiFile and used for exporting
+ * standard MIDI files.
+ *
  * This is the second part of a two-part process to convert the Event objects
  * in a Composition into MappedEvent objects that can be sent to ALSA.  For
  * the first part of this conversion, see InternalSegmentMapper.
