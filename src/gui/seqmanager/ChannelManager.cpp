@@ -16,7 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[ChannelManager]"
-#define RG_NO_DEBUG_PRINT 1
+//#define RG_NO_DEBUG_PRINT 1
 
 #include "ChannelManager.h"
 
@@ -465,59 +465,43 @@ ChannelManager::setInstrument(Instrument *instrument)
     m_ready = false;
 }
 
-// Something is kicking everything off "channel" in our device.  It is
-// the signaller's responsibility to put AllocateChannels right (in
-// fact this signal only sent by AllocateChannels)
-// @author Tom Breton (Tehom) 
 void
-ChannelManager::
-slotVacateChannel(ChannelId channel)
+ChannelManager::slotVacateChannel(ChannelId channel)
 {
-    if (m_channelInterval.getChannelId() == channel) {
-        m_channelInterval.clearChannelId();
-        disconnectAllocator();
-    }
+    // Not our channel?  Bail.
+    if (m_channelInterval.getChannelId() != channel)
+        return;
+
+    m_channelInterval.clearChannelId();
+    disconnectAllocator();
 }
 
 
-// Our instrument and its entire device are being destroyed.  We can
-// skip setting the device's allocator right since it's going away.
-// @author Tom Breton (Tehom) 
 void
-ChannelManager::
-slotLosingDevice(void)
+ChannelManager::slotLosingDevice()
 {
     m_instrument = 0;
     m_channelInterval.clearChannelId();
 }
 
-// Our instrument is being destroyed.  We may or may not have
-// received slotLosingDevice first.
-// @author Tom Breton (Tehom) 
 void
-ChannelManager::
-slotLosingInstrument(void)
+ChannelManager::slotLosingInstrument()
 {
     freeChannelInterval();
     m_instrument = 0;
 }
 
-// Our instrument's channel is now fixed.
-// @author Tom Breton (Tehom) 
 void
-ChannelManager::
-slotChannelBecomesFixed(void)
+ChannelManager::slotChannelBecomesFixed()
 {
-    RG_DEBUG << "slotChannelBecomesFixed" 
-             << (m_usingAllocator ? "using allocator" :
-                 "not using allocator")
-             << "for"
-             << (void *)m_instrument
-             << endl;
+    //RG_DEBUG << "slotChannelBecomesFixed()" << (m_usingAllocator ? "using allocator" : "not using allocator") << "for" << (void *)m_instrument;
 
     ChannelId channel = m_instrument->getNaturalChannel();
-    if (!m_usingAllocator && (channel == m_channelInterval.getChannelId()))
-        { return; }
+
+    // If we're already fixed and set to our natural channel, there's nothing
+    // to do.
+    if (!m_usingAllocator  &&  (channel == m_channelInterval.getChannelId()))
+        return;
 
     // Free the channel that we had (safe even if already fixed)
     freeChannelInterval();
@@ -528,20 +512,14 @@ slotChannelBecomesFixed(void)
     m_ready = false;
 }
 
-// Our instrument's channel is now unfixed.
-// @author Tom Breton (Tehom) 
 void
-ChannelManager::
-slotChannelBecomesUnfixed(void)
+ChannelManager::slotChannelBecomesUnfixed()
 {
-    RG_DEBUG << "slotChannelBecomesUnfixed" 
-             << (m_usingAllocator ? "using allocator" :
-                 "not using allocator")
-             << "for"
-             << (void *)m_instrument
-             << endl;
+    //RG_DEBUG << "slotChannelBecomesUnfixed" << (m_usingAllocator ? "using allocator" : "not using allocator") << "for" << (void *)m_instrument;
+
     // If we were already unfixed, do nothing.
-    if (m_usingAllocator) { return; }
+    if (m_usingAllocator)
+        return;
 
     m_usingAllocator = true;
     // We no longer have a channel interval.
@@ -551,22 +529,20 @@ slotChannelBecomesUnfixed(void)
     m_ready = false;
 }
 
-// Our instrument has changed how to set up the channel.
-// @author Tom Breton (Tehom) 
 void
-ChannelManager::
-slotInstrumentChanged(void)
+ChannelManager::slotInstrumentChanged()
 {
     m_triedToGetChannel = false;
 
     // Reset to the fixedness of the instrument.  This is safe even
     // when fixedness hasn't really changed.
-    if(m_instrument) {
-        if(m_instrument->hasFixedChannel() ||
-           (m_instrument->getType() != Instrument::Midi))
-            { slotChannelBecomesFixed(); }
-        else
-            { slotChannelBecomesUnfixed(); }
+    if (m_instrument) {
+        if (m_instrument->hasFixedChannel()  ||
+            m_instrument->getType() != Instrument::Midi) {
+            slotChannelBecomesFixed();
+        } else {
+            slotChannelBecomesUnfixed();
+        }
     }
 
     // The above code won't always set dirty flag, so set it now.
@@ -575,4 +551,3 @@ slotInstrumentChanged(void)
 
 
 }
-
