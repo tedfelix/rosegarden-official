@@ -76,6 +76,17 @@ public:
      */
     void setDocument(RosegardenDocument *doc, QWidget *parentWidget);
 
+    /**
+     * Update m_soundDriverStatus.
+     *
+     * This is called at startup and by play() and record().  At startup,
+     * warnUser is true which indicates that a warning dialog can be
+     * shown if there is a problem with the setup.  In other cases, the
+     * status is only sent to the debug output.  And only if debug output
+     * is enabled.
+     */
+    void checkSoundDriverStatus(bool warnUser);
+
     //
     // Transport controls
     //
@@ -95,14 +106,38 @@ public:
     /**
      * This handles both incoming events when recording and incoming events
      * that are unrelated to recording.
+     *
+     * The events come from RosegardenMainWindow who gets them from
+     * SequencerDataBlock and RosegardenSequencer.
+     *
+     * This routine mainly emits the following signals which are handled
+     * by various parts of the UI:
+     *
+     *   - signalSelectProgramNoSend() -> MIPP::slotExternalProgramChange()
+     *   - signalMidiInLabel() -> TransportDialog::slotMidiInLabel()
+     *   - signalMidiOutLabel() -> TransportDialog::slotMidiOutLabel()
+     *   - insertableNoteOffReceived()
+     *     -> NotationView::slotInsertableNoteOffReceived()
+     *     -> PitchTrackerView::slotInsertableNoteOffReceived()
+     *     -> MatrixView::slotInsertableNoteOffReceived()
+     *   - insertableNoteOnReceived()
+     *     -> NotationView::slotInsertableNoteOnReceived()
+     *     -> PitchTrackerView::slotInsertableNoteOnReceived()
+     *     -> MatrixView::slotInsertableNoteOnReceived()
+     *   - controllerDeviceEventReceived()
+     *     -> RMVW::slotControllerDeviceEventReceived()
+     *
+     * This routine also performs extensive error checking and displays
+     * error messages when a problem is detected.
+     *
+     * ??? It feels to me like this spaghetti can be simplified.  Why not
+     *     create a new AsyncMIDIHandler object that makes a more direct
+     *     connection between RosegardenSequencer/SequencerDataBlock and
+     *     the UI?  That would be a first step.  Then we might be able to
+     *     make the connections even more direct.
      */
     void processAsynchronousMidi(const MappedEventList &mC,
                                  AudioManagerDialog *aMD);
-
-    // Before playing and recording.  If warnUser is true, show the
-    // user a warning dialog if there is a problem with the setup.
-    //
-    void checkSoundDriverStatus(bool warnUser);
 
     /**
      * Send program changes and align Instrument lists before playback
@@ -208,17 +243,28 @@ public slots:
     void fastForwardToEnd();
 
 signals:
-    void signalSelectProgramNoSend(int, int, int);
+    /// Emitted by processAsynchronousMidi().
+    /**
+     * Connected to MIDIInstrumentParameterPanel::slotExternalProgramChange().
+     *
+     * Incoming program changes from a connected device are sent to the MIPP
+     * where, if the "Receive External" checkbox is checked, the bank and
+     * program on the MIPP will be changed to match.
+     *
+     * ??? Since we are in here, reverse the order of these parameters.
+     *     Make sure MIPP matches.
+     */
+    void signalSelectProgramNoSend(int program, int bankLSB, int bankMSB);
 
     void insertableNoteOnReceived(int pitch, int velocity);
     void insertableNoteOffReceived(int pitch, int velocity);
-    void controllerDeviceEventReceived(MappedEvent *ev);
+    void controllerDeviceEventReceived(MappedEvent *event);
 
     /// signal RosegardenMainWindow to display a warning on the WarningWidget
     void sendWarning(int type, QString text, QString informativeText);
 
     /// signal GUI changes to the TransportDialog
-    void signalTempoChanged(tempoT);
+    void signalTempoChanged(tempoT tempo);
     void signalMidiInLabel(const MappedEvent *event);
     void signalMidiOutLabel(const MappedEvent *event);
     void signalPlaying(bool checked);

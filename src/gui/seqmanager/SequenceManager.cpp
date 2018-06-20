@@ -17,7 +17,7 @@
 
 #define RG_MODULE_STRING "[SequenceManager]"
 
-// #define DEBUG_SEQUENCE_MANAGER 1
+//#define DEBUG_SEQUENCE_MANAGER 1
 #if !defined DEBUG_SEQUENCE_MANAGER
 #define RG_NO_DEBUG_PRINT 1
 #endif
@@ -1190,12 +1190,19 @@ SequenceManager::setLoop(const timeT &lhs, const timeT &rhs)
 void
 SequenceManager::checkSoundDriverStatus(bool warnUser)
 {
+    // Update local copy of status.
+    // ??? Can we get rid of this member?  Only record() uses it.  Why
+    //     not just let record() call getSoundDriverStatus(VERSION) directly?
     m_soundDriverStatus = RosegardenSequencer::getInstance()->
         getSoundDriverStatus(VERSION);
 
-    SEQMAN_DEBUG << "Sound driver status is: " << m_soundDriverStatus;
-    
-    if (!warnUser) return;
+    RG_DEBUG << "Sound driver status:" <<
+            "MIDI" << (((m_soundDriverStatus & MIDI_OK) != 0) ? "ok" : "NOT OK") << "|" <<
+            "Audio" << (((m_soundDriverStatus & AUDIO_OK) != 0) ? "ok" : "NOT OK") << "|" <<
+            "Version" << (((m_soundDriverStatus & VERSION_OK) != 0) ? "ok" : "NOT OK");
+
+    if (!warnUser)
+        return;
 
 #ifdef HAVE_LIBJACK
     if ((m_soundDriverStatus & (AUDIO_OK | MIDI_OK | VERSION_OK)) ==
@@ -1229,6 +1236,8 @@ SequenceManager::checkSoundDriverStatus(bool warnUser)
         // This is to avoid us ever showing the same dialog more than
         // once during a single run of the program -- it's quite
         // separate from the suppression function
+        // ??? But this routine is only ever called with "true" once.  From
+        //     RMW's ctor.  There is no need for this.
         static bool showJackWarning = true;
 
         if (showJackWarning) {

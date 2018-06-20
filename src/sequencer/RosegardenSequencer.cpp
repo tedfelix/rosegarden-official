@@ -467,6 +467,10 @@ RosegardenSequencer::getSoundDriverStatus(const QString &guiVersion)
     LOCKED;
 
     unsigned int driverStatus = m_driver->getStatus();
+    // ??? How would it ever be possible for these versions to mismatch?
+    //     They both come from the exact same place.  This might have been
+    //     an attempt at separating the GUI and Sequencer into .so files
+    //     or something.  I say remove this check.  Version is always OK.
     if (guiVersion == VERSION)
         driverStatus |= VERSION_OK;
     else {

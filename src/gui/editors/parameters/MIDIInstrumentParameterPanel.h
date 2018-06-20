@@ -71,17 +71,16 @@ public slots:
      * SequenceManager::signalSelectProgramNoSend().
      *
      * Note: This function's parameters are in reverse order.  They should be:
-     *       slotExternalProgramChange(bankMSB, bankLSB, programChange)
+     *       slotExternalProgramChange(bankMSB, bankLSB, programChange).
      *       This would require changing
      *       SequenceManager::signalSelectProgramNoSend() as well.
      *
-     * parameters:
-     * programChange : the program to select (triggered by Program
-     *                 Change message)
-     * bankLSB : the bank to select (-1 if no LSB Bank Select occurred)
-     *           (triggered by LSB Bank Select message)
-     * bankMSB : the bank to select (-1 if no MSB Bank Select occurred)
-     *           (triggered by MSB Bank Select message)
+     * @param [in] programChange The program to select (triggered by Program
+     *                           Change message).
+     * @param [in] bankLSB The bank to select (-1 if no LSB Bank Select occurred)
+     *                     (triggered by LSB Bank Select message).
+     * @param [in] bankMSB The bank to select (-1 if no MSB Bank Select occurred)
+     *                     (triggered by MSB Bank Select message).
      */
     void slotExternalProgramChange(
             int programChange, int bankLSB, int bankMSB);
