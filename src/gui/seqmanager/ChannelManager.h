@@ -59,9 +59,6 @@ struct ControllerAndPBList
 
 /// Owns and services a channel interval for an instrument.
 /**
- * Base class for the specialized channel managers IntervalChannelManager
- * and EternalChannelManager.
- *
  * ChannelManager's purpose is to own and service a channel interval
  * (ChannelManager::m_channel), relative to an instrument that wants to
  * play on it.  It is owned by some note-producing source:
@@ -70,9 +67,9 @@ struct ControllerAndPBList
  *
  * Special cases it deals with:
  *
- *   - Eternal channels, eg for the metronome.  Its derived class
- *     (EternalChannelManager) just makes a channel interval that's
- *     guaranteed to be longer than the composition.
+ *   - Eternal channels, e.g. for the metronome.  Call setEternalInterval()
+ *     to make a channel interval that's guaranteed to be longer than the
+ *     composition.
  *
  *   - Fixed channels, for which it doesn't use a channel allocator
  *     (AllocateChannels), but pretends to be doing all the same stuff.
@@ -123,8 +120,6 @@ public:
             Instrument *instrument, RealTime start);
     };
 
-protected:
-    // Like an ABC, only objects of a derived type can be constructed.
     ChannelManager(Instrument *instrument);
 
 private:
@@ -248,6 +243,15 @@ public:
         m_endMargin   = endMargin;
     }
 
+    /// Set the interval to the maximum range.
+    void setEternalInterval()
+    {
+        setRequiredInterval(ChannelInterval::m_earliestTime,
+                            ChannelInterval::m_latestTime,
+                            RealTime::zeroTime,
+                            RealTime::zeroTime);
+    }
+
     /// Allocate a sufficient channel interval in the current allocation mode.
     /*
      * It is safe to call this more than once, ie even if we already have a
@@ -345,49 +349,6 @@ protected:
      * making us search again every time we insert a note.
      */
     bool m_triedToGetChannel;
-};
-
-/// Channel manager of a channel that encompasses the entire playing time.
-/**
- * MetronomeMapper and ImmediateNote have an EternalChannelManager.
- *
- * @author Tom Breton (Tehom)
- */
-class EternalChannelManager : public ChannelManager
-{
-public:
-    EternalChannelManager(Instrument *instrument) :
-        ChannelManager(instrument)
-    {
-        setRequiredInterval(ChannelInterval::m_earliestTime,
-                            ChannelInterval::m_latestTime,
-                            RealTime::zeroTime,
-                            RealTime::zeroTime);
-    }
-
-    /// Reallocate its channel
-    void reallocateEternalChannel(void)  { reallocate(false); }
-};
-
-/// Channel manager of a channel interval.
-/**
- * InternalSegmentMapper has an IntervalChannelManager.
- *
- * @author Tom Breton (Tehom)
- */
-class IntervalChannelManager : public ChannelManager
-{
-public:
-    IntervalChannelManager(Instrument *instrument) :
-        ChannelManager(instrument) 
-    { }
-
-    /// Reallocate its channel interval.
-    void reallocateChannel(RealTime start, RealTime end) 
-    {
-        setRequiredInterval(start, end, RealTime::zeroTime, RealTime(1,0));
-        reallocate(false);
-    }
 };
 
 }

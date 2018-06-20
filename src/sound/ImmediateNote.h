@@ -30,7 +30,7 @@ class ImmediateNote
  ImmediateNote(void) :
   // There's no sensible value to set for instrument.  We'll get an
   // Instrument in each call.
-  m_channelManager(0) {}
+  m_channelManager(0)  { m_channelManager.setEternalInterval(); }
 
   // Fill mC with a corresponding note and its appropriate setup events.
   void
@@ -39,7 +39,7 @@ class ImmediateNote
                    RealTime duration, bool oneshot);
 
  private:
-  EternalChannelManager m_channelManager;
+  ChannelManager m_channelManager;
 };
  
 }

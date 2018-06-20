@@ -129,7 +129,7 @@ private:
 
     /** Data members **/
 
-    IntervalChannelManager m_channelManager;
+    ChannelManager m_channelManager;
 
     // Separate storage for triggered events.  This storage, like
     // original segment, contains just one time thru; logic in "fillBuffer"

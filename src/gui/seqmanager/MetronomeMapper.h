@@ -21,7 +21,7 @@
 #include "base/MidiProgram.h"  // For InstrumentId
 #include "base/RealTime.h"
 #include "base/TimeT.h"
-#include "gui/seqmanager/ChannelManager.h"  // For EternalChannelManager
+#include "gui/seqmanager/ChannelManager.h"
 #include "gui/seqmanager/MappedEventBuffer.h"
 
 #include <QString>
@@ -73,7 +73,7 @@ private:
 
     const MidiMetronome *m_metronome;
 
-    EternalChannelManager m_channelManager;
+    ChannelManager m_channelManager;
 };
 
 

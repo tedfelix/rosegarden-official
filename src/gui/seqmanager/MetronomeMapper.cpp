@@ -65,6 +65,7 @@ MetronomeMapper::MetronomeMapper(RosegardenDocument *doc) :
     // As we promised, set instrument
     m_channelManager.setInstrument(
             studio.getInstrumentById(m_metronome->getInstrument()));
+    m_channelManager.setEternalInterval();
 
     Composition &composition = m_doc->getComposition();
 
@@ -239,7 +240,7 @@ void MetronomeMapper::fillBuffer()
 
     resize(index);
 
-    m_channelManager.reallocateEternalChannel();
+    m_channelManager.reallocate(false);
     m_channelManager.setDirty();
 }
 
