@@ -292,6 +292,7 @@ void InternalSegmentMapper::fillBuffer()
     RealTime maxRealTime;
     if (anything) {
         minRealTime = getBuffer()[0].getEventTime();
+        // ??? Shouldn't we add the duration of the event?  getDuration().
         maxRealTime = getBuffer()[size() - 1].getEventTime();
 
         // Fix for bug #1378.  Start slightly before the first note so
