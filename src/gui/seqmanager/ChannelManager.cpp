@@ -174,21 +174,19 @@ insertControllers(ChannelId channel, Instrument *instrument,
     }
 }
 
-// Send program control for instrument on channel.
-// Adapted from SequenceManager
-void
-ChannelManager::
-insertProgramForInstrument(ChannelId channel, Instrument *instrument,
-                           MappedInserterBase &inserter,
-                           RealTime insertTime, int trackId)
+void ChannelManager::insertBSAndPC(
+        int trackId,
+        const Instrument *instrument,
+        ChannelId channel,
+        RealTime insertTime,
+        MappedInserterBase &inserter)
 {
-    //RG_DEBUG << "insertProgramForInstrument() : inserting prg change for " << instrument->getPresentationName().c_str() << "on channel" << (int)channel;
+    //RG_DEBUG << "insertBSAndPC(): inserting BS/PC for " << instrument->getPresentationName().c_str() << "on channel" << (int)channel;
 
-    // Send bank select before program change unless we have a fixed
-    // channel and no sendsBankSelect.
-    if (!instrument->hasFixedChannel() ||
+    if (!instrument->hasFixedChannel()  ||
         instrument->sendsBankSelect()) {
         {
+            // Bank Select MSB
             MappedEvent mE(instrument->getId(),
                            MappedEvent::MidiController,
                            MIDI_CONTROLLER_BANK_MSB,
@@ -199,6 +197,7 @@ insertProgramForInstrument(ChannelId channel, Instrument *instrument,
             inserter.insertCopy(mE);
         }
         {
+            // Bank Select LSB
             MappedEvent mE(instrument->getId(),
                            MappedEvent::MidiController,
                            MIDI_CONTROLLER_BANK_LSB,
@@ -210,14 +209,12 @@ insertProgramForInstrument(ChannelId channel, Instrument *instrument,
         }
     }
 
-    // Send program change unless we have a fixed channel and no
-    // sendsProgramChange.
-    if (!instrument->hasFixedChannel() ||
+    if (!instrument->hasFixedChannel()  ||
         instrument->sendsProgramChange()) {
+        // Program Change
         MappedEvent mE(instrument->getId(),
                        MappedEvent::MidiProgramChange,
                        instrument->getProgramChange());
-
         mE.setRecordedChannel(channel);
         mE.setEventTime(insertTime);
         mE.setTrackId(trackId);
@@ -326,8 +323,7 @@ ChannelManager::insertChannelSetup(MappedInserterBase &inserter,
     // We don't do this for SoftSynth instruments.
     if (m_instrument->getType() == Instrument::Midi) {
         ChannelId channel = m_channelInterval.getChannelId();
-        insertProgramForInstrument(channel, m_instrument, inserter,
-                                   insertTime, trackId);
+        insertBSAndPC(trackId, m_instrument, channel, insertTime, inserter);
         insertControllers(channel, m_instrument, inserter, reftime,
                           insertTime, controllerAndPBList, trackId);
     }

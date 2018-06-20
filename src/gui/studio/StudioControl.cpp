@@ -270,9 +270,12 @@ sendChannelSetup(Instrument *instrument, int channel)
     // Insert bank selects and program change.
     // Acquire it from ChannelManager.  Passing -1 for trackId which
     // is unused here.
-    ChannelManager::insertProgramForInstrument(channel, instrument,
-                                               inserter,
-                                               RealTime::zeroTime, -1);
+    ChannelManager::insertBSAndPC(
+            -1,  // trackId
+            instrument,
+            channel,
+            RealTime::zeroTime,  // insertTime
+            inserter);
 
     // Insert controllers (and pitch bend).
     ChannelManager::insertControllers(channel, instrument,

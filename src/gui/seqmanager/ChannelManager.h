@@ -103,16 +103,20 @@ public:
     /// Get the instrument we are playing on.  Can return NULL.
     Instrument *getInstrument(void) const  { return m_instrument; }
 
-    /// Send program control for instrument on channel.
+    // *** MappedEvent Insertion functions
+
+    /// Insert Bank Select and Program Change for an Instrument on a channel.
     /**
-     * Adapted from SequenceManager
+     * This routine is essentially a conversion from Instrument to
+     * MappedEvents which are inserted into a MappedEventBuffer via
+     * an inserter.
      */
-    static void insertProgramForInstrument(
-        ChannelId channel, 
-        Instrument *instrument,
-        MappedInserterBase &inserter,
-        RealTime insertTime,
-        int trackId);
+    static void insertBSAndPC(
+            int trackId,
+            const Instrument *instrument,
+            ChannelId channel,
+            RealTime insertTime,
+            MappedInserterBase &inserter);
 
     /// Insert controllers and pitch bend via inserter.
     /**
@@ -120,8 +124,8 @@ public:
      * following via the inserter:
      *
      *   - Reset All Controllers
-     *   - Controllers obtained via callbacks
-     *   - Pitchbend from callbacks
+     *   - Control Changes from controllerAndPBList
+     *   - Pitchbend from controllerAndPBList
      *
      * Adapted from SequenceManager.
      */
