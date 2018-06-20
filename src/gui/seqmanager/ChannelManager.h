@@ -34,9 +34,6 @@ class MappedEvent;
 class MappedInserterBase;
 
 /// List of controllers and a pitchbend.
-/**
- * @author Tom Breton (Tehom)
- */
 struct ControllerAndPBList
 {
     ControllerAndPBList(void) :
@@ -138,7 +135,6 @@ public:
      * If we already have a ChannelInterval, this will allocate a new one.
      *
      * @see freeChannelInterval() and AllocateChannels
-     * @author Tom Breton (Tehom)
      */
     void allocateChannelInterval(bool changedInstrument);
 
@@ -147,7 +143,6 @@ public:
      * Safe to call even when m_usingAllocator is false.
      *
      * @see allocateChannelInterval() and AllocateChannels
-     * @author Tom Breton (Tehom)
      */
     void freeChannelInterval();
 
@@ -187,8 +182,6 @@ public:
     /// Insert appropriate channel setup (if needed) followed by an event.
     /**
      * Note: event is modified by this routine.
-     *
-     * @author Tom Breton (Tehom)
      */
     void insertEvent(
             TrackId trackId,
@@ -199,9 +192,6 @@ public:
             MappedInserterBase &inserter);
 
     /// Allocate a ChannelInterval and insert a channel setup.
-    /**
-     * @author Tom Breton (Tehom)
-     */
     bool makeReady(
             TrackId trackId,
             RealTime time,
@@ -209,9 +199,6 @@ public:
             MappedInserterBase &inserter);
 
     /// Insert a channel setup that is appropriate for the ChannelInterval.
-    /**
-     * @author Tom Breton (Tehom)
-     */
     void insertChannelSetup(
             TrackId trackId,
             RealTime insertTime,

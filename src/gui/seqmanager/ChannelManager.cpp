@@ -33,10 +33,8 @@
 namespace Rosegarden
 {
 
-// ctor for ChannelManager
-// @author Tom Breton (Tehom) 
-ChannelManager::
-ChannelManager(Instrument *instrument) :
+
+ChannelManager::ChannelManager(Instrument *instrument) :
     m_instrument(0),
     m_start(),
     m_end(),
@@ -51,18 +49,15 @@ ChannelManager(Instrument *instrument) :
     connectInstrument(instrument);
 }
 
-// Connect signals from instrument.
-// Safe even for NULL.
-// @author Tom Breton (Tehom) 
 void
-ChannelManager::
-connectInstrument(Instrument *instrument)
+ChannelManager::connectInstrument(Instrument *instrument)
 {
-    if (!instrument) { return; }
+    if (!instrument)
+        return;
 
     // Disconnect the old instrument, if any.
     if (m_instrument)
-        { disconnect(m_instrument); }
+        disconnect(m_instrument);
 
     // Connect to the new instrument
     connect(instrument, SIGNAL(wholeDeviceDestroyed()),
@@ -94,7 +89,6 @@ void ChannelManager::insertController(
                    MappedEvent::MidiController,
                    controller,
                    value);
-                        
     mE.setRecordedChannel(channel);
     mE.setEventTime(insertTime);
     mE.setTrackId(trackId);
@@ -171,7 +165,6 @@ void ChannelManager::insertChannelSetup(
             mE.setRecordedChannel(channel);
             mE.setEventTime(insertTime);
             mE.setTrackId(trackId);
-
             inserter.insertCopy(mE);
         } catch (...) {
             // Ignore.
@@ -185,10 +178,10 @@ void ChannelManager::insertChannelSetup(
     // For each controller
     for (StaticControllerConstIterator cIt = list.begin();
          cIt != list.end(); ++cIt) {
-        const MidiByte controlId    = cIt->first;
+        const MidiByte controlId = cIt->first;
         const MidiByte controlValue = cIt->second;
 
-        //RG_DEBUG << "insertControllers() : inserting controller " << (int)controlId << "value" << (int)controlValue << "on channel" << (int)channel << "for time" << reftime;
+        //RG_DEBUG << "insertChannelSetup() : inserting controller " << (int)controlId << "value" << (int)controlValue << "on channel" << (int)channel << "for time" << reftime;
 
         try {
             // Put it in the inserter.
@@ -216,7 +209,6 @@ void ChannelManager::insertChannelSetup(
             mE.setRecordedChannel(channel);
             mE.setEventTime(insertTime);
             mE.setTrackId(trackId);
-
             inserter.insertCopy(mE);
         } catch (...) {
             // Ignore.
@@ -229,35 +221,33 @@ void ChannelManager::insertEvent(
         const ControllerAndPBList &controllerAndPBList,
         RealTime reftime,
         MappedEvent &event,
-        bool firstOutput,
+        bool /*firstOutput*/,
         MappedInserterBase &inserter)
 {
     //Profiler profiler("ChannelManager::insertEvent()", true);
 
-    RG_DEBUG
-        << "doInsert playing on"
-        << (m_instrument ?
-            m_instrument->getPresentationName().c_str() :
-            "nothing")
-        << "at"
-        << reftime
-        << (firstOutput
-            ? "needs init"
-            : "doesn't need init")
-        << endl;
+    //RG_DEBUG << "insertEvent(): playing on" << (m_instrument ? m_instrument->getPresentationName().c_str() : "nothing") << "at" << reftime << (firstOutput ? "needs init" : "doesn't need init");
 
-    // We got here without being initted.  This might happen briefly
+    // ??? firstOutput was always ignored.  What would happen if we actually
+    //     honored it?  E.g.:
+    //       if (firstOutput)
+    //           m_ready = false;
+
+    // We got here without being ready.  This might happen briefly
     // if a track becomes unmuted, until the meta-iterator gets around
     // to initting.
     if (!m_ready) {
         makeReady(trackId, reftime, controllerAndPBList, inserter);
-        // If we're still not initted, we can't do much.
+        // If we're still not ready, we can't do much.
         if (!m_ready)
             return;
     }
+
     // !!! These checks may not be needed now, could become assertions.
-    if (!m_instrument) { return; }
-    if (!m_channelInterval.validChannel()) { return; }
+    if (!m_instrument)
+        return;
+    if (!m_channelInterval.validChannel())
+        return;
 
     event.setInstrument(m_instrument->getId());
     event.setRecordedChannel(m_channelInterval.getChannelId());
@@ -271,28 +261,24 @@ bool ChannelManager::makeReady(
         const ControllerAndPBList &controllerAndPBList,
         MappedInserterBase &inserter)
 {
-    RG_DEBUG
-        << "makeReady for"
-        << (m_instrument ?
-            m_instrument->getPresentationName().c_str() :
-            "nothing")
-        << "at"
-        << time
-        << endl;
+    //RG_DEBUG << "makeReady() for" << (m_instrument ? m_instrument->getPresentationName().c_str() : "nothing") << "at" << time;
 
     // We don't even have an instrument to play on.
-    if (!m_instrument) { return false; }
+    if (!m_instrument)
+        return false;
 
     // Try to get a valid channel if we lack one.
     if (!m_channelInterval.validChannel()) {
         // We already tried to get one and failed; don't keep trying.
-        if (m_triedToGetChannel) { return false; }
+        if (m_triedToGetChannel)
+            return false;
         
         // Try to get a channel.  This sets m_triedToGetChannel.
         allocateChannelInterval(false);
         
         // If we still don't have one, give up.
-        if (!m_channelInterval.validChannel()) { return false; }
+        if (!m_channelInterval.validChannel())
+            return false;
     }
     
     // If this instrument is in auto channels mode
@@ -305,6 +291,7 @@ bool ChannelManager::makeReady(
     }
     
     m_ready = true;
+
     return true;
 }
 
@@ -315,7 +302,7 @@ ChannelManager::insertChannelSetup(
         const ControllerAndPBList &controllerAndPBList,
         MappedInserterBase &inserter)
 {
-    RG_DEBUG << "insertChannelSetup() : " << (m_instrument ? "Got instrument" : "No instrument");
+    //RG_DEBUG << "insertChannelSetup() : " << (m_instrument ? "Got instrument" : "No instrument");
 
     if (!m_instrument)
         return;
@@ -332,14 +319,13 @@ ChannelManager::insertChannelSetup(
     }
 }
 
-// Set a fixed channel when we're not using an allocator.
-// @author Tom Breton (Tehom) 
 void
-ChannelManager::
-setChannelIdDirectly(void)
+ChannelManager::setChannelIdDirectly()
 {
     Q_ASSERT(!m_usingAllocator);
+
     ChannelId channel = m_instrument->getNaturalChannel();
+
     if (m_instrument->getType() == Instrument::Midi) {
         // !!! Stopgap measure.  If we ever share allocators between
         // MIDI devices, this will have to become smarter.
@@ -348,27 +334,23 @@ setChannelIdDirectly(void)
                        m_instrument->getNaturalChannel() : 9);
         }
     }
+
     m_channelInterval.setChannelId(channel);
 }
 
-
-// Get the allocator
-// @author Tom Breton (Tehom) 
 AllocateChannels *
-ChannelManager::
-getAllocator(void)
+ChannelManager::getAllocator()
 {
     Q_ASSERT(m_usingAllocator);
-    if (!m_instrument) { return 0; }
-    Device *device = m_instrument->getDevice();
-    return device->getAllocator();
+
+    if (!m_instrument)
+        return 0;
+
+    return m_instrument->getDevice()->getAllocator();
 }
 
-// Connect signals to the allocator
-// @author Tom Breton (Tehom) 
 void
-ChannelManager::
-connectAllocator(void)
+ChannelManager::connectAllocator()
 {
     Q_ASSERT(m_usingAllocator);
     if (!m_channelInterval.validChannel()) { return; }
