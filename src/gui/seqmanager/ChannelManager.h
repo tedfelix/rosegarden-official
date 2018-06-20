@@ -95,45 +95,6 @@ class ChannelManager : public QObject
     Q_OBJECT
 
 public:
-    /// %Controller and pitchbend info interface.
-    /**
-     * InternalSegmentMapper::Callbacks and ChannelManager::InitialControllerInfo
-     * subclass this.
-     *
-     * Used by clients of the insertion functions to provide control
-     * change info by callback.
-     *
-     * ??? Can we get rid of this and instead of working inside-out, simply
-     *     compute the ControllerAndPBList and send it into the insert
-     *     routine?
-     *
-     * @author Tom Breton (Tehom)
-     */
-    class IControllerInfo
-    {
-    public:
-        virtual ~IControllerInfo()  { }
-        virtual ControllerAndPBList getControllers(
-                Instrument *instrument, RealTime start) = 0;
-    };
-
-    /// IControllerInfo implementation that obtains CCs from the Instrument.
-    /**
-     * This is a simple implementation of the IControllerInfo interface
-     * that gets controller and pitchbend info from the Instrument object.
-     * This is the initial control change info that appears on the
-     * MIDIInstrumentParameterPanel.
-     */
-    class InitialControllerInfo : public IControllerInfo
-    {
-    public:
-        virtual ControllerAndPBList getControllers(
-                Instrument *instrument, RealTime /*start*/)
-        {
-            return instrument->getStaticControllers();
-        }
-    };
-
     ChannelManager(Instrument *instrument);
     virtual ~ChannelManager(void)  { freeChannelInterval(); }
 

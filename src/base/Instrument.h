@@ -282,7 +282,12 @@ public:
     int getMappedId() const { return m_mappedId; }
     void setMappedId(int id) { m_mappedId = id; }
 
-    StaticControllers& getStaticControllers() { return m_staticControllers; }
+    /// Get CCs at time 0 for this Instrument.
+    /**
+     * ??? This returns a copy.  Consider taking in a reference instead to
+     *     avoid the copy.
+     */
+    StaticControllers &getStaticControllers() { return m_staticControllers; }
 
     // Clears down the instruments controls.
     //

@@ -55,9 +55,7 @@ class RealTime;
  * in a Composition into MappedEvent objects that can be sent to ALSA.  For
  * the second part of this conversion, see MappedBufMetaIterator.
  */
-class InternalSegmentMapper :
-        public SegmentMapper,
-        public ChannelManager::IControllerInfo
+class InternalSegmentMapper : public SegmentMapper
 {
 public:
     InternalSegmentMapper(RosegardenDocument *doc, Segment *segment);
@@ -66,6 +64,11 @@ private:
     friend class ControllerSearch;
     friend class ControllerContextMap;
 
+    /// Get CCs and PitchBend at a time for this Segment.
+    /**
+     * ??? This returns a copy.  Consider taking in a reference instead to
+     *     avoid the copy.
+     */
     ControllerAndPBList getControllers(Instrument *instrument, RealTime start);
 
     typedef std::pair<timeT, int> Noteoff;
