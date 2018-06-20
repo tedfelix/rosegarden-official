@@ -227,6 +227,7 @@ void ChannelManager::insertEvent(
         bool firstOutput,
         MappedInserterBase &inserter)
 {
+    //Profiler profiler("ChannelManager::insertEvent()", true);
 
     RG_DEBUG
         << "doInsert playing on"
@@ -243,10 +244,11 @@ void ChannelManager::insertEvent(
     // We got here without being initted.  This might happen briefly
     // if a track becomes unmuted, until the meta-iterator gets around
     // to initting.
-    if (needsInit()) {
+    if (!m_inittedForOutput) {
         makeReady(trackId, reftime, controllerAndPBList, inserter);
         // If we're still not initted, we can't do much.
-        if (needsInit()) { return; }
+        if (!m_inittedForOutput)
+            return;
     }
     // !!! These checks may not be needed now, could become assertions.
     if (!m_instrument) { return; }
@@ -297,7 +299,7 @@ bool ChannelManager::makeReady(
                 inserter);
     }
     
-    setInitted(true);
+    m_inittedForOutput = true;
     return true;
 }
 
@@ -486,7 +488,7 @@ setInstrument(Instrument *instrument)
         }
         allocateChannelInterval(true);
         connectInstrument(instrument);
-        setDirty();
+        m_inittedForOutput = false;
     }
 }
 
@@ -563,7 +565,7 @@ slotChannelBecomesFixed(void)
 
     // Set the new channel.
     setChannelIdDirectly();
-    setDirty();
+    m_inittedForOutput = false;
 }
 
 // Our instrument's channel is now unfixed.
@@ -586,7 +588,7 @@ slotChannelBecomesUnfixed(void)
     m_channelInterval.clearChannelId();
     // Get a new one.
     allocateChannelInterval(false);
-    setDirty();
+    m_inittedForOutput = false;
 }
 
 // Our instrument has changed how to set up the channel.
@@ -608,7 +610,7 @@ slotInstrumentChanged(void)
     }
 
     // The above code won't always set dirty flag, so set it now.
-    setDirty();
+    m_inittedForOutput = false;
 }
 
 

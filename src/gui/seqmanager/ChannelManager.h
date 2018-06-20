@@ -73,6 +73,9 @@ struct ControllerAndPBList
  * makeReady() is probably the main function here.  It allocates a channel
  * and inserts a channel setup into a MappedEventList via an inserter.
  *
+ * insertEvent() is probably the most called function here.  It is used by
+ * InternalSegmentMapper to insert all of the events from a Segment.
+ *
  * Special cases it deals with:
  *
  *   - Eternal channels, e.g. for the metronome.  Call setEternalInterval()
@@ -105,6 +108,30 @@ public:
     void setInstrument(Instrument *instrument);
     /// Get the instrument we are playing on.  Can return NULL.
     Instrument *getInstrument() const  { return m_instrument; }
+
+    /// Set an interval that this ChannelManager must cover.
+    /**
+     * This does not do allocation.
+     *
+     * @see setEternalInterval(), allocateChannelInterval(), and makeReady()
+     */
+    void setRequiredInterval(RealTime start, RealTime end,
+                             RealTime startMargin, RealTime endMargin)
+    {
+        m_start = start;
+        m_end = end;
+        m_startMargin = startMargin;
+        m_endMargin = endMargin;
+    }
+
+    /// Set the interval to the maximum range.
+    void setEternalInterval()
+    {
+        m_start = ChannelInterval::m_earliestTime;
+        m_end = ChannelInterval::m_latestTime;
+        m_startMargin = RealTime::zeroTime;
+        m_endMargin = RealTime::zeroTime;
+    }
 
     // *** Channel Interval Allocation
 
@@ -193,58 +220,59 @@ public:
             const ControllerAndPBList &controllerAndPBList,
             MappedInserterBase &inserter);
 
-    void setDirty(void)  { m_inittedForOutput = false; }
-
-    /// Set an interval that this ChannelManager must cover.
-    /**
-     * This does not do allocation.
-     */
-    void setRequiredInterval(RealTime start, RealTime end,
-                             RealTime startMargin, RealTime endMargin)
-    {
-        m_start       = start;
-        m_end         = end;
-        m_startMargin = startMargin;
-        m_endMargin   = endMargin;
-    }
-
-    /// Set the interval to the maximum range.
-    void setEternalInterval()
-    {
-        setRequiredInterval(ChannelInterval::m_earliestTime,
-                            ChannelInterval::m_latestTime,
-                            RealTime::zeroTime,
-                            RealTime::zeroTime);
-    }
+    /// Indicate that a channel setup needs to go out.
+    void setDirty()  { m_inittedForOutput = false; }
 
     /// Print our status, for tracing.
     void debugPrintStatus(void);
 
 private slots:
+    // *** AllocateChannels Signal Handler
+
     /// Something is kicking everything off "channel" in our device.
     /**
      * It is the signaller's responsibility to put AllocateChannels right (in
      * fact this signal only sent by AllocateChannels)
+     *
+     * Connected to AllocateChannels::sigVacateChannel().
      */
     void slotVacateChannel(ChannelId channel);
-    /// Our instrument and its entire device are being destroyed.
+
+    // *** Instrument Signal Handlers
+
+    /// Our Instrument and its entire Device are being destroyed.
     /**
      * This exists so we can take a shortcut.  We can skip setting the
      * device's allocator right since it's going away.
+     *
+     * Connected to Instrument::wholeDeviceDestroyed().
      */
     void slotLosingDevice(void);
-    /// Our instrument is being destroyed.
+
+    /// Our Instrument is being destroyed.
     /**
      * We may or may not have received slotLosingDevice first.
+     *
+     * Connected to Instrument::destroyed().
      */
     void slotLosingInstrument(void);
 
-    /// Our instrument now has different settings so we must reinit the channel.
+    /// Our Instrument now has different settings so we must reinit the channel.
+    /**
+     * Connected to Instrument::changedChannelSetup().
+     */
     void slotInstrumentChanged(void);
 
     /// Our instrument now has a fixed channel.
+    /**
+     * Connected to Instrument::channelBecomesFixed().
+     */
     void slotChannelBecomesFixed(void);
+
     /// Our instrument now lacks a fixed channel.
+    /**
+     * Connected to Instrument::channelBecomesUnfixed().
+     */
     void slotChannelBecomesUnfixed(void);
 
 private:
@@ -287,11 +315,6 @@ private:
      */
     void setAllocationMode(Instrument *instrument);
 
-    /*** Functions about setting up the channel ***/
-
-    void setInitted(bool initted)  { m_inittedForOutput = initted; }
-    bool needsInit(void)  { return !m_inittedForOutput; }
-
     /********************/
     /*** Data members ***/
 
@@ -329,9 +352,14 @@ private:
 
     /// Whether the output channel has been set up for m_channelInterval.
     /**
+     * Whether makeReady() needs to be called.  insertEvent() is the main
+     * user of this.
+     *
      * Here we only deal with having the right channel.  doInsert()'s
      * firstOutput argument tells us if we need setup for some other
      * reason such as jumping in time.
+     *
+     * ??? rename: m_ready?
      */
     bool m_inittedForOutput;
     /// Whether we have tried to allocate a channel interval.
