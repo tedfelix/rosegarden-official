@@ -15,33 +15,40 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef RG_INTERNALPREVIEWER_H
-#define RG_INTERNALPREVIEWER_H
+#ifndef RG_IMMEDIATENOTE_H
+#define RG_IMMEDIATENOTE_H
 
 #include "gui/seqmanager/ChannelManager.h"
+#include "base/Instrument.h"
+#include "sound/MappedEventList.h"
+#include "base/RealTime.h"
 
 namespace Rosegarden
 {
+
 class MappedEventList;
 
 class ImmediateNote
 {
- public:
- ImmediateNote(void) :
-  // There's no sensible value to set for instrument.  We'll get an
-  // Instrument in each call.
-  m_channelManager(0)  { m_channelManager.setEternalInterval(); }
+public:
+    ImmediateNote() :
+        // There's no sensible value to set for instrument.  We'll get an
+        // Instrument in each call.
+        m_channelManager(0)
+    {
+        m_channelManager.setEternalInterval();
+    }
 
-  // Fill mC with a corresponding note and its appropriate setup events.
-  void
-      fillWithNote(MappedEventList &mC, Instrument *instrument,
-                   int pitch, int velocity,
-                   RealTime duration, bool oneshot);
+    /// Fill mappedEventList with a note and its setup events.
+    void fillWithNote(MappedEventList &mappedEventList, Instrument *instrument,
+                      int pitch, int velocity,
+                      RealTime duration, bool oneshot);
 
- private:
-  ChannelManager m_channelManager;
+private:
+    ChannelManager m_channelManager;
 };
- 
+
+
 }
 
-#endif /* ifndef RG_INTERNALPREVIEWER_H */
+#endif

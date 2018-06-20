@@ -15,6 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[ImmediateNote]"
+
 #include "ImmediateNote.h"
 
 #include "base/Instrument.h"
@@ -23,7 +25,7 @@
 #include "sound/MappedEvent.h"
 #include "sound/MappedEventInserter.h"
 
-#define DEBUG_PREVIEW_NOTES 1
+//#define DEBUG_PREVIEW_NOTES 1
 
 namespace Rosegarden
 {
@@ -52,52 +54,61 @@ canPreviewAnotherNote()
     return true;
 }
 
-// Fill mC with a corresponding note and its appropriate setup events.
 // @author Tom Breton (Tehom) 
 void
-ImmediateNote::
-fillWithNote(MappedEventList &mC, Instrument *instrument,
-             int pitch, int velocity, RealTime duration, bool oneshot)
+ImmediateNote::fillWithNote(
+        MappedEventList &mappedEventList, Instrument *instrument,
+        int pitch, int velocity, RealTime duration, bool oneshot)
 {
-  if (!instrument) { return; }
+    if (!instrument)
+        return;
+
 #ifdef DEBUG_PREVIEW_NOTES
-    SEQUENCER_DEBUG
-        << "ImmediateNote::fillWithNote on"
-        << (instrument->isPercussion() ? "percussion" : "non-percussion")
-        << instrument->getName() << instrument->getId()
-        << endl;
+    RG_DEBUG << "fillWithNote() on" << (instrument->isPercussion() ? "percussion" : "non-percussion") << instrument->getName() << instrument->getId();
 #endif
-  if (!canPreviewAnotherNote()) { return; }
-  if ((pitch < 0) || (pitch > 127)) { return; }
-  if (velocity < 0) { velocity = 100; }
 
-  MappedEvent::MappedEventType type =
-    oneshot ?
-    MappedEvent::MidiNoteOneShot :
-    MappedEvent::MidiNote;
+    if (!canPreviewAnotherNote())
+        return;
 
-  // Make the event.
-  MappedEvent mE(instrument->getId(),
-                 type,
-                 pitch,
-                 velocity,
-                 RealTime::zeroTime,
-                 duration,
-                 RealTime::zeroTime);
-  // Since we're not going thru MappedBufMetaIterator::acceptEvent
-  // which checks tracks for muting, we needn't set a track.
+    if ((pitch < 0) || (pitch > 127))
+        return;
 
-  // Set up channel manager.
-  m_channelManager.setInstrument(instrument);
-  m_channelManager.reallocate(false);
+    if (velocity < 0)
+        velocity = 100;
 
-  // Set up channel.
-  ChannelManager::SimpleCallbacks callbacks;
-  MappedEventInserter inserter(mC);
+    MappedEvent::MappedEventType type =
+            oneshot ? MappedEvent::MidiNoteOneShot : MappedEvent::MidiNote;
 
-  // Insert the event.
-  m_channelManager.doInsert(inserter, mE, RealTime::zeroTime,
-                            &callbacks, true, NO_TRACK);
+    // Make the event.
+    MappedEvent mappedEvent(
+            instrument->getId(),
+            type,
+            pitch,
+            velocity,
+            RealTime::zeroTime,  // absTime
+            duration,
+            RealTime::zeroTime);  // audioStartMarker
+
+    // Since we're not going thru MappedBufMetaIterator::acceptEvent()
+    // which checks tracks for muting, we needn't set a track.
+
+    // Set up channel manager.
+    m_channelManager.setInstrument(instrument);
+    m_channelManager.reallocate(false);
+
+    ChannelManager::SimpleCallbacks callbacks;
+    MappedEventInserter inserter(mappedEventList);
+
+    // Insert the event.
+    // Setting firstOutput to true indicates that we want a channel
+    // setup.
+    m_channelManager.doInsert(
+            inserter,
+            mappedEvent,
+            RealTime::zeroTime,  // refTime
+            &callbacks,
+            true,  // firstOutput
+            NO_TRACK);
 }
 
 
