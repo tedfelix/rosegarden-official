@@ -208,9 +208,6 @@ public:
     /// Indicate that a channel setup needs to go out.
     void setDirty()  { m_ready = false; }
 
-    /// Print our status, for tracing.
-    void debugPrintStatus();
-
 private slots:
     // *** AllocateChannels Signal Handler
 

@@ -353,143 +353,116 @@ void
 ChannelManager::connectAllocator()
 {
     Q_ASSERT(m_usingAllocator);
-    if (!m_channelInterval.validChannel()) { return; }
+
+    if (!m_channelInterval.validChannel())
+        return;
+
     connect(getAllocator(), SIGNAL(sigVacateChannel(ChannelId)),
             this, SLOT(slotVacateChannel(ChannelId)),
             Qt::UniqueConnection);
 }
 
-// Disconnect from the allocator's signals
-// @author Tom Breton (Tehom) 
 void
-ChannelManager::
-disconnectAllocator(void)
+ChannelManager::disconnectAllocator()
 {
-    if (m_instrument && m_usingAllocator) {
+    if (m_instrument  &&  m_usingAllocator)
         disconnect(getAllocator(), 0, this, 0);
-    }
 }
 
-// Set m_usingAllocator appropriately for instrument.  It is safe to
-// pass NULL here.
-// @author Tom Breton (Tehom) 
 void
-ChannelManager::
-setAllocationMode(Instrument *instrument)
+ChannelManager::setAllocationMode(Instrument *instrument)
 {
-    if (!instrument)
-        { m_usingAllocator = false; }
-    else
-        {
-            bool wasUsingAllocator = m_usingAllocator;
-            switch (instrument->getType()) {
-            case Instrument::Midi :
-                m_usingAllocator = !instrument->hasFixedChannel();
-                break;
-            case Instrument::SoftSynth:
-                m_usingAllocator = false;
-                break;
-            case Instrument::Audio:
-            case Instrument::InvalidInstrument:
-            default:
-                RG_DEBUG << "setAllocationMode() : Got an "
-                    "audio or unrecognizable instrument type."
-                         << endl;
-                break;
-            }
+    if (!instrument) {
+        m_usingAllocator = false;
+    } else {
+        bool wasUsingAllocator = m_usingAllocator;
 
-            // Clear m_channelInterval, otherwise its old value will appear valid.
-            if (m_usingAllocator != wasUsingAllocator) {
-                m_channelInterval.clearChannelId();
-            }
+        switch (instrument->getType()) {
+        case Instrument::Midi :
+            m_usingAllocator = !instrument->hasFixedChannel();
+            break;
+
+        case Instrument::SoftSynth:
+            m_usingAllocator = false;
+            break;
+
+        case Instrument::Audio:
+        case Instrument::InvalidInstrument:
+        default:
+            RG_WARNING << "setAllocationMode() : Got an audio or unrecognizable instrument type.";
+            break;
         }
+
+        // If the allocation mode has changed, clear m_channelInterval,
+        // otherwise its old value will appear valid.
+        if (m_usingAllocator != wasUsingAllocator)
+            m_channelInterval.clearChannelId();
+    }
 }    
 
 void
 ChannelManager::allocateChannelInterval(bool changedInstrument)
 {
-    RG_DEBUG << "allocateChannelInterval "
-             << (m_usingAllocator ? "using allocator" :
-                 "not using allocator")
-             << "for"
-             << (void *)m_instrument
-             << endl;
+    //RG_DEBUG << "allocateChannelInterval(): " << (m_usingAllocator ? "using allocator" : "not using allocator") << "for" << (void *)m_instrument;
+
     if (m_instrument) {
         if (m_usingAllocator) {
             // Only Midi instruments should have m_usingAllocator set.
             Q_ASSERT(m_instrument->getType() == Instrument::Midi);
-            getAllocator()->
-                reallocateToFit(*m_instrument, m_channelInterval,
-                                m_start, m_end,
-                                m_startMargin, m_endMargin,
-                                changedInstrument);
+
+            getAllocator()->reallocateToFit(
+                    *m_instrument, m_channelInterval,
+                    m_start, m_end,
+                    m_startMargin, m_endMargin,
+                    changedInstrument);
+
             connectAllocator();
         } else {
             setChannelIdDirectly();
         }
     }
 
-    if (m_channelInterval.validChannel()) {
-        RG_DEBUG << "  Channel is valid";
-    } else {
-        RG_DEBUG << "  ??? Channel is invalid!  (end of allocateChannelInterval())";
-    }
+    //RG_DEBUG << "allocateChannelInterval(): Channel is " << (m_channelInterval.validChannel() ? "valid" : "INVALID");
 
     m_triedToGetChannel = true;
 }
 
-void ChannelManager::freeChannelInterval(void)
+void ChannelManager::freeChannelInterval()
 {
-    if (m_instrument && m_usingAllocator) {
-        AllocateChannels *allocater = getAllocator();
-        if (allocater) {
-            allocater->freeChannelInterval(m_channelInterval);
+    if (m_instrument  &&  m_usingAllocator) {
+        AllocateChannels *allocator = getAllocator();
+
+        if (allocator) {
+            allocator->freeChannelInterval(m_channelInterval);
             disconnectAllocator();
         }
+
         m_triedToGetChannel = false;
     }
 }
 
-// Set the instrument we are playing on, releasing any old one.
-// @author Tom Breton (Tehom)
 void
-ChannelManager::
-setInstrument(Instrument *instrument)
+ChannelManager::setInstrument(Instrument *instrument)
 {
-    RG_DEBUG << "setInstrument: Setting instrument to" 
-             << (void *)instrument
-             << "It was"
-             << (void *)m_instrument
-             << endl;
+    //RG_DEBUG << "setInstrument(): Setting instrument to" << (void *)instrument << "It was" << (void *)m_instrument;
 
-    if (instrument != m_instrument) {
-        if (m_instrument) {
-            Device *oldDevice = m_instrument->getDevice();
-            Device *newDevice = instrument ? instrument->getDevice() : 0;
-            // Don't hold onto a channel on a device we're no longer
-            // playing thru.  Even if newDevice == 0, we free oldDevice's
-            // channel.
-            if (oldDevice != newDevice) {
-                freeChannelInterval();
-            }
-        }
-        allocateChannelInterval(true);
-        connectInstrument(instrument);
-        m_ready = false;
+    // No change?  Bail.
+    if (instrument == m_instrument)
+        return;
+
+    if (m_instrument) {
+        Device *oldDevice = m_instrument->getDevice();
+        Device *newDevice = instrument ? instrument->getDevice() : 0;
+        // Don't hold onto a channel on a device we're no longer
+        // playing thru.  Even if newDevice == 0, we free oldDevice's
+        // channel.
+        if (oldDevice != newDevice)
+            freeChannelInterval();
     }
-}
 
-// Print our status, for tracing.
-// @author Tom Breton (Tehom) 
-void
-ChannelManager::
-debugPrintStatus(void)
-{
-    RG_DEBUG
-        << "ChannelManager "
-        << (m_ready ? "doesn't need" : "needs")
-        << "initting"
-        << endl;
+    allocateChannelInterval(true);
+    connectInstrument(instrument);
+    m_ready = false;
 }
 
 // Something is kicking everything off "channel" in our device.  It is
