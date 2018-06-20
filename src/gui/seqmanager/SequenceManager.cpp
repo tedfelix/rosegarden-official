@@ -821,10 +821,11 @@ SequenceManager::processAsynchronousMidi(const MappedEventList &mC,
     // output, but here we need both filtered (for OUT display) and
     // unfiltered (for insertable note callbacks) compositions, so
     // we've received the unfiltered copy and will filter here
-    MappedEventList tempMC =
-        applyFiltering(mC,
-                       MappedEvent::MappedEventType(
-                           m_doc->getStudio().getMIDIThruFilter()));
+    MappedEventList tempMC;
+    applyFiltering(mC,
+                   MappedEvent::MappedEventType(
+                       m_doc->getStudio().getMIDIThruFilter()),
+                   tempMC);
 
     // send to the MIDI labels (which can only hold one event at a time)
     i = mC.begin();
@@ -1345,41 +1346,6 @@ SequenceManager::panic()
 
     MappedEvent mE(MidiInstrumentBase, MappedEvent::Panic, 0, 0);
     StudioControl::sendMappedEvent(mE);
-
-    //    Studio &studio = m_doc->getStudio();
-    //
-    //    InstrumentList list = studio.getPresentationInstruments();
-    //    InstrumentList::iterator it;
-    //
-    //    int maxDevices = 0, device = 0;
-    //    for (it = list.begin(); it != list.end(); it++)
-    //        if ((*it)->getType() == Instrument::Midi)
-    //            maxDevices++;
-    //
-    //    emit setValue(40);
-    //
-    //    for (it = list.begin(); it != list.end(); it++)
-    //    {
-    //        if ((*it)->getType() == Instrument::Midi)
-    //        {
-    //            for (unsigned int i = 0; i < 128; i++)
-    //            {
-    //                MappedEvent
-    //                    mE((*it)->getId(),
-    //                                MappedEvent::MidiNote,
-    //                                i,
-    //                                0);
-    //
-    //                StudioControl::sendMappedEvent(mE);
-    //            }
-    //
-    //            device++;
-    //        }
-    //
-    //        emit setValue(int(90.0 * (double(device) / double(maxDevices))));
-    //    }
-    //
-    //    resetControllers();
 }
 
 void SequenceManager::setTempo(const tempoT tempo)
@@ -1406,23 +1372,25 @@ void
 SequenceManager::showVisuals(const MappedEventList &mC)
 {
     MappedEventList::const_iterator it = mC.begin();
-    if (it != mC.end())
+    if (it != mC.end()) {
+        // ??? Is this only sending the first?!  Then back the parameter
+        //     list off to just a MappedEvent *.
         emit signalMidiOutLabel(*it);
+    }
 }
 
-MappedEventList
-SequenceManager::applyFiltering(const MappedEventList &mC,
-                                MappedEvent::MappedEventType filter)
+void
+SequenceManager::applyFiltering(const MappedEventList &eventsIn,
+                                MappedEvent::MappedEventType filter,
+                                MappedEventList &eventsOut)
 {
-    MappedEventList retMc;
-    MappedEventList::const_iterator it = mC.begin();
-
-    for (; it != mC.end(); ++it) {
+    for (MappedEventList::const_iterator it = eventsIn.begin();
+         it != eventsIn.end();
+         ++it) {
+        // If it doesn't match the filter, copy to output.
         if (!((*it)->getType() & filter))
-            retMc.insert(new MappedEvent(*it));
+            eventsOut.insert(new MappedEvent(*it));
     }
-
-    return retMc;
 }
 
 void SequenceManager::resetCompositionMapper()

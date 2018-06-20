@@ -164,51 +164,51 @@ public:
     /// Send JACK and MMC transport control statuses
     static void sendTransportControlStatuses();
 
-    /// Send all note offs and resets to MIDI devices
+    /// Send all note offs and resets to MIDI devices.
+    /**
+     * The actual work appears to be done by AlsaDriver::processEventsOut()
+     * when it sees a MappedEvent::Panic.
+     */
     void panic();
 
-    /// Set tempo (also notifies StudioControl and TransportDialog)
+    /**
+     * Sends tempo to RosegardenSequencer::setQuarterNoteLength().
+     *
+     * Emits signalTempoChanged() which is connected to
+     * TransportDialog::slotTempoChanged().
+     */
     void setTempo(const tempoT tempo);
 
-    /// Send an MC to the view
-    void showVisuals(const MappedEventList &mC);
-
-    /// Apply in-situ filtering to a MappedEventList
-    /**
-     * ??? Return by value?  COPY.
-     */
-    MappedEventList
-        applyFiltering(const MappedEventList &mC,
-                       MappedEvent::MappedEventType filter);
-
-    CountdownDialog* getCountdownDialog() { return m_countdownDialog; }
+    CountdownDialog *getCountdownDialog()  { return m_countdownDialog; }
 
     // Return a new metaiterator on the current composition (suitable
     // for MidiFile)
-    MappedBufMetaIterator *makeTempMetaiterator(void);
+    MappedBufMetaIterator *makeTempMetaiterator();
+
     //
     // CompositionObserver interface
     //
-    virtual void segmentAdded              (const Composition*, Segment*);
-    virtual void segmentRemoved            (const Composition*, Segment*);
-    virtual void segmentRepeatChanged      (const Composition*, Segment*, bool);
-    virtual void segmentRepeatEndChanged   (const Composition*, Segment*, timeT);
-    virtual void segmentEventsTimingChanged(const Composition*, Segment *, timeT delay, RealTime rtDelay);
-    virtual void segmentTransposeChanged   (const Composition*, Segment *, int transpose);
-    virtual void segmentTrackChanged       (const Composition*, Segment *, TrackId id);
-    virtual void segmentEndMarkerChanged   (const Composition*, Segment *, bool);
-    virtual void endMarkerTimeChanged      (const Composition*, bool shorten);
-    virtual void tracksAdded               (const Composition*, std::vector<TrackId> &/*trackIds*/);
-    virtual void trackChanged              (const Composition*, Track*);
-    virtual void tracksDeleted             (const Composition*, std::vector<TrackId> &/*trackIds*/);
-    virtual void timeSignatureChanged      (const Composition*);
-    virtual void metronomeChanged          (const Composition*);
-    virtual void selectedTrackChanged      (const Composition *);
-    virtual void tempoChanged              (const Composition*);
 
-    void processAddedSegment(Segment*);
-    void processRemovedSegment(Segment*);
-    void segmentModified(Segment*);
+    virtual void segmentAdded(const Composition *, Segment *);
+    virtual void segmentRemoved(const Composition *, Segment *);
+    virtual void segmentRepeatChanged(const Composition *, Segment *, bool);
+    virtual void segmentRepeatEndChanged(const Composition *, Segment *, timeT);
+    virtual void segmentEventsTimingChanged(const Composition *, Segment *, timeT delay, RealTime rtDelay);
+    virtual void segmentTransposeChanged(const Composition *, Segment *, int transpose);
+    virtual void segmentTrackChanged(const Composition *, Segment *, TrackId id);
+    virtual void segmentEndMarkerChanged(const Composition *, Segment *, bool);
+    virtual void endMarkerTimeChanged(const Composition *, bool shorten);
+    virtual void tracksAdded(const Composition *, std::vector<TrackId> &/*trackIds*/);
+    virtual void trackChanged(const Composition *, Track *);
+    virtual void tracksDeleted(const Composition *, std::vector<TrackId> &/*trackIds*/);
+    virtual void timeSignatureChanged(const Composition *);
+    virtual void metronomeChanged(const Composition *);
+    virtual void selectedTrackChanged(const Composition *);
+    virtual void tempoChanged(const Composition *);
+
+    void processAddedSegment(Segment *);
+    void processRemovedSegment(Segment *);
+    void segmentModified(Segment *);
     void segmentInstrumentChanged(Segment *s);
 
     virtual bool event(QEvent *e);
@@ -278,6 +278,26 @@ private slots:
 private:
 
     void stop2();
+
+    /// Update the MIDI out label on the TransportDialog.
+    /*
+     * Emits signalMidiOutLabel().
+     *
+     * ??? rename: updateMIDIOutLabel()
+     * ??? Only one caller.  Inline?
+     */
+    void showVisuals(const MappedEventList &mC);
+
+    /// Apply filtering to a MappedEventList.
+    /**
+     * Copies events that DO NOT match filter from eventsIn to
+     * eventsOut.
+     *
+     * ??? Only one caller.  Inline?
+     */
+    void applyFiltering(const MappedEventList &eventsIn,
+                        MappedEvent::MappedEventType filter,
+                        MappedEventList &eventsOut);
 
     void resetCompositionMapper();
     void populateCompositionMapper();
