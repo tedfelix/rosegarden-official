@@ -267,18 +267,8 @@ sendChannelSetup(Instrument *instrument, int channel)
     MappedEventList mappedEventList;
     MappedEventInserter inserter(mappedEventList);
 
-    // Insert bank selects and program change.
-    // Acquire it from ChannelManager.  Passing -1 for trackId which
-    // is unused here.
-    ChannelManager::insertBSAndPC(
-            -1,  // trackId
-            instrument,
-            channel,
-            RealTime::zeroTime,  // insertTime
-            inserter);
-
-    // Insert controllers (and pitch bend).
-    ChannelManager::insertControllers(
+    // Insert BS, PC, CCs, and pitch bend.
+    ChannelManager::insertChannelSetup(
             -1,  // trackId
             instrument,
             channel,

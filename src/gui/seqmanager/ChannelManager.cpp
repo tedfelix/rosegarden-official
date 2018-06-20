@@ -96,7 +96,7 @@ void ChannelManager::insertController(
     inserter.insertCopy(mE);
 }
 
-void ChannelManager::insertControllers(
+void ChannelManager::insertChannelSetup(
         int trackId,
         const Instrument *instrument,
         ChannelId channel,
@@ -104,87 +104,7 @@ void ChannelManager::insertControllers(
         const ControllerAndPBList &controllerAndPBList,
         MappedInserterBase &inserter)
 {
-    // This is still desirable for some users.
-    QSettings settings;
-    settings.beginGroup(SequencerOptionsConfigGroup);
-    const bool allowReset =
-            settings.value("allowresetallcontrollers", "true").toBool();
-    settings.endGroup();
-
-    //RG_DEBUG << "insertControllers() : for channel" << (int)channel;
-
-    if (allowReset) {
-        // In case some controllers are on that we don't know about, turn
-        // all controllers off.  (Reset All Controllers)
-        try {
-            MappedEvent mE(instrument->getId(),
-                           MappedEvent::MidiController,
-                           MIDI_CONTROLLER_RESET,
-                           0);
-            mE.setRecordedChannel(channel);
-            mE.setEventTime(insertTime);
-            mE.setTrackId(trackId);
-
-            inserter.insertCopy(mE);
-        } catch (...) {
-            // Ignore.
-        }
-    }
-
-    // Get the appropriate controllers and pitch bend from the callback our
-    // mapper gave us.
-    //ControllerAndPBList controllerAndPBlist =
-    //        controllerInfo->getControllers(instrument, reftime);
-    const StaticControllers &list = controllerAndPBList.m_controllers;
-
-    // For each controller
-    for (StaticControllerConstIterator cIt = list.begin();
-         cIt != list.end(); ++cIt) {
-        const MidiByte controlId    = cIt->first;
-        const MidiByte controlValue = cIt->second;
-
-        //RG_DEBUG << "insertControllers() : inserting controller " << (int)controlId << "value" << (int)controlValue << "on channel" << (int)channel << "for time" << reftime;
-
-        try {
-            // Put it in the inserter.
-            insertController(trackId, instrument, channel, insertTime,
-                             controlId, controlValue, inserter);
-        } catch (...) {
-            // Ignore.
-        }
-    }
-
-    // If there's a pitch bend, insert it...
-    // We only do one type of pitchbend, though GM2 allows others.
-    if (controllerAndPBList.m_havePitchbend) {
-        const int raised = controllerAndPBList.m_pitchbend + 8192;
-        const int d1 = (raised >> 7) & 0x7f;
-        const int d2 = raised & 0x7f;
-
-        try {
-            MappedEvent mE(instrument->getId(),
-                           MappedEvent::MidiPitchBend,
-                           d1,
-                           d2);
-            mE.setRecordedChannel(channel);
-            mE.setEventTime(insertTime);
-            mE.setTrackId(trackId);
-
-            inserter.insertCopy(mE);
-        } catch (...) {
-            // Ignore.
-        }
-    }
-}
-
-void ChannelManager::insertBSAndPC(
-        int trackId,
-        const Instrument *instrument,
-        ChannelId channel,
-        RealTime insertTime,
-        MappedInserterBase &inserter)
-{
-    //RG_DEBUG << "insertBSAndPC(): inserting BS/PC for " << instrument->getPresentationName().c_str() << "on channel" << (int)channel;
+    // Bank Select
 
     if (!instrument->hasFixedChannel()  ||
         instrument->sendsBankSelect()) {
@@ -212,6 +132,8 @@ void ChannelManager::insertBSAndPC(
         }
     }
 
+    // Program Change
+
     if (!instrument->hasFixedChannel()  ||
         instrument->sendsProgramChange()) {
         // Program Change
@@ -222,6 +144,78 @@ void ChannelManager::insertBSAndPC(
         mE.setEventTime(insertTime);
         mE.setTrackId(trackId);
         inserter.insertCopy(mE);
+    }
+
+    // Reset All Controllers
+
+    // This is still desirable for some users.
+    QSettings settings;
+    settings.beginGroup(SequencerOptionsConfigGroup);
+    const bool allowReset =
+            settings.value("allowresetallcontrollers", "true").toBool();
+    settings.endGroup();
+
+    if (allowReset) {
+        // In case some controllers are on that we don't know about, turn
+        // all controllers off.  (Reset All Controllers)
+        try {
+            MappedEvent mE(instrument->getId(),
+                           MappedEvent::MidiController,
+                           MIDI_CONTROLLER_RESET,
+                           0);
+            mE.setRecordedChannel(channel);
+            mE.setEventTime(insertTime);
+            mE.setTrackId(trackId);
+
+            inserter.insertCopy(mE);
+        } catch (...) {
+            // Ignore.
+        }
+    }
+
+    // Control Changes
+
+    const StaticControllers &list = controllerAndPBList.m_controllers;
+
+    // For each controller
+    for (StaticControllerConstIterator cIt = list.begin();
+         cIt != list.end(); ++cIt) {
+        const MidiByte controlId    = cIt->first;
+        const MidiByte controlValue = cIt->second;
+
+        //RG_DEBUG << "insertControllers() : inserting controller " << (int)controlId << "value" << (int)controlValue << "on channel" << (int)channel << "for time" << reftime;
+
+        try {
+            // Put it in the inserter.
+            insertController(trackId, instrument, channel, insertTime,
+                             controlId, controlValue, inserter);
+        } catch (...) {
+            // Ignore.
+        }
+    }
+
+    // Pitch Bend
+
+    // If there's a pitch bend, insert it...
+    // We only do one type of pitchbend, though GM2 allows others.
+    if (controllerAndPBList.m_havePitchbend) {
+        const int raised = controllerAndPBList.m_pitchbend + 8192;
+        const int d1 = (raised >> 7) & 0x7f;
+        const int d2 = raised & 0x7f;
+
+        try {
+            MappedEvent mE(instrument->getId(),
+                           MappedEvent::MidiPitchBend,
+                           d1,
+                           d2);
+            mE.setRecordedChannel(channel);
+            mE.setEventTime(insertTime);
+            mE.setTrackId(trackId);
+
+            inserter.insertCopy(mE);
+        } catch (...) {
+            // Ignore.
+        }
     }
 }
 
@@ -326,9 +320,8 @@ ChannelManager::insertChannelSetup(MappedInserterBase &inserter,
     // We don't do this for SoftSynth instruments.
     if (m_instrument->getType() == Instrument::Midi) {
         ChannelId channel = m_channelInterval.getChannelId();
-        insertBSAndPC(trackId, m_instrument, channel, insertTime, inserter);
-        insertControllers(trackId, m_instrument, channel, insertTime,
-                          controllerAndPBList, inserter);
+        insertChannelSetup(trackId, m_instrument, channel, insertTime,
+                           controllerAndPBList, inserter);
     }
 }
 

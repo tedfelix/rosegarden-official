@@ -105,31 +105,17 @@ public:
 
     // *** MappedEvent Insertion routines
 
-    /// Insert Bank Select and Program Change for an Instrument on a channel.
-    /**
-     * This routine is essentially a conversion from Instrument to
-     * MappedEvents which are inserted into a MappedEventBuffer via
-     * an inserter.
-     *
-     * ??? This seems to always be paired with a call to insertControllers().
-     *     If this is true, consider combining.
-     */
-    static void insertBSAndPC(
-            int trackId,
-            const Instrument *instrument,
-            ChannelId channel,
-            RealTime insertTime,
-            MappedInserterBase &inserter);
-
-    /// Insert CCs and pitch bend for an Instrument on a channel.
+    /// Insert BS, PC, CCs, and Pitch Bend for an Instrument on a channel.
     /**
      * Inserts the following:
      *
+     *   - Bank Select from Instrument
+     *   - Program Change from Instrument
      *   - Reset All Controllers (optional based on user preference)
      *   - Control Changes from controllerAndPBList
      *   - Pitchbend from controllerAndPBList
      */
-    static void insertControllers(
+    static void insertChannelSetup(
             int trackId,
             const Instrument *instrument,
             ChannelId channel,
