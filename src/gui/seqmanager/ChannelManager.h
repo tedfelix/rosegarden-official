@@ -21,6 +21,7 @@
 #include "base/ChannelInterval.h"
 #include "base/Instrument.h"
 #include "base/RealTime.h"
+#include "base/Track.h"  // For TrackId
 
 #include <QObject>
 
@@ -33,7 +34,6 @@ class MappedEvent;
 class MappedInserterBase;
 class Segment;
 class RosegardenDocument;
-typedef unsigned int TrackId;
 
 /// Set of controllers and pitchbends
 /**
@@ -103,7 +103,27 @@ public:
     /// Get the instrument we are playing on.  Can return NULL.
     Instrument *getInstrument(void) const  { return m_instrument; }
 
-    // *** MappedEvent Insertion routines
+    // *** Channel Interval Allocation
+
+    /// Allocate a sufficient ChannelInterval in the current allocation mode.
+    /**
+     * If we already have a ChannelInterval, this will allocate a new one.
+     *
+     * @see freeChannelInterval() and AllocateChannels
+     * @author Tom Breton (Tehom)
+     */
+    void allocateChannelInterval(bool changedInstrument);
+
+    /// Free the owned ChannelInterval (m_channelInterval).
+    /**
+     * Safe to call even when m_usingAllocator is false.
+     *
+     * @see allocateChannelInterval() and AllocateChannels
+     * @author Tom Breton (Tehom)
+     */
+    void freeChannelInterval();
+
+    // *** Channel Setup
 
     /// Insert BS, PC, CCs, and Pitch Bend for an Instrument on a channel.
     /**
@@ -116,7 +136,7 @@ public:
      *   - Pitchbend from controllerAndPBList
      */
     static void insertChannelSetup(
-            int trackId,
+            TrackId trackId,
             const Instrument *instrument,
             ChannelId channel,
             RealTime insertTime,
@@ -125,7 +145,7 @@ public:
 
     /// Insert a single CC for an Instrument on a channel.
     static void insertController(
-            int trackId,
+            TrackId trackId,
             const Instrument *instrument,
             ChannelId channel,
             RealTime insertTime,
@@ -133,13 +153,10 @@ public:
             MidiByte value,
             MappedInserterBase &inserter);
 
-    /// Free the owned channel interval (m_channelInterval).
-    /**
-     * Safe even when m_usingAllocator is false.
-     */
-    void freeChannelInterval(void);
-
     /// Insert event via inserter, pre-inserting appropriate channel setup.
+    /**
+     * ??? Reorder parameters.
+     */
     void doInsert(MappedInserterBase &inserter, MappedEvent &evt,
                 RealTime reftime,
                 const ControllerAndPBList &controllerAndPBList,
@@ -177,13 +194,6 @@ public:
                             RealTime::zeroTime,
                             RealTime::zeroTime);
     }
-
-    /// Allocate a sufficient channel interval in the current allocation mode.
-    /*
-     * It is safe to call this more than once, ie even if we already have a
-     * channel interval.
-     */
-    void reallocate(bool changedInstrument);
 
     /// Print our status, for tracing.
     void debugPrintStatus(void);

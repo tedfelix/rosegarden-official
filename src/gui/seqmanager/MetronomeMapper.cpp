@@ -240,7 +240,7 @@ void MetronomeMapper::fillBuffer()
 
     resize(index);
 
-    m_channelManager.reallocate(false);
+    m_channelManager.allocateChannelInterval(false);
     m_channelManager.setDirty();
 }
 

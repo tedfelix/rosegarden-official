@@ -234,7 +234,7 @@ StudioControl::fillWithImmediateNote(
     m_channelManager.setEternalInterval();
     // ??? It's odd that we would say "false" for changedInstrument given
     //     that we did indeed change the Instrument.  Why are we doing this?
-    m_channelManager.reallocate(false);
+    m_channelManager.allocateChannelInterval(false);
 
     MappedEventInserter inserter(mappedEventList);
 

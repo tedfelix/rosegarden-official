@@ -313,7 +313,7 @@ void InternalSegmentMapper::fillBuffer()
         // Track is unmuted, so get a channel interval to play on.
         // This also releases the old channel interval (possibly
         // getting it again)
-        m_channelManager.reallocate(false);
+        m_channelManager.allocateChannelInterval(false);
     } else {
         // But if track is muted, don't waste a channel interval on
         // it.  If that changes later, the first played note will

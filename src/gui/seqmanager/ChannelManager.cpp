@@ -77,7 +77,7 @@ connectInstrument(Instrument *instrument)
 }
 
 void ChannelManager::insertController(
-        int trackId,
+        TrackId trackId,
         const Instrument *instrument,
         ChannelId channel,
         RealTime insertTime,
@@ -97,7 +97,7 @@ void ChannelManager::insertController(
 }
 
 void ChannelManager::insertChannelSetup(
-        int trackId,
+        TrackId trackId,
         const Instrument *instrument,
         ChannelId channel,
         RealTime insertTime,
@@ -284,7 +284,7 @@ ChannelManager::makeReady(MappedInserterBase &inserter, RealTime time,
         if (m_triedToGetChannel) { return false; }
         
         // Try to get a channel.  This sets m_triedToGetChannel.
-        reallocate(false);
+        allocateChannelInterval(false);
         
         // If we still don't have one, give up.
         if (!m_channelInterval.validChannel()) { return false; }
@@ -416,12 +416,10 @@ setAllocationMode(Instrument *instrument)
         }
 }    
 
-// Allocate a sufficient channel interval in the current allocation mode.
-// @author Tom Breton (Tehom) 
 void
-ChannelManager::reallocate(bool changedInstrument)
+ChannelManager::allocateChannelInterval(bool changedInstrument)
 {
-    RG_DEBUG << "reallocate "
+    RG_DEBUG << "allocateChannelInterval "
              << (m_usingAllocator ? "using allocator" :
                  "not using allocator")
              << "for"
@@ -445,15 +443,12 @@ ChannelManager::reallocate(bool changedInstrument)
     if (m_channelInterval.validChannel()) {
         RG_DEBUG << "  Channel is valid";
     } else {
-        RG_DEBUG << "  ??? Channel is invalid!  (end of reallocate())";
+        RG_DEBUG << "  ??? Channel is invalid!  (end of allocateChannelInterval())";
     }
 
     m_triedToGetChannel = true;
 }
 
-// Free the channel interval it owned.  Safe even when
-// m_usingAllocator is false.
-// @author Tom Breton (Tehom) 
 void ChannelManager::freeChannelInterval(void)
 {
     if (m_instrument && m_usingAllocator) {
@@ -489,7 +484,7 @@ setInstrument(Instrument *instrument)
                 freeChannelInterval();
             }
         }
-        reallocate(true);
+        allocateChannelInterval(true);
         connectInstrument(instrument);
         setDirty();
     }
@@ -590,7 +585,7 @@ slotChannelBecomesUnfixed(void)
     // We no longer have a channel interval.
     m_channelInterval.clearChannelId();
     // Get a new one.
-    reallocate(false);
+    allocateChannelInterval(false);
     setDirty();
 }
 
