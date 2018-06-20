@@ -29,6 +29,10 @@ class MappedEventList;
 /**
  * This is primarily used by RosegardenSequencer::getSlice() during playback
  * to generate a MappedEventList to send off to ALSA.
+ *
+ * ??? This inside-out thinking hurts my brain.  Can we instead just send
+ *     a MappedEventList & to whoever needs to insert things, and let them
+ *     call a MappedEventList::insertCopy()?
  */
 class MappedEventInserter : public MappedInserterBase
 {
