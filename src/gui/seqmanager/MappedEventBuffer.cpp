@@ -15,6 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[MappedEventBuffer]"
+
 #include "MappedEventBuffer.h"
 
 #include "document/RosegardenDocument.h"
@@ -207,6 +209,8 @@ MappedEventBuffer::iterator::iterator(MappedEventBuffer *s) :
     m_active(false)
     //m_currentTime
 {
+    //RG_DEBUG << "iterator ctor";
+
     s->addOwner();
 }
 
