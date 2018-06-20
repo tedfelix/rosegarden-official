@@ -55,7 +55,9 @@ class RealTime;
  * in a Composition into MappedEvent objects that can be sent to ALSA.  For
  * the second part of this conversion, see MappedBufMetaIterator.
  */
-class InternalSegmentMapper : public SegmentMapper
+class InternalSegmentMapper :
+        public SegmentMapper,
+        public ChannelManager::IControllerInfo
 {
 public:
     InternalSegmentMapper(RosegardenDocument *doc, Segment *segment);
@@ -64,19 +66,7 @@ private:
     friend class ControllerSearch;
     friend class ControllerContextMap;
 
-    // ??? rename: ControllerInfo
-    class Callbacks : public ChannelManager::IControllerInfo
-        {
-        public:
-    
-        Callbacks(InternalSegmentMapper *mapper) :
-            m_mapper(mapper) {}
-        private:
-            virtual ControllerAndPBList
-                getControllers(Instrument *instrument, RealTime start);
-            InternalSegmentMapper *m_mapper;
-        };
-    friend class Callbacks;
+    ControllerAndPBList getControllers(Instrument *instrument, RealTime start);
 
     typedef std::pair<timeT, int> Noteoff;
     struct NoteoffCmp

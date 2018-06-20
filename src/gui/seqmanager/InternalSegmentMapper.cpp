@@ -400,9 +400,8 @@ void
 InternalSegmentMapper::
 makeReady(MappedInserterBase &inserter, RealTime time)
 {
-    Callbacks callbacks(this);
     m_channelManager.setInstrument(m_doc->getInstrument(m_segment));
-    m_channelManager.makeReady(inserter, time, &callbacks,
+    m_channelManager.makeReady(inserter, time, this,
                                m_segment->getTrack());
 }
 
@@ -415,10 +414,9 @@ InternalSegmentMapper::insertChannelSetup(MappedInserterBase &inserter)
     if (!instrument->hasFixedChannel())
         return;
 
-    Callbacks callbacks(this);
     m_channelManager.setInstrument(instrument);
     m_channelManager.insertChannelSetup(
-            inserter, RealTime::zeroTime, RealTime::zeroTime, &callbacks,
+            inserter, RealTime::zeroTime, RealTime::zeroTime, this,
             m_segment->getTrack());
 }
 
@@ -429,8 +427,7 @@ InternalSegmentMapper::doInsert(MappedInserterBase &inserter, MappedEvent &evt,
     if (dirtyIter) {
         m_channelManager.setInstrument(m_doc->getInstrument(m_segment));
     }
-    Callbacks callbacks(this);
-    m_channelManager.doInsert(inserter, evt, start, &callbacks,
+    m_channelManager.doInsert(inserter, evt, start, this,
                               dirtyIter, m_segment->getTrack());
 }
 
@@ -465,21 +462,18 @@ shouldPlay(MappedEvent *evt, RealTime sliceStart)
     return !evt->EndedBefore(sliceStart);
 }
 
-/***  InternalSegmentMapper::Callbacks ***/
-
 ControllerAndPBList
-InternalSegmentMapper::Callbacks::
-getControllers(Instrument *instrument, RealTime start)
+InternalSegmentMapper::getControllers(Instrument *instrument, RealTime start)
 {
-    Profiler profiler("InternalSegmentMapper::Callbacks::getControllers", false);
+    Profiler profiler("InternalSegmentMapper::getControllers()", false);
     timeT startTime =
-        m_mapper->m_doc->getComposition().getElapsedTimeForRealTime(start);
+        m_doc->getComposition().getElapsedTimeForRealTime(start);
 
     // If time is at or before all events, we can just use static values.
-    if (startTime <= m_mapper->m_segment->getStartTime()) {
+    if (startTime <= m_segment->getStartTime()) {
         return ControllerAndPBList(instrument->getStaticControllers());
     }
-        
+
     ControllerAndPBList returnValue;
     // Get a value for each controller type.  Always get a value, just
     // in case the controller used to be set on this channel.
@@ -488,7 +482,6 @@ getControllers(Instrument *instrument, RealTime start)
          cIt != list.end(); ++cIt) {
         MidiByte controlId = cIt->first;
         MidiByte controlValue =
-            m_mapper->
             getControllerValue(startTime,
                                Controller::EventType,
                                controlId);
@@ -501,7 +494,6 @@ getControllers(Instrument *instrument, RealTime start)
     // ignore GM2's other PitchBend types)
     {
         MidiByte controlValue =
-            m_mapper->
             getControllerValue(startTime,
                                PitchBend::EventType,
                                0);
@@ -511,5 +503,6 @@ getControllers(Instrument *instrument, RealTime start)
     }
     return returnValue;
 }
+
 
 }
