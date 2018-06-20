@@ -68,22 +68,17 @@ public slots:
      * the comboboxes.
      *
      * This slot is connected in RosegardenMainWindow's ctor to
-     * SequenceManager::signalSelectProgramNoSend().
+     * SequenceManager::sigProgramChange().
      *
-     * Note: This function's parameters are in reverse order.  They should be:
-     *       slotExternalProgramChange(bankMSB, bankLSB, programChange).
-     *       This would require changing
-     *       SequenceManager::signalSelectProgramNoSend() as well.
-     *
-     * @param [in] programChange The program to select (triggered by Program
-     *                           Change message).
-     * @param [in] bankLSB The bank to select (-1 if no LSB Bank Select occurred)
-     *                     (triggered by LSB Bank Select message).
      * @param [in] bankMSB The bank to select (-1 if no MSB Bank Select occurred)
      *                     (triggered by MSB Bank Select message).
+     * @param [in] bankLSB The bank to select (-1 if no LSB Bank Select occurred)
+     *                     (triggered by LSB Bank Select message).
+     * @param [in] programChange The program to select (triggered by Program
+     *                           Change message).
      */
     void slotExternalProgramChange(
-            int programChange, int bankLSB, int bankMSB);
+            int bankMSB, int bankLSB, int programChange);
 
 private slots:
 

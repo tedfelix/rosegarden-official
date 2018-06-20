@@ -63,7 +63,7 @@ AudioMixerWindow2::AudioMixerWindow2(QWidget *parent) :
     connect(RosegardenMainWindow::self()->getDocument(),
                 SIGNAL(documentModified(bool)),
             SLOT(slotDocumentModified(bool)));
-    // Connect for External Controller events.
+    // Connect for "external controller" events.
     connect(RosegardenMainWindow::self()->getView(),
                 SIGNAL(controllerDeviceEventReceived(MappedEvent *, const void *)),
             SLOT(slotExternalControllerEvent(MappedEvent *, const void *)));

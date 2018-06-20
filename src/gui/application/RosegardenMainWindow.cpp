@@ -354,12 +354,18 @@ RosegardenMainWindow::RosegardenMainWindow(bool enableSound,
     // ??? TransportDialog should connect itself to SequenceManager.  Move
     //     all of this into TransportDialog.
     Q_ASSERT(m_transport);
-    connect(m_seqManager, SIGNAL(signalTempoChanged(tempoT)), m_transport, SLOT(slotTempoChanged(tempoT)));
-    connect(m_seqManager, SIGNAL(signalMidiInLabel(const MappedEvent*)), m_transport, SLOT(slotMidiInLabel(const MappedEvent*)));
-    connect(m_seqManager, SIGNAL(signalMidiOutLabel(const MappedEvent*)), m_transport, SLOT(slotMidiOutLabel(const MappedEvent*)));
-    connect(m_seqManager, SIGNAL(signalPlaying(bool)), m_transport, SLOT(slotPlaying(bool)));
-    connect(m_seqManager, SIGNAL(signalRecording(bool)), m_transport, SLOT(slotRecording(bool)));
-    connect(m_seqManager, SIGNAL(signalMetronomeActivated(bool)), m_transport, SLOT(slotMetronomeActivated(bool)));
+    connect(m_seqManager, SIGNAL(signalTempoChanged(tempoT)),
+            m_transport, SLOT(slotTempoChanged(tempoT)));
+    connect(m_seqManager, SIGNAL(signalMidiInLabel(const MappedEvent*)),
+            m_transport, SLOT(slotMidiInLabel(const MappedEvent*)));
+    connect(m_seqManager, SIGNAL(signalMidiOutLabel(const MappedEvent*)),
+            m_transport, SLOT(slotMidiOutLabel(const MappedEvent*)));
+    connect(m_seqManager, SIGNAL(signalPlaying(bool)),
+            m_transport, SLOT(slotPlaying(bool)));
+    connect(m_seqManager, SIGNAL(signalRecording(bool)),
+            m_transport, SLOT(slotRecording(bool)));
+    connect(m_seqManager, SIGNAL(signalMetronomeActivated(bool)),
+            m_transport, SLOT(slotMetronomeActivated(bool)));
 
     // Load the initial document (this includes doc's own autoload)
     //

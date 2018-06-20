@@ -143,7 +143,7 @@ public:
      * This routine mainly emits the following signals which are handled
      * by various parts of the UI:
      *
-     *   - signalSelectProgramNoSend() -> MIPP::slotExternalProgramChange()
+     *   - sigProgramChange() -> MIPP::slotExternalProgramChange()
      *   - signalMidiInLabel() -> TransportDialog::slotMidiInLabel()
      *   - signalMidiOutLabel() -> TransportDialog::slotMidiOutLabel()
      *   - insertableNoteOffReceived()
@@ -261,32 +261,68 @@ public slots:
     void fastForwardToEnd();
 
 signals:
-    /// Emitted by processAsynchronousMidi().
+    /// A program change was received.
     /**
+     * Emitted by processAsynchronousMidi().
+     *
      * Connected to MIDIInstrumentParameterPanel::slotExternalProgramChange().
      *
      * Incoming program changes from a connected device are sent to the MIPP
      * where, if the "Receive External" checkbox is checked, the bank and
      * program on the MIPP will be changed to match.
-     *
-     * ??? Since we are in here, reverse the order of these parameters.
-     *     Make sure MIPP matches.
      */
-    void signalSelectProgramNoSend(int program, int bankLSB, int bankMSB);
+    void sigProgramChange(int bankMSB, int bankLSB, int programChange);
 
+    /// A note-on event was received that might be of interest to the editors.
+    /**
+     * Emitted by processAsynchronousMidi().
+     *
+     * Connected to MatrixView, NotationView, and PitchTrackerView for
+     * step editing features.
+     */
     void insertableNoteOnReceived(int pitch, int velocity);
+
+    /// A note-off event was received that might be of interest to the editors.
+    /**
+     * Emitted by processAsynchronousMidi().
+     *
+     * Connected to MatrixView, NotationView, and PitchTrackerView for
+     * step editing features.
+     */
     void insertableNoteOffReceived(int pitch, int velocity);
+
+    /// An event was received from the "external controller" port.
+    /**
+     * Emitted by processAsynchronousMidi().
+     *
+     * Connected to
+     * RosegardenMainViewWindow::slotControllerDeviceEventReceived().  These
+     * are events from the "external controller" port.
+     */
     void controllerDeviceEventReceived(MappedEvent *event);
 
-    /// signal RosegardenMainWindow to display a warning on the WarningWidget
+    /// Signal RosegardenMainWindow to display a warning.
+    /**
+     * Connected to RosegardenMainWindow::slotDisplayWarning().
+     *
+     * RMW displays an appropriate warning icon on the status bar
+     * (WarningWidget) and displays a WarningDialog in response to this.
+     */
     void sendWarning(int type, QString text, QString informativeText);
 
-    /// signal GUI changes to the TransportDialog
+    // TransportDialog signals
+
+    /// Connected to TransportDialog::slotTempoChanged().
     void signalTempoChanged(tempoT tempo);
+    /// Connected to TransportDialog::slotMidiInLabel().
     void signalMidiInLabel(const MappedEvent *event);
+    /// Connected to TransportDialog::slotMidiOutLabel().
     void signalMidiOutLabel(const MappedEvent *event);
+    /// Connected to TransportDialog::slotPlaying().
     void signalPlaying(bool checked);
+    /// Connected to TransportDialog::slotRecording().
     void signalRecording(bool checked);
+    /// Connected to TransportDialog::slotMetronomeActivated().
     void signalMetronomeActivated(bool checked);
 
 private slots:

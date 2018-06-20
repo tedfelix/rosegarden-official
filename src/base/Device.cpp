@@ -24,6 +24,7 @@ namespace Rosegarden
 
 const DeviceId Device::NO_DEVICE = 10000;
 const DeviceId Device::ALL_DEVICES = 10001;
+// "external controller" port.
 const DeviceId Device::CONTROL_DEVICE = 10002;
 
 Device::~Device()

@@ -816,7 +816,7 @@ SequenceManager::processAsynchronousMidi(const MappedEventList &mC,
             // this selects the program-list entry on prog-change-messages 
             // as well as the previously received bank select (lsb)
             prg = (*i)->getData1();
-            emit signalSelectProgramNoSend( prg, bnk_lsb, bnk_msb );
+            emit sigProgramChange(bnk_msb, bnk_lsb, prg);
         }
     }
 	

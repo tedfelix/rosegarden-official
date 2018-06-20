@@ -281,7 +281,7 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(QWidget *parent) :
             SLOT(slotControlChange(Instrument *, int)));
 
     connect(RosegardenMainWindow::self()->getSequenceManager(),
-                SIGNAL(signalSelectProgramNoSend(int,int,int)),
+                SIGNAL(sigProgramChange(int,int,int)),
             SLOT(slotExternalProgramChange(int,int,int)));
 }
 
@@ -1123,7 +1123,8 @@ MIDIInstrumentParameterPanel::slotSelectBank(int index)
 }
 
 void
-MIDIInstrumentParameterPanel::slotExternalProgramChange(int programChange, int bankLSB, int bankMSB )
+MIDIInstrumentParameterPanel::slotExternalProgramChange(
+        int bankMSB, int bankLSB, int programChange)
 {
     RG_DEBUG << "slotExternalProgramChange()";
 
