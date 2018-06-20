@@ -755,7 +755,10 @@ punchin:
 
             // Pop-up the dialog (don't use exec())
             //
-            // bug #1505805, abolish recording countdown dialog
+            // bug #941 (old #1505805), abolish recording countdown dialog.
+            // ??? This was removed way back in [r7366] (2006-07-07).  But
+            //     there appears to be renewed interest in feature request
+            //     #453.  Should we clean this up or not?
             //m_countdownDialog->show();
 
         } else {
@@ -1981,10 +1984,13 @@ SequenceManager::slotScheduledCompositionMapperReset()
 }
 
 int
-SequenceManager::getSampleRate() 
+SequenceManager::getSampleRate() const
 {
-    if (m_sampleRate != 0) return m_sampleRate;
+    // Get from cache if it's there.
+    if (m_sampleRate != 0)
+        return m_sampleRate;
 
+    // Cache the result to avoid locks.
     m_sampleRate = RosegardenSequencer::getInstance()->getSampleRate();
 
     return m_sampleRate;

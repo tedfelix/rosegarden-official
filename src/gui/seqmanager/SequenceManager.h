@@ -87,6 +87,9 @@ public:
      */
     void checkSoundDriverStatus(bool warnUser);
 
+    /// Find what has been initialised and what hasn't
+    unsigned int getSoundDriverStatus() const  { return m_soundDriverStatus; }
+
     /// Reinitialise the studio.
     /**
      * Sends a SystemAudioPorts and a SystemAudioFileFormat event to
@@ -95,6 +98,9 @@ public:
      * Called only by RosegardenMainWindow's ctor.
      */
     static void reinitialiseSequencerStudio();
+
+    /// Send JACK and MMC transport control statuses
+    static void sendTransportControlStatuses();
 
     /// Align Instrument lists before playback starts.
     void preparePlayback();
@@ -117,6 +123,14 @@ public:
     void setTransportStatus(TransportStatus status)
             { m_transportStatus = status; }
     TransportStatus getTransportStatus() const  { return m_transportStatus; }
+
+    /**
+     * Sends tempo to RosegardenSequencer::setQuarterNoteLength().
+     *
+     * Emits signalTempoChanged() which is connected to
+     * TransportDialog::slotTempoChanged().
+     */
+    void setTempo(const tempoT tempo);
 
     /// Handle incoming MappedEvent's.
     /**
@@ -155,14 +169,8 @@ public:
     void processAsynchronousMidi(const MappedEventList &mC,
                                  AudioManagerDialog *aMD);
 
-    /// Find what has been initialised and what hasn't
-    unsigned int getSoundDriverStatus() const  { return m_soundDriverStatus; }
-
     /// Reset MIDI network.  Send an FF Reset on all devices and channels.
     void resetMidiNetwork();
-
-    /// Send JACK and MMC transport control statuses
-    static void sendTransportControlStatuses();
 
     /// Send all note offs and resets to MIDI devices.
     /**
@@ -171,18 +179,10 @@ public:
      */
     void panic();
 
-    /**
-     * Sends tempo to RosegardenSequencer::setQuarterNoteLength().
-     *
-     * Emits signalTempoChanged() which is connected to
-     * TransportDialog::slotTempoChanged().
-     */
-    void setTempo(const tempoT tempo);
-
+    /// ??? The CountdownDialog has been disabled.
     CountdownDialog *getCountdownDialog()  { return m_countdownDialog; }
 
-    // Return a new metaiterator on the current composition (suitable
-    // for MidiFile)
+    /// Assemble and return a meta-iterator for MIDI file generation.
     MappedBufMetaIterator *makeTempMetaiterator();
 
     //
@@ -206,25 +206,55 @@ public:
     virtual void selectedTrackChanged(const Composition *);
     virtual void tempoChanged(const Composition *);
 
-    void processAddedSegment(Segment *);
-    void processRemovedSegment(Segment *);
-    void segmentModified(Segment *);
+    /**
+     * Called by TrackButtons.
+     *
+     * ??? Is there a notification we can subscribe to instead?
+     */
     void segmentInstrumentChanged(Segment *s);
 
+    /// Handle QEvent::User messages from update().
+    /**
+     * QObject override.
+     *
+     * Calls checkRefreshStatus().
+     */
     virtual bool event(QEvent *e);
 
-    /// for the gui to call to indicate that the metronome needs to be remapped
+    /// Sets a new Instrument for the metronome and regenerates the ticks.
+    /**
+     * Used by ManageMetronomeDialog and MIDIConfigurationPage to reconfigure
+     * the metronome.
+     *
+     * ??? Both callers set regenerateTicks to true.  Get rid of it.
+     *
+     * @see resetMetronomeMapper(), ControlBlock::setInstrumentForMetronome()
+     */
     void metronomeChanged(InstrumentId id, bool regenerateTicks);
 
-    /// for the gui to call to indicate that a MIDI filter needs to be remapped
-    void filtersChanged(MidiFilter thruFilter,
-                        MidiFilter recordFilter);
+    /// Forward new filtering parameters to ControlBlock.
+    /**
+     * Used by MidiFilterDialog.
+     */
+    static void filtersChanged(MidiFilter thruFilter,
+                               MidiFilter recordFilter);
 
-    int getSampleRate(); // may return 0 if sequencer uncontactable
+    /// Get sample rate from RosegardenSequencer.
+    int getSampleRate() const;
 
 public slots:
 
+    /**
+     * Connected to CommandHistory::commandExecuted() to ensure an update
+     * after every command.
+     */
     void update();
+
+    // Transport Controls (cont'd)
+
+    // The following are slots for the test driver:
+    // test_notationview_selection.cpp
+
     void rewind();
     void fastforward();
     void rewindToBeginning();
@@ -277,6 +307,10 @@ private slots:
     
 private:
 
+    void processAddedSegment(Segment *);
+    void processRemovedSegment(Segment *);
+    void segmentModified(Segment *);
+
     void stop2();
 
     /// Update the MIDI out label on the TransportDialog.
@@ -326,8 +360,9 @@ private:
 
     clock_t                    m_lastRewoundAt;
 
-    CountdownDialog           *m_countdownDialog;
-    QTimer                    *m_countdownTimer;
+    /// ??? The CountdownDialog has been disabled.
+    CountdownDialog *m_countdownDialog;
+    QTimer *m_countdownTimer;
 
     bool                      m_shownOverrunWarning;
 
@@ -359,7 +394,8 @@ private:
 
     timeT                      m_lastTransportStartPosition;
 
-    int                        m_sampleRate;
+    /// Cache of sample rate to avoid locks.
+    mutable int m_sampleRate;
 
     tempoT m_tempo;
 };
