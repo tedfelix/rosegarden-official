@@ -396,8 +396,6 @@ RosegardenMainWindow::RosegardenMainWindow(bool enableSound,
     //
     m_seqManager->sendTransportControlStatuses();
 
-    m_seqManager->setTrackEditor(m_view->getTrackEditor());
-
     // Now autoload
     //
     enterActionState("new_file"); //@@@ JAS orig. 0

@@ -86,7 +86,6 @@ SequenceManager::SequenceManager() :
     m_metronomeMapper(0),
     m_tempoSegmentMapper(0),
     m_timeSigSegmentMapper(0),
-    m_trackEditor(0),
     m_transportStatus(STOPPED),
     m_soundDriverStatus(NO_DRIVER),
     m_lastRewoundAt(clock()),
@@ -176,12 +175,6 @@ SequenceManager::setDocument(RosegardenDocument *doc, QWidget *parentWidget)
         resetCompositionMapper();
         populateCompositionMapper();
     }
-}
-
-void SequenceManager::setTrackEditor(TrackEditor *trackEditor)
-{
-    Q_ASSERT(trackEditor);
-    m_trackEditor = trackEditor;
 }
 
 void
@@ -1891,19 +1884,14 @@ void SequenceManager::tempoChanged(const Composition *c)
     if (c->isLooping())
         setLoop(c->getLoopStart(), c->getLoopEnd());
     else if (m_transportStatus == PLAYING) {
-        // If the tempo changes during playback, reset the pointer
-        // position because the sequencer keeps track of position in
-        // real time and we want to maintain the same position in
-        // musical time.  Turn off play tracking while this happens,
-        // so that we don't jump about in the main window while the
-        // user's trying to drag the tempo in it.  (That doesn't help
-        // for matrix or notation though, sadly)
-        bool tracking = m_trackEditor && m_trackEditor->isTracking();
-        if (tracking)
-            m_trackEditor->toggleTracking();
+
+        // Tempo has changed during playback.
+
+        // Reset the playback position because the sequencer keeps track of
+        // position in real time (seconds) and we want to maintain the same
+        // position in musical time (bars/beats).
         m_doc->slotSetPointerPosition(c->getPosition());
-        if (tracking)
-            m_trackEditor->toggleTracking();
+
     }
 }
 

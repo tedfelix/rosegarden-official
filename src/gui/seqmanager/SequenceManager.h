@@ -19,28 +19,25 @@
 #define RG_SEQUENCEMANAGER_H
 
 #include "base/Composition.h"
-#include "base/Event.h"
-#include "base/MidiProgram.h"
 #include "base/RealTime.h"
-#include "base/Track.h"
 #include "gui/application/TransportStatus.h"
 #include "sound/MappedEventList.h"
 #include "sound/MappedEvent.h"
+
 #include <QObject>
 #include <QString>
-#include <vector>
-#include <map>
-
 
 class QTimer;
 class QTime;
 class QEvent;
 
+#include <vector>
+#include <map>
 
 namespace Rosegarden
 {
 
-class TransportDialog;
+
 class Track;
 class TrackEditor;
 class TimeSigSegmentMapper;
@@ -50,42 +47,30 @@ class RosegardenDocument;
 class MetronomeMapper;
 class CountdownDialog;
 class CompositionMapper;
-class Composition;
 class AudioManagerDialog;
 class MappedBufMetaIterator;
 
-class ROSEGARDENPRIVATE_EXPORT SequenceManager : public QObject, public CompositionObserver
+
+class ROSEGARDENPRIVATE_EXPORT SequenceManager :
+        public QObject, public CompositionObserver
 {
     Q_OBJECT
 public:
     /**
-     * Construct a SequenceManager.  The SequenceManager is not
-     * designed to operate without a document; you must call
-     * setDocument before you do anything with it.
+     * SequenceManager is not designed to operate without a document;
+     * you must call setDocument before you do anything with it.
      */
     SequenceManager();
     ~SequenceManager();
 
-    /** Used to transmit the type of sequencer warning, so the WarningWidget
-     * knows which icon to manipulate
-     */
-    //typedef enum { Midi, Audio, Timer } WarningType;
-
     /**
-     * Sets (replaces) the internal document, and sets a parent widget for the CountDownDialog
+     * Sets (replaces) the internal document, and sets a parent widget for
+     * the CountDownDialog.
+     *
+     * ??? Subscribe for RMW::documentChanged() instead of this.
+     *     parentWidget is just RMW::self().
      */
     void setDocument(RosegardenDocument *doc, QWidget *parentWidget);
-
-    /**
-     * Return the current internal document
-     */
-    RosegardenDocument* getDocument();
-
-    /**
-     * Lets SequenceManager know about the TrackEditor,
-     * for the special handling of "when the tempo changes during playback"
-     */
-    void setTrackEditor(TrackEditor *trackEditor);
 
     //
     // Transport controls
@@ -162,6 +147,9 @@ public:
     void showVisuals(const MappedEventList &mC);
 
     /// Apply in-situ filtering to a MappedEventList
+    /**
+     * ??? Return by value?  COPY.
+     */
     MappedEventList
         applyFiltering(const MappedEventList &mC,
                        MappedEvent::MappedEventType filter);
@@ -267,7 +255,6 @@ protected:
     MetronomeMapper       *m_metronomeMapper;
     TempoSegmentMapper    *m_tempoSegmentMapper;
     TimeSigSegmentMapper  *m_timeSigSegmentMapper;
-    TrackEditor           *m_trackEditor;
 
     std::vector<Segment *> m_addedSegments;
     std::vector<Segment *> m_removedSegments;
