@@ -47,9 +47,11 @@ class OverlapRange
 
 public :
     OverlapRange() :
-        m_inconsistancy(false)
-{
-}
+        m_segments(),
+        m_inconsistancy(false),
+        m_property()
+    {
+    }
 
     ~OverlapRange() { }
 
