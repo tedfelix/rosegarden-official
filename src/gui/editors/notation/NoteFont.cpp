@@ -15,6 +15,7 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[NoteFont]"
 
 #include "NoteFont.h"
 #include "misc/Debug.h"
@@ -196,10 +197,15 @@ NoteFont::lookupDrawRep(QPixmap *pixmap) const
         if (image.isNull())
             return 0;
 
+#if 0
+// ??? Removing since this does nothing other than trigger a compiler warning.
         if (image.depth() > 1) {
 //            image = image.convertDepth(1, Qt::MonoOnly | Qt::ThresholdDither);
+              // ??? Since the return is ignored, this does nothing other
+              //     than trigger a compiler warning.
               image.convertToFormat(QImage::Format_Mono, Qt::ThresholdDither);
         }
+#endif
 
         NoteCharacterDrawRep *a = new NoteCharacterDrawRep();
 
