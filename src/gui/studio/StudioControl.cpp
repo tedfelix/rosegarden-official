@@ -241,13 +241,13 @@ StudioControl::fillWithImmediateNote(
     // Insert the event.
     // Setting firstOutput to true indicates that we want a channel
     // setup.
-    m_channelManager.doInsert(
-            inserter,
-            mappedEvent,
-            RealTime::zeroTime,  // refTime
+    m_channelManager.insertEvent(
+            NO_TRACK,  // trackId
             instrument->getStaticControllers(),
+            RealTime::zeroTime,  // refTime
+            mappedEvent,
             true,  // firstOutput
-            NO_TRACK);
+            inserter);
 }
 
 void

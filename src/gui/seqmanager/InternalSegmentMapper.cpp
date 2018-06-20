@@ -431,9 +431,13 @@ InternalSegmentMapper::doInsert(MappedInserterBase &inserter, MappedEvent &evt,
     if (dirtyIter)
         m_channelManager.setInstrument(instrument);
 
-    m_channelManager.doInsert(inserter, evt, start,
-                              getControllers(instrument, start),
-                              dirtyIter, m_segment->getTrack());
+    m_channelManager.insertEvent(
+            m_segment->getTrack(),  // trackId
+            getControllers(instrument, start),
+            start,
+            evt,
+            dirtyIter,  // firstOutput
+            inserter);
 }
 
 int

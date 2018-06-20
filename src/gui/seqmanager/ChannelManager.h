@@ -153,14 +153,19 @@ public:
             MidiByte value,
             MappedInserterBase &inserter);
 
-    /// Insert event via inserter, pre-inserting appropriate channel setup.
+    /// Insert appropriate channel setup (if needed) followed by an event.
     /**
-     * ??? Reorder parameters.
+     * Note: event is modified by this routine.
+     *
+     * @author Tom Breton (Tehom)
      */
-    void doInsert(MappedInserterBase &inserter, MappedEvent &evt,
-                RealTime reftime,
-                const ControllerAndPBList &controllerAndPBList,
-                bool firstOutput, TrackId trackId);
+    void insertEvent(
+            TrackId trackId,
+            const ControllerAndPBList &controllerAndPBList,
+            RealTime reftime,
+            MappedEvent &event,
+            bool firstOutput,
+            MappedInserterBase &inserter);
 
     bool makeReady(MappedInserterBase &inserter, RealTime time,
             const ControllerAndPBList &controllerAndPBList, TrackId trackId);

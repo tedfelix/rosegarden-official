@@ -219,14 +219,13 @@ void ChannelManager::insertChannelSetup(
     }
 }
 
-// Insert evt, possibly pre-inserting other events to configure the
-// channel.
-// @author Tom Breton (Tehom) 
-void
-ChannelManager::doInsert(MappedInserterBase &inserter, MappedEvent &evt, 
-                         RealTime reftime/**/,
-                         const ControllerAndPBList &controllerAndPBList,
-                         bool firstOutput/**/, TrackId trackId)
+void ChannelManager::insertEvent(
+        TrackId trackId,
+        const ControllerAndPBList &controllerAndPBList,
+        RealTime reftime,
+        MappedEvent &event,
+        bool firstOutput,
+        MappedInserterBase &inserter)
 {
 
     RG_DEBUG
@@ -253,10 +252,10 @@ ChannelManager::doInsert(MappedInserterBase &inserter, MappedEvent &evt,
     if (!m_instrument) { return; }
     if (!m_channelInterval.validChannel()) { return; }
 
-    evt.setInstrument(m_instrument->getId());
-    evt.setRecordedChannel(m_channelInterval.getChannelId());
-    evt.setTrackId(trackId);
-    inserter.insertCopy(evt);
+    event.setInstrument(m_instrument->getId());
+    event.setRecordedChannel(m_channelInterval.getChannelId());
+    event.setTrackId(trackId);
+    inserter.insertCopy(event);
 }
 
 // Make the channel ready by inserting events to configure the
