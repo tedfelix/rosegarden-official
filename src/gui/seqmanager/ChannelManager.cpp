@@ -37,10 +37,15 @@ namespace Rosegarden
 // @author Tom Breton (Tehom) 
 ChannelManager::
 ChannelManager(Instrument *instrument) :
-    m_usingAllocator(false),
     m_instrument(0),
-    m_inittedForOutput(false),
-    m_triedToGetChannel(false)
+    m_start(),
+    m_end(),
+    m_startMargin(),
+    m_endMargin(),
+    m_channelInterval(),
+    m_usingAllocator(false),
+    m_triedToGetChannel(false),
+    m_inittedForOutput(false)
 {
     // Safe even for NULL.
     connectInstrument(instrument);

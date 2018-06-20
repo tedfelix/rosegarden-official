@@ -224,7 +224,7 @@ public:
     void setDirty()  { m_inittedForOutput = false; }
 
     /// Print our status, for tracing.
-    void debugPrintStatus(void);
+    void debugPrintStatus();
 
 private slots:
     // *** AllocateChannels Signal Handler
@@ -247,7 +247,7 @@ private slots:
      *
      * Connected to Instrument::wholeDeviceDestroyed().
      */
-    void slotLosingDevice(void);
+    void slotLosingDevice();
 
     /// Our Instrument is being destroyed.
     /**
@@ -255,73 +255,56 @@ private slots:
      *
      * Connected to Instrument::destroyed().
      */
-    void slotLosingInstrument(void);
+    void slotLosingInstrument();
 
     /// Our Instrument now has different settings so we must reinit the channel.
     /**
      * Connected to Instrument::changedChannelSetup().
      */
-    void slotInstrumentChanged(void);
+    void slotInstrumentChanged();
 
     /// Our instrument now has a fixed channel.
     /**
      * Connected to Instrument::channelBecomesFixed().
      */
-    void slotChannelBecomesFixed(void);
+    void slotChannelBecomesFixed();
 
     /// Our instrument now lacks a fixed channel.
     /**
      * Connected to Instrument::channelBecomesUnfixed().
      */
-    void slotChannelBecomesUnfixed(void);
+    void slotChannelBecomesUnfixed();
 
 private:
     // Hide copy ctor and op=
     ChannelManager(const ChannelManager &);
     ChannelManager &operator=(const ChannelManager &);
 
-    /// Connect signals from instrument.  Safe even for NULL.
+    /// The instrument this plays on.  I don't own this.
+    Instrument *m_instrument;
     void connectInstrument(Instrument *instrument);
 
-    /**************************/
-    /*** Internal functions ***/
-
-    /*** Functions about allocating. ***/
-
-    /// Get the channel allocator (AllocateChannels) from the device.
-    AllocateChannels *getAllocator(void);
-    /// Set a fixed channel.
+    /// Required start time.
     /**
-     * @see Instrument::getNaturalChannel()
+     * m_channelInterval may be larger but never smaller than m_start to m_end.
+     *
+     * @see m_end, m_channelInterval
      */
-    void setChannelIdDirectly(void);
+    RealTime m_start;
 
-    /// Connect to allocator for sigVacateChannel().
+    /// Required end time.
     /**
-     * @see AllocateChannels::sigVacateChannel(), slotVacateChannel()
+     * @see m_start, m_channelInterval
      */
-    void connectAllocator(void);
-    /// Disconnect from the allocator's signals.
-    /**
-     * We disconnect just when we don't have a valid channel given by
-     * the allocator.  Note that this doesn't necessarily correspond
-     * to m_usingAllocator's state.
-     */
-    void disconnectAllocator(void);
+    RealTime m_end;
 
-    /// Set m_usingAllocator appropriately for instrument.
-    /**
-     * It is safe to pass NULL here.
-     */
-    void setAllocationMode(Instrument *instrument);
+    RealTime m_startMargin;
 
-    /********************/
-    /*** Data members ***/
+    RealTime m_endMargin;
+
+    // *** Allocation
 
     /// The channel interval that is allocated for this segment.
-    /**
-     * rename: m_channelInterval
-     */
     ChannelInterval m_channelInterval;
 
     /// Whether we are to get a channel interval thru Device's allocator.
@@ -331,24 +314,45 @@ private:
      */
     bool m_usingAllocator;
 
-    /// Required start time.
+    /// Whether we have tried to allocate a channel interval.
     /**
-     * m_channelInterval may be larger but never smaller than m_start to m_end.
+     * Does not imply success.  This allows some flexibility without
+     * making us search again every time we insert a note.
+     */
+    bool m_triedToGetChannel;
+
+    /// Get the channel allocator from the device.
+    AllocateChannels *getAllocator();
+
+    /// Set a fixed channel.
+    /**
+     * @see Instrument::getNaturalChannel()
+     */
+    void setChannelIdDirectly();
+
+    /// Connect to allocator for sigVacateChannel().
+    /**
+     * ??? This could probably be inlined into its only caller.  But
+     *     then disconnectAllocator() would look odd by itself.
      *
-     * @see m_end, m_channelInterval
+     * @see AllocateChannels::sigVacateChannel(), slotVacateChannel()
      */
-    RealTime m_start;
-    /// Required end time.
+    void connectAllocator();
+    /// Disconnect from the allocator's signals.
     /**
-     * @see m_start, m_channelInterval
+     * We disconnect just when we don't have a valid channel given by
+     * the allocator.  Note that this doesn't necessarily correspond
+     * to m_usingAllocator's state.
      */
-    RealTime m_end;
+    void disconnectAllocator();
 
-    /// Margins required if instrument has changed.
-    RealTime m_startMargin, m_endMargin;
+    /// Set m_usingAllocator appropriately for instrument.
+    /**
+     * It is safe to pass NULL here.
+     */
+    void setAllocationMode(Instrument *instrument);
 
-    /// The instrument this plays on.  I don't own this.
-    Instrument *m_instrument;
+    // *** Channel Setup
 
     /// Whether the output channel has been set up for m_channelInterval.
     /**
@@ -362,12 +366,6 @@ private:
      * ??? rename: m_ready?
      */
     bool m_inittedForOutput;
-    /// Whether we have tried to allocate a channel interval.
-    /**
-     * Does not imply success.  This allows some flexibility without
-     * making us search again every time we insert a note.
-     */
-    bool m_triedToGetChannel;
 };
 
 }
