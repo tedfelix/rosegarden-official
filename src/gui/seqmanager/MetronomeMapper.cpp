@@ -63,8 +63,8 @@ MetronomeMapper::MetronomeMapper(RosegardenDocument *doc) :
     }
 
     // As we promised, set instrument
-    m_channelManager.setInstrument(
-            studio.getInstrumentById(m_metronome->getInstrument()));
+    m_instrument = studio.getInstrumentById(m_metronome->getInstrument());
+    m_channelManager.setInstrument(m_instrument);
     m_channelManager.setEternalInterval();
 
     Composition &composition = m_doc->getComposition();
@@ -260,8 +260,8 @@ void
 MetronomeMapper::doInsert(MappedInserterBase &inserter, MappedEvent &evt,
                           RealTime start, bool firstOutput)
 {
-    ChannelManager::InitialControllerInfo controllerInfo;
-    m_channelManager.doInsert(inserter, evt, start, &controllerInfo,
+    m_channelManager.doInsert(inserter, evt, start,
+                              m_instrument->getStaticControllers(),
                               firstOutput, NO_TRACK);
 }
 
@@ -269,8 +269,8 @@ void
 MetronomeMapper::
 makeReady(MappedInserterBase &inserter, RealTime time)
 {
-    ChannelManager::InitialControllerInfo controllerInfo;
-    m_channelManager.makeReady(inserter, time, &controllerInfo, NO_TRACK);
+    m_channelManager.makeReady(inserter, time,
+                               m_instrument->getStaticControllers(), NO_TRACK);
 }
 
 bool

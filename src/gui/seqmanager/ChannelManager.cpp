@@ -97,8 +97,9 @@ void
 ChannelManager::
 insertControllers(ChannelId channel, Instrument *instrument,
                MappedInserterBase &inserter,
-               RealTime reftime, RealTime insertTime,
-               IControllerInfo *controllerInfo, int trackId)
+               RealTime /*reftime*/, RealTime insertTime,
+               const ControllerAndPBList &controllerAndPBList,
+               int trackId)
 {
     // This is still desirable for some users.
     QSettings settings;
@@ -129,9 +130,9 @@ insertControllers(ChannelId channel, Instrument *instrument,
 
     // Get the appropriate controllers and pitch bend from the callback our
     // mapper gave us.
-    ControllerAndPBList controllerAndPBlist =
-            controllerInfo->getControllers(instrument, reftime);
-    StaticControllers &list = controllerAndPBlist.m_controllers;
+    //ControllerAndPBList controllerAndPBlist =
+    //        controllerInfo->getControllers(instrument, reftime);
+    const StaticControllers &list = controllerAndPBList.m_controllers;
 
     // For each controller
     for (StaticControllerConstIterator cIt = list.begin();
@@ -152,8 +153,8 @@ insertControllers(ChannelId channel, Instrument *instrument,
 
     // If there's a pitch bend, insert it...
     // We only do one type of pitchbend, though GM2 allows others.
-    if (controllerAndPBlist.m_havePitchbend) {
-        const int raised = controllerAndPBlist.m_pitchbend + 8192;
+    if (controllerAndPBList.m_havePitchbend) {
+        const int raised = controllerAndPBList.m_pitchbend + 8192;
         const int d1 = (raised >> 7) & 0x7f;
         const int d2 = raised & 0x7f;
 
@@ -230,7 +231,7 @@ insertProgramForInstrument(ChannelId channel, Instrument *instrument,
 void
 ChannelManager::doInsert(MappedInserterBase &inserter, MappedEvent &evt, 
                          RealTime reftime/**/,
-                         IControllerInfo *controllerInfo,
+                         const ControllerAndPBList &controllerAndPBList,
                          bool firstOutput/**/, TrackId trackId)
 {
 
@@ -250,7 +251,7 @@ ChannelManager::doInsert(MappedInserterBase &inserter, MappedEvent &evt,
     // if a track becomes unmuted, until the meta-iterator gets around
     // to initting.
     if (needsInit()) {
-        makeReady(inserter, reftime, controllerInfo, trackId);
+        makeReady(inserter, reftime, controllerAndPBList, trackId);
         // If we're still not initted, we can't do much.
         if (needsInit()) { return; }
     }
@@ -269,7 +270,7 @@ ChannelManager::doInsert(MappedInserterBase &inserter, MappedEvent &evt,
 // @author Tom Breton (Tehom) 
 bool
 ChannelManager::makeReady(MappedInserterBase &inserter, RealTime time,
-        IControllerInfo *controllerInfo, TrackId trackId)
+        const ControllerAndPBList &controllerAndPBList, TrackId trackId)
 {
     RG_DEBUG
         << "makeReady for"
@@ -298,7 +299,7 @@ ChannelManager::makeReady(MappedInserterBase &inserter, RealTime time,
     // If this instrument is in auto channels mode
     if (!m_instrument->hasFixedChannel()) {
         insertChannelSetup(inserter, time, time,
-                           controllerInfo, trackId);
+                           controllerAndPBList, trackId);
     }
     
     setInitted(true);
@@ -310,7 +311,7 @@ ChannelManager::makeReady(MappedInserterBase &inserter, RealTime time,
 void
 ChannelManager::insertChannelSetup(MappedInserterBase &inserter,
                                    RealTime reftime, RealTime insertTime,
-                                   IControllerInfo *controllerInfo,
+                                   const ControllerAndPBList &controllerAndPBList,
                                    int trackId)
 {
     RG_DEBUG << "insertChannelSetup() : " << (m_instrument ? "Got instrument" : "No instrument");
@@ -328,7 +329,7 @@ ChannelManager::insertChannelSetup(MappedInserterBase &inserter,
         insertProgramForInstrument(channel, m_instrument, inserter,
                                    insertTime, trackId);
         insertControllers(channel, m_instrument, inserter, reftime,
-                          insertTime, controllerInfo, trackId);
+                          insertTime, controllerAndPBList, trackId);
     }
 }
 

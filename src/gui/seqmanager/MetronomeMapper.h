@@ -60,6 +60,8 @@ public:
     virtual void fillBuffer();
 
 private:
+    Instrument *m_instrument;
+
     enum TickType {
         BarTick = 0,
         BeatTick = 1,

@@ -236,7 +236,6 @@ StudioControl::fillWithImmediateNote(
     //     that we did indeed change the Instrument.  Why are we doing this?
     m_channelManager.reallocate(false);
 
-    ChannelManager::InitialControllerInfo controllerInfo;
     MappedEventInserter inserter(mappedEventList);
 
     // Insert the event.
@@ -246,7 +245,7 @@ StudioControl::fillWithImmediateNote(
             inserter,
             mappedEvent,
             RealTime::zeroTime,  // refTime
-            &controllerInfo,
+            instrument->getStaticControllers(),
             true,  // firstOutput
             NO_TRACK);
 }
@@ -275,13 +274,11 @@ sendChannelSetup(Instrument *instrument, int channel)
                                                inserter,
                                                RealTime::zeroTime, -1);
 
-    ChannelManager::InitialControllerInfo controllerInfo;
-
     // Insert controllers (and pitch bend).
     ChannelManager::insertControllers(channel, instrument,
                                       inserter, RealTime::zeroTime,
                                       RealTime::zeroTime,
-                                      &controllerInfo, -1);
+                                      instrument->getStaticControllers(), -1);
 
     // Send it out.
     sendMappedEventList(mappedEventList);

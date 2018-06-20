@@ -400,8 +400,9 @@ void
 InternalSegmentMapper::
 makeReady(MappedInserterBase &inserter, RealTime time)
 {
-    m_channelManager.setInstrument(m_doc->getInstrument(m_segment));
-    m_channelManager.makeReady(inserter, time, this,
+    Instrument *instrument = m_doc->getInstrument(m_segment);
+    m_channelManager.setInstrument(instrument);
+    m_channelManager.makeReady(inserter, time, getControllers(instrument, time),
                                m_segment->getTrack());
 }
 
@@ -416,7 +417,8 @@ InternalSegmentMapper::insertChannelSetup(MappedInserterBase &inserter)
 
     m_channelManager.setInstrument(instrument);
     m_channelManager.insertChannelSetup(
-            inserter, RealTime::zeroTime, RealTime::zeroTime, this,
+            inserter, RealTime::zeroTime, RealTime::zeroTime,
+            getControllers(instrument, RealTime::zeroTime),
             m_segment->getTrack());
 }
 
@@ -424,10 +426,13 @@ void
 InternalSegmentMapper::doInsert(MappedInserterBase &inserter, MappedEvent &evt,
                                RealTime start, bool dirtyIter)
 {
-    if (dirtyIter) {
-        m_channelManager.setInstrument(m_doc->getInstrument(m_segment));
-    }
-    m_channelManager.doInsert(inserter, evt, start, this,
+    Instrument *instrument = m_doc->getInstrument(m_segment);
+
+    if (dirtyIter)
+        m_channelManager.setInstrument(instrument);
+
+    m_channelManager.doInsert(inserter, evt, start,
+                              getControllers(instrument, start),
                               dirtyIter, m_segment->getTrack());
 }
 

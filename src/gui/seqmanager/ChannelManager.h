@@ -170,7 +170,7 @@ public:
         MappedInserterBase &inserter,
         RealTime reftime, 
         RealTime insertTime,
-        IControllerInfo *controllerInfo,
+        const ControllerAndPBList &controllerAndPBList,
         int trackId);
 
     static void insertController(
@@ -191,16 +191,17 @@ public:
     /// Insert event via inserter, pre-inserting appropriate channel setup.
     void doInsert(MappedInserterBase &inserter, MappedEvent &evt,
                 RealTime reftime,
-                IControllerInfo *controllerInfo,
+                const ControllerAndPBList &controllerAndPBList,
                 bool firstOutput, TrackId trackId);
 
     bool makeReady(MappedInserterBase &inserter, RealTime time,
-            IControllerInfo *controllerInfo, TrackId trackId);
+            const ControllerAndPBList &controllerAndPBList, TrackId trackId);
 
     /// Insert appropriate MIDI channel-setup.
     void insertChannelSetup(MappedInserterBase &inserter,
                             RealTime reftime, RealTime insertTime,
-                            IControllerInfo *controllerInfo, int trackId);
+                            const ControllerAndPBList &controllerAndPBList,
+                            int trackId);
 
     void setDirty(void)  { m_inittedForOutput = false; }
 
