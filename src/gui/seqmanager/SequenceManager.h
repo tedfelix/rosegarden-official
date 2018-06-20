@@ -54,6 +54,8 @@ class MappedBufMetaIterator;
 /**
  * A layer between the UI (RosegardenMainWindow) and the sequencer
  * (RosegardenSequencer).
+ *
+ * Owns the CompositionMapper.
  */
 class ROSEGARDENPRIVATE_EXPORT SequenceManager :
         public QObject, public CompositionObserver
@@ -343,7 +345,16 @@ private slots:
     void slotScheduledCompositionMapperReset();
     
 private:
+    // ??? Get rid of this and go through RMW.
+    RosegardenDocument *m_doc;
 
+    // *** CompositionMapper
+
+    CompositionMapper *m_compositionMapper;  // owned
+    /// Reset everything.
+    void resetCompositionMapper();
+    /// Add each Segment from the Composition to the CompositionMapper.
+    void populateCompositionMapper();
     /**
      * Add Segment to CompositionMapper, RosegardenSequencer, and the
      * SegmentRefreshMap (m_segments).
@@ -361,37 +372,21 @@ private:
      */
     void segmentDeleted(Segment *);
 
-    /// ??? inline into caller.
-    void stop2();
+    // *** Other Mappers
 
-    /// Apply filtering to a MappedEventList.
-    /**
-     * Copies events that DO NOT match filter from eventsIn to
-     * eventsOut.
-     *
-     * ??? Only one caller.  Inline?
-     */
-    void applyFiltering(const MappedEventList &eventsIn,
-                        MappedEvent::MappedEventType filter,
-                        MappedEventList &eventsOut);
-
-    void resetCompositionMapper();
-    void populateCompositionMapper();
-    void resetControlBlock();
+    MetronomeMapper *m_metronomeMapper;  // owned
     void resetMetronomeMapper();
+
+    TempoSegmentMapper *m_tempoSegmentMapper;  // owned
     void resetTempoSegmentMapper();
+
+    TimeSigSegmentMapper *m_timeSigSegmentMapper;  // owned
     void resetTimeSigSegmentMapper();
+
     void checkRefreshStatus();
+
     bool shouldWarnForImpreciseTimer();
     
-    //--------------- Data members ---------------------------------
-
-    RosegardenDocument    *m_doc;
-    CompositionMapper     *m_compositionMapper;
-    MetronomeMapper       *m_metronomeMapper;
-    TempoSegmentMapper    *m_tempoSegmentMapper;
-    TimeSigSegmentMapper  *m_timeSigSegmentMapper;
-
     std::vector<Segment *> m_addedSegments;
     std::vector<Segment *> m_removedSegments;
     bool m_metronomeNeedsRefresh;

@@ -321,17 +321,6 @@ SequenceManager::stop()
     SEQMAN_DEBUG << "SequenceManager::stopping() - preparing to stop";
     //    SEQMAN_DEBUG << kdBacktrace();
 
-    // ??? Inline this.  We are the only caller.
-    stop2();
-
-    m_shownOverrunWarning = false;
-}
-
-void
-SequenceManager::stop2()
-{
-    if (!m_doc) return;
-
     // Toggle off the buttons - first record
     //
     if (m_transportStatus == RECORDING) {
@@ -392,6 +381,8 @@ SequenceManager::stop2()
     // We don't reset controllers at this point - what happens with static
     // controllers the next time we play otherwise?  [rwb]
     //resetControllers();
+
+    m_shownOverrunWarning = false;
 }
 
 void
@@ -820,29 +811,37 @@ SequenceManager::processAsynchronousMidi(const MappedEventList &mC,
         }
     }
 	
+    // send to the MIDI labels (which can only hold one event at a time)
+
+    i = mC.begin();
+    if (i != mC.end())
+        emit signalMidiInLabel(*i);
+
     // Thru filtering is done at the sequencer for the actual sound
     // output, but here we need both filtered (for OUT display) and
     // unfiltered (for insertable note callbacks) compositions, so
     // we've received the unfiltered copy and will filter here
-    MappedEventList tempMC;
-    applyFiltering(mC,
-                   MappedEvent::MappedEventType(
-                       m_doc->getStudio().getMIDIThruFilter()),
-                   tempMC);
 
-    // send to the MIDI labels (which can only hold one event at a time)
-    i = mC.begin();
-    if (i != mC.end()) {
-        emit signalMidiInLabel(*i);
-    }
+    MappedEvent::MappedEventType filter = MappedEvent::MappedEventType(
+            m_doc->getStudio().getMIDIThruFilter());
 
-    i = tempMC.begin();
-    while (i != tempMC.end()) {
-        if ((*i)->getRecordedDevice() != Device::CONTROL_DEVICE) {
-            emit signalMidiOutLabel(*i);
-            break;
-        }
-        ++i;
+    // For each event
+    for (MappedEventList::const_iterator it = mC.begin();
+         it != mC.end();
+         ++it) {
+        // Skip events destined for the "external controller" port.
+        if ((*it)->getRecordedDevice() == Device::CONTROL_DEVICE)
+            continue;
+
+        // Skip events that are filtered.
+        if (((*it)->getType() & filter) != 0)
+            continue;
+
+        // Show the event on the TransportDialog's MIDI out label.
+        emit signalMidiOutLabel(*it);
+
+        // We can only show one at a time.
+        break;
     }
 
     for (i = mC.begin(); i != mC.end(); ++i ) {
@@ -1382,20 +1381,6 @@ void SequenceManager::setTempo(const tempoT tempo)
     emit signalTempoChanged(tempo);
 }
 
-void
-SequenceManager::applyFiltering(const MappedEventList &eventsIn,
-                                MappedEvent::MappedEventType filter,
-                                MappedEventList &eventsOut)
-{
-    for (MappedEventList::const_iterator it = eventsIn.begin();
-         it != eventsIn.end();
-         ++it) {
-        // If it doesn't match the filter, copy to output.
-        if (!((*it)->getType() & filter))
-            eventsOut.insert(new MappedEvent(*it));
-    }
-}
-
 void SequenceManager::resetCompositionMapper()
 {
     SEQMAN_DEBUG << "SequenceManager::resetCompositionMapper()";
@@ -1408,7 +1393,9 @@ void SequenceManager::resetCompositionMapper()
     resetMetronomeMapper();
     resetTempoSegmentMapper();
     resetTimeSigSegmentMapper();
-    resetControlBlock();
+
+    // Reset ControlBlock.
+    ControlBlock::getInstance()->setDocument(m_doc);
 }
 
 void SequenceManager::populateCompositionMapper()
@@ -1476,13 +1463,6 @@ void SequenceManager::resetTimeSigSegmentMapper()
     m_timeSigSegmentMapper->addOwner();
     RosegardenSequencer::getInstance()->segmentAdded
         (m_timeSigSegmentMapper);
-}
-
-void SequenceManager::resetControlBlock()
-{
-    SEQMAN_DEBUG << "SequenceManager::resetControlBlockMapper()";
-    
-    ControlBlock::getInstance()->setDocument(m_doc);
 }
 
 bool SequenceManager::event(QEvent *e)
