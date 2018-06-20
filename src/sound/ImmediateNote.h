@@ -28,6 +28,13 @@ namespace Rosegarden
 
 class MappedEventList;
 
+/// Add a note and its channel setup to a MappedEventList.
+/**
+ * ImmediateNote is only used in one place: StudioControl::playPreviewNote().
+ *
+ * ??? Since this is only used in one place, inline fillWithNote() into caller
+ *     and delete this class.
+ */
 class ImmediateNote
 {
 public:
