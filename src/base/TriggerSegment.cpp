@@ -539,7 +539,7 @@ getSoundingIntervals(Segment::iterator iTrigger,
     bool wasMasked = true;
     // The time that the next forthcoming interval starts at.  Not
     // valid when wasMasked is true.
-    timeT startInterval;
+    timeT startInterval = 0;
     // Container for the intervals we collect.
     TimeIntervalVector  intervals;
 
