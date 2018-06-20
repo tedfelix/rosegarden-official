@@ -132,7 +132,7 @@ MusicXmlExportHelper::MusicXmlExportHelper(const std::string &name,
         std::vector<Segment *> trackSegments = m_staves[i].segments;
         m_staves[i].segments.clear();
         bool repeating = false;
-        Segment *repeatingSegment;
+        Segment *repeatingSegment = NULL;
         for (std::vector<Segment *>::iterator s = trackSegments.begin();
              s != trackSegments.end(); ++s) {
 
