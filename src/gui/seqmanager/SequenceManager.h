@@ -326,37 +326,43 @@ signals:
     void signalMetronomeActivated(bool checked);
 
 private slots:
+    /// For the (unused) CountdownDialog.  See m_countdownDialog.
     void slotCountdownTimerTimeout();
 
     // Activated by timer to allow a message to be reported to 
     // the user - we use this mechanism so that the user isn't
     // bombarded with dialogs in the event of lots of failures.
-    //
-    void slotAllowReport() { m_canReport = true; }
+    // See m_reportTimer.
+    //void slotAllowReport() { m_canReport = true; }
 
-    void slotFoundMountPoint(const QString&,
-                             unsigned long kBSize,
-                             unsigned long kBUsed,
-                             unsigned long kBAvail);
-
+    /// Reset Composition Mapper.
+    /**
+     * ??? This is no longer scheduled and no longer needs to be a slot.
+     *     Inline into only caller.  It's only two lines of code.
+     */
     void slotScheduledCompositionMapperReset();
     
 private:
 
-    void processAddedSegment(Segment *);
-    void processRemovedSegment(Segment *);
-    void segmentModified(Segment *);
-
-    void stop2();
-
-    /// Update the MIDI out label on the TransportDialog.
-    /*
-     * Emits signalMidiOutLabel().
-     *
-     * ??? rename: updateMIDIOutLabel()
-     * ??? Only one caller.  Inline?
+    /**
+     * Add Segment to CompositionMapper, RosegardenSequencer, and the
+     * SegmentRefreshMap (m_segments).
      */
-    void showVisuals(const MappedEventList &mC);
+    void segmentAdded(Segment *);
+    /// Inform CompositionMapper and RosegardenSequencer that a Segment has changed.
+    void segmentModified(Segment *);
+    /**
+     * Remove Segment from CompositionMapper, RosegardenSequencer, and the
+     * SegmentRefreshMap (m_segments).
+     *
+     * Incoming Segment pointer can point to unallocated memory.
+     * ??? This needs to be rectified.  We should never pass around pointers
+     *     to unallocated memory anywhere.
+     */
+    void segmentDeleted(Segment *);
+
+    /// ??? inline into caller.
+    void stop2();
 
     /// Apply filtering to a MappedEventList.
     /**
@@ -422,9 +428,6 @@ private:
     //
     QTimer                    *m_reportTimer;
     bool                       m_canReport;
-
-    bool                       m_gotDiskSpaceResult;
-    unsigned long              m_diskSpaceKBAvail;
 
     bool                       m_lastLowLatencySwitchSent;
 

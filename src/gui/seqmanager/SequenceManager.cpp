@@ -882,6 +882,10 @@ SequenceManager::processAsynchronousMidi(const MappedEventList &mC,
 //!DEVPUSH                m_doc->syncDevices();
             }
 
+            // ??? Error handling appears to start here.  Can we pluck this
+            //     out into a routine?  The indentation walls are closing in
+            //     on us...
+
             if (m_transportStatus == PLAYING ||
                 m_transportStatus == RECORDING) {
                 if ((*i)->getType() == MappedEvent::SystemFailure) {
@@ -1033,9 +1037,12 @@ SequenceManager::processAsynchronousMidi(const MappedEventList &mC,
 
                     // Turn off the report flag and set off a one-shot
                     // timer for 5 seconds.
-                    //
                     if (!m_reportTimer->isActive()) {
+                        // ??? This is never set back to true.
                         m_canReport = false;
+                        // ??? This timer isn't connected to anything.  Looks
+                        //     like it was supposed to be connected to
+                        //     slotAllowReport().
                         m_reportTimer->setSingleShot(true);
                         m_reportTimer->start(5000);
                     }
@@ -1280,13 +1287,12 @@ SequenceManager::preparePlayback()
 void
 SequenceManager::resetMidiNetwork()
 {
-    SEQMAN_DEBUG << "SequenceManager::resetMidiNetwork - resetting";
     MappedEventList mC;
 
-    // Should do all Midi Instrument - not just guess like this is doing
-    // currently.
+    // ??? This should send resets on all MIDI channels on all MIDI
+    //     Device's.  As it is now, it only does the first Device.
 
-    for (unsigned int i = 0; i < 16; i++) {
+    for (unsigned int i = 0; i < 16; ++i) {
         MappedEvent *mE =
             new MappedEvent(MidiInstrumentBase + i,
                             MappedEvent::MidiController,
@@ -1294,8 +1300,13 @@ SequenceManager::resetMidiNetwork()
                             0);
 
         mC.insert(mE);
+
+        // Display the first one on the TransportDialog.
+        if (i == 0)
+            emit signalMidiOutLabel(mE);
     }
-    showVisuals(mC);
+
+    // Send it out.
     StudioControl::sendMappedEventList(mC);
 }
 
@@ -1372,17 +1383,6 @@ void SequenceManager::setTempo(const tempoT tempo)
 }
 
 void
-SequenceManager::showVisuals(const MappedEventList &mC)
-{
-    MappedEventList::const_iterator it = mC.begin();
-    if (it != mC.end()) {
-        // ??? Is this only sending the first?!  Then back the parameter
-        //     list off to just a MappedEvent *.
-        emit signalMidiOutLabel(*it);
-    }
-}
-
-void
 SequenceManager::applyFiltering(const MappedEventList &eventsIn,
                                 MappedEvent::MappedEventType filter,
                                 MappedEventList &eventsOut)
@@ -1418,7 +1418,7 @@ void SequenceManager::populateCompositionMapper()
     for (Composition::iterator i = comp.begin(); i != comp.end(); ++i) {
         SEQMAN_DEBUG << "Adding segment with rid "
                      << (*i)->getRuntimeId() << endl;
-        processAddedSegment(*i);
+        segmentAdded(*i);
     }
 
     for (Composition::triggersegmentcontaineriterator i =
@@ -1556,7 +1556,7 @@ void SequenceManager::checkRefreshStatus()
 
     // Check removed segments first
     for (i = m_removedSegments.begin(); i != m_removedSegments.end(); ++i) {
-        processRemovedSegment(*i);
+        segmentDeleted(*i);
     }
     m_removedSegments.clear();
 
@@ -1574,7 +1574,7 @@ void SequenceManager::checkRefreshStatus()
 
     // then added ones
     for (i = m_addedSegments.begin(); i != m_addedSegments.end(); ++i) {
-        processAddedSegment(*i);
+        segmentAdded(*i);
     }
     m_addedSegments.clear();
 }
@@ -1680,9 +1680,9 @@ void SequenceManager::segmentInstrumentChanged(Segment *s)
     segmentModified(s);
 }
 
-void SequenceManager::processAddedSegment(Segment* s)
+void SequenceManager::segmentAdded(Segment* s)
 {
-    SEQMAN_DEBUG << "SequenceManager::processAddedSegment(" << s 
+    SEQMAN_DEBUG << "SequenceManager::segmentAdded(" << s
                  << ")" << endl;
     m_compositionMapper->segmentAdded(s);
 
@@ -1694,14 +1694,19 @@ void SequenceManager::processAddedSegment(Segment* s)
     m_segments.insert(SegmentRefreshMap::value_type(s, id));
 }
 
-void SequenceManager::processRemovedSegment(Segment* s)
+void SequenceManager::segmentDeleted(Segment* s)
 {
-    SEQMAN_DEBUG << "SequenceManager::processRemovedSegment()";
+    SEQMAN_DEBUG << "SequenceManager::segmentDeleted()";
     // !!! WARNING !!!
     // The "s" segment pointer that is coming in to this routine has already
     // been deleted.  This is a POINTER TO DELETED MEMORY.  It cannot be
     // dereferenced in any way.  Each of the following lines of code will be
     // explained to make it clear that the pointer is not being dereferenced.
+    // ??? This needs to be fixed.  Passing around pointers that point to
+    //     nowhere is just asking for trouble.  E.g. what if the same memory
+    //     address is allocated to a new Segment, that Segment is added, then
+    //     this routine is called for the old Segment?  We remove the
+    //     new Segment.
 
     {
         // getMappedEventBuffer() uses the segment pointer value as an
@@ -1967,18 +1972,9 @@ SequenceManager::slotCountdownTimerTimeout()
 }
 
 void
-SequenceManager::slotFoundMountPoint(const QString&,
-                                     unsigned long /*kBSize*/,
-                                     unsigned long /*kBUsed*/,
-                                     unsigned long kBAvail)
-{
-    m_gotDiskSpaceResult = true;
-    m_diskSpaceKBAvail = kBAvail;
-}
-
-void
 SequenceManager::slotScheduledCompositionMapperReset()
 {
+    // ??? Inline into only caller.
     resetCompositionMapper();
     populateCompositionMapper();
 }
