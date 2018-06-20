@@ -178,7 +178,7 @@ public:
     virtual void doInsert(MappedInserterBase &inserter, MappedEvent &evt,
                           RealTime refTime, bool firstOutput);
 
-    // Return whether the event would even sound.  
+    /// Return whether the event would even sound.
     /**
      * For instance, it might be on a muted track and shouldn't be
      * played, or it might have already ended by startTime.  The exact
@@ -186,7 +186,7 @@ public:
      */
     virtual bool shouldPlay(MappedEvent *evt, RealTime startTime)=0;
 
-    // Make the channel, if any, ready to be played on.
+    /// Make the channel, if any, ready to be played on.
     /**
      * InternalSegmentMapper and MetronomeMapper override this to bring
      * ChannelManager into the picture.
@@ -210,6 +210,8 @@ public:
      *   - SequenceManager::resetMetronomeMapper()
      *   - SequenceManager::resetTempoSegmentMapper()
      *   - SequenceManager::resetTimeSigSegmentMapper()
+     *
+     * ??? QSharedPointer would be more convenient and less code.
      *
      * @see removeOwner()
      */
@@ -363,20 +365,18 @@ public:
          */
         bool getActive() const  { return m_active; }
 
+        /// Whether makeReady() needs to be called.
         /**
-         * Set to true by doInsert().  Set to false by
-         * MappedBufMetaIterator::moveIteratorToTime() and
-         * MappedBufMetaIterator::resetIteratorForSegment().
-         *
-         * @see isReady()
+         * @see isReady() and makeReady()
          */
         void setReady(bool value)  { m_ready = value; };
 
-        /// Whether we are ready with regard to performance time.
+        /// Does makeReady() need to be called?
         /**
-         * Called by MappedEventBuffer::iterator::doInsert().
+         * MappedBufMetaIterator::fetchEventsNoncompeting() is the only
+         * real user.  There is another caller, but the result is ignored.
          *
-         * @see m_ready
+         * @see setReady() and makeReady()
          */
         bool isReady() const  { return m_ready; }
 
@@ -389,6 +389,14 @@ public:
          */
         void doInsert(MappedInserterBase &inserter, MappedEvent &evt);
 
+        /// Prepares an Instrument for playback.
+        /**
+         * Only InternalSegmentMapper and MetronomeMapper handle this.
+         * They send out a channel setup (BS/PC/CCs) when asked to make
+         * an Instrument ready.
+         *
+         * @see setReady() and isReady()
+         */
         void makeReady(MappedInserterBase &inserter, RealTime time) {
             m_s->makeReady(inserter, time);
             setReady(true);
