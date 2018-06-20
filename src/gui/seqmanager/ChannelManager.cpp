@@ -19,9 +19,9 @@
 #define RG_NO_DEBUG_PRINT 1
 
 #include "ChannelManager.h"
+
 #include "base/AllocateChannels.h"
 #include "base/Instrument.h"
-#include "base/MidiTypes.h"
 #include "misc/Debug.h"
 #include "misc/ConfigGroups.h"
 #include "sound/MappedEvent.h"
@@ -45,7 +45,7 @@ ChannelManager(Instrument *instrument) :
     m_channelInterval(),
     m_usingAllocator(false),
     m_triedToGetChannel(false),
-    m_inittedForOutput(false)
+    m_ready(false)
 {
     // Safe even for NULL.
     connectInstrument(instrument);
@@ -249,10 +249,10 @@ void ChannelManager::insertEvent(
     // We got here without being initted.  This might happen briefly
     // if a track becomes unmuted, until the meta-iterator gets around
     // to initting.
-    if (!m_inittedForOutput) {
+    if (!m_ready) {
         makeReady(trackId, reftime, controllerAndPBList, inserter);
         // If we're still not initted, we can't do much.
-        if (!m_inittedForOutput)
+        if (!m_ready)
             return;
     }
     // !!! These checks may not be needed now, could become assertions.
@@ -304,7 +304,7 @@ bool ChannelManager::makeReady(
                 inserter);
     }
     
-    m_inittedForOutput = true;
+    m_ready = true;
     return true;
 }
 
@@ -493,7 +493,7 @@ setInstrument(Instrument *instrument)
         }
         allocateChannelInterval(true);
         connectInstrument(instrument);
-        m_inittedForOutput = false;
+        m_ready = false;
     }
 }
 
@@ -505,7 +505,7 @@ debugPrintStatus(void)
 {
     RG_DEBUG
         << "ChannelManager "
-        << (m_inittedForOutput ? "doesn't need" : "needs")
+        << (m_ready ? "doesn't need" : "needs")
         << "initting"
         << endl;
 }
@@ -570,7 +570,7 @@ slotChannelBecomesFixed(void)
 
     // Set the new channel.
     setChannelIdDirectly();
-    m_inittedForOutput = false;
+    m_ready = false;
 }
 
 // Our instrument's channel is now unfixed.
@@ -593,7 +593,7 @@ slotChannelBecomesUnfixed(void)
     m_channelInterval.clearChannelId();
     // Get a new one.
     allocateChannelInterval(false);
-    m_inittedForOutput = false;
+    m_ready = false;
 }
 
 // Our instrument has changed how to set up the channel.
@@ -615,7 +615,7 @@ slotInstrumentChanged(void)
     }
 
     // The above code won't always set dirty flag, so set it now.
-    m_inittedForOutput = false;
+    m_ready = false;
 }
 
 

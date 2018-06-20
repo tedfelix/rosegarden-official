@@ -19,7 +19,7 @@
 #define RG_CHANNELMANAGER_H
 
 #include "base/ChannelInterval.h"
-#include "base/Instrument.h"
+#include "base/Instrument.h"  // For StaticControllers
 #include "base/RealTime.h"
 #include "base/Track.h"  // For TrackId
 
@@ -32,10 +32,8 @@ class AllocateChannels;
 class Instrument;
 class MappedEvent;
 class MappedInserterBase;
-class Segment;
-class RosegardenDocument;
 
-/// Set of controllers and pitchbends
+/// List of controllers and a pitchbend.
 /**
  * @author Tom Breton (Tehom)
  */
@@ -53,14 +51,14 @@ struct ControllerAndPBList
     { }
 
     StaticControllers m_controllers;
-    bool              m_havePitchbend;
-    int               m_pitchbend;
+    bool m_havePitchbend;
+    int m_pitchbend;
 };
 
 /// Owns and services a ChannelInterval for an Instrument.
 /**
  * ChannelManager's purpose is to own and service a ChannelInterval
- * (ChannelManager::m_channelInterval), relative to an Instrument that wants to
+ * (ChannelManager::m_channelInterval) relative to an Instrument that wants to
  * play on it.
  *
  * There is one ChannelManager for each MIDI Segment.  It is owned by the
@@ -221,7 +219,7 @@ public:
             MappedInserterBase &inserter);
 
     /// Indicate that a channel setup needs to go out.
-    void setDirty()  { m_inittedForOutput = false; }
+    void setDirty()  { m_ready = false; }
 
     /// Print our status, for tracing.
     void debugPrintStatus();
@@ -286,31 +284,46 @@ private:
 
     /// Required start time.
     /**
+     * This is usually the start time of the first event in the Segment minus
+     * a little to leave time for the Program Change to be sent out and
+     * responded to.
+     *
      * m_channelInterval may be larger but never smaller than m_start to m_end.
      *
-     * @see m_end, m_channelInterval
+     * @see setRequiredInterval(), m_end, m_channelInterval
      */
     RealTime m_start;
 
     /// Required end time.
     /**
-     * @see m_start, m_channelInterval
+     * Oddly, InternalSegmentMapper::fillBuffer() sets this to the start time
+     * of the last event.  Then it specifies an additional margin of one
+     * second.  The note duration/note-off is ignored.
+     *
+     * @see setRequiredInterval(), m_start, m_channelInterval
      */
     RealTime m_end;
 
+    /// Additional time required at the beginning.
     RealTime m_startMargin;
 
+    /// Additional time required at the end.
     RealTime m_endMargin;
 
     // *** Allocation
 
     /// The channel interval that is allocated for this segment.
+    /**
+     * @see allocateChannelInterval()
+     */
     ChannelInterval m_channelInterval;
 
     /// Whether we are to get a channel interval thru Device's allocator.
     /**
      * The alternative is to get one as a fixed channel.  Can be true
-     * even when we don't currently have a valid a channel.
+     * even when we don't currently have a valid channel.
+     *
+     * @see setAllocationMode()
      */
     bool m_usingAllocator;
 
@@ -318,10 +331,12 @@ private:
     /**
      * Does not imply success.  This allows some flexibility without
      * making us search again every time we insert a note.
+     *
+     * @see makeReady()
      */
     bool m_triedToGetChannel;
 
-    /// Get the channel allocator from the device.
+    /// Get the channel allocator from the Instrument's Device.
     AllocateChannels *getAllocator();
 
     /// Set a fixed channel.
@@ -338,6 +353,7 @@ private:
      * @see AllocateChannels::sigVacateChannel(), slotVacateChannel()
      */
     void connectAllocator();
+
     /// Disconnect from the allocator's signals.
     /**
      * We disconnect just when we don't have a valid channel given by
@@ -362,12 +378,11 @@ private:
      * Here we only deal with having the right channel.  doInsert()'s
      * firstOutput argument tells us if we need setup for some other
      * reason such as jumping in time.
-     *
-     * ??? rename: m_ready?
      */
-    bool m_inittedForOutput;
+    bool m_ready;
 };
+
 
 }
 
-#endif /* ifndef RG_CHANNELMANAGER_H */
+#endif
