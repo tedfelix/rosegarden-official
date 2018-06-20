@@ -510,17 +510,18 @@ JackDriver::createFaderOutputs(int audioPairs, int synthPairs)
 
     for (int i = pairsNow; i < pairs; ++i) {
 
-        char namebuffer[22];
-        jack_port_t *port;
+        QString portName;
 
         if (i < audioPairs) {
-            snprintf(namebuffer, 21, "audio fader %d out L", i + 1);
+            portName = QString("audio fader %1 out L").arg(i+1);
         } else {
-            snprintf(namebuffer, 21, "synth fader %d out L", i - audioPairs + 1);
+            portName = QString("synth fader %1 out L").arg(i - audioPairs + 1);
         }
 
+        jack_port_t *port;
+
         port = jack_port_register(m_client,
-                                  namebuffer,
+                                  portName.toLocal8Bit().constData(),
                                   JACK_DEFAULT_AUDIO_TYPE,
                                   JackPortIsOutput,
                                   0);
@@ -529,13 +530,13 @@ JackDriver::createFaderOutputs(int audioPairs, int synthPairs)
         m_outputInstruments.push_back(port);
 
         if (i < audioPairs) {
-            snprintf(namebuffer, 21, "audio fader %d out R", i + 1);
+            portName = QString("audio fader %1 out R").arg(i+1);
         } else {
-            snprintf(namebuffer, 21, "synth fader %d out R", i - audioPairs + 1);
+            portName = QString("synth fader %1 out R").arg(i - audioPairs + 1);
         }
 
         port = jack_port_register(m_client,
-                                  namebuffer,
+                                  portName.toLocal8Bit().constData(),
                                   JACK_DEFAULT_AUDIO_TYPE,
                                   JackPortIsOutput,
                                   0);
