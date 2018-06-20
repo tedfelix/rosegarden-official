@@ -183,10 +183,11 @@ SequenceManager::setTransportStatus(const TransportStatus &status)
     m_transportStatus = status;
 }
 
-bool
+void
 SequenceManager::play()
 {
-    if (!m_doc) return false;
+    if (!m_doc)
+        return;
 
     Composition &comp = m_doc->getComposition();
 
@@ -194,8 +195,8 @@ SequenceManager::play()
     //
     if (m_transportStatus == PLAYING ||
         m_transportStatus == RECORDING) {
-        stopping();
-        return true;
+        stop();
+        return;
     }
 
     // This check may throw an exception
@@ -217,9 +218,9 @@ SequenceManager::play()
     //
     emit signalPlaying(true);
 
-    //!!! disable the record button, because recording while playing is horribly
-    // broken, and disabling it is less complicated than fixing it
-    // see #1223025 - DMM
+    // !!! disable the record button, because recording while playing is horribly
+    //     broken, and disabling it is less complicated than fixing it
+    //     see #1223025 - DMM
     //    SEQMAN_DEBUG << "SequenceManager::play() - disabling record button, as we are playing\n";
     //    m_transport->RecordButton()->setEnabled(false);
 
@@ -259,8 +260,8 @@ SequenceManager::play()
     // that these options are more easily set to reasonable defaults
     // here than left to the user.  Mostly.
 
-    //!!! need some cleverness somewhere to ensure the read-ahead
-    //is larger than the JACK period size
+    // !!! need some cleverness somewhere to ensure the read-ahead
+    //     is larger than the JACK period size
 
     if (lowLat) {
         readAhead  = RealTime(0, 160000000);
@@ -288,12 +289,10 @@ SequenceManager::play()
         std::cerr << "ERROR: SequenceManager::play(): Failed to start playback!" << std::endl;
     }
     settings.endGroup();
-
-    return false;
 }
 
 void
-SequenceManager::stopping()
+SequenceManager::stop()
 {
     if (!m_doc) return;
 
@@ -306,7 +305,7 @@ SequenceManager::stopping()
     // race condition (we use setPointerPosition() during stop()).
     //
     if (m_transportStatus == STOPPED) {
-        /*!!!
+        /* !!!
                 if (m_doc->getComposition().isLooping())
                     m_doc->slotSetPointerPosition(m_doc->getComposition().getLoopStart());
                 else
@@ -329,13 +328,14 @@ SequenceManager::stopping()
     SEQMAN_DEBUG << "SequenceManager::stopping() - preparing to stop";
     //    SEQMAN_DEBUG << kdBacktrace();
 
-    stop();
+    // ??? Inline this.  We are the only caller.
+    stop2();
 
     m_shownOverrunWarning = false;
 }
 
 void
-SequenceManager::stop()
+SequenceManager::stop2()
 {
     if (!m_doc) return;
 
@@ -461,15 +461,7 @@ SequenceManager::fastforward()
 }
 
 void
-SequenceManager::notifySequencerStatus(TransportStatus status)
-{
-    // for the moment we don't do anything fancy
-    m_transportStatus = status;
-
-}
-
-void
-SequenceManager::sendSequencerJump(const RealTime &time)
+SequenceManager::jumpTo(const RealTime &time)
 {
     RosegardenSequencer::getInstance()->jumpTo(time);
 }
@@ -714,10 +706,10 @@ punchin:
         // that these options are more easily set to reasonable defaults
         // here than left to the user.  Mostly.
 
-        //!!! Duplicates code in play()
+        // !!! Duplicates code in play()
 
-        //!!! need some cleverness somewhere to ensure the read-ahead
-        //is larger than the JACK period size
+        // !!! need some cleverness somewhere to ensure the read-ahead
+        //     is larger than the JACK period size
 
         if (lowLat) {
             readAhead  = RealTime(0, 160000000);
@@ -907,7 +899,7 @@ SequenceManager::processAsynchronousMidi(const MappedEventList &mC,
                         // Something horrible has happened to JACK or we got
                         // bumped out of the graph.  Either way stop playback.
                         //
-                        stopping();
+                        stop();
 
                     } else if ((*i)->getData1() == MappedEvent::FailureJackRestartFailed) {
 
@@ -926,7 +918,7 @@ SequenceManager::processAsynchronousMidi(const MappedEventList &mC,
 #define REPORT_CPU_OVERLOAD 1
 #ifdef REPORT_CPU_OVERLOAD
 
-                        stopping();
+                        stop();
 
                         QMessageBox::critical(
                             dynamic_cast<QWidget*>(m_doc->parent())->parentWidget(), "",
@@ -1066,10 +1058,10 @@ SequenceManager::processAsynchronousMidi(const MappedEventList &mC,
                             tr("The JACK Audio subsystem has failed or it has stopped Rosegarden from processing audio.\nPlease restart Rosegarden to continue working with audio.\nQuitting other running applications may improve Rosegarden's performance."));
 
                     } else if ((*i)->getData1() == MappedEvent::FailureJackRestart) {
-                        //!!! Does this attempt to restart the "audio service"
-                        // EVER work?  I don't think I've ever seen that work.
-                        // When this is gone, it's gone, and time to restart.
-                        // But let's not change the translated message.
+                        // !!! Does this attempt to restart the "audio service"
+                        //     EVER work?  I don't think I've ever seen that work.
+                        //     When this is gone, it's gone, and time to restart.
+                        //     But let's not change the translated message.
                         QMessageBox::critical(
                             RosegardenMainWindow::self(), "",
                             tr("The JACK Audio subsystem has stopped Rosegarden from processing audio, probably because of a processing overload.\nAn attempt to restart the audio service has been made, but some problems may remain.\nQuitting other running applications may improve Rosegarden's performance."));
@@ -1168,8 +1160,8 @@ SequenceManager::fastForwardToEnd()
 void
 SequenceManager::setLoop(const timeT &lhs, const timeT &rhs)
 {
-    //!!!  So who disabled the following, why?  Are loops with JACK transport
-    // sync no longer hideously broken?
+    // !!!  So who disabled the following, why?  Are loops with JACK transport
+    //      sync no longer hideously broken?
     //
     // do not set a loop if JACK transport sync is enabled, because this is
     // completely broken, and apparently broken due to a limitation of JACK
@@ -1180,9 +1172,9 @@ SequenceManager::setLoop(const timeT &lhs, const timeT &rhs)
 
     //    if ( qStrToBool( settings.value("jacktransport", "false" ) ) )
     //    {
-    //	//!!! message box should go here to inform user of why the loop was
-    //	// not set, but I can't add it at the moment due to to the pre-release
-    //	// freeze - DMM
+    //	// !!! message box should go here to inform user of why the loop was
+    //	//     not set, but I can't add it at the moment due to to the pre-release
+    //	//     freeze - DMM
     //    settings.endGroup();
     //	return;
     //    }
@@ -1325,7 +1317,7 @@ SequenceManager::panic()
 {
     SEQMAN_DEBUG << "panic button";
     
-    stopping();
+    stop();
 
     MappedEvent mE(MidiInstrumentBase, MappedEvent::Panic, 0, 0);
     StudioControl::sendMappedEvent(mE);

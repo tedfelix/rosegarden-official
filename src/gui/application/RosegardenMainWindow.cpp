@@ -4710,7 +4710,7 @@ RosegardenMainWindow::slotSetPointerPosition(timeT t)
         // because we might be a transport master of some kind
         try {
             if (!m_originatingJump) {
-                m_seqManager->sendSequencerJump(comp.getElapsedRealTime(t));
+                m_seqManager->jumpTo(comp.getElapsedRealTime(t));
             }
         } catch (QString s) {
             QMessageBox::critical(this, tr("Rosegarden"), s);
@@ -5625,7 +5625,7 @@ RosegardenMainWindow::slotStop()
 
     try {
         if (m_seqManager)
-            m_seqManager->stopping();
+            m_seqManager->stop();
     } catch (Exception e) {
         QMessageBox::critical(0, tr("Rosegarden"), strtoqstr(e.getMessage()));
     }

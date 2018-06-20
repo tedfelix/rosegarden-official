@@ -51,6 +51,10 @@ class AudioManagerDialog;
 class MappedBufMetaIterator;
 
 
+/**
+ * A layer between the UI (RosegardenMainWindow) and the sequencer
+ * (RosegardenSequencer).
+ */
 class ROSEGARDENPRIVATE_EXPORT SequenceManager :
         public QObject, public CompositionObserver
 {
@@ -76,22 +80,22 @@ public:
     // Transport controls
     //
 
-    /// returns true if the call actually paused playback
-    bool play();
-
-    // We don't call stop() directly - using stopping() and then
-    // call stop().
-    //
+    /// Start or pause playback.
+    void play();
+    /// Stop playback.
     void stop();
-
-    void stopping();
+    /// Start recording.
     void record(bool countIn);
 
-    void setLoop(const timeT &lhs, const timeT &rhs);
-    void notifySequencerStatus(TransportStatus status);
-    void sendSequencerJump(const RealTime &time);
+    void jumpTo(const RealTime &time);
 
-    // Events coming in
+    void setLoop(const timeT &lhs, const timeT &rhs);
+
+    /// Handle incoming MappedEvent's.
+    /**
+     * This handles both incoming events when recording and incoming events
+     * that are unrelated to recording.
+     */
     void processAsynchronousMidi(const MappedEventList &mC,
                                  AudioManagerDialog *aMD);
 
@@ -221,7 +225,7 @@ signals:
     void signalRecording(bool checked);
     void signalMetronomeActivated(bool checked);
 
-protected slots:
+private slots:
     void slotCountdownTimerTimeout();
 
     // Activated by timer to allow a message to be reported to 
@@ -237,7 +241,9 @@ protected slots:
 
     void slotScheduledCompositionMapperReset();
     
-protected:
+private:
+
+    void stop2();
 
     void resetCompositionMapper();
     void populateCompositionMapper();
