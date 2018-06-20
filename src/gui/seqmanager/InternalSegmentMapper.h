@@ -64,7 +64,8 @@ private:
     friend class ControllerSearch;
     friend class ControllerContextMap;
 
-    class Callbacks : public ChannelManager::Callbacks
+    // ??? rename: ControllerInfo
+    class Callbacks : public ChannelManager::IControllerInfo
         {
         public:
     

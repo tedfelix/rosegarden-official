@@ -95,37 +95,52 @@ class ChannelManager : public QObject
     Q_OBJECT
 
 public:
-    /// %Controller and pitchbend info callback interface.
+    /// %Controller and pitchbend info interface.
     /**
-     * Base class to provide covariance with MIDI-type mappers.
+     * InternalSegmentMapper::Callbacks and ChannelManager::InitialControllerInfo
+     * subclass this.
      *
-     * InternalSegmentMapper and SimpleCallbacks subclass this.
+     * Used by clients of the insertion functions to provide control
+     * change info by callback.
+     *
+     * ??? Can we get rid of this and instead of working inside-out, simply
+     *     compute the ControllerAndPBList and send it into the insert
+     *     routine?
      *
      * @author Tom Breton (Tehom)
      */
-    class Callbacks
+    class IControllerInfo
     {
     public:
-        virtual ~Callbacks();
+        virtual ~IControllerInfo()  { }
         virtual ControllerAndPBList getControllers(
-            Instrument *instrument, RealTime start) = 0;
+                Instrument *instrument, RealTime start) = 0;
     };
 
-    /// %Controller and pitchbend callback that obtains info from the Instrument.
+    /// IControllerInfo implementation that obtains CCs from the Instrument.
     /**
-     * This is a simple implementation of the controller and pitchbend
-     * callback functor (Callbacks) that gets controller and
-     * pitchbend info from the Instrument object.
+     * This is a simple implementation of the IControllerInfo interface
+     * that gets controller and pitchbend info from the Instrument object.
+     * This is the initial control change info that appears on the
+     * MIDIInstrumentParameterPanel.
      */
-    class SimpleCallbacks : public Callbacks
+    class InitialControllerInfo : public IControllerInfo
     {
     public:
         virtual ControllerAndPBList getControllers(
-            Instrument *instrument, RealTime start);
+                Instrument *instrument, RealTime /*start*/)
+        {
+            return instrument->getStaticControllers();
+        }
     };
 
     ChannelManager(Instrument *instrument);
     virtual ~ChannelManager(void)  { freeChannelInterval(); }
+
+    /// Set the instrument we are playing on, releasing any old one.
+    void setInstrument(Instrument *instrument);
+    /// Get the instrument we are playing on.  Can return NULL.
+    Instrument *getInstrument(void) const  { return m_instrument; }
 
     /// Send program control for instrument on channel.
     /**
@@ -155,7 +170,7 @@ public:
         MappedInserterBase &inserter,
         RealTime reftime, 
         RealTime insertTime,
-        Callbacks *callbacks, 
+        IControllerInfo *controllerInfo,
         int trackId);
 
     static void insertController(
@@ -176,23 +191,16 @@ public:
     /// Insert event via inserter, pre-inserting appropriate channel setup.
     void doInsert(MappedInserterBase &inserter, MappedEvent &evt,
                 RealTime reftime,
-                Callbacks *callbacks,
+                IControllerInfo *controllerInfo,
                 bool firstOutput, TrackId trackId);
 
     bool makeReady(MappedInserterBase &inserter, RealTime time,
-                   Callbacks *callbacks, TrackId trackId);
+            IControllerInfo *controllerInfo, TrackId trackId);
 
     /// Insert appropriate MIDI channel-setup.
     void insertChannelSetup(MappedInserterBase &inserter,
                             RealTime reftime, RealTime insertTime,
-                            Callbacks *callbacks, int trackId);
-
-    /// Set the instrument we are playing on, releasing any old one.
-    void setInstrument(Instrument *instrument);
-
-    /// Get the instrument we are playing on.  Can return NULL.
-    Instrument *getInstrument(void) const
-    { return m_instrument; }
+                            IControllerInfo *controllerInfo, int trackId);
 
     void setDirty(void)  { m_inittedForOutput = false; }
 

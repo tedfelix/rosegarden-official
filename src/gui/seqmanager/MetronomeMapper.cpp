@@ -260,8 +260,8 @@ void
 MetronomeMapper::doInsert(MappedInserterBase &inserter, MappedEvent &evt,
                           RealTime start, bool firstOutput)
 {
-    ChannelManager::SimpleCallbacks callbacks;
-    m_channelManager.doInsert(inserter, evt, start, &callbacks,
+    ChannelManager::InitialControllerInfo controllerInfo;
+    m_channelManager.doInsert(inserter, evt, start, &controllerInfo,
                               firstOutput, NO_TRACK);
 }
 
@@ -269,8 +269,8 @@ void
 MetronomeMapper::
 makeReady(MappedInserterBase &inserter, RealTime time)
 {
-    ChannelManager::SimpleCallbacks callbacks;
-    m_channelManager.makeReady(inserter, time, &callbacks, NO_TRACK);
+    ChannelManager::InitialControllerInfo controllerInfo;
+    m_channelManager.makeReady(inserter, time, &controllerInfo, NO_TRACK);
 }
 
 bool

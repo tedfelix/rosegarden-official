@@ -98,7 +98,7 @@ ChannelManager::
 insertControllers(ChannelId channel, Instrument *instrument,
                MappedInserterBase &inserter,
                RealTime reftime, RealTime insertTime,
-               Callbacks *callbacks, int trackId)
+               IControllerInfo *controllerInfo, int trackId)
 {
     // This is still desirable for some users.
     QSettings settings;
@@ -130,7 +130,7 @@ insertControllers(ChannelId channel, Instrument *instrument,
     // Get the appropriate controllers and pitch bend from the callback our
     // mapper gave us.
     ControllerAndPBList controllerAndPBlist =
-        callbacks->getControllers(instrument, reftime);
+            controllerInfo->getControllers(instrument, reftime);
     StaticControllers &list = controllerAndPBlist.m_controllers;
 
     // For each controller
@@ -230,7 +230,7 @@ insertProgramForInstrument(ChannelId channel, Instrument *instrument,
 void
 ChannelManager::doInsert(MappedInserterBase &inserter, MappedEvent &evt, 
                          RealTime reftime/**/,
-                         Callbacks *callbacks,
+                         IControllerInfo *controllerInfo,
                          bool firstOutput/**/, TrackId trackId)
 {
 
@@ -250,7 +250,7 @@ ChannelManager::doInsert(MappedInserterBase &inserter, MappedEvent &evt,
     // if a track becomes unmuted, until the meta-iterator gets around
     // to initting.
     if (needsInit()) {
-        makeReady(inserter, reftime, callbacks, trackId);
+        makeReady(inserter, reftime, controllerInfo, trackId);
         // If we're still not initted, we can't do much.
         if (needsInit()) { return; }
     }
@@ -269,7 +269,7 @@ ChannelManager::doInsert(MappedInserterBase &inserter, MappedEvent &evt,
 // @author Tom Breton (Tehom) 
 bool
 ChannelManager::makeReady(MappedInserterBase &inserter, RealTime time,
-                          Callbacks *callbacks, TrackId trackId)
+        IControllerInfo *controllerInfo, TrackId trackId)
 {
     RG_DEBUG
         << "makeReady for"
@@ -298,7 +298,7 @@ ChannelManager::makeReady(MappedInserterBase &inserter, RealTime time,
     // If this instrument is in auto channels mode
     if (!m_instrument->hasFixedChannel()) {
         insertChannelSetup(inserter, time, time,
-                           callbacks, trackId);
+                           controllerInfo, trackId);
     }
     
     setInitted(true);
@@ -310,7 +310,7 @@ ChannelManager::makeReady(MappedInserterBase &inserter, RealTime time,
 void
 ChannelManager::insertChannelSetup(MappedInserterBase &inserter,
                                    RealTime reftime, RealTime insertTime,
-                                   Callbacks *callbacks,
+                                   IControllerInfo *controllerInfo,
                                    int trackId)
 {
     RG_DEBUG << "insertChannelSetup() : " << (m_instrument ? "Got instrument" : "No instrument");
@@ -328,7 +328,7 @@ ChannelManager::insertChannelSetup(MappedInserterBase &inserter,
         insertProgramForInstrument(channel, m_instrument, inserter,
                                    insertTime, trackId);
         insertControllers(channel, m_instrument, inserter, reftime,
-                          insertTime, callbacks, trackId);
+                          insertTime, controllerInfo, trackId);
     }
 }
 
@@ -623,18 +623,6 @@ slotInstrumentChanged(void)
     setDirty();
 }
 
-/*** ChannelManager::SimpleCallbacks ***/
-
-ControllerAndPBList
-ChannelManager::SimpleCallbacks::
-getControllers(Instrument *instrument, RealTime /*start*/)
-{
-    return ControllerAndPBList(instrument->getStaticControllers());
-}
-
-ChannelManager::Callbacks::~Callbacks()
-{
-}
 
 }
 
