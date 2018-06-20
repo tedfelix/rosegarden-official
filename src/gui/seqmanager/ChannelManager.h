@@ -62,7 +62,7 @@ struct ControllerAndPBList
  * ChannelManager's purpose is to own and service a channel interval
  * (ChannelManager::m_channel), relative to an instrument that wants to
  * play on it.  It is owned by some note-producing source:
- * InternalSegmentMapper, MetronomeMapper, or ImmediateNote (for preview
+ * InternalSegmentMapper, MetronomeMapper, or StudioControl (for preview
  * notes etc).
  *
  * Special cases it deals with:

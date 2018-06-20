@@ -519,7 +519,6 @@ set(rg_CPPS
   sound/DSSIPluginInstance.cpp
   sound/MidiEvent.cpp
   sound/SoundFile.cpp
-  sound/ImmediateNote.cpp
   sound/SoundDriverFactory.cpp
   sound/audiostream/AudioReadStream.cpp
   sound/audiostream/WavFileWriteStream.cpp

@@ -18,9 +18,11 @@
 #ifndef RG_STUDIOCONTROL_H
 #define RG_STUDIOCONTROL_H
 
+#include "gui/seqmanager/ChannelManager.h"
 #include "base/MidiProgram.h"
 #include "sound/MappedCommon.h"
 #include "sound/MappedStudio.h"
+#include "base/RealTime.h"
 
 #include <QMutex>
 #include <QString>
@@ -30,12 +32,10 @@ namespace Rosegarden
 {
 
 
-class RealTime;
 class MappedInstrument;
 class MappedEvent;
 class MappedEventList;
 class Instrument;
-class ImmediateNote;
 
 
 /// Global interface for plugin, audio, and MIDI configuration.
@@ -187,8 +187,12 @@ public:
                                MidiByte controller, MidiByte value);
 
  private:
+    static ChannelManager m_channelManager;
+
     /// Used by playPreviewNote() to insert a note into a MappedEventList.
-    static ImmediateNote m_immediateNoteFiller;
+    static void fillWithImmediateNote(
+            MappedEventList &mappedEventList, Instrument *instrument,
+            int pitch, int velocity, RealTime duration, bool oneshot);
 
 };
 

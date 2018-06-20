@@ -32,7 +32,6 @@
 #include "sound/MappedEvent.h"
 #include "sound/MappedInstrument.h"
 #include "sound/MappedStudio.h"
-#include "sound/ImmediateNote.h"
 
 #include <QByteArray>
 #include <QDataStream>
@@ -42,7 +41,7 @@
 namespace Rosegarden
 {
 
-ImmediateNote StudioControl::m_immediateNoteFiller;
+ChannelManager StudioControl::m_channelManager(0);
 
 MappedObjectId
 StudioControl::createStudioObject(MappedObject::MappedObjectType type)
@@ -195,14 +194,70 @@ StudioControl::sendQuarterNoteLength(const RealTime &length)
     RosegardenSequencer::getInstance()->setQuarterNoteLength(length);
 }
 
+// @author Tom Breton (Tehom)
+void
+StudioControl::fillWithImmediateNote(
+        MappedEventList &mappedEventList, Instrument *instrument,
+        int pitch, int velocity, RealTime duration, bool oneshot)
+{
+    if (!instrument)
+        return;
+
+#ifdef DEBUG_PREVIEW_NOTES
+    RG_DEBUG << "fillWithNote() on" << (instrument->isPercussion() ? "percussion" : "non-percussion") << instrument->getName() << instrument->getId();
+#endif
+
+    if ((pitch < 0) || (pitch > 127))
+        return;
+
+    if (velocity < 0)
+        velocity = 100;
+
+    MappedEvent::MappedEventType type =
+            oneshot ? MappedEvent::MidiNoteOneShot : MappedEvent::MidiNote;
+
+    // Make the event.
+    MappedEvent mappedEvent(
+            instrument->getId(),
+            type,
+            pitch,
+            velocity,
+            RealTime::zeroTime,  // absTime
+            duration,
+            RealTime::zeroTime);  // audioStartMarker
+
+    // Since we're not going thru MappedBufMetaIterator::acceptEvent()
+    // which checks tracks for muting, we needn't set a track.
+
+    // Set up channel manager.
+    m_channelManager.setInstrument(instrument);
+    m_channelManager.setEternalInterval();
+    // ??? It's odd that we would say "false" for changedInstrument given
+    //     that we did indeed change the Instrument.  Why are we doing this?
+    m_channelManager.reallocate(false);
+
+    ChannelManager::SimpleCallbacks callbacks;
+    MappedEventInserter inserter(mappedEventList);
+
+    // Insert the event.
+    // Setting firstOutput to true indicates that we want a channel
+    // setup.
+    m_channelManager.doInsert(
+            inserter,
+            mappedEvent,
+            RealTime::zeroTime,  // refTime
+            &callbacks,
+            true,  // firstOutput
+            NO_TRACK);
+}
+
 void
 StudioControl::
 playPreviewNote(Instrument *instrument, int pitch,
                 int velocity, RealTime duration, bool oneshot)
 {
     MappedEventList mC;
-    m_immediateNoteFiller.fillWithNote(
-            mC, instrument, pitch, velocity, duration, oneshot);
+    fillWithImmediateNote(mC, instrument, pitch, velocity, duration, oneshot);
     sendMappedEventList(mC);
 }
 
