@@ -199,8 +199,8 @@ void MetronomeMapper::fillBuffer()
             e.setData1(MIDI_TIMING_CLOCK);
             e.setEventTime(eventTime);
         } else {
-            MidiByte velocity;
-            MidiByte pitch;
+            MidiByte velocity = 0;
+            MidiByte pitch = 0;
 
             switch (tick->second) {
             case BarTick:
