@@ -273,8 +273,11 @@ void
 MetronomeMapper::
 makeReady(MappedInserterBase &inserter, RealTime time)
 {
-    m_channelManager.makeReady(inserter, time,
-                               m_instrument->getStaticControllers(), NO_TRACK);
+    m_channelManager.makeReady(
+            NO_TRACK,  // trackId
+            time,
+            m_instrument->getStaticControllers(),
+            inserter);
 }
 
 bool

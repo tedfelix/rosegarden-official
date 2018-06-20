@@ -57,9 +57,9 @@ struct ControllerAndPBList
     int               m_pitchbend;
 };
 
-/// Owns and services a channel interval for an Instrument.
+/// Owns and services a ChannelInterval for an Instrument.
 /**
- * ChannelManager's purpose is to own and service a channel interval
+ * ChannelManager's purpose is to own and service a ChannelInterval
  * (ChannelManager::m_channelInterval), relative to an Instrument that wants to
  * play on it.
  *
@@ -69,6 +69,9 @@ struct ControllerAndPBList
  *
  * ChannelManager objects are also owned by MetronomeMapper and
  * StudioControl (for preview notes, etc.).
+ *
+ * makeReady() is probably the main function here.  It allocates a channel
+ * and inserts a channel setup into a MappedEventList via an inserter.
  *
  * Special cases it deals with:
  *
@@ -96,12 +99,12 @@ class ChannelManager : public QObject
 
 public:
     ChannelManager(Instrument *instrument);
-    virtual ~ChannelManager(void)  { freeChannelInterval(); }
+    virtual ~ChannelManager()  { freeChannelInterval(); }
 
     /// Set the instrument we are playing on, releasing any old one.
     void setInstrument(Instrument *instrument);
     /// Get the instrument we are playing on.  Can return NULL.
-    Instrument *getInstrument(void) const  { return m_instrument; }
+    Instrument *getInstrument() const  { return m_instrument; }
 
     // *** Channel Interval Allocation
 
@@ -124,6 +127,9 @@ public:
     void freeChannelInterval();
 
     // *** Channel Setup
+
+    // ??? Why are there all of these variations?  Can we somehow simplify
+    //     this and get rid of all the variations?
 
     /// Insert BS, PC, CCs, and Pitch Bend for an Instrument on a channel.
     /**
@@ -167,14 +173,25 @@ public:
             bool firstOutput,
             MappedInserterBase &inserter);
 
-    bool makeReady(MappedInserterBase &inserter, RealTime time,
-            const ControllerAndPBList &controllerAndPBList, TrackId trackId);
+    /// Allocate a ChannelInterval and insert a channel setup.
+    /**
+     * @author Tom Breton (Tehom)
+     */
+    bool makeReady(
+            TrackId trackId,
+            RealTime time,
+            const ControllerAndPBList &controllerAndPBList,
+            MappedInserterBase &inserter);
 
-    /// Insert appropriate MIDI channel-setup.
-    void insertChannelSetup(MappedInserterBase &inserter,
-                            RealTime reftime, RealTime insertTime,
-                            const ControllerAndPBList &controllerAndPBList,
-                            int trackId);
+    /// Insert a channel setup that is appropriate for the ChannelInterval.
+    /**
+     * @author Tom Breton (Tehom)
+     */
+    void insertChannelSetup(
+            TrackId trackId,
+            RealTime insertTime,
+            const ControllerAndPBList &controllerAndPBList,
+            MappedInserterBase &inserter);
 
     void setDirty(void)  { m_inittedForOutput = false; }
 

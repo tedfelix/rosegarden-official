@@ -244,7 +244,7 @@ void ChannelManager::insertEvent(
     // if a track becomes unmuted, until the meta-iterator gets around
     // to initting.
     if (needsInit()) {
-        makeReady(inserter, reftime, controllerAndPBList, trackId);
+        makeReady(trackId, reftime, controllerAndPBList, inserter);
         // If we're still not initted, we can't do much.
         if (needsInit()) { return; }
     }
@@ -258,12 +258,11 @@ void ChannelManager::insertEvent(
     inserter.insertCopy(event);
 }
 
-// Make the channel ready by inserting events to configure the
-// channel.
-// @author Tom Breton (Tehom) 
-bool
-ChannelManager::makeReady(MappedInserterBase &inserter, RealTime time,
-        const ControllerAndPBList &controllerAndPBList, TrackId trackId)
+bool ChannelManager::makeReady(
+        TrackId trackId,
+        RealTime time,
+        const ControllerAndPBList &controllerAndPBList,
+        MappedInserterBase &inserter)
 {
     RG_DEBUG
         << "makeReady for"
@@ -291,21 +290,23 @@ ChannelManager::makeReady(MappedInserterBase &inserter, RealTime time,
     
     // If this instrument is in auto channels mode
     if (!m_instrument->hasFixedChannel()) {
-        insertChannelSetup(inserter, time, time,
-                           controllerAndPBList, trackId);
+        insertChannelSetup(
+                trackId,
+                time,
+                controllerAndPBList,
+                inserter);
     }
     
     setInitted(true);
     return true;
 }
 
-// Insert appropriate MIDI channel-setup
-// @author Tom Breton (Tehom) 
 void
-ChannelManager::insertChannelSetup(MappedInserterBase &inserter,
-                                   RealTime /*reftime*/, RealTime insertTime,
-                                   const ControllerAndPBList &controllerAndPBList,
-                                   int trackId)
+ChannelManager::insertChannelSetup(
+        TrackId trackId,
+        RealTime insertTime,
+        const ControllerAndPBList &controllerAndPBList,
+        MappedInserterBase &inserter)
 {
     RG_DEBUG << "insertChannelSetup() : " << (m_instrument ? "Got instrument" : "No instrument");
 

@@ -402,8 +402,11 @@ makeReady(MappedInserterBase &inserter, RealTime time)
 {
     Instrument *instrument = m_doc->getInstrument(m_segment);
     m_channelManager.setInstrument(instrument);
-    m_channelManager.makeReady(inserter, time, getControllers(instrument, time),
-                               m_segment->getTrack());
+    m_channelManager.makeReady(
+            m_segment->getTrack(),
+            time,
+            getControllers(instrument, time),
+            inserter);
 }
 
 void
@@ -417,9 +420,10 @@ InternalSegmentMapper::insertChannelSetup(MappedInserterBase &inserter)
 
     m_channelManager.setInstrument(instrument);
     m_channelManager.insertChannelSetup(
-            inserter, RealTime::zeroTime, RealTime::zeroTime,
+            m_segment->getTrack(),
+            RealTime::zeroTime,
             getControllers(instrument, RealTime::zeroTime),
-            m_segment->getTrack());
+            inserter);
 }
 
 void
