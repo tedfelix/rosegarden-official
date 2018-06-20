@@ -30,30 +30,6 @@
 namespace Rosegarden
 {
 
-static bool
-canPreviewAnotherNote()
-{
-    // NB, this is C's time_t, not our timeT.
-    static time_t lastCutOff = 0;
-    static int sinceLastCutOff = 0;
-
-    time_t now = time(0);
-    ++sinceLastCutOff;
-
-    if ((now - lastCutOff) > 0) {
-        sinceLastCutOff = 0;
-        lastCutOff = now;
-    } else {
-        if (sinceLastCutOff >= 20) {
-            // don't permit more than 20 notes per second or so, to
-            // avoid gungeing up the sound drivers
-            return false;
-        }
-    }
-
-    return true;
-}
-
 // @author Tom Breton (Tehom) 
 void
 ImmediateNote::fillWithNote(
@@ -66,9 +42,6 @@ ImmediateNote::fillWithNote(
 #ifdef DEBUG_PREVIEW_NOTES
     RG_DEBUG << "fillWithNote() on" << (instrument->isPercussion() ? "percussion" : "non-percussion") << instrument->getName() << instrument->getId();
 #endif
-
-    if (!canPreviewAnotherNote())
-        return;
 
     if ((pitch < 0) || (pitch > 127))
         return;
