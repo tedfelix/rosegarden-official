@@ -256,10 +256,10 @@ ChannelManager::doInsert(MappedInserterBase &inserter, MappedEvent &evt,
     }
     // !!! These checks may not be needed now, could become assertions.
     if (!m_instrument) { return; }
-    if (!m_channel.validChannel()) { return; }
+    if (!m_channelInterval.validChannel()) { return; }
 
     evt.setInstrument(m_instrument->getId());
-    evt.setRecordedChannel(m_channel.getChannelId());
+    evt.setRecordedChannel(m_channelInterval.getChannelId());
     evt.setTrackId(trackId);
     inserter.insertCopy(evt);
 }
@@ -284,7 +284,7 @@ ChannelManager::makeReady(MappedInserterBase &inserter, RealTime time,
     if (!m_instrument) { return false; }
 
     // Try to get a valid channel if we lack one.
-    if (!m_channel.validChannel()) {
+    if (!m_channelInterval.validChannel()) {
         // We already tried to get one and failed; don't keep trying.
         if (m_triedToGetChannel) { return false; }
         
@@ -292,7 +292,7 @@ ChannelManager::makeReady(MappedInserterBase &inserter, RealTime time,
         reallocate(false);
         
         // If we still don't have one, give up.
-        if (!m_channel.validChannel()) { return false; }
+        if (!m_channelInterval.validChannel()) { return false; }
     }
     
     // If this instrument is in auto channels mode
@@ -317,14 +317,14 @@ ChannelManager::insertChannelSetup(MappedInserterBase &inserter,
 
     if (!m_instrument)
         return;
-    if (!m_channel.validChannel())
+    if (!m_channelInterval.validChannel())
         return;
 
     //RG_DEBUG << "  Instrument type is " << (int)m_instrument->getType();
 
     // We don't do this for SoftSynth instruments.
     if (m_instrument->getType() == Instrument::Midi) {
-        ChannelId channel = m_channel.getChannelId();
+        ChannelId channel = m_channelInterval.getChannelId();
         insertProgramForInstrument(channel, m_instrument, inserter,
                                    insertTime, trackId);
         insertControllers(channel, m_instrument, inserter, reftime,
@@ -348,7 +348,7 @@ setChannelIdDirectly(void)
                        m_instrument->getNaturalChannel() : 9);
         }
     }
-    m_channel.setChannelId(channel);
+    m_channelInterval.setChannelId(channel);
 }
 
 
@@ -371,7 +371,7 @@ ChannelManager::
 connectAllocator(void)
 {
     Q_ASSERT(m_usingAllocator);
-    if (!m_channel.validChannel()) { return; }
+    if (!m_channelInterval.validChannel()) { return; }
     connect(getAllocator(), SIGNAL(sigVacateChannel(ChannelId)),
             this, SLOT(slotVacateChannel(ChannelId)),
             Qt::UniqueConnection);
@@ -416,9 +416,9 @@ setAllocationMode(Instrument *instrument)
                 break;
             }
 
-            // Clear m_channel, otherwise its old value will appear valid.
+            // Clear m_channelInterval, otherwise its old value will appear valid.
             if (m_usingAllocator != wasUsingAllocator) {
-                m_channel.clearChannelId();
+                m_channelInterval.clearChannelId();
             }
         }
 }    
@@ -439,7 +439,7 @@ ChannelManager::reallocate(bool changedInstrument)
             // Only Midi instruments should have m_usingAllocator set.
             Q_ASSERT(m_instrument->getType() == Instrument::Midi);
             getAllocator()->
-                reallocateToFit(*m_instrument, m_channel,
+                reallocateToFit(*m_instrument, m_channelInterval,
                                 m_start, m_end,
                                 m_startMargin, m_endMargin,
                                 changedInstrument);
@@ -449,7 +449,7 @@ ChannelManager::reallocate(bool changedInstrument)
         }
     }
 
-    if (m_channel.validChannel()) {
+    if (m_channelInterval.validChannel()) {
         RG_DEBUG << "  Channel is valid";
     } else {
         RG_DEBUG << "  ??? Channel is invalid!  (end of reallocate())";
@@ -466,7 +466,7 @@ void ChannelManager::freeChannelInterval(void)
     if (m_instrument && m_usingAllocator) {
         AllocateChannels *allocater = getAllocator();
         if (allocater) {
-            allocater->freeChannelInterval(m_channel);
+            allocater->freeChannelInterval(m_channelInterval);
             disconnectAllocator();
         }
         m_triedToGetChannel = false;
@@ -523,8 +523,8 @@ void
 ChannelManager::
 slotVacateChannel(ChannelId channel)
 {
-    if (m_channel.getChannelId() == channel) {
-        m_channel.clearChannelId();
+    if (m_channelInterval.getChannelId() == channel) {
+        m_channelInterval.clearChannelId();
         disconnectAllocator();
     }
 }
@@ -538,7 +538,7 @@ ChannelManager::
 slotLosingDevice(void)
 {
     m_instrument = 0;
-    m_channel.clearChannelId();
+    m_channelInterval.clearChannelId();
 }
 
 // Our instrument is being destroyed.  We may or may not have
@@ -566,7 +566,7 @@ slotChannelBecomesFixed(void)
              << endl;
 
     ChannelId channel = m_instrument->getNaturalChannel();
-    if (!m_usingAllocator && (channel == m_channel.getChannelId()))
+    if (!m_usingAllocator && (channel == m_channelInterval.getChannelId()))
         { return; }
 
     // Free the channel that we had (safe even if already fixed)
@@ -595,7 +595,7 @@ slotChannelBecomesUnfixed(void)
 
     m_usingAllocator = true;
     // We no longer have a channel interval.
-    m_channel.clearChannelId();
+    m_channelInterval.clearChannelId();
     // Get a new one.
     reallocate(false);
     setDirty();

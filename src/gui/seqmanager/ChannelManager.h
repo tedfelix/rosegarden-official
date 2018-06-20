@@ -57,13 +57,18 @@ struct ControllerAndPBList
     int               m_pitchbend;
 };
 
-/// Owns and services a channel interval for an instrument.
+/// Owns and services a channel interval for an Instrument.
 /**
  * ChannelManager's purpose is to own and service a channel interval
- * (ChannelManager::m_channel), relative to an instrument that wants to
- * play on it.  It is owned by some note-producing source:
- * InternalSegmentMapper, MetronomeMapper, or StudioControl (for preview
- * notes etc).
+ * (ChannelManager::m_channelInterval), relative to an Instrument that wants to
+ * play on it.
+ *
+ * There is one ChannelManager for each MIDI Segment.  It is owned by the
+ * InternalSegmentMapper for that Segment.  See CompositionMapper which
+ * holds the InternalSegmentMapper instances for each Segment.
+ *
+ * ChannelManager objects are also owned by MetronomeMapper and
+ * StudioControl (for preview notes, etc.).
  *
  * Special cases it deals with:
  *
@@ -111,7 +116,6 @@ public:
      * This is a simple implementation of the controller and pitchbend
      * callback functor (Callbacks) that gets controller and
      * pitchbend info from the Instrument object.
-     *
      */
     class SimpleCallbacks : public Callbacks
     {
@@ -121,17 +125,7 @@ public:
     };
 
     ChannelManager(Instrument *instrument);
-
-private:
-    // Hide copy ctor and op=
-    ChannelManager(const ChannelManager &);
-    ChannelManager &operator=(const ChannelManager &);
-
-public:
     virtual ~ChannelManager(void)  { freeChannelInterval(); }
-
-    /// Connect signals from instrument.  Safe even for NULL.
-    void connectInstrument(Instrument *instrument);
 
     /// Send program control for instrument on channel.
     /**
@@ -173,35 +167,7 @@ public:
         MidiByte controller, 
         MidiByte value);
 
-protected slots:
-    /// Something is kicking everything off "channel" in our device.
-    /**
-     * It is the signaller's responsibility to put AllocateChannels right (in
-     * fact this signal only sent by AllocateChannels)
-     */
-    void slotVacateChannel(ChannelId channel);
-    /// Our instrument and its entire device are being destroyed.
-    /**
-     * This exists so we can take a shortcut.  We can skip setting the
-     * device's allocator right since it's going away.
-     */
-    void slotLosingDevice(void);
-    /// Our instrument is being destroyed.
-    /**
-     * We may or may not have received slotLosingDevice first.
-     */
-    void slotLosingInstrument(void);
-
-    /// Our instrument now has different settings so we must reinit the channel.
-    void slotInstrumentChanged(void);
-
-    /// Our instrument now has a fixed channel.
-    void slotChannelBecomesFixed(void);
-    /// Our instrument now lacks a fixed channel.
-    void slotChannelBecomesUnfixed(void);
-
-public:
-    /// Free the owned channel interval (m_channel).
+    /// Free the owned channel interval (m_channelInterval).
     /**
      * Safe even when m_usingAllocator is false.
      */
@@ -262,7 +228,40 @@ public:
     /// Print our status, for tracing.
     void debugPrintStatus(void);
 
-protected:
+private slots:
+    /// Something is kicking everything off "channel" in our device.
+    /**
+     * It is the signaller's responsibility to put AllocateChannels right (in
+     * fact this signal only sent by AllocateChannels)
+     */
+    void slotVacateChannel(ChannelId channel);
+    /// Our instrument and its entire device are being destroyed.
+    /**
+     * This exists so we can take a shortcut.  We can skip setting the
+     * device's allocator right since it's going away.
+     */
+    void slotLosingDevice(void);
+    /// Our instrument is being destroyed.
+    /**
+     * We may or may not have received slotLosingDevice first.
+     */
+    void slotLosingInstrument(void);
+
+    /// Our instrument now has different settings so we must reinit the channel.
+    void slotInstrumentChanged(void);
+
+    /// Our instrument now has a fixed channel.
+    void slotChannelBecomesFixed(void);
+    /// Our instrument now lacks a fixed channel.
+    void slotChannelBecomesUnfixed(void);
+
+private:
+    // Hide copy ctor and op=
+    ChannelManager(const ChannelManager &);
+    ChannelManager &operator=(const ChannelManager &);
+
+    /// Connect signals from instrument.  Safe even for NULL.
+    void connectInstrument(Instrument *instrument);
 
     /**************************/
     /*** Internal functions ***/
@@ -308,7 +307,7 @@ protected:
     /**
      * rename: m_channelInterval
      */
-    ChannelInterval m_channel;
+    ChannelInterval m_channelInterval;
 
     /// Whether we are to get a channel interval thru Device's allocator.
     /**
@@ -319,14 +318,14 @@ protected:
 
     /// Required start time.
     /**
-     * m_channel may be larger but never smaller than m_start to m_end.
+     * m_channelInterval may be larger but never smaller than m_start to m_end.
      *
-     * @see m_end, m_channel
+     * @see m_end, m_channelInterval
      */
     RealTime m_start;
     /// Required end time.
     /**
-     * @see m_start, m_channel
+     * @see m_start, m_channelInterval
      */
     RealTime m_end;
 
@@ -336,9 +335,9 @@ protected:
     /// The instrument this plays on.  I don't own this.
     Instrument *m_instrument;
 
-    /// Whether the output channel has been set up for m_channel.
+    /// Whether the output channel has been set up for m_channelInterval.
     /**
-     * Here we only deal with having the right channel.  doInsert's
+     * Here we only deal with having the right channel.  doInsert()'s
      * firstOutput argument tells us if we need setup for some other
      * reason such as jumping in time.
      */
