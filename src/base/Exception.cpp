@@ -31,6 +31,9 @@ Exception::Exception(const char *message) :
 Exception::Exception(const char *message, const char *file, int line) :
     m_message(message)
 {
+    // Fix compiler warning.
+    (void)file;
+    (void)line;
 #ifndef NDEBUG
     std::cerr << "WARNING: Rosegarden::Exception: \""
 	      << message << "\" at " << file << ":" << line << std::endl;
@@ -49,6 +52,9 @@ Exception::Exception(std::string message) :
 Exception::Exception(std::string message, std::string file, int line) :
     m_message(message)
 {
+    // Fix compiler warning.
+    (void)file;
+    (void)line;
 #ifndef NDEBUG
     std::cerr << "WARNING: Rosegarden::Exception: \""
 	      << message << "\" at " << file << ":" << line << std::endl;
@@ -67,6 +73,9 @@ Exception::Exception(QString message) :
 Exception::Exception(QString message, QString file, int line) :
     m_message(message.toUtf8().data())
 {
+    // Fix compiler warning.
+    (void)file;
+    (void)line;
 #ifndef NDEBUG
     std::cerr << "WARNING: Rosegarden::Exception: \""
 	      << m_message << "\" at " << file.toLocal8Bit().data() << ":" << line << std::endl;
