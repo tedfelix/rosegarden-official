@@ -71,16 +71,37 @@ Fingering::hasBarre() const
 Fingering::Barre
 Fingering::getBarre() const
 {
+    // ??? This routine needs review and testing.  If guitar chords in
+    //     lilypond look strange, this is likely the reason.
+
+    // Fret on the last string.  (6th string for standard guitar.)
     int lastStringStatus = m_strings[getNbStrings() - 1];
 
     Barre res;
     
     res.fret = lastStringStatus;
-    
+
+    // For each string from first (0) to third (2).
     for(unsigned int i = 0; i < 3; ++i) {
-        if (m_strings[i] > OPEN && m_strings[i] == lastStringStatus)
+        // If this string is not open (0) and it's at the same fret
+        // as the last (6th) string...
+        // ??? We can drop the check for OPEN if we check for
+        //     lastStringStatus == OPEN and bail before we get in here.
+        if (m_strings[i] > OPEN && m_strings[i] == lastStringStatus) {
             res.start = i;
-            break;
+
+            // ??? Is this the way this is supposed to be?
+            //break;
+        }
+
+        // ??? Based on indentation in previous versions, it seems like this
+        //     belongs in the if above.  Reformatting this to fix a compiler
+        //     warning, but don't have time to figure out a regression test.
+        //     As it is, this seems wrong.  It will only check the first
+        //     string.  If it's not at the same fret as the 6th string,
+        //     it will indicate that the barre goes from string 0 (or
+        //     perhaps garbage) to string 6 at string 6's fret.
+        break;
     }
 
     res.end = 5;
