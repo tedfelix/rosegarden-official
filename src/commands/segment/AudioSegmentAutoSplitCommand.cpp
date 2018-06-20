@@ -101,7 +101,6 @@ AudioSegmentAutoSplitCommand::execute()
         std::vector<SplitPointPair>::iterator it;
         timeT absStartTime, absEndTime;
 
-        char splitNumber[10];
         int splitCount = 0;
 
         timeT origStartTime = m_segment->getStartTime();
@@ -137,7 +136,7 @@ AudioSegmentAutoSplitCommand::execute()
             newSegment->setEndMarkerTime(absEndTime);
 
             // label
-            sprintf(splitNumber, "%d", splitCount++);
+            ++splitCount;
             std::string label = m_segment->getLabel();
             newSegment->setLabel(appendLabel(label, qstrtostr(
                     tr("(part %1)").arg(splitCount))));
