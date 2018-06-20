@@ -103,13 +103,16 @@ public:
     /// Get the instrument we are playing on.  Can return NULL.
     Instrument *getInstrument(void) const  { return m_instrument; }
 
-    // *** MappedEvent Insertion functions
+    // *** MappedEvent Insertion routines
 
     /// Insert Bank Select and Program Change for an Instrument on a channel.
     /**
      * This routine is essentially a conversion from Instrument to
      * MappedEvents which are inserted into a MappedEventBuffer via
      * an inserter.
+     *
+     * ??? This seems to always be paired with a call to insertControllers().
+     *     If this is true, consider combining.
      */
     static void insertBSAndPC(
             int trackId,
@@ -118,34 +121,31 @@ public:
             RealTime insertTime,
             MappedInserterBase &inserter);
 
-    /// Insert controllers and pitch bend via inserter.
+    /// Insert CCs and pitch bend for an Instrument on a channel.
     /**
-     * Set default controllers for instrument on channel.  Inserts the
-     * following via the inserter:
+     * Inserts the following:
      *
-     *   - Reset All Controllers
+     *   - Reset All Controllers (optional based on user preference)
      *   - Control Changes from controllerAndPBList
      *   - Pitchbend from controllerAndPBList
-     *
-     * Adapted from SequenceManager.
      */
     static void insertControllers(
-        ChannelId channel, 
-        Instrument *instrument,
-        MappedInserterBase &inserter,
-        RealTime reftime, 
-        RealTime insertTime,
-        const ControllerAndPBList &controllerAndPBList,
-        int trackId);
+            int trackId,
+            const Instrument *instrument,
+            ChannelId channel,
+            RealTime insertTime,
+            const ControllerAndPBList &controllerAndPBList,
+            MappedInserterBase &inserter);
 
+    /// Insert a single CC for an Instrument on a channel.
     static void insertController(
-        ChannelId channel, 
-        const Instrument *instrument,
-        MappedInserterBase &inserter, 
-        RealTime insertTime,
-        int trackId, 
-        MidiByte controller, 
-        MidiByte value);
+            int trackId,
+            const Instrument *instrument,
+            ChannelId channel,
+            RealTime insertTime,
+            MidiByte controller,
+            MidiByte value,
+            MappedInserterBase &inserter);
 
     /// Free the owned channel interval (m_channelInterval).
     /**

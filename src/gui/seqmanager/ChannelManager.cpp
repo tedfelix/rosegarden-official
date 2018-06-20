@@ -76,11 +76,14 @@ connectInstrument(Instrument *instrument)
     slotInstrumentChanged();
 }
 
-void
-ChannelManager::
-insertController(ChannelId channel, const Instrument *instrument,
-                 MappedInserterBase &inserter, RealTime insertTime,
-                 int trackId, MidiByte controller, MidiByte value)
+void ChannelManager::insertController(
+        int trackId,
+        const Instrument *instrument,
+        ChannelId channel,
+        RealTime insertTime,
+        MidiByte controller,
+        MidiByte value,
+        MappedInserterBase &inserter)
 {
     MappedEvent mE(instrument->getId(),
                    MappedEvent::MidiController,
@@ -93,13 +96,13 @@ insertController(ChannelId channel, const Instrument *instrument,
     inserter.insertCopy(mE);
 }
 
-void
-ChannelManager::
-insertControllers(ChannelId channel, Instrument *instrument,
-               MappedInserterBase &inserter,
-               RealTime /*reftime*/, RealTime insertTime,
-               const ControllerAndPBList &controllerAndPBList,
-               int trackId)
+void ChannelManager::insertControllers(
+        int trackId,
+        const Instrument *instrument,
+        ChannelId channel,
+        RealTime insertTime,
+        const ControllerAndPBList &controllerAndPBList,
+        MappedInserterBase &inserter)
 {
     // This is still desirable for some users.
     QSettings settings;
@@ -144,8 +147,8 @@ insertControllers(ChannelId channel, Instrument *instrument,
 
         try {
             // Put it in the inserter.
-            insertController(channel, instrument, inserter, insertTime,
-                             trackId, controlId, controlValue);
+            insertController(trackId, instrument, channel, insertTime,
+                             controlId, controlValue, inserter);
         } catch (...) {
             // Ignore.
         }
@@ -307,7 +310,7 @@ ChannelManager::makeReady(MappedInserterBase &inserter, RealTime time,
 // @author Tom Breton (Tehom) 
 void
 ChannelManager::insertChannelSetup(MappedInserterBase &inserter,
-                                   RealTime reftime, RealTime insertTime,
+                                   RealTime /*reftime*/, RealTime insertTime,
                                    const ControllerAndPBList &controllerAndPBList,
                                    int trackId)
 {
@@ -324,8 +327,8 @@ ChannelManager::insertChannelSetup(MappedInserterBase &inserter,
     if (m_instrument->getType() == Instrument::Midi) {
         ChannelId channel = m_channelInterval.getChannelId();
         insertBSAndPC(trackId, m_instrument, channel, insertTime, inserter);
-        insertControllers(channel, m_instrument, inserter, reftime,
-                          insertTime, controllerAndPBList, trackId);
+        insertControllers(trackId, m_instrument, channel, insertTime,
+                          controllerAndPBList, inserter);
     }
 }
 

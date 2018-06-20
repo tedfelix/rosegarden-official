@@ -278,10 +278,13 @@ sendChannelSetup(Instrument *instrument, int channel)
             inserter);
 
     // Insert controllers (and pitch bend).
-    ChannelManager::insertControllers(channel, instrument,
-                                      inserter, RealTime::zeroTime,
-                                      RealTime::zeroTime,
-                                      instrument->getStaticControllers(), -1);
+    ChannelManager::insertControllers(
+            -1,  // trackId
+            instrument,
+            channel,
+            RealTime::zeroTime,  // insertTime
+            instrument->getStaticControllers(),
+            inserter);
 
     // Send it out.
     sendMappedEventList(mappedEventList);
@@ -297,11 +300,16 @@ sendController(const Instrument *instrument, int channel,
     MappedEventList mC;
     MappedEventInserter inserter(mC);
 
-    // Acquire it from ChannelManager.  Passing -1 for trackId which
-    // is unused here.
-    ChannelManager::insertController(channel, instrument, inserter,
-                                     RealTime::zeroTime, -1,
-                                     controller, value);
+    // Passing -1 for trackId which is unused here.
+    ChannelManager::insertController(
+            -1,  // trackId
+            instrument,
+            channel,
+            RealTime::zeroTime,  // insertTime
+            controller,
+            value,
+            inserter);
+
     sendMappedEventList(mC);
 }
 
