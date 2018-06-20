@@ -379,8 +379,10 @@ AudioTimeStretcher::putInput(float **input, size_t samples)
             
             for (size_t c = 0; c < m_channels; ++c) {
 
+#ifndef NDEBUG
                 size_t got = m_inbuf[c]->peek(m_tempbuf, m_wlen);
                 Q_ASSERT(got == m_wlen);
+#endif
 
                 analyseBlock(c, m_tempbuf);
             }
