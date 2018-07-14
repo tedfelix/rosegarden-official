@@ -1036,13 +1036,13 @@ void RosegardenSequencer::dumpFirstSegment()
 
     unsigned int i = 0;
     
-    std::set<MappedEventBuffer *> segs = m_metaIterator.getSegments();
+    std::set<QSharedPointer<MappedEventBuffer> > segs = m_metaIterator.getSegments();
     if (segs.empty()) {
         SEQUENCER_DEBUG << "(no segments)";
         return;
     }
 
-    MappedEventBuffer *firstMappedEventBuffer = *segs.begin();
+    QSharedPointer<MappedEventBuffer> firstMappedEventBuffer = *segs.begin();
 
     MappedEventBuffer::iterator it(firstMappedEventBuffer);
 
@@ -1066,7 +1066,7 @@ void RosegardenSequencer::dumpFirstSegment()
 }
 
 void
-RosegardenSequencer::segmentModified(MappedEventBuffer *mapper)
+RosegardenSequencer::segmentModified(QSharedPointer<MappedEventBuffer> mapper)
 {
     if (!mapper) return;
 
@@ -1083,7 +1083,7 @@ RosegardenSequencer::segmentModified(MappedEventBuffer *mapper)
 }
 
 void
-RosegardenSequencer::segmentAdded(MappedEventBuffer *mapper)
+RosegardenSequencer::segmentAdded(QSharedPointer<MappedEventBuffer> mapper)
 {
     if (!mapper) return;
 
@@ -1098,9 +1098,11 @@ RosegardenSequencer::segmentAdded(MappedEventBuffer *mapper)
 }
 
 void
-RosegardenSequencer::segmentAboutToBeDeleted(MappedEventBuffer *mapper)
+RosegardenSequencer::segmentAboutToBeDeleted(
+        QSharedPointer<MappedEventBuffer> mapper)
 {
-    if (!mapper) return;
+    if (!mapper)
+        return;
 
     LOCKED;
 

@@ -394,13 +394,13 @@ private:
 
     // *** Other Mappers
 
-    MetronomeMapper *m_metronomeMapper;  // owned
+    QSharedPointer<MetronomeMapper> m_metronomeMapper;  // owned
     void resetMetronomeMapper();
 
-    TempoSegmentMapper *m_tempoSegmentMapper;  // owned
+    QSharedPointer<TempoSegmentMapper> m_tempoSegmentMapper;  // owned
     void resetTempoSegmentMapper();
 
-    TimeSigSegmentMapper *m_timeSigSegmentMapper;  // owned
+    QSharedPointer<TimeSigSegmentMapper> m_timeSigSegmentMapper;  // owned
     void resetTimeSigSegmentMapper();
 
     // *** Refresh Mappers and RosegardenSequencer

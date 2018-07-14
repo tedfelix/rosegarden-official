@@ -60,8 +60,8 @@ public:
     MappedBufMetaIterator()  { }
     ~MappedBufMetaIterator();
 
-    void addSegment(MappedEventBuffer *);
-    void removeSegment(MappedEventBuffer *);
+    void addSegment(QSharedPointer<MappedEventBuffer>);
+    void removeSegment(QSharedPointer<MappedEventBuffer>);
 
     /// Delete all iterators and forget all segments
     void clear();
@@ -88,7 +88,7 @@ public:
      * @param immediate means to reset it right away, presumably because
      *   we are playing right now.
      */
-    void resetIteratorForSegment(MappedEventBuffer *s, bool immediate);
+    void resetIteratorForSegment(QSharedPointer<MappedEventBuffer> s, bool immediate);
 
     void getAudioEvents(std::vector<MappedEvent> &);
 
@@ -101,7 +101,7 @@ public:
     //std::vector<MappedEvent> &getPlayingAudioFiles(const RealTime &songPosition);
 
     // For debugging.
-    std::set<MappedEventBuffer *> getSegments() const { return m_segments; }
+    std::set<QSharedPointer<MappedEventBuffer> > getSegments() const { return m_segments; }
 
 private:
     // Dtor is non-trivial.  Hide copy ctor and op=.
@@ -129,7 +129,7 @@ private:
 
     RealTime m_currentTime;
 
-    typedef std::set<MappedEventBuffer *> MappedSegments;
+    typedef std::set<QSharedPointer<MappedEventBuffer> > MappedSegments;
     MappedSegments m_segments;
 
     typedef std::vector<MappedEventBuffer::iterator *> SegmentIterators;

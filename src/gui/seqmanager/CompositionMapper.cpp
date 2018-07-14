@@ -51,11 +51,6 @@ CompositionMapper::CompositionMapper(RosegardenDocument *doc) :
 CompositionMapper::~CompositionMapper()
 {
     SEQMAN_DEBUG << "~CompositionMapper()\n";
-
-    for (SegmentMappers::iterator i = m_segmentMappers.begin();
-         i != m_segmentMappers.end(); ++i) {
-        i->second->removeOwner();
-    }
 }
 
 bool
@@ -63,7 +58,7 @@ CompositionMapper::segmentModified(Segment *segment)
 {
     if (m_segmentMappers.find(segment) == m_segmentMappers.end()) return false;
 
-    SegmentMapper *mapper = m_segmentMappers[segment];
+    QSharedPointer<SegmentMapper> mapper = m_segmentMappers[segment];
 
     if (!mapper) {
         return false; // this can happen with the SegmentSplitCommand,
@@ -102,9 +97,6 @@ CompositionMapper::segmentDeleted(Segment *segment)
 
     // "segment" is used here as an index into m_segmentMappers.  It is not
     // dereferenced.
-    SegmentMapper *mapper = m_segmentMappers[segment];
-    // "segment" is used here as an index into m_segmentMappers.  It is not
-    // dereferenced.
     m_segmentMappers.erase(segment);
 
     // Given that mapper has a pointer to the deleted segment, this line is
@@ -112,8 +104,6 @@ CompositionMapper::segmentDeleted(Segment *segment)
     // In that case, this should do nothing more than write out the pointer
     // value.  Uncomment this line of code at your own risk.
 //    SEQMAN_DEBUG << "CompositionMapper::segmentDeleted() : releasing SegmentMapper " << mapper;
-
-    mapper->removeOwner();
 }
 
 void
@@ -130,16 +120,15 @@ CompositionMapper::mapSegment(Segment *segment)
         itMapper->second->refresh();
         return;
     }
-    SegmentMapper *mapper =
+    QSharedPointer<SegmentMapper> mapper =
         SegmentMapper::makeMapperForSegment(m_doc, segment);
 
     if (mapper) {
         m_segmentMappers[segment] = mapper;
-        mapper->addOwner();
     }
 }
 
-MappedEventBuffer *
+QSharedPointer<MappedEventBuffer>
 CompositionMapper::getMappedEventBuffer(Segment *s)
 {
     // !!! WARNING !!!
@@ -150,7 +139,7 @@ CompositionMapper::getMappedEventBuffer(Segment *s)
     if (m_segmentMappers.find(s) != m_segmentMappers.end()) {
         return m_segmentMappers[s];
     } else {
-        return 0;
+        return QSharedPointer<MappedEventBuffer>();
     }
 }
 

@@ -18,6 +18,8 @@
 #ifndef RG_COMPOSITIONMAPPER_H
 #define RG_COMPOSITIONMAPPER_H
 
+#include <QSharedPointer>
+
 #include <map>
 
 namespace Rosegarden
@@ -44,13 +46,13 @@ public:
     ~CompositionMapper();
 
     /// Get the SegmentMapper for a Segment
-    MappedEventBuffer *getMappedEventBuffer(Segment *);
+    QSharedPointer<MappedEventBuffer> getMappedEventBuffer(Segment *);
 
     bool segmentModified(Segment *);
     void segmentAdded(Segment *);
     void segmentDeleted(Segment *);
 
-    typedef std::map<Segment *, SegmentMapper *> SegmentMappers;
+    typedef std::map<Segment *, QSharedPointer<SegmentMapper> > SegmentMappers;
 
     /// The Container of SegmentMapper Pointers.
     /**

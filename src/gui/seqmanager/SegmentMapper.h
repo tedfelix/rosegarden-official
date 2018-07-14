@@ -35,7 +35,7 @@ public:
     virtual ~SegmentMapper();
 
     /// Create the appropriate mapper for the segment type.  Factory function.
-    static SegmentMapper *makeMapperForSegment(RosegardenDocument *, Segment *);
+    static QSharedPointer<SegmentMapper> makeMapperForSegment(RosegardenDocument *, Segment *);
 
     virtual int getSegmentRepeatCount();
     virtual TrackId getTrackID() const;

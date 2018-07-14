@@ -56,27 +56,27 @@ SegmentMapper::~SegmentMapper()
     SEQMAN_DEBUG << "~SegmentMapper : " << this;
 }
 
-SegmentMapper *
+QSharedPointer<SegmentMapper>
 SegmentMapper::makeMapperForSegment(RosegardenDocument *doc,
                                     Segment *segment)
 {
-    SegmentMapper *mapper = 0;
+    QSharedPointer<SegmentMapper> mapper;
 
     if (segment == 0) {
         RG_DEBUG << "makeMapperForSegment() segment == 0";
-        return 0;
+        return QSharedPointer<SegmentMapper>();
     }
 
     switch (segment->getType()) {
     case Segment::Internal :
-        mapper = new InternalSegmentMapper(doc, segment);
+        mapper = QSharedPointer<SegmentMapper>(new InternalSegmentMapper(doc, segment));
         break;
     case Segment::Audio :
-        mapper = new AudioSegmentMapper(doc, segment);
+        mapper = QSharedPointer<SegmentMapper>(new AudioSegmentMapper(doc, segment));
         break;
     default:
         RG_DEBUG << "makeMapperForSegment(" << segment << ") : can't map, unknown segment type " << segment->getType();
-        mapper = 0;
+        mapper = QSharedPointer<SegmentMapper>();
     }
 
     // ??? InternalSegmentMapper and AudioSegmentMapper's ctors should

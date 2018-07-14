@@ -40,7 +40,7 @@ MappedBufMetaIterator::~MappedBufMetaIterator()
 }
 
 void
-MappedBufMetaIterator::addSegment(MappedEventBuffer *mappedEventBuffer)
+MappedBufMetaIterator::addSegment(QSharedPointer<MappedEventBuffer> mappedEventBuffer)
 {
     // BUG #1349 (was #3546135)
     // If we already have this segment, bail, or else we'll have two
@@ -60,7 +60,7 @@ MappedBufMetaIterator::addSegment(MappedEventBuffer *mappedEventBuffer)
 }
 
 void
-MappedBufMetaIterator::removeSegment(MappedEventBuffer *mappedEventBuffer)
+MappedBufMetaIterator::removeSegment(QSharedPointer<MappedEventBuffer> mappedEventBuffer)
 {
     // Remove from m_iterators
     for (SegmentIterators::iterator i = m_iterators.begin();
@@ -168,7 +168,7 @@ MappedBufMetaIterator::fetchFixedChannelSetup(MappedInserterBase &inserter)
     // for each MappedEventBuffer/segment in m_segments
     for (MappedSegments::iterator i = m_segments.begin();
          i != m_segments.end(); ++i) {
-        MappedEventBuffer *mappedEventBuffer = *i;
+        QSharedPointer<MappedEventBuffer> mappedEventBuffer = *i;
 
         TrackId trackID = mappedEventBuffer->getTrackID();
 
@@ -403,7 +403,7 @@ fetchEventsNoncompeting(MappedInserterBase &inserter,
 
 void
 MappedBufMetaIterator::
-resetIteratorForSegment(MappedEventBuffer *mappedEventBuffer, bool immediate)
+resetIteratorForSegment(QSharedPointer<MappedEventBuffer> mappedEventBuffer, bool immediate)
 {
     // For each segment
     for (SegmentIterators::iterator i = m_iterators.begin();

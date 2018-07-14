@@ -199,33 +199,6 @@ public:
      */
     virtual void makeReady(MappedInserterBase &inserter, RealTime time);
 
-    /// Record one more owner of this mapper.
-    /**
-     * This increases the reference count to prevent deletion of a mapper
-     * that is still owned.
-     *
-     * Called by:
-     *   - MappedEventBuffer::iterator's ctor
-     *   - CompositionMapper::mapSegment()
-     *   - SequenceManager::resetMetronomeMapper()
-     *   - SequenceManager::resetTempoSegmentMapper()
-     *   - SequenceManager::resetTimeSigSegmentMapper()
-     *
-     * ??? QSharedPointer would be more convenient and less code.
-     *
-     * @see removeOwner()
-     */
-    void addOwner(void);
-
-    /// Record one fewer owner of this mapper.
-    /**
-     * When the owner count reaches 0, this object will destroy itself
-     * with a "delete this".
-     *
-     * @see addOwner()
-     */
-    void removeOwner(void);
-
     /// Get the earliest and latest sounding times.
     /**
      * Called by MappedBufMetaIterator::fetchEvents() and
@@ -244,37 +217,7 @@ public:
     class iterator 
     {
     public:
-        iterator(MappedEventBuffer* s);
-
-        /// Destructor.
-        /**
-         * Since this destructor is "non-trivial", we are required to provide
-         * (or hide) the other two of the "big three".  I.e. the copy ctor
-         * and op=.
-         */
-        ~iterator(void)  { m_s->removeOwner(); }
-
-        /// Copy ctor.  (UNTESTED)
-        /**
-         * Copy ctors are not for the faint of heart, and should be avoided
-         * whenever possible.  In this case, the postfix op++ needs the copy
-         * ctor in its first line.  We could probably get rid of the postfix
-         * op++ and force users to use the prefix op++ which would then let
-         * us remove this copy ctor.
-         *
-         * UNTESTED.  Use carefully.
-         */
-        iterator(const iterator&);
-
-        /// Assignment operator.  (UNTESTED)
-        /**
-         * Turns out this is never used.  However, since there's a copy ctor
-         * and the non-trivial dtor that rounds out the "big three", we might
-         * as well be complete and correct.
-         *
-         * UNTESTED.  Use carefully.
-         */
-        iterator& operator=(const iterator&);  // never used
+        iterator(QSharedPointer<MappedEventBuffer> s);
 
         /// Equality
         /**
@@ -293,12 +236,6 @@ public:
 
         /// Postfix operator++  (UNTESTED)
         /**
-         * This is never actually used anywhere.  But, unfortunately it
-         * triggers the need for a copy ctor.  It would probably be best to
-         * get rid of this and force all clients to use the prefix
-         * operator++.  But then someone might try to implement this and do
-         * it incorrectly.
-         *
          * UNTESTED.  Use carefully.
          */
         iterator  operator++(int);
@@ -332,9 +269,9 @@ public:
         MappedEvent *peek() const;
 
         /// Access to the segment the iterator is connected to.
-        MappedEventBuffer *getSegment() { return m_s; }
+        QSharedPointer<MappedEventBuffer> getSegment() { return m_s; }
         /// Access to the segment the iterator is connected to.
-        const MappedEventBuffer *getSegment() const { return m_s; }
+        QSharedPointer<const MappedEventBuffer> getSegment() const { return m_s; }
 
         /**
          * Called by MappedBufMetaIterator::fetchEventsNoncompeting().
@@ -416,7 +353,7 @@ public:
 
     protected:
         /// The buffer this iterator points into.
-        MappedEventBuffer *m_s;
+        QSharedPointer<MappedEventBuffer> m_s;
 
         /// Position of the iterator in the buffer.
         int m_index;

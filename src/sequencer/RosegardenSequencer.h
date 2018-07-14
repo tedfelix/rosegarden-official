@@ -339,9 +339,9 @@ public:
     /// Debug stuff, to check MappedEventBuffer::iterator
     void dumpFirstSegment();
 
-    void segmentModified(MappedEventBuffer *);
-    void segmentAdded(MappedEventBuffer *);
-    void segmentAboutToBeDeleted(MappedEventBuffer *);
+    void segmentModified(QSharedPointer<MappedEventBuffer>);
+    void segmentAdded(QSharedPointer<MappedEventBuffer>);
+    void segmentAboutToBeDeleted(QSharedPointer<MappedEventBuffer>);
     /// Close all mapped segments
     void compositionAboutToBeDeleted();
     /**

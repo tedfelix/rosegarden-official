@@ -108,18 +108,6 @@ SequenceManager::~SequenceManager()
         m_doc->getComposition().removeObserver(this);
 
     delete m_compositionMapper;
-
-    // ??? Use QSharedPointer instead.
-    if (m_metronomeMapper)
-        m_metronomeMapper->removeOwner();
-
-    // ??? Use QSharedPointer instead.
-    if (m_tempoSegmentMapper)
-        m_tempoSegmentMapper->removeOwner();
-
-    // ??? Use QSharedPointer instead.
-    if (m_timeSigSegmentMapper)
-        m_timeSigSegmentMapper->removeOwner();
 }
 
 void
@@ -1424,11 +1412,10 @@ void SequenceManager::resetMetronomeMapper()
     if (m_metronomeMapper) {
         RosegardenSequencer::getInstance()->segmentAboutToBeDeleted
             (m_metronomeMapper);
-        m_metronomeMapper->removeOwner();
     }
 
-    m_metronomeMapper = new MetronomeMapper(m_doc);
-    m_metronomeMapper->addOwner();
+    m_metronomeMapper =
+            QSharedPointer<MetronomeMapper>(new MetronomeMapper(m_doc));
     RosegardenSequencer::getInstance()->segmentAdded
         (m_metronomeMapper);
 }
@@ -1440,11 +1427,10 @@ void SequenceManager::resetTempoSegmentMapper()
     if (m_tempoSegmentMapper) {
         RosegardenSequencer::getInstance()->segmentAboutToBeDeleted
             (m_tempoSegmentMapper);
-        m_tempoSegmentMapper->removeOwner();
     }
 
-    m_tempoSegmentMapper = new TempoSegmentMapper(m_doc);
-    m_tempoSegmentMapper->addOwner();
+    m_tempoSegmentMapper =
+            QSharedPointer<TempoSegmentMapper>(new TempoSegmentMapper(m_doc));
     RosegardenSequencer::getInstance()->segmentAdded
         (m_tempoSegmentMapper);
 }
@@ -1456,11 +1442,10 @@ void SequenceManager::resetTimeSigSegmentMapper()
     if (m_timeSigSegmentMapper) {
         RosegardenSequencer::getInstance()->segmentAboutToBeDeleted
             (m_timeSigSegmentMapper);
-        m_timeSigSegmentMapper->removeOwner();
     }
 
-    m_timeSigSegmentMapper = new TimeSigSegmentMapper(m_doc);
-    m_timeSigSegmentMapper->addOwner();
+    m_timeSigSegmentMapper =
+            QSharedPointer<TimeSigSegmentMapper>(new TimeSigSegmentMapper(m_doc));
     RosegardenSequencer::getInstance()->segmentAdded
         (m_timeSigSegmentMapper);
 }
@@ -1720,7 +1705,7 @@ void SequenceManager::segmentDeleted(Segment* s)
     {
         // getMappedEventBuffer() uses the segment pointer value as an
     	// index into a map.  So this is not a dereference.
-        MappedEventBuffer *mapper =
+        QSharedPointer<MappedEventBuffer> mapper =
             m_compositionMapper->getMappedEventBuffer(s);
         // segmentDeleted() has been reviewed and should only be using
         // the pointer as an index into a container.  segmentDeleted()
@@ -2020,7 +2005,7 @@ makeTempMetaiterator(void)
     metaiterator->addSegment(m_timeSigSegmentMapper);
     // We don't hold on to the marker mapper because we only use it
     // when exporting.
-    metaiterator->addSegment(new MarkerMapper(m_doc));
+    metaiterator->addSegment(QSharedPointer<MarkerMapper>(new MarkerMapper(m_doc)));
     typedef CompositionMapper::SegmentMappers container;
     typedef container::iterator iterator;
     container &mapperContainer = m_compositionMapper->m_segmentMappers;

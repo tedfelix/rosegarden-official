@@ -169,40 +169,9 @@ void
 MappedEventBuffer::
 makeReady(MappedInserterBase &/*inserter*/, RealTime /*time*/) {}
 
-void
-MappedEventBuffer::
-addOwner(void)
-{
-    ++m_refCount;
-
-#ifdef DEBUG_MAPPED_EVENT_BUFFER
-    SEQUENCER_DEBUG << "MappedEventBuffer::addOwner"
-                    << (void*)this
-                    << "giving refcount"
-                    << (int) m_refCount
-                    << endl;
-#endif
-}
-
-void
-MappedEventBuffer::
-removeOwner(void)
-{
-#ifdef DEBUG_MAPPED_EVENT_BUFFER
-    SEQUENCER_DEBUG << "MappedEventBuffer::removeOwner"
-                    << (void*)this
-                    << "which had refcount"
-                    << (int) m_refCount
-                    << endl;
-#endif
-
-    --m_refCount;
-    if (!m_refCount)  delete this;
-}
-
     /*** MappedEventBuffer::iterator ***/
 
-MappedEventBuffer::iterator::iterator(MappedEventBuffer *s) :
+MappedEventBuffer::iterator::iterator(QSharedPointer<MappedEventBuffer> s) :
     m_s(s),
     m_index(0),
     m_ready(false),
@@ -210,48 +179,6 @@ MappedEventBuffer::iterator::iterator(MappedEventBuffer *s) :
     //m_currentTime
 {
     //RG_DEBUG << "iterator ctor";
-
-    s->addOwner();
-}
-
-// UNTESTED
-MappedEventBuffer::iterator::iterator(const iterator &i) :
-    m_s(i.m_s),
-    m_index(i.m_index),
-    m_ready(i.m_ready),
-    m_active(i.m_active),
-    m_currentTime(i.m_currentTime)
-{
-    // Add a reference count for this
-    m_s->addOwner();
-}
-
-// UNTESTED
-MappedEventBuffer::iterator &
-MappedEventBuffer::iterator::operator=(const iterator& rhs)
-{
-    // Handle self-assignment gracefully.
-    // With this particular class, the issue is that the call to
-    // removeOwner() might cause the MappedEventBuffer to be deleted.
-    // Then the following call to addOwner() would be on a deleted
-    // object.
-    if (&rhs == this)
-        return *this;
-
-    // Adjust reference count
-    m_s->removeOwner();
-
-    // Full bitwise copy
-    m_s = rhs.m_s;
-    m_index = rhs.m_index;
-    m_ready = rhs.m_ready;
-    m_active = rhs.m_active;
-    m_currentTime = rhs.m_currentTime;
-
-    // Adjust reference count
-    m_s->addOwner();
-
-    return *this;
 }
 
 // ++prefix
