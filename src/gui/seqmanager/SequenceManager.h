@@ -277,7 +277,7 @@ signals:
      * Connected to MIDIInstrumentParameterPanel::slotExternalProgramChange().
      *
      * Incoming program changes from a connected device are sent to the MIPP
-     * where, if the "Receive External" checkbox is checked, the bank and
+     * where, if the "Receive external" checkbox is checked, the bank and
      * program on the MIPP will be changed to match.
      */
     void sigProgramChange(int bankMSB, int bankLSB, int programChange);
@@ -432,6 +432,10 @@ private:
     /// Prevents showing an overrun warning more than once.
     bool m_shownOverrunWarning;
 
+    /// Just to make sure we don't bother the user too often
+    QTimer *m_reportTimer;
+    bool m_canReport;
+
 
     /// TransportStatus on the GUI side.
     /**
@@ -456,18 +460,29 @@ private:
     QTimer *m_countdownTimer;
     QTime *m_recordTime;
 
-    /// Just to make sure we don't bother the user too often
-    QTimer                    *m_reportTimer;
-    bool                       m_canReport;
+    /// Used by play() and record() to detect low latency mode changes.
+    /**
+     * This prevents the need for a restart of rg when this mode is changed.
+     *
+     * ??? This is a hidden setting in the config.  Might want to just set
+     *     it true and get rid of all of this.
+     */
+    bool m_lastLowLatencySwitchSent;
 
-    bool                       m_lastLowLatencySwitchSent;
+    // ??? This one looks like it is being used to put the PPP back (in
+    //     stop()) to where it was when play() or record() were called.
+    //     But this is not the observed behavior.  Is this erroneous?
+    //     Who overrides it at stop?  I suspect no one.  My guess at this
+    //     point is that the call to set the PPP in stop() is overridden
+    //     by the next UI update which copies the PPP from the document
+    //     to the UI.  See RosegardenMainWindow::slotUpdateUI().  This is
+    //     probably bogus and should be removed.
+    timeT m_lastTransportStartPosition;
 
-    timeT                      m_lastTransportStartPosition;
-
-    /// Cache of sample rate to avoid locks.
+    /// Cache used by getSampleRate() to avoid locks.
     mutable int m_sampleRate;
 
-    /// Cache to allow setTempo() to detect actual changes.
+    /// Used by setTempo() to detect tempo changes.
     tempoT m_tempo;
 };
 

@@ -88,14 +88,14 @@ SequenceManager::SequenceManager() :
     m_timeSigSegmentMapper(0),
     m_refreshRequested(true),
     m_shownOverrunWarning(false),
+    m_reportTimer(0),
+    m_canReport(true),
     m_transportStatus(STOPPED),
     m_soundDriverStatus(NO_DRIVER),
     m_lastRewoundAt(clock()),
     m_countdownDialog(0),
     m_countdownTimer(0),
     m_recordTime(new QTime()),
-    m_reportTimer(0),
-    m_canReport(true),
     m_lastLowLatencySwitchSent(false),
     m_lastTransportStartPosition(0),
     m_sampleRate(0),
@@ -297,6 +297,9 @@ SequenceManager::stop()
                 else
                     m_doc->slotSetPointerPosition(m_doc->getComposition().getStartMarker());
         */
+        // ??? Suspect this does nothing since it doesn't update the
+        //     position pointer in SequencerDataBlock.  See
+        //     SequencerDataBlock::getPositionPointer().
         m_doc->slotSetPointerPosition(m_lastTransportStartPosition);
 
         return ;
@@ -772,36 +775,43 @@ SequenceManager::processAsynchronousMidi(const MappedEventList &mC,
 
     MappedEventList::const_iterator i;
 
-    // before applying through-filter, catch program-change-messages
-    int prg;
-    int bnk_msb;
-    int bnk_lsb;
-    bnk_msb = -1;
-    bnk_lsb = -1;
+    // Before applying thru filter, catch program changes and
+    // send them to MIPP.
 
-    for (i = mC.begin(); i != mC.end(); ++i ) {
-		
-        // catch bank selects (lsb)
-        if ((*i)->getType() == MappedEvent::MidiController){
-            prg = (*i)->getData1();
-            if (prg == 32 ) {
-                // then it's a Bank Select (fine, LSB)
-                // get bank nr: 
-                bnk_lsb = (*i)->getData2();
-            }else 
-                if (prg == 0 ) {
-                    // then it's a Bank Select (coarse, MSB)
-                    // get msb value: 
-                    bnk_msb = (*i)->getData2();
-                }
+    int bankMSB = -1;
+    int bankLSB = -1;
+
+    // For each event
+    for (i = mC.begin(); i != mC.end(); ++i) {
+
+        const MappedEvent *event = (*i);
+
+        // Bank Select
+
+        // ??? This *requires* that BS and PC come in together.  Is there a
+        //     guarantee that they will come in together?
+
+        if (event->getType() == MappedEvent::MidiController) {
+            int controlNumber = event->getData1();
+
+            // If Bank Select LSB
+            if (controlNumber == 32) {
+                bankLSB = event->getData2();
+            } else if (controlNumber == 0) {  // Bank Select MSB
+                bankMSB = event->getData2();
+            }
         }
-        // catch program changes
-        if ((*i)->getType() == MappedEvent::MidiProgramChange) {
-            // this selects the program-list entry on prog-change-messages 
-            // as well as the previously received bank select (lsb)
-            prg = (*i)->getData1();
-            emit sigProgramChange(bnk_msb, bnk_lsb, prg);
+
+        // Program Change
+
+        if (event->getType() == MappedEvent::MidiProgramChange) {
+            int programChange = event->getData1();
+
+            // Send to MIPP.  If "Receive external" is checked, the MIPP
+            // will update to show this bank and program.
+            emit sigProgramChange(bankMSB, bankLSB, programChange);
         }
+
     }
 	
     // send to the MIDI labels (which can only hold one event at a time)
