@@ -56,16 +56,19 @@ class MappedBufMetaIterator;
  * (RosegardenSequencer).
  *
  * Owns the CompositionMapper.
+ *
+ * What are the broad categories of functionality here?  Can they be split off
+ * into separate classes?
+ *
+ *   - Asynchronous MIDI (incoming/internal MIDI)
+ *   - Management of the Mappers.
+ *   - Transport handling (play(), record(), etc...).
  */
 class ROSEGARDENPRIVATE_EXPORT SequenceManager :
         public QObject, public CompositionObserver
 {
     Q_OBJECT
 public:
-    /**
-     * SequenceManager is not designed to operate without a document;
-     * you must call setDocument before you do anything with it.
-     */
     SequenceManager();
     ~SequenceManager();
 
@@ -73,8 +76,11 @@ public:
      * Sets (replaces) the internal document, and sets a parent widget for
      * the CountDownDialog.
      *
+     * SequenceManager is not designed to operate without a document;
+     * you must call setDocument() before you do anything with it.
+     *
      * ??? Subscribe for RMW::documentChanged() instead of this.
-     *     parentWidget is just RMW::self().
+     *     parentWidget is just RMW::self().  No need to pass it in.
      */
     void setDocument(RosegardenDocument *doc, QWidget *parentWidget);
 
@@ -134,7 +140,7 @@ public:
      */
     void setTempo(const tempoT tempo);
 
-    /// Handle incoming MappedEvent's.
+    /// Handle incoming and internal MappedEvent's.
     /**
      * This handles both incoming events when recording and incoming events
      * that are unrelated to recording.
@@ -219,7 +225,7 @@ public:
     /**
      * QObject override.
      *
-     * Calls checkRefreshStatus().
+     * Calls refresh().
      */
     virtual bool event(QEvent *e);
 
@@ -383,13 +389,36 @@ private:
     TimeSigSegmentMapper *m_timeSigSegmentMapper;  // owned
     void resetTimeSigSegmentMapper();
 
-    void checkRefreshStatus();
+    // *** Refresh Mappers and RosegardenSequencer
 
+    /// Let RosegardenSequencer know about any changes.
+    void refresh();
+
+    // *** Async MIDI
+
+    /// When handling an async MappedEvent::WarningImpreciseTimer.
     bool shouldWarnForImpreciseTimer();
     
+    /// Added Segment refresh queue.
+    /**
+     * Holds new Segment's until they can be refreshed.
+     *
+     * segmentAdded(const Composition *, Segment *) (CompositionObserver)
+     * puts Segments in this list.  refresh() calls
+     * segmentAdded(Segment *) for each Segment it finds here, then clears
+     * this list.
+     */
     std::vector<Segment *> m_addedSegments;
+
+    /// Removed Segment refresh queue.
+    /**
+     * Holds removed Segment's until they can be refreshed.
+     *
+     * segmentRemoved() (CompositionObserver) puts Segment's in this list.
+     * refresh() calls segmentDeleted() for each Segment it finds
+     * here, then clears this list.
+     */
     std::vector<Segment *> m_removedSegments;
-    bool m_metronomeNeedsRefresh;
 
     // statuses
     TransportStatus            m_transportStatus;
@@ -407,7 +436,8 @@ private:
     //
     QTime                     *m_recordTime;
 
-    typedef std::map<Segment *, int> SegmentRefreshMap;
+    /// Map from Segment to refresh status ID.
+    typedef std::map<Segment *, int /* refreshStatusID */> SegmentRefreshMap;
     SegmentRefreshMap m_segments; // map to refresh status id
     SegmentRefreshMap m_triggerSegments;
     unsigned int m_compositionRefreshStatusId;
@@ -431,6 +461,7 @@ private:
     /// Cache of sample rate to avoid locks.
     mutable int m_sampleRate;
 
+    /// Cache to allow setTempo() to detect actual changes.
     tempoT m_tempo;
 };
 

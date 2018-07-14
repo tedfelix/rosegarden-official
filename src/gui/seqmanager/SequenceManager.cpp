@@ -1472,7 +1472,7 @@ bool SequenceManager::event(QEvent *e)
         if (m_updateRequested) {
             SEQMAN_DEBUG << "SequenceManager::event(): update requested"
                          << endl;
-            checkRefreshStatus();
+            refresh();
             m_updateRequested = false;
         }
         return true;
@@ -1490,32 +1490,53 @@ void SequenceManager::update()
     QApplication::postEvent(this, e);
 }
 
-void SequenceManager::checkRefreshStatus()
+void SequenceManager::refresh()
 {
-    SEQMAN_DEBUG << "SequenceManager::checkRefreshStatus()";
-    
+    SEQMAN_DEBUG << "SequenceManager::refresh()";
+
+    Composition &comp = m_doc->getComposition();
+
+    // ??? See Segment::m_refreshStatusArray for insight into what this
+    //     is doing.
+
     // Look at trigger segments first: if one of those has changed, we'll
     // need to be aware of it when scanning segments subsequently
 
+    // List of Segments modified by changes to trigger Segments.  These
+    // will need a refresh.
+    // ??? Instead of gathering these, can't we just set the refresh
+    //     status for the Segment?  Or would that cause others to do
+    //     refreshes?  Can we just set *our* refresh status?
+    // ??? rename: triggerRefreshSet
     TriggerSegmentRec::SegmentRuntimeIdSet ridset;
-    Composition &comp = m_doc->getComposition();
+
+    // List of all trigger Segments.
     SegmentRefreshMap newTriggerMap;
 
+    // For each trigger Segment in the composition
     for (Composition::triggersegmentcontaineriterator i =
              comp.getTriggerSegments().begin();
          i != comp.getTriggerSegments().end(); ++i) {
 
         Segment *s = (*i)->getSegment();
 
+        // If we don't have this one
         if (m_triggerSegments.find(s) == m_triggerSegments.end()) {
+            // Make a new trigger Segment entry.
             newTriggerMap[s] = s->getNewRefreshStatusId();
         } else {
+            // Use the existing entry.
             newTriggerMap[s] = m_triggerSegments[s];
         }
 
+        // If this trigger Segment needs a refresh
         if (s->getRefreshStatus(newTriggerMap[s]).needsRefresh()) {
-            TriggerSegmentRec::SegmentRuntimeIdSet &thisSet = (*i)->getReferences();
+            // Collect all the Segments this will affect.
+            TriggerSegmentRec::SegmentRuntimeIdSet &thisSet =
+                    (*i)->getReferences();
             ridset.insert(thisSet.begin(), thisSet.end());
+
+            // Clear the trigger Segment's refresh flag.
             s->getRefreshStatus(newTriggerMap[s]).setNeedsRefresh(false);
         }
     }
@@ -1523,7 +1544,7 @@ void SequenceManager::checkRefreshStatus()
     m_triggerSegments = newTriggerMap;
 
 #ifdef DEBUG_SEQUENCE_MANAGER
-    SEQMAN_DEBUG << "SequenceManager::checkRefreshStatus: segments modified by changes to trigger segments are:";
+    SEQMAN_DEBUG << "SequenceManager::refresh: segments modified by changes to trigger segments are:";
     int x = 0;
     for (TriggerSegmentRec::SegmentRuntimeIdSet::iterator i = ridset.begin();
             i != ridset.end(); ++i) {
@@ -1534,17 +1555,21 @@ void SequenceManager::checkRefreshStatus()
 
     std::vector<Segment*>::iterator i;
 
-    // Check removed segments first
+    // Removed Segments
+
     for (i = m_removedSegments.begin(); i != m_removedSegments.end(); ++i) {
         segmentDeleted(*i);
     }
     m_removedSegments.clear();
 
-    SEQMAN_DEBUG << "SequenceManager::checkRefreshStatus: we have "
+    SEQMAN_DEBUG << "SequenceManager::refresh: we have "
                  << m_segments.size() << " segments" << endl;
-    // then the ones which are still there
+
+    // Current Segments
+
     for (SegmentRefreshMap::iterator i = m_segments.begin();
             i != m_segments.end(); ++i) {
+        // If this Segment needs a refresh
         if (i->first->getRefreshStatus(i->second).needsRefresh() ||
                 ridset.find(i->first->getRuntimeId()) != ridset.end()) {
             segmentModified(i->first);
@@ -1552,7 +1577,8 @@ void SequenceManager::checkRefreshStatus()
         }
     }
 
-    // then added ones
+    // Added Segments
+
     for (i = m_addedSegments.begin(); i != m_addedSegments.end(); ++i) {
         segmentAdded(*i);
     }
