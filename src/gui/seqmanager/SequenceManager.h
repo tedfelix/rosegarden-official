@@ -70,6 +70,14 @@ class ROSEGARDENPRIVATE_EXPORT SequenceManager :
 {
     Q_OBJECT
 public:
+    /**
+     * The owner of this sequence manager will need to call
+     * checkSoundDriverStatus() on it to set up its status appropriately
+     * immediately after construction; we used to do it from the ctor but
+     * we're not well placed to handle reporting to the user if it
+     * throws an exception (and we don't want to leave the object half
+     * constructed).
+     */
     SequenceManager();
     ~SequenceManager();
 
@@ -355,6 +363,11 @@ private:
     // ??? Get rid of this and go through RMW.
     RosegardenDocument *m_doc;
 
+    /**
+     * @see RosegardenSequencer::getSoundDriverStatus()
+     */
+    SoundDriverStatus m_soundDriverStatus;
+
     // *** CompositionMapper
 
     CompositionMapper *m_compositionMapper;  // owned
@@ -436,6 +449,7 @@ private:
     QTimer *m_reportTimer;
     bool m_canReport;
 
+    // *** Misc
 
     /// TransportStatus on the GUI side.
     /**
@@ -447,15 +461,10 @@ private:
      */
     TransportStatus m_transportStatus;
 
-    /**
-     * @see RosegardenSequencer::getSoundDriverStatus()
-     */
-    SoundDriverStatus m_soundDriverStatus;
-
     /// Used by rewind() to detect rapid pressing of the rewind button.
     clock_t m_lastRewoundAt;
 
-    /// ??? The CountdownDialog has been disabled.
+    /// ??? The CountdownDialog has been disabled.  See feature request #453.
     CountdownDialog *m_countdownDialog;
     QTimer *m_countdownTimer;
     QTime *m_recordTime;

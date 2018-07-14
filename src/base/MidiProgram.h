@@ -13,8 +13,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef RG_MIDIBANK_H
-#define RG_MIDIBANK_H
+#ifndef RG_MIDIPROGRAM_H
+#define RG_MIDIPROGRAM_H
 
 #include <string>
 #include <vector>

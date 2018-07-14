@@ -24,16 +24,16 @@
 
 #include "SequenceManager.h"
 
-#include "sound/Midi.h"
+#include "sound/Midi.h"  // for MIDI_SYSTEM_RESET
 #include "sound/ControlBlock.h"
 #include "misc/Debug.h"
-#include "misc/Strings.h"
+#include "misc/Strings.h"  // for qStrToBool()
 #include "misc/ConfigGroups.h"
 #include "base/Composition.h"
 #include "base/Device.h"
 #include "base/Exception.h"
 #include "base/Instrument.h"
-#include "base/MidiProgram.h"
+#include "base/MidiProgram.h"  // for MidiFilter
 #include "base/RealTime.h"
 #include "base/Segment.h"
 #include "base/Studio.h"
@@ -44,54 +44,51 @@
 #include "document/CommandHistory.h"
 #include "gui/dialogs/AudioManagerDialog.h"
 #include "gui/dialogs/CountdownDialog.h"
-#include "gui/editors/segment/TrackEditor.h"
+#include "gui/application/RosegardenMainWindow.h"
 #include "gui/widgets/StartupLogo.h"
 #include "gui/studio/StudioControl.h"
-#include "gui/dialogs/DialogSuppressor.h"
 #include "gui/widgets/WarningWidget.h"
 #include "sequencer/RosegardenSequencer.h"
 #include "MarkerMapper.h"
 #include "MetronomeMapper.h"
 #include "TempoSegmentMapper.h"
 #include "TimeSigSegmentMapper.h"
-#include "sound/AudioFile.h"
+#include "sound/AudioFile.h"  // For AudioFileId
 #include "sound/MappedEventList.h"
 #include "sound/MappedEvent.h"
 #include "sound/MappedInstrument.h"
-#include "sound/SoundDriver.h"
 
-#include "rosegarden-version.h"
+#include "rosegarden-version.h"  // for VERSION
 
 #include <QSettings>
 #include <QMessageBox>
 #include <QApplication>
-#include <QByteArray>
 #include <QCursor>
-#include <QDataStream>
 #include <QEvent>
-#include <QObject>
-#include <QPushButton>
 #include <QString>
-#include <QStringList>
 #include <QTimer>
 
-#include <algorithm>
+#include <utility>  // For std::pair.
 
 namespace Rosegarden
 {
 
 SequenceManager::SequenceManager() :
     m_doc(0),
+    m_soundDriverStatus(NO_DRIVER),
     m_compositionMapper(0),
     m_metronomeMapper(0),
     m_tempoSegmentMapper(0),
     m_timeSigSegmentMapper(0),
     m_refreshRequested(true),
+    m_segments(),
+    m_triggerSegments(),
+    m_addedSegments(),
+    m_removedSegments(),
     m_shownOverrunWarning(false),
     m_reportTimer(0),
     m_canReport(true),
     m_transportStatus(STOPPED),
-    m_soundDriverStatus(NO_DRIVER),
     m_lastRewoundAt(clock()),
     m_countdownDialog(0),
     m_countdownTimer(0),
@@ -101,26 +98,26 @@ SequenceManager::SequenceManager() :
     m_sampleRate(0),
     m_tempo(0)
 {
-    // The owner of this sequence manager will need to call
-    // checkSoundDriverStatus on it to set up its status appropriately
-    // immediately after construction; we used to do it from here but
-    // we're not well placed to handle reporting to the user if it
-    // throws an exception (and we don't want to leave the object half
-    // constructed).
 }
 
 SequenceManager::~SequenceManager()
 {
-    if (m_doc) {
-        m_doc->getComposition().removeObserver(this);
-    }
+    RG_DEBUG << "dtor...";
 
-    SEQMAN_DEBUG << "SequenceManager::~SequenceManager()";
+    if (m_doc)
+        m_doc->getComposition().removeObserver(this);
+
     delete m_compositionMapper;
+
+    // ??? Use QSharedPointer instead.
     if (m_metronomeMapper)
         m_metronomeMapper->removeOwner();
+
+    // ??? Use QSharedPointer instead.
     if (m_tempoSegmentMapper)
         m_tempoSegmentMapper->removeOwner();
+
+    // ??? Use QSharedPointer instead.
     if (m_timeSigSegmentMapper)
         m_timeSigSegmentMapper->removeOwner();
 }
