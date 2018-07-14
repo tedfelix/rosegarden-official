@@ -773,6 +773,13 @@ else()
 qt5_add_resources(rg_SOURCES ../data/data.qrc)
 endif()
 
+# Turn off automoc for generated files.
+set_property(SOURCE ui_RosegardenTransportUi.h PROPERTY SKIP_AUTOMOC ON)
+set_property(SOURCE ui_DeviceManagerDialogUi.h PROPERTY SKIP_AUTOMOC ON)
+set_property(SOURCE svnversion.h PROPERTY SKIP_AUTOMOC ON)
+set_property(SOURCE qrc_data.cxx PROPERTY SKIP_AUTOMOC ON)
+set_property(SOURCE qrc_locale.cpp PROPERTY SKIP_AUTOMOC ON)
+
 # Define a static lib with the whole code
 add_library(rosegardenprivate ${RG_LIBRARY_TYPE}
    ${rg_SOURCES}
