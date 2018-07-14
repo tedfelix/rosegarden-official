@@ -23,6 +23,7 @@
 #include "gui/application/TransportStatus.h"
 #include "sound/MappedEventList.h"
 #include "sound/MappedEvent.h"
+#include "sound/SoundDriver.h"
 
 #include <QObject>
 #include <QString>
@@ -260,8 +261,8 @@ public slots:
 
     // Transport Controls (cont'd)
 
-    // The following are slots for the test driver:
-    // test_notationview_selection.cpp
+    // The following are slots to allow the test driver
+    // (test_notationview_selection.cpp) to access them.
 
     void rewind();
     void fastforward();
@@ -394,11 +395,14 @@ private:
     /// Let RosegardenSequencer know about any changes.
     void refresh();
 
-    // *** Async MIDI
+    /// Used by update() to let event() know we want a refresh().
+    bool m_refreshRequested;
 
-    /// When handling an async MappedEvent::WarningImpreciseTimer.
-    bool shouldWarnForImpreciseTimer();
-    
+    /// Map from Segment to refresh status ID.
+    typedef std::map<Segment *, int /* refreshStatusID */> SegmentRefreshMap;
+    SegmentRefreshMap m_segments;
+    SegmentRefreshMap m_triggerSegments;
+
     /// Added Segment refresh queue.
     /**
      * Holds new Segment's until they can be refreshed.
@@ -420,37 +424,39 @@ private:
      */
     std::vector<Segment *> m_removedSegments;
 
-    // statuses
-    TransportStatus            m_transportStatus;
-    unsigned int               m_soundDriverStatus;
+    // *** Async MIDI
 
-    clock_t                    m_lastRewoundAt;
+    /// When handling an async MappedEvent::WarningImpreciseTimer.
+    bool shouldWarnForImpreciseTimer();
+
+    /// Prevents showing an overrun warning more than once.
+    bool m_shownOverrunWarning;
+
+
+    /// TransportStatus on the GUI side.
+    /**
+     * This usually reflects the TransportStatus on the RosegardenSequencer
+     * side, but can be briefly out of sync as the sequencer moves from one
+     * state to another.
+     *
+     * @see RosegardenSequencer::m_transportStatus
+     */
+    TransportStatus m_transportStatus;
+
+    /**
+     * @see RosegardenSequencer::getSoundDriverStatus()
+     */
+    SoundDriverStatus m_soundDriverStatus;
+
+    /// Used by rewind() to detect rapid pressing of the rewind button.
+    clock_t m_lastRewoundAt;
 
     /// ??? The CountdownDialog has been disabled.
     CountdownDialog *m_countdownDialog;
     QTimer *m_countdownTimer;
+    QTime *m_recordTime;
 
-    bool                      m_shownOverrunWarning;
-
-    // Keep a track of elapsed record time with this object
-    //
-    QTime                     *m_recordTime;
-
-    /// Map from Segment to refresh status ID.
-    typedef std::map<Segment *, int /* refreshStatusID */> SegmentRefreshMap;
-    SegmentRefreshMap m_segments; // map to refresh status id
-    SegmentRefreshMap m_triggerSegments;
-    unsigned int m_compositionRefreshStatusId;
-    bool m_updateRequested;
-
-    // used to schedule a composition mapper reset when the
-    // composition end time marker changes this can be caused by a
-    // window resize, and since the reset is potentially expensive we
-    // want to collapse several following requests into one.
-    //QTimer                    *m_compositionMapperResetTimer;
-
-    // Just to make sure we don't bother the user too often
-    //
+    /// Just to make sure we don't bother the user too often
     QTimer                    *m_reportTimer;
     bool                       m_canReport;
 

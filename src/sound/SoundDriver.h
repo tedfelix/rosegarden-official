@@ -49,14 +49,14 @@ typedef enum
 // Status of a SoundDriver - whether we're got an audio and
 // MIDI subsystem or not.  This is reported right up to the
 // gui.
-//
-typedef enum
+typedef unsigned int SoundDriverStatus;
+enum
 {
     NO_DRIVER  = 0x00,          // Nothing's OK
     AUDIO_OK   = 0x01,          // AUDIO's OK
     MIDI_OK    = 0x02,          // MIDI's OK
     VERSION_OK = 0x04           // GUI and sequencer versions match
-} SoundDriverStatus;
+};
 
 
 // Used for MMC and MTC, not for JACK transport

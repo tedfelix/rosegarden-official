@@ -86,15 +86,14 @@ SequenceManager::SequenceManager() :
     m_metronomeMapper(0),
     m_tempoSegmentMapper(0),
     m_timeSigSegmentMapper(0),
+    m_refreshRequested(true),
+    m_shownOverrunWarning(false),
     m_transportStatus(STOPPED),
     m_soundDriverStatus(NO_DRIVER),
     m_lastRewoundAt(clock()),
     m_countdownDialog(0),
     m_countdownTimer(0),
-    m_shownOverrunWarning(false),
     m_recordTime(new QTime()),
-    m_updateRequested(true),
-    //m_compositionMapperResetTimer(0),
     m_reportTimer(0),
     m_canReport(true),
     m_lastLowLatencySwitchSent(false),
@@ -149,7 +148,6 @@ SequenceManager::setDocument(RosegardenDocument *doc, QWidget *parentWidget)
     //
     delete m_countdownDialog;
     delete m_countdownTimer;
-    //delete m_compositionMapperResetTimer;
 
     m_countdownDialog = new CountdownDialog(parentWidget);
 
@@ -161,11 +159,6 @@ SequenceManager::setDocument(RosegardenDocument *doc, QWidget *parentWidget)
     connect(m_countdownTimer, SIGNAL(timeout()),
             this, SLOT(slotCountdownTimerTimeout()));
 
-    //m_compositionMapperResetTimer = new QTimer(m_doc);
-    //connect(m_compositionMapperResetTimer, SIGNAL(timeout()),
-    //        this, SLOT(slotScheduledCompositionMapperReset()));
-
-    m_compositionRefreshStatusId = comp.getNewRefreshStatusId();
     comp.addObserver(this);
 
     connect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
@@ -1469,11 +1462,11 @@ bool SequenceManager::event(QEvent *e)
 {
     if (e->type() == QEvent::User) {
         SEQMAN_DEBUG << "SequenceManager::event() with user event";
-        if (m_updateRequested) {
+        if (m_refreshRequested) {
             SEQMAN_DEBUG << "SequenceManager::event(): update requested"
                          << endl;
             refresh();
-            m_updateRequested = false;
+            m_refreshRequested = false;
         }
         return true;
     } else {
@@ -1486,7 +1479,10 @@ void SequenceManager::update()
     SEQMAN_DEBUG << "SequenceManager::update()";
     // schedule a refresh-status check for the next event loop
     QEvent *e = new QEvent(QEvent::User);
-    m_updateRequested = true;
+    // Let the handler know we want a refresh().
+    // ??? But we always want a refresh().  When wouldn't we?  Are
+    //     we getting QEvent::User events from elsewhere?
+    m_refreshRequested = true;
     QApplication::postEvent(this, e);
 }
 
@@ -1750,13 +1746,6 @@ void SequenceManager::endMarkerTimeChanged(const Composition *, bool /*shorten*/
         // update the metronome segment.  There appear to be other
         // important things that need to be done as well.
         slotScheduledCompositionMapperReset();
-
-        // This used to be done after a .5 second delay.  Doesn't seem
-        // necessary now.
-        // Call slotScheduledCompositionMapperReset() in .5 seconds to
-        // reset the composition mapper based on the new composition size.
-        //m_compositionMapperResetTimer->setSingleShot(true);
-        //m_compositionMapperResetTimer->start(500);
     }
 }
 
