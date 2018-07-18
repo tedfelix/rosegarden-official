@@ -59,8 +59,13 @@ class InternalSegmentMapper : public SegmentMapper
 {
 public:
     InternalSegmentMapper(RosegardenDocument *doc, Segment *segment);
+    ~InternalSegmentMapper();
 
 private:
+    // Hide copy ctor and op= since dtor is non-trivial.
+    InternalSegmentMapper(const InternalSegmentMapper &);
+    InternalSegmentMapper operator=(const InternalSegmentMapper &);
+
     friend class ControllerSearch;
     friend class ControllerContextMap;
 
@@ -86,8 +91,6 @@ private:
     // filter noteoffs so it can't be.
     typedef std::multiset<Noteoff, NoteoffCmp>
         NoteoffContainer;
-
-    ~InternalSegmentMapper(void);
 
     // Do channel-setup for Auto channel mode.
     virtual void makeReady(MappedInserterBase &inserter, RealTime time);
