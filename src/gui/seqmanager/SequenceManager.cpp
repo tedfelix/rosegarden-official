@@ -93,7 +93,6 @@ SequenceManager::SequenceManager() :
     m_countdownDialog(0),
     m_countdownTimer(0),
     m_recordTime(new QTime()),
-    m_lastLowLatencySwitchSent(false),
     m_lastTransportStartPosition(0),
     m_sampleRate(0),
     m_tempo(0)
@@ -205,14 +204,6 @@ SequenceManager::play()
     // If we're looping then jump to loop start
     if (comp.isLooping())
         startPos = comp.getElapsedRealTime(comp.getLoopStart());
-
-    const bool lowLatency = true;
-
-    // ??? If low latency is the default, get rid of this.
-    if (lowLatency != m_lastLowLatencySwitchSent) {
-        RosegardenSequencer::getInstance()->setLowLatencyMode(lowLatency);
-        m_lastLowLatencySwitchSent = lowLatency;
-    }
 
     // ??? Push the constant values down into RosegardenSequencer.
     int result = RosegardenSequencer::getInstance()->play(
@@ -621,15 +612,6 @@ punchin:
         //
         RealTime startPos =
             comp.getElapsedRealTime(comp.getPosition());
-
-        // Assume always low latency.
-        const bool lowLatency = true;
-
-        // ??? If low latency is the default, get rid of this.
-        if (lowLatency != m_lastLowLatencySwitchSent) {
-            RosegardenSequencer::getInstance()->setLowLatencyMode(lowLatency);
-            m_lastLowLatencySwitchSent = lowLatency;
-        }
 
         // ??? Push the constant values down into RosegardenSequencer.
         int result = RosegardenSequencer::getInstance()->record(

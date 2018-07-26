@@ -667,14 +667,6 @@ RosegardenSequencer::setCurrentTimer(QString timer)
     m_driver->setCurrentTimer(timer);
 }
 
-void
-RosegardenSequencer::setLowLatencyMode(bool ll)
-{
-    LOCKED;
-
-    m_driver->setLowLatencyMode(ll);
-}
-
 RealTime
 RosegardenSequencer::getAudioPlayLatency()
 {

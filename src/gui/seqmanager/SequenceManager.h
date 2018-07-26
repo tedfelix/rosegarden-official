@@ -469,15 +469,6 @@ private:
     QTimer *m_countdownTimer;
     QTime *m_recordTime;
 
-    /// Used by play() and record() to detect low latency mode changes.
-    /**
-     * This prevents the need for a restart of rg when this mode is changed.
-     *
-     * ??? This is a hidden setting in the config.  Might want to just set
-     *     it true and get rid of all of this.
-     */
-    bool m_lastLowLatencySwitchSent;
-
     // ??? This one looks like it is being used to put the PPP back (in
     //     stop()) to where it was when play() or record() were called.
     //     But this is not the observed behavior.  Is this erroneous?

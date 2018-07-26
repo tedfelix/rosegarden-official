@@ -366,7 +366,8 @@ public:
     RealTime getAudioWriteBufferLength() { return m_audioWriteBufferLength; }
     int getSmallFileSize() { return m_smallFileSize; }
 
-    void setLowLatencyMode(bool ll) { m_lowLatencyMode = ll; }
+    // ??? Always true.
+    //void setLowLatencyMode(bool ll) { m_lowLatencyMode = ll; }
     bool getLowLatencyMode() const { return m_lowLatencyMode; }
 
     // Cancel the playback of an audio file - either by instrument and audio file id

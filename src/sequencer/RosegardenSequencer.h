@@ -251,8 +251,6 @@ public:
      */
     void setCurrentTimer(QString timer);
 
-    void setLowLatencyMode(bool);
-
     RealTime getAudioPlayLatency();
     RealTime getAudioRecordLatency();
 
