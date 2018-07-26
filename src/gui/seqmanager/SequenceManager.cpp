@@ -289,29 +289,34 @@ SequenceManager::stop()
 void
 SequenceManager::rewind()
 {
-    if (!m_doc) return;
+    if (!m_doc)
+        return;
 
     Composition &composition = m_doc->getComposition();
 
     timeT position = composition.getPosition();
+
+    // Subtract one from position to make sure we go back one bar if we
+    // are stopped and sitting at the beginning of a bar.
     std::pair<timeT, timeT> barRange =
         composition.getBarRangeForTime(position - 1);
 
     if (m_transportStatus == PLAYING) {
-
-        // if we're playing and we had a rewind request less than 200ms
-        // ago and we're some way into the bar but less than half way
-        // through it, rewind two barlines instead of one
-
+        // Compute elapsed time since last rewind press.
         clock_t now = clock();
         int elapsed = (now - m_lastRewoundAt) * 1000 / CLOCKS_PER_SEC;
 
-        SEQMAN_DEBUG << "That was " << m_lastRewoundAt << ", this is " << now << ", elapsed is " << elapsed;
+        //RG_DEBUG << "rewind(): That was " << m_lastRewoundAt << ", this is " << now << ", elapsed is " << elapsed;
+
+        // If we had a rewind press less than 200ms ago...
         if (elapsed >= 0 && elapsed <= 200) {
-            if (position > barRange.first &&
-                    position < barRange.second &&
-                    position <= (barRange.first + (barRange.second -
-                                                   barRange.first) / 2)) {
+
+            timeT halfway = barRange.first +
+                    (barRange.second - barRange.first) / 2;
+
+            // If we're less than half way into the bar
+            if (position <= halfway) {
+                // Rewind an additional bar.
                 barRange = composition.getBarRangeForTime(barRange.first - 1);
             }
         }
@@ -329,20 +334,19 @@ SequenceManager::rewind()
 void
 SequenceManager::fastforward()
 {
-    if (!m_doc) return;
+    if (!m_doc)
+        return;
 
     Composition &composition = m_doc->getComposition();
 
-    timeT position = composition.getPosition() + 1;
-    timeT newPosition = composition.getBarRangeForTime(position).second;
+    timeT position = composition.getPosition();
+    timeT newPosition = composition.getBarEndForTime(position);
 
-    // Don't skip past end marker
-    //
+    // Don't skip past end marker.
     if (newPosition > composition.getEndMarker())
         newPosition = composition.getEndMarker();
 
     m_doc->slotSetPointerPosition(newPosition);
-
 }
 
 void

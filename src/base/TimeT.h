@@ -20,7 +20,7 @@
 
 namespace Rosegarden
 {
-    // Time in internal units.
+    // Time in internal units (pulses).  Timebase is 960ppq.
     typedef long timeT;
 
     // Time used in the rewriter to represent tupled notes exactly.

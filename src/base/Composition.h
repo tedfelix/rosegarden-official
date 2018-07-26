@@ -489,6 +489,8 @@ public:
      * 
      * Will happily return theoretical timings for bars before the
      * start or beyond the end of composition.
+     *
+     * ??? typedef std::pair<timeT, timeT> BarRange;
      */
     std::pair<timeT, timeT> getBarRangeForTime(timeT t) const;
 
