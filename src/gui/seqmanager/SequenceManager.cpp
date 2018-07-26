@@ -206,41 +206,21 @@ SequenceManager::play()
     if (comp.isLooping())
         startPos = comp.getElapsedRealTime(comp.getLoopStart());
 
-    QSettings settings;
-    settings.beginGroup( SequencerOptionsConfigGroup );
-    // ??? This is a hidden config setting.  Get rid of it.  Assume true.
-    bool lowLat = qStrToBool( settings.value("audiolowlatencymonitoring", "true" ) ) ;
-    settings.endGroup();
+    const bool lowLatency = true;
 
-    if (lowLat != m_lastLowLatencySwitchSent) {
-        RosegardenSequencer::getInstance()->setLowLatencyMode(lowLat);
-        m_lastLowLatencySwitchSent = lowLat;
+    // ??? If low latency is the default, get rid of this.
+    if (lowLatency != m_lastLowLatencySwitchSent) {
+        RosegardenSequencer::getInstance()->setLowLatencyMode(lowLatency);
+        m_lastLowLatencySwitchSent = lowLatency;
     }
 
-    RealTime readAhead;
-    RealTime audioMix;
-
-    // Apart from perhaps the small file size, I think with hindsight
-    // that these options are more easily set to reasonable defaults
-    // here than left to the user.  Mostly.
-
-    // !!! need some cleverness somewhere to ensure the read-ahead
-    //     is larger than the JACK period size
-
-    if (lowLat) {
-        readAhead  = RealTime(0, 160000000);
-        audioMix   = RealTime(0, 60000000); // ignored in lowlat mode
-    } else {
-        readAhead  = RealTime(0, 500000000);
-        audioMix   = RealTime(0, 400000000); // ignored in lowlat mode
-    }
-
+    // ??? Push the constant values down into RosegardenSequencer.
     int result = RosegardenSequencer::getInstance()->play(
             startPos,
-            readAhead,
-            audioMix,
-            RealTime(2, 500000000),  // audioRead
-            RealTime(4, 0),  // audioWrite
+            RealTime(0, 160000000),  // readAhead 160msecs
+            RealTime(0, 60000000),  // audioMix (ignored in low latency mode?)
+            RealTime(2, 500000000),  // audioRead 2.5 secs
+            RealTime(4, 0),  // audioWrite 4.0 secs
             256);  // smallFileSize (k)
 
     // Failed?  Bail.
@@ -628,14 +608,12 @@ punchin:
         emit signalPlaying(true);
 
         if (comp.getCurrentTempo() == 0) {
-            SEQMAN_DEBUG << "SequenceManager::play() - setting Tempo to Default value of 120.000";
+            SEQMAN_DEBUG << "SequenceManager::record() - setting Tempo to Default value of 120.000";
             comp.setCompositionDefaultTempo(comp.getTempoForQpm(120.0));
         } else {
             SEQMAN_DEBUG << "SequenceManager::record() - starting to record";
         }
 
-        // set the tempo in the transport
-        //
         setTempo(comp.getCurrentTempo());
 
         // The arguments for the Sequencer - record is similar to playback,
@@ -644,47 +622,24 @@ punchin:
         RealTime startPos =
             comp.getElapsedRealTime(comp.getPosition());
 
-//         QSettings settings;
-        settings.beginGroup( GeneralOptionsConfigGroup );
-        // ??? This is a hidden config setting.  Get rid of it.  Assume true.
-        bool lowLat = qStrToBool( settings.value("audiolowlatencymonitoring", "true" ) ) ;
-        settings.endGroup();
+        // Assume always low latency.
+        const bool lowLatency = true;
 
-        if (lowLat != m_lastLowLatencySwitchSent) {
-            RosegardenSequencer::getInstance()->setLowLatencyMode(lowLat);
-            m_lastLowLatencySwitchSent = lowLat;
+        // ??? If low latency is the default, get rid of this.
+        if (lowLatency != m_lastLowLatencySwitchSent) {
+            RosegardenSequencer::getInstance()->setLowLatencyMode(lowLatency);
+            m_lastLowLatencySwitchSent = lowLatency;
         }
 
-        RealTime readAhead, audioMix, audioRead, audioWrite;
-        long smallFileSize;
-
-        // Apart from perhaps the small file size, I think with hindsight
-        // that these options are more easily set to reasonable defaults
-        // here than left to the user.  Mostly.
-
-        // !!! Duplicates code in play()
-
-        // !!! need some cleverness somewhere to ensure the read-ahead
-        //     is larger than the JACK period size
-
-        if (lowLat) {
-            readAhead  = RealTime(0, 160000000);
-            audioMix   = RealTime(0, 60000000); // ignored in lowlat mode
-            audioRead  = RealTime(2, 500000000); // audio read nsec
-            audioWrite = RealTime(4, 0);
-            smallFileSize = 256; // K
-        } else {
-            readAhead  = RealTime(0, 500000000);
-            audioMix   = RealTime(0, 400000000); // ignored in lowlat mode
-            audioRead  = RealTime(2, 500000000); // audio read nsec
-            audioWrite = RealTime(4, 0);
-            smallFileSize = 256; // K
-        }
-
-        int result = 
-            RosegardenSequencer::getInstance()->
-            record(startPos, readAhead, audioMix, audioRead, audioWrite, smallFileSize,
-                   STARTING_TO_RECORD);
+        // ??? Push the constant values down into RosegardenSequencer.
+        int result = RosegardenSequencer::getInstance()->record(
+                startPos,
+                RealTime(0, 160000000),  // readAhead
+                RealTime(0, 60000000),  // audioMix (ignored in low latency mode?)
+                RealTime(2, 500000000),  // audioRead
+                RealTime(4, 0),  // audioWrite
+                256,  // smallFileSize (k)
+                STARTING_TO_RECORD);  // recordMode
 
         if (result) {
 

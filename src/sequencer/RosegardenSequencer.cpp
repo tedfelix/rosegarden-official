@@ -190,6 +190,9 @@ RosegardenSequencer::play(const RealTime &time,
 {
     LOCKED;
 
+    // ??? Precondition: readAhead should be larger than the JACK
+    //     (m_driver) period size.
+
     if (m_transportStatus == PLAYING ||
         m_transportStatus == STARTING_TO_PLAY)
         return true;
@@ -252,6 +255,9 @@ RosegardenSequencer::record(const RealTime &time,
                             long recordMode)
 {
     LOCKED;
+
+    // ??? Precondition: readAhead should be larger than the JACK
+    //     (m_driver) period size.
 
     TransportStatus localRecordMode = (TransportStatus) recordMode;
 
