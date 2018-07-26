@@ -71,7 +71,7 @@ void TestNotationViewSelection::initTestCase()
     QCOMPARE(m_view->getCurrentSegment(), m_segment);
     QCOMPARE(m_segment->getStartTime(), timeT(0));
 
-    m_seqManager.setDocument(&m_doc, 0);
+    m_seqManager.setDocument(&m_doc);
 
     // The mainwindow connects fast-forward and rewind (to intercept them when recording), so we need to do it ourselves here.
     connect(m_view, SIGNAL(fastForwardPlayback()),

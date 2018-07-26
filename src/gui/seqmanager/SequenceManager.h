@@ -91,7 +91,7 @@ public:
      * ??? Subscribe for RMW::documentChanged() instead of this.
      *     parentWidget is just RMW::self().  No need to pass it in.
      */
-    void setDocument(RosegardenDocument *doc, QWidget *parentWidget);
+    void setDocument(RosegardenDocument *doc);
 
     /**
      * Update m_soundDriverStatus.
@@ -370,7 +370,7 @@ private:
 
     // *** CompositionMapper
 
-    CompositionMapper *m_compositionMapper;  // owned
+    QSharedPointer<CompositionMapper> m_compositionMapper;  // owned
     /// Reset everything.
     void resetCompositionMapper();
     /// Add each Segment from the Composition to the CompositionMapper.
@@ -484,8 +484,9 @@ private:
     //     Who overrides it at stop?  I suspect no one.  My guess at this
     //     point is that the call to set the PPP in stop() is overridden
     //     by the next UI update which copies the PPP from the document
-    //     to the UI.  See RosegardenMainWindow::slotUpdateUI().  This is
-    //     probably bogus and should be removed.
+    //     to the UI.  See RosegardenMainWindow::slotUpdateUI().
+    // ??? See feature request #452 which talks about how and
+    //     when this should work.  Perhaps we should fix it?
     timeT m_lastTransportStartPosition;
 
     /// Cache used by getSampleRate() to avoid locks.

@@ -76,7 +76,7 @@ namespace Rosegarden
 SequenceManager::SequenceManager() :
     m_doc(0),
     m_soundDriverStatus(NO_DRIVER),
-    m_compositionMapper(0),
+    m_compositionMapper(),
     m_metronomeMapper(0),
     m_tempoSegmentMapper(0),
     m_timeSigSegmentMapper(0),
@@ -106,37 +106,38 @@ SequenceManager::~SequenceManager()
 
     if (m_doc)
         m_doc->getComposition().removeObserver(this);
-
-    delete m_compositionMapper;
 }
 
 void
-SequenceManager::setDocument(RosegardenDocument *doc, QWidget *parentWidget)
+SequenceManager::setDocument(RosegardenDocument *doc)
 {
-    SEQMAN_DEBUG << "SequenceManager::setDocument(" << doc << ")";
+    RG_DEBUG << "setDocument(" << doc << ")";
 
     DataBlockRepository::clear();
 
-    if (m_doc) m_doc->getComposition().removeObserver(this);
+    if (m_doc)
+        m_doc->getComposition().removeObserver(this);
+
+    // Avoid duplicate connections.
     disconnect(CommandHistory::getInstance(), SIGNAL(commandExecuted()));
 
     m_segments.clear();
     m_triggerSegments.clear();
 
     m_doc = doc;
-    Composition &comp = m_doc->getComposition();
 
     m_doc->setSequenceManager(this);
 
     // Must recreate and reconnect the countdown timer and dialog
-    // (bug 729039)
+    // (bug #200 was 729039 "audio recording bug")
     //
     delete m_countdownDialog;
     delete m_countdownTimer;
 
-    m_countdownDialog = new CountdownDialog(parentWidget);
+    m_countdownDialog = new CountdownDialog(RosegardenMainWindow::self());
 
-    // Bug 933041: no longer connect the CountdownDialog from
+    // Bug #394: playback pointer wonkiness when stopping recording
+    // (was 933041)  No longer connect the CountdownDialog from
     // SequenceManager; instead let the RosegardenMainWindow connect it to
     // its own slotStop to ensure the right housekeeping is done
 
@@ -144,7 +145,7 @@ SequenceManager::setDocument(RosegardenDocument *doc, QWidget *parentWidget)
     connect(m_countdownTimer, SIGNAL(timeout()),
             this, SLOT(slotCountdownTimerTimeout()));
 
-    comp.addObserver(this);
+    m_doc->getComposition().addObserver(this);
 
     connect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
             this, SLOT(update()));
@@ -164,8 +165,7 @@ SequenceManager::play()
     Composition &comp = m_doc->getComposition();
 
     // If already playing or recording then stop
-    //
-    if (m_transportStatus == PLAYING ||
+    if (m_transportStatus == PLAYING  ||
         m_transportStatus == RECORDING) {
         stop();
         return;
@@ -174,40 +174,32 @@ SequenceManager::play()
     // This check may throw an exception
     checkSoundDriverStatus(false);
 
-    // Align Instrument lists.
+    // Make sure RosegardenSequencer has the right Instrument objects.
     preparePlayback();
 
+    // Remember the last playback position so that we can return on stop.
+    // ??? Not working.  Fix and make it an option.  See feature request #452.
     m_lastTransportStartPosition = comp.getPosition();
 
     // Update play metronome status
-    //
-    ControlBlock::getInstance()->setInstrumentForMetronome
-        (m_metronomeMapper->getMetronomeInstrument());
+    ControlBlock::getInstance()->setInstrumentForMetronome(
+            m_metronomeMapper->getMetronomeInstrument());
     ControlBlock::getInstance()->setMetronomeMuted(!comp.usePlayMetronome());
 
-    // make sure we toggle the play button
-    //
+    // Depress the play button.
     emit signalPlaying(true);
 
-    // !!! disable the record button, because recording while playing is horribly
-    //     broken, and disabling it is less complicated than fixing it
-    //     see #1223025 - DMM
-    //    SEQMAN_DEBUG << "SequenceManager::play() - disabling record button, as we are playing\n";
-    //    m_transport->RecordButton()->setEnabled(false);
-
     if (comp.getCurrentTempo() == 0) {
-        comp.setCompositionDefaultTempo(comp.getTempoForQpm(120.0));
+        RG_DEBUG << "play() - setting Tempo to Default value of 120.000";
 
-        SEQMAN_DEBUG << "SequenceManager::play() - setting Tempo to Default value of 120.000";
-    } else {
-        SEQMAN_DEBUG << "SequenceManager::play() - starting to play";
+        comp.setCompositionDefaultTempo(comp.getTempoForQpm(120.0));
     }
 
     // Send initial tempo
-    //
     setTempo(comp.getCurrentTempo());
 
     // The arguments for the Sequencer
+
     RealTime startPos = comp.getElapsedRealTime(comp.getPosition());
 
     // If we're looping then jump to loop start
@@ -216,16 +208,17 @@ SequenceManager::play()
 
     QSettings settings;
     settings.beginGroup( SequencerOptionsConfigGroup );
-
+    // ??? This is a hidden config setting.  Get rid of it.  Assume true.
     bool lowLat = qStrToBool( settings.value("audiolowlatencymonitoring", "true" ) ) ;
+    settings.endGroup();
 
     if (lowLat != m_lastLowLatencySwitchSent) {
         RosegardenSequencer::getInstance()->setLowLatencyMode(lowLat);
         m_lastLowLatencySwitchSent = lowLat;
     }
 
-    RealTime readAhead, audioMix, audioRead, audioWrite;
-    long smallFileSize;
+    RealTime readAhead;
+    RealTime audioMix;
 
     // Apart from perhaps the small file size, I think with hindsight
     // that these options are more easily set to reasonable defaults
@@ -237,29 +230,27 @@ SequenceManager::play()
     if (lowLat) {
         readAhead  = RealTime(0, 160000000);
         audioMix   = RealTime(0, 60000000); // ignored in lowlat mode
-        audioRead  = RealTime(2, 500000000); // audio read nsec
-        audioWrite = RealTime(4, 0);
-        smallFileSize = 256; // K
     } else {
         readAhead  = RealTime(0, 500000000);
         audioMix   = RealTime(0, 400000000); // ignored in lowlat mode
-        audioRead  = RealTime(2, 500000000); // audio read nsec
-        audioWrite = RealTime(4, 0);
-        smallFileSize = 256; // K
     }
 
-    int result = 
-        RosegardenSequencer::getInstance()->
-        play(startPos, readAhead, audioMix, audioRead, audioWrite, smallFileSize);
+    int result = RosegardenSequencer::getInstance()->play(
+            startPos,
+            readAhead,
+            audioMix,
+            RealTime(2, 500000000),  // audioRead
+            RealTime(4, 0),  // audioWrite
+            256);  // smallFileSize (k)
 
-    if (result) {
-        // completed successfully
-        m_transportStatus = STARTING_TO_PLAY;
-    } else {
+    // Failed?  Bail.
+    if (!result) {
+        RG_WARNING << "play(): WARNING: Failed to start playback!";
         m_transportStatus = STOPPED;
-        std::cerr << "ERROR: SequenceManager::play(): Failed to start playback!" << std::endl;
+        return;
     }
-    settings.endGroup();
+
+    m_transportStatus = STARTING_TO_PLAY;
 }
 
 void
@@ -655,7 +646,7 @@ punchin:
 
 //         QSettings settings;
         settings.beginGroup( GeneralOptionsConfigGroup );
-
+        // ??? This is a hidden config setting.  Get rid of it.  Assume true.
         bool lowLat = qStrToBool( settings.value("audiolowlatencymonitoring", "true" ) ) ;
         settings.endGroup();
 
@@ -1255,6 +1246,8 @@ SequenceManager::checkSoundDriverStatus(bool warnUser)
 void
 SequenceManager::preparePlayback()
 {
+    // ??? rename: setMappedInstruments()
+
     // ??? Where does this function really belong?  It iterates over the
     //     Instrument's in the Studio and calls
     //     RosegardenSequencer::setMappedInstrument().  Seems like
@@ -1375,8 +1368,7 @@ void SequenceManager::resetCompositionMapper()
     
     RosegardenSequencer::getInstance()->compositionAboutToBeDeleted();
 
-    delete m_compositionMapper;
-    m_compositionMapper = new CompositionMapper(m_doc);
+    m_compositionMapper.reset(new CompositionMapper(m_doc));
 
     resetMetronomeMapper();
     resetTempoSegmentMapper();
