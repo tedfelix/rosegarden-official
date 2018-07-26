@@ -24,7 +24,11 @@ typedef enum
      STOPPING,
      STARTING_TO_PLAY,
      STARTING_TO_RECORD,
-     RECORDING_ARMED,                   // gui only state
+     // SequenceManager uses this state when we go to record.  We stay
+     // in this state until recording begins.  Usually recording begins
+     // immediately, but in the past, the CountdownDialog would delay
+     // the actual start of recording.
+     RECORDING_ARMED,
      QUIT
 } TransportStatus;
 

@@ -177,7 +177,6 @@ SequenceManager::play()
     preparePlayback();
 
     // Remember the last playback position so that we can return on stop.
-    // ??? Not working.  Fix and make it an option.  See feature request #452.
     m_lastTransportStartPosition = comp.getPosition();
 
     // Update play metronome status
@@ -194,10 +193,7 @@ SequenceManager::play()
         comp.setCompositionDefaultTempo(comp.getTempoForQpm(120.0));
     }
 
-    // Send initial tempo
     setTempo(comp.getCurrentTempo());
-
-    // The arguments for the Sequencer
 
     RealTime startPos = comp.getElapsedRealTime(comp.getPosition());
 
@@ -220,103 +216,72 @@ SequenceManager::play()
 void
 SequenceManager::stop()
 {
-    if (!m_doc) return;
+    if (!m_doc)
+        return;
 
     if (m_countdownTimer)
         m_countdownTimer->stop();
     if (m_countdownDialog)
         m_countdownDialog->hide();
 
-    // Do this here rather than in stop() to avoid any potential
-    // race condition (we use setPointerPosition() during stop()).
-    //
+    // If the user presses stop while stopped, return to where we last started.
     if (m_transportStatus == STOPPED) {
-        /* !!!
-                if (m_doc->getComposition().isLooping())
-                    m_doc->slotSetPointerPosition(m_doc->getComposition().getLoopStart());
-                else
-                    m_doc->slotSetPointerPosition(m_doc->getComposition().getStartMarker());
-        */
-        // ??? Suspect this does nothing since it doesn't update the
-        //     position pointer in SequencerDataBlock.  See
-        //     SequencerDataBlock::getPositionPointer().
         m_doc->slotSetPointerPosition(m_lastTransportStartPosition);
-
-        return ;
+        return;
     }
 
-    // Disarm recording and drop back to STOPPED
-    //
+    // If recording hasn't started yet, drop back to STOPPED.
     if (m_transportStatus == RECORDING_ARMED) {
         m_transportStatus = STOPPED;
+
         emit signalRecording(false);
         emit signalMetronomeActivated(m_doc->getComposition().usePlayMetronome());
-        return ;
+
+        return;
     }
 
-    SEQMAN_DEBUG << "SequenceManager::stopping() - preparing to stop";
-    //    SEQMAN_DEBUG << kdBacktrace();
+    RG_DEBUG << "stop() - preparing to stop playback or recording in progress";
 
-    // Toggle off the buttons - first record
-    //
     if (m_transportStatus == RECORDING) {
         emit signalRecording(false);
         emit signalMetronomeActivated(m_doc->getComposition().usePlayMetronome());
-
-        // Remove the countdown dialog and stop the timer
-        //
-        m_countdownDialog->hide();
-        m_countdownTimer->stop();
     }
 
-    // Now playback
     emit signalPlaying(false);
 
-    // re-enable the record button if it was previously disabled when
-    // going into play mode - DMM
-    //    SEQMAN_DEBUG << "SequenceManager::stop() - re-enabling record button\n";
-    //    m_transport->RecordButton()->setEnabled(true);
-
+    // wait cursor
+    QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
     // "call" the sequencer with a stop so we get a synchronous
     // response - then we can fiddle about with the audio file
     // without worrying about the sequencer causing problems
     // with access to the same audio files.
-    //
-
-    // wait cursor
-    //
-    QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-
     RosegardenSequencer::getInstance()->stop();
 
     // restore
     QApplication::restoreOverrideCursor();
 
-    TransportStatus status = m_transportStatus;
+    TransportStatus previousStatus = m_transportStatus;
 
     // set new transport status first, so that if we're stopping
     // recording we don't risk the record segment being restored by a
     // timer while the document is busy trying to do away with it
     m_transportStatus = STOPPED;
 
-    // if we're recording MIDI or Audio then tidy up the recording Segment
-    if (status == RECORDING) {
+    // if we were recording MIDI or Audio then tidy up the recording Segment
+    if (previousStatus == RECORDING) {
         m_doc->stopRecordingMidi();
         m_doc->stopRecordingAudio();
 
-        SEQMAN_DEBUG << "SequenceManager::stop() - stopped recording";
+        RG_DEBUG << "stop() - stopped recording";
     } else {
         m_doc->stopPlaying();
     }
 
     // always untoggle the play button at this stage
-    //
     emit signalPlaying(false);
-    SEQMAN_DEBUG << "SequenceManager::stop() - stopped playing";
-    // We don't reset controllers at this point - what happens with static
-    // controllers the next time we play otherwise?  [rwb]
-    //resetControllers();
+
+    RG_DEBUG << "stop() - stopped playing";
 
     m_shownOverrunWarning = false;
 }
@@ -438,6 +403,14 @@ SequenceManager::record(bool toggled)
 
         if (m_transportStatus == STOPPED) {
             SEQMAN_DEBUG << "SequenceManager::record - armed record";
+
+            // Recording is now armed, but will not start until the countdown
+            // is over.  Then RosegardenMainWindow::slotHandleInputs() will
+            // sync us up to the current sequencer state.  If there is no
+            // countdown, we will likely go directly to RECORDING.
+            // ??? If there is a CountdownDialog, wouldn't we go directly to
+            //     STOPPED due to RMW::slotHandleInputs()?  Or is that off in
+            //     STOPPED?
             m_transportStatus = RECORDING_ARMED;
 
             // Toggle the buttons

@@ -457,6 +457,9 @@ private:
      * side, but can be briefly out of sync as the sequencer moves from one
      * state to another.
      *
+     * RosegardenMainWindow::slotHandleInputs() keeps this updated to
+     * reflect RosegardenSequencer's TransportStatus.
+     *
      * @see RosegardenSequencer::m_transportStatus
      */
     TransportStatus m_transportStatus;
@@ -469,15 +472,7 @@ private:
     QTimer *m_countdownTimer;
     QTime *m_recordTime;
 
-    // ??? This one looks like it is being used to put the PPP back (in
-    //     stop()) to where it was when play() or record() were called.
-    //     But this is not the observed behavior.  Is this erroneous?
-    //     Who overrides it at stop?  I suspect no one.  My guess at this
-    //     point is that the call to set the PPP in stop() is overridden
-    //     by the next UI update which copies the PPP from the document
-    //     to the UI.  See RosegardenMainWindow::slotUpdateUI().
-    // ??? See feature request #452 which talks about how and
-    //     when this should work.  Perhaps we should fix it?
+    /// Used by stop() to return to the last start position.
     timeT m_lastTransportStartPosition;
 
     /// Cache used by getSampleRate() to avoid locks.
