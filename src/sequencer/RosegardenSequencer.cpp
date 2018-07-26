@@ -61,20 +61,20 @@ RosegardenSequencer::m_instanceMutex;
 
 #define LOCKED QMutexLocker rgseq_locker(&m_mutex)
 
-// The default latency and read-ahead values are actually sent
-// down from the GUI every time playback or recording starts
-// so the local values are kind of meaningless.
-//
 RosegardenSequencer::RosegardenSequencer() :
     m_driver(0),
     m_transportStatus(STOPPED),
     m_songPosition(0, 0),
     m_lastFetchSongPosition(0, 0),
-    m_readAhead(0, 80000000),          // default value
-    m_audioMix(0, 60000000),          // default value
-    m_audioRead(0, 100000000),          // default value
-    m_audioWrite(0, 200000000),          // default value
-    m_smallFileSize(128),
+    // 160 msecs for low latency mode.  Historically, we used
+    // 500 msecs for "high" latency mode.
+    m_readAhead(0, 160000000),
+    // 60 msecs for low latency mode.  Historically, we used
+    // 400 msecs for "high" latency mode.
+    m_audioMix(0, 60000000),
+    m_audioRead(2, 500000000),  // 2.5 secs
+    m_audioWrite(4, 0),  // 4.0 secs
+    m_smallFileSize(256),  // 256 kbytes
     m_loopStart(0, 0),
     m_loopEnd(0, 0),
     m_studio(new MappedStudio()),
@@ -181,12 +181,7 @@ RosegardenSequencer::quit()
 // and play the piece until we get a signal to stop.
 //
 bool
-RosegardenSequencer::play(const RealTime &time,
-                             const RealTime &readAhead,
-                             const RealTime &audioMix,
-                             const RealTime &audioRead,
-                             const RealTime &audioWrite,
-                             long smallFileSize)
+RosegardenSequencer::play(const RealTime &time)
 {
     LOCKED;
 
@@ -219,17 +214,6 @@ RosegardenSequencer::play(const RealTime &time,
 
     m_driver->stopClocks();
 
-    // Set up buffer size
-    //
-    m_readAhead = readAhead;
-    if (m_readAhead == RealTime::zeroTime)
-        m_readAhead.sec = 1;
-
-    m_audioMix = audioMix;
-    m_audioRead = audioRead;
-    m_audioWrite = audioWrite;
-    m_smallFileSize = smallFileSize;
-
     m_driver->setAudioBufferSizes(m_audioMix, m_audioRead, m_audioWrite,
                                   m_smallFileSize);
 
@@ -247,11 +231,6 @@ RosegardenSequencer::play(const RealTime &time,
 
 bool
 RosegardenSequencer::record(const RealTime &time,
-                            const RealTime &readAhead,
-                            const RealTime &audioMix,
-                            const RealTime &audioRead,
-                            const RealTime &audioWrite,
-                            long smallFileSize,
                             long recordMode)
 {
     LOCKED;
@@ -354,7 +333,7 @@ RosegardenSequencer::record(const RealTime &time,
         //
         m_driver->initialisePlayback(m_songPosition);
 
-        return play(time, readAhead, audioMix, audioRead, audioWrite, smallFileSize);
+        return play(time);
     }
 }
 

@@ -70,21 +70,10 @@ public:
     /**
      *  Based on RealTime timestamps.
      */
-    bool play(const RealTime &position,
-              const RealTime &readAhead,
-              const RealTime &audioMix,
-              const RealTime &audioRead,
-              const RealTime &audioWrite,
-              long smallFileSize);
+    bool play(const RealTime &time);
 
     /// Record from a given time with given parameters.
-    bool record(const RealTime &position,
-                const RealTime &readAhead,
-                const RealTime &audioMix,
-                const RealTime &audioRead,
-                const RealTime &audioWrite,
-                long smallFileSize,
-                long recordMode);
+    bool record(const RealTime &position, long recordMode);
 
     /// Punch out from recording to playback
     /**
@@ -488,6 +477,10 @@ private:
     RealTime m_lastFetchSongPosition;
 
     RealTime m_readAhead;
+    // ??? Rumor has it that this is ignored in low latency mode.  Track
+    //     this down and decide whether to remove altogether.  We default to
+    //     low latency mode now and likely have no need for "high latency"
+    //     mode.
     RealTime m_audioMix;
     RealTime m_audioRead;
     RealTime m_audioWrite;

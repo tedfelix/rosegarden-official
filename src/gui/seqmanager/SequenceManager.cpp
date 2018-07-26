@@ -205,14 +205,7 @@ SequenceManager::play()
     if (comp.isLooping())
         startPos = comp.getElapsedRealTime(comp.getLoopStart());
 
-    // ??? Push the constant values down into RosegardenSequencer.
-    int result = RosegardenSequencer::getInstance()->play(
-            startPos,
-            RealTime(0, 160000000),  // readAhead 160msecs
-            RealTime(0, 60000000),  // audioMix (ignored in low latency mode?)
-            RealTime(2, 500000000),  // audioRead 2.5 secs
-            RealTime(4, 0),  // audioWrite 4.0 secs
-            256);  // smallFileSize (k)
+    int result = RosegardenSequencer::getInstance()->play(startPos);
 
     // Failed?  Bail.
     if (!result) {
@@ -613,14 +606,8 @@ punchin:
         RealTime startPos =
             comp.getElapsedRealTime(comp.getPosition());
 
-        // ??? Push the constant values down into RosegardenSequencer.
         int result = RosegardenSequencer::getInstance()->record(
                 startPos,
-                RealTime(0, 160000000),  // readAhead
-                RealTime(0, 60000000),  // audioMix (ignored in low latency mode?)
-                RealTime(2, 500000000),  // audioRead
-                RealTime(4, 0),  // audioWrite
-                256,  // smallFileSize (k)
                 STARTING_TO_RECORD);  // recordMode
 
         if (result) {
