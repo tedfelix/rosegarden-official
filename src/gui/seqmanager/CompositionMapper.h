@@ -30,7 +30,7 @@ class MappedEventBuffer;
 class Segment;
 class RosegardenDocument;
 
-/// Maintains a collection of SegmentMappers.
+/// Maintains a collection of SegmentMapper objects.
 /**
  * Keeps a set of SegmentMapper objects in sync with the Segments in the
  * Composition.

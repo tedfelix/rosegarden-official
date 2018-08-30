@@ -56,6 +56,9 @@ class MappedBufMetaIterator;
  * A layer between the UI (RosegardenMainWindow) and the sequencer
  * (RosegardenSequencer).
  *
+ * A single instance is owned by RosegardenMainWindow.  See
+ * RosegardenMainWindow::m_seqManager.
+ *
  * Owns the CompositionMapper.
  *
  * What are the broad categories of functionality here?  Can they be split off
