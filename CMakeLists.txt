@@ -55,47 +55,17 @@ enable_testing()
 # and this defines the BUILD_TESTING option (and enabled CDash integration)
 include(CTest)
 
-# Check whether we explicitely select the Qt version to be used or autodetect.
-if(NOT USE_QT4 AND NOT USE_QT5)
-   # Autodetect, prefering Qt 5
-   message(STATUS "Autodetecting Qt version to use")
-   find_package(Qt5 QUIET COMPONENTS Core)
-   if(Qt5_FOUND)
-      set(USE_QT5 TRUE)
-   else()
-      set(USE_QT4 TRUE)
-   endif()
-endif()
+# Qt5 is required.
+# ??? Move down to required dependencies section?
+find_package(Qt5 "5.1.0" REQUIRED COMPONENTS Core Gui Widgets Xml Network PrintSupport Test)
 
-if(USE_QT4)
-   set(QT_MIN_VERSION "4.8.0")
+set(QT_QTCORE_LIBRARY Qt5::Core)
+set(QT_QTGUI_LIBRARY Qt5::Widgets Qt5::PrintSupport)
+set(QT_QTXML_LIBRARY Qt5::Xml)
+set(QT_QTNETWORK_LIBRARY Qt5::Network)
+set(QT_QTTEST_LIBRARY Qt5::Test)
 
-   # Locate Qt4 on the system.
-   find_package(Qt4 REQUIRED QtCore QtGui QtXml QtNetwork QtTest)
-
-   # properly set up compile flags (QT_DEBUG/QT_NO_DEBUG, ...)
-   include(${QT_USE_FILE})
-
-   set(QT_QTCORE_LIBRARY Qt4::QtCore)
-   set(QT_QTGUI_LIBRARY Qt4::QtGui)
-   set(QT_QTXML_LIBRARY Qt4::QtXml)
-   set(QT_QTNETWORK_LIBRARY Qt4::QtNetwork)
-   set(QT_QTTEST_LIBRARY Qt4::QtTest)
-
-else()
-
-   # Locate Qt5 on the system.
-   find_package(Qt5 "5.1.0" REQUIRED COMPONENTS Core Gui Widgets Xml Network PrintSupport Test)
-
-   set(QT_QTCORE_LIBRARY Qt5::Core)
-   set(QT_QTGUI_LIBRARY Qt5::Widgets Qt5::PrintSupport)
-   set(QT_QTXML_LIBRARY Qt5::Xml)
-   set(QT_QTNETWORK_LIBRARY Qt5::Network)
-   set(QT_QTTEST_LIBRARY Qt5::Test)
-
-   set(QT_RCC_EXECUTABLE ${Qt5Core_RCC_EXECUTABLE})
-
-endif()
+set(QT_RCC_EXECUTABLE ${Qt5Core_RCC_EXECUTABLE})
 
 # Compiler defines
 

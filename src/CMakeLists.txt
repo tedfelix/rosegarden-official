@@ -727,21 +727,13 @@ set(rg_UIS
 
 set(rg_SOURCES ${rg_CPPS})
 
-if(USE_QT4)
-  qt4_wrap_ui(rg_SOURCES ${rg_UIS})
-else()
-  qt5_wrap_ui(rg_SOURCES ${rg_UIS})
-endif()
+qt5_wrap_ui(rg_SOURCES ${rg_UIS})
 
 # Compile translations (.ts -> .qm)
 file(GLOB TS_FILES ${CMAKE_CURRENT_SOURCE_DIR}/../data/locale/*.ts)
 list(REMOVE_ITEM TS_FILES ${CMAKE_CURRENT_SOURCE_DIR}/../data/locale/rosegarden.ts)
-if(USE_QT4)
-  qt4_add_translation(QM_FILES ${TS_FILES})
-else()
-  find_package(Qt5LinguistTools "5.1.0" REQUIRED)
-  qt5_add_translation(QM_FILES ${TS_FILES})
-endif()
+find_package(Qt5LinguistTools "5.1.0" REQUIRED)
+qt5_add_translation(QM_FILES ${TS_FILES})
 
 # Generate a .qrc for the .qm files
 SET(localeqrc_file locale)
@@ -758,7 +750,7 @@ ADD_CUSTOM_COMMAND(
 )
 
 # Run the resource compiler (rcc_options should already be set). We can't
-# use QT4_ADD_RESOURCES because the qrc file may not exist yet.
+# use qt5_add_resources because the qrc file may not exist yet.
 ADD_CUSTOM_COMMAND(
    OUTPUT ${localeqrc_outfile}
    COMMAND ${QT_RCC_EXECUTABLE}
@@ -767,11 +759,7 @@ ADD_CUSTOM_COMMAND(
    DEPENDS ${QM_FILES}
 )
 
-if(USE_QT4)
-qt4_add_resources(rg_SOURCES ../data/data.qrc)
-else()
 qt5_add_resources(rg_SOURCES ../data/data.qrc)
-endif()
 
 # Turn off automoc for generated files.
 set_property(SOURCE ui_RosegardenTransportUi.h PROPERTY SKIP_AUTOMOC ON)

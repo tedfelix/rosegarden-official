@@ -61,8 +61,6 @@ rosegarden binary!  It also results in the use of shared libs, and the
 building of unit tests.  If you want to disable this (to go back to a static
 lib and no unit tests), pass -DBUILD_TESTING=OFF to cmake.
 
-You can force a specific Qt version using either -DUSE_QT4=1 or -DUSE_QT5=1.
-
 Support for LIRC (Linux Infrared Remote Control) can be disabled using
 -DDISABLE_LIRC=1.
 
