@@ -23,7 +23,6 @@
 #include "base/RulerScale.h"
 #include "base/SnapGrid.h"
 #include "gui/general/GUIPalette.h"
-#include "gui/general/HZoomable.h"
 #include "gui/general/RosegardenScrollView.h"
 #include "document/RosegardenDocument.h"
 
@@ -97,11 +96,7 @@ void LoopRuler::scrollHoriz(int x)
     // int w = width(); //, h = height();
     // int dx = x - ( -m_currentXOffset);
 
-    if (getHScaleFactor() != 1.0) {
-        m_currentXOffset = static_cast<int>( -x / getHScaleFactor());
-    } else {
-        m_currentXOffset = -x;
-    }
+    m_currentXOffset = -x;
 
 //    if (dx > w*3 / 4 || dx < -w*3 / 4) {
 //        update();
@@ -147,9 +142,6 @@ void LoopRuler::paintEvent(QPaintEvent* e)
 //    RG_DEBUG << "LoopRuler::paintEvent";
 
     QPainter paint(this);
-
-    if (getHScaleFactor() != 1.0)
-        paint.scale(getHScaleFactor(), 1.0);
 
     paint.setClipRegion(e->region());
     paint.setClipRect(e->rect().normalized());
@@ -198,7 +190,7 @@ void LoopRuler::drawBarSections(QPainter* paint)
     for (int i = firstBar; i < lastBar; ++i) {
 
         double x = m_rulerScale->getBarPosition(i) + m_currentXOffset;
-        if ((x * getHScaleFactor()) > clipRect.x() + clipRect.width())
+        if (x > clipRect.x() + clipRect.width())
             break;
 
         double width = m_rulerScale->getBarWidth(i);
@@ -257,8 +249,7 @@ LoopRuler::drawLoopMarker(QPainter* paint)
 double
 LoopRuler::mouseEventToSceneX(QMouseEvent *mE)
 {
-    double x = mE->pos().x() / getHScaleFactor()
-               - m_currentXOffset;
+    double x = mE->pos().x() - m_currentXOffset;
     return x;
 }
 

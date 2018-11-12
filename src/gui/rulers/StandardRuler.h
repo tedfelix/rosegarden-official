@@ -57,8 +57,6 @@ public:
     
     void setMinimumWidth(int width);
 
-    void setHScaleFactor(double dy);
-    
     /**
      * Update all components of standard ruler.
      * Useful when the scene has changed due to font change,

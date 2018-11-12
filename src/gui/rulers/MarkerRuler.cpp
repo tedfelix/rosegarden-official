@@ -26,7 +26,6 @@
 #include "base/RulerScale.h"
 #include "document/RosegardenDocument.h"
 #include "gui/general/GUIPalette.h"
-#include "gui/general/HZoomable.h"
 #include "gui/dialogs/MarkerModifyDialog.h"
 #include "commands/edit/ModifyMarkerCommand.h"
 #include "document/CommandHistory.h"
@@ -113,7 +112,7 @@ MarkerRuler::createMenu()
 void 
 MarkerRuler::scrollHoriz(int x)
 {
-    m_currentXOffset = static_cast<int>( -x / getHScaleFactor());
+    m_currentXOffset = -x;
     update();
 }
 
@@ -269,9 +268,6 @@ MarkerRuler::paintEvent(QPaintEvent*)
 {
     QPainter painter(this);
 
-    if (getHScaleFactor() != 1.0)
-        painter.scale(getHScaleFactor(), 1.0);
-
     // See note elsewhere...
     QRect clipRect = visibleRegion().boundingRect();
 
@@ -291,7 +287,7 @@ MarkerRuler::paintEvent(QPaintEvent*)
         firstBar = m_rulerScale->getFirstVisibleBar();
     }
 
-    painter.drawLine(m_currentXOffset, 0, static_cast<int>(clipRect.width() / getHScaleFactor()), 0);
+    painter.drawLine(m_currentXOffset, 0, clipRect.width(), 0);
 
     float minimumWidth = 25.0;
     float testSize = ((float)(m_rulerScale->getBarPosition(firstBar + 1) -
@@ -314,7 +310,7 @@ MarkerRuler::paintEvent(QPaintEvent*)
 
         double x = m_rulerScale->getBarPosition(i) + m_currentXOffset;
 
-        if ((x * getHScaleFactor()) > clipRect.x() + clipRect.width())
+        if (x > clipRect.x() + clipRect.width())
             break;
 
         // always the first bar number
@@ -337,17 +333,8 @@ MarkerRuler::paintEvent(QPaintEvent*)
 
             if (i >= 0) {
                 const int yText = painter.fontMetrics().ascent();
-
-                // disable worldXForm for text
-                //QPoint textDrawPoint = painter.xForm(QPoint(static_cast<int>(x + 4), yText));
-                QPoint textDrawPoint = QPoint(static_cast<int>(x + 4), yText) * painter.combinedTransform();
-
-                bool enableXForm = painter.worldMatrixEnabled();
-                painter.setWorldMatrixEnabled(false);
-
+                const QPoint textDrawPoint(static_cast<int>(x + 4), yText);
                 painter.drawText(textDrawPoint, QString("%1").arg(i + 1));
-
-                painter.setWorldMatrixEnabled(enableXForm);
             }
         } else {
             const QPen normalPen = painter.pen();
@@ -383,24 +370,8 @@ MarkerRuler::paintEvent(QPaintEvent*)
                 painter.drawLine(int(x), 1, int(x), barHeight - 2);
                 painter.drawLine(int(x) + 1, 1, int(x) + 1, barHeight - 2);
 
-                // NO_QT3 NOTE:  This next bit is a complete shot in the dark,
-                // and is likely to be wrong.
-
-                // was:
-                //
-                //QPoint textDrawPoint = painter.xForm
-                //                       (QPoint(static_cast<int>(x + 3), barHeight - 4));
-                //
-
-                QPoint textDrawPoint = QPoint(static_cast<int>(x + 3), barHeight - 4) * painter.combinedTransform();
-
-                // disable worldXForm for text
-                bool enableXForm = painter.worldMatrixEnabled();
-                painter.setWorldMatrixEnabled(false);
-                
+                const QPoint textDrawPoint(static_cast<int>(x + 3), barHeight - 4);
                 painter.drawText(textDrawPoint, name);
-
-                painter.setWorldMatrixEnabled(enableXForm);
             }
         }
     }

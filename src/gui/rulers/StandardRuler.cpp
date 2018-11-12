@@ -158,12 +158,6 @@ void StandardRuler::setMinimumWidth(int width)
     m_loopRuler->setMinimumWidth(width);
 }
 
-void StandardRuler::setHScaleFactor(double dy)
-{
-    m_markerRuler->setHScaleFactor(dy);
-    m_loopRuler->setHScaleFactor(dy);
-}
-
 void StandardRuler::updateStandardRuler()
 {
     m_markerRuler->update();

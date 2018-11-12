@@ -340,7 +340,6 @@ set(rg_CPPS
   gui/general/PresetGroup.cpp
   gui/general/ActionCommandRegistry.cpp
   gui/general/GUIPalette.cpp
-  gui/general/HZoomable.cpp
   gui/general/ClefIndex.cpp
   gui/general/ActionFileParser.cpp
   gui/general/LilyPondProcessor.cpp
