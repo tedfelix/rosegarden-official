@@ -434,11 +434,11 @@ MatrixWidget::setSegments(RosegardenDocument *document,
             this, SIGNAL(selectionChanged()));
 
     m_topStandardRuler = new StandardRuler(document,
-                                           m_referenceScale, 0, 25,
+                                           m_referenceScale, 0,
                                            false);
 
     m_bottomStandardRuler = new StandardRuler(document,
-                                               m_referenceScale, 0, 25,
+                                               m_referenceScale, 0,
                                                true);
 
     m_tempoRuler = new TempoRuler(m_referenceScale,

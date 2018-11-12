@@ -54,13 +54,10 @@ namespace Rosegarden
 
 MarkerRuler::MarkerRuler(RosegardenDocument *doc,
                          RulerScale *rulerScale,
-                         int barHeight,
                          double xorigin,
                          QWidget* parent,
                          const char* name)
-                         //WFlags f)
-        : QWidget(parent), //, f),
-        m_barHeight(barHeight),
+        : QWidget(parent),
         m_xorigin(xorigin),
         m_currentXOffset(0),
         m_width(-1),
@@ -81,10 +78,9 @@ MarkerRuler::MarkerRuler(RosegardenDocument *doc,
     while (probe && !dynamic_cast<QMainWindow *>(probe)) probe = probe->parent();
     if (probe) m_parentMainWindow = dynamic_cast<QMainWindow *>(probe);
 
-    //    m_barFont = new QFont("helvetica", 12);
-    //    m_barFont->setPixelSize(12);
-    m_barFont = new QFont();
-    m_barFont->setPointSize(10);
+    QFont font;
+    font.setPointSize((font.pointSize() * 9) / 10);
+    setFont(font);
 
     createAction("insert_marker_here", SLOT(slotInsertMarkerHere()));
     createAction("insert_marker_at_pointer", SLOT(slotInsertMarkerAtPointer()));
@@ -96,7 +92,6 @@ MarkerRuler::MarkerRuler(RosegardenDocument *doc,
 
 MarkerRuler::~MarkerRuler()
 {
-    delete m_barFont;
 }
 
 void
@@ -133,7 +128,7 @@ MarkerRuler::sizeHint() const
         m_rulerScale->getBarPosition(lastBar) +
         m_rulerScale->getBarWidth(lastBar) + m_xorigin;
 
-    return QSize(std::max(int(width), m_width), m_barHeight);
+    return QSize(std::max(int(width), m_width), fontMetrics().height());
 }
 
 QSize 
@@ -141,7 +136,7 @@ MarkerRuler::minimumSizeHint() const
 {
     double firstBarWidth = m_rulerScale->getBarWidth(0) + m_xorigin;
 
-    return QSize(static_cast<int>(firstBarWidth), m_barHeight);
+    return QSize(static_cast<int>(firstBarWidth), fontMetrics().height());
 }
 
 void
@@ -237,7 +232,7 @@ MarkerRuler::getMarkerAtClickPosition()
     timeT end = comp.getBarEnd(lastBar);
 
     // need these to calculate the visible extents of a marker tag
-    QFontMetrics metrics(*m_barFont);
+    QFontMetrics metrics = fontMetrics();
 
     for (Composition::markerconstiterator i = markers.begin();
             i != markers.end(); ++i) {
@@ -276,7 +271,6 @@ void
 MarkerRuler::paintEvent(QPaintEvent*)
 {
     QPainter painter(this);
-    painter.setFont(*m_barFont);
 
     if (getHScaleFactor() != 1.0)
         painter.scale(getHScaleFactor(), 1.0);
@@ -307,6 +301,8 @@ MarkerRuler::paintEvent(QPaintEvent*)
     float testSize = ((float)(m_rulerScale->getBarPosition(firstBar + 1) -
                               m_rulerScale->getBarPosition(firstBar)))
                      / minimumWidth;
+
+    const int barHeight = height();
 
     int every = 0;
     int count = 0;
@@ -341,25 +337,28 @@ MarkerRuler::paintEvent(QPaintEvent*)
             count++;
 
         if (i != lastBar) {
-            painter.drawLine(static_cast<int>(x), 0, static_cast<int>(x), m_barHeight);
+            painter.drawLine(static_cast<int>(x), 0, static_cast<int>(x), barHeight);
 
-            // disable worldXForm for text
-            //QPoint textDrawPoint = painter.xForm(QPoint(static_cast<int>(x + 4), 12));
-            QPoint textDrawPoint = QPoint(static_cast<int>(x + 4), 12) * painter.combinedTransform();
+            if (i >= 0) {
+                const int yText = painter.fontMetrics().ascent();
 
-            bool enableXForm = painter.worldMatrixEnabled();
-            painter.setWorldMatrixEnabled(false);
+                // disable worldXForm for text
+                //QPoint textDrawPoint = painter.xForm(QPoint(static_cast<int>(x + 4), yText));
+                QPoint textDrawPoint = QPoint(static_cast<int>(x + 4), yText) * painter.combinedTransform();
+                qDebug() << yText << textDrawPoint;
 
-            if (i >= 0)
+                bool enableXForm = painter.worldMatrixEnabled();
+                painter.setWorldMatrixEnabled(false);
+
                 painter.drawText(textDrawPoint, QString("%1").arg(i + 1));
 
-            painter.setWorldMatrixEnabled(enableXForm);
+                painter.setWorldMatrixEnabled(enableXForm);
+            }
         } else {
             const QPen normalPen = painter.pen();
-            ;
             QPen endPen(Qt::black, 2);
             painter.setPen(endPen);
-            painter.drawLine(static_cast<int>(x), 0, static_cast<int>(x), m_barHeight);
+            painter.drawLine(static_cast<int>(x), 0, static_cast<int>(x), barHeight);
             painter.setPen(normalPen);
         }
     }
@@ -383,11 +382,11 @@ MarkerRuler::paintEvent(QPaintEvent*)
 
                 painter.fillRect(static_cast<int>(x), 1,
                                  static_cast<int>(metrics.width(name) + 5),
-                                 m_barHeight - 2,
+                                 barHeight - 2,
                                  QBrush(GUIPalette::getColour(GUIPalette::MarkerBackground)));
 
-                painter.drawLine(int(x), 1, int(x), m_barHeight - 2);
-                painter.drawLine(int(x) + 1, 1, int(x) + 1, m_barHeight - 2);
+                painter.drawLine(int(x), 1, int(x), barHeight - 2);
+                painter.drawLine(int(x) + 1, 1, int(x) + 1, barHeight - 2);
 
                 // NO_QT3 NOTE:  This next bit is a complete shot in the dark,
                 // and is likely to be wrong.
@@ -395,10 +394,10 @@ MarkerRuler::paintEvent(QPaintEvent*)
                 // was:
                 //
                 //QPoint textDrawPoint = painter.xForm
-                //                       (QPoint(static_cast<int>(x + 3), m_barHeight - 4));
+                //                       (QPoint(static_cast<int>(x + 3), barHeight - 4));
                 //
 
-                QPoint textDrawPoint = QPoint(static_cast<int>(x + 3), m_barHeight - 4) * painter.combinedTransform();
+                QPoint textDrawPoint = QPoint(static_cast<int>(x + 3), barHeight - 4) * painter.combinedTransform();
 
                 // disable worldXForm for text
                 bool enableXForm = painter.worldMatrixEnabled();

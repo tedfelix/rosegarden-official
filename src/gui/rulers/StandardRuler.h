@@ -40,7 +40,6 @@ public:
     StandardRuler(RosegardenDocument *doc,
                   RulerScale *rulerScale,
                   double xorigin,
-                  int buttonHeight,
                   bool invert = false, // draw upside-down
                   bool isForMainWindow = false,
                   QWidget* parent = 0);

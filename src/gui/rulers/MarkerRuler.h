@@ -28,7 +28,6 @@
 
 class QPaintEvent;
 class QMouseEvent;
-class QFont;
 class QMenu;
 class QMainWindow;
 
@@ -47,11 +46,9 @@ class MarkerRuler : public QWidget, public HZoomable, public ActionFileClient
 public:
     MarkerRuler(RosegardenDocument *doc,
                      RulerScale *rulerScale,
-                     int buttonHeight,
                      double xorigin = 0.0,
                      QWidget* parent = 0,
                      const char* name = 0);
-//                      WFlags f=0);
 
     virtual ~MarkerRuler();
     
@@ -93,13 +90,11 @@ protected:
     Rosegarden::Marker* getMarkerAtClickPosition();
     
     //--------------- Data members ---------------------------------
-    int m_barHeight;
     double m_xorigin;
     int m_currentXOffset;
     int m_width;
     int m_clickX;
     
-    QFont 	*m_barFont;
     QMenu 	*m_menu;
     
     RosegardenDocument *m_doc;
