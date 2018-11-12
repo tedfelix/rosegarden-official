@@ -341,7 +341,6 @@ MarkerRuler::paintEvent(QPaintEvent*)
                 // disable worldXForm for text
                 //QPoint textDrawPoint = painter.xForm(QPoint(static_cast<int>(x + 4), yText));
                 QPoint textDrawPoint = QPoint(static_cast<int>(x + 4), yText) * painter.combinedTransform();
-                qDebug() << yText << textDrawPoint;
 
                 bool enableXForm = painter.worldMatrixEnabled();
                 painter.setWorldMatrixEnabled(false);
