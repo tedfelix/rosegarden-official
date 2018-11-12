@@ -54,11 +54,9 @@ namespace Rosegarden
 
 MarkerRuler::MarkerRuler(RosegardenDocument *doc,
                          RulerScale *rulerScale,
-                         double xorigin,
                          QWidget* parent,
                          const char* name)
         : QWidget(parent),
-        m_xorigin(xorigin),
         m_currentXOffset(0),
         m_width(-1),
         m_clickX(0),
@@ -126,7 +124,7 @@ MarkerRuler::sizeHint() const
         m_rulerScale->getLastVisibleBar();
     double width =
         m_rulerScale->getBarPosition(lastBar) +
-        m_rulerScale->getBarWidth(lastBar) + m_xorigin;
+        m_rulerScale->getBarWidth(lastBar);
 
     return QSize(std::max(int(width), m_width), fontMetrics().height());
 }
@@ -134,7 +132,7 @@ MarkerRuler::sizeHint() const
 QSize 
 MarkerRuler::minimumSizeHint() const
 {
-    double firstBarWidth = m_rulerScale->getBarWidth(0) + m_xorigin;
+    double firstBarWidth = m_rulerScale->getBarWidth(0);
 
     return QSize(static_cast<int>(firstBarWidth), fontMetrics().height());
 }
@@ -196,7 +194,7 @@ timeT
 MarkerRuler::getClickPosition()
 {
     timeT t = m_rulerScale->getTimeForX
-              (m_clickX - m_xorigin - m_currentXOffset);
+              (m_clickX - m_currentXOffset);
 
     return t;
 }
@@ -218,8 +216,7 @@ MarkerRuler::getMarkerAtClickPosition()
     QRect clipRect = visibleRegion().boundingRect();
 
     int firstBar = m_rulerScale->getBarForX(clipRect.x() -
-                                            m_currentXOffset -
-                                            m_xorigin);
+                                            m_currentXOffset);
     int lastBar = m_rulerScale->getLastVisibleBar();
     if (firstBar < m_rulerScale->getFirstVisibleBar()) {
         firstBar = m_rulerScale->getFirstVisibleBar();
@@ -242,7 +239,7 @@ MarkerRuler::getMarkerAtClickPosition()
             QString name(strtoqstr((*i)->getName()));
 
             int x = m_rulerScale->getXForTime((*i)->getTime())
-                    + m_xorigin + m_currentXOffset;
+                    + m_currentXOffset;
 
             int width = metrics.width(name) + 5;
 
@@ -251,7 +248,7 @@ MarkerRuler::getMarkerAtClickPosition()
             ++j;
             if (j != markers.end()) {
                 nextX = m_rulerScale->getXForTime((*j)->getTime())
-                        + m_xorigin + m_currentXOffset;
+                        + m_currentXOffset;
             }
 
             if (m_clickX >= x && m_clickX <= x + width) {
@@ -288,8 +285,7 @@ MarkerRuler::paintEvent(QPaintEvent*)
     painter.setPen(GUIPalette::getColour(GUIPalette::RulerForeground));
 
     int firstBar = m_rulerScale->getBarForX(clipRect.x() -
-                                            m_currentXOffset -
-                                            m_xorigin);
+                                            m_currentXOffset);
     int lastBar = m_rulerScale->getLastVisibleBar();
     if (firstBar < m_rulerScale->getFirstVisibleBar()) {
         firstBar = m_rulerScale->getFirstVisibleBar();
@@ -316,7 +312,7 @@ MarkerRuler::paintEvent(QPaintEvent*)
 
     for (int i = firstBar; i <= lastBar; ++i) {
 
-        double x = m_rulerScale->getBarPosition(i) + m_xorigin + m_currentXOffset;
+        double x = m_rulerScale->getBarPosition(i) + m_currentXOffset;
 
         if ((x * getHScaleFactor()) > clipRect.x() + clipRect.width())
             break;
@@ -378,7 +374,7 @@ MarkerRuler::paintEvent(QPaintEvent*)
                 QString name(strtoqstr((*it)->getName()));
 
                 double x = m_rulerScale->getXForTime((*it)->getTime())
-                           + m_xorigin + m_currentXOffset;
+                           + m_currentXOffset;
 
                 painter.fillRect(static_cast<int>(x), 1,
                                  static_cast<int>(metrics.width(name) + 5),
@@ -446,7 +442,7 @@ MarkerRuler::mousePressEvent(QMouseEvent *e)
     if (shiftPressed) { // set loop
 
         timeT t = m_rulerScale->getTimeForX
-                  (e->x() - m_xorigin - m_currentXOffset);
+                  (e->x() - m_currentXOffset);
 
         timeT prev = 0;
 

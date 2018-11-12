@@ -39,7 +39,6 @@ class StandardRuler : public QWidget
 public:
     StandardRuler(RosegardenDocument *doc,
                   RulerScale *rulerScale,
-                  double xorigin,
                   bool invert = false, // draw upside-down
                   bool isForMainWindow = false,
                   QWidget* parent = 0);

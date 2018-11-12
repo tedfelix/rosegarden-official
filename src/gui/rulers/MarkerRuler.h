@@ -46,7 +46,6 @@ class MarkerRuler : public QWidget, public HZoomable, public ActionFileClient
 public:
     MarkerRuler(RosegardenDocument *doc,
                      RulerScale *rulerScale,
-                     double xorigin = 0.0,
                      QWidget* parent = 0,
                      const char* name = 0);
 
@@ -90,7 +89,6 @@ protected:
     Rosegarden::Marker* getMarkerAtClickPosition();
     
     //--------------- Data members ---------------------------------
-    double m_xorigin;
     int m_currentXOffset;
     int m_width;
     int m_clickX;

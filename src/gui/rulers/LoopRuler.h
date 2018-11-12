@@ -52,7 +52,6 @@ public:
     LoopRuler(RosegardenDocument *doc,
               RulerScale *rulerScale,
               int height = 0,
-              double xorigin = 0.0,
               bool invert = false,
               bool isForMainWindow = false,
               QWidget* parent = 0);
@@ -118,7 +117,6 @@ protected:
 
     //--------------- Data members ---------------------------------
     int  m_height;
-    double m_xorigin;
     bool m_invert;
     bool m_isForMainWindow;
     int  m_currentXOffset;

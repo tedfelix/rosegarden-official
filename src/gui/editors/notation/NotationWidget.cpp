@@ -509,17 +509,14 @@ NotationWidget::setSegments(RosegardenDocument *document,
 
     m_topStandardRuler = new StandardRuler(document,
                                            m_referenceScale,
-                                           0,
                                            false);
 
     m_bottomStandardRuler = new StandardRuler(document,
                                               m_referenceScale,
-                                              0,
                                               true);
 
     m_tempoRuler = new TempoRuler(m_referenceScale,
                                   document,
-                                  0,      // xorigin
                                   24,     // height
                                   true,   // small
                                   ThornStyle::isEnabled());
@@ -527,12 +524,10 @@ NotationWidget::setSegments(RosegardenDocument *document,
     m_chordNameRuler = new ChordNameRuler(m_referenceScale,
                                           document,
                                           segments,
-                                          0,       // xorigin
                                           24);     // height
 
     m_rawNoteRuler = new RawNoteRuler(m_referenceScale,
                                       segments[0],
-                                      0,
                                       20);  // why not 24 as other rulers ?
 
     m_layout->addWidget(m_topStandardRuler, TOPRULER_ROW, MAIN_COL, 1, 1);

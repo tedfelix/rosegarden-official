@@ -44,11 +44,9 @@ namespace Rosegarden
 
 RawNoteRuler::RawNoteRuler(RulerScale *rulerScale,
                            Segment *segment,
-                           double xorigin,
                            int height,
                            QWidget *parent) :
         QWidget(parent),
-        m_xorigin(xorigin),
         m_height(height),
         m_currentXOffset(0),
         m_width( -1),
@@ -115,8 +113,7 @@ RawNoteRuler::sizeHint() const
 {
     double width =
         m_rulerScale->getBarPosition(m_rulerScale->getLastVisibleBar()) +
-        m_rulerScale->getBarWidth(m_rulerScale->getLastVisibleBar()) +
-        m_xorigin;
+        m_rulerScale->getBarWidth(m_rulerScale->getLastVisibleBar());
 
     QSize res(std::max(int(width), m_width), m_height);
 
@@ -126,7 +123,7 @@ RawNoteRuler::sizeHint() const
 QSize
 RawNoteRuler::minimumSizeHint() const
 {
-    double firstBarWidth = m_rulerScale->getBarWidth(0) + m_xorigin;
+    double firstBarWidth = m_rulerScale->getBarWidth(0);
     QSize res = QSize(int(firstBarWidth), m_height);
     return res;
 }
@@ -384,8 +381,8 @@ RawNoteRuler::drawNode(QPainter &paint, DefaultVelocityColour &vc,
     double u0 = m_rulerScale->getXForTime(start);
     double u1 = m_rulerScale->getXForTime(end);
 
-    u0 += m_currentXOffset + m_xorigin;
-    u1 += m_currentXOffset + m_xorigin;
+    u0 += m_currentXOffset;
+    u1 += m_currentXOffset;
 
     start = m_segment->getComposition()->getNotationQuantizer()->
             getQuantizedAbsoluteTime(*node->node);
@@ -395,8 +392,8 @@ RawNoteRuler::drawNode(QPainter &paint, DefaultVelocityColour &vc,
     double q0 = m_rulerScale->getXForTime(start);
     double q1 = m_rulerScale->getXForTime(end);
 
-    q0 += m_currentXOffset + m_xorigin;
-    q1 += m_currentXOffset + m_xorigin;
+    q0 += m_currentXOffset;
+    q1 += m_currentXOffset;
 
 #ifdef DEBUG_RAW_NOTE_RULER
 
@@ -482,9 +479,9 @@ RawNoteRuler::paintEvent(QPaintEvent* e)
     QRect clipRect = paint.clipRegion().boundingRect();
 
     timeT from = m_rulerScale->getTimeForX
-                 (clipRect.x() - m_currentXOffset - 100 - m_xorigin);
+                 (clipRect.x() - m_currentXOffset - 100);
     timeT to = m_rulerScale->getTimeForX
-               (clipRect.x() + clipRect.width() - m_currentXOffset + 100 - m_xorigin);
+               (clipRect.x() + clipRect.width() - m_currentXOffset + 100);
 
     paint.setPen(GUIPalette::getColour(GUIPalette::RawNoteRulerForeground));
     paint.setBrush(GUIPalette::getColour(GUIPalette::RawNoteRulerForeground));
@@ -497,9 +494,9 @@ RawNoteRuler::paintEvent(QPaintEvent* e)
     paint.setPen(brushColor);
     paint.setBrush(brushColor);
     int x0 = int(m_rulerScale->getXForTime(m_segment->getStartTime()) + 
-                 m_currentXOffset + m_xorigin);
+                 m_currentXOffset);
     int x1 = int(m_rulerScale->getXForTime(m_segment->getEndMarkerTime()) + 
-                 m_currentXOffset + m_xorigin);
+                 m_currentXOffset);
     paint.drawRect(x0, 1, x1-x0+1, height()-1);
 
     // draw the bar divisions
@@ -527,7 +524,7 @@ RawNoteRuler::paintEvent(QPaintEvent* e)
         paint.setBrush(GUIPalette::getColour(GUIPalette::RawNoteRulerForeground));
 
         int x = int(m_rulerScale->getXForTime(barStart) +
-                    m_currentXOffset + m_xorigin);
+                    m_currentXOffset);
         paint.drawLine(x, 1, x, m_height);
 
         for (int depth = 0; depth < 3; ++depth) {
@@ -541,7 +538,7 @@ RawNoteRuler::paintEvent(QPaintEvent* e)
             while (t < barEnd) {
                 if ((t - barStart) % (base * divisions[depth]) != 0) {
                     int x = int(m_rulerScale->getXForTime(t) +
-                                m_currentXOffset + m_xorigin);
+                                m_currentXOffset);
                     paint.drawLine(x, 1, x, m_height);
                 }
                 t += base;

@@ -60,7 +60,6 @@ public:
      */
     ChordNameRuler(RulerScale *rulerScale,
                    RosegardenDocument *doc,
-                   double xorigin = 0.0,
                    int height = 0,
                    QWidget* parent = 0);
 
@@ -73,7 +72,6 @@ public:
     ChordNameRuler(RulerScale *rulerScale,
                    RosegardenDocument *doc,
                    std::vector<Segment *> &segments,
-                   double xorigin = 0.0,
                    int height = 0,
                    QWidget* parent = 0);
 
@@ -103,7 +101,6 @@ private:
     void recalculate(timeT from = 0,
                      timeT to = 0);
 
-    double m_xorigin;
     int    m_height;
     int    m_currentXOffset;
     int    m_width;

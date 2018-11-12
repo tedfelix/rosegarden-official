@@ -52,7 +52,6 @@ class RawNoteRuler : public QWidget, public SegmentObserver
 public:
     RawNoteRuler(RulerScale *rulerScale,
                  Segment *segment,
-                 double xorigin = 0.0,
                  int height = 0,
                  QWidget* parent = 0);
 
@@ -82,7 +81,6 @@ protected:
     virtual void paintEvent(QPaintEvent*);
     
 private:
-    double m_xorigin;
     int  m_height;
     int  m_currentXOffset;
     int  m_width;

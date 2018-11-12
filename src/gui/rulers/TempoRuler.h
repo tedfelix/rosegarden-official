@@ -64,7 +64,6 @@ public:
      */
     TempoRuler(RulerScale *rulerScale,
                RosegardenDocument *doc,
-               double xorigin = 0.0,
                int height = 0,
                bool small = false,
                bool Thorn = true);
@@ -101,7 +100,6 @@ protected:
     void createMenu();
 
 private:
-    double m_xorigin;
     int  m_height;
     int  m_currentXOffset;
     int  m_width;

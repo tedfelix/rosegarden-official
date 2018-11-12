@@ -40,7 +40,6 @@ namespace Rosegarden
 
 StandardRuler::StandardRuler(RosegardenDocument *doc,
                              RulerScale *rulerScale,
-                             double xorigin,
                              bool invert,
                              bool isForMainWindow,
                              QWidget* parent) :
@@ -62,17 +61,17 @@ StandardRuler::StandardRuler(RosegardenDocument *doc,
 	
     if (!m_invert) {
         m_markerRuler = new MarkerRuler
-                       (m_doc, m_rulerScale, xorigin, this);
+                       (m_doc, m_rulerScale, this);
         layout->addWidget(m_markerRuler);
     }
 
     m_loopRuler = new LoopRuler
-                  (m_doc, m_rulerScale, m_loopRulerHeight, xorigin, m_invert, m_isForMainWindow, this);
+                  (m_doc, m_rulerScale, m_loopRulerHeight, m_invert, m_isForMainWindow, this);
     layout->addWidget(m_loopRuler);
 
     if (m_invert) {
         m_markerRuler = new MarkerRuler
-                       (m_doc, m_rulerScale, xorigin, this);
+                       (m_doc, m_rulerScale, this);
         layout->addWidget(m_markerRuler);
     }
 

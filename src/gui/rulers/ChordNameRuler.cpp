@@ -54,11 +54,9 @@ namespace Rosegarden
 
 ChordNameRuler::ChordNameRuler(RulerScale *rulerScale,
                                RosegardenDocument *doc,
-                               double xorigin,
                                int height,
                                QWidget *parent) :
         QWidget(parent),
-        m_xorigin(xorigin),
         m_height(height),
         m_currentXOffset(0),
         m_width( -1),
@@ -92,11 +90,9 @@ ChordNameRuler::ChordNameRuler(RulerScale *rulerScale,
 ChordNameRuler::ChordNameRuler(RulerScale *rulerScale,
                                RosegardenDocument *doc,
                                std::vector<Segment *> &segments,
-                               double xorigin,
                                int height,
                                QWidget *parent) :
         QWidget(parent),
-        m_xorigin(xorigin),
         m_height(height),
         m_currentXOffset(0),
         m_width( -1),
@@ -431,9 +427,9 @@ ChordNameRuler::paintEvent(QPaintEvent* e)
     QRect clipRect = paint.clipRegion().boundingRect();
 
     timeT from = m_rulerScale->getTimeForX
-                 (clipRect.x() - m_currentXOffset - m_xorigin - 50);
+                 (clipRect.x() - m_currentXOffset - 50);
     timeT to = m_rulerScale->getTimeForX
-               (clipRect.x() + clipRect.width() - m_currentXOffset - m_xorigin + 50);
+               (clipRect.x() + clipRect.width() - m_currentXOffset + 50);
 
     recalculate(from, to);
 
@@ -510,8 +506,8 @@ ChordNameRuler::paintEvent(QPaintEvent* e)
         long actualX = (*i)->get
                        <Int>(TEXT_ACTUAL_X);
 
-        formalX += m_currentXOffset + long(m_xorigin);
-        actualX += m_currentXOffset + long(m_xorigin);
+        formalX += m_currentXOffset;
+        actualX += m_currentXOffset;
 
         paint.drawLine(formalX, height() - 4, formalX, height());
 

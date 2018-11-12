@@ -60,12 +60,10 @@ namespace Rosegarden
 
 TempoRuler::TempoRuler(RulerScale *rulerScale,
                        RosegardenDocument *doc,
-                       double xorigin,
                        int height,
                        bool small,
                        bool Thorn) :
         QWidget(0),
-        m_xorigin(xorigin),
         m_height(height),
         m_currentXOffset(0),
         m_width( -1),
@@ -137,14 +135,14 @@ TempoRuler::mousePressEvent(QMouseEvent *e)
 
         if (e->type() == QEvent::MouseButtonDblClick) {
             timeT t = m_rulerScale->getTimeForX
-                      (e->x() - m_currentXOffset - m_xorigin);
+                      (e->x() - m_currentXOffset);
             m_editTempoController->emitEditTempos(t);
             return;
         }
 
         int x = e->x() + 1;
         int y = e->y();
-        timeT t = m_rulerScale->getTimeForX(x - m_currentXOffset - m_xorigin);
+        timeT t = m_rulerScale->getTimeForX(x - m_currentXOffset);
         int tcn = m_composition->getTempoChangeNumberAt(t);
 
         if (tcn < 0 || tcn >= m_composition->getTempoChangeCount())
@@ -163,7 +161,7 @@ TempoRuler::mousePressEvent(QMouseEvent *e)
         m_dragOriginalTarget = m_dragStartTarget;
         m_dragFine = ((e->modifiers() & Qt::ShiftModifier) != 0);
 
-        int px = m_rulerScale->getXForTime(tc.first) + m_currentXOffset + m_xorigin;
+        int px = m_rulerScale->getXForTime(tc.first) + m_currentXOffset;
         if (x >= px && x < px + 5) {
             m_dragHoriz = true;
             m_dragVert = false;
@@ -173,7 +171,7 @@ TempoRuler::mousePressEvent(QMouseEvent *e)
             if (tcn < m_composition->getTempoChangeCount() - 1) {
                 nt = m_composition->getTempoChange(tcn + 1).first;
             }
-            int nx = m_rulerScale->getXForTime(nt) + m_currentXOffset + m_xorigin;
+            int nx = m_rulerScale->getXForTime(nt) + m_currentXOffset;
             if (x > px + 5 && x > nx - 5) {
                 m_dragTarget = true;
                 setCursor(Qt::SizeVerCursor);
@@ -328,7 +326,7 @@ TempoRuler::mouseMoveEvent(QMouseEvent *e)
         } else {
             grid.setSnapTime(SnapGrid::SnapToUnit);
         }
-        timeT newTime = grid.snapX(x - m_currentXOffset - m_xorigin,
+        timeT newTime = grid.snapX(x - m_currentXOffset,
                                    SnapGrid::SnapEither);
 
         int tcn = m_composition->getTempoChangeNumberAt(m_dragPreviousTime);
@@ -354,7 +352,7 @@ TempoRuler::mouseMoveEvent(QMouseEvent *e)
     } else {
 
         int x = e->x() + 1;
-        timeT t = m_rulerScale->getTimeForX(x - m_currentXOffset - m_xorigin);
+        timeT t = m_rulerScale->getTimeForX(x - m_currentXOffset);
         int tcn = m_composition->getTempoChangeNumberAt(t);
 
         if (tcn < 0 || tcn >= m_composition->getTempoChangeCount())
@@ -376,7 +374,7 @@ TempoRuler::mouseMoveEvent(QMouseEvent *e)
         //!!! merge this test with the one in mousePressEvent as
         //isCloseToStart or equiv, and likewise for close to end
 
-        int px = m_rulerScale->getXForTime(tc.first) + m_currentXOffset + m_xorigin;
+        int px = m_rulerScale->getXForTime(tc.first) + m_currentXOffset;
         if (x >= px && x < px + 5) {
             m_illuminatePoint = true;
         } else {
@@ -384,7 +382,7 @@ TempoRuler::mouseMoveEvent(QMouseEvent *e)
             if (tcn < m_composition->getTempoChangeCount() - 1) {
                 nt = m_composition->getTempoChange(tcn + 1).first;
             }
-            int nx = m_rulerScale->getXForTime(nt) + m_currentXOffset + m_xorigin;
+            int nx = m_rulerScale->getXForTime(nt) + m_currentXOffset;
             if (x > px + 5 && x > nx - 5) {
                 m_illuminateTarget = true;
             }
@@ -521,8 +519,7 @@ TempoRuler::sizeHint() const
 {
     double width =
         m_rulerScale->getBarPosition(m_rulerScale->getLastVisibleBar()) +
-        m_rulerScale->getBarWidth(m_rulerScale->getLastVisibleBar()) +
-        m_xorigin;
+        m_rulerScale->getBarWidth(m_rulerScale->getLastVisibleBar());
 
     QSize res(std::max(int(width), m_width), m_height);
 
@@ -532,7 +529,7 @@ TempoRuler::sizeHint() const
 QSize
 TempoRuler::minimumSizeHint() const
 {
-    double firstBarWidth = m_rulerScale->getBarWidth(0) + m_xorigin;
+    double firstBarWidth = m_rulerScale->getBarWidth(0);
     QSize res = QSize(int(firstBarWidth), m_height);
     return res;
 }
@@ -599,14 +596,10 @@ TempoRuler::paintEvent(QPaintEvent* e)
     paint.setClipRegion(e->region());
     paint.setClipRect(clipRect);
 
-    if (m_xorigin > 0) {
-        paint.fillRect(0, 0, m_xorigin, height(), kuller);
-    }
-
     timeT from = m_rulerScale->getTimeForX
-                 (clipRect.x() - m_currentXOffset - 100 - m_xorigin);
+                 (clipRect.x() - m_currentXOffset - 100);
     timeT to = m_rulerScale->getTimeForX
-               (clipRect.x() + clipRect.width() - m_currentXOffset + 100 - m_xorigin);
+               (clipRect.x() + clipRect.width() - m_currentXOffset + 100);
 
     QRect boundsForHeight = m_fontMetrics.boundingRect("019");
     int fontHeight = boundsForHeight.height();
@@ -688,8 +681,8 @@ TempoRuler::paintEvent(QPaintEvent* e)
         }
 
         double x0, x1;
-        x0 = m_rulerScale->getXForTime(t0) + m_currentXOffset + m_xorigin;
-        x1 = m_rulerScale->getXForTime(t1) + m_currentXOffset + m_xorigin;
+        x0 = m_rulerScale->getXForTime(t0) + m_currentXOffset;
+        x1 = m_rulerScale->getXForTime(t1) + m_currentXOffset;
         /*!!!
             if (x0 > e->rect().x()) {
                 paint.fillRect(e->rect().x(), 0, x0 - e->rect().x(), height(),
@@ -797,8 +790,7 @@ TempoRuler::paintEvent(QPaintEvent* e)
             i != timePoints.end(); ++i) {
 
         timeT time = i->first;
-        double x = m_rulerScale->getXForTime(time) + m_currentXOffset
-                   + m_xorigin;
+        double x = m_rulerScale->getXForTime(time) + m_currentXOffset;
 
         /*
             paint.drawLine(static_cast<int>(x),
@@ -879,7 +871,7 @@ TempoRuler::slotInsertTempoHere()
 {
     SnapGrid grid(m_rulerScale);
     grid.setSnapTime(SnapGrid::SnapToUnit);
-    timeT t = grid.snapX(m_clickX - m_currentXOffset - m_xorigin,
+    timeT t = grid.snapX(m_clickX - m_currentXOffset,
                          SnapGrid::SnapLeft);
     tempoT tempo = Composition::getTempoForQpm(120.0);
 
@@ -914,14 +906,14 @@ TempoRuler::slotInsertTempoAtPointer()
 void
 TempoRuler::slotDeleteTempoChange()
 {
-    timeT t = m_rulerScale->getTimeForX(m_clickX - m_currentXOffset - m_xorigin);
+    timeT t = m_rulerScale->getTimeForX(m_clickX - m_currentXOffset);
     m_editTempoController->deleteTempoChange(t);
 }
 
 void
 TempoRuler::slotRampToNext()
 {
-    timeT t = m_rulerScale->getTimeForX(m_clickX - m_currentXOffset - m_xorigin);
+    timeT t = m_rulerScale->getTimeForX(m_clickX - m_currentXOffset);
 
     int tcn = m_composition->getTempoChangeNumberAt(t);
     if (tcn < 0 || tcn >= m_composition->getTempoChangeCount())
@@ -935,7 +927,7 @@ TempoRuler::slotRampToNext()
 void
 TempoRuler::slotUnramp()
 {
-    timeT t = m_rulerScale->getTimeForX(m_clickX - m_currentXOffset - m_xorigin);
+    timeT t = m_rulerScale->getTimeForX(m_clickX - m_currentXOffset);
 
     int tcn = m_composition->getTempoChangeNumberAt(t);
     if (tcn < 0 || tcn >= m_composition->getTempoChangeCount())
@@ -949,21 +941,21 @@ TempoRuler::slotUnramp()
 void
 TempoRuler::slotEditTempo()
 {
-    const timeT atTime = m_rulerScale->getTimeForX(m_clickX - m_currentXOffset - m_xorigin);
+    const timeT atTime = m_rulerScale->getTimeForX(m_clickX - m_currentXOffset);
     m_editTempoController->editTempo(this, atTime);
 }
 
 void
 TempoRuler::slotEditTimeSignature()
 {
-    timeT t = m_rulerScale->getTimeForX(m_clickX - m_currentXOffset - m_xorigin);
+    timeT t = m_rulerScale->getTimeForX(m_clickX - m_currentXOffset);
     m_editTempoController->editTimeSignature(this, t);
 }
 
 void
 TempoRuler::slotEditTempos()
 {
-    timeT t = m_rulerScale->getTimeForX(m_clickX - m_currentXOffset - m_xorigin);
+    timeT t = m_rulerScale->getTimeForX(m_clickX - m_currentXOffset);
     m_editTempoController->emitEditTempos(t);
 }
 
