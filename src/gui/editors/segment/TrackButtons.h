@@ -363,8 +363,6 @@ protected:
     static const int m_vuSpacing;
 
 private slots:
-    /// Called when a new document is loaded.
-    void slotNewDocument(RosegardenDocument *);
     /// Called when the document is modified in some way.
     void slotDocumentModified(bool);
 

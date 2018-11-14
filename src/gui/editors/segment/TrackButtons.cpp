@@ -142,9 +142,12 @@ TrackButtons::TrackButtons(RosegardenDocument* doc,
 
     m_doc->getComposition().addObserver(this);
 
-    connect(RosegardenMainWindow::self(),
-                SIGNAL(documentChanged(RosegardenDocument *)),
-            SLOT(slotNewDocument(RosegardenDocument *)));
+    // We do not care about documentChanged() because if the
+    // document is changing, we are going away.  A new TrackButtons
+    // is created for each new document.
+    //connect(RosegardenMainWindow::self(),
+    //            SIGNAL(documentChanged(RosegardenDocument *)),
+    //        SLOT(slotNewDocument(RosegardenDocument *)));
 }
 
 TrackButtons::~TrackButtons() {
@@ -1300,13 +1303,6 @@ TrackButtons::slotTrackSelected(int trackId)
     // New notification mechanism.
     // This should replace all others.
     m_doc->emitDocumentModified();
-}
-
-void
-TrackButtons::slotNewDocument(RosegardenDocument *doc)
-{
-    connect(doc, SIGNAL(documentModified(bool)),
-            SLOT(slotDocumentModified(bool)));
 }
 
 void
