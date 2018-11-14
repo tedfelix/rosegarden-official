@@ -78,6 +78,9 @@ Fader::Fader(AudioLevel::FaderType type,
     m_outlineColour = QColor(palette().mid().color());
 
     calculateGroovePixmap();
+
+    // Bogus value to force an update.
+    m_value = -1;
     setFader(0.0);
     emit faderChanged(m_value);
 }
