@@ -922,7 +922,7 @@ RosegardenMainWindow::initStatusBar()
 void
 RosegardenMainWindow::initView()
 {
-    RG_DEBUG << "initView()...";
+    //RG_DEBUG << "initView()...";
 
     Composition &comp = m_doc->getComposition();
 
@@ -1219,7 +1219,8 @@ RosegardenMainWindow::setDocument(RosegardenDocument* newDocument)
         newDocument->initialiseStudio();
     }
 
-    // Create a new RosegardenMainViewWidget and delete the old.
+    // Create a new RosegardenMainViewWidget and set it as the central
+    // widget.  The old RMVW instance will be scheduled for deletion later.
     initView();
 
     // This will delete all edit views.
