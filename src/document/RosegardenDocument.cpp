@@ -120,7 +120,7 @@ RosegardenDocument::RosegardenDocument(
     m_modified(false),
     m_autoSaved(false),
     m_audioPeaksThread(&m_audioFileManager),
-    m_seqManager(0),
+    m_seqManager(nullptr),
     m_pluginManager(pluginManager),
     m_audioRecordLatency(0, 0),
     m_quickMarkerTime(-1),
@@ -573,7 +573,7 @@ bool RosegardenDocument::openDocument(const QString &filename,
     if (squelchProgressDialog) {
         progressDialog.close();
         // Apparently, close() isn't strong enough...
-        m_progressDialog = 0;
+        m_progressDialog = nullptr;
     }
 
     setAbsFilePath(fileInfo.absoluteFilePath());
