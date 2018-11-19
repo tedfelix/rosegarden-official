@@ -78,7 +78,9 @@
 namespace Rosegarden
 {
 
+#ifdef HAVE_LIBJACK
 static size_t debug_jack_frame_count = 0;
+#endif
 
 #define FAILURE_REPORT_COUNT 256
 static MappedEvent::FailureCode failureReports[FAILURE_REPORT_COUNT];
@@ -4159,7 +4161,9 @@ AlsaDriver::processEventsOut(const MappedEventList &mC,
                              const RealTime &sliceEnd)
 {
     // special case for unqueued events
-    bool now = (sliceStart == RealTime::zeroTime && sliceEnd == RealTime::zeroTime);
+#ifdef HAVE_LIBJACK
+    const bool now = (sliceStart == RealTime::zeroTime && sliceEnd == RealTime::zeroTime);
+#endif
 
     if (m_startPlayback) {
         m_startPlayback = false;

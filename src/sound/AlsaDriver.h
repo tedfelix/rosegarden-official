@@ -141,6 +141,8 @@ public:
     virtual RealTime getInstrumentPlayLatency(InstrumentId id) {
 #ifdef HAVE_LIBJACK
         if (m_jackDriver) return m_jackDriver->getInstrumentPlayLatency(id);
+#else
+        Q_UNUSED(id);
 #endif
         return RealTime::zeroTime;
     }
@@ -160,12 +162,19 @@ public:
                                    int position) {
 #ifdef HAVE_LIBJACK
         if (m_jackDriver) m_jackDriver->setPluginInstance(id, identifier, position);
+#else
+        Q_UNUSED(id);
+        Q_UNUSED(identifier);
+        Q_UNUSED(position);
 #endif
     }
 
     virtual void removePluginInstance(InstrumentId id, int position) {
 #ifdef HAVE_LIBJACK
         if (m_jackDriver) m_jackDriver->removePluginInstance(id, position);
+#else
+        Q_UNUSED(id);
+        Q_UNUSED(position);
 #endif
     }
 
@@ -183,6 +192,11 @@ public:
                                             float value) {
 #ifdef HAVE_LIBJACK
         if (m_jackDriver) m_jackDriver->setPluginInstancePortValue(id, position, portNumber, value);
+#else
+        Q_UNUSED(id);
+        Q_UNUSED(position);
+        Q_UNUSED(portNumber);
+        Q_UNUSED(value);
 #endif
     }
 
@@ -191,6 +205,10 @@ public:
                                              unsigned long portNumber) {
 #ifdef HAVE_LIBJACK
         if (m_jackDriver) return m_jackDriver->getPluginInstancePortValue(id, position, portNumber);
+#else
+        Q_UNUSED(id);
+        Q_UNUSED(position);
+        Q_UNUSED(portNumber);
 #endif
         return 0;
     }
@@ -200,6 +218,10 @@ public:
                                          bool value) {
 #ifdef HAVE_LIBJACK
         if (m_jackDriver) m_jackDriver->setPluginInstanceBypass(id, position, value);
+#else
+        Q_UNUSED(id);
+        Q_UNUSED(position);
+        Q_UNUSED(value);
 #endif
     }
 
@@ -207,6 +229,9 @@ public:
                                                   int position) {
 #ifdef HAVE_LIBJACK
         if (m_jackDriver) return m_jackDriver->getPluginInstancePrograms(id, position);
+#else
+        Q_UNUSED(id);
+        Q_UNUSED(position);
 #endif
         return QStringList();
     }
@@ -215,6 +240,9 @@ public:
                                              int position) {
 #ifdef HAVE_LIBJACK
         if (m_jackDriver) return m_jackDriver->getPluginInstanceProgram(id, position);
+#else
+        Q_UNUSED(id);
+        Q_UNUSED(position);
 #endif
         return QString();
     }
@@ -225,6 +253,11 @@ public:
                                              int program) {
 #ifdef HAVE_LIBJACK
         if (m_jackDriver) return m_jackDriver->getPluginInstanceProgram(id, position, bank, program);
+#else
+        Q_UNUSED(id);
+        Q_UNUSED(position);
+        Q_UNUSED(bank);
+        Q_UNUSED(program);
 #endif
         return QString();
     }
@@ -234,6 +267,10 @@ public:
                                                    QString name) {
 #ifdef HAVE_LIBJACK
         if (m_jackDriver) return m_jackDriver->getPluginInstanceProgram(id, position, name);
+#else
+        Q_UNUSED(id);
+        Q_UNUSED(position);
+        Q_UNUSED(name);
 #endif
         return 0;
     }
@@ -243,6 +280,10 @@ public:
                                           QString program) {
 #ifdef HAVE_LIBJACK
         if (m_jackDriver) m_jackDriver->setPluginInstanceProgram(id, position, program);
+#else
+        Q_UNUSED(id);
+        Q_UNUSED(position);
+        Q_UNUSED(program);
 #endif
     }
 
@@ -252,6 +293,11 @@ public:
                                     QString value) {
 #ifdef HAVE_LIBJACK
         if (m_jackDriver) return m_jackDriver->configurePlugin(id, position, key, value);
+#else
+        Q_UNUSED(id);
+        Q_UNUSED(position);
+        Q_UNUSED(key);
+        Q_UNUSED(value);
 #endif
         return QString();
     }
@@ -261,6 +307,10 @@ public:
                                     float pan) {
 #ifdef HAVE_LIBJACK
         if (m_jackDriver) m_jackDriver->setAudioBussLevels(bussId, dB, pan);
+#else
+        Q_UNUSED(bussId);
+        Q_UNUSED(dB);
+        Q_UNUSED(pan);
 #endif
     }
 
@@ -269,6 +319,10 @@ public:
                                           float pan) {
 #ifdef HAVE_LIBJACK
         if (m_jackDriver) m_jackDriver->setAudioInstrumentLevels(instrument, dB, pan);
+#else
+        Q_UNUSED(instrument);
+        Q_UNUSED(dB);
+        Q_UNUSED(pan);
 #endif
     }
 
