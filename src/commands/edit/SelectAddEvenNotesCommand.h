@@ -85,13 +85,13 @@ BeatEvent(Event *event, int numSkippedBeats,
                                           Event *firstBeat,
                                           Event *secondBeat);
     static BeatEventVector findBeatEvents(EventSelection *eventSelection);
-    virtual EventSelection *getSubsequentSelection();
+    EventSelection *getSubsequentSelection() override;
 
  private:
     static QString getGlobalName() { return tr("Select Beats"); }
     static timeT getStartTime(BeatEventVector &beatEventVector);
     static timeT getEndTime(BeatEventVector &beatEventVector);
-    virtual void modifySegment();
+    void modifySegment() override;
         
     BeatEventVector m_beatEventVector;
     EventVector     m_eventsAdded;

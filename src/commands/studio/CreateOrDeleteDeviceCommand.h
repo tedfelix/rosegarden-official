@@ -62,8 +62,8 @@ public:
         return (deletion ? tr("Delete Device") : tr("Create Device")); 
     }
     
-    virtual void execute();
-    virtual void unexecute() { execute(); }
+    void execute() override;
+    void unexecute() override { execute(); }
     
 protected:
     Studio *m_studio;

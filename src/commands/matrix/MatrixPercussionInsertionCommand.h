@@ -46,7 +46,7 @@ public:
     Event *getLastInsertedEvent() { return m_lastInsertedEvent; }
     
 protected:
-    virtual void modifySegment();
+    void modifySegment() override;
 
     timeT getEffectiveStartTime(Segment &segment,
                                             timeT startTime,

@@ -49,8 +49,8 @@ public:
 
     static QString getGlobalName() { return tr("&Remove Marker"); }
 
-    virtual void execute();
-    virtual void unexecute();
+    void execute() override;
+    void unexecute() override;
 
 protected:
 

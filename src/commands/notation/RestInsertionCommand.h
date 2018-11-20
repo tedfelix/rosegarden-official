@@ -42,7 +42,7 @@ public:
     virtual ~RestInsertionCommand();
 
 protected:
-    virtual void modifySegment();
+    void modifySegment() override;
 };
 
 

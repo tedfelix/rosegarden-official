@@ -50,8 +50,8 @@ public:
     virtual ~SegmentGroupInsertRangeCommand();
 
 protected:
-    virtual void execute();
-    virtual void unexecute();
+    void execute() override;
+    void unexecute() override;
     void     calculateNewSegments(void);
     Segment * splitRejoin(Segment *segment);
 

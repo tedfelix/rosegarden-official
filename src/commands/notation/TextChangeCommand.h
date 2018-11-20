@@ -43,7 +43,7 @@ public:
     virtual ~TextChangeCommand();
 
 protected:
-    virtual void modifySegment();
+    void modifySegment() override;
     Event *m_event; // only used first time through
     Text m_text;
 };

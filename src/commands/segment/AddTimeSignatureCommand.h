@@ -46,8 +46,8 @@ public:
 
     static QString getGlobalName() { return tr("Add Time Si&gnature Change..."); }
 
-    virtual void execute();
-    virtual void unexecute();
+    void execute() override;
+    void unexecute() override;
 
 protected:
     Composition *m_composition;

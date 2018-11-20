@@ -46,7 +46,7 @@ public:
     Event *getLastInsertedEvent() { return m_lastInsertedEvent; }
     
 protected:
-    virtual void modifySegment();
+    void modifySegment() override;
 
     Event *m_event;
     Event *m_lastInsertedEvent; // an alias for another event

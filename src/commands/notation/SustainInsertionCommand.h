@@ -54,11 +54,11 @@ public:
         }
     }
 
-    virtual EventSelection *getSubsequentSelection();
+    EventSelection *getSubsequentSelection() override;
     Event *getLastInsertedEvent() { return m_lastInsertedEvent; }
 
 protected:
-    virtual void modifySegment();
+    void modifySegment() override;
 
     bool m_down;
     int m_controllerNumber;

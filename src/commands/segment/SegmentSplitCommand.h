@@ -49,8 +49,8 @@ public:
     bool isValid() { return isValid(m_segment, m_splitTime); }
     bool isValid(Segment * segment, timeT splitTime);
 
-    virtual void execute();
-    virtual void unexecute();
+    void execute() override;
+    void unexecute() override;
 
     static SegmentVec getNewSegments(Segment *segment, timeT splitTime,
 				     bool keepLabel);

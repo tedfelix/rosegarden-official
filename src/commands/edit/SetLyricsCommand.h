@@ -44,8 +44,8 @@ public:
     
     static QString getGlobalName() { return tr("Edit L&yrics"); }
 
-    virtual void execute();
-    virtual void unexecute();
+    void execute() override;
+    void unexecute() override;
 
 private:
     Segment *m_segment;

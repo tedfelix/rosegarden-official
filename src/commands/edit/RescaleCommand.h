@@ -45,7 +45,7 @@ public:
     static QString getGlobalName() { return tr("Stretch or S&quash..."); }
     
 protected:
-    virtual void modifySegment();
+    void modifySegment() override;
 
 private:
     timeT rescale(timeT);

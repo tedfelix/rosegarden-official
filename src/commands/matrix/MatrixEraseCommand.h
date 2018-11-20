@@ -41,10 +41,10 @@ public:
     MatrixEraseCommand(Segment &segment,
                        Event *event);
 
-    virtual timeT getRelayoutEndTime();
+    timeT getRelayoutEndTime() override;
 
 protected:
-    virtual void modifySegment();
+    void modifySegment() override;
 
     Event *m_event; // only used on 1st execute (cf bruteForceRedo)
     timeT m_relayoutEndTime;

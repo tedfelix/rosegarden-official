@@ -47,8 +47,8 @@ public:
                           timeT newStartTime);
     virtual ~SegmentRescaleCommand();
 
-    virtual void execute();
-    virtual void unexecute();
+    void execute() override;
+    void unexecute() override;
     
     static QString getGlobalName() { return tr("Stretch or S&quash..."); }
 

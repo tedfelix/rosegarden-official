@@ -53,7 +53,7 @@ public:
     virtual ~InsertTriggerNoteCommand();
 
 protected:
-    virtual void modifySegment();
+    void modifySegment() override;
 
     timeT m_time;
     timeT m_duration;

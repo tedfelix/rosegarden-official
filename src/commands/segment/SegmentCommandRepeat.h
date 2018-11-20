@@ -42,8 +42,8 @@ public:
     SegmentCommandRepeat(const std::vector<Segment*>&,
                          bool repeat);
 
-    virtual void execute();
-    virtual void unexecute();
+    void execute() override;
+    void unexecute() override;
 
 protected:
     bool m_repeatState;

@@ -44,8 +44,8 @@ public:
     CreateTempoMapFromSegmentCommand(Segment *grooveSegment);
     virtual ~CreateTempoMapFromSegmentCommand();
 
-    virtual void execute();
-    virtual void unexecute();
+    void execute() override;
+    void unexecute() override;
 
 private:
     void initialise(Segment *s);

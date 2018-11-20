@@ -46,8 +46,8 @@ public:
 
     static QString getGlobalName() { return tr("Split by &Drum..."); }
 
-    virtual void execute();
-    virtual void unexecute();
+    void execute() override;
+    void unexecute() override;
 
 private:
     Composition *m_composition;

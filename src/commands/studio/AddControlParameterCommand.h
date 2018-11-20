@@ -50,8 +50,8 @@ public:
 
     ~AddControlParameterCommand();
 
-    virtual void execute();
-    virtual void unexecute();
+    void execute() override;
+    void unexecute() override;
 
     static QString getGlobalName() { return tr("&Add Control Parameter"); }
 

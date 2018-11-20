@@ -62,8 +62,8 @@ public:
     static QString getGlobalName()
         { return tr("Split by &Pitch..."); }
 
-    virtual void execute();
-    virtual void unexecute();
+    void execute() override;
+    void unexecute() override;
 
 private:
     int getSplitPitchAt(Segment::iterator i);

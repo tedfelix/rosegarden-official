@@ -46,8 +46,8 @@ public:
     static QString getGlobalName()
         { return tr("Change Segment Color Map..."); }
 
-    virtual void execute();
-    virtual void unexecute();
+    void execute() override;
+    void unexecute() override;
 protected:
     RosegardenDocument *                m_doc;
     ColourMap             m_oldMap;

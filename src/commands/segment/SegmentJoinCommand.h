@@ -41,8 +41,8 @@ public:
     SegmentJoinCommand(SegmentSelection &segments);
     virtual ~SegmentJoinCommand();
 
-    virtual void execute();
-    virtual void unexecute();
+    void execute() override;
+    void unexecute() override;
     static Segment *makeSegment(SegmentVec oldSegments);
 
     static QString getGlobalName() { return tr("&Join"); }

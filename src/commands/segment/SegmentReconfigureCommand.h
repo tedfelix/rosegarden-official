@@ -66,8 +66,8 @@ private:
     timeT swap();
     
     // Command overrides
-    void execute();
-    void unexecute();
+    void execute() override;
+    void unexecute() override;
 
     // unused
 //    void addSegments(const ChangeSet &changes);

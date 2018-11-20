@@ -53,7 +53,7 @@ public:
     static QString getGlobalName(Quantizer *quantizer = 0);
     
 protected:
-    virtual void modifySegment();
+    void modifySegment() override;
 
 private:
     Quantizer *m_quantizer;

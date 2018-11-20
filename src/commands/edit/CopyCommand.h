@@ -62,8 +62,8 @@ public:
 
     static QString getGlobalName() { return tr("&Copy"); }
 
-    virtual void execute();
-    virtual void unexecute();
+    void execute() override;
+    void unexecute() override;
 
 protected:
     Clipboard *m_sourceClipboard;

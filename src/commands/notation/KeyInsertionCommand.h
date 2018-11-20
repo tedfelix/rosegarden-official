@@ -68,11 +68,11 @@ public:
         }
     }
 
-    virtual EventSelection *getSubsequentSelection();
+    EventSelection *getSubsequentSelection() override;
     Event *getLastInsertedEvent() { return m_lastInsertedEvent; }
 
 protected:
-    virtual void modifySegment();
+    void modifySegment() override;
 
     Key m_key;
     Event *m_lastInsertedEvent;

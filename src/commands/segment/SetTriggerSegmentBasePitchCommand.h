@@ -41,8 +41,8 @@ public:
                                       int newPitch);
     virtual ~SetTriggerSegmentBasePitchCommand();
     
-    virtual void execute();
-    virtual void unexecute();
+    void execute() override;
+    void unexecute() override;
 
 protected:
     Composition *m_composition;

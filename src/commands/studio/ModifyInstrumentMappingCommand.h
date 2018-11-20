@@ -49,8 +49,8 @@ public:
 
     static QString getGlobalName() { return tr("Modify &Instrument Mapping"); }
 
-    virtual void execute();
-    virtual void unexecute();
+    void execute() override;
+    void unexecute() override;
 
 protected:
     Composition *m_composition;

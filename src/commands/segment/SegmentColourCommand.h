@@ -43,8 +43,8 @@ public:
     static QString getGlobalName()
         { return tr("Change Segment Color..."); }
 
-    virtual void execute();
-    virtual void unexecute();
+    void execute() override;
+    void unexecute() override;
 protected:
 
     std::vector<Segment*>     m_segments;

@@ -39,8 +39,8 @@ public:
     SegmentChangeTransposeCommand(int, Segment *segment);
     virtual ~SegmentChangeTransposeCommand();
 
-    virtual void execute();
-    virtual void unexecute();
+    void execute() override;
+    void unexecute() override;
 
     static QString getGlobalName(int unit) {
         if (!unit) {

@@ -50,8 +50,8 @@ public:
         m_id(id) { }
     ~ModifyControlParameterCommand();
 
-    virtual void execute();
-    virtual void unexecute();
+    void execute() override;
+    void unexecute() override;
 
     static QString getGlobalName() { return tr("&Modify Control Parameter"); }
 

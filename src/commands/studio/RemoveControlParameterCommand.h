@@ -49,8 +49,8 @@ public:
 
     ~RemoveControlParameterCommand();
 
-    virtual void execute();
-    virtual void unexecute();
+    void execute() override;
+    void unexecute() override;
 
     static QString getGlobalName() { return tr("&Remove Control Parameter"); }
 

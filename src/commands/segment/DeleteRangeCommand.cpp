@@ -51,8 +51,8 @@ public:
     virtual ~SegmentGroupDeleteRangeCommand();
 
 protected:
-    virtual void execute();
-    virtual void unexecute();
+    void execute() override;
+    void unexecute() override;
     Segment *splitTwiceRejoin(Segment *segment);
     Segment *splitAtFirst(Segment *segment);
     Segment *splitAtSecond(Segment *segment);

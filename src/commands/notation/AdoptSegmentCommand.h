@@ -41,8 +41,8 @@ public:
     virtual ~AdoptSegmentCommand();
 
 protected:
-    virtual void execute(void);
-    virtual void unexecute(void);
+    void execute(void) override;
+    void unexecute(void) override;
     void adopt(void);
     void unadopt(void);
 

@@ -41,8 +41,8 @@ public:
                                      timeT time);
     virtual ~SegmentSingleRepeatToCopyCommand();
 
-    virtual void execute();
-    virtual void unexecute();
+    void execute() override;
+    void unexecute() override;
 
     Segment *getNewSegment() const { return m_newSegment; }
 

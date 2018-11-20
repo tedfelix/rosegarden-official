@@ -51,7 +51,7 @@ public:
     static QString getGlobalName() { return tr("Resize Segment"); }
 
 protected:
-    virtual void modifySegment();
+    void modifySegment() override;
 
 private:
     Segment *m_segment;

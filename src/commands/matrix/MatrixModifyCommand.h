@@ -43,7 +43,7 @@ public:
                         bool normalize);
 
 protected:
-    virtual void modifySegment();
+    void modifySegment() override;
 
     bool m_normalize;
 

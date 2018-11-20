@@ -49,7 +49,7 @@ public:
     static QString getGlobalName() { return tr("&Normalize Rests"); }
 
 protected:
-    virtual void modifySegment();
+    void modifySegment() override;
 };
 
 

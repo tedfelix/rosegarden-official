@@ -48,8 +48,8 @@ public:
                                timeT newEndMarkerTime);
     virtual ~AudioSegmentRescaleCommand();
 
-    virtual void execute();
-    virtual void unexecute();
+    void execute() override;
+    void unexecute() override;
 
     AudioFileTimeStretcher *getStretcher() { return m_stretcher; }
     int getNewAudioFileId() const { return m_fid; }

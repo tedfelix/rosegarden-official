@@ -79,7 +79,7 @@ public:
                                                     m_progressPerCall = perCall; };
 
 protected:
-    virtual void modifySegment();
+    void modifySegment() override;
 
 private:
     Quantizer *m_quantizer; // I own this

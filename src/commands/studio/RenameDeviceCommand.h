@@ -49,8 +49,8 @@ public:
 
     static QString getGlobalName() { return tr("Rename Device"); }
 
-    virtual void execute();
-    virtual void unexecute();
+    void execute() override;
+    void unexecute() override;
 
 protected:
     Studio *m_studio;

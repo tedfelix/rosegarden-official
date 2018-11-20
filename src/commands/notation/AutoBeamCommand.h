@@ -50,7 +50,7 @@ public:
     static void registerCommand(CommandRegistry *r);
 
 protected:
-    virtual void modifySegment();
+    void modifySegment() override;
 };
 
 

@@ -37,7 +37,7 @@ class PlaceControllersCommand  : public BasicSelectionCommand
                          const ControlParameter *cp);
 
  protected:
-  virtual void modifySegment(void);
+  void modifySegment(void) override;
   static int getDefaultValue(const Instrument *instrument,
                              const ControlParameter *cp);
 

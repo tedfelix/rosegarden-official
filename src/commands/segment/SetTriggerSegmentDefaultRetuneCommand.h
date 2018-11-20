@@ -41,8 +41,8 @@ public:
                                           bool newDefaultRetune);
     virtual ~SetTriggerSegmentDefaultRetuneCommand();
 
-    virtual void execute();
-    virtual void unexecute();
+    void execute() override;
+    void unexecute() override;
 
 protected:
     Composition *m_composition;

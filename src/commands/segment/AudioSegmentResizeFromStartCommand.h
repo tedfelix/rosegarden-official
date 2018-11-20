@@ -43,8 +43,8 @@ public:
                                        timeT newStartTime);
     virtual ~AudioSegmentResizeFromStartCommand();
 
-    virtual void execute();
-    virtual void unexecute();
+    void execute() override;
+    void unexecute() override;
 
 private:
     Segment *m_segment;

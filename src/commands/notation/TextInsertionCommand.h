@@ -43,11 +43,11 @@ public:
                          Text text);
     virtual ~TextInsertionCommand();
 
-    virtual EventSelection *getSubsequentSelection();
+    EventSelection *getSubsequentSelection() override;
     Event *getLastInsertedEvent() { return m_lastInsertedEvent; }
 
 protected:
-    virtual void modifySegment();
+    void modifySegment() override;
 
     Text m_text;
     Event *m_lastInsertedEvent;

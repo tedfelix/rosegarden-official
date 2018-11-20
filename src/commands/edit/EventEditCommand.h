@@ -50,7 +50,7 @@ public:
     static QString getGlobalName() { return tr("Edit E&vent"); }
 
 protected:
-    virtual void modifySegment();
+    void modifySegment() override;
 
 private:
     Event *m_oldEvent; // only used on 1st execute

@@ -85,11 +85,11 @@ public:
                              int velocity = 0); // Zero for rest inserter
     virtual ~NoteInsertionCommand();
 
-    virtual EventSelection *getSubsequentSelection();
+    EventSelection *getSubsequentSelection() override;
     Event *getLastInsertedEvent() { return m_lastInsertedEvent; }
 
 protected:
-    virtual void modifySegment();
+    void modifySegment() override;
 
     timeT getModificationStartTime(Segment &, timeT);
 

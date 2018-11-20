@@ -44,8 +44,8 @@ public:
     static QString getGlobalName() 
         { return tr("Fit Existing Beats to Beat Segment"); }
 
-    virtual void execute();
-    virtual void unexecute();
+    void execute() override;
+    void unexecute() override;
 
 private:
     typedef std::map<timeT, tempoT> TempoMap;

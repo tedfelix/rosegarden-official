@@ -48,12 +48,12 @@ public:
     // another one of the same type
     bool canExecute();
 
-    EventSelection *getSubsequentSelection();
+    EventSelection *getSubsequentSelection() override;
 
     Event *getLastInsertedEvent() {
         return m_lastInsertedEvent;
     }
-    virtual timeT getRelayoutEndTime() {
+    timeT getRelayoutEndTime() override {
         return getStartTime() + m_indicationDuration;
     }
 
@@ -63,7 +63,7 @@ public:
     static void registerCommand(CommandRegistry *r);
 
 protected:
-    virtual void modifySegment();
+    void modifySegment() override;
 
     std::string m_indicationType;
     timeT m_indicationStart;

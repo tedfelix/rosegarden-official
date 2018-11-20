@@ -43,7 +43,7 @@ public:
     static QString getGlobalName() { return tr("Ung&race"); }
 
 protected:
-    virtual void modifySegment();
+    void modifySegment() override;
 };
 
 

@@ -46,8 +46,8 @@ public:
                                  int threshold);
     virtual ~AudioSegmentAutoSplitCommand();
 
-    virtual void execute();
-    virtual void unexecute();
+    void execute() override;
+    void unexecute() override;
     
     static QString getGlobalName() { return tr("&Split on Silence"); }
 

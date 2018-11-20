@@ -54,8 +54,8 @@ public:
 
     static QString getGlobalName() { return tr("&Paste"); }
 
-    virtual void execute();
-    virtual void unexecute();
+    void execute() override;
+    void unexecute() override;
 
 protected:
     Composition *m_composition;

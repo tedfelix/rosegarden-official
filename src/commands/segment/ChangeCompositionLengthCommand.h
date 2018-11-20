@@ -48,8 +48,8 @@ public:
     static QString getGlobalName()
         { return tr("Change &Composition Start and End..."); }
 
-    virtual void execute();
-    virtual void unexecute();
+    void execute() override;
+    void unexecute() override;
 
 protected:
     Composition *m_composition;

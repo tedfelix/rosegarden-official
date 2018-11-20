@@ -49,11 +49,11 @@ class CutToTriggerSegmentCommand : public BasicSelectionCommand
                                bool          retune,
                                std::string   timeAdjust,
                                Mark          mark);
-    virtual void execute();
-    virtual void unexecute();
+    void execute() override;
+    void unexecute() override;
 
 protected:
-    void modifySegment(void);
+    void modifySegment(void) override;
 
     PasteToTriggerSegmentWorker m_paster;
     EventSelection *            m_selection;

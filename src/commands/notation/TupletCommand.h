@@ -50,7 +50,7 @@ public:
     }
 
 protected:
-    virtual void modifySegment();
+    void modifySegment() override;
 
 private:
     timeT m_unit;

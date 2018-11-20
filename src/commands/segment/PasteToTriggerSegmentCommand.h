@@ -97,8 +97,8 @@ public:
                                  int baseVelocity = -1);
     virtual ~PasteToTriggerSegmentCommand();
 
-    virtual void execute();
-    virtual void unexecute();
+    void execute() override;
+    void unexecute() override;
 
 protected:
     PasteToTriggerSegmentWorker m_worker;

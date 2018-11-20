@@ -45,7 +45,7 @@ public:
     static QString getGlobalName() { return tr("Collapse &Equal-Pitch Notes"); }
 
 protected:
-    virtual void modifySegment();
+    void modifySegment() override;
 
 private:
     EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)

@@ -47,8 +47,8 @@ public:
                               timeT t);
     virtual ~PasteConductorDataCommand();
 
-    virtual void execute();
-    virtual void unexecute();
+    void execute() override;
+    void unexecute() override;
 
 private:
     Composition *m_composition;

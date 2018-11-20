@@ -59,8 +59,8 @@ protected:
             m_gapEnd(fromTime),
             m_gapStart(toTime) { }
 
-        virtual void execute();
-        virtual void unexecute();
+        void execute() override;
+        void unexecute() override;
 
     private:
         Segment *m_segment;

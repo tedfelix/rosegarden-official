@@ -52,8 +52,8 @@ public:
 
     static QString getGlobalName() { return tr("Add Te&mpo Change..."); }
 
-    virtual void execute();
-    virtual void unexecute();
+    void execute() override;
+    void unexecute() override;
 
 private:
     Composition *m_composition;

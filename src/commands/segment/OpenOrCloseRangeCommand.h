@@ -51,8 +51,8 @@ public:
                             bool open);
     virtual ~OpenOrCloseRangeCommand();
 
-    virtual void execute();
-    virtual void unexecute();
+    void execute() override;
+    void unexecute() override;
 
 private:
     Composition *m_composition;

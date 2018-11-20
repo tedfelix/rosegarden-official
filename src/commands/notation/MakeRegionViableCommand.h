@@ -47,7 +47,7 @@ public:
     static QString getGlobalName() { return tr("Tie Notes at &Barlines"); }
 
 protected:
-    virtual void modifySegment();
+    void modifySegment() override;
 };
     
 

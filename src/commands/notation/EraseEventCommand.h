@@ -41,10 +41,10 @@ public:
                       bool collapseRest);
     virtual ~EraseEventCommand();
 
-    virtual timeT getRelayoutEndTime();
+    timeT getRelayoutEndTime() override;
 
 protected:
-    virtual void modifySegment();
+    void modifySegment() override;
 
     bool m_collapseRest;
 

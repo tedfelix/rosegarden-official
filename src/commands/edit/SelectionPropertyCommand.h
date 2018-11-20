@@ -42,7 +42,7 @@ public:
 
     static QString getGlobalName() { return tr("Set &Property"); }
 
-    virtual void modifySegment();
+    void modifySegment() override;
 
 private:
     ParameterPattern::Result m_result;

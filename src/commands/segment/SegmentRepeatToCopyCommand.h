@@ -40,8 +40,8 @@ public:
     SegmentRepeatToCopyCommand(Segment *segment);
     virtual ~SegmentRepeatToCopyCommand();
 
-    virtual void execute();
-    virtual void unexecute();
+    void execute() override;
+    void unexecute() override;
     
 private:
 

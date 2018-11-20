@@ -48,10 +48,10 @@ public:
     // were done, meaning key or clef deletions.
     static bool eraseInSegment(EventSelection *selection);
     
-    virtual timeT getRelayoutEndTime();
+    timeT getRelayoutEndTime() override;
 
 protected:
-    virtual void modifySegment();
+    void modifySegment() override;
 
 private:
     EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)

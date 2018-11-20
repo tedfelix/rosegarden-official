@@ -44,11 +44,11 @@ public:
 
     static QString getGlobalName(Symbol *symbol = 0);
 
-    virtual EventSelection *getSubsequentSelection();
+    EventSelection *getSubsequentSelection() override;
     Event *getLastInsertedEvent() { return m_lastInsertedEvent; }
 
 protected:
-    virtual void modifySegment();
+    void modifySegment() override;
 
     Symbol m_symbol;
 

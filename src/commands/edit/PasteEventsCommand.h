@@ -87,10 +87,10 @@ public:
     /// Determine whether this paste will succeed (without executing it yet)
     bool isPossible();
 
-    virtual timeT getRelayoutEndTime();
+    timeT getRelayoutEndTime() override;
 
 protected:
-    virtual void modifySegment();
+    void modifySegment() override;
     timeT getEffectiveEndTime(Segment &,
                                           Clipboard *,
                                           timeT);

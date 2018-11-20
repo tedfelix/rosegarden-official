@@ -41,8 +41,8 @@ public:
 
     void addSegment(Segment *s);
 
-    virtual void execute();
-    virtual void unexecute();
+    void execute() override;
+    void unexecute() override;
 
     static QString getGlobalName(timeT unit) {
         if (!unit) {

@@ -42,11 +42,11 @@ public:
 				    GeneratedRegion generatedRegion);
     virtual ~GeneratedRegionInsertionCommand();
 
-    virtual EventSelection *getSubsequentSelection();
+    EventSelection *getSubsequentSelection() override;
     Event *getLastInsertedEvent() { return m_lastInsertedEvent; }
 
 protected:
-    virtual void modifySegment();
+    void modifySegment() override;
 
     GeneratedRegion m_generatedRegion;
     Event *m_lastInsertedEvent;

@@ -41,8 +41,8 @@ public:
     SegmentQuickCopyCommand(Segment *segment);
     virtual ~SegmentQuickCopyCommand();
 
-    virtual void execute();
-    virtual void unexecute();
+    void execute() override;
+    void unexecute() override;
 
     // return pointer to new copy
     Segment* getCopy() { return m_newSegment; }

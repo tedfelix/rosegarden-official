@@ -47,8 +47,8 @@ public:
 
     static QString getGlobalName() { return tr("Rename Track"); }
 
-    virtual void execute();
-    virtual void unexecute();
+    void execute() override;
+    void unexecute() override;
 
 protected:
     Composition *m_composition;

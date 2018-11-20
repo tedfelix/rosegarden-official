@@ -42,8 +42,8 @@ public:
         bool changeKey, int steps, int semitones, bool transposeSegmentBack);
     virtual ~SegmentLinkTransposeCommand();
 
-    virtual void execute();
-    virtual void unexecute();
+    void execute() override;
+    void unexecute() override;
 
     static QString getGlobalName() { return tr("Transpose Linked Segments"); }
 
@@ -81,11 +81,11 @@ public:
     static QString getGlobalName() {
         return tr("Reset Transpose on Linked Segment"); }
 
-    virtual void execute();
-    virtual void unexecute();
+    void execute() override;
+    void unexecute() override;
 
 protected:
-    virtual void modifySegment();
+    void modifySegment() override;
 
 private:
     Segment *m_linkedSeg;
