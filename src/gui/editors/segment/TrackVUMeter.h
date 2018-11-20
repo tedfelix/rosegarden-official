@@ -41,8 +41,8 @@ public:
     int getPosition() const { return m_position; }
 
 protected:
-    virtual void meterStart();
-    virtual void meterStop();
+    void meterStart() override;
+    void meterStop() override;
 
 private:
     int m_position;

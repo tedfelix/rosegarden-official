@@ -35,24 +35,24 @@ public:
     virtual ~ChordXmlHandler();
     
     /// overloaded handler functions
-    virtual bool startDocument();
-    virtual bool startElement(const QString& namespaceURI,
+    bool startDocument() override;
+    bool startElement(const QString& namespaceURI,
                               const QString& localName,
                               const QString& qName,
-                              const QXmlAttributes& atts);
+                              const QXmlAttributes& atts) override;
 
-    virtual bool endElement(const QString& namespaceURI,
+    bool endElement(const QString& namespaceURI,
                             const QString& localName,
-                            const QString& qName);
+                            const QString& qName) override;
 
-    virtual bool characters(const QString& ch);
+    bool characters(const QString& ch) override;
 
-    virtual bool endDocument ();
+    bool endDocument () override;
 
     /// Return the error string set during the parsing (if any)
-    QString errorString() const { return m_errorString; }
-    bool error(const QXmlParseException& exception);
-    bool fatalError(const QXmlParseException& exception);
+    QString errorString() const override { return m_errorString; }
+    bool error(const QXmlParseException& exception) override;
+    bool fatalError(const QXmlParseException& exception) override;
 
 protected:
 

@@ -39,9 +39,9 @@ public:
 
     // Xml handler methods:
 
-    virtual bool startElement
+    bool startElement
     (const QString& namespaceURI, const QString& localName,
-     const QString& qName, const QXmlAttributes& atts);
+     const QString& qName, const QXmlAttributes& atts) override;
     
 private:
     bool setFromAttributes(Note::Type type, const QXmlAttributes &attributes);

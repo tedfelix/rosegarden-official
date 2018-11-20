@@ -46,7 +46,7 @@ public:
 
 protected:
     // don't emit when the button is released
-    virtual void mouseReleaseEvent(QMouseEvent *);
+    void mouseReleaseEvent(QMouseEvent *) override;
 
 private:
 };

@@ -54,7 +54,7 @@ public:
      * the tool is set as current.
      * Add any setup here
      */
-    virtual void ready();
+    void ready() override;
 
     /**
      * Derivers need to call this to make sure the right-click
@@ -87,8 +87,8 @@ protected:
 
 private:
     /// Right-click context menu.
-    virtual void createMenu();
-    virtual bool hasMenu() { return true; }
+    void createMenu() override;
+    bool hasMenu() override { return true; }
 
     ChangingSegmentPtr m_changingSegment;
 

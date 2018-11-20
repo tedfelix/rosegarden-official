@@ -67,15 +67,15 @@ public:
     /**
      * Resets internal data stores for all staffs
      */
-    virtual void reset();
+    void reset() override;
 
     /**
      * Lay out a single staff.
      */
-    virtual void scanViewSegment(ViewSegment &,
+    void scanViewSegment(ViewSegment &,
 				 timeT startTime,
 				 timeT endTime,
-				 bool full);
+				 bool full) override;
 
     /**
      * Do any layout dependent on more than one staff.  As it
@@ -83,9 +83,9 @@ public:
      * depends on the final results from the horizontal layout
      * (for slurs), so we should do that here
      */
-    virtual void finishLayout(timeT startTime,
+    void finishLayout(timeT startTime,
                               timeT endTime,
-			      bool full);
+			      bool full) override;
 
 private:
     void positionSlur(NotationStaff &staff, NotationElementList::iterator i);

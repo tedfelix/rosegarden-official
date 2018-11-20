@@ -107,8 +107,8 @@ public:
     NotationScene *getScene();
 
 
-    QSize sizeHint() const;
-    QSize minimumSizeHint() const;
+    QSize sizeHint() const override;
+    QSize minimumSizeHint() const override;
 
     // Only return valid values after slotUpdateAllHeaders() has been called
     timeT getStartOfViewTime() { return m_startOfView; }

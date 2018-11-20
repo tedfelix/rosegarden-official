@@ -88,8 +88,8 @@ public:
 
     RosegardenDocument *getDocument() { return m_document; }
 
-    virtual EventSelection *getSelection() const { return m_selection; }
-    virtual void setSelection(EventSelection* s, bool preview);
+    EventSelection *getSelection() const override { return m_selection; }
+    void setSelection(EventSelection* s, bool preview) override;
     void selectAll();
     int calculatePitchFromY(int y) const;
 
@@ -147,13 +147,13 @@ protected slots:
     void slotCommandExecuted();
 
 protected:
-    void mousePressEvent(QGraphicsSceneMouseEvent *);
-    void mouseMoveEvent(QGraphicsSceneMouseEvent *);
-    void mouseReleaseEvent(QGraphicsSceneMouseEvent *);
-    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *);
+    void mousePressEvent(QGraphicsSceneMouseEvent *) override;
+    void mouseMoveEvent(QGraphicsSceneMouseEvent *) override;
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent *) override;
+    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *) override;
 
-    void segmentRemoved(const Composition *, Segment *); // CompositionObserver
-    void timeSignatureChanged(const Composition *); // CompositionObserver
+    void segmentRemoved(const Composition *, Segment *) override; // CompositionObserver
+    void timeSignatureChanged(const Composition *) override; // CompositionObserver
 
 private:
     MatrixWidget *m_widget; // I do not own this

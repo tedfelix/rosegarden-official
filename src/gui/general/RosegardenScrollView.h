@@ -161,9 +161,9 @@ protected:
     void startAutoScroll();
 
     /// Viewport resize.
-    virtual void resizeEvent(QResizeEvent *);
+    void resizeEvent(QResizeEvent *) override;
 
-    virtual void wheelEvent(QWheelEvent *);
+    void wheelEvent(QWheelEvent *) override;
 
 private slots:
 

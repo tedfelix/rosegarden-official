@@ -45,19 +45,19 @@ public:
                          const MidiKeyMapping *mapping,
                          int lineSpacing);
 
-    virtual QSize sizeHint() const;
-    virtual QSize minimumSizeHint() const;
+    QSize sizeHint() const override;
+    QSize minimumSizeHint() const override;
 
-    void drawHoverNote(int evPitch);
-    void hideHoverNote();
+    void drawHoverNote(int evPitch) override;
+    void hideHoverNote() override;
 
 protected:
-    virtual void paintEvent(QPaintEvent*);
-    virtual void mouseMoveEvent(QMouseEvent*);
-    virtual void mousePressEvent(QMouseEvent*);
-    virtual void mouseReleaseEvent(QMouseEvent*);
-    virtual void enterEvent(QEvent *);
-    virtual void leaveEvent(QEvent *);
+    void paintEvent(QPaintEvent*) override;
+    void mouseMoveEvent(QMouseEvent*) override;
+    void mousePressEvent(QMouseEvent*) override;
+    void mouseReleaseEvent(QMouseEvent*) override;
+    void enterEvent(QEvent *) override;
+    void leaveEvent(QEvent *) override;
 
     const MidiKeyMapping *m_mapping;
 

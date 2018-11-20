@@ -37,10 +37,10 @@ public:
     /// Create the appropriate mapper for the segment type.  Factory function.
     static QSharedPointer<SegmentMapper> makeMapperForSegment(RosegardenDocument *, Segment *);
 
-    virtual int getSegmentRepeatCount();
-    virtual TrackId getTrackID() const;
+    int getSegmentRepeatCount() override;
+    TrackId getTrackID() const override;
 
-    virtual void initSpecial(void);
+    void initSpecial(void) override;
 
 protected:
     SegmentMapper(RosegardenDocument *, Segment *);

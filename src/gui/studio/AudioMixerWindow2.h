@@ -52,7 +52,7 @@ signals:
     void windowActivated();
 
 protected:
-    void changeEvent(QEvent *event);
+    void changeEvent(QEvent *event) override;
 
 private slots:
     /// Connected to RosegardenDocument::documentModified(bool).

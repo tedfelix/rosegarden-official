@@ -185,7 +185,7 @@ protected:
     /**
      * @see #setInCtor
      */
-    virtual void closeEvent(QCloseEvent* e);
+    void closeEvent(QCloseEvent* e) override;
     
     /**
      * read general Options again and initialize all variables like the recent file list

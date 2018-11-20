@@ -58,8 +58,8 @@ public:
 
     virtual ~SqueezedLabel();
 
-    virtual QSize minimumSizeHint() const;
-    virtual QSize sizeHint() const;
+    QSize minimumSizeHint() const override;
+    QSize sizeHint() const override;
     /**
     * Overridden for internal reasons; the API remains unaffected.
     */
@@ -104,11 +104,11 @@ protected:
     /**
     * Called when widget is resized
     */
-    void resizeEvent(QResizeEvent *);
+    void resizeEvent(QResizeEvent *) override;
     /**
     * \reimp
     */
-    void contextMenuEvent(QContextMenuEvent*);
+    void contextMenuEvent(QContextMenuEvent*) override;
     /**
     * does the dirty work
     */

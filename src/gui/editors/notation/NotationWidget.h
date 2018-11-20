@@ -80,8 +80,8 @@ public:
     ControlRulerWidget *getControlsWidget(void)
         { return m_controlsWidget; }
 
-    virtual EventSelection *getSelection() const;
-    virtual void setSelection(EventSelection* s, bool preview);
+    EventSelection *getSelection() const override;
+    void setSelection(EventSelection* s, bool preview) override;
 
     timeT getInsertionTime() const;
 
@@ -176,7 +176,7 @@ public slots:
     void slotRegenerateHeaders();
 
 protected:
-    virtual void showEvent(QShowEvent * event);
+    void showEvent(QShowEvent * event) override;
     void hideOrShowRulers();
     bool linearMode();   // Return true when notation page layout is linear
 

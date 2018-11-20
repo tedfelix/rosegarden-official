@@ -74,23 +74,23 @@ public:
      * The map should be cleared (by calling reset()) before a full
      * set of staffs is preparsed.
      */
-    virtual void scanViewSegment(ViewSegment &staff,
+    void scanViewSegment(ViewSegment &staff,
                                  timeT startTime,
                                  timeT endTime,
-                                 bool full);
+                                 bool full) override;
 
     /**
      * Resets internal data stores, notably the BarDataMap that is
      * used to retain the data computed by scanViewSegment().
      */
-    virtual void reset();
+    void reset() override;
 
     /**
      * Lays out all staffs that have been scanned
      */
-    virtual void finishLayout(timeT startTime,
+    void finishLayout(timeT startTime,
                               timeT endTime,
-                              bool full);
+                              bool full) override;
 
     /**
      * Set page mode
@@ -105,7 +105,7 @@ public:
     /**
      * Set a page width
      */
-    virtual void setPageWidth(double pageWidth) { m_pageWidth = pageWidth; }
+    void setPageWidth(double pageWidth) override { m_pageWidth = pageWidth; }
 
     /**
      * Get the page width
@@ -156,41 +156,41 @@ public:
      * This is the x-coord of the end of the last element on the longest
      * staff, plus the space allocated to that element
      */
-    virtual double getTotalWidth() const { return m_totalWidth; }
+    double getTotalWidth() const override { return m_totalWidth; }
 
     /**
      * Returns the number of the first visible bar line on the given
      * staff
      */
-    virtual int getFirstVisibleBarOnViewSegment(ViewSegment &staff) const;
+    int getFirstVisibleBarOnViewSegment(ViewSegment &staff) const override;
 
     /**
      * Returns the number of the first visible bar line on any
      * staff
      */
-    virtual int getFirstVisibleBar() const;
+    int getFirstVisibleBar() const override;
 
     /**
      * Returns the number of the last visible bar line on the given
      * staff
      */
-    virtual int getLastVisibleBarOnViewSegment(ViewSegment &staff) const;
+    int getLastVisibleBarOnViewSegment(ViewSegment &staff) const override;
 
     /**
      * Returns the number of the first visible bar line on any
      * staff
      */
-    virtual int getLastVisibleBar() const;
+    int getLastVisibleBar() const override;
 
     /**
      * Returns the x-coordinate of the given bar number
      */
-    virtual double getBarPosition(int barNo) const;
+    double getBarPosition(int barNo) const override;
 
     /**
      * Returns the nearest time value to the given X coord.
      */
-    virtual timeT getTimeForX(double x) const;
+    timeT getTimeForX(double x) const override;
 
     /**
      * Returns the X coord corresponding to the given time value.
@@ -198,7 +198,7 @@ public:
      * (the inverse of the way getTimeForX works), and should be used
      * for any rulers associated with the layout.
      */
-    virtual double getXForTime(timeT time) const;
+    double getXForTime(timeT time) const override;
 
     /**
      * Returns the X coord corresponding to the given time value.
@@ -210,16 +210,16 @@ public:
     /**
      * Returns true if the specified bar has the correct length
      */
-    virtual bool isBarCorrectOnViewSegment(ViewSegment &staff, int barNo) const;
+    bool isBarCorrectOnViewSegment(ViewSegment &staff, int barNo) const override;
 
     /**
      * Returns true if there is a new time signature in the given bar,
      * setting timeSignature appropriately and setting timeSigX to its
      * x-coord
      */
-    virtual bool getTimeSignaturePosition
+    bool getTimeSignaturePosition
     (ViewSegment &staff, int barNo,
-     TimeSignature &timeSig, double &timeSigX) const;
+     TimeSignature &timeSig, double &timeSigX) const override;
 
     /// purely optional, used only for value() reporting
     void setViewSegmentCount(int staffCount) {

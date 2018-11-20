@@ -118,7 +118,7 @@ protected:
      */
     virtual void toggleWidget(QWidget* widget, const QString& toggleActionName);
 
-    virtual void paintEvent(QPaintEvent* e);
+    void paintEvent(QPaintEvent* e) override;
 
     void setRCFileName(QString s) { m_rcFileName = s; }
     QString getRCFileName()       { return m_rcFileName; }

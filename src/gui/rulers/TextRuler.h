@@ -73,8 +73,8 @@ public:
 
     ~TextRuler();
 
-    virtual QSize sizeHint() const;
-    virtual QSize minimumSizeHint() const;
+    QSize sizeHint() const override;
+    QSize minimumSizeHint() const override;
 
     void setMinimumWidth(int width) { m_width = width; }
 
@@ -82,7 +82,7 @@ public slots:
     void slotScrollHoriz(int x);
 
 protected:
-    virtual void paintEvent(QPaintEvent *);
+    void paintEvent(QPaintEvent *) override;
 
 private:
     int  m_height;

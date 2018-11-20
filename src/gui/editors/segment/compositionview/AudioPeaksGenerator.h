@@ -79,7 +79,7 @@ signals:
 
 protected:
     // QObject override.
-    virtual bool event(QEvent *);
+    bool event(QEvent *) override;
 
 private:
     // ??? Instead of requiring that this comes in via the ctor, why not

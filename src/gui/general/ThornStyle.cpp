@@ -294,9 +294,7 @@ ThornStyle::~ThornStyle()
 {
 }
 
-QIcon ThornStyle::standardIconImplementation(StandardPixmap standardIcon,
-                                             const QStyleOption *option,
-                                             const QWidget *parent) const
+QIcon ThornStyle::standardIcon(QStyle::StandardPixmap standardIcon, const QStyleOption *option, const QWidget *parent) const
 {
     // NOTE: see src/gui/styles/qcommonstyle.cpp in the Qt source for examples
     // of how to extend this whenever more custom icons are called for
@@ -1475,11 +1473,6 @@ QRect ThornStyle::subControlRect(QStyle::ComplexControl cc, const QStyleOptionCo
     }
 
     return QProxyStyle::subControlRect(cc, option, sc, widget);
-}
-
-QIcon ThornStyle::standardIcon(QStyle::StandardPixmap standardIcon, const QStyleOption *option, const QWidget *widget) const
-{
-    return standardIconImplementation(standardIcon, option, widget);
 }
 
 #pragma GCC diagnostic pop

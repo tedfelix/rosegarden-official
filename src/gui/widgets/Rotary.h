@@ -100,13 +100,13 @@ signals:
     void valueChanged(float);
 
 protected:
-    virtual void paintEvent(QPaintEvent *e);
-    virtual void mousePressEvent(QMouseEvent *e);
-    virtual void mouseReleaseEvent(QMouseEvent *e);
-    virtual void mouseMoveEvent(QMouseEvent *e);
-    virtual void mouseDoubleClickEvent(QMouseEvent *e);
-    virtual void wheelEvent(QWheelEvent *e);
-    virtual void enterEvent(QEvent *e);
+    void paintEvent(QPaintEvent *e) override;
+    void mousePressEvent(QMouseEvent *e) override;
+    void mouseReleaseEvent(QMouseEvent *e) override;
+    void mouseMoveEvent(QMouseEvent *e) override;
+    void mouseDoubleClickEvent(QMouseEvent *e) override;
+    void wheelEvent(QWheelEvent *e) override;
+    void enterEvent(QEvent *e) override;
 
     void snapPosition();
     void drawPosition();

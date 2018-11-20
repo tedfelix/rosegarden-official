@@ -47,7 +47,7 @@ public:
     std::string getTimeAdjust() const;
 
 public slots:
-    void accept();
+    void accept() override;
 
 protected:
     void setupFromConfig();

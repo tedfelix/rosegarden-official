@@ -365,27 +365,27 @@ private:
     // --- Event Handlers ---------------------------------
 
     /// Redraw in response to AudioPeaksThread::AudioPeaksQueueEmpty.
-    virtual bool event(QEvent *);
+    bool event(QEvent *) override;
 
     /// Passes the event on to the current tool.
-    virtual void mousePressEvent(QMouseEvent *);
+    void mousePressEvent(QMouseEvent *) override;
     /// Passes the event on to the current tool.
-    virtual void mouseReleaseEvent(QMouseEvent *);
+    void mouseReleaseEvent(QMouseEvent *) override;
     /// Launches a segment editor or moves the position pointer.
-    virtual void mouseDoubleClickEvent(QMouseEvent *);
+    void mouseDoubleClickEvent(QMouseEvent *) override;
     /// Passes the event on to the current tool.
     /**
      * Also handles scrolling as needed.
      */
-    virtual void mouseMoveEvent(QMouseEvent *);
+    void mouseMoveEvent(QMouseEvent *) override;
 
-    virtual void keyPressEvent(QKeyEvent *);
-    virtual void keyReleaseEvent(QKeyEvent *);
+    void keyPressEvent(QKeyEvent *) override;
+    void keyReleaseEvent(QKeyEvent *) override;
 
     /// Delegates to drawAll().
-    virtual void paintEvent(QPaintEvent *);
+    void paintEvent(QPaintEvent *) override;
     /// Handles resize.  Uses slotUpdateSize().
-    virtual void resizeEvent(QResizeEvent *);
+    void resizeEvent(QResizeEvent *) override;
 
     /// Called when the mouse enters the view.
     /**
@@ -394,7 +394,7 @@ private:
      *
      * @see leaveEvent() and slotToolHelpChanged()
      */
-    virtual void enterEvent(QEvent *);
+    void enterEvent(QEvent *) override;
 
     /// Called when the mouse leaves the view.
     /**
@@ -404,7 +404,7 @@ private:
      *
      * @see enterEvent() and slotToolHelpChanged()
      */
-    virtual void leaveEvent(QEvent *);
+    void leaveEvent(QEvent *) override;
 
     // --- Segments ---------------------------------------
 

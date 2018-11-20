@@ -39,7 +39,7 @@ public:
     DeferScrollArea(QWidget* parent=0);
     ~DeferScrollArea();
 
-    void wheelEvent(QWheelEvent*);
+    void wheelEvent(QWheelEvent*) override;
 public slots:
 signals:
     void gotWheelEvent(QWheelEvent*);

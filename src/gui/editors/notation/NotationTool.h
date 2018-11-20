@@ -71,13 +71,13 @@ public:
      * Is called by the view when the tool is set as current.
      * Add any setup here
      */
-    virtual void ready();
+    void ready() override;
 
     /**
      * Is called by the view when the tool is put away.
      * Add any cleanup here
      */
-    virtual void stow();
+    void stow() override;
 
     enum FollowMode {
         NoFollow = 0x0,
@@ -112,8 +112,8 @@ protected:
      */
     NotationTool(NotationWidget *);
 
-    virtual void createMenu();
-    virtual bool hasMenu() { return m_menuName != ""; }
+    void createMenu() override;
+    bool hasMenu() override { return m_menuName != ""; }
 
     void setScene(NotationScene *scene) { m_scene = scene; }
 

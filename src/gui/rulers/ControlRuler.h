@@ -67,9 +67,9 @@ public:
 
     virtual QString getName() = 0;
 
-    virtual QSize sizeHint() const { return QSize(1,100); }
+    QSize sizeHint() const override { return QSize(1,100); }
 
-    virtual void paintEvent(QPaintEvent *);
+    void paintEvent(QPaintEvent *) override;
 
     long getMaxItemValue() { return m_maxItemValue; }
     void setMaxItemValue(long val) { m_maxItemValue = val; }
@@ -158,12 +158,12 @@ public slots:
     virtual void slotSetTool(const QString&);
 
 protected:
-    virtual void mousePressEvent(QMouseEvent*);
-    virtual void mouseReleaseEvent(QMouseEvent*);
-    virtual void mouseMoveEvent(QMouseEvent*);
-    virtual void contextMenuEvent(QContextMenuEvent*);
-    virtual void wheelEvent(QWheelEvent*);
-    virtual void resizeEvent(QResizeEvent *);
+    void mousePressEvent(QMouseEvent*) override;
+    void mouseReleaseEvent(QMouseEvent*) override;
+    void mouseMoveEvent(QMouseEvent*) override;
+    void contextMenuEvent(QContextMenuEvent*) override;
+    void wheelEvent(QWheelEvent*) override;
+    void resizeEvent(QResizeEvent *) override;
 
     virtual ControlMouseEvent createControlMouseEvent(QMouseEvent* e);
 

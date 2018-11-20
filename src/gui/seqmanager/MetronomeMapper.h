@@ -48,16 +48,16 @@ public:
 
     // *** MappedEventBuffer overrides.
 
-    virtual int getSegmentRepeatCount();
+    int getSegmentRepeatCount() override;
     // Do channel-setup
-    virtual void doInsert(MappedInserterBase &inserter, MappedEvent &evt,
-                          RealTime start, bool firstOutput);
-    virtual void makeReady(MappedInserterBase &inserter, RealTime time);
+    void doInsert(MappedInserterBase &inserter, MappedEvent &evt,
+                          RealTime start, bool firstOutput) override;
+    void makeReady(MappedInserterBase &inserter, RealTime time) override;
     /// Should the event be played?
-    virtual bool shouldPlay(MappedEvent *evt, RealTime startTime);
-    virtual int calculateSize();
+    bool shouldPlay(MappedEvent *evt, RealTime startTime) override;
+    int calculateSize() override;
     /// Convert m_ticks to events in m_buffer.
-    virtual void fillBuffer();
+    void fillBuffer() override;
 
 private:
     Instrument *m_instrument;

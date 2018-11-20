@@ -179,7 +179,7 @@ private:
     std::queue<CommandType> commands;
       
     // CompositionObserver overrides
-    virtual void trackChanged(const Composition *c, Track* t);
+    void trackChanged(const Composition *c, Track* t) override;
     // tracksAdded() need not be overridden as adding a track will not change
     // anything the TranzPort would display.
     // tracksDeleted() should probably be overridden to clear the display on

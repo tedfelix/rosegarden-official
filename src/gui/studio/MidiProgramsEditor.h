@@ -58,8 +58,8 @@ public slots:
     void slotNewLSB(int value);
     void slotNewPercussion(); // gets value from checkbox
 
-    virtual void slotNameChanged(const QString &);
-    virtual void slotKeyMapButtonPressed();
+    void slotNameChanged(const QString &) override;
+    void slotKeyMapButtonPressed() override;
     void slotKeyMapMenuItemSelected(QAction *);
     void slotKeyMapMenuItemSelected(int);
 

@@ -88,15 +88,15 @@ public:
     void dumpKeyContext();
 
 /** SegmentObserver methods **/
-    virtual void eventAdded(const Segment *, Event *);
+    void eventAdded(const Segment *, Event *) override;
 
-    virtual void eventRemoved(const Segment *, Event *);
+    void eventRemoved(const Segment *, Event *) override;
 
-    virtual void startChanged(const Segment *, timeT);
+    void startChanged(const Segment *, timeT) override;
 
-    virtual void endMarkerTimeChanged(const Segment *, bool /*shorten*/);
+    void endMarkerTimeChanged(const Segment *, bool /*shorten*/) override;
 
-    virtual void segmentDeleted(const Segment *) { }
+    void segmentDeleted(const Segment *) override { }
     // Nothing to do here : the cleanup is handled by NotationScene
 
 

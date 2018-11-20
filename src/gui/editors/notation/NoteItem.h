@@ -47,13 +47,13 @@ public:
 	     QGraphicsItem *parent = 0);
     virtual ~NoteItem();
 
-    QRectF boundingRect() const;
+    QRectF boundingRect() const override;
     QPointF offset() const;
     QPixmap makePixmap() const;
 
     void paint(QPainter *painter,
                const QStyleOptionGraphicsItem *option,
-               QWidget *widget);
+               QWidget *widget) override;
 
     enum DrawMode {
         DrawNormal,

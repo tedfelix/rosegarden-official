@@ -37,12 +37,12 @@ public:
 
 protected:
     // overrides from SegmentMapper
-    virtual int calculateSize();
+    int calculateSize() override;
 
     // override from SegmentMapper
-    virtual void fillBuffer();
+    void fillBuffer() override;
 
-    virtual bool shouldPlay(MappedEvent *evt, RealTime /*startTime*/);
+    bool shouldPlay(MappedEvent *evt, RealTime /*startTime*/) override;
 };
 
 

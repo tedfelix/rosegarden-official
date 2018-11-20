@@ -47,8 +47,8 @@ public:
   QColor color() const  { return m_color; }
 
   // QWidget overrides
-  virtual QSize sizeHint() const  { return QSize(16, 16); }
-  virtual QSize minimumSizeHint() const  { return QSize(16, 16); }
+  QSize sizeHint() const  override { return QSize(16, 16); }
+  QSize minimumSizeHint() const  override { return QSize(16, 16); }
 
 public slots:
   void toggle()  { setState((m_state == On) ? Off : On); }
@@ -57,7 +57,7 @@ public slots:
 
 protected:
   // QWidget override
-  void paintEvent(QPaintEvent *);
+  void paintEvent(QPaintEvent *) override;
 
 private:
   State m_state;

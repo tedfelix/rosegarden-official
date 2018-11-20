@@ -97,7 +97,7 @@ protected slots:
 protected:
     void addTab(QWidget *tab, const QString &title);
 
-    virtual void sendControllerRefresh();
+    void sendControllerRefresh() override;
 
     QTabWidget *m_tabWidget;
 

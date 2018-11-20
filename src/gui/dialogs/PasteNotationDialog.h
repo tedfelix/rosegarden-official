@@ -50,7 +50,7 @@ public slots:
 
 protected:
     bool setAsDefault() const;
-    virtual void accept();
+    void accept() override;
 
     //--------------- Data members ---------------------------------
 

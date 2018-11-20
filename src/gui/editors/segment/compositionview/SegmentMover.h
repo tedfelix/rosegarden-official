@@ -41,14 +41,14 @@ class SegmentMover : public SegmentTool
     friend class SegmentToolBox;
 
 public:
-    virtual void ready();
-    virtual void stow();
+    void ready() override;
+    void stow() override;
 
-    virtual void mousePressEvent(QMouseEvent *);
-    virtual int mouseMoveEvent(QMouseEvent *);
-    virtual void mouseReleaseEvent(QMouseEvent *);
-    virtual void keyPressEvent(QKeyEvent *);
-    virtual void keyReleaseEvent(QKeyEvent *);
+    void mousePressEvent(QMouseEvent *) override;
+    int mouseMoveEvent(QMouseEvent *) override;
+    void mouseReleaseEvent(QMouseEvent *) override;
+    void keyPressEvent(QKeyEvent *) override;
+    void keyReleaseEvent(QKeyEvent *) override;
 
     static QString ToolName();
 

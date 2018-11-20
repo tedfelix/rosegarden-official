@@ -74,7 +74,7 @@ protected slots:
     void slotDeleteFingering();
     void slotEditFingering();
 
-    virtual void accept();
+    void accept() override;
 
 protected:
 

@@ -49,14 +49,14 @@ public:
     virtual ~SegmentSelector();
 
     /// Called when this tool becomes the active tool.
-    virtual void ready();
-    virtual void stow()  { }
+    void ready() override;
+    void stow()  override { }
 
-    virtual void mousePressEvent(QMouseEvent *);
-    virtual int mouseMoveEvent(QMouseEvent *);
-    virtual void mouseReleaseEvent(QMouseEvent *);
-    virtual void keyPressEvent(QKeyEvent *);
-    virtual void keyReleaseEvent(QKeyEvent *);
+    void mousePressEvent(QMouseEvent *) override;
+    int mouseMoveEvent(QMouseEvent *) override;
+    void mouseReleaseEvent(QMouseEvent *) override;
+    void keyPressEvent(QKeyEvent *) override;
+    void keyReleaseEvent(QKeyEvent *) override;
 
     // Unused
     //bool isSegmentAdding() const { return m_segmentAddMode; }

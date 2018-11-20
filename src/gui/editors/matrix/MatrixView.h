@@ -68,18 +68,18 @@ public:
 
     virtual ~MatrixView();
 
-    void closeEvent(QCloseEvent *event);
+    void closeEvent(QCloseEvent *event) override;
 
     /**
      * Get the velocity currently set in the velocity menu.
      */
     int getCurrentVelocity() const;
 
-    virtual Segment *getCurrentSegment();
-    virtual EventSelection *getSelection() const;
-    virtual void setSelection(EventSelection *s, bool preview);
+    Segment *getCurrentSegment() override;
+    EventSelection *getSelection() const override;
+    void setSelection(EventSelection *s, bool preview) override;
 
-    virtual void updateViewCaption() { }//!!!
+    void updateViewCaption() override { }//!!!
 
     virtual timeT getInsertionTime() const;
 
@@ -103,7 +103,7 @@ signals:
 
 protected slots:
     /// Remove a segment from our list when it is deleted from the composition
-    void slotSegmentDeleted(Segment *);
+    void slotSegmentDeleted(Segment *) override;
 
     /// All segments have been deleted (close editor)
     void slotSceneDeleted();
@@ -160,9 +160,9 @@ protected slots:
 
     void slotUpdateMenuStates();
 
-    void slotEditCut();
-    void slotEditCopy();
-    void slotEditPaste();
+    void slotEditCut() override;
+    void slotEditCopy() override;
+    void slotEditPaste() override;
     void slotEditDelete();
 
     /// Show or hide rulers
@@ -253,7 +253,7 @@ protected slots:
     
 protected:
     const SnapGrid *getSnapGrid() const;
-    virtual void readOptions();
+    void readOptions() override;
     void conformRulerSelectionState(void);
     void insertControllerSequence(const ControlParameter &cp);
 
@@ -295,7 +295,7 @@ private:
      */
     Device *getCurrentDevice();
 
-    virtual void initStatusBar();
+    void initStatusBar() override;
 
 };
 

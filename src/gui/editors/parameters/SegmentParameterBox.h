@@ -79,8 +79,8 @@ public:
 
     // CompositionObserver interface
     //
-    virtual void segmentRemoved(const Composition *,
-                                Segment *);
+    void segmentRemoved(const Composition *,
+                                Segment *) override;
 
 public slots:
     void slotRepeatPressed();

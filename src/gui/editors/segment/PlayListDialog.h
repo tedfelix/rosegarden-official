@@ -49,7 +49,7 @@ signals:
     void closing();
 
 protected:    
-    virtual void closeEvent(QCloseEvent *e);
+    void closeEvent(QCloseEvent *e) override;
 
     void save();
     void restore();

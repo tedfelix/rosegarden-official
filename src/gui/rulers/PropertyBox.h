@@ -47,11 +47,11 @@ public:
                int height,
                QWidget *parent=0);
 
-    virtual QSize sizeHint() const;
-    virtual QSize minimumSizeHint() const;
+    QSize sizeHint() const override;
+    QSize minimumSizeHint() const override;
 
 protected:
-    virtual void paintEvent(QPaintEvent *);
+    void paintEvent(QPaintEvent *) override;
 
     //--------------- Data members ---------------------------------
 

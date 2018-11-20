@@ -60,7 +60,7 @@ class ActionCommandArgumentQuerier : public CommandArgumentQuerier
 
 public:
     ActionCommandArgumentQuerier(QWidget *widget) : m_widget(widget) { }
-    QString getText(QString message, bool *ok) {
+    QString getText(QString message, bool *ok) override {
         if (!m_widget) return "";
         return InputDialog::getText(m_widget,
                                     tr("Rosegarden - Query"),

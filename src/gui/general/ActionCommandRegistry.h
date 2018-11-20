@@ -39,8 +39,8 @@ public:
 protected:
     ActionFileClient *m_client;
 
-    virtual void addAction(QString actionName);
-    virtual void invokeCommand(QString actionName);
+    void addAction(QString actionName) override;
+    void invokeCommand(QString actionName) override;
 };
 
 }

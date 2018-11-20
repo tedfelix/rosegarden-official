@@ -36,7 +36,7 @@ public:
                       bool drumMode);
     virtual ~MatrixViewSegment();
 
-    void endMarkerTimeChanged(const Segment *segment, bool shorten);
+    void endMarkerTimeChanged(const Segment *segment, bool shorten) override;
 
     SegmentRefreshStatus &getRefreshStatus() const;
     void resetRefreshStatus();
@@ -50,20 +50,20 @@ protected:
      * Override from ViewSegment
      * Wrap only notes 
      */
-    virtual bool wrapEvent(Event*);
+    bool wrapEvent(Event*) override;
 
     /**
      * Override from ViewSegment
      */
-    virtual void eventAdded(const Segment *, Event *);
+    void eventAdded(const Segment *, Event *) override;
 
     /**
      * Override from ViewSegment
      * Let tools know if their current element has gone
      */
-    virtual void eventRemoved(const Segment *, Event *);
+    void eventRemoved(const Segment *, Event *) override;
 
-    virtual ViewElement* makeViewElement(Event *);
+    ViewElement* makeViewElement(Event *) override;
 
     MatrixScene *m_scene;
     bool m_drum;

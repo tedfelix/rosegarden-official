@@ -44,7 +44,7 @@ public:
 
     int getPitch() const { return m_pitch; }
 
-    virtual QSize sizeHint() const;
+    QSize sizeHint() const override;
 
 signals:
     void pitchDragged(int);
@@ -60,11 +60,11 @@ public slots:
     void slotSetPitch(int,int,int);
     
 protected:
-    virtual void paintEvent(QPaintEvent *);
-    virtual void mousePressEvent(QMouseEvent *e);
-    virtual void mouseReleaseEvent(QMouseEvent *e);
-    virtual void mouseMoveEvent(QMouseEvent *e);
-    virtual void wheelEvent(QWheelEvent *e);
+    void paintEvent(QPaintEvent *) override;
+    void mousePressEvent(QMouseEvent *e) override;
+    void mouseReleaseEvent(QMouseEvent *e) override;
+    void mouseMoveEvent(QMouseEvent *e) override;
+    void wheelEvent(QWheelEvent *e) override;
 
     void calculatePixmap() const;
     void calculatePixmap(int pitch, int octave, int step) const;

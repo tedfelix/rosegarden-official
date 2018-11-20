@@ -101,7 +101,7 @@ public:
     virtual void hide();
 
 protected:
-    virtual void closeEvent(QCloseEvent * e);
+    void closeEvent(QCloseEvent * e) override;
     void computeSampleRate();
     void cycleThroughModes();
     void displayTime();

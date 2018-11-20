@@ -66,12 +66,8 @@ public:
 
     QIcon standardIcon(StandardPixmap standardIcon,
                        const QStyleOption * option = 0,
-                       const QWidget * widget = 0) const; // override in Qt5
+                       const QWidget * widget = 0) const override;
 
-protected slots:
-    QIcon standardIconImplementation(StandardPixmap standardIcon,
-                                     const QStyleOption * option = 0,
-                                     const QWidget * widget = 0) const; // for Qt4
 private:
     QSize pixmapSize(const QPixmap &pixmap) const;
 

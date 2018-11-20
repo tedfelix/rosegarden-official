@@ -50,7 +50,7 @@ public:
     virtual FollowMode handleMouseMove(const ControlMouseEvent *) { return NoFollow; }
 
 protected:
-    virtual void createMenu();
+    void createMenu() override;
 
     ControlRuler *m_ruler;
     bool m_overItem;

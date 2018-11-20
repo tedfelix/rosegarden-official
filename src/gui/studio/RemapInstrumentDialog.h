@@ -48,7 +48,7 @@ public:
 public slots:
     void slotRemapReleased();
 
-    void accept();
+    void accept() override;
     void slotApply();
 
 signals:

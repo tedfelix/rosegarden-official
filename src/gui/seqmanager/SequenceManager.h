@@ -209,22 +209,22 @@ public:
     // CompositionObserver interface
     //
 
-    virtual void segmentAdded(const Composition *, Segment *);
-    virtual void segmentRemoved(const Composition *, Segment *);
-    virtual void segmentRepeatChanged(const Composition *, Segment *, bool);
-    virtual void segmentRepeatEndChanged(const Composition *, Segment *, timeT);
-    virtual void segmentEventsTimingChanged(const Composition *, Segment *, timeT delay, RealTime rtDelay);
-    virtual void segmentTransposeChanged(const Composition *, Segment *, int transpose);
-    virtual void segmentTrackChanged(const Composition *, Segment *, TrackId id);
-    virtual void segmentEndMarkerChanged(const Composition *, Segment *, bool);
-    virtual void endMarkerTimeChanged(const Composition *, bool shorten);
-    virtual void tracksAdded(const Composition *, std::vector<TrackId> &/*trackIds*/);
-    virtual void trackChanged(const Composition *, Track *);
-    virtual void tracksDeleted(const Composition *, std::vector<TrackId> &/*trackIds*/);
-    virtual void timeSignatureChanged(const Composition *);
-    virtual void metronomeChanged(const Composition *);
-    virtual void selectedTrackChanged(const Composition *);
-    virtual void tempoChanged(const Composition *);
+    void segmentAdded(const Composition *, Segment *) override;
+    void segmentRemoved(const Composition *, Segment *) override;
+    void segmentRepeatChanged(const Composition *, Segment *, bool) override;
+    void segmentRepeatEndChanged(const Composition *, Segment *, timeT) override;
+    void segmentEventsTimingChanged(const Composition *, Segment *, timeT delay, RealTime rtDelay) override;
+    void segmentTransposeChanged(const Composition *, Segment *, int transpose) override;
+    void segmentTrackChanged(const Composition *, Segment *, TrackId id) override;
+    void segmentEndMarkerChanged(const Composition *, Segment *, bool) override;
+    void endMarkerTimeChanged(const Composition *, bool shorten) override;
+    void tracksAdded(const Composition *, std::vector<TrackId> &/*trackIds*/) override;
+    void trackChanged(const Composition *, Track *) override;
+    void tracksDeleted(const Composition *, std::vector<TrackId> &/*trackIds*/) override;
+    void timeSignatureChanged(const Composition *) override;
+    void metronomeChanged(const Composition *) override;
+    void selectedTrackChanged(const Composition *) override;
+    void tempoChanged(const Composition *) override;
 
     /**
      * Called by TrackButtons.
@@ -239,7 +239,7 @@ public:
      *
      * Calls refresh().
      */
-    virtual bool event(QEvent *e);
+    bool event(QEvent *e) override;
 
     /// Sets a new Instrument for the metronome and regenerates the ticks.
     /**

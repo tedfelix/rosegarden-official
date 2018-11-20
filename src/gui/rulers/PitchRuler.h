@@ -35,8 +35,8 @@ class PitchRuler : public QWidget
 public:
     PitchRuler(QWidget *parent);
 
-    virtual QSize sizeHint() const;
-    virtual QSize minimumSizeHint() const;
+    QSize sizeHint() const override;
+    QSize minimumSizeHint() const override;
 
     virtual void drawHoverNote(int evPitch) = 0;
     virtual void hideHoverNote() = 0;

@@ -76,7 +76,7 @@ protected slots:
     void slotHelpRequested();
 
 protected:
-    virtual void closeEvent(QCloseEvent *);
+    void closeEvent(QCloseEvent *) override;
 
 protected:
     RosegardenDocument *m_document;

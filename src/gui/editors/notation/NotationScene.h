@@ -110,8 +110,8 @@ public:
     RosegardenDocument *getDocument() { return m_document; }
     NotePixmapFactory *getNotePixmapFactory() { return m_notePixmapFactory; }
 
-    virtual EventSelection *getSelection() const { return m_selection; }
-    virtual void setSelection(EventSelection* s, bool preview);
+    EventSelection *getSelection() const override { return m_selection; }
+    void setSelection(EventSelection* s, bool preview) override;
 
     timeT getInsertionTime() const;
 
@@ -259,23 +259,23 @@ protected slots:
     void slotCommandExecuted();
 
 protected:
-    void mousePressEvent(QGraphicsSceneMouseEvent *);
-    void mouseMoveEvent(QGraphicsSceneMouseEvent *);
-    void mouseReleaseEvent(QGraphicsSceneMouseEvent *);
-    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *);
-    void wheelEvent(QGraphicsSceneWheelEvent *);
-    
-    virtual void keyPressEvent(QKeyEvent * keyEvent);
-    virtual void keyReleaseEvent(QKeyEvent * keyEvent);
+    void mousePressEvent(QGraphicsSceneMouseEvent *) override;
+    void mouseMoveEvent(QGraphicsSceneMouseEvent *) override;
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent *) override;
+    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *) override;
+    void wheelEvent(QGraphicsSceneWheelEvent *) override;
+
+    void keyPressEvent(QKeyEvent * keyEvent) override;
+    void keyReleaseEvent(QKeyEvent * keyEvent) override;
 
     // CompositionObserver methods
-    void segmentRemoved(const Composition *, Segment *);
-    void timeSignatureChanged(const Composition *); // CompositionObserver
-    void segmentRepeatChanged(const Composition *, Segment *, bool);
-    void segmentRepeatEndChanged(const Composition *, Segment *, timeT);
-    void segmentStartChanged(const Composition *, Segment *, timeT);
-    void segmentEndMarkerChanged(const Composition *, Segment *, bool);
-    void trackChanged(const Composition *, Track *);
+    void segmentRemoved(const Composition *, Segment *) override;
+    void timeSignatureChanged(const Composition *) override; // CompositionObserver
+    void segmentRepeatChanged(const Composition *, Segment *, bool) override;
+    void segmentRepeatEndChanged(const Composition *, Segment *, timeT) override;
+    void segmentStartChanged(const Composition *, Segment *, timeT) override;
+    void segmentEndMarkerChanged(const Composition *, Segment *, bool) override;
+    void trackChanged(const Composition *, Track *) override;
 
 
 

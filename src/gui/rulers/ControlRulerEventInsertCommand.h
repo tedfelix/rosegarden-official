@@ -42,7 +42,7 @@ public:
 
 protected:
 
-    virtual void modifySegment();
+    void modifySegment() override;
 
     std::string m_type;
     long m_number;

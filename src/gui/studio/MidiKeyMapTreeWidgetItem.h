@@ -39,7 +39,7 @@ public:
     MidiKeyMapTreeWidgetItem(DeviceId deviceId,
                            QTreeWidgetItem* parent, QString name);
 
-    virtual int compare(QTreeWidgetItem *i, int col, bool ascending) const;
+    int compare(QTreeWidgetItem *i, int col, bool ascending) const override;
 
     QString getName() const { return m_name; }
 

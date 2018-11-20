@@ -31,12 +31,12 @@ class ViewElementAdapter : public ElementAdapter
 public:
     ViewElementAdapter(ViewElement*, const PropertyName&);
 
-    virtual bool  getValue(long&);
-    virtual void  setValue(long);
-    virtual timeT getTime();
-    virtual timeT getDuration();
+    bool  getValue(long&) override;
+    void  setValue(long) override;
+    timeT getTime() override;
+    timeT getDuration() override;
 
-    virtual Event* getEvent() { return m_viewElement->event(); }
+    Event* getEvent() override { return m_viewElement->event(); }
     ViewElement* getViewElement() { return m_viewElement; }
 
 protected:

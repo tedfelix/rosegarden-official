@@ -71,7 +71,7 @@ public:
     MidiDevice::VariationType getVariationType() const;
 
 public slots:
-    void accept();
+    void accept() override;
     void slotCancel();
 
 protected:

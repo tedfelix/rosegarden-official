@@ -50,8 +50,8 @@ public:
 
     virtual ~MarkerRuler();
     
-    virtual QSize sizeHint() const;
-    virtual QSize minimumSizeHint() const;
+    QSize sizeHint() const override;
+    QSize minimumSizeHint() const override;
 
     void scrollHoriz(int x);
 
@@ -79,9 +79,9 @@ protected slots:
     void slotEditMarker();
     
 protected:
-    virtual void paintEvent(QPaintEvent*);
-    virtual void mousePressEvent(QMouseEvent *e);
-    virtual void mouseDoubleClickEvent(QMouseEvent *e);
+    void paintEvent(QPaintEvent*) override;
+    void mousePressEvent(QMouseEvent *e) override;
+    void mouseDoubleClickEvent(QMouseEvent *e) override;
 
     void createMenu();
     timeT getClickPosition();

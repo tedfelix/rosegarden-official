@@ -31,7 +31,7 @@ class SpecialSegmentMapper : public MappedEventBuffer
 public:
     // overrides from MappedEventBuffer.  Exists only for historical
     // reasons.
-    virtual int getSegmentRepeatCount();
+    int getSegmentRepeatCount() override;
 
 protected:
     SpecialSegmentMapper(RosegardenDocument *doc);

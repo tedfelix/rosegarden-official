@@ -179,19 +179,19 @@ public:
 
 
 /** SegmentObserver methods **/
-    virtual void eventAdded(const Segment *, Event *);
+    void eventAdded(const Segment *, Event *) override;
 
-    virtual void eventRemoved(const Segment *, Event *);
+    void eventRemoved(const Segment *, Event *) override;
 
-    virtual void appearanceChanged(const Segment *);
+    void appearanceChanged(const Segment *) override;
 
-    virtual void startChanged(const Segment *, timeT);
+    void startChanged(const Segment *, timeT) override;
 
-    virtual void endMarkerTimeChanged(const Segment *, bool /*shorten*/);
+    void endMarkerTimeChanged(const Segment *, bool /*shorten*/) override;
 
-    virtual void transposeChanged(const Segment *, int);
+    void transposeChanged(const Segment *, int) override;
 
-    virtual void segmentDeleted(const Segment *);
+    void segmentDeleted(const Segment *) override;
 
 
 
@@ -201,11 +201,11 @@ signals :
     void staffModified();
 
 protected :
-    virtual void paintEvent(QPaintEvent *);
+    void paintEvent(QPaintEvent *) override;
 //    virtual bool event(QEvent *event);
-    virtual void enterEvent(QEvent *event);
-    virtual void mouseMoveEvent(QMouseEvent *event);
-    virtual void leaveEvent(QEvent *event);
+    void enterEvent(QEvent *event) override;
+    void mouseMoveEvent(QMouseEvent *event) override;
+    void leaveEvent(QEvent *event) override;
 //    virtual void mousePressEvent(QMouseEvent *event);
 
     /**

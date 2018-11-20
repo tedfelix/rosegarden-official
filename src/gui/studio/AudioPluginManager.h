@@ -84,7 +84,7 @@ protected:
     {
     public:
         Enumerator(AudioPluginManager *);
-        virtual void run();
+        void run() override;
         bool isDone() const { return m_done; }
         
     protected:

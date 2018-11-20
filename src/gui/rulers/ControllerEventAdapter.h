@@ -27,12 +27,12 @@ class ControllerEventAdapter : public Rosegarden::ElementAdapter
 public:
     ControllerEventAdapter(Event* e) : m_event(e) {}
 
-    virtual bool getValue(long&);
-    virtual void setValue(long);
-    virtual timeT getTime();
-    virtual timeT getDuration();
+    bool getValue(long&) override;
+    void setValue(long) override;
+    timeT getTime() override;
+    timeT getDuration() override;
 
-    virtual Event* getEvent() { return m_event; }
+    Event* getEvent() override { return m_event; }
 
 protected:
 

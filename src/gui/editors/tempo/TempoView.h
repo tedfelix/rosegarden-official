@@ -68,14 +68,14 @@ public:
 
     virtual bool applyLayout(int staffNo = -1);
 
-    virtual void refreshSegment(Segment *segment,
+    void refreshSegment(Segment *segment,
                                 timeT startTime = 0,
-                                timeT endTime = 0);
+                                timeT endTime = 0) override;
 
-    virtual void updateView();
+    void updateView() override;
 
     virtual void setupActions();
-    virtual void initStatusBar();
+    void initStatusBar() override;
     virtual QSize getViewSize(); 
     virtual void setViewSize(QSize);
 
@@ -89,17 +89,17 @@ public:
 
     // Composition Observer callbacks
     //
-    virtual void timeSignatureChanged(const Composition *);
-    virtual void tempoChanged(const Composition *);
+    void timeSignatureChanged(const Composition *) override;
+    void tempoChanged(const Composition *) override;
 
 signals:
     void closing();
 
 public slots:
     // standard slots
-    virtual void slotEditCut();
-    virtual void slotEditCopy();
-    virtual void slotEditPaste();
+    void slotEditCut() override;
+    void slotEditCopy() override;
+    void slotEditPaste() override;
 
     // other edit slots
     void slotEditDelete();
@@ -126,17 +126,17 @@ public slots:
 
 protected slots:
 
-    virtual void slotSaveOptions();
+    void slotSaveOptions() override;
 
 protected:
-    virtual void closeEvent(QCloseEvent *);
+    void closeEvent(QCloseEvent *) override;
 
 private:
-    virtual void readOptions();
+    void readOptions() override;
     void makeInitialSelection(timeT);
     QString makeTimeString(timeT time, int timeMode);
-    virtual Segment *getCurrentSegment();
-    virtual void updateViewCaption();
+    Segment *getCurrentSegment() override;
+    void updateViewCaption() override;
 
     //--------------- Data members ---------------------------------
     EditTempoController *m_editTempoController;

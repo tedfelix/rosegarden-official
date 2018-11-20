@@ -53,15 +53,15 @@ public:
 
     ~NotationSelector();
 
-    virtual void handleLeftButtonPress(const NotationMouseEvent *);
+    void handleLeftButtonPress(const NotationMouseEvent *) override;
 
-    virtual void handleRightButtonPress(const NotationMouseEvent *);
+    void handleRightButtonPress(const NotationMouseEvent *) override;
 
-    virtual FollowMode handleMouseMove(const NotationMouseEvent *);
+    FollowMode handleMouseMove(const NotationMouseEvent *) override;
 
-    virtual void handleMouseRelease(const NotationMouseEvent *);
+    void handleMouseRelease(const NotationMouseEvent *) override;
 
-    virtual void handleMouseDoubleClick(const NotationMouseEvent *);
+    void handleMouseDoubleClick(const NotationMouseEvent *) override;
 
     virtual void handleMouseTripleClick(const NotationMouseEvent *);
 
@@ -73,12 +73,12 @@ public:
      * deleted, so we can't delete the selection rect in
      * ~NotationSelector because that leads to double deletion.
      */
-    virtual void ready();
+    void ready() override;
 
     /**
      * Delete the selection rect.
      */
-    virtual void stow();
+    void stow() override;
 
     /**
      * Respond to an event being deleted -- it may be the one the tool
@@ -89,9 +89,9 @@ public:
     /**
      * Useful to get the tool name from a NotationTool object
      */ 
-    virtual const QString getToolName() { return ToolName(); }
+    const QString getToolName() override { return ToolName(); }
 
-    virtual bool needsWheelEvents() { return false; }
+    bool needsWheelEvents() override { return false; }
 
     static QString ToolName();
 

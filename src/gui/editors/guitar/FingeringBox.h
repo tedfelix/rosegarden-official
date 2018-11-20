@@ -55,7 +55,7 @@ protected:
     /** In Qt4 there is no more drawContents() so we'll use paintEvent() to
      * trigger the old code, hopefully with minimal modification
      */
-    virtual void paintEvent(QPaintEvent*);
+    void paintEvent(QPaintEvent*) override;
 
     /** This was the old Qt3 way of updating the widget.  Rather than
      * restructuring everything in new idiom, we use new idiom to call the old
@@ -63,10 +63,10 @@ protected:
      */
     virtual void drawContents(QPainter*);
 
-    virtual void mousePressEvent(QMouseEvent*);
-    virtual void mouseReleaseEvent(QMouseEvent*);
-    virtual void mouseMoveEvent(QMouseEvent*);
-    virtual void leaveEvent(QEvent*);
+    void mousePressEvent(QMouseEvent*) override;
+    void mouseReleaseEvent(QMouseEvent*) override;
+    void mouseMoveEvent(QMouseEvent*) override;
+    void leaveEvent(QEvent*) override;
 
     void processMouseRelease( unsigned int release_string_num, unsigned int release_fret_num);
 

@@ -136,7 +136,7 @@ protected slots:
 
     /** If user cancels, clean up tmp dir
      */
-    void reject();
+    void reject() override;
 
     /**
      * Begin the packing process.

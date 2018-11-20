@@ -39,7 +39,7 @@ public:
     StartupTester();
     virtual ~StartupTester();
 
-    virtual void run();
+    void run() override;
 
     bool isReady();
 

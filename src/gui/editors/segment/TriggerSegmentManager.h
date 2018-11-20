@@ -84,7 +84,7 @@ signals:
     void closing();
 
 protected:
-    virtual void closeEvent(QCloseEvent *);
+    void closeEvent(QCloseEvent *) override;
 
     void setupActions();
     QString makeDurationString(timeT startTime,

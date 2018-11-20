@@ -88,14 +88,14 @@ public:
 
     // Xml handler methods:
 
-    virtual bool startElement
+    bool startElement
     (const QString& namespaceURI, const QString& localName,
-     const QString& qName, const QXmlAttributes& atts);
+     const QString& qName, const QXmlAttributes& atts) override;
 
-    virtual bool characters(const QString &);
+    bool characters(const QString &) override;
 
-    bool error(const QXmlParseException& exception);
-    bool fatalError(const QXmlParseException& exception);
+    bool error(const QXmlParseException& exception) override;
+    bool fatalError(const QXmlParseException& exception) override;
 
     void dump() const;
 

@@ -51,7 +51,7 @@ public:
 
 public slots:
     void slotApply();
-    void accept();
+    void accept() override;
     void help();
 
 protected:

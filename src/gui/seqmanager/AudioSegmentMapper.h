@@ -32,12 +32,12 @@ public:
     AudioSegmentMapper(RosegardenDocument *, Segment *);
 
 protected:
-    virtual int calculateSize();
+    int calculateSize() override;
 
     /// dump all segment data in the file
-    virtual void fillBuffer();
+    void fillBuffer() override;
     // Return whether the event should be played.
-    virtual bool shouldPlay(MappedEvent *evt, RealTime startTime);
+    bool shouldPlay(MappedEvent *evt, RealTime startTime) override;
 };
 
 

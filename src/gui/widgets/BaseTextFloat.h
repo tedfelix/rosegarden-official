@@ -103,7 +103,7 @@ protected slots :
 
 protected :
 
-    virtual void paintEvent(QPaintEvent *e);
+    void paintEvent(QPaintEvent *e) override;
 
     // Currently displayed text
     QString  m_text;

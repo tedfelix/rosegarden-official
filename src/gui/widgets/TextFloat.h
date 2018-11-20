@@ -102,7 +102,7 @@ public :
      * corner of the parent widget and show it.
      * (call reparent() if necessary then wrap to BaseTextFloat::display())
      */
-    virtual void display(QPoint offset);
+    void display(QPoint offset) override;
 
     virtual ~TextFloat();
 

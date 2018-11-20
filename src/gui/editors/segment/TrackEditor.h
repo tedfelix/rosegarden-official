@@ -209,9 +209,9 @@ private:
     void init(RosegardenMainViewWidget *);
 
     // QWidget overrides.
-    virtual void dragEnterEvent(QDragEnterEvent *);
-    virtual void dropEvent(QDropEvent *);
-    virtual void dragMoveEvent(QDragMoveEvent *);
+    void dragEnterEvent(QDragEnterEvent *) override;
+    void dropEvent(QDropEvent *) override;
+    void dragMoveEvent(QDragMoveEvent *) override;
 
     /// Scroll when dragging the pointer or loop end.
     /**

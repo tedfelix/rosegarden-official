@@ -46,7 +46,7 @@ public:
     void setScene(MatrixScene *scene);
 
 protected:
-    virtual BaseTool *createTool(QString toolName);
+    BaseTool *createTool(QString toolName) override;
     MatrixWidget *m_widget;
     MatrixScene *m_scene;
 };

@@ -177,7 +177,7 @@ protected:
     void selectFileListItemNoSignal(QTreeWidgetItem*);
     void updateActionState(bool haveSelection);
 
-    virtual void closeEvent(QCloseEvent *);
+    void closeEvent(QCloseEvent *) override;
 
     //--------------- Data members ---------------------------------
 

@@ -40,7 +40,7 @@ public:
     ControlToolBox(ControlRuler *parent);
 
 protected:
-    virtual BaseTool *createTool(QString toolName);
+    BaseTool *createTool(QString toolName) override;
     ControlRuler *m_ruler;
 };
 

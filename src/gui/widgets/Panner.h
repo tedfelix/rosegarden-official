@@ -57,18 +57,18 @@ protected:
 
     void moveTo(QPoint);
 
-    virtual void paintEvent(QPaintEvent *);
-    virtual void mousePressEvent(QMouseEvent *e);
-    virtual void mouseMoveEvent(QMouseEvent *e);
-    virtual void mouseReleaseEvent(QMouseEvent *e);
-    virtual void mouseDoubleClickEvent(QMouseEvent *e);
-    virtual void wheelEvent(QWheelEvent *e);
+    void paintEvent(QPaintEvent *) override;
+    void mousePressEvent(QMouseEvent *e) override;
+    void mouseMoveEvent(QMouseEvent *e) override;
+    void mouseReleaseEvent(QMouseEvent *e) override;
+    void mouseDoubleClickEvent(QMouseEvent *e) override;
+    void wheelEvent(QWheelEvent *e) override;
 
-    virtual void resizeEvent(QResizeEvent *);
+    void resizeEvent(QResizeEvent *) override;
 
     virtual void updateScene(const QList<QRectF> &);
-    virtual void drawItems(QPainter *, int, QGraphicsItem *[],
-                           const QStyleOptionGraphicsItem []);
+    void drawItems(QPainter *, int, QGraphicsItem *[],
+                           const QStyleOptionGraphicsItem []) override;
 
     bool m_clicked;
     QRectF m_clickedRect;

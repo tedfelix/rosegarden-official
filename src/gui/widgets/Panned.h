@@ -68,11 +68,11 @@ protected:
     float m_pointerHeight;
     bool m_pointerVisible;
 
-    virtual void paintEvent(QPaintEvent *);
-    virtual void resizeEvent(QResizeEvent *);
-    virtual void drawForeground(QPainter *, const QRectF &);
-    virtual void wheelEvent(QWheelEvent *);
-    virtual void leaveEvent(QEvent *);
+    void paintEvent(QPaintEvent *) override;
+    void resizeEvent(QResizeEvent *) override;
+    void drawForeground(QPainter *, const QRectF &) override;
+    void wheelEvent(QWheelEvent *) override;
+    void leaveEvent(QEvent *) override;
 
 private:
     bool m_wheelZoomPan;

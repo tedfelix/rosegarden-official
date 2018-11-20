@@ -39,12 +39,12 @@ class ControlMover : public ControlTool
 
 public:
     ControlMover(ControlRuler *ruler, QString menuName = "ControlMover");
-    virtual void handleLeftButtonPress(const ControlMouseEvent *);
-    virtual FollowMode handleMouseMove(const ControlMouseEvent *);
-    virtual void handleMouseRelease(const ControlMouseEvent *);
+    void handleLeftButtonPress(const ControlMouseEvent *) override;
+    FollowMode handleMouseMove(const ControlMouseEvent *) override;
+    void handleMouseRelease(const ControlMouseEvent *) override;
 
-    virtual void ready();
-    virtual void stow();
+    void ready() override;
+    void stow() override;
 
     static QString ToolName();
     

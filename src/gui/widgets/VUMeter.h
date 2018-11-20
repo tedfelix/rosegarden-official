@@ -69,7 +69,7 @@ public:
     void setRecordLevel(double level);
     void setRecordLevel(double leftLevel, double rightLevel);
 
-    virtual void paintEvent(QPaintEvent*);
+    void paintEvent(QPaintEvent*) override;
 
 protected:
     // Constructor is protected - we can only create an object

@@ -43,7 +43,7 @@ signals:
     void stateChanged(bool newState);
 
 protected:    
-    void mousePressEvent(QMouseEvent *e);
+    void mousePressEvent(QMouseEvent *e) override;
 };
 
 

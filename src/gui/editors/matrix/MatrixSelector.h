@@ -42,11 +42,11 @@ class MatrixSelector : public MatrixTool
     friend class MatrixToolBox;
 
 public:
-    virtual void handleLeftButtonPress(const MatrixMouseEvent *);
-    virtual void handleMidButtonPress(const MatrixMouseEvent *);
-    virtual FollowMode handleMouseMove(const MatrixMouseEvent *);
-    virtual void handleMouseRelease(const MatrixMouseEvent *);
-    virtual void handleMouseDoubleClick(const MatrixMouseEvent *);
+    void handleLeftButtonPress(const MatrixMouseEvent *) override;
+    void handleMidButtonPress(const MatrixMouseEvent *) override;
+    FollowMode handleMouseMove(const MatrixMouseEvent *) override;
+    void handleMouseRelease(const MatrixMouseEvent *) override;
+    void handleMouseDoubleClick(const MatrixMouseEvent *) override;
     virtual void handleMouseTripleClick(const MatrixMouseEvent *);
 
     /**
@@ -57,12 +57,12 @@ public:
      * we can't delete the selection rect in ~MatrixSelector because
      * that leads to double deletion.
      */
-    virtual void ready();
+    void ready() override;
 
     /**
      * Delete the selection rect.
      */
-    virtual void stow();
+    void stow() override;
 
     static QString ToolName();
 
@@ -81,7 +81,7 @@ public slots:
      * Respond to an event being deleted -- it may be the one the tool
      * is remembering as the current event.
      */
-    virtual void handleEventRemoved(Event *event);
+    void handleEventRemoved(Event *event) override;
 
 protected slots:
     void slotMatrixScrolled(int x, int y); //!!! do we need this? probably not

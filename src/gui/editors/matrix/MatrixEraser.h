@@ -29,11 +29,11 @@ class MatrixEraser : public MatrixTool
     friend class MatrixToolBox;
 
 public:
-    virtual void handleLeftButtonPress(const MatrixMouseEvent *);
+    void handleLeftButtonPress(const MatrixMouseEvent *) override;
 
     static QString ToolName();
 
-    virtual void ready();
+    void ready() override;
 
 protected:
     MatrixEraser(MatrixWidget *);

@@ -60,7 +60,7 @@ public:
     void setTempoPosition(timeT time);
 
 public slots:
-    virtual void accept();
+    void accept() override;
     void slotActionChanged();
     void slotTempoChanged(double);
     void slotTempoConstantClicked();

@@ -64,8 +64,8 @@ public:
     void setDocument(RosegardenDocument *doc);
 
     // CompositionObserver overrides.
-    virtual void trackChanged(const Composition *comp, Track *track);
-    virtual void trackSelectionChanged(const Composition *, TrackId);
+    void trackChanged(const Composition *comp, Track *track) override;
+    void trackSelectionChanged(const Composition *, TrackId) override;
 
 public slots:
     /// Connected to RosegardenDocument::docColoursChanged().

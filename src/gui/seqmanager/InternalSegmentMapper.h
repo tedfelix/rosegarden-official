@@ -93,24 +93,24 @@ private:
         NoteoffContainer;
 
     // Do channel-setup for Auto channel mode.
-    virtual void makeReady(MappedInserterBase &inserter, RealTime time);
+    void makeReady(MappedInserterBase &inserter, RealTime time) override;
 
     // Do channel-setup for Fixed channel mode.
-    virtual void insertChannelSetup(MappedInserterBase &);
+    void insertChannelSetup(MappedInserterBase &) override;
 
     // Insert the event "evt"
-    virtual void doInsert(MappedInserterBase &inserter, MappedEvent &evt,
-                         RealTime start, bool firstOutput);
+    void doInsert(MappedInserterBase &inserter, MappedEvent &evt,
+                         RealTime start, bool firstOutput) override;
 
     // Return whether the event should be played.
-    virtual bool shouldPlay(MappedEvent *evt, RealTime startTime);
+    bool shouldPlay(MappedEvent *evt, RealTime startTime) override;
 
-    virtual int calculateSize();
+    int calculateSize() override;
 
     int addSize(int size, Segment *);
 
     /// dump all segment data in the file
-    virtual void fillBuffer();
+    void fillBuffer() override;
 
     Instrument *getInstrument(void) const
     { return m_channelManager.getInstrument(); }

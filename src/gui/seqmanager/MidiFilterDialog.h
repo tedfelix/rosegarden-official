@@ -43,7 +43,7 @@ public:
 
 public slots:
 
-    void accept();
+    void accept() override;
     void help();
     void slotApply();
     void slotSetModified(int foo = 42);

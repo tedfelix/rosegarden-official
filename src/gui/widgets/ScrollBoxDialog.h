@@ -48,7 +48,7 @@ public:
     void setPageSize(const QSize&);
     
 protected:
-    virtual void closeEvent(QCloseEvent * e);
+    void closeEvent(QCloseEvent * e) override;
 
 signals:
     void closed();

@@ -54,7 +54,7 @@ public:
     ~SelectDialog();
 
 public slots:
-    void accept();
+    void accept() override;
     void help();
 
 protected:

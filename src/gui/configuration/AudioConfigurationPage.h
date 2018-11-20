@@ -49,7 +49,7 @@ public:
     AudioConfigurationPage(RosegardenDocument *doc,
                                QWidget *parent = 0);
 
-    virtual void apply();
+    void apply() override;
 
     static QString iconLabel() { return tr("Audio"); }
     static QString title()     { return tr("Audio Settings"); }

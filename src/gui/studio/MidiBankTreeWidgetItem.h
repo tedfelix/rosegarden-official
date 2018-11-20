@@ -51,7 +51,7 @@ public:
     void setMSB(int msb);
     void setLSB(int msb);
 
-    virtual int compare(QTreeWidgetItem *i, int col, bool ascending) const;
+    int compare(QTreeWidgetItem *i, int col, bool ascending) const override;
     
 protected:
 

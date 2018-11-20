@@ -36,12 +36,12 @@ public:
 
     ~EventControlItem();
     
-    virtual void update();
+    void update() override;
     virtual void updateFromEvent();
 
     void setY(float y);
-    void updateSegment();
-    void reconfigure();
+    void updateSegment() override;
+    void reconfigure() override;
     void reconfigure(float x,float y);
 
 protected:

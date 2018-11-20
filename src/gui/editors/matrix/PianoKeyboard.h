@@ -41,25 +41,25 @@ class PianoKeyboard : public PitchRuler
 public:
     PianoKeyboard(QWidget *parent, int keys = 88);
 
-    virtual QSize sizeHint() const;
-    virtual QSize minimumSizeHint() const;
+    QSize sizeHint() const override;
+    QSize minimumSizeHint() const override;
 
     /* 
      * We want to be able to call this from the matrix view
      */
-    void drawHoverNote(int evPitch);
+    void drawHoverNote(int evPitch) override;
 
-    void hideHoverNote();
+    void hideHoverNote() override;
 
 protected:
 
-    virtual void paintEvent(QPaintEvent*);
+    void paintEvent(QPaintEvent*) override;
 
-    virtual void mouseMoveEvent(QMouseEvent*);
-    virtual void mousePressEvent(QMouseEvent*);
-    virtual void mouseReleaseEvent(QMouseEvent*);
-    virtual void enterEvent(QEvent *);
-    virtual void leaveEvent(QEvent *);
+    void mouseMoveEvent(QMouseEvent*) override;
+    void mousePressEvent(QMouseEvent*) override;
+    void mouseReleaseEvent(QMouseEvent*) override;
+    void enterEvent(QEvent *) override;
+    void leaveEvent(QEvent *) override;
 
     // compute all key positions and store them
     //

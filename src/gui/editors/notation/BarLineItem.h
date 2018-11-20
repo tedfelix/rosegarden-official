@@ -44,11 +44,11 @@ public:
 
     void setColour(QColor colour) { m_colour = colour; }
 
-    QRectF boundingRect() const;
+    QRectF boundingRect() const override;
 
     void paint(QPainter *painter,
                const QStyleOptionGraphicsItem *option,
-               QWidget *widget);
+               QWidget *widget) override;
 
 protected:
     double m_layoutX;

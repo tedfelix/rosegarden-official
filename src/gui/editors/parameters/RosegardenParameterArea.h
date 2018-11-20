@@ -52,7 +52,7 @@ public:
     void addRosegardenParameterBox(RosegardenParameterBox *b);
 
 protected:
-    bool eventFilter(QObject *object, QEvent *event);
+    bool eventFilter(QObject *object, QEvent *event) override;
 
 private:
     // The list of parameter box widgets that are being displayed by this

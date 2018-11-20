@@ -40,9 +40,9 @@ class MatrixVelocity : public MatrixTool
     friend class MatrixToolBox;
 
 public:
-    virtual void handleLeftButtonPress(const MatrixMouseEvent *);
-    virtual FollowMode handleMouseMove(const MatrixMouseEvent *);
-    virtual void handleMouseRelease(const MatrixMouseEvent *);
+    void handleLeftButtonPress(const MatrixMouseEvent *) override;
+    FollowMode handleMouseMove(const MatrixMouseEvent *) override;
+    void handleMouseRelease(const MatrixMouseEvent *) override;
 
     static QString ToolName();
 
@@ -50,10 +50,10 @@ public:
      * Respond to an event being deleted -- it may be the one the tool
      * is remembering as the current event.
      */
-    virtual void handleEventRemoved(Event *event);
+    void handleEventRemoved(Event *event) override;
 
-    virtual void ready();
-    virtual void stow();
+    void ready() override;
+    void stow() override;
 
 protected:
     int m_mouseStartY;

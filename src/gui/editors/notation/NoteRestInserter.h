@@ -48,21 +48,21 @@ class NoteRestInserter : public NotationTool
 public:
     ~NoteRestInserter();
 
-    virtual void handleLeftButtonPress(const NotationMouseEvent *);
+    void handleLeftButtonPress(const NotationMouseEvent *) override;
     
-    virtual void handleMidButtonPress(const NotationMouseEvent *);
+    void handleMidButtonPress(const NotationMouseEvent *) override;
 
-    virtual FollowMode handleMouseMove(const NotationMouseEvent *);
+    FollowMode handleMouseMove(const NotationMouseEvent *) override;
 
-    virtual void handleMouseRelease(const NotationMouseEvent *);
+    void handleMouseRelease(const NotationMouseEvent *) override;
     
-    virtual void handleWheelTurned(int , const NotationMouseEvent *);
+    void handleWheelTurned(int , const NotationMouseEvent *) override;
     
-    virtual bool needsWheelEvents() { return m_quickEdit; }
+    bool needsWheelEvents() override { return m_quickEdit; }
 
-    virtual void ready();
+    void ready() override;
 
-    virtual void stow();
+    void stow() override;
 
     Note getCurrentNote() {
         return Note(m_noteType, m_noteDots);
@@ -79,7 +79,7 @@ public:
     /**
      * Useful to get the tool name from a NotationTool object
      */ 
-    virtual const QString getToolName() { return ToolName(); }
+    const QString getToolName() override { return ToolName(); }
 
     static QString ToolName();
 
@@ -98,7 +98,7 @@ public:
      * Show the menu if there is one.
      * This is an over ride of BaseTool::showMenu().
      */
-    virtual void showMenu();
+    void showMenu() override;
 
 public slots:
     /// Set the type of note (quaver, breve...) which will be inserted

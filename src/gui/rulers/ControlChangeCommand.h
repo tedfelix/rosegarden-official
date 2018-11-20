@@ -42,7 +42,7 @@ public:
 
 protected:
 
-    virtual void modifySegment();
+    void modifySegment() override;
 
     ControlItemList m_selectedItems;
 };

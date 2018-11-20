@@ -82,18 +82,18 @@ public:
 
     virtual ~EventView();
 
-    void closeEvent(QCloseEvent *event);
+    void closeEvent(QCloseEvent *event) override;
 
     virtual bool applyLayout(int staffNo = -1);
 
-    virtual void refreshSegment(Segment *segment,
+    void refreshSegment(Segment *segment,
                                 timeT startTime = 0,
-                                timeT endTime = 0);
+                                timeT endTime = 0) override;
 
-    virtual void updateView();
+    void updateView() override;
 
     void setupActions();
-    virtual void initStatusBar();
+    void initStatusBar() override;
     virtual QSize getViewSize(); 
     virtual void setViewSize(QSize);
 
@@ -108,9 +108,9 @@ public:
 public slots:
 
     // standard slots
-    virtual void slotEditCut();
-    virtual void slotEditCopy();
-    virtual void slotEditPaste();
+    void slotEditCut() override;
+    void slotEditCopy() override;
+    void slotEditPaste() override;
 
     // other edit slots
     void slotEditDelete();
@@ -138,10 +138,10 @@ public slots:
     //
     void slotModifyFilter();
 
-    virtual void eventAdded(const Segment *, Event *) { }
-    virtual void eventRemoved(const Segment *, Event *);
-    virtual void endMarkerTimeChanged(const Segment *, bool) { }
-    virtual void segmentDeleted(const Segment *);
+    void eventAdded(const Segment *, Event *) override { }
+    void eventRemoved(const Segment *, Event *) override;
+    void endMarkerTimeChanged(const Segment *, bool) override { }
+    void segmentDeleted(const Segment *) override;
 
     void slotHelpRequested();
     void slotHelpAbout();
@@ -150,7 +150,7 @@ signals:
     void editTriggerSegment(int);
 
 protected slots:
-    virtual void slotSaveOptions();
+    void slotSaveOptions() override;
 
     void slotEditTriggerName();
     void slotEditTriggerPitch();
@@ -166,14 +166,14 @@ protected:
     /// virtual function inherited from the base class, this implementation just
     /// calls updateWindowTitle() and avoids a refactoring job, even though
     /// updateViewCaption is superfluous
-    virtual void updateViewCaption();
+    void updateViewCaption() override;
 
-    virtual void readOptions();
+    void readOptions() override;
     void makeInitialSelection(timeT);
     QString makeTimeString(timeT time, int timeMode);
     QString makeDurationString(timeT time,
                                timeT duration, int timeMode);
-    virtual Segment *getCurrentSegment();
+    Segment *getCurrentSegment() override;
 
     //--------------- Data members ---------------------------------
 

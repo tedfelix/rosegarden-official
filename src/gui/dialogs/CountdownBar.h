@@ -39,7 +39,7 @@ public:
     void setPosition(int position);
 
 protected:
-    virtual void paintEvent(QPaintEvent *e);
+    void paintEvent(QPaintEvent *e) override;
 
     int m_width;
     int m_height;

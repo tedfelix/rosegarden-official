@@ -90,7 +90,7 @@ public:
 
 protected:
     // QThread override
-    virtual void run();
+    void run() override;
 
 private:
     bool process();

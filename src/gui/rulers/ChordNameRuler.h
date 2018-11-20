@@ -86,8 +86,8 @@ public:
     // may have one of these (to avoid using percussion tracks in chords):
     void setStudio(Studio *studio);
 
-    virtual QSize sizeHint() const;
-    virtual QSize minimumSizeHint() const;
+    QSize sizeHint() const override;
+    QSize minimumSizeHint() const override;
 
     void setMinimumWidth(int width) { m_width = width; }
 
@@ -95,7 +95,7 @@ public slots:
     void slotScrollHoriz(int x);
 
 protected:
-    virtual void paintEvent(QPaintEvent *);
+    void paintEvent(QPaintEvent *) override;
 
 private:
     void recalculate(timeT from = 0,

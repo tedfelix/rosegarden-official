@@ -147,23 +147,23 @@ private:
 
     // QXmlDefaultHandler methods
 
-    virtual bool startDocument();
+    bool startDocument() override;
 
-    virtual bool startElement(const QString& namespaceURI,
+    bool startElement(const QString& namespaceURI,
                               const QString& localName,
                               const QString& qName,
-                              const QXmlAttributes& atts);
+                              const QXmlAttributes& atts) override;
 
-    virtual bool endElement(const QString& namespaceURI,
+    bool endElement(const QString& namespaceURI,
                             const QString& localName,
-                            const QString& qName);
+                            const QString& qName) override;
 
-    virtual bool characters(const QString& ch);
+    bool characters(const QString& ch) override;
 
-    virtual bool endDocument();
+    bool endDocument() override;
 
-    bool error(const QXmlParseException &exception);
-    bool fatalError(const QXmlParseException &exception);
+    bool error(const QXmlParseException &exception) override;
+    bool fatalError(const QXmlParseException &exception) override;
 };
 
 /**

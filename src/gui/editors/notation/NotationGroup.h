@@ -85,13 +85,13 @@ public:
      */
     void applyTuplingLine(NotationStaff &);
 
-    virtual bool contains(const NELIterator &) const;
+    bool contains(const NELIterator &) const override;
 
-    virtual bool sample(const NELIterator &i, bool goingForwards);
+    bool sample(const NELIterator &i, bool goingForwards) override;
 
 protected:
-    virtual bool test(const NELIterator &i);
-    virtual void initialiseFinish(void);
+    bool test(const NELIterator &i) override;
+    void initialiseFinish(void) override;
 
 private:
     struct Beam

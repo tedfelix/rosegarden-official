@@ -62,7 +62,7 @@ public:
 
     virtual ~BigArrowButton() { } 
 
-    virtual QSize sizeHint() const {
+    QSize sizeHint() const override {
         return QSize(20, 20);
     }
 };

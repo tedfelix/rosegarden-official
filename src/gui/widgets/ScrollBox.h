@@ -64,8 +64,8 @@ signals:
     void button3Pressed();
 
 protected:
-    void mousePressEvent(QMouseEvent *);
-    void mouseMoveEvent(QMouseEvent *);
+    void mousePressEvent(QMouseEvent *) override;
+    void mouseMoveEvent(QMouseEvent *) override;
     void drawContents(QPainter *);
 
 private:

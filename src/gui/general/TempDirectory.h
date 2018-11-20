@@ -31,7 +31,7 @@ class DirectoryCreationFailed : virtual public std::exception
 public:
     DirectoryCreationFailed(QString directory) throw();
     virtual ~DirectoryCreationFailed() throw();
-    virtual const char *what() const throw();
+    const char *what() const throw() override;
     
 protected:
     QString m_directory;

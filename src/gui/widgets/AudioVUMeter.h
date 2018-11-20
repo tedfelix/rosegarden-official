@@ -55,7 +55,7 @@ public:
         m_meter->setRecordLevel(dBleft, dBright);
     }
 
-    virtual void paintEvent(QPaintEvent*);
+    void paintEvent(QPaintEvent*) override;
 
 protected:
     class AudioVUMeterImpl : public VUMeter
@@ -68,8 +68,8 @@ protected:
                          int width,
                          int height);
     protected:
-        virtual void meterStart() { }
-        virtual void meterStop() { }
+        void meterStart() override { }
+        void meterStop() override { }
     };
         
     AudioVUMeterImpl *m_meter;

@@ -39,18 +39,18 @@ class TextInserter : public NotationTool
     friend class NotationToolBox;
 
 public:
-    virtual void ready();
+    void ready() override;
 
-    virtual void handleLeftButtonPress(const NotationMouseEvent *);
+    void handleLeftButtonPress(const NotationMouseEvent *) override;
 
 
 
     /**
      * Useful to get the tool name from a NotationTool object
      */ 
-    virtual const QString getToolName() { return ToolName(); }
+    const QString getToolName() override { return ToolName(); }
 
-    virtual bool needsWheelEvents() { return false; }
+    bool needsWheelEvents() override { return false; }
 
     static QString ToolName();
 

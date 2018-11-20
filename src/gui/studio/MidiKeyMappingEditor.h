@@ -49,8 +49,8 @@ public:
     void reset();
 
 public slots:
-    virtual void slotNameChanged(const QString &);
-    virtual void slotKeyMapButtonPressed();
+    void slotNameChanged(const QString &) override;
+    void slotKeyMapButtonPressed() override;
 
 protected:
     virtual QWidget *makeAdditionalWidget(QWidget *parent);

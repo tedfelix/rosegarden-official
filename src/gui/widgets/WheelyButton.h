@@ -43,7 +43,7 @@ signals:
     void wheel(bool up);
 
 protected:
-    void wheelEvent(QWheelEvent *e) {
+    void wheelEvent(QWheelEvent *e) override {
         emit wheel(e->delta() > 0);
     }
 };

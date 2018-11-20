@@ -74,12 +74,12 @@ signals:
     void faderChanged(float);
 
 protected:
-    virtual void paintEvent(QPaintEvent *);
-    virtual void mousePressEvent(QMouseEvent *);
-    virtual void mouseReleaseEvent(QMouseEvent *);
-    virtual void mouseMoveEvent(QMouseEvent *);
-    virtual void wheelEvent(QWheelEvent *);
-    virtual void enterEvent(QEvent *e);
+    void paintEvent(QPaintEvent *) override;
+    void mousePressEvent(QMouseEvent *) override;
+    void mouseReleaseEvent(QMouseEvent *) override;
+    void mouseMoveEvent(QMouseEvent *) override;
+    void wheelEvent(QWheelEvent *) override;
+    void enterEvent(QEvent *e) override;
 
     float position_to_value(int);
     int value_to_position(float);

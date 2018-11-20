@@ -39,11 +39,11 @@ public:
 
     ~PropertyControlItem();
 
-    virtual void update();
+    void update() override;
     ViewElement* getElement() { return m_element; }
 
-    void setValue(float y);
-    void updateSegment();
+    void setValue(float y) override;
+    void updateSegment() override;
 
 protected:
     using ControlItem::reconfigure;

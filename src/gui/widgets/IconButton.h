@@ -29,7 +29,7 @@ class IconButton : public QAbstractButton
 public:
     IconButton(QWidget* parent, const QPixmap& icon, const QString & name);
 
-    virtual void paintEvent(QPaintEvent*);
+    void paintEvent(QPaintEvent*) override;
     void setCheckedColor(QColor color);
     
 public slots:

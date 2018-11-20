@@ -368,25 +368,25 @@ private:
     // CompositionObserver Interface
     // ??? It's hard to pin these down to a category as they contribute
     //     to multiple categories.
-    virtual void segmentAdded(const Composition *, Segment *);
-    virtual void segmentRemoved(const Composition *, Segment *);
-    virtual void segmentRepeatChanged(const Composition *, Segment *, bool);
-    virtual void segmentStartChanged(const Composition *, Segment *, timeT);
-    virtual void segmentEndMarkerChanged(const Composition *, Segment *, bool);
-    virtual void segmentTrackChanged(const Composition *, Segment *, TrackId);
-    virtual void endMarkerTimeChanged(const Composition *, bool shorten);
+    void segmentAdded(const Composition *, Segment *) override;
+    void segmentRemoved(const Composition *, Segment *) override;
+    void segmentRepeatChanged(const Composition *, Segment *, bool) override;
+    void segmentStartChanged(const Composition *, Segment *, timeT) override;
+    void segmentEndMarkerChanged(const Composition *, Segment *, bool) override;
+    void segmentTrackChanged(const Composition *, Segment *, TrackId) override;
+    void endMarkerTimeChanged(const Composition *, bool shorten) override;
 
     // --- Notation Previews ------------------------------
 
     // SegmentObserver Interface
     // ??? These primarily affect the notation previews, however,
     //     endMarkerTimeChanged() feels more like a Segment thing.
-    virtual void eventAdded(const Segment *, Event *);
-    virtual void eventRemoved(const Segment *, Event *);
-    virtual void allEventsChanged(const Segment *);
-    virtual void appearanceChanged(const Segment *);
-    virtual void endMarkerTimeChanged(const Segment *, bool shorten);
-    virtual void segmentDeleted(const Segment *)
+    void eventAdded(const Segment *, Event *) override;
+    void eventRemoved(const Segment *, Event *) override;
+    void allEventsChanged(const Segment *) override;
+    void appearanceChanged(const Segment *) override;
+    void endMarkerTimeChanged(const Segment *, bool shorten) override;
+    void segmentDeleted(const Segment *) override
             { /* nothing to do - handled by CompositionObserver::segmentRemoved() */ }
 
     /// Make a NotationPreviewRange for a Segment.

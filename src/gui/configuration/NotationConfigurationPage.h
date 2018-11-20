@@ -47,7 +47,7 @@ class NotationConfigurationPage : public TabbedConfigurationPage
 public:
     NotationConfigurationPage(QWidget *parent = 0);
 
-    virtual void apply();
+    void apply() override;
 
     static QString iconLabel() { return tr("Notation"); }
     static QString title()     { return tr("Notation"); }

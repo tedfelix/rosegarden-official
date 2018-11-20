@@ -45,11 +45,11 @@ public:
 
     virtual ~SegmentSplitter();
 
-    virtual void ready();
+    void ready() override;
 
-    virtual void mousePressEvent(QMouseEvent *);
-    virtual int mouseMoveEvent(QMouseEvent *);
-    virtual void mouseReleaseEvent(QMouseEvent *);
+    void mousePressEvent(QMouseEvent *) override;
+    int mouseMoveEvent(QMouseEvent *) override;
+    void mouseReleaseEvent(QMouseEvent *) override;
 
     // don't do double clicks
     virtual void contentsMouseDoubleClickEvent(QMouseEvent*);

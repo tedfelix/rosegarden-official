@@ -35,12 +35,12 @@ public:
 
 protected:
     // override from MappedEventBuffer
-    virtual int calculateSize();
+    int calculateSize() override;
 
     // override from MappedEventBuffer
-    virtual void fillBuffer();
+    void fillBuffer() override;
 
-    virtual bool shouldPlay(MappedEvent *evt, RealTime /*startTime*/);
+    bool shouldPlay(MappedEvent *evt, RealTime /*startTime*/) override;
 };
 
 }

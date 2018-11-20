@@ -48,13 +48,13 @@ signals:
     void scrollWheel(int);
 
 protected:
-    virtual void mouseReleaseEvent(QMouseEvent * /*e*/)
+    void mouseReleaseEvent(QMouseEvent * /*e*/) override
         { emit clicked(); }
 
-    virtual void mouseDoubleClickEvent(QMouseEvent * /*e*/)
+    void mouseDoubleClickEvent(QMouseEvent * /*e*/) override
         { emit doubleClicked(); }
 
-    virtual void wheelEvent(QWheelEvent *e)
+    void wheelEvent(QWheelEvent *e) override
         { emit scrollWheel(e->delta()); }
 
 };

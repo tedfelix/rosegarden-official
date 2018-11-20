@@ -39,10 +39,10 @@ class SegmentToolBox : public BaseToolBox
 public:
     SegmentToolBox(CompositionView* parent, RosegardenDocument*);
 
-    virtual SegmentTool* getTool(QString toolName);
+    SegmentTool* getTool(QString toolName) override;
     
 protected:
-    virtual SegmentTool* createTool(QString toolName);
+    SegmentTool* createTool(QString toolName) override;
 
     //--------------- Data members ---------------------------------
 

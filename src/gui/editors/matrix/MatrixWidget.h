@@ -98,8 +98,8 @@ public:
     void setCanvasCursor(QCursor cursor);
 
     // These delegate to MatrixScene, which possesses the selection
-    virtual EventSelection *getSelection() const;
-    virtual void setSelection(EventSelection *s, bool preview);
+    EventSelection *getSelection() const override;
+    void setSelection(EventSelection *s, bool preview) override;
 
     ControlRulerWidget *getControlsWidget(void)
     { return m_controlsWidget; }
@@ -209,7 +209,7 @@ protected slots:
     void slotInstrumentGone(void);
 
 protected :
-    virtual void showEvent(QShowEvent * event);
+    void showEvent(QShowEvent * event) override;
 
     /// (Re)generate the pitch ruler (useful when key mapping changed)
     void generatePitchRuler();

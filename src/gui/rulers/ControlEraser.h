@@ -36,9 +36,9 @@ class ControlEraser : public ControlTool
     friend class ControlToolBox;
 
 public:
-    virtual void handleLeftButtonPress(const ControlMouseEvent *);
-    virtual FollowMode handleMouseMove(const ControlMouseEvent *);
-    virtual void handleMouseRelease(const ControlMouseEvent *);
+    void handleLeftButtonPress(const ControlMouseEvent *) override;
+    FollowMode handleMouseMove(const ControlMouseEvent *) override;
+    void handleMouseRelease(const ControlMouseEvent *) override;
 
     /**
      * Respond to an event being deleted -- it may be the one the tool
@@ -46,8 +46,8 @@ public:
      */
 //    virtual void handleEventRemoved(Event *event);
 
-    virtual void ready();
-    virtual void stow();
+    void ready() override;
+    void stow() override;
 
     static QString ToolName();
 

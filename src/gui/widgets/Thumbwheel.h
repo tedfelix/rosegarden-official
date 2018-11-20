@@ -45,7 +45,7 @@ public:
 
     void setShowToolTip(bool show);
 
-    QSize sizeHint() const;
+    QSize sizeHint() const override;
 
 signals:
     void valueChanged(int);
@@ -65,14 +65,14 @@ public slots:
     void resetToDefault();
 
 protected:
-    virtual void mousePressEvent(QMouseEvent *e);
-    virtual void mouseDoubleClickEvent(QMouseEvent *e);
-    virtual void mouseMoveEvent(QMouseEvent *e);
-    virtual void mouseReleaseEvent(QMouseEvent *e);
-    virtual void wheelEvent(QWheelEvent *e);
-    virtual void paintEvent(QPaintEvent *e);
-    virtual void enterEvent(QEvent *);
-    virtual void leaveEvent(QEvent *);
+    void mousePressEvent(QMouseEvent *e) override;
+    void mouseDoubleClickEvent(QMouseEvent *e) override;
+    void mouseMoveEvent(QMouseEvent *e) override;
+    void mouseReleaseEvent(QMouseEvent *e) override;
+    void wheelEvent(QWheelEvent *e) override;
+    void paintEvent(QPaintEvent *e) override;
+    void enterEvent(QEvent *) override;
+    void leaveEvent(QEvent *) override;
 
     int m_min;
     int m_max;

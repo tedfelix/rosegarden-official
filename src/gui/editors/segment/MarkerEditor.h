@@ -90,7 +90,7 @@ signals:
     void jumpToMarker(timeT);
 
 protected:
-    virtual void closeEvent(QCloseEvent *);
+    void closeEvent(QCloseEvent *) override;
 
     void setupActions();
     QString makeTimeString(timeT time, int timeMode);

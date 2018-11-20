@@ -108,8 +108,8 @@ public:
      * of a range, you will then need to call positionElements for the
      * changed range and the entire remainder of the staff.
      */
-    virtual void renderElements(NotationElementList::iterator from,
-                                NotationElementList::iterator to);
+    void renderElements(NotationElementList::iterator from,
+                                NotationElementList::iterator to) override;
 
     virtual void renderElements(timeT from, timeT to);
 
@@ -145,8 +145,8 @@ public:
      * passing from and to arguments corresponding to the times of those
      * passed to renderElements.
      */
-    virtual void positionElements(timeT from,
-                                  timeT to);
+    void positionElements(timeT from,
+                                  timeT to) override;
 
     /**
      * Set a painter as the printer output.  If this painter is
@@ -169,28 +169,28 @@ public:
      * Insert time signature at x-coordinate \a x.
      * Use a gray color if \a grayed is true.
      */
-    virtual void insertTimeSignature(double layoutX,
-                                     const TimeSignature &timeSig, bool grayed);
+    void insertTimeSignature(double layoutX,
+                                     const TimeSignature &timeSig, bool grayed) override;
 
     /**
      * Delete all time signatures
      */
-    virtual void deleteTimeSignatures();
+    void deleteTimeSignatures() override;
     
     /**
      * Insert repeated clef and key at start of new line, at x-coordinate \a x.
      */
-    virtual void insertRepeatedClefAndKey(double layoutX, int barNo);
+    void insertRepeatedClefAndKey(double layoutX, int barNo) override;
 
     /**
      * Delete all repeated clefs and keys.
      */
-    virtual void deleteRepeatedClefsAndKeys();
+    void deleteRepeatedClefsAndKeys() override;
 
     /**
      * (Re)draw the staff name from the track's current name
      */
-    virtual void drawStaffName();
+    void drawStaffName() override;
 
     /**
      * Return true if the staff name as currently drawn is up-to-date
@@ -241,8 +241,8 @@ public:
      *
      * Also returns the clef and key in force at the given coordinates.
      */
-    virtual ViewElementList::iterator getElementUnderLayoutX
-    (double x, Event *&clef, Event *&key);
+    ViewElementList::iterator getElementUnderLayoutX
+    (double x, Event *&clef, Event *&key) override;
 
     /**
      * Draw a note on the staff to show an insert position prior to
@@ -263,20 +263,20 @@ public:
      * We want to avoid wrapping things like controller events, if
      * our showUnknowns preference is off
      */
-    virtual bool wrapEvent(Event *);
+    bool wrapEvent(Event *) override;
 
     /**
      * Override from Staff<T>
      * Let tools know if their current element has gone
      */
-    virtual void eventRemoved(const Segment *, Event *);
+    void eventRemoved(const Segment *, Event *) override;
 
     /**
      * Return the view-local PropertyName definitions for this staff's view
      */
     const NotationProperties &getProperties() const;
 
-    virtual double getBarInset(int barNo, bool isFirstBarInRow) const;
+    double getBarInset(int barNo, bool isFirstBarInRow) const override;
 
     /**
      * Return the time at the given scene coordinates
@@ -287,16 +287,16 @@ public:
     
 protected:
 
-    virtual ViewElement* makeViewElement(Event*);
+    ViewElement* makeViewElement(Event*) override;
 
     // definition of staff
-    virtual int getLineCount() const         { return 5; }
-    virtual int getLegerLineCount() const    { return m_legerLineCount; }
-    virtual int getBottomLineHeight() const  { return 0; }
-    virtual int getHeightPerLine() const     { return 2; }
-    virtual int showBarNumbersEvery() const  { return m_barNumbersEvery; }
+    int getLineCount() const         override { return 5; }
+    int getLegerLineCount() const    override { return m_legerLineCount; }
+    int getBottomLineHeight() const  override { return 0; }
+    int getHeightPerLine() const     override { return 2; }
+    int showBarNumbersEvery() const  override { return m_barNumbersEvery; }
 
-    virtual BarStyle getBarStyle(int barNo) const;
+    BarStyle getBarStyle(int barNo) const override;
 
     /** 
      * Assign a suitable item to the given element (the clef is

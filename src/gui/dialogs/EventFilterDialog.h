@@ -112,7 +112,7 @@ protected slots:
     void slotToggleNone();
 
     // write out settings to QSettings data for next time
-    virtual void accept();
+    void accept() override;
 
     // update note name text display and ensure From <= To
     void slotPitchFromChanged(int pitch);

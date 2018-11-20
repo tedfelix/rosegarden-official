@@ -44,7 +44,7 @@ class DocumentMetaConfigurationPage : public TabbedConfigurationPage
     Q_OBJECT
 public:
     DocumentMetaConfigurationPage(RosegardenDocument *doc, QWidget *parent = 0);
-    virtual void apply();
+    void apply() override;
 
     static QString iconLabel() { return tr("About"); }
     static QString title() { return tr("About"); }

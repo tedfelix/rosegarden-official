@@ -66,14 +66,14 @@ public:
      * notation (usually the result of notation quantization on the
      * raw event time)
      */
-    virtual timeT getViewAbsoluteTime() const;
+    timeT getViewAbsoluteTime() const override;
 
     /**
      * Returns the duration with which the Event is to be displayed in
      * notation (usually the result of notation quantization on the
      * raw event duration)
      */
-    virtual timeT getViewDuration() const;
+    timeT getViewDuration() const override;
 
     /**
      * Return the position and horizontal size spanned by the item,

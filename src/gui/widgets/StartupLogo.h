@@ -48,8 +48,8 @@ protected:
     StartupLogo(QWidget *parent=0);
     ~StartupLogo();
     
-    virtual void paintEvent(QPaintEvent*);
-    virtual void mousePressEvent( QMouseEvent*);
+    void paintEvent(QPaintEvent*) override;
+    void mousePressEvent( QMouseEvent*) override;
 
     bool m_readyToHide;
     bool m_showTip;

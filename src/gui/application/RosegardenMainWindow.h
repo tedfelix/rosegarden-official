@@ -141,7 +141,7 @@ public:
      * close event.  Otherwise we ignore it, the closing breaks, and we keep
      * running.
      */
-    void closeEvent(QCloseEvent *event);
+    void closeEvent(QCloseEvent *event) override;
 
     /// Global access to the single instance of this class.
     static RosegardenMainWindow *self() { return m_myself; }
@@ -403,7 +403,7 @@ protected:
     static const void* SequencerExternal;
 
     /// Raise the transport along
-    virtual void showEvent(QShowEvent*);
+    void showEvent(QShowEvent*) override;
 
     /**
      * read general Options again and initialize all variables like

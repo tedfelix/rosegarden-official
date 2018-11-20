@@ -53,7 +53,7 @@ public:
 
     PitchTrackerConfigurationPage(QWidget *parent = 0);
 
-    virtual void apply();
+    void apply() override;
 
     static QString iconLabel() {
         return tr("Pitch Tracker");

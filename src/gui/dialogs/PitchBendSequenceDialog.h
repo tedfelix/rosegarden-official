@@ -80,7 +80,7 @@ public:
                             timeT startTime, timeT endTime);
 
 public slots:
-    virtual void accept();
+    void accept() override;
     void slotSequencePresetChanged(int);
     void slotHelpRequested();
 

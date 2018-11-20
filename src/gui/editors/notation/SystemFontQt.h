@@ -30,8 +30,8 @@ public:
     SystemFontQt(QFont &font) : m_font(font) { }
     virtual ~SystemFontQt() { }
 
-    virtual QPixmap renderChar(CharName charName, int glyph, int code,
-			       Strategy strategy, bool &success);
+    QPixmap renderChar(CharName charName, int glyph, int code,
+			       Strategy strategy, bool &success) override;
 
 private:
     QFont m_font;

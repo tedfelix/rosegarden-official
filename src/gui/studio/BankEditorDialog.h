@@ -128,7 +128,7 @@ signals:
     void deviceNamesChanged();
 
 protected:
-    virtual void closeEvent(QCloseEvent*);
+    void closeEvent(QCloseEvent*) override;
 
     void resetProgramList();
     void setProgramList(MidiDevice *device);

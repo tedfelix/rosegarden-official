@@ -88,7 +88,7 @@ signals:
 
 
 protected:
-    virtual void closeEvent(QCloseEvent *);
+    void closeEvent(QCloseEvent *) override;
 
     void setupActions();
 

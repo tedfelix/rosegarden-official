@@ -152,7 +152,7 @@ protected slots:
     void slotCategoryIndexChanged(int index);
 
     /// write out settings to QSettings data for next time and call accept()
-    void accept();
+    void accept() override;
 
     void help();
 }; // PresetHandlerDialog

@@ -38,13 +38,13 @@ protected:
 //     bool acceptDrag(QDropEvent* e) const;
 
     
-    virtual void dragEnterEvent(QDragEnterEvent *event);
-    virtual void dropEvent(QDropEvent*);
+    void dragEnterEvent(QDragEnterEvent *event) override;
+    void dropEvent(QDropEvent*) override;
     
-    virtual void mouseMoveEvent(QMouseEvent *event);
+    void mouseMoveEvent(QMouseEvent *event) override;
     
 //     virtual QMimeData *mimeData(const QList<QTreeWidgetItem*> items) const;
-    virtual QStringList mimeTypes() const;
+    QStringList mimeTypes() const override;
     
 };
 

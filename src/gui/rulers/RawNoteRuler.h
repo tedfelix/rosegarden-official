@@ -59,8 +59,8 @@ public:
 
     void setCurrentSegment(Segment *segment);
 
-    virtual QSize sizeHint() const;
-    virtual QSize minimumSizeHint() const;
+    QSize sizeHint() const override;
+    QSize minimumSizeHint() const override;
 
     void setMinimumWidth(int width) { m_width = width; }
     
@@ -68,17 +68,17 @@ public:
 /** SegmentObserver methods : **/
 
 // Used to update the ruler when notes are moved around or deleted
-    virtual void eventAdded(const Segment *, Event *) { update(); }
-    virtual void eventRemoved(const Segment *, Event *) { update(); }
+    void eventAdded(const Segment *, Event *) override { update(); }
+    void eventRemoved(const Segment *, Event *) override { update(); }
 
-    virtual void segmentDeleted(const Segment *);
+    void segmentDeleted(const Segment *) override;
 
 
 public slots:
     void slotScrollHoriz(int x);
 
 protected:
-    virtual void paintEvent(QPaintEvent*);
+    void paintEvent(QPaintEvent*) override;
     
 private:
     int  m_height;

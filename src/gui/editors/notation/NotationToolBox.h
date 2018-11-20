@@ -46,7 +46,7 @@ public:
     void setScene(NotationScene *scene);
 
 protected:
-    virtual BaseTool *createTool(QString toolName);
+    BaseTool *createTool(QString toolName) override;
     NotationWidget *m_widget;
     NotationScene *m_scene;
 };

@@ -81,8 +81,8 @@ protected:
 
     const SnapGrid *getSnapGrid() const;
 
-    virtual void createMenu();
-    virtual bool hasMenu() { return m_menuName != ""; }
+    void createMenu() override;
+    bool hasMenu() override { return m_menuName != ""; }
 
     void setScene(MatrixScene *scene) { m_scene = scene; }
 

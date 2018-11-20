@@ -51,7 +51,7 @@ public:
     void setPageByIndex(int index);
 
 protected slots:
-    virtual void accept();
+    void accept() override;
     virtual void slotApply();
     virtual void slotCancelOrClose();
     virtual void slotHelpRequested();

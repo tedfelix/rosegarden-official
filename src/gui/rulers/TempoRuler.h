@@ -70,8 +70,8 @@ public:
 
     ~TempoRuler();
 
-    virtual QSize sizeHint() const;
-    virtual QSize minimumSizeHint() const;
+    QSize sizeHint() const override;
+    QSize minimumSizeHint() const override;
 
     void setMinimumWidth(int width) { m_width = width; }
 
@@ -89,13 +89,13 @@ protected slots:
     void slotEditTempos();
 
 protected:
-    virtual void paintEvent(QPaintEvent *);
-    virtual void enterEvent(QEvent *);
-    virtual void leaveEvent(QEvent *);
-    virtual void mousePressEvent(QMouseEvent *);
-    virtual void mouseReleaseEvent(QMouseEvent *);
-    virtual void mouseMoveEvent(QMouseEvent *);
-    virtual void wheelEvent(QWheelEvent *);
+    void paintEvent(QPaintEvent *) override;
+    void enterEvent(QEvent *) override;
+    void leaveEvent(QEvent *) override;
+    void mousePressEvent(QMouseEvent *) override;
+    void mouseReleaseEvent(QMouseEvent *) override;
+    void mouseMoveEvent(QMouseEvent *) override;
+    void wheelEvent(QWheelEvent *) override;
 
     void createMenu();
 
