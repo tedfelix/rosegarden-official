@@ -176,7 +176,7 @@ public:
      * that people can pack up and swap their songs (including audio
      * files) and shift them about easily.
      */
-    virtual std::string toXmlString() const;
+    std::string toXmlString() const override;
 
     /// Generate previews for all audio files.
     /**

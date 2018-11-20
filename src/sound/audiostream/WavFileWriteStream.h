@@ -37,9 +37,9 @@ public:
 
     static void initStaticObjects();
 
-    virtual QString getError() const { return m_error; }
+    QString getError() const override { return m_error; }
 
-    virtual bool putInterleavedFrames(size_t count, float *frames);
+    bool putInterleavedFrames(size_t count, float *frames) override;
     
 protected:
     SF_INFO m_fileInfo;

@@ -35,7 +35,7 @@ public:
     public:
         FileDRMProtected(QString file) throw();
         virtual ~FileDRMProtected() throw() { }
-        virtual const char *what() const throw();
+        const char *what() const throw() override;
 
     protected:
         QString m_file;

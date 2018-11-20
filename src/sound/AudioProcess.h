@@ -130,7 +130,7 @@ public:
     void updateInstrumentConnections();
 
 protected:
-    virtual void threadRun();
+    void threadRun() override;
 
     void processBlocks();
     void generateBuffers();
@@ -279,9 +279,9 @@ public:
     void updateInstrumentMuteStates();
 
 protected:
-    virtual void threadRun();
+    void threadRun() override;
 
-    virtual int getPriority() { return 3; }
+    int getPriority() override { return 3; }
 
     void processBlocks(bool &readSomething);
     void processEmptyBlocks(InstrumentId id);
@@ -347,7 +347,7 @@ public:
     void fillBuffers(const RealTime &currentTime);
 
 protected:
-    virtual void threadRun();
+    void threadRun() override;
 };
 
 
@@ -370,7 +370,7 @@ public:
     void write(InstrumentId id, const sample_t *, int channel, size_t samples);
 
 protected:
-    virtual void threadRun();
+    void threadRun() override;
 
     typedef std::pair<AudioFile *, RecordableAudioFile *> FilePair;
     typedef std::map<InstrumentId, FilePair> FileMap;

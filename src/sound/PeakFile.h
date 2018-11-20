@@ -54,15 +54,15 @@ public:
     PeakFile(AudioFile *audioFile);
     virtual ~PeakFile();
 
-    virtual bool open();
-    virtual void close();
+    bool open() override;
+    void close() override;
 
     /// Set up a progress dialog for write().
     void setProgressDialog(QPointer<QProgressDialog> progressDialog)
             { m_progressDialog = progressDialog; }
 
     /// Write to standard peak file
-    virtual bool write();
+    bool write() override;
 
     /// Is the peak file valid and up to date?
     /**

@@ -29,28 +29,28 @@ class DSSIPluginFactory : public LADSPAPluginFactory
 public:
     virtual ~DSSIPluginFactory();
 
-    virtual void enumeratePlugins(MappedObjectPropertyList &list);
+    void enumeratePlugins(MappedObjectPropertyList &list) override;
 
-    virtual void populatePluginSlot(QString identifier, MappedPluginSlot &slot);
+    void populatePluginSlot(QString identifier, MappedPluginSlot &slot) override;
 
-    virtual RunnablePluginInstance *instantiatePlugin(QString identifier,
+    RunnablePluginInstance *instantiatePlugin(QString identifier,
                                                       int instrumentId,
                                                       int position,
                                                       unsigned int sampleRate,
                                                       unsigned int blockSize,
-                                                      unsigned int channels);
+                                                      unsigned int channels) override;
 
 protected:
     DSSIPluginFactory();
     friend class PluginFactory;
 
-    virtual std::vector<QString> getPluginPath();
+    std::vector<QString> getPluginPath() override;
 
-    virtual std::vector<QString> getLRDFPath(QString &baseUri);
+    std::vector<QString> getLRDFPath(QString &baseUri) override;
 
-    virtual void discoverPlugin(const QString &soName);
+    void discoverPlugin(const QString &soName) override;
 
-    virtual const LADSPA_Descriptor *getLADSPADescriptor(QString identifier);
+    const LADSPA_Descriptor *getLADSPADescriptor(QString identifier) override;
     virtual const DSSI_Descriptor *getDSSIDescriptor(QString identifier);
 };
 

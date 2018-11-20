@@ -65,7 +65,7 @@ public:
 
     // Show the information we have on this file
     //
-    virtual void printStats();
+    void printStats() override;
 
     // Slightly dodgy code here - we keep these functions here
     // because I don't want to duplicate them in PlayableRIFFAudioFile
@@ -80,44 +80,44 @@ public:
     // shouldn't be less than zero.  Returns true if the
     // scan time was valid and successful.
     // 
-    virtual bool scanTo(const RealTime &time);
-    virtual bool scanTo(std::ifstream *file, const RealTime &time);
+    bool scanTo(const RealTime &time) override;
+    bool scanTo(std::ifstream *file, const RealTime &time) override;
 
     // Scan forward in a file by a certain amount of time
     //
-    virtual bool scanForward(const RealTime &time);
-    virtual bool scanForward(std::ifstream *file, const RealTime &time);
+    bool scanForward(const RealTime &time) override;
+    bool scanForward(std::ifstream *file, const RealTime &time) override;
 
     // Return a number of samples - caller will have to
     // de-interleave n-channel samples themselves.
     //
-    virtual std::string getSampleFrames(std::ifstream *file,
-                                        unsigned int frames);
-    virtual unsigned int getSampleFrames(std::ifstream *file,
+    std::string getSampleFrames(std::ifstream *file,
+                                        unsigned int frames) override;
+    unsigned int getSampleFrames(std::ifstream *file,
                                          char *buf,
-                                         unsigned int frames);
+                                         unsigned int frames) override;
     virtual std::string getSampleFrames(unsigned int frames);
 
     // Return a number of (possibly) interleaved samples
     // over a time slice from current file pointer position.
     //
-    virtual std::string getSampleFrameSlice(std::ifstream *file,
-                                            const RealTime &time);
+    std::string getSampleFrameSlice(std::ifstream *file,
+                                            const RealTime &time) override;
     virtual std::string getSampleFrameSlice(const RealTime &time);
 
     // Append a string of samples to an already open (for writing)
     // audio file.
     //
-    virtual bool appendSamples(const std::string &buffer);
-    virtual bool appendSamples(const char *buf, unsigned int frames);
+    bool appendSamples(const std::string &buffer) override;
+    bool appendSamples(const char *buf, unsigned int frames) override;
 
     // Get the length of the sample in Seconds/Microseconds
     //
-    virtual RealTime getLength();
+    RealTime getLength() override;
 
     // Accessors
     //
-    virtual unsigned int getBytesPerFrame() { return m_bytesPerFrame; }
+    unsigned int getBytesPerFrame() override { return m_bytesPerFrame; }
     unsigned int getBytesPerSecond() { return m_bytesPerSecond; }
 
     // Allow easy identification of wav file type
@@ -133,13 +133,13 @@ public:
     // the results in the given float buffer.  Return true for
     // success.  This function does crappy resampling if necessary.
     // 
-    virtual bool decode(const unsigned char *sourceData,
+    bool decode(const unsigned char *sourceData,
                         size_t sourceBytes,
                         size_t targetSampleRate,
                         size_t targetChannels,
                         size_t targetFrames,
                         std::vector<float *> &targetData,
-                        bool addToResultBuffers = false) = 0;
+                        bool addToResultBuffers = false) override = 0;
 
 protected:
     //virtual void parseHeader(const std::string &header);

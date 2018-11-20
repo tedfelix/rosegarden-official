@@ -66,7 +66,7 @@ private:
      * See insertSorted() which sorts the list and extracts the events
      * from the list in sorted order.
      */
-    virtual void insertCopy(const MappedEvent &evt);
+    void insertCopy(const MappedEvent &evt) override;
 
     // NB, this is not the same as MappedEventList which is actually a
     // std::multiset.

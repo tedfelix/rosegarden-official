@@ -56,7 +56,7 @@ class MidiInserter : public MappedInserterBase
  public:
     MidiInserter(Composition &composition, int timingDivision, RealTime trueEnd);
 
-    virtual void insertCopy(const MappedEvent &evt);
+    void insertCopy(const MappedEvent &evt) override;
 
     void assignToMidiFile(MidiFile &midifile);
         

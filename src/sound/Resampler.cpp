@@ -60,17 +60,17 @@ public:
                  float *const *const out,
                  int incount,
                  float ratio,
-                 bool final);
+                 bool final) override;
 
     int resampleInterleaved(const float *const in,
                             float *const out,
                             int incount,
                             float ratio,
-                            bool final = false);
+                            bool final = false) override;
 
-    int getChannelCount() const { return m_channels; }
+    int getChannelCount() const override { return m_channels; }
 
-    void reset();
+    void reset() override;
 
 protected:
     SRC_STATE *m_src;

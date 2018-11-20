@@ -34,20 +34,20 @@ class LADSPAPluginFactory : public PluginFactory
 public:
     virtual ~LADSPAPluginFactory();
 
-    virtual void discoverPlugins();
+    void discoverPlugins() override;
 
-    virtual const std::vector<QString> &getPluginIdentifiers() const;
+    const std::vector<QString> &getPluginIdentifiers() const override;
 
-    virtual void enumeratePlugins(MappedObjectPropertyList &list);
+    void enumeratePlugins(MappedObjectPropertyList &list) override;
 
-    virtual void populatePluginSlot(QString identifier, MappedPluginSlot &slot);
+    void populatePluginSlot(QString identifier, MappedPluginSlot &slot) override;
 
-    virtual RunnablePluginInstance *instantiatePlugin(QString identifier,
+    RunnablePluginInstance *instantiatePlugin(QString identifier,
                                                       int instrumentId,
                                                       int position,
                                                       unsigned int sampleRate,
                                                       unsigned int blockSize,
-                                                      unsigned int channels);
+                                                      unsigned int channels) override;
 
     MappedObjectValue getPortMinimum(const LADSPA_Descriptor *, int port);
     MappedObjectValue getPortMaximum(const LADSPA_Descriptor *, int port);
@@ -66,7 +66,7 @@ protected:
     virtual void generateTaxonomy(QString uri, QString base);
     virtual void generateFallbackCategories();
 
-    virtual void releasePlugin(RunnablePluginInstance *, QString);
+    void releasePlugin(RunnablePluginInstance *, QString) override;
 
     virtual const LADSPA_Descriptor *getLADSPADescriptor(QString identifier);
 

@@ -36,40 +36,40 @@ class DSSIPluginInstance : public RunnablePluginInstance
 public:
     virtual ~DSSIPluginInstance();
 
-    virtual bool isOK() const { return m_instanceHandle != 0; }
+    bool isOK() const override { return m_instanceHandle != 0; }
 
     InstrumentId getInstrument() const { return m_instrument; }
-    virtual QString getIdentifier() const { return m_identifier; }
+    QString getIdentifier() const override { return m_identifier; }
     int getPosition() const { return m_position; }
 
-    virtual void run(const RealTime &);
+    void run(const RealTime &) override;
 
-    virtual void setPortValue(unsigned int portNumber, float value);
-    virtual float getPortValue(unsigned int portNumber);
-    virtual QString configure(QString key, QString value);
-    virtual void sendEvent(const RealTime &eventTime,
-                           const void *event);
+    void setPortValue(unsigned int portNumber, float value) override;
+    float getPortValue(unsigned int portNumber) override;
+    QString configure(QString key, QString value) override;
+    void sendEvent(const RealTime &eventTime,
+                           const void *event) override;
 
-    virtual size_t getBufferSize() { return m_blockSize; }
-    virtual size_t getAudioInputCount() { return m_audioPortsIn.size(); }
-    virtual size_t getAudioOutputCount() { return m_idealChannelCount; }
-    virtual sample_t **getAudioInputBuffers() { return m_inputBuffers; }
-    virtual sample_t **getAudioOutputBuffers() { return m_outputBuffers; }
+    size_t getBufferSize() override { return m_blockSize; }
+    size_t getAudioInputCount() override { return m_audioPortsIn.size(); }
+    size_t getAudioOutputCount() override { return m_idealChannelCount; }
+    sample_t **getAudioInputBuffers() override { return m_inputBuffers; }
+    sample_t **getAudioOutputBuffers() override { return m_outputBuffers; }
 
-    virtual QStringList getPrograms();
-    virtual QString getCurrentProgram();
-    virtual QString getProgram(int bank, int program);
-    virtual unsigned long getProgram(QString name);
-    virtual void selectProgram(QString program);
+    QStringList getPrograms() override;
+    QString getCurrentProgram() override;
+    QString getProgram(int bank, int program) override;
+    unsigned long getProgram(QString name) override;
+    void selectProgram(QString program) override;
 
-    virtual bool isBypassed() const { return m_bypassed; }
-    virtual void setBypassed(bool bypassed) { m_bypassed = bypassed; }
+    bool isBypassed() const override { return m_bypassed; }
+    void setBypassed(bool bypassed) override { m_bypassed = bypassed; }
 
-    virtual size_t getLatency();
+    size_t getLatency() override;
 
-    virtual void silence();
-    virtual void discardEvents();
-    virtual void setIdealChannelCount(size_t channels); // may re-instantiate
+    void silence() override;
+    void discardEvents() override;
+    void setIdealChannelCount(size_t channels) override; // may re-instantiate
 
     virtual bool isInGroup() const { return m_grouped; }
     virtual void detachFromGroup();

@@ -46,22 +46,22 @@ public:
 
     // Override these methods for the WAV
     //
-    virtual bool open();
-    virtual bool write();
-    virtual void close();
+    bool open() override;
+    bool write() override;
+    void close() override;
 
     // Decode and de-interleave the given samples that were retrieved
     // from this file or another with the same format as it.  Place
     // the results in the given float buffer.  Return true for
     // success.  This function does crappy resampling if necessary.
     // 
-    virtual bool decode(const unsigned char *sourceData,
+    bool decode(const unsigned char *sourceData,
                         size_t sourceBytes,
                         size_t targetSampleRate,
                         size_t targetChannels,
                         size_t targetFrames,
                         std::vector<float *> &targetData,
-                        bool addToResultBuffers = false);
+                        bool addToResultBuffers = false) override;
 
     // Get all header information
     //
@@ -69,11 +69,11 @@ public:
 
     // Offset to start of sample data
     //
-    virtual std::streampos getDataOffset();
+    std::streampos getDataOffset() override;
 
     // Peak file name
     //
-    virtual QString getPeakFilename()
+    QString getPeakFilename() override
         { return (m_fileName + ".pk"); }
 
 

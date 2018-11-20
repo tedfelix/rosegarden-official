@@ -98,9 +98,9 @@ public:
     /// information to an audio file that has been written and is now
     /// being closed.
     ///
-    virtual bool open() = 0;
-    virtual bool write() = 0;
-    virtual void close() = 0;
+    bool open() override = 0;
+    bool write() override = 0;
+    void close() override = 0;
 
     /// Show the information we have on this file
     ///

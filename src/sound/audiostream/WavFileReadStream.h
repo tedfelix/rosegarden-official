@@ -37,10 +37,10 @@ public:
     
     static void initStaticObjects();
 
-    virtual QString getError() const { return m_error; }
+    QString getError() const override { return m_error; }
 
 protected:
-    virtual size_t getFrames(size_t count, float *frames);
+    size_t getFrames(size_t count, float *frames) override;
     
     SF_INFO m_fileInfo;
     SNDFILE *m_file;

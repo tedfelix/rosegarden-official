@@ -31,38 +31,38 @@ public:
     DummyDriver(MappedStudio *studio, QString pastLog);
     virtual ~DummyDriver() { }
 
-    virtual bool initialise()  { return true; }
-    virtual void initialisePlayback(const RealTime & /*position*/) { }
-    virtual void stopPlayback() { }
-    virtual void punchOut() { }
-    virtual void resetPlayback(const RealTime & /*old position*/,
-                               const RealTime & /*position*/) { }
-    virtual void allNotesOff()  { }
+    bool initialise()  override { return true; }
+    void initialisePlayback(const RealTime & /*position*/) override { }
+    void stopPlayback() override { }
+    void punchOut() override { }
+    void resetPlayback(const RealTime & /*old position*/,
+                               const RealTime & /*position*/) override { }
+    void allNotesOff()  override { }
     
-    virtual RealTime getSequencerTime() { return RealTime(0, 0);}
+    RealTime getSequencerTime() override { return RealTime(0, 0);}
 
-    virtual bool getMappedEventList(MappedEventList &) { return true; }
+    bool getMappedEventList(MappedEventList &) override { return true; }
 
-    virtual void processEventsOut(const MappedEventList & /*mC*/) { }
+    void processEventsOut(const MappedEventList & /*mC*/) override { }
 
-    virtual void processEventsOut(const MappedEventList &,
+    void processEventsOut(const MappedEventList &,
                                   const RealTime &,
-                                  const RealTime &) { }
+                                  const RealTime &) override { }
 
     // Activate a recording state
     //
-    virtual bool record(RecordStatus /*recordStatus*/,
+    bool record(RecordStatus /*recordStatus*/,
                         const std::vector<InstrumentId> */*armedInstruments = 0*/,
-                        const std::vector<QString> */*audioFileNames = 0*/)
+                        const std::vector<QString> */*audioFileNames = 0*/) override
         { return false; }
 
     // Process anything that's pending
     //
-    virtual void processPending() { }
+    void processPending() override { }
 
     // Sample rate
     //
-    virtual unsigned int getSampleRate() const { return 0; }
+    unsigned int getSampleRate() const override { return 0; }
 
     // Return the last recorded audio level
     //
@@ -70,86 +70,86 @@ public:
 
     // Plugin instance management
     //
-    virtual void setPluginInstance(InstrumentId /*id*/,
+    void setPluginInstance(InstrumentId /*id*/,
                                    QString /*pluginIdent*/,
-                                   int /*position*/) { }
+                                   int /*position*/) override { }
 
-    virtual void removePluginInstance(InstrumentId /*id*/,
-                                      int /*position*/) { }
+    void removePluginInstance(InstrumentId /*id*/,
+                                      int /*position*/) override { }
 
-    virtual void removePluginInstances() { }
+    void removePluginInstances() override { }
 
-    virtual void setPluginInstancePortValue(InstrumentId /*id*/,
+    void setPluginInstancePortValue(InstrumentId /*id*/,
                                             int /*position*/,
                                             unsigned long /*portNumber*/,
-                                            float /*value*/) { }
+                                            float /*value*/) override { }
 
-    virtual float getPluginInstancePortValue(InstrumentId ,
+    float getPluginInstancePortValue(InstrumentId ,
                                              int ,
-                                             unsigned long ) { return 0; }
+                                             unsigned long ) override { return 0; }
 
-    virtual void setPluginInstanceBypass(InstrumentId /*id*/,
+    void setPluginInstanceBypass(InstrumentId /*id*/,
                                          int /*position*/,
-                                         bool /*value*/) { }
+                                         bool /*value*/) override { }
 
-    virtual QStringList getPluginInstancePrograms(InstrumentId ,
-                                                  int ) { return QStringList(); }
+    QStringList getPluginInstancePrograms(InstrumentId ,
+                                                  int ) override { return QStringList(); }
 
-    virtual QString getPluginInstanceProgram(InstrumentId,
-                                             int ) { return QString(); }
+    QString getPluginInstanceProgram(InstrumentId,
+                                             int ) override { return QString(); }
 
-    virtual QString getPluginInstanceProgram(InstrumentId,
+    QString getPluginInstanceProgram(InstrumentId,
                                              int,
                                              int,
-                                             int) { return QString(); }
+                                             int) override { return QString(); }
 
-    virtual unsigned long getPluginInstanceProgram(InstrumentId,
+    unsigned long getPluginInstanceProgram(InstrumentId,
                                                    int ,
-                                                   QString) { return 0; }
+                                                   QString) override { return 0; }
     
-    virtual void setPluginInstanceProgram(InstrumentId,
+    void setPluginInstanceProgram(InstrumentId,
                                           int ,
-                                          QString ) { }
+                                          QString ) override { }
 
-    virtual QString configurePlugin(InstrumentId,
+    QString configurePlugin(InstrumentId,
                                     int,
                                     QString ,
-                                    QString ) { return QString(); }
+                                    QString ) override { return QString(); }
 
-    virtual void setAudioBussLevels(int ,
+    void setAudioBussLevels(int ,
                                     float ,
-                                    float ) { }
+                                    float ) override { }
 
-    virtual void setAudioInstrumentLevels(InstrumentId,
+    void setAudioInstrumentLevels(InstrumentId,
                                           float,
-                                          float) { }
+                                          float) override { }
 
-    virtual bool checkForNewClients() { return false; }
+    bool checkForNewClients() override { return false; }
 
-    virtual void setLoop(const RealTime &/*loopStart*/,
-                         const RealTime &/*loopEnd*/) { }
+    void setLoop(const RealTime &/*loopStart*/,
+                         const RealTime &/*loopEnd*/) override { }
 
-    virtual QString getStatusLog();
+    QString getStatusLog() override;
 
     virtual std::vector<PlayableAudioFile*> getPlayingAudioFiles()
         { return std::vector<PlayableAudioFile*>(); }
 
-    virtual void getAudioInstrumentNumbers(InstrumentId &i, int &n) {
+    void getAudioInstrumentNumbers(InstrumentId &i, int &n) override {
         i = 0; n = 0;
     }
-    virtual void getSoftSynthInstrumentNumbers(InstrumentId &i, int &n) {
+    void getSoftSynthInstrumentNumbers(InstrumentId &i, int &n) override {
         i = 0; n = 0;
     }
 
-    virtual void claimUnwantedPlugin(void */* plugin */) { }
-    virtual void scavengePlugins() { }
+    void claimUnwantedPlugin(void */* plugin */) override { }
+    void scavengePlugins() override { }
 
-    virtual bool areClocksRunning() const { return true; }
+    bool areClocksRunning() const override { return true; }
 
 protected:
-    virtual void processMidiOut(const MappedEventList & /*mC*/,
-                                const RealTime &, const RealTime &) { }
-    virtual void generateFixedInstruments()  { }
+    void processMidiOut(const MappedEventList & /*mC*/,
+                                const RealTime &, const RealTime &) override { }
+    void generateFixedInstruments()  override { }
 
     QString m_pastLog;
 };

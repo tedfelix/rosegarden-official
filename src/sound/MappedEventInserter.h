@@ -42,7 +42,7 @@ public:
     { }
 
     /// Inserts an event into the MappedEventList (m_list).
-    virtual void insertCopy(const MappedEvent &evt);
+    void insertCopy(const MappedEvent &evt) override;
 
 private:
     MappedEventList &m_list;
