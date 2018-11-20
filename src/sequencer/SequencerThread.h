@@ -34,7 +34,7 @@ class SequencerThread : public QThread
 {
 protected:
     /// The sequencer thread's processing loop.
-    virtual void run();
+    void run() override;
 };
 
 }

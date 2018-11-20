@@ -50,7 +50,7 @@ public:
     NamedCommand(QString name) : m_name(name) { }
     virtual ~NamedCommand() { }
 
-    virtual QString getName() const { return m_name; }
+    QString getName() const override { return m_name; }
     virtual void setName(QString name) { m_name = name; }
 
 protected:
@@ -67,10 +67,10 @@ public:
     virtual void deleteCommand(Command *command);
     virtual bool haveCommands() const;
 
-    virtual void execute();
-    virtual void unexecute();
+    void execute() override;
+    void unexecute() override;
 
-    virtual QString getName() const;
+    QString getName() const override;
     virtual void setName(QString name);
     
     virtual const std::vector<Command *>& getCommands() { return m_commands; }
@@ -91,7 +91,7 @@ public:
     BundleCommand(QString name);
     virtual ~BundleCommand();
 
-    virtual QString getName() const;
+    QString getName() const override;
 };
 
 }

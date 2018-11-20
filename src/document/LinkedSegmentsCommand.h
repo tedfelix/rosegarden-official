@@ -54,8 +54,8 @@ public:
     virtual ~LinkedSegmentsCommand();
 
 protected:
-    virtual void execute()=0;
-    virtual void unexecute()=0;
+    void execute()override = 0;
+    void unexecute()override = 0;
     void executeAttachDetach(void);
     void unexecuteAttachDetach(void);
     // Copy auxilliary properties of source segment to target: track,

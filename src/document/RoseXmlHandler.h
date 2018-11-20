@@ -89,30 +89,30 @@ public:
     virtual ~RoseXmlHandler();
 
     /// overloaded handler functions
-    virtual bool startDocument();
-    virtual bool startElement(const QString& namespaceURI,
+    bool startDocument() override;
+    bool startElement(const QString& namespaceURI,
                               const QString& localName,
                               const QString& qName,
-                              const QXmlAttributes& atts);
+                              const QXmlAttributes& atts) override;
 
-    virtual bool endElement(const QString& namespaceURI,
+    bool endElement(const QString& namespaceURI,
                             const QString& localName,
-                            const QString& qName);
+                            const QString& qName) override;
 
-    virtual bool characters(const QString& ch);
+    bool characters(const QString& ch) override;
 
-    virtual bool endDocument (); // [rwb] - for tempo element catch
+    bool endDocument() override; // [rwb] - for tempo element catch
 
     bool isDeprecated() { return m_deprecation; }
 
     /// Return the error string set during the parsing (if any)
-    QString errorString() const;
+    QString errorString() const override;
 
     bool hasActiveAudio() const { return m_hasActiveAudio; }
     std::set<QString> &pluginsNotFound() { return m_pluginsNotFound; }
 
-    bool error(const QXmlParseException& exception);
-    bool fatalError(const QXmlParseException& exception);
+    bool error(const QXmlParseException& exception) override;
+    bool fatalError(const QXmlParseException& exception) override;
 
 
 protected:

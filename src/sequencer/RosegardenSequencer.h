@@ -434,10 +434,10 @@ public:
     // external clients to call (via some low-level audio callback)
     // and requires sychronising with the GUI.
     
-    TransportToken transportChange(TransportRequest);
-    TransportToken transportJump(TransportRequest, RealTime);
-    bool isTransportSyncComplete(TransportToken token);
-    TransportToken getInvalidTransportToken() const { return 0; }
+    TransportToken transportChange(TransportRequest) override;
+    TransportToken transportJump(TransportRequest, RealTime) override;
+    bool isTransportSyncComplete(TransportToken token) override;
+    TransportToken getInvalidTransportToken() const override { return 0; }
 
     // ---------- End of ExternalTransport Interface -----------
 

@@ -45,8 +45,8 @@ class BasicCommand : public NamedCommand
 public:
     virtual ~BasicCommand();
 
-    virtual void execute();
-    virtual void unexecute();
+    void execute() override;
+    void unexecute() override;
 
     virtual Segment &getSegment();
 

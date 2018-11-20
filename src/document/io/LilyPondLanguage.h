@@ -76,7 +76,7 @@ class LilyPondSolfege : public LilyPondLanguage
 public:
     virtual ~LilyPondSolfege() {}
 protected:
-    virtual const std::string getLilyNoteName(const char noteName) const;
+    const std::string getLilyNoteName(const char noteName) const override;
 };
 
 /**
@@ -85,12 +85,12 @@ protected:
 class LilyPondArabic : public LilyPondSolfege
 {
 public:
-    virtual const std::string getImportStatement() const;
+    const std::string getImportStatement() const override;
     virtual ~LilyPondArabic() {}
 protected:
-    virtual const std::string applyAccidental(
+    const std::string applyAccidental(
             const std::string lilyNoteName, const Accidental accidental
-            ) const;
+            ) const override;
 };
 
 /**
@@ -99,7 +99,7 @@ protected:
 class LilyPondItaliano : public LilyPondArabic
 {
 public:
-    virtual const std::string getImportStatement() const;
+    const std::string getImportStatement() const override;
     virtual ~LilyPondItaliano() {}
 };
 
@@ -109,12 +109,12 @@ public:
 class LilyPondVlaams : public LilyPondSolfege
 {
 public:
-    virtual const std::string getImportStatement() const;
+    const std::string getImportStatement() const override;
     virtual ~LilyPondVlaams() {}
 protected:
-    virtual const std::string applyAccidental(
+    const std::string applyAccidental(
             const std::string lilyNoteName, const Accidental accidental
-            ) const;
+            ) const override;
 };
 
 /**
@@ -123,12 +123,12 @@ protected:
 class LilyPondEspanol : public LilyPondSolfege
 {
 public:
-    virtual const std::string getImportStatement() const;
+    const std::string getImportStatement() const override;
     virtual ~LilyPondEspanol() {}
 protected:
-    virtual const std::string applyAccidental(
+    const std::string applyAccidental(
             const std::string lilyNoteName, const Accidental accidental
-            ) const;
+            ) const override;
 };
 
 /**
@@ -137,7 +137,7 @@ protected:
 class LilyPondCatalan : public LilyPondEspanol
 {
 public:
-    virtual const std::string getImportStatement() const;
+    const std::string getImportStatement() const override;
     virtual ~LilyPondCatalan() {}
 };
 
@@ -147,7 +147,7 @@ public:
 class LilyPondPortugues : public LilyPondEspanol
 {
 public:
-    virtual const std::string getImportStatement() const;
+    const std::string getImportStatement() const override;
     virtual ~LilyPondPortugues() {}
 };
 
@@ -157,13 +157,13 @@ public:
 class LilyPondDeutsch : public LilyPondLanguage
 {
 public:
-    virtual const std::string getImportStatement() const;
+    const std::string getImportStatement() const override;
     virtual ~LilyPondDeutsch() {}
 protected:
-    virtual const std::string getLilyNoteName(const char noteName) const;
-    virtual const std::string applyAccidental(
+    const std::string getLilyNoteName(const char noteName) const override;
+    const std::string applyAccidental(
             const std::string lilyNoteName, const Accidental accidental
-            ) const;
+            ) const override;
 };
 
 /**
@@ -172,13 +172,13 @@ protected:
 class LilyPondNederlands : public LilyPondDeutsch
 {
 public:
-    virtual const std::string getImportStatement() const;
+    const std::string getImportStatement() const override;
     virtual ~LilyPondNederlands() {}
 protected:
-    virtual const std::string getLilyNoteName(const char noteName) const;
-    virtual const std::string applyAccidental(
+    const std::string getLilyNoteName(const char noteName) const override;
+    const std::string applyAccidental(
             const std::string lilyNoteName, const Accidental accidental
-            ) const;
+            ) const override;
 };
 
 /**
@@ -187,7 +187,7 @@ protected:
 class LilyPondNorsk : public LilyPondDeutsch
 {
 public:
-    virtual const std::string getImportStatement() const;
+    const std::string getImportStatement() const override;
     virtual ~LilyPondNorsk() {}
 };
 
@@ -197,7 +197,7 @@ public:
 class LilyPondSuomi : public LilyPondDeutsch
 {
 public:
-    virtual const std::string getImportStatement() const;
+    const std::string getImportStatement() const override;
     virtual ~LilyPondSuomi() {}
 };
 
@@ -207,12 +207,12 @@ public:
 class LilyPondSvenska : public LilyPondDeutsch
 {
 public:
-    virtual const std::string getImportStatement() const;
+    const std::string getImportStatement() const override;
     virtual ~LilyPondSvenska() {}
 protected:
-    virtual const std::string applyAccidental(
+    const std::string applyAccidental(
             const std::string lilyNoteName, const Accidental accidental
-            ) const;
+            ) const override;
 };
 
 /**
@@ -221,13 +221,13 @@ protected:
 class LilyPondEnglish : public LilyPondLanguage
 {
 public:
-    virtual const std::string getImportStatement() const;
+    const std::string getImportStatement() const override;
     virtual ~LilyPondEnglish() {}
 protected:
-    virtual const std::string getLilyNoteName(const char noteName) const;
-    virtual const std::string applyAccidental(
+    const std::string getLilyNoteName(const char noteName) const override;
+    const std::string applyAccidental(
             const std::string lilyNoteName, const Accidental accidental
-            ) const;
+            ) const override;
 };
 
 }

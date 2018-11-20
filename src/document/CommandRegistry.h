@@ -73,13 +73,13 @@ class SelectionCommandBuilder : public AbstractCommandBuilder
 {
 public:
     // may throw CommandCancelled
-    virtual Command *build(QString /* actionName */,
+    Command *build(QString /* actionName */,
                            EventSelection &s,
-                           CommandArgumentQuerier &/* querier */) {
+                           CommandArgumentQuerier &/* querier */) override {
         return new CommandType(s);
     }
 
-    virtual EventSelection *getSubsequentSelection(Command *c) {
+    EventSelection *getSubsequentSelection(Command *c) override {
         CommandType *command = dynamic_cast<CommandType *>(c);
         if (command) return command->getSubsequentSelection();
         return 0;
@@ -91,13 +91,13 @@ class ArgumentAndSelectionCommandBuilder : public AbstractCommandBuilder
 {
 public:
     // may throw CommandCancelled
-    virtual Command *build(QString actionName,
+    Command *build(QString actionName,
                            EventSelection &s,
-                           CommandArgumentQuerier &querier) {
+                           CommandArgumentQuerier &querier) override {
         return new CommandType(CommandType::getArgument(actionName, querier), s);
     }
 
-    virtual EventSelection *getSubsequentSelection(Command *c) {
+    EventSelection *getSubsequentSelection(Command *c) override {
         CommandType *command = dynamic_cast<CommandType *>(c);
         if (command) return command->getSubsequentSelection();
         return 0;

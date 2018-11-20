@@ -85,22 +85,22 @@ public:
     /**
       * Overloaded handler functions
       */
-    void setDocumentLocator(QXmlLocator * locator);
+    void setDocumentLocator(QXmlLocator * locator) override;
 
-    virtual bool startDocument();
+    bool startDocument() override;
 
-    virtual bool startElement(const QString& namespaceURI,
+    bool startElement(const QString& namespaceURI,
                               const QString& localName,
                               const QString& qName,
-                              const QXmlAttributes& atts);
+                              const QXmlAttributes& atts) override;
 
-    virtual bool endElement(const QString& namespaceURI,
+    bool endElement(const QString& namespaceURI,
                             const QString& localName,
-                            const QString& qName);
+                            const QString& qName) override;
 
-    virtual bool characters(const QString& ch);
+    bool characters(const QString& ch) override;
 
-    virtual bool endDocument ();
+    bool endDocument () override;
 private:
     /**
      * startElement() and endElement() call the functions below for
@@ -126,10 +126,10 @@ private:
 
 
 public:
-    bool error(const QXmlParseException & exception);
-    bool fatalError(const QXmlParseException & exception);
-    bool warning(const QXmlParseException & exception);
-    QString errorString() const;
+    bool error(const QXmlParseException & exception) override;
+    bool fatalError(const QXmlParseException & exception) override;
+    bool warning(const QXmlParseException & exception) override;
+    QString errorString() const override;
 
 private:
     void ignoreElement();

@@ -52,19 +52,19 @@ public:
     /** 
       * Overloaded handler functions
       */
-    virtual bool startDocument();
-    virtual bool startElement(const QString& namespaceURI,
+    bool startDocument() override;
+    bool startElement(const QString& namespaceURI,
                               const QString& localName,
                               const QString& qName,
-                              const QXmlAttributes& atts);
+                              const QXmlAttributes& atts) override;
 
-    virtual bool endElement(const QString& namespaceURI,
+    bool endElement(const QString& namespaceURI,
                             const QString& localName,
-                            const QString& qName);
+                            const QString& qName) override;
 
-    virtual bool characters(const QString& ch);
+    bool characters(const QString& ch) override;
 
-    virtual bool endDocument ();
+    bool endDocument () override;
 
 private:
     virtual bool startElement_093(const QString& namespaceURI,
