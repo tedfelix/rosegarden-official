@@ -72,10 +72,10 @@ public:
 	// can treat them using the normal Chord class
     public:
 	ProvisionalQuantizer(Impl *i) : Quantizer("blah", "blahblah"), m_impl(i) { }
-	virtual timeT getQuantizedDuration(const Event *e) const {
+	timeT getQuantizedDuration(const Event *e) const override {
 	    return m_impl->getProvisional((Event *)e, DurationValue);
 	}
-	virtual timeT getQuantizedAbsoluteTime(const Event *e) const {
+	timeT getQuantizedAbsoluteTime(const Event *e) const override {
 	    timeT t = m_impl->getProvisional((Event *)e, AbsoluteTimeValue);
 #ifdef DEBUG_NOTATION_QUANTIZER
 	    cout << "ProvisionalQuantizer::getQuantizedAbsoluteTime: returning " << t << endl;

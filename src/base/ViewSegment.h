@@ -66,24 +66,24 @@ public:
      * SegmentObserver method - called after the event has been added to
      * the segment
      */
-    virtual void eventAdded(const Segment *, Event *);
+    void eventAdded(const Segment *, Event *) override;
 
     /**
      * SegmentObserver method - called after the event has been removed
      * from the segment, and just before it is deleted
      */
-    virtual void eventRemoved(const Segment *, Event *);
+    void eventRemoved(const Segment *, Event *) override;
 
     /** 
      * SegmentObserver method - called after the segment's end marker
      * time has been changed
      */
-    virtual void endMarkerTimeChanged(const Segment *, bool shorten);
+    void endMarkerTimeChanged(const Segment *, bool shorten) override;
 
     /**
      * SegmentObserver method - called from Segment dtor
      */
-    virtual void segmentDeleted(const Segment *);
+    void segmentDeleted(const Segment *) override;
 
     void addObserver   (ViewSegmentObserver *obs) { m_observers.push_back(obs); }
     void removeObserver(ViewSegmentObserver *obs) { m_observers.remove(obs); }

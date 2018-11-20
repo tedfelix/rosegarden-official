@@ -54,7 +54,7 @@ public:
                      segment, redoEvents)
         
         {}
-    void modifySegment(void) {}
+    void modifySegment(void) override {}
 };
 
 

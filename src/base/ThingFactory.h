@@ -181,7 +181,7 @@ public:
     ConcreteThingBuilder(QUrl uri, QStringList tags) {
 	ThingFactory<Thing, Parameters>::getInstance()->registerBuilder(uri, this, tags);
     }
-    virtual Thing *build(Parameters p) {
+    Thing *build(Parameters p) override {
 	return new ConcreteThing(p);
     }
 };

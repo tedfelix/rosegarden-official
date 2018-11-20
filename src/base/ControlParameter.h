@@ -103,7 +103,7 @@ public:
 
     void setIPBPosition(int position) { m_ipbPosition = position; }
 
-    virtual std::string toXmlString() const;
+    std::string toXmlString() const override;
 
     // Return a new event setting this controller to VALUE at TIME
     Event *newEvent(timeT time, int value) const;

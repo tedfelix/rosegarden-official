@@ -80,7 +80,7 @@ public:
     // For exporting -- doesn't write the <configuration> part of
     // the element in case you want to write it into another element
     //
-    virtual std::string toXmlString() const;
+    std::string toXmlString() const override;
 
     /// Return all the contained property names in alphabetical order
     std::vector<std::string> getPropertyNames();
@@ -126,7 +126,7 @@ public:
     // for exporting -- doesn't write the <configuration> part of
     // the element in case you want to write it into another element
     // 
-    virtual std::string toXmlString() const;
+    std::string toXmlString() const override;
 
     // Property names
     static const PropertyName SequencerOptions;

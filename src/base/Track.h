@@ -132,7 +132,7 @@ public:
     // XmlExportable override.
 
     /// For writing.  See RoseXmlHandler for reading.
-    virtual std::string toXmlString() const;
+    std::string toXmlString() const override;
 
 private:
     // Hide copy ctor and op=.

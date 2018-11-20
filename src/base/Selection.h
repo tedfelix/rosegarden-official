@@ -167,10 +167,10 @@ public:
     Segment &getSegment()             { return m_originalSegment; }
 
     // SegmentObserver methods
-    virtual void eventAdded(const Segment *, Event *) { }
-    virtual void eventRemoved(const Segment *, Event *);
-    virtual void endMarkerTimeChanged(const Segment *, bool) { }
-    virtual void segmentDeleted(const Segment *);
+    void eventAdded(const Segment *, Event *) override { }
+    void eventRemoved(const Segment *, Event *) override;
+    void endMarkerTimeChanged(const Segment *, bool) override { }
+    void segmentDeleted(const Segment *) override;
     
     // Debug
     void dump() const;

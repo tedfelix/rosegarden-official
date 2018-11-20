@@ -63,10 +63,10 @@ public:
     //           const std::string &label,
     //           DeviceDirection dir);
 
-    virtual AllocateChannels *getAllocator(void);
+    AllocateChannels *getAllocator(void) override;
 
     // Instrument must be on heap; I take ownership of it
-    virtual void addInstrument(Instrument*);
+    void addInstrument(Instrument*) override;
 
     void setMetronome(const MidiMetronome &);
     const MidiMetronome* getMetronome() const { return m_metronome; }
@@ -110,8 +110,8 @@ public:
     void mergeProgramList(const ProgramList &program);
     void mergeKeyMappingList(const KeyMappingList &mappings);
 
-    virtual InstrumentList getAllInstruments() const;
-    virtual InstrumentList getPresentationInstruments() const;
+    InstrumentList getAllInstruments() const override;
+    InstrumentList getPresentationInstruments() const override;
 
     // Retrieve Librarian details
     //
@@ -127,8 +127,8 @@ public:
 
     DeviceDirection getDirection() const { return m_direction; }
     void setDirection(DeviceDirection dir) { m_direction = dir; }
-    virtual bool isOutput() const  { return (m_direction == Play); }
-    virtual bool isInput() const  { return (m_direction == Record); }
+    bool isOutput() const  override { return (m_direction == Play); }
+    bool isInput() const  override { return (m_direction == Record); }
 
     enum VariationType {
         NoVariations,
@@ -149,7 +149,7 @@ public:
 
     // implemented from Controllable interface
     //
-    virtual const ControlList &getControlParameters() const { return m_controlList; }
+    const ControlList &getControlParameters() const override { return m_controlList; }
 
     // Only those on the IPB list
     //
@@ -158,9 +158,9 @@ public:
     // Access ControlParameters (read/write)
     //
     virtual ControlParameter *getControlParameter(int index);
-    virtual const ControlParameter *getControlParameter(int index) const;
+    const ControlParameter *getControlParameter(int index) const override;
     virtual ControlParameter *getControlParameter(const std::string &type, MidiByte controllerNumber);
-    virtual const ControlParameter *getControlParameter(const std::string &type, MidiByte controllerNumber) const;
+    const ControlParameter *getControlParameter(const std::string &type, MidiByte controllerNumber) const override;
 
     // Modify ControlParameters
     //
@@ -190,14 +190,14 @@ public:
     //
     void generateDefaultControllers();
 
-    virtual std::string toXmlString() const;
+    std::string toXmlString() const override;
 
     static bool isPercussionNumber(int channel)
     { return channel == 9; }
 
 protected:
     void createInstruments(InstrumentId);
-    void renameInstruments();
+    void renameInstruments() override;
     //void conformInstrumentControllers(void);
 
     void generatePresentationList();

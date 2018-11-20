@@ -37,10 +37,10 @@ public:
     //
     AudioDevice(const AudioDevice &);
 
-    virtual bool isOutput() const  { return true; }
-    virtual bool isInput() const  { return false; }
+    bool isOutput() const  override { return true; }
+    bool isInput() const  override { return false; }
 
-    virtual void addInstrument(Instrument*);
+    void addInstrument(Instrument*) override;
 
     // An untainted Instrument we can use for playing previews
     //
@@ -48,15 +48,15 @@ public:
 
     // Turn into XML string
     //
-    virtual std::string toXmlString() const;
+    std::string toXmlString() const override;
 
-    virtual InstrumentList getAllInstruments() const { return m_instruments; }
-    virtual InstrumentList getPresentationInstruments() const
+    InstrumentList getAllInstruments() const override { return m_instruments; }
+    InstrumentList getPresentationInstruments() const override
         { return m_instruments; }
 
 private:
     void createInstruments();
-    void renameInstruments();
+    void renameInstruments() override;
 };
 
 }

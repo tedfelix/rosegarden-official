@@ -38,25 +38,25 @@ public:
     //
     SoftSynthDevice(const SoftSynthDevice &);
 
-    virtual bool isOutput() const  { return true; }
-    virtual bool isInput() const  { return false; }
+    bool isOutput() const  override { return true; }
+    bool isInput() const  override { return false; }
 
-    virtual void addInstrument(Instrument*);
+    void addInstrument(Instrument*) override;
 
     // Turn into XML string
     //
-    virtual std::string toXmlString() const;
+    std::string toXmlString() const override;
 
-    virtual InstrumentList getAllInstruments() const { return m_instruments; }
-    virtual InstrumentList getPresentationInstruments() const
+    InstrumentList getAllInstruments() const override { return m_instruments; }
+    InstrumentList getPresentationInstruments() const override
         { return m_instruments; }
 
     // implemented from Controllable interface
     //
-    virtual const ControlList &getControlParameters() const { return m_controlList; }
-    virtual const ControlParameter *getControlParameter(int index) const;
-    virtual const ControlParameter *getControlParameter(const std::string &type,
-                                                        MidiByte controllerNumber) const;
+    const ControlList &getControlParameters() const override { return m_controlList; }
+    const ControlParameter *getControlParameter(int index) const override;
+    const ControlParameter *getControlParameter(const std::string &type,
+                                                        MidiByte controllerNumber) const override;
     void setMetronome(const MidiMetronome &);
     const MidiMetronome* getMetronome() const { return m_metronome; }
 
@@ -65,7 +65,7 @@ private:
     static ControlList m_controlList;
     static void checkControlList();
     void createInstruments();
-    void renameInstruments();
+    void renameInstruments() override;
 };
 
 }

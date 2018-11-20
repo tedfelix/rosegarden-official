@@ -68,8 +68,8 @@ public:
     static timeT getStandardQuantization(EventSelection *);
 
 protected:
-    virtual void quantizeSingle(Segment *,
-                                Segment::iterator) const;
+    void quantizeSingle(Segment *,
+                                Segment::iterator) const override;
 
 private:
     BasicQuantizer &operator=(const BasicQuantizer &); // not provided

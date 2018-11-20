@@ -28,17 +28,17 @@ namespace Rosegarden
 // @author Tom Breton (Tehom)
 class LinearParameterPattern : public ParameterPattern
 {
-    virtual QString getText(QString propertyName) const;
+    QString getText(QString propertyName) const override;
 
     // Make as many sliders as we need.  EventParameterDialog will
     // truncate or pad as needed.
     virtual SliderSpecVector
-        getSliderSpec(const SelectionSituation *situation) const;
+        getSliderSpec(const SelectionSituation *situation) const override;
 
     // Set the properties of events from begin to end.
     virtual void
         setEventProperties(iterator begin, iterator end,
-                           Result *result) const;
+                           Result *result) const override;
     virtual double getValueDelta(double valueChange, double timeRatio)
         const;
     

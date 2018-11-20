@@ -59,7 +59,7 @@ public:
     void setDescription(const std::string &des) { m_description = des; }
 
     // export as XML
-    virtual std::string toXmlString() const;
+    std::string toXmlString() const override;
 
 protected:
 

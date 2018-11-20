@@ -783,7 +783,7 @@ public:
 
     // XML exportable method
     //
-    virtual std::string toXmlString() const;
+    std::string toXmlString() const override;
 
     // Who's making this racket?
     //
@@ -988,7 +988,7 @@ protected:
         typedef Impl::size_type size_type;
         typedef Impl::difference_type difference_type;
 
-        void clear();
+        void clear() override;
 
         timeT getDuration() const;
         

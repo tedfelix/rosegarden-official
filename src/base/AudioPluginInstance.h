@@ -121,7 +121,7 @@ public:
     unsigned int getPortCount() const { return m_ports.size(); }
 
     // export
-    std::string toXmlString() const;
+    std::string toXmlString() const override;
 
     // Is the instance assigned to a plugin?
     //

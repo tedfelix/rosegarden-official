@@ -129,8 +129,8 @@ public:
 
     ~Instrument();
 
-    virtual std::string getName() const { return m_name; }
-    virtual std::string getPresentationName() const;
+    std::string getName() const override { return m_name; }
+    std::string getPresentationName() const override;
 
     /** Returns a translated QString suitable for presentation to the user */
     virtual QString getLocalizedPresentationName() const;
@@ -141,10 +141,10 @@ public:
      */
     virtual unsigned int getPresentationNumber() const;
 
-    virtual std::string getAlias() const;
+    std::string getAlias() const override;
 
     void setId(InstrumentId id) { m_id = id; }
-    InstrumentId getId() const { return m_id; }
+    InstrumentId getId() const override { return m_id; }
 
     void setName(const std::string &name) { m_name = name; }
     void setAlias(const std::string &alias) { m_alias = alias; }
@@ -264,7 +264,7 @@ public:
 
     // Implementation of virtual function
     //
-    virtual std::string toXmlString() const;
+    std::string toXmlString() const override;
 
     // Get and set the parent device
     //
@@ -410,7 +410,7 @@ public:
     ~Buss();
 
     void setId(BussId id) { m_id = id; }
-    BussId getId() const { return m_id; }
+    BussId getId() const override { return m_id; }
 
     void setLevel(float dB) { m_level = dB; }
     float getLevel() const { return m_level; }
@@ -421,10 +421,10 @@ public:
     int getMappedId() const { return m_mappedId; }
     void setMappedId(int id) { m_mappedId = id; }
 
-    virtual std::string toXmlString() const;
-    virtual std::string getName() const;
-    virtual std::string getPresentationName() const;
-    virtual std::string getAlias() const;
+    std::string toXmlString() const override;
+    std::string getName() const override;
+    std::string getPresentationName() const override;
+    std::string getAlias() const override;
 
 private:
     BussId m_id;
@@ -445,7 +445,7 @@ public:
     int getMappedId() const { return m_mappedId; }
     void setMappedId(int id) { m_mappedId = id; }
 
-    virtual std::string toXmlString() const;
+    std::string toXmlString() const override;
 
 private:
     int m_mappedId;

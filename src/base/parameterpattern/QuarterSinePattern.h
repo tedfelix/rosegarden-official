@@ -28,9 +28,8 @@ namespace Rosegarden
 // @author Tom Breton (Tehom)
 class QuarterSinePattern : public LinearParameterPattern
 {
-    virtual double getValueDelta(double valueChange, double timeRatio)
-        const;
-    
+    double getValueDelta(double valueChange, double timeRatio) const override;
+
 public:
     QuarterSinePattern(QString patternText,
 		       bool isDiminuendo) :

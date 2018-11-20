@@ -136,20 +136,20 @@ public:
         PropertyStoreBase(p), m_data(p.m_data) { }
     PropertyStore &operator=(const PropertyStore<P> &p);
 
-    virtual PropertyType getType() const;
-    virtual std::string getTypeName() const;
+    PropertyType getType() const override;
+    std::string getTypeName() const override;
 
-    virtual PropertyStoreBase* clone();
-    
-    virtual std::string unparse() const;
+    PropertyStoreBase* clone() override;
+
+    std::string unparse() const override;
 
     typename PropertyDefn<P>::basic_type getData() { return m_data; }
     void setData(typename PropertyDefn<P>::basic_type data) { m_data = data; }
 
-    virtual size_t getStorageSize() const;
+    size_t getStorageSize() const override;
 
 #ifndef NDEBUG
-    void dump(std::ostream&) const;
+    void dump(std::ostream&) const override;
 #endif
 
 private:
@@ -201,7 +201,7 @@ PropertyStore<P>::dump(std::ostream &out) const
     out << getTypeName() << " - " << unparse();
 }
 #endif
- 
+
 }
 
 

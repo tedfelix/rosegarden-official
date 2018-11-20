@@ -48,8 +48,8 @@ public:
           { initialise(); }
 
 protected:
-    virtual bool     test(const Iterator &i);
-    virtual bool     sample(const Iterator &i, bool goingForwards);
+    bool     test(const Iterator &i) override;
+    bool     sample(const Iterator &i, bool goingForwards) override;
     // The longest duration we expect a preceding note to have.
     timeT    m_preDuration;
 };

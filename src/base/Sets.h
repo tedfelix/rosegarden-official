@@ -175,10 +175,10 @@ public:
     virtual int getMarkCountForChord() const;
     virtual std::vector<Mark> getMarksForChord() const;
     virtual std::vector<int> getPitches() const;
-    virtual bool contains(const Iterator &) const;
+    bool contains(const Iterator &) const override;
 
-    virtual void initialiseFinish(void);
-    
+    void initialiseFinish(void) override;
+
     /**
      * Return an iterator pointing to the previous note before this
      * chord, or container's end() if there is no previous note.
@@ -206,8 +206,8 @@ public:
     virtual int getSubOrdering() { return m_subordering; }
 
 protected:
-    virtual bool test(const Iterator&);
-    virtual bool sample(const Iterator&, bool goingForwards);
+    bool test(const Iterator&) override;
+    bool sample(const Iterator&, bool goingForwards) override;
 
     class PitchGreater {
     public:

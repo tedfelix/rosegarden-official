@@ -36,9 +36,9 @@ public:
     void setUnit(timeT unit) { m_unit = unit; }
     timeT getUnit() const { return m_unit; }
 
-    virtual void quantizeRange(Segment *,
+    void quantizeRange(Segment *,
                                Segment::iterator,
-                               Segment::iterator) const;
+                               Segment::iterator) const override;
 
 protected:
     virtual void quantizeLegatoSingle(Segment *,

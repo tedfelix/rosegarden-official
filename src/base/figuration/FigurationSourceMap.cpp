@@ -56,8 +56,8 @@ public:
         RelativeEvent(e, startTime),
         m_index(i)
     {};
-    virtual Event   *getAsEvent(timeT baseTime, const Key key,
-                                const FigChord *notes);
+    Event   *getAsEvent(timeT baseTime, const Key key,
+                                const FigChord *notes) override;
     virtual pitchT getResultPitch(const Key key, const Pitch & basePitch)=0;
 private:
     int              m_index;
@@ -81,7 +81,7 @@ public:
         setScore(-penalty);
     };
     static pitchT addChromaticInterval(const Pitch & basePitch, int interval);
-    virtual pitchT getResultPitch(const Key key, const Pitch & basePitch);
+    pitchT getResultPitch(const Key key, const Pitch & basePitch) override;
 private:
     int  m_interval;
 };
@@ -97,7 +97,7 @@ public:
     static pitchT addDiatonicInterval(const Key key,
                                       const Pitch & basePitch,
                                       int interval);
-    virtual pitchT getResultPitch(const Key key, const Pitch & basePitch);
+    pitchT getResultPitch(const Key key, const Pitch & basePitch) override;
 private:
     int  m_interval;
 };
@@ -656,8 +656,8 @@ public:
         m_index(index),
         m_sharedData(sharedData)
     { setScore(0); };
-    virtual Event   *getAsEvent(timeT baseTime, const Key key,
-                                const FigChord *notes);
+    Event   *getAsEvent(timeT baseTime, const Key key,
+                                const FigChord *notes) override;
 private:
     int m_index;
     SharedData *m_sharedData;
@@ -672,8 +672,8 @@ public:
     RelativeNonnote(Event *e, timeT startTime) :
         RelativeEvent(e, startTime)
     {};
-    virtual Event   *getAsEvent(timeT baseTime, const Key key,
-                                const FigChord *notes);
+    Event   *getAsEvent(timeT baseTime, const Key key,
+                                const FigChord *notes) override;
 };
 
 /***** Internal types to add complete collections of notes *****/
@@ -714,7 +714,7 @@ public:
         {}
 
     // This shoudl actually become getPossibleRelations.
-    virtual UnsolvedNote add(Event *e)
+    UnsolvedNote add(Event *e) override
     {
         if (e->isa(Note::EventType)) {
             return FigurationSourceMap::getPossibleRelations(e,
@@ -767,7 +767,7 @@ private:
         }
     }
         
-    virtual UnsolvedNote add(Event *e)
+    UnsolvedNote add(Event *e) override
         {
             if (e->isa(Note::EventType)) {
                 int index = getPitchIndex(e->get<Int>(BaseProperties::PITCH));

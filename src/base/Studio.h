@@ -171,7 +171,7 @@ public:
 
     // Export as XML string
     //
-    virtual std::string toXmlString() const;
+    std::string toXmlString() const override;
 
     // Export a subset of devices as XML string.  If devices is empty,
     // exports all devices just as the above method does.

@@ -68,9 +68,9 @@ public:
     bool getArticulate() const;
 
 protected:
-    virtual void quantizeRange(Segment *,
+    void quantizeRange(Segment *,
                                Segment::iterator,
-                               Segment::iterator) const;
+                               Segment::iterator) const override;
 
 protected:
     // avoid having to rebuild absolutely everything each time we
