@@ -26,8 +26,8 @@ namespace Rosegarden
 {
 using std::string;
 
-PropertyName::intern_map *PropertyName::m_interns = 0;
-PropertyName::intern_reverse_map *PropertyName::m_internsReversed = 0;
+PropertyName::intern_map *PropertyName::m_interns = nullptr;
+PropertyName::intern_reverse_map *PropertyName::m_internsReversed = nullptr;
 int PropertyName::m_nextValue = 0;
 
 int PropertyName::intern(const string &s)

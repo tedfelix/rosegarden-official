@@ -315,7 +315,7 @@ LilyPondSegmentsContext::precompute()
     // On each voice of each track, store the volta of each repeat sequence
     // inside the main segment data
     int currentRepeatId = 0;
-    const SegmentData * currentMainSeg = 0;
+    const SegmentData * currentMainSeg = nullptr;
     for (tit = m_segments.begin(); tit != m_segments.end(); ++tit) {
         // int trackPos = tit->first;
         // int trackId = m_composition->getTrackByPosition(trackPos)->getId();
@@ -363,7 +363,7 @@ LilyPondSegmentsContext::precompute()
                         volta->data->repeatId = 0;
                         delete volta;
                         delete sit->rawVoltaChain;
-                        sit->rawVoltaChain = 0;
+                        sit->rawVoltaChain = nullptr;
                         sit->repeatId = 0;
                         sit->numberOfVolta = 0;
                     }
@@ -527,7 +527,7 @@ Track *
 LilyPondSegmentsContext::useFirstTrack()
 {
     m_trackIterator = m_segments.begin();
-    if (m_trackIterator == m_segments.end()) return 0;
+    if (m_trackIterator == m_segments.end()) return nullptr;
     return m_composition->getTrackByPosition((*m_trackIterator).first);
 }
 
@@ -535,7 +535,7 @@ Track *
 LilyPondSegmentsContext::useNextTrack()
 {
     ++m_trackIterator;
-    if (m_trackIterator == m_segments.end()) return 0;
+    if (m_trackIterator == m_segments.end()) return nullptr;
     return m_composition->getTrackByPosition((*m_trackIterator).first);
 }
 
@@ -582,7 +582,7 @@ LilyPondSegmentsContext::useFirstSegment()
     m_firstVolta = false;
     m_lastVolta = false;
     m_segIterator = m_voiceIterator->second.begin();
-    if (m_segIterator == m_voiceIterator->second.end()) return 0;
+    if (m_segIterator == m_voiceIterator->second.end()) return nullptr;
     if (m_repeatWithVolta && m_segIterator->ignored) return useNextSegment();
 
     m_wasRepeatingWithoutVolta = false;
@@ -618,7 +618,7 @@ LilyPondSegmentsContext::useNextSegment()
                         return (*m_voltaIterator)->data->segment;
                     } else {
                         m_lastVolta = false;
-                        m_currentVoltaChain = 0;
+                        m_currentVoltaChain = nullptr;
                     }
                 }
             }
@@ -627,7 +627,7 @@ LilyPondSegmentsContext::useNextSegment()
     m_lastWasOK = false;
 
     ++m_segIterator;
-    if (m_segIterator == (*m_voiceIterator).second.end()) return 0;
+    if (m_segIterator == (*m_voiceIterator).second.end()) return nullptr;
     if (m_repeatWithVolta && (*m_segIterator).ignored) return useNextSegment();
 
     m_lastWasOK = true;
@@ -791,13 +791,13 @@ LilyPondSegmentsContext::getFirstSynchronousSegment(Segment * seg)
     m_GSSSegment = seg;
 
     m_GSSTrackIterator = m_segments.begin();
-    if (m_GSSTrackIterator == m_segments.end()) return 0;
+    if (m_GSSTrackIterator == m_segments.end()) return nullptr;
 
     m_GSSVoiceIterator = m_GSSTrackIterator->second.begin();
-    if (m_GSSVoiceIterator == m_GSSTrackIterator->second.end()) return 0;
+    if (m_GSSVoiceIterator == m_GSSTrackIterator->second.end()) return nullptr;
 
     m_GSSSegIterator = m_GSSVoiceIterator->second.begin();
-    if (m_GSSSegIterator == m_GSSVoiceIterator->second.end()) return 0;
+    if (m_GSSSegIterator == m_GSSVoiceIterator->second.end()) return nullptr;
 
     if (m_GSSSegIterator->synchronous &&
         (m_GSSSegIterator->segment != m_GSSSegment) &&
@@ -818,7 +818,7 @@ LilyPondSegmentsContext::getNextSynchronousSegment()
             ++m_GSSVoiceIterator;
             if (m_GSSVoiceIterator == m_GSSTrackIterator->second.end()) {
                 ++m_GSSTrackIterator;
-                if (m_GSSTrackIterator == m_segments.end()) return 0;
+                if (m_GSSTrackIterator == m_segments.end()) return nullptr;
                 m_GSSVoiceIterator = m_GSSTrackIterator->second.begin();
             }
             m_GSSSegIterator = m_GSSVoiceIterator->second.begin();

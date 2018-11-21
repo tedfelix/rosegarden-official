@@ -82,7 +82,7 @@ Segment *
 Clipboard::getSingleSegment() const
 {
     if (isSingleSegment()) return *begin();
-    else return 0;
+    else return nullptr;
 }
 
 bool

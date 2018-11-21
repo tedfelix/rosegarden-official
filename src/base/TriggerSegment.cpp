@@ -315,7 +315,7 @@ TriggerSegmentRec::makeLinkedSegment
     // If we squash or stretch, we can't make a proper linked segment
     // so return NULL;
     if (timeScale.isSquished())
-        { return 0; }
+        { return nullptr; }
     
     Segment *link =
         SegmentLinker::createLinkedSegment(getSegment());
@@ -367,11 +367,11 @@ TriggerSegmentRec::makeExpansion(Event *trigger,
                                  Instrument */*instrument*/) const
 {
     Segment *s = new Segment();
-    ExpandInto(s, containing->findSingle(trigger), containing, 0);
+    ExpandInto(s, containing->findSingle(trigger), containing, nullptr);
 
     if (s->empty()) {
         delete s;
-        return 0;
+        return nullptr;
     }
 
     timeT dummy;

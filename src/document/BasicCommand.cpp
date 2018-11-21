@@ -36,7 +36,7 @@ BasicCommand::BasicCommand(const QString &name, Segment &segment,
     m_segment(segment),
     m_savedEvents(segment.getType(), m_startTime),
     m_doBruteForceRedo(false),
-    m_redoEvents(0)
+    m_redoEvents(nullptr)
 {
     if (m_endTime == m_startTime) ++m_endTime;
 

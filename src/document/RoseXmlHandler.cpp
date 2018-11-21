@@ -1028,7 +1028,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             m_currentSegment->setStartTimeDataMember(startTime);
         } else {
             if (!linkerIdStr.isEmpty()) {
-                SegmentLinker *linker = 0;                                  
+                SegmentLinker *linker = nullptr;                                  
                 int linkId = linkerIdStr.toInt();
                 SegmentLinkerMap::iterator linkerItr = 
                                                   m_segmentLinkers.find(linkId);
@@ -1810,7 +1810,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
     } else if (lcName == "plugin" || lcName == "synth") {
 
-        PluginContainer *container = 0;
+        PluginContainer *container = nullptr;
 
         if (m_section == InInstrument) {
 //            RG_WARNING << "Found plugin in instrument";
@@ -1862,7 +1862,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
             QString identifier = atts.value("identifier");
 
-            AudioPlugin *plugin = 0;
+            AudioPlugin *plugin = nullptr;
             AudioPluginManager *apm = getAudioPluginManager();
 
             if ( identifier.isEmpty() ) {
@@ -2273,7 +2273,7 @@ RoseXmlHandler::endElement(const QString& namespaceURI,
         bool finished;
         bool res = getSubHandler()->endElement(namespaceURI, localName, qName.toLower(), finished);
         if (finished)
-            setSubHandler(0);
+            setSubHandler(nullptr);
         return res;
     }
 
@@ -2339,7 +2339,7 @@ RoseXmlHandler::endElement(const QString& namespaceURI,
 
         if (m_currentSegment && m_currentEvent) {
             m_currentSegment->insert(m_currentEvent);
-            m_currentEvent = 0;
+            m_currentEvent = nullptr;
         } else if (!m_currentSegment && m_currentEvent) {
             m_errorString = "Got event outside of a Segment";
             return false;
@@ -2370,15 +2370,15 @@ RoseXmlHandler::endElement(const QString& namespaceURI,
             }
 
             delete m_segmentEndMarkerTime;
-            m_segmentEndMarkerTime = 0;
+            m_segmentEndMarkerTime = nullptr;
         }
 
-        m_currentSegment = 0;
+        m_currentSegment = nullptr;
         m_section = NoSection;
 
     } else if (lcName == "bar-segment" || lcName == "tempo-segment") {
 
-        m_currentSegment = 0;
+        m_currentSegment = nullptr;
 
     } else if (lcName == "composition") {
         m_inComposition = false;
@@ -2391,12 +2391,12 @@ RoseXmlHandler::endElement(const QString& namespaceURI,
     } else if (lcName == "buss") {
 
         m_section = InStudio;
-        m_buss = 0;
+        m_buss = nullptr;
 
     } else if (lcName == "instrument") {
 
         m_section = InStudio;
-        m_instrument = 0;
+        m_instrument = nullptr;
 
     } else if (lcName == "plugin") {
 
@@ -2405,12 +2405,12 @@ RoseXmlHandler::endElement(const QString& namespaceURI,
         } else {
             m_section = InInstrument;
         }
-        m_plugin = 0;
+        m_plugin = nullptr;
         m_pluginId = 0;
 
     } else if (lcName == "device") {
 
-        m_device = 0;
+        m_device = nullptr;
 
     } else if (lcName == "keymapping") {
 
@@ -2424,7 +2424,7 @@ RoseXmlHandler::endElement(const QString& namespaceURI,
                         md->addKeyMapping(*m_keyMapping);
                     }
                 }
-                m_keyMapping = 0;
+                m_keyMapping = nullptr;
             }
         }
 
@@ -2438,7 +2438,7 @@ RoseXmlHandler::endElement(const QString& namespaceURI,
 
     } else if (lcName == "colourmap") {
         m_inColourMap = false;
-        m_colourMap = 0;
+        m_colourMap = nullptr;
     }
 
     return true;
@@ -2653,7 +2653,7 @@ RoseXmlHandler::skipToNextPlayDevice()
 
     SEQMAN_DEBUG << "RoseXmlHandler::skipToNextPlayDevice: fresh out of devices";
 
-    m_device = 0;
+    m_device = nullptr;
 }
 
 void

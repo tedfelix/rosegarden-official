@@ -91,7 +91,7 @@ Studio::addDevice(const std::string &name,
                   InstrumentId baseInstrumentId,
                   Device::DeviceType type)
 {
-    Device *d = 0;
+    Device *d = nullptr;
 
     switch (type) {
 
@@ -239,7 +239,7 @@ Studio::getInstrumentById(InstrumentId id)
                 return (*iit);
     }
 
-    return 0;
+    return nullptr;
 
 }
 
@@ -276,25 +276,25 @@ Studio::getInstrumentFromList(int index)
         }
     }
 
-    return 0;
+    return nullptr;
 
 }
 
 Instrument *
 Studio::getInstrumentFor(Segment *segment)
 {
-    if (!segment) return 0;
-    if (!segment->getComposition()) return 0;
+    if (!segment) return nullptr;
+    if (!segment->getComposition()) return nullptr;
     TrackId tid = segment->getTrack();
     Track *track = segment->getComposition()->getTrackById(tid);
-    if (!track) return 0;
+    if (!track) return nullptr;
     return getInstrumentFor(track);
 }
 
 Instrument *
 Studio::getInstrumentFor(Track *track)
 {
-    if (!track) return 0;
+    if (!track) return nullptr;
     InstrumentId iid = track->getInstrument();
     return getInstrumentById(iid);
 }
@@ -311,7 +311,7 @@ Studio::getBussById(BussId id)
     for (BussList::iterator i = m_busses.begin(); i != m_busses.end(); ++i) {
         if ((*i)->getId() == id) return *i;
     }
-    return 0;
+    return nullptr;
 }
 
 void
@@ -398,7 +398,7 @@ Studio::getRecordIn(int number)
     if (number >= 0  &&  number < int(m_recordIns.size()))
         return m_recordIns[number];
     else
-        return 0;
+        return nullptr;
 }
 
 void
@@ -540,7 +540,7 @@ Studio::getMetronomeFromDevice(DeviceId id)
         }
     }
 
-    return 0;
+    return nullptr;
 }
 
 // Scan all MIDI devices for available channels and map
@@ -558,8 +558,8 @@ Studio::assignMidiProgramToInstrument(MidiByte program,
 
     // Instruments that we may return
     //
-    Rosegarden::Instrument *newInstrument = 0;
-    Rosegarden::Instrument *firstInstrument = 0;
+    Rosegarden::Instrument *newInstrument = nullptr;
+    Rosegarden::Instrument *firstInstrument = nullptr;
 
     bool needBank = (msb >= 0 || lsb >= 0);
     if (needBank) {
@@ -581,7 +581,7 @@ Studio::assignMidiProgramToInstrument(MidiByte program,
 
             for (iit = instList.begin(); iit != instList.end(); ++iit)
             {
-                if (firstInstrument == 0)
+                if (firstInstrument == nullptr)
                     firstInstrument = *iit;
 
                 // If we find an Instrument sending the right program already.
@@ -608,7 +608,7 @@ Studio::assignMidiProgramToInstrument(MidiByte program,
                     // Otherwise store the first Instrument for
                     // possible use later.
                     //
-                    if (newInstrument == 0 &&
+                    if (newInstrument == nullptr &&
                         (*iit)->sendsProgramChange() == false &&
                         (*iit)->sendsBankSelect() == false &&
                         (*iit)->isPercussion() == percussion)
@@ -622,7 +622,7 @@ Studio::assignMidiProgramToInstrument(MidiByte program,
     // Okay, if we've got this far and we have a new Instrument to use
     // then use it.
     //
-    if (newInstrument != 0)
+    if (newInstrument != nullptr)
     {
         newInstrument->setSendProgramChange(true);
         newInstrument->setProgramChange(program);
@@ -769,7 +769,7 @@ Studio::getDevice(DeviceId id) const
     
     //RG_DEBUG << "NOT found";
     
-    return 0;
+    return nullptr;
 }
 
 Device *
@@ -781,7 +781,7 @@ Studio::getAudioDevice()
         if ((*it)->getType() == Device::Audio) return *it;
     }
 
-    return 0;
+    return nullptr;
 }
 
 Device *
@@ -793,7 +793,7 @@ Studio::getSoftSynthDevice()
         if ((*it)->getType() == Device::SoftSynth) return *it;
     }
 
-    return 0;
+    return nullptr;
 }
 
 std::string

@@ -32,7 +32,7 @@ SoftSynthDevice::m_controlList;
 
 SoftSynthDevice::SoftSynthDevice() :
     Device(0, "Default Soft Synth Device", Device::SoftSynth),
-    m_metronome(0)
+    m_metronome(nullptr)
 {
     createInstruments();
     checkControlList();
@@ -40,7 +40,7 @@ SoftSynthDevice::SoftSynthDevice() :
 
 SoftSynthDevice::SoftSynthDevice(DeviceId id, const std::string &name) :
     Device(id, name, Device::SoftSynth),
-    m_metronome(0)
+    m_metronome(nullptr)
 {
     createInstruments();
     checkControlList();
@@ -50,7 +50,7 @@ SoftSynthDevice::SoftSynthDevice(DeviceId id, const std::string &name) :
 SoftSynthDevice::SoftSynthDevice(const SoftSynthDevice &dev) :
     Device(dev.getId(), dev.getName(), dev.getType()),
     Controllable(),
-    m_metronome(0)
+    m_metronome(nullptr)
 {
     // Copy the instruments
     //
@@ -126,7 +126,7 @@ SoftSynthDevice::getControlParameter(int index) const
 {
     if (index >= 0 && ((unsigned int)index) < ((unsigned int)m_controlList.size()))
         return &m_controlList[index];
-    return 0;
+    return nullptr;
 }
 
 const ControlParameter *
@@ -151,7 +151,7 @@ SoftSynthDevice::getControlParameter(const std::string &type,
         }
     }
 
-    return 0;
+    return nullptr;
 }
 
 void

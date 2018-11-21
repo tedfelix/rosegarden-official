@@ -732,7 +732,7 @@ SegmentNotationHelper::makeThisNoteViable(iterator noteItr, bool splitAtBars)
             if (!lastTiedForward)
                 e->unset(TIED_FORWARD);
             toInsert.push_back(e);
-            e = 0;
+            e = nullptr;
             break;
         }
 
@@ -780,7 +780,7 @@ SegmentNotationHelper::makeThisNoteViable(iterator noteItr, bool splitAtBars)
 
             // Add in the remaining time.
             toInsert.push_back(e);
-            e = 0;
+            e = nullptr;
             break;
         }
 
@@ -2071,7 +2071,7 @@ SegmentNotationHelper::splitPreservingPerformanceTimes(Event *e, timeT q1)
     RG_DEBUG << "splitPreservingPerformanceTimes: (ut,ud) (" << ut << "," << ud << "), (qt,qd) (" << qt << "," << qd << ") q1 " << q1 << ", u1 " << u1 << ", u2 " << u2;
 
     if (u1 <= 0 || u2 <= 0) { // can't do a meaningful split
-        return std::pair<Event *, Event *>(0, 0);
+        return std::pair<Event *, Event *>(0, nullptr);
     }
 
     Event *e1 = new Event(*e, ut, u1, e->getSubOrdering(), qt, q1);
@@ -2136,7 +2136,7 @@ SegmentNotationHelper::deCounterpoint(timeT startTime, timeT endTime)
         timeT tk = (*k)->getNotationAbsoluteTime();
         timeT dk = (*k)->getNotationDuration();
 
-        Event *e1 = 0, *e2 = 0;
+        Event *e1 = nullptr, *e2 = 0;
         std::pair<Event *, Event *> splits;
         Segment::iterator toGo = segment().end();
 

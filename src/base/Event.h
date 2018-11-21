@@ -86,24 +86,24 @@ public:
     Event(const std::string &type,
           timeT absoluteTime, timeT duration = 0, short subOrdering = 0) :
         m_data(new EventData(type, absoluteTime, duration, subOrdering)),
-        m_nonPersistentProperties(0) { }
+        m_nonPersistentProperties(nullptr) { }
 
     Event(const std::string &type,
           timeT absoluteTime, timeT duration, short subOrdering,
           timeT notationAbsoluteTime, timeT notationDuration) :
         m_data(new EventData(type, absoluteTime, duration, subOrdering)),
-        m_nonPersistentProperties(0) {
+        m_nonPersistentProperties(nullptr) {
         setNotationAbsoluteTime(notationAbsoluteTime);
         setNotationDuration(notationDuration);
     }
 
     Event(const Event &e) :
-        m_nonPersistentProperties(0) { share(e); }
+        m_nonPersistentProperties(nullptr) { share(e); }
 
     // these ctors can't use default args: default has to be obtained from e
 
     Event(const Event &e, timeT absoluteTime) :
-        m_nonPersistentProperties(0) {
+        m_nonPersistentProperties(nullptr) {
         share(e);
         unshare();
         m_data->m_absoluteTime = absoluteTime;
@@ -112,7 +112,7 @@ public:
     }
 
     Event(const Event &e, timeT absoluteTime, timeT duration) :
-        m_nonPersistentProperties(0) {
+        m_nonPersistentProperties(nullptr) {
         share(e);
         unshare();
         m_data->m_absoluteTime = absoluteTime;
@@ -122,7 +122,7 @@ public:
     }
 
     Event(const Event &e, timeT absoluteTime, timeT duration, short subOrdering):
-        m_nonPersistentProperties(0) {
+        m_nonPersistentProperties(nullptr) {
         share(e);
         unshare();
         m_data->m_absoluteTime = absoluteTime;
@@ -134,7 +134,7 @@ public:
 
     Event(const Event &e, timeT absoluteTime, timeT duration, short subOrdering,
           timeT notationAbsoluteTime) :
-        m_nonPersistentProperties(0) {
+        m_nonPersistentProperties(nullptr) {
         share(e);
         unshare();
         m_data->m_absoluteTime = absoluteTime;
@@ -146,7 +146,7 @@ public:
 
     Event(const Event &e, timeT absoluteTime, timeT duration, short subOrdering,
           timeT notationAbsoluteTime, timeT notationDuration) :
-        m_nonPersistentProperties(0) {
+        m_nonPersistentProperties(nullptr) {
         share(e);
         unshare();
         m_data->m_absoluteTime = absoluteTime;
@@ -397,7 +397,7 @@ protected:
 
     Event() :
         m_data(new EventData("", 0, 0, 0)),
-        m_nonPersistentProperties(0) { }
+        m_nonPersistentProperties(nullptr) { }
 
     void setType(const std::string &t) { unshare(); m_data->m_type = t; }
     void setAbsoluteTime(timeT t)      { unshare(); m_data->m_absoluteTime = t; }
@@ -467,7 +467,7 @@ private:
     void lose() {
         if (--m_data->m_refCount == 0) delete m_data;
         delete m_nonPersistentProperties;
-        m_nonPersistentProperties = 0;
+        m_nonPersistentProperties = nullptr;
     }
 
     // returned iterator (in i) only valid if return map value is non-zero

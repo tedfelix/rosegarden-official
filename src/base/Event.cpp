@@ -39,7 +39,7 @@ Event::EventData::EventData(const std::string &type, timeT absoluteTime,
     m_absoluteTime(absoluteTime),
     m_duration(duration),
     m_subOrdering(subOrdering),
-    m_properties(0)
+    m_properties(nullptr)
 {
     // empty
 }
@@ -52,7 +52,7 @@ Event::EventData::EventData(const std::string &type, timeT absoluteTime,
     m_absoluteTime(absoluteTime),
     m_duration(duration),
     m_subOrdering(subOrdering),
-    m_properties(properties ? new PropertyMap(*properties) : 0)
+    m_properties(properties ? new PropertyMap(*properties) : nullptr)
 {
     // empty
 }
@@ -125,10 +125,10 @@ Event::find(const PropertyName &name, PropertyMap::iterator &i)
     if (!map || ((i = map->find(name)) == map->end())) {
 
 	map = m_nonPersistentProperties;
-	if (!map) return 0;
+	if (!map) return nullptr;
 
 	i = map->find(name);
-	if (i == map->end()) return 0;
+	if (i == map->end()) return nullptr;
     }
 
     return map;

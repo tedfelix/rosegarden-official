@@ -347,8 +347,8 @@ private :
             numberOfVolta = 0;
             startOfRepeatChain = false;
             volta = false;
-            rawVoltaChain = 0;
-            sortedVoltaChain = 0;
+            rawVoltaChain = nullptr;
+            sortedVoltaChain = nullptr;
             startTime = 0;
             endTime = 0;
             previousKey = Rosegarden::Key("undefined");

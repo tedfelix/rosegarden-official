@@ -118,7 +118,7 @@ PluginContainer::getPlugin(unsigned int position) const
             return *it;
     }
 
-    return 0;
+    return nullptr;
 }
 
 
@@ -745,7 +745,7 @@ const MidiKeyMapping *
 Instrument::getKeyMapping() const
 {
     MidiDevice *md = dynamic_cast<MidiDevice*>(m_device);
-    if (!md) return 0;
+    if (!md) return nullptr;
 
     const MidiKeyMapping *mkm = md->getKeyMappingForProgram(m_program);
     if (mkm) return mkm;
@@ -757,7 +757,7 @@ Instrument::getKeyMapping() const
         }
     }
 
-    return 0;
+    return nullptr;
 }    
 
 // Set a fixed channel.  For MIDI instruments, conform allocator

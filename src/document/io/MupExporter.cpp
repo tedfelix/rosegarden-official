@@ -94,7 +94,7 @@ MupExporter::write()
 
             str << "\t" << trackNo + 1 << ":";
 
-            Segment *s = 0;
+            Segment *s = nullptr;
             timeT barStart = c->getBarStart(barNo);
             timeT barEnd = c->getBarEnd(barNo);
 

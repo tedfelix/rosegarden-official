@@ -56,7 +56,7 @@ Device::getControllable(void)
 // @author Tom Breton (Tehom)
 AllocateChannels *
 Device::getAllocator(void)
-{ return 0; }
+{ return nullptr; }
 
 void
 Device::sendChannelSetups()

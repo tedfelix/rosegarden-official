@@ -217,11 +217,11 @@ Event *LilyPondExporter::nextNoteInGroup(Segment *s, Segment::iterator it, const
         }
 
         if (newGroupId == -1 || newGroupId != currentGroupId) {
-            return 0;
+            return nullptr;
         }
         return event;
     }
-    return 0;
+    return nullptr;
 }
 
 LilyPondExporter::~LilyPondExporter()
@@ -1191,7 +1191,7 @@ LilyPondExporter::write()
     // and segments, but the time spent doing that should still
     // be relatively small in the greater scheme.
 
-    Track *track = 0;
+    Track *track = nullptr;
     int trackPos = 0;
 
     for (track = lsc.useFirstTrack(); track; track = lsc.useNextTrack()) {
@@ -2271,8 +2271,8 @@ LilyPondExporter::writeBar(Segment *s,
 
     bool inBeamedGroup = false;
     bool startingBeamedGroup = false;
-    Event *nextBeamedNoteInGroup = 0;
-    Event *nextNoteInTuplet = 0;
+    Event *nextBeamedNoteInGroup = nullptr;
+    Event *nextNoteInTuplet = nullptr;
 
     while (s->isBeforeEndMarker(i)) {
 
@@ -2295,7 +2295,7 @@ LilyPondExporter::writeBar(Segment *s,
 
             // skip everything until the next beamed note in the current group
             if (!nextBeamedNoteInGroup || event == nextBeamedNoteInGroup) {
-                nextBeamedNoteInGroup = 0;
+                nextBeamedNoteInGroup = nullptr;
 
                 groupType = "";
                 event->get<String>(BEAMED_GROUP_TYPE, groupType); // might fail

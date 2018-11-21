@@ -256,7 +256,7 @@ Composition::deleteSegment(Composition::iterator i)
     clearVoiceCaches();
 
     Segment *p = (*i);
-    p->setComposition(0);
+    p->setComposition(nullptr);
 
     m_segments.erase(i);
     distributeVerses();
@@ -297,7 +297,7 @@ Composition::weakDetachSegment(Segment *segment)
     if (i == end()) return false;
     clearVoiceCaches();
     
-    segment->setComposition(0);
+    segment->setComposition(nullptr);
     m_segments.erase(i);
 
     return true;
@@ -489,7 +489,7 @@ TriggerSegmentRec *
 Composition::addTriggerSegment(Segment *s, TriggerSegmentId id, int pitch, int velocity)
 {
     TriggerSegmentRec *rec = getTriggerSegmentRec(id);
-    if (rec) return 0;
+    if (rec) return nullptr;
     rec = new TriggerSegmentRec(id, s, pitch, velocity);
     m_triggerSegments.insert(rec);
     s->setComposition(this);
@@ -500,10 +500,10 @@ Composition::addTriggerSegment(Segment *s, TriggerSegmentId id, int pitch, int v
 void
 Composition::deleteTriggerSegment(TriggerSegmentId id)
 {
-    TriggerSegmentRec dummyRec(id, 0);
+    TriggerSegmentRec dummyRec(id, nullptr);
     triggersegmentcontaineriterator i = m_triggerSegments.find(&dummyRec);
     if (i == m_triggerSegments.end()) return;
-    (*i)->getSegment()->setComposition(0);
+    (*i)->getSegment()->setComposition(nullptr);
     delete (*i)->getSegment();
     delete *i;
     m_triggerSegments.erase(i);
@@ -512,10 +512,10 @@ Composition::deleteTriggerSegment(TriggerSegmentId id)
 void
 Composition::detachTriggerSegment(TriggerSegmentId id)
 {
-    TriggerSegmentRec dummyRec(id, 0);
+    TriggerSegmentRec dummyRec(id, nullptr);
     triggersegmentcontaineriterator i = m_triggerSegments.find(&dummyRec);
     if (i == m_triggerSegments.end()) return;
-    (*i)->getSegment()->setComposition(0);
+    (*i)->getSegment()->setComposition(nullptr);
     delete *i;
     m_triggerSegments.erase(i);
 }
@@ -545,16 +545,16 @@ Segment *
 Composition::getTriggerSegment(TriggerSegmentId id)
 {
     TriggerSegmentRec *rec = getTriggerSegmentRec(id);
-    if (!rec) return 0;
+    if (!rec) return nullptr;
     return rec->getSegment();
 }    
 
 TriggerSegmentRec *
 Composition::getTriggerSegmentRec(TriggerSegmentId id)
 {
-    TriggerSegmentRec dummyRec(id, 0);
+    TriggerSegmentRec dummyRec(id, nullptr);
     triggersegmentcontaineriterator i = m_triggerSegments.find(&dummyRec);
-    if (i == m_triggerSegments.end()) return 0;
+    if (i == m_triggerSegments.end()) return nullptr;
     return *i;
 }
 
@@ -562,7 +562,7 @@ TriggerSegmentRec *
 Composition::getTriggerSegmentRec(Event* e)
 {
     if (!e->has(BaseProperties::TRIGGER_SEGMENT_ID))
-        { return 0; }
+        { return nullptr; }
 
     const int id = e->get<Int>(BaseProperties::TRIGGER_SEGMENT_ID);
     return getTriggerSegmentRec(id);
@@ -1658,7 +1658,7 @@ Track* Composition::getTrackById(TrackId track) const
         NOTATION_DEBUG << (int)(*i).second->getId();
     }
 
-    return 0;
+    return nullptr;
 }
 
 bool
@@ -1791,7 +1791,7 @@ bool Composition::detachTrack(Rosegarden::Track *track)
         return false;
     }
 
-    ((*it).second)->setOwningComposition(0);
+    ((*it).second)->setOwningComposition(nullptr);
 
     m_tracks.erase(it);
     updateRefreshStatuses();
@@ -2070,7 +2070,7 @@ Composition::getTrackByPosition(int position) const
             return (*it).second;
     }
 
-    return 0;
+    return nullptr;
 
 }
 

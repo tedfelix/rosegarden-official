@@ -95,7 +95,7 @@ public:
      * entire undo history needlessly.
      */
     RosegardenDocument(QObject *parent,
-                       AudioPluginManager *audioPluginManager = 0,
+                       AudioPluginManager *audioPluginManager = nullptr,
                        bool skipAutoload = false,
                        bool clearCommandHistory = true,
                        bool enableSound = true);

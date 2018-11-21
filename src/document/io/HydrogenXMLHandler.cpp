@@ -117,7 +117,7 @@ HydrogenXMLHandler::startDocument()
 
     m_currentProperty = "";
 
-    m_segment = 0;
+    m_segment = nullptr;
     m_currentTrackNb = 0;
     m_segmentAdded = 0;
     m_currentBar = 0;
@@ -304,7 +304,7 @@ HydrogenXMLHandler::endElement_093(const QString& /*namespaceURI*/,
             m_composition->notifyTracksAdded(trackIds);
 
             m_composition->addSegment(m_segment);
-            m_segment = 0;
+            m_segment = nullptr;
 
             m_segmentAdded = true;
         }

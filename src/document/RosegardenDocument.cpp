@@ -1888,7 +1888,7 @@ RosegardenDocument::insertRecordedMidi(const MappedEventList &mC)
                 (*i)->getEventTime() + (*i)->getDuration());
         timeT duration = endTime - absTime;
 
-        Event *rEvent = 0;
+        Event *rEvent = nullptr;
         bool isNoteOn = false;
         const int pitch = (*i)->getPitch();
         int channel = (*i)->getRecordedChannel();
@@ -2043,7 +2043,7 @@ RosegardenDocument::insertRecordedMidi(const MappedEventList &mC)
 
         // sanity check
         //
-        if (rEvent == 0)
+        if (rEvent == nullptr)
             continue;
 
         // Set the recorded input port
@@ -2413,7 +2413,7 @@ RosegardenDocument::stopRecordingMidi()
         // composition if there was anything in it; otherwise we don't
         // need to do so
 
-        if (s->getComposition() == 0) {
+        if (s->getComposition() == nullptr) {
             delete s;
             continue;
         }
@@ -2450,7 +2450,7 @@ RosegardenDocument::stopRecordingMidi()
 
     emit stoppedMIDIRecording();
 
-    slotUpdateAllViews(0);
+    slotUpdateAllViews(nullptr);
 
     emit pointerPositionChanged(m_composition.getPosition());
 }
@@ -2583,7 +2583,7 @@ RosegardenDocument::addRecordAudioSegment(InstrumentId iid,
 
     // Find the right track
 
-    Track *recordTrack = 0;
+    Track *recordTrack = nullptr;
 
     const Composition::recordtrackcontainer &tr =
         getComposition().getRecordTracks();
@@ -2808,7 +2808,7 @@ RosegardenDocument::finalizeAudioFile(InstrumentId iid)
             new SegmentRecordCommand(recordSegment));
 
     // update views
-    slotUpdateAllViews(0);
+    slotUpdateAllViews(nullptr);
 
     // Add the file to the sequencer
     RosegardenSequencer::getInstance()->addAudioFile(
@@ -2922,7 +2922,7 @@ RosegardenDocument::addOrphanedDerivedAudioFile(QString fileName)
 void
 RosegardenDocument::notifyAudioFileRemoval(AudioFileId id)
 {
-    AudioFile *file = 0;
+    AudioFile *file = nullptr;
 
     if (m_audioFileManager.wasAudioFileRecentlyRecorded(id)) {
         file = m_audioFileManager.getAudioFile(id);
@@ -2944,7 +2944,7 @@ RosegardenDocument::
 getInstrument(Segment *segment)
 {
     if (!segment || !(segment->getComposition())) {
-        return 0;
+        return nullptr;
     }
 
     Studio &studio = getStudio();

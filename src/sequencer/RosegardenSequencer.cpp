@@ -52,7 +52,7 @@ namespace Rosegarden
 {
 
 RosegardenSequencer *
-RosegardenSequencer::m_instance = 0;
+RosegardenSequencer::m_instance = nullptr;
 
 QMutex
 RosegardenSequencer::m_instanceMutex;
@@ -129,9 +129,9 @@ RosegardenSequencer::cleanup()
 {
     if (m_driver) m_driver->shutdown();
     delete m_studio;
-    m_studio = 0;
+    m_studio = nullptr;
     delete m_driver;
-    m_driver = 0;
+    m_driver = nullptr;
 }
 
 RosegardenSequencer *
@@ -685,7 +685,7 @@ RosegardenSequencer::setMappedProperties(const MappedObjectIdList &ids,
 {
     LOCKED;
 
-    MappedObject *object = 0;
+    MappedObject *object = nullptr;
     MappedObjectId prevId = 0;
 
     for (size_t i = 0;

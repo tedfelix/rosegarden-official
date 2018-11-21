@@ -97,7 +97,7 @@ public:
     LilyPondExporter(RosegardenDocument *doc,
                      const SegmentSelection &selection,
                      const std::string &fileName,
-                     NotationView *parent = 0);
+                     NotationView *parent = nullptr);
     ~LilyPondExporter();
 
    /**

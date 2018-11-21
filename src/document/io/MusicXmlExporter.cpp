@@ -236,8 +236,8 @@ MusicXmlExporter::initalisePart(timeT compositionEndTime, int curTrackPos,
 {
     TrackVector tracks;
     std::string name;
-    Track *track = 0;
-    Track *curTrack = 0;
+    Track *track = nullptr;
+    Track *curTrack = nullptr;
     bool inMultiStaffGroup = false;
     InstrumentId instrument = 0;
     bool found = false;
@@ -246,7 +246,7 @@ MusicXmlExporter::initalisePart(timeT compositionEndTime, int curTrackPos,
 
     // For each track
     for (int trackPos = 0;
-         (track = m_composition->getTrackByPosition(trackPos)) != 0; ++trackPos) {
+         (track = m_composition->getTrackByPosition(trackPos)) != nullptr; ++trackPos) {
         qApp->processEvents();
 
         if (trackPos == curTrackPos) curTrack = track;
@@ -336,11 +336,11 @@ MusicXmlExporter::writeScorePart(timeT compositionEndTime, std::ostream &str)
     int writeSquareClose = 0;
     int writeCurlyOpen = 0;
     int writeCurlyClose = 0;
-    Track *track = 0;
+    Track *track = nullptr;
 
     // For each Track in the Composition
     for (int trackPos = 0;
-         (track = m_composition->getTrackByPosition(trackPos)) != 0;
+         (track = m_composition->getTrackByPosition(trackPos)) != nullptr;
          ++trackPos) {
         if (m_progressDialog) {
             m_progressDialog->setValue(

@@ -240,16 +240,16 @@ public:
             iterator_base(const_cast<FastVector<T> *>(v),i) { }
     };
 
-public: 
+public:
     FastVector() :
-        m_items(0), m_count(0), m_gapStart(-1),
+        m_items(nullptr), m_count(0), m_gapStart(-1),
         m_gapLength(0), m_size(0) { }
     FastVector(const FastVector<T> &);
     virtual ~FastVector();
 
     template <class InputIterator>
     FastVector(InputIterator first, InputIterator last) :
-        m_items(0), m_count(0), m_gapStart(-1),
+        m_items(nullptr), m_count(0), m_gapStart(-1),
         m_gapLength(0), m_size(0) {
         insert(begin(), first, last);
     }

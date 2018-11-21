@@ -62,7 +62,7 @@ const timeT
 FigChord::
 m_preDuration = Note(Note::WholeNote).getDuration();
 
-NotationQuantizer * FigChord::m_nq = 0;
+NotationQuantizer * FigChord::m_nq = nullptr;
 
 const Quantizer *
 FigChord::getQuantizer(void)
@@ -76,9 +76,9 @@ FindFigChords::
 getChordNow(timeT timeLimit)
 {
     if (m_iter == m_chordSource->end())
-        { return 0; }
+        { return nullptr; }
     else if ((*m_iter)->getAbsoluteTime() >= timeLimit)
-        { return 0; }
+        { return nullptr; }
     else
         { return new FigChord(*m_chordSource, m_iter); }
 }

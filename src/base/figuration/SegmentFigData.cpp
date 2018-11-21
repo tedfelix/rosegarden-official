@@ -155,7 +155,7 @@ update(ChordSegmentMap& chordSources,
     Segment* s = m_s;
     // Initialize `target' as NULL.  We allocate it just-in-time
     // because we use and release it in some iterations.
-    Segment* target = 0;
+    Segment* target = nullptr;
 
     // For telling whether there's space between one region and the
     // next.  Since we get the regions in forward order, this is
@@ -195,7 +195,7 @@ update(ChordSegmentMap& chordSources,
         // we got and start another.
         if (lastEnd < startRegion) {
             doneEventHolder(s, comp, target, command);
-            target = 0;
+            target = nullptr;
         }
 
         // Make sure we have something to write to.
@@ -596,7 +596,7 @@ SegmentFigData::expand(SourcedFiguration& sourcedFiguration,
          ++k) {
         const timeT eventTime =
             (*k)->getAbsoluteTime(startTime);
-        const FigChord *pBlockChord = 0;
+        const FigChord *pBlockChord = nullptr;
 
         // Get the relevant blockChord.
         for (ChordSequence::iterator j =

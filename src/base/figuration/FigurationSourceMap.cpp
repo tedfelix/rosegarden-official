@@ -222,7 +222,7 @@ class ProximityNote : public RelativeEvent
     public:
         SharedData(void) :
             m_oldFigChord(0),
-            m_pitchDeltas(0)
+            m_pitchDeltas(nullptr)
             {}
 
         void init(PitchNoOctaveVector &unorderedPitches)
@@ -306,7 +306,7 @@ class ProximityNote : public RelativeEvent
                        "the chord has no notes");
 
             if (m_pitchDeltas) { delete m_pitchDeltas; }
-            m_pitchDeltas = 0;
+            m_pitchDeltas = nullptr;
             m_oldFigChord = notes;
 
             TonePressureVector tones = getTonePressureVector(notes);
@@ -321,7 +321,7 @@ class ProximityNote : public RelativeEvent
 
                 // Find the closest chord tone (modulo octaves)
                 int leastPenalty = 1000000;
-                TonePressure *bestTonePressure = 0;
+                TonePressure *bestTonePressure = nullptr;
                 for (TonePressureVector::iterator j = tones.begin();
                      j != tones.end();
                      ++j
@@ -1061,7 +1061,7 @@ getFigurations(Segment *s)
     Q_CHECK_PTR(s);
 
     FigurationVector figs;
-    FigChord  *parameterChord = 0;
+    FigChord  *parameterChord = nullptr;
     for (Segment::iterator i = s->begin();
          i != s->end();
          ++i) {
@@ -1153,7 +1153,7 @@ getFigurations(Segment *s)
                     // NB, we are emptying hs and deleting all its
                     // members except the one relation that we keep.
                     UnsolvedNote hs = (*j);
-                    RelativeEvent * bestRelation = 0;
+                    RelativeEvent * bestRelation = nullptr;
                     int bestScore = -1000000;
                     for (UnsolvedNote::iterator k = hs.begin();
                          k != hs.end();
@@ -1209,7 +1209,7 @@ findMatch(FigurationVector& figVector,
         }
     }
     // If we never found a match, signal that with NULL
-    return 0;
+    return nullptr;
 }
 
 }

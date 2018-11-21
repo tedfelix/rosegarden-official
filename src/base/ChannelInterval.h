@@ -66,8 +66,8 @@ public:
         m_channel(-1),
         m_start(RealTime::zeroTime),
         m_end(RealTime::zeroTime),
-        m_instrumentBefore(NULL),
-        m_instrumentAfter(NULL),
+        m_instrumentBefore(nullptr),
+        m_instrumentAfter(nullptr),
         m_marginBefore(RealTime::zeroTime),
         m_marginAfter(RealTime::zeroTime)
         { }
@@ -77,8 +77,8 @@ public:
         m_channel(-1),
         m_start(t),
         m_end(m_latestTime),
-        m_instrumentBefore(NULL),
-        m_instrumentAfter(NULL),
+        m_instrumentBefore(nullptr),
+        m_instrumentAfter(nullptr),
         m_marginBefore(RealTime::zeroTime),
         m_marginAfter(RealTime::zeroTime)
         { }
@@ -135,7 +135,7 @@ private:
     RealTime    m_end;
 
     // The instrument that plays on the channel immediately before
-    // this channel interval starts, or NULL if none.
+    // this channel interval starts, or nullptr if none.
     Instrument *m_instrumentBefore;
     // The instrument immediately after (see above)
     Instrument *m_instrumentAfter;

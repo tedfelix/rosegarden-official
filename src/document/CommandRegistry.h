@@ -65,7 +65,7 @@ public:
                            EventSelection &s,
                            CommandArgumentQuerier &querier) = 0;
 
-    virtual EventSelection *getSubsequentSelection(Command *) { return 0; }
+    virtual EventSelection *getSubsequentSelection(Command *) { return nullptr; }
 };
 
 template <typename CommandType>
@@ -82,7 +82,7 @@ public:
     EventSelection *getSubsequentSelection(Command *c) override {
         CommandType *command = dynamic_cast<CommandType *>(c);
         if (command) return command->getSubsequentSelection();
-        return 0;
+        return nullptr;
     }
 };
 
@@ -100,7 +100,7 @@ public:
     EventSelection *getSubsequentSelection(Command *c) override {
         CommandType *command = dynamic_cast<CommandType *>(c);
         if (command) return command->getSubsequentSelection();
-        return 0;
+        return nullptr;
     }
 };
 

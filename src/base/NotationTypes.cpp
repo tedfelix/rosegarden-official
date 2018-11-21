@@ -449,7 +449,7 @@ const Key Key::UndefinedKey = Key("undefined");
 
 Key::Key() :
     m_name(DefaultKey.m_name),
-    m_accidentalHeights(0)
+    m_accidentalHeights(nullptr)
 {
     checkMap();
 }
@@ -457,7 +457,7 @@ Key::Key() :
 
 Key::Key(const Event &e) :
     m_name(""),
-    m_accidentalHeights(0)
+    m_accidentalHeights(nullptr)
 {
     checkMap();
     if (e.getType() != EventType) {
@@ -476,7 +476,7 @@ Key::Key(const Event &e) :
 
 Key::Key(const std::string &name) :
     m_name(name),
-    m_accidentalHeights(0)
+    m_accidentalHeights(nullptr)
 {
     if (name == "undefined") return;
     checkMap();
@@ -486,7 +486,7 @@ Key::Key(const std::string &name) :
 }
 
 Key::Key(int accidentalCount, bool isSharp, bool isMinor) :
-    m_accidentalHeights(0)
+    m_accidentalHeights(nullptr)
 {
     checkMap();
     for (KeyDetailMap::const_iterator i = m_keyDetailMap.begin();
@@ -513,7 +513,7 @@ Key::Key(int accidentalCount, bool isSharp, bool isMinor) :
 // with that signature.  Not quite sure what's the best solution.
 
 Key::Key(int tonicPitch, bool isMinor) :
-    m_accidentalHeights(0)
+    m_accidentalHeights(nullptr)
 {
         checkMap();
     for (KeyDetailMap::const_iterator i = m_keyDetailMap.begin();
@@ -536,14 +536,14 @@ Key::Key(int tonicPitch, bool isMinor) :
 
 Key::Key(const Key &kc) :
     m_name(kc.m_name),
-    m_accidentalHeights(0)
+    m_accidentalHeights(nullptr)
 {
 }
 
 Key& Key::operator=(const Key &kc)
 {
     m_name = kc.m_name;
-    m_accidentalHeights = 0;
+    m_accidentalHeights = nullptr;
     return *this;
 }
 

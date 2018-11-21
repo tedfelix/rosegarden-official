@@ -25,7 +25,7 @@ static std::string multibyte;
 
 std::string XmlExportable::encode(const std::string &s0)
 {
-    static char *buffer = 0;
+    static char *buffer = nullptr;
     static size_t bufsiz = 0;
     size_t buflen = 0;
 

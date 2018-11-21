@@ -169,7 +169,7 @@ AudioPluginInstance::getPort(int number)
             return *it;
     }
 
-    return 0;
+    return nullptr;
 }
 
 void

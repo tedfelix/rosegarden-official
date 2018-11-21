@@ -34,7 +34,7 @@
 namespace Rosegarden
 {
 
-CommandHistory *CommandHistory::m_instance = 0;
+CommandHistory *CommandHistory::m_instance = nullptr;
 
 CommandHistory::CommandHistory() :
     m_undoLimit(50),
@@ -252,7 +252,7 @@ CommandHistory::closeBundle()
     std::cerr << "CommandHistory::closeBundle" << std::endl;
 #endif
 
-    m_currentBundle = 0;
+    m_currentBundle = nullptr;
     m_currentBundleName = "";
 }
 
@@ -305,7 +305,7 @@ CommandHistory::endCompoundOperation()
     }
 
     MacroCommand *toAdd = m_currentCompound;
-    m_currentCompound = 0;
+    m_currentCompound = nullptr;
 
     if (toAdd->haveCommands()) {
 

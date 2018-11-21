@@ -37,7 +37,7 @@ SegmentLinker::SegmentLinker()
 
     ++m_count;
     m_id = m_count;
-    m_reference = 0;
+    m_reference = nullptr;
 }
 
 SegmentLinker::SegmentLinker(SegmentLinkerId id)
@@ -47,7 +47,7 @@ SegmentLinker::SegmentLinker(SegmentLinkerId id)
 
     m_id = id;
     m_count = std::max(m_count,m_id+1);
-    m_reference = 0;
+    m_reference = nullptr;
 }
 
 SegmentLinker::~SegmentLinker()
@@ -85,7 +85,7 @@ SegmentLinker::removeLinkedSegment(Segment *s)
     LinkedSegmentParamsList::iterator itr = findParamsItrForSegment(s);
     if (itr != m_linkedSegmentParamsList.end()) {
         m_linkedSegmentParamsList.erase(itr);
-        s->setLinker(0);
+        s->setLinker(nullptr);
     }
 }
 
@@ -294,7 +294,7 @@ SegmentLinker::insertMappedEvent(Segment *seg,
             Rosegarden::Key trKey = (Rosegarden::Key (*e)).transpose(semitones, 
                                                                          steps);
             delete refSegEvent; 
-            refSegEvent = 0;
+            refSegEvent = nullptr;
             SegmentNotationHelper helper(*seg);
             helper.insertKey(t,trKey);
             needsInsertion = false;
@@ -377,8 +377,8 @@ SegmentLinker::refreshSegment(Segment *seg)
     // Last parameter set to true to avoid an useless search for lyrics
     
     //find another segment
-    Segment *sourceSeg = 0;
-    Segment *tempClone = 0;
+    Segment *sourceSeg = nullptr;
+    Segment *tempClone = nullptr;
     
     LinkedSegmentParamsList::iterator itr;
     for (itr = m_linkedSegmentParamsList.begin(); 

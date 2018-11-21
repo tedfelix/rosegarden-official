@@ -621,7 +621,7 @@ void RG21Loader::closeSegment()
         m_composition->notifyTracksAdded(trackIds);
 
         m_composition->addSegment(m_currentSegment);
-        m_currentSegment = 0;
+        m_currentSegment = nullptr;
         m_currentSegmentTime = 0;
         m_currentClef = Clef(Clef::Treble);
 
@@ -772,7 +772,7 @@ bool RG21Loader::load(const QString &fileName, Composition &comp)
     }
 
     delete m_stream;
-    m_stream = 0;
+    m_stream = nullptr;
 
     return true;
 }

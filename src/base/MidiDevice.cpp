@@ -414,7 +414,7 @@ MidiDevice::getBankByName(const std::string &name) const
          i != m_bankList.end(); ++i) {
         if (i->getName() == name) return &(*i);
     }
-    return 0;
+    return nullptr;
 }
 
 MidiByteList
@@ -515,7 +515,7 @@ MidiDevice::getKeyMappingByName(const std::string &name) const
          i != m_keyMappingList.end(); ++i) {
         if (i->getName() == name) return &(*i);
     }
-    return 0;
+    return nullptr;
 }
 
 const MidiKeyMapping *
@@ -526,12 +526,12 @@ MidiDevice::getKeyMappingForProgram(const MidiProgram &program) const
     for (it = m_programList.begin(); it != m_programList.end(); ++it) {
         if (it->partialCompare(program)) {
             std::string kmn = it->getKeyMapping();
-            if (kmn == "") return 0;
+            if (kmn == "") return nullptr;
             return getKeyMappingByName(kmn);
         }
     }
 
-    return 0;
+    return nullptr;
 }
 
 void
@@ -956,7 +956,7 @@ bool
 MidiDevice::isUniqueControlParameter(const ControlParameter &con) const
 {
     return
-        findControlParameter(con.getType(), con.getControllerValue()) == 0;
+        findControlParameter(con.getType(), con.getControllerValue()) == nullptr;
 }
 
 const ControlParameter *
@@ -975,7 +975,7 @@ findControlParameter(std::string type, MidiByte conNumber) const
             return &*it;
         }
     }
-    return 0;
+    return nullptr;
 }
 
 bool 
@@ -1038,7 +1038,7 @@ MidiDevice::getControlParameter(int index)
     if (index >= 0 && ((unsigned int)index) < (unsigned int)m_controlList.size())
         return &m_controlList[index];
 
-    return 0;
+    return nullptr;
 }
 
 const ControlParameter *
@@ -1068,7 +1068,7 @@ MidiDevice::getControlParameter(const std::string &type, Rosegarden::MidiByte co
         }
     }
 
-    return 0;
+    return nullptr;
 }
 
 const ControlParameter *

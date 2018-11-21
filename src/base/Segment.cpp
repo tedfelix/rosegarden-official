@@ -95,7 +95,7 @@ Segment::Segment(const Segment &segment):
     m_composition(0), // Composition should decide what's in it and what's not
     m_startTime(segment.getStartTime()),
     m_endMarkerTime(segment.m_endMarkerTime ?
-                    new timeT(*segment.m_endMarkerTime) : 0),
+                    new timeT(*segment.m_endMarkerTime) : nullptr),
     m_endTime(segment.getEndTime()),
     m_trackId(segment.getTrack()),
     m_type(segment.getType()),
@@ -131,7 +131,7 @@ Segment::Segment(const Segment &segment):
     m_isTmp(segment.isTmp()),
     m_participation(segment.m_participation),
     m_verseCount(-1),   // -1 => computation needed
-    m_verse(0)   // Needs a global recomputation on the whole composition 
+    m_verse(0)   // Needs a global recomputation on the whole composition
 {
     for (const_iterator it = segment.begin();
          it != segment.end(); ++it) {
@@ -533,7 +533,7 @@ void
 Segment::clearEndMarker()
 {
     delete m_endMarkerTime;
-    m_endMarkerTime = 0;
+    m_endMarkerTime = nullptr;
     notifyEndMarkerChange(false);
 }
 
@@ -1565,7 +1565,7 @@ Segment::lockResizeNotifications()
 {
     m_notifyResizeLocked = true;
     m_memoStart = m_startTime;
-    m_memoEndMarkerTime = m_endMarkerTime ? new timeT(*m_endMarkerTime) : 0;
+    m_memoEndMarkerTime = m_endMarkerTime ? new timeT(*m_endMarkerTime) : nullptr;
 }
 
 void
@@ -1584,7 +1584,7 @@ Segment::unlockResizeNotifications()
     // opposite) ?   Is such a case possible ?
     
     if (m_memoEndMarkerTime) delete m_memoEndMarkerTime;
-    m_memoEndMarkerTime = 0;
+    m_memoEndMarkerTime = nullptr;
     notifyEndMarkerChange(shorten);
 }
 
@@ -1665,7 +1665,7 @@ Segment::getEventRuler(const std::string &type, int controllerValue)
         if ((*it)->m_type == type && (*it)->m_controllerValue == controllerValue)
             return *it;
 
-    return 0;
+    return nullptr;
 }
 
 
