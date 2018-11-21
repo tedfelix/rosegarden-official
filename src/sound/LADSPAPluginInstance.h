@@ -34,7 +34,7 @@ namespace Rosegarden
 class LADSPAPluginInstance : public RunnablePluginInstance
 {
 public:
-    virtual ~LADSPAPluginInstance();
+    ~LADSPAPluginInstance() override;
 
     bool isOK() const override { return !m_instanceHandles.empty(); }
 

@@ -55,7 +55,7 @@ public:
                                   SegmentSelection &inputSelection,
                                   AudioFile *audioFile);
 
-    virtual ~AudioSegmentDistributeCommand();
+    ~AudioSegmentDistributeCommand() override;
 
     static QString getGlobalName() 
         { return tr("Distribute Audio Segments over MIDI"); }

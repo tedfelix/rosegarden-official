@@ -170,7 +170,7 @@ public:
                  const Quantizer *quantizer,
                  PropertyName stemUpProperty = PropertyName::EmptyPropertyName);
 
-    virtual ~GenericChord();
+    ~GenericChord() override;
 
     virtual int getMarkCountForChord() const;
     virtual std::vector<Mark> getMarksForChord() const;

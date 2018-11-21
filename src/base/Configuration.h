@@ -54,7 +54,7 @@ public:
 
     Configuration() {;}
     Configuration(const Configuration &);
-    ~Configuration();
+    ~Configuration() override;
 
     bool has(const PropertyName &name) const;
 
@@ -119,7 +119,7 @@ class DocumentConfiguration : public Configuration
 public:
     DocumentConfiguration();
     DocumentConfiguration(const DocumentConfiguration &);
-    ~DocumentConfiguration();
+    ~DocumentConfiguration() override;
 
     DocumentConfiguration& operator=(const DocumentConfiguration &);
 

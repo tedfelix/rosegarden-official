@@ -37,7 +37,7 @@ class WheelyButton : public QPushButton
 
 public:
     WheelyButton(QWidget *w);
-    virtual ~WheelyButton() { }
+    ~WheelyButton() override { }
 
 signals:
     void wheel(bool up);

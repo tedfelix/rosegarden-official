@@ -40,7 +40,7 @@ class SegmentAutoSplitCommand : public NamedCommand
 
 public:
     SegmentAutoSplitCommand(Segment *segment);
-    virtual ~SegmentAutoSplitCommand();
+    ~SegmentAutoSplitCommand() override;
 
     void execute() override;
     void unexecute() override;

@@ -64,7 +64,7 @@ public:
                     RosegardenDocument *document,
                     int mode,
                     QString filename);
-    ~ProjectPackager() { };
+    ~ProjectPackager() override { };
 
     /** Return the true filename as discovered when analyzing the contents of
      * the .rgp file.  foo.rgp might contain bar.rg and directory bar/

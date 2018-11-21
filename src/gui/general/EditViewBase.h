@@ -48,7 +48,7 @@ public:
                  std::vector<Segment *> segments,
                  QWidget *parent);
 
-    virtual ~EditViewBase();
+    ~EditViewBase() override;
 
     const RosegardenDocument *getDocument() const { return m_doc; }
     RosegardenDocument *getDocument() { return m_doc; }

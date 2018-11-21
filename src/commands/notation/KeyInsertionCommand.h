@@ -58,7 +58,7 @@ public:
                         bool shouldTranspose,
                         bool shouldTransposeKey,
 			bool shouldIgnorePercussion);
-    virtual ~KeyInsertionCommand();
+    ~KeyInsertionCommand() override;
 
     static QString getGlobalName(Key *key = nullptr) {
         if (key) {

@@ -77,7 +77,7 @@ public:
 
     FileSource(const FileSource &);
 
-    virtual ~FileSource();
+    ~FileSource() override;
 
     /**
      * Block on a sub-event-loop until the availability of the file or

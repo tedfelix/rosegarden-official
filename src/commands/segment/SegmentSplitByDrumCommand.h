@@ -42,7 +42,7 @@ public:
     typedef std::vector<MidiByte> PitchList;
     
     SegmentSplitByDrumCommand(Segment *segment, const MidiKeyMapping *keyMap);
-    virtual ~SegmentSplitByDrumCommand();
+    ~SegmentSplitByDrumCommand() override;
 
     static QString getGlobalName() { return tr("Split by &Drum..."); }
 

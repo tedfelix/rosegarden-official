@@ -60,7 +60,7 @@ class NotationScene : public QGraphicsScene,
 
 public:
     NotationScene();
-    ~NotationScene();
+    ~NotationScene() override;
 
     void setNotationWidget(NotationWidget *w);
     void setStaffs(RosegardenDocument *document, std::vector<Segment *> segments);

@@ -32,11 +32,11 @@ class LinearParameterPattern : public ParameterPattern
 
     // Make as many sliders as we need.  EventParameterDialog will
     // truncate or pad as needed.
-    virtual SliderSpecVector
+    SliderSpecVector
         getSliderSpec(const SelectionSituation *situation) const override;
 
     // Set the properties of events from begin to end.
-    virtual void
+    void
         setEventProperties(iterator begin, iterator end,
                            Result *result) const override;
     virtual double getValueDelta(double valueChange, double timeRatio)

@@ -59,7 +59,7 @@ public:
                       AudioPluginOSCGUIManager *aGM,
                       PluginContainer *instrument,
                       int index);
-    virtual ~AudioPluginDialog();
+    ~AudioPluginDialog() override;
 
     PluginContainer* getPluginContainer() const { return m_pluginContainer; }
 

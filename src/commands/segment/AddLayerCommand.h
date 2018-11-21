@@ -40,7 +40,7 @@ public:
      */
     AddLayerCommand(Segment *segment, Composition &composition);
 
-    virtual ~AddLayerCommand();
+    ~AddLayerCommand() override;
 
     /** Returns a pointer to the newly created layer segment.  Not valid until
      * after invokation

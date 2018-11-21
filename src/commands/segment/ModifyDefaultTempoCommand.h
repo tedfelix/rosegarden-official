@@ -41,7 +41,7 @@ public:
         m_composition(composition),
         m_tempo(tempo) {}
 
-    virtual ~ModifyDefaultTempoCommand() {}
+    ~ModifyDefaultTempoCommand() override {}
 
     static QString getGlobalName() { return tr("Modify &Default Tempo..."); }
 

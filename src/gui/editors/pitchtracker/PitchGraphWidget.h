@@ -49,7 +49,7 @@ class PitchGraphWidget : public QWidget
 
 public:
     PitchGraphWidget(PitchHistory &history, QWidget *parent = nullptr);
-    ~PitchGraphWidget();
+    ~PitchGraphWidget() override;
 
     void setTuning(Accidentals::Tuning* tuning);
 

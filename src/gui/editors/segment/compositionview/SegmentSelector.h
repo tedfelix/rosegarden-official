@@ -46,7 +46,7 @@ public:
     static QString ToolName();
 
     SegmentSelector(CompositionView *, RosegardenDocument *);
-    virtual ~SegmentSelector();
+    ~SegmentSelector() override;
 
     /// Called when this tool becomes the active tool.
     void ready() override;

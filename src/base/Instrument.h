@@ -127,7 +127,7 @@ public:
     //
     Instrument(const Instrument &);
 
-    ~Instrument();
+    ~Instrument() override;
 
     std::string getName() const override { return m_name; }
     std::string getPresentationName() const override;
@@ -407,7 +407,7 @@ class Buss : public XmlExportable, public PluginContainer
 {
 public:
     Buss(BussId id);
-    ~Buss();
+    ~Buss() override;
 
     void setId(BussId id) { m_id = id; }
     BussId getId() const override { return m_id; }
@@ -440,7 +440,7 @@ class RecordIn : public XmlExportable
 {
 public:
     RecordIn();
-    ~RecordIn();
+    ~RecordIn() override;
 
     int getMappedId() const { return m_mappedId; }
     void setMappedId(int id) { m_mappedId = id; }

@@ -89,7 +89,7 @@ public:
     /**
      * Destructor for the main view
      */
-    ~RosegardenMainViewWidget();
+    ~RosegardenMainViewWidget() override;
 
     /**
      * returns a pointer to the document connected to the view

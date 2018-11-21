@@ -52,7 +52,7 @@ public:
         BadSoundFileException(QString path, QString file, int line) :
             Exception(QObject::tr("Bad sound file ") + path, file, line), m_path(path) { }
 
-        ~BadSoundFileException() throw() { }
+        ~BadSoundFileException() throw() override { }
 
         QString getPath() const { return m_path; }
 

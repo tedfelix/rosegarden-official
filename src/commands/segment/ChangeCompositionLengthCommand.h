@@ -43,7 +43,7 @@ public:
                                    timeT startTime,
                                    timeT endTime,
                                    bool autoExpand);
-    virtual ~ChangeCompositionLengthCommand();
+    ~ChangeCompositionLengthCommand() override;
 
     static QString getGlobalName()
         { return tr("Change &Composition Start and End..."); }

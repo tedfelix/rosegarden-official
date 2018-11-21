@@ -32,7 +32,7 @@ class LADSPAPluginInstance;
 class LADSPAPluginFactory : public PluginFactory
 {
 public:
-    virtual ~LADSPAPluginFactory();
+    ~LADSPAPluginFactory() override;
 
     void discoverPlugins() override;
 

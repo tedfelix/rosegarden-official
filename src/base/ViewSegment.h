@@ -39,7 +39,7 @@ class ViewSegmentObserver;
 class ViewSegment : public SegmentObserver
 {
 public: 
-    virtual ~ViewSegment();
+    ~ViewSegment() override;
 
     /**
      * Create a new ViewElementList wrapping all Events in the

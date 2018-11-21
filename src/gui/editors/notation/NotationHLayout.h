@@ -61,7 +61,7 @@ public:
                     const NotationProperties &properties,
                     QObject* parent);
 
-    virtual ~NotationHLayout();
+    ~NotationHLayout() override;
 
     void setNotePixmapFactory(NotePixmapFactory *npf) {
         m_npf = npf;

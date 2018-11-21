@@ -40,7 +40,7 @@ public:
     SymbolInsertionCommand(Segment &segment,
                          timeT time,
                          Symbol symbol);
-    virtual ~SymbolInsertionCommand();
+    ~SymbolInsertionCommand() override;
 
     static QString getGlobalName(Symbol *symbol = nullptr);
 

@@ -39,7 +39,7 @@ class SegmentQuickCopyCommand : public NamedCommand
 
 public:
     SegmentQuickCopyCommand(Segment *segment);
-    virtual ~SegmentQuickCopyCommand();
+    ~SegmentQuickCopyCommand() override;
 
     void execute() override;
     void unexecute() override;

@@ -59,7 +59,7 @@ public:
      * Only destroy the graphical representation of the Event, not the
      * Event itself
      */
-    ~NotationElement();
+    ~NotationElement() override;
 
     /**
      * Returns the time at which the Event is to be displayed in

@@ -36,7 +36,7 @@ public:
     AddTimeSignatureAndNormalizeCommand(Composition *composition,
                                         timeT time,
                                         TimeSignature timeSig);
-    virtual ~AddTimeSignatureAndNormalizeCommand();
+    ~AddTimeSignatureAndNormalizeCommand() override;
 };
 
 

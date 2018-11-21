@@ -39,7 +39,7 @@ public:
     SetTriggerSegmentBasePitchCommand(Composition *composition,
                                       TriggerSegmentId id,
                                       int newPitch);
-    virtual ~SetTriggerSegmentBasePitchCommand();
+    ~SetTriggerSegmentBasePitchCommand() override;
     
     void execute() override;
     void unexecute() override;

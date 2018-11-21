@@ -36,7 +36,7 @@ class WarningDialog : public QDialog
     Q_OBJECT
 public:
     WarningDialog(QWidget *parent = nullptr);
-    ~WarningDialog();
+    ~WarningDialog() override;
 
     /** We'll build the message queue out of these for convenience, so both the
      * text and informative text can be tossed about as one unit

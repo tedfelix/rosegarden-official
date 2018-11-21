@@ -74,7 +74,7 @@ public:
     LilyPondProcessor(QWidget *parent,
                       int mode,
                       QString filename);
-    ~LilyPondProcessor() { };
+    ~LilyPondProcessor() override { };
 
 protected:
     int           m_mode;

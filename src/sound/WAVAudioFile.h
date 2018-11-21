@@ -42,7 +42,7 @@ public:
                   unsigned int bytesPerSample,
                   unsigned int bitsPerSample);
 
-    ~WAVAudioFile();
+    ~WAVAudioFile() override;
 
     // Override these methods for the WAV
     //

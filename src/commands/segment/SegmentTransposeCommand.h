@@ -42,7 +42,7 @@ public:
     SegmentTransposeCommand(SegmentSelection selection,
         bool changeKey, int steps, int semitones, bool transposeSegmentBack);
 
-    virtual ~SegmentTransposeCommand();
+    ~SegmentTransposeCommand() override;
 
     static QString getGlobalName(int semitones = 0) {
         switch (semitones) {

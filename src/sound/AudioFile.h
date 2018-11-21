@@ -67,7 +67,7 @@ public:
               unsigned int sampleRate,
               unsigned int bitsPerSample);
 
-    ~AudioFile();
+    ~AudioFile() override;
 
     /// Id of this audio file (used by AudioFileManager)
     ///

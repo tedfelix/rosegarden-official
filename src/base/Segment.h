@@ -146,7 +146,7 @@ protected:
     Segment(const Segment&);
 
 public:
-    virtual ~Segment();
+    ~Segment() override;
 
 
     //////

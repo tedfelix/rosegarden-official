@@ -48,7 +48,7 @@ public:
         m_device(device),
         m_control(control),
         m_id(id) { }
-    ~ModifyControlParameterCommand();
+    ~ModifyControlParameterCommand() override;
 
     void execute() override;
     void unexecute() override;

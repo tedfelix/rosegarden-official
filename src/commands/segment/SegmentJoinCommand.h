@@ -39,7 +39,7 @@ class SegmentJoinCommand : public NamedCommand
 public:
     typedef std::vector<Segment *> SegmentVec;
     SegmentJoinCommand(SegmentSelection &segments);
-    virtual ~SegmentJoinCommand();
+    ~SegmentJoinCommand() override;
 
     void execute() override;
     void unexecute() override;

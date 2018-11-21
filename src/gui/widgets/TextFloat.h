@@ -104,7 +104,7 @@ public :
      */
     void display(QPoint offset) override;
 
-    virtual ~TextFloat();
+    ~TextFloat() override;
 
 protected :
     TextFloat(QWidget *parent);

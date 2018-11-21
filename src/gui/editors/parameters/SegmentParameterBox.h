@@ -66,7 +66,7 @@ public:
 
     SegmentParameterBox(RosegardenDocument *doc,
                         QWidget *parent=nullptr);
-    ~SegmentParameterBox();
+    ~SegmentParameterBox() override;
 
     // Use Segments to update GUI parameters
     //

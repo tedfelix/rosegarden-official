@@ -27,7 +27,7 @@ class DSSIPluginInstance;
 class DSSIPluginFactory : public LADSPAPluginFactory
 {
 public:
-    virtual ~DSSIPluginFactory();
+    ~DSSIPluginFactory() override;
 
     void enumeratePlugins(MappedObjectPropertyList &list) override;
 

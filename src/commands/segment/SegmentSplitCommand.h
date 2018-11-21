@@ -44,7 +44,7 @@ public:
     SegmentSplitCommand(Segment *segment,
                         timeT splitTime,
                         bool keepLabel = false);
-    virtual ~SegmentSplitCommand();
+    ~SegmentSplitCommand() override;
 
     bool isValid() { return isValid(m_segment, m_splitTime); }
     bool isValid(Segment * segment, timeT splitTime);

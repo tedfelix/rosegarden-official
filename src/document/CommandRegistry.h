@@ -113,7 +113,7 @@ class CommandRegistry : public QObject
     Q_OBJECT
 
 public:
-    virtual ~CommandRegistry();
+    ~CommandRegistry() override;
 
     void registerCommand(QString actionName,
                          AbstractCommandBuilder *builder) {

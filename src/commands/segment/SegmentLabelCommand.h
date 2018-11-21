@@ -39,7 +39,7 @@ class SegmentLabelCommand : public NamedCommand
 public:
     SegmentLabelCommand(SegmentSelection &segments,
                         const QString &label);
-    virtual ~SegmentLabelCommand();
+    ~SegmentLabelCommand() override;
 
     static QString getGlobalName()
         { return tr("Re&label..."); }

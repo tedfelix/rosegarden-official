@@ -39,7 +39,7 @@ class AudioSegmentSplitCommand : public NamedCommand
 public:
     AudioSegmentSplitCommand(Segment *segment,
                              timeT splitTime);
-    virtual ~AudioSegmentSplitCommand();
+    ~AudioSegmentSplitCommand() override;
 
     // Call after ctor and before execute() to see if execute() will succeed.
     bool isValid();

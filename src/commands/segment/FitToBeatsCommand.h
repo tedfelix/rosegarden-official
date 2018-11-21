@@ -39,7 +39,7 @@ class FitToBeatsCommand : public NamedCommand
 public:
     FitToBeatsCommand(Segment *grooveSegment);
 
-    virtual ~FitToBeatsCommand();
+    ~FitToBeatsCommand() override;
 
     static QString getGlobalName() 
         { return tr("Fit Existing Beats to Beat Segment"); }

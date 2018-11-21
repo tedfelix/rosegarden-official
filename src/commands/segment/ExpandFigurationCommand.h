@@ -40,7 +40,7 @@ class ExpandFigurationCommand : public MacroCommand
 public:
   ExpandFigurationCommand(SegmentSelection selection);
 
-  virtual ~ExpandFigurationCommand();
+  ~ExpandFigurationCommand() override;
 
   static QString getGlobalName() 
   { return tr("Expand Block Chords to Figurations"); }

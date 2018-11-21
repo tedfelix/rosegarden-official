@@ -46,7 +46,7 @@ class NoteRestInserter : public NotationTool
     friend class NotationToolBox;
 
 public:
-    ~NoteRestInserter();
+    ~NoteRestInserter() override;
 
     void handleLeftButtonPress(const NotationMouseEvent *) override;
     

@@ -34,7 +34,7 @@ public:
     MatrixViewSegment(MatrixScene *,
                       Segment *,
                       bool drumMode);
-    virtual ~MatrixViewSegment();
+    ~MatrixViewSegment() override;
 
     void endMarkerTimeChanged(const Segment *segment, bool shorten) override;
 

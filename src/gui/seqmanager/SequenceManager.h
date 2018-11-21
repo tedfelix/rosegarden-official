@@ -82,7 +82,7 @@ public:
      * constructed).
      */
     SequenceManager();
-    ~SequenceManager();
+    ~SequenceManager() override;
 
     /**
      * Sets (replaces) the internal document, and sets a parent widget for

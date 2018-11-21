@@ -80,7 +80,7 @@ public:
               std::vector<Segment *> segments,
               QWidget *parent);
 
-    virtual ~EventView();
+    ~EventView() override;
 
     void closeEvent(QCloseEvent *event) override;
 

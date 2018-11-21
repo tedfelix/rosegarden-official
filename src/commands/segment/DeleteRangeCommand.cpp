@@ -48,7 +48,7 @@ public:
         {
             Q_ASSERT(firstSplitTime < secondSplitTime);
         }
-    virtual ~SegmentGroupDeleteRangeCommand();
+    ~SegmentGroupDeleteRangeCommand() override;
 
 protected:
     void execute() override;

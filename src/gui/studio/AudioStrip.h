@@ -47,7 +47,7 @@ class AudioStrip : public QWidget
 
 public:
     AudioStrip(QWidget *parent, InstrumentId i_id = NoInstrument);
-    virtual ~AudioStrip();
+    ~AudioStrip() override;
 
     void setId(InstrumentId id);
     InstrumentId getId() const  { return m_id; }

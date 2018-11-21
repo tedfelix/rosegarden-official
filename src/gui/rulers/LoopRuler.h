@@ -55,7 +55,7 @@ public:
               bool isForMainWindow = false,
               QWidget* parent = nullptr);
 
-    ~LoopRuler();
+    ~LoopRuler() override;
 
     void setSnapGrid(const SnapGrid *grid);
 

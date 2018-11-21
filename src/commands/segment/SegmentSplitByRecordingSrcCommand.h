@@ -38,7 +38,7 @@ class SegmentSplitByRecordingSrcCommand : public NamedCommand
 public:
     SegmentSplitByRecordingSrcCommand(Segment *segment,
                                       int channel, int device);
-    virtual ~SegmentSplitByRecordingSrcCommand();
+    ~SegmentSplitByRecordingSrcCommand() override;
     
     static QString getGlobalName()
         { return tr("Split by &Recording Source..."); }

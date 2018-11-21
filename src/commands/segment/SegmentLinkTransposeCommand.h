@@ -40,7 +40,7 @@ public:
     /// Set transpose on segments.
     SegmentLinkTransposeCommand(std::vector<Segment *> linkedSegs,
         bool changeKey, int steps, int semitones, bool transposeSegmentBack);
-    virtual ~SegmentLinkTransposeCommand();
+    ~SegmentLinkTransposeCommand() override;
 
     void execute() override;
     void unexecute() override;

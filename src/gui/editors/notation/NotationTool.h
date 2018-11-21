@@ -65,7 +65,7 @@ class NotationTool : public BaseTool, public ActionFileClient
     friend class NotationToolBox;
 
 public:
-    virtual ~NotationTool();
+    ~NotationTool() override;
 
     /**
      * Is called by the view when the tool is set as current.

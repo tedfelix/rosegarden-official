@@ -71,7 +71,7 @@ public:
               int height = 0,
               QWidget* parent = nullptr);
 
-    ~TextRuler();
+    ~TextRuler() override;
 
     QSize sizeHint() const override;
     QSize minimumSizeHint() const override;

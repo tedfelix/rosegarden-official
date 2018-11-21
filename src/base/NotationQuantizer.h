@@ -26,7 +26,7 @@ public:
     NotationQuantizer();
     NotationQuantizer(std::string source, std::string target);
     NotationQuantizer(const NotationQuantizer &);
-    ~NotationQuantizer();
+    ~NotationQuantizer() override;
 
     /**
      * Set the absolute time minimum unit.  Default is demisemiquaver.

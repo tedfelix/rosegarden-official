@@ -46,7 +46,7 @@ public:
                InstrumentId ibase,
                const std::string &name,
                DeviceDirection dir);
-    virtual ~MidiDevice();
+    ~MidiDevice() override;
 
     // Copy ctor.
     // ??? Switch pointers to objects and rely on bitwise copy to take

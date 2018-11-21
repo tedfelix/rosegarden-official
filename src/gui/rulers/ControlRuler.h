@@ -63,7 +63,7 @@ public:
     ControlRuler(ViewSegment*,
                  RulerScale*,
                  QWidget* parent=nullptr); //###  const char name is obsolete, and I'm almost sure WFlags is obsolete too
-    virtual ~ControlRuler();
+    ~ControlRuler() override;
 
     virtual QString getName() = 0;
 

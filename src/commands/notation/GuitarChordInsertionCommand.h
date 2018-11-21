@@ -41,7 +41,7 @@ public:
     GuitarChordInsertionCommand(Segment &segment,
                               timeT time,
                               const Guitar::Chord& chord);
-    virtual ~GuitarChordInsertionCommand();
+    ~GuitarChordInsertionCommand() override;
 
     Event *getLastInsertedEvent() { return m_lastInsertedEvent; }
 

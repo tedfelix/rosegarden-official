@@ -34,7 +34,7 @@ namespace Rosegarden
 class DSSIPluginInstance : public RunnablePluginInstance
 {
 public:
-    virtual ~DSSIPluginInstance();
+    ~DSSIPluginInstance() override;
 
     bool isOK() const override { return m_instanceHandle != nullptr; }
 

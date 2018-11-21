@@ -66,7 +66,7 @@ class NotationWidget : public QWidget,
 
 public:
     NotationWidget();
-    virtual ~NotationWidget();
+    ~NotationWidget() override;
 
     // Delete and zero the pointer members if they are allocated.  For
     // 2-stage deletion.

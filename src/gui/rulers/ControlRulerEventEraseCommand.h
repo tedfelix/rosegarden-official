@@ -36,7 +36,7 @@ public:
     ControlRulerEventEraseCommand(ControlItemList selectedItems,
                                 Segment &segment,
                                 Rosegarden::timeT start, Rosegarden::timeT end);
-    virtual ~ControlRulerEventEraseCommand() {;}
+    ~ControlRulerEventEraseCommand() override {;}
 
 
 protected:

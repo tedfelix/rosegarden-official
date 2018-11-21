@@ -42,7 +42,7 @@ class AddIndicationCommand : public BasicCommand
 public:
     AddIndicationCommand(std::string indicationType,
                          EventSelection &selection);
-    virtual ~AddIndicationCommand();
+    ~AddIndicationCommand() override;
 
     // tests whether the indication can be added without overlapping
     // another one of the same type

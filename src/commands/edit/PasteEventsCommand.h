@@ -78,7 +78,7 @@ public:
                        timeT pasteEndTime,
                        PasteType pasteType);
 
-    virtual ~PasteEventsCommand();
+    ~PasteEventsCommand() override;
 
     EventSelection getPastedEvents();
 

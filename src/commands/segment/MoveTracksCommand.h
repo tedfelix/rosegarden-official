@@ -41,7 +41,7 @@ public:
     MoveTracksCommand(Composition *composition,
                       TrackId srcTrack,
                       TrackId destTrack);
-    virtual ~MoveTracksCommand();
+    ~MoveTracksCommand() override;
 
     static QString getGlobalName() { return tr("Move Tracks..."); }
 

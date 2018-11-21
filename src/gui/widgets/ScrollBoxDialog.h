@@ -42,7 +42,7 @@ public:
                     ScrollBox::SizeMode mode = ScrollBox::FixWidth,
                     const char *name = nullptr);
 //                    WFlags flags = 0);
-    ~ScrollBoxDialog();
+    ~ScrollBoxDialog() override;
 
     ScrollBox *scrollbox() { return m_scrollbox; }
     void setPageSize(const QSize&);

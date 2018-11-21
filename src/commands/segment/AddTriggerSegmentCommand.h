@@ -43,7 +43,7 @@ public:
                              timeT duration, // start time always 0
                              int basePitch = -1,
                              int baseVelocity = -1);
-    virtual ~AddTriggerSegmentCommand();
+    ~AddTriggerSegmentCommand() override;
 
     TriggerSegmentId getId() const; // after invocation
 

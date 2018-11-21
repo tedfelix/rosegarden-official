@@ -71,7 +71,7 @@ class MatrixWidget : public QWidget,
 
 public:
     MatrixWidget(bool drumMode);
-    virtual ~MatrixWidget();
+    ~MatrixWidget() override;
 
     void setSegments(RosegardenDocument *document,
                      std::vector<Segment *> segments);

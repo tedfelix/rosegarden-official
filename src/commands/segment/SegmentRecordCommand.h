@@ -44,7 +44,7 @@ class SegmentRecordCommand : public NamedCommand
 
 public:
     SegmentRecordCommand(Segment *segment);
-    virtual ~SegmentRecordCommand();
+    ~SegmentRecordCommand() override;
 
     void execute() override;
     void unexecute() override;

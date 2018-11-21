@@ -48,7 +48,7 @@ Q_OBJECT
 
 public:
     ControlRulerWidget();
-    virtual ~ControlRulerWidget();
+    ~ControlRulerWidget() override;
 
     void setSegments(RosegardenDocument *document,
                      std::vector<Segment *> segments);

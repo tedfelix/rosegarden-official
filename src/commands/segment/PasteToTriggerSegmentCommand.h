@@ -95,7 +95,7 @@ public:
                                  QString label,
                                  int basePitch = -1,
                                  int baseVelocity = -1);
-    virtual ~PasteToTriggerSegmentCommand();
+    ~PasteToTriggerSegmentCommand() override;
 
     void execute() override;
     void unexecute() override;

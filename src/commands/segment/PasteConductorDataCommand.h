@@ -45,7 +45,7 @@ public:
     PasteConductorDataCommand(Composition *composition,
                               Clipboard *clipboard,
                               timeT t);
-    virtual ~PasteConductorDataCommand();
+    ~PasteConductorDataCommand() override;
 
     void execute() override;
     void unexecute() override;

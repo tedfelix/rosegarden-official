@@ -34,7 +34,7 @@ public:
                 ControllerEventAdapter* eventAdapter,
                 QPolygonF polygon);
 
-    ~EventControlItem();
+    ~EventControlItem() override;
     
     void update() override;
     virtual void updateFromEvent();

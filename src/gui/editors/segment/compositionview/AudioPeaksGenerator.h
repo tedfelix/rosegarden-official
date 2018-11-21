@@ -52,7 +52,7 @@ public:
                         const Segment *segment,
                         const QRect &segmentRect,
                         CompositionModelImpl *parent);
-    ~AudioPeaksGenerator();
+    ~AudioPeaksGenerator() override;
 
     void setSegmentRect(const QRect &rect)  { m_rect = rect; }
 

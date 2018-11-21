@@ -66,7 +66,7 @@ public:
     PresetHandlerDialog(QWidget* parent, bool fromNotation = false);
 
     /** Destroy the PresetHandlerDialog */
-    ~PresetHandlerDialog();
+    ~PresetHandlerDialog() override;
 
     /** Allows access to the dialog's PresetGroup object
      *

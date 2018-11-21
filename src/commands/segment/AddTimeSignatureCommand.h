@@ -42,7 +42,7 @@ public:
     AddTimeSignatureCommand(Composition *composition,
                             timeT time,
                             TimeSignature timeSig);
-    virtual ~AddTimeSignatureCommand();
+    ~AddTimeSignatureCommand() override;
 
     static QString getGlobalName() { return tr("Add Time Si&gnature Change..."); }
 

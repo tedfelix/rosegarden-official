@@ -48,7 +48,7 @@ public:
         m_oldTime(0),
         m_oldTempo(0){}
 
-    virtual ~RemoveTempoChangeCommand() {}
+    ~RemoveTempoChangeCommand() override {}
 
     static QString getGlobalName() { return tr("Remove &Tempo Change..."); }
 

@@ -43,7 +43,7 @@ public:
      */
     RecentFiles(QString settingsGroup = "RecentFiles", size_t maxCount = 20);
 
-    virtual ~RecentFiles();
+    ~RecentFiles() override;
 
     QString getSettingsGroup() const { return m_settingsGroup; }
 

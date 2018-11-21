@@ -37,7 +37,7 @@ class FontRequester : public QWidget
 
 public:
     FontRequester(QWidget *parent = nullptr);
-    virtual ~FontRequester();
+    ~FontRequester() override;
 
     void setFont(QFont);
     QFont getFont() const;

@@ -136,7 +136,7 @@ public:
      */
     SimpleRulerScale(Composition *composition,
                      double origin, double unitsPerPixel);
-    virtual ~SimpleRulerScale();
+    ~SimpleRulerScale() override;
 
     double getOrigin() const { return m_origin; }
     void   setOrigin(double origin) { m_origin = origin; }
@@ -175,7 +175,7 @@ public:
      */
     SegmentsRulerScale(Composition *composition, SegmentSelection segments,
                        double origin, double unitsPerPixel);
-    virtual ~SegmentsRulerScale();
+    ~SegmentsRulerScale() override;
 
     double getOrigin() const { return m_origin; }
     void   setOrigin(double origin) { m_origin = origin; }
@@ -220,7 +220,7 @@ public:
      * deleted).
      */
     ZoomableRulerScale(const RulerScale *reference);
-    virtual ~ZoomableRulerScale();
+    ~ZoomableRulerScale() override;
 
     double getBarPosition(int n) const override;
     double getBarWidth(int n) const override;

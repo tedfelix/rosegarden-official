@@ -40,7 +40,7 @@ class SetLyricsCommand : public NamedCommand
 
 public:
     SetLyricsCommand(Segment *segment, int verse, QString newLyricData);
-    ~SetLyricsCommand();
+    ~SetLyricsCommand() override;
     
     static QString getGlobalName() { return tr("Edit L&yrics"); }
 

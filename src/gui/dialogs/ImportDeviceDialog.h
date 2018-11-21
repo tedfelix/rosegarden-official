@@ -50,7 +50,7 @@ class ImportDeviceDialog : public QDialog
 
 public:
     ImportDeviceDialog(QWidget *parent, QUrl url);
-    virtual ~ImportDeviceDialog();
+    ~ImportDeviceDialog() override;
 
     bool doImport();
 

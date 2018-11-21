@@ -57,7 +57,7 @@ Q_OBJECT
 
 public:
     InstrumentParameterBox(QWidget *parent);
-    ~InstrumentParameterBox();
+    ~InstrumentParameterBox() override;
 
     /// Set the audio meter levels on the AIPP.
     /**

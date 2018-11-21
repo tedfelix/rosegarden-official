@@ -51,7 +51,7 @@ class DeviceManagerDialog : public QMainWindow, public Ui::DeviceManagerDialogUi
 public:
     
     DeviceManagerDialog (QWidget* parent, RosegardenDocument* doc);
-    ~DeviceManagerDialog();
+    ~DeviceManagerDialog() override;
     
     /**
     *    Clear all lists

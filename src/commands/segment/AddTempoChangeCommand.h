@@ -48,7 +48,7 @@ public:
         m_oldTempo(0),
         m_tempoChangeIndex(0) {}
 
-    virtual ~AddTempoChangeCommand();
+    ~AddTempoChangeCommand() override;
 
     static QString getGlobalName() { return tr("Add Te&mpo Change..."); }
 

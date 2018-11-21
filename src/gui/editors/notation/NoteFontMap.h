@@ -45,7 +45,7 @@ public:
     typedef Exception MappingFileReadFailed;
 
     NoteFontMap(QString name); // load and parse the XML mapping file
-    ~NoteFontMap();
+    ~NoteFontMap() override;
 
     /**
      * ok() returns false if the file read succeeded but the font

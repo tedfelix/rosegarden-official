@@ -41,7 +41,7 @@ public:
     TextInsertionCommand(Segment &segment,
                          timeT time,
                          Text text);
-    virtual ~TextInsertionCommand();
+    ~TextInsertionCommand() override;
 
     EventSelection *getSubsequentSelection() override;
     Event *getLastInsertedEvent() { return m_lastInsertedEvent; }

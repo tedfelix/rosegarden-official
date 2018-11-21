@@ -90,7 +90,7 @@ public:
                  int overallHeight,
                  QWidget* parent = nullptr);
 
-    ~TrackButtons();
+    ~TrackButtons() override;
 
     /// Return a vector of highlighted track positions
     /// @see selectTrack()

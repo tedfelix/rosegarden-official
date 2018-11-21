@@ -41,7 +41,7 @@ class SegmentSyncClefCommand : public MacroCommand
 public:
     SegmentSyncClefCommand(Segment &segment, const Clef& clef);
 
-    virtual ~SegmentSyncClefCommand();
+    ~SegmentSyncClefCommand() override;
 
 protected:
     void processSegment(Segment &segment, const Clef& clef);

@@ -40,7 +40,7 @@ class EventSelection;
 class BasicSelectionCommand : public BasicCommand
 {
 public:
-    virtual ~BasicSelectionCommand();
+    ~BasicSelectionCommand() override;
 
 protected:
     /// selection from segment

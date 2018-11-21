@@ -80,7 +80,7 @@ public:
     } TypeStatus;
 
     MusicXMLXMLHandler(Composition *comp, Studio *studio);
-    ~MusicXMLXMLHandler();
+    ~MusicXMLXMLHandler() override;
 
     /**
       * Overloaded handler functions

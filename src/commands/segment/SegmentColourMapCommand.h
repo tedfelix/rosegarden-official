@@ -41,7 +41,7 @@ class SegmentColourMapCommand : public NamedCommand
 public:
     SegmentColourMapCommand(      RosegardenDocument*      doc,
                             const ColourMap& map);
-    virtual ~SegmentColourMapCommand();
+    ~SegmentColourMapCommand() override;
 
     static QString getGlobalName()
         { return tr("Change Segment Color Map..."); }

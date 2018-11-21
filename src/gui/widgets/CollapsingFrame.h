@@ -41,7 +41,7 @@ public:
             QWidget *parent = nullptr,
             const QString &name = "",
             bool defaultExpanded = false);
-    virtual ~CollapsingFrame();
+    ~CollapsingFrame() override;
 
     QFont font() const;
     void setFont(QFont font);

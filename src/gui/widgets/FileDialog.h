@@ -50,7 +50,7 @@ class FileDialog : public QFileDialog
 {
     Q_OBJECT
 public:
-    ~FileDialog();
+    ~FileDialog() override;
 
     /** See documentation for QFileDialog::getOpenFilename()
      */

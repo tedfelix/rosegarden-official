@@ -69,7 +69,7 @@ public:
                  unsigned int cols,
                  QWidget *parent);
 
-    ~ListEditView();
+    ~ListEditView() override;
 
     /**
      * Update the view

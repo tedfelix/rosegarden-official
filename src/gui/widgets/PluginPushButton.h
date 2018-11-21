@@ -52,7 +52,7 @@ public:
         setState(Normal);
     };
 
-    virtual ~PluginPushButton();
+    ~PluginPushButton() override;
 
     /** Set the state of the PluginPushButton to one of:
      *

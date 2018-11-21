@@ -38,7 +38,7 @@ class SegmentReconfigureCommand : public NamedCommand
 {
 public:
     SegmentReconfigureCommand(QString name, Composition *composition);
-    virtual ~SegmentReconfigureCommand();
+    ~SegmentReconfigureCommand() override;
 
     // rename: addChange()
     void addSegment(Segment *segment,

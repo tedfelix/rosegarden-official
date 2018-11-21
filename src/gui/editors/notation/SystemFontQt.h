@@ -28,7 +28,7 @@ class SystemFontQt : public SystemFont
 {
 public:
     SystemFontQt(QFont &font) : m_font(font) { }
-    virtual ~SystemFontQt() { }
+    ~SystemFontQt() override { }
 
     QPixmap renderChar(CharName charName, int glyph, int code,
 			       Strategy strategy, bool &success) override;

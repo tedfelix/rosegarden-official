@@ -45,7 +45,7 @@ public:
                      unsigned int nbTracks,
                      InstrumentId id,
                      int position); // -1 -> at end
-    virtual ~AddTracksCommand();
+    ~AddTracksCommand() override;
 
     static QString getGlobalName() { return tr("Add Tracks..."); }
 

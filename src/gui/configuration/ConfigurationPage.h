@@ -45,7 +45,7 @@ public:
     ConfigurationPage(RosegardenDocument *doc, QWidget *parent = nullptr)
         : QWidget(parent), m_doc(doc), m_pageIndex(0) {}
 
-    virtual ~ConfigurationPage() {};
+    ~ConfigurationPage() override {};
 
     /**
      * Should set the page up (ie. read the setting from the @ref

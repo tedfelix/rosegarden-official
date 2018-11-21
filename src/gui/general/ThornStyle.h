@@ -45,7 +45,7 @@ class ROSEGARDENPRIVATE_EXPORT ThornStyle : public QProxyStyle
 
 public:
     ThornStyle();
-    ~ThornStyle();
+    ~ThornStyle() override;
 
     static void setEnabled(bool b);
     static bool isEnabled();

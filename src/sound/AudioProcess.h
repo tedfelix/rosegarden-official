@@ -83,7 +83,7 @@ public:
                    unsigned int sampleRate,
                    unsigned int blockSize);
 
-    virtual ~AudioBussMixer();
+    ~AudioBussMixer() override;
 
     void kick(bool wantLock = true, bool signalInstrumentMixer = true);
     
@@ -176,7 +176,7 @@ public:
                          unsigned int sampleRate,
                          unsigned int blockSize);
 
-    virtual ~AudioInstrumentMixer();
+    ~AudioInstrumentMixer() override;
 
     void kick(bool wantLock = true);
 
@@ -336,7 +336,7 @@ public:
     AudioFileReader(SoundDriver *driver,
                     unsigned int sampleRate);
 
-    virtual ~AudioFileReader();
+    ~AudioFileReader() override;
 
     bool kick(bool wantLock = true);
 
@@ -357,7 +357,7 @@ public:
     AudioFileWriter(SoundDriver *driver,
                     unsigned int sampleRate);
 
-    virtual ~AudioFileWriter();
+    ~AudioFileWriter() override;
 
     void kick(bool wantLock = true);
 

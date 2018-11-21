@@ -61,7 +61,7 @@ public:
                     std::vector<Segment *> segments,
                     QWidget *parent = nullptr);
 
-    virtual ~NotationView();
+    ~NotationView() override;
 
     Segment *getCurrentSegment() override;
     EventSelection *getSelection() const override;

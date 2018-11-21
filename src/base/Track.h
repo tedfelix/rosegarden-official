@@ -52,7 +52,7 @@ public:
           int position = 0,
           const std::string &label = "",
           bool muted = false);
-    virtual ~Track()  { }
+    ~Track() override  { }
 
     // Accessors/Mutators
 

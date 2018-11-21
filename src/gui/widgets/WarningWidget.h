@@ -58,7 +58,7 @@ public:
      * widget is intended to be displayed on the status bar in the main window.
      */
     WarningWidget(QWidget *parent = nullptr);
-    ~WarningWidget();
+    ~WarningWidget() override;
 
     void setMidiWarning(const bool status);
     void setAudioWarning(const bool status);

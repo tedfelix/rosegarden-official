@@ -39,7 +39,7 @@ class SegmentSingleRepeatToCopyCommand : public NamedCommand
 public:
     SegmentSingleRepeatToCopyCommand(Segment *segment,
                                      timeT time);
-    virtual ~SegmentSingleRepeatToCopyCommand();
+    ~SegmentSingleRepeatToCopyCommand() override;
 
     void execute() override;
     void unexecute() override;

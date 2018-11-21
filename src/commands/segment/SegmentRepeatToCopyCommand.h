@@ -38,7 +38,7 @@ class SegmentRepeatToCopyCommand : public NamedCommand
 
 public:
     SegmentRepeatToCopyCommand(Segment *segment);
-    virtual ~SegmentRepeatToCopyCommand();
+    ~SegmentRepeatToCopyCommand() override;
 
     void execute() override;
     void unexecute() override;

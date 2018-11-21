@@ -44,7 +44,7 @@ public:
     AudioSegmentAutoSplitCommand(RosegardenDocument *doc,
                                  Segment *segment,
                                  int threshold);
-    virtual ~AudioSegmentAutoSplitCommand();
+    ~AudioSegmentAutoSplitCommand() override;
 
     void execute() override;
     void unexecute() override;

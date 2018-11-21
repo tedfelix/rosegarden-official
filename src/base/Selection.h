@@ -59,7 +59,7 @@ public:
 
     EventSelection(const EventSelection&);
 
-    virtual ~EventSelection();
+    ~EventSelection() override;
 
     bool operator==(const EventSelection &);
 

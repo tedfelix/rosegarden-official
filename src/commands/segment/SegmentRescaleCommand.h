@@ -45,7 +45,7 @@ public:
                           int multiplier,
                           int divisor,
                           timeT newStartTime);
-    virtual ~SegmentRescaleCommand();
+    ~SegmentRescaleCommand() override;
 
     void execute() override;
     void unexecute() override;

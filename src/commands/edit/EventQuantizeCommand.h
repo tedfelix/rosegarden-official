@@ -69,7 +69,7 @@ public:
                          QString settingsGroup,
                          QuantizeScope scope);
 
-    ~EventQuantizeCommand();
+    ~EventQuantizeCommand() override;
     
     static QString getGlobalName(Quantizer *quantizer = nullptr);
 

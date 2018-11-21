@@ -52,7 +52,7 @@ public:
                         RulerScale*,
                         QWidget* parent=nullptr, const char* name=0);
 
-    virtual ~PropertyControlRuler();
+    ~PropertyControlRuler() override;
 
     virtual void update();
     

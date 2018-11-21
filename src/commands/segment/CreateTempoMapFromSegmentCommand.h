@@ -42,7 +42,7 @@ class CreateTempoMapFromSegmentCommand : public NamedCommand
 
 public:
     CreateTempoMapFromSegmentCommand(Segment *grooveSegment);
-    virtual ~CreateTempoMapFromSegmentCommand();
+    ~CreateTempoMapFromSegmentCommand() override;
 
     void execute() override;
     void unexecute() override;

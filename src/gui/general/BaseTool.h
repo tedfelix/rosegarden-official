@@ -42,7 +42,7 @@ class BaseTool : public QObject
 
 public:
 
-    virtual ~BaseTool();
+    ~BaseTool() override;
 
     /**
      * Is called by the parent View (EditView or SegmentCanvas) when

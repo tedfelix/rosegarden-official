@@ -51,7 +51,7 @@ class RosegardenSequencer : public QObject, public ExternalTransport
     Q_OBJECT
 
 public:
-    virtual ~RosegardenSequencer();
+    ~RosegardenSequencer() override;
 
     /// Singleton
     static RosegardenSequencer *getInstance();

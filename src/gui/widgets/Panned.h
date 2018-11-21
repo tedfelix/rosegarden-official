@@ -32,7 +32,7 @@ class Panned : public QGraphicsView
 
 public:
     Panned();
-    virtual ~Panned() { }
+    ~Panned() override { }
 
     /// Enable wheel shift pan/ctrl zoom behavior.
     void setWheelZoomPan(bool wheelZoomPan)  { m_wheelZoomPan = wheelZoomPan; }

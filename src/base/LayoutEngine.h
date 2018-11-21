@@ -87,7 +87,7 @@ class HorizontalLayoutEngine : public LayoutEngine,
 {
 public:
     HorizontalLayoutEngine(Composition *c) : LayoutEngine(), RulerScale(c) { }
-    virtual ~HorizontalLayoutEngine() { }
+    ~HorizontalLayoutEngine() override { }
 
     /**
      * Sets a page width for the layout.
@@ -143,7 +143,7 @@ class VerticalLayoutEngine : public LayoutEngine
 {
 public:
     VerticalLayoutEngine() { }
-    virtual ~VerticalLayoutEngine() { }
+    ~VerticalLayoutEngine() override { }
 
     // I don't think we need to add anything here for now
 };

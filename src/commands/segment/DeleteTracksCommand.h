@@ -41,7 +41,7 @@ class DeleteTracksCommand : public NamedCommand
 public:
     DeleteTracksCommand(Composition *composition,
                         std::vector<TrackId> tracks);
-    virtual ~DeleteTracksCommand();
+    ~DeleteTracksCommand() override;
 
     static QString getGlobalName() { return tr("Delete Tracks..."); }
 

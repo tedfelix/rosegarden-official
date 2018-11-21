@@ -37,7 +37,7 @@ class SegmentChangeTransposeCommand : public NamedCommand
 public:
     /// Set transpose on segments.
     SegmentChangeTransposeCommand(int, Segment *segment);
-    virtual ~SegmentChangeTransposeCommand();
+    ~SegmentChangeTransposeCommand() override;
 
     void execute() override;
     void unexecute() override;

@@ -60,7 +60,7 @@ public:
         m_quantizer(quantizer),
         m_interpretations(interpretations) { }
 
-    virtual ~InterpretCommand();
+    ~InterpretCommand() override;
 
     static QString getGlobalName() { return tr("&Interpret..."); }
     

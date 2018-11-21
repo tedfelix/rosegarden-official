@@ -76,7 +76,7 @@ private:
 
     /**Destroys the input dialog
      */
-    ~InputDialog();
+    ~InputDialog() override;
 
 public:
     /* Static convenience function to get a string from the user. \a

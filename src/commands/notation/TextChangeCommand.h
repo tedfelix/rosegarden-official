@@ -40,7 +40,7 @@ public:
     TextChangeCommand(Segment &segment,
                       Event *event,
                       const Text &text);
-    virtual ~TextChangeCommand();
+    ~TextChangeCommand() override;
 
 protected:
     void modifySegment() override;

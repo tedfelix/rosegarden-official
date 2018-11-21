@@ -36,7 +36,7 @@ public:
                   Event *event,
                   bool drum,
                   long pitchOffset);
-    virtual ~MatrixElement();
+    ~MatrixElement() override;
 
     /// Returns true if the wrapped event is a note
     bool isNote() const;

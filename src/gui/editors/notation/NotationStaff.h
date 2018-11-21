@@ -61,7 +61,7 @@ public:
                   int id,
                   NotePixmapFactory *normalFactory,
                   NotePixmapFactory *smallFactory);
-    virtual ~NotationStaff();
+    ~NotationStaff() override;
 
     void setNotePixmapFactories(NotePixmapFactory *normal,
                                 NotePixmapFactory *small);

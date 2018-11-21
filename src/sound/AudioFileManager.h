@@ -61,7 +61,7 @@ class AudioFileManager : public QObject, public XmlExportable
     Q_OBJECT
 public:
     AudioFileManager();
-    virtual ~AudioFileManager();
+    ~AudioFileManager() override;
 
     class BadAudioPathException : public Exception
     {
@@ -73,7 +73,7 @@ public:
         BadAudioPathException(const SoundFile::BadSoundFileException &e) :
             Exception(QObject::tr("Bad audio file path (malformed file?) ") + e.getPath()), m_path(e.getPath()) { }
 
-        ~BadAudioPathException() throw() { }
+        ~BadAudioPathException() throw() override { }
 
         QString getPath() const { return m_path; }
 

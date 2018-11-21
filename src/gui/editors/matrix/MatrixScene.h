@@ -76,7 +76,7 @@ class MatrixScene : public QGraphicsScene,
 
 public:
     MatrixScene();
-    ~MatrixScene();
+    ~MatrixScene() override;
 
     void setMatrixWidget(MatrixWidget *w) { m_widget = w; };
     MatrixWidget *getMatrixWidget() { return m_widget; };

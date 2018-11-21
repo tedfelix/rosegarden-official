@@ -38,7 +38,7 @@ public:
                         NotationView &view,
                         Segment *segment,
                         bool into = true);
-    virtual ~AdoptSegmentCommand();
+    ~AdoptSegmentCommand() override;
 
 protected:
     void execute(void) override;

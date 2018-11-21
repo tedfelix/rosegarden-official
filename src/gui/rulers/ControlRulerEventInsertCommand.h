@@ -38,7 +38,7 @@ public:
                                    Segment &segment,
 				    timeT duration=0);
 
-    virtual ~ControlRulerEventInsertCommand() {;}
+    ~ControlRulerEventInsertCommand() override {;}
 
 protected:
 

@@ -39,7 +39,7 @@ public:
     SetTriggerSegmentDefaultRetuneCommand(Composition *composition,
                                           TriggerSegmentId id,
                                           bool newDefaultRetune);
-    virtual ~SetTriggerSegmentDefaultRetuneCommand();
+    ~SetTriggerSegmentDefaultRetuneCommand() override;
 
     void execute() override;
     void unexecute() override;

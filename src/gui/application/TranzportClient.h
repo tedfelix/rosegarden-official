@@ -49,7 +49,7 @@ class TranzportClient : public QObject, public CompositionObserver
 public:
     TranzportClient(RosegardenMainWindow* rgGUIApp);
       
-    virtual ~TranzportClient();
+    ~TranzportClient() override;
 
 public slots:
     void readData();

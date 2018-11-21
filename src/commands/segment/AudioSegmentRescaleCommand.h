@@ -46,7 +46,7 @@ public:
                                Segment *segment, float ratio,
                                timeT newStartTime,
                                timeT newEndMarkerTime);
-    virtual ~AudioSegmentRescaleCommand();
+    ~AudioSegmentRescaleCommand() override;
 
     void execute() override;
     void unexecute() override;

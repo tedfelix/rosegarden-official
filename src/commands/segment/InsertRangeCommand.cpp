@@ -47,7 +47,7 @@ public:
         {
             Q_ASSERT(duration > 0);
         }
-    virtual ~SegmentGroupInsertRangeCommand();
+    ~SegmentGroupInsertRangeCommand() override;
 
 protected:
     void execute() override;

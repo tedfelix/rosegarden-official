@@ -40,7 +40,7 @@ class DeleteTriggerSegmentCommand : public NamedCommand
 public:
     DeleteTriggerSegmentCommand(RosegardenDocument *doc,
                                 TriggerSegmentId);
-    virtual ~DeleteTriggerSegmentCommand();
+    ~DeleteTriggerSegmentCommand() override;
 
     void execute() override;
     void unexecute() override;

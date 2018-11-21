@@ -54,7 +54,7 @@ class EventFilterDialog : public QDialog
 public:
 
     EventFilterDialog(QWidget* parent);
-    ~EventFilterDialog();
+    ~EventFilterDialog() override;
 
     //-------[ accessor functions ]------------------------
 

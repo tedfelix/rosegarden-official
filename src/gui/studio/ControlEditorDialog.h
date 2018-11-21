@@ -51,7 +51,7 @@ public:
                         RosegardenDocument *doc,
                         DeviceId device);
 
-    ~ControlEditorDialog();
+    ~ControlEditorDialog() override;
 
     void initDialog();
 

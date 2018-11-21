@@ -75,7 +75,7 @@ public:
                    int height = 0,
                    QWidget* parent = nullptr);
 
-    ~ChordNameRuler();
+    ~ChordNameRuler() override;
 
     /// Indicate that the chord-name ruler should make itself ready and refresh
     void setReady();

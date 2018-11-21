@@ -47,7 +47,7 @@ public:
         m_device(device),
         m_id(id) { }
 
-    ~RemoveControlParameterCommand();
+    ~RemoveControlParameterCommand() override;
 
     void execute() override;
     void unexecute() override;

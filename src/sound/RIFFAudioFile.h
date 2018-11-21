@@ -50,7 +50,7 @@ public:
                   unsigned int bytesPerFrame,
                   unsigned int bitsPerSample);
 
-    ~RIFFAudioFile();
+    ~RIFFAudioFile() override;
 
     typedef enum {
         PCM,

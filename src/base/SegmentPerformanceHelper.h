@@ -27,7 +27,7 @@ class SegmentPerformanceHelper : protected SegmentHelper
 {
 public:
     SegmentPerformanceHelper(Segment &t) : SegmentHelper(t) { }
-    virtual ~SegmentPerformanceHelper();
+    ~SegmentPerformanceHelper() override;
 
     typedef std::vector<iterator> iteratorcontainer;
 

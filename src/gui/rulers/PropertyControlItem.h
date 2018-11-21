@@ -37,7 +37,7 @@ public:
                 ViewElement* element,
                 QPolygonF polygon);
 
-    ~PropertyControlItem();
+    ~PropertyControlItem() override;
 
     void update() override;
     ViewElement* getElement() { return m_element; }

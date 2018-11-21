@@ -37,7 +37,7 @@ class AudioFileTimeStretcher : public QObject
     
 public:
     AudioFileTimeStretcher(AudioFileManager *afm);
-    virtual ~AudioFileTimeStretcher();
+    ~AudioFileTimeStretcher() override;
 
     /**
      * Stretch an audio file and return the ID of the stretched

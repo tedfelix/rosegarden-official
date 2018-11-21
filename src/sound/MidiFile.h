@@ -46,7 +46,7 @@ class MidiFile : public QObject
     Q_OBJECT
 public:
     MidiFile();
-    virtual ~MidiFile();
+    ~MidiFile() override;
 
     /// Convert a MIDI file to a Rosegarden composition.
     /**

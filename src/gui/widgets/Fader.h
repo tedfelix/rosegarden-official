@@ -61,7 +61,7 @@ public:
     Fader(int min, int max, int deflt,
                     bool vertical, QWidget *parent);
 
-    virtual ~Fader();
+    ~Fader() override;
 
     void setOutlineColour(QColor);
 

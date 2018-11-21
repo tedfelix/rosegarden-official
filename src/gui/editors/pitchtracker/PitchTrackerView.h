@@ -56,7 +56,7 @@ public:
     PitchTrackerView(RosegardenDocument *doc,
                      std::vector<Segment *> segments,
                      QWidget *parent = nullptr);
-    ~PitchTrackerView();
+    ~PitchTrackerView() override;
 
     void setSegments(RosegardenDocument *document,
                      std::vector<Segment *> segments);

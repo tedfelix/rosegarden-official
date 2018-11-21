@@ -33,7 +33,7 @@ class ROSEGARDENPRIVATE_EXPORT WavFileReadStream : public AudioReadStream
 {
 public:
     WavFileReadStream(QString path);
-    virtual ~WavFileReadStream();
+    ~WavFileReadStream() override;
     
     static void initStaticObjects();
 

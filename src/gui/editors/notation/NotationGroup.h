@@ -60,7 +60,7 @@ public:
                   const NotationProperties &properties,
                   const Clef &clef, const Key &key);
 
-    virtual ~NotationGroup();
+    ~NotationGroup() override;
 
     Type getGroupType() const { return m_type; }
 

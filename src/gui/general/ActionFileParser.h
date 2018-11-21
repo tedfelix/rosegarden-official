@@ -44,7 +44,7 @@ class ActionFileParser : public QObject, public QXmlDefaultHandler
 
 public:
     ActionFileParser(QObject *actionOwner);
-    virtual ~ActionFileParser();
+    ~ActionFileParser() override;
     
     bool load(QString actionRcFile);
 
@@ -180,7 +180,7 @@ class ActionFileMenuWrapper : public QObject
 
 public:
     ActionFileMenuWrapper(QMenu *menu, QObject *parent);
-    virtual ~ActionFileMenuWrapper();
+    ~ActionFileMenuWrapper() override;
 
     QMenu *getMenu();
 

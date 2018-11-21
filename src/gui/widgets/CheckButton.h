@@ -55,7 +55,7 @@ public:
      */
     CheckButton(QString iconName, bool wantsMemory = true,  QWidget *parent = nullptr);
 
-    ~CheckButton();
+    ~CheckButton() override;
 };
 
 

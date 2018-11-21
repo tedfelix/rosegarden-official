@@ -154,7 +154,7 @@ class MappedStudio : public MappedObject
 {
 public:
     MappedStudio();
-    ~MappedStudio();
+    ~MappedStudio() override;
 
     // Create a new slider of a certain type for a certain
     // type of device.
@@ -296,7 +296,7 @@ public:
                             MappedObjectType type,
                             MappedObjectId id);
 
-    ~MappedConnectableObject();
+    ~MappedConnectableObject() override;
 
     void setConnections(ConnectionDirection dir,
                         MappedObjectValueList conns);
@@ -331,7 +331,7 @@ public:
     MappedAudioFader(MappedObject *parent,
                      MappedObjectId id,
                      MappedObjectValue channels = 2); // stereo default
-    ~MappedAudioFader();
+    ~MappedAudioFader() override;
 
     MappedObjectPropertyList getPropertyList(
                         const MappedObjectProperty &property) override;
@@ -380,7 +380,7 @@ public:
 
     MappedAudioBuss(MappedObject *parent,
                     MappedObjectId id);
-    ~MappedAudioBuss();
+    ~MappedAudioBuss() override;
 
     MappedObjectPropertyList getPropertyList(
                         const MappedObjectProperty &property) override;
@@ -413,7 +413,7 @@ public:
 
     MappedAudioInput(MappedObject *parent,
                      MappedObjectId id);
-    ~MappedAudioInput();
+    ~MappedAudioInput() override;
 
     MappedObjectPropertyList getPropertyList(
                         const MappedObjectProperty &property) override;
@@ -449,7 +449,7 @@ public:
     static const MappedObjectProperty Configuration; // list property
 
     MappedPluginSlot(MappedObject *parent, MappedObjectId id);
-    ~MappedPluginSlot();
+    ~MappedPluginSlot() override;
 
     MappedObjectPropertyList getPropertyList(
                         const MappedObjectProperty &property) override;
@@ -507,7 +507,7 @@ public:
     static const MappedObjectProperty Value;
 
     MappedPluginPort(MappedObject *parent, MappedObjectId id);
-    ~MappedPluginPort();
+    ~MappedPluginPort() override;
 
     MappedObjectPropertyList getPropertyList(
                         const MappedObjectProperty &property) override;

@@ -32,7 +32,7 @@ class ChordXmlHandler : public QXmlDefaultHandler
 {
 public:
 	ChordXmlHandler(Guitar::ChordMap&);
-    virtual ~ChordXmlHandler();
+    ~ChordXmlHandler() override;
     
     /// overloaded handler functions
     bool startDocument() override;

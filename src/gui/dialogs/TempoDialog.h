@@ -53,7 +53,7 @@ public:
 
     TempoDialog(QWidget *parent, RosegardenDocument *doc,
                 bool timeEditable = false);
-    ~TempoDialog();
+    ~TempoDialog() override;
 
     // Set the position at which we're checking the tempo
     //

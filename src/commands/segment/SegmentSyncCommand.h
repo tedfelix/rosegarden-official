@@ -51,7 +51,7 @@ public:
     SegmentSyncCommand(SegmentMultiSet& segments, TrackId track,
             int newTranspose, int lowRange, int highRange, const Clef& clef);
 
-    virtual ~SegmentSyncCommand();
+    ~SegmentSyncCommand() override;
 
 protected:
     void processSegment(Segment &segment, int newTranspose, int lowRange, int highRange, const Clef& clef);

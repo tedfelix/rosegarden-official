@@ -33,7 +33,7 @@ class ROSEGARDENPRIVATE_EXPORT WavFileWriteStream : public AudioWriteStream
 {
 public:
     WavFileWriteStream(Target target);
-    virtual ~WavFileWriteStream();
+    ~WavFileWriteStream() override;
 
     static void initStaticObjects();
 

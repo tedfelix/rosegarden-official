@@ -58,7 +58,7 @@ public:
                 timeT endTime,
                 Clipboard *clipboard);
 
-    virtual ~CopyCommand();
+    ~CopyCommand() override;
 
     static QString getGlobalName() { return tr("&Copy"); }
 

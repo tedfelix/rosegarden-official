@@ -38,7 +38,7 @@ class SegmentColourCommand : public NamedCommand
 public:
     SegmentColourCommand(SegmentSelection &segments,
                          const unsigned int index);
-    virtual ~SegmentColourCommand();
+    ~SegmentColourCommand() override;
 
     static QString getGlobalName()
         { return tr("Change Segment Color..."); }

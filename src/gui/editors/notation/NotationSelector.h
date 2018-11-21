@@ -51,7 +51,7 @@ class NotationSelector : public NotationTool
 
 public:
 
-    ~NotationSelector();
+    ~NotationSelector() override;
 
     void handleLeftButtonPress(const NotationMouseEvent *) override;
 

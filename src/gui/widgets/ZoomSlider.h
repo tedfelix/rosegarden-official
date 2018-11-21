@@ -54,7 +54,7 @@ public:
     ZoomSlider(const std::vector<T> &sizes, T defaultValue,
                Qt::Orientation, QWidget * parent, const char * name=0);
 
-    virtual ~ZoomSlider();
+    ~ZoomSlider() override;
     
     void reinitialise(const std::vector<T> &sizes, T defaultValue);
 

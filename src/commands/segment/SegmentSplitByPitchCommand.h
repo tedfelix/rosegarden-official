@@ -57,7 +57,7 @@ public:
                                SplitStrategy splitStrategy,
                                bool duplicateNonNoteEvents,
                                ClefHandling clefHandling);
-    virtual ~SegmentSplitByPitchCommand();
+    ~SegmentSplitByPitchCommand() override;
 
     static QString getGlobalName()
         { return tr("Split by &Pitch..."); }

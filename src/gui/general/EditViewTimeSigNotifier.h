@@ -29,7 +29,7 @@ public:
         m_timeSigChanged(false) {
         m_composition->addObserver(this);
     }
-    virtual ~EditViewTimeSigNotifier() {
+    ~EditViewTimeSigNotifier() override {
         if (!isCompositionDeleted()) m_composition->removeObserver(this);
     }
     void timeSignatureChanged(const Rosegarden::Composition *c) override {

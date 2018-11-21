@@ -35,7 +35,7 @@ public:
     
     SegmentLinker();
     SegmentLinker(SegmentLinkerId id);
-    virtual ~SegmentLinker();
+    ~SegmentLinker() override;
     
     void addLinkedSegment(Segment *s);
     void removeLinkedSegment(Segment *s);

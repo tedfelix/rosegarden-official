@@ -88,7 +88,7 @@ public:
     typedef recordtrackcontainer::const_iterator recordtrackconstiterator;
 
     Composition();
-    virtual ~Composition();
+    ~Composition() override;
 
 private:
     Composition(const Composition &);
@@ -979,7 +979,7 @@ protected:
 
     public:
         ReferenceSegment(std::string eventType);
-        virtual ~ReferenceSegment();
+        ~ReferenceSegment() override;
     private:
         ReferenceSegment(const ReferenceSegment &);
         ReferenceSegment& operator=(const ReferenceSegment &);

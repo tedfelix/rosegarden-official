@@ -51,7 +51,7 @@ class SelectDialog : public QDialog
 public:
     SelectDialog(QWidget *parent = nullptr
                 );
-    ~SelectDialog();
+    ~SelectDialog() override;
 
 public slots:
     void accept() override;

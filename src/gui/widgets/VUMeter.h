@@ -82,7 +82,7 @@ protected:
             int width = 0,
             int height = 0,
             VUAlignment alignment = Horizontal);
-    ~VUMeter();
+    ~VUMeter() override;
 
     virtual void meterStart() = 0;
     virtual void meterStop() = 0;

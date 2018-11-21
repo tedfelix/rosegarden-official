@@ -41,7 +41,7 @@ class MatrixToolBox : public BaseToolBox
 
 public:
     MatrixToolBox(MatrixWidget *parent);
-    virtual ~MatrixToolBox();
+    ~MatrixToolBox() override;
 
     void setScene(MatrixScene *scene);
 

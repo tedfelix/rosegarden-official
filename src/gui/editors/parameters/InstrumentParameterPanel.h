@@ -43,7 +43,7 @@ class InstrumentParameterPanel : public QFrame
     Q_OBJECT
 public:
     InstrumentParameterPanel(QWidget *parent);
-    virtual ~InstrumentParameterPanel() {}
+    ~InstrumentParameterPanel() override {}
 
 protected:
     void setSelectedInstrument(Instrument *);

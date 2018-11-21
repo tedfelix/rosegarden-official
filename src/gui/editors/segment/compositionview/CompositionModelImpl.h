@@ -118,7 +118,7 @@ public:
                          RulerScale *,
                          int trackCellHeight);
 
-    virtual ~CompositionModelImpl();
+    ~CompositionModelImpl() override;
 
     Composition &getComposition()  { return m_composition; }
     Studio &getStudio()  { return m_studio; }

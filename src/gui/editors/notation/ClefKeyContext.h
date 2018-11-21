@@ -63,7 +63,7 @@ public:
      */
     ClefKeyContext();
 
-    ~ClefKeyContext();
+    ~ClefKeyContext() override;
 
     void setSegments(NotationScene *scene);
 

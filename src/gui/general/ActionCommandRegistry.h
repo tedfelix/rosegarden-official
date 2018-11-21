@@ -34,7 +34,7 @@ class ActionCommandRegistry : public CommandRegistry
 
 public:
     ActionCommandRegistry(ActionFileClient *c);
-    virtual ~ActionCommandRegistry();
+    ~ActionCommandRegistry() override;
 
 protected:
     ActionFileClient *m_client;

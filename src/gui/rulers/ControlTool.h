@@ -40,7 +40,7 @@ public:
     };
 
     ControlTool(QString rcFileName, QString menuName, ControlRuler *ruler);
-    virtual ~ControlTool() {};
+    ~ControlTool() override {};
 //    virtual int operator()(double x, int val) = 0;
     virtual void handleLeftButtonPress(const ControlMouseEvent *) {}
     virtual void handleMidButtonPress(const ControlMouseEvent *) {}

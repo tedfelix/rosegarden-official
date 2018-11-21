@@ -29,7 +29,7 @@ class Panner : public QGraphicsView
 
 public:
     Panner();
-    virtual ~Panner() { }
+    ~Panner() override { }
 
     virtual void setScene(QGraphicsScene *);
 

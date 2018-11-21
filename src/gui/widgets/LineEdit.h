@@ -34,7 +34,7 @@ class LineEdit : public QLineEdit
 public:
     LineEdit(QWidget *parent=nullptr);
     LineEdit(const QString&, QWidget *parent=nullptr);
-    ~LineEdit();
+    ~LineEdit() override;
 };
 
 }

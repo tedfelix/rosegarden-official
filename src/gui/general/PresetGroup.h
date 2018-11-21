@@ -63,7 +63,7 @@ public:
     PresetGroup();
 
     /** Destroy the PresetGroup object */
-    ~PresetGroup();
+    ~PresetGroup() override;
 
     /** Return a \c CategoriesContainer that comprises a list of the categories
      * discovered in the XML file */

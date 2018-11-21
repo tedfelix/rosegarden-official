@@ -48,7 +48,7 @@ class NamedCommand : public Command
 {
 public:
     NamedCommand(QString name) : m_name(name) { }
-    virtual ~NamedCommand() { }
+    ~NamedCommand() override { }
 
     QString getName() const override { return m_name; }
     virtual void setName(QString name) { m_name = name; }
@@ -61,7 +61,7 @@ class MacroCommand : public Command
 {
 public:
     MacroCommand(QString name);
-    virtual ~MacroCommand();
+    ~MacroCommand() override;
 
     virtual void addCommand(Command *command);
     virtual void deleteCommand(Command *command);
@@ -89,7 +89,7 @@ class BundleCommand : public MacroCommand
     Q_DECLARE_TR_FUNCTIONS(BundleCommand)
 public:
     BundleCommand(QString name);
-    virtual ~BundleCommand();
+    ~BundleCommand() override;
 
     QString getName() const override;
 };

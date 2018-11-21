@@ -32,7 +32,7 @@ class SoftSynthDevice : public Device, public Controllable
 public:
     SoftSynthDevice();
     SoftSynthDevice(DeviceId id, const std::string &name);
-    virtual ~SoftSynthDevice();
+    ~SoftSynthDevice() override;
 
     // Copy constructor
     //

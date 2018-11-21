@@ -55,7 +55,7 @@ public:
                  int height = 0,
                  QWidget* parent = nullptr);
 
-    ~RawNoteRuler();
+    ~RawNoteRuler() override;
 
     void setCurrentSegment(Segment *segment);
 

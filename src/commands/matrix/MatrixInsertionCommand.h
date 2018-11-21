@@ -42,7 +42,7 @@ public:
                            timeT endTime,
                            Event *event);
 
-    virtual ~MatrixInsertionCommand();
+    ~MatrixInsertionCommand() override;
 
     Event *getLastInsertedEvent() { return m_lastInsertedEvent; }
     

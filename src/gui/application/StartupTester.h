@@ -37,7 +37,7 @@ class StartupTester : public QThread
 
 public:
     StartupTester();
-    virtual ~StartupTester();
+    ~StartupTester() override;
 
     void run() override;
 

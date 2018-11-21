@@ -70,7 +70,7 @@ public:
      */
     StaffHeader(HeadersGroup *group, TrackId trackId, int height, int ypos);
 
-    ~StaffHeader();
+    ~StaffHeader() override;
 
     /**
      * Examine staff at x position and gather data needed to draw

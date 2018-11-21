@@ -38,7 +38,7 @@ class TimerCallbackAssistant : public QObject
 
 public:
     TimerCallbackAssistant(int ms, void (*callback)(void *data), void *data);
-    virtual ~TimerCallbackAssistant();
+    ~TimerCallbackAssistant() override;
 
 protected slots:
     void slotCallback();

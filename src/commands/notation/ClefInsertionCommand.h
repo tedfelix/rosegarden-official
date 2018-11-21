@@ -44,7 +44,7 @@ public:
                          Clef clef,
                          bool shouldChangeOctave = false,
                          bool shouldTranspose = false);
-    virtual ~ClefInsertionCommand();
+    ~ClefInsertionCommand() override;
 
     virtual QString getThisGlobalName(Clef *clef = nullptr);
     static QString getGlobalName(Clef *clef = nullptr);
@@ -73,7 +73,7 @@ public:
                             Clef clef,
                             bool shouldChangeOctave = false,
                             bool shouldTranspose = false);
-    virtual ~ClefLinkInsertionCommand();
+    ~ClefLinkInsertionCommand() override;
 
     QString getThisGlobalName(Clef *clef = nullptr) override;
     static QString getGlobalName(Clef *clef = nullptr);

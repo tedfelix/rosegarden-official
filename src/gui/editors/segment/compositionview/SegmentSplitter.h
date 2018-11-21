@@ -43,7 +43,7 @@ class SegmentSplitter : public SegmentTool
 
 public:
 
-    virtual ~SegmentSplitter();
+    ~SegmentSplitter() override;
 
     void ready() override;
 

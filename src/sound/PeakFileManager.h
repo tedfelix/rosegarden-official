@@ -44,7 +44,7 @@ class PeakFileManager : public QObject
     Q_OBJECT
 public:
     PeakFileManager();
-    virtual ~PeakFileManager();
+    ~PeakFileManager() override;
     
     class BadPeakFileException : public Exception
     {
@@ -56,7 +56,7 @@ public:
         BadPeakFileException(const SoundFile::BadSoundFileException &e) :
             Exception(QObject::tr("Bad peak file (malformed audio?) ") + e.getPath()), m_path(e.getPath()) { }
 
-        ~BadPeakFileException() throw() { }
+        ~BadPeakFileException() throw() override { }
 
         QString getPath() const { return m_path; }
 

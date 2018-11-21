@@ -51,7 +51,7 @@ public:
     LinkedSegmentsCommand(const QString &name,
                           SegmentVec originalSegments,
 			  Composition *composition);
-    virtual ~LinkedSegmentsCommand();
+    ~LinkedSegmentsCommand() override;
 
 protected:
     void execute()override = 0;

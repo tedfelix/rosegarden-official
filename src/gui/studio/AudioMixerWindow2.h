@@ -42,7 +42,7 @@ class AudioMixerWindow2 : public QMainWindow, public ActionFileClient
 
 public:
     AudioMixerWindow2(QWidget *parent);
-    virtual ~AudioMixerWindow2();
+    ~AudioMixerWindow2() override;
 
 signals:
     /// Let RMVW know we are now the active window for external controller events.

@@ -32,7 +32,7 @@ class Thumbwheel : public QWidget
 
 public:
     Thumbwheel(Qt::Orientation orientation, bool useRed = false, QWidget *parent = nullptr);
-    virtual ~Thumbwheel();
+    ~Thumbwheel() override;
 
     int getMinimumValue() const;
     int getMaximumValue() const;

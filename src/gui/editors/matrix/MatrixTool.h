@@ -41,7 +41,7 @@ class MatrixTool : public BaseTool, public ActionFileClient
     friend class MatrixToolBox;
 
 public:
-    ~MatrixTool();
+    ~MatrixTool() override;
 
     //!!! todo: hoist common bits of this & NotationTool into a new
     // version of EditTool? (only if there is enough to be worth it)

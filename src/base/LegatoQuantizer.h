@@ -31,7 +31,7 @@ public:
     LegatoQuantizer(timeT unit = -1);
     LegatoQuantizer(std::string source, std::string target, timeT unit = -1);
     LegatoQuantizer(const LegatoQuantizer &);
-    virtual ~LegatoQuantizer();
+    ~LegatoQuantizer() override;
 
     void setUnit(timeT unit) { m_unit = unit; }
     timeT getUnit() const { return m_unit; }

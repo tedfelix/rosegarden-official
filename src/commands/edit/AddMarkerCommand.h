@@ -44,7 +44,7 @@ public:
                      timeT time,
                      const std::string &name,
                      const std::string &description);
-    ~AddMarkerCommand();
+    ~AddMarkerCommand() override;
 
     static QString getGlobalName() { return tr("&Add Marker"); }
 

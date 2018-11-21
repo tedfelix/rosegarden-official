@@ -737,7 +737,7 @@ public:
         m_sharedData(new ProximityNote::SharedData)
         {}
         
-    virtual ~UnparamaterizedRelativeEventAdder(void)
+    ~UnparamaterizedRelativeEventAdder(void) override
     {
         // Destroying the adder triggers setting up the shared data,
         // using what we collected during the adder's lifetime.

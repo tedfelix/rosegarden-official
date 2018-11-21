@@ -59,7 +59,7 @@ class InternalSegmentMapper : public SegmentMapper
 {
 public:
     InternalSegmentMapper(RosegardenDocument *doc, Segment *segment);
-    ~InternalSegmentMapper();
+    ~InternalSegmentMapper() override;
 
 private:
     // Hide copy ctor and op= since dtor is non-trivial.

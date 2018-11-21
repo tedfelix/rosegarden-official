@@ -41,7 +41,7 @@ public:
                                      timeT time,
                                      Event *event);
 
-    virtual ~MatrixPercussionInsertionCommand();
+    ~MatrixPercussionInsertionCommand() override;
 
     Event *getLastInsertedEvent() { return m_lastInsertedEvent; }
     

@@ -46,7 +46,7 @@ class AlsaDriver : public SoundDriver
 {
 public:
     AlsaDriver(MappedStudio *studio);
-    virtual ~AlsaDriver();
+    ~AlsaDriver() override;
 
     // shutdown everything that's currently open
     void shutdown() override;

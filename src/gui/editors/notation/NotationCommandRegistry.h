@@ -26,7 +26,7 @@ class NotationCommandRegistry : public ActionCommandRegistry
 {
 public:
     NotationCommandRegistry(ActionFileClient *);
-    ~NotationCommandRegistry();
+    ~NotationCommandRegistry() override;
 
 protected:
 };

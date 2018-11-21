@@ -43,7 +43,7 @@ public:
                        TrackId track, 
                        QString longName,
                        QString shortName);
-    virtual ~RenameTrackCommand();
+    ~RenameTrackCommand() override;
 
     static QString getGlobalName() { return tr("Rename Track"); }
 

@@ -48,7 +48,7 @@ class Audit : public std::stringstream
 public:
     Audit() { }
 
-    virtual ~Audit();
+    ~Audit() override;
 
     static std::string getAudit();
 

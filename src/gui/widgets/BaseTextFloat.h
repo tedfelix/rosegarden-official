@@ -66,7 +66,7 @@ public :
      */
     BaseTextFloat(QWidget *parent);
 
-    virtual ~BaseTextFloat() {}
+    ~BaseTextFloat() override {}
 
     /**
      * Move the text float to a new parent widget and/or look at the

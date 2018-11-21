@@ -44,7 +44,7 @@ public:
                               timeT newStartTime,
                               bool notation,
                               EventSelection &selection);
-    virtual ~MoveAcrossSegmentsCommand();
+    ~MoveAcrossSegmentsCommand() override;
 
     static QString getGlobalName();
 

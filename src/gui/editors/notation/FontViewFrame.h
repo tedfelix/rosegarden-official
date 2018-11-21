@@ -38,7 +38,7 @@ class FontViewFrame : public QFrame
 
 public:
     FontViewFrame(int pixelSize, QWidget *parent = nullptr);
-    virtual ~FontViewFrame();
+    ~FontViewFrame() override;
 
     QSize sizeHint() const override;
     bool hasRow(int row) const;

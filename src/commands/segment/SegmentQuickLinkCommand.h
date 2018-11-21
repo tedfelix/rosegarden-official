@@ -35,7 +35,7 @@ class SegmentQuickLinkCommand : public NamedCommand
 
 public:
     SegmentQuickLinkCommand(Segment *segment);
-    virtual ~SegmentQuickLinkCommand();
+    ~SegmentQuickLinkCommand() override;
 
     void execute() override;
     void unexecute() override;

@@ -46,7 +46,7 @@ public:
     SegmentInsertCommand(Composition *composition,
                          Segment *segment,
                          TrackId track);
-    virtual ~SegmentInsertCommand();
+    ~SegmentInsertCommand() override;
 
     Segment *getSegment() const; // after invocation
 

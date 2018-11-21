@@ -66,7 +66,7 @@ public:
 		  bool drumMode,
 		  QWidget *parent = nullptr);
 
-    virtual ~MatrixView();
+    ~MatrixView() override;
 
     void closeEvent(QCloseEvent *event) override;
 

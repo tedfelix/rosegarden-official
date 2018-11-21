@@ -44,7 +44,7 @@ public:
                             timeT time,
                             bool down,
                             int controllerNumber);
-    virtual ~SustainInsertionCommand();
+    ~SustainInsertionCommand() override;
 
     static QString getGlobalName(bool down) {
         if (down) {

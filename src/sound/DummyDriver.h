@@ -29,7 +29,7 @@ class DummyDriver : public SoundDriver
 public:
     DummyDriver(MappedStudio *studio);
     DummyDriver(MappedStudio *studio, QString pastLog);
-    virtual ~DummyDriver() { }
+    ~DummyDriver() override { }
 
     bool initialise()  override { return true; }
     void initialisePlayback(const RealTime & /*position*/) override { }

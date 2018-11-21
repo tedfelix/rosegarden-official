@@ -86,7 +86,7 @@ public:
                    QPointer<QProgressDialog> progressDialog,
                    bool createNewDevicesWhenNeeded);
 
-    virtual ~RoseXmlHandler();
+    ~RoseXmlHandler() override;
 
     /// overloaded handler functions
     bool startDocument() override;

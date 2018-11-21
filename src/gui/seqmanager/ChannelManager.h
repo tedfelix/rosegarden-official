@@ -97,7 +97,7 @@ class ChannelManager : public QObject
 
 public:
     ChannelManager(Instrument *instrument);
-    virtual ~ChannelManager()  { freeChannelInterval(); }
+    ~ChannelManager() override  { freeChannelInterval(); }
 
     /// Set the instrument we are playing on, releasing any old one.
     void setInstrument(Instrument *instrument);

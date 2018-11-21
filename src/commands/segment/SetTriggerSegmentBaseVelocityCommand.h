@@ -39,7 +39,7 @@ public:
     SetTriggerSegmentBaseVelocityCommand(Composition *composition,
                                       TriggerSegmentId id,
                                       int newVelocity);
-    virtual ~SetTriggerSegmentBaseVelocityCommand();
+    ~SetTriggerSegmentBaseVelocityCommand() override;
     
     void execute() override;
     void unexecute() override;

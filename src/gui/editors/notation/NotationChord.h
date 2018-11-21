@@ -45,7 +45,7 @@ public:
                   const Clef &clef = Clef::DefaultClef,
                   const Key &key = Key::DefaultKey);
 
-    virtual ~NotationChord() { }
+    ~NotationChord() override { }
 
     virtual int getHighestNoteHeight() const {
         return getHeight(getHighestNote());

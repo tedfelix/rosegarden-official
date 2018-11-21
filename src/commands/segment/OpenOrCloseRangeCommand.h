@@ -49,7 +49,7 @@ public:
                             timeT rangeBegin,
                             timeT rangeEnd,
                             bool open);
-    virtual ~OpenOrCloseRangeCommand();
+    ~OpenOrCloseRangeCommand() override;
 
     void execute() override;
     void unexecute() override;

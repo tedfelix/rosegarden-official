@@ -54,7 +54,7 @@ public:
      */
     HeadersGroup(RosegardenDocument *document);
     
-    ~HeadersGroup();
+    ~HeadersGroup() override;
 
     void removeAllHeaders();
 

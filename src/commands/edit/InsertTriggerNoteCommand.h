@@ -50,7 +50,7 @@ public:
                              bool retune,
                              std::string timeAdjust,
                              Mark mark);
-    virtual ~InsertTriggerNoteCommand();
+    ~InsertTriggerNoteCommand() override;
 
 protected:
     void modifySegment() override;

@@ -54,7 +54,7 @@ public:
     Device(DeviceId id, const std::string &name, DeviceType type):
         m_name(name), m_type(type), m_id(id) { }
 
-    virtual ~Device();
+    ~Device() override;
 
     /**
      * Return a Controllable if we are a subtype that also inherits

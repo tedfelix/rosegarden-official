@@ -26,7 +26,7 @@ class MatrixCommandRegistry : public ActionCommandRegistry
 {
 public:
     MatrixCommandRegistry(ActionFileClient *);
-    ~MatrixCommandRegistry();
+    ~MatrixCommandRegistry() override;
 
 protected:
 };

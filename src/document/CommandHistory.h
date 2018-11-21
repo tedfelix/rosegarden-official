@@ -52,7 +52,7 @@ class CommandHistory : public QObject
     Q_OBJECT
 
 public:
-    virtual ~CommandHistory();
+    ~CommandHistory() override;
 
     static CommandHistory *getInstance();
 

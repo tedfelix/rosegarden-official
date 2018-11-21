@@ -37,7 +37,7 @@ public:
     ControlChangeCommand(ControlItemList selectedItems,
                          Segment &segment,
                          Rosegarden::timeT start, Rosegarden::timeT end);
-    virtual ~ControlChangeCommand() {;}
+    ~ControlChangeCommand() override {;}
 
 
 protected:

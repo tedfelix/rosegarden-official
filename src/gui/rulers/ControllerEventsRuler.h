@@ -49,7 +49,7 @@ public:
                           const ControlParameter *controller = nullptr,
                           const char* name=nullptr );
 
-    virtual ~ControllerEventsRuler();
+    ~ControllerEventsRuler() override;
 
     void paintEvent(QPaintEvent *) override;
 

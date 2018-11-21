@@ -48,7 +48,7 @@ public:
     EventUnquantizeCommand(EventSelection &selection,
                            Quantizer *);
 
-    ~EventUnquantizeCommand();
+    ~EventUnquantizeCommand() override;
     
     static QString getGlobalName(Quantizer *quantizer = nullptr);
     

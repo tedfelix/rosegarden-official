@@ -40,7 +40,7 @@ class LircClient : public QObject
     Q_OBJECT
 public:
     LircClient(void);
-    ~LircClient();
+    ~LircClient() override;
     
 public slots:
     void readButton();

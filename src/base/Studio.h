@@ -57,7 +57,7 @@ class Studio : public XmlExportable
 
 public:
     Studio();
-    ~Studio();
+    ~Studio() override;
 
 private:
     Studio(const Studio &);

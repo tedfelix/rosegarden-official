@@ -83,7 +83,7 @@ public:
                              float targetSubordering,
                              NoteStyleName noteStyle,
                              int velocity = 0); // Zero for rest inserter
-    virtual ~NoteInsertionCommand();
+    ~NoteInsertionCommand() override;
 
     EventSelection *getSubsequentSelection() override;
     Event *getLastInsertedEvent() { return m_lastInsertedEvent; }

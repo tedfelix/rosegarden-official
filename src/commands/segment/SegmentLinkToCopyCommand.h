@@ -35,7 +35,7 @@ class SegmentLinkToCopyCommand : public NamedCommand
 
 public:
     SegmentLinkToCopyCommand(Segment *segment);
-    virtual ~SegmentLinkToCopyCommand();
+    ~SegmentLinkToCopyCommand() override;
 
     void execute() override;
     void unexecute() override;

@@ -60,7 +60,7 @@ class AudioManagerDialog : public QMainWindow, public ActionFileClient
 public:
     AudioManagerDialog(QWidget *parent,
                        RosegardenDocument *doc);
-    ~AudioManagerDialog();
+    ~AudioManagerDialog() override;
 
     // Populate the file list from the AudioFileManager
     //

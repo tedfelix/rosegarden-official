@@ -39,7 +39,7 @@ public:
     EraseEventCommand(Segment &segment,
                       Event *event,
                       bool collapseRest);
-    virtual ~EraseEventCommand();
+    ~EraseEventCommand() override;
 
     timeT getRelayoutEndTime() override;
 

@@ -40,7 +40,7 @@ public:
     DeleteRangeCommand(Composition *composition,
                        timeT begin,
                        timeT end);
-    virtual ~DeleteRangeCommand();
+    ~DeleteRangeCommand() override;
 };
 
 

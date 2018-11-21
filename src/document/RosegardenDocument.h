@@ -112,7 +112,7 @@ public:
     /**
      * Destructor for the fileclass of the application
      */
-    ~RosegardenDocument();
+    ~RosegardenDocument() override;
 
     /**
      * adds a view to the document which represents the document

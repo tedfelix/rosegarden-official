@@ -37,7 +37,7 @@ class SegmentChangeQuantizationCommand : public NamedCommand
 public:
     /// Set quantization on segments.  If unit is zero, switch quantization off
     SegmentChangeQuantizationCommand(timeT);
-    virtual ~SegmentChangeQuantizationCommand();
+    ~SegmentChangeQuantizationCommand() override;
 
     void addSegment(Segment *s);
 

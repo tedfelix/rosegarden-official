@@ -113,7 +113,7 @@ public:
     typedef std::set<ChannelId> FixedChannelSet;
 
     AllocateChannels(ChannelSetup setup);
-    ~AllocateChannels(void);
+    ~AllocateChannels(void) override;
 
     void reallocateToFit(Instrument& instrument, ChannelInterval &ci,
                          RealTime start, RealTime end,

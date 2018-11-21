@@ -68,7 +68,7 @@ public:
                bool small = false,
                bool Thorn = true);
 
-    ~TempoRuler();
+    ~TempoRuler() override;
 
     QSize sizeHint() const override;
     QSize minimumSizeHint() const override;

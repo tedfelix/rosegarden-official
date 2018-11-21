@@ -39,7 +39,7 @@ public:
     EraseSegmentsStartingInRangeCommand(Composition *composition,
                                         timeT begin,
                                         timeT end);
-    virtual ~EraseSegmentsStartingInRangeCommand();
+    ~EraseSegmentsStartingInRangeCommand() override;
     
     void execute() override;
     void unexecute() override;

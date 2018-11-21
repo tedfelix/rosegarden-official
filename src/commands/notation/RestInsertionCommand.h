@@ -39,7 +39,7 @@ public:
                          timeT time,
                          timeT endTime,
                          Note note);
-    virtual ~RestInsertionCommand();
+    ~RestInsertionCommand() override;
 
 protected:
     void modifySegment() override;

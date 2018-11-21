@@ -43,7 +43,7 @@ class CommandArgumentQuerier; // forward declaration useful for some subclasses
 class BasicCommand : public NamedCommand
 {
 public:
-    virtual ~BasicCommand();
+    ~BasicCommand() override;
 
     void execute() override;
     void unexecute() override;

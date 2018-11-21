@@ -46,7 +46,7 @@ class SegmentResizeFromStartCommand : public BasicCommand
 public:
     SegmentResizeFromStartCommand(Segment *segment,
                                   timeT newStartTime);
-    virtual ~SegmentResizeFromStartCommand();
+    ~SegmentResizeFromStartCommand() override;
 
     static QString getGlobalName() { return tr("Resize Segment"); }
 

@@ -48,7 +48,7 @@ public:
         m_oldTime(0),
         m_oldTimeSignature() { }
 
-    virtual ~RemoveTimeSignatureCommand() {}
+    ~RemoveTimeSignatureCommand() override {}
 
     static QString getGlobalName() { return tr("Remove &Time Signature Change..."); }
 

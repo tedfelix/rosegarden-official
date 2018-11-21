@@ -49,7 +49,7 @@ public:
                               AudioFileId audioFileId,
                               const RealTime &audioStartTime,
                               const RealTime &audioEndTime);
-    virtual ~AudioSegmentInsertCommand();
+    ~AudioSegmentInsertCommand() override;
 
     Segment *getNewSegment() { return m_segment; }
 

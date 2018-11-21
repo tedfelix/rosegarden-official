@@ -54,7 +54,7 @@ public:
                              RosegardenDocument *doc,
 			     AudioPluginOSCGUIManager *guiManager);
 
-    virtual ~SynthPluginManagerDialog();
+    ~SynthPluginManagerDialog() override;
 
     void updatePlugin(InstrumentId id, int plugin);
     

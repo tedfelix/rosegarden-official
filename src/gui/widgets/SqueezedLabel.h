@@ -56,7 +56,7 @@ public:
     explicit SqueezedLabel(QWidget *parent = nullptr);
     explicit SqueezedLabel(const QString &text, QWidget *parent = nullptr);
 
-    virtual ~SqueezedLabel();
+    ~SqueezedLabel() override;
 
     QSize minimumSizeHint() const override;
     QSize sizeHint() const override;

@@ -56,7 +56,7 @@ public:
            bool snapToTicks = false,
            bool centred = false,
            bool logarithmic = false); // extents are logs, exp for display
-    ~Rotary();
+    ~Rotary() override;
 
     void setMinimum(float min);
     float getMinValue() const { return m_minimum; }

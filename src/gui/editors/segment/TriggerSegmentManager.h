@@ -48,7 +48,7 @@ class TriggerSegmentManager : public QMainWindow, public ActionFileClient
 public:
     TriggerSegmentManager(QWidget *parent,
                           RosegardenDocument *doc);
-    ~TriggerSegmentManager();
+    ~TriggerSegmentManager() override;
 
     void initDialog();
 

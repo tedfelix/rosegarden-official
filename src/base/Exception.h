@@ -34,7 +34,7 @@ public:
     Exception(QString message);
     Exception(QString message, QString file, int line);
 
-    virtual ~Exception() throw () {}
+    ~Exception() throw () override {}
 
     std::string getMessage() const { return m_message; }
 

@@ -63,7 +63,7 @@ public:
                      DeviceId defaultDevice =
                      Device::NO_DEVICE);
 
-    ~BankEditorDialog();
+    ~BankEditorDialog() override;
 
     // Initialize the devices/banks and programs - the whole lot
     //

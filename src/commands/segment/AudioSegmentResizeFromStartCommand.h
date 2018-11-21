@@ -41,7 +41,7 @@ class AudioSegmentResizeFromStartCommand : public NamedCommand
 public:
     AudioSegmentResizeFromStartCommand(Segment *segment,
                                        timeT newStartTime);
-    virtual ~AudioSegmentResizeFromStartCommand();
+    ~AudioSegmentResizeFromStartCommand() override;
 
     void execute() override;
     void unexecute() override;

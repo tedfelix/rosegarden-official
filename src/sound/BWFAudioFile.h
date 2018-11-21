@@ -42,7 +42,7 @@ public:
                   unsigned int bytesPerFrame,
                   unsigned int bitsPerSample);
 
-    ~BWFAudioFile();
+    ~BWFAudioFile() override;
 
     // Override these methods for the WAV
     //

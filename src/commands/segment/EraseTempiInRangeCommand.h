@@ -44,7 +44,7 @@ public:
     EraseTempiInRangeCommand(Composition *composition,
                             timeT rangeBegin,
                             timeT rangeEnd);
-    virtual ~EraseTempiInRangeCommand();
+    ~EraseTempiInRangeCommand() override;
 
     void execute() override;
     void unexecute() override;

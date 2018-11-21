@@ -31,7 +31,7 @@ class AudioDevice : public Device
 public:
     AudioDevice();
     AudioDevice(DeviceId id, const std::string &name);
-    virtual ~AudioDevice();
+    ~AudioDevice() override;
 
     // Copy constructor
     //

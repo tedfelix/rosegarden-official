@@ -48,7 +48,7 @@ public:
         m_control(control),
         m_id(0) { }
 
-    ~AddControlParameterCommand();
+    ~AddControlParameterCommand() override;
 
     void execute() override;
     void unexecute() override;

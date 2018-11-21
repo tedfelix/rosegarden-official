@@ -42,7 +42,7 @@ public:
     TristateCheckBox(QWidget *parent=nullptr):QCheckBox(parent)
         { setTristate(true) ;}
 
-    virtual ~TristateCheckBox();
+    ~TristateCheckBox() override;
 
 protected:
     // don't emit when the button is released

@@ -31,7 +31,7 @@ public:
                    timeT unit = -1, bool doDurations = false,
                    int swingPercent = 0, int iteratePercent = 100);
     BasicQuantizer(const BasicQuantizer &);
-    virtual ~BasicQuantizer();
+    ~BasicQuantizer() override;
 
     void setUnit(timeT unit) { m_unit = unit; }
     timeT getUnit() const { return m_unit; }

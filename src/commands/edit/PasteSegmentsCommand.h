@@ -50,7 +50,7 @@ public:
                          TrackId baseTrack,
                          bool useExactTracks);
 
-    virtual ~PasteSegmentsCommand();
+    ~PasteSegmentsCommand() override;
 
     static QString getGlobalName() { return tr("&Paste"); }
 

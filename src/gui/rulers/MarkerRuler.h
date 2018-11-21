@@ -48,7 +48,7 @@ public:
                      QWidget* parent = nullptr,
                      const char* name = nullptr);
 
-    virtual ~MarkerRuler();
+    ~MarkerRuler() override;
     
     QSize sizeHint() const override;
     QSize minimumSizeHint() const override;

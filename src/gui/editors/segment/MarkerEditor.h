@@ -51,7 +51,7 @@ class MarkerEditor : public QMainWindow, public ActionFileClient
 public:
     MarkerEditor(QWidget *parent,
                        RosegardenDocument *doc);
-    ~MarkerEditor();
+    ~MarkerEditor() override;
 
     void initDialog();
 
