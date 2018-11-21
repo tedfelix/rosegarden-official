@@ -65,7 +65,7 @@ SegmentJoinCommand::~SegmentJoinCommand()
 Segment *
 SegmentJoinCommand::makeSegment(SegmentVec oldSegments)
 {
-    // We can proceed even if composition is NULL, just normalize
+    // We can proceed even if composition is nullptr, just normalize
     // rests will do less.
     Composition *composition = oldSegments[0]->getComposition();
 

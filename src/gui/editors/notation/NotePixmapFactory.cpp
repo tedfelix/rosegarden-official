@@ -3563,7 +3563,7 @@ NotePixmapFactory::makeItem(QPoint hotspot)
 
     if (!m_generatedPixmap->isNull()) {
         m_p->end();
-    }// else NOTATION_DEBUG << "m_generatedPixmap was NULL!";
+    }// else NOTATION_DEBUG << "m_generatedPixmap was nullptr!";
 
     QGraphicsPixmapItem *p = new QGraphicsPixmapItem;
 

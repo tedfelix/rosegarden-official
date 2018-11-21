@@ -40,7 +40,7 @@ Device::~Device()
 }
 
 // Return a Controllable if we are a subtype that also inherits from
-// Controllable, otherwise return NULL
+// Controllable, otherwise return nullptr
 Controllable *
 Device::getControllable(void)
 {
@@ -52,7 +52,7 @@ Device::getControllable(void)
     return c;
 }
 
-// Base case: Device itself doesn't know AllocateChannels so gives NULL.
+// Base case: Device itself doesn't know AllocateChannels so gives nullptr.
 // @author Tom Breton (Tehom)
 AllocateChannels *
 Device::getAllocator(void)

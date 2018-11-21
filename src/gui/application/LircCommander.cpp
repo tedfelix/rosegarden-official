@@ -136,7 +136,7 @@ void LircCommander::slotExecute(const char *command)
                                     sizeof(commands) / sizeof(struct command),
                                     sizeof(struct command),
                                     compareCommandName);
-    if (res != NULL)
+    if (res != nullptr)
     {
         switch (res->code)
         {

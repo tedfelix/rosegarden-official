@@ -29,7 +29,7 @@ class AudioReadStreamFactory
 {
 public:
     // May throw FileOpenFailed or AudioReadStream::FileDRMProtected,
-    // or simply return NULL, for failure
+    // or simply return nullptr, for failure
     static AudioReadStream *createReadStream(QString fileName);
 
     static QStringList getSupportedFileExtensions();

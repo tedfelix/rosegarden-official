@@ -36,7 +36,7 @@ class Led : public QWidget
 
 public:
 
-  Led(const QColor &color, QWidget *parent = NULL);
+  Led(const QColor &color, QWidget *parent = nullptr);
   ~Led();
 
   enum State { Off, On };

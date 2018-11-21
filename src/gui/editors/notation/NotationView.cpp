@@ -2181,7 +2181,7 @@ NotationView::slotSwitchToNotes()
     NOTATION_DEBUG << "NotationView::slotSwitchToNotes : entered. ";
 
     QString actionName = "";
-    NoteRestInserter *currentInserter = NULL;
+    NoteRestInserter *currentInserter = nullptr;
     if (m_notationWidget) {
         currentInserter = dynamic_cast<NoteRestInserter *>
             (m_notationWidget->getCurrentTool());
@@ -2238,7 +2238,7 @@ NotationView::slotSwitchToRests()
     NOTATION_DEBUG << "NotationView::slotSwitchToRests : entered. ";
 
     QString actionName = "";
-    NoteRestInserter *currentInserter = NULL;
+    NoteRestInserter *currentInserter = nullptr;
     if (m_notationWidget) {
         currentInserter = dynamic_cast<NoteRestInserter *>
             (m_notationWidget->getCurrentTool());
@@ -2692,7 +2692,7 @@ void
 NotationView::slotToggleDot()
 {
     NOTATION_DEBUG << "NotationView::slotToggleDot : entered. ";
-    NoteRestInserter *currentInserter = NULL;
+    NoteRestInserter *currentInserter = nullptr;
     if (m_notationWidget) {
         currentInserter = dynamic_cast<NoteRestInserter *>
             (m_notationWidget->getCurrentTool());
@@ -3112,7 +3112,7 @@ NotationView::EditOrnamentInline(Event *trigger, Segment *containing)
     if (!rec) { return; }
     Segment *link = rec->makeLinkedSegment(trigger, containing);
 
-    // makeLinkedSegment can return NULL, eg if ornament was squashed.
+    // makeLinkedSegment can return nullptr, eg if ornament was squashed.
     if (!link) { return; }
 
     link->setParticipation(Segment::editableClone);
@@ -3978,7 +3978,7 @@ NotationView::slotTranspose()
 {
     EventSelection *selection = getSelection();
     if (!selection) {
-        RG_WARNING << "Hint: selection is NULL in slotTranpose()";
+        RG_WARNING << "Hint: selection is nullptr in slotTranpose()";
         return;
     }
 

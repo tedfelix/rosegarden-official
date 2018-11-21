@@ -111,7 +111,7 @@ void PlayListView::mouseMoveEvent(QMouseEvent *event){
      if (!(event->buttons() & Qt::LeftButton)) return;
     
     // if no item selected, return (else it would crash)
-     if (currentItem() == NULL) return;
+     if (currentItem() == nullptr) return;
     
     QDrag *drag = new QDrag(this);
     QMimeData *mimeData = new QMimeData;

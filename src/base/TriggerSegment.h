@@ -62,7 +62,7 @@ public:
 
     // Return a new linked segment that corresponds in timing and
     // pitch to this triggered segment as invoked by trigger.  
-    // Returns NULL if it can't make a meaningful linked segment.
+    // Returns nullptr if it can't make a meaningful linked segment.
     Segment *makeLinkedSegment(Event *trigger, Segment *containing);
     Segment* makeExpansion(Event *trigger,
                            Segment *containing,

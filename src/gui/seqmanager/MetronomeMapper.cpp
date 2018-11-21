@@ -160,7 +160,7 @@ MetronomeMapper::~MetronomeMapper()
     RG_DEBUG << "dtor: " << this;
 
     delete m_metronome;
-    m_metronome = NULL;
+    m_metronome = nullptr;
 }
 
 InstrumentId MetronomeMapper::getMetronomeInstrument() const

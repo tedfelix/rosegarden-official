@@ -77,7 +77,7 @@ searchSegment(const Segment *s, timeT noEarlierThan, timeT noLaterThan) const
 }
 
 // Search Segments A and B for the latest controller value. Search A
-// first.  B may be NULL but A must exist.
+// first.  B may be nullptr but A must exist.
 ControllerSearch::Maybe
 ControllerSearch::
 doubleSearch(Segment *a, Segment *b, timeT noLaterThan) const

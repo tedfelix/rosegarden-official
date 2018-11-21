@@ -57,13 +57,13 @@ AudioStrip::AudioStrip(QWidget *parent, InstrumentId id) :
     QWidget(parent),
     m_id(NoInstrument),
     m_externalControllerChannel(InvalidChannel),
-    m_label(NULL),
-    m_input(NULL),
-    m_output(NULL),
-    m_fader(NULL),
-    m_meter(NULL),
-    m_pan(NULL),
-    m_stereoButton(NULL),
+    m_label(nullptr),
+    m_input(nullptr),
+    m_output(nullptr),
+    m_fader(nullptr),
+    m_meter(nullptr),
+    m_pan(nullptr),
+    m_stereoButton(nullptr),
     m_stereo(false),
     m_plugins(),
     m_layout(new QGridLayout(this))
@@ -130,7 +130,7 @@ void AudioStrip::createWidgets()
     Studio &studio = doc->getStudio();
 
     // Get the appropriate instrument based on the ID.
-    Instrument *instrument = NULL;
+    Instrument *instrument = nullptr;
     if (isInput())
         instrument = studio.getInstrumentById(m_id);
 
@@ -317,12 +317,12 @@ void AudioStrip::updateWidgets()
     Studio &studio = doc->getStudio();
 
     // Get the appropriate instrument based on the ID.
-    Instrument *instrument = NULL;
+    Instrument *instrument = nullptr;
     if (isInput())
         instrument = studio.getInstrumentById(m_id);
 
     // Get the appropriate buss based on the ID.
-    Buss *buss = NULL;
+    Buss *buss = nullptr;
     if (!isInput()) {
         BussList busses = studio.getBusses();
         buss = busses[m_id];
@@ -377,7 +377,7 @@ void AudioStrip::updateWidgets()
 
     // Plugin Buttons
 
-    const PluginContainer *pluginContainer = NULL;
+    const PluginContainer *pluginContainer = nullptr;
 
     if (isInput()) {
         pluginContainer = dynamic_cast<const PluginContainer *>(
@@ -726,7 +726,7 @@ AudioStrip::slotSelectPlugin()
 void
 AudioStrip::slotUpdateMeter()
 {
-    if (m_meter == NULL)
+    if (m_meter == nullptr)
         return;
     if (m_id == NoInstrument)
         return;

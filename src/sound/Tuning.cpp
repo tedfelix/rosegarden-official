@@ -73,7 +73,7 @@ std::vector<Tuning*> *Tuning::getTunings() {
     
     QString tuningsPath =
         ResourceFinder().getResourcePath("pitches", "tunings.xml");
-    if (tuningsPath == "") return NULL;
+    if (tuningsPath == "") return nullptr;
     #   if (TUNING_DEBUG > 1)
     qDebug() << "Path to tunings file:" << tuningsPath;
     #   endif
@@ -91,7 +91,7 @@ std::vector<Tuning*> *Tuning::getTunings() {
             qDebug()  << "Tunings configuration file " << tuningsPath
                       << " is not a valid rosegarden scales file. "
                       << "(Root element is " << stream.name() << ")";
-            return NULL;
+            return nullptr;
         }
         
         enum {needTuning, needName, needInterval, needSpellings} state;

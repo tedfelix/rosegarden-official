@@ -550,7 +550,7 @@ RosegardenMainWindow::installSignalHandlers()
     memset(&action, 0, sizeof(action));
     action.sa_handler = handleSignal;
 
-    if (sigaction(SIGUSR1, &action, NULL) == -1) {
+    if (sigaction(SIGUSR1, &action, nullptr) == -1) {
         qWarning("sigaction() failed: %s", std::strerror(errno));
         return false;
     }
@@ -4200,7 +4200,7 @@ RosegardenMainWindow::createDocumentFromRG21File(QString file)
     // We will close anyway when this object goes out of scope.
     progressDialog.setAutoClose(false);
     // Remove the cancel button since RG21Loader doesn't support cancel.
-    progressDialog.setCancelButton(NULL);
+    progressDialog.setCancelButton(nullptr);
     // Just force the progress dialog up.
     // Both Qt4 and Qt5 have bugs related to delayed showing of progress
     // dialogs.  In Qt4, the dialog sometimes won't show.  In Qt5, KDE
@@ -4297,7 +4297,7 @@ RosegardenMainWindow::createDocumentFromHydrogenFile(QString file)
     // We will close anyway when this object goes out of scope.
     progressDialog.setAutoClose(false);
     // Remove the cancel button since HydrogenLoader doesn't support cancel.
-    progressDialog.setCancelButton(NULL);
+    progressDialog.setCancelButton(nullptr);
     // Just force the progress dialog up.
     // Both Qt4 and Qt5 have bugs related to delayed showing of progress
     // dialogs.  In Qt4, the dialog sometimes won't show.  In Qt5, KDE
@@ -4395,7 +4395,7 @@ RosegardenMainWindow::createDocumentFromMusicXMLFile(QString file)
     // We will close anyway when this object goes out of scope.
     progressDialog.setAutoClose(false);
     // Remove the cancel button since MusicXMLLoader doesn't support cancel.
-    progressDialog.setCancelButton(NULL);
+    progressDialog.setCancelButton(nullptr);
     // Just force the progress dialog up.
     // Both Qt4 and Qt5 have bugs related to delayed showing of progress
     // dialogs.  In Qt4, the dialog sometimes won't show.  In Qt5, KDE
@@ -4478,7 +4478,7 @@ RosegardenMainWindow::mergeFile(QString filePath, ImportType type)
 
             delete doc;
 
-        } else {  // ??? I don't think it's possible for m_doc to be NULL.
+        } else {  // ??? I don't think it's possible for m_doc to be nullptr.
             setDocument(doc);
         }
     }
@@ -5100,7 +5100,7 @@ RosegardenMainWindow::exportCsoundFile(QString file)
     // this object goes out of scope.
     progressDialog.setAutoClose(false);
     // Get rid of the cancel button for now.
-    progressDialog.setCancelButton(NULL);
+    progressDialog.setCancelButton(nullptr);
     // Just force the progress dialog up.
     // Both Qt4 and Qt5 have bugs related to delayed showing of progress
     // dialogs.  In Qt4, the dialog sometimes won't show.  In Qt5, KDE
@@ -5148,7 +5148,7 @@ RosegardenMainWindow::exportMupFile(QString file)
     // this object goes out of scope.
     progressDialog.setAutoClose(false);
     // Get rid of the cancel button for now.
-    progressDialog.setCancelButton(NULL);
+    progressDialog.setCancelButton(nullptr);
     // Just force the progress dialog up.
     // Both Qt4 and Qt5 have bugs related to delayed showing of progress
     // dialogs.  In Qt4, the dialog sometimes won't show.  In Qt5, KDE
@@ -5325,7 +5325,7 @@ RosegardenMainWindow::exportMusicXmlFile(QString file)
     // this object goes out of scope.
     progressDialog.setAutoClose(false);
     // Get rid of the cancel button for now.
-    progressDialog.setCancelButton(NULL);
+    progressDialog.setCancelButton(nullptr);
     // Just force the progress dialog up.
     // Both Qt4 and Qt5 have bugs related to delayed showing of progress
     // dialogs.  In Qt4, the dialog sometimes won't show.  In Qt5, KDE

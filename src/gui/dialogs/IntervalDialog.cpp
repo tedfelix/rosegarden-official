@@ -84,8 +84,8 @@ IntervalDialog::IntervalDialog(QWidget *parent, bool askChangeKey, bool askTrans
         affectKeyGroupLayout->addWidget(m_transposeChangingKey);
         affectKeyGroup->setLayout(affectKeyGroupLayout);
     } else {
-        m_transposeChangingKey = NULL;
-        m_transposeWithinKey = NULL;
+        m_transposeChangingKey = nullptr;
+        m_transposeWithinKey = nullptr;
     }
     
     if (askTransposeSegmentBack) {
@@ -94,7 +94,7 @@ IntervalDialog::IntervalDialog(QWidget *parent, bool askChangeKey, bool askTrans
         m_transposeSegmentBack->setTristate(false);
         m_transposeSegmentBack->setChecked(false);
     } else {
-        m_transposeSegmentBack = NULL;
+        m_transposeSegmentBack = nullptr;
     }
 
     vBox->setLayout(vBoxLayout);
@@ -335,7 +335,7 @@ IntervalDialog::slotSetReferenceNote(int pitch, int octave, int step)
 bool
 IntervalDialog::getChangeKey()
 {
-    if (m_transposeChangingKey == NULL) {
+    if (m_transposeChangingKey == nullptr) {
         return false;
     } else {
         return m_transposeChangingKey->isChecked();
@@ -345,7 +345,7 @@ IntervalDialog::getChangeKey()
 bool
 IntervalDialog::getTransposeSegmentBack()
 {
-    if (m_transposeSegmentBack == NULL) {
+    if (m_transposeSegmentBack == nullptr) {
         return false;
     } else {
         return m_transposeSegmentBack->isChecked();	

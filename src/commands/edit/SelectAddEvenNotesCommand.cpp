@@ -209,7 +209,7 @@ SelectAddEvenNotesCommand::findBeatEvents(Segment &s,
        // Break if there won't be more notes to find.
        if (startRangeIter == s.end()) { break; }
 
-       // Candidate variable.  NULL means nothing found.
+       // Candidate variable.  nullptr means nothing found.
        Event *nextBeat = nullptr;
        // Scoring variable, how much the best candidate note differs
        // from expectedNoteTime.  Smaller is better.

@@ -64,9 +64,9 @@ PitchTrackerView::PitchTrackerView(RosegardenDocument *doc,
                                    QWidget *parent) :
         NotationView(doc, segments, parent),
         m_doc(doc),
-        m_jackCaptureClient(NULL),
+        m_jackCaptureClient(nullptr),
         m_jackConnected(false),
-        m_pitchDetector(NULL),
+        m_pitchDetector(nullptr),
         m_running(false)
 {
     QSettings settings;
@@ -116,7 +116,7 @@ PitchTrackerView::PitchTrackerView(RosegardenDocument *doc,
         }
         m_tuning = m_availableTunings[tuning];
     } else {
-        m_tuning = NULL;
+        m_tuning = nullptr;
         RG_WARNING << "WARNING: No available tunings!";
     }
     

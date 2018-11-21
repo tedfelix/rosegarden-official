@@ -1117,7 +1117,7 @@ AnalysisHelper::guessKey(CompositionTimeSliceAdapter &c)
 // @param t is the target time
 // @param segmentToSkip is the segment to skip, presumably because it
 // is getting a new key signature so its old one isn't relevant.  It
-// may be NULL.
+// may be nullptr.
 // @author Tom Breton (Tehom)
 Key
 AnalysisHelper::guessKeyAtTime(Composition &comp, timeT t,

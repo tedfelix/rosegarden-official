@@ -1413,7 +1413,7 @@ void MatrixView::slotTranspose()
 {
     EventSelection *selection = getSelection();
     if (!selection) {
-        RG_WARNING << "Hint: selection is NULL in slotTranpose()";
+        RG_WARNING << "Hint: selection is nullptr in slotTranpose()";
         return;
     }
 
@@ -1510,7 +1510,7 @@ void MatrixView::slotInvert()
 
     EventSelection *selection = getSelection();
     if (!selection) {
-        RG_WARNING << "Hint: selection is NULL in slotInvert()";
+        RG_WARNING << "Hint: selection is nullptr in slotInvert()";
         return;
     }
 

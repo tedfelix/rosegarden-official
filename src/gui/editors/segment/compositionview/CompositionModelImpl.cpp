@@ -1188,7 +1188,7 @@ void CompositionModelImpl::deleteCachedPreviews()
 void CompositionModelImpl::setSelected(Segment *segment, bool selected)
 {
     if (!segment) {
-        RG_DEBUG << "setSelected(): WARNING - segment is NULL";
+        RG_DEBUG << "setSelected(): WARNING - segment is nullptr";
         return;
     }
 

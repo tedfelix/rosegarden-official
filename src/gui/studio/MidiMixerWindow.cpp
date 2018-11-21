@@ -631,7 +631,7 @@ MidiMixerWindow::updateMeters()
             m_faders[i]->m_vuMeter->setLevel(double(info.level / 127.0));
             RG_DEBUG << "MidiMixerWindow::updateMeters - level  " << info.level;
         } else {
-            RG_DEBUG << "MidiMixerWindow::updateMeters - m_vuMeter for m_faders[" << i << "] is NULL!";
+            RG_DEBUG << "MidiMixerWindow::updateMeters - m_vuMeter for m_faders[" << i << "] is nullptr!";
         }
     }
 }

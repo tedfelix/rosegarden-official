@@ -346,7 +346,7 @@ StaffHeader::paintEvent(QPaintEvent *)
 
     // avoid common random crash by brute force
     if (!m_clefItem) {
-        RG_WARNING << "StaffHeader::paintEvent() - m_clefItem was NULL.\n"
+        RG_WARNING << "StaffHeader::paintEvent() - m_clefItem was nullptr.\n"
                    << "  Skipping this paintEvent to avoid a crash.\n"
                    << "  This is a BUG which should no longer occur. (rev 11137)";
         return;

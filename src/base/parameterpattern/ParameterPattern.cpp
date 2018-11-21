@@ -140,7 +140,7 @@ ParameterPattern::getTimes (iterator begin, iterator end)
 
 /* ***** End-to-end functions ***** */
 
-// Set some property, with a dialog.  Safe to call with NULL
+// Set some property, with a dialog.  Safe to call with nullptr
 // selection.
 // @param situation This call will take ownership of situation.
 void

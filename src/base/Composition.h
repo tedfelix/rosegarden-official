@@ -395,7 +395,7 @@ public:
     TriggerSegmentRec *getTriggerSegmentRec(TriggerSegmentId);
 
     /**
-     * As above for a given Event, or NULL if none.
+     * As above for a given Event, or nullptr if none.
      **/
     TriggerSegmentRec *getTriggerSegmentRec(Event* e);
     /**

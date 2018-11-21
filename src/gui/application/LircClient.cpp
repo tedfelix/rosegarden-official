@@ -47,7 +47,7 @@ LircClient::LircClient(void)
         throw Exception("Failed to connect to LIRC");
     }
 
-    if (lirc_readconfig(NULL, &m_config, NULL) == -1) {
+    if (lirc_readconfig(nullptr, &m_config, nullptr) == -1) {
         throw Exception("Failed reading LIRC config file");
     }
 
@@ -79,9 +79,9 @@ void LircClient::readButton()
 
     RG_DEBUG << "LircClient::readButton";
 
-    if (lirc_nextcode(&code) == 0 && code != NULL) {   // no error && a string is available
+    if (lirc_nextcode(&code) == 0 && code != nullptr) {   // no error && a string is available
         // handle any command attached to that button
-        while ( (ret = lirc_code2char(m_config, code, &m_command)) == 0 && m_command != NULL ) 
+        while ( (ret = lirc_code2char(m_config, code, &m_command)) == 0 && m_command != nullptr ) 
         {
             emit buttonPressed(m_command);
         }

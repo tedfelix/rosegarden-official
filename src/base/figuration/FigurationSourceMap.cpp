@@ -1208,7 +1208,7 @@ findMatch(FigurationVector& figVector,
             return &fig;
         }
     }
-    // If we never found a match, signal that with NULL
+    // If we never found a match, signal that with nullptr
     return nullptr;
 }
 

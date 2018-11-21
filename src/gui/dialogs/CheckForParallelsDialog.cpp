@@ -409,7 +409,7 @@ CheckForParallelsDialog::startCheck()
     int currentTrackPosition;
     QString currentTrackLabel;
 
-    NotationStaff *currentStaff = NULL;
+    NotationStaff *currentStaff = nullptr;
 
     parallelList.clear();
 

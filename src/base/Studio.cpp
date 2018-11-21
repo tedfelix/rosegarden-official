@@ -755,7 +755,7 @@ Studio::getDevice(DeviceId id) const
         
         // possibly fix a following seg.fault :
         if( ! (*it) ){ 
-            RG_WARNING << "getDevice(): WARNING: (*it) is NULL";
+            RG_WARNING << "getDevice(): WARNING: (*it) is nullptr";
             continue;
         }
         

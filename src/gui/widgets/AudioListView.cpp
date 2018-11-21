@@ -58,7 +58,7 @@ void AudioListView::mouseMoveEvent(QMouseEvent *event){
      if (!(event->buttons() & Qt::LeftButton)) return;
     
     // if no item selected, return (else it would crash)
-     if (currentItem() == NULL) return;
+     if (currentItem() == nullptr) return;
      
      QTreeWidgetItem *item = currentItem();
      
@@ -67,7 +67,7 @@ void AudioListView::mouseMoveEvent(QMouseEvent *event){
         item = dynamic_cast<QTreeWidgetItem*>( item->parent() );  // assign parent/topLevelItem
      }
      if( ! item ){
-        RG_DEBUG << "AudioListView::mouseMoveEvent() - item is NULL (cast failed?) ";
+        RG_DEBUG << "AudioListView::mouseMoveEvent() - item is nullptr (cast failed?) ";
         return;
      }
     

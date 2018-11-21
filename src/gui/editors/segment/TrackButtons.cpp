@@ -435,7 +435,7 @@ TrackButtons::removeButtons(int position)
 
     // Delete all child widgets (button, led, label...)
     delete m_trackHBoxes[position];
-    m_trackHBoxes[position] = NULL;
+    m_trackHBoxes[position] = nullptr;
 
     std::vector<QFrame*>::iterator it = m_trackHBoxes.begin();
     it += position;

@@ -74,7 +74,7 @@ namespace Rosegarden
 
 TrackParameterBox::TrackParameterBox(QWidget *parent) :
     RosegardenParameterBox(tr("Track Parameters"), parent),
-    m_doc(NULL),
+    m_doc(nullptr),
     m_selectedTrackId(NO_TRACK),
     m_lastInstrumentType(Instrument::InvalidInstrument)
 {
@@ -974,17 +974,17 @@ Track *
 TrackParameterBox::getTrack()
 {
     if (m_selectedTrackId == NO_TRACK)
-        return NULL;
+        return nullptr;
 
     if (!m_doc)
-        return NULL;
+        return nullptr;
 
     Composition &comp = m_doc->getComposition();
 
     // If the track is gone, bail.
     if (!comp.haveTrack(m_selectedTrackId)) {
         m_selectedTrackId = NO_TRACK;
-        return NULL;
+        return nullptr;
     }
 
     return comp.getTrackById(m_selectedTrackId);

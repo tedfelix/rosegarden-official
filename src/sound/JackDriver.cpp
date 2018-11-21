@@ -326,7 +326,7 @@ JackDriver::initialise(bool reinitialise)
     bool connectDefaultInputs = settings.value("connect_default_jack_inputs", true).toBool();
     settings.endGroup();
 
-    const char **ports = jack_get_ports(m_client, NULL, NULL,
+    const char **ports = jack_get_ports(m_client, nullptr, nullptr,
             JackPortIsPhysical | JackPortIsInput);
     
     if (connectDefaultOutputs) {
@@ -406,7 +406,7 @@ JackDriver::initialise(bool reinitialise)
         std::string capture_1, capture_2;
 
         ports =
-            jack_get_ports(m_client, NULL, NULL,
+            jack_get_ports(m_client, nullptr, nullptr,
                            JackPortIsPhysical | JackPortIsOutput);
 
         if (ports) {

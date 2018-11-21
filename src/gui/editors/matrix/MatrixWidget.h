@@ -230,7 +230,7 @@ private:
     MatrixScene *m_scene; // I own this
     MatrixToolBox *m_toolBox; // I own this
     MatrixTool *m_currentTool; // Toolbox owns this
-    // This can be NULL.  It tracks what pitchruler corresponds to.
+    // This can be nullptr.  It tracks what pitchruler corresponds to.
     Instrument *m_instrument; // Studio owns this (TBC)
     bool m_drumMode;
     bool m_onlyKeyMapping;

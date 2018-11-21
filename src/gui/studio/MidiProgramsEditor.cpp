@@ -406,7 +406,7 @@ MidiProgramsEditor::slotNameChanged(const QString& programName)
     MidiBank *currBank = getCurrentBank();
 
     if (!currBank) {
-        RG_WARNING << "slotNameChanged(): WARNING: currBank is NULL.";
+        RG_WARNING << "slotNameChanged(): WARNING: currBank is nullptr.";
         return;
     }
 
@@ -452,7 +452,7 @@ MidiProgramsEditor::slotNameChanged(const QString& programName)
     }
 
     if (!program) {
-        RG_WARNING << "slotNameChanged(): WARNING: program is NULL.";
+        RG_WARNING << "slotNameChanged(): WARNING: program is nullptr.";
         return;
     }
 

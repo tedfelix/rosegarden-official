@@ -240,7 +240,7 @@ LilyPondExporter::isSegmentToPrint(Segment *seg)
         for (SegmentSelection::iterator it = m_selection.begin(); it != m_selection.end(); ++it) {
             if ((*it) == seg) currentSegmentSelected = true;
         }
-    } else if ((m_exportSelection == EXPORT_EDITED_SEGMENTS) && (m_notationView != NULL)) {
+    } else if ((m_exportSelection == EXPORT_EDITED_SEGMENTS) && (m_notationView != nullptr)) {
         currentSegmentSelected = m_notationView->hasSegment(seg);
     }
 
@@ -867,7 +867,7 @@ LilyPondExporter::write()
 
     // Find out the printed length of the composition
     Composition::iterator i = m_composition->begin();
-    if ((*i) == NULL) {
+    if ((*i) == nullptr) {
         // The composition is empty!
         str << indent(col) << "\\score {" << std::endl;
         str << indent(++col) << "% no segments found" << std::endl;

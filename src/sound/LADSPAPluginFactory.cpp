@@ -806,7 +806,7 @@ LADSPAPluginFactory::generateTaxonomy(QString uri, QString base)
     QByteArray ba = uri.toLocal8Bit();
     lrdf_uris *uris = lrdf_get_instances(ba.data());
 
-    if (uris != NULL) {
+    if (uris != nullptr) {
         for (unsigned int i = 0; i < uris->count; ++i) {
             m_taxonomy[lrdf_get_uid(uris->items[i])] = base;
         }
@@ -815,7 +815,7 @@ LADSPAPluginFactory::generateTaxonomy(QString uri, QString base)
 
     uris = lrdf_get_subclasses(ba.data());
 
-    if (uris != NULL) {
+    if (uris != nullptr) {
         for (unsigned int i = 0; i < uris->count; ++i) {
             char *label = lrdf_get_label(uris->items[i]);
             generateTaxonomy(uris->items[i],

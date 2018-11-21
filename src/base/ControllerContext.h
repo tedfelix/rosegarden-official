@@ -66,7 +66,7 @@ class ControllerSearch
                      int controllerId);
     
     // Search Segments A and B for the latest controller value.  B may
-    // be NULL but A must exist. 
+    // be nullptr but A must exist. 
     Maybe
         doubleSearch(Segment *a, Segment *b, timeT noLaterThan) const;
 
@@ -99,7 +99,7 @@ struct ControllerContextMap
 
     // Return the respective controller value at searchTime.  Segment
     // A is primary and governs timing and repitition.  Segment
-    // B, if non-NULL, will be searched too.  In any case the latest event
+    // B, if non-nullptr, will be searched too.  In any case the latest event
     // takes priority.  Defaults from Instrument will be used if
     // neccessary. 
     int getControllerValue(Instrument *instrument,
@@ -151,10 +151,10 @@ private:
   timeT                     m_triggerTime;
   Instrument               *m_instrument;
   Segment                  *m_a;
-  // May be NULL
+  // May be nullptr
   Segment                  *m_b;
   ControllerContextMap     &m_controllerContext;
-  // May be NULL
+  // May be nullptr
   ControllerContextParams  *m_parentContext;
 };
 }

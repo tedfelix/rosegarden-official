@@ -134,7 +134,7 @@ MappedBufMetaIterator::moveIteratorToTime(MappedEventBuffer::iterator &iter,
             break;
 
         // We use peek because it's safe even if we have not fully
-        // filled the buffer yet.  That means we can get NULL.
+        // filled the buffer yet.  That means we can get nullptr.
         const MappedEvent *event = iter.peek();
 
         // We know nothing about the event yet.  Stop here.

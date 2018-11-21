@@ -61,7 +61,7 @@ PresetHandlerDialog::PresetHandlerDialog(QWidget *parent,
 PresetHandlerDialog::~PresetHandlerDialog()
 {
     // delete m_presets
-    if (m_presets != NULL) {
+    if (m_presets != nullptr) {
         delete m_presets;
     }
 }

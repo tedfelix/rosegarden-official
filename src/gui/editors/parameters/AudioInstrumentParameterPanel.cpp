@@ -495,20 +495,20 @@ AudioInstrumentParameterPanel::slotDocumentModified(bool)
     InstrumentId instrumentId =
             doc->getComposition().getSelectedInstrumentId();
 
-    Instrument *instrument = NULL;
+    Instrument *instrument = nullptr;
 
     // If an instrument has been selected.
     if (instrumentId != NoInstrument)
         instrument = doc->getStudio().getInstrumentById(instrumentId);
 
     if (!instrument) {
-        setSelectedInstrument(NULL);
+        setSelectedInstrument(nullptr);
         return;
     }
 
     if (instrument->getType() != Instrument::Audio  &&
         instrument->getType() != Instrument::SoftSynth) {
-        setSelectedInstrument(NULL);
+        setSelectedInstrument(nullptr);
         return;
     }
 

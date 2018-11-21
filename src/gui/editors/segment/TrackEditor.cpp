@@ -900,9 +900,9 @@ void TrackEditor::dropEvent(QDropEvent *e)
             s >> endTime.sec;
             s >> endTime.nsec;
 
-            // We know e->source() is non-NULL, tested it above when
+            // We know e->source() is non-nullptr, tested it above when
             // setting internal, but no harm in leaving this check in
-            QString sourceName = "NULL";
+            QString sourceName = "nullptr";
             if (e->source()) sourceName = e->source()->objectName();
             
             RG_DEBUG << "dropEvent() event source: " << sourceName;

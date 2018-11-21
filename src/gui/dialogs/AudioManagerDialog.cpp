@@ -543,7 +543,7 @@ AudioManagerDialog::slotExportAudio()
     // We will close anyway when this object goes out of scope.
     progressDialog.setAutoClose(false);
     // No cancel button since appendSamples() doesn't support progress.
-    progressDialog.setCancelButton(NULL);
+    progressDialog.setCancelButton(nullptr);
     // Just force the progress dialog up.
     // Both Qt4 and Qt5 have bugs related to delayed showing of progress
     // dialogs.  In Qt4, the dialog sometimes won't show.  In Qt5, KDE

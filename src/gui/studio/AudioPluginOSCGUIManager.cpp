@@ -108,9 +108,9 @@ AudioPluginOSCGUIManager::checkOSCThread()
     if (m_haveOSCThread)
         return ;
 
-    m_serverThread = lo_server_thread_new(NULL, osc_error);
+    m_serverThread = lo_server_thread_new(nullptr, osc_error);
 
-    lo_server_thread_add_method(m_serverThread, NULL, NULL,
+    lo_server_thread_add_method(m_serverThread, nullptr, nullptr,
                                 osc_message_handler, this);
 
     lo_server_thread_start(m_serverThread);

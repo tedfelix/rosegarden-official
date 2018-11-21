@@ -132,7 +132,7 @@ MusicXmlExportHelper::MusicXmlExportHelper(const std::string &name,
         std::vector<Segment *> trackSegments = m_staves[i].segments;
         m_staves[i].segments.clear();
         bool repeating = false;
-        Segment *repeatingSegment = NULL;
+        Segment *repeatingSegment = nullptr;
         for (std::vector<Segment *>::iterator s = trackSegments.begin();
              s != trackSegments.end(); ++s) {
 
@@ -418,7 +418,7 @@ MusicXmlExportHelper::skipSegment(Segment *segment, bool selectedSegmentsOnly)
 {
     if (selectedSegmentsOnly) {
         bool segmentSelected = true;
-        if ((m_view != NULL) && (m_view->haveSelection())) {
+        if ((m_view != nullptr) && (m_view->haveSelection())) {
             //
             // Check whether the current segment is in the list of selected segments.
             //

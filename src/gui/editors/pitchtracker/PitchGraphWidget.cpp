@@ -37,7 +37,7 @@ namespace Rosegarden {
 
 PitchGraphWidget::PitchGraphWidget(PitchHistory &history, QWidget *parent) :
         QWidget(parent),
-        m_tuning(NULL),
+        m_tuning(nullptr),
 	m_history(history)
 {
     setMinimumHeight(100);

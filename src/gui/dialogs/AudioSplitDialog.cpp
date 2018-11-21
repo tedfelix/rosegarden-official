@@ -170,7 +170,7 @@ AudioSplitDialog::drawPreview()
     //
     AudioFileManager &aFM = m_doc->getAudioFileManager();
     AudioFile *aF = aFM.getAudioFile(m_segment->getAudioFileId());
-    if (aF == NULL) {
+    if (aF == nullptr) {
         noPreviewMsg();
         return;
     }

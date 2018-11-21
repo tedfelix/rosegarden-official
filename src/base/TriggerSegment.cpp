@@ -156,7 +156,7 @@ private:
     int                       m_pitchDiff;
     bool                      m_retune;
     int                       m_velocityDiff;
-    // May be NULL
+    // May be nullptr
     ControllerContextParams  *m_controllerContextParams;
     TimeIntervalVector        m_intervals;   
 };
@@ -298,7 +298,7 @@ getVelocityDiff(const Event *trigger) const
 // @return
 // A segment linked to the trigger segment, adjusted in pitch and time
 // to match the ornament as performed by trigger.  Caller owns this.
-// This can be NULL if no meaningful segment could be made.
+// This can be nullptr if no meaningful segment could be made.
 // @param trigger
 // The triggering event.
 // @param containing
@@ -313,7 +313,7 @@ TriggerSegmentRec::makeLinkedSegment
                    LinearTimeScale::m_identity);
 
     // If we squash or stretch, we can't make a proper linked segment
-    // so return NULL;
+    // so return nullptr;
     if (timeScale.isSquished())
         { return nullptr; }
     
@@ -348,7 +348,7 @@ TriggerSegmentRec::makeLinkedSegment
 //
 // @return
 // A fresh segment containing the ornament fully expanded.  Caller
-// owns this.  This can be NULL if no meaningful segment could be
+// owns this.  This can be nullptr if no meaningful segment could be
 // made.
 // @param trigger
 // The triggering event.

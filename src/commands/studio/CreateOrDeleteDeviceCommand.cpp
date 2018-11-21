@@ -104,7 +104,7 @@ CreateOrDeleteDeviceCommand::execute()
 
         /* update view automatically (without pressing refresh button) */
         DeviceManagerDialog *dmd=RosegardenMainWindow::self()->getDeviceManager();
-        if (dmd!=NULL) {
+        if (dmd!=nullptr) {
           dmd->slotResyncDevicesReceived();
         }
     } else {

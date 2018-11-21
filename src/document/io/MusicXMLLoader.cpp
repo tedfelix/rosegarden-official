@@ -33,7 +33,7 @@ namespace Rosegarden
 {
 
 MusicXMLLoader::MusicXMLLoader(Studio *studio) :
-        m_composition(NULL),
+        m_composition(nullptr),
         m_studio(studio)
 {}
 

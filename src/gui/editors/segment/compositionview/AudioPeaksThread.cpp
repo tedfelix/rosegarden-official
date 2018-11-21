@@ -169,7 +169,7 @@ AudioPeaksThread::process()
         if (found) {
             AudioFile *audioFile = m_manager->getAudioFile(req.audioFileId);
             // If there's an audio file to work with
-            if (audioFile != NULL) {
+            if (audioFile != nullptr) {
                 unsigned int channels = audioFile->getChannels();
                 m_results[token] = ResultsPair(channels, results);
                 QObject *notify = req.notify;

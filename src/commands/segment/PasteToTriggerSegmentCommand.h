@@ -41,7 +41,7 @@ public:
     PasteToTriggerSegmentWorker
       (Composition *composition,
        // This takes ownership of clipboard.
-       // OK to pass NULL clipboard
+       // OK to pass nullptr clipboard
        Clipboard *clipboard,
        // The label given to the ornament.
        QString label,

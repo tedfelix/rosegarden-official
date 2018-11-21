@@ -45,7 +45,7 @@ ChannelManager::ChannelManager(Instrument *instrument) :
     m_triedToGetChannel(false),
     m_ready(false)
 {
-    // Safe even for NULL.
+    // Safe even for nullptr.
     connectInstrument(instrument);
 }
 

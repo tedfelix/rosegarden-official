@@ -101,7 +101,7 @@ public:
 
     /// Set the instrument we are playing on, releasing any old one.
     void setInstrument(Instrument *instrument);
-    /// Get the instrument we are playing on.  Can return NULL.
+    /// Get the instrument we are playing on.  Can return nullptr.
     Instrument *getInstrument() const  { return m_instrument; }
 
     /// Set an interval that this ChannelManager must cover.
@@ -348,7 +348,7 @@ private:
 
     /// Set m_usingAllocator appropriately for instrument.
     /**
-     * It is safe to pass NULL here.
+     * It is safe to pass nullptr here.
      */
     void setAllocationMode(Instrument *instrument);
 

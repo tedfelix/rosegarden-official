@@ -58,13 +58,13 @@ public:
 
     /**
      * Return a Controllable if we are a subtype that also inherits
-     * from Controllable, otherwise return NULL
+     * from Controllable, otherwise return nullptr
      **/
     Controllable *getControllable(void);
 
     /**
      * Return our AllocateChannels if we are a subtype that tracks
-     * free channels, otherwise return NULL
+     * free channels, otherwise return nullptr
      **/
     virtual AllocateChannels *getAllocator(void);
 

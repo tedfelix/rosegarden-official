@@ -32,12 +32,12 @@ namespace Rosegarden
 JackCaptureClient::JackCaptureClient( const char *captureClientName, int fs ) :
         m_isConnected(false),
         m_processing(false),
-        m_jackRingBuffer(NULL),
+        m_jackRingBuffer(nullptr),
         m_frameSize(fs)
 {
     // Try to connect to Jack server
     //if ( (client = jack_client_new(captureClientName)) == 0 ) {
-    if ( (client = jack_client_open(captureClientName, JackNullOption, NULL)) == nullptr ) {
+    if ( (client = jack_client_open(captureClientName, JackNullOption, nullptr)) == nullptr ) {
         return;
     }
 #if DEBUG_JACK_CAPTURE_CLIENT
@@ -123,7 +123,7 @@ JackCaptureClient::setFrameSize(int nextFrameSize)
 const char
 **JackCaptureClient::getPorts()
 {
-    return jack_get_ports( client, NULL, NULL, JackPortIsOutput );
+    return jack_get_ports( client, nullptr, nullptr, JackPortIsOutput );
 }
 
 const char*
@@ -160,7 +160,7 @@ JackCaptureClient::setupPorts(const char *portName,
 
         const char **connectedPorts = jack_port_get_connections(inPort);
         int i=0;
-        while (connectedPorts[i] != NULL)
+        while (connectedPorts[i] != nullptr)
         {
 #if DEBUG_JACK_CAPTURE_CLIENT
             RG_DEBUG << "disconnecting from " << connectedPorts[i];

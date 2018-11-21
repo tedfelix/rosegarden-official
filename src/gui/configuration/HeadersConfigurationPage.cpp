@@ -327,7 +327,7 @@ void HeadersConfigurationPage::apply()
         QTableWidgetItem* tabItem2 = m_metadata->item(r, 1);
 
         if ((!tabItem) || (!tabItem2)) {
-            RG_DEBUG << "ERROR: Any TableWidgetItem is NULL in HeadersConfigurationPage::apply() ";
+            RG_DEBUG << "ERROR: Any TableWidgetItem is nullptr in HeadersConfigurationPage::apply() ";
             continue;
         }
 

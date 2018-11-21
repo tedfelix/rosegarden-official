@@ -253,7 +253,7 @@ allocateChannelIntervalFrom(iterator i, RealTime start, RealTime end,
  
   return ChannelInterval(cs.getChannelId(),
                          start, end,
-                         NULL, NULL,
+                         nullptr, nullptr,
                          RealTime::zeroTime, RealTime::zeroTime);
 }
 
@@ -268,7 +268,7 @@ addChannel(ChannelId channelNb)
            ChannelInterval(channelNb,
                            ChannelInterval::m_beforeEarliestTime,
                            ChannelInterval::m_afterLatestTime,
-                           NULL, NULL,
+                           nullptr, nullptr,
                            RealTime::zeroTime, RealTime::zeroTime));
 }
 
@@ -402,7 +402,7 @@ reallocateToFit(Instrument& instrument, ChannelInterval &ci,
     if (instrument.isPercussion()) {
         // For single channel, this implicitly frees+reallocates
         ci = ChannelInterval(getPercussionChannel(), start, end,
-                             NULL, NULL,
+                             nullptr, nullptr,
                              RealTime::zeroTime, RealTime::zeroTime);
     } else {
         m_freeChannels.reallocateToFit(ci, start, end,

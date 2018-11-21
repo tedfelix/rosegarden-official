@@ -126,7 +126,7 @@ newEventHolder(Segment *s, Composition *comp)
     return eventHolder;
 }
 
-// Takes ownership of `target'.  Safe even if target is NULL.
+// Takes ownership of `target'.  Safe even if target is nullptr.
 void
 TargetSegment::
 doneEventHolder(Segment *s, Composition *comp,
@@ -153,14 +153,14 @@ update(ChordSegmentMap& chordSources,
     Q_CHECK_PTR(command);
     Composition *comp = DocumentGet::getComposition();
     Segment* s = m_s;
-    // Initialize `target' as NULL.  We allocate it just-in-time
+    // Initialize `target' as nullptr.  We allocate it just-in-time
     // because we use and release it in some iterations.
     Segment* target = nullptr;
 
     // For telling whether there's space between one region and the
     // next.  Since we get the regions in forward order, this is
     // simple.  The initial value doesn't matter much because the
-    // relevant branch does nothing when `target' is NULL.
+    // relevant branch does nothing when `target' is nullptr.
     timeT lastEnd = 0;
     
     // Expand for each target
@@ -222,7 +222,7 @@ update(ChordSegmentMap& chordSources,
     }
 
     // Finally, save the last contiguous region.  Safe even if we did
-    // zero iterations and `target' is NULL.
+    // zero iterations and `target' is nullptr.
     doneEventHolder(s, comp, target, command);
 }
 

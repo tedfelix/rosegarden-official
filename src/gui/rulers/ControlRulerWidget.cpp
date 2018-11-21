@@ -107,7 +107,7 @@ ControlRulerWidget::setSegments(RosegardenDocument *document, std::vector<Segmen
     if (instr) {
         Device *device = instr->getDevice();
 
-        // Cast to a Controllable if possible, otherwise leave c NULL.
+        // Cast to a Controllable if possible, otherwise leave c nullptr.
         Controllable *c =
             dynamic_cast<MidiDevice *>(device);
         if (!c)
@@ -479,7 +479,7 @@ ControlRulerWidget::hasSelection(void)
     return ruler->getEventSelection() ? true : false;
 }
 
-// Return the active ruler's event selection, or NULL if none.
+// Return the active ruler's event selection, or nullptr if none.
 // @author Tom Breton (Tehom)
 EventSelection *
 ControlRulerWidget::getSelection(void)
@@ -497,7 +497,7 @@ ControlRulerWidget::getControlParameter(void)
     return ruler->getControlParameter();
 }
 
-// @return the active ruler's parameter situation, or NULL if none.
+// @return the active ruler's parameter situation, or nullptr if none.
 // Return is owned by caller.
 // @author Tom Breton (Tehom)
 SelectionSituation *

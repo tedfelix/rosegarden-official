@@ -39,7 +39,7 @@ namespace Rosegarden
 {
 
 StartupTester::StartupTester() :
-//    m_proc(NULL),
+//    m_proc(nullptr),
     m_ready(false),
     m_haveAudioFileImporter(false)
 //    m_versionHttpFailed(false)
