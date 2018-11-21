@@ -437,6 +437,6 @@ void DataBlockRepository::addDataByteForEvent(MidiByte byte, MappedEvent* e)
 // setDataBlockForEvent does what addDataStringForEvent used to do.
 
 
-DataBlockRepository* DataBlockRepository::m_instance = 0;
+DataBlockRepository* DataBlockRepository::m_instance = nullptr;
 
 }

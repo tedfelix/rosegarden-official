@@ -72,8 +72,8 @@ public:
     bool getMappedEventList(MappedEventList &mappedEventList) override;
     
     bool record(RecordStatus recordStatus,
-                        const std::vector<InstrumentId> *armedInstruments = 0,
-                        const std::vector<QString> *audioFileNames = 0) override;
+                        const std::vector<InstrumentId> *armedInstruments = nullptr,
+                        const std::vector<QString> *audioFileNames = nullptr) override;
 
     void startClocks() override;
     virtual void startClocksApproved(); // called by JACK driver in sync mode
@@ -473,7 +473,7 @@ protected:
      * Bring m_alsaPorts up-to-date; if newPorts is non-null, also
      * return the new ports (not previously in m_alsaPorts) through it
      */
-    virtual void generatePortList(AlsaPortList *newPorts = 0);
+    virtual void generatePortList(AlsaPortList *newPorts = nullptr);
     void generateFixedInstruments() override;
 
     virtual void generateTimerList();

@@ -32,12 +32,12 @@ AudioReadStreamFactoryImpl;
 
 template <>
 AudioReadStreamFactoryImpl *
-AudioReadStreamFactoryImpl::m_instance = 0;
+AudioReadStreamFactoryImpl::m_instance = nullptr;
 
 AudioReadStream *
 AudioReadStreamFactory::createReadStream(QString audioFileName)
 {
-    AudioReadStream *s = 0;
+    AudioReadStream *s = nullptr;
 
     QString extension = QFileInfo(audioFileName).suffix().toLower();
 
@@ -60,7 +60,7 @@ AudioReadStreamFactory::createReadStream(QString audioFileName)
     }
 
     delete s;
-    s = 0;
+    s = nullptr;
 
     // If that fails, try all readers in arbitrary order
 
@@ -78,10 +78,10 @@ AudioReadStreamFactory::createReadStream(QString audioFileName)
         }
 
         delete s;
-        s = 0;
+        s = nullptr;
     }
 
-    return 0;
+    return nullptr;
 }
 
 QStringList

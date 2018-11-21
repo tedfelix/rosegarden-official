@@ -78,8 +78,8 @@ RecordableAudioFile::write()
     // Use a static buffer -- this obviously requires that write() is
     // only called from a single thread
     static size_t bufferSize = 0;
-    static sample_t *buffer = 0;
-    static char *encodeBuffer = 0;
+    static sample_t *buffer = nullptr;
+    static char *encodeBuffer = nullptr;
 
     unsigned int bits = m_audioFile->getBitsPerSample();
 

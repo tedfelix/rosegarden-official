@@ -27,7 +27,7 @@ namespace Rosegarden
 SoundDriver *
 SoundDriverFactory::createDriver(MappedStudio *studio)
 {
-    SoundDriver *driver = 0;
+    SoundDriver *driver = nullptr;
     bool initialised = false;
 
 #ifdef HAVE_ALSA

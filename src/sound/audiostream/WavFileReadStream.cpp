@@ -72,7 +72,7 @@ WavFileReadStream::initStaticObjects()
 
 
 WavFileReadStream::WavFileReadStream(QString path) :
-    m_file(0),
+    m_file(nullptr),
     m_path(path),
     m_offset(0)
 {

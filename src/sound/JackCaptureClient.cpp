@@ -37,7 +37,7 @@ JackCaptureClient::JackCaptureClient( const char *captureClientName, int fs ) :
 {
     // Try to connect to Jack server
     //if ( (client = jack_client_new(captureClientName)) == 0 ) {
-    if ( (client = jack_client_open(captureClientName, JackNullOption, NULL)) == 0 ) {
+    if ( (client = jack_client_open(captureClientName, JackNullOption, NULL)) == nullptr ) {
         return;
     }
 #if DEBUG_JACK_CAPTURE_CLIENT
@@ -149,7 +149,7 @@ JackCaptureClient::setupPorts(const char *portName,
 #endif
     inPort = jack_port_register(client, inPortName.c_str(),
                                 JACK_DEFAULT_AUDIO_TYPE, JackPortIsInput, 0 );
-    if (inPort == 0) {
+    if (inPort == nullptr) {
         RG_DEBUG << "Cannot open Jack port";
     }
 

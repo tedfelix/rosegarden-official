@@ -182,7 +182,7 @@ AudioThread::terminate()
         std::cerr << name << "::terminate(): cancel requested" << std::endl;
 #endif
 
-        int rv = pthread_join(m_thread, 0);
+        int rv = pthread_join(m_thread, nullptr);
         rv = rv; // shut up compiler warning when the code below is not compiled
 
 #ifdef DEBUG_THREAD_CREATE_DESTROY
@@ -202,7 +202,7 @@ AudioThread::staticThreadRun(void *arg)
 {
     AudioThread *inst = static_cast<AudioThread *>(arg);
     if (!inst)
-        return 0;
+        return nullptr;
 
     pthread_cleanup_push(staticThreadCleanup, arg);
 
@@ -218,7 +218,7 @@ AudioThread::staticThreadRun(void *arg)
     inst->releaseLock();
     pthread_cleanup_pop(0);
 
-    return 0;
+    return nullptr;
 }
 
 void
@@ -833,7 +833,7 @@ AudioBussMixer::threadRun()
             t = RealTime(0, 10000000); // 10ms minimum
 
         struct timeval now;
-        gettimeofday(&now, 0);
+        gettimeofday(&now, nullptr);
         t = t + RealTime(now.tv_sec, now.tv_usec * 1000);
 
         struct timespec timeout;
@@ -875,11 +875,11 @@ AudioInstrumentMixer::AudioInstrumentMixer(SoundDriver *driver,
 
         PluginList &list = m_plugins[id];
         for (int j = 0; j < int(Instrument::PLUGIN_COUNT); ++j) {
-            list.push_back(0);
+            list.push_back(nullptr);
         }
 
         if (i >= audioInstruments) {
-            m_synths[id] = 0;
+            m_synths[id] = nullptr;
         }
     }
 
@@ -923,7 +923,7 @@ AudioInstrumentMixer::setPlugin(InstrumentId id, int position, QString identifie
         channels = m_bufferMap[id].channels;
     }
 
-    RunnablePluginInstance *instance = 0;
+    RunnablePluginInstance *instance = nullptr;
 
     PluginFactory *factory = PluginFactory::instanceFor(identifier);
     if (factory) {
@@ -937,14 +937,14 @@ AudioInstrumentMixer::setPlugin(InstrumentId id, int position, QString identifie
             std::cerr << "AudioInstrumentMixer::setPlugin(" << id << ", " << position
                       << ": instance is not OK" << std::endl;
             delete instance;
-            instance = 0;
+            instance = nullptr;
         }
     } else {
         std::cerr << "AudioInstrumentMixer::setPlugin: No factory for identifier "
                   << identifier << std::endl;
     }
 
-    RunnablePluginInstance *oldInstance = 0;
+    RunnablePluginInstance *oldInstance = nullptr;
 
     if (position == int(Instrument::SYNTH_PLUGIN_POSITION)) {
 
@@ -957,7 +957,7 @@ AudioInstrumentMixer::setPlugin(InstrumentId id, int position, QString identifie
 
         if (position < int(Instrument::PLUGIN_COUNT)) {
             while (position >= (int)list.size()) {
-                list.push_back(0);
+                list.push_back(nullptr);
             }
             oldInstance = list[position];
             list[position] = instance;
@@ -980,13 +980,13 @@ AudioInstrumentMixer::removePlugin(InstrumentId id, int position)
 
     std::cerr << "AudioInstrumentMixer::removePlugin(" << id << ", " << position << ")" << std::endl;
 
-    RunnablePluginInstance *oldInstance = 0;
+    RunnablePluginInstance *oldInstance = nullptr;
 
     if (position == int(Instrument::SYNTH_PLUGIN_POSITION)) {
 
         if (m_synths[id]) {
             oldInstance = m_synths[id];
-            m_synths[id] = 0;
+            m_synths[id] = nullptr;
         }
 
     } else {
@@ -994,7 +994,7 @@ AudioInstrumentMixer::removePlugin(InstrumentId id, int position)
         PluginList &list = m_plugins[id];
         if (position < (int)list.size()) {
             oldInstance = list[position];
-            list[position] = 0;
+            list[position] = nullptr;
         }
     }
 
@@ -1014,7 +1014,7 @@ AudioInstrumentMixer::removeAllPlugins()
             i != m_synths.end(); ++i) {
         if (i->second) {
             RunnablePluginInstance *instance = i->second;
-            i->second = 0;
+            i->second = nullptr;
             m_driver->claimUnwantedPlugin(instance);
         }
     }
@@ -1026,7 +1026,7 @@ AudioInstrumentMixer::removeAllPlugins()
 
         for (PluginList::iterator i = list.begin(); i != list.end(); ++i) {
             RunnablePluginInstance *instance = *i;
-            *i = 0;
+            *i = nullptr;
             m_driver->claimUnwantedPlugin(instance);
         }
     }
@@ -1045,7 +1045,7 @@ AudioInstrumentMixer::getPluginInstance(InstrumentId id, int position)
         if (position < int(list.size()))
             return list[position];
     }
-    return 0;
+    return nullptr;
 }
 
 
@@ -1276,7 +1276,7 @@ AudioInstrumentMixer::destroyAllPlugins()
     for (SynthPluginMap::iterator j = m_synths.begin();
             j != m_synths.end(); ++j) {
         RunnablePluginInstance *instance = j->second;
-        j->second = 0;
+        j->second = nullptr;
         delete instance;
     }
 
@@ -1289,7 +1289,7 @@ AudioInstrumentMixer::destroyAllPlugins()
                 i != m_plugins[id].end(); ++i) {
 
             RunnablePluginInstance *instance = *i;
-            *i = 0;
+            *i = nullptr;
             delete instance;
         }
     }
@@ -1438,7 +1438,7 @@ AudioInstrumentMixer::generateBuffers()
     for (int i = 0; i < busses; ++i) {
         PluginList &list = m_plugins[i + 1];
         while ((unsigned int)list.size() < Instrument::PLUGIN_COUNT) {
-            list.push_back(0);
+            list.push_back(nullptr);
         }
     }
 
@@ -1612,7 +1612,7 @@ AudioInstrumentMixer::processBlocks(bool &readSomething)
             if (empty) {
                 for (PluginList::iterator j = m_plugins[id].begin();
                         j != m_plugins[id].end(); ++j) {
-                    if (*j != 0) {
+                    if (*j != nullptr) {
                         empty = false;
                         break;
                     }
@@ -2067,7 +2067,7 @@ AudioInstrumentMixer::threadRun()
             t = RealTime(0, 10000000); // 10ms minimum
 
         struct timeval now;
-        gettimeofday(&now, 0);
+        gettimeofday(&now, nullptr);
         t = t + RealTime(now.tv_sec, now.tv_usec * 1000);
 
         struct timespec timeout;
@@ -2202,7 +2202,7 @@ AudioFileReader::threadRun()
                 bt = RealTime(0, 10000000); // 10ms minimum
 
             struct timeval now;
-            gettimeofday(&now, 0);
+            gettimeofday(&now, nullptr);
             RealTime t = bt + RealTime(now.tv_sec, now.tv_usec * 1000);
 
             struct timespec timeout;
@@ -2232,7 +2232,7 @@ AudioFileWriter::AudioFileWriter(SoundDriver *driver,
         // refer to the map without a lock (as the number of
         // instruments won't change)
 
-        m_files[id] = FilePair(0, 0);
+        m_files[id] = FilePair(0, nullptr);
     }
 }
 
@@ -2272,7 +2272,7 @@ AudioFileWriter::openRecordFile(InstrumentId id,
         int bytesPerSample = (format == RIFFAudioFile::PCM ? 2 : 4) * channels;
         int bitsPerSample = (format == RIFFAudioFile::PCM ? 16 : 32);
 
-        AudioFile *recordFile = 0;
+        AudioFile *recordFile = nullptr;
 
         try {
             recordFile =
@@ -2418,9 +2418,9 @@ AudioFileWriter::kick(bool wantLock)
             std::cerr << "AudioFileWriter::kick: found defunct file on instrument " << id << std::endl;
 #endif
 
-            m_files[id].first = 0;
+            m_files[id].first = nullptr;
             delete raf; // also deletes the AudioFile
-            m_files[id].second = 0;
+            m_files[id].second = nullptr;
 
         } else {
 #ifdef DEBUG_WRITER
@@ -2448,7 +2448,7 @@ AudioFileWriter::threadRun()
             t = RealTime(0, 10000000); // 10ms minimum
 
         struct timeval now;
-        gettimeofday(&now, 0);
+        gettimeofday(&now, nullptr);
         t = t + RealTime(now.tv_sec, now.tv_usec * 1000);
 
         struct timespec timeout;

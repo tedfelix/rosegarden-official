@@ -119,7 +119,7 @@ public:
         if (channel < (unsigned int)m_bufferMap[buss].buffers.size()) {
             return m_bufferMap[buss].buffers[channel];
         } else {
-            return 0;
+            return nullptr;
         }
     }
 
@@ -268,7 +268,7 @@ public:
         if (channel < (unsigned int)m_bufferMap[id].buffers.size()) {
             return m_bufferMap[id].buffers[channel];
         } else {
-            return 0;
+            return nullptr;
         }
     }
 

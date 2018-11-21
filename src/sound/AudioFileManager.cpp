@@ -123,7 +123,7 @@ AudioFileManager::addFile(const QString &filePath)
     }
 
     // prepare for audio file
-    AudioFile *aF = 0;
+    AudioFile *aF = nullptr;
     AudioFileId id = getUniqueAudioFileID();
 
     if (ext == "wav") {
@@ -152,7 +152,7 @@ AudioFileManager::addFile(const QString &filePath)
 
         // Ensure we have a valid file handle
         //
-        if (aF == 0) {
+        if (aF == nullptr) {
             RG_WARNING << "addFile(): Unknown WAV audio file subtype in " << filePath;
             throw BadAudioPathException(filePath, __FILE__, __LINE__);
         }
@@ -333,7 +333,7 @@ AudioFileManager::insertFile(const std::string &name,
     removeFile(id);
 
     // and insert
-    WAVAudioFile *aF = 0;
+    WAVAudioFile *aF = nullptr;
 
     try {
 
@@ -507,7 +507,7 @@ AudioFileManager::createRecordingAudioFile(QString projectName, QString instrume
     }
 
     // insert file into vector
-    WAVAudioFile *aF = 0;
+    WAVAudioFile *aF = nullptr;
 
     QString aup( m_audioPath );
     QString fnm(fileName);
@@ -560,7 +560,7 @@ AudioFileManager::createDerivedAudioFile(AudioFileId source,
         ;
 
     AudioFile *sourceFile = getAudioFile(source);
-    if (!sourceFile) return 0;
+    if (!sourceFile) return nullptr;
 
     AudioFileId newId = getUniqueAudioFileID();
     QString fileName = "";
@@ -586,7 +586,7 @@ AudioFileManager::createDerivedAudioFile(AudioFileId source,
     }
 
     // insert file into vector
-    WAVAudioFile *aF = 0;
+    WAVAudioFile *aF = nullptr;
 
     try {
         aF = new WAVAudioFile(newId,
@@ -680,7 +680,7 @@ AudioFileManager::importFile(const QString &fileName, int sampleRate)
             ;
 
         // insert file into vector
-        WAVAudioFile *aF = 0;
+        WAVAudioFile *aF = nullptr;
 
         aF = new WAVAudioFile(newId,
                               qstrtostr(targetName),
@@ -931,7 +931,7 @@ AudioFileManager::generatePreview(AudioFileId id)
 
     AudioFile *audioFile = getAudioFile(id);
 
-    if (audioFile == 0)
+    if (audioFile == nullptr)
         return false;
 
     if (!m_peakManager.hasValidPeaks(audioFile))
@@ -953,7 +953,7 @@ AudioFileManager::getAudioFile(AudioFileId id)
         if ((*it)->getId() == id)
             return (*it);
     }
-    return 0;
+    return nullptr;
 }
 
 std::vector<float>
@@ -968,7 +968,7 @@ AudioFileManager::getPreview(AudioFileId id,
 
     AudioFile *audioFile = getAudioFile(id);
 
-    if (audioFile == 0) {
+    if (audioFile == nullptr) {
         return std::vector<float>();
     }
 
@@ -1160,7 +1160,7 @@ AudioFileManager::getSplitPoints(AudioFileId id,
 
     AudioFile *audioFile = getAudioFile(id);
 
-    if (audioFile == 0)
+    if (audioFile == nullptr)
         return std::vector<SplitPointPair>();
 
     return m_peakManager.getSplitPoints(audioFile,

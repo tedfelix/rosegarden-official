@@ -109,7 +109,7 @@ bool
 RIFFAudioFile::scanForward(std::ifstream *file, const RealTime &time)
 {
     // sanity
-    if (file == 0)
+    if (file == nullptr)
         return false;
 
     unsigned int totalSamples = m_sampleRate * time.sec +
@@ -150,7 +150,7 @@ bool
 RIFFAudioFile::scanTo(std::ifstream *file, const RealTime &time)
 {
     // sanity
-    if (file == 0)
+    if (file == nullptr)
         return false;
 
     // whatever we do here we invalidate the read buffer
@@ -244,7 +244,7 @@ std::string
 RIFFAudioFile::getSampleFrames(std::ifstream *file, unsigned int frames)
 {
     // sanity
-    if (file == 0)
+    if (file == nullptr)
         return std::string("");
 
     // Bytes per sample already takes into account the number
@@ -263,7 +263,7 @@ unsigned int
 RIFFAudioFile::getSampleFrames(std::ifstream *file, char *buf,
                                unsigned int frames)
 {
-    if (file == 0)
+    if (file == nullptr)
         return 0;
     try {
         return getBytes(file, buf, frames * m_bytesPerFrame) / m_bytesPerFrame;
@@ -288,7 +288,7 @@ std::string
 RIFFAudioFile::getSampleFrameSlice(std::ifstream *file, const RealTime &time)
 {
     // sanity
-    if (file == 0)
+    if (file == nullptr)
         return std::string("");
 
     long totalFrames = RealTime::realTime2Frame(time, m_sampleRate);
@@ -351,7 +351,7 @@ RIFFAudioFile::getLength()
 void
 RIFFAudioFile::readFormatChunk()
 {
-    if (m_inFile == 0)
+    if (m_inFile == nullptr)
         return ;
 
     m_loseBuffer = true;
@@ -490,7 +490,7 @@ RIFFAudioFile::readFormatChunk()
 void
 RIFFAudioFile::writeFormatChunk()
 {
-    if (m_outFile == 0 || m_type != WAV)
+    if (m_outFile == nullptr || m_type != WAV)
         return ;
 
     std::string outString;

@@ -680,7 +680,7 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
     // Used to expand the composition if needed.
     timeT maxTime = 0;
 
-    Segment *conductorSegment = 0;
+    Segment *conductorSegment = nullptr;
 
     // Time Signature
     int numerator = 4;
@@ -824,7 +824,7 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
             }
 
             // The incoming midiEvent is transformed into this rosegardenEvent.
-            Event *rosegardenEvent = 0;
+            Event *rosegardenEvent = nullptr;
 
             if (midiEvent.isMeta()) {
 
@@ -1065,9 +1065,9 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
         // Empty segment?  Toss it.
         if (segment->empty()) {
             delete segment;
-            segment = 0;
+            segment = nullptr;
             delete track;
-            track = 0;
+            track = nullptr;
 
             // Try the next track
             continue;

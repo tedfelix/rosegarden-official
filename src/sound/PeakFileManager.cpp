@@ -77,9 +77,9 @@ PeakFileManager::removeAudioFile(AudioFile *audioFile)
 PeakFile *
 PeakFileManager::getPeakFile(AudioFile *audioFile)
 {
-    PeakFile *ptr = 0;
+    PeakFile *ptr = nullptr;
 
-    while (ptr == 0) {
+    while (ptr == nullptr) {
         // For each PeakFile
         for (std::vector<PeakFile *>::iterator it = m_peakFiles.begin();
              it != m_peakFiles.end();
@@ -90,13 +90,13 @@ PeakFileManager::getPeakFile(AudioFile *audioFile)
 
         // If nothing is found then insert and retry
         //
-        if (ptr == 0) {
+        if (ptr == nullptr) {
             // Insert - if we fail we return as empty
             //
             // ??? If this would return the pointer, we can get rid of the
             //     while loop.
             if (insertAudioFile(audioFile) == false)
-                return 0;
+                return nullptr;
         }
     }
 
@@ -110,7 +110,7 @@ PeakFileManager::hasValidPeaks(AudioFile *audioFile)
         // Check external peak file
         PeakFile *peakFile = getPeakFile(audioFile);
 
-        if (peakFile == 0) {
+        if (peakFile == nullptr) {
 #ifdef DEBUG_PEAKFILEMANAGER
             RG_WARNING << "hasValidPeaks() - no peak file found";
 #endif
@@ -243,7 +243,7 @@ PeakFileManager::getSplitPoints(AudioFile *audioFile,
 {
     PeakFile *peakFile = getPeakFile(audioFile);
 
-    if (peakFile == 0)
+    if (peakFile == nullptr)
         return std::vector<SplitPointPair>();
 
     return peakFile->getSplitPoints(startTime,

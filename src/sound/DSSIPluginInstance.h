@@ -36,7 +36,7 @@ class DSSIPluginInstance : public RunnablePluginInstance
 public:
     virtual ~DSSIPluginInstance();
 
-    bool isOK() const override { return m_instanceHandle != 0; }
+    bool isOK() const override { return m_instanceHandle != nullptr; }
 
     InstrumentId getInstrument() const { return m_instrument; }
     QString getIdentifier() const override { return m_identifier; }

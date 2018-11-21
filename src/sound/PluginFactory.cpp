@@ -30,8 +30,8 @@ namespace Rosegarden
 
 int PluginFactory::m_sampleRate = 48000;
 
-static LADSPAPluginFactory *ladspaInstance = 0;
-static LADSPAPluginFactory *dssiInstance = 0;
+static LADSPAPluginFactory *ladspaInstance = nullptr;
+static LADSPAPluginFactory *dssiInstance = nullptr;
 
 PluginFactory *
 PluginFactory::instance(QString pluginType)
@@ -51,7 +51,7 @@ PluginFactory::instance(QString pluginType)
         }
         return dssiInstance;
     } else {
-        return 0;
+        return nullptr;
     }
 }
 
@@ -69,7 +69,7 @@ PluginFactory::enumerateAllPlugins(MappedObjectPropertyList &list)
     PluginFactory *factory;
 
     // Plugins can change the locale, store it for reverting afterwards
-    char *loc = setlocale(LC_ALL, 0);
+    char *loc = setlocale(LC_ALL, nullptr);
 
     // Query DSSI plugins before LADSPA ones.
     // This is to provide for the interesting possibility of plugins

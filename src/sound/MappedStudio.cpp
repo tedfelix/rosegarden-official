@@ -330,7 +330,7 @@ MappedStudio::createObject(MappedObjectType type)
 {
     GET_LOCK;
 
-    MappedObject *mO = 0;
+    MappedObject *mO = nullptr;
 
     // Ensure we've got an empty slot
     //
@@ -355,10 +355,10 @@ MappedStudio::createObject(MappedObjectType type,
     // fail if the object already exists and it's not zero
     if (id != 0 && getObjectById(id)) {
         RELEASE_LOCK;
-        return 0;
+        return nullptr;
     }
 
-    MappedObject *mO = 0;
+    MappedObject *mO = nullptr;
 
     if (type == MappedObject::AudioFader) {
         mO = new MappedAudioFader(this,
@@ -406,7 +406,7 @@ MappedStudio::createObject(MappedObjectType type,
 MappedObject*
 MappedStudio::getObjectOfType(MappedObjectType type)
 {
-    MappedObject *rv = 0;
+    MappedObject *rv = nullptr;
 
     GET_LOCK;
 
@@ -638,7 +638,7 @@ MappedObject*
 MappedStudio::getObjectById(MappedObjectId id)
 {
     GET_LOCK;
-    MappedObject *rv = 0;
+    MappedObject *rv = nullptr;
 
     for (MappedObjectMap::iterator i = m_objects.begin();
             i != m_objects.end(); ++i) {
@@ -658,7 +658,7 @@ MappedObject*
 MappedStudio::getObjectByIdAndType(MappedObjectId id, MappedObjectType type)
 {
     GET_LOCK;
-    MappedObject *rv = 0;
+    MappedObject *rv = nullptr;
 
     MappedObjectCategory &category = m_objects[type];
     MappedObjectCategory::iterator i = category.find(id);
@@ -684,7 +684,7 @@ MappedStudio::getNext(MappedObject *object)
     MappedObjectCategory &category = m_objects[object->getType()];
 
     bool next = false;
-    MappedObject *rv = 0;
+    MappedObject *rv = nullptr;
 
     for (MappedObjectCategory::iterator i = category.begin();
             i != category.end(); ++i) {
@@ -714,7 +714,7 @@ MappedStudio::getAudioFader(InstrumentId id)
     GET_LOCK;
 
     MappedObjectCategory &category = m_objects[AudioFader];
-    MappedAudioFader *rv = 0;
+    MappedAudioFader *rv = nullptr;
 
     for (MappedObjectCategory::iterator i = category.begin();
             i != category.end(); ++i) {
@@ -735,7 +735,7 @@ MappedStudio::getAudioBuss(int bussNumber)
     GET_LOCK;
 
     MappedObjectCategory &category = m_objects[AudioBuss];
-    MappedAudioBuss *rv = 0;
+    MappedAudioBuss *rv = nullptr;
 
     for (MappedObjectCategory::iterator i = category.begin();
             i != category.end(); ++i) {
@@ -756,7 +756,7 @@ MappedStudio::getAudioInput(int inputNumber)
     GET_LOCK;
 
     MappedObjectCategory &category = m_objects[AudioInput];
-    MappedAudioInput *rv = 0;
+    MappedAudioInput *rv = nullptr;
 
     for (MappedObjectCategory::iterator i = category.begin();
             i != category.end(); ++i) {
@@ -1522,7 +1522,7 @@ MappedPluginSlot::setPort(unsigned long portNumber, float value)
 {
     std::vector<MappedObject*> ports = getChildObjects();
     std::vector<MappedObject*>::iterator it = ports.begin();
-    MappedPluginPort *port = 0;
+    MappedPluginPort *port = nullptr;
 
     for (; it != ports.end(); ++it) {
         port = dynamic_cast<MappedPluginPort *>(*it);
@@ -1537,7 +1537,7 @@ MappedPluginSlot::getPort(unsigned long portNumber)
 {
     std::vector<MappedObject*> ports = getChildObjects();
     std::vector<MappedObject*>::iterator it = ports.begin();
-    MappedPluginPort *port = 0;
+    MappedPluginPort *port = nullptr;
 
     for (; it != ports.end(); ++it) {
         port = dynamic_cast<MappedPluginPort *>(*it);

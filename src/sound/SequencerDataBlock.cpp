@@ -27,7 +27,7 @@ namespace Rosegarden
 SequencerDataBlock *
 SequencerDataBlock::getInstance()
 {
-    static SequencerDataBlock *instance = 0;
+    static SequencerDataBlock *instance = nullptr;
     if (!instance) instance = new SequencerDataBlock();
     return instance;
 }

@@ -190,7 +190,7 @@ AlsaDriver::shutdown()
 
 #ifdef HAVE_LIBJACK
     delete m_jackDriver;
-    m_jackDriver = 0;
+    m_jackDriver = nullptr;
 #endif
 
     if (m_midiHandle) {
@@ -209,7 +209,7 @@ AlsaDriver::shutdown()
         RG_DEBUG << "shutdown() - closed MIDI handle";
 #endif
 
-        m_midiHandle = 0;
+        m_midiHandle = nullptr;
     }
 
     DataBlockRepository::clear();
@@ -1212,7 +1212,7 @@ AlsaDriver::setPlausibleConnection(DeviceId id, QString idealConnection, bool re
         }
     }
 
-    AlsaPortDescription *viableHardwarePort = 0, *viableSoftwarePort = 0;
+    AlsaPortDescription *viableHardwarePort = nullptr, *viableSoftwarePort = 0;
     int fitness = 0;
 
     // Try to find one viable hardware and one viable software port, if
@@ -1331,7 +1331,7 @@ AlsaDriver::setPlausibleConnection(DeviceId id, QString idealConnection, bool re
 
     // If we found a viable software port, use it.  If we didn't find a viable
     // software port, but did find a viable hardware port, use it. 
-    AlsaPortDescription *port = 0;
+    AlsaPortDescription *port = nullptr;
     if (viableSoftwarePort) port = viableSoftwarePort;
     else if (viableHardwarePort) port = viableHardwarePort;
 
@@ -1374,8 +1374,8 @@ AlsaDriver::connectSomething()
     // something suitable to connect one play, and one record device to, and
     // connects it.  If nothing very appropriate beckons, leaves unconnected.
 
-    MappedDevice *toConnect = 0;
-    MappedDevice *toConnectRecord = 0;
+    MappedDevice *toConnect = nullptr;
+    MappedDevice *toConnectRecord = nullptr;
 
     // Check whether anything is connected.
 
@@ -1765,7 +1765,7 @@ AlsaDriver::initialiseAudio()
         m_driverStatus |= AUDIO_OK;
     } else {
         delete m_jackDriver;
-        m_jackDriver = 0;
+        m_jackDriver = nullptr;
     }
 #endif
 }
@@ -2730,7 +2730,7 @@ AlsaDriver::getMappedEventList(MappedEventList &mappedEventList)
                 }
 
                 std::string sysExcData; 
-                MappedEvent *sysExcEvent = 0;
+                MappedEvent *sysExcEvent = nullptr;
 
                 // Check to see if there are any pending System Exclusive Messages
                 if (!m_pendSysExcMap->empty()) {
@@ -3699,7 +3699,7 @@ AlsaDriver::processMidiOut(const MappedEventList &mC,
 #ifdef DEBUG_ALSA
             RG_DEBUG << "processMidiOut() - Event of type " << (int)((*i)->getType()) << " (data1 " << (int)(*i)->getData1() << ", data2 " << (int)(*i)->getData2() << ") for external controller channel " << (int)channel;
 #endif
-        } else if (instrument != 0) {
+        } else if (instrument != nullptr) {
             channel = (*i)->getRecordedChannel();
 #ifdef DEBUG_ALSA
             RG_DEBUG << "processMidiOut() - Non-controller Event of type " << (int)((*i)->getType()) << " (data1 " << (int)(*i)->getData1() << ", data2 " << (int)(*i)->getData2() << ") for channel " << (int)(*i)->getRecordedChannel();
@@ -4180,7 +4180,7 @@ AlsaDriver::processEventsOut(const MappedEventList &mC,
         }
     }
 
-    AudioFile *audioFile = 0;
+    AudioFile *audioFile = nullptr;
     bool haveNewAudio = false;
 
     // For each incoming event, insert audio events if we find them
@@ -4237,7 +4237,7 @@ AlsaDriver::processEventsOut(const MappedEventList &mC,
                 RG_DEBUG << "processEventsOut(): Read buffer length is " << bufferLength << " (" << bufferFrames << " frames)";
 #endif
 
-                PlayableAudioFile *paf = 0;
+                PlayableAudioFile *paf = nullptr;
 
                 try {
                     paf = new PlayableAudioFile((*i)->getInstrument(),
@@ -4887,7 +4887,7 @@ AlsaDriver::setRecordDevice(DeviceId id, bool connectAction)
     sender.client = pair.first;
     sender.port = pair.second;
 
-    MappedDevice *device = 0;
+    MappedDevice *device = nullptr;
 
     for (MappedDeviceList::iterator i = m_devices.begin();
          i != m_devices.end(); ++i) {

@@ -27,8 +27,8 @@ SoundFile::SoundFile(const QString &fileName):
         m_fileName(fileName),
         m_readChunkPtr( -1),
         m_readChunkSize(4096),  // 4k blocks
-        m_inFile(0),
-        m_outFile(0),
+        m_inFile(nullptr),
+        m_outFile(nullptr),
         m_loseBuffer(false),
         m_fileSize(0)
 {}
@@ -114,7 +114,7 @@ SoundFile::getBytes(std::ifstream *file, char *buf, size_t n)
 std::string
 SoundFile::getBytes(unsigned int numberOfBytes)
 {
-    if (m_inFile == 0)
+    if (m_inFile == nullptr)
         throw(BadSoundFileException(m_fileName, "SoundFile::getBytes - no open file handle"));
 
     if (m_inFile->eof()) {

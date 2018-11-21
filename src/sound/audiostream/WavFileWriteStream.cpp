@@ -51,7 +51,7 @@ WavFileWriteStream::initStaticObjects()
 
 WavFileWriteStream::WavFileWriteStream(Target target) :
     AudioWriteStream(target),
-    m_file(0)
+    m_file(nullptr)
 {
     memset(&m_fileInfo, 0, sizeof(SF_INFO));
     m_fileInfo.format = SF_FORMAT_WAV | SF_FORMAT_FLOAT;

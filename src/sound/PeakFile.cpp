@@ -239,10 +239,10 @@ PeakFile::close()
     if (m_inFile && m_inFile->is_open()) {
         m_inFile->close();
         delete m_inFile;
-        m_inFile = 0;
+        m_inFile = nullptr;
     }
 
-    if (m_outFile == 0)
+    if (m_outFile == nullptr)
         return ;
 
     // Seek to start of chunk
@@ -300,7 +300,7 @@ PeakFile::close()
     //
     m_outFile->close();
     delete m_outFile;
-    m_outFile = 0;
+    m_outFile = nullptr;
 }
 
 bool

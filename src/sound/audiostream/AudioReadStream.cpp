@@ -41,7 +41,7 @@ AudioReadStream::AudioReadStream() :
     m_sampleRate(0),
     m_retrievalRate(0),
     m_resampler(0),
-    m_resampleBuffer(0)
+    m_resampleBuffer(nullptr)
 {
 }
 

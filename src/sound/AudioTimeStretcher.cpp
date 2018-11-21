@@ -428,7 +428,7 @@ AudioTimeStretcher::putInput(float **input, size_t samples)
             for (size_t c = 0; c < m_channels; ++c) {
 
                 synthesiseBlock(c, m_mashbuf[c],
-                                c == 0 ? m_modulationbuf : 0,
+                                c == 0 ? m_modulationbuf : nullptr,
                                 m_prevTransient ? m_n1 : m_n2);
 
 

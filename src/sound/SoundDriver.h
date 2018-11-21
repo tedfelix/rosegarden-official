@@ -176,8 +176,8 @@ public:
     // can be NULL if no audio tracks recording.
     //
     virtual bool record(RecordStatus recordStatus,
-                        const std::vector<InstrumentId> *armedInstruments = 0,
-                        const std::vector<QString> *audioFileNames = 0) = 0;
+                        const std::vector<InstrumentId> *armedInstruments = nullptr,
+                        const std::vector<QString> *audioFileNames = nullptr) = 0;
 
     // Process anything that's pending
     //

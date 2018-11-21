@@ -44,7 +44,7 @@ LADSPAPluginFactory::~LADSPAPluginFactory()
     for (std::set
                 <RunnablePluginInstance *>::iterator i = m_instances.begin();
                 i != m_instances.end(); ++i) {
-            (*i)->setFactory(0);
+            (*i)->setFactory(nullptr);
             delete *i;
         }
     m_instances.clear();
@@ -421,7 +421,7 @@ LADSPAPluginFactory::instantiatePlugin(QString identifier,
         return instance;
     }
 
-    return 0;
+    return nullptr;
 }
 
 void
@@ -468,7 +468,7 @@ LADSPAPluginFactory::getLADSPADescriptor(QString identifier)
         loadLibrary(soname);
         if (m_libraryHandles.find(soname) == m_libraryHandles.end()) {
             RG_WARNING << "getLADSPADescriptor() WARNING: loadLibrary failed for " << soname;
-            return 0;
+            return nullptr;
         }
     }
 
@@ -479,10 +479,10 @@ LADSPAPluginFactory::getLADSPADescriptor(QString identifier)
 
     if (!fn) {
         RG_WARNING << "getLADSPADescriptor() WARNING: No descriptor function in library " << soname;
-        return 0;
+        return nullptr;
     }
 
-    const LADSPA_Descriptor *descriptor = 0;
+    const LADSPA_Descriptor *descriptor = nullptr;
 
     int index = 0;
     while ((descriptor = fn(index))) {
@@ -493,7 +493,7 @@ LADSPAPluginFactory::getLADSPADescriptor(QString identifier)
 
     RG_WARNING << "getLADSPADescriptor() WARNING: No such plugin as " << label << " in library " << soname;
 
-    return 0;
+    return nullptr;
 }
 
 void
@@ -687,17 +687,17 @@ LADSPAPluginFactory::discoverPlugin(const QString &soName)
         return ;
     }
 
-    const LADSPA_Descriptor *descriptor = 0;
+    const LADSPA_Descriptor *descriptor = nullptr;
 
     int index = 0;
     while ((descriptor = fn(index))) {
 
-        char * def_uri = 0;
-        lrdf_defaults *defs = 0;
+        char * def_uri = nullptr;
+        lrdf_defaults *defs = nullptr;
 
         QString category = m_taxonomy[descriptor->UniqueID];
 
-        if (category == "" && descriptor->Name != 0) {
+        if (category == "" && descriptor->Name != nullptr) {
             std::string name = descriptor->Name;
             if (name.length() > 4 &&
                     name.substr(name.length() - 4) == " VST") {

@@ -39,7 +39,7 @@ namespace Rosegarden
 #define EVENT_BUFFER_SIZE 1023
 
 DSSIPluginInstance::GroupMap DSSIPluginInstance::m_groupMap;
-snd_seq_event_t **DSSIPluginInstance::m_groupLocalEventBuffers = 0;
+snd_seq_event_t **DSSIPluginInstance::m_groupLocalEventBuffers = nullptr;
 size_t DSSIPluginInstance::m_groupLocalEventBufferCount = 0;
 Scavenger<ScavengerArrayWrapper<snd_seq_event_t *> > DSSIPluginInstance::m_bufferScavenger(2, 10);
 
@@ -238,7 +238,7 @@ DSSIPluginInstance::silence()
     if (m_run && !m_runSinceReset) {
         return ;
     }
-    if (m_instanceHandle != 0) {
+    if (m_instanceHandle != nullptr) {
         deactivate();
         activate();
     }
@@ -268,7 +268,7 @@ DSSIPluginInstance::setIdealChannelCount(size_t channels)
         return ;
     }
 
-    if (m_instanceHandle != 0) {
+    if (m_instanceHandle != nullptr) {
         deactivate();
     }
 
@@ -293,7 +293,7 @@ DSSIPluginInstance::setIdealChannelCount(size_t channels)
         connectPorts();
     }
 
-    if (m_instanceHandle != 0) {
+    if (m_instanceHandle != nullptr) {
         activate();
     }
 }
@@ -351,7 +351,7 @@ DSSIPluginInstance::~DSSIPluginInstance()
 
     detachFromGroup();
 
-    if (m_instanceHandle != 0) {
+    if (m_instanceHandle != nullptr) {
         deactivate();
     }
 
@@ -1228,7 +1228,7 @@ DSSIPluginInstance::cleanup()
     }
 
     m_descriptor->LADSPA_Plugin->cleanup(m_instanceHandle);
-    m_instanceHandle = 0;
+    m_instanceHandle = nullptr;
 #ifdef DEBUG_DSSI
 
     std::cerr << "DSSIPluginInstance::cleanup " << m_identifier << " done" << std::endl;

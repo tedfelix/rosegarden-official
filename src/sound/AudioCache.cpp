@@ -38,7 +38,7 @@ float **
 AudioCache::getData(void *index, size_t &channels, size_t &frames)
 {
     if (m_cache.find(index) == m_cache.end())
-        return 0;
+        return nullptr;
     CacheRec *rec = m_cache[index];
     channels = rec->channels;
     frames = rec->nframes;

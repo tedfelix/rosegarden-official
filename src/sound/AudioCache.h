@@ -75,7 +75,7 @@ protected:
     void clear();
 
     struct CacheRec {
-        CacheRec() : data(0), channels(0), nframes(0), refCount(0) { }
+        CacheRec() : data(nullptr), channels(0), nframes(0), refCount(0) { }
         CacheRec(float **d, size_t c, size_t n) :
             data(d), channels(c), nframes(n), refCount(1) { }
         ~CacheRec();

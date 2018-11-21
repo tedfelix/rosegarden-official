@@ -103,7 +103,7 @@ Scavenger<T>::Scavenger(int sec, int defaultObjectListSize) :
     m_claimed(0),
     m_scavenged(0)
 {
-    pthread_mutex_init(&m_excessMutex, NULL);
+    pthread_mutex_init(&m_excessMutex, nullptr);
 }
 
 template <typename T>
@@ -112,10 +112,9 @@ Scavenger<T>::~Scavenger()
     if (m_scavenged < m_claimed) {
         for (size_t i = 0; i < m_objects.size(); ++i) {
             ObjectTimePair &pair = m_objects[i];
-            if (pair.first != 0) {
-                T *ot = pair.first;
-                pair.first = 0;
-                delete ot;
+            if (pair.first != nullptr) {
+                delete pair.first;
+                pair.first = nullptr;
                 ++m_scavenged;
             }
         }
@@ -131,12 +130,12 @@ void
 Scavenger<T>::claim(T *t)
 {
     struct timeval tv;
-    (void)gettimeofday(&tv, 0);
+    (void)gettimeofday(&tv, nullptr);
     int sec = tv.tv_sec;
 
     for (size_t i = 0; i < m_objects.size(); ++i) {
         ObjectTimePair &pair = m_objects[i];
-        if (pair.first == 0) {
+        if (pair.first == nullptr) {
             pair.second = sec;
             pair.first = t;
             ++m_claimed;
@@ -162,9 +161,8 @@ Scavenger<T>::scavenge()
     for (size_t i = 0; i < m_objects.size(); ++i) {
         ObjectTimePair &pair = m_objects[i];
         if (pair.first != 0 && pair.second + m_sec < sec) {
-            T *ot = pair.first;
-            pair.first = 0;
-            delete ot;
+            delete pair.first;
+            pair.first = nullptr;
             ++m_scavenged;
         }
     }
@@ -181,7 +179,7 @@ Scavenger<T>::pushExcess(T *t)
     pthread_mutex_lock(&m_excessMutex);
     m_excess.push_back(t);
     struct timeval tv;
-    (void)gettimeofday(&tv, 0);
+    (void)gettimeofday(&tv, nullptr);
     m_lastExcess = tv.tv_sec;
     pthread_mutex_unlock(&m_excessMutex);
 }

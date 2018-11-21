@@ -294,7 +294,7 @@ size_t PlayableAudioFile::m_workBufferSize = 0;
 char *PlayableAudioFile::m_rawFileBuffer;
 size_t PlayableAudioFile::m_rawFileBufferSize = 0;
 
-RingBufferPool *PlayableAudioFile::m_ringBufferPool = 0;
+RingBufferPool *PlayableAudioFile::m_ringBufferPool = nullptr;
 
 size_t PlayableAudioFile::m_xfadeFrames = 30;
 
@@ -373,7 +373,7 @@ PlayableAudioFile::initialise(size_t bufferSize, size_t smallFileSize)
         if (!*m_file) {
             std::cerr << "ERROR: PlayableAudioFile::initialise: Failed to open audio file " << m_audioFile->getFilename() << std::endl;
             delete m_file;
-            m_file = 0;
+            m_file = nullptr;
         }
     }
 
@@ -405,7 +405,7 @@ PlayableAudioFile::initialise(size_t bufferSize, size_t smallFileSize)
 
     m_ringBuffers = new RingBuffer<sample_t> *[m_targetChannels];
     for (int ch = 0; ch < m_targetChannels; ++ch) {
-        m_ringBuffers[ch] = 0;
+        m_ringBuffers[ch] = nullptr;
     }
 }
 
@@ -418,7 +418,7 @@ PlayableAudioFile::~PlayableAudioFile()
 
     returnRingBuffers();
     delete[] m_ringBuffers;
-    m_ringBuffers = 0;
+    m_ringBuffers = nullptr;
 
     if (m_isSmallFile) {
         m_smallFileCache.decrementReference(m_audioFile);
@@ -435,7 +435,7 @@ PlayableAudioFile::returnRingBuffers()
     for (int i = 0; i < m_targetChannels; ++i) {
         if (m_ringBuffers[i]) {
             m_ringBufferPool->returnBuffer(m_ringBuffers[i]);
-            m_ringBuffers[i] = 0;
+            m_ringBuffers[i] = nullptr;
         }
     }
 }
@@ -707,7 +707,7 @@ PlayableAudioFile::checkSmallFileCache(size_t smallFileSize)
         if (m_file) {
             m_file->close();
             delete m_file;
-            m_file = 0;
+            m_file = nullptr;
         }
     }
 }
@@ -730,7 +730,7 @@ PlayableAudioFile::fillBuffers()
         if (!*m_file) {
             std::cerr << "ERROR: PlayableAudioFile::fillBuffers: Failed to open audio file " << m_audioFile->getFilename() << std::endl;
             delete m_file;
-            m_file = 0;
+            m_file = nullptr;
             return ;
         }
     }
@@ -774,7 +774,7 @@ PlayableAudioFile::fillBuffers(const RealTime &currentTime)
         if (!*m_file) {
             std::cerr << "ERROR: PlayableAudioFile::fillBuffers: Failed to open audio file " << m_audioFile->getFilename() << std::endl;
             delete m_file;
-            m_file = 0;
+            m_file = nullptr;
             return false;
         }
         scanTo(m_startIndex);
@@ -1015,7 +1015,7 @@ PlayableAudioFile::updateBuffers()
         if (m_file) {
             m_file->close();
             delete m_file;
-            m_file = 0;
+            m_file = nullptr;
         }
     }
 

@@ -54,13 +54,13 @@ void TrackInfo::clear()
 ControlBlock *
 ControlBlock::getInstance()
 {
-    static ControlBlock *instance = 0;
+    static ControlBlock *instance = nullptr;
     if (!instance) instance = new ControlBlock();
     return instance;
 }
 
 ControlBlock::ControlBlock() :
-    m_doc(0),
+    m_doc(nullptr),
     m_maxTrackId(0),
     m_thruFilter(0),
     m_recordFilter(0),

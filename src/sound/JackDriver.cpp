@@ -97,7 +97,7 @@ JackDriver::~JackDriver()
 #endif
 
     AudioBussMixer *bussMixer = m_bussMixer;
-    m_bussMixer = 0;
+    m_bussMixer = nullptr;
     if (bussMixer)
         bussMixer->terminate();
 
@@ -106,7 +106,7 @@ JackDriver::~JackDriver()
 #endif
 
     AudioInstrumentMixer *instrumentMixer = m_instrumentMixer;
-    m_instrumentMixer = 0;
+    m_instrumentMixer = nullptr;
     if (instrumentMixer) {
         instrumentMixer->terminate();
         instrumentMixer->destroyAllPlugins();
@@ -117,7 +117,7 @@ JackDriver::~JackDriver()
 #endif
 
     AudioFileReader *reader = m_fileReader;
-    m_fileReader = 0;
+    m_fileReader = nullptr;
     if (reader)
         reader->terminate();
 
@@ -126,7 +126,7 @@ JackDriver::~JackDriver()
 #endif
 
     AudioFileWriter *writer = m_fileWriter;
-    m_fileWriter = 0;
+    m_fileWriter = nullptr;
     if (writer)
         writer->terminate();
 
@@ -182,7 +182,7 @@ JackDriver::~JackDriver()
 
         jack_client_close(m_client);
         RG_DEBUG << "dtor: done";
-        m_client = 0;
+        m_client = nullptr;
     }
 
 #ifdef DEBUG_JACK_DRIVER
@@ -225,7 +225,7 @@ JackDriver::initialise(bool reinitialise)
 
     // attempt connection to JACK server
     //
-    if ((m_client = jack_client_open(jackClientName.c_str(), jackOptions, 0)) == 0) {
+    if ((m_client = jack_client_open(jackClientName.c_str(), jackOptions, nullptr)) == 0) {
         RG_WARNING << "initialise() - JACK server not running";
         RG_WARNING << "  Attempt to start JACK server was " << (jackOptions & JackNoStartServer ? "NOT " : "") << "made per user config";
         // Also send to user log.
@@ -1356,7 +1356,7 @@ JackDriver::jackProcessRecord(InstrumentId id,
 
     // Get input buffers
     //
-    sample_t *inputBufferLeft = 0, *inputBufferRight = 0;
+    sample_t *inputBufferLeft = nullptr, *inputBufferRight = 0;
 
     int recInput = m_recordInputs[id].input;
 
@@ -1477,7 +1477,7 @@ JackDriver::jackProcessRecord(InstrumentId id,
 
         if (inputBufferLeft) {
 
-            sample_t *buf = 0;
+            sample_t *buf = nullptr;
             if (!m_outputMonitors.empty()) {
                 buf = static_cast<sample_t *>
                     (jack_port_get_buffer(m_outputMonitors[0], nframes));
@@ -1493,7 +1493,7 @@ JackDriver::jackProcessRecord(InstrumentId id,
 
             if (channels == 2 && inputBufferRight) {
 
-                buf = 0;
+                buf = nullptr;
                 if (m_outputMonitors.size() > 1) {
                     buf = static_cast<sample_t *>
                         (jack_port_get_buffer(m_outputMonitors[1], nframes));
@@ -1861,7 +1861,7 @@ JackDriver::jackShutdown(void *arg)
 
     JackDriver *inst = static_cast<JackDriver*>(arg);
     inst->m_ok = false;
-    inst->m_kickedOutAt = time(0);
+    inst->m_kickedOutAt = time(nullptr);
     inst->reportFailure(MappedEvent::FailureJackDied);
 }
 
@@ -1896,10 +1896,10 @@ JackDriver::restoreIfRestorable()
     if (m_client) {
         jack_client_close(m_client);
         RG_DEBUG << "restoreIfRestorable(): closed client";
-        m_client = 0;
+        m_client = nullptr;
     }
 
-    time_t now = time(0);
+    time_t now = time(nullptr);
 
     if (now < m_kickedOutAt || now >= m_kickedOutAt + 3) {
 
@@ -2425,7 +2425,7 @@ JackDriver::getSynthPlugin(InstrumentId id)
     if (m_instrumentMixer)
         return m_instrumentMixer->getSynthPlugin(id);
     else
-        return 0;
+        return nullptr;
 }
 
 void
