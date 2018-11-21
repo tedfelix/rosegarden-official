@@ -62,7 +62,7 @@ NoteInsertionCommand::NoteInsertionCommand(Segment &segment, timeT time,
         m_targetSubordering(targetSubordering),
         m_noteStyle(noteStyle),
         m_velocity(velocity),
-        m_lastInsertedEvent(0)
+        m_lastInsertedEvent(nullptr)
 {
     // nothing
 }

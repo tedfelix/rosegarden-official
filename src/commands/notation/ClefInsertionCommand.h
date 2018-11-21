@@ -46,8 +46,8 @@ public:
                          bool shouldTranspose = false);
     virtual ~ClefInsertionCommand();
 
-    virtual QString getThisGlobalName(Clef *clef = 0);
-    static QString getGlobalName(Clef *clef = 0);
+    virtual QString getThisGlobalName(Clef *clef = nullptr);
+    static QString getGlobalName(Clef *clef = nullptr);
     timeT getRelayoutEndTime() override;
 
     EventSelection *getSubsequentSelection() override;
@@ -75,8 +75,8 @@ public:
                             bool shouldTranspose = false);
     virtual ~ClefLinkInsertionCommand();
 
-    QString getThisGlobalName(Clef *clef = 0) override;
-    static QString getGlobalName(Clef *clef = 0);
+    QString getThisGlobalName(Clef *clef = nullptr) override;
+    static QString getGlobalName(Clef *clef = nullptr);
 
 protected:
     void modifySegment() override;

@@ -39,7 +39,7 @@ MatrixPercussionInsertionCommand::MatrixPercussionInsertionCommand(Segment &segm
         BasicCommand(tr("Insert Percussion Note"), segment,
                      getEffectiveStartTime(segment, time, *event),
                      getEndTime(segment, time, *event)),
-        m_event(0),
+        m_event(nullptr),
         m_time(time)
 {
     timeT endTime = getEndTime(segment, time, *event);

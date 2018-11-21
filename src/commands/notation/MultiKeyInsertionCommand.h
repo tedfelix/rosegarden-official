@@ -53,7 +53,7 @@ public:
 			     bool shouldIgnorePercussion); 
     virtual ~MultiKeyInsertionCommand();
 
-    static QString getGlobalName(Key *key = 0) {
+    static QString getGlobalName(Key *key = nullptr) {
         if (key) {
             return tr("Change all to &Key %1...").arg(strtoqstr(key->getName()));
         } else {

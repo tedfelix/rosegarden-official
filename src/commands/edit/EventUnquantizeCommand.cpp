@@ -35,7 +35,7 @@ EventUnquantizeCommand::EventUnquantizeCommand(Segment &segment,
         BasicCommand(tr("Unquantize Events"), segment, startTime, endTime,
                      true),  // bruteForceRedo
         m_quantizer(quantizer),
-        m_selection(0)
+        m_selection(nullptr)
 {
     // nothing else
 }

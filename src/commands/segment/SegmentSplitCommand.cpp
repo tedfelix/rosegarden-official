@@ -84,8 +84,8 @@ getNewSegments(Segment *segment, timeT splitTime, bool keepLabel)
 
     // !!! Set Composition?
     
-    Event *clefEvent = 0;
-    Event *keyEvent = 0;
+    Event *clefEvent = nullptr;
+    Event *keyEvent = nullptr;
 
     // Copy the last occurrence of clef and key
     // from the left hand side of the split (nb. timesig events

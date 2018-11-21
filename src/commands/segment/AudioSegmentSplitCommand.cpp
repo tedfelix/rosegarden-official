@@ -124,7 +124,7 @@ AudioSegmentSplitCommand::execute()
     if (emt) {
         m_previousEndMarkerTime = new timeT(*emt);
     } else {
-        m_previousEndMarkerTime = 0;
+        m_previousEndMarkerTime = nullptr;
     }
 
     RG_DEBUG << "AudioSegmentSplitCommand::execute: Setting end marker of left segment to " << m_splitTime;
@@ -147,7 +147,7 @@ AudioSegmentSplitCommand::unexecute()
 
         m_segment->setEndMarkerTime(*m_previousEndMarkerTime);
         delete m_previousEndMarkerTime;
-        m_previousEndMarkerTime = 0;
+        m_previousEndMarkerTime = nullptr;
     } else {
         m_segment->clearEndMarker();
     }

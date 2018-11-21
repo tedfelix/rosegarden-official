@@ -42,7 +42,7 @@ MoveCommand::MoveCommand(Segment &s, timeT delta, bool useNotationTimings,
         m_selection(&sel),
         m_delta(delta),
         m_useNotationTimings(useNotationTimings),
-        m_lastInsertedEvent(0)
+        m_lastInsertedEvent(nullptr)
 {
     // nothing else
 }

@@ -60,7 +60,7 @@ void
 ModifyInstrumentMappingCommand::unexecute()
 {
     std::vector<TrackId>::iterator it = m_mapping.begin();
-    Track *track = 0;
+    Track *track = nullptr;
 
     for (; it != m_mapping.end(); ++it) {
         track = m_composition->getTrackById(*it);

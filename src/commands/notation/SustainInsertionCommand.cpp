@@ -35,7 +35,7 @@ SustainInsertionCommand::SustainInsertionCommand(Segment &segment, timeT time,
         BasicCommand(getGlobalName(down), segment, time, time),
         m_down(down),
         m_controllerNumber(controllerNumber),
-        m_lastInsertedEvent(0)
+        m_lastInsertedEvent(nullptr)
 {
     // nothing
 }

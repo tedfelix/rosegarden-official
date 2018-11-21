@@ -33,7 +33,7 @@ RemoveMarkerCommand::RemoveMarkerCommand(Composition *comp,
         const std::string &description):
         NamedCommand(getGlobalName()),
         m_composition(comp),
-        m_marker(0),
+        m_marker(nullptr),
         m_id(id),
         m_time(time),
         m_name(name),

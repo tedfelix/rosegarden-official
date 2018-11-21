@@ -35,7 +35,7 @@ CopyCommand::CopyCommand(EventSelection &selection,
         m_targetClipboard(clipboard)
 {
     m_sourceClipboard = new Clipboard;
-    m_savedClipboard = 0;
+    m_savedClipboard = nullptr;
     std::string label = selection.getSegment().getLabel();
     m_sourceClipboard->newSegment(&selection)->setLabel(
             appendLabel(label, qstrtostr(tr("(excerpt)"))));
@@ -47,7 +47,7 @@ CopyCommand::CopyCommand(SegmentSelection &selection,
         m_targetClipboard(clipboard)
 {
     m_sourceClipboard = new Clipboard;
-    m_savedClipboard = 0;
+    m_savedClipboard = nullptr;
 
     for (SegmentSelection::iterator i = selection.begin();
             i != selection.end(); ++i) {
@@ -66,7 +66,7 @@ CopyCommand::CopyCommand(Composition *composition,
         m_targetClipboard(clipboard)
 {
     m_sourceClipboard = new Clipboard;
-    m_savedClipboard = 0;
+    m_savedClipboard = nullptr;
 
     // For each segment in the composition
     for (Composition::iterator i = composition->begin();

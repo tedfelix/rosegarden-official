@@ -50,7 +50,7 @@ ModifyDeviceMappingCommand::execute()
     Composition::trackcontainer &tracks =
         m_composition->getTracks();
     Composition::trackcontainer::iterator it = tracks.begin();
-    Instrument *instr = 0;
+    Instrument *instr = nullptr;
     int index = 0;
 
     for (; it != tracks.end(); ++it) {
@@ -130,7 +130,7 @@ ModifyDeviceMappingCommand::unexecute()
 {
     std::vector<std::pair<TrackId, InstrumentId> >
     ::iterator it = m_mapping.begin();
-    Track *track = 0;
+    Track *track = nullptr;
 
     for (; it != m_mapping.end(); ++it) {
         track = m_composition->getTrackById(it->first);

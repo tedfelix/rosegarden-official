@@ -235,7 +235,7 @@ addInsertionCommands(MacroCommand *macroCommand,
             macroCommand->
                 addCommand(new AudioSegmentSplitCommand(*i, startTime));
         } else {
-                if ((*i)->getLinker() == 0) {
+                if ((*i)->getLinker() == nullptr) {
                     // If not linked, immediately add a command to
                     // handle it.  It can't be stored in linkedGroups
                     // because all unlinked Segments would wrongly

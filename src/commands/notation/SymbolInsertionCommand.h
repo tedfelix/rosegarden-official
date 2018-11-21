@@ -42,7 +42,7 @@ public:
                          Symbol symbol);
     virtual ~SymbolInsertionCommand();
 
-    static QString getGlobalName(Symbol *symbol = 0);
+    static QString getGlobalName(Symbol *symbol = nullptr);
 
     EventSelection *getSubsequentSelection() override;
     Event *getLastInsertedEvent() { return m_lastInsertedEvent; }

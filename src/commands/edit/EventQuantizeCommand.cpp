@@ -51,7 +51,7 @@ EventQuantizeCommand::EventQuantizeCommand(Segment &segment,
     BasicCommand(getGlobalName(quantizer), segment, startTime, endTime,
                  true),  // bruteForceRedo
     m_quantizer(quantizer),
-    m_selection(0)
+    m_selection(nullptr)
 {
     // nothing else
 }
@@ -77,7 +77,7 @@ EventQuantizeCommand::EventQuantizeCommand(Segment &segment,
     BasicCommand(getGlobalName(makeQuantizer(settingsGroup, scope)),
                  segment, startTime, endTime,
                  true),  // bruteForceRedo
-    m_selection(0),
+    m_selection(nullptr),
     m_settingsGroup(settingsGroup)
 {
     // nothing else -- m_quantizer set by makeQuantizer
@@ -260,7 +260,7 @@ EventQuantizeCommand::makeQuantizer(QString settingsGroup,
 
     settings.endGroup();
 
-    m_quantizer = 0;
+    m_quantizer = nullptr;
 
     if (type == 0) {
         if (notateOnly) {

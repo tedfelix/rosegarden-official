@@ -65,7 +65,7 @@ public:
     // if it's valid.  So we resort to a hack: since m_segment gets a
     // non-null value at the same time, we check for that.
     bool hasTriggerSegmentId(void)
-    { return m_segment != 0; }
+    { return m_segment != nullptr; }
     TriggerSegmentId getTriggerSegmentId(void)
     { return m_id; }
     int getBasePitch(void)

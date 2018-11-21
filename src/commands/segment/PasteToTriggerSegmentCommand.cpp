@@ -79,7 +79,7 @@ PasteToTriggerSegmentWorker::PasteToTriggerSegmentWorker(Composition *compositio
         m_label(label),
         m_basePitch(basePitch),
         m_baseVelocity(baseVelocity),
-        m_segment(0),
+        m_segment(nullptr),
         m_detached(false)
 {
     // nothing else

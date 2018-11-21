@@ -210,7 +210,7 @@ SelectAddEvenNotesCommand::findBeatEvents(Segment &s,
        if (startRangeIter == s.end()) { break; }
 
        // Candidate variable.  NULL means nothing found.
-       Event *nextBeat = 0;
+       Event *nextBeat = nullptr;
        // Scoring variable, how much the best candidate note differs
        // from expectedNoteTime.  Smaller is better.
        timeT nearestMiss = std::numeric_limits<timeT>::max();

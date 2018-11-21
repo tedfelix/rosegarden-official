@@ -183,7 +183,7 @@ SegmentJoinCommand::makeSegment(SegmentVec oldSegments)
         /// than ideal without it;
         newSegment->setComposition(composition);
         newSegment->normalizeRests(overlapStart, overlapEnd);
-        newSegment->setComposition(0);        
+        newSegment->setComposition(nullptr);        
     }
 
     return newSegment;

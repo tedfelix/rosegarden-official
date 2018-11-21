@@ -46,7 +46,7 @@ public:
 
     DeCounterpointCommand(Segment &segment) :
         BasicSelectionCommand(getGlobalName(), segment, true),
-        m_selection(0) { }
+        m_selection(nullptr) { }
 
     static QString getGlobalName() { return tr("Split-and-Tie Overlapping &Chords"); }
 

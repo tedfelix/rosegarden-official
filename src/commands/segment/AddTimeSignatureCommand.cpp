@@ -33,7 +33,7 @@ AddTimeSignatureCommand::AddTimeSignatureCommand(Composition *composition,
         m_composition(composition),
         m_time(time),
         m_timeSignature(timeSig),
-        m_oldTimeSignature(0)
+        m_oldTimeSignature(nullptr)
 {
     // nothing else
 }

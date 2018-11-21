@@ -71,7 +71,7 @@ public:
 
     ~EventQuantizeCommand();
     
-    static QString getGlobalName(Quantizer *quantizer = 0);
+    static QString getGlobalName(Quantizer *quantizer = nullptr);
 
     void setProgressDialog(QPointer<QProgressDialog> progressDialog)
             { m_progressDialog = progressDialog; }

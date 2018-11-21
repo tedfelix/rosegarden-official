@@ -100,7 +100,7 @@ AddIndicationCommand::AddIndicationCommand(std::string indicationType,
     m_indicationType(indicationType),
     m_indicationStart(selection.getNotationStartTime()),
     m_indicationDuration(selection.getTotalNotationDuration()),
-    m_lastInsertedEvent(0)
+    m_lastInsertedEvent(nullptr)
 {
     if (!canExecute()) {
         throw CommandFailed

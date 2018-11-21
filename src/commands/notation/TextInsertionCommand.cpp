@@ -33,7 +33,7 @@ TextInsertionCommand::TextInsertionCommand(Segment &segment, timeT time,
         Text text) :
         BasicCommand(tr("Insert Text"), segment, time, time + 1),
         m_text(text),
-        m_lastInsertedEvent(0)
+        m_lastInsertedEvent(nullptr)
 {
     // nothing
 }

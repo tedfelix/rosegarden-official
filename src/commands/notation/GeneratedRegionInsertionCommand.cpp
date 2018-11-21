@@ -31,7 +31,7 @@ GeneratedRegionInsertionCommand::GeneratedRegionInsertionCommand(Segment &segmen
         GeneratedRegion generatedRegion) :
         BasicCommand(tr("Insert Generated Region"), segment, time, time + 1),
         m_generatedRegion(generatedRegion),
-        m_lastInsertedEvent(0)
+        m_lastInsertedEvent(nullptr)
 {
     // nothing
 }

@@ -66,7 +66,7 @@ SegmentSplitByDrumCommand::execute()
     Profiler profiler("SplitByDrumCommand::execute", true);
     if (!m_newSegments.size()) {
 
-        Segment *s = 0;
+        Segment *s = nullptr;
 
         // get the total number of colors in the map; only do this once
         int maxColors = m_composition->getSegmentColourMap().size();
@@ -173,7 +173,7 @@ SegmentSplitByDrumCommand::execute()
                 std::string label = (m_keyMap ? m_keyMap->getMapForKeyName(*index) : fsckIt.toStdString()) + " (" + m_segment->getLabel() + ")";
                 s->setLabel(label);
 
-                s = 0;
+                s = nullptr;
 
             } // end segment loop
 

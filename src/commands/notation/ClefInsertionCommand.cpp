@@ -44,7 +44,7 @@ ClefInsertionCommand::ClefInsertionCommand(Segment &segment, timeT time,
         m_clef(clef),
         m_shouldChangeOctave(shouldChangeOctave),
         m_shouldTranspose(shouldTranspose),
-        m_lastInsertedEvent(0)
+        m_lastInsertedEvent(nullptr)
 {
     // nothing
 }

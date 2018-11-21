@@ -38,7 +38,7 @@ SymbolInsertionCommand::SymbolInsertionCommand(Segment &segment, timeT time,
         Symbol symbol) :
         BasicCommand(getGlobalName(&symbol), segment, time, time + 1),
         m_symbol(symbol),
-        m_lastInsertedEvent(0)
+        m_lastInsertedEvent(nullptr)
 {
     // nothing
 }

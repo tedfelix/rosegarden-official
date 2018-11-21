@@ -38,19 +38,18 @@ using namespace BaseProperties;
 
 
 KeyInsertionCommand::KeyInsertionCommand(Segment &segment, timeT time,
-        Key key,
-        bool convert,
-        bool transpose,
-        bool transposeKey,
-	bool ignorePercussion) :
-        BasicCommand(getGlobalName(&key), segment, time, segment.getEndTime()),
-        m_key(key),
-        m_lastInsertedEvent(0),
-        m_convert(convert),
-        m_transpose(transpose),
-        m_transposeKey(transposeKey),
-	m_ignorePercussion(ignorePercussion)
-
+                                         Key key,
+                                         bool convert,
+                                         bool transpose,
+                                         bool transposeKey,
+                                         bool ignorePercussion) :
+    BasicCommand(getGlobalName(&key), segment, time, segment.getEndTime()),
+    m_key(key),
+    m_lastInsertedEvent(nullptr),
+    m_convert(convert),
+    m_transpose(transpose),
+    m_transposeKey(transposeKey),
+    m_ignorePercussion(ignorePercussion)
 {
     // nothing
 }
