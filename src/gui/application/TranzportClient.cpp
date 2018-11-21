@@ -71,8 +71,8 @@ TranzportClient::TranzportClient(RosegardenMainWindow* rgGUIApp) :
         fcntl(m_descriptor, F_SETFL, socketFlags | O_NONBLOCK);
     }
 
-    m_socketReadNotifier = new QSocketNotifier(m_descriptor, QSocketNotifier::Read, 0);
-    m_socketWriteNotifier = new QSocketNotifier(m_descriptor, QSocketNotifier::Write,0);
+    m_socketReadNotifier = new QSocketNotifier(m_descriptor, QSocketNotifier::Read, nullptr);
+    m_socketWriteNotifier = new QSocketNotifier(m_descriptor, QSocketNotifier::Write,nullptr);
 
     connect(m_socketReadNotifier, SIGNAL(activated(int)), this, SLOT(readData()));
     connect(m_socketWriteNotifier, SIGNAL(activated(int)), this, SLOT(writeCommandQueue()));

@@ -237,7 +237,7 @@ NotationScene::getCurrentStaff()
     if (m_currentStaff < (int)m_staffs.size()) {
         return m_staffs[m_currentStaff];
     } else {
-        return 0;
+        return nullptr;
     }
 }
 
@@ -457,7 +457,7 @@ NotationScene::getStaffForSceneCoords(double x, int y) const
 {
     // (i)  Do not change staff, if mouse was clicked within the current staff.
 
-    StaffLayout *s = 0;
+    StaffLayout *s = nullptr;
 
     if (m_currentStaff < (int)m_staffs.size()) {
         s = m_staffs[m_currentStaff];
@@ -499,7 +499,7 @@ NotationScene::getStaffForSceneCoords(double x, int y) const
         }
     }
 
-    return 0;
+    return nullptr;
 }
 
 NotationStaff *
@@ -533,7 +533,7 @@ NotationScene::getStaffbyTrackAndTime(const Track *track, timeT targetTime)
     // includes time t, we'll return the fallback instead.  We
     // don't try to find the best fallback.
     bool haveFallback = false;
-    NotationStaff * fallback = 0;
+    NotationStaff * fallback = nullptr;
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
         if (m_staffs[i]->getSegment().getTrack() == track->getId()) {
             if(m_staffs[i]->includesTime(targetTime)) {
@@ -549,7 +549,7 @@ NotationScene::getStaffbyTrackAndTime(const Track *track, timeT targetTime)
     // so return the fallback.
     if (haveFallback) { return fallback; }
     
-    return 0;
+    return nullptr;
 }
 
 // @params
@@ -559,15 +559,15 @@ NotationScene::getStaffbyTrackAndTime(const Track *track, timeT targetTime)
 NotationStaff *
 NotationScene::getNextStaffVertically(int direction, timeT t)
 {
-    if (m_staffs.size() < 2 || m_currentStaff >= (int)m_staffs.size()) return 0;
+    if (m_staffs.size() < 2 || m_currentStaff >= (int)m_staffs.size()) return nullptr;
 
     NotationStaff *current = m_staffs[m_currentStaff];
     Composition *composition = &m_document->getComposition();
     Track *track = composition->getTrackById(current->getSegment().getTrack());
-    if (!track) return 0;
+    if (!track) return nullptr;
 
     int position = track->getPosition();
-    Track *newTrack = 0;
+    Track *newTrack = nullptr;
 
     while ((newTrack = composition->getTrackByPosition(position + direction))) {
         NotationStaff * staff = getStaffbyTrackAndTime(newTrack, t);
@@ -575,13 +575,13 @@ NotationScene::getNextStaffVertically(int direction, timeT t)
         position += direction;
     }
 
-    return 0;
+    return nullptr;
 }
 
 NotationStaff *
 NotationScene::getNextStaffHorizontally(int direction, bool cycle)
 {
-    if (m_staffs.size() < 2 || m_currentStaff >= (int)m_staffs.size()) return 0;
+    if (m_staffs.size() < 2 || m_currentStaff >= (int)m_staffs.size()) return nullptr;
 
     NotationStaff *current = m_staffs[m_currentStaff];
     //Composition *composition = &m_document->getComposition();
@@ -599,20 +599,20 @@ NotationScene::getNextStaffHorizontally(int direction, bool cycle)
 
     if (i == timeMap.end()) {
         RG_WARNING << "Argh! Can't find staff I just put in map";
-        return 0;
+        return nullptr;
     }
 
     if (direction < 0) {
         if (i == timeMap.begin()) {
             if (cycle) i = timeMap.end();
-            else return 0;
+            else return nullptr;
         }
         --i;
     } else {
         ++i;
         if (i == timeMap.end()) {
             if (cycle) i = timeMap.begin();
-            else return 0;
+            else return nullptr;
         }
     }
 
@@ -639,7 +639,7 @@ NotationScene::initCurrentStaffIndex(void)
     // any segments from)
     {
         const Track *track = composition.getTrackById(composition.getSelectedTrack());
-        NotationStaff *staff = track ? getStaffbyTrackAndTime(track, targetTime) : 0;
+        NotationStaff *staff = track ? getStaffbyTrackAndTime(track, targetTime) : nullptr;
         if (staff) {
             setCurrentStaff(staff);
             return;
@@ -667,14 +667,14 @@ NotationScene::initCurrentStaffIndex(void)
 Segment *
 NotationScene::getCurrentSegment()
 {
-    NotationStaff *s = 0;
+    NotationStaff *s = nullptr;
 
     if (m_currentStaff < (int)m_staffs.size()) {
         s = m_staffs[m_currentStaff];
     }
 
     if (s) return &s->getSegment();
-    return 0;
+    return nullptr;
 }
 
 bool
@@ -726,7 +726,7 @@ NotationScene::setupMouseEvent(QPointF scenePos, Qt::MouseButtons buttons,
 
     nme.modifiers = modifiers;
     nme.buttons = buttons;
-    nme.element = 0;
+    nme.element = nullptr;
     nme.staff = getStaffForSceneCoords(sx, sy);
 
     bool haveClickHeight = false;
@@ -737,7 +737,7 @@ NotationScene::setupMouseEvent(QPointF scenePos, Qt::MouseButtons buttons,
 
     if (nme.staff) {
 
-        Event *clefEvent = 0, *keyEvent = 0;
+        Event *clefEvent = nullptr, *keyEvent = 0;
         NotationElementList::iterator i =
             nme.staff->getElementUnderSceneCoords(sx, sy, clefEvent, keyEvent);
 
@@ -757,7 +757,7 @@ NotationScene::setupMouseEvent(QPointF scenePos, Qt::MouseButtons buttons,
         haveClickHeight = true;
 
     } else {
-        nme.element = 0;
+        nme.element = nullptr;
         nme.time = 0;
         nme.height = 0;
     }
@@ -767,9 +767,9 @@ NotationScene::setupMouseEvent(QPointF scenePos, Qt::MouseButtons buttons,
 
     const QList<QGraphicsItem *> collisions = items(scenePos);
 
-    NotationElement *clickedNote = 0;
-    NotationElement *clickedVagueNote = 0;
-    NotationElement *clickedNonNote = 0;
+    NotationElement *clickedNote = nullptr;
+    NotationElement *clickedVagueNote = nullptr;
+    NotationElement *clickedNonNote = nullptr;
 
     for (QList<QGraphicsItem *>::const_iterator i = collisions.begin();
          i != collisions.end(); ++i) {
@@ -1048,8 +1048,8 @@ NotationScene::getCursorCoordinates(timeT t) const
 {
     if (m_staffs.empty() || !m_hlayout) return CursorCoordinates();
 
-    NotationStaff *topStaff = 0;
-    NotationStaff *bottomStaff = 0;
+    NotationStaff *topStaff = nullptr;
+    NotationStaff *bottomStaff = nullptr;
     for (uint i = 0; i < m_staffs.size(); ++i) {
         if (!m_staffs[i]) continue;
         if (!topStaff || m_staffs[i]->getY() < topStaff->getY()) {
@@ -1060,7 +1060,7 @@ NotationScene::getCursorCoordinates(timeT t) const
         }
     }
 
-    NotationStaff *currentStaff = 0;
+    NotationStaff *currentStaff = nullptr;
     if (m_currentStaff < (int)m_staffs.size()) {
         currentStaff = m_staffs[m_currentStaff];
     }
@@ -1101,7 +1101,7 @@ NotationScene::getCursorCoordinates(timeT t) const
 timeT
 NotationScene::snapTimeToNoteBoundary(timeT t) const
 {
-    NotationStaff *s = 0;
+    NotationStaff *s = nullptr;
     if (m_currentStaff < (int)m_staffs.size()) {
         s = m_staffs[m_currentStaff];
     }
@@ -1122,7 +1122,7 @@ NotationScene::checkUpdate()
     bool all = false;
     timeT start = 0, end = 0;
     int count = 0;
-    NotationStaff *single = 0;
+    NotationStaff *single = nullptr;
 
     bool compositionModified = m_document &&
         m_document->getComposition().getRefreshStatus
@@ -1417,7 +1417,7 @@ NotationScene::positionStaffs()
     delete m_subtitle;
     delete m_composer;
     delete m_copyright;
-    m_title = m_subtitle = m_composer = m_copyright = 0;
+    m_title = m_subtitle = m_composer = m_copyright = nullptr;
 
     if (m_pageMode == StaffLayout::MultiPageMode) {
 
@@ -1679,7 +1679,7 @@ void
 NotationScene::layoutAll()
 {
     Profiler profiler("NotationScene::layoutAll", true);
-    layout(0, 0, 0);
+    layout(nullptr, 0, 0);
 }
 
 void
@@ -1689,7 +1689,7 @@ NotationScene::layout(NotationStaff *singleStaff,
     Profiler profiler("NotationScene::layout", true);
     NOTATION_DEBUG << "NotationScene::layout: from " << startTime << " to " << endTime;
 
-    bool full = (singleStaff == 0 && startTime == endTime);
+    bool full = (singleStaff == nullptr && startTime == endTime);
 
     m_hlayout->setViewSegmentCount(m_staffs.size());
 
@@ -1828,7 +1828,7 @@ NotationScene::setSelection(EventSelection *s,
     EventSelection *oldSelection = m_selection;
     m_selection = s;
 
-    NotationStaff *oldStaff = 0, *newStaff = 0;
+    NotationStaff *oldStaff = nullptr, *newStaff = 0;
 
     if (oldSelection) {
         oldStaff = setSelectionElementStatus(oldSelection, false);
@@ -1903,9 +1903,9 @@ NotationScene::setSingleSelectedEvent(Segment *seg,
 NotationStaff *
 NotationScene::setSelectionElementStatus(EventSelection *s, bool set)
 {
-    if (!s) return 0;
+    if (!s) return nullptr;
 
-    NotationStaff *staff = 0;
+    NotationStaff *staff = nullptr;
 
     for (std::vector<NotationStaff *>::iterator i = m_staffs.begin();
          i != m_staffs.end(); ++i) {
@@ -1916,7 +1916,7 @@ NotationScene::setSelectionElementStatus(EventSelection *s, bool set)
         }
     }
 
-    if (!staff) return 0;
+    if (!staff) return nullptr;
 
     for (EventSelection::eventcontainer::iterator i = s->getSegmentEvents().begin();
          i != s->getSegmentEvents().end(); ++i) {

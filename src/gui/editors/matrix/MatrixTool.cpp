@@ -114,7 +114,7 @@ MatrixTool::slotVelocityChangeSelected()
 const SnapGrid *
 MatrixTool::getSnapGrid() const
 {
-    if (!m_scene) return 0;
+    if (!m_scene) return nullptr;
     return m_scene->getSnapGrid();
 }
 
@@ -133,15 +133,15 @@ MatrixTool::invokeInParentView(QString actionName)
 QAction *
 MatrixTool::findActionInParentView(QString actionName)
 {
-    if (!m_widget) return 0;
+    if (!m_widget) return nullptr;
     QWidget *w = m_widget;
-    ActionFileClient *c = 0;
+    ActionFileClient *c = nullptr;
     while (w && !(c = dynamic_cast<ActionFileClient *>(w))) {
         w = w->parentWidget();
     }
     if (!c) {
         RG_WARNING << "MatrixTool::findActionInParentView: Can't find ActionFileClient in parent widget hierarchy";
-        return 0;
+        return nullptr;
     }
     QAction *a = c->findAction(actionName);
     return a;
@@ -154,7 +154,7 @@ MatrixTool::createMenu()
 
     if (!createMenusAndToolbars(m_rcFileName)) {
         RG_WARNING << "MatrixTool::createMenu(" << m_rcFileName << "): menu creation failed";
-        m_menu = 0;
+        m_menu = nullptr;
         return;
     }
 

@@ -33,7 +33,7 @@ namespace Rosegarden
 BaseTool::BaseTool(const QString& menuName, QObject* parent)
         : QObject(parent),
         m_menuName(menuName),
-        m_menu(0)
+        m_menu(nullptr)
 {}
 
 BaseTool::~BaseTool()

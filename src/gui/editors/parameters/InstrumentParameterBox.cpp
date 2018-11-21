@@ -40,8 +40,8 @@ InstrumentParameterBox::InstrumentParameterBox(QWidget *parent) :
     RosegardenParameterBox(tr("Instrument Parameters"), parent),
     m_stackedWidget(new QStackedWidget(this)),
     m_emptyFrame(new QFrame),
-    m_mipp(new MIDIInstrumentParameterPanel(0)),
-    m_aipp(new AudioInstrumentParameterPanel(0))
+    m_mipp(new MIDIInstrumentParameterPanel(nullptr)),
+    m_aipp(new AudioInstrumentParameterPanel(nullptr))
 {
     setObjectName("Instrument Parameter Box");
 

@@ -65,8 +65,8 @@ public:
     QRect subControlRect(ComplexControl cc, const QStyleOptionComplex *opt, SubControl sc, const QWidget *widget = Q_NULLPTR) const Q_DECL_OVERRIDE;
 
     QIcon standardIcon(StandardPixmap standardIcon,
-                       const QStyleOption * option = 0,
-                       const QWidget * widget = 0) const override;
+                       const QStyleOption * option = nullptr,
+                       const QWidget * widget = nullptr) const override;
 
 private:
     QSize pixmapSize(const QPixmap &pixmap) const;

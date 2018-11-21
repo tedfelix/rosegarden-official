@@ -59,7 +59,7 @@ public:
     typedef void (NotationView::*opOnEvent) (Event* e, Segment *containing);
     NotationView(RosegardenDocument *doc,
                     std::vector<Segment *> segments,
-                    QWidget *parent = 0);
+                    QWidget *parent = nullptr);
 
     virtual ~NotationView();
 
@@ -413,7 +413,7 @@ private:
      * If \a force point to a bool, then the bool's value
      * is used to show/hide the toolbar.
      */
-    void toggleNamedToolBar(const QString& toolBarName, bool* force = 0);
+    void toggleNamedToolBar(const QString& toolBarName, bool* force = nullptr);
 
     /**
      * Return the device of the current segment, if any

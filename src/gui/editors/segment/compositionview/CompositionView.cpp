@@ -204,7 +204,7 @@ CompositionView::CompositionView(RosegardenDocument *doc,
 void CompositionView::endAudioPreviewGeneration()
 {
     if (m_model) {
-        m_model->setAudioPeaksThread(0);
+        m_model->setAudioPeaksThread(nullptr);
     }
 }
 
@@ -617,8 +617,8 @@ void CompositionView::drawSegments(const QRect &clipRect)
     // *** Get Segment and Preview Rectangles
 
     // Assume we aren't going to show previews.
-    CompositionModelImpl::NotationPreviewRanges *notationPreview = 0;
-    CompositionModelImpl::AudioPreviews *audioPreview = 0;
+    CompositionModelImpl::NotationPreviewRanges *notationPreview = nullptr;
+    CompositionModelImpl::AudioPreviews *audioPreview = nullptr;
 
     if (m_showPreviews) {
         // Clear the previews.

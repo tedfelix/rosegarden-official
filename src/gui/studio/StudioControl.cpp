@@ -41,7 +41,7 @@
 namespace Rosegarden
 {
 
-ChannelManager StudioControl::m_channelManager(0);
+ChannelManager StudioControl::m_channelManager(nullptr);
 
 MappedObjectId
 StudioControl::createStudioObject(MappedObject::MappedObjectType type)

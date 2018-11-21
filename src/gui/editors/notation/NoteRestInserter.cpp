@@ -220,7 +220,7 @@ void NoteRestInserter::ready()
 {
     m_ready = true;
     m_clickHappened = false;
-    m_clickStaff = 0;
+    m_clickStaff = nullptr;
     
     // The pencil tool uses the wheel for selecting note values.
     // Disable Panned's handling of the wheel.
@@ -322,7 +322,7 @@ NoteRestInserter::handleMouseRelease(const NotationMouseEvent *e)
     bool okay = computeLocationAndPreview(e, true);
     clearPreview();
     m_clickHappened = false;
-    m_clickStaff = 0;
+    m_clickStaff = nullptr;
     if (!okay) return;
 
     Note note(m_noteType, m_noteDots);
@@ -1162,8 +1162,8 @@ NoteRestInserter::doAddCommand(Segment &segment, timeT time, timeT endTime,
                    << ", pitch " << pitch << ",isaRestInserter "
                    << isaRestInserter();
 
-    Command *activeCommand = 0;  //Used in rest / note mode code
-    NoteInsertionCommand *insertionCommand = 0; //Used in rest / note mode code
+    Command *activeCommand = nullptr;  //Used in rest / note mode code
+    NoteInsertionCommand *insertionCommand = nullptr; //Used in rest / note mode code
 
     // Insert Note (Code taken from old NoteInserter)
     timeT noteEnd = time + note.getDuration();
@@ -1176,7 +1176,7 @@ NoteRestInserter::doAddCommand(Segment &segment, timeT time, timeT endTime,
     if (time < segment.getStartTime() ||
         endTime > segment.getEndMarkerTime() ||
         noteEnd > segment.getEndMarkerTime()) {
-        return 0;
+        return nullptr;
     }
 
     if (isaRestInserter()) {

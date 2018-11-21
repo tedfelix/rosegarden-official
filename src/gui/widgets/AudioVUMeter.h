@@ -34,7 +34,7 @@ namespace Rosegarden
 class AudioVUMeter : public QWidget
 {
 public:
-    AudioVUMeter(QWidget *parent = 0,
+    AudioVUMeter(QWidget *parent = nullptr,
                  VUMeter::VUMeterType type = VUMeter::AudioPeakHoldShort,
                  bool stereo = true,
                  bool hasRecord = false,

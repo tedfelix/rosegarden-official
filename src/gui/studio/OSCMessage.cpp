@@ -41,7 +41,7 @@ OSCMessage::clearArgs()
 void
 OSCMessage::addArg(char type, lo_arg *arg)
 {
-    lo_arg *newarg = 0;
+    lo_arg *newarg = nullptr;
 
     if (type == 's') {
 

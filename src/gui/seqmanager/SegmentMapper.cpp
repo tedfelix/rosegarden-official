@@ -44,7 +44,7 @@ void
 SegmentMapper::
 initSpecial(void)
 {
-    if (m_segment != 0) {
+    if (m_segment != nullptr) {
         SEQMAN_DEBUG << "SegmentMapper::initSpecial " 
                      << " for segment " << m_segment->getLabel() << endl;
     }    
@@ -62,7 +62,7 @@ SegmentMapper::makeMapperForSegment(RosegardenDocument *doc,
 {
     QSharedPointer<SegmentMapper> mapper;
 
-    if (segment == 0) {
+    if (segment == nullptr) {
         RG_DEBUG << "makeMapperForSegment() segment == 0";
         return QSharedPointer<SegmentMapper>();
     }

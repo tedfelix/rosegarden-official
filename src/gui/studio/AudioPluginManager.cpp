@@ -195,7 +195,7 @@ AudioPluginManager::getPlugin(int number)
     awaitEnumeration();
 
     if (number < 0 || number > (int(m_plugins.size()) - 1))
-        return 0;
+        return nullptr;
 
     return m_plugins[number];
 }
@@ -244,7 +244,7 @@ AudioPluginManager::getPluginByIdentifier(QString identifier)
             return (*it);
     }
 
-    return 0;
+    return nullptr;
 }
 
 AudioPlugin*
@@ -258,7 +258,7 @@ AudioPluginManager::getPluginByUniqueId(unsigned long uniqueId)
             return (*it);
     }
 
-    return 0;
+    return nullptr;
 }
 
 PluginIterator

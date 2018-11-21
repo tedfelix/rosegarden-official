@@ -59,7 +59,7 @@ class TrackParameterBox : public RosegardenParameterBox,
     Q_OBJECT
         
 public:
-    TrackParameterBox(QWidget *parent = 0);
+    TrackParameterBox(QWidget *parent = nullptr);
     
     void setDocument(RosegardenDocument *doc);
 

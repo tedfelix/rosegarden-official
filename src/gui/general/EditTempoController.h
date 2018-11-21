@@ -36,7 +36,7 @@ public:
     /**
      * Constructor. Called by the mainwindow
      */
-    EditTempoController(QObject *parent = 0);
+    EditTempoController(QObject *parent = nullptr);
 
     /// The user of this class *must* call this method.
     void setDocument(RosegardenDocument *doc);

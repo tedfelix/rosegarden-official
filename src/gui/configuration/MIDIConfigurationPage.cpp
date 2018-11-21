@@ -65,7 +65,7 @@ MIDIConfigurationPage::MIDIConfigurationPage(
     RosegardenDocument *doc,
     QWidget *parent):
         TabbedConfigurationPage(parent),
-        m_midiPitchOctave(0)
+        m_midiPitchOctave(nullptr)
 {
 //    RG_DEBUG << "MIDI CONFIGURATION PAGE CTOR";
     // set the document in the super class
@@ -83,7 +83,7 @@ MIDIConfigurationPage::MIDIConfigurationPage(
     layout->setRowMinimumHeight(row, 15);
     ++row;
 
-    QLabel *label = 0;
+    QLabel *label = nullptr;
 
     QSettings settings;
     settings.beginGroup( GeneralOptionsConfigGroup );

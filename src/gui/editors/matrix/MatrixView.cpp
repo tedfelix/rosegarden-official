@@ -169,7 +169,7 @@ MatrixView::MatrixView(RosegardenDocument *doc,
     // Toggle the desired tool off and then trigger it on again, to
     // make sure its signal is called at least once (as would not
     // happen if the tool was on by default otherwise)
-    QAction *toolAction = 0;
+    QAction *toolAction = nullptr;
     if (!m_matrixWidget->segmentsContainNotes()) {
         toolAction = findAction("draw");
     } else {
@@ -794,14 +794,14 @@ Segment *
 MatrixView::getCurrentSegment()
 {
     if (m_matrixWidget) return m_matrixWidget->getCurrentSegment();
-    else return 0;
+    else return nullptr;
 }
 
 EventSelection *
 MatrixView::getSelection() const
 {
     if (m_matrixWidget) return m_matrixWidget->getSelection();
-    else return 0;
+    else return nullptr;
 }
 
 void
@@ -821,7 +821,7 @@ const SnapGrid *
 MatrixView::getSnapGrid() const
 {
     if (m_matrixWidget) return m_matrixWidget->getSnapGrid();
-    else return 0;
+    else return nullptr;
 }
 
 void
@@ -1315,7 +1315,7 @@ void MatrixView::slotAddTimeSignature()
     Composition *composition = segment->getComposition();
     timeT insertionTime = getInsertionTime();
 
-    TimeSignatureDialog *dialog = 0;
+    TimeSignatureDialog *dialog = nullptr;
     int timeSigNo = composition->getTimeSignatureNumberAt(insertionTime);
 
     if (timeSigNo >= 0) {
@@ -2008,7 +2008,7 @@ MatrixView::slotToggleStepByStep()
     if (action->isChecked()) { // after toggling, that is
         emit stepByStepTargetRequested(this);
     } else {
-        emit stepByStepTargetRequested(0);
+        emit stepByStepTargetRequested(nullptr);
     }
 }
 
@@ -2028,7 +2028,7 @@ Device *
 MatrixView::getCurrentDevice()
 {
     if (m_matrixWidget) return m_matrixWidget->getCurrentDevice();
-    else return 0;
+    else return nullptr;
 }
 
 void

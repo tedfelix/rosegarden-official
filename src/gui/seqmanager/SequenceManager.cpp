@@ -647,7 +647,7 @@ SequenceManager::processAsynchronousMidi(const MappedEventList &mC,
     static bool boolShowingALSAWarning = false;
     static long warningShownAt = 0;
 
-    if (m_doc == 0 || mC.size() == 0)
+    if (m_doc == nullptr || mC.size() == 0)
         return ;
 
     MappedEventList::const_iterator i;
@@ -823,7 +823,7 @@ SequenceManager::processAsynchronousMidi(const MappedEventList &mC,
                     if ((*i)->getData1() == MappedEvent::FailureALSACallFailed) {
 
                         struct timeval tv;
-                        (void)gettimeofday(&tv, 0);
+                        (void)gettimeofday(&tv, nullptr);
 
                         if (tv.tv_sec - warningShownAt >= 5 &&
                                 !boolShowingALSAWarning) {
@@ -839,7 +839,7 @@ SequenceManager::processAsynchronousMidi(const MappedEventList &mC,
                               QMessageBox::Ok);
                             boolShowingALSAWarning = false;
 
-                            (void)gettimeofday(&tv, 0);
+                            (void)gettimeofday(&tv, nullptr);
                             warningShownAt = tv.tv_sec;
                         }
 

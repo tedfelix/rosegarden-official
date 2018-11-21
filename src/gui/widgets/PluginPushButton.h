@@ -45,7 +45,7 @@ public:
     enum State {Normal, Bypassed, Active};
 
 
-    PluginPushButton(QWidget *parent = 0) :
+    PluginPushButton(QWidget *parent = nullptr) :
         QPushButton(parent),
         m_currentState(Active)  // Anything but Normal to trigger first change.
     {

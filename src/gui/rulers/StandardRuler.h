@@ -41,7 +41,7 @@ public:
                   RulerScale *rulerScale,
                   bool invert = false, // draw upside-down
                   bool isForMainWindow = false,
-                  QWidget* parent = 0);
+                  QWidget* parent = nullptr);
 
     void setSnapGrid(const SnapGrid *grid);
 

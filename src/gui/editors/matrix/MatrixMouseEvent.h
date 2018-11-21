@@ -51,10 +51,10 @@ public:
     Qt::MouseButtons buttons;
 
     MatrixMouseEvent() :
-        viewSegment(0), element(0),
+        viewSegment(nullptr), element(nullptr),
         time(0), pitch(0),
         sceneX(0), sceneY(0),
-        modifiers(0), buttons(0) { }
+        modifiers(), buttons() { }
 };
 
 }

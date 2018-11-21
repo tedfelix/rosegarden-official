@@ -27,12 +27,12 @@
 namespace Rosegarden
 {
 
-static EditTempoController *s_instance = 0;
+static EditTempoController *s_instance = nullptr;
 
 EditTempoController::EditTempoController(QObject *parent)
     : QObject(parent),
       m_doc(0),
-      m_composition(0)
+      m_composition(nullptr)
 {
     s_instance = this;
 }

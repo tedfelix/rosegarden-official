@@ -289,7 +289,7 @@ ChordNameRuler::recalculate(timeT from, timeT to)
 
         if (m_currentSegment &&
                 ss.find(m_currentSegment) == ss.end()) {
-            m_currentSegment = 0;
+            m_currentSegment = nullptr;
             level = RecalcWhole;
         }
     }

@@ -120,7 +120,7 @@ IdentifyTextCodecDialog::IdentifyTextCodecDialog(QWidget *parent,
 
     QSet<QTextCodec *> seen;
 
-    QTextCodec *cc = 0;
+    QTextCodec *cc = nullptr;
     int currentWeight = -1;
     QMap<QString, int> codecWeights;
     codecWeights["UTF-8"] = 20;

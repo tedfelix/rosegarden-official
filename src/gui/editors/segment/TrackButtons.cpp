@@ -652,9 +652,9 @@ TrackButtons::slotInstrumentMenu(int trackId)
     const int position = comp.getTrackById(trackId)->getPosition();
     Track *track = comp.getTrackByPosition(position);
 
-    Instrument *instrument = 0;
+    Instrument *instrument = nullptr;
 
-    if (track != 0) {
+    if (track != nullptr) {
         instrument = m_doc->getStudio().getInstrumentById(
                 track->getInstrument());
     }
@@ -721,7 +721,7 @@ TrackButtons::populateInstrumentPopup(Instrument *thisTrackInstr, QMenu* instrum
     // clear the popup
     instrumentPopup->clear();
 
-    QMenu *currentSubMenu = 0;
+    QMenu *currentSubMenu = nullptr;
 
     // position index
     int count = 0;
@@ -1089,7 +1089,7 @@ TrackButtons::trackHeight(TrackId trackId)
 QFrame*
 TrackButtons::makeButton(Track *track)
 {
-    if (track == 0) return 0;
+    if (track == nullptr) return 0;
 
     TrackId trackId = track->getId();
 

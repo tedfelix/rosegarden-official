@@ -46,18 +46,18 @@ namespace Rosegarden
 
 HeadersGroup::
 HeadersGroup(RosegardenDocument *document) :
-        QWidget(0),
+        QWidget(nullptr),
         m_composition(document->getComposition()),
-        m_scene(0),
-        m_widget(0),
+        m_scene(nullptr),
+        m_widget(nullptr),
         m_usedHeight(0),
-        m_filler(0),
+        m_filler(nullptr),
         m_lastX(INT_MIN),
         m_lastWidth(-1),
-        m_layout(0),
+        m_layout(nullptr),
         m_startOfView(0),
         m_endOfView(0),
-        m_currentSegment(0),
+        m_currentSegment(nullptr),
         m_currentSegStartTime(0),
         m_currentSegEndTime(0),
         m_currentTrackId(0)
@@ -87,7 +87,7 @@ HeadersGroup::removeAllHeaders()
 
     if (m_filler) {
         delete m_filler;
-        m_filler = 0;
+        m_filler = nullptr;
     }
     m_usedHeight = 0;
     m_lastWidth = -1;

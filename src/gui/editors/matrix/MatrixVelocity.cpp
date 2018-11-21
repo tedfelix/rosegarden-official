@@ -63,7 +63,7 @@ void
 MatrixVelocity::handleEventRemoved(Event *event)
 {
     if (m_currentElement && m_currentElement->event() == event) {
-        m_currentElement = 0;
+        m_currentElement = nullptr;
     }
 }
 
@@ -169,7 +169,7 @@ MatrixVelocity::handleMouseMove(const MatrixMouseEvent *e)
              selection->getSegmentEvents().begin();
          it != selection->getSegmentEvents().end(); ++it) {
 
-        MatrixElement *element = 0;
+        MatrixElement *element = nullptr;
         ViewElementList::iterator vi = m_currentViewSegment->findEvent(*it);
         if (vi != m_currentViewSegment->getViewElementList()->end()) {
             element = static_cast<MatrixElement *>(*vi);
@@ -258,7 +258,7 @@ MatrixVelocity::handleMouseRelease(const MatrixMouseEvent *e)
     // Reset the start of mousemove
     m_start = false;
     m_velocityDelta = m_mouseStartY = 0;
-    m_currentElement = 0;
+    m_currentElement = nullptr;
     setBasicContextHelp();
 
     // Mouse position is again related to pitch

@@ -88,7 +88,7 @@ TextInserter::handleLeftButtonPress(const NotationMouseEvent *e)
 
     Text defaultText(m_text);
     timeT insertionTime;
-    Event *eraseEvent = 0;
+    Event *eraseEvent = nullptr;
 
     insertionTime = e->element->event()->getAbsoluteTime(); // not getViewAbsoluteTime()
 

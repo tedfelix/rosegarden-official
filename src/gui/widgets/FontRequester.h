@@ -36,7 +36,7 @@ class FontRequester : public QWidget
     Q_OBJECT
 
 public:
-    FontRequester(QWidget *parent = 0);
+    FontRequester(QWidget *parent = nullptr);
     virtual ~FontRequester();
 
     void setFont(QFont);

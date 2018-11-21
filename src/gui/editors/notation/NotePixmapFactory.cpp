@@ -109,7 +109,7 @@ NotePixmapFactory::NotePixmapFactory(QString fontName, int size, int graceSize) 
     m_trackHeaderFontMetrics(m_trackHeaderFont),
     m_trackHeaderBoldFont(defaultSansSerifFontFamily, 9, QFont::Bold),
     m_trackHeaderBoldFontMetrics(m_trackHeaderBoldFont),
-    m_generatedPixmap(0),
+    m_generatedPixmap(nullptr),
     m_generatedWidth( -1),
     m_generatedHeight( -1),
     m_inPrinterMethod(false),
@@ -2050,7 +2050,7 @@ NotePixmapFactory::makeMarkMenuPixmap(Mark mark)
     if (mark == Marks::Sforzando || mark == Marks::Rinforzando) {
         return makeToolbarPixmap( mark.c_str(), true );
     } else {
-        NoteFont *font = 0;
+        NoteFont *font = nullptr;
         try {
             font = NoteFontFactory::getFont
                 (NoteFontFactory::getDefaultFontName(), 6);

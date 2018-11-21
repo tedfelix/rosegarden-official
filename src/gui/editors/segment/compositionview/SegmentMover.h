@@ -55,7 +55,7 @@ public:
 protected:
     SegmentMover(CompositionView*, RosegardenDocument*);
 
-    void setContextHelp2(Qt::KeyboardModifiers modifiers = 0);
+    void setContextHelp2(Qt::KeyboardModifiers modifiers = nullptr);
 
     QPoint m_clickPoint;
     bool m_changeMade;

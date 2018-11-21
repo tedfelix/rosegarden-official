@@ -65,8 +65,8 @@ namespace Rosegarden
 
 MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(QWidget *parent) :
     InstrumentParameterPanel(parent),
-    m_rotaryFrame(NULL),
-    m_rotaryGrid(NULL)
+    m_rotaryFrame(nullptr),
+    m_rotaryGrid(nullptr)
 {
     RG_DEBUG << "MIDIInstrumentParameterPanel ctor";
 
@@ -400,7 +400,7 @@ MIDIInstrumentParameterPanel::setupControllers(MidiDevice *md)
                 it->getColourIndex());
         const QColor knobColour = QColor(c.getRed(), c.getGreen(), c.getBlue());
 
-        Rotary *rotary = 0;
+        Rotary *rotary = nullptr;
 
         // If the Rotary widgets have already been created, update them.
         if (rotaryIter != m_rotaries.end()) {
@@ -879,7 +879,7 @@ MIDIInstrumentParameterPanel::slotDocumentModified(bool)
     InstrumentId instrumentId =
             doc->getComposition().getSelectedInstrumentId();
 
-    Instrument *instrument = NULL;
+    Instrument *instrument = nullptr;
 
     // If an instrument has been selected.
     if (instrumentId != NoInstrument)
@@ -892,12 +892,12 @@ MIDIInstrumentParameterPanel::slotDocumentModified(bool)
     }
 
     if (!instrument) {
-        setSelectedInstrument(NULL);
+        setSelectedInstrument(nullptr);
         return;
     }
 
     if (instrument->getType() != Instrument::Midi) {
-        setSelectedInstrument(NULL);
+        setSelectedInstrument(nullptr);
         return;
     }
 

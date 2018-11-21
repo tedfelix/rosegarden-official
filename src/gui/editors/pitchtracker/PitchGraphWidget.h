@@ -48,7 +48,7 @@ class PitchGraphWidget : public QWidget
     Q_OBJECT
 
 public:
-    PitchGraphWidget(PitchHistory &history, QWidget *parent = 0);
+    PitchGraphWidget(PitchHistory &history, QWidget *parent = nullptr);
     ~PitchGraphWidget();
 
     void setTuning(Accidentals::Tuning* tuning);

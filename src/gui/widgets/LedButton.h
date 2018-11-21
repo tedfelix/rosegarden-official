@@ -37,7 +37,7 @@ class LedButton : public Led
     Q_OBJECT
 
 public: 
-    LedButton(const QColor &color, QWidget *parent = 0);
+    LedButton(const QColor &color, QWidget *parent = nullptr);
 
 signals:
     void stateChanged(bool newState);

@@ -53,7 +53,7 @@ MidiKeyMappingEditor::MidiKeyMappingEditor(
                   tr("Key Mapping details"),  // title
                   parent,
                   false),  // showKeyMapButtons
-    m_device(0)
+    m_device(nullptr)
 {
     QWidget *additionalWidget = makeAdditionalWidget(m_topFrame);
     if (additionalWidget) {
@@ -64,7 +64,7 @@ MidiKeyMappingEditor::MidiKeyMappingEditor(
 QWidget *
 MidiKeyMappingEditor::makeAdditionalWidget(QWidget */* parent */)
 {
-    return 0;
+    return nullptr;
 }
 
 void

@@ -65,7 +65,7 @@ MidiProgramsEditor::MidiProgramsEditor(BankEditorDialog* bankEditor,
                   tr("Bank and Program details"),  // title
                   parent,
                   true),  // showKeyMapButtons
-    m_device(0),
+    m_device(nullptr),
     m_bankList(bankEditor->getBankList()),
     m_programList(bankEditor->getProgramList()),
     m_oldBank(false, 0, 0)
@@ -168,7 +168,7 @@ MidiProgramsEditor::clearAll()
     m_lsb->setValue(0);
     m_librarian->clear();
     m_librarianEmail->clear();
-    m_currentBank = 0;
+    m_currentBank = nullptr;
     setEnabled(false);
 
     blockAllSignals(false);
@@ -656,7 +656,7 @@ MidiProgramsEditor::getProgram(const MidiBank &bank, int programNo)
         }
     }
 
-    return 0;
+    return nullptr;
 }
 
 void

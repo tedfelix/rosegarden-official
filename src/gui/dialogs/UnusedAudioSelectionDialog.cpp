@@ -59,7 +59,7 @@ UnusedAudioSelectionDialog::UnusedAudioSelectionDialog(QWidget *parent,
     sl << tr("File name") << tr("File size") << tr("Last modified date");
     m_listView->setHorizontalHeaderLabels(sl);
     
-    QTableWidgetItem *item = 0;
+    QTableWidgetItem *item = nullptr;
     unsigned int i;
     unsigned int rc;
     for (i = 0; i < fileNames.size(); i++) {

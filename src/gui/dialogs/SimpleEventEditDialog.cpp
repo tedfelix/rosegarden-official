@@ -83,7 +83,7 @@ SimpleEventEditDialog::SimpleEventEditDialog(QWidget *parent,
 
     if (inserting) {
 
-        m_typeLabel = 0;
+        m_typeLabel = nullptr;
 
         m_typeCombo = new QComboBox(frame);
         layout->addWidget(m_typeCombo, 0, 1);
@@ -109,7 +109,7 @@ SimpleEventEditDialog::SimpleEventEditDialog(QWidget *parent,
 
     } else {
 
-        m_typeCombo = 0;
+        m_typeCombo = nullptr;
 
         m_typeLabel = new QLabel(frame);
         layout->addWidget(m_typeLabel, 0, 1);

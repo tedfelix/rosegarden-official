@@ -55,7 +55,7 @@ AudioRouteMenu::AudioRouteMenu(QWidget *parent,
     switch (format) {
 
     case Compact: {
-            m_combo = 0;
+            m_combo = nullptr;
             m_button = new WheelyButton(parent);
             connect(m_button, SIGNAL(wheel(bool)),
                     SLOT(slotWheel(bool)));
@@ -65,7 +65,7 @@ AudioRouteMenu::AudioRouteMenu(QWidget *parent,
         }
 
     case Regular: {
-            m_button = 0;
+            m_button = nullptr;
             m_combo = new QComboBox(parent);
             connect(m_combo, SIGNAL(activated(int)),
                     SLOT(slotEntrySelected(int)));
@@ -269,7 +269,7 @@ AudioRouteMenu::getEntryText(int entry)
             Studio &studio = doc->getStudio();
             Instrument *instrument = studio.getInstrumentById(m_instrumentId);
             if (!instrument)
-                return 0;
+                return nullptr;
 
             bool stereo = (instrument->getAudioChannels() > 1);
             int recordIns = studio.getRecordIns().size();

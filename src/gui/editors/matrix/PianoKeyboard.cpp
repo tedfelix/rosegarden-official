@@ -122,7 +122,7 @@ void PianoKeyboard::computeKeyPos()
 
 void PianoKeyboard::paintEvent(QPaintEvent*)
 {
-    static QFont *pFont = 0;
+    static QFont *pFont = nullptr;
     if (!pFont) {
         pFont = new QFont();
         pFont->setPixelSize(9);

@@ -50,7 +50,7 @@ public:
 
     bool begin(QPaintDevice *device) {
 
-	m_externalPainter = 0;
+	m_externalPainter = nullptr;
 
         if (m_myPainter.isActive()) {
             NOTATION_DEBUG << "WARNING: NotePixmapPainter::begin(): Painter already active";

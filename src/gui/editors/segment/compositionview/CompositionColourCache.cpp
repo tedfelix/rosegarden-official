@@ -50,6 +50,6 @@ CompositionColourCache* CompositionColourCache::getInstance()
     return m_instance;
 }
 
-CompositionColourCache* CompositionColourCache::m_instance = 0;
+CompositionColourCache* CompositionColourCache::m_instance = nullptr;
 
 }

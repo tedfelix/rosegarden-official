@@ -79,7 +79,7 @@ protected:
     MidiByte   m_beatPitch;
     MidiByte   m_subBeatPitch;
 
-    bool isSuitable(Device *, bool *hasConnectionReturn = 0);
+    bool isSuitable(Device *, bool *hasConnectionReturn = nullptr);
     void setMetronome(Device *, const MidiMetronome &);
     const MidiMetronome *getMetronome(Device *);
 };

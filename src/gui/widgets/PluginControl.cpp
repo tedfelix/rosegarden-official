@@ -202,9 +202,9 @@ float
 PluginControl::getValue() const
 {
     if (m_port->getDisplayHint() & PluginPort::Logarithmic) {
-        return m_dial == 0 ? 0 : powf(10, m_dial->getPosition());
+        return m_dial == nullptr ? 0 : powf(10, m_dial->getPosition());
     } else {
-        return m_dial == 0 ? 0 : m_dial->getPosition();
+        return m_dial == nullptr ? 0 : m_dial->getPosition();
     }
 }
 

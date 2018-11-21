@@ -110,7 +110,7 @@ NotationSelector::handleLeftButtonPress(const NotationMouseEvent *e)
     m_wholeStaffSelectionComplete = false;
 
     delete m_selectionToMerge;
-    const EventSelection *selectionToMerge = 0;
+    const EventSelection *selectionToMerge = nullptr;
     if (e->modifiers & Qt::ShiftModifier) {
         m_clickedShift = true;
         selectionToMerge = m_scene->getSelection();
@@ -119,10 +119,10 @@ NotationSelector::handleLeftButtonPress(const NotationMouseEvent *e)
     }
 //    std::cout << "NotationSelector::handleLeftButtonPress(): m_clickedShift == " << (m_clickedShift ? "true" : "false") << std::endl;
     m_selectionToMerge =
-        (selectionToMerge ? new EventSelection(*selectionToMerge) : 0);
+        (selectionToMerge ? new EventSelection(*selectionToMerge) : nullptr);
 
     m_selectedStaff = e->staff;
-    m_clickedElement = 0;
+    m_clickedElement = nullptr;
 
     if (e->exact) {
         m_clickedElement = e->element;
@@ -311,7 +311,7 @@ void NotationSelector::handleMouseRelease(const NotationMouseEvent *e)
     if ((w > -3 && w < 3 && h > -3 && h < 3 && !m_startedFineDrag) ||
         (m_clickedShift)) {
 
-        if (m_clickedElement != 0 && m_selectedStaff) {
+        if (m_clickedElement != nullptr && m_selectedStaff) {
             
             // If we didn't drag out a meaningful area, but _did_
             // click on an individual event, then select just that
@@ -331,7 +331,7 @@ void NotationSelector::handleMouseRelease(const NotationMouseEvent *e)
                 }
                 
                 m_scene->setSelection(m_selectionToMerge, true);
-                m_selectionToMerge = 0;
+                m_selectionToMerge = nullptr;
 
             } else {
                 m_scene->setSingleSelectedEvent(m_selectedStaff, m_clickedElement, true);
@@ -375,7 +375,7 @@ void NotationSelector::handleMouseRelease(const NotationMouseEvent *e)
         }
     }
 
-    m_clickedElement = 0;
+    m_clickedElement = nullptr;
     m_selectionRect->hide();
     m_selectionOrigin = QPointF();
     m_wholeStaffSelectionComplete = false;
@@ -419,7 +419,7 @@ void NotationSelector::drag(int x, int y, bool final)
     (void)m_clickedElement->event()->get<Int>
             (NotationProperties::HEIGHT_ON_STAFF, clickedHeight);
 
-    Event *clefEvt = 0, *keyEvt = 0;
+    Event *clefEvt = nullptr, *keyEvt = 0;
     Clef clef;
     ::Rosegarden::Key key;
 
@@ -514,8 +514,8 @@ void NotationSelector::drag(int x, int y, bool final)
         MacroCommand *command = new MacroCommand(MoveCommand::getGlobalName());
         bool haveSomething = false;
 
-        MoveCommand *mc = 0;
-        Event *lastInsertedEvent = 0;
+        MoveCommand *mc = nullptr;
+        Event *lastInsertedEvent = nullptr;
 
         if (pitch != clickedPitch && m_clickedElement->isNote()) {
             command->addCommand(new TransposeCommand(pitch - clickedPitch,
@@ -552,7 +552,7 @@ void NotationSelector::drag(int x, int y, bool final)
             // so our clicked element will no longer be valid.  But we
             // can't always recreate it, so as a precaution clear it
             // here so at least it isn't set to something bogus
-            m_clickedElement = 0;
+            m_clickedElement = nullptr;
 
             if (mc && singleNonNotePreview) {
 
@@ -569,7 +569,7 @@ void NotationSelector::drag(int x, int y, bool final)
                     if (vli != targetStaff->getViewElementList()->end()) {
                         m_clickedElement = dynamic_cast<NotationElement *>(*vli);
                     } else {
-                        m_clickedElement = 0;
+                        m_clickedElement = nullptr;
                     }
 
                     m_selectionRect->setPos(x, y);
@@ -695,13 +695,13 @@ void NotationSelector::ready()
 void NotationSelector::stow()
 {
     delete m_selectionRect;
-    m_selectionRect = 0;
+    m_selectionRect = nullptr;
 }
 
 void NotationSelector::handleEventRemoved(Event *e)
 {
     if (m_clickedElement && m_clickedElement->event() == e) {
-        m_clickedElement = 0;
+        m_clickedElement = nullptr;
     }
 }
 
@@ -805,9 +805,9 @@ NotationSelector::getEventsInSelectionRect()
     // If selection rect is not visible or too small,
     // return 0
     //
-    if (!m_selectionRect->isVisible()) return 0;
+    if (!m_selectionRect->isVisible()) return nullptr;
 
-    if (!m_selectedStaff) return 0;
+    if (!m_selectedStaff) return nullptr;
 
     Profiler profiler("NotationSelector::getEventsInSelectionRect");
 
@@ -819,7 +819,7 @@ NotationSelector::getEventsInSelectionRect()
     if (rect.width()  > -3 &&
         rect.width()  <  3 &&
         rect.height() > -3 &&
-        rect.height() <  3) return 0;
+        rect.height() <  3) return nullptr;
 
     QList<QGraphicsItem *> l = m_selectionRect->collidingItems
         (Qt::IntersectsItemShape);
@@ -885,7 +885,7 @@ NotationSelector::getEventsInSelectionRect()
         return selection;
     } else {
         delete selection;
-        return 0;
+        return nullptr;
     }
 }
 

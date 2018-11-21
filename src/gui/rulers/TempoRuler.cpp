@@ -209,7 +209,7 @@ TempoRuler::mouseReleaseEvent(QMouseEvent *e)
 
         if (e->x() < 0 || e->x() >= width() ||
                 e->y() < 0 || e->y() >= height()) {
-            leaveEvent(0);
+            leaveEvent(nullptr);
         }
 
         // First we make a note of the values that we just set and
@@ -237,7 +237,7 @@ TempoRuler::mouseReleaseEvent(QMouseEvent *e)
 
         if (e->x() < 0 || e->x() >= width() ||
                 e->y() < 0 || e->y() >= height()) {
-            leaveEvent(0);
+            leaveEvent(nullptr);
         }
 
         if (m_dragPreviousTime != m_dragStartTime) {

@@ -37,10 +37,10 @@ class ProgressBar : public QProgressBar
     Q_OBJECT
 
 public:
-    ProgressBar(QWidget *parent = 0);
+    ProgressBar(QWidget *parent = nullptr);
 
     ProgressBar(int totalSteps,
-                QWidget *parent = 0);
+                QWidget *parent = nullptr);
 
 public slots:
     void WTF(int);

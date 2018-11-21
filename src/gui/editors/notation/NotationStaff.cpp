@@ -927,7 +927,7 @@ NotationStaff::renderSingleElement(ViewElementList::iterator &vli,
 
     try {
 
-        QGraphicsItem *item = 0;
+        QGraphicsItem *item = nullptr;
 
         m_notePixmapFactory->setSelected(selected);
         m_notePixmapFactory->setShaded(invisible || tmp);
@@ -1775,7 +1775,7 @@ NotationStaff::renderNote(ViewElementList::iterator &vli)
         // The normal on-screen case
 
         bool collision = false;
-        QGraphicsItem *haloItem = 0;
+        QGraphicsItem *haloItem = nullptr;
         if (m_showCollisions) {
             collision = elt->isColliding();
             if (collision) {
@@ -1903,7 +1903,7 @@ NotationStaff::clearPreviewNote()
     if (!m_previewItem) return;
     m_previewItem->hide();
     delete m_previewItem;
-    m_previewItem = 0;
+    m_previewItem = nullptr;
 }
 
 bool
@@ -2091,12 +2091,12 @@ NotationStaff::getBarStyle(int barNo) const
     // fact that Composition's iterator returns segments in track
     // order.
 
-    Segment *lastSegmentOnTrack = 0;
+    Segment *lastSegmentOnTrack = nullptr;
 
     for (Composition::iterator i = c->begin(); i != c->end(); ++i) {
         if ((*i)->getTrack() == s->getTrack()) {
             lastSegmentOnTrack = *i;
-        } else if (lastSegmentOnTrack != 0) {
+        } else if (lastSegmentOnTrack != nullptr) {
             break;
         }
     }

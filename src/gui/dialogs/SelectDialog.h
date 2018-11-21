@@ -49,7 +49,7 @@ class SelectDialog : public QDialog
     Q_OBJECT
 
 public:
-    SelectDialog(QWidget *parent = 0
+    SelectDialog(QWidget *parent = nullptr
                 );
     ~SelectDialog();
 

@@ -344,7 +344,7 @@ ChannelManager::getAllocator()
     Q_ASSERT(m_usingAllocator);
 
     if (!m_instrument)
-        return 0;
+        return nullptr;
 
     return m_instrument->getDevice()->getAllocator();
 }
@@ -366,7 +366,7 @@ void
 ChannelManager::disconnectAllocator()
 {
     if (m_instrument  &&  m_usingAllocator)
-        disconnect(getAllocator(), 0, this, 0);
+        disconnect(getAllocator(), 0, this, nullptr);
 }
 
 void
@@ -452,7 +452,7 @@ ChannelManager::setInstrument(Instrument *instrument)
 
     if (m_instrument) {
         Device *oldDevice = m_instrument->getDevice();
-        Device *newDevice = instrument ? instrument->getDevice() : 0;
+        Device *newDevice = instrument ? instrument->getDevice() : nullptr;
         // Don't hold onto a channel on a device we're no longer
         // playing thru.  Even if newDevice == 0, we free oldDevice's
         // channel.
@@ -480,7 +480,7 @@ ChannelManager::slotVacateChannel(ChannelId channel)
 void
 ChannelManager::slotLosingDevice()
 {
-    m_instrument = 0;
+    m_instrument = nullptr;
     m_channelInterval.clearChannelId();
 }
 
@@ -488,7 +488,7 @@ void
 ChannelManager::slotLosingInstrument()
 {
     freeChannelInterval();
-    m_instrument = 0;
+    m_instrument = nullptr;
 }
 
 void

@@ -244,7 +244,7 @@ MatrixElement *
 MatrixElement::getMatrixElement(QGraphicsItem *item)
 {
     QVariant v = item->data(MatrixElementData);
-    if (v.isNull()) return 0;
+    if (v.isNull()) return nullptr;
     return (MatrixElement *)v.value<void *>();
 }
 

@@ -106,7 +106,7 @@ namespace Rosegarden
 //
 static double barWidth44 = 100.0;
 
-const QWidget *RosegardenMainViewWidget::m_lastActiveMainWindow = 0;
+const QWidget *RosegardenMainViewWidget::m_lastActiveMainWindow = nullptr;
 
 // This is the maximum number of matrix, event view or percussion
 // matrix editors to open in a single operation (not the maximum that
@@ -952,7 +952,7 @@ void RosegardenMainViewWidget::slotEditSegmentAudio(Segment *segment)
 
     AudioFile *aF = getDocument()->getAudioFileManager().
                     getAudioFile(segment->getAudioFileId());
-    if (aF == 0) {
+    if (aF == nullptr) {
         std::cerr << "RosegardenMainViewWidget::slotEditSegmentAudio() - "
         << "can't find audio file" << std::endl;
         return ;
@@ -1045,7 +1045,7 @@ void RosegardenMainViewWidget::slotSelectTrackSegments(int trackId)
     Composition &comp = getDocument()->getComposition();
     Track *track = comp.getTrackById(trackId);
 
-    if (track == 0)
+    if (track == nullptr)
         return ;
 
     SegmentSelection segments;
@@ -1311,7 +1311,7 @@ RosegardenMainViewWidget::updateMeters()
 
                 InstrumentId selectedInstrumentId = comp.getSelectedInstrumentId();
 
-                Instrument *selectedInstrument = 0;
+                Instrument *selectedInstrument = nullptr;
 
                 if (selectedInstrumentId != NoInstrument) {
                     // ??? Performance: LINEAR SEARCH
@@ -1361,7 +1361,7 @@ RosegardenMainViewWidget::updateMonitorMeters()
 
     InstrumentId selectedInstrumentId = comp.getSelectedInstrumentId();
 
-    Instrument *selectedInstrument = 0;
+    Instrument *selectedInstrument = nullptr;
 
     if (selectedInstrumentId != NoInstrument) {
         // ??? Performance: LINEAR SEARCH
@@ -1786,7 +1786,7 @@ RosegardenMainViewWidget::slotUpdateRecordingSegment(Segment *segment,
 {
     // We're only interested in this on the first call per recording segment,
     // when we possibly create a view for it
-    static Segment *lastRecordingSegment = 0;
+    static Segment *lastRecordingSegment = nullptr;
 
     if (segment == lastRecordingSegment)
         return ;

@@ -32,7 +32,7 @@ class IconStackedWidget : public QWidget
 {
     Q_OBJECT
 public:
-    IconStackedWidget(QWidget *parent = 0);
+    IconStackedWidget(QWidget *parent = nullptr);
     void addPage(const QString& iconLabel, QWidget *page, const QPixmap& icon);
     typedef std::vector<IconButton *> iconbuttons;
     void setPageByIndex(int index);

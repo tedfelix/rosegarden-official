@@ -39,7 +39,7 @@ class CommentsPopupDialog : public QDialog
     Q_OBJECT
 
 public:
-    CommentsPopupDialog(RosegardenDocument *doc, QWidget *parent = 0);
+    CommentsPopupDialog(RosegardenDocument *doc, QWidget *parent = nullptr);
     
 public slots:
     void slotCheckChanged(int state);

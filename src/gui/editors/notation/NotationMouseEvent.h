@@ -46,10 +46,10 @@ public:
     Qt::MouseButtons buttons;
 
     NotationMouseEvent() :
-        staff(0), element(0), exact(false),
+        staff(nullptr), element(nullptr), exact(false),
         time(0), height(0),
         sceneX(0), sceneY(0),
-        modifiers(0), buttons(0) { }
+        modifiers(), buttons() { }
 };
 
 }

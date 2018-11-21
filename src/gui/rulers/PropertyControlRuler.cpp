@@ -230,7 +230,7 @@ void PropertyControlRuler::updateSelection(std::vector <ViewElement*> *elementLi
     clearSelectedItems();
 
     // For now, simply clear the selected items list and build it afresh
-    PropertyControlItem *item = 0;
+    PropertyControlItem *item = nullptr;
 
 //    for (ControlItemList::iterator it = m_selectedItems.begin(); it != m_selectedItems.end(); ++it) {
 //        item = dynamic_cast <PropertyControlItem *> (*it);
@@ -245,7 +245,7 @@ void PropertyControlRuler::updateSelection(std::vector <ViewElement*> *elementLi
                 if (item->getElement() == (*elit)) {
                     break;
                 } else {
-                    item = 0;
+                    item = nullptr;
                 }
             }
         }
@@ -334,8 +334,8 @@ void PropertyControlRuler::elementRemoved(const ViewSegment *, ViewElement *el)
 
 void PropertyControlRuler::viewSegmentDeleted(const ViewSegment *)
 {
-    m_viewSegment = 0;
-    m_segment = 0;
+    m_viewSegment = nullptr;
+    m_segment = nullptr;
 }
 
 void

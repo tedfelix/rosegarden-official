@@ -38,7 +38,7 @@ namespace Rosegarden
 MatrixToolBox::MatrixToolBox(MatrixWidget *parent) :
     BaseToolBox(parent),
     m_widget(parent),
-    m_scene(0)
+    m_scene(nullptr)
 {
 }
 
@@ -50,7 +50,7 @@ MatrixToolBox::~MatrixToolBox()
 BaseTool *
 MatrixToolBox::createTool(QString toolName)
 {
-    MatrixTool *tool = 0;
+    MatrixTool *tool = nullptr;
 
     QString toolNamelc = toolName.toLower();
 
@@ -81,7 +81,7 @@ MatrixToolBox::createTool(QString toolName)
     else {
         QMessageBox::critical(0, tr("Rosegarden"), QString("MatrixToolBox::createTool : unrecognised toolname %1 (%2)")
                            .arg(toolName).arg(toolNamelc));
-        return 0;
+        return nullptr;
     }
 
     m_tools.insert(toolName, tool);

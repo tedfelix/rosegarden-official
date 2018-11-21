@@ -31,7 +31,7 @@ namespace Rosegarden
 {
 
 
-TextFloat *TextFloat::m_textFloat = 0;
+TextFloat *TextFloat::m_textFloat = nullptr;
 
 TextFloat::TextFloat(QWidget *parent):
     BaseTextFloat(parent),
@@ -42,14 +42,14 @@ TextFloat::TextFloat(QWidget *parent):
 TextFloat::~TextFloat()
 {
     // m_textFloat is static
-    m_textFloat = 0;
+    m_textFloat = nullptr;
 }
 
 TextFloat *
 TextFloat::getTextFloat()
 {
     if (!m_textFloat) {
-        m_textFloat = new TextFloat(0);
+        m_textFloat = new TextFloat(nullptr);
     }
 
     return m_textFloat;

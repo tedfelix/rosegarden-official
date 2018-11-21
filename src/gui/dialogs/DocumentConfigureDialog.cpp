@@ -41,7 +41,7 @@ DocumentConfigureDialog::DocumentConfigureDialog(RosegardenDocument *doc,
         const char *name)
     : ConfigureDialogBase(parent, tr("Document Properties"), name )//, QMessageBox::StandardButtons buttons )
 {
-    QWidget *page = 0;
+    QWidget *page = nullptr;
 
     // Document Meta Page
     //

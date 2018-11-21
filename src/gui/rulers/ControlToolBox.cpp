@@ -40,7 +40,7 @@ ControlToolBox::ControlToolBox(ControlRuler *parent) :
 BaseTool *
 ControlToolBox::createTool(QString toolName)
 {
-    ControlTool *tool = 0;
+    ControlTool *tool = nullptr;
 
     QString toolNamelc = toolName.toLower();
 
@@ -58,7 +58,7 @@ ControlToolBox::createTool(QString toolName)
     {
         QMessageBox::critical(0, tr("Rosegarden"), QString("ControlToolBox::createTool : unrecognised toolname %1 (%2)")
                            .arg(toolName).arg(toolNamelc));
-        return 0;
+        return nullptr;
     }
 
     m_tools.insert(toolName, tool);

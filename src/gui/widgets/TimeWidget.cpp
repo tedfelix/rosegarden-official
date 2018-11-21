@@ -56,7 +56,7 @@ TimeWidget::TimeWidget(QString title,
         m_time(absTime),
         m_startTime(0),
         m_defaultTime(absTime),
-        m_delayUpdateTimer(0)
+        m_delayUpdateTimer(nullptr)
 {
     init(editable);
 }
@@ -77,7 +77,7 @@ TimeWidget::TimeWidget(QString title,
         m_startTime(startTime),
         m_defaultTime(duration),
         m_minimumDuration(minimumDuration),
-        m_delayUpdateTimer(0)
+        m_delayUpdateTimer(nullptr)
 {
     init(editable);
 }
@@ -95,7 +95,7 @@ TimeWidget::init(bool editable)
     setContentsMargins(5, 5, 5, 5);
     QGridLayout *layout = new QGridLayout;
     layout->setSpacing(5);
-    QLabel *label = 0;
+    QLabel *label = nullptr;
 
     if (m_isDuration) {
 
@@ -136,7 +136,7 @@ TimeWidget::init(bool editable)
 
         } else {
 
-            m_note = 0;
+            m_note = nullptr;
             timeT error = 0;
             QString label = NotationStrings::makeNoteMenuLabel
                             (m_time, false, error);
@@ -159,7 +159,7 @@ TimeWidget::init(bool editable)
                     this, SLOT(slotTimeTChanged(int)));
             layout->addWidget(m_timeT, 0, 5);
         } else {
-            m_timeT = 0;
+            m_timeT = nullptr;
             LineEdit *le = new LineEdit(QString("%1").arg(m_time));
             le->setReadOnly(true);
             layout->addWidget(le, 0, 5);
@@ -167,7 +167,7 @@ TimeWidget::init(bool editable)
 
     } else {
 
-        m_note = 0;
+        m_note = nullptr;
 
         label = new QLabel(tr("Time:"));
         label->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
@@ -182,7 +182,7 @@ TimeWidget::init(bool editable)
             layout->addWidget(m_timeT, 0, 1);
             layout->addWidget(new QLabel(tr("units")), 0, 2);
         } else {
-            m_timeT = 0;
+            m_timeT = nullptr;
             LineEdit *le = new LineEdit(QString("%1").arg(m_time));
             le->setReadOnly(true);
             layout->addWidget(le, 0, 2);
@@ -194,7 +194,7 @@ TimeWidget::init(bool editable)
     layout->addWidget(label, 1, 0);
 
     if (editable) {
-        m_barLabel = 0;
+        m_barLabel = nullptr;
         m_bar = new QSpinBox;
         if (m_isDuration)
             m_bar->setMinimum(0);
@@ -202,7 +202,7 @@ TimeWidget::init(bool editable)
                 this, SLOT(slotBarBeatOrFractionChanged(int)));
         layout->addWidget(m_bar, 1, 1);
     } else {
-        m_bar = 0;
+        m_bar = nullptr;
         m_barLabel = new LineEdit;
         m_barLabel->setReadOnly(true);
         layout->addWidget(m_barLabel, 1, 1);
@@ -213,14 +213,14 @@ TimeWidget::init(bool editable)
     layout->addWidget(label, 1, 2);
 
     if (editable) {
-        m_beatLabel = 0;
+        m_beatLabel = nullptr;
         m_beat = new QSpinBox;
         m_beat->setMinimum(1);
         connect(m_beat, SIGNAL(valueChanged(int)),
                 this, SLOT(slotBarBeatOrFractionChanged(int)));
         layout->addWidget(m_beat, 1, 3);
     } else {
-        m_beat = 0;
+        m_beat = nullptr;
         m_beatLabel = new LineEdit;
         m_beatLabel->setReadOnly(true);
         layout->addWidget(m_beatLabel, 1, 3);
@@ -232,14 +232,14 @@ TimeWidget::init(bool editable)
     layout->addWidget(label, 1, 4);
 
     if (editable) {
-        m_fractionLabel = 0;
+        m_fractionLabel = nullptr;
         m_fraction = new QSpinBox;
         m_fraction->setMinimum(1);
         connect(m_fraction, SIGNAL(valueChanged(int)),
                 this, SLOT(slotBarBeatOrFractionChanged(int)));
         layout->addWidget(m_fraction, 1, 5);
     } else {
-        m_fraction = 0;
+        m_fraction = nullptr;
         m_fractionLabel = new LineEdit;
         m_fractionLabel->setReadOnly(true);
         layout->addWidget(m_fractionLabel, 1, 5);
@@ -253,7 +253,7 @@ TimeWidget::init(bool editable)
     layout->addWidget(label, 2, 0);
 
     if (editable) {
-        m_secLabel = 0;
+        m_secLabel = nullptr;
         m_sec = new QSpinBox;
         if (m_isDuration)
             m_sec->setMinimum(0);
@@ -261,7 +261,7 @@ TimeWidget::init(bool editable)
                 this, SLOT(slotSecOrMSecChanged(int)));
         layout->addWidget(m_sec, 2, 1);
     } else {
-        m_sec = 0;
+        m_sec = nullptr;
         m_secLabel = new LineEdit;
         m_secLabel->setReadOnly(true);
         layout->addWidget(m_secLabel, 2, 1);
@@ -272,7 +272,7 @@ TimeWidget::init(bool editable)
     layout->addWidget(label, 2, 2);
 
     if (editable) {
-        m_msecLabel = 0;
+        m_msecLabel = nullptr;
         m_msec = new QSpinBox;
         m_msec->setMinimum(0);
         m_msec->setSingleStep(10);
@@ -280,7 +280,7 @@ TimeWidget::init(bool editable)
                 this, SLOT(slotMSecChanged()));
         layout->addWidget(m_msec, 2, 3);
     } else {
-        m_msec = 0;
+        m_msec = nullptr;
         m_msecLabel = new LineEdit;
         m_msecLabel->setReadOnly(true);
         layout->addWidget(m_msecLabel, 2, 3);
@@ -290,7 +290,7 @@ TimeWidget::init(bool editable)
         m_tempo = new QLabel;
         layout->addWidget(m_tempo, 2, 6);
     } else {
-        m_tempo = 0;
+        m_tempo = nullptr;
     }
 
     setLayout(layout);

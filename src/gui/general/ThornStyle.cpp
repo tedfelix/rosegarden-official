@@ -414,8 +414,8 @@ int ThornStyle::pixelMetric(QStyle::PixelMetric metric, const QStyleOption *opti
         // QMenuBar::item { spacing: 3px; padding: 1px 4px; }
         return 4;
     case PM_ScrollBarExtent: {
-        QWidget *parent = widget ? widget->parentWidget() : 0;
-        QWidget *combo = parent ? parent->parentWidget() : 0;
+        QWidget *parent = widget ? widget->parentWidget() : nullptr;
+        QWidget *combo = parent ? parent->parentWidget() : nullptr;
         if (qobject_cast<QComboBox *>(combo)) {
             // QComboBox QAbstractItemView QScrollBar:vertical { width: 12px; }
             return 12;

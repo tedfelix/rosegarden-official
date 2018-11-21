@@ -364,7 +364,7 @@ TriggerSegmentManager::slotClose()
 
 //     if (m_doc)
 //         CommandHistory::getInstance()->detachView(actionCollection());    //&&&
-    m_doc = 0;
+    m_doc = nullptr;
 
     close();
 }

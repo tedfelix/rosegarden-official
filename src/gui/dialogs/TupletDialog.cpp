@@ -133,7 +133,7 @@ TupletDialog::TupletDialog(QWidget *parent, Note::Type defaultUnitType,
                 Qt::AlignRight);
         row++;
     } else {
-        m_selectionDurationDisplay = 0;
+        m_selectionDurationDisplay = nullptr;
     }
 
     timingDisplayLayout->addWidget(new QLabel(tr("Group with current timing:")),
@@ -182,7 +182,7 @@ TupletDialog::TupletDialog(QWidget *parent, Note::Type defaultUnitType,
         timingDisplayLayout->addWidget(m_unchangedDurationDisplay, row, 2);
 
     } else {
-        m_unchangedDurationDisplay = 0;
+        m_unchangedDurationDisplay = nullptr;
     }
 
     m_timingDisplayGrid->setLayout(timingDisplayLayout);

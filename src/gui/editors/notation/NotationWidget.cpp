@@ -209,7 +209,7 @@ NotationWidget::NotationWidget() :
     m_hpanner->setMaximumHeight(80);
     m_hpanner->setBackgroundBrush(Qt::white);
     m_hpanner->setOptimizationFlag(QGraphicsView::DontAdjustForAntialiasing, true);
-    m_hpanner->setRenderHints(0);
+    m_hpanner->setRenderHints(nullptr);
 
     m_pannerLayout->addWidget(m_hpanner);
 
@@ -390,11 +390,11 @@ void
 NotationWidget::clearAll(void)
 {
     delete m_scene;
-    m_scene = 0;
+    m_scene = nullptr;
     delete m_headersScene;
-    m_headersScene = 0;
+    m_headersScene = nullptr;
     delete m_referenceScale;
-    m_referenceScale = 0;
+    m_referenceScale = nullptr;
 }
     
 void
@@ -649,7 +649,7 @@ NotationWidget::setCanvasCursor(QCursor c)
 Segment *
 NotationWidget::getCurrentSegment()
 {
-    if (!m_scene) return 0;
+    if (!m_scene) return nullptr;
     return m_scene->getCurrentSegment();
 }
 
@@ -1029,7 +1029,7 @@ EventSelection *
 NotationWidget::getSelection() const
 {
     if (m_scene) return m_scene->getSelection();
-    else return 0;
+    else return nullptr;
 }
 
 void
@@ -1680,7 +1680,7 @@ NotationWidget::getCurrentDevice()
 {
     Segment *segment = getCurrentSegment();
     if (!segment)
-        return 0;
+        return nullptr;
 
     Studio &studio = m_document->getStudio();
     Instrument *instrument =
@@ -1688,7 +1688,7 @@ NotationWidget::getCurrentDevice()
         (segment->getComposition()->getTrackById(segment->getTrack())->
          getInstrument());
     if (!instrument)
-        return 0;
+        return nullptr;
 
     return instrument->getDevice();
 }

@@ -70,7 +70,7 @@ FileMergeDialog::FileMergeDialog(QWidget *parent,
     hbox->setLayout(hboxLayout);
     m_choice->addItem(tr("At start of existing composition"));
     m_choice->addItem(tr("From end of existing composition"));
-    m_useTimings = 0;
+    m_useTimings = nullptr;
 
     if (timingsDiffer) {
         new QLabel(tr("The file has different time signatures or tempos."), vbox);

@@ -101,7 +101,7 @@ TrackEditor::TrackEditor(RosegardenDocument *doc,
     m_tempoRuler(0),
     m_chordNameRuler(0),
     m_topStandardRuler(0),
-    m_bottomStandardRuler(0)
+    m_bottomStandardRuler(nullptr)
     //m_canvasWidth(0)
 {
     // Accept objects dragged and dropped onto this widget.
@@ -802,7 +802,7 @@ void TrackEditor::dropEvent(QDropEvent *e)
 
     Track *track = m_doc->getComposition().getTrackByPosition(trackPos);
 
-    bool internal = (e->source() != 0); // have a source widget
+    bool internal = (e->source() != nullptr); // have a source widget
 
     if (!internal && !uriList.empty()) {
 

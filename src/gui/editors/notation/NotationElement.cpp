@@ -39,7 +39,7 @@ NotationElement::NotationElement(Event *event) :
     m_recentlyRegenerated(false),
     m_isColliding(false),
     m_item(0),
-    m_extraItems(0)
+    m_extraItems(nullptr)
 {
     //     NOTATION_DEBUG << "new NotationElement "
     //                          << this << " wrapping " << event << endl;
@@ -155,7 +155,7 @@ NotationElement::removeItem()
 //    NOTATION_DEBUG << "NotationElement::removeItem";
 
     delete m_item;
-    m_item = 0;
+    m_item = nullptr;
 
     if (m_extraItems) {
 
@@ -164,7 +164,7 @@ NotationElement::removeItem()
         m_extraItems->clear();
 
         delete m_extraItems;
-        m_extraItems = 0;
+        m_extraItems = nullptr;
     }
 }
 
@@ -207,7 +207,7 @@ NotationElement *
 NotationElement::getNotationElement(QGraphicsItem *item)
 {
     QVariant v = item->data(NotationElementData);
-    if (v.isNull()) return 0;
+    if (v.isNull()) return nullptr;
     return (NotationElement *)v.value<void *>();
 }
 

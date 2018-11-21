@@ -340,7 +340,7 @@ const char* const GUIPalette::RecordFaderOutline = "recordfaderoutline";
 
 const char* const GUIPalette::PannerOverlay = "panneroverlay";
 
-GUIPalette* GUIPalette::m_instance = 0;
+GUIPalette* GUIPalette::m_instance = nullptr;
 
 // defines which index in the document's colourmap should be used as the color
 // when creating new audio segments from recordings, or inserting from the

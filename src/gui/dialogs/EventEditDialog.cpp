@@ -183,8 +183,8 @@ EventEditDialog::EventEditDialog(QWidget *parent,
     p = event.getNonPersistentPropertyNames();
 
     if (p.begin() == p.end()) {
-        m_nonPersistentView = 0;
-        m_nonPersistentGrid = 0;
+        m_nonPersistentView = nullptr;
+        m_nonPersistentGrid = nullptr;
     } else {
 
         // create bottom area container (group-box) for non-persistent-events view

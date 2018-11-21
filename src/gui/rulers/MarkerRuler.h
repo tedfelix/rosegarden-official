@@ -45,8 +45,8 @@ class MarkerRuler : public QWidget, public ActionFileClient
 public:
     MarkerRuler(RosegardenDocument *doc,
                      RulerScale *rulerScale,
-                     QWidget* parent = 0,
-                     const char* name = 0);
+                     QWidget* parent = nullptr,
+                     const char* name = nullptr);
 
     virtual ~MarkerRuler();
     

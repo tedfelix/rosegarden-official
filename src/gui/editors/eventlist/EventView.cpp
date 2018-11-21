@@ -97,12 +97,12 @@ EventView::EventView(RosegardenDocument *doc,
         m_eventFilter(Note | Text | SystemExclusive | Controller |
                       ProgramChange | PitchBend | Indication | Other |
                       GeneratedRegion | SegmentID),
-        m_menu(0)
+        m_menu(nullptr)
 {
     setAttribute(Qt::WA_DeleteOnClose);
 
     m_isTriggerSegment = false;
-    m_triggerName = m_triggerPitch = m_triggerVelocity = 0;
+    m_triggerName = m_triggerPitch = m_triggerVelocity = nullptr;
 
     if (!segments.empty()) {
         Segment *s = *segments.begin();
@@ -655,11 +655,11 @@ EventView::makeInitialSelection(timeT time)
 {
     m_listSelection.clear();
 
-    EventViewItem *goodItem = 0;
+    EventViewItem *goodItem = nullptr;
     int goodItemNo = 0;
 
     int i = 0;
-    QTreeWidgetItem *child = 0;
+    QTreeWidgetItem *child = nullptr;
     
     for( i=0; i< m_eventList->topLevelItemCount(); i++ ){
         child = m_eventList->topLevelItem(i);
@@ -897,7 +897,7 @@ EventView::slotEditCut()
 //    QPtrListIterator<QTreeWidgetItem> it(selection);
     QTreeWidgetItem *listItem;
     EventViewItem *item;
-    EventSelection *cutSelection = 0;
+    EventSelection *cutSelection = nullptr;
     int itemIndex = -1;
 
 //    while ((listItem = it.current()) != 0) {
@@ -912,7 +912,7 @@ EventView::slotEditCut()
             //itemIndex = m_eventList->itemIndex(*it);
 
         if (item) {
-            if (cutSelection == 0)
+            if (cutSelection == nullptr)
                 cutSelection =
                     new EventSelection(*(item->getSegment()));
 
@@ -946,7 +946,7 @@ EventView::slotEditCopy()
 //    QPtrListIterator<QTreeWidgetItem> it(selection);
     QTreeWidgetItem *listItem;
     EventViewItem *item;
-    EventSelection *copySelection = 0;
+    EventSelection *copySelection = nullptr;
 
     // clear the selection for post modification updating
     //
@@ -963,7 +963,7 @@ EventView::slotEditCopy()
         m_listSelection.push_back(m_eventList->indexOfTopLevelItem(listItem));
 
         if (item) {
-            if (copySelection == 0)
+            if (copySelection == nullptr)
                 copySelection =
                     new EventSelection(*(item->getSegment()));
 
@@ -1041,7 +1041,7 @@ EventView::slotEditDelete()
 //    QPtrListIterator<QTreeWidgetItem> it(selection);
     QTreeWidgetItem *listItem;
     EventViewItem *item;
-    EventSelection *deleteSelection = 0;
+    EventSelection *deleteSelection = nullptr;
     int itemIndex = -1;
 
 //    while ((listItem = it.current()) != 0) {
@@ -1061,7 +1061,7 @@ EventView::slotEditDelete()
                 continue;
             }
 
-            if (deleteSelection == 0)
+            if (deleteSelection == nullptr)
                 deleteSelection =
                     new EventSelection(*m_segments[0]);
 
@@ -1292,7 +1292,7 @@ Segment *
 EventView::getCurrentSegment()
 {
     if (m_segments.empty())
-        return 0;
+        return nullptr;
     else
         return *m_segments.begin();
 }

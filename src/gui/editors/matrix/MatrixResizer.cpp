@@ -42,7 +42,7 @@ namespace Rosegarden
 MatrixResizer::MatrixResizer(MatrixWidget *parent) :
     MatrixTool("matrixresizer.rc", "MatrixResizer", parent),
     m_currentElement(0),
-    m_currentViewSegment(0)
+    m_currentViewSegment(nullptr)
 {
     createAction("select", SLOT(slotSelectSelected()));
     createAction("draw", SLOT(slotDrawSelected()));
@@ -56,7 +56,7 @@ void
 MatrixResizer::handleEventRemoved(Event *event)
 {
     if (m_currentElement && m_currentElement->event() == event) {
-        m_currentElement = 0;
+        m_currentElement = nullptr;
     }
 }
 
@@ -129,7 +129,7 @@ MatrixResizer::handleMouseMove(const MatrixMouseEvent *e)
 
     for (; it != selection->getSegmentEvents().end(); ++it) {
 
-        MatrixElement *element = 0;
+        MatrixElement *element = nullptr;
         ViewElementList::iterator vi = m_currentViewSegment->findEvent(*it);
         if (vi != m_currentViewSegment->getViewElementList()->end()) {
             element = static_cast<MatrixElement *>(*vi);
@@ -236,7 +236,7 @@ MatrixResizer::handleMouseRelease(const MatrixMouseEvent *e)
     m_scene->setSelection(newSelection, false);
 
 //    m_mParentView->update();
-    m_currentElement = 0;
+    m_currentElement = nullptr;
     setBasicContextHelp();
 }
 

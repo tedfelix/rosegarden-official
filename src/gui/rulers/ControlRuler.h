@@ -62,7 +62,7 @@ class ControlRuler : public QWidget //, public ViewSegmentObserver
 public:
     ControlRuler(ViewSegment*,
                  RulerScale*,
-                 QWidget* parent=0); //###  const char name is obsolete, and I'm almost sure WFlags is obsolete too
+                 QWidget* parent=nullptr); //###  const char name is obsolete, and I'm almost sure WFlags is obsolete too
     virtual ~ControlRuler();
 
     virtual QString getName() = 0;

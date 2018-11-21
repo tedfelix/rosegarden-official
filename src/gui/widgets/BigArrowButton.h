@@ -48,7 +48,7 @@ public:
                 break;
             case Qt::NoArrow :
             default :
-                fileName = 0;
+                fileName = nullptr;
         }
 
         if (fileName) {

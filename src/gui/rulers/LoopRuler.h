@@ -53,7 +53,7 @@ public:
               int height = 0,
               bool invert = false,
               bool isForMainWindow = false,
-              QWidget* parent = 0);
+              QWidget* parent = nullptr);
 
     ~LoopRuler();
 

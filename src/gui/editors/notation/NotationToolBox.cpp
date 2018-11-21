@@ -38,14 +38,14 @@ namespace Rosegarden
 NotationToolBox::NotationToolBox(NotationWidget *parent) :
     BaseToolBox(parent),
     m_widget(parent),
-    m_scene(0)
+    m_scene(nullptr)
 {
 }
 
 BaseTool *
 NotationToolBox::createTool(QString toolName)
 {
-    NotationTool *tool = 0;
+    NotationTool *tool = nullptr;
 
     QString toolNamelc = toolName.toLower();
     
@@ -84,7 +84,7 @@ NotationToolBox::createTool(QString toolName)
     else {
         QMessageBox::critical(0, tr("Rosegarden"), QString("NotationToolBox::createTool : unrecognised toolname %1 (%2)")
                            .arg(toolName).arg(toolNamelc));
-        return 0;
+        return nullptr;
     }
 
     m_tools.insert(toolName, tool);

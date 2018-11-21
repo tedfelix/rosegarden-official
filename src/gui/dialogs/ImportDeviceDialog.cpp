@@ -52,7 +52,7 @@ namespace Rosegarden
 ImportDeviceDialog::ImportDeviceDialog(QWidget *parent, QUrl url) :
     QDialog(parent),
     m_url(url),
-    m_device(0)
+    m_device(nullptr)
 {}
 
 ImportDeviceDialog::~ImportDeviceDialog()
@@ -137,11 +137,11 @@ ImportDeviceDialog::doImport()
     bool showRenameOption = false;
 
     if (m_devices.size() > 1) {
-        m_deviceLabel = 0;
+        m_deviceLabel = nullptr;
         m_deviceCombo = new QComboBox( deviceBox );
         deviceBoxLayout->addWidget(m_deviceCombo);
     } else {
-        m_deviceCombo = 0;
+        m_deviceCombo = nullptr;
         m_deviceLabel = new QLabel( deviceBox );
         deviceBoxLayout->addWidget(m_deviceLabel);
     }
@@ -183,7 +183,7 @@ ImportDeviceDialog::doImport()
         m_rename = new QCheckBox(tr("Import device name"), gb);
         gbLayout->addWidget(m_rename);
     } else {
-        m_rename = 0;
+        m_rename = nullptr;
     }
 
     QGroupBox *buttonGroupBox = new QGroupBox(tr("Bank import behavior"));

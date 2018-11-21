@@ -154,7 +154,7 @@ AudioInstrumentParameterPanel::AudioInstrumentParameterPanel(QWidget *parent) :
 void
 AudioInstrumentParameterPanel::slotSelectAudioLevel(float dB)
 {
-    if (getSelectedInstrument() == 0)
+    if (getSelectedInstrument() == nullptr)
         return ;
 
     if (getSelectedInstrument()->getType() == Instrument::Audio ||
@@ -169,7 +169,7 @@ AudioInstrumentParameterPanel::slotSelectAudioLevel(float dB)
 void
 AudioInstrumentParameterPanel::slotSelectAudioRecordLevel(float dB)
 {
-    if (getSelectedInstrument() == 0)
+    if (getSelectedInstrument() == nullptr)
         return ;
 
     //    std::cerr << "AudioInstrumentParameterPanel::slotSelectAudioRecordLevel("
@@ -209,7 +209,7 @@ AudioInstrumentParameterPanel::slotPluginSelected(InstrumentId instrumentId,
     QColor pluginBackgroundColour = QColor(Qt::black);
     bool bypassed = false;
 
-    PluginPushButton *button = 0;
+    PluginPushButton *button = nullptr;
     QString noneText;
 
     // updates synth gui button &c:
@@ -294,7 +294,7 @@ AudioInstrumentParameterPanel::setButtonColour(
 {
     //RG_DEBUG << "setButtonColour() " << "pluginIndex = " << pluginIndex << ", bypassState = " << bypassState << ", rgb = " << colour.name();
 
-    PluginPushButton *button = 0;
+    PluginPushButton *button = nullptr;
 
     if (pluginIndex == int(Instrument::SYNTH_PLUGIN_POSITION)) {
         button = m_audioFader->m_synthButton;

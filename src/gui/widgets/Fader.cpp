@@ -169,7 +169,7 @@ Fader::groovePixmap()
             return j->second;
         }
     }
-    return 0;
+    return nullptr;
 }
 
 QPixmap *
@@ -179,7 +179,7 @@ Fader::buttonPixmap()
     if (i != faderPixmapCache()->end()) {
         return i->second.second;
     } else
-        return 0;
+        return nullptr;
 }
 
 float

@@ -84,7 +84,7 @@ public:
                              InstrumentParameterBox*,
                              TrackParameterBox*,
                              RosegardenParameterArea* parameterArea,
-                             QWidget *parent = 0);
+                             QWidget *parent = nullptr);
 
     /**
      * Destructor for the main view

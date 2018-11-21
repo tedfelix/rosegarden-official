@@ -255,7 +255,7 @@ AudioManagerDialog::slotPopulateFileList()
     AudioListItem *selectedItem = dynamic_cast<AudioListItem*>(m_fileList->currentItem());
     
     AudioFileId lastId = 0;
-    Segment *lastSegment = 0;
+    Segment *lastSegment = nullptr;
     bool findSelection = false;
     bool foundSelection = false;
 
@@ -383,7 +383,7 @@ AudioManagerDialog::slotPopulateFileList()
 
         // Test audio file element for selection criteria
         //
-        if (findSelection && lastSegment == 0 && lastId == (*it)->getId()) {
+        if (findSelection && lastSegment == nullptr && lastId == (*it)->getId()) {
             //m_fileList->setSelected(item, true);
             m_fileList->setCurrentItem(item);
             
@@ -463,12 +463,12 @@ AudioManagerDialog::getCurrentSelection()
     QList<QTreeWidgetItem *> til= m_fileList->selectedItems();
     if (til.isEmpty()){
         RG_WARNING << "AudioManagerDialog::getCurrentSelection() - til.isEmpty() so we're returning 0 and this game is over. Fail.";
-        return 0;
+        return nullptr;
     }
     AudioListItem *item = dynamic_cast<AudioListItem*>(til[0]);
-    if (item == 0) {
+    if (item == nullptr) {
         RG_WARNING << "AudioManagerDialog::getCurrentSelection() - item == 0 so we're returning 0 and this game is over. Epic fail.";
-        return 0;
+        return nullptr;
     }
 
     std::vector<AudioFile*>::const_iterator it;
@@ -489,7 +489,7 @@ AudioManagerDialog::getCurrentSelection()
     }
 
     RG_WARNING << "AudioManagerDialog::getCurrentSelection() - we tried so hard, but in the end it was all just bricks in the wall.";
-    return 0;
+    return nullptr;
 }
 
 void
@@ -592,7 +592,7 @@ AudioManagerDialog::slotRemove()
     }
     AudioListItem *item = dynamic_cast<AudioListItem*>(til[0]);
 
-    if (audioFile == 0 || item == 0)
+    if (audioFile == nullptr || item == 0)
         return ;
 
     // If we're on a Segment then delete it at the Composition
@@ -605,19 +605,19 @@ AudioManagerDialog::slotRemove()
         
         // Or try above
         //
-        if (newItem == 0)
+        if (newItem == nullptr)
             newItem = m_fileList->itemAbove(item);
 
         // Or the parent
         //
-        if (newItem == 0)
+        if (newItem == nullptr)
             newItem = item->parent();
 
         // Get the id and segment of the next item so that we can
         // match against it
         //
         AudioFileId id = 0;
-        Segment *segment = 0;
+        Segment *segment = nullptr;
         AudioListItem *aItem = dynamic_cast<AudioListItem*>(newItem);
 
         if (aItem) {
@@ -696,7 +696,7 @@ AudioManagerDialog::slotPlayPreview()
     }
     AudioListItem *item = dynamic_cast<AudioListItem*>(til[0]);
 
-    if (item == 0 || audioFile == 0)
+    if (item == nullptr || audioFile == 0)
         return ;
 
     // store the audio file we're playing
@@ -725,7 +725,7 @@ AudioManagerDialog::slotPlayPreview()
         emit cancelPlayingAudioFile(m_playingAudioFile);
 
     delete m_audioPlayingDialog;
-    m_audioPlayingDialog = 0;
+    m_audioPlayingDialog = nullptr;
 
     m_playTimer->stop();
 
@@ -738,7 +738,7 @@ AudioManagerDialog::slotCancelPlayingAudio()
     if (m_audioPlayingDialog) {
         m_playTimer->stop();
         delete m_audioPlayingDialog;
-        m_audioPlayingDialog = 0;
+        m_audioPlayingDialog = nullptr;
     }
 }
 
@@ -835,7 +835,7 @@ AudioManagerDialog::slotInsert()
     RG_DEBUG << "AudioManagerDialog::slotInsert() - firing...";
 
     AudioFile *audioFile = getCurrentSelection();
-    if (audioFile == 0)
+    if (audioFile == nullptr)
         return ;
 
     RG_DEBUG << "AudioManagerDialog::slotInsert\n";
@@ -1002,7 +1002,7 @@ AudioManagerDialog::slotRename()
 {
     AudioFile *audioFile = getCurrentSelection();
 
-    if (audioFile == 0)
+    if (audioFile == nullptr)
         return ;
 
     bool ok = false;
@@ -1032,7 +1032,7 @@ void AudioManagerDialog::slotItemChanged(QTreeWidgetItem *current, QTreeWidgetIt
 //void AudioManagerDialog::slotSelectionChanged(QTreeWidgetItem *item)
 void AudioManagerDialog::slotSelectionChanged()
 {
-    AudioListItem *aItem = 0;
+    AudioListItem *aItem = nullptr;
     //AudioListItem *aItem = dynamic_cast<AudioListItem*>(item);
     
     QList<QTreeWidgetItem *> itemsx = m_fileList->selectedItems();
@@ -1057,7 +1057,7 @@ void AudioManagerDialog::slotSelectionChanged()
         emit segmentsSelected(selection);
     }
 
-    updateActionState(aItem != 0);
+    updateActionState(aItem != nullptr);
 }
 
 void
@@ -1065,8 +1065,8 @@ AudioManagerDialog::setSelected(AudioFileId id,
                                 const Segment *segment,
                                 bool propagate)
 {
-    QTreeWidgetItem *it = 0;    //m_fileList->topLevelItem(0);
-    AudioListItem *aItem = 0;
+    QTreeWidgetItem *it = nullptr;    //m_fileList->topLevelItem(0);
+    AudioListItem *aItem = nullptr;
     //int itCount = m_fileList->topLevelItemCount();
     
     QTreeWidgetItemIterator twIt( m_fileList, QTreeWidgetItemIterator::All );
@@ -1131,16 +1131,16 @@ void
 AudioManagerDialog::slotSegmentSelection(
     const SegmentSelection &segments)
 {
-    const Segment *segment = 0;
+    const Segment *segment = nullptr;
 
     for (SegmentSelection::const_iterator it = segments.begin();
             it != segments.end(); ++it) {
         if ((*it)->getType() == Segment::Audio) {
             // Only get one audio segment
-            if (segment == 0)
+            if (segment == nullptr)
                 segment = *it;
             else
-                segment = 0;
+                segment = nullptr;
         }
 
     }
@@ -1151,7 +1151,7 @@ AudioManagerDialog::slotSegmentSelection(
         //
         setSelected(segment->getAudioFileId(), segment, false);
     } else {
-        selectFileListItemNoSignal(0);
+        selectFileListItemNoSignal(nullptr);
     }
 
 }
@@ -1169,7 +1169,7 @@ AudioManagerDialog::closePlayingDialog(AudioFileId id)
     if (m_audioPlayingDialog && id == m_playingAudioFile) {
         m_playTimer->stop();
         delete m_audioPlayingDialog;
-        m_audioPlayingDialog = 0;
+        m_audioPlayingDialog = nullptr;
     }
 
 }
@@ -1347,7 +1347,7 @@ AudioManagerDialog::slotDistributeOnMidiSegment()
     QList<RosegardenMainViewWidget*> viewList_ = m_doc->getViewList();
     QListIterator<RosegardenMainViewWidget*> viewList(viewList_);
 
-    RosegardenMainViewWidget *w = 0;
+    RosegardenMainViewWidget *w = nullptr;
     SegmentSelection selection;
 
     viewList.toFront();

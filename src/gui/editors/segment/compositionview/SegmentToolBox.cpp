@@ -43,7 +43,7 @@ SegmentToolBox::SegmentToolBox(CompositionView* parent, RosegardenDocument* doc)
 
 SegmentTool* SegmentToolBox::createTool(QString toolName)
 {
-    SegmentTool* tool = 0;
+    SegmentTool* tool = nullptr;
 
     QString toolNamelc = toolName.toLower();
     
@@ -78,7 +78,7 @@ SegmentTool* SegmentToolBox::createTool(QString toolName)
     else {
         QMessageBox::critical(0, tr("Rosegarden"), QString("SegmentToolBox::createTool : unrecognised toolname %1 (%2)")
                            .arg(toolName).arg(toolNamelc));
-        return 0;
+        return nullptr;
     }
 
     m_tools.insert(toolName, tool);

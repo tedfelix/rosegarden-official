@@ -98,32 +98,32 @@ namespace Rosegarden
 
 
 MatrixWidget::MatrixWidget(bool drumMode) :
-    m_document(0),
-    m_view(0),
-    m_scene(0),
-    m_toolBox(0),
-    m_currentTool(0),
-    m_instrument(0),
+    m_document(nullptr),
+    m_view(nullptr),
+    m_scene(nullptr),
+    m_toolBox(nullptr),
+    m_currentTool(nullptr),
+    m_instrument(nullptr),
     m_drumMode(drumMode),
     m_onlyKeyMapping(false),
     m_playTracking(true),
     m_hZoomFactor(1.0),
     m_vZoomFactor(1.0),
     m_currentVelocity(100),
-    m_referenceScale(0),
+    m_referenceScale(nullptr),
     m_inMove(false),
     m_lastZoomWasHV(true),
     m_lastV(0),
     m_lastH(0),
-    m_pitchRuler(0),
-    m_pianoView(0),
-    m_pianoScene(0),
-    m_localMapping(0),
-    m_topStandardRuler(0),
-    m_bottomStandardRuler(0),
-    m_tempoRuler(0),
-    m_chordNameRuler(0),
-    m_layout(0),
+    m_pitchRuler(nullptr),
+    m_pianoView(nullptr),
+    m_pianoScene(nullptr),
+    m_localMapping(nullptr),
+    m_topStandardRuler(nullptr),
+    m_bottomStandardRuler(nullptr),
+    m_tempoRuler(nullptr),
+    m_chordNameRuler(nullptr),
+    m_layout(nullptr),
     m_hSliderHacked(false),
     m_lastNote(0),
     m_hoverNoteIsVisible(true)
@@ -489,11 +489,11 @@ MatrixWidget::generatePitchRuler()
 {
     delete m_pianoScene;   // Delete the old m_pitchRuler if any
     delete m_localMapping;
-    m_localMapping = 0;    // To avoid a double delete
+    m_localMapping = nullptr;    // To avoid a double delete
     bool isPercussion = false;
 
     Composition &comp = m_document->getComposition();
-    const MidiKeyMapping *mapping = 0;
+    const MidiKeyMapping *mapping = nullptr;
     Track *track = comp.getTrackById(m_scene->getCurrentSegment()->getTrack());
     m_instrument = m_document->getStudio().
                             getInstrumentById(track->getInstrument());
@@ -515,7 +515,7 @@ MatrixWidget::generatePitchRuler()
         }
     }
     if (mapping && !m_localMapping->getMap().empty()) {
-        m_pitchRuler = new PercussionPitchRuler(0, m_localMapping,
+        m_pitchRuler = new PercussionPitchRuler(nullptr, m_localMapping,
                                                 m_scene->getYResolution());
     } else {
         if (m_onlyKeyMapping) {
@@ -526,10 +526,10 @@ MatrixWidget::generatePitchRuler()
             m_localMapping = new MidiKeyMapping();
             m_localMapping->getMap()[0] = "";  //!!! extent() doesn't work ???
             m_localMapping->getMap()[127] = "";
-            m_pitchRuler = new PercussionPitchRuler(0, m_localMapping,
+            m_pitchRuler = new PercussionPitchRuler(nullptr, m_localMapping,
                                                     m_scene->getYResolution());
         } else {
-            m_pitchRuler = new PianoKeyboard(0);
+            m_pitchRuler = new PianoKeyboard(nullptr);
         }
     }
 
@@ -708,7 +708,7 @@ MatrixWidget::slotHScroll()
 EventSelection *
 MatrixWidget::getSelection() const
 {
-    if (!m_scene) return 0;
+    if (!m_scene) return nullptr;
     return m_scene->getSelection();
 }
 
@@ -722,7 +722,7 @@ MatrixWidget::setSelection(EventSelection *s, bool preview)
 const SnapGrid *
 MatrixWidget::getSnapGrid() const
 {
-    if (!m_scene) return 0;
+    if (!m_scene) return nullptr;
     return m_scene->getSnapGrid();
 }
 
@@ -752,14 +752,14 @@ MatrixWidget::slotClearSelection()
     if (!selector) {
         slotSetSelectTool();
     } else {
-        setSelection(0, false);
+        setSelection(nullptr, false);
     }
 }
 
 Segment *
 MatrixWidget::getCurrentSegment()
 {
-    if (!m_scene) return 0;
+    if (!m_scene) return nullptr;
     return m_scene->getCurrentSegment();
 }
 
@@ -788,7 +788,7 @@ MatrixWidget::getCurrentDevice()
 {
     Segment *segment = getCurrentSegment();
     if (!segment)
-        return 0;
+        return nullptr;
 
     Studio &studio = m_document->getStudio();
     Instrument *instrument =
@@ -796,7 +796,7 @@ MatrixWidget::getCurrentDevice()
         (segment->getComposition()->getTrackById(segment->getTrack())->
          getInstrument());
     if (!instrument)
-        return 0;
+        return nullptr;
 
     return instrument->getDevice();
 }
@@ -1480,7 +1480,7 @@ MatrixWidget::showInitialPointer()
 void
 MatrixWidget::
 slotInstrumentGone(void)
-{ m_instrument = 0; }
+{ m_instrument = nullptr; }
 
 void
 MatrixWidget::slotPlayPreviewNote(Segment * segment, int pitch)

@@ -387,7 +387,7 @@ TextEventDialog::TextEventDialog(QWidget *parent,
     m_text->setText(strtoqstr(defaultText.getText()));
     
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::Help);
-    vboxLayout->addWidget(buttonBox, 1, 0);
+    vboxLayout->addWidget(buttonBox, 1, nullptr);
     //vboxLayout->setRowStretch(0, 10);
     
     connect(buttonBox, SIGNAL(accepted()), this, SLOT(slotOK()));

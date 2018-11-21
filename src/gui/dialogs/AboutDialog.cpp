@@ -29,7 +29,7 @@
 namespace Rosegarden
 {
 
-AboutDialog::AboutDialog(QWidget *parent): QDialog(parent, 0)
+AboutDialog::AboutDialog(QWidget *parent): QDialog(parent, nullptr)
 {
     this->setModal(true);
     this->setWindowTitle(tr("About Rosegarden"));

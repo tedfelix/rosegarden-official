@@ -306,7 +306,7 @@ TempoView::makeInitialSelection(timeT time)
 {
     m_listSelection.clear();
 
-    TempoListItem *goodItem = 0;
+    TempoListItem *goodItem = nullptr;
     int goodItemNo = 0;
 
     for (int i = 0; m_list->topLevelItem(i); ++i) {
@@ -338,7 +338,7 @@ Segment *
 TempoView::getCurrentSegment()
 {
     if (m_segments.empty())
-        return 0;
+        return nullptr;
     else
         return *m_segments.begin();
 }

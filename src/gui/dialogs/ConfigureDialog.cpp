@@ -48,7 +48,7 @@ ConfigureDialog::ConfigureDialog(RosegardenDocument *doc,
     : ConfigureDialogBase(parent, tr("Rosegarden - Preferences"), name )
 {
     
-    QWidget* page = 0;
+    QWidget* page = nullptr;
     
     // General Page
     //

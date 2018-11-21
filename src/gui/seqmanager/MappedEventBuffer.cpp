@@ -30,7 +30,7 @@ namespace Rosegarden
 {
 
 MappedEventBuffer::MappedEventBuffer(RosegardenDocument *doc) :
-    m_buffer(0),
+    m_buffer(nullptr),
     m_capacity(0),
     m_size(0),
     m_doc(doc),
@@ -42,7 +42,7 @@ MappedEventBuffer::MappedEventBuffer(RosegardenDocument *doc) :
 
 MappedEventBuffer::~MappedEventBuffer()
 {
-    // Safe even if NULL.
+    // Safe even if nullptr.
     delete[] m_buffer;
 }
 
@@ -250,9 +250,9 @@ MappedEventBuffer::iterator::peek() const
 {
     // The lock formerly here has moved out to callers.
 
-    // If we're at the end, return NULL
+    // If we're at the end, return nullptr
     if (m_index >= m_s->size())
-        return 0;
+        return nullptr;
 
     // Otherwise return a pointer into the buffer.
     return &m_s->m_buffer[m_index];

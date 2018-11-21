@@ -27,7 +27,7 @@ class PlayListView : public QTreeWidget
 {
     Q_OBJECT
 public:
-    PlayListView(QWidget *parent=0, const char *name=0);
+    PlayListView(QWidget *parent=nullptr, const char *name=0);
 
     QTreeWidgetItem* previousSibling(QTreeWidgetItem*);
 

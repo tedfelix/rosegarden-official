@@ -129,7 +129,7 @@ public:
      * @see initMenuBar initToolBar
      */
     RosegardenMainWindow(bool enableSound = true,
-                         QObject *startupStatusMessageReceiver = 0);
+                         QObject *startupStatusMessageReceiver = nullptr);
 
     virtual ~RosegardenMainWindow();
 

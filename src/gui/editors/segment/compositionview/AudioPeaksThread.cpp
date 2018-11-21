@@ -43,7 +43,7 @@ AudioPeaksThread::AudioPeaksThread(AudioFileManager *manager) :
         m_manager(manager),
         m_nextToken(0),
         m_exiting(false),
-        m_emptyQueueListener(0)
+        m_emptyQueueListener(nullptr)
 {}
 
 void

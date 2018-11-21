@@ -863,7 +863,7 @@ TrackParameterBox::slotLoadPressed()
     // Inherits style.  Centers on main window.
     //PresetHandlerDialog dialog(this);
     // Does not inherit style?  Centers on monitor #1?
-    PresetHandlerDialog dialog(0);
+    PresetHandlerDialog dialog(nullptr);
 
     Track *track = getTrack();
     if (!track)

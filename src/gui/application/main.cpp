@@ -395,7 +395,7 @@ int main(int argc, char *argv[])
 
     setsid(); // acquire shiny new process group
 
-    srandom((unsigned int)time(0) * (unsigned int)getpid());
+    srandom((unsigned int)time(nullptr) * (unsigned int)getpid());
 
     // we have to set the graphics system before creating theApp, or it
     // won't work, so we have to use an unusual QSettings ctor here.
@@ -634,7 +634,7 @@ int main(int argc, char *argv[])
     settings.endGroup();
     settings.beginGroup(GeneralOptionsConfigGroup);
 
-    StartupLogo* startLogo = 0L;
+    StartupLogo* startLogo = nullptr;
 
     if (qStrToBool(settings.value("Logo", "true")) && !nosplash) {
         startLogo = StartupLogo::getInstance();
@@ -646,7 +646,7 @@ int main(int argc, char *argv[])
     }
 
     struct timeval logoShowTime;
-    gettimeofday(&logoShowTime, 0);
+    gettimeofday(&logoShowTime, nullptr);
 
     RG_INFO << "Creating RosegardenMainWindow instance...";
 
@@ -730,7 +730,7 @@ int main(int argc, char *argv[])
         // and remove it immediately
 
         struct timeval now;
-        gettimeofday(&now, 0);
+        gettimeofday(&now, nullptr);
 
         RealTime visibleFor =
             RealTime(now.tv_sec, now.tv_usec * 1000) -

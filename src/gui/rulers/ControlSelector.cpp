@@ -113,7 +113,7 @@ ControlSelector::handleMouseRelease(const ControlMouseEvent *e)
     if (pRectF) {
         // Selection drag is now complete
         delete pRectF;
-        m_ruler->setSelectionRect(0);
+        m_ruler->setSelectionRect(nullptr);
 
         // Add the selected items to the current selection
         for (ControlItemList::iterator it = m_addedItems.begin(); it != m_addedItems.end(); ++it) {

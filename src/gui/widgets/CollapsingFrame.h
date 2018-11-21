@@ -38,7 +38,7 @@ class CollapsingFrame : public QFrame
 public:
     CollapsingFrame(
             QString label,
-            QWidget *parent = 0,
+            QWidget *parent = nullptr,
             const QString &name = "",
             bool defaultExpanded = false);
     virtual ~CollapsingFrame();

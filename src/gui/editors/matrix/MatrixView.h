@@ -64,7 +64,7 @@ public:
     MatrixView(RosegardenDocument *doc,
 		  std::vector<Segment *> segments,
 		  bool drumMode,
-		  QWidget *parent = 0);
+		  QWidget *parent = nullptr);
 
     virtual ~MatrixView();
 
@@ -288,7 +288,7 @@ private:
      * If \a force point to a bool, then the bool's value
      * is used to show/hide the toolbar.
      */
-    void toggleNamedToolBar(const QString& toolBarName, bool* force = 0);
+    void toggleNamedToolBar(const QString& toolBarName, bool* force = nullptr);
 
     /**
      * Return the device of the current segment, if any

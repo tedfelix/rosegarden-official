@@ -32,7 +32,7 @@ namespace Rosegarden
 InstrumentParameterPanel::InstrumentParameterPanel(QWidget *parent) :
     QFrame(parent),
     m_instrumentLabel(new SqueezedLabel(this)),
-    m_selectedInstrument(0)
+    m_selectedInstrument(nullptr)
 {
 }
 
@@ -57,7 +57,7 @@ void
 InstrumentParameterPanel::
 slotInstrumentGone(void)
 {
-    m_selectedInstrument = 0;
+    m_selectedInstrument = nullptr;
     m_instrumentLabel->setText(tr("none"));
 }
 

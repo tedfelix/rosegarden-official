@@ -43,7 +43,7 @@ class GuitarChordSelectorDialog : public QDialog
     enum { COMPLEXITY_BEGINNER, COMPLEXITY_COMMON, COMPLEXITY_ALL };
     
 public:
-    GuitarChordSelectorDialog(QWidget *parent=0);
+    GuitarChordSelectorDialog(QWidget *parent=nullptr);
 
     void init();
 

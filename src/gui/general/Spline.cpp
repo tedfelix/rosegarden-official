@@ -30,7 +30,7 @@ Spline::calculate(const QPoint &s, const QPoint &f, const PointList &cp,
                   QPoint &topLeft, QPoint &bottomRight)
 {
     if (cp.size() < 2)
-        return 0;
+        return nullptr;
 
     int i;
     PointList *acc = new PointList();

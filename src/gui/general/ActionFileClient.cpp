@@ -35,7 +35,7 @@ namespace Rosegarden
 {
 
 ActionFileClient::ActionFileClient() :
-    m_actionFileParser(0)
+    m_actionFileParser(nullptr)
 {
 }
 
@@ -51,7 +51,7 @@ ActionFileClient::createAction(QString actionName, QString connection)
     QObject *obj = dynamic_cast<QObject *>(this);
     if (!obj) {
         RG_WARNING << "ERROR: ActionFileClient::createAction: ActionFileClient subclass is not a QObject";
-        return 0;
+        return nullptr;
     }
     QAction *action = new QAction(obj);
     action->setObjectName(actionName);
@@ -68,7 +68,7 @@ ActionFileClient::createAction(QString actionName, QObject *target, QString conn
     QObject *obj = dynamic_cast<QObject *>(this);
     if (!obj) {
         RG_WARNING << "ERROR: ActionFileClient::createAction: ActionFileClient subclass is not a QObject";
-        return 0;
+        return nullptr;
     }
     QAction *action = new QAction(obj);
     action->setObjectName(actionName);
@@ -122,10 +122,10 @@ ActionFileClient::findGroup(QString groupName)
     QObject *obj = dynamic_cast<QObject *>(this);
     if (!obj) {
         RG_WARNING << "ERROR: ActionFileClient::findGroup: ActionFileClient subclass is not a QObject";
-        return 0;
+        return nullptr;
     }
     QWidget *widget = dynamic_cast<QWidget *>(this);
-    QActionGroup *g = 0;
+    QActionGroup *g = nullptr;
     if (widget) {
         g = obj->findChild<QActionGroup *>(groupName);
         if (!g) {
@@ -142,10 +142,10 @@ ActionFileClient::findMenu(QString menuName)
     QObject *obj = dynamic_cast<QObject *>(this);
     if (!obj) {
         RG_WARNING << "ERROR: ActionFileClient::findMenu: ActionFileClient subclass is not a QObject";
-        return 0;
+        return nullptr;
     }
     QWidget *widget = dynamic_cast<QWidget *>(this);
-    QMenu *m = 0;
+    QMenu *m = nullptr;
     if (widget) {
         m = obj->findChild<QMenu *>(menuName);
         if (!m) {
@@ -169,7 +169,7 @@ ActionFileClient::findToolbar(QString toolbarName)
     QWidget *w = dynamic_cast<QWidget *>(this);
     if (!w) {
         RG_WARNING << "ERROR: ActionFileClient::findToolbar: ActionFileClient subclass is not a QWidget";
-        return 0;
+        return nullptr;
     }
     QToolBar *t = w->findChild<QToolBar *>(toolbarName);
     if (!t) {

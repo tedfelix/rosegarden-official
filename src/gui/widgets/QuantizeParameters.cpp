@@ -282,7 +282,7 @@ QuantizeParameters::getQuantizer() const
         unit = m_standardQuantizations[m_notationUnitCombo->currentIndex()];
     }
 
-    Quantizer *quantizer = 0;
+    Quantizer *quantizer = nullptr;
 
     int swing = m_swingCombo->currentIndex();
     swing *= 10;

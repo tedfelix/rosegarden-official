@@ -83,7 +83,7 @@ AudioPluginOSCGUIManager::AudioPluginOSCGUIManager(RosegardenMainWindow *mainWin
         m_studio(0),
         m_haveOSCThread(false),
         m_oscBuffer(1023),
-        m_dispatchTimer(0)
+        m_dispatchTimer(nullptr)
 {}
 
 AudioPluginOSCGUIManager::~AudioPluginOSCGUIManager()
@@ -126,7 +126,7 @@ AudioPluginOSCGUIManager::checkOSCThread()
 bool
 AudioPluginOSCGUIManager::hasGUI(InstrumentId instrument, int position)
 {
-    PluginContainer *container = 0;
+    PluginContainer *container = nullptr;
     container = m_studio->getContainerById(instrument);
     if (!container) return false;
 
@@ -157,7 +157,7 @@ AudioPluginOSCGUIManager::startGUI(InstrumentId instrument, int position)
     }
 
     // check the label
-    PluginContainer *container = 0;
+    PluginContainer *container = nullptr;
     container = m_studio->getContainerById(instrument);
     if (!container) {
         RG_DEBUG << "AudioPluginOSCGUIManager::startGUI: no such instrument or buss as "
@@ -245,7 +245,7 @@ AudioPluginOSCGUIManager::updateProgram(InstrumentId instrument, int position)
         m_guis[instrument].find(position) == m_guis[instrument].end())
         return ;
 
-    PluginContainer *container = 0;
+    PluginContainer *container = nullptr;
     container = m_studio->getContainerById(instrument);
     if (!container) return;
 
@@ -276,7 +276,7 @@ AudioPluginOSCGUIManager::updatePort(InstrumentId instrument, int position,
         m_guis[instrument].find(position) == m_guis[instrument].end())
         return ;
 
-    PluginContainer *container = 0;
+    PluginContainer *container = nullptr;
     container = m_studio->getContainerById(instrument);
     if (!container) return;
 
@@ -457,7 +457,7 @@ AudioPluginOSCGUIManager::dispatch()
 
     while (m_oscBuffer.getReadSpace() > 0) {
 
-        OSCMessage *message = 0;
+        OSCMessage *message = nullptr;
         m_oscBuffer.read(&message, 1);
 
         int instrument = message->getTarget();
@@ -469,7 +469,7 @@ AudioPluginOSCGUIManager::dispatch()
         AudioPluginInstance *pluginInstance = container->getPlugin(position);
         if (!pluginInstance) continue;
 
-        AudioPluginOSCGUI *gui = 0;
+        AudioPluginOSCGUI *gui = nullptr;
 
         if (m_guis.find(instrument) == m_guis.end()) {
             RG_DEBUG << "AudioPluginOSCGUIManager: no GUI for instrument "

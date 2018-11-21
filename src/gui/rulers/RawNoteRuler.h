@@ -53,7 +53,7 @@ public:
     RawNoteRuler(RulerScale *rulerScale,
                  Segment *segment,
                  int height = 0,
-                 QWidget* parent = 0);
+                 QWidget* parent = nullptr);
 
     ~RawNoteRuler();
 

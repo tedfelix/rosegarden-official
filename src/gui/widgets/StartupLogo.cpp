@@ -60,7 +60,7 @@ StartupLogo::StartupLogo(QWidget * parent) :
 StartupLogo::~StartupLogo()
 {
     m_wasClosed = true;
-    m_instance = 0;
+    m_instance = nullptr;
 }
 
 void StartupLogo::paintEvent(QPaintEvent*)
@@ -133,7 +133,7 @@ void StartupLogo::mousePressEvent(QMouseEvent*)
 StartupLogo* StartupLogo::getInstance()
 {
     if (m_wasClosed)
-        return 0;
+        return nullptr;
 
     if (!m_instance)
         m_instance = new StartupLogo;
@@ -149,7 +149,7 @@ void StartupLogo::hideIfStillThere()
 }
 
 
-StartupLogo* StartupLogo::m_instance = 0;
+StartupLogo* StartupLogo::m_instance = nullptr;
 bool StartupLogo::m_wasClosed = false;
 
 

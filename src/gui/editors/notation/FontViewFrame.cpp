@@ -38,7 +38,7 @@ namespace Rosegarden
 FontViewFrame::FontViewFrame( int pixelSize, QWidget* parent) :
     QFrame(parent),
     m_fontSize(pixelSize),
-    m_tableFont(0),
+    m_tableFont(nullptr),
     m_ascent(0)
 {
 //    setBackgroundRole( QPalette::Base );

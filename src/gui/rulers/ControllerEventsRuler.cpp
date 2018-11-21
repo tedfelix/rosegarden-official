@@ -76,7 +76,7 @@ ControllerEventsRuler::ControllerEventsRuler(ViewSegment *segment,
         m_controller = new ControlParameter(*controller);
     }
     else {
-        m_controller = 0;
+        m_controller = nullptr;
     }
 
     setMenuName("controller_events_ruler_menu");
@@ -325,7 +325,7 @@ void ControllerEventsRuler::eventRemoved(const Segment*, Event *event)
 
 void ControllerEventsRuler::segmentDeleted(const Segment *)
 {
-    m_segment = 0;
+    m_segment = nullptr;
 }
 
 ControlItem* ControllerEventsRuler::addControlItem2(Event *event)
@@ -341,7 +341,7 @@ ControlItem* ControllerEventsRuler::addControlItem2(float x, float y)
 {
     // Adds a ControlItem in the absence of an event (used by ControlPainter)
     clearSelectedItems();
-    EventControlItem *item = new EventControlItem(this, new ControllerEventAdapter(0), QPolygonF());
+    EventControlItem *item = new EventControlItem(this, new ControllerEventAdapter(nullptr), QPolygonF());
     item->reconfigure(x,y);
     item->setSelected(true);
     ControlRuler::addControlItem(item);

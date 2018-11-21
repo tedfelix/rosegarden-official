@@ -85,7 +85,7 @@ public:
         OpenGL
     };
 
-    GeneralConfigurationPage(RosegardenDocument *doc, QWidget *parent = 0);
+    GeneralConfigurationPage(RosegardenDocument *doc, QWidget *parent = nullptr);
 
     void apply() override;
 

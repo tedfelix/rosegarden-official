@@ -54,7 +54,7 @@ public:
     AudioFaderBox(QWidget *parent,
                   QString id = "",
                   bool haveInOut = true,
-                  const char *name = 0);
+                  const char *name = nullptr);
 
     void setAudioChannels(int);
 

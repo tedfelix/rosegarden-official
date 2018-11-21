@@ -373,7 +373,7 @@ GuitarChordSelectorDialog::setChord(const Guitar::Chord& chord)
     if (chordExt.isEmpty()) {
         chordExt = "";
         //m_chordExtList->setSelected(0, true);
-        m_chordExtList->setCurrentItem(0);
+        m_chordExtList->setCurrentItem(nullptr);
     } else {                
         //QListWidgetItem* correspondingExt = m_chordExtList->findItem(chordExt, Qt::ExactMatch);
         QList<QListWidgetItem*> correspondingExt = m_chordExtList->findItems(chordExt, Qt::MatchExactly);

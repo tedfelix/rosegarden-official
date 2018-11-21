@@ -65,7 +65,7 @@ public:
     } Tristate;
 
     SegmentParameterBox(RosegardenDocument *doc,
-                        QWidget *parent=0);
+                        QWidget *parent=nullptr);
     ~SegmentParameterBox();
 
     // Use Segments to update GUI parameters

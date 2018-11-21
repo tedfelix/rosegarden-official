@@ -383,8 +383,8 @@ BankEditorDialog::initDialog()
 
     // Fill list view
     //
-    MidiDevice* midiDevice = 0;
-    QTreeWidgetItem* twItemDevice = 0;
+    MidiDevice* midiDevice = nullptr;
+    QTreeWidgetItem* twItemDevice = nullptr;
     DeviceList *devices = m_studio->getDevices();
     DeviceListIterator it;
     Device *devx;
@@ -439,10 +439,10 @@ BankEditorDialog::updateDialog()
     DeviceListIterator it;
     bool deviceLabelUpdate = false;
     
-    MidiDevice* midiDevice = 0;
-    QTreeWidgetItem* currentIndex = 0;
-    MidiDeviceTreeWidgetItem* deviceItem = 0;
-    QTreeWidgetItem *child = 0;
+    MidiDevice* midiDevice = nullptr;
+    QTreeWidgetItem* currentIndex = nullptr;
+    MidiDeviceTreeWidgetItem* deviceItem = nullptr;
+    QTreeWidgetItem *child = nullptr;
     unsigned int cnt, i;
     
     for (it = devices->begin(); it != devices->end(); ++it) {
@@ -724,8 +724,8 @@ bool
 BankEditorDialog::deviceItemHasBank(MidiDeviceTreeWidgetItem* deviceItem, int bankNb)
 {
 //     QTreeWidgetItem *child = deviceItem->firstChild();
-    MidiBankTreeWidgetItem *bankItem = 0;
-    QTreeWidgetItem *child = 0;
+    MidiBankTreeWidgetItem *bankItem = nullptr;
+    QTreeWidgetItem *child = nullptr;
     
     int n = 0;
     while (n < deviceItem->childCount()) {
@@ -902,7 +902,7 @@ BankEditorDialog::slotApply()
 {
     RG_DEBUG << "BankEditorDialog::slotApply()\n";
 
-    ModifyDeviceCommand *command = 0;
+    ModifyDeviceCommand *command = nullptr;
 
     MidiDevice *device = getMidiDevice(m_lastDevice);
 
@@ -1021,7 +1021,7 @@ BankEditorDialog::getParentDeviceItem(QTreeWidgetItem* item)
     *   return the parent t.w.Item of a bank or keymap (which is a MidiDeviceTreeWidgetItem )
     **/
     if (!item)
-        return 0;
+        return nullptr;
 
     if (dynamic_cast<MidiBankTreeWidgetItem*>(item)){
         // go up to the parent device item
@@ -1034,7 +1034,7 @@ BankEditorDialog::getParentDeviceItem(QTreeWidgetItem* item)
 
     if (!item) {
         RG_DEBUG << "BankEditorDialog::getParentDeviceItem : missing parent device item for bank item - this SHOULD NOT HAPPEN";
-        return 0;
+        return nullptr;
     }
 
     return dynamic_cast<MidiDeviceTreeWidgetItem*>(item);
@@ -1069,7 +1069,7 @@ BankEditorDialog::slotAddBank()
 
         QString name = "";
         int n = 0;
-        while (name == "" || device->getBankByName(qstrtostr(name)) != 0) {
+        while (name == "" || device->getBankByName(qstrtostr(name)) != nullptr) {
             ++n;
             if (n == 1)
                 name = tr("<new bank>");
@@ -1112,7 +1112,7 @@ BankEditorDialog::slotAddKeyMapping()
 
         QString name = "";
         int n = 0;
-        while (name == "" || device->getKeyMappingByName(qstrtostr(name)) != 0) {
+        while (name == "" || device->getKeyMappingByName(qstrtostr(name)) != nullptr) {
             ++n;
             if (n == 1)
                 name = tr("<new mapping>");
@@ -1285,7 +1285,7 @@ BankEditorDialog::slotDeleteAll()
     if (reply == QMessageBox::Yes) {
 
         // erase all bank items
-        QTreeWidgetItem* child = 0;
+        QTreeWidgetItem* child = nullptr;
         while ((child = deviceItem->child(0)))
             delete child;
 
@@ -1342,7 +1342,7 @@ BankEditorDialog::getMidiDevice(QTreeWidgetItem* item)
     MidiDeviceTreeWidgetItem* deviceItem =
         dynamic_cast<MidiDeviceTreeWidgetItem*>(item);
     if (!deviceItem)
-        return 0;
+        return nullptr;
 
     return getMidiDevice(deviceItem->getDeviceId());
 }
@@ -1491,8 +1491,8 @@ BankEditorDialog::selectDeviceBankItem(DeviceId deviceId,
 //     int deviceCount = 0, bankCount = 0;
 
     
-    QTreeWidgetItem *twItemDevice = 0;
-    MidiDeviceTreeWidgetItem *midiDeviceItem = 0;
+    QTreeWidgetItem *twItemDevice = nullptr;
+    MidiDeviceTreeWidgetItem *midiDeviceItem = nullptr;
     
     int bankI;
     int devI = 0;
@@ -1560,7 +1560,7 @@ BankEditorDialog::slotImport()
                       tr("Rosegarden files") + " (*.rg *.RG)" + ";;" +
                       tr("Sound fonts") + " (*.sf2 *.SF2)" + ";;" +
                       tr("LinuxSampler configuration files") + " (*.lscp *.LSCP)" + ";;" +
-                      tr("All files") + " (*)", 0, 0); ///!!! Should we allow 'All files' here since LinuxSampler files don't need to have an extension?!
+                      tr("All files") + " (*)", 0, nullptr); ///!!! Should we allow 'All files' here since LinuxSampler files don't need to have an extension?!
 
     QUrl url(url_str);
     
@@ -1594,7 +1594,7 @@ BankEditorDialog::slotImport()
             return ;
         }
 
-        ModifyDeviceCommand *command = 0;
+        ModifyDeviceCommand *command = nullptr;
 
         BankList banks(dialog->getBanks());
         ProgramList programs(dialog->getPrograms());
@@ -1832,7 +1832,7 @@ BankEditorDialog::slotFileClose()
     // triggered when the closeEvent is actually processed.
     //
 //     CommandHistory::getInstance()->detachView(actionCollection());    //&&&
-    m_doc = 0;
+    m_doc = nullptr;
     close();
 }
 

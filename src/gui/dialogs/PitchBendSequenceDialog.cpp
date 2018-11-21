@@ -394,7 +394,7 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(QWidget *parent,
         (QDialogButtonBox::Cancel | QDialogButtonBox::Help);
         
     QDialogButtonBox *buttonBox = new QDialogButtonBox(flags);
-    vboxLayout->addWidget(buttonBox, 1, 0);
+    vboxLayout->addWidget(buttonBox, 1, nullptr);
 
     connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));

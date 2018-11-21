@@ -59,7 +59,7 @@ void
 MatrixMover::handleEventRemoved(Event *event)
 {
     if (m_currentElement && m_currentElement->event() == event) {
-        m_currentElement = 0;
+        m_currentElement = nullptr;
     }
 }
 
@@ -218,7 +218,7 @@ MatrixMover::handleMouseMove(const MatrixMouseEvent *e)
              selection->getSegmentEvents().begin();
          it != selection->getSegmentEvents().end(); ++it) {
 
-        MatrixElement *element = 0;
+        MatrixElement *element = nullptr;
         ViewElementList::iterator vi = m_currentViewSegment->findEvent(*it);
         if (vi != m_currentViewSegment->getViewElementList()->end()) {
             element = static_cast<MatrixElement *>(*vi);
@@ -288,7 +288,7 @@ MatrixMover::handleMouseRelease(const MatrixMouseEvent *e)
             delete m_duplicateElements[i];
         }
         m_duplicateElements.clear();
-        m_currentElement = 0;
+        m_currentElement = nullptr;
         return;
     }
 
@@ -351,7 +351,7 @@ MatrixMover::handleMouseRelease(const MatrixMouseEvent *e)
             newPitch = (*it)->get<Int>(PITCH) + diffPitch;
         }
 
-        Event *newEvent = 0;
+        Event *newEvent = nullptr;
 
         if (newTime < segment.getStartTime()) {
             newTime = segment.getStartTime();
@@ -390,7 +390,7 @@ MatrixMover::handleMouseRelease(const MatrixMouseEvent *e)
     m_scene->setSelection(newSelection, false);
 
 //    m_mParentView->canvas()->update();
-    m_currentElement = 0;
+    m_currentElement = nullptr;
 
     setBasicContextHelp();
 }

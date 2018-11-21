@@ -42,7 +42,7 @@ CompositionMapper::CompositionMapper(RosegardenDocument *doc) :
 
         // check to see if track actually exists
         //
-        if (track == 0) continue;
+        if (track == nullptr) continue;
 
         mapSegment(*it);
     }

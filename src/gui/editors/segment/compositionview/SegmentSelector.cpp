@@ -60,7 +60,7 @@ SegmentSelector::SegmentSelector(CompositionView *c, RosegardenDocument *d) :
     m_segmentQuickCopyDone(false),
     m_selectionMoveStarted(false),
     m_changeMade(false),
-    m_dispatchTool(0)
+    m_dispatchTool(nullptr)
 {
     //RG_DEBUG << "SegmentSelector()";
 }
@@ -264,7 +264,7 @@ SegmentSelector::mouseReleaseEvent(QMouseEvent *e)
         // Forget about the tool.
         // Note that this is not a memory leak.  There is only one instance
         // of each tool stored in BaseToolBox::m_tools.
-        m_dispatchTool = 0;
+        m_dispatchTool = nullptr;
 
         // Back to this tool.
         ready();
@@ -296,7 +296,7 @@ SegmentSelector::mouseReleaseEvent(QMouseEvent *e)
 
         if (m_changeMade) {
 
-            MacroCommand *macroCommand = 0;
+            MacroCommand *macroCommand = nullptr;
 
             CompositionModelImpl::ChangingSegmentSet &changingSegments =
                     m_canvas->getModel()->getChangingSegments();
@@ -326,7 +326,7 @@ SegmentSelector::mouseReleaseEvent(QMouseEvent *e)
                      ++it) {
                     Segment *segment = *it;
 
-                    Command *command = 0;
+                    Command *command = nullptr;
 
                     if (m_segmentCopyingAsLink) {
                         command = new SegmentQuickLinkCommand(segment);

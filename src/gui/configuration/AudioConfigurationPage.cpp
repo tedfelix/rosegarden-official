@@ -64,7 +64,7 @@ AudioConfigurationPage::AudioConfigurationPage(
     RosegardenDocument *doc,
     QWidget *parent):
     TabbedConfigurationPage(parent),
-    m_externalAudioEditorPath(0)
+    m_externalAudioEditorPath(nullptr)
 {
     // set the document in the super class
     m_doc = doc;

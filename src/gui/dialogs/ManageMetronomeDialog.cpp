@@ -233,7 +233,7 @@ ManageMetronomeDialog::populate(int deviceIndex)
     DeviceList *devices = m_doc->getStudio().getDevices();
     DeviceListConstIterator it;
     int count = 0;
-    Device *dev = 0;
+    Device *dev = nullptr;
 
     for (it = devices->begin(); it != devices->end(); it++) {
 
@@ -245,7 +245,7 @@ ManageMetronomeDialog::populate(int deviceIndex)
     }
 
     // sanity
-    if (count < 0 || dev == 0 || !isSuitable(dev)) {
+    if (count < 0 || dev == nullptr || !isSuitable(dev)) {
         return ;
     }
 
@@ -256,7 +256,7 @@ ManageMetronomeDialog::populate(int deviceIndex)
     const MidiMetronome *metronome = getMetronome(dev);
 
     // if we've got no metronome against this device then create one
-    if (metronome == 0) {
+    if (metronome == nullptr) {
         InstrumentId id = SystemInstrumentBase;
 
         for (iit = list.begin(); iit != list.end(); ++iit) {
@@ -358,7 +358,7 @@ ManageMetronomeDialog::slotApply()
     DeviceList *devices = m_doc->getStudio().getDevices();
     DeviceListConstIterator it;
     int count = 0;
-    Device *dev = 0;
+    Device *dev = nullptr;
 
     for (it = devices->begin(); it != devices->end(); it++) {
 
@@ -377,7 +377,7 @@ ManageMetronomeDialog::slotApply()
     DeviceId deviceId = dev->getId();
     studio.setMetronomeDevice(deviceId);
 
-    if (getMetronome(dev) == 0) {
+    if (getMetronome(dev) == nullptr) {
         RG_WARNING << "Warning: ManageMetronomeDialog::slotApply: unable to extract metronome from device " << deviceId;
         return ;
     }
@@ -427,7 +427,7 @@ ManageMetronomeDialog::slotPreviewPitch(int pitch)
     DeviceList *devices = m_doc->getStudio().getDevices();
     DeviceListConstIterator it;
     int count = 0;
-    Device *dev = 0;
+    Device *dev = nullptr;
 
     for (it = devices->begin(); it != devices->end(); it++) {
 
@@ -441,7 +441,7 @@ ManageMetronomeDialog::slotPreviewPitch(int pitch)
     if (!dev || !isSuitable(dev)) return;
 
     const MidiMetronome *metronome = getMetronome(dev);
-    if (metronome == 0) return;
+    if (metronome == nullptr) return;
 
     InstrumentList list = dev->getPresentationInstruments();
 
@@ -529,7 +529,7 @@ ManageMetronomeDialog::getMetronome(Device *dev)
     if (ssd) {
         return ssd->getMetronome();
     }
-    return 0;
+    return nullptr;
 }
 
 

@@ -36,7 +36,7 @@ namespace Rosegarden
 
 GuitarChordInserter::GuitarChordInserter(NotationWidget *widget) :
     NotationTool("guitarchordinserter.rc", "GuitarChordInserter", widget),
-    m_guitarChordSelector(0)
+    m_guitarChordSelector(nullptr)
 {
     createAction("select", SLOT(slotSelectSelected()));
     createAction("erase", SLOT(slotEraseSelected()));

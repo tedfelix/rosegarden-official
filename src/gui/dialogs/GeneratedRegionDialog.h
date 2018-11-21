@@ -46,7 +46,7 @@ class GeneratedRegionDialog : public QDialog
   { return m_generatedRegion; }
   MacroCommand *extractCommand(void) {
       MacroCommand *command = m_command;
-      m_command = 0;
+      m_command = nullptr;
       return command;
   }
 private slots:

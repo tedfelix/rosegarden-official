@@ -27,7 +27,7 @@ class AudioListView : public QTreeWidget
 {
     Q_OBJECT
 public:
-    AudioListView(QWidget *parent = 0, const char *name = 0);
+    AudioListView(QWidget *parent = nullptr, const char *name = 0);
 
 protected:
 signals:

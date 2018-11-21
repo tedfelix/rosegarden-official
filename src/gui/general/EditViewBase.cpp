@@ -48,7 +48,7 @@ EditViewBase::EditViewBase(RosegardenDocument *doc,
     m_doc(doc),
     m_segments(segments),
     m_configDialogPageIndex(0),
-    m_shortcuts(0)
+    m_shortcuts(nullptr)
 {
     setAttribute(Qt::WA_DeleteOnClose);
     // Address #1508:  Show the edit windows without activating them, so either

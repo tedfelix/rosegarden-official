@@ -43,6 +43,6 @@ DefaultVelocityColour* DefaultVelocityColour::getInstance()
     return m_instance;
 }
 
-DefaultVelocityColour* DefaultVelocityColour::m_instance = 0;
+DefaultVelocityColour* DefaultVelocityColour::m_instance = nullptr;
 
 }

@@ -44,7 +44,7 @@ MidiFilterDialog::MidiFilterDialog(QWidget *parent,
         QDialog(parent),
         m_doc(doc),
         m_modified(true),
-        m_buttonBox(0)
+        m_buttonBox(nullptr)
 {
     //setHelp("studio-midi-filters");
 

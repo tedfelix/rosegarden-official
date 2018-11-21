@@ -805,7 +805,7 @@ StaffLayout::insertBar(double layoutX, double width, bool isCorrect,
         m_barNumbers.push_back(barNoText);
     }
 
-    QGraphicsRectItem *rect = 0;
+    QGraphicsRectItem *rect = nullptr;
 
     if (showBeatLines()) {
 
@@ -930,7 +930,7 @@ StaffLayout::resizeStaffLines()
     int i;
     while ((int)m_staffLines.size() <= lastRow) {
         m_staffLines.push_back(ItemList());
-        m_staffConnectingLines.push_back(0);
+        m_staffConnectingLines.push_back(nullptr);
     }
 
     // Remove all the staff lines that precede the start of the staff
@@ -975,7 +975,7 @@ StaffLayout::clearStaffLineRow(int row)
     m_staffLines[row].clear();
 
     delete m_staffConnectingLines[row];
-    m_staffConnectingLines[row] = 0;
+    m_staffConnectingLines[row] = nullptr;
 }
 
 void
@@ -1040,11 +1040,11 @@ StaffLayout::resizeStaffLineRow(int row, double x, double length)
         m_staffConnectingLines[row] = line;
 
     } else {
-        m_staffConnectingLines[row] = 0;
+        m_staffConnectingLines[row] = nullptr;
     }
 
     while ((int)m_staffLines[row].size() <= getLineCount() * m_lineThickness) {
-        m_staffLines[row].push_back(0);
+        m_staffLines[row].push_back(nullptr);
     }
 
     int lineIndex = 0;
@@ -1100,7 +1100,7 @@ StaffLayout::resizeStaffLineRow(int row, double x, double length)
 
     while (lineIndex < (int)m_staffLines[row].size()) {
         delete m_staffLines[row][lineIndex];
-        m_staffLines[row][lineIndex] = 0;
+        m_staffLines[row][lineIndex] = nullptr;
         ++lineIndex;
     }
 }

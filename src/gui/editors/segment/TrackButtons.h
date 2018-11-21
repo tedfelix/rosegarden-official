@@ -88,7 +88,7 @@ public:
                  int trackLabelWidth,
                  bool showTrackLabels,
                  int overallHeight,
-                 QWidget* parent = 0);
+                 QWidget* parent = nullptr);
 
     ~TrackButtons();
 

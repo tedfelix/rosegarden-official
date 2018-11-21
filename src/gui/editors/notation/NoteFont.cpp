@@ -39,10 +39,10 @@
 namespace Rosegarden
 {
 
-NoteFont::FontPixmapMap *NoteFont::m_fontPixmapMap = 0;
+NoteFont::FontPixmapMap *NoteFont::m_fontPixmapMap = nullptr;
 
-NoteFont::DrawRepMap *NoteFont::m_drawRepMap = 0;
-QPixmap *NoteFont::m_blankPixmap = 0;
+NoteFont::DrawRepMap *NoteFont::m_drawRepMap = nullptr;
+QPixmap *NoteFont::m_blankPixmap = nullptr;
 
 
 NoteFont::NoteFont(QString fontName, int size) :
@@ -68,11 +68,11 @@ NoteFont::NoteFont(QString fontName, int size) :
 
     // Create the global font map and blank pixmap if necessary
 
-    if (m_fontPixmapMap == 0) {
+    if (m_fontPixmapMap == nullptr) {
         m_fontPixmapMap = new FontPixmapMap();
     }
 
-    if (m_blankPixmap == 0) {
+    if (m_blankPixmap == nullptr) {
         m_blankPixmap = new QPixmap(10, 10);
         m_blankPixmap->fill(Qt::transparent);
     }
@@ -155,7 +155,7 @@ NoteFont::lookup(CharName charName, bool inverted, QPixmap *&pixmap) const
         }
         return true;
     }
-    pixmap = 0;
+    pixmap = nullptr;
     return false;
 }
 
@@ -176,7 +176,7 @@ NoteFont::add
         if (inverted) {
             (*m_map)[charName] = PixmapPair(0, pixmap);
         } else {
-            (*m_map)[charName] = PixmapPair(pixmap, 0);
+            (*m_map)[charName] = PixmapPair(pixmap, nullptr);
         }
     }
 }
@@ -195,7 +195,7 @@ NoteFont::lookupDrawRep(QPixmap *pixmap) const
 
         QImage image = pixmap->toImage();
         if (image.isNull())
-            return 0;
+            return nullptr;
 
 #if 0
 // ??? Removing since this does nothing other than trigger a compiler warning.
@@ -248,7 +248,7 @@ NoteFont::lookupDrawRep(QPixmap *pixmap) const
 bool
 NoteFont::getPixmap(CharName charName, QPixmap &pixmap, bool inverted) const
 {
-    QPixmap *found = 0;
+    QPixmap *found = nullptr;
     bool ok = lookup(charName, inverted, found);
     if (ok) {
         if (found) {
@@ -302,7 +302,7 @@ NoteFont::getPixmap(CharName charName, QPixmap &pixmap, bool inverted) const
             std::cerr << "NoteFont::getPixmap: Warning: No pixmap, code, or glyph for character \""
                       << charName << "\"" << (inverted ? " (inverted)" : "")
                       << " in font \"" << m_fontMap.getName() << "\"" << std::endl;
-            add(charName, inverted, 0);
+            add(charName, inverted, nullptr);
             pixmap = *m_blankPixmap;
             return false;
         }
@@ -325,7 +325,7 @@ NoteFont::getPixmap(CharName charName, QPixmap &pixmap, bool inverted) const
                       << charName << "\"" << (inverted ? " (inverted)" : "")
                       << " in font \"" << m_fontMap.getName() << "\"" << std::endl;
 
-            add(charName, inverted, 0);
+            add(charName, inverted, nullptr);
             pixmap = *m_blankPixmap;
             return false;
         }
@@ -345,13 +345,13 @@ NoteFont::getPixmap(CharName charName, QPixmap &pixmap, bool inverted) const
             pixmap = *found;
             return true;
         } else {
-            add(charName, inverted, 0);
+            add(charName, inverted, nullptr);
             pixmap = *m_blankPixmap;
             return false;
         }
     }
 
-    add(charName, inverted, 0);
+    add(charName, inverted, nullptr);
     pixmap = *m_blankPixmap;
     return false;
 }
@@ -362,7 +362,7 @@ NoteFont::getColouredPixmap(CharName baseCharName, QPixmap &pixmap,
 {
     CharName charName(getNameWithColour(baseCharName, hue));
 
-    QPixmap *found = 0;
+    QPixmap *found = nullptr;
     bool ok = lookup(charName, inverted, found);
     if (ok) {
         if (found) {
@@ -378,7 +378,7 @@ NoteFont::getColouredPixmap(CharName baseCharName, QPixmap &pixmap,
     ok = getPixmap(baseCharName, basePixmap, inverted);
 
     if (!ok) {
-        add(charName, inverted, 0);
+        add(charName, inverted, nullptr);
         pixmap = *m_blankPixmap;
         return false;
     }
@@ -396,7 +396,7 @@ NoteFont::getShadedPixmap(CharName baseCharName, QPixmap &pixmap,
 {
     CharName charName(getNameShaded(baseCharName));
 
-    QPixmap *found = 0;
+    QPixmap *found = nullptr;
     bool ok = lookup(charName, inverted, found);
     if (ok) {
         if (found) {
@@ -412,7 +412,7 @@ NoteFont::getShadedPixmap(CharName baseCharName, QPixmap &pixmap,
     ok = getPixmap(baseCharName, basePixmap, inverted);
 
     if (!ok) {
-        add(charName, inverted, 0);
+        add(charName, inverted, nullptr);
         pixmap = *m_blankPixmap;
         return false;
     }
@@ -503,16 +503,16 @@ NoteFont::getCharacter(CharName charName,
     if (type == Screen) {
         character = NoteCharacter(pixmap,
                                   getHotspot(charName, inverted),
-                                  0);
+                                  nullptr);
     } else {
 
         // Get the pointer direct from cache (depends on earlier call
         // to getPixmap to put it in the cache if available)
 
-        QPixmap *pmapptr = 0;
+        QPixmap *pmapptr = nullptr;
         bool found = lookup(charName, inverted, pmapptr);
 
-        NoteCharacterDrawRep *rep = 0;
+        NoteCharacterDrawRep *rep = nullptr;
         if (found && pmapptr)
             rep = lookupDrawRep(pmapptr);
 
@@ -551,18 +551,18 @@ NoteFont::getCharacterColoured(CharName charName,
 
         character = NoteCharacter(pixmap,
                                   getHotspot(charName, inverted),
-                                  0);
+                                  nullptr);
 
     } else {
 
         // Get the pointer direct from cache (depends on earlier call
         // to getPixmap to put it in the cache if available)
 
-        QPixmap *pmapptr = 0;
+        QPixmap *pmapptr = nullptr;
         CharName cCharName(getNameWithColour(charName, hue));
         bool found = lookup(cCharName, inverted, pmapptr);
 
-        NoteCharacterDrawRep *rep = 0;
+        NoteCharacterDrawRep *rep = nullptr;
         if (found && pmapptr)
             rep = lookupDrawRep(pmapptr);
 

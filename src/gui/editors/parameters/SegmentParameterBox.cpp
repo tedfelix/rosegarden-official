@@ -354,7 +354,7 @@ SegmentParameterBox::initBox()
 void
 SegmentParameterBox::setDocument(RosegardenDocument* doc)
 {
-    if (m_doc != 0)
+    if (m_doc != nullptr)
         disconnect(m_doc, SIGNAL(docColoursChanged()),
                    this, SLOT(slotDocColoursChanged()));
 

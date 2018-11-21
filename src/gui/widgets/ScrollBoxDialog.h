@@ -38,9 +38,9 @@ class ScrollBoxDialog : public QDialog
     Q_OBJECT
 
 public:
-    ScrollBoxDialog(QWidget *parent = 0,
+    ScrollBoxDialog(QWidget *parent = nullptr,
                     ScrollBox::SizeMode mode = ScrollBox::FixWidth,
-                    const char *name = 0);
+                    const char *name = nullptr);
 //                    WFlags flags = 0);
     ~ScrollBoxDialog();
 

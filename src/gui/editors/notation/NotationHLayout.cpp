@@ -166,7 +166,7 @@ NotationHLayout::getNotePixmapFactory(ViewSegment &staff)
 {
     NotationStaff *ns = dynamic_cast<NotationStaff *>(&staff);
     if (ns) return &ns->getNotePixmapFactory(false);
-    else return 0;
+    else return nullptr;
 }
 
 NotePixmapFactory *
@@ -174,7 +174,7 @@ NotationHLayout::getGraceNotePixmapFactory(ViewSegment &staff)
 {
     NotationStaff *ns = dynamic_cast<NotationStaff *>(&staff);
     if (ns) return &ns->getNotePixmapFactory(true);
-    else return 0;
+    else return nullptr;
 }
 
 void
@@ -853,7 +853,7 @@ NotationHLayout::preSquishBar(int barNo)
         // else walk through the bars and find the first segment to exist
         // (i.e. with the smallest basicData.delayInBar value)
         timeT delay = std::numeric_limits<timeT>::max();
-        BarData * dataPtr = 0;
+        BarData * dataPtr = nullptr;
         for (BarDataVector::iterator
             j = i->second.begin(); j != i->second.end(); ++j) {
 
@@ -969,7 +969,7 @@ ViewSegment *
 NotationHLayout::getViewSegmentWithWidestBar(int barNo)
 {
     float maxWidth = -1;
-    ViewSegment *widest = 0;
+    ViewSegment *widest = nullptr;
 
     for (BarDataMap::iterator mi = m_barData.begin();
             mi != m_barData.end(); ++mi) {
@@ -1468,7 +1468,7 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime,
 
         double barInset = notationStaff.getBarInset(barNo, repeatClefAndKey);
 
-        NotationElement *lastDynamicText = 0;
+        NotationElement *lastDynamicText = nullptr;
         int fretboardCount = 0;
         int count = 0;
 

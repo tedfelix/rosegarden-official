@@ -45,7 +45,7 @@ MatrixPainter::MatrixPainter(MatrixWidget *widget) :
     MatrixTool("matrixpainter.rc", "MatrixPainter", widget),
     m_clickTime(0),
     m_currentElement(0),
-    m_currentViewSegment(0)
+    m_currentViewSegment(nullptr)
 {
     createAction("select", SLOT(slotSelectSelected()));
     createAction("resize", SLOT(slotResizeSelected()));
@@ -59,7 +59,7 @@ void MatrixPainter::handleEventRemoved(Event *event)
 {
     if (m_currentElement && m_currentElement->event() == event) {
         delete m_currentElement;
-        m_currentElement = 0;
+        m_currentElement = nullptr;
     }
 }
 
@@ -100,7 +100,7 @@ void MatrixPainter::handleMouseDoubleClick(const MatrixMouseEvent *e){
         }
         //}
         delete m_currentElement;
-        m_currentElement = 0;
+        m_currentElement = nullptr;
         return;
     }
     
@@ -151,7 +151,7 @@ void MatrixPainter::handleLeftButtonPress(const MatrixMouseEvent *e)
             }
         }
         delete m_currentElement;
-        m_currentElement = 0;
+        m_currentElement = nullptr;
         return;
     }
 
@@ -292,8 +292,8 @@ void MatrixPainter::handleMouseRelease(const MatrixMouseEvent *e)
         }
     }
 
-    m_currentElement = 0;
-    m_currentViewSegment = 0;
+    m_currentElement = nullptr;
+    m_currentViewSegment = nullptr;
 
     setBasicContextHelp();
 }

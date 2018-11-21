@@ -38,7 +38,7 @@ class InstrumentAliasButton : public QPushButton
 
 public:
     InstrumentAliasButton(QWidget *parent,
-                   Instrument *instrument = 0);
+                   Instrument *instrument = nullptr);
 
     void setInstrument(Instrument *instrument) { m_instrument = instrument; }
 

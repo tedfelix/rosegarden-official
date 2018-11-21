@@ -187,7 +187,7 @@ MatrixScene::setSegments(RosegardenDocument *document,
 Segment *
 MatrixScene::getCurrentSegment()
 {
-    if (m_segments.empty()) return 0;
+    if (m_segments.empty()) return nullptr;
     if (m_currentSegmentIndex >= int(m_segments.size())) {
         m_currentSegmentIndex = int(m_segments.size()) - 1;
     }
@@ -211,21 +211,21 @@ MatrixScene::setCurrentSegment(Segment *s)
 Segment *
 MatrixScene::getPriorSegment()
 {
-    if (m_currentSegmentIndex == 0) return 0;
+    if (m_currentSegmentIndex == 0) return nullptr;
     return m_segments[m_currentSegmentIndex-1];
 }
 
 Segment *
 MatrixScene::getNextSegment()
 {
-    if ((unsigned int) m_currentSegmentIndex + 1 >= m_segments.size()) return 0;
+    if ((unsigned int) m_currentSegmentIndex + 1 >= m_segments.size()) return nullptr;
     return m_segments[m_currentSegmentIndex+1];
 }
 
 MatrixViewSegment *
 MatrixScene::getCurrentViewSegment()
 {
-    if (m_viewSegments.empty()) return 0;
+    if (m_viewSegments.empty()) return nullptr;
     return m_viewSegments[0];
 }
 
@@ -493,7 +493,7 @@ MatrixScene::setupMouseEvent(QGraphicsSceneMouseEvent *e,
     mme.modifiers = e->modifiers();
     mme.buttons = e->buttons();
 
-    mme.element = 0;
+    mme.element = nullptr;
 
     QList<QGraphicsItem *> l = items(e->scenePos());
 //    MATRIX_DEBUG << "Found " << l.size() << " items at " << e->scenePos();
@@ -758,7 +758,7 @@ MatrixScene::setSelectionElementStatus(EventSelection *s, bool set)
 {
     if (!s) return;
 
-    MatrixViewSegment *vs = 0;
+    MatrixViewSegment *vs = nullptr;
 
     for (std::vector<MatrixViewSegment *>::iterator i = m_viewSegments.begin();
          i != m_viewSegments.end(); ++i) {

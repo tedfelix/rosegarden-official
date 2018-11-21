@@ -49,7 +49,7 @@ PlayList::PlayList(QWidget *parent) : QWidget(parent),
         m_moveUpButton(0),
         m_moveDownButton(0),
         m_deleteButton(0),
-        m_clearButton(0)
+        m_clearButton(nullptr)
 {
     QVBoxLayout *vLayout = new QVBoxLayout;
     vLayout->addWidget(m_listView);
@@ -98,7 +98,7 @@ PlayList::PlayList(QWidget *parent) : QWidget(parent),
 
     restore();
 
-    enableButtons(0);
+    enableButtons(nullptr);
 
 }
 
@@ -239,7 +239,7 @@ void PlayList::slotMoveDown()
 void PlayList::slotClear()
 {
     m_listView->clear();
-    enableButtons(0);
+    enableButtons(nullptr);
 }
 
 void PlayList::slotDeleteCurrent()
@@ -257,7 +257,7 @@ void PlayList::slotCurrentItemChanged(QTreeWidgetItem* currentItem, QTreeWidgetI
 
 void PlayList::enableButtons(QTreeWidgetItem* currentIndex)
 {
-    bool enable = (currentIndex != 0);
+    bool enable = (currentIndex != nullptr);
 
     m_playButton->setEnabled(enable);
     m_deleteButton->setEnabled(enable);

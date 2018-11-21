@@ -43,7 +43,7 @@ class AudioPropertiesPage : public TabbedConfigurationPage
 {
     Q_OBJECT
 public:
-    AudioPropertiesPage(RosegardenDocument *doc, QWidget *parent = 0);
+    AudioPropertiesPage(RosegardenDocument *doc, QWidget *parent = nullptr);
     void apply() override;
 
     static QString iconLabel() { return tr("Audio"); }

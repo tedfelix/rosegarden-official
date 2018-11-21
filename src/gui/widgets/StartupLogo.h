@@ -45,7 +45,7 @@ public slots:
 
 protected:
 
-    StartupLogo(QWidget *parent=0);
+    StartupLogo(QWidget *parent=nullptr);
     ~StartupLogo();
     
     void paintEvent(QPaintEvent*) override;

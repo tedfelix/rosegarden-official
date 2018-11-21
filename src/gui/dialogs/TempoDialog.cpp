@@ -129,7 +129,7 @@ TempoDialog::TempoDialog(QWidget *parent, RosegardenDocument *doc,
 
     frame->setLayout(layout);
 
-    m_timeEditor = 0;
+    m_timeEditor = nullptr;
 
     if (timeEditable) {
 

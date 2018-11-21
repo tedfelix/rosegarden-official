@@ -124,7 +124,7 @@ TempDirectory::createTempDirectoryIn(QString dir)
 
     QString suffix;
     int padlen = 6, attempts = 100;
-    unsigned int r = time(0) ^ getpid();
+    unsigned int r = time(nullptr) ^ getpid();
 
     for (int i = 0; i < padlen; ++i) {
         suffix += "X";

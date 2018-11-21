@@ -71,7 +71,7 @@ AudioPluginOSCGUI::AudioPluginOSCGUI(AudioPluginInstance *instance,
     if (!m_gui->waitForStarted()) {  //@@@ JAS Check here first for errors
         RG_DEBUG << "AudioPluginOSCGUI::AudioPluginOSCGUI: Couldn't start process " << filePath;
         delete m_gui;
-        m_gui = 0;
+        m_gui = nullptr;
         throw Exception("Failed to start GUI");
     }
 }

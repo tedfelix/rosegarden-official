@@ -44,7 +44,7 @@ public:
              bool selected,
              bool shaded,
 	     NotePixmapFactory *factory,
-	     QGraphicsItem *parent = 0);
+	     QGraphicsItem *parent = nullptr);
     virtual ~NoteItem();
 
     QRectF boundingRect() const override;

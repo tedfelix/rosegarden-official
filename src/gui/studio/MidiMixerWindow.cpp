@@ -69,7 +69,7 @@ namespace Rosegarden
 MidiMixerWindow::MidiMixerWindow(QWidget *parent,
                                  RosegardenDocument *document):
     MixerWindow(parent, document),
-    m_tabFrame(0)
+    m_tabFrame(nullptr)
 {
     // Initial setup
     //
@@ -103,7 +103,7 @@ void
 MidiMixerWindow::setupTabs()
 {
     DeviceListConstIterator it;
-    MidiDevice *dev = 0;
+    MidiDevice *dev = nullptr;
     InstrumentList instruments;
     InstrumentList::const_iterator iIt;
     int faderCount = 0, deviceCount = 1;

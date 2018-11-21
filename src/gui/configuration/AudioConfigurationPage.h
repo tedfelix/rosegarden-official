@@ -47,7 +47,7 @@ class AudioConfigurationPage : public TabbedConfigurationPage
     Q_OBJECT
 public:
     AudioConfigurationPage(RosegardenDocument *doc,
-                               QWidget *parent = 0);
+                               QWidget *parent = nullptr);
 
     void apply() override;
 

@@ -31,7 +31,7 @@ namespace Rosegarden
 
 NoteCharacter::NoteCharacter() :
     m_hotspot(0, 0),
-    m_rep(0)
+    m_rep(nullptr)
 {}
 
 NoteCharacter::NoteCharacter(QPixmap pixmap,

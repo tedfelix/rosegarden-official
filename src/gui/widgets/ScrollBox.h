@@ -44,9 +44,9 @@ class ScrollBox: public QFrame
 public:
     enum SizeMode { FixWidth, FixHeight };
 
-    ScrollBox(QWidget *parent = 0,
+    ScrollBox(QWidget *parent = nullptr,
               SizeMode mode = FixWidth,
-              const char *name = 0);
+              const char *name = nullptr);
 
 public slots:
     void setPageSize(const QSize&);

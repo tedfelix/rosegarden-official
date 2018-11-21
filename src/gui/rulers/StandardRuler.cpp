@@ -50,7 +50,7 @@ StandardRuler::StandardRuler(RosegardenDocument *doc,
         m_currentXOffset(0),
         m_doc(doc),
         m_rulerScale(rulerScale),
-        m_markerRuler(0)
+        m_markerRuler(nullptr)
 {
 //    QString localStyle("QWidget { background-color: #EEEEEE; color: #000000; }");
 

@@ -44,7 +44,7 @@ public:
     // parentDialog is only used to allow enabling the apply button of
     // the dialog.
     CommentsConfigurationPage(QWidget *parent, RosegardenDocument *doc,
-                              ConfigureDialogBase *parentDialog = 0);
+                              ConfigureDialogBase *parentDialog = nullptr);
     void apply();
 
 protected slots:

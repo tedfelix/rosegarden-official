@@ -74,7 +74,7 @@ protected:
 void
 ActionCommandRegistry::invokeCommand(QString actionName)
 {
-    EventSelection *selection = 0;
+    EventSelection *selection = nullptr;
 
     SelectionManager *sm = dynamic_cast<SelectionManager *>(m_client);
 

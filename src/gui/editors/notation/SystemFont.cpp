@@ -72,7 +72,7 @@ SystemFont::loadSystemFont(const SystemFontSpec &spec)
     static QHash<QString, QFont *> qFontMap;
 
     if (qFontMap.contains(name)) {
-        if (qFontMap[name] == 0) return 0;
+        if (qFontMap[name] == nullptr) return nullptr;
         QFont qfont(*qFontMap[name]);
         qfont.setPixelSize(size);
         return new SystemFontQt(qfont);
@@ -100,8 +100,8 @@ SystemFont::loadSystemFont(const SystemFontSpec &spec)
     }
 
     NOTATION_DEBUG << "SystemFont::loadSystemFont[Qt]: Wrong family returned, failing";
-    qFontMap[name] = 0;
-    return 0;
+    qFontMap[name] = nullptr;
+    return nullptr;
 }
 
 void

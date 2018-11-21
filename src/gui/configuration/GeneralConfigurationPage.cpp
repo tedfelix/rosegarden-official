@@ -58,14 +58,14 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenDocument *doc,
         m_client(0),
         m_countIn(0),
         m_nameStyle(0),
-        m_appendLabel(0)
+        m_appendLabel(nullptr)
 {
     QSettings settings;
     settings.beginGroup(GeneralOptionsConfigGroup);
 
     QFrame *frame;
     QGridLayout *layout;
-    QLabel *label = 0;
+    QLabel *label = nullptr;
     int row = 0;
 
     //

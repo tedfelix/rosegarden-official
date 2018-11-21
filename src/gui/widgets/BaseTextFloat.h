@@ -75,7 +75,7 @@ public :
      * is moved or resized.
      * \arg newParent New parent, or 0 (default) if parent is not changed.
      */
-    void reparent(QWidget *newParent = 0);
+    void reparent(QWidget *newParent = nullptr);
 
     /**
      * Set the text to display inside the TextFloat box.

@@ -37,7 +37,7 @@ class GuitarChordEditorDialog : public QDialog
     Q_OBJECT
     
 public:
-	GuitarChordEditorDialog(Guitar::Chord&, const Guitar::ChordMap& chordMap, QWidget *parent=0);
+	GuitarChordEditorDialog(Guitar::Chord&, const Guitar::ChordMap& chordMap, QWidget *parent=nullptr);
 
 protected slots:
     void slotStartFretChanged(int);

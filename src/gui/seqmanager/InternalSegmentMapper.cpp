@@ -174,7 +174,7 @@ void InternalSegmentMapper::fillBuffer()
                     timeT refTime = (*j)->getAbsoluteTime();
                     ControllerContextParams
                         params(refTime, getInstrument(), m_segment,
-                               m_triggeredEvents, m_controllerCache, 0);
+                               m_triggeredEvents, m_controllerCache, nullptr);
 
                     // Add triggered events into m_triggeredEvents.
                     // This invalidates `implied'.

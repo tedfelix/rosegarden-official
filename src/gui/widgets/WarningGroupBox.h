@@ -36,7 +36,7 @@ class WarningGroupBox : public QGroupBox
 {
     Q_OBJECT
 public:
-    WarningGroupBox(QWidget *parent=0);
+    WarningGroupBox(QWidget *parent=nullptr);
     ~WarningGroupBox();
 };
 

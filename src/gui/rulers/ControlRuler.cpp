@@ -82,7 +82,7 @@ const int ControlRuler::ItemHeightRange = 64;
         m_itemMoved(false),
         m_selecting(false),
         m_selectionRect(0),
-        m_menu(0)
+        m_menu(nullptr)
 {
 
     setFixedHeight(sizeHint().height());

@@ -200,7 +200,7 @@ ListEditView::paintEvent(QPaintEvent* e)
 
     timeT updateStart = 0, updateEnd = 0;
     int segmentsToUpdate = 0;
-    Segment *singleSegment = 0;
+    Segment *singleSegment = nullptr;
 
     for (unsigned int i = 0; i < m_segments.size(); ++i) {
 
@@ -212,14 +212,14 @@ ListEditView::paintEvent(QPaintEvent* e)
         if (refreshStatus.needsRefresh() && isCompositionModified()) {
 
             // if composition is also modified, relayout everything
-            refreshSegment(0);
+            refreshSegment(nullptr);
             segmentsToUpdate = 0;
             break;
 
         } else if (m_timeSigNotifier->hasTimeSigChanged()) {
 
             // not exactly optimal!
-            refreshSegment(0);
+            refreshSegment(nullptr);
             segmentsToUpdate = 0;
             m_timeSigNotifier->reset();
             break;

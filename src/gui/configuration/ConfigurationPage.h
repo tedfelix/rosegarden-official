@@ -39,10 +39,10 @@ class ConfigurationPage : public QWidget
     Q_OBJECT
 
 public:
-    ConfigurationPage(QWidget *parent = 0)
-        : QWidget(parent), m_doc(0), m_pageIndex(0) {}
+    ConfigurationPage(QWidget *parent = nullptr)
+        : QWidget(parent), m_doc(nullptr), m_pageIndex(0) {}
 
-    ConfigurationPage(RosegardenDocument *doc, QWidget *parent = 0)
+    ConfigurationPage(RosegardenDocument *doc, QWidget *parent = nullptr)
         : QWidget(parent), m_doc(doc), m_pageIndex(0) {}
 
     virtual ~ConfigurationPage() {};

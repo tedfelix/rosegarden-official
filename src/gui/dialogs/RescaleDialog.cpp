@@ -77,7 +77,7 @@ RescaleDialog::RescaleDialog(QWidget *parent,
 
         settings.endGroup();
     } else {
-        m_closeGap = 0;
+        m_closeGap = nullptr;
     }
 
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Reset | QDialogButtonBox::Ok | QDialogButtonBox::Cancel);

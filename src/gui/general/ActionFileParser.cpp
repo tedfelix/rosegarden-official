@@ -347,7 +347,7 @@ ActionFileParser::fatalError(const QXmlParseException &exception)
 QAction *
 ActionFileParser::findAction(QString actionName)
 {
-    if (!m_actionOwner) return 0;
+    if (!m_actionOwner) return nullptr;
     //!!! we could create an action, if it does not yet exist, that
     //!!! pops up a dialog or something explaining that the action
     //!!! needs to have been created before the rc file is read
@@ -358,7 +358,7 @@ QAction *
 ActionFileParser::findStandardAction(QString actionName)
 {
     CommandHistory *history = CommandHistory::getInstance();
-    if (!history) return 0;
+    if (!history) return nullptr;
     return history->findChild<QAction *>(actionName);
 }
 
@@ -376,7 +376,7 @@ ActionFileParser::findGroup(QString groupName)
 QMenu *
 ActionFileParser::findMenu(QString menuName)
 {
-    QMenu *menu = 0;
+    QMenu *menu = nullptr;
     QWidget *widget = dynamic_cast<QWidget *>(m_actionOwner);
     if (widget) {
         menu = widget->findChild<QMenu *>(menuName);
@@ -390,7 +390,7 @@ ActionFileParser::findMenu(QString menuName)
         if (ref) {
             menu = ref->getMenu();
         } else {
-            menu = new QMenu(0);
+            menu = new QMenu(nullptr);
             menu->setObjectName(menuName);
             new ActionFileMenuWrapper(menu, m_actionOwner);
         }
@@ -405,7 +405,7 @@ ActionFileParser::findToolbar(QString toolbarName, Position position)
     QWidget *widget = dynamic_cast<QWidget *>(m_actionOwner);
     if (!widget) {
         std::cerr << "ActionFileParser::findToolbar(\"" << toolbarName << "\"): Action owner is not a QWidget, cannot have toolbars" << std::endl;
-        return 0;
+        return nullptr;
     }
     QToolBar *toolbar = widget->findChild<QToolBar *>(toolbarName);
     if (!toolbar) {

@@ -103,15 +103,15 @@ NotationTool::invokeInParentView(QString actionName)
 QAction *
 NotationTool::findActionInParentView(QString actionName)
 {
-    if (!m_widget) return 0;
+    if (!m_widget) return nullptr;
     QWidget *w = m_widget;
-    ActionFileClient *c = 0;
+    ActionFileClient *c = nullptr;
     while (w && !(c = dynamic_cast<ActionFileClient *>(w))) {
         w = w->parentWidget();
     }
     if (!c) {
         RG_WARNING << "NotationTool::findActionInParentView: Can't find ActionFileClient in parent widget hierarchy";
-        return 0;
+        return nullptr;
     }
     QAction *a = c->findAction(actionName);
     return a;
@@ -124,7 +124,7 @@ NotationTool::createMenu()
 
     if (!createMenusAndToolbars(m_rcFileName)) {
         RG_WARNING << "NotationTool::createMenu(" << m_rcFileName << "): menu creation failed";
-        m_menu = 0;
+        m_menu = nullptr;
         return;
     }
 

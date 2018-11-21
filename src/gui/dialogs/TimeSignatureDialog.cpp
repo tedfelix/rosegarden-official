@@ -64,15 +64,15 @@ TimeSignatureDialog::TimeSignatureDialog(QWidget *parent,
         m_normalizeRestsButton(0),
         m_asGivenButton(0),
         m_startOfBarButton(0),
-        m_timeEditor(0)
+        m_timeEditor(nullptr)
 {
     setModal(true);
     setWindowTitle(tr("Time Signature"));
     setObjectName("MinorDialog");
 
-    static QFont *timeSigFont = 0;
+    static QFont *timeSigFont = nullptr;
 
-    if (timeSigFont == 0) {
+    if (timeSigFont == nullptr) {
         timeSigFont = new QFont("new century schoolbook", 8, QFont::Bold);
         timeSigFont->setPixelSize(20);
     }
@@ -93,7 +93,7 @@ TimeSignatureDialog::TimeSignatureDialog(QWidget *parent,
     QHBoxLayout *denomBoxLayout = new QHBoxLayout;
     groupBoxLayout->addWidget(denomBox);
 
-    QLabel *explanatoryLabel = 0;
+    QLabel *explanatoryLabel = nullptr;
     if (!explanatoryText.isEmpty()) {
         explanatoryLabel = new QLabel(explanatoryText, groupBox);
         groupBoxLayout->addWidget(explanatoryLabel);
@@ -137,12 +137,12 @@ TimeSignatureDialog::TimeSignatureDialog(QWidget *parent,
                         m_time,
                         true);
         vboxLayout->addWidget(m_timeEditor);
-        m_asGivenButton = 0;
-        m_startOfBarButton = 0;
+        m_asGivenButton = nullptr;
+        m_startOfBarButton = nullptr;
 
     } else {
 
-        m_timeEditor = 0;
+        m_timeEditor = nullptr;
 
         groupBox = new QGroupBox(tr("Scope"));
         groupBoxLayout = new QVBoxLayout;

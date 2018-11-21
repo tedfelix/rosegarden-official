@@ -128,7 +128,7 @@ ClefDialog::ClefDialog(QWidget *parent,
         m_changeOctaveButton = new QRadioButton(tr("Transpose into appropriate octave"));
         conversionFrameLayout->addWidget(m_changeOctaveButton);
 
-        m_transposeButton = 0;
+        m_transposeButton = nullptr;
 
         //!!! why aren't we offering this option? does it not work? too difficult to describe?
         //
@@ -143,9 +143,9 @@ ClefDialog::ClefDialog(QWidget *parent,
         m_noConversionButton->setChecked(settings.value("transpose", false).toBool());
         settings.endGroup();
     } else {
-        m_noConversionButton = 0;
-        m_changeOctaveButton = 0;
-        m_transposeButton = 0;
+        m_noConversionButton = nullptr;
+        m_changeOctaveButton = nullptr;
+        m_transposeButton = nullptr;
         conversionFrame->hide();
     }
 

@@ -64,7 +64,7 @@ KeySignatureDialog::KeySignatureDialog(QWidget *parent,
         m_ignoreComboChanges(false),
         m_explanatoryLabel(0),
         m_applyToAllButton(0),
-        m_noPercussionCheckBox(0)
+        m_noPercussionCheckBox(nullptr)
 {
     //setHelp("nv-signatures-key");
 
@@ -78,8 +78,8 @@ KeySignatureDialog::KeySignatureDialog(QWidget *parent,
     metagrid->addWidget(vbox, 0, 0);
 
 
-    QWidget *keyBox = 0;
-    QWidget *nameBox = 0;
+    QWidget *keyBox = nullptr;
+    QWidget *nameBox = nullptr;
 
     QGroupBox *keyFrame = new QGroupBox( tr("Key signature"), vbox );
     QVBoxLayout *keyFrameLayout = new QVBoxLayout;
@@ -105,7 +105,7 @@ KeySignatureDialog::KeySignatureDialog(QWidget *parent,
     QHBoxLayout *nameBoxLayout = new QHBoxLayout;
     keyFrameLayout->addWidget(nameBox);
 
-    QLabel *explanatoryLabel = 0;
+    QLabel *explanatoryLabel = nullptr;
     if (!explanatoryText.isEmpty()) {
         explanatoryLabel = new QLabel(explanatoryText, keyFrame);
         keyFrameLayout->addWidget(explanatoryLabel);
@@ -174,7 +174,7 @@ KeySignatureDialog::KeySignatureDialog(QWidget *parent,
         buttonFrameLayout->addWidget(m_noPercussionCheckBox);
         m_noPercussionCheckBox->setChecked(true);
     } else {
-        m_applyToAllButton = 0;
+        m_applyToAllButton = nullptr;
         buttonFrame->hide();
     }
 
@@ -195,9 +195,9 @@ KeySignatureDialog::KeySignatureDialog(QWidget *parent,
         conversionFrameLayout->addWidget(m_transposeButton);
         m_noConversionButton->setChecked(true);
     } else {
-        m_noConversionButton = 0;
-        m_convertButton = 0;
-        m_transposeButton = 0;
+        m_noConversionButton = nullptr;
+        m_convertButton = nullptr;
+        m_transposeButton = nullptr;
         conversionFrame->hide();
     }
 

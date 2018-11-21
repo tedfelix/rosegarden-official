@@ -319,7 +319,7 @@ QTreeWidgetItem
             return twItem;
         }
     }
-    return 0;               //twItem;
+    return nullptr;               //twItem;
 }
 
 
@@ -345,7 +345,7 @@ QTreeWidgetItem
             return twItem;
         }
     }
-    return 0;               //twItem;
+    return nullptr;               //twItem;
 }
 
 
@@ -525,7 +525,7 @@ MidiDevice
         }
     }
 
-    return 0;
+    return nullptr;
 }
 
 MidiDevice
@@ -543,7 +543,7 @@ MidiDevice
 
 
     if (!twItem)
-        return 0;
+        return nullptr;
 
     devId = twItem->data(0, m_UserRole_DeviceId).toInt();
     mdev = getDeviceById(devId);
@@ -564,7 +564,7 @@ MidiDevice
     DeviceId devId;
 
     if (!twItem)
-        return 0;
+        return nullptr;
     devId = twItem->data(0, m_UserRole_DeviceId).toInt();
     mdev = getDeviceById(devId);
 //        mdev = getDeviceByName( twItem->text( 0 ) );    // item->text(column)

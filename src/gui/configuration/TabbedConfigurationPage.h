@@ -40,9 +40,9 @@ class TabbedConfigurationPage : public ConfigurationPage
     Q_OBJECT
 
 public:
-    TabbedConfigurationPage(RosegardenDocument *doc, QWidget *parent = 0);
+    TabbedConfigurationPage(RosegardenDocument *doc, QWidget *parent = nullptr);
 
-    TabbedConfigurationPage(QWidget *parent = 0);
+    TabbedConfigurationPage(QWidget *parent = nullptr);
 
     static QString iconName() { return "misc"; }
     

@@ -70,7 +70,7 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
     m_pluginGUIManager(aGM),
     m_pluginContainer(pluginContainer),
     m_containerId(pluginContainer->getId()),
-    m_programLabel(0),
+    m_programLabel(nullptr),
     m_index(index),
     m_generating(true),
     m_guiShown(false)
@@ -464,7 +464,7 @@ AudioPluginDialog::slotPluginSelected(int i)
     delete m_pluginParamsBox;
     //RG_DEBUG << "slotPluginSelected(): deleted m_pluginParamsBox";
     m_pluginWidgets.clear(); // The widgets are deleted with the parameter box
-    m_programCombo = 0;
+    m_programCombo = nullptr;
 
     // count up how many controller inputs the plugin has
     int portCount = 0;
@@ -538,7 +538,7 @@ AudioPluginDialog::slotPluginSelected(int i)
                 // if it doesn't exist.  Modification occurs through the
                 // slotPluginPortChanged signal.
                 //
-                if (inst->getPort(count) == 0) {
+                if (inst->getPort(count) == nullptr) {
                     inst->addPort(count, (float)(*it)->getDefaultValue());
 //                    std::cerr << "Plugin port name " << (*it)->getName() << ", default: " << (*it)->getDefaultValue() << std::endl;
                 }

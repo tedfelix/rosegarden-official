@@ -221,7 +221,7 @@ ControlEditorDialog::slotUpdate(bool added)
         return ;
 
     ControlList::const_iterator it = md->beginControllers();
-    ControlParameterItem *item = 0;
+    ControlParameterItem *item = nullptr;
     int i = 0;
 
     // Attempt to track last controller selected so we can reselect it
@@ -386,7 +386,7 @@ ControlEditorDialog::slotClose()
 {
     RG_DEBUG << "ControlEditorDialog::slotClose";
 
-    m_doc = 0;
+    m_doc = nullptr;
 
     close();
 }

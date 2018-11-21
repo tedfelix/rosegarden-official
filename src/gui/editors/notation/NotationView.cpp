@@ -229,7 +229,7 @@ NotationView::NotationView(RosegardenDocument *doc,
     // Toggle the desired tool off and then trigger it on again, to
     // make sure its signal is called at least once (as would not
     // happen if the tool was on by default otherwise)
-    QAction *toolAction = 0;
+    QAction *toolAction = nullptr;
     if (!m_notationWidget->segmentsContainNotes()) {
         toolAction = findAction("draw");
     } else {
@@ -1589,14 +1589,14 @@ Segment *
 NotationView::getCurrentSegment()
 {
     if (m_notationWidget) return m_notationWidget->getCurrentSegment();
-    else return 0;
+    else return nullptr;
 }
 
 EventSelection *
 NotationView::getSelection() const
 {
     if (m_notationWidget) return m_notationWidget->getSelection();
-    else return 0;
+    else return nullptr;
 }
 
 void
@@ -2301,7 +2301,7 @@ NotationView::morphDurationMonobar()
 {
     NOTATION_DEBUG << "NotationView::morphDurationMonobar : entered. ";
 
-    NoteRestInserter *currentInserter = 0; 
+    NoteRestInserter *currentInserter = nullptr; 
     if (m_notationWidget) {
         currentInserter = dynamic_cast<NoteRestInserter *>
         (m_notationWidget->getCurrentTool());
@@ -2608,7 +2608,7 @@ NotationView::slotInsertNoteFromAction()
     Segment *segment = getCurrentSegment();
     if (!segment) return;
 
-    NoteRestInserter *currentInserter = 0;
+    NoteRestInserter *currentInserter = nullptr;
     if(m_notationWidget) {
         currentInserter = dynamic_cast<NoteRestInserter *>
             (m_notationWidget->getCurrentTool());
@@ -2663,7 +2663,7 @@ NotationView::slotInsertRestFromAction()
     Segment *segment = getCurrentSegment();
     if (!segment) return;
     
-    NoteRestInserter *currentInserter = 0;
+    NoteRestInserter *currentInserter = nullptr;
     if(m_notationWidget) {
         currentInserter = dynamic_cast<NoteRestInserter *>
             (m_notationWidget->getCurrentTool());
@@ -3499,7 +3499,7 @@ NotationView::slotAddTimeSignature()
     Composition *composition = segment->getComposition();
     timeT insertionTime = getInsertionTime();
 
-    TimeSignatureDialog *dialog = 0;
+    TimeSignatureDialog *dialog = nullptr;
     int timeSigNo = composition->getTimeSignatureNumberAt(insertionTime);
 
     if (timeSigNo >= 0) {
@@ -3559,7 +3559,7 @@ NotationView::slotCheckForParallels()
 
     Composition *composition = segment->getComposition();
 
-    CheckForParallelsDialog *dialog = 0;
+    CheckForParallelsDialog *dialog = nullptr;
 
     dialog = new CheckForParallelsDialog(this, m_document, m_notationWidget->getScene(), composition);
 
@@ -3730,7 +3730,7 @@ NotationView::slotGroupTuplet(bool simple)
     timeT unit = 0;
     int tupled = 2;
     int untupled = 3;
-    Segment *segment = 0;
+    Segment *segment = nullptr;
     bool hasTimingAlready = false;
     EventSelection *selection = getSelection();
 
@@ -4417,7 +4417,7 @@ Device *
 NotationView::getCurrentDevice()
 {
     if (m_notationWidget) return m_notationWidget->getCurrentDevice();
-    else return 0;
+    else return nullptr;
 }
 
 void
@@ -4477,7 +4477,7 @@ NotationView::slotToggleStepByStep()
     if (action->isChecked()) {
         emit stepByStepTargetRequested(this);
     } else {
-        emit stepByStepTargetRequested(0);
+        emit stepByStepTargetRequested(nullptr);
     }
 }
 
@@ -5164,7 +5164,7 @@ NotationView::slotInterpretActivate()
     // treat it like there was no selection at all by just zeroing it out and
     // feeding it along to be replaced with a select all.
     if (selection) {
-        if (selection->getTotalDuration() == 0) selection = 0;
+        if (selection->getTotalDuration() == 0) selection = nullptr;
     }
 
     // Selections aren't undoable anywhere else, so there's no point writing a

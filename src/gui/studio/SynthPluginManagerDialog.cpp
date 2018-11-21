@@ -390,7 +390,7 @@ void SynthPluginManagerDialog::slotPluginChanged ( int index ){
                     if ( ( ( *it )->getType() & PluginPort::Control ) &&
                          ( ( *it )->getType() & PluginPort::Input ) ){
 
-                        if ( pluginInstance->getPort ( count ) == 0 ){
+                        if ( pluginInstance->getPort ( count ) == nullptr ){
                             pluginInstance->addPort ( count, ( float ) ( *it )->getDefaultValue() );
                         }
                         else{

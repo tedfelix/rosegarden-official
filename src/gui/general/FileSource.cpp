@@ -380,7 +380,7 @@ FileSource::init()
         qint64 written = m_localFile->write(ba);
         m_localFile->close();
         delete m_localFile;
-        m_localFile = 0;
+        m_localFile = nullptr;
 
         if (written != ba.size()) {
 #ifdef DEBUG_FILE_SOURCE
@@ -494,12 +494,12 @@ FileSource::cleanup()
 {
     if (m_done) {
         delete m_localFile; // does not actually delete the file
-        m_localFile = 0;
+        m_localFile = nullptr;
     }
     m_done = true;
     if (m_reply) {
         QNetworkReply *r = m_reply;
-        m_reply = 0;
+        m_reply = nullptr;
 
         // Can only call abort() when there are no errors.
         if (r->error() == QNetworkReply::NoError) {
@@ -510,7 +510,7 @@ FileSource::cleanup()
     }
     if (m_localFile) {
         delete m_localFile; // does not actually delete the file
-        m_localFile = 0;
+        m_localFile = nullptr;
     }
 }
 
@@ -699,7 +699,7 @@ FileSource::metaDataChanged()
                 incCount(newUrl.toString());
 #endif
                 m_url = newUrl;
-                m_localFile = 0;
+                m_localFile = nullptr;
                 m_lastStatus = 0;
                 m_done = false;
                 m_refCounted = false;

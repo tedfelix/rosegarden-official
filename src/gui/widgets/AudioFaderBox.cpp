@@ -67,7 +67,7 @@ AudioFaderBox::AudioFaderBox(QWidget *parent,
     // Plugin box
     //
     PluginPushButton *plugin;
-    QWidget *pluginVbox = 0;
+    QWidget *pluginVbox = nullptr;
 
     pluginVbox = new QWidget(this);
     QVBoxLayout *pluginVboxLayout = new QVBoxLayout;
@@ -162,8 +162,8 @@ AudioFaderBox::AudioFaderBox(QWidget *parent,
     } else {
         m_pan->setKnobColour(GUIPalette::getColour(GUIPalette::RotaryPastelOrange));
 
-        m_audioInput = 0;
-        m_audioOutput = 0;
+        m_audioInput = nullptr;
+        m_audioOutput = nullptr;
     }
 
     m_pan->setToolTip(tr("Set the audio pan position in the stereo field"));

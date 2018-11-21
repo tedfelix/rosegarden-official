@@ -260,7 +260,7 @@ MarkerRuler::getMarkerAtClickPosition()
         }
     }
 
-    return 0L;
+    return nullptr;
 }
     
 void
@@ -396,8 +396,8 @@ MarkerRuler::mousePressEvent(QMouseEvent *e)
         if (m_menu) {
 //             actionCollection()->action("delete_marker")->setEnabled(clickedMarker != 0);
 //             actionCollection()->action("edit_marker")->setEnabled(clickedMarker != 0);
-            findAction("delete_marker")->setEnabled(clickedMarker != 0);
-            findAction("edit_marker")->setEnabled(clickedMarker != 0);
+            findAction("delete_marker")->setEnabled(clickedMarker != nullptr);
+            findAction("edit_marker")->setEnabled(clickedMarker != nullptr);
             
             m_menu->exec(QCursor::pos());
         }

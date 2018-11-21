@@ -45,7 +45,7 @@ class NotationConfigurationPage : public TabbedConfigurationPage
     Q_OBJECT
 
 public:
-    NotationConfigurationPage(QWidget *parent = 0);
+    NotationConfigurationPage(QWidget *parent = nullptr);
 
     void apply() override;
 

@@ -81,7 +81,7 @@ void
 LoopRuler::setSnapGrid(const SnapGrid *grid)
 {
     delete m_loopGrid;
-    if (grid == 0) {
+    if (grid == nullptr) {
         m_grid = &m_defaultGrid;
         m_loopGrid = new SnapGrid(m_defaultGrid);
     } else {

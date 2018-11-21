@@ -54,34 +54,34 @@ public:
 
     /** See documentation for QFileDialog::getOpenFilename()
      */
-    static QString getOpenFileName(QWidget *parent = 0,
+    static QString getOpenFileName(QWidget *parent = nullptr,
                                    const QString &caption = QString(),
                                    const QString &dir = QString(),
                                    const QString &filter = QString(),
-                                   QString *selectedFilter = 0,
-                                   QFileDialog::Options options = 0);
+                                   QString *selectedFilter = nullptr,
+                                   QFileDialog::Options options = nullptr);
 
     /** See documentation for QFileDialog::getOpenFileNames()
      */
-    static QStringList getOpenFileNames(QWidget *parent = 0,
+    static QStringList getOpenFileNames(QWidget *parent = nullptr,
                                         const QString &caption = QString(),
                                         const QString &dir = QString(),
                                         const QString &filter = QString(),
-                                        QString *selectedFilter = 0,
-                                        QFileDialog::Options options = 0);
+                                        QString *selectedFilter = nullptr,
+                                        QFileDialog::Options options = nullptr);
 
     /**
      * Based on QFileDialog::getSaveFileName().
      * This version allows specification of a default filename (defaultName)
      * to save the user some typing.
      */
-    static QString getSaveFileName(QWidget *parent = 0,
+    static QString getSaveFileName(QWidget *parent = nullptr,
                                    const QString &caption = QString(),
                                    const QString &dir = QString(),
                                    const QString &defaultName = QString(),
                                    const QString &filter = QString(),
-                                   QString *selectedFilter = 0,
-                                   QFileDialog::Options options = 0);
+                                   QString *selectedFilter = nullptr,
+                                   QFileDialog::Options options = nullptr);
 
     /**
      * Subclass of QFileDialog::getExistingDirectory() specifically to get an
@@ -89,12 +89,12 @@ public:
      * hard coded in the implementation, and is less flexible than the full
      * QFileDialog version.
      */
-    static QString getExistingDirectory(QWidget *parent = 0,
+    static QString getExistingDirectory(QWidget *parent = nullptr,
                                         const QString &caption = QString(),
                                         const QString &dir = QString());
 
 protected:
-    explicit FileDialog(QWidget *parent = 0,
+    explicit FileDialog(QWidget *parent = nullptr,
                         const QString &caption = QString(),
                         const QString &dir = QString(),
                         const QString &filter = QString(), Options options = Options());
