@@ -38,10 +38,10 @@
 #include <map>
 #include <vector>
 
+class QLockFile;
 class QWidget;
 class QTextStream;
 class NoteOnRecSet;
-
 
 namespace Rosegarden
 {
@@ -462,7 +462,7 @@ public:
 
     bool deleteOrphanedAudioFiles(bool documentWillNotBeSaved);
 
-    void disableRelease()  { m_release = false; }
+    void stealLockFile(RosegardenDocument *other);
 
 public slots:
     /**
@@ -664,10 +664,12 @@ private:
     // File locking functions to prevent multiple users from editing
     // the same file.
 
-    QString lockFilename(const QString &absFilePath) const;
     /// Returns true if the lock was successful.
-    bool lock() const;
-    void release(const QString &absFilePath) const;
+    bool lock();
+    void release();
+
+    static QLockFile *createLock(const QString &absFilePath);
+    static QString lockFilename(const QString &absFilePath);
 
     //--------------- Data members ---------------------------------
 
@@ -700,6 +702,11 @@ private:
      * absolute file path of the current document
      */
     QString m_absFilePath;
+
+    /**
+     * absolute file path of the current document
+     */
+    QLockFile *m_lockFile;
 
     /**
      * the composition this document is wrapping

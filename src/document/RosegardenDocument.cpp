@@ -103,7 +103,7 @@
 #include <QTextStream>
 #include <QWidget>
 #include <QHostInfo>
-
+#include <QLockFile>
 
 namespace Rosegarden
 {
@@ -119,6 +119,7 @@ RosegardenDocument::RosegardenDocument(
     QObject(parent),
     m_modified(false),
     m_autoSaved(false),
+    m_lockFile(nullptr),
     m_audioPeaksThread(&m_audioFileManager),
     m_seqManager(nullptr),
     m_pluginManager(pluginManager),
@@ -127,8 +128,7 @@ RosegardenDocument::RosegardenDocument(
     m_autoSavePeriod(0),
     m_beingDestroyed(false),
     m_clearCommandHistory(clearCommandHistory),
-    m_soundEnabled(enableSound),
-    m_release(true)
+    m_soundEnabled(enableSound)
 {
     checkSequencerTimer();
 
@@ -160,8 +160,7 @@ RosegardenDocument::~RosegardenDocument()
 
     if (m_clearCommandHistory) CommandHistory::getInstance()->clear(); // before Composition is deleted
 
-    if (m_release)
-        release(m_absFilePath);
+    release();
 }
 
 unsigned int
@@ -622,7 +621,7 @@ bool RosegardenDocument::openDocument(const QString &filename,
 
     if (cancelled) {
         // Don't leave a lock file around.
-        release(m_absFilePath);
+        release();
 
         newDocument();
 
@@ -653,6 +652,14 @@ bool RosegardenDocument::openDocument(const QString &filename,
     RG_DEBUG << "openDocument(): Successfully opened document \"" << filename << "\"";
 
     return true;
+}
+
+void
+RosegardenDocument::stealLockFile(RosegardenDocument *other)
+{
+    Q_ASSERT(!m_lockFile);
+    m_lockFile = other->m_lockFile;
+    other->m_lockFile = nullptr;
 }
 
 void
@@ -1602,8 +1609,9 @@ bool RosegardenDocument::saveAs(const QString &newName, QString &errMsg)
     m_title = newNameInfo.fileName();
     m_absFilePath = newNameInfo.absoluteFilePath();
 
-    // Lock the new name.  If the lock fails...
-    if (!lock()) {
+    // Lock and lock the new name.  If the lock fails...
+    QLockFile *newLock = createLock(m_absFilePath);
+    if (!newLock) {
         // Put back the old title/name.
         m_title = oldTitle;
         m_absFilePath = oldAbsFilePath;
@@ -1615,7 +1623,7 @@ bool RosegardenDocument::saveAs(const QString &newName, QString &errMsg)
     // Save.  If the save fails...
     if (!saveDocument(newName, errMsg)) {
         // Unlock the new name.
-        release(m_absFilePath);
+        delete newLock;
 
         // Put back the old title/name.
         m_title = oldTitle;
@@ -1626,7 +1634,8 @@ bool RosegardenDocument::saveAs(const QString &newName, QString &errMsg)
     }
 
     // Release the old lock
-    release(oldAbsFilePath);
+    release();
+    m_lockFile = newLock;
 
     // Success.
     return true;
@@ -2990,71 +2999,78 @@ RosegardenDocument::checkAudioPath(Track *track)
     }
 }
 
-QString RosegardenDocument::lockFilename(const QString &absFilePath) const
+QString
+RosegardenDocument::lockFilename(const QString &absFilePath) // static
 {
     QFileInfo fileInfo(absFilePath);
     return fileInfo.absolutePath() + "/.~lock." + fileInfo.fileName() + "#";
 }
 
-bool RosegardenDocument::lock() const
+bool
+RosegardenDocument::lock()
 {
     // Can't lock something that isn't a file on the filesystem.
     if (!isRegularDotRGFile())
         return true;
 
-    QFile lockFile(lockFilename(m_absFilePath));
-
-    if (lockFile.exists()) {
-        // Read in the existing lock file.
-        QString message;
-        lockFile.open(QIODevice::ReadOnly | QIODevice::Text);
-        while (!lockFile.atEnd()) {
-            QByteArray line = lockFile.readLine(128);
-            message += line;
-        }
-        message = QString::fromLocal8Bit(message.toStdString().c_str());
-
-        // Present a dialog to the user with the info.
-        StartupLogo::hideIfStillThere();
-        QMessageBox::warning(
-                RosegardenMainWindow::self(),
-                tr("Rosegarden"),
-                tr("Could not lock file.\n\n"
-                   "Another user or instance of Rosegarden may already be\n"
-                   "editing this file.  If you are sure no one else is\n"
-                   "editing this file, delete the lock file and try again.\n\n") +
-                   message);
-
-        return false;
-    }
-
-    // Write out the user/host/date/time.
-
-    // If we can't create the lock file, the chances are good that we
-    // do not have permission.  Don't worry about it.  Pretend the lock
-    // was successful.  After all, we won't be able to save.
-    if (!lockFile.open(QIODevice::WriteOnly | QIODevice::Text))
-        return true;
-
-    QTextStream out(&lockFile);
-    out << tr("Lock Filename: ") << lockFilename(m_absFilePath) << '\n';
-    // Note: Some systems might use "USERNAME".  There's also "LOGNAME".
-    out << tr("User: ") << qgetenv("USER") << '\n';
-    out << tr("Host: ") << QHostInfo::localHostName() << '\n';
-    out << tr("Date/Time: ") << QDateTime::currentDateTime().toString() << '\n';
-
-    return true;
+    delete m_lockFile;
+    m_lockFile = createLock(m_absFilePath);
+    return m_lockFile != nullptr;
 }
 
-void RosegardenDocument::release(const QString &absFilePath) const
+QLockFile *
+RosegardenDocument::createLock(const QString &absFilePath) // static
 {
-    if (absFilePath == "")
-        return;
+    QLockFile *lockFile = new QLockFile(lockFilename(absFilePath));
+    lockFile->setStaleLockTime(0);
 
-    QFile lockFile(lockFilename(absFilePath));
+    if (!lockFile->tryLock()) {
+        if (lockFile->error() == QLockFile::LockFailedError) {
+            // Read in the existing lock file.
+            qint64 pid;
+            QString hostname;
+            QString appname;
+            if (!lockFile->getLockInfo(&pid, &hostname, &appname)) {
+                qWarning() << "Failed to read lock file information! Permission problem? Deleted meanwhile?";
+            }
+            QString message;
+            QTextStream out(&message);
+            out << tr("Lock Filename: ") << lockFilename(absFilePath) << '\n';
+            out << tr("Process ID: ") << pid << '\n';
+            out << tr("Host: ") << hostname << '\n';
+            out << tr("Application: ") << appname << '\n';
+            out.flush();
 
-    // Just remove the lock file, ignoring errors.
-    lockFile.remove();
+            // Present a dialog to the user with the info.
+            StartupLogo::hideIfStillThere();
+            QMessageBox::warning(
+                    RosegardenMainWindow::self(),
+                    tr("Rosegarden"),
+                    tr("Could not lock file.\n\n"
+                        "Another user or instance of Rosegarden may already be\n"
+                        "editing this file.  If you are sure no one else is\n"
+                        "editing this file, delete the lock file and try again.\n\n") +
+                    message);
+            // Maybe we can add a button which would call lockFile->removeStaleLockFile()?
+            // On the other hand with QLockFile it's much more rare to need to do this
+            // since it detects when the owning process went away and then we don't get here.
+
+            delete lockFile;
+            return nullptr;
+        }
+        // This is why we don't handle the other error codes from tryLock:
+        // If we do not have permission, don't worry about it.  Pretend the lock
+        // was successful.  After all, we won't be able to save.
+    }
+
+    return lockFile;
+}
+
+void RosegardenDocument::release()
+{
+    // Remove the lock file
+    delete m_lockFile;
+    m_lockFile = nullptr;
 }
 
 }

@@ -1298,11 +1298,6 @@ RosegardenMainWindow::openFile(QString filePath, ImportType type)
     if (m_doc) {
         QFileInfo newFileInfo(filePath);
         revert = (newFileInfo.absoluteFilePath() == m_doc->getAbsFilePath());
-
-        if (revert) {
-            // Prevent release of file lock on destruction.
-            m_doc->disableRelease();
-        }
     }
 
     RosegardenDocument *doc = createDocument(filePath, type, !revert);
@@ -1310,6 +1305,9 @@ RosegardenMainWindow::openFile(QString filePath, ImportType type)
     if (!doc)
         return;
 
+    if (revert) {
+        doc->stealLockFile(m_doc);
+    }
     setDocument(doc);
 
     // fix #782, "SPB combo not updating after document swap"
