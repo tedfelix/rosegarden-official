@@ -43,8 +43,8 @@ namespace Rosegarden
 
 MatrixMover::MatrixMover(MatrixWidget *parent) :
     MatrixTool("matrixmover.rc", "MatrixMover", parent),
-    m_currentElement(0),
-    m_currentViewSegment(0),
+    m_currentElement(nullptr),
+    m_currentViewSegment(nullptr),
     m_lastPlayedPitch(-1)
 {
     createAction("select", SLOT(slotSelectSelected()));
@@ -385,7 +385,7 @@ MatrixMover::handleMouseRelease(const MatrixMouseEvent *e)
                                                 normalizeStart,
                                                 normalizeEnd));
     
-    m_scene->setSelection(0, false);
+    m_scene->setSelection(nullptr, false);
     CommandHistory::getInstance()->addCommand(macro);
     m_scene->setSelection(newSelection, false);
 

@@ -31,7 +31,7 @@ namespace Rosegarden
 {
 
 ClefKeyContext::ClefKeyContext() :
-    m_scene(0),
+    m_scene(nullptr),
     m_changed(true)
 {
 }

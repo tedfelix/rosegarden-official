@@ -49,9 +49,9 @@ static int g_runtimeSegmentId = 0;
 
 Segment::Segment(SegmentType segmentType, timeT startTime) :
     EventContainer(),
-    m_composition(0),
+    m_composition(nullptr),
     m_startTime(startTime),
-    m_endMarkerTime(0),
+    m_endMarkerTime(nullptr),
     m_endTime(startTime),
     m_trackId(0),
     m_type(segmentType),
@@ -71,17 +71,17 @@ Segment::Segment(SegmentType segmentType, timeT startTime) :
     m_highestPlayable(127),
     m_lowestPlayable(0),
     m_percussionPitch(-1),
-    m_clefKeyList(0),
+    m_clefKeyList(nullptr),
     m_notifyResizeLocked(false),
     m_memoStart(0),
-    m_memoEndMarkerTime(0),
+    m_memoEndMarkerTime(nullptr),
     m_runtimeSegmentId(g_runtimeSegmentId++),
     m_snapGridSize(-1),
     m_viewFeatures(0),
     m_autoFade(false),
     m_fadeInTime(Rosegarden::RealTime::zeroTime),
     m_fadeOutTime(Rosegarden::RealTime::zeroTime),
-    m_segmentLinker(0),
+    m_segmentLinker(nullptr),
     m_isTmp(0),
     m_participation(normal),
     m_verseCount(-1),   // -1 => computation needed
@@ -92,7 +92,7 @@ Segment::Segment(SegmentType segmentType, timeT startTime) :
 Segment::Segment(const Segment &segment):
     QObject(),
     EventContainer(),
-    m_composition(0), // Composition should decide what's in it and what's not
+    m_composition(nullptr), // Composition should decide what's in it and what's not
     m_startTime(segment.getStartTime()),
     m_endMarkerTime(segment.m_endMarkerTime ?
                     new timeT(*segment.m_endMarkerTime) : nullptr),
@@ -117,17 +117,17 @@ Segment::Segment(const Segment &segment):
     m_highestPlayable(127),
     m_lowestPlayable(0),
     m_percussionPitch(-1),
-    m_clefKeyList(0),
+    m_clefKeyList(nullptr),
     m_notifyResizeLocked(false),  // To copy a segment while notifications
     m_memoStart(0),               // are locked doesn't sound as a good
-    m_memoEndMarkerTime(0),       // idea.
+    m_memoEndMarkerTime(nullptr),       // idea.
     m_runtimeSegmentId(g_runtimeSegmentId++),
     m_snapGridSize(-1),
     m_viewFeatures(0),
     m_autoFade(segment.isAutoFading()),
     m_fadeInTime(segment.getFadeInTime()),
     m_fadeOutTime(segment.getFadeOutTime()),
-    m_segmentLinker(0), //yes, this is intentional. clone() handles this
+    m_segmentLinker(nullptr), //yes, this is intentional. clone() handles this
     m_isTmp(segment.isTmp()),
     m_participation(segment.m_participation),
     m_verseCount(-1),   // -1 => computation needed

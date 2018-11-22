@@ -731,7 +731,7 @@ RG_DEBUG << "cp " << oldName << " " << newName;
         // Something broken in the subclass of QFileDialog?  Bad code?  I'm just
         // leaving it unresolved for now. One file at a time at least satisfies
         // the bare minimum requirements
-        QStringList files =  FileDialog::getOpenFileNames(this, "Open File", directory, tr("All files") + " (*)", 0, nullptr);
+        QStringList files =  FileDialog::getOpenFileNames(this, "Open File", directory, tr("All files") + " (*)", nullptr, nullptr);
         extraFiles << files;
        
         //!!!  It would be nice to show the list of files already chosen and

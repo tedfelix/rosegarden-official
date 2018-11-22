@@ -55,9 +55,9 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenDocument *doc,
         QWidget *parent)
         : TabbedConfigurationPage(parent),
         m_doc(doc),
-        m_client(0),
-        m_countIn(0),
-        m_nameStyle(0),
+        m_client(nullptr),
+        m_countIn(nullptr),
+        m_nameStyle(nullptr),
         m_appendLabel(nullptr)
 {
     QSettings settings;

@@ -61,11 +61,11 @@ using namespace BaseProperties;
 
 NotationSelector::NotationSelector(NotationWidget *widget, bool ties) :
     NotationTool("notationselector.rc", "NotationSelector", widget),
-    m_selectionRect(0),
+    m_selectionRect(nullptr),
     m_updateRect(false),
-    m_selectedStaff(0),
-    m_clickedElement(0),
-    m_selectionToMerge(0),
+    m_selectedStaff(nullptr),
+    m_clickedElement(nullptr),
+    m_selectionToMerge(nullptr),
     m_justSelectedBar(false),
     m_wholeStaffSelectionComplete(false),
     m_ties(ties)
@@ -419,7 +419,7 @@ void NotationSelector::drag(int x, int y, bool final)
     (void)m_clickedElement->event()->get<Int>
             (NotationProperties::HEIGHT_ON_STAFF, clickedHeight);
 
-    Event *clefEvt = nullptr, *keyEvt = 0;
+    Event *clefEvt = nullptr, *keyEvt = nullptr;
     Clef clef;
     ::Rosegarden::Key key;
 

@@ -38,7 +38,7 @@ LilyPondSegmentsContext::LilyPondSegmentsContext(Composition *composition) :
     m_lastSegmentEndTime(0),
     m_automaticVoltaUsable(true),
     m_repeatWithVolta(false),
-    m_currentVoltaChain(0),
+    m_currentVoltaChain(nullptr),
     m_firstVolta(false),
     m_lastVolta(false),
     m_wasRepeatingWithoutVolta(false),

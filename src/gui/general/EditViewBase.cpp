@@ -44,7 +44,7 @@ EditViewBase::EditViewBase(RosegardenDocument *doc,
                            std::vector<Segment *> segments,
                            QWidget * /* parent */) :
     // QMainWindow(parent),   // See following comments
-    QMainWindow(0),
+    QMainWindow(nullptr),
     m_doc(doc),
     m_segments(segments),
     m_configDialogPageIndex(0),

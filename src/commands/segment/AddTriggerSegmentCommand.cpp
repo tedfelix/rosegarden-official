@@ -37,7 +37,7 @@ AddTriggerSegmentCommand::AddTriggerSegmentCommand(RosegardenDocument *doc,
         m_basePitch(basePitch),
         m_baseVelocity(baseVelocity),
         m_id(0),
-        m_segment(0),
+        m_segment(nullptr),
         m_detached(false)
 {
     // nothing else

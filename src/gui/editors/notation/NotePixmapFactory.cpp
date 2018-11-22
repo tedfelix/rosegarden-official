@@ -140,7 +140,7 @@ NotePixmapFactory::NotePixmapFactory(const NotePixmapFactory &npf) :
     m_trackHeaderFontMetrics(m_trackHeaderFont),
     m_trackHeaderBoldFont(defaultSansSerifFontFamily, 9, QFont::Bold),
     m_trackHeaderBoldFontMetrics(m_trackHeaderBoldFont),
-    m_generatedPixmap(0),
+    m_generatedPixmap(nullptr),
     m_generatedWidth( -1),
     m_generatedHeight( -1),
     m_inPrinterMethod(false),
@@ -186,7 +186,7 @@ NotePixmapFactory::init(QString fontName, int size)
         m_style = NoteStyleFactory::getStyle(NoteStyleFactory::DefaultStyle);
     } catch (NoteStyleFactory::StyleUnavailable u) {
         StartupLogo::hideIfStillThere();
-        QMessageBox::critical(0, tr("Rosegarden"), tr( u.getMessage().c_str() )  );
+        QMessageBox::critical(nullptr, tr("Rosegarden"), tr( u.getMessage().c_str() )  );
         throw;
     }
 
@@ -355,7 +355,7 @@ NotePixmapFactory::makeNotePixmapItem(const NotePixmapParameters &params)
     Profiler profiler("NotePixmapFactory::makeNotePixmapItem");
 
     calculateNoteDimensions(params);
-    drawNoteAux(params, 0, 0, 0);
+    drawNoteAux(params, nullptr, 0, 0);
 
     QPoint hotspot(m_nd.left, m_nd.above + m_nd.noteBodyHeight / 2);
 
@@ -1786,7 +1786,7 @@ NotePixmapFactory::makeRest(const NotePixmapParameters &params)
     }
 
     QPoint hotspot(m_font->getHotspot(charName));
-    drawRestAux(params, hotspot, 0, 0, 0);
+    drawRestAux(params, hotspot, nullptr, 0, 0);
 
     QGraphicsPixmapItem *canvasMap = makeItem(hotspot);
     return canvasMap;
@@ -2579,7 +2579,7 @@ QGraphicsPixmapItem *
 NotePixmapFactory::makeHairpin(int length, bool isCrescendo)
 {
     Profiler profiler("NotePixmapFactory::makeHairpin");
-    drawHairpinAux(length, isCrescendo, 0, 0, 0);
+    drawHairpinAux(length, isCrescendo, nullptr, 0, 0);
     return makeItem(QPoint(0, m_generatedHeight / 2));
 }
 
@@ -2655,7 +2655,7 @@ NotePixmapFactory::makeSlur(int length, int dy, bool above, bool phrasing)
     QPoint hotspot;
     if (length < getNoteBodyWidth()*2)
         length = getNoteBodyWidth() * 2;
-    drawSlurAux(length, dy, above, smooth, false, phrasing, hotspot, 0, 0, 0);
+    drawSlurAux(length, dy, above, smooth, false, phrasing, hotspot, nullptr, 0, 0);
 
     m_p->end();
 
@@ -2881,7 +2881,7 @@ NotePixmapFactory::makeOttava(int length, int octavesUp)
 {
     Profiler profiler("NotePixmapFactory::makeOttava");
     m_inPrinterMethod = false;
-    drawOttavaAux(length, octavesUp, 0, 0, 0);
+    drawOttavaAux(length, octavesUp, nullptr, 0, 0);
     return makeItem(QPoint(0, m_generatedHeight - 1));
 }
 
@@ -2974,7 +2974,7 @@ NotePixmapFactory::drawOttavaAux(int length, int octavesUp,
 QGraphicsPixmapItem *
 NotePixmapFactory::makeTrillLine(int length)
 {
-    drawTrillLineAux(length, 0, 0, 0);
+    drawTrillLineAux(length, nullptr, 0, 0);
     return makeItem(QPoint(0, m_generatedHeight / 2));
 }
 
@@ -3382,7 +3382,7 @@ NotePixmapFactory::makeText(const Text &text)
         return makeAnnotation(text, (type == Text::LilyPondDirective));
     }
 
-    drawTextAux(text, 0, 0, 0);
+    drawTextAux(text, nullptr, 0, 0);
     return makeItem(QPoint(2, 2));
 }
 

@@ -22,7 +22,7 @@ class TestNotationViewSelection : public QObject
 
 public:
     TestNotationViewSelection()
-        : m_doc(0, 0, true /*skip autoload*/, true, false /*no sound*/),
+        : m_doc(nullptr, nullptr, true /*skip autoload*/, true, false /*no sound*/),
           m_view(nullptr) {}
 
 private Q_SLOTS:
@@ -114,7 +114,7 @@ QString TestNotationViewSelection::selectedNotes() const
 void TestNotationViewSelection::init()
 {
     // Before each test, unselect all and go back to position 0
-    m_view->setSelection(0, false);
+    m_view->setSelection(nullptr, false);
     m_doc.slotSetPointerPosition(0);
 }
 

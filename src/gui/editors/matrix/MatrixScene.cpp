@@ -54,13 +54,13 @@ namespace Rosegarden
 using namespace BaseProperties;
 
 MatrixScene::MatrixScene() :
-    m_widget(0),
-    m_document(0),
-    m_scale(0),
-    m_referenceScale(0),
-    m_snapGrid(0),
+    m_widget(nullptr),
+    m_document(nullptr),
+    m_scale(nullptr),
+    m_referenceScale(nullptr),
+    m_snapGrid(nullptr),
     m_resolution(8),
-    m_selection(0),
+    m_selection(nullptr),
     m_currentSegmentIndex(0)
 {
     connect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),

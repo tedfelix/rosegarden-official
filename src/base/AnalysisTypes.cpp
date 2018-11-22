@@ -83,7 +83,7 @@ AnalysisHelper::labelChords(CompositionTimeSliceAdapter &c, Segment &s,
 
     Key key;
     if (c.begin() != c.end()) key = getKeyForEvent(*c.begin(), s);
-    else key = getKeyForEvent(0, s);
+    else key = getKeyForEvent(nullptr, s);
 
     Profiler profiler("AnalysisHelper::labelChords", true);
 

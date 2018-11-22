@@ -48,7 +48,7 @@ namespace Rosegarden
 
 PresetHandlerDialog::PresetHandlerDialog(QWidget *parent,
                                          bool fromNotation)
-        : QDialog(parent, 0),
+        : QDialog(parent, nullptr),
         m_fromNotation(fromNotation)
 {
     m_presets = new PresetGroup();

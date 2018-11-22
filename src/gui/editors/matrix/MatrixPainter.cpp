@@ -44,7 +44,7 @@ namespace Rosegarden
 MatrixPainter::MatrixPainter(MatrixWidget *widget) : 
     MatrixTool("matrixpainter.rc", "MatrixPainter", widget),
     m_clickTime(0),
-    m_currentElement(0),
+    m_currentElement(nullptr),
     m_currentViewSegment(nullptr)
 {
     createAction("select", SLOT(slotSelectSelected()));

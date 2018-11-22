@@ -57,19 +57,19 @@ namespace Rosegarden
 static int instanceCount = 0;
 
 NotationScene::NotationScene() :
-    m_widget(0),
-    m_document(0),
-    m_properties(0),
-    m_notePixmapFactory(0),
-    m_notePixmapFactorySmall(0),
+    m_widget(nullptr),
+    m_document(nullptr),
+    m_properties(nullptr),
+    m_notePixmapFactory(nullptr),
+    m_notePixmapFactorySmall(nullptr),
     m_clefKeyContext(new ClefKeyContext),
-    m_selection(0),
-    m_hlayout(0),
-    m_vlayout(0),
-    m_title(0),
-    m_subtitle(0),
-    m_composer(0),
-    m_copyright(0),
+    m_selection(nullptr),
+    m_hlayout(nullptr),
+    m_vlayout(nullptr),
+    m_title(nullptr),
+    m_subtitle(nullptr),
+    m_composer(nullptr),
+    m_copyright(nullptr),
     m_pageMode(StaffLayout::LinearMode),
     m_printSize(5),
     m_leftGutter(0),
@@ -333,7 +333,7 @@ NotationScene::setStaffs(RosegardenDocument *document,
         NotationStaff *staff = new NotationStaff
             (this,
              m_segments[i],
-             0, // no snap grid for notation
+             nullptr, // no snap grid for notation
              i,
              m_notePixmapFactory,
              m_notePixmapFactorySmall);
@@ -737,7 +737,7 @@ NotationScene::setupMouseEvent(QPointF scenePos, Qt::MouseButtons buttons,
 
     if (nme.staff) {
 
-        Event *clefEvent = nullptr, *keyEvent = 0;
+        Event *clefEvent = nullptr, *keyEvent = nullptr;
         NotationElementList::iterator i =
             nme.staff->getElementUnderSceneCoords(sx, sy, clefEvent, keyEvent);
 
@@ -1164,7 +1164,7 @@ NotationScene::checkUpdate()
         else {
             // Test count to fix bug #2973777
             if (count == 1) layout(single, start, end);
-            else  layout(0, start, end);
+            else  layout(nullptr, start, end);
         }
     }
 }
@@ -1828,7 +1828,7 @@ NotationScene::setSelection(EventSelection *s,
     EventSelection *oldSelection = m_selection;
     m_selection = s;
 
-    NotationStaff *oldStaff = nullptr, *newStaff = 0;
+    NotationStaff *oldStaff = nullptr, *newStaff = nullptr;
 
     if (oldSelection) {
         oldStaff = setSelectionElementStatus(oldSelection, false);

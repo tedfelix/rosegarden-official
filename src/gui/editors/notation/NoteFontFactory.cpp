@@ -90,7 +90,7 @@ NoteFontFactory::getFontNames(bool forceRescan)
                 if (map.ok()) names.append(map.getName());
             } catch (Exception e) {
                 StartupLogo::hideIfStillThere();
-                QMessageBox::critical(0, tr("Rosegarden"), strtoqstr(e.getMessage()));
+                QMessageBox::critical(nullptr, tr("Rosegarden"), strtoqstr(e.getMessage()));
                 throw;
             }
         }
@@ -158,7 +158,7 @@ NoteFontFactory::getFont(const QString &fontName, int size)
             return font;
         } catch (Exception e) {
             StartupLogo::hideIfStillThere();
-            QMessageBox::critical(0, tr("Rosegarden"), strtoqstr(e.getMessage()));
+            QMessageBox::critical(nullptr, tr("Rosegarden"), strtoqstr(e.getMessage()));
             throw;
         }
     } else {
@@ -185,7 +185,7 @@ NoteFontFactory::getDefaultFontName()
         } else {
             QString message = tr("Can't obtain a default font -- no fonts found");
             StartupLogo::hideIfStillThere();
-            QMessageBox::critical(0, tr("Rosegarden"), message);
+            QMessageBox::critical(nullptr, tr("Rosegarden"), message);
             throw NoFontsAvailable(qstrtostr(message));
         }
     }

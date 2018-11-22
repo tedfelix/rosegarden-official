@@ -32,7 +32,7 @@ SegmentSingleRepeatToCopyCommand::SegmentSingleRepeatToCopyCommand(
         NamedCommand(tr("Turn Single Repeat into Copy")),
         m_composition(segment->getComposition()),
         m_segment(segment),
-        m_newSegment(0),
+        m_newSegment(nullptr),
         m_time(time),
         m_detached(false)
 {}

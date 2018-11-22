@@ -2136,7 +2136,7 @@ SegmentNotationHelper::deCounterpoint(timeT startTime, timeT endTime)
         timeT tk = (*k)->getNotationAbsoluteTime();
         timeT dk = (*k)->getNotationDuration();
 
-        Event *e1 = nullptr, *e2 = 0;
+        Event *e1 = nullptr, *e2 = nullptr;
         std::pair<Event *, Event *> splits;
         Segment::iterator toGo = segment().end();
 

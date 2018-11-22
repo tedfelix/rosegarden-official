@@ -47,20 +47,20 @@ static RealTime startTime;
 #endif
 
 JackDriver::JackDriver(AlsaDriver *alsaDriver) :
-        m_client(0),
+        m_client(nullptr),
         m_bufferSize(0),
         m_sampleRate(0),
-        m_tempOutBuffer(0),
+        m_tempOutBuffer(nullptr),
         m_jackTransportEnabled(false),
         m_jackTransportMaster(false),
         m_waiting(false),
         m_waitingState(JackTransportStopped),
         m_waitingToken(0),
         m_ignoreProcessTransportCount(0),
-        m_bussMixer(0),
-        m_instrumentMixer(0),
-        m_fileReader(0),
-        m_fileWriter(0),
+        m_bussMixer(nullptr),
+        m_instrumentMixer(nullptr),
+        m_fileReader(nullptr),
+        m_fileWriter(nullptr),
         m_alsaDriver(alsaDriver),
         m_masterLevel(1.0),
         m_directMasterAudioInstruments(0L),
@@ -225,7 +225,7 @@ JackDriver::initialise(bool reinitialise)
 
     // attempt connection to JACK server
     //
-    if ((m_client = jack_client_open(jackClientName.c_str(), jackOptions, nullptr)) == 0) {
+    if ((m_client = jack_client_open(jackClientName.c_str(), jackOptions, nullptr)) == nullptr) {
         RG_WARNING << "initialise() - JACK server not running";
         RG_WARNING << "  Attempt to start JACK server was " << (jackOptions & JackNoStartServer ? "NOT " : "") << "made per user config";
         // Also send to user log.
@@ -911,7 +911,7 @@ JackDriver::jackProcess(jack_nframes_t nframes)
                 int rv = 0;
                 for (InstrumentId id = audioInstrumentBase;
                         id < audioInstrumentBase + audioInstruments; ++id) {
-                    int irv = jackProcessRecord(id, nframes, 0, 0, clocksRunning);
+                    int irv = jackProcessRecord(id, nframes, nullptr, nullptr, clocksRunning);
                     if (irv != 0)
                         rv = irv;
                 }
@@ -975,7 +975,7 @@ JackDriver::jackProcess(jack_nframes_t nframes)
             int rv = 0;
             for (InstrumentId id = audioInstrumentBase;
                     id < audioInstrumentBase + audioInstruments; ++id) {
-                int irv = jackProcessRecord(id, nframes, 0, 0, clocksRunning);
+                int irv = jackProcessRecord(id, nframes, nullptr, nullptr, clocksRunning);
                 if (irv != 0)
                     rv = irv;
             }
@@ -1033,7 +1033,7 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 
     for (int buss = 0; buss < bussCount; ++buss) {
 
-        sample_t *submaster[2] = { 0, 0 };
+        sample_t *submaster[2] = { nullptr, nullptr };
         sample_t peak[2] = { 0.0, 0.0 };
 
         if ((int)m_outputSubmasters.size() > buss * 2 + 1) {
@@ -1106,7 +1106,7 @@ JackDriver::jackProcess(jack_nframes_t nframes)
         if (m_instrumentMixer->isInstrumentEmpty(id))
             continue;
 
-        sample_t *instrument[2] = { 0, 0 };
+        sample_t *instrument[2] = { nullptr, nullptr };
         sample_t peak[2] = { 0.0, 0.0 };
 
         if (int(m_outputInstruments.size()) > i * 2 + 1) {
@@ -1248,7 +1248,7 @@ JackDriver::jackProcess(jack_nframes_t nframes)
         } else if (m_recordInputs[id].input < 1000) { // buss, already done
             // nothing
         } else if (!doneRecord) {
-            jackProcessRecord(id, nframes, 0, 0, clocksRunning);
+            jackProcessRecord(id, nframes, nullptr, nullptr, clocksRunning);
         }
     }
 
@@ -1356,7 +1356,7 @@ JackDriver::jackProcessRecord(InstrumentId id,
 
     // Get input buffers
     //
-    sample_t *inputBufferLeft = nullptr, *inputBufferRight = 0;
+    sample_t *inputBufferLeft = nullptr, *inputBufferRight = nullptr;
 
     int recInput = m_recordInputs[id].input;
 

@@ -43,7 +43,7 @@ LADSPAPluginInstance::LADSPAPluginInstance(PluginFactory *factory,
         m_descriptor(descriptor),
         m_blockSize(blockSize),
         m_sampleRate(sampleRate),
-        m_latencyPort(0),
+        m_latencyPort(nullptr),
         m_run(false),
         m_bypassed(false)
 {
@@ -87,7 +87,7 @@ LADSPAPluginInstance::LADSPAPluginInstance(PluginFactory *factory,
         m_outputBuffers(outputBuffers),
         m_ownBuffers(false),
         m_sampleRate(sampleRate),
-        m_latencyPort(0),
+        m_latencyPort(nullptr),
         m_run(false),
         m_bypassed(false)
 {

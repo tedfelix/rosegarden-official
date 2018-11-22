@@ -31,7 +31,7 @@ getSupportedExtensions()
     QStringList extensions;
     int count;
     
-    if (sf_command(0, SFC_GET_FORMAT_MAJOR_COUNT, &count, sizeof(count))) {
+    if (sf_command(nullptr, SFC_GET_FORMAT_MAJOR_COUNT, &count, sizeof(count))) {
         extensions.push_back("wav");
         extensions.push_back("aiff");
         extensions.push_back("aifc");
@@ -42,7 +42,7 @@ getSupportedExtensions()
     SF_FORMAT_INFO info;
     for (int i = 0; i < count; ++i) {
         info.format = i;
-        if (!sf_command(0, SFC_GET_FORMAT_MAJOR, &info, sizeof(info))) {
+        if (!sf_command(nullptr, SFC_GET_FORMAT_MAJOR, &info, sizeof(info))) {
             extensions.push_back(QString(info.extension).toLower());
         }
     }

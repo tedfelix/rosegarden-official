@@ -852,7 +852,7 @@ AudioInstrumentMixer::AudioInstrumentMixer(SoundDriver *driver,
         unsigned int blockSize) :
         AudioThread("AudioInstrumentMixer", driver, sampleRate),
         m_fileReader(fileReader),
-        m_bussMixer(0),
+        m_bussMixer(nullptr),
         m_blockSize(blockSize)
 {
     // Pregenerate empty plugin slots

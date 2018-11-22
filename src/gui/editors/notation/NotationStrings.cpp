@@ -207,11 +207,11 @@ NotationStrings::getNoteForName(QString name)
         { "64th", "sixty-fourth", "hemidemisemi", "hemidemisemiquaver" },
         { "32nd", "thirty-second", "demisemi", "demisemiquaver"	},
         { "16th", "sixteenth", "semi", "semiquaver"	},
-        { "8th", "eighth", 0, "quaver"	},
-        { "quarter", 0, 0, "crotchet", },
-        { "half", 0, 0, "minim"	},
-        { "whole", 0, 0, "semibreve"	},
-        { "double whole", 0, 0, "breve"	}
+        { "8th", "eighth", nullptr, "quaver"	},
+        { "quarter", nullptr, nullptr, "crotchet", },
+        { "half", nullptr, nullptr, "minim"	},
+        { "whole", nullptr, nullptr, "semibreve"	},
+        { "double whole", nullptr, nullptr, "breve"	}
     };
 
     for (type = Note::Shortest; type <= Note::Longest; ++type) {

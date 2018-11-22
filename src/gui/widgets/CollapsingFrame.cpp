@@ -40,7 +40,7 @@ CollapsingFrame::CollapsingFrame(
         QString label, QWidget *parent, const QString &name,
         bool defaultExpanded) :
     QFrame(parent),
-    m_widget(0),
+    m_widget(nullptr),
     m_fill(false),
     m_collapsed(false)
 {

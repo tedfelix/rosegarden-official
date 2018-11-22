@@ -97,7 +97,7 @@ private:
     {
     public:
         iterator_base() :
-            m_v(0), m_i(-1) {
+            m_v(nullptr), m_i(-1) {
         }
         iterator_base(const iterator_base &i) :
             m_v(i.m_v), m_i(i.m_i) {

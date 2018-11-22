@@ -289,7 +289,7 @@ MappedObject::destroy()
 //
 
 MappedStudio::MappedStudio() :
-        MappedObject(0,
+        MappedObject(nullptr,
                      "MappedStudio",
                      Studio,
                      0),

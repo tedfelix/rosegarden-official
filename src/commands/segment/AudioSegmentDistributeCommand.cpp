@@ -38,7 +38,7 @@ AudioSegmentDistributeCommand::AudioSegmentDistributeCommand(
         NamedCommand(getGlobalName()),
         m_composition(comp),
         m_selection(inputSelection),
-        m_audioFile(0),
+        m_audioFile(nullptr),
         m_audioSegment(audioSegment),
         m_executed(false)
 {}
@@ -51,7 +51,7 @@ AudioSegmentDistributeCommand::AudioSegmentDistributeCommand(
         m_composition(comp),
         m_selection(inputSelection),
         m_audioFile(audioFile),
-        m_audioSegment(0),
+        m_audioSegment(nullptr),
         m_executed(false)
 {}
 

@@ -63,8 +63,8 @@ namespace Rosegarden
 {
 
 TransportDialog::TransportDialog(QWidget *parent):
-    QDialog(parent, 0),
-    ui(0),
+    QDialog(parent, nullptr),
+    ui(nullptr),
     //m_lcdList(),
     //m_lcdListDefault(),
     //m_lcdNegative(),
@@ -95,13 +95,13 @@ TransportDialog::TransportDialog(QWidget *parent):
     m_denominator(0),
     m_framesPerSecond(24),
     m_bitsPerFrame(80),
-    m_midiInTimer(0),
-    m_midiOutTimer(0),
-    m_clearMetronomeTimer(0),
+    m_midiInTimer(nullptr),
+    m_midiOutTimer(nullptr),
+    m_clearMetronomeTimer(nullptr),
     m_enableMIDILabels(true),
     //m_panelOpen(),
     //m_panelClosed(),
-    m_shortcuts(0),
+    m_shortcuts(nullptr),
     m_isExpanded(true),
     m_isBackgroundSet(false),
     m_sampleRate(0)

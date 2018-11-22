@@ -80,7 +80,7 @@ static int osc_message_handler(const char *path, const char *types, lo_arg **arg
 
 AudioPluginOSCGUIManager::AudioPluginOSCGUIManager(RosegardenMainWindow *mainWindow) :
         m_mainWindow(mainWindow),
-        m_studio(0),
+        m_studio(nullptr),
         m_haveOSCThread(false),
         m_oscBuffer(1023),
         m_dispatchTimer(nullptr)

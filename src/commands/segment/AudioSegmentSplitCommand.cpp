@@ -35,9 +35,9 @@ AudioSegmentSplitCommand::AudioSegmentSplitCommand(Segment *segment,
         timeT splitTime) :
         NamedCommand(tr("Split Audio Segment")),
         m_segment(segment),
-        m_newSegment(0),
+        m_newSegment(nullptr),
         m_splitTime(splitTime),
-        m_previousEndMarkerTime(0),
+        m_previousEndMarkerTime(nullptr),
         m_detached(false)
 {}
 

@@ -67,12 +67,12 @@ ListEditView::ListEditView(RosegardenDocument *doc,
     EditViewBase(doc, segments, parent),
     m_viewNumber( -1),
     m_viewLocalPropertyPrefix(makeViewLocalPropertyPrefix()),
-    m_centralFrame(0),
-    m_grid(0),
+    m_centralFrame(nullptr),
+    m_grid(nullptr),
     m_mainCol(cols - 1),
     m_compositionRefreshStatusId(doc->getComposition().getNewRefreshStatusId()),
     m_needUpdate(false),
-    m_pendingPaintEvent(0),
+    m_pendingPaintEvent(nullptr),
     m_havePendingPaintEvent(false),
     m_inCtor(true),
     m_timeSigNotifier(new EditViewTimeSigNotifier(doc))
@@ -244,7 +244,7 @@ ListEditView::paintEvent(QPaintEvent* e)
     }
 
     if (segmentsToUpdate > 1) {
-        refreshSegment(0, updateStart, updateEnd);
+        refreshSegment(nullptr, updateStart, updateEnd);
     } else if (segmentsToUpdate > 0) {
         refreshSegment(singleSegment, updateStart, updateEnd);
     }

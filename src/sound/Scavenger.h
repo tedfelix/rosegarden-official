@@ -155,7 +155,7 @@ Scavenger<T>::scavenge()
     if (m_scavenged >= m_claimed) return;
     
     struct timeval tv;
-    (void)gettimeofday(&tv, 0);
+    (void)gettimeofday(&tv, nullptr);
     int sec = tv.tv_sec;
 
     for (size_t i = 0; i < m_objects.size(); ++i) {

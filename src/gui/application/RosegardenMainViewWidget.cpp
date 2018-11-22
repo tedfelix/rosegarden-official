@@ -121,8 +121,8 @@ RosegardenMainViewWidget::RosegardenMainViewWidget(bool showTrackLabels,
                                                    RosegardenParameterArea* parameterArea,
                                                    QWidget *parent)
         : QWidget(parent),
-        m_rulerScale(0),
-        m_trackEditor(0),
+        m_rulerScale(nullptr),
+        m_trackEditor(nullptr),
         m_segmentParameterBox(segmentParameterBox),
         m_instrumentParameterBox(instrumentParameterBox),
         m_trackParameterBox(trackParameterBox)

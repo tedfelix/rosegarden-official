@@ -59,7 +59,7 @@ MarkerRuler::MarkerRuler(RosegardenDocument *doc,
         m_currentXOffset(0),
         m_width(-1),
         m_clickX(0),
-        m_menu(0),
+        m_menu(nullptr),
         m_doc(doc),
         m_rulerScale(rulerScale),
         m_parentMainWindow( dynamic_cast<QMainWindow*>(doc->parent()) )

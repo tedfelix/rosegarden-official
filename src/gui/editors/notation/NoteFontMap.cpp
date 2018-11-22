@@ -40,7 +40,7 @@ NoteFontMap::NoteFontMap(QString name) :
     m_name(name),
     m_smooth(false),
     m_srcDirectory(name),
-    m_characterDestination(0),
+    m_characterDestination(nullptr),
     m_hotspotCharName(""),
     m_errorString(QObject::tr("unknown error")),
     m_ok(true)

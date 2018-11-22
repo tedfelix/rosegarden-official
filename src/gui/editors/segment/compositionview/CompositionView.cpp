@@ -102,7 +102,7 @@ CompositionView::CompositionView(RosegardenDocument *doc,
     m_drawSelectionRect(false),
     //m_selectionRect(),
     m_toolBox(new SegmentToolBox(this, doc)),
-    m_currentTool(0),
+    m_currentTool(nullptr),
     //m_toolContextHelp(),
     m_contextHelpShown(false),
     m_enableDrawing(true)
@@ -287,7 +287,7 @@ void CompositionView::setTool(const QString &toolName)
     m_currentTool = m_toolBox->getTool(toolName);
 
     if (!m_currentTool) {
-        QMessageBox::critical(0, tr("Rosegarden"), QString("CompositionView::setTool() : unknown tool name %1").arg(toolName));
+        QMessageBox::critical(nullptr, tr("Rosegarden"), QString("CompositionView::setTool() : unknown tool name %1").arg(toolName));
         return;
     }
 

@@ -32,7 +32,7 @@ DeleteTriggerSegmentCommand::DeleteTriggerSegmentCommand(RosegardenDocument *doc
         NamedCommand(tr("Delete Triggered Segment")),
         m_composition(&doc->getComposition()),
         m_id(id),
-        m_segment(0),
+        m_segment(nullptr),
         m_basePitch( -1),
         m_baseVelocity( -1),
         m_detached(true)

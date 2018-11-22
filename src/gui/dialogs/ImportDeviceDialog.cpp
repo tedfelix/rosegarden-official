@@ -341,7 +341,7 @@ bool
 ImportDeviceDialog::importFromRG(QString fileName)
 {
     bool skipAutoload = true, clearCommandHistory = false;
-    RosegardenDocument fileDoc(RosegardenMainWindow::self(), 0, 
+    RosegardenDocument fileDoc(RosegardenMainWindow::self(), nullptr, 
                                skipAutoload, clearCommandHistory);
 
     if (!fileDoc.openDocument(fileName, false)) {

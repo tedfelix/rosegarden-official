@@ -38,7 +38,7 @@ NotationElement::NotationElement(Event *event) :
     ViewElement(event),
     m_recentlyRegenerated(false),
     m_isColliding(false),
-    m_item(0),
+    m_item(nullptr),
     m_extraItems(nullptr)
 {
     //     NOTATION_DEBUG << "new NotationElement "

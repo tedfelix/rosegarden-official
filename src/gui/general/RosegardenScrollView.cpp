@@ -48,7 +48,7 @@ const int RosegardenScrollView::AutoScrollTimerInterval = 30;  // msecs
 RosegardenScrollView::RosegardenScrollView(QWidget *parent)
     : QAbstractScrollArea(parent),
 
-      m_bottomRuler(0),
+      m_bottomRuler(nullptr),
       m_contentsWidth(0),
       m_contentsHeight(0),
       m_followMode(NoFollow),

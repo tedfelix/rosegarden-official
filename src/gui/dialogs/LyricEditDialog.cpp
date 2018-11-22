@@ -53,9 +53,9 @@ LyricEditDialog::LyricEditDialog(QWidget *parent,
                                  Segment *segment) :
     QDialog(parent),
     m_segment(segment),
-    m_segmentSelectMenu(0),
-    m_descr1(0),
-    m_descr2(0),
+    m_segmentSelectMenu(nullptr),
+    m_descr1(nullptr),
+    m_descr2(nullptr),
     m_verseCount(0),
     m_previousVerseCount(0)
 {

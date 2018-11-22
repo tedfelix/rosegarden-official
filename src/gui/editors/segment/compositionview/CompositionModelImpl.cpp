@@ -73,7 +73,7 @@ CompositionModelImpl::CompositionModelImpl(
     m_studio(studio),
     m_grid(rulerScale, trackCellHeight),
     m_notationPreviewCache(),
-    m_audioPeaksThread(0),
+    m_audioPeaksThread(nullptr),
     m_audioPeaksGeneratorMap(),
     m_audioPeaksCache(),
     m_audioPreviewImageCache(),

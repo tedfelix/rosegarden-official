@@ -243,7 +243,7 @@ AudioConfigurationPage::apply()
     if (extpath != "") {
         QFileInfo info(extpath);
         if (!info.exists() || !info.isExecutable()) {
-            QMessageBox::critical(0, tr("Rosegarden"), tr("External audio editor \"%1\" not found or not executable").arg(extpath));
+            QMessageBox::critical(nullptr, tr("Rosegarden"), tr("External audio editor \"%1\" not found or not executable").arg(extpath));
             settings.setValue("externalaudioeditor", "");
         } else {
             settings.setValue("externalaudioeditor", externalAudioEditor);

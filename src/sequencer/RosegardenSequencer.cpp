@@ -62,7 +62,7 @@ RosegardenSequencer::m_instanceMutex;
 #define LOCKED QMutexLocker rgseq_locker(&m_mutex)
 
 RosegardenSequencer::RosegardenSequencer() :
-    m_driver(0),
+    m_driver(nullptr),
     m_transportStatus(STOPPED),
     m_songPosition(0, 0),
     m_lastFetchSongPosition(0, 0),

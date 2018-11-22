@@ -43,7 +43,7 @@ public:
     ControlMouseEvent() :
         itemList(),
         x(0), y(0), 
-        modifiers(0), buttons(nullptr) { }
+        modifiers(nullptr), buttons(nullptr) { }
     
     ControlMouseEvent(const ControlMouseEvent *e) :
         itemList(e->itemList),

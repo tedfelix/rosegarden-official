@@ -51,9 +51,9 @@ namespace Rosegarden
 {
 
 ControlRulerWidget::ControlRulerWidget() :
-m_controlList(0),
-m_segment(0),
-m_viewSegment(0),
+m_controlList(nullptr),
+m_segment(nullptr),
+m_viewSegment(nullptr),
 m_scale(nullptr)
 {
     m_tabBar = new ControlRulerTabBar;

@@ -683,7 +683,7 @@ NotationConfigurationPage::slotFontComboChanged(int index)
             m_fontTypeLabel->setText(tr("%1 (jaggy)").arg(tr(map.getType().toStdString().c_str())));
         }
     } catch (Exception f) {
-        QMessageBox::critical(0, tr("Rosegarden"), strtoqstr(f.getMessage()));
+        QMessageBox::critical(nullptr, tr("Rosegarden"), strtoqstr(f.getMessage()));
     }
 }
 

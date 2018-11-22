@@ -1089,7 +1089,7 @@ TrackButtons::trackHeight(TrackId trackId)
 QFrame*
 TrackButtons::makeButton(Track *track)
 {
-    if (track == nullptr) return 0;
+    if (track == nullptr) return nullptr;
 
     TrackId trackId = track->getId();
 

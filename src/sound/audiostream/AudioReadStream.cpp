@@ -40,7 +40,7 @@ AudioReadStream::AudioReadStream() :
     m_channelCount(0),
     m_sampleRate(0),
     m_retrievalRate(0),
-    m_resampler(0),
+    m_resampler(nullptr),
     m_resampleBuffer(nullptr)
 {
 }

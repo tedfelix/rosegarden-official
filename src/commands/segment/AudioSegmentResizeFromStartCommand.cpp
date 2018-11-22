@@ -31,7 +31,7 @@ AudioSegmentResizeFromStartCommand::AudioSegmentResizeFromStartCommand(Segment *
         timeT newStartTime) :
         NamedCommand(tr("Resize Segment")),
         m_segment(segment),
-        m_newSegment(0),
+        m_newSegment(nullptr),
         m_detached(false),
         m_oldStartTime(segment->getStartTime()),
         m_newStartTime(newStartTime)

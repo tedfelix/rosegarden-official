@@ -179,7 +179,7 @@ CheckForParallelsDialog::exportText()
     static QString lastExportDirectory;
     QString name = FileDialog::getSaveFileName(
             this, label, lastExportDirectory,
-            QString(""), "*.txt", 0,
+            QString(""), "*.txt", nullptr,
             FileDialog::DontConfirmOverwrite);
 
     if (name == "")

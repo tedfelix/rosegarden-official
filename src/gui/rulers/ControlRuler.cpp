@@ -63,15 +63,15 @@ const int ControlRuler::ItemHeightRange = 64;
                            QWidget* parent) :
         QWidget(parent),
         m_rulerScale(rulerScale),
-        m_eventSelection(0),
-        m_viewSegment(0),
-        m_notationStaff(0),
-        m_segment(0),
+        m_eventSelection(nullptr),
+        m_viewSegment(nullptr),
+        m_notationStaff(nullptr),
+        m_segment(nullptr),
         m_firstVisibleItem(m_controlItemMap.end()),
         m_lastVisibleItem(m_controlItemMap.end()),
         m_nextItemLeft(m_controlItemMap.end()),
-        m_currentIndex(0),
-        m_currentTool(0),
+        m_currentIndex(nullptr),
+        m_currentTool(nullptr),
         m_xScale(1.0),
         m_yScale(1.0),
         m_maxItemValue(127),
@@ -81,7 +81,7 @@ const int ControlRuler::ItemHeightRange = 64;
         m_currentX(0.0),
         m_itemMoved(false),
         m_selecting(false),
-        m_selectionRect(0),
+        m_selectionRect(nullptr),
         m_menu(nullptr)
 {
 

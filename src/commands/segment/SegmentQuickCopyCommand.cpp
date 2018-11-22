@@ -32,7 +32,7 @@ SegmentQuickCopyCommand::SegmentQuickCopyCommand(Segment *segment):
         NamedCommand(getGlobalName()),
         m_composition(segment->getComposition()),
         m_originalSegment(segment),
-        m_newSegment(0),
+        m_newSegment(nullptr),
         m_detached(false)
 {}
 

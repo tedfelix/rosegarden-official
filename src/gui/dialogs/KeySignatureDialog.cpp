@@ -62,8 +62,8 @@ KeySignatureDialog::KeySignatureDialog(QWidget *parent,
         m_clef(clef),
         m_valid(true),
         m_ignoreComboChanges(false),
-        m_explanatoryLabel(0),
-        m_applyToAllButton(0),
+        m_explanatoryLabel(nullptr),
+        m_applyToAllButton(nullptr),
         m_noPercussionCheckBox(nullptr)
 {
     //setHelp("nv-signatures-key");

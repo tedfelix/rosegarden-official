@@ -53,10 +53,10 @@ using namespace Marks;
 
 RG21Loader::RG21Loader(Studio *studio)
         :
-        m_stream(0),
+        m_stream(nullptr),
         m_studio(studio),
-        m_composition(0),
-        m_currentSegment(0),
+        m_composition(nullptr),
+        m_currentSegment(nullptr),
         m_currentSegmentTime(0),
         m_currentSegmentNb(0),
         m_currentClef(Clef::Treble),
@@ -142,7 +142,7 @@ bool RG21Loader::parseChordItem()
     timeT duration = convertRG21Duration(i);
 
     // get chord mod flags and nb of notes.  chord mod is hex
-    int chordMods = (*i).toInt(0, 16);
+    int chordMods = (*i).toInt(nullptr, 16);
     ++i;
     /*int nbNotes   = (*i).toInt();*/
     ++i;
@@ -158,7 +158,7 @@ bool RG21Loader::parseChordItem()
         // The noteMods field is nominally a hex integer.  As it
         // happens its value can never exceed 7, but I guess we
         // should do the right thing anyway
-        int noteMods = (*i).toInt(0, 16);
+        int noteMods = (*i).toInt(nullptr, 16);
         pitch = convertRG21Pitch(pitch, noteMods);
 
         Event *noteEvent = new Event(Note::EventType,
@@ -531,7 +531,7 @@ bool RG21Loader::parseBarType()
     }
 
     // barNo is a hex integer
-    int barNo = m_tokens[2].toInt(0, 16);
+    int barNo = m_tokens[2].toInt(nullptr, 16);
 
     int numerator = m_tokens[4].toInt();
     int denominator = m_tokens[5].toInt();

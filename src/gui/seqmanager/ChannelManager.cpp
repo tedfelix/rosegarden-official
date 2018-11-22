@@ -35,7 +35,7 @@ namespace Rosegarden
 
 
 ChannelManager::ChannelManager(Instrument *instrument) :
-    m_instrument(0),
+    m_instrument(nullptr),
     m_start(),
     m_end(),
     m_startMargin(),
@@ -366,7 +366,7 @@ void
 ChannelManager::disconnectAllocator()
 {
     if (m_instrument  &&  m_usingAllocator)
-        disconnect(getAllocator(), 0, this, nullptr);
+        disconnect(getAllocator(), nullptr, this, nullptr);
 }
 
 void

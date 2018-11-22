@@ -103,7 +103,7 @@ protected:
 
     struct FaderStruct {
 
-        FaderStruct():m_id(0), m_vuMeter(0), m_volumeFader(nullptr) {}
+        FaderStruct():m_id(0), m_vuMeter(nullptr), m_volumeFader(nullptr) {}
 
         InstrumentId m_id;
         MidiMixerVUMeter *m_vuMeter;

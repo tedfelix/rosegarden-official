@@ -45,10 +45,10 @@ PlayList::PlayList(QWidget *parent) : QWidget(parent),
         m_listView(new PlayListView(this)),
         m_buttonBar(new QFrame(this)),
         m_barLayout(new QHBoxLayout(m_buttonBar)),
-        m_playButton(0),
-        m_moveUpButton(0),
-        m_moveDownButton(0),
-        m_deleteButton(0),
+        m_playButton(nullptr),
+        m_moveUpButton(nullptr),
+        m_moveDownButton(nullptr),
+        m_deleteButton(nullptr),
         m_clearButton(nullptr)
 {
     QVBoxLayout *vLayout = new QVBoxLayout;
@@ -113,7 +113,7 @@ void PlayList::slotOpenFiles()
                         tr("Rosegarden files") + " (*.rg *.RG)" + ";;" +
                         tr("MIDI files") + " (*.mid *.midi *.MID *.MIDI)" + ";;" +
                         tr("X11 Rosegarden files") + " (*.rose)" + ";;" +
-                        tr("All files") + " (*)", 0, 0 );
+                        tr("All files") + " (*)", nullptr, nullptr );
     
     QString fname;
     

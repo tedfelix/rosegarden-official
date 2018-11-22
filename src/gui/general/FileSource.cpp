@@ -167,8 +167,8 @@ FileSource::FileSource(QString fileOrUrl,
 
 FileSource::FileSource(QUrl url) :
     m_url(url),
-    m_localFile(0),
-    m_reply(0),
+    m_localFile(nullptr),
+    m_reply(nullptr),
     m_ok(false),
     m_lastStatus(0),
     m_resource(false),
@@ -198,8 +198,8 @@ FileSource::FileSource(QUrl url) :
 FileSource::FileSource(const FileSource &rf) :
     QObject(),
     m_url(rf.m_url),
-    m_localFile(0),
-    m_reply(0),
+    m_localFile(nullptr),
+    m_reply(nullptr),
     m_ok(rf.m_ok),
     m_lastStatus(rf.m_lastStatus),
     m_resource(rf.m_resource),

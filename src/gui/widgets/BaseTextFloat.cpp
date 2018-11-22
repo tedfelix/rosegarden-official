@@ -40,7 +40,7 @@ namespace Rosegarden
 BaseTextFloat::BaseTextFloat(QWidget *parent) :
     QWidget(parent, Qt::ToolTip),
     m_text(""),
-    m_timer(0),
+    m_timer(nullptr),
     m_widget(parent),
     m_totalPos(QPoint(0, 0)),
     m_width(20),

@@ -36,7 +36,7 @@ SegmentSplitByRecordingSrcCommand::SegmentSplitByRecordingSrcCommand (
         NamedCommand(tr("Split by Recording Source")),
         m_composition(segment->getComposition()),
         m_segment(segment),
-        m_newSegmentA(0),
+        m_newSegmentA(nullptr),
         m_channel(channel),
         m_device(device),
         m_executed(false)

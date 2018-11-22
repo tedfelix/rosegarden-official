@@ -815,7 +815,7 @@ TrackParameterBox::slotHighestPressed()
         return;
 
     PitchPickerDialog dialog(
-            0, track->getHighestPlayable(), tr("Highest playable note"));
+            nullptr, track->getHighestPlayable(), tr("Highest playable note"));
 
     // Launch the PitchPickerDialog.  If the user clicks OK...
     if (dialog.exec() == QDialog::Accepted) {
@@ -840,7 +840,7 @@ TrackParameterBox::slotLowestPressed()
         return;
 
     PitchPickerDialog dialog(
-            0, track->getLowestPlayable(), tr("Lowest playable note"));
+            nullptr, track->getLowestPlayable(), tr("Lowest playable note"));
 
     // Launch the PitchPickerDialog.  If the user clicks OK...
     if (dialog.exec() == QDialog::Accepted) {
@@ -911,7 +911,7 @@ TrackParameterBox::slotLoadPressed()
     } catch (Exception &e) {  // from PresetHandlerDialog
         // !!! This should be a more verbose error to pass along the
         //     row/column of the corruption.
-        QMessageBox::warning(0, tr("Rosegarden"),
+        QMessageBox::warning(nullptr, tr("Rosegarden"),
                 tr("The instrument preset database is corrupt.  Check your installation."));
     }
 }

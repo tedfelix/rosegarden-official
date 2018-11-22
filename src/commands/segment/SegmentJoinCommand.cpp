@@ -38,7 +38,7 @@ namespace Rosegarden
 
 SegmentJoinCommand::SegmentJoinCommand(SegmentSelection &segments) :
         NamedCommand(getGlobalName()),
-        m_newSegment(0),
+        m_newSegment(nullptr),
         m_detached(false) // true if the old segments are detached, not the new
 {
     for (SegmentSelection::iterator i = segments.begin();

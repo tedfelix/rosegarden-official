@@ -1190,7 +1190,7 @@ MatrixView::slotFilterSelection()
         }
 
         if (haveEvent) setSelection(newSelection, false);
-        else setSelection(0, false);
+        else setSelection(nullptr, false);
     }
 }
 

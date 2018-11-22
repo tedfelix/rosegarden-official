@@ -32,7 +32,7 @@ NotationTool::NotationTool(QString rcFileName, QString menuName,
                            NotationWidget *widget) :
     BaseTool(menuName, widget),
     m_widget(widget),
-    m_scene(0),
+    m_scene(nullptr),
     m_rcFileName(rcFileName)
 {
 }

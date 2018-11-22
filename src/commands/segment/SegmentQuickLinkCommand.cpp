@@ -29,7 +29,7 @@ SegmentQuickLinkCommand::SegmentQuickLinkCommand(Segment *segment) :
         NamedCommand(getGlobalName()),
         m_composition(segment->getComposition()),
         m_originalSegment(segment),
-        m_newLinkedSegment(0),
+        m_newLinkedSegment(nullptr),
         m_detached(false),
         m_originalSegmentLinked(false)
 {

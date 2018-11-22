@@ -36,8 +36,8 @@ namespace Rosegarden
 
 AudioPluginOSCGUI::AudioPluginOSCGUI(AudioPluginInstance *instance,
                                      QString serverURL, QString friendlyName) :
-        m_gui(0),
-        m_address(0),
+        m_gui(nullptr),
+        m_address(nullptr),
         m_basePath(""),
         m_serverUrl(serverURL)
 {

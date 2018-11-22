@@ -1007,7 +1007,7 @@ SegmentParameterBox::slotHighestPressed()
 {
     RG_DEBUG << "SegmentParameterBox::slotHighestPressed()";
 
-    PitchPickerDialog dialog(0, m_highestPlayable, tr("Highest playable note"));
+    PitchPickerDialog dialog(nullptr, m_highestPlayable, tr("Highest playable note"));
     std::vector<Segment*>::iterator it;
 
     if (dialog.exec() == QDialog::Accepted) {
@@ -1027,7 +1027,7 @@ SegmentParameterBox::slotLowestPressed()
 {
     RG_DEBUG << "SegmentParameterBox::slotLowestPressed()";
 
-    PitchPickerDialog dialog(0, m_lowestPlayable, tr("Lowest playable note"));
+    PitchPickerDialog dialog(nullptr, m_lowestPlayable, tr("Lowest playable note"));
     std::vector<Segment*>::iterator it;
 
     if (dialog.exec() == QDialog::Accepted) {

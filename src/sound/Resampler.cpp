@@ -85,9 +85,9 @@ protected:
 
 D_SRC::D_SRC(Resampler::Quality quality, int channels, int maxBufferSize,
              int debugLevel) :
-    m_src(0),
-    m_iin(0),
-    m_iout(0),
+    m_src(nullptr),
+    m_iin(nullptr),
+    m_iout(nullptr),
     m_lastRatio(1.f),
     m_channels(channels),
     m_iinsize(0),

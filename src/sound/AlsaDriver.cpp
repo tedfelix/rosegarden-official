@@ -96,7 +96,7 @@ AlsaDriver::AlsaDriver(MappedStudio *studio):
                 std::string(", kernel version ") +
                 getKernelVersionString() +
                 "]"),
-    m_midiHandle(0),
+    m_midiHandle(nullptr),
     m_client( -1),
     m_inputPort( -1),
     m_syncOutputPort( -1),
@@ -115,7 +115,7 @@ AlsaDriver::AlsaDriver(MappedStudio *studio):
     m_looping(false),
     m_haveShutdown(false)
 #ifdef HAVE_LIBJACK
-    , m_jackDriver(0)
+    , m_jackDriver(nullptr)
 #endif
     , m_queueRunning(false)
     , m_portCheckNeeded(false),
@@ -198,7 +198,7 @@ AlsaDriver::shutdown()
         RG_DEBUG << "shutdown() - closing MIDI client";
 #endif
 
-        checkAlsaError(snd_seq_stop_queue(m_midiHandle, m_queue, 0), "shutdown(): stopping queue");
+        checkAlsaError(snd_seq_stop_queue(m_midiHandle, m_queue, nullptr), "shutdown(): stopping queue");
         checkAlsaError(snd_seq_drain_output(m_midiHandle), "shutdown(): drain output");
 #ifdef DEBUG_ALSA
         RG_DEBUG << "shutdown() - stopped queue";
@@ -1212,7 +1212,7 @@ AlsaDriver::setPlausibleConnection(DeviceId id, QString idealConnection, bool re
         }
     }
 
-    AlsaPortDescription *viableHardwarePort = nullptr, *viableSoftwarePort = 0;
+    AlsaPortDescription *viableHardwarePort = nullptr, *viableSoftwarePort = nullptr;
     int fitness = 0;
 
     // Try to find one viable hardware and one viable software port, if

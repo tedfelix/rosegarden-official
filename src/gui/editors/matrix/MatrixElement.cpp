@@ -44,7 +44,7 @@ MatrixElement::MatrixElement(MatrixScene *scene, Event *event,
     m_scene(scene),
     m_drum(drum),
     m_current(true),
-    m_item(0),
+    m_item(nullptr),
     m_pitchOffset(pitchOffset)
 {
     reconfigure();

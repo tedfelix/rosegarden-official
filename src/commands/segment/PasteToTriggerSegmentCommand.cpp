@@ -96,7 +96,7 @@ PasteToTriggerSegmentWorker(Composition *composition,
         m_label(label),
         m_basePitch(basePitch),
         m_baseVelocity(baseVelocity),
-        m_segment(0),
+        m_segment(nullptr),
         m_detached(false)
 {
     m_clipboard->newSegment(selection);

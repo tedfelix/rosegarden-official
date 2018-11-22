@@ -33,7 +33,7 @@ SegmentEraseCommand::SegmentEraseCommand(Segment *segment) :
         NamedCommand(tr("Erase Segment")),
         m_composition(segment->getComposition()),
         m_segment(segment),
-        m_mgr(0),
+        m_mgr(nullptr),
         m_audioFileName(""),
         m_detached(false)
 {

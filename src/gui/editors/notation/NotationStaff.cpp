@@ -84,8 +84,8 @@ NotationStaff::NotationStaff(NotationScene *scene, Segment *segment,
         ),
     m_notePixmapFactory(normalFactory),
     m_graceNotePixmapFactory(smallFactory),
-    m_previewItem(0),
-    m_staffName(0),
+    m_previewItem(nullptr),
+    m_staffName(nullptr),
     m_notationScene(scene),
     m_legerLineCount(8),
     m_barNumbersEvery(0),
@@ -94,7 +94,7 @@ NotationStaff::NotationStaff(NotationScene *scene, Segment *segment,
     m_showRanges(true),
     m_showCollisions(true),
     m_hideRedundance(true),
-    m_printPainter(0),
+    m_printPainter(nullptr),
     m_refreshStatusId(segment->getNewRefreshStatusId())
 {
     QSettings settings;
@@ -920,7 +920,7 @@ NotationStaff::renderSingleElement(ViewElementList::iterator &vli,
 
         static bool warned = false;
         if (!warned) {
-            QMessageBox::critical(0, tr("Rosegarden"), tr( u.getMessage().c_str() ));
+            QMessageBox::critical(nullptr, tr("Rosegarden"), tr( u.getMessage().c_str() ));
             warned = true;
         }
     }

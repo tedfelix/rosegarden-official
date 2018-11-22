@@ -41,10 +41,10 @@ CommandHistory::CommandHistory() :
     m_redoLimit(50),
     m_menuLimit(15),
     m_savedAt(0),
-    m_currentCompound(0),
+    m_currentCompound(nullptr),
     m_executeCompound(false),
-    m_currentBundle(0),
-    m_bundleTimer(0),
+    m_currentBundle(nullptr),
+    m_bundleTimer(nullptr),
     m_bundleTimeout(5000)
 {
     // All Edit > Undo menu items share this QAction object.

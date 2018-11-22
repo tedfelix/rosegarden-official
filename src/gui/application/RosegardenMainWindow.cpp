@@ -251,54 +251,54 @@ namespace Rosegarden
 
 RosegardenMainWindow::RosegardenMainWindow(bool enableSound,
                                            QObject *startupStatusMessageReceiver) :
-    QMainWindow(0),
+    QMainWindow(nullptr),
     m_actionsSetup(false),
-    m_view(0),
-    m_doc(0),
-    m_recentFiles(0),
-    m_sequencerThread(0),
+    m_view(nullptr),
+    m_doc(nullptr),
+    m_recentFiles(nullptr),
+    m_sequencerThread(nullptr),
     m_sequencerCheckedIn(false),
 #ifdef HAVE_LIBJACK
-    m_jackProcess(0),
+    m_jackProcess(nullptr),
 #endif
-    m_cpuBar(0),
-    m_zoomSlider(0),
-    m_zoomLabel(0),
+    m_cpuBar(nullptr),
+    m_zoomSlider(nullptr),
+    m_zoomLabel(nullptr),
 //    m_statusBarLabel1(0),
-    m_seqManager(0),
-    m_transport(0),
-    m_audioManagerDialog(0),
+    m_seqManager(nullptr),
+    m_transport(nullptr),
+    m_audioManagerDialog(nullptr),
     m_originatingJump(false),
     m_storedLoopStart(0),
     m_storedLoopEnd(0),
     m_useSequencer(enableSound),
     m_autoSaveTimer(new QTimer(this)),
     m_clipboard(Clipboard::mainClipboard()),
-    m_playList(0),
-    m_synthManager(0),
+    m_playList(nullptr),
+    m_synthManager(nullptr),
     m_audioMixerWindow2(),
-    m_midiMixer(0),
-    m_bankEditor(0),
-    m_markerEditor(0),
-    m_tempoView(0),
-    m_triggerSegmentManager(0),
-    m_configDlg(0),
-    m_docConfigDlg(0),
+    m_midiMixer(nullptr),
+    m_bankEditor(nullptr),
+    m_markerEditor(nullptr),
+    m_tempoView(nullptr),
+    m_triggerSegmentManager(nullptr),
+    m_configDlg(nullptr),
+    m_docConfigDlg(nullptr),
     m_pluginGUIManager(new AudioPluginOSCGUIManager(this)),
     m_updateUITimer(new QTimer(this)),
     m_inputTimer(new QTimer(this)),
     m_editTempoController(new EditTempoController(this)),
-    m_startupTester(0),
+    m_startupTester(nullptr),
     m_firstRun(false),
     m_haveAudioImporter(false),
-    m_parameterArea(0),
+    m_parameterArea(nullptr),
 #ifdef HAVE_LIRC
-    m_lircClient(0),
-    m_lircCommander(0),
+    m_lircClient(nullptr),
+    m_lircCommander(nullptr),
 #endif
-    m_tranzport(0),
+    m_tranzport(nullptr),
 //  m_deviceManager(),  QPointer inits itself to 0.
-    m_warningWidget(0),
+    m_warningWidget(nullptr),
     m_cpuMeterTimer(new QTimer(this))
 {
     setAttribute(Qt::WA_DeleteOnClose);
@@ -941,9 +941,9 @@ RosegardenMainWindow::initView()
 
     // We need to make sure the parameter boxes don't send any
     // signals to the old view!
-    disconnect(m_segmentParameterBox, 0, oldView, nullptr);
-    disconnect(m_instrumentParameterBox, 0, oldView, nullptr);
-    disconnect(m_trackParameterBox, 0, oldView, nullptr);
+    disconnect(m_segmentParameterBox, nullptr, oldView, nullptr);
+    disconnect(m_instrumentParameterBox, nullptr, oldView, nullptr);
+    disconnect(m_trackParameterBox, nullptr, oldView, nullptr);
 
     RosegardenMainViewWidget *swapView = new RosegardenMainViewWidget
         (findAction("show_tracklabels")->isChecked(),
@@ -1855,7 +1855,7 @@ RosegardenMainWindow::openFileDialogAt(QString target)
                     tr("All supported files") + " (*.rg *.RG *.rgt *.RGT *.rgp *.RGP *.mid *.MID *.midi *.MIDI)" + ";;" +
                     tr("Rosegarden files") + " (*.rg *.RG *.rgp *.RGP *.rgt *.RGT)" + ";;" +
                     tr("MIDI files") + " (*.mid *.MID *.midi *.MIDI)" + ";;" +
-                    tr("All files") + " (*)", 0, nullptr);
+                    tr("All files") + " (*)", nullptr, nullptr);
 
     // If the user has cancelled, bail.
     if (fname.isEmpty())
@@ -1925,7 +1925,7 @@ RosegardenMainWindow::slotMerge()
 
     const QString file = FileDialog::getOpenFileName(this, tr("Open File"), directory,
                tr("Rosegarden files") + " (*.rg *.RG)" + ";;" +
-               tr("All files") + " (*)", 0, nullptr);
+               tr("All files") + " (*)", nullptr, nullptr);
 
     if (file.isEmpty()) {
         return ;
@@ -2049,7 +2049,7 @@ RosegardenMainWindow::getValidWriteFileName(QString descriptiveExtension,
     // "Save File" 100% of the time.)
     QString name = FileDialog::getSaveFileName(
         this, label, directory, 
-        originalFileInfo.baseName(), descriptiveExtension, 0, 
+        originalFileInfo.baseName(), descriptiveExtension, nullptr, 
         FileDialog::DontConfirmOverwrite); 
     
 //RG_DEBUG << "RosegardenMainWindow::getValidWriteFileName() : " << 
@@ -2648,7 +2648,7 @@ RosegardenMainWindow::testAudioPath(QString op)
     } catch (AudioFileManager::BadAudioPathException) {
         // changing the following parent to 0 fixes a nasty style problem cheap:
         if (QMessageBox::warning
-                (0, tr("Warning"),
+                (nullptr, tr("Warning"),
                  tr("The audio file path does not exist or is not writable.\nYou must set the audio file path to a valid directory in Document Properties before %1.\nWould you like to set it now?", op.toStdString().c_str()),
                 QMessageBox::Yes | QMessageBox::Cancel,
                  QMessageBox::Cancel 
@@ -3826,7 +3826,7 @@ RosegardenMainWindow::slotImportProject()
 
     const QString file = FileDialog::getOpenFileName(this, tr("Import Rosegarden Project File"), directory,
                tr("Rosegarden Project files") + " (*.rgp *.RGP)" + ";;" +
-               tr("All files") + " (*)", 0, nullptr);
+               tr("All files") + " (*)", nullptr, nullptr);
 
     if (file.isEmpty()) {
         return ;
@@ -3866,7 +3866,7 @@ RosegardenMainWindow::slotImportMIDI()
 
     const QString file = FileDialog::getOpenFileName(this, tr("Open MIDI File"), directory,
                tr("MIDI files") + " (*.mid *.midi *.MID *.MIDI)" + ";;" +
-               tr("All files") + " (*)", 0, nullptr);
+               tr("All files") + " (*)", nullptr, nullptr);
 
     if (file.isEmpty()) {
         return ;
@@ -3889,7 +3889,7 @@ RosegardenMainWindow::slotMergeMIDI()
 
     const QString file = FileDialog::getOpenFileName(this, tr("Merge MIDI File"), directory,
                tr("MIDI files") + " (*.mid *.midi *.MID *.MIDI)" + ";;" +
-               tr("All files") + " (*)", 0, nullptr);
+               tr("All files") + " (*)", nullptr, nullptr);
 
     if (file.isEmpty()) {
         return ;
@@ -3912,7 +3912,7 @@ RosegardenMainWindow::guessTextCodec(std::string text)
         if (text[c] & 0x80) {
             StartupLogo::hideIfStillThere();
 
-            IdentifyTextCodecDialog dialog(0, text);
+            IdentifyTextCodecDialog dialog(nullptr, text);
             dialog.exec();
 
             QString codecName = dialog.getCodec();
@@ -4145,7 +4145,7 @@ RosegardenMainWindow::slotImportRG21()
 
     const QString file = FileDialog::getOpenFileName(this, tr("Open X11 Rosegarden File"), directory,
                tr("X11 Rosegarden files") + " (*.rose)" + ";;" +
-               tr("All files") + " (*)", 0, nullptr);
+               tr("All files") + " (*)", nullptr, nullptr);
 
     if (file.isEmpty()) {
         return ;
@@ -4168,7 +4168,7 @@ RosegardenMainWindow::slotMergeRG21()
 
     const QString file = FileDialog::getOpenFileName(this, tr("Open X11 Rosegarden File"), directory,
                tr("X11 Rosegarden files") + " (*.rose)" + ";;" +
-               tr("All files") + " (*)", 0, nullptr);
+               tr("All files") + " (*)", nullptr, nullptr);
 
     if (file.isEmpty()) {
         return ;
@@ -4340,7 +4340,7 @@ RosegardenMainWindow::slotImportMusicXML()
 
     const QString file = FileDialog::getOpenFileName(this, tr("Open MusicXML File"), directory,
                tr("XML files") + " (*.xml *.XML)" + ";;" +
-               tr("All files") + " (*)", 0, nullptr);
+               tr("All files") + " (*)", nullptr, nullptr);
 
     if (file.isEmpty()) {
         return ;
@@ -4363,7 +4363,7 @@ RosegardenMainWindow::slotMergeMusicXML()
 
     const QString file = FileDialog::getOpenFileName(this, tr("Open MusicXML File"), directory,
                tr("XML files") + " (*.xml *.XML)" + ";;" +
-               tr("All files") + " (*)", 0, nullptr);
+               tr("All files") + " (*)", nullptr, nullptr);
 
     if (file.isEmpty()) {
         return ;
@@ -5464,7 +5464,7 @@ RosegardenMainWindow::slotRecord()
         return ;
     } catch (AudioFileManager::BadAudioPathException e) {
             if (QMessageBox::warning
-                    (0, tr("Warning"),
+                    (nullptr, tr("Warning"),
                  tr("The audio file path does not exist or is not writable.\nPlease set the audio file path to a valid directory in Document Properties before recording audio.\nWould you like to set it now?"),
                       QMessageBox::Yes | QMessageBox::Cancel, 
                                QMessageBox::Cancel) // default button
@@ -6389,7 +6389,7 @@ RosegardenMainWindow::showError(QString error)
     // going to stick with a warning dialog here rather than an
     // information one
 
-    QMessageBox::warning(0, tr("Rosegarden"), error);
+    QMessageBox::warning(nullptr, tr("Rosegarden"), error);
 }
 
 void
@@ -7866,7 +7866,7 @@ RosegardenMainWindow::slotImportStudio()
 
     const QString file = FileDialog::getOpenFileName(this, tr("Import Studio from File"), directory,
                     tr("All supported files") + " (*.rg *.RG *.rgt *.RGT *.rgp *.RGP)" + ";;" +
-                    tr("All files") + " (*)", 0, nullptr);
+                    tr("All files") + " (*)", nullptr, nullptr);
 
     if (file.isEmpty())
         return ;
@@ -7885,7 +7885,7 @@ RosegardenMainWindow::slotImportStudioFromFile(const QString &file)
     // We're only using this document temporarily, so we don't want to let it
     // obliterate the command history!
     bool clearCommandHistory = false, skipAutoload = true;
-    RosegardenDocument *doc = new RosegardenDocument(this, 0, skipAutoload, clearCommandHistory, m_useSequencer);
+    RosegardenDocument *doc = new RosegardenDocument(this, nullptr, skipAutoload, clearCommandHistory, m_useSequencer);
 
     Studio &oldStudio = m_doc->getStudio();
     Studio &newStudio = doc->getStudio();

@@ -46,8 +46,8 @@ MatrixVelocity::MatrixVelocity(MatrixWidget *widget) :
     m_velocityDelta(0),
     m_screenPixelsScale(100),
     m_velocityScale(0),
-    m_currentElement(0),
-    m_currentViewSegment(0),
+    m_currentElement(nullptr),
+    m_currentViewSegment(nullptr),
     m_start(false)
 {
     createAction("select", SLOT(slotSelectSelected()));
@@ -247,7 +247,7 @@ MatrixVelocity::handleMouseRelease(const MatrixMouseEvent *e)
             commandLabel = tr("Change Velocities");
         }
 
-        m_scene->setSelection(0, false);
+        m_scene->setSelection(nullptr, false);
 
         CommandHistory::getInstance()->addCommand
             (new ChangeVelocityCommand(m_velocityDelta, *selection, false));

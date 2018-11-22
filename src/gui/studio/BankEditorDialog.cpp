@@ -1560,7 +1560,7 @@ BankEditorDialog::slotImport()
                       tr("Rosegarden files") + " (*.rg *.RG)" + ";;" +
                       tr("Sound fonts") + " (*.sf2 *.SF2)" + ";;" +
                       tr("LinuxSampler configuration files") + " (*.lscp *.LSCP)" + ";;" +
-                      tr("All files") + " (*)", 0, nullptr); ///!!! Should we allow 'All files' here since LinuxSampler files don't need to have an extension?!
+                      tr("All files") + " (*)", nullptr, nullptr); ///!!! Should we allow 'All files' here since LinuxSampler files don't need to have an extension?!
 
     QUrl url(url_str);
     
@@ -1811,11 +1811,11 @@ BankEditorDialog::slotExport()
     if (!m_doc->exportStudio(name, errMsg, devices)) {
         if (errMsg != "") {
             QMessageBox::critical
-                (0, tr("Rosegarden"), tr(QString("Could not export studio to file at %1\n(%2)")
+                (nullptr, tr("Rosegarden"), tr(QString("Could not export studio to file at %1\n(%2)")
                            .arg(name).arg(errMsg).toStdString().c_str()));
         } else {
             QMessageBox::critical
-                (0, tr("Rosegarden"), tr(QString("Could not export studio to file at %1")
+                (nullptr, tr("Rosegarden"), tr(QString("Could not export studio to file at %1")
                            .arg(name).toStdString().c_str()));
         }
     }

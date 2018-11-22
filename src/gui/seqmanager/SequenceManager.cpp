@@ -74,24 +74,24 @@ namespace Rosegarden
 {
 
 SequenceManager::SequenceManager() :
-    m_doc(0),
+    m_doc(nullptr),
     m_soundDriverStatus(NO_DRIVER),
     m_compositionMapper(),
-    m_metronomeMapper(0),
-    m_tempoSegmentMapper(0),
-    m_timeSigSegmentMapper(0),
+    m_metronomeMapper(nullptr),
+    m_tempoSegmentMapper(nullptr),
+    m_timeSigSegmentMapper(nullptr),
     m_refreshRequested(true),
     m_segments(),
     m_triggerSegments(),
     m_addedSegments(),
     m_removedSegments(),
     m_shownOverrunWarning(false),
-    m_reportTimer(0),
+    m_reportTimer(nullptr),
     m_canReport(true),
     m_transportStatus(STOPPED),
     m_lastRewoundAt(clock()),
-    m_countdownDialog(0),
-    m_countdownTimer(0),
+    m_countdownDialog(nullptr),
+    m_countdownTimer(nullptr),
     m_recordTime(new QTime()),
     m_lastTransportStartPosition(0),
     m_sampleRate(0),
@@ -832,7 +832,7 @@ SequenceManager::processAsynchronousMidi(const MappedEventList &mC,
                             boolShowingALSAWarning = true;
 
                             QMessageBox::information(
-                              0,
+                              nullptr,
                               "", /* no title */
                               message,
                               QMessageBox::Ok,
@@ -902,7 +902,7 @@ SequenceManager::processAsynchronousMidi(const MappedEventList &mC,
                         if ((*i)->getData1() == MappedEvent::FailureDiscOverrun) {
                             // the error you can't hear
                             QMessageBox::information(
-                              0,
+                              nullptr,
                               "", /* no title */
                               message,
                               QMessageBox::Ok,

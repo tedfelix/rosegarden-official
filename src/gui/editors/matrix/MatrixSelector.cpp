@@ -50,10 +50,10 @@ namespace Rosegarden
 
 MatrixSelector::MatrixSelector(MatrixWidget *widget) :
     MatrixTool("matrixselector.rc", "MatrixSelector", widget),
-    m_selectionRect(0),
+    m_selectionRect(nullptr),
     m_updateRect(false),
-    m_clickedElement(0),
-    m_dispatchTool(0),
+    m_clickedElement(nullptr),
+    m_dispatchTool(nullptr),
     m_justSelectedBar(false),
     m_selectionToMerge(nullptr)
 {
@@ -172,7 +172,7 @@ MatrixSelector::handleLeftButtonPress(const MatrixMouseEvent *e)
         // Clear existing selection if we're not merging
         //
         if (!m_selectionToMerge) {
-            m_scene->setSelection(0, false);
+            m_scene->setSelection(nullptr, false);
         }
     }
 }

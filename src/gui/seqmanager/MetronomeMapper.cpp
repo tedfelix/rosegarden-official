@@ -41,7 +41,7 @@ namespace Rosegarden
 
 MetronomeMapper::MetronomeMapper(RosegardenDocument *doc) :
     MappedEventBuffer(doc),
-    m_metronome(0),
+    m_metronome(nullptr),
     m_channelManager(nullptr) // We will set this below after we find instrument.
 {
     //RG_DEBUG << "ctor: " << this;

@@ -101,7 +101,7 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
         QMainWindow(parent),
         m_doc(doc),
         m_playingAudioFile(0),
-        m_audioPlayingDialog(0),
+        m_audioPlayingDialog(nullptr),
         m_playTimer(new QTimer(this)),
         m_audiblePreview(true)
 {
@@ -592,7 +592,7 @@ AudioManagerDialog::slotRemove()
     }
     AudioListItem *item = dynamic_cast<AudioListItem*>(til[0]);
 
-    if (audioFile == nullptr || item == 0)
+    if (audioFile == nullptr || item == nullptr)
         return ;
 
     // If we're on a Segment then delete it at the Composition
@@ -696,7 +696,7 @@ AudioManagerDialog::slotPlayPreview()
     }
     AudioListItem *item = dynamic_cast<AudioListItem*>(til[0]);
 
-    if (item == nullptr || audioFile == 0)
+    if (item == nullptr || audioFile == nullptr)
         return ;
 
     // store the audio file we're playing

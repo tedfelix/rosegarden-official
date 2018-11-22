@@ -221,7 +221,7 @@ class ProximityNote : public RelativeEvent
     class SharedData {
     public:
         SharedData(void) :
-            m_oldFigChord(0),
+            m_oldFigChord(nullptr),
             m_pitchDeltas(nullptr)
             {}
 

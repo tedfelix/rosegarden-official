@@ -35,7 +35,7 @@ MatrixTool::MatrixTool(QString rcFileName, QString menuName,
                            MatrixWidget *widget) :
     BaseTool(menuName, widget),
     m_widget(widget),
-    m_scene(0),
+    m_scene(nullptr),
     m_rcFileName(rcFileName)
 {
 }

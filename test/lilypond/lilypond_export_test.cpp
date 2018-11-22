@@ -95,7 +95,7 @@ void TestLilypondExport::init()
 void TestLilypondExport::testEmptyDocument()
 {
     // GIVEN a document and a lilypond exporter
-    RosegardenDocument doc(0, 0, true /*skip autoload*/, true, false /*no sound*/);
+    RosegardenDocument doc(nullptr, nullptr, true /*skip autoload*/, true, false /*no sound*/);
     const QString fileName = "out.ly";
     LilyPondExporter exporter(&doc, SegmentSelection(), qstrtostr(fileName));
 
@@ -192,7 +192,7 @@ void TestLilypondExport::testExamples()
     settings.setValue("lilyexportbeamings", (options & ExportBeaming) ? true : false);
     settings.endGroup();
 
-    RosegardenDocument doc(0, 0, true /*skip autoload*/, true, false /*no sequencer*/);
+    RosegardenDocument doc(nullptr, nullptr, true /*skip autoload*/, true, false /*no sequencer*/);
     doc.openDocument(input, false /*not permanent, i.e. don't create midi devices*/, true /*no progress dlg*/);
     LilyPondExporter exporter(&doc, SegmentSelection(), qstrtostr(fileName));
 
