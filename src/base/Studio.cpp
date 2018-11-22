@@ -130,7 +130,7 @@ Studio::removeDevice(DeviceId id)
 
 void
 Studio::
-resyncDeviceConnections(void)
+resyncDeviceConnections()
 {
     // Sync all the device connections
     DeviceList *devices = getDevices();

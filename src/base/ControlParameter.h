@@ -110,8 +110,8 @@ public:
     // True if "e" is this type of controller / pitchbend.
     bool matches(Event *e) const;
     
-    static const ControlParameter& getPitchBend(void);
-    static const ControlParameter& getExpression(void);
+    static const ControlParameter& getPitchBend();
+    static const ControlParameter& getExpression();
 
 protected:
 

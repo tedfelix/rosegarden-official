@@ -110,7 +110,7 @@ protected:
     void initialise();
 
     // Finish initialization specifically for a derived class
-    virtual void initialiseFinish(void) = 0;
+    virtual void initialiseFinish() = 0;
 
     /// Return true if this element is not definitely beyond bounds of set
     virtual bool test(const Iterator &i) = 0;
@@ -177,7 +177,7 @@ public:
     virtual std::vector<int> getPitches() const;
     bool contains(const Iterator &) const override;
 
-    void initialiseFinish(void) override;
+    void initialiseFinish() override;
 
     /**
      * Return an iterator pointing to the previous note before this
@@ -432,7 +432,7 @@ GenericChord<Element, Container, singleStaff>::~GenericChord()
 template <class Element, class Container, bool singleStaff>
 void
 GenericChord<Element, Container, singleStaff>::
-initialiseFinish(void)
+initialiseFinish()
 {
     if (std::vector<typename Container::iterator>::size() > 1) {
         std::stable_sort(std::vector<typename Container::iterator>::begin(),

@@ -74,7 +74,7 @@ ControlBlock::ControlBlock() :
 
 void
 ControlBlock::
-clearTracks(void)
+clearTracks()
 {
     // ??? Giving TrackInfo a proper default ctor would simplify this.
     //       m_trackInfo[i] = TrackInfo();

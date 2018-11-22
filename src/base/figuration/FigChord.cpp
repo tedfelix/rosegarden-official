@@ -65,7 +65,7 @@ m_preDuration = Note(Note::WholeNote).getDuration();
 NotationQuantizer * FigChord::m_nq = nullptr;
 
 const Quantizer *
-FigChord::getQuantizer(void)
+FigChord::getQuantizer()
 {
   if (!m_nq) { m_nq = new NotationQuantizer; }
   return m_nq;
@@ -85,7 +85,7 @@ getChordNow(timeT timeLimit)
 
 FindFigChords &
 FindFigChords::
-operator++(void)
+operator++()
 {
     for (;m_iter != m_chordSource->end(); ++m_iter) {
         Event *e = *m_iter;

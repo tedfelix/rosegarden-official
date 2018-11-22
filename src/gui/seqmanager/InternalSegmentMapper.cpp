@@ -52,7 +52,7 @@ InternalSegmentMapper::InternalSegmentMapper(RosegardenDocument *doc,
 {}
 
 InternalSegmentMapper::
-~InternalSegmentMapper(void)
+~InternalSegmentMapper()
 {
     if(m_triggeredEvents) { delete m_triggeredEvents; }
 }

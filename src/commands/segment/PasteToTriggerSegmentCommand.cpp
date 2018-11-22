@@ -55,7 +55,7 @@ PasteToTriggerSegmentCommand(Composition *composition,
 }
 
 PasteToTriggerSegmentCommand::
-~PasteToTriggerSegmentCommand(void)
+~PasteToTriggerSegmentCommand()
 {}
     
 void

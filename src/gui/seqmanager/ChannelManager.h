@@ -36,7 +36,7 @@ class MappedInserterBase;
 /// List of controllers and a pitchbend.
 struct ControllerAndPBList
 {
-    ControllerAndPBList(void) :
+    ControllerAndPBList() :
         m_havePitchbend(false),
         m_pitchbend(0)
     { }

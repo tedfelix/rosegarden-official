@@ -871,7 +871,7 @@ public slots:
     /**
      * Update existing figurations
      */
-    void slotUpdateFigurations(void);
+    void slotUpdateFigurations();
     
     /**
      * Tempo to Segment length

@@ -112,7 +112,7 @@ LilyPondExporter::LilyPondExporter(RosegardenDocument *doc,
 }
 
 void
-LilyPondExporter::readConfigVariables(void)
+LilyPondExporter::readConfigVariables()
 {
     // grab settings info
     QSettings settings;

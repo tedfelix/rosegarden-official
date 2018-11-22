@@ -38,11 +38,11 @@ public:
 
   /// Returned event is on heap; caller takes responsibility for ownership
   Event *getAsEvent(timeT absoluteTime) const;
-  int    getChordSourceID(void) const
+  int    getChordSourceID() const
   { return m_chordSourceID; }
-  int    getFigurationSourceID(void) const
+  int    getFigurationSourceID() const
   { return m_figurationSourceID; }
-  const std::string NotationString(void) const;
+  const std::string NotationString() const;
   void setChordSourceID(int id)
   { m_chordSourceID = id; }
   void setFigurationSourceID(int id)

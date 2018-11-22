@@ -64,7 +64,7 @@ InstrumentAliasButton::slotPressed()
 
 void
 InstrumentAliasButton::
-slotInstrumentGone(void)
+slotInstrumentGone()
 {
     m_instrument = nullptr;
 }

@@ -61,8 +61,8 @@ protected:
     public:
       ParamWidget(QLayout *parent);
       void showByArgs(const SliderSpec* args);
-      void hide(void);
-      int getValue(void);
+      void hide();
+      int getValue();
       
     private:
       // We only include the widgets that we may want to interact with
@@ -82,14 +82,14 @@ public:
 			 const ParameterPatternVec *patterns);
 private:
     // Initialize just the pattern-choosing widgets.
-    void    initializePatternBox(void);
+    void    initializePatternBox();
 
 public:
     // Get the entire result
-    ParameterPattern::Result getResult(void);
+    ParameterPattern::Result getResult();
 private:
     // Get just the BareParams part of the result.
-    BareParams getBareParams(void);
+    BareParams getBareParams();
     // Get the current pattern index.
     const ParameterPattern * getPattern(int index) const
     { return m_patterns->at(index); }

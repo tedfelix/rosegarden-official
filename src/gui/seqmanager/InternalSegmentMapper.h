@@ -112,7 +112,7 @@ private:
     /// dump all segment data in the file
     void fillBuffer() override;
 
-    Instrument *getInstrument(void) const
+    Instrument *getInstrument() const
     { return m_channelManager.getInstrument(); }
 
     void popInsertNoteoff(int trackid, Composition &comp);

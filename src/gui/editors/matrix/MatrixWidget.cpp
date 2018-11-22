@@ -1479,7 +1479,7 @@ MatrixWidget::showInitialPointer()
 /// Instrument is destroyed
 void
 MatrixWidget::
-slotInstrumentGone(void)
+slotInstrumentGone()
 { m_instrument = nullptr; }
 
 void

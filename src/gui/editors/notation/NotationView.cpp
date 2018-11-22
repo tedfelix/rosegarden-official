@@ -464,7 +464,7 @@ findAdopted(Segment *s)
 
 // Set NotationWidget's segments.
 void
-NotationView::setWidgetSegments(void)
+NotationView::setWidgetSegments()
 {
     SegmentVector allSegments = m_segments;
     allSegments.insert(allSegments.end(),
@@ -1188,7 +1188,7 @@ NotationView::slotUpdateMenuStates()
 
 void
 NotationView::
-conformRulerSelectionState(void)
+conformRulerSelectionState()
 {
     ControlRulerWidget * cr = m_notationWidget->getControlsWidget();
     if (cr->isAnyRulerVisible())
@@ -4494,19 +4494,19 @@ NotationView::slotStepByStepTargetRequested(QObject *obj)
 }
 
 void
-NotationView::slotMoveEventsUpStaffInteractive(void)
+NotationView::slotMoveEventsUpStaffInteractive()
 { generalMoveEventsToStaff(true, true); }
 
 void
-NotationView::slotMoveEventsDownStaffInteractive(void)
+NotationView::slotMoveEventsDownStaffInteractive()
 { generalMoveEventsToStaff(false, true); }
 
 void
-NotationView::slotMoveEventsUpStaff(void)
+NotationView::slotMoveEventsUpStaff()
 { generalMoveEventsToStaff(true, false); }
 
 void
-NotationView::slotMoveEventsDownStaff(void)
+NotationView::slotMoveEventsDownStaff()
 { generalMoveEventsToStaff(false, false); }
 
 // Move the selected events to another staff

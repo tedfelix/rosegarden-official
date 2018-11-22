@@ -45,7 +45,7 @@ struct RealTime;
 
 class PitchHistory {
   public:
-    void clear(void);
+    void clear();
     
     QList<double>   m_detectFreqs;
     QList<double>   m_detectErrorsCents;

@@ -66,10 +66,10 @@ public:
      * widget as appropriate for the sort of notation layout in effect.
      */
     bool isAnyRulerVisible();
-    EventSelection *getSelection(void);
-    bool hasSelection(void);
-    SelectionSituation *getSituation(void);
-    ControlParameter   *getControlParameter(void);
+    EventSelection *getSelection();
+    bool hasSelection();
+    SelectionSituation *getSituation();
+    ControlParameter   *getControlParameter();
 
     /**
      * Returns Velocity ruler if currently shown else return 0
@@ -98,7 +98,7 @@ signals:
     void showContextHelp(const QString &);
 
 protected:
-    ControllerEventsRuler *getActiveRuler(void);
+    ControllerEventsRuler *getActiveRuler();
     
     QStackedWidget *m_stackedWidget;
     ControlRulerTabBar *m_tabBar;

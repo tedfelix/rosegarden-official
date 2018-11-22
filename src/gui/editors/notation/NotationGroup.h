@@ -91,7 +91,7 @@ public:
 
 protected:
     bool test(const NELIterator &i) override;
-    void initialiseFinish(void) override;
+    void initialiseFinish() override;
 
 private:
     struct Beam

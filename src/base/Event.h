@@ -305,7 +305,7 @@ public:
      * is masked, for use when the event is part of a multiple-tied-note
      * ornament trigger.
      **/
-    bool maskedInTrigger(void) const;
+    bool maskedInTrigger() const;
     
     typedef std::vector<PropertyName> PropertyNames;
     PropertyNames getPropertyNames() const;

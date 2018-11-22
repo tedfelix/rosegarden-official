@@ -69,7 +69,7 @@ MusicXmlExporter::~MusicXmlExporter()
 }
 
 void
-MusicXmlExporter::readConfigVariables(void)
+MusicXmlExporter::readConfigVariables()
 {
     // grab settings info
     QSettings settings;

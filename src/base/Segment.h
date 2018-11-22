@@ -198,7 +198,7 @@ public:
     void setParticipation(Participation participation)
     { m_participation = participation; }
 
-    Participation getParticipation(void)
+    Participation getParticipation()
     { return m_participation; }
 
     // label
@@ -741,7 +741,7 @@ public:
     typedef std::multiset<Segment *, Segment::SegmentCmp> SegmentMultiSet;
 
     // Get the segments in the current composition.
-    static SegmentMultiSet& getCompositionSegments(void);
+    static SegmentMultiSet& getCompositionSegments();
     
     void  addObserver(SegmentObserver *obs) { m_observers.push_back(obs); }
     void removeObserver(SegmentObserver *obs) { m_observers.remove(obs); }
@@ -863,7 +863,7 @@ public:
      * Set the segment to display as greyed out, a visual indication
      * that it is temporary or read-only.
      **/
-    void setGreyOut(void);
+    void setGreyOut();
     
     /**
      * Set the current segment as the reference of the linked segment group and

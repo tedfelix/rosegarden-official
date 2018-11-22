@@ -124,7 +124,7 @@ public:
      */
     struct MidiInstrument
     {
-      MidiInstrument(void) {};
+      MidiInstrument() {};
       MidiInstrument(Instrument * instrument, int pitch);
       int         channel;
       int         program;
@@ -196,7 +196,7 @@ protected:
     std::string m_fileName;
     RosegardenMainViewWidget *m_view;
 
-    void readConfigVariables(void);
+    void readConfigVariables();
     bool isPercussionTrack(Track *track);
     bool exportTrack(Track *track);
     void writeHeader(std::ostream &str);

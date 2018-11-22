@@ -56,10 +56,10 @@ protected:
     Segment *splitTwiceRejoin(Segment *segment);
     Segment *splitAtFirst(Segment *segment);
     Segment *splitAtSecond(Segment *segment);
-    void     calculateNewSegments(void);
+    void     calculateNewSegments();
 
 private:
-    timeT getRangeDuration(void)
+    timeT getRangeDuration()
     { return m_secondSplitTime - m_firstSplitTime; }
 
     timeT m_firstSplitTime;
@@ -227,7 +227,7 @@ splitTwiceRejoin(Segment *segment)
 }
 void
 SegmentGroupDeleteRangeCommand::
-calculateNewSegments(void)
+calculateNewSegments()
 {
     Q_ASSERT(!m_originalSegments.empty());
 

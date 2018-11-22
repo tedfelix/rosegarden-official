@@ -387,7 +387,7 @@ public:
         if (initialise) *this = MappedEvent();
     }
 
-    bool isValid(void) const { return m_type != InvalidMappedEvent; }
+    bool isValid() const { return m_type != InvalidMappedEvent; }
     // Event time
     //
     void setEventTime(const RealTime &a) { m_eventTime = a; }

@@ -25,12 +25,12 @@ namespace Rosegarden
 namespace DocumentGet
 {
 
-RosegardenDocument* getDocument(void)
+RosegardenDocument* getDocument()
 {
   return RosegardenMainWindow::self()->getDocument();
 }
     
-Composition* getComposition(void)
+Composition* getComposition()
 {
   return &getDocument()->getComposition();
 }

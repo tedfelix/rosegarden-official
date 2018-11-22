@@ -217,7 +217,7 @@ Segment::setTmp() {
 }
 
 void
-Segment::setGreyOut(void) {
+Segment::setGreyOut() {
     for (iterator it = begin(); it != end(); ++it) {
         (*it)->set<Bool>(BaseProperties::TMP, true, false);
     }
@@ -1708,7 +1708,7 @@ Segment::countVerses()
 
 SegmentMultiSet&
 Segment::
-getCompositionSegments(void)
+getCompositionSegments()
 {
     Composition* composition = DocumentGet::getComposition();
     return composition->getSegments();

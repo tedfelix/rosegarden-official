@@ -55,7 +55,7 @@ InstrumentParameterPanel::getSelectedInstrument()
 
 void
 InstrumentParameterPanel::
-slotInstrumentGone(void)
+slotInstrumentGone()
 {
     m_selectedInstrument = nullptr;
     m_instrumentLabel->setText(tr("none"));

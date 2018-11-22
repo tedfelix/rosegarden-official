@@ -2503,7 +2503,7 @@ RosegardenMainWindow::slotExpandFiguration()
 }
 
 void
-RosegardenMainWindow::slotUpdateFigurations(void)
+RosegardenMainWindow::slotUpdateFigurations()
 {
     m_view->slotAddCommandToHistory(new UpdateFigurationCommand());
 }

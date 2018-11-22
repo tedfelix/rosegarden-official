@@ -1889,7 +1889,7 @@ SequenceManager::shouldWarnForImpreciseTimer()
 // for MidiFile)
 MappedBufMetaIterator *
 SequenceManager::
-makeTempMetaiterator(void)
+makeTempMetaiterator()
 {
     MappedBufMetaIterator *metaiterator = new MappedBufMetaIterator;
     // Add the mappers we know of.  Not the metronome because we don't

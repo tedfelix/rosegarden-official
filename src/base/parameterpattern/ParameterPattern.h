@@ -110,8 +110,8 @@ protected:
             m_parameters(1, soleParameter)
         {}
 
-        EventSelection *getSelection(void);
-        void            modifySegment(void);
+        EventSelection *getSelection();
+        void            modifySegment();
         
         const SelectionSituation *m_situation;
         const ParameterPattern   *m_pattern;

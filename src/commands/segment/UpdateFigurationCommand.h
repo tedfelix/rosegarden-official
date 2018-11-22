@@ -31,7 +31,7 @@ class UpdateFigurationCommand : public MacroCommand
 {
 
 public:
-  UpdateFigurationCommand(void);
+  UpdateFigurationCommand();
 };
 
 

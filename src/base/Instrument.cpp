@@ -764,7 +764,7 @@ Instrument::getKeyMapping() const
 // accordingly. 
 void
 Instrument::
-setFixedChannel(void)
+setFixedChannel()
 {
     if (m_fixed) { return; }
 
@@ -781,7 +781,7 @@ setFixedChannel(void)
 // @author Tom Breton (Tehom) 
 void
 Instrument::
-releaseFixedChannel(void)
+releaseFixedChannel()
 {
     if (!m_fixed) { return; }
     

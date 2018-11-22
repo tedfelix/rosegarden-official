@@ -225,7 +225,7 @@ private:
     // Singleton.  Use getInstance().
     ControlBlock();
 
-    void clearTracks(void);
+    void clearTracks();
 
     RosegardenDocument *m_doc;
 

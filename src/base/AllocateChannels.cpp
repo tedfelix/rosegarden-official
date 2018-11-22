@@ -366,7 +366,7 @@ AllocateChannels(ChannelSetup /*unused*/) :
 }
 
 AllocateChannels::
-~AllocateChannels(void)
+~AllocateChannels()
 {
     RG_DEBUG
         << "~AllocateChannels"

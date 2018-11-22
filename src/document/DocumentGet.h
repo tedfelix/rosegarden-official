@@ -30,8 +30,8 @@ namespace Rosegarden
    */
   namespace DocumentGet
   {
-    Composition* getComposition(void);
-    RosegardenDocument* getDocument(void);
+    Composition* getComposition();
+    RosegardenDocument* getDocument();
   }
 }
 

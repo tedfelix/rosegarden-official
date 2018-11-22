@@ -63,7 +63,7 @@ SegmentID::getAsEvent(timeT absoluteTime) const
 }
 
 const std::string
-SegmentID::NotationString(void) const
+SegmentID::NotationString() const
 {
   if (m_type == ChordSource)
       { return qStrToStrLocal8(QObject::tr("Chord Source Segment")); }

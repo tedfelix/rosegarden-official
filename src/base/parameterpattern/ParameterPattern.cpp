@@ -41,7 +41,7 @@ namespace Rosegarden
 
 // Get the selection we have.
 EventSelection *
-ParameterPattern::Result::getSelection(void)
+ParameterPattern::Result::getSelection()
 {
     return m_situation->getEventSelection();
 }
@@ -49,7 +49,7 @@ ParameterPattern::Result::getSelection(void)
 // Modify the segment we have.  This is the guts of
 // SelectionPropertyCommand.
 void
-ParameterPattern::Result::modifySegment(void)
+ParameterPattern::Result::modifySegment()
 {
     typedef EventSelection::eventcontainer::iterator iterator;
     const EventSelection *selection = m_situation->getEventSelection();

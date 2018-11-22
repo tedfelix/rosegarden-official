@@ -62,7 +62,7 @@ class ChannelInterval
 public:
 
     // Construct an invalid channelinterval
-    ChannelInterval(void) :
+    ChannelInterval() :
         m_channel(-1),
         m_start(RealTime::zeroTime),
         m_end(RealTime::zeroTime),
@@ -113,11 +113,11 @@ public:
         }
     };
 
-    ChannelId getChannelId(void) const
+    ChannelId getChannelId() const
         { return m_channel; };
-    void clearChannelId(void)
+    void clearChannelId()
         { m_channel = -1; }
-    bool validChannel(void) const
+    bool validChannel() const
         { return m_channel >= 0; }
 
 #if defined NDEBUG

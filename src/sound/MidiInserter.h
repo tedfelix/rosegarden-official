@@ -74,11 +74,11 @@ class MidiInserter : public MappedInserterBase
 
     // Get ready to receive events.  Assumes nothing is written to
     // tracks yet.
-    void setup(void);
+    void setup();
 
     // Done receiving events.  Tracks will be complete when this
     // returns.
-    void finish(void);
+    void finish();
  
     Composition   &m_comp;
     // From RG track pos -> MIDI TrackData, the opposite direction

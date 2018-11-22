@@ -53,7 +53,7 @@ derivePropertyName(std::string eventType)
 // Return the largest value that the relevant property may have
 int
 SelectionSituation::
-maxValue(void)  const
+maxValue()  const
 {
   if (m_eventType ==       Note::EventType) { return 127; }
   if (m_eventType == Controller::EventType) { return 127; }
@@ -64,7 +64,7 @@ maxValue(void)  const
 // Get the property name as a QString
 // @author Tom Breton (Tehom)
 QString
-SelectionSituation::getPropertyNameQString(void) const
+SelectionSituation::getPropertyNameQString() const
 {
     return strtoqstr(m_property);
 }
@@ -89,7 +89,7 @@ SelectionSituation::addToValue(Event *e, int increase) const
 // for events in the selection.
 std::pair<int,int>
 SelectionSituation::
-getMinMax(void) const
+getMinMax() const
 {
     // Start with values such that anything we find will supersede
     // them.
@@ -113,7 +113,7 @@ getMinMax(void) const
 // Return the mean value of the selection
 int
 SelectionSituation::
-calcMeanValue(void) const
+calcMeanValue() const
 {
     float total = 0;
     int count = 0;

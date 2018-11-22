@@ -41,7 +41,7 @@ public:
 
     int getPitch();
 
-    int getStrategy(void);
+    int getStrategy();
     bool getShouldDuplicateNonNoteEvents();
     int getClefHandling(); // actually SegmentSplitByPitchCommand::ClefHandling
 

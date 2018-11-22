@@ -35,7 +35,7 @@
 namespace Rosegarden
 {
 
-LircClient::LircClient(void)
+LircClient::LircClient()
         : QObject()
 {
     int socketFlags;

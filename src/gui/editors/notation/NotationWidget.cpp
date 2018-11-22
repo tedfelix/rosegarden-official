@@ -387,7 +387,7 @@ NotationWidget::~NotationWidget()
 
 // Safe to call this more than once.
 void
-NotationWidget::clearAll(void)
+NotationWidget::clearAll()
 {
     delete m_scene;
     m_scene = nullptr;

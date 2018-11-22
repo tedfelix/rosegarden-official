@@ -60,7 +60,7 @@ public:
   FigChord(Segment& s, Segment::iterator i) :
     ChordFromCounterpoint(s, i, getQuantizer(), m_preDuration)
     {}
-  static const Quantizer * getQuantizer(void);
+  static const Quantizer * getQuantizer();
 private:
   static const timeT m_preDuration;
   static NotationQuantizer * m_nq;
@@ -76,8 +76,8 @@ class FindFigChords
         {}
     
     FigChord * getChordNow(timeT timeLimit);
-    FindFigChords &operator++(void);
-    timeT timeNow(void) { return m_timePreviousChord; }
+    FindFigChords &operator++();
+    timeT timeNow() { return m_timePreviousChord; }
     
  private:
     Segment *m_chordSource;

@@ -41,19 +41,19 @@ class SelectionSituation
 		     EventSelection *selection,
 		     int currentFlatValue = -1);
 
-  QString getPropertyNameQString(void) const;
+  QString getPropertyNameQString() const;
 
  public:
   bool isSuitable(Event *e) const
   { return e->isa(m_eventType); }
-  std::pair<int,int> getMinMax(void) const;
+  std::pair<int,int> getMinMax() const;
   void setValue(Event *e, int value) const;
   void addToValue(Event *e, int increase) const;
-  EventSelection *getEventSelection(void) const
+  EventSelection *getEventSelection() const
   { return m_selection; }
-  int getFlatValue(void) const { return m_currentFlatValue; }
-  int calcMeanValue(void) const;
-  int maxValue(void) const;
+  int getFlatValue() const { return m_currentFlatValue; }
+  int calcMeanValue() const;
+  int maxValue() const;
       
  protected:
   static PropertyName derivePropertyName(std::string eventType);

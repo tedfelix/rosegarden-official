@@ -324,7 +324,7 @@ storeLatestValue(Event *e)
 // @author Tom Breton (Tehom)
 void
 ControllerContextMap::
-clear(void)
+clear()
 {
     m_latestValues.clear();
     m_PitchBendLatestValue = Maybe(false,ControllerSearchValue());

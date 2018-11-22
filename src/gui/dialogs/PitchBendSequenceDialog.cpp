@@ -434,7 +434,7 @@ PitchBendSequenceDialog::slotOnlyEraseClicked(bool checked)
 }
 
 void
-PitchBendSequenceDialog::maybeEnableVibratoFields(void)
+PitchBendSequenceDialog::maybeEnableVibratoFields()
 {
     bool enable =
         m_radioRampLinear->isChecked() &&
@@ -513,7 +513,7 @@ PitchBendSequenceDialog::slotSequencePresetChanged(int index) {
 
 bool
 PitchBendSequenceDialog::
-useTrueValues(void) const
+useTrueValues() const
 {
     return m_control.getType() == Controller::EventType;
 }
@@ -535,7 +535,7 @@ percentToValueDelta(double percent) const
 
 double
 PitchBendSequenceDialog::
-getMaxSpinboxValue(void) const
+getMaxSpinboxValue() const
 {
     const int rangeAboveDefault = m_control.getMax() - m_control.getDefault();
     if (useTrueValues()) {
@@ -546,7 +546,7 @@ getMaxSpinboxValue(void) const
 }
 double
 PitchBendSequenceDialog::
-getMinSpinboxValue(void) const
+getMinSpinboxValue() const
 {
     /* rangeBelowDefault and return value will be negative or zero. */
     const int rangeBelowDefault = m_control.getMin() - m_control.getDefault();
@@ -559,7 +559,7 @@ getMinSpinboxValue(void) const
 
 double
 PitchBendSequenceDialog::
-getSmallestSpinboxStep(void) const
+getSmallestSpinboxStep() const
 {
     if (useTrueValues()) {
         return 1;
@@ -592,7 +592,7 @@ spinboxToControl(const QDoubleSpinBox *spinbox) const
 
 
 PitchBendSequenceDialog::ReplaceMode
-PitchBendSequenceDialog::getReplaceMode(void)
+PitchBendSequenceDialog::getReplaceMode()
 {
     return
         m_radioOnlyErase ->isChecked() ? OnlyErase :
@@ -602,7 +602,7 @@ PitchBendSequenceDialog::getReplaceMode(void)
 }
 
 PitchBendSequenceDialog::RampMode
-PitchBendSequenceDialog::getRampMode(void)
+PitchBendSequenceDialog::getRampMode()
 {
     return
         m_radioRampLinear      ->isChecked() ? Linear       :
@@ -634,7 +634,7 @@ PitchBendSequenceDialog::setRampMode(RampMode rampMode)
 }
 
 PitchBendSequenceDialog::StepSizeCalculation
-PitchBendSequenceDialog::getStepSizeCalculation(void)
+PitchBendSequenceDialog::getStepSizeCalculation()
 {
     return
         m_radioStepSizeDirect  ->isChecked() ? StepSizeDirect  : 
@@ -796,7 +796,7 @@ PitchBendSequenceDialog::accept()
 }
 
 double
-PitchBendSequenceDialog::getElapsedSeconds(void)
+PitchBendSequenceDialog::getElapsedSeconds()
 {
     const Composition *composition = m_segment->getComposition();
     const RealTime realTimeDifference =
@@ -807,7 +807,7 @@ PitchBendSequenceDialog::getElapsedSeconds(void)
 }
 
 int
-PitchBendSequenceDialog::numVibratoCycles(void)
+PitchBendSequenceDialog::numVibratoCycles()
 {
     const int vibratoFrequency  = m_vibratoFrequency->value();
     const float totalCyclesExact =

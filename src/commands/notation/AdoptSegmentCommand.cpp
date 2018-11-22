@@ -39,32 +39,32 @@ AdoptSegmentCommand(QString name, //
 }
   
 AdoptSegmentCommand::
-~AdoptSegmentCommand(void)
+~AdoptSegmentCommand()
 {
     if (m_detached) {
         delete m_segment;
     }
 }
 void
-AdoptSegmentCommand::slotViewdestroyed(void)
+AdoptSegmentCommand::slotViewdestroyed()
 { m_viewDestroyed = true; }
 
 void
-AdoptSegmentCommand::execute(void)
+AdoptSegmentCommand::execute()
 {
     if (m_into) { adopt(); }
     else { unadopt(); }
 }
   
 void
-AdoptSegmentCommand::unexecute(void)
+AdoptSegmentCommand::unexecute()
 {
     if (m_into) { unadopt(); }
     else { adopt(); }
 }
   
 void
-AdoptSegmentCommand::adopt(void)
+AdoptSegmentCommand::adopt()
 {
     if (m_viewDestroyed) { return; }
     m_view.adoptSegment(m_segment);
@@ -72,7 +72,7 @@ AdoptSegmentCommand::adopt(void)
 }
 
 void
-AdoptSegmentCommand::unadopt(void)
+AdoptSegmentCommand::unadopt()
 {
     if (m_viewDestroyed) { return; }
     m_view.unadoptSegment(m_segment);

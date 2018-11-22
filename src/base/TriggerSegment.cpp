@@ -61,10 +61,10 @@ class LinearTimeScale
 
     // Whether the performance duration is different than the
     // segment's intrinsic duration.
-    bool isSquished(void) const
+    bool isSquished() const
     { return m_ratio != 1.0; }
     
-    bool isPerformable(void) const
+    bool isPerformable() const
     { return m_ratio != 0.0; }
     static const LinearTimeScale m_identity;
     static const LinearTimeScale m_unperformable;
@@ -127,7 +127,7 @@ private:
         { m_retune = (m_pitchDiff != 0); }
 public:
     
-    bool isPerformable(void) const {
+    bool isPerformable() const {
         return
             !m_intervals.empty() &&
             m_timeScale.isPerformable();

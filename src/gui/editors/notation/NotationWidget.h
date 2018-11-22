@@ -70,14 +70,14 @@ public:
 
     // Delete and zero the pointer members if they are allocated.  For
     // 2-stage deletion.
-    void clearAll(void);
+    void clearAll();
 
     void setSegments(RosegardenDocument *document, 
                      std::vector<Segment *> segments);
 
     NotationScene *getScene() { return m_scene; }
     Panned *getView() { return m_view; }
-    ControlRulerWidget *getControlsWidget(void)
+    ControlRulerWidget *getControlsWidget()
         { return m_controlsWidget; }
 
     EventSelection *getSelection() const override;

@@ -113,7 +113,7 @@ public:
     typedef std::set<ChannelId> FixedChannelSet;
 
     AllocateChannels(ChannelSetup setup);
-    ~AllocateChannels(void) override;
+    ~AllocateChannels() override;
 
     void reallocateToFit(Instrument& instrument, ChannelInterval &ci,
                          RealTime start, RealTime end,
@@ -135,7 +135,7 @@ public:
 
     static bool isPercussion(ChannelId channel);
     static bool isPercussion(ChannelInterval &ci);
-    static ChannelId getPercussionChannel(void) { return 9; }
+    static ChannelId getPercussionChannel() { return 9; }
 
 signals:
     void sigVacateChannel(ChannelId channel);

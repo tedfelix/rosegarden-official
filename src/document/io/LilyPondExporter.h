@@ -125,7 +125,7 @@ private:
     LilyPondLanguage *m_language;
     SegmentSelection m_selection;
 
-    void readConfigVariables(void);
+    void readConfigVariables();
 
     Event *nextNoteInGroup(Segment *s, Segment::iterator it, const std::string &groupType, int barEnd) const;
 

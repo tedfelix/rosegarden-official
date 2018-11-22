@@ -60,13 +60,13 @@ public:
      * Return a Controllable if we are a subtype that also inherits
      * from Controllable, otherwise return nullptr
      **/
-    Controllable *getControllable(void);
+    Controllable *getControllable();
 
     /**
      * Return our AllocateChannels if we are a subtype that tracks
      * free channels, otherwise return nullptr
      **/
-    virtual AllocateChannels *getAllocator(void);
+    virtual AllocateChannels *getAllocator();
 
     void setType(DeviceType type) { m_type = type; }
     DeviceType getType() const { return m_type; }

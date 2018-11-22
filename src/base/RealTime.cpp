@@ -208,7 +208,7 @@ RealTime::frame2RealTime(long frame, unsigned int sampleRate)
 // @returns corresponding beats per minute.
 // @author Tom Breton
 double
-RealTime::toPerMinute(void)
+RealTime::toPerMinute()
 {
     const double nsecsPerSec = ONE_BILLION;
     const double secondsPerBeat = double(sec) + double(nsec) / nsecsPerSec;

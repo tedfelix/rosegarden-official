@@ -81,7 +81,7 @@ public:
     /**
      * The only overrider is SegmentMapper and it just debug-prints.
      */
-    virtual void initSpecial(void)  { }
+    virtual void initSpecial()  { }
 
     /// Access to the internal buffer of events.  NOT LOCKED
     /**
@@ -348,7 +348,7 @@ public:
         { return m_s->shouldPlay(evt, startTime); }
 
         // Get a pointer to the MappedEventBuffer's lock.
-        QReadWriteLock* getLock(void) const
+        QReadWriteLock* getLock() const
         { return &m_s->m_lock; }
 
     protected:

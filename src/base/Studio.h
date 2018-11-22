@@ -71,7 +71,7 @@ public:
 
     void removeDevice(DeviceId id);
 
-    void resyncDeviceConnections(void);
+    void resyncDeviceConnections();
 
     DeviceId getSpareDeviceId(InstrumentId &baseInstrumentId);
 

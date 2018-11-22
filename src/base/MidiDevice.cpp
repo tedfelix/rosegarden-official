@@ -208,7 +208,7 @@ MidiDevice::~MidiDevice()
 }
 
 AllocateChannels *
-MidiDevice::getAllocator(void)
+MidiDevice::getAllocator()
 { return m_allocator; }
 
 void

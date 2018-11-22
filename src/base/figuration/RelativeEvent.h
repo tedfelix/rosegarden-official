@@ -34,12 +34,12 @@ public:
       m_bareEvent(e),
       m_relativeTime(e->getAbsoluteTime() - startTime)
   {};
-  virtual ~RelativeEvent(void) {}
+  virtual ~RelativeEvent() {}
 
   virtual Event   *getAsEvent(timeT baseTime, const Key key,
 			      const FigChord *notes)=0;
   void setScore(int score) { m_score = score; };
-  int getScore(void) { return m_score; };
+  int getScore() { return m_score; };
   timeT            getAbsoluteTime(timeT baseTime)
   { return m_relativeTime + baseTime; };
 protected:

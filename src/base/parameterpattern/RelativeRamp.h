@@ -39,7 +39,7 @@ class RelativeRamp : public ParameterPattern
                            Result *result) const override;
 
 public:
-    RelativeRamp(void) 
+    RelativeRamp() 
     {};
     static RelativeRamp single;
 };

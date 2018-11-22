@@ -622,7 +622,7 @@ NotationScene::getNextStaffHorizontally(int direction, bool cycle)
 // Initialize which staff is current.  We try to choose one containing
 // the playback pointer.
 void
-NotationScene::initCurrentStaffIndex(void)
+NotationScene::initCurrentStaffIndex()
 {
     // Only do this if we haven't done it before since the last reset,
     // otherwise we'll annoy the user.

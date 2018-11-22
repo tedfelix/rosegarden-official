@@ -57,16 +57,16 @@ public:
   SegmentFigData(Segment* s);
 
   void addTagIfNeeded(Segment *s, MacroCommand* command);
-  int getID(void) { return m_id; }
-  bool needsTag(void) { return m_needsTag; }
-  SegTypes getType(void) { return m_type; }
+  int getID() { return m_id; }
+  bool needsTag() { return m_needsTag; }
+  SegTypes getType() { return m_type; }
   void convertType(SegTypes type) {
     m_type = type;
     m_needsTag = true;
   }
   bool isa(SegTypes type) { return m_type == type; }
 
-  static int getUnusedSegmentID(void) {
+  static int getUnusedSegmentID() {
     ++m_maxID;
     return m_maxID;
   }

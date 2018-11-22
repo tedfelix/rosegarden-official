@@ -135,7 +135,7 @@ class ProximityNote : public RelativeEvent
             sort(m_originalTones.begin(), m_originalTones.end());
         }
         // Unused now.
-        PitchNoOctave getPitch(void) { return m_pitch; }
+        PitchNoOctave getPitch() { return m_pitch; }
         int getPenalty(PitchNoOctave pitch)
         {
             // Direction of subtraction here isn't important since
@@ -220,7 +220,7 @@ class ProximityNote : public RelativeEvent
     typedef std::vector<TonePressure> TonePressureVector;
     class SharedData {
     public:
-        SharedData(void) :
+        SharedData() :
             m_oldFigChord(nullptr),
             m_pitchDeltas(nullptr)
             {}
@@ -685,7 +685,7 @@ protected:
 
 public:
     virtual UnsolvedNote add(Event *e)=0;
-    virtual ~BaseRelativeEventAdder(void) {};
+    virtual ~BaseRelativeEventAdder() {};
 
 protected:
     BaseRelativeEventAdder(timeT startTime) :
@@ -737,7 +737,7 @@ public:
         m_sharedData(new ProximityNote::SharedData)
         {}
         
-    ~UnparamaterizedRelativeEventAdder(void) override
+    ~UnparamaterizedRelativeEventAdder() override
     {
         // Destroying the adder triggers setting up the shared data,
         // using what we collected during the adder's lifetime.

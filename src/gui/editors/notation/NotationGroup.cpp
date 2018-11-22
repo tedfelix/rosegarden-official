@@ -179,7 +179,7 @@ NotationGroup::sample(const NELIterator &i, bool goingForwards)
 }
 
 void
-NotationGroup::initialiseFinish(void) {}
+NotationGroup::initialiseFinish() {}
 
 bool
 NotationGroup::contains(const NELIterator &i) const

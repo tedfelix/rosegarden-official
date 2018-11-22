@@ -46,11 +46,11 @@ class SegmentID
 
   /// Returned event is on heap; caller takes responsibility for ownership
   Event *getAsEvent(timeT absoluteTime) const;
-  int    getID(void) const
+  int    getID() const
   { return m_ID; }
   std::string getType() const
     { return m_type; }
-  const std::string NotationString(void) const;
+  const std::string NotationString() const;
 
  private:
   long m_ID;

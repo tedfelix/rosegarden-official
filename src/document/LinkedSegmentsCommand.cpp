@@ -46,7 +46,7 @@ LinkedSegmentsCommand::LinkedSegmentsCommand(const QString &name,
 #endif            
 }
 
-LinkedSegmentsCommand::~LinkedSegmentsCommand(void)
+LinkedSegmentsCommand::~LinkedSegmentsCommand()
 {
     if (m_detached) {
         for (SegmentVec::iterator i = m_newSegments.begin();
@@ -57,7 +57,7 @@ LinkedSegmentsCommand::~LinkedSegmentsCommand(void)
     }
 }
 void
-LinkedSegmentsCommand::executeAttachDetach(void)
+LinkedSegmentsCommand::executeAttachDetach()
 {
     m_composition->detachAllSegments(m_originalSegments);
     m_composition->addAllSegments(m_newSegments);
@@ -65,7 +65,7 @@ LinkedSegmentsCommand::executeAttachDetach(void)
 }
 
 void
-LinkedSegmentsCommand::unexecuteAttachDetach(void)
+LinkedSegmentsCommand::unexecuteAttachDetach()
 {
     m_composition->detachAllSegments(m_newSegments);
     m_composition->addAllSegments(m_originalSegments);

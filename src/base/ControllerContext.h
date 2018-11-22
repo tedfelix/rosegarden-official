@@ -42,12 +42,12 @@ class ControllerSearchValue
     m_value(value),
         m_when(when)
         {};
- ControllerSearchValue(void) :
+ ControllerSearchValue() :
     m_value(0),
         m_when(0)
             {};    
-    int value(void) { return m_value; }
-    int time(void)  { return m_when; }
+    int value() { return m_value; }
+    int time()  { return m_when; }
  private:
     // Type is long so that ControllerEventAdapter can work.
     long              m_value; 
@@ -90,7 +90,7 @@ struct ControllerContextMap
     typedef std::map< int, ControllerSearchValue>  Cache;
     typedef std::pair<int, ControllerSearchValue>  CacheEntry;
  public:
- ControllerContextMap(void) :
+ ControllerContextMap() :
     m_PitchBendLatestValue(Maybe(false,ControllerSearchValue()))
     {};
 
@@ -108,7 +108,7 @@ struct ControllerContextMap
                            int controllerId);
 
     void storeLatestValue(Event *e);
-    void clear(void);
+    void clear();
 
  private:
     int makeAbsolute(const ControlParameter * controlParameter,

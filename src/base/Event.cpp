@@ -370,7 +370,7 @@ Event::dumpStats(ostream&)
 #endif
 
 bool
-Event::maskedInTrigger(void) const
+Event::maskedInTrigger() const
 {
     using namespace BaseProperties;
     

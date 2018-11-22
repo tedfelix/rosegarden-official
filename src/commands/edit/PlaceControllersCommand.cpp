@@ -59,7 +59,7 @@ PlaceControllersCommand::getDefaultValue(const Instrument *instrument,
 
 void
 PlaceControllersCommand::
-modifySegment(void)
+modifySegment()
 {
     typedef EventSelection::eventcontainer container;
     typedef container::iterator iterator;

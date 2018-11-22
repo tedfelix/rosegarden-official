@@ -284,7 +284,7 @@ private:
     NotationStaff *getNextStaffVertically(int direction, timeT t);
     NotationStaff *getNextStaffHorizontally(int direction, bool cycle);
     NotationStaff *getStaffbyTrackAndTime(const Track *track, timeT targetTime);
-    void initCurrentStaffIndex(void);
+    void initCurrentStaffIndex();
     void processKeyboardEvent(QKeyEvent * keyEvent);
 
     NotationWidget *m_widget; // I do not own this

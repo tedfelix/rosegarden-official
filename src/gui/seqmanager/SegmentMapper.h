@@ -40,12 +40,12 @@ public:
     int getSegmentRepeatCount() override;
     TrackId getTrackID() const override;
 
-    void initSpecial(void) override;
+    void initSpecial() override;
 
 protected:
     SegmentMapper(RosegardenDocument *, Segment *);
 
-    bool mutedEtc(void);
+    bool mutedEtc();
 
     //--------------- Data members ---------------------------------
     Segment *m_segment;

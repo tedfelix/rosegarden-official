@@ -42,7 +42,7 @@ SegmentMapper::SegmentMapper(RosegardenDocument *doc,
 
 void
 SegmentMapper::
-initSpecial(void)
+initSpecial()
 {
     if (m_segment != nullptr) {
         SEQMAN_DEBUG << "SegmentMapper::initSpecial " 
@@ -116,7 +116,7 @@ SegmentMapper::getTrackID() const
 
 bool
 SegmentMapper::
-mutedEtc(void)
+mutedEtc()
 {
     const ControlBlock *controlBlock = ControlBlock::getInstance();
     TrackId trackId = m_segment->getTrack();

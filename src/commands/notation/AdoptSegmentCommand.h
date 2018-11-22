@@ -41,13 +41,13 @@ public:
     ~AdoptSegmentCommand() override;
 
 protected:
-    void execute(void) override;
-    void unexecute(void) override;
-    void adopt(void);
-    void unadopt(void);
+    void execute() override;
+    void unexecute() override;
+    void adopt();
+    void unadopt();
 
 protected slots:
-    void slotViewdestroyed(void);
+    void slotViewdestroyed();
     
  private:
     NotationView &m_view;

@@ -42,7 +42,7 @@ public:
     BeatInterpolator(timeT duration,
                      timeT prevBeatDuration,
                      int numSkippedBeats);
-    BeatInterpolator(void) :
+    BeatInterpolator() :
         m_baseBeatDuration(480), // No good default for this.
         m_logScalingPerBeat(1.0)
         {}

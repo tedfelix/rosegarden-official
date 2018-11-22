@@ -21,7 +21,7 @@ namespace Rosegarden {
 
 // Clear all member lists
 void
-PitchHistory::clear(void)
+PitchHistory::clear()
 {
     m_detectTimes.clear();
     m_detectRealTimes.clear();

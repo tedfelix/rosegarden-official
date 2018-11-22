@@ -109,7 +109,7 @@ struct ROSEGARDENPRIVATE_EXPORT RealTime
     static long realTime2Frame(const RealTime &r, unsigned int sampleRate);
     static RealTime frame2RealTime(long frame, unsigned int sampleRate);
     // Convert to frequency per minute.
-    double toPerMinute(void);
+    double toPerMinute();
 
     static const RealTime zeroTime;
     static const RealTime beforeMaxTime;

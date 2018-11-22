@@ -156,10 +156,10 @@ public:
 
     // ---------------- Fixed channels -----------------
 
-    void setFixedChannel(void);
+    void setFixedChannel();
     // Release this instrument's fixed channel, if any.
-    void releaseFixedChannel(void);
-    bool hasFixedChannel(void) const { return m_fixed; }
+    void releaseFixedChannel();
+    bool hasFixedChannel() const { return m_fixed; }
 
     //void setMidiInputChannel(char ic) { m_input_channel = ic; }
     //char getMidiInputChannel() const { return m_input_channel; }
@@ -297,7 +297,7 @@ public:
     //
     void removeStaticController(MidiByte controller);
 
-    void sendWholeDeviceDestroyed(void)
+    void sendWholeDeviceDestroyed()
     { emit wholeDeviceDestroyed(); }
 
     /// Send out program changes, etc..., for fixed channels.
@@ -321,18 +321,18 @@ public:
  signals:
     // Like QObject::destroyed, but implies that the whole device is
     // being destroyed so we needn't bother freeing channels on it.
-    void wholeDeviceDestroyed(void);
+    void wholeDeviceDestroyed();
 
     // Emitted when we change how we set up the MIDI channel.
     // Notifies ChannelManagers that use the instrument to refresh
     // channel
-    void changedChannelSetup(void);
+    void changedChannelSetup();
 
     // Emitted when we lose/gain a fixed MIDI channel.  Notifies
     // ChannelManagers that use the instrument to modify their channel
     // allocation accordingly.
-    void channelBecomesFixed(void);
-    void channelBecomesUnfixed(void);
+    void channelBecomesFixed();
+    void channelBecomesUnfixed();
 
 private:
     // ??? Hiding because, fortunately, this is never used.

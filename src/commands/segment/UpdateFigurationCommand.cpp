@@ -23,7 +23,7 @@ namespace Rosegarden
 {
 
 UpdateFigurationCommand::
-UpdateFigurationCommand(void)
+UpdateFigurationCommand()
     : MacroCommand(QObject::tr("Update Figurations"))
 { SegmentFigData::updateComposition(this); }
 

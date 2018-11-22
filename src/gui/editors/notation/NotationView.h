@@ -149,7 +149,7 @@ protected slots:
     void slotPlaceControllers();
 
     void slotSetSelectTool();
-    void slotSetSelectNoTiesTool(void);
+    void slotSetSelectNoTiesTool();
 
     void slotSetEraseTool();
     
@@ -320,10 +320,10 @@ protected slots:
      */
     void slotSymbolAction();
 
-    void slotMoveEventsUpStaffInteractive(void);
-    void slotMoveEventsDownStaffInteractive(void);
-    void slotMoveEventsUpStaff(void);
-    void slotMoveEventsDownStaff(void);
+    void slotMoveEventsUpStaffInteractive();
+    void slotMoveEventsDownStaffInteractive();
+    void slotMoveEventsUpStaff();
+    void slotMoveEventsDownStaff();
 
     /**
      * Called when the mouse cursor moves over a different height on
@@ -472,10 +472,10 @@ private:
     void setCurrentNotePixmap(QPixmap);
     void setCurrentNotePixmapFrom(QAction *);
 
-    void conformRulerSelectionState(void);
+    void conformRulerSelectionState();
     void insertControllerSequence(const ControlParameter &cp);
     bool isShowable(Event *e);
-    void setWidgetSegments(void);
+    void setWidgetSegments();
     void EditOrnamentInline(Event *trigger, Segment *containing);
     void ShowOrnamentExpansion(Event *trigger, Segment *containing);
     SegmentVector::iterator findAdopted(Segment *s);

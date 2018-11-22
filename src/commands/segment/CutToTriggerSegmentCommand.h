@@ -53,7 +53,7 @@ class CutToTriggerSegmentCommand : public BasicSelectionCommand
     void unexecute() override;
 
 protected:
-    void modifySegment(void) override;
+    void modifySegment() override;
 
     PasteToTriggerSegmentWorker m_paster;
     EventSelection *            m_selection;

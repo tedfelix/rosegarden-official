@@ -456,7 +456,7 @@ ControlRulerWidget::isAnyRulerVisible()
 }
 
 ControllerEventsRuler *
-ControlRulerWidget::getActiveRuler(void)
+ControlRulerWidget::getActiveRuler()
 {
     QWidget * widget = m_stackedWidget->currentWidget ();
     if (!widget) { return nullptr; }
@@ -472,7 +472,7 @@ ControlRulerWidget::getActivePropertyRuler()
 }
 
 bool
-ControlRulerWidget::hasSelection(void)
+ControlRulerWidget::hasSelection()
 {
     ControllerEventsRuler *ruler = getActiveRuler();
     if (!ruler) { return false; }
@@ -482,7 +482,7 @@ ControlRulerWidget::hasSelection(void)
 // Return the active ruler's event selection, or nullptr if none.
 // @author Tom Breton (Tehom)
 EventSelection *
-ControlRulerWidget::getSelection(void)
+ControlRulerWidget::getSelection()
 {
     ControllerEventsRuler *ruler = getActiveRuler();
     if (!ruler) { return nullptr; }
@@ -490,7 +490,7 @@ ControlRulerWidget::getSelection(void)
 }
 
 ControlParameter *
-ControlRulerWidget::getControlParameter(void)
+ControlRulerWidget::getControlParameter()
 {
     ControllerEventsRuler *ruler = getActiveRuler();
     if (!ruler) { return nullptr; }
@@ -501,7 +501,7 @@ ControlRulerWidget::getControlParameter(void)
 // Return is owned by caller.
 // @author Tom Breton (Tehom)
 SelectionSituation *
-ControlRulerWidget::getSituation(void)
+ControlRulerWidget::getSituation()
 {
     ControllerEventsRuler *ruler = getActiveRuler();
     if (!ruler) { return nullptr; }

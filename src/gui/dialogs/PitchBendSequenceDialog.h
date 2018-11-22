@@ -92,32 +92,32 @@ protected slots:
 protected:
     /** Methods dealing with transforming to or from spinbox values **/
 
-    bool useTrueValues(void) const;
+    bool useTrueValues() const;
     int spinboxToControl(const QDoubleSpinBox *spinbox) const;
     int spinboxToControlDelta(const QDoubleSpinBox *spinbox) const;
-    double getMaxSpinboxValue(void) const;
-    double getMinSpinboxValue(void) const;
-    double getSmallestSpinboxStep(void) const;
+    double getMaxSpinboxValue() const;
+    double getMinSpinboxValue() const;
+    double getSmallestSpinboxStep() const;
     double valueDeltaToPercent(int valueDelta) const;
     int percentToValueDelta(double) const;
-    double getElapsedSeconds(void);
-    int numVibratoCycles(void);
+    double getElapsedSeconds();
+    int numVibratoCycles();
 
     /** Methods dealing with setting and reading radiobutton groups **/
 
-    ReplaceMode getReplaceMode(void);
+    ReplaceMode getReplaceMode();
     void setRampMode(RampMode rampMode);
-    RampMode getRampMode(void);
+    RampMode getRampMode();
     void setStepSizeCalculation(StepSizeCalculation stepSizeCalculation);
-    StepSizeCalculation getStepSizeCalculation(void);
+    StepSizeCalculation getStepSizeCalculation();
 
     /** Methods to help manage which widgets are enabled **/
 
-    void maybeEnableVibratoFields(void);
+    void maybeEnableVibratoFields();
 
     /** Methods dealing with saving/restoring presets **/
 
-    void saveSettings(void);
+    void saveSettings();
     void savePreset(int preset);
     void restorePreset(int preset);
     

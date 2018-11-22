@@ -82,7 +82,7 @@ CutToTriggerSegmentCommand::unexecute()
 // selection was in, the trigger segment is managed separately by
 // m_paster.
 void
-CutToTriggerSegmentCommand::modifySegment(void)
+CutToTriggerSegmentCommand::modifySegment()
 {
     using namespace BaseProperties;
 

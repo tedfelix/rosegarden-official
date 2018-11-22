@@ -170,7 +170,7 @@ getTrackData(TrackId RGTrackPos, int channelNb)
 // Adapted from MidiFile.cpp
 void
 MidiInserter::
-setup(void)
+setup()
 {
     m_conductorTrack.m_previousTime = 0;
     
@@ -198,7 +198,7 @@ setup(void)
 // @author Tom Breton (Tehom)
 void
 MidiInserter::
-finish(void)
+finish()
 {
     if(m_finished) { return; }
     timeT endOfComp = getAbsoluteTime(m_trueEnd);

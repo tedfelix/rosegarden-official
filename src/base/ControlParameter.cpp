@@ -164,7 +164,7 @@ matches(Event *e) const
 // order to prevent the "static initialization order fiasco".
 const ControlParameter&
 ControlParameter::
-getPitchBend(void)
+getPitchBend()
 {
     static const ControlParameter
         pitchBend(
@@ -175,7 +175,7 @@ getPitchBend(void)
 
 const ControlParameter&
 ControlParameter::
-getExpression(void)
+getExpression()
 {
     static const ControlParameter
         expression(
