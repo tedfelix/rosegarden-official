@@ -250,11 +250,13 @@ NotationScene::setCurrentStaff(NotationStaff *staff)
         if (staff->getSegment().isTmp()) return;
     }
 
-    for (uint i = 0; i < m_staffs.size(); ++i) {
+    for (int i = 0; i < int(m_staffs.size()); ++i) {
         if (m_staffs[i] == staff) {
-            m_currentStaff = i;
-            emit currentStaffChanged();
-            emit currentViewSegmentChanged(staff);
+            if (m_currentStaff != i) {
+                m_currentStaff = i;
+                emit currentStaffChanged();
+                emit currentViewSegmentChanged(staff);
+            }
             return;
         }
     }
@@ -855,6 +857,7 @@ NotationScene::mousePressEvent(QGraphicsSceneMouseEvent *e)
 {
     NotationMouseEvent nme;
     setupMouseEvent(e, nme);
+    ///! Warning, this short-circuits NotationView::setCurrentStaff...
     if (nme.staff) setCurrentStaff(nme.staff);
     emit mousePressed(&nme);
 }

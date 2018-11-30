@@ -589,6 +589,9 @@ NotationWidget::setSegments(RosegardenDocument *document,
 
     showPointerPosition(m_document->getComposition().getPosition(),
                         true);
+
+    connect(m_scene, &NotationScene::currentStaffChanged,
+            this, [this]() { updatePointerPosition(true); });
 }
 
 void

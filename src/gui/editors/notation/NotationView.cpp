@@ -2027,7 +2027,6 @@ NotationView::setCurrentStaff(NotationStaff *staff)
         { leaveActionState("focus_adopted_segment"); }
 
     scene->setCurrentStaff(staff);
-    m_notationWidget->updatePointerPosition(true);
 }
 
 void
