@@ -69,7 +69,7 @@ public:
         : m_systemPalette(qApp->palette()),
           m_systemStyle(qApp->style()) {
     }
-    bool eventFilter(QObject *watched, QEvent *event) Q_DECL_OVERRIDE;
+    bool eventFilter(QObject *watched, QEvent *event) override;
 
     bool shouldIgnoreThornStyle(QWidget *widget) const {
         return qobject_cast<QFileDialog *>(widget)

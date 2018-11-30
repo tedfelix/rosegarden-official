@@ -24,14 +24,6 @@
 #include <QIcon>
 #include <rosegardenprivate_export.h>
 
-// Qt4 support
-#ifndef Q_DECL_OVERRIDE
-#define Q_DECL_OVERRIDE
-#endif
-#ifndef Q_nullptrPTR
-#define Q_nullptrPTR 0
-#endif
-
 namespace Rosegarden
 {
 
@@ -50,19 +42,19 @@ public:
     static void setEnabled(bool b);
     static bool isEnabled();
 
-    QPalette standardPalette() const Q_DECL_OVERRIDE;
+    QPalette standardPalette() const override;
 
-    int styleHint(StyleHint hint, const QStyleOption *option, const QWidget *widget = Q_nullptrPTR, QStyleHintReturn *returnData = Q_nullptrPTR) const Q_DECL_OVERRIDE;
-    int pixelMetric(PixelMetric metric, const QStyleOption *option, const QWidget *widget = Q_nullptrPTR) const Q_DECL_OVERRIDE;
+    int styleHint(StyleHint hint, const QStyleOption *option, const QWidget *widget = nullptr, QStyleHintReturn *returnData = nullptr) const override;
+    int pixelMetric(PixelMetric metric, const QStyleOption *option, const QWidget *widget = nullptr) const override;
 
-    void drawPrimitive(PrimitiveElement element, const QStyleOption *option, QPainter *painter, const QWidget *widget = Q_nullptrPTR) const Q_DECL_OVERRIDE;
-    void drawControl(ControlElement element, const QStyleOption *option, QPainter *painter, const QWidget *widget = Q_nullptrPTR) const Q_DECL_OVERRIDE;
-    void drawComplexControl(ComplexControl control, const QStyleOptionComplex *option, QPainter *painter, const QWidget *widget = Q_nullptrPTR) const Q_DECL_OVERRIDE;
+    void drawPrimitive(PrimitiveElement element, const QStyleOption *option, QPainter *painter, const QWidget *widget = nullptr) const override;
+    void drawControl(ControlElement element, const QStyleOption *option, QPainter *painter, const QWidget *widget = nullptr) const override;
+    void drawComplexControl(ComplexControl control, const QStyleOptionComplex *option, QPainter *painter, const QWidget *widget = nullptr) const override;
 
-    QSize sizeFromContents(ContentsType type, const QStyleOption *option, const QSize &size, const QWidget *widget = Q_nullptrPTR) const Q_DECL_OVERRIDE;
+    QSize sizeFromContents(ContentsType type, const QStyleOption *option, const QSize &size, const QWidget *widget = nullptr) const override;
 
-    QRect subElementRect(SubElement element, const QStyleOption *option, const QWidget *widget = Q_nullptrPTR) const Q_DECL_OVERRIDE;
-    QRect subControlRect(ComplexControl cc, const QStyleOptionComplex *opt, SubControl sc, const QWidget *widget = Q_nullptrPTR) const Q_DECL_OVERRIDE;
+    QRect subElementRect(SubElement element, const QStyleOption *option, const QWidget *widget = nullptr) const override;
+    QRect subControlRect(ComplexControl cc, const QStyleOptionComplex *opt, SubControl sc, const QWidget *widget = nullptr) const override;
 
     QIcon standardIcon(StandardPixmap standardIcon,
                        const QStyleOption * option = nullptr,
