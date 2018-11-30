@@ -744,7 +744,7 @@ NotationWidget::slotSetFontSize(int size)
     // Force standard rulers and pointer pointer to refresh -- otherwise
     m_bottomStandardRuler->updateStandardRuler();
     m_topStandardRuler->updateStandardRuler();
-    slotUpdatePointerPosition(false);
+    updatePointerPosition(false);
 }
 
 NotationTool *
@@ -873,7 +873,7 @@ NotationWidget::slotTogglePlayTracking()
 }
 
 void
-NotationWidget::slotUpdatePointerPosition(bool moveView)
+NotationWidget::updatePointerPosition(bool moveView)
 {
     slotPointerPositionChanged(m_document->getComposition().getPosition(),
                                moveView);

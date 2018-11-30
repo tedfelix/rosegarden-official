@@ -39,9 +39,6 @@ class ActionFileParser;
  * ??? Derivation seems a bit extreme in this case.  Consider using
  *     containment instead.  Pass the QObject pointer in via the ctor.
  *     That will then eliminate the need for multiple inheritance.
- *     One issue is whether anyone actually overrides any of these
- *     virtual functions.  If no one does, then containment really is
- *     preferable.
  */
 class ActionFileClient
 {
@@ -56,7 +53,7 @@ public:
      *     NotationTool::findActionInParentView()
      *     MatrixTool::findActionInParentView()
      */
-    virtual QAction *findAction(QString actionName);
+    QAction *findAction(QString actionName);
 
 protected:
     ActionFileClient();
@@ -79,22 +76,22 @@ protected:
      * this will currently return a null pointer -- beware the
      * inconsistency with the other methods here!
      */
-    virtual QActionGroup *findGroup(QString groupName);
+    QActionGroup *findGroup(QString groupName);
 
     /**
      * Find a menu of the given object name.  If it does not exist,
      * this will currently return a null pointer -- beware the
      * inconsistency with the other methods here!
      */
-    virtual QMenu *findMenu(QString menuName);
+    QMenu *findMenu(QString menuName);
 
     /// Creates the toolbar if it doesn't exist.
-    virtual QToolBar *findToolbar(QString toolbarName);
+    QToolBar *findToolbar(QString toolbarName);
 
     /// Enable/disable and show/hide actions based on the new state.
-    virtual void enterActionState(QString stateName);
+    void enterActionState(QString stateName);
     /// Enable/disable and show/hide actions based on leaving the state.
-    virtual void leaveActionState(QString stateName);
+    void leaveActionState(QString stateName);
 
     /// Enable auto-repeat for a toolbar button.
     void enableAutoRepeat(

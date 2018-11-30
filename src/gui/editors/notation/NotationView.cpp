@@ -380,7 +380,7 @@ NotationView::NotationView(RosegardenDocument *doc,
     settings.endGroup();
 
     // Show the pointer as soon as notation editor opens
-    m_notationWidget->slotUpdatePointerPosition(false);
+    m_notationWidget->updatePointerPosition(false);
     
     readOptions();
 }
@@ -2015,8 +2015,7 @@ NotationView::slotCurrentSegmentNext()
 }
 
 void
-NotationView::
-setCurrentStaff(NotationStaff *staff)
+NotationView::setCurrentStaff(NotationStaff *staff)
 {
     if (!staff) return;
     NotationScene *scene = m_notationWidget->getScene();
@@ -2028,10 +2027,7 @@ setCurrentStaff(NotationStaff *staff)
         { leaveActionState("focus_adopted_segment"); }
 
     scene->setCurrentStaff(staff);
-    m_notationWidget->slotUpdatePointerPosition(true);
-    // m_notationWidget->
-    //     slotPointerPositionChanged(m_document->getComposition().getPosition(),
-    //                                true);
+    m_notationWidget->updatePointerPosition(true);
 }
 
 void
