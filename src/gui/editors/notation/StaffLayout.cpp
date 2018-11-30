@@ -1119,20 +1119,6 @@ StaffLayout::renderElements(ViewElementList::iterator,
     // of positionElements
 }
 
-void
-StaffLayout::renderAllElements()
-{
-    renderElements(m_viewSegment->getViewElementList()->begin(),
-                   m_viewSegment->getViewElementList()->end());
-}
-
-void
-StaffLayout::positionAllElements()
-{
-    positionElements(m_viewSegment->getSegment().getStartTime(),
-                     m_viewSegment->getSegment().getEndTime());
-}
-
 QRectF
 StaffLayout::getSceneArea()
 {

@@ -26,8 +26,6 @@
 
 class QMenu;
 class QAction;
-class QKeyEvent;
-
 
 namespace Rosegarden
 {

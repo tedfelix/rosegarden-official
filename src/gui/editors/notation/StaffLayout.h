@@ -406,11 +406,6 @@ public:
                                 ViewElementList::iterator to);
 
     /**
-     * Call renderElements(from, to) on the whole staff.
-     */
-    virtual void renderAllElements();
-
-    /**
      * Assign suitable coordinates to the elements on the staff
      * between the start and end times, based entirely on the layout
      * X and Y coordinates they were given by the horizontal and
@@ -422,14 +417,7 @@ public:
     virtual void positionElements(timeT from,
                                   timeT to) = 0;
  
-    /**
-     * Call positionElements(from, to) on the whole staff.
-     */
-    virtual void positionAllElements();
-    
-
     /* Some optional methods for the subclass. */
-
 
     /**
      * Return an iterator pointing to the nearest view element to the

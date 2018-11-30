@@ -482,12 +482,6 @@ NotationStaff::renderElements(NotationElementList::iterator from,
     //    RG_DEBUG << "NotationStaff " << this << "::renderElements()";
     Profiler profiler("NotationStaff::renderElements");
 
-    //emit setOperationName(tr("Rendering staff %1...").arg(getId() + 1));
-    //emit setValue(0);
-
-    //throwIfCancelled();
-
-    //int elementCount = 0;
     timeT endTime =
         (to != getViewElementList()->end() ? (*to)->getViewAbsoluteTime() :
          getSegment().getEndMarkerTime());
@@ -513,12 +507,6 @@ NotationStaff::renderElements(NotationElementList::iterator from,
         //                           << " (selected = " << selected << ")";
 
         renderSingleElement(it, currentClef, currentKey, selected);
-
-        //if ((endTime > startTime) && (++elementCount % 200 == 0)) {
-            //timeT myTime = (*it)->getViewAbsoluteTime();
-            //emit setValue((myTime - startTime) * 100 / (endTime - startTime));
-            //throwIfCancelled();
-        //}
     }
 
     //    RG_DEBUG << "NotationStaff " << this << "::renderElements: "
