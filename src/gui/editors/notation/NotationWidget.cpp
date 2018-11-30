@@ -587,8 +587,8 @@ NotationWidget::setSegments(RosegardenDocument *document,
     // calculates position correctly for slotPointerPositionChanged.
     resumeLayoutUpdates();
 
-    slotPointerPositionChanged(m_document->getComposition().getPosition(),
-                               true);
+    showPointerPosition(m_document->getComposition().getPosition(),
+                        true);
 }
 
 void
@@ -690,7 +690,7 @@ NotationWidget::locatePanner(bool tall)
 }
 
 bool
-NotationWidget::linearMode()
+NotationWidget::linearMode() const
 {
     if (!m_scene) return true;    // Default to true when no scene
     return m_scene->getPageMode() == StaffLayout::LinearMode;
@@ -875,18 +875,13 @@ NotationWidget::slotTogglePlayTracking()
 void
 NotationWidget::updatePointerPosition(bool moveView)
 {
-    slotPointerPositionChanged(m_document->getComposition().getPosition(),
-                               moveView);
+    showPointerPosition(m_document->getComposition().getPosition(),
+                        moveView);
 }
 
 void
-NotationWidget::slotPointerPositionChanged(timeT t, bool moveView)
+NotationWidget::showPointerPosition(timeT t, bool moveView, bool page)
 {
-    QObject *s = sender();
-    bool fromDocument = (s == m_document);
-
-    RG_DEBUG << "slotPointerPositionChanged to " << t;
-
     if (!m_scene) return;
 
     NotationScene::CursorCoordinates cc = m_scene->getCursorCoordinates(t);
@@ -898,14 +893,10 @@ NotationWidget::slotPointerPositionChanged(timeT t, bool moveView)
         rolling = true;
     }
 
-    RG_DEBUG << "slotPointerPositionChanged(" << t << "): rolling = " << rolling;
+    RG_DEBUG << "showPointerPosition(" << t << "): rolling = " << rolling;
 
-    QLineF p = cc.currentStaff;
-    if (rolling) p = cc.allStaffs;
+    const QLineF p = rolling ? cc.allStaffs : cc.currentStaff;
     if (p == QLineF()) return;
-
-//    QLineF p = m_scene->snapTimeToStaffPosition(t);
-//    if (p == QLineF()) return;
 
     //!!! p will also contain sensible Y (although not 100% sensible yet)
     double sceneX = p.x1();
@@ -924,9 +915,15 @@ NotationWidget::slotPointerPositionChanged(timeT t, bool moveView)
         m_hpanner->slotShowPositionPointer(QPointF(sceneX, sceneY), height);
     }
 
-    if (getPlayTracking() || !fromDocument) {
-        if (moveView) m_view->slotEnsurePositionPointerInView(fromDocument);
+    if (moveView) {
+        m_view->slotEnsurePositionPointerInView(page);
     }
+}
+
+void
+NotationWidget::slotPointerPositionChanged(timeT t, bool moveView)
+{
+    showPointerPosition(t, moveView && getPlayTracking(), true);
 }
 
 void

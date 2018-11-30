@@ -135,6 +135,7 @@ public:
     void addWidgetToBottom(QWidget *bottomWidget);
 
     void updateSegmentChangerBackground();
+    void updatePointerPosition(bool moveView = false);
 
 signals:
     void sceneNeedsRebuilding();
@@ -171,16 +172,15 @@ public slots:
     void slotTogglePitchbendRuler();
     void slotAddControlRuler(QAction*);
 
-    void updatePointerPosition(bool moveView = false);
-    
     void slotRegenerateHeaders();
 
-protected:
+private:
     void showEvent(QShowEvent * event) override;
     void hideOrShowRulers();
-    bool linearMode();   // Return true when notation page layout is linear
+    bool linearMode() const;   // Return true when notation page layout is linear
+    void showPointerPosition(timeT t, bool moveView, bool page = false);
 
-protected slots:
+private slots:
     void slotDispatchMousePress(const NotationMouseEvent *);
     void slotDispatchMouseRelease(const NotationMouseEvent *);
     void slotDispatchMouseMove(const NotationMouseEvent *);
