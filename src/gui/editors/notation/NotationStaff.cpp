@@ -282,14 +282,6 @@ NotationStaff::drawStaffName()
     m_staffName->show();
 }
 
-bool
-NotationStaff::isStaffNameUpToDate()
-{
-    return (m_staffNameText ==
-            getSegment().getComposition()->
-            getTrackById(getSegment().getTrack())->getLabel());
-}
-
 timeT
 NotationStaff::getTimeAtSceneCoords(double cx, int cy) const
 {
@@ -516,12 +508,6 @@ NotationStaff::renderElements(NotationElementList::iterator from,
 
         ++nextIt;
 
-        if (isDirectlyPrintable(*it)) {
-            // notes are renderable direct to the printer, so don't render
-            // them to the scene here
-            continue;
-        }
-
         bool selected = isSelected(it);
         //      RG_DEBUG << "Rendering at " << (*it)->getAbsoluteTime()
         //                           << " (selected = " << selected << ")";
@@ -531,58 +517,6 @@ NotationStaff::renderElements(NotationElementList::iterator from,
         //if ((endTime > startTime) && (++elementCount % 200 == 0)) {
             //timeT myTime = (*it)->getViewAbsoluteTime();
             //emit setValue((myTime - startTime) * 100 / (endTime - startTime));
-            //throwIfCancelled();
-        //}
-    }
-
-    //    RG_DEBUG << "NotationStaff " << this << "::renderElements: "
-    //                   << elementCount << " elements rendered";
-}
-
-void
-NotationStaff::renderPrintable(timeT from, timeT to)
-{
-    if (!m_printPainter)
-        return ;
-
-    Profiler profiler("NotationStaff::renderElements");
-
-    //emit setOperationName(tr("Rendering notes on staff %1...").arg(getId() + 1));
-    //emit setValue(0);
-
-    //throwIfCancelled();
-
-    // These are only used when rendering keys, and we don't do that
-    // here, so we don't care what they are
-    Clef currentClef;
-    ::Rosegarden::Key currentKey;
-
-    Composition *composition = getSegment().getComposition();
-    NotationElementList::iterator beginAt =
-        getViewElementList()->findTime(composition->getBarStartForTime(from));
-    NotationElementList::iterator endAt =
-        getViewElementList()->findTime(composition->getBarEndForTime(to));
-
-    //int elementCount = 0;
-
-    for (NotationElementList::iterator it = beginAt, nextIt = beginAt;
-            it != endAt; it = nextIt) {
-
-        ++nextIt;
-
-        if (!isDirectlyPrintable(*it)) {
-            continue;
-        }
-
-        bool selected = isSelected(it);
-        //      RG_DEBUG << "Rendering at " << (*it)->getAbsoluteTime()
-        //                           << " (selected = " << selected << ")";
-
-        renderSingleElement(it, currentClef, currentKey, selected);
-
-        //if ((to > from) && (++elementCount % 200 == 0)) {
-            //timeT myTime = (*it)->getViewAbsoluteTime();
-            //emit setValue((myTime - from) * 100 / (to - from));
             //throwIfCancelled();
         //}
     }
@@ -743,10 +677,6 @@ NotationStaff::positionElements(timeT from, timeT to)
                                       el->event()->getAbsoluteTime() - 1);
                 haveCurrentKey = true;
             }
-
-        } else if (isDirectlyPrintable(el)) {
-            // these are rendered by renderPrintable for printing
-            continue;
         }
 
         bool selected = isSelected(it);
@@ -866,17 +796,6 @@ NotationStaff::elementShiftedOnly(NotationElementList::iterator i)
     return ok;
 }
 
-bool
-NotationStaff::isDirectlyPrintable(ViewElement *velt)
-{
-    if (!m_printPainter)
-        return false;
-    return (velt->event()->isa(Note::EventType) ||
-            velt->event()->isa(Note::EventRestType) ||
-            velt->event()->isa(Text::EventType) ||
-            velt->event()->isa(Indication::EventType));
-}
-
 void
 NotationStaff::renderSingleElement(ViewElementList::iterator &vli,
                                    const Clef &currentClef,
@@ -933,13 +852,6 @@ NotationStaff::renderSingleElement(ViewElementList::iterator &vli,
         m_notePixmapFactory->setShaded(invisible || tmp);
         int z = selected ? 3 : 0;
 
-        // these are actually only used for the printer stuff
-        StaffLayoutCoords coords;
-        if (m_printPainter) {
-            coords = getSceneCoordsForLayoutCoords
-                     (elt->getLayoutX(), (int)elt->getLayoutY());
-        }
-
         FitPolicy policy = PretendItFittedAllAlong;
 
         RG_DEBUG << "renderSingleElement: Inspecting something at " << elt->event()->getAbsoluteTime();
@@ -988,14 +900,8 @@ NotationStaff::renderSingleElement(ViewElementList::iterator &vli,
                     }
                 }
 
-                if (m_printPainter) {
-                    m_notePixmapFactory->drawRest
-                        (restParams,
-                         *m_printPainter, int(coords.first), coords.second);
-                } else {
-                    RG_DEBUG << "renderSingleElement: It's a normal rest";
-                    item = m_notePixmapFactory->makeRest(restParams);
-                }
+                RG_DEBUG << "renderSingleElement: It's a normal rest";
+                item = m_notePixmapFactory->makeRest(restParams);
             }
 
         } else if (elt->event()->isa(Clef::EventType)) {
@@ -1077,23 +983,8 @@ NotationStaff::renderSingleElement(ViewElementList::iterator &vli,
             } else {
 
                 try {
-                    if (m_printPainter) {
-                        Text text(*elt->event());
-                        int length = m_notePixmapFactory->getTextWidth(text);
-                        for (double w = -1, inc = 0; w != 0; inc += w) {
-                            w = setPainterClipping(m_printPainter,
-                                                   elt->getLayoutX(),
-                                                   int(elt->getLayoutY()),
-                                                   int(inc), length, coords,
-                                                   policy);
-                            m_notePixmapFactory->drawText
-                            (text, *m_printPainter, int(coords.first), coords.second);
-                            m_printPainter->restore();
-                        }
-                    } else {
-                        RG_DEBUG << "renderSingleElement: It's a normal text";
-                        item = m_notePixmapFactory->makeText(Text(*elt->event()));
-                    }
+                    RG_DEBUG << "renderSingleElement: It's a normal text";
+                    item = m_notePixmapFactory->makeText(Text(*elt->event()));
                 } catch (Exception e) { // Text ctor failed
                     RG_DEBUG << "Bad text event";
                 }
@@ -1160,22 +1051,8 @@ NotationStaff::renderSingleElement(ViewElementList::iterator &vli,
                 if (indicationType == Indication::Crescendo ||
                     indicationType == Indication::Decrescendo) {
 
-                    if (m_printPainter) {
-                        for (double w = -1, inc = 0; w != 0; inc += w) {
-                            w = setPainterClipping(m_printPainter,
-                                                   elt->getLayoutX(),
-                                                   int(elt->getLayoutY()),
-                                                   int(inc), length, coords,
-                                                   policy);
-                            m_notePixmapFactory->drawHairpin
-                            (length, indicationType == Indication::Crescendo,
-                             *m_printPainter, int(coords.first), coords.second);
-                            m_printPainter->restore();
-                        }
-                    } else {
-                        item = m_notePixmapFactory->makeHairpin
+                    item = m_notePixmapFactory->makeHairpin
                             (length, indicationType == Indication::Crescendo);
-                    }
                 } else if (indicationType == Indication::TrillLine) {
 
                     // skip m_printPainter as it is no longer relevant
@@ -1192,24 +1069,9 @@ NotationStaff::renderSingleElement(ViewElementList::iterator &vli,
                     elt->event()->get<Int>(properties.SLUR_Y_DELTA, dy);
                     elt->event()->get<Int>(properties.SLUR_LENGTH, length);
 
-                    if (m_printPainter) {
-                        for (double w = -1, inc = 0; w != 0; inc += w) {
-                            w = setPainterClipping(m_printPainter,
-                                                   elt->getLayoutX(),
-                                                   int(elt->getLayoutY()),
-                                                   int(inc), length, coords,
-                                                   policy);
-                            m_notePixmapFactory->drawSlur
-                            (length, dy, above,
-                             indicationType == Indication::PhrasingSlur,
-                             *m_printPainter, int(coords.first), coords.second);
-                            m_printPainter->restore();
-                        }
-                    } else {
-                        item = m_notePixmapFactory->makeSlur
+                    item = m_notePixmapFactory->makeSlur
                             (length, dy, above,
                              indicationType == Indication::PhrasingSlur);
-                    }
 
                 } else if (indicationType == Indication::FigParameterChord) {
                     Text text = Text("Chord");
@@ -1222,22 +1084,8 @@ NotationStaff::renderSingleElement(ViewElementList::iterator &vli,
                     int octaves = indication.getOttavaShift();
 
                     if (octaves != 0) {
-                        if (m_printPainter) {
-                            for (double w = -1, inc = 0; w != 0; inc += w) {
-                                w = setPainterClipping(m_printPainter,
-                                                       elt->getLayoutX(),
-                                                       int(elt->getLayoutY()),
-                                                       int(inc), length, coords,
-                                                       policy);
-                                m_notePixmapFactory->drawOttava
-                                (length, octaves,
-                                 *m_printPainter, int(coords.first), coords.second);
-                                m_printPainter->restore();
-                            }
-                        } else {
-                            item = m_notePixmapFactory->makeOttava
+                        item = m_notePixmapFactory->makeOttava
                                 (length, octaves);
-                        }
                     } else {
 
                         RG_DEBUG << "Unrecognised indicationType " << indicationType;
@@ -1312,26 +1160,8 @@ NotationStaff::renderSingleElement(ViewElementList::iterator &vli,
             try {
 
                 Guitar::Chord chord (*elt->event());
-
-                /* UNUSED - for printing, just use a large pixmap as below
-                                    if (m_printPainter) {
-
-                                        int length = m_notePixmapFactory->getTextWidth(text);
-                                        for (double w = -1, inc = 0; w != 0; inc += w) {
-                                            w = setPainterClipping(m_printPainter,
-                                                                   elt->getLayoutX(),
-                                                                   int(elt->getLayoutY()),
-                                                                   int(inc), length, coords,
-                                                                   policy);
-                                            m_notePixmapFactory->drawText
-                                                (text, *m_printPainter, int(coords.first), coords.second);
-                                            m_printPainter->restore();
-                                        }
-                                    } else {
-                                        */
-
                 item = m_notePixmapFactory->makeGuitarChord
-                    (chord.getFingering(), int(coords.first), coords.second);
+                    (chord.getFingering(), 0, 0);
                 //                  }
             } catch (Exception e) { // GuitarChord ctor failed
                 RG_DEBUG << "Bad guitar chord event";
@@ -1373,57 +1203,6 @@ NotationStaff::renderSingleElement(ViewElementList::iterator &vli,
 
     m_notePixmapFactory->setSelected(false);
     m_notePixmapFactory->setShaded(false);
-}
-
-double
-NotationStaff::setPainterClipping(QPainter *painter, double lx, int ly,
-                                  double dx, double w, StaffLayoutCoords &coords,
-                                  FitPolicy policy)
-{
-    painter->save();
-
-    //    RG_DEBUG << "setPainterClipping: lx " << lx << ", dx " << dx << ", w " << w;
-
-    coords = getSceneCoordsForLayoutCoords(lx + dx, ly);
-    int row = getRowForLayoutX(lx + dx);
-    double rightMargin = getSceneXForRightOfRow(row);
-    double available = rightMargin - coords.first;
-
-    //    RG_DEBUG << "setPainterClipping: row " << row << ", rightMargin " << rightMargin << ", available " << available;
-
-    switch (policy) {
-
-    case SplitToFit: {
-        bool fit = (w - dx <= available + m_notePixmapFactory->getNoteBodyWidth());
-        if (dx > 0.01 || !fit) {
-            int clipLeft = int(coords.first), clipWidth = int(available);
-            if (dx < 0.01) {
-                // never clip the left side of the first part of something
-                clipWidth += clipLeft;
-                clipLeft = 0;
-            }
-            QRect clip(clipLeft, coords.second - getRowSpacing() / 2,
-                       clipWidth, getRowSpacing());
-            painter->setClipRect(clip, Qt::ReplaceClip); //QPainter::CoordPainter);
-            coords.first -= dx;
-        }
-        if (fit) {
-            return 0.0;
-        }
-        return available;
-    }
-
-    case MoveBackToFit:
-        if (w - dx > available + m_notePixmapFactory->getNoteBodyWidth()) {
-            coords.first -= (w - dx) - available;
-        }
-        return 0.0;
-
-    case PretendItFittedAllAlong:
-        return 0.0;
-    }
-
-    return 0.0;
 }
 
 void
@@ -1733,7 +1512,7 @@ NotationStaff::renderNote(ViewElementList::iterator &vli)
         // lift this code from elsewhere to fix #1930309, and it seems to work a
         // treat, as y'all Wrongpondians are wont to say
         params.setLegerLines(heightOnStaff < 0 ? heightOnStaff :
-                             heightOnStaff > 8 ? heightOnStaff - 8 : 0);
+                                                 heightOnStaff > 8 ? heightOnStaff - 8 : 0);
         m_graceNotePixmapFactory->setSelected(m_notePixmapFactory->isSelected());
         m_graceNotePixmapFactory->setShaded(m_notePixmapFactory->isShaded());
         factory = m_graceNotePixmapFactory;
@@ -1743,67 +1522,35 @@ NotationStaff::renderNote(ViewElementList::iterator &vli)
     elt->event()->get<Bool>(BaseProperties::MEMBER_OF_PARALLEL, memberOfParallel);
     params.setMemberOfParallel(memberOfParallel);
 
-    if (m_printPainter) {
-
-        // Return no scene item, but instead render straight to
-        // the printer.
-
-        StaffLayoutCoords coords = getSceneCoordsForLayoutCoords
-            (elt->getLayoutX(), (int)elt->getLayoutY());
-
-        // We don't actually know how wide the note drawing will be,
-        // but we should be able to use a fairly pessimistic estimate
-        // without causing any problems
-        int length = tieLength + 10 * m_notePixmapFactory->getNoteBodyWidth();
-
-        for (double w = -1, inc = 0; w != 0; inc += w) {
-
-            w = setPainterClipping(m_printPainter,
-                                   elt->getLayoutX(),
-                                   int(elt->getLayoutY()),
-                                   int(inc), length, coords,
-                                   SplitToFit);
-
-            factory->drawNote
-                (params, *m_printPainter, int(coords.first), coords.second);
-
-            m_printPainter->restore(); // save() called by setPainterClipping
-        }
-
-    } else {
-
-        // The normal on-screen case
-
-        bool collision = false;
-        QGraphicsItem *haloItem = nullptr;
-        if (m_showCollisions) {
-            collision = elt->isColliding();
-            if (collision) {
-                // Make collision halo
-                haloItem = factory->makeNoteHalo(params);
-                haloItem->setZValue(-1);
-            }
-        }
-
-        QGraphicsItem *item = factory->makeNote(params);
-
-        int z = 0;
-        if (factory->isSelected()) z = 3;
-        else if (quantized) z = 2;
-
-        setItem(elt, item, z, SplitToFit);
-
+    bool collision = false;
+    QGraphicsItem *haloItem = nullptr;
+    if (m_showCollisions) {
+        collision = elt->isColliding();
         if (collision) {
-            // Display collision halo
-            StaffLayoutCoords coords =
-                getSceneCoordsForLayoutCoords(elt->getLayoutX(),
-                                               elt->getLayoutY());
-            double sceneX = coords.first;
-            int sceneY = coords.second;
-            elt->addItem(haloItem, sceneX, sceneY);
-            getScene()->addItem(haloItem);
-            haloItem->show();
+            // Make collision halo
+            haloItem = factory->makeNoteHalo(params);
+            haloItem->setZValue(-1);
         }
+    }
+
+    QGraphicsItem *item = factory->makeNote(params);
+
+    int z = 0;
+    if (factory->isSelected()) z = 3;
+    else if (quantized) z = 2;
+
+    setItem(elt, item, z, SplitToFit);
+
+    if (collision) {
+        // Display collision halo
+        StaffLayoutCoords coords =
+                getSceneCoordsForLayoutCoords(elt->getLayoutX(),
+                                              elt->getLayoutY());
+        double sceneX = coords.first;
+        int sceneY = coords.second;
+        elt->addItem(haloItem, sceneX, sceneY);
+        getScene()->addItem(haloItem);
+        haloItem->show();
     }
 }
 
@@ -1994,12 +1741,6 @@ NotationStaff::regenerate(timeT from, timeT to, bool secondary)
                          getSegment().getEndMarkerTime());
     }
 
-}
-
-void
-NotationStaff::setPrintPainter(QPainter *painter)
-{
-    m_printPainter = painter;
 }
 
 void

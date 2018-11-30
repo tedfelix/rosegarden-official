@@ -91,7 +91,7 @@ public:
      * too much state for its methods to be const, but you should
      * treat the returned reference as if it were const anyway.
      */
-    virtual NotePixmapFactory& getNotePixmapFactory(bool grace) {
+    NotePixmapFactory& getNotePixmapFactory(bool grace) {
         return grace ? *m_graceNotePixmapFactory : *m_notePixmapFactory;
     }
 
@@ -111,7 +111,7 @@ public:
     void renderElements(NotationElementList::iterator from,
                                 NotationElementList::iterator to) override;
 
-    virtual void renderElements(timeT from, timeT to);
+    void renderElements(timeT from, timeT to);
 
     
     /**
@@ -146,25 +146,8 @@ public:
      * passed to renderElements.
      */
     void positionElements(timeT from,
-                                  timeT to) override;
+                          timeT to) override;
 
-    /**
-     * Set a painter as the printer output.  If this painter is
-     * non-null, subsequent renderElements calls will only render
-     * those elements that cannot be rendered directly to a print
-     * painter; those that can, will be rendered by renderPrintable()
-     * instead.
-     */
-    virtual void setPrintPainter(QPainter *painter);
-
-    /**
-     * Render to the current print painter those elements that can be
-     * rendered directly to a print painter.  If no print painter is
-     * set, do nothing.
-     */
-    virtual void renderPrintable(timeT from,
-                                 timeT to);
-    
     /**
      * Insert time signature at x-coordinate \a x.
      * Use a gray color if \a grayed is true.
@@ -193,18 +176,12 @@ public:
     void drawStaffName() override;
 
     /**
-     * Return true if the staff name as currently drawn is up-to-date
-     * with that in the composition
-     */
-    virtual bool isStaffNameUpToDate();
-
-    /**
      * Return the clef and key in force at the given canvas
      * coordinates
      */
-    virtual void getClefAndKeyAtSceneCoords(double x, int y,
-                                             Clef &clef,
-                                             ::Rosegarden::Key &key) const;
+    void getClefAndKeyAtSceneCoords(double x, int y,
+                                    Clef &clef,
+                                    ::Rosegarden::Key &key) const;
 
     /**
      * Return the note name (C4, Bb3, whatever) corresponding to the
@@ -248,15 +225,15 @@ public:
      * Draw a note on the staff to show an insert position prior to
      * an insert. 
      */
-    virtual void showPreviewNote(double layoutX, int heightOnStaff,
-                                 const Note &note, bool grace,
-                                 Accidental accidental, bool cautious,
-                                 QColor color);
+    void showPreviewNote(double layoutX, int heightOnStaff,
+                         const Note &note, bool grace,
+                         Accidental accidental, bool cautious,
+                         QColor color);
 
     /**
      * Remove any visible preview note.
      */
-    virtual void clearPreviewNote();
+    void clearPreviewNote();
 
     /**
      * Overridden from Staff<T>.
@@ -303,25 +280,23 @@ protected:
      * needed in case it's a key event, in which case we need to judge
      * the correct pitch for the key)
      */
-    virtual void renderSingleElement(ViewElementList::iterator &,
-                                     const Clef &,
-                                     const ::Rosegarden::Key &,
-                                     bool selected);
-
-    bool isDirectlyPrintable(ViewElement *elt);
+    void renderSingleElement(ViewElementList::iterator &,
+                             const Clef &,
+                             const ::Rosegarden::Key &,
+                             bool selected);
 
     void setTuplingParameters(NotationElement *, NotePixmapParameters &);
 
     /**
      * Set an item representing the given note event to the given notation element
      */
-    virtual void renderNote(ViewElementList::iterator &);
+    void renderNote(ViewElementList::iterator &);
 
     /**
      * Return true if the element has a scene item that is already
      * at the correct y-coordinate
      */
-    virtual bool elementNotMovedInY(NotationElement *);
+    bool elementNotMovedInY(NotationElement *);
 
     /**
      * Returns true if the item at the given iterator appears to have
@@ -333,9 +308,9 @@ protected:
      * all other following iterators at the same time as well as the
      * first iterator found at a greater time.
      */
-    virtual bool elementShiftedOnly(NotationElementList::iterator);
+    bool elementShiftedOnly(NotationElementList::iterator);
 
-    virtual bool elementNeedsRegenerating(NotationElementList::iterator);
+    bool elementNeedsRegenerating(NotationElementList::iterator);
 
     enum FitPolicy {
         PretendItFittedAllAlong = 0,
@@ -344,29 +319,11 @@ protected:
     };
 
     /**
-     * Prepare a painter to draw an object of logical width w at
-     * layout-x coord x, starting at offset dx into the object, by
-     * setting the painter's clipping so as to crop the object at the
-     * right edge of the row if it would otherwise overrun.  The
-     * return value is the amount of the object visible on this row
-     * (i.e. the increment in offset for the next call to this method)
-     * or zero if no crop was necessary.  The scene coords at which
-     * the object should subsequently be drawn are returned in coords.
-     *
-     * This function calls painter.save(), and the caller must call
-     * painter.restore() after use.
-     */
-    virtual double setPainterClipping(QPainter *, double layoutX, int layoutY,
-                                      double dx, double w, StaffLayoutCoords &coords,
-                                      FitPolicy policy);
-
-    /**
      * Set a single item to a notation element, or split it into bits
      * if it overruns the end of a row and can be split, and set the
      * bits separately.
      */
-    virtual void setItem(NotationElement *, QGraphicsItem *, int z,
-                         FitPolicy policy);
+    void setItem(NotationElement *, QGraphicsItem *, int z, FitPolicy policy);
 
     bool isSelected(NotationElementList::iterator);
 
