@@ -47,25 +47,24 @@ const int MIN_SUBORDERING = SHRT_MIN;
 
 namespace Accidentals
 {
-#pragma GCC diagnostic ignored "-Wattributes"
     /**
      * NoAccidental means the accidental will be inferred
      * based on the performance pitch and current key at the
      * location of the note.
      */
-    ROSEGARDENPRIVATE_EXPORT const Accidental NoAccidental = "no-accidental";
+    const Accidental NoAccidental = "no-accidental";
 
-    ROSEGARDENPRIVATE_EXPORT const Accidental Sharp = "sharp";
-    ROSEGARDENPRIVATE_EXPORT const Accidental Flat = "flat";
-    ROSEGARDENPRIVATE_EXPORT const Accidental Natural = "natural";
-    ROSEGARDENPRIVATE_EXPORT const Accidental DoubleSharp = "double-sharp";
-    ROSEGARDENPRIVATE_EXPORT const Accidental DoubleFlat = "double-flat";
+    const Accidental Sharp = "sharp";
+    const Accidental Flat = "flat";
+    const Accidental Natural = "natural";
+    const Accidental DoubleSharp = "double-sharp";
+    const Accidental DoubleFlat = "double-flat";
 
     // Additional Accidentals for demi- and sesqui- sharps and flats
-    ROSEGARDENPRIVATE_EXPORT const Accidental QuarterFlat = "demiflat";
-    ROSEGARDENPRIVATE_EXPORT const Accidental ThreeQuarterFlat =  "sesqiflat";
-    ROSEGARDENPRIVATE_EXPORT const Accidental QuarterSharp = "demisharp";
-    ROSEGARDENPRIVATE_EXPORT const Accidental ThreeQuarterSharp = "sesquisharp";
+    const Accidental QuarterFlat = "demiflat";
+    const Accidental ThreeQuarterFlat =  "sesqiflat";
+    const Accidental QuarterSharp = "demisharp";
+    const Accidental ThreeQuarterSharp = "sesquisharp";
 
     ROSEGARDENPRIVATE_EXPORT AccidentalList getStandardAccidentals() {
 
@@ -109,29 +108,29 @@ using namespace Accidentals;
 
 namespace Marks
 {
-    ROSEGARDENPRIVATE_EXPORT const Mark NoMark = "no-mark";
-    ROSEGARDENPRIVATE_EXPORT const Mark Accent = "accent";
-    ROSEGARDENPRIVATE_EXPORT const Mark Tenuto = "tenuto";
-    ROSEGARDENPRIVATE_EXPORT const Mark Staccato = "staccato";
-    ROSEGARDENPRIVATE_EXPORT const Mark Staccatissimo = "staccatissimo";
-    ROSEGARDENPRIVATE_EXPORT const Mark Marcato = "marcato";
-    ROSEGARDENPRIVATE_EXPORT const Mark Open = "open";
-    ROSEGARDENPRIVATE_EXPORT const Mark Stopped = "stopped";
-    ROSEGARDENPRIVATE_EXPORT const Mark Harmonic = "harmonic";
-    ROSEGARDENPRIVATE_EXPORT const Mark Sforzando = getTextMark("sf");
-    ROSEGARDENPRIVATE_EXPORT const Mark Rinforzando = getTextMark("rf");
-    ROSEGARDENPRIVATE_EXPORT const Mark Trill = "trill";
-    ROSEGARDENPRIVATE_EXPORT const Mark LongTrill = "long-trill";
-    ROSEGARDENPRIVATE_EXPORT const Mark TrillLine = "trill-line";
-    ROSEGARDENPRIVATE_EXPORT const Mark Turn = "turn";
-    ROSEGARDENPRIVATE_EXPORT const Mark Pause = "pause";
-    ROSEGARDENPRIVATE_EXPORT const Mark UpBow = "up-bow";
-    ROSEGARDENPRIVATE_EXPORT const Mark DownBow = "down-bow";
+    const Mark NoMark = "no-mark";
+    const Mark Accent = "accent";
+    const Mark Tenuto = "tenuto";
+    const Mark Staccato = "staccato";
+    const Mark Staccatissimo = "staccatissimo";
+    const Mark Marcato = "marcato";
+    const Mark Open = "open";
+    const Mark Stopped = "stopped";
+    const Mark Harmonic = "harmonic";
+    const Mark Sforzando = getTextMark("sf");
+    const Mark Rinforzando = getTextMark("rf");
+    const Mark Trill = "trill";
+    const Mark LongTrill = "long-trill";
+    const Mark TrillLine = "trill-line";
+    const Mark Turn = "turn";
+    const Mark Pause = "pause";
+    const Mark UpBow = "up-bow";
+    const Mark DownBow = "down-bow";
 
-    ROSEGARDENPRIVATE_EXPORT const Mark Mordent = "mordent";
-    ROSEGARDENPRIVATE_EXPORT const Mark MordentInverted = "mordent-inverted";
-    ROSEGARDENPRIVATE_EXPORT const Mark MordentLong = "mordent-long";
-    ROSEGARDENPRIVATE_EXPORT const Mark MordentLongInverted = "mordent-long-inverted";
+    const Mark Mordent = "mordent";
+    const Mark MordentInverted = "mordent-inverted";
+    const Mark MordentLong = "mordent-long";
+    const Mark MordentLongInverted = "mordent-long-inverted";
 
     ROSEGARDENPRIVATE_EXPORT string getTextMark(string text) {
         return string("text_") + text;
