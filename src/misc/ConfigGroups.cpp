@@ -17,13 +17,10 @@
 
 namespace Rosegarden 
 {
-
-    #pragma GCC diagnostic ignored "-Wattributes"
-
     //
     // QSettings group names
     //
-    ROSEGARDENPRIVATE_EXPORT const char* const GeneralOptionsConfigGroup = "General_Options";
+    const char* const GeneralOptionsConfigGroup = "General_Options";
     const char* const LatencyOptionsConfigGroup = "Latency_Options";
     const char* const SequencerOptionsConfigGroup = "Sequencer_Options";
     const char* const NotationViewConfigGroup = "Notation_Options";
@@ -48,7 +45,7 @@ namespace Rosegarden
     const char* const EditViewConfigGroup = "Edit_View";
     const char* const PresetDialogConfigGroup = "Parameter_Presets";
     const char* const ExternalApplicationsConfigGroup = "External_Applications";
-    ROSEGARDENPRIVATE_EXPORT const char* const LilyPondExportConfigGroup = "LilyPond_Export";
+    const char* const LilyPondExportConfigGroup = "LilyPond_Export";
     const char* const MusicXMLExportConfigGroup = "MusicXML_Export";
     const char* const LastUsedPathsConfigGroup = "Last_Used_Paths";
     const char* const WindowGeometryConfigGroup = "Window_Geometry";
