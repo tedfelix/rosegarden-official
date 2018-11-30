@@ -15,7 +15,6 @@
 
 #ifdef __GNUG__
 #pragma GCC diagnostic ignored "-Wswitch-enum"
-#pragma GCC diagnostic ignored "-Wimplicit-fallthrough"
 #endif
 
 #define RG_MODULE_STRING "[AlsaDriver]"
@@ -2541,7 +2540,8 @@ AlsaDriver::getMappedEventList(MappedEventList &mappedEventList)
                 break;
             }
 
-            // FALLTHROUGH:  NOTEON with velocity 0 is treated as a NOTEOFF
+            // fall-through
+            // NOTEON with velocity 0 is treated as a NOTEOFF
 
         case SND_SEQ_EVENT_NOTEOFF: {
             //RG_DEBUG << "AD::gMEL()  NOTEOFF channel:" << channel << " pitch:" << event->data.note.note;

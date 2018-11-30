@@ -13,10 +13,6 @@
     COPYING included with this distribution for more information.
 */
 
-#ifdef __GNUG__
-#pragma GCC diagnostic ignored "-Wimplicit-fallthrough"
-#endif
-
 #include "base/NotationTypes.h"
 #include "NotationRules.h"
 #include "base/BaseProperties.h"
@@ -1011,7 +1007,7 @@ resolveNoAccidental(int pitch,
         case UseKeySharpness:
             noAccidentalStrategy =
                 key.isSharp() ? UseSharps : UseFlats;
-            // fall though
+            // fall through
         case UseFlats:
             // shares code with UseSharps
         case UseSharps:
@@ -1095,23 +1091,23 @@ resolveSpecifiedAccidental(int pitch,
     // its number of accidentals to set the flags:
     if (keyIsSharp) {
         switch (accidentalCount) {
-            case 7: keyHasSharpB = true;
-            case 6: keyHasSharpE = true;
-            case 5: keyHasSharpA = true;
-            case 4: keyHasSharpD = true;
-            case 3: keyHasSharpG = true;
-            case 2: keyHasSharpC = true;
-            case 1: keyHasSharpF = true;
+            case 7: keyHasSharpB = true; // fall-through
+            case 6: keyHasSharpE = true; // fall-through
+            case 5: keyHasSharpA = true; // fall-through
+            case 4: keyHasSharpD = true; // fall-through
+            case 3: keyHasSharpG = true; // fall-through
+            case 2: keyHasSharpC = true; // fall-through
+            case 1: keyHasSharpF = true; // fall-through
         }
     } else {
         switch (accidentalCount) {
-            case 7: keyHasFlatF = true;
-            case 6: keyHasFlatC = true;
-            case 5: keyHasFlatG = true;
-            case 4: keyHasFlatD = true;
-            case 3: keyHasFlatA = true;
-            case 2: keyHasFlatE = true;
-            case 1: keyHasFlatB = true;
+            case 7: keyHasFlatF = true; // fall-through
+            case 6: keyHasFlatC = true; // fall-through
+            case 5: keyHasFlatG = true; // fall-through
+            case 4: keyHasFlatD = true; // fall-through
+            case 3: keyHasFlatA = true; // fall-through
+            case 2: keyHasFlatE = true; // fall-through
+            case 1: keyHasFlatB = true; // fall-through
         }
    }
 
