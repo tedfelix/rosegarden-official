@@ -112,69 +112,73 @@ static Options defaultOptions(ExportBeaming);
 
 void TestLilypondExport::testExamples_data()
 {
+    QTest::addColumn<QString>("baseDir");
     QTest::addColumn<QString>("baseName");
     QTest::addColumn<Options>("options");
 
-    QTest::newRow("aveverum") << "aveverum" << defaultOptions;
-    QTest::newRow("aylindaamiga") << "aylindaamiga" << defaultOptions;
-    QTest::newRow("bogus-surf-jam") << "bogus-surf-jam" << defaultOptions;
-    QTest::newRow("beaming") << "beaming" << defaultOptions;
-    QTest::newRow("Brandenburg_No3-BWV_1048") << "Brandenburg_No3-BWV_1048" << defaultOptions;
-    QTest::newRow("bwv-1060-trumpet-duet-excerpt") << "bwv-1060-trumpet-duet-excerpt" << defaultOptions;
+    QTest::newRow("aveverum") << "examples" << "aveverum" << defaultOptions;
+    QTest::newRow("aylindaamiga") << "examples" << "aylindaamiga" << defaultOptions;
+    QTest::newRow("bogus-surf-jam") << "examples" << "bogus-surf-jam" << defaultOptions;
+    QTest::newRow("beaming") << "examples" << "beaming" << defaultOptions;
+    QTest::newRow("Brandenburg_No3-BWV_1048") << "examples" << "Brandenburg_No3-BWV_1048" << defaultOptions;
+    QTest::newRow("bwv-1060-trumpet-duet-excerpt") << "examples" << "bwv-1060-trumpet-duet-excerpt" << defaultOptions;
 
     // Those work but are very slow, and the output lots and lots of
     // WARNING: Rosegarden::Exception: "Bad type for Indication model event (expected indication, found controller)"
-    //QTest::newRow("children") << "children" << defaultOptions;
-    //QTest::newRow("Chopin-Prelude-in-E-minor-Aere") << "Chopin-Prelude-in-E-minor-Aere" << defaultOptions;
+    //QTest::newRow("children") << "examples" << "children" << defaultOptions;
+    //QTest::newRow("Chopin-Prelude-in-E-minor-Aere") << "examples" << "Chopin-Prelude-in-E-minor-Aere" << defaultOptions;
 
-    QTest::newRow("Djer-Fire") << "Djer-Fire" << defaultOptions;
-    QTest::newRow("doodle-q") << "doodle-q" << defaultOptions;
-    QTest::newRow("exercise_notation") << "exercise_notation" << defaultOptions;
-    QTest::newRow("glazunov-for-solo-and-piano-with-cue") << "glazunov-for-solo-and-piano-with-cue" << defaultOptions;
-    QTest::newRow("glazunov") << "glazunov" << defaultOptions;
-    QTest::newRow("Hallelujah_Chorus_from_Messiah") << "Hallelujah_Chorus_from_Messiah" << defaultOptions;
-    QTest::newRow("headers-and-unicode-lyrics") << "headers-and-unicode-lyrics" << defaultOptions;
-    QTest::newRow("himno_de_riego") << "himno_de_riego" << defaultOptions;
-    QTest::newRow("interpretation-example") << "interpretation-example" << defaultOptions;
-    QTest::newRow("let-all-mortal-flesh") << "let-all-mortal-flesh" << defaultOptions;
-    QTest::newRow("lilypond-alternative-endings_new-way") << "lilypond-alternative-endings_new-way" << defaultOptions;
-    QTest::newRow("lilypond-alternative-endings") << "lilypond-alternative-endings" << defaultOptions;
-    QTest::newRow("lilypond-directives") << "lilypond-directives" << defaultOptions;
-    QTest::newRow("lilypond-up-down") << "lilypond-up-down" << defaultOptions;
-    QTest::newRow("lilypond-staff-groupings") << "lilypond-staff-groupings" << defaultOptions;
-    QTest::newRow("lilypond-tied-grace-notes") << "lilypond-tied-grace-notes" << defaultOptions;
-    QTest::newRow("logical-segments-4") << "logical-segments-4" << defaultOptions;
-    QTest::newRow("mandolin-sonatina") << "mandolin-sonatina" << defaultOptions;
-    QTest::newRow("marks-test") << "marks-test" << defaultOptions;
-    QTest::newRow("mozart-quartet") << "mozart-quartet" << defaultOptions;
-    QTest::newRow("notation-for-string-orchestra-in-D-minor") << "notation-for-string-orchestra-in-D-minor" << defaultOptions;
-    QTest::newRow("perfect-moment") << "perfect-moment" << defaultOptions;
-    QTest::newRow("ravel-pc-gmaj-adagio") << "ravel-pc-gmaj-adagio" << defaultOptions;
-    QTest::newRow("Romanza") << "Romanza" << defaultOptions;
+    QTest::newRow("Djer-Fire") << "examples" << "Djer-Fire" << defaultOptions;
+    QTest::newRow("doodle-q") << "examples" << "doodle-q" << defaultOptions;
+    QTest::newRow("exercise_notation") << "examples" << "exercise_notation" << defaultOptions;
+    QTest::newRow("glazunov-for-solo-and-piano-with-cue") << "examples" << "glazunov-for-solo-and-piano-with-cue" << defaultOptions;
+    QTest::newRow("glazunov") << "examples" << "glazunov" << defaultOptions;
+    QTest::newRow("Hallelujah_Chorus_from_Messiah") << "examples" << "Hallelujah_Chorus_from_Messiah" << defaultOptions;
+    QTest::newRow("headers-and-unicode-lyrics") << "examples" << "headers-and-unicode-lyrics" << defaultOptions;
+    QTest::newRow("himno_de_riego") << "examples" << "himno_de_riego" << defaultOptions;
+    QTest::newRow("interpretation-example") << "examples" << "interpretation-example" << defaultOptions;
+    QTest::newRow("let-all-mortal-flesh") << "examples" << "let-all-mortal-flesh" << defaultOptions;
+    QTest::newRow("lilypond-alternative-endings_new-way") << "examples" << "lilypond-alternative-endings_new-way" << defaultOptions;
+    QTest::newRow("lilypond-alternative-endings") << "examples" << "lilypond-alternative-endings" << defaultOptions;
+    QTest::newRow("lilypond-directives") << "examples" << "lilypond-directives" << defaultOptions;
+    QTest::newRow("lilypond-up-down") << "examples" << "lilypond-up-down" << defaultOptions;
+    QTest::newRow("lilypond-staff-groupings") << "examples" << "lilypond-staff-groupings" << defaultOptions;
+    QTest::newRow("lilypond-tied-grace-notes") << "examples" << "lilypond-tied-grace-notes" << defaultOptions;
+    QTest::newRow("logical-segments-4") << "examples" << "logical-segments-4" << defaultOptions;
+    QTest::newRow("mandolin-sonatina") << "examples" << "mandolin-sonatina" << defaultOptions;
+    QTest::newRow("marks-test") << "examples" << "marks-test" << defaultOptions;
+    QTest::newRow("mozart-quartet") << "examples" << "mozart-quartet" << defaultOptions;
+    QTest::newRow("notation-for-string-orchestra-in-D-minor") << "examples" << "notation-for-string-orchestra-in-D-minor" << defaultOptions;
+    QTest::newRow("perfect-moment") << "examples" << "perfect-moment" << defaultOptions;
+    QTest::newRow("ravel-pc-gmaj-adagio") << "examples" << "ravel-pc-gmaj-adagio" << defaultOptions;
+    QTest::newRow("Romanza") << "examples" << "Romanza" << defaultOptions;
 
     // THIS ONE FAILS
     // sicut-locutus.ly:98:47: error: syntax error, unexpected '}'
     //                < f g > 2 _\markup { \italic
     //                                              } _\markup { \italic Masked and substituted }  _~ f _~  |
-    // ### QTest::newRow("sicut-locutus") << "sicut-locutus" << defaultOptions;
+    // ### QTest::newRow("sicut-locutus") << "examples" << "sicut-locutus" << defaultOptions;
 
-    QTest::newRow("stormy-riders") << "stormy-riders" << defaultOptions;
-    QTest::newRow("test_tuplets") << "test_tuplets" << defaultOptions;
-    QTest::newRow("the-rose-garden") << "the-rose-garden" << defaultOptions;
-    QTest::newRow("vivaldi-cs3mv2") << "vivaldi-cs3mv2" << defaultOptions;
-    QTest::newRow("vivaldi_op44_11_1") << "vivaldi_op44_11_1" << defaultOptions;
+    QTest::newRow("stormy-riders") << "examples" << "stormy-riders" << defaultOptions;
+    QTest::newRow("test_tuplets") << "examples" << "test_tuplets" << defaultOptions;
+    QTest::newRow("the-rose-garden") << "examples" << "the-rose-garden" << defaultOptions;
+    QTest::newRow("vivaldi-cs3mv2") << "examples" << "vivaldi-cs3mv2" << defaultOptions;
+    QTest::newRow("vivaldi_op44_11_1") << "examples" << "vivaldi_op44_11_1" << defaultOptions;
+
+    // data/regression
+    QTest::newRow("export_hidden_key_signatures") << "regression" << "export_hidden_key_signatures" << defaultOptions;
 }
 
 void TestLilypondExport::testExamples()
 {
+    QFETCH(QString, baseDir);
     QFETCH(QString, baseName);
     QFETCH(Options, options);
 
     // GIVEN
-    const QString input = QFINDTESTDATA("../../data/examples/" + baseName + ".rg");
+    const QString input = QFINDTESTDATA("../../data/" + baseDir + "/" + baseName + ".rg");
     QVERIFY(!input.isEmpty()); // file not found
     const QString expected = QFINDTESTDATA("baseline/" + baseName + ".ly");
-    QVERIFY(!expected.isEmpty()); // file not found
 
     const QString fileName = baseName + ".ly";
     qDebug() << "Loading" << input << "and exporting to" << fileName;

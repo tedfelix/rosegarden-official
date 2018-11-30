@@ -2,7 +2,8 @@ The files in this directory are short and simple regression test files.  When
 adding new regression tests to this directory, please document their purpose in
 this file.
 
-We should probably endeavor to run through all of these before making a release.
+The unittest lilypond_export_test runs all these, just type 'ctest' in the builddir to
+run all unittests.
 
 
 export_hidden_key_signatures.rg
