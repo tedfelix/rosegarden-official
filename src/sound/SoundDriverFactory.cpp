@@ -24,6 +24,8 @@
 namespace Rosegarden
 {
 
+static bool s_soundEnabled = true;
+
 SoundDriver *
 SoundDriverFactory::createDriver(MappedStudio *studio)
 {
@@ -31,7 +33,11 @@ SoundDriverFactory::createDriver(MappedStudio *studio)
     bool initialised = false;
 
 #ifdef HAVE_ALSA
-    driver = new AlsaDriver(studio);
+    if (s_soundEnabled) {
+        driver = new AlsaDriver(studio);
+    } else {
+        driver = new DummyDriver(studio);
+    }
 #else
     driver = new DummyDriver(studio);
 #endif
@@ -55,6 +61,10 @@ SoundDriverFactory::createDriver(MappedStudio *studio)
     return driver;
 }
 
+void SoundDriverFactory::setSoundEnabled(bool b)
+{
+    s_soundEnabled = b;
+}
 
 }
 

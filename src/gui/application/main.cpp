@@ -56,6 +56,7 @@
 #include <QPixmapCache>
 #include <QStringList>
 
+#include <sound/SoundDriverFactory.h>
 #include <sys/time.h>
 #include <unistd.h>
 
@@ -647,6 +648,8 @@ int main(int argc, char *argv[])
 
     struct timeval logoShowTime;
     gettimeofday(&logoShowTime, nullptr);
+
+    SoundDriverFactory::setSoundEnabled(!nosound);
 
     RG_INFO << "Creating RosegardenMainWindow instance...";
 

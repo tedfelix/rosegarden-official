@@ -16,15 +16,18 @@
 #ifndef SOUND_DRIVER_FACTORY_H
 #define SOUND_DRIVER_FACTORY_H
 
+#include "rosegardenprivate_export.h"
+
 namespace Rosegarden {
 
 class SoundDriver;
+class MappedStudio;
 
-class SoundDriverFactory
+namespace SoundDriverFactory
 {
-public:
-    static SoundDriver *createDriver(MappedStudio *studio);
-};
+    ROSEGARDENPRIVATE_EXPORT void setSoundEnabled(bool b);
+    SoundDriver *createDriver(MappedStudio *studio);
+}
 
 }
 
