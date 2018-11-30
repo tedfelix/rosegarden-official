@@ -27,15 +27,6 @@ private Q_SLOTS:
     void testExamples();
 };
 
-// Qt5 has a nice QFINDTESTDATA, but to support Qt4 we'll have our own function
-static QString findFile(const QString &fileName) {
-    QString attempt = QFile::decodeName(SRCDIR) + '/' + fileName;
-    if (QFile::exists(attempt))
-        return attempt;
-    qWarning() << fileName << "NOT FOUND";
-    return QString();
-}
-
 static QList<QByteArray> readLines(const QString &fileName)
 {
     QList<QByteArray> lines;
@@ -107,7 +98,7 @@ void TestLilypondExport::testEmptyDocument()
     QCOMPARE(exporter.getMessage(), QString("Export succeeded, but the composition was empty."));
 
     // ... and the output file should match "empty.ly"
-    checkFile(fileName, findFile("baseline/empty.ly"));
+    checkFile(fileName, QFINDTESTDATA("baseline/empty.ly"));
 }
 
 enum Option {
@@ -180,9 +171,10 @@ void TestLilypondExport::testExamples()
     QFETCH(Options, options);
 
     // GIVEN
-    const QString input = findFile("../../data/examples/" + baseName + ".rg");
+    const QString input = QFINDTESTDATA("../../data/examples/" + baseName + ".rg");
     QVERIFY(!input.isEmpty()); // file not found
-    const QString expected = findFile("baseline/" + baseName + ".ly");
+    const QString expected = QFINDTESTDATA("baseline/" + baseName + ".ly");
+    QVERIFY(!expected.isEmpty()); // file not found
 
     const QString fileName = baseName + ".ly";
     qDebug() << "Loading" << input << "and exporting to" << fileName;

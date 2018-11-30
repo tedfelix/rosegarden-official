@@ -119,6 +119,8 @@ TempDirectory::createTempDirectoryIn(QString dir)
     // to do this for us, and mkdtemp is not standard.  This method is
     // based on the way glibc does mkdtemp.
 
+    // NOTE: Qt 5 has QTemporaryDir for this
+
     static QString chars =
         "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 

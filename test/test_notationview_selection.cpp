@@ -43,19 +43,10 @@ private:
     SequenceManager m_seqManager;
 };
 
-// Qt5 has a nice QFINDTESTDATA, but to support Qt4 we'll have our own function
-static QString findFile(const QString &fileName) {
-    QString attempt = QFile::decodeName(SRCDIR) + '/' + fileName;
-    if (QFile::exists(attempt))
-        return attempt;
-    qWarning() << fileName << "NOT FOUND";
-    return QString();
-}
-
 void TestNotationViewSelection::initTestCase()
 {
     // Loading from a file
-    const QString input = findFile("../data/examples/test_selection.rg");
+    const QString input = QFINDTESTDATA("../data/examples/test_selection.rg");
     QVERIFY(!input.isEmpty()); // file not found
     m_doc.openDocument(input, false /*not permanent, i.e. don't create midi devices*/, true /*no progress dlg*/);
 
