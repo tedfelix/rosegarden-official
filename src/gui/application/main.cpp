@@ -327,30 +327,7 @@ visible at the bottom of rosegarden/sequencer/main.cpp.
 
 // -----------------------------------------------------------------
 
-#ifdef Q_WS_X11
-#include <X11/Xlib.h>
-#include <X11/Xutil.h>
-
-static int xErrorHandler(Display *dpy, XErrorEvent *err)
-{
-    char errstr[256];
-    XGetErrorText(dpy, err->error_code, errstr, 256);
-    if (err->error_code != BadWindow) {
-        std::cerr << "Rosegarden: detected X Error: " << errstr << " " << err->error_code
-                  << "\n  Major opcode:  " << err->request_code << std::endl;
-    }
-    return 0;
-}
-#endif
-
-enum GraphicsSystem
-{
-    Raster,
-    Native,
-    OpenGL
-};
-
-void usage()
+static void usage()
 {
     std::cerr << "Rosegarden: A sequencer and musical notation editor" << std::endl;
     std::cerr << "Usage: rosegarden [--nosplash] [--nosound] [file.rg]" << std::endl;
@@ -398,105 +375,41 @@ int main(int argc, char *argv[])
 
     srandom((unsigned int)time(nullptr) * (unsigned int)getpid());
 
-    // we have to set the graphics system before creating theApp, or it
-    // won't work, so we have to use an unusual QSettings ctor here.
-    //
-    // (this has to be outside the ifdef block below)
-    QSettings preAppSettings("rosegardenmusic", "Rosegarden");
-    preAppSettings.beginGroup(GeneralOptionsConfigGroup);
-#pragma GCC diagnostic ignored "-Wunused-variable"
-    // See comments below on the choice of "Native" as the default.
-    unsigned int graphicsSystem = preAppSettings.value("graphics_system", Native).toUInt();
-    // Write this back out in case it was the default.  This prevents the
-    // default in the config dialog (see GeneralConfigurationPage's ctor)
-    // from having any effect.  Just in case it doesn't match the one above.
-    preAppSettings.setValue("graphics_system", graphicsSystem);
-    preAppSettings.endGroup();
-
-
     bool styleSpecified = false;
-#ifdef Q_WS_X11
-#if QT_VERSION >= 0x040500
-    bool systemSpecified = false;
     for (int i = 1; i < argc; ++i) {
-        if (!strcmp(argv[i], "-graphicssystem")) {
-            systemSpecified = true;
-            break;
-        }
         if (!strcmp(argv[i], "-style")) {
             styleSpecified = true;
             break;
         }
     }
 
-    if (!systemSpecified) {
-        // Set the graphics system specified in QSettings unless the user has
-        // overridden this on the command line.
-        //
-        // We prefer the "raster" graphics system available since Qt 4.5.0,
-        // because it is dramatically faster on X11 than the "native" system.
-        // Unfortunately, users have reported a variety of crashes and horrible
-        // rendering problems, and it's just such a mixed bag we've got to offer
-        // the option.  (And after two more users with reports of crashes in Qt
-        // code that have "Raster" written all over them, it's time to make the
-        // only reliable system (Native) the default out of the box (see
-        // "graphics_system" above), and do up a FAQ
-        // about bad graphics performance suggesting to give the less stable
-        // alternatives a shot.)
+    RosegardenApplication theApp(argc, argv);
 
-        RG_WARNING << "Setting graphics system for Qt 4.5+ to:";
-        switch (graphicsSystem) {
-        case Raster:
-            QApplication::setGraphicsSystem("raster");
-            RG_WARNING << "  raster";
-            break;
+    theApp.setOrganizationName("rosegardenmusic");
+    theApp.setOrganizationDomain("rosegardenmusic.com");
+    theApp.setApplicationName(QObject::tr("Rosegarden"));
 
-        case Native:
-            QApplication::setGraphicsSystem("native");
-            RG_WARNING << "  native";
-            break;
-
-        case OpenGL:
-            QApplication::setGraphicsSystem("opengl");
-            RG_WARNING << "  opengl";
-            break;
-
-        default:
-            QApplication::setGraphicsSystem("raster");
-            RG_WARNING << "  raster (DEFAULTED!)";
-        }
-    }
-#endif
-#endif
-
-    preAppSettings.beginGroup(GeneralOptionsConfigGroup);
-    bool Thorn = preAppSettings.value("use_thorn_style", true).toBool();
+    QSettings settings;
+    settings.beginGroup(GeneralOptionsConfigGroup);
+    bool Thorn = settings.value("use_thorn_style", true).toBool();
 
     // If the option was turned on in settings, but the user has specified a
     // style on the command line (obnoxious user!) then we must turn this option
     // _off_ in settings as though the user had un-checked it on the config
     // page, or else mayhem and chaos will reign.
     if (Thorn && styleSpecified) {
-        preAppSettings.setValue("use_thorn_style", false);
+        settings.setValue("use_thorn_style", false);
         Thorn = false;
     }
 
-    preAppSettings.endGroup();
-
-    RosegardenApplication theApp(argc, argv);
-
-    RG_WARNING << "Thorn - " << Thorn;
+    settings.endGroup();
 
     ThornStyle::setEnabled(Thorn);
 
-    theApp.setOrganizationName("rosegardenmusic");
-    theApp.setOrganizationDomain("rosegardenmusic.com");
-    theApp.setApplicationName(QObject::tr("Rosegarden"));
     // This allows icons to appear in the instrument popup menu in
     // TrackButtons.
     theApp.setAttribute(Qt::AA_DontShowIconsInMenus, false);
     QStringList args = theApp.arguments();
-    QSettings settings;
 
     // enable to load resources from rcc file (if not compiled in)
 #ifdef RESOURCE_FILE_NOT_COMPILED_IN
@@ -506,8 +419,8 @@ int main(int argc, char *argv[])
     }
 #endif
 
-    RG_WARNING << "System Locale:" << QLocale::system().name();
-    RG_WARNING << "Qt translations path: " << QLibraryInfo::location(QLibraryInfo::TranslationsPath);
+    RG_DEBUG << "System Locale:" << QLocale::system().name();
+    RG_DEBUG << "Qt translations path: " << QLibraryInfo::location(QLibraryInfo::TranslationsPath);
 
     QTranslator qtTranslator;
     bool qtTranslationsLoaded = 
@@ -515,17 +428,17 @@ int main(int argc, char *argv[])
             QLibraryInfo::location(QLibraryInfo::TranslationsPath));
     if (qtTranslationsLoaded) {
         theApp.installTranslator(&qtTranslator);
-        RG_WARNING << "Qt translations loaded successfully.";
+        RG_DEBUG << "Qt translations loaded successfully.";
     } else {
         RG_WARNING << "Qt translations not loaded.";
     }
 
     QTranslator rgTranslator;
-    RG_WARNING << "RG Translation: trying to load :locale/" << QLocale::system().name();
+    RG_DEBUG << "RG Translation: trying to load :locale/" << QLocale::system().name();
     bool rgTranslationsLoaded = 
       rgTranslator.load(QLocale::system().name(), ":locale/");
     if (rgTranslationsLoaded) {
-        RG_WARNING << "RG Translations loaded successfully.";
+        RG_DEBUG << "RG Translations loaded successfully.";
         theApp.installTranslator(&rgTranslator);
     } else {
         RG_WARNING << "RG Translations not loaded.";
@@ -547,12 +460,12 @@ int main(int argc, char *argv[])
     if (nonOptArgs > 1) usage();
 
     QIcon icon;
-    int sizes[] = { 16, 22, 24, 32, 48, 64, 128 };
+    static const int sizes[] = { 16, 22, 24, 32, 48, 64, 128 };
     for (size_t i = 0; i < sizeof(sizes)/sizeof(sizes[0]); ++i) {
         QString name = QString("rg-rwb-rose3-%1x%2").arg(sizes[i]).arg(sizes[i]);
         QPixmap pixmap = IconLoader().loadPixmap(name);
         if (!pixmap.isNull()) {
-            RG_WARNING << "Loaded application icon \"" << name << "\"";
+            RG_DEBUG << "Loaded application icon \"" << name << "\"";
             icon.addPixmap(pixmap);
         }
     }
@@ -721,10 +634,6 @@ int main(int argc, char *argv[])
         RG_DEBUG << "sfxload disabled\n";
     }
 
-
-#ifdef Q_WS_X11
-    XSetErrorHandler(xErrorHandler);
-#endif
 
     if (startLogo) {
 
