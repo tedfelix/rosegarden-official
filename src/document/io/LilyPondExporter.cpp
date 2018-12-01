@@ -3032,24 +3032,26 @@ LilyPondExporter::handleText(const Event *textEvent,
             // print below staff, bold italics, small
             lilyText += "_\\markup { \\bold \\italic \"" + s + "\" } ";
 
+        } else if (textType == Text::LilyPondDirective) {
+            if (s == Text::Gliss) {
+                lilyText += "\\glissando ";
+            } else if (s == Text::Arpeggio) {
+                lilyText += "\\arpeggio ";
+            } else if (s == Text::Tiny) {
+                lilyText += "\\tiny ";
+            } else if (s == Text::Small) {
+                lilyText += "\\small ";
+            } else if (s == Text::NormalSize) {
+                lilyText += "\\normalsize ";
+            }
             // LilyPond directives that don't require special handling across
             // barlines are handled here along with ordinary text types.  These
             // can be injected wherever they happen to occur, and should get
             // attached to the right bits in due course without extra effort.
-            //
-        } else if (text.getText() == Text::Gliss) {
-            lilyText += "\\glissando ";
-        } else if (text.getText() == Text::Arpeggio) {
-            lilyText += "\\arpeggio ";
-        } else if (text.getText() == Text::Tiny) {
-            lilyText += "\\tiny ";
-        } else if (text.getText() == Text::Small) {
-            lilyText += "\\small ";
-        } else if (text.getText() == Text::NormalSize) {
-            lilyText += "\\normalsize ";
         } else if (textType == Text::Lyric) {
-            // avoid printing a misleading warning that something is amiss when
-            // it really isn't
+            // Lyric are handled elsewhere in this file
+        } else if (textType == Text::Annotation) {
+            // TODO: should annotations be exported?
         } else {
             RG_WARNING << "LilyPondExporter::write() - unhandled text type: " << textType;
         }
