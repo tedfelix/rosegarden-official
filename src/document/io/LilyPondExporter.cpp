@@ -2982,28 +2982,30 @@ LilyPondExporter::handleText(const Event *textEvent,
 
         Text text(*textEvent);
         std::string s = text.getText();
+        const std::string textType = text.getTextType();
 
         // only protect illegal chars if this is Text, rather than
         // LilyPondDirective
-        if ((*textEvent).isa(Text::EventType))
+        if (textType == Text::EventType)
             s = protectIllegalChars(s);
 
-        if (text.getTextType() == Text::Tempo) {
+        if (textType == Text::Tempo) {
 
             // print above staff, bold, large
             lilyText += "^\\markup { \\bold \\large \"" + s + "\" } ";
 
-        } else if (text.getTextType() == Text::LocalTempo) {
+        } else if (textType == Text::LocalTempo) {
 
             // print above staff, bold, small
             lilyText += "^\\markup { \\bold \"" + s + "\" } ";
-        } else if (m_chordNamesMode == false && text.getTextType() == Text::Chord) {
+
+        } else if (m_chordNamesMode == false && textType == Text::Chord) {
 
             // Either (1) the chords will have an own ChordNames context
             //     or (2) they will be printed above staff, bold, small.
             lilyText += "^\\markup { \\bold \"" + s + "\" } ";
 
-        } else if (text.getTextType() == Text::Dynamic) {
+        } else if (textType == Text::Dynamic) {
 
             // supported dynamics first
             if (s == "ppppp" || s == "pppp" || s == "ppp" ||
@@ -3020,12 +3022,12 @@ LilyPondExporter::handleText(const Event *textEvent,
                 lilyText += "_\\markup { \\bold \\italic \"" + s + "\" } ";
             }
 
-        } else if (text.getTextType() == Text::Direction) {
+        } else if (textType == Text::Direction) {
 
             // print above staff, large
             lilyText += "^\\markup { \\large \"" + s + "\" } ";
 
-        } else if (text.getTextType() == Text::LocalDirection) {
+        } else if (textType == Text::LocalDirection) {
 
             // print below staff, bold italics, small
             lilyText += "_\\markup { \\bold \\italic \"" + s + "\" } ";
@@ -3045,13 +3047,11 @@ LilyPondExporter::handleText(const Event *textEvent,
             lilyText += "\\small ";
         } else if (text.getText() == Text::NormalSize) {
             lilyText += "\\normalsize ";
-        } else if (text.getText() == Text::Lyric) {
+        } else if (textType == Text::Lyric) {
             // avoid printing a misleading warning that something is amiss when
             // it really isn't
         } else {
-            textEvent->get
-                <String>(Text::TextTypePropertyName, s);
-            RG_WARNING << "LilyPondExporter::write() - unhandled text type: " << s;
+            RG_WARNING << "LilyPondExporter::write() - unhandled text type: " << textType;
         }
     } catch (Exception e) {
         RG_WARNING << "Bad text: " << e.getMessage();
