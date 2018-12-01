@@ -52,15 +52,22 @@ include(RPathHandling)
 
 # Activate unit tests (this enables `make test`)
 enable_testing()
-# and this defines the BUILD_TESTING option (and enabled CDash integration)
-include(CTest)
+# then define the BUILD_TESTING option, with the default value that we want
+# We'll set it to OFF in release mode, and let users (developers) choose in debug mode.
+# include(CTest) would make it ON by default in all cases, so we don't use that
+
+if(CMAKE_BUILD_TYPE STREQUAL "Release")
+    option(BUILD_TESTING "Build the testing tree." OFF)
+else()
+    option(BUILD_TESTING "Build the testing tree." ON)
+endif()
 
 # Compiler defines
 
-if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-    add_definitions(-DDEBUG -DBUILD_DEBUG -DWANT_TIMING)
-else()
+if(CMAKE_BUILD_TYPE STREQUAL "Release")
     add_definitions(-DNDEBUG -DBUILD_RELEASE -DNO_TIMING)
+else()
+    add_definitions(-DDEBUG -DBUILD_DEBUG -DWANT_TIMING)
 endif()
 
 add_definitions(-DQT_NO_URL_CAST_FROM_STRING)
@@ -172,12 +179,6 @@ feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
 
 # --------------------------------------------------------
 
-# BUILD_TESTING is a builtin option in cmake, which defaults to ON.
-# We'll set it to OFF in release mode, and let users (developers) choose in debug mode.
-
-if(NOT CMAKE_BUILD_TYPE STREQUAL "Debug")
-    set(BUILD_TESTING OFF)
-endif()
 
 # Unit tests disabled: use a static lib
 # Unit tests enabled: use shared libs, to speed up linking
