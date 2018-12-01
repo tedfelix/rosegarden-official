@@ -23,11 +23,12 @@
 #include <QCoreApplication> // for Q_DECLARE_TR_FUNCTIONS
 
 #include <vector>
+#include <rosegardenprivate_export.h>
 
 namespace Rosegarden
 {
 
-class Command
+class ROSEGARDENPRIVATE_EXPORT Command
 {
 public:
     Command() : m_updateLinks(true) { }
@@ -44,7 +45,7 @@ private:
     bool m_updateLinks;
 };
 
-class NamedCommand : public Command
+class ROSEGARDENPRIVATE_EXPORT NamedCommand : public Command
 {
 public:
     NamedCommand(QString name) : m_name(name) { }
@@ -57,7 +58,7 @@ protected:
     QString m_name;
 };
 
-class MacroCommand : public Command
+class ROSEGARDENPRIVATE_EXPORT MacroCommand : public Command
 {
 public:
     MacroCommand(QString name);
@@ -84,7 +85,7 @@ protected:
  * BundleCommand is a MacroCommand whose name includes a note of how
  * many commands it contains
  */
-class BundleCommand : public MacroCommand
+class ROSEGARDENPRIVATE_EXPORT BundleCommand : public MacroCommand
 {
     Q_DECLARE_TR_FUNCTIONS(BundleCommand)
 public:
