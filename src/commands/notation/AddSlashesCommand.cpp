@@ -46,7 +46,7 @@ AddSlashesCommand::getArgument(QString actionName, CommandArgumentQuerier &)
 {
     QString pfx("slashes_");
     if (actionName.startsWith(pfx)) {
-        return actionName.right(actionName.length() - pfx.length()).toInt();
+        return actionName.rightRef(actionName.length() - pfx.length()).toInt();
     }
     return 0;
 }

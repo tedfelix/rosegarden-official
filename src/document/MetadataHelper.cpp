@@ -94,7 +94,7 @@ int
 MetadataHelper::CommentsKey::lineNumber() 
 {
     if (!m_isOK) return -1;
-    return m_key.right(keyNumSize).toInt();
+    return m_key.rightRef(keyNumSize).toInt();
 }
 
 

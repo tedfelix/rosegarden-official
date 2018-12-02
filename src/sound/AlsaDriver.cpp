@@ -1192,13 +1192,13 @@ AlsaDriver::setPlausibleConnection(DeviceId id, QString idealConnection, bool re
 
         int colon = idealConnection.indexOf(":");
         if (colon >= 0) {
-            client = idealConnection.left(colon).toInt();
+            client = idealConnection.leftRef(colon).toInt();
         }
 
         if (client > 0) {
             QString remainder = idealConnection.mid(colon + 1);
             int space = remainder.indexOf(" ");
-            if (space >= 0) portNo = remainder.left(space).toInt();
+            if (space >= 0) portNo = remainder.leftRef(space).toInt();
         }
     
         int firstSpace = idealConnection.indexOf(" ");

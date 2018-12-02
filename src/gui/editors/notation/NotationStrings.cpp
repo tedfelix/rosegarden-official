@@ -177,7 +177,7 @@ NotationStrings::getNoteForName(QString name)
     int dots = 0;
 
     if (pos > 0 && pos < 6 && pos < name.length() - 1) {
-        dots = name.left(pos).toInt();
+        dots = name.leftRef(pos).toInt();
         name = name.right(name.length() - pos - 1);
         if (dots < 2) {
             throw MalformedNoteName("Non-numeric or invalid dot count in \"" +
