@@ -50,7 +50,7 @@ FontRequester::FontRequester(QWidget *parent) :
 
     layout->setColumnStretch(0, 20);
 
-    connect(button, SIGNAL(clicked()), this, SLOT(slotChoose()));
+    connect(button, &QAbstractButton::clicked, this, &FontRequester::slotChoose);
 }
 
 FontRequester::~FontRequester()

@@ -175,8 +175,8 @@ MatrixWidget::MatrixWidget(bool drumMode) :
     m_segmentChanger->setValue(60);
     m_segmentChanger->setSpeed(0.05);
     m_lastSegmentChangerValue = m_segmentChanger->getValue();
-    connect(m_segmentChanger, SIGNAL(valueChanged(int)), this,
-            SLOT(slotSegmentChangerMoved(int)));
+    connect(m_segmentChanger, &Thumbwheel::valueChanged, this,
+            &MatrixWidget::slotSegmentChangerMoved);
     changerWidgetLayout->addWidget(m_segmentChanger);
 
     pannerLayout->addWidget(m_changerWidget);
@@ -210,8 +210,8 @@ MatrixWidget::MatrixWidget(bool drumMode) :
     m_lastHVzoomValue = m_HVzoom->getValue();
     controlsLayout->addWidget(m_HVzoom, 0, 0, Qt::AlignCenter);
 
-    connect(m_HVzoom, SIGNAL(valueChanged(int)), this,
-            SLOT(slotPrimaryThumbwheelMoved(int)));
+    connect(m_HVzoom, &Thumbwheel::valueChanged, this,
+            &MatrixWidget::slotPrimaryThumbwheelMoved);
 
     m_Hzoom = new Thumbwheel(Qt::Horizontal);
     m_Hzoom->setFixedSize(QSize(50, 16));
@@ -222,8 +222,8 @@ MatrixWidget::MatrixWidget(bool drumMode) :
     m_Hzoom->setDefaultValue(0); 
     m_Hzoom->setBright(false);
     controlsLayout->addWidget(m_Hzoom, 1, 0);
-    connect(m_Hzoom, SIGNAL(valueChanged(int)), this,
-            SLOT(slotHorizontalThumbwheelMoved(int)));
+    connect(m_Hzoom, &Thumbwheel::valueChanged, this,
+            &MatrixWidget::slotHorizontalThumbwheelMoved);
 
     m_Vzoom = new Thumbwheel(Qt::Vertical);
     m_Vzoom->setFixedSize(QSize(16, 50));
@@ -234,8 +234,8 @@ MatrixWidget::MatrixWidget(bool drumMode) :
     m_Vzoom->setBright(false);
     controlsLayout->addWidget(m_Vzoom, 0, 1, Qt::AlignRight);
 
-    connect(m_Vzoom, SIGNAL(valueChanged(int)), this,
-            SLOT(slotVerticalThumbwheelMoved(int)));
+    connect(m_Vzoom, &Thumbwheel::valueChanged, this,
+            &MatrixWidget::slotVerticalThumbwheelMoved);
 
     // a blank QPushButton forced square looks better than the tool button did
     m_reset = new QPushButton;
@@ -243,8 +243,8 @@ MatrixWidget::MatrixWidget(bool drumMode) :
     m_reset->setToolTip(tr("Reset Zoom"));
     controlsLayout->addWidget(m_reset, 1, 1, Qt::AlignCenter);
 
-    connect(m_reset, SIGNAL(clicked()), this, 
-            SLOT(slotResetZoomClicked()));
+    connect(m_reset, &QAbstractButton::clicked, this, 
+            &MatrixWidget::slotResetZoomClicked);
 
     pannerLayout->addWidget(controls);
 
@@ -258,56 +258,56 @@ MatrixWidget::MatrixWidget(bool drumMode) :
                         HSLIDER_ROW, MAIN_COL, 1, 1);
 
     // Hide or show the horizontal scroll bar when needed
-    connect(m_view->horizontalScrollBar(), SIGNAL(rangeChanged(int, int)),
-            this, SLOT(slotHScrollBarRangeChanged(int, int)));
+    connect(m_view->horizontalScrollBar(), &QAbstractSlider::rangeChanged,
+            this, &MatrixWidget::slotHScrollBarRangeChanged);
 
-    connect(m_view, SIGNAL(pannedRectChanged(QRectF)),
-            m_hpanner, SLOT(slotSetPannedRect(QRectF)));
+    connect(m_view, &Panned::pannedRectChanged,
+            m_hpanner, &Panner::slotSetPannedRect);
 
-    connect(m_view, SIGNAL(pannedRectChanged(QRectF)),
-            m_pianoView, SLOT(slotSetPannedRect(QRectF)));
+    connect(m_view, &Panned::pannedRectChanged,
+            m_pianoView, &Panned::slotSetPannedRect);
 
-    connect(m_view, SIGNAL(pannedRectChanged(QRectF)),
-            m_controlsWidget, SLOT(slotSetPannedRect(QRectF)));
+    connect(m_view, &Panned::pannedRectChanged,
+            m_controlsWidget, &ControlRulerWidget::slotSetPannedRect);
 
-    connect(m_view, SIGNAL(zoomIn()),
-            SLOT(slotZoomIn()));
-    connect(m_view, SIGNAL(zoomOut()),
-            SLOT(slotZoomOut()));
+    connect(m_view, &Panned::zoomIn,
+            this, &MatrixWidget::slotZoomIn);
+    connect(m_view, &Panned::zoomOut,
+            this, &MatrixWidget::slotZoomOut);
 
-    connect(m_hpanner, SIGNAL(pannedRectChanged(QRectF)),
-            m_view, SLOT(slotSetPannedRect(QRectF)));
+    connect(m_hpanner, &Panner::pannedRectChanged,
+            m_view, &Panned::slotSetPannedRect);
 
-    connect(m_hpanner, SIGNAL(pannedRectChanged(QRectF)),
-            m_pianoView, SLOT(slotSetPannedRect(QRectF)));
+    connect(m_hpanner, &Panner::pannedRectChanged,
+            m_pianoView, &Panned::slotSetPannedRect);
 
-    connect(m_hpanner, SIGNAL(pannedRectChanged(QRectF)),
-            m_controlsWidget, SLOT(slotSetPannedRect(QRectF)));
+    connect(m_hpanner, &Panner::pannedRectChanged,
+            m_controlsWidget, &ControlRulerWidget::slotSetPannedRect);
 
-    connect(m_view, SIGNAL(pannedContentsScrolled()),
-            this, SLOT(slotHScroll()));
+    connect(m_view, &Panned::pannedContentsScrolled,
+            this, &MatrixWidget::slotHScroll);
 
-    connect(m_hpanner, SIGNAL(zoomIn()),
-            this, SLOT(slotSyncPannerZoomIn()));
+    connect(m_hpanner, &Panner::zoomIn,
+            this, &MatrixWidget::slotSyncPannerZoomIn);
 
-    connect(m_hpanner, SIGNAL(zoomOut()),
-            this, SLOT(slotSyncPannerZoomOut()));
+    connect(m_hpanner, &Panner::zoomOut,
+            this, &MatrixWidget::slotSyncPannerZoomOut);
 
-    connect(m_pianoView, SIGNAL(wheelEventReceived(QWheelEvent *)),
-            m_view, SLOT(slotEmulateWheelEvent(QWheelEvent *)));
+    connect(m_pianoView, &Panned::wheelEventReceived,
+            m_view, &Panned::slotEmulateWheelEvent);
 
-    connect(m_controlsWidget, SIGNAL(dragScroll(timeT)),
-            this, SLOT(slotEnsureTimeVisible(timeT)));
+    connect(m_controlsWidget, &ControlRulerWidget::dragScroll,
+            this, &MatrixWidget::slotEnsureTimeVisible);
     
     m_toolBox = new MatrixToolBox(this);
 
     // Relay context help from matrix tools
-    connect(m_toolBox, SIGNAL(showContextHelp(const QString &)),
-            this, SIGNAL(showContextHelp(const QString &)));
+    connect(m_toolBox, &BaseToolBox::showContextHelp,
+            this, &MatrixWidget::showContextHelp);
 
     // Relay context help from matrix rulers
-    connect(m_controlsWidget, SIGNAL(showContextHelp(const QString &)),
-            this, SIGNAL(showContextHelp(const QString &)));
+    connect(m_controlsWidget, &ControlRulerWidget::showContextHelp,
+            this, &MatrixWidget::showContextHelp);
 
     MatrixMover *matrixMoverTool = dynamic_cast <MatrixMover *> (m_toolBox->getTool(MatrixMover::ToolName()));
     if (matrixMoverTool) {
@@ -321,12 +321,12 @@ MatrixWidget::MatrixWidget(bool drumMode) :
 //                m_controlsWidget, SLOT(slotHoveredOverNoteChanged()));
 //    }
 
-    connect(this, SIGNAL(toolChanged(QString)),
-            m_controlsWidget, SLOT(slotSetToolName(QString)));
+    connect(this, &MatrixWidget::toolChanged,
+            m_controlsWidget, &ControlRulerWidget::slotSetToolName);
 
     // scrollbar hack from notation, but this one only affects horizontal
-    connect(m_view->horizontalScrollBar(), SIGNAL(valueChanged(int)),
-            this, SLOT(slotInitialHSliderHack(int)));
+    connect(m_view->horizontalScrollBar(), &QAbstractSlider::valueChanged,
+            this, &MatrixWidget::slotInitialHSliderHack);
 
     // Make sure MatrixScene always gets mouse move events even when the
     // button isn't pressed.  This way the keys on the piano keyboard
@@ -334,8 +334,8 @@ MatrixWidget::MatrixWidget(bool drumMode) :
     m_view->setMouseTracking(true);
 
     connect(RosegardenMainWindow::self()->getDocument(),
-                SIGNAL(documentModified(bool)),
-            SLOT(slotDocumentModified(bool)));
+                &RosegardenDocument::documentModified,
+            this, &MatrixWidget::slotDocumentModified);
 }
 
 MatrixWidget::~MatrixWidget()
@@ -386,23 +386,23 @@ MatrixWidget::setSegments(RosegardenDocument *document,
 
     m_referenceScale = m_scene->getReferenceScale();
 
-    connect(m_scene, SIGNAL(mousePressed(const MatrixMouseEvent *)),
-            this, SLOT(slotDispatchMousePress(const MatrixMouseEvent *)));
+    connect(m_scene, &MatrixScene::mousePressed,
+            this, &MatrixWidget::slotDispatchMousePress);
 
-    connect(m_scene, SIGNAL(mouseMoved(const MatrixMouseEvent *)),
-            this, SLOT(slotDispatchMouseMove(const MatrixMouseEvent *)));
+    connect(m_scene, &MatrixScene::mouseMoved,
+            this, &MatrixWidget::slotDispatchMouseMove);
 
-    connect(m_scene, SIGNAL(mouseReleased(const MatrixMouseEvent *)),
-            this, SLOT(slotDispatchMouseRelease(const MatrixMouseEvent *)));
+    connect(m_scene, &MatrixScene::mouseReleased,
+            this, &MatrixWidget::slotDispatchMouseRelease);
 
-    connect(m_scene, SIGNAL(mouseDoubleClicked(const MatrixMouseEvent *)),
-            this, SLOT(slotDispatchMouseDoubleClick(const MatrixMouseEvent *)));
+    connect(m_scene, &MatrixScene::mouseDoubleClicked,
+            this, &MatrixWidget::slotDispatchMouseDoubleClick);
 
-    connect(m_scene, SIGNAL(segmentDeleted(Segment *)),
-            this, SIGNAL(segmentDeleted(Segment *)));
+    connect(m_scene, &MatrixScene::segmentDeleted,
+            this, &MatrixWidget::segmentDeleted);
 
-    connect(m_scene, SIGNAL(sceneDeleted()),
-            this, SIGNAL(sceneDeleted()));
+    connect(m_scene, &MatrixScene::sceneDeleted,
+            this, &MatrixWidget::sceneDeleted);
 
     m_view->setScene(m_scene);
 
@@ -410,8 +410,8 @@ MatrixWidget::setSegments(RosegardenDocument *document,
 
     m_hpanner->setScene(m_scene);
 
-    connect(m_view, SIGNAL(mouseLeaves()),
-            this, SLOT(slotMouseLeavesView()));
+    connect(m_view, &Panned::mouseLeaves,
+            this, &MatrixWidget::slotMouseLeavesView);
 
     generatePitchRuler();
 
@@ -421,14 +421,14 @@ MatrixWidget::setSegments(RosegardenDocument *document,
 
     // For some reason this doesn't work in the constructor - not looked in detail
     // ( ^^^ it's because m_scene is only set after construction --cc)
-    connect(m_scene, SIGNAL(currentViewSegmentChanged(ViewSegment *)),
-            m_controlsWidget, SLOT(slotSetCurrentViewSegment(ViewSegment *)));
+    connect(m_scene, &MatrixScene::currentViewSegmentChanged,
+            m_controlsWidget, &ControlRulerWidget::slotSetCurrentViewSegment);
     
     connect(m_scene, SIGNAL(selectionChanged(EventSelection *)),
             m_controlsWidget, SLOT(slotSelectionChanged(EventSelection *)));
 
-    connect(m_controlsWidget, SIGNAL(childRulerSelectionChanged(EventSelection *)),
-            m_scene, SLOT(slotRulerSelectionChanged(EventSelection *)));
+    connect(m_controlsWidget, &ControlRulerWidget::childRulerSelectionChanged,
+            m_scene, &MatrixScene::slotRulerSelectionChanged);
 
     connect(m_scene, SIGNAL(selectionChanged()),
             this, SIGNAL(selectionChanged()));
@@ -468,10 +468,10 @@ MatrixWidget::setSegments(RosegardenDocument *document,
     connect(m_bottomStandardRuler, SIGNAL(dragPointerToPosition(timeT)),
             this, SLOT(slotPointerPositionChanged(timeT)));
 
-    connect(m_topStandardRuler->getLoopRuler(), SIGNAL(dragLoopToPosition(timeT)),
-            this, SLOT(slotEnsureTimeVisible(timeT)));
-    connect(m_bottomStandardRuler->getLoopRuler(), SIGNAL(dragLoopToPosition(timeT)),
-            this, SLOT(slotEnsureTimeVisible(timeT)));
+    connect(m_topStandardRuler->getLoopRuler(), &LoopRuler::dragLoopToPosition,
+            this, &MatrixWidget::slotEnsureTimeVisible);
+    connect(m_bottomStandardRuler->getLoopRuler(), &LoopRuler::dragLoopToPosition,
+            this, &MatrixWidget::slotEnsureTimeVisible);
 
     connect(m_document, SIGNAL(pointerPositionChanged(timeT)),
             this, SLOT(slotPointerPositionChanged(timeT)));
@@ -500,8 +500,8 @@ MatrixWidget::generatePitchRuler()
     if (m_instrument) {
 
         // Make instrument tell us if it gets destroyed.
-        connect(m_instrument, SIGNAL(destroyed()),
-                this, SLOT(slotInstrumentGone()));
+        connect(m_instrument, &QObject::destroyed,
+                this, &MatrixWidget::slotInstrumentGone);
 
         mapping = m_instrument->getKeyMapping();
         if (mapping) {
@@ -542,22 +542,22 @@ MatrixWidget::generatePitchRuler()
     m_pianoView->centerOn(pianoKbd);
 
     QObject::connect
-    (m_pitchRuler, SIGNAL(hoveredOverKeyChanged(unsigned int)),
-     this, SLOT (slotHoveredOverKeyChanged(unsigned int)));
+    (m_pitchRuler, &PitchRuler::hoveredOverKeyChanged,
+     this, &MatrixWidget::slotHoveredOverKeyChanged);
 
     QObject::connect
-    (m_pitchRuler, SIGNAL(keyPressed(unsigned int, bool)),
-     this, SLOT (slotKeyPressed(unsigned int, bool)));
+    (m_pitchRuler, &PitchRuler::keyPressed,
+     this, &MatrixWidget::slotKeyPressed);
 
     QObject::connect
-    (m_pitchRuler, SIGNAL(keySelected(unsigned int, bool)),
-     this, SLOT (slotKeySelected(unsigned int, bool)));
+    (m_pitchRuler, &PitchRuler::keySelected,
+     this, &MatrixWidget::slotKeySelected);
 
     // Don't send the "note off" midi message to a percussion instrument
     // when clicking on the pitch ruler
     if (!isPercussion || !m_drumMode) {
-        connect(m_pitchRuler, SIGNAL(keyReleased(unsigned int, bool)),
-                this, SLOT (slotKeyReleased(unsigned int, bool)));
+        connect(m_pitchRuler, &PitchRuler::keyReleased,
+                this, &MatrixWidget::slotKeyReleased);
     }
 
     // If piano scene and matrix scene don't have the same height
@@ -838,7 +838,7 @@ MatrixWidget::slotDispatchMouseMove(const MatrixMouseEvent *e)
         m_lastMouseMoveScenePos = QPointF(e->sceneX, e->sceneY);
         m_inMove = true;
         slotEnsureLastMouseMoveVisible();
-        QTimer::singleShot(100, this, SLOT(slotEnsureLastMouseMoveVisible()));
+        QTimer::singleShot(100, this, &MatrixWidget::slotEnsureLastMouseMoveVisible);
         m_inMove = false;
     }
 }
@@ -929,8 +929,8 @@ MatrixWidget::slotSetSelectTool()
     if (selector) {
         //MATRIX_DEBUG << "slotSetSelectTool: selector successfully set";
     
-        connect(selector, SIGNAL(editTriggerSegment(int)),
-                this, SIGNAL(editTriggerSegment(int)));
+        connect(selector, &MatrixSelector::editTriggerSegment,
+                this, &MatrixWidget::editTriggerSegment);
     }
 }
 

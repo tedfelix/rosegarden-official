@@ -139,8 +139,8 @@ LyricEditDialog::LyricEditDialog(QWidget *parent,
 
         // Connect the button to the menu and the menu to the appropriate slot
         selectSegment->setMenu(m_segmentSelectMenu);
-        connect(m_segmentSelectMenu, SIGNAL(triggered(QAction *)),
-                this, SLOT(slotSegmentChanged(QAction *)));
+        connect(m_segmentSelectMenu, &QMenu::triggered,
+                this, &LyricEditDialog::slotSegmentChanged);
     }
 
     // Continue dialog layout
@@ -160,10 +160,10 @@ LyricEditDialog::LyricEditDialog(QWidget *parent,
     connect(m_verseNumber, SIGNAL(activated(int)), this, SLOT(slotVerseNumberChanged(int)));
     m_verseAddButton = new QPushButton(tr("Add Verse"), hbox );
     hboxLayout->addWidget(m_verseAddButton);
-    connect(m_verseAddButton, SIGNAL(clicked()), this, SLOT(slotAddVerse()));
+    connect(m_verseAddButton, &QAbstractButton::clicked, this, &LyricEditDialog::slotAddVerse);
     m_verseRemoveButton = new QPushButton(tr("Remove Verse"), hbox );
     hboxLayout->addWidget(m_verseRemoveButton);
-    connect(m_verseRemoveButton, SIGNAL(clicked()), this, SLOT(slotRemoveVerse()));
+    connect(m_verseRemoveButton, &QAbstractButton::clicked, this, &LyricEditDialog::slotRemoveVerse);
 
     // Avoid buttons to become exaggeratedly large when dialog is resized
     QFrame *f = new QFrame( hbox );
@@ -193,9 +193,9 @@ LyricEditDialog::LyricEditDialog(QWidget *parent,
                                                      | QDialogButtonBox::Help);
     metagrid->addWidget(buttonBox, 1, 0);
     metagrid->setRowStretch(0, 10);
-    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
-    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
-    connect(buttonBox, SIGNAL(helpRequested()), this, SLOT(slotHelpRequested()));
+    connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
+    connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
+    connect(buttonBox, &QDialogButtonBox::helpRequested, this, &LyricEditDialog::slotHelpRequested);
 }
 
 void

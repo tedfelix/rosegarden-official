@@ -141,8 +141,8 @@ SynthPluginManagerDialog:: setupGuiMain()
     }
 
 //         connect(m_dialogButtonBox, SIGNAL(accepted()), this, SLOT(accept()));
-    connect ( m_dialogButtonBox, SIGNAL ( rejected() ), this, SLOT ( slotClose() ) );
-    connect ( m_dialogButtonBox, SIGNAL ( helpRequested() ), this, SLOT ( slotHelpRequested() ) );
+    connect ( m_dialogButtonBox, &QDialogButtonBox::rejected, this, &SynthPluginManagerDialog::slotClose );
+    connect ( m_dialogButtonBox, &QDialogButtonBox::helpRequested, this, &SynthPluginManagerDialog::slotHelpRequested );
 
     //
     // end dialog button-box setup
@@ -219,14 +219,14 @@ void SynthPluginManagerDialog:: setupGuiCreatePluginList(){
 
         QPushButton *controlsButton = new QPushButton ( tr ( "Controls" ), m_scrollWidget );
         m_scrollWidgetLayout->addWidget ( controlsButton, i, 2 );
-        connect ( controlsButton, SIGNAL ( clicked() ), this, SLOT ( slotControlsButtonClicked() ) );
+        connect ( controlsButton, &QAbstractButton::clicked, this, &SynthPluginManagerDialog::slotControlsButtonClicked );
         m_controlsButtons.push_back ( controlsButton );
 
         QPushButton *guiButton = new QPushButton ( tr ( "Editor >>" ), m_scrollWidget );
         m_scrollWidgetLayout->addWidget ( guiButton, i, 3 );
         guiButton->setEnabled ( m_guiManager->hasGUI
                                 ( id, Instrument::SYNTH_PLUGIN_POSITION ) );
-        connect ( guiButton, SIGNAL ( clicked() ), this, SLOT ( slotGUIButtonClicked() ) );
+        connect ( guiButton, &QAbstractButton::clicked, this, &SynthPluginManagerDialog::slotGUIButtonClicked );
         m_guiButtons.push_back ( guiButton );
 
     }// end for i

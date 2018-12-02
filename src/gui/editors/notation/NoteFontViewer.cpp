@@ -129,8 +129,8 @@ NoteFontViewer::NoteFontViewer(QWidget *parent, QString noteFontName,
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Close);
     metagrid->addWidget(buttonBox, 1, 0);
     metagrid->setRowStretch(0, 10);
-    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
-    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+    connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
+    connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 }
 
 }

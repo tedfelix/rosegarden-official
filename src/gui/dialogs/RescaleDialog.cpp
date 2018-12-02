@@ -82,12 +82,12 @@ RescaleDialog::RescaleDialog(QWidget *parent,
 
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Reset | QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
     vboxLayout->addWidget(buttonBox);
-    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
-    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+    connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
+    connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 
     QPushButton *resetButton = buttonBox->button(QDialogButtonBox::Reset);
-    connect(resetButton, SIGNAL(clicked()),
-            m_newDuration, SLOT(slotResetToDefault()));
+    connect(resetButton, &QAbstractButton::clicked,
+            m_newDuration, &TimeWidget::slotResetToDefault);
 
     updateGeometry();
 }

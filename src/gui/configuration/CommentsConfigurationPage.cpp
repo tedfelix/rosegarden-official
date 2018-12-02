@@ -145,23 +145,23 @@ CommentsConfigurationPage::CommentsConfigurationPage(
 
     // Set up the connexions
 
-    connect(m_clearButton, SIGNAL(clicked()),
-            this, SLOT(slotClear()));
+    connect(m_clearButton, &QAbstractButton::clicked,
+            this, &CommentsConfigurationPage::slotClear);
 
-    connect(m_reloadButton, SIGNAL(clicked()),
-            this, SLOT(slotReload()));
+    connect(m_reloadButton, &QAbstractButton::clicked,
+            this, &CommentsConfigurationPage::slotReload);
 
     if (m_parentDialog) {
-        connect(m_textEdit, SIGNAL(textChanged()),
-                m_parentDialog, SLOT(slotActivateApply()));
-        connect(m_checkBox, SIGNAL(stateChanged(int)),
-                m_parentDialog, SLOT(slotActivateApply()));
+        connect(m_textEdit, &QPlainTextEdit::textChanged,
+                m_parentDialog, &ConfigureDialogBase::slotActivateApply);
+        connect(m_checkBox, &QCheckBox::stateChanged,
+                m_parentDialog, &ConfigureDialogBase::slotActivateApply);
     }
 
-    connect (m_checkBox, SIGNAL(stateChanged(int)),
-             this, SLOT(slotShowPopupChanged(int)));
+    connect (m_checkBox, &QCheckBox::stateChanged,
+             this, &CommentsConfigurationPage::slotShowPopupChanged);
 
-    connect(m_pageButton, SIGNAL(clicked()), this, SLOT(slotShowPagesMenu()));
+    connect(m_pageButton, &QAbstractButton::clicked, this, &CommentsConfigurationPage::slotShowPagesMenu);
 }
 
 void
@@ -248,8 +248,8 @@ CommentsConfigurationPage::slotClear()
         m_saveTextClear = m_textEdit->toPlainText();
         m_textEdit->setPlainText("");
         setUndoClearButton();
-        connect(m_textEdit, SIGNAL(textChanged()),
-                this, SLOT(slotResetUndoClearButton()));
+        connect(m_textEdit, &QPlainTextEdit::textChanged,
+                this, &CommentsConfigurationPage::slotResetUndoClearButton);
     } else {
         m_textEdit->setPlainText(m_saveTextClear);
         m_saveTextClear = "";
@@ -266,8 +266,8 @@ CommentsConfigurationPage::slotReload()
         m_comments[m_page] = comments[m_page];
         m_textEdit->setPlainText(m_comments[m_page].text);
         setUndoReloadButton();
-        connect(m_textEdit, SIGNAL(textChanged()),
-                this, SLOT(slotResetUndoReloadButton()));
+        connect(m_textEdit, &QPlainTextEdit::textChanged,
+                this, &CommentsConfigurationPage::slotResetUndoReloadButton);
     } else {
         m_textEdit->setPlainText(m_saveTextReload);
         m_saveTextReload = "";
@@ -279,8 +279,8 @@ void
 CommentsConfigurationPage::slotResetUndoClearButton()
 {
     setClearButton();
-    disconnect(m_textEdit, SIGNAL(textChanged()),
-                this, SLOT(slotResetUndoClearButton()));
+    disconnect(m_textEdit, &QPlainTextEdit::textChanged,
+                this, &CommentsConfigurationPage::slotResetUndoClearButton);
     m_saveTextClear = "";
 }
 
@@ -288,8 +288,8 @@ void
 CommentsConfigurationPage::slotResetUndoReloadButton()
 {
     setReloadButton();
-    disconnect(m_textEdit, SIGNAL(textChanged()),
-                this, SLOT(slotResetUndoReloadButton()));
+    disconnect(m_textEdit, &QPlainTextEdit::textChanged,
+                this, &CommentsConfigurationPage::slotResetUndoReloadButton);
     m_saveTextReload = "";
 }
 

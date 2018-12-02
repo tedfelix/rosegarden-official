@@ -145,8 +145,8 @@ AudioFaderBox::AudioFaderBox(QWidget *parent,
     m_stereoButton->setIcon(QIcon(m_monoPixmap)); // default is mono
     m_stereoButton->setFixedSize(24, 24);
 
-    connect(m_stereoButton, SIGNAL(clicked()),
-            this, SLOT(slotChannelStateChanged()));
+    connect(m_stereoButton, &QAbstractButton::clicked,
+            this, &AudioFaderBox::slotChannelStateChanged);
 
     m_synthGUIButton = new QPushButton(this);
     m_synthGUIButton->setText(tr("Editor"));

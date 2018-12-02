@@ -203,8 +203,8 @@ NotationView::NotationView(RosegardenDocument *doc,
 
     // connect the editElement signal from NotationSelector, relayed through
     // NotationWidget to be acted upon here in NotationView
-    connect(m_notationWidget, SIGNAL(editElement(NotationStaff *, NotationElement *, bool)),
-            this, SLOT(slotEditElement(NotationStaff *, NotationElement *, bool)));
+    connect(m_notationWidget, &NotationWidget::editElement,
+            this, &NotationView::slotEditElement);
 
     // Many actions are created here
     m_commandRegistry = new NotationCommandRegistry(this);
@@ -329,11 +329,11 @@ NotationView::NotationView(RosegardenDocument *doc,
     initStatusBar();
 
     slotUpdateWindowTitle();
-    connect(m_document, SIGNAL(documentModified(bool)),
-            this, SLOT(slotUpdateWindowTitle(bool)));
+    connect(m_document, &RosegardenDocument::documentModified,
+            this, &NotationView::slotUpdateWindowTitle);
 
-    connect(m_notationWidget, SIGNAL(showContextHelp(const QString &)),
-            this, SLOT(slotShowContextHelp(const QString &)));
+    connect(m_notationWidget, &NotationWidget::showContextHelp,
+            this, &NotationView::slotShowContextHelp);
 
     // Restore window geometry and toolbar/dock state
     settings.beginGroup(WindowGeometryConfigGroup);
@@ -341,8 +341,8 @@ NotationView::NotationView(RosegardenDocument *doc,
     this->restoreState(settings.value("Notation_View_State").toByteArray());
     settings.endGroup();
 
-    connect(m_notationWidget, SIGNAL(sceneNeedsRebuilding()),
-            this, SLOT(slotRegenerateScene()));
+    connect(m_notationWidget, &NotationWidget::sceneNeedsRebuilding,
+            this, &NotationView::slotRegenerateScene);
 
     // Set the rewind and fast-forward buttons for auto-repeat.
     enableAutoRepeat("Transport Toolbar", "playback_pointer_back_bar");
@@ -354,8 +354,8 @@ NotationView::NotationView(RosegardenDocument *doc,
 
     // Connection to update the "Show staff headers" check box in the menu
     // (Must be done before setting the initial visibility of the headers)
-    connect(m_notationWidget, SIGNAL(headersVisibilityChanged(bool)),
-            this,  SLOT(slotCheckShowHeadersMenu(bool)));
+    connect(m_notationWidget, &NotationWidget::headersVisibilityChanged,
+            this,  &NotationView::slotCheckShowHeadersMenu);
 
     // Set initial visibility of staff headers.
     // (Could not be done earlier because both view size and headers size are
@@ -837,11 +837,11 @@ NotationView::setupActions()
     // so the pitch tracker (our derrived class) can see them
     // Because they're protected, we'll connect them here.
     createAction("cursor_back", SIGNAL(stepBackward()));
-    connect(this, SIGNAL(stepBackward()),
-            this, SLOT(slotStepBackward()));
+    connect(this, &NotationView::stepBackward,
+            this, &NotationView::slotStepBackward);
     createAction("cursor_forward", SIGNAL(stepForward()));
-    connect(this, SIGNAL(stepForward()),
-            this, SLOT(slotStepForward()));
+    connect(this, &NotationView::stepForward,
+            this, &NotationView::slotStepForward);
     createAction("playback_pointer_back_bar", SIGNAL(rewindPlayback()));
     createAction("playback_pointer_forward_bar", SIGNAL(fastForwardPlayback()));
     createAction("playback_pointer_start", SIGNAL(rewindPlaybackToBeginning()));
@@ -920,11 +920,11 @@ NotationView::setupActions()
         }
     }
 
-    connect(addControlRulerMenu, SIGNAL(triggered(QAction*)),
-            SLOT(slotAddControlRuler(QAction*)));
+    connect(addControlRulerMenu, &QMenu::triggered,
+            this, &NotationView::slotAddControlRuler);
 
-    connect(m_notationWidget, SIGNAL(hoveredOverNoteChanged(const QString&)),
-            SLOT (slotHoveredOverNoteChanged(const QString&)));
+    connect(m_notationWidget, &NotationWidget::hoveredOverNoteChanged,
+            this, &NotationView::slotHoveredOverNoteChanged);
 
     findAction("add_control_ruler")->setMenu(addControlRulerMenu);
 
@@ -1108,10 +1108,10 @@ NotationView::setupActions()
     settings.endGroup();
 
     // connect up the segment changer signals
-    connect(m_notationWidget, SIGNAL(currentSegmentNext()),
-            SLOT(slotCurrentSegmentNext()));
-    connect(m_notationWidget, SIGNAL(currentSegmentPrior()),
-            SLOT(slotCurrentSegmentPrior()));
+    connect(m_notationWidget, &NotationWidget::currentSegmentNext,
+            this, &NotationView::slotCurrentSegmentNext);
+    connect(m_notationWidget, &NotationWidget::currentSegmentPrior,
+            this, &NotationView::slotCurrentSegmentPrior);
 }
 
 void 

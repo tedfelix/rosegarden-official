@@ -87,8 +87,8 @@ SelectDialog::SelectDialog(QWidget *parent) :
     layout->addWidget(buttonBox);
 
     connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
-    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
-    connect(buttonBox, SIGNAL(helpRequested()), this, SLOT(help()));
+    connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
+    connect(buttonBox, &QDialogButtonBox::helpRequested, this, &SelectDialog::help);
 
 }
 
@@ -409,23 +409,23 @@ SelectDialog::makeDurationTab()
     settings.endGroup();
 
     // connect the use_all buttons
-    connect(m_use_all_breves, SIGNAL(toggled(bool)), SLOT(slotUseAllBreve(bool)));
-    connect(m_use_all_semibreves, SIGNAL(toggled(bool)), SLOT(slotUseAllSemiBreve(bool)));
-    connect(m_use_all_minims, SIGNAL(toggled(bool)), SLOT(slotUseAllMinim(bool)));
-    connect(m_use_all_crotchets, SIGNAL(toggled(bool)), SLOT(slotUseAllCrotchet(bool)));
-    connect(m_use_all_quavers, SIGNAL(toggled(bool)), SLOT(slotUseAllQuaver(bool)));
-    connect(m_use_all_semiquavers, SIGNAL(toggled(bool)), SLOT(slotUseAllSemiQuaver(bool)));
-    connect(m_use_all_demisemis, SIGNAL(toggled(bool)), SLOT(slotUseAllDemiSemi(bool)));
-    connect(m_use_all_hemidemisemis, SIGNAL(toggled(bool)), SLOT(slotUseAllHemiDemiSemi(bool)));
-    connect(m_use_all_normals, SIGNAL(toggled(bool)), SLOT(slotUseAllNormal(bool)));
-    connect(m_use_all_dotteds, SIGNAL(toggled(bool)), SLOT(slotUseAllDotted(bool)));
-    connect(m_use_all_double_dotteds, SIGNAL(toggled(bool)), SLOT(slotUseAllDoubleDotted(bool)));
-    connect(m_use_all_tuplets, SIGNAL(toggled(bool)), SLOT(slotUseAllTuplet(bool)));
-    connect(m_use_all_rests, SIGNAL(toggled(bool)), SLOT(slotUseAllRestNormal(bool)));
-    connect(m_use_all_dotted_rests, SIGNAL(toggled(bool)), SLOT(slotUseAllRestDotted(bool)));
-    connect(m_use_all_double_dotted_rests, SIGNAL(toggled(bool)), SLOT(slotUseAllRestDoubleDotted(bool)));
-    connect(m_use_all_rest_tuplets, SIGNAL(toggled(bool)), SLOT(slotUseAllRestTuplet(bool)));
-    connect(m_use_all_duration, SIGNAL(toggled(bool)), SLOT(slotUseAllDuration(bool)));
+    connect(m_use_all_breves, &QAbstractButton::toggled, this, &SelectDialog::slotUseAllBreve);
+    connect(m_use_all_semibreves, &QAbstractButton::toggled, this, &SelectDialog::slotUseAllSemiBreve);
+    connect(m_use_all_minims, &QAbstractButton::toggled, this, &SelectDialog::slotUseAllMinim);
+    connect(m_use_all_crotchets, &QAbstractButton::toggled, this, &SelectDialog::slotUseAllCrotchet);
+    connect(m_use_all_quavers, &QAbstractButton::toggled, this, &SelectDialog::slotUseAllQuaver);
+    connect(m_use_all_semiquavers, &QAbstractButton::toggled, this, &SelectDialog::slotUseAllSemiQuaver);
+    connect(m_use_all_demisemis, &QAbstractButton::toggled, this, &SelectDialog::slotUseAllDemiSemi);
+    connect(m_use_all_hemidemisemis, &QAbstractButton::toggled, this, &SelectDialog::slotUseAllHemiDemiSemi);
+    connect(m_use_all_normals, &QAbstractButton::toggled, this, &SelectDialog::slotUseAllNormal);
+    connect(m_use_all_dotteds, &QAbstractButton::toggled, this, &SelectDialog::slotUseAllDotted);
+    connect(m_use_all_double_dotteds, &QAbstractButton::toggled, this, &SelectDialog::slotUseAllDoubleDotted);
+    connect(m_use_all_tuplets, &QAbstractButton::toggled, this, &SelectDialog::slotUseAllTuplet);
+    connect(m_use_all_rests, &QAbstractButton::toggled, this, &SelectDialog::slotUseAllRestNormal);
+    connect(m_use_all_dotted_rests, &QAbstractButton::toggled, this, &SelectDialog::slotUseAllRestDotted);
+    connect(m_use_all_double_dotted_rests, &QAbstractButton::toggled, this, &SelectDialog::slotUseAllRestDoubleDotted);
+    connect(m_use_all_rest_tuplets, &QAbstractButton::toggled, this, &SelectDialog::slotUseAllRestTuplet);
+    connect(m_use_all_duration, &QAbstractButton::toggled, this, &SelectDialog::slotUseAllDuration);
   
 }
 
@@ -868,14 +868,14 @@ SelectDialog::makeSpecialTab()
     m_useAllSpecial = new CheckButton("golden-arrow-up", false);
     grid->addWidget(m_useAllSpecial, 8, 8);
 
-    connect(m_useRow1, SIGNAL(toggled(bool)), SLOT(slotUseRow1(bool)));
-    connect(m_useRow2, SIGNAL(toggled(bool)), SLOT(slotUseRow2(bool)));
-    connect(m_useRow3, SIGNAL(toggled(bool)), SLOT(slotUseRow3(bool)));
-    connect(m_useRow4, SIGNAL(toggled(bool)), SLOT(slotUseRow4(bool)));
-    connect(m_useRow5, SIGNAL(toggled(bool)), SLOT(slotUseRow5(bool)));
-    connect(m_useRow6, SIGNAL(toggled(bool)), SLOT(slotUseRow6(bool)));
-    connect(m_useRow7, SIGNAL(toggled(bool)), SLOT(slotUseRow7(bool)));
-    connect(m_useAllSpecial, SIGNAL(toggled(bool)), SLOT(slotUseAllSpecial(bool)));
+    connect(m_useRow1, &QAbstractButton::toggled, this, &SelectDialog::slotUseRow1);
+    connect(m_useRow2, &QAbstractButton::toggled, this, &SelectDialog::slotUseRow2);
+    connect(m_useRow3, &QAbstractButton::toggled, this, &SelectDialog::slotUseRow3);
+    connect(m_useRow4, &QAbstractButton::toggled, this, &SelectDialog::slotUseRow4);
+    connect(m_useRow5, &QAbstractButton::toggled, this, &SelectDialog::slotUseRow5);
+    connect(m_useRow6, &QAbstractButton::toggled, this, &SelectDialog::slotUseRow6);
+    connect(m_useRow7, &QAbstractButton::toggled, this, &SelectDialog::slotUseRow7);
+    connect(m_useAllSpecial, &QAbstractButton::toggled, this, &SelectDialog::slotUseAllSpecial);
 }
 
 void

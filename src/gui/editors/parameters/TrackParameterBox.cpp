@@ -133,8 +133,8 @@ TrackParameterBox::TrackParameterBox(QWidget *parent) :
     m_archive = new QCheckBox(playbackParameters);
     m_archive->setFont(m_font);
     m_archive->setToolTip(tr("<qt><p>Check this to archive a track.  Archived tracks will not make sound.</p></qt>"));
-    connect(m_archive, SIGNAL(clicked(bool)),
-            this, SLOT(slotArchiveChanged(bool)));
+    connect(m_archive, &QAbstractButton::clicked,
+            this, &TrackParameterBox::slotArchiveChanged);
 
     // Playback parameters layout
 
@@ -305,8 +305,8 @@ TrackParameterBox::TrackParameterBox(QWidget *parent) :
     m_load = new QPushButton(tr("Load"), createSegmentsWith);
     m_load->setFont(m_font);
     m_load->setToolTip(tr("<qt><p>Load a segment parameters preset from our comprehensive database of real-world instruments.</p><p>When you create new segments, they will have these parameters at the moment of creation.  To use these parameters on existing segments (eg. to convert an existing part in concert pitch for playback on a Bb trumpet) use <b>Segments -> Convert notation for</b> in the notation editor.</p></qt>"));
-    connect(m_load, SIGNAL(released()),
-            SLOT(slotLoadPressed()));
+    connect(m_load, &QAbstractButton::released,
+            this, &TrackParameterBox::slotLoadPressed);
 
     // Clef
     m_clefLabel = new QLabel(tr("Clef"), createSegmentsWith);
@@ -362,8 +362,8 @@ TrackParameterBox::TrackParameterBox(QWidget *parent) :
     m_lowest = new QPushButton(tr("---"), createSegmentsWith);
     m_lowest->setFont(m_font);
     m_lowest->setToolTip(tr("<qt><p>Choose the lowest suggested playable note, using a staff</p></qt>"));
-    connect(m_lowest, SIGNAL(released()),
-            SLOT(slotLowestPressed()));
+    connect(m_lowest, &QAbstractButton::released,
+            this, &TrackParameterBox::slotLowestPressed);
 
     // Highest playable note
     m_highestLabel = new QLabel(tr("Highest"), createSegmentsWith);
@@ -372,8 +372,8 @@ TrackParameterBox::TrackParameterBox(QWidget *parent) :
     m_highest = new QPushButton(tr("---"), createSegmentsWith);
     m_highest->setFont(m_font);
     m_highest->setToolTip(tr("<qt><p>Choose the highest suggested playable note, using a staff</p></qt>"));
-    connect(m_highest, SIGNAL(released()),
-            SLOT(slotHighestPressed()));
+    connect(m_highest, &QAbstractButton::released,
+            this, &TrackParameterBox::slotHighestPressed);
 
     // Color
     QLabel *colorLabel = new QLabel(tr("Color"), createSegmentsWith);
@@ -390,8 +390,8 @@ TrackParameterBox::TrackParameterBox(QWidget *parent) :
     m_resetToDefaults = new QPushButton(
             tr("Reset to Defaults"), createSegmentsWith);
     m_resetToDefaults->setFont(m_font);
-    connect(m_resetToDefaults, SIGNAL(released()),
-            SLOT(slotResetToDefaultsPressed()));
+    connect(m_resetToDefaults, &QAbstractButton::released,
+            this, &TrackParameterBox::slotResetToDefaultsPressed);
 
     // "Create segments with" layout
 
@@ -426,8 +426,8 @@ TrackParameterBox::TrackParameterBox(QWidget *parent) :
     // Connections
 
     connect(RosegardenMainWindow::self(),
-                SIGNAL(documentChanged(RosegardenDocument *)),
-            SLOT(slotNewDocument(RosegardenDocument *)));
+                &RosegardenMainWindow::documentChanged,
+            this, &TrackParameterBox::slotNewDocument);
 
     // Layout
 
@@ -1364,8 +1364,8 @@ TrackParameterBox::updateWidgets2()
 void
 TrackParameterBox::slotNewDocument(RosegardenDocument *doc)
 {
-    connect(doc, SIGNAL(documentModified(bool)),
-            SLOT(slotDocumentModified(bool)));
+    connect(doc, &RosegardenDocument::documentModified,
+            this, &TrackParameterBox::slotDocumentModified);
 }
 
 void

@@ -125,7 +125,7 @@ SegmentParameterBox::initBox()
     const int width20 = fontMetrics.width("12345678901234567890");
     m_label->setFixedWidth(width20);
     m_label->setToolTip(tr("<qt>Click to edit the segment label for any selected segments</qt>"));
-    connect(m_label, SIGNAL(clicked()), SLOT(slotEditSegmentLabel()));
+    connect(m_label, &Label::clicked, this, &SegmentParameterBox::slotEditSegmentLabel);
 
     // Edit button
     // ??? This Edit button is now no longer needed.  The user can just
@@ -133,7 +133,7 @@ SegmentParameterBox::initBox()
     m_editButton = new QPushButton(tr("Edit"), this);
     m_editButton->setFont(m_font);
     m_editButton->setToolTip(tr("<qt>Edit the segment label for any selected segments</qt>"));
-    connect(m_editButton, SIGNAL(released()), SLOT(slotEditSegmentLabel()));
+    connect(m_editButton, &QAbstractButton::released, this, &SegmentParameterBox::slotEditSegmentLabel);
 
     // Repeat
     QLabel *repeatLabel = new QLabel(tr("Repeat"), this);
@@ -147,7 +147,7 @@ SegmentParameterBox::initBox()
                                  ".png\"></img></center></p><br>These can be used in conjunction with special LilyPond export direct"
                                  "ives to create repeats with first and second alternate endings. See rosegardenmusic.com for a tut"
                                  "orial. [Ctrl+Shift+R] </qt>"));
-    connect(m_repeatCheckBox, SIGNAL(pressed()), SLOT(slotRepeatPressed()));
+    connect(m_repeatCheckBox, &QAbstractButton::pressed, this, &SegmentParameterBox::slotRepeatPressed);
 
     // Transpose
     QLabel *transposeLabel = new QLabel(tr("Transpose"), this);
@@ -161,8 +161,8 @@ SegmentParameterBox::initBox()
                                     "setting before drawing or recording new segments.</i></p></qt>"));
     connect(m_transposeComboBox, SIGNAL(activated(int)),
             SLOT(slotTransposeSelected(int)));
-    connect(m_transposeComboBox, SIGNAL(editTextChanged(const QString&)),
-            SLOT(slotTransposeTextChanged(const QString&)));
+    connect(m_transposeComboBox, &QComboBox::editTextChanged,
+            this, &SegmentParameterBox::slotTransposeTextChanged);
 
     // Quantize
     QLabel *quantizeLabel = new QLabel(tr("Quantize"), this);
@@ -196,8 +196,8 @@ SegmentParameterBox::initBox()
                                 " notation rendering as viewed in the notation editor.</i></p></qt>"));
     connect(m_delayComboBox, SIGNAL(activated(int)),
             SLOT(slotDelaySelected(int)));
-    connect(m_delayComboBox, SIGNAL(editTextChanged(const QString&)),
-            SLOT(slotDelayTextChanged(const QString &)));
+    connect(m_delayComboBox, &QComboBox::editTextChanged,
+            this, &SegmentParameterBox::slotDelayTextChanged);
 
     // Color
     QLabel *colourLabel = new QLabel(tr("Color"), this);
@@ -211,8 +211,8 @@ SegmentParameterBox::initBox()
     connect(m_colourComboBox, SIGNAL(activated(int)),
             SLOT(slotColourSelected(int)));
 
-    connect(m_doc, SIGNAL(docColoursChanged()),
-            this, SLOT(slotDocColoursChanged()));
+    connect(m_doc, &RosegardenDocument::docColoursChanged,
+            this, &SegmentParameterBox::slotDocColoursChanged);
 
     // Linked segment parameters (hidden)
 
@@ -238,15 +238,15 @@ SegmentParameterBox::initBox()
     QPushButton *changeButton = new QPushButton(tr("Change"), linkedSegmentParameters);
     changeButton->setFont(m_font);
     changeButton->setToolTip(tr("<qt>Edit the relative transposition on the linked segment</qt>"));
-    connect(changeButton, SIGNAL(released()),
-            SLOT(slotChangeLinkTranspose()));
+    connect(changeButton, &QAbstractButton::released,
+            this, &SegmentParameterBox::slotChangeLinkTranspose);
 
     // Reset
     QPushButton *resetButton = new QPushButton(tr("Reset"), linkedSegmentParameters);
     resetButton->setFont(m_font);
     resetButton->setToolTip(tr("<qt>Reset the relative transposition on the linked segment to zero</qt>"));
-    connect(resetButton, SIGNAL(released()),
-            SLOT(slotResetLinkTranspose()));
+    connect(resetButton, &QAbstractButton::released,
+            this, &SegmentParameterBox::slotResetLinkTranspose);
 
     // Linked segment parameters layout
 
@@ -355,14 +355,14 @@ void
 SegmentParameterBox::setDocument(RosegardenDocument* doc)
 {
     if (m_doc != nullptr)
-        disconnect(m_doc, SIGNAL(docColoursChanged()),
-                   this, SLOT(slotDocColoursChanged()));
+        disconnect(m_doc, &RosegardenDocument::docColoursChanged,
+                   this, &SegmentParameterBox::slotDocColoursChanged);
 
     m_doc = doc;
 
     // Detect when the document colours are updated
-    connect (m_doc, SIGNAL(docColoursChanged()),
-             this, SLOT(slotDocColoursChanged()));
+    connect (m_doc, &RosegardenDocument::docColoursChanged,
+             this, &SegmentParameterBox::slotDocColoursChanged);
 
     slotDocColoursChanged(); // repopulate combo
 }

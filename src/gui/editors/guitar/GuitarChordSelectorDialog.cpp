@@ -84,12 +84,12 @@ GuitarChordSelectorDialog::GuitarChordSelectorDialog(QWidget *parent)
     vboxLayout->addWidget(m_deleteFingeringButton); 
     vboxLayout->addWidget(m_editFingeringButton); 
     
-    connect(m_newFingeringButton, SIGNAL(clicked()),
-            this, SLOT(slotNewFingering()));
-    connect(m_deleteFingeringButton, SIGNAL(clicked()),
-            this, SLOT(slotDeleteFingering()));
-    connect(m_editFingeringButton, SIGNAL(clicked()),
-            this, SLOT(slotEditFingering()));
+    connect(m_newFingeringButton, &QAbstractButton::clicked,
+            this, &GuitarChordSelectorDialog::slotNewFingering);
+    connect(m_deleteFingeringButton, &QAbstractButton::clicked,
+            this, &GuitarChordSelectorDialog::slotDeleteFingering);
+    connect(m_editFingeringButton, &QAbstractButton::clicked,
+            this, &GuitarChordSelectorDialog::slotEditFingering);
     
     topLayout->addWidget(new QLabel(tr("Fingerings"), page), 0, 3);
     m_fingeringsList = new QListWidget(page);
@@ -104,10 +104,10 @@ GuitarChordSelectorDialog::GuitarChordSelectorDialog(QWidget *parent)
     m_fingeringBox = new FingeringBox(false, page, true);
     topLayout->addWidget(m_fingeringBox, 2, 0, 1, 2);
     
-    connect(m_rootNotesList, SIGNAL(currentRowChanged(int)),
-            this, SLOT(slotRootHighlighted(int)));
-    connect(m_chordExtList, SIGNAL(currentRowChanged(int)),
-            this, SLOT(slotChordExtHighlighted(int)));
+    connect(m_rootNotesList, &QListWidget::currentRowChanged,
+            this, &GuitarChordSelectorDialog::slotRootHighlighted);
+    connect(m_chordExtList, &QListWidget::currentRowChanged,
+            this, &GuitarChordSelectorDialog::slotChordExtHighlighted);
 
     // connect itemClicked() so it will fire if a user clicks directly on the
     // fingering list doodad thingummy (and comments like "fingering list doodad
@@ -133,7 +133,7 @@ GuitarChordSelectorDialog::GuitarChordSelectorDialog(QWidget *parent)
     metagrid->addWidget(buttonBox, 1, 0);
     metagrid->setRowStretch(0, 10);
     connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
-    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+    connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 }
 
 void

@@ -76,7 +76,7 @@ CheckForParallelsDialog::CheckForParallelsDialog(NotationView *p, RosegardenDocu
     pal.setColor(QPalette::Text, Qt::black);
     textBrowser->setPalette(pal);
 
-    connect(textBrowser, SIGNAL(cursorPositionChanged()), this, SLOT(onTextBrowserclicked()));
+    connect(textBrowser, &QTextEdit::cursorPositionChanged, this, &CheckForParallelsDialog::onTextBrowserclicked);
 
     ignoreCursor = true;
 
@@ -94,7 +94,7 @@ CheckForParallelsDialog::CheckForParallelsDialog(NotationView *p, RosegardenDocu
     vboxLayout->addWidget(checkForUnisonsCheckBox);
     checkForUnisonsCheckBox->setChecked( checkForUnisons );
 
-    connect(checkForUnisonsCheckBox, SIGNAL(clicked()), this, SLOT(checkForUnisonsClicked()));
+    connect(checkForUnisonsCheckBox, &QAbstractButton::clicked, this, &CheckForParallelsDialog::checkForUnisonsClicked);
 
     // we make the check for hidden parallels optional
     //
@@ -105,7 +105,7 @@ CheckForParallelsDialog::CheckForParallelsDialog(NotationView *p, RosegardenDocu
     vboxLayout->addWidget(checkForHiddenParallelsCheckBox);
     checkForHiddenParallelsCheckBox->setChecked( checkForHiddenParallels );
 
-    connect(checkForHiddenParallelsCheckBox, SIGNAL(clicked()), this, SLOT(checkForHiddenParallelsClicked()));
+    connect(checkForHiddenParallelsCheckBox, &QAbstractButton::clicked, this, &CheckForParallelsDialog::checkForHiddenParallelsClicked);
 
     // buttons
 
@@ -132,10 +132,10 @@ CheckForParallelsDialog::CheckForParallelsDialog(NotationView *p, RosegardenDocu
     settings.endGroup();
 
 
-    connect(startButton, SIGNAL(clicked()), this, SLOT(startCheck()));
-    connect(clearButton, SIGNAL(clicked()), this, SLOT(clear()));
-    connect(exportButton, SIGNAL(clicked()), this, SLOT(exportText()));
-    connect(okButton, SIGNAL(clicked()), this, SLOT(cleanUpAndLeave()));
+    connect(startButton, &QAbstractButton::clicked, this, &CheckForParallelsDialog::startCheck);
+    connect(clearButton, &QAbstractButton::clicked, this, &CheckForParallelsDialog::clear);
+    connect(exportButton, &QAbstractButton::clicked, this, &CheckForParallelsDialog::exportText);
+    connect(okButton, &QAbstractButton::clicked, this, &CheckForParallelsDialog::cleanUpAndLeave);
 
     transitionList.clear();
 }

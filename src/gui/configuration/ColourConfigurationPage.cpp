@@ -79,20 +79,20 @@ ColourConfigurationPage::ColourConfigurationPage(RosegardenDocument *doc, QWidge
     // disable until we can remove it after release
     deleteColourButton->setEnabled(false);
 
-    connect(addColourButton, SIGNAL(clicked()),
-            this, SLOT(slotAddNew()));
+    connect(addColourButton, &QAbstractButton::clicked,
+            this, &ColourConfigurationPage::slotAddNew);
 
-    connect(deleteColourButton, SIGNAL(clicked()),
-            this, SLOT(slotDelete()));
+    connect(deleteColourButton, &QAbstractButton::clicked,
+            this, &ColourConfigurationPage::slotDelete);
 
-    connect(this, SIGNAL(docColoursChanged()),
-            m_doc, SLOT(slotDocColoursChanged()));
+    connect(this, &ColourConfigurationPage::docColoursChanged,
+            m_doc, &RosegardenDocument::slotDocColoursChanged);
 
-    connect(m_colourtable, SIGNAL(entryTextChanged(unsigned int, QString)),
-            this, SLOT(slotTextChanged(unsigned int, QString)));
+    connect(m_colourtable, &ColourTable::entryTextChanged,
+            this, &ColourConfigurationPage::slotTextChanged);
 
-    connect(m_colourtable, SIGNAL(entryColourChanged(unsigned int, QColor)),
-            this, SLOT(slotColourChanged(unsigned int, QColor)));
+    connect(m_colourtable, &ColourTable::entryColourChanged,
+            this, &ColourConfigurationPage::slotColourChanged);
 
     addTab(frame, tr("Color Map"));
 

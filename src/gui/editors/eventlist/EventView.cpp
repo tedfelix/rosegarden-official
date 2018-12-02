@@ -178,21 +178,21 @@ EventView::EventView(RosegardenDocument *doc,
         layout->addWidget(m_triggerName, 0, 1);
         QPushButton *editButton = new QPushButton(tr("edit"), frame);
         layout->addWidget(editButton, 0, 2);
-        connect(editButton, SIGNAL(clicked()), this, SLOT(slotEditTriggerName()));
+        connect(editButton, &QAbstractButton::clicked, this, &EventView::slotEditTriggerName);
 
         layout->addWidget(new QLabel(tr("Base pitch:  "), frame), 1, 0);
         m_triggerPitch = new QLabel(QString("%1").arg(rec->getBasePitch()), frame);
         layout->addWidget(m_triggerPitch, 1, 1);
         editButton = new QPushButton(tr("edit"), frame);
         layout->addWidget(editButton, 1, 2);
-        connect(editButton, SIGNAL(clicked()), this, SLOT(slotEditTriggerPitch()));
+        connect(editButton, &QAbstractButton::clicked, this, &EventView::slotEditTriggerPitch);
 
         layout->addWidget(new QLabel(tr("Base velocity:  "), frame), 2, 0);
         m_triggerVelocity = new QLabel(QString("%1").arg(rec->getBaseVelocity()), frame);
         layout->addWidget(m_triggerVelocity, 2, 1);
         editButton = new QPushButton(tr("edit"), frame);
         layout->addWidget(editButton, 2, 2);
-        connect(editButton, SIGNAL(clicked()), this, SLOT(slotEditTriggerVelocity()));
+        connect(editButton, &QAbstractButton::clicked, this, &EventView::slotEditTriggerVelocity);
 
         /*!!! Comment out these two options, which are not yet used
           anywhere else -- intended for use with library ornaments, not
@@ -233,8 +233,8 @@ EventView::EventView(RosegardenDocument *doc,
     }
 
     updateViewCaption();
-    connect(getDocument(), SIGNAL(documentModified(bool)),
-            this, SLOT(updateWindowTitle(bool)));
+    connect(getDocument(), &RosegardenDocument::documentModified,
+            this, &EventView::updateWindowTitle);
 
     for (unsigned int i = 0; i < m_segments.size(); ++i) {
         m_segments[i]->addObserver(this);
@@ -242,13 +242,13 @@ EventView::EventView(RosegardenDocument *doc,
 
     // Connect double clicker
     //
-    connect(m_eventList, SIGNAL(itemDoubleClicked(QTreeWidgetItem*, int)),
-            SLOT(slotPopupEventEditor(QTreeWidgetItem*, int)));
+    connect(m_eventList, &QTreeWidget::itemDoubleClicked,
+            this, &EventView::slotPopupEventEditor);
 
     m_eventList->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(m_eventList,
-            SIGNAL(customContextMenuRequested(const QPoint&)),
-            SLOT(slotPopupMenu(const QPoint&)));
+            &QWidget::customContextMenuRequested,
+            this, &EventView::slotPopupMenu);
 
     m_eventList->setAllColumnsShowFocus(true);
     m_eventList->setSelectionMode( QAbstractItemView::ExtendedSelection );
@@ -279,19 +279,19 @@ EventView::EventView(RosegardenDocument *doc,
     // That took an astonishing amount of time to work out.
     //
     //
-    connect(m_noteCheckBox, SIGNAL(stateChanged(int)), SLOT(slotModifyFilter()));              
-    connect(m_programCheckBox, SIGNAL(stateChanged(int)), SLOT(slotModifyFilter()));
-    connect(m_controllerCheckBox, SIGNAL(stateChanged(int)), SLOT(slotModifyFilter()));
-    connect(m_pitchBendCheckBox, SIGNAL(stateChanged(int)), SLOT(slotModifyFilter()));
-    connect(m_sysExCheckBox, SIGNAL(stateChanged(int)), SLOT(slotModifyFilter()));
-    connect(m_keyPressureCheckBox, SIGNAL(stateChanged(int)), SLOT(slotModifyFilter()));
-    connect(m_channelPressureCheckBox, SIGNAL(stateChanged(int)), SLOT(slotModifyFilter()));
-    connect(m_restCheckBox, SIGNAL(stateChanged(int)), SLOT(slotModifyFilter()));
-    connect(m_indicationCheckBox, SIGNAL(stateChanged(int)), SLOT(slotModifyFilter()));
-    connect(m_textCheckBox, SIGNAL(stateChanged(int)), SLOT(slotModifyFilter()));
-    connect(m_generatedRegionCheckBox, SIGNAL(stateChanged(int)), SLOT(slotModifyFilter()));
-    connect(m_segmentIDCheckBox, SIGNAL(stateChanged(int)), SLOT(slotModifyFilter()));
-    connect(m_otherCheckBox, SIGNAL(stateChanged(int)), SLOT(slotModifyFilter()));
+    connect(m_noteCheckBox, &QCheckBox::stateChanged, this, &EventView::slotModifyFilter);              
+    connect(m_programCheckBox, &QCheckBox::stateChanged, this, &EventView::slotModifyFilter);
+    connect(m_controllerCheckBox, &QCheckBox::stateChanged, this, &EventView::slotModifyFilter);
+    connect(m_pitchBendCheckBox, &QCheckBox::stateChanged, this, &EventView::slotModifyFilter);
+    connect(m_sysExCheckBox, &QCheckBox::stateChanged, this, &EventView::slotModifyFilter);
+    connect(m_keyPressureCheckBox, &QCheckBox::stateChanged, this, &EventView::slotModifyFilter);
+    connect(m_channelPressureCheckBox, &QCheckBox::stateChanged, this, &EventView::slotModifyFilter);
+    connect(m_restCheckBox, &QCheckBox::stateChanged, this, &EventView::slotModifyFilter);
+    connect(m_indicationCheckBox, &QCheckBox::stateChanged, this, &EventView::slotModifyFilter);
+    connect(m_textCheckBox, &QCheckBox::stateChanged, this, &EventView::slotModifyFilter);
+    connect(m_generatedRegionCheckBox, &QCheckBox::stateChanged, this, &EventView::slotModifyFilter);
+    connect(m_segmentIDCheckBox, &QCheckBox::stateChanged, this, &EventView::slotModifyFilter);
+    connect(m_otherCheckBox, &QCheckBox::stateChanged, this, &EventView::slotModifyFilter);
 
     makeInitialSelection(doc->getComposition().getPosition());
 

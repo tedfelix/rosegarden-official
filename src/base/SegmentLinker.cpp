@@ -32,8 +32,8 @@ SegmentLinker::SegmentLinkerId SegmentLinker::m_count = 0;
 
 SegmentLinker::SegmentLinker()
 {
-    connect(CommandHistory::getInstance(), SIGNAL(updateLinkedSegments(Command *)),
-        this, SLOT(slotUpdateLinkedSegments(Command *)));
+    connect(CommandHistory::getInstance(), &CommandHistory::updateLinkedSegments,
+        this, &SegmentLinker::slotUpdateLinkedSegments);
 
     ++m_count;
     m_id = m_count;
@@ -42,8 +42,8 @@ SegmentLinker::SegmentLinker()
 
 SegmentLinker::SegmentLinker(SegmentLinkerId id)
 {
-    connect(CommandHistory::getInstance(), SIGNAL(updateLinkedSegments(Command *)),
-        this, SLOT(slotUpdateLinkedSegments(Command *)));
+    connect(CommandHistory::getInstance(), &CommandHistory::updateLinkedSegments,
+        this, &SegmentLinker::slotUpdateLinkedSegments);
 
     m_id = id;
     m_count = std::max(m_count,m_id+1);

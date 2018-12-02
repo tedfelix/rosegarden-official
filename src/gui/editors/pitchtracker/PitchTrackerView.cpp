@@ -188,8 +188,8 @@ void PitchTrackerView::setupActions(int initialTuning, int initialMethod)
         m_tuningsActionGroup->actions().at(initialTuning)->setChecked(true);
     }
     
-    connect(m_tuningsActionGroup, SIGNAL(triggered(QAction *)),
-            this, SLOT(slotNewTuningFromAction(QAction *)));
+    connect(m_tuningsActionGroup, &QActionGroup::triggered,
+            this, &PitchTrackerView::slotNewTuningFromAction);
  
     
     QMenu *methodsMenu = new QMenu(tr("Pitch estimate method"), viewMenu);
@@ -205,8 +205,8 @@ void PitchTrackerView::setupActions(int initialTuning, int initialMethod)
         m_methodsActionGroup->actions().at(initialMethod)->setChecked(true);
     }
     
-    connect(m_methodsActionGroup, SIGNAL(triggered(QAction *)),
-            this, SLOT(slotNewPitchEstimationMethod(QAction *)));
+    connect(m_methodsActionGroup, &QActionGroup::triggered,
+            this, &PitchTrackerView::slotNewPitchEstimationMethod);
     
     viewMenu->addSeparator();
     viewMenu->addMenu(tuningsMenu);
@@ -245,29 +245,29 @@ PitchTrackerView::setSegments(RosegardenDocument *document,
 
     // update GUI 
 
-    connect(m_document, SIGNAL(pointerPositionChanged(timeT)),
-            this, SLOT(slotUpdateValues(timeT)));
+    connect(m_document, &RosegardenDocument::pointerPositionChanged,
+            this, &PitchTrackerView::slotUpdateValues);
 
-    connect(this, SIGNAL( play() ),
-            this, SLOT( slotStartTracker() ));
-    connect(this, SIGNAL( stop() ),
-            this, SLOT( slotStopTracker() ));
+    connect(this, &NotationView::play,
+            this, &PitchTrackerView::slotStartTracker);
+    connect(this, &NotationView::stop,
+            this, &PitchTrackerView::slotStopTracker);
 
     // Any other jumping around in the score will invalidate the pitch
     // graph, so let's just erase it and let it start again.
      
-    connect(this, SIGNAL( stepBackward() ),
-            this, SLOT( slotPlaybackJump() ));
-    connect(this, SIGNAL( stepForward() ),
-            this, SLOT( slotPlaybackJump() ));
-    connect(this, SIGNAL( rewindPlayback() ),
-            this, SLOT( slotPlaybackJump() ));
-    connect(this, SIGNAL( fastForwardPlayback() ),
-            this, SLOT( slotPlaybackJump() ));
-    connect(this, SIGNAL( rewindPlaybackToBeginning() ),
-            this, SLOT( slotPlaybackJump() ));
-    connect(this, SIGNAL( fastForwardPlaybackToEnd() ),
-            this, SLOT( slotPlaybackJump() ));
+    connect(this, &NotationView::stepBackward,
+            this, &PitchTrackerView::slotPlaybackJump);
+    connect(this, &NotationView::stepForward,
+            this, &PitchTrackerView::slotPlaybackJump);
+    connect(this, &NotationView::rewindPlayback,
+            this, &PitchTrackerView::slotPlaybackJump);
+    connect(this, &NotationView::fastForwardPlayback,
+            this, &PitchTrackerView::slotPlaybackJump);
+    connect(this, &NotationView::rewindPlaybackToBeginning,
+            this, &PitchTrackerView::slotPlaybackJump);
+    connect(this, &NotationView::fastForwardPlaybackToEnd,
+            this, &PitchTrackerView::slotPlaybackJump);
 
 }
 

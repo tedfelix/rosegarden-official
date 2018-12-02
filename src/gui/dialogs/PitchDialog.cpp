@@ -51,10 +51,10 @@ PitchDialog::PitchDialog(QWidget *parent, QString title, int defaultPitch) :
         = buttonBox->addButton(tr("Reset"), QDialogButtonBox::ActionRole);
     metagrid->addWidget(buttonBox, 1, 0);
     metagrid->setRowStretch(0, 10);
-    connect(user1, SIGNAL(clicked(bool)),
-            m_pitchChooser, SLOT(slotResetToDefault()));
-    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
-    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+    connect(user1, &QAbstractButton::clicked,
+            m_pitchChooser, &PitchChooser::slotResetToDefault);
+    connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
+    connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 }
 
 int

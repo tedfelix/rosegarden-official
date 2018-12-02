@@ -49,10 +49,10 @@ PlayListDialog::PlayListDialog( QString caption,
 
     setLayout(metagrid);
 
-    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
-    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
-    connect(buttonBox->button(QDialogButtonBox::Close), SIGNAL(clicked()),
-            this, SLOT(slotClose()));
+    connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
+    connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
+    connect(buttonBox->button(QDialogButtonBox::Close), &QAbstractButton::clicked,
+            this, &PlayListDialog::slotClose);
 
     restore();
 }

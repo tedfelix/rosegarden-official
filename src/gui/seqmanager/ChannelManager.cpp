@@ -60,16 +60,16 @@ ChannelManager::connectInstrument(Instrument *instrument)
         disconnect(m_instrument);
 
     // Connect to the new instrument
-    connect(instrument, SIGNAL(wholeDeviceDestroyed()),
-            this, SLOT(slotLosingDevice()));
-    connect(instrument, SIGNAL(destroyed()),
-            this, SLOT(slotLosingInstrument()));
-    connect(instrument, SIGNAL(changedChannelSetup()),
-            this, SLOT(slotInstrumentChanged()));
-    connect(instrument, SIGNAL(channelBecomesFixed()),
-            this, SLOT(slotChannelBecomesFixed()));
-    connect(instrument, SIGNAL(channelBecomesUnfixed()),
-            this, SLOT(slotChannelBecomesUnfixed()));
+    connect(instrument, &Instrument::wholeDeviceDestroyed,
+            this, &ChannelManager::slotLosingDevice);
+    connect(instrument, &QObject::destroyed,
+            this, &ChannelManager::slotLosingInstrument);
+    connect(instrument, &Instrument::changedChannelSetup,
+            this, &ChannelManager::slotInstrumentChanged);
+    connect(instrument, &Instrument::channelBecomesFixed,
+            this, &ChannelManager::slotChannelBecomesFixed);
+    connect(instrument, &Instrument::channelBecomesUnfixed,
+            this, &ChannelManager::slotChannelBecomesUnfixed);
 
     setAllocationMode(instrument);
     m_instrument = instrument;
@@ -357,8 +357,8 @@ ChannelManager::connectAllocator()
     if (!m_channelInterval.validChannel())
         return;
 
-    connect(getAllocator(), SIGNAL(sigVacateChannel(ChannelId)),
-            this, SLOT(slotVacateChannel(ChannelId)),
+    connect(getAllocator(), &AllocateChannels::sigVacateChannel,
+            this, &ChannelManager::slotVacateChannel,
             Qt::UniqueConnection);
 }
 

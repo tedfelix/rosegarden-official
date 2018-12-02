@@ -81,8 +81,8 @@ AudioInstrumentParameterPanel::AudioInstrumentParameterPanel(QWidget *parent) :
     m_aliasButton = new InstrumentAliasButton(this);
     m_aliasButton->setFixedSize(10, 6); // golden rectangle
     m_aliasButton->setToolTip(tr("Click to rename this instrument"));
-    connect(m_aliasButton, SIGNAL(changed()),
-            SLOT(slotAliasChanged()));
+    connect(m_aliasButton, &InstrumentAliasButton::changed,
+            this, &AudioInstrumentParameterPanel::slotAliasChanged);
 
     // Instrument label
     QFontMetrics metrics(font);
@@ -96,20 +96,20 @@ AudioInstrumentParameterPanel::AudioInstrumentParameterPanel(QWidget *parent) :
     // Audio Fader Box
     m_audioFader = new AudioFaderBox(this);
     m_audioFader->setFont(font);
-    connect(m_audioFader, SIGNAL(audioChannelsChanged(int)),
-            this, SLOT(slotAudioChannels(int)));
+    connect(m_audioFader, &AudioFaderBox::audioChannelsChanged,
+            this, &AudioInstrumentParameterPanel::slotAudioChannels);
     connect(m_audioFader->m_signalMapper, SIGNAL(mapped(int)),
             this, SLOT(slotSelectPlugin(int)));
-    connect(m_audioFader->m_fader, SIGNAL(faderChanged(float)),
-            this, SLOT(slotSelectAudioLevel(float)));
-    connect(m_audioFader->m_recordFader, SIGNAL(faderChanged(float)),
-            this, SLOT(slotSelectAudioRecordLevel(float)));
-    connect(m_audioFader->m_pan, SIGNAL(valueChanged(float)),
-            this, SLOT(slotSetPan(float)));
-    connect(m_audioFader->m_synthButton, SIGNAL(clicked()),
-            this, SLOT(slotSynthButtonClicked()));
-    connect(m_audioFader->m_synthGUIButton, SIGNAL(clicked()),
-            this, SLOT(slotSynthGUIButtonClicked()));
+    connect(m_audioFader->m_fader, &Fader::faderChanged,
+            this, &AudioInstrumentParameterPanel::slotSelectAudioLevel);
+    connect(m_audioFader->m_recordFader, &Fader::faderChanged,
+            this, &AudioInstrumentParameterPanel::slotSelectAudioRecordLevel);
+    connect(m_audioFader->m_pan, &Rotary::valueChanged,
+            this, &AudioInstrumentParameterPanel::slotSetPan);
+    connect(m_audioFader->m_synthButton, &QAbstractButton::clicked,
+            this, &AudioInstrumentParameterPanel::slotSynthButtonClicked);
+    connect(m_audioFader->m_synthGUIButton, &QAbstractButton::clicked,
+            this, &AudioInstrumentParameterPanel::slotSynthGUIButtonClicked);
 
     // Layout
 
@@ -134,21 +134,21 @@ AudioInstrumentParameterPanel::AudioInstrumentParameterPanel(QWidget *parent) :
     // Connections
 
     connect(RosegardenMainWindow::self(),
-                SIGNAL(documentChanged(RosegardenDocument *)),
-            SLOT(slotNewDocument(RosegardenDocument *)));
+                &RosegardenMainWindow::documentChanged,
+            this, &AudioInstrumentParameterPanel::slotNewDocument);
 
     // Connect for high-frequency control change notifications.
     connect(Instrument::getStaticSignals().data(),
-                SIGNAL(controlChange(Instrument *, int)),
-            SLOT(slotControlChange(Instrument *, int)));
+                &InstrumentStaticSignals::controlChange,
+            this, &AudioInstrumentParameterPanel::slotControlChange);
 
     connect(RosegardenMainWindow::self(),
-                SIGNAL(pluginSelected(InstrumentId, int, int)),
-            SLOT(slotPluginSelected(InstrumentId, int, int)));
+                &RosegardenMainWindow::pluginSelected,
+            this, &AudioInstrumentParameterPanel::slotPluginSelected);
 
     connect(RosegardenMainWindow::self(),
-                SIGNAL(pluginBypassed(InstrumentId, int, bool)),
-            SLOT(slotPluginBypassed(InstrumentId, int, bool)));
+                &RosegardenMainWindow::pluginBypassed,
+            this, &AudioInstrumentParameterPanel::slotPluginBypassed);
 }
 
 void
@@ -482,8 +482,8 @@ AudioInstrumentParameterPanel::slotAliasChanged()
 void
 AudioInstrumentParameterPanel::slotNewDocument(RosegardenDocument *doc)
 {
-    connect(doc, SIGNAL(documentModified(bool)),
-            SLOT(slotDocumentModified(bool)));
+    connect(doc, &RosegardenDocument::documentModified,
+            this, &AudioInstrumentParameterPanel::slotDocumentModified);
 }
 
 void

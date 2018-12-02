@@ -61,12 +61,12 @@ AudioMixerWindow2::AudioMixerWindow2(QWidget *parent) :
     //     to connect to to get wind of document changes?
     //     RMW::documentAboutToChange()?
     connect(RosegardenMainWindow::self()->getDocument(),
-                SIGNAL(documentModified(bool)),
-            SLOT(slotDocumentModified(bool)));
+                &RosegardenDocument::documentModified,
+            this, &AudioMixerWindow2::slotDocumentModified);
     // Connect for "external controller" events.
     connect(RosegardenMainWindow::self()->getView(),
-                SIGNAL(controllerDeviceEventReceived(MappedEvent *, const void *)),
-            SLOT(slotExternalControllerEvent(MappedEvent *, const void *)));
+                &RosegardenMainViewWidget::controllerDeviceEventReceived,
+            this, &AudioMixerWindow2::slotExternalControllerEvent);
     // Connect to make sure "external controller" events get here when
     // we are the active window.
     connect(this, SIGNAL(windowActivated()),
@@ -74,8 +74,8 @@ AudioMixerWindow2::AudioMixerWindow2(QWidget *parent) :
                 SLOT(slotActiveMainWindowChanged()));
     // Connect for high-frequency control change notifications.
     connect(Instrument::getStaticSignals().data(),
-                SIGNAL(controlChange(Instrument *, int)),
-            SLOT(slotControlChange(Instrument *, int)));
+                &InstrumentStaticSignals::controlChange,
+            this, &AudioMixerWindow2::slotControlChange);
 
     // File > Close
     createAction("file_close", SLOT(slotClose()));

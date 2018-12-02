@@ -69,20 +69,20 @@ FileLocateDialog::FileLocateDialog(QWidget *parent,
 
     QPushButton *user1 = new QPushButton(tr("&Skip"));
     buttonBox->addButton(user1, QDialogButtonBox::ActionRole);
-    connect(user1, SIGNAL(clicked(bool)), this, SLOT(slotUser1()));
+    connect(user1, &QAbstractButton::clicked, this, &FileLocateDialog::slotUser1);
 
     QPushButton *user2 = new QPushButton(tr("Skip &All"));
     buttonBox->addButton(user2, QDialogButtonBox::ActionRole);
-    connect(user2, SIGNAL(clicked(bool)), this, SLOT(slotUser2()));
+    connect(user2, &QAbstractButton::clicked, this, &FileLocateDialog::slotUser2);
 
     QPushButton *user3 = new QPushButton(tr("&Locate"));
     buttonBox->addButton(user3, QDialogButtonBox::ActionRole);
-    connect(user3, SIGNAL(clicked(bool)), this, SLOT(slotUser3()));
+    connect(user3, &QAbstractButton::clicked, this, &FileLocateDialog::slotUser3);
 
     metagrid->addWidget(buttonBox, 1, 0);
     metagrid->setRowStretch(0, 10);
-    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
-    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+    connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
+    connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 }
 
 void

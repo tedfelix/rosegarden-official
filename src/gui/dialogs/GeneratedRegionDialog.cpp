@@ -63,8 +63,8 @@ GeneratedRegionDialog(QWidget *parent,
 
   initializeCombos();
 
-  connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
-  connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+  connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
+  connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 
   connect(m_figSourcesBox,   SIGNAL(currentIndexChanged(int)),
 	  this, SLOT(assignFigurationSource(int)));

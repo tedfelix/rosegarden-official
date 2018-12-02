@@ -89,8 +89,8 @@ const int ControlRuler::ItemHeightRange = 64;
     setMouseTracking(true);
 
     m_toolBox = new ControlToolBox(this);
-    connect(m_toolBox, SIGNAL(showContextHelp(const QString &)),
-            this, SIGNAL(showContextHelp(const QString &)));
+    connect(m_toolBox, &BaseToolBox::showContextHelp,
+            this, &ControlRuler::showContextHelp);
 
     emit stateChange("have_controller_item_selected", false);
 }

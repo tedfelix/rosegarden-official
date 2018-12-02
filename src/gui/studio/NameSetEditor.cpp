@@ -119,8 +119,8 @@ NameSetEditor::NameSetEditor(BankEditorDialog *bankEditor,
             m_numberingBaseButton = new QPushButton("", rowWidget);
             m_numberingBaseButton->setFixedWidth(25);
             connect(m_numberingBaseButton,
-                    SIGNAL(clicked()),
-                    SLOT(slotToggleNumberingBase()));
+                    &QAbstractButton::clicked,
+                    this, &NameSetEditor::slotToggleNumberingBase);
 
             rowLayout->addWidget(m_numberingBaseButton);
 
@@ -140,8 +140,8 @@ NameSetEditor::NameSetEditor(BankEditorDialog *bankEditor,
             //     it here for safety.
             button->setObjectName(QString("Key Map Button %1").arg(index));
             button->setProperty("index", index);
-            connect(button, SIGNAL(clicked()),
-                    this, SLOT(slotKeyMapButtonPressed()));
+            connect(button, &QAbstractButton::clicked,
+                    this, &NameSetEditor::slotKeyMapButtonPressed);
             m_keyMapButtons.push_back(button);
 
             rowLayout->addWidget(button);
@@ -159,8 +159,8 @@ NameSetEditor::NameSetEditor(BankEditorDialog *bankEditor,
 
         m_names.push_back(lineEdit);
         connect(m_names[index],
-                SIGNAL(textChanged(const QString &)),
-                SLOT(slotNameChanged(const QString &)));
+                &QLineEdit::textChanged,
+                this, &NameSetEditor::slotNameChanged);
 
         rowLayout->addWidget(lineEdit, 1);
 

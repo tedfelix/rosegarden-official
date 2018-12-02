@@ -113,8 +113,8 @@ RosegardenSequencer::RosegardenSequencer() :
     // this going through a message queue anyway.  We should probably
     // request a DirectConnection for every controlChange() connection.
     connect(Instrument::getStaticSignals().data(),
-                SIGNAL(controlChange(Instrument *, int)),
-            SLOT(slotControlChange(Instrument *, int)),
+                &InstrumentStaticSignals::controlChange,
+            this, &RosegardenSequencer::slotControlChange,
             Qt::DirectConnection);
 }
 

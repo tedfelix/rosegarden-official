@@ -145,17 +145,17 @@ MarkerEditor::MarkerEditor(QWidget *parent,
 
     btnBox->setLayout(layout);
 
-    connect(m_addButton, SIGNAL(released()),
-            SLOT(slotAdd()));
+    connect(m_addButton, &QAbstractButton::released,
+            this, &MarkerEditor::slotAdd);
 
-    connect(m_deleteButton, SIGNAL(released()),
-            SLOT(slotDelete()));
+    connect(m_deleteButton, &QAbstractButton::released,
+            this, &MarkerEditor::slotDelete);
 
-    connect(m_closeButton, SIGNAL(released()),
-            SLOT(slotClose()));
+    connect(m_closeButton, &QAbstractButton::released,
+            this, &MarkerEditor::slotClose);
 
-    connect(m_deleteAllButton, SIGNAL(released()),
-            SLOT(slotDeleteAll()));
+    connect(m_deleteAllButton, &QAbstractButton::released,
+            this, &MarkerEditor::slotDeleteAll);
 
     setupActions();
 
@@ -164,13 +164,13 @@ MarkerEditor::MarkerEditor(QWidget *parent,
     connect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
             this, SLOT(slotUpdate()));
 
-    connect(m_listView, SIGNAL(itemDoubleClicked(QTreeWidgetItem *, int)),
-            SLOT(slotEdit(QTreeWidgetItem *, int)));
+    connect(m_listView, &QTreeWidget::itemDoubleClicked,
+            this, &MarkerEditor::slotEdit);
     
     // qt4 code:
     // on pressed
-    connect( m_listView, SIGNAL(itemPressed( QTreeWidgetItem*, int)), //item,column
-            this, SLOT(slotItemClicked(QTreeWidgetItem*, int)) );
+    connect( m_listView, &QTreeWidget::itemPressed, //item,column
+            this, &MarkerEditor::slotItemClicked );
 //     // on clicked
 //     connect( m_listView, SIGNAL(itemClicked( QTreeWidgetItem*, int)), //item,column
 //             this, SLOT(slotItemClicked(QTreeWidgetItem*, int)) );
@@ -395,7 +395,7 @@ MarkerEditor::setupActions()
     createAction("file_close", SLOT(slotClose())); //!!! uh-oh, file_close_discard in rc file
     
     m_closeButton->setText(tr("Close"));
-    connect(m_closeButton, SIGNAL(released()), this, SLOT(slotClose()));
+    connect(m_closeButton, &QAbstractButton::released, this, &MarkerEditor::slotClose);
 
     QSettings settings;
     settings.beginGroup(MarkerEditorConfigGroup);

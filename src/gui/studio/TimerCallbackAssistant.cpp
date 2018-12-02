@@ -31,7 +31,7 @@ TimerCallbackAssistant::TimerCallbackAssistant(int ms, void (*callback)(void *da
         m_data(data)
 {
     QTimer *timer = new QTimer(this);
-    connect(timer, SIGNAL(timeout()), this, SLOT(slotCallback()));
+    connect(timer, &QTimer::timeout, this, &TimerCallbackAssistant::slotCallback);
     timer->start(ms); // not a single shot timer
 }
 

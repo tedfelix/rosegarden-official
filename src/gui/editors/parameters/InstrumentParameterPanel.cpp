@@ -42,8 +42,8 @@ InstrumentParameterPanel::setSelectedInstrument(Instrument *instrument)
     m_selectedInstrument = instrument;
     if (instrument) {
         // Make instrument tell us if it gets destroyed.
-        connect(instrument, SIGNAL(destroyed()),
-                this, SLOT(slotInstrumentGone()));
+        connect(instrument, &QObject::destroyed,
+                this, &InstrumentParameterPanel::slotInstrumentGone);
     }
 }
 

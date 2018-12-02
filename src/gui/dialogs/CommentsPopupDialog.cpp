@@ -85,8 +85,8 @@ CommentsPopupDialog::CommentsPopupDialog(RosegardenDocument *doc,
     checkBox->setToolTip(tr("<qt>If checked, these notes will pop up the next"
                             "time the document is loaded</qt>"));
     checkBox->setChecked(true);
-    connect(checkBox, SIGNAL(stateChanged(int)),
-            this, SLOT(slotCheckChanged(int)));
+    connect(checkBox, &QCheckBox::stateChanged,
+            this, &CommentsPopupDialog::slotCheckChanged);
 
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Close);
     bottomLayout->addWidget(buttonBox);
@@ -96,7 +96,7 @@ CommentsPopupDialog::CommentsPopupDialog(RosegardenDocument *doc,
     closeButton->setAutoDefault(false);
 
     connect(parent, SIGNAL(documentAboutToChange()), this, SLOT(close()));
-    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+    connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 
     show();
 }

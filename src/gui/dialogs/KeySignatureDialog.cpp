@@ -203,8 +203,8 @@ KeySignatureDialog::KeySignatureDialog(QWidget *parent,
 
     conversionFrame->setLayout(conversionFrameLayout);
 
-    QObject::connect(keyUp, SIGNAL(clicked()), this, SLOT(slotKeyUp()));
-    QObject::connect(keyDown, SIGNAL(clicked()), this, SLOT(slotKeyDown()));
+    QObject::connect(keyUp, &QAbstractButton::clicked, this, &KeySignatureDialog::slotKeyUp);
+    QObject::connect(keyDown, &QAbstractButton::clicked, this, &KeySignatureDialog::slotKeyDown);
     QObject::connect(m_keyCombo, SIGNAL(activated(int)),
                      this, SLOT(slotKeyNameChanged(int)));
     QObject::connect(m_majorMinorCombo, SIGNAL(activated(const QString &)),
@@ -212,9 +212,9 @@ KeySignatureDialog::KeySignatureDialog(QWidget *parent,
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::Help);
     metagrid->addWidget(buttonBox, 1, 0);
     metagrid->setRowStretch(0, 10);
-    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
-    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
-    connect(buttonBox, SIGNAL(helpRequested()), this, SLOT(slotHelpRequested()));
+    connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
+    connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
+    connect(buttonBox, &QDialogButtonBox::helpRequested, this, &KeySignatureDialog::slotHelpRequested);
 }
 
 KeySignatureDialog::ConversionType

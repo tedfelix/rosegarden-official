@@ -65,8 +65,8 @@ InstrumentParameterBox::InstrumentParameterBox(QWidget *parent) :
     setLayout(layout);
 
     connect(RosegardenMainWindow::self(),
-                SIGNAL(documentChanged(RosegardenDocument *)),
-            SLOT(slotNewDocument(RosegardenDocument *)));
+                &RosegardenMainWindow::documentChanged,
+            this, &InstrumentParameterBox::slotNewDocument);
 }
 
 InstrumentParameterBox::~InstrumentParameterBox()
@@ -81,8 +81,8 @@ InstrumentParameterBox::setAudioMeter(float ch1, float ch2, float ch1r, float ch
 
 void InstrumentParameterBox::slotNewDocument(RosegardenDocument *doc)
 {
-    connect(doc, SIGNAL(documentModified(bool)),
-            SLOT(slotDocumentModified(bool)));
+    connect(doc, &RosegardenDocument::documentModified,
+            this, &InstrumentParameterBox::slotDocumentModified);
 }
 
 void InstrumentParameterBox::slotDocumentModified(bool)

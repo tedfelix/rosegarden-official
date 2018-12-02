@@ -284,20 +284,20 @@ StaffHeader::StaffHeader(HeadersGroup *group,
     m_clefOrKeyInconsistency->hide();
 
     // Connect the warning icon to a show popup slot
-    connect(m_clefOrKeyInconsistency, SIGNAL(clicked()),
-            this, SLOT(slotShowInconsistencies()));
+    connect(m_clefOrKeyInconsistency, &QAbstractButton::clicked,
+            this, &StaffHeader::slotShowInconsistencies);
 
 
     // Implement a ToolTip event replacement (see enterEvent(), leaveEvent and
     // mouseMoveEvent()).
     m_toolTipTimer = new QTimer(this);
-    connect(m_toolTipTimer, SIGNAL(timeout()), this, SLOT(slotToolTip()));
+    connect(m_toolTipTimer, &QTimer::timeout, this, &StaffHeader::slotToolTip);
     m_toolTipTimer->setSingleShot(false);
     m_toolTipTimer->setInterval(200);  // 0.2 s
     setMouseTracking(true);
 
-    connect(m_headersGroup, SIGNAL(currentSegmentChanged()),
-            this, SLOT(slotSetCurrent()));
+    connect(m_headersGroup, &HeadersGroup::currentSegmentChanged,
+            this, &StaffHeader::slotSetCurrent);
 
             
     // Create three objects where to find possible inconsistencies
@@ -959,7 +959,7 @@ StaffHeader::slotShowInconsistencies()
     warning->setWindowFlags(Qt::Dialog); // Get a popup in middle of screen
     warning->setMinimumWidth(500);
     warning->show();
-    connect(this, SIGNAL(destroyed()), warning, SLOT(close()));
+    connect(this, &QObject::destroyed, warning, &QWidget::close);
 }
 
 void

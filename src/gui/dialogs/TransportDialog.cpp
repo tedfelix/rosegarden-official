@@ -166,42 +166,42 @@ TransportDialog::TransportDialog(QWidget *parent):
     m_midiOutTimer = new QTimer(this);
     m_clearMetronomeTimer = new QTimer(this);
 
-    connect(m_midiInTimer, SIGNAL(timeout()),
-            SLOT(slotClearMidiInLabel()));
+    connect(m_midiInTimer, &QTimer::timeout,
+            this, &TransportDialog::slotClearMidiInLabel);
 
-    connect(m_midiOutTimer, SIGNAL(timeout()),
-            SLOT(slotClearMidiOutLabel()));
+    connect(m_midiOutTimer, &QTimer::timeout,
+            this, &TransportDialog::slotClearMidiOutLabel);
 
-    connect(m_clearMetronomeTimer, SIGNAL(timeout()),
-            SLOT(slotResetBackground()));
+    connect(m_clearMetronomeTimer, &QTimer::timeout,
+            this, &TransportDialog::slotResetBackground);
 
     ui->TimeDisplayLabel->hide();
     ui->ToEndLabel->hide();
 
-    connect(ui->TimeDisplayButton, SIGNAL(clicked()),
-            SLOT(slotChangeTimeDisplay()));
+    connect(ui->TimeDisplayButton, &QAbstractButton::clicked,
+            this, &TransportDialog::slotChangeTimeDisplay);
 
-    connect(ui->ToEndButton, SIGNAL(clicked()),
-            SLOT(slotChangeToEnd()));
+    connect(ui->ToEndButton, &QAbstractButton::clicked,
+            this, &TransportDialog::slotChangeToEnd);
 
-    connect(ui->LoopButton, SIGNAL(clicked()),
-            SLOT(slotLoopButtonClicked()));
+    connect(ui->LoopButton, &QAbstractButton::clicked,
+            this, &TransportDialog::slotLoopButtonClicked);
 
-    connect(ui->PanelOpenButton, SIGNAL(clicked()),
-            SLOT(slotPanelOpenButtonClicked()));
+    connect(ui->PanelOpenButton, &QAbstractButton::clicked,
+            this, &TransportDialog::slotPanelOpenButtonClicked);
 
-    connect(ui->PanelCloseButton, SIGNAL(clicked()),
-            SLOT(slotPanelCloseButtonClicked()));
+    connect(ui->PanelCloseButton, &QAbstractButton::clicked,
+            this, &TransportDialog::slotPanelCloseButtonClicked);
 
-    connect(ui->PanicButton, SIGNAL(clicked()), SIGNAL(panic()));
+    connect(ui->PanicButton, &QAbstractButton::clicked, this, &TransportDialog::panic);
 /*
     const QPixmap *p = ui->PanelOpenButton->pixmap();
     if (p) m_panelOpen = *p;
     p = ui->PanelCloseButton->pixmap();
     if (p) m_panelClosed = *p;
 */
-    connect(ui->SetStartLPButton, SIGNAL(clicked()), SLOT(slotSetStartLoopingPointAtMarkerPos()));
-    connect(ui->SetStopLPButton, SIGNAL(clicked()), SLOT(slotSetStopLoopingPointAtMarkerPos()));
+    connect(ui->SetStartLPButton, &QAbstractButton::clicked, this, &TransportDialog::slotSetStartLoopingPointAtMarkerPos);
+    connect(ui->SetStopLPButton, &QAbstractButton::clicked, this, &TransportDialog::slotSetStopLoopingPointAtMarkerPos);
 
     // clear labels
     //
@@ -248,46 +248,46 @@ TransportDialog::TransportDialog(QWidget *parent):
     ui->TempoDisplay->setFont( localFont );
     ui->TimeSigDisplay->setFont( localFont );
 
-    connect(ui->TempoDisplay, SIGNAL(doubleClicked()),
-            this, SLOT(slotEditTempo()));
+    connect(ui->TempoDisplay, &Label::doubleClicked,
+            this, &TransportDialog::slotEditTempo);
 
-    connect(ui->TempoDisplay, SIGNAL(scrollWheel(int)),
-            this, SIGNAL(scrollTempo(int)));
+    connect(ui->TempoDisplay, &Label::scrollWheel,
+            this, &TransportDialog::scrollTempo);
 
-    connect(ui->TimeSigDisplay, SIGNAL(doubleClicked()),
-            this, SLOT(slotEditTimeSignature()));
+    connect(ui->TimeSigDisplay, &Label::doubleClicked,
+            this, &TransportDialog::slotEditTimeSignature);
 
     // toil through the individual pixmaps
-    connect(ui->NegativePixmap, SIGNAL(doubleClicked()),
-            this, SLOT(slotEditTime()));
-    connect(ui->TenHoursPixmap, SIGNAL(doubleClicked()),
-            this, SLOT(slotEditTime()));
-    connect(ui->UnitHoursPixmap, SIGNAL(doubleClicked()),
-            this, SLOT(slotEditTime()));
-    connect(ui->HourColonPixmap, SIGNAL(doubleClicked()),
-            this, SLOT(slotEditTime()));
-    connect(ui->TenMinutesPixmap, SIGNAL(doubleClicked()),
-            this, SLOT(slotEditTime()));
-    connect(ui->UnitMinutesPixmap, SIGNAL(doubleClicked()),
-            this, SLOT(slotEditTime()));
-    connect(ui->MinuteColonPixmap, SIGNAL(doubleClicked()),
-            this, SLOT(slotEditTime()));
-    connect(ui->TenSecondsPixmap, SIGNAL(doubleClicked()),
-            this, SLOT(slotEditTime()));
-    connect(ui->UnitSecondsPixmap, SIGNAL(doubleClicked()),
-            this, SLOT(slotEditTime()));
-    connect(ui->SecondColonPixmap, SIGNAL(doubleClicked()),
-            this, SLOT(slotEditTime()));
-    connect(ui->TenthsPixmap, SIGNAL(doubleClicked()),
-            this, SLOT(slotEditTime()));
-    connect(ui->HundredthsPixmap, SIGNAL(doubleClicked()),
-            this, SLOT(slotEditTime()));
-    connect(ui->HundredthColonPixmap, SIGNAL(doubleClicked()),
-            this, SLOT(slotEditTime()));
-    connect(ui->TenThousandthsPixmap, SIGNAL(doubleClicked()),
-            this, SLOT(slotEditTime()));
-    connect(ui->ThousandthsPixmap, SIGNAL(doubleClicked()),
-            this, SLOT(slotEditTime()));
+    connect(ui->NegativePixmap, &Label::doubleClicked,
+            this, &TransportDialog::slotEditTime);
+    connect(ui->TenHoursPixmap, &Label::doubleClicked,
+            this, &TransportDialog::slotEditTime);
+    connect(ui->UnitHoursPixmap, &Label::doubleClicked,
+            this, &TransportDialog::slotEditTime);
+    connect(ui->HourColonPixmap, &Label::doubleClicked,
+            this, &TransportDialog::slotEditTime);
+    connect(ui->TenMinutesPixmap, &Label::doubleClicked,
+            this, &TransportDialog::slotEditTime);
+    connect(ui->UnitMinutesPixmap, &Label::doubleClicked,
+            this, &TransportDialog::slotEditTime);
+    connect(ui->MinuteColonPixmap, &Label::doubleClicked,
+            this, &TransportDialog::slotEditTime);
+    connect(ui->TenSecondsPixmap, &Label::doubleClicked,
+            this, &TransportDialog::slotEditTime);
+    connect(ui->UnitSecondsPixmap, &Label::doubleClicked,
+            this, &TransportDialog::slotEditTime);
+    connect(ui->SecondColonPixmap, &Label::doubleClicked,
+            this, &TransportDialog::slotEditTime);
+    connect(ui->TenthsPixmap, &Label::doubleClicked,
+            this, &TransportDialog::slotEditTime);
+    connect(ui->HundredthsPixmap, &Label::doubleClicked,
+            this, &TransportDialog::slotEditTime);
+    connect(ui->HundredthColonPixmap, &Label::doubleClicked,
+            this, &TransportDialog::slotEditTime);
+    connect(ui->TenThousandthsPixmap, &Label::doubleClicked,
+            this, &TransportDialog::slotEditTime);
+    connect(ui->ThousandthsPixmap, &Label::doubleClicked,
+            this, &TransportDialog::slotEditTime);
 
     // shortcut object
     //

@@ -130,7 +130,7 @@ AudioConfigurationPage::AudioConfigurationPage(
     }
 
     m_externalAudioEditorPath = new LineEdit(externalAudioEditor, frame);
-    connect(m_externalAudioEditorPath, SIGNAL(textChanged(const QString &)), this, SLOT(slotModified()));
+    connect(m_externalAudioEditorPath, &QLineEdit::textChanged, this, &AudioConfigurationPage::slotModified);
 //    m_externalAudioEditorPath->setMinimumWidth(150);
     layout->addWidget(m_externalAudioEditorPath, row, 1);
     
@@ -138,7 +138,7 @@ AudioConfigurationPage::AudioConfigurationPage(
         new QPushButton(tr("Choose..."), frame);
 
     layout->addWidget(changePathButton, row, 2);
-    connect(changePathButton, SIGNAL(clicked()), SLOT(slotFileDialog()));
+    connect(changePathButton, &QAbstractButton::clicked, this, &AudioConfigurationPage::slotFileDialog);
     ++row;
 
     settings.endGroup();
@@ -151,7 +151,7 @@ AudioConfigurationPage::AudioConfigurationPage(
     settings.beginGroup( SequencerOptionsConfigGroup );
 
     m_createFaderOuts = new QCheckBox(tr("for individual audio instruments"), frame);
-    connect(m_createFaderOuts, SIGNAL(stateChanged(int)), this, SLOT(slotModified()));
+    connect(m_createFaderOuts, &QCheckBox::stateChanged, this, &AudioConfigurationPage::slotModified);
     m_createFaderOuts->setChecked( qStrToBool( settings.value("audiofaderouts", "false" ) ) );
 
 //    layout->addWidget(label, row, 0, Qt::AlignRight);
@@ -159,7 +159,7 @@ AudioConfigurationPage::AudioConfigurationPage(
     ++row;
 
     m_createSubmasterOuts = new QCheckBox(tr("for submasters"), frame);
-    connect(m_createSubmasterOuts, SIGNAL(stateChanged(int)), this, SLOT(slotModified()));
+    connect(m_createSubmasterOuts, &QCheckBox::stateChanged, this, &AudioConfigurationPage::slotModified);
     m_createSubmasterOuts->setChecked( qStrToBool( settings.value("audiosubmasterouts", "false" ) ) );
 
 //    layout->addWidget(label, row, 0, Qt::AlignRight);
@@ -177,20 +177,20 @@ AudioConfigurationPage::AudioConfigurationPage(
     settings.beginGroup(SequencerOptionsConfigGroup);
 
     m_connectDefaultAudioOutputs = new QCheckBox(tr("audio outputs"));
-    connect(m_connectDefaultAudioOutputs, SIGNAL(stateChanged(int)), this, SLOT(slotModified()));
+    connect(m_connectDefaultAudioOutputs, &QCheckBox::stateChanged, this, &AudioConfigurationPage::slotModified);
     m_connectDefaultAudioOutputs->setChecked(qStrToBool(settings.value("connect_default_jack_outputs", "true")));
     layout->addWidget(m_connectDefaultAudioOutputs, row, 1);
     ++row;
 
     m_connectDefaultAudioInputs = new QCheckBox(tr("audio inputs"));
-    connect(m_connectDefaultAudioInputs, SIGNAL(stateChanged(int)), this, SLOT(slotModified()));
+    connect(m_connectDefaultAudioInputs, &QCheckBox::stateChanged, this, &AudioConfigurationPage::slotModified);
     m_connectDefaultAudioInputs->setChecked(qStrToBool(settings.value("connect_default_jack_inputs", "true")));
     layout->addWidget(m_connectDefaultAudioInputs, row, 1);
     ++row;
 
     layout->addWidget(new QLabel(tr("Start JACK automatically"),frame), row, 0);
     m_autoStartJackServer = new QCheckBox();
-    connect(m_autoStartJackServer, SIGNAL(stateChanged(int)), this, SLOT(slotModified()));
+    connect(m_autoStartJackServer, &QCheckBox::stateChanged, this, &AudioConfigurationPage::slotModified);
     m_autoStartJackServer->setChecked(settings.value("autostartjack", "true").toBool());
     layout->addWidget(m_autoStartJackServer, row, 1);
     ++row;

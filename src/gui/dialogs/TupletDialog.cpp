@@ -111,7 +111,7 @@ TupletDialog::TupletDialog(QWidget *parent, Note::Type defaultUnitType,
 
     timingBox->setLayout(timingLayout);
 
-    connect(m_hasTimingAlready, SIGNAL(clicked()), this, SLOT(slotHasTimingChanged()));
+    connect(m_hasTimingAlready, &QAbstractButton::clicked, this, &TupletDialog::slotHasTimingChanged);
 
     updateUntupledCombo();
     updateTupledCombo();
@@ -206,9 +206,9 @@ TupletDialog::TupletDialog(QWidget *parent, Note::Type defaultUnitType,
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::Help);
     metagrid->addWidget(buttonBox, 1, 0);
     metagrid->setRowStretch(0, 10);
-    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
-    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
-    connect(buttonBox, SIGNAL(helpRequested()), this, SLOT(slotHelpRequested()));
+    connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
+    connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
+    connect(buttonBox, &QDialogButtonBox::helpRequested, this, &TupletDialog::slotHelpRequested);
 }
 
 void

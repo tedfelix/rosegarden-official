@@ -105,10 +105,10 @@ CompositionModelImpl::CompositionModelImpl(
     }
 
     connect(RosegardenMainWindow::self(),
-                SIGNAL(documentChanged(RosegardenDocument *)),
-            SLOT(slotNewDocument(RosegardenDocument *)));
+                &RosegardenMainWindow::documentChanged,
+            this, &CompositionModelImpl::slotNewDocument);
 
-    connect(&m_updateTimer, SIGNAL(timeout()), SLOT(slotUpdateTimer()));
+    connect(&m_updateTimer, &QTimer::timeout, this, &CompositionModelImpl::slotUpdateTimer);
 }
 
 CompositionModelImpl::~CompositionModelImpl()
@@ -1051,8 +1051,8 @@ void CompositionModelImpl::updateAudioPeaksCache(const Segment *segment)
                         *m_audioPeaksThread, m_composition,
                         segment, segmentRect.rect, this);
 
-        connect(generator, SIGNAL(audioPeaksComplete(AudioPeaksGenerator*)),
-                this, SLOT(slotAudioPeaksComplete(AudioPeaksGenerator*)));
+        connect(generator, &AudioPeaksGenerator::audioPeaksComplete,
+                this, &CompositionModelImpl::slotAudioPeaksComplete);
 
         m_audioPeaksGeneratorMap[segment] = generator;
 
@@ -1111,8 +1111,8 @@ void CompositionModelImpl::slotAudioPeaksComplete(
 void
 CompositionModelImpl::slotNewDocument(RosegardenDocument *doc)
 {
-    connect(doc, SIGNAL(documentModified(bool)),
-            SLOT(slotDocumentModified(bool)));
+    connect(doc, &RosegardenDocument::documentModified,
+            this, &CompositionModelImpl::slotDocumentModified);
 }
 
 void

@@ -154,19 +154,19 @@ ControlEditorDialog::ControlEditorDialog
     layout->addWidget(m_closeButton);
     layout->addSpacing(5);
 
-    connect(m_addButton, SIGNAL(released()),
-            SLOT(slotAdd()));
+    connect(m_addButton, &QAbstractButton::released,
+            this, &ControlEditorDialog::slotAdd);
 
-    connect(m_deleteButton, SIGNAL(released()),
-            SLOT(slotDelete()));
+    connect(m_deleteButton, &QAbstractButton::released,
+            this, &ControlEditorDialog::slotDelete);
 
     setupActions();
 
     connect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
             this, SLOT(slotUpdate()));
 
-    connect(m_treeWidget, SIGNAL(itemDoubleClicked(QTreeWidgetItem *, int)),
-            SLOT(slotEdit(QTreeWidgetItem *, int)));
+    connect(m_treeWidget, &QTreeWidget::itemDoubleClicked,
+            this, &ControlEditorDialog::slotEdit);
 
     // Highlight all columns - enable extended selection mode
     //
@@ -396,7 +396,7 @@ ControlEditorDialog::setupActions()
 {
     createAction("file_close", SLOT(slotClose()));
     m_closeButton->setText(tr("Close"));
-    connect(m_closeButton, SIGNAL(released()), this, SLOT(slotClose()));
+    connect(m_closeButton, &QAbstractButton::released, this, &ControlEditorDialog::slotClose);
     createAction("control_help", SLOT(slotHelpRequested()));
     createAction("help_about_app", SLOT(slotHelpAbout()));
 

@@ -100,8 +100,8 @@ TempoView::TempoView(RosegardenDocument *doc, QWidget *parent, EditTempoControll
 
     // Connect double clicker
     //
-    connect(m_list, SIGNAL(itemDoubleClicked(QTreeWidgetItem*, int)),
-            SLOT(slotPopupEditor(QTreeWidgetItem*, int)));
+    connect(m_list, &QTreeWidget::itemDoubleClicked,
+            this, &TempoView::slotPopupEditor);
 
     m_list->setAllColumnsShowFocus(true);
     m_list->setSelectionMode(QAbstractItemView::ExtendedSelection);
@@ -122,10 +122,10 @@ TempoView::TempoView(RosegardenDocument *doc, QWidget *parent, EditTempoControll
     readOptions();
     setButtonsToFilter();
 
-    connect(m_tempoCheckBox, SIGNAL(stateChanged(int)),
-            SLOT(slotModifyFilter(int)));
-    connect(m_timeSigCheckBox, SIGNAL(stateChanged(int)),
-            SLOT(slotModifyFilter(int)));
+    connect(m_tempoCheckBox, &QCheckBox::stateChanged,
+            this, &TempoView::slotModifyFilter);
+    connect(m_timeSigCheckBox, &QCheckBox::stateChanged,
+            this, &TempoView::slotModifyFilter);
 
     applyLayout();
 

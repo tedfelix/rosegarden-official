@@ -135,44 +135,44 @@ CompositionView::CompositionView(RosegardenDocument *doc,
 
     // *** Connections
 
-    connect(m_toolBox, SIGNAL(showContextHelp(const QString &)),
-            this, SLOT(slotToolHelpChanged(const QString &)));
+    connect(m_toolBox, &BaseToolBox::showContextHelp,
+            this, &CompositionView::slotToolHelpChanged);
 
     connect(m_model, SIGNAL(needUpdate()),
             this, SLOT(slotUpdateAll()));
     connect(m_model, SIGNAL(needUpdate(const QRect&)),
             this, SLOT(slotAllNeedRefresh(const QRect&)));
-    connect(m_model, SIGNAL(needArtifactsUpdate()),
-            this, SLOT(slotUpdateArtifacts()));
-    connect(m_model, SIGNAL(needSizeUpdate()),
-            this, SLOT(slotUpdateSize()));
+    connect(m_model, &CompositionModelImpl::needArtifactsUpdate,
+            this, &CompositionView::slotUpdateArtifacts);
+    connect(m_model, &CompositionModelImpl::needSizeUpdate,
+            this, &CompositionView::slotUpdateSize);
 
-    connect(doc, SIGNAL(docColoursChanged()),
-            this, SLOT(slotRefreshColourCache()));
+    connect(doc, &RosegardenDocument::docColoursChanged,
+            this, &CompositionView::slotRefreshColourCache);
 
     // recording-related signals
-    connect(doc, SIGNAL(newMIDIRecordingSegment(Segment*)),
-            this, SLOT(slotNewMIDIRecordingSegment(Segment*)));
-    connect(doc, SIGNAL(newAudioRecordingSegment(Segment*)),
-            this, SLOT(slotNewAudioRecordingSegment(Segment*)));
-    connect(doc, SIGNAL(stoppedAudioRecording()),
-            this, SLOT(slotStoppedRecording()));
-    connect(doc, SIGNAL(stoppedMIDIRecording()),
-            this, SLOT(slotStoppedRecording()));
-    connect(doc, SIGNAL(audioFileFinalized(Segment*)),
-            m_model, SLOT(slotAudioFileFinalized(Segment*)));
+    connect(doc, &RosegardenDocument::newMIDIRecordingSegment,
+            this, &CompositionView::slotNewMIDIRecordingSegment);
+    connect(doc, &RosegardenDocument::newAudioRecordingSegment,
+            this, &CompositionView::slotNewAudioRecordingSegment);
+    connect(doc, &RosegardenDocument::stoppedAudioRecording,
+            this, &CompositionView::slotStoppedRecording);
+    connect(doc, &RosegardenDocument::stoppedMIDIRecording,
+            this, &CompositionView::slotStoppedRecording);
+    connect(doc, &RosegardenDocument::audioFileFinalized,
+            m_model, &CompositionModelImpl::slotAudioFileFinalized);
 
     // Connect for high-frequency control change notifications.
     connect(Instrument::getStaticSignals().data(),
-                SIGNAL(controlChange(Instrument *, int)),
-            SLOT(slotControlChange(Instrument *, int)));
+                &InstrumentStaticSignals::controlChange,
+            this, &CompositionView::slotControlChange);
 
     // Audio Preview Thread
     m_model->setAudioPeaksThread(&doc->getAudioPeaksThread());
     doc->getAudioPeaksThread().setEmptyQueueListener(this);
 
     // Update timer
-    connect(&m_updateTimer, SIGNAL(timeout()), this, SLOT(slotUpdateTimer()));
+    connect(&m_updateTimer, &QTimer::timeout, this, &CompositionView::slotUpdateTimer);
     m_updateTimer.start(100);
 
     // Init the halo offsets table.

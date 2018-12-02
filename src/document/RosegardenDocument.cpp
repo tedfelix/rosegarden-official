@@ -135,8 +135,8 @@ RosegardenDocument::RosegardenDocument(
     connect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
             this, SLOT(slotDocumentModified()));
 
-    connect(CommandHistory::getInstance(), SIGNAL(documentRestored()),
-            this, SLOT(slotDocumentRestored()));
+    connect(CommandHistory::getInstance(), &CommandHistory::documentRestored,
+            this, &RosegardenDocument::slotDocumentRestored);
 
     // autoload a new document
     if (!skipAutoload)

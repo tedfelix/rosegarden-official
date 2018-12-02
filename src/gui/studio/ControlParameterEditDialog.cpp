@@ -122,14 +122,14 @@ ControlParameterEditDialog::ControlParameterEditDialog(
 
     frame->setLayout(layout);
 
-    connect(m_nameEdit, SIGNAL(textChanged(const QString&)),
-            SLOT(slotNameChanged(const QString&)));
+    connect(m_nameEdit, &QLineEdit::textChanged,
+            this, &ControlParameterEditDialog::slotNameChanged);
 
     connect(m_typeCombo, SIGNAL(activated(int)),
             SLOT(slotTypeChanged(int)));
 
-    connect(m_description, SIGNAL(textChanged(const QString&)),
-            SLOT(slotDescriptionChanged(const QString &)));
+    connect(m_description, &QLineEdit::textChanged,
+            this, &ControlParameterEditDialog::slotDescriptionChanged);
 
     connect(m_controllerBox, SIGNAL(valueChanged(int)),
             SLOT(slotControllerChanged(int)));
@@ -212,8 +212,8 @@ ControlParameterEditDialog::ControlParameterEditDialog(
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
     metagrid->addWidget(buttonBox, 1, 0);
     metagrid->setRowStretch(0, 10);
-    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
-    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+    connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
+    connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 }
 
 void

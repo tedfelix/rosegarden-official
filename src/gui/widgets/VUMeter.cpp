@@ -92,14 +92,14 @@ VUMeter::VUMeter(QWidget *parent,
     //
     m_decayTimerLeft = new QTimer();
 
-    connect(m_decayTimerLeft, SIGNAL(timeout()),
-            this, SLOT(slotDecayLeft()));
+    connect(m_decayTimerLeft, &QTimer::timeout,
+            this, &VUMeter::slotDecayLeft);
 
     if (m_showPeakLevel) {
         m_peakTimerLeft = new QTimer();
 
-        connect(m_peakTimerLeft, SIGNAL(timeout()),
-                this, SLOT(slotStopShowingPeakLeft()));
+        connect(m_peakTimerLeft, &QTimer::timeout,
+                this, &VUMeter::slotStopShowingPeakLeft);
     }
 
     m_timeDecayLeft = new QTime();
@@ -107,13 +107,13 @@ VUMeter::VUMeter(QWidget *parent,
     if (stereo) {
         m_decayTimerRight = new QTimer();
 
-        connect(m_decayTimerRight, SIGNAL(timeout()),
-                this, SLOT(slotDecayRight()));
+        connect(m_decayTimerRight, &QTimer::timeout,
+                this, &VUMeter::slotDecayRight);
 
         if (m_showPeakLevel) {
             m_peakTimerRight = new QTimer();
-            connect(m_peakTimerRight, SIGNAL(timeout()),
-                    this, SLOT(slotStopShowingPeakRight()));
+            connect(m_peakTimerRight, &QTimer::timeout,
+                    this, &VUMeter::slotStopShowingPeakRight);
         }
 
         m_timeDecayRight = new QTime();

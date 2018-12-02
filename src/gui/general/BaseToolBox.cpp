@@ -38,8 +38,8 @@ BaseToolBox::getTool(QString toolName)
 
     if (!tool) tool = createTool(toolName);
 
-    connect(tool, SIGNAL(showContextHelp(QString)),
-            this, SIGNAL(showContextHelp(QString)));
+    connect(tool, &BaseTool::showContextHelp,
+            this, &BaseToolBox::showContextHelp);
     
     return tool;
 }

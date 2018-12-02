@@ -151,11 +151,11 @@ MatrixView::MatrixView(RosegardenDocument *doc,
     initRulersToolbar();
     initStatusBar();
     
-    connect(m_matrixWidget, SIGNAL(editTriggerSegment(int)),
-            this, SIGNAL(editTriggerSegment(int)));
+    connect(m_matrixWidget, &MatrixWidget::editTriggerSegment,
+            this, &MatrixView::editTriggerSegment);
 
-    connect(m_matrixWidget, SIGNAL(showContextHelp(const QString &)),
-            this, SLOT(slotShowContextHelp(const QString &)));
+    connect(m_matrixWidget, &MatrixWidget::showContextHelp,
+            this, &MatrixView::slotShowContextHelp);
 
     slotUpdateMenuStates();
     slotTestClipboard();
@@ -163,8 +163,8 @@ MatrixView::MatrixView(RosegardenDocument *doc,
     connect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
             this, SLOT(slotUpdateMenuStates()));
 
-    connect(m_matrixWidget, SIGNAL(selectionChanged()),
-            this, SLOT(slotUpdateMenuStates()));
+    connect(m_matrixWidget, &MatrixWidget::selectionChanged,
+            this, &MatrixView::slotUpdateMenuStates);
 
     // Toggle the desired tool off and then trigger it on again, to
     // make sure its signal is called at least once (as would not
@@ -186,8 +186,8 @@ MatrixView::MatrixView(RosegardenDocument *doc,
     m_matrixWidget->slotSetPlayTracking(m_tracking);
 
     slotUpdateWindowTitle();
-    connect(m_document, SIGNAL(documentModified(bool)),
-            this, SLOT(slotUpdateWindowTitle(bool)));
+    connect(m_document, &RosegardenDocument::documentModified,
+            this, &MatrixView::slotUpdateWindowTitle);
 
     // Set initial visibility ...
     bool view;
@@ -233,11 +233,11 @@ MatrixView::MatrixView(RosegardenDocument *doc,
 
     connect(m_matrixWidget, SIGNAL(segmentDeleted(Segment *)),
             this, SLOT(slotSegmentDeleted(Segment *)));
-    connect(m_matrixWidget, SIGNAL(sceneDeleted()),
-            this, SLOT(slotSceneDeleted()));
+    connect(m_matrixWidget, &MatrixWidget::sceneDeleted,
+            this, &MatrixView::slotSceneDeleted);
 
-    connect(this, SIGNAL(noteInsertedFromKeyboard(Segment *, int)),
-            m_matrixWidget, SLOT(slotPlayPreviewNote(Segment *, int)));
+    connect(this, &MatrixView::noteInsertedFromKeyboard,
+            m_matrixWidget, &MatrixWidget::slotPlayPreviewNote);
 
     // Set the rewind and fast-forward buttons for auto-repeat.
     enableAutoRepeat("Transport Toolbar", "playback_pointer_back_bar");
@@ -478,8 +478,8 @@ MatrixView::setupActions()
         }
     }
 
-    connect(addControlRulerMenu, SIGNAL(triggered(QAction*)),
-            SLOT(slotAddControlRuler(QAction*)));
+    connect(addControlRulerMenu, &QMenu::triggered,
+            this, &MatrixView::slotAddControlRuler);
 
     findAction("add_control_ruler")->setMenu(addControlRulerMenu);
 

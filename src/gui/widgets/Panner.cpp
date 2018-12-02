@@ -57,14 +57,14 @@ void
 Panner::setScene(QGraphicsScene *s)
 {
     if (scene()) {
-        disconnect(scene(), SIGNAL(sceneRectChanged(const QRectF &)),
-                   this, SLOT(slotSceneRectChanged(const QRectF &)));
+        disconnect(scene(), &QGraphicsScene::sceneRectChanged,
+                   this, &Panner::slotSceneRectChanged);
     }
     QGraphicsView::setScene(s);
     if (scene()) fitInView(sceneRect(), Qt::KeepAspectRatio);
     m_cache = QPixmap();
-    connect(scene(), SIGNAL(sceneRectChanged(const QRectF &)),
-            this, SLOT(slotSceneRectChanged(const QRectF &)));
+    connect(scene(), &QGraphicsScene::sceneRectChanged,
+            this, &Panner::slotSceneRectChanged);
     RG_DEBUG << "Panner::setScene: scene is " << scene();
 }
 

@@ -695,12 +695,12 @@ TimeWidget::slotTimeTChanged(int t)
 
     if (m_timeT)  // Checking in case called by accident
     {
-        connect(m_timeT, SIGNAL(editingFinished()),
-                this, SLOT(slotTimeTUpdate()));
+        connect(m_timeT, &QAbstractSpinBox::editingFinished,
+                this, &TimeWidget::slotTimeTUpdate);
     }
 
-    connect(m_delayUpdateTimer, SIGNAL(timeout()),
-            this, SLOT(slotTimeTUpdate()));
+    connect(m_delayUpdateTimer, &QTimer::timeout,
+            this, &TimeWidget::slotTimeTUpdate);
 
     m_delayUpdateTimer->start(UPDATE_DELAY_TIME);
 }
@@ -759,12 +759,12 @@ TimeWidget::slotMSecChanged()
 
     if (m_msec)  // Checking in case called by accident
     {
-        connect(m_msec, SIGNAL(editingFinished()),
-                this, SLOT(slotMSecUpdate()));
+        connect(m_msec, &QAbstractSpinBox::editingFinished,
+                this, &TimeWidget::slotMSecUpdate);
     }
 
-    connect(m_delayUpdateTimer, SIGNAL(timeout()),
-            this, SLOT(slotMSecUpdate()));
+    connect(m_delayUpdateTimer, &QTimer::timeout,
+            this, &TimeWidget::slotMSecUpdate);
 
     m_delayUpdateTimer->start(UPDATE_DELAY_TIME);
 }

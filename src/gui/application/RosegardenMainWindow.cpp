@@ -354,18 +354,18 @@ RosegardenMainWindow::RosegardenMainWindow(bool enableSound,
     // ??? TransportDialog should connect itself to SequenceManager.  Move
     //     all of this into TransportDialog.
     Q_ASSERT(m_transport);
-    connect(m_seqManager, SIGNAL(signalTempoChanged(tempoT)),
-            m_transport, SLOT(slotTempoChanged(tempoT)));
-    connect(m_seqManager, SIGNAL(signalMidiInLabel(const MappedEvent*)),
-            m_transport, SLOT(slotMidiInLabel(const MappedEvent*)));
-    connect(m_seqManager, SIGNAL(signalMidiOutLabel(const MappedEvent*)),
-            m_transport, SLOT(slotMidiOutLabel(const MappedEvent*)));
-    connect(m_seqManager, SIGNAL(signalPlaying(bool)),
-            m_transport, SLOT(slotPlaying(bool)));
-    connect(m_seqManager, SIGNAL(signalRecording(bool)),
-            m_transport, SLOT(slotRecording(bool)));
-    connect(m_seqManager, SIGNAL(signalMetronomeActivated(bool)),
-            m_transport, SLOT(slotMetronomeActivated(bool)));
+    connect(m_seqManager, &SequenceManager::signalTempoChanged,
+            m_transport, &TransportDialog::slotTempoChanged);
+    connect(m_seqManager, &SequenceManager::signalMidiInLabel,
+            m_transport, &TransportDialog::slotMidiInLabel);
+    connect(m_seqManager, &SequenceManager::signalMidiOutLabel,
+            m_transport, &TransportDialog::slotMidiOutLabel);
+    connect(m_seqManager, &SequenceManager::signalPlaying,
+            m_transport, &TransportDialog::slotPlaying);
+    connect(m_seqManager, &SequenceManager::signalRecording,
+            m_transport, &TransportDialog::slotRecording);
+    connect(m_seqManager, &SequenceManager::signalMetronomeActivated,
+            m_transport, &TransportDialog::slotMetronomeActivated);
 
     // Load the initial document (this includes doc's own autoload)
     //
@@ -375,9 +375,9 @@ RosegardenMainWindow::RosegardenMainWindow(bool enableSound,
     m_seqManager->setDocument(m_doc);
 
     connect(m_seqManager,
-            SIGNAL(sendWarning(int, QString, QString)),
+            &SequenceManager::sendWarning,
             this,
-            SLOT(slotDisplayWarning(int, QString, QString)));
+            &RosegardenMainWindow::slotDisplayWarning);
 
     if (m_useSequencer) {
         // Check the sound driver status and warn the user of any
@@ -450,7 +450,7 @@ RosegardenMainWindow::RosegardenMainWindow(bool enableSound,
     enterActionState("have_project_packager");
     enterActionState("have_lilypondview");
 
-    QTimer::singleShot(1000, this, SLOT(slotTestStartupTester()));
+    QTimer::singleShot(1000, this, &RosegardenMainWindow::slotTestStartupTester);
 
     // Restore window geometry and toolbar state
     RG_DEBUG << "[geometry] RosegardenMainWindow - Restoring saved main window geometry...";
@@ -473,12 +473,12 @@ RosegardenMainWindow::RosegardenMainWindow(bool enableSound,
     settings.endGroup();
 
     // Connect the various timers to their handlers.
-    connect(m_updateUITimer, SIGNAL(timeout()), this, SLOT(slotUpdateUI()));
+    connect(m_updateUITimer, &QTimer::timeout, this, &RosegardenMainWindow::slotUpdateUI);
     m_updateUITimer->start(updateUITime);
-    connect(m_inputTimer, SIGNAL(timeout()), this, SLOT(slotHandleInputs()));
+    connect(m_inputTimer, &QTimer::timeout, this, &RosegardenMainWindow::slotHandleInputs);
     m_inputTimer->start(20);
-    connect(m_autoSaveTimer, SIGNAL(timeout()), this, SLOT(slotAutoSave()));
-    connect(m_cpuMeterTimer, SIGNAL(timeout()), this, SLOT(slotUpdateCPUMeter()));
+    connect(m_autoSaveTimer, &QTimer::timeout, this, &RosegardenMainWindow::slotAutoSave);
+    connect(m_cpuMeterTimer, &QTimer::timeout, this, &RosegardenMainWindow::slotUpdateCPUMeter);
     m_cpuMeterTimer->start(1000);
 }
 
@@ -542,8 +542,8 @@ RosegardenMainWindow::installSignalHandlers()
     /*install notifier to handle pipe messages*/
     QSocketNotifier* signalNotifier = new QSocketNotifier(sigpipe[0],
             QSocketNotifier::Read, this);
-    connect(signalNotifier, SIGNAL(activated(int)),
-            this, SLOT(signalAction(int)));
+    connect(signalNotifier, &QSocketNotifier::activated,
+            this, &RosegardenMainWindow::signalAction);
 
     /*install signal handlers*/
     struct sigaction action;
@@ -791,8 +791,8 @@ RosegardenMainWindow::setupActions()
     setupRecentFilesMenu();
     createAndSetupTransport();
 
-    connect(&m_recentFiles, SIGNAL(recentChanged()),
-            this, SLOT(setupRecentFilesMenu()));
+    connect(&m_recentFiles, &RecentFiles::recentChanged,
+            this, &RosegardenMainWindow::setupRecentFilesMenu);
 
     // transport toolbar is hidden by default - TODO : this should be in options
     //
@@ -802,8 +802,8 @@ RosegardenMainWindow::setupActions()
     QMenu* setTrackInstrumentMenu = this->findChild<QMenu*>("set_track_instrument");
 
     if (setTrackInstrumentMenu) {
-        connect(setTrackInstrumentMenu, SIGNAL(aboutToShow()),
-                this, SLOT(slotPopulateTrackInstrumentPopup()));
+        connect(setTrackInstrumentMenu, &QMenu::aboutToShow,
+                this, &RosegardenMainWindow::slotPopulateTrackInstrumentPopup);
     } else {
         RG_DEBUG << "RosegardenMainWindow::setupActions() : couldn't find set_track_instrument menu - check rosegardenui.rcn\n";
     }
@@ -826,7 +826,7 @@ RosegardenMainWindow::setupRecentFilesMenu()
     for (size_t i = 0; i < files.size(); ++i) {
         QAction *action = new QAction(files[i], this);
         action->setObjectName(files[i]);
-        connect(action, SIGNAL(triggered()), this, SLOT(slotFileOpenRecent()));
+        connect(action, &QAction::triggered, this, &RosegardenMainWindow::slotFileOpenRecent);
         menu->addAction(action);
         if (i == 0) action->setShortcut(tr("Ctrl+R"));
     }
@@ -869,8 +869,8 @@ RosegardenMainWindow::initZoomToolbar()
     m_zoomLabel = new QLabel(minZoom, zoomToolbar);
     m_zoomLabel->setIndent(10);
 
-    connect(m_zoomSlider, SIGNAL(valueChanged(int)),
-            this, SLOT(slotChangeZoom(int)));
+    connect(m_zoomSlider, &QAbstractSlider::valueChanged,
+            this, &RosegardenMainWindow::slotChangeZoom);
 
     zoomToolbar->addWidget(m_zoomSlider);
     zoomToolbar->addWidget(m_zoomLabel);
@@ -955,18 +955,18 @@ RosegardenMainWindow::initView()
 
     // Connect up this signal so that we can force tool mode
     // changes from the view
-    connect(swapView, SIGNAL(activateTool(QString)),
-            this, SLOT(slotActivateTool(QString)));
+    connect(swapView, &RosegardenMainViewWidget::activateTool,
+            this, &RosegardenMainWindow::slotActivateTool);
 
     connect(swapView,
-            SIGNAL(segmentsSelected(const SegmentSelection &)),
-            SIGNAL(segmentsSelected(const SegmentSelection &)));
+            &RosegardenMainViewWidget::segmentsSelected,
+            this, &RosegardenMainWindow::segmentsSelected);
 
     connect(swapView,
-            SIGNAL(addAudioFile(AudioFileId)),
-            SLOT(slotAddAudioFile(AudioFileId)));
+            &RosegardenMainViewWidget::addAudioFile,
+            this, &RosegardenMainWindow::slotAddAudioFile);
 
-    connect(swapView, SIGNAL(toggleSolo(bool)), SLOT(slotToggleSolo(bool)));
+    connect(swapView, &RosegardenMainViewWidget::toggleSolo, this, &RosegardenMainWindow::slotToggleSolo);
 
     m_doc->attachView(swapView);
 
@@ -1003,8 +1003,8 @@ RosegardenMainWindow::initView()
     // !!! The call to setCentralWidget() below will delete oldView.
     m_view = swapView;
 
-    connect(m_view, SIGNAL(stateChange(QString, bool)),
-            this, SLOT (slotStateChanged(QString, bool)));
+    connect(m_view, &RosegardenMainViewWidget::stateChange,
+            this, &RosegardenMainWindow::slotStateChanged);
 
     // We only check for the SequenceManager to make sure
     // we're not on the first pass though - we don't want
@@ -1079,9 +1079,9 @@ RosegardenMainWindow::initView()
     m_view->show();
 
     connect(m_view->getTrackEditor()->getCompositionView(),
-            SIGNAL(showContextHelp(const QString &)),
+            &CompositionView::showContextHelp,
             this,
-            SLOT(slotShowToolHelp(const QString &)));
+            &RosegardenMainWindow::slotShowToolHelp);
 
     // We have to do this to make sure that the 2nd call ("select")
     // actually has any effect. Activating the same radio action
@@ -1173,19 +1173,19 @@ RosegardenMainWindow::setDocument(RosegardenDocument* newDocument)
 
     // connect needed signals
     //
-    connect(m_segmentParameterBox, SIGNAL(documentModified()),
-            m_doc, SLOT(slotDocumentModified()));
+    connect(m_segmentParameterBox, &SegmentParameterBox::documentModified,
+            m_doc, &RosegardenDocument::slotDocumentModified);
 
-    connect(m_doc, SIGNAL(pointerPositionChanged(timeT)),
-            this, SLOT(slotSetPointerPosition(timeT)));
+    connect(m_doc, &RosegardenDocument::pointerPositionChanged,
+            this, &RosegardenMainWindow::slotSetPointerPosition);
 
-    connect(m_doc, SIGNAL(documentModified(bool)),
-            this, SLOT(slotDocumentModified(bool)));
+    connect(m_doc, &RosegardenDocument::documentModified,
+            this, &RosegardenMainWindow::slotDocumentModified);
 
     // connecting this independently of slotDocumentModified in the hope that it
     // will better reflect the true state of things
-    connect(m_doc, SIGNAL(documentModified(bool)),
-            this, SLOT(slotUpdateTitle(bool)));
+    connect(m_doc, &RosegardenDocument::documentModified,
+            this, &RosegardenMainWindow::slotUpdateTitle);
 
     connect(m_doc, SIGNAL(loopChanged(timeT, timeT)),
             this, SLOT(slotSetLoop(timeT, timeT)));
@@ -1200,8 +1200,8 @@ RosegardenMainWindow::setDocument(RosegardenDocument* newDocument)
     // start the autosave timer
     m_autoSaveTimer->start(m_doc->getAutoSavePeriod() * 1000);
 
-    connect(m_doc, SIGNAL(devicesResyncd()),
-            this, SLOT(slotDocumentDevicesResyncd()));
+    connect(m_doc, &RosegardenDocument::devicesResyncd,
+            this, &RosegardenMainWindow::slotDocumentDevicesResyncd);
 
     if (m_useSequencer) {
         // Connect the devices prior to calling initView() to make sure there
@@ -1228,8 +1228,8 @@ RosegardenMainWindow::setDocument(RosegardenDocument* newDocument)
     oldDoc = nullptr;
 
     if (getView() && getView()->getTrackEditor()) {
-        connect(m_doc, SIGNAL(makeTrackVisible(int)),
-                getView()->getTrackEditor(), SLOT(slotScrollToTrack(int)));
+        connect(m_doc, &RosegardenDocument::makeTrackVisible,
+                getView()->getTrackEditor(), &TrackEditor::slotScrollToTrack);
     }
 
     // Make sure the view and the new document match.
@@ -2748,15 +2748,15 @@ RosegardenMainWindow::createAndSetupTransport()
 
     // Ensure that the checkbox is unchecked if the dialog
     // is closed
-    connect(m_transport, SIGNAL(closed()),
-            SLOT(slotCloseTransport()));
+    connect(m_transport, &TransportDialog::closed,
+            this, &RosegardenMainWindow::slotCloseTransport);
 
     // Handle loop setting and unsetting from the transport loop button
     //
 
     connect(m_transport, SIGNAL(setLoop()), SLOT(slotSetLoop()));
-    connect(m_transport, SIGNAL(unsetLoop()), SLOT(slotUnsetLoop()));
-    connect(m_transport, SIGNAL(panic()), SLOT(slotPanic()));
+    connect(m_transport, &TransportDialog::unsetLoop, this, &RosegardenMainWindow::slotUnsetLoop);
+    connect(m_transport, &TransportDialog::panic, this, &RosegardenMainWindow::slotPanic);
 
     connect(m_transport, SIGNAL(editTempo(QWidget*)),
             SLOT(slotEditTempo(QWidget*)));
@@ -2769,8 +2769,8 @@ RosegardenMainWindow::createAndSetupTransport()
 
     // Handle set loop start/stop time buttons.
     //
-    connect(m_transport, SIGNAL(setLoopStartTime()), SLOT(slotSetLoopStart()));
-    connect(m_transport, SIGNAL(setLoopStopTime()), SLOT(slotSetLoopStop()));
+    connect(m_transport, &TransportDialog::setLoopStartTime, this, &RosegardenMainWindow::slotSetLoopStart);
+    connect(m_transport, &TransportDialog::setLoopStopTime, this, &RosegardenMainWindow::slotSetLoopStop);
 }
 
 void
@@ -4831,15 +4831,15 @@ RosegardenMainWindow::slotTestStartupTester()
 
     if (!m_startupTester) {
         m_startupTester = new StartupTester();
-        connect(m_startupTester, SIGNAL(newerVersionAvailable(QString)),
-                this, SLOT(slotNewerVersionAvailable(QString)));
+        connect(m_startupTester, &StartupTester::newerVersionAvailable,
+                this, &RosegardenMainWindow::slotNewerVersionAvailable);
         m_startupTester->start();
-        QTimer::singleShot(100, this, SLOT(slotTestStartupTester()));
+        QTimer::singleShot(100, this, &RosegardenMainWindow::slotTestStartupTester);
         return ;
     }
 
     if (!m_startupTester->isReady()) {
-        QTimer::singleShot(100, this, SLOT(slotTestStartupTester()));
+        QTimer::singleShot(100, this, &RosegardenMainWindow::slotTestStartupTester);
         return ;
     }
 
@@ -4934,7 +4934,7 @@ RosegardenMainWindow::launchSequencer()
     }
 
     m_sequencerThread = new SequencerThread();
-    connect(m_sequencerThread, SIGNAL(finished()), this, SLOT(slotSequencerExited()));
+    connect(m_sequencerThread, &QThread::finished, this, &RosegardenMainWindow::slotSequencerExited);
     m_sequencerThread->start();
 
     RG_DEBUG << "RosegardenMainWindow::launchSequencer: Sequencer thread is "
@@ -5490,8 +5490,8 @@ RosegardenMainWindow::slotRecord()
     plugShortcuts(m_seqManager->getCountdownDialog(),
                      m_seqManager->getCountdownDialog()->getShortcuts());
 
-    connect(m_seqManager->getCountdownDialog(), SIGNAL(stopped()),
-            this, SLOT(slotStop()));
+    connect(m_seqManager->getCountdownDialog(), &CountdownDialog::stopped,
+            this, &RosegardenMainWindow::slotStop);
 }
 
 void
@@ -5622,10 +5622,10 @@ RosegardenMainWindow::slotStop()
 {
     if (m_seqManager &&
         m_seqManager->getCountdownDialog()) {
-        disconnect(m_seqManager->getCountdownDialog(), SIGNAL(stopped()),
-                   this, SLOT(slotStop()));
-        disconnect(m_seqManager->getCountdownDialog(), SIGNAL(completed()),
-                   this, SLOT(slotStop()));
+        disconnect(m_seqManager->getCountdownDialog(), &CountdownDialog::stopped,
+                   this, &RosegardenMainWindow::slotStop);
+        disconnect(m_seqManager->getCountdownDialog(), &CountdownDialog::completed,
+                   this, &RosegardenMainWindow::slotStop);
     }
 
     try {
@@ -5855,16 +5855,16 @@ RosegardenMainWindow::slotConfigure()
     if (!m_configDlg) {
         m_configDlg = new ConfigureDialog(m_doc, this);
 
-        connect(m_configDlg, SIGNAL(updateAutoSaveInterval(unsigned int)),
-                this, SLOT(slotUpdateAutoSaveInterval(unsigned int)));
+        connect(m_configDlg, &ConfigureDialog::updateAutoSaveInterval,
+                this, &RosegardenMainWindow::slotUpdateAutoSaveInterval);
         
         // Close the dialog if the document is changed : fix a potential crash
         connect(this, SIGNAL(documentAboutToChange()),
                 m_configDlg, SLOT(slotCancelOrClose()));
 
         // Clear m_configDlg if the dialog is destroyed
-        connect(m_configDlg, SIGNAL(destroyed()),
-                this, SLOT(slotResetConfigDlg()));
+        connect(m_configDlg, &QObject::destroyed,
+                this, &RosegardenMainWindow::slotResetConfigDlg);
 
         m_configDlg->show();
     }
@@ -5892,8 +5892,8 @@ RosegardenMainWindow::slotEditDocumentProperties()
                 m_docConfigDlg, SLOT(slotCancelOrClose()));
 
         // Clear m_docConfigDlg if the dialog is destroyed
-        connect(m_docConfigDlg, SIGNAL(destroyed()),
-                this, SLOT(slotResetDocConfigDlg()));
+        connect(m_docConfigDlg, &QObject::destroyed,
+                this, &RosegardenMainWindow::slotResetDocConfigDlg);
     }
 
     m_docConfigDlg->show();
@@ -5913,8 +5913,8 @@ RosegardenMainWindow::slotOpenAudioPathSettings()
                 m_docConfigDlg, SLOT(slotCancelOrClose()));
 
         // Clear m_docConfigDlg if the dialog is destroyed
-        connect(m_docConfigDlg, SIGNAL(destroyed()),
-                this, SLOT(slotResetDocConfigDlg()));
+        connect(m_docConfigDlg, &QObject::destroyed,
+                this, &RosegardenMainWindow::slotResetDocConfigDlg);
     }
 
     m_docConfigDlg->showAudioPage();
@@ -6223,57 +6223,57 @@ RosegardenMainWindow::plugShortcuts(QWidget *widget, QShortcut * /*acc*/)
         
 
         connect(transport->PlayButton(),
-                SIGNAL(clicked()),
+                &QAbstractButton::clicked,
                 this,
-                SLOT(slotPlay()));
+                &RosegardenMainWindow::slotPlay);
 
         connect(transport->StopButton(),
-                SIGNAL(clicked()),
+                &QAbstractButton::clicked,
                 this,
-                SLOT(slotStop()));
+                &RosegardenMainWindow::slotStop);
 
         connect(transport->FfwdButton(),
-                SIGNAL(clicked()),
-                SLOT(slotFastforward()));
+                &QAbstractButton::clicked,
+                this, &RosegardenMainWindow::slotFastforward);
 
         connect(transport->RewindButton(),
-                SIGNAL(clicked()),
+                &QAbstractButton::clicked,
                 this,
-                SLOT(slotRewind()));
+                &RosegardenMainWindow::slotRewind);
 
         connect(transport->RecordButton(),
-                SIGNAL(clicked()),
+                &QAbstractButton::clicked,
                 this,
-                SLOT(slotRecord()));
+                &RosegardenMainWindow::slotRecord);
 
         connect(transport->RewindEndButton(),
-                SIGNAL(clicked()),
+                &QAbstractButton::clicked,
                 this,
-                SLOT(slotRewindToBeginning()));
+                &RosegardenMainWindow::slotRewindToBeginning);
 
         connect(transport->FfwdEndButton(),
-                SIGNAL(clicked()),
+                &QAbstractButton::clicked,
                 this,
-                SLOT(slotFastForwardToEnd()));
+                &RosegardenMainWindow::slotFastForwardToEnd);
 
         connect(transport->MetronomeButton(),
-                SIGNAL(clicked()),
+                &QAbstractButton::clicked,
                 this,
-                SLOT(slotToggleMetronome()));
+                &RosegardenMainWindow::slotToggleMetronome);
 
         connect(transport->SoloButton(),
-                SIGNAL(clicked(bool)),
+                &QAbstractButton::clicked,
                 this,
-                SLOT(slotToggleSolo(bool)));
+                &RosegardenMainWindow::slotToggleSolo);
 
         connect(transport->TimeDisplayButton(),
-                SIGNAL(clicked()),
+                &QAbstractButton::clicked,
                 this,
-                SLOT(slotRefreshTimeDisplay()));
+                &RosegardenMainWindow::slotRefreshTimeDisplay);
 
         connect(transport->ToEndButton(),
-                SIGNAL(clicked()),
-                SLOT(slotRefreshTimeDisplay()));
+                &QAbstractButton::clicked,
+                this, &RosegardenMainWindow::slotRefreshTimeDisplay);
     }
 }
 
@@ -6418,8 +6418,8 @@ RosegardenMainWindow::slotAudioManager()
             SLOT(slotAddAudioFile(AudioFileId)));
 
     connect(m_audioManagerDialog,
-            SIGNAL(deleteAudioFile(AudioFileId)),
-            SLOT(slotDeleteAudioFile(AudioFileId)));
+            &AudioManagerDialog::deleteAudioFile,
+            this, &RosegardenMainWindow::slotDeleteAudioFile);
 
     //
     // Sync segment selection between audio man. dialog and main window
@@ -6427,19 +6427,19 @@ RosegardenMainWindow::slotAudioManager()
 
     // from dialog to us...
     connect(m_audioManagerDialog,
-            SIGNAL(segmentsSelected(const SegmentSelection&)),
+            &AudioManagerDialog::segmentsSelected,
             m_view,
-            SLOT(slotPropagateSegmentSelection(const SegmentSelection&)));
+            &RosegardenMainViewWidget::slotPropagateSegmentSelection);
 
     // and from us to dialog
-    connect(this, SIGNAL(segmentsSelected(const SegmentSelection&)),
+    connect(this, &RosegardenMainWindow::segmentsSelected,
             m_audioManagerDialog,
-            SLOT(slotSegmentSelection(const SegmentSelection&)));
+            &AudioManagerDialog::slotSegmentSelection);
 
 
     connect(m_audioManagerDialog,
-            SIGNAL(deleteSegments(const SegmentSelection&)),
-            SLOT(slotDeleteSegments(const SegmentSelection&)));
+            &AudioManagerDialog::deleteSegments,
+            this, &RosegardenMainWindow::slotDeleteSegments);
 
     connect(m_audioManagerDialog,
             SIGNAL(insertAudioSegment(AudioFileId,
@@ -6450,23 +6450,23 @@ RosegardenMainWindow::slotAudioManager()
                                                     const RealTime&,
                                                     const RealTime&)));
     connect(m_audioManagerDialog,
-            SIGNAL(cancelPlayingAudioFile(AudioFileId)),
-            SLOT(slotCancelAudioPlayingFile(AudioFileId)));
+            &AudioManagerDialog::cancelPlayingAudioFile,
+            this, &RosegardenMainWindow::slotCancelAudioPlayingFile);
 
     connect(m_audioManagerDialog,
-            SIGNAL(deleteAllAudioFiles()),
-            SLOT(slotDeleteAllAudioFiles()));
+            &AudioManagerDialog::deleteAllAudioFiles,
+            this, &RosegardenMainWindow::slotDeleteAllAudioFiles);
 
     // Make sure we know when the audio man. dialog is closing
     //
     connect(m_audioManagerDialog,
-            SIGNAL(closing()),
-            SLOT(slotAudioManagerClosed()));
+            &AudioManagerDialog::closing,
+            this, &RosegardenMainWindow::slotAudioManagerClosed);
 
     // And that it goes away when the current document is changing
     //
-    connect(this, SIGNAL(documentAboutToChange()),
-            m_audioManagerDialog, SLOT(close()));
+    connect(this, &RosegardenMainWindow::documentAboutToChange,
+            m_audioManagerDialog, &QWidget::close);
 
     m_audioManagerDialog->setAudioSubsystemStatus(
         m_seqManager->getSoundDriverStatus() & AUDIO_OK);
@@ -6669,19 +6669,19 @@ RosegardenMainWindow::slotManageMIDIDevices()
         connect(m_deviceManager, SIGNAL(editBanks(DeviceId)),
                 this, SLOT(slotEditBanks(DeviceId)));
         
-        connect(m_deviceManager, SIGNAL(editControllers(DeviceId)),
-                this, SLOT(slotEditControlParameters(DeviceId)));
+        connect(m_deviceManager.data(), &DeviceManagerDialog::editControllers,
+                this, &RosegardenMainWindow::slotEditControlParameters);
         
-        connect(this, SIGNAL(documentAboutToChange()),
-                m_deviceManager, SLOT(close()));
+        connect(this, &RosegardenMainWindow::documentAboutToChange,
+                m_deviceManager.data(), &QWidget::close);
 
         if (m_midiMixer) {
-             connect(m_deviceManager, SIGNAL(deviceNamesChanged()),
-                     m_midiMixer, SLOT(slotSynchronise()));
+             connect(m_deviceManager.data(), &DeviceManagerDialog::deviceNamesChanged,
+                     m_midiMixer, &MidiMixerWindow::slotSynchronise);
         }
         
-        connect(m_deviceManager, SIGNAL(deviceNamesChanged()),
-                     m_trackParameterBox, SLOT(devicesChanged()));
+        connect(m_deviceManager.data(), &DeviceManagerDialog::deviceNamesChanged,
+                     m_trackParameterBox, &TrackParameterBox::devicesChanged);
     }
     
     QToolButton *tb = findChild<QToolButton*>("manage_midi_devices");
@@ -6713,26 +6713,26 @@ RosegardenMainWindow::slotManageSynths()
 
     m_synthManager = new SynthPluginManagerDialog(this, m_doc, m_pluginGUIManager);
 
-    connect(m_synthManager, SIGNAL(closing()),
-            this, SLOT(slotSynthPluginManagerClosed()));
+    connect(m_synthManager, &SynthPluginManagerDialog::closing,
+            this, &RosegardenMainWindow::slotSynthPluginManagerClosed);
 
-    connect(this, SIGNAL(documentAboutToChange()),
-            m_synthManager, SLOT(close()));
-
-    connect(m_synthManager,
-            SIGNAL(pluginSelected(InstrumentId, int, int)),
-            this,
-            SLOT(slotPluginSelected(InstrumentId, int, int)));
+    connect(this, &RosegardenMainWindow::documentAboutToChange,
+            m_synthManager, &QWidget::close);
 
     connect(m_synthManager,
-            SIGNAL(showPluginDialog(QWidget *, InstrumentId, int)),
+            &SynthPluginManagerDialog::pluginSelected,
             this,
-            SLOT(slotShowPluginDialog(QWidget *, InstrumentId, int)));
+            &RosegardenMainWindow::slotPluginSelected);
 
     connect(m_synthManager,
-            SIGNAL(showPluginGUI(InstrumentId, int)),
+            &SynthPluginManagerDialog::showPluginDialog,
             this,
-            SLOT(slotShowPluginGUI(InstrumentId, int)));
+            &RosegardenMainWindow::slotShowPluginDialog);
+
+    connect(m_synthManager,
+            &SynthPluginManagerDialog::showPluginGUI,
+            this,
+            &RosegardenMainWindow::slotShowPluginGUI);
 
     m_synthManager->show();
 }
@@ -6766,31 +6766,31 @@ RosegardenMainWindow::slotOpenMidiMixer()
     connect(m_midiMixer, SIGNAL(windowActivated()),
             m_view, SLOT(slotActiveMainWindowChanged()));
 
-    connect(m_view, SIGNAL(controllerDeviceEventReceived(MappedEvent *, const void *)),
-            m_midiMixer, SLOT(slotControllerDeviceEventReceived(MappedEvent *, const void *)));
+    connect(m_view, &RosegardenMainViewWidget::controllerDeviceEventReceived,
+            m_midiMixer, &MidiMixerWindow::slotControllerDeviceEventReceived);
 
-    connect(m_midiMixer, SIGNAL(closing()),
-            this, SLOT(slotMidiMixerClosed()));
+    connect(m_midiMixer, &MixerWindow::closing,
+            this, &RosegardenMainWindow::slotMidiMixerClosed);
 
-    connect(this, SIGNAL(documentAboutToChange()),
-            m_midiMixer, SLOT(close()));
+    connect(this, &RosegardenMainWindow::documentAboutToChange,
+            m_midiMixer, &QWidget::close);
 
-    connect(m_midiMixer, SIGNAL(play()),
-            this, SLOT(slotPlay()));
-    connect(m_midiMixer, SIGNAL(stop()),
-            this, SLOT(slotStop()));
-    connect(m_midiMixer, SIGNAL(fastForwardPlayback()),
-            this, SLOT(slotFastforward()));
-    connect(m_midiMixer, SIGNAL(rewindPlayback()),
-            this, SLOT(slotRewind()));
-    connect(m_midiMixer, SIGNAL(fastForwardPlaybackToEnd()),
-            this, SLOT(slotFastForwardToEnd()));
-    connect(m_midiMixer, SIGNAL(rewindPlaybackToBeginning()),
-            this, SLOT(slotRewindToBeginning()));
-    connect(m_midiMixer, SIGNAL(record()),
-            this, SLOT(slotRecord()));
-    connect(m_midiMixer, SIGNAL(panic()),
-            this, SLOT(slotPanic()));
+    connect(m_midiMixer, &MidiMixerWindow::play,
+            this, &RosegardenMainWindow::slotPlay);
+    connect(m_midiMixer, &MidiMixerWindow::stop,
+            this, &RosegardenMainWindow::slotStop);
+    connect(m_midiMixer, &MidiMixerWindow::fastForwardPlayback,
+            this, &RosegardenMainWindow::slotFastforward);
+    connect(m_midiMixer, &MidiMixerWindow::rewindPlayback,
+            this, &RosegardenMainWindow::slotRewind);
+    connect(m_midiMixer, &MidiMixerWindow::fastForwardPlaybackToEnd,
+            this, &RosegardenMainWindow::slotFastForwardToEnd);
+    connect(m_midiMixer, &MidiMixerWindow::rewindPlaybackToBeginning,
+            this, &RosegardenMainWindow::slotRewindToBeginning);
+    connect(m_midiMixer, &MidiMixerWindow::record,
+            this, &RosegardenMainWindow::slotRecord);
+    connect(m_midiMixer, &MidiMixerWindow::panic,
+            this, &RosegardenMainWindow::slotPanic);
 
     plugShortcuts(m_midiMixer, m_midiMixer->getShortcuts());
 
@@ -6817,11 +6817,11 @@ RosegardenMainWindow::slotEditControlParameters(DeviceId device)
 
     RG_DEBUG << "inserting control editor dialog, have " << m_controlEditors.size() << " now";
 
-    connect(controlEditor, SIGNAL(closing()),
-            SLOT(slotControlEditorClosed()));
+    connect(controlEditor, &ControlEditorDialog::closing,
+            this, &RosegardenMainWindow::slotControlEditorClosed);
 
-    connect(this, SIGNAL(documentAboutToChange()),
-            controlEditor, SLOT(close()));
+    connect(this, &RosegardenMainWindow::documentAboutToChange,
+            controlEditor, &QWidget::close);
 
     connect(m_doc, SIGNAL(devicesResyncd()),
             controlEditor, SLOT(slotUpdate()));
@@ -6852,25 +6852,25 @@ RosegardenMainWindow::slotEditBanks(DeviceId device)
 
     m_bankEditor = new BankEditorDialog(this, m_doc, device);
 
-    connect(m_bankEditor, SIGNAL(closing()),
-            this, SLOT(slotBankEditorClosed()));
+    connect(m_bankEditor, &BankEditorDialog::closing,
+            this, &RosegardenMainWindow::slotBankEditorClosed);
 
-    connect(this, SIGNAL(documentAboutToChange()),
-            m_bankEditor, SLOT(slotFileClose()));
+    connect(this, &RosegardenMainWindow::documentAboutToChange,
+            m_bankEditor, &BankEditorDialog::slotFileClose);
 
     // Cheating way of updating the track/instrument list
     //
-    connect(m_bankEditor, SIGNAL(deviceNamesChanged()),
-            m_view, SLOT(slotSynchroniseWithComposition()));
+    connect(m_bankEditor, &BankEditorDialog::deviceNamesChanged,
+            m_view, &RosegardenMainViewWidget::slotSynchroniseWithComposition);
 
     // Assume a m_device manager at this point, but check
     // Need to refresh the device manager as well
-    connect(m_bankEditor, SIGNAL(deviceNamesChanged()),
-            m_deviceManager, SLOT(slotResyncDevicesReceived()));
+    connect(m_bankEditor, &BankEditorDialog::deviceNamesChanged,
+            m_deviceManager.data(), &DeviceManagerDialog::slotResyncDevicesReceived);
     m_bankEditor->show();
 
-    connect(m_bankEditor, SIGNAL(deviceNamesChanged()),
-            m_trackParameterBox, SLOT(devicesChanged()));
+    connect(m_bankEditor, &BankEditorDialog::deviceNamesChanged,
+            m_trackParameterBox, &TrackParameterBox::devicesChanged);
 }
 
 void
@@ -6885,11 +6885,11 @@ RosegardenMainWindow::slotManageTriggerSegments()
 
     m_triggerSegmentManager = new TriggerSegmentManager(this, m_doc);
 
-    connect(m_triggerSegmentManager, SIGNAL(closing()),
-            SLOT(slotTriggerManagerClosed()));
+    connect(m_triggerSegmentManager, &TriggerSegmentManager::closing,
+            this, &RosegardenMainWindow::slotTriggerManagerClosed);
 
-    connect(m_triggerSegmentManager, SIGNAL(editTriggerSegment(int)),
-            m_view, SLOT(slotEditTriggerSegment(int)));
+    connect(m_triggerSegmentManager, &TriggerSegmentManager::editTriggerSegment,
+            m_view, &RosegardenMainViewWidget::slotEditTriggerSegment);
 
     m_triggerSegmentManager->show();
 }
@@ -6914,11 +6914,11 @@ RosegardenMainWindow::slotEditMarkers()
 
     m_markerEditor = new MarkerEditor(this, m_doc);
 
-    connect(m_markerEditor, SIGNAL(closing()),
-            SLOT(slotMarkerEditorClosed()));
+    connect(m_markerEditor, &MarkerEditor::closing,
+            this, &RosegardenMainWindow::slotMarkerEditorClosed);
 
-    connect(m_markerEditor, SIGNAL(jumpToMarker(timeT)),
-            m_doc, SLOT(slotSetPointerPosition(timeT)));
+    connect(m_markerEditor, &MarkerEditor::jumpToMarker,
+            m_doc, &RosegardenDocument::slotSetPointerPosition);
 
     plugShortcuts(m_markerEditor, m_markerEditor->getShortcuts());
 
@@ -6945,13 +6945,13 @@ RosegardenMainWindow::slotEditTempos(timeT t)
 
     m_tempoView = new TempoView(m_doc, getView(), m_editTempoController, t);
 
-    connect(m_tempoView, SIGNAL(closing()),
-            SLOT(slotTempoViewClosed()));
+    connect(m_tempoView, &TempoView::closing,
+            this, &RosegardenMainWindow::slotTempoViewClosed);
 
     connect(m_tempoView, SIGNAL(windowActivated()),
             getView(), SLOT(slotActiveMainWindowChanged()));
 
-    connect(m_tempoView, SIGNAL(saveFile()), this, SLOT(slotFileSave()));
+    connect(m_tempoView, &EditViewBase::saveFile, this, &RosegardenMainWindow::slotFileSave);
 
     plugShortcuts(m_tempoView, m_tempoView->getShortcuts());
 
@@ -7059,46 +7059,46 @@ RosegardenMainWindow::slotShowPluginDialog(QWidget *parent,
     plugShortcuts(dialog, dialog->getShortcuts());
 
     connect(dialog,
-            SIGNAL(pluginSelected(InstrumentId, int, int)),
+            &AudioPluginDialog::pluginSelected,
             this,
-            SLOT(slotPluginSelected(InstrumentId, int, int)));
+            &RosegardenMainWindow::slotPluginSelected);
 
     connect(dialog,
-            SIGNAL(pluginPortChanged(InstrumentId, int, int)),
+            &AudioPluginDialog::pluginPortChanged,
             this,
-            SLOT(slotPluginPortChanged(InstrumentId, int, int)));
+            &RosegardenMainWindow::slotPluginPortChanged);
 
     connect(dialog,
-            SIGNAL(pluginProgramChanged(InstrumentId, int)),
+            &AudioPluginDialog::pluginProgramChanged,
             this,
-            SLOT(slotPluginProgramChanged(InstrumentId, int)));
+            &RosegardenMainWindow::slotPluginProgramChanged);
 
     connect(dialog,
-            SIGNAL(changePluginConfiguration(InstrumentId, int, bool, QString, QString)),
+            &AudioPluginDialog::changePluginConfiguration,
             this,
-            SLOT(slotChangePluginConfiguration(InstrumentId, int, bool, QString, QString)));
+            &RosegardenMainWindow::slotChangePluginConfiguration);
 
     connect(dialog,
-            SIGNAL(showPluginGUI(InstrumentId, int)),
+            &AudioPluginDialog::showPluginGUI,
             this,
-            SLOT(slotShowPluginGUI(InstrumentId, int)));
+            &RosegardenMainWindow::slotShowPluginGUI);
 
     connect(dialog,
-            SIGNAL(stopPluginGUI(InstrumentId, int)),
+            &AudioPluginDialog::stopPluginGUI,
             this,
-            SLOT(slotStopPluginGUI(InstrumentId, int)));
+            &RosegardenMainWindow::slotStopPluginGUI);
 
     connect(dialog,
-            SIGNAL(bypassed(InstrumentId, int, bool)),
+            &AudioPluginDialog::bypassed,
             this,
-            SLOT(slotPluginBypassed(InstrumentId, int, bool)));
+            &RosegardenMainWindow::slotPluginBypassed);
 
     connect(dialog,
             SIGNAL(destroyed(InstrumentId, int)),
             this,
             SLOT(slotPluginDialogDestroyed(InstrumentId, int)));
 
-    connect(this, SIGNAL(documentAboutToChange()), dialog, SLOT(close()));
+    connect(this, &RosegardenMainWindow::documentAboutToChange, dialog, &QWidget::close);
 
     // Hold onto this dialog so we don't have to create it again.
     m_pluginDialogs[key] = dialog;
@@ -7620,9 +7620,9 @@ RosegardenMainWindow::slotPlayList()
 {
     if (!m_playList) {
         m_playList = new PlayListDialog(tr("Play List"), this);
-        connect(m_playList, SIGNAL(closing()), this, SLOT(slotPlayListClosed()));
+        connect(m_playList, &PlayListDialog::closing, this, &RosegardenMainWindow::slotPlayListClosed);
                 
-        connect(m_playList->getPlayList(), SIGNAL(play(QString)), this, SLOT(slotPlayListPlay(QString)));
+        connect(m_playList->getPlayList(), &PlayList::play, this, &RosegardenMainWindow::slotPlayListPlay);
         
     }
 
@@ -7790,9 +7790,9 @@ RosegardenMainWindow::slotRemapInstruments()
     RG_DEBUG << "RosegardenMainWindow::slotRemapInstruments\n";
     RemapInstrumentDialog dialog(this, m_doc);
 
-    connect(&dialog, SIGNAL(applyClicked()),
+    connect(&dialog, &RemapInstrumentDialog::applyClicked,
             m_view->getTrackEditor()->getTrackButtons(),
-            SLOT(slotSynchroniseWithComposition()));
+            &TrackButtons::slotSynchroniseWithComposition);
 
     if (dialog.exec() == QDialog::Accepted) {
         RG_DEBUG << "slotRemapInstruments - accepted\n";

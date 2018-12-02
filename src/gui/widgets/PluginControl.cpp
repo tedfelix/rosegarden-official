@@ -147,8 +147,8 @@ PluginControl::PluginControl(QWidget *parent,
 
         m_dial->setKnobColour(GUIPalette::getColour(GUIPalette::RotaryPlugin));
 
-        connect(m_dial, SIGNAL(valueChanged(float)),
-                this, SLOT(slotValueChanged(float)));
+        connect(m_dial, &Rotary::valueChanged,
+                this, &PluginControl::slotValueChanged);
 
         QLabel *upp;
         if (port->getDisplayHint() &

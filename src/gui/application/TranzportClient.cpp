@@ -74,53 +74,53 @@ TranzportClient::TranzportClient(RosegardenMainWindow* rgGUIApp) :
     m_socketReadNotifier = new QSocketNotifier(m_descriptor, QSocketNotifier::Read, nullptr);
     m_socketWriteNotifier = new QSocketNotifier(m_descriptor, QSocketNotifier::Write,nullptr);
 
-    connect(m_socketReadNotifier, SIGNAL(activated(int)), this, SLOT(readData()));
-    connect(m_socketWriteNotifier, SIGNAL(activated(int)), this, SLOT(writeCommandQueue()));
+    connect(m_socketReadNotifier, &QSocketNotifier::activated, this, &TranzportClient::readData);
+    connect(m_socketWriteNotifier, &QSocketNotifier::activated, this, &TranzportClient::writeCommandQueue);
         
-    connect(this, SIGNAL(play()),
-            m_rgGUIApp, SLOT(slotPlay()) );
-    connect(this, SIGNAL(stop()),
-            m_rgGUIApp, SLOT(slotStop()) );
-    connect(this, SIGNAL(record()),
-            m_rgGUIApp, SLOT(slotRecord()) );
-    connect(this, SIGNAL(rewind()),
-            m_rgGUIApp, SLOT(slotRewind()) );
-    connect(this, SIGNAL(rewindToBeginning()),
-            m_rgGUIApp, SLOT(slotRewindToBeginning()) );
-    connect(this, SIGNAL(fastForward()),
-            m_rgGUIApp, SLOT(slotFastforward()) );
-    connect(this, SIGNAL(fastForwardToEnd()),
-            m_rgGUIApp, SLOT(slotFastForwardToEnd()) );
-    connect(this, SIGNAL(toggleRecord()),
-            m_rgGUIApp, SLOT(slotToggleRecord()) );
-    connect(this, SIGNAL(trackDown()),
-            m_rgGUIApp, SLOT(slotTrackDown()) );
-    connect(this, SIGNAL(trackUp()),
-            m_rgGUIApp, SLOT(slotTrackUp()) );
+    connect(this, &TranzportClient::play,
+            m_rgGUIApp, &RosegardenMainWindow::slotPlay );
+    connect(this, &TranzportClient::stop,
+            m_rgGUIApp, &RosegardenMainWindow::slotStop );
+    connect(this, &TranzportClient::record,
+            m_rgGUIApp, &RosegardenMainWindow::slotRecord );
+    connect(this, &TranzportClient::rewind,
+            m_rgGUIApp, &RosegardenMainWindow::slotRewind );
+    connect(this, &TranzportClient::rewindToBeginning,
+            m_rgGUIApp, &RosegardenMainWindow::slotRewindToBeginning );
+    connect(this, &TranzportClient::fastForward,
+            m_rgGUIApp, &RosegardenMainWindow::slotFastforward );
+    connect(this, &TranzportClient::fastForwardToEnd,
+            m_rgGUIApp, &RosegardenMainWindow::slotFastForwardToEnd );
+    connect(this, &TranzportClient::toggleRecord,
+            m_rgGUIApp, &RosegardenMainWindow::slotToggleRecord );
+    connect(this, &TranzportClient::trackDown,
+            m_rgGUIApp, &RosegardenMainWindow::slotTrackDown );
+    connect(this, &TranzportClient::trackUp,
+            m_rgGUIApp, &RosegardenMainWindow::slotTrackUp );
     connect(this, SIGNAL(trackMute()),
             m_rgGUIApp, SLOT(slotToggleMute()) );
-    connect(this, SIGNAL(trackRecord()),
-            m_rgGUIApp, SLOT(slotToggleRecordCurrentTrack()) );
-    connect(this, SIGNAL(solo(bool)),
-            m_rgGUIApp, SLOT(slotToggleSolo(bool)));
+    connect(this, &TranzportClient::trackRecord,
+            m_rgGUIApp, &RosegardenMainWindow::slotToggleRecordCurrentTrack );
+    connect(this, &TranzportClient::solo,
+            m_rgGUIApp, &RosegardenMainWindow::slotToggleSolo);
 
-    connect(m_rgGUIApp, SIGNAL(documentChanged(RosegardenDocument*)),
-            this, SLOT(documentChanged(RosegardenDocument*)));
+    connect(m_rgGUIApp, &RosegardenMainWindow::documentChanged,
+            this, &TranzportClient::documentChanged);
 
-    connect(m_rgDocument, SIGNAL(pointerPositionChanged(timeT)),
-            this, SLOT(pointerPositionChanged(timeT)));
+    connect(m_rgDocument, &RosegardenDocument::pointerPositionChanged,
+            this, &TranzportClient::pointerPositionChanged);
 
-    connect(m_rgDocument, SIGNAL(loopChanged(timeT,timeT)),
-            this, SLOT(loopChanged(timeT,timeT)));
+    connect(m_rgDocument, &RosegardenDocument::loopChanged,
+            this, &TranzportClient::loopChanged);
 
-    connect(this, SIGNAL(undo()),
-            CommandHistory::getInstance(),SLOT(undo()));
+    connect(this, &TranzportClient::undo,
+            CommandHistory::getInstance(),&CommandHistory::undo);
 
-    connect(this, SIGNAL(redo()),
-            CommandHistory::getInstance(), SLOT(redo()));
+    connect(this, &TranzportClient::redo,
+            CommandHistory::getInstance(), &CommandHistory::redo);
 
-    connect(this, SIGNAL(setPosition(timeT)),
-            m_rgDocument, SLOT(slotSetPointerPosition(timeT)));
+    connect(this, &TranzportClient::setPosition,
+            m_rgDocument, &RosegardenDocument::slotSetPointerPosition);
 
     m_composition->addObserver(this);
     m_socketWriteNotifier->setEnabled(false);
@@ -156,12 +156,12 @@ TranzportClient::documentChanged(RosegardenDocument* doc)
     m_rgDocument = doc;
     m_composition = &m_rgDocument->getComposition();
     m_composition->addObserver(this);
-    connect(m_rgDocument, SIGNAL(pointerPositionChanged(timeT)),
-            this, SLOT(pointerPositionChanged(timeT)));
-    connect(m_rgDocument, SIGNAL(loopChanged(timeT,timeT)),
-            this, SLOT(loopChanged(timeT,timeT)));
-    connect(this, SIGNAL(setPosition(timeT)),
-            m_rgDocument, SLOT(slotSetPointerPosition(timeT)));
+    connect(m_rgDocument, &RosegardenDocument::pointerPositionChanged,
+            this, &TranzportClient::pointerPositionChanged);
+    connect(m_rgDocument, &RosegardenDocument::loopChanged,
+            this, &TranzportClient::loopChanged);
+    connect(this, &TranzportClient::setPosition,
+            m_rgDocument, &RosegardenDocument::slotSetPointerPosition);
                 
     while (not commands.empty()) {
         commands.pop();

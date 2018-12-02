@@ -186,8 +186,8 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
     
     //
     // connect selection mechanism
-    connect(m_fileList, SIGNAL(itemSelectionChanged()),
-            this, SLOT(slotSelectionChanged()));
+    connect(m_fileList, &QTreeWidget::itemSelectionChanged,
+            this, &AudioManagerDialog::slotSelectionChanged);
     
     connect(m_fileList, SIGNAL(dropped(QDropEvent*, QTreeWidget*, QList<QUrl>)),
             SLOT(slotDropped(QDropEvent*, QTreeWidget*, QList<QUrl>)));
@@ -200,7 +200,7 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
     // delete
     //
     m_shortcuts = new QShortcut(QKeySequence(Qt::Key_Delete), this);
-    connect(m_shortcuts, SIGNAL(activated()), this, SLOT(slotRemove()));
+    connect(m_shortcuts, &QShortcut::activated, this, &AudioManagerDialog::slotRemove);
     
     
     slotPopulateFileList();
@@ -210,8 +210,8 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
     connect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
             this, SLOT(slotCommandExecuted()));
 
-    connect(m_playTimer, SIGNAL(timeout()),
-            this, SLOT(slotCancelPlayingAudio()));
+    connect(m_playTimer, &QTimer::timeout,
+            this, &AudioManagerDialog::slotCancelPlayingAudio);
 
 
     createMenusAndToolbars("audiomanager.rc"); //@@@ JAS orig. 0

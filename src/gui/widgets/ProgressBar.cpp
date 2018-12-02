@@ -34,7 +34,7 @@ ProgressBar::ProgressBar(/*int totalSteps, */
 {
 /*    setRange(0, totalSteps); */
 
-    connect (this, SIGNAL(valueChanged(int)), this, SLOT(WTF(int)));
+    connect (this, &QProgressBar::valueChanged, this, &ProgressBar::WTF);
 }
 
 ProgressBar::ProgressBar(int totalSteps,
@@ -43,7 +43,7 @@ ProgressBar::ProgressBar(int totalSteps,
 {
     setRange(0, totalSteps);
 
-    connect (this, SIGNAL(valueChanged(int)), this, SLOT(WTF(int)));
+    connect (this, &QProgressBar::valueChanged, this, &ProgressBar::WTF);
 }
 
 void

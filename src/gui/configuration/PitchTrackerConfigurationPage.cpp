@@ -157,8 +157,8 @@ PitchTrackerConfigurationPage::PitchTrackerConfigurationPage(QWidget *parent) :
 
     layout->addWidget(new QLabel(tr("Ignore Octave Errors"), frame), row, 0);
     m_ignore8ve = new QCheckBox(frame);
-    connect(m_ignore8ve, SIGNAL(stateChanged(int)),
-            this, SLOT(slotModified()));
+    connect(m_ignore8ve, &QCheckBox::stateChanged,
+            this, &PitchTrackerConfigurationPage::slotModified);
     bool defaultIgnore8ve =
            settings.value("ignoreoctave",
                           PitchTrackerConfigurationPage::defaultIgnore8ve

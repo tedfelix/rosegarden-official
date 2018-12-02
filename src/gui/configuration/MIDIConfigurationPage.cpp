@@ -107,7 +107,7 @@ MIDIConfigurationPage::MIDIConfigurationPage(
                                       frame), row, 0, 1, 2);
 
     m_studio = new QCheckBox(frame);
-    connect(m_studio, SIGNAL(stateChanged(int)), this, SLOT(slotModified()));
+    connect(m_studio, &QCheckBox::stateChanged, this, &MIDIConfigurationPage::slotModified);
     m_studio->setChecked( qStrToBool( settings.value("alwaysusedefaultstudio", "false" ) ) );
     layout->addWidget(m_studio, row, 2);
     ++row;
@@ -123,7 +123,7 @@ MIDIConfigurationPage::MIDIConfigurationPage(
     layout->addWidget(label, row, 0, row- row+1, 1- 0+1);
 
     m_allowResetAllControllers = new QCheckBox(frame);
-    connect(m_allowResetAllControllers, SIGNAL(stateChanged(int)), this, SLOT(slotModified()));
+    connect(m_allowResetAllControllers, &QCheckBox::stateChanged, this, &MIDIConfigurationPage::slotModified);
     const bool sendResetAllControllers = qStrToBool( settings.value("allowresetallcontrollers", "true" ) ) ;
     m_allowResetAllControllers->setChecked(sendResetAllControllers);
     m_allowResetAllControllers->setToolTip(resetTip);
@@ -166,7 +166,7 @@ MIDIConfigurationPage::MIDIConfigurationPage(
     layout->addWidget(lbl, row, 0, row- row+1, 1- 0+1);
 
     m_sfxLoadEnabled = new QCheckBox(frame);
-    connect(m_sfxLoadEnabled, SIGNAL(stateChanged(int)), this, SLOT(slotModified()));
+    connect(m_sfxLoadEnabled, &QCheckBox::stateChanged, this, &MIDIConfigurationPage::slotModified);
     layout->addWidget(m_sfxLoadEnabled, row, 2);
     m_sfxLoadEnabled->setToolTip(tooltip);
     ++row;
@@ -194,14 +194,14 @@ MIDIConfigurationPage::MIDIConfigurationPage(
         m_soundFontChoose->setEnabled(false);
     }
 
-    connect(m_sfxLoadEnabled, SIGNAL(toggled(bool)),
-            this, SLOT(slotSoundFontToggled(bool)));
+    connect(m_sfxLoadEnabled, &QAbstractButton::toggled,
+            this, &MIDIConfigurationPage::slotSoundFontToggled);
 
-    connect(m_sfxLoadChoose, SIGNAL(clicked()),
-            this, SLOT(slotSfxLoadPathChoose()));
+    connect(m_sfxLoadChoose, &QAbstractButton::clicked,
+            this, &MIDIConfigurationPage::slotSfxLoadPathChoose);
 
-    connect(m_soundFontChoose, SIGNAL(clicked()),
-            this, SLOT(slotSoundFontChoose()));
+    connect(m_soundFontChoose, &QAbstractButton::clicked,
+            this, &MIDIConfigurationPage::slotSoundFontChoose);
 
     layout->setRowStretch(row, 10);
 
@@ -289,7 +289,7 @@ MIDIConfigurationPage::MIDIConfigurationPage(
     hboxLayout->addWidget(label);
 //    layout->addWidget(label, row, 0);
     m_midiSyncAuto = new QCheckBox( hbox );
-    connect(m_midiSyncAuto, SIGNAL(stateChanged(int)), this, SLOT(slotModified()));
+    connect(m_midiSyncAuto, &QCheckBox::stateChanged, this, &MIDIConfigurationPage::slotModified);
     hboxLayout->addWidget(m_midiSyncAuto);
     hbox->setLayout(hboxLayout);
 //    layout->addWidget(m_midiSyncAuto, row, 1);

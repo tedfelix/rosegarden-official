@@ -53,8 +53,8 @@ StartupTester::StartupTester() :
     network->get(QNetworkRequest(url));
     RG_DEBUG << "StartupTester::StartupTester(): URL: " << url.toString();
 
-    connect(network, SIGNAL(finished(QNetworkReply*)),
-            this, SLOT(slotNetworkFinished(QNetworkReply*)));
+    connect(network, &QNetworkAccessManager::finished,
+            this, &StartupTester::slotNetworkFinished);
 }
 
 StartupTester::~StartupTester()

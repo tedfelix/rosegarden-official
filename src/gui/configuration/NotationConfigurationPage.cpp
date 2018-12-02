@@ -125,7 +125,7 @@ NotationConfigurationPage::NotationConfigurationPage(QWidget *parent) :
          (tr("Show non-notation events as question marks"), frame),
          row, 0, 1, 2);
     m_showUnknowns = new QCheckBox(frame);
-    connect(m_showUnknowns, SIGNAL(stateChanged(int)), this, SLOT(slotModified()));
+    connect(m_showUnknowns, &QCheckBox::stateChanged, this, &NotationConfigurationPage::slotModified);
     bool defaultShowUnknowns = qStrToBool(settings.value("showunknowns", "false")) ;
     m_showUnknowns->setChecked(defaultShowUnknowns);
     layout->addWidget(m_showUnknowns, row, 2);
@@ -136,7 +136,7 @@ NotationConfigurationPage::NotationConfigurationPage(QWidget *parent) :
          (tr("Show notation-quantized notes in a different color"), frame),
          row, 0, 1, 2);
     m_colourQuantize = new QCheckBox(frame);
-    connect(m_colourQuantize, SIGNAL(stateChanged(int)), this, SLOT(slotModified()));
+    connect(m_colourQuantize, &QCheckBox::stateChanged, this, &NotationConfigurationPage::slotModified);
     bool defaultColourQuantize = qStrToBool(settings.value("colourquantize", "false")) ;
     m_colourQuantize->setChecked(defaultColourQuantize);
     layout->addWidget(m_colourQuantize, row, 2);
@@ -147,7 +147,7 @@ NotationConfigurationPage::NotationConfigurationPage(QWidget *parent) :
          (tr("Show \"invisible\" events in grey"), frame),
          row, 0, 1, 2);
     m_showInvisibles = new QCheckBox(frame);
-    connect(m_showInvisibles, SIGNAL(stateChanged(int)), this, SLOT(slotModified()));
+    connect(m_showInvisibles, &QCheckBox::stateChanged, this, &NotationConfigurationPage::slotModified);
     bool defaultShowInvisibles = qStrToBool(settings.value("showinvisibles", "true")) ;
     m_showInvisibles->setChecked(defaultShowInvisibles);
     layout->addWidget(m_showInvisibles, row, 2);
@@ -158,7 +158,7 @@ NotationConfigurationPage::NotationConfigurationPage(QWidget *parent) :
          (tr("Show notes outside suggested playable range in red"), frame),
          row, 0, 1, 2);
     m_showRanges = new QCheckBox(frame);
-    connect(m_showRanges, SIGNAL(stateChanged(int)), this, SLOT(slotModified()));
+    connect(m_showRanges, &QCheckBox::stateChanged, this, &NotationConfigurationPage::slotModified);
     bool defaultShowRanges = qStrToBool(settings.value("showranges", "true")) ;
     m_showRanges->setChecked(defaultShowRanges);
     layout->addWidget(m_showRanges, row, 2);
@@ -169,7 +169,7 @@ NotationConfigurationPage::NotationConfigurationPage(QWidget *parent) :
          (tr("Highlight superimposed notes with a halo effect"), frame),
          row, 0, 1, 2);
     m_showCollisions = new QCheckBox(frame);
-    connect(m_showCollisions, SIGNAL(stateChanged(int)), this, SLOT(slotModified()));
+    connect(m_showCollisions, &QCheckBox::stateChanged, this, &NotationConfigurationPage::slotModified);
     bool defaultShowCollisions = qStrToBool(settings.value("showcollisions", "true")) ;
     m_showCollisions->setChecked(defaultShowCollisions);
     layout->addWidget(m_showCollisions, row, 2);
@@ -183,7 +183,7 @@ NotationConfigurationPage::NotationConfigurationPage(QWidget *parent) :
          (tr("When recording MIDI, split-and-tie long notes at barlines"), frame),
          row, 0, 1, 2);
     m_splitAndTie = new QCheckBox(frame);
-    connect(m_splitAndTie, SIGNAL(stateChanged(int)), this, SLOT(slotModified()));
+    connect(m_splitAndTie, &QCheckBox::stateChanged, this, &NotationConfigurationPage::slotModified);
     //NB. The split-and-tie feature is turned on by default once more, now that
     // the matrix and notation editors both handle strings of adjacent tied
     // notes as though they were a single unit.  This makes more sense when
@@ -263,7 +263,7 @@ NotationConfigurationPage::NotationConfigurationPage(QWidget *parent) :
          (tr("Auto-beam on insert when appropriate"), frame),
          row, 0, 1, 2);
     m_autoBeam = new QCheckBox(frame);
-    connect(m_autoBeam, SIGNAL(stateChanged(int)), this, SLOT(slotModified()));
+    connect(m_autoBeam, &QCheckBox::stateChanged, this, &NotationConfigurationPage::slotModified);
     m_autoBeam->setChecked(autoBeam);
     layout->addWidget(m_autoBeam, row, 2, 1, 1);
 
@@ -276,7 +276,7 @@ NotationConfigurationPage::NotationConfigurationPage(QWidget *parent) :
              (tr("Tie notes at barlines automatically"), frame),
              row, 0, 1, 2);
      m_autoTieBarlines = new QCheckBox(frame);
-     connect(m_autoTieBarlines, SIGNAL(stateChanged(int)), this, SLOT(slotModified()));
+     connect(m_autoTieBarlines, &QCheckBox::stateChanged, this, &NotationConfigurationPage::slotModified);
      m_autoTieBarlines->setChecked(autoCorrect);
      layout->addWidget(m_autoTieBarlines, row, 2, 1, 1);
 
@@ -290,7 +290,7 @@ NotationConfigurationPage::NotationConfigurationPage(QWidget *parent) :
          (tr("Collapse rests after erase"), frame),
          row, 0, 1, 2);
     m_collapseRests = new QCheckBox(frame);
-    connect(m_collapseRests, SIGNAL(stateChanged(int)), this, SLOT(slotModified()));
+    connect(m_collapseRests, &QCheckBox::stateChanged, this, &NotationConfigurationPage::slotModified);
     m_collapseRests->setChecked(collapse);
     layout->addWidget(m_collapseRests, row, 2, 1, 1);
     ++row;
@@ -329,7 +329,7 @@ NotationConfigurationPage::NotationConfigurationPage(QWidget *parent) :
          (tr("Always show note preview"), frame);
     layout->addWidget(previewLabel, row, 0, 1, 2);
     m_preview = new QCheckBox(frame);
-    connect(m_preview, SIGNAL(stateChanged(int)), this, SLOT(slotModified()));
+    connect(m_preview, &QCheckBox::stateChanged, this, &NotationConfigurationPage::slotModified);
     m_preview->setChecked(preview);
     QString previewTip(tr(
         "<p>If checked, a preview of the note or rest is always displayed"
@@ -346,7 +346,7 @@ NotationConfigurationPage::NotationConfigurationPage(QWidget *parent) :
          frame);
     layout->addWidget(quickEditLabel, row, 0, 1, 2);
     m_quickEdit = new QCheckBox(frame);
-    connect(m_quickEdit, SIGNAL(stateChanged(int)), this, SLOT(slotModified()));
+    connect(m_quickEdit, &QCheckBox::stateChanged, this, &NotationConfigurationPage::slotModified);
     m_quickEdit->setChecked(quickEdit);
     QString quickEditTip(tr(
         "<p>If checked, the following features are usable while inserting notes"
@@ -512,7 +512,7 @@ NotationConfigurationPage::NotationConfigurationPage(QWidget *parent) :
     layout->addWidget
         (new QLabel(tr("Text font"), frame), row, 0);
     m_textFont = new FontRequester(frame);
-    connect(m_textFont, SIGNAL(fontChanged(QFont)), this, SLOT(slotModified()));
+    connect(m_textFont, &FontRequester::fontChanged, this, &NotationConfigurationPage::slotModified);
     QFont textFont = defaultTextFont;
     QVariant fv = settings.value("textfont", textFont);
     if (fv.canConvert(QVariant::Font)) textFont = fv.value<QFont>();
@@ -523,7 +523,7 @@ NotationConfigurationPage::NotationConfigurationPage(QWidget *parent) :
     layout->addWidget
         (new QLabel(tr("Sans-serif font"), frame), row, 0);
     m_sansFont = new FontRequester(frame);
-    connect(m_sansFont, SIGNAL(fontChanged(QFont)), this, SLOT(slotModified()));
+    connect(m_sansFont, &FontRequester::fontChanged, this, &NotationConfigurationPage::slotModified);
     QFont sansFont = defaultTextFont;
     fv = settings.value("sansfont", sansFont);
     if (fv.canConvert(QVariant::Font)) sansFont = fv.value<QFont>();
@@ -553,8 +553,8 @@ NotationConfigurationPage::NotationConfigurationPage(QWidget *parent) :
          (tr("Show repeated segments"), frame),
          row, 0, 1, 2);
     m_showRepeated = new QCheckBox(frame);
-    connect(m_showRepeated, SIGNAL(stateChanged(int)),
-            this, SLOT(slotModified()));
+    connect(m_showRepeated, &QCheckBox::stateChanged,
+            this, &NotationConfigurationPage::slotModified);
     bool defaultShowRepeated = qStrToBool(settings.value("showrepeated",
                                                          "true")) ;
     m_showRepeated->setChecked(defaultShowRepeated);
@@ -566,8 +566,8 @@ NotationConfigurationPage::NotationConfigurationPage(QWidget *parent) :
          (tr("Allow direct edition of repeated segments"), frame),
          row, 0, 1, 2);
     m_editRepeated = new QCheckBox(frame);
-    connect(m_editRepeated, SIGNAL(stateChanged(int)),
-            this, SLOT(slotModified()));
+    connect(m_editRepeated, &QCheckBox::stateChanged,
+            this, &NotationConfigurationPage::slotModified);
     bool defaultEditRepeated = qStrToBool(settings.value("editrepeated",
                                                          "false")) ;
     m_editRepeated->setChecked(defaultEditRepeated);
@@ -579,8 +579,8 @@ NotationConfigurationPage::NotationConfigurationPage(QWidget *parent) :
          (tr("Hide redundant clefs and keys"), frame),
          row, 0, 1, 2);
     m_hideRedundantClefKey = new QCheckBox(frame);
-    connect(m_hideRedundantClefKey, SIGNAL(stateChanged(int)),
-            this, SLOT(slotModified()));
+    connect(m_hideRedundantClefKey, &QCheckBox::stateChanged,
+            this, &NotationConfigurationPage::slotModified);
     bool defaultHideRedundantClefKey =
         qStrToBool(settings.value("hideredundantclefkey", "true")) ;
     m_hideRedundantClefKey->setChecked(defaultHideRedundantClefKey);
@@ -592,8 +592,8 @@ NotationConfigurationPage::NotationConfigurationPage(QWidget *parent) :
          (tr("Distribute verses among repeated segments"), frame),
          row, 0, 1, 2);
     m_distributeVerses = new QCheckBox(frame);
-    connect(m_distributeVerses, SIGNAL(stateChanged(int)),
-            this, SLOT(slotModified()));
+    connect(m_distributeVerses, &QCheckBox::stateChanged,
+            this, &NotationConfigurationPage::slotModified);
     bool defaultDistributeVerses =
         qStrToBool(settings.value("distributeverses", "true")) ;
     m_distributeVerses->setChecked(defaultDistributeVerses);

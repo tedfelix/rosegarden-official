@@ -70,8 +70,8 @@ InputDialog::InputDialog(const QString &title, const QString &label,
     okButton->setDefault(true);
     vboxLayout->addWidget(buttonBox);
 
-    QObject::connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
-    QObject::connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+    QObject::connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
+    QObject::connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 
     // No size grip.  Size grips are stupid looking, and I detest them.
     // Rosegarden has a NO SIZE GRIP policy.

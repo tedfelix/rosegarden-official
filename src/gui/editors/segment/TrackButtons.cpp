@@ -1195,8 +1195,8 @@ TrackButtons::makeButton(Track *track)
     trackLabel->setFixedHeight(m_cellSize - m_buttonGap);
     trackLabel->setIndent(7);
 
-    connect(trackLabel, SIGNAL(renameTrack(QString, QString, TrackId)),
-            SLOT(slotRenameTrack(QString, QString, TrackId)));
+    connect(trackLabel, &TrackLabel::renameTrack,
+            this, &TrackButtons::slotRenameTrack);
 
     m_trackLabels.push_back(trackLabel);
 

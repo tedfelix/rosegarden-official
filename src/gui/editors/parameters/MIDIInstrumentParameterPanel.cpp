@@ -104,8 +104,8 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(QWidget *parent) :
     m_percussionCheckBox = new QCheckBox;
     m_percussionCheckBox->setFont(f);
     m_percussionCheckBox->setToolTip(tr("<qt><p>Check this to tell Rosegarden that this is a percussion instrument.  This allows you access to any percussion key maps and drum kits you may have configured in the studio</p></qt>"));
-    connect(m_percussionCheckBox, SIGNAL(clicked(bool)),
-            SLOT(slotPercussionClicked(bool)));
+    connect(m_percussionCheckBox, &QAbstractButton::clicked,
+            this, &MIDIInstrumentParameterPanel::slotPercussionClicked);
 
     // Bank Label
     m_bankLabel = new QLabel;
@@ -116,8 +116,8 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(QWidget *parent) :
     m_bankCheckBox = new QCheckBox;
     m_bankCheckBox->setFont(f);
     m_bankCheckBox->setToolTip(tr("<qt>Send bank select</qt>"));
-    connect(m_bankCheckBox, SIGNAL(clicked(bool)),
-            SLOT(slotBankClicked(bool)));
+    connect(m_bankCheckBox, &QAbstractButton::clicked,
+            this, &MIDIInstrumentParameterPanel::slotBankClicked);
 
     // Since these ComboBoxes may have a very large number of items,
     // expand the maximum dropdown size (normally 10) to show more of
@@ -144,8 +144,8 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(QWidget *parent) :
     m_programCheckBox = new QCheckBox;
     m_programCheckBox->setFont(f);
     m_programCheckBox->setToolTip(tr("<qt>Send program change</qt>"));
-    connect(m_programCheckBox, SIGNAL(clicked(bool)),
-            SLOT(slotProgramClicked(bool)));
+    connect(m_programCheckBox, &QAbstractButton::clicked,
+            this, &MIDIInstrumentParameterPanel::slotProgramClicked);
 
     // Program ComboBox
     m_programComboBox = new QComboBox;
@@ -165,8 +165,8 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(QWidget *parent) :
     m_variationCheckBox = new QCheckBox;
     m_variationCheckBox->setFont(f);
     m_variationCheckBox->setToolTip(tr("<qt>Send bank select for variation</qt>"));
-    connect(m_variationCheckBox, SIGNAL(clicked(bool)),
-            SLOT(slotVariationClicked(bool)));
+    connect(m_variationCheckBox, &QAbstractButton::clicked,
+            this, &MIDIInstrumentParameterPanel::slotVariationClicked);
 
     // Variation ComboBox
     m_variationComboBox = new QComboBox;
@@ -273,16 +273,16 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(QWidget *parent) :
     // Connections
 
     connect(RosegardenMainWindow::self(),
-                SIGNAL(documentChanged(RosegardenDocument *)),
-            SLOT(slotNewDocument(RosegardenDocument *)));
+                &RosegardenMainWindow::documentChanged,
+            this, &MIDIInstrumentParameterPanel::slotNewDocument);
 
     connect(Instrument::getStaticSignals().data(),
-                SIGNAL(controlChange(Instrument *, int)),
-            SLOT(slotControlChange(Instrument *, int)));
+                &InstrumentStaticSignals::controlChange,
+            this, &MIDIInstrumentParameterPanel::slotControlChange);
 
     connect(RosegardenMainWindow::self()->getSequenceManager(),
-                SIGNAL(sigProgramChange(int,int,int)),
-            SLOT(slotExternalProgramChange(int,int,int)));
+                &SequenceManager::sigProgramChange,
+            this, &MIDIInstrumentParameterPanel::slotExternalProgramChange);
 }
 
 void
@@ -866,8 +866,8 @@ MIDIInstrumentParameterPanel::updateVariationComboBox()
 void
 MIDIInstrumentParameterPanel::slotNewDocument(RosegardenDocument *doc)
 {
-    connect(doc, SIGNAL(documentModified(bool)),
-            SLOT(slotDocumentModified(bool)));
+    connect(doc, &RosegardenDocument::documentModified,
+            this, &MIDIInstrumentParameterPanel::slotDocumentModified);
 }
 
 void

@@ -116,17 +116,17 @@ TriggerSegmentManager::TriggerSegmentManager(QWidget *parent,
 
 
     // Whether accepted or rejected, we always just want to call slotClose()
-    connect(btnBox, SIGNAL(accepted()), this, SLOT(slotClose()));
-    connect(btnBox, SIGNAL(rejected()), this, SLOT(slotClose()));
+    connect(btnBox, &QDialogButtonBox::accepted, this, &TriggerSegmentManager::slotClose);
+    connect(btnBox, &QDialogButtonBox::rejected, this, &TriggerSegmentManager::slotClose);
     
-    connect(m_addButton, SIGNAL(released()),
-            SLOT(slotAdd()));
+    connect(m_addButton, &QAbstractButton::released,
+            this, &TriggerSegmentManager::slotAdd);
 
-    connect(m_deleteButton, SIGNAL(released()),
-            SLOT(slotDelete()));
+    connect(m_deleteButton, &QAbstractButton::released,
+            this, &TriggerSegmentManager::slotDelete);
 
-    connect(m_deleteAllButton, SIGNAL(released()),
-            SLOT(slotDeleteAll()));
+    connect(m_deleteAllButton, &QAbstractButton::released,
+            this, &TriggerSegmentManager::slotDeleteAll);
 
     setupActions();
 
@@ -135,11 +135,11 @@ TriggerSegmentManager::TriggerSegmentManager(QWidget *parent,
     connect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
             this, SLOT(slotUpdate()));
 
-    connect(m_listView, SIGNAL(itemDoubleClicked(QTreeWidgetItem *, int)),
-            SLOT(slotEdit(QTreeWidgetItem *)));
+    connect(m_listView, &QTreeWidget::itemDoubleClicked,
+            this, &TriggerSegmentManager::slotEdit);
 
-    connect(m_listView, SIGNAL(itemPressed(QTreeWidgetItem *, int)),
-            this, SLOT(slotItemClicked(QTreeWidgetItem *)));
+    connect(m_listView, &QTreeWidget::itemPressed,
+            this, &TriggerSegmentManager::slotItemClicked);
 
     // Highlight all columns - enable extended selection mode
     //

@@ -231,35 +231,35 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
 
     // device/bank modification
 
-    connect(m_treeWidget, SIGNAL(itemDoubleClicked(QTreeWidgetItem*, int )),
-            this, SLOT(slotEdit(QTreeWidgetItem*, int)));
+    connect(m_treeWidget, &QTreeWidget::itemDoubleClicked,
+            this, &BankEditorDialog::slotEdit);
 
-    connect(m_addBank, SIGNAL(clicked()),
-            this, SLOT(slotAddBank()));
+    connect(m_addBank, &QAbstractButton::clicked,
+            this, &BankEditorDialog::slotAddBank);
 
-    connect(m_addKeyMapping, SIGNAL(clicked()),
-            this, SLOT(slotAddKeyMapping()));
+    connect(m_addKeyMapping, &QAbstractButton::clicked,
+            this, &BankEditorDialog::slotAddKeyMapping);
 
-    connect(m_delete, SIGNAL(clicked()),
-            this, SLOT(slotDelete()));
+    connect(m_delete, &QAbstractButton::clicked,
+            this, &BankEditorDialog::slotDelete);
 
-    connect(m_deleteAll, SIGNAL(clicked()),
-            this, SLOT(slotDeleteAll()));
+    connect(m_deleteAll, &QAbstractButton::clicked,
+            this, &BankEditorDialog::slotDeleteAll);
 
-    connect(m_importBanks, SIGNAL(clicked()),
-            this, SLOT(slotImport()));
+    connect(m_importBanks, &QAbstractButton::clicked,
+            this, &BankEditorDialog::slotImport);
 
-    connect(m_exportBanks, SIGNAL(clicked()),
-            this, SLOT(slotExport()));
+    connect(m_exportBanks, &QAbstractButton::clicked,
+            this, &BankEditorDialog::slotExport);
 
-    connect(m_copyPrograms, SIGNAL(clicked()),
-            this, SLOT(slotEditCopy()));
+    connect(m_copyPrograms, &QAbstractButton::clicked,
+            this, &BankEditorDialog::slotEditCopy);
 
-    connect(m_pastePrograms, SIGNAL(clicked()),
-            this, SLOT(slotEditPaste()));
+    connect(m_pastePrograms, &QAbstractButton::clicked,
+            this, &BankEditorDialog::slotEditPaste);
 
-    connect(m_variationToggle, SIGNAL(clicked()),
-            this, SLOT(slotVariationToggled()));
+    connect(m_variationToggle, &QAbstractButton::clicked,
+            this, &BankEditorDialog::slotVariationToggled);
 
     connect(m_variationCombo, SIGNAL(activated(int)),
             this, SLOT(slotVariationChanged(int)));
@@ -279,7 +279,7 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     m_closeButton = btnBox->button(QDialogButtonBox::Close);
     m_resetButton = btnBox->button(QDialogButtonBox::Reset);
 
-    connect(m_resetButton, SIGNAL(clicked()), this, SLOT(slotReset()));
+    connect(m_resetButton, &QAbstractButton::clicked, this, &BankEditorDialog::slotReset);
 
     // Initialize the dialog
     //
@@ -332,7 +332,7 @@ BankEditorDialog::setupActions()
     
     createAction("file_close", SLOT(slotFileClose()));
 
-    connect(m_closeButton, SIGNAL(clicked()), this, SLOT(slotFileClose()));
+    connect(m_closeButton, &QAbstractButton::clicked, this, &BankEditorDialog::slotFileClose);
 
     createAction("edit_copy", SLOT(slotEditCopy()));
     createAction("edit_paste", SLOT(slotEditPaste()));
@@ -348,11 +348,11 @@ BankEditorDialog::setupActions()
     
     
 //     currentItemChanged( QTreeWidgetItem* current, QTreeWidgetItem* previous )
-    connect( m_treeWidget, SIGNAL(currentItemChanged( QTreeWidgetItem*, QTreeWidgetItem*)),  //twItemCurr, teItemPrev
-             this, SLOT(slotPopulateDeviceEditors(QTreeWidgetItem*, QTreeWidgetItem*))  );
+    connect( m_treeWidget, &QTreeWidget::currentItemChanged,  //twItemCurr, teItemPrev
+             this, &BankEditorDialog::slotPopulateDeviceEditors  );
     
-    connect(m_treeWidget, SIGNAL(itemChanged(QTreeWidgetItem*, int)), this, 
-            SLOT(slotModifyDeviceOrBankName(QTreeWidgetItem*, int)));
+    connect(m_treeWidget, &QTreeWidget::itemChanged, this, 
+            &BankEditorDialog::slotModifyDeviceOrBankName);
     
     // some adjustments
 

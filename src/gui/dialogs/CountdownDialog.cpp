@@ -73,7 +73,7 @@ CountdownDialog::CountdownDialog(QWidget *parent, int seconds):
     layout->addWidget(m_stopButton, 0, Qt::AlignRight);
     setLayout(layout);
 
-    connect (m_stopButton, SIGNAL(released()), this, SIGNAL(stopped()));
+    connect (m_stopButton, &QAbstractButton::released, this, &CountdownDialog::stopped);
 
     // Set the total time to show the bar in initial position
     //

@@ -73,8 +73,8 @@ NotationSelector::NotationSelector(NotationWidget *widget, bool ties) :
     //connect(m_widget, SIGNAL(usedSelection()),
     //        this, SLOT(slotHideSelection()));
 
-    connect(this, SIGNAL(editElement(NotationStaff *, NotationElement *, bool)),
-            m_widget, SIGNAL(editElement(NotationStaff *, NotationElement *, bool)));
+    connect(this, &NotationSelector::editElement,
+            m_widget, &NotationWidget::editElement);
 
     createAction("insert", SLOT(slotInsertSelected()));
     createAction("erase", SLOT(slotEraseSelected()));
@@ -204,7 +204,7 @@ void NotationSelector::handleMouseDoubleClick(const NotationMouseEvent *e)
 
         m_justSelectedBar = true;
         QTimer::singleShot(QApplication::doubleClickInterval(), this,
-                           SLOT(slotClickTimeout()));
+                           &NotationSelector::slotClickTimeout);
     }
 }
 

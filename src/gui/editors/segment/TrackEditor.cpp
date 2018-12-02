@@ -211,25 +211,25 @@ TrackEditor::init(RosegardenMainViewWidget *mainViewWidget)
     //connect(m_trackButtons, SIGNAL(widthChanged()),
     //        this, SLOT(slotTrackButtonsWidthChanged()));
 
-    connect(m_trackButtons, SIGNAL(trackSelected(int)),
-            mainViewWidget, SLOT(slotSelectTrackSegments(int)));
+    connect(m_trackButtons, &TrackButtons::trackSelected,
+            mainViewWidget, &RosegardenMainViewWidget::slotSelectTrackSegments);
 
-    connect(this, SIGNAL(stateChange(QString, bool)),
-            mainViewWidget, SIGNAL(stateChange(QString, bool)));
+    connect(this, &TrackEditor::stateChange,
+            mainViewWidget, &RosegardenMainViewWidget::stateChange);
 
     // No such signal.  Was there ever?
 //    connect(m_trackButtons, SIGNAL(modified()),
 //            m_doc, SLOT(slotDocumentModified()));
 
     // connect loop rulers' follow-scroll signals
-    connect(m_topStandardRuler->getLoopRuler(), SIGNAL(startMouseMove(int)),
-            m_compositionView, SLOT(slotStartAutoScroll(int)));
-    connect(m_topStandardRuler->getLoopRuler(), SIGNAL(stopMouseMove()),
-            m_compositionView, SLOT(slotStopAutoScroll()));
-    connect(m_bottomStandardRuler->getLoopRuler(), SIGNAL(startMouseMove(int)),
-            m_compositionView, SLOT(slotStartAutoScroll(int)));
-    connect(m_bottomStandardRuler->getLoopRuler(), SIGNAL(stopMouseMove()),
-            m_compositionView, SLOT(slotStopAutoScroll()));
+    connect(m_topStandardRuler->getLoopRuler(), &LoopRuler::startMouseMove,
+            m_compositionView, &RosegardenScrollView::slotStartAutoScroll);
+    connect(m_topStandardRuler->getLoopRuler(), &LoopRuler::stopMouseMove,
+            m_compositionView, &RosegardenScrollView::slotStopAutoScroll);
+    connect(m_bottomStandardRuler->getLoopRuler(), &LoopRuler::startMouseMove,
+            m_compositionView, &RosegardenScrollView::slotStartAutoScroll);
+    connect(m_bottomStandardRuler->getLoopRuler(), &LoopRuler::stopMouseMove,
+            m_compositionView, &RosegardenScrollView::slotStopAutoScroll);
 
     //&&&  Interesting one here.  Q(3)ScrollArea had a contentsMoving signal we
     // used to grab for some purpose.  Q(Abstract)ScrollArea has no usable
@@ -242,74 +242,74 @@ TrackEditor::init(RosegardenMainViewWidget *mainViewWidget)
 
     // Synchronize TrackButtons scroll area (m_trackButtonScroll) with
     // segment canvas's vertical scrollbar.
-    connect(m_compositionView->verticalScrollBar(), SIGNAL(valueChanged(int)),
-            this, SLOT(slotVerticalScrollTrackButtons(int)));
-    connect(m_compositionView->verticalScrollBar(), SIGNAL(sliderMoved(int)),
-            this, SLOT(slotVerticalScrollTrackButtons(int)));
+    connect(m_compositionView->verticalScrollBar(), &QAbstractSlider::valueChanged,
+            this, &TrackEditor::slotVerticalScrollTrackButtons);
+    connect(m_compositionView->verticalScrollBar(), &QAbstractSlider::sliderMoved,
+            this, &TrackEditor::slotVerticalScrollTrackButtons);
 
     // Connect scrolling with the mouse wheel in the TrackButtons to
     // scrolling the CompositionView.
-    connect(m_trackButtonScroll, SIGNAL(gotWheelEvent(QWheelEvent*)),
-            m_compositionView, SLOT(slotExternalWheelEvent(QWheelEvent*)));
+    connect(m_trackButtonScroll, &DeferScrollArea::gotWheelEvent,
+            m_compositionView, &CompositionView::slotExternalWheelEvent);
 
     // Synchronize the rulers with the horizontal scrollbar.
 
-    connect(m_compositionView->horizontalScrollBar(), SIGNAL(valueChanged(int)),
-            m_topStandardRuler, SLOT(slotScrollHoriz(int)));
-    connect(m_compositionView->horizontalScrollBar(), SIGNAL(sliderMoved(int)),
-            m_topStandardRuler, SLOT(slotScrollHoriz(int)));
+    connect(m_compositionView->horizontalScrollBar(), &QAbstractSlider::valueChanged,
+            m_topStandardRuler, &StandardRuler::slotScrollHoriz);
+    connect(m_compositionView->horizontalScrollBar(), &QAbstractSlider::sliderMoved,
+            m_topStandardRuler, &StandardRuler::slotScrollHoriz);
 
-    connect(m_compositionView->horizontalScrollBar(), SIGNAL(valueChanged(int)),
-            m_bottomStandardRuler, SLOT(slotScrollHoriz(int)));
-    connect(m_compositionView->horizontalScrollBar(), SIGNAL(sliderMoved(int)),
-            m_bottomStandardRuler, SLOT(slotScrollHoriz(int)));
+    connect(m_compositionView->horizontalScrollBar(), &QAbstractSlider::valueChanged,
+            m_bottomStandardRuler, &StandardRuler::slotScrollHoriz);
+    connect(m_compositionView->horizontalScrollBar(), &QAbstractSlider::sliderMoved,
+            m_bottomStandardRuler, &StandardRuler::slotScrollHoriz);
 
-    connect(m_compositionView->horizontalScrollBar(), SIGNAL(valueChanged(int)),
-            m_tempoRuler, SLOT(slotScrollHoriz(int)));
-    connect(m_compositionView->horizontalScrollBar(), SIGNAL(sliderMoved(int)),
-            m_tempoRuler, SLOT(slotScrollHoriz(int)));
+    connect(m_compositionView->horizontalScrollBar(), &QAbstractSlider::valueChanged,
+            m_tempoRuler, &TempoRuler::slotScrollHoriz);
+    connect(m_compositionView->horizontalScrollBar(), &QAbstractSlider::sliderMoved,
+            m_tempoRuler, &TempoRuler::slotScrollHoriz);
 
-    connect(m_compositionView->horizontalScrollBar(), SIGNAL(valueChanged(int)),
-            m_chordNameRuler, SLOT(slotScrollHoriz(int)));
-    connect(m_compositionView->horizontalScrollBar(), SIGNAL(sliderMoved(int)),
-            m_chordNameRuler, SLOT(slotScrollHoriz(int)));
+    connect(m_compositionView->horizontalScrollBar(), &QAbstractSlider::valueChanged,
+            m_chordNameRuler, &ChordNameRuler::slotScrollHoriz);
+    connect(m_compositionView->horizontalScrollBar(), &QAbstractSlider::sliderMoved,
+            m_chordNameRuler, &ChordNameRuler::slotScrollHoriz);
 
     // Was only emitted from dead code.
     //connect(this, SIGNAL(needUpdate()),
     //        m_compositionView, SLOT(slotUpdateAll()));
 
     connect(m_compositionView->getModel(),
-            SIGNAL(selectionChanged(const SegmentSelection &)),
+            &CompositionModelImpl::selectionChanged,
             mainViewWidget,
-            SLOT(slotSelectedSegments(const SegmentSelection &)));
+            &RosegardenMainViewWidget::slotSelectedSegments);
 
-    connect(m_compositionView, SIGNAL(viewportResize()),
-            this, SLOT(slotViewportResize()));
-    connect(m_compositionView, SIGNAL(zoomIn()),
-            RosegardenMainWindow::self(), SLOT(slotZoomIn()));
-    connect(m_compositionView, SIGNAL(zoomOut()),
-            RosegardenMainWindow::self(), SLOT(slotZoomOut()));
+    connect(m_compositionView, &RosegardenScrollView::viewportResize,
+            this, &TrackEditor::slotViewportResize);
+    connect(m_compositionView, &RosegardenScrollView::zoomIn,
+            RosegardenMainWindow::self(), &RosegardenMainWindow::slotZoomIn);
+    connect(m_compositionView, &RosegardenScrollView::zoomOut,
+            RosegardenMainWindow::self(), &RosegardenMainWindow::slotZoomOut);
 
     connect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
             this, SLOT(slotCommandExecuted()));
 
-    connect(m_doc, SIGNAL(pointerPositionChanged(timeT)),
-            this, SLOT(slotSetPointerPosition(timeT)));
+    connect(m_doc, &RosegardenDocument::pointerPositionChanged,
+            this, &TrackEditor::slotSetPointerPosition);
 
     // Top/Bottom ruler pointer drag.
-    connect(m_topStandardRuler, SIGNAL(dragPointerToPosition(timeT)),
-            this, SLOT(slotPointerDraggedToPosition(timeT)));
-    connect(m_bottomStandardRuler, SIGNAL(dragPointerToPosition(timeT)),
-            this, SLOT(slotPointerDraggedToPosition(timeT)));
+    connect(m_topStandardRuler, &StandardRuler::dragPointerToPosition,
+            this, &TrackEditor::slotPointerDraggedToPosition);
+    connect(m_bottomStandardRuler, &StandardRuler::dragPointerToPosition,
+            this, &TrackEditor::slotPointerDraggedToPosition);
 
     // Top/Bottom ruler loop drag.
-    connect(m_topStandardRuler, SIGNAL(dragLoopToPosition(timeT)),
-            this, SLOT(slotLoopDraggedToPosition(timeT)));
-    connect(m_bottomStandardRuler, SIGNAL(dragLoopToPosition(timeT)),
-            this, SLOT(slotLoopDraggedToPosition(timeT)));
+    connect(m_topStandardRuler, &StandardRuler::dragLoopToPosition,
+            this, &TrackEditor::slotLoopDraggedToPosition);
+    connect(m_bottomStandardRuler, &StandardRuler::dragLoopToPosition,
+            this, &TrackEditor::slotLoopDraggedToPosition);
 
-    connect(m_doc, SIGNAL(loopChanged(timeT, timeT)),
-            this, SLOT(slotSetLoop(timeT, timeT)));
+    connect(m_doc, &RosegardenDocument::loopChanged,
+            this, &TrackEditor::slotSetLoop);
 }
 
 void TrackEditor::updateCanvasSize()

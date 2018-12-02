@@ -83,15 +83,15 @@ InterpretDialog::InterpretDialog(QWidget *parent) :
     ( qStrToBool( settings.value("interpretarticulate", "true" ) ) );
 
     connect(m_allInterpretations,
-            SIGNAL(clicked()), this, SLOT(slotAllBoxChanged()));
+            &QAbstractButton::clicked, this, &InterpretDialog::slotAllBoxChanged);
 
     slotAllBoxChanged();
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::Help);
     metagrid->addWidget(buttonBox, 1, 0);
     metagrid->setRowStretch(0, 10);
-    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
-    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
-    connect(buttonBox, SIGNAL(helpRequested()), this, SLOT(slotHelpRequested()));
+    connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
+    connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
+    connect(buttonBox, &QDialogButtonBox::helpRequested, this, &InterpretDialog::slotHelpRequested);
 
     settings.endGroup();
 }

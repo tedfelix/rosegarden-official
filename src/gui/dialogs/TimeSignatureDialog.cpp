@@ -123,10 +123,10 @@ TimeSignatureDialog::TimeSignatureDialog(QWidget *parent,
     denomBoxLayout->addWidget(denomUp);
     denomBox->setLayout(denomBoxLayout);
 
-    QObject::connect(numDown, SIGNAL(clicked()), this, SLOT(slotNumDown()));
-    QObject::connect(numUp, SIGNAL(clicked()), this, SLOT(slotNumUp()));
-    QObject::connect(denomDown, SIGNAL(clicked()), this, SLOT(slotDenomDown()));
-    QObject::connect(denomUp, SIGNAL(clicked()), this, SLOT(slotDenomUp()));
+    QObject::connect(numDown, &QAbstractButton::clicked, this, &TimeSignatureDialog::slotNumDown);
+    QObject::connect(numUp, &QAbstractButton::clicked, this, &TimeSignatureDialog::slotNumUp);
+    QObject::connect(denomDown, &QAbstractButton::clicked, this, &TimeSignatureDialog::slotDenomDown);
+    QObject::connect(denomUp, &QAbstractButton::clicked, this, &TimeSignatureDialog::slotDenomUp);
 
     if (timeEditable) {
 
@@ -220,8 +220,8 @@ TimeSignatureDialog::TimeSignatureDialog(QWidget *parent,
 
     groupBox->setLayout(groupBoxLayout);
 
-    QObject::connect(m_hideSignatureButton, SIGNAL(clicked()), this,
-                     SLOT(slotUpdateCommonTimeButton()));
+    QObject::connect(m_hideSignatureButton, &QAbstractButton::clicked, this,
+                     &TimeSignatureDialog::slotUpdateCommonTimeButton);
     slotUpdateCommonTimeButton();
     m_explanatoryLabel = explanatoryLabel;
 
@@ -233,9 +233,9 @@ TimeSignatureDialog::TimeSignatureDialog(QWidget *parent,
 
     vboxLayout->addWidget(buttonBox);
 
-    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
-    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
-    connect(buttonBox, SIGNAL(helpRequested()), this, SLOT(slotHelpRequested()));
+    connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
+    connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
+    connect(buttonBox, &QDialogButtonBox::helpRequested, this, &TimeSignatureDialog::slotHelpRequested);
 
 }
 

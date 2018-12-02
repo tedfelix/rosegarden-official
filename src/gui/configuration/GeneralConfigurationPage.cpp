@@ -158,7 +158,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenDocument *doc,
     layout->addWidget(label, row, 0);
 
     m_appendLabel = new QCheckBox(frame);
-    connect(m_appendLabel, SIGNAL(stateChanged(int)), this, SLOT(slotModified()));
+    connect(m_appendLabel, &QCheckBox::stateChanged, this, &GeneralConfigurationPage::slotModified);
     // I traditionally had these turned off, and when they reappeared, I found
     // them incredibly annoying, so I'm making false the default:
     m_appendLabel->setChecked(settings.value("appendlabel", false).toBool());
@@ -176,7 +176,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenDocument *doc,
     label->setToolTip(useTrackNameTip);
     m_useTrackName->setToolTip(useTrackNameTip);
 
-    connect(m_useTrackName, SIGNAL(stateChanged(int)), this, SLOT(slotModified()));
+    connect(m_useTrackName, &QCheckBox::stateChanged, this, &GeneralConfigurationPage::slotModified);
 
     // Leaving unchecked by default to remain compatible with earlier behaviour
     m_useTrackName->setChecked(settings.value("usetrackname", false).toBool());
@@ -195,7 +195,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenDocument *doc,
     layout->addWidget(label, row, 0);
 
     m_jackTransport = new QCheckBox(frame);
-    connect(m_jackTransport, SIGNAL(stateChanged(int)), this, SLOT(slotModified()));
+    connect(m_jackTransport, &QCheckBox::stateChanged, this, &GeneralConfigurationPage::slotModified);
     layout->addWidget(m_jackTransport, row, 1, row- row+1, 2);
 
 //    m_jackTransport->addItem(tr("Ignore JACK transport"));
@@ -250,8 +250,8 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenDocument *doc,
 
     QPushButton *showStatusButton = new QPushButton(tr("Details..."),
                                     frame);
-    QObject::connect(showStatusButton, SIGNAL(clicked()),
-                     this, SLOT(slotShowStatus()));
+    QObject::connect(showStatusButton, &QAbstractButton::clicked,
+                     this, &GeneralConfigurationPage::slotShowStatus);
     layout->addWidget(showStatusButton, row, 2, Qt::AlignRight);
     ++row;
 
@@ -276,7 +276,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenDocument *doc,
                                  frame), row, 0);
 
     m_Thorn = new QCheckBox;
-    connect(m_Thorn, SIGNAL(stateChanged(int)), this, SLOT(slotModified()));
+    connect(m_Thorn, &QCheckBox::stateChanged, this, &GeneralConfigurationPage::slotModified);
     layout->addWidget(m_Thorn, row, 1, 1, 3);
     m_Thorn->setToolTip(tr("<qt>When checked, Rosegarden will use the Thorn look and feel, otherwise default system preferences will be used the next time Rosegarden starts.</qt>"));
     m_Thorn->setChecked(settings.value("use_thorn_style", true).toBool());
@@ -305,11 +305,11 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenDocument *doc,
     layout->addWidget(new QLabel(tr("Show textured background on"), frame), row, 0);
 
     m_backgroundTextures = new QCheckBox(tr("Main window"), frame);
-    connect(m_backgroundTextures, SIGNAL(stateChanged(int)), this, SLOT(slotModified()));
+    connect(m_backgroundTextures, &QCheckBox::stateChanged, this, &GeneralConfigurationPage::slotModified);
     layout->addWidget(m_backgroundTextures, row, 1);
 
     m_notationBackgroundTextures = new QCheckBox(tr("Notation"), frame);
-    connect(m_notationBackgroundTextures, SIGNAL(stateChanged(int)), this, SLOT(slotModified()));
+    connect(m_notationBackgroundTextures, &QCheckBox::stateChanged, this, &GeneralConfigurationPage::slotModified);
     layout->addWidget(m_notationBackgroundTextures, row, 2);
 
     m_backgroundTextures->setChecked(settings.value("backgroundtextures", true).toBool());
@@ -325,7 +325,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenDocument *doc,
     layout->addWidget(new QLabel(tr("Show full path in window titles")), row, 0);
 
     m_longTitles = new QCheckBox;
-    connect(m_longTitles, SIGNAL(stateChanged(int)), this, SLOT(slotModified()));
+    connect(m_longTitles, &QCheckBox::stateChanged, this, &GeneralConfigurationPage::slotModified);
     layout->addWidget(m_longTitles, row, 1);
 
     settings.beginGroup(GeneralOptionsConfigGroup);

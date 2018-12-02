@@ -127,8 +127,8 @@ SimpleEventEditDialog::SimpleEventEditDialog(QWidget *parent,
 
     connect(m_timeSpinBox, SIGNAL(valueChanged(int)),
             SLOT(slotAbsoluteTimeChanged(int)));
-    connect(m_timeEditButton, SIGNAL(released()),
-            SLOT(slotEditAbsoluteTime()));
+    connect(m_timeEditButton, &QAbstractButton::released,
+            this, &SimpleEventEditDialog::slotEditAbsoluteTime);
 
     m_durationLabel = new QLabel(tr("Duration:"), frame);
     layout->addWidget(m_durationLabel, 2, 0);
@@ -142,8 +142,8 @@ SimpleEventEditDialog::SimpleEventEditDialog(QWidget *parent,
 
     connect(m_durationSpinBox, SIGNAL(valueChanged(int)),
             SLOT(slotDurationChanged(int)));
-    connect(m_durationEditButton, SIGNAL(released()),
-            SLOT(slotEditDuration()));
+    connect(m_durationEditButton, &QAbstractButton::released,
+            this, &SimpleEventEditDialog::slotEditDuration);
 
     m_pitchLabel = new QLabel(tr("Pitch:"), frame);
     layout->addWidget(m_pitchLabel, 3, 0);
@@ -154,8 +154,8 @@ SimpleEventEditDialog::SimpleEventEditDialog(QWidget *parent,
 
     connect(m_pitchSpinBox, SIGNAL(valueChanged(int)),
             SLOT(slotPitchChanged(int)));
-    connect(m_pitchEditButton, SIGNAL(released()),
-            SLOT(slotEditPitch()));
+    connect(m_pitchEditButton, &QAbstractButton::released,
+            this, &SimpleEventEditDialog::slotEditPitch);
 
     m_pitchSpinBox->setMinimum(MidiMinValue);
     m_pitchSpinBox->setMaximum(MidiMaxValue);
@@ -190,12 +190,12 @@ SimpleEventEditDialog::SimpleEventEditDialog(QWidget *parent,
 
     frame->setLayout(layout);
 
-    connect(m_metaEdit, SIGNAL(textChanged(const QString &)),
-            SLOT(slotMetaChanged(const QString &)));
-    connect(m_sysexLoadButton, SIGNAL(released()),
-            SLOT(slotSysexLoad()));
-    connect(m_sysexSaveButton, SIGNAL(released()),
-            SLOT(slotSysexSave()));
+    connect(m_metaEdit, &QLineEdit::textChanged,
+            this, &SimpleEventEditDialog::slotMetaChanged);
+    connect(m_sysexLoadButton, &QAbstractButton::released,
+            this, &SimpleEventEditDialog::slotSysexLoad);
+    connect(m_sysexSaveButton, &QAbstractButton::released,
+            this, &SimpleEventEditDialog::slotSysexSave);
 
     m_notationGroupBox = new QGroupBox( tr("Notation Properties"), vbox );
     m_notationGroupBox->setContentsMargins(5, 5, 5, 5);
@@ -208,8 +208,8 @@ SimpleEventEditDialog::SimpleEventEditDialog(QWidget *parent,
     layout->addWidget(m_lockNotationValues, 0, 0, 0- 0+1, 2-0+ 1);
     m_lockNotationValues->setChecked(true);
 
-    connect(m_lockNotationValues, SIGNAL(released()),
-            SLOT(slotLockNotationChanged()));
+    connect(m_lockNotationValues, &QAbstractButton::released,
+            this, &SimpleEventEditDialog::slotLockNotationChanged);
 
     m_notationTimeLabel = new QLabel(tr("Notation time:"), m_notationGroupBox);
     layout->addWidget(m_notationTimeLabel, 1, 0);
@@ -223,8 +223,8 @@ SimpleEventEditDialog::SimpleEventEditDialog(QWidget *parent,
 
     connect(m_notationTimeSpinBox, SIGNAL(valueChanged(int)),
             SLOT(slotNotationAbsoluteTimeChanged(int)));
-    connect(m_notationTimeEditButton, SIGNAL(released()),
-            SLOT(slotEditNotationAbsoluteTime()));
+    connect(m_notationTimeEditButton, &QAbstractButton::released,
+            this, &SimpleEventEditDialog::slotEditNotationAbsoluteTime);
 
     m_notationDurationLabel = new QLabel(tr("Notation duration:"), m_notationGroupBox);
     layout->addWidget(m_notationDurationLabel, 2, 0);
@@ -240,15 +240,15 @@ SimpleEventEditDialog::SimpleEventEditDialog(QWidget *parent,
 
     connect(m_notationDurationSpinBox, SIGNAL(valueChanged(int)),
             SLOT(slotNotationDurationChanged(int)));
-    connect(m_notationDurationEditButton, SIGNAL(released()),
-            SLOT(slotEditNotationDuration()));
+    connect(m_notationDurationEditButton, &QAbstractButton::released,
+            this, &SimpleEventEditDialog::slotEditNotationDuration);
 
     setupForEvent();
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
     metagrid->addWidget(buttonBox, 1, 0);
     metagrid->setRowStretch(0, 10);
-    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
-    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+    connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
+    connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 }
 
 void

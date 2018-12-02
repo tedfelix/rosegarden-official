@@ -104,8 +104,8 @@ HeadersGroup::addHeader(int trackId, int height, int ypos, double /* xcur */)
     connect(sh, SIGNAL(showToolTip(QString)),
             m_widget, SLOT(slotShowHeaderToolTip(QString)));
 
-    connect(sh, SIGNAL(staffModified()),
-            m_widget, SLOT(slotRegenerateHeaders()), Qt::QueuedConnection);
+    connect(sh, &StaffHeader::staffModified,
+            m_widget, &NotationWidget::slotRegenerateHeaders, Qt::QueuedConnection);
             // Without Qt::QueuedConnection, headers may be deleted
             // from themselves leading to crash
 }
@@ -113,14 +113,14 @@ HeadersGroup::addHeader(int trackId, int height, int ypos, double /* xcur */)
 void
 HeadersGroup::setTracks(NotationWidget *widget, NotationScene *scene)
 {
-    if (m_scene) disconnect(m_scene, SIGNAL(currentStaffChanged()),
-                            this, SLOT(slotSetCurrentSegment()));
+    if (m_scene) disconnect(m_scene, &NotationScene::currentStaffChanged,
+                            this, &HeadersGroup::slotSetCurrentSegment);
 
     m_scene = scene;
     m_widget = widget;
 
-    connect(m_scene, SIGNAL(currentStaffChanged()),
-            this, SLOT(slotSetCurrentSegment()));
+    connect(m_scene, &NotationScene::currentStaffChanged,
+            this, &HeadersGroup::slotSetCurrentSegment);
     slotSetCurrentSegment();
 
 

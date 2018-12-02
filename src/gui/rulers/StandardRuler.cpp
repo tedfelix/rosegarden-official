@@ -81,20 +81,20 @@ StandardRuler::StandardRuler(RosegardenDocument *doc,
 
     if (RosegardenMainWindow::self()) {
         QObject::connect
-                (m_markerRuler, SIGNAL(editMarkers()),
-                 RosegardenMainWindow::self(), SLOT(slotEditMarkers()));
+                (m_markerRuler, &MarkerRuler::editMarkers,
+                 RosegardenMainWindow::self(), &RosegardenMainWindow::slotEditMarkers);
 
         QObject::connect
-                (m_markerRuler, SIGNAL(addMarker(timeT)),
-                 RosegardenMainWindow::self(), SLOT(slotAddMarker(timeT)));
+                (m_markerRuler, &MarkerRuler::addMarker,
+                 RosegardenMainWindow::self(), &RosegardenMainWindow::slotAddMarker);
 
         QObject::connect
-                (m_markerRuler, SIGNAL(deleteMarker(int, timeT, QString, QString)),
-                 RosegardenMainWindow::self(), SLOT(slotDeleteMarker(int, timeT, QString, QString)));
+                (m_markerRuler, &MarkerRuler::deleteMarker,
+                 RosegardenMainWindow::self(), &RosegardenMainWindow::slotDeleteMarker);
 
         QObject::connect
-                (m_loopRuler, SIGNAL(setPlayPosition(timeT)),
-                 RosegardenMainWindow::self(), SLOT(slotSetPlayPosition(timeT)));
+                (m_loopRuler, &LoopRuler::setPlayPosition,
+                 RosegardenMainWindow::self(), &RosegardenMainWindow::slotSetPlayPosition);
     }
 }
 
@@ -115,33 +115,33 @@ void StandardRuler::connectRulerToDocPointer(RosegardenDocument *doc)
     // so they are re-emitted from the loop ruler by this widget
     //
     QObject::connect
-    (m_loopRuler, SIGNAL(setPointerPosition(timeT)),
-     doc, SLOT(slotSetPointerPosition(timeT)));
+    (m_loopRuler, &LoopRuler::setPointerPosition,
+     doc, &RosegardenDocument::slotSetPointerPosition);
 
     QObject::connect
-    (m_markerRuler, SIGNAL(setPointerPosition(timeT)),
-     doc, SLOT(slotSetPointerPosition(timeT)));
+    (m_markerRuler, &MarkerRuler::setPointerPosition,
+     doc, &RosegardenDocument::slotSetPointerPosition);
 
     QObject::connect
-    (m_loopRuler, SIGNAL(dragPointerToPosition(timeT)),
-     this, SIGNAL(dragPointerToPosition(timeT)));
+    (m_loopRuler, &LoopRuler::dragPointerToPosition,
+     this, &StandardRuler::dragPointerToPosition);
 
     QObject::connect
-    (m_loopRuler, SIGNAL(dragLoopToPosition(timeT)),
-     this, SIGNAL(dragLoopToPosition(timeT)));
+    (m_loopRuler, &LoopRuler::dragLoopToPosition,
+     this, &StandardRuler::dragLoopToPosition);
 
     QObject::connect
-    (m_markerRuler, SIGNAL(setLoop(timeT, timeT)),
-     doc, SLOT(slotSetLoop(timeT, timeT)));
+    (m_markerRuler, &MarkerRuler::setLoop,
+     doc, &RosegardenDocument::slotSetLoop);
 
     QObject::connect
-    (m_loopRuler, SIGNAL(setLoop(timeT, timeT)),
-     doc, SLOT(slotSetLoop(timeT, timeT)));
+    (m_loopRuler, &LoopRuler::setLoop,
+     doc, &RosegardenDocument::slotSetLoop);
 
     QObject::connect
-    (doc, SIGNAL(loopChanged(timeT, timeT)),
+    (doc, &RosegardenDocument::loopChanged,
      m_loopRuler,
-     SLOT(slotSetLoopMarker(timeT, timeT)));
+     &LoopRuler::slotSetLoopMarker);
 
 //    m_loopRuler->setBackgroundColor(GUIPalette::getColour(GUIPalette::PointerRuler));
 }

@@ -57,10 +57,10 @@ AudioRouteMenu::AudioRouteMenu(QWidget *parent,
     case Compact: {
             m_combo = nullptr;
             m_button = new WheelyButton(parent);
-            connect(m_button, SIGNAL(wheel(bool)),
-                    SLOT(slotWheel(bool)));
-            connect(m_button, SIGNAL(clicked()),
-                    SLOT(slotShowMenu()));
+            connect(m_button, &WheelyButton::wheel,
+                    this, &AudioRouteMenu::slotWheel);
+            connect(m_button, &QAbstractButton::clicked,
+                    this, &AudioRouteMenu::slotShowMenu);
             break;
         }
 

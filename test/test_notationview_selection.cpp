@@ -65,14 +65,14 @@ void TestNotationViewSelection::initTestCase()
     m_seqManager.setDocument(&m_doc);
 
     // The mainwindow connects fast-forward and rewind (to intercept them when recording), so we need to do it ourselves here.
-    connect(m_view, SIGNAL(fastForwardPlayback()),
-            &m_seqManager, SLOT(fastforward()));
-    connect(m_view, SIGNAL(rewindPlayback()),
-            &m_seqManager, SLOT(rewind()));
-    connect(m_view, SIGNAL(fastForwardPlaybackToEnd()),
-            &m_seqManager, SLOT(fastForwardToEnd()));
-    connect(m_view, SIGNAL(rewindPlaybackToBeginning()),
-            &m_seqManager, SLOT(rewindToBeginning()));
+    connect(m_view, &NotationView::fastForwardPlayback,
+            &m_seqManager, &SequenceManager::fastforward);
+    connect(m_view, &NotationView::rewindPlayback,
+            &m_seqManager, &SequenceManager::rewind);
+    connect(m_view, &NotationView::fastForwardPlaybackToEnd,
+            &m_seqManager, &SequenceManager::fastForwardToEnd);
+    connect(m_view, &NotationView::rewindPlaybackToBeginning,
+            &m_seqManager, &SequenceManager::rewindToBeginning);
 
 }
 

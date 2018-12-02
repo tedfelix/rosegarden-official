@@ -53,8 +53,8 @@ TrackLabel::TrackLabel(TrackId id,
 
     m_pressTimer = new QTimer(this);
 
-    connect(m_pressTimer, SIGNAL(timeout()),
-            this, SIGNAL(changeToInstrumentList()));
+    connect(m_pressTimer, &QTimer::timeout,
+            this, &TrackLabel::changeToInstrumentList);
 
     setToolTip(tr("<qt>"
                   "<p>Click to select all the segments on this track.</p>"

@@ -78,18 +78,18 @@ PlayList::PlayList(QWidget *parent) : QWidget(parent),
     m_deleteButton ->setText(tr("Remove"));
     m_clearButton ->setText(tr("Clear whole List"));
 
-    connect(m_openButton, SIGNAL(clicked()), SLOT(slotOpenFiles()));
-    connect(m_playButton, SIGNAL(clicked()),SLOT(slotPlay()));
-    connect(m_deleteButton, SIGNAL(clicked()), SLOT(slotDeleteCurrent()));
-    connect(m_clearButton, SIGNAL(clicked()), SLOT(slotClear()));
-    connect(m_moveUpButton, SIGNAL(clicked()), SLOT(slotMoveUp()));
-    connect(m_moveDownButton, SIGNAL(clicked()), SLOT(slotMoveDown()));
+    connect(m_openButton, &QAbstractButton::clicked, this, &PlayList::slotOpenFiles);
+    connect(m_playButton, &QAbstractButton::clicked,this, &PlayList::slotPlay);
+    connect(m_deleteButton, &QAbstractButton::clicked, this, &PlayList::slotDeleteCurrent);
+    connect(m_clearButton, &QAbstractButton::clicked, this, &PlayList::slotClear);
+    connect(m_moveUpButton, &QAbstractButton::clicked, this, &PlayList::slotMoveUp);
+    connect(m_moveDownButton, &QAbstractButton::clicked, this, &PlayList::slotMoveDown);
     
-    connect(m_listView, SIGNAL(droppedURIs(QDropEvent*, QTreeWidget*, QStringList)),
-            SLOT(slotDroppedURIs(QDropEvent*, QTreeWidget*, QStringList)));
+    connect(m_listView, &PlayListView::droppedURIs,
+            this, &PlayList::slotDroppedURIs);
     
-    connect(m_listView, SIGNAL(currentItemChanged(QTreeWidgetItem*, QTreeWidgetItem*)),
-                this, SLOT(slotCurrentItemChanged(QTreeWidgetItem*, QTreeWidgetItem*)));
+    connect(m_listView, &QTreeWidget::currentItemChanged,
+                this, &PlayList::slotCurrentItemChanged);
     
 //     connect(m_listView, SIGNAL(currentChanged(QTreeWidgetItem*)),
 //             SLOT(slotCurrentItemChanged(QTreeWidgetItem*)));

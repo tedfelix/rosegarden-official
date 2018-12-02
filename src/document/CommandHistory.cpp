@@ -52,34 +52,34 @@ CommandHistory::CommandHistory() :
     m_undoAction->setObjectName("edit_undo");
     m_undoAction->setShortcut(tr("Ctrl+Z"));
     m_undoAction->setStatusTip(tr("Undo the last editing operation"));
-    connect(m_undoAction, SIGNAL(triggered()), this, SLOT(undo()));
+    connect(m_undoAction, &QAction::triggered, this, &CommandHistory::undo);
 
     // Undo button for the main window toolbar.
     m_undoMenuAction = new QAction(QIcon(":/icons/undo.png"), tr("&Undo"), this);
     m_undoMenuAction->setObjectName("edit_toolbar_undo");
-    connect(m_undoMenuAction, SIGNAL(triggered()), this, SLOT(undo()));
+    connect(m_undoMenuAction, &QAction::triggered, this, &CommandHistory::undo);
     
     m_undoMenu = new QMenu(tr("&Undo"));
     m_undoMenuAction->setMenu(m_undoMenu);
-    connect(m_undoMenu, SIGNAL(triggered(QAction *)),
-            this, SLOT(undoActivated(QAction*)));
+    connect(m_undoMenu, &QMenu::triggered,
+            this, &CommandHistory::undoActivated);
 
     // All Edit > Redo menu items share this QAction object.
     m_redoAction = new QAction(QIcon(":/icons/redo.png"), tr("Re&do"), this);
     m_redoAction->setObjectName("edit_redo");
     m_redoAction->setShortcut(tr("Ctrl+Shift+Z"));
     m_redoAction->setStatusTip(tr("Redo the last operation that was undone"));
-    connect(m_redoAction, SIGNAL(triggered()), this, SLOT(redo()));
+    connect(m_redoAction, &QAction::triggered, this, &CommandHistory::redo);
     
     // Redo button for the main window toolbar.
     m_redoMenuAction = new QAction(QIcon(":/icons/redo.png"), tr("Re&do"), this);
     m_redoMenuAction->setObjectName("edit_toolbar_redo");
-    connect(m_redoMenuAction, SIGNAL(triggered()), this, SLOT(redo()));
+    connect(m_redoMenuAction, &QAction::triggered, this, &CommandHistory::redo);
 
     m_redoMenu = new QMenu(tr("Re&do"));
     m_redoMenuAction->setMenu(m_redoMenu);
-    connect(m_redoMenu, SIGNAL(triggered(QAction *)),
-            this, SLOT(redoActivated(QAction*)));
+    connect(m_redoMenu, &QMenu::triggered,
+            this, &CommandHistory::redoActivated);
 }
 
 CommandHistory::~CommandHistory()
@@ -241,7 +241,7 @@ CommandHistory::addToBundle(Command *command, bool execute)
 
     delete m_bundleTimer;
     m_bundleTimer = new QTimer(this);
-    connect(m_bundleTimer, SIGNAL(timeout()), this, SLOT(bundleTimerTimeout()));
+    connect(m_bundleTimer, &QTimer::timeout, this, &CommandHistory::bundleTimerTimeout);
     m_bundleTimer->start(m_bundleTimeout);
 }
 

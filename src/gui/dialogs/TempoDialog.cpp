@@ -84,7 +84,7 @@ TempoDialog::TempoDialog(QWidget *parent, RosegardenDocument *doc,
 
     m_tempoTap= new QPushButton(tr("Tap"), frame);
     layout->addWidget(m_tempoTap, 0, 3);
-    connect(m_tempoTap, SIGNAL(clicked()), SLOT(slotTapClicked()));
+    connect(m_tempoTap, &QAbstractButton::clicked, this, &TempoDialog::slotTapClicked);
 
 
     m_tempoConstant = new QRadioButton(tr("Tempo is fixed until the following tempo change"), frame);
@@ -109,12 +109,12 @@ TempoDialog::TempoDialog(QWidget *parent, RosegardenDocument *doc,
 
     //    connect(m_tempoTargetCheckBox, SIGNAL(clicked()),
     //            SLOT(slotTargetCheckBoxClicked()));
-    connect(m_tempoConstant, SIGNAL(clicked()),
-            SLOT(slotTempoConstantClicked()));
-    connect(m_tempoRampToNext, SIGNAL(clicked()),
-            SLOT(slotTempoRampToNextClicked()));
-    connect(m_tempoRampToTarget, SIGNAL(clicked()),
-            SLOT(slotTempoRampToTargetClicked()));
+    connect(m_tempoConstant, &QAbstractButton::clicked,
+            this, &TempoDialog::slotTempoConstantClicked);
+    connect(m_tempoRampToNext, &QAbstractButton::clicked,
+            this, &TempoDialog::slotTempoRampToNextClicked);
+    connect(m_tempoRampToTarget, &QAbstractButton::clicked,
+            this, &TempoDialog::slotTempoRampToTargetClicked);
     connect(m_tempoTargetSpinBox, SIGNAL(valueChanged(double)),
             SLOT(slotTargetChanged(double)));
 
@@ -206,14 +206,14 @@ TempoDialog::TempoDialog(QWidget *parent, RosegardenDocument *doc,
         optionHBox->setLayout(optionHBoxLayout);
         optionHBoxLayout->setStretchFactor(spare, 20);
 
-        connect(m_tempoChangeHere, SIGNAL(clicked()),
-                SLOT(slotActionChanged()));
-        connect(m_tempoChangeBefore, SIGNAL(clicked()),
-                SLOT(slotActionChanged()));
-        connect(m_tempoChangeStartOfBar, SIGNAL(clicked()),
-                SLOT(slotActionChanged()));
-        connect(m_tempoChangeGlobal, SIGNAL(clicked()),
-                SLOT(slotActionChanged()));
+        connect(m_tempoChangeHere, &QAbstractButton::clicked,
+                this, &TempoDialog::slotActionChanged);
+        connect(m_tempoChangeBefore, &QAbstractButton::clicked,
+                this, &TempoDialog::slotActionChanged);
+        connect(m_tempoChangeStartOfBar, &QAbstractButton::clicked,
+                this, &TempoDialog::slotActionChanged);
+        connect(m_tempoChangeGlobal, &QAbstractButton::clicked,
+                this, &TempoDialog::slotActionChanged);
 
         m_tempoChangeBefore->setChecked(true);
 
@@ -225,8 +225,8 @@ TempoDialog::TempoDialog(QWidget *parent, RosegardenDocument *doc,
     vboxLayout->addWidget(buttonBox);
     
     connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
-    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
-    connect(buttonBox, SIGNAL(helpRequested()), this, SLOT(slotHelpRequested()));
+    connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
+    connect(buttonBox, &QDialogButtonBox::helpRequested, this, &TempoDialog::slotHelpRequested);
 
     populateTempo();    
 }

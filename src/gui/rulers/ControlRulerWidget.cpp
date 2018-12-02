@@ -76,11 +76,11 @@ m_scale(nullptr)
 
     this->setLayout(layout);
     
-    connect(m_tabBar,SIGNAL(currentChanged(int)),
-            m_stackedWidget,SLOT(setCurrentIndex(int)));
+    connect(m_tabBar,&QTabBar::currentChanged,
+            m_stackedWidget,&QStackedWidget::setCurrentIndex);
     
-    connect(m_tabBar,SIGNAL(tabCloseRequest(int)),
-            this,SLOT(slotRemoveRuler(int)));
+    connect(m_tabBar,&ControlRulerTabBar::tabCloseRequest,
+            this,&ControlRulerWidget::slotRemoveRuler);
 }
 
 ControlRulerWidget::~ControlRulerWidget()
@@ -129,8 +129,8 @@ void
 ControlRulerWidget::setSegment(Segment *segment)
 {
     if (m_segment) {
-        disconnect(m_segment, SIGNAL(contentsChanged(timeT, timeT)),
-                this, SLOT(slotUpdateRulers(timeT, timeT)));
+        disconnect(m_segment, &Segment::contentsChanged,
+                this, &ControlRulerWidget::slotUpdateRulers);
     }
     m_segment = segment;
 
@@ -143,8 +143,8 @@ ControlRulerWidget::setSegment(Segment *segment)
         }
     }
     if (m_segment) {
-        connect(m_segment, SIGNAL(contentsChanged(timeT, timeT)),
-                   this, SLOT(slotUpdateRulers(timeT, timeT)));
+        connect(m_segment, &Segment::contentsChanged,
+                   this, &ControlRulerWidget::slotUpdateRulers);
     }
 }
 
@@ -292,11 +292,11 @@ ControlRulerWidget::slotAddControlRuler(const ControlParameter &controlParameter
     ControlRuler *controlruler = new ControllerEventsRuler(m_viewSegment, m_scale, this, &controlParameter);
     controlruler->setXOffset(m_gutter);
 
-    connect(controlruler, SIGNAL(dragScroll(timeT)),
-            this, SLOT(slotDragScroll(timeT)));
+    connect(controlruler, &ControlRuler::dragScroll,
+            this, &ControlRulerWidget::slotDragScroll);
 
-    connect(controlruler, SIGNAL(rulerSelectionChanged(EventSelection *)),
-            this, SLOT(slotChildRulerSelectionChanged(EventSelection *)));
+    connect(controlruler, &ControlRuler::rulerSelectionChanged,
+            this, &ControlRulerWidget::slotChildRulerSelectionChanged);
 
     addRuler(controlruler,QString::fromStdString(controlParameter.getName()));
     controlruler->setViewSegment(m_viewSegment);
@@ -309,11 +309,11 @@ ControlRulerWidget::slotAddPropertyRuler(const PropertyName &propertyName)
 
     PropertyControlRuler *controlruler = new PropertyControlRuler(propertyName, m_viewSegment, m_scale, this);
 
-    connect(controlruler, SIGNAL(rulerSelectionChanged(EventSelection *)),
-            this, SLOT(slotChildRulerSelectionChanged(EventSelection *)));
+    connect(controlruler, &ControlRuler::rulerSelectionChanged,
+            this, &ControlRulerWidget::slotChildRulerSelectionChanged);
 
-    connect(controlruler, SIGNAL(showContextHelp(const QString &)),
-            this,  SIGNAL(showContextHelp(const QString &)));
+    connect(controlruler, &ControlRuler::showContextHelp,
+            this,  &ControlRulerWidget::showContextHelp);
 
     controlruler->setXOffset(m_gutter);
     controlruler->updateSelection(&m_selectedElements);

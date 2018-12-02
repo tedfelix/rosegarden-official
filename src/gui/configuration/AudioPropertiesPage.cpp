@@ -85,8 +85,8 @@ AudioPropertiesPage::AudioPropertiesPage(RosegardenDocument *doc,  QWidget *pare
 
     calculateStats();
 
-    connect(m_changePathButton, SIGNAL(released()),
-            SLOT(slotFileDialog()));
+    connect(m_changePathButton, &QAbstractButton::released,
+            this, &AudioPropertiesPage::slotFileDialog);
 
     addTab(frame, tr("Modify audio path"));
 }

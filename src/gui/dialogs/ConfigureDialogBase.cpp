@@ -61,12 +61,12 @@ ConfigureDialogBase::ConfigureDialogBase(QWidget *parent, const QString &label, 
     dlgLayout->addWidget(buttonBox);
 
     connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
-    connect(buttonBox, SIGNAL(rejected()), this, SLOT(slotCancelOrClose()));
-    connect(buttonBox, SIGNAL( helpRequested() ), this, SLOT ( slotHelpRequested() ) );
+    connect(buttonBox, &QDialogButtonBox::rejected, this, &ConfigureDialogBase::slotCancelOrClose);
+    connect(buttonBox, &QDialogButtonBox::helpRequested, this, &ConfigureDialogBase::slotHelpRequested );
 
     m_applyButton = buttonBox->button(QDialogButtonBox::Apply);
     m_applyButton->setEnabled(false);
-    connect(m_applyButton, SIGNAL(clicked()), this, SLOT(slotApply()));
+    connect(m_applyButton, &QAbstractButton::clicked, this, &ConfigureDialogBase::slotApply);
 
 }
 

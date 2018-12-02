@@ -356,8 +356,8 @@ TextEventDialog::TextEventDialog(QWidget *parent,
     m_prevLyric = settings.value("previous_lyric", "").toString();
     m_prevAnnotation = settings.value("previous_annotation", "").toString();
 
-    QObject::connect(m_text, SIGNAL(textChanged(const QString &)),
-                     this, SLOT(slotTextChanged(const QString &)));
+    QObject::connect(m_text, &QLineEdit::textChanged,
+                     this, &TextEventDialog::slotTextChanged);
     QObject::connect(m_typeCombo, SIGNAL(activated(const QString &)),
                      this, SLOT(slotTypeChanged(const QString &)));
     QObject::connect(m_dynamicShortcutCombo, SIGNAL(activated(const QString &)),
@@ -373,8 +373,8 @@ TextEventDialog::TextEventDialog(QWidget *parent,
     QObject::connect(m_lilyPondDirectiveCombo, SIGNAL(activated(const QString &)),
                      this, SLOT(slotLilyPondDirectiveChanged(const QString &)));
 
-    QObject::connect(m_optionLabel, SIGNAL(currentChanged(int)), this, SLOT(slotUpdateSize(int)));
-    QObject::connect(m_optionWidget, SIGNAL(currentChanged(int)), this, SLOT(slotUpdateSize(int)));
+    QObject::connect(m_optionLabel, &QStackedWidget::currentChanged, this, &TextEventDialog::slotUpdateSize);
+    QObject::connect(m_optionWidget, &QStackedWidget::currentChanged, this, &TextEventDialog::slotUpdateSize);
         
     m_text->setFocus();
     slotTypeChanged(strtoqstr(getTextType()));
@@ -390,9 +390,9 @@ TextEventDialog::TextEventDialog(QWidget *parent,
     vboxLayout->addWidget(buttonBox, 1, nullptr);
     //vboxLayout->setRowStretch(0, 10);
     
-    connect(buttonBox, SIGNAL(accepted()), this, SLOT(slotOK()));
-    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
-    connect(buttonBox, SIGNAL(helpRequested()), this, SLOT(slotHelpRequested()));
+    connect(buttonBox, &QDialogButtonBox::accepted, this, &TextEventDialog::slotOK);
+    connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
+    connect(buttonBox, &QDialogButtonBox::helpRequested, this, &TextEventDialog::slotHelpRequested);
 
     settings.endGroup();
 

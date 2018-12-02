@@ -150,10 +150,10 @@ ClefDialog::ClefDialog(QWidget *parent,
     }
 
     // hook up the up/down left/right buttons
-    QObject::connect(clefUp, SIGNAL(clicked()), this, SLOT(slotClefUp()));
-    QObject::connect(clefDown, SIGNAL(clicked()), this, SLOT(slotClefDown()));
-    QObject::connect(m_octaveUp, SIGNAL(clicked()), this, SLOT(slotOctaveUp()));
-    QObject::connect(m_octaveDown, SIGNAL(clicked()), this, SLOT(slotOctaveDown()));
+    QObject::connect(clefUp, &QAbstractButton::clicked, this, &ClefDialog::slotClefUp);
+    QObject::connect(clefDown, &QAbstractButton::clicked, this, &ClefDialog::slotClefDown);
+    QObject::connect(m_octaveUp, &QAbstractButton::clicked, this, &ClefDialog::slotOctaveUp);
+    QObject::connect(m_octaveDown, &QAbstractButton::clicked, this, &ClefDialog::slotOctaveDown);
 
     redrawClefPixmap();
 
@@ -164,7 +164,7 @@ ClefDialog::ClefDialog(QWidget *parent,
     vboxLayout->addWidget(buttonBox);
 
     connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
-    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+    connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 }
 
 Clef

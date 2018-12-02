@@ -128,8 +128,8 @@ DiatonicPitchChooser::DiatonicPitchChooser(QString title,
     connect(m_pitchDragLabel, SIGNAL(pitchChanged(int,int,int)),
             this, SIGNAL(noteChanged(int,int,int)));
 
-    connect(m_pitchDragLabel, SIGNAL(preview(int)),
-            this, SIGNAL(preview(int)));
+    connect(m_pitchDragLabel, &PitchDragLabel::preview,
+            this, &DiatonicPitchChooser::preview);
 
 }
 

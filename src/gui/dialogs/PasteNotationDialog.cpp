@@ -66,8 +66,8 @@ PasteNotationDialog::PasteNotationDialog(QWidget *parent) :
         QRadioButton *button = new QRadioButton(i->second, pasteTypeGroup);
         pasteTypeGroupLayout->addWidget(button);
         button->setChecked(m_defaultType == i->first);
-        QObject::connect(button, SIGNAL(clicked()),
-                         this, SLOT(slotPasteTypeChanged()));
+        QObject::connect(button, &QAbstractButton::clicked,
+                         this, &PasteNotationDialog::slotPasteTypeChanged);
 
         m_pasteTypeButtons.push_back(button);
     }
@@ -89,8 +89,8 @@ PasteNotationDialog::PasteNotationDialog(QWidget *parent) :
     metagrid->addWidget(buttonBox, 1, 0);
     metagrid->setRowStretch(0, 10);
     connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
-    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
-    connect(buttonBox, SIGNAL(helpRequested()), this, SLOT(slotHelpRequested()));
+    connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
+    connect(buttonBox, &QDialogButtonBox::helpRequested, this, &PasteNotationDialog::slotHelpRequested);
 }
 
 PasteEventsCommand::PasteType

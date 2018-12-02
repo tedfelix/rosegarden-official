@@ -705,7 +705,7 @@ ActionFileParser::enableActionInState(QString stateName, QString actionName)
     if (!action) action = findStandardAction(actionName);
     if (!action) return false;
     m_stateEnableMap[stateName].insert(action);
-    connect(action, SIGNAL(destroyed()), this, SLOT(slotObjectDestroyed()));
+    connect(action, &QObject::destroyed, this, &ActionFileParser::slotObjectDestroyed);
     return true;
 }
 
@@ -717,7 +717,7 @@ ActionFileParser::disableActionInState(QString stateName, QString actionName)
     if (!action) action = findStandardAction(actionName);
     if (!action) return false;
     m_stateDisableMap[stateName].insert(action);
-    connect(action, SIGNAL(destroyed()), this, SLOT(slotObjectDestroyed()));
+    connect(action, &QObject::destroyed, this, &ActionFileParser::slotObjectDestroyed);
     return true;
 }
 
@@ -732,7 +732,7 @@ ActionFileParser::enableMenuInState(QString stateName, QString menuName)
         QAction *a = actions[i];
         if (!a) continue;
         m_stateEnableMap[stateName].insert(a);
-        connect(a, SIGNAL(destroyed()), this, SLOT(slotObjectDestroyed()));
+        connect(a, &QObject::destroyed, this, &ActionFileParser::slotObjectDestroyed);
     }
     return true;
 }
@@ -748,7 +748,7 @@ ActionFileParser::disableMenuInState(QString stateName, QString menuName)
         QAction *a = actions[i];
         if (!a) continue;
         m_stateDisableMap[stateName].insert(a);
-        connect(a, SIGNAL(destroyed()), this, SLOT(slotObjectDestroyed()));
+        connect(a, &QObject::destroyed, this, &ActionFileParser::slotObjectDestroyed);
     }
     return true;
 }
@@ -761,7 +761,7 @@ ActionFileParser::toVisibleActionInState(QString stateName, QString actionName)
     if (!action) action = findStandardAction(actionName);
     if (!action) return false;
     m_stateVisibleMap[stateName].insert(action);
-    connect(action, SIGNAL(destroyed()), this, SLOT(slotObjectDestroyed()));
+    connect(action, &QObject::destroyed, this, &ActionFileParser::slotObjectDestroyed);
     return true;
 }
 
@@ -773,7 +773,7 @@ ActionFileParser::toInvisibleActionInState(QString stateName, QString actionName
     if (!action) action = findStandardAction(actionName);
     if (!action) return false;
     m_stateInvisibleMap[stateName].insert(action);
-    connect(action, SIGNAL(destroyed()), this, SLOT(slotObjectDestroyed()));
+    connect(action, &QObject::destroyed, this, &ActionFileParser::slotObjectDestroyed);
     return true;
 }
 

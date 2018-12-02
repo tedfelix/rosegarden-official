@@ -88,8 +88,8 @@ MatrixToolBox::createTool(QString toolName)
 
     if (m_scene) {
         tool->setScene(m_scene);
-        connect(m_scene, SIGNAL(eventRemoved(Event *)),
-                tool, SLOT(handleEventRemoved(Event *)));
+        connect(m_scene, &MatrixScene::eventRemoved,
+                tool, &MatrixTool::handleEventRemoved);
     }
 
     return tool;
@@ -105,8 +105,8 @@ MatrixToolBox::setScene(MatrixScene *scene)
         MatrixTool *nt = dynamic_cast<MatrixTool *>(*i);
         if (nt) {
             nt->setScene(scene);
-            connect(scene, SIGNAL(eventRemoved(Event *)),
-                    nt, SLOT(handleEventRemoved(Event *)));
+            connect(scene, &MatrixScene::eventRemoved,
+                    nt, &MatrixTool::handleEventRemoved);
         }
     }
 }

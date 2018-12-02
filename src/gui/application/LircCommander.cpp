@@ -43,53 +43,53 @@ LircCommander::LircCommander(LircClient *lirc, RosegardenMainWindow *rgGUIApp)
 {
     m_lirc = lirc;
     m_rgGUIApp = rgGUIApp;
-    connect(m_lirc, SIGNAL(buttonPressed(const char *)),
-            this, SLOT(slotExecute(const char *)) );
+    connect(m_lirc, &LircClient::buttonPressed,
+            this, &LircCommander::slotExecute );
 
-    connect(this, SIGNAL(play()),
-            m_rgGUIApp, SLOT(slotPlay()) );
-    connect(this, SIGNAL(stop()),
-            m_rgGUIApp, SLOT(slotStop()) );
-    connect(this, SIGNAL(record()),
-            m_rgGUIApp, SLOT(slotRecord()) );
-    connect(this, SIGNAL(rewind()),
-            m_rgGUIApp, SLOT(slotRewind()) );
-    connect(this, SIGNAL(rewindToBeginning()),
-            m_rgGUIApp, SLOT(slotRewindToBeginning()) );
-    connect(this, SIGNAL(fastForward()),
-            m_rgGUIApp, SLOT(slotFastforward()) );
-    connect(this, SIGNAL(fastForwardToEnd()),
-            m_rgGUIApp, SLOT(slotFastForwardToEnd()) );
-    connect(this, SIGNAL(toggleRecord()),
-            m_rgGUIApp, SLOT(slotToggleRecord()) );
-    connect(this, SIGNAL(trackDown()),
-            m_rgGUIApp, SLOT(slotTrackDown()) );
-    connect(this, SIGNAL(trackUp()),
-            m_rgGUIApp, SLOT(slotTrackUp()) );
+    connect(this, &LircCommander::play,
+            m_rgGUIApp, &RosegardenMainWindow::slotPlay );
+    connect(this, &LircCommander::stop,
+            m_rgGUIApp, &RosegardenMainWindow::slotStop );
+    connect(this, &LircCommander::record,
+            m_rgGUIApp, &RosegardenMainWindow::slotRecord );
+    connect(this, &LircCommander::rewind,
+            m_rgGUIApp, &RosegardenMainWindow::slotRewind );
+    connect(this, &LircCommander::rewindToBeginning,
+            m_rgGUIApp, &RosegardenMainWindow::slotRewindToBeginning );
+    connect(this, &LircCommander::fastForward,
+            m_rgGUIApp, &RosegardenMainWindow::slotFastforward );
+    connect(this, &LircCommander::fastForwardToEnd,
+            m_rgGUIApp, &RosegardenMainWindow::slotFastForwardToEnd );
+    connect(this, &LircCommander::toggleRecord,
+            m_rgGUIApp, &RosegardenMainWindow::slotToggleRecord );
+    connect(this, &LircCommander::trackDown,
+            m_rgGUIApp, &RosegardenMainWindow::slotTrackDown );
+    connect(this, &LircCommander::trackUp,
+            m_rgGUIApp, &RosegardenMainWindow::slotTrackUp );
     connect(this, SIGNAL(trackMute()),
             m_rgGUIApp, SLOT(slotToggleMute()) );
-    connect(this, SIGNAL(trackRecord()),
-            m_rgGUIApp, SLOT(slotToggleRecordCurrentTrack()) );
-    connect(this, SIGNAL(undo()),
-            CommandHistory::getInstance(), SLOT(undo()) );
-    connect(this, SIGNAL(redo()),
-            CommandHistory::getInstance(), SLOT(redo()) );
-    connect(this, SIGNAL(aboutrg()),
-            m_rgGUIApp, SLOT(slotHelpAbout()) );
-    connect(this, SIGNAL(editInMatrix()),
-            m_rgGUIApp, SLOT(slotEditInMatrix()) );
-    connect(this, SIGNAL(editInPercussionMatrix()),
-            m_rgGUIApp, SLOT(slotEditInPercussionMatrix()) );
-    connect(this, SIGNAL(editInEventList()),
-            m_rgGUIApp, SLOT(slotEditInEventList()) );
-    connect(this, SIGNAL(editAsNotation()),
-            m_rgGUIApp, SLOT(slotEditAsNotation()) );
-    connect(this, SIGNAL(quit()),
-            m_rgGUIApp, SLOT(slotQuit()) );
-    connect(this, SIGNAL(closeTransport()),
-            m_rgGUIApp, SLOT(slotCloseTransport()) );
-    connect(this, SIGNAL(toggleTransportVisibility()),
-            m_rgGUIApp, SLOT(slotToggleTransportVisibility()) );
+    connect(this, &LircCommander::trackRecord,
+            m_rgGUIApp, &RosegardenMainWindow::slotToggleRecordCurrentTrack );
+    connect(this, &LircCommander::undo,
+            CommandHistory::getInstance(), &CommandHistory::undo );
+    connect(this, &LircCommander::redo,
+            CommandHistory::getInstance(), &CommandHistory::redo );
+    connect(this, &LircCommander::aboutrg,
+            m_rgGUIApp, &RosegardenMainWindow::slotHelpAbout );
+    connect(this, &LircCommander::editInMatrix,
+            m_rgGUIApp, &RosegardenMainWindow::slotEditInMatrix );
+    connect(this, &LircCommander::editInPercussionMatrix,
+            m_rgGUIApp, &RosegardenMainWindow::slotEditInPercussionMatrix );
+    connect(this, &LircCommander::editInEventList,
+            m_rgGUIApp, &RosegardenMainWindow::slotEditInEventList );
+    connect(this, &LircCommander::editAsNotation,
+            m_rgGUIApp, &RosegardenMainWindow::slotEditAsNotation );
+    connect(this, &LircCommander::quit,
+            m_rgGUIApp, &RosegardenMainWindow::slotQuit );
+    connect(this, &LircCommander::closeTransport,
+            m_rgGUIApp, &RosegardenMainWindow::slotCloseTransport );
+    connect(this, &LircCommander::toggleTransportVisibility,
+            m_rgGUIApp, &RosegardenMainWindow::slotToggleTransportVisibility );
 }
 
 LircCommander::command LircCommander::commands[] =

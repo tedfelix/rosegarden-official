@@ -58,8 +58,8 @@ RosegardenScrollView::RosegardenScrollView(QWidget *parent)
     // The rest of the code assumes there is no frame.
     setFrameStyle(QFrame::NoFrame);
 
-    connect(&m_autoScrollTimer, SIGNAL(timeout()),
-            this, SLOT(slotOnAutoScrollTimer()));
+    connect(&m_autoScrollTimer, &QTimer::timeout,
+            this, &RosegardenScrollView::slotOnAutoScrollTimer);
 }
 
 int RosegardenScrollView::contentsX()

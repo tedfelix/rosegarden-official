@@ -35,11 +35,11 @@ InstrumentAliasButton::InstrumentAliasButton(QWidget *parent,
         QPushButton(parent),
         m_instrument(instrument)
 {
-    connect(this, SIGNAL(clicked()), this, SLOT(slotPressed()));
+    connect(this, &QAbstractButton::clicked, this, &InstrumentAliasButton::slotPressed);
     if (instrument) {
         // Make instrument tell us if it gets destroyed.
-        connect(instrument, SIGNAL(destroyed()),
-                this, SLOT(slotInstrumentGone()));
+        connect(instrument, &QObject::destroyed,
+                this, &InstrumentAliasButton::slotInstrumentGone);
     }
 }
 

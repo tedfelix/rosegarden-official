@@ -84,8 +84,8 @@ PitchChooser::PitchChooser(QString title,
     connect(m_pitchDragLabel, SIGNAL(pitchChanged(int)),
             this, SIGNAL(pitchChanged(int)));
 
-    connect(m_pitchDragLabel, SIGNAL(preview(int)),
-            this, SIGNAL(preview(int)));
+    connect(m_pitchDragLabel, &PitchDragLabel::preview,
+            this, &PitchChooser::preview);
 
 }
 

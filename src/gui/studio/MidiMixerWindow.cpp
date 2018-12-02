@@ -95,8 +95,8 @@ MidiMixerWindow::MidiMixerWindow(QWidget *parent,
     enableAutoRepeat("Transport Toolbar", "playback_pointer_forward_bar");
 
     connect(Instrument::getStaticSignals().data(),
-                SIGNAL(controlChange(Instrument *, int)),
-            SLOT(slotControlChange(Instrument *, int)));
+                &InstrumentStaticSignals::controlChange,
+            this, &MidiMixerWindow::slotControlChange);
 }
 
 void
@@ -122,8 +122,8 @@ MidiMixerWindow::setupTabs()
     m_tabWidget = new QTabWidget;
     centralLayout->addWidget(m_tabWidget);
 
-    connect(m_tabWidget, SIGNAL(currentChanged(int)),
-            this, SLOT(slotCurrentTabChanged(int)));
+    connect(m_tabWidget, &QTabWidget::currentChanged,
+            this, &MidiMixerWindow::slotCurrentTabChanged);
     m_tabWidget->setTabPosition(QTabWidget::South);
     setWindowTitle(tr("MIDI Mixer"));
     setWindowIcon(IconLoader().loadPixmap("window-midimixer"));
@@ -218,8 +218,8 @@ MidiMixerWindow::setupTabs()
 
                     controller->setKnobColour(knobColour);
 
-                    connect(controller, SIGNAL(valueChanged(float)),
-                            this, SLOT(slotControllerChanged(float)));
+                    connect(controller, &Rotary::valueChanged,
+                            this, &MidiMixerWindow::slotControllerChanged);
 
                     mainLayout->addWidget(controller, i + 1, posCount,
                                           Qt::AlignCenter);
@@ -263,8 +263,8 @@ MidiMixerWindow::setupTabs()
 
                 // Connect them up
                 //
-                connect(fader, SIGNAL(faderChanged(float)),
-                        this, SLOT(slotFaderLevelChanged(float)));
+                connect(fader, &Fader::faderChanged,
+                        this, &MidiMixerWindow::slotFaderLevelChanged);
 
                 // Update all the faders and controllers
                 //

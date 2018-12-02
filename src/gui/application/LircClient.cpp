@@ -58,7 +58,7 @@ LircClient::LircClient()
     }
 
     m_socketNotifier = new QSocketNotifier(m_socket, QSocketNotifier::Read, nullptr);
-    connect(m_socketNotifier, SIGNAL(activated(int)), this, SLOT(readButton()) );
+    connect(m_socketNotifier, &QSocketNotifier::activated, this, &LircClient::readButton );
 
     RG_DEBUG << "LircClient::LircClient: connected to socket: " << m_socket;
 }

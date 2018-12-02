@@ -77,9 +77,9 @@ AudioStrip::AudioStrip(QWidget *parent, InstrumentId id) :
     boldFont.setBold(true);
 
     connect(this,
-            SIGNAL(selectPlugin(QWidget *, InstrumentId, int)),
+            &AudioStrip::selectPlugin,
             RosegardenMainWindow::self(),
-            SLOT(slotShowPluginDialog(QWidget *, InstrumentId, int)));
+            &RosegardenMainWindow::slotShowPluginDialog);
 
     // We have to have an id in order to create the proper widgets and
     // initialize them.  If we don't, don't worry about it.  Handle it
@@ -88,8 +88,8 @@ AudioStrip::AudioStrip(QWidget *parent, InstrumentId id) :
         setId(id);
 
     // Meter timer.
-    connect(&m_timer, SIGNAL(timeout()),
-            SLOT(slotUpdateMeter()));
+    connect(&m_timer, &QTimer::timeout,
+            this, &AudioStrip::slotUpdateMeter);
     // 20fps should be responsive enough.
     m_timer.start(50);
 }
@@ -148,8 +148,8 @@ void AudioStrip::createWidgets()
     m_label->setMinimumHeight(12);
     m_label->setMaximumHeight(12);
     m_label->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-    connect(m_label, SIGNAL(clicked()),
-            SLOT(slotLabelClicked()));
+    connect(m_label, &Label::clicked,
+            this, &AudioStrip::slotLabelClicked);
 
     // Input
 
@@ -180,8 +180,8 @@ void AudioStrip::createWidgets()
     m_fader = new Fader(AudioLevel::LongFader, 20, 240, this);
     m_fader->setToolTip(tr("Audio level"));
 
-    connect(m_fader, SIGNAL(faderChanged(float)),
-            this, SLOT(slotFaderLevelChanged(float)));
+    connect(m_fader, &Fader::faderChanged,
+            this, &AudioStrip::slotFaderLevelChanged);
 
     // Meter
 
@@ -222,8 +222,8 @@ void AudioStrip::createWidgets()
             }
         }
 
-        connect(m_pan, SIGNAL(valueChanged(float)),
-                SLOT(slotPanChanged(float)));
+        connect(m_pan, &Rotary::valueChanged,
+                this, &AudioStrip::slotPanChanged);
     }
 
     // Stereo
@@ -240,8 +240,8 @@ void AudioStrip::createWidgets()
         m_stereoButton->setFlat(true);
         m_stereoButton->setToolTip(tr("Mono or stereo"));
 
-        connect(m_stereoButton, SIGNAL(clicked()),
-                SLOT(slotChannelsChanged()));
+        connect(m_stereoButton, &QAbstractButton::clicked,
+                this, &AudioStrip::slotChannelsChanged);
 
     }
 
@@ -261,8 +261,8 @@ void AudioStrip::createWidgets()
             pluginPushButton->setToolTip(tr("Click to load an audio plugin"));
             pluginPushButton->setProperty("index", i);
 
-            connect(pluginPushButton, SIGNAL(clicked()),
-                    SLOT(slotSelectPlugin()));
+            connect(pluginPushButton, &QAbstractButton::clicked,
+                    this, &AudioStrip::slotSelectPlugin);
 
             m_plugins.push_back(pluginPushButton);
         }

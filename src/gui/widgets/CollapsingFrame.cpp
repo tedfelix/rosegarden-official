@@ -69,7 +69,7 @@ CollapsingFrame::CollapsingFrame(
 
     m_toggleButton->setIcon(IconLoader().load("style/arrow-down-small-inverted"));
 
-    connect(m_toggleButton, SIGNAL(clicked()), this, SLOT(toggle()));
+    connect(m_toggleButton, &QAbstractButton::clicked, this, &CollapsingFrame::toggle);
 
     m_layout->addWidget(m_toggleButton, 0, 0, 1, 3);
 }

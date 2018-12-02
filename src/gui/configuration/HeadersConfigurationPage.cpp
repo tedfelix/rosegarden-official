@@ -94,8 +94,8 @@ HeadersConfigurationPage::HeadersConfigurationPage(
         unsigned int row = 0, col = 0, width = 1;
         LineEdit *editHeader = new LineEdit(headerStr, frameHeaders);
         if (m_parentDialog) {
-            connect(editHeader, SIGNAL(textEdited(QString)),
-                    m_parentDialog, SLOT(slotActivateApply()));
+            connect(editHeader, &QLineEdit::textEdited,
+                    m_parentDialog, &ConfigureDialogBase::slotActivateApply);
         }
         QString trName;
         if (key == headerDedication()) {
@@ -197,8 +197,8 @@ HeadersConfigurationPage::HeadersConfigurationPage(
 
     m_metadata = new QTableWidget( 2, 2, frameOtherHeaders ); // rows, columns
     if (m_parentDialog) {
-        connect(m_metadata, SIGNAL(cellChanged(int, int)),
-                m_parentDialog, SLOT(slotActivateApply()));
+        connect(m_metadata, &QTableWidget::cellChanged,
+                m_parentDialog, &ConfigureDialogBase::slotActivateApply);
     }
     m_metadata->setObjectName("StyledTable");
     m_metadata->setAlternatingRowColors(true);
@@ -243,11 +243,11 @@ HeadersConfigurationPage::HeadersConfigurationPage(
 
     frameOtherHeaders->setLayout(layoutOtherHeaders);
 
-    connect(addPropButton, SIGNAL(clicked()),
-            this, SLOT(slotAddNewProperty()));
+    connect(addPropButton, &QAbstractButton::clicked,
+            this, &HeadersConfigurationPage::slotAddNewProperty);
 
-    connect(deletePropButton, SIGNAL(clicked()),
-            this, SLOT(slotDeleteProperty()));
+    connect(deletePropButton, &QAbstractButton::clicked,
+            this, &HeadersConfigurationPage::slotDeleteProperty);
     
     if (m_parentDialog) {
         m_parentDialog->deactivateApply();

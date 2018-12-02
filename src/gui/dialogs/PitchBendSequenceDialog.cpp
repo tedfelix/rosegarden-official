@@ -373,17 +373,17 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(QWidget *parent,
 
         connect(m_sequencePreset, SIGNAL(activated(int)), this,
                 SLOT(slotSequencePresetChanged(int)));
-        connect(m_radioOnlyErase, SIGNAL(toggled(bool)),
-                this, SLOT(slotOnlyEraseClicked(bool)));
-        connect(m_radioRampLinear, SIGNAL(toggled(bool)),
-                this, SLOT(slotLinearRampClicked(bool)));
+        connect(m_radioOnlyErase, &QAbstractButton::toggled,
+                this, &PitchBendSequenceDialog::slotOnlyEraseClicked);
+        connect(m_radioRampLinear, &QAbstractButton::toggled,
+                this, &PitchBendSequenceDialog::slotLinearRampClicked);
         
         // We connect all these buttons to slotStepSizeStyleChanged,
         // which will react only to the current selected one.
-        connect(m_radioStepSizeDirect, SIGNAL(toggled(bool)),
-                this, SLOT(slotStepSizeStyleChanged(bool)));
-        connect(m_radioStepSizeByCount, SIGNAL(toggled(bool)),
-                this, SLOT(slotStepSizeStyleChanged(bool)));
+        connect(m_radioStepSizeDirect, &QAbstractButton::toggled,
+                this, &PitchBendSequenceDialog::slotStepSizeStyleChanged);
+        connect(m_radioStepSizeByCount, &QAbstractButton::toggled,
+                this, &PitchBendSequenceDialog::slotStepSizeStyleChanged);
     } else {
         vboxLayout->addWidget(new QLabel(tr("Invalid end time. Have you selected some events?")));
     }
@@ -397,8 +397,8 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(QWidget *parent,
     vboxLayout->addWidget(buttonBox, 1, nullptr);
 
     connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
-    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
-    connect(buttonBox, SIGNAL(helpRequested()), this, SLOT(slotHelpRequested()));
+    connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
+    connect(buttonBox, &QDialogButtonBox::helpRequested, this, &PitchBendSequenceDialog::slotHelpRequested);
 }
 
 void

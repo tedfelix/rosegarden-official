@@ -61,9 +61,9 @@ WarningWidget::WarningWidget(QWidget *parent) :
     m_warningButton->setIconSize(QSize(16, 16));
     m_warningButton->setIcon(IconLoader().loadPixmap("warning"));
     connect(m_warningButton,
-            SIGNAL(clicked()),
+            &QAbstractButton::clicked,
             this,
-            SLOT(displayMessageQueue()));
+            &WarningWidget::displayMessageQueue);
     m_warningButton->setToolTip(tr("<qt><p>Performance problems detected!</p><p>Click to display details</p></qt>"));
     m_warningButton->hide();
 
@@ -72,9 +72,9 @@ WarningWidget::WarningWidget(QWidget *parent) :
     m_graphicsButton->setIconSize(QSize(16, 16));
     m_graphicsButton->setIcon(IconLoader().loadPixmap("safe-graphics"));
     connect(m_graphicsButton,
-            SIGNAL(clicked()),
+            &QAbstractButton::clicked,
             this,
-            SLOT(displayGraphicsAdvisory()));
+            &WarningWidget::displayGraphicsAdvisory);
     m_graphicsButton->hide();
 
     m_infoButton = new QToolButton();
@@ -82,9 +82,9 @@ WarningWidget::WarningWidget(QWidget *parent) :
     m_infoButton->setIconSize(QSize(16, 16));
     m_infoButton->setIcon(IconLoader().loadPixmap("messagebox-information"));
     connect(m_infoButton,
-            SIGNAL(clicked()),
+            &QAbstractButton::clicked,
             this,
-            SLOT(displayMessageQueue()));
+            &WarningWidget::displayMessageQueue);
     m_infoButton->setToolTip(tr("<qt><p>Information available.</p><p>Click to display details</p></qt>"));
     m_infoButton->hide();
 

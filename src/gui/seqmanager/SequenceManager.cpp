@@ -141,8 +141,8 @@ SequenceManager::setDocument(RosegardenDocument *doc)
     // its own slotStop to ensure the right housekeeping is done
 
     m_countdownTimer = new QTimer(m_doc);
-    connect(m_countdownTimer, SIGNAL(timeout()),
-            this, SLOT(slotCountdownTimerTimeout()));
+    connect(m_countdownTimer, &QTimer::timeout,
+            this, &SequenceManager::slotCountdownTimerTimeout);
 
     m_doc->getComposition().addObserver(this);
 

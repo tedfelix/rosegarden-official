@@ -176,8 +176,8 @@ ManageMetronomeDialog::ManageMetronomeDialog(QWidget *parent,
     m_metronomePitch = new PitchChooser(tr("Pitch"), vbox , 60);
     m_metronomePitch->setToolTip(tr("<qt>It is typical to use a percussion instrument for the metronome, so the pitch normally controls which sort of drum will sound for each tick.  You may configure a different pitch for each of the bar, beat, and sub-beat ticks.</qt>"));
     vboxLayout->addWidget(m_metronomePitch);
-    connect(m_metronomePitch, SIGNAL(pitchChanged(int)), this, SLOT(slotPitchChanged(int)));
-    connect(m_metronomePitch, SIGNAL(preview(int)), this, SLOT(slotPreviewPitch(int)));
+    connect(m_metronomePitch, &PitchChooser::pitchChanged, this, &ManageMetronomeDialog::slotPitchChanged);
+    connect(m_metronomePitch, &PitchChooser::preview, this, &ManageMetronomeDialog::slotPreviewPitch);
 
     m_metronomePitchSelector = new QComboBox();
     m_metronomePitchSelector->addItem(tr("for Bar"));
@@ -193,8 +193,8 @@ ManageMetronomeDialog::ManageMetronomeDialog(QWidget *parent,
     enableBoxLayout->addWidget(m_playEnabled);
     m_recordEnabled = new QCheckBox(tr("Recording"), enableBox);
     enableBoxLayout->addWidget(m_recordEnabled);
-    connect(m_playEnabled, SIGNAL(clicked()), this, SLOT(slotSetModified()));
-    connect(m_recordEnabled, SIGNAL(clicked()), this, SLOT(slotSetModified()));
+    connect(m_playEnabled, &QAbstractButton::clicked, this, &ManageMetronomeDialog::slotSetModified);
+    connect(m_recordEnabled, &QAbstractButton::clicked, this, &ManageMetronomeDialog::slotSetModified);
     enableBox->setLayout(enableBoxLayout);
 
     vbox->setLayout(vboxLayout);
@@ -212,7 +212,7 @@ ManageMetronomeDialog::ManageMetronomeDialog(QWidget *parent,
     metagrid->addWidget(m_buttonBox, 1, 0);
     metagrid->setRowStretch(0, 10);
     connect(m_buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
-    connect(m_buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+    connect(m_buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 
     setModified(false);
 }

@@ -591,8 +591,8 @@ int main(int argc, char *argv[])
     }
 
     //@@@???
-    QObject::connect(&theApp, SIGNAL(aboutToSaveState()),
-                     mainWindow, SLOT(slotDeleteTransport()));
+    QObject::connect(&theApp, &RosegardenApplication::aboutToSaveState,
+                     mainWindow, &RosegardenMainWindow::slotDeleteTransport);
 
     // Now that we've started up, raise start logo
     //
@@ -696,8 +696,8 @@ int main(int argc, char *argv[])
         QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok);
         metagrid->addWidget(buttonBox, 1, 0);
         metagrid->setRowStretch(0, 10);
-        QObject::connect(buttonBox, SIGNAL(accepted()), dialog, SLOT(accept()));
-        QObject::connect(buttonBox, SIGNAL(rejected()), dialog, SLOT(reject()));
+        QObject::connect(buttonBox, &QDialogButtonBox::accepted, dialog, &QDialog::accept);
+        QObject::connect(buttonBox, &QDialogButtonBox::rejected, dialog, &QDialog::reject);
 
         mainWindow->awaitDialogClearance();
         dialog->exec();

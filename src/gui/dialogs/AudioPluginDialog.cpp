@@ -144,8 +144,8 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
     pluginDonglesBoxLayout->addStretch(20); // spread these out some so they don't clump together
     m_bypass->setToolTip(tr("Bypass this plugin"));
 
-    connect(m_bypass, SIGNAL(toggled(bool)),
-            this, SLOT(slotBypassChanged(bool)));
+    connect(m_bypass, &QAbstractButton::toggled,
+            this, &AudioPluginDialog::slotBypassChanged);
 
 
     m_insOuts = new QLabel(tr("<ports>"), pluginDonglesBox);
@@ -172,22 +172,22 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
     m_copyButton = new QPushButton(tr("Copy"), pluginButtonsBox);
     pluginButtonsBoxLayout->addWidget(m_copyButton);
 
-    connect(m_copyButton, SIGNAL(clicked()),
-            this, SLOT(slotCopy()));
+    connect(m_copyButton, &QAbstractButton::clicked,
+            this, &AudioPluginDialog::slotCopy);
     m_copyButton->setToolTip(tr("Copy plugin parameters"));
 
     m_pasteButton = new QPushButton(tr("Paste"), pluginButtonsBox);
     pluginButtonsBoxLayout->addWidget(m_pasteButton);
 
-    connect(m_pasteButton, SIGNAL(clicked()),
-            this, SLOT(slotPaste()));
+    connect(m_pasteButton, &QAbstractButton::clicked,
+            this, &AudioPluginDialog::slotPaste);
     m_pasteButton->setToolTip(tr("Paste plugin parameters"));
 
     m_defaultButton = new QPushButton(tr("Reset"), pluginButtonsBox);
     pluginButtonsBoxLayout->addWidget(m_defaultButton);
 
-    connect(m_defaultButton, SIGNAL(clicked()),
-            this, SLOT(slotDefault()));
+    connect(m_defaultButton, &QAbstractButton::clicked,
+            this, &AudioPluginDialog::slotDefault);
     m_defaultButton->setToolTip(tr("Reset plugin controls to factory defaults"));
     
     m_generating = false;
@@ -200,16 +200,16 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
     m_editorButton = new QPushButton(tr("Editor"));
     //RG_DEBUG << "ctor - created Editor button";
     buttonBox->addButton(m_editorButton, QDialogButtonBox::ActionRole);
-    connect(m_editorButton, SIGNAL(clicked(bool)), this, SLOT(slotEditor()));
+    connect(m_editorButton, &QAbstractButton::clicked, this, &AudioPluginDialog::slotEditor);
     m_editorButton->setEnabled(false);
 
     metagrid->addWidget(buttonBox, 1, 0);
     metagrid->setRowStretch(0, 10);
 
     // "Close" button has the RejectRole
-    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+    connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
     // "Help" button has the HelpRole
-    connect(buttonBox, SIGNAL(helpRequested()), this, SLOT(slotHelpRequested()));
+    connect(buttonBox, &QDialogButtonBox::helpRequested, this, &AudioPluginDialog::slotHelpRequested);
 
     //RG_DEBUG << "ctor: populating plugin category list...";
     populatePluginCategoryList();
@@ -666,8 +666,8 @@ AudioPluginDialog::slotPluginSelected(int i)
                     col = 0;
                 }
 
-                connect(control, SIGNAL(valueChanged(float)),
-                        this, SLOT(slotPluginPortChanged(float)));
+                connect(control, &PluginControl::valueChanged,
+                        this, &AudioPluginDialog::slotPluginPortChanged);
 
                 m_pluginWidgets.push_back(control);
             }

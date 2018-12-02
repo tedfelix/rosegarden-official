@@ -92,8 +92,8 @@ MidiProgramsEditor::makeAdditionalWidget(QWidget *parent)
     gridLayout->addWidget(new QLabel(tr("Percussion"), frame),
                           0, 0, Qt::AlignLeft);
     gridLayout->addWidget(m_percussion, 0, 1, Qt::AlignLeft);
-    connect(m_percussion, SIGNAL(clicked()),
-            this, SLOT(slotNewPercussion()));
+    connect(m_percussion, &QAbstractButton::clicked,
+            this, &MidiProgramsEditor::slotNewPercussion);
 
     gridLayout->addWidget(new QLabel(tr("MSB Value"), frame),
                           1, 0, Qt::AlignLeft);

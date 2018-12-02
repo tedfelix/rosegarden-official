@@ -77,7 +77,7 @@ DialogSuppressor::shouldSuppress(QDialog *dialog, QString settingsKey)
     QCheckBox *cb = new QCheckBox(errorStr);
     SuppressionTarget *target = new SuppressionTarget(settingsKey);
     target->setParent(cb);
-    QObject::connect(cb, SIGNAL(toggled(bool)), target, SLOT(slotSuppressionToggled(bool)));
+    QObject::connect(cb, &QAbstractButton::toggled, target, &SuppressionTarget::slotSuppressionToggled);
     il->addWidget(cb);
     il->addWidget(bb);
     QGridLayout *grid = dynamic_cast<QGridLayout *>(layout);

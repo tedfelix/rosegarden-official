@@ -78,7 +78,7 @@ LilyPondProcessor::LilyPondProcessor(QWidget *parent, int mode, QString filename
     layout->addWidget(m_progress, 1, 1);
 
     QPushButton *ok = new QPushButton(tr("Cancel"), this);
-    connect(ok, SIGNAL(clicked()), this, SLOT(reject()));
+    connect(ok, &QAbstractButton::clicked, this, &QDialog::reject);
     layout->addWidget(ok, 3, 1); 
 
    
