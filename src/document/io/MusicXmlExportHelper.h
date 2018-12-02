@@ -87,9 +87,6 @@ public:
             endTime = 0;
             firstVoice = 0;
             lastVoice = 0;
-            segments.clear();
-            Key key();
-            Clef clef();
         }
 
         TrackId                 trackId;
