@@ -1000,7 +1000,7 @@ resolveNoAccidental(int pitch,
                   const Key &key,
                   NoAccidentalStrategy noAccidentalStrategy)
 {
-    Accidental outputAccidental = "";
+    Accidental outputAccidental;
 
     // Find out the accidental to use, based on the strategy specified
     switch (noAccidentalStrategy) {
@@ -1029,7 +1029,7 @@ resolveNoAccidental(int pitch,
             int pitchOffset = (pitch - key.getTonicPitch() + 12) % 12;
             // 0: major, 1: minor
             int minor = key.isMinor();
-            static int pitchToHeight[2][12] =
+            static const int pitchToHeight[2][12] =
                 {
                     { 0, 0, 1, 2, 2, 3, 3, 4, 5, 5, 6, 6 },
                     // a ., b, c, ., d, ., e, f, ., g, .
@@ -1040,7 +1040,7 @@ resolveNoAccidental(int pitch,
             // accidentals in the key. Example: in F major, with a pitchOffset
             // of 6, the resulting height would be 3 (Bb) and the correction
             // would be +1, so the resulting note would be B-natural
-            static int pitchToCorrection[2][12] =
+            static const int pitchToCorrection[2][12] =
                 {
                     { 0, +1, 0, -1, 0, 0, +1, 0, -1, 0, -1, 0 },
                     { 0, -1, 0, 0, +1, 0, -1, 0, 0, +1, 0, +1 }
