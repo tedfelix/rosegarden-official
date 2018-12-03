@@ -176,9 +176,9 @@ operator<<(QDebug &dbg, const MidiEvent &midiEvent)
             tonality = (int)midiEvent.m_metaMessage[0];
 
             if (tonality < 0) {
-                sharpflat = -tonality + " flat";
+                sharpflat = std::to_string(-tonality) + " flat";
             } else {
-                sharpflat = tonality;
+                sharpflat = std::to_string(tonality);
                 sharpflat += " sharp";
             }
 
