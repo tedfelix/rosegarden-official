@@ -317,6 +317,10 @@ SegmentParameterBox::initBox()
     m_delays.clear();
 
     for (int i = 0; i < 6; i++) {
+
+        // extra range checks below are benign - they account for the
+        // option of increasing the range of the loop beyond 0-5
+        
         timeT time = 0;
         if (i > 0 && i < 6) {
             time = Note(Note::Hemidemisemiquaver).getDuration() << (i - 1);
