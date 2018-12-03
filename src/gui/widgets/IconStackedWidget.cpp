@@ -123,7 +123,7 @@ IconStackedWidget::slotPageSelect()
     // Cycle through the buttons to find the one that is checked
     iconbuttons::iterator i = m_iconButtons.begin();
     int index = 0;
-    while (((*i)->isChecked() == false) && (i != m_iconButtons.end())) {
+    while ((i != m_iconButtons.end()) && ((*i)->isChecked() == false)) {
         ++i;
         index++;
     }
