@@ -236,8 +236,6 @@ IntervalDialog::getIntervalName(int intervalDiatonic, int intervalChromatic)
                textIntervalDeviated += tr("a triply augmented");
            else if (deviation == 4)
                textIntervalDeviated += tr("a quadruply augmented");
-           else if (deviation == 0)
-               textIntervalDeviated += tr("a perfect");
            else
                textIntervalDeviated += tr("an (unknown, %1)").arg(deviation);
            break;
