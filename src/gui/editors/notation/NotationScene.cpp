@@ -1707,10 +1707,6 @@ NotationScene::layout(NotationStaff *singleStaff,
 
         for (unsigned int i = 0; i < m_segments.size(); ++i) {
 
-            if (singleStaff && m_segments[i] != &singleStaff->getSegment()) {
-                continue;
-            }
-
             timeT thisStart = m_segments[i]->getClippedStartTime();
             timeT thisEnd = m_segments[i]->getEndMarkerTime();
 
