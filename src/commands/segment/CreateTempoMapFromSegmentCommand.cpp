@@ -115,8 +115,11 @@ CreateTempoMapFromSegmentCommand::initialise(Segment *s)
 
     // set up m_oldTempi and prevTempo
 
-    for (int i = m_composition->getTempoChangeNumberAt(*beatTimeTs.begin() - 1) + 1;
-            i <= m_composition->getTempoChangeNumberAt(*beatTimeTs.end() - 1); ++i) {
+    timeT firstBeatTimeT = *beatTimeTs.begin();
+    timeT lastBeatTimeT = *(beatTimeTs.end() - 1);
+    
+    for (int i = m_composition->getTempoChangeNumberAt(firstBeatTimeT - 1) + 1;
+            i <= m_composition->getTempoChangeNumberAt(lastBeatTimeT - 1); ++i) {
 
         std::pair<timeT, tempoT> tempoChange =
             m_composition->getTempoChange(i);
