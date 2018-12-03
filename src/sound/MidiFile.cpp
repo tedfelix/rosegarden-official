@@ -1521,21 +1521,20 @@ MidiFile::writeTrack(std::ofstream *midiFile, TrackId trackNumber)
 bool
 MidiFile::write(const QString &filename)
 {
-    std::ofstream *midiFile =
-        new std::ofstream(filename.toLocal8Bit(),
-                          std::ios::out | std::ios::binary);
+    std::ofstream midiFile(filename.toLocal8Bit(),
+                           std::ios::out | std::ios::binary);
 
-    if (!(*midiFile)) {
+    if (!midiFile.good()) {
         RG_WARNING << "write() - can't write file";
         m_format = MIDI_FILE_NOT_LOADED;
         return false;
     }
 
-    writeHeader(midiFile);
+    writeHeader(&midiFile);
 
     // For each track, write it out.
     for (TrackId i = 0; i < m_numberOfTracks; ++i) {
-        writeTrack(midiFile, i);
+        writeTrack(&midiFile, i);
 
         if (m_progressDialog  &&  m_progressDialog->wasCanceled())
             return false;
@@ -1544,7 +1543,7 @@ MidiFile::write(const QString &filename)
             m_progressDialog->setValue(i * 100 / m_numberOfTracks);
     }
 
-    midiFile->close();
+    midiFile.close();
 
     return true;
 }
