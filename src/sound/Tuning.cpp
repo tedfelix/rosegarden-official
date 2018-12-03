@@ -391,8 +391,8 @@ Tuning::Tuning(const Tuning *tuning) :
     m_name(tuning->getName()),
     m_rootPitch(tuning->getRootPitch()),
     m_refPitch(tuning->getRefPitch()),
-    m_size(m_intervals->size()),
     m_intervals(tuning->getIntervalList()),
+    m_size(m_intervals->size()),
     m_spellings(tuning->getSpellingList())
 {
 #   if (TUNING_DEBUG > 1)

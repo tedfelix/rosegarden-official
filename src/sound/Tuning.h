@@ -135,8 +135,8 @@ class Tuning {
   int m_cPosition;
   double  m_refFreq;
   double m_cRefFreq;
-  int m_size;
   const IntervalList *m_intervals;
+  int m_size;
   SpellingList *m_spellings;
 
   typedef std::map<const int, const Accidental *> AccMap;
