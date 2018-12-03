@@ -246,14 +246,15 @@ StaffHeader::StaffHeader(HeadersGroup *group,
     // from the headers group. The notation widget displays the tool tip,
     // without clipping nor resizing it, when it receives this signal.
 
-    m_firstSeg = *m_segments.begin();
-    if (m_firstSeg == *m_segments.end()) {
+    if (m_segments.begin() == m_segments.end()) {
         RG_WARNING << "No segments on this track";
         m_noSegment = true;
         return;
     } else {
         m_noSegment = false;
     }
+
+    m_firstSeg = *m_segments.begin();
     m_firstSegStartTime = m_firstSeg->getStartTime();
 
     /// This may not work if two segments are superimposed
