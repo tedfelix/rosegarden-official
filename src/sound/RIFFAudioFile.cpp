@@ -557,8 +557,10 @@ RIFFAudioFile::identifySubType(const QString &filename)
     std::ifstream *testFile =
         new std::ifstream(filename.toLocal8Bit(), std::ios::in | std::ios::binary);
 
-    if (!(*testFile))
+    if (!(*testFile)) {
+        delete testFile;
         return UNKNOWN;
+    }
 
     std::string hS;
     unsigned int numberOfBytes = 36;
