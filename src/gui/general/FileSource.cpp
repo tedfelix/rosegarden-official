@@ -899,7 +899,8 @@ FileSource::createCacheFile()
 #ifdef DEBUG_FILE_SOURCE
         std::cerr << "FileSource::createCacheFile: ERROR: Failed to create temporary directory: " << f.what() << std::endl;
 #endif
-        return "";
+        m_localFilename = "";
+        return false;
     }
 
     QString filepart = m_url.path().section('/', -1, -1,
@@ -957,7 +958,8 @@ FileSource::createCacheFile()
                       << m_url.toString() << "\" (or file already exists)" << std::endl;
 #endif
 
-            return "";
+            m_localFilename = "";
+            return false;
         }
     }
 
@@ -968,7 +970,6 @@ FileSource::createCacheFile()
 #endif
     
     m_localFilename = filepath;
-
     return false;
 }
 
