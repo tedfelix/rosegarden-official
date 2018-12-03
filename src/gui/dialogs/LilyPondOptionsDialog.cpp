@@ -61,7 +61,7 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QWidget *parent,
     m_createdFromNotationEditor(createdFromNotationEditor)
 {
     setModal(true);
-    setWindowTitle((windowCaption = "" ? tr("LilyPond Export/Preview") : windowCaption));
+    setWindowTitle((windowCaption == "" ? tr("LilyPond Export/Preview") : windowCaption));
 
     QGridLayout *metaGridLayout = new QGridLayout;
 
