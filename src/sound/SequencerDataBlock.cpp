@@ -317,7 +317,7 @@ SequencerDataBlock::getSubmasterLevel(int submaster, LevelInfo &info) const
     //     in clearTemporaries().
     static int lastUpdateIndex[SEQUENCER_DATABLOCK_MAX_NB_SUBMASTERS];
 
-    if (submaster < 0 || submaster > SEQUENCER_DATABLOCK_MAX_NB_SUBMASTERS) {
+    if (submaster < 0 || submaster >= SEQUENCER_DATABLOCK_MAX_NB_SUBMASTERS) {
         info.level = info.levelRight = 0;
         return false;
     }
@@ -336,7 +336,7 @@ SequencerDataBlock::getSubmasterLevel(int submaster, LevelInfo &info) const
 void
 SequencerDataBlock::setSubmasterLevel(int submaster, const LevelInfo &info)
 {
-    if (submaster < 0 || submaster > SEQUENCER_DATABLOCK_MAX_NB_SUBMASTERS) {
+    if (submaster < 0 || submaster >= SEQUENCER_DATABLOCK_MAX_NB_SUBMASTERS) {
         return ;
     }
 
