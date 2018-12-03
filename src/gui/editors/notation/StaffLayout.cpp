@@ -1025,7 +1025,7 @@ StaffLayout::resizeStaffLineRow(int row, double x, double length)
 
     delete m_staffConnectingLines[row];
 
-    if (m_pageMode != LinearMode && m_connectingLineLength > 0.1) {
+    if (m_pageMode != LinearMode && m_connectingLineLength > 0) {
 
         // rather arbitrary (dup in insertBar)
         int barThickness = m_resolution / 12 + 1;
