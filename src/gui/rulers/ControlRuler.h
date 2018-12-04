@@ -62,7 +62,7 @@ class ControlRuler : public QWidget //, public ViewSegmentObserver
 public:
     ControlRuler(ViewSegment*,
                  RulerScale*,
-                 QWidget* parent=nullptr); //###  const char name is obsolete, and I'm almost sure WFlags is obsolete too
+                 QWidget* parent = nullptr);
     ~ControlRuler() override;
 
     virtual QString getName() = 0;
@@ -71,10 +71,10 @@ public:
 
     void paintEvent(QPaintEvent *) override;
 
-    long getMaxItemValue() { return m_maxItemValue; }
+    long getMaxItemValue() const { return m_maxItemValue; }
     void setMaxItemValue(long val) { m_maxItemValue = val; }
 
-    long getMinItemValue() { return m_minItemValue; }
+    long getMinItemValue() const { return m_minItemValue; }
     void setMinItemValue(long val) { m_minItemValue = val; }
 
     void clear();
@@ -95,7 +95,7 @@ public:
     
     virtual void notationLayoutUpdated(timeT,timeT);
 
-    virtual void setRulerScale(RulerScale *rulerscale) { m_rulerScale = rulerscale; }
+    void setRulerScale(RulerScale *rulerscale) { m_rulerScale = rulerscale; }
     RulerScale* getRulerScale() { return m_rulerScale; }
     
     void setXOffset(int offset) { m_xOffset = offset; } 
@@ -103,8 +103,8 @@ public:
     float valueToY(long val);
     long yToValue(float height);
 
-    double getXScale() {return m_xScale; }
-    double getYScale() {return m_yScale; }
+    double getXScale() const { return m_xScale; }
+    double getYScale() const { return m_yScale; }
     float getXMax();
     float getXMin();
     
@@ -127,18 +127,10 @@ public:
     // SegmentObserver interface
 //    virtual void viewSegmentDeleted(const ViewSegment *);
 
-    static const int DefaultRulerHeight;
-    static const int MinItemHeight;
-    static const int MaxItemHeight;
-    static const int ItemHeightRange;
-
     void flipForwards();
     void flipBackwards();
 
-//    void setMainHorizontalScrollBar(QScrollBar* s ) { m_mainHorizontalScrollBar = s; }
-
 signals:
-    void stateChange(const QString&, bool);
     void dragScroll(timeT);
 
     /** Emitted whenever the ruler changes its selection, so the ruler owner can

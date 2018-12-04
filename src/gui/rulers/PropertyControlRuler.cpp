@@ -355,15 +355,10 @@ PropertyControlRuler::mousePressEvent(QMouseEvent *e)
 {
     RG_DEBUG << "PropertyControlRuler::mousePressEvent\n";
 
-//    if (!m_propertyLineShowing) {
-        if (e->button() == Qt::MidButton)
-//            m_lastEventPos = inverseMapPoint(e->pos());
-            m_lastEventPos = e->pos();
+    if (e->button() == Qt::MidButton)
+        m_lastEventPos = e->pos();
 
-        ControlRuler::mousePressEvent(e); // send super
-
-//        return ;
-//    }
+    ControlRuler::mousePressEvent(e); // send super
 
     // cancel control line mode
     //if (e->button() == Qt::RightButton) {
@@ -396,18 +391,14 @@ PropertyControlRuler::mouseMoveEvent(QMouseEvent *e)
 {
     RG_DEBUG << "PropertyControlRuler::mouseMoveEvent\n";
 
-//    if (!m_propertyLineShowing) {
-        // Don't send super if we're using the middle button
-        //
-        if (e->button() == Qt::MidButton) {
-//            m_lastEventPos = inverseMapPoint(e->pos());
-            m_lastEventPos = e->pos();
-            return ;
-        }
+    // Don't send super if we're using the middle button
+    //
+    if (e->button() == Qt::MidButton) {
+        m_lastEventPos = e->pos();
+        return;
+    }
 
-        ControlRuler::mouseMoveEvent(e); // send super
-        //return ;
-    //}
+    ControlRuler::mouseMoveEvent(e); // send super
 
     //QPoint p = inverseMapPoint(e->pos());
 
@@ -431,8 +422,6 @@ void PropertyControlRuler::contextMenuEvent(QContextMenuEvent* e)
 
     RG_DEBUG << "PropertyControlRuler::contextMenuEvent : haveItems = "
     << haveItems << endl;
-
-    emit stateChange("have_note_events_in_segment", haveItems);
 
     ControlRuler::contextMenuEvent(e);
 }

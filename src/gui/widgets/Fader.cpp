@@ -82,7 +82,6 @@ Fader::Fader(AudioLevel::FaderType type,
     // Bogus value to force an update.
     m_value = -1;
     setFader(0.0);
-    emit faderChanged(m_value);
 }
 
 Fader::Fader(int min, int max, int deflt,
@@ -116,7 +115,6 @@ Fader::Fader(int min, int max, int deflt,
 
     calculateGroovePixmap();
     setFader(deflt);
-    emit faderChanged(m_value);
 }
 
 Fader::Fader(int min, int max, int deflt,
@@ -144,7 +142,6 @@ Fader::Fader(int min, int max, int deflt,
 
     calculateGroovePixmap();
     setFader(deflt);
-    emit faderChanged(m_value);
 }
 
 Fader::~Fader()

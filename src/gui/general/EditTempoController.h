@@ -52,7 +52,7 @@ public:
      */
     static EditTempoController *self();
 
-    void emitEditTempos(timeT time) { editTempos(time); }
+    void emitEditTempos(timeT time) { emit editTempos(time); }
     void editTempo(QWidget *parent, timeT atTime, bool timeEditable = false);
     void editTimeSignature(QWidget *parent, timeT time);
     void moveTempo(timeT oldTime, timeT newTime);

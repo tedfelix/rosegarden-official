@@ -840,7 +840,7 @@ StaffHeader::SegmentCmp::operator()(const Segment * s1, const Segment * s2) cons
 // StaffHeader::event(QEvent *event)
 // {
 //     if (event->type() == QEvent::ToolTip) {
-//         emit(showToolTip(m_toolTipText));
+//         emit showToolTip(m_toolTipText);
 //         return true;
 //     }
 // 
@@ -896,9 +896,9 @@ StaffHeader::slotToolTip()
     QRect inconIconRect = m_clefOrKeyInconsistency->frameGeometry();
     if ((m_clefOrKeyIsInconsistent || m_transposeIsInconsistent)
          && inconIconRect.contains(m_cursorPos)) {
-        emit(showToolTip(m_warningToolTipText));
+        emit showToolTip(m_warningToolTipText);
     } else {
-        emit(showToolTip(m_toolTipText));
+        emit showToolTip(m_toolTipText);
     }
 }
 
@@ -967,7 +967,7 @@ void
 StaffHeader::eventAdded(const Segment */* seg */, Event *ev)
 {
    if (ev->isa(Key::EventType) || ev->isa(Clef::EventType)) {
-        emit(staffModified());
+        emit staffModified();
     }
 }
 
@@ -975,32 +975,32 @@ void
 StaffHeader::eventRemoved(const Segment */* seg */, Event *ev)
 {
     if (ev->isa(Key::EventType) || ev->isa(Clef::EventType)) {
-        emit(staffModified());
+        emit staffModified();
     }
 }
 
 void
 StaffHeader::appearanceChanged(const Segment */* seg */)
 {
-        emit(staffModified());
+        emit staffModified();
 }
 
 void
 StaffHeader::startChanged(const Segment */* seg */, timeT)
 {
-        emit(staffModified());
+        emit staffModified();
 }
 
 void
 StaffHeader::endMarkerTimeChanged(const Segment */* seg */, bool /*shorten*/)
 {
-        emit(staffModified());
+        emit staffModified();
 }
 
 void
 StaffHeader::transposeChanged(const Segment */* seg */, int)
 {
-        emit(staffModified());
+        emit staffModified();
 }
 
 void
@@ -1021,7 +1021,7 @@ StaffHeader::segmentDeleted(const Segment *seg)
         }
     }
 
-    emit(staffModified());
+    emit staffModified();
 }
 
 

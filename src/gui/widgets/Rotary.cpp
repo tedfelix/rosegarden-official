@@ -119,8 +119,6 @@ Rotary::Rotary(QWidget *parent,
 
     this->setToolTip(tr("<qt><p>Click and drag up and down or left and right to modify.</p><p>Double click to edit value directly.</p></qt>"));
     setFixedSize(size, size);
-
-    emit valueChanged(m_snapPosition);
 }
 
 Rotary::~Rotary()
