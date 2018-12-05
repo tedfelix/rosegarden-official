@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0">
+<TS version="2.1">
 <context>
     <name>:</name>
     <message>
@@ -191,14 +191,14 @@
         <translation type="unfinished">Eiledu - gosod %1 i&apos;r mwyaf a&apos;r lleiaf ar bob yn ail ddigwyddiad</translation>
     </message>
     <message>
+        <location line="+11"/>
         <location filename="../../src/base/parameterpattern/RingingParameterPattern.cpp" line="+39"/>
-        <location filename="../../src/base/parameterpattern/AlternatingParameterPattern.cpp" line="+11"/>
         <source>First Value</source>
         <translation type="unfinished">Gwerth Cyntaf</translation>
     </message>
     <message>
         <location line="+2"/>
-        <location filename="../../src/base/parameterpattern/AlternatingParameterPattern.cpp" line="+2"/>
+        <location filename="../../src/base/parameterpattern/RingingParameterPattern.cpp" line="+2"/>
         <source>Second Value</source>
         <translation type="unfinished">Ail Werth</translation>
     </message>
@@ -5380,7 +5380,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NoteFont.cpp" line="+57"/>
+        <location filename="../../src/gui/editors/notation/NoteFont.cpp" line="+58"/>
         <source>No sizes listed for font &quot;%1&quot;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6645,12 +6645,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+1"/>
-        <source>Cuíca</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
+        <location line="+2"/>
         <source>Finger cymbals</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6925,7 +6920,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="-28"/>
+        <source>Cu�ca</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+29"/>
         <location filename="../AutoloadStrings.cpp" line="-1"/>
         <source>Cabasa</source>
         <translation type="unfinished"></translation>
@@ -8048,15 +8048,15 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../src/sound/AlsaDriver.cpp" line="+691"/>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="+1086"/>
-        <location filename="../../src/sound/AlsaDriver.cpp" line="+689"/>
         <location filename="../../src/base/Studio.cpp" line="+65"/>
         <location filename="../AutoloadStrings.cpp" line="-189"/>
         <source>Synth plugin</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/sound/AlsaDriver.cpp" line="+37"/>
+        <location line="+37"/>
         <location filename="../../src/base/Studio.cpp" line="-3"/>
         <location filename="../AutoloadStrings.cpp" line="-1"/>
         <source>Audio</source>
@@ -10204,9 +10204,9 @@
         <translation type="unfinished">&amp;%1%2 {1.?}</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="+446"/>
         <location filename="../../src/gui/general/ActionFileParser.cpp" line="+649"/>
         <location line="+7"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="+446"/>
         <source>%1</source>
         <translation type="unfinished">%1%</translation>
     </message>
@@ -10221,10 +10221,10 @@
         <translation type="unfinished">&amp;%1%2</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="+1667"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="+914"/>
+        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="+1016"/>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="+472"/>
-        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="+1018"/>
+        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="+1662"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="+914"/>
         <source>%1 Controller %2 %3</source>
         <translation type="unfinished">rheolydd %1</translation>
     </message>
@@ -10233,12 +10233,12 @@
         <translation type="obsolete">Rosegarden - Dilyniannydd a golygydd nodiant cerddorol</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/main.cpp" line="+493"/>
+        <location filename="../../src/gui/application/main.cpp" line="+390"/>
         <source>Rosegarden</source>
         <translation type="unfinished">Rosegarden</translation>
     </message>
     <message>
-        <location line="+268"/>
+        <location line="+283"/>
         <source>Welcome!</source>
         <translation type="unfinished"></translation>
     </message>
@@ -10336,17 +10336,17 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="+513"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="+387"/>
         <source>Audio subsystem is not available - can&apos;t record audio</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+98"/>
+        <location line="+106"/>
         <source>&lt;qt&gt;&lt;p&gt;No tracks were armed for recording.&lt;/p&gt;&lt;p&gt;Please arm at least one of the recording LEDs &lt;img src=&quot;:pixmaps/tooltip/record-leds.png&quot;&gt; and try again&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+178"/>
+        <location line="+141"/>
         <source>&lt;qt&gt;&lt;p&gt;Couldn&apos;t start recording audio.&lt;/p&gt;&lt;p&gt;Please set a valid recording path in &lt;b&gt;Composition -&gt; Edit Document Properties... -&gt; Audio&lt;/b&gt;&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -11864,7 +11864,7 @@ Please select the ones you wish to delete permanently from the hard disk.
         <translation type="unfinished">&amp;Hollti ar Ddistawrwydd</translation>
     </message>
     <message>
-        <location filename="../../src/commands/segment/AudioSegmentAutoSplitCommand.cpp" line="+143"/>
+        <location filename="../../src/commands/segment/AudioSegmentAutoSplitCommand.cpp" line="+142"/>
         <source>(part %1)</source>
         <translation type="unfinished">%1 (rhan)</translation>
     </message>
@@ -12485,7 +12485,7 @@ Please select the ones you wish to delete permanently from the hard disk.
 <context>
     <name>Rosegarden::ChordNameRuler</name>
     <message>
-        <location filename="../../src/gui/rulers/ChordNameRuler.cpp" line="+89"/>
+        <location filename="../../src/gui/rulers/ChordNameRuler.cpp" line="+87"/>
         <source>&lt;qt&gt;&lt;p&gt;Chord name ruler.  This ruler analyzes your harmonies and attempts to guess what chords your composition contains.  These chords cannot be printed or manipulated, and this is only a reference for your information.&lt;/p&gt;&lt;p&gt;Turn it on and off with the &lt;b&gt;View -&gt; Rulers&lt;/b&gt; menu.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -14433,7 +14433,7 @@ Ydych eisiau ceisio lleoli&apos;r ffeil yma neu&apos;i osgoi?</translation>
 <context>
     <name>Rosegarden::Fingering</name>
     <message>
-        <location filename="../../src/gui/editors/guitar/Fingering.cpp" line="+110"/>
+        <location filename="../../src/gui/editors/guitar/Fingering.cpp" line="+131"/>
         <source>couldn&apos;t parse fingering &apos;%1&apos; in &apos;%2&apos;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -15405,12 +15405,12 @@ Example text from file:</source>
     </message>
     <message>
         <location line="+7"/>
-        <location line="+241"/>
+        <location line="+239"/>
         <source>a perfect unison</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-233"/>
+        <location line="-231"/>
         <source>Effect on Key</source>
         <translation type="unfinished"></translation>
     </message>
@@ -15478,18 +15478,17 @@ Example text from file:</source>
     </message>
     <message>
         <location line="-26"/>
-        <location line="+28"/>
         <source>a perfect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-26"/>
-        <location line="+28"/>
+        <location line="+2"/>
+        <location line="+26"/>
         <source>an (unknown, %1)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-20"/>
+        <location line="-18"/>
         <source>a minor</source>
         <translation type="unfinished">Cyfuno</translation>
     </message>
@@ -15499,7 +15498,7 @@ Example text from file:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+21"/>
+        <location line="+19"/>
         <source>an (unknown)</source>
         <translation type="unfinished">Anhysbys</translation>
     </message>
@@ -16250,7 +16249,7 @@ yn lle?</translation>
 <context>
     <name>Rosegarden::LoopRuler</name>
     <message>
-        <location filename="../../src/gui/rulers/LoopRuler.cpp" line="+75"/>
+        <location filename="../../src/gui/rulers/LoopRuler.cpp" line="+72"/>
         <source>&lt;qt&gt;&lt;p&gt;Click and drag to move the playback pointer.&lt;/p&gt;&lt;p&gt;Shift-click and drag to set a range for looping or editing.&lt;/p&gt;&lt;p&gt;Shift-click to clear the loop or range.&lt;/p&gt;&lt;p&gt;Ctrl-click and drag to move the playback pointer with snap to beat.&lt;/p&gt;&lt;p&gt;Double-click to start playback.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -16932,7 +16931,7 @@ fel arfer yn achosi oedi wrth ddechrau&apos;r chwarae o achos cymaint y ddata sy
 <context>
     <name>Rosegarden::MarkerRuler</name>
     <message>
-        <location filename="../../src/gui/rulers/MarkerRuler.cpp" line="+94"/>
+        <location filename="../../src/gui/rulers/MarkerRuler.cpp" line="+87"/>
         <source>Click on a marker to move the playback pointer.
 Shift-click to set a range between markers.
 Double-click to open the marker editor.</source>
@@ -17319,7 +17318,7 @@ Double-click to open the marker editor.</source>
 <context>
     <name>Rosegarden::MatrixWidget</name>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="-816"/>
+        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="-814"/>
         <source>Zoom</source>
         <translation type="unfinished"></translation>
     </message>
@@ -17339,7 +17338,7 @@ Double-click to open the marker editor.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+1060"/>
+        <location line="+1058"/>
         <source>&lt;qt&gt;Rotate wheel to change the active segment&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -18090,7 +18089,7 @@ Double-click to open the marker editor.</source>
 <context>
     <name>Rosegarden::NotationStaff</name>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationStaff.cpp" line="+473"/>
+        <location filename="../../src/gui/editors/notation/NotationStaff.cpp" line="+465"/>
         <source> %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -18107,12 +18106,12 @@ Double-click to open the marker editor.</source>
         <translation type="obsolete">Lleoli erwydd %1...</translation>
     </message>
     <message>
-        <location line="+450"/>
+        <location line="+365"/>
         <source>Rosegarden</source>
         <translation type="unfinished">Rosegarden</translation>
     </message>
     <message>
-        <location line="+356"/>
+        <location line="+285"/>
         <source>Sustain</source>
         <translation type="unfinished"></translation>
     </message>
@@ -18386,7 +18385,7 @@ Nam yw hwn (o&apos;r blaen, buasai&apos;r rhaglen wedi chwalu erbyn rwan).</tran
         <translation type="unfinished">   Dim dewisiad</translation>
     </message>
     <message>
-        <location line="+2652"/>
+        <location line="+2647"/>
         <source>Chord</source>
         <translation type="unfinished">Cord</translation>
     </message>
@@ -18403,7 +18402,7 @@ Nam yw hwn (o&apos;r blaen, buasai&apos;r rhaglen wedi chwalu erbyn rwan).</tran
         <translation type="unfinished">&amp;%1%2</translation>
     </message>
     <message>
-        <location line="-2259"/>
+        <location line="-2254"/>
         <source>Unknown spacing action %1</source>
         <translation type="unfinished">Gweithrediad bylchu anhysbys %1</translation>
     </message>
@@ -18459,14 +18458,14 @@ Nam yw hwn (o&apos;r blaen, buasai&apos;r rhaglen wedi chwalu erbyn rwan).</tran
         <location line="+25"/>
         <location line="+103"/>
         <location line="+58"/>
-        <location line="+901"/>
+        <location line="+896"/>
         <location line="+730"/>
         <location line="+1081"/>
         <source>Rosegarden</source>
         <translation type="unfinished">Rosegarden</translation>
     </message>
     <message>
-        <location line="-3023"/>
+        <location line="-3018"/>
         <source>Printing with LilyPond...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -18498,12 +18497,12 @@ Nam yw hwn (o&apos;r blaen, buasai&apos;r rhaglen wedi chwalu erbyn rwan).</tran
         <translation type="unfinished">Methu gludo wrth y fan yma.</translation>
     </message>
     <message>
-        <location line="+2797"/>
+        <location line="+2792"/>
         <source>Move Events to Staff Above</source>
         <translation type="unfinished">Wedi cael digwyddiad tu allan o Gylchran</translation>
     </message>
     <message>
-        <location line="-2654"/>
+        <location line="-2649"/>
         <source>Raising velocities...</source>
         <translation type="unfinished">Codi buaneddau...</translation>
     </message>
@@ -18513,7 +18512,7 @@ Nam yw hwn (o&apos;r blaen, buasai&apos;r rhaglen wedi chwalu erbyn rwan).</tran
         <translation type="unfinished">Iselhau buaneddau...</translation>
     </message>
     <message>
-        <location line="+2801"/>
+        <location line="+2796"/>
         <source>Edit Text Event</source>
         <translation type="unfinished"></translation>
     </message>
@@ -18691,7 +18690,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
 <context>
     <name>Rosegarden::NotationWidget</name>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="-1442"/>
+        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="-1437"/>
         <source>Zoom</source>
         <translation type="unfinished"></translation>
     </message>
@@ -18716,7 +18715,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+1445"/>
+        <location line="+1440"/>
         <location line="+1"/>
         <source>&lt;qt&gt;Rotate wheel to change the active segment&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
@@ -19903,7 +19902,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
 <context>
     <name>Rosegarden::RawNoteRuler</name>
     <message>
-        <location filename="../../src/gui/rulers/RawNoteRuler.cpp" line="+470"/>
+        <location filename="../../src/gui/rulers/RawNoteRuler.cpp" line="+467"/>
         <source>Track #%1, Segment &quot;%2&quot; (runtime id %3)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -20207,13 +20206,13 @@ There may be some incompatibilities with the file format.</source>
 <context>
     <name>Rosegarden::RosegardenDocument</name>
     <message>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="+480"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="+479"/>
         <location line="+60"/>
         <location line="+12"/>
         <location line="+66"/>
         <location line="+32"/>
-        <location line="+397"/>
-        <location line="+622"/>
+        <location line="+405"/>
+        <location line="+624"/>
         <location line="+11"/>
         <location line="+22"/>
         <location line="+3"/>
@@ -20223,12 +20222,12 @@ There may be some incompatibilities with the file format.</source>
         <location line="+11"/>
         <location line="+999"/>
         <location line="+16"/>
-        <location line="+220"/>
+        <location line="+238"/>
         <source>Rosegarden</source>
         <translation type="unfinished">Rosegarden</translation>
     </message>
     <message numerus="yes">
-        <location line="-2587"/>
+        <location line="-2615"/>
         <source>Delete the %n audio file(s) recorded during the unsaved session?</source>
         <translation type="unfinished">
             <numerusform>
@@ -20284,7 +20283,7 @@ Please select any you wish to delete permanently from the hard disk.
         <translation type="obsolete">Creu rhagolygon sain...</translation>
     </message>
     <message>
-        <location line="+47"/>
+        <location line="+55"/>
         <source>Merge</source>
         <translation type="unfinished">Cyfuno</translation>
     </message>
@@ -20309,7 +20308,7 @@ Please select any you wish to delete permanently from the hard disk.
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+1766"/>
+        <location line="+1768"/>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
@@ -20321,7 +20320,17 @@ Would you like to set it now?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+37"/>
+        <location line="+45"/>
+        <source>Process ID: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Application: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+8"/>
         <source>Could not lock file.
 
 Another user or instance of Rosegarden may already be
@@ -20332,48 +20341,38 @@ editing this file, delete the lock file and try again.
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+18"/>
+        <location line="-11"/>
         <source>Lock Filename: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+2"/>
-        <source>User: </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
         <source>Host: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+1"/>
-        <source>Date/Time: </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="-1688"/>
+        <location line="-1677"/>
         <source>Error while writing on &apos;%1&apos;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-808"/>
+        <location line="-816"/>
         <source>Reading file...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+1"/>
-        <location line="+2233"/>
+        <location line="+2243"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-1381"/>
+        <location line="-1383"/>
         <source>Could not open file &apos;%1&apos; for writing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+268"/>
+        <location line="+270"/>
         <location line="+11"/>
         <source>File load cancelled</source>
         <translation type="unfinished">Diddymwyd Llwytho&apos;r Ffeil</translation>
@@ -20540,7 +20539,7 @@ See Edit -&gt; Preferences -&gt; Audio.</source>
         <translation type="obsolete">Paramedrau Cylchrannau</translation>
     </message>
     <message>
-        <location line="+19"/>
+        <location line="+25"/>
         <source>Starting sequence manager...</source>
         <translation type="unfinished">Cychwyn rheolydd dilyniannydd...</translation>
     </message>
@@ -20550,7 +20549,7 @@ See Edit -&gt; Preferences -&gt; Audio.</source>
         <translation type="unfinished">Gwaredu data stiwdio...</translation>
     </message>
     <message>
-        <location line="+22"/>
+        <location line="+20"/>
         <source>Starting...</source>
         <translation type="unfinished">Dechrau...</translation>
     </message>
@@ -20564,7 +20563,7 @@ See Edit -&gt; Preferences -&gt; Audio.</source>
         <translation type="obsolete">&amp;%1%2</translation>
     </message>
     <message>
-        <location line="+520"/>
+        <location line="+519"/>
         <source>File &quot;%1&quot; does not exist</source>
         <translation type="unfinished">Nid yw&apos;r ffeil penodol mewn bod</translation>
     </message>
@@ -20603,7 +20602,7 @@ Error was : %2</source>
         <location line="-497"/>
         <location line="+343"/>
         <location line="+157"/>
-        <location line="+6157"/>
+        <location line="+6161"/>
         <source>Could not save document at %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -20612,7 +20611,7 @@ Error was : %2</source>
         <translation type="obsolete">Agor ffenestr cymhwysiad newydd...</translation>
     </message>
     <message>
-        <location line="-6589"/>
+        <location line="-6593"/>
         <source>Creating new document...</source>
         <translation type="unfinished">Creu dogfen newydd...</translation>
     </message>
@@ -20679,12 +20678,12 @@ Error was : %2</source>
         <translation type="unfinished">Agor Ffeil</translation>
     </message>
     <message>
-        <location line="-1096"/>
+        <location line="-1095"/>
         <source>Ctrl+R</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+937"/>
+        <location line="+936"/>
         <source>%1%2 - %3</source>
         <translation type="unfinished">&amp;%1%3 {1%2 ?}</translation>
     </message>
@@ -20929,8 +20928,8 @@ Cylchrannau -&gt; Dat-ehangu Cylchrannau.
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-6630"/>
-        <location line="+337"/>
+        <location line="-6629"/>
+        <location line="+336"/>
         <location line="+8"/>
         <location line="+10"/>
         <location line="+26"/>
@@ -20994,18 +20993,18 @@ Cylchrannau -&gt; Dat-ehangu Cylchrannau.
         <location line="+18"/>
         <location line="+3"/>
         <location line="+10"/>
-        <location line="+466"/>
+        <location line="+470"/>
         <location line="+2"/>
         <source>Rosegarden</source>
         <translation type="unfinished">Rosegarden</translation>
     </message>
     <message>
-        <location line="-642"/>
+        <location line="-646"/>
         <source>http://rosegardenmusic.com/tutorials/</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+444"/>
+        <location line="+448"/>
         <source>&lt;h3&gt;Newer version available&lt;/h3&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -21015,7 +21014,7 @@ Cylchrannau -&gt; Dat-ehangu Cylchrannau.
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-4244"/>
+        <location line="-4248"/>
         <source>Open MIDI File</source>
         <translation type="unfinished">Agor Ffeil MIDI</translation>
     </message>
@@ -21073,12 +21072,12 @@ Please exit and restart Rosegarden to restore sound capability.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-4649"/>
+        <location line="-4652"/>
         <source>Starting sequencer...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+1089"/>
+        <location line="+1092"/>
         <source>File &quot;%1&quot; is a Rosegarden Device, and must be imported using the MIDI device manager.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -21427,7 +21426,7 @@ Error was : %2</source>
         <translation type="unfinished">Mewnforio Stiwdio o Ffeil</translation>
     </message>
     <message>
-        <location line="+314"/>
+        <location line="+318"/>
         <source>&lt;h3&gt;Invalid audio path&lt;/h3&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -21473,7 +21472,7 @@ Error was : %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-5654"/>
+        <location line="-5658"/>
         <source>The audio file path does not exist or is not writable.
 You must set the audio file path to a valid directory in Document Properties before %1.
 Would you like to set it now?</source>
@@ -21488,7 +21487,7 @@ Would you like to set it now?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+409"/>
+        <location line="+407"/>
         <source>Select a new value</source>
         <translation type="unfinished">Dileu&apos;r priodwedd yma</translation>
     </message>
@@ -21789,7 +21788,7 @@ Would you like to set it now?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+38"/>
+        <location line="+42"/>
         <location line="+351"/>
         <source>%1 ms</source>
         <translation type="unfinished">%1 ms</translation>
@@ -22282,23 +22281,23 @@ Would you like to set it now?</source>
 <context>
     <name>Rosegarden::SequenceManager</name>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="+134"/>
-        <location line="+150"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="+154"/>
+        <location line="+153"/>
         <source>The JACK Audio subsystem has failed or it has stopped Rosegarden from processing audio.
 Please restart Rosegarden to continue working with audio.
 Quitting other running applications may improve Rosegarden&apos;s performance.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-144"/>
-        <location line="+153"/>
+        <location line="-147"/>
+        <location line="+156"/>
         <source>The JACK Audio subsystem has stopped Rosegarden from processing audio, probably because of a processing overload.
 An attempt to restart the audio service has been made, but some problems may remain.
 Quitting other running applications may improve Rosegarden&apos;s performance.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-142"/>
+        <location line="-145"/>
         <source>Out of processor power for real-time audio processing.  Cannot continue.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -22323,7 +22322,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+52"/>
+        <location line="+55"/>
         <source>&lt;h3&gt;System timer resolution is too low!&lt;/h3&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -22338,7 +22337,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+107"/>
+        <location line="+124"/>
         <source>&lt;h3&gt;Sequencer engine unavailable!&lt;/h3&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -22358,7 +22357,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+17"/>
+        <location line="+19"/>
         <source>&lt;h3&gt;Audio sequencing and synth plugins unavailable!&lt;/h3&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -22368,7 +22367,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-233"/>
+        <location line="-255"/>
         <source>The audio mixing subsystem is failing to keep up.</source>
         <translation type="unfinished">Nid yw&apos;r is-gysawd sain ar gael - methu recordio sain</translation>
     </message>
@@ -22821,187 +22820,53 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
 <context>
     <name>Rosegarden::StaffHeader</name>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="+154"/>
         <source>normal</source>
-        <translation type="unfinished">Arferol</translation>
+        <translation type="obsolete">Arferol</translation>
     </message>
     <message>
-        <location line="+3"/>
         <source>small</source>
-        <translation type="unfinished">Popeth</translation>
+        <translation type="obsolete">Popeth</translation>
     </message>
     <message>
-        <location line="+3"/>
-        <source>tiny</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+29"/>
-        <source>&lt;br&gt;Size: %1,  Bracket: %2 </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+28"/>
-        <source>&lt;br&gt;bars [%1-%2] in %3 (tr=%4) : &quot;%5&quot;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+7"/>
-        <source>&lt;br&gt;bars [%1-%2] (tr=%3) : &quot;%4&quot;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+48"/>
-        <source>&lt;qt&gt;&lt;p&gt;Notation is not consistent&lt;/p&gt;&lt;p&gt;Click to get more information&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+162"/>
-        <location line="+50"/>
         <source>...</source>
-        <translation type="unfinished">...</translation>
+        <translation type="obsolete">...</translation>
     </message>
     <message>
-        <location line="+75"/>
-        <source>C</source>
-        <comment>note name</comment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
         <source>C#</source>
         <comment>note name</comment>
-        <translation type="unfinished">C#%1</translation>
+        <translation type="obsolete">C#%1</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>D</source>
         <comment>note name</comment>
-        <translation type="unfinished">I</translation>
+        <translation type="obsolete">I</translation>
     </message>
     <message>
-        <location line="+1"/>
-        <source>Eb</source>
-        <comment>note name</comment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>E</source>
-        <comment>note name</comment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>F</source>
-        <comment>note name</comment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
         <source>F#</source>
         <comment>note name</comment>
-        <translation type="unfinished">F#%1</translation>
+        <translation type="obsolete">F#%1</translation>
     </message>
     <message>
-        <location line="+1"/>
-        <source>G</source>
-        <comment>note name</comment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
         <source>G#</source>
         <comment>note name</comment>
-        <translation type="unfinished">G#%1</translation>
+        <translation type="obsolete">G#%1</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>A</source>
         <comment>note name</comment>
-        <translation type="unfinished">A4</translation>
+        <translation type="obsolete">A4</translation>
     </message>
     <message>
-        <location line="+1"/>
-        <source>Bb</source>
-        <comment>note name</comment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>B</source>
-        <comment>note name</comment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+356"/>
-        <source>&lt;h2&gt;Notation Inconsistencies&lt;/h2&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+2"/>
-        <source>&lt;h3&gt;Filename: %1 &lt;/h3&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+3"/>
-        <source>&lt;h3&gt;Track %1: &quot;%2&quot;&lt;/h3&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+5"/>
-        <source>Overlapping segments with inconsistent clefs:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+2"/>
-        <source>Segment &quot;%1&quot;: %2 clef</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+5"/>
-        <source>Overlapping segments with inconsistent keys:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+2"/>
-        <source>Segment &quot;%1&quot;: %2 key</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+5"/>
-        <source>Overlapping segments with inconsistent transpositions:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+2"/>
-        <source>Segment &quot;%1&quot;: %2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+6"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation type="obsolete">Rosegarden</translation>
     </message>
     <message>
-        <location line="-276"/>
         <source>%1: %2</source>
-        <translation type="unfinished">&amp;%1%2</translation>
+        <translation type="obsolete">&amp;%1%2</translation>
     </message>
     <message>
-        <location line="-536"/>
-        <source>Track %1 : &quot;%2&quot;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+6"/>
-        <source>&lt;br&gt;Notate for: %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+533"/>
         <source> in %1</source>
-        <translation type="unfinished">Dat-&amp;wneud %1</translation>
+        <translation type="obsolete">Dat-&amp;wneud %1</translation>
     </message>
 </context>
 <context>
@@ -23174,7 +23039,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
 <context>
     <name>Rosegarden::TempoRuler</name>
     <message>
-        <location filename="../../src/gui/rulers/TempoRuler.cpp" line="+483"/>
+        <location filename="../../src/gui/rulers/TempoRuler.cpp" line="+481"/>
         <source>%1.%2%3 (%4.%5%6 bpm)</source>
         <translation type="unfinished">%1.%2 s,</translation>
     </message>
@@ -23878,7 +23743,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
 <context>
     <name>Rosegarden::TrackButtons</name>
     <message>
-        <location filename="../../src/gui/editors/segment/TrackButtons.cpp" line="+294"/>
+        <location filename="../../src/gui/editors/segment/TrackButtons.cpp" line="+297"/>
         <source>&lt;no instrument&gt;</source>
         <translation type="unfinished">&lt;dim offeryn&gt;</translation>
     </message>
@@ -23911,7 +23776,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
 <context>
     <name>Rosegarden::TrackEditor</name>
     <message>
-        <location filename="../../src/gui/editors/segment/TrackEditor.cpp" line="+369"/>
+        <location filename="../../src/gui/editors/segment/TrackEditor.cpp" line="+359"/>
         <source>Delete Tracks</source>
         <translation type="unfinished"></translation>
     </message>
@@ -25221,60 +25086,194 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <name>S:</name>
     <message>
         <source></source>
-        <comment>if the manual is translated into your language, you can</comment>
+        <comment>the pixmap in this error string contains no English</comment>
         <translation></translation>
     </message>
 </context>
 <context>
     <name>StaffHeader</name>
     <message>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="+146"/>
+        <source>Track %1 : &quot;%2&quot;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>&lt;br&gt;Notate for: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
         <source>normal</source>
-        <translation type="obsolete">Arferol</translation>
+        <translation type="unfinished">Arferol</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>small</source>
-        <translation type="obsolete">Popeth</translation>
+        <translation type="unfinished">Popeth</translation>
     </message>
     <message>
+        <location line="+3"/>
+        <source>tiny</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+29"/>
+        <source>&lt;br&gt;Size: %1,  Bracket: %2 </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+28"/>
+        <source>&lt;br&gt;bars [%1-%2] in %3 (tr=%4) : &quot;%5&quot;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>&lt;br&gt;bars [%1-%2] (tr=%3) : &quot;%4&quot;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+49"/>
+        <source>&lt;qt&gt;&lt;p&gt;Notation is not consistent&lt;/p&gt;&lt;p&gt;Click to get more information&lt;/p&gt;&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+162"/>
+        <location line="+50"/>
         <source>...</source>
-        <translation type="obsolete">...</translation>
+        <translation type="unfinished">...</translation>
     </message>
     <message>
+        <location line="+75"/>
+        <source>C</source>
+        <comment>note name</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
         <source>C#</source>
         <comment>note name</comment>
-        <translation type="obsolete">C#%1</translation>
+        <translation type="unfinished">C#%1</translation>
     </message>
     <message>
+        <location line="+1"/>
         <source>D</source>
         <comment>note name</comment>
-        <translation type="obsolete">I</translation>
+        <translation type="unfinished">I</translation>
     </message>
     <message>
+        <location line="+1"/>
+        <source>Eb</source>
+        <comment>note name</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>E</source>
+        <comment>note name</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>F</source>
+        <comment>note name</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
         <source>F#</source>
         <comment>note name</comment>
-        <translation type="obsolete">F#%1</translation>
+        <translation type="unfinished">F#%1</translation>
     </message>
     <message>
+        <location line="+1"/>
+        <source>G</source>
+        <comment>note name</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
         <source>G#</source>
         <comment>note name</comment>
-        <translation type="obsolete">G#%1</translation>
+        <translation type="unfinished">G#%1</translation>
     </message>
     <message>
+        <location line="+1"/>
         <source>A</source>
         <comment>note name</comment>
-        <translation type="obsolete">A4</translation>
+        <translation type="unfinished">A4</translation>
     </message>
     <message>
+        <location line="+1"/>
+        <source>Bb</source>
+        <comment>note name</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>B</source>
+        <comment>note name</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+112"/>
         <source>%1: %2</source>
-        <translation type="obsolete">&amp;%1%2</translation>
+        <translation type="unfinished">&amp;%1%2</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source> in %1</source>
-        <translation type="obsolete">Dat-&amp;wneud %1</translation>
+        <translation type="unfinished">Dat-&amp;wneud %1</translation>
     </message>
     <message>
+        <location line="+241"/>
+        <source>&lt;h2&gt;Notation Inconsistencies&lt;/h2&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>&lt;h3&gt;Filename: %1 &lt;/h3&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>&lt;h3&gt;Track %1: &quot;%2&quot;&lt;/h3&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Overlapping segments with inconsistent clefs:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Segment &quot;%1&quot;: %2 clef</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Overlapping segments with inconsistent keys:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Segment &quot;%1&quot;: %2 key</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Overlapping segments with inconsistent transpositions:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Segment &quot;%1&quot;: %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+6"/>
         <source>Rosegarden</source>
-        <translation type="obsolete">Rosegarden</translation>
+        <translation type="unfinished">Rosegarden</translation>
     </message>
 </context>
 </TS>
