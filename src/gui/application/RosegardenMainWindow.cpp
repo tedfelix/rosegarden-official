@@ -253,6 +253,9 @@ RosegardenMainWindow::RosegardenMainWindow(bool enableSound,
                                            QObject *startupStatusMessageReceiver) :
     QMainWindow(nullptr),
     m_actionsSetup(false),
+    m_notPlaying(true),
+    m_haveSelection(false),
+    m_haveRange(false),
     m_view(nullptr),
     m_doc(nullptr),
     m_recentFiles(nullptr),
@@ -6094,6 +6097,62 @@ RosegardenMainWindow::slotStateChanged(QString s,
         leaveActionState(s);
     }
 }
+
+void
+RosegardenMainWindow::updateActions()
+{
+    // not_playing && have_selection
+
+    findAction("delete")->setEnabled(m_notPlaying  &&  m_haveSelection);
+    findAction("edit_cut")->setEnabled(m_notPlaying  &&  m_haveSelection);
+    // ??? This doesn't prevent Ctrl+Resize on the edges of a Segment.  CRASH.
+    findAction("rescale")->setEnabled(m_notPlaying  &&  m_haveSelection);
+    findAction("auto_split")->setEnabled(m_notPlaying  &&  m_haveSelection);
+    findAction("split_by_pitch")->setEnabled(m_notPlaying  &&  m_haveSelection);
+    findAction("split_by_recording")->setEnabled(m_notPlaying  &&  m_haveSelection);
+    // ??? This doesn't prevent the split tool from causing a CRASH.
+    findAction("split_at_time")->setEnabled(m_notPlaying  &&  m_haveSelection);
+    findAction("split_by_drum")->setEnabled(m_notPlaying  &&  m_haveSelection);
+    findAction("join_segments")->setEnabled(m_notPlaying  &&  m_haveSelection);
+
+
+    // not_playing && have_range
+
+    findAction("cut_range")->setEnabled(m_notPlaying  &&  m_haveRange);
+}
+
+void
+RosegardenMainWindow::enterActionState(QString stateName)
+{
+   if (stateName == "not_playing")
+      m_notPlaying = true;
+   if (stateName == "have_selection")
+      m_haveSelection = true;
+   if (stateName == "have_range")
+      m_haveRange = true;
+
+   updateActions();
+
+   // Let baseclass take a shot as well.
+   ActionFileClient::enterActionState(stateName);
+}
+
+void
+RosegardenMainWindow::leaveActionState(QString stateName)
+{
+   if (stateName == "not_playing")
+      m_notPlaying = false;
+   if (stateName == "have_selection")
+      m_haveSelection = false;
+   if (stateName == "have_range")
+      m_haveRange = false;
+
+   updateActions();
+
+   // Let baseclass take a shot as well.
+   ActionFileClient::leaveActionState(stateName);
+}
+
 
 void
 RosegardenMainWindow::slotTestClipboard()

@@ -392,9 +392,9 @@
 
 <State name="have_selection">
   <enable>
-    <Action name="edit_cut"/>
+    <!-- See also RosegardenMainWindow::m_haveSelection. -->
+
     <Action name="edit_copy"/>
-    <Action name="delete"/>
     <Action name="edit_default"/>
     <Action name="edit_matrix"/>
     <Action name="edit_percussion_matrix"/>
@@ -405,21 +405,15 @@
     <Action name="repeat_quantize"/>
 <!--    <Action name="harmonize_selection"/> -->
     <Action name="switch_preset"/>
-    <Action name="rescale"/>
     <Action name="jog_left"/>
     <Action name="jog_right"/>
-    <Action name="auto_split"/>
-    <Action name="split_by_pitch"/>
-    <Action name="split_by_recording"/>
-    <Action name="split_at_time"/>
-    <Action name="join_segments"/>
     <Action name="expand_figuration"/>
     <Action name="relabel_segment"/>
     <Action name="transpose"/>
     <Action name="create_anacrusis"/>
     <Action name="set_segment_start"/>
     <Action name="set_segment_duration"/>
-    <Action name="collapse"/>
+    <!-- <Action name="collapse"/> -->
     <Action name="set_tempo_to_segment_length"/>
     <Action name="repeats_to_real_copies"/>
     <Action name="links_to_real_copies"/>
@@ -460,7 +454,7 @@
     <Action name="split_by_pitch"/>
     <Action name="split_by_recording"/>
     <Action name="join_segments"/>
-    <Action name="collapse"/>
+    <!-- <Action name="collapse"/> -->
     <Action name="repeats_to_real_copies"/>
     <Action name="links_to_real_copies"/>
     <Action name="groove_quantize"/>
@@ -501,8 +495,12 @@
   <enable>
     <!-- Only enable these destructive actions when the 
          sequencer is stopped. -->
+    <!-- See also RosegardenMainWindow::m_notPlaying. -->
+
     <Action name="file_new" />
     <Action name="file_open" />
+    <!-- ??? This doesn't work.  Would be nice. -->
+    <menu name="file_open_recent" />
     <Action name="file_import_project" />
     <Action name="file_import_midi" />
     <Action name="file_import_rg21" />
@@ -513,15 +511,11 @@
     <Action name="file_merge_musicxml" />
     <Action name="file_close" />
     <Action name="file_quit" />
+    <Action name="edit_undo" />
+    <Action name="edit_redo" />
     <Action name="delete_track" />
     <!-- There are probably others, like split and resize. -->
 
-    <!-- These would be nice, however they conflict with have_selection
-         and have_range which also enable them. -->
-    <!-- All the entries in Open Recent -->
-    <!-- <Action name="delete" /> -->
-    <!-- <Action name="edit_cut" /> -->
-    <!-- <Action name="cut_range" /> -->
   </enable>
 </State>
 
@@ -529,7 +523,8 @@
          range selected. -->
 <State name="have_range">
   <enable>
-    <Action name="cut_range"/>
+    <!-- See also RosegardenMainWindow::m_haveRange. -->
+
     <Action name="copy_range"/>
     <Action name="erase_range_tempos"/>
   </enable>

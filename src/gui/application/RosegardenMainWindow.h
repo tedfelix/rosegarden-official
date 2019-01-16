@@ -525,6 +525,17 @@ protected:
      */
     QString getDataLocation();
 
+    /**
+     * Override (non-virtual) ActionFileClient's version to allow for more
+     * complex enable/disable behavior.
+     */
+    void enterActionState(QString stateName);
+    /**
+     * Override (non-virtual) ActionFileClient's version to allow for more
+     * complex enable/disable behavior.
+     */
+    void leaveActionState(QString stateName);
+
 signals:
     void startupStatusMessage(QString message);
 
@@ -1587,6 +1598,12 @@ private:
     //--------------- Data members ---------------------------------
 
     bool m_actionsSetup;
+
+    // Action States
+    bool m_notPlaying;
+    bool m_haveSelection;
+    bool m_haveRange;
+    void updateActions();
 
     RosegardenMainViewWidget* m_view;
 
