@@ -37,7 +37,9 @@
 #include "document/RosegardenDocument.h"
 #include "gui/general/BaseTool.h"
 #include "gui/application/RosegardenMainWindow.h"
+#include "gui/application/TransportStatus.h"
 #include "gui/general/RosegardenScrollView.h"
+#include "gui/seqmanager/SequenceManager.h"
 #include "SegmentTool.h"
 #include "document/Command.h"
 #include "document/CommandHistory.h"
@@ -83,6 +85,12 @@ void SegmentResizer::mousePressEvent(QMouseEvent *e)
 
     // We only care about the left mouse button.
     if (e->button() != Qt::LeftButton)
+        return;
+
+    // Can't rescale a segment while playing, so just refuse to
+    // resize or rescale.
+    if (RosegardenMainWindow::self()->getSequenceManager()->
+            getTransportStatus() == PLAYING)
         return;
 
     // No need to propagate.
