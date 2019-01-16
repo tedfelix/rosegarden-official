@@ -87,8 +87,10 @@ protected:
     virtual void beginExecute();
 
 private:
-    void copyTo(Segment *);
-    void copyFrom(Segment *);
+    /// Copy from m_segment to segment.
+    void copyTo(Segment *segment);
+    /// Copy from segment to m_segment replacing events in the time range.
+    void copyFrom(Segment *segment);
 
     timeT calculateStartTime(timeT given, Segment &segment);
     timeT calculateEndTime(timeT given, Segment &segment);
@@ -96,10 +98,14 @@ private:
     timeT m_startTime;
     timeT m_endTime;
 
+    /// The Segment that this command is being run against.
     Segment &m_segment;
+    /// Events from m_segment prior to executing the command.
     Segment m_savedEvents;
 
+    /// Redo or execute() will be using a list of events (m_redoEvents).
     bool m_doBruteForceRedo;
+    /// Events for redo, or for the "redoEvents" ctor.
     Segment *m_redoEvents;
 };
 
