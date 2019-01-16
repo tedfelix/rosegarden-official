@@ -2527,15 +2527,14 @@ RoseXmlHandler::addMIDIDevice(QString name, bool createAtSequencer, QString dir)
     if (createAtSequencer) {
         if (!RosegardenSequencer::getInstance()->
             addDevice(Device::Midi, deviceId, instrumentBase, devDir)) {
-            SEQMAN_DEBUG << "RoseXmlHandler::addMIDIDevice - "
-                         << "sequencer addDevice failed" << endl;
+            RG_DEBUG << "addMIDIDevice() - sequencer addDevice failed";
             return;
         }
 
-        SEQMAN_DEBUG << "RoseXmlHandler::addMIDIDevice - "
+        RG_DEBUG << "addMIDIDevice() - "
                      << " added device " << deviceId
                      << " with instrument base " << instrumentBase
-                     << " at sequencer" << endl;
+                     << " at sequencer";
     }
 
     getStudio().addDevice(qstrtostr(name), deviceId,
@@ -2546,10 +2545,10 @@ RoseXmlHandler::addMIDIDevice(QString name, bool createAtSequencer, QString dir)
         if (md) md->setDirection(devDir);
     }
 
-    SEQMAN_DEBUG << "RoseXmlHandler::addMIDIDevice - "
+    RG_DEBUG << "addMIDIDevice() - "
                  << " added device " << deviceId
                  << " with instrument base " << instrumentBase
-                 << " in studio" << endl;
+                 << " in studio";
 
     m_deviceRunningId = deviceId;
     m_deviceInstrumentBase = instrumentBase;
@@ -2631,7 +2630,7 @@ RoseXmlHandler::mapToActualInstrument(InstrumentId oldId)
 void
 RoseXmlHandler::skipToNextPlayDevice()
 {
-    SEQMAN_DEBUG << "RoseXmlHandler::skipToNextPlayDevice; m_deviceRunningId is " << m_deviceRunningId;
+    RG_DEBUG << "skipToNextPlayDevice(): m_deviceRunningId is " << m_deviceRunningId;
 
     for (DeviceList::iterator i = getStudio().getDevices()->begin();
             i != getStudio().getDevices()->end(); ++i) {
@@ -2642,7 +2641,7 @@ RoseXmlHandler::skipToNextPlayDevice()
             if (m_deviceRunningId == Device::NO_DEVICE ||
                 md->getId() > m_deviceRunningId) {
 
-                SEQMAN_DEBUG << "RoseXmlHandler::skipToNextPlayDevice: found next device: id " << md->getId();
+                RG_DEBUG << "skipToNextPlayDevice(): found next device: id " << md->getId();
 
                 m_device = md;
                 m_deviceRunningId = md->getId();
@@ -2651,7 +2650,7 @@ RoseXmlHandler::skipToNextPlayDevice()
         }
     }
 
-    SEQMAN_DEBUG << "RoseXmlHandler::skipToNextPlayDevice: fresh out of devices";
+    RG_DEBUG << "skipToNextPlayDevice(): fresh out of devices";
 
     m_device = nullptr;
 }
@@ -2659,7 +2658,7 @@ RoseXmlHandler::skipToNextPlayDevice()
 void
 RoseXmlHandler::setMIDIDeviceConnection(QString connection)
 {
-    SEQMAN_DEBUG << "RoseXmlHandler::setMIDIDeviceConnection(" << connection << ")";
+    RG_DEBUG << "setMIDIDeviceConnection(" << connection << ")";
 
     MidiDevice *md = dynamic_cast<MidiDevice *>(m_device);
     if (!md) return;
@@ -2674,7 +2673,7 @@ RoseXmlHandler::setMIDIDeviceConnection(QString connection)
 void
 RoseXmlHandler::setMIDIDeviceName(QString name)
 {
-    SEQMAN_DEBUG << "RoseXmlHandler::setMIDIDeviceName(" << name << ")";
+    RG_DEBUG << "setMIDIDeviceName(" << name << ")";
 
     MidiDevice *md = dynamic_cast<MidiDevice *>(m_device);
     if (!md) return;

@@ -90,14 +90,13 @@ void InternalSegmentMapper::fillBuffer()
     resize(0);
 
 #ifdef DEBUG_INTERNAL_SEGMENT_MAPPER
-    SEQMAN_DEBUG
-        << "InternalSegmentMapper::fillBuffer"
+    RG_DEBUG
+        << "fillBuffer(): "
         << (void *)this
         << "Segment"
         << (void *)m_segment
         << "with repeat count"
-        << repeatCount
-        << endl;
+        << repeatCount;
 #endif
     
     // Clear out stuff from before.
@@ -271,7 +270,7 @@ void InternalSegmentMapper::fillBuffer()
                         
                     } catch (...) {
 #ifdef DEBUG_INTERNAL_SEGMENT_MAPPER
-                        SEQMAN_DEBUG << "SegmentMapper::fillBuffer - caught exception while trying to create MappedEvent\n";
+                        RG_DEBUG << "fillBuffer() - caught exception while trying to create MappedEvent";
 #endif
                     }
                 }
@@ -349,8 +348,7 @@ enqueueNoteoff(timeT time, int pitch)
          i != m_noteOffs.end(); ++i) {
         if (i->second == pitch) {
 #ifdef DEBUG_INTERNAL_SEGMENT_MAPPER
-            SEQMAN_DEBUG << "duplicated NOTE OFF  pitch: " << pitch
-                         << " at " << time << std::endl;
+            RG_DEBUG << "enqueueNoteoff(): duplicated NOTE OFF  pitch: " << pitch << " at " << time;
 #endif
             break;
         }

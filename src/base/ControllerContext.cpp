@@ -15,6 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[ControllerContextMap]"
+
 #include "ControllerContext.h"
 
 #include "base/BaseProperties.h"
@@ -279,11 +281,10 @@ makeControlValueAbsolute(Instrument *instrument, Segment *a,
         makeAbsolute(controlParameter, oldValue + baseline);
     adapter.setValue(newValue);
 #ifdef DEBUG_CONTROLLER_CONTEXT
-    SEQMAN_DEBUG << "ControllerContextMap::makeControlValueAbsolute"
+    RG_DEBUG << "makeControlValueAbsolute()"
                  << "oldValue - " << oldValue
                  << "newValue - " << newValue
                  << "baseline - " << result.second.value()
-                 << endl
         ;
 #endif
 }

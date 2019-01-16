@@ -54,13 +54,12 @@ MappedEventBuffer::init()
     if (size > 0) {
         reserve(size);
 
-        SEQMAN_DEBUG << "SegmentMapper::init : size = " << size
-                     << endl;
+        RG_DEBUG << "init() : size = " << size;
 
         initSpecial();
         fillBuffer();
     } else {
-        SEQMAN_DEBUG << "SegmentMapper::init : mmap size = 0 - skipping mmapping for now\n";
+        RG_DEBUG << "init() : mmap size = 0 - skipping mmapping for now";
     }
 }
 
@@ -73,11 +72,10 @@ MappedEventBuffer::refresh()
     int oldSize = capacity();
 
 #ifdef DEBUG_MAPPED_EVENT_BUFFER    
-    SEQMAN_DEBUG << "SegmentMapper::refresh() - " << this
+    RG_DEBUG << "refresh() - " << this
                  << " - old size = " << oldSize
                  << " - old fill = " << size()
-                 << " - new fill = " << newFill
-                 << endl;
+                 << " - new fill = " << newFill;
 #endif
 
     // If we need to expand the buffer to hold the events

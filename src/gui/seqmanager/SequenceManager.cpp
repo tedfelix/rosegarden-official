@@ -17,10 +17,7 @@
 
 #define RG_MODULE_STRING "[SequenceManager]"
 
-//#define DEBUG_SEQUENCE_MANAGER 1
-#if !defined DEBUG_SEQUENCE_MANAGER
 #define RG_NO_DEBUG_PRINT 1
-#endif
 
 #include "SequenceManager.h"
 
@@ -360,7 +357,7 @@ SequenceManager::record(bool toggled)
 {
     if (!m_doc) return;
 
-    SEQMAN_DEBUG << "SequenceManager::record(" << toggled << ")";
+    RG_DEBUG << "record(" << toggled << ")";
     Composition &comp = m_doc->getComposition();
     Studio &studio = m_doc->getStudio();
 
@@ -395,7 +392,7 @@ SequenceManager::record(bool toggled)
     if (toggled) { // preparing record or punch-in record
 
         if (m_transportStatus == RECORDING_ARMED) {
-            SEQMAN_DEBUG << "SequenceManager::record - unarming record";
+            RG_DEBUG << "record() - unarming record";
             m_transportStatus = STOPPED;
 
             // Toggle the buttons
@@ -406,7 +403,7 @@ SequenceManager::record(bool toggled)
         }
 
         if (m_transportStatus == STOPPED) {
-            SEQMAN_DEBUG << "SequenceManager::record - armed record";
+            RG_DEBUG << "record() - armed record";
 
             // Recording is now armed, but will not start until the countdown
             // is over.  Then RosegardenMainWindow::slotHandleInputs() will
@@ -425,7 +422,7 @@ SequenceManager::record(bool toggled)
         }
 
         if (m_transportStatus == RECORDING) {
-            SEQMAN_DEBUG << "SequenceManager::record - stop recording and keep playing";
+            RG_DEBUG << "record() - stop recording and keep playing";
             if (!RosegardenSequencer::getInstance()->punchOut()) {
 
                 // #1797873 - set new transport status first, so that
@@ -449,7 +446,7 @@ SequenceManager::record(bool toggled)
         }
 
         if (m_transportStatus == PLAYING) {
-            SEQMAN_DEBUG << "SequenceManager::record - punch in recording";
+            RG_DEBUG << "record() - punch in recording";
             punchIn = true;
             goto punchin;
         }
@@ -542,7 +539,7 @@ punchin:
 
                 // If this is a MIDI instrument
                 if (inst && (inst->getType() != Instrument::Audio)) {
-                    SEQMAN_DEBUG << "SequenceManager:  mdoc->addRecordMIDISegment(" << *i << ")";
+                    RG_DEBUG << "record(): mdoc->addRecordMIDISegment(" << *i << ")";
                     // Create the record MIDI segment now, so that the
                     // composition view has a real segment to display.  It
                     // won't actually be added to the composition until the
@@ -569,10 +566,10 @@ punchin:
         emit signalPlaying(true);
 
         if (comp.getCurrentTempo() == 0) {
-            SEQMAN_DEBUG << "SequenceManager::record() - setting Tempo to Default value of 120.000";
+            RG_DEBUG << "record() - setting Tempo to Default value of 120.000";
             comp.setCompositionDefaultTempo(comp.getTempoForQpm(120.0));
         } else {
-            SEQMAN_DEBUG << "SequenceManager::record() - starting to record";
+            RG_DEBUG << "record() - starting to record";
         }
 
         setTempo(comp.getCurrentTempo());
@@ -727,14 +724,7 @@ SequenceManager::processAsynchronousMidi(const MappedEventList &mC,
     for (i = mC.begin(); i != mC.end(); ++i ) {
         if ((*i)->getType() >= MappedEvent::Audio) {
             if ((*i)->getType() == MappedEvent::AudioStopped) {
-                /*
-                  SEQMAN_DEBUG << "AUDIO FILE ID = "
-                  << int((*i)->getData1())
-                  << " - FILE STOPPED - " 
-                  << "INSTRUMENT = "
-                  << (*i)->getInstrument()
-                  << endl;
-                */
+                //RG_DEBUG << "AUDIO FILE ID = " << int((*i)->getData1()) << " - FILE STOPPED - " << "INSTRUMENT = " << (*i)->getInstrument();
 
                 if (audioManagerDialog && (*i)->getInstrument() ==
                         m_doc->getStudio().getAudioPreviewInstrument()) {
@@ -746,14 +736,14 @@ SequenceManager::processAsynchronousMidi(const MappedEventList &mC,
 
             if ((*i)->getType() ==
                     MappedEvent::AudioGeneratePreview) {
-                SEQMAN_DEBUG << "Received AudioGeneratePreview: data1 is " 
-                             << int((*i)->getData1()) << ", data2 "
-                             << int((*i)->getData2()) << ", instrument is " 
-                             << (*i)->getInstrument() << endl;
+                RG_DEBUG << "processAsynchronousMidi(): Received AudioGeneratePreview: data1 is "
+                         << int((*i)->getData1()) << ", data2 "
+                         << int((*i)->getData2()) << ", instrument is "
+                         << (*i)->getInstrument();
                 m_doc->finalizeAudioFile((int)(*i)->getData1() +
                                          (int)(*i)->getData2() * 256);
             }
-            
+
             if ((*i)->getType() == MappedEvent::SystemUpdateInstruments) {
 
                 // resync Devices and Instruments
@@ -769,7 +759,8 @@ SequenceManager::processAsynchronousMidi(const MappedEventList &mC,
                 m_transportStatus == RECORDING) {
                 if ((*i)->getType() == MappedEvent::SystemFailure) {
 
-                    SEQMAN_DEBUG << "Failure of some sort...";
+                    RG_DEBUG << "processAsynchronousMidi(): Failure of some sort...";
+
                     bool handling = true;
 
                     /* These are the ones that we always report or handle. */
@@ -815,8 +806,7 @@ SequenceManager::processAsynchronousMidi(const MappedEventList &mC,
                         continue;
 
                     if (!m_canReport) {
-                        SEQMAN_DEBUG << "Not reporting it to user just yet"
-                        << endl;
+                        RG_DEBUG << "processAsynchronousMidi(): Not reporting it to user just yet";
                         continue;
                     }
 
@@ -908,7 +898,7 @@ SequenceManager::processAsynchronousMidi(const MappedEventList &mC,
                               QMessageBox::Ok,
                               QMessageBox::Ok);
                         } else {
-                            std::cerr << message << std::endl;
+                            RG_WARNING << message;
                         }
 #endif
 
@@ -952,7 +942,7 @@ SequenceManager::processAsynchronousMidi(const MappedEventList &mC,
                     } else if ((*i)->getData1() == MappedEvent::WarningImpreciseTimer &&
                                shouldWarnForImpreciseTimer()) {
 
-                        std::cerr << "Rosegarden: WARNING: No accurate sequencer timer available" << std::endl;
+                        RG_WARNING << "Rosegarden: WARNING: No accurate sequencer timer available";
 
 //                        StartupLogo::hideIfStillThere();
 //
@@ -974,7 +964,7 @@ SequenceManager::processAsynchronousMidi(const MappedEventList &mC,
                     } else if ((*i)->getData1() == MappedEvent::WarningImpreciseTimerTryRTC &&
                                shouldWarnForImpreciseTimer()) {
 
-                        std::cerr << "Rosegarden: WARNING: No accurate sequencer timer available (and kernel is new enough for RTC addendum)" << std::endl;
+                        RG_WARNING << "Rosegarden: WARNING: No accurate sequencer timer available (and kernel is new enough for RTC addendum)";
 
 //                        StartupLogo::hideIfStillThere();
 //
@@ -1019,7 +1009,7 @@ SequenceManager::processAsynchronousMidi(const MappedEventList &mC,
             }
         }
         if ((*i)->getRecordedDevice() == Device::CONTROL_DEVICE) {
-            SEQMAN_DEBUG << "controllerDeviceEventReceived";
+            RG_DEBUG << "processAsynchronousMidi(): Emitting controllerDeviceEventReceived()...";
             emit controllerDeviceEventReceived(*i);
         }
     }
@@ -1028,14 +1018,14 @@ SequenceManager::processAsynchronousMidi(const MappedEventList &mC,
 void
 SequenceManager::rewindToBeginning()
 {
-    SEQMAN_DEBUG << "SequenceManager::rewindToBeginning()";
+    RG_DEBUG << "rewindToBeginning()";
     m_doc->slotSetPointerPosition(m_doc->getComposition().getStartMarker());
 }
 
 void
 SequenceManager::fastForwardToEnd()
 {
-    SEQMAN_DEBUG << "SequenceManager::fastForwardToEnd()";
+    RG_DEBUG << "fastForwardToEnd()";
     Composition &comp = m_doc->getComposition();
     m_doc->slotSetPointerPosition(comp.getEndMarker());
 }
@@ -1235,7 +1225,7 @@ SequenceManager::reinitialiseSequencerStudio()
 void
 SequenceManager::panic()
 {
-    SEQMAN_DEBUG << "panic button";
+    RG_DEBUG << "panic()";
     
     stop();
 
@@ -1265,7 +1255,7 @@ void SequenceManager::setTempo(const tempoT tempo)
 
 void SequenceManager::resetCompositionMapper()
 {
-    SEQMAN_DEBUG << "SequenceManager::resetCompositionMapper()";
+    RG_DEBUG << "resetCompositionMapper()";
     
     RosegardenSequencer::getInstance()->compositionAboutToBeDeleted();
 
@@ -1284,8 +1274,7 @@ void SequenceManager::populateCompositionMapper()
     Composition &comp = m_doc->getComposition();
 
     for (Composition::iterator i = comp.begin(); i != comp.end(); ++i) {
-        SEQMAN_DEBUG << "Adding segment with rid "
-                     << (*i)->getRuntimeId() << endl;
+        RG_DEBUG << "populateCompositionMapper(): Adding segment with rid " << (*i)->getRuntimeId();
         segmentAdded(*i);
     }
 
@@ -1300,7 +1289,7 @@ void SequenceManager::populateCompositionMapper()
 }
 void SequenceManager::resetMetronomeMapper()
 {
-    SEQMAN_DEBUG << "SequenceManager::resetMetronomeMapper()";
+    RG_DEBUG << "resetMetronomeMapper()";
     
     if (m_metronomeMapper) {
         RosegardenSequencer::getInstance()->segmentAboutToBeDeleted
@@ -1315,7 +1304,7 @@ void SequenceManager::resetMetronomeMapper()
 
 void SequenceManager::resetTempoSegmentMapper()
 {
-    SEQMAN_DEBUG << "SequenceManager::resetTempoSegmentMapper()";
+    RG_DEBUG << "resetTempoSegmentMapper()";
     
     if (m_tempoSegmentMapper) {
         RosegardenSequencer::getInstance()->segmentAboutToBeDeleted
@@ -1330,7 +1319,7 @@ void SequenceManager::resetTempoSegmentMapper()
 
 void SequenceManager::resetTimeSigSegmentMapper()
 {
-    SEQMAN_DEBUG << "SequenceManager::resetTimeSigSegmentMapper()";
+    RG_DEBUG << "resetTimeSigSegmentMapper()";
     
     if (m_timeSigSegmentMapper) {
         RosegardenSequencer::getInstance()->segmentAboutToBeDeleted
@@ -1346,10 +1335,9 @@ void SequenceManager::resetTimeSigSegmentMapper()
 bool SequenceManager::event(QEvent *e)
 {
     if (e->type() == QEvent::User) {
-        SEQMAN_DEBUG << "SequenceManager::event() with user event";
+        RG_DEBUG << "event() with user event";
         if (m_refreshRequested) {
-            SEQMAN_DEBUG << "SequenceManager::event(): update requested"
-                         << endl;
+            RG_DEBUG << "event(): update requested";
             refresh();
             m_refreshRequested = false;
         }
@@ -1361,7 +1349,7 @@ bool SequenceManager::event(QEvent *e)
 
 void SequenceManager::update()
 {
-    SEQMAN_DEBUG << "SequenceManager::update()";
+    RG_DEBUG << "update()";
     // schedule a refresh-status check for the next event loop
     QEvent *e = new QEvent(QEvent::User);
     // Let the handler know we want a refresh().
@@ -1373,7 +1361,7 @@ void SequenceManager::update()
 
 void SequenceManager::refresh()
 {
-    SEQMAN_DEBUG << "SequenceManager::refresh()";
+    RG_DEBUG << "refresh()";
 
     Composition &comp = m_doc->getComposition();
 
@@ -1424,12 +1412,12 @@ void SequenceManager::refresh()
 
     m_triggerSegments = newTriggerMap;
 
-#ifdef DEBUG_SEQUENCE_MANAGER
-    SEQMAN_DEBUG << "SequenceManager::refresh: segments modified by changes to trigger segments are:";
+#if 0
+    RG_DEBUG << "refresh(): segments modified by changes to trigger segments are:";
     int x = 0;
     for (TriggerSegmentRec::SegmentRuntimeIdSet::iterator i = ridset.begin();
             i != ridset.end(); ++i) {
-        SEQMAN_DEBUG << x << ": " << *i;
+        RG_DEBUG << x << ": " << *i;
         ++x;
     }
 #endif
@@ -1443,8 +1431,7 @@ void SequenceManager::refresh()
     }
     m_removedSegments.clear();
 
-    SEQMAN_DEBUG << "SequenceManager::refresh: we have "
-                 << m_segments.size() << " segments" << endl;
+    RG_DEBUG << "refresh(): we have " << m_segments.size() << " segments";
 
     // Current Segments
 
@@ -1469,12 +1456,11 @@ void SequenceManager::refresh()
 void
 SequenceManager::segmentModified(Segment* s)
 {
-    SEQMAN_DEBUG << "SequenceManager::segmentModified(" << s << ")";
+    RG_DEBUG << "segmentModified(" << s << ")";
 
     bool sizeChanged = m_compositionMapper->segmentModified(s);
 
-    SEQMAN_DEBUG << "SequenceManager::segmentModified() : size changed = "
-                 << sizeChanged;
+    RG_DEBUG << "segmentModified() : size changed = " << sizeChanged;
 
     RosegardenSequencer::getInstance()->segmentModified
         (m_compositionMapper->getMappedEventBuffer(s));
@@ -1482,16 +1468,13 @@ SequenceManager::segmentModified(Segment* s)
 
 void SequenceManager::segmentAdded(const Composition*, Segment* s)
 {
-    SEQMAN_DEBUG << "SequenceManager::segmentAdded(" << s
-                 << "); queueing" 
-                 << endl;
+    RG_DEBUG << "segmentAdded(" << s << "); queueing";
     m_addedSegments.push_back(s);
 }
 
 void SequenceManager::segmentRemoved(const Composition*, Segment* s)
 {
-    SEQMAN_DEBUG << "SequenceManager::segmentRemoved(" << s
-                 << ")" << endl;
+    RG_DEBUG << "SequenceManager::segmentRemoved(" << s << ")";
 
     // !!! WARNING !!!
     // The segment pointer "s" is about to be deleted by
@@ -1508,25 +1491,19 @@ void SequenceManager::segmentRemoved(const Composition*, Segment* s)
 
 void SequenceManager::segmentRepeatChanged(const Composition*, Segment* s, bool repeat)
 {
-    SEQMAN_DEBUG << "SequenceManager::segmentRepeatChanged(" << s
-                 << ", " << repeat << ")" 
-                 << endl;
+    RG_DEBUG << "segmentRepeatChanged(" << s << ", " << repeat << ")";
     segmentModified(s);
 }
 
 void SequenceManager::segmentRepeatEndChanged(const Composition*, Segment* s, timeT newEndTime)
 {
-    SEQMAN_DEBUG << "SequenceManager::segmentRepeatEndChanged(" << s
-                 << ", " << newEndTime << ")" 
-                 << endl;
+    RG_DEBUG << "segmentRepeatEndChanged(" << s << ", " << newEndTime << ")";
     segmentModified(s);
 }
 
 void SequenceManager::segmentEventsTimingChanged(const Composition*, Segment * s, timeT t, RealTime)
 {
-    SEQMAN_DEBUG << "SequenceManager::segmentEventsTimingChanged(" << s
-                 << ", " << t << ")" 
-                 << endl;
+    RG_DEBUG << "segmentEventsTimingChanged(" << s << ", " << t << ")";
     segmentModified(s);
     if (s && s->getType() == Segment::Audio && m_transportStatus == PLAYING) {
         RosegardenSequencer::getInstance()->remapTracks();
@@ -1535,17 +1512,13 @@ void SequenceManager::segmentEventsTimingChanged(const Composition*, Segment * s
 
 void SequenceManager::segmentTransposeChanged(const Composition*, Segment *s, int transpose)
 {
-    SEQMAN_DEBUG << "SequenceManager::segmentTransposeChanged(" << s
-                 << ", " << transpose << ")" 
-                 << endl;
+    RG_DEBUG << "segmentTransposeChanged(" << s << ", " << transpose << ")";
     segmentModified(s);
 }
 
 void SequenceManager::segmentTrackChanged(const Composition*, Segment *s, TrackId id)
 {
-    SEQMAN_DEBUG << "SequenceManager::segmentTrackChanged(" << s
-                 << ", " << id << ")" 
-                 << endl;
+    RG_DEBUG << "SequenceManager::segmentTrackChanged(" << s << ", " << id << ")";
     segmentModified(s);
     if (s && s->getType() == Segment::Audio && m_transportStatus == PLAYING) {
         RosegardenSequencer::getInstance()->remapTracks();
@@ -1554,23 +1527,20 @@ void SequenceManager::segmentTrackChanged(const Composition*, Segment *s, TrackI
 
 void SequenceManager::segmentEndMarkerChanged(const Composition*, Segment *s, bool)
 {
-    SEQMAN_DEBUG << "SequenceManager::segmentEndMarkerChanged(" << s
-                 << ")" << endl;
+    RG_DEBUG << "SequenceManager::segmentEndMarkerChanged(" << s << ")";
     segmentModified(s);
 }
 
 void SequenceManager::segmentInstrumentChanged(Segment *s)
 {
-    SEQMAN_DEBUG << "SequenceManager::segmentInstrumentChanged(" << s
-                 << ")" << endl;
+    RG_DEBUG << "SequenceManager::segmentInstrumentChanged(" << s << ")";
     // Quick and dirty: Redo the whole segment.
     segmentModified(s);
 }
 
 void SequenceManager::segmentAdded(Segment* s)
 {
-    SEQMAN_DEBUG << "SequenceManager::segmentAdded(" << s
-                 << ")" << endl;
+    RG_DEBUG << "SequenceManager::segmentAdded(" << s << ")";
     m_compositionMapper->segmentAdded(s);
 
     RosegardenSequencer::getInstance()->segmentAdded
@@ -1583,7 +1553,8 @@ void SequenceManager::segmentAdded(Segment* s)
 
 void SequenceManager::segmentDeleted(Segment* s)
 {
-    SEQMAN_DEBUG << "SequenceManager::segmentDeleted()";
+    RG_DEBUG << "segmentDeleted()";
+
     // !!! WARNING !!!
     // The "s" segment pointer that is coming in to this routine has already
     // been deleted.  This is a POINTER TO DELETED MEMORY.  It cannot be
@@ -1614,7 +1585,7 @@ void SequenceManager::segmentDeleted(Segment* s)
 
 void SequenceManager::endMarkerTimeChanged(const Composition *, bool /*shorten*/)
 {
-    SEQMAN_DEBUG << "SequenceManager::endMarkerTimeChanged()";
+    RG_DEBUG << "endMarkerTimeChanged()";
 
     if (m_transportStatus == RECORDING) {
         // When recording, we just need to extend the metronome segment
@@ -1641,11 +1612,11 @@ void SequenceManager::timeSignatureChanged(const Composition *)
 
 void SequenceManager::tracksAdded(const Composition* c, std::vector<TrackId> &trackIds)
 {
-    SEQMAN_DEBUG << "SequenceManager::tracksAdded()  tracks: " << trackIds.size();
+    RG_DEBUG << "tracksAdded()  tracks: " << trackIds.size();
 
     // For each track added, call ControlBlock::updateTrackData()
     for (unsigned i = 0; i < trackIds.size(); ++i) {
-        SEQMAN_DEBUG << "  ID: " << trackIds[i];
+        RG_DEBUG << "  ID: " << trackIds[i];
 
         Track *t = c->getTrackById(trackIds[i]);
         ControlBlock::getInstance()->updateTrackData(t);
@@ -1660,7 +1631,7 @@ void SequenceManager::tracksAdded(const Composition* c, std::vector<TrackId> &tr
 
 void SequenceManager::trackChanged(const Composition *, Track* t)
 {
-    SEQMAN_DEBUG << "SequenceManager::trackChanged()  ID: " << t->getId();
+    RG_DEBUG << "trackChanged()  ID: " << t->getId();
 
     ControlBlock::getInstance()->updateTrackData(t);
 
@@ -1671,9 +1642,10 @@ void SequenceManager::trackChanged(const Composition *, Track* t)
 
 void SequenceManager::tracksDeleted(const Composition *, std::vector<TrackId> &trackIds)
 {
-    SEQMAN_DEBUG << "SequenceManager::tracksDeleted()  tracks:" << trackIds.size();
+    RG_DEBUG << "tracksDeleted()  tracks:" << trackIds.size();
+
     for (unsigned i = 0; i < trackIds.size(); ++i) {
-        SEQMAN_DEBUG << "  ID: " << trackIds[i];
+        RG_DEBUG << "  ID: " << trackIds[i];
         ControlBlock::getInstance()->setTrackDeleted(trackIds[i], true);
     }
 }
@@ -1684,10 +1656,7 @@ void SequenceManager::metronomeChanged(InstrumentId id,
     // This method is called when the user has changed the
     // metronome instrument, pitch etc
 
-    SEQMAN_DEBUG << "SequenceManager::metronomeChanged (simple)"
-                 << ", instrument = "
-                 << id
-                 << endl;
+    RG_DEBUG << "metronomeChanged() (simple)" << ", instrument = " << id;
     if (regenerateTicks) resetMetronomeMapper();
 
     Composition &comp = m_doc->getComposition();
@@ -1709,10 +1678,7 @@ void SequenceManager::metronomeChanged(const Composition *comp)
     // This method is called when the muting status in the composition
     // has changed -- the metronome itself has not actually changed
 
-    SEQMAN_DEBUG << "SequenceManager::metronomeChanged "
-                 << ", instrument = "
-                 << m_metronomeMapper->getMetronomeInstrument()
-                 << endl;
+    RG_DEBUG << "metronomeChanged() " << ", instrument = " << m_metronomeMapper->getMetronomeInstrument();
     if (!comp) comp = &m_doc->getComposition();
     ControlBlock::getInstance()->setInstrumentForMetronome
         (m_metronomeMapper->getMetronomeInstrument());
@@ -1739,7 +1705,8 @@ void SequenceManager::selectedTrackChanged(const Composition *composition)
 
 void SequenceManager::tempoChanged(const Composition *c)
 {
-    SEQMAN_DEBUG << "SequenceManager::tempoChanged()";
+    RG_DEBUG << "tempoChanged()";
+
     // Refresh all segments
     //
     for (SegmentRefreshMap::iterator i = m_segments.begin();

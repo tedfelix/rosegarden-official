@@ -15,6 +15,7 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[CompositionMapper]"
 
 #include "CompositionMapper.h"
 #include "misc/Debug.h"
@@ -32,7 +33,7 @@ namespace Rosegarden
 CompositionMapper::CompositionMapper(RosegardenDocument *doc) :
     m_doc(doc)
 {
-    SEQMAN_DEBUG << "CompositionMapper() - doc = " << doc;
+    RG_DEBUG << "ctor: doc = " << doc;
 
     Composition &comp = m_doc->getComposition();
 
@@ -50,7 +51,7 @@ CompositionMapper::CompositionMapper(RosegardenDocument *doc) :
 
 CompositionMapper::~CompositionMapper()
 {
-    SEQMAN_DEBUG << "~CompositionMapper()\n";
+    RG_DEBUG << "dtor";
 }
 
 bool
@@ -66,8 +67,7 @@ CompositionMapper::segmentModified(Segment *segment)
                       // though it's not mapped yet
     }
 
-    SEQMAN_DEBUG << "CompositionMapper::segmentModified(" << segment << ") - mapper = "
-                 << mapper << endl;
+    RG_DEBUG << "segmentModified(" << segment << ") - mapper = " << mapper;
 
     return mapper->refresh();
 }
@@ -75,7 +75,7 @@ CompositionMapper::segmentModified(Segment *segment)
 void
 CompositionMapper::segmentAdded(Segment *segment)
 {
-    SEQMAN_DEBUG << "CompositionMapper::segmentAdded(" << segment << ")\n";
+    RG_DEBUG << "segmentAdded(" << segment << ")";
 
     mapSegment(segment);
 }
@@ -83,7 +83,7 @@ CompositionMapper::segmentAdded(Segment *segment)
 void
 CompositionMapper::segmentDeleted(Segment *segment)
 {
-    SEQMAN_DEBUG << "CompositionMapper::segmentDeleted()";
+    RG_DEBUG << "segmentDeleted()";
 
     // !!! WARNING !!!
     // The segment pointer that is coming in to this routine has already
@@ -103,16 +103,15 @@ CompositionMapper::segmentDeleted(Segment *segment)
     // suspect.  However, I believe there is no operator<< for SegmentMapper.
     // In that case, this should do nothing more than write out the pointer
     // value.  Uncomment this line of code at your own risk.
-//    SEQMAN_DEBUG << "CompositionMapper::segmentDeleted() : releasing SegmentMapper " << mapper;
+//    RG_DEBUG << "segmentDeleted() : releasing SegmentMapper " << mapper;
 }
 
 void
 CompositionMapper::mapSegment(Segment *segment)
 {
-    SEQMAN_DEBUG << "CompositionMapper::mapSegment(" << segment << ")\n";
-    SEQMAN_DEBUG << "We have" << m_segmentMappers.size()
-                 << "segments"
-                 << endl;
+    RG_DEBUG << "mapSegment(" << segment << ")";
+    RG_DEBUG << "  We have" << m_segmentMappers.size() << "segment(s)";
+
     SegmentMappers::iterator itMapper = m_segmentMappers.find(segment);
 
     // If it already exists, don't add it but do refresh it.

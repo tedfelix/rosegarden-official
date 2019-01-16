@@ -81,7 +81,6 @@ public:
     #define NOTATION_DEBUG  QDebug(QtDebugMsg) << "[notation] "
     #define MATRIX_DEBUG    QDebug(QtDebugMsg) << "[matrix] "
     #define SEQUENCER_DEBUG QDebug(QtDebugMsg) << "[sequencer] "
-    #define SEQMAN_DEBUG    QDebug(QtDebugMsg) << "[seqman] "
 
 #else
 
@@ -91,7 +90,6 @@ public:
     #define NOTATION_DEBUG  RGNoDebug()
     #define MATRIX_DEBUG    RGNoDebug()
     #define SEQUENCER_DEBUG RGNoDebug()
-    #define SEQMAN_DEBUG    RGNoDebug()
 
 #endif
 

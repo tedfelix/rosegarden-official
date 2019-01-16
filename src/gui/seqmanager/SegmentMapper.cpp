@@ -36,7 +36,7 @@ SegmentMapper::SegmentMapper(RosegardenDocument *doc,
     MappedEventBuffer(doc),
     m_segment(segment)
 {
-    SEQMAN_DEBUG << "SegmentMapper : " << this;
+    RG_DEBUG << "ctor: " << this;
 }
 
 
@@ -45,15 +45,14 @@ SegmentMapper::
 initSpecial()
 {
     if (m_segment != nullptr) {
-        SEQMAN_DEBUG << "SegmentMapper::initSpecial " 
-                     << " for segment " << m_segment->getLabel() << endl;
+        RG_DEBUG << "initSpecial()  for segment " << m_segment->getLabel();
     }    
 };
 
 
 SegmentMapper::~SegmentMapper()
 {
-    SEQMAN_DEBUG << "~SegmentMapper : " << this;
+    RG_DEBUG << "dtor: " << this;
 }
 
 QSharedPointer<SegmentMapper>

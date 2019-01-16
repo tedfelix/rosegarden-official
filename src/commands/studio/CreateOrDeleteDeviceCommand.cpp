@@ -77,22 +77,20 @@ CreateOrDeleteDeviceCommand::execute()
             addDevice(m_type, m_deviceId, m_baseInstrumentId, m_direction);
 
         if (!success) {
-            SEQMAN_DEBUG << "CreateDeviceCommand::execute - "
-                         << "sequencer addDevice failed" << endl;
+            RG_DEBUG << "execute() - sequencer addDevice failed";
             return ;
         }
 
-        SEQMAN_DEBUG << "CreateDeviceCommand::execute - "
+        RG_DEBUG << "execute() - "
                      << " added device " << m_deviceId
-                     << " with base instrument id " << m_baseInstrumentId
-                     << endl;
+                     << " with base instrument id " << m_baseInstrumentId;
 
         RosegardenSequencer::getInstance()->setConnection
             (m_deviceId, strtoqstr(m_connection));
 
-        SEQMAN_DEBUG << "CreateDeviceCommand::execute - "
+        RG_DEBUG << "execute() - "
                      << " reconnected device " << m_deviceId
-                     << " to " << m_connection << endl;
+                     << " to " << m_connection;
 
         m_studio->addDevice(m_name, m_deviceId, m_baseInstrumentId, m_type);
         Device *device = m_studio->getDevice(m_deviceId);
@@ -113,8 +111,7 @@ CreateOrDeleteDeviceCommand::execute()
 
         RosegardenSequencer::getInstance()->removeDevice(m_deviceId);
 
-        SEQMAN_DEBUG << "CreateDeviceCommand::execute - "
-                     << " removed device " << m_deviceId << endl;
+        RG_DEBUG << "execute() - removed device " << m_deviceId;
 
         m_studio->removeDevice(m_deviceId);
 
