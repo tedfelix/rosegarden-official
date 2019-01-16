@@ -261,6 +261,9 @@ Composition::deleteSegment(Composition::iterator i)
     m_segments.erase(i);
     distributeVerses();
     notifySegmentRemoved(p);
+
+    // ??? If this delete occurs during playback, we may get a crash later in
+    //     MappedBufMetaIterator::fetchEvents().
     delete p;
 
     updateRefreshStatuses();
