@@ -28,6 +28,9 @@
 #include "document/RosegardenDocument.h"
 #include "gui/general/BaseTool.h"
 #include "gui/general/RosegardenScrollView.h"
+#include "gui/application/RosegardenMainWindow.h"
+#include "gui/application/TransportStatus.h"
+#include "gui/seqmanager/SequenceManager.h"
 #include "SegmentTool.h"
 #include "document/Command.h"
 #include "document/CommandHistory.h"
@@ -71,6 +74,11 @@ SegmentSplitter::mousePressEvent(QMouseEvent *e)
     if (e->button() != Qt::LeftButton)
         return;
 
+    // Can't split a segment while playing.
+    if (RosegardenMainWindow::self()->getSequenceManager()->
+            getTransportStatus() == PLAYING)
+        return;
+
     // No need to propagate.
     e->accept();
 
@@ -97,6 +105,11 @@ SegmentSplitter::mouseReleaseEvent(QMouseEvent *e)
 {
     // We only care about the left mouse button.
     if (e->button() != Qt::LeftButton)
+        return;
+
+    // Can't split a segment while playing.
+    if (RosegardenMainWindow::self()->getSequenceManager()->
+            getTransportStatus() == PLAYING)
         return;
 
     // No need to propagate.
@@ -135,6 +148,11 @@ SegmentSplitter::mouseReleaseEvent(QMouseEvent *e)
 int
 SegmentSplitter::mouseMoveEvent(QMouseEvent *e)
 {
+    // Can't split a segment while playing.
+    if (RosegardenMainWindow::self()->getSequenceManager()->
+            getTransportStatus() == PLAYING)
+        return RosegardenScrollView::NoFollow;
+
     // No need to propagate.
     e->accept();
 
