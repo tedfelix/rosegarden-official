@@ -12,33 +12,32 @@
   COPYING included with this distribution for more information.
 */
 
-#include "RosegardenSequencer.h"
+#define RG_MODULE_STRING "[SequencerThread]"
+
 #include "SequencerThread.h"
 
-#include <iostream>
-#include <unistd.h>
-#include <sys/time.h>
-
-#include <QDateTime>
-
-#include "base/Profiler.h"
-#include "sound/MappedEventList.h"
-
 #include "misc/Debug.h"
+#include "base/RealTime.h"
+#include "RosegardenSequencer.h"
+#include "gui/application/TransportStatus.h"
+
+#include <QDateTime>  // For QTime
+
 
 namespace Rosegarden
 {
 
+
 void
 SequencerThread::run()
 {
-    SEQUENCER_DEBUG << "SequencerThread::run()";
+    RG_DEBUG << "run()";
 
     RosegardenSequencer &seq = *RosegardenSequencer::getInstance();
 
     TransportStatus lastSeqStatus = seq.getStatus();
 
-    RealTime sleepTime = RealTime(0, 10000000);
+    const RealTime sleepTime = RealTime::fromMilliseconds(10);
 
     QTime timer;
     timer.start();
@@ -51,7 +50,7 @@ SequencerThread::run()
 
         bool atLeisure = true;
 
-        //SEQUENCER_DEBUG << "Sequencer status is " << seq.getStatus();
+        //RG_DEBUG << "run(): Sequencer status is " << seq.getStatus();
 
         switch (seq.getStatus()) {
 
@@ -107,7 +106,8 @@ SequencerThread::run()
                 // Still process these so we can send up
                 // audio levels as MappedEvents
                 //
-                // Bug #3542166.  This line can occasionally steal MIDI
+                // Bug #1348 MIDI Recording Drops Notes (was #3542166).
+                // This line can occasionally steal MIDI
                 // events that are needed by processRecordedMidi().
                 // Need to track down what the above "audio levels" comment
                 // means and whether it is a serious issue.  If so, we need
@@ -125,11 +125,11 @@ SequencerThread::run()
             // direct to RosegardenSequencer to start with
             seq.setStatus(STOPPED);
 
-            SEQUENCER_DEBUG << "SequencerThread::run() - Stopped";
+            RG_DEBUG << "run() - Stopped";
             break;
 
         case RECORDING_ARMED:
-            SEQUENCER_DEBUG << "SequencerThread::run() - Sequencer can't enter \"RECORDING_ARMED\" state - internal error";
+            RG_DEBUG << "run() - Sequencer can't enter \"RECORDING_ARMED\" state - internal error";
             break;
 
         case STOPPED:
@@ -147,12 +147,18 @@ SequencerThread::run()
         //
         seq.updateClocks();
 
+        // If the sequencer status has changed...
         if (lastSeqStatus != seq.getStatus()) {
-            SEQUENCER_DEBUG << "Sequencer status changed from " << lastSeqStatus << " to " << seq.getStatus();
+            RG_DEBUG << "run(): Sequencer status changed from " << lastSeqStatus << " to " << seq.getStatus();
             lastSeqStatus = seq.getStatus();
+
+            // Immediately check for another change.
+            // We might be in one of the "STARTING" or "STOPPING" states and
+            // we need to immediately go to the next state.
             atLeisure = false;
         }
 
+        // Every 3 seconds
         if (timer.elapsed() > 3000) {
             seq.checkForNewClients();
             timer.restart();
@@ -164,13 +170,18 @@ SequencerThread::run()
         // be made now
 
         // If the sequencer status hasn't changed, sleep for a bit
-        if (atLeisure)
+        if (atLeisure) {
+            // ??? Could we use a QWaitCondition/QMutex here to reduce the
+            //     (upwards of sleepTime) delay between pressing play and
+            //     playing?
             seq.sleep(sleepTime);
+        }
 
         seq.lock();
     }
 
     seq.unlock();
 }
+
 
 }
