@@ -36,16 +36,9 @@ struct ROSEGARDENPRIVATE_EXPORT RealTime
     RealTime(): sec(0), nsec(0) {}
     RealTime(int s, int n);
 
-    RealTime(const RealTime &r) :
-        sec(r.sec), nsec(r.nsec) { }
-
     static RealTime fromSeconds(double sec);
     static RealTime fromMilliseconds(int msec);
     static RealTime fromTimeval(const struct timeval &);
-
-    RealTime &operator=(const RealTime &r) {
-        sec = r.sec; nsec = r.nsec; return *this;
-    }
 
     RealTime operator+(const RealTime &r) const {
         return RealTime(sec + r.sec, nsec + r.nsec);
