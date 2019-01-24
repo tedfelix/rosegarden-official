@@ -272,29 +272,63 @@ Panned::slotEmulateWheelEvent(QWheelEvent *ev)
 void
 Panned::processWheelEvent(QWheelEvent *e)
 {
+    //RG_DEBUG << "processWheelEvent()";
+    //RG_DEBUG << "  delta(): " << e->delta();
+    //RG_DEBUG << "  angleDelta(): " << e->angleDelta();
+    //RG_DEBUG << "  pixelDelta(): " << e->pixelDelta();
+
+    // See also RosegardenScrollView::wheelEvent().
+
     // We'll handle this.  Don't pass to parent.
     e->accept();
+
+    QPoint angleDelta = e->angleDelta();
 
     // Ctrl+wheel to zoom
     if (e->modifiers() & Qt::CTRL) {
         // Wheel down
-        if (e->delta() > 0)
+        if (angleDelta.y() > 0)
             emit zoomOut();
-        else if (e->delta() < 0)  // Wheel up
+        else if (angleDelta.y() < 0)  // Wheel up
             emit zoomIn();
+
         return;
     }
 
     // Shift+wheel to scroll left/right.
-    if (e->modifiers() & Qt::SHIFT) {
-        // Remove the shift modifier to avoid paging the scrollbar.
-        QWheelEvent e2(e->pos(), e->delta(), e->buttons(),
-                       static_cast<Qt::KeyboardModifiers>(e->modifiers() ^ Qt::SHIFT),
-                       e->orientation());
-        QApplication::sendEvent(horizontalScrollBar(), &e2);
-    } else {  // Scroll up/down
-        QApplication::sendEvent(verticalScrollBar(), e);
+    // If shift is pressed and we are scrolling vertically...
+    if ((e->modifiers() & Qt::SHIFT)  &&  angleDelta.y() != 0) {
+        // Transform the incoming vertical scroll event into a
+        // horizontal scroll event.
+
+        // Swap x/y
+        QPoint pixelDelta2(e->pixelDelta().y(), e->pixelDelta().x());
+        QPoint angleDelta2(angleDelta.y(), angleDelta.x());
+
+        // Create a new event.
+        // We remove the Qt::SHIFT modifier otherwise we end up
+        // moving left/right a page at a time.
+        QWheelEvent e2(
+                e->pos(),  // pos
+                e->globalPosF(),  // globalPos
+                pixelDelta2,  // pixelDelta
+                angleDelta2,  // angleDelta
+                e->delta(),  // qt4Delta
+                Qt::Horizontal,  // qt4Orientation
+                e->buttons(),  // buttons
+                e->modifiers() & ~Qt::SHIFT,  // modifiers
+                e->phase(),  // phase
+                e->source(),  // source
+                e->inverted());  // inverted
+
+        // Let baseclass handle as usual.
+        QGraphicsView::wheelEvent(&e2);
+
+        return;
     }
+
+    // Let baseclass handle normal scrolling.
+    QGraphicsView::wheelEvent(e);
 }
 
 void
