@@ -425,6 +425,8 @@ void RosegardenScrollView::wheelEvent(QWheelEvent *e)
     //RG_DEBUG << "  angleDelta(): " << e->angleDelta();
     //RG_DEBUG << "  pixelDelta(): " << e->pixelDelta();
 
+    // See also Panned::processWheelEvent().
+
     // We'll handle this.  Don't pass to parent.
     e->accept();
 
@@ -432,9 +434,10 @@ void RosegardenScrollView::wheelEvent(QWheelEvent *e)
 
     // Ctrl+wheel to zoom
     if (e->modifiers() & Qt::CTRL) {
+        // Wheel down
         if (angleDelta.y() > 0)
             emit zoomIn();
-        else if (angleDelta.y() < 0)
+        else if (angleDelta.y() < 0)  // Wheel up
             emit zoomOut();
 
         return;
