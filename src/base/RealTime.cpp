@@ -37,15 +37,18 @@ namespace Rosegarden {
 RealTime::RealTime(int s, int n) :
     sec(s), nsec(n)
 {
-    if (sec == 0) {
-        while (nsec <= -ONE_BILLION) { nsec += ONE_BILLION; --sec; }
-        while (nsec >=  ONE_BILLION) { nsec -= ONE_BILLION; ++sec; }
-    } else if (sec < 0) {
-        while (nsec <= -ONE_BILLION) { nsec += ONE_BILLION; --sec; }
-        while (nsec > 0)             { nsec -= ONE_BILLION; ++sec; }
-    } else { 
-        while (nsec >=  ONE_BILLION) { nsec -= ONE_BILLION; ++sec; }
-        while (nsec < 0)             { nsec += ONE_BILLION; --sec; }
+    // Normalize so that -ONE_BILLION < nsec < ONE_BILLION.
+    sec += nsec / ONE_BILLION;
+    nsec %= ONE_BILLION;
+
+    // Check signs and make sure they match.
+    if (sec < 0  &&  nsec > 0) {
+        ++sec;
+        nsec -= ONE_BILLION;
+    }
+    if (sec > 0  &&  nsec < 0) {
+        --sec;
+        nsec += ONE_BILLION;
     }
 }
 
