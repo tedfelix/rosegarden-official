@@ -620,8 +620,6 @@ Rotary::mouseMoveEvent(QMouseEvent *e)
 void
 Rotary::wheelEvent(QWheelEvent *e)
 {
-    RG_DEBUG << "wheelEvent()";
-
     // We'll handle this.  Don't pass to parent.
     e->accept();
 
