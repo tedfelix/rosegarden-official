@@ -15,6 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[PitchDragLabel]"
+
 #include "PitchDragLabel.h"
 
 #include "base/NotationRules.h"
@@ -154,7 +156,10 @@ PitchDragLabel::emitPitchChange()
 void
 PitchDragLabel::wheelEvent(QWheelEvent *e)
 {
-    if (e->delta() > 0) {
+    // We'll handle this.  Don't pass to parent.
+    e->accept();
+
+    if (e->angleDelta().y() > 0) {
         if (m_pitch < 127) {
             ++m_pitch;
             m_usingSharps = true;
@@ -163,7 +168,7 @@ PitchDragLabel::wheelEvent(QWheelEvent *e)
             emit preview(m_pitch);
             update();
         }
-    } else {
+    } else if (e->angleDelta().y() < 0) {
         if (m_pitch > 0) {
             --m_pitch;
             m_usingSharps = false;
