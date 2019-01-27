@@ -404,22 +404,27 @@ Fader::mouseMoveEvent(QMouseEvent *e)
 void
 Fader::wheelEvent(QWheelEvent *e)
 {
+    // We'll handle this.  Don't pass to parent.
+    e->accept();
+
+    const int dy = e->angleDelta().y();
     int buttonPosition = value_to_position(m_value);
-    if (e->modifiers() & Qt::SHIFT ) {
-        if (e->delta() > 0)
+
+    // Shift+wheel => up/down by 10
+    if (e->modifiers() & Qt::SHIFT) {
+        if (dy > 0)
             buttonPosition += 10;
-        else
+        else if (dy < 0)
             buttonPosition -= 10;
     } else {
-        if (e->delta() > 0)
+        if (dy > 0)
             buttonPosition += 1;
-        else
+        else if (dy < 0)
             buttonPosition -= 1;
     }
-    //RG_DEBUG << "wheelEvent() - button position = " << buttonPosition;
+
     setFader(position_to_value(buttonPosition));
     emit faderChanged(m_value);
-    //RG_DEBUG << "wheelEvent() - value = " << m_value;
 
     showFloatText();
 }
