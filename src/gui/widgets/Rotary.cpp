@@ -620,9 +620,14 @@ Rotary::mouseMoveEvent(QMouseEvent *e)
 void
 Rotary::wheelEvent(QWheelEvent *e)
 {
-    if (e->delta() > 0)
+    RG_DEBUG << "wheelEvent()";
+
+    // We'll handle this.  Don't pass to parent.
+    e->accept();
+
+    if (e->angleDelta().y() > 0)
         m_position -= m_pageStep;
-    else
+    else if (e->angleDelta().y() < 0)
         m_position += m_pageStep;
 
     if (m_position > m_maximum)
