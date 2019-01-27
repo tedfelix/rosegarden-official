@@ -251,11 +251,10 @@ Panner::mouseReleaseEvent(QMouseEvent *e)
 void
 Panner::wheelEvent(QWheelEvent *e)
 {
-    if (e->delta() > 0) {
+    if (e->angleDelta().y() > 0)
         emit zoomOut();
-    } else {
+    else if (e->angleDelta().y() < 0)
         emit zoomIn();
-    }
 }
 
 void
