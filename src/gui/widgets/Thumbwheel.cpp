@@ -15,10 +15,13 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[Thumbwheel]"
+
 #include "Thumbwheel.h"
 
 #include "base/Profiler.h"
 #include "misc/ConfigGroups.h"
+#include "misc/Debug.h"
 #include "gui/general/ThornStyle.h"
 
 #include <QMouseEvent>
@@ -309,14 +312,16 @@ Thumbwheel::mouseReleaseEvent(QMouseEvent *e)
 void
 Thumbwheel::wheelEvent(QWheelEvent *e)
 {
+    // We'll handle this.  Don't pass to parent.
+    e->accept();
+
     int step = lrintf(m_speed);
     if (step == 0) step = 1;
 
-    if (e->delta() > 0) {
+    if (e->angleDelta().y() > 0)
         setValue(m_value + step);
-    } else {
+    else if (e->angleDelta().y() < 0)
         setValue(m_value - step);
-    }
     
     emit valueChanged(getValue());
 }
