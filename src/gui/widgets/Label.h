@@ -55,7 +55,7 @@ protected:
         { emit doubleClicked(); }
 
     void wheelEvent(QWheelEvent *e) override
-        { emit scrollWheel(e->delta()); }
+        { emit scrollWheel(e->angleDelta().y()); }
 
 };
 

@@ -251,8 +251,8 @@ TransportDialog::TransportDialog(QWidget *parent):
     connect(ui->TempoDisplay, &Label::doubleClicked,
             this, &TransportDialog::slotEditTempo);
 
-    connect(ui->TempoDisplay, &Label::scrollWheel,
-            this, &TransportDialog::scrollTempo);
+    //connect(ui->TempoDisplay, &Label::scrollWheel,
+    //        this, &TransportDialog::scrollTempo);
 
     connect(ui->TimeSigDisplay, &Label::doubleClicked,
             this, &TransportDialog::slotEditTimeSignature);

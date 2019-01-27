@@ -155,7 +155,7 @@ signals:
     void editTempo(QWidget *);
     void editTimeSignature(QWidget *);
     void editTransportTime(QWidget *);
-    void scrollTempo(int);
+    //void scrollTempo(int);
     void panic();
 
 private:
