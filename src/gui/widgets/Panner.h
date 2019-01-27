@@ -23,6 +23,16 @@
 namespace Rosegarden
 {
 
+
+/// The light blue area that appears below the notation and matrix views.
+/**
+ * A Panner is the light blue navigation area below the notation and matrix
+ * views.  It is to the left of the set of three thumbwheels that can be
+ * used for panning and zooming.
+ *
+ * The viewport can be moved around by clicking and dragging in
+ * the Panner.  Using the scroll wheel within the Panner zooms in and out.
+ */
 class Panner : public QGraphicsView
 {
     Q_OBJECT
