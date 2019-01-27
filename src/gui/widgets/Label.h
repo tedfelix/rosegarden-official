@@ -54,8 +54,12 @@ protected:
     void mouseDoubleClickEvent(QMouseEvent * /*e*/) override
         { emit doubleClicked(); }
 
-    void wheelEvent(QWheelEvent *e) override
-        { emit scrollWheel(e->angleDelta().y()); }
+    void wheelEvent(QWheelEvent *e) override {
+        // We'll handle this.  Don't pass to parent.
+        e->accept();
+
+        emit scrollWheel(e->angleDelta().y());
+    }
 
 };
 

@@ -251,6 +251,9 @@ Panner::mouseReleaseEvent(QMouseEvent *e)
 void
 Panner::wheelEvent(QWheelEvent *e)
 {
+    // We'll handle this.  Don't pass to parent.
+    e->accept();
+
     if (e->angleDelta().y() > 0)
         emit zoomOut();
     else if (e->angleDelta().y() < 0)
