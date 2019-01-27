@@ -16,3 +16,5 @@
 */
 
 #include "Label.h"
+
+// Required for the meta-object compiler.
