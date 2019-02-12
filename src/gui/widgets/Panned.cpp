@@ -33,7 +33,7 @@ namespace Rosegarden
 
 
 Panned::Panned() :
-    m_pannedRect(),
+    m_viewportScene(),
     m_pointerTop(),
     m_pointerHeight(0),
     m_pointerVisible(false),
@@ -49,9 +49,9 @@ Panned::resizeEvent(QResizeEvent *ev)
     //RG_DEBUG << "resizeEvent(): viewportScene = " << viewportScene;
 
     // If the viewport has changed (resized)...
-    if (viewportScene != m_pannedRect) {
-        m_pannedRect = viewportScene;
-        emit pannedRectChanged(viewportScene);
+    if (viewportScene != m_viewportScene) {
+        m_viewportScene = viewportScene;
+        emit viewportChanged(viewportScene);
     }
 
     QGraphicsView::resizeEvent(ev);
@@ -80,14 +80,14 @@ Panned::scrollContentsBy(int dx, int dy)
     const QRectF viewportScene = mapToScene(rect()).boundingRect();
 
     // If the viewport has changed (scrolled)...
-    if (viewportScene != m_pannedRect) {
+    if (viewportScene != m_viewportScene) {
         // If we've moved horizontally
-        if (viewportScene.x() != m_pannedRect.x())
+        if (viewportScene.x() != m_viewportScene.x())
             emit pannedContentsScrolled();
 
-        m_pannedRect = viewportScene;
+        m_viewportScene = viewportScene;
 
-        emit pannedRectChanged(viewportScene);
+        emit viewportChanged(viewportScene);
     }
 
     QGraphicsView::scrollContentsBy(dx, dy);
@@ -104,14 +104,14 @@ Panned::drawForeground(QPainter *paint, const QRectF &)
     const QRectF viewportScene = mapToScene(rect()).boundingRect();
 
     // If the viewport has changed (scrolled)...
-    if (viewportScene != m_pannedRect) {
+    if (viewportScene != m_viewportScene) {
         // If we've moved horizontally
-        if (viewportScene.x() != m_pannedRect.x())
+        if (viewportScene.x() != m_viewportScene.x())
             emit pannedContentsScrolled();
 
-        m_pannedRect = viewportScene;
+        m_viewportScene = viewportScene;
 
-        emit pannedRectChanged(viewportScene);
+        emit viewportChanged(viewportScene);
     }
 
     // Draw the Playback Position Pointer
@@ -138,7 +138,7 @@ Panned::drawForeground(QPainter *paint, const QRectF &)
 }
 
 void
-Panned::slotSetPannedRect(QRectF viewportScene)
+Panned::slotSetViewport(QRectF viewportScene)
 {
     // ??? We're just centering.  That explains why zoom has to travel by
     //     a different path (zoomIn() and zoomOut() signals).

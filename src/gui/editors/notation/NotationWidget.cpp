@@ -321,11 +321,11 @@ NotationWidget::NotationWidget() :
     connect(m_view->horizontalScrollBar(), &QAbstractSlider::rangeChanged,
             this, &NotationWidget::slotHScrollBarRangeChanged);
 
-    connect(m_view, &Panned::pannedRectChanged,
+    connect(m_view, &Panned::viewportChanged,
             m_hpanner, &Panner::slotSetPannedRect);
 
     connect(m_hpanner, &Panner::pannedRectChanged,
-            m_view, &Panned::slotSetPannedRect);
+            m_view, &Panned::slotSetViewport);
 
     connect(m_hpanner, &Panner::pannerChanged,
              this, &NotationWidget::slotAdjustHeadersVerticalPos);
@@ -485,7 +485,7 @@ NotationWidget::setSegments(RosegardenDocument *document,
     m_controlsWidget->setViewSegment(m_scene->getCurrentStaff());
     m_controlsWidget->setRulerScale(m_referenceScale, m_leftGutter);
 
-    connect(m_view, &Panned::pannedRectChanged,
+    connect(m_view, &Panned::viewportChanged,
             m_controlsWidget, &ControlRulerWidget::slotSetPannedRect);
 
     connect(m_controlsWidget, &ControlRulerWidget::dragScroll,

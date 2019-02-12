@@ -66,10 +66,8 @@ signals:
      *
      * Handlers of this typically use the viewport rect to stay in sync
      * with the main view and each other.
-     *
-     * rename: viewportChanged()
      */
-    void pannedRectChanged(QRectF viewportScene);
+    void viewportChanged(QRectF viewportScene);
 
     /// Emitted when a wheel event is received.
     /**
@@ -81,7 +79,7 @@ signals:
      * the matrix view's slotEmulateWheelEvent() slot.  This ensures that the
      * matrix view stays in sync with the piano view.
      *
-     * ??? Since we already have a pannedRectChanged() signal, why not also
+     * ??? Since we already have a viewportChanged() signal, why not also
      *     offer a slotSyncVertical() that can handle that signal and keep
      *     two views in sync vertically (position and zoom)?  That would
      *     eliminate the need for the wheelEventReceived() signal.  This
@@ -96,7 +94,7 @@ signals:
      *
      * ??? As with the MatrixWidget, we might be able to get rid of this
      *     signal and instead connect the track headers view's
-     *     pannedRectChanged() to a new slotSyncVertical() in the
+     *     viewportChanged() to a new slotSyncVertical() in the
      *     notation view.  That should be simpler and fix some bugs.
      */
     void wheelEventReceived(QWheelEvent *);
@@ -109,10 +107,10 @@ signals:
      * forwards the position info to the various rulers.  It does other things
      * as well.
      *
-     * ??? Perhaps we can get rid of this and instead use pannedRectChanged().
+     * ??? Perhaps we can get rid of this and instead use viewportChanged().
      *     Since this provides absolutely no info, we should be able to easily
-     *     do this in a pannedRectChanged() handler within the Widget classes.
-     *     pannedRectChanged() is sent more frequently, but who cares?  If
+     *     do this in a viewportChanged() handler within the Widget classes.
+     *     viewportChanged() is sent more frequently, but who cares?  If
      *     we want to be more efficient, we can detect horizontal scrolling
      *     in the handlers.
      *
@@ -144,10 +142,7 @@ signals:
 
 public slots:
     /// Actually, this only centers the viewport.
-    /**
-     * rename: slotSetViewport();
-     */
-    void slotSetPannedRect(QRectF viewportScene);
+    void slotSetViewport(QRectF viewportScene);
     void slotEmulateWheelEvent(QWheelEvent *ev);
 
 protected:
@@ -166,11 +161,9 @@ protected:
 private:
     /// Cache to detect changes in the viewport.  Scene coords.
     /**
-     * See pannedRectChanged().
-     *
-     * rename: m_viewportScene
+     * See viewportChanged().
      */
-    QRectF m_pannedRect;
+    QRectF m_viewportScene;
 
     /// Top of the playback position pointer.  Scene coords.
     /**

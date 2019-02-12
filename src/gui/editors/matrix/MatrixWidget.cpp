@@ -261,13 +261,13 @@ MatrixWidget::MatrixWidget(bool drumMode) :
     connect(m_view->horizontalScrollBar(), &QAbstractSlider::rangeChanged,
             this, &MatrixWidget::slotHScrollBarRangeChanged);
 
-    connect(m_view, &Panned::pannedRectChanged,
+    connect(m_view, &Panned::viewportChanged,
             m_hpanner, &Panner::slotSetPannedRect);
 
-    connect(m_view, &Panned::pannedRectChanged,
-            m_pianoView, &Panned::slotSetPannedRect);
+    connect(m_view, &Panned::viewportChanged,
+            m_pianoView, &Panned::slotSetViewport);
 
-    connect(m_view, &Panned::pannedRectChanged,
+    connect(m_view, &Panned::viewportChanged,
             m_controlsWidget, &ControlRulerWidget::slotSetPannedRect);
 
     connect(m_view, &Panned::zoomIn,
@@ -276,10 +276,10 @@ MatrixWidget::MatrixWidget(bool drumMode) :
             this, &MatrixWidget::slotZoomOut);
 
     connect(m_hpanner, &Panner::pannedRectChanged,
-            m_view, &Panned::slotSetPannedRect);
+            m_view, &Panned::slotSetViewport);
 
     connect(m_hpanner, &Panner::pannedRectChanged,
-            m_pianoView, &Panned::slotSetPannedRect);
+            m_pianoView, &Panned::slotSetViewport);
 
     connect(m_hpanner, &Panner::pannedRectChanged,
             m_controlsWidget, &ControlRulerWidget::slotSetPannedRect);
