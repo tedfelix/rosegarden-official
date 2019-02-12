@@ -23,16 +23,19 @@
 #include "base/Profiler.h"
 #include "gui/general/GUIPalette.h"
 
-#include <QApplication>
+#include <QPainter>
 #include <QScrollBar>
 #include <QWheelEvent>
 
-#include <iostream>
 
 namespace Rosegarden
 {
 
+
 Panned::Panned() :
+    m_pannedRect(),
+    m_pointerTop(),
+    m_pointerHeight(0),
     m_pointerVisible(false),
     m_wheelZoomPan(false)
 {
@@ -85,7 +88,8 @@ Panned::drawForeground(QPainter *paint, const QRectF &)
     if (m_pointerVisible && scene()) {
         QPoint top = mapFromScene(m_pointerTop);
         float height = m_pointerHeight;
-        if (height == 0.f) height = scene()->height();
+        if (height == 0.f)
+            height = scene()->height();
         QPoint bottom = mapFromScene
             (m_pointerTop + QPointF(0, height));
         paint->save();
@@ -105,7 +109,7 @@ Panned::slotSetPannedRect(QRectF pr)
 }
 
 void
-Panned::slotShowPositionPointer(float x) // scene coord; full height
+Panned::showPositionPointer(float x) // scene coord; full height
 {
     if (m_pointerVisible) {
         QRect oldRect = QRect(mapFromScene(m_pointerTop),
@@ -127,7 +131,7 @@ Panned::slotShowPositionPointer(float x) // scene coord; full height
 }
 
 void
-Panned::slotShowPositionPointer(QPointF top, float height) // scene coords
+Panned::showPositionPointer(QPointF top, float height) // scene coords
 {
     m_pointerVisible = true;
     m_pointerTop = top;
@@ -136,7 +140,7 @@ Panned::slotShowPositionPointer(QPointF top, float height) // scene coords
 }
 
 void
-Panned::slotEnsurePositionPointerInView(bool page)
+Panned::ensurePositionPointerInView(bool page)
 {
     if (!m_pointerVisible || !scene()) return;
 
@@ -172,21 +176,21 @@ Panned::slotEnsurePositionPointerInView(bool page)
     // Is x inside the scene? If not do nothing.
     if ((x < x1) || (x > x2)) return;
 
-//    std::cerr << "page = " << page << std::endl;
+    //RG_DEBUG << "ensurePositionPointerInView(): page = " << page;
 
     int value = horizontalScrollBar()->value();
 
-//    std::cerr << "x = " << x << ", left = " << left << ", leftThreshold = " << leftThreshold << ", right = " << right << ", rightThreshold = " << rightThreshold << std::endl;
+    //RG_DEBUG << "x = " << x << ", left = " << left << ", leftThreshold = " << leftThreshold << ", right = " << right << ", rightThreshold = " << rightThreshold;
 
     // Is x inside the view?
 //  if (x < leftThreshold || (x > rightThreshold && x < right && page)) {
     // Allow a little room for x to overshoot the left threshold when the scrollbar is updated.
     if (x < leftThreshold - 100 || (x > rightThreshold && x < right && page)) {
-//        std::cerr << "big scroll (x is off left, or paging)" << std::endl;
+        //RG_DEBUG << "big scroll (x is off left, or paging)" <<;
         // scroll to have the left of the view, plus threshold, at x
         value = hMin + (((x - ws * leftDist) - x1) * (hMax - hMin)) / (length - ws);
     } else if (x > rightThreshold) {
-//        std::cerr << "small scroll (x is off right and not paging)" << std::endl;
+        //RG_DEBUG << "small scroll (x is off right and not paging)";
         value = hMin + (((x - ws * (1.0 - rightDist)) - x1) * (hMax - hMin)) / (length - ws);
     }
 
@@ -200,7 +204,7 @@ Panned::slotEnsurePositionPointerInView(bool page)
     // Then setupMouseEvent() and setCurrentStaff() will be called from scene.
     // Then slotUpdatePointerPosition() and slotpointerPositionChanged() will
     // be called from NotationWidget.
-    // Then again Panned::slotEnsurePositionPointerInView() and probably the
+    // Then again Panned::ensurePositionPointerInView() and probably the ?
     // is moved again : this is an infinite recursive call loop which leads to
     // crash.
 
@@ -243,7 +247,7 @@ Panned::slotEnsurePositionPointerInView(bool page)
 }
 
 void
-Panned::slotHidePositionPointer()
+Panned::hidePositionPointer()
 {
     m_pointerVisible = false;
     viewport()->update(); //!!! should update old pointer area only, really
@@ -337,5 +341,5 @@ Panned::leaveEvent(QEvent *)
     emit mouseLeaves();
 }
 
-}
 
+}

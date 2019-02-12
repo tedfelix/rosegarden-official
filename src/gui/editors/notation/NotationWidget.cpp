@@ -865,7 +865,7 @@ NotationWidget::slotSetPlayTracking(bool tracking)
 {
     m_playTracking = tracking;
     if (m_playTracking) {
-        m_view->slotEnsurePositionPointerInView(true);
+        m_view->ensurePositionPointerInView(true);
     }
 }
 
@@ -911,15 +911,15 @@ NotationWidget::showPointerPosition(timeT t, bool moveView, bool page)
     double x2 = x1 + m_scene->sceneRect().width();
 
     if ((sceneX < x1) || (sceneX > x2)) {
-        m_view->slotHidePositionPointer();
+        m_view->hidePositionPointer();
         m_hpanner->slotHidePositionPointer();
     } else {
-        m_view->slotShowPositionPointer(QPointF(sceneX, sceneY), height);
+        m_view->showPositionPointer(QPointF(sceneX, sceneY), height);
         m_hpanner->slotShowPositionPointer(QPointF(sceneX, sceneY), height);
     }
 
     if (moveView) {
-        m_view->slotEnsurePositionPointerInView(page);
+        m_view->ensurePositionPointerInView(page);
     }
 }
 

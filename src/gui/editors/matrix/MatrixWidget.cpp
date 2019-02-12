@@ -957,7 +957,7 @@ MatrixWidget::slotSetPlayTracking(bool tracking)
 {
     m_playTracking = tracking;
     if (m_playTracking) {
-        m_view->slotEnsurePositionPointerInView(true);
+        m_view->ensurePositionPointerInView(true);
     }
 }
 
@@ -1070,15 +1070,15 @@ MatrixWidget::slotPointerPositionChanged(timeT t, bool moveView)
     double x2 = x1 + m_scene->sceneRect().width();
 
     if ((sceneX < x1) || (sceneX > x2)) {
-        m_view->slotHidePositionPointer();
+        m_view->hidePositionPointer();
         m_hpanner->slotHidePositionPointer();
     } else {
-        m_view->slotShowPositionPointer(sceneX);
+        m_view->showPositionPointer(sceneX);
         m_hpanner->slotShowPositionPointer(sceneX);
     }
 
     if (getPlayTracking() || !fromDocument) {
-        if (moveView) m_view->slotEnsurePositionPointerInView(fromDocument);
+        if (moveView) m_view->ensurePositionPointerInView(fromDocument);
     }
 }
 
@@ -1468,10 +1468,10 @@ MatrixWidget::showInitialPointer()
 
     if ((sceneX < x1) || (sceneX > x2)) {
         // Place insertion marker at begining of scene.
-        m_view->slotShowPositionPointer(x1);
+        m_view->showPositionPointer(x1);
         m_hpanner->slotShowPositionPointer(x1);
     } else {
-        m_view->slotShowPositionPointer(sceneX);
+        m_view->showPositionPointer(sceneX);
         m_hpanner->slotShowPositionPointer(sceneX);
     }
 }
