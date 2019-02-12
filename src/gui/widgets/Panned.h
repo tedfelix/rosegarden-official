@@ -32,7 +32,10 @@ namespace Rosegarden
 {
 
 
-/// A QGraphicsView that offers pan synchronization.
+/// A QGraphicsView that offers viewport synchronization.
+/**
+ * Rename: SynchronizedGraphicsView
+ */
 class Panned : public QGraphicsView
 {
     Q_OBJECT
@@ -44,52 +47,83 @@ public:
     /// Enable wheel shift pan/ctrl zoom behavior.
     void setWheelZoomPan(bool wheelZoomPan)  { m_wheelZoomPan = wheelZoomPan; }
 
-    /// Scene coords; full height.
+
+    // *** Playback Position Pointer
+
+    /// MatrixWidget full-height pointer.  Scene coords.
     void showPositionPointer(float x);
-    /// Scene coords.
+    /// NotationWidget specific height pointer.  Scene coords.
     void showPositionPointer(QPointF top, float height);
     void hidePositionPointer();
     /// If visible.
     void ensurePositionPointerInView(bool page);
 
 signals:
-    /// Emitted when the panned rect changes.
+    /// Emitted when the viewport changes.  Scene coords.
     /**
-     * 5 connect() calls.
+     * This is emitted when the foreground is redrawn, or when the window
+     * is resized and the visible scene coords change.
+     *
+     * Handlers of this typically use the viewport rect to stay in sync
+     * with the main view and each other.
+     *
+     * rename: viewportChanged()
      */
-    void pannedRectChanged(QRectF);
+    void pannedRectChanged(QRectF viewportScene);
 
-    /// Use to synchronize two Panned views.
+    /// Emitted when a wheel event is received.
     /**
-     * Connect this to the other Panned view's slotEmulateWheelEvent() and
+     * Used to synchronize two views.
+     *
+     * Connect this to the other view's slotEmulateWheelEvent() and
      * vice versa.
      *
-     * 2 connect() calls.
+     * ??? Is this redundant?  We're already syncing based on the viewport
+     *     with pannedRectChanged().  Why do we need this as well?
      */
     void wheelEventReceived(QWheelEvent *);
 
     /**
      * 2 connect() calls.
+     *
+     * ??? Is this redundant?  We're already syncing based on the viewport
+     *     with pannedRectChanged().  Why do we need this as well?
+     *
+     * rename: horizontalScroll()
      */
     void pannedContentsScrolled();
+
+    /// Emitted when a leaveEvent() is received.
     /**
-     * 1 connect() call.
+     * Used by the MatrixWidget to remove the pitch highlight.
      */
     void mouseLeaves();
 
     /// Emitted on ctrl+wheel.
     /**
      * 2 connect() calls.
+     *
+     * ??? Is this redundant?  We're already syncing based on the viewport
+     *     with pannedRectChanged().  Why do we need this as well?
+     *     slotSetPannedRect() only centers.  That might be part of the reason.
      */
     void zoomIn();
     /// Emitted on ctrl+wheel.
     /**
      * 2 connect() calls.
+     *
+     * ??? Is this redundant?  We're already syncing based on the viewport
+     *     with pannedRectChanged().  Why do we need this as well?
+     *     slotSetPannedRect() only centers.  That might be part of the reason.
      */
     void zoomOut();
 
 public slots:
-    void slotSetPannedRect(QRectF);
+    /// Actually, this only centers the viewport.
+    /**
+     * rename: slotSetViewport();
+     */
+    void slotSetPannedRect(QRectF viewportScene);
     void slotEmulateWheelEvent(QWheelEvent *ev);
 
 protected:
@@ -99,22 +133,27 @@ protected:
     void wheelEvent(QWheelEvent *) override;
     void leaveEvent(QEvent *) override;
 
+    // QAbstractScrollArea override.
+    //void scrollContentsBy(int dx, int dy) override;
+
     // QGraphicsView override.
     void drawForeground(QPainter *, const QRectF &) override;
 
 private:
-    /// Cache to detect changes in the panned rect.
+    /// Cache to detect changes in the viewport.  Scene coords.
     /**
      * See pannedRectChanged().
+     *
+     * rename: m_viewportScene
      */
     QRectF m_pannedRect;
 
-    /// Top of the playback position pointer.
+    /// Top of the playback position pointer.  Scene coords.
     /**
      * Set by the showPositionPointer() overloaded functions.
      */
     QPointF m_pointerTop;
-    /// Height of the playback position pointer.
+    /// Height of the playback position pointer.  Scene coords.
     /**
      * 0 means full height.
      *

@@ -44,16 +44,14 @@ Panned::Panned() :
 void
 Panned::resizeEvent(QResizeEvent *ev)
 {
-    QPointF near = mapToScene(0, 0);
-    QPointF far = mapToScene(width(), height());
-    QSizeF sz(far.x()-near.x(), far.y()-near.y());
-    QRectF pr(near, sz);
+    const QRectF viewportScene = mapToScene(rect()).boundingRect();
 
-    RG_DEBUG << "Panned::resizeEvent: pr = " << pr;
+    //RG_DEBUG << "resizeEvent(): viewportScene = " << viewportScene;
 
-    if (pr != m_pannedRect) {
-        m_pannedRect = pr;
-        emit pannedRectChanged(pr);
+    // If the viewport has changed (resized)...
+    if (viewportScene != m_pannedRect) {
+        m_pannedRect = viewportScene;
+        emit pannedRectChanged(viewportScene);
     }
 
     QGraphicsView::resizeEvent(ev);
@@ -67,45 +65,87 @@ Panned::paintEvent(QPaintEvent *e)
     QGraphicsView::paintEvent(e);
 }
 
+#if 0
+// It would be nice to do this instead of detecting scrolling in
+// drawForeground().  Unfortunately, this is unreliable.  Need to
+// track down why.  Specifically, scrolling with the arrow keys ends
+// up out of sync.
+void
+Panned::scrollContentsBy(int dx, int dy)
+{
+    //RG_DEBUG << "scrollContentsBy()";
+
+    // Determine whether we've scrolled and emit appropriate signals.
+
+    const QRectF viewportScene = mapToScene(rect()).boundingRect();
+
+    // If the viewport has changed (scrolled)...
+    if (viewportScene != m_pannedRect) {
+        // If we've moved horizontally
+        if (viewportScene.x() != m_pannedRect.x())
+            emit pannedContentsScrolled();
+
+        m_pannedRect = viewportScene;
+
+        emit pannedRectChanged(viewportScene);
+    }
+
+    QGraphicsView::scrollContentsBy(dx, dy);
+}
+#endif
+
 void
 Panned::drawForeground(QPainter *paint, const QRectF &)
 {
     Profiler profiler("Panned::drawForeground");
 
-    QPointF near = mapToScene(0, 0);
-    QPointF far = mapToScene(width(), height());
-    QSizeF sz(far.x()-near.x(), far.y()-near.y());
-    QRectF pr(near, sz);
+    // Detect viewport scrolling and emit appropriate signals
 
-//    RG_DEBUG << "Panned::drawForeground: pr = " << pr;
+    const QRectF viewportScene = mapToScene(rect()).boundingRect();
 
-    if (pr != m_pannedRect) {
-        if (pr.x() != m_pannedRect.x()) emit pannedContentsScrolled();
-        m_pannedRect = pr;
-        emit pannedRectChanged(pr);
+    // If the viewport has changed (scrolled)...
+    if (viewportScene != m_pannedRect) {
+        // If we've moved horizontally
+        if (viewportScene.x() != m_pannedRect.x())
+            emit pannedContentsScrolled();
+
+        m_pannedRect = viewportScene;
+
+        emit pannedRectChanged(viewportScene);
     }
 
-    if (m_pointerVisible && scene()) {
-        QPoint top = mapFromScene(m_pointerTop);
-        float height = m_pointerHeight;
-        if (height == 0.f)
-            height = scene()->height();
-        QPoint bottom = mapFromScene
-            (m_pointerTop + QPointF(0, height));
-        paint->save();
-        paint->setWorldMatrix(QMatrix());
-        paint->setPen(QPen(GUIPalette::getColour(GUIPalette::Pointer), 2));
-        paint->drawLine(top, bottom);
-        paint->restore();
-    }
+    // Draw the Playback Position Pointer
+
+    if (!m_pointerVisible)
+        return;
+
+    if (!scene())
+        return;
+
+    QPoint top = mapFromScene(m_pointerTop);
+
+    float height = m_pointerHeight;
+    if (height == 0)
+        height = scene()->height();
+
+    QPoint bottom = mapFromScene(m_pointerTop + QPointF(0, height));
+
+    paint->save();
+    paint->setWorldMatrix(QMatrix());
+    paint->setPen(QPen(GUIPalette::getColour(GUIPalette::Pointer), 2));
+    paint->drawLine(top, bottom);
+    paint->restore();
 }
 
 void
-Panned::slotSetPannedRect(QRectF pr)
+Panned::slotSetPannedRect(QRectF viewportScene)
 {
-    centerOn(pr.center());
-//	setSceneRect(pr);
-//	m_pannedRect = pr;
+    // ??? We're just centering.  That explains why zoom has to travel by
+    //     a different path (zoomIn() and zoomOut() signals).
+    centerOn(viewportScene.center());
+
+    // ??? Wouldn't this eliminate the need for the zoom signals?
+    //setSceneRect(viewportScene);
 }
 
 void
@@ -209,7 +249,7 @@ Panned::ensurePositionPointerInView(bool page)
     // crash.
 
     // To avoid it, ensureVisible() should not be called on a rectangle
-    // highter than the view :
+    // higher than the view :
 
     // Convert pointer height from scene coords to pixels
     int hPointerPx = mapFromScene(0, 0, 1,
