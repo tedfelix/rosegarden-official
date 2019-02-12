@@ -282,7 +282,11 @@ private:
     RawNoteRuler *m_rawNoteRuler; // I own this
     ControlRulerWidget *m_controlsWidget; // I own this
 
+    // Track Headers
+    // View > Show Track Headers
+
     HeadersGroup *m_headersGroup; // I own this
+    /// Track Headers that appear to the left of the staves.
     Panned *m_headersView; // I own this
     QGraphicsScene *m_headersScene; // I own this
     QWidget *m_headersButtons; // I own this

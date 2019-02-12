@@ -73,21 +73,48 @@ signals:
 
     /// Emitted when a wheel event is received.
     /**
-     * Used to synchronize two views.
+     * Used to synchronize a primary view (e.g. the matrix view) to a
+     * secondary view (e.g. the matrix widget's piano view) when the user
+     * scrolls within the secondary view using the wheel.
      *
-     * Connect this to the other view's slotEmulateWheelEvent() and
-     * vice versa.
+     * MatrixWidget connects the piano view's wheelEventReceived() signal to
+     * the matrix view's slotEmulateWheelEvent() slot.  This ensures that the
+     * matrix view stays in sync with the piano view.
      *
-     * ??? Is this redundant?  We're already syncing based on the viewport
-     *     with pannedRectChanged().  Why do we need this as well?
+     * ??? Since we already have a pannedRectChanged() signal, why not also
+     *     offer a slotSyncVertical() that can handle that signal and keep
+     *     two views in sync vertically (position and zoom)?  That would
+     *     eliminate the need for the wheelEventReceived() signal.  This
+     *     would also fix the bug where using the scroll wheel with Shift
+     *     or Ctrl causes the matrix view to scroll and zoom and sometimes
+     *     end up out of sync with the piano view.
+     *
+     * NotationWidget connects the track headers view's wheelEventReceived()
+     * signal to the notation view's slotEmulateWheelEvent() slot.  This
+     * ensures that the notation view stays in sync with the track headers
+     * view.
+     *
+     * ??? As with the MatrixWidget, we might be able to get rid of this
+     *     signal and instead connect the track headers view's
+     *     pannedRectChanged() to a new slotSyncVertical() in the
+     *     notation view.  That should be simpler and fix some bugs.
      */
     void wheelEventReceived(QWheelEvent *);
 
     /**
-     * 2 connect() calls.
+     * MatrixWidget::slotHScroll() fields this one from the view and then
+     * forwards the position info to the various rulers.
      *
-     * ??? Is this redundant?  We're already syncing based on the viewport
-     *     with pannedRectChanged().  Why do we need this as well?
+     * NotationWidget::slotHScroll() fields this one from the view and then
+     * forwards the position info to the various rulers.  It does other things
+     * as well.
+     *
+     * ??? Perhaps we can get rid of this and instead use pannedRectChanged().
+     *     Since this provides absolutely no info, we should be able to easily
+     *     do this in a pannedRectChanged() handler within the Widget classes.
+     *     pannedRectChanged() is sent more frequently, but who cares?  If
+     *     we want to be more efficient, we can detect horizontal scrolling
+     *     in the handlers.
      *
      * rename: horizontalScroll()
      */
@@ -101,20 +128,17 @@ signals:
 
     /// Emitted on ctrl+wheel.
     /**
-     * 2 connect() calls.
+     * This drives the zoom behavior in MatrixWidget and NotationWidget.
+     * See MatrixWidget::slotZoomIn() and NotationWidget::slotZoomIn().
      *
-     * ??? Is this redundant?  We're already syncing based on the viewport
-     *     with pannedRectChanged().  Why do we need this as well?
-     *     slotSetPannedRect() only centers.  That might be part of the reason.
+     * ??? Might combine the two signals into a single zoom() signal with
+     *     a bool to indicate "in" vs. "out".
      */
     void zoomIn();
     /// Emitted on ctrl+wheel.
     /**
-     * 2 connect() calls.
-     *
-     * ??? Is this redundant?  We're already syncing based on the viewport
-     *     with pannedRectChanged().  Why do we need this as well?
-     *     slotSetPannedRect() only centers.  That might be part of the reason.
+     * This drives the zoom behavior in MatrixWidget and NotationWidget.
+     * See MatrixWidget::slotZoomOut() and NotationWidget::slotZoomOut().
      */
     void zoomOut();
 
