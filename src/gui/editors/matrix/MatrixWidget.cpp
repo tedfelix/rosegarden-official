@@ -1313,17 +1313,19 @@ MatrixWidget::slotHoveredOverKeyChanged(unsigned int y)
     int evPitch = m_scene->calculatePitchFromY(y);
     m_pitchRuler->drawHoverNote(evPitch);
     m_pianoView->update();   // Needed to remove black trailers left by
-                             // hover note at hight zoom levels
+                             // hover note at high zoom levels
 }
 
 void
 MatrixWidget::slotMouseLeavesView()
 {
-    // The mouse leaves the view, so the hover note in pitch ruler
-    // have to be unhilighted
+    // The mouse has left the view, so the hover note in the pitch ruler
+    // has to be unhighlighted.
     m_pitchRuler->hideHoverNote();
-    m_pianoView->update();   // Needed to remove black trailers left by
-                             // hover note at hight zoom levels
+
+    // At high zoom levels, black trailers are left behind.  This makes
+    // sure they are removed.  (Retest this.)
+    m_pianoView->update();
 }
 
 
