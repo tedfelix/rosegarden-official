@@ -511,31 +511,35 @@ Studio::toXmlString(const std::vector<DeviceId> &devices) const
     return studio.str();
 }
 
-// Run through the Devices checking for MidiDevices and
-// returning the first Metronome we come across
-//
-const MidiMetronome*
+const MidiMetronome *
 Studio::getMetronomeFromDevice(DeviceId id)
 {
-    std::vector<Device*>::iterator it;
+    // For each Device
+    for (std::vector<Device *>::const_iterator deviceIter = m_devices.begin();
+         deviceIter != m_devices.end();
+         ++deviceIter) {
 
-    for (it = m_devices.begin(); it != m_devices.end(); ++it) {
+        //RG_DEBUG << "getMetronomeFromDevice(): Having a look at device " << (*it)->getId();
 
-        RG_DEBUG << "getMetronomeFromDevice(): Having a look at device " << (*it)->getId();
+        // No ID match?  Try the next.
+        if ((*deviceIter)->getId() != id)
+            continue;
 
-        MidiDevice *midiDevice = dynamic_cast<MidiDevice*>(*it);
-        if (midiDevice && 
-            midiDevice->getId() == id &&
+        MidiDevice *midiDevice = dynamic_cast<MidiDevice *>(*deviceIter);
+
+        // If it's a MidiDevice and it has a metronome, return it.
+        if (midiDevice  &&
             midiDevice->getMetronome()) {
-            RG_DEBUG << "getMetronomeFromDevice(" << id << "): device is a MIDI device";
+            //RG_DEBUG << "getMetronomeFromDevice(" << id << "): device is a MIDI device";
             return midiDevice->getMetronome();
         }
 
-        SoftSynthDevice *ssDevice = dynamic_cast<SoftSynthDevice *>(*it);
-        if (ssDevice && 
-            ssDevice->getId() == id &&
+        SoftSynthDevice *ssDevice = dynamic_cast<SoftSynthDevice *>(*deviceIter);
+
+        // If it's a SoftSynthDevice and it has a metronome, return it.
+        if (ssDevice  &&
             ssDevice->getMetronome()) {
-            RG_DEBUG << "getMetronomeFromDevice(" << id << "): device is a soft synth device";
+            //RG_DEBUG << "getMetronomeFromDevice(" << id << "): device is a soft synth device";
             return ssDevice->getMetronome();
         }
     }
