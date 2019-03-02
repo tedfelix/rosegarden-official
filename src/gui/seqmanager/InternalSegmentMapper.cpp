@@ -400,6 +400,9 @@ InternalSegmentMapper::
 makeReady(MappedInserterBase &inserter, RealTime time)
 {
     Instrument *instrument = m_doc->getInstrument(m_segment);
+    if (!instrument)
+        return;
+
     m_channelManager.setInstrument(instrument);
     m_channelManager.makeReady(
             m_segment->getTrack(),
@@ -412,6 +415,8 @@ void
 InternalSegmentMapper::insertChannelSetup(MappedInserterBase &inserter)
 {
     Instrument *instrument = m_doc->getInstrument(m_segment);
+    if (!instrument)
+        return;
 
     // If this segment's Instrument is in Auto channels mode, bail.
     if (!instrument->hasFixedChannel())
@@ -430,6 +435,8 @@ InternalSegmentMapper::doInsert(MappedInserterBase &inserter, MappedEvent &evt,
                                RealTime start, bool dirtyIter)
 {
     Instrument *instrument = m_doc->getInstrument(m_segment);
+    if (!instrument)
+        return;
 
     if (dirtyIter)
         m_channelManager.setInstrument(instrument);
@@ -478,6 +485,10 @@ ControllerAndPBList
 InternalSegmentMapper::getControllers(Instrument *instrument, RealTime start)
 {
     Profiler profiler("InternalSegmentMapper::getControllers()", false);
+
+    if (!instrument)
+        return ControllerAndPBList();
+
     timeT startTime =
         m_doc->getComposition().getElapsedTimeForRealTime(start);
 
