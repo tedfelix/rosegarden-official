@@ -58,12 +58,21 @@ MetronomeMapper::MetronomeMapper(RosegardenDocument *doc) :
         // Make a local copy.
         m_metronome = new MidiMetronome(*metronome);
     } else {
-        RG_WARNING << "ctor: no metronome for device " << metronomeDeviceId;
+        RG_WARNING << "WARNING: ctor: No metronome for device " << metronomeDeviceId;
+        // ??? This isn't good enough.  Chances are very good if there is
+        //     no metronome, there are no Device or Instrument objects to
+        //     connect to.
         m_metronome = new MidiMetronome(SystemInstrumentBase);
     }
 
-    // As we promised, set instrument
     m_instrument = studio.getInstrumentById(m_metronome->getInstrument());
+
+    if (!m_instrument) {
+        RG_WARNING << "FATAL: ctor: Metronome is not connected to an Instrument.";
+        // ??? Message box?
+    }
+
+    // As we promised, set instrument
     m_channelManager.setInstrument(m_instrument);
     m_channelManager.setEternalInterval();
 
@@ -157,7 +166,7 @@ MetronomeMapper::MetronomeMapper(RosegardenDocument *doc) :
 
 MetronomeMapper::~MetronomeMapper()
 {
-    RG_DEBUG << "dtor: " << this;
+    //RG_DEBUG << "dtor: " << this;
 
     delete m_metronome;
     m_metronome = nullptr;
@@ -260,6 +269,9 @@ void
 MetronomeMapper::doInsert(MappedInserterBase &inserter, MappedEvent &evt,
                           RealTime start, bool firstOutput)
 {
+    if (!m_instrument)
+        return;
+
     m_channelManager.insertEvent(
             NO_TRACK,  // trackId
             m_instrument->getStaticControllers(),
@@ -273,6 +285,17 @@ void
 MetronomeMapper::
 makeReady(MappedInserterBase &inserter, RealTime time)
 {
+    if (!m_instrument) {
+        RG_WARNING << "FATAL: makeReady(): No Instrument for the metronome.";
+        RG_WARNING << "  Check the Composition's MIDI Devices and make sure the metronome is connected to one.";
+        // Unfortunately, shoring this up is non-trivial.  Going to just
+        // crash here and try to track down the source of the missing
+        // Device objects and fix that.
+        Q_ASSERT_X(m_instrument, "MetronomeMapper::makeReady()",
+                   "Metronome is not connected to a device.");
+        return;
+    }
+
     m_channelManager.makeReady(
             NO_TRACK,  // trackId
             time,
