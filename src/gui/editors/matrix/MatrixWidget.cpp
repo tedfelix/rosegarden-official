@@ -746,7 +746,7 @@ MatrixWidget::clearSelection()
     MatrixSelector *selector = dynamic_cast<MatrixSelector *>(m_currentTool);
 
     if (!selector)
-        slotSetSelectTool();
+        setSelectAndEditTool();
     else
         setSelection(nullptr, false);
 }
@@ -913,46 +913,49 @@ MatrixWidget::setDrawTool()
 }
 
 void
-MatrixWidget::slotSetEraseTool()
+MatrixWidget::setEraseTool()
 {
     slotSetTool(MatrixEraser::ToolName());
 }
 
 void
-MatrixWidget::slotSetSelectTool()
+MatrixWidget::setSelectAndEditTool()
 {
-    //MATRIX_DEBUG << "slotSetSelectTool";
-    
     slotSetTool(MatrixSelector::ToolName());
+
     MatrixSelector *selector = dynamic_cast<MatrixSelector *>(m_currentTool);
     if (selector) {
-        //MATRIX_DEBUG << "slotSetSelectTool: selector successfully set";
-    
+        //RG_DEBUG << "setSelectAndEditTool(): selector successfully set";
+
+        // ??? This will pile up connections each time we select the arrow
+        //     tool.  Need to use Qt::AutoConnection | Qt::UniqueConnection.
+        //     This will cause connect() to fail.  Not sure how.  Might
+        //     need to check for errors.
         connect(selector, &MatrixSelector::editTriggerSegment,
                 this, &MatrixWidget::editTriggerSegment);
     }
 }
 
 void
-MatrixWidget::slotSetMoveTool()
+MatrixWidget::setMoveTool()
 {
     slotSetTool(MatrixMover::ToolName());
 }
 
 void
-MatrixWidget::slotSetResizeTool()
+MatrixWidget::setResizeTool()
 {
     slotSetTool(MatrixResizer::ToolName());
 }
 
 void
-MatrixWidget::slotSetVelocityTool()
+MatrixWidget::setVelocityTool()
 {
     slotSetTool(MatrixVelocity::ToolName());
 }
 
 void
-MatrixWidget::slotSetPlayTracking(bool tracking)
+MatrixWidget::setScrollToFollowPlayback(bool tracking)
 {
     m_playTracking = tracking;
     if (m_playTracking) {

@@ -183,7 +183,7 @@ MatrixView::MatrixView(RosegardenDocument *doc,
         MATRIX_DEBUG << "newest state for action '" << toolAction->objectName() << "' is " << toolAction->isChecked();
     }
 
-    m_matrixWidget->slotSetPlayTracking(m_tracking);
+    m_matrixWidget->setScrollToFollowPlayback(m_tracking);
 
     slotUpdateWindowTitle();
     connect(m_document, &RosegardenDocument::documentModified,
@@ -763,32 +763,36 @@ MatrixView::slotSetPaintTool()
 void
 MatrixView::slotSetEraseTool()
 {
-    if (m_matrixWidget) m_matrixWidget->slotSetEraseTool();
+    if (m_matrixWidget)
+        m_matrixWidget->setEraseTool();
 }
 
 void
 MatrixView::slotSetSelectTool()
 {
-    MATRIX_DEBUG << "MatrixView::slotSetSelectTool";
-    if (m_matrixWidget) m_matrixWidget->slotSetSelectTool();
+    if (m_matrixWidget)
+        m_matrixWidget->setSelectAndEditTool();
 }
 
 void
 MatrixView::slotSetMoveTool()
 {
-    if (m_matrixWidget) m_matrixWidget->slotSetMoveTool();
+    if (m_matrixWidget)
+        m_matrixWidget->setMoveTool();
 }
 
 void
 MatrixView::slotSetResizeTool()
 {
-    if (m_matrixWidget) m_matrixWidget->slotSetResizeTool();
+    if (m_matrixWidget)
+        m_matrixWidget->setResizeTool();
 }
 
 void
 MatrixView::slotSetVelocityTool()
 {
-    if (m_matrixWidget) m_matrixWidget->slotSetVelocityTool();
+    if (m_matrixWidget)
+        m_matrixWidget->setVelocityTool();
 }
 
 Segment *
@@ -1237,7 +1241,7 @@ void
 MatrixView::slotToggleTracking()
 {
     m_tracking = !m_tracking;
-    m_matrixWidget->slotSetPlayTracking(m_tracking);
+    m_matrixWidget->setScrollToFollowPlayback(m_tracking);
 }
 
 void

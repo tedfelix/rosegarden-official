@@ -108,6 +108,8 @@ public:
 
     void setHoverNoteVisible(bool visible);
 
+    // Interface for MatrixView menu commands
+
     /// Edit > Select All
     void selectAll();
     /// Edit > Clear Selection
@@ -118,6 +120,18 @@ public:
     void nextSegment();
     /// Tools > Draw
     void setDrawTool();
+    /// Tools > Erase
+    void setEraseTool();
+    /// Tools > Select and Edit
+    void setSelectAndEditTool();
+    /// Tools > Move
+    void setMoveTool();
+    /// Tools > Resize
+    void setResizeTool();
+    /// Tools > Velocity
+    void setVelocityTool();
+    /// Move > Scroll to Follow Playback
+    void setScrollToFollowPlayback(bool);
 
 signals:
     void editTriggerSegment(int);
@@ -129,43 +143,10 @@ signals:
     void selectionChanged();
 
 public slots:
-    // ??? I suspect few of these is actually used as slots.  MatrixView
+    // ??? I suspect few of these are actually used as slots.  MatrixView
     //     performs all the createAction() calls and uses its own slots.
     //     Nothing is ever connected to these.  Confirm and remove slot-ness
     //     (monster).
-
-    /// Tools > Erase
-    /**
-     * ??? Not used as a slot?  MatrixView has its own.
-     */
-    void slotSetEraseTool();
-    /// Tools > Select and Edit
-    /**
-     * ??? Not used as a slot?  MatrixView has its own.
-     * ??? rename: slotSetSelectAndEditTool() or slotToolsSelectAndEdit()
-     */
-    void slotSetSelectTool();
-    /// Tools > Move
-    /**
-     * ??? Not used as a slot?  MatrixView has its own.
-     */
-    void slotSetMoveTool();
-    /// Tools > Resize
-    /**
-     * ??? Not used as a slot?  MatrixView has its own.
-     */
-    void slotSetResizeTool();
-    /// Tools > Velocity
-    /**
-     * ??? Not used as a slot?  MatrixView has its own.
-     */
-    void slotSetVelocityTool();
-
-    /// Move > Scroll to Follow Playback
-    /**
-     * ??? This is never used as a slot.  Move to public and rename.
-     */
-    void slotSetPlayTracking(bool);
 
     /// Velocity combo box.
     void slotSetCurrentVelocity(int velocity) { m_currentVelocity = velocity; }
