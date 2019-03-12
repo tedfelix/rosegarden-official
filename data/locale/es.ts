@@ -1086,7 +1086,7 @@
     <message>
         <location line="+2"/>
         <source>Interpret &amp;Slurs and Marks</source>
-        <translation>Interpretar ligadura&amp;s y marcadores  </translation>
+        <translation>Interpretar ligadura&amp;s y marcadores</translation>
     </message>
     <message>
         <location line="+5"/>
@@ -1096,7 +1096,7 @@
     <message>
         <location line="+2"/>
         <source>Interpret &amp;Beats</source>
-        <translation>Interpretar &amp;Pulsos </translation>
+        <translation>Interpretar &amp;Pulsos</translation>
     </message>
     <message>
         <location line="+5"/>
@@ -2274,7 +2274,7 @@
     <message>
         <location line="+4"/>
         <source>Check for Parallels...</source>
-        <translation>Buscar paralelos... </translation>
+        <translation>Buscar paralelos...</translation>
     </message>
     <message>
         <location line="+6"/>
@@ -3385,7 +3385,7 @@
     <message>
         <location line="+1"/>
         <source>Don&apos;t Skip This Part (&amp;Unmask Tied Note)</source>
-        <translation>No saltar esta &amp;parte del ornamento </translation>
+        <translation>No saltar esta &amp;parte del ornamento</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -4390,7 +4390,7 @@
     <message>
         <location line="+12"/>
         <source>Select but Don&apos;t Follow Ties</source>
-        <translation>Marcar pero no seguir ligaduras </translation>
+        <translation>Marcar pero no seguir ligaduras</translation>
     </message>
     <message>
         <location line="+43"/>
@@ -6298,7 +6298,7 @@
     <message>
         <location line="+1"/>
         <source>Alto horn in F</source>
-        <translation>Trompa alto en fa </translation>
+        <translation>Trompa alto en fa</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -6308,7 +6308,7 @@
     <message>
         <location line="+1"/>
         <source>Baritone horn</source>
-        <translation>Bombardino barítono </translation>
+        <translation>Bombardino barítono</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -6927,7 +6927,7 @@
     <message>
         <location line="-28"/>
         <source>Cu�ca</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+29"/>
@@ -8070,7 +8070,7 @@
         <location filename="../../src/base/Studio.cpp" line="-3"/>
         <location filename="../AutoloadStrings.cpp" line="-1"/>
         <source>Audio</source>
-        <translation>Audio </translation>
+        <translation>Audio</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="+200"/>
@@ -10430,7 +10430,7 @@
     <message>
         <location line="+9"/>
         <source>Attempt to get more bytes than expected on Track</source>
-        <translation>Se intentó leer más bytes que fue posible en pista </translation>
+        <translation>Se intentó leer más bytes que fue posible en pista</translation>
     </message>
     <message>
         <location line="+21"/>
@@ -10503,12 +10503,12 @@
         <location filename="../../src/sound/PeakFileManager.h" line="+53"/>
         <location line="+2"/>
         <source>Bad peak file </source>
-        <translation>Archivo peak erróneo</translation>
+        <translation>Archivo peak erróneo </translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Bad peak file (malformed audio?) </source>
-        <translation>Archivo peak erróneo (¿audio malformado?)</translation>
+        <translation>Archivo peak erróneo (¿audio malformado?) </translation>
     </message>
     <message>
         <location filename="../../src/sound/SoundFile.h" line="+49"/>
@@ -10547,7 +10547,7 @@
 %1</source>
         <translation>Interprete de audio no disponible.  Fallo al inicializar interprete de audio:
 
-%1 </translation>
+%1</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -10587,12 +10587,12 @@
     <message>
         <location line="+9"/>
         <source>Increase first value this much: </source>
-        <translation>Aumentar valor primero por:</translation>
+        <translation>Aumentar valor primero por: </translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Increase last value this much: </source>
-        <translation>Diminuir varlor primero por:</translation>
+        <translation>Diminuir varlor primero por: </translation>
     </message>
     <message>
         <location filename="../../src/commands/segment/UpdateFigurationCommand.cpp" line="+27"/>
@@ -10610,7 +10610,7 @@ Would you like to use
  instead?</source>
         <translation>LilyPond no permite espacios o barras invertidas en los nombres de archivo.
 
-¿Quiere usar «%1» en su lugar? </translation>
+¿Quiere usar «%1» en su lugar?</translation>
     </message>
     <message>
         <location line="+11"/>
@@ -10645,7 +10645,7 @@ Would you like to use
     <message>
         <location line="+11"/>
         <source>warning: bar too short, padding with rests</source>
-        <translation>aviso: compás demasiado corto; rellenando con silencios </translation>
+        <translation>aviso: compás demasiado corto; rellenando con silencios</translation>
     </message>
 </context>
 <context>
@@ -11039,7 +11039,7 @@ Would you like to use
     <message>
         <location filename="../../src/gui/configuration/AudioConfigurationPage.h" line="+54"/>
         <source>Audio</source>
-        <translation>Audio </translation>
+        <translation>Audio</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -11064,7 +11064,7 @@ Would you like to use
     <message>
         <location line="+10"/>
         <source>Record audio files as</source>
-        <translation>Grabar archivos de audio como </translation>
+        <translation>Grabar archivos de audio como</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -11797,7 +11797,7 @@ Por favor, seleccione cuáles de ellos quiere borrar permanentemente del disco d
     <message>
         <location filename="../../src/gui/configuration/AudioPropertiesPage.h" line="+49"/>
         <source>Audio</source>
-        <translation>Audio </translation>
+        <translation>Audio</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -11812,7 +11812,7 @@ Por favor, seleccione cuáles de ellos quiere borrar permanentemente del disco d
     <message>
         <location line="+5"/>
         <source>Choose...</source>
-        <translation>Elegir... </translation>
+        <translation>Elegir...</translation>
     </message>
     <message>
         <location line="+5"/>
@@ -11988,7 +11988,7 @@ Por favor, seleccione cuáles de ellos quiere borrar permanentemente del disco d
     <message>
         <location line="+9"/>
         <source>AutoSplit Segment &quot;</source>
-        <translation>Dividir automáticamente segmento &quot; </translation>
+        <translation>Dividir automáticamente segmento &quot;</translation>
     </message>
     <message>
         <location line="+18"/>
@@ -12427,7 +12427,7 @@ Por favor, seleccione cuáles de ellos quiere borrar permanentemente del disco d
     <message>
         <location line="+11"/>
         <source>Check for Hidden Parallels</source>
-        <translation>Buscar paralelos escondidos </translation>
+        <translation>Buscar paralelos escondidos</translation>
     </message>
     <message>
         <location line="+8"/>
@@ -12917,7 +12917,7 @@ Por favor, seleccione cuáles de ellos quiere borrar permanentemente del disco d
         <location line="+9"/>
         <source>Undo last clear</source>
         <comment>Button label</comment>
-        <translation>Deshacer borrar anterior </translation>
+        <translation>Deshacer borrar anterior</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -13045,7 +13045,7 @@ Por favor, seleccione cuáles de ellos quiere borrar permanentemente del disco d
     <message>
         <location line="+6"/>
         <source>Name  </source>
-        <translation>Nombre</translation>
+        <translation>Nombre  </translation>
     </message>
     <message>
         <location line="+1"/>
@@ -13055,7 +13055,7 @@ Por favor, seleccione cuáles de ellos quiere borrar permanentemente del disco d
     <message>
         <location line="+1"/>
         <source>Number  </source>
-        <translation>Número</translation>
+        <translation>Número  </translation>
     </message>
     <message>
         <location line="+2"/>
@@ -13065,12 +13065,12 @@ Por favor, seleccione cuáles de ellos quiere borrar permanentemente del disco d
     <message>
         <location line="+1"/>
         <source>Max. value  </source>
-        <translation>Valor max</translation>
+        <translation>Valor max  </translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Default value  </source>
-        <translation>Valor predeterminado</translation>
+        <translation>Valor predeterminado  </translation>
     </message>
     <message>
         <location line="+1"/>
@@ -13144,7 +13144,7 @@ Por favor, seleccione cuáles de ellos quiere borrar permanentemente del disco d
     <message>
         <location line="+5"/>
         <source>Type:</source>
-        <translation>Tipo: </translation>
+        <translation>Tipo:</translation>
     </message>
     <message>
         <location line="+9"/>
@@ -13306,7 +13306,7 @@ Por favor, seleccione cuáles de ellos quiere borrar permanentemente del disco d
     <message>
         <location line="+34"/>
         <source>Recording beyond end of composition:  </source>
-        <translation>Aumentando la composición:</translation>
+        <translation>Aumentando la composición:  </translation>
     </message>
 </context>
 <context>
@@ -14173,7 +14173,7 @@ Esto puede causar problemas si se sobreescribe más adelante con un valor calcul
     <message>
         <location line="+1"/>
         <source>Other</source>
-        <translation>Otro </translation>
+        <translation>Otro</translation>
     </message>
     <message>
         <location line="+31"/>
@@ -15263,7 +15263,7 @@ Ejemplo de texto perteneciente del archivo:</translation>
     <message>
         <location line="+6"/>
         <source>Bank import behavior</source>
-        <translation>Comportamiento de importación de bancos </translation>
+        <translation>Comportamiento de importación de bancos</translation>
     </message>
     <message>
         <location line="+5"/>
@@ -15328,7 +15328,7 @@ Ejemplo de texto perteneciente del archivo:</translation>
     <message>
         <location line="+8"/>
         <source>Play </source>
-        <translation>Ejecutar</translation>
+        <translation>Ejecutar </translation>
     </message>
     <message>
         <location line="+6"/>
@@ -15859,7 +15859,7 @@ Ejemplo de texto perteneciente del archivo:</translation>
     <message>
         <location line="+78"/>
         <source>Print short staff names</source>
-        <translation>Imprimir nombres de pentagrama cortos </translation>
+        <translation>Imprimir nombres de pentagrama cortos</translation>
     </message>
     <message>
         <location line="+42"/>
@@ -15954,7 +15954,7 @@ Ejemplo de texto perteneciente del archivo:</translation>
     <message>
         <location line="+4"/>
         <source>Edited segments</source>
-        <translation>Segmentos editados </translation>
+        <translation>Segmentos editados</translation>
     </message>
     <message>
         <location line="+11"/>
@@ -16015,7 +16015,7 @@ Ejemplo de texto perteneciente del archivo:</translation>
     <message>
         <location line="+3"/>
         <source>Export tempo marks </source>
-        <translation>Exportar indicaciones de tempo</translation>
+        <translation>Exportar indicaciones de tempo </translation>
     </message>
     <message>
         <location line="+25"/>
@@ -16410,7 +16410,7 @@ Ejemplo de texto perteneciente del archivo:</translation>
     <message>
         <location line="+1"/>
         <source>Accept Start, Stop and Continue</source>
-        <translation>Aceptar Start, Stop y Continue </translation>
+        <translation>Aceptar Start, Stop y Continue</translation>
     </message>
     <message>
         <location line="+11"/>
@@ -16751,7 +16751,7 @@ Ejemplo de texto perteneciente del archivo:</translation>
     <message>
         <location line="+6"/>
         <source>for Bar</source>
-        <translation>por cada Compás </translation>
+        <translation>por cada Compás</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -16808,12 +16808,12 @@ Ejemplo de texto perteneciente del archivo:</translation>
     <message>
         <location line="+1"/>
         <source>Text  </source>
-        <translation>Texto</translation>
+        <translation>Texto  </translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Comment </source>
-        <translation>Commentario</translation>
+        <translation>Commentario </translation>
     </message>
     <message>
         <location line="+4"/>
@@ -16942,7 +16942,7 @@ Doble clic para abrir el editor de marcadores.</translation>
     <message>
         <location line="+1"/>
         <source>&amp;Mask Ornament</source>
-        <translation>&amp;Mascarar ornamento </translation>
+        <translation>&amp;Mascarar ornamento</translation>
     </message>
 </context>
 <context>
@@ -17515,7 +17515,7 @@ Doble clic para abrir el editor de marcadores.</translation>
         <location line="+139"/>
         <location line="+333"/>
         <source>Key Mapping: %1</source>
-        <translation>Mapa del teclado: %1 </translation>
+        <translation>Mapa del teclado: %1</translation>
     </message>
     <message>
         <location line="-82"/>
@@ -17998,12 +17998,12 @@ Doble clic para abrir el editor de marcadores.</translation>
     <message>
         <location line="+19"/>
         <source>Origin:</source>
-        <translation>Origen: </translation>
+        <translation>Origen:</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Copyright:</source>
-        <translation>Copyright: </translation>
+        <translation>Copyright:</translation>
     </message>
     <message>
         <location line="+4"/>
@@ -18013,7 +18013,7 @@ Doble clic para abrir el editor de marcadores.</translation>
     <message>
         <location line="+4"/>
         <source>Type:</source>
-        <translation>Tipo: </translation>
+        <translation>Tipo:</translation>
     </message>
     <message>
         <location line="+26"/>
@@ -18058,7 +18058,7 @@ Doble clic para abrir el editor de marcadores.</translation>
     <message>
         <location line="+13"/>
         <source>Distribute verses among repeated segments</source>
-        <translation>Distribuir estrofas entre repeticiones de segmentos </translation>
+        <translation>Distribuir estrofas entre repeticiones de segmentos</translation>
     </message>
     <message>
         <location line="+15"/>
@@ -18378,8 +18378,8 @@ Esto es un bug (el programa debería haber fallado ya)</translation>
         <location line="-105"/>
         <source>  %n event(s) selected </source>
         <translation>
-            <numerusform>  un evento seleccionado</numerusform>
-            <numerusform>  %n eventos seleccionados</numerusform>
+            <numerusform>  un evento seleccionado </numerusform>
+            <numerusform>  %n eventos seleccionados </numerusform>
         </translation>
     </message>
     <message>
@@ -18390,7 +18390,7 @@ Esto es un bug (el programa debería haber fallado ya)</translation>
     <message>
         <location line="+2647"/>
         <source>Chord</source>
-        <translation> Acorde</translation>
+        <translation>Acorde</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -18415,12 +18415,12 @@ Esto es un bug (el programa debería haber fallado ya)</translation>
     <message>
         <location line="-149"/>
         <source>LilyPond Preview Options</source>
-        <translation>Opciones de previsualización con LilyPond </translation>
+        <translation>Opciones de previsualización con LilyPond</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>LilyPond preview options</source>
-        <translation>Opciones de previsualización con LilyPond </translation>
+        <translation>Opciones de previsualización con LilyPond</translation>
     </message>
     <message>
         <location line="+300"/>
@@ -18554,7 +18554,7 @@ Esto es un bug (el programa debería haber fallado ya)</translation>
         <source>There is no sustain controller defined for this device.
 Please ensure the device is configured correctly in the Manage MIDI Devices dialog in the main window.</source>
         <translation>No hay un controlador de Sustain definido para este dispositivo.
-Por favor, asegúrese de que está correctamente configurado en el cuadro de diálogo &quot;Gestionar Dispositivos MIDI&quot;. </translation>
+Por favor, asegúrese de que está correctamente configurado en el cuadro de diálogo &quot;Gestionar Dispositivos MIDI&quot;.</translation>
     </message>
     <message>
         <location line="+148"/>
@@ -20198,7 +20198,7 @@ Pueden haber incompatibilidades con el formato del archivo.</translation>
     <message>
         <location line="+1380"/>
         <source>Loading plugins...</source>
-        <translation>Enumerando plugins... </translation>
+        <translation>Enumerando plugins...</translation>
     </message>
 </context>
 <context>
@@ -20390,12 +20390,12 @@ Por favor, configura el directorio de archivos de audio hacia un directorio vál
     <message>
         <location line="+45"/>
         <source>Process ID: </source>
-        <translation type="unfinished"></translation>
+        <translation>ID de proceso: </translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Application: </source>
-        <translation type="unfinished"></translation>
+        <translation>Aplicación: </translation>
     </message>
     <message>
         <location line="+8"/>
@@ -20412,12 +20412,13 @@ Quizá otro usuario u otra instancia de Rosegarden ya
 esté editando este archivo. Asegúrese de que nadie
 edita este archivo, borre el archivo de bloqueo y empiece
 de nuevo.
+
 </translation>
     </message>
     <message>
         <location line="-11"/>
         <source>Lock Filename: </source>
-        <translation>Nombre del archivo de bloqueo:</translation>
+        <translation>Nombre del archivo de bloqueo: </translation>
     </message>
     <message>
         <source>User: </source>
@@ -20426,7 +20427,7 @@ de nuevo.
     <message>
         <location line="+2"/>
         <source>Host: </source>
-        <translation>Servidor:</translation>
+        <translation>Servidor: </translation>
     </message>
     <message>
         <source>Date/Time: </source>
@@ -21244,7 +21245,7 @@ Para asistencia acerca de una correcta configuración de audio y MIDI, vaya ahtt
         <location line="+45"/>
         <location line="+85"/>
         <source>Exporting LilyPond file...</source>
-        <translation>Exportando archivo.LilyPond... </translation>
+        <translation>Exportando archivo.LilyPond...</translation>
     </message>
     <message>
         <location line="-82"/>
@@ -21264,12 +21265,12 @@ Para asistencia acerca de una correcta configuración de audio y MIDI, vaya ahtt
     <message>
         <location line="+42"/>
         <source>LilyPond Preview Options</source>
-        <translation>Opciones de previsualización con LilyPond </translation>
+        <translation>Opciones de previsualización con LilyPond</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>LilyPond preview options</source>
-        <translation>Opciones de previsualización con LilyPond </translation>
+        <translation>Opciones de previsualización con LilyPond</translation>
     </message>
     <message>
         <location line="+46"/>
@@ -22286,7 +22287,7 @@ Please restart Rosegarden to continue working with audio.
 Quitting other running applications may improve Rosegarden&apos;s performance.</source>
         <translation>El subsistema de Audio JACK ha muerto o ha dejado de procesar audio para Rosegarden.
 Reinicie Rosegarden para continuar trabajando con audio.
-Cierre otras aplicaciones en ejecución para mejorar el rendimiento de Rosegarden. </translation>
+Cierre otras aplicaciones en ejecución para mejorar el rendimiento de Rosegarden.</translation>
     </message>
     <message>
         <location line="-147"/>
@@ -23114,7 +23115,7 @@ Cerrando otras aplicaciones en ejecución puede mejorar el rendimiento de Rosega
     <message>
         <location line="+19"/>
         <source>        (at %1.%2 s, in measure %3)</source>
-        <translation>        (en %1,%2 s, compás %3)  </translation>
+        <translation>        (en %1,%2 s, compás %3)</translation>
     </message>
     <message>
         <location line="+17"/>
@@ -23391,7 +23392,7 @@ Cerrando otras aplicaciones en ejecución puede mejorar el rendimiento de Rosega
     <message>
         <location line="+3"/>
         <source>Direction:  </source>
-        <translation>Dirección:</translation>
+        <translation>Dirección:  </translation>
     </message>
     <message>
         <location line="+7"/>
@@ -23522,7 +23523,7 @@ Cerrando otras aplicaciones en ejecución puede mejorar el rendimiento de Rosega
     <message>
         <location line="+3"/>
         <source>Tempo:  </source>
-        <translation>Tempo:   </translation>
+        <translation>Tempo:  </translation>
     </message>
     <message>
         <location line="+5"/>
@@ -23611,12 +23612,12 @@ Cerrando otras aplicaciones en ejecución puede mejorar el rendimiento de Rosega
     <message>
         <location line="-18"/>
         <source>Local Tempo:  </source>
-        <translation>Tempo Local: </translation>
+        <translation>Tempo Local:  </translation>
     </message>
     <message>
         <location line="+21"/>
         <source>Directive:  </source>
-        <translation>Directriz: </translation>
+        <translation>Directriz:  </translation>
     </message>
     <message>
         <location line="+56"/>
@@ -24654,7 +24655,7 @@ Cerrando otras aplicaciones en ejecución puede mejorar el rendimiento de Rosega
     <message>
         <location line="+26"/>
         <source>Play </source>
-        <translation>Ejecutar</translation>
+        <translation>Ejecutar </translation>
     </message>
     <message>
         <location line="+21"/>
@@ -24751,7 +24752,7 @@ Cerrando otras aplicaciones en ejecución puede mejorar el rendimiento de Rosega
     <message>
         <location line="+9"/>
         <source> (not found) </source>
-        <translation>(no encontrado)</translation>
+        <translation> (no encontrado) </translation>
     </message>
 </context>
 <context>
@@ -25151,185 +25152,185 @@ Cerrando otras aplicaciones en ejecución puede mejorar el rendimiento de Rosega
     <message>
         <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="+146"/>
         <source>Track %1 : &quot;%2&quot;</source>
-        <translation type="unfinished">Pista %1 : «%2»</translation>
+        <translation>Pista %1 : «%2»</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>&lt;br&gt;Notate for: %1</source>
-        <translation type="unfinished">&lt;br&gt;Partitura para: %1</translation>
+        <translation>&lt;br&gt;Partitura para: %1</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>normal</source>
-        <translation type="unfinished">normal</translation>
+        <translation>normal</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>small</source>
-        <translation type="unfinished">pequeño</translation>
+        <translation>pequeño</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>tiny</source>
-        <translation type="unfinished">pequeñito</translation>
+        <translation>pequeñito</translation>
     </message>
     <message>
         <location line="+29"/>
         <source>&lt;br&gt;Size: %1,  Bracket: %2 </source>
-        <translation type="unfinished">&lt;br&gt;Tamaño: %1,  Paréntesis: %2 </translation>
+        <translation>&lt;br&gt;Tamaño: %1,  Paréntesis: %2 </translation>
     </message>
     <message>
         <location line="+28"/>
         <source>&lt;br&gt;bars [%1-%2] in %3 (tr=%4) : &quot;%5&quot;</source>
-        <translation type="unfinished">&lt;br&gt;compáses [%1-%2] en %3 (tr=%4) : «%5»</translation>
+        <translation>&lt;br&gt;compáses [%1-%2] en %3 (tr=%4) : «%5»</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>&lt;br&gt;bars [%1-%2] (tr=%3) : &quot;%4&quot;</source>
-        <translation type="unfinished">&lt;br&gt;compáses [%1-%2] (tr=%3) : «%4»</translation>
+        <translation>&lt;br&gt;compáses [%1-%2] (tr=%3) : «%4»</translation>
     </message>
     <message>
         <location line="+49"/>
         <source>&lt;qt&gt;&lt;p&gt;Notation is not consistent&lt;/p&gt;&lt;p&gt;Click to get more information&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;Partitura incoherente&lt;/p&gt;&lt;p&gt;Haga clic para aprender más&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Partitura incoherente&lt;/p&gt;&lt;p&gt;Haga clic para aprender más&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+162"/>
         <location line="+50"/>
         <source>...</source>
-        <translation type="unfinished">...</translation>
+        <translation>...</translation>
     </message>
     <message>
         <location line="+75"/>
         <source>C</source>
         <comment>note name</comment>
-        <translation type="unfinished"></translation>
+        <translation>Do</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>C#</source>
         <comment>note name</comment>
-        <translation type="unfinished">Do sostenido</translation>
+        <translation>Do sostenido</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>D</source>
         <comment>note name</comment>
-        <translation type="unfinished"></translation>
+        <translation>Re</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Eb</source>
         <comment>note name</comment>
-        <translation type="unfinished">Mi bemol</translation>
+        <translation>Mi bemol</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>E</source>
         <comment>note name</comment>
-        <translation type="unfinished"></translation>
+        <translation>Mi</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>F</source>
         <comment>note name</comment>
-        <translation type="unfinished"></translation>
+        <translation>Fa</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>F#</source>
         <comment>note name</comment>
-        <translation type="unfinished">Fa sostenido</translation>
+        <translation>Fa sostenido</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>G</source>
         <comment>note name</comment>
-        <translation type="unfinished"></translation>
+        <translation>Sol</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>G#</source>
         <comment>note name</comment>
-        <translation type="unfinished">Sol sostenido</translation>
+        <translation>Sol sostenido</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>A</source>
         <comment>note name</comment>
-        <translation type="unfinished"></translation>
+        <translation>La</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Bb</source>
         <comment>note name</comment>
-        <translation type="unfinished">Si bemol</translation>
+        <translation>Si bemol</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>B</source>
         <comment>note name</comment>
-        <translation type="unfinished"></translation>
+        <translation>Si</translation>
     </message>
     <message>
         <location line="+112"/>
         <source>%1: %2</source>
-        <translation type="unfinished">%1: %2</translation>
+        <translation>%1: %2</translation>
     </message>
     <message>
         <location line="+3"/>
         <source> in %1</source>
-        <translation type="unfinished"> en %1</translation>
+        <translation> en %1</translation>
     </message>
     <message>
         <location line="+241"/>
         <source>&lt;h2&gt;Notation Inconsistencies&lt;/h2&gt;</source>
-        <translation type="unfinished">&lt;h2&gt;Partitura incoherente&lt;/h2&gt;</translation>
+        <translation>&lt;h2&gt;Partitura incoherente&lt;/h2&gt;</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>&lt;h3&gt;Filename: %1 &lt;/h3&gt;</source>
-        <translation type="unfinished">&lt;h3&gt;Nombre de archivo: %1 &lt;/h3&gt;</translation>
+        <translation>&lt;h3&gt;Nombre de archivo: %1 &lt;/h3&gt;</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>&lt;h3&gt;Track %1: &quot;%2&quot;&lt;/h3&gt;</source>
-        <translation type="unfinished">&lt;h3&gt;Pista %1: &quot;%2&quot;&lt;/h3&gt;</translation>
+        <translation>&lt;h3&gt;Pista %1: &quot;%2&quot;&lt;/h3&gt;</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Overlapping segments with inconsistent clefs:</source>
-        <translation type="unfinished">Segmentos solapados con claves distinos:</translation>
+        <translation>Segmentos solapados con claves distintos:</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Segment &quot;%1&quot;: %2 clef</source>
-        <translation type="unfinished">Segmento &quot;%1&quot;: clave de %2</translation>
+        <translation>Segmento &quot;%1&quot;: clave de %2</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Overlapping segments with inconsistent keys:</source>
-        <translation type="unfinished">Segmentos solapados con tonalidades distintas:</translation>
+        <translation>Segmentos solapados con tonalidades distintas:</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Segment &quot;%1&quot;: %2 key</source>
-        <translation type="unfinished">Segmento &quot;%1&quot;: tonalidad de %2</translation>
+        <translation>Segmento &quot;%1&quot;: tonalidad de %2</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Overlapping segments with inconsistent transpositions:</source>
-        <translation type="unfinished">Segmentos solapados con transportes distintos:</translation>
+        <translation>Segmentos solapados con transportes distintos:</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Segment &quot;%1&quot;: %2</source>
-        <translation type="unfinished">Segmento &quot;%1&quot;: %2</translation>
+        <translation>Segmento &quot;%1&quot;: %2</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
 </context>
 </TS>
