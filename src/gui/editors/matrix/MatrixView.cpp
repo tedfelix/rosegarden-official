@@ -756,7 +756,8 @@ conformRulerSelectionState()
 void
 MatrixView::slotSetPaintTool()
 {
-    if (m_matrixWidget) m_matrixWidget->slotSetPaintTool();
+    if (m_matrixWidget)
+        m_matrixWidget->setDrawTool();
 }
 
 void
@@ -1123,19 +1124,22 @@ MatrixView::slotRemoveTriggers()
 void
 MatrixView::slotSelectAll()
 {
-    if (m_matrixWidget) m_matrixWidget->slotSelectAll();
+    if (m_matrixWidget)
+        m_matrixWidget->selectAll();
 }
 
 void
 MatrixView::slotCurrentSegmentPrior()
 {
-    if (m_matrixWidget) m_matrixWidget->slotCurrentSegmentPrior();
+    if (m_matrixWidget)
+        m_matrixWidget->previousSegment();
 }
 
 void
 MatrixView::slotCurrentSegmentNext()
 {
-    if (m_matrixWidget) m_matrixWidget->slotCurrentSegmentNext();
+    if (m_matrixWidget)
+        m_matrixWidget->nextSegment();
 }
 
 void
@@ -1158,7 +1162,7 @@ MatrixView::slotClearLoop()
 void
 MatrixView::slotClearSelection()
 {
-    if (m_matrixWidget) m_matrixWidget->slotClearSelection();
+    if (m_matrixWidget) m_matrixWidget->clearSelection();
 }
 
 void

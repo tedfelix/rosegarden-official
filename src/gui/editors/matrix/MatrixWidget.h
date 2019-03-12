@@ -108,6 +108,17 @@ public:
 
     void setHoverNoteVisible(bool visible);
 
+    /// Edit > Select All
+    void selectAll();
+    /// Edit > Clear Selection
+    void clearSelection();
+    /// Move > Previous Segment
+    void previousSegment();
+    /// Move > Next Segment
+    void nextSegment();
+    /// Tools > Draw
+    void setDrawTool();
+
 signals:
     void editTriggerSegment(int);
     void toolChanged(QString);
@@ -123,36 +134,6 @@ public slots:
     //     Nothing is ever connected to these.  Confirm and remove slot-ness
     //     (monster).
 
-    /// Edit > Select All
-    /**
-     * ??? Not used as a slot?  MatrixView has its own.
-     */
-    void slotSelectAll();
-    /// Edit > Clear Selection
-    /**
-     * ??? Not used as a slot?  MatrixView has its own.
-     */
-    void slotClearSelection();
-
-    /// Move > Previous Segment
-    /**
-     * ??? Not used as a slot?  MatrixView has its own.
-     * ??? rename: slotPreviousSegment()
-     */
-    void slotCurrentSegmentPrior();
-    /// Move > Next Segment
-    /**
-     * ??? Not used as a slot?  MatrixView has its own.
-     * ??? rename: slotNextSegment()
-     */
-    void slotCurrentSegmentNext();
-
-    /// Tools > Draw
-    /**
-     * ??? Not used as a slot?  MatrixView has its own.
-     * ??? rename: slotSetDrawTool() or slotToolsDraw()
-     */
-    void slotSetPaintTool();
     /// Tools > Erase
     /**
      * ??? Not used as a slot?  MatrixView has its own.
@@ -292,7 +273,7 @@ protected slots:
     /// Instrument is being destroyed
     void slotInstrumentGone();
 
-protected :
+protected:
     void showEvent(QShowEvent * event) override;
 
     /// (Re)generate the pitch ruler (useful when key mapping changed)

@@ -722,26 +722,33 @@ MatrixWidget::slotSetSnap(timeT t)
 }
 
 void
-MatrixWidget::slotSelectAll()
+MatrixWidget::selectAll()
 {
-    if (!m_scene) return;
+    if (!m_scene)
+        return;
+
     m_scene->selectAll();
 }
 
 void
-MatrixWidget::slotClearSelection()
+MatrixWidget::clearSelection()
 {
     // Actually we don't clear the selection immediately: if we're
     // using some tool other than the select tool, then the first
     // press switches us back to the select tool.
 
+    // ??? Why?  Plus there's a bug.  The toolbar button does not
+    //     become pressed for the select tool.  Instead it still
+    //     shows the old tool.  Recommend changing this to do what
+    //     the user has asked.  Just call setSelection().  I've
+    //     tested it and it works fine.
+
     MatrixSelector *selector = dynamic_cast<MatrixSelector *>(m_currentTool);
 
-    if (!selector) {
+    if (!selector)
         slotSetSelectTool();
-    } else {
+    else
         setSelection(nullptr, false);
-    }
 }
 
 Segment *
@@ -752,21 +759,27 @@ MatrixWidget::getCurrentSegment()
 }
 
 void
-MatrixWidget::slotCurrentSegmentPrior()
+MatrixWidget::previousSegment()
 {
-    if (!m_scene) return;
+    if (!m_scene)
+        return;
+
     Segment *s = m_scene->getPriorSegment();
-    if (s) m_scene->setCurrentSegment(s);
+    if (s)
+        m_scene->setCurrentSegment(s);
     slotPointerPositionChanged(m_document->getComposition().getPosition(), false);
     updateSegmentChangerBackground();
 }
 
 void
-MatrixWidget::slotCurrentSegmentNext()
+MatrixWidget::nextSegment()
 {
-    if (!m_scene) return;
+    if (!m_scene)
+        return;
+
     Segment *s = m_scene->getNextSegment();
-    if (s) m_scene->setCurrentSegment(s);
+    if (s)
+        m_scene->setCurrentSegment(s);
     slotPointerPositionChanged(m_document->getComposition().getPosition(), false);
     updateSegmentChangerBackground();
 }
@@ -894,10 +907,8 @@ MatrixWidget::slotSetTool(QString name)
 }
 
 void
-MatrixWidget::slotSetPaintTool()
+MatrixWidget::setDrawTool()
 {
-    //MATRIX_DEBUG << "slotSetPaintTool";
-    
     slotSetTool(MatrixPainter::ToolName());
 }
 
@@ -1252,8 +1263,10 @@ MatrixWidget::slotSegmentChangerMoved(int v)
     if (steps < 0) steps *= -1;
 
     for (int i = 0; i < steps; ++i) {
-        if (v < m_lastSegmentChangerValue) slotCurrentSegmentNext();
-        else if (v > m_lastSegmentChangerValue) slotCurrentSegmentPrior();
+        if (v < m_lastSegmentChangerValue)
+            nextSegment();
+        else if (v > m_lastSegmentChangerValue)
+            previousSegment();
     }
 
     m_lastSegmentChangerValue = v;
