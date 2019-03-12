@@ -642,18 +642,6 @@ MatrixWidget::setVerticalZoomFactor(double factor)
     m_pianoView->setFixedWidth(m_pitchRuler->sizeHint().width());
 }
 
-double
-MatrixWidget::getHorizontalZoomFactor() const
-{
-    return m_hZoomFactor;
-}
-
-double
-MatrixWidget::getVerticalZoomFactor() const
-{
-    return m_vZoomFactor;
-}
-
 void
 MatrixWidget::slotZoomInFromPanner()
 {
@@ -1077,7 +1065,7 @@ MatrixWidget::slotPointerPositionChanged(timeT t, bool moveView)
         m_hpanner->slotShowPositionPointer(sceneX);
     }
 
-    if (getPlayTracking() || !fromDocument) {
+    if (m_playTracking || !fromDocument) {
         if (moveView) m_view->ensurePositionPointerInView(fromDocument);
     }
 }

@@ -18,20 +18,17 @@
 #ifndef RG_MATRIX_WIDGET_H
 #define RG_MATRIX_WIDGET_H
 
-#include <QWidget>
-#include <QPushButton>
-#include <QSharedPointer>
-
 #include "base/Event.h"             // for timeT
 #include "base/MidiTypes.h"         // for MidiByte
 #include "gui/general/SelectionManager.h"
-#include "gui/widgets/Thumbwheel.h"
 
 #include <vector>
 
+#include <QWidget>
+
 class QGraphicsScene;
-class QStackedLayout; // To be replaced
 class QGridLayout;
+class QPushButton;
 
 namespace Rosegarden
 {
@@ -42,7 +39,6 @@ class MatrixScene;
 class MatrixToolBox;
 class MatrixTool;
 class MatrixMouseEvent;
-class RulerScale;
 class SnapGrid;
 class ZoomableRulerScale;
 class Panner;
@@ -56,13 +52,16 @@ class TempoRuler;
 class ChordNameRuler;
 class Device;
 class Instrument;
-class InstrumentStaticSignals;
+class Thumbwheel;
 
 
+/// QWidget that holds the matrix editor.
 /**
  * Container widget for the matrix editor (which is a QGraphicsView)
  * and any associated rulers and panner widgets.  This class also owns
  * the editing tools.
+ *
+ * MatrixView::m_matrixWidget is the only instance of this class.
  */
 class MatrixWidget : public QWidget,
                      public SelectionManager
@@ -71,27 +70,21 @@ class MatrixWidget : public QWidget,
 
 public:
     MatrixWidget(bool drumMode);
-    ~MatrixWidget() override;
+    virtual ~MatrixWidget() override;
 
+    /**
+     * ??? Only one caller.  Might want to fold this into the ctor.
+     */
     void setSegments(RosegardenDocument *document,
                      std::vector<Segment *> segments);
 
     MatrixScene *getScene() { return m_scene; }
-    Panned *getView() { return m_view; }
-
-    void setHorizontalZoomFactor(double factor);
-    void setVerticalZoomFactor(double factor);
-
-    double getHorizontalZoomFactor() const;
-    double getVerticalZoomFactor() const;
 
     int getCurrentVelocity() const { return m_currentVelocity; }
 
     bool isDrumMode() const { return m_drumMode; }
 
     bool hasOnlyKeyMapping() const { return m_onlyKeyMapping; }
-
-    bool getPlayTracking() const { return m_playTracking; }
 
     MatrixToolBox *getToolBox() { return m_toolBox; }
 
@@ -101,10 +94,9 @@ public:
     EventSelection *getSelection() const override;
     void setSelection(EventSelection *s, bool preview) override;
 
-    ControlRulerWidget *getControlsWidget()
-    { return m_controlsWidget; }
+    ControlRulerWidget *getControlsWidget()  { return m_controlsWidget; }
     
-    // This delegates to MatrixScene
+    /// Delegates to MatrixScene::getSnapGrid()
     const SnapGrid *getSnapGrid() const;
 
     Segment *getCurrentSegment();
@@ -114,8 +106,6 @@ public:
     void setTempoRulerVisible(bool visible);
     void setChordNameRulerVisible(bool visible);
 
-    void updateSegmentChangerBackground();
-
     void setHoverNoteVisible(bool visible);
 
 signals:
@@ -124,6 +114,7 @@ signals:
     void segmentDeleted(Segment *);
     void sceneDeleted();
     void showContextHelp(const QString &);
+    /// Forwarded from MatrixScene::selectionChanged()
     void selectionChanged();
 
 public slots:
@@ -235,8 +226,13 @@ private:
     bool m_drumMode;
     bool m_onlyKeyMapping;
     bool m_playTracking;
+
     double m_hZoomFactor;
+    void setHorizontalZoomFactor(double factor);
+
     double m_vZoomFactor;
+    void setVerticalZoomFactor(double factor);
+
     int m_currentVelocity;
     ZoomableRulerScale *m_referenceScale; // m_scene own this (refers to scene scale)
     bool m_inMove;
@@ -260,6 +256,7 @@ private:
     QWidget *m_changerWidget;
     Thumbwheel  *m_segmentChanger;
     int m_lastSegmentChangerValue;
+    void updateSegmentChangerBackground();
 
     /// Either a PercussionPitchRuler or a PianoKeyboard object.
     PitchRuler *m_pitchRuler; // I own this
