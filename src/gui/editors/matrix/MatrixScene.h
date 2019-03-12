@@ -136,6 +136,23 @@ signals:
 
     void currentViewSegmentChanged(ViewSegment *);
     //void selectionChanged(); // already defined in QGraphicsScene
+    /**
+     * MatrixWidget::setSegments() connects this to
+     * ControlRulerWidget::slotSelectionChanged().
+     *
+     * ??? I don't think this is ever emitted.  Need to determine if that
+     *     is the case.  Create a new test slot and connect it to this.
+     *     Then see if that test slot ever gets called.  Might want to
+     *     confirm that it isn't the other selectionChanged() signal
+     *     somehow triggering this if we do get a call.  Also connect a
+     *     test slot to the other signal to confirm that is working.
+     *     Remove this signal and the connect() that uses it if we can
+     *     determine that it is never emitted.
+     *
+     * ??? Rename: selectionChangedES() to avoid overload.  We'll need to
+     *     test thoroughly to make sure nothing is broken.  However, if
+     *     this really is never emitted, it will be hard to test.  See above.
+     */
     void selectionChanged(EventSelection *s);
     void segmentDeleted(Segment *);
     void sceneDeleted(); // all segments have been removed
