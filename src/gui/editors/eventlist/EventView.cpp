@@ -1453,9 +1453,9 @@ EventView::createMenu()
     signalMapper->setMapping(expertEventEditorAction, 1);
 
     connect(eventEditorAction, SIGNAL(triggered()),
-            signalMapper, SLOT (map()));
+            signalMapper, SLOT(map()));
     connect(expertEventEditorAction, SIGNAL(triggered()),
-            signalMapper, SLOT (map()));
+            signalMapper, SLOT(map()));
 
     connect(signalMapper, SIGNAL(mapped(int)),
             SLOT(slotMenuActivated(int)));

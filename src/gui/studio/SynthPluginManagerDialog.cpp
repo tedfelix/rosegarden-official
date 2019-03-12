@@ -210,8 +210,8 @@ void SynthPluginManagerDialog:: setupGuiCreatePluginList(){
             }
         }
 
-        connect ( pluginCombo, SIGNAL ( activated ( int ) ),
-                  this, SLOT ( slotPluginChanged ( int ) ) );
+        connect (pluginCombo, SIGNAL(activated(int)),
+                 this, SLOT(slotPluginChanged(int)));
 
         m_scrollWidgetLayout->addWidget ( pluginCombo, i, 1 );
 
