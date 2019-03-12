@@ -281,10 +281,14 @@ void RosegardenScrollView::doAutoScroll()
             scrollX = lround(-distanceToScrollRate(-mousePos.x()));
         }
 
-        // If the mouse is to the right of the viewport
-        if (mousePos.x() > viewport()->width()) {
+        // Pull the auto scroll limit into the viewport slightly in case
+        // there is no scrollbar.
+        const int xMax = viewport()->width() - 20;
+
+        // If the mouse is to the right of the auto scroll limit
+        if (mousePos.x() > xMax) {
             // Set the scroll rate based on how far outside we are.
-            scrollX = lround(distanceToScrollRate(mousePos.x() - viewport()->width()));
+            scrollX = lround(distanceToScrollRate(mousePos.x() - xMax));
         }
 
         // Scroll if needed.
