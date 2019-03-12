@@ -285,7 +285,7 @@ MatrixWidget::MatrixWidget(bool drumMode) :
             m_controlsWidget, &ControlRulerWidget::slotSetPannedRect);
 
     connect(m_view, &Panned::pannedContentsScrolled,
-            this, &MatrixWidget::slotHScroll);
+            this, &MatrixWidget::slotScrollRulers);
 
     connect(m_hpanner, &Panner::zoomIn,
             this, &MatrixWidget::slotSyncPannerZoomIn);
@@ -625,7 +625,7 @@ MatrixWidget::setHorizontalZoomFactor(double factor)
     m.scale(1.0, m_vZoomFactor);
     m_pianoView->setMatrix(m);
     m_pianoView->setFixedWidth(m_pitchRuler->sizeHint().width());
-    slotHScroll();
+    slotScrollRulers();
 }
 
 void
@@ -643,7 +643,7 @@ MatrixWidget::setVerticalZoomFactor(double factor)
 }
 
 void
-MatrixWidget::slotZoomInFromPanner()
+MatrixWidget::zoomInFromPanner()
 {
     m_hZoomFactor /= 1.1;
     m_vZoomFactor /= 1.1;
@@ -656,11 +656,11 @@ MatrixWidget::slotZoomInFromPanner()
     m2.scale(1, m_vZoomFactor);
     m_pianoView->setMatrix(m2);
     m_pianoView->setFixedWidth(m_pitchRuler->sizeHint().width());
-    slotHScroll();
+    slotScrollRulers();
 }
 
 void
-MatrixWidget::slotZoomOutFromPanner()
+MatrixWidget::zoomOutFromPanner()
 {
     m_hZoomFactor *= 1.1;
     m_vZoomFactor *= 1.1;
@@ -673,11 +673,11 @@ MatrixWidget::slotZoomOutFromPanner()
     m2.scale(1, m_vZoomFactor);
     m_pianoView->setMatrix(m2);
     m_pianoView->setFixedWidth(m_pitchRuler->sizeHint().width());
-    slotHScroll();
+    slotScrollRulers();
 }
 
 void
-MatrixWidget::slotHScroll()
+MatrixWidget::slotScrollRulers()
 {
     // Get time of the window left
     QPointF topLeft = m_view->mapToScene(0, 0);
@@ -715,7 +715,7 @@ MatrixWidget::getSnapGrid() const
 }
 
 void
-MatrixWidget::slotSetSnap(timeT t)
+MatrixWidget::setSnap(timeT t)
 {
     if (!m_scene) return;
     m_scene->setSnap(t);
@@ -964,24 +964,24 @@ MatrixWidget::setScrollToFollowPlayback(bool tracking)
 }
 
 void
-MatrixWidget::slotToggleVelocityRuler()
+MatrixWidget::showVelocityRuler()
 {
     m_controlsWidget->slotTogglePropertyRuler(BaseProperties::VELOCITY);
 }
 
 void
-MatrixWidget::slotTogglePitchbendRuler()
+MatrixWidget::showPitchBendRuler()
 {
     m_controlsWidget->slotToggleControlRuler("PitchBend");
 }
 
 void
-MatrixWidget::slotAddControlRuler(QAction *action)
+MatrixWidget::addControlRuler(QAction *action)
 {
     QString name = action->text();
 
-    //MATRIX_DEBUG << "MatrixWidget::slotAddControlRuler()";
-    //MATRIX_DEBUG << "  my name is " << name;
+    //RG_DEBUG << "addControlRuler()";
+    //RG_DEBUG << "  my name is " << name;
 
     // we just cheaply paste the code from MatrixView that created the menu to
     // figure out what its indices must point to (and thinking about this whole
@@ -1102,7 +1102,7 @@ void
 MatrixWidget::showEvent(QShowEvent * event)
 {
     QWidget::showEvent(event);
-    slotHScroll();
+    slotScrollRulers();
 }
 
 void
@@ -1173,15 +1173,17 @@ MatrixWidget::slotPrimaryThumbwheelMoved(int v)
     // steps according to its speed.  I don't see a sure way (and after all
     // there are no docs!) to make sure dragging results in a smooth 1:1
     // relationship when compared with mouse wheeling, and we are just hijacking
-    // slotZoomInFromPanner() here, so we will look at the number of steps
+    // zoomInFromPanner() here, so we will look at the number of steps
     // between the old value and the last one, and call the slot that many times
     // in order to enforce the 1:1 relationship.
     int steps = v - m_lastHVzoomValue;
     if (steps < 0) steps *= -1;
 
     for (int i = 0; i < steps; ++i) {
-        if (v < m_lastHVzoomValue) slotZoomInFromPanner();
-        else if (v > m_lastHVzoomValue) slotZoomOutFromPanner();
+        if (v < m_lastHVzoomValue)
+            zoomInFromPanner();
+        else if (v > m_lastHVzoomValue)
+            zoomOutFromPanner();
     }
 
     m_lastHVzoomValue = v;
@@ -1209,7 +1211,7 @@ MatrixWidget::slotResetZoomClicked()
     m2.scale(1, m_vZoomFactor);
     m_pianoView->setMatrix(m2);
     m_pianoView->setFixedWidth(m_pitchRuler->sizeHint().width());
-    slotHScroll();
+    slotScrollRulers();
 
     // scale factor 1.0 = 100% zoom
     m_Hzoom->setValue(1);

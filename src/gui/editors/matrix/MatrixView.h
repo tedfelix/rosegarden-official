@@ -147,6 +147,9 @@ protected slots:
     void slotSetSnapFromAction();
 
     /// Set the snaptime of the grid
+    /**
+     * ??? This is never used as a slot.  Move to private and rename.
+     */
     void slotSetSnap(timeT);
 
     /// Quantize a selection to a given level (when quantize combo changes)

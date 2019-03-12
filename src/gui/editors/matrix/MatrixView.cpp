@@ -865,7 +865,7 @@ MatrixView::slotSetSnapFromAction()
 void
 MatrixView::slotSetSnap(timeT t)
 {
-    m_matrixWidget->slotSetSnap(t);
+    m_matrixWidget->setSnap(t);
 
     for (unsigned int i = 0; i < m_snapValues.size(); ++i) {
         if (m_snapValues[i] == t) {
@@ -1260,21 +1260,21 @@ MatrixView::slotToggleChordsRuler()
 void
 MatrixView::slotToggleVelocityRuler()
 {
-    m_matrixWidget->slotToggleVelocityRuler();
+    m_matrixWidget->showVelocityRuler();
     conformRulerSelectionState();
 }
 
 void
 MatrixView::slotTogglePitchbendRuler()
 {
-    m_matrixWidget->slotTogglePitchbendRuler();
+    m_matrixWidget->showPitchBendRuler();
     conformRulerSelectionState();
 }
 
 void
 MatrixView::slotAddControlRuler(QAction *action)
 {
-    m_matrixWidget->slotAddControlRuler(action);
+    m_matrixWidget->addControlRuler(action);
     conformRulerSelectionState();
 }
 

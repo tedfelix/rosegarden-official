@@ -108,6 +108,8 @@ public:
 
     void setHoverNoteVisible(bool visible);
 
+    void setSnap(timeT);
+
     // Interface for MatrixView menu commands
 
     /// Edit > Select All
@@ -132,6 +134,12 @@ public:
     void setVelocityTool();
     /// Move > Scroll to Follow Playback
     void setScrollToFollowPlayback(bool);
+    /// View > Rulers > Show Velocity Ruler
+    void showVelocityRuler();
+    /// View > Rulers > Show Pitch Bend Ruler
+    void showPitchBendRuler();
+    /// View > Rulers > Add Control Ruler
+    void addControlRuler(QAction *);
 
 signals:
     void editTriggerSegment(int);
@@ -150,44 +158,8 @@ public slots:
 
     /// Velocity combo box.
     void slotSetCurrentVelocity(int velocity) { m_currentVelocity = velocity; }
-    /**
-     * ??? This is never used as a slot.  Move to public and rename.  The
-     *     one in MatrixView is never used as a slot either.  Document.
-     */
-    void slotSetSnap(timeT);
 
-    /**
-     * ??? This is never used as a slot.  Only used privately.
-     *     Move to private and rename.
-     */
-    void slotZoomInFromPanner();
-    /**
-     * ??? This is never used as a slot.  Only used privately.
-     *     Move to private and rename.
-     */
-    void slotZoomOutFromPanner();
-
-    /// View > Rulers > Show Velocity Ruler
-    /**
-     * ??? Not used as a slot?  MatrixView has its own.
-     */
-    void slotToggleVelocityRuler();
-    /// View > Rulers > Show Pitch Bend Ruler
-    /**
-     * ??? Not used as a slot?  MatrixView has its own.
-     */
-    void slotTogglePitchbendRuler();
-    /**
-     * ??? This is never used as a slot.
-     *     Move to public and rename.
-     */
-    void slotAddControlRuler(QAction*);
-
-    /**
-     * ??? This is never used as a slot.  Only used privately.
-     *     Move to private and rename.
-     */
-    void slotHScroll();
+    /// Scroll view so that specified time is visible.
     /**
      * ??? This is never used as a slot.  Only used privately.
      *     Move to private and rename.
@@ -269,10 +241,17 @@ private slots:
     /// Connected to Panned::zoomOut() for ctrl+wheel.
     void slotZoomOut();
 
+    /// Scroll rulers to sync up with view.
+    void slotScrollRulers();
+
 private:
     RosegardenDocument *m_document; // I do not own this
     Panned *m_view; // I own this
+
     Panner *m_hpanner; // I own this
+    void zoomInFromPanner();
+    void zoomOutFromPanner();
+
     MatrixScene *m_scene; // I own this
     MatrixToolBox *m_toolBox; // I own this
     MatrixTool *m_currentTool; // Toolbox owns this
