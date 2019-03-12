@@ -118,40 +118,133 @@ signals:
     void selectionChanged();
 
 public slots:
+    // ??? I suspect few of these is actually used as slots.  MatrixView
+    //     performs all the createAction() calls and uses its own slots.
+    //     Nothing is ever connected to these.  Confirm and remove slot-ness
+    //     (monster).
+
+    /// Edit > Select All
+    /**
+     * ??? Not used as a slot?  MatrixView has its own.
+     */
     void slotSelectAll();
+    /// Edit > Clear Selection
+    /**
+     * ??? Not used as a slot?  MatrixView has its own.
+     */
     void slotClearSelection();
 
+    /// Move > Previous Segment
+    /**
+     * ??? Not used as a slot?  MatrixView has its own.
+     * ??? rename: slotPreviousSegment()
+     */
     void slotCurrentSegmentPrior();
+    /// Move > Next Segment
+    /**
+     * ??? Not used as a slot?  MatrixView has its own.
+     * ??? rename: slotNextSegment()
+     */
     void slotCurrentSegmentNext();
 
-    void slotSetTool(QString name);
+    /// Tools > Draw
+    /**
+     * ??? Not used as a slot?  MatrixView has its own.
+     * ??? rename: slotSetDrawTool() or slotToolsDraw()
+     */
     void slotSetPaintTool();
+    /// Tools > Erase
+    /**
+     * ??? Not used as a slot?  MatrixView has its own.
+     */
     void slotSetEraseTool();
+    /// Tools > Select and Edit
+    /**
+     * ??? Not used as a slot?  MatrixView has its own.
+     * ??? rename: slotSetSelectAndEditTool() or slotToolsSelectAndEdit()
+     */
     void slotSetSelectTool();
+    /// Tools > Move
+    /**
+     * ??? Not used as a slot?  MatrixView has its own.
+     */
     void slotSetMoveTool();
+    /// Tools > Resize
+    /**
+     * ??? Not used as a slot?  MatrixView has its own.
+     */
     void slotSetResizeTool();
+    /// Tools > Velocity
+    /**
+     * ??? Not used as a slot?  MatrixView has its own.
+     */
     void slotSetVelocityTool();
 
+    /// Move > Scroll to Follow Playback
+    /**
+     * ??? This is never used as a slot.  Move to public and rename.
+     */
     void slotSetPlayTracking(bool);
 
+    /// Velocity combo box.
     void slotSetCurrentVelocity(int velocity) { m_currentVelocity = velocity; }
+    /**
+     * ??? This is never used as a slot.  Move to public and rename.  The
+     *     one in MatrixView is never used as a slot either.  Document.
+     */
     void slotSetSnap(timeT);
 
+    /**
+     * ??? This is never used as a slot.  Only used privately.
+     *     Move to private and rename.
+     */
     void slotZoomInFromPanner();
+    /**
+     * ??? This is never used as a slot.  Only used privately.
+     *     Move to private and rename.
+     */
     void slotZoomOutFromPanner();
 
+    /// View > Rulers > Show Velocity Ruler
+    /**
+     * ??? Not used as a slot?  MatrixView has its own.
+     */
     void slotToggleVelocityRuler();
+    /// View > Rulers > Show Pitch Bend Ruler
+    /**
+     * ??? Not used as a slot?  MatrixView has its own.
+     */
     void slotTogglePitchbendRuler();
+    /**
+     * ??? This is never used as a slot.
+     *     Move to public and rename.
+     */
     void slotAddControlRuler(QAction*);
 
+    /**
+     * ??? This is never used as a slot.  Only used privately.
+     *     Move to private and rename.
+     */
     void slotHScroll();
+    /**
+     * ??? This is never used as a slot.  Only used privately.
+     *     Move to private and rename.
+     */
     void slotEnsureTimeVisible(timeT);
 
-    /** Show the pointer.  Used by MatrixView upon construction, this ensures
+    /**
+     * Show the pointer.  Used by MatrixView upon construction, this ensures
      * the pointer is visible initially.
+     *
+     * ??? This is never used as a slot.
+     *     Move to public and rename.
      */
     void showInitialPointer();
     
+    /**
+     * ??? This is never used as a slot.
+     *     Move to public and rename.
+     */
     void slotPlayPreviewNote(Segment * segment, int pitch);
 
 protected slots:
@@ -314,6 +407,9 @@ private:
         HEADER_COL,
         MAIN_COL,
     };
+
+    /// ??? Never used as a slot.  Rename.
+    void slotSetTool(QString name);
 
 };
 
