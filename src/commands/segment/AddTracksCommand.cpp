@@ -137,7 +137,8 @@ void AddTracksCommand::execute()
     RosegardenDocument *document = RosegardenMainWindow::self()->getDocument();
     Instrument *instrument =
             document->getStudio().getInstrumentById(m_instrumentId);
-    instrument->sendChannelSetup();
+    if (instrument)
+        instrument->sendChannelSetup();
 }
 
 void AddTracksCommand::unexecute()
