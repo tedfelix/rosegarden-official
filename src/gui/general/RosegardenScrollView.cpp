@@ -242,10 +242,15 @@ void RosegardenScrollView::slotStopAutoScroll()
     m_autoScrolling = false;
 }
 
-double RosegardenScrollView::distanceToScrollRate(int distance)
+namespace
 {
     // We'll hit MaxScrollRate at this distance outside the viewport.
+    // ??? HiDPI: This needs to be bigger for the HiDPI case.
     const double maxDistance = 40;
+}
+
+double RosegardenScrollView::distanceToScrollRate(int distance)
+{
     const double distanceNormalized = distance / maxDistance;
     // Apply a curve to reduce the touchiness.
     // Simple square curve.  Something more pronounced might be better.
@@ -272,6 +277,9 @@ void RosegardenScrollView::doAutoScroll()
         // Eclipse, and the GIMP.  Auto scroll will only happen if the
         // mouse is outside the viewport.  The auto scroll rate is
         // proportional to how far outside the viewport the mouse is.
+        // If the right edge is too close to the edge of the screen
+        // (e.g. when maximized), the auto scroll area is moved inside
+        // of the viewport.
 
         int scrollX = 0;
 
@@ -281,9 +289,24 @@ void RosegardenScrollView::doAutoScroll()
             scrollX = lround(-distanceToScrollRate(-mousePos.x()));
         }
 
-        // Pull the auto scroll limit into the viewport slightly in case
-        // there is no scrollbar.
-        const int xMax = viewport()->width() - 20;
+        // Assume we can place the auto scroll area outside the window.
+        int xOffset = 0;
+
+        const int rightSideOfScreen =
+                QApplication::desktop()->availableGeometry(this).right();
+
+        const int rightSideOfViewport =
+                parentWidget()->mapToGlobal(geometry().bottomRight()).x();
+
+        const int spaceToTheRight = rightSideOfScreen - rightSideOfViewport;
+
+        // If there's not enough space for the auto scroll area, move it
+        // inside the viewport.
+        if (spaceToTheRight < maxDistance)
+            xOffset = static_cast<int>(-maxDistance + spaceToTheRight);
+
+        // Limit where auto scroll begins.
+        const int xMax = viewport()->width() + xOffset;
 
         // If the mouse is to the right of the auto scroll limit
         if (mousePos.x() > xMax) {
