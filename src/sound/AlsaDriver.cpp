@@ -1518,6 +1518,13 @@ AlsaDriver::setCurrentTimer(QString timer)
 {
     Audit audit;
 
+    QSettings settings;
+    bool skip = settings.value("ALSA/SkipSetCurrentTimer", false).toBool();
+    // Write back out so we can find it.
+    settings.setValue("ALSA/SkipSetCurrentTimer", skip);
+    if (skip)
+        return;
+
     if (timer == getCurrentTimer())
         return ;
 
