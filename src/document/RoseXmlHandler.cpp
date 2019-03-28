@@ -270,7 +270,7 @@ RoseXmlHandler::getAudioFileManager()
     return m_doc->getAudioFileManager();
 }
 
-AudioPluginManager *
+QSharedPointer<AudioPluginManager>
 RoseXmlHandler::getAudioPluginManager()
 {
     return m_doc->getPluginManager();
@@ -1863,7 +1863,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             QString identifier = atts.value("identifier");
 
             AudioPlugin *plugin = nullptr;
-            AudioPluginManager *apm = getAudioPluginManager();
+            QSharedPointer<AudioPluginManager> apm = getAudioPluginManager();
 
             if ( identifier.isEmpty() ) {
                 QString q = atts.value("id");

@@ -36,6 +36,7 @@
 #include <QAction>
 #include <QToolBar>
 #include <QPointer>
+#include <QSharedPointer>
 
 #include <map>
 #include <set>
@@ -1662,7 +1663,7 @@ private:
 
     bool m_useSequencer;
 
-    AudioPluginManager *m_pluginManager;
+    QSharedPointer<AudioPluginManager> m_pluginManager;
 
     QTimer* m_autoSaveTimer;
 

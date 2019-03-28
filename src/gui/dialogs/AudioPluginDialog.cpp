@@ -61,7 +61,7 @@ namespace Rosegarden
 {
 
 AudioPluginDialog::AudioPluginDialog(QWidget *parent,
-                                     AudioPluginManager *aPM,
+                                     QSharedPointer<AudioPluginManager> aPM,
                                      AudioPluginOSCGUIManager *aGM,
                                      PluginContainer *pluginContainer,
                                      int index):

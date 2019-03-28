@@ -40,7 +40,7 @@ namespace Rosegarden
 PluginControl::PluginControl(QWidget *parent,
                              ControlType type,
                              PluginPort *port,
-                             AudioPluginManager *aPM,
+                             QSharedPointer<AudioPluginManager> aPM,
                              int index,
                              float initialValue,
                              bool showBounds):

@@ -326,7 +326,7 @@ RosegardenMainWindow::RosegardenMainWindow(bool enableSound,
     // Plugin manager
     //
     emit startupStatusMessage(tr("Initializing plugin manager..."));
-    m_pluginManager = new AudioPluginManager(enableSound);
+    m_pluginManager.reset(new AudioPluginManager(enableSound));
 
     RosegardenDocument* doc = newDocument();
 

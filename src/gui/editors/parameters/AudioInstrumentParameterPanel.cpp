@@ -273,7 +273,7 @@ AudioInstrumentParameterPanel::slotPluginBypassed(InstrumentId instrumentId,
     QColor backgroundColour = QColor(Qt::black); // default background colour
 
     if (inst && inst->isAssigned()) {
-        AudioPluginManager *pluginMgr =
+        QSharedPointer<AudioPluginManager> pluginMgr =
                 RosegardenMainWindow::self()->getDocument()->getPluginManager();
         AudioPlugin *pluginClass = pluginMgr->getPlugin(
                 pluginMgr->getPositionByIdentifier(
@@ -408,7 +408,7 @@ AudioInstrumentParameterPanel::setupForInstrument(Instrument* instrument)
         AudioPluginInstance *inst = instrument->getPlugin(index);
 
         if (inst && inst->isAssigned()) {
-            AudioPluginManager *pluginMgr =
+            QSharedPointer<AudioPluginManager> pluginMgr =
                     RosegardenMainWindow::self()->getDocument()->
                         getPluginManager();
             AudioPlugin *pluginClass = pluginMgr->getPlugin(

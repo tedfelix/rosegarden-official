@@ -22,6 +22,7 @@
 #include "base/MidiProgram.h"
 
 #include <QDialog>
+#include <QSharedPointer>
 #include <QString>
 #include <QStringList>
 
@@ -55,7 +56,7 @@ class AudioPluginDialog : public QDialog
 
 public:
     AudioPluginDialog(QWidget *parent,
-                      AudioPluginManager *aPM,
+                      QSharedPointer<AudioPluginManager> aPM,
                       AudioPluginOSCGUIManager *aGM,
                       PluginContainer *instrument,
                       int index);
@@ -114,7 +115,7 @@ protected:
 
     //--------------- Data members ---------------------------------
 
-    AudioPluginManager  *m_pluginManager;
+    QSharedPointer<AudioPluginManager> m_pluginManager;
     AudioPluginOSCGUIManager *m_pluginGUIManager;
     PluginContainer     *m_pluginContainer;
     InstrumentId         m_containerId;

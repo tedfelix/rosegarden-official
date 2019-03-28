@@ -18,6 +18,7 @@
 #ifndef RG_PLUGINCONTROL_H
 #define RG_PLUGINCONTROL_H
 
+#include <QSharedPointer>
 #include <QWidget>
 
 
@@ -48,7 +49,7 @@ public:
     PluginControl(QWidget *parent,
                   ControlType type,
                   PluginPort *port,
-                  AudioPluginManager *pluginManager,
+                  QSharedPointer<AudioPluginManager> pluginManager,
                   int index,
                   float initialValue,
                   bool showBounds);
@@ -75,7 +76,7 @@ protected:
     PluginPort          *m_port;
 
     ::Rosegarden::Rotary              *m_dial; // we have to specify the namespace here otherwise gcc 4.1 thinks it's the enum value above
-    AudioPluginManager  *m_pluginManager;
+    QSharedPointer<AudioPluginManager> m_pluginManager;
 
     int                  m_index;
 

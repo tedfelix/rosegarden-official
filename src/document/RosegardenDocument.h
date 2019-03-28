@@ -34,6 +34,7 @@
 #include <QStringList>
 #include <QProgressDialog>
 #include <QPointer>
+#include <QSharedPointer>
 
 #include <map>
 #include <vector>
@@ -95,7 +96,7 @@ public:
      * entire undo history needlessly.
      */
     RosegardenDocument(QObject *parent,
-                       AudioPluginManager *audioPluginManager = nullptr,
+                       QSharedPointer<AudioPluginManager> audioPluginManager,
                        bool skipAutoload = false,
                        bool clearCommandHistory = true,
                        bool enableSound = true);
@@ -415,7 +416,7 @@ public:
     /**
      * Return the AudioPluginManager
      */
-    AudioPluginManager* getPluginManager()
+    QSharedPointer<AudioPluginManager> getPluginManager()
         { return m_pluginManager; }
     
     /**
@@ -772,7 +773,7 @@ private:
     /**
      * AudioPluginManager - sequencer and local plugin management
      */
-    AudioPluginManager *m_pluginManager;
+    QSharedPointer<AudioPluginManager> m_pluginManager;
 
     RealTime m_audioRecordLatency;
 

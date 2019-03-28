@@ -27,6 +27,7 @@
 #include <QtCore/QSharedPointer>
 #include <QPointer>
 #include <QProgressDialog>
+#include <QSharedPointer>
 
 #include <map>
 #include <set>
@@ -122,7 +123,7 @@ protected:
     Composition& getComposition();
     Studio& getStudio();
     AudioFileManager& getAudioFileManager();
-    AudioPluginManager* getAudioPluginManager();
+    QSharedPointer<AudioPluginManager> getAudioPluginManager();
 
     void setSubHandler(XmlSubHandler* sh);
     XmlSubHandler* getSubHandler() { return m_subHandler; }

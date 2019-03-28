@@ -112,7 +112,7 @@ using namespace BaseProperties;
 
 RosegardenDocument::RosegardenDocument(
         QObject *parent,
-        AudioPluginManager *pluginManager,
+        QSharedPointer<AudioPluginManager> pluginManager,
         bool skipAutoload,
         bool clearCommandHistory,
         bool enableSound) :

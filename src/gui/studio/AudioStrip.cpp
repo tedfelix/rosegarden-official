@@ -405,7 +405,7 @@ void AudioStrip::updateWidgets()
 
             if (plugin  &&  plugin->isAssigned()) {
 
-                AudioPluginManager *pluginMgr = doc->getPluginManager();
+                QSharedPointer<AudioPluginManager> pluginMgr = doc->getPluginManager();
                 AudioPlugin *pluginClass = pluginMgr->getPluginByIdentifier(
                         plugin->getIdentifier().c_str());
 
