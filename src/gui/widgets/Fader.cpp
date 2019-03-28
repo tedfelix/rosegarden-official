@@ -28,6 +28,7 @@
 #include <QPainter>
 #include <QPixmap>
 #include <QPoint>
+#include <QSharedPointer>
 #include <QString>
 #include <QTimer>
 #include <QWidget>
@@ -41,9 +42,11 @@
 namespace Rosegarden
 {
 
-typedef std::pair<int, int> SizeRec;
-typedef std::map<unsigned int, QPixmap *> ColourPixmapRec; // key is QColor::pixel()
-typedef std::pair<ColourPixmapRec, QPixmap *> PixmapRec;
+// ??? Use QSize instead.  Might need to define a less() for std::map.
+typedef std::pair<int /*width*/, int /*height*/> SizeRec;
+// key is QColormap::pixel()
+typedef std::map<unsigned int /*color*/, QSharedPointer<QPixmap> /*groove*/ > ColourPixmapRec;
+typedef std::pair<ColourPixmapRec, QSharedPointer<QPixmap> /*button*/ > PixmapRec;
 typedef std::map<SizeRec, PixmapRec> PixmapCache;
 Q_GLOBAL_STATIC(PixmapCache, faderPixmapCache);
 
@@ -154,7 +157,7 @@ Fader::setOutlineColour(QColor c)
     calculateGroovePixmap();
 }
 
-QPixmap *
+QSharedPointer<QPixmap>
 Fader::groovePixmap()
 {
     PixmapCache::iterator i = faderPixmapCache()->find(SizeRec(width(), height()));
@@ -166,17 +169,17 @@ Fader::groovePixmap()
             return j->second;
         }
     }
-    return nullptr;
+    return QSharedPointer<QPixmap>();
 }
 
-QPixmap *
+QSharedPointer<QPixmap>
 Fader::buttonPixmap()
 {
     PixmapCache::iterator i = faderPixmapCache()->find(SizeRec(width(), height()));
     if (i != faderPixmapCache()->end()) {
         return i->second.second;
     } else
-        return nullptr;
+        return QSharedPointer<QPixmap>();
 }
 
 float
@@ -473,10 +476,9 @@ Fader::calculateGroovePixmap()
 {
     QColormap colorMap = QColormap::instance();
     uint pixel(colorMap.pixel(m_outlineColour));
-    QPixmap *& map = (*faderPixmapCache())[SizeRec(width(), height())].first[pixel];
+    QSharedPointer<QPixmap> & map = (*faderPixmapCache())[SizeRec(width(), height())].first[pixel];
 
-    delete map;
-    map = new QPixmap(width(), height());
+    map.reset(new QPixmap(width(), height()));
 
     // The area between the groove and the border takes a very translucent tint
     // of border color
@@ -491,7 +493,7 @@ Fader::calculateGroovePixmap()
 
     map->fill(bg);
 
-    QPainter paint(map);
+    QPainter paint(map.data());
     paint.setBrush(bg);
 
     if (m_vertical) {
@@ -537,7 +539,7 @@ Fader::calculateButtonPixmap()
     if (i != faderPixmapCache()->end() && i->second.second)
         return ;
 
-    QPixmap *& map = (*faderPixmapCache())[SizeRec(width(), height())].second;
+    QSharedPointer<QPixmap> & map = (*faderPixmapCache())[SizeRec(width(), height())].second;
 
     int h = height() - 1;
     int w = width() - 1;
@@ -557,7 +559,7 @@ Fader::calculateButtonPixmap()
         if (buttonWidth > w - 2)
             buttonWidth = w - 2;
 
-        map = new QPixmap(buttonWidth, buttonHeight);
+        map.reset(new QPixmap(buttonWidth, buttonHeight));
 
         // we have to draw something with our own stylesheet-compatible colors
         // instead of pulling button colors from the palette, and presumably
@@ -573,7 +575,7 @@ Fader::calculateButtonPixmap()
         int x = 0;
         int y = 0;
 
-        QPainter paint(map);
+        QPainter paint(map.data());
 
         paint.setPen(palette().light().color());
         paint.drawLine(x + 1, y, x + buttonWidth - 2, y);

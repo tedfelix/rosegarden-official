@@ -103,8 +103,8 @@ protected:
     int m_clickMousePos;
     int m_clickButtonPos;
 
-    QPixmap *groovePixmap();
-    QPixmap *buttonPixmap();
+    QSharedPointer<QPixmap> groovePixmap();
+    QSharedPointer<QPixmap> buttonPixmap();
 
     QColor m_outlineColour;
 };
