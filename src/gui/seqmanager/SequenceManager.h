@@ -26,6 +26,7 @@
 #include "sound/SoundDriver.h"
 
 #include <QObject>
+#include <QSharedPointer>
 #include <QString>
 
 class QTimer;
@@ -473,7 +474,7 @@ private:
     /// ??? The CountdownDialog has been disabled.  See feature request #453.
     CountdownDialog *m_countdownDialog;
     QTimer *m_countdownTimer;
-    QTime *m_recordTime;
+    QSharedPointer<QTime> m_recordTime;
 
     /// Used by stop() to return to the last start position.
     timeT m_lastTransportStartPosition;
