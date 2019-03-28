@@ -33,6 +33,7 @@
 #include <QFontDatabase>
 #include <QFileInfo>
 #include <QPixmap>
+#include <QSharedPointer>
 #include <QString>
 
 #include "SystemFont.h"
@@ -69,7 +70,7 @@ SystemFont::loadSystemFont(const SystemFontSpec &spec)
         haveFonts = true;
     }
 
-    static QHash<QString, QFont *> qFontMap;
+    static QHash<QString, QSharedPointer<QFont> > qFontMap;
 
     if (qFontMap.contains(name)) {
         if (qFontMap[name] == nullptr) return nullptr;
@@ -88,13 +89,13 @@ SystemFont::loadSystemFont(const SystemFontSpec &spec)
     QString family = info.family().toLower();
 
     if (family == name.toLower()) {
-        qFontMap[name] = new QFont(qfont);
+        qFontMap[name].reset(new QFont(qfont));
         return new SystemFontQt(qfont);
     } else {
         int bracket = family.indexOf(" [");
         if (bracket > 1) family = family.left(bracket);
         if (family == name.toLower()) {
-            qFontMap[name] = new QFont(qfont);
+            qFontMap[name].reset(new QFont(qfont));
             return new SystemFontQt(qfont);
         }
     }
