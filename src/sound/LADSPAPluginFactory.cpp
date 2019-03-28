@@ -230,8 +230,8 @@ LADSPAPluginFactory::getPortMaximum(const LADSPA_Descriptor *descriptor, int por
 
     MappedObjectValue maximum = 1.0;
 
-//    std::cerr << "LADSPAPluginFactory::getPortMaximum(" << port << ")" << std::endl;
-//    std::cerr << "bounded above: " << LADSPA_IS_HINT_BOUNDED_ABOVE(d) << std::endl;
+    //RG_DEBUG << "getPortMaximum(\"" << descriptor->Name << "\", " << port << ")";
+    //RG_DEBUG << "  bounded above: " << LADSPA_IS_HINT_BOUNDED_ABOVE(d);
 
     if (LADSPA_IS_HINT_BOUNDED_ABOVE(d)) {
         MappedObjectValue ub = descriptor->PortRangeHints[port].UpperBound;
@@ -248,15 +248,13 @@ LADSPAPluginFactory::getPortMaximum(const LADSPA_Descriptor *descriptor, int por
     }
 
     if (LADSPA_IS_HINT_SAMPLE_RATE(d)) {
-        //std::cerr << "note: port has sample rate hint" << std::endl;
+        //RG_DEBUG << "  note: port has sample rate hint";
         maximum *= m_sampleRate;
     }
 
-//    std::cerr << "maximum: " << maximum << std::endl;
-//    if (LADSPA_IS_HINT_LOGARITHMIC(d)) {
-//        std::cerr << "note: port is logarithmic" << std::endl;
-//    }
-//    std::cerr << "note: minimum is reported as " << getPortMinimum(descriptor, port) << " (from bounded = " << LADSPA_IS_HINT_BOUNDED_BELOW(d) << ", bound = " << descriptor->PortRangeHints[port].LowerBound << ")" << std::endl;
+    //RG_DEBUG << "  maximum: " << maximum;
+    //RG_DEBUG << "  logarithmic: " << LADSPA_IS_HINT_LOGARITHMIC(d);
+    //RG_DEBUG << "  note: minimum is reported as " << getPortMinimum(descriptor, port) << " (from bounded = " << LADSPA_IS_HINT_BOUNDED_BELOW(d) << ", bound = " << descriptor->PortRangeHints[port].LowerBound << ")";
 
     return maximum;
 }
