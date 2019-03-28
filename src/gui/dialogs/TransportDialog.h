@@ -23,6 +23,7 @@
 #include <QPixmap>
 #include <QtCore>
 #include <QDialog>
+#include <QSharedPointer>
 
 #include "base/Composition.h" // for tempoT
 
@@ -166,7 +167,7 @@ private:
 
     //--------------- Data members ---------------------------------
 
-    Ui_RosegardenTransport* ui;
+    QSharedPointer<Ui_RosegardenTransport> ui;
 
     QHash<int, QPixmap> m_lcdList;
     QHash<int, QPixmap> m_lcdListDefault;

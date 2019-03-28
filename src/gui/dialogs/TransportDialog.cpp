@@ -64,7 +64,7 @@ namespace Rosegarden
 
 TransportDialog::TransportDialog(QWidget *parent):
     QDialog(parent, nullptr),
-    ui(nullptr),
+    ui(new Ui_RosegardenTransport()),
     //m_lcdList(),
     //m_lcdListDefault(),
     //m_lcdNegative(),
@@ -117,7 +117,6 @@ TransportDialog::TransportDialog(QWidget *parent):
 
     QFrame *frame = new QFrame;
     vboxLay->addWidget(frame);
-    ui = new Ui_RosegardenTransport();
     ui->setupUi(frame);
 	
     setWindowTitle(tr("Rosegarden Transport"));
