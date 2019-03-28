@@ -95,6 +95,7 @@ AudioPluginManager::Enumerator::run()
         unsigned int portCount = rawPlugins[i++].toInt();
 
         //RG_DEBUG << "PLUGIN: " << i << ": " << (identifier != "" ? identifier : "(null)") << " unique id " << uniqueId << " / CATEGORY: \"" << (category != "" ? category : "(null)") << "\"";
+        //RG_DEBUG << "Enumerator::run(): Plugin name:" << name;
 
         AudioPlugin *aP = m_manager->addPlugin(identifier,
                                                name,

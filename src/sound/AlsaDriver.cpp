@@ -1694,14 +1694,43 @@ AlsaDriver::initialiseMidi()
 
     m_midiInputPortConnected = true;
 
-    // Set the input queue size
-    //
-    if (snd_seq_set_client_pool_output(m_midiHandle, 2000) < 0 ||
-        snd_seq_set_client_pool_input(m_midiHandle, 2000) < 0 ||
-        snd_seq_set_client_pool_output_room(m_midiHandle, 2000) < 0) {
-        RG_WARNING << "initialiseMidi(): WARNING: Can't modify pool parameters";
+#define POOL_DEBUG 0
+
+#if POOL_DEBUG
+    snd_seq_client_pool_t *poolInfo;
+    snd_seq_client_pool_malloc(&poolInfo);
+    snd_seq_get_client_pool(m_midiHandle, poolInfo);
+    RG_DEBUG << "initialiseMidi() before setting pool sizes...";
+    RG_DEBUG << "  input pool: " << snd_seq_client_pool_get_input_pool(poolInfo);
+    RG_DEBUG << "  output pool: " << snd_seq_client_pool_get_output_pool(poolInfo);
+    RG_DEBUG << "  output room: " << snd_seq_client_pool_get_output_room(poolInfo);
+#endif
+
+    // Increase memory pool size.
+    // Normally these are 200, 500, and 0 respectively.
+
+    // valgrind shows errors here.  They appear to be harmless.
+
+    if (checkAlsaError(snd_seq_set_client_pool_input(m_midiHandle, 2000),
+                       "AlsaDriver::initialiseMidi(): can't set input pool size") < 0)
         return false;
-    }
+
+    if (checkAlsaError(snd_seq_set_client_pool_output(m_midiHandle, 2000),
+                       "AlsaDriver::initialiseMidi(): can't set output pool size") < 0)
+        return false;
+
+    if (checkAlsaError(snd_seq_set_client_pool_output_room(m_midiHandle, 2000),
+                       "AlsaDriver::initialiseMidi(): can't set output pool room") < 0)
+        return false;
+
+#if POOL_DEBUG
+    snd_seq_get_client_pool(m_midiHandle, poolInfo);
+    RG_DEBUG << "initialiseMidi() after setting pool sizes...";
+    RG_DEBUG << "  input pool: " << snd_seq_client_pool_get_input_pool(poolInfo);
+    RG_DEBUG << "  output pool: " << snd_seq_client_pool_get_output_pool(poolInfo);
+    RG_DEBUG << "  output room: " << snd_seq_client_pool_get_output_room(poolInfo);
+    snd_seq_client_pool_free(poolInfo);
+#endif
 
     // Create sync output now as well
     m_syncOutputPort = checkAlsaError(snd_seq_create_simple_port
