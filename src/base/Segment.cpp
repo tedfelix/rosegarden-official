@@ -1111,13 +1111,6 @@ Segment::setQuantizeLevel(timeT unit)
     if (m_quantize) m_quantizer->quantize(this, begin(), end());
 }
 
-const BasicQuantizer *
-Segment::getQuantizer() const
-{
-    return m_quantizer;
-}
-
-
 void
 Segment::setRepeating(bool value)
 {

@@ -29,6 +29,7 @@
 #include "MidiProgram.h"
 
 #include <QColor>
+#include <QSharedPointer>
 
 namespace Rosegarden
 {
@@ -390,7 +391,8 @@ public:
     /**
      * Get the quantizer currently in (or not in) use.
      */
-    const BasicQuantizer *getQuantizer() const;
+    QSharedPointer<const BasicQuantizer> getQuantizer() const
+        { return m_quantizer; }
 
 
 
@@ -921,7 +923,7 @@ private:
 
     bool m_repeating;           // is this segment repeating?
 
-    BasicQuantizer *const m_quantizer;
+    QSharedPointer<BasicQuantizer> m_quantizer;
     bool m_quantize;
 
     int m_transpose;            // all Events tranpose
