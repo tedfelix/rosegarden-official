@@ -54,6 +54,7 @@
 #include <QScrollArea>
 #include <QUrl>
 #include <QDesktopServices>
+#include <QSharedPointer>
 
 #include <set>
 
@@ -253,7 +254,7 @@ AudioPluginDialog::populatePluginCategoryList()
         <QString> categories;
     QString currentCategory;
 
-    for (PluginIterator i = m_pluginManager->begin();
+    for (AudioPluginManager::iterator i = m_pluginManager->begin();
          i != m_pluginManager->end(); ++i) {
 
         if (( isSynth() && (*i)->isSynth()) ||
@@ -325,16 +326,16 @@ AudioPluginDialog::populatePluginList()
     // Use this temporary map to ensure that the plugins are sorted
     // by name when they go into the combobox.
     // The count is the AudioPluginManager index.
-    typedef std::pair<int /* count */, AudioPlugin *> PluginPair;
+    typedef std::pair<int /* count */, QSharedPointer<AudioPlugin> > PluginPair;
     typedef std::map<QString, PluginPair> PluginMap;
     PluginMap pluginsSorted;
     int count = 0;
 
     // For each plugin in the AudioPluginManager
-    for (PluginIterator i = m_pluginManager->begin();
+    for (AudioPluginManager::iterator i = m_pluginManager->begin();
          i != m_pluginManager->end(); ++i) {
 
-        AudioPlugin *plugin = (*i);
+        QSharedPointer<AudioPlugin> plugin = (*i);
 
         ++count;
 
@@ -455,7 +456,7 @@ AudioPluginDialog::slotPluginSelected(int i)
         m_pluginList->setToolTip( tr("Select a plugin from this list") );
     }
 
-    AudioPlugin *plugin = m_pluginManager->getPlugin(number - 1);
+    QSharedPointer<AudioPlugin> plugin = m_pluginManager->getPlugin(number - 1);
 
     // Destroy old param widgets
     //
@@ -1014,7 +1015,7 @@ AudioPluginDialog::slotDefault()
     if (n == 0)
         return ;
 
-    AudioPlugin *plugin = m_pluginManager->getPlugin(n - 1);
+    QSharedPointer<AudioPlugin> plugin = m_pluginManager->getPlugin(n - 1);
     if (!plugin)
         return ;
 

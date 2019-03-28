@@ -19,10 +19,14 @@
 #define RG_AUDIOPLUGINMANAGER_H
 
 #include "AudioPluginClipboard.h"
+
 #include <QMutex>
+#include <QSharedPointer>
 #include <QString>
 #include <QThread>
+
 #include <vector>
+
 #include "AudioPlugin.h"
 
 
@@ -45,9 +49,9 @@ public:
 
     // Some useful members
     //
-    AudioPlugin* getPlugin(int number);
+    QSharedPointer<AudioPlugin> getPlugin(int number);
 
-    AudioPlugin* getPluginByIdentifier(QString identifier);
+    QSharedPointer<AudioPlugin> getPluginByIdentifier(QString identifier);
     int getPositionByIdentifier(QString identifier);
 
     // Deprecated -- the GUI shouldn't be using unique ID because it's
@@ -56,10 +60,13 @@ public:
     // structured string managed by the sequencer.  Keep this in only
     // for compatibility with old .rg files.
     //
-    AudioPlugin* getPluginByUniqueId(unsigned long uniqueId);
+    QSharedPointer<AudioPlugin> getPluginByUniqueId(unsigned long uniqueId);
 
-    PluginIterator begin();
-    PluginIterator end();
+    typedef std::vector<QSharedPointer<AudioPlugin> >::iterator iterator;
+    //typedef std::vector<QSharedPointer<AudioPlugin> >::iterator const_iterator;
+
+    iterator begin();
+    iterator end();
 
     // Sample rate
     //
@@ -68,7 +75,8 @@ public:
     AudioPluginClipboard* getPluginClipboard() { return &m_pluginClipboard; }
 
 protected:
-    AudioPlugin* addPlugin(const QString &identifier,
+    QSharedPointer<AudioPlugin> addPlugin(
+                           const QString &identifier,
                            const QString &name,
                            unsigned long uniqueId,
                            const QString &label,
@@ -95,7 +103,7 @@ protected:
     void awaitEnumeration();
     void fetchSampleRate();
 
-    std::vector<AudioPlugin*> m_plugins;
+    std::vector<QSharedPointer<AudioPlugin> > m_plugins;
     mutable unsigned int      m_sampleRate;
     AudioPluginClipboard      m_pluginClipboard;
     Enumerator                m_enumerator;

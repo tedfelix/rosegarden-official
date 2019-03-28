@@ -52,6 +52,7 @@
 #include <QScrollArea>
 #include <QDesktopServices>
 #include <QUrl>
+#include <QSharedPointer>
 
 namespace Rosegarden
 {
@@ -161,7 +162,7 @@ void SynthPluginManagerDialog:: setupGuiCreatePluginList(){
 
     int count = 0;
 
-    for ( PluginIterator itr = m_pluginManager->begin();
+    for ( AudioPluginManager::iterator itr = m_pluginManager->begin();
           itr != m_pluginManager->end(); ++itr ){
 
         if ( ( *itr )->isSynth() ){
@@ -200,7 +201,7 @@ void SynthPluginManagerDialog:: setupGuiCreatePluginList(){
             if ( m_synthPlugins[j] == -1 )
                 continue;
 
-            AudioPlugin *plugin =
+            QSharedPointer<AudioPlugin> plugin =
                 m_pluginManager->getPlugin ( m_synthPlugins[j] );
 
             pluginCombo->addItem ( plugin->getName() );
@@ -366,7 +367,7 @@ void SynthPluginManagerDialog::slotPluginChanged ( int index ){
 
     // NB m_synthPlugins[0] is -1 to represent the <none> item
 
-    AudioPlugin *plugin = m_pluginManager->getPlugin ( m_synthPlugins[index] );
+    QSharedPointer<AudioPlugin> plugin = m_pluginManager->getPlugin ( m_synthPlugins[index] );
     Instrument *instrument = m_studio->getInstrumentById ( id );
 
     if ( instrument ){

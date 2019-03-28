@@ -1862,7 +1862,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
             QString identifier = atts.value("identifier");
 
-            AudioPlugin *plugin = nullptr;
+            QSharedPointer<AudioPlugin> plugin;
             QSharedPointer<AudioPluginManager> apm = getAudioPluginManager();
 
             if ( identifier.isEmpty() ) {

@@ -235,7 +235,7 @@ AudioInstrumentParameterPanel::slotPluginSelected(InstrumentId instrumentId,
 
     } else {
 
-        AudioPlugin *pluginClass =
+        QSharedPointer<AudioPlugin> pluginClass =
                 RosegardenMainWindow::self()->getDocument()->
                     getPluginManager()->getPlugin(plugin);
 
@@ -275,7 +275,7 @@ AudioInstrumentParameterPanel::slotPluginBypassed(InstrumentId instrumentId,
     if (inst && inst->isAssigned()) {
         QSharedPointer<AudioPluginManager> pluginMgr =
                 RosegardenMainWindow::self()->getDocument()->getPluginManager();
-        AudioPlugin *pluginClass = pluginMgr->getPlugin(
+        QSharedPointer<AudioPlugin> pluginClass = pluginMgr->getPlugin(
                 pluginMgr->getPositionByIdentifier(
                         inst->getIdentifier().c_str()));
 
@@ -411,7 +411,7 @@ AudioInstrumentParameterPanel::setupForInstrument(Instrument* instrument)
             QSharedPointer<AudioPluginManager> pluginMgr =
                     RosegardenMainWindow::self()->getDocument()->
                         getPluginManager();
-            AudioPlugin *pluginClass = pluginMgr->getPlugin(
+            QSharedPointer<AudioPlugin> pluginClass = pluginMgr->getPlugin(
                     pluginMgr->getPositionByIdentifier(
                         inst->getIdentifier().c_str()));
 

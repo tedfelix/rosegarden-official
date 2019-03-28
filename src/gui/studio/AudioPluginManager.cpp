@@ -97,7 +97,8 @@ AudioPluginManager::Enumerator::run()
         //RG_DEBUG << "PLUGIN: " << i << ": " << (identifier != "" ? identifier : "(null)") << " unique id " << uniqueId << " / CATEGORY: \"" << (category != "" ? category : "(null)") << "\"";
         //RG_DEBUG << "Enumerator::run(): Plugin name:" << name;
 
-        AudioPlugin *aP = m_manager->addPlugin(identifier,
+        QSharedPointer<AudioPlugin> aP = m_manager->addPlugin(
+                                               identifier,
                                                name,
                                                uniqueId,
                                                label,
@@ -134,7 +135,7 @@ AudioPluginManager::Enumerator::run()
     //RG_DEBUG << "Enumerator::run() - done";
 }
 
-AudioPlugin*
+QSharedPointer<AudioPlugin>
 AudioPluginManager::addPlugin(const QString &identifier,
                               const QString &name,
                               unsigned long uniqueId,
@@ -145,7 +146,8 @@ AudioPluginManager::addPlugin(const QString &identifier,
                               bool isGrouped,
                               const QString &category)
 {
-    AudioPlugin *newPlugin = new AudioPlugin(identifier,
+    QSharedPointer<AudioPlugin> newPlugin(
+             new AudioPlugin(identifier,
                              name,
                              uniqueId,
                              label,
@@ -153,7 +155,7 @@ AudioPluginManager::addPlugin(const QString &identifier,
                              copyright,
                              isSynth,
                              isGrouped,
-                             category);
+                             category));
     m_plugins.push_back(newPlugin);
 
     return newPlugin;
@@ -162,11 +164,10 @@ AudioPluginManager::addPlugin(const QString &identifier,
 bool
 AudioPluginManager::removePlugin(const QString &identifier)
 {
-    std::vector<AudioPlugin*>::iterator it = m_plugins.begin();
+    iterator it = m_plugins.begin();
 
     for (; it != m_plugins.end(); ++it) {
         if ((*it)->getIdentifier() == identifier) {
-            delete *it;
             m_plugins.erase(it);
             return true;
         }
@@ -182,7 +183,7 @@ AudioPluginManager::getPluginNames()
 
     std::vector<QString> names;
 
-    PluginIterator it = m_plugins.begin();
+    iterator it = m_plugins.begin();
 
     for (; it != m_plugins.end(); ++it)
         names.push_back((*it)->getName());
@@ -190,7 +191,7 @@ AudioPluginManager::getPluginNames()
     return names;
 }
 
-AudioPlugin*
+QSharedPointer<AudioPlugin>
 AudioPluginManager::getPlugin(int number)
 {
     awaitEnumeration();
@@ -207,7 +208,7 @@ AudioPluginManager::getPositionByIdentifier(QString identifier)
     awaitEnumeration();
 
     int pos = 0;
-    PluginIterator it = m_plugins.begin();
+    iterator it = m_plugins.begin();
 
     for (; it != m_plugins.end(); ++it) {
         if ((*it)->getIdentifier() == identifier)
@@ -228,12 +229,12 @@ AudioPluginManager::getPositionByIdentifier(QString identifier)
     return -1;
 }
 
-AudioPlugin*
+QSharedPointer<AudioPlugin>
 AudioPluginManager::getPluginByIdentifier(QString identifier)
 {
     awaitEnumeration();
 
-    PluginIterator it = m_plugins.begin();
+    iterator it = m_plugins.begin();
     for (; it != m_plugins.end(); ++it) {
         if ((*it)->getIdentifier() == identifier)
             return (*it);
@@ -248,12 +249,12 @@ AudioPluginManager::getPluginByIdentifier(QString identifier)
     return nullptr;
 }
 
-AudioPlugin*
+QSharedPointer<AudioPlugin>
 AudioPluginManager::getPluginByUniqueId(unsigned long uniqueId)
 {
     awaitEnumeration();
 
-    PluginIterator it = m_plugins.begin();
+    iterator it = m_plugins.begin();
     for (; it != m_plugins.end(); ++it) {
         if ((*it)->getUniqueId() == uniqueId)
             return (*it);
@@ -262,14 +263,14 @@ AudioPluginManager::getPluginByUniqueId(unsigned long uniqueId)
     return nullptr;
 }
 
-PluginIterator
+AudioPluginManager::iterator
 AudioPluginManager::begin()
 {
     awaitEnumeration();
     return m_plugins.begin();
 }
 
-PluginIterator
+AudioPluginManager::iterator
 AudioPluginManager::end()
 {
     awaitEnumeration();

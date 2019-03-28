@@ -102,8 +102,6 @@ protected:
     QColor                    m_colour;
 };
 
-typedef std::vector<AudioPlugin*>::iterator PluginIterator;
-
 
 }
 

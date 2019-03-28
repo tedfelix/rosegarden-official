@@ -235,6 +235,7 @@
 #include <QColorDialog>
 #include <QFontDialog>
 #include <QPageSetupDialog>
+#include <QSharedPointer>
 
 // Ladish lv1 support
 #include <cerrno>   // for errno
@@ -7540,7 +7541,7 @@ RosegardenMainWindow::slotChangePluginConfiguration(InstrumentId instrumentId,
         // Set the same configuration on other plugins in the same
         // instance group
 
-        AudioPlugin *pl =
+        QSharedPointer<AudioPlugin> pl =
             m_pluginManager->getPluginByIdentifier(strtoqstr(inst->getIdentifier()));
 
         if (pl && pl->isGrouped()) {
