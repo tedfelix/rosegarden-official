@@ -22,7 +22,7 @@ class TestNotationViewSelection : public QObject
 
 public:
     TestNotationViewSelection()
-        : m_doc(nullptr, nullptr, true /*skip autoload*/, true, false /*no sound*/),
+        : m_doc(nullptr, {}, true /*skip autoload*/, true, false /*no sound*/),
           m_view(nullptr) {}
 
 private Q_SLOTS:

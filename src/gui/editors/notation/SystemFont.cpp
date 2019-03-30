@@ -101,7 +101,7 @@ SystemFont::loadSystemFont(const SystemFontSpec &spec)
     }
 
     NOTATION_DEBUG << "SystemFont::loadSystemFont[Qt]: Wrong family returned, failing";
-    qFontMap[name] = nullptr;
+    qFontMap[name] = {};
     return nullptr;
 }
 

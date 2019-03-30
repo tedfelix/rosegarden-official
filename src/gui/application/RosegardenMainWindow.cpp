@@ -7945,7 +7945,7 @@ RosegardenMainWindow::slotImportStudioFromFile(const QString &file)
     // We're only using this document temporarily, so we don't want to let it
     // obliterate the command history!
     bool clearCommandHistory = false, skipAutoload = true;
-    RosegardenDocument *doc = new RosegardenDocument(this, nullptr, skipAutoload, clearCommandHistory, m_useSequencer);
+    RosegardenDocument *doc = new RosegardenDocument(this, {}, skipAutoload, clearCommandHistory, m_useSequencer);
 
     Studio &oldStudio = m_doc->getStudio();
     Studio &newStudio = doc->getStudio();

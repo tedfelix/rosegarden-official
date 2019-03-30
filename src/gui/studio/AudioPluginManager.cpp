@@ -197,7 +197,7 @@ AudioPluginManager::getPlugin(int number)
     awaitEnumeration();
 
     if (number < 0 || number > (int(m_plugins.size()) - 1))
-        return nullptr;
+        return {};
 
     return m_plugins[number];
 }
@@ -246,7 +246,7 @@ AudioPluginManager::getPluginByIdentifier(QString identifier)
             return (*it);
     }
 
-    return nullptr;
+    return {};
 }
 
 QSharedPointer<AudioPlugin>
@@ -260,7 +260,7 @@ AudioPluginManager::getPluginByUniqueId(unsigned long uniqueId)
             return (*it);
     }
 
-    return nullptr;
+    return {};
 }
 
 AudioPluginManager::iterator
