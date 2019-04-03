@@ -252,7 +252,7 @@
       <!-- JAS swapped rewind / ffwd to match matrix.rc -->
       <Action name="rewind" text="Re&amp;wind" icon="transport-rewind" shortcut="PgUp, Media Previous" shortcut-context="application" />
       <Action name="fast_forward" text="&amp;Fast Forward" icon="transport-ffwd" shortcut="PgDown, Media Next" shortcut-context="application" />
-      <Action name="record" text="&amp;Record" icon="transport-record" shortcut="Media Record" shortcut-context="application" />
+      <Action name="record" text="&amp;Record" icon="transport-record" shortcut="Ctrl+Space, Media Record" shortcut-context="application" />
       <Action name="recordtoggle" text="P&amp;unch in Record" icon="transport-record" shortcut="Space" shortcut-context="application" />
       <Action name="toggle_tracking" text="Scro&amp;ll to Follow Playback" icon="transport-tracking" shortcut="Pause" checked="true" />
       <Action name="panic" text="P&amp;anic" icon="transport-panic" shortcut="Alt+Ctrl+P" />
