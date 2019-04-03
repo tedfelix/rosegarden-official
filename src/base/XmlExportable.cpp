@@ -12,8 +12,12 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[XmlExportable]"
+
 #include "XmlExportable.h"
-#include <iostream>
+
+#include "misc/Debug.h"
+
 #include <cstdlib>
 #include <cstring>
 
@@ -71,12 +75,12 @@ std::string XmlExportable::encode(const std::string &s0)
                     buflen += mblen;
                 } else {
                     if (!warned) {
-                        std::cerr
+                        RG_WARNING
                             << "WARNING: Invalid utf8 char width in string \""
                             << s0 << "\" at index " << i << " ("
                             << mblen << " octet"
                             << (mblen != 1 ? "s" : "")
-                            << ", expected " << length << ")" << std::endl;
+                            << ", expected " << length << ")";
                         warned = true;
                     }
                     // and drop the character
@@ -108,10 +112,10 @@ std::string XmlExportable::encode(const std::string &s0)
                     if (c >= 32) buffer[buflen++] = c;
                     else {
                         if (!warned) {
-                            std::cerr
+                            RG_WARNING
                                 << "WARNING: Invalid utf8 octet in string \""
                                 << s0 << "\" at index " << i << " ("
-                                << (int)c << " < 32)" << std::endl;
+                                << (int)c << " < 32)";
                         }
                         warned = true;
                     }
@@ -131,19 +135,19 @@ std::string XmlExportable::encode(const std::string &s0)
 
             if (mblen == 0) { // ... without a first byte!
                 if (!warned) {
-                    std::cerr
+                    RG_WARNING
                         << "WARNING: Invalid utf8 octet sequence in string \""
-                        << s0 << "\" at index " << i << std::endl;
+                        << s0 << "\" at index " << i;
                     warned = true;
                 }
             } else {
 
                 if (mblen >= sizeof(multibyte)-1) {
                     if (!warned) {
-                        std::cerr
+                        RG_WARNING
                             << "WARNING: Character too wide in string \""
                             << s0 << "\" at index " << i << " (reached width of "
-                            << mblen << ")" << std::endl;
+                            << mblen << ")";
                     }
                     warned = true;
                     mblen = 0;
@@ -171,17 +175,18 @@ std::string XmlExportable::encode(const std::string &s0)
             buflen += mblen;
         } else {
             if (!warned) {
-                std::cerr
+                RG_WARNING
                     << "WARNING: Invalid utf8 char width in string \""
                     << s0 << "\" at index " << len << " ("
                     << mblen << " octet"
                     << (mblen != 1 ? "s" : "")
-                    << ", expected " << length << ")" << std::endl;
+                    << ", expected " << length << ")";
                 warned = true;
             }
             // and drop the character
         }
     }
+
     buffer[buflen] = '\0';
 
     return buffer;
