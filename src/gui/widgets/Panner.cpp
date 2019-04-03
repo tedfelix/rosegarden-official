@@ -125,6 +125,8 @@ Panner::paintEvent(QPaintEvent *e)
 
     QPaintEvent *e2 = new QPaintEvent(e->region().boundingRect());
     QGraphicsView::paintEvent(e2);
+    delete e2;
+    e2 = nullptr;
 
     QPainter paint;
     paint.begin(viewport());
