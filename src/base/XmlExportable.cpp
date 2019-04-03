@@ -21,16 +21,35 @@
 #include <cstdlib>
 #include <cstring>
 
+namespace
+{
+    class Deleter
+    {
+    public:
+        Deleter(char *p) : m_p(p)  { }
+        ~Deleter()
+        {
+            free(m_p);
+        }
+    private:
+        char *m_p;
+    };
+}
+
 namespace Rosegarden
 {
 
-static std::string s1;
-static std::string multibyte;
+//static std::string s1;
+//static std::string multibyte;
 
 std::string XmlExportable::encode(const std::string &s0)
 {
     static char *buffer = nullptr;
+    // Make sure we don't leak.  This will free(buffer) at static
+    // destruction time.
+    static Deleter deleter(buffer);
     static size_t bufsiz = 0;
+
     size_t buflen = 0;
 
     static char multibyte[20];
@@ -40,7 +59,7 @@ std::string XmlExportable::encode(const std::string &s0)
 
     if (bufsiz < len * 2 + 10) {
         bufsiz = len * 2 + 10;
-        buffer = (char *)malloc(bufsiz);
+        buffer = (char *)realloc(buffer, bufsiz);
     }
 
     // Escape any xml special characters, and also make sure we have
