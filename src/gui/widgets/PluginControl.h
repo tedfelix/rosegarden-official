@@ -48,7 +48,7 @@ public:
 
     PluginControl(QWidget *parent,
                   ControlType type,
-                  PluginPort *port,
+                  QSharedPointer<PluginPort> port,
                   QSharedPointer<AudioPluginManager> pluginManager,
                   int index,
                   float initialValue,
@@ -73,7 +73,7 @@ protected:
     //--------------- Data members ---------------------------------
 
     ControlType          m_type;
-    PluginPort          *m_port;
+    QSharedPointer<PluginPort> m_port;
 
     ::Rosegarden::Rotary              *m_dial; // we have to specify the namespace here otherwise gcc 4.1 thinks it's the enum value above
     QSharedPointer<AudioPluginManager> m_pluginManager;

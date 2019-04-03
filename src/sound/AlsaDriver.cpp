@@ -517,10 +517,10 @@ AlsaDriver::getAutoTimer(bool &wantTimerChecks)
  * to be called regularly. */
 
 void
-AlsaDriver::generatePortList(AlsaPortList *newPorts)
+AlsaDriver::generatePortList(AlsaPortVector *newPorts)
 {
     Audit audit;
-    AlsaPortList alsaPorts;
+    AlsaPortVector alsaPorts;
 
     snd_seq_client_info_t *cinfo;
     snd_seq_port_info_t *pinfo;
@@ -639,7 +639,7 @@ AlsaDriver::generatePortList(AlsaPortList *newPorts)
                     name += " (duplex)";
                 }
 
-                AlsaPortDescription *portDescription =
+                QSharedPointer<AlsaPortDescription> portDescription(
                     new AlsaPortDescription(
                                             Instrument::Midi,
                                             name,
@@ -648,7 +648,7 @@ AlsaDriver::generatePortList(AlsaPortList *newPorts)
                                             clientType,
                                             portType,
                                             capability,
-                                            direction);
+                                            direction));
 
                 if (newPorts &&
                     (getPortName(ClientPortPair(client, port)) == "")) {
@@ -993,7 +993,7 @@ AlsaDriver::getConnection(Device::DeviceType type,
     if (type != Device::Midi)
         return "";
 
-    AlsaPortList tempList;
+    AlsaPortVector tempList;
     for (size_t j = 0; j < m_alsaPorts.size(); ++j) {
         if ((direction == MidiDevice::Play && m_alsaPorts[j]->isWriteable()) ||
             (direction == MidiDevice::Record && m_alsaPorts[j]->isReadable())) {
@@ -1211,7 +1211,9 @@ AlsaDriver::setPlausibleConnection(DeviceId id, QString idealConnection, bool re
         }
     }
 
-    AlsaPortDescription *viableHardwarePort = nullptr, *viableSoftwarePort = nullptr;
+    QSharedPointer<AlsaPortDescription> viableHardwarePort;
+    QSharedPointer<AlsaPortDescription> viableSoftwarePort;
+
     int fitness = 0;
 
     // Try to find one viable hardware and one viable software port, if
@@ -1231,7 +1233,7 @@ AlsaDriver::setPlausibleConnection(DeviceId id, QString idealConnection, bool re
 
                 for (size_t i = 0; i < m_alsaPorts.size(); ++i) {
 
-                    AlsaPortDescription *port = m_alsaPorts[i];
+                    QSharedPointer<AlsaPortDescription> port = m_alsaPorts[i];
 
                     if (!port->isReadable() && recordDevice) {
                         // We're looking for a record device, so if this isn't
@@ -1330,7 +1332,7 @@ AlsaDriver::setPlausibleConnection(DeviceId id, QString idealConnection, bool re
 
     // If we found a viable software port, use it.  If we didn't find a viable
     // software port, but did find a viable hardware port, use it. 
-    AlsaPortDescription *port = nullptr;
+    QSharedPointer<AlsaPortDescription> port;
     if (viableSoftwarePort) port = viableSoftwarePort;
     else if (viableHardwarePort) port = viableHardwarePort;
 
@@ -4638,7 +4640,7 @@ ClientPortPair
 AlsaDriver::getFirstDestination(bool duplex)
 {
     ClientPortPair destPair( -1, -1);
-    AlsaPortList::iterator it;
+    AlsaPortVector::iterator it;
 
     for (it = m_alsaPorts.begin(); it != m_alsaPorts.end(); ++it) {
         destPair.first = (*it)->m_client;
@@ -4818,7 +4820,7 @@ AlsaDriver::checkForNewClients()
     RG_DEBUG << "checkForNewClients(): port check needed";
 #endif
 
-    AlsaPortList newPorts;
+    AlsaPortVector newPorts;
     generatePortList(&newPorts); // updates m_alsaPorts, returns new ports as well
 
     // If one of our ports is connected to a single other port and
@@ -4876,7 +4878,7 @@ AlsaDriver::checkForNewClients()
                     // madeChange = true;
                 }
             } else {
-                for (AlsaPortList::iterator k = m_alsaPorts.begin();
+                for (AlsaPortVector::iterator k = m_alsaPorts.begin();
                      k != m_alsaPorts.end(); ++k) {
                     if ((*k)->m_client == firstOther.first &&
                         (*k)->m_port == firstOther.second) {

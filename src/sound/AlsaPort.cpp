@@ -58,7 +58,8 @@ AlsaPortDescription::AlsaPortDescription(Instrument::InstrumentType type,
 
 
 bool
-AlsaPortCmp::operator()(AlsaPortDescription *a1, AlsaPortDescription *a2)
+AlsaPortCmp::operator()(QSharedPointer<AlsaPortDescription> a1,
+                        QSharedPointer<AlsaPortDescription> a2)
 {
     // Ordering for ALSA ports in the list:
     //

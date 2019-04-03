@@ -57,15 +57,16 @@ AudioPlugin::addPort(int number,
                      PortData upperBound,
                      PortData defaultValue)
 {
-    PluginPort *port = new PluginPort(number,
-                                      qstrtostr(name),
-                                      type,
-                                      hint,
-                                      lowerBound,
-                                      upperBound,
-                                      defaultValue);
-    m_ports.push_back(port);
+    QSharedPointer<PluginPort> port(new PluginPort(
+            number,
+            qstrtostr(name),
+            type,
+            hint,
+            lowerBound,
+            upperBound,
+            defaultValue));
 
+    m_ports.push_back(port);
 }
 
 }

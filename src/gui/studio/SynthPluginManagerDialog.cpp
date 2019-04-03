@@ -383,10 +383,11 @@ void SynthPluginManagerDialog::slotPluginChanged ( int index ){
 
                 // set ports to defaults
 
-                AudioPlugin::PortIterator it = plugin->begin();
                 int count = 0;
 
-                for ( ; it != plugin->end(); ++it ){
+                for (AudioPlugin::PluginPortVector::iterator it = plugin->begin();
+                     it != plugin->end();
+                     ++it) {
 
                     if ( ( ( *it )->getType() & PluginPort::Control ) &&
                          ( ( *it )->getType() & PluginPort::Input ) ){

@@ -31,6 +31,7 @@
 #include <alsa/asoundlib.h> // ALSA
 
 #include <QMutex>
+#include <QSharedPointer>
 
 #include <vector>
 #include <set>
@@ -467,13 +468,13 @@ protected:
      */
     NoteOnMap m_noteOnMap;
 
-    typedef std::vector<AlsaPortDescription *> AlsaPortList;
+    typedef std::vector<QSharedPointer<AlsaPortDescription> > AlsaPortVector;
 
     /**
      * Bring m_alsaPorts up-to-date; if newPorts is non-null, also
      * return the new ports (not previously in m_alsaPorts) through it
      */
-    virtual void generatePortList(AlsaPortList *newPorts = nullptr);
+    virtual void generatePortList(AlsaPortVector *newPorts = nullptr);
     void generateFixedInstruments() override;
 
     virtual void generateTimerList();
@@ -518,7 +519,7 @@ private:
                               
     int checkAlsaError(int rc, const char *message);
 
-    AlsaPortList m_alsaPorts;
+    AlsaPortVector m_alsaPorts;
 
     // ALSA MIDI/Sequencer stuff
     //

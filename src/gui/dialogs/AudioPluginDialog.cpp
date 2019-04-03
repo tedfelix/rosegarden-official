@@ -470,7 +470,9 @@ AudioPluginDialog::slotPluginSelected(int i)
     // count up how many controller inputs the plugin has
     int portCount = 0;
     if (plugin) {
-        for (AudioPlugin::PortIterator it = plugin->begin(); it != plugin->end(); ++it) {
+        for (AudioPlugin::PluginPortVector::iterator it = plugin->begin();
+             it != plugin->end();
+             ++it) {
             if (((*it)->getType() & PluginPort::Control) &&
                 ((*it)->getType() & PluginPort::Input))
                 ++portCount;
@@ -528,11 +530,12 @@ AudioPluginDialog::slotPluginSelected(int i)
 
         inst->setIdentifier(identifier);
 
-        AudioPlugin::PortIterator it = plugin->begin();
         int count = 0;
         int ins = 0, outs = 0;
 
-        for (; it != plugin->end(); ++it) {
+        for (AudioPlugin::PluginPortVector::iterator it = plugin->begin();
+             it != plugin->end();
+             ++it) {
             if (((*it)->getType() & PluginPort::Control) &&
                 ((*it)->getType() & PluginPort::Input)) {
                 // Check for port existence and create with default value
@@ -602,7 +605,6 @@ AudioPluginDialog::slotPluginSelected(int i)
             m_programCombo->show();
         }
 
-        AudioPlugin::PortIterator it = plugin->begin();
         int count = 0;
 
         int row = insRow + 1;
@@ -641,7 +643,9 @@ AudioPluginDialog::slotPluginSelected(int i)
 
         // Create the plugin controls, but only if they're going to be visible.
         // (Else what's the point of creating them at all?)
-        for (; it != plugin->end(); ++it) {
+        for (AudioPlugin::PluginPortVector::iterator it = plugin->begin();
+             it != plugin->end();
+             ++it) {
             if (((*it)->getType() & PluginPort::Control) &&
                 ((*it)->getType() & PluginPort::Input) &&
                 !hidden) {
@@ -1022,7 +1026,9 @@ AudioPluginDialog::slotDefault()
     for (std::vector<PluginControl *>::iterator i = m_pluginWidgets.begin();
          i != m_pluginWidgets.end(); ++i) {
 
-        for (AudioPlugin::PortIterator pi = plugin->begin(); pi != plugin->end(); ++pi) {
+        for (AudioPlugin::PluginPortVector::iterator pi = plugin->begin();
+             pi != plugin->end();
+             ++pi) {
             if ((*pi)->getNumber() == (*i)->getIndex()) {
                 (*i)->setValue((*pi)->getDefaultValue(), true); // and emit
                 break;

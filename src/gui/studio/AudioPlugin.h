@@ -20,16 +20,16 @@
 #define RG_AUDIOPLUGIN_H
 
 #include "base/AudioPluginInstance.h"
+
 #include <QColor>
+#include <QSharedPointer>
 #include <QString>
+
 #include <vector>
-
-
 
 
 namespace Rosegarden
 {
-
 
 
 class AudioPlugin
@@ -73,10 +73,10 @@ public:
                  PortData upperBound,
                  PortData defaultVale);
 
-    typedef std::vector<PluginPort*>::iterator PortIterator;
+    typedef std::vector<QSharedPointer<PluginPort> > PluginPortVector;
 
-    PortIterator begin() { return m_ports.begin(); }
-    PortIterator end() { return m_ports.end(); }
+    PluginPortVector::iterator begin() { return m_ports.begin(); }
+    PluginPortVector::iterator end() { return m_ports.end(); }
 
     QColor getColour() const { return m_colour; }
     void setColour(const QColor &colour) { m_colour = colour; }
@@ -95,7 +95,7 @@ protected:
     QString                    m_category;
 
     // our ports and associated hints
-    std::vector<PluginPort*>   m_ports;
+    PluginPortVector m_ports;
 
     // Colour of this activated plugin
     //

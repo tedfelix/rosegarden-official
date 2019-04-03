@@ -13,6 +13,9 @@
 
 #include <vector>
 #include <set>
+
+#include <QSharedPointer>
+
 #include "base/Instrument.h"
 #include "MappedCommon.h"
 
@@ -66,8 +69,8 @@ public:
 //
 struct AlsaPortCmp
 {
-    bool operator()(AlsaPortDescription *a1,
-                    AlsaPortDescription *a2);
+    bool operator()(QSharedPointer<AlsaPortDescription> a1,
+                    QSharedPointer<AlsaPortDescription> a2);
 };
 
 
