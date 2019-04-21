@@ -27,7 +27,7 @@ namespace Rosegarden
 {
 
 NoteItem::NoteItem(const NotePixmapParameters &params,
-                   NoteStyle *style,
+                   QSharedPointer<NoteStyle> style,
                    bool selected,
                    bool shaded,
 		   NotePixmapFactory *factory,

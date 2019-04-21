@@ -33,6 +33,7 @@
 #include <QPixmap>
 #include <QPoint>
 #include <QCoreApplication> // for Q_DECLARE_TR_FUNCTIONS
+#include <QSharedPointer>
 
 class QPainter;
 class QBitmap;
@@ -117,8 +118,8 @@ public:
      */
     bool isShaded() const { return m_shaded; }
 
-    void setNoteStyle(NoteStyle *style) { m_style = style; }
-    const NoteStyle *getNoteStyle() const { return m_style; } 
+    void setNoteStyle(QSharedPointer<NoteStyle> style) { m_style = style; }
+    const QSharedPointer<NoteStyle> getNoteStyle() const { return m_style; }
 
     // Display methods -- create graphics items:
 
@@ -363,7 +364,7 @@ protected:
 
     NoteFont *m_font;
     NoteFont *m_graceFont;
-    NoteStyle *m_style;
+    QSharedPointer<NoteStyle> m_style;
     bool m_selected;
     bool m_shaded;
     bool m_haveGrace;

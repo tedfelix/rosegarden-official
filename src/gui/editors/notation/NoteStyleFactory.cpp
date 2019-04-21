@@ -61,7 +61,7 @@ NoteStyleFactory::getAvailableStyleNames()
     return names;
 }
 
-NoteStyle *
+QSharedPointer<NoteStyle>
 NoteStyleFactory::getStyle(NoteStyleName name)
 {
     StyleMap::iterator i = m_styles.find(name);
@@ -69,7 +69,7 @@ NoteStyleFactory::getStyle(NoteStyleName name)
     if (i == m_styles.end()) {
 
         try {
-            NoteStyle *newStyle = NoteStyleFileReader(name).getStyle();
+            QSharedPointer<NoteStyle> newStyle = NoteStyleFileReader(name).getStyle();
             m_styles[name] = newStyle;
             return newStyle;
 
@@ -83,7 +83,7 @@ NoteStyleFactory::getStyle(NoteStyleName name)
     }
 }
 
-NoteStyle *
+QSharedPointer<NoteStyle>
 NoteStyleFactory::getStyleForEvent(Event *event)
 {
     std::string sname;

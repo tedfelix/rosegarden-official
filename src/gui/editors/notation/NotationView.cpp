@@ -156,6 +156,7 @@
 #include <QMenu>
 #include <QMessageBox>
 #include <QSettings>
+#include <QSharedPointer>
 #include <QTemporaryFile>
 #include <QToolBar>
 #include <QInputDialog>
@@ -3005,7 +3006,7 @@ NotationView::slotMakeOrnament()
     int basePitch = -1;
     int baseVelocity = -1;
 
-    NoteStyle *style = NoteStyleFactory::getStyle(NoteStyleFactory::DefaultStyle);
+    QSharedPointer<NoteStyle> style = NoteStyleFactory::getStyle(NoteStyleFactory::DefaultStyle);
 
     for (EventSelection::eventcontainer::iterator i =
              ec.begin(); i != ec.end(); ++i) {

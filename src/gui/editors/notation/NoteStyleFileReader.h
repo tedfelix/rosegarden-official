@@ -23,6 +23,7 @@
 #include "NoteStyle.h"
 
 #include <QCoreApplication>
+#include <QSharedPointer>
 
 namespace Rosegarden {
 
@@ -35,7 +36,7 @@ public:
 
     typedef Rosegarden::Exception StyleFileReadFailed;
     
-    NoteStyle *getStyle() { return m_style; }
+    QSharedPointer<NoteStyle> getStyle()  { return m_style; }
 
     // Xml handler methods:
 
@@ -47,7 +48,7 @@ private:
     bool setFromAttributes(Note::Type type, const QXmlAttributes &attributes);
 
     QString m_errorString;
-    NoteStyle *m_style;
+    QSharedPointer<NoteStyle> m_style;
     bool m_haveNote;
 };
 

@@ -57,7 +57,6 @@ const NoteStyle::NoteHeadShape NoteStyle::CustomCharName = "custom character";
 
 
 NoteStyle::NoteHeadShape
-
 NoteStyle::getShape(Note::Type type)
 {
     NoteDescriptionMap::iterator i = m_notes.find(type);

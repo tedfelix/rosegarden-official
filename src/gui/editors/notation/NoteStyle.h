@@ -22,7 +22,10 @@
 #include "base/NotationTypes.h"
 #include <map>
 #include "NoteCharacterNames.h"
+
+#include <QSharedPointer>
 #include <QString>
+
 #include <utility>
 
 
@@ -118,7 +121,7 @@ protected:
     typedef std::map<Note::Type, NoteDescription> NoteDescriptionMap;
 
     NoteDescriptionMap m_notes;
-    NoteStyle *m_baseStyle;
+    QSharedPointer<NoteStyle> m_baseStyle;
     NoteStyleName m_name;
 
     void checkDescription(Note::Type type);

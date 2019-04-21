@@ -19,6 +19,7 @@
 #define RG_NOTEITEM_H
 
 #include <QGraphicsItem>
+#include <QSharedPointer>
 
 #include "NotePixmapParameters.h"
 
@@ -40,7 +41,7 @@ class NoteItem : public QGraphicsItem
 {
 public:
     NoteItem(const NotePixmapParameters &params,
-             NoteStyle *style,
+             QSharedPointer<NoteStyle> style,
              bool selected,
              bool shaded,
 	     NotePixmapFactory *factory,
@@ -64,7 +65,7 @@ public:
 
 protected:
     NotePixmapParameters m_parameters;
-    NoteStyle *m_style;
+    QSharedPointer<NoteStyle> m_style;
     bool m_selected;
     bool m_shaded;
     NotePixmapFactory *m_factory;
