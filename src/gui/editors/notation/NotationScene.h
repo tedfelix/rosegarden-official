@@ -19,6 +19,7 @@
 #define RG_NOTATION_SCENE_H
 
 #include <QGraphicsScene>
+#include <QSharedPointer>
 
 #include "base/NotationTypes.h"
 #include "base/Composition.h"
@@ -290,7 +291,8 @@ private:
     NotationWidget *m_widget; // I do not own this
 
     RosegardenDocument *m_document; // I do not own this
-    NotationProperties *m_properties; // I own this
+
+    QSharedPointer<NotationProperties> m_properties;
 
     NotePixmapFactory *m_notePixmapFactory; // I own this
     NotePixmapFactory *m_notePixmapFactorySmall; // I own this

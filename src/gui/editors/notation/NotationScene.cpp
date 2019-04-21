@@ -59,7 +59,7 @@ static int instanceCount = 0;
 NotationScene::NotationScene() :
     m_widget(nullptr),
     m_document(nullptr),
-    m_properties(nullptr),
+    m_properties(),
     m_notePixmapFactory(nullptr),
     m_notePixmapFactorySmall(nullptr),
     m_clefKeyContext(new ClefKeyContext),
@@ -87,7 +87,7 @@ NotationScene::NotationScene() :
     m_haveInittedCurrentStaff(false)
 {
     QString prefix(QString("NotationScene%1::").arg(instanceCount++));
-    m_properties = new NotationProperties(qstrtostr(prefix));
+    m_properties.reset(new NotationProperties(qstrtostr(prefix)));
 
 //    qRegisterMetaType<NotationMouseEvent>("Rosegarden::NotationMouseEvent");
 
