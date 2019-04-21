@@ -37,13 +37,13 @@ NoteStyleFileReader::NoteStyleFileReader(QString name) :
     m_haveNote(false)
 {
 /*!!!
-	IconLoader il;
-//     QString styleDirectory =
-//	KGlobal::dirs()->findResource("appdata", "styles/");
-	QString styleDirectory = il.getResourcePath( "styles" );
-	
+    IconLoader il;
+    //QString styleDirectory =
+    //    KGlobal::dirs()->findResource("appdata", "styles/");
+    QString styleDirectory = il.getResourcePath( "styles" );
+
     QString styleFileName =
-	QString("%1/%2.xml").arg(styleDirectory).arg(name);
+        QString("%1/%2.xml").arg(styleDirectory).arg(name);
 */
     QString styleFileName = ResourceFinder().getResourcePath
         ("styles", QString("%1.xml").arg(name));
@@ -64,51 +64,51 @@ NoteStyleFileReader::NoteStyleFileReader(QString name) :
     styleFile.close();
 
     if (!ok) {
-	throw StyleFileReadFailed(m_errorString);
+        throw StyleFileReadFailed(m_errorString);
     }
 }
 
 bool
 NoteStyleFileReader::startElement(const QString &, const QString &,
-				  const QString &qName,
-				  const QXmlAttributes &attributes)
+                                  const QString &qName,
+                                  const QXmlAttributes &attributes)
 {
     QString lcName = qName.toLower();
 
     if (lcName == "rosegarden-note-style") {
 
-	QString s = attributes.value("base-style");
-	if ( !s.isEmpty() ) m_style->setBaseStyle(s);
+        QString s = attributes.value("base-style");
+        if ( !s.isEmpty() ) m_style->setBaseStyle(s);
 
     } else if (lcName == "note") {
 
-	m_haveNote = true;
-	
-	QString s = attributes.value("type");
-	if (s.isEmpty() ) {
-	    m_errorString = tr("type is a required attribute of note");
-	    return false;
-	}
-	
-	try {
-	    Note::Type type = NotationStrings::getNoteForName(s).getNoteType();
-	    if (!setFromAttributes(type, attributes)) return false;
+        m_haveNote = true;
 
-	} catch (NotationStrings::MalformedNoteName n) {
-	    m_errorString = tr("Unrecognised note name %1").arg(s);
-	    return false;
-	}
+        QString s = attributes.value("type");
+        if (s.isEmpty() ) {
+            m_errorString = tr("type is a required attribute of note");
+            return false;
+        }
+
+        try {
+            Note::Type type = NotationStrings::getNoteForName(s).getNoteType();
+            if (!setFromAttributes(type, attributes)) return false;
+
+        } catch (NotationStrings::MalformedNoteName n) {
+            m_errorString = tr("Unrecognised note name %1").arg(s);
+            return false;
+        }
 
     } else if (lcName == "global") {
 
-	if (m_haveNote) {
-	    m_errorString = tr("global element must precede note elements");
-	    return false;
-	}
-	    
-	for (Note::Type type = Note::Shortest; type <= Note::Longest; ++type) {
-	    if (!setFromAttributes(type, attributes)) return false;
-	}
+        if (m_haveNote) {
+            m_errorString = tr("global element must precede note elements");
+            return false;
+        }
+
+        for (Note::Type type = Note::Shortest; type <= Note::Longest; ++type) {
+            if (!setFromAttributes(type, attributes)) return false;
+        }
     }
 
     return true;
@@ -117,39 +117,39 @@ NoteStyleFileReader::startElement(const QString &, const QString &,
 
 bool
 NoteStyleFileReader::setFromAttributes(Note::Type type,
-				       const QXmlAttributes &attributes)
+                                       const QXmlAttributes &attributes)
 {
     QString s;
     bool haveShape = false;
 
     s = attributes.value("shape");
-	if (!s.isEmpty() ) {
-	m_style->setShape(type, s.toLower());
-	haveShape = true;
+    if (!s.isEmpty() ) {
+        m_style->setShape(type, s.toLower());
+        haveShape = true;
     }
     
     s = attributes.value("charname");
-	if (!s.isEmpty() ) {
-	if (haveShape) {
-	    m_errorString = tr("global and note elements may have shape "
-				 "or charname attribute, but not both");
-	    return false;
-	}
-	m_style->setShape(type, NoteStyle::CustomCharName);
-	m_style->setCharName(type, s);
+    if (!s.isEmpty() ) {
+        if (haveShape) {
+            m_errorString = tr("global and note elements may have shape "
+                               "or charname attribute, but not both");
+            return false;
+        }
+        m_style->setShape(type, NoteStyle::CustomCharName);
+        m_style->setCharName(type, s);
     }
 
     s = attributes.value("filled");
-	if (!s.isEmpty() ) m_style->setFilled(type, s.toLower() == "true");
+    if (!s.isEmpty() ) m_style->setFilled(type, s.toLower() == "true");
     
     s = attributes.value("stem");
-	if (!s.isEmpty() ) m_style->setStem(type, s.toLower() == "true");
+    if (!s.isEmpty() ) m_style->setStem(type, s.toLower() == "true");
     
     s = attributes.value("flags");
-	if (!s.isEmpty() ) m_style->setFlagCount(type, s.toInt());
+    if (!s.isEmpty() ) m_style->setFlagCount(type, s.toInt());
     
     s = attributes.value("slashes");
-	if (!s.isEmpty() ) m_style->setSlashCount(type, s.toInt());
+    if (!s.isEmpty() ) m_style->setSlashCount(type, s.toInt());
 
     NoteStyle::HFixPoint hfix;
     NoteStyle::VFixPoint vfix;
@@ -158,28 +158,28 @@ NoteStyleFileReader::setFromAttributes(Note::Type type,
     bool haveVFix = false;
 
     s = attributes.value("hfixpoint");
-	if (!s.isEmpty() ) {
-	s = s.toLower();
-	haveHFix = true;
-	if (s == "normal") hfix = NoteStyle::Normal;
-	else if (s == "central") hfix = NoteStyle::Central;
-	else if (s == "reversed") hfix = NoteStyle::Reversed;
-	else haveHFix = false;
+    if (!s.isEmpty() ) {
+        s = s.toLower();
+        haveHFix = true;
+        if (s == "normal") hfix = NoteStyle::Normal;
+        else if (s == "central") hfix = NoteStyle::Central;
+        else if (s == "reversed") hfix = NoteStyle::Reversed;
+        else haveHFix = false;
     }
 
     s = attributes.value("vfixpoint");
-	if (!s.isEmpty() ) {
-	s = s.toLower();
-	haveVFix = true;
-	if (s == "near") vfix = NoteStyle::Near;
-	else if (s == "middle") vfix = NoteStyle::Middle;
-	else if (s == "far") vfix = NoteStyle::Far;
-	else haveVFix = false;
+    if (!s.isEmpty() ) {
+        s = s.toLower();
+        haveVFix = true;
+        if (s == "near") vfix = NoteStyle::Near;
+        else if (s == "middle") vfix = NoteStyle::Middle;
+        else if (s == "far") vfix = NoteStyle::Far;
+        else haveVFix = false;
     }
 
     if (haveHFix || haveVFix) {
-	m_style->setStemFixPoints(type, hfix, vfix);
-	// otherwise they inherit from base style, so avoid setting here
+        m_style->setStemFixPoints(type, hfix, vfix);
+        // otherwise they inherit from base style, so avoid setting here
     }
 
     return true;
