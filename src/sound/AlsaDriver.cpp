@@ -179,9 +179,7 @@ AlsaDriver::checkAlsaError(int rc, const char *
 void
 AlsaDriver::shutdown()
 {
-#ifdef DEBUG_ALSA
-    RG_DEBUG << "shutdown(): shutting down";
-#endif
+    RG_DEBUG << "shutdown(): shutting down...";
 
     if (m_midiHandle) {
         processNotesOff(getAlsaTime(), true, true);
@@ -193,20 +191,15 @@ AlsaDriver::shutdown()
 #endif
 
     if (m_midiHandle) {
-#ifdef DEBUG_ALSA
-        RG_DEBUG << "shutdown() - closing MIDI client";
-#endif
+
+        RG_DEBUG << "shutdown(): stopping queue...";
 
         checkAlsaError(snd_seq_stop_queue(m_midiHandle, m_queue, nullptr), "shutdown(): stopping queue");
         checkAlsaError(snd_seq_drain_output(m_midiHandle), "shutdown(): drain output");
-#ifdef DEBUG_ALSA
-        RG_DEBUG << "shutdown() - stopped queue";
-#endif
+
+        RG_DEBUG << "shutdown(): closing MIDI handle...";
 
         snd_seq_close(m_midiHandle);
-#ifdef DEBUG_ALSA
-        RG_DEBUG << "shutdown() - closed MIDI handle";
-#endif
 
         m_midiHandle = nullptr;
     }
