@@ -1104,21 +1104,17 @@ EventView::slotEditInsert()
 
     // Create default event
     //
-    Event *event =
-        new Event(Note::EventType,
-                  insertTime,
-                  insertDuration);
-    event->set
-    <Int>(BaseProperties::PITCH, 70);
-    event->set
-    <Int>(BaseProperties::VELOCITY, 100);
+    Event event(Note::EventType, insertTime, insertDuration);
+    event.set<Int>(BaseProperties::PITCH, 70);
+    event.set<Int>(BaseProperties::VELOCITY, 100);
 
-    SimpleEventEditDialog dialog(this, getDocument(), *event, true);
+    SimpleEventEditDialog dialog(this, getDocument(), event, true);
 
     if (dialog.exec() == QDialog::Accepted) {
+        event = dialog.getEvent();
         EventInsertionCommand *command =
             new EventInsertionCommand(*m_segments[0],
-                                      new Event(dialog.getEvent()));
+                                      &event);
         addCommandToHistory(command);
     }
 }
