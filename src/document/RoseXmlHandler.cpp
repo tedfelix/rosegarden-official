@@ -235,7 +235,7 @@ RoseXmlHandler::RoseXmlHandler(RosegardenDocument *doc,
     m_plugin(nullptr),
     m_pluginInBuss(false),
     m_colourMap(nullptr),
-    m_keyMapping(nullptr),
+    m_keyMapping(),
     m_pluginId(0),
     m_totalElements(elementCount),
     m_elementsSoFar(0),
@@ -1549,7 +1549,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
             if (m_device && (m_device->getType() == Device::Midi)) {
                 QString name = atts.value("name");
-                m_keyMapping = new MidiKeyMapping(qstrtostr(name));
+                m_keyMapping.reset(new MidiKeyMapping(qstrtostr(name)));
                 m_keyNameMap.clear();
             }
         }
@@ -2426,7 +2426,8 @@ RoseXmlHandler::endElement(const QString& namespaceURI,
                         md->addKeyMapping(*m_keyMapping);
                     }
                 }
-                m_keyMapping = nullptr;
+
+                m_keyMapping.reset();
             }
         }
 

@@ -178,7 +178,7 @@ protected:
     AudioPluginInstance              *m_plugin;
     bool                              m_pluginInBuss;
     ColourMap                        *m_colourMap;
-    MidiKeyMapping                   *m_keyMapping;
+    QSharedPointer<MidiKeyMapping> m_keyMapping;
     MidiKeyMapping::KeyNameMap        m_keyNameMap;
     unsigned int                      m_pluginId;
     unsigned int                      m_totalElements;
