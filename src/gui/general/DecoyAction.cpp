@@ -15,11 +15,14 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[DecoyAction]"
+
 #include "DecoyAction.h"
 
-#include <iostream>
+#include "misc/Debug.h"
 
 namespace Rosegarden {
+
 
 DecoyAction *
 DecoyAction::m_instance = nullptr;
@@ -28,18 +31,16 @@ DecoyAction *
 DecoyAction::getInstance()
 { 
     if (!m_instance) m_instance = new DecoyAction();
-    std::cerr << "WARNING: Using decoy action" << std::endl;
+    RG_WARNING << "getInstance(): WARNING: Using decoy action";
     return m_instance;
 }
 
 DecoyAction::~DecoyAction()
 {
-    std::cerr << "ERROR: Deleting the global DecoyAction -- some class has looked up an action that did not exist, and deleted it -- a crash is highly likely now" << std::endl;
+    RG_WARNING << "dtor: ERROR: Deleting the global DecoyAction -- some class has looked up an action that did not exist, and deleted it -- a crash is highly likely now";
 }
 
-    DecoyAction::DecoyAction() : QAction("Decoy Action", nullptr) { }
+DecoyAction::DecoyAction() : QAction("Decoy Action", nullptr) { }
+
 
 }
-
-
-    

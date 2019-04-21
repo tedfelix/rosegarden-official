@@ -16,6 +16,9 @@
 */
 
 #define RG_MODULE_STRING "[RosegardenDocument]"
+
+#define RG_NO_DEBUG_PRINT 1
+
 #include "RosegardenDocument.h"
 
 #include "CommandHistory.h"

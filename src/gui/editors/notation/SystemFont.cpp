@@ -15,6 +15,9 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[SystemFont]"
+
+//#define RG_NO_DEBUG_PRINT 1
 
 // "qtextstream.h must be included before any header file that defines Status"
 #include <QTextStream>
@@ -56,7 +59,7 @@ SystemFont::loadSystemFont(const SystemFontSpec &spec)
     QString name = spec.first;
     int size = spec.second;
 
-    NOTATION_DEBUG << "SystemFont::loadSystemFont: name is " << name << ", size " << size;
+    RG_DEBUG << "loadSystemFont(): name is " << name << ", size " << size;
 
     if (name == "DEFAULT") {
         QFont font;
@@ -84,7 +87,7 @@ SystemFont::loadSystemFont(const SystemFontSpec &spec)
 
     QFontInfo info(qfont);
 
-    NOTATION_DEBUG << "SystemFont::loadSystemFont[Qt]: wanted family " << name << " at size " << size << ", got family " << info.family() << " (exactMatch " << info.exactMatch() << ")";
+    RG_DEBUG << "loadSystemFont(): [Qt]: wanted family " << name << " at size " << size << ", got family " << info.family() << " (exactMatch " << info.exactMatch() << ")";
 
     QString family = info.family().toLower();
 
@@ -100,7 +103,7 @@ SystemFont::loadSystemFont(const SystemFontSpec &spec)
         }
     }
 
-    NOTATION_DEBUG << "SystemFont::loadSystemFont[Qt]: Wrong family returned, failing";
+    RG_DEBUG << "loadSystemFont(): [Qt]: Wrong family returned, failing";
     qFontMap[name] = {};
     return nullptr;
 }
@@ -114,7 +117,7 @@ SystemFont::unbundleFonts()
     fontFiles << ResourceFinder().getResourceFiles("fonts", "ttf");
     fontFiles << ResourceFinder().getResourceFiles("fonts", "otf");
 
-    NOTATION_DEBUG << "Found font files: " << fontFiles;
+    RG_DEBUG << "unbundleFonts(): Found font files: " << fontFiles;
 
     for (QStringList::const_iterator i = fontFiles.constBegin();
          i != fontFiles.constEnd(); ++i) {
@@ -135,7 +138,7 @@ void
 SystemFont::addFont(QString fileName)
 {
     QFontDatabase::addApplicationFont(fileName);
-    NOTATION_DEBUG << "Added font file" << fileName << "to Qt font database";
+    RG_DEBUG << "addFont(): Added font file" << fileName << "to Qt font database";
 }
 
 }

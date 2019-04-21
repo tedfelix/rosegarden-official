@@ -1653,12 +1653,10 @@ Track* Composition::getTrackById(TrackId track) const
     if (i != m_tracks.end())
         return (*i).second;
 
-    RG_WARNING << "Composition::getTrackById("
-              << track << ") - WARNING - track id not found, this is probably a BUG "
-              << __FILE__ << ":" << __LINE__;
-    NOTATION_DEBUG << "Available track ids are:";
+    RG_WARNING << "getTrackById(" << track << "): WARNING: Track ID not found.";
+    RG_WARNING << "  Available track ids are:";
     for (trackconstiterator i = m_tracks.begin(); i != m_tracks.end(); ++i) {
-        NOTATION_DEBUG << (int)(*i).second->getId();
+        RG_WARNING << "    " << (int)(*i).second->getId();
     }
 
     return nullptr;

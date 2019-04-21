@@ -15,6 +15,8 @@
 
 #define RG_MODULE_STRING "[ControlBlock]"
 
+#define RG_NO_DEBUG_PRINT 1
+
 #include <cstring>
 
 #include "ControlBlock.h"

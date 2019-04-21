@@ -17,6 +17,8 @@
 
 #define RG_MODULE_STRING "[RoseXmlHandler]"
 
+#define RG_NO_DEBUG_PRINT 1
+
 #include "RoseXmlHandler.h"
 
 #include "sound/Midi.h"

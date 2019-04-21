@@ -1079,7 +1079,7 @@ SequenceManager::checkSoundDriverStatus(bool warnUser)
     m_soundDriverStatus = RosegardenSequencer::getInstance()->
         getSoundDriverStatus(VERSION);
 
-    RG_DEBUG << "Sound driver status:" <<
+    RG_DEBUG << "checkSoundDriverStatus(): Sound driver status:" <<
             "MIDI" << (((m_soundDriverStatus & MIDI_OK) != 0) ? "ok" : "NOT OK") << "|" <<
             "Audio" << (((m_soundDriverStatus & AUDIO_OK) != 0) ? "ok" : "NOT OK") << "|" <<
             "Version" << (((m_soundDriverStatus & VERSION_OK) != 0) ? "ok" : "NOT OK");
@@ -1335,9 +1335,9 @@ void SequenceManager::resetTimeSigSegmentMapper()
 bool SequenceManager::event(QEvent *e)
 {
     if (e->type() == QEvent::User) {
-        RG_DEBUG << "event() with user event";
+        //RG_DEBUG << "event() with user event";
         if (m_refreshRequested) {
-            RG_DEBUG << "event(): update requested";
+            //RG_DEBUG << "event(): update requested";
             refresh();
             m_refreshRequested = false;
         }
@@ -1349,7 +1349,7 @@ bool SequenceManager::event(QEvent *e)
 
 void SequenceManager::update()
 {
-    RG_DEBUG << "update()";
+    //RG_DEBUG << "update()";
     // schedule a refresh-status check for the next event loop
     QEvent *e = new QEvent(QEvent::User);
     // Let the handler know we want a refresh().
@@ -1474,7 +1474,7 @@ void SequenceManager::segmentAdded(const Composition*, Segment* s)
 
 void SequenceManager::segmentRemoved(const Composition*, Segment* s)
 {
-    RG_DEBUG << "SequenceManager::segmentRemoved(" << s << ")";
+    RG_DEBUG << "segmentRemoved(" << s << ")";
 
     // !!! WARNING !!!
     // The segment pointer "s" is about to be deleted by
@@ -1518,7 +1518,7 @@ void SequenceManager::segmentTransposeChanged(const Composition*, Segment *s, in
 
 void SequenceManager::segmentTrackChanged(const Composition*, Segment *s, TrackId id)
 {
-    RG_DEBUG << "SequenceManager::segmentTrackChanged(" << s << ", " << id << ")";
+    RG_DEBUG << "segmentTrackChanged(" << s << ", " << id << ")";
     segmentModified(s);
     if (s && s->getType() == Segment::Audio && m_transportStatus == PLAYING) {
         RosegardenSequencer::getInstance()->remapTracks();
@@ -1527,20 +1527,20 @@ void SequenceManager::segmentTrackChanged(const Composition*, Segment *s, TrackI
 
 void SequenceManager::segmentEndMarkerChanged(const Composition*, Segment *s, bool)
 {
-    RG_DEBUG << "SequenceManager::segmentEndMarkerChanged(" << s << ")";
+    RG_DEBUG << "segmentEndMarkerChanged(" << s << ")";
     segmentModified(s);
 }
 
 void SequenceManager::segmentInstrumentChanged(Segment *s)
 {
-    RG_DEBUG << "SequenceManager::segmentInstrumentChanged(" << s << ")";
+    RG_DEBUG << "segmentInstrumentChanged(" << s << ")";
     // Quick and dirty: Redo the whole segment.
     segmentModified(s);
 }
 
 void SequenceManager::segmentAdded(Segment* s)
 {
-    RG_DEBUG << "SequenceManager::segmentAdded(" << s << ")";
+    RG_DEBUG << "segmentAdded(" << s << ")";
     m_compositionMapper->segmentAdded(s);
 
     RosegardenSequencer::getInstance()->segmentAdded
@@ -1553,7 +1553,7 @@ void SequenceManager::segmentAdded(Segment* s)
 
 void SequenceManager::segmentDeleted(Segment* s)
 {
-    RG_DEBUG << "segmentDeleted()";
+    RG_DEBUG << "segmentDeleted(" << s << ")";
 
     // !!! WARNING !!!
     // The "s" segment pointer that is coming in to this routine has already
