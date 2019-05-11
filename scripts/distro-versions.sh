@@ -25,7 +25,7 @@ for shortname in $ubuntu_release_shortnames ; do
 	sed 's/[^0-9\.].*//' | \
 	head -1`
     [ -z "$rv" ] && continue
-    longname=`echo "$ubuntu_release_description" | grep "$shortname" | sed 's/^.*Ubuntu //' | sed 's/<.*//'`
+    longname=`echo "$ubuntu_release_description" | grep "$shortname" | sed 's/^.*Ubuntu //' | sed 's/<.*//' | sed 's/&nbsp;.*//'`
     echo "</tr><tr><td class=a>&nbsp;Ubuntu $longname&nbsp;</td>"
     echo "<td class=a>&nbsp;Rosegarden v$rv&nbsp;</td>"
     echo "<td class=a>&nbsp;Community-supported Packages</td>"
