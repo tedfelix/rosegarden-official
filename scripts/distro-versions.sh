@@ -9,7 +9,7 @@ ubuntu_package_path='/sound/rosegarden'
 
 ubuntu_release_url='http://releases.ubuntu.com/'
 
-ubuntu_release_description=`wget -O- "$ubuntu_release_url" 2>/dev/null | grep '<li>' | grep '[0-9] [A-Z]* *('`
+ubuntu_release_description=`wget -O- "$ubuntu_release_url" 2>/dev/null | grep '<li[ >]' | grep '[0-9] [A-Z]* *('`
 ubuntu_release_shortnames=`echo "$ubuntu_release_description" | sed 's/^.*(//' | sed 's/ .*//'`
 
 rowspan=$(($maxrelease+1))
@@ -90,7 +90,7 @@ for x in `seq 1 $maxrelease` ; do echo '<tr></tr>'; done
 # Arch Linux
 
 
-arch_package_url='http://www.archlinux.org/packages/extra/x86_64/rosegarden/'
+arch_package_url='http://www.archlinux.org/packages/community/x86_64/rosegarden/'
 
 echo '<tr><td>&nbsp;</td></tr>'
 echo '<tr>'
@@ -104,7 +104,7 @@ case "$arch_version" in
         echo '</tr><tr>'
         echo "<td class=a>&nbsp;Arch Linux&nbsp;</td>"
         echo "<td class=a>&nbsp;Rosegarden v$arch_version&nbsp;</td>"
-        echo "<td class=a>&nbsp;Extra repository</td>"
+        echo "<td class=a>&nbsp;Community repository</td>"
         ;;
 esac
 echo "</tr>"
