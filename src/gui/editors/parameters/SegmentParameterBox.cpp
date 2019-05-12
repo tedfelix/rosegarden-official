@@ -53,6 +53,7 @@
 #include "gui/widgets/LineEdit.h"
 #include "gui/widgets/InputDialog.h"
 #include "gui/widgets/Label.h"
+#include "gui/application/RosegardenMainWindow.h"
 
 #include <QColorDialog>
 #include <QLayout>
@@ -99,6 +100,10 @@ SegmentParameterBox::SegmentParameterBox(RosegardenDocument* doc,
     initBox();
 
     m_doc->getComposition().addObserver(this);
+
+    connect(RosegardenMainWindow::self(),
+                &RosegardenMainWindow::documentChanged,
+            this, &SegmentParameterBox::slotNewDocument);
 
     connect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
             this, SLOT(update()));
@@ -352,7 +357,7 @@ SegmentParameterBox::initBox()
     // populate m_colourComboBox
     slotDocColoursChanged();
 
-    //RG_DEBUG << "SegmentParameterBox::SegmentParameterBox: " << this << ": font() size is " << (this->font()).pixelSize() << "px (" << (this->font()).pointSize() << "pt)";
+    //RG_DEBUG << "initBox(): " << this << ": font() size is " << (this->font()).pixelSize() << "px (" << (this->font()).pointSize() << "pt)";
 }
 
 void
@@ -393,7 +398,7 @@ SegmentParameterBox::useSegments(const SegmentSelection &segments)
 void
 SegmentParameterBox::slotDocColoursChanged()
 {
-    RG_DEBUG << "SegmentParameterBox::slotDocColoursChanged()";
+    RG_DEBUG << "slotDocColoursChanged()";
 
     m_colourComboBox->clear();
     m_colourList.clear();
@@ -438,7 +443,7 @@ SegmentParameterBox::slotDocColoursChanged()
 
 void SegmentParameterBox::update()
 {
-    RG_DEBUG << "SegmentParameterBox::update()";
+    RG_DEBUG << "update()";
 
     populateBoxFromSegments();
 }
@@ -447,23 +452,36 @@ void
 SegmentParameterBox::segmentRemoved(const Composition *composition,
                                     Segment *segment)
 {
-    if (composition == &m_doc->getComposition()) {
+    RG_DEBUG << "segmentRemoved()...";
 
-        for (std::vector<Segment*>::iterator it =
-                    m_segments.begin(); it != m_segments.end(); ++it) {
-
-            if (*it == segment) {
-                m_segments.erase(it);
-                return ;
-            }
-        }
+    // Not our composition?  Bail.
+    if (composition != &m_doc->getComposition()) {
+        RG_DEBUG << "segmentRemoved(): received a delete for the wrong Composition";
+        return;
     }
+
+    // For each Segment that we are displaying...
+    for (SegmentVector::const_iterator it =
+             m_segments.begin();
+         it != m_segments.end();
+         ++it) {
+
+        // If we found the segment in question, delete it from our list.
+        if (*it == segment) {
+            RG_DEBUG << "segmentRemoved(): found the segment to remove";
+            m_segments.erase(it);
+            return;
+        }
+
+    }
+
+    // ??? We don't update() here, so we still show old data.
 }
 
 void
 SegmentParameterBox::populateBoxFromSegments()
 {
-    std::vector<Segment*>::iterator it;
+    SegmentVector::iterator it;
     Tristate repeated = NotApplicable;
     Tristate quantized = NotApplicable;
     Tristate transposed = NotApplicable;
@@ -761,7 +779,7 @@ void SegmentParameterBox::slotRepeatPressed()
 
     addCommandToHistory(new SegmentCommandRepeat(m_segments, state));
 
-    //     std::vector<Segment*>::iterator it;
+    //     SegmentVector::iterator it;
 
     //     for (it = m_segments.begin(); it != m_segments.end(); it++)
     //         (*it)->setRepeating(state);
@@ -776,7 +794,7 @@ SegmentParameterBox::slotQuantizeSelected(int qLevel)
         new SegmentChangeQuantizationCommand
         (off ? 0 : m_standardQuantizations[qLevel]);
 
-    std::vector<Segment*>::iterator it;
+    SegmentVector::iterator it;
     for (it = m_segments.begin(); it != m_segments.end(); ++it) {
         command->addSegment(*it);
     }
@@ -795,7 +813,7 @@ SegmentParameterBox::slotTransposeTextChanged(const QString &text)
     //     addCommandToHistory(new SegmentCommandChangeTransposeValue(m_segments,
     //                                                                transposeValue));
 
-    std::vector<Segment*>::iterator it;
+    SegmentVector::iterator it;
     for (it = m_segments.begin(); it != m_segments.end(); ++it) {
         (*it)->setTranspose(transposeValue);
     }
@@ -816,8 +834,8 @@ SegmentParameterBox::slotChangeLinkTranspose()
         return ;
 
     bool foundTransposedLinks = false;
-    std::vector<Segment *> linkedSegs;
-    std::vector<Segment *>::iterator it;
+    SegmentVector linkedSegs;
+    SegmentVector::iterator it;
     for (it = m_segments.begin(); it != m_segments.end(); ++it) {
         Segment *linkedSeg = *it;
         if (linkedSeg->isLinked()) {
@@ -864,8 +882,8 @@ SegmentParameterBox::slotResetLinkTranspose()
     if (m_segments.size() == 0)
         return ;
 
-    std::vector<Segment *> linkedSegs;
-    std::vector<Segment *>::iterator it;
+    SegmentVector linkedSegs;
+    SegmentVector::iterator it;
     for (it = m_segments.begin(); it != m_segments.end(); ++it) {
         Segment *linkedSeg = *it;
         if (linkedSeg->isLinked()) {
@@ -896,7 +914,7 @@ SegmentParameterBox::slotDelayTimeChanged(timeT delayValue)
 
     if (delayValue > 0) {
 
-        std::vector<Segment*>::iterator it;
+        SegmentVector::iterator it;
         for (it = m_segments.begin(); it != m_segments.end(); ++it) {
             (*it)->setDelay(delayValue);
             (*it)->setRealTimeDelay(RealTime::zeroTime);
@@ -904,7 +922,7 @@ SegmentParameterBox::slotDelayTimeChanged(timeT delayValue)
 
     } else if (delayValue < 0) {
 
-        std::vector<Segment*>::iterator it;
+        SegmentVector::iterator it;
         for (it = m_segments.begin(); it != m_segments.end(); ++it) {
             (*it)->setDelay(0);
             int sec = ( -delayValue) / 1000;
@@ -913,7 +931,7 @@ SegmentParameterBox::slotDelayTimeChanged(timeT delayValue)
         }
     } else {
 
-        std::vector<Segment*>::iterator it;
+        SegmentVector::iterator it;
         for (it = m_segments.begin(); it != m_segments.end(); ++it) {
             (*it)->setDelay(0);
             (*it)->setRealTimeDelay(RealTime::zeroTime);
@@ -957,7 +975,7 @@ SegmentParameterBox::slotColourSelected(int value)
         }
 
         SegmentSelection segments;
-        std::vector<Segment*>::iterator it;
+        SegmentVector::iterator it;
 
         for (it = m_segments.begin(); it != m_segments.end(); ++it) {
             segments.insert(*it);
@@ -1009,10 +1027,10 @@ SegmentParameterBox::updateHighLow()
 void
 SegmentParameterBox::slotHighestPressed()
 {
-    RG_DEBUG << "SegmentParameterBox::slotHighestPressed()";
+    RG_DEBUG << "slotHighestPressed()";
 
     PitchPickerDialog dialog(nullptr, m_highestPlayable, tr("Highest playable note"));
-    std::vector<Segment*>::iterator it;
+    SegmentVector::iterator it;
 
     if (dialog.exec() == QDialog::Accepted) {
         m_highestPlayable = dialog.getPitch();
@@ -1029,10 +1047,10 @@ SegmentParameterBox::slotHighestPressed()
 void
 SegmentParameterBox::slotLowestPressed()
 {
-    RG_DEBUG << "SegmentParameterBox::slotLowestPressed()";
+    RG_DEBUG << "slotLowestPressed()";
 
     PitchPickerDialog dialog(nullptr, m_lowestPlayable, tr("Lowest playable note"));
-    std::vector<Segment*>::iterator it;
+    SegmentVector::iterator it;
 
     if (dialog.exec() == QDialog::Accepted) {
         m_lowestPlayable = dialog.getPitch();
@@ -1082,7 +1100,7 @@ SegmentParameterBox::slotEditSegmentLabel()
 
     if (ok) {
         SegmentSelection segments;
-        std::vector<Segment*>::iterator it;
+        SegmentVector::iterator it;
         for (it = m_segments.begin(); it != m_segments.end(); ++it)
             segments.insert(*it);
 
@@ -1099,8 +1117,7 @@ SegmentParameterBox::slotEditSegmentLabel()
 void
 SegmentParameterBox::slotAudioFadeChanged(int value)
 {
-    RG_DEBUG << "SegmentParameterBox::slotAudioFadeChanged - value = "
-    << value << endl;
+    RG_DEBUG << "slotAudioFadeChanged() - value = " << value;
 /*
     if (m_segments.size() == 0)
         return ;
@@ -1109,7 +1126,7 @@ SegmentParameterBox::slotAudioFadeChanged(int value)
     if (value == QCheckBox::On)
         state = true;
 
-    std::vector<Segment*>::iterator it;
+    SegmentVector::iterator it;
     for (it = m_segments.begin(); it != m_segments.end(); it++) {
         (*it)->setAutoFade(state);
     }
@@ -1119,15 +1136,24 @@ SegmentParameterBox::slotAudioFadeChanged(int value)
 void
 SegmentParameterBox::slotFadeInChanged(int value)
 {
-    RG_DEBUG << "SegmentParameterBox::slotFadeInChanged - value = "
-    << value << endl;
+    RG_DEBUG << "slotFadeInChanged() - value = " << value;
 }
 
 void
 SegmentParameterBox::slotFadeOutChanged(int value)
 {
-    RG_DEBUG << "SegmentParameterBox::slotFadeOutChanged - value = "
-    << value << endl;
+    RG_DEBUG << "slotFadeOutChanged() - value = " << value;
+}
+
+void
+SegmentParameterBox::slotNewDocument(RosegardenDocument *doc)
+{
+    // Connect to the new document.
+    m_doc = doc;
+    m_doc->getComposition().addObserver(this);
+
+    // Make sure everything is correct.
+    update();
 }
 
 

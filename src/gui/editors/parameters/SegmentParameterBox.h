@@ -114,6 +114,9 @@ signals:
     void documentModified();
     void canvasModified();
 
+private slots:
+    void slotNewDocument(RosegardenDocument *doc);
+
 protected:
     void initBox();
     void populateBoxFromSegments();
@@ -146,7 +149,12 @@ protected:
     int                        m_highestPlayable;
     int                        m_lowestPlayable;
 
-    std::vector<Segment*> m_segments;
+    // ??? Can we access the selection directly instead of keeping a
+    //     copy?  Of pointers?  That would make this code significantly
+    //     safer.
+    typedef std::vector<Segment *> SegmentVector;
+    SegmentVector m_segments;
+
     std::vector<timeT> m_standardQuantizations;
     std::vector<timeT> m_delays;
     std::vector<int> m_realTimeDelays;
