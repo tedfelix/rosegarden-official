@@ -448,7 +448,7 @@ NoteStyle::setBaseStyle(NoteStyleName name)
     try {
         m_baseStyle = NoteStyleFactory::getStyle(name);
         if (m_baseStyle == this)
-            m_baseStyle = nullptr;
+            m_baseStyle.reset();
     } catch (NoteStyleFactory::StyleUnavailable u) {
         if (name != NoteStyleFactory::DefaultStyle) {
             RG_WARNING
@@ -460,7 +460,7 @@ NoteStyle::setBaseStyle(NoteStyleName name)
             RG_WARNING
                 << "NoteStyle::setBaseStyle: Base style "
                 << name << " not available";
-            m_baseStyle = nullptr;
+            m_baseStyle.reset();
         }
     }
 }
