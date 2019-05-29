@@ -982,13 +982,12 @@
         <translation>PgDown, Media Next</translation>
     </message>
     <message>
-        <location line="+9"/>
         <source>Media Record</source>
         <comment>keyboard shortcut</comment>
-        <translation>Media Record</translation>
+        <translation type="vanished">Media Record</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+18"/>
         <source>Space</source>
         <comment>keyboard shortcut</comment>
         <translation>Space</translation>
@@ -5204,7 +5203,13 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+38"/>
+        <location line="+36"/>
+        <source>Ctrl+Space, Media Record</source>
+        <comment>keyboard shortcut</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
         <source>P&amp;unch in Record</source>
         <translation>Pu&amp;nch-in-inspelning</translation>
     </message>
@@ -8303,7 +8308,7 @@
         <translation>&amp;lt;inget&amp;gt;</translation>
     </message>
     <message>
-        <location filename="../../src/sound/AlsaDriver.cpp" line="+691"/>
+        <location filename="../../src/sound/AlsaDriver.cpp" line="+684"/>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="+1086"/>
         <location filename="../../src/base/Studio.cpp" line="+65"/>
         <location filename="../AutoloadStrings.cpp" line="-189"/>
@@ -10459,7 +10464,7 @@
         <translation>%1. %2</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/ActionFileParser.cpp" line="+649"/>
+        <location filename="../../src/gui/general/ActionFileParser.cpp" line="+651"/>
         <location line="+7"/>
         <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="+446"/>
         <source>%1</source>
@@ -10476,10 +10481,10 @@
         <translation>%1 (%2)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="+1016"/>
+        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="+1018"/>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="+472"/>
         <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="+1662"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="+914"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="+915"/>
         <source>%1 Controller %2 %3</source>
         <translation>%1 effekt %2 %3</translation>
     </message>
@@ -10488,7 +10493,7 @@
         <translation type="obsolete">Rosegarden - Ett musikbehandlingsprogram och noteditor</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/main.cpp" line="+390"/>
+        <location filename="../../src/gui/application/main.cpp" line="+392"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
@@ -10591,7 +10596,7 @@
         <translation>H</translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="+387"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="+384"/>
         <source>Audio subsystem is not available - can&apos;t record audio</source>
         <translation>Ljud-undersystemet är inte tillgängligt - kan inte spela in ljud</translation>
     </message>
@@ -11885,7 +11890,7 @@ Välj de du vill ta bort permanent från hårddisken.
 <context>
     <name>Rosegarden::AudioPluginDialog</name>
     <message>
-        <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="+81"/>
+        <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="+82"/>
         <source>Audio Plugin</source>
         <translation>Ljudinsticksmodul</translation>
     </message>
@@ -12003,7 +12008,7 @@ Välj de du vill ta bort permanent från hårddisken.
         <translation>Återställ insticksmodulens styrdon till fördefinierade värden</translation>
     </message>
     <message>
-        <location line="+301"/>
+        <location line="+303"/>
         <source>&lt;qt&gt;&lt;p&gt;This plugin has too many controls to edit here.&lt;/p&gt;&lt;p&gt;Use the external editor, if available.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Insticksmodulen har för många styrdon för att redigera dem här.&lt;/p&gt;&lt;p&gt;Använd den externa editorn, om tillgänglig.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
@@ -12018,7 +12023,7 @@ Välj de du vill ta bort permanent från hårddisken.
         <translation>Id: %1</translation>
     </message>
     <message>
-        <location line="+50"/>
+        <location line="+51"/>
         <source>mono</source>
         <translation>mono</translation>
     </message>
@@ -12034,21 +12039,21 @@ Välj de du vill ta bort permanent från hårddisken.
     </message>
     <message>
         <location line="+23"/>
-        <location line="+254"/>
+        <location line="+255"/>
         <source>Program:  </source>
         <translation>Program:  </translation>
     </message>
     <message>
-        <location line="-250"/>
+        <location line="-251"/>
         <location line="+7"/>
-        <location line="+247"/>
+        <location line="+248"/>
         <location line="+5"/>
         <location line="+29"/>
         <source>&lt;none selected&gt;</source>
         <translation>&lt;inget markerat&gt;</translation>
     </message>
     <message>
-        <location line="+165"/>
+        <location line="+167"/>
         <source>http://rosegardenmusic.com/wiki/doc:audioPluginDialog-en</source>
         <translation>http://rosegardenmusic.com/wiki/doc:audioPluginDialog-en</translation>
     </message>
@@ -12813,7 +12818,7 @@ Välj de du vill ta bort permanent från hårddisken.
 <context>
     <name>Rosegarden::ChordNameRuler</name>
     <message>
-        <location filename="../../src/gui/rulers/ChordNameRuler.cpp" line="+87"/>
+        <location filename="../../src/gui/rulers/ChordNameRuler.cpp" line="+90"/>
         <source>&lt;qt&gt;&lt;p&gt;Chord name ruler.  This ruler analyzes your harmonies and attempts to guess what chords your composition contains.  These chords cannot be printed or manipulated, and this is only a reference for your information.&lt;/p&gt;&lt;p&gt;Turn it on and off with the &lt;b&gt;View -&gt; Rulers&lt;/b&gt; menu.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Ackordnamnslinjal. Linjalen analyserar harmonier och försöker gissa vilka ackord kompositionen innehåller. Ackorden kan inte skrivas ut eller påverkas, och är bara en referens för information.&lt;/p&gt;&lt;p&gt;Dölj och visa den med menyn &lt;b&gt;Visa -&gt; Linjaler&lt;/b&gt;.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
@@ -14584,7 +14589,7 @@ Det kan orsaka problem om den senare överskrider ett annat beräknat värde.</t
         <translation>Kunde inte klistra in på den här platsen</translation>
     </message>
     <message>
-        <location line="+425"/>
+        <location line="+421"/>
         <source>Open in Event Editor</source>
         <translation>Öppna i händelseeditor</translation>
     </message>
@@ -17559,12 +17564,12 @@ Dubbel-klicka för att öppna markeringsredigeraren.</translation>
 <context>
     <name>Rosegarden::MatrixView</name>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="+1354"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="+1362"/>
         <source>Unknown note insert action %1</source>
         <translation>Okänd notinfogningsåtgärd %1</translation>
     </message>
     <message>
-        <location line="-1496"/>
+        <location line="-1504"/>
         <source>&lt;untitled&gt;</source>
         <translation>&lt;namnlös&gt;</translation>
     </message>
@@ -17627,7 +17632,7 @@ Dubbel-klicka för att öppna markeringsredigeraren.</translation>
         <translation>Av</translation>
     </message>
     <message>
-        <location line="+877"/>
+        <location line="+885"/>
         <source>http://rosegardenmusic.com/wiki/doc:matrix-en</source>
         <translation>http://rosegardenmusic.com/wiki/doc:matrix-en</translation>
     </message>
@@ -17668,7 +17673,7 @@ Dubbel-klicka för att öppna markeringsredigeraren.</translation>
         <translation>Enligt antal halvtonsteg:</translation>
     </message>
     <message>
-        <location line="-322"/>
+        <location line="-325"/>
         <source>Trigger Segment</source>
         <translation>Utlösande segment</translation>
     </message>
@@ -17678,7 +17683,7 @@ Dubbel-klicka för att öppna markeringsredigeraren.</translation>
         <translation>Ta bort utlösare</translation>
     </message>
     <message>
-        <location line="-814"/>
+        <location line="-819"/>
         <source>Matrix</source>
         <translation>Matris</translation>
     </message>
@@ -17686,7 +17691,7 @@ Dubbel-klicka för att öppna markeringsredigeraren.</translation>
 <context>
     <name>Rosegarden::MatrixWidget</name>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="-814"/>
+        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="-816"/>
         <source>Zoom</source>
         <translation>Zooma</translation>
     </message>
@@ -17706,7 +17711,7 @@ Dubbel-klicka för att öppna markeringsredigeraren.</translation>
         <translation>Återställ zoom</translation>
     </message>
     <message>
-        <location line="+1058"/>
+        <location line="+1064"/>
         <source>&lt;qt&gt;Rotate wheel to change the active segment&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Rotera hjulet för att byta aktivt segment&lt;/qt&gt;</translation>
     </message>
@@ -20554,7 +20559,7 @@ Försäkra dig om att enheten är riktigt inställd i dialogrutan Hantera MIDI-e
 <context>
     <name>Rosegarden::RoseXmlHandler</name>
     <message>
-        <location filename="../../src/document/RoseXmlHandler.cpp" line="+283"/>
+        <location filename="../../src/document/RoseXmlHandler.cpp" line="+285"/>
         <source>Reading file...</source>
         <translation type="unfinished">Läser fil...</translation>
     </message>
@@ -20607,7 +20612,7 @@ här versionen. Det kan finnas vissa problem med filformatet.</translation>
 (%2)</translation>
     </message>
     <message>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="+479"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="+482"/>
         <location line="+60"/>
         <location line="+12"/>
         <location line="+66"/>
@@ -20939,7 +20944,7 @@ Se Redigera -&gt; Inställningar -&gt; Ljud.</translation>
 <context>
     <name>Rosegarden::RosegardenMainWindow</name>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="+325"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="+329"/>
         <source>Initializing plugin manager...</source>
         <translation>Initierar instickshantering...</translation>
     </message>
@@ -21000,12 +21005,12 @@ Vill du öppna den istället?</translation>
     </message>
     <message>
         <location line="+145"/>
-        <location line="+4659"/>
+        <location line="+4715"/>
         <source>Untitled</source>
         <translation>Namnlös</translation>
     </message>
     <message>
-        <location line="-4646"/>
+        <location line="-4702"/>
         <location line="+342"/>
         <location line="+157"/>
         <source>Could not save document at %1
@@ -21017,7 +21022,7 @@ Felet är: %2</translation>
         <location line="-497"/>
         <location line="+343"/>
         <location line="+157"/>
-        <location line="+6161"/>
+        <location line="+6217"/>
         <source>Could not save document at %1</source>
         <translation>Kunde inte spara dokument i %1</translation>
     </message>
@@ -21026,7 +21031,7 @@ Felet är: %2</translation>
         <translation type="obsolete">Öppnar ett nytt programfönster...</translation>
     </message>
     <message>
-        <location line="-6593"/>
+        <location line="-6649"/>
         <source>Creating new document...</source>
         <translation>Skapar nytt dokument...</translation>
     </message>
@@ -21045,12 +21050,12 @@ Felet är: %2</translation>
     </message>
     <message>
         <location line="-102"/>
-        <location line="+6013"/>
+        <location line="+6069"/>
         <source>All supported files</source>
         <translation>Alla filer som stöds</translation>
     </message>
     <message>
-        <location line="-6012"/>
+        <location line="-6068"/>
         <location line="+71"/>
         <location line="+193"/>
         <source>Rosegarden files</source>
@@ -21082,12 +21087,12 @@ Felet är: %2</translation>
         <location line="+53"/>
         <location line="+48"/>
         <location line="+122"/>
-        <location line="+2573"/>
+        <location line="+2629"/>
         <source>All files</source>
         <translation>Alla filer</translation>
     </message>
     <message>
-        <location line="-6015"/>
+        <location line="-6071"/>
         <location line="+72"/>
         <source>Open File</source>
         <translation>Öppna fil</translation>
@@ -21346,7 +21351,7 @@ Segment -&gt; Sammanfoga segment.
         <translation>Rosegarden projektfiler</translation>
     </message>
     <message>
-        <location line="+1613"/>
+        <location line="+1669"/>
         <source>Input</source>
         <translation>Indata</translation>
     </message>
@@ -21356,7 +21361,7 @@ Segment -&gt; Sammanfoga segment.
         <translation>http://rosegardenmusic.com/wiki/doc:manual-en</translation>
     </message>
     <message>
-        <location line="-6629"/>
+        <location line="-6685"/>
         <location line="+336"/>
         <location line="+8"/>
         <location line="+10"/>
@@ -21412,7 +21417,7 @@ Segment -&gt; Sammanfoga segment.
         <location line="+58"/>
         <location line="+2"/>
         <location line="+34"/>
-        <location line="+662"/>
+        <location line="+718"/>
         <location line="+95"/>
         <location line="+120"/>
         <location line="+13"/>
@@ -21442,7 +21447,7 @@ Segment -&gt; Sammanfoga segment.
         <translation>&lt;p&gt;Du använder version %1.  Version %2 är nu tillgänglig.&lt;/p&gt;&lt;p&gt;Besök gärna &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/getting/&quot;&gt;Rosegardens hemsida&lt;/a&gt; för mer information.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location line="-4248"/>
+        <location line="-4304"/>
         <source>Open MIDI File</source>
         <translation>Öppna MIDI-fil</translation>
     </message>
@@ -21781,7 +21786,7 @@ Vill du ställa in den nu?</translation>
         <translation>ingen beskrivning</translation>
     </message>
     <message>
-        <location line="+246"/>
+        <location line="+302"/>
         <source>&lt;qt&gt;&lt;p&gt;You must choose a filename for this composition before recording audio.&lt;/p&gt;&lt;p&gt;Audio files will be saved to &lt;b&gt;%1&lt;/b&gt; as &lt;b&gt;rg-[&lt;i&gt;filename&lt;/i&gt;]-[&lt;i&gt;instrument&lt;/i&gt;]-&lt;i&gt;date&lt;/i&gt;_&lt;i&gt;time&lt;/i&gt;-&lt;i&gt;n&lt;/i&gt;.wav&lt;/b&gt;.  You may wish to rename audio instruments before recording as well.  For more information, please see the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/wiki/doc:audio-filenames-en&quot;&gt;Rosegarden Wiki&lt;/a&gt;.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Du måste välja ett filnamn för kompositionen innan du spelar in ljud.&lt;/p&gt;&lt;p&gt;Ljudfiler kommer att sparas i &lt;b&gt;%1&lt;/b&gt; som &lt;b&gt;rg-[&lt;i&gt;filnamn&lt;/i&gt;]-[&lt;i&gt;instrument&lt;/i&gt;]-&lt;i&gt;datum&lt;/i&gt;_&lt;i&gt;tid&lt;/i&gt;-&lt;i&gt;n&lt;/i&gt;.wav&lt;/b&gt;.  Du bör dessutom kanske byta namn på ljudinstrument innan du spelar in. För mer information, se &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/wiki/doc:audio-filenames-en&quot;&gt;Rosegardens webbjournal&lt;/a&gt;.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
@@ -21917,7 +21922,7 @@ Felet är: %2</translation>
 <context>
     <name>Rosegarden::Rotary</name>
     <message>
-        <location filename="../../src/gui/widgets/Rotary.cpp" line="+120"/>
+        <location filename="../../src/gui/widgets/Rotary.cpp" line="+121"/>
         <source>&lt;qt&gt;&lt;p&gt;Click and drag up and down or left and right to modify.&lt;/p&gt;&lt;p&gt;Double click to edit value directly.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Klicka och dra uppåt, neråt, åt vänster eller åt höger för att ändra.&lt;/p&gt;&lt;p&gt;Dubbelklicka för att direkt redigera värdet.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
@@ -22122,12 +22127,12 @@ Felet är: %2</translation>
         <translation type="obsolete">Segment</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="+90"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="+91"/>
         <source>Segment Parameters</source>
         <translation>Segmentparametrar</translation>
     </message>
     <message>
-        <location line="+28"/>
+        <location line="+32"/>
         <source>Label</source>
         <translation>Namn</translation>
     </message>
@@ -22224,12 +22229,12 @@ Felet är: %2</translation>
     </message>
     <message>
         <location line="+42"/>
-        <location line="+351"/>
+        <location line="+364"/>
         <source>%1 ms</source>
         <translation>%1 ms</translation>
     </message>
     <message>
-        <location line="-285"/>
+        <location line="-298"/>
         <source>Default</source>
         <translation>Förval</translation>
     </message>
@@ -22239,7 +22244,7 @@ Felet är: %2</translation>
         <translation>Lägg till ny färg</translation>
     </message>
     <message>
-        <location line="+406"/>
+        <location line="+419"/>
         <location line="+46"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
@@ -22385,7 +22390,7 @@ innan en ny transponering kan utföras.</translation>
 <context>
     <name>Rosegarden::SegmentResizer</name>
     <message>
-        <location filename="../../src/gui/editors/segment/compositionview/SegmentResizer.cpp" line="+125"/>
+        <location filename="../../src/gui/editors/segment/compositionview/SegmentResizer.cpp" line="+133"/>
         <source>Warning</source>
         <translation>Varning</translation>
     </message>
@@ -22604,7 +22609,7 @@ Vill du ange den nu?</translation>
 <context>
     <name>Rosegarden::SegmentSplitter</name>
     <message>
-        <location filename="../../src/gui/editors/segment/compositionview/SegmentSplitter.cpp" line="+61"/>
+        <location filename="../../src/gui/editors/segment/compositionview/SegmentSplitter.cpp" line="+64"/>
         <source>Click on a segment to split it in two; hold Shift to avoid snapping to beat grid</source>
         <translation>Klicka på ett segment för att dela det itu; håll ner Skift för att undvika fästande på rutnätet för taktslag</translation>
     </message>
@@ -22722,8 +22727,8 @@ Vill du ange den nu?</translation>
 <context>
     <name>Rosegarden::SequenceManager</name>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="+154"/>
-        <location line="+153"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="+148"/>
+        <location line="+152"/>
         <source>The JACK Audio subsystem has failed or it has stopped Rosegarden from processing audio.
 Please restart Rosegarden to continue working with audio.
 Quitting other running applications may improve Rosegarden&apos;s performance.</source>
@@ -22732,8 +22737,8 @@ Starta om Rosegarden för att fortsätta arbeta med ljud.
 Att avsluta andra program som körs kan förbättra Rosegardens prestanda.</translation>
     </message>
     <message>
-        <location line="-147"/>
-        <location line="+156"/>
+        <location line="-146"/>
+        <location line="+155"/>
         <source>The JACK Audio subsystem has stopped Rosegarden from processing audio, probably because of a processing overload.
 An attempt to restart the audio service has been made, but some problems may remain.
 Quitting other running applications may improve Rosegarden&apos;s performance.</source>
@@ -22742,12 +22747,12 @@ Ett försök att starta om ljudtjänsten har gjorts, men vissa problem kan vara 
 Att avsluta andra program som körs kan förbättra Rosegardens prestanda.</translation>
     </message>
     <message>
-        <location line="-145"/>
+        <location line="-144"/>
         <source>Out of processor power for real-time audio processing.  Cannot continue.</source>
         <translation>Slut på processorkraft för realtidsbehandling av ljud. Kan inte fortsätta.</translation>
     </message>
     <message>
-        <location line="+26"/>
+        <location line="+25"/>
         <source>A serious error has occurred in the ALSA MIDI subsystem.  It may not be possible to continue sequencing.  Please check console output for more information.</source>
         <translation>Ett allvarligt fel har inträffat i ALSA-MIDI-delsystemet. Det kanske inte är möjligt att fortsätta köra spelaren. Kontrollera terminalutmatningen för mer information.</translation>
     </message>
@@ -23445,7 +23450,7 @@ Att avsluta andra program som körs kan förbättra Rosegardens prestanda.</tran
 <context>
     <name>Rosegarden::SynthPluginManagerDialog</name>
     <message>
-        <location filename="../../src/gui/studio/SynthPluginManagerDialog.cpp" line="+70"/>
+        <location filename="../../src/gui/studio/SynthPluginManagerDialog.cpp" line="+71"/>
         <source>Manage Synth Plugins</source>
         <translation>Hantera syntinsticksmoduler</translation>
     </message>
@@ -24091,7 +24096,7 @@ Att avsluta andra program som körs kan förbättra Rosegardens prestanda.</tran
 <context>
     <name>Rosegarden::Thumbwheel</name>
     <message>
-        <location filename="../../src/gui/widgets/Thumbwheel.cpp" line="+260"/>
+        <location filename="../../src/gui/widgets/Thumbwheel.cpp" line="+263"/>
         <source>Enter new value</source>
         <translation>Ange nytt värde</translation>
     </message>
@@ -24906,7 +24911,7 @@ Att avsluta andra program som körs kan förbättra Rosegardens prestanda.</tran
 <context>
     <name>Rosegarden::TransportDialog</name>
     <message>
-        <location filename="../../src/gui/dialogs/TransportDialog.cpp" line="+123"/>
+        <location filename="../../src/gui/dialogs/TransportDialog.cpp" line="+122"/>
         <source>Rosegarden Transport</source>
         <translation>Spelkontrollpanel</translation>
     </message>
