@@ -5329,7 +5329,7 @@
         <location line="+36"/>
         <source>Ctrl+Space, Media Record</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+264"/>
