@@ -54,16 +54,19 @@ public:
     /// QWidget that has scrollbars.  May or may not be the same as the viewport.
     void connectScrollArea(QAbstractScrollArea *i_abstractScrollArea)
             { m_abstractScrollArea = i_abstractScrollArea; }
+    // ??? Do we really need this?  RosegardenScrollView seems to need it.  Why?
+    //     MatrixWidget doesn't need this.
     void connectViewport(QWidget *i_viewport)
             { m_viewport = i_viewport; }
     void setVScrollRate(int i_vScrollRate)
             { m_vScrollRate = i_vScrollRate; }
 
-    // Mouse events
+    // Control
 
-    void press();
-    void move(FollowMode i_followMode);
-    void release();
+    void start();
+    void setFollowMode(FollowMode i_followMode)
+            { m_followMode = i_followMode; }
+    void stop();
 
 private slots:
     void slotOnTimer();

@@ -21,6 +21,7 @@
 #include "base/Event.h"             // for timeT
 #include "MatrixTool.h"
 #include "base/MidiTypes.h"         // for MidiByte
+#include "gui/general/AutoScroller.h"
 #include "gui/general/SelectionManager.h"
 
 #include <vector>
@@ -296,8 +297,6 @@ private slots:
     /// Instrument is being destroyed
     void slotInstrumentGone();
 
-    void slotOnAutoScrollTimer();
-
 private:
     // ??? Instead of storing the document, which can change, get the
     //     document as needed via RosegardenMainWindow::self()->getDocument().
@@ -434,11 +433,7 @@ private:
 
     // Auto-scroll
 
-    QTimer m_autoScrollTimer;
-    FollowMode m_followMode;
-    void startAutoScroll();
-    void doAutoScroll();
-    void stopAutoScroll();
+    AutoScroller m_autoScroller;
 
 };
 

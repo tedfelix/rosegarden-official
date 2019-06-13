@@ -72,15 +72,15 @@ AutoScroller::AutoScroller() :
 }
 
 void
-AutoScroller::press()
+AutoScroller::start()
 {
     if (!m_abstractScrollArea) {
-        RG_WARNING << "press(): abstract scroll area not specified";
+        RG_WARNING << "start(): abstract scroll area not specified";
         return;
     }
 
     if (!m_viewport) {
-        RG_WARNING << "press(): viewport not specified";
+        RG_WARNING << "start(): viewport not specified";
         return;
     }
 
@@ -89,13 +89,7 @@ AutoScroller::press()
 }
 
 void
-AutoScroller::move(FollowMode i_followMode)
-{
-    m_followMode = i_followMode;
-}
-
-void
-AutoScroller::release()
+AutoScroller::stop()
 {
     if (m_timer.isActive())
         m_timer.stop();
