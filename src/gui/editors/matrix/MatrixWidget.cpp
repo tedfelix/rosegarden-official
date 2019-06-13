@@ -129,6 +129,9 @@ MatrixWidget::MatrixWidget(bool drumMode) :
     m_pianoView(nullptr),
     m_onlyKeyMapping(false),
     m_drumMode(drumMode),
+    m_firstNote(0),
+    m_lastNote(0),
+    m_hoverNoteIsVisible(true),
     m_toolBox(nullptr),
     m_currentTool(nullptr),
     m_currentVelocity(100),
@@ -140,9 +143,7 @@ MatrixWidget::MatrixWidget(bool drumMode) :
     m_topStandardRuler(nullptr),
     m_bottomStandardRuler(nullptr),
     m_referenceScale(nullptr),
-    m_inMove(false),
-    m_lastNote(0),
-    m_hoverNoteIsVisible(true)
+    m_inMove(false)
 {
     //MATRIX_DEBUG << "MatrixWidget ctor";
 
@@ -585,6 +586,9 @@ MatrixWidget::generatePitchRuler()
 
     // Apply current zoom to the new pitch ruler
     if (m_lastZoomWasHV) {
+        // Set the view's matrix.
+        // ??? Why?  Why only in this case?  Why not in the other case?
+        //     Why isn't this handled elsewhere?  Is it?
         QMatrix m;
         m.scale(m_hZoomFactor, m_vZoomFactor);
         m_view->setMatrix(m);
@@ -1343,9 +1347,11 @@ void MatrixWidget::slotKeyPressed(unsigned int y, bool repeating)
     slotHoveredOverKeyChanged(y);
     int evPitch = m_scene->calculatePitchFromY(y);
 
-    // Don't do anything if we're part of a run up the keyboard
-    // and the pitch hasn't changed
-    if (m_lastNote == evPitch && repeating)  return ;
+    // If we are part of a run up the keyboard, don't send redundant
+    // note ons.  Otherwise we will send a note on for every tiny movement
+    // of the mouse.
+    if (m_lastNote == evPitch  &&  repeating)
+        return;
 
     // Save value
     m_lastNote = evPitch;
@@ -1382,10 +1388,11 @@ void MatrixWidget::slotKeySelected(unsigned int y, bool repeating)
     
     int evPitch = m_scene->calculatePitchFromY(y);
 
-    // Don't do anything if we're part of a run up the keyboard
-    // and the pitch hasn't changed
-    //
-    if (m_lastNote == evPitch && repeating) return ;
+    // If we are part of a run up the keyboard, don't send redundant
+    // note ons.  Otherwise we will send a note on for every tiny movement
+    // of the mouse.
+    if (m_lastNote == evPitch  &&  repeating)
+        return;
 
     // Save value
     m_lastNote = evPitch;
@@ -1393,30 +1400,34 @@ void MatrixWidget::slotKeySelected(unsigned int y, bool repeating)
 
     MatrixViewSegment *current = m_scene->getCurrentViewSegment();
 
-    EventSelection *s = new EventSelection(current->getSegment());
+    EventSelection *eventSelection = new EventSelection(current->getSegment());
 
+    // For each Event in the current Segment...
     for (Segment::iterator i = current->getSegment().begin();
-            current->getSegment().isBeforeEndMarker(i); ++i) {
+         current->getSegment().isBeforeEndMarker(i);
+         ++i) {
 
-        if ((*i)->isa(Note::EventType) &&
-                (*i)->has(BaseProperties::PITCH)) {
+        // If this is a Note event with a pitch...
+        if ((*i)->isa(Note::EventType)  &&
+            (*i)->has(BaseProperties::PITCH)) {
 
-            MidiByte p = (*i)->get
-                         <Int>
-                         (BaseProperties::PITCH);
-            if (p >= std::min((int)m_firstNote, evPitch) &&
-                    p <= std::max((int)m_firstNote, evPitch)) {
-                s->addEvent(*i);
+            MidiByte pitch = (*i)->get<Int>(BaseProperties::PITCH);
+
+            // If this note is between the first note selected and
+            // where we are now, select it.
+            if (pitch >= std::min((int)m_firstNote, evPitch)  &&
+                pitch <= std::max((int)m_firstNote, evPitch)) {
+                eventSelection->addEvent(*i);
             }
         }
     }
 
     if (getSelection()) {
         // allow addFromSelection to deal with eliminating duplicates
-        s->addFromSelection(getSelection());
+        eventSelection->addFromSelection(getSelection());
     }
 
-    setSelection(s, false);
+    setSelection(eventSelection, false);
 
     // now play the note as well
     Composition &comp = m_document->getComposition();
@@ -1441,7 +1452,10 @@ void MatrixWidget::slotKeyReleased(unsigned int y, bool repeating)
 
     int evPitch = m_scene->calculatePitchFromY(y);
 
-    if (m_lastNote == evPitch && repeating) return;
+    // If we are part of a run up the keyboard, don't send a
+    // note off for every tiny movement of the mouse.
+    if (m_lastNote == evPitch  &&  repeating)
+        return;
 
     // send note off (note on at zero velocity)
 

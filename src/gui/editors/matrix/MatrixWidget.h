@@ -257,7 +257,7 @@ private:
     void setVerticalZoomFactor(double factor);
 
 
-    // Panner (Navigation Area)
+    // Panner (Navigation Area below the matrix)
 
     /// Navigation area under the main view.
     Panner *m_hpanner; // I own this
@@ -295,6 +295,26 @@ private:
      */
     bool m_drumMode;
 
+    /// First note selected when doing a run up/down the keyboard.
+    /**
+     * Used to allow selection of a range of pitches by shift-clicking a
+     * note on the pitch ruler then dragging up or down to another note.
+     */
+    MidiByte m_firstNote;
+
+    /// Last note selected when doing a run up/down the keyboard.
+    /**
+     * Used to prevent redundant note on/offs when doing a run up/down the
+     * pitch ruler.
+     */
+    MidiByte m_lastNote;
+
+    /// Hide pitch ruler hover note when mouse move is not related to a pitch change.
+    /**
+     * ??? I don't ever see a hover note.  Is it broken?
+     */
+    bool m_hoverNoteIsVisible;
+
 
     // Tools
 
@@ -305,15 +325,23 @@ private:
     int m_currentVelocity;
 
 
-    // Zoom Area
+    // Zoom Area (to the right of the Panner)
 
+    /// The big zoom wheel.
     Thumbwheel *m_HVzoom;
+    /// Used to compute how far the big zoom wheel has moved.
     int m_lastHVzoomValue;
+    /// Which zoom factor to use.  For the pitch ruler.
     bool m_lastZoomWasHV;
+    /// Thin horizontal zoom wheel under the big zoom wheel.
     Thumbwheel *m_Hzoom;
+    /// Used to compute how far the horizontal zoom wheel has moved.
     int m_lastH;
+    /// Thin vertical zoom wheel to the right of the big zoom wheel.
     Thumbwheel *m_Vzoom;
+    /// Used to compute how far the vertical zoom wheel has moved.
     int m_lastV;
+    /// Small reset button to the lower right of the big zoom wheel.
     QPushButton *m_reset;
 
 
@@ -329,7 +357,7 @@ private:
     /**
      * See MatrixScene::getReferenceScale().
      */
-    ZoomableRulerScale *m_referenceScale;
+    ZoomableRulerScale *m_referenceScale;  // Owned by MatrixScene
 
 
     // Auto-scroll
@@ -354,22 +382,6 @@ private:
      * slotEnsureLastMouseMoveVisible() to do auto scrolling.
      */
     QPointF m_lastMouseMoveScenePos;
-
-
-    // Miscellaneous
-
-    /// The last note we sent in case we're swooshing up and
-    /// down the keyboard and don't want repeat notes sending
-    ///
-    MidiByte m_lastNote;
-
-    /// The first note we sent in similar case (only used for
-    /// doing effective sweep selections
-    ///
-    MidiByte m_firstNote;
-
-    // Use to hide hover note when mouse move is not related to a pitch change
-    bool m_hoverNoteIsVisible;
 
 };
 
