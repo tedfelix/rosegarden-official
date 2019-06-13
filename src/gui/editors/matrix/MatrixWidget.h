@@ -73,6 +73,12 @@ public:
     virtual ~MatrixWidget() override;
 
     /**
+     * Show the pointer.  Used by MatrixView upon construction, this ensures
+     * the pointer is visible initially.
+     */
+    void showInitialPointer();
+
+    /**
      * ??? Only one caller.  Might want to fold this into the ctor.
      */
     void setSegments(RosegardenDocument *document,
@@ -144,47 +150,47 @@ public:
 signals:
     void editTriggerSegment(int);
     void toolChanged(QString);
+
+    /// Forwarded from MatrixScene::segmentDeleted().
     void segmentDeleted(Segment *);
+    /// Forwarded from MatrixScene::sceneDeleted().
     void sceneDeleted();
+
     void showContextHelp(const QString &);
     /// Forwarded from MatrixScene::selectionChanged()
     void selectionChanged();
 
 public slots:
-    // ??? I suspect few of these are actually used as slots.  MatrixView
-    //     performs all the createAction() calls and uses its own slots.
-    //     Nothing is ever connected to these.  Confirm and remove slot-ness
-    //     (monster).
-
     /// Velocity combo box.
     void slotSetCurrentVelocity(int velocity) { m_currentVelocity = velocity; }
 
+    /// Plays the preview note when using the computer keyboard to enter notes.
+    void slotPlayPreviewNote(Segment *segment, int pitch);
+
+protected:
+    // QWidget Override
+    /// Make sure the rulers are in sync when we are shown.
+    void showEvent(QShowEvent *event) override;
+
+private slots:
+    /// Called when the document is modified in some way.
+    void slotDocumentModified(bool);
+
+    /// Connected to Panned::zoomIn() for ctrl+wheel.
+    void slotZoomIn();
+    /// Connected to Panned::zoomOut() for ctrl+wheel.
+    void slotZoomOut();
+
+    /// Scroll rulers to sync up with view.
+    void slotScrollRulers();
+
     /// Scroll view so that specified time is visible.
-    /**
-     * ??? This is never used as a slot.  Only used privately.
-     *     Move to private and rename.
-     */
     void slotEnsureTimeVisible(timeT);
 
-    /**
-     * Show the pointer.  Used by MatrixView upon construction, this ensures
-     * the pointer is visible initially.
-     *
-     * ??? This is never used as a slot.
-     *     Move to public and rename.
-     */
-    void showInitialPointer();
-    
-    /**
-     * ??? This is never used as a slot.
-     *     Move to public and rename.
-     */
-    void slotPlayPreviewNote(Segment * segment, int pitch);
-
-protected slots:
+    // MatrixScene Interface
     void slotDispatchMousePress(const MatrixMouseEvent *);
-    void slotDispatchMouseRelease(const MatrixMouseEvent *);
     void slotDispatchMouseMove(const MatrixMouseEvent *);
+    void slotDispatchMouseRelease(const MatrixMouseEvent *);
     void slotDispatchMouseDoubleClick(const MatrixMouseEvent *);
 
     void slotPointerPositionChanged(timeT, bool moveView = true);
@@ -226,46 +232,62 @@ protected slots:
     /// Instrument is being destroyed
     void slotInstrumentGone();
 
-protected:
-    void showEvent(QShowEvent * event) override;
-
-    /// (Re)generate the pitch ruler (useful when key mapping changed)
-    void generatePitchRuler();
-
-private slots:
-    /// Called when the document is modified in some way.
-    void slotDocumentModified(bool);
-
-    /// Connected to Panned::zoomIn() for ctrl+wheel.
-    void slotZoomIn();
-    /// Connected to Panned::zoomOut() for ctrl+wheel.
-    void slotZoomOut();
-
-    /// Scroll rulers to sync up with view.
-    void slotScrollRulers();
-
 private:
     RosegardenDocument *m_document; // I do not own this
+
+
+    // View
+
+    /// QGraphicsScene holding the note Events.
+    // ??? QSharedPointer
+    MatrixScene *m_scene; // I own this
+
+    /// The main view of the MatrixScene (m_scene).
     Panned *m_view; // I own this
 
+    /// Whether the view will scroll along with the playback position pointer.
+    bool m_playTracking;
+
+    /// View horizontal zoom factor.
+    double m_hZoomFactor;
+    void setHorizontalZoomFactor(double factor);
+
+    /// View vertical zoom factor.
+    double m_vZoomFactor;
+    void setVerticalZoomFactor(double factor);
+
+
+    // Panner (Navigation Area)
+
+    /// Navigation area under the main view.
     Panner *m_hpanner; // I own this
     void zoomInFromPanner();
     void zoomOutFromPanner();
 
-    MatrixScene *m_scene; // I own this
-    MatrixToolBox *m_toolBox; // I own this
-    MatrixTool *m_currentTool; // Toolbox owns this
+
+    // Pitch Ruler
+
     // This can be nullptr.  It tracks what pitchruler corresponds to.
     Instrument *m_instrument; // Studio owns this (TBC)
-    bool m_drumMode;
+    /// Key mapping from the Instrument.
+    // ??? QSharedPointer
+    MidiKeyMapping *m_localMapping; // I own this
+    /// Either a PercussionPitchRuler or a PianoKeyboard object.
+    PitchRuler *m_pitchRuler; // I own this
+    /// (Re)generate the pitch ruler (useful when key mapping changed)
+    void generatePitchRuler();
+    /// All Segments only have key mappings.  Use a PercussionPitchRuler.
     bool m_onlyKeyMapping;
-    bool m_playTracking;
+    /// Percussion matrix editor?
+    /**
+     * For the Percussion matrix editor, we ignore key release events from
+     * the PitchRuler.
+     */
+    bool m_drumMode;
 
-    double m_hZoomFactor;
-    void setHorizontalZoomFactor(double factor);
 
-    double m_vZoomFactor;
-    void setVerticalZoomFactor(double factor);
+    MatrixToolBox *m_toolBox; // I own this
+    MatrixTool *m_currentTool; // Toolbox owns this
 
     int m_currentVelocity;
     ZoomableRulerScale *m_referenceScale; // m_scene own this (refers to scene scale)
@@ -292,16 +314,13 @@ private:
     int m_lastSegmentChangerValue;
     void updateSegmentChangerBackground();
 
-    /// Either a PercussionPitchRuler or a PianoKeyboard object.
-    PitchRuler *m_pitchRuler; // I own this
     /// Contains m_pianoScene.
     Panned *m_pianoView; // I own this
     /// Contains m_pitchRuler.
+    // ??? QSharedPointer
     QGraphicsScene *m_pianoScene; // I own this
 
     ControlRulerWidget *m_controlsWidget; // I own this
-
-    MidiKeyMapping *m_localMapping; // I own this
 
     StandardRuler *m_topStandardRuler; // I own this
     StandardRuler *m_bottomStandardRuler; // I own this

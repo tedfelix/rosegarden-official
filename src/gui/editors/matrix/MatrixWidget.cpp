@@ -99,26 +99,26 @@ namespace Rosegarden
 
 MatrixWidget::MatrixWidget(bool drumMode) :
     m_document(nullptr),
-    m_view(nullptr),
     m_scene(nullptr),
-    m_toolBox(nullptr),
-    m_currentTool(nullptr),
-    m_instrument(nullptr),
-    m_drumMode(drumMode),
-    m_onlyKeyMapping(false),
+    m_view(nullptr),
     m_playTracking(true),
     m_hZoomFactor(1.0),
     m_vZoomFactor(1.0),
+    m_instrument(nullptr),
+    m_localMapping(nullptr),
+    m_pitchRuler(nullptr),
+    m_onlyKeyMapping(false),
+    m_drumMode(drumMode),
+    m_toolBox(nullptr),
+    m_currentTool(nullptr),
     m_currentVelocity(100),
     m_referenceScale(nullptr),
     m_inMove(false),
     m_lastZoomWasHV(true),
     m_lastV(0),
     m_lastH(0),
-    m_pitchRuler(nullptr),
     m_pianoView(nullptr),
     m_pianoScene(nullptr),
-    m_localMapping(nullptr),
     m_topStandardRuler(nullptr),
     m_bottomStandardRuler(nullptr),
     m_tempoRuler(nullptr),
@@ -1491,7 +1491,7 @@ slotInstrumentGone()
 { m_instrument = nullptr; }
 
 void
-MatrixWidget::slotPlayPreviewNote(Segment * segment, int pitch)
+MatrixWidget::slotPlayPreviewNote(Segment *segment, int pitch)
 {
     m_scene->playNote(*segment, pitch, 100);
 }
