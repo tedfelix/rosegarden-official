@@ -363,6 +363,8 @@ NotationWidget::NotationWidget() :
             this, &NotationWidget::slotGenerateHeaders);
     m_headersTimer->setSingleShot(true);
     m_headersTimer->setInterval(100);  // 0.1 s
+
+    m_autoScroller.connectScrollArea(m_view);
 }
 
 NotationWidget::~NotationWidget()
@@ -485,6 +487,14 @@ NotationWidget::setSegments(RosegardenDocument *document,
     connect(this, &NotationWidget::toolChanged,
             m_controlRulerWidget, &ControlRulerWidget::slotSetToolName);
 
+    // Connect ControlRulerWidget for Auto-Scroll.
+    connect(m_controlRulerWidget, &ControlRulerWidget::mousePress,
+            this, &NotationWidget::slotCRWMousePress);
+    connect(m_controlRulerWidget, &ControlRulerWidget::mouseMove,
+            this, &NotationWidget::slotCRWMouseMove);
+    connect(m_controlRulerWidget, &ControlRulerWidget::mouseRelease,
+            this, &NotationWidget::slotCRWMouseRelease);
+
     m_topStandardRuler = new StandardRuler(document,
                                            m_referenceScale,
                                            false);
@@ -518,6 +528,20 @@ NotationWidget::setSegments(RosegardenDocument *document,
             this, &NotationWidget::slotStandardRulerDrag);
     connect(m_bottomStandardRuler, &StandardRuler::dragPointerToPosition,
             this, &NotationWidget::slotStandardRulerDrag);
+
+    connect(m_topStandardRuler->getLoopRuler(), &LoopRuler::startMouseMove,
+            this, &NotationWidget::slotSRStartMouseMove);
+    connect(m_topStandardRuler->getLoopRuler(), &LoopRuler::stopMouseMove,
+            this, &NotationWidget::slotSRStopMouseMove);
+    connect(m_bottomStandardRuler->getLoopRuler(), &LoopRuler::startMouseMove,
+            this, &NotationWidget::slotSRStartMouseMove);
+    connect(m_bottomStandardRuler->getLoopRuler(), &LoopRuler::stopMouseMove,
+            this, &NotationWidget::slotSRStopMouseMove);
+
+    connect(m_tempoRuler, &TempoRuler::mousePress,
+            this, &NotationWidget::slotTRMousePress);
+    connect(m_tempoRuler, &TempoRuler::mouseRelease,
+            this, &NotationWidget::slotTRMouseRelease);
 
     connect(m_document, SIGNAL(pointerPositionChanged(timeT)),
             this, SLOT(slotPointerPositionChanged(timeT)));
@@ -929,6 +953,50 @@ NotationWidget::slotStandardRulerDrag(timeT t)
 }
 
 void
+NotationWidget::slotSRStartMouseMove()
+{
+    m_autoScroller.setFollowMode(FOLLOW_HORIZONTAL);
+    m_autoScroller.start();
+}
+
+void
+NotationWidget::slotSRStopMouseMove()
+{
+    m_autoScroller.stop();
+}
+
+void
+NotationWidget::slotCRWMousePress()
+{
+    m_autoScroller.start();
+}
+
+void
+NotationWidget::slotCRWMouseMove(FollowMode followMode)
+{
+    m_autoScroller.setFollowMode(followMode);
+}
+
+void
+NotationWidget::slotCRWMouseRelease()
+{
+    m_autoScroller.stop();
+}
+
+void
+NotationWidget::slotTRMousePress()
+{
+    m_autoScroller.setFollowMode(FOLLOW_HORIZONTAL);
+    m_autoScroller.start();
+}
+
+void
+NotationWidget::slotTRMouseRelease()
+{
+    m_autoScroller.stop();
+}
+
+void
 NotationWidget::slotDispatchMousePress(const NotationMouseEvent *e)
 {
     if (!m_currentTool)
@@ -944,6 +1012,8 @@ NotationWidget::slotDispatchMousePress(const NotationMouseEvent *e)
     } else if (e->buttons & Qt::RightButton) {
         m_currentTool->handleRightButtonPress(e);
     }
+
+    m_autoScroller.start();
 }
 
 void
@@ -954,11 +1024,7 @@ NotationWidget::slotDispatchMouseMove(const NotationMouseEvent *e)
 
     FollowMode followMode = m_currentTool->handleMouseMove(e);
 
-    if (followMode != NO_FOLLOW) {
-
-        // Auto-scroll
-
-    }
+    m_autoScroller.setFollowMode(followMode);
 
     if (e->staff) {
         QString s = e->staff->getNoteNameAtSceneCoords(e->sceneX, e->sceneY);
@@ -969,6 +1035,8 @@ NotationWidget::slotDispatchMouseMove(const NotationMouseEvent *e)
 void
 NotationWidget::slotDispatchMouseRelease(const NotationMouseEvent *e)
 {
+    m_autoScroller.stop();
+
     if (!m_currentTool)
         return;
 

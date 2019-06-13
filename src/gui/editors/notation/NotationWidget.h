@@ -20,6 +20,7 @@
 
 #include "StaffLayout.h"
 
+#include "gui/general/AutoScroller.h"
 #include "base/NotationTypes.h"
 #include "gui/general/SelectionManager.h"
 #include "gui/widgets/Thumbwheel.h"
@@ -190,7 +191,20 @@ private slots:
     void slotDispatchWheelTurned(int, const NotationMouseEvent *);
 
     void slotPointerPositionChanged(timeT t);
+
+    // Standard Ruler
     void slotStandardRulerDrag(timeT t);
+    void slotSRStartMouseMove();
+    void slotSRStopMouseMove();
+
+    // ControlRulerWidget
+    void slotCRWMousePress();
+    void slotCRWMouseMove(FollowMode followMode);
+    void slotCRWMouseRelease();
+
+    // TempoRuler
+    void slotTRMousePress();
+    void slotTRMouseRelease();
 
     void slotZoomInFromPanner();
     void slotZoomOutFromPanner();
@@ -334,6 +348,8 @@ private:
         MAIN_COL,
         VPANNER_COL
     };
+
+    AutoScroller m_autoScroller;
 
 private slots:
     /// Connected to Panned::zoomIn() for ctrl+wheel.
