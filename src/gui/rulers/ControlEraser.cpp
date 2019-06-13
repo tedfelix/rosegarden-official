@@ -73,7 +73,7 @@ ControlEraser::handleLeftButtonPress(const ControlMouseEvent *e)
     }
 }
 
-ControlTool::FollowMode
+FollowMode
 ControlEraser::handleMouseMove(const ControlMouseEvent *e)
 {
     if (e->buttons == Qt::NoButton) {
@@ -91,7 +91,7 @@ ControlEraser::handleMouseMove(const ControlMouseEvent *e)
 //        }
     }
     
-    return NoFollow;
+    return NO_FOLLOW;
 }
 
 void

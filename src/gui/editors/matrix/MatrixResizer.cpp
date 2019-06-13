@@ -97,14 +97,14 @@ MatrixResizer::handleLeftButtonPress(const MatrixMouseEvent *e)
     }
 }
 
-MatrixResizer::FollowMode
+FollowMode
 MatrixResizer::handleMouseMove(const MatrixMouseEvent *e)
 {
-    if (!e) return NoFollow;
+    if (!e) return NO_FOLLOW;
 
     setBasicContextHelp();
 
-    if (!m_currentElement || !m_currentViewSegment) return NoFollow;
+    if (!m_currentElement || !m_currentViewSegment) return NO_FOLLOW;
 
     if (getSnapGrid()->getSnapSetting() != SnapGrid::NoSnap) {
         setContextHelp(tr("Hold Shift to avoid snapping to beat grid"));
@@ -122,7 +122,7 @@ MatrixResizer::handleMouseMove(const MatrixMouseEvent *e)
     timeT durationDiff = newDuration - m_currentElement->getViewDuration();
 
     EventSelection* selection = m_scene->getSelection();
-    if (!selection || selection->getAddedEvents() == 0) return NoFollow;
+    if (!selection || selection->getAddedEvents() == 0) return NO_FOLLOW;
 
     EventSelection::eventcontainer::iterator it =
         selection->getSegmentEvents().begin();
@@ -153,7 +153,7 @@ MatrixResizer::handleMouseMove(const MatrixMouseEvent *e)
     }
 
 //    m_mParentView->canvas()->update();
-    return FollowHorizontal;
+    return FOLLOW_HORIZONTAL;
 }
 
 void

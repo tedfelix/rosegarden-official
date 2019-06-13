@@ -299,7 +299,7 @@ LoopRuler::mousePressEvent(QMouseEvent *mE)
         //     some clients need this and share slots with other signal
         //     sources.  It would probably be best to connect this signal
         //     to a slot in the client that is specific to LoopRuler.
-        emit startMouseMove(RosegardenScrollView::FollowHorizontal);
+        emit startMouseMove(FOLLOW_HORIZONTAL);
     }
 }
 

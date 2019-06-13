@@ -65,7 +65,7 @@ PropertyAdjuster::handleLeftButtonPress(const ControlMouseEvent *e)
     m_ruler->update();
 }
 
-ControlTool::FollowMode
+FollowMode
 PropertyAdjuster::handleMouseMove(const ControlMouseEvent *e)
 {
     setBasicContextHelp();
@@ -106,7 +106,7 @@ PropertyAdjuster::handleMouseMove(const ControlMouseEvent *e)
                                 .arg(minVelocity).arg(maxVelocity));
         }
     }
-    return NoFollow;
+    return NO_FOLLOW;
 }
 
 void

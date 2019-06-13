@@ -114,7 +114,7 @@ ControlPainter::handleLeftButtonPress(const ControlMouseEvent *e)
  
 }
 
-ControlTool::FollowMode
+FollowMode
 ControlPainter::handleMouseMove(const ControlMouseEvent *e)
 {
     ControllerEventsRuler* ruler = dynamic_cast <ControllerEventsRuler*>(m_ruler);
@@ -135,7 +135,7 @@ ControlPainter::handleMouseMove(const ControlMouseEvent *e)
     
     // not sure what any of this is about; had to match the return type used
     // elsewhere, and have made no investigation into what any of it means
-    return ControlTool::NoFollow;
+    return NO_FOLLOW;
 }
 
 QString ControlPainter::ToolName() { return "painter"; }

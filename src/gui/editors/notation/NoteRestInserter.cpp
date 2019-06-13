@@ -273,7 +273,7 @@ NoteRestInserter::handleMidButtonPress(const NotationMouseEvent *)
     }
 }
 
-NoteRestInserter::FollowMode
+FollowMode
 NoteRestInserter::handleMouseMove(const NotationMouseEvent *e)
 {
     if (m_alwaysPreview) { 
@@ -283,7 +283,7 @@ NoteRestInserter::handleMouseMove(const NotationMouseEvent *e)
             showPreview(false);
         }
     }
-    return NoFollow;
+    return NO_FOLLOW;
 }
 
 Accidental

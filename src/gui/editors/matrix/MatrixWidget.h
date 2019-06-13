@@ -429,7 +429,7 @@ private:
 
     QTimer m_autoScrollTimer;
     bool m_autoScrolling;
-    int m_followMode;  // Actually MatrixTool::FollowMode.
+    FollowMode m_followMode;
     void startAutoScroll();
     void doAutoScroll();
     void stopAutoScroll();

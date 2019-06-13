@@ -425,7 +425,7 @@ SegmentSelector::mouseMoveEvent(QMouseEvent *e)
     //       QWidget::setMouseTracking().
     if (e->buttons() == Qt::NoButton) {
         setContextHelpFor(pos, e->modifiers());
-        return RosegardenScrollView::NoFollow;
+        return NO_FOLLOW;
     }
 
     // If another tool has taken over, delegate.
@@ -435,22 +435,21 @@ SegmentSelector::mouseMoveEvent(QMouseEvent *e)
     // We only handle the left button.  The middle button is handled by
     // the dispatch tool (segment pencil) or ignored.
     if (e->buttons() != Qt::LeftButton)
-        return RosegardenScrollView::NoFollow;
+        return NO_FOLLOW;
 
     // If we aren't moving anything, rubber band.
     if (!getChangingSegment()) {
         m_canvas->drawSelectionRectPos2(pos);
         m_canvas->getModel()->selectionHasChanged();
 
-        return RosegardenScrollView::FollowHorizontal |
-               RosegardenScrollView::FollowVertical;
+        return FOLLOW_HORIZONTAL | FOLLOW_VERTICAL;
     }
 
     // Moving
 
     // If the segment that was clicked on isn't selected, bail.
     if (!m_canvas->getModel()->isSelected(getChangingSegment()->getSegment()))
-        return RosegardenScrollView::NoFollow;
+        return NO_FOLLOW;
 
     const int dx = pos.x() - m_clickPoint.x();
     const int dy = pos.y() - m_clickPoint.y();
@@ -461,7 +460,7 @@ SegmentSelector::mouseMoveEvent(QMouseEvent *e)
     if (!m_passedInertiaEdge  &&
         abs(dx) < inertiaDistance  &&
         abs(dy) < inertiaDistance) {
-        return RosegardenScrollView::NoFollow;
+        return NO_FOLLOW;
     }
 
     m_passedInertiaEdge = true;
@@ -617,8 +616,7 @@ SegmentSelector::mouseMoveEvent(QMouseEvent *e)
 
     m_canvas->update();
 
-    return RosegardenScrollView::FollowHorizontal |
-           RosegardenScrollView::FollowVertical;
+    return FOLLOW_HORIZONTAL | FOLLOW_VERTICAL;
 }
 
 void SegmentSelector::keyPressEvent(QKeyEvent *e)

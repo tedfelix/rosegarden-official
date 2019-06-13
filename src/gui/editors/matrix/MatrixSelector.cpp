@@ -299,7 +299,7 @@ MatrixSelector::handleMouseTripleClick(const MatrixMouseEvent *e)
     }
 }
 
-MatrixSelector::FollowMode
+FollowMode
 MatrixSelector::handleMouseMove(const MatrixMouseEvent *e)
 {
     if (m_dispatchTool) {
@@ -309,7 +309,7 @@ MatrixSelector::handleMouseMove(const MatrixMouseEvent *e)
     if (!m_updateRect) {
         setContextHelpFor
             (e, getSnapGrid()->getSnapSetting() == SnapGrid::NoSnap);
-        return NoFollow;
+        return NO_FOLLOW;
     } else {
         clearContextHelp();
     }
@@ -350,7 +350,7 @@ MatrixSelector::handleMouseMove(const MatrixMouseEvent *e)
     m_selectionRect->setX(m_selectionRect->x() - xFix);
     m_widget->canvas()->update();
 */
-    return FollowMode(FollowHorizontal | FollowVertical);
+    return (FOLLOW_HORIZONTAL | FOLLOW_VERTICAL);
 }
 
 void

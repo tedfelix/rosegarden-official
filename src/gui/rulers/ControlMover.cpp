@@ -88,7 +88,7 @@ ControlMover::handleLeftButtonPress(const ControlMouseEvent *e)
     m_ruler->update();
 }
 
-ControlTool::FollowMode
+FollowMode
 ControlMover::handleMouseMove(const ControlMouseEvent *e)
 {
     if (e->buttons == Qt::NoButton) {
@@ -146,12 +146,12 @@ ControlMover::handleMouseMove(const ControlMouseEvent *e)
             if (item) item->reconfigure(x,y);
             ++pIt;
         }
-        return FollowHorizontal;
+        return FOLLOW_HORIZONTAL;
     }
 
     m_ruler->update();
     
-    return NoFollow;
+    return NO_FOLLOW;
 }
 
 void

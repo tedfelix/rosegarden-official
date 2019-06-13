@@ -943,9 +943,9 @@ NotationWidget::slotDispatchMouseMove(const NotationMouseEvent *e)
     if (!m_currentTool)
         return;
 
-    NotationTool::FollowMode followMode = m_currentTool->handleMouseMove(e);
+    FollowMode followMode = m_currentTool->handleMouseMove(e);
 
-    if (followMode != NotationTool::NoFollow) {
+    if (followMode != NO_FOLLOW) {
         m_lastMouseMoveScenePos = QPointF(e->sceneX, e->sceneY);
 
         ensureLastMouseMoveVisible();

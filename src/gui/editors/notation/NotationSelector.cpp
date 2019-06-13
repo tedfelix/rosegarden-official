@@ -240,10 +240,10 @@ void NotationSelector::handleMouseTripleClick(const NotationMouseEvent *e)
     return;
 }
 
-NotationSelector::FollowMode
+FollowMode
 NotationSelector::handleMouseMove(const NotationMouseEvent *e)
 {
-    if (!m_updateRect) return NoFollow;
+    if (!m_updateRect) return NO_FOLLOW;
 
 //    std::cout << "NotationSelector::handleMouseMove: staff is " 
 //              << m_selectedStaff << ", m_updateRect is " << m_updateRect
@@ -285,7 +285,7 @@ NotationSelector::handleMouseMove(const NotationMouseEvent *e)
         setViewCurrentSelection(true);
     }
 
-    return FollowMode(FollowHorizontal | FollowVertical);
+    return (FOLLOW_HORIZONTAL | FOLLOW_VERTICAL);
 }
 
 void NotationSelector::handleMouseRelease(const NotationMouseEvent *e)

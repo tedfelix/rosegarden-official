@@ -21,6 +21,7 @@
 #include "gui/general/BaseTool.h"
 
 #include "gui/general/ActionFileClient.h"
+#include "gui/general/AutoScroller.h"  // For FollowMode
 
 class QAction;
 
@@ -45,12 +46,6 @@ public:
 
     //!!! todo: hoist common bits of this & NotationTool into a new
     // version of EditTool? (only if there is enough to be worth it)
-
-    enum FollowMode {
-        NoFollow = 0x0,
-        FollowHorizontal = 0x1,
-        FollowVertical = 0x2
-    };
 
     virtual void handleLeftButtonPress(const MatrixMouseEvent *);
     virtual void handleMidButtonPress(const MatrixMouseEvent *);

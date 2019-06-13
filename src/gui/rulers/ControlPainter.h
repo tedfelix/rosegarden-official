@@ -37,7 +37,7 @@ class ControlPainter : public ControlMover
 
 public:
     void handleLeftButtonPress(const ControlMouseEvent *) override;
-    ControlTool::FollowMode handleMouseMove(const ControlMouseEvent *) override;
+    FollowMode handleMouseMove(const ControlMouseEvent *) override;
 
     /**
      * Respond to an event being deleted -- it may be the one the tool

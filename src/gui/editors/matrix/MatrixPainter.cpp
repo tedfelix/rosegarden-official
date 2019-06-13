@@ -177,11 +177,11 @@ void MatrixPainter::handleLeftButtonPress(const MatrixMouseEvent *e)
     m_scene->playNote(m_currentViewSegment->getSegment(), adjustedPitch, velocity);
 }
 
-MatrixPainter::FollowMode
+FollowMode
 MatrixPainter::handleMouseMove(const MatrixMouseEvent *e)
 {
     // sanity check
-    if (!m_currentElement) return NoFollow;
+    if (!m_currentElement) return NO_FOLLOW;
 
     if (getSnapGrid()->getSnapSetting() != SnapGrid::NoSnap) {
         setContextHelp(tr("Hold Shift to avoid snapping to beat grid"));
@@ -202,7 +202,7 @@ MatrixPainter::handleMouseMove(const MatrixMouseEvent *e)
     // we need the same pitch/height corrections for dragging notes as for
     // entering new ones
     m_currentViewSegment = e->viewSegment;
-    if (!m_currentViewSegment) return NoFollow;
+    if (!m_currentViewSegment) return NO_FOLLOW;
     long pitchOffset = m_currentViewSegment->getSegment().getTranspose();
     long adjustedPitch = e->pitch + (pitchOffset * -1);
 
@@ -229,7 +229,7 @@ MatrixPainter::handleMouseMove(const MatrixMouseEvent *e)
         m_scene->playNote(m_currentViewSegment->getSegment(), adjustedPitch, velocity);
     }
 
-    return FollowMode(FollowHorizontal | FollowVertical);
+    return (FOLLOW_HORIZONTAL | FOLLOW_VERTICAL);
 }
 
 void MatrixPainter::handleMouseRelease(const MatrixMouseEvent *e)

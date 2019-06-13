@@ -20,6 +20,7 @@
 
 #include <QObject>
 #include "gui/general/BaseTool.h"
+#include "gui/general/AutoScroller.h"  // For FollowMode
 
 class QString;
 
@@ -33,12 +34,6 @@ class ControlTool : public BaseTool
     Q_OBJECT
 
 public:
-    enum FollowMode {
-        NoFollow = 0x0,
-        FollowHorizontal = 0x1,
-        FollowVertical = 0x2
-    };
-
     ControlTool(QString rcFileName, QString menuName, ControlRuler *ruler);
     ~ControlTool() override {};
 //    virtual int operator()(double x, int val) = 0;
@@ -47,7 +42,7 @@ public:
     virtual void handleRightButtonPress(const ControlMouseEvent *) {}
     virtual void handleMouseRelease(const ControlMouseEvent *) {}
     virtual void handleMouseDoubleClick(const ControlMouseEvent *) {}
-    virtual FollowMode handleMouseMove(const ControlMouseEvent *) { return NoFollow; }
+    virtual FollowMode handleMouseMove(const ControlMouseEvent *) { return NO_FOLLOW; }
 
 protected:
     void createMenu() override;

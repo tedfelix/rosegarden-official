@@ -177,16 +177,16 @@ MatrixMover::handleLeftButtonPress(const MatrixMouseEvent *e)
     }
 }
 
-MatrixTool::FollowMode
+FollowMode
 MatrixMover::handleMouseMove(const MatrixMouseEvent *e)
 {
-    if (!e) return NoFollow;
+    if (!e) return NO_FOLLOW;
 
     //RG_DEBUG << "handleMouseMove() snapped time = " << e->snappedLeftTime;
 
     setBasicContextHelp(e->modifiers & Qt::ControlModifier);
 
-    if (!m_currentElement || !m_currentViewSegment) return NoFollow;
+    if (!m_currentElement || !m_currentViewSegment) return NO_FOLLOW;
 
     if (getSnapGrid()->getSnapSetting() != SnapGrid::NoSnap) {
         setContextHelp(tr("Hold Shift to avoid snapping to beat grid"));
@@ -248,7 +248,7 @@ MatrixMover::handleMouseMove(const MatrixMouseEvent *e)
         m_lastPlayedPitch = newPitch;
     }
 
-    return FollowMode(FollowHorizontal | FollowVertical);
+    return (FOLLOW_HORIZONTAL | FOLLOW_VERTICAL);
 }
 
 void

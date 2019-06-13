@@ -62,7 +62,7 @@ public:
      */
     virtual void mousePressEvent(QMouseEvent *);
     virtual int mouseMoveEvent(QMouseEvent *)
-            { return RosegardenScrollView::NoFollow; }
+            { return NO_FOLLOW; }
     virtual void mouseReleaseEvent(QMouseEvent *)  { }
     virtual void keyPressEvent(QKeyEvent *)  { }
     virtual void keyReleaseEvent(QKeyEvent *)  { }

@@ -95,7 +95,7 @@ int SegmentEraser::mouseMoveEvent(QMouseEvent *e)
     // No need to propagate.
     e->accept();
 
-    return RosegardenScrollView::NoFollow;
+    return NO_FOLLOW;
 }
 
 

@@ -249,7 +249,7 @@ int SegmentMover::mouseMoveEvent(QMouseEvent *e)
 
     // If we aren't moving anything, bail.
     if (!getChangingSegment())
-        return RosegardenScrollView::NoFollow;
+        return NO_FOLLOW;
 
     QPoint pos = m_canvas->viewportToContents(e->pos());
 
@@ -322,8 +322,7 @@ int SegmentMover::mouseMoveEvent(QMouseEvent *e)
 
 	m_canvas->update();
 
-    return RosegardenScrollView::FollowHorizontal |
-           RosegardenScrollView::FollowVertical;
+    return FOLLOW_HORIZONTAL | FOLLOW_VERTICAL;
 }
 
 void SegmentMover::keyPressEvent(QKeyEvent *e)

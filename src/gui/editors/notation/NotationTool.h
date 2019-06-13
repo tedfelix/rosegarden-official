@@ -23,6 +23,7 @@
 
 #include "gui/general/BaseTool.h"
 #include "gui/general/ActionFileClient.h"
+#include "gui/general/AutoScroller.h"  // For FollowMode
 
 class QMenu;
 class QAction;
@@ -76,12 +77,6 @@ public:
      * Add any cleanup here
      */
     void stow() override;
-
-    enum FollowMode {
-        NoFollow = 0x0,
-        FollowHorizontal = 0x1,
-        FollowVertical = 0x2
-    };
 
     virtual void handleLeftButtonPress(const NotationMouseEvent *);
     virtual void handleMidButtonPress(const NotationMouseEvent *);

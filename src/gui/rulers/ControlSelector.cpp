@@ -70,7 +70,7 @@ ControlSelector::handleLeftButtonPress(const ControlMouseEvent *e)
     ControlMover::handleLeftButtonPress(e);
 }
 
-ControlTool::FollowMode
+FollowMode
 ControlSelector::handleMouseMove(const ControlMouseEvent *e)
 {
     QRectF *pRectF = m_ruler->getSelectionRectangle();

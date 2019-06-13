@@ -240,7 +240,7 @@ int SegmentPencil::mouseMoveEvent(QMouseEvent *e)
 
     if (!m_newRect) {
         setContextHelpFor(pos);
-        return RosegardenScrollView::NoFollow;
+        return NO_FOLLOW;
     }
 
     // Display help for the Shift key.
@@ -279,7 +279,7 @@ int SegmentPencil::mouseMoveEvent(QMouseEvent *e)
     tmpRect.setRight(rightX);
 
     m_canvas->drawNewSegment(tmpRect);
-    return RosegardenScrollView::FollowHorizontal;
+    return FOLLOW_HORIZONTAL;
 }
 
 void SegmentPencil::keyPressEvent(QKeyEvent *e)

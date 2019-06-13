@@ -65,10 +65,10 @@ MatrixTool::handleMouseRelease(const MatrixMouseEvent *) { }
 void
 MatrixTool::handleMouseDoubleClick(const MatrixMouseEvent *) { }
 
-MatrixTool::FollowMode
+FollowMode
 MatrixTool::handleMouseMove(const MatrixMouseEvent *)
 {
-    return NoFollow;
+    return NO_FOLLOW;
 }
 
 void

@@ -88,7 +88,7 @@ SegmentJoiner::mouseMoveEvent(QMouseEvent *e)
 
     // ??? not implemented
 
-    return RosegardenScrollView::NoFollow;
+    return NO_FOLLOW;
 }
 
 void

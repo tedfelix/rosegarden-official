@@ -304,7 +304,7 @@ int SegmentResizer::mouseMoveEvent(QMouseEvent *e)
     setContextHelp2(e->modifiers());
 
     if (!getChangingSegment()) {
-        return RosegardenScrollView::NoFollow;
+        return NO_FOLLOW;
     }
 
     Segment* segment = getChangingSegment()->getSegment();
@@ -317,7 +317,7 @@ int SegmentResizer::mouseMoveEvent(QMouseEvent *e)
             setChangingSegment(nullptr);
             QMessageBox::information(m_canvas,
                     tr("You can't yet resize an audio segment!"));
-            return RosegardenScrollView::NoFollow;
+            return NO_FOLLOW;
         }
     */
 
@@ -390,7 +390,7 @@ int SegmentResizer::mouseMoveEvent(QMouseEvent *e)
     // Redraw the canvas
     m_canvas->slotAllNeedRefresh(getChangingSegment()->rect() | oldRect);
 
-    return RosegardenScrollView::FollowHorizontal;
+    return FOLLOW_HORIZONTAL;
 }
 
 void SegmentResizer::keyPressEvent(QKeyEvent *e)

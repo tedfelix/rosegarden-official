@@ -106,20 +106,20 @@ MatrixVelocity::handleLeftButtonPress(const MatrixMouseEvent *e)
     m_start = true;
 }
 
-MatrixVelocity::FollowMode
+FollowMode
 MatrixVelocity::handleMouseMove(const MatrixMouseEvent *e)
 {
     setBasicContextHelp();
 
     if (!e || !m_currentElement || !m_currentViewSegment) {
         m_mouseStartY = 0;
-        return NoFollow;
+        return NO_FOLLOW;
     }
 
     // Check if left mousebutton is down
     if (!(e->buttons & Qt::LeftButton)) {
         m_mouseStartY = 0;
-        return NoFollow;
+        return NO_FOLLOW;
     }
 
     // Calculate velocity scale factor
@@ -218,7 +218,7 @@ MatrixVelocity::handleMouseMove(const MatrixMouseEvent *e)
                            .arg(m_velocityDelta).arg(minVelocity).arg(maxVelocity));
     }
 
-    return NoFollow;
+    return NO_FOLLOW;
 }
 
 void

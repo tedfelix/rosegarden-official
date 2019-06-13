@@ -18,6 +18,8 @@
 #ifndef RG_ROSEGARDENSCROLLVIEW_H
 #define RG_ROSEGARDENSCROLLVIEW_H
 
+#include "gui/general/AutoScroller.h"  // For FollowMode
+
 #include <QAbstractScrollArea>
 #include <QDateTime>
 #include <QPoint>
@@ -77,23 +79,6 @@ public:
 
     void updateContents();
 
-    /// Follow Mode
-    /**
-     * Derivers from SegmentTool override SegmentTool::handleMouseMove() and
-     * return an OR-ed combination of these to indicate the auto-scroll
-     * direction.
-     *
-     * See MatrixTool::FollowMode, NotationTool::FollowMode, and
-     * ControlTool::FollowMode.
-     *
-     * Would this make more sense in SegmentTool?
-     */
-    enum FollowMode {
-        NoFollow = 0x0,
-        FollowHorizontal = 0x1,
-        FollowVertical = 0x2
-    };
-
     /**
      * Called by TrackEditor::handleAutoScroll().
      */
@@ -121,9 +106,9 @@ public:
 public slots:
     /// Handle top and bottom StandardRuler::startMouseMove() signals.
     /**
-     * See enum FollowMode for valid mask values.
+     * See AutoScroller.h for valid mask values.
      */
-    void slotStartAutoScroll(int followMode);
+    void slotStartAutoScroll(FollowMode followMode);
     /// Handle top and bottom StandardRuler::stopMouseMove() signals.
     void slotStopAutoScroll();
 
@@ -156,8 +141,7 @@ protected:
 
     void updateContents(const QRect &);
 
-    /// See enum FollowMode.
-    void setFollowMode(int followMode)  { m_followMode = followMode; }
+    void setFollowMode(FollowMode followMode)  { m_followMode = followMode; }
     void startAutoScroll();
 
     /// Viewport resize.
@@ -198,8 +182,8 @@ private:
     /// m_autoScrollTimer interval.
     static const int AutoScrollTimerInterval;
 
-    /// See enum FollowMode for valid mask values.
-    int m_followMode;
+    /// See AutoScroller.h for valid mask values.
+    FollowMode m_followMode;
     bool m_autoScrolling;
 
 };

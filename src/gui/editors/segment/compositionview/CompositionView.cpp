@@ -1380,7 +1380,7 @@ void CompositionView::mouseMoveEvent(QMouseEvent *e)
 
     setFollowMode(followMode);
 
-    if (followMode != RosegardenScrollView::NoFollow) {
+    if (followMode != NO_FOLLOW) {
         doAutoScroll();
     }
 }

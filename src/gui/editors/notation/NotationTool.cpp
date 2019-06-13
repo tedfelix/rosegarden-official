@@ -79,10 +79,10 @@ NotationTool::handleMouseRelease(const NotationMouseEvent *) { }
 void
 NotationTool::handleMouseDoubleClick(const NotationMouseEvent *) { }
 
-NotationTool::FollowMode
+FollowMode
 NotationTool::handleMouseMove(const NotationMouseEvent *)
 {
-    return NoFollow;
+    return NO_FOLLOW;
 }
 
 void

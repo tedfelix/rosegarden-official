@@ -151,7 +151,7 @@ SegmentSplitter::mouseMoveEvent(QMouseEvent *e)
     // Can't split a segment while playing.
     if (RosegardenMainWindow::self()->getSequenceManager()->
             getTransportStatus() == PLAYING)
-        return RosegardenScrollView::NoFollow;
+        return NO_FOLLOW;
 
     // No need to propagate.
     e->accept();
@@ -167,11 +167,11 @@ SegmentSplitter::mouseMoveEvent(QMouseEvent *e)
     if (item) {
 //        m_canvas->viewport()->setCursor(Qt::blankCursor);
         drawSplitLine(e);
-        return RosegardenScrollView::FollowHorizontal;
+        return FOLLOW_HORIZONTAL;
     } else {
         m_canvas->viewport()->setCursor(Qt::SplitHCursor);
         m_canvas->hideSplitLine();
-        return RosegardenScrollView::NoFollow;
+        return NO_FOLLOW;
     }
 }
 

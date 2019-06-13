@@ -51,7 +51,7 @@ RosegardenScrollView::RosegardenScrollView(QWidget *parent)
       m_bottomRuler(nullptr),
       m_contentsWidth(0),
       m_contentsHeight(0),
-      m_followMode(NoFollow),
+      m_followMode(NO_FOLLOW),
       m_autoScrolling(false)
 {
     // Turn off the frame which causes positioning issues.
@@ -280,7 +280,7 @@ void RosegardenScrollView::doAutoScroll()
     //     and get rid of this line.
     m_autoScrollTimer.start(AutoScrollTimerInterval);
 
-    if (m_followMode & FollowHorizontal) {
+    if (m_followMode & FOLLOW_HORIZONTAL) {
 
         // The following auto scroll behavior is patterned after Chromium,
         // Eclipse, and the GIMP.  Auto scroll will only happen if the
@@ -328,7 +328,7 @@ void RosegardenScrollView::doAutoScroll()
             horizontalScrollBar()->setValue(horizontalScrollBar()->value() + scrollX);
     }
 
-    if (m_followMode & FollowVertical) {
+    if (m_followMode & FOLLOW_VERTICAL) {
 
         // This vertical auto scroll behavior is patterned after
         // Audacity.  Auto scroll will only happen if the mouse is

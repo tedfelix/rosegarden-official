@@ -1107,7 +1107,7 @@ MatrixWidget::slotStandardRulerDrag(timeT t)
 void
 MatrixWidget::slotSRStartMouseMove()
 {
-    m_followMode = MatrixTool::FollowHorizontal;
+    m_followMode = FOLLOW_HORIZONTAL;
 
     startAutoScroll();
 }
@@ -1642,7 +1642,7 @@ MatrixWidget::doAutoScroll()
 
     //RG_DEBUG << "doAutoScroll(): mousePos:" << mousePos;
 
-    if (m_followMode & MatrixTool::FollowHorizontal) {
+    if (m_followMode & FOLLOW_HORIZONTAL) {
 
         // The following auto scroll behavior is patterned after Chromium,
         // Eclipse, and the GIMP.  Auto scroll will only happen if the
@@ -1699,7 +1699,7 @@ MatrixWidget::doAutoScroll()
         }
     }
 
-    if (m_followMode & MatrixTool::FollowVertical) {
+    if (m_followMode & FOLLOW_VERTICAL) {
 
         // This vertical auto scroll behavior is patterned after
         // Audacity.  Auto scroll will only happen if the mouse is

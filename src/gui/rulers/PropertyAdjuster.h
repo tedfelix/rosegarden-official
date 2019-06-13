@@ -37,7 +37,7 @@ class PropertyAdjuster : public ControlTool
 
 public:
     void handleLeftButtonPress(const ControlMouseEvent *) override;
-    ControlTool::FollowMode handleMouseMove(const ControlMouseEvent *) override;
+    FollowMode handleMouseMove(const ControlMouseEvent *) override;
     void handleMouseRelease(const ControlMouseEvent *) override;
 
     /**
