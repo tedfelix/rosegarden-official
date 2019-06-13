@@ -875,19 +875,6 @@ MatrixWidget::slotDispatchMouseMove(const MatrixMouseEvent *e)
 }
 
 void
-MatrixWidget::slotEnsureTimeVisible(timeT t)
-{
-    QPointF pos = m_view->mapToScene(0,m_view->height()/2);
-
-    pos.setX(m_scene->getRulerScale()->getXForTime(t));
-
-    if (m_scene)
-        m_scene->constrainToSegmentArea(pos);
-
-    m_view->ensureVisible(QRectF(pos, pos));
-}
-
-void
 MatrixWidget::slotDispatchMouseRelease(const MatrixMouseEvent *e)
 {
     m_autoScroller.stop();

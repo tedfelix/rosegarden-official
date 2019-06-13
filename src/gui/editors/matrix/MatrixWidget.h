@@ -223,12 +223,6 @@ private slots:
     /// Scroll rulers to sync up with view.
     void slotScrollRulers();
 
-    /// Scroll view so that specified time is visible.
-    /**
-     * This is used for drags in the rulers.
-     */
-    void slotEnsureTimeVisible(timeT);
-
     // MatrixScene Interface
     void slotDispatchMousePress(const MatrixMouseEvent *);
     void slotDispatchMouseMove(const MatrixMouseEvent *);
