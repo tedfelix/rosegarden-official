@@ -1197,20 +1197,27 @@ void
 MatrixWidget::slotVerticalThumbwheelMoved(int v)
 {
     // limits sanity check
-    if (v < -25) v = -25;
-    if (v > 60) v = 60;
-    if (m_lastV < -25) m_lastV = -25;
-    if (m_lastV > 60) m_lastV = 60;
+    if (v < -25)
+        v = -25;
+    if (v > 60)
+        v = 60;
+    if (m_lastV < -25)
+        m_lastV = -25;
+    if (m_lastV > 60)
+        m_lastV = 60;
 
     int steps = v - m_lastV;
-    if (steps < 0) steps *= -1;
+    if (steps < 0)
+        steps *= -1;
 
     bool zoomingIn = (v > m_lastV);
     double newZoom = m_vZoomFactor;
 
     for (int i = 0; i < steps; ++i) {
-        if (zoomingIn) newZoom *= 1.1;
-        else newZoom /= 1.1;
+        if (zoomingIn)
+            newZoom *= 1.1;
+        else
+            newZoom /= 1.1;
     }
 
     //RG_DEBUG << "slotVerticalThumbwheelMoved(): v is: " << v << " z zoom factor was: " << m_lastV << " now: " << newZoom << " zooming " << (zoomingIn ? "IN" : "OUT");
@@ -1225,10 +1232,14 @@ MatrixWidget::slotPrimaryThumbwheelMoved(int v)
 {
     // little bit of kludge work to deal with value manipulations that are
     // outside of the constraints imposed by the primary zoom wheel itself
-    if (v < -20) v = -20;
-    if (v > 20) v = 20;
-    if (m_lastHVzoomValue < -20) m_lastHVzoomValue = -20;
-    if (m_lastHVzoomValue > 20) m_lastHVzoomValue = 20;
+    if (v < -20)
+        v = -20;
+    if (v > 20)
+        v = 20;
+    if (m_lastHVzoomValue < -20)
+        m_lastHVzoomValue = -20;
+    if (m_lastHVzoomValue > 20)
+        m_lastHVzoomValue = 20;
 
     // When dragging the wheel up and down instead of mouse wheeling it, it
     // steps according to its speed.  I don't see a sure way (and after all
@@ -1238,7 +1249,8 @@ MatrixWidget::slotPrimaryThumbwheelMoved(int v)
     // between the old value and the last one, and call the slot that many times
     // in order to enforce the 1:1 relationship.
     int steps = v - m_lastHVzoomValue;
-    if (steps < 0) steps *= -1;
+    if (steps < 0)
+        steps *= -1;
 
     for (int i = 0; i < steps; ++i) {
         if (v < m_lastHVzoomValue)
@@ -1307,10 +1319,14 @@ MatrixWidget::slotSegmentChangerMoved(int v)
     // see comments in slotPrimaryThumbWheelMoved() for an explanation of that
     // mechanism, which is repurposed and simplified here
 
-    if (v < -120) v = -120;
-    if (v > 120) v = 120;
-    if (m_lastSegmentChangerValue < -120) m_lastSegmentChangerValue = -120;
-    if (m_lastSegmentChangerValue > 120) m_lastSegmentChangerValue = 120;
+    if (v < -120)
+        v = -120;
+    if (v > 120)
+        v = 120;
+    if (m_lastSegmentChangerValue < -120)
+        m_lastSegmentChangerValue = -120;
+    if (m_lastSegmentChangerValue > 120)
+        m_lastSegmentChangerValue = 120;
 
     int steps = v - m_lastSegmentChangerValue;
     if (steps < 0) steps *= -1;
@@ -1328,7 +1344,7 @@ MatrixWidget::slotSegmentChangerMoved(int v)
     // If we are switching between a pitched instrument segment and a pecussion
     // segment or betwween two percussion segments with different percussion
     // sets, the pitch ruler may need to be regenerated.
-    //!!! TODO : test if regeneration is really needed before doing it
+    // TODO : test if regeneration is really needed before doing it
     generatePitchRuler();
 }
 
@@ -1337,7 +1353,8 @@ MatrixWidget::updateSegmentChangerBackground()
 {
     // set the changer widget background to the now current segment's
     // background, and reset the tooltip style to compensate
-    Colour c = m_document->getComposition().getSegmentColourMap().getColourByIndex(m_scene->getCurrentSegment()->getColourIndex());
+    Colour c = m_document->getComposition().getSegmentColourMap().
+            getColourByIndex(m_scene->getCurrentSegment()->getColourIndex());
 
     QPalette palette = m_changerWidget->palette();
     palette.setColor(QPalette::Window, c.toQColor());
@@ -1345,8 +1362,10 @@ MatrixWidget::updateSegmentChangerBackground()
 
     // have to deal with all this ruckus to get a few pieces of info about the
     // track:
-    Track *track = m_document->getComposition().getTrackById(m_scene->getCurrentSegment()->getTrack());
-    int trackPosition = m_document->getComposition().getTrackPositionById(track->getId());
+    Track *track = m_document->getComposition().getTrackById(
+            m_scene->getCurrentSegment()->getTrack());
+    int trackPosition = m_document->getComposition().getTrackPositionById(
+            track->getId());
     QString trackLabel = QString::fromStdString(track->getLabel());
 
     // set up some tooltips...  I don't like this much, and it wants some kind
@@ -1398,23 +1417,25 @@ void MatrixWidget::slotKeyPressed(unsigned int y, bool repeating)
 
     // Save value
     m_lastNote = evPitch;
-    if (!repeating) m_firstNote = evPitch;
+    if (!repeating)
+        m_firstNote = evPitch;
 
     Composition &comp = m_document->getComposition();
     Studio &studio = m_document->getStudio();
 
     MatrixViewSegment *current = m_scene->getCurrentViewSegment();
     Track *track = comp.getTrackById(current->getSegment().getTrack());
-    if (!track) return;
+    if (!track)
+        return;
 
     Instrument *ins = studio.getInstrumentById(track->getInstrument());
 
-    StudioControl::
-        playPreviewNote(ins,
-                        evPitch + current->getSegment().getTranspose(),
-                        MidiMaxValue,
-                        RealTime(-1, 0),  // Note-on, no note-off.
-                        false);  // "MidiNote"
+    StudioControl::playPreviewNote(
+            ins,  // instrument
+            evPitch + current->getSegment().getTranspose(),  // pitch
+            MidiMaxValue,  // velocity
+            RealTime(-1, 0),  // duration: Note-on, no note-off.
+            false);  // oneshot
 }
 
 void MatrixWidget::slotKeySelected(unsigned int y, bool repeating)
@@ -1439,7 +1460,8 @@ void MatrixWidget::slotKeySelected(unsigned int y, bool repeating)
 
     // Save value
     m_lastNote = evPitch;
-    if (!repeating) m_firstNote = evPitch;
+    if (!repeating)
+        m_firstNote = evPitch;
 
     MatrixViewSegment *current = m_scene->getCurrentViewSegment();
 
@@ -1477,16 +1499,17 @@ void MatrixWidget::slotKeySelected(unsigned int y, bool repeating)
     Studio &studio = m_document->getStudio();
 
     Track *track = comp.getTrackById(current->getSegment().getTrack());
-    if (!track) return;
+    if (!track)
+        return;
 
     Instrument *ins = studio.getInstrumentById(track->getInstrument());
 
-    StudioControl::
-        playPreviewNote(ins,
-                        evPitch + current->getSegment().getTranspose(),
-                        MidiMaxValue,
-                        RealTime(-1, 0),  // Note-on, no note-off.
-                        false);  // "MidiNote"
+    StudioControl::playPreviewNote(
+            ins,  // instrument
+            evPitch + current->getSegment().getTranspose(),  // pitch
+            MidiMaxValue,  // velocity
+            RealTime(-1, 0),  // duration: Note-on, no note-off.
+            false);  // oneshot
 }
 
 void MatrixWidget::slotKeyReleased(unsigned int y, bool repeating)
@@ -1507,22 +1530,24 @@ void MatrixWidget::slotKeyReleased(unsigned int y, bool repeating)
 
     MatrixViewSegment *current = m_scene->getCurrentViewSegment();
     Track *track = comp.getTrackById(current->getSegment().getTrack());
-    if (!track) return;
+    if (!track)
+        return;
 
     Instrument *ins = studio.getInstrumentById(track->getInstrument());
 
-    StudioControl::
-        playPreviewNote(ins,
-                        evPitch + current->getSegment().getTranspose(),
-                        0,  // Velocity 0 => note-off
-                        RealTime(0, 1),  // Need a non-zero duration to get through.
-                        false);  // "MidiNote"
+    StudioControl::playPreviewNote(
+            ins,  // instrument
+            evPitch + current->getSegment().getTranspose(),  // pitch
+            0,  // velocity: 0 => note-off
+            RealTime(0, 1),  // duration: Need non-zero to get through.
+            false);  // oneshot
 }
 
 void
 MatrixWidget::showInitialPointer()
 {
-    if (!m_scene) return;
+    if (!m_scene)
+        return;
 
     timeT t = getCurrentSegment()->getStartTime();
 
@@ -1532,7 +1557,7 @@ MatrixWidget::showInitialPointer()
     double x1 = m_scene->sceneRect().x();
     double x2 = x1 + m_scene->sceneRect().width();
 
-    if ((sceneX < x1) || (sceneX > x2)) {
+    if ((sceneX < x1)  ||  (sceneX > x2)) {
         // Place insertion marker at begining of scene.
         m_view->showPositionPointer(x1);
         m_hpanner->slotShowPositionPointer(x1);
@@ -1549,11 +1574,11 @@ MatrixWidget::showInitialPointer()
     m_view->centerOn(QPointF(0, m_view->sceneRect().center().y()));
 }
 
-/// Instrument is destroyed
 void
-MatrixWidget::
-slotInstrumentGone()
-{ m_instrument = nullptr; }
+MatrixWidget::slotInstrumentGone()
+{
+    m_instrument = nullptr;
+}
 
 void
 MatrixWidget::slotPlayPreviewNote(Segment *segment, int pitch)
