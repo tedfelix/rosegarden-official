@@ -145,12 +145,12 @@ MatrixWidget::MatrixWidget(bool drumMode) :
     m_referenceScale(nullptr),
     m_inMove(false)
 {
-    //MATRIX_DEBUG << "MatrixWidget ctor";
+    //RG_DEBUG << "ctor";
 
     m_layout = new QGridLayout;
     setLayout(m_layout);
 
-    // Remove thick black lines beetween rulers and matrix
+    // Remove thick black lines between rulers and matrix
     m_layout->setSpacing(0);
 
     // Remove black margins around the matrix
@@ -353,11 +353,11 @@ MatrixWidget::MatrixWidget(bool drumMode) :
 
 MatrixWidget::~MatrixWidget()
 {
-    //MATRIX_DEBUG << "MatrixWidget::~MatrixWidget() - start";
+    //RG_DEBUG << "dtor...";
     delete m_scene;
     delete m_pianoScene;
     delete m_localMapping;
-    //MATRIX_DEBUG << "MatrixWidget::~MatrixWidget() - end";
+    //RG_DEBUG << "dtor end";
 }
 
 void
@@ -518,12 +518,12 @@ MatrixWidget::generatePitchRuler()
 
         mapping = m_instrument->getKeyMapping();
         if (mapping) {
-            //MATRIX_DEBUG << "MatrixView: Instrument has key mapping: " << mapping->getName();
+            //RG_DEBUG << "generatePitchRuler(): Instrument has key mapping: " << mapping->getName();
             m_localMapping = new MidiKeyMapping(*mapping);
             m_localMapping->extend();
             isPercussion = true;
         } else {
-            //MATRIX_DEBUG << "MatrixView: Instrument has no key mapping";
+            //RG_DEBUG << "generatePitchRuler(): Instrument has no key mapping";
             isPercussion = false;
         }
     }
@@ -554,17 +554,14 @@ MatrixWidget::generatePitchRuler()
     m_pianoView->setScene(m_pianoScene);
     m_pianoView->centerOn(pianoKbd);
 
-    QObject::connect
-    (m_pitchRuler, &PitchRuler::hoveredOverKeyChanged,
-     this, &MatrixWidget::slotHoveredOverKeyChanged);
+    QObject::connect(m_pitchRuler, &PitchRuler::hoveredOverKeyChanged,
+                     this, &MatrixWidget::slotHoveredOverKeyChanged);
 
-    QObject::connect
-    (m_pitchRuler, &PitchRuler::keyPressed,
-     this, &MatrixWidget::slotKeyPressed);
+    QObject::connect(m_pitchRuler, &PitchRuler::keyPressed,
+                     this, &MatrixWidget::slotKeyPressed);
 
-    QObject::connect
-    (m_pitchRuler, &PitchRuler::keySelected,
-     this, &MatrixWidget::slotKeySelected);
+    QObject::connect(m_pitchRuler, &PitchRuler::keySelected,
+                     this, &MatrixWidget::slotKeySelected);
 
     // Don't send the "note off" midi message to a percussion instrument
     // when clicking on the pitch ruler
@@ -618,7 +615,9 @@ MatrixWidget::generatePitchRuler()
 bool
 MatrixWidget::segmentsContainNotes() const
 {
-    if (!m_scene) return false;
+    if (!m_scene)
+        return false;
+
     return m_scene->segmentsContainNotes();
 }
 
@@ -633,7 +632,8 @@ MatrixWidget::setHorizontalZoomFactor(double factor)
     // 1.0 horizontally, and only scale it vertically.  Git'r done.
 
     m_hZoomFactor = factor;
-    if (m_referenceScale) m_referenceScale->setXZoomFactor(m_hZoomFactor);
+    if (m_referenceScale)
+        m_referenceScale->setXZoomFactor(m_hZoomFactor);
     m_view->resetMatrix();
     m_view->scale(m_hZoomFactor, m_vZoomFactor);
     // Only vertical zoom factor is applied to pitch ruler
@@ -648,7 +648,8 @@ void
 MatrixWidget::setVerticalZoomFactor(double factor)
 {
     m_vZoomFactor = factor;
-    if (m_referenceScale) m_referenceScale->setYZoomFactor(m_vZoomFactor);
+    if (m_referenceScale)
+        m_referenceScale->setYZoomFactor(m_vZoomFactor);
     m_view->resetMatrix();
     m_view->scale(m_hZoomFactor, m_vZoomFactor);
     // Only vertical zoom factor is applied to pitch ruler
@@ -663,7 +664,8 @@ MatrixWidget::zoomInFromPanner()
 {
     m_hZoomFactor /= 1.1;
     m_vZoomFactor /= 1.1;
-    if (m_referenceScale) m_referenceScale->setXZoomFactor(m_hZoomFactor);
+    if (m_referenceScale)
+        m_referenceScale->setXZoomFactor(m_hZoomFactor);
     QMatrix m;
     m.scale(m_hZoomFactor, m_vZoomFactor);
     m_view->setMatrix(m);
@@ -680,7 +682,8 @@ MatrixWidget::zoomOutFromPanner()
 {
     m_hZoomFactor *= 1.1;
     m_vZoomFactor *= 1.1;
-    if (m_referenceScale) m_referenceScale->setXZoomFactor(m_hZoomFactor);
+    if (m_referenceScale)
+        m_referenceScale->setXZoomFactor(m_hZoomFactor);
     QMatrix m;
     m.scale(m_hZoomFactor, m_vZoomFactor);
     m_view->setMatrix(m);
@@ -712,28 +715,36 @@ MatrixWidget::slotScrollRulers()
 EventSelection *
 MatrixWidget::getSelection() const
 {
-    if (!m_scene) return nullptr;
+    if (!m_scene)
+        return nullptr;
+
     return m_scene->getSelection();
 }
 
 void
 MatrixWidget::setSelection(EventSelection *s, bool preview)
 {
-    if (!m_scene) return;
+    if (!m_scene)
+        return;
+
     m_scene->setSelection(s, preview);
 }
 
 const SnapGrid *
 MatrixWidget::getSnapGrid() const
 {
-    if (!m_scene) return nullptr;
+    if (!m_scene)
+        return nullptr;
+
     return m_scene->getSnapGrid();
 }
 
 void
 MatrixWidget::setSnap(timeT t)
 {
-    if (!m_scene) return;
+    if (!m_scene)
+        return;
+
     m_scene->setSnap(t);
 }
 
@@ -770,7 +781,9 @@ MatrixWidget::clearSelection()
 Segment *
 MatrixWidget::getCurrentSegment()
 {
-    if (!m_scene) return nullptr;
+    if (!m_scene)
+        return nullptr;
+
     return m_scene->getCurrentSegment();
 }
 
@@ -821,7 +834,8 @@ MatrixWidget::getCurrentDevice()
 void
 MatrixWidget::slotDispatchMousePress(const MatrixMouseEvent *e)
 {
-    if (!m_currentTool) return;
+    if (!m_currentTool)
+        return;
 
     if (e->buttons & Qt::LeftButton) {
         m_currentTool->handleLeftButtonPress(e);
@@ -835,9 +849,9 @@ MatrixWidget::slotDispatchMousePress(const MatrixMouseEvent *e)
 void
 MatrixWidget::slotDispatchMouseMove(const MatrixMouseEvent *e)
 {
-    if (m_hoverNoteIsVisible) {
+    if (m_hoverNoteIsVisible)
         m_pitchRuler->drawHoverNote(e->pitch);
-    }
+
     m_pianoView->update();   // Needed to remove black trailers left by
                              // hover note at high zoom levels
 
@@ -878,7 +892,8 @@ MatrixWidget::slotEnsureTimeVisible(timeT t)
     m_inMove = true;
     QPointF pos = m_view->mapToScene(0,m_view->height()/2);
     pos.setX(m_scene->getRulerScale()->getXForTime(t));
-    if (m_scene) m_scene->constrainToSegmentArea(pos);
+    if (m_scene)
+        m_scene->constrainToSegmentArea(pos);
     m_view->ensureVisible(QRectF(pos, pos));
     m_inMove = false;
 }
@@ -886,17 +901,22 @@ MatrixWidget::slotEnsureTimeVisible(timeT t)
 void
 MatrixWidget::slotDispatchMouseRelease(const MatrixMouseEvent *e)
 {
-    if (!m_currentTool) return;
+    if (!m_currentTool)
+        return;
+
     m_currentTool->handleMouseRelease(e);
     QPointF pos(e->sceneX, e->sceneY);
-    if (m_scene) m_scene->constrainToSegmentArea(pos);
+    if (m_scene)
+        m_scene->constrainToSegmentArea(pos);
     m_view->ensureVisible(QRectF(pos, pos));
 }
 
 void
 MatrixWidget::slotDispatchMouseDoubleClick(const MatrixMouseEvent *e)
 {
-    if (!m_currentTool) return;
+    if (!m_currentTool)
+        return;
+
     m_currentTool->handleMouseDoubleClick(e);
 }
 
@@ -904,21 +924,28 @@ void
 MatrixWidget::setHoverNoteVisible(bool visible)
 {
     m_hoverNoteIsVisible = visible;
-    if (! visible) m_pitchRuler->hideHoverNote();
+
+    if (!visible)
+        m_pitchRuler->hideHoverNote();
 }
 
 void
 MatrixWidget::setCanvasCursor(QCursor c)
 {
-    if (m_view) m_view->viewport()->setCursor(c);
+    if (m_view)
+        m_view->viewport()->setCursor(c);
 }
 
 void
 MatrixWidget::setTool(QString name)
 {
     MatrixTool *tool = dynamic_cast<MatrixTool *>(m_toolBox->getTool(name));
-    if (!tool) return;
-    if (m_currentTool) m_currentTool->stow();
+    if (!tool)
+        return;
+
+    if (m_currentTool)
+        m_currentTool->stow();
+
     m_currentTool = tool;
     m_currentTool->ready();
     emit toolChanged(name);
@@ -976,9 +1003,9 @@ void
 MatrixWidget::setScrollToFollowPlayback(bool tracking)
 {
     m_playTracking = tracking;
-    if (m_playTracking) {
+
+    if (m_playTracking)
         m_view->ensurePositionPointerInView(true);
-    }
 }
 
 void
@@ -1023,11 +1050,13 @@ MatrixWidget::addControlRuler(QAction *action)
 //  int i = 0;
 
     for (ControlList::const_iterator it = list.begin();
-            it != list.end(); ++it) {
+         it != list.end();
+         ++it) {
 
         // Pitch Bend is treated separately now, and there's no point in adding
         // "unsupported" controllers to the menu, so skip everything else
-        if (it->getType() != Controller::EventType) continue;
+        if (it->getType() != Controller::EventType)
+            continue;
 
         QString hexValue;
         hexValue.sprintf("(0x%x)", it->getControllerValue());
@@ -1038,9 +1067,10 @@ MatrixWidget::addControlRuler(QAction *action)
                                      .arg(it->getControllerValue())
                                      .arg(hexValue);
         
-        if (name != itemStr) continue;
+        if (name != itemStr)
+            continue;
 
-        //MATRIX_DEBUG << "  name: " << name << " should match  itemStr: " << itemStr;
+        //RG_DEBUG << "addControlRuler(): name: " << name << " should match  itemStr: " << itemStr;
 
         m_controlsWidget->slotAddControlRuler(*it);
 
@@ -1052,11 +1082,10 @@ MatrixWidget::addControlRuler(QAction *action)
 void
 MatrixWidget::slotHScrollBarRangeChanged(int min, int max)
 {
-    if (max > min) {
+    if (max > min)
         m_view->horizontalScrollBar()->show();
-    } else {
+    else
         m_view->horizontalScrollBar()->hide();
-    }
 }
 
 void
@@ -1065,14 +1094,16 @@ MatrixWidget::slotPointerPositionChanged(timeT t, bool moveView)
     QObject *s = sender();
     bool fromDocument = (s == m_document);
 
-    if (!m_scene) return;
+    if (!m_scene)
+        return;
 
     double sceneX = m_scene->getRulerScale()->getXForTime(t);
 
     // Find the limits of the current segment
     Segment *currentSeg = getCurrentSegment();
     if (currentSeg && !moveView) {
-        double segSceneTime = m_scene->getRulerScale()->getXForTime(currentSeg->getStartTime());
+        double segSceneTime = m_scene->getRulerScale()->getXForTime(
+                currentSeg->getStartTime());
         if (segSceneTime > sceneX) {
             // Move pointer to start of current segment
             sceneX = segSceneTime;
@@ -1089,7 +1120,7 @@ MatrixWidget::slotPointerPositionChanged(timeT t, bool moveView)
     double x1 = m_scene->sceneRect().x();
     double x2 = x1 + m_scene->sceneRect().width();
 
-    if ((sceneX < x1) || (sceneX > x2)) {
+    if ((sceneX < x1)  ||  (sceneX > x2)) {
         m_view->hidePositionPointer();
         m_hpanner->slotHidePositionPointer();
     } else {
@@ -1097,23 +1128,28 @@ MatrixWidget::slotPointerPositionChanged(timeT t, bool moveView)
         m_hpanner->slotShowPositionPointer(sceneX);
     }
 
-    if (m_playTracking || !fromDocument) {
-        if (moveView) m_view->ensurePositionPointerInView(fromDocument);
+    if (m_playTracking  ||  !fromDocument) {
+        if (moveView)
+            m_view->ensurePositionPointerInView(fromDocument);
     }
 }
 
 void
 MatrixWidget::setTempoRulerVisible(bool visible)
 {
-    if (visible) m_tempoRuler->show();
-    else m_tempoRuler->hide();
+    if (visible)
+        m_tempoRuler->show();
+    else
+        m_tempoRuler->hide();
 }
 
 void
 MatrixWidget::setChordNameRulerVisible(bool visible)
 {
-    if (visible) m_chordNameRuler->show();
-    else m_chordNameRuler->hide();
+    if (visible)
+        m_chordNameRuler->show();
+    else
+        m_chordNameRuler->hide();
 }
 
 void
@@ -1127,23 +1163,30 @@ void
 MatrixWidget::slotHorizontalThumbwheelMoved(int v)
 {
     // limits sanity check
-    if (v < -25) v = -25;
-    if (v > 60) v = 60;
-    if (m_lastH < -25) m_lastH = -25;
-    if (m_lastH > 60) m_lastH = 60;
+    if (v < -25)
+        v = -25;
+    if (v > 60)
+        v = 60;
+    if (m_lastH < -25)
+        m_lastH = -25;
+    if (m_lastH > 60)
+        m_lastH = 60;
 
     int steps = v - m_lastH;
-    if (steps < 0) steps *= -1;
+    if (steps < 0)
+        steps *= -1;
 
     bool zoomingIn = (v > m_lastH);
     double newZoom = m_hZoomFactor;
 
     for (int i = 0; i < steps; ++i) {
-        if (zoomingIn) newZoom *= 1.1;
-        else newZoom /= 1.1;
+        if (zoomingIn)
+            newZoom *= 1.1;
+        else
+            newZoom /= 1.1;
     }
 
-    //MATRIX_DEBUG << "v is: " << v << " h zoom factor was: " << m_lastH << " now: " << newZoom << " zooming " << (zoomingIn ? "IN" : "OUT");
+    //RG_DEBUG << "slotHorizontalThumbwheelMoved(): v is: " << v << " h zoom factor was: " << m_lastH << " now: " << newZoom << " zooming " << (zoomingIn ? "IN" : "OUT");
 
     setHorizontalZoomFactor(newZoom);
     m_lastH = v;
@@ -1170,7 +1213,7 @@ MatrixWidget::slotVerticalThumbwheelMoved(int v)
         else newZoom /= 1.1;
     }
 
-    //MATRIX_DEBUG << "v is: " << v << " z zoom factor was: " << m_lastV << " now: " << newZoom << " zooming " << (zoomingIn ? "IN" : "OUT");
+    //RG_DEBUG << "slotVerticalThumbwheelMoved(): v is: " << v << " z zoom factor was: " << m_lastV << " now: " << newZoom << " zooming " << (zoomingIn ? "IN" : "OUT");
 
     setVerticalZoomFactor(newZoom);
     m_lastV = v;
@@ -1211,7 +1254,7 @@ MatrixWidget::slotPrimaryThumbwheelMoved(int v)
 void
 MatrixWidget::slotResetZoomClicked()
 {
-    //MATRIX_DEBUG << "MatrixWidget::slotResetZoomClicked()";
+    //RG_DEBUG << "slotResetZoomClicked()";
 
     m_hZoomFactor = 1.0;
     m_vZoomFactor = 1.0;
@@ -1319,7 +1362,7 @@ MatrixWidget::updateSegmentChangerBackground()
 void
 MatrixWidget::slotHoveredOverKeyChanged(unsigned int y)
 {
-    //MATRIX_DEBUG << "MatrixWidget::slotHoveredOverKeyChanged(" << y << ")";
+    //RG_DEBUG << "slotHoveredOverKeyChanged(" << y << ")";
 
     int evPitch = m_scene->calculatePitchFromY(y);
     m_pitchRuler->drawHoverNote(evPitch);
