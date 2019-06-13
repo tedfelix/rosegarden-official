@@ -246,7 +246,7 @@ namespace
 {
     // We'll hit MaxScrollRate at this distance outside the viewport.
     // ??? HiDPI: This needs to be bigger for the HiDPI case.
-    const double maxDistance = 40;
+    constexpr double maxDistance = 40;
 }
 
 double RosegardenScrollView::distanceToScrollRate(int distance)
@@ -256,9 +256,9 @@ double RosegardenScrollView::distanceToScrollRate(int distance)
     // Simple square curve.  Something more pronounced might be better.
     const double distanceWithCurve = distanceNormalized * distanceNormalized;
 
-    const double minScrollRate = 1.2;
-    const double maxScrollRate = 100;
-    const double scrollRateRange = (maxScrollRate - minScrollRate);
+    constexpr double minScrollRate = 1.2;
+    constexpr double maxScrollRate = 100;
+    constexpr double scrollRateRange = (maxScrollRate - minScrollRate);
 
     const double scrollRate = distanceWithCurve * scrollRateRange + minScrollRate;
 
@@ -267,8 +267,17 @@ double RosegardenScrollView::distanceToScrollRate(int distance)
 
 void RosegardenScrollView::doAutoScroll()
 {
+    // ??? This code is duplicated in two other places.  Might be time to
+    //     pull out an AutoScroller class.
+    //
+    //       1. MatrixWidget::doAutoScroll()
+    //       2. NotationWidget::doAutoScroll() (soon)
+
     const QPoint mousePos = viewport()->mapFromGlobal(QCursor::pos());
 
+    // ??? Why not just call startAutoScroll()?  Or even better, make
+    //     sure no one calls this for the purpose of starting auto-scroll
+    //     and get rid of this line.
     m_autoScrollTimer.start(AutoScrollTimerInterval);
 
     if (m_followMode & FollowHorizontal) {
