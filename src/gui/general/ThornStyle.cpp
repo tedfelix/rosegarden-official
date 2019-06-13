@@ -15,9 +15,14 @@
     COPYING included with this distribution for more information.
 */
 
-#include "ResourceFinder.h"
+#define RG_MODULE_STRING "[ThornStyle]"
+
 #include "ThornStyle.h"
+
+#include "ResourceFinder.h"
 #include "gui/general/IconLoader.h"
+#include "misc/Debug.h"
+
 #include <QApplication>
 #include <QAbstractItemView>
 #include <QCheckBox>
@@ -51,7 +56,7 @@ static QPixmap loadPix(const QString &name)
 {
     QPixmap pix(name);
     if (pix.isNull()) {
-        qWarning() << "Pixmap not found:" << name;
+        RG_WARNING << "::loadPix(): Pixmap not found:" << name;
         Q_ASSERT(0);
     }
     return pix;
@@ -696,7 +701,7 @@ void ThornStyle::drawControl(QStyle::ControlElement element, const QStyleOption 
                 roundedRect = tabRect.adjusted(0, -5, 0, 0);
                 break;
             default:
-                qWarning() << "Vertical tabbars not implemented yet, call David";
+                RG_WARNING << "drawControl(): Vertical tabbars not implemented yet, call David";
             }
 
             // Draw tab shape

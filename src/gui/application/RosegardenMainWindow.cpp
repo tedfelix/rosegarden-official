@@ -467,7 +467,7 @@ RosegardenMainWindow::RosegardenMainWindow(bool enableSound,
     checkAudioPath();
 
     if (!installSignalHandlers())
-        qWarning("%s", "Signal handlers not installed!");
+        RG_WARNING << "ctor: Signal handlers not installed!";
 
     // Update UI time interval
     settings.beginGroup("Performance_Testing");
@@ -528,7 +528,7 @@ void
 RosegardenMainWindow::handleSignal(int sig)
 {
     if (write(sigpipe[1], &sig, sizeof(sig)) == -1) {
-        qWarning("write() failed: %s", std::strerror(errno));
+        RG_WARNING << "handleSignal(): write() failed:" << std::strerror(errno);
     }
 }
 
@@ -539,7 +539,7 @@ RosegardenMainWindow::installSignalHandlers()
 {
     /*install pipe to forward received system signals*/
     if (pipe(sigpipe) < 0) {
-        qWarning("pipe() failed: %s", std::strerror(errno));
+        RG_WARNING << "installSignalHandlers(): pipe() failed:" << std::strerror(errno);
         return false;
     }
 
@@ -555,7 +555,7 @@ RosegardenMainWindow::installSignalHandlers()
     action.sa_handler = handleSignal;
 
     if (sigaction(SIGUSR1, &action, nullptr) == -1) {
-        qWarning("sigaction() failed: %s", std::strerror(errno));
+        RG_WARNING << "installSignalHandlers(): sigaction() failed:" << std::strerror(errno);
         return false;
     }
 
@@ -570,7 +570,7 @@ RosegardenMainWindow::signalAction(int fd)
     int message;
 
     if (read(fd, &message, sizeof(message)) == -1) {
-        qWarning("read() failed: %s", std::strerror(errno));
+        RG_WARNING << "signalAction(): read() failed:" << std::strerror(errno);
         return;
     }
 
@@ -579,7 +579,7 @@ RosegardenMainWindow::signalAction(int fd)
             slotFileSave();
             break;
         default:
-            qWarning("Unexpected signal received: %d", message);
+            RG_WARNING << "signalAction(): Unexpected signal received:" << message;
             break;
     }
 }

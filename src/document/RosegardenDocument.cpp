@@ -3034,7 +3034,7 @@ RosegardenDocument::createLock(const QString &absFilePath) // static
             QString hostname;
             QString appname;
             if (!lockFile->getLockInfo(&pid, &hostname, &appname)) {
-                qWarning() << "Failed to read lock file information! Permission problem? Deleted meanwhile?";
+                RG_WARNING << "createLock(): Failed to read lock file information! Permission problem? Deleted meanwhile?";
             }
             QString message;
             QTextStream out(&message);
