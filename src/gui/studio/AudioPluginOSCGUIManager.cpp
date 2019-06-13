@@ -47,11 +47,11 @@ namespace Rosegarden
 static void osc_error(int num, const char *msg, const char *path)
 {
     std::cerr << "Rosegarden: ERROR: liblo server error " << num
-	      << " in path " << path << ": " << msg << std::endl;
+              << " in path " << path << ": " << msg << std::endl;
 }
 
 static int osc_message_handler(const char *path, const char *types, lo_arg **argv,
-			       int argc, lo_message, void *user_data)
+                               int argc, lo_message, void *user_data)
 {
     AudioPluginOSCGUIManager *manager = (AudioPluginOSCGUIManager *)user_data;
 
@@ -60,7 +60,7 @@ static int osc_message_handler(const char *path, const char *types, lo_arg **arg
     QString method;
 
     if (!manager->parseOSCPath(path, instrument, position, method)) {
-	return 1;
+        return 1;
     }
 
     OSCMessage *message = new OSCMessage();
@@ -70,8 +70,8 @@ static int osc_message_handler(const char *path, const char *types, lo_arg **arg
 
     int arg = 0;
     while (types && arg < argc && types[arg]) {
-	message->addArg(types[arg], argv[arg]);
-	++arg;
+        message->addArg(types[arg], argv[arg]);
+        ++arg;
     }
 
     manager->postMessage(message);
