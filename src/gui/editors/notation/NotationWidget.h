@@ -180,7 +180,7 @@ private:
     void showEvent(QShowEvent * event) override;
     void hideOrShowRulers();
     bool linearMode() const;   // Return true when notation page layout is linear
-    void showPointerPosition(timeT t, bool moveView, bool page = false);
+    void updatePointer(timeT t);
 
 private slots:
     void slotDispatchMousePress(const NotationMouseEvent *);
@@ -189,15 +189,14 @@ private slots:
     void slotDispatchMouseDoubleClick(const NotationMouseEvent *);
     void slotDispatchWheelTurned(int, const NotationMouseEvent *);
 
-    // When moveView is false, the view is not scrolled toward the pointer
-    void slotPointerPositionChanged(timeT t, bool moveView = true);
+    void slotPointerPositionChanged(timeT t);
+    void slotStandardRulerDrag(timeT t);
 
     void slotZoomInFromPanner();
     void slotZoomOutFromPanner();
 
     void slotHScroll();
     void slotHScrollBarRangeChanged(int min, int max);
-    void slotEnsureTimeVisible(timeT);
 
     /// The horizontal zoom thumbwheel moved
     void slotHorizontalThumbwheelMoved(int);
@@ -226,7 +225,9 @@ private slots:
 
     /// The segment control thumbwheel moved
     void slotSegmentChangerMoved(int);
-    
+
+    void slotStaffChanged();
+
     void slotUpdateRawNoteRuler(ViewSegment *);
     void slotUpdateSegmentChangerBackground();
 
@@ -245,10 +246,6 @@ private:
     NotationToolBox *m_toolBox;
     NotationTool *m_currentTool;
     bool m_playTracking;
-
-    bool m_inMove;
-    QPointF m_lastMouseMoveScenePos;
-    void ensureLastMouseMoveVisible();
 
     double m_hZoomFactor;
     double m_vZoomFactor;

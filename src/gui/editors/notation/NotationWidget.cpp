@@ -96,7 +96,6 @@ NotationWidget::NotationWidget() :
     m_leftGutter(20),
     m_currentTool(nullptr),
     m_playTracking(true),
-    m_inMove(false),
     m_hZoomFactor(1.0),
     m_vZoomFactor(1.0),
     m_referenceScale(nullptr),
@@ -470,9 +469,6 @@ NotationWidget::setSegments(RosegardenDocument *document,
     connect(m_view, &Panned::viewportChanged,
             m_controlRulerWidget, &ControlRulerWidget::slotSetPannedRect);
 
-    connect(m_controlRulerWidget, &ControlRulerWidget::dragScroll,
-            this, &NotationWidget::slotEnsureTimeVisible);
-
     // Relay context help from notation rulers
     connect(m_controlRulerWidget, &ControlRulerWidget::showContextHelp,
             this, &NotationWidget::showContextHelp);
@@ -518,15 +514,10 @@ NotationWidget::setSegments(RosegardenDocument *document,
     m_layout->addWidget(m_chordNameRuler, CHORDNAMERULER_ROW, MAIN_COL, 1, 1);
     m_layout->addWidget(m_rawNoteRuler, RAWNOTERULER_ROW, MAIN_COL, 1, 1);
 
-    connect(m_topStandardRuler, SIGNAL(dragPointerToPosition(timeT)),
-            this, SLOT(slotPointerPositionChanged(timeT)));
-    connect(m_bottomStandardRuler, SIGNAL(dragPointerToPosition(timeT)),
-            this, SLOT(slotPointerPositionChanged(timeT)));
-
-    connect(m_topStandardRuler->getLoopRuler(), &LoopRuler::dragLoopToPosition,
-            this, &NotationWidget::slotEnsureTimeVisible);
-    connect(m_bottomStandardRuler->getLoopRuler(), &LoopRuler::dragLoopToPosition,
-            this, &NotationWidget::slotEnsureTimeVisible);
+    connect(m_topStandardRuler, &StandardRuler::dragPointerToPosition,
+            this, &NotationWidget::slotStandardRulerDrag);
+    connect(m_bottomStandardRuler, &StandardRuler::dragPointerToPosition,
+            this, &NotationWidget::slotStandardRulerDrag);
 
     connect(m_document, SIGNAL(pointerPositionChanged(timeT)),
             this, SLOT(slotPointerPositionChanged(timeT)));
@@ -569,11 +560,14 @@ NotationWidget::setSegments(RosegardenDocument *document,
     // calculates position correctly for slotPointerPositionChanged.
     resumeLayoutUpdates();
 
-    showPointerPosition(m_document->getComposition().getPosition(),
-                        true);
+    // Draw the pointer
+    updatePointer(m_document->getComposition().getPosition());
+    // And jump to where it is.
+    // Note that calls to scrollToTopLeft() might override this.
+    m_view->ensurePositionPointerInView(false);
 
     connect(m_scene, &NotationScene::currentStaffChanged,
-            this, [this]() { updatePointerPosition(true); });
+            this, &NotationWidget::slotStaffChanged);
 }
 
 void
@@ -737,7 +731,7 @@ NotationWidget::slotSetFontSize(int size)
     m_bottomStandardRuler->updateStandardRuler();
     m_topStandardRuler->updateStandardRuler();
 
-    updatePointerPosition(false);
+    updatePointer(m_document->getComposition().getPosition());
 }
 
 NotationTool *
@@ -868,12 +862,14 @@ NotationWidget::slotTogglePlayTracking()
 void
 NotationWidget::updatePointerPosition(bool moveView)
 {
-    showPointerPosition(m_document->getComposition().getPosition(),
-                        moveView);
+    updatePointer(m_document->getComposition().getPosition());
+
+    if (moveView)
+        m_view->ensurePositionPointerInView(false);  // page
 }
 
 void
-NotationWidget::showPointerPosition(timeT t, bool moveView, bool page)
+NotationWidget::updatePointer(timeT t)
 {
     if (!m_scene)
         return;
@@ -885,7 +881,7 @@ NotationWidget::showPointerPosition(timeT t, bool moveView, bool page)
              (seqMgr->getTransportStatus() == PLAYING  ||
               seqMgr->getTransportStatus() == RECORDING));
 
-    //RG_DEBUG << "showPointerPosition(" << t << "): rolling = " << rolling;
+    //RG_DEBUG << "updatePointer(" << t << "): rolling = " << rolling;
 
     NotationScene::CursorCoordinates cursorPos =
             m_scene->getCursorCoordinates(t);
@@ -915,16 +911,21 @@ NotationWidget::showPointerPosition(timeT t, bool moveView, bool page)
         m_hpanner->slotShowPositionPointer(QPointF(pointerX, pointerY),
                                            pointerHeight);
     }
-
-    if (moveView) {
-        m_view->ensurePositionPointerInView(page);
-    }
 }
 
 void
-NotationWidget::slotPointerPositionChanged(timeT t, bool moveView)
+NotationWidget::slotPointerPositionChanged(timeT t)
 {
-    showPointerPosition(t, moveView && getPlayTracking(), true);
+    updatePointer(t);
+
+    if (m_playTracking)
+        m_view->ensurePositionPointerInView(true);  // page
+}
+
+void
+NotationWidget::slotStandardRulerDrag(timeT t)
+{
+    updatePointer(t);
 }
 
 void
@@ -954,49 +955,15 @@ NotationWidget::slotDispatchMouseMove(const NotationMouseEvent *e)
     FollowMode followMode = m_currentTool->handleMouseMove(e);
 
     if (followMode != NO_FOLLOW) {
-        m_lastMouseMoveScenePos = QPointF(e->sceneX, e->sceneY);
 
-        ensureLastMouseMoveVisible();
+        // Auto-scroll
 
-        QTimer::singleShot(100, this,
-                           &NotationWidget::ensureLastMouseMoveVisible);
     }
 
     if (e->staff) {
         QString s = e->staff->getNoteNameAtSceneCoords(e->sceneX, e->sceneY);
         emit hoveredOverNoteChanged(s);
     }
-}
-
-void
-NotationWidget::ensureLastMouseMoveVisible()
-{
-    if (m_inMove)
-        return;
-
-    m_inMove = true;
-
-    QPointF pos = m_lastMouseMoveScenePos;
-
-    if (m_scene)
-        m_scene->constrainToSegmentArea(pos);
-
-    // Reduce margin from 5O (default) to 10 pixels to fix bug #1254
-    // (was bug #2954074)
-    m_view->ensureVisible(QRectF(pos, pos), 10, 10);
-
-    m_inMove = false;
-}
-
-void
-NotationWidget::slotEnsureTimeVisible(timeT t)
-{
-    m_inMove = true;
-    QPointF pos = m_view->mapToScene(0,m_view->height()/2);
-    pos.setX(m_scene->getRulerScale()->getXForTime(t));
-    if (m_scene) m_scene->constrainToSegmentArea(pos);
-    m_view->ensureVisible(QRectF(pos, pos));
-    m_inMove = false;
 }
 
 void
@@ -1693,6 +1660,15 @@ NotationWidget::slotSegmentChangerMoved(int v)
     }
 
     m_lastSegmentChangerValue = v;
+}
+
+void
+NotationWidget::slotStaffChanged()
+{
+    // Draw the pointer
+    updatePointer(m_document->getComposition().getPosition());
+    // Make sure it's in view.
+    m_view->ensurePositionPointerInView(false);
 }
 
 void
