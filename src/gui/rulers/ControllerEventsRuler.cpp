@@ -35,6 +35,7 @@
 #include "base/RulerScale.h"
 #include "base/Segment.h"
 #include "base/Selection.h"
+#include "base/ViewSegment.h"
 #include "commands/edit/EraseCommand.h"
 #include "commands/edit/EventInsertionCommand.h"
 #include "commands/notation/EraseEventCommand.h"

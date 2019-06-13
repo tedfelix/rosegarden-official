@@ -21,10 +21,11 @@
 
 #include "base/PropertyName.h"
 #include "ControlRuler.h"
-#include <QString>
 #include "base/Event.h"
 #include "base/Segment.h"
+#include "base/ViewSegment.h"
 
+#include <QString>
 
 class QWidget;
 class QMouseEvent;

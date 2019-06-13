@@ -301,6 +301,14 @@ MatrixWidget::MatrixWidget(bool drumMode) :
     connect(m_pianoView, &Panned::wheelEventReceived,
             m_view, &Panned::slotEmulateWheelEvent);
 
+    // Connect ControlRulerWidget for Auto-Scroll.
+    connect(m_controlsWidget, &ControlRulerWidget::mousePress,
+            this, &MatrixWidget::slotCRWMousePress);
+    connect(m_controlsWidget, &ControlRulerWidget::mouseMove,
+            this, &MatrixWidget::slotCRWMouseMove);
+    connect(m_controlsWidget, &ControlRulerWidget::mouseRelease,
+            this, &MatrixWidget::slotCRWMouseRelease);
+
     m_toolBox = new MatrixToolBox(this);
 
     // Relay context help from matrix tools
@@ -1114,6 +1122,24 @@ MatrixWidget::slotSRStartMouseMove()
 
 void
 MatrixWidget::slotSRStopMouseMove()
+{
+    stopAutoScroll();
+}
+
+void
+MatrixWidget::slotCRWMousePress()
+{
+    startAutoScroll();
+}
+
+void
+MatrixWidget::slotCRWMouseMove(FollowMode followMode)
+{
+    m_followMode = followMode;
+}
+
+void
+MatrixWidget::slotCRWMouseRelease()
 {
     stopAutoScroll();
 }

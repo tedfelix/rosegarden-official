@@ -295,6 +295,14 @@ ControlRulerWidget::slotAddControlRuler(const ControlParameter &controlParameter
     connect(controlruler, &ControlRuler::dragScroll,
             this, &ControlRulerWidget::slotDragScroll);
 
+    // Mouse signals.  Forward them from the current ControlRuler.
+    connect(controlruler, &ControlRuler::mousePress,
+            this, &ControlRulerWidget::mousePress);
+    connect(controlruler, &ControlRuler::mouseMove,
+            this, &ControlRulerWidget::mouseMove);
+    connect(controlruler, &ControlRuler::mouseRelease,
+            this, &ControlRulerWidget::mouseRelease);
+
     connect(controlruler, &ControlRuler::rulerSelectionChanged,
             this, &ControlRulerWidget::slotChildRulerSelectionChanged);
 

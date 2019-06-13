@@ -18,16 +18,18 @@
 #ifndef RG_CONTROLRULER_H
 #define RG_CONTROLRULER_H
 
-#include <QWidget>
+#include "ControlItem.h"
+
+#include "gui/general/AutoScroller.h"
 #include "base/Segment.h"
 #include "base/Selection.h"
-#include "base/ViewSegment.h"
+
 #include <QColor>
 #include <QPoint>
 #include <QString>
-#include <utility>
+#include <QWidget>
 
-#include "ControlItem.h"
+#include <utility>
 
 //class QWidget;
 class QMenu;
@@ -49,6 +51,7 @@ class RulerScale;
 class EventSelection;
 class EditViewBase;
 class NotationStaff;
+class ViewSegment;
 
 /**
  * ControlRuler : base class for Control Rulers
@@ -131,7 +134,12 @@ public:
     void flipBackwards();
 
 signals:
+    /// DEPRECATED.  This is being replaced by the new mouse*() signals.
     void dragScroll(timeT);
+
+    void mousePress();
+    void mouseMove(FollowMode);
+    void mouseRelease();
 
     /** Emitted whenever the ruler changes its selection, so the ruler owner can
      * update its own selection to include the events selected on the ruler

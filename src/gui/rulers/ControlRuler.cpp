@@ -33,6 +33,8 @@
 #include "ControlChangeCommand.h"
 #include "DefaultVelocityColour.h"
 #include "document/CommandHistory.h"
+#include "base/ViewSegment.h"
+
 #include <algorithm>
 #include <cfloat>
 
@@ -53,7 +55,7 @@
 namespace Rosegarden
 {
 
-    ControlRuler::ControlRuler(ViewSegment * /*viewsegment*/,
+ControlRuler::ControlRuler(ViewSegment * /*viewsegment*/,
                            RulerScale* rulerScale,
                            QWidget* parent) :
         QWidget(parent),
@@ -601,6 +603,8 @@ void ControlRuler::mousePressEvent(QMouseEvent* e)
         ControlMouseEvent controlMouseEvent = createControlMouseEvent(e);
         m_currentTool->handleLeftButtonPress(&controlMouseEvent);
     }
+
+    emit mousePress();
 }
 
 void ControlRuler::mouseReleaseEvent(QMouseEvent* e)
@@ -612,6 +616,8 @@ void ControlRuler::mouseReleaseEvent(QMouseEvent* e)
         ControlMouseEvent controlMouseEvent = createControlMouseEvent(e);
         m_currentTool->handleMouseRelease(&controlMouseEvent);
     }
+
+    emit mouseRelease();
 }
 
 void ControlRuler::mouseMoveEvent(QMouseEvent* e)
@@ -625,6 +631,8 @@ void ControlRuler::mouseMoveEvent(QMouseEvent* e)
     if (mode != NO_FOLLOW) {
         emit dragScroll(m_rulerScale->getTimeForX(controlMouseEvent.x/m_xScale));
     }
+
+    emit mouseMove(mode);
 }
 
 void

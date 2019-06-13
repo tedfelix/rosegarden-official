@@ -18,11 +18,13 @@
 #ifndef RG_CONTROLRULERWIDGET_H
 #define RG_CONTROLRULERWIDGET_H
 
-#include <QWidget>
+#include "gui/general/AutoScroller.h"
 #include "base/Event.h"
 #include "base/ViewElement.h"
 #include "base/MidiDevice.h"
 #include "base/parameterpattern/SelectionSituation.h"
+
+#include <QWidget>
 
 class QStackedWidget;
 class QTabBar;
@@ -93,7 +95,13 @@ public slots:
     void slotDragScroll(timeT);
 
 signals:
+    /// DEPRECATED.  This is being replaced by the new mouse*() signals.
     void dragScroll(timeT);
+
+    void mousePress();
+    void mouseMove(FollowMode);
+    void mouseRelease();
+
     void childRulerSelectionChanged(EventSelection *);
     void showContextHelp(const QString &);
 
