@@ -235,6 +235,8 @@ private slots:
 private:
     RosegardenDocument *m_document; // I do not own this
 
+    QGridLayout *m_layout; // I own this
+
 
     // View
 
@@ -264,6 +266,11 @@ private:
     void zoomInFromPanner();
     void zoomOutFromPanner();
 
+    QWidget *m_changerWidget;
+    Thumbwheel *m_segmentChanger;
+    int m_lastSegmentChangerValue;
+    void updateSegmentChangerBackground();
+
 
     // Pitch Ruler
 
@@ -276,6 +283,11 @@ private:
     PitchRuler *m_pitchRuler; // I own this
     /// (Re)generate the pitch ruler (useful when key mapping changed)
     void generatePitchRuler();
+    /// Contains m_pitchRuler.
+    // ??? QSharedPointer
+    QGraphicsScene *m_pianoScene; // I own this
+    /// Contains m_pianoScene.
+    Panned *m_pianoView; // I own this
     /// All Segments only have key mappings.  Use a PercussionPitchRuler.
     bool m_onlyKeyMapping;
     /// Percussion matrix editor?
@@ -288,46 +300,38 @@ private:
 
     MatrixToolBox *m_toolBox; // I own this
     MatrixTool *m_currentTool; // Toolbox owns this
-
+    void setTool(QString name);
+    /// Used by the MatrixMover and MatrixPainter tools for preview notes.
     int m_currentVelocity;
-    ZoomableRulerScale *m_referenceScale; // m_scene own this (refers to scene scale)
+
+
+    /// Used by all rulers to make sure they are all zoomed to the same scale.
+    /**
+     * See MatrixScene::getReferenceScale().
+     */
+    ZoomableRulerScale *m_referenceScale;
+
     bool m_inMove;
     QPointF m_lastMouseMoveScenePos;
 
-    Thumbwheel  *m_HVzoom;
-    Thumbwheel  *m_Hzoom;
-    Thumbwheel  *m_Vzoom;
-    QPushButton *m_reset;
 
-    /** The primary zoom wheel behaves just like using the mouse wheel over any
-     * part of the Panner.  We don't need to keep track of absolute values here,
-     * just whether we rolled up or down.  We'll do that by keeping track of the
-     * last setting and comparing it to see which way it moved.
-     */
+    // Zoom Area
+
+    Thumbwheel *m_HVzoom;
     int m_lastHVzoomValue;
     bool m_lastZoomWasHV;
-    int m_lastV;
+    Thumbwheel *m_Hzoom;
     int m_lastH;
+    Thumbwheel *m_Vzoom;
+    int m_lastV;
+    QPushButton *m_reset;
 
-    QWidget *m_changerWidget;
-    Thumbwheel  *m_segmentChanger;
-    int m_lastSegmentChangerValue;
-    void updateSegmentChangerBackground();
 
-    /// Contains m_pianoScene.
-    Panned *m_pianoView; // I own this
-    /// Contains m_pitchRuler.
-    // ??? QSharedPointer
-    QGraphicsScene *m_pianoScene; // I own this
-
-    ControlRulerWidget *m_controlsWidget; // I own this
-
+    ChordNameRuler *m_chordNameRuler; // I own this
+    TempoRuler *m_tempoRuler; // I own this
     StandardRuler *m_topStandardRuler; // I own this
     StandardRuler *m_bottomStandardRuler; // I own this
-    TempoRuler *m_tempoRuler; // I own this
-    ChordNameRuler *m_chordNameRuler; // I own this
-
-    QGridLayout *m_layout; // I own this
+    ControlRulerWidget *m_controlsWidget; // I own this
 
     bool m_hSliderHacked;
 
@@ -343,33 +347,6 @@ private:
 
     // Use to hide hover note when mouse move is not related to a pitch change
     bool m_hoverNoteIsVisible;
-
-
-
-    /**
-     * Widgets vertical positions inside the main QGridLayout
-     */
-    enum {
-        CHORDNAMERULER_ROW,
-        TEMPORULER_ROW,
-        TOPRULER_ROW,
-        PANNED_ROW,
-        BOTTOMRULER_ROW,
-        CONTROLS_ROW,
-        HSLIDER_ROW,
-        PANNER_ROW
-    };
-
-    /**
-     * Widgets horizontal positions inside the main QGridLayout
-     */
-    enum {
-        HEADER_COL,
-        MAIN_COL,
-    };
-
-    /// ??? Never used as a slot.  Rename.
-    void slotSetTool(QString name);
 
 };
 

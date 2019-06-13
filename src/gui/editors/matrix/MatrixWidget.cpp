@@ -97,6 +97,24 @@ namespace Rosegarden
 {
 
 
+// Widgets vertical positions inside the main QGridLayout (m_layout).
+enum {
+    CHORDNAMERULER_ROW,
+    TEMPORULER_ROW,
+    TOPRULER_ROW,
+    PANNED_ROW,
+    BOTTOMRULER_ROW,
+    CONTROLS_ROW,
+    HSLIDER_ROW,
+    PANNER_ROW
+};
+
+// Widgets horizontal positions inside the main QGridLayout (m_layout).
+enum {
+    HEADER_COL,
+    MAIN_COL,
+};
+
 MatrixWidget::MatrixWidget(bool drumMode) :
     m_document(nullptr),
     m_scene(nullptr),
@@ -107,6 +125,8 @@ MatrixWidget::MatrixWidget(bool drumMode) :
     m_instrument(nullptr),
     m_localMapping(nullptr),
     m_pitchRuler(nullptr),
+    m_pianoScene(nullptr),
+    m_pianoView(nullptr),
     m_onlyKeyMapping(false),
     m_drumMode(drumMode),
     m_toolBox(nullptr),
@@ -115,15 +135,12 @@ MatrixWidget::MatrixWidget(bool drumMode) :
     m_referenceScale(nullptr),
     m_inMove(false),
     m_lastZoomWasHV(true),
-    m_lastV(0),
     m_lastH(0),
-    m_pianoView(nullptr),
-    m_pianoScene(nullptr),
+    m_lastV(0),
+    m_chordNameRuler(nullptr),
+    m_tempoRuler(nullptr),
     m_topStandardRuler(nullptr),
     m_bottomStandardRuler(nullptr),
-    m_tempoRuler(nullptr),
-    m_chordNameRuler(nullptr),
-    m_layout(nullptr),
     m_hSliderHacked(false),
     m_lastNote(0),
     m_hoverNoteIsVisible(true)
@@ -896,7 +913,7 @@ MatrixWidget::setCanvasCursor(QCursor c)
 }
 
 void
-MatrixWidget::slotSetTool(QString name)
+MatrixWidget::setTool(QString name)
 {
     MatrixTool *tool = dynamic_cast<MatrixTool *>(m_toolBox->getTool(name));
     if (!tool) return;
@@ -909,19 +926,19 @@ MatrixWidget::slotSetTool(QString name)
 void
 MatrixWidget::setDrawTool()
 {
-    slotSetTool(MatrixPainter::ToolName());
+    setTool(MatrixPainter::ToolName());
 }
 
 void
 MatrixWidget::setEraseTool()
 {
-    slotSetTool(MatrixEraser::ToolName());
+    setTool(MatrixEraser::ToolName());
 }
 
 void
 MatrixWidget::setSelectAndEditTool()
 {
-    slotSetTool(MatrixSelector::ToolName());
+    setTool(MatrixSelector::ToolName());
 
     MatrixSelector *selector = dynamic_cast<MatrixSelector *>(m_currentTool);
     if (selector) {
@@ -939,19 +956,19 @@ MatrixWidget::setSelectAndEditTool()
 void
 MatrixWidget::setMoveTool()
 {
-    slotSetTool(MatrixMover::ToolName());
+    setTool(MatrixMover::ToolName());
 }
 
 void
 MatrixWidget::setResizeTool()
 {
-    slotSetTool(MatrixResizer::ToolName());
+    setTool(MatrixResizer::ToolName());
 }
 
 void
 MatrixWidget::setVelocityTool()
 {
-    slotSetTool(MatrixVelocity::ToolName());
+    setTool(MatrixVelocity::ToolName());
 }
 
 void
