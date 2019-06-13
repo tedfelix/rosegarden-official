@@ -70,6 +70,8 @@
 #include "base/ColourMap.h"
 #include "base/Colour.h"
 
+#include <QApplication>
+#include <QDesktopWidget>
 #include <QGraphicsView>
 #include <QGridLayout>
 #include <QScrollBar>
@@ -332,6 +334,9 @@ MatrixWidget::MatrixWidget(bool drumMode) :
     connect(RosegardenMainWindow::self()->getDocument(),
                 &RosegardenDocument::documentModified,
             this, &MatrixWidget::slotDocumentModified);
+
+    connect(&m_autoScrollTimer, &QTimer::timeout,
+            this, &MatrixWidget::slotOnAutoScrollTimer);
 }
 
 MatrixWidget::~MatrixWidget()
@@ -826,6 +831,8 @@ MatrixWidget::slotDispatchMousePress(const MatrixMouseEvent *e)
     } else if (e->buttons & Qt::RightButton) {
         m_currentTool->handleRightButtonPress(e);
     }
+
+    startAutoScroll();
 }
 
 void
@@ -863,22 +870,12 @@ MatrixWidget::slotEnsureTimeVisible(timeT t)
 void
 MatrixWidget::slotDispatchMouseRelease(const MatrixMouseEvent *e)
 {
+    stopAutoScroll();
+
     if (!m_currentTool)
         return;
 
     m_currentTool->handleMouseRelease(e);
-
-    // Auto-scroll.
-
-    // ??? Why?  Mouse movement should have already handled this.  Note
-    //     that NotationView does not do this.
-
-    QPointF pos(e->sceneX, e->sceneY);
-
-    if (m_scene)
-        m_scene->constrainToSegmentArea(pos);
-
-    m_view->ensureVisible(QRectF(pos, pos));
 }
 
 void
@@ -1577,6 +1574,154 @@ MatrixWidget::slotZoomOut()
 
     m_Hzoom->setValue(v);
     slotHorizontalThumbwheelMoved(v);
+}
+
+void
+MatrixWidget::startAutoScroll()
+{
+    if (!m_autoScrollTimer.isActive())
+        m_autoScrollTimer.start(30);  // msecs
+
+    m_autoScrolling = true;
+
+    // ??? For now, assume both.  Really should be based on return from
+    //     tool and/or just FollowHorizontal for ruler scrolling.
+    m_followMode = MatrixTool::FollowHorizontal | MatrixTool::FollowVertical;
+}
+
+// We'll hit MaxScrollRate at this distance outside the viewport.
+// ??? HiDPI: This needs to be bigger for the HiDPI case.
+constexpr double maxDistance = 40;
+
+double distanceToScrollRate(int distance)
+{
+    const double distanceNormalized = distance / maxDistance;
+    // Apply a curve to reduce the touchiness.
+    // Simple square curve.  Something more pronounced might be better.
+    const double distanceWithCurve = distanceNormalized * distanceNormalized;
+
+    const double minScrollRate = 1.2;
+    const double maxScrollRate = 100;
+    const double scrollRateRange = (maxScrollRate - minScrollRate);
+
+    const double scrollRate = distanceWithCurve * scrollRateRange + minScrollRate;
+
+    return std::min(scrollRate, maxScrollRate);
+}
+
+void
+MatrixWidget::doAutoScroll()
+{
+    // Copied from RosegardenScrollView::doAutoScroll().
+    // Will be copied to NotationWidget in the near future.
+
+    // ??? Eventually, this will be used in three places, RosegardenScrollView,
+    //     MatrixWidget, and NotationWidget.  Might be time to pull out into
+    //     a separate class?  AutoScroller.  Clients will contain an instance
+    //     and interact with it.
+
+    // Make sure we're auto-scrolling.
+    // ??? Necessary?  External users should only call start functions,
+    //     not this.
+    //startAutoScroll();
+
+    const QPoint mousePos = m_view->mapFromGlobal(QCursor::pos());
+
+    //RG_DEBUG << "doAutoScroll(): mousePos:" << mousePos;
+
+    if (m_followMode & MatrixTool::FollowHorizontal) {
+
+        // The following auto scroll behavior is patterned after Chromium,
+        // Eclipse, and the GIMP.  Auto scroll will only happen if the
+        // mouse is outside the viewport.  The auto scroll rate is
+        // proportional to how far outside the viewport the mouse is.
+        // If the right edge is too close to the edge of the screen
+        // (e.g. when maximized), the auto scroll area is moved inside
+        // of the viewport.
+
+        int scrollX = 0;
+
+        // If the mouse is to the left of the viewport
+        if (mousePos.x() < 0) {
+
+            // Set the scroll rate based on how far outside we are.
+            scrollX = lround(-distanceToScrollRate(-mousePos.x()));
+
+        } else {
+
+            // Check if the mouse is to the right of the viewport
+
+            // Assume we can place the auto scroll area outside the window.
+            int xOffset = 0;
+
+            const int rightSideOfScreen =
+                    QApplication::desktop()->availableGeometry(this).right();
+
+            const int rightSideOfViewport =
+                    m_view->parentWidget()->mapToGlobal(
+                            m_view->geometry().bottomRight()).x();
+
+            const int spaceToTheRight = rightSideOfScreen - rightSideOfViewport;
+
+            // If there's not enough space for the auto scroll area, move it
+            // inside the viewport.
+            if (spaceToTheRight < maxDistance)
+                xOffset = static_cast<int>(-maxDistance + spaceToTheRight);
+
+            // Limit where auto scroll begins.
+            const int xMax = m_view->width() + xOffset;
+
+            // If the mouse is to the right of the auto scroll limit
+            if (mousePos.x() > xMax) {
+                // Set the scroll rate based on how far outside we are.
+                scrollX = lround(distanceToScrollRate(mousePos.x() - xMax));
+            }
+
+        }
+
+        // Scroll if needed.
+        if (scrollX) {
+            QScrollBar *hScrollBar = m_view->horizontalScrollBar();
+            hScrollBar->setValue(hScrollBar->value() + scrollX);
+        }
+    }
+
+    if (m_followMode & MatrixTool::FollowVertical) {
+
+        // This vertical auto scroll behavior is patterned after
+        // Audacity.  Auto scroll will only happen if the mouse is
+        // outside the viewport.  The auto scroll rate is fixed.
+
+        int scrollY = 0;
+
+        // If the mouse is above the viewport
+        if (mousePos.y() < 0)
+            scrollY = -10;
+
+        // If the mouse is below the viewport
+        if (mousePos.y() > m_view->height())
+            scrollY = +10;
+
+        // Scroll if needed.
+        if (scrollY) {
+            QScrollBar *vScrollBar = m_view->verticalScrollBar();
+            vScrollBar->setValue(vScrollBar->value() + scrollY);
+        }
+
+    }
+}
+
+void
+MatrixWidget::slotOnAutoScrollTimer()
+{
+    doAutoScroll();
+}
+
+void
+MatrixWidget::stopAutoScroll()
+{
+    m_autoScrollTimer.stop();
+    m_autoScrolling = false;
 }
 
 

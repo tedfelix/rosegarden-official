@@ -19,12 +19,14 @@
 #define RG_MATRIX_WIDGET_H
 
 #include "base/Event.h"             // for timeT
+#include "MatrixTool.h"
 #include "base/MidiTypes.h"         // for MidiByte
 #include "gui/general/SelectionManager.h"
 
 #include <vector>
 
 #include <QSharedPointer>
+#include <QTimer>
 #include <QWidget>
 
 class QGraphicsScene;
@@ -38,7 +40,6 @@ class RosegardenDocument;
 class Segment;
 class MatrixScene;
 class MatrixToolBox;
-class MatrixTool;
 class MatrixMouseEvent;
 class SnapGrid;
 class ZoomableRulerScale;
@@ -284,6 +285,8 @@ private slots:
     /// Instrument is being destroyed
     void slotInstrumentGone();
 
+    void slotOnAutoScrollTimer();
+
 private:
     // ??? Instead of storing the document, which can change, get the
     //     document as needed via RosegardenMainWindow::self()->getDocument().
@@ -416,6 +419,16 @@ private:
      * See MatrixScene::getReferenceScale().
      */
     ZoomableRulerScale *m_referenceScale;  // Owned by MatrixScene
+
+
+    // Auto-scroll
+
+    QTimer m_autoScrollTimer;
+    bool m_autoScrolling;
+    int m_followMode;  // Actually MatrixTool::FollowMode.
+    void startAutoScroll();
+    void doAutoScroll();
+    void stopAutoScroll();
 
 };
 
