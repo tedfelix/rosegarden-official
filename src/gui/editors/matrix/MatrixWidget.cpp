@@ -141,7 +141,6 @@ MatrixWidget::MatrixWidget(bool drumMode) :
     m_bottomStandardRuler(nullptr),
     m_referenceScale(nullptr),
     m_inMove(false),
-    m_hSliderHacked(false),
     m_lastNote(0),
     m_hoverNoteIsVisible(true)
 {
@@ -340,10 +339,6 @@ MatrixWidget::MatrixWidget(bool drumMode) :
 
     connect(this, &MatrixWidget::toolChanged,
             m_controlsWidget, &ControlRulerWidget::slotSetToolName);
-
-    // scrollbar hack from notation, but this one only affects horizontal
-    connect(m_view->horizontalScrollBar(), &QAbstractSlider::valueChanged,
-            this, &MatrixWidget::slotInitialHSliderHack);
 
     // Make sure MatrixScene always gets mouse move events even when the
     // button isn't pressed.  This way the keys on the piano keyboard
@@ -1260,19 +1255,6 @@ MatrixWidget::slotSyncPannerZoomOut()
 }
 
 void
-MatrixWidget::slotInitialHSliderHack(int)
-{
-    if (m_hSliderHacked) return;
-
-    m_hSliderHacked = true;
-
-    //MATRIX_DEBUG << "MatrixWidget::slotInitialHSliderHack()";
-    //MATRIX_DEBUG << "  h slider position was: " << m_view->horizontalScrollBar()->sliderPosition();
-    m_view->horizontalScrollBar()->setSliderPosition(0);
-    //MATRIX_DEBUG << "  h slider position now: " << m_view->horizontalScrollBar()->sliderPosition();
-}
-
-void
 MatrixWidget::slotSegmentChangerMoved(int v)
 {
     // see comments in slotPrimaryThumbWheelMoved() for an explanation of that
@@ -1501,6 +1483,13 @@ MatrixWidget::showInitialPointer()
         m_view->showPositionPointer(sceneX);
         m_hpanner->slotShowPositionPointer(sceneX);
     }
+
+    // QGraphicsView usually defaults to the center.  We want to
+    // start at the left center.
+    // Note: This worked fine at the end of setSegments() as well.
+    //       This feels like a better place.  Especially since we
+    //       might want to scroll to where the pointer is.
+    m_view->centerOn(QPointF(0, m_view->sceneRect().center().y()));
 }
 
 /// Instrument is destroyed

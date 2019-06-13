@@ -224,8 +224,6 @@ private slots:
     /// The segment control thumbwheel moved
     void slotSegmentChangerMoved(int);
 
-    void slotInitialHSliderHack(int);
-
     /// The mouse has left the view
     void slotMouseLeavesView();
 
@@ -359,8 +357,6 @@ private:
 
 
     // Miscellaneous
-
-    bool m_hSliderHacked;
 
     /// The last note we sent in case we're swooshing up and
     /// down the keyboard and don't want repeat notes sending
