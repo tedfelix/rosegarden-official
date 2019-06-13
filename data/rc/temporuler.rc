@@ -13,7 +13,8 @@
 <Separator/>
   <Action name="edit_tempo" text="Edit Tempo..." icon="event-edit" />
   <Action name="edit_time_signature" text="Edit Time Signature..." />
-  <Action name="edit_tempos" text="Open Tempo and Time Signature Editor"" />	
+  <Action name="edit_tempos" text="Open Tempo and Time Signature Editor" />
 </Menu>
 
 </kpartgui>
+
