@@ -121,6 +121,9 @@ Panner::slotSceneRectChanged(const QRectF &newRect)
 void
 Panner::paintEvent(QPaintEvent *e)
 {
+    RG_DEBUG << "paintEvent()";
+    RG_DEBUG << "  region bounding rect:" << e->region().boundingRect();
+
     Profiler profiler("Panner::paintEvent");
 
     QPaintEvent *e2 = new QPaintEvent(e->region().boundingRect());
@@ -165,6 +168,12 @@ Panner::paintEvent(QPaintEvent *e)
 void
 Panner::updateScene(const QList<QRectF> &rects)
 {
+    // ??? This is not virtual in QGraphicsView, so this is not actually
+    //     an override.  It never gets called.  At least I can't get it to
+    //     be called.
+
+    RG_DEBUG << "updateScene()";
+
     if (!m_cache.isNull()) m_cache = QPixmap();
     QGraphicsView::updateScene(rects);
 }
@@ -174,6 +183,8 @@ Panner::drawItems(QPainter *painter, int numItems,
                   QGraphicsItem *items[],
                   const QStyleOptionGraphicsItem options[])
 {
+    RG_DEBUG << "drawItems()";
+
     Profiler profiler("Panner::drawItems");
 
     if (m_cache.size() != viewport()->size()) {
