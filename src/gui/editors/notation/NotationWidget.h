@@ -80,7 +80,7 @@ public:
     NotationScene *getScene() { return m_scene; }
     Panned *getView() { return m_view; }
     ControlRulerWidget *getControlsWidget()
-        { return m_controlsWidget; }
+        { return m_controlRulerWidget; }
 
     EventSelection *getSelection() const override;
     void setSelection(EventSelection* s, bool preview) override;
@@ -281,7 +281,7 @@ private:
     TempoRuler *m_tempoRuler; // I own this
     ChordNameRuler *m_chordNameRuler; // I own this
     RawNoteRuler *m_rawNoteRuler; // I own this
-    ControlRulerWidget *m_controlsWidget; // I own this
+    ControlRulerWidget *m_controlRulerWidget; // I own this
 
     // Track Headers
     // View > Show Track Headers

@@ -108,7 +108,7 @@ NotationWidget::NotationWidget() :
     m_tempoRuler(nullptr),
     m_chordNameRuler(nullptr),
     m_rawNoteRuler(nullptr),
-    m_controlsWidget(nullptr),
+    m_controlRulerWidget(nullptr),
     m_headersGroup(nullptr),
     m_headersView(nullptr),
     m_headersScene(nullptr),
@@ -380,7 +380,7 @@ NotationWidget::clearAll()
     delete m_referenceScale;
     m_referenceScale = nullptr;
 }
-    
+
 void
 NotationWidget::setSegments(RosegardenDocument *document,
                             std::vector<Segment *> segments)
@@ -396,8 +396,6 @@ NotationWidget::setSegments(RosegardenDocument *document,
          it != segments.end(); ++it) {
         (*it)->enforceBeginWithClefAndKey();
     }
-
-
 
     if (m_document) {
         disconnect(m_document, SIGNAL(pointerPositionChanged(timeT)),
@@ -461,35 +459,35 @@ NotationWidget::setSegments(RosegardenDocument *document,
     if (m_tempoRuler) delete m_tempoRuler;
     if (m_chordNameRuler) delete m_chordNameRuler;
     if (m_rawNoteRuler) delete m_rawNoteRuler;
-    if (m_controlsWidget) delete m_controlsWidget;
+    if (m_controlRulerWidget) delete m_controlRulerWidget;
 
-    m_controlsWidget = new ControlRulerWidget;
-    m_layout->addWidget(m_controlsWidget, CONTROLS_ROW, MAIN_COL, 1, 1);
-    m_controlsWidget->setSegments(document, segments);
-    m_controlsWidget->setViewSegment(m_scene->getCurrentStaff());
-    m_controlsWidget->setRulerScale(m_referenceScale, m_leftGutter);
+    m_controlRulerWidget = new ControlRulerWidget;
+    m_layout->addWidget(m_controlRulerWidget, CONTROLS_ROW, MAIN_COL, 1, 1);
+    m_controlRulerWidget->setSegments(document, segments);
+    m_controlRulerWidget->setViewSegment(m_scene->getCurrentStaff());
+    m_controlRulerWidget->setRulerScale(m_referenceScale, m_leftGutter);
 
     connect(m_view, &Panned::viewportChanged,
-            m_controlsWidget, &ControlRulerWidget::slotSetPannedRect);
+            m_controlRulerWidget, &ControlRulerWidget::slotSetPannedRect);
 
-    connect(m_controlsWidget, &ControlRulerWidget::dragScroll,
+    connect(m_controlRulerWidget, &ControlRulerWidget::dragScroll,
             this, &NotationWidget::slotEnsureTimeVisible);
 
     // Relay context help from notation rulers
-    connect(m_controlsWidget, &ControlRulerWidget::showContextHelp,
+    connect(m_controlRulerWidget, &ControlRulerWidget::showContextHelp,
             this, &NotationWidget::showContextHelp);
 
     connect(m_scene, &NotationScene::layoutUpdated,
-            m_controlsWidget, &ControlRulerWidget::slotUpdateRulers);
+            m_controlRulerWidget, &ControlRulerWidget::slotUpdateRulers);
 
     connect(m_scene, SIGNAL(selectionChanged(EventSelection *)),
-            m_controlsWidget, SLOT(slotSelectionChanged(EventSelection *)));
+            m_controlRulerWidget, SLOT(slotSelectionChanged(EventSelection *)));
 
     connect(m_scene, &NotationScene::currentViewSegmentChanged,
-            m_controlsWidget, &ControlRulerWidget::slotSetCurrentViewSegment);
+            m_controlRulerWidget, &ControlRulerWidget::slotSetCurrentViewSegment);
 
     connect(this, &NotationWidget::toolChanged,
-            m_controlsWidget, &ControlRulerWidget::slotSetToolName);
+            m_controlRulerWidget, &ControlRulerWidget::slotSetToolName);
 
     m_topStandardRuler = new StandardRuler(document,
                                            m_referenceScale,
@@ -732,11 +730,13 @@ NotationWidget::slotSetFontName(QString name)
 void
 NotationWidget::slotSetFontSize(int size)
 {
-    if (m_scene) m_scene->setFontSize(size);
+    if (m_scene)
+        m_scene->setFontSize(size);
 
     // Force standard rulers and pointer pointer to refresh -- otherwise
     m_bottomStandardRuler->updateStandardRuler();
     m_topStandardRuler->updateStandardRuler();
+
     updatePointerPosition(false);
 }
 
@@ -875,37 +875,45 @@ NotationWidget::updatePointerPosition(bool moveView)
 void
 NotationWidget::showPointerPosition(timeT t, bool moveView, bool page)
 {
-    if (!m_scene) return;
+    if (!m_scene)
+        return;
 
-    NotationScene::CursorCoordinates cc = m_scene->getCursorCoordinates(t);
+    SequenceManager *seqMgr = m_document->getSequenceManager();
 
-    bool rolling = false;
-    if (m_document->getSequenceManager() &&
-        (m_document->getSequenceManager()->getTransportStatus() == PLAYING ||
-         m_document->getSequenceManager()->getTransportStatus() == RECORDING)) {
-        rolling = true;
-    }
+    bool rolling =
+            (seqMgr  &&
+             (seqMgr->getTransportStatus() == PLAYING  ||
+              seqMgr->getTransportStatus() == RECORDING));
 
-    RG_DEBUG << "showPointerPosition(" << t << "): rolling = " << rolling;
+    //RG_DEBUG << "showPointerPosition(" << t << "): rolling = " << rolling;
 
-    const QLineF p = rolling ? cc.allStaffs : cc.currentStaff;
-    if (p == QLineF()) return;
+    NotationScene::CursorCoordinates cursorPos =
+            m_scene->getCursorCoordinates(t);
 
-    //!!! p will also contain sensible Y (although not 100% sensible yet)
-    double sceneX = p.x1();
-    double sceneY = std::min(p.y1(), p.y2());
-    double height = fabsf(p.y2() - p.y1());
+    // While rolling, display a playback position pointer that stretches
+    // across all staves.
+    const QLineF p = rolling ? cursorPos.allStaffs : cursorPos.currentStaff;
+    if (p == QLineF())
+        return;
 
-    // Never move the pointer outside the scene (else the scene will grow)
-    double x1 = m_scene->sceneRect().x();
-    double x2 = x1 + m_scene->sceneRect().width();
+    // p will also contain sensible Y (although not 100% sensible yet)
+    double pointerX = p.x1();
+    double pointerY = std::min(p.y1(), p.y2());
+    double pointerHeight = fabs(p.dy());
 
-    if ((sceneX < x1) || (sceneX > x2)) {
+    double sceneXMin = m_scene->sceneRect().left();
+    double sceneXMax = m_scene->sceneRect().right();
+
+    // If the pointer has gone outside the limits
+    if (pointerX < sceneXMin  ||  sceneXMax < pointerX) {
+        // Never move the pointer outside the scene (else the scene will grow)
         m_view->hidePositionPointer();
         m_hpanner->slotHidePositionPointer();
     } else {
-        m_view->showPositionPointer(QPointF(sceneX, sceneY), height);
-        m_hpanner->slotShowPositionPointer(QPointF(sceneX, sceneY), height);
+        m_view->showPositionPointer(QPointF(pointerX, pointerY),
+                                    pointerHeight);
+        m_hpanner->slotShowPositionPointer(QPointF(pointerX, pointerY),
+                                           pointerHeight);
     }
 
     if (moveView) {
@@ -1323,7 +1331,7 @@ NotationWidget::hideOrShowRulers()
             m_headersView->show();
             m_headersButtons->show();
         }
-        if (m_controlsWidget->isAnyRulerVisible()) m_controlsWidget->show();
+        if (m_controlRulerWidget->isAnyRulerVisible()) m_controlRulerWidget->show();
         m_bottomStandardRuler->show();
         m_topStandardRuler->show();
     } else {
@@ -1334,7 +1342,7 @@ NotationWidget::hideOrShowRulers()
             m_headersView->hide();
             m_headersButtons->hide();
         }
-        if (m_controlsWidget->isAnyRulerVisible()) m_controlsWidget->hide();
+        if (m_controlRulerWidget->isAnyRulerVisible()) m_controlRulerWidget->hide();
         m_bottomStandardRuler->hide();
         m_topStandardRuler->hide();
     }
@@ -1571,13 +1579,13 @@ NotationWidget::getVerticalZoomFactor() const
 void
 NotationWidget::slotToggleVelocityRuler()
 {
-    m_controlsWidget->slotTogglePropertyRuler(BaseProperties::VELOCITY);
+    m_controlRulerWidget->slotTogglePropertyRuler(BaseProperties::VELOCITY);
 }
 
 void
 NotationWidget::slotTogglePitchbendRuler()
 {
-    m_controlsWidget->slotToggleControlRuler("PitchBend");
+    m_controlRulerWidget->slotToggleControlRuler("PitchBend");
 }
 
 void
@@ -1633,7 +1641,7 @@ NotationWidget::slotAddControlRuler(QAction *action)
 
         RG_DEBUG << "name: " << name.toStdString() << " should match  itemStr: " << itemStr.toStdString();
 
-        m_controlsWidget->slotAddControlRuler(*it);
+        m_controlRulerWidget->slotAddControlRuler(*it);
 
 //      if (i == menuIndex) m_controlsWidget->slotAddControlRuler(*p);
 //      else i++;
