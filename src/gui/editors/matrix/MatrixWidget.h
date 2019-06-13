@@ -234,7 +234,8 @@ private slots:
     void slotDispatchMouseDoubleClick(const MatrixMouseEvent *);
 
     /// Display the playback position pointer.
-    void slotPointerPositionChanged(timeT, bool moveView = true);
+    void slotPointerPositionChanged(timeT t);
+    void slotStandardRulerDrag(timeT t);
 
     /// Hide the horizontal scrollbar when not needed.
     /**
@@ -309,6 +310,11 @@ private:
     /// View vertical zoom factor.
     double m_vZoomFactor;
     void setVerticalZoomFactor(double factor);
+
+
+    // Pointer
+
+    void updatePointer(timeT t);
 
 
     // Panner (Navigation Area below the matrix)
@@ -410,36 +416,6 @@ private:
      * See MatrixScene::getReferenceScale().
      */
     ZoomableRulerScale *m_referenceScale;  // Owned by MatrixScene
-
-
-    // Auto-scroll
-
-    /// Auto-scroll.
-    void ensureLastMouseMoveVisible();
-
-    /// Currently moving the scene via ensureVisible().
-    /**
-     * Appears to be intended to make sure that any mouse movements
-     * that come in (slotDispatchMouseMove()) while the scene is
-     * moving result in m_lastMouseMoveScenePos being updated.
-     * However, it seems very unlikely that a mouse move event
-     * could sneak in while m_inMove is true.  The UI is
-     * single-threaded.  Maybe ensureVisible() pumps the message queue?
-     *
-     * At any rate, I'm planning on replacing this auto-scroll
-     * implementation with a new one, so probably don't need to
-     * spend much time analyzing the old one.
-     *
-     * This was added in r9966 along with the original auto-scroll
-     * implementation in 2009.
-     */
-    bool m_inMove;
-    /// Mouse position while moving converted to Scene Coords.
-    /**
-     * Set by slotDispatchMouseMove().  Used by
-     * ensureLastMouseMoveVisible() to do auto scrolling.
-     */
-    QPointF m_lastMouseMoveScenePos;
 
 };
 

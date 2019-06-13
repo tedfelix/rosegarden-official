@@ -128,8 +128,7 @@ MatrixWidget::MatrixWidget(bool drumMode) :
     m_tempoRuler(nullptr),
     m_topStandardRuler(nullptr),
     m_bottomStandardRuler(nullptr),
-    m_referenceScale(nullptr),
-    m_inMove(false)
+    m_referenceScale(nullptr)
 {
     //RG_DEBUG << "ctor";
 
@@ -300,9 +299,6 @@ MatrixWidget::MatrixWidget(bool drumMode) :
     connect(m_pianoView, &Panned::wheelEventReceived,
             m_view, &Panned::slotEmulateWheelEvent);
 
-    connect(m_controlsWidget, &ControlRulerWidget::dragScroll,
-            this, &MatrixWidget::slotEnsureTimeVisible);
-    
     m_toolBox = new MatrixToolBox(this);
 
     // Relay context help from matrix tools
@@ -466,14 +462,9 @@ MatrixWidget::setSegments(RosegardenDocument *document,
     m_bottomStandardRuler->connectRulerToDocPointer(document);
 
     connect(m_topStandardRuler, SIGNAL(dragPointerToPosition(timeT)),
-            this, SLOT(slotPointerPositionChanged(timeT)));
+            this, SLOT(slotStandardRulerDrag(timeT)));
     connect(m_bottomStandardRuler, SIGNAL(dragPointerToPosition(timeT)),
-            this, SLOT(slotPointerPositionChanged(timeT)));
-
-    connect(m_topStandardRuler->getLoopRuler(), &LoopRuler::dragLoopToPosition,
-            this, &MatrixWidget::slotEnsureTimeVisible);
-    connect(m_bottomStandardRuler->getLoopRuler(), &LoopRuler::dragLoopToPosition,
-            this, &MatrixWidget::slotEnsureTimeVisible);
+            this, SLOT(slotStandardRulerDrag(timeT)));
 
     connect(m_document, SIGNAL(pointerPositionChanged(timeT)),
             this, SLOT(slotPointerPositionChanged(timeT)));
@@ -784,7 +775,7 @@ MatrixWidget::previousSegment()
     Segment *s = m_scene->getPriorSegment();
     if (s)
         m_scene->setCurrentSegment(s);
-    slotPointerPositionChanged(m_document->getComposition().getPosition(), false);
+    updatePointer(m_document->getComposition().getPosition());
     updateSegmentChangerBackground();
 }
 
@@ -797,7 +788,7 @@ MatrixWidget::nextSegment()
     Segment *s = m_scene->getNextSegment();
     if (s)
         m_scene->setCurrentSegment(s);
-    slotPointerPositionChanged(m_document->getComposition().getPosition(), false);
+    updatePointer(m_document->getComposition().getPosition());
     updateSegmentChangerBackground();
 }
 
@@ -849,52 +840,24 @@ MatrixWidget::slotDispatchMouseMove(const MatrixMouseEvent *e)
     if (!m_currentTool)
         return;
 
-    if (m_inMove) {
-        m_lastMouseMoveScenePos = QPointF(e->sceneX, e->sceneY);
-        m_inMove = false;
-        return;
-    }
-
     MatrixTool::FollowMode followMode = m_currentTool->handleMouseMove(e);
 
     if (followMode != MatrixTool::NoFollow) {
-        m_lastMouseMoveScenePos = QPointF(e->sceneX, e->sceneY);
-        m_inMove = true;
-        // Auto-scroll now.
-        ensureLastMouseMoveVisible();
-        // And in 100msecs.
-        QTimer::singleShot(100, this,
-                           &MatrixWidget::ensureLastMouseMoveVisible);
-        m_inMove = false;
+        // Auto-scroll
     }
-}
-
-void
-MatrixWidget::ensureLastMouseMoveVisible()
-{
-    m_inMove = true;
-
-    QPointF pos = m_lastMouseMoveScenePos;
-
-    if (m_scene)
-        m_scene->constrainToSegmentArea(pos);
-
-    // Auto-scroll.
-    m_view->ensureVisible(QRectF(pos, pos));
-
-    m_inMove = false;
 }
 
 void
 MatrixWidget::slotEnsureTimeVisible(timeT t)
 {
-    m_inMove = true;
     QPointF pos = m_view->mapToScene(0,m_view->height()/2);
+
     pos.setX(m_scene->getRulerScale()->getXForTime(t));
+
     if (m_scene)
         m_scene->constrainToSegmentArea(pos);
+
     m_view->ensureVisible(QRectF(pos, pos));
-    m_inMove = false;
 }
 
 void
@@ -1096,49 +1059,49 @@ MatrixWidget::slotHScrollBarRangeChanged(int min, int max)
 }
 
 void
-MatrixWidget::slotPointerPositionChanged(timeT t, bool moveView)
+MatrixWidget::updatePointer(timeT t)
 {
-    QObject *s = sender();
-    bool fromDocument = (s == m_document);
-
     if (!m_scene)
         return;
 
-    double sceneX = m_scene->getRulerScale()->getXForTime(t);
+    // Convert to scene X coords.
+    double pointerX = m_scene->getRulerScale()->getXForTime(t);
 
-    // Find the limits of the current segment
-    Segment *currentSeg = getCurrentSegment();
-    if (currentSeg && !moveView) {
-        double segSceneTime = m_scene->getRulerScale()->getXForTime(
-                currentSeg->getStartTime());
-        if (segSceneTime > sceneX) {
-            // Move pointer to start of current segment
-            sceneX = segSceneTime;
-        } else {
-            segSceneTime = m_scene->getRulerScale()->getXForTime(
-                    currentSeg->getEndMarkerTime());
-            if (segSceneTime < sceneX) {
-                   sceneX = segSceneTime;
-            }
-        }
-    }
-    
-    // Never move the pointer outside the scene (else the scene will grow)
-    double x1 = m_scene->sceneRect().x();
-    double x2 = x1 + m_scene->sceneRect().width();
+    // Compute the limits of the scene.
+    double sceneXMin = m_scene->sceneRect().left();
+    double sceneXMax = m_scene->sceneRect().right();
 
-    if ((sceneX < x1)  ||  (sceneX > x2)) {
+    // If the pointer has gone outside the limits
+    if (pointerX < sceneXMin  ||  sceneXMax < pointerX) {
+        // Never move the pointer outside the scene (else the scene will grow)
         m_view->hidePositionPointer();
         m_hpanner->slotHidePositionPointer();
     } else {
-        m_view->showPositionPointer(sceneX);
-        m_hpanner->slotShowPositionPointer(sceneX);
+        m_view->showPositionPointer(pointerX);
+        m_hpanner->slotShowPositionPointer(pointerX);
     }
+}
 
-    if (m_playTracking  ||  !fromDocument) {
-        if (moveView)
-            m_view->ensurePositionPointerInView(fromDocument);
-    }
+void
+MatrixWidget::slotPointerPositionChanged(timeT t)
+{
+    // ??? We don't really need "t".  We could just use
+    //     m_document->getComposition().getPosition().
+
+    updatePointer(t);
+
+    // Auto-scroll
+
+    if (m_playTracking)
+        m_view->ensurePositionPointerInView(true);  // page
+}
+
+void
+MatrixWidget::slotStandardRulerDrag(timeT t)
+{
+    updatePointer(t);
+
+    // ??? Need auto-scroll.
 }
 
 void
@@ -1556,28 +1519,17 @@ MatrixWidget::showInitialPointer()
     if (!m_scene)
         return;
 
-    timeT t = getCurrentSegment()->getStartTime();
-
-    double sceneX = m_scene->getRulerScale()->getXForTime(t);
-
-    // Never move the pointer outside the scene (else the scene will grow)
-    double x1 = m_scene->sceneRect().x();
-    double x2 = x1 + m_scene->sceneRect().width();
-
-    if ((sceneX < x1)  ||  (sceneX > x2)) {
-        // Place insertion marker at begining of scene.
-        m_view->showPositionPointer(x1);
-        m_hpanner->slotShowPositionPointer(x1);
-    } else {
-        m_view->showPositionPointer(sceneX);
-        m_hpanner->slotShowPositionPointer(sceneX);
-    }
+    updatePointer(m_document->getComposition().getPosition());
 
     // QGraphicsView usually defaults to the center.  We want to
     // start at the left center.
     // Note: This worked fine at the end of setSegments() as well.
     //       This feels like a better place.  Especially since we
     //       might want to scroll to where the pointer is.
+    // ??? Probably better to scroll left/right so that the beginning
+    //     of the selected Segment is at the left edge.  That's a bit
+    //     tricky, but if we don't do that, the user might end up someplace
+    //     unexpected when editing multiple segments.
     m_view->centerOn(QPointF(0, m_view->sceneRect().center().y()));
 }
 
