@@ -15,6 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[MatrixPainter]"
+
 #include "MatrixPainter.h"
 
 #include "base/BaseProperties.h"
@@ -63,30 +65,24 @@ void MatrixPainter::handleEventRemoved(Event *event)
     }
 }
 
-
-
-void MatrixPainter::handleMidButtonPress(const MatrixMouseEvent *e)
+void MatrixPainter::handleMidButtonPress(const MatrixMouseEvent * /*event*/)
 {
     // note: middle button == third button (== left+right at the same time)
-    // pass
-    e = e;
 }
-
 
 void MatrixPainter::handleMouseDoubleClick(const MatrixMouseEvent *e){
     /**
     left double click with PainterTool : deletes MatrixElement
     **/
-    
-    MATRIX_DEBUG << "MatrixPainter::handleThridButtonPress : pitch = "
-            << e->pitch << ", time : " << e->time << endl;
-    
+
+    RG_DEBUG << "handleMouseDoubleClick(): pitch = " << e->pitch << ", time : " << e->time;
+
     m_currentViewSegment = e->viewSegment;
     if (!m_currentViewSegment) return;
 
     // Don't create an overlapping event on the same note on the same channel
     if (e->element) {
-        //RG_DEBUG << "MatrixPainter::handleLeftButtonPress : overlap with an other matrix element";
+        //RG_DEBUG << "handleMouseDoubleClick(): overlap with another matrix element";
         // In percussion matrix, we delete the existing event rather
         // than just ignoring it -- this is reasonable as the event
         // has no meaningful duration, so we can just toggle it on and
@@ -109,7 +105,7 @@ void MatrixPainter::handleMouseDoubleClick(const MatrixMouseEvent *e){
     
     int velocity = m_widget->getCurrentVelocity();
     
-    MATRIX_DEBUG << "velocity = " << velocity;
+    RG_DEBUG << "handleMouseDoubleClick(): velocity = " << velocity;
     
     m_clickTime = e->snappedLeftTime;
     
@@ -129,15 +125,14 @@ void MatrixPainter::handleMouseDoubleClick(const MatrixMouseEvent *e){
 
 void MatrixPainter::handleLeftButtonPress(const MatrixMouseEvent *e)
 {
-    MATRIX_DEBUG << "MatrixPainter::handleLeftButtonPress : pitch = "
-                 << e->pitch << ", time : " << e->time << endl;
+    RG_DEBUG << "handleLeftButtonPress(): pitch = " << e->pitch << ", time : " << e->time;
 
     m_currentViewSegment = e->viewSegment;
     if (!m_currentViewSegment) return;
 
     // Don't create an overlapping event on the same note on the same channel
     if (e->element) {
-        RG_DEBUG << "MatrixPainter::handleLeftButtonPress : overlap with an other matrix element";
+        RG_DEBUG << "handleLeftButtonPress(): overlap with another matrix element";
         // In percussion matrix, we delete the existing event rather
         // than just ignoring it -- this is reasonable as the event
         // has no meaningful duration, so we can just toggle it on and
@@ -159,7 +154,7 @@ void MatrixPainter::handleLeftButtonPress(const MatrixMouseEvent *e)
 
     int velocity = m_widget->getCurrentVelocity();
 
-    MATRIX_DEBUG << "velocity = " << velocity;
+    RG_DEBUG << "handleLeftButtonPress(): velocity = " << velocity;
 
     m_clickTime = e->snappedLeftTime;
 
@@ -174,8 +169,7 @@ void MatrixPainter::handleLeftButtonPress(const MatrixMouseEvent *e)
     ev->set<Int>(BaseProperties::PITCH, adjustedPitch);
     ev->set<Int>(BaseProperties::VELOCITY, velocity);
 
-    RG_DEBUG << "MATRIX PAINTER: I'm working from segment \"" << m_currentViewSegment->getSegment().getLabel() << "\""
-              << "  clicked pitch: " << e->pitch << " adjusted pitch: " << adjustedPitch;
+    RG_DEBUG << "handleLeftButtonPress(): I'm working from segment \"" << m_currentViewSegment->getSegment().getLabel() << "\"" << "  clicked pitch: " << e->pitch << " adjusted pitch: " << adjustedPitch;
 
     m_currentElement = new MatrixElement(m_scene, ev, m_widget->isDrumMode(), pitchOffset);
 
@@ -201,8 +195,7 @@ MatrixPainter::handleMouseMove(const MatrixMouseEvent *e)
     if (endTime == time) endTime = time + e->snapUnit;
     if (time > endTime) std::swap(time, endTime);
 
-    MATRIX_DEBUG << "MatrixPainter::handleMouseMove : pitch = "
-                 << e->pitch << "time = " << time << ", end time = " << endTime << endl;
+    //RG_DEBUG << "handleMouseMove(): pitch = " << e->pitch << "time = " << time << ", end time = " << endTime;
 
     using BaseProperties::PITCH;
 

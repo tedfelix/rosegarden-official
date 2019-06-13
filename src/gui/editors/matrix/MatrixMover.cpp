@@ -15,6 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[MatrixMover]"
+
 #include "MatrixMover.h"
 
 #include "base/BaseProperties.h"
@@ -66,7 +68,7 @@ MatrixMover::handleEventRemoved(Event *event)
 void
 MatrixMover::handleLeftButtonPress(const MatrixMouseEvent *e)
 {
-    MATRIX_DEBUG << "MatrixMover::handleLeftButtonPress() : snapped time = " << e->snappedLeftTime << ", el = " << e->element;
+    RG_DEBUG << "handleLeftButtonPress() : snapped time = " << e->snappedLeftTime << ", el = " << e->element;
 
     if (!e->element) return;
 
@@ -89,7 +91,7 @@ MatrixMover::handleLeftButtonPress(const MatrixMouseEvent *e)
     }
 
     if (!found) {
-        MATRIX_DEBUG << "Clicked element not owned by active segment.  Returning...";
+        RG_WARNING << "handleLeftButtonPress(): Clicked element not owned by active segment.  Returning...";
         return;
     }
 
@@ -180,8 +182,7 @@ MatrixMover::handleMouseMove(const MatrixMouseEvent *e)
 {
     if (!e) return NoFollow;
 
-    MATRIX_DEBUG << "MatrixMover::handleMouseMove() snapped time = "
-                 << e->snappedLeftTime << endl;
+    //RG_DEBUG << "handleMouseMove() snapped time = " << e->snappedLeftTime;
 
     setBasicContextHelp(e->modifiers & Qt::ControlModifier);
 
@@ -255,8 +256,7 @@ MatrixMover::handleMouseRelease(const MatrixMouseEvent *e)
 {
     if (!e) return;
 
-    MATRIX_DEBUG << "MatrixMover::handleMouseRelease() - newPitch = "
-                 << e->pitch << endl;
+    RG_DEBUG << "handleMouseRelease() - newPitch = " << e->pitch;
 
     if (!m_currentElement || !m_currentViewSegment) return;
 
