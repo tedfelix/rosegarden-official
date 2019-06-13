@@ -298,21 +298,13 @@ private:
     bool m_drumMode;
 
 
+    // Tools
+
     MatrixToolBox *m_toolBox; // I own this
     MatrixTool *m_currentTool; // Toolbox owns this
     void setTool(QString name);
     /// Used by the MatrixMover and MatrixPainter tools for preview notes.
     int m_currentVelocity;
-
-
-    /// Used by all rulers to make sure they are all zoomed to the same scale.
-    /**
-     * See MatrixScene::getReferenceScale().
-     */
-    ZoomableRulerScale *m_referenceScale;
-
-    bool m_inMove;
-    QPointF m_lastMouseMoveScenePos;
 
 
     // Zoom Area
@@ -327,11 +319,46 @@ private:
     QPushButton *m_reset;
 
 
+    // Rulers
+
     ChordNameRuler *m_chordNameRuler; // I own this
     TempoRuler *m_tempoRuler; // I own this
     StandardRuler *m_topStandardRuler; // I own this
     StandardRuler *m_bottomStandardRuler; // I own this
     ControlRulerWidget *m_controlsWidget; // I own this
+
+    /// Used by all rulers to make sure they are all zoomed to the same scale.
+    /**
+     * See MatrixScene::getReferenceScale().
+     */
+    ZoomableRulerScale *m_referenceScale;
+
+
+    // Auto-scroll
+
+    /// Currently moving the scene via ensureVisible().
+    /**
+     * Appears to be intended to make sure that any mouse movements
+     * that come in (slotDispatchMouseMove()) while the scene is
+     * moving result in m_lastMouseMoveScenePos being updated.
+     * However, it seems very unlikely that a mouse move event
+     * could sneak in while m_inMove is true.  The UI is
+     * single-threaded.  Maybe ensureVisible() pumps the message queue?
+     *
+     * At any rate, I'm planning on replacing this auto-scroll
+     * implementation with a new one, so probably don't need to
+     * spend much time analyzing the old one.
+     */
+    bool m_inMove;
+    /// Mouse position while moving converted to Scene Coords.
+    /**
+     * Set by slotDispatchMouseMove().  Used by
+     * slotEnsureLastMouseMoveVisible() to do auto scrolling.
+     */
+    QPointF m_lastMouseMoveScenePos;
+
+
+    // Miscellaneous
 
     bool m_hSliderHacked;
 

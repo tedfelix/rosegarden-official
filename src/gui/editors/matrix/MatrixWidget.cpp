@@ -132,8 +132,6 @@ MatrixWidget::MatrixWidget(bool drumMode) :
     m_toolBox(nullptr),
     m_currentTool(nullptr),
     m_currentVelocity(100),
-    m_referenceScale(nullptr),
-    m_inMove(false),
     m_lastZoomWasHV(true),
     m_lastH(0),
     m_lastV(0),
@@ -141,6 +139,8 @@ MatrixWidget::MatrixWidget(bool drumMode) :
     m_tempoRuler(nullptr),
     m_topStandardRuler(nullptr),
     m_bottomStandardRuler(nullptr),
+    m_referenceScale(nullptr),
+    m_inMove(false),
     m_hSliderHacked(false),
     m_lastNote(0),
     m_hoverNoteIsVisible(true)
@@ -855,7 +855,9 @@ MatrixWidget::slotDispatchMouseMove(const MatrixMouseEvent *e)
     if (mode != MatrixTool::NoFollow) {
         m_lastMouseMoveScenePos = QPointF(e->sceneX, e->sceneY);
         m_inMove = true;
+        // Do it now.
         slotEnsureLastMouseMoveVisible();
+        // And in 100msecs.
         QTimer::singleShot(100, this, &MatrixWidget::slotEnsureLastMouseMoveVisible);
         m_inMove = false;
     }
