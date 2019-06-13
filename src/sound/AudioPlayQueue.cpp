@@ -13,7 +13,10 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[AudioPlayQueue]"
+
 #include "AudioPlayQueue.h"
+
 #include "misc/Debug.h"
 #include "PlayableAudioFile.h"
 #include "base/Profiler.h"
@@ -62,7 +65,8 @@ AudioPlayQueue::AudioPlayQueue() :
 
 AudioPlayQueue::~AudioPlayQueue()
 {
-    std::cerr << "AudioPlayQueue::~AudioPlayQueue()" << std::endl;
+    RG_DEBUG << "dtor";
+
     clear();
 }
 
@@ -70,8 +74,7 @@ void
 AudioPlayQueue::addScheduled(PlayableAudioFile *file)
 {
     if (m_files.find(file) != m_files.end()) {
-        std::cerr << "WARNING: AudioPlayQueue::addScheduled("
-        << file << "): already in queue" << std::endl;
+        RG_WARNING << "WARNING: addScheduled(" << file << "): already in queue";
         return ;
     }
 
@@ -88,7 +91,7 @@ AudioPlayQueue::addScheduled(PlayableAudioFile *file)
     }
 
 #ifdef DEBUG_AUDIO_PLAY_QUEUE
-    std::cerr << "AudioPlayQueue[" << this << "]::addScheduled(" << file << "): start " << file->getStartTime() << ", end " << file->getEndTime() << ", slots: " << std::endl;
+    RG_DEBUG << "[" << this << "]::addScheduled(" << file << "): start " << file->getStartTime() << ", end " << file->getEndTime() << ", slots: ";
 #endif
 
     for (int i = startTime.sec; i <= endTime.sec; ++i) {
@@ -101,14 +104,13 @@ AudioPlayQueue::addScheduled(PlayableAudioFile *file)
             }
         }
 #ifdef DEBUG_AUDIO_PLAY_QUEUE
-        std::cerr << i << " ";
+        RG_DEBUG << "  " << i;
 #endif
 
     }
 
 #ifdef DEBUG_AUDIO_PLAY_QUEUE
-    std::cerr << std::endl << "(max buffers now "
-    << m_maxBuffers << ")" << std::endl;
+    RG_DEBUG << "  (max buffers now " << m_maxBuffers << ")";
 #endif
 }
 
@@ -116,14 +118,13 @@ void
 AudioPlayQueue::addUnscheduled(PlayableAudioFile *file)
 {
 #ifdef DEBUG_AUDIO_PLAY_QUEUE
-    std::cerr << "AudioPlayQueue[" << this << "]::addUnscheduled(" << file << "): start " << file->getStartTime() << ", end " << file->getEndTime() << ", instrument " << file->getInstrument() << std::endl;
+    RG_DEBUG << "[" << this << "]::addUnscheduled(" << file << "): start " << file->getStartTime() << ", end " << file->getEndTime() << ", instrument " << file->getInstrument();
 #endif
 
     m_unscheduled.push_back(file);
 
 #ifdef DEBUG_AUDIO_PLAY_QUEUE
-
-    std::cerr << "AudioPlayQueue[" << this << "]::addUnscheduled: now " << m_unscheduled.size() << " unscheduled files" << std::endl;
+    RG_DEBUG << "[" << this << "]::addUnscheduled: now " << m_unscheduled.size() << " unscheduled files";
 #endif
 
 }
@@ -132,7 +133,7 @@ void
 AudioPlayQueue::erase(PlayableAudioFile *file)
 {
 #ifdef DEBUG_AUDIO_PLAY_QUEUE
-    std::cerr << "AudioPlayQueue::erase(" << file << "): start " << file->getStartTime() << ", end " << file->getEndTime() << std::endl;
+    RG_DEBUG << "erase(" << file << "): start " << file->getStartTime() << ", end " << file->getEndTime();
 #endif
 
     FileSet::iterator fi = m_files.find(file);
@@ -189,7 +190,7 @@ void
 AudioPlayQueue::clear()
 {
 #ifdef DEBUG_AUDIO_PLAY_QUEUE
-    std::cerr << "AudioPlayQueue::clear()" << std::endl;
+    RG_DEBUG << "clear()";
 #endif
 
     while (m_files.begin() != m_files.end()) {
@@ -249,8 +250,7 @@ AudioPlayQueue::getPlayingFiles(const RealTime &sliceStart,
                 continue;
 
 #ifdef FINE_DEBUG_AUDIO_PLAY_QUEUE
-
-            std::cerr << "... found " << f << " in slot " << i << std::endl;
+            RG_DEBUG << "getPlayingFiles(): found " << f << " in slot " << i;
 #endif
 
             playing.insert(f);
@@ -268,9 +268,7 @@ AudioPlayQueue::getPlayingFiles(const RealTime &sliceStart,
 
 #ifdef FINE_DEBUG_AUDIO_PLAY_QUEUE
     if (playing.size() > 0) {
-        std::cerr << "AudioPlayQueue::getPlayingFiles(" << sliceStart << ","
-        << sliceDuration << "): total "
-        << playing.size() << " files" << std::endl;
+        RG_DEBUG << "getPlayingFiles(" << sliceStart << "," << sliceDuration << "): total " << playing.size() << " files";
     }
 #endif
 }
@@ -315,11 +313,8 @@ AudioPlayQueue::getPlayingFilesForInstrument(const RealTime &sliceStart,
                 continue;
 
 #ifdef FINE_DEBUG_AUDIO_PLAY_QUEUE
-
             if (!printed) {
-                std::cerr << "AudioPlayQueue::getPlayingFilesForInstrument(" << sliceStart
-                << ", " << sliceDuration << ", " << instrumentId << ")"
-                << std::endl;
+                RG_DEBUG << "getPlayingFilesForInstrument(" << sliceStart << ", " << sliceDuration << ", " << instrumentId << ")";
                 printed = true;
             }
 #endif
@@ -328,13 +323,11 @@ AudioPlayQueue::getPlayingFilesForInstrument(const RealTime &sliceStart,
                     f->getEndTime() <= sliceStart) {
 
 #ifdef FINE_DEBUG_AUDIO_PLAY_QUEUE
-                std::cerr << "... rejected " << f << " in slot " << i << std::endl;
+                RG_DEBUG << "  rejected " << f << " in slot " << i;
                 if (f->getStartTime() > sliceEnd) {
-                    std::cerr << "(" << f->getStartTime() << " > " << sliceEnd
-                    << ")" << std::endl;
+                    RG_DEBUG << "  (" << f->getStartTime() << " > " << sliceEnd << ")";
                 } else {
-                    std::cerr << "(" << f->getEndTime() << " <= " << sliceStart
-                    << ")" << std::endl;
+                    RG_DEBUG << "  (" << f->getEndTime() << " <= " << sliceStart << ")";
                 }
 #endif
 
@@ -342,9 +335,7 @@ AudioPlayQueue::getPlayingFilesForInstrument(const RealTime &sliceStart,
             }
 
 #ifdef FINE_DEBUG_AUDIO_PLAY_QUEUE
-            std::cerr << "... found " << f << " in slot " << i << " ("
-            << f->getStartTime() << " -> " << f->getEndTime()
-            << ")" << std::endl;
+            RG_DEBUG << "  found " << f << " in slot " << i << " (" << f->getStartTime() << " -> " << f->getEndTime() << ")";
 #endif
 
             size_t j = 0;
@@ -357,7 +348,7 @@ AudioPlayQueue::getPlayingFilesForInstrument(const RealTime &sliceStart,
 
             if (written >= size) {
 #ifdef FINE_DEBUG_AUDIO_PLAY_QUEUE
-                std::cerr << "No room to write it!" << std::endl;
+                RG_DEBUG << "  No room to write it!";
 #endif
 
                 break;
@@ -376,8 +367,7 @@ unscheduled:
 
         if (f->getInstrument() != instrumentId) {
 #ifdef FINE_DEBUG_AUDIO_PLAY_QUEUE
-            std::cerr << "rejecting unscheduled " << f << " as wrong instrument ("
-            << f->getInstrument() << " != " << instrumentId << ")" << std::endl;
+            RG_DEBUG << "  rejecting unscheduled " << f << " as wrong instrument (" << f->getInstrument() << " != " << instrumentId << ")";
 #endif
 
             continue;
@@ -385,9 +375,7 @@ unscheduled:
 
 #ifdef FINE_DEBUG_AUDIO_PLAY_QUEUE
         if (!printed) {
-            std::cerr << "AudioPlayQueue::getPlayingFilesForInstrument(" << sliceStart
-            << ", " << sliceDuration << ", " << instrumentId << ")"
-            << std::endl;
+            RG_DEBUG << "getPlayingFilesForInstrument(" << sliceStart << ", " << sliceDuration << ", " << instrumentId << ")";
             printed = true;
         }
 #endif
@@ -396,9 +384,7 @@ unscheduled:
                 f->getStartTime() + f->getDuration() > sliceStart) {
 
 #ifdef FINE_DEBUG_AUDIO_PLAY_QUEUE
-            std::cerr << "... found " << f << " in unscheduled list ("
-            << f->getStartTime() << " -> " << f->getEndTime()
-            << ")" << std::endl;
+            RG_DEBUG << "  found " << f << " in unscheduled list (" << f->getStartTime() << " -> " << f->getEndTime() << ")";
 #endif
 
             if (written >= size)
@@ -409,13 +395,11 @@ unscheduled:
 
         } else {
 
-            std::cerr << "... rejected " << f << " in unscheduled list" << std::endl;
+            RG_DEBUG << "  rejected " << f << " in unscheduled list";
             if (f->getStartTime() > sliceEnd) {
-                std::cerr << "(" << f->getStartTime() << " > " << sliceEnd
-                << ")" << std::endl;
+                RG_DEBUG << "  (" << f->getStartTime() << " > " << sliceEnd << ")";
             } else {
-                std::cerr << "(" << f->getEndTime() << " <= " << sliceStart
-                << ")" << std::endl;
+                RG_DEBUG << "  (" << f->getEndTime() << " <= " << sliceStart << ")";
             }
 #endif
 
@@ -424,8 +408,7 @@ unscheduled:
 
 #ifdef FINE_DEBUG_AUDIO_PLAY_QUEUE
     if (written > 0) {
-        std::cerr << "AudioPlayQueue::getPlayingFilesForInstrument: total "
-        << written << " files" << std::endl;
+        RG_DEBUG << "getPlayingFilesForInstrument(): total " << written << " files";
     }
 #endif
 
@@ -436,7 +419,7 @@ bool
 AudioPlayQueue::haveFilesForInstrument(InstrumentId instrumentId) const
 {
 #ifdef FINE_DEBUG_AUDIO_PLAY_QUEUE
-    std::cerr << "AudioPlayQueue::haveFilesForInstrument(" << instrumentId << ")...";
+    RG_DEBUG << "haveFilesForInstrument(" << instrumentId << ")...";
 #endif
 
     unsigned int index = instrumentId2Index(instrumentId);
@@ -444,7 +427,7 @@ AudioPlayQueue::haveFilesForInstrument(InstrumentId instrumentId) const
     if (index < (unsigned int)m_instrumentIndex.size() &&
             !m_instrumentIndex[index].empty()) {
 #ifdef FINE_DEBUG_AUDIO_PLAY_QUEUE
-        std::cerr << " yes (scheduled)" << std::endl;
+        RG_DEBUG << "  yes (scheduled)";
 #endif
 
         return true;
@@ -455,7 +438,7 @@ AudioPlayQueue::haveFilesForInstrument(InstrumentId instrumentId) const
         PlayableAudioFile *file = *fli;
         if (file->getInstrument() == instrumentId) {
 #ifdef FINE_DEBUG_AUDIO_PLAY_QUEUE
-            std::cerr << " yes (unscheduled)" << std::endl;
+            RG_DEBUG << "  yes (unscheduled)";
 #endif
 
             return true;
@@ -463,7 +446,7 @@ AudioPlayQueue::haveFilesForInstrument(InstrumentId instrumentId) const
     }
 
 #ifdef FINE_DEBUG_AUDIO_PLAY_QUEUE
-    std::cerr << " no" << std::endl;
+    RG_DEBUG << "  no";
 #endif
 
     return false;
@@ -473,7 +456,7 @@ const AudioPlayQueue::FileSet &
 AudioPlayQueue::getAllScheduledFiles() const
 {
 #ifdef DEBUG_AUDIO_PLAY_QUEUE
-    std::cerr << "AudioPlayQueue[" << this << "]::getAllScheduledFiles: have " << m_files.size() << " files" << std::endl;
+    RG_DEBUG << "[" << this << "]::getAllScheduledFiles(): have " << m_files.size() << " files";
 #endif
 
     return m_files;
@@ -483,7 +466,7 @@ const AudioPlayQueue::FileList &
 AudioPlayQueue::getAllUnscheduledFiles() const
 {
 #ifdef DEBUG_AUDIO_PLAY_QUEUE
-    std::cerr << "AudioPlayQueue[" << this << "]::getAllUnscheduledFiles: have " << m_unscheduled.size() << " files" << std::endl;
+    RG_DEBUG << "[" << this << "]::getAllUnscheduledFiles(): have " << m_unscheduled.size() << " files";
 #endif
 
     return m_unscheduled;
