@@ -323,6 +323,7 @@ set(rg_CPPS
   gui/application/LircCommander.cpp
   gui/application/RosegardenMainWindow.cpp
   gui/application/LircClient.cpp
+  gui/general/AutoScroller.cpp
   gui/general/Spline.cpp
   gui/general/IconLoader.cpp
   gui/general/PixmapFunctions.cpp
