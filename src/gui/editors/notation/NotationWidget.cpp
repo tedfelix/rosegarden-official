@@ -399,8 +399,8 @@ NotationWidget::setSegments(RosegardenDocument *document,
     }
 
     if (m_document) {
-        disconnect(m_document, SIGNAL(pointerPositionChanged(timeT)),
-                   this, SLOT(slotPointerPositionChanged(timeT)));
+        disconnect(m_document, &RosegardenDocument::pointerPositionChanged,
+                   this, &NotationWidget::slotPointerPositionChanged);
     }
 
     m_document = document;
@@ -478,8 +478,8 @@ NotationWidget::setSegments(RosegardenDocument *document,
     connect(m_scene, &NotationScene::layoutUpdated,
             m_controlRulerWidget, &ControlRulerWidget::slotUpdateRulers);
 
-    connect(m_scene, SIGNAL(selectionChanged(EventSelection *)),
-            m_controlRulerWidget, SLOT(slotSelectionChanged(EventSelection *)));
+    connect(m_scene, &NotationScene::selectionChanged,
+            m_controlRulerWidget, &ControlRulerWidget::slotSelectionChanged);
 
     connect(m_scene, &NotationScene::currentViewSegmentChanged,
             m_controlRulerWidget, &ControlRulerWidget::slotSetCurrentViewSegment);
@@ -543,8 +543,8 @@ NotationWidget::setSegments(RosegardenDocument *document,
     connect(m_tempoRuler, &TempoRuler::mouseRelease,
             this, &NotationWidget::slotTRMouseRelease);
 
-    connect(m_document, SIGNAL(pointerPositionChanged(timeT)),
-            this, SLOT(slotPointerPositionChanged(timeT)));
+    connect(m_document, &RosegardenDocument::pointerPositionChanged,
+            this, &NotationWidget::slotPointerPositionChanged);
 
     m_topStandardRuler->connectRulerToDocPointer(document);
     m_bottomStandardRuler->connectRulerToDocPointer(document);

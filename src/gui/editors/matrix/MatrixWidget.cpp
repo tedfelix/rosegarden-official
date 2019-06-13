@@ -363,8 +363,8 @@ MatrixWidget::setSegments(RosegardenDocument *document,
                           std::vector<Segment *> segments)
 {
     if (m_document) {
-        disconnect(m_document, SIGNAL(pointerPositionChanged(timeT)),
-                   this, SLOT(slotPointerPositionChanged(timeT)));
+        disconnect(m_document, &RosegardenDocument::pointerPositionChanged,
+                   this, &MatrixWidget::slotPointerPositionChanged);
     }
 
     m_document = document;
@@ -435,8 +435,8 @@ MatrixWidget::setSegments(RosegardenDocument *document,
     connect(m_scene, &MatrixScene::currentViewSegmentChanged,
             m_controlsWidget, &ControlRulerWidget::slotSetCurrentViewSegment);
     
-    connect(m_scene, SIGNAL(selectionChanged(EventSelection *)),
-            m_controlsWidget, SLOT(slotSelectionChanged(EventSelection *)));
+    connect(m_scene, &MatrixScene::selectionChanged,
+            m_controlsWidget, &ControlRulerWidget::slotSelectionChanged);
 
     connect(m_controlsWidget, &ControlRulerWidget::childRulerSelectionChanged,
             m_scene, &MatrixScene::slotRulerSelectionChanged);
@@ -474,10 +474,10 @@ MatrixWidget::setSegments(RosegardenDocument *document,
     m_topStandardRuler->connectRulerToDocPointer(document);
     m_bottomStandardRuler->connectRulerToDocPointer(document);
 
-    connect(m_topStandardRuler, SIGNAL(dragPointerToPosition(timeT)),
-            this, SLOT(slotStandardRulerDrag(timeT)));
-    connect(m_bottomStandardRuler, SIGNAL(dragPointerToPosition(timeT)),
-            this, SLOT(slotStandardRulerDrag(timeT)));
+    connect(m_topStandardRuler, &StandardRuler::dragPointerToPosition,
+            this, &MatrixWidget::slotStandardRulerDrag);
+    connect(m_bottomStandardRuler, &StandardRuler::dragPointerToPosition,
+            this, &MatrixWidget::slotStandardRulerDrag);
 
     connect(m_topStandardRuler->getLoopRuler(), &LoopRuler::startMouseMove,
             this, &MatrixWidget::slotSRStartMouseMove);
@@ -493,8 +493,8 @@ MatrixWidget::setSegments(RosegardenDocument *document,
     connect(m_tempoRuler, &TempoRuler::mouseRelease,
             this, &MatrixWidget::slotTRMouseRelease);
 
-    connect(m_document, SIGNAL(pointerPositionChanged(timeT)),
-            this, SLOT(slotPointerPositionChanged(timeT)));
+    connect(m_document, &RosegardenDocument::pointerPositionChanged,
+            this, &MatrixWidget::slotPointerPositionChanged);
 
     m_chordNameRuler->setReady();
 
