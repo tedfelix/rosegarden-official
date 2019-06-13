@@ -235,18 +235,6 @@ void RosegardenScrollView::stopAutoScroll()
     m_autoScrolling = false;
 }
 
-void RosegardenScrollView::slotStartAutoScroll(int followMode)
-{
-    setFollowMode(followMode);
-    startAutoScroll();
-}
-
-void RosegardenScrollView::slotStopAutoScroll()
-{
-    m_autoScrollTimer.stop();
-    m_autoScrolling = false;
-}
-
 namespace
 {
     // We'll hit MaxScrollRate at this distance outside the viewport.
@@ -273,27 +261,7 @@ double RosegardenScrollView::distanceToScrollRate(int distance)
 void
 RosegardenScrollView::doAutoScroll()
 {
-    // ??? This code is duplicated in two other places.  Might be time to
-    //     pull out an AutoScroller class.
-    //
-    //       1. MatrixWidget::doAutoScroll()
-    //       2. NotationWidget::doAutoScroll() (soon)
-
     const QPoint mousePos = viewport()->mapFromGlobal(QCursor::pos());
-
-    // ??? Why not just call startAutoScroll()?  Or even better, make
-    //     sure no one calls this for the purpose of starting auto-scroll
-    //     and get rid of this line.
-    //
-    //     It appears that TrackEditor calls this routine in response to
-    //     the two StandardRuler interactions (drag pointer and loop).
-    //     Re-implement StandardRuler auto-scroll in a way similar to
-    //     MatrixWidget.  Then we can get rid of this call.
-    //
-    // ??? Note also that we did not set m_autoScrolling to true.  So,
-    //     this is wrong.  Or, even worse, someone depends on this
-    //     incorrect behavior.
-    m_autoScrollTimer.start(AutoScrollTimerInterval);
 
     if (m_followMode & FOLLOW_HORIZONTAL) {
 

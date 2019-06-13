@@ -69,6 +69,8 @@ public:
             { m_followMode = i_followMode; }
     void stop();
 
+    bool isRunning() const  { return m_timer.isActive(); }
+
 private slots:
 
     void slotOnTimer();

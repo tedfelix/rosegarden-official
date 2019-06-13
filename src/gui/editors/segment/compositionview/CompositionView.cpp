@@ -1329,7 +1329,7 @@ void CompositionView::mousePressEvent(QMouseEvent *e)
 void CompositionView::mouseReleaseEvent(QMouseEvent *e)
 {
     // In case there is no tool, and auto scroll is running.
-    slotStopAutoScroll();
+    stopAutoScroll();
 
     if (m_currentTool)
         m_currentTool->mouseReleaseEvent(e);;

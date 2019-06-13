@@ -103,15 +103,6 @@ public:
      */
     void scrollVert(int y);
 
-public slots:
-    /// Handle top and bottom StandardRuler::startMouseMove() signals.
-    /**
-     * See AutoScroller.h for valid mask values.
-     */
-    void slotStartAutoScroll(FollowMode followMode);
-    /// Handle top and bottom StandardRuler::stopMouseMove() signals.
-    void slotStopAutoScroll();
-
 signals:
     /// Used by TrackEditor to keep TrackButtons the right size.
     void viewportResize();
