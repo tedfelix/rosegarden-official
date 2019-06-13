@@ -50,8 +50,13 @@ public:
     QSize sizeHint() const override;
     QSize minimumSizeHint() const override;
 
-    void drawHoverNote(int evPitch) override;
-    void hideHoverNote() override;
+    /// Draw a highlight to indicate the pitch that the mouse is hovering over.
+    /**
+     * For the PercussionPitchRuler, this is a reverse video highlight on
+     * the text.
+     */
+    void showHighlight(int evPitch) override;
+    void hideHighlight() override;
 
 protected:
     void paintEvent(QPaintEvent*) override;

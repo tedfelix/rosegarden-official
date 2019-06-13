@@ -38,8 +38,9 @@ public:
     QSize sizeHint() const override;
     QSize minimumSizeHint() const override;
 
-    virtual void drawHoverNote(int evPitch) = 0;
-    virtual void hideHoverNote() = 0;
+    /// Show a highlight to indicate where the mouse is hovering.
+    virtual void showHighlight(int evPitch) = 0;
+    virtual void hideHighlight() = 0;
 
 signals:
 

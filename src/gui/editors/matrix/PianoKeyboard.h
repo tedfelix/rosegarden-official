@@ -44,12 +44,13 @@ public:
     QSize sizeHint() const override;
     QSize minimumSizeHint() const override;
 
-    /* 
-     * We want to be able to call this from the matrix view
+    /// Draw a highlight to indicate the pitch that the mouse is hovering over.
+    /**
+     * For the PianoKeyboard, this is a small, usually orange rectangle over
+     * the key.
      */
-    void drawHoverNote(int evPitch) override;
-
-    void hideHoverNote() override;
+    void showHighlight(int evPitch) override;
+    void hideHighlight() override;
 
 protected:
 
@@ -79,8 +80,8 @@ protected:
     bool                      m_selecting;
 
     // highlight element on the keyboard
-    QWidget                  *m_hoverHighlight;
-    int                       m_lastHoverHighlight;
+    QWidget                  *m_highlight;
+    int                       m_lastHighlightPitch;
     int                       m_lastKeyPressed;
 };
 

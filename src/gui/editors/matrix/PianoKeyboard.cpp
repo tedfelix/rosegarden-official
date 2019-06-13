@@ -15,6 +15,7 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[PianoKeyboard]"
 
 #include "PianoKeyboard.h"
 #include "misc/Debug.h"
@@ -45,15 +46,15 @@ PianoKeyboard::PianoKeyboard(QWidget *parent, int keys)
         m_blackKeySize(24, 8),
         m_nbKeys(keys),
         m_mouseDown(false),
-        m_hoverHighlight(new QWidget(this)),
-        m_lastHoverHighlight(-1),
+        m_highlight(new QWidget(this)),
+        m_lastHighlightPitch(-1),
         m_lastKeyPressed(0)
 {
-    m_hoverHighlight->hide();
-    QPalette hoverHighlightPalette = m_hoverHighlight->palette();
-    hoverHighlightPalette.setColor(QPalette::Window, GUIPalette::getColour(GUIPalette::MatrixKeyboardFocus));
-    m_hoverHighlight->setPalette(hoverHighlightPalette);
-    m_hoverHighlight->setAutoFillBackground(true);
+    m_highlight->hide();
+    QPalette highlightPalette = m_highlight->palette();
+    highlightPalette.setColor(QPalette::Window, GUIPalette::getColour(GUIPalette::MatrixKeyboardFocus));
+    m_highlight->setPalette(highlightPalette);
+    m_highlight->setAutoFillBackground(true);
 
     computeKeyPos();
     setMouseTracking(true);
@@ -169,12 +170,12 @@ void PianoKeyboard::paintEvent(QPaintEvent*)
 
 void PianoKeyboard::enterEvent(QEvent *)
 {
-    //drawHoverNote(e->y());
+    //showHighlight(e->y());
 }
 
 void PianoKeyboard::leaveEvent(QEvent*)
 {
-    hideHoverNote();
+    hideHighlight();
 
     int pos = mapFromGlobal( cursor().pos() ).x();
     if ( pos > m_keySize.width() - 5 || pos < 0 ) { // bit of a hack
@@ -182,11 +183,12 @@ void PianoKeyboard::leaveEvent(QEvent*)
     }
 }
 
-void PianoKeyboard::drawHoverNote(int evPitch)
+void PianoKeyboard::showHighlight(int evPitch)
 {
-    if (m_lastHoverHighlight != evPitch) {
-        //MATRIX_DEBUG << "PianoKeyboard::drawHoverNote : note = " << evPitch;
-        m_lastHoverHighlight = evPitch;
+    if (m_lastHighlightPitch != evPitch) {
+        //RG_DEBUG << "showHighlight() : note = " << evPitch;
+
+        m_lastHighlightPitch = evPitch;
 
         int count = 0;
         std::vector<unsigned int>::iterator it;
@@ -235,9 +237,9 @@ void PianoKeyboard::drawHoverNote(int evPitch)
 
                 }
 
-                m_hoverHighlight->setFixedSize(width, 4);
-                m_hoverHighlight->move(3, yPos);
-                m_hoverHighlight->show();
+                m_highlight->setFixedSize(width, 4);
+                m_highlight->move(3, yPos);
+                m_highlight->show();
 
                 return ;
             }
@@ -245,10 +247,10 @@ void PianoKeyboard::drawHoverNote(int evPitch)
     }
 }
 
-void PianoKeyboard::hideHoverNote()
+void PianoKeyboard::hideHighlight()
 {
-    m_hoverHighlight->hide();
-    m_lastHoverHighlight = -1;
+    m_highlight->hide();
+    m_lastHighlightPitch = -1;
 }
 
 void PianoKeyboard::mouseMoveEvent(QMouseEvent* e)

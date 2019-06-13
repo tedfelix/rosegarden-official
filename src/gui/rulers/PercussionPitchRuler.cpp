@@ -15,6 +15,7 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[PercussionPitchRuler]"
 
 #include <QMouseEvent>
 #include "PercussionPitchRuler.h"
@@ -142,13 +143,13 @@ void PercussionPitchRuler::leaveEvent(QEvent*)
     update();
 }
 
-void PercussionPitchRuler::drawHoverNote(int evPitch)
+void PercussionPitchRuler::showHighlight(int evPitch)
 {
     m_hoverNotePitch = evPitch;
     update();
 }
 
-void PercussionPitchRuler::hideHoverNote()
+void PercussionPitchRuler::hideHighlight()
 {
     // Force current hover note to be unhilighted
     m_hoverNotePitch = -1;

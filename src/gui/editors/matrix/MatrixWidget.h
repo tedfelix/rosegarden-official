@@ -381,7 +381,7 @@ private:
 
     /// Hide pitch ruler hover note when mouse move is not related to a pitch change.
     /**
-     * ??? I don't ever see a hover note.  Is it broken?
+     * ??? Rename: m_highlightVisible;
      */
     bool m_hoverNoteIsVisible;
 
