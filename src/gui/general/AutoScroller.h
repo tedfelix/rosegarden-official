@@ -35,18 +35,19 @@ constexpr int FOLLOW_VERTICAL = 2;  // Was FollowVertical
 
 /// Handle auto-scroll behavior when the mouse is dragged outside a window.
 /**
- * Currently, this behavior is spread around the system in doAutoScroll()
- * routines.  This class should be able to eliminate most of that copy/paste
- * code.
+ * See RosegardenScrollView::doAutoScroll().
  *
- * See RosegardenScrollView::doAutoScroll(), MatrixWidget::doAutoScroll(),
- * and the upcoming NotationWidget::doAutoScroll().
+ * This is really nothing more than an addition to QAbstractScrollArea.
+ * Perhaps we should consider generalizing it (offer fixed/variable in all
+ * directions, edge of screen detection in all directions, etc...) and creating
+ * an AutoScrollArea that adds all this.  Then we can derive from that.
  */
 class AutoScroller : public QObject
 {
     Q_OBJECT
 
 public:
+
     AutoScroller();
 
     // Setup
@@ -69,6 +70,7 @@ public:
     void stop();
 
 private slots:
+
     void slotOnTimer();
 
 private:
