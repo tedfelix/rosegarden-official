@@ -334,7 +334,7 @@ ControlRulerWidget::slotSetPannedRect(QRectF pr)
 {
     // Current Panned.cpp code uses QGraphicsView::centreOn this point
     ///TODO Note these rectangles are currently wrong
-    RG_DEBUG << "ControlRulerWidget::slotSetPannedRect - " << pr;
+    //RG_DEBUG << "slotSetPannedRect():" << pr;
 
     // Ruler widgets should draw this region (using getTimeForX from the segment) so pass the rectangle on
     // Provided rectangle should be centered on current widget size
