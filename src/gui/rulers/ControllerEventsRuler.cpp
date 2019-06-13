@@ -82,14 +82,15 @@ ControllerEventsRuler::ControllerEventsRuler(ViewSegment *segment,
 
     setMenuName("controller_events_ruler_menu");
 
-    RG_DEBUG << "ControllerEventsRuler::ControllerEventsRuler - " << controller->getName();
-    RG_DEBUG << "Segment from " << segment->getSegment().getStartTime() << " to " << segment->getSegment().getEndTime();
-    RG_DEBUG << "Position x = " << rulerScale->getXForTime(segment->getSegment().getStartTime()) << " to " << rulerScale->getXForTime(segment->getSegment().getEndTime());
+    RG_DEBUG << "ctor:" << controller->getName();
+    RG_DEBUG << "  Segment from " << segment->getSegment().getStartTime() << " to " << segment->getSegment().getEndTime();
+    RG_DEBUG << "  Position x = " << rulerScale->getXForTime(segment->getSegment().getStartTime()) << " to " << rulerScale->getXForTime(segment->getSegment().getEndTime());
 }
 
 ControllerEventsRuler::~ControllerEventsRuler()
 {
-    RG_DEBUG << "ControllerEventsRuler::~ControllerEventsRuler()";
+    RG_DEBUG << "dtor";
+
     if (m_segment) m_segment->removeObserver(this);
 }
 
@@ -109,8 +110,8 @@ bool ControllerEventsRuler::isOnThisRuler(Event *event)
             result = true;
         }
     }
-    RG_DEBUG << "ControllerEventsRuler::isOnThisRuler - "
-        << "Event type: " << event->getType() << " Controller type: " << m_controller->getType();
+
+    //RG_DEBUG << "isOnThisRuler():" << "Event type: " << event->getType() << " Controller type: " << m_controller->getType();
 
     return result;
 }
@@ -128,7 +129,8 @@ ControllerEventsRuler::setSegment(Segment *segment)
 void
 ControllerEventsRuler::setViewSegment(ViewSegment *segment)
 {
-    RG_DEBUG << "ControllerEventsRuler::setSegment(" << segment << ")";
+    RG_DEBUG << "setViewSegment(" << segment << ")";
+
     setSegment(&segment->getSegment());
 }
 
@@ -353,7 +355,8 @@ ControlItem* ControllerEventsRuler::addControlItem2(float x, float y)
 void
 ControllerEventsRuler::addControlLine(float x1, float y1, float x2, float y2, bool eraseExistingControllers)
 {
-    RG_DEBUG << "ControllerEventsRuler::addControlLine()";
+    RG_DEBUG << "addControlLine()";
+
     clearSelectedItems();
 
     // get a timeT for one end point of our line
@@ -403,10 +406,9 @@ ControllerEventsRuler::addControlLine(float x1, float y1, float x2, float y2, bo
     long rise = destinationValue - originValue;
     timeT run = destinationTime - originTime;
 
-    RG_DEBUG << "Drawing a line from origin time: " << originTime << " to " << destinationTime
-              << " rising from: " << originValue << " to " << destinationValue 
-              << " with a rise of: " << rise << " and run of: " << run
-             ;
+    RG_DEBUG << "addControlLine(): Drawing a line from origin time: " << originTime << " to " << destinationTime
+             << " rising from: " << originValue << " to " << destinationValue
+             << " with a rise of: " << rise << " and run of: " << run;
 
     // avoid divide by 0 potential, rise is always at least 1
     if (rise == 0) rise = 1;
@@ -431,7 +433,7 @@ ControllerEventsRuler::addControlLine(float x1, float y1, float x2, float y2, bo
     if (m_controller) {
         controllerNumber = m_controller->getControllerValue();
     } else {
-        RG_WARNING << "No controller number set.  Time to panic!  Line drawing aborted.";
+        RG_WARNING << "addControlLine(): No controller number set.  Time to panic!  Line drawing aborted.";
         return;
     }
 
@@ -470,7 +472,7 @@ ControllerEventsRuler::addControlLine(float x1, float y1, float x2, float y2, bo
         if (rising && intermediateValue > destinationValue) failsafe = true;
         else if (!rising && intermediateValue < destinationValue) failsafe = true;
 
-//        RG_DEBUG << "creating event at time: " << i << " of value: " << intermediateValue;
+//        RG_DEBUG << "addControlLine(): creating event at time: " << i << " of value: " << intermediateValue;
 //        continue;
 
         Event *controllerEvent = new Event(m_controller->getType(), (timeT) i);
@@ -491,7 +493,7 @@ ControllerEventsRuler::addControlLine(float x1, float y1, float x2, float y2, bo
                 i != originTime           &&
                 i != destinationTime) continue;
 
-            RG_DEBUG << "intermediate value: " << intermediateValue;
+            RG_DEBUG << "addControlLine(): intermediate value: " << intermediateValue;
 
             // Convert to PitchBend MSB/LSB
             int lsb = intermediateValue & 0x7f;
@@ -500,7 +502,7 @@ ControllerEventsRuler::addControlLine(float x1, float y1, float x2, float y2, bo
             controllerEvent->set<Rosegarden::Int>(Rosegarden::PitchBend::LSB, lsb);
         }
 
-        if (failsafe) RG_DEBUG << "intermediate value: " << intermediateValue << " exceeded target: " << destinationValue;
+        if (failsafe) RG_DEBUG << "addControlLine(): intermediate value: " << intermediateValue << " exceeded target: " << destinationValue;
 
         macro->addCommand(new EventInsertionCommand (*m_segment, controllerEvent));
     }
@@ -555,8 +557,7 @@ Event *ControllerEventsRuler::insertEvent(float x, float y)
 
     long initialValue = yToValue(y);
 
-    RG_DEBUG << "ControllerEventsRuler::insertControllerEvent() : inserting event at"
-        << insertTime << "- initial value =" << initialValue;
+    RG_DEBUG << "insertEvent(): inserting event at" << insertTime << "- initial value =" << initialValue;
 
     // ask controller number to user
     long number = 0;
@@ -615,7 +616,7 @@ void ControllerEventsRuler::eraseEvent(Event *event)
 
 void ControllerEventsRuler::eraseControllerEvent()
 {
-    RG_DEBUG << "ControllerEventsRuler::eraseControllerEvent() : deleting selected events\n";
+    RG_DEBUG << "eraseControllerEvent(): deleting selected events";
 
     // This command uses the SegmentObserver mechanism to bring the control item list up to date
     ControlRulerEventEraseCommand* command =
