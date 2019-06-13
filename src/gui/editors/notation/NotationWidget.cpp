@@ -926,7 +926,10 @@ NotationWidget::slotDispatchMousePress(const NotationMouseEvent *e)
 
     //!!! todo: handle equivalents of NotationView::slotXXXItemPressed
 
-    if (e->buttons & Qt::LeftButton) {
+    // Check for left and right *first*
+    if ((e->buttons & Qt::LeftButton)  &&  (e->buttons & Qt::RightButton)) {
+        m_currentTool->handleMidButtonPress(e);
+    } else if (e->buttons & Qt::LeftButton) {
         m_currentTool->handleLeftButtonPress(e);
     } else if (e->buttons & Qt::MidButton) {
         m_currentTool->handleMidButtonPress(e);

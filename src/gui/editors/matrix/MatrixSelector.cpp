@@ -180,6 +180,8 @@ MatrixSelector::handleLeftButtonPress(const MatrixMouseEvent *e)
 void
 MatrixSelector::handleMidButtonPress(const MatrixMouseEvent *e)
 {
+    // Middle button press draws a new event via MatrixPainter.
+
     m_clickedElement = nullptr; // should be used for left-button clicks only
 
     // Don't allow overlapping elements on the same channel
