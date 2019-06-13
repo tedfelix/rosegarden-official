@@ -223,9 +223,8 @@ void RosegardenScrollView::setBottomRuler(StandardRuler *ruler)
 
 void RosegardenScrollView::startAutoScroll()
 {
-    if (!m_autoScrollTimer.isActive()) {
+    if (!m_autoScrollTimer.isActive())
         m_autoScrollTimer.start(AutoScrollTimerInterval);
-    }
 
     m_autoScrolling = true;
 }
@@ -265,7 +264,8 @@ double RosegardenScrollView::distanceToScrollRate(int distance)
     return std::min(scrollRate, maxScrollRate);
 }
 
-void RosegardenScrollView::doAutoScroll()
+void
+RosegardenScrollView::doAutoScroll()
 {
     // ??? This code is duplicated in two other places.  Might be time to
     //     pull out an AutoScroller class.
@@ -278,6 +278,15 @@ void RosegardenScrollView::doAutoScroll()
     // ??? Why not just call startAutoScroll()?  Or even better, make
     //     sure no one calls this for the purpose of starting auto-scroll
     //     and get rid of this line.
+    //
+    //     It appears that TrackEditor calls this routine in response to
+    //     the two StandardRuler interactions (drag pointer and loop).
+    //     Re-implement StandardRuler auto-scroll in a way similar to
+    //     MatrixWidget.  Then we can get rid of this call.
+    //
+    // ??? Note also that we did not set m_autoScrolling to true.  So,
+    //     this is wrong.  Or, even worse, someone depends on this
+    //     incorrect behavior.
     m_autoScrollTimer.start(AutoScrollTimerInterval);
 
     if (m_followMode & FOLLOW_HORIZONTAL) {
@@ -305,7 +314,8 @@ void RosegardenScrollView::doAutoScroll()
                 QApplication::desktop()->availableGeometry(this).right();
 
         const int rightSideOfViewport =
-                parentWidget()->mapToGlobal(geometry().bottomRight()).x();
+                viewport()->parentWidget()->mapToGlobal(
+                        viewport()->geometry().bottomRight()).x();
 
         const int spaceToTheRight = rightSideOfScreen - rightSideOfViewport;
 

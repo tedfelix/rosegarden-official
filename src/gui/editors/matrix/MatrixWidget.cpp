@@ -1654,19 +1654,13 @@ MatrixWidget::doAutoScroll()
     // Copied from RosegardenScrollView::doAutoScroll().
     // Will be copied to NotationWidget in the near future.
 
-    // ??? Eventually, this will be used in three places, RosegardenScrollView,
-    //     MatrixWidget, and NotationWidget.  Might be time to pull out into
-    //     a separate class?  AutoScroller.  Clients will contain an instance
-    //     and interact with it.
-
-    // Make sure we're auto-scrolling.
-    // ??? Necessary?  External users should only call start functions,
-    //     not this.
-    //startAutoScroll();
+    // ??? This code is duplicated in two other places.  Might be time to
+    //     pull out an AutoScroller class.
+    //
+    //       1. RosegardenScrollView::doAutoScroll()
+    //       2. NotationWidget::doAutoScroll() (soon)
 
     const QPoint mousePos = m_view->mapFromGlobal(QCursor::pos());
-
-    //RG_DEBUG << "doAutoScroll(): mousePos:" << mousePos;
 
     if (m_followMode & FOLLOW_HORIZONTAL) {
 

@@ -1379,10 +1379,6 @@ void CompositionView::mouseMoveEvent(QMouseEvent *e)
     // ??? Can we push the rest of this down into the tools?
 
     setFollowMode(followMode);
-
-    if (followMode != NO_FOLLOW) {
-        doAutoScroll();
-    }
 }
 
 void CompositionView::keyPressEvent(QKeyEvent *e)
