@@ -471,6 +471,15 @@ MatrixWidget::setSegments(RosegardenDocument *document,
     connect(m_bottomStandardRuler, SIGNAL(dragPointerToPosition(timeT)),
             this, SLOT(slotStandardRulerDrag(timeT)));
 
+    connect(m_topStandardRuler->getLoopRuler(), &LoopRuler::startMouseMove,
+            this, &MatrixWidget::slotSRStartMouseMove);
+    connect(m_topStandardRuler->getLoopRuler(), &LoopRuler::stopMouseMove,
+            this, &MatrixWidget::slotSRStopMouseMove);
+    connect(m_bottomStandardRuler->getLoopRuler(), &LoopRuler::startMouseMove,
+            this, &MatrixWidget::slotSRStartMouseMove);
+    connect(m_bottomStandardRuler->getLoopRuler(), &LoopRuler::stopMouseMove,
+            this, &MatrixWidget::slotSRStopMouseMove);
+
     connect(m_document, SIGNAL(pointerPositionChanged(timeT)),
             this, SLOT(slotPointerPositionChanged(timeT)));
 
@@ -1093,8 +1102,20 @@ void
 MatrixWidget::slotStandardRulerDrag(timeT t)
 {
     updatePointer(t);
+}
 
-    // ??? Need auto-scroll.
+void
+MatrixWidget::slotSRStartMouseMove()
+{
+    m_followMode = MatrixTool::FollowHorizontal;
+
+    startAutoScroll();
+}
+
+void
+MatrixWidget::slotSRStopMouseMove()
+{
+    stopAutoScroll();
 }
 
 void
@@ -1579,10 +1600,6 @@ MatrixWidget::startAutoScroll()
         m_autoScrollTimer.start(30);  // msecs
 
     m_autoScrolling = true;
-
-    // ??? For now, assume both.  Really should be based on return from
-    //     tool and/or just FollowHorizontal for ruler scrolling.
-    m_followMode = MatrixTool::FollowHorizontal | MatrixTool::FollowVertical;
 }
 
 // We'll hit MaxScrollRate at this distance outside the viewport.
