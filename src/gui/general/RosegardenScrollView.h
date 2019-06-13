@@ -18,7 +18,7 @@
 #ifndef RG_ROSEGARDENSCROLLVIEW_H
 #define RG_ROSEGARDENSCROLLVIEW_H
 
-#include "gui/general/AutoScroller.h"  // For FollowMode
+#include "gui/general/AutoScroller.h"
 
 #include <QAbstractScrollArea>
 #include <QDateTime>
@@ -80,10 +80,11 @@ public:
     void updateContents();
 
     void startAutoScroll();
-    void setFollowMode(FollowMode followMode)  { m_followMode = followMode; }
+    void setFollowMode(FollowMode followMode)
+            { m_autoScroller.setFollowMode(followMode); }
     void stopAutoScroll();
 
-    bool isAutoScrolling() const  { return m_autoScrolling; }
+    bool isAutoScrolling() const  { return m_autoScroller.isRunning(); }
 
     /// Playback scrolling.
     /**
@@ -137,11 +138,6 @@ protected:
 
     void wheelEvent(QWheelEvent *) override;
 
-private slots:
-
-    /// Handler for m_autoScrollTimer.
-    void slotOnAutoScrollTimer();
-
 private:
 
     StandardRuler *m_bottomRuler;
@@ -162,18 +158,7 @@ private:
 
     // *** Auto Scrolling
 
-    /// Convert a distance outside the viewport into a scroll rate.
-    double distanceToScrollRate(int distance);
-
-    /// Calls slotOnAutoScrollTimer().
-    QTimer m_autoScrollTimer;
-    /// m_autoScrollTimer interval.
-    static const int AutoScrollTimerInterval;
-    void doAutoScroll();
-
-    /// See AutoScroller.h for valid mask values.
-    FollowMode m_followMode;
-    bool m_autoScrolling;
+    AutoScroller m_autoScroller;
 
 };
 

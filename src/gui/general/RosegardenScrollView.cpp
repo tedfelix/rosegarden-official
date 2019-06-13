@@ -42,24 +42,19 @@ namespace Rosegarden
 {
 
 
-const int RosegardenScrollView::AutoScrollTimerInterval = 30;  // msecs
-
-
 RosegardenScrollView::RosegardenScrollView(QWidget *parent)
     : QAbstractScrollArea(parent),
 
       m_bottomRuler(nullptr),
       m_contentsWidth(0),
-      m_contentsHeight(0),
-      m_followMode(NO_FOLLOW),
-      m_autoScrolling(false)
+      m_contentsHeight(0)
 {
     // Turn off the frame which causes positioning issues.
     // The rest of the code assumes there is no frame.
     setFrameStyle(QFrame::NoFrame);
 
-    connect(&m_autoScrollTimer, &QTimer::timeout,
-            this, &RosegardenScrollView::slotOnAutoScrollTimer);
+    m_autoScroller.connectScrollArea(this);
+    m_autoScroller.connectViewport(viewport());
 }
 
 int RosegardenScrollView::contentsX()
@@ -223,122 +218,12 @@ void RosegardenScrollView::setBottomRuler(StandardRuler *ruler)
 
 void RosegardenScrollView::startAutoScroll()
 {
-    if (!m_autoScrollTimer.isActive())
-        m_autoScrollTimer.start(AutoScrollTimerInterval);
-
-    m_autoScrolling = true;
+    m_autoScroller.start();
 }
 
 void RosegardenScrollView::stopAutoScroll()
 {
-    m_autoScrollTimer.stop();
-    m_autoScrolling = false;
-}
-
-namespace
-{
-    // We'll hit MaxScrollRate at this distance outside the viewport.
-    // ??? HiDPI: This needs to be bigger for the HiDPI case.
-    constexpr double maxDistance = 40;
-}
-
-double RosegardenScrollView::distanceToScrollRate(int distance)
-{
-    const double distanceNormalized = distance / maxDistance;
-    // Apply a curve to reduce the touchiness.
-    // Simple square curve.  Something more pronounced might be better.
-    const double distanceWithCurve = distanceNormalized * distanceNormalized;
-
-    constexpr double minScrollRate = 1.2;
-    constexpr double maxScrollRate = 100;
-    constexpr double scrollRateRange = (maxScrollRate - minScrollRate);
-
-    const double scrollRate = distanceWithCurve * scrollRateRange + minScrollRate;
-
-    return std::min(scrollRate, maxScrollRate);
-}
-
-void
-RosegardenScrollView::doAutoScroll()
-{
-    const QPoint mousePos = viewport()->mapFromGlobal(QCursor::pos());
-
-    if (m_followMode & FOLLOW_HORIZONTAL) {
-
-        // The following auto scroll behavior is patterned after Chromium,
-        // Eclipse, and the GIMP.  Auto scroll will only happen if the
-        // mouse is outside the viewport.  The auto scroll rate is
-        // proportional to how far outside the viewport the mouse is.
-        // If the right edge is too close to the edge of the screen
-        // (e.g. when maximized), the auto scroll area is moved inside
-        // of the viewport.
-
-        int scrollX = 0;
-
-        // If the mouse is to the left of the viewport
-        if (mousePos.x() < 0) {
-            // Set the scroll rate based on how far outside we are.
-            scrollX = lround(-distanceToScrollRate(-mousePos.x()));
-        }
-
-        // Assume we can place the auto scroll area outside the window.
-        int xOffset = 0;
-
-        const int rightSideOfScreen =
-                QApplication::desktop()->availableGeometry(this).right();
-
-        const int rightSideOfViewport =
-                viewport()->parentWidget()->mapToGlobal(
-                        viewport()->geometry().bottomRight()).x();
-
-        const int spaceToTheRight = rightSideOfScreen - rightSideOfViewport;
-
-        // If there's not enough space for the auto scroll area, move it
-        // inside the viewport.
-        if (spaceToTheRight < maxDistance)
-            xOffset = static_cast<int>(-maxDistance + spaceToTheRight);
-
-        // Limit where auto scroll begins.
-        const int xMax = viewport()->width() + xOffset;
-
-        // If the mouse is to the right of the auto scroll limit
-        if (mousePos.x() > xMax) {
-            // Set the scroll rate based on how far outside we are.
-            scrollX = lround(distanceToScrollRate(mousePos.x() - xMax));
-        }
-
-        // Scroll if needed.
-        if (scrollX)
-            horizontalScrollBar()->setValue(horizontalScrollBar()->value() + scrollX);
-    }
-
-    if (m_followMode & FOLLOW_VERTICAL) {
-
-        // This vertical auto scroll behavior is patterned after
-        // Audacity.  Auto scroll will only happen if the mouse is
-        // outside the viewport.  The auto scroll rate is fixed.
-
-        int scrollY = 0;
-
-        // If the mouse is above the viewport
-        if (mousePos.y() < 0) {
-            scrollY = -5;
-        }
-
-        // If the mouse is below the viewport
-        if (mousePos.y() > viewport()->height()) {
-            scrollY = +5;
-        }
-
-        // Scroll if needed.
-        if (scrollY)
-            verticalScrollBar()->setValue(verticalScrollBar()->value() + scrollY);
-    }
-}
-
-void RosegardenScrollView::slotOnAutoScrollTimer()
-{
-    doAutoScroll();
+    m_autoScroller.stop();
 }
 
 void RosegardenScrollView::scrollHoriz(int x)
