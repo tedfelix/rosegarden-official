@@ -963,12 +963,20 @@ NotationWidget::slotDispatchMouseMove(const NotationMouseEvent *e)
 void
 NotationWidget::ensureLastMouseMoveVisible()
 {
-    if (m_inMove) return;
+    if (m_inMove)
+        return;
+
     m_inMove = true;
+
     QPointF pos = m_lastMouseMoveScenePos;
-    if (m_scene) m_scene->constrainToSegmentArea(pos);
-    // Reduce margin from 5O (default) to 10 pixels to fix bug #2954074
+
+    if (m_scene)
+        m_scene->constrainToSegmentArea(pos);
+
+    // Reduce margin from 5O (default) to 10 pixels to fix bug #1254
+    // (was bug #2954074)
     m_view->ensureVisible(QRectF(pos, pos), 10, 10);
+
     m_inMove = false;
 }
 
@@ -986,7 +994,9 @@ NotationWidget::slotEnsureTimeVisible(timeT t)
 void
 NotationWidget::slotDispatchMouseRelease(const NotationMouseEvent *e)
 {
-    if (!m_currentTool) return;
+    if (!m_currentTool)
+        return;
+
     m_currentTool->handleMouseRelease(e);
 }
 

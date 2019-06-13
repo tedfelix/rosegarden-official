@@ -873,9 +873,15 @@ void
 MatrixWidget::ensureLastMouseMoveVisible()
 {
     m_inMove = true;
+
     QPointF pos = m_lastMouseMoveScenePos;
-    if (m_scene) m_scene->constrainToSegmentArea(pos);
+
+    if (m_scene)
+        m_scene->constrainToSegmentArea(pos);
+
+    // Auto-scroll.
     m_view->ensureVisible(QRectF(pos, pos));
+
     m_inMove = false;
 }
 
@@ -898,9 +904,17 @@ MatrixWidget::slotDispatchMouseRelease(const MatrixMouseEvent *e)
         return;
 
     m_currentTool->handleMouseRelease(e);
+
+    // Auto-scroll.
+
+    // ??? Why?  Mouse movement should have already handled this.  Note
+    //     that NotationView does not do this.
+
     QPointF pos(e->sceneX, e->sceneY);
+
     if (m_scene)
         m_scene->constrainToSegmentArea(pos);
+
     m_view->ensureVisible(QRectF(pos, pos));
 }
 

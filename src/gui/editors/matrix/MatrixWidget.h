@@ -432,8 +432,6 @@ private:
      *
      * This was added in r9966 along with the original auto-scroll
      * implementation in 2009.
-     *
-     * Note also that NotationWidget has no such member.
      */
     bool m_inMove;
     /// Mouse position while moving converted to Scene Coords.
