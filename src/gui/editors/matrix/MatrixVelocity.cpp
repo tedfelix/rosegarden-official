@@ -73,7 +73,7 @@ MatrixVelocity::handleLeftButtonPress(const MatrixMouseEvent *e)
     if (!e->element) return;
 
     // Mouse position is no more related to pitch
-    m_widget->setHoverNoteVisible(false);
+    m_widget->showHighlight(false);
 
     m_currentViewSegment = e->viewSegment;
     m_currentElement = e->element;
@@ -227,7 +227,7 @@ MatrixVelocity::handleMouseRelease(const MatrixMouseEvent *e)
     if (!e || !m_currentElement || !m_currentViewSegment) {
         m_mouseStartY = 0;
         // Mouse position is again related to pitch
-        m_widget->setHoverNoteVisible(true);
+        m_widget->showHighlight(true);
         return;
     }
 
@@ -238,7 +238,7 @@ MatrixVelocity::handleMouseRelease(const MatrixMouseEvent *e)
     if (selection->getAddedEvents() == 0 || m_velocityDelta == 0) {
         delete selection;
         // Mouse position is again related to pitch
-        m_widget->setHoverNoteVisible(true);
+        m_widget->showHighlight(true);
         return;
     } else {
         QString commandLabel = tr("Change Velocity");
@@ -262,7 +262,7 @@ MatrixVelocity::handleMouseRelease(const MatrixMouseEvent *e)
     setBasicContextHelp();
 
     // Mouse position is again related to pitch
-    m_widget->setHoverNoteVisible(true);
+    m_widget->showHighlight(true);
 }
 
 void
@@ -277,7 +277,7 @@ void
 MatrixVelocity::stow()
 {
     m_start = false;
-    m_widget->setHoverNoteVisible(true);
+    m_widget->showHighlight(true);
 }
 
 void

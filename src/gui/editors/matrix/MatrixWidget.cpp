@@ -119,7 +119,7 @@ MatrixWidget::MatrixWidget(bool drumMode) :
     m_drumMode(drumMode),
     m_firstNote(0),
     m_lastNote(0),
-    m_hoverNoteIsVisible(true),
+    m_highlightVisible(true),
     m_toolBox(nullptr),
     m_currentTool(nullptr),
     m_currentVelocity(100),
@@ -860,10 +860,10 @@ MatrixWidget::slotDispatchMousePress(const MatrixMouseEvent *e)
 void
 MatrixWidget::slotDispatchMouseMove(const MatrixMouseEvent *e)
 {
-    if (m_hoverNoteIsVisible)
+    if (m_highlightVisible)
         m_pitchRuler->showHighlight(e->pitch);
 
-    // Needed to remove black trailers left by hover note at high zoom levels.
+    // Needed to remove black trailers left by highlight at high zoom levels.
     m_pianoView->update();
 
     if (!m_currentTool)
@@ -895,9 +895,9 @@ MatrixWidget::slotDispatchMouseDoubleClick(const MatrixMouseEvent *e)
 }
 
 void
-MatrixWidget::setHoverNoteVisible(bool visible)
+MatrixWidget::showHighlight(bool visible)
 {
-    m_hoverNoteIsVisible = visible;
+    m_highlightVisible = visible;
 
     if (!visible)
         m_pitchRuler->hideHighlight();
@@ -1402,14 +1402,14 @@ MatrixWidget::slotHoveredOverKeyChanged(unsigned int y)
     int evPitch = m_scene->calculatePitchFromY(y);
     m_pitchRuler->showHighlight(evPitch);
     m_pianoView->update();   // Needed to remove black trailers left by
-                             // hover note at high zoom levels
+                             // highlight at high zoom levels
 }
 
 void
 MatrixWidget::slotMouseLeavesView()
 {
-    // The mouse has left the view, so the hover note in the pitch ruler
-    // has to be unhighlighted.
+    // The mouse has left the view, so the highlight in the pitch ruler
+    // has to be un-highlighted.
     m_pitchRuler->hideHighlight();
 
     // At high zoom levels, black trailers are left behind.  This makes

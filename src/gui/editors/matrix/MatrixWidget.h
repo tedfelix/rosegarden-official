@@ -121,8 +121,8 @@ public:
     void setChordNameRulerVisible(bool visible);
     void setTempoRulerVisible(bool visible);
 
-    // ??? This seems broken.  I don't see a hover anywhere.
-    void setHoverNoteVisible(bool visible);
+    /// Show the highlight on the piano/percussion rulers.
+    void showHighlight(bool visible);
 
 
     // SelectionManager interface.
@@ -257,10 +257,7 @@ private slots:
     void slotHScrollBarRangeChanged(int min, int max);
 
     // PitchRuler slots
-    /// Draw the hover note as we move from one key to the next.
-    /**
-     * ??? Hover note doesn't seem to work.
-     */
+    /// Draw the highlight as we move from one pitch to the next.
     void slotHoveredOverKeyChanged(unsigned int);
     void slotKeyPressed(unsigned int, bool);
     void slotKeySelected(unsigned int, bool);
@@ -287,10 +284,7 @@ private slots:
     /// The Segment control thumbwheel moved, display a different Segment.
     void slotSegmentChangerMoved(int);
 
-    /// The mouse has left the view, hide the hover note.
-    /**
-     * ??? Hover note doesn't seem to work.
-     */
+    /// The mouse has left the view, hide the highlight note.
     void slotMouseLeavesView();
 
     /// Instrument is being destroyed
@@ -379,11 +373,8 @@ private:
      */
     MidiByte m_lastNote;
 
-    /// Hide pitch ruler hover note when mouse move is not related to a pitch change.
-    /**
-     * ??? Rename: m_highlightVisible;
-     */
-    bool m_hoverNoteIsVisible;
+    /// Hide pitch ruler highlight when mouse move is not related to a pitch change.
+    bool m_highlightVisible;
 
 
     // Tools

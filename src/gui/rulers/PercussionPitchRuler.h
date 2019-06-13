@@ -74,8 +74,8 @@ protected:
     bool                      m_mouseDown;
     bool                      m_selecting;
 
-    int                       m_hoverNotePitch;
-    int                       m_lastHoverHighlight;
+    int                       m_highlightPitch;
+    int                       m_lastHighlightPitch;
 
     QFont                    *m_font;
     QFontMetrics             *m_fontMetrics;
