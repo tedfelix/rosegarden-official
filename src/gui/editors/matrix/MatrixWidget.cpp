@@ -489,6 +489,11 @@ MatrixWidget::setSegments(RosegardenDocument *document,
     connect(m_bottomStandardRuler->getLoopRuler(), &LoopRuler::stopMouseMove,
             this, &MatrixWidget::slotSRStopMouseMove);
 
+    connect(m_tempoRuler, &TempoRuler::mousePress,
+            this, &MatrixWidget::slotTRMousePress);
+    connect(m_tempoRuler, &TempoRuler::mouseRelease,
+            this, &MatrixWidget::slotTRMouseRelease);
+
     connect(m_document, SIGNAL(pointerPositionChanged(timeT)),
             this, SLOT(slotPointerPositionChanged(timeT)));
 
@@ -1142,6 +1147,19 @@ MatrixWidget::slotCRWMouseMove(FollowMode followMode)
 
 void
 MatrixWidget::slotCRWMouseRelease()
+{
+    m_autoScroller.stop();
+}
+
+void
+MatrixWidget::slotTRMousePress()
+{
+    m_autoScroller.setFollowMode(FOLLOW_HORIZONTAL);
+    m_autoScroller.start();
+}
+
+void
+MatrixWidget::slotTRMouseRelease()
 {
     m_autoScroller.stop();
 }

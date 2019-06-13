@@ -75,6 +75,10 @@ public:
 
     void setMinimumWidth(int width) { m_width = width; }
 
+signals:
+    void mousePress();
+    void mouseRelease();
+
 public slots:
     void slotScrollHoriz(int x);
 

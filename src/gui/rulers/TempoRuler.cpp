@@ -140,6 +140,8 @@ TempoRuler::mousePressEvent(QMouseEvent *e)
             return;
         }
 
+        emit mousePress();
+
         int x = e->x() + 1;
         int y = e->y();
         timeT t = m_rulerScale->getTimeForX(x - m_currentXOffset);
@@ -202,6 +204,8 @@ TempoRuler::mousePressEvent(QMouseEvent *e)
 void
 TempoRuler::mouseReleaseEvent(QMouseEvent *e)
 {
+    emit mouseRelease();
+
     if (m_dragVert) {
 
         m_dragVert = false;

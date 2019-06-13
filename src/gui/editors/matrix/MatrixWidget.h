@@ -250,6 +250,11 @@ private slots:
     /// Handle ControlRulerWidget::mouseRelease().
     void slotCRWMouseRelease();
 
+    /// Handle TempoRuler::mousePress().
+    void slotTRMousePress();
+    /// Handle TempoRuler::mouseRelease().
+    void slotTRMouseRelease();
+
     /// Hide the horizontal scrollbar when not needed.
     /**
      * ??? Why do we need to manage this?  We turn off the horizontal
