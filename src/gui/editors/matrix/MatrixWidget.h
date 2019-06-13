@@ -55,13 +55,26 @@ class Instrument;
 class Thumbwheel;
 
 
-/// QWidget that holds the matrix editor.
+/// QWidget that fills the Matrix Editor's (MatrixView) client area.
 /**
- * Container widget for the matrix editor (which is a QGraphicsView)
- * and any associated rulers and panner widgets.  This class also owns
- * the editing tools.
+ * The main Matrix Editor window, MatrixView, owns the only instance
+ * of this class.  See MatrixView::m_matrixWidget.
  *
- * MatrixView::m_matrixWidget is the only instance of this class.
+ * MatrixWidget contains the matrix itself (m_view and m_scene).
+ * MatrixWidget also contains all the other parts of the Matrix Editor
+ * that appear around the matrix.  From left to right, top to bottom:
+ *
+ *   - The chord name ruler
+ *   - The tempo ruler
+ *   - The top standard ruler
+ *   - The pitch ruler, m_pianoView (to the left of the matrix)
+ *   - The matrix itself, m_view and m_scene
+ *   - The bottom standard ruler
+ *   - The controls widget (optional)
+ *   - The panner, m_hpanner (navigation area)
+ *   - The zoom area (knobs in the bottom right corner)
+ *
+ * This class also owns the editing tools.
  */
 class MatrixWidget : public QWidget,
                      public SelectionManager
@@ -72,49 +85,64 @@ public:
     MatrixWidget(bool drumMode);
     virtual ~MatrixWidget() override;
 
+    Device *getCurrentDevice();
+    MatrixScene *getScene()  { return m_scene; }
+
     /**
      * Show the pointer.  Used by MatrixView upon construction, this ensures
      * the pointer is visible initially.
      */
     void showInitialPointer();
 
+    /// Set the Segment(s) to display.
     /**
      * ??? Only one caller.  Might want to fold this into the ctor.
      */
     void setSegments(RosegardenDocument *document,
                      std::vector<Segment *> segments);
+    /// MatrixScene::getCurrentSegment()
+    Segment *getCurrentSegment();
+    /// MatrixScene::segmentsContainNotes()
+    bool segmentsContainNotes() const;
 
-    MatrixScene *getScene() { return m_scene; }
-
-    int getCurrentVelocity() const { return m_currentVelocity; }
-
-    bool isDrumMode() const { return m_drumMode; }
-
+    /// All segments only have a key mapping.
     bool hasOnlyKeyMapping() const { return m_onlyKeyMapping; }
+
+    ControlRulerWidget *getControlsWidget()  { return m_controlsWidget; }
+
+    /// MatrixScene::getSnapGrid()
+    const SnapGrid *getSnapGrid() const;
+    /// MatrixScene::setSnap()
+    void setSnap(timeT);
+
+    void setChordNameRulerVisible(bool visible);
+    void setTempoRulerVisible(bool visible);
+
+    // ??? This seems broken.  I don't see a hover anywhere.
+    void setHoverNoteVisible(bool visible);
+
+
+    // SelectionManager interface.
+
+    // These delegate to MatrixScene, which possesses the selection
+    /// MatrixScene::getSelection()
+    EventSelection *getSelection() const override;
+    /// MatrixScene::setSelection()
+    void setSelection(EventSelection *s, bool preview) override;
+
+
+    // Tools
 
     MatrixToolBox *getToolBox() { return m_toolBox; }
 
+    /// Used by the tools to set an appropriate mouse cursor.
     void setCanvasCursor(QCursor cursor);
 
-    // These delegate to MatrixScene, which possesses the selection
-    EventSelection *getSelection() const override;
-    void setSelection(EventSelection *s, bool preview) override;
+    bool isDrumMode() const { return m_drumMode; }
 
-    ControlRulerWidget *getControlsWidget()  { return m_controlsWidget; }
-    
-    /// Delegates to MatrixScene::getSnapGrid()
-    const SnapGrid *getSnapGrid() const;
+    /// Velocity for new notes.  (And moved notes too.)
+    int getCurrentVelocity() const { return m_currentVelocity; }
 
-    Segment *getCurrentSegment();
-    Device *getCurrentDevice();
-    bool segmentsContainNotes() const;
-
-    void setTempoRulerVisible(bool visible);
-    void setChordNameRulerVisible(bool visible);
-
-    void setHoverNoteVisible(bool visible);
-
-    void setSnap(timeT);
 
     // Interface for MatrixView menu commands
 
@@ -148,21 +176,29 @@ public:
     void addControlRuler(QAction *);
 
 signals:
-    void editTriggerSegment(int);
     void toolChanged(QString);
+
+    /**
+     * Emitted when the user double-clicks on a note that triggers a
+     * segment.
+     *
+     * RosegardenMainViewWidget::slotEditTriggerSegment() launches the event
+     * editor on the triggered segment in response to this.
+     */
+    void editTriggerSegment(int);
 
     /// Forwarded from MatrixScene::segmentDeleted().
     void segmentDeleted(Segment *);
     /// Forwarded from MatrixScene::sceneDeleted().
     void sceneDeleted();
-
-    void showContextHelp(const QString &);
     /// Forwarded from MatrixScene::selectionChanged()
     void selectionChanged();
 
+    void showContextHelp(const QString &);
+
 public slots:
     /// Velocity combo box.
-    void slotSetCurrentVelocity(int velocity) { m_currentVelocity = velocity; }
+    void slotSetCurrentVelocity(int velocity)  { m_currentVelocity = velocity; }
 
     /// Plays the preview note when using the computer keyboard to enter notes.
     void slotPlayPreviewNote(Segment *segment, int pitch);
@@ -185,7 +221,13 @@ private slots:
     void slotScrollRulers();
 
     /// Scroll view so that specified time is visible.
+    /**
+     * This is used for drags in the rulers.
+     */
     void slotEnsureTimeVisible(timeT);
+
+    /// Auto-scroll.
+    void slotEnsureLastMouseMoveVisible();
 
     // MatrixScene Interface
     void slotDispatchMousePress(const MatrixMouseEvent *);
@@ -193,11 +235,20 @@ private slots:
     void slotDispatchMouseRelease(const MatrixMouseEvent *);
     void slotDispatchMouseDoubleClick(const MatrixMouseEvent *);
 
+    /// Display the playback position pointer.
     void slotPointerPositionChanged(timeT, bool moveView = true);
-    void slotEnsureLastMouseMoveVisible();
 
+    /// Hide the horizontal scrollbar when not needed.
+    /**
+     * ??? Seems strange that Qt doesn't do this for us.  Is this redundant?
+     */
     void slotHScrollBarRangeChanged(int min, int max);
 
+    // PitchRuler slots
+    /// Draw the hover note as we move from one key to the next.
+    /**
+     * ??? Hover note doesn't seem to work.
+     */
     void slotHoveredOverKeyChanged(unsigned int);
     void slotKeyPressed(unsigned int, bool);
     void slotKeySelected(unsigned int, bool);
@@ -221,16 +272,21 @@ private slots:
     /// Trap a zoom out from the panner and sync it to the primary thumb wheel
     void slotSyncPannerZoomOut();
 
-    /// The segment control thumbwheel moved
+    /// The Segment control thumbwheel moved, display a different Segment.
     void slotSegmentChangerMoved(int);
 
-    /// The mouse has left the view
+    /// The mouse has left the view, hide the hover note.
+    /**
+     * ??? Hover note doesn't seem to work.
+     */
     void slotMouseLeavesView();
 
     /// Instrument is being destroyed
     void slotInstrumentGone();
 
 private:
+    // ??? Instead of storing the document, which can change, get the
+    //     document as needed via RosegardenMainWindow::self()->getDocument().
     RosegardenDocument *m_document; // I do not own this
 
     QGridLayout *m_layout; // I own this
