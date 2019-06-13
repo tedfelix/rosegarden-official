@@ -227,9 +227,6 @@ private slots:
      */
     void slotEnsureTimeVisible(timeT);
 
-    /// Auto-scroll.
-    void slotEnsureLastMouseMoveVisible();
-
     // MatrixScene Interface
     void slotDispatchMousePress(const MatrixMouseEvent *);
     void slotDispatchMouseMove(const MatrixMouseEvent *);
@@ -417,6 +414,9 @@ private:
 
     // Auto-scroll
 
+    /// Auto-scroll.
+    void ensureLastMouseMoveVisible();
+
     /// Currently moving the scene via ensureVisible().
     /**
      * Appears to be intended to make sure that any mouse movements
@@ -429,12 +429,17 @@ private:
      * At any rate, I'm planning on replacing this auto-scroll
      * implementation with a new one, so probably don't need to
      * spend much time analyzing the old one.
+     *
+     * This was added in r9966 along with the original auto-scroll
+     * implementation in 2009.
+     *
+     * Note also that NotationWidget has no such member.
      */
     bool m_inMove;
     /// Mouse position while moving converted to Scene Coords.
     /**
      * Set by slotDispatchMouseMove().  Used by
-     * slotEnsureLastMouseMoveVisible() to do auto scrolling.
+     * ensureLastMouseMoveVisible() to do auto scrolling.
      */
     QPointF m_lastMouseMoveScenePos;
 

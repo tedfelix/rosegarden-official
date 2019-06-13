@@ -922,9 +922,8 @@ NotationWidget::slotPointerPositionChanged(timeT t, bool moveView)
 void
 NotationWidget::slotDispatchMousePress(const NotationMouseEvent *e)
 {
-    if (!m_currentTool) return;
-
-    //!!! todo: handle equivalents of NotationView::slotXXXItemPressed
+    if (!m_currentTool)
+        return;
 
     // Check for left and right *first*
     if ((e->buttons & Qt::LeftButton)  &&  (e->buttons & Qt::RightButton)) {
@@ -941,41 +940,28 @@ NotationWidget::slotDispatchMousePress(const NotationMouseEvent *e)
 void
 NotationWidget::slotDispatchMouseMove(const NotationMouseEvent *e)
 {
-    if (!m_currentTool) return;
-    NotationTool::FollowMode mode = m_currentTool->handleMouseMove(e);
+    if (!m_currentTool)
+        return;
 
-    if (mode != NotationTool::NoFollow) {
+    NotationTool::FollowMode followMode = m_currentTool->handleMouseMove(e);
+
+    if (followMode != NotationTool::NoFollow) {
         m_lastMouseMoveScenePos = QPointF(e->sceneX, e->sceneY);
-        slotEnsureLastMouseMoveVisible();
-        QTimer::singleShot(100, this, &NotationWidget::slotEnsureLastMouseMoveVisible);
+
+        ensureLastMouseMoveVisible();
+
+        QTimer::singleShot(100, this,
+                           &NotationWidget::ensureLastMouseMoveVisible);
     }
 
     if (e->staff) {
         QString s = e->staff->getNoteNameAtSceneCoords(e->sceneX, e->sceneY);
         emit hoveredOverNoteChanged(s);
     }
-
-    // NOTE: when you click the ruler and try to drag the loop/range selection
-    // thing in notation and matrix, it stops at the right edge and won't go.  I
-    // think the following blurb may be what made that work:
-    /*!!!
-if (getCanvasView()->isTimeForSmoothScroll()) {
-
-            if (follow & RosegardenScrollView::FollowHorizontal) {
-                getCanvasView()->scrollHorizSmallSteps(e->x());
-            }
-
-            if (follow & RosegardenScrollView::FollowVertical) {
-                getCanvasView()->scrollVertSmallSteps(e->y());
-            }
-
-        }
-    }
-    */
 }
 
 void
-NotationWidget::slotEnsureLastMouseMoveVisible()
+NotationWidget::ensureLastMouseMoveVisible()
 {
     if (m_inMove) return;
     m_inMove = true;

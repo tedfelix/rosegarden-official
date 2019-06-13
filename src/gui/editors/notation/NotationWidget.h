@@ -191,7 +191,6 @@ private slots:
 
     // When moveView is false, the view is not scrolled toward the pointer
     void slotPointerPositionChanged(timeT t, bool moveView = true);
-    void slotEnsureLastMouseMoveVisible();
 
     void slotZoomInFromPanner();
     void slotZoomOutFromPanner();
@@ -246,8 +245,11 @@ private:
     NotationToolBox *m_toolBox;
     NotationTool *m_currentTool;
     bool m_playTracking;
+
     bool m_inMove;
     QPointF m_lastMouseMoveScenePos;
+    void ensureLastMouseMoveVisible();
+
     double m_hZoomFactor;
     double m_vZoomFactor;
     ZoomableRulerScale *m_referenceScale; // I own this (refers to scene scale)

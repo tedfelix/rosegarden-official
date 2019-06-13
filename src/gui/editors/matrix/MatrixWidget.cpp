@@ -843,10 +843,11 @@ MatrixWidget::slotDispatchMouseMove(const MatrixMouseEvent *e)
     if (m_hoverNoteIsVisible)
         m_pitchRuler->drawHoverNote(e->pitch);
 
-    m_pianoView->update();   // Needed to remove black trailers left by
-                             // hover note at high zoom levels
+    // Needed to remove black trailers left by hover note at high zoom levels.
+    m_pianoView->update();
 
-    if (!m_currentTool) return;
+    if (!m_currentTool)
+        return;
 
     if (m_inMove) {
         m_lastMouseMoveScenePos = QPointF(e->sceneX, e->sceneY);
@@ -854,21 +855,22 @@ MatrixWidget::slotDispatchMouseMove(const MatrixMouseEvent *e)
         return;
     }
 
-    MatrixTool::FollowMode mode = m_currentTool->handleMouseMove(e);
+    MatrixTool::FollowMode followMode = m_currentTool->handleMouseMove(e);
 
-    if (mode != MatrixTool::NoFollow) {
+    if (followMode != MatrixTool::NoFollow) {
         m_lastMouseMoveScenePos = QPointF(e->sceneX, e->sceneY);
         m_inMove = true;
-        // Do it now.
-        slotEnsureLastMouseMoveVisible();
+        // Auto-scroll now.
+        ensureLastMouseMoveVisible();
         // And in 100msecs.
-        QTimer::singleShot(100, this, &MatrixWidget::slotEnsureLastMouseMoveVisible);
+        QTimer::singleShot(100, this,
+                           &MatrixWidget::ensureLastMouseMoveVisible);
         m_inMove = false;
     }
 }
 
 void
-MatrixWidget::slotEnsureLastMouseMoveVisible()
+MatrixWidget::ensureLastMouseMoveVisible()
 {
     m_inMove = true;
     QPointF pos = m_lastMouseMoveScenePos;
