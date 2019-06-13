@@ -241,7 +241,8 @@ private slots:
 
     /// Hide the horizontal scrollbar when not needed.
     /**
-     * ??? Seems strange that Qt doesn't do this for us.  Is this redundant?
+     * ??? Why do we need to manage this?  We turn off the horizontal
+     *     scrollbar in the ctor with Qt::ScrollBarAlwaysOff.
      */
     void slotHScrollBarRangeChanged(int min, int max);
 

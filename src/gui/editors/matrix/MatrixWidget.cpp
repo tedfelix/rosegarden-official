@@ -32,25 +32,9 @@
 #include "MatrixViewSegment.h"
 #include "PianoKeyboard.h"
 
-#include <QGraphicsView>
-#include <QGridLayout>
-#include <QScrollBar>
-#include <QTimer>
-#include <QGraphicsScene>
-#include <QGraphicsProxyWidget>
-#include <QWheelEvent>
-#include <QStackedLayout>
-#include <QWidget>
-#include <QPushButton>
-#include <QSettings>
-#include <QLabel>
-
 #include "document/RosegardenDocument.h"
 
 #include "gui/application/RosegardenMainWindow.h"
-#include "gui/application/TransportStatus.h"
-
-#include "gui/seqmanager/SequenceManager.h"
 
 #include "gui/widgets/Panner.h"
 #include "gui/widgets/Panned.h"
@@ -59,39 +43,41 @@
 #include "gui/rulers/PitchRuler.h"
 #include "gui/rulers/PercussionPitchRuler.h"
 
-#include "gui/rulers/ControllerEventsRuler.h"
 #include "gui/rulers/ControlRulerWidget.h"
 #include "gui/rulers/StandardRuler.h"
 #include "gui/rulers/TempoRuler.h"
 #include "gui/rulers/ChordNameRuler.h"
 #include "gui/rulers/LoopRuler.h"
 
-#include "gui/general/IconLoader.h"
 #include "gui/general/ThornStyle.h"
 
 #include "gui/studio/StudioControl.h"
 
 #include "misc/Debug.h"
-#include "misc/Strings.h"
-#include "misc/ConfigGroups.h"
 
 #include "base/Composition.h"
 #include "base/Instrument.h"
-#include "base/MidiProgram.h"
+//#include "base/MidiProgram.h"
 #include "base/RulerScale.h"
 #include "base/PropertyName.h"
 #include "base/BaseProperties.h"
 #include "base/Controllable.h"
 #include "base/Studio.h"
-#include "base/Instrument.h"
-#include "base/InstrumentStaticSignals.h"
+//#include "base/InstrumentStaticSignals.h"
 #include "base/Device.h"
 #include "base/MidiDevice.h"
 #include "base/SoftSynthDevice.h"
-#include "base/MidiTypes.h"
 #include "base/ColourMap.h"
 #include "base/Colour.h"
-#include "base/MidiTypes.h"
+
+#include <QGraphicsView>
+#include <QGridLayout>
+#include <QScrollBar>
+#include <QTimer>
+#include <QGraphicsScene>
+#include <QGraphicsProxyWidget>
+#include <QPushButton>
+
 
 namespace Rosegarden
 {
@@ -102,16 +88,16 @@ enum {
     CHORDNAMERULER_ROW,
     TEMPORULER_ROW,
     TOPRULER_ROW,
-    PANNED_ROW,
+    PANNED_ROW,  // Matrix
     BOTTOMRULER_ROW,
     CONTROLS_ROW,
-    HSLIDER_ROW,
-    PANNER_ROW
+    HSCROLLBAR_ROW,
+    PANNER_ROW  // Navigation area
 };
 
 // Widgets horizontal positions inside the main QGridLayout (m_layout).
 enum {
-    HEADER_COL,
+    HEADER_COL,  // Piano Ruler
     MAIN_COL,
 };
 
@@ -269,10 +255,11 @@ MatrixWidget::MatrixWidget(bool drumMode) :
 
     // Rulers being not defined still, they can't be added to m_layout.
     // This will be done in setSegments().
+
     // Move the scroll bar from m_view to MatrixWidget
     m_view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_layout->addWidget(m_view->horizontalScrollBar(),
-                        HSLIDER_ROW, MAIN_COL, 1, 1);
+                        HSCROLLBAR_ROW, MAIN_COL, 1, 1);
 
     // Hide or show the horizontal scroll bar when needed
     connect(m_view->horizontalScrollBar(), &QAbstractSlider::rangeChanged,
