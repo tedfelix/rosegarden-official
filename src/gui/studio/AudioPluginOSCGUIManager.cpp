@@ -231,7 +231,8 @@ AudioPluginOSCGUIManager::stopAllGUIs()
 void
 AudioPluginOSCGUIManager::postMessage(OSCMessage *message)
 {
-    RG_DEBUG << "AudioPluginOSCGUIManager::postMessage";
+    RG_DEBUG << "postMessage()";
+
     m_oscBuffer.write(&message, 1);
 }
 
@@ -355,7 +356,8 @@ bool
 AudioPluginOSCGUIManager::parseOSCPath(QString path, InstrumentId &instrument,
                                        int &position, QString &method)
 {
-    RG_DEBUG << "AudioPluginOSCGUIManager::parseOSCPath(" << path << ")";
+    RG_DEBUG << "parseOSCPath(" << path << ")";
+
     if (!m_studio)
         return false;
 
@@ -366,8 +368,7 @@ AudioPluginOSCGUIManager::parseOSCPath(QString path, InstrumentId &instrument,
     }
 
     if (!path.startsWith(pluginStr)) {
-        RG_DEBUG << "AudioPluginOSCGUIManager::parseOSCPath: malformed path "
-        << path << endl;
+        RG_DEBUG << "parseOSCPath(): malformed path " << path;
         return false;
     }
 
@@ -419,8 +420,7 @@ AudioPluginOSCGUIManager::parseOSCPath(QString path, InstrumentId &instrument,
         return false;
     }
 
-    RG_DEBUG << "AudioPluginOSCGUIManager::parseOSCPath: good path " << path
-    << ", got mapped id " << pluginInstance->getMappedId() << endl;
+    RG_DEBUG << "parseOSCPath(): good path " << path << ", got mapped id " << pluginInstance->getMappedId();
 
     return true;
 }
@@ -660,24 +660,48 @@ AudioPluginOSCGUIManager::dispatch()
                 goto done;
             }
 
-            RG_DEBUG << "AudioPluginOSCGUIManager: handling MIDI message";
+            RG_DEBUG << "dispatch(): handling MIDI message...";
 
-            // let's only handle note on and note off
+            int eventType = arg->m[1] & MIDI_MESSAGE_TYPE_MASK;
 
-            int eventCode = arg->m[1];
-            int eventType = eventCode & MIDI_MESSAGE_TYPE_MASK;
-            if (eventType == MIDI_NOTE_ON ||
-                    eventType == MIDI_NOTE_OFF) {
+            // Send Test Note
+            // MIDI_NOTE_OFF will also be received, but we ignore it.
+            if (eventType == MIDI_NOTE_ON) {
+
+                //RG_DEBUG << "dispatch(): Have note on";
+                //RG_DEBUG << "  Note:" << arg->m[2];
+                //RG_DEBUG << "  Velocity:" << arg->m[3];
+                //RG_DEBUG << "  Instrument ID:" << instrument;
+
+                // ??? The note will not be heard until a Track is
+                //     configured with this Instrument.  I assume the issue
+                //     is that a volume CC hasn't been sent yet.
+
+                // ??? We send a 1/4 second note.  It would be nice if
+                //     we could just forward the Note On and the Note Off.
+                //     We do that with events coming from the keyboard.
+                //     How can we do that here?
+
+#if 1
+                // Usual approach.
+                StudioControl::playPreviewNote(
+                        m_studio->getInstrumentById(instrument),  // instrument
+                        MidiByte(arg->m[2]),  // pitch
+                        MidiByte(arg->m[3]),  // velocity
+                        RealTime(0, 250000000));  // duration
+#else
+                // Slightly lower level approach, but still doesn't allow
+                // for sending of individual NOTE ON and NOTE OFF events.
                 MappedEvent ev(instrument,
-                               MappedEvent::MidiNote,
-                               MidiByte(arg->m[2]),
-                               MidiByte(arg->m[3]),
-                               RealTime::zeroTime,
-                               RealTime::zeroTime,
-                               RealTime::zeroTime);
-                if (eventType == MIDI_NOTE_OFF)
-                    ev.setVelocity(0);
+                               MappedEvent::MidiNoteOneShot,  // type
+                               MidiByte(arg->m[2]),  // pitch
+                               MidiByte(arg->m[3]),  // velocity
+                               RealTime::zeroTime,  // absTime
+                               RealTime(0, 250000000),  // duration
+                               RealTime::zeroTime);  // audioStartMarker
+
                 StudioControl::sendMappedEvent(ev);
+#endif
             }
 
         } else if (method == "exiting") {
