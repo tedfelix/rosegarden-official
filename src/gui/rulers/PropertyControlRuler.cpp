@@ -72,13 +72,13 @@ void PropertyControlRuler::update()
 //    for (ControlItemList::iterator it = tmplist.begin(); it != tmplist.end(); ++it) {
 //        if (!(*it)->isSelected()) {
 //            (*it)->update();
-//            RG_DEBUG << "ControlItem updated: " << hex << (long)(*it);
+//            RG_DEBUG << "update(): ControlItem updated: " << hex << (long)(*it);
 //        }
 //    }
 
 //    for (ControlItemList::iterator it = m_selectedItems.begin(); it != m_selectedItems.end(); ++it) {
 //        (*it)->update();        
-//        RG_DEBUG << "ControlItem updated: " << hex << (long)(*it);
+//        RG_DEBUG << "update(): ControlItem updated: " << hex << (long)(*it);
 //    }
 
     ControlRuler::update();
@@ -160,7 +160,7 @@ void PropertyControlRuler::addControlItem2(ViewElement *el)
 //    double y = (double) val / MIDI_CONTROL_MAX_VALUE;
 
 //    size_t s = sizeof(MatrixElement);
-//    RG_DEBUG << "PropertyControlRuler::addControlItem sizeof(MatrixElement): " << s;
+//    RG_DEBUG << "addControlItem2(): sizeof(MatrixElement): " << s;
 
     PropertyControlItem *controlItem = new PropertyControlItem(this, getPropertyName(), el, QPolygonF());
     controlItem->update();
@@ -174,8 +174,8 @@ void PropertyControlRuler::addControlItem2(ViewElement *el)
 //    if (event->getType()!="note")
 //        return;
 //
-//    RG_DEBUG << "Event Type: " << event->getType();
-//    RG_DEBUG << "Event absolute time: " << event->getAbsoluteTime();
+//    RG_DEBUG << "addControlItem(): Event Type: " << event->getType();
+//    RG_DEBUG << "  Event absolute time: " << event->getAbsoluteTime();
 //
 //    double x1 = m_rulerScale->getXForTime(event->getAbsoluteTime());
 //    double x2 = m_rulerScale->getXForTime(event->getAbsoluteTime()+event->getDuration());
@@ -213,7 +213,7 @@ void PropertyControlRuler::init()
     }
     
 
-    RG_DEBUG << "PropertyControlRuler::init - Segment size: " << m_segment->size();
+    RG_DEBUG << "init() - Segment size: " << m_segment->size();
 
 //    for (Segment::iterator it = m_viewSegment->begin();
 //        it != m_viewSegment->end(); it++) {
@@ -270,7 +270,7 @@ void PropertyControlRuler::updateSelectedItems()
 
 //void PropertyControlRuler::slotHoveredOverNoteChanged(int evPitch, bool haveEvent, timeT evTime)
 //{
-//    RG_DEBUG << "slotHoveredJOBBY!!";
+//    RG_DEBUG << "slotHoveredOverNoteChanged()";
 //    for (ControlItemList::iterator it = m_selectedItems.begin(); it != m_selectedItems.end(); ++it) {
 //        (*it)->update();
 //    }
@@ -294,9 +294,8 @@ void PropertyControlRuler::elementAdded(const ViewSegment *, ViewElement *el)
     if (el->event()->isa(Note::EventRestType))
         return ;
 
-    RG_DEBUG << "PropertyControlRuler::elementAdded()\n";
+    RG_DEBUG << "elementAdded()";
 
-//    RG_DEBUG << "PropertyControlRuler::eventAdded()";
 //    addControlItem(el->event());
 //    if (MatrixElement *mel = dynamic_cast<MatrixElement*>(el)) {
     addControlItem2(el);
@@ -315,7 +314,8 @@ void PropertyControlRuler::elementRemoved(const ViewSegment *, ViewElement *el)
     if (el->event()->isa(Note::EventRestType))
         return ;
 
-    RG_DEBUG << "PropertyControlRuler::elementRemoved()";
+    RG_DEBUG << "elementRemoved()";
+
     for (ControlItemMap::iterator it = m_controlItemMap.begin(); it != m_controlItemMap.end(); ++it) {
         if (PropertyControlItem *item = dynamic_cast<PropertyControlItem*>(it->second)) {
             if (item->getEvent() == el->event()) {
@@ -323,7 +323,7 @@ void PropertyControlRuler::elementRemoved(const ViewSegment *, ViewElement *el)
 //                m_selectedItems.remove(item);
 //                delete item;
                 eraseControlItem(it);
-                RG_DEBUG << "Control item erased";
+                RG_DEBUG << "elementRemoved(): Control item erased";
                 break;
             }
         }
@@ -343,7 +343,7 @@ PropertyControlRuler::endMarkerTimeChanged(const Segment *s, bool)
 {
     timeT endMarkerTime = s->getEndMarkerTime();
 
-    RG_DEBUG << "PropertyControlRuler::endMarkerTimeChanged() " << endMarkerTime;
+    RG_DEBUG << "endMarkerTimeChanged() " << endMarkerTime;
 
 //    clearSelectedItems();
 //    clear();
@@ -353,7 +353,7 @@ PropertyControlRuler::endMarkerTimeChanged(const Segment *s, bool)
 void
 PropertyControlRuler::mousePressEvent(QMouseEvent *e)
 {
-    RG_DEBUG << "PropertyControlRuler::mousePressEvent\n";
+    RG_DEBUG << "mousePressEvent()";
 
     if (e->button() == Qt::MidButton)
         m_lastEventPos = e->pos();
@@ -389,7 +389,7 @@ PropertyControlRuler::mouseReleaseEvent(QMouseEvent *e)
 void
 PropertyControlRuler::mouseMoveEvent(QMouseEvent *e)
 {
-    RG_DEBUG << "PropertyControlRuler::mouseMoveEvent\n";
+    //RG_DEBUG << "mouseMoveEvent()";
 
     // Don't send super if we're using the middle button
     //
@@ -408,7 +408,7 @@ PropertyControlRuler::mouseMoveEvent(QMouseEvent *e)
 
 void PropertyControlRuler::contextMenuEvent(QContextMenuEvent* e)
 {
-    RG_DEBUG << "PropertyControlRuler::contextMenuEvent\n";
+    RG_DEBUG << "contextMenuEvent()";
 
     // check if we actually have some control items
     bool haveItems = false;
@@ -420,8 +420,7 @@ void PropertyControlRuler::contextMenuEvent(QContextMenuEvent* e)
         }
     }
 
-    RG_DEBUG << "PropertyControlRuler::contextMenuEvent : haveItems = "
-    << haveItems << endl;
+    RG_DEBUG << "contextMenuEvent(): haveItems = " << haveItems;
 
     ControlRuler::contextMenuEvent(e);
 }

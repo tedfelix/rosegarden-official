@@ -15,6 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[MatrixViewSegment]"
+
 #include "MatrixViewSegment.h"
 
 #include "MatrixScene.h"
@@ -82,13 +84,12 @@ MatrixViewSegment::eventRemoved(const Segment *segment,
 ViewElement *
 MatrixViewSegment::makeViewElement(Event* e)
 {
-    MATRIX_DEBUG << "MatrixViewSegment::makeViewElement: event at "
-                 << e->getAbsoluteTime() << endl;
+    //RG_DEBUG << "makeViewElement(): event at " << e->getAbsoluteTime();
 
     // transpose bits
     long pitchOffset = getSegment().getTranspose();
 
-//    std::cout << "I am segment \"" << getSegment().getLabel() << "\"" << std::endl;
+    //RG_DEBUG << "  I am segment \"" << getSegment().getLabel() << "\"";
 
     return new MatrixElement(m_scene, e, m_drum, pitchOffset);
 }

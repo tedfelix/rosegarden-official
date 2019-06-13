@@ -152,7 +152,8 @@ ControlItemMap::iterator ControlRuler::findControlItem(const ControlItem* item)
 void ControlRuler::addControlItem(ControlItem* item)
 {
     // Add a ControlItem to the ruler
-    RG_DEBUG << "ControlItem added: " << hex << (long)item;
+
+    RG_DEBUG << "addControlItem(): ControlItem added: " << hex << (long)item;
     
     // ControlItem may not have an assigned event but must have x position
     ControlItemMap::iterator it = m_controlItemMap.insert(ControlItemMap::value_type(item->xStart(),item));
@@ -213,15 +214,15 @@ void ControlRuler::removeControlItem(const Event *event)
     ControlItemMap::iterator it = findControlItem(event);
 
     if (it != m_controlItemMap.end()) {
-        RG_DEBUG << "removeControlItem at x = " << it->first;
+        RG_DEBUG << "removeControlItem(): at x = " << it->first;
         removeControlItem(it);
     }
 }
 
 void ControlRuler::removeControlItem(const ControlItemMap::iterator &it)
 {
-    RG_DEBUG << "removeControlItem: iterator->item: " << hex << (long) it->second;
-    RG_DEBUG << "m_selectedItems.front(): " << hex << (long) m_selectedItems.front();
+    RG_DEBUG << "removeControlItem(): iterator->item: " << hex << (long) it->second;
+    RG_DEBUG << "  m_selectedItems.front(): " << hex << (long) m_selectedItems.front();
     
     if (it->second->isSelected()) m_selectedItems.remove(it->second);
     removeCheckVisibleLimits(it);
@@ -399,7 +400,7 @@ void ControlRuler::updateSegment()
 
 void ControlRuler::slotUpdate()
 {
-    RG_DEBUG << "ControlRuler::slotUpdate()\n";
+    //RG_DEBUG << "slotUpdate()";
 
 ///TODO Set some update flag?
 }
@@ -432,7 +433,7 @@ void ControlRuler::notationLayoutUpdated(timeT startTime, timeT /*endTime*/)
     
     for (std::vector<ControlItem*>::iterator vit = itemsToUpdate.begin(); vit != itemsToUpdate.end(); ++vit) {
         (*vit)->update();
-        RG_DEBUG << "Updated item: " << hex << (long)(*vit);
+        RG_DEBUG << "notationLayoutUpdated(): Updated item: " << hex << (long)(*vit);
     }
     
     update();
@@ -440,7 +441,8 @@ void ControlRuler::notationLayoutUpdated(timeT startTime, timeT /*endTime*/)
 
 void ControlRuler::paintEvent(QPaintEvent * /*event*/)
 {
-    RG_DEBUG << "ControlRuler::paintEvent: width()=" << width() << " height()=" << height();
+    //RG_DEBUG << "paintEvent(): width()=" << width() << " height()=" << height();
+
     QPainter painter(this);
 
     QPen pen;
@@ -461,7 +463,7 @@ void ControlRuler::paintEvent(QPaintEvent * /*event*/)
     xstart = mapXToWidget(xstart*m_xScale);
     xend = mapXToWidget(xend*m_xScale);
 
-    RG_DEBUG << "ControlRuler::paintEvent: xstart=" << xstart;
+    //RG_DEBUG << "paintEvent(): xstart=" << xstart;
 
     painter.setPen(QColor(127, 127, 127));
     painter.drawLine(xstart, mapYToWidget(0.0f), xend, mapYToWidget(0.0f));
@@ -554,7 +556,7 @@ void ControlRuler::slotSetPannedRect(QRectF pr)
         if (visPos == 1) break;
     }
     
-    RG_DEBUG << "ControlRuler::slotSetPannedRect - visible items: " << m_visibleItems.size();
+    //RG_DEBUG << "slotSetPannedRect() - visible items: " << m_visibleItems.size();
 }
 
 void ControlRuler::resizeEvent(QResizeEvent *)
@@ -638,17 +640,17 @@ void ControlRuler::contextMenuEvent(QContextMenuEvent* e)
         createMenu();
 
     if (m_menu) {
-//        RG_DEBUG << "ControlRuler::showMenu() - show menu with" << m_menu->count() << " items\n";
+//        RG_DEBUG << "ControlRuler::showMenu() - show menu with" << m_menu->count() << " items";
         m_lastEventPos = e->pos(); ///CJ OK ??? - inverseMapPoint(e->pos());
         m_menu->exec(QCursor::pos());
-    } else
-        RG_DEBUG << "ControlRuler::showMenu() : no menu to show\n";
-
+    } else {
+        RG_WARNING << "contextMenuEvent(): no menu to show";
+    }
 }
 
 void ControlRuler::createMenu()
 {
-    RG_DEBUG << "ControlRuler::createMenu()\n";
+    RG_DEBUG << "createMenu()";
 
     QMainWindow* parentMainWindow = dynamic_cast<QMainWindow*>(topLevelWidget());
 
@@ -656,10 +658,10 @@ void ControlRuler::createMenu()
         m_menu = parentMainWindow->findChild<QMenu*>(m_menuName);
 
         if (!m_menu) {
-            RG_DEBUG << "ControlRuler::createMenu() failed\n";
+            RG_WARNING << "createMenu() failed";
         }
     } else {
-        RG_DEBUG << "ControlRuler::createMenu() failed: no parent factory\n";
+        RG_WARNING << "createMenu() failed: no parent factory";
     }
 }
 
@@ -685,7 +687,8 @@ void ControlRuler::updateSelection()
         m_eventSelection->addEvent((*it)->getEvent());
     }
 
-    RG_DEBUG << "control ruler updating selection";
+    RG_DEBUG << "updateSelection(): emitting rulerSelectionChanged()";
+
     emit rulerSelectionChanged(m_eventSelection);
 }
 
@@ -701,7 +704,8 @@ void ControlRuler::addToSelection(ControlItem *item)
     item->setSelected(true);
     m_eventSelection->addEvent(item->getEvent());
     emit rulerSelectionChanged(m_eventSelection);
-    RG_DEBUG << "control ruler add to selection";
+
+    RG_DEBUG << "addToSelection() done";
 }
 
 void ControlRuler::removeFromSelection(ControlItem*item)
@@ -714,10 +718,11 @@ void ControlRuler::removeFromSelection(ControlItem*item)
 
 void ControlRuler::clear()
 {
-    RG_DEBUG << "ControlRuler::clear - m_controlItemMap.size(): " << m_controlItemMap.size();
+    RG_DEBUG << "clear() - m_controlItemMap.size(): " << m_controlItemMap.size();
+
     for (ControlItemMap::iterator it = m_controlItemMap.begin(); it != m_controlItemMap.end(); ++it) {
         if (ControlItem *item = dynamic_cast<ControlItem*>(it->second)) {
-            RG_DEBUG << "Deleting controlItem";
+            RG_DEBUG << "  Deleting controlItem";
             delete item;
         }
     }
