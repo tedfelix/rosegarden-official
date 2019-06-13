@@ -847,11 +847,7 @@ MatrixWidget::slotDispatchMouseMove(const MatrixMouseEvent *e)
     if (!m_currentTool)
         return;
 
-    MatrixTool::FollowMode followMode = m_currentTool->handleMouseMove(e);
-
-    if (followMode != MatrixTool::NoFollow) {
-        // Auto-scroll
-    }
+    m_followMode = m_currentTool->handleMouseMove(e);
 }
 
 void
