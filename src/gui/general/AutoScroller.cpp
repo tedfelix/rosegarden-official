@@ -44,13 +44,15 @@ namespace
         const double distanceNormalized = distance / maxDistance;
         // Apply a curve to reduce the touchiness.
         // Simple square curve.  Something more pronounced might be better.
-        const double distanceWithCurve = distanceNormalized * distanceNormalized;
+        const double distanceWithCurve =
+                distanceNormalized * distanceNormalized;
 
         const double minScrollRate = 1.2;
         const double maxScrollRate = 100;
         const double scrollRateRange = (maxScrollRate - minScrollRate);
 
-        const double scrollRate = distanceWithCurve * scrollRateRange + minScrollRate;
+        const double scrollRate =
+                distanceWithCurve * scrollRateRange + minScrollRate;
 
         return std::min(scrollRate, maxScrollRate);
     }
@@ -63,7 +65,6 @@ namespace Rosegarden
 
 AutoScroller::AutoScroller() :
     m_abstractScrollArea(nullptr),
-    m_viewport(nullptr),
     m_vScrollRate(10),
     m_followMode(NO_FOLLOW)
 {
@@ -76,11 +77,6 @@ AutoScroller::start()
 {
     if (!m_abstractScrollArea) {
         RG_WARNING << "start(): abstract scroll area not specified";
-        return;
-    }
-
-    if (!m_viewport) {
-        RG_WARNING << "start(): viewport not specified";
         return;
     }
 
@@ -104,7 +100,8 @@ AutoScroller::slotOnTimer()
 void
 AutoScroller::doAutoScroll()
 {
-    const QPoint mousePos = m_viewport->mapFromGlobal(QCursor::pos());
+    const QPoint mousePos =
+            m_abstractScrollArea->mapFromGlobal(QCursor::pos());
 
     if (m_followMode & FOLLOW_HORIZONTAL) {
 
@@ -131,14 +128,15 @@ AutoScroller::doAutoScroll()
             // Assume we can place the auto scroll area outside the window.
             int xOffset = 0;
 
-            const int rightSideOfScreen =
-                    QApplication::desktop()->availableGeometry(m_viewport).right();
+            const int rightSideOfScreen = QApplication::desktop()->
+                    availableGeometry(m_abstractScrollArea).right();
 
             const int rightSideOfViewport =
-                    m_viewport->parentWidget()->mapToGlobal(
-                            m_viewport->geometry().bottomRight()).x();
+                    m_abstractScrollArea->parentWidget()->mapToGlobal(
+                        m_abstractScrollArea->geometry().bottomRight()).x();
 
-            const int spaceToTheRight = rightSideOfScreen - rightSideOfViewport;
+            const int spaceToTheRight =
+                    rightSideOfScreen - rightSideOfViewport;
 
             // If there's not enough space for the auto scroll area, move it
             // inside the viewport.
@@ -146,7 +144,7 @@ AutoScroller::doAutoScroll()
                 xOffset = static_cast<int>(-maxDistance + spaceToTheRight);
 
             // Limit where auto scroll begins.
-            const int xMax = m_viewport->width() + xOffset;
+            const int xMax = m_abstractScrollArea->width() + xOffset;
 
             // If the mouse is to the right of the auto scroll limit
             if (mousePos.x() > xMax) {
@@ -158,7 +156,8 @@ AutoScroller::doAutoScroll()
 
         // Scroll if needed.
         if (scrollX) {
-            QScrollBar *hScrollBar = m_abstractScrollArea->horizontalScrollBar();
+            QScrollBar *hScrollBar =
+                    m_abstractScrollArea->horizontalScrollBar();
             hScrollBar->setValue(hScrollBar->value() + scrollX);
         }
     }
@@ -176,12 +175,13 @@ AutoScroller::doAutoScroll()
             scrollY = -m_vScrollRate;
 
         // If the mouse is below the viewport
-        if (mousePos.y() > m_viewport->height())
+        if (mousePos.y() > m_abstractScrollArea->height())
             scrollY = +m_vScrollRate;
 
         // Scroll if needed.
         if (scrollY) {
-            QScrollBar *vScrollBar = m_abstractScrollArea->verticalScrollBar();
+            QScrollBar *vScrollBar =
+                    m_abstractScrollArea->verticalScrollBar();
             vScrollBar->setValue(vScrollBar->value() + scrollY);
         }
 

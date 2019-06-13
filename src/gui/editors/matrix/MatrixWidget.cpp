@@ -345,7 +345,6 @@ MatrixWidget::MatrixWidget(bool drumMode) :
 
     // Set up AutoScroller.
     m_autoScroller.connectScrollArea(m_view);
-    m_autoScroller.connectViewport(m_view);
 }
 
 MatrixWidget::~MatrixWidget()

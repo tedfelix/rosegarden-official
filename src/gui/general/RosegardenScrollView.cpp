@@ -54,7 +54,6 @@ RosegardenScrollView::RosegardenScrollView(QWidget *parent)
     setFrameStyle(QFrame::NoFrame);
 
     m_autoScroller.connectScrollArea(this);
-    m_autoScroller.connectViewport(viewport());
 }
 
 int RosegardenScrollView::contentsX()
