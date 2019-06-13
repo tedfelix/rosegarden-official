@@ -1624,8 +1624,6 @@ MatrixWidget::startAutoScroll()
 {
     if (!m_autoScrollTimer.isActive())
         m_autoScrollTimer.start(30);  // msecs
-
-    m_autoScrolling = true;
 }
 
 // We'll hit MaxScrollRate at this distance outside the viewport.
@@ -1754,7 +1752,6 @@ void
 MatrixWidget::stopAutoScroll()
 {
     m_autoScrollTimer.stop();
-    m_autoScrolling = false;
 }
 
 

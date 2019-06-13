@@ -435,7 +435,6 @@ private:
     // Auto-scroll
 
     QTimer m_autoScrollTimer;
-    bool m_autoScrolling;
     FollowMode m_followMode;
     void startAutoScroll();
     void doAutoScroll();
