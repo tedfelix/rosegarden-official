@@ -53,8 +53,8 @@ Key
 AnalysisHelper::getKeyForEvent(Event *e, Segment &s)
 {
     Segment::iterator i =
-	e ? s.findNearestTime(e->getAbsoluteTime()) //cc
-   	  : s.begin();
+        e ? s.findNearestTime(e->getAbsoluteTime()) //cc
+          : s.begin();
 
     if (i==s.end()) return Key();
 
@@ -78,7 +78,7 @@ AnalysisHelper::getKeyForEvent(Event *e, Segment &s)
 
 void
 AnalysisHelper::labelChords(CompositionTimeSliceAdapter &c, Segment &s,
-			    const Rosegarden::Quantizer *quantizer)
+                            const Rosegarden::Quantizer *quantizer)
 {
 
     Key key;
@@ -89,50 +89,50 @@ AnalysisHelper::labelChords(CompositionTimeSliceAdapter &c, Segment &s,
 
     for (CompositionTimeSliceAdapter::iterator i = c.begin(); i != c.end(); ++i) {
 
-	timeT time = (*i)->getAbsoluteTime();
+        timeT time = (*i)->getAbsoluteTime();
 
-//	std::cerr << "AnalysisHelper::labelChords: time is " << time << ", type is " << (*i)->getType() << ", event is " << *i << " (itr is " << &i << ")" << std::endl;
+        //std::cerr << "AnalysisHelper::labelChords: time is " << time << ", type is " << (*i)->getType() << ", event is " << *i << " (itr is " << &i << ")" << std::endl;
 
-	if ((*i)->isa(Key::EventType)) {
-	    key = Key(**i);
-	    Text text(key.getName(), Text::KeyName);
-	    s.insert(text.getAsEvent(time));
-	    continue;
-	}
+        if ((*i)->isa(Key::EventType)) {
+            key = Key(**i);
+            Text text(key.getName(), Text::KeyName);
+            s.insert(text.getAsEvent(time));
+            continue;
+        }
 
-	if ((*i)->isa(Note::EventType)) {
+        if ((*i)->isa(Note::EventType)) {
 
-	    int bass = 999;
-	    int mask = 0;
+            int bass = 999;
+            int mask = 0;
 
-	    GlobalChord chord(c, i, quantizer);
-	    if (chord.size() == 0) continue;
-	    
-	    for (GlobalChord::iterator j = chord.begin(); j != chord.end(); ++j) {
-		long pitch = 999;
-		if ((**j)->get<Int>(BaseProperties::PITCH, pitch)) {
-		    if (pitch < bass) {
-			assert(bass == 999); // should be in ascending order already
-			bass = pitch;
-		    }
-		    mask |= 1 << (pitch % 12);
-		}
-	    }
+            GlobalChord chord(c, i, quantizer);
+            if (chord.size() == 0) continue;
 
-	    i = chord.getFinalElement();
+            for (GlobalChord::iterator j = chord.begin(); j != chord.end(); ++j) {
+                long pitch = 999;
+                if ((**j)->get<Int>(BaseProperties::PITCH, pitch)) {
+                    if (pitch < bass) {
+                        assert(bass == 999); // should be in ascending order already
+                        bass = pitch;
+                    }
+                    mask |= 1 << (pitch % 12);
+                }
+            }
 
-	    if (mask == 0) continue;
+            i = chord.getFinalElement();
 
-	    ChordLabel ch(key, mask, bass);
+            if (mask == 0) continue;
 
-	    if (ch.isValid())
-	    {
-            //std::cerr << ch.getName(key) << " at time " << time << std::endl;
-		
-		Text text(ch.getName(key), Text::ChordName);
-		s.insert(text.getAsEvent(time));
-	    }
-	}
+            ChordLabel ch(key, mask, bass);
+
+            if (ch.isValid())
+            {
+                //std::cerr << ch.getName(key) << " at time " << time << std::endl;
+
+                Text text(ch.getName(key), Text::ChordName);
+                s.insert(text.getAsEvent(time));
+            }
+        }
 
     }
 }
@@ -175,7 +175,7 @@ ChordLabel::ChordLabel(Key key, int mask, int /* bass */) :
       else if (rootBassInterval > 4) m_data.m_type=ChordTypes::NoChord;
       // Mark first-inversion and root-position chords as such
       else if (rootBassInterval > 0) m_data.m_inversion=1;
-      else 						   m_data.m_inversion=0;
+      else                           m_data.m_inversion=0;
     */
 
 }
@@ -184,8 +184,8 @@ std::string
 ChordLabel::getName(Key key) const
 {
     return Pitch(m_data.m_rootPitch).getAsString(key.isSharp(), false) +
-	m_data.m_type;
-    //			+ (m_data.m_inversion>0 ? " in first inversion" : "");
+        m_data.m_type;
+        // + (m_data.m_inversion>0 ? " in first inversion" : "");
 }
 
 int
@@ -233,14 +233,14 @@ ChordLabel::checkMap()
 
     const int basicChordMasks[8] =
     {
-        1 + (1<<4) + (1<<7),			// major
-        1 + (1<<3) + (1<<7),			// minor
-        1 + (1<<3) + (1<<6),			// diminished
-        1 + (1<<4) + (1<<7) + (1<<11),	// major 7th
-        1 + (1<<4) + (1<<7) + (1<<10),	// dominant 7th
-        1 + (1<<3) + (1<<7) + (1<<10),	// minor 7th
-        1 + (1<<3) + (1<<6) + (1<<10),	// half-diminished 7th
-        1 + (1<<3) + (1<<6) + (1<<9)	// diminished 7th
+        1 + (1<<4) + (1<<7),            // major
+        1 + (1<<3) + (1<<7),            // minor
+        1 + (1<<3) + (1<<6),            // diminished
+        1 + (1<<4) + (1<<7) + (1<<11),  // major 7th
+        1 + (1<<4) + (1<<7) + (1<<10),  // dominant 7th
+        1 + (1<<3) + (1<<7) + (1<<10),  // minor 7th
+        1 + (1<<3) + (1<<6) + (1<<10),  // half-diminished 7th
+        1 + (1<<3) + (1<<6) + (1<<9)    // diminished 7th
     };
 
     // Each mask is inserted into the map rotated twelve ways; each
@@ -254,8 +254,8 @@ ChordLabel::checkMap()
 
             m_chordMap.insert
             (
-//                std::pair<int, ChordData>
-		ChordMap::value_type
+                //std::pair<int, ChordData>
+                ChordMap::value_type
                 (
                     (basicChordMasks[i] << j | basicChordMasks[i] >> (12-j))
                     & ((1<<12) - 1),
@@ -318,20 +318,20 @@ AnalysisHelper::makeHarmonyGuessList(CompositionTimeSliceAdapter &c,
 
         timeT time = (*i)->getAbsoluteTime();
 
-	if (time >= nextSigTime) {
-	    Composition *comp = c.getComposition();
-	    int sigNo = comp->getTimeSignatureNumberAt(time);
-	    if (sigNo >= 0) {
-		std::pair<timeT, TimeSignature> sig = comp->getTimeSignatureChange(sigNo);
-		timeSigTime = sig.first;
-		timeSig = sig.second;
-	    }
-	    if (sigNo < comp->getTimeSignatureCount() - 1) {
-		nextSigTime = comp->getTimeSignatureChange(sigNo + 1).first;
-	    } else {
-		nextSigTime = comp->getEndMarker();
-	    }
-	}
+        if (time >= nextSigTime) {
+            Composition *comp = c.getComposition();
+            int sigNo = comp->getTimeSignatureNumberAt(time);
+            if (sigNo >= 0) {
+                std::pair<timeT, TimeSignature> sig = comp->getTimeSignatureChange(sigNo);
+                timeSigTime = sig.first;
+                timeSig = sig.second;
+            }
+            if (sigNo < comp->getTimeSignatureCount() - 1) {
+                nextSigTime = comp->getTimeSignatureChange(sigNo + 1).first;
+            } else {
+                nextSigTime = comp->getEndMarker();
+            }
+        }
 
         double emphasis =
             double(timeSig.getEmphasisForTime(time - timeSigTime));
@@ -352,15 +352,15 @@ AnalysisHelper::makeHarmonyGuessList(CompositionTimeSliceAdapter &c,
         // no initialization
         for (  ; i != c.end() && (*i)->getAbsoluteTime() == time; ++i)
         {
-	    if ((*i)->isa(Note::EventType))
+            if ((*i)->isa(Note::EventType))
             {
-		try {
-		    int pitch = (*i)->get<Int>(BaseProperties::PITCH);
-		    delta[pitch % 12] += 1 << int(emphasis);
-		    ++noteCount;
-		} catch (...) {
-		    std::cerr << "No pitch for note at " << time << "!" << std::endl;
-		}
+                try {
+                    int pitch = (*i)->get<Int>(BaseProperties::PITCH);
+                    delta[pitch % 12] += 1 << int(emphasis);
+                    ++noteCount;
+                } catch (...) {
+                    std::cerr << "No pitch for note at " << time << "!" << std::endl;
+                }
             }
         }
 
@@ -543,7 +543,7 @@ AnalysisHelper::refineHarmonyGuessList(CompositionTimeSliceAdapter &/* c */,
         }
 
         // Since we're not returning any results right now, print them
-	std::cerr << "Time: " << j->first << std::endl;
+        std::cerr << "Time: " << j->first << std::endl;
         std::cerr << "Best chords: "
           << bestGuessForFirstChord.getName(Key()) << ", "
           << bestGuessForSecondChord.getName(Key()) << std::endl;
@@ -569,17 +569,17 @@ AnalysisHelper::refineHarmonyGuessList(CompositionTimeSliceAdapter &/* c */,
 
             // If not, h.erase(second-iterator++)
 
-	// Temporary hack to get _something_ interesting out:
-	Event *e;
-	e = Text(bestGuessForFirstChord.getName(Key()), Text::ChordName).
-	    getAsEvent(j->first);
-	segment.insert(new Event(*e, e->getAbsoluteTime(),
-				 e->getDuration(), e->getSubOrdering()-1));
-	delete e;
+        // Temporary hack to get _something_ interesting out:
+        Event *e;
+        e = Text(bestGuessForFirstChord.getName(Key()), Text::ChordName).
+            getAsEvent(j->first);
+        segment.insert(new Event(*e, e->getAbsoluteTime(),
+                                 e->getDuration(), e->getSubOrdering()-1));
+        delete e;
 
-	e = Text(bestGuessForSecondChord.getName(Key()), Text::ChordName).
-	    getAsEvent(j->first);
-	segment.insert(e);
+        e = Text(bestGuessForSecondChord.getName(Key()), Text::ChordName).
+            getAsEvent(j->first);
+        segment.insert(e);
 
         // For now, just advance:
         i = j;
@@ -874,7 +874,7 @@ AnalysisHelper::guessTimeSignature(CompositionTimeSliceAdapter &c)
 
         // Skip non-notes
         if (!(*i)->isa(Note::EventType)) continue;
-	haveNotes = true;
+        haveNotes = true;
 
         for (int k = 0; k < 4; ++k)
         {
@@ -1024,36 +1024,36 @@ AnalysisHelper::guessKey(CompositionTimeSliceAdapter &c)
     {
         timeT time = (*i)->getAbsoluteTime();
 
-	if (time >= nextSigTime) {
-	    Composition *comp = c.getComposition();
-	    int sigNo = comp->getTimeSignatureNumberAt(time);
-	    if (sigNo >= 0) {
-		std::pair<timeT, TimeSignature> sig = comp->getTimeSignatureChange(sigNo);
-		timeSigTime = sig.first;
-		timeSig = sig.second;
-	    }
-	    if (sigNo < comp->getTimeSignatureCount() - 1) {
-		nextSigTime = comp->getTimeSignatureChange(sigNo + 1).first;
-	    } else {
-		nextSigTime = comp->getEndMarker();
-	    }
-	}
+        if (time >= nextSigTime) {
+            Composition *comp = c.getComposition();
+            int sigNo = comp->getTimeSignatureNumberAt(time);
+            if (sigNo >= 0) {
+                std::pair<timeT, TimeSignature> sig = comp->getTimeSignatureChange(sigNo);
+                timeSigTime = sig.first;
+                timeSig = sig.second;
+            }
+            if (sigNo < comp->getTimeSignatureCount() - 1) {
+                nextSigTime = comp->getTimeSignatureChange(sigNo + 1).first;
+            } else {
+                nextSigTime = comp->getEndMarker();
+            }
+        }
 
         // Skip any other non-notes
         if (!(*i)->isa(Note::EventType)) continue;
 
-	try {
-	    // Get pitch, metric strength of this event
-	    int pitch = (*i)->get<Int>(BaseProperties::PITCH)%12;
-	    int emphasis =
-		1 << timeSig.getEmphasisForTime((*i)->getAbsoluteTime() - timeSigTime);
-	    
-	    // Count notes
-	    weightedNoteCount[pitch] += emphasis;
+        try {
+            // Get pitch, metric strength of this event
+            int pitch = (*i)->get<Int>(BaseProperties::PITCH)%12;
+            int emphasis =
+                1 << timeSig.getEmphasisForTime((*i)->getAbsoluteTime() - timeSigTime);
 
-	} catch (...) {
-	    std::cerr << "No pitch for note at " << time << "!" << std::endl;
-	}
+            // Count notes
+            weightedNoteCount[pitch] += emphasis;
+
+        } catch (...) {
+            std::cerr << "No pitch for note at " << time << "!" << std::endl;
+        }
     }
 
     // 2. Figure out what key best fits the distribution of emphasis.
