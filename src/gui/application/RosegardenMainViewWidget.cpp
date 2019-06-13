@@ -222,7 +222,8 @@ RosegardenMainViewWidget::RosegardenMainViewWidget(bool showTrackLabels,
 
 RosegardenMainViewWidget::~RosegardenMainViewWidget()
 {
-    RG_DEBUG << "~RosegardenMainViewWidget()";
+    RG_DEBUG << "dtor";
+
     delete m_rulerScale;
 }
 
@@ -354,7 +355,7 @@ void RosegardenMainViewWidget::slotEditSegmentNotation(Segment* p)
     SetWaitCursor waitCursor;
     std::vector<Segment *> segmentsToEdit;
 
-    RG_DEBUG << "\n\n\n\nRosegardenMainViewWidget::slotEditSegmentNotation: p is " << p;
+    RG_DEBUG << "slotEditSegmentNotation(): p is " << p;
 
     // The logic here is: If we're calling for this operation to
     // happen on a particular segment, then open that segment and if
@@ -487,7 +488,7 @@ void RosegardenMainViewWidget::slotEditSegmentPitchTracker(Segment* p)
     SetWaitCursor waitCursor;
     std::vector<Segment *> segmentsToEdit;
 
-    RG_DEBUG << "\n\n\n\nRosegardenMainViewWidget::slotEditSegmentNotation: p is " << p;
+    RG_DEBUG << "slotEditSegmentPitchTracker(): p is " << p;
 
     // The logic here is: If we're calling for this operation to
     // happen on a particular segment, then open that segment and if
@@ -884,7 +885,8 @@ void RosegardenMainViewWidget::slotEditSegmentsEventList(std::vector<Segment *> 
 
 void RosegardenMainViewWidget::slotEditTriggerSegment(int id)
 {
-    std::cerr << "RosegardenMainViewWidget caught editTriggerSegment signal" << std::endl;
+    RG_DEBUG << "slotEditTriggerSegment(): caught editTriggerSegment signal";
+
     SetWaitCursor waitCursor;
 
     std::vector<Segment *> segmentsToEdit;
@@ -894,7 +896,7 @@ void RosegardenMainViewWidget::slotEditTriggerSegment(int id)
     if (s) {
         segmentsToEdit.push_back(s);
     } else {
-        std::cerr << "caught id: " << id << " and must not have been valid?" << std::endl;
+        RG_WARNING << "slotEditTriggerSegment(): caught id: " << id << " and must not have been valid?";
         return ;
     }
 
@@ -915,8 +917,7 @@ void RosegardenMainViewWidget::slotSegmentAutoSplit(Segment *segment)
 
 void RosegardenMainViewWidget::slotEditSegmentAudio(Segment *segment)
 {
-    std::cout << "RosegardenMainViewWidget::slotEditSegmentAudio() - "
-    << "starting external audio editor" << std::endl;
+    RG_DEBUG << "slotEditSegmentAudio() - starting external audio editor";
 
     QSettings settings;
     settings.beginGroup( GeneralOptionsConfigGroup );
@@ -932,9 +933,7 @@ void RosegardenMainViewWidget::slotEditSegmentAudio(Segment *segment)
 
     if (splitCommand.size() == 0) {
 
-        std::cerr << "RosegardenMainViewWidget::slotEditSegmentAudio() - "
-        << "external editor \"" << application.data()
-        << "\" not found" << std::endl;
+        RG_WARNING << "slotEditSegmentAudio() - external editor \"" << application.data() << "\" not found";
 
          QMessageBox::warning(this, tr("Rosegarden"), 
                            tr("You've not yet defined an audio editor for Rosegarden to use.\nSee Edit -> Preferences -> Audio."));
@@ -944,17 +943,14 @@ void RosegardenMainViewWidget::slotEditSegmentAudio(Segment *segment)
 
     QFileInfo *appInfo = new QFileInfo(splitCommand[0]);
     if (appInfo->exists() == false || appInfo->isExecutable() == false) {
-        std::cerr << "RosegardenMainViewWidget::slotEditSegmentAudio() - "
-                  << "can't execute \"" << splitCommand[0] << "\""
-                  << std::endl;
+        RG_WARNING << "slotEditSegmentAudio() - can't execute \"" << splitCommand[0] << "\"";
         return;
     }
 
     AudioFile *aF = getDocument()->getAudioFileManager().
                     getAudioFile(segment->getAudioFileId());
     if (aF == nullptr) {
-        std::cerr << "RosegardenMainViewWidget::slotEditSegmentAudio() - "
-        << "can't find audio file" << std::endl;
+        RG_WARNING << "slotEditSegmentAudio() - can't find audio file";
         return ;
     }
 
@@ -970,8 +966,7 @@ void RosegardenMainViewWidget::slotEditSegmentAudio(Segment *segment)
     //
     process->start(splitCommand.takeFirst(), splitCommand);
     if (!process->waitForStarted()) {  //@@@ JAS Check here first for errors
-        std::cerr << "RosegardenMainViewWidget::slotEditSegmentAudio() - "
-        << "can't start external editor" << std::endl;
+        RG_WARNING << "slotEditSegmentAudio() - can't start external editor";
     }
 
     // restore cursor
@@ -996,8 +991,7 @@ void RosegardenMainViewWidget::setZoomSize(double size)
 #if 0
     double duration44 = TimeSignature(4, 4).getBarDuration();
     double xScale = duration44 / (size * barWidth44);
-    RG_DEBUG << "RosegardenMainViewWidget::setZoomSize():  xScale = " << 
-        xScale;
+    RG_DEBUG << "setZoomSize():  xScale = " << xScale;
 #endif
 
     // Redraw everything
@@ -1452,16 +1446,14 @@ void RosegardenMainViewWidget::slotShowSegmentLabels(bool v)
 void RosegardenMainViewWidget::slotAddTracks(unsigned int nbTracks,
                                       InstrumentId id, int pos)
 {
-    RG_DEBUG << "RosegardenMainViewWidget::slotAddTracks(" << nbTracks << ", " << pos << ")";
+    RG_DEBUG << "slotAddTracks(" << nbTracks << ", " << pos << ")";
     m_trackEditor->addTracks(nbTracks, id, pos);
 }
 
 void RosegardenMainViewWidget::slotDeleteTracks(
     std::vector<TrackId> tracks)
 {
-    RG_DEBUG << "RosegardenMainViewWidget::slotDeleteTracks - "
-    << "deleting " << tracks.size() << " tracks"
-    << endl;
+    RG_DEBUG << "slotDeleteTracks() - deleting " << tracks.size() << " tracks";
 
     m_trackEditor->deleteTracks(tracks);
 }
@@ -1511,7 +1503,8 @@ RosegardenMainViewWidget::slotAddAudioSegmentCurrentPosition(AudioFileId audioFi
         const RealTime &startTime,
         const RealTime &endTime)
 {
-    std::cerr << "RosegardenMainViewWidget::slotAddAudioSegmentCurrentPosition(...) - slot firing as ordered, sir!" << std::endl;
+    RG_DEBUG << "slotAddAudioSegmentCurrentPosition(...) - slot firing as ordered, sir!";
+
     Composition &comp = getDocument()->getComposition();
 
     AudioSegmentInsertCommand *command =
@@ -1537,7 +1530,7 @@ RosegardenMainViewWidget::slotAddAudioSegmentDefaultPosition(AudioFileId audioFi
         const RealTime &startTime,
         const RealTime &endTime)
 {
-    RG_DEBUG << "RosegardenMainViewWidget::slotAddAudioSegmentDefaultPosition()...";
+    RG_DEBUG << "slotAddAudioSegmentDefaultPosition()...";
 
     // Add at current track if it's an audio track, otherwise at first
     // empty audio track if there is one, otherwise at first audio track.
@@ -1729,16 +1722,15 @@ RosegardenMainViewWidget::slotDroppedAudio(QString audioDesc)
     s >> endTime.sec;
     s >> endTime.nsec;
 
-    RG_DEBUG << "RosegardenMainViewWidget::slotDroppedAudio("
-    //<< audioDesc
-    << ") : audioFileId = " << audioFileId
-    << " - trackId = " << trackId
-    << " - position = " << position
-    << " - startTime.sec = " << startTime.sec
-    << " - startTime.nsec = " << startTime.nsec
-    << " - endTime.sec = " << endTime.sec
-    << " - endTime.nsec = " << endTime.nsec
-    << endl;
+    RG_DEBUG << "slotDroppedAudio("
+             //<< audioDesc
+             << ") : audioFileId = " << audioFileId
+             << " - trackId = " << trackId
+             << " - position = " << position
+             << " - startTime.sec = " << startTime.sec
+             << " - startTime.nsec = " << startTime.nsec
+             << " - endTime.sec = " << endTime.sec
+             << " - endTime.nsec = " << endTime.nsec;
 
     slotAddAudioSegment(audioFileId, trackId, position, startTime, endTime);
 }
@@ -1746,9 +1738,7 @@ RosegardenMainViewWidget::slotDroppedAudio(QString audioDesc)
 void
 RosegardenMainViewWidget::slotSetRecord(InstrumentId id, bool value)
 {
-    RG_DEBUG << "RosegardenMainViewWidget::slotSetRecord - "
-    << "id = " << id
-    << ",value = " << value << endl;
+    RG_DEBUG << "slotSetRecord() - id = " << id << ",value = " << value;
     /*
         // IPB
         //
@@ -1773,9 +1763,7 @@ RosegardenMainViewWidget::slotSetRecord(InstrumentId id, bool value)
 void
 RosegardenMainViewWidget::slotSetSolo(InstrumentId id, bool value)
 {
-    RG_DEBUG << "RosegardenMainViewWidget::slotSetSolo - "
-    << "id = " << id
-    << ",value = " << value << endl;
+    RG_DEBUG << "slotSetSolo() - " << "id = " << id << ",value = " << value;
 
     emit toggleSolo(value);
 }
@@ -1801,7 +1789,7 @@ RosegardenMainViewWidget::slotUpdateRecordingSegment(Segment *segment,
     if (tracking != 1)
         return ;
 
-    RG_DEBUG << "RosegardenMainViewWidget::slotUpdateRecordingSegment: segment is " << segment << ", lastRecordingSegment is " << lastRecordingSegment << ", opening a new view";
+    RG_DEBUG << "slotUpdateRecordingSegment(): segment is " << segment << ", lastRecordingSegment is " << lastRecordingSegment << ", opening a new view";
 
     std::vector<Segment *> segments;
     segments.push_back(segment);
@@ -1851,7 +1839,7 @@ RosegardenMainViewWidget::slotActiveMainWindowChanged()
 void
 RosegardenMainViewWidget::slotControllerDeviceEventReceived(MappedEvent *e)
 {
-    //RG_DEBUG << "Controller device event received - send to " << (void *)m_lastActiveMainWindow << " (I am " << this << ")";
+    //RG_DEBUG << "slotControllerDeviceEventReceived() - send to " << (void *)m_lastActiveMainWindow << " (I am " << this << ")";
 
     //!!! So, what _should_ we do with these?
 
