@@ -323,7 +323,7 @@ private:
     // Panner (Navigation Area below the matrix)
 
     /// Navigation area under the main view.
-    Panner *m_hpanner; // I own this
+    Panner *m_panner; // I own this
     void zoomInFromPanner();
     void zoomOutFromPanner();
 

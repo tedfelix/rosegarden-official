@@ -186,12 +186,12 @@ MatrixWidget::MatrixWidget(bool drumMode) :
     pannerLayout->addWidget(m_changerWidget);
 
     // the panner
-    m_hpanner = new Panner;
-    m_hpanner->setMaximumHeight(60);
-    m_hpanner->setBackgroundBrush(Qt::white);
-    m_hpanner->setOptimizationFlag(QGraphicsView::DontAdjustForAntialiasing, true);
+    m_panner = new Panner;
+    m_panner->setMaximumHeight(60);
+    m_panner->setBackgroundBrush(Qt::white);
+    m_panner->setOptimizationFlag(QGraphicsView::DontAdjustForAntialiasing, true);
 
-    pannerLayout->addWidget(m_hpanner);
+    pannerLayout->addWidget(m_panner);
 
     // row, col, row span, col span
     QFrame *controls = new QFrame;
@@ -267,7 +267,7 @@ MatrixWidget::MatrixWidget(bool drumMode) :
             this, &MatrixWidget::slotHScrollBarRangeChanged);
 
     connect(m_view, &Panned::viewportChanged,
-            m_hpanner, &Panner::slotSetPannedRect);
+            m_panner, &Panner::slotSetPannedRect);
 
     connect(m_view, &Panned::viewportChanged,
             m_pianoView, &Panned::slotSetViewport);
@@ -280,22 +280,22 @@ MatrixWidget::MatrixWidget(bool drumMode) :
     connect(m_view, &Panned::zoomOut,
             this, &MatrixWidget::slotZoomOut);
 
-    connect(m_hpanner, &Panner::pannedRectChanged,
+    connect(m_panner, &Panner::pannedRectChanged,
             m_view, &Panned::slotSetViewport);
 
-    connect(m_hpanner, &Panner::pannedRectChanged,
+    connect(m_panner, &Panner::pannedRectChanged,
             m_pianoView, &Panned::slotSetViewport);
 
-    connect(m_hpanner, &Panner::pannedRectChanged,
+    connect(m_panner, &Panner::pannedRectChanged,
             m_controlsWidget, &ControlRulerWidget::slotSetPannedRect);
 
     connect(m_view, &Panned::pannedContentsScrolled,
             this, &MatrixWidget::slotScrollRulers);
 
-    connect(m_hpanner, &Panner::zoomIn,
+    connect(m_panner, &Panner::zoomIn,
             this, &MatrixWidget::slotSyncPannerZoomIn);
 
-    connect(m_hpanner, &Panner::zoomOut,
+    connect(m_panner, &Panner::zoomOut,
             this, &MatrixWidget::slotSyncPannerZoomOut);
 
     connect(m_pianoView, &Panned::wheelEventReceived,
@@ -411,7 +411,7 @@ MatrixWidget::setSegments(RosegardenDocument *document,
 
     m_toolBox->setScene(m_scene);
 
-    m_hpanner->setScene(m_scene);
+    m_panner->setScene(m_scene);
 
     connect(m_view, &Panned::mouseLeaves,
             this, &MatrixWidget::slotMouseLeavesView);
@@ -1072,10 +1072,10 @@ MatrixWidget::updatePointer(timeT t)
     if (pointerX < sceneXMin  ||  sceneXMax < pointerX) {
         // Never move the pointer outside the scene (else the scene will grow)
         m_view->hidePositionPointer();
-        m_hpanner->slotHidePositionPointer();
+        m_panner->slotHidePositionPointer();
     } else {
         m_view->showPositionPointer(pointerX);
-        m_hpanner->slotShowPositionPointer(pointerX);
+        m_panner->slotShowPositionPointer(pointerX);
     }
 }
 
