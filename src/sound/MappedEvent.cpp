@@ -190,6 +190,141 @@ MappedEvent::addDataString(const std::string& data)
         setDataBlockForEvent(this, data, true);
 }
 
+QDebug &
+operator<<(QDebug &dbg, const MappedEvent &mE)
+{
+    dbg << "MappedEvent" << endl;
+
+    dbg << "  Track ID:";
+
+    if (mE.m_trackId != NO_TRACK)
+        dbg << static_cast<int>(mE.m_trackId);
+    else
+        dbg << "NO_TRACK";
+
+    dbg << endl;
+
+    dbg << "  Instrument ID:" << mE.m_instrument << endl;
+
+    QString type;
+
+    // ToString(MappedEventType)?
+    switch(mE.m_type)
+    {
+    case MappedEvent::InvalidMappedEvent:
+        type = "InvalidMappedEvent";
+        break;
+    case MappedEvent::MidiNote:
+        type = "MidiNote";
+        break;
+    case MappedEvent::MidiNoteOneShot:
+        type = "MidiNoteOneShot";
+        break;
+    case MappedEvent::MidiProgramChange:
+        type = "MidiProgramChange";
+        break;
+    case MappedEvent::MidiKeyPressure:
+        type = "MidiKeyPressure";
+        break;
+    case MappedEvent::MidiChannelPressure:
+        type = "MidiChannelPressure";
+        break;
+    case MappedEvent::MidiPitchBend:
+        type = "MidiPitchBend";
+        break;
+    case MappedEvent::MidiController:
+        type = "MidiController";
+        break;
+    case MappedEvent::MidiSystemMessage:
+        type = "MidiSystemMessage";
+        break;
+    case MappedEvent::Audio:
+        type = "Audio";
+        break;
+    case MappedEvent::AudioCancel:
+        type = "AudioCancel";
+        break;
+    case MappedEvent::AudioLevel:
+        type = "AudioLevel";
+        break;
+    case MappedEvent::AudioStopped:
+        type = "AudioStopped";
+        break;
+    case MappedEvent::AudioGeneratePreview:
+        type = "AudioGeneratePreview";
+        break;
+    case MappedEvent::SystemUpdateInstruments:
+        type = "SystemUpdateInstruments";
+        break;
+    case MappedEvent::SystemJackTransport:
+        type = "SystemJackTransport";
+        break;
+    case MappedEvent::SystemMMCTransport:
+        type = "SystemMMCTransport";
+        break;
+    case MappedEvent::SystemMIDIClock:
+        type = "SystemMIDIClock";
+        break;
+    case MappedEvent::SystemMetronomeDevice:
+        type = "SystemMetronomeDevice";
+        break;
+    case MappedEvent::SystemAudioPortCounts:
+        type = "SystemAudioPortCounts";
+        break;
+    case MappedEvent::SystemAudioPorts:
+        type = "SystemAudioPorts";
+        break;
+    case MappedEvent::SystemFailure:
+        type = "SystemFailure";
+        break;
+    case MappedEvent::TimeSignature:
+        type = "TimeSignature";
+        break;
+    case MappedEvent::Tempo:
+        type = "Tempo";
+        break;
+    case MappedEvent::Panic:
+        type = "Panic";
+        break;
+    case MappedEvent::SystemMTCTransport:
+        type = "SystemMTCTransport";
+        break;
+    case MappedEvent::SystemMIDISyncAuto:
+        type = "SystemMIDISyncAuto";
+        break;
+    case MappedEvent::SystemAudioFileFormat:
+        type = "SystemAudioFileFormat";
+        break;
+    case MappedEvent::Marker:
+        type = "Marker";
+        break;
+    case MappedEvent::Text:
+        type = "Text";
+        break;
+    default:
+        // ??? This is a bitmask, so this might happen with perfectly
+        //     legitimate values.
+        type = "*** Unexpected";
+        break;
+    }
+
+    dbg << "  Type:" << type << endl;
+
+    dbg << "  Data 1:" << mE.m_data1 << endl;
+    dbg << "  Data 2:" << mE.m_data2 << endl;
+    dbg << "  Event Time:" << mE.m_eventTime << endl;
+    dbg << "  Duration:" << mE.m_duration << endl;
+    dbg << "  Audio Start Marker:" << mE.m_audioStartMarker << endl;
+    dbg << "  Runtime Segment ID:" << mE.m_runtimeSegmentId << endl;
+    dbg << "  Auto Fade:" << mE.m_autoFade << endl;
+    dbg << "  Fade In Time:" << mE.m_fadeInTime << endl;
+    dbg << "  Fade Out Time:" << mE.m_fadeOutTime << endl;
+    dbg << "  Recorded Channel:" << mE.m_recordedChannel << endl;
+    dbg << "  Recorded Device:" << mE.m_recordedDevice << endl;
+
+    return dbg;
+}
+
 //--------------------------------------------------
 
 class DataBlockFile
@@ -438,5 +573,6 @@ void DataBlockRepository::addDataByteForEvent(MidiByte byte, MappedEvent* e)
 
 
 DataBlockRepository* DataBlockRepository::m_instance = nullptr;
+
 
 }

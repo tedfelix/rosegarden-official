@@ -539,7 +539,11 @@ private:
     // used for output.
     unsigned int          m_recordedChannel;
     unsigned int          m_recordedDevice;
+
+    friend QDebug &operator<<(QDebug &, const MappedEvent &);
 };
+
+QDebug &operator<<(QDebug &, const MappedEvent &);
 
 
 }
