@@ -79,10 +79,10 @@ public:
 
     void updateContents();
 
-    /**
-     * Called by TrackEditor::handleAutoScroll().
-     */
-    void doAutoScroll();
+    void startAutoScroll();
+    void setFollowMode(FollowMode followMode)  { m_followMode = followMode; }
+    void stopAutoScroll();
+
     bool isAutoScrolling() const  { return m_autoScrolling; }
 
     /// Playback scrolling.
@@ -141,9 +141,6 @@ protected:
 
     void updateContents(const QRect &);
 
-    void setFollowMode(FollowMode followMode)  { m_followMode = followMode; }
-    void startAutoScroll();
-
     /// Viewport resize.
     void resizeEvent(QResizeEvent *) override;
 
@@ -181,6 +178,7 @@ private:
     QTimer m_autoScrollTimer;
     /// m_autoScrollTimer interval.
     static const int AutoScrollTimerInterval;
+    void doAutoScroll();
 
     /// See AutoScroller.h for valid mask values.
     FollowMode m_followMode;

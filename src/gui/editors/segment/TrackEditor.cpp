@@ -221,15 +221,17 @@ TrackEditor::init(RosegardenMainViewWidget *mainViewWidget)
 //    connect(m_trackButtons, SIGNAL(modified()),
 //            m_doc, SLOT(slotDocumentModified()));
 
-    // connect loop rulers' follow-scroll signals
+    // Connect for all standard ruler mouse move starts and stops.  This
+    // allows for auto-scroll while the user drags (pointer or loop) in
+    // a StandardRuler.
     connect(m_topStandardRuler->getLoopRuler(), &LoopRuler::startMouseMove,
-            m_compositionView, &RosegardenScrollView::slotStartAutoScroll);
+            this, &TrackEditor::slotSRStartMouseMove);
     connect(m_topStandardRuler->getLoopRuler(), &LoopRuler::stopMouseMove,
-            m_compositionView, &RosegardenScrollView::slotStopAutoScroll);
+            this, &TrackEditor::slotSRStopMouseMove);
     connect(m_bottomStandardRuler->getLoopRuler(), &LoopRuler::startMouseMove,
-            m_compositionView, &RosegardenScrollView::slotStartAutoScroll);
+            this, &TrackEditor::slotSRStartMouseMove);
     connect(m_bottomStandardRuler->getLoopRuler(), &LoopRuler::stopMouseMove,
-            m_compositionView, &RosegardenScrollView::slotStopAutoScroll);
+            this, &TrackEditor::slotSRStopMouseMove);
 
     //&&&  Interesting one here.  Q(3)ScrollArea had a contentsMoving signal we
     // used to grab for some purpose.  Q(Abstract)ScrollArea has no usable
@@ -301,12 +303,6 @@ TrackEditor::init(RosegardenMainViewWidget *mainViewWidget)
             this, &TrackEditor::slotPointerDraggedToPosition);
     connect(m_bottomStandardRuler, &StandardRuler::dragPointerToPosition,
             this, &TrackEditor::slotPointerDraggedToPosition);
-
-    // Top/Bottom ruler loop drag.
-    connect(m_topStandardRuler, &StandardRuler::dragLoopToPosition,
-            this, &TrackEditor::slotLoopDraggedToPosition);
-    connect(m_bottomStandardRuler, &StandardRuler::dragLoopToPosition,
-            this, &TrackEditor::slotLoopDraggedToPosition);
 
     connect(m_doc, &RosegardenDocument::loopChanged,
             this, &TrackEditor::slotSetLoop);
@@ -465,50 +461,24 @@ TrackEditor::slotSetPointerPosition(timeT pointerTime)
 void
 TrackEditor::slotPointerDraggedToPosition(timeT position)
 {
-    int currentPointerPos = m_compositionView->getPointerPos();
+    if (!m_rulerScale)
+        return;
 
-    double newPosition;
+    double newPosition = m_rulerScale->getXForTime(position);
 
-    if (handleAutoScroll(currentPointerPos, position, newPosition))
-        m_compositionView->drawPointer(int(newPosition));
+    m_compositionView->drawPointer(static_cast<int>(newPosition));
 }
 
 void
-TrackEditor::slotLoopDraggedToPosition(timeT position)
+TrackEditor::slotSRStartMouseMove()
 {
-    if (!m_doc)
-        return;
-
-    int currentEndLoopPos = m_doc->getComposition().getLoopEnd();
-    double dummy;
-    handleAutoScroll(currentEndLoopPos, position, dummy);
+    m_compositionView->setFollowMode(FOLLOW_HORIZONTAL);
+    m_compositionView->startAutoScroll();
 }
 
-bool TrackEditor::handleAutoScroll(int currentPosition, timeT newTimePosition, double &newPosition)
+void TrackEditor::slotSRStopMouseMove()
 {
-    if (!m_rulerScale)
-        return false;
-
-    newPosition = m_rulerScale->getXForTime(newTimePosition);
-    const double distance = fabs(newPosition - currentPosition);
-
-    bool moveDetected = (distance >= 1.0);
-
-    if (moveDetected) {
-
-        if (m_doc  &&  m_doc->getSequenceManager()  &&
-            m_doc->getSequenceManager()->getTransportStatus() != STOPPED) {
-
-            if (m_playTracking) {
-                m_compositionView->scrollHoriz(newPosition);
-            }
-        } else {
-            m_compositionView->doAutoScroll();
-        }
-
-    }
-
-    return moveDetected;
+    m_compositionView->stopAutoScroll();
 }
 
 void

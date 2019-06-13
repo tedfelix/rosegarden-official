@@ -229,6 +229,12 @@ void RosegardenScrollView::startAutoScroll()
     m_autoScrolling = true;
 }
 
+void RosegardenScrollView::stopAutoScroll()
+{
+    m_autoScrollTimer.stop();
+    m_autoScrolling = false;
+}
+
 void RosegardenScrollView::slotStartAutoScroll(int followMode)
 {
     setFollowMode(followMode);

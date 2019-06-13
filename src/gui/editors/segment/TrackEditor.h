@@ -166,19 +166,14 @@ private slots:
 
     /// Update the pointer position as it is being dragged along.
     /**
-     * Scroll to make sure the pointer is visible.
-     *
      * init() connects this to the top and bottom rulers'
      * dragPointerToPosition(timeT).
      */
     void slotPointerDraggedToPosition(timeT position);
 
-    /// Scroll to make sure the loop end is visible.
-    /**
-     * init() connects this to the top and bottom rulers'
-     * dragLoopToPosition(timeT).
-     */
-    void slotLoopDraggedToPosition(timeT position);
+    // StandardRuler mouse move for auto-scroll.
+    void slotSRStartMouseMove();
+    void slotSRStopMouseMove();
 
     /// Show the given loop on the rulers
     /**
@@ -212,15 +207,6 @@ private:
     void dragEnterEvent(QDragEnterEvent *) override;
     void dropEvent(QDropEvent *) override;
     void dragMoveEvent(QDragMoveEvent *) override;
-
-    /// Scroll when dragging the pointer or loop end.
-    /**
-     * Returns true if an actual move occurred between currentPosition and
-     * newTimePosition.  Output parameter newPosition contains the horizontal
-     * position corresponding to newTimePosition.
-     */
-    bool handleAutoScroll(
-            int currentPosition, timeT newTimePosition, double &newPosition);
 
     /// Wrapper around CommandHistory::addCommand().
     void addCommandToHistory(Command *command);
