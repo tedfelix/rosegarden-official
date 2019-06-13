@@ -175,6 +175,10 @@ private slots:
     void slotSRStartMouseMove();
     void slotSRStopMouseMove();
 
+    // TempoRuler mouse press/release for auto-scroll.
+    void slotTRMousePress();
+    void slotTRMouseRelease();
+
     /// Show the given loop on the rulers
     /**
      * init() connects this to RosegardenDocument::loopChanged().
