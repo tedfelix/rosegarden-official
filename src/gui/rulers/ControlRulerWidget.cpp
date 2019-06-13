@@ -353,6 +353,10 @@ ControlRulerWidget::slotSetPannedRect(QRectF pr)
 void
 ControlRulerWidget::slotDragScroll(timeT t)
 {
+    // ??? This is just a forward.  We can do that with connect() and there
+    //     is no need for this slotDragScroll() routine at all.  Simply
+    //     connect the incoming signal to the outgoing signal and delete this.
+
     emit dragScroll(t);
 }
 

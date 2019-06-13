@@ -293,6 +293,12 @@ LoopRuler::mousePressEvent(QMouseEvent *mE)
         }
 
         m_activeMousePress = true;
+
+        // ??? This signal is never emitted with any other argument.
+        //     Remove the parameter.  This gets a little tricky because
+        //     some clients need this and share slots with other signal
+        //     sources.  It would probably be best to connect this signal
+        //     to a slot in the client that is specific to LoopRuler.
         emit startMouseMove(RosegardenScrollView::FollowHorizontal);
     }
 }
