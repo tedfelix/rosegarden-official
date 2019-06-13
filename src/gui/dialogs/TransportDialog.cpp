@@ -820,7 +820,7 @@ TransportDialog::displayBarTime(int bar, int beat, int unit)
 void
 TransportDialog::updateTimeDisplay()
 {
-    Profiler profiler("TransportDialog::updateTimeDisplay");
+    //Profiler profiler("TransportDialog::updateTimeDisplay");
 
 #define UPDATE(NEW,OLD,WIDGET)                                     \
     if (NEW != OLD) {                                              \

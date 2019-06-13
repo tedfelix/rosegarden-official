@@ -54,7 +54,7 @@ SystemFont::~SystemFont()
 SystemFont *
 SystemFont::loadSystemFont(const SystemFontSpec &spec)
 {
-    Profiler profiler("SystemFont::loadSystemFont");
+    //Profiler profiler("SystemFont::loadSystemFont");
 
     QString name = spec.first;
     int size = spec.second;

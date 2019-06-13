@@ -1237,7 +1237,8 @@ bool RosegardenDocument::saveDocumentActual(const QString& filename,
                                           QString& errMsg,
                                           bool autosave)
 {
-    Profiler profiler("RosegardenDocument::saveDocumentActual");
+    //Profiler profiler("RosegardenDocument::saveDocumentActual");
+
     RG_DEBUG << "RosegardenDocument::saveDocumentActual(" << filename << ")";
 
     QString outText;
@@ -1654,7 +1655,7 @@ RosegardenDocument::xmlParse(QString fileContents, QString &errMsg,
                            bool permanent,
                            bool &cancelled)
 {
-    Profiler profiler("RosegardenDocument::xmlParse");
+    //Profiler profiler("RosegardenDocument::xmlParse");
 
     cancelled = false;
 
@@ -2507,7 +2508,7 @@ RosegardenDocument::setLoop(timeT t0, timeT t1)
 void
 RosegardenDocument::checkSequencerTimer()
 {
-    Profiler profiler("RosegardenDocument::checkSequencerTimer", true);
+    //Profiler profiler("RosegardenDocument::checkSequencerTimer", true);
 
     if (!m_soundEnabled) return;
 

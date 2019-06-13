@@ -359,7 +359,8 @@ Segment::getEndTime() const
 void
 Segment::setStartTime(timeT t)
 {
-    Profiler profiler("Segment::setStartTime()");
+    //Profiler profiler("Segment::setStartTime()");
+
     typedef EventContainer base;
     int dt = t - m_startTime;
     if (dt == 0) return;
@@ -805,7 +806,7 @@ Segment::fillWithRests(timeT startTime, timeT endTime)
 void
 Segment::normalizeRests(timeT startTime, timeT endTime)
 {
-    Profiler profiler("Segment::normalizeRests");
+    //Profiler profiler("Segment::normalizeRests");
 
 #ifdef DEBUG_NORMALIZE_RESTS
     cerr << "normalizeRests (" << startTime << "->" << endTime << "), segment starts at " << m_startTime << endl;

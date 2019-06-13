@@ -67,7 +67,7 @@ CompositionMapper::segmentModified(Segment *segment)
                       // though it's not mapped yet
     }
 
-    RG_DEBUG << "segmentModified(" << segment << ") - mapper = " << mapper;
+    //RG_DEBUG << "segmentModified(" << segment << ") - mapper = " << mapper;
 
     return mapper->refresh();
 }

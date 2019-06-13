@@ -21,7 +21,6 @@
 
 #include "ActionFileParser.h"
 
-#include <iostream>
 #include <QAction>
 #include <QActionGroup>
 #include <QMenu>
@@ -66,12 +65,11 @@ ActionFileParser::findRcFile(QString name)
 bool
 ActionFileParser::load(QString actionRcFile)
 {
-    Profiler p("ActionFileParser::load");
+    //Profiler p("ActionFileParser::load");
 
     QString location = findRcFile(actionRcFile);
     if (location == "") {
-        std::cerr << "ActionFileParser::load: Failed to find RC file \""
-                  << actionRcFile << "\"" << std::endl;
+        RG_WARNING << "load(): Failed to find RC file \"" << actionRcFile << "\"";
         return false;
     }
 
@@ -107,7 +105,7 @@ ActionFileParser::startElement(const QString& /* namespaceURI */,
 
         QString menuName = atts.value("name");
         if (menuName == "") {
-            std::cerr << "WARNING: ActionFileParser::startElement(" << m_currentFile << "): No menu name provided in menu element" << std::endl;
+            RG_WARNING << "WARNING: startElement(" << m_currentFile << "): No menu name provided in menu element";
         }
         
         if (m_inEnable) {
@@ -136,7 +134,7 @@ ActionFileParser::startElement(const QString& /* namespaceURI */,
 
         QString toolbarName = atts.value("name");
         if (toolbarName == "") {
-            std::cerr << "WARNING: ActionFileParser::startElement(" << m_currentFile << "): No toolbar name provided in toolbar element" << std::endl;
+            RG_WARNING << "WARNING: startElement(" << m_currentFile << "): No toolbar name provided in toolbar element";
         }
         (void)findToolbar(toolbarName, position); // creates it if necessary
         m_currentToolbar = toolbarName;
@@ -156,18 +154,16 @@ ActionFileParser::startElement(const QString& /* namespaceURI */,
 
         QString actionName = atts.value("name");
         if (actionName == "") {
-            std::cerr << "WARNING: ActionFileParser::startElement(" 
-                << m_currentFile << "): No action name provided in action element"
-                << std::endl;
+            RG_WARNING << "WARNING: startElement(" << m_currentFile << "): No action name provided in action element";
         }
 
         if (m_currentMenus.empty() && m_currentToolbar == "" &&
             (m_currentState == "" || (!m_inEnable && !m_inDisable
             && !m_inVisible && !m_inInvisible))) {
-            std::cerr << "WARNING: ActionFileParser::startElement("
+            RG_WARNING << "WARNING: startElement("
                 << m_currentFile << "): Action \"" << actionName
                 << "\" appears outside (valid) menu, toolbar or state "
-                << "enable/disable/visible/invisible element" << std::endl;
+                << "enable/disable/visible/invisible element";
         }
 
         QString text = atts.value("text");
@@ -214,14 +210,14 @@ ActionFileParser::startElement(const QString& /* namespaceURI */,
 
         QString stateName = atts.value("name");
         if (stateName == "") {
-            std::cerr << "WARNING: ActionFileParser::startElement(" << m_currentFile << "): No state name provided in state element" << std::endl;
+            RG_WARNING << "WARNING: startElement(" << m_currentFile << "): No state name provided in state element";
         }
         m_currentState = stateName;
 
     } else if (name == "enable") {
 
         if (m_currentState == "") {
-            std::cerr << "WARNING: ActionFileParser::startElement(" << m_currentFile << "): Enable element appears outside state element" << std::endl;
+            RG_WARNING << "WARNING: startElement(" << m_currentFile << "): Enable element appears outside state element";
         } else {
             m_inEnable = true;
         }
@@ -229,21 +225,21 @@ ActionFileParser::startElement(const QString& /* namespaceURI */,
     } else if (name == "disable") {
 
         if (m_currentState == "") {
-            std::cerr << "WARNING: ActionFileParser::startElement(" << m_currentFile << "): Disable element appears outside state element" << std::endl;
+            RG_WARNING << "WARNING: startElement(" << m_currentFile << "): Disable element appears outside state element";
         } else {
             m_inDisable = true;
         }
     } else if (name == "visible") {
 
         if (m_currentState == "") {
-            std::cerr << "WARNING: ActionFileParser::startElement(" << m_currentFile << "): Visible element appears outside state element" << std::endl;
+            RG_WARNING << "WARNING: startElement(" << m_currentFile << "): Visible element appears outside state element";
         } else {
             m_inVisible = true;
         }
     } else if (name == "invisible") {
 
         if (m_currentState == "") {
-            std::cerr << "WARNING: ActionFileParser::startElement(" << m_currentFile << "): Invisible element appears outside state element" << std::endl;
+            RG_WARNING << "WARNING: startElement(" << m_currentFile << "): Invisible element appears outside state element";
         } else {
             m_inInvisible = true;
         }
@@ -324,12 +320,14 @@ bool
 ActionFileParser::error(const QXmlParseException &exception)
 {
     QString errorString =
-	QString("ERROR: ActionFileParser: %1 at line %2, column %3 in file %4")
-	.arg(exception.message())
-	.arg(exception.lineNumber())
-	.arg(exception.columnNumber())
-        .arg(m_currentFile);
-    std::cerr << errorString.toLocal8Bit().data() << std::endl;
+            QString("ERROR: %1 at line %2, column %3 in file %4")
+                .arg(exception.message())
+                .arg(exception.lineNumber())
+                .arg(exception.columnNumber())
+                .arg(m_currentFile);
+
+    RG_WARNING << errorString.toLocal8Bit().data();
+
     return QXmlDefaultHandler::error(exception);
 }
 
@@ -337,12 +335,14 @@ bool
 ActionFileParser::fatalError(const QXmlParseException &exception)
 {
     QString errorString =
-	QString("FATAL ERROR: ActionFileParser: %1 at line %2, column %3 in file %4")
-	.arg(exception.message())
-	.arg(exception.lineNumber())
-	.arg(exception.columnNumber())
-        .arg(m_currentFile);
-    std::cerr << errorString.toLocal8Bit().data() << std::endl;
+            QString("FATAL ERROR: %1 at line %2, column %3 in file %4")
+                .arg(exception.message())
+                .arg(exception.lineNumber())
+                .arg(exception.columnNumber())
+                .arg(m_currentFile);
+
+    RG_WARNING << errorString.toLocal8Bit().data();
+
     return QXmlDefaultHandler::fatalError(exception);
 }
 
@@ -406,7 +406,7 @@ ActionFileParser::findToolbar(QString toolbarName, Position position)
 {
     QWidget *widget = dynamic_cast<QWidget *>(m_actionOwner);
     if (!widget) {
-        std::cerr << "ActionFileParser::findToolbar(\"" << toolbarName << "\"): Action owner is not a QWidget, cannot have toolbars" << std::endl;
+        RG_WARNING << "findToolbar(\"" << toolbarName << "\"): Action owner is not a QWidget, cannot have toolbars";
         return nullptr;
     }
     QToolBar *toolbar = widget->findChild<QToolBar *>(toolbarName);
@@ -650,14 +650,14 @@ ActionFileParser::addActionToToolbar(QString toolbarName, QString actionName)
         QString m(action->toolTip());
         QString tip = QObject::tr("%1").arg(QObject::tr(m.toStdString().c_str()));
         action->setToolTip(tip);
-//        std::cout << "setting tip: " << std::string(tip.toLocal8Bit()) << std::endl;
-    // transport toolbar tooltips:
-    // text() translated, toolTip() in English
+        //RG_DEBUG << "setting tip: " << tip;
+        // transport toolbar tooltips:
+        // text() translated, toolTip() in English
     } else if (strippedText(action->text()) != action->toolTip()) {
         QString m(action->toolTip());
         QString tip = QObject::tr("%1").arg(QObject::tr(m.toStdString().c_str()));
         action->setToolTip(tip);
-//        std::cout << "setting tip: " << std::string(tip.toLocal8Bit()) << std::endl;
+        //RG_DEBUG << "setting tip: " << tip;
     } else if (action->shortcut() != QKeySequence()) {
         // Avoid setting an automatic tooltip if an explicit one has
         // been provided via setActionToolTip earlier.  We need to
