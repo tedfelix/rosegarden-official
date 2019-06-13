@@ -353,11 +353,13 @@ MatrixWidget::MatrixWidget(bool drumMode) :
 
 MatrixWidget::~MatrixWidget()
 {
-    //RG_DEBUG << "dtor...";
+    // ??? QSharedPointer would be nice, but it opens up a can of worms
+    //     since this is passed to reuse code that is used across the system.
+    //     Panned and Panner in this case.  Probably worth doing.  Just a
+    //     bit more work than usual.
     delete m_scene;
+    // ??? See above.
     delete m_pianoScene;
-    delete m_localMapping;
-    //RG_DEBUG << "dtor end";
 }
 
 void
@@ -501,8 +503,7 @@ void
 MatrixWidget::generatePitchRuler()
 {
     delete m_pianoScene;   // Delete the old m_pitchRuler if any
-    delete m_localMapping;
-    m_localMapping = nullptr;    // To avoid a double delete
+    m_localMapping.reset();
     bool isPercussion = false;
 
     Composition &comp = m_document->getComposition();
@@ -519,7 +520,7 @@ MatrixWidget::generatePitchRuler()
         mapping = m_instrument->getKeyMapping();
         if (mapping) {
             //RG_DEBUG << "generatePitchRuler(): Instrument has key mapping: " << mapping->getName();
-            m_localMapping = new MidiKeyMapping(*mapping);
+            m_localMapping.reset(new MidiKeyMapping(*mapping));
             m_localMapping->extend();
             isPercussion = true;
         } else {
@@ -532,12 +533,12 @@ MatrixWidget::generatePitchRuler()
                                                 m_scene->getYResolution());
     } else {
         if (m_onlyKeyMapping) {
-            //!!! In such a case, a matrix resolution of 11 is used.
-            // (See comments in MatrixScene::setSegments())
+            // In such a case, a matrix resolution of 11 is used.
+            // (See comments in MatrixScene::setSegments().)
             // As the piano keyboard works only with a resolution of 7, an
             // empty key mapping will be used in place of the keyboard.
-            m_localMapping = new MidiKeyMapping();
-            m_localMapping->getMap()[0] = "";  //!!! extent() doesn't work ???
+            m_localMapping.reset(new MidiKeyMapping());
+            m_localMapping->getMap()[0] = "";  // extent() doesn't work?
             m_localMapping->getMap()[127] = "";
             m_pitchRuler = new PercussionPitchRuler(nullptr, m_localMapping,
                                                     m_scene->getYResolution());

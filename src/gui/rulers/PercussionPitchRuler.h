@@ -20,6 +20,8 @@
 #define RG_PERCUSSIONPITCHRULER_H
 
 #include "PitchRuler.h"
+
+#include <QSharedPointer>
 #include <QSize>
 
 
@@ -42,7 +44,7 @@ class PercussionPitchRuler : public PitchRuler
     Q_OBJECT
 public:
     PercussionPitchRuler(QWidget *parent,
-                         const MidiKeyMapping *mapping,
+                         QSharedPointer<const MidiKeyMapping> mapping,
                          int lineSpacing);
 
     QSize sizeHint() const override;
@@ -59,7 +61,7 @@ protected:
     void enterEvent(QEvent *) override;
     void leaveEvent(QEvent *) override;
 
-    const MidiKeyMapping *m_mapping;
+    QSharedPointer<const MidiKeyMapping> m_mapping;
 
     int                       m_width;
     int                       m_lineSpacing;

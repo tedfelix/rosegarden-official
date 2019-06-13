@@ -24,6 +24,7 @@
 
 #include <vector>
 
+#include <QSharedPointer>
 #include <QWidget>
 
 class QGraphicsScene;
@@ -295,7 +296,6 @@ private:
     // View
 
     /// QGraphicsScene holding the note Events.
-    // ??? QSharedPointer
     MatrixScene *m_scene; // I own this
 
     /// The main view of the MatrixScene (m_scene).
@@ -331,14 +331,12 @@ private:
     // This can be nullptr.  It tracks what pitchruler corresponds to.
     Instrument *m_instrument; // Studio owns this (TBC)
     /// Key mapping from the Instrument.
-    // ??? QSharedPointer
-    MidiKeyMapping *m_localMapping; // I own this
+    QSharedPointer<MidiKeyMapping> m_localMapping;
     /// Either a PercussionPitchRuler or a PianoKeyboard object.
     PitchRuler *m_pitchRuler; // I own this
     /// (Re)generate the pitch ruler (useful when key mapping changed)
     void generatePitchRuler();
     /// Contains m_pitchRuler.
-    // ??? QSharedPointer
     QGraphicsScene *m_pianoScene; // I own this
     /// Contains m_pianoScene.
     Panned *m_pianoView; // I own this

@@ -38,14 +38,14 @@ namespace Rosegarden
 {
 
 PercussionPitchRuler::PercussionPitchRuler(QWidget *parent,
-        const MidiKeyMapping *mapping,
+        QSharedPointer<const MidiKeyMapping> mapping,
         int lineSpacing) :
-        PitchRuler(parent),
-        m_mapping(mapping),
-        m_lineSpacing(lineSpacing),
-        m_mouseDown(false),
-        m_hoverNotePitch(-1),
-        m_lastHoverHighlight( -1)
+    PitchRuler(parent),
+    m_mapping(mapping),
+    m_lineSpacing(lineSpacing),
+    m_mouseDown(false),
+    m_hoverNotePitch(-1),
+    m_lastHoverHighlight( -1)
 {
     m_font = new QFont();
     m_font->setPixelSize(9);
