@@ -126,9 +126,8 @@ NotationWidget::NotationWidget() :
     m_graceMode(false),
     m_tupledCount(2),
     m_untupledCount(3),
-    m_updatesSuspended(false),
-    m_hSliderHacked(false),
-    m_vSliderHacked(false) {
+    m_updatesSuspended(false)
+{
     m_layout = new QGridLayout;
     setLayout(m_layout);
 
@@ -355,21 +354,6 @@ NotationWidget::NotationWidget() :
 
     slotSetTool(NoteRestInserter::ToolName());
 
-    // crude, but finally effective!
-    //
-    // somewhere beyond the end of the ctor and into the event loop,
-    // NotationWidget picks a stupid place to open the initial view to, and this
-    // causes its Panned object's scrollbars to emit valueChanged() signals,
-    // which we hijack as the timing cue that now is finally the appropriate
-    // time to move the view to a sane place.  Currently this just physically
-    // moves the scrollbars to 0 and 0, which is better than the almost random
-    // not quite center this code initializes to, but this can probably be
-    // improved now that the timing is established.
-    connect(m_view->horizontalScrollBar(), &QAbstractSlider::valueChanged,
-            this, &NotationWidget::slotInitialHSliderHack);
-    connect(m_view->verticalScrollBar(), &QAbstractSlider::valueChanged,
-            this, &NotationWidget::slotInitialVSliderHack);
-
     // When a clef or a key is modified, the same signal "staffModified()" is
     // emitted three times from the concerned header.
     // Following timer is here to try limiting CPU usage by executing code
@@ -592,6 +576,12 @@ NotationWidget::setSegments(RosegardenDocument *document,
 
     connect(m_scene, &NotationScene::currentStaffChanged,
             this, [this]() { updatePointerPosition(true); });
+}
+
+void
+NotationWidget::scrollToTopLeft()
+{
+    m_view->centerOn(QPointF(0,0));
 }
 
 void
@@ -1577,30 +1567,6 @@ double
 NotationWidget::getVerticalZoomFactor() const
 {
     return m_vZoomFactor;
-}
-
-void
-NotationWidget::slotInitialHSliderHack(int)
-{
-    if (m_hSliderHacked) return;
-
-    m_hSliderHacked = true;
-
-//    RG_DEBUG << "h slider position was: " << m_view->horizontalScrollBar()->sliderPosition();;
-    m_view->horizontalScrollBar()->setSliderPosition(0);
-//    RG_DEBUG << "h slider position now: " << m_view->horizontalScrollBar()->sliderPosition();;
-}
-
-void
-NotationWidget::slotInitialVSliderHack(int)
-{
-    if (m_vSliderHacked) return;
-
-    m_vSliderHacked = true;
-
-//    RG_DEBUG << "v slider position was: " << m_view->verticalScrollBar()->sliderPosition();;
-    m_view->verticalScrollBar()->setSliderPosition(0);
-//    RG_DEBUG << "v slider position now: " << m_view->verticalScrollBar()->sliderPosition();;
 }
 
 void

@@ -75,6 +75,8 @@ public:
     void setSegments(RosegardenDocument *document, 
                      std::vector<Segment *> segments);
 
+    void scrollToTopLeft();
+
     NotationScene *getScene() { return m_scene; }
     Panned *getView() { return m_view; }
     ControlRulerWidget *getControlsWidget()
@@ -226,9 +228,6 @@ private slots:
     /// The segment control thumbwheel moved
     void slotSegmentChangerMoved(int);
     
-    void slotInitialHSliderHack(int);
-    void slotInitialVSliderHack(int);
-
     void slotUpdateRawNoteRuler(ViewSegment *);
     void slotUpdateSegmentChangerBackground();
 
@@ -311,9 +310,6 @@ private:
     bool m_updatesSuspended;
 
     void locatePanner(bool vertical);
-
-    bool m_hSliderHacked;
-    bool m_vSliderHacked;
 
     /**
      * Widgets vertical positions inside the main QGridLayout

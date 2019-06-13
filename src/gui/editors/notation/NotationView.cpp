@@ -384,6 +384,8 @@ NotationView::NotationView(RosegardenDocument *doc,
     m_notationWidget->updatePointerPosition(false);
     
     readOptions();
+
+    m_notationWidget->scrollToTopLeft();
 }
 
 NotationView::~NotationView()
