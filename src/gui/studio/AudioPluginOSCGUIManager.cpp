@@ -622,44 +622,30 @@ AudioPluginOSCGUIManager::dispatch()
 
             int eventType = arg->m[1] & MIDI_MESSAGE_TYPE_MASK;
 
-            // Send Test Note
-            // MIDI_NOTE_OFF will also be received, but we ignore it.
             if (eventType == MIDI_NOTE_ON) {
 
-                //RG_DEBUG << "dispatch(): Have note on";
-                //RG_DEBUG << "  Note:" << arg->m[2];
-                //RG_DEBUG << "  Velocity:" << arg->m[3];
-                //RG_DEBUG << "  Instrument ID:" << instrument;
-
                 // ??? The note will not be heard until a Track is
-                //     configured with this Instrument.  I assume the issue
-                //     is that a volume CC hasn't been sent yet.
+                //     configured with this Instrument.  Why?  Can
+                //     this be fixed?
 
-                // ??? We send a 1/4 second note.  It would be nice if
-                //     we could just forward the Note On and the Note Off.
-                //     We do that with events coming from the keyboard.
-                //     How can we do that here?
-
-#if 1
-                // Usual approach.
+                // Send a NOTE ON.
+                // We use a special duration (-1) to indicate no NOTE OFF.
                 StudioControl::playPreviewNote(
                         m_studio->getInstrumentById(instrument),  // instrument
                         MidiByte(arg->m[2]),  // pitch
                         MidiByte(arg->m[3]),  // velocity
-                        RealTime(0, 250000000));  // duration
-#else
-                // Slightly lower level approach, but still doesn't allow
-                // for sending of individual NOTE ON and NOTE OFF events.
-                MappedEvent ev(instrument,
-                               MappedEvent::MidiNoteOneShot,  // type
-                               MidiByte(arg->m[2]),  // pitch
-                               MidiByte(arg->m[3]),  // velocity
-                               RealTime::zeroTime,  // absTime
-                               RealTime(0, 250000000),  // duration
-                               RealTime::zeroTime);  // audioStartMarker
+                        RealTime(-1, 0),  // duration, -1 => NOTE ON ONLY
+                        false);  // oneshot
 
-                StudioControl::sendMappedEvent(ev);
-#endif
+            } else if (eventType == MIDI_NOTE_OFF) {
+
+                // Send a NOTE OFF.
+                StudioControl::playPreviewNote(
+                        m_studio->getInstrumentById(instrument),  // instrument
+                        MidiByte(arg->m[2]),  // pitch
+                        0,  // velocity, 0 => NOTE OFF
+                        RealTime(0, 1),  // duration, (shortest)
+                        false);  // oneshot
             }
 
         } else if (method == "exiting") {
