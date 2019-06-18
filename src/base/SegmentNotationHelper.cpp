@@ -1807,7 +1807,7 @@ SegmentNotationHelper::guessClef(iterator from, iterator to)
                 Pitch p(**i);
                 totalHeight += p.getHeightOnStaff(clef, key);
                 ++noteCount;
-            } catch (Exception e) {
+            } catch (const Exception &e) {
                 // no pitch in note
             }
         }

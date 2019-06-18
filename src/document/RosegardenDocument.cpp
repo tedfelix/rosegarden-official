@@ -647,7 +647,7 @@ bool RosegardenDocument::openDocument(const QString &filename,
     try {
         // generate any audio previews after loading the files
         m_audioFileManager.generatePreviews();
-    } catch (Exception e) {
+    } catch (const Exception &e) {
         StartupLogo::hideIfStillThere();
         QMessageBox::critical(dynamic_cast<QWidget *>(parent()), tr("Rosegarden"), strtoqstr(e.getMessage()));
     }
@@ -2809,7 +2809,7 @@ RosegardenDocument::finalizeAudioFile(InstrumentId iid)
 
     try {
         m_audioFileManager.generatePreview(newAudioFile->getId());
-    } catch (Exception e) {
+    } catch (const Exception &e) {
         StartupLogo::hideIfStillThere();
         QMessageBox::critical(dynamic_cast<QWidget *>(parent()), tr("Rosegarden"), strtoqstr(e.getMessage()));
     }

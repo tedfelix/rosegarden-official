@@ -69,7 +69,7 @@ WAVAudioFile::open()
 
     try {
         parseHeader();
-    } catch (BadSoundFileException e) {
+    } catch (const BadSoundFileException &e) {
         RG_WARNING << "ERROR: WAVAudioFile::open(): parseHeader: " << e.getMessage();
         return false;
     }

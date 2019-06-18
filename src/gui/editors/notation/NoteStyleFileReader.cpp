@@ -94,7 +94,7 @@ NoteStyleFileReader::startElement(const QString &, const QString &,
             Note::Type type = NotationStrings::getNoteForName(s).getNoteType();
             if (!setFromAttributes(type, attributes)) return false;
 
-        } catch (NotationStrings::MalformedNoteName n) {
+        } catch (const NotationStrings::MalformedNoteName &n) {
             m_errorString = tr("Unrecognised note name %1").arg(s);
             return false;
         }

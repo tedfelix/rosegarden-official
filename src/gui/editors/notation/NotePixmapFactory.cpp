@@ -184,7 +184,7 @@ NotePixmapFactory::init(QString fontName, int size)
 {
     try {
         m_style = NoteStyleFactory::getStyle(NoteStyleFactory::DefaultStyle);
-    } catch (NoteStyleFactory::StyleUnavailable u) {
+    } catch (const NoteStyleFactory::StyleUnavailable &u) {
         StartupLogo::hideIfStillThere();
         QMessageBox::critical(nullptr, tr("Rosegarden"), tr( u.getMessage().c_str() )  );
         throw;
@@ -198,7 +198,7 @@ NotePixmapFactory::init(QString fontName, int size)
             m_font = NoteFontFactory::getFont(fontName, size);
             if (m_graceSize > 0) m_graceFont = NoteFontFactory::getFont(fontName, m_graceSize);
             else m_graceFont = m_font;
-        } catch (Exception f) {
+        } catch (const Exception &f) {
             fontName = "";
             // fall through
         }
@@ -211,7 +211,7 @@ NotePixmapFactory::init(QString fontName, int size)
             if (size < 0) size = NoteFontFactory::getDefaultSize(fontName);
             m_font = NoteFontFactory::getFont(fontName, size);
             m_graceFont = NoteFontFactory::getFont(fontName, m_graceSize);
-        } catch (Exception f) { // already reported
+        } catch (const Exception &f) { // already reported
             throw;
         }
     }
@@ -2054,7 +2054,7 @@ NotePixmapFactory::makeMarkMenuPixmap(Mark mark)
         try {
             font = NoteFontFactory::getFont
                 (NoteFontFactory::getDefaultFontName(), 6);
-        } catch (Exception) {
+        } catch (const Exception &) {
             font = NoteFontFactory::getFont
                 (NoteFontFactory::getDefaultFontName(),
                  NoteFontFactory::getDefaultSize(NoteFontFactory::getDefaultFontName()));

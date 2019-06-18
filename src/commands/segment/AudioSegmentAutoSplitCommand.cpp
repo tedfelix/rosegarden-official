@@ -92,9 +92,9 @@ AudioSegmentAutoSplitCommand::execute()
                                m_segment->getAudioEndTime(),
                                m_threshold,
                                RealTime(0, 200000000));
-        } catch (AudioFileManager::BadAudioPathException e) {
+        } catch (const AudioFileManager::BadAudioPathException &e) {
             RG_WARNING << "ERROR: AudioSegmentAutoSplitCommand: Bad audio path: " << e.getMessage();
-        } catch (PeakFileManager::BadPeakFileException e) {
+        } catch (const PeakFileManager::BadPeakFileException &e) {
             RG_WARNING << "ERROR: AudioSegmentAutoSplitCommand: Bad peak file: " << e.getMessage();
         }
 

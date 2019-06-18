@@ -194,7 +194,7 @@ MupExporter::writeBar(std::ofstream &str,
                 int dots = e->get
                            <Int>(NOTE_DOTS);
                 duration = Note(type, dots).getDuration();
-            } catch (Exception e) { // no properties
+            } catch (const Exception &e) { // no properties
                 RG_WARNING << "WARNING: MupExporter::writeBar: incomplete note properties: " << e.getMessage();
             }
 

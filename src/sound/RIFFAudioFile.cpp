@@ -197,7 +197,7 @@ RIFFAudioFile::scanTo(std::ifstream *file, const RealTime &time)
         RG_DEBUG << "RIFFAudioFile::scanTo() - data chunk size =" << chunkLength;
 #endif
 
-    } catch (BadSoundFileException s) {
+    } catch (const BadSoundFileException &s) {
 #ifdef DEBUG_RIFF
         RG_WARNING << "RIFFAudioFile::scanTo - EXCEPTION - \"" << s.getMessage() << "\"";
 #endif
@@ -254,7 +254,7 @@ RIFFAudioFile::getSampleFrames(std::ifstream *file, unsigned int frames)
 
     try {
         return getBytes(file, totalBytes);
-    } catch (BadSoundFileException s) {
+    } catch (const BadSoundFileException &s) {
         return "";
     }
 }
@@ -267,7 +267,7 @@ RIFFAudioFile::getSampleFrames(std::ifstream *file, char *buf,
         return 0;
     try {
         return getBytes(file, buf, frames * m_bytesPerFrame) / m_bytesPerFrame;
-    } catch (BadSoundFileException s) {
+    } catch (const BadSoundFileException &s) {
         return 0;
     }
 }
@@ -296,7 +296,7 @@ RIFFAudioFile::getSampleFrameSlice(std::ifstream *file, const RealTime &time)
 
     try {
         return getBytes(file, totalBytes);
-    } catch (BadSoundFileException s) {
+    } catch (const BadSoundFileException &s) {
         return "";
     }
 }

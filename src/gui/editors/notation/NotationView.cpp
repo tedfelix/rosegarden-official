@@ -4609,7 +4609,7 @@ NotationView::slotEditElement(NotationStaff *staff,
                      (staff->getSegment(), element->event()->getAbsoluteTime(),
                       dialog.getClef(), shouldChangeOctave, shouldTranspose));
             }
-        } catch (Exception e) {
+        } catch (const Exception &e) {
             RG_WARNING << e.getMessage();
         }
 
@@ -4649,7 +4649,7 @@ NotationView::slotEditElement(NotationStaff *staff,
                 }
             }
                 
-        } catch (Exception e) {
+        } catch (const Exception &e) {
             RG_WARNING << e.getMessage();
         }
 
@@ -4680,7 +4680,7 @@ NotationView::slotEditElement(NotationStaff *staff,
               dialog.shouldIgnorePercussion()));
             }
 
-        } catch (Exception e) {
+        } catch (const Exception &e) {
             RG_WARNING << e.getMessage();
         }
 
@@ -4705,7 +4705,7 @@ NotationView::slotEditElement(NotationStaff *staff,
                 macroCommand->addCommand(command);
                 CommandHistory::getInstance()->addCommand(macroCommand);
             }
-        } catch (Exception e) {
+        } catch (const Exception &e) {
             RG_WARNING << e.getMessage();
         }
 

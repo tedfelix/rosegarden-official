@@ -322,7 +322,7 @@ AudioManagerDialog::slotPopulateFileList()
                         (*it)->getLength(),
                         audioPixmap);
     RG_DEBUG << "\n*** AudioManagerDialog:: 2";
-        } catch (Exception e) {
+        } catch (const Exception &e) {
     RG_DEBUG << "\n*** AudioManagerDialog:: 3";
             audioPixmap->fill(); // white
             QPainter p(audioPixmap);
@@ -421,7 +421,7 @@ AudioManagerDialog::slotPopulateFileList()
                                            (*iit)->getAudioStartTime(),
                                            (*iit)->getAudioEndTime(),
                                            audioPixmap);
-                } catch (Exception e) {
+                } catch (const Exception &e) {
                     // should already be set to "no file"
                 }
 
@@ -1219,11 +1219,11 @@ AudioManagerDialog::addFile(const QUrl& kurl)
 
     try {
         id = aFM.importURL(kurl, m_sampleRate);
-    } catch (AudioFileManager::BadAudioPathException e) {
+    } catch (const AudioFileManager::BadAudioPathException &e) {
         QString errorString = tr("Failed to add audio file. ") + strtoqstr(e.getMessage());
         QMessageBox::warning(this, tr("Rosegarden"), errorString);
         return false;
-    } catch (SoundFile::BadSoundFileException e) {
+    } catch (const SoundFile::BadSoundFileException &e) {
         QString errorString = tr("Failed to add audio file. ") + strtoqstr(e.getMessage());
         QMessageBox::warning(this, tr("Rosegarden"), errorString);
         return false;
@@ -1231,7 +1231,7 @@ AudioManagerDialog::addFile(const QUrl& kurl)
 
     try {
         aFM.generatePreview(id);
-    } catch (Exception e) {
+    } catch (const Exception &e) {
         QString message = strtoqstr(e.getMessage()) + "\n\n" +
                           tr("Try copying this file to a directory where you have write permission and re-add it");
         QMessageBox::information(this, tr("Rosegarden"), message);

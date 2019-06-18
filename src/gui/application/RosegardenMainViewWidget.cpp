@@ -1669,11 +1669,11 @@ RosegardenMainViewWidget::slotDroppedNewAudio(QString audioDesc)
 
     try {
         audioFileId = aFM.importURL(qurl, sampleRate);
-    } catch (AudioFileManager::BadAudioPathException e) {
+    } catch (const AudioFileManager::BadAudioPathException &e) {
         QString errorString = tr("Can't add dropped file. ") + strtoqstr(e.getMessage());
         QMessageBox::warning(this, tr("Rosegarden"), errorString);
         return ;
-    } catch (SoundFile::BadSoundFileException e) {
+    } catch (const SoundFile::BadSoundFileException &e) {
         QString errorString = tr("Can't add dropped file. ") + strtoqstr(e.getMessage());
         QMessageBox::warning(this, tr("Rosegarden"), errorString);
         return;
@@ -1681,7 +1681,7 @@ RosegardenMainViewWidget::slotDroppedNewAudio(QString audioDesc)
 
     try {
         aFM.generatePreview(audioFileId);
-    } catch (Exception e) {
+    } catch (const Exception &e) {
         QString message = strtoqstr(e.getMessage()) + "\n\n" +
                           tr("Try copying this file to a directory where you have write permission and re-add it");
         QMessageBox::information(this, tr("Rosegarden"), message);

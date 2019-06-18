@@ -129,7 +129,7 @@ void SegmentResizer::resizeAudioSegment(
 {
     try {
         m_doc->getAudioFileManager().testAudioPath();
-    } catch (AudioFileManager::BadAudioPathException) {
+    } catch (const AudioFileManager::BadAudioPathException &) {
         if (QMessageBox::warning(nullptr, tr("Warning"), //tr("Set audio file path"),
                 tr("The audio file path does not exist or is not writable.\nYou must set the audio file path to a valid directory in Document Properties before rescaling an audio file.\nWould you like to set it now?"),
                 QMessageBox::Yes | QMessageBox::Cancel, QMessageBox::Cancel) ==

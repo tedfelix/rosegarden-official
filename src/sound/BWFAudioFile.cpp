@@ -70,7 +70,7 @@ BWFAudioFile::open()
 
     try {
         parseHeader();
-    } catch (BadSoundFileException s) {
+    } catch (const BadSoundFileException &s) {
         //throw(s);
         return false;
     }

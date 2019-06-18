@@ -88,7 +88,7 @@ NoteFontFactory::getFontNames(bool forceRescan)
             try {
                 NoteFontMap map(name);
                 if (map.ok()) names.append(map.getName());
-            } catch (Exception e) {
+            } catch (const Exception &e) {
                 StartupLogo::hideIfStillThere();
                 QMessageBox::critical(nullptr, tr("Rosegarden"), strtoqstr(e.getMessage()));
                 throw;
@@ -156,7 +156,7 @@ NoteFontFactory::getFont(const QString &fontName, int size)
             NoteFont *font = new NoteFont(fontName, size);
             that.m_fonts[std::pair<QString, int>(fontName, size)] = font;
             return font;
-        } catch (Exception e) {
+        } catch (const Exception &e) {
             StartupLogo::hideIfStillThere();
             QMessageBox::critical(nullptr, tr("Rosegarden"), strtoqstr(e.getMessage()));
             throw;

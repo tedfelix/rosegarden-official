@@ -203,7 +203,7 @@ PeakFileManager::getPreview(AudioFile *audioFile,
                                       endTime,
                                       width,
                                       showMinima);
-        } catch (SoundFile::BadSoundFileException e) {
+        } catch (const SoundFile::BadSoundFileException &e) {
 #ifdef DEBUG_PEAKFILEMANAGER
             RG_WARNING << "getPreview() - \"" << e << "\"";
 #endif

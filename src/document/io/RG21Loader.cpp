@@ -592,7 +592,7 @@ timeT RG21Loader::convertRG21Duration(QStringList::Iterator& i)
         Note n(NotationStrings::getNoteForName(durationString));
         return n.getDuration();
 
-    } catch (NotationStrings::MalformedNoteName m) {
+    } catch (const NotationStrings::MalformedNoteName &m) {
 
         RG_DEBUG << "RG21Loader::convertRG21Duration: Bad duration: "
         << durationString << endl;

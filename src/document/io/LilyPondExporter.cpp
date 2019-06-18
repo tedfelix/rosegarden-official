@@ -283,9 +283,9 @@ LilyPondExporter::handleStartingPreEvents(eventstartlist &preEventsToStart,
                 str << "\\ottava #-2 ";
             }
 
-        } catch (Event::BadType) {
+        } catch (const Event::BadType &) {
             // Not an indication
-        } catch (Event::NoData e) {
+        } catch (const Event::NoData &e) {
             RG_WARNING << "Bad indication: " << e.getMessage();
         }
 
@@ -340,7 +340,7 @@ LilyPondExporter::handleStartingPostEvents(eventstartlist &postEventsToStart,
                 str << "\\startTrillSpan ";
             }
 
-        } catch (Event::BadType) {
+        } catch (const Event::BadType &) {
             // Not an indication
             // Check for sustainDown or sustainUp events
             if ((*m)->isa(Controller::EventType) &&
@@ -381,7 +381,7 @@ LilyPondExporter::handleStartingPostEvents(eventstartlist &postEventsToStart,
                     }
                 }
             }
-        } catch (Event::NoData e) {
+        } catch (const Event::NoData &e) {
             RG_WARNING << "Bad indication: " << e.getMessage();
         }
 
@@ -434,10 +434,10 @@ LilyPondExporter::handleEndingPreEvents(eventendlist &preEventsInProgress,
                 preEventsInProgress.erase(l);
             }
 
-        } catch (Event::BadType) {
+        } catch (const Event::BadType &) {
             // not an indication
 
-        } catch (Event::NoData e) {
+        } catch (const Event::NoData &e) {
             RG_WARNING << "Bad indication: " << e.getMessage();
         }
     }
@@ -486,10 +486,10 @@ LilyPondExporter::handleEndingPostEvents(eventendlist &postEventsInProgress,
                 postEventsInProgress.erase(l);
             }
 
-        } catch (Event::BadType) {
+        } catch (const Event::BadType &) {
             // not an indication
 
-        } catch (Event::NoData e) {
+        } catch (const Event::NoData &e) {
             RG_WARNING << "Bad indication: " << e.getMessage();
         }
     }
@@ -2048,7 +2048,7 @@ LilyPondExporter::calculateDuration(Segment *s,
             Note::Type type = (*i)->get<Int>(NOTE_TYPE);
             int dots = (*i)->get<Int>(NOTE_DOTS);
             durationCorrection = Note(type, dots).getDuration() - duration;
-        } catch (Exception e) { // no properties
+        } catch (const Exception &e) { // no properties
         }
     }
 
@@ -2200,7 +2200,7 @@ void LilyPondExporter::handleGuitarChord(Segment::iterator i, std::ofstream &str
         }
         str << "\" ";
 
-    } catch (Exception e) { // GuitarChord ctor failed
+    } catch (const Exception &e) { // GuitarChord ctor failed
         RG_DEBUG << "Bad GuitarChord event in LilyPond export";
     }
 }
@@ -2716,7 +2716,7 @@ LilyPondExporter::writeBar(Segment *s,
 
                 str << "\"" << std::endl << indent(col);
 
-            } catch (Exception e) {
+            } catch (const Exception &e) {
                 RG_WARNING << "Bad clef: " << e.getMessage();
             }
 
@@ -2749,7 +2749,7 @@ LilyPondExporter::writeBar(Segment *s,
                     str << std::endl << indent(col);
                 }
 
-            } catch (Exception e) {
+            } catch (const Exception &e) {
                 RG_WARNING << "Bad key: " << e.getMessage();
             }
 
@@ -3055,7 +3055,7 @@ LilyPondExporter::handleText(const Event *textEvent,
         } else {
             RG_WARNING << "LilyPondExporter::write() - unhandled text type: " << textType;
         }
-    } catch (Exception e) {
+    } catch (const Exception &e) {
         RG_WARNING << "Bad text: " << e.getMessage();
     }
 }

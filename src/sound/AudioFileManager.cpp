@@ -137,14 +137,14 @@ AudioFileManager::addFile(const QString &filePath)
 
             try {
                 aF = new BWFAudioFile(id, qstrtostr(getShortFilename(filePath)), filePath);
-            } catch (SoundFile::BadSoundFileException e) {
+            } catch (const SoundFile::BadSoundFileException &e) {
                 delete aF;
                 throw BadAudioPathException(e);
             }
         } else if (subType == WAV) {
             try {
                 aF = new WAVAudioFile(id, qstrtostr(getShortFilename(filePath)), filePath);
-            } catch (SoundFile::BadSoundFileException e) {
+            } catch (const SoundFile::BadSoundFileException &e) {
                 delete aF;
                 throw BadAudioPathException(e);
             }
@@ -164,7 +164,7 @@ AudioFileManager::addFile(const QString &filePath)
                 RG_WARNING << "addFile(): Malformed audio file in " << filePath;
                 throw BadAudioPathException(filePath, __FILE__, __LINE__);
             }
-        } catch (SoundFile::BadSoundFileException e) {
+        } catch (const SoundFile::BadSoundFileException &e) {
             delete aF;
             throw BadAudioPathException(e);
         }
@@ -257,7 +257,7 @@ AudioFileManager::insertFile(const std::string &name,
         }
         m_audioFiles.push_back(aF);
 
-    } catch (SoundFile::BadSoundFileException e) {
+    } catch (const SoundFile::BadSoundFileException &e) {
         delete aF;
         throw BadAudioPathException(e);
     }
@@ -348,7 +348,7 @@ AudioFileManager::insertFile(const std::string &name,
         m_audioFiles.push_back(aF);
         updateAudioFileID(id);
 
-    } catch (SoundFile::BadSoundFileException e) {
+    } catch (const SoundFile::BadSoundFileException &e) {
         delete aF;
         throw BadAudioPathException(e);
     }
@@ -517,7 +517,7 @@ AudioFileManager::createRecordingAudioFile(QString projectName, QString instrume
         //aF = new WAVAudioFile(newId, fileName.data(), m_audioPath + qstrtostr(fileName) );
         m_audioFiles.push_back(aF);
         m_recordedAudioFiles.insert(aF);
-    } catch (SoundFile::BadSoundFileException e) {
+    } catch (const SoundFile::BadSoundFileException &e) {
         delete aF;
         throw BadAudioPathException(e);
     }
@@ -594,7 +594,7 @@ AudioFileManager::createDerivedAudioFile(AudioFileId source,
                               m_audioPath + fileName );
         m_audioFiles.push_back(aF);
         m_derivedAudioFiles.insert(aF);
-    } catch (SoundFile::BadSoundFileException e) {
+    } catch (const SoundFile::BadSoundFileException &e) {
         delete aF;
         throw BadAudioPathException(e);
     }

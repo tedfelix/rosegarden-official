@@ -426,18 +426,18 @@ NoteStyle::getSomeCharName(QString qthing)
     try {
         name = getAccidentalCharName(Accidental(thing));
         if (!(name == NoteCharacterNames::UNKNOWN)) return name;
-    } catch (Exception) { }
+    } catch (const Exception &) { }
 
     try {
         name = getMarkCharName(Mark(thing));
         RG_DEBUG << thing << " -> " << name;
         if (!(name == NoteCharacterNames::UNKNOWN)) return name;
-    } catch (Exception) { }
+    } catch (const Exception &) { }
 
     try {
         name = getClefCharName(Clef(thing));
         if (!(name == NoteCharacterNames::UNKNOWN)) return name;
-    } catch (Exception) { }
+    } catch (const Exception &) { }
 
     return NoteCharacterNames::UNKNOWN;
 }
@@ -449,7 +449,7 @@ NoteStyle::setBaseStyle(NoteStyleName name)
         m_baseStyle = NoteStyleFactory::getStyle(name);
         if (m_baseStyle == this)
             m_baseStyle.reset();
-    } catch (NoteStyleFactory::StyleUnavailable u) {
+    } catch (const NoteStyleFactory::StyleUnavailable &u) {
         if (name != NoteStyleFactory::DefaultStyle) {
             RG_WARNING
                 << "NoteStyle::setBaseStyle: Base style "

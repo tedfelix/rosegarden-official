@@ -624,7 +624,7 @@ NotationConfigurationPage::slotPopulateFontCombo(bool rescan)
     try {
         (void)NoteFontFactory::getFont
             (defaultFont, NoteFontFactory::getDefaultSize(defaultFont));
-    } catch (Exception e) {
+    } catch (const Exception &e) {
         defaultFont = NoteFontFactory::getDefaultFontName();
     }
 
@@ -682,7 +682,7 @@ NotationConfigurationPage::slotFontComboChanged(int index)
         } else {
             m_fontTypeLabel->setText(tr("%1 (jaggy)").arg(tr(map.getType().toStdString().c_str())));
         }
-    } catch (Exception f) {
+    } catch (const Exception &f) {
         QMessageBox::critical(nullptr, tr("Rosegarden"), strtoqstr(f.getMessage()));
     }
 }

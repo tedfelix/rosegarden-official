@@ -110,8 +110,8 @@ ActionCommandRegistry::invokeCommand(QString actionName)
             sm->setSelection(subsequentSelection, false);
         }
 
-    } catch (CommandCancelled) {
-    } catch (CommandFailed f) {
+    } catch (const CommandCancelled &) {
+    } catch (const CommandFailed &f) {
 
         QMessageBox::warning(widget,
                              tr("Rosegarden - Warning"),

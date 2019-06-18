@@ -136,7 +136,7 @@ AudioPluginOSCGUIManager::hasGUI(InstrumentId instrument, int position)
         QString filePath = AudioPluginOSCGUI::getGUIFilePath
                            (strtoqstr(pluginInstance->getIdentifier()));
         return ( !filePath.isEmpty() );
-    } catch (Exception e) { // that's OK
+    } catch (const Exception &e) { // that's OK
         return false;
     }
 }
@@ -179,7 +179,7 @@ AudioPluginOSCGUIManager::startGUI(InstrumentId instrument, int position)
                                                   strtoqstr(pluginInstance->getIdentifier())));
         m_guis[instrument][position] = gui;
 
-    } catch (Exception e) {
+    } catch (const Exception &e) {
 
         RG_WARNING << "startGUI(): failed to start GUI: " << e.getMessage();
     }

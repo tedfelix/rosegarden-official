@@ -96,7 +96,7 @@ TextInserter::handleLeftButtonPress(const NotationMouseEvent *e)
         // edit an existing text, if that's what we clicked on
         try {
             defaultText = Text(*e->element->event());
-        } catch (Exception e) {
+        } catch (const Exception &) {
         }
         eraseEvent = e->element->event();
     }

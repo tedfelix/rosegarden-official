@@ -184,7 +184,7 @@ AudioSplitDialog::drawPreview()
                                 m_segment->getAudioEndTime(),
                                 m_previewWidth,
                                 false);
-    } catch (Exception e) {
+    } catch (const Exception &e) {
         noPreviewMsg();
         return ;
     }

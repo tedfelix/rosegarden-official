@@ -135,7 +135,7 @@ GuitarChordInserter::handleSelectedGuitarChord(const NotationMouseEvent *e)
 
             CommandHistory::getInstance()->addCommand(command);
         }
-    } catch (Exception e) {}
+    } catch (const Exception &e) {}
 }
 
 void GuitarChordInserter::createNewGuitarChord(const NotationMouseEvent *e)

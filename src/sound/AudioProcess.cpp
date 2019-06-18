@@ -2292,7 +2292,7 @@ AudioFileWriter::openRecordFile(InstrumentId id,
                 releaseLock();
                 return false;
             }
-        } catch (SoundFile::BadSoundFileException e) {
+        } catch (const SoundFile::BadSoundFileException &e) {
             std::cerr << "AudioFileWriter::openRecordFile: failed to open " << fileName << " for writing: " << e.getMessage() << std::endl;
             delete recordFile;
             releaseLock();

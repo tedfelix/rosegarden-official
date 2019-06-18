@@ -445,7 +445,7 @@ RosegardenMainWindow::RosegardenMainWindow(bool enableSound,
     {
         m_tranzport = new TranzportClient(this);
     }
-    catch (Exception e)
+    catch (const Exception &e)
     {
         m_tranzport = nullptr;        
         RG_DEBUG << e.getMessage().c_str() <<endl;        
@@ -2649,7 +2649,7 @@ RosegardenMainWindow::testAudioPath(QString op)
 {
     try {
         m_doc->getAudioFileManager().testAudioPath();
-    } catch (AudioFileManager::BadAudioPathException) {
+    } catch (const AudioFileManager::BadAudioPathException &) {
         // changing the following parent to 0 fixes a nasty style problem cheap:
         if (QMessageBox::warning
                 (nullptr, tr("Warning"),
@@ -5466,7 +5466,7 @@ RosegardenMainWindow::slotRecord()
         getTransport()->RecordButton()->setChecked(false);
         getTransport()->PlayButton()->setChecked(false);
         return ;
-    } catch (AudioFileManager::BadAudioPathException e) {
+    } catch (const AudioFileManager::BadAudioPathException &e) {
             if (QMessageBox::warning
                     (nullptr, tr("Warning"),
                  tr("The audio file path does not exist or is not writable.\nPlease set the audio file path to a valid directory in Document Properties before recording audio.\nWould you like to set it now?"),
@@ -5481,7 +5481,7 @@ RosegardenMainWindow::slotRecord()
         getTransport()->RecordButton()->setChecked(false);
         getTransport()->PlayButton()->setChecked(false);
         return ;
-    } catch (Exception e) {
+    } catch (const Exception &e) {
         QMessageBox::critical(this, tr("Rosegarden"), strtoqstr(e.getMessage()));
 
         getTransport()->MetronomeButton()->setChecked(false);
@@ -5506,9 +5506,9 @@ RosegardenMainWindow::slotToggleRecord()
 
     try {
         m_seqManager->record(true);
-    } catch (QString s) {
+    } catch (const QString &s) {
         QMessageBox::critical(this, tr("Rosegarden"), s);
-    } catch (AudioFileManager::BadAudioPathException e) {
+    } catch (const AudioFileManager::BadAudioPathException &e) {
         if (QMessageBox::warning
             (this, tr("Error"),
                  tr("The audio file path does not exist or is not writable.\nPlease set the audio file path to a valid directory in Document Properties before you start to record audio.\nWould you like to set it now?"),
@@ -5519,7 +5519,7 @@ RosegardenMainWindow::slotToggleRecord()
             //tr("Set audio file path")) == QMessageBox::Continue) {
         slotOpenAudioPathSettings();
         }
-    } catch (Exception e) {
+    } catch (const Exception &e) {
         QMessageBox::critical(this, tr("Rosegarden"),  strtoqstr(e.getMessage()));
     }
 
@@ -5599,9 +5599,9 @@ RosegardenMainWindow::slotPlay()
 
     try {
         m_seqManager->play(); // this will stop playback (pause) if it's already running
-    } catch (QString s) {
+    } catch (const QString &s) {
         QMessageBox::critical(this, tr("Rosegarden"), s);
-    } catch (Exception e) {
+    } catch (const Exception &e) {
         QMessageBox::critical(this, tr("Rosegarden"), strtoqstr(e.getMessage()));
     }  
 }
@@ -5635,7 +5635,7 @@ RosegardenMainWindow::slotStop()
     try {
         if (m_seqManager)
             m_seqManager->stop();
-    } catch (Exception e) {
+    } catch (const Exception &e) {
         QMessageBox::critical(this, tr("Rosegarden"), strtoqstr(e.getMessage()));
     }
 }
@@ -6392,7 +6392,7 @@ RosegardenMainWindow::createRecordAudioFiles(const QVector<InstrumentId> &record
                 std::cerr << "ERROR: RosegardenMainWindow::createRecordAudioFiles: Failed to create recording audio file" << std::endl;
                 return qv;
             }
-        } catch (AudioFileManager::BadAudioPathException e) {
+        } catch (const AudioFileManager::BadAudioPathException &e) {
             delete aF;
             std::cerr << "ERROR: RosegardenMainWindow::createRecordAudioFiles: Failed to create recording audio file: " << e.getMessage() << std::endl;
             return qv;

@@ -820,7 +820,7 @@ NotationStaff::renderSingleElement(ViewElementList::iterator &vli,
         m_notePixmapFactory->setNoteStyle
             (NoteStyleFactory::getStyleForEvent(elt->event()));
 
-    } catch (NoteStyleFactory::StyleUnavailable u) {
+    } catch (const NoteStyleFactory::StyleUnavailable &u) {
 
         RG_WARNING << "WARNING: Note style unavailable: "
                   << u.getMessage();
@@ -973,7 +973,7 @@ NotationStaff::renderSingleElement(ViewElementList::iterator &vli,
                 try {
                     RG_DEBUG << "renderSingleElement: It's a normal text";
                     item = m_notePixmapFactory->makeText(Text(*elt->event()));
-                } catch (Exception e) { // Text ctor failed
+                } catch (const Exception &e) { // Text ctor failed
                     RG_DEBUG << "Bad text event";
                 }
             }
@@ -1151,7 +1151,7 @@ NotationStaff::renderSingleElement(ViewElementList::iterator &vli,
                 item = m_notePixmapFactory->makeGuitarChord
                     (chord.getFingering(), 0, 0);
                 //                  }
-            } catch (Exception e) { // GuitarChord ctor failed
+            } catch (const Exception &e) { // GuitarChord ctor failed
                 RG_DEBUG << "Bad guitar chord event";
             }
 

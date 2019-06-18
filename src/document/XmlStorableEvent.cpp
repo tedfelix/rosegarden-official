@@ -71,7 +71,7 @@ XmlStorableEvent::XmlStorableEvent(const QXmlAttributes &attributes,
                 try {
                     Note n(NotationStrings::getNoteForName(attrVal));
                     setDuration(n.getDuration());
-                } catch (NotationStrings::MalformedNoteName m) {
+                } catch (const NotationStrings::MalformedNoteName &m) {
                     RG_DEBUG << "XmlStorableEvent::XmlStorableEvent: Bad duration: " << attrVal << " (" << m.getMessage() << ")";
                 }
             } else {

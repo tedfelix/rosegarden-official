@@ -103,7 +103,7 @@ PeakFile::open()
 
     try {
         parseHeader();
-    } catch (BadSoundFileException s) {
+    } catch (const BadSoundFileException &s) {
 
 #ifdef DEBUG_PEAKFILE
         RG_WARNING << "open() - EXCEPTION \"" << s.getMessage() << "\"";
@@ -208,7 +208,7 @@ PeakFile::write()
     try {
         if (!m_audioFile->open())
             return false;
-    } catch (BadSoundFileException e) {
+    } catch (const BadSoundFileException &e) {
 #ifdef DEBUG_PEAKFILE
         RG_WARNING << "write() - \"" << e.getMessage() << "\"";
 #endif
@@ -515,7 +515,7 @@ PeakFile::writePeaks(std::ofstream *file)
             // Read a block
             samples = m_audioFile->
                       getBytes(m_blockSize * channels * bytes);
-        } catch (BadSoundFileException e) {
+        } catch (const BadSoundFileException &e) {
             RG_WARNING << "writePeaks():" << e.getMessage();
             break;
         }
@@ -674,7 +674,7 @@ PeakFile::getPreview(const RealTime &startTime,
             try
             {
                 m_peakCache = getBytes(m_inFile, getSize() - 128);
-            } catch (BadSoundFileException e)
+            } catch (const BadSoundFileException &e)
             {
                 RG_WARNING << "PeakFile::getPreview: " << e.getMessage();
             }
@@ -789,7 +789,7 @@ PeakFile::getPreview(const RealTime &startTime,
 
                     try {
                         peakData = getBytes(m_inFile, m_format * m_pointsPerValue);
-                    } catch (BadSoundFileException e) {
+                    } catch (const BadSoundFileException &e) {
                         // Problem with the get - probably an EOF
                         // return the results so far.
                         //
@@ -968,7 +968,7 @@ PeakFile::getSplitPoints(const RealTime &startTime,
         for (int ch = 0; ch < m_channels; ch++) {
             try {
                 peakData = getBytes(m_inFile, m_format * m_pointsPerValue);
-            } catch (BadSoundFileException e) {
+            } catch (const BadSoundFileException &e) {
                 RG_WARNING << "getSplitPoints(): " << e.getMessage();
                 break;
             }

@@ -132,7 +132,7 @@ AudioPeaksThread::process()
                                             req.audioEndTime,
                                             req.width,
                                             req.showMinima);
-        } catch (AudioFileManager::BadAudioPathException e) {
+        } catch (const AudioFileManager::BadAudioPathException &e) {
 
 #if DEBUG_AUDIO_PEAKS_THREAD
             RG_DEBUG << "process(): failed to get peaks for audio file " << req.audioFileId << ": bad audio path: " << e.getMessage();
@@ -142,7 +142,7 @@ AudioPeaksThread::process()
             // leave this one in the queue
             ++failed;
 
-        } catch (PeakFileManager::BadPeakFileException e) {
+        } catch (const PeakFileManager::BadPeakFileException &e) {
 
 #if DEBUG_AUDIO_PEAKS_THREAD
             RG_DEBUG << "process(): failed to get peaks for audio file " << req.audioFileId << ": bad peak file: " << e.getMessage();

@@ -710,11 +710,11 @@ int main(int argc, char *argv[])
 
     try {
         mainWindow->launchSequencer();
-    } catch (std::string e) {
+    } catch (const std::string &e) {
         RG_DEBUG << "mainWindow->launchSequencer() - " << e;
-    } catch (QString e) {
+    } catch (const QString &e) {
         RG_DEBUG << "mainWindow->launchSequencer() - " << e;
-    } catch (Exception e) {
+    } catch (const Exception &e) {
         RG_DEBUG << "mainWindow->launchSequencer() - " << e.getMessage();
     }
 

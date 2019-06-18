@@ -73,7 +73,7 @@ NoteStyleFactory::getStyle(NoteStyleName name)
             m_styles[name] = newStyle;
             return newStyle;
 
-        } catch (NoteStyleFileReader::StyleFileReadFailed f) {
+        } catch (const NoteStyleFileReader::StyleFileReadFailed &f) {
             RG_WARNING << "NoteStyleFactory::getStyle: Style file read failed:" << f.getMessage();
             throw StyleUnavailable("Style file read failed: " + f.getMessage());
         }

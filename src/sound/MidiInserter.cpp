@@ -463,22 +463,22 @@ insertCopy(const MappedEvent &evt)
             default:
                 break;
             }
-    } catch (MIDIValueOutOfRange r) {
+    } catch (const MIDIValueOutOfRange &r) {
 #ifdef MIDI_DEBUG
         RG_DEBUG << "MIDI value out of range at " << midiEventAbsoluteTime;
 #endif
 
-    } catch (Event::NoData d) {
+    } catch (const Event::NoData &d) {
 #ifdef MIDI_DEBUG
         RG_DEBUG << "Caught Event::NoData at " << midiEventAbsoluteTime << ", message is:" << d.getMessage();
 #endif
 
-    } catch (Event::BadType b) {
+    } catch (const Event::BadType &b) {
 #ifdef MIDI_DEBUG
         RG_DEBUG << "Caught Event::BadType at " << midiEventAbsoluteTime << ", message is:" << b.getMessage();
 #endif
 
-    } catch (SystemExclusive::BadEncoding e) {
+    } catch (const SystemExclusive::BadEncoding &e) {
 #ifdef MIDI_DEBUG
         RG_DEBUG << "Caught bad SysEx encoding at " << midiEventAbsoluteTime;
 #endif

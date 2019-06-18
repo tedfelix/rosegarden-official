@@ -331,13 +331,13 @@ SimpleEventEditDialog::setupForEvent()
 
         try {
             m_pitchSpinBox->setValue(m_event.get<Int>(PITCH));
-        } catch (Event::NoData) {
+        } catch (const Event::NoData &) {
             m_pitchSpinBox->setValue(60);
         }
 
         try {
             m_velocitySpinBox->setValue(m_event.get<Int>(VELOCITY));
-        } catch (Event::NoData) {
+        } catch (const Event::NoData &) {
             m_velocitySpinBox->setValue(100);
         }
 
@@ -369,14 +369,14 @@ SimpleEventEditDialog::setupForEvent()
         try {
             m_pitchSpinBox->setValue(m_event.get<Int>
                                      (Controller::NUMBER));
-        } catch (Event::NoData) {
+        } catch (const Event::NoData &) {
             m_pitchSpinBox->setValue(0);
         }
 
         try {
             m_velocitySpinBox->setValue(m_event.get<Int>
                                         (Controller::VALUE));
-        } catch (Event::NoData) {
+        } catch (const Event::NoData &) {
             m_velocitySpinBox->setValue(0);
         }
 
@@ -407,14 +407,14 @@ SimpleEventEditDialog::setupForEvent()
         try {
             m_pitchSpinBox->setValue(m_event.get<Int>
                                      (KeyPressure::PITCH));
-        } catch (Event::NoData) {
+        } catch (const Event::NoData &) {
             m_pitchSpinBox->setValue(0);
         }
 
         try {
             m_velocitySpinBox->setValue(m_event.get<Int>
                                         (KeyPressure::PRESSURE));
-        } catch (Event::NoData) {
+        } catch (const Event::NoData &) {
             m_velocitySpinBox->setValue(0);
         }
 
@@ -444,7 +444,7 @@ SimpleEventEditDialog::setupForEvent()
         try {
             m_pitchSpinBox->setValue(m_event.get<Int>
                                      (ChannelPressure::PRESSURE));
-        } catch (Event::NoData) {
+        } catch (const Event::NoData &) {
             m_pitchSpinBox->setValue(0);
         }
 
@@ -477,7 +477,7 @@ SimpleEventEditDialog::setupForEvent()
         try {
             m_pitchSpinBox->setValue(m_event.get<Int>
                                      (ProgramChange::PROGRAM) + 1);
-        } catch (Event::NoData) {
+        } catch (const Event::NoData &) {
             m_pitchSpinBox->setValue(0);
         }
 
@@ -544,14 +544,14 @@ SimpleEventEditDialog::setupForEvent()
         try {
             m_pitchSpinBox->setValue(m_event.get<Int>
                                      (PitchBend::MSB));
-        } catch (Event::NoData) {
+        } catch (const Event::NoData &) {
             m_pitchSpinBox->setValue(0);
         }
 
         try {
             m_velocitySpinBox->setValue(m_event.get<Int>
                                         (PitchBend::LSB));
-        } catch (Event::NoData) {
+        } catch (const Event::NoData &) {
             m_velocitySpinBox->setValue(0);
         }
 

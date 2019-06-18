@@ -303,7 +303,7 @@ SystemExclusive::isHex(std::string rh)
     // arf
     try {
 	std::string r = toRaw(rh);
-    } catch (BadEncoding) {
+    } catch (const BadEncoding &) {
 	return false;
     }
     return true;

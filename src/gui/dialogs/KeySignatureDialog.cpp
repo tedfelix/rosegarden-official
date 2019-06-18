@@ -269,7 +269,7 @@ KeySignatureDialog::slotKeyUp()
     try {
         m_key = Rosegarden::Key(ac, sharp, m_key.isMinor());
         setValid(true);
-    } catch (Rosegarden::Key::BadKeySpec s) {
+    } catch (const Rosegarden::Key::BadKeySpec &s) {
         RG_WARNING << s.getMessage();
         setValid(false);
     }
@@ -298,7 +298,7 @@ KeySignatureDialog::slotKeyDown()
     try {
         m_key = Rosegarden::Key(ac, sharp, m_key.isMinor());
         setValid(true);
-    } catch (Rosegarden::Key::BadKeySpec s) {
+    } catch (const Rosegarden::Key::BadKeySpec &s) {
         RG_WARNING << s.getMessage();
         setValid(false);
     }
@@ -410,7 +410,7 @@ KeySignatureDialog::slotKeyNameChanged(int index)
             name = name.substr(0, space);
         m_keyCombo->setEditText(strtoqstr(name));
 
-    } catch (Rosegarden::Key::BadKeyName s) {
+    } catch (const Rosegarden::Key::BadKeyName &s) {
         RG_WARNING << s.getMessage();
         setValid(false);
     }
@@ -430,7 +430,7 @@ KeySignatureDialog::slotMajorMinorChanged(const QString &s)
     try {
         m_key = Rosegarden::Key(name);
         setValid(true);
-    } catch (Rosegarden::Key::BadKeyName s) {
+    } catch (const Rosegarden::Key::BadKeyName &s) {
         RG_WARNING << s.getMessage();
         setValid(false);
     }

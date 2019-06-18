@@ -313,7 +313,7 @@ SoundDriver::addAudioFile(const QString &fileName, unsigned int id)
 
         return true;
 
-    } catch (SoundFile::BadSoundFileException e) {
+    } catch (const SoundFile::BadSoundFileException &e) {
         RG_DEBUG << "SoundDriver::addAudioFile: Failed to add audio file " << fileName << ": " << e.getMessage();
         delete ins;
         return false;
