@@ -211,15 +211,6 @@ ColourMap::end()
     return ret;
 }
 
-ColourMap&
-ColourMap::operator=(const ColourMap& input)
-{
-    if (this != &input)
-        m_map = input.m_map;
-
-    return *this;
-}
-
 unsigned int
 ColourMap::size() const
 {

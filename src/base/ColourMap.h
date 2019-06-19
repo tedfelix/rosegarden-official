@@ -119,8 +119,6 @@ public:
 
     std::string toXmlString(std::string name) const;
 
-    ColourMap& operator=(const ColourMap& input);
-
     unsigned int size() const;
 
 private:
