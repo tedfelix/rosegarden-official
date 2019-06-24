@@ -98,8 +98,6 @@ enum Tristate
 SegmentParameterBox::SegmentParameterBox(RosegardenDocument* doc,
                                          QWidget *parent) :
     RosegardenParameterBox(tr("Segment Parameters"), parent),
-    m_highestPlayable(127),
-    m_lowestPlayable(0),
     m_standardQuantizations(BasicQuantizer::getStandardQuantizations()),
     m_doc(doc),
     m_transposeRange(48)
@@ -1018,54 +1016,6 @@ SegmentParameterBox::slotColourSelected(int value)
 }
 
 void
-SegmentParameterBox::updateHighLow()
-{
-    // this was never fully implemented, and never will be, so the partial
-    // implementation has been removed pending removal of this entire method
-    // from the class
-}
-
-void
-SegmentParameterBox::slotHighestPressed()
-{
-    RG_DEBUG << "slotHighestPressed()";
-
-    PitchPickerDialog dialog(nullptr, m_highestPlayable, tr("Highest playable note"));
-    SegmentVector::iterator it;
-
-    if (dialog.exec() == QDialog::Accepted) {
-        m_highestPlayable = dialog.getPitch();
-        updateHighLow();
-
-        for (it = m_segments.begin(); it != m_segments.end(); ++it) {
-            (*it)->setHighestPlayable(m_highestPlayable);
-        }
-
-        emit documentModified();
-    }
-}
-
-void
-SegmentParameterBox::slotLowestPressed()
-{
-    RG_DEBUG << "slotLowestPressed()";
-
-    PitchPickerDialog dialog(nullptr, m_lowestPlayable, tr("Lowest playable note"));
-    SegmentVector::iterator it;
-
-    if (dialog.exec() == QDialog::Accepted) {
-        m_lowestPlayable = dialog.getPitch();
-        updateHighLow();
-
-        for (it = m_segments.begin(); it != m_segments.end(); ++it) {
-            (*it)->setLowestPlayable(m_lowestPlayable);
-        }
-
-        emit documentModified();
-    }
-}
-
-void
 SegmentParameterBox::addCommandToHistory(Command *command)
 {
     CommandHistory::getInstance()->addCommand(command);
@@ -1113,37 +1063,6 @@ SegmentParameterBox::slotEditSegmentLabel()
      // fix #1776915, maybe?
      update();
     }
-}
-
-void
-SegmentParameterBox::slotAudioFadeChanged(int value)
-{
-    RG_DEBUG << "slotAudioFadeChanged() - value = " << value;
-/*
-    if (m_segments.size() == 0)
-        return ;
-
-    bool state = false;
-    if (value == QCheckBox::On)
-        state = true;
-
-    SegmentVector::iterator it;
-    for (it = m_segments.begin(); it != m_segments.end(); it++) {
-        (*it)->setAutoFade(state);
-    }
-*/
-}
-
-void
-SegmentParameterBox::slotFadeInChanged(int value)
-{
-    RG_DEBUG << "slotFadeInChanged() - value = " << value;
-}
-
-void
-SegmentParameterBox::slotFadeOutChanged(int value)
-{
-    RG_DEBUG << "slotFadeOutChanged() - value = " << value;
 }
 
 void

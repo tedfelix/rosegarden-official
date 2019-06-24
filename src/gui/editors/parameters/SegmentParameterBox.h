@@ -42,6 +42,14 @@ class Segment;
 class RosegardenDocument;
 
 
+/// Top pane to the left of the segment canvas (CompositionView).
+/**
+ * In the past, this box had fields for highest and lowest note.  Those can
+ * now be set in the notation editor via Segment > Convert notation for....
+ * This box also had settings for audio fade (auto, fade in, and fade out).
+ * These were removed at some point, possibly near r8100.  I've decided to
+ * completely remove all remaining traces of these features.
+ */
 class SegmentParameterBox : public RosegardenParameterBox,
                             public CompositionObserver
 {
@@ -49,7 +57,6 @@ class SegmentParameterBox : public RosegardenParameterBox,
     Q_OBJECT
 
 public:
-
     // ??? Get document directly.
     SegmentParameterBox(RosegardenDocument *doc,
                         QWidget *parent);
@@ -69,47 +76,48 @@ public slots:
     //     that takes a function pointer instead of a QString/SLOT().
     void slotRepeatPressed();
 
-    void slotTransposeSelected(int);
-    void slotTransposeTextChanged(const QString &);
-
-    void slotDelaySelected(int);
-    void slotDelayTimeChanged(timeT delayValue);
-    void slotDelayTextChanged(const QString &);
-
-    void slotEditSegmentLabel();
-
-    void slotColourSelected(int);
-    void slotDocColoursChanged();
-
-    void slotAudioFadeChanged(int);
-    void slotFadeInChanged(int);
-    void slotFadeOutChanged(int);
-
-    void slotHighestPressed();
-    void slotLowestPressed();
-
-    void slotChangeLinkTranspose();
-    void slotResetLinkTranspose();
-
-    // ??? Shadow.  Does this need to be a slot?
+    // ??? Shadows QWidget::update(...).
+    //       - Rename to slotUpdate().
+    //       - Make not virtual.
+    //       - Move to private.
     virtual void update();
 
 signals:
+    /// RosegardenMainWindow connects to this.
     void documentModified();
     void canvasModified();
 
 private slots:
     void slotNewDocument(RosegardenDocument *doc);
+
+    void slotEditSegmentLabel();
+
+    void slotTransposeSelected(int);
+    void slotTransposeTextChanged(const QString &);
+
     void slotQuantizeSelected(int);
+
+    void slotDelaySelected(int);
+    void slotDelayTimeChanged(timeT delayValue);
+    void slotDelayTextChanged(const QString &);
+
+    void slotColourSelected(int);
+    void slotDocColoursChanged();
+
+    void slotChangeLinkTranspose();
+    void slotResetLinkTranspose();
 
 private:
     void initBox();
+
+    // ??? updateWidgets()?
     void populateBoxFromSegments();
-    void updateHighLow();
+
     void addCommandToHistory(Command *command);
 
     Label *m_label;
     QPushButton *m_editButton;
+
     TristateCheckBox *m_repeatCheckBox;
     QComboBox *m_quantizeComboBox;
     QComboBox *m_transposeComboBox;
@@ -118,10 +126,6 @@ private:
 
     int m_addColourPos;
 
-    // used to keep track of highest/lowest as there is no associated spinbox
-    // to query for its value
-    int m_highestPlayable;
-    int m_lowestPlayable;
 
     // ??? Can we access the selection directly instead of keeping a
     //     copy?  Of pointers?  That would make this code significantly
