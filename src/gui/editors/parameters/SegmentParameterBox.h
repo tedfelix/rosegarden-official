@@ -95,7 +95,6 @@ private slots:
 
     void slotRepeatClicked(bool checked);
 
-    void slotTransposeTextChanged(const QString &);
     void slotTransposeSelected(int);
 
     void slotQuantizeSelected(int);

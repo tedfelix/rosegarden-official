@@ -77,6 +77,10 @@ enum Tristate
     NotApplicable  // no applicable segments selected
 };
 
+namespace {
+    constexpr int transposeRange = 48;
+}
+
 SegmentParameterBox::SegmentParameterBox(RosegardenDocument* doc,
                                          QWidget *parent) :
     RosegardenParameterBox(tr("Segment Parameters"), parent),
@@ -142,12 +146,8 @@ SegmentParameterBox::SegmentParameterBox(RosegardenDocument* doc,
     // ??? QComboBox::activated() is overloaded, so we have to use SIGNAL().
     connect(m_transpose, SIGNAL(activated(int)),
             SLOT(slotTransposeSelected(int)));
-    connect(m_transpose, &QComboBox::editTextChanged,
-            this, &SegmentParameterBox::slotTransposeTextChanged);
 
     QPixmap noMap = NotePixmapFactory::makeToolbarPixmap("menu-no-note");
-
-    constexpr int transposeRange = 48;
 
     for (int i = -transposeRange; i < transposeRange + 1; ++i) {
         m_transpose->addItem(noMap, QString("%1").arg(i));
@@ -896,28 +896,28 @@ SegmentParameterBox::slotToggleRepeat()
 }
 
 void
-SegmentParameterBox::slotTransposeTextChanged(const QString &text)
+SegmentParameterBox::slotTransposeSelected(int value)
 {
-    if (text.isEmpty() || m_segments.size() == 0)
-        return ;
+    SegmentSelection segmentSelection = getSelectedSegments();
 
-    int transposeValue = text.toInt();
+    // No Segments selected?  Bail.
+    if (segmentSelection.empty())
+        return;
 
+    int transposeValue = value - transposeRange;
+
+    // ??? This would be nice.  It would allow for undo.
     //CommandHistory::getInstance()->addCommand(
-    //        new SegmentCommandChangeTransposeValue(m_segments, transposeValue));
+    //        new SegmentCommandChangeTransposeValue(
+    //                segmentSelection, transposeValue));
 
-    SegmentVector::iterator it;
-    for (it = m_segments.begin(); it != m_segments.end(); ++it) {
-        (*it)->setTranspose(transposeValue);
+    for (SegmentSelection::iterator i = segmentSelection.begin();
+         i != segmentSelection.end();
+         ++i) {
+        (*i)->setTranspose(transposeValue);
     }
 
     emit documentModified();
-}
-
-void
-SegmentParameterBox::slotTransposeSelected(int value)
-{
-    slotTransposeTextChanged(m_transpose->itemText(value));
 }
 
 void
