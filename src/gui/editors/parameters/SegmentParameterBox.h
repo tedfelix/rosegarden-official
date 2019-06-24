@@ -140,6 +140,7 @@ private:
     void updateDelay();
 
     ColorCombo *m_color;
+    void updateColor();
 
 };
 

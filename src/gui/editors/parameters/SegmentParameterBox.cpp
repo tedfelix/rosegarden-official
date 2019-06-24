@@ -762,6 +762,55 @@ SegmentParameterBox::updateDelay()
 }
 
 void
+SegmentParameterBox::updateColor()
+{
+    SegmentSelection segmentSelection = getSelectedSegments();
+
+    // No Segments selected?  Disable and set to 0.
+    if (segmentSelection.empty()) {
+        m_color->setEnabled(false);
+        m_color->setCurrentIndex(0);
+        return;
+    }
+
+    // One or more Segments selected
+
+    m_color->setEnabled(true);
+
+    SegmentSelection::const_iterator i = segmentSelection.begin();
+
+    unsigned colorIndex = (*i)->getColourIndex();
+
+    // Just one?  Set and bail.
+    if (segmentSelection.size() == 1) {
+        m_color->setCurrentIndex(colorIndex);
+        return;
+    }
+
+    // More than one Segment selected.
+
+    // Skip to the second Segment.
+    ++i;
+
+    bool allSame = true;
+
+    // For each Segment
+    for (/* ...starting with the second one */;
+         i != segmentSelection.end();
+         ++i) {
+        if ((*i)->getColourIndex() != colorIndex) {
+            allSame = false;
+            break;
+        }
+    }
+
+    if (allSame)
+        m_color->setCurrentIndex(colorIndex);
+    else
+        m_color->setCurrentIndex(-1);
+}
+
+void
 SegmentParameterBox::updateWidgets()
 {
     // ??? Recommend reorganizing this to focus on one widget at
@@ -774,14 +823,13 @@ SegmentParameterBox::updateWidgets()
     updateTranspose();
     updateQuantize();
     updateDelay();
+    updateColor();
 
 
     // * The Rest
 
     SegmentVector::iterator it;
-    Tristate diffcolours = NotApplicable;
     Tristate highlow = NotApplicable;
-    unsigned int myCol = 0;
     unsigned int myHigh = 127;
     unsigned int myLow = 0;
 
@@ -799,22 +847,8 @@ SegmentParameterBox::updateWidgets()
         // and repeat checkbox:
         m_edit->setEnabled(true);
 
-        if (diffcolours == NotApplicable)
-            diffcolours = None;
         if (highlow == NotApplicable)
             highlow = None;
-
-        // Colour
-
-        if (it == m_segments.begin()) {
-            myCol = (*it)->getColourIndex();
-        } else {
-            //!!! the following if statement had been empty since who knows
-            // when, and made no logical sense, so let's see if this is what the
-            // original coder was trying to say here:
-            if (myCol != (*it)->getColourIndex())
-                diffcolours = All;
-        }
 
         // Highest/Lowest playable
         //
@@ -829,21 +863,6 @@ SegmentParameterBox::updateWidgets()
         }
 
     }
-
-    switch (diffcolours) {
-    case None:
-        m_color->setCurrentIndex(myCol);
-        break;
-
-    case All:
-    case NotApplicable:
-    case Some:
-    default:
-        m_color->setCurrentIndex(0);
-        break;
-    }
-
-    m_color->setEnabled(diffcolours != NotApplicable);
 }
 
 void SegmentParameterBox::slotRepeatPressed()
