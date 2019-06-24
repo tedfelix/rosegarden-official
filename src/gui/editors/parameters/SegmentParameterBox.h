@@ -51,8 +51,7 @@ class RosegardenDocument;
  * These were removed at some point, possibly near r8100.  I've decided to
  * completely remove all remaining traces of these features.
  */
-class SegmentParameterBox : public RosegardenParameterBox,
-                            public CompositionObserver
+class SegmentParameterBox : public RosegardenParameterBox
 {
 
     Q_OBJECT
@@ -66,13 +65,12 @@ public:
     // ??? Get document directly.
     void setDocument(RosegardenDocument *doc);
 
-    // ??? Get rid of this.  Use getSelectedSegments() (in the .cpp) instead.
-    void useSegments(const SegmentSelection &segments);
-
-    // CompositionObserver interface
-    // ??? Get rid of this.
-    void segmentRemoved(const Composition *,
-                        Segment *) override;
+    // ??? This should be private.  It's public for the moment to handle
+    //     selection changes.  The right way to do this is to connect a
+    //     slotSelectionChanged() to a signal from CompositionModelImpl.
+    //     slotSelectionChanged() would then call updateWidgets().
+    //     Using slotUpdate() is also a possibility.
+    void updateWidgets();
 
 public slots:
     /// Segment > Toggle Repeat
@@ -84,6 +82,10 @@ public slots:
 
 signals:
     /// RosegardenMainWindow connects to this.
+    /**
+     * ??? We should directly call the RosegardenDocument documentModified()
+     *     functions as appropriate and get rid of this.
+     */
     void documentModified();
 
 private slots:
@@ -110,15 +112,6 @@ private slots:
 
 private:
     RosegardenDocument *m_doc;
-
-    // ??? Can we access the selection directly instead of keeping a
-    //     copy?  Of pointers?  That would make this code significantly
-    //     safer.  Yes.  See getSelectedSegments() in the .cpp.  Switch
-    //     everyone over to that.
-    typedef std::vector<Segment *> SegmentVector;
-    SegmentVector m_segments;
-
-    void updateWidgets();
 
     Label *m_label;
     void updateLabel();

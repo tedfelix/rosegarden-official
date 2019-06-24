@@ -77,6 +77,8 @@ enum Tristate
     NotApplicable  // no applicable segments selected
 };
 
+typedef std::vector<Segment *> SegmentVector;
+
 namespace {
     constexpr int transposeRange = 48;
 }
@@ -324,8 +326,6 @@ SegmentParameterBox::SegmentParameterBox(RosegardenDocument* doc,
 
     //RG_DEBUG << "ctor: " << this << ": font() size is " << (this->font()).pixelSize() << "px (" << (this->font()).pointSize() << "pt)";
 
-    m_doc->getComposition().addObserver(this);
-
     connect(RosegardenMainWindow::self(),
                 &RosegardenMainWindow::documentChanged,
             this, &SegmentParameterBox::slotNewDocument);
@@ -339,10 +339,6 @@ SegmentParameterBox::SegmentParameterBox(RosegardenDocument* doc,
 
 SegmentParameterBox::~SegmentParameterBox()
 {
-    if (!isCompositionDeleted()) {
-        RosegardenMainWindow::self()->getDocument()->
-            getComposition().removeObserver(this);
-    }
 }
 
 void
@@ -377,24 +373,6 @@ namespace
     }
 }
 
-void
-SegmentParameterBox::useSegments(const SegmentSelection &segments)
-{
-    // ??? Switch this push approach to a pull approach.
-    //     Use getSelectedSegments() and get rid of m_segments.
-    // ??? Since selection isn't part of the document, we'll need
-    //     to keep this to get notifications of selection changes
-    //     when they happen.
-
-    // Copy from segments which is a std::set to m_segments which
-    // is a std::vector.
-    m_segments.clear();
-    m_segments.resize(segments.size());
-    std::copy(segments.begin(), segments.end(), m_segments.begin());
-
-    updateWidgets();
-}
-
 void SegmentParameterBox::slotUpdate()
 {
     // ??? I'm guessing this should evolve into some sort of
@@ -403,42 +381,6 @@ void SegmentParameterBox::slotUpdate()
     RG_DEBUG << "slotUpdate()";
 
     updateWidgets();
-}
-
-void
-SegmentParameterBox::segmentRemoved(const Composition *composition,
-                                    Segment *segment)
-{
-    // ??? If we switch to getSelectedSegments() this will no longer be
-    //     needed.  Instead, we should be able to get notification of
-    //     segments removed as part of the doc modified notification.
-    //     If that's not the case, at the very least, this can just be
-    //     reduced to an updateWidgets() call.
-
-    RG_DEBUG << "segmentRemoved()...";
-
-    // Not our composition?  Bail.
-    if (composition != &m_doc->getComposition()) {
-        RG_DEBUG << "segmentRemoved(): received a delete for the wrong Composition";
-        return;
-    }
-
-    // For each Segment that we are displaying...
-    for (SegmentVector::const_iterator it =
-             m_segments.begin();
-         it != m_segments.end();
-         ++it) {
-
-        // If we found the segment in question, delete it from our list.
-        if (*it == segment) {
-            RG_DEBUG << "segmentRemoved(): found the segment to remove";
-            m_segments.erase(it);
-            return;
-        }
-
-    }
-
-    // ??? We don't slotUpdate() here, so we still show old data.
 }
 
 void
@@ -1079,16 +1021,20 @@ SegmentParameterBox::slotDocColoursChanged()
 void
 SegmentParameterBox::slotChangeLinkTranspose()
 {
-    if (m_segments.size() == 0)
-        return ;
+    SegmentSelection segments = getSelectedSegments();
+
+    // No Segments selected?  Bail.
+    if (segments.empty())
+        return;
 
     bool foundTransposedLinks = false;
     SegmentVector linkedSegs;
-    SegmentVector::iterator it;
-    for (it = m_segments.begin(); it != m_segments.end(); ++it) {
+    for (SegmentSelection::iterator it = segments.begin();
+         it != segments.end();
+         ++it) {
         Segment *linkedSeg = *it;
         if (linkedSeg->isLinked()) {
-            if (linkedSeg->getLinkTransposeParams().m_semitones==0) {
+            if (linkedSeg->getLinkTransposeParams().m_semitones == 0) {
                 linkedSegs.push_back(linkedSeg);
             } else {
                 foundTransposedLinks = true;
@@ -1104,55 +1050,54 @@ SegmentParameterBox::slotChangeLinkTranspose()
         return;
     }
         
-    if (linkedSegs.size()==0) {
+    if (linkedSegs.empty())
         return;
-    }
     
     IntervalDialog intervalDialog(this, true, true);
     int ok = intervalDialog.exec();
     
-    if (!ok) {
+    if (!ok)
         return;
-    }
 
-    bool changeKey = intervalDialog.getChangeKey();
-    int steps = intervalDialog.getDiatonicDistance();
-    int semitones = intervalDialog.getChromaticDistance();
-    bool transposeSegmentBack = intervalDialog.getTransposeSegmentBack();
-     
-    CommandHistory::getInstance()->addCommand
-        (new SegmentLinkTransposeCommand(linkedSegs, changeKey, steps, 
-                                         semitones, transposeSegmentBack));
+    CommandHistory::getInstance()->addCommand(
+            new SegmentLinkTransposeCommand(
+                    linkedSegs,  // linkedSegs
+                    intervalDialog.getChangeKey(),  // changeKey
+                    intervalDialog.getDiatonicDistance(),  // steps
+                    intervalDialog.getChromaticDistance(),  // semitones
+                    intervalDialog.getTransposeSegmentBack()));  // transposeSegmentBack
 }
 
 void
 SegmentParameterBox::slotResetLinkTranspose()
 {
-    if (m_segments.size() == 0)
-        return ;
+    SegmentSelection segments = getSelectedSegments();
+
+    // Nothing selected?  Bail.
+    if (segments.empty())
+        return;
 
     SegmentVector linkedSegs;
-    SegmentVector::iterator it;
-    for (it = m_segments.begin(); it != m_segments.end(); ++it) {
+    for (SegmentSelection::iterator it = segments.begin();
+         it != segments.end();
+         ++it) {
         Segment *linkedSeg = *it;
-        if (linkedSeg->isLinked()) {
+
+        if (linkedSeg->isLinked())
             linkedSegs.push_back(linkedSeg);
-        }
     }
 
-    if (linkedSegs.size() == 0) {
+    if (linkedSegs.empty())
         return;
-    }
 
     int reset = QMessageBox::question(this, tr("Rosegarden"), 
                    tr("Remove transposition on selected linked segments?"));
 
-    if (reset == QMessageBox::No) {
-        return ;
-    }
+    if (reset == QMessageBox::No)
+        return;
 
-    CommandHistory::getInstance()->addCommand
-        (new SegmentLinkResetTransposeCommand(linkedSegs));
+    CommandHistory::getInstance()->addCommand(
+            new SegmentLinkResetTransposeCommand(linkedSegs));
 }
 
 void
@@ -1160,10 +1105,9 @@ SegmentParameterBox::slotNewDocument(RosegardenDocument *doc)
 {
     // Connect to the new document.
     m_doc = doc;
-    m_doc->getComposition().addObserver(this);
 
     // Make sure everything is correct.
-    slotUpdate();
+    updateWidgets();
 }
 
 

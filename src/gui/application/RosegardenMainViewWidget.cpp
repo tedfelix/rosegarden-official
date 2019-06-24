@@ -1148,7 +1148,7 @@ void RosegardenMainViewWidget::slotPropagateSegmentSelection(const SegmentSelect
     m_trackEditor->getCompositionView()->selectSegments(segments);
 
     // update the segment parameter box
-    m_segmentParameterBox->useSegments(segments);
+    m_segmentParameterBox->updateWidgets();
 
     if (!segments.empty()) {
         emit stateChange("have_selection", true);
@@ -1186,7 +1186,7 @@ void RosegardenMainViewWidget::slotSelectAllSegments()
     m_trackEditor->getCompositionView()->selectSegments(segments);
 
     // update the segment parameter box
-    m_segmentParameterBox->useSegments(segments);
+    m_segmentParameterBox->updateWidgets();
 
     //!!! similarly, how to set no selected track?
     //comp.setSelectedTrack(trackId);
@@ -1389,7 +1389,7 @@ void
 RosegardenMainViewWidget::slotSelectedSegments(const SegmentSelection &segments)
 {
     // update the segment parameter box
-    m_segmentParameterBox->useSegments(segments);
+    m_segmentParameterBox->updateWidgets();
 
     if (!segments.empty()) {
         emit stateChange("have_selection", true);
