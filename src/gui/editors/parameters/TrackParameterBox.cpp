@@ -717,6 +717,8 @@ TrackParameterBox::slotDocColoursChanged()
     // to modify the document colors.  See ColourConfigurationPage
     // which was probably meant to be used by DocumentConfigureDialog.
     // See SegmentParameterBox::slotDocColoursChanged().
+    // ??? Probably should combine this and the SPB version into a ColorCombo
+    //     class derived from QComboBox.
 
     m_color->clear();
 
@@ -801,6 +803,9 @@ TrackParameterBox::slotColorChanged(int index)
             if (newColor.isValid()) {
                 Colour newRColour = GUIPalette::convertColour(newColour);
                 newMap.addItem(newRColour, qstrtostr(newName));
+                SegmentColourMapCommand *command =
+                        new SegmentColourMapCommand(m_doc, newMap);
+                CommandHistory::getInstance()->addCommand(command);
                 slotDocColoursChanged();
             }
         }

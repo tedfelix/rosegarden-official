@@ -96,7 +96,7 @@ private slots:
     void slotDelayTimeChanged(timeT delayValue);
     void slotDelayTextChanged(const QString &);
 
-    void slotColourSelected(int);
+    void slotColourChanged(int);
     void slotDocColoursChanged();
 
     void slotChangeLinkTranspose();

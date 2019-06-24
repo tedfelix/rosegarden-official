@@ -239,7 +239,7 @@ SegmentParameterBox::SegmentParameterBox(RosegardenDocument* doc,
     m_color->setToolTip(tr("<qt><p>Change the color of any selected segments</p></qt>"));
     m_color->setMaxVisibleItems(20);
     connect(m_color, SIGNAL(activated(int)),
-            SLOT(slotColourSelected(int)));
+            SLOT(slotColourChanged(int)));
 
     connect(m_doc, &RosegardenDocument::docColoursChanged,
             this, &SegmentParameterBox::slotDocColoursChanged);
@@ -398,13 +398,18 @@ SegmentParameterBox::slotDocColoursChanged()
     // to modify the document colors.  See ColourConfigurationPage
     // which was probably meant to be used by DocumentConfigureDialog.
     // See TrackParameterBox::slotDocColoursChanged().
+    // ??? Probably should combine this and the TPB version into a ColorCombo
+    //     class derived from QComboBox.
 
     m_color->clear();
+
+    // ??? TrackParameterBox doesn't have this.  Can we get rid of it?
     m_colourList.clear();
 
     // Populate it from Composition::m_segmentColourMap
     ColourMap temp = m_doc->getComposition().getSegmentColourMap();
 
+    // ??? TrackParameterBox doesn't have this.  Can we get rid of it?
     unsigned i = 0;
 
     // For each color in the segment color map
@@ -968,59 +973,57 @@ SegmentParameterBox::slotDelaySelected(int value)
 }
 
 void
-SegmentParameterBox::slotColourSelected(int value)
+SegmentParameterBox::slotColourChanged(int index)
 {
-    if (value != m_addColourPos) {
-        unsigned int temp = 0;
+    unsigned int colorIndex = 0;
 
-        ColourTable::ColourList::const_iterator pos;
-        for (pos = m_colourList.begin(); pos != m_colourList.end(); ++pos) {
-            if (int(pos->second) == value) {
-                temp = pos->first;
-                break;
-            }
+    ColourTable::ColourList::const_iterator pos;
+    for (pos = m_colourList.begin(); pos != m_colourList.end(); ++pos) {
+        if (int(pos->second) == index) {
+            colorIndex = pos->first;
+            break;
         }
+    }
 
-        SegmentSelection segments;
-        SegmentVector::iterator it;
+    SegmentSelection segments = getSelectedSegments();
+    SegmentColourCommand *command =
+            new SegmentColourCommand(segments, colorIndex);
 
-        for (it = m_segments.begin(); it != m_segments.end(); ++it) {
-            segments.insert(*it);
-        }
+    CommandHistory::getInstance()->addCommand(command);
 
-        SegmentColourCommand *command = new SegmentColourCommand(segments, temp);
-
-        CommandHistory::getInstance()->addCommand(command);
-    } else {
+#if 0
+// This will never happen since the "Add Color" option is never added.
+    if (index == m_addColourPos) {
         ColourMap newMap = m_doc->getComposition().getSegmentColourMap();
         QColor newColour;
         bool ok = false;
+
         QString newName = InputDialog::getText(this,
                                                tr("New Color Name"),
-                                               tr("Enter new name"),
+                                               tr("Enter new name:"),
                                                LineEdit::Normal,
                                                tr("New"), &ok);
+
         if ((ok == true) && (!newName.isEmpty())) {
 //             QColorDialog box(this, "", true);
-               
-               //QRgb QColorDialog::getRgba( 0xffffffff, &ok, this );
-               QColor newColor = QColorDialog::getColor( Qt::white, this );
-
 //             int result = box.getColor(newColour);
 
-            if( newColor.isValid() ) {
+            //QRgb QColorDialog::getRgba(0xffffffff, &ok, this);
+            QColor newColor = QColorDialog::getColor(Qt::white, this);
+
+            if (newColor.isValid()) {
                 Colour newRColour = GUIPalette::convertColour(newColour);
                 newMap.addItem(newRColour, qstrtostr(newName));
-                SegmentColourMapCommand *command = new SegmentColourMapCommand(m_doc, newMap);
+                SegmentColourMapCommand *command =
+                        new SegmentColourMapCommand(m_doc, newMap);
                 CommandHistory::getInstance()->addCommand(command);
                 slotDocColoursChanged();
             }
         }
         // Else we don't do anything as they either didn't give a name·
-        //  or didn't give a colour
+        // or didn't give a colour
     }
-
-
+#endif
 }
 
 void

@@ -32,8 +32,12 @@ SegmentColourCommand::SegmentColourCommand(
         NamedCommand(tr("Change Segment Color")),
         m_newColourIndex(index)
 {
-    for (SegmentSelection::iterator i = segments.begin(); i != segments.end(); ++i)
+    // ??? std::copy()
+    for (SegmentSelection::iterator i = segments.begin();
+         i != segments.end();
+         ++i) {
         m_segments.push_back(*i);
+    }
 }
 
 SegmentColourCommand::~SegmentColourCommand()
