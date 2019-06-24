@@ -393,28 +393,6 @@ SegmentParameterBox::useSegments(const SegmentSelection &segments)
     updateWidgets();
 }
 
-void
-SegmentParameterBox::slotDocColoursChanged()
-{
-    // The color combobox is handled differently from the others.  Since
-    // there are 420 strings of up to 25 chars in here, it would be
-    // expensive to detect changes by comparing vectors of strings.
-
-    // For now, we'll handle the document colors changed notification
-    // and reload the combobox then.
-
-    // See the comments on RosegardenDocument::docColoursChanged()
-    // in RosegardenDocument.h.
-
-    // Note that as of this writing (June 2019) there is no way
-    // to modify the document colors.  See ColourConfigurationPage
-    // which was probably meant to be used by DocumentConfigureDialog.
-    // See TrackParameterBox::slotDocColoursChanged().
-
-    m_color->updateColors();
-    m_color->setCurrentIndex(0);
-}
-
 void SegmentParameterBox::slotUpdate()
 {
     // ??? I'm guessing this should evolve into some sort of
@@ -918,23 +896,6 @@ SegmentParameterBox::slotToggleRepeat()
 }
 
 void
-SegmentParameterBox::slotQuantizeSelected(int qLevel)
-{
-    bool off = (qLevel == m_quantize->count() - 1);
-
-    SegmentChangeQuantizationCommand *command =
-        new SegmentChangeQuantizationCommand
-        (off ? 0 : m_standardQuantizations[qLevel]);
-
-    SegmentVector::iterator it;
-    for (it = m_segments.begin(); it != m_segments.end(); ++it) {
-        command->addSegment(*it);
-    }
-
-    CommandHistory::getInstance()->addCommand(command);
-}
-
-void
 SegmentParameterBox::slotTransposeTextChanged(const QString &text)
 {
     if (text.isEmpty() || m_segments.size() == 0)
@@ -957,6 +918,143 @@ void
 SegmentParameterBox::slotTransposeSelected(int value)
 {
     slotTransposeTextChanged(m_transpose->itemText(value));
+}
+
+void
+SegmentParameterBox::slotQuantizeSelected(int qLevel)
+{
+    bool off = (qLevel == m_quantize->count() - 1);
+
+    SegmentChangeQuantizationCommand *command =
+        new SegmentChangeQuantizationCommand
+        (off ? 0 : m_standardQuantizations[qLevel]);
+
+    SegmentVector::iterator it;
+    for (it = m_segments.begin(); it != m_segments.end(); ++it) {
+        command->addSegment(*it);
+    }
+
+    CommandHistory::getInstance()->addCommand(command);
+}
+
+void
+SegmentParameterBox::slotDelayTimeChanged(timeT delayValue)
+{
+    // by convention and as a nasty hack, we use negative timeT here
+    // to represent positive RealTime in ms
+
+    if (delayValue > 0) {
+
+        SegmentVector::iterator it;
+        for (it = m_segments.begin(); it != m_segments.end(); ++it) {
+            (*it)->setDelay(delayValue);
+            (*it)->setRealTimeDelay(RealTime::zeroTime);
+        }
+
+    } else if (delayValue < 0) {
+
+        SegmentVector::iterator it;
+        for (it = m_segments.begin(); it != m_segments.end(); ++it) {
+            (*it)->setDelay(0);
+            int sec = ( -delayValue) / 1000;
+            int nsec = (( -delayValue) - 1000 * sec) * 1000000;
+            (*it)->setRealTimeDelay(RealTime(sec, nsec));
+        }
+    } else {
+
+        SegmentVector::iterator it;
+        for (it = m_segments.begin(); it != m_segments.end(); ++it) {
+            (*it)->setDelay(0);
+            (*it)->setRealTimeDelay(RealTime::zeroTime);
+        }
+    }
+
+    emit documentModified();
+}
+
+void
+SegmentParameterBox::slotDelaySelected(int value)
+{
+    if (value < int(m_delays.size())) {
+        slotDelayTimeChanged(m_delays[value]);
+    } else {
+        slotDelayTimeChanged( -(m_realTimeDelays[value - m_delays.size()]));
+    }
+}
+
+void
+SegmentParameterBox::slotDelayTextChanged(const QString &text)
+{
+    if (text.isEmpty() || m_segments.size() == 0)
+        return ;
+
+    slotDelayTimeChanged( -(text.toInt()));
+}
+
+void
+SegmentParameterBox::slotColourChanged(int index)
+{
+    SegmentSelection segments = getSelectedSegments();
+    SegmentColourCommand *command =
+            new SegmentColourCommand(segments, index);
+
+    CommandHistory::getInstance()->addCommand(command);
+
+#if 0
+// This will never happen since the "Add Color" option is never added.
+    if (index == m_addColourPos) {
+        ColourMap newMap = m_doc->getComposition().getSegmentColourMap();
+        QColor newColour;
+        bool ok = false;
+
+        QString newName = InputDialog::getText(this,
+                                               tr("New Color Name"),
+                                               tr("Enter new name:"),
+                                               LineEdit::Normal,
+                                               tr("New"), &ok);
+
+        if ((ok == true) && (!newName.isEmpty())) {
+//             QColorDialog box(this, "", true);
+//             int result = box.getColor(newColour);
+
+            //QRgb QColorDialog::getRgba(0xffffffff, &ok, this);
+            QColor newColor = QColorDialog::getColor(Qt::white, this);
+
+            if (newColor.isValid()) {
+                Colour newRColour = GUIPalette::convertColour(newColour);
+                newMap.addItem(newRColour, qstrtostr(newName));
+                SegmentColourMapCommand *command =
+                        new SegmentColourMapCommand(m_doc, newMap);
+                CommandHistory::getInstance()->addCommand(command);
+                slotDocColoursChanged();
+            }
+        }
+        // Else we don't do anything as they either didn't give a name·
+        // or didn't give a colour
+    }
+#endif
+}
+
+void
+SegmentParameterBox::slotDocColoursChanged()
+{
+    // The color combobox is handled differently from the others.  Since
+    // there are 420 strings of up to 25 chars in here, it would be
+    // expensive to detect changes by comparing vectors of strings.
+
+    // For now, we'll handle the document colors changed notification
+    // and reload the combobox then.
+
+    // See the comments on RosegardenDocument::docColoursChanged()
+    // in RosegardenDocument.h.
+
+    // Note that as of this writing (June 2019) there is no way
+    // to modify the document colors.  See ColourConfigurationPage
+    // which was probably meant to be used by DocumentConfigureDialog.
+    // See TrackParameterBox::slotDocColoursChanged().
+
+    m_color->updateColors();
+    m_color->setCurrentIndex(0);
 }
 
 void
@@ -1036,104 +1134,6 @@ SegmentParameterBox::slotResetLinkTranspose()
 
     CommandHistory::getInstance()->addCommand
         (new SegmentLinkResetTransposeCommand(linkedSegs));
-}
-
-void
-SegmentParameterBox::slotDelayTimeChanged(timeT delayValue)
-{
-    // by convention and as a nasty hack, we use negative timeT here
-    // to represent positive RealTime in ms
-
-    if (delayValue > 0) {
-
-        SegmentVector::iterator it;
-        for (it = m_segments.begin(); it != m_segments.end(); ++it) {
-            (*it)->setDelay(delayValue);
-            (*it)->setRealTimeDelay(RealTime::zeroTime);
-        }
-
-    } else if (delayValue < 0) {
-
-        SegmentVector::iterator it;
-        for (it = m_segments.begin(); it != m_segments.end(); ++it) {
-            (*it)->setDelay(0);
-            int sec = ( -delayValue) / 1000;
-            int nsec = (( -delayValue) - 1000 * sec) * 1000000;
-            (*it)->setRealTimeDelay(RealTime(sec, nsec));
-        }
-    } else {
-
-        SegmentVector::iterator it;
-        for (it = m_segments.begin(); it != m_segments.end(); ++it) {
-            (*it)->setDelay(0);
-            (*it)->setRealTimeDelay(RealTime::zeroTime);
-        }
-    }
-
-    emit documentModified();
-}
-
-void
-SegmentParameterBox::slotDelayTextChanged(const QString &text)
-{
-    if (text.isEmpty() || m_segments.size() == 0)
-        return ;
-
-    slotDelayTimeChanged( -(text.toInt()));
-}
-
-void
-SegmentParameterBox::slotDelaySelected(int value)
-{
-    if (value < int(m_delays.size())) {
-        slotDelayTimeChanged(m_delays[value]);
-    } else {
-        slotDelayTimeChanged( -(m_realTimeDelays[value - m_delays.size()]));
-    }
-}
-
-void
-SegmentParameterBox::slotColourChanged(int index)
-{
-    SegmentSelection segments = getSelectedSegments();
-    SegmentColourCommand *command =
-            new SegmentColourCommand(segments, index);
-
-    CommandHistory::getInstance()->addCommand(command);
-
-#if 0
-// This will never happen since the "Add Color" option is never added.
-    if (index == m_addColourPos) {
-        ColourMap newMap = m_doc->getComposition().getSegmentColourMap();
-        QColor newColour;
-        bool ok = false;
-
-        QString newName = InputDialog::getText(this,
-                                               tr("New Color Name"),
-                                               tr("Enter new name:"),
-                                               LineEdit::Normal,
-                                               tr("New"), &ok);
-
-        if ((ok == true) && (!newName.isEmpty())) {
-//             QColorDialog box(this, "", true);
-//             int result = box.getColor(newColour);
-
-            //QRgb QColorDialog::getRgba(0xffffffff, &ok, this);
-            QColor newColor = QColorDialog::getColor(Qt::white, this);
-
-            if (newColor.isValid()) {
-                Colour newRColour = GUIPalette::convertColour(newColour);
-                newMap.addItem(newRColour, qstrtostr(newName));
-                SegmentColourMapCommand *command =
-                        new SegmentColourMapCommand(m_doc, newMap);
-                CommandHistory::getInstance()->addCommand(command);
-                slotDocColoursChanged();
-            }
-        }
-        // Else we don't do anything as they either didn't give a name·
-        // or didn't give a colour
-    }
-#endif
 }
 
 void

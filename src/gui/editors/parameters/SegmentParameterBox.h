@@ -95,13 +95,13 @@ private slots:
 
     void slotRepeatClicked(bool checked);
 
-    void slotTransposeSelected(int);
     void slotTransposeTextChanged(const QString &);
+    void slotTransposeSelected(int);
 
     void slotQuantizeSelected(int);
 
-    void slotDelaySelected(int);
     void slotDelayTimeChanged(timeT delayValue);
+    void slotDelaySelected(int);
     void slotDelayTextChanged(const QString &);
 
     void slotColourChanged(int);
