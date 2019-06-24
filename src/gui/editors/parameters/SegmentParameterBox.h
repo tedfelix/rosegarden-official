@@ -115,10 +115,10 @@ private:
     typedef std::vector<Segment *> SegmentVector;
     SegmentVector m_segments;
 
-    // ??? updateWidgets()?
-    void populateBoxFromSegments();
+    void updateWidgets();
 
     Label *m_label;
+    void updateLabel();
     QPushButton *m_edit;
 
     TristateCheckBox *m_repeat;

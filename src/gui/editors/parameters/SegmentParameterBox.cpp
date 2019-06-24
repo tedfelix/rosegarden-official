@@ -377,7 +377,10 @@ void
 SegmentParameterBox::useSegments(const SegmentSelection &segments)
 {
     // ??? Switch this push approach to a pull approach.
-    //     Use getSelectedSegments() and get rid of this.
+    //     Use getSelectedSegments() and get rid of m_segments.
+    // ??? Since selection isn't part of the document, we'll need
+    //     to keep this to get notifications of selection changes
+    //     when they happen.
 
     // Copy from segments which is a std::set to m_segments which
     // is a std::vector.
@@ -385,7 +388,7 @@ SegmentParameterBox::useSegments(const SegmentSelection &segments)
     m_segments.resize(segments.size());
     std::copy(segments.begin(), segments.end(), m_segments.begin());
 
-    populateBoxFromSegments();
+    updateWidgets();
 }
 
 void
@@ -417,7 +420,7 @@ void SegmentParameterBox::slotUpdate()
 
     RG_DEBUG << "slotUpdate()";
 
-    populateBoxFromSegments();
+    updateWidgets();
 }
 
 void
@@ -427,6 +430,8 @@ SegmentParameterBox::segmentRemoved(const Composition *composition,
     // ??? If we switch to getSelectedSegments() this will no longer be
     //     needed.  Instead, we should be able to get notification of
     //     segments removed as part of the doc modified notification.
+    //     If that's not the case, at the very least, this can just be
+    //     reduced to an updateWidgets() call.
 
     RG_DEBUG << "segmentRemoved()...";
 
@@ -455,9 +460,56 @@ SegmentParameterBox::segmentRemoved(const Composition *composition,
 }
 
 void
-SegmentParameterBox::populateBoxFromSegments()
+SegmentParameterBox::updateLabel()
 {
-    // ??? Is this updateWidgets()?  If so, rename it.
+    SegmentSelection segmentSelection = getSelectedSegments();
+
+    // No Segments selected?  Blank.
+    if (segmentSelection.empty()) {
+        m_label->setText("");
+        return;
+    }
+
+    // One or more Segments selected
+
+    SegmentSelection::const_iterator i = segmentSelection.begin();
+
+    m_label->setText(QObject::trUtf8((*i)->getLabel().c_str()));
+
+    // Just one?  We're done.
+    if (segmentSelection.size() == 1)
+        return;
+
+    // More than one Segment selected.
+
+    ++i;
+
+    // For each Segment
+    for (/* Starting with the second one... */;
+         i != segmentSelection.end();
+         ++i) {
+        // If the labels do not match, set label to "*"
+        if (QObject::trUtf8((*i)->getLabel().c_str()) != m_label->text()) {
+            m_label->setText("*");
+            break;
+        }
+    }
+}
+
+void
+SegmentParameterBox::updateWidgets()
+{
+    // ??? Recommend reorganizing this to focus on one widget at
+    //     a time even though that will result in duplicated for loops.
+    // ??? Then switch it over to getSelectedSegments() and ignore
+    //     m_segments.
+
+    // * Label
+
+    updateLabel();
+
+
+    // * The Rest
 
     SegmentVector::iterator it;
     Tristate repeated = NotApplicable;
@@ -475,11 +527,6 @@ SegmentParameterBox::populateBoxFromSegments()
     // values to represent real-time delay in ms
     timeT delayLevel = 0;
     int transposeLevel = 0;
-
-    if (m_segments.size() == 0)
-        m_label->setText("");
-    else 
-        m_label->setText(QObject::trUtf8(m_segments[0]->getLabel().c_str()));
 
     // I never noticed this after all this time, but it seems to go all the way
     // back to the "..." button that this was never disabled if there was no
@@ -509,11 +556,6 @@ SegmentParameterBox::populateBoxFromSegments()
             diffcolours = None;
         if (highlow == NotApplicable)
             highlow = None;
-
-        // Set label to "*" when multiple labels don't match
-        //
-        if (QObject::trUtf8((*it)->getLabel().c_str()) != m_label->text())
-            m_label->setText("*");
 
         // Are all, some or none of the Segments repeating?
         if ((*it)->isRepeating()) {
