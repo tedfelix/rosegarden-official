@@ -13,28 +13,27 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef QUANTIZER_H
-#define QUANTIZER_H
+#ifndef RG_QUANTIZER_H
+#define RG_QUANTIZER_H
 
 #include "base/Segment.h"
-#include "Event.h"
-#include "base/NotationTypes.h"
 #include "FastVector.h"
+
 #include <string>
+
 
 namespace Rosegarden {
 
+
+class Event;
 class EventSelection;
 
 /**
    The Quantizer class rounds the starting times and durations of note
    and rest events according to one of a set of possible criteria.
 */
-
 class Quantizer
 {
-    // define the Quantizer API
-
 public:
     virtual ~Quantizer();
 

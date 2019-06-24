@@ -1,6 +1,4 @@
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
-
-
 /*
     Rosegarden
     A sequencer and musical notation editor.
@@ -14,28 +12,23 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[Quantizer]"
+
 #include "Quantizer.h"
-#include "base/BaseProperties.h"
-#include "base/NotationTypes.h"
-#include "Selection.h"
-#include "Composition.h"
-#include "Sets.h"
+
+#include "misc/Debug.h"
+#include "Event.h"
+#include "Selection.h"  // For EventSelection
 #include "base/Profiler.h"
 
-#include <QtGlobal>
-
-#include <iostream>
-#include <cmath>
-#include <cstdio> // for sprintf
-#include <ctime>
-
-using std::cout;
-using std::cerr;
-using std::endl;
+#include <algorithm>  // for std::min/std::max
+#include <utility>  // for std::pair
 
 //#define DEBUG_NOTATION_QUANTIZER 1
 
+
 namespace Rosegarden {
+
 
 Quantizer::Quantizer(std::string source,
                      std::string target) :
@@ -114,19 +107,17 @@ Quantizer::quantize(EventSelection *selection)
     while (r-- != ranges.begin()) {
 
 /*
-        cerr << "Quantizer: quantizing range ";
+        RG_DEBUG << "quantize(): quantizing range:";
         if (r->first == segment.end()) {
-            cerr << "end";
+            RG_DEBUG << "  From: end";
         } else {
-            cerr << (*r->first)->getAbsoluteTime();
+            RG_DEBUG << "  From:" << (*r->first)->getAbsoluteTime();
         }
-        cerr << " to ";
         if (r->second == segment.end()) {
-            cerr << "end";
+            RG_DEBUG << "  To: end";
         } else {
-            cerr << (*r->second)->getAbsoluteTime();
+            RG_DEBUG << "  To:" << (*r->second)->getAbsoluteTime();
         }
-        cerr << endl;
 */
 
         quantizeRange(&segment, r->first, r->second);
@@ -216,7 +207,7 @@ Quantizer::quantizeRange(Segment *s,
                          Segment::iterator from,
                          Segment::iterator to) const
 {
-    //!!! It is vital that ordering is maintained after quantization.
+    // !!! It is vital that ordering is maintained after quantization.
     // That is, an event whose absolute time quantizes to a time t must
     // appear in the original segment before all events whose times
     // quantize to greater than t.  This means we must quantize the
@@ -291,7 +282,7 @@ Quantizer::getFromSource(Event *e, ValueType v) const
 {
     Profiler profiler("Quantizer::getFromSource");
 
-//    cerr << "Quantizer::getFromSource: source is \"" << m_source << "\"" << endl;
+//    RG_DEBUG << "getFromSource(): source is \"" << m_source << "\"";
 
     if (m_source == RawEventData) {
 
@@ -354,7 +345,7 @@ Quantizer::setToTarget(Segment *s, Segment::iterator i,
 {
     Profiler profiler("Quantizer::setToTarget");
 
-    //cerr << "Quantizer::setToTarget: target is \"" << m_target << "\", absTime is " << absTime << ", duration is " << duration << " (unit is " << m_unit << ", original values are absTime " << (*i)->getAbsoluteTime() << ", duration " << (*i)->getDuration() << ")" << endl;
+    //RG_DEBUG << "setToTarget(): target is \"" << m_target << "\", absTime is " << absTime << ", duration is " << duration << " (unit is " << m_unit << ", original values are absTime " << (*i)->getAbsoluteTime() << ", duration " << (*i)->getDuration() << ")";
 
     timeT st = 0, sd = 0;
     bool haveSt = false, haveSd = false;
@@ -374,9 +365,7 @@ Quantizer::setToTarget(Segment *s, Segment::iterator i,
         // preventing us from locating them in the ViewElementLists
         // because their ordering would have silently changed
 #ifdef DEBUG_NOTATION_QUANTIZER
-        cout << "Quantizer: setting " << absTime << " to notation absolute time and "
-             << duration << " to notation duration"
-             << endl;
+        RG_DEBUG << "setToTarget(): setting " << absTime << " to notation absolute time and " << duration << " to notation duration";
 #endif
         e = new Event(**i, (*i)->getAbsoluteTime(), (*i)->getDuration(),
                       (*i)->getSubOrdering(), absTime, duration);
@@ -412,7 +401,7 @@ Quantizer::setToTarget(Segment *s, Segment::iterator i,
     }
 
 #ifdef DEBUG_NOTATION_QUANTIZER
-    cout << "m_toInsert.size() is now " << m_toInsert.size() << endl;
+    RG_DEBUG << "setToTarget(): m_toInsert.size() is now " << m_toInsert.size();
 #endif
 }
 
@@ -469,8 +458,7 @@ Quantizer::insertNewEvents(Segment *s) const
         timeT myDur  = m_toInsert[i]->getDuration();
 
         if (endTime > 0 && myTime >= endTime) {
-            cerr << "Quantizer::insertNewEvents(): ignoring event outside the segment at "
-                 << myTime << endl;
+            RG_DEBUG << "insertNewEvents(): ignoring event outside the segment at " << myTime;
             continue;
         }
 
@@ -511,9 +499,7 @@ Quantizer::insertNewEvents(Segment *s) const
     }
 
 #ifdef DEBUG_NOTATION_QUANTIZER
-    cout << "Quantizer::insertNewEvents: sz is " << sz
-              << ", minTime " << minTime << ", maxTime " << maxTime
-              << endl;
+    RG_DEBUG << "insertNewEvents(): sz is " << sz << ", minTime " << minTime << ", maxTime " << maxTime;
 #endif
 
     if (m_target == NotationPrefix || m_target == RawEventData) {
@@ -529,14 +515,11 @@ Quantizer::insertNewEvents(Segment *s) const
     }
 
 #ifdef DEBUG_NOTATION_QUANTIZER
-        cout << "Quantizer: calling normalizeRests("
-                  << minTime << ", " << maxTime << ")" << endl;
+        RG_DEBUG << "insertNewEvents(): calling normalizeRests(" << minTime << ", " << maxTime << ")";
 #endif
 
     m_toInsert.clear();
 }
-
-
 
 
 }
