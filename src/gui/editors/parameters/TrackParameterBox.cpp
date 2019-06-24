@@ -716,6 +716,7 @@ TrackParameterBox::slotDocColoursChanged()
     // Note that as of this writing (August 2016) there is no way
     // to modify the document colors.  See ColourConfigurationPage
     // which was probably meant to be used by DocumentConfigureDialog.
+    // See SegmentParameterBox::slotDocColoursChanged().
 
     m_color->clear();
 
@@ -726,6 +727,8 @@ TrackParameterBox::slotDocColoursChanged()
     for (RCMap::const_iterator colourIter = temp.begin();
          colourIter != temp.end();
          ++colourIter) {
+        // Wrap in a tr() call in case the color is on the list of translated
+        // color names we're including since 09.10.
         QString colourName(QObject::tr(colourIter->second.second.c_str()));
 
         QPixmap colourIcon(15, 15);

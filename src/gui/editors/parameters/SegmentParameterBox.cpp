@@ -46,6 +46,8 @@
 #include "gui/widgets/InputDialog.h"
 #include "gui/widgets/Label.h"
 #include "gui/application/RosegardenMainWindow.h"
+#include "gui/application/RosegardenMainViewWidget.h"
+#include "gui/editors/segment/compositionview/CompositionView.h"
 
 #include <QColor>
 #include <QColorDialog>
@@ -231,12 +233,12 @@ SegmentParameterBox::SegmentParameterBox(RosegardenDocument* doc,
     QLabel *colourLabel = new QLabel(tr("Color"), this);
     colourLabel->setFont(m_font);
 
-    m_colourComboBox = new QComboBox(this);
-    m_colourComboBox->setEditable(false);
-    m_colourComboBox->setFont(m_font);
-    m_colourComboBox->setToolTip(tr("<qt><p>Change the color of any selected segments</p></qt>"));
-    m_colourComboBox->setMaxVisibleItems(20);
-    connect(m_colourComboBox, SIGNAL(activated(int)),
+    m_color = new QComboBox(this);
+    m_color->setEditable(false);
+    m_color->setFont(m_font);
+    m_color->setToolTip(tr("<qt><p>Change the color of any selected segments</p></qt>"));
+    m_color->setMaxVisibleItems(20);
+    connect(m_color, SIGNAL(activated(int)),
             SLOT(slotColourSelected(int)));
 
     connect(m_doc, &RosegardenDocument::docColoursChanged,
@@ -309,7 +311,7 @@ SegmentParameterBox::SegmentParameterBox(RosegardenDocument* doc,
     gridLayout->addWidget(m_delayComboBox, 2, 4, 1, 2);
     // Row 3: Color
     gridLayout->addWidget(colourLabel, 3, 0);
-    gridLayout->addWidget(m_colourComboBox, 3, 1, 1, 5);
+    gridLayout->addWidget(m_color, 3, 1, 1, 5);
     // Row 4: Linked segment parameters
     gridLayout->addWidget(linkedSegmentParametersFrame, 4, 0, 1, 5);
 
@@ -327,14 +329,17 @@ SegmentParameterBox::SegmentParameterBox(RosegardenDocument* doc,
 
     // ??? commandExecuted() is overloaded so we must use SLOT().
     //     Rename to commandExecutedOrUn().
+    // ??? We should subscribe for documentModified instead of this.
     connect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
             this, SLOT(slotUpdate()));
 }
 
 SegmentParameterBox::~SegmentParameterBox()
 {
-    if (!isCompositionDeleted())
-        m_doc->getComposition().removeObserver(this);
+    if (!isCompositionDeleted()) {
+        RosegardenMainWindow::self()->getDocument()->
+            getComposition().removeObserver(this);
+    }
 }
 
 void
@@ -355,9 +360,26 @@ SegmentParameterBox::setDocument(RosegardenDocument *doc)
     slotDocColoursChanged();
 }
 
+namespace
+{
+    SegmentSelection
+    getSelectedSegments()
+    {
+        // Delegates to CompositionModelImpl::getSelectedSegments().
+
+        // ??? COPY
+        return RosegardenMainWindow::self()->getView()->
+                   getTrackEditor()->getCompositionView()->getModel()->
+                   getSelectedSegments();
+    }
+}
+
 void
 SegmentParameterBox::useSegments(const SegmentSelection &segments)
 {
+    // ??? Switch this push approach to a pull approach.
+    //     Use getSelectedSegments() and get rid of this.
+
     // Copy from segments which is a std::set to m_segments which
     // is a std::vector.
     m_segments.clear();
@@ -372,45 +394,57 @@ SegmentParameterBox::slotDocColoursChanged()
 {
     RG_DEBUG << "slotDocColoursChanged()";
 
-    m_colourComboBox->clear();
+    // Note that as of this writing (June 2019) there is no way
+    // to modify the document colors.  See ColourConfigurationPage
+    // which was probably meant to be used by DocumentConfigureDialog.
+    // See TrackParameterBox::slotDocColoursChanged().
+
+    m_color->clear();
     m_colourList.clear();
-    // Populate it from composition.m_segmentColourMap
+
+    // Populate it from Composition::m_segmentColourMap
     ColourMap temp = m_doc->getComposition().getSegmentColourMap();
 
-    unsigned int i = 0;
+    unsigned i = 0;
 
-    for (RCMap::const_iterator it = temp.begin(); it != temp.end(); ++it) {
-        // wrap in tr() call in case the color is on the list of translated ones
-        // we're including since 09.10
-        QString qtrunc(QObject::tr(it->second.second.c_str()));
-        QPixmap colour(15, 15);
-        colour.fill(GUIPalette::convertColour(it->second.first));
-        if (qtrunc == "") {
-            m_colourComboBox->addItem(colour, tr("Default"), i);
+    // For each color in the segment color map
+    for (RCMap::const_iterator colourIter = temp.begin();
+         colourIter != temp.end();
+         ++colourIter) {
+        // Wrap in a tr() call in case the color is on the list of translated
+        // color names we're including since 09.10.
+        QString colourName(QObject::tr(colourIter->second.second.c_str()));
+
+        QPixmap colourIcon(15, 15);
+        colourIcon.fill(GUIPalette::convertColour(colourIter->second.first));
+
+        if (colourName == "") {
+            m_color->addItem(colourIcon, tr("Default"), i);
         } else {
             // truncate name to 25 characters to avoid the combo forcing the
             // whole kit and kaboodle too wide (This expands from 15 because the
             // translators wrote books instead of copying the style of
             // TheShortEnglishNames, and because we have that much room to
             // spare.)
-            if (qtrunc.length() > 25)
-                qtrunc = qtrunc.left(22) + "...";
-            m_colourComboBox->addItem(colour, qtrunc, i);
+            if (colourName.length() > 25)
+                colourName = colourName.left(22) + "...";
+
+            m_color->addItem(colourIcon, colourName, i);
         }
-        m_colourList[it->first] = i; // maps colour number to menu index
+        m_colourList[colourIter->first] = i; // maps colour number to menu index
         ++i;
     }
 
     m_addColourPos = i;
-    m_colourComboBox->addItem(tr("Add New Color"), m_addColourPos);
+    m_color->addItem(tr("Add New Color"), m_addColourPos);
     
     // remove the item we just inserted; this leaves the translation alone, but
     // eliminates the useless option
     //
     //!!! fix after release
-    m_colourComboBox->removeItem(m_addColourPos);
+    m_color->removeItem(m_addColourPos);
 
-    m_colourComboBox->setCurrentIndex(0);
+    m_color->setCurrentIndex(0);
 }
 
 void SegmentParameterBox::slotUpdate()
@@ -707,9 +741,9 @@ SegmentParameterBox::populateBoxFromSegments()
     switch (diffcolours) {
     case None:
         if (m_colourList.find(myCol) != m_colourList.end())
-            m_colourComboBox->setCurrentIndex(m_colourList[myCol]);
+            m_color->setCurrentIndex(m_colourList[myCol]);
         else
-            m_colourComboBox->setCurrentIndex(0);
+            m_color->setCurrentIndex(0);
         break;
 
 
@@ -717,12 +751,12 @@ SegmentParameterBox::populateBoxFromSegments()
     case NotApplicable:
     case Some:
     default:
-        m_colourComboBox->setCurrentIndex(0);
+        m_color->setCurrentIndex(0);
         break;
 
     }
 
-    m_colourComboBox->setEnabled(diffcolours != NotApplicable);
+    m_color->setEnabled(diffcolours != NotApplicable);
 
     // deleted a large amount of "fix after 1.3" cruft from this spot
 }

@@ -128,7 +128,7 @@ private:
     std::vector<timeT> m_delays;
     std::vector<int> m_realTimeDelays;
 
-    QComboBox *m_colourComboBox;
+    QComboBox *m_color;
     int m_addColourPos;
     ColourTable::ColourList m_colourList;
 
