@@ -482,10 +482,11 @@ SegmentParameterBox::updateLabel()
 
     // More than one Segment selected.
 
+    // Skip to the second Segment.
     ++i;
 
     // For each Segment
-    for (/* Starting with the second one... */;
+    for (/* ...starting with the second one */;
          i != segmentSelection.end();
          ++i) {
         // If the labels do not match, set label to "*"
@@ -521,6 +522,8 @@ SegmentParameterBox::updateRepeat()
         return;
     }
 
+    // More than one Segment selected.
+
     std::size_t repeating = 0;
 
     // For each Segment, count the repeating ones
@@ -540,6 +543,57 @@ SegmentParameterBox::updateRepeat()
 }
 
 void
+SegmentParameterBox::updateTranspose()
+{
+    SegmentSelection segmentSelection = getSelectedSegments();
+
+    // No Segments selected?  Disable/uncheck.
+    if (segmentSelection.empty()) {
+        m_transpose->setEnabled(false);
+        m_transpose->setCurrentIndex(m_transpose->findText("0"));
+        return;
+    }
+
+    // One or more Segments selected
+
+    m_transpose->setEnabled(true);
+
+    SegmentSelection::const_iterator i = segmentSelection.begin();
+    int transposeValue = (*i)->getTranspose();
+
+    // Just one?  Set and bail.
+    if (segmentSelection.size() == 1) {
+        m_transpose->setCurrentIndex(m_transpose->findText(
+                QString("%1").arg(transposeValue)));
+        return;
+    }
+
+    // More than one Segment selected.
+
+    // Skip to the second Segment.
+    ++i;
+
+    bool allSame = true;
+
+    // For each Segment
+    for (/* ...starting with the second one */;
+         i != segmentSelection.end();
+         ++i) {
+        if ((*i)->getTranspose() != transposeValue) {
+            allSame = false;
+            break;
+        }
+    }
+
+    if (allSame) {
+        m_transpose->setCurrentIndex(m_transpose->findText(
+                QString("%1").arg(transposeValue)));
+    } else {
+        m_transpose->setCurrentIndex(-1);
+    }
+}
+
+void
 SegmentParameterBox::updateWidgets()
 {
     // ??? Recommend reorganizing this to focus on one widget at
@@ -547,20 +601,15 @@ SegmentParameterBox::updateWidgets()
     // ??? Then switch it over to getSelectedSegments() and ignore
     //     m_segments.
 
-    // * Label
-
     updateLabel();
-
-    // * Repeat
-
     updateRepeat();
+    updateTranspose();
 
 
     // * The Rest
 
     SegmentVector::iterator it;
     Tristate quantized = NotApplicable;
-    Tristate transposed = NotApplicable;
     Tristate delayed = NotApplicable;
     Tristate diffcolours = NotApplicable;
     Tristate highlow = NotApplicable;
@@ -572,7 +621,6 @@ SegmentParameterBox::updateWidgets()
     // At the moment we have no negative delay, so we use negative
     // values to represent real-time delay in ms
     timeT delayLevel = 0;
-    int transposeLevel = 0;
 
     // I never noticed this after all this time, but it seems to go all the way
     // back to the "..." button that this was never disabled if there was no
@@ -590,8 +638,6 @@ SegmentParameterBox::updateWidgets()
 
         if (quantized == NotApplicable)
             quantized = None;
-        if (transposed == NotApplicable)
-            transposed = None;
         if (delayed == NotApplicable)
             delayed = None;
         if (diffcolours == NotApplicable)
@@ -616,24 +662,6 @@ SegmentParameterBox::updateWidgets()
         } else {
             if (quantized == All)
                 quantized = Some;
-        }
-
-        // Transpose
-        //
-        if ((*it)->getTranspose() != 0) {
-            if (it == m_segments.begin()) {
-                transposed = All;
-                transposeLevel = (*it)->getTranspose();
-            } else {
-                if (transposed == None ||
-                        (transposed == All &&
-                         transposeLevel != (*it)->getTranspose()))
-                    transposed = Some;
-            }
-
-        } else {
-            if (transposed == All)
-                transposed = Some;
         }
 
         // Delay
@@ -712,24 +740,6 @@ SegmentParameterBox::updateWidgets()
     }
 
     m_quantize->setEnabled(quantized != NotApplicable);
-
-    switch (transposed) {
-    case All:
-          m_transpose->setCurrentIndex(m_transpose->findText(QString("%1").arg(transposeLevel)));
-          break;
-
-    case Some:
-          m_transpose->setCurrentIndex(m_transpose->findText(QString("")));
-          break;
-
-    case None:
-    case NotApplicable:
-    default:
-          m_transpose->setCurrentIndex(m_transpose->findText(QString("0")));
-          break;
-    }
-
-    m_transpose->setEnabled(transposed != NotApplicable);
 
     m_delay->blockSignals(true);
 

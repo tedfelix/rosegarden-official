@@ -125,6 +125,7 @@ private:
     void updateRepeat();
 
     QComboBox *m_transpose;
+    void updateTranspose();
 
     QComboBox *m_quantize;
     std::vector<timeT> m_standardQuantizations;
