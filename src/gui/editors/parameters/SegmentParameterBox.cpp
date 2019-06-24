@@ -20,17 +20,13 @@
 #include "SegmentParameterBox.h"
 
 #include "misc/Debug.h"
-#include "misc/Strings.h"
-#include "misc/ConfigGroups.h"
+#include "misc/Strings.h"  // qstrtostr() etc...
 #include "base/Colour.h"
 #include "base/ColourMap.h"
-#include "base/Composition.h"
-#include "base/MidiProgram.h"
-#include "base/NotationTypes.h"
+//#include "base/NotationTypes.h"
 #include "base/BasicQuantizer.h"
 #include "base/RealTime.h"
 #include "base/Segment.h"
-#include "base/Selection.h"
 #include "commands/segment/SegmentChangeQuantizationCommand.h"
 #include "commands/segment/SegmentColourCommand.h"
 #include "commands/segment/SegmentColourMapCommand.h"
@@ -39,7 +35,6 @@
 #include "commands/segment/SegmentLinkTransposeCommand.h"
 #include "document/CommandHistory.h"
 #include "document/RosegardenDocument.h"
-#include "gui/dialogs/PitchPickerDialog.h"
 #include "gui/dialogs/IntervalDialog.h"
 #include "gui/editors/notation/NotationStrings.h"
 #include "gui/editors/notation/NotePixmapFactory.h"
@@ -47,40 +42,22 @@
 #include "gui/widgets/ColourTable.h"
 #include "gui/widgets/TristateCheckBox.h"
 #include "gui/widgets/CollapsingFrame.h"
-#include "RosegardenParameterArea.h"
-#include "RosegardenParameterBox.h"
-#include "document/Command.h"
 #include "gui/widgets/LineEdit.h"
 #include "gui/widgets/InputDialog.h"
 #include "gui/widgets/Label.h"
 #include "gui/application/RosegardenMainWindow.h"
 
-#include <QColorDialog>
-#include <QLayout>
-#include <QApplication>
-#include <QComboBox>
-#include <QSettings>
-#include <QTabWidget>
-#include <QPushButton>
-#include <QCheckBox>
 #include <QColor>
-#include <QDialog>
-#include <QFont>
+#include <QColorDialog>
+#include <QComboBox>
 #include <QFontMetrics>
-#include <QFrame>
+#include <QGridLayout>
 #include <QLabel>
+#include <QMessageBox>
 #include <QPixmap>
 #include <QPushButton>
-#include <QScrollArea>
-#include <QSpinBox>
 #include <QString>
-#include <QToolTip>
 #include <QWidget>
-#include <QLayout>
-#include <QHBoxLayout>
-#include <QVBoxLayout>
-#include <QStackedWidget>
-#include <QMessageBox>
 
 
 namespace Rosegarden
@@ -98,9 +75,8 @@ enum Tristate
 SegmentParameterBox::SegmentParameterBox(RosegardenDocument* doc,
                                          QWidget *parent) :
     RosegardenParameterBox(tr("Segment Parameters"), parent),
-    m_standardQuantizations(BasicQuantizer::getStandardQuantizations()),
     m_doc(doc),
-    m_transposeRange(48)
+    m_standardQuantizations(BasicQuantizer::getStandardQuantizations())
 {
     setObjectName("Segment Parameter Box");
 
@@ -112,8 +88,10 @@ SegmentParameterBox::SegmentParameterBox(RosegardenDocument* doc,
                 &RosegardenMainWindow::documentChanged,
             this, &SegmentParameterBox::slotNewDocument);
 
+    // ??? commandExecuted() is overloaded so we must use SLOT().
+    //     Rename to commandExecutedOrUn().
     connect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
-            this, SLOT(update()));
+            this, SLOT(slotUpdate()));
 }
 
 SegmentParameterBox::~SegmentParameterBox()
@@ -318,6 +296,8 @@ SegmentParameterBox::initBox()
     // default to last item
     m_quantizeComboBox->setCurrentIndex(m_quantizeComboBox->count() - 1);
 
+    constexpr MidiByte m_transposeRange = 48;
+
     // populate the transpose combo
     //
     for (int i = -m_transposeRange; i < m_transposeRange + 1; i++) {
@@ -440,9 +420,9 @@ SegmentParameterBox::slotDocColoursChanged()
     m_colourComboBox->setCurrentIndex(0);
 }
 
-void SegmentParameterBox::update()
+void SegmentParameterBox::slotUpdate()
 {
-    RG_DEBUG << "update()";
+    RG_DEBUG << "slotUpdate()";
 
     populateBoxFromSegments();
 }
@@ -474,7 +454,7 @@ SegmentParameterBox::segmentRemoved(const Composition *composition,
 
     }
 
-    // ??? We don't update() here, so we still show old data.
+    // ??? We don't slotUpdate() here, so we still show old data.
 }
 
 void
@@ -776,7 +756,8 @@ void SegmentParameterBox::slotRepeatPressed()
     // update the check box and all current Segments
     m_repeatCheckBox->setChecked(state);
 
-    addCommandToHistory(new SegmentCommandRepeat(m_segments, state));
+    CommandHistory::getInstance()->addCommand(
+            new SegmentCommandRepeat(m_segments, state));
 
     //     SegmentVector::iterator it;
 
@@ -798,7 +779,7 @@ SegmentParameterBox::slotQuantizeSelected(int qLevel)
         command->addSegment(*it);
     }
 
-    addCommandToHistory(command);
+    CommandHistory::getInstance()->addCommand(command);
 }
 
 void
@@ -809,8 +790,8 @@ SegmentParameterBox::slotTransposeTextChanged(const QString &text)
 
     int transposeValue = text.toInt();
 
-    //     addCommandToHistory(new SegmentCommandChangeTransposeValue(m_segments,
-    //                                                                transposeValue));
+    //CommandHistory::getInstance()->addCommand(
+    //        new SegmentCommandChangeTransposeValue(m_segments, transposeValue));
 
     SegmentVector::iterator it;
     for (it = m_segments.begin(); it != m_segments.end(); ++it) {
@@ -982,7 +963,7 @@ SegmentParameterBox::slotColourSelected(int value)
 
         SegmentColourCommand *command = new SegmentColourCommand(segments, temp);
 
-        addCommandToHistory(command);
+        CommandHistory::getInstance()->addCommand(command);
     } else {
         ColourMap newMap = m_doc->getComposition().getSegmentColourMap();
         QColor newColour;
@@ -1004,7 +985,7 @@ SegmentParameterBox::slotColourSelected(int value)
                 Colour newRColour = GUIPalette::convertColour(newColour);
                 newMap.addItem(newRColour, qstrtostr(newName));
                 SegmentColourMapCommand *command = new SegmentColourMapCommand(m_doc, newMap);
-                addCommandToHistory(command);
+                CommandHistory::getInstance()->addCommand(command);
                 slotDocColoursChanged();
             }
         }
@@ -1013,12 +994,6 @@ SegmentParameterBox::slotColourSelected(int value)
     }
 
 
-}
-
-void
-SegmentParameterBox::addCommandToHistory(Command *command)
-{
-    CommandHistory::getInstance()->addCommand(command);
 }
 
 void
@@ -1058,10 +1033,10 @@ SegmentParameterBox::slotEditSegmentLabel()
         SegmentLabelCommand *command = new
                                        SegmentLabelCommand(segments, newLabel);
 
-        addCommandToHistory(command);
+        CommandHistory::getInstance()->addCommand(command);
 
-     // fix #1776915, maybe?
-     update();
+        // fix #1776915, maybe?
+        slotUpdate();
     }
 }
 
@@ -1073,7 +1048,7 @@ SegmentParameterBox::slotNewDocument(RosegardenDocument *doc)
     m_doc->getComposition().addObserver(this);
 
     // Make sure everything is correct.
-    update();
+    slotUpdate();
 }
 
 

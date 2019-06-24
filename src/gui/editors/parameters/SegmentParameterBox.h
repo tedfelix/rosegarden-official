@@ -76,19 +76,14 @@ public slots:
     //     that takes a function pointer instead of a QString/SLOT().
     void slotRepeatPressed();
 
-    // ??? Shadows QWidget::update(...).
-    //       - Rename to slotUpdate().
-    //       - Make not virtual.
-    //       - Move to private.
-    virtual void update();
-
 signals:
     /// RosegardenMainWindow connects to this.
     void documentModified();
-    void canvasModified();
 
 private slots:
     void slotNewDocument(RosegardenDocument *doc);
+
+    void slotUpdate();
 
     void slotEditSegmentLabel();
 
@@ -108,24 +103,7 @@ private slots:
     void slotResetLinkTranspose();
 
 private:
-    void initBox();
-
-    // ??? updateWidgets()?
-    void populateBoxFromSegments();
-
-    void addCommandToHistory(Command *command);
-
-    Label *m_label;
-    QPushButton *m_editButton;
-
-    TristateCheckBox *m_repeatCheckBox;
-    QComboBox *m_quantizeComboBox;
-    QComboBox *m_transposeComboBox;
-    QComboBox *m_delayComboBox;
-    QComboBox *m_colourComboBox;
-
-    int m_addColourPos;
-
+    RosegardenDocument *m_doc;
 
     // ??? Can we access the selection directly instead of keeping a
     //     copy?  Of pointers?  That would make this code significantly
@@ -133,14 +111,30 @@ private:
     typedef std::vector<Segment *> SegmentVector;
     SegmentVector m_segments;
 
+    // ??? Inline into only caller?  (ctor)
+    void initBox();
+
+    // ??? updateWidgets()?
+    void populateBoxFromSegments();
+
+    Label *m_label;
+    QPushButton *m_editButton;
+
+    TristateCheckBox *m_repeatCheckBox;
+
+    QComboBox *m_transposeComboBox;
+
+    QComboBox *m_quantizeComboBox;
     std::vector<timeT> m_standardQuantizations;
+
+    QComboBox *m_delayComboBox;
     std::vector<timeT> m_delays;
     std::vector<int> m_realTimeDelays;
-    ColourTable::ColourList  m_colourList;
 
-    RosegardenDocument *m_doc;
+    QComboBox *m_colourComboBox;
+    int m_addColourPos;
+    ColourTable::ColourList m_colourList;
 
-    MidiByte m_transposeRange;
 };
 
 
