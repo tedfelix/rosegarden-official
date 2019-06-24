@@ -38,7 +38,7 @@ using std::endl;
 namespace Rosegarden {
 
 Quantizer::Quantizer(std::string source,
-		     std::string target) :
+                     std::string target) :
     m_source(source), m_target(target)
 {
     makePropertyNames();
@@ -49,9 +49,9 @@ Quantizer::Quantizer(std::string target) :
     m_target(target)
 {
     if (target == RawEventData) {
-	m_source = GlobalSource;
+        m_source = GlobalSource;
     } else {
-	m_source = RawEventData;
+        m_source = RawEventData;
     }
 
     makePropertyNames();
@@ -71,8 +71,8 @@ Quantizer::quantize(Segment *s) const
 
 void
 Quantizer::quantize(Segment *s,
-		    Segment::iterator from,
-		    Segment::iterator to) const
+                    Segment::iterator from,
+                    Segment::iterator to) const
 {
     Q_ASSERT(m_toInsert.size() == 0);
 
@@ -114,19 +114,19 @@ Quantizer::quantize(EventSelection *selection)
     while (r-- != ranges.begin()) {
 
 /*
-	cerr << "Quantizer: quantizing range ";
-	if (r->first == segment.end()) {
-	    cerr << "end";
-	} else {
-	    cerr << (*r->first)->getAbsoluteTime();
-	}
-	cerr << " to ";
-	if (r->second == segment.end()) {
-	    cerr << "end";
-	} else {
-	    cerr << (*r->second)->getAbsoluteTime();
-	}
-	cerr << endl;
+        cerr << "Quantizer: quantizing range ";
+        if (r->first == segment.end()) {
+            cerr << "end";
+        } else {
+            cerr << (*r->first)->getAbsoluteTime();
+        }
+        cerr << " to ";
+        if (r->second == segment.end()) {
+            cerr << "end";
+        } else {
+            cerr << (*r->second)->getAbsoluteTime();
+        }
+        cerr << endl;
 */
 
         quantizeRange(&segment, r->first, r->second);
@@ -147,8 +147,8 @@ Quantizer::quantize(EventSelection *selection)
 
 void
 Quantizer::fixQuantizedValues(Segment *s,
-			      Segment::iterator from,
-			      Segment::iterator to) const
+                              Segment::iterator from,
+                              Segment::iterator to) const
 {
     Q_ASSERT(m_toInsert.size() == 0);
 
@@ -158,13 +158,13 @@ Quantizer::fixQuantizedValues(Segment *s,
 
     for (Segment::iterator nextFrom = from; from != to; from = nextFrom) {
 
-	++nextFrom;
-	
-	timeT t = getFromTarget(*from, AbsoluteTimeValue);
-	timeT d = getFromTarget(*from, DurationValue);
-	Event *e = new Event(**from, t, d);
-	s->erase(from);
-	m_toInsert.push_back(e);
+        ++nextFrom;
+
+        timeT t = getFromTarget(*from, AbsoluteTimeValue);
+        timeT d = getFromTarget(*from, DurationValue);
+        Event *e = new Event(**from, t, d);
+        s->erase(from);
+        m_toInsert.push_back(e);
     }
     
     insertNewEvents(s);
@@ -175,13 +175,13 @@ timeT
 Quantizer::getQuantizedDuration(const Event *e) const
 {
     if (m_target == RawEventData) {
-	return e->getDuration();
+        return e->getDuration();
     } else if (m_target == NotationPrefix) {
-	return e->getNotationDuration();
+        return e->getNotationDuration();
     } else {
-	timeT d = e->getDuration();
-	e->get<Int>(m_targetProperties[DurationValue], d);
-	return d;
+        timeT d = e->getDuration();
+        e->get<Int>(m_targetProperties[DurationValue], d);
+        return d;
     }
 }
 
@@ -189,13 +189,13 @@ timeT
 Quantizer::getQuantizedAbsoluteTime(const Event *e) const
 {
     if (m_target == RawEventData) {
-	return e->getAbsoluteTime();
+        return e->getAbsoluteTime();
     } else if (m_target == NotationPrefix) {
-	return e->getNotationAbsoluteTime();
+        return e->getNotationAbsoluteTime();
     } else {
-	timeT t = e->getAbsoluteTime();
-	e->get<Int>(m_targetProperties[AbsoluteTimeValue], t);
-	return t;
+        timeT t = e->getAbsoluteTime();
+        e->get<Int>(m_targetProperties[AbsoluteTimeValue], t);
+        return t;
     }
 }
 
@@ -213,8 +213,8 @@ Quantizer::getUnquantizedDuration(Event *e) const
 
 void
 Quantizer::quantizeRange(Segment *s,
-			 Segment::iterator from,
-			 Segment::iterator to) const
+                         Segment::iterator from,
+                         Segment::iterator to) const
 {
     //!!! It is vital that ordering is maintained after quantization.
     // That is, an event whose absolute time quantizes to a time t must
@@ -228,29 +228,29 @@ Quantizer::quantizeRange(Segment *s,
 
     for (Segment::iterator nextFrom = from; from != to; from = nextFrom) {
 
-	++nextFrom;
-	quantizeSingle(s, from);
+        ++nextFrom;
+        quantizeSingle(s, from);
     }
 }
     
 void
 Quantizer::unquantize(Segment *s,
-		      Segment::iterator from,
-		      Segment::iterator to) const
+                      Segment::iterator from,
+                      Segment::iterator to) const
 {
     Q_ASSERT(m_toInsert.size() == 0);
 
     for (Segment::iterator nextFrom = from; from != to; from = nextFrom) {
-	++nextFrom;
+        ++nextFrom;
 
-	if (m_target == RawEventData || m_target == NotationPrefix) {
-	    setToTarget(s, from,
-			getFromSource(*from, AbsoluteTimeValue),
-			getFromSource(*from, DurationValue));
-	    
-	} else {
-	    removeTargetProperties(*from);
-	}
+        if (m_target == RawEventData || m_target == NotationPrefix) {
+            setToTarget(s, from,
+                        getFromSource(*from, AbsoluteTimeValue),
+                        getFromSource(*from, DurationValue));
+
+        } else {
+            removeTargetProperties(*from);
+        }
     }
     
     insertNewEvents(s);
@@ -268,17 +268,17 @@ Quantizer::unquantize(EventSelection *selection) const
 
     for (; it != selection->getSegmentEvents().end(); ++it) {
 
-	if (m_target == RawEventData || m_target == NotationPrefix) {
+        if (m_target == RawEventData || m_target == NotationPrefix) {
 
             Segment::iterator from = s->findSingle(*it);
             Segment::iterator to = s->findSingle(*it);
-	    setToTarget(s, from,
-			getFromSource(*from, AbsoluteTimeValue),
-			getFromSource(*to, DurationValue));
+            setToTarget(s, from,
+                        getFromSource(*from, AbsoluteTimeValue),
+                        getFromSource(*to, DurationValue));
 
-	} else {
-	    removeTargetProperties(*it);
-	}
+        } else {
+            removeTargetProperties(*it);
+        }
     }
     
     insertNewEvents(&selection->getSegment());
@@ -295,32 +295,32 @@ Quantizer::getFromSource(Event *e, ValueType v) const
 
     if (m_source == RawEventData) {
 
-	if (v == AbsoluteTimeValue) return e->getAbsoluteTime();
-	else return e->getDuration();
+        if (v == AbsoluteTimeValue) return e->getAbsoluteTime();
+        else return e->getDuration();
 
     } else if (m_source == NotationPrefix) {
 
-	if (v == AbsoluteTimeValue) return e->getNotationAbsoluteTime();
-	else return e->getNotationDuration();
+        if (v == AbsoluteTimeValue) return e->getNotationAbsoluteTime();
+        else return e->getNotationDuration();
 
     } else {
 
-	// We need to write the source from the target if the
-	// source doesn't exist (and the target does)
+        // We need to write the source from the target if the
+        // source doesn't exist (and the target does)
 
-	bool haveSource = e->has(m_sourceProperties[v]);
-	bool haveTarget = ((m_target == RawEventData) ||
-			   (e->has(m_targetProperties[v])));
-	timeT t = 0;
+        bool haveSource = e->has(m_sourceProperties[v]);
+        bool haveTarget = ((m_target == RawEventData) ||
+                           (e->has(m_targetProperties[v])));
+        timeT t = 0;
 
-	if (!haveSource && haveTarget) {
-	    t = getFromTarget(e, v);
-	    e->setMaybe<Int>(m_sourceProperties[v], t);
-	    return t;
-	}
+        if (!haveSource && haveTarget) {
+            t = getFromTarget(e, v);
+            e->setMaybe<Int>(m_sourceProperties[v], t);
+            return t;
+        }
 
-	e->get<Int>(m_sourceProperties[v], t);
-	return t;
+        e->get<Int>(m_sourceProperties[v], t);
+        return t;
     }
 }
 
@@ -331,26 +331,26 @@ Quantizer::getFromTarget(Event *e, ValueType v) const
 
     if (m_target == RawEventData) {
 
-	if (v == AbsoluteTimeValue) return e->getAbsoluteTime();
-	else return e->getDuration();
+        if (v == AbsoluteTimeValue) return e->getAbsoluteTime();
+        else return e->getDuration();
 
     } else if (m_target == NotationPrefix) {
 
-	if (v == AbsoluteTimeValue) return e->getNotationAbsoluteTime();
-	else return e->getNotationDuration();
+        if (v == AbsoluteTimeValue) return e->getNotationAbsoluteTime();
+        else return e->getNotationDuration();
 
     } else {
-	timeT value;
-	if (v == AbsoluteTimeValue) value = e->getAbsoluteTime();
-	else value = e->getDuration();
-	e->get<Int>(m_targetProperties[v], value);
-	return value;
+        timeT value;
+        if (v == AbsoluteTimeValue) value = e->getAbsoluteTime();
+        else value = e->getDuration();
+        e->get<Int>(m_targetProperties[v], value);
+        return value;
     }
 }
 
 void
 Quantizer::setToTarget(Segment *s, Segment::iterator i,
-		       timeT absTime, timeT duration) const
+                       timeT absTime, timeT duration) const
 {
     Profiler profiler("Quantizer::setToTarget");
 
@@ -359,56 +359,56 @@ Quantizer::setToTarget(Segment *s, Segment::iterator i,
     timeT st = 0, sd = 0;
     bool haveSt = false, haveSd = false;
     if (m_source != RawEventData && m_target == RawEventData) {
-	haveSt = (*i)->get<Int>(m_sourceProperties[AbsoluteTimeValue], st);
-	haveSd = (*i)->get<Int>(m_sourceProperties[DurationValue],     sd);
+        haveSt = (*i)->get<Int>(m_sourceProperties[AbsoluteTimeValue], st);
+        haveSd = (*i)->get<Int>(m_sourceProperties[DurationValue],     sd);
     }
     
     Event *e;
     if (m_target == RawEventData) {
-	e = new Event(**i, absTime, duration);
+        e = new Event(**i, absTime, duration);
     } else if (m_target == NotationPrefix) {
-	// Setting the notation absolute time on an event without
-	// recreating it would be dodgy, just as setting the absolute
-	// time would, because it could change the ordering of events
-	// that are already being referred to in ViewElementLists,
-	// preventing us from locating them in the ViewElementLists
-	// because their ordering would have silently changed
+        // Setting the notation absolute time on an event without
+        // recreating it would be dodgy, just as setting the absolute
+        // time would, because it could change the ordering of events
+        // that are already being referred to in ViewElementLists,
+        // preventing us from locating them in the ViewElementLists
+        // because their ordering would have silently changed
 #ifdef DEBUG_NOTATION_QUANTIZER
-	cout << "Quantizer: setting " << absTime << " to notation absolute time and "
-	     << duration << " to notation duration"
-	     << endl;
+        cout << "Quantizer: setting " << absTime << " to notation absolute time and "
+             << duration << " to notation duration"
+             << endl;
 #endif
-	e = new Event(**i, (*i)->getAbsoluteTime(), (*i)->getDuration(),
-		      (*i)->getSubOrdering(), absTime, duration);
+        e = new Event(**i, (*i)->getAbsoluteTime(), (*i)->getDuration(),
+                      (*i)->getSubOrdering(), absTime, duration);
     } else {
-	e = *i;
-	e->clearNonPersistentProperties();
+        e = *i;
+        e->clearNonPersistentProperties();
     }
 
     if (m_target == NotationPrefix) {
-	timeT normalizeStart = std::min(absTime, (*i)->getAbsoluteTime());
-	timeT normalizeEnd = std::max(absTime + duration,
-				      (*i)->getAbsoluteTime() +
-				      (*i)->getDuration()) + 1;
+        timeT normalizeStart = std::min(absTime, (*i)->getAbsoluteTime());
+        timeT normalizeEnd = std::max(absTime + duration,
+                                      (*i)->getAbsoluteTime() +
+                                      (*i)->getDuration()) + 1;
 
-	if (m_normalizeRegion.first != m_normalizeRegion.second) {
-	    normalizeStart = std::min(normalizeStart, m_normalizeRegion.first);
-	    normalizeEnd = std::max(normalizeEnd, m_normalizeRegion.second);
-	}
-	
-	m_normalizeRegion = std::pair<timeT, timeT>
-	    (normalizeStart, normalizeEnd);
+        if (m_normalizeRegion.first != m_normalizeRegion.second) {
+            normalizeStart = std::min(normalizeStart, m_normalizeRegion.first);
+            normalizeEnd = std::max(normalizeEnd, m_normalizeRegion.second);
+        }
+
+        m_normalizeRegion = std::pair<timeT, timeT>
+            (normalizeStart, normalizeEnd);
     }
     
     if (haveSt) e->setMaybe<Int>(m_sourceProperties[AbsoluteTimeValue],st);
     if (haveSd) e->setMaybe<Int>(m_sourceProperties[DurationValue],    sd);
     
     if (m_target != RawEventData && m_target != NotationPrefix) {
-	e->setMaybe<Int>(m_targetProperties[AbsoluteTimeValue], absTime);
-	e->setMaybe<Int>(m_targetProperties[DurationValue], duration);
+        e->setMaybe<Int>(m_targetProperties[AbsoluteTimeValue], absTime);
+        e->setMaybe<Int>(m_targetProperties[DurationValue], duration);
     } else {
-	s->erase(i);
-	m_toInsert.push_back(e);
+        s->erase(i);
+        m_toInsert.push_back(e);
     }
 
 #ifdef DEBUG_NOTATION_QUANTIZER
@@ -420,38 +420,38 @@ void
 Quantizer::removeProperties(Event *e) const
 {
     if (m_source != RawEventData) {
-	e->unset(m_sourceProperties[AbsoluteTimeValue]);
-	e->unset(m_sourceProperties[DurationValue]);
+        e->unset(m_sourceProperties[AbsoluteTimeValue]);
+        e->unset(m_sourceProperties[DurationValue]);
     }
 
     if (m_target != RawEventData && m_target != NotationPrefix) {
-	e->unset(m_targetProperties[AbsoluteTimeValue]);
-	e->unset(m_targetProperties[DurationValue]);
-    }	
+        e->unset(m_targetProperties[AbsoluteTimeValue]);
+        e->unset(m_targetProperties[DurationValue]);
+    }
 }
 
 void
 Quantizer::removeTargetProperties(Event *e) const
 {
     if (m_target != RawEventData) {
-	e->unset(m_targetProperties[AbsoluteTimeValue]);
-	e->unset(m_targetProperties[DurationValue]);
-    }	
+        e->unset(m_targetProperties[AbsoluteTimeValue]);
+        e->unset(m_targetProperties[DurationValue]);
+    }
 }
 
 void
 Quantizer::makePropertyNames()
 {
     if (m_source != RawEventData && m_source != NotationPrefix) {
-	m_sourceProperties[AbsoluteTimeValue] = m_source + "AbsoluteTimeSource";
-	m_sourceProperties[DurationValue]     = m_source + "DurationSource";
+        m_sourceProperties[AbsoluteTimeValue] = m_source + "AbsoluteTimeSource";
+        m_sourceProperties[DurationValue]     = m_source + "DurationSource";
     }
 
     if (m_target != RawEventData && m_target != NotationPrefix) {
-	m_targetProperties[AbsoluteTimeValue] = m_target + "AbsoluteTimeTarget";
-	m_targetProperties[DurationValue]     = m_target + "DurationTarget";
+        m_targetProperties[AbsoluteTimeValue] = m_target + "AbsoluteTimeTarget";
+        m_targetProperties[DurationValue]     = m_target + "DurationTarget";
     }
-}	
+}
 
 void
 Quantizer::insertNewEvents(Segment *s) const
@@ -465,8 +465,8 @@ Quantizer::insertNewEvents(Segment *s) const
 
     for (size_t i = 0; i < sz; ++i) {
 
-	timeT myTime = m_toInsert[i]->getAbsoluteTime();
-	timeT myDur  = m_toInsert[i]->getDuration();
+        timeT myTime = m_toInsert[i]->getAbsoluteTime();
+        timeT myDur  = m_toInsert[i]->getDuration();
 
         if (endTime > 0 && myTime >= endTime) {
             cerr << "Quantizer::insertNewEvents(): ignoring event outside the segment at "
@@ -477,7 +477,7 @@ Quantizer::insertNewEvents(Segment *s) const
         if (myTime < minTime) minTime = myTime;
         if (myTime + myDur > maxTime) maxTime = myTime + myDur;
 
-	s->insert(m_toInsert[i]);
+        s->insert(m_toInsert[i]);
     }
 
     if (minTime < startTime) {
@@ -512,25 +512,25 @@ Quantizer::insertNewEvents(Segment *s) const
 
 #ifdef DEBUG_NOTATION_QUANTIZER
     cout << "Quantizer::insertNewEvents: sz is " << sz
-	      << ", minTime " << minTime << ", maxTime " << maxTime
-	      << endl;
+              << ", minTime " << minTime << ", maxTime " << maxTime
+              << endl;
 #endif
 
     if (m_target == NotationPrefix || m_target == RawEventData) {
 
-	if (m_normalizeRegion.first == m_normalizeRegion.second) {
-	    if (sz > 0) {
-		s->normalizeRests(minTime, maxTime);
-	    }
-	} else {
-	    s->normalizeRests(minTime, maxTime);
-	    m_normalizeRegion = std::pair<timeT, timeT>(0, 0);
-	}
+        if (m_normalizeRegion.first == m_normalizeRegion.second) {
+            if (sz > 0) {
+                s->normalizeRests(minTime, maxTime);
+            }
+        } else {
+            s->normalizeRests(minTime, maxTime);
+            m_normalizeRegion = std::pair<timeT, timeT>(0, 0);
+        }
     }
-		
+
 #ifdef DEBUG_NOTATION_QUANTIZER
-	cout << "Quantizer: calling normalizeRests("
-		  << minTime << ", " << maxTime << ")" << endl;
+        cout << "Quantizer: calling normalizeRests("
+                  << minTime << ", " << maxTime << ")" << endl;
 #endif
 
     m_toInsert.clear();
