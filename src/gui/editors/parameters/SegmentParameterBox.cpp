@@ -831,6 +831,50 @@ SegmentParameterBox::updateWidgets()
 }
 
 void
+SegmentParameterBox::slotEditSegmentLabel()
+{
+    QString editLabel;
+
+    //!!!  This is too simplistic to be translated properly, but I'm leaving it
+    // alone.  The right way is to use %n and all that, but we don't want the
+    // number to appear in any version of the string, and I don't see a way to
+    // handle plurals without a %n placemarker.
+    if (m_segments.size() == 0) return;
+    else if (m_segments.size() == 1) editLabel = tr("Modify Segment label");
+    else editLabel = tr("Modify Segments label");
+
+    bool ok = false;
+
+    // Remove the asterisk if we're using it
+    //
+    QString label = m_label->text();
+    if (label == "*")
+        label = "";
+
+    QString newLabel = InputDialog::getText(this,
+                                            editLabel,
+                                            tr("Enter new label:"),
+                                            LineEdit::Normal,
+                                            m_label->text(),
+                                            &ok);
+
+    if (ok) {
+        SegmentSelection segments;
+        SegmentVector::iterator it;
+        for (it = m_segments.begin(); it != m_segments.end(); ++it)
+            segments.insert(*it);
+
+        SegmentLabelCommand *command = new
+                                       SegmentLabelCommand(segments, newLabel);
+
+        CommandHistory::getInstance()->addCommand(command);
+
+        // fix #1776915, maybe?
+        slotUpdate();
+    }
+}
+
+void
 SegmentParameterBox::slotRepeatClicked(bool checked)
 {
     SegmentSelection segmentSelection = getSelectedSegments();
@@ -1087,50 +1131,6 @@ SegmentParameterBox::slotColourChanged(int index)
         // or didn't give a colour
     }
 #endif
-}
-
-void
-SegmentParameterBox::slotEditSegmentLabel()
-{
-    QString editLabel;
-
-    //!!!  This is too simplistic to be translated properly, but I'm leaving it
-    // alone.  The right way is to use %n and all that, but we don't want the
-    // number to appear in any version of the string, and I don't see a way to
-    // handle plurals without a %n placemarker.
-    if (m_segments.size() == 0) return;
-    else if (m_segments.size() == 1) editLabel = tr("Modify Segment label");
-    else editLabel = tr("Modify Segments label");
-
-    bool ok = false;
-
-    // Remove the asterisk if we're using it
-    //
-    QString label = m_label->text();
-    if (label == "*")
-        label = "";
-
-    QString newLabel = InputDialog::getText(this, 
-                                            editLabel,
-                                            tr("Enter new label:"),
-                                            LineEdit::Normal,
-                                            m_label->text(),
-                                            &ok);
-
-    if (ok) {
-        SegmentSelection segments;
-        SegmentVector::iterator it;
-        for (it = m_segments.begin(); it != m_segments.end(); ++it)
-            segments.insert(*it);
-
-        SegmentLabelCommand *command = new
-                                       SegmentLabelCommand(segments, newLabel);
-
-        CommandHistory::getInstance()->addCommand(command);
-
-        // fix #1776915, maybe?
-        slotUpdate();
-    }
 }
 
 void
