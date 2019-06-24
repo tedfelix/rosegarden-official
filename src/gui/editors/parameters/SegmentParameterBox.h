@@ -129,6 +129,9 @@ private:
 
     QComboBox *m_quantize;
     std::vector<timeT> m_standardQuantizations;
+    /// Compute the UI (m_quantize) index for a specific quantization time.
+    int quantizeIndex(timeT t);
+    void updateQuantize();
 
     QComboBox *m_delay;
     std::vector<timeT> m_delays;

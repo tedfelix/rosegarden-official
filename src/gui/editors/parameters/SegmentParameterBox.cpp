@@ -466,13 +466,19 @@ SegmentParameterBox::updateLabel()
 
     // No Segments selected?  Blank.
     if (segmentSelection.empty()) {
+        m_label->setEnabled(false);
         m_label->setText("");
         return;
     }
 
     // One or more Segments selected
 
+    m_label->setEnabled(true);
+
     SegmentSelection::const_iterator i = segmentSelection.begin();
+
+    // ??? Use the same approach as for transpose.  Get the label
+    //     value and use that for the comparisons later.
 
     m_label->setText(QObject::trUtf8((*i)->getLabel().c_str()));
 
@@ -547,7 +553,7 @@ SegmentParameterBox::updateTranspose()
 {
     SegmentSelection segmentSelection = getSelectedSegments();
 
-    // No Segments selected?  Disable/uncheck.
+    // No Segments selected?  Disable and set to 0.
     if (segmentSelection.empty()) {
         m_transpose->setEnabled(false);
         m_transpose->setCurrentIndex(m_transpose->findText("0"));
@@ -593,6 +599,76 @@ SegmentParameterBox::updateTranspose()
     }
 }
 
+int
+SegmentParameterBox::quantizeIndex(timeT t)
+{
+    for (unsigned i = 0;
+         i < m_standardQuantizations.size();
+         ++i) {
+        if (m_standardQuantizations[i] == t)
+            return i;
+    }
+
+    // Nothing?  Return one beyond the last, which is "Off" in the UI.
+    return m_standardQuantizations.size();
+}
+
+void
+SegmentParameterBox::updateQuantize()
+{
+    SegmentSelection segmentSelection = getSelectedSegments();
+
+    // No Segments selected?  Disable and set to off.
+    if (segmentSelection.empty()) {
+        m_quantize->setEnabled(false);
+        m_quantize->setCurrentIndex(m_quantize->count() - 1);  // Off
+        return;
+    }
+
+    // One or more Segments selected
+
+    m_quantize->setEnabled(true);
+
+    SegmentSelection::const_iterator i = segmentSelection.begin();
+    timeT quantizeValue =
+            (*i)->hasQuantization() ?
+                    (*i)->getQuantizer()->getUnit() :
+                    0;
+
+    // Just one?  Set and bail.
+    if (segmentSelection.size() == 1) {
+        m_quantize->setCurrentIndex(quantizeIndex(quantizeValue));
+        return;
+    }
+
+    // More than one Segment selected.
+
+    // Skip to the second Segment.
+    ++i;
+
+    bool allSame = true;
+
+    // For each Segment
+    for (/* ...starting with the second one */;
+         i != segmentSelection.end();
+         ++i) {
+        timeT quantizeValue2 =
+                (*i)->hasQuantization() ?
+                        (*i)->getQuantizer()->getUnit() :
+                        0;
+        // If any of them are different from the first...
+        if (quantizeValue2 != quantizeValue) {
+            allSame = false;
+            break;
+        }
+    }
+
+    if (allSame)
+        m_quantize->setCurrentIndex(quantizeIndex(quantizeValue));
+    else
+        m_quantize->setCurrentIndex(-1);
+}
+
 void
 SegmentParameterBox::updateWidgets()
 {
@@ -604,12 +680,12 @@ SegmentParameterBox::updateWidgets()
     updateLabel();
     updateRepeat();
     updateTranspose();
+    updateQuantize();
 
 
     // * The Rest
 
     SegmentVector::iterator it;
-    Tristate quantized = NotApplicable;
     Tristate delayed = NotApplicable;
     Tristate diffcolours = NotApplicable;
     Tristate highlow = NotApplicable;
@@ -617,7 +693,6 @@ SegmentParameterBox::updateWidgets()
     unsigned int myHigh = 127;
     unsigned int myLow = 0;
 
-    timeT qntzLevel = 0;
     // At the moment we have no negative delay, so we use negative
     // values to represent real-time delay in ms
     timeT delayLevel = 0;
@@ -636,33 +711,12 @@ SegmentParameterBox::updateWidgets()
         // and repeat checkbox:
         m_edit->setEnabled(true);
 
-        if (quantized == NotApplicable)
-            quantized = None;
         if (delayed == NotApplicable)
             delayed = None;
         if (diffcolours == NotApplicable)
             diffcolours = None;
         if (highlow == NotApplicable)
             highlow = None;
-
-        // Quantization
-        //
-        if ((*it)->hasQuantization()) {
-            if (it == m_segments.begin()) {
-                quantized = All;
-                qntzLevel = (*it)->getQuantizer()->getUnit();
-            } else {
-                // If quantize levels don't match
-                if (quantized == None ||
-                        (quantized == All &&
-                         qntzLevel !=
-                         (*it)->getQuantizer()->getUnit()))
-                    quantized = Some;
-            }
-        } else {
-            if (quantized == All)
-                quantized = Some;
-        }
 
         // Delay
         //
@@ -712,34 +766,6 @@ SegmentParameterBox::updateWidgets()
         }
 
     }
-
-    switch (quantized) {
-    case All: {
-            for (unsigned int i = 0;
-                    i < m_standardQuantizations.size(); ++i) {
-                if (m_standardQuantizations[i] == qntzLevel) {
-                    m_quantize->setCurrentIndex(i);
-                    break;
-                }
-            }
-        }
-        break;
-
-    case Some:
-        // Set the edit text to an unfeasible blank value meaning "Some"
-        //
-        m_quantize->setCurrentIndex( -1);
-        break;
-
-        // Assuming "Off" is always the last field
-    case None:
-    case NotApplicable:
-    default:
-        m_quantize->setCurrentIndex(m_quantize->count() - 1);
-        break;
-    }
-
-    m_quantize->setEnabled(quantized != NotApplicable);
 
     m_delay->blockSignals(true);
 
