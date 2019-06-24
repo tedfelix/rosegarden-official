@@ -49,6 +49,7 @@ namespace Rosegarden
 
 
 class CollapsingFrame;
+class ColorCombo;
 class RosegardenDocument;
 
 
@@ -205,7 +206,7 @@ private:
     QPushButton *m_highest;
 
     /// Create segments with: Color
-    QComboBox *m_color;
+    ColorCombo *m_color;
 
     QPushButton *m_resetToDefaults;
 

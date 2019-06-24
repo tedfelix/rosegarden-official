@@ -39,6 +39,7 @@
 #include "gui/editors/notation/NotationStrings.h"
 #include "gui/editors/notation/NotePixmapFactory.h"
 #include "gui/general/GUIPalette.h"
+#include "gui/widgets/ColorCombo.h"
 #include "gui/widgets/ColourTable.h"
 #include "gui/widgets/TristateCheckBox.h"
 #include "gui/widgets/CollapsingFrame.h"
@@ -233,18 +234,16 @@ SegmentParameterBox::SegmentParameterBox(RosegardenDocument* doc,
     QLabel *colourLabel = new QLabel(tr("Color"), this);
     colourLabel->setFont(m_font);
 
-    m_color = new QComboBox(this);
-    m_color->setEditable(false);
+    m_color = new ColorCombo(this);
     m_color->setFont(m_font);
     m_color->setToolTip(tr("<qt><p>Change the color of any selected segments</p></qt>"));
-    m_color->setMaxVisibleItems(20);
     connect(m_color, SIGNAL(activated(int)),
             SLOT(slotColourChanged(int)));
 
     connect(m_doc, &RosegardenDocument::docColoursChanged,
             this, &SegmentParameterBox::slotDocColoursChanged);
     // Populate the colours.
-    slotDocColoursChanged();
+    m_color->updateColors();
 
     // * Linked segment parameters (hidden)
 
@@ -406,46 +405,8 @@ SegmentParameterBox::slotDocColoursChanged()
     // to modify the document colors.  See ColourConfigurationPage
     // which was probably meant to be used by DocumentConfigureDialog.
     // See TrackParameterBox::slotDocColoursChanged().
-    // ??? Probably should combine this and the TPB version into a ColorCombo
-    //     class derived from QComboBox.
 
-    m_color->clear();
-
-    // Populate it from Composition::m_segmentColourMap
-    ColourMap temp = m_doc->getComposition().getSegmentColourMap();
-
-    // For each color in the segment color map
-    for (RCMap::const_iterator colourIter = temp.begin();
-         colourIter != temp.end();
-         ++colourIter) {
-        // Wrap in a tr() call in case the color is on the list of translated
-        // color names we're including since 09.10.
-        QString colourName(QObject::tr(colourIter->second.second.c_str()));
-
-        QPixmap colourIcon(15, 15);
-        colourIcon.fill(GUIPalette::convertColour(colourIter->second.first));
-
-        if (colourName == "") {
-            m_color->addItem(colourIcon, tr("Default"));
-        } else {
-            // truncate name to 25 characters to avoid the combo forcing the
-            // whole kit and kaboodle too wide (This expands from 15 because the
-            // translators wrote books instead of copying the style of
-            // TheShortEnglishNames, and because we have that much room to
-            // spare.)
-            if (colourName.length() > 25)
-                colourName = colourName.left(22) + "...";
-
-            m_color->addItem(colourIcon, colourName);
-        }
-    }
-
-#if 0
-// Removing this since it has never been in there.
-    m_color->addItem(tr("Add New Color"));
-    m_addColourPos = m_color->count() - 1;
-#endif
-
+    m_color->updateColors();
     m_color->setCurrentIndex(0);
 }
 

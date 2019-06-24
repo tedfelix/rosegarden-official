@@ -35,6 +35,7 @@ namespace Rosegarden
 {
 
 
+class ColorCombo;
 class Command;
 class TristateCheckBox;
 class Label;
@@ -128,7 +129,7 @@ private:
     std::vector<timeT> m_delays;
     std::vector<int> m_realTimeDelays;
 
-    QComboBox *m_color;
+    ColorCombo *m_color;
 
 };
 
