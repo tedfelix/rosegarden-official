@@ -140,6 +140,14 @@ SegmentParameterBox::SegmentParameterBox(RosegardenDocument* doc,
     connect(m_transposeComboBox, &QComboBox::editTextChanged,
             this, &SegmentParameterBox::slotTransposeTextChanged);
 
+    QPixmap noMap = NotePixmapFactory::makeToolbarPixmap("menu-no-note");
+
+    constexpr int transposeRange = 48;
+
+    for (int i = -transposeRange; i < transposeRange + 1; ++i) {
+        m_transposeComboBox->addItem(noMap, QString("%1").arg(i));
+    }
+
     // * Quantize
 
     QLabel *quantizeLabel = new QLabel(tr("Quantize"), this);
@@ -154,8 +162,6 @@ SegmentParameterBox::SegmentParameterBox(RosegardenDocument* doc,
     // ??? QComboBox::activated() is overloaded, so we have to use SIGNAL().
     connect(m_quantizeComboBox, SIGNAL(activated(int)),
             SLOT(slotQuantizeSelected(int)));
-
-    QPixmap noMap = NotePixmapFactory::makeToolbarPixmap("menu-no-note");
 
     // For each standard quantization value
     for (unsigned int i = 0; i < m_standardQuantizations.size(); ++i) {
@@ -185,6 +191,40 @@ SegmentParameterBox::SegmentParameterBox(RosegardenDocument* doc,
             SLOT(slotDelaySelected(int)));
     connect(m_delayComboBox, &QComboBox::editTextChanged,
             this, &SegmentParameterBox::slotDelayTextChanged);
+
+    m_delays.clear();
+
+    // For each note duration delay
+    for (int i = 0; i < 6; i++) {
+
+        // extra range checks below are benign - they account for the
+        // option of increasing the range of the loop beyond 0-5
+
+        timeT time = 0;
+        if (i > 0 && i < 6) {
+            time = Note(Note::Hemidemisemiquaver).getDuration() << (i - 1);
+        } else if (i > 5) {
+            time = Note(Note::Crotchet).getDuration() * (i - 4);
+        }
+
+        m_delays.push_back(time);
+
+        timeT error = 0;
+        QString label = NotationStrings::makeNoteMenuLabel(time, true, error);
+        QPixmap pmap = NotePixmapFactory::makeNoteMenuPixmap(time, error);
+
+        // check if it's a valid note duration (it will be for the
+        // time defn above, but if we were basing it on the sequencer
+        // resolution it might not be) & include a note pixmap if so
+        m_delayComboBox->addItem((error ? noMap : pmap), label);
+    }
+
+    // For each real-time delay (msecs)
+    for (int i = 0; i < 10; i++) {
+        int rtd = (i < 5 ? ((i + 1) * 10) : ((i - 3) * 50));
+        m_realTimeDelays.push_back(rtd);
+        m_delayComboBox->addItem(tr("%1 ms").arg(rtd));
+    }
 
     // * Color
 
@@ -277,54 +317,6 @@ SegmentParameterBox::SegmentParameterBox(RosegardenDocument* doc,
 
     setContentsMargins(4, 7, 4, 4);
 
-    // Populate the widgets
-
-    // Transpose Combo
-
-    constexpr MidiByte m_transposeRange = 48;
-
-    for (int i = -m_transposeRange; i < m_transposeRange + 1; i++) {
-        m_transposeComboBox->addItem(noMap, QString("%1").arg(i));
-        if (i == 0)
-            m_transposeComboBox->setCurrentIndex(m_transposeComboBox->count() - 1);
-    }
-
-    // Delay
-
-    m_delays.clear();
-
-    // For each note duration delay
-    for (int i = 0; i < 6; i++) {
-
-        // extra range checks below are benign - they account for the
-        // option of increasing the range of the loop beyond 0-5
-        
-        timeT time = 0;
-        if (i > 0 && i < 6) {
-            time = Note(Note::Hemidemisemiquaver).getDuration() << (i - 1);
-        } else if (i > 5) {
-            time = Note(Note::Crotchet).getDuration() * (i - 4);
-        }
-
-        m_delays.push_back(time);
-
-        timeT error = 0;
-        QString label = NotationStrings::makeNoteMenuLabel(time, true, error);
-        QPixmap pmap = NotePixmapFactory::makeNoteMenuPixmap(time, error);
-
-        // check if it's a valid note duration (it will be for the
-        // time defn above, but if we were basing it on the sequencer
-        // resolution it might not be) & include a note pixmap if so
-        m_delayComboBox->addItem((error ? noMap : pmap), label);
-    }
-
-    // For each real-time delay (msecs)
-    for (int i = 0; i < 10; i++) {
-        int rtd = (i < 5 ? ((i + 1) * 10) : ((i - 3) * 50));
-        m_realTimeDelays.push_back(rtd);
-        m_delayComboBox->addItem(tr("%1 ms").arg(rtd));
-    }
-
     //RG_DEBUG << "ctor: " << this << ": font() size is " << (this->font()).pixelSize() << "px (" << (this->font()).pointSize() << "pt)";
 
     m_doc->getComposition().addObserver(this);
@@ -341,17 +333,17 @@ SegmentParameterBox::SegmentParameterBox(RosegardenDocument* doc,
 
 SegmentParameterBox::~SegmentParameterBox()
 {
-    if (!isCompositionDeleted()) {
+    if (!isCompositionDeleted())
         m_doc->getComposition().removeObserver(this);
-    }
 }
 
 void
-SegmentParameterBox::setDocument(RosegardenDocument* doc)
+SegmentParameterBox::setDocument(RosegardenDocument *doc)
 {
-    if (m_doc != nullptr)
+    if (m_doc) {
         disconnect(m_doc, &RosegardenDocument::docColoursChanged,
                    this, &SegmentParameterBox::slotDocColoursChanged);
+    }
 
     m_doc = doc;
 
@@ -359,14 +351,16 @@ SegmentParameterBox::setDocument(RosegardenDocument* doc)
     connect (m_doc, &RosegardenDocument::docColoursChanged,
              this, &SegmentParameterBox::slotDocColoursChanged);
 
-    slotDocColoursChanged(); // repopulate combo
+    // repopulate combo
+    slotDocColoursChanged();
 }
 
 void
 SegmentParameterBox::useSegments(const SegmentSelection &segments)
 {
+    // Copy from segments which is a std::set to m_segments which
+    // is a std::vector.
     m_segments.clear();
-
     m_segments.resize(segments.size());
     std::copy(segments.begin(), segments.end(), m_segments.begin());
 
