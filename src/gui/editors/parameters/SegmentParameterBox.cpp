@@ -392,7 +392,15 @@ SegmentParameterBox::useSegments(const SegmentSelection &segments)
 void
 SegmentParameterBox::slotDocColoursChanged()
 {
-    RG_DEBUG << "slotDocColoursChanged()";
+    // The color combobox is handled differently from the others.  Since
+    // there are 420 strings of up to 25 chars in here, it would be
+    // expensive to detect changes by comparing vectors of strings.
+
+    // For now, we'll handle the document colors changed notification
+    // and reload the combobox then.
+
+    // See the comments on RosegardenDocument::docColoursChanged()
+    // in RosegardenDocument.h.
 
     // Note that as of this writing (June 2019) there is no way
     // to modify the document colors.  See ColourConfigurationPage
@@ -403,14 +411,8 @@ SegmentParameterBox::slotDocColoursChanged()
 
     m_color->clear();
 
-    // ??? TrackParameterBox doesn't have this.  Can we get rid of it?
-    m_colourList.clear();
-
     // Populate it from Composition::m_segmentColourMap
     ColourMap temp = m_doc->getComposition().getSegmentColourMap();
-
-    // ??? TrackParameterBox doesn't have this.  Can we get rid of it?
-    unsigned i = 0;
 
     // For each color in the segment color map
     for (RCMap::const_iterator colourIter = temp.begin();
@@ -424,7 +426,7 @@ SegmentParameterBox::slotDocColoursChanged()
         colourIcon.fill(GUIPalette::convertColour(colourIter->second.first));
 
         if (colourName == "") {
-            m_color->addItem(colourIcon, tr("Default"), i);
+            m_color->addItem(colourIcon, tr("Default"));
         } else {
             // truncate name to 25 characters to avoid the combo forcing the
             // whole kit and kaboodle too wide (This expands from 15 because the
@@ -434,20 +436,15 @@ SegmentParameterBox::slotDocColoursChanged()
             if (colourName.length() > 25)
                 colourName = colourName.left(22) + "...";
 
-            m_color->addItem(colourIcon, colourName, i);
+            m_color->addItem(colourIcon, colourName);
         }
-        m_colourList[colourIter->first] = i; // maps colour number to menu index
-        ++i;
     }
 
-    m_addColourPos = i;
-    m_color->addItem(tr("Add New Color"), m_addColourPos);
-    
-    // remove the item we just inserted; this leaves the translation alone, but
-    // eliminates the useless option
-    //
-    //!!! fix after release
-    m_color->removeItem(m_addColourPos);
+#if 0
+// Removing this since it has never been in there.
+    m_color->addItem(tr("Add New Color"));
+    m_addColourPos = m_color->count() - 1;
+#endif
 
     m_color->setCurrentIndex(0);
 }
@@ -629,7 +626,8 @@ SegmentParameterBox::populateBoxFromSegments()
             //!!! the following if statement had been empty since who knows
             // when, and made no logical sense, so let's see if this is what the
             // original coder was trying to say here:
-            if (myCol != (*it)->getColourIndex()) diffcolours = All;
+            if (myCol != (*it)->getColourIndex())
+                diffcolours = All;
         }
 
         // Highest/Lowest playable
@@ -745,12 +743,8 @@ SegmentParameterBox::populateBoxFromSegments()
 
     switch (diffcolours) {
     case None:
-        if (m_colourList.find(myCol) != m_colourList.end())
-            m_color->setCurrentIndex(m_colourList[myCol]);
-        else
-            m_color->setCurrentIndex(0);
+        m_color->setCurrentIndex(myCol);
         break;
-
 
     case All:
     case NotApplicable:
@@ -758,12 +752,9 @@ SegmentParameterBox::populateBoxFromSegments()
     default:
         m_color->setCurrentIndex(0);
         break;
-
     }
 
     m_color->setEnabled(diffcolours != NotApplicable);
-
-    // deleted a large amount of "fix after 1.3" cruft from this spot
 }
 
 void SegmentParameterBox::slotRepeatPressed()
@@ -975,19 +966,9 @@ SegmentParameterBox::slotDelaySelected(int value)
 void
 SegmentParameterBox::slotColourChanged(int index)
 {
-    unsigned int colorIndex = 0;
-
-    ColourTable::ColourList::const_iterator pos;
-    for (pos = m_colourList.begin(); pos != m_colourList.end(); ++pos) {
-        if (int(pos->second) == index) {
-            colorIndex = pos->first;
-            break;
-        }
-    }
-
     SegmentSelection segments = getSelectedSegments();
     SegmentColourCommand *command =
-            new SegmentColourCommand(segments, colorIndex);
+            new SegmentColourCommand(segments, index);
 
     CommandHistory::getInstance()->addCommand(command);
 
