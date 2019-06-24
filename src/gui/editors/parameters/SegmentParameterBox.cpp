@@ -86,6 +86,15 @@
 namespace Rosegarden
 {
 
+
+enum Tristate
+{
+    None,
+    Some,
+    All,
+    NotApplicable // no applicable segments selected
+};
+
 SegmentParameterBox::SegmentParameterBox(RosegardenDocument* doc,
                                          QWidget *parent) :
     RosegardenParameterBox(tr("Segment Parameters"), parent),
@@ -374,14 +383,6 @@ SegmentParameterBox::setDocument(RosegardenDocument* doc)
              this, &SegmentParameterBox::slotDocColoursChanged);
 
     slotDocColoursChanged(); // repopulate combo
-}
-
-void
-SegmentParameterBox::useSegment(Segment *segment)
-{
-    m_segments.clear();
-    m_segments.push_back(segment);
-    populateBoxFromSegments();
 }
 
 void

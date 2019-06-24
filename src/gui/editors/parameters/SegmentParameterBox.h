@@ -1,6 +1,4 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
-
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
@@ -19,72 +17,57 @@
 #ifndef RG_SEGMENTPARAMETERBOX_H
 #define RG_SEGMENTPARAMETERBOX_H
 
-#include "base/Composition.h"
-#include "base/MidiProgram.h"
-#include "base/Selection.h"
 #include "gui/widgets/ColourTable.h"
-#include "RosegardenParameterArea.h"
+#include "base/Composition.h"
+#include "base/MidiProgram.h"  // For MidiByte
 #include "RosegardenParameterBox.h"
-#include <QString>
-#include <vector>
-#include "base/Event.h"
+#include "base/Selection.h"  // For SegmentSelection
 
-
-class QWidget;
-class QSpinBox;
-class QPushButton;
-class QLabel;
-class QCheckBox;
 class QComboBox;
+class QPushButton;
+class QString;
+class QWidget;
+
+#include <vector>
 
 
 namespace Rosegarden
 {
+
 
 class Command;
 class TristateCheckBox;
 class Label;
 class Segment;
 class RosegardenDocument;
-class Composition;
 
 
 class SegmentParameterBox : public RosegardenParameterBox,
                             public CompositionObserver
 {
-Q_OBJECT
+
+    Q_OBJECT
 
 public:
 
-    typedef enum
-    {
-        None,
-        Some,
-        All,
-        NotApplicable // no applicable segments selected
-    } Tristate;
-
+    // ??? Get document directly.
     SegmentParameterBox(RosegardenDocument *doc,
-                        QWidget *parent=nullptr);
+                        QWidget *parent);
     ~SegmentParameterBox() override;
 
-    // Use Segments to update GUI parameters
-    //
-    void useSegment(Segment *segment);
+    // ??? Get document directly.
+    void setDocument(RosegardenDocument *doc);
+
     void useSegments(const SegmentSelection &segments);
 
-    void addCommandToHistory(Command *command);
-
-    void setDocument(RosegardenDocument*);
-
     // CompositionObserver interface
-    //
     void segmentRemoved(const Composition *,
-                                Segment *) override;
+                        Segment *) override;
 
 public slots:
+    // ??? It would be nice if there were an ActionFileClient::createAction()
+    //     that takes a function pointer instead of a QString/SLOT().
     void slotRepeatPressed();
-    void slotQuantizeSelected(int);
 
     void slotTransposeSelected(int);
     void slotTransposeTextChanged(const QString &);
@@ -108,6 +91,7 @@ public slots:
     void slotChangeLinkTranspose();
     void slotResetLinkTranspose();
 
+    // ??? Shadow.  Does this need to be a slot?
     virtual void update();
 
 signals:
@@ -116,38 +100,28 @@ signals:
 
 private slots:
     void slotNewDocument(RosegardenDocument *doc);
+    void slotQuantizeSelected(int);
 
-protected:
+private:
     void initBox();
     void populateBoxFromSegments();
     void updateHighLow();
+    void addCommandToHistory(Command *command);
 
-    Label                      *m_label;
-//    QLabel                     *m_rangeLabel;
-    QPushButton                *m_editButton;
-//    QPushButton                *m_highButton;
-//    QPushButton                *m_lowButton;
+    Label *m_label;
+    QPushButton *m_editButton;
     TristateCheckBox *m_repeatCheckBox;
-    QComboBox                  *m_quantizeComboBox;
-    QComboBox                  *m_transposeComboBox;
-    QComboBox                  *m_delayComboBox;
-    QComboBox                  *m_colourComboBox;
+    QComboBox *m_quantizeComboBox;
+    QComboBox *m_transposeComboBox;
+    QComboBox *m_delayComboBox;
+    QComboBox *m_colourComboBox;
 
-    // Audio autofade
-    //
-//    QLabel                     *m_autoFadeLabel;
-//    QCheckBox                  *m_autoFadeBox;
-//    QLabel                     *m_fadeInLabel;
-//    QSpinBox                   *m_fadeInSpin;
-//    QLabel                     *m_fadeOutLabel;
-//    QSpinBox                   *m_fadeOutSpin;
-
-    int                        m_addColourPos;
+    int m_addColourPos;
 
     // used to keep track of highest/lowest as there is no associated spinbox
     // to query for its value
-    int                        m_highestPlayable;
-    int                        m_lowestPlayable;
+    int m_highestPlayable;
+    int m_lowestPlayable;
 
     // ??? Can we access the selection directly instead of keeping a
     //     copy?  Of pointers?  That would make this code significantly
@@ -160,9 +134,9 @@ protected:
     std::vector<int> m_realTimeDelays;
     ColourTable::ColourList  m_colourList;
 
-    RosegardenDocument           *m_doc;
+    RosegardenDocument *m_doc;
 
-    MidiByte        m_transposeRange;
+    MidiByte m_transposeRange;
 };
 
 

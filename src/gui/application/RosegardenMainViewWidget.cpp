@@ -55,6 +55,7 @@
 #include "gui/editors/matrix/MatrixView.h"
 #include "gui/editors/notation/NotationView.h"
 #include "gui/editors/parameters/InstrumentParameterBox.h"
+#include "gui/editors/parameters/RosegardenParameterArea.h"
 #include "gui/editors/parameters/SegmentParameterBox.h"
 #include "gui/editors/parameters/TrackParameterBox.h"
 #include "gui/editors/pitchtracker/PitchTrackerView.h"
