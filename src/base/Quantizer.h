@@ -28,10 +28,13 @@ namespace Rosegarden {
 class Event;
 class EventSelection;
 
+/// Base class for quantizers.
 /**
-   The Quantizer class rounds the starting times and durations of note
-   and rest events according to one of a set of possible criteria.
-*/
+ * See BasicQuantizer, LegatoQuantizer, and NotationQuantizer.
+ *
+ * The Quantizer class rounds the starting times and durations of note
+ * and rest events according to one of a set of possible criteria.
+ */
 class Quantizer
 {
 public:
