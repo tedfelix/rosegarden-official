@@ -62,6 +62,8 @@
 #include <QString>
 #include <QWidget>
 
+#include <algorithm>  // for std::copy()
+
 
 namespace Rosegarden
 {
@@ -123,8 +125,8 @@ SegmentParameterBox::SegmentParameterBox(RosegardenDocument* doc,
                                  ".png\"></img></center></p><br>These can be used in conjunction with special LilyPond export direct"
                                  "ives to create repeats with first and second alternate endings. See rosegardenmusic.com for a tut"
                                  "orial. [Ctrl+Shift+R] </qt>"));
-    connect(m_repeat, &QAbstractButton::pressed,
-            this, &SegmentParameterBox::slotRepeatPressed);
+    connect(m_repeat, &QCheckBox::clicked,
+            this, &SegmentParameterBox::slotRepeatClicked);
 
     // * Transpose
 
@@ -828,41 +830,44 @@ SegmentParameterBox::updateWidgets()
     updateColor();
 }
 
-void SegmentParameterBox::slotRepeatPressed()
+void
+SegmentParameterBox::slotRepeatClicked(bool checked)
 {
-    // ??? We need to redo this so that it uses QCheckBox the
-    //     way it was intended to be used.  E.g. we should be handling
-    //     the clicked() signal, not pressed().  TristateCheckbox
-    //     should provide a nextCheckState() that skips over
-    //     PartiallyChecked.  Etc...
+    SegmentSelection segmentSelection = getSelectedSegments();
 
-    if (m_segments.size() == 0)
-        return ;
+    // No selected Segments?  Bail.
+    if (segmentSelection.empty())
+        return;
 
-    bool state = false;
-
-    switch (m_repeat->checkState()) {
-    case Qt::Unchecked:
-        state = true;
-        break;
-
-    case Qt::PartiallyChecked:
-    case Qt::Checked:
-    default:
-        state = false;
-        break;
-    }
-
-    // update the check box and all current Segments
-    m_repeat->setChecked(state);
+    // SegmentCommandRepeat requires a SegmentVector.
+    SegmentVector segmentVector(segmentSelection.size());
+    std::copy(segmentSelection.begin(),  // source first
+              segmentSelection.end(),  // source last
+              segmentVector.begin());  // destination first
 
     CommandHistory::getInstance()->addCommand(
-            new SegmentCommandRepeat(m_segments, state));
+            new SegmentCommandRepeat(segmentVector, checked));
+}
 
-    //     SegmentVector::iterator it;
+void
+SegmentParameterBox::slotToggleRepeat()
+{
+    SegmentSelection segmentSelection = getSelectedSegments();
 
-    //     for (it = m_segments.begin(); it != m_segments.end(); it++)
-    //         (*it)->setRepeating(state);
+    if (segmentSelection.empty())
+        return;
+
+    // Compute the new state.
+    bool state = !(m_repeat->checkState() == Qt::Checked);
+
+    // SegmentCommandRepeat requires a SegmentVector.
+    SegmentVector segmentVector(segmentSelection.size());
+    std::copy(segmentSelection.begin(),  // source first
+              segmentSelection.end(),  // source last
+              segmentVector.begin());  // destination first
+
+    CommandHistory::getInstance()->addCommand(
+            new SegmentCommandRepeat(segmentVector, state));
 }
 
 void

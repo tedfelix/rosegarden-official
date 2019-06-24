@@ -75,9 +75,12 @@ public:
                         Segment *) override;
 
 public slots:
-    // ??? It would be nice if there were an ActionFileClient::createAction()
-    //     that takes a function pointer instead of a QString/SLOT().
-    void slotRepeatPressed();
+    /// Segment > Toggle Repeat
+    /**
+     * It would be nice if there were an ActionFileClient::createAction()
+     * that takes a function pointer instead of a QString/SLOT().
+     */
+    void slotToggleRepeat();
 
 signals:
     /// RosegardenMainWindow connects to this.
@@ -89,6 +92,8 @@ private slots:
     void slotUpdate();
 
     void slotEditSegmentLabel();
+
+    void slotRepeatClicked(bool checked);
 
     void slotTransposeSelected(int);
     void slotTransposeTextChanged(const QString &);

@@ -788,7 +788,7 @@ RosegardenMainWindow::setupActions()
     createAction("panic", SLOT(slotPanic()));
     createAction("debug_dump_segments", SLOT(slotDebugDump()));
     
-    createAction("repeat_segment_onoff", m_segmentParameterBox, SLOT(slotRepeatPressed()));
+    createAction("repeat_segment_onoff", m_segmentParameterBox, SLOT(slotToggleRepeat()));
 
     createMenusAndToolbars("rosegardenmainwindow.rc");
 

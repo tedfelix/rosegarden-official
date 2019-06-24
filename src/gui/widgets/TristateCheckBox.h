@@ -36,30 +36,27 @@ namespace Rosegarden
  * Qt::PartiallyChecked state.
  *
  * This is only used by the SegmentParameterBox.
- *
- * ??? I think we need to take a look at QCheckBox::nextCheckState() which
- *     appears to be the proper way to implement a Tristate that doesn't
- *     allow the user to select PartiallyChecked.  Then get rid of the
- *     bogus mouseReleaseEvent().
  */
 class TristateCheckBox : public QCheckBox
 {
 Q_OBJECT
 public:
-    explicit TristateCheckBox(QWidget *parent=nullptr) :
+    explicit TristateCheckBox(QWidget *parent = nullptr) :
         QCheckBox(parent)
     {
         setTristate(true);
     }
 
-    ~TristateCheckBox() override  { }
-
 protected:
-    // Don't emit when the button is released.
-    // ??? Why?
-    void mouseReleaseEvent(QMouseEvent *) override  { }
+    void nextCheckState() override
+    {
+        // We specifically skip Qt::PartiallyChecked.
+        if (checkState() == Qt::Checked)
+            setCheckState(Qt::Unchecked);
+        else
+            setCheckState(Qt::Checked);
+    }
 
-private:
 };
 
 
