@@ -136,6 +136,8 @@ private:
     QComboBox *m_delay;
     std::vector<timeT> m_delays;
     std::vector<int> m_realTimeDelays;
+    void setDelay(timeT);
+    void updateDelay();
 
     ColorCombo *m_color;
 

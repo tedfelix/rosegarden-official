@@ -669,6 +669,98 @@ SegmentParameterBox::updateQuantize()
         m_quantize->setCurrentIndex(-1);
 }
 
+namespace
+{
+    // Flatten Segment::getDelay() and getRealTimeDelay() to
+    // return a single delay value.  Real-time delay is returned
+    // as a negative.
+    // ??? This means we can't do negative delays, which could be very
+    //     useful.  Might want to redo this using a vector to translate
+    //     the value to an index.  Like quantizeIndex().  See m_delays
+    //     and m_realTimeDelays which might be combined.
+    timeT
+    delay(Segment *s)
+    {
+        // Note duration delay (1/4, 1/8, etc...)
+        timeT delayValue = s->getDelay();
+        if (delayValue != 0)
+            return delayValue;
+
+        // Millisecond delay (10ms, 20ms, etc...)
+        return -(s->getRealTimeDelay().sec * 1000 +
+                 s->getRealTimeDelay().msec());
+    }
+}
+
+void
+SegmentParameterBox::setDelay(timeT t)
+{
+    // Note duration delay (1/4, 1/8, etc...)
+    if (t >= 0) {
+        timeT error = 0;
+
+        QString label =
+                NotationStrings::makeNoteMenuLabel(
+                        t,  // duration
+                        true,  // brief
+                        error);  // errorReturn
+        m_delay->setCurrentIndex(m_delay->findText(label));
+
+        return;
+    }
+
+    // Millisecond delay (10ms, 20ms, etc...)
+    m_delay->setCurrentIndex(m_delay->findText(tr("%1 ms").arg(-t)));
+}
+
+void
+SegmentParameterBox::updateDelay()
+{
+    SegmentSelection segmentSelection = getSelectedSegments();
+
+    // No Segments selected?  Disable and set to 0.
+    if (segmentSelection.empty()) {
+        m_delay->setEnabled(false);
+        m_delay->setCurrentIndex(m_delay->findText("0"));
+        return;
+    }
+
+    // One or more Segments selected
+
+    m_delay->setEnabled(true);
+
+    SegmentSelection::const_iterator i = segmentSelection.begin();
+    timeT delayValue = delay(*i);
+
+    // Just one?  Set and bail.
+    if (segmentSelection.size() == 1) {
+        setDelay(delayValue);
+        return;
+    }
+
+    // More than one Segment selected.
+
+    // Skip to the second Segment.
+    ++i;
+
+    bool allSame = true;
+
+    // For each Segment
+    for (/* ...starting with the second one */;
+         i != segmentSelection.end();
+         ++i) {
+        if (delay(*i) != delayValue) {
+            allSame = false;
+            break;
+        }
+    }
+
+    if (allSame)
+        setDelay(delayValue);
+    else
+        m_delay->setCurrentIndex(-1);
+}
+
 void
 SegmentParameterBox::updateWidgets()
 {
@@ -681,21 +773,17 @@ SegmentParameterBox::updateWidgets()
     updateRepeat();
     updateTranspose();
     updateQuantize();
+    updateDelay();
 
 
     // * The Rest
 
     SegmentVector::iterator it;
-    Tristate delayed = NotApplicable;
     Tristate diffcolours = NotApplicable;
     Tristate highlow = NotApplicable;
     unsigned int myCol = 0;
     unsigned int myHigh = 127;
     unsigned int myLow = 0;
-
-    // At the moment we have no negative delay, so we use negative
-    // values to represent real-time delay in ms
-    timeT delayLevel = 0;
 
     // I never noticed this after all this time, but it seems to go all the way
     // back to the "..." button that this was never disabled if there was no
@@ -711,35 +799,10 @@ SegmentParameterBox::updateWidgets()
         // and repeat checkbox:
         m_edit->setEnabled(true);
 
-        if (delayed == NotApplicable)
-            delayed = None;
         if (diffcolours == NotApplicable)
             diffcolours = None;
         if (highlow == NotApplicable)
             highlow = None;
-
-        // Delay
-        //
-        timeT myDelay = (*it)->getDelay();
-        if (myDelay == 0) {
-            myDelay = -((*it)->getRealTimeDelay().sec * 1000 +
-                        (*it)->getRealTimeDelay().msec());
-        }
-
-        if (myDelay != 0) {
-            if (it == m_segments.begin()) {
-                delayed = All;
-                delayLevel = myDelay;
-            } else {
-                if (delayed == None ||
-                        (delayed == All &&
-                         delayLevel != myDelay))
-                    delayed = Some;
-            }
-        } else {
-            if (delayed == All)
-                delayed = Some;
-        }
 
         // Colour
 
@@ -766,39 +829,6 @@ SegmentParameterBox::updateWidgets()
         }
 
     }
-
-    m_delay->blockSignals(true);
-
-    switch (delayed) {
-    case All:
-        if (delayLevel >= 0) {
-            timeT error = 0;
-            QString label = NotationStrings::makeNoteMenuLabel(delayLevel,
-                            true,
-                            error);
-               m_delay->setCurrentIndex(m_delay->findText(label));
-
-        } else if (delayLevel < 0) {
-
-               m_delay->setCurrentIndex(m_delay->findText( tr("%1 ms").arg(-delayLevel) ));
-          }
-
-        break;
-
-    case Some:
-          m_delay->setCurrentIndex(m_delay->findText(QString("")));
-          break;
-
-    case None:
-    case NotApplicable:
-    default:
-        m_delay->setCurrentIndex(m_delay->findText(QString("0")));
-        break;
-    }
-
-    m_delay->setEnabled(delayed != NotApplicable);
-
-    m_delay->blockSignals(false);
 
     switch (diffcolours) {
     case None:
