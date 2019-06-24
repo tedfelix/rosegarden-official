@@ -243,6 +243,7 @@ SegmentParameterBox::SegmentParameterBox(RosegardenDocument* doc,
     m_color = new ColorCombo(this);
     m_color->setFont(m_font);
     m_color->setToolTip(tr("<qt><p>Change the color of any selected segments</p></qt>"));
+    // ??? QComboBox::activated() is overloaded, so we have to use SIGNAL().
     connect(m_color, SIGNAL(activated(int)),
             SLOT(slotColourChanged(int)));
 
