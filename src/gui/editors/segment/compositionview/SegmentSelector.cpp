@@ -135,6 +135,21 @@ SegmentSelector::mousePressEvent(QMouseEvent *e)
     // ??? Should we split this into a midPress(e) and a leftPress(e)?
     //     Might improve readability a little.
 
+    // *** Resize
+
+    // if the Segment was clicked near the edge, resize
+    if (item  &&  isNearEdge(item->rect(), pos)) {
+        SegmentResizer *segmentResizer = dynamic_cast<SegmentResizer *>(
+                m_canvas->getToolBox()->getTool(SegmentResizer::ToolName()));
+
+        // Turn it over to SegmentResizer.
+        m_dispatchTool = segmentResizer;
+        m_dispatchTool->ready(); // set mouse cursor
+        m_dispatchTool->mousePressEvent(e);
+
+        return;
+    }
+
     // *** Adjust Selection
 
     // Shift key adds to selection.
@@ -166,23 +181,6 @@ SegmentSelector::mousePressEvent(QMouseEvent *e)
 
     // if a segment was clicked
     if (item) {
-
-        // * Resize
-
-        // if only one segment is selected and clicked near the edge, resize
-        if (m_canvas->getModel()->getSelectedSegments().size() == 1  &&
-            isNearEdge(item->rect(), pos)) {
-
-            SegmentResizer *segmentResizer = dynamic_cast<SegmentResizer *>(
-                m_canvas->getToolBox()->getTool(SegmentResizer::ToolName()));
-
-            // Turn it over to SegmentResizer.
-            m_dispatchTool = segmentResizer;
-            m_dispatchTool->ready(); // set mouse cursor
-            m_dispatchTool->mousePressEvent(e);
-
-            return;
-        }
 
         // * Move
 
