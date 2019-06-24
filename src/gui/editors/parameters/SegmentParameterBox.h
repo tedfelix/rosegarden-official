@@ -100,7 +100,7 @@ private slots:
     void slotQuantizeSelected(int qIndex);
 
     void slotDelaySelected(int);
-    void slotDelayTextChanged(const QString &);
+    //void slotDelayTextChanged(const QString &);
 
     void slotColourChanged(int);
     void slotDocColoursChanged();

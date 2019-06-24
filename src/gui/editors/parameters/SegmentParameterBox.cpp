@@ -194,8 +194,10 @@ SegmentParameterBox::SegmentParameterBox(RosegardenDocument* doc,
     // ??? QComboBox::activated() is overloaded, so we have to use SIGNAL().
     connect(m_delay, SIGNAL(activated(int)),
             SLOT(slotDelaySelected(int)));
-    connect(m_delay, &QComboBox::editTextChanged,
-            this, &SegmentParameterBox::slotDelayTextChanged);
+    // ??? The combobox is not editable.  This will never be called.
+    //     It would be a nice feature, though.
+    //connect(m_delay, &QComboBox::editTextChanged,
+    //        this, &SegmentParameterBox::slotDelayTextChanged);
 
     m_delays.clear();
 
@@ -949,6 +951,8 @@ SegmentParameterBox::setSegmentDelay(long delayValue)
 {
     SegmentSelection segmentSelection = getSelectedSegments();
 
+    // ??? This should use a command so that it can be undone.
+
     // Note duration (timeT/ppq)
     if (delayValue >= 0) {
 
@@ -977,21 +981,34 @@ SegmentParameterBox::setSegmentDelay(long delayValue)
 void
 SegmentParameterBox::slotDelaySelected(int value)
 {
-    if (value < int(m_delays.size())) {
+    // If it's a note-duration (timeT/ppq) delay
+    if (value < static_cast<int>(m_delays.size()))
         setSegmentDelay(m_delays[value]);
-    } else {
-        setSegmentDelay( -(m_realTimeDelays[value - m_delays.size()]));
-    }
+    else  // It's a millisecond delay
+        setSegmentDelay(-(m_realTimeDelays[value - m_delays.size()]));
 }
 
+#if 0
 void
 SegmentParameterBox::slotDelayTextChanged(const QString &text)
 {
-    if (text.isEmpty() || m_segments.size() == 0)
-        return ;
+    // ??? The combobox is not editable.  This will never be called.
+    //     It certainly would be nice to be able to set arbitrary
+    //     delays, though.  Maybe this should be editable?
 
-    setSegmentDelay( -(text.toInt()));
+    if (text.isEmpty())
+        return;
+
+    int delay = text.toInt();
+
+    // Don't allow negatives for now.
+    if (delay < 0)
+        delay = 0;
+
+    // Negate to treat as msecs.
+    setSegmentDelay(-delay);
 }
+#endif
 
 void
 SegmentParameterBox::slotColourChanged(int index)
