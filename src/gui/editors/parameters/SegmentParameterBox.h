@@ -97,9 +97,8 @@ private slots:
 
     void slotTransposeSelected(int);
 
-    void slotQuantizeSelected(int);
+    void slotQuantizeSelected(int qIndex);
 
-    void slotDelayTimeChanged(timeT delayValue);
     void slotDelaySelected(int);
     void slotDelayTextChanged(const QString &);
 
@@ -140,8 +139,25 @@ private:
     QComboBox *m_delay;
     std::vector<timeT> m_delays;
     std::vector<int> m_realTimeDelays;
-    void setDelay(timeT);
+    /// Set the delay combobox to delayValue.
+    /**
+     * See setSegmentDelay() for details of positive vs. negative delays.
+     */
+    void setDelay(long delayValue);
+    /// Update the delay combobox from the selected Segments.
     void updateDelay();
+    /// Set the delay in the selected Segments.
+    /**
+     * Positive delay values are assumed to be of note-duration (timeT/ppq)
+     * and are set using Segment::setDelay().  Negative delay values are
+     * assumed to be positive millisecond delays and are set using
+     * Segment::setRealTimeDelay().
+     *
+     * ??? Less than ideal.  We need a better approach.  Perhaps a std::map
+     *     from combobox index to a timeT/RealTime delay record.  That would
+     *     then allow negative delays.
+     */
+    void setSegmentDelay(long delayValue);
 
     ColorCombo *m_color;
     void updateColor();

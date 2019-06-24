@@ -199,7 +199,7 @@ SegmentParameterBox::SegmentParameterBox(RosegardenDocument* doc,
 
     m_delays.clear();
 
-    // For each note duration delay
+    // For each note duration (timeT/ppq) delay
     for (int i = 0; i < 6; i++) {
 
         // extra range checks below are benign - they account for the
@@ -664,11 +664,12 @@ namespace
     // ??? This means we can't do negative delays, which could be very
     //     useful.  Might want to redo this using a vector to translate
     //     the value to an index.  Like quantizeIndex().  See m_delays
-    //     and m_realTimeDelays which might be combined.
-    timeT
+    //     and m_realTimeDelays which might be combined.  Also see
+    //     comments in header on setSegmentDelay().
+    long
     delay(Segment *s)
     {
-        // Note duration delay (1/4, 1/8, etc...)
+        // Note duration delay (timeT/ppq: 1/4, 1/8, etc...)
         timeT delayValue = s->getDelay();
         if (delayValue != 0)
             return delayValue;
@@ -680,9 +681,9 @@ namespace
 }
 
 void
-SegmentParameterBox::setDelay(timeT t)
+SegmentParameterBox::setDelay(long t)
 {
-    // Note duration delay (1/4, 1/8, etc...)
+    // Note duration delay (timeT/ppq: 1/4, 1/8, etc...)
     if (t >= 0) {
         timeT error = 0;
 
@@ -717,7 +718,7 @@ SegmentParameterBox::updateDelay()
     m_delay->setEnabled(true);
 
     SegmentSelection::const_iterator i = segmentSelection.begin();
-    timeT delayValue = delay(*i);
+    long delayValue = delay(*i);
 
     // Just one?  Set and bail.
     if (segmentSelection.size() == 1) {
@@ -921,52 +922,53 @@ SegmentParameterBox::slotTransposeSelected(int value)
 }
 
 void
-SegmentParameterBox::slotQuantizeSelected(int qLevel)
+SegmentParameterBox::slotQuantizeSelected(int qIndex)
 {
-    bool off = (qLevel == m_quantize->count() - 1);
+    timeT quantization = 0;
+
+    // If it's not "Off"...
+    if (qIndex != m_quantize->count() - 1)
+        quantization = m_standardQuantizations[qIndex];
 
     SegmentChangeQuantizationCommand *command =
-        new SegmentChangeQuantizationCommand
-        (off ? 0 : m_standardQuantizations[qLevel]);
+        new SegmentChangeQuantizationCommand(quantization);
 
-    SegmentVector::iterator it;
-    for (it = m_segments.begin(); it != m_segments.end(); ++it) {
-        command->addSegment(*it);
+    SegmentSelection segmentSelection = getSelectedSegments();
+
+    for (SegmentSelection::iterator i = segmentSelection.begin();
+         i != segmentSelection.end();
+         ++i) {
+        command->addSegment(*i);
     }
 
     CommandHistory::getInstance()->addCommand(command);
 }
 
 void
-SegmentParameterBox::slotDelayTimeChanged(timeT delayValue)
+SegmentParameterBox::setSegmentDelay(long delayValue)
 {
-    // by convention and as a nasty hack, we use negative timeT here
-    // to represent positive RealTime in ms
+    SegmentSelection segmentSelection = getSelectedSegments();
 
-    if (delayValue > 0) {
+    // Note duration (timeT/ppq)
+    if (delayValue >= 0) {
 
-        SegmentVector::iterator it;
-        for (it = m_segments.begin(); it != m_segments.end(); ++it) {
+        for (SegmentSelection::iterator it = segmentSelection.begin();
+             it != segmentSelection.end();
+             ++it) {
             (*it)->setDelay(delayValue);
             (*it)->setRealTimeDelay(RealTime::zeroTime);
         }
 
-    } else if (delayValue < 0) {
+    } else {  // Negative msecs
 
-        SegmentVector::iterator it;
-        for (it = m_segments.begin(); it != m_segments.end(); ++it) {
+        for (SegmentSelection::iterator it = segmentSelection.begin();
+             it != segmentSelection.end();
+             ++it) {
             (*it)->setDelay(0);
-            int sec = ( -delayValue) / 1000;
-            int nsec = (( -delayValue) - 1000 * sec) * 1000000;
-            (*it)->setRealTimeDelay(RealTime(sec, nsec));
+            (*it)->setRealTimeDelay(
+                    RealTime::fromSeconds(-delayValue / 1000.0));
         }
-    } else {
 
-        SegmentVector::iterator it;
-        for (it = m_segments.begin(); it != m_segments.end(); ++it) {
-            (*it)->setDelay(0);
-            (*it)->setRealTimeDelay(RealTime::zeroTime);
-        }
     }
 
     emit documentModified();
@@ -976,9 +978,9 @@ void
 SegmentParameterBox::slotDelaySelected(int value)
 {
     if (value < int(m_delays.size())) {
-        slotDelayTimeChanged(m_delays[value]);
+        setSegmentDelay(m_delays[value]);
     } else {
-        slotDelayTimeChanged( -(m_realTimeDelays[value - m_delays.size()]));
+        setSegmentDelay( -(m_realTimeDelays[value - m_delays.size()]));
     }
 }
 
@@ -988,7 +990,7 @@ SegmentParameterBox::slotDelayTextChanged(const QString &text)
     if (text.isEmpty() || m_segments.size() == 0)
         return ;
 
-    slotDelayTimeChanged( -(text.toInt()));
+    setSegmentDelay( -(text.toInt()));
 }
 
 void
