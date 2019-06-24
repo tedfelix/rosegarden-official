@@ -30,31 +30,38 @@ namespace Rosegarden
 {
 
 
-
-/** Create out own check box which is always Tristate 
- * and allows us to click only between on and off
- * and only to _show_ the third ("Some") state 
+/**
+ * A QCheckBox which starts out Tristate by default and allows us to
+ * click only between on and off and only to *show* the
+ * Qt::PartiallyChecked state.
+ *
+ * This is only used by the SegmentParameterBox.
+ *
+ * ??? I think we need to take a look at QCheckBox::nextCheckState() which
+ *     appears to be the proper way to implement a Tristate that doesn't
+ *     allow the user to select PartiallyChecked.  Then get rid of the
+ *     bogus mouseReleaseEvent().
  */
 class TristateCheckBox : public QCheckBox
 {
 Q_OBJECT
 public:
-    TristateCheckBox(QWidget *parent=nullptr):QCheckBox(parent)
-        { setTristate(true) ;}
+    explicit TristateCheckBox(QWidget *parent=nullptr) :
+        QCheckBox(parent)
+    {
+        setTristate(true);
+    }
 
-    ~TristateCheckBox() override;
+    ~TristateCheckBox() override  { }
 
 protected:
-    // don't emit when the button is released
-    void mouseReleaseEvent(QMouseEvent *) override;
+    // Don't emit when the button is released.
+    // ??? Why?
+    void mouseReleaseEvent(QMouseEvent *) override  { }
 
 private:
 };
 
-
-// A label that emits a double click signal and provides scroll wheel information.
-//
-//
 
 }
 

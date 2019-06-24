@@ -122,6 +122,7 @@ private:
     QPushButton *m_edit;
 
     TristateCheckBox *m_repeat;
+    void updateRepeat();
 
     QComboBox *m_transpose;
 

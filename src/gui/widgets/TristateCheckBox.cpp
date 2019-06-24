@@ -25,11 +25,6 @@
 namespace Rosegarden
 {
 
-void
-TristateCheckBox::mouseReleaseEvent(QMouseEvent *)
-{}
-
-TristateCheckBox::~TristateCheckBox()
-{}
+// It's all already in the header.  Delete this file.
 
 }

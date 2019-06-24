@@ -497,6 +497,49 @@ SegmentParameterBox::updateLabel()
 }
 
 void
+SegmentParameterBox::updateRepeat()
+{
+    SegmentSelection segmentSelection = getSelectedSegments();
+
+    // No Segments selected?  Disable/uncheck.
+    if (segmentSelection.empty()) {
+        m_repeat->setEnabled(false);
+        m_repeat->setCheckState(Qt::Unchecked);
+        return;
+    }
+
+    // One or more Segments selected
+
+    m_repeat->setEnabled(true);
+
+    SegmentSelection::const_iterator i = segmentSelection.begin();
+
+    // Just one?  Set and bail.
+    if (segmentSelection.size() == 1) {
+        m_repeat->setCheckState(
+                (*i)->isRepeating() ? Qt::Checked : Qt::Unchecked);
+        return;
+    }
+
+    std::size_t repeating = 0;
+
+    // For each Segment, count the repeating ones
+    for (/* Starting with the first... */;
+         i != segmentSelection.end();
+         ++i) {
+        if ((*i)->isRepeating())
+            ++repeating;
+    }
+
+    if (repeating == 0)  // none
+        m_repeat->setCheckState(Qt::Unchecked);
+    else if (repeating == segmentSelection.size())  // all
+        m_repeat->setCheckState(Qt::Checked);
+    else  // some
+        m_repeat->setCheckState(Qt::PartiallyChecked);
+}
+
+void
 SegmentParameterBox::updateWidgets()
 {
     // ??? Recommend reorganizing this to focus on one widget at
@@ -508,11 +551,14 @@ SegmentParameterBox::updateWidgets()
 
     updateLabel();
 
+    // * Repeat
+
+    updateRepeat();
+
 
     // * The Rest
 
     SegmentVector::iterator it;
-    Tristate repeated = NotApplicable;
     Tristate quantized = NotApplicable;
     Tristate transposed = NotApplicable;
     Tristate delayed = NotApplicable;
@@ -533,7 +579,6 @@ SegmentParameterBox::updateWidgets()
     // segment, and therefore no label to edit.  So we disable the edit button
     // and repeat checkbox first:
     m_edit->setEnabled(false);
-    m_repeat->setEnabled(false);
 
 
     for (it = m_segments.begin(); it != m_segments.end(); ++it) {
@@ -542,10 +587,7 @@ SegmentParameterBox::updateWidgets()
         // and since there is at least one segment, we can re-enable the edit button
         // and repeat checkbox:
         m_edit->setEnabled(true);
-        m_repeat->setEnabled(true);
 
-        if (repeated == NotApplicable)
-            repeated = None;
         if (quantized == NotApplicable)
             quantized = None;
         if (transposed == NotApplicable)
@@ -556,19 +598,6 @@ SegmentParameterBox::updateWidgets()
             diffcolours = None;
         if (highlow == NotApplicable)
             highlow = None;
-
-        // Are all, some or none of the Segments repeating?
-        if ((*it)->isRepeating()) {
-            if (it == m_segments.begin())
-                repeated = All;
-            else {
-                if (repeated == None)
-                    repeated = Some;
-            }
-        } else {
-            if (repeated == All)
-                repeated = Some;
-        }
 
         // Quantization
         //
@@ -655,24 +684,6 @@ SegmentParameterBox::updateWidgets()
         }
 
     }
-
-    switch (repeated) {
-    case All:
-        m_repeat->setChecked(true);
-        break;
-
-    case Some:
-        m_repeat->setCheckState(Qt::PartiallyChecked);
-        break;
-
-    case None:
-    case NotApplicable:
-    default:
-        m_repeat->setChecked(false);
-        break;
-    }
-
-    m_repeat->setEnabled(repeated != NotApplicable);
 
     switch (quantized) {
     case All: {
@@ -771,6 +782,12 @@ SegmentParameterBox::updateWidgets()
 
 void SegmentParameterBox::slotRepeatPressed()
 {
+    // ??? We need to redo this so that it uses QCheckBox the
+    //     way it was intended to be used.  E.g. we should be handling
+    //     the clicked() signal, not pressed().  TristateCheckbox
+    //     should provide a nextCheckState() that skips over
+    //     PartiallyChecked.  Etc...
+
     if (m_segments.size() == 0)
         return ;
 
