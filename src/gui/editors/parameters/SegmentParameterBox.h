@@ -66,9 +66,11 @@ public:
     // ??? Get document directly.
     void setDocument(RosegardenDocument *doc);
 
+    // ??? Get rid of this.  Use getSelectedSegments() (in the .cpp) instead.
     void useSegments(const SegmentSelection &segments);
 
     // CompositionObserver interface
+    // ??? Get rid of this.
     void segmentRemoved(const Composition *,
                         Segment *) override;
 
@@ -108,7 +110,8 @@ private:
 
     // ??? Can we access the selection directly instead of keeping a
     //     copy?  Of pointers?  That would make this code significantly
-    //     safer.
+    //     safer.  Yes.  See getSelectedSegments() in the .cpp.  Switch
+    //     everyone over to that.
     typedef std::vector<Segment *> SegmentVector;
     SegmentVector m_segments;
 
@@ -116,16 +119,16 @@ private:
     void populateBoxFromSegments();
 
     Label *m_label;
-    QPushButton *m_editButton;
+    QPushButton *m_edit;
 
-    TristateCheckBox *m_repeatCheckBox;
+    TristateCheckBox *m_repeat;
 
-    QComboBox *m_transposeComboBox;
+    QComboBox *m_transpose;
 
-    QComboBox *m_quantizeComboBox;
+    QComboBox *m_quantize;
     std::vector<timeT> m_standardQuantizations;
 
-    QComboBox *m_delayComboBox;
+    QComboBox *m_delay;
     std::vector<timeT> m_delays;
     std::vector<int> m_realTimeDelays;
 
