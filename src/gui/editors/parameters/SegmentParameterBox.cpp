@@ -468,39 +468,46 @@ SegmentParameterBox::updateLabel()
     if (segmentSelection.empty()) {
         m_label->setEnabled(false);
         m_label->setText("");
+        m_edit->setEnabled(false);
         return;
     }
 
     // One or more Segments selected
 
     m_label->setEnabled(true);
+    m_edit->setEnabled(true);
 
     SegmentSelection::const_iterator i = segmentSelection.begin();
+    QString labelText = QObject::trUtf8((*i)->getLabel().c_str());
 
-    // ??? Use the same approach as for transpose.  Get the label
-    //     value and use that for the comparisons later.
-
-    m_label->setText(QObject::trUtf8((*i)->getLabel().c_str()));
-
-    // Just one?  We're done.
-    if (segmentSelection.size() == 1)
+    // Just one?  Set and bail.
+    if (segmentSelection.size() == 1) {
+        m_label->setText(labelText);
         return;
+    }
 
     // More than one Segment selected.
 
     // Skip to the second Segment.
     ++i;
 
+    bool allSame = true;
+
     // For each Segment
     for (/* ...starting with the second one */;
          i != segmentSelection.end();
          ++i) {
-        // If the labels do not match, set label to "*"
-        if (QObject::trUtf8((*i)->getLabel().c_str()) != m_label->text()) {
-            m_label->setText("*");
+        // If the labels do not match
+        if (QObject::trUtf8((*i)->getLabel().c_str()) != labelText) {
+            allSame = false;
             break;
         }
     }
+
+    if (allSame)
+        m_label->setText(labelText);
+    else
+        m_label->setText("*");
 }
 
 void
@@ -813,56 +820,12 @@ SegmentParameterBox::updateColor()
 void
 SegmentParameterBox::updateWidgets()
 {
-    // ??? Recommend reorganizing this to focus on one widget at
-    //     a time even though that will result in duplicated for loops.
-    // ??? Then switch it over to getSelectedSegments() and ignore
-    //     m_segments.
-
     updateLabel();
     updateRepeat();
     updateTranspose();
     updateQuantize();
     updateDelay();
     updateColor();
-
-
-    // * The Rest
-
-    SegmentVector::iterator it;
-    Tristate highlow = NotApplicable;
-    unsigned int myHigh = 127;
-    unsigned int myLow = 0;
-
-    // I never noticed this after all this time, but it seems to go all the way
-    // back to the "..." button that this was never disabled if there was no
-    // segment, and therefore no label to edit.  So we disable the edit button
-    // and repeat checkbox first:
-    m_edit->setEnabled(false);
-
-
-    for (it = m_segments.begin(); it != m_segments.end(); ++it) {
-        // ok, first thing is we know we have at least one segment
-        //
-        // and since there is at least one segment, we can re-enable the edit button
-        // and repeat checkbox:
-        m_edit->setEnabled(true);
-
-        if (highlow == NotApplicable)
-            highlow = None;
-
-        // Highest/Lowest playable
-        //
-        if (it == m_segments.begin()) {
-            myHigh = (unsigned int)(*it)->getHighestPlayable();
-            myLow = (unsigned int)(*it)->getLowestPlayable();
-        } else {
-            if (myHigh != (unsigned int)(*it)->getHighestPlayable() ||
-                myLow != (unsigned int)(*it)->getLowestPlayable()) {
-                highlow = All;
-            }
-        }
-
-    }
 }
 
 void SegmentParameterBox::slotRepeatPressed()
