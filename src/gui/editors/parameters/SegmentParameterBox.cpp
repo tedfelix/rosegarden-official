@@ -337,10 +337,6 @@ SegmentParameterBox::SegmentParameterBox(RosegardenDocument* doc,
             this, SLOT(slotUpdate()));
 }
 
-SegmentParameterBox::~SegmentParameterBox()
-{
-}
-
 void
 SegmentParameterBox::setDocument(RosegardenDocument *doc)
 {
@@ -754,6 +750,13 @@ SegmentParameterBox::updateWidgets()
 }
 
 void
+SegmentParameterBox::slotSelectionChanged(
+        const SegmentSelection & /*segments*/)
+{
+    updateWidgets();
+}
+
+void
 SegmentParameterBox::slotEditSegmentLabel()
 {
     SegmentSelection segmentSelection = getSelectedSegments();
@@ -1105,6 +1108,11 @@ SegmentParameterBox::slotNewDocument(RosegardenDocument *doc)
 {
     // Connect to the new document.
     m_doc = doc;
+
+    // Connect to RosegardenMainViewWidget for selection change.
+    connect(RosegardenMainWindow::self()->getView(),
+                &RosegardenMainViewWidget::segmentsSelected,
+            this, &SegmentParameterBox::slotSelectionChanged);
 
     // Make sure everything is correct.
     updateWidgets();

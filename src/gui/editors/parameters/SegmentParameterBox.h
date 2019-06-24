@@ -57,20 +57,12 @@ class SegmentParameterBox : public RosegardenParameterBox
     Q_OBJECT
 
 public:
-    // ??? Get document directly.
+    // ??? Get rid of "doc".  Get document directly.
     SegmentParameterBox(RosegardenDocument *doc,
                         QWidget *parent);
-    ~SegmentParameterBox() override;
 
-    // ??? Get document directly.
+    // ??? Get rid of this.  Get document directly.
     void setDocument(RosegardenDocument *doc);
-
-    // ??? This should be private.  It's public for the moment to handle
-    //     selection changes.  The right way to do this is to connect a
-    //     slotSelectionChanged() to a signal from CompositionModelImpl.
-    //     slotSelectionChanged() would then call updateWidgets().
-    //     Using slotUpdate() is also a possibility.
-    void updateWidgets();
 
 public slots:
     /// Segment > Toggle Repeat
@@ -90,6 +82,9 @@ signals:
 
 private slots:
     void slotNewDocument(RosegardenDocument *doc);
+
+    /// Connected to RosegardenMainViewWidget::segmentsSelected().
+    void slotSelectionChanged(const SegmentSelection &segments);
 
     void slotUpdate();
 
@@ -111,7 +106,10 @@ private slots:
     void slotResetLinkTranspose();
 
 private:
+    // ??? Get rid of this.  Get the document directly.
     RosegardenDocument *m_doc;
+
+    void updateWidgets();
 
     Label *m_label;
     void updateLabel();
@@ -156,7 +154,6 @@ private:
     void updateColor();
 
 };
-
 
 
 }
