@@ -20,6 +20,7 @@
 
 namespace Rosegarden {
 
+/// The "Grid quantizer"
 class BasicQuantizer : public Quantizer
 {
 public:

@@ -111,9 +111,6 @@ private:
     typedef std::vector<Segment *> SegmentVector;
     SegmentVector m_segments;
 
-    // ??? Inline into only caller?  (ctor)
-    void initBox();
-
     // ??? updateWidgets()?
     void populateBoxFromSegments();
 

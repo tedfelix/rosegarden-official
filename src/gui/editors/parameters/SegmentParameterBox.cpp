@@ -69,7 +69,7 @@ enum Tristate
     None,
     Some,
     All,
-    NotApplicable // no applicable segments selected
+    NotApplicable  // no applicable segments selected
 };
 
 SegmentParameterBox::SegmentParameterBox(RosegardenDocument* doc,
@@ -80,52 +80,35 @@ SegmentParameterBox::SegmentParameterBox(RosegardenDocument* doc,
 {
     setObjectName("Segment Parameter Box");
 
-    initBox();
+    // * Label
 
-    m_doc->getComposition().addObserver(this);
-
-    connect(RosegardenMainWindow::self(),
-                &RosegardenMainWindow::documentChanged,
-            this, &SegmentParameterBox::slotNewDocument);
-
-    // ??? commandExecuted() is overloaded so we must use SLOT().
-    //     Rename to commandExecutedOrUn().
-    connect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
-            this, SLOT(slotUpdate()));
-}
-
-SegmentParameterBox::~SegmentParameterBox()
-{
-    if (!isCompositionDeleted()) {
-        m_doc->getComposition().removeObserver(this);
-    }
-}
-
-void
-SegmentParameterBox::initBox()
-{
-    // Label
     QLabel *label = new QLabel(tr("Label"), this);
     label->setFont(m_font);
 
     m_label = new Label("", this);
+    // SPECIAL_LABEL => Gray background, black text.  See ThornStyle.cpp.
+    // ??? Can't we just inline that here?
     m_label->setObjectName("SPECIAL_LABEL");
     m_label->setFont(m_font);
     QFontMetrics fontMetrics(m_font);
     const int width20 = fontMetrics.width("12345678901234567890");
     m_label->setFixedWidth(width20);
     m_label->setToolTip(tr("<qt>Click to edit the segment label for any selected segments</qt>"));
-    connect(m_label, &Label::clicked, this, &SegmentParameterBox::slotEditSegmentLabel);
+    connect(m_label, &Label::clicked,
+            this, &SegmentParameterBox::slotEditSegmentLabel);
 
-    // Edit button
+    // * Edit button
+
     // ??? This Edit button is now no longer needed.  The user can just
     //     click on the label to edit it.
     m_editButton = new QPushButton(tr("Edit"), this);
     m_editButton->setFont(m_font);
     m_editButton->setToolTip(tr("<qt>Edit the segment label for any selected segments</qt>"));
-    connect(m_editButton, &QAbstractButton::released, this, &SegmentParameterBox::slotEditSegmentLabel);
+    connect(m_editButton, &QAbstractButton::released,
+            this, &SegmentParameterBox::slotEditSegmentLabel);
 
-    // Repeat
+    // * Repeat
+
     QLabel *repeatLabel = new QLabel(tr("Repeat"), this);
     repeatLabel->setFont(m_font);
 
@@ -137,9 +120,11 @@ SegmentParameterBox::initBox()
                                  ".png\"></img></center></p><br>These can be used in conjunction with special LilyPond export direct"
                                  "ives to create repeats with first and second alternate endings. See rosegardenmusic.com for a tut"
                                  "orial. [Ctrl+Shift+R] </qt>"));
-    connect(m_repeatCheckBox, &QAbstractButton::pressed, this, &SegmentParameterBox::slotRepeatPressed);
+    connect(m_repeatCheckBox, &QAbstractButton::pressed,
+            this, &SegmentParameterBox::slotRepeatPressed);
 
-    // Transpose
+    // * Transpose
+
     QLabel *transposeLabel = new QLabel(tr("Transpose"), this);
     transposeLabel->setFont(m_font);
 
@@ -149,31 +134,42 @@ SegmentParameterBox::initBox()
                                     "<i>NOTE: This control changes segments that already exist.</i></p><p><i>Use the transpose "
                                     "control in <b>Track Parameters</b> under <b>Create segments with</b> to pre-select this   "
                                     "setting before drawing or recording new segments.</i></p></qt>"));
+    // ??? QComboBox::activated() is overloaded, so we have to use SIGNAL().
     connect(m_transposeComboBox, SIGNAL(activated(int)),
             SLOT(slotTransposeSelected(int)));
     connect(m_transposeComboBox, &QComboBox::editTextChanged,
             this, &SegmentParameterBox::slotTransposeTextChanged);
 
-    // Quantize
+    // * Quantize
+
     QLabel *quantizeLabel = new QLabel(tr("Quantize"), this);
     quantizeLabel->setFont(m_font);
 
     m_quantizeComboBox = new QComboBox(this);
     m_quantizeComboBox->setFont(m_font);
-
-    //!!!  I don't think that actually *is* what the quantize combo is for.  Is
-    // it?  Isn't the SPB quantize combo different from the notation view big Q
-    // icon?  I think so, but I have no idea what the SPB actually does.  Never
-    // use it.  Anyway, it's better not to say anything than to say something
-    // that might be wrong, so let's just hide this tooltip and not burden
-    // translators with it until such time as it might get sorted out.
-    //m_quantizeComboBox->setToolTip(tr("<qt><p>This allows you to choose how you want to quantize the midi notes.This allows you to tidy up human play to make sense of the notes for notation purposes. This gives you visual quantization only, and does not affect the way the midi sounds. </p></qt>"));
-
-    // handle quantize changes from drop down
+    m_quantizeComboBox->setToolTip(tr(
+            "<qt><p>Quantize the selected segments using the Grid quantizer.  "
+            "This quantization can be removed at any time in "
+            "the future by setting it to off.</p></qt>"));
+    // ??? QComboBox::activated() is overloaded, so we have to use SIGNAL().
     connect(m_quantizeComboBox, SIGNAL(activated(int)),
             SLOT(slotQuantizeSelected(int)));
 
-    // Delay
+    QPixmap noMap = NotePixmapFactory::makeToolbarPixmap("menu-no-note");
+
+    // For each standard quantization value
+    for (unsigned int i = 0; i < m_standardQuantizations.size(); ++i) {
+        timeT time = m_standardQuantizations[i];
+        timeT error = 0;
+        QString label = NotationStrings::makeNoteMenuLabel(time, true, error);
+        QPixmap pmap = NotePixmapFactory::makeNoteMenuPixmap(time, error);
+        // Add the icon and label to the ComboBox.
+        m_quantizeComboBox->addItem(error ? noMap : pmap, label);
+    }
+    m_quantizeComboBox->addItem(noMap, tr("Off"));
+
+    // * Delay
+
     QLabel *delayLabel = new QLabel(tr("Delay"), this);
     delayLabel->setFont(m_font);
 
@@ -184,12 +180,14 @@ SegmentParameterBox::initBox()
                                 "composition to start before bar 1, and move segments to the left.  You can hold <b>shift</b>"
                                 " while doing this for fine-grained control, though doing so will have harsh effects on music"
                                 " notation rendering as viewed in the notation editor.</i></p></qt>"));
+    // ??? QComboBox::activated() is overloaded, so we have to use SIGNAL().
     connect(m_delayComboBox, SIGNAL(activated(int)),
             SLOT(slotDelaySelected(int)));
     connect(m_delayComboBox, &QComboBox::editTextChanged,
             this, &SegmentParameterBox::slotDelayTextChanged);
 
-    // Color
+    // * Color
+
     QLabel *colourLabel = new QLabel(tr("Color"), this);
     colourLabel->setFont(m_font);
 
@@ -203,8 +201,10 @@ SegmentParameterBox::initBox()
 
     connect(m_doc, &RosegardenDocument::docColoursChanged,
             this, &SegmentParameterBox::slotDocColoursChanged);
+    // Populate the colours.
+    slotDocColoursChanged();
 
-    // Linked segment parameters (hidden)
+    // * Linked segment parameters (hidden)
 
     // Outer collapsing frame
     CollapsingFrame *linkedSegmentParametersFrame = new CollapsingFrame(
@@ -279,35 +279,21 @@ SegmentParameterBox::initBox()
 
     // Populate the widgets
 
-    // populate the quantize combo
-    //
-    QPixmap noMap = NotePixmapFactory::makeToolbarPixmap("menu-no-note");
-
-    for (unsigned int i = 0; i < m_standardQuantizations.size(); ++i) {
-
-        timeT time = m_standardQuantizations[i];
-        timeT error = 0;
-        QString label = NotationStrings::makeNoteMenuLabel(time, true, error);
-        QPixmap pmap = NotePixmapFactory::makeNoteMenuPixmap(time, error);
-        m_quantizeComboBox->addItem(error ? noMap : pmap, label);
-    }
-    m_quantizeComboBox->addItem(noMap, tr("Off"));
-
-    // default to last item
-    m_quantizeComboBox->setCurrentIndex(m_quantizeComboBox->count() - 1);
+    // Transpose Combo
 
     constexpr MidiByte m_transposeRange = 48;
 
-    // populate the transpose combo
-    //
     for (int i = -m_transposeRange; i < m_transposeRange + 1; i++) {
         m_transposeComboBox->addItem(noMap, QString("%1").arg(i));
         if (i == 0)
             m_transposeComboBox->setCurrentIndex(m_transposeComboBox->count() - 1);
     }
 
+    // Delay
+
     m_delays.clear();
 
+    // For each note duration delay
     for (int i = 0; i < 6; i++) {
 
         // extra range checks below are benign - they account for the
@@ -322,29 +308,42 @@ SegmentParameterBox::initBox()
 
         m_delays.push_back(time);
 
-        // check if it's a valid note duration (it will be for the
-        // time defn above, but if we were basing it on the sequencer
-        // resolution it might not be) & include a note pixmap if so
-        //
         timeT error = 0;
         QString label = NotationStrings::makeNoteMenuLabel(time, true, error);
         QPixmap pmap = NotePixmapFactory::makeNoteMenuPixmap(time, error);
+
+        // check if it's a valid note duration (it will be for the
+        // time defn above, but if we were basing it on the sequencer
+        // resolution it might not be) & include a note pixmap if so
         m_delayComboBox->addItem((error ? noMap : pmap), label);
     }
 
+    // For each real-time delay (msecs)
     for (int i = 0; i < 10; i++) {
         int rtd = (i < 5 ? ((i + 1) * 10) : ((i - 3) * 50));
         m_realTimeDelays.push_back(rtd);
         m_delayComboBox->addItem(tr("%1 ms").arg(rtd));
     }
 
-    // set delay blank initially
-    m_delayComboBox->setCurrentIndex( -1);
+    //RG_DEBUG << "ctor: " << this << ": font() size is " << (this->font()).pixelSize() << "px (" << (this->font()).pointSize() << "pt)";
 
-    // populate m_colourComboBox
-    slotDocColoursChanged();
+    m_doc->getComposition().addObserver(this);
 
-    //RG_DEBUG << "initBox(): " << this << ": font() size is " << (this->font()).pixelSize() << "px (" << (this->font()).pointSize() << "pt)";
+    connect(RosegardenMainWindow::self(),
+                &RosegardenMainWindow::documentChanged,
+            this, &SegmentParameterBox::slotNewDocument);
+
+    // ??? commandExecuted() is overloaded so we must use SLOT().
+    //     Rename to commandExecutedOrUn().
+    connect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
+            this, SLOT(slotUpdate()));
+}
+
+SegmentParameterBox::~SegmentParameterBox()
+{
+    if (!isCompositionDeleted()) {
+        m_doc->getComposition().removeObserver(this);
+    }
 }
 
 void
