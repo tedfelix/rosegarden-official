@@ -567,12 +567,12 @@ JackDriver::createSubmasterOutputs(int pairs)
 
     for (int i = pairsNow; i < pairs; ++i) {
 
-        char namebuffer[22];
+        QString name;
         jack_port_t *port;
 
-        snprintf(namebuffer, 21, "submaster %d out L", i + 1);
+        name = QString("submaster %d out L").arg(i + 1);
         port = jack_port_register(m_client,
-                                  namebuffer,
+                                  name.toLocal8Bit(),
                                   JACK_DEFAULT_AUDIO_TYPE,
                                   JackPortIsOutput,
                                   0);
@@ -580,9 +580,9 @@ JackDriver::createSubmasterOutputs(int pairs)
             return false;
         m_outputSubmasters.push_back(port);
 
-        snprintf(namebuffer, 21, "submaster %d out R", i + 1);
+        name = QString("submaster %d out R").arg(i + 1);
         port = jack_port_register(m_client,
-                                  namebuffer,
+                                  name.toLocal8Bit(),
                                   JACK_DEFAULT_AUDIO_TYPE,
                                   JackPortIsOutput,
                                   0);
@@ -613,12 +613,12 @@ JackDriver::createRecordInputs(int pairs)
 
     for (int i = pairsNow; i < pairs; ++i) {
 
-        char namebuffer[22];
+        QString name;
         jack_port_t *port;
 
-        snprintf(namebuffer, 21, "record in %d L", i + 1);
+        name = QString("record in %1 L").arg(i + 1);
         port = jack_port_register(m_client,
-                                  namebuffer,
+                                  name.toLocal8Bit(),
                                   JACK_DEFAULT_AUDIO_TYPE,
                                   JackPortIsInput,
                                   0);
@@ -626,9 +626,9 @@ JackDriver::createRecordInputs(int pairs)
             return false;
         m_inputPorts.push_back(port);
 
-        snprintf(namebuffer, 21, "record in %d R", i + 1);
+        name = QString("record in %1 R").arg(i + 1);
         port = jack_port_register(m_client,
-                                  namebuffer,
+                                  name.toLocal8Bit(),
                                   JACK_DEFAULT_AUDIO_TYPE,
                                   JackPortIsInput,
                                   0);
