@@ -18,20 +18,20 @@
 
 #include <string>
 
-// [rwb]
-//
-//   Abstract base class that forces all derived classes
-//   to implement the virtual toXmlString object.
-//
-//   Yes, this is similar to  the XmlStoreableEvent class
-//   in gui/ but with hopes to be more general so that any
-//   classes in base/ can go ahead and implement it.
-//
-//
-
 namespace Rosegarden
 {
 
+
+/**
+ * Abstract base class that forces all derived classes
+ * to implement the virtual toXmlString object.
+ *
+ * Yes, this is similar to the XmlStoreableEvent class
+ * in gui/ but with hopes to be more general so that any
+ * classes in base/ can go ahead and implement it.
+ *
+ * \author rwb
+ */
 class XmlExportable
 {
 public:
@@ -40,10 +40,11 @@ public:
 
     virtual std::string toXmlString() const = 0;
 
+    /// Escape any xml special characters and validate utf8.
     static std::string encode(const std::string &);
 };
+
 
 }
 
 #endif // RG_XMLEXPORTABLE_H
-

@@ -29,7 +29,7 @@ namespace
         Deleter(char *p) : m_p(p)  { }
         ~Deleter()
         {
-            free(m_p);
+            std::free(m_p);
         }
     private:
         char *m_p;
@@ -39,8 +39,6 @@ namespace
 namespace Rosegarden
 {
 
-//static std::string s1;
-//static std::string multibyte;
 
 std::string XmlExportable::encode(const std::string &s0)
 {
@@ -59,12 +57,17 @@ std::string XmlExportable::encode(const std::string &s0)
 
     if (bufsiz < len * 2 + 10) {
         bufsiz = len * 2 + 10;
-        buffer = (char *)realloc(buffer, bufsiz);
+        buffer = (char *)std::realloc(buffer, bufsiz);
     }
 
     // Escape any xml special characters, and also make sure we have
     // valid utf8 -- otherwise we won't be able to re-read the xml.
     // Amazing how complicated this gets.
+
+    // ??? QString::toHtmlEscaped() does part of this.  There are some
+    //     QString UTF-8 functions that might be able to do the validation.
+    //     Regardless, we should probably redo this with QString at some
+    //     point.
 
     bool warned = false; // no point in warning forever for long bogus strings
 
@@ -76,6 +79,7 @@ std::string XmlExportable::encode(const std::string &s0)
 
             // 11xxxxxx or 0xxxxxxx: first byte of a character sequence
 
+            // ??? Duplicated code.  See below.
             if (mblen > 0) {
 
                 // does multibyte contain a valid sequence?
@@ -88,9 +92,9 @@ std::string XmlExportable::encode(const std::string &s0)
                 if (length == 0 || mblen == length) {
                     if (bufsiz < buflen + mblen + 1) {
                         bufsiz = 2 * buflen + mblen + 1;
-                        buffer = (char *)realloc(buffer, bufsiz);
+                        buffer = (char *)std::realloc(buffer, bufsiz);
                     }
-                    strncpy(buffer + buflen, multibyte, mblen);
+                    std::strncpy(buffer + buflen, multibyte, mblen);
                     buflen += mblen;
                 } else {
                     if (!warned) {
@@ -112,21 +116,23 @@ std::string XmlExportable::encode(const std::string &s0)
 
                 if (bufsiz < buflen + 10) {
                     bufsiz = 2 * buflen + 10;
-                    buffer = (char *)realloc(buffer, bufsiz);
+                    buffer = (char *)std::realloc(buffer, bufsiz);
                 }
 
                 switch (c) {
-                case '&' :  strncpy(buffer + buflen, "&amp;", 5); buflen += 5;  break;
-                case '<' :  strncpy(buffer + buflen, "&lt;", 4); buflen += 4;  break;
-                case '>' :  strncpy(buffer + buflen, "&gt;", 4); buflen += 4;  break;
-                case '"' :  strncpy(buffer + buflen, "&quot;", 6); buflen += 6;  break;
-                case '\'' : strncpy(buffer + buflen, "&apos;", 6); buflen += 6;  break;
-                case 0x9:
-                case 0xa:
-                case 0xd:
+                case '&' :  std::strncpy(buffer + buflen, "&amp;", 5); buflen += 5;  break;
+                case '<' :  std::strncpy(buffer + buflen, "&lt;", 4); buflen += 4;  break;
+                case '>' :  std::strncpy(buffer + buflen, "&gt;", 4); buflen += 4;  break;
+                case '"' :  std::strncpy(buffer + buflen, "&quot;", 6); buflen += 6;  break;
+                case '\'' : std::strncpy(buffer + buflen, "&apos;", 6); buflen += 6;  break;
+
+                case 0x9:  // tab, \t
+                case 0xa:  // line feed, \n
+                case 0xd:  // carriage return, \r
                     // convert these special cases to plain whitespace:
                     buffer[buflen++] = ' ';
                     break;
+
                 default:
                     if (c >= 32) buffer[buflen++] = c;
                     else {
@@ -142,7 +148,7 @@ std::string XmlExportable::encode(const std::string &s0)
 
             } else {
 
-                // store in multibyte rather than straight to s1, so
+                // store in multibyte rather than straight to buffer, so
                 // that we know we're in the middle of something
                 // (below).  At this point we know mblen == 0.
                 multibyte[mblen++] = c;
@@ -177,6 +183,11 @@ std::string XmlExportable::encode(const std::string &s0)
         }
     }
 
+    // ??? Duplicated code from above.  Either pull out a function or
+    //     restructure the loop so that this is not needed.  E.g. use
+    //     while instead of for and detect the terminating NULL.  Or
+    //     do both if possible.
+
     if (mblen > 0) {
         // does multibyte contain a valid sequence?
         size_t length =
@@ -188,9 +199,9 @@ std::string XmlExportable::encode(const std::string &s0)
         if (length == 0 || mblen == length) {
             if (bufsiz < buflen + mblen + 1) {
                 bufsiz = 2 * buflen + mblen + 1;
-                buffer = (char *)realloc(buffer, bufsiz);
+                buffer = (char *)std::realloc(buffer, bufsiz);
             }
-            strncpy(buffer + buflen, multibyte, mblen);
+            std::strncpy(buffer + buflen, multibyte, mblen);
             buflen += mblen;
         } else {
             if (!warned) {
@@ -211,5 +222,5 @@ std::string XmlExportable::encode(const std::string &s0)
     return buffer;
 }
 
-}
 
+}
