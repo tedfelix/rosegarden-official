@@ -94,7 +94,7 @@ std::string XmlExportable::encode(const std::string &s0)
                         bufsiz = 2 * buflen + mblen + 1;
                         buffer = (char *)std::realloc(buffer, bufsiz);
                     }
-                    std::strncpy(buffer + buflen, multibyte, mblen);
+                    std::memcpy(buffer + buflen, multibyte, mblen);
                     buflen += mblen;
                 } else {
                     if (!warned) {
@@ -120,11 +120,11 @@ std::string XmlExportable::encode(const std::string &s0)
                 }
 
                 switch (c) {
-                case '&' :  std::strncpy(buffer + buflen, "&amp;", 5); buflen += 5;  break;
-                case '<' :  std::strncpy(buffer + buflen, "&lt;", 4); buflen += 4;  break;
-                case '>' :  std::strncpy(buffer + buflen, "&gt;", 4); buflen += 4;  break;
-                case '"' :  std::strncpy(buffer + buflen, "&quot;", 6); buflen += 6;  break;
-                case '\'' : std::strncpy(buffer + buflen, "&apos;", 6); buflen += 6;  break;
+                case '&' :  std::memcpy(buffer + buflen, "&amp;", 5); buflen += 5;  break;
+                case '<' :  std::memcpy(buffer + buflen, "&lt;", 4); buflen += 4;  break;
+                case '>' :  std::memcpy(buffer + buflen, "&gt;", 4); buflen += 4;  break;
+                case '"' :  std::memcpy(buffer + buflen, "&quot;", 6); buflen += 6;  break;
+                case '\'' : std::memcpy(buffer + buflen, "&apos;", 6); buflen += 6;  break;
 
                 case 0x9:  // tab, \t
                 case 0xa:  // line feed, \n
@@ -201,7 +201,7 @@ std::string XmlExportable::encode(const std::string &s0)
                 bufsiz = 2 * buflen + mblen + 1;
                 buffer = (char *)std::realloc(buffer, bufsiz);
             }
-            std::strncpy(buffer + buflen, multibyte, mblen);
+            std::memcpy(buffer + buflen, multibyte, mblen);
             buflen += mblen;
         } else {
             if (!warned) {
