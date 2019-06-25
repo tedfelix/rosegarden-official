@@ -513,7 +513,7 @@ AudioFileManager::createRecordingAudioFile(QString projectName, QString instrume
     QString fnm(fileName);
     const QString fpath = m_audioPath + fileName;
     try {
-        aF = new WAVAudioFile( static_cast<const unsigned int>(newId), qstrtostr(fileName), fpath );
+        aF = new WAVAudioFile(newId, qstrtostr(fileName), fpath);
         //aF = new WAVAudioFile(newId, fileName.data(), m_audioPath + qstrtostr(fileName) );
         m_audioFiles.push_back(aF);
         m_recordedAudioFiles.insert(aF);
