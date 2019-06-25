@@ -430,7 +430,7 @@ RosegardenMainWindow::RosegardenMainWindow(bool enableSound,
 
     try {
         m_lircClient = new LircClient();
-    } catch (Exception e) {
+    } catch (const Exception &e) {
         RG_DEBUG << e.getMessage().c_str();
         // continue without
         m_lircClient = nullptr;
@@ -1029,7 +1029,7 @@ RosegardenMainWindow::initView()
         try {
             if (isUsingSequencer()) m_seqManager->setLoop(0, 0);
             leaveActionState("have_range"); //@@@ JAS orig. KXMLGUIClient::StateReverse
-        } catch (QString s) {
+        } catch (const QString &s) {
             StartupLogo::hideIfStillThere();
             QMessageBox::critical(dynamic_cast<QWidget*>(this), tr("Rosegarden"), s, QMessageBox::Ok, QMessageBox::Ok);
         }
@@ -4717,7 +4717,7 @@ RosegardenMainWindow::slotSetPointerPosition(timeT t)
             if (!m_originatingJump) {
                 m_seqManager->jumpTo(comp.getElapsedRealTime(t));
             }
-        } catch (QString s) {
+        } catch (const QString &s) {
             QMessageBox::critical(this, tr("Rosegarden"), s);
         }
     }
@@ -5452,7 +5452,7 @@ RosegardenMainWindow::slotRecord()
     //
     try {
         m_seqManager->record(false);
-    } catch (QString s) {
+    } catch (const QString &s) {
         // We should already be stopped by this point so just unset
         // the buttons after clicking the dialog.
         //
@@ -5537,7 +5537,7 @@ RosegardenMainWindow::slotSetLoop(timeT lhs, timeT rhs)
             getTransport()->LoopButton()->setChecked(false);
             leaveActionState("have_range"); //@@@ JAS orig. KXMLGUIClient::StateReverse
         }
-    } catch (QString s) {
+    } catch (const QString &s) {
         QMessageBox::critical(this, tr("Rosegarden"), s);
     }
 }
