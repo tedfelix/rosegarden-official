@@ -973,7 +973,11 @@ AudioFileManager::getPreview(AudioFileId id,
     }
 
     if (!m_peakManager.hasValidPeaks(audioFile)) {
-        RG_WARNING << "getPreview(): No peaks for audio file " << audioFile->getFilename();
+        // ??? This happens a lot when recording audio.  Need to detect
+        //     that we are recording and suppress this.  Or just don't
+        //     call this when recording.  The caller has comments in
+        //     its catch() to this effect.
+        RG_WARNING << "getPreview(): No peaks for audio file" << audioFile->getFilename() << "(this is probably OK when recording)";
         throw PeakFileManager::BadPeakFileException(
                 audioFile->getFilename(), __FILE__, __LINE__);
     }
@@ -1073,7 +1077,7 @@ AudioFileManager::drawHighlightedPreview(AudioFileId id,
         return;
 
     if (!m_peakManager.hasValidPeaks(audioFile)) {
-        RG_WARNING << "getPreview(): No peaks for audio file " << audioFile->getFilename();
+        RG_WARNING << "drawHighlightedPreview(): No peaks for audio file " << audioFile->getFilename();
         throw PeakFileManager::BadPeakFileException
         (audioFile->getFilename(), __FILE__, __LINE__);
     }
