@@ -324,13 +324,6 @@ SegmentParameterBox::SegmentParameterBox(QWidget *parent) :
     connect(RosegardenMainWindow::self(),
                 &RosegardenMainWindow::documentChanged,
             this, &SegmentParameterBox::slotNewDocument);
-
-    // ??? commandExecuted() is overloaded so we must use SLOT().
-    //     Rename to commandExecutedOrUn().
-    // ??? We should subscribe for RosegardenDocument::documentModified()
-    //     instead of this.  Rename slotUpdate() -> slotDocumentModified().
-    connect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
-            this, SLOT(slotUpdate()));
 }
 
 namespace
@@ -345,16 +338,6 @@ namespace
                    getTrackEditor()->getCompositionView()->getModel()->
                    getSelectedSegments();
     }
-}
-
-void SegmentParameterBox::slotUpdate()
-{
-    // ??? I'm guessing this should evolve into some sort of
-    //     slotDocumentModified()?
-
-    RG_DEBUG << "slotUpdate()";
-
-    updateWidgets();
 }
 
 void
@@ -1084,6 +1067,9 @@ SegmentParameterBox::slotResetLinkTranspose()
 void
 SegmentParameterBox::slotNewDocument(RosegardenDocument *doc)
 {
+    connect(doc, &RosegardenDocument::documentModified,
+            this, &SegmentParameterBox::slotDocumentModified);
+
     // Connect to RosegardenMainViewWidget for selection change.
     connect(RosegardenMainWindow::self()->getView(),
                 &RosegardenMainViewWidget::segmentsSelected,
@@ -1097,6 +1083,11 @@ SegmentParameterBox::slotNewDocument(RosegardenDocument *doc)
     slotDocColoursChanged();
 
     // Make sure everything is correct.
+    updateWidgets();
+}
+
+void SegmentParameterBox::slotDocumentModified(bool)
+{
     updateWidgets();
 }
 

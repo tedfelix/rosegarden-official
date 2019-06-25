@@ -70,10 +70,10 @@ public slots:
 private slots:
     void slotNewDocument(RosegardenDocument *doc);
 
+    void slotDocumentModified(bool);
+
     /// Connected to RosegardenMainViewWidget::segmentsSelected().
     void slotSelectionChanged(const SegmentSelection &segments);
-
-    void slotUpdate();
 
     void slotEditSegmentLabel();
 
