@@ -327,7 +327,8 @@ SegmentParameterBox::SegmentParameterBox(QWidget *parent) :
 
     // ??? commandExecuted() is overloaded so we must use SLOT().
     //     Rename to commandExecutedOrUn().
-    // ??? We should subscribe for documentModified instead of this.
+    // ??? We should subscribe for RosegardenDocument::documentModified()
+    //     instead of this.  Rename slotUpdate() -> slotDocumentModified().
     connect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
             this, SLOT(slotUpdate()));
 }
@@ -842,7 +843,7 @@ SegmentParameterBox::slotTransposeSelected(int value)
         (*i)->setTranspose(transposeValue);
     }
 
-    emit documentModified();
+    RosegardenMainWindow::self()->getDocument()->slotDocumentModified();
 }
 
 void
@@ -897,7 +898,7 @@ SegmentParameterBox::setSegmentDelay(long delayValue)
 
     }
 
-    emit documentModified();
+    RosegardenMainWindow::self()->getDocument()->slotDocumentModified();
 }
 
 void

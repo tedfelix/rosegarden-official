@@ -67,14 +67,6 @@ public slots:
      */
     void slotToggleRepeat();
 
-signals:
-    /// RosegardenMainWindow connects to this.
-    /**
-     * ??? We should directly call the RosegardenDocument documentModified()
-     *     functions as appropriate and get rid of this.
-     */
-    void documentModified();
-
 private slots:
     void slotNewDocument(RosegardenDocument *doc);
 

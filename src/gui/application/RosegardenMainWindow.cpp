@@ -1175,9 +1175,6 @@ RosegardenMainWindow::setDocument(RosegardenDocument* newDocument)
     }
 
     // connect needed signals
-    //
-    connect(m_segmentParameterBox, &SegmentParameterBox::documentModified,
-            m_doc, &RosegardenDocument::slotDocumentModified);
 
     connect(m_doc, &RosegardenDocument::pointerPositionChanged,
             this, &RosegardenMainWindow::slotSetPointerPosition);
