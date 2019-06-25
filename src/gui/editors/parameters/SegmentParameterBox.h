@@ -97,7 +97,6 @@ private:
 
     Label *m_label;
     void updateLabel();
-    QPushButton *m_edit;
 
     TristateCheckBox *m_repeat;
     void updateRepeat();

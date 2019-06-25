@@ -99,21 +99,8 @@ SegmentParameterBox::SegmentParameterBox(QWidget *parent) :
     // ??? Can't we just inline that here?
     m_label->setObjectName("SPECIAL_LABEL");
     m_label->setFont(m_font);
-    QFontMetrics fontMetrics(m_font);
-    const int width20 = fontMetrics.width("12345678901234567890");
-    m_label->setFixedWidth(width20);
     m_label->setToolTip(tr("<qt>Click to edit the segment label for any selected segments</qt>"));
     connect(m_label, &Label::clicked,
-            this, &SegmentParameterBox::slotEditSegmentLabel);
-
-    // * Edit button
-
-    // ??? This Edit button is now no longer needed.  The user can just
-    //     click on the label to edit it.
-    m_edit = new QPushButton(tr("Edit"), this);
-    m_edit->setFont(m_font);
-    m_edit->setToolTip(tr("<qt>Edit the segment label for any selected segments</qt>"));
-    connect(m_edit, &QAbstractButton::released,
             this, &SegmentParameterBox::slotEditSegmentLabel);
 
     // * Repeat
@@ -297,8 +284,7 @@ SegmentParameterBox::SegmentParameterBox(QWidget *parent) :
     gridLayout->setSpacing(2);
     // Row 0: Label
     gridLayout->addWidget(label, 0, 0);
-    gridLayout->addWidget(m_label, 0, 1, 1, 4);
-    gridLayout->addWidget(m_edit, 0, 5);
+    gridLayout->addWidget(m_label, 0, 1, 1, 5);
     // Row 1: Repeat/Transpose
     gridLayout->addWidget(repeatLabel, 1, 0);
     gridLayout->addWidget(m_repeat, 1, 1);
@@ -349,14 +335,12 @@ SegmentParameterBox::updateLabel()
     if (segmentSelection.empty()) {
         m_label->setEnabled(false);
         m_label->setText("");
-        m_edit->setEnabled(false);
         return;
     }
 
     // One or more Segments selected
 
     m_label->setEnabled(true);
-    m_edit->setEnabled(true);
 
     SegmentSelection::const_iterator i = segmentSelection.begin();
     QString labelText = QObject::trUtf8((*i)->getLabel().c_str());
