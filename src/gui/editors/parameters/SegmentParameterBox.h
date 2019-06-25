@@ -57,12 +57,7 @@ class SegmentParameterBox : public RosegardenParameterBox
     Q_OBJECT
 
 public:
-    // ??? Get rid of "doc".  Get document directly.
-    SegmentParameterBox(RosegardenDocument *doc,
-                        QWidget *parent);
-
-    // ??? Get rid of this.  Get document directly.
-    void setDocument(RosegardenDocument *doc);
+    SegmentParameterBox(QWidget *parent);
 
 public slots:
     /// Segment > Toggle Repeat
@@ -106,9 +101,6 @@ private slots:
     void slotResetLinkTranspose();
 
 private:
-    // ??? Get rid of this.  Get the document directly.
-    RosegardenDocument *m_doc;
-
     void updateWidgets();
 
     Label *m_label;

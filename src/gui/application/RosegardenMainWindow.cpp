@@ -338,7 +338,7 @@ RosegardenMainWindow::RosegardenMainWindow(bool enableSound,
 
     // Populate the parameter-box area with the respective
     // parameter box widgets.
-    m_segmentParameterBox = new SegmentParameterBox(doc, m_parameterArea);
+    m_segmentParameterBox = new SegmentParameterBox(m_parameterArea);
     m_parameterArea->addRosegardenParameterBox(m_segmentParameterBox);
     m_trackParameterBox = new TrackParameterBox(m_parameterArea);
     m_parameterArea->addRosegardenParameterBox(m_trackParameterBox);
@@ -1161,7 +1161,6 @@ RosegardenMainWindow::setDocument(RosegardenDocument* newDocument)
         m_triggerSegmentManager->setDocument(m_doc);
 
     m_trackParameterBox->setDocument(m_doc);
-    m_segmentParameterBox->setDocument(m_doc);
     m_editTempoController->setDocument(m_doc);
 
     if (m_pluginGUIManager) {

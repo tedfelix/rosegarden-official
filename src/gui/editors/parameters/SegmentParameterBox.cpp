@@ -83,10 +83,8 @@ namespace {
     constexpr int transposeRange = 48;
 }
 
-SegmentParameterBox::SegmentParameterBox(RosegardenDocument* doc,
-                                         QWidget *parent) :
+SegmentParameterBox::SegmentParameterBox(QWidget *parent) :
     RosegardenParameterBox(tr("Segment Parameters"), parent),
-    m_doc(doc),
     m_standardQuantizations(BasicQuantizer::getStandardQuantizations())
 {
     setObjectName("Segment Parameter Box");
@@ -246,11 +244,7 @@ SegmentParameterBox::SegmentParameterBox(RosegardenDocument* doc,
     // ??? QComboBox::activated() is overloaded, so we have to use SIGNAL().
     connect(m_color, SIGNAL(activated(int)),
             SLOT(slotColourChanged(int)));
-
-    connect(m_doc, &RosegardenDocument::docColoursChanged,
-            this, &SegmentParameterBox::slotDocColoursChanged);
-    // Populate the colours.
-    m_color->updateColors();
+    // slotNewDocument() will finish the initialization.
 
     // * Linked segment parameters (hidden)
 
@@ -336,24 +330,6 @@ SegmentParameterBox::SegmentParameterBox(RosegardenDocument* doc,
     // ??? We should subscribe for documentModified instead of this.
     connect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
             this, SLOT(slotUpdate()));
-}
-
-void
-SegmentParameterBox::setDocument(RosegardenDocument *doc)
-{
-    if (m_doc) {
-        disconnect(m_doc, &RosegardenDocument::docColoursChanged,
-                   this, &SegmentParameterBox::slotDocColoursChanged);
-    }
-
-    m_doc = doc;
-
-    // Detect when the document colours are updated
-    connect (m_doc, &RosegardenDocument::docColoursChanged,
-             this, &SegmentParameterBox::slotDocColoursChanged);
-
-    // repopulate combo
-    slotDocColoursChanged();
 }
 
 namespace
@@ -968,7 +944,7 @@ SegmentParameterBox::slotColourChanged(int index)
 #if 0
 // This will never happen since the "Add Color" option is never added.
     if (index == m_addColourPos) {
-        ColourMap newMap = m_doc->getComposition().getSegmentColourMap();
+        ColourMap newMap = RosegardenMainWindow::self()->getDocument()->getComposition().getSegmentColourMap();
         QColor newColour;
         bool ok = false;
 
@@ -989,7 +965,7 @@ SegmentParameterBox::slotColourChanged(int index)
                 Colour newRColour = GUIPalette::convertColour(newColour);
                 newMap.addItem(newRColour, qstrtostr(newName));
                 SegmentColourMapCommand *command =
-                        new SegmentColourMapCommand(m_doc, newMap);
+                        new SegmentColourMapCommand(RosegardenMainWindow::self()->getDocument(), newMap);
                 CommandHistory::getInstance()->addCommand(command);
                 slotDocColoursChanged();
             }
@@ -1107,13 +1083,17 @@ SegmentParameterBox::slotResetLinkTranspose()
 void
 SegmentParameterBox::slotNewDocument(RosegardenDocument *doc)
 {
-    // Connect to the new document.
-    m_doc = doc;
-
     // Connect to RosegardenMainViewWidget for selection change.
     connect(RosegardenMainWindow::self()->getView(),
                 &RosegardenMainViewWidget::segmentsSelected,
             this, &SegmentParameterBox::slotSelectionChanged);
+
+    // Detect when the document colours are updated.
+    connect (doc, &RosegardenDocument::docColoursChanged,
+             this, &SegmentParameterBox::slotDocColoursChanged);
+
+    // Repopulate color combo.
+    slotDocColoursChanged();
 
     // Make sure everything is correct.
     updateWidgets();
