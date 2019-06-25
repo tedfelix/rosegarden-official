@@ -99,6 +99,9 @@ SegmentParameterBox::SegmentParameterBox(QWidget *parent) :
     // ??? Can't we just inline that here?
     m_label->setObjectName("SPECIAL_LABEL");
     m_label->setFont(m_font);
+    QFontMetrics fontMetrics(m_font);
+    const int labelWidth = fontMetrics.width(QString(31, 'X'));
+    m_label->setFixedWidth(labelWidth);
     m_label->setToolTip(tr("<qt>Click to edit the segment label for any selected segments</qt>"));
     connect(m_label, &Label::clicked,
             this, &SegmentParameterBox::slotEditSegmentLabel);
