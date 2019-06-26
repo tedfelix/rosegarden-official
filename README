@@ -82,6 +82,19 @@ Rosegarden requires the following external applications.
   - DSSI plugins (any your distro carries)
   - LADSPA plugins (any your distro carries)
 
+
+Running the Unit Tests
+----------------------
+
+To run the unit tests, build as follows:
+
+    mkdir build
+    cd build
+    cmake .. -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTING=ON
+    make
+    make test
+
+
 User documentation
 ------------------
 

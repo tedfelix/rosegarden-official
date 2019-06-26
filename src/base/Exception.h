@@ -20,9 +20,11 @@
 #include <QString>
 #include <exception>
 
+#include <rosegardenprivate_export.h>
+
 namespace Rosegarden {
 
-class Exception : public virtual std::exception
+class ROSEGARDENPRIVATE_EXPORT Exception : public virtual std::exception
 {
 public:
     Exception(const char *message);

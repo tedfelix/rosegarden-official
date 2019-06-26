@@ -17,11 +17,13 @@
 #include "Property.h"
 #include "base/PropertyName.h"
 
+#include <rosegardenprivate_export.h>
+
 #include <map>
 
 namespace Rosegarden {
 
-class PropertyMap : public std::map<PropertyName, PropertyStoreBase *>
+class ROSEGARDENPRIVATE_EXPORT PropertyMap : public std::map<PropertyName, PropertyStoreBase *>
 {
 public:
     PropertyMap() { }

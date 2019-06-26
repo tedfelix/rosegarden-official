@@ -16,6 +16,7 @@ RG_UNIT_TESTS(
    segmenttransposecommand
    test_notationview_selection
    transpose
+   reference_segment
 )
 
 add_subdirectory(lilypond)

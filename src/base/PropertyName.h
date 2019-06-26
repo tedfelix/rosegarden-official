@@ -20,6 +20,8 @@
 #include <string>
 #include <map>
 
+#include <rosegardenprivate_export.h>
+
 namespace Rosegarden 
 {
 
@@ -67,7 +69,7 @@ namespace Rosegarden
 
 */
 
-class PropertyName
+class ROSEGARDENPRIVATE_EXPORT PropertyName
 {
 public:
     PropertyName() : m_value(-1) { }

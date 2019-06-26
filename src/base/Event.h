@@ -20,6 +20,8 @@
 #include "PropertyMap.h"
 #include "Exception.h"
 
+#include <rosegardenprivate_export.h>
+
 #include <string>
 #include <vector>
 #include <iostream> // TODO remove (after changing the dump() signature)
@@ -49,7 +51,7 @@ typedef long timeT;
  * recomputed at will if necessary.
  */
 
-class Event
+class ROSEGARDENPRIVATE_EXPORT Event
 {
 public:
     /**

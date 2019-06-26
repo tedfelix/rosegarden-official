@@ -21,13 +21,15 @@
 
 #include "RealTime.h"
 
+#include <rosegardenprivate_export.h>
+
 namespace Rosegarden 
 {
 
 enum PropertyType { Int, String, Bool, RealTimeT };
 
 template <PropertyType P>
-class PropertyDefn
+class ROSEGARDENPRIVATE_EXPORT PropertyDefn
 {
 public:
     struct PropertyDefnNotDefined {
@@ -103,7 +105,7 @@ public:
 };
 
 
-class PropertyStoreBase {
+class ROSEGARDENPRIVATE_EXPORT PropertyStoreBase {
 public:
     virtual ~PropertyStoreBase();
 
@@ -127,7 +129,7 @@ inline std::ostream& operator<<(std::ostream &out, PropertyStoreBase &e)
 #endif
 
 template <PropertyType P>
-class PropertyStore : public PropertyStoreBase
+class ROSEGARDENPRIVATE_EXPORT PropertyStore : public PropertyStoreBase
 {
 public:
     PropertyStore(typename PropertyDefn<P>::basic_type d) :
