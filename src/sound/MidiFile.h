@@ -41,7 +41,7 @@ class RosegardenDocument;
  * to create it for a single way conversion and then throw it away (MIDI
  * to Composition conversion invalidates the internal MIDI model).
  */
-class MidiFile : public QObject
+class ROSEGARDENPRIVATE_EXPORT MidiFile : public QObject
 {
     Q_OBJECT
 public:
@@ -65,7 +65,7 @@ public:
      *
      * See RosegardenMainWindow::exportMIDIFile().
      */
-    bool convertToMidi(Composition &, const QString &filename);
+    bool convertToMidi(RosegardenDocument *doc, const QString &filename);
 
     void setProgressDialog(QPointer<QProgressDialog> progressDialog)
             { m_progressDialog = progressDialog; }

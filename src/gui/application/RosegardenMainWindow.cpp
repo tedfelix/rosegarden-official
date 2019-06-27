@@ -5057,7 +5057,7 @@ RosegardenMainWindow::exportMIDIFile(QString file)
 
     midiFile.setProgressDialog(&progressDialog);
 
-    if (!midiFile.convertToMidi(m_doc->getComposition(), file)) {
+    if (!midiFile.convertToMidi(m_doc, file)) {
         QMessageBox::warning(this, tr("Rosegarden"),
                 tr("Export failed.  The file could not be opened for writing."));
     }

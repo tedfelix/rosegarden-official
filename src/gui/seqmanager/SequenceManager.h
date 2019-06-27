@@ -97,6 +97,9 @@ public:
      */
     void setDocument(RosegardenDocument *doc);
 
+    /// Reset everything.
+    void resetCompositionMapper();
+
     /**
      * Update m_soundDriverStatus.
      *
@@ -375,8 +378,6 @@ private:
     // *** CompositionMapper
 
     QSharedPointer<CompositionMapper> m_compositionMapper;  // owned
-    /// Reset everything.
-    void resetCompositionMapper();
     /// Add each Segment from the Composition to the CompositionMapper.
     void populateCompositionMapper();
     /**

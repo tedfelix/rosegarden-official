@@ -27,6 +27,7 @@
 #include "gui/application/RosegardenApplication.h"
 #include "base/RealTime.h"
 
+#include "sound/MidiFile.h"
 #include "sound/audiostream/WavFileReadStream.h"
 #include "sound/audiostream/WavFileWriteStream.h"
 #include "sound/audiostream/OggVorbisReadStream.h"
@@ -329,10 +330,47 @@ visible at the bottom of rosegarden/sequencer/main.cpp.
 
 static void usage()
 {
-    std::cerr << "Rosegarden: A sequencer and musical notation editor" << std::endl;
-    std::cerr << "Usage: rosegarden [--nosplash] [--nosound] [file.rg]" << std::endl;
-    std::cerr << "       rosegarden --version" << std::endl;
+    std::cerr << "Rosegarden: A sequencer and musical notation editor\n";
+    std::cerr << "Usage: rosegarden [--nosplash] [--nosound] [file.rg]\n";
+    std::cerr << "       rosegarden --convert source.rg dest.mid\n";
+    std::cerr << "       rosegarden --version\n";
     exit(2);
+}
+
+static void convert(const QStringList &args)
+{
+    QString inFile  = args[2];
+    QString outFile = args[3];
+
+    std::cout << "Converting from \"" << inFile << "\" to \"" << outFile << "\"\n";
+
+    RosegardenDocument doc(
+            nullptr,  // parent
+            nullptr,  // audioPluginManager
+            true,  // skipAutoload
+            true,  // clearCommandHistory
+            false);  // m_useSequencer
+
+    bool ok;
+
+    ok = doc.openDocument(
+            inFile,
+            false,  // permanent
+            true,  // squelchProgressDialog
+            false);  // enableLock
+    if (!ok) {
+        std::cerr << "Error opening rg file: " << inFile << "\n";
+        exit(1);
+    }
+
+    MidiFile midiFile;
+    ok = midiFile.convertToMidi(&doc, outFile);
+    if (!ok) {
+        std::cerr << "Error writing MIDI file: " << outFile << "\n";
+        exit(1);
+    }
+
+    exit(0);
 }
 
 int main(int argc, char *argv[])
@@ -446,6 +484,8 @@ int main(int argc, char *argv[])
         RG_WARNING << "RG Translations not loaded.";
     }
 
+    // *** Process Command Line Options
+
     bool nosplash = false;
     bool nosound = false;
     int nonOptArgs = 0;
@@ -454,6 +494,7 @@ int main(int argc, char *argv[])
         if (args[i].startsWith("-")) {
             if (args[i] == "--nosplash") nosplash = true;
             else if (args[i] == "--nosound") nosound = true;
+            else if (args[i] == "--convert") convert(args);
             else usage();
         } else {
             ++nonOptArgs;

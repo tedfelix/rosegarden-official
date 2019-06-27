@@ -16,6 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[MidiInserter]"
+#define RG_NO_DEBUG_PRINT 1
 
 #include "MidiInserter.h"
 

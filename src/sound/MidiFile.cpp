@@ -1301,16 +1301,31 @@ void MidiFile::configureInstrument(
 }
 
 bool
-MidiFile::convertToMidi(Composition &comp, const QString &filename)
+MidiFile::convertToMidi(RosegardenDocument *doc, const QString &filename)
 {
+    Composition &composition = doc->getComposition();
+
+    RosegardenMainWindow *mainWindow = RosegardenMainWindow::self();
+    bool haveUI = (mainWindow != nullptr);
+
+    SequenceManager *sequenceManager = nullptr;
+
+    if (haveUI) {
+        // Use the UI's sequence manager.
+        sequenceManager = RosegardenMainWindow::self()->getSequenceManager();
+    } else {  // No UI.  Command line conversion.
+        // Create our own temporary SequenceManager.
+        sequenceManager = new SequenceManager();
+        sequenceManager->setDocument(doc);
+        // Create a new CompositionMapper.
+        sequenceManager->resetCompositionMapper();
+    }
 
     MappedBufMetaIterator *metaIterator =
-        RosegardenMainWindow::self()->
-        getSequenceManager()->
-        makeTempMetaiterator();
+            sequenceManager->makeTempMetaiterator();
 
-    RealTime start = comp.getElapsedRealTime(comp.getStartMarker());
-    RealTime end   = comp.getElapsedRealTime(comp.getEndMarker());
+    RealTime start = composition.getElapsedRealTime(composition.getStartMarker());
+    RealTime end   = composition.getElapsedRealTime(composition.getEndMarker());
 
     // For ramping, we need to get MappedEvents in order, but
     // fetchEvents's order is only approximately
@@ -1328,14 +1343,20 @@ MidiFile::convertToMidi(Composition &comp, const QString &filename)
 
     delete metaIterator;
 
-    MidiInserter inserter(comp, 480, end);
+    MidiInserter inserter(composition, 480, end);
     // Copy the events from sorter to inserter.
     sorter.insertSorted(inserter);
     // Finally, copy the events from inserter to m_midiComposition.
     inserter.assignToMidiFile(*this);
 
     // Write m_midiComposition to the file.
-    return write(filename);
+    bool success = write(filename);
+
+    // Clean up if needed.
+    if (!haveUI)
+        delete sequenceManager;
+
+    return success;
 }
 
 void
