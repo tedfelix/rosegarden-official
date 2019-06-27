@@ -99,6 +99,7 @@ SegmentParameterBox::SegmentParameterBox(QWidget *parent) :
     // ??? Can't we just inline that here?
     m_label->setObjectName("SPECIAL_LABEL");
     m_label->setFont(m_font);
+    m_label->setContentsMargins(4, 3, 4, 3);
     // For horizontal, we expand to fill the layout and ignore the sizeHint()
     // which is driven by the text.  For vertical, we use the sizeHint()
     // which is based on the font.
