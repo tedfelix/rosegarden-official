@@ -20,7 +20,6 @@
 #include "misc/Debug.h"
 #include "base/Segment.h"
 #include "base/SegmentLinker.h"
-#include "FastVector.h"
 #include "base/BaseProperties.h"
 #include "base/Profiler.h"
 #include "BasicQuantizer.h"
@@ -83,11 +82,56 @@ Composition::ReferenceSegment::~ReferenceSegment()
     clear();
 }
 
-void
-Composition::ReferenceSegment::clear()
+Composition::ReferenceSegment::iterator Composition::ReferenceSegment::begin()
+{
+    return m_events.begin();
+}
+
+Composition::ReferenceSegment::const_iterator Composition::ReferenceSegment::begin() const
+{
+    return m_events.begin();
+}
+
+Composition::ReferenceSegment::iterator Composition::ReferenceSegment::end()
+{
+    return m_events.end();
+}
+
+Composition::ReferenceSegment::const_iterator Composition::ReferenceSegment::end() const
+{
+    return m_events.end();
+}
+
+Composition::ReferenceSegment::size_type Composition::ReferenceSegment::size() const
+{
+    return m_events.size();
+}
+
+bool Composition::ReferenceSegment::empty() const
+{
+    return m_events.empty();
+}
+
+Composition::ReferenceSegment::iterator
+Composition::ReferenceSegment::erase(Composition::ReferenceSegment::iterator position)
+{
+    return m_events.erase(position);
+}
+
+void Composition::ReferenceSegment::clear()
 {
     for (iterator it = begin(); it != end(); ++it) delete (*it);
-    Impl::erase(begin(), end());
+    m_events.clear();
+}
+
+Event* Composition::ReferenceSegment::operator[] (size_type n)
+{
+    return m_events[n];
+}
+
+const Event* Composition::ReferenceSegment::operator[] (size_type n) const
+{
+    return m_events[n];
 }
 
 timeT
@@ -125,7 +169,7 @@ Composition::ReferenceSegment::insertEvent(Event *e)
         return i;
 
     } else {
-        return Impl::insert(i, e);
+        return m_events.insert(i, e);
     }
 }
 
@@ -133,7 +177,7 @@ void
 Composition::ReferenceSegment::eraseEvent(Event *e)
 {
     iterator i = find(e);
-    if (i != end()) Impl::erase(i);
+    if (i != end()) m_events.erase(i);
 }
 
 Composition::ReferenceSegment::iterator

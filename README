@@ -53,16 +53,26 @@ directories under [PREFIX]:
     [PREFIX]/share/applications                    .desktop file
     [PREFIX]/share/icons/hicolor/32x32/apps        application icon
 
-The optional [-DCMAKE_BUILD_TYPE=Debug] will build Rosegarden so that it is
-useful for debugging, which can greatly improve our ability to find and
-correct bugs by allowing Rosegarden to produce useful stack traces when it
-crashes.  WARNING!  Enabling this option results in an approximately 300 MB
-rosegarden binary!  It also results in the use of shared libs, and the
-building of unit tests.  If you want to disable this (to go back to a static
-lib and no unit tests), pass -DBUILD_TESTING=OFF to cmake.
+For a debug build, specify:
 
-Support for LIRC (Linux Infrared Remote Control) can be disabled using
--DDISABLE_LIRC=1.
+    -DCMAKE_BUILD_TYPE=Debug
+
+This will build Rosegarden so that it is useful for debugging, which can
+greatly improve our ability to find and correct bugs by allowing Rosegarden
+to produce useful stack traces when it crashes.  The debug binary will be
+somewhat large: about 200MB as of July 2019.
+
+A debug build results in the use of shared libs and the building of unit
+tests.  Use -DBUILD_TESTING=OFF to disable the shared library and unit
+tests in a Debug build.
+
+Flags for the C++ compiler can be added via CMAKE_CXX_FLAGS:
+
+    -DCMAKE_CXX_FLAGS="-Werror -Wpedantic"
+
+Support for LIRC (Linux Infrared Remote Control) can be disabled using:
+
+    -DDISABLE_LIRC=1
 
 
 Runtime requirements
@@ -92,6 +102,11 @@ To run the unit tests, build as follows:
     cd build
     cmake .. -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTING=ON
     make
+
+(-DBUILD_TESTING=ON is assumed for a Debug build so it isn't needed.)
+
+Then run the tests with "make test":
+
     make test
 
 

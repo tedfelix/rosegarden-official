@@ -17,8 +17,6 @@
 #define RG_COMPOSITION_H
 
 
-#include "FastVector.h"
-
 #include "RealTime.h"
 #include "base/Segment.h"
 #include "Track.h"
@@ -972,23 +970,32 @@ protected:
      * This is a bit like a segment, but can only contain one sort of
      * event, and can only have one event at each absolute time
      */
-    class ReferenceSegment :
-        public FastVector<Event *> // not a set: want random access for bars
+    class ReferenceSegment
     {
-        typedef FastVector<Event *> Impl;
 
     public:
         ReferenceSegment(std::string eventType);
-        ~ReferenceSegment() override;
+        ~ReferenceSegment();
     private:
         ReferenceSegment(const ReferenceSegment &);
         ReferenceSegment& operator=(const ReferenceSegment &);
     public:
-        typedef Impl::iterator iterator;
-        typedef Impl::size_type size_type;
-        typedef Impl::difference_type difference_type;
+        typedef std::vector<Event*>::size_type size_type;
+        typedef std::vector<Event*>::iterator iterator;
+        typedef std::vector<Event*>::const_iterator const_iterator;
 
-        void clear() override;
+        iterator begin();
+        const_iterator begin() const;
+        iterator end();
+        const_iterator end() const;
+
+        size_type size() const;
+        bool empty() const;
+        iterator erase(iterator position);
+        void clear();
+
+        Event* operator[] (size_type n);
+        const Event* operator[] (size_type n) const;
 
         timeT getDuration() const;
         
@@ -1008,6 +1015,8 @@ protected:
     private:
         iterator find(Event *e);
         std::string m_eventType;
+        // not a set: want random access for bars
+        std::vector<Event*> m_events;
     };
 
     /// Contains time signature events

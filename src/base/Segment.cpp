@@ -30,6 +30,7 @@
 
 #include <iostream>
 #include <algorithm>
+#include <vector>
 #include <iterator>
 #include <cstdio>
 #include <typeinfo>
@@ -372,7 +373,7 @@ Segment::setStartTime(timeT t)
 
     // still, this is rather unsatisfactory
 
-    FastVector<Event *> events;
+    std::vector<Event *> events;
 
     /** This is effectively calling Segment::erase on each event after
         copyMoving it.  Segment::erase did the following:

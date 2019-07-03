@@ -19,9 +19,9 @@
 #ifndef RG_NOTATIONVLAYOUT_H
 #define RG_NOTATIONVLAYOUT_H
 
-#include "base/FastVector.h"
 #include "base/LayoutEngine.h"
 #include <map>
+#include <vector>
 #include "base/Event.h"
 
 #include "NotationElement.h"
@@ -90,7 +90,7 @@ public:
 private:
     void positionSlur(NotationStaff &staff, NotationElementList::iterator i);
 
-    typedef FastVector<NotationElementList::iterator> SlurList;
+    typedef std::vector<NotationElementList::iterator> SlurList;
     typedef std::map<ViewSegment *, SlurList> SlurListMap;
 
     //--------------- Data members ---------------------------------

@@ -22,6 +22,7 @@
 
 #include "misc/Debug.h"
 
+#include <assert.h>
 
 namespace Rosegarden {
 

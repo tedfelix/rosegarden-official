@@ -49,7 +49,7 @@ void TestReferenceSegment::testInsert()
     Event *tempoEvent1 = new Event(TempoEventType, ttime1);
     tempoEvent1->set<Int>(TempoProperty, tempo1);
     rs.insertEvent(tempoEvent1);
-    QCOMPARE(rs.size(), 1l);
+    QCOMPARE(rs.size(), 1ul);
 
     Event *badEvent = new Event("xxx", 100);
     try {
@@ -62,12 +62,12 @@ void TestReferenceSegment::testInsert()
     Event *tempoEvent2 = new Event(TempoEventType, ttime2);
     tempoEvent2->set<Int>(TempoProperty, tempo2);
     rs.insertEvent(tempoEvent2);
-    QCOMPARE(rs.size(), 2l);
+    QCOMPARE(rs.size(), 2ul);
 
     Event *tempoEvent3 = new Event(TempoEventType, ttime1);
     tempoEvent3->set<Int>(TempoProperty, tempo3);
     rs.insertEvent(tempoEvent3);
-    QCOMPARE(rs.size(), 2l); // only one event per time
+    QCOMPARE(rs.size(), 2ul); // only one event per time
 }
 
 void TestReferenceSegment::testErase()
@@ -76,7 +76,7 @@ void TestReferenceSegment::testErase()
 
     rs->erase(rs->begin());
 
-    QCOMPARE(rs->size(), 4l);
+    QCOMPARE(rs->size(), 4ul);
     std::string rss = toString(*rs);
     QVERIFY(rss == "test:10/20/50/100/");
 
@@ -86,18 +86,18 @@ void TestReferenceSegment::testErase()
     Event* e = *it;
     rs->eraseEvent(e);
 
-    QCOMPARE(rs->size(), 3l);
+    QCOMPARE(rs->size(), 3ul);
     rss = toString(*rs);
     QVERIFY(rss == "test:10/50/100/");
 
     auto it1 = rs->findNearestTime(60);
     rs->erase(it1);
-    QCOMPARE(rs->size(), 2l);
+    QCOMPARE(rs->size(), 2ul);
     rss = toString(*rs);
     QVERIFY(rss == "test:10/100/");
 
     rs->clear();
-    QCOMPARE(rs->size(), 0l);
+    QCOMPARE(rs->size(), 0ul);
     rss = toString(*rs);
     QVERIFY(rss == "test:");
 }

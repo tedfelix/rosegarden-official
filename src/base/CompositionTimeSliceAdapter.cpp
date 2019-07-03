@@ -27,6 +27,9 @@
 #include "Composition.h"
 #include "Selection.h"
 
+#include <assert.h>
+
+
 namespace Rosegarden {
 
 using std::list;

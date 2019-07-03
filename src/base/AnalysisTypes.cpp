@@ -34,6 +34,8 @@
 #include "Sets.h"
 #include "Quantizer.h"
 
+#include <assert.h>
+
 
 namespace Rosegarden
 {

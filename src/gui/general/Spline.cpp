@@ -32,7 +32,7 @@ Spline::calculate(const QPoint &s, const QPoint &f, const PointList &cp,
     if (cp.size() < 2)
         return nullptr;
 
-    int i;
+    size_t i;
     PointList *acc = new PointList();
     QPoint p(s);
 

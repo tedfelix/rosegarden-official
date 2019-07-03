@@ -17,10 +17,9 @@
 #define RG_QUANTIZER_H
 
 #include "base/Segment.h"
-#include "FastVector.h"
 
 #include <string>
-
+#include <vector>
 
 namespace Rosegarden {
 
@@ -223,7 +222,7 @@ public: // should be protected, but gcc-2.95 doesn't like allowing NotationQuant
     timeT getFromSource(Event *, ValueType) const;
     timeT getFromTarget(Event *, ValueType) const;
     void setToTarget(Segment *, Segment::iterator, timeT t, timeT d) const;
-    mutable FastVector<Event *> m_toInsert;
+    mutable std::vector<Event *> m_toInsert;
 
 protected:
     void removeProperties(Event *) const;

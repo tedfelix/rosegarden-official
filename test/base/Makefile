@@ -48,7 +48,7 @@ test.o: ../Event.h ../PropertyMap.h ../Property.h ../RealTime.h
 test.o: ../PropertyName.h ../Exception.h ../Segment.h ../Track.h
 test.o: ../XmlExportable.h ../Instrument.h ../NotationTypes.h #../StringHash.h
 test.o: ../XmlExportable.h ../Instrument.h ../NotationTypes.h 
-test.o: ../RefreshStatus.h ../Composition.h ../FastVector.h
+test.o: ../RefreshStatus.h ../Composition.h
 test.o: ../Configuration.h ../ColourMap.h ../Colour.h
 test.o: ../SegmentNotationHelper.h ../SegmentPerformanceHelper.h
 test.o: ../MidiTypes.h
