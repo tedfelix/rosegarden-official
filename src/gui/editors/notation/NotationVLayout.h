@@ -43,12 +43,10 @@ class NotationProperties;
 class Composition;
 
 
+/// Vertical notation layout
 /**
- * Vertical notation layout
- *
  * computes the Y coordinate of notation elements
  */
-
 class NotationVLayout : public VerticalLayoutEngine,
                         public QObject  // For tr().  Can probably be cleaned up.
 {

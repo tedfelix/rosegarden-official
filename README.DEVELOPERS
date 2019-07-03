@@ -1,18 +1,19 @@
 Unit tests:
 
-* They are compiled by default in debug mode (-DBUILD_TESTING=OFF to disable that - not recommended)
+* They are compiled by default in debug mode (-DBUILD_TESTING=OFF to disable
+  that - not recommended)
 * Run them all with `make test`
-* They trigger the switch from static libs to shared libs for rosegarden's own code,
-  to speed up linking.
+* They trigger the switch from static libs to shared libs for rosegarden's
+  own code, to speed up linking.
 
 ========
 
 Shared libs:
 
-Note that you can still run rosegarden uninstalled, even with shared libs, because
-cmake takes care of setting the RUNPATH in the rosegarden executable. So your uninstalled
-shared lib will be preferred over the installed one - unless you set $LD_LIBRARY_PATH
-to point to the installed one.
+Note that you can still run rosegarden uninstalled, even with shared libs,
+because cmake takes care of setting the RUNPATH in the rosegarden executable.
+So your uninstalled shared lib will be preferred over the installed one -
+unless you set $LD_LIBRARY_PATH to point to the installed one.
 
 ========
 

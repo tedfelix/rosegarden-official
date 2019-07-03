@@ -131,8 +131,8 @@ NotationVLayout::scanViewSegment(ViewSegment &staffBase, timeT, timeT, bool)
                 el->setLayoutY(staff.getLayoutYForHeight(4) + displacedY);
             }
 
-            // Fix for bug 1090767 Rests outside staves have wrong glyphs
-            // by William <rosegarden4c AT orthoset.com>
+            // Fix for bug #674 (was 1090767) Rests outside staves have wrong
+            // glyphs by William <rosegarden4c AT orthoset.com>
             // We use a "rest-outside-stave" glyph for any minim/semibreve/breve
             // rest that has been displaced vertically e.g. by fine-positioning
             // outside the stave. For small vertical displacements that keep

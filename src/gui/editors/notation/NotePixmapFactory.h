@@ -332,6 +332,7 @@ protected:
     void drawShallowLine(float x0, float y0, float x1, float y1, float thickness);
     void drawTie(bool above, int length, int shift);
 
+    /// Draw a parenthesis for cautionary (courtesy) accidentals.
     void drawBracket(int length, bool left, bool curly, int x, int y);
 
     QFont getTextFont(const Text &text) const;
