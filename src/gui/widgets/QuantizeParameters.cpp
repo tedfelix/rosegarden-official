@@ -15,12 +15,13 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[QuantizeParameters]"
 
 #include "QuantizeParameters.h"
 
-#include "misc/Strings.h"
-#include "misc/ConfigGroups.h"
-#include "base/NotationTypes.h"
+#include "misc/Debug.h"
+#include "misc/Strings.h"  // qStrToBool() etc...
+#include "misc/ConfigGroups.h"  // *ConfigGroup names
 #include "base/Quantizer.h"
 #include "base/BasicQuantizer.h"
 #include "base/LegatoQuantizer.h"
@@ -28,20 +29,12 @@
 #include "gui/editors/notation/NotationStrings.h"
 #include "gui/editors/notation/NotePixmapFactory.h"
 
-#include <QLayout>
-#include <QApplication>
-#include <QComboBox>
-#include <QSettings>
 #include <QCheckBox>
-#include <QFrame>
-#include <QGroupBox>
+#include <QComboBox>
 #include <QLabel>
-#include <QObject>
 #include <QPixmap>
-#include <QPushButton>
+#include <QSettings>
 #include <QString>
-#include <QWidget>
-#include <QHBoxLayout>
 #include <QVBoxLayout>
 
 
@@ -69,18 +62,19 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
     m_mainLayout->addWidget(quantizerBox);
 
     qbLayout->addWidget(new QLabel(tr("Quantizer type:"), quantizerBox), 0, 0);
-    m_typeCombo = new QComboBox(quantizerBox);
-    m_typeCombo->addItem(tr("Grid quantizer"));
-    m_typeCombo->addItem(tr("Legato quantizer"));
-    m_typeCombo->addItem(tr("Heuristic notation quantizer"));
-    qbLayout->addWidget(m_typeCombo, 0, 1);
+    m_quantizerType = new QComboBox(quantizerBox);
+    m_quantizerType->addItem(tr("Grid quantizer"));
+    m_quantizerType->addItem(tr("Legato quantizer"));
+    m_quantizerType->addItem(tr("Heuristic notation quantizer"));
+    qbLayout->addWidget(m_quantizerType, 0, 1);
 
     m_notationTarget = new QCheckBox
                        (tr("Quantize for notation only (leave performance unchanged)"),
                         quantizerBox);
     qbLayout->addWidget(m_notationTarget, 1, 0, 1, 2);
 
-    if (!showNotationOption) m_notationTarget->hide();
+    if (!showNotationOption)
+        m_notationTarget->hide();
 
 
     // Notation parameters box
@@ -253,7 +247,7 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
         m_iterativeCombo->show();
         m_notationBox->hide();
         m_durationCheckBox->show();
-        m_typeCombo->setCurrentIndex(0);
+        m_quantizerType->setCurrentIndex(0);
         break;
     case 1:  // legato
         m_gridBox->show();
@@ -263,16 +257,16 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
         m_iterativeCombo->hide();
         m_notationBox->hide();
         m_durationCheckBox->hide();
-        m_typeCombo->setCurrentIndex(1);
+        m_quantizerType->setCurrentIndex(1);
         break;
     case 2:  // notation
         m_gridBox->hide();
         m_notationBox->show();
-        m_typeCombo->setCurrentIndex(2);
+        m_quantizerType->setCurrentIndex(2);
         break;
     }
 
-    connect(m_typeCombo, SIGNAL(activated(int)), SLOT(slotTypeChanged(int)));
+    connect(m_quantizerType, SIGNAL(activated(int)), SLOT(slotTypeChanged(int)));
 }
 
 Quantizer *
@@ -281,7 +275,7 @@ QuantizeParameters::getQuantizer() const
     //!!! Excessive duplication with
     // EventQuantizeCommand::makeQuantizer in editcommands.cpp
 
-    int type = m_typeCombo->currentIndex();
+    int type = m_quantizerType->currentIndex();
     timeT unit = 0;
 
     if (type == 0 || type == 1) {
