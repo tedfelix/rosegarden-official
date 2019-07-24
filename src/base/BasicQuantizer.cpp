@@ -175,8 +175,8 @@ BasicQuantizer::checkStandardQuantizations()
     // For each note type from semibreve to hemidemisemiquaver
     for (Note::Type nt = Note::Semibreve; nt >= Note::Shortest; --nt) {
 
-        // For semiquavers and smaller, offer the triplet variation
-        int i1 = (nt < Note::Quaver ? 1 : 0);
+        // For quavers and smaller, offer the triplet variation
+        int i1 = (nt <= Note::Quaver ? 1 : 0);
 
         // For the base note (0) and the triplet variation (1)
         for (int i = 0; i <= i1; ++i) {
