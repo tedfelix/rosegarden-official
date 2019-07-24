@@ -41,7 +41,7 @@ const std::string Quantizer::GlobalSource = "GlobalQ";
 const std::string Quantizer::NotationPrefix = "Notation";
 
 BasicQuantizer::BasicQuantizer(timeT unit, bool doDurations,
-			       int swing, int iterate) :
+                               int swing, int iterate) :
     Quantizer(RawEventData),
     m_unit(unit),
     m_durations(doDurations),
@@ -52,8 +52,8 @@ BasicQuantizer::BasicQuantizer(timeT unit, bool doDurations,
 }
 
 BasicQuantizer::BasicQuantizer(std::string source, std::string target,
-			       timeT unit, bool doDurations,
-			       int swing, int iterate) :
+                               timeT unit, bool doDurations,
+                               int swing, int iterate) :
     Quantizer(source, target),
     m_unit(unit),
     m_durations(doDurations),
@@ -84,8 +84,8 @@ BasicQuantizer::quantizeSingle(Segment *s, Segment::iterator i) const
     timeT d = getFromSource(*i, DurationValue);
 
     if (d == 0 && (*i)->isa(Note::EventType)) {
-	s->erase(i);
-	return;
+        s->erase(i);
+        return;
     }
 
     if (m_unit == 0) return;
@@ -103,44 +103,44 @@ BasicQuantizer::quantizeSingle(Segment *s, Segment::iterator i) const
     timeT swingOffset = (m_unit * m_swing) / 300;
 
     if (high - t > t - low) {
-	t = low;
+        t = low;
     } else {
-	t = high;
-	++n;
+        t = high;
+        ++n;
     }
 
     if (n % 2 == 1) {
-	t += swingOffset;
+        t += swingOffset;
     }
     
     if (m_durations && d != 0) {
 
-	low = (d / m_unit) * m_unit;
-	high = low + m_unit;
+        low = (d / m_unit) * m_unit;
+        high = low + m_unit;
 
-	if (low > 0 && (high - d > d - low)) {
-	    d = low;
-	} else {
-	    d = high;
-	}
+        if (low > 0 && (high - d > d - low)) {
+            d = low;
+        } else {
+            d = high;
+        }
 
-	int n1 = n + d / m_unit;
+        int n1 = n + d / m_unit;
 
-	if (n % 2 == 0) { // start not swung
-	    if (n1 % 2 == 0) { // end not swung
-		// do nothing
-	    } else { // end swung
-		d += swingOffset;
-	    }
-	} else { // start swung
-	    if (n1 % 2 == 0) { // end not swung
-		d -= swingOffset;
-	    } else {
-		// do nothing
-	    }
-	}
+        if (n % 2 == 0) { // start not swung
+            if (n1 % 2 == 0) { // end not swung
+                // do nothing
+            } else { // end swung
+                d += swingOffset;
+            }
+        } else { // start swung
+            if (n1 % 2 == 0) { // end not swung
+                d -= swingOffset;
+            } else {
+                // do nothing
+            }
+        }
     }
-	
+
     t += barStart;
 
     timeT t1(t), d1(d);
@@ -150,9 +150,9 @@ BasicQuantizer::quantizeSingle(Segment *s, Segment::iterator i) const
     // if an iterative quantize results in something much closer than
     // the shortest actual note resolution we have, just snap it
     if (m_iterate != 100) {
-	timeT close = Note(Note::Shortest).getDuration()/2;
-	if (t >= t1 - close && t <= t1 + close) t = t1;
-	if (d >= d1 - close && d <= d1 + close) d = d1;
+        timeT close = Note(Note::Shortest).getDuration()/2;
+        if (t >= t1 - close && t <= t1 + close) t = t1;
+        if (d >= d1 - close && d <= d1 + close) d = d1;
     }
 
     if (t0 != t || d0 != d) setToTarget(s, i, t, d);
@@ -173,15 +173,15 @@ BasicQuantizer::checkStandardQuantizations()
 
     for (Note::Type nt = Note::Semibreve; nt >= Note::Shortest; --nt) {
 
-	int i1 = (nt < Note::Quaver ? 1 : 0);
-	for (int i = 0; i <= i1; ++i) {
-	    
-	    int divisor = (1 << (Note::Semibreve - nt));
-	    if (i) divisor = divisor * 3 / 2;
+        int i1 = (nt < Note::Quaver ? 1 : 0);
+        for (int i = 0; i <= i1; ++i) {
 
-	    timeT unit = Note(Note::Semibreve).getDuration() / divisor;
-	    m_standardQuantizations.push_back(unit);
-	}
+            int divisor = (1 << (Note::Semibreve - nt));
+            if (i) divisor = divisor * 3 / 2;
+
+            timeT unit = Note(Note::Semibreve).getDuration() / divisor;
+            m_standardQuantizations.push_back(unit);
+        }
     }
 }    
 
@@ -192,10 +192,10 @@ BasicQuantizer::getStandardQuantization(Segment *s)
     timeT unit = -1;
 
     for (Segment::iterator i = s->begin(); s->isBeforeEndMarker(i); ++i) {
-	
-	if (!(*i)->isa(Rosegarden::Note::EventType)) continue;
-	timeT myUnit = getUnitFor(*i);
-	if (unit < 0 || myUnit < unit) unit = myUnit;
+
+        if (!(*i)->isa(Rosegarden::Note::EventType)) continue;
+        timeT myUnit = getUnitFor(*i);
+        if (unit < 0 || myUnit < unit) unit = myUnit;
     }
 
     return unit;
@@ -210,12 +210,12 @@ BasicQuantizer::getStandardQuantization(EventSelection *s)
     if (!s) return 0;
 
     for (EventSelection::eventcontainer::iterator i =
-	     s->getSegmentEvents().begin();
-	 i != s->getSegmentEvents().end(); ++i) {
-	
-	if (!(*i)->isa(Rosegarden::Note::EventType)) continue;
-	timeT myUnit = getUnitFor(*i);
-	if (unit < 0 || myUnit < unit) unit = myUnit;
+             s->getSegmentEvents().begin();
+         i != s->getSegmentEvents().end(); ++i) {
+
+        if (!(*i)->isa(Rosegarden::Note::EventType)) continue;
+        timeT myUnit = getUnitFor(*i);
+        if (unit < 0 || myUnit < unit) unit = myUnit;
     }
 
     return unit;
@@ -223,7 +223,7 @@ BasicQuantizer::getStandardQuantization(EventSelection *s)
 
 timeT
 BasicQuantizer::getUnitFor(Event *e)
-{	    
+{
     timeT absTime = e->getAbsoluteTime();
     timeT myQuantizeUnit = 0;
     
@@ -231,10 +231,10 @@ BasicQuantizer::getUnitFor(Event *e)
     // stop when we reach one that divides into the note's time
     
     for (size_t i = 0; i < m_standardQuantizations.size(); ++i) {
-	if (absTime % m_standardQuantizations[i] == 0) {
-	    myQuantizeUnit = m_standardQuantizations[i];
-	    break;
-	}
+        if (absTime % m_standardQuantizations[i] == 0) {
+            myQuantizeUnit = m_standardQuantizations[i];
+            break;
+        }
     }
 
     return myQuantizeUnit;
