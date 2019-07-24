@@ -169,17 +169,28 @@ BasicQuantizer::getStandardQuantizations()
 void
 BasicQuantizer::checkStandardQuantizations()
 {
-    if (!m_standardQuantizations.empty()) return;
+    if (!m_standardQuantizations.empty())
+        return;
 
+    // For each note type from semibreve to hemidemisemiquaver
     for (Note::Type nt = Note::Semibreve; nt >= Note::Shortest; --nt) {
 
+        // For semiquavers and smaller, offer the triplet variation
         int i1 = (nt < Note::Quaver ? 1 : 0);
+
+        // For the base note (0) and the triplet variation (1)
         for (int i = 0; i <= i1; ++i) {
 
+            // Compute divisor, e.g. crotchet is 4, quaver is 8...
             int divisor = (1 << (Note::Semibreve - nt));
-            if (i) divisor = divisor * 3 / 2;
 
+            // If we're doing the triplet variation, adjust the divisor
+            if (i)
+                divisor = divisor * 3 / 2;
+
+            // Compute the number of MIDI clocks.
             timeT unit = Note(Note::Semibreve).getDuration() / divisor;
+
             m_standardQuantizations.push_back(unit);
         }
     }

@@ -75,7 +75,7 @@ protected:
 
     QGroupBox *m_gridBox;
     QCheckBox *m_durationCheckBox;
-    QComboBox *m_gridUnitCombo;
+    QComboBox *m_baseGridUnit;
     QLabel    *m_swingLabel;
     QComboBox *m_swingCombo;
     QLabel    *m_iterativeLabel;

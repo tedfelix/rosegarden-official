@@ -83,19 +83,20 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
     if (!showNotationOption) m_notationTarget->hide();
 
 
-    // Notation box
+    // Notation parameters box
     m_notationBox = new QGroupBox( tr("Notation parameters"));
     QGridLayout *nbLayout = new QGridLayout;
     nbLayout->setSpacing(3);
     m_notationBox->setLayout(nbLayout);
     m_mainLayout->addWidget(m_notationBox);
 
+    // Base grid unit
     nbLayout->addWidget(new QLabel(tr("Base grid unit:"), m_notationBox), 1, 0);
     m_notationUnitCombo = new QComboBox(m_notationBox);
     nbLayout->addWidget(m_notationUnitCombo, 1, 1);
 
+    // Complexity
     nbLayout->addWidget(new QLabel(tr("Complexity:"), m_notationBox), 0, 0);
-
     m_simplicityCombo = new QComboBox(m_notationBox);
     m_simplicityCombo->addItem(tr("Very high"));
     m_simplicityCombo->addItem(tr("High"));
@@ -104,6 +105,7 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
     m_simplicityCombo->addItem(tr("Very low"));
     nbLayout->addWidget(m_simplicityCombo, 0, 1);
 
+    // Tuplet level
     nbLayout->addWidget(new QLabel(tr("Tuplet level:"), m_notationBox), 2, 0);
     m_maxTuplet = new QComboBox(m_notationBox);
     m_maxTuplet->addItem(tr("None"));
@@ -112,36 +114,42 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
     m_maxTuplet->addItem(tr("Any"));
     nbLayout->addWidget(m_maxTuplet, 2, 1);
 
+    // Permit counterpoint
     m_counterpoint = new QCheckBox(tr("Permit counterpoint"), m_notationBox);
     nbLayout->addWidget(m_counterpoint, 3, 0, 1, 1);
 
 
-    // Grid box
+    // Grid parameters box
     m_gridBox = new QGroupBox( tr("Grid parameters"));
     QGridLayout *gbLayout = new QGridLayout;
     gbLayout->setSpacing(3);
     m_gridBox->setLayout(gbLayout);
     m_mainLayout->addWidget(m_gridBox);
 
+    // Base grid unit
     gbLayout->addWidget(new QLabel(tr("Base grid unit:"), m_gridBox), 0, 0);
-    m_gridUnitCombo = new QComboBox(m_gridBox);
-    gbLayout->addWidget(m_gridUnitCombo, 0, 1);
+    m_baseGridUnit = new QComboBox(m_gridBox);
+    gbLayout->addWidget(m_baseGridUnit, 0, 1);
 
+    // Swing
     m_swingLabel = new QLabel(tr("Swing:"), m_gridBox);
     gbLayout->addWidget(m_swingLabel, 1, 0);
     m_swingCombo = new QComboBox(m_gridBox);
     gbLayout->addWidget(m_swingCombo, 1, 1);
 
+    // Iterative amount
     m_iterativeLabel = new QLabel(tr("Iterative amount:"), m_gridBox);
     gbLayout->addWidget(m_iterativeLabel, 2, 0);
     m_iterativeCombo = new QComboBox(m_gridBox);
     gbLayout->addWidget(m_iterativeCombo, 2, 1);
 
+    // Quantize durations
     m_durationCheckBox = new QCheckBox
                          (tr("Quantize durations as well as start times"), m_gridBox);
     gbLayout->addWidget(m_durationCheckBox, 3, 0, 1, 1);
 
-    // Post-processing box
+
+    // After quantization box
     m_postProcessingBox = new QGroupBox
                           (tr("After quantization"), this);
     QGridLayout *pbLayout = new QGridLayout;
@@ -209,15 +217,15 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
         QString label = NotationStrings::makeNoteMenuLabel(time, false, error);
 
         if (error == 0) {
-            m_gridUnitCombo->addItem(pmap, label);
+            m_baseGridUnit->addItem(pmap, label);
             m_notationUnitCombo->addItem(pmap, label);
         } else {
-            m_gridUnitCombo->addItem(noMap, QString("%1").arg(time));
+            m_baseGridUnit->addItem(noMap, QString("%1").arg(time));
             m_notationUnitCombo->addItem(noMap, QString("%1").arg(time));
         }
 
         if (m_standardQuantizations[i] == defaultUnit) {
-            m_gridUnitCombo->setCurrentIndex(m_gridUnitCombo->count() - 1);
+            m_baseGridUnit->setCurrentIndex(m_baseGridUnit->count() - 1);
             m_notationUnitCombo->setCurrentIndex
             (m_notationUnitCombo->count() - 1);
         }
@@ -277,7 +285,7 @@ QuantizeParameters::getQuantizer() const
     timeT unit = 0;
 
     if (type == 0 || type == 1) {
-        unit = m_standardQuantizations[m_gridUnitCombo->currentIndex()];
+        unit = m_standardQuantizations[m_baseGridUnit->currentIndex()];
     } else {
         unit = m_standardQuantizations[m_notationUnitCombo->currentIndex()];
     }
