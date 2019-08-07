@@ -669,6 +669,7 @@ MatrixScene::handleEventRemoved(Event *e)
     if (e->getType() == Rosegarden::Key::EventType) {
         recreatePitchHighlights();
     }
+    update();
     emit eventRemoved(e);
 }
 
