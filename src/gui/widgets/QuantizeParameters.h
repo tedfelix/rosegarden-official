@@ -81,11 +81,11 @@ private:
 
     QComboBox *m_quantizerType;
     // ??? Hidden widget that is never shown.
-    QCheckBox *m_notationTarget;
+    QCheckBox *m_quantizeNotation;
 
     // Grid Parameters
     QGroupBox *m_gridBox;
-    QComboBox *m_baseGridUnit;
+    QComboBox *m_gridBaseGridUnit;
     QLabel *m_swingLabel;
     QComboBox *m_swingCombo;
     QLabel *m_iterativeLabel;
@@ -94,10 +94,10 @@ private:
 
     // Notation Parameters
     QGroupBox *m_notationBox;
-    QComboBox *m_simplicityCombo;
-    QComboBox *m_notationUnitCombo;
-    QComboBox *m_maxTuplet;
-    QCheckBox *m_counterpoint;
+    QComboBox *m_complexity;
+    QComboBox *m_notationBaseGridUnit;
+    QComboBox *m_tupletLevel;
+    QCheckBox *m_permitCounterpoint;
 
     // After quantization
     QGroupBox *m_postProcessingBox;

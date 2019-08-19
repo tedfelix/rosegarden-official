@@ -68,13 +68,14 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
     m_quantizerType->addItem(tr("Heuristic notation quantizer"));
     qbLayout->addWidget(m_quantizerType, 0, 1);
 
-    m_notationTarget = new QCheckBox
+    m_quantizeNotation = new QCheckBox
                        (tr("Quantize for notation only (leave performance unchanged)"),
                         quantizerBox);
-    qbLayout->addWidget(m_notationTarget, 1, 0, 1, 2);
+    qbLayout->addWidget(m_quantizeNotation, 1, 0, 1, 2);
 
+    // ??? Always false.  Only caller always sets this to false.
     if (!showNotationOption)
-        m_notationTarget->hide();
+        m_quantizeNotation->hide();
 
 
     // Notation parameters box
@@ -86,31 +87,31 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
 
     // Base grid unit
     nbLayout->addWidget(new QLabel(tr("Base grid unit:"), m_notationBox), 1, 0);
-    m_notationUnitCombo = new QComboBox(m_notationBox);
-    nbLayout->addWidget(m_notationUnitCombo, 1, 1);
+    m_notationBaseGridUnit = new QComboBox(m_notationBox);
+    nbLayout->addWidget(m_notationBaseGridUnit, 1, 1);
 
     // Complexity
     nbLayout->addWidget(new QLabel(tr("Complexity:"), m_notationBox), 0, 0);
-    m_simplicityCombo = new QComboBox(m_notationBox);
-    m_simplicityCombo->addItem(tr("Very high"));
-    m_simplicityCombo->addItem(tr("High"));
-    m_simplicityCombo->addItem(tr("Normal"));
-    m_simplicityCombo->addItem(tr("Low"));
-    m_simplicityCombo->addItem(tr("Very low"));
-    nbLayout->addWidget(m_simplicityCombo, 0, 1);
+    m_complexity = new QComboBox(m_notationBox);
+    m_complexity->addItem(tr("Very high"));
+    m_complexity->addItem(tr("High"));
+    m_complexity->addItem(tr("Normal"));
+    m_complexity->addItem(tr("Low"));
+    m_complexity->addItem(tr("Very low"));
+    nbLayout->addWidget(m_complexity, 0, 1);
 
     // Tuplet level
     nbLayout->addWidget(new QLabel(tr("Tuplet level:"), m_notationBox), 2, 0);
-    m_maxTuplet = new QComboBox(m_notationBox);
-    m_maxTuplet->addItem(tr("None"));
-    m_maxTuplet->addItem(tr("2-in-the-time-of-3"));
-    m_maxTuplet->addItem(tr("Triplet"));
-    m_maxTuplet->addItem(tr("Any"));
-    nbLayout->addWidget(m_maxTuplet, 2, 1);
+    m_tupletLevel = new QComboBox(m_notationBox);
+    m_tupletLevel->addItem(tr("None"));
+    m_tupletLevel->addItem(tr("2-in-the-time-of-3"));
+    m_tupletLevel->addItem(tr("Triplet"));
+    m_tupletLevel->addItem(tr("Any"));
+    nbLayout->addWidget(m_tupletLevel, 2, 1);
 
     // Permit counterpoint
-    m_counterpoint = new QCheckBox(tr("Permit counterpoint"), m_notationBox);
-    nbLayout->addWidget(m_counterpoint, 3, 0, 1, 1);
+    m_permitCounterpoint = new QCheckBox(tr("Permit counterpoint"), m_notationBox);
+    nbLayout->addWidget(m_permitCounterpoint, 3, 0, 1, 1);
 
 
     // Grid parameters box
@@ -122,8 +123,8 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
 
     // Base grid unit
     gbLayout->addWidget(new QLabel(tr("Base grid unit:"), m_gridBox), 0, 0);
-    m_baseGridUnit = new QComboBox(m_gridBox);
-    gbLayout->addWidget(m_baseGridUnit, 0, 1);
+    m_gridBaseGridUnit = new QComboBox(m_gridBox);
+    gbLayout->addWidget(m_gridBaseGridUnit, 0, 1);
 
     // Swing
     m_swingLabel = new QLabel(tr("Swing:"), m_gridBox);
@@ -179,15 +180,15 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
     defaultUnit = settings.value("quantizeunit", static_cast<unsigned long long>(defaultUnit)).toInt();
     defaultSwing = settings.value("quantizeswing", defaultSwing).toInt();
     defaultIterate = settings.value("quantizeiterate", defaultIterate).toInt();
-    m_notationTarget->setChecked(qStrToBool(settings.value
+    m_quantizeNotation->setChecked(qStrToBool(settings.value
             ("quantizenotationonly", (defaultQuantizer == Notation))));
     m_durationCheckBox->setChecked(qStrToBool(settings.value
             ("quantizedurations", "false")));
-    m_simplicityCombo->setCurrentIndex(settings.value
+    m_complexity->setCurrentIndex(settings.value
             ("quantizesimplicity", 13).toInt()  - 11);
-    m_maxTuplet->setCurrentIndex(settings.value
+    m_tupletLevel->setCurrentIndex(settings.value
             ("quantizemaxtuplet", 3).toInt()  - 1);
-    m_counterpoint->setChecked(qStrToBool(settings.value
+    m_permitCounterpoint->setChecked(qStrToBool(settings.value
             ("quantizecounterpoint", "false" )));
     m_rebeam->setChecked(qStrToBool(settings.value
             ("quantizerebeam", "true")));
@@ -211,17 +212,17 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
         QString label = NotationStrings::makeNoteMenuLabel(time, false, error);
 
         if (error == 0) {
-            m_baseGridUnit->addItem(pmap, label);
-            m_notationUnitCombo->addItem(pmap, label);
+            m_gridBaseGridUnit->addItem(pmap, label);
+            m_notationBaseGridUnit->addItem(pmap, label);
         } else {
-            m_baseGridUnit->addItem(noMap, QString("%1").arg(time));
-            m_notationUnitCombo->addItem(noMap, QString("%1").arg(time));
+            m_gridBaseGridUnit->addItem(noMap, QString("%1").arg(time));
+            m_notationBaseGridUnit->addItem(noMap, QString("%1").arg(time));
         }
 
         if (m_standardQuantizations[i] == defaultUnit) {
-            m_baseGridUnit->setCurrentIndex(m_baseGridUnit->count() - 1);
-            m_notationUnitCombo->setCurrentIndex
-            (m_notationUnitCombo->count() - 1);
+            m_gridBaseGridUnit->setCurrentIndex(m_gridBaseGridUnit->count() - 1);
+            m_notationBaseGridUnit->setCurrentIndex
+            (m_notationBaseGridUnit->count() - 1);
         }
     }
 
@@ -279,9 +280,9 @@ QuantizeParameters::getQuantizer() const
     timeT unit = 0;
 
     if (type == 0 || type == 1) {
-        unit = m_standardQuantizations[m_baseGridUnit->currentIndex()];
+        unit = m_standardQuantizations[m_gridBaseGridUnit->currentIndex()];
     } else {
-        unit = m_standardQuantizations[m_notationUnitCombo->currentIndex()];
+        unit = m_standardQuantizations[m_notationBaseGridUnit->currentIndex()];
     }
 
     Quantizer *quantizer = nullptr;
@@ -296,7 +297,7 @@ QuantizeParameters::getQuantizer() const
 
     if (type == 0) {
 
-        if (m_notationTarget->isChecked()) {
+        if (m_quantizeNotation->isChecked()) {
             quantizer = new BasicQuantizer
                         (Quantizer::RawEventData,
                          Quantizer::NotationPrefix,
@@ -310,7 +311,7 @@ QuantizeParameters::getQuantizer() const
                          swing, iterate);
         }
     } else if (type == 1) {
-        if (m_notationTarget->isChecked()) {
+        if (m_quantizeNotation->isChecked()) {
             quantizer = new LegatoQuantizer
                         (Quantizer::RawEventData,
                          Quantizer::NotationPrefix, unit);
@@ -324,7 +325,7 @@ QuantizeParameters::getQuantizer() const
 
         NotationQuantizer *nq;
 
-        if (m_notationTarget->isChecked()) {
+        if (m_quantizeNotation->isChecked()) {
             nq = new NotationQuantizer();
         } else {
             nq = new NotationQuantizer
@@ -333,9 +334,9 @@ QuantizeParameters::getQuantizer() const
         }
 
         nq->setUnit(unit);
-        nq->setSimplicityFactor(m_simplicityCombo->currentIndex() + 11);
-        nq->setMaxTuplet(m_maxTuplet->currentIndex() + 1);
-        nq->setContrapuntal(m_counterpoint->isChecked());
+        nq->setSimplicityFactor(m_complexity->currentIndex() + 11);
+        nq->setMaxTuplet(m_tupletLevel->currentIndex() + 1);
+        nq->setContrapuntal(m_permitCounterpoint->isChecked());
         nq->setArticulate(m_articulate->isChecked());
 
         quantizer = nq;
@@ -349,17 +350,17 @@ QuantizeParameters::getQuantizer() const
     settings.setValue("quantizeswing", swing);
     settings.setValue("quantizeiterate", iterate);
     settings.setValue("quantizenotationonly",
-                       m_notationTarget->isChecked());
+                       m_quantizeNotation->isChecked());
     if (type == 0) {
         settings.setValue("quantizedurations",
                            m_durationCheckBox->isChecked());
     } else {
         settings.setValue("quantizesimplicity",
-                           m_simplicityCombo->currentIndex() + 11);
+                           m_complexity->currentIndex() + 11);
         settings.setValue("quantizemaxtuplet",
-                           m_maxTuplet->currentIndex() + 1);
+                           m_tupletLevel->currentIndex() + 1);
         settings.setValue("quantizecounterpoint",
-                           m_counterpoint->isChecked());
+                           m_permitCounterpoint->isChecked());
     }
     settings.setValue("quantizerebeam", m_rebeam->isChecked());
     settings.setValue("quantizearticulate", m_articulate->isChecked());
