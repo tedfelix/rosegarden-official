@@ -68,9 +68,9 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
     m_quantizerType->addItem(tr("Heuristic notation quantizer"));
     qbLayout->addWidget(m_quantizerType, 0, 1);
 
-    m_quantizeNotation = new QCheckBox
-                       (tr("Quantize for notation only (leave performance unchanged)"),
-                        quantizerBox);
+    m_quantizeNotation = new QCheckBox(
+            tr("Quantize for notation only (leave performance unchanged)"),
+            quantizerBox);
     qbLayout->addWidget(m_quantizeNotation, 1, 0, 1, 2);
 
     // ??? Always false.  Only caller always sets this to false.
@@ -129,34 +129,33 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
     // Swing
     m_swingLabel = new QLabel(tr("Swing:"), m_gridBox);
     gbLayout->addWidget(m_swingLabel, 1, 0);
-    m_swingCombo = new QComboBox(m_gridBox);
-    gbLayout->addWidget(m_swingCombo, 1, 1);
+    m_swing = new QComboBox(m_gridBox);
+    gbLayout->addWidget(m_swing, 1, 1);
 
     // Iterative amount
-    m_iterativeLabel = new QLabel(tr("Iterative amount:"), m_gridBox);
-    gbLayout->addWidget(m_iterativeLabel, 2, 0);
-    m_iterativeCombo = new QComboBox(m_gridBox);
-    gbLayout->addWidget(m_iterativeCombo, 2, 1);
+    m_iterativeAmountLabel = new QLabel(tr("Iterative amount:"), m_gridBox);
+    gbLayout->addWidget(m_iterativeAmountLabel, 2, 0);
+    m_iterativeAmount = new QComboBox(m_gridBox);
+    gbLayout->addWidget(m_iterativeAmount, 2, 1);
 
     // Quantize durations
-    m_durationCheckBox = new QCheckBox
-                         (tr("Quantize durations as well as start times"), m_gridBox);
-    gbLayout->addWidget(m_durationCheckBox, 3, 0, 1, 1);
+    m_quantizeDurations = new QCheckBox(
+            tr("Quantize durations as well as start times"), m_gridBox);
+    gbLayout->addWidget(m_quantizeDurations, 3, 0, 1, 1);
 
 
     // After quantization box
-    m_postProcessingBox = new QGroupBox
-                          (tr("After quantization"), this);
+    m_afterQuantizationBox = new QGroupBox(tr("After quantization"), this);
     QGridLayout *pbLayout = new QGridLayout;
     pbLayout->setSpacing(3);
-    m_postProcessingBox->setLayout(pbLayout);
-    m_mainLayout->addWidget(m_postProcessingBox);
+    m_afterQuantizationBox->setLayout(pbLayout);
+    m_mainLayout->addWidget(m_afterQuantizationBox);
 
-    m_rebeam = new QCheckBox(tr("Re-beam"), m_postProcessingBox);
+    m_rebeam = new QCheckBox(tr("Re-beam"), m_afterQuantizationBox);
     m_articulate = new QCheckBox
-                   (tr("Add articulations (staccato, tenuto, slurs)"), m_postProcessingBox);
-    m_makeViable = new QCheckBox(tr("Tie notes at barlines etc"), m_postProcessingBox);
-    m_deCounterpoint = new QCheckBox(tr("Split-and-tie overlapping chords"), m_postProcessingBox);
+                   (tr("Add articulations (staccato, tenuto, slurs)"), m_afterQuantizationBox);
+    m_makeViable = new QCheckBox(tr("Tie notes at barlines etc"), m_afterQuantizationBox);
+    m_deCounterpoint = new QCheckBox(tr("Split-and-tie overlapping chords"), m_afterQuantizationBox);
 
     pbLayout->addWidget(m_rebeam, 0, 0);
     pbLayout->addWidget(m_articulate, 1, 0);
@@ -182,7 +181,7 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
     defaultIterate = settings.value("quantizeiterate", defaultIterate).toInt();
     m_quantizeNotation->setChecked(qStrToBool(settings.value
             ("quantizenotationonly", (defaultQuantizer == Notation))));
-    m_durationCheckBox->setChecked(qStrToBool(settings.value
+    m_quantizeDurations->setChecked(qStrToBool(settings.value
             ("quantizedurations", "false")));
     m_complexity->setCurrentIndex(settings.value
             ("quantizesimplicity", 13).toInt()  - 11);
@@ -201,7 +200,7 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
 
     settings.endGroup();
 
-    m_postProcessingBox->show();
+    m_afterQuantizationBox->show();
 
     for (unsigned int i = 0; i < m_standardQuantizations.size(); ++i) {
 
@@ -227,37 +226,37 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
     }
 
     for (int i = -100; i <= 200; i += 10) {
-        m_swingCombo->addItem(i == 0 ? tr("None") : QString("%1%").arg(i));
+        m_swing->addItem(i == 0 ? tr("None") : QString("%1%").arg(i));
         if (i == defaultSwing)
-            m_swingCombo->setCurrentIndex(m_swingCombo->count() - 1);
+            m_swing->setCurrentIndex(m_swing->count() - 1);
     }
 
     for (int i = 10; i <= 100; i += 10) {
-        m_iterativeCombo->addItem(i == 100 ? tr("Full quantize") :
+        m_iterativeAmount->addItem(i == 100 ? tr("Full quantize") :
                                      QString("%1%").arg(i));
         if (i == defaultIterate)
-            m_iterativeCombo->setCurrentIndex(m_iterativeCombo->count() - 1);
+            m_iterativeAmount->setCurrentIndex(m_iterativeAmount->count() - 1);
     }
 
     switch (defaultType) {
     case 0:  // grid
         m_gridBox->show();
         m_swingLabel->show();
-        m_swingCombo->show();
-        m_iterativeLabel->show();
-        m_iterativeCombo->show();
+        m_swing->show();
+        m_iterativeAmountLabel->show();
+        m_iterativeAmount->show();
         m_notationBox->hide();
-        m_durationCheckBox->show();
+        m_quantizeDurations->show();
         m_quantizerType->setCurrentIndex(0);
         break;
     case 1:  // legato
         m_gridBox->show();
         m_swingLabel->hide();
-        m_swingCombo->hide();
-        m_iterativeLabel->hide();
-        m_iterativeCombo->hide();
+        m_swing->hide();
+        m_iterativeAmountLabel->hide();
+        m_iterativeAmount->hide();
         m_notationBox->hide();
-        m_durationCheckBox->hide();
+        m_quantizeDurations->hide();
         m_quantizerType->setCurrentIndex(1);
         break;
     case 2:  // notation
@@ -287,11 +286,11 @@ QuantizeParameters::getQuantizer() const
 
     Quantizer *quantizer = nullptr;
 
-    int swing = m_swingCombo->currentIndex();
+    int swing = m_swing->currentIndex();
     swing *= 10;
     swing -= 100;
 
-    int iterate = m_iterativeCombo->currentIndex();
+    int iterate = m_iterativeAmount->currentIndex();
     iterate *= 10;
     iterate += 10;
 
@@ -301,13 +300,13 @@ QuantizeParameters::getQuantizer() const
             quantizer = new BasicQuantizer
                         (Quantizer::RawEventData,
                          Quantizer::NotationPrefix,
-                         unit, m_durationCheckBox->isChecked(),
+                         unit, m_quantizeDurations->isChecked(),
                          swing, iterate);
         } else {
             quantizer = new BasicQuantizer
                         (Quantizer::RawEventData,
                          Quantizer::RawEventData,
-                         unit, m_durationCheckBox->isChecked(),
+                         unit, m_quantizeDurations->isChecked(),
                          swing, iterate);
         }
     } else if (type == 1) {
@@ -353,7 +352,7 @@ QuantizeParameters::getQuantizer() const
                        m_quantizeNotation->isChecked());
     if (type == 0) {
         settings.setValue("quantizedurations",
-                           m_durationCheckBox->isChecked());
+                           m_quantizeDurations->isChecked());
     } else {
         settings.setValue("quantizesimplicity",
                            m_complexity->currentIndex() + 11);
@@ -381,18 +380,18 @@ QuantizeParameters::slotTypeChanged(int index)
     if (index == 0) {
         m_gridBox->show();
         m_swingLabel->show();
-        m_swingCombo->show();
-        m_iterativeLabel->show();
-        m_iterativeCombo->show();
-        m_durationCheckBox->show();
+        m_swing->show();
+        m_iterativeAmountLabel->show();
+        m_iterativeAmount->show();
+        m_quantizeDurations->show();
         m_notationBox->hide();
     } else if (index == 1) {
         m_gridBox->show();
         m_swingLabel->hide();
-        m_swingCombo->hide();
-        m_iterativeLabel->hide();
-        m_iterativeCombo->hide();
-        m_durationCheckBox->hide();
+        m_swing->hide();
+        m_iterativeAmountLabel->hide();
+        m_iterativeAmount->hide();
+        m_quantizeDurations->hide();
         m_notationBox->hide();
     } else {
         m_gridBox->hide();

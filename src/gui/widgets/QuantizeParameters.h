@@ -55,7 +55,7 @@ public:
     /// Returned quantizer object is on heap -- caller must delete.
     Quantizer *getQuantizer() const;
 
-    QWidget *getAdvancedWidget()  { return m_postProcessingBox; }
+    QWidget *getAdvancedWidget()  { return m_afterQuantizationBox; }
 
 private slots:
     void slotTypeChanged(int);
@@ -87,10 +87,10 @@ private:
     QGroupBox *m_gridBox;
     QComboBox *m_gridBaseGridUnit;
     QLabel *m_swingLabel;
-    QComboBox *m_swingCombo;
-    QLabel *m_iterativeLabel;
-    QComboBox *m_iterativeCombo;
-    QCheckBox *m_durationCheckBox;
+    QComboBox *m_swing;
+    QLabel *m_iterativeAmountLabel;
+    QComboBox *m_iterativeAmount;
+    QCheckBox *m_quantizeDurations;
 
     // Notation Parameters
     QGroupBox *m_notationBox;
@@ -100,7 +100,7 @@ private:
     QCheckBox *m_permitCounterpoint;
 
     // After quantization
-    QGroupBox *m_postProcessingBox;
+    QGroupBox *m_afterQuantizationBox;
     QCheckBox *m_rebeam;
     QCheckBox *m_articulate;
     QCheckBox *m_makeViable;
