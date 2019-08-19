@@ -98,7 +98,6 @@ private:
     QCheckBox *m_permitCounterpoint;
 
     // After quantization
-    QGroupBox *m_afterQuantizationBox;  // ??? REMOVE THIS
     QCheckBox *m_rebeam;
     QCheckBox *m_addArticulations;
     QCheckBox *m_tieNotesAtBarlines;
