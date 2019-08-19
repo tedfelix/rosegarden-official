@@ -145,62 +145,66 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
 
 
     // After quantization box
-    m_afterQuantizationBox = new QGroupBox(tr("After quantization"), this);
+    QGroupBox *m_afterQuantizationBox =
+            new QGroupBox(tr("After quantization"), this);
     QGridLayout *pbLayout = new QGridLayout;
     pbLayout->setSpacing(3);
     m_afterQuantizationBox->setLayout(pbLayout);
     m_mainLayout->addWidget(m_afterQuantizationBox);
 
     m_rebeam = new QCheckBox(tr("Re-beam"), m_afterQuantizationBox);
-    m_articulate = new QCheckBox
-                   (tr("Add articulations (staccato, tenuto, slurs)"), m_afterQuantizationBox);
-    m_makeViable = new QCheckBox(tr("Tie notes at barlines etc"), m_afterQuantizationBox);
-    m_deCounterpoint = new QCheckBox(tr("Split-and-tie overlapping chords"), m_afterQuantizationBox);
+    m_addArticulations = new QCheckBox(
+            tr("Add articulations (staccato, tenuto, slurs)"),
+            m_afterQuantizationBox);
+    m_tieNotesAtBarlines = new QCheckBox(
+            tr("Tie notes at barlines etc"), m_afterQuantizationBox);
+    m_splitAndTie = new QCheckBox(
+            tr("Split-and-tie overlapping chords"), m_afterQuantizationBox);
 
     pbLayout->addWidget(m_rebeam, 0, 0);
-    pbLayout->addWidget(m_articulate, 1, 0);
-    pbLayout->addWidget(m_makeViable, 2, 0);
-    pbLayout->addWidget(m_deCounterpoint, 3, 0);
+    pbLayout->addWidget(m_addArticulations, 1, 0);
+    pbLayout->addWidget(m_tieNotesAtBarlines, 2, 0);
+    pbLayout->addWidget(m_splitAndTie, 3, 0);
 
-    QPixmap noMap = NotePixmapFactory::makeToolbarPixmap("menu-no-note");
-
-    int defaultType = 0;
-    timeT defaultUnit =
-        Note(Note::Demisemiquaver).getDuration();
-
-    int defaultSwing = 0;
-    int defaultIterate = 100;
 
     QSettings settings;
-    settings.beginGroup(m_inNotation ? NotationQuantizeConfigGroup : GridQuantizeConfigGroup);
+    settings.beginGroup(
+            m_inNotation ? NotationQuantizeConfigGroup :
+                           GridQuantizeConfigGroup);
 
-    defaultType = settings.value("quantizetype", (defaultQuantizer == Notation)
-            ? 2 : (defaultQuantizer == Legato) ? 1 : 0).toInt();
-    defaultUnit = settings.value("quantizeunit", static_cast<unsigned long long>(defaultUnit)).toInt();
-    defaultSwing = settings.value("quantizeswing", defaultSwing).toInt();
-    defaultIterate = settings.value("quantizeiterate", defaultIterate).toInt();
-    m_quantizeNotation->setChecked(qStrToBool(settings.value
-            ("quantizenotationonly", (defaultQuantizer == Notation))));
-    m_quantizeDurations->setChecked(qStrToBool(settings.value
-            ("quantizedurations", "false")));
-    m_complexity->setCurrentIndex(settings.value
-            ("quantizesimplicity", 13).toInt()  - 11);
-    m_tupletLevel->setCurrentIndex(settings.value
-            ("quantizemaxtuplet", 3).toInt()  - 1);
-    m_permitCounterpoint->setChecked(qStrToBool(settings.value
-            ("quantizecounterpoint", "false" )));
-    m_rebeam->setChecked(qStrToBool(settings.value
-            ("quantizerebeam", "true")));
-    m_makeViable->setChecked(qStrToBool(settings.value
-            ("quantizemakeviable", "false")));
-    m_deCounterpoint->setChecked(qStrToBool(settings.value
-            ("quantizedecounterpoint", "false")));
-    m_articulate->setChecked(qStrToBool(settings.value
-            ("quantizearticulate", "true")));
+    int defaultType = settings.value(
+            "quantizetype",
+            (defaultQuantizer == Notation) ? 2 :
+                    (defaultQuantizer == Legato) ? 1 : 0).toInt();
+    timeT defaultUnit = settings.value(
+            "quantizeunit",
+            static_cast<unsigned long long>(  // ??? unsigned long long?  Why?
+                Note(Note::Demisemiquaver).getDuration())).toInt();
+    int defaultSwing = settings.value("quantizeswing", 0).toInt();
+    int defaultIterate = settings.value("quantizeiterate", 100).toInt();
+    m_quantizeNotation->setChecked(qStrToBool(settings.value(
+            "quantizenotationonly", (defaultQuantizer == Notation))));
+    m_quantizeDurations->setChecked(qStrToBool(settings.value(
+            "quantizedurations", "false")));
+    m_complexity->setCurrentIndex(settings.value(
+            "quantizesimplicity", 13).toInt()  - 11);
+    m_tupletLevel->setCurrentIndex(settings.value(
+            "quantizemaxtuplet", 3).toInt()  - 1);
+    m_permitCounterpoint->setChecked(qStrToBool(settings.value(
+            "quantizecounterpoint", "false" )));
+    m_rebeam->setChecked(qStrToBool(settings.value(
+            "quantizerebeam", "true")));
+    m_tieNotesAtBarlines->setChecked(qStrToBool(settings.value(
+            "quantizemakeviable", "false")));
+    m_splitAndTie->setChecked(qStrToBool(settings.value(
+            "quantizedecounterpoint", "false")));
+    m_addArticulations->setChecked(qStrToBool(settings.value(
+            "quantizearticulate", "true")));
 
+    // ??? Move to end and distribute lines above near to where they are used.
     settings.endGroup();
 
-    m_afterQuantizationBox->show();
+    QPixmap noMap = NotePixmapFactory::makeToolbarPixmap("menu-no-note");
 
     for (unsigned int i = 0; i < m_standardQuantizations.size(); ++i) {
 
@@ -336,7 +340,7 @@ QuantizeParameters::getQuantizer() const
         nq->setSimplicityFactor(m_complexity->currentIndex() + 11);
         nq->setMaxTuplet(m_tupletLevel->currentIndex() + 1);
         nq->setContrapuntal(m_permitCounterpoint->isChecked());
-        nq->setArticulate(m_articulate->isChecked());
+        nq->setArticulate(m_addArticulations->isChecked());
 
         quantizer = nq;
     }
@@ -362,9 +366,9 @@ QuantizeParameters::getQuantizer() const
                            m_permitCounterpoint->isChecked());
     }
     settings.setValue("quantizerebeam", m_rebeam->isChecked());
-    settings.setValue("quantizearticulate", m_articulate->isChecked());
-    settings.setValue("quantizemakeviable", m_makeViable->isChecked());
-    settings.setValue("quantizedecounterpoint", m_deCounterpoint->isChecked());
+    settings.setValue("quantizearticulate", m_addArticulations->isChecked());
+    settings.setValue("quantizemakeviable", m_tieNotesAtBarlines->isChecked());
+    settings.setValue("quantizedecounterpoint", m_splitAndTie->isChecked());
 
     settings.endGroup();
 

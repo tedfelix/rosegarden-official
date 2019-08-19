@@ -44,7 +44,6 @@ QuantizeDialog::QuantizeDialog(QWidget *parent, bool inNotation) :
             false);
     vboxLayout->addWidget(m_quantizeFrame);
 
-    m_quantizeFrame->getAdvancedWidget()->show();
     m_quantizeFrame->adjustSize();
     adjustSize();
 

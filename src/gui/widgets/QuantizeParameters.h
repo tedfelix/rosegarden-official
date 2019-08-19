@@ -55,8 +55,6 @@ public:
     /// Returned quantizer object is on heap -- caller must delete.
     Quantizer *getQuantizer() const;
 
-    QWidget *getAdvancedWidget()  { return m_afterQuantizationBox; }
-
 private slots:
     void slotTypeChanged(int);
 
@@ -100,11 +98,11 @@ private:
     QCheckBox *m_permitCounterpoint;
 
     // After quantization
-    QGroupBox *m_afterQuantizationBox;
+    QGroupBox *m_afterQuantizationBox;  // ??? REMOVE THIS
     QCheckBox *m_rebeam;
-    QCheckBox *m_articulate;
-    QCheckBox *m_makeViable;
-    QCheckBox *m_deCounterpoint;
+    QCheckBox *m_addArticulations;
+    QCheckBox *m_tieNotesAtBarlines;
+    QCheckBox *m_splitAndTie;
 
 };
 
