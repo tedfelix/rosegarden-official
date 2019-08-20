@@ -4690,24 +4690,23 @@ RosegardenMainWindow::slotSetPointerPosition(timeT t)
     //    std::cerr << "RosegardenMainWindow::slotSetPointerPosition: t = " << t << std::endl;
 
     if (m_seqManager) {
-        if (m_seqManager->getTransportStatus() == PLAYING ||
-                m_seqManager->getTransportStatus() == RECORDING) {
+        if (m_seqManager->getTransportStatus() == PLAYING) {
             if (t > comp.getEndMarker()) {
-                if (m_seqManager->getTransportStatus() == PLAYING) {
-    
-                    slotStop();
-                    t = comp.getEndMarker();
-                    m_doc->slotSetPointerPosition(t); //causes this method to be re-invoked
-                    return ;
-    
-                } else { // if recording, increase composition duration
-                    std::pair<timeT, timeT> timeRange = comp.getBarRangeForTime(t);
-                    timeT barDuration = timeRange.second - timeRange.first;
-                    timeT newEndMarker = t + 10 * barDuration;
-                    comp.setEndMarker(newEndMarker);
-                    getView()->getTrackEditor()->updateCanvasSize();
-                    getView()->getTrackEditor()->updateRulers();
-                }
+                slotStop();
+                t = comp.getEndMarker();
+                m_doc->slotSetPointerPosition(t); //causes this method to be re-invoked
+                return ;
+            }
+        }
+        if (m_seqManager->getTransportStatus() == RECORDING) {
+            std::pair<timeT, timeT> timeRange = comp.getBarRangeForTime(t);
+            timeT barDuration = timeRange.second - timeRange.first;
+            if (t > comp.getEndMarker() - barDuration / 4) {
+            // if recording and almost at end increase composition duration
+                timeT newEndMarker = comp.getEndMarker() + 10 * barDuration;
+                comp.setEndMarker(newEndMarker);
+                getView()->getTrackEditor()->updateCanvasSize();
+                getView()->getTrackEditor()->updateRulers();
             }
         }
     
