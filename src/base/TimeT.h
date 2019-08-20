@@ -22,6 +22,7 @@ namespace Rosegarden
 {
     // Time in internal units (pulses).  Timebase is 960ppq.
     typedef long timeT;
+    constexpr timeT timebase = 960;
 
     // Time used in the rewriter to represent tupled notes exactly.
     // It doesn't have a fixed conversion to timeT, instead each bar

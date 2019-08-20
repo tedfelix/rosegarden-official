@@ -4690,24 +4690,36 @@ RosegardenMainWindow::slotSetPointerPosition(timeT t)
     //    std::cerr << "RosegardenMainWindow::slotSetPointerPosition: t = " << t << std::endl;
 
     if (m_seqManager) {
-        if (m_seqManager->getTransportStatus() == PLAYING) {
-            if (t > comp.getEndMarker()) {
-                slotStop();
-                t = comp.getEndMarker();
-                m_doc->slotSetPointerPosition(t); //causes this method to be re-invoked
-                return ;
-            }
+        // If we're playing and we're past the end...
+        if (m_seqManager->getTransportStatus() == PLAYING  &&
+            t > comp.getEndMarker()) {
+
+            // Stop
+            slotStop();
+
+            // Limit the end to the end of the composition.
+            // RECURSION: Causes this method to be re-invoked.
+            m_doc->slotSetPointerPosition(comp.getEndMarker());
+
+            return;
+
         }
-        if (m_seqManager->getTransportStatus() == RECORDING) {
+        // If we're recording and we're near the end...
+        if (m_seqManager->getTransportStatus() == RECORDING  &&
+            t > comp.getEndMarker() - timebase) {
+
+            // Compute bar duration
             std::pair<timeT, timeT> timeRange = comp.getBarRangeForTime(t);
-            timeT barDuration = timeRange.second - timeRange.first;
-            if (t > comp.getEndMarker() - barDuration / 4) {
-            // if recording and almost at end increase composition duration
-                timeT newEndMarker = comp.getEndMarker() + 10 * barDuration;
-                comp.setEndMarker(newEndMarker);
-                getView()->getTrackEditor()->updateCanvasSize();
-                getView()->getTrackEditor()->updateRulers();
-            }
+            const timeT barDuration = timeRange.second - timeRange.first;
+
+            // Add on ten bars.
+            const timeT newEndMarker = comp.getEndMarker() + 10 * barDuration;
+            comp.setEndMarker(newEndMarker);
+
+            // Update UI
+            getView()->getTrackEditor()->updateCanvasSize();
+            getView()->getTrackEditor()->updateRulers();
+
         }
     
         // cc 20050520 - jump at the sequencer even if we're not playing,
