@@ -69,6 +69,10 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
     m_quantizerType->addItem(tr("Grid quantizer"));
     m_quantizerType->addItem(tr("Legato quantizer"));
     m_quantizerType->addItem(tr("Heuristic notation quantizer"));
+    QuantizerType quantizerType = static_cast<QuantizerType>(
+            m_settings.value("quantizetype", defaultQuantizer).toInt());
+    m_quantizerType->setCurrentIndex(quantizerType);
+    connect(m_quantizerType, SIGNAL(activated(int)), SLOT(slotTypeChanged(int)));
     qbLayout->addWidget(m_quantizerType, 0, 1);
 
     m_quantizeNotation = new QCheckBox(
@@ -219,42 +223,9 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
     pbLayout->addWidget(m_tieNotesAtBarlines, 2, 0);
     pbLayout->addWidget(m_splitAndTie, 3, 0);
 
+    // Show/Hide widgets as appropriate for the quantizer type.
+    slotTypeChanged(quantizerType);
 
-    // Initialize widgets
-
-    // ??? Move these up closer to where the widgets are created.
-
-    QuantizerType quantizerType = static_cast<QuantizerType>(
-            m_settings.value("quantizetype", defaultQuantizer).toInt());
-
-    m_quantizerType->setCurrentIndex(quantizerType);
-
-    switch (quantizerType) {
-    case Grid:
-        m_gridBox->show();
-        m_swingLabel->show();
-        m_swing->show();
-        m_iterativeAmountLabel->show();
-        m_iterativeAmount->show();
-        m_notationBox->hide();
-        m_quantizeDurations->show();
-        break;
-    case Legato:
-        m_gridBox->show();
-        m_swingLabel->hide();
-        m_swing->hide();
-        m_iterativeAmountLabel->hide();
-        m_iterativeAmount->hide();
-        m_notationBox->hide();
-        m_quantizeDurations->hide();
-        break;
-    case Notation:
-        m_gridBox->hide();
-        m_notationBox->show();
-        break;
-    }
-
-    connect(m_quantizerType, SIGNAL(activated(int)), SLOT(slotTypeChanged(int)));
 }
 
 void
@@ -399,7 +370,16 @@ QuantizeParameters::slotTypeChanged(int index)
     setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Maximum));
     parentWidget()->setSizePolicy(QSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum));
 
-    if (index == 0) {
+    QuantizerType quantizerType = static_cast<QuantizerType>(index);
+
+    // Could do it this way too.  Not sure which is easiest on the eyes.
+    //m_gridBox->setVisible(quantizerType != Notation);
+    //m_swingLabel->setVisible(quantizerType == Grid);
+    //m_swing->setVisible(quantizerType == Grid);
+    // ...
+
+    switch (quantizerType) {
+    case Grid:
         m_gridBox->show();
         m_swingLabel->show();
         m_swing->show();
@@ -407,7 +387,8 @@ QuantizeParameters::slotTypeChanged(int index)
         m_iterativeAmount->show();
         m_quantizeDurations->show();
         m_notationBox->hide();
-    } else if (index == 1) {
+        break;
+    case Legato:
         m_gridBox->show();
         m_swingLabel->hide();
         m_swing->hide();
@@ -415,9 +396,11 @@ QuantizeParameters::slotTypeChanged(int index)
         m_iterativeAmount->hide();
         m_quantizeDurations->hide();
         m_notationBox->hide();
-    } else {
+        break;
+    case Notation:
         m_gridBox->hide();
         m_notationBox->show();
+        break;
     }
 
     adjustSize();
