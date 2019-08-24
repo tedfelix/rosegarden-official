@@ -264,32 +264,50 @@ QuantizeParameters::initBaseGridUnit(QString settingsKey, QComboBox *comboBox)
     }
 }
 
+void
+QuantizeParameters::saveSettings()
+{
+    m_settings.setValue("quantizetype", m_quantizerType->currentIndex());
+    m_settings.setValue("gridBaseGridUnit", static_cast<unsigned long long>(
+            m_standardQuantizations[m_gridBaseGridUnit->currentIndex()]));
+    m_settings.setValue("notationBaseGridUnit", static_cast<unsigned long long>(
+            m_standardQuantizations[m_notationBaseGridUnit->currentIndex()]));
+    m_settings.setValue("quantizeswing", m_swing->currentIndex() * 10 - 100);
+    m_settings.setValue("quantizeiterate",
+                        m_iterativeAmount->currentIndex() * 10 + 10);
+    m_settings.setValue("quantizenotationonly",
+                        m_quantizeNotation->isChecked());
+    m_settings.setValue("quantizedurations",
+                        m_quantizeDurations->isChecked());
+    m_settings.setValue("quantizesimplicity",
+                        m_complexity->currentIndex() + 11);
+    m_settings.setValue("quantizemaxtuplet",
+                        m_tupletLevel->currentIndex() + 1);
+    m_settings.setValue("quantizecounterpoint",
+                        m_permitCounterpoint->isChecked());
+    m_settings.setValue("quantizerebeam", m_rebeam->isChecked());
+    m_settings.setValue("quantizearticulate", m_addArticulations->isChecked());
+    m_settings.setValue("quantizemakeviable", m_tieNotesAtBarlines->isChecked());
+    m_settings.setValue("quantizedecounterpoint", m_splitAndTie->isChecked());
+}
+
 Quantizer *
 QuantizeParameters::getQuantizer()
 {
-    //!!! Excessive duplication with
-    // EventQuantizeCommand::makeQuantizer in editcommands.cpp
+    // ??? Similar to EventQuantizeCommand::makeQuantizer().
+    //     Can we pull out a common routine?
 
-    int type = m_quantizerType->currentIndex();
-    timeT unit = 0;
-
-    if (type == 0 || type == 1) {
-        unit = m_standardQuantizations[m_gridBaseGridUnit->currentIndex()];
-    } else {
-        unit = m_standardQuantizations[m_notationBaseGridUnit->currentIndex()];
-    }
+    QuantizerType type =
+            static_cast<QuantizerType>(m_quantizerType->currentIndex());
 
     Quantizer *quantizer = nullptr;
 
-    int swing = m_swing->currentIndex();
-    swing *= 10;
-    swing -= 100;
+    if (type == Grid) {
 
-    int iterate = m_iterativeAmount->currentIndex();
-    iterate *= 10;
-    iterate += 10;
-
-    if (type == 0) {
+        const timeT unit =
+                m_standardQuantizations[m_gridBaseGridUnit->currentIndex()];
+        const int swing = m_swing->currentIndex() * 10 - 100;
+        const int iterate = m_iterativeAmount->currentIndex() * 10 + 10;
 
         if (m_quantizeNotation->isChecked()) {
             quantizer = new BasicQuantizer
@@ -304,7 +322,12 @@ QuantizeParameters::getQuantizer()
                          unit, m_quantizeDurations->isChecked(),
                          swing, iterate);
         }
-    } else if (type == 1) {
+
+    } else if (type == Legato) {
+
+        const timeT unit =
+                m_standardQuantizations[m_gridBaseGridUnit->currentIndex()];
+
         if (m_quantizeNotation->isChecked()) {
             quantizer = new LegatoQuantizer
                         (Quantizer::RawEventData,
@@ -315,7 +338,8 @@ QuantizeParameters::getQuantizer()
                          Quantizer::RawEventData,
                          unit);
         }
-    } else {
+
+    } else {  // Notation
 
         NotationQuantizer *nq;
 
@@ -327,7 +351,8 @@ QuantizeParameters::getQuantizer()
                   Quantizer::RawEventData);
         }
 
-        nq->setUnit(unit);
+        nq->setUnit(m_standardQuantizations[
+                m_notationBaseGridUnit->currentIndex()]);
         nq->setSimplicityFactor(m_complexity->currentIndex() + 11);
         nq->setMaxTuplet(m_tupletLevel->currentIndex() + 1);
         nq->setContrapuntal(m_permitCounterpoint->isChecked());
@@ -336,30 +361,8 @@ QuantizeParameters::getQuantizer()
         quantizer = nq;
     }
 
-    m_settings.setValue("quantizetype", type);
-    m_settings.setValue("gridBaseGridUnit", static_cast<unsigned long long>(
-            m_standardQuantizations[m_gridBaseGridUnit->currentIndex()]));
-    m_settings.setValue("notationBaseGridUnit", static_cast<unsigned long long>(
-            m_standardQuantizations[m_notationBaseGridUnit->currentIndex()]));
-    m_settings.setValue("quantizeswing", swing);
-    m_settings.setValue("quantizeiterate", iterate);
-    m_settings.setValue("quantizenotationonly",
-                       m_quantizeNotation->isChecked());
-    if (type == 0) {
-        m_settings.setValue("quantizedurations",
-                           m_quantizeDurations->isChecked());
-    } else {
-        m_settings.setValue("quantizesimplicity",
-                           m_complexity->currentIndex() + 11);
-        m_settings.setValue("quantizemaxtuplet",
-                           m_tupletLevel->currentIndex() + 1);
-        m_settings.setValue("quantizecounterpoint",
-                           m_permitCounterpoint->isChecked());
-    }
-    m_settings.setValue("quantizerebeam", m_rebeam->isChecked());
-    m_settings.setValue("quantizearticulate", m_addArticulations->isChecked());
-    m_settings.setValue("quantizemakeviable", m_tieNotesAtBarlines->isChecked());
-    m_settings.setValue("quantizedecounterpoint", m_splitAndTie->isChecked());
+    // ??? These should be set on "OK", not on getQuantizer().
+    saveSettings();
 
     return quantizer;
 }

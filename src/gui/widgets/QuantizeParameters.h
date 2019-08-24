@@ -53,6 +53,9 @@ public:
                        QuantizerType defaultQuantizer,
                        bool showNotationOption);
     
+    /// Call on "accept" to save the values for next time.
+    void saveSettings();
+
     /// Returned quantizer object is on heap -- caller must delete.
     Quantizer *getQuantizer();
 

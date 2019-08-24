@@ -227,8 +227,7 @@ Quantizer *
 EventQuantizeCommand::makeQuantizer(QString settingsGroup,
                                     QuantizeScope scope)
 {
-    //!!! Excessive duplication with
-    // QuantizeParameters::getQuantizer in widgets.cpp
+    // See QuantizeParameters::getQuantizer() which is quite similar.
 
     QSettings settings;
     settings.beginGroup(settingsGroup);
