@@ -143,12 +143,35 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
     m_swingLabel = new QLabel(tr("Swing:"), m_gridBox);
     gbLayout->addWidget(m_swingLabel, 1, 0);
     m_swing = new QComboBox(m_gridBox);
+
+    int swing = m_settings.value("quantizeswing", 0).toInt();
+
+    for (int i = -100; i <= 200; i += 10) {
+        m_swing->addItem(i == 0 ? tr("None") : QString("%1%").arg(i));
+
+        // Found it?  Select it.
+        if (i == swing)
+            m_swing->setCurrentIndex(m_swing->count() - 1);
+    }
+
     gbLayout->addWidget(m_swing, 1, 1);
 
     // Iterative amount
     m_iterativeAmountLabel = new QLabel(tr("Iterative amount:"), m_gridBox);
     gbLayout->addWidget(m_iterativeAmountLabel, 2, 0);
     m_iterativeAmount = new QComboBox(m_gridBox);
+
+    int iterativeAmount = m_settings.value("quantizeiterate", 100).toInt();
+
+    for (int i = 10; i <= 100; i += 10) {
+        m_iterativeAmount->addItem(
+                i == 100 ? tr("Full quantize") : QString("%1%").arg(i));
+
+        // Found it?  Select it.
+        if (i == iterativeAmount)
+            m_iterativeAmount->setCurrentIndex(m_iterativeAmount->count() - 1);
+    }
+
     gbLayout->addWidget(m_iterativeAmount, 2, 1);
 
     // Quantize durations
@@ -201,34 +224,13 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
 
     // ??? Move these up closer to where the widgets are created.
 
-    int swing = m_settings.value("quantizeswing", 0).toInt();
+    QuantizerType quantizerType = static_cast<QuantizerType>(
+            m_settings.value("quantizetype", defaultQuantizer).toInt());
 
-    for (int i = -100; i <= 200; i += 10) {
-        m_swing->addItem(i == 0 ? tr("None") : QString("%1%").arg(i));
-
-        // Found it?  Select it.
-        if (i == swing)
-            m_swing->setCurrentIndex(m_swing->count() - 1);
-    }
-
-    int iterativeAmount = m_settings.value("quantizeiterate", 100).toInt();
-
-    for (int i = 10; i <= 100; i += 10) {
-        m_iterativeAmount->addItem(
-                i == 100 ? tr("Full quantize") : QString("%1%").arg(i));
-
-        // Found it?  Select it.
-        if (i == iterativeAmount)
-            m_iterativeAmount->setCurrentIndex(m_iterativeAmount->count() - 1);
-    }
-
-    int quantizerType = m_settings.value(
-            "quantizetype",
-            (defaultQuantizer == Notation) ? 2 :
-                    (defaultQuantizer == Legato) ? 1 : 0).toInt();
+    m_quantizerType->setCurrentIndex(quantizerType);
 
     switch (quantizerType) {
-    case 0:  // grid
+    case Grid:
         m_gridBox->show();
         m_swingLabel->show();
         m_swing->show();
@@ -236,9 +238,8 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
         m_iterativeAmount->show();
         m_notationBox->hide();
         m_quantizeDurations->show();
-        m_quantizerType->setCurrentIndex(0);
         break;
-    case 1:  // legato
+    case Legato:
         m_gridBox->show();
         m_swingLabel->hide();
         m_swing->hide();
@@ -246,17 +247,14 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
         m_iterativeAmount->hide();
         m_notationBox->hide();
         m_quantizeDurations->hide();
-        m_quantizerType->setCurrentIndex(1);
         break;
-    case 2:  // notation
+    case Notation:
         m_gridBox->hide();
         m_notationBox->show();
-        m_quantizerType->setCurrentIndex(2);
         break;
     }
 
     connect(m_quantizerType, SIGNAL(activated(int)), SLOT(slotTypeChanged(int)));
-
 }
 
 void
