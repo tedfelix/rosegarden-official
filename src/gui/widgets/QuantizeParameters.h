@@ -23,6 +23,7 @@
 
 #include <QFrame>
 #include <QGroupBox>
+#include <QSettings>
 
 class QCheckBox;
 class QComboBox;
@@ -53,7 +54,7 @@ public:
                        bool showNotationOption);
     
     /// Returned quantizer object is on heap -- caller must delete.
-    Quantizer *getQuantizer() const;
+    Quantizer *getQuantizer();
 
 private slots:
     void slotTypeChanged(int);
@@ -61,19 +62,7 @@ private slots:
 private:
     std::vector<timeT> m_standardQuantizations;
 
-    /// Are we in the notation editor?
-    /**
-     * true if the default initial quantizer was the notation quantizer.
-     * We assume this means the notation editor launched us.
-     *
-     * This is used to select which QSettings group we persist this
-     * dialog to.
-     *
-     * ??? Make this a QString and set it to the proper group in the ctor.
-     *     Or keep the QSettings instance as a member and set the group
-     *     in the ctor.
-     */
-    bool m_inNotation;
+    QSettings m_settings;
 
     QVBoxLayout *m_mainLayout;
 
