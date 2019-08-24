@@ -93,6 +93,7 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
     // Base grid unit
     nbLayout->addWidget(new QLabel(tr("Base grid unit:"), m_notationBox), 1, 0);
     m_notationBaseGridUnit = new QComboBox(m_notationBox);
+    initBaseGridUnit("notationBaseGridUnit", m_notationBaseGridUnit);
     nbLayout->addWidget(m_notationBaseGridUnit, 1, 1);
 
     // Complexity
@@ -135,6 +136,7 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
     // Base grid unit
     gbLayout->addWidget(new QLabel(tr("Base grid unit:"), m_gridBox), 0, 0);
     m_gridBaseGridUnit = new QComboBox(m_gridBox);
+    initBaseGridUnit("gridBaseGridUnit", m_gridBaseGridUnit);
     gbLayout->addWidget(m_gridBaseGridUnit, 0, 1);
 
     // Swing
@@ -199,49 +201,6 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
 
     // ??? Move these up closer to where the widgets are created.
 
-    QPixmap noMap = NotePixmapFactory::makeToolbarPixmap("menu-no-note");
-
-    timeT gridBaseGridUnit = m_settings.value(
-            "gridBaseGridUnit",
-            static_cast<int>(
-                Note(Note::Demisemiquaver).getDuration())).toInt();
-    timeT notationBaseGridUnit = m_settings.value(
-            "notationBaseGridUnit",
-            static_cast<int>(
-                Note(Note::Demisemiquaver).getDuration())).toInt();
-
-    // For each standard quantization
-    for (unsigned int i = 0; i < m_standardQuantizations.size(); ++i) {
-
-        timeT time = m_standardQuantizations[i];
-        timeT error = 0;
-
-        QPixmap pmap = NotePixmapFactory::makeNoteMenuPixmap(time, error);
-        QString label;
-        if (error == 0)
-            label = NotationStrings::makeNoteMenuLabel(time, false, error);
-
-        if (error == 0) {
-            m_gridBaseGridUnit->addItem(pmap, label);
-            m_notationBaseGridUnit->addItem(pmap, label);
-        } else {
-            // ??? We never end up in here since we are iterating through
-            //     the standard quantizations.  We can probably remove this.
-            m_gridBaseGridUnit->addItem(noMap, QString("%1").arg(time));
-            m_notationBaseGridUnit->addItem(noMap, QString("%1").arg(time));
-        }
-
-        // Found it?  Select it.
-        if (m_standardQuantizations[i] == gridBaseGridUnit) {
-            m_gridBaseGridUnit->setCurrentIndex(
-                    m_gridBaseGridUnit->count() - 1);
-        }
-        if (m_standardQuantizations[i] == notationBaseGridUnit) {
-            m_notationBaseGridUnit->setCurrentIndex(
-                    m_notationBaseGridUnit->count() - 1);
-        }
-    }
-
     int swing = m_settings.value("quantizeswing", 0).toInt();
 
     for (int i = -100; i <= 200; i += 10) {
@@ -298,6 +257,42 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
 
     connect(m_quantizerType, SIGNAL(activated(int)), SLOT(slotTypeChanged(int)));
 
+}
+
+void
+QuantizeParameters::initBaseGridUnit(QString settingsKey, QComboBox *comboBox)
+{
+    QPixmap noMap = NotePixmapFactory::makeToolbarPixmap("menu-no-note");
+
+    timeT baseGridUnit = m_settings.value(
+            settingsKey,
+            static_cast<int>(
+                Note(Note::Demisemiquaver).getDuration())).toInt();
+
+    // For each standard quantization
+    for (unsigned int i = 0; i < m_standardQuantizations.size(); ++i) {
+
+        timeT time = m_standardQuantizations[i];
+        timeT error = 0;
+
+        QPixmap pmap = NotePixmapFactory::makeNoteMenuPixmap(time, error);
+        QString label;
+        if (error == 0)
+            label = NotationStrings::makeNoteMenuLabel(time, false, error);
+
+        if (error == 0) {
+            comboBox->addItem(pmap, label);
+        } else {
+            // ??? We never end up in here since we are iterating through
+            //     the standard quantizations.  We can probably remove this.
+            comboBox->addItem(noMap, QString("%1").arg(time));
+        }
+
+        // Found it?  Select it.
+        if (m_standardQuantizations[i] == baseGridUnit) {
+            comboBox->setCurrentIndex(comboBox->count() - 1);
+        }
+    }
 }
 
 Quantizer *

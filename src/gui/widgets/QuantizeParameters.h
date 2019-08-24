@@ -61,6 +61,8 @@ private slots:
 
 private:
     std::vector<timeT> m_standardQuantizations;
+    /// Init a base grid unit combobox from settings.
+    void initBaseGridUnit(QString settingsKey, QComboBox *comboBox);
 
     QSettings m_settings;
 
