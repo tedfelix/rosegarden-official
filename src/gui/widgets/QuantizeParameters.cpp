@@ -361,9 +361,6 @@ QuantizeParameters::getQuantizer()
         quantizer = nq;
     }
 
-    // ??? These should be set on "OK", not on getQuantizer().
-    saveSettings();
-
     return quantizer;
 }
 

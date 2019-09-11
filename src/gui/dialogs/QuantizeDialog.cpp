@@ -50,7 +50,7 @@ QuantizeDialog::QuantizeDialog(QWidget *parent, bool inNotation) :
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
 
     vboxLayout->addWidget(buttonBox);
-    connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
+    connect(buttonBox, &QDialogButtonBox::accepted, this, &QuantizeDialog::accept);
     connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 }
 
@@ -58,6 +58,18 @@ Quantizer *
 QuantizeDialog::getQuantizer() const
 {
     return m_quantizeFrame->getQuantizer();
+}
+
+void
+QuantizeDialog::accept()
+{
+    // Save the settings.
+    // ??? We could do this in QuantizeParameters dtor, but not sure
+    //     we want to save settings on Cancel as well as Ok.
+    m_quantizeFrame->saveSettings();
+
+    // Let the baseclass take care of the rest.
+    QDialog::accept();
 }
 
 

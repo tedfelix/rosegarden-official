@@ -40,8 +40,12 @@ public:
     
     /// Returned quantizer object is on heap -- caller must delete
     Quantizer *getQuantizer() const;
-    
-protected:
+
+public slots:
+    // QDialog override.
+    void accept() override;
+
+private:
     QuantizeParameters *m_quantizeFrame;
 };
 
