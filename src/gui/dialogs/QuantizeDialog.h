@@ -37,7 +37,7 @@ class QuantizeDialog : public QDialog
 
 public:
     QuantizeDialog(QWidget *parent, bool inNotation = false);
-    
+
     /// Returned quantizer object is on heap -- caller must delete
     Quantizer *getQuantizer() const;
 
@@ -46,7 +46,7 @@ public slots:
     void accept() override;
 
 private:
-    QuantizeParameters *m_quantizeFrame;
+    QuantizeParameters *m_quantizeParameters;
 };
 
 

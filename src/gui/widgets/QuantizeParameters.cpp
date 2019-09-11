@@ -295,70 +295,90 @@ Quantizer *
 QuantizeParameters::getQuantizer()
 {
     // ??? Similar to EventQuantizeCommand::makeQuantizer().
-    //     Can we pull out a common routine?
+    //     Can we pull out a common routine?  Maybe a factory function
+    //     in Quantizer.  It would probably require a ton of parameters,
+    //     though.
 
     QuantizerType type =
             static_cast<QuantizerType>(m_quantizerType->currentIndex());
 
     Quantizer *quantizer = nullptr;
 
-    if (type == Grid) {
+    switch (type) {
+    case Grid:
+        {
+            const timeT unit =
+                    m_standardQuantizations[m_gridBaseGridUnit->currentIndex()];
+            const int swingPercent = m_swing->currentIndex() * 10 - 100;
+            const int iteratePercent =
+                    m_iterativeAmount->currentIndex() * 10 + 10;
 
-        const timeT unit =
-                m_standardQuantizations[m_gridBaseGridUnit->currentIndex()];
-        const int swing = m_swing->currentIndex() * 10 - 100;
-        const int iterate = m_iterativeAmount->currentIndex() * 10 + 10;
+            if (m_quantizeNotation->isChecked()) {
+                quantizer = new BasicQuantizer(
+                        Quantizer::RawEventData,  // source
+                        Quantizer::NotationPrefix,  // target
+                        unit,
+                        m_quantizeDurations->isChecked(),  // doDurations
+                        swingPercent,
+                        iteratePercent);
+            } else {  // Quantize the events.
+                quantizer = new BasicQuantizer(
+                        Quantizer::RawEventData,  // source
+                        Quantizer::RawEventData,  // target
+                        unit,
+                        m_quantizeDurations->isChecked(),  // doDurations
+                        swingPercent,
+                        iteratePercent);
+            }
 
-        if (m_quantizeNotation->isChecked()) {
-            quantizer = new BasicQuantizer
-                        (Quantizer::RawEventData,
-                         Quantizer::NotationPrefix,
-                         unit, m_quantizeDurations->isChecked(),
-                         swing, iterate);
-        } else {
-            quantizer = new BasicQuantizer
-                        (Quantizer::RawEventData,
-                         Quantizer::RawEventData,
-                         unit, m_quantizeDurations->isChecked(),
-                         swing, iterate);
+            break;
         }
+    case Legato:
+        {
+            const timeT unit =
+                    m_standardQuantizations[m_gridBaseGridUnit->currentIndex()];
 
-    } else if (type == Legato) {
+            if (m_quantizeNotation->isChecked()) {
+                quantizer = new LegatoQuantizer(
+                        Quantizer::RawEventData,  // source
+                        Quantizer::NotationPrefix,  // target
+                        unit);
+            } else {  // Quantize the events.
+                quantizer = new LegatoQuantizer(
+                        Quantizer::RawEventData,  // source
+                        Quantizer::RawEventData,  // target
+                        unit);
+            }
 
-        const timeT unit =
-                m_standardQuantizations[m_gridBaseGridUnit->currentIndex()];
-
-        if (m_quantizeNotation->isChecked()) {
-            quantizer = new LegatoQuantizer
-                        (Quantizer::RawEventData,
-                         Quantizer::NotationPrefix, unit);
-        } else {
-            quantizer = new LegatoQuantizer
-                        (Quantizer::RawEventData,
-                         Quantizer::RawEventData,
-                         unit);
+            break;
         }
+    case Notation:
+        {
 
-    } else {  // Notation
+            NotationQuantizer *notationQuantizer = nullptr;
 
-        NotationQuantizer *nq;
+            if (m_quantizeNotation->isChecked()) {
+                notationQuantizer = new NotationQuantizer();
+            } else {
+                notationQuantizer = new NotationQuantizer(
+                        Quantizer::RawEventData,  // source
+                        Quantizer::RawEventData);  // target
+            }
 
-        if (m_quantizeNotation->isChecked()) {
-            nq = new NotationQuantizer();
-        } else {
-            nq = new NotationQuantizer
-                 (Quantizer::RawEventData,
-                  Quantizer::RawEventData);
+            notationQuantizer->setUnit(m_standardQuantizations[
+                    m_notationBaseGridUnit->currentIndex()]);
+            notationQuantizer->setSimplicityFactor(
+                    m_complexity->currentIndex() + 11);
+            notationQuantizer->setMaxTuplet(m_tupletLevel->currentIndex() + 1);
+            notationQuantizer->setContrapuntal(
+                    m_permitCounterpoint->isChecked());
+            notationQuantizer->setArticulate(m_addArticulations->isChecked());
+
+            // Cast up to baseclass type.
+            quantizer = static_cast<Quantizer *>(notationQuantizer);
+
+            break;
         }
-
-        nq->setUnit(m_standardQuantizations[
-                m_notationBaseGridUnit->currentIndex()]);
-        nq->setSimplicityFactor(m_complexity->currentIndex() + 11);
-        nq->setMaxTuplet(m_tupletLevel->currentIndex() + 1);
-        nq->setContrapuntal(m_permitCounterpoint->isChecked());
-        nq->setArticulate(m_addArticulations->isChecked());
-
-        quantizer = nq;
     }
 
     return quantizer;
