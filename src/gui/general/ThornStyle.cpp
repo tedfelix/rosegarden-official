@@ -281,6 +281,8 @@ ThornStyle::ThornStyle()
     // selection-color: #FFFFFF;
     m_standardPalette.setColor(QPalette::Base, Qt::white);
     m_standardPalette.setColor(QPalette::Text, Qt::black);
+    m_standardPalette.setColor(
+            QPalette::Disabled, QPalette::Text, Qt::gray);
     m_standardPalette.setColor(QPalette::Highlight, QColor(0x80, 0xAF, 0xFF));
     m_standardPalette.setColor(QPalette::HighlightedText, Qt::white);
 
