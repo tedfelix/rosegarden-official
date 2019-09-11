@@ -28,6 +28,7 @@
 #include "base/NotationQuantizer.h"
 #include "gui/editors/notation/NotationStrings.h"
 #include "gui/editors/notation/NotePixmapFactory.h"
+#include "gui/widgets/LineEdit.h"
 
 #include <QCheckBox>
 #include <QComboBox>
@@ -141,11 +142,24 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
     gbLayout->addWidget(new QLabel(tr("Base grid unit:"), m_gridBox), 0, 0);
     m_gridBaseGridUnit = new QComboBox(m_gridBox);
     initBaseGridUnit("gridBaseGridUnit", m_gridBaseGridUnit);
+    connect(m_gridBaseGridUnit, static_cast<void(QComboBox::*)(int)>(
+                &QComboBox::currentIndexChanged),
+            this, &QuantizeParameters::gridUnitChanged);
     gbLayout->addWidget(m_gridBaseGridUnit, 0, 1);
+
+    // Arbitrary grid unit
+    m_arbitraryGridUnitLabel = new QLabel(tr("Arbitrary grid unit:"), m_gridBox);;
+    gbLayout->addWidget(m_arbitraryGridUnitLabel, 1, 0);
+    m_arbitraryGridUnit = new LineEdit(m_gridBox);
+    int arbitraryGridUnit = m_settings.value("arbitraryGridUnit", 1).toInt();
+    m_arbitraryGridUnit->setText(QString::number(arbitraryGridUnit));
+    gbLayout->addWidget(m_arbitraryGridUnit, 1, 1);
+    // Enable/Disable Arbitrary grid unit controls as appropriate.
+    gridUnitChanged(m_gridBaseGridUnit->currentIndex());
 
     // Swing
     m_swingLabel = new QLabel(tr("Swing:"), m_gridBox);
-    gbLayout->addWidget(m_swingLabel, 1, 0);
+    gbLayout->addWidget(m_swingLabel, 2, 0);
     m_swing = new QComboBox(m_gridBox);
 
     int swing = m_settings.value("quantizeswing", 0).toInt();
@@ -158,11 +172,11 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
             m_swing->setCurrentIndex(m_swing->count() - 1);
     }
 
-    gbLayout->addWidget(m_swing, 1, 1);
+    gbLayout->addWidget(m_swing, 2, 1);
 
     // Iterative amount
     m_iterativeAmountLabel = new QLabel(tr("Iterative amount:"), m_gridBox);
-    gbLayout->addWidget(m_iterativeAmountLabel, 2, 0);
+    gbLayout->addWidget(m_iterativeAmountLabel, 3, 0);
     m_iterativeAmount = new QComboBox(m_gridBox);
 
     int iterativeAmount = m_settings.value("quantizeiterate", 100).toInt();
@@ -176,14 +190,14 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
             m_iterativeAmount->setCurrentIndex(m_iterativeAmount->count() - 1);
     }
 
-    gbLayout->addWidget(m_iterativeAmount, 2, 1);
+    gbLayout->addWidget(m_iterativeAmount, 3, 1);
 
     // Quantize durations
     m_quantizeDurations = new QCheckBox(
             tr("Quantize durations as well as start times"), m_gridBox);
     m_quantizeDurations->setChecked(qStrToBool(m_settings.value(
             "quantizedurations", "false")));
-    gbLayout->addWidget(m_quantizeDurations, 3, 0, 1, 1);
+    gbLayout->addWidget(m_quantizeDurations, 4, 0, 1, 1);
 
 
     // After quantization box
@@ -238,6 +252,8 @@ QuantizeParameters::initBaseGridUnit(QString settingsKey, QComboBox *comboBox)
             static_cast<int>(
                 Note(Note::Demisemiquaver).getDuration())).toInt();
 
+    bool found = false;
+
     // For each standard quantization
     for (unsigned int i = 0; i < m_standardQuantizations.size(); ++i) {
 
@@ -260,8 +276,17 @@ QuantizeParameters::initBaseGridUnit(QString settingsKey, QComboBox *comboBox)
         // Found it?  Select it.
         if (m_standardQuantizations[i] == baseGridUnit) {
             comboBox->setCurrentIndex(comboBox->count() - 1);
+            found = true;
         }
     }
+
+    comboBox->addItem(noMap, "Arbitrary grid unit");
+    // Save the index for future reference.
+    m_arbitraryGridUnitIndex = comboBox->count() - 1;
+
+    // Nothing was found up to this point, go with arbitrary.
+    if (!found)
+        comboBox->setCurrentIndex(m_arbitraryGridUnitIndex);
 }
 
 void
@@ -270,6 +295,7 @@ QuantizeParameters::saveSettings()
     m_settings.setValue("quantizetype", m_quantizerType->currentIndex());
     m_settings.setValue("gridBaseGridUnit", static_cast<unsigned long long>(
             m_standardQuantizations[m_gridBaseGridUnit->currentIndex()]));
+    m_settings.setValue("arbitraryGridUnit", m_arbitraryGridUnit->text());
     m_settings.setValue("notationBaseGridUnit", static_cast<unsigned long long>(
             m_standardQuantizations[m_notationBaseGridUnit->currentIndex()]));
     m_settings.setValue("quantizeswing", m_swing->currentIndex() * 10 - 100);
@@ -291,6 +317,25 @@ QuantizeParameters::saveSettings()
     m_settings.setValue("quantizedecounterpoint", m_splitAndTie->isChecked());
 }
 
+timeT
+QuantizeParameters::getGridUnit() const
+{
+    timeT unit = 1;
+
+    // Arbitrary grid unit selected?
+    if (m_gridBaseGridUnit->currentIndex() == m_arbitraryGridUnitIndex) {
+        // Use the arbitrary grid unit field.
+        unit = m_arbitraryGridUnit->text().toInt();
+        if (unit < 1)
+            unit = 1;
+    } else {
+        unit = m_standardQuantizations[
+                m_gridBaseGridUnit->currentIndex()];
+    }
+
+    return unit;
+}
+
 Quantizer *
 QuantizeParameters::getQuantizer()
 {
@@ -307,8 +352,7 @@ QuantizeParameters::getQuantizer()
     switch (type) {
     case Grid:
         {
-            const timeT unit =
-                    m_standardQuantizations[m_gridBaseGridUnit->currentIndex()];
+            const timeT unit = getGridUnit();
             const int swingPercent = m_swing->currentIndex() * 10 - 100;
             const int iteratePercent =
                     m_iterativeAmount->currentIndex() * 10 + 10;
@@ -335,8 +379,7 @@ QuantizeParameters::getQuantizer()
         }
     case Legato:
         {
-            const timeT unit =
-                    m_standardQuantizations[m_gridBaseGridUnit->currentIndex()];
+            const timeT unit = getGridUnit();
 
             if (m_quantizeNotation->isChecked()) {
                 quantizer = new LegatoQuantizer(
@@ -426,5 +469,16 @@ QuantizeParameters::slotTypeChanged(int index)
     adjustSize();
     parentWidget()->adjustSize();
 }
+
+void
+QuantizeParameters::gridUnitChanged(int index)
+{
+    // Enable/Disable Arbitrary grid unit widgets
+    bool arbitraryEnabled = (index == m_arbitraryGridUnitIndex);
+    m_arbitraryGridUnitLabel->setEnabled(arbitraryEnabled);
+    m_arbitraryGridUnit->setEnabled(arbitraryEnabled);
+    m_arbitraryGridUnit->setText(QString::number(getGridUnit()));
+}
+
 
 }

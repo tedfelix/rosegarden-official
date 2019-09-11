@@ -271,6 +271,8 @@ ThornStyle::ThornStyle()
 
     // QLabel { color: white }
     m_standardPalette.setColor(QPalette::WindowText, Qt::white);
+    m_standardPalette.setColor(
+            QPalette::Disabled, QPalette::WindowText, Qt::gray);
 
     // QListView, QTableView, QTreeView, QLineEdit... :
     // background-color: #FFFFFF;

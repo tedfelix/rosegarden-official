@@ -39,6 +39,7 @@ namespace Rosegarden
 {
 
 
+class LineEdit;
 class Quantizer;
 
 
@@ -61,6 +62,7 @@ public:
 
 private slots:
     void slotTypeChanged(int);
+    void gridUnitChanged(int index);
 
 private:
     std::vector<timeT> m_standardQuantizations;
@@ -78,6 +80,12 @@ private:
     // Grid Parameters
     QGroupBox *m_gridBox;
     QComboBox *m_gridBaseGridUnit;
+    /// Index into m_gridBaseGridUnit for "Arbitrary gird unit".
+    int m_arbitraryGridUnitIndex;
+    QLabel *m_arbitraryGridUnitLabel;
+    LineEdit *m_arbitraryGridUnit;
+    /// Get the selected grid unit from m_gridBaseGridUnit and m_arbitraryGridUnit.
+    timeT getGridUnit() const;
     QLabel *m_swingLabel;
     QComboBox *m_swing;
     QLabel *m_iterativeAmountLabel;
