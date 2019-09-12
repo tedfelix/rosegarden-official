@@ -21,6 +21,7 @@ private Q_SLOTS:
     void testTransposeBbToF();
     void testIntervalToString();
     void testCisToC();
+    void testKeyCMajorToDFlatMajor();
 };
 
 /**
@@ -95,6 +96,17 @@ void TestTranspose::testTransposeBbToF()
     int resultPitch = result.getPerformancePitch();
     QCOMPARE(resultAccidental, Accidentals::NoAccidental);
     QCOMPARE(resultPitch, 65);
+}
+
+void TestTranspose::testKeyCMajorToDFlatMajor()
+{
+    Key cmaj("C major");
+    Key result = cmaj.transpose(1, 1);
+
+    std::string resultName = result.getName(); 
+    int resultPitch = result.getTonicPitch();
+    QCOMPARE(resultName, "Db major");
+    QCOMPARE(resultPitch, 1);
 }
 
 static bool testIntervalString(int steps, int semitones, const QString &expectedString)

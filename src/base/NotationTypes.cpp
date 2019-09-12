@@ -567,10 +567,10 @@ Key::KeyList Key::getKeys(bool minor)
 
 Key Key::transpose(int pitchDelta, int heightDelta)
 {
-    Pitch tonic(getTonicPitch());
+    Pitch tonic(getTonicPitch(), getAccidentalForStep(0));
     Pitch newTonic = tonic.transpose(*this, pitchDelta, heightDelta);
-    int newTonicPitch = (newTonic.getPerformancePitch() % 12 + 12) % 12;
-    return Key (newTonicPitch, isMinor());
+
+    return newTonic.getAsKey();
 }
 
 Accidental Key::getAccidentalAtHeight(int height, const Clef &clef) const
@@ -1392,6 +1392,37 @@ Pitch::getAsNoteEvent(timeT absoluteTime, timeT duration) const
     e->set<Int>(BaseProperties::PITCH, m_pitch);
     e->set<String>(BaseProperties::ACCIDENTAL, m_accidental);
     return e;
+}
+
+Key
+Pitch::getAsKey() const {
+    Key cmaj("C major");
+
+    // Cycle through the circle of fifths, from 7 flats (Cb) to 7 sharps (C#),
+    // to find the number of accidentals for the key for this tonic 
+    Pitch p(-1, 0, Accidentals::Flat);
+    int accidentalCount = -7;
+    while ((p.getPitchInOctave() != this->getPitchInOctave() || p.getAccidental(cmaj) != this->getAccidental(cmaj)) 
+        && accidentalCount < 8) {
+        accidentalCount++;
+        p = p.transpose(cmaj, 7, 4);
+    }
+    
+    if (p.getPitchInOctave() == this->getPitchInOctave() && p.getAccidental(cmaj) == this->getAccidental(cmaj)) {
+        return Key(abs(accidentalCount), accidentalCount >= 0, false);
+    } else {
+        // Not any 'regular' key, so the ambiguous ctor is fine 
+        return Key(this->getPitchInOctave(), false);
+    }
+    
+}
+
+Key
+Pitch::getAsKey(bool isMinor) const {
+    if (isMinor)
+        return getAsKey().getEquivalent();
+    else
+        return getAsKey();
 }
 
 /**

@@ -1010,6 +1010,16 @@ public:
      */
     Event *getAsNoteEvent(timeT absoluteTime, timeT duration) const;
 
+    /**
+     * Get the major key that has this Pitch as the tonic
+     */
+    Key getAsKey() const;
+
+    /**
+     * Get the major or minor key that has this Pitch as the tonic
+     */
+    Key getAsKey(bool isMinor) const;
+
 private:
     int m_pitch;
     Accidental m_accidental;
