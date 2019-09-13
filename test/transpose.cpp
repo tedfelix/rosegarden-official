@@ -103,9 +103,9 @@ void TestTranspose::testKeyCMajorToDFlatMajor()
     Key cmaj("C major");
     Key result = cmaj.transpose(1, 1);
 
-    std::string resultName = result.getName(); 
+    QString resultName = result.getName().c_str();
     int resultPitch = result.getTonicPitch();
-    QCOMPARE(resultName, "Db major");
+    QCOMPARE(resultName, QString("Db major"));
     QCOMPARE(resultPitch, 1);
 }
 
