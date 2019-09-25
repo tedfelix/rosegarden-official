@@ -66,43 +66,19 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenDocument *doc,
     QFrame *frame;
     QGridLayout *layout;
     QLabel *label = nullptr;
-    int row = 0;
 
-    //
-    // "Behavior" tab
-    //
+
+    // *** Behavior tab
+
     frame = new QFrame(m_tabWidget);
-    frame->setContentsMargins(10, 10, 10, 10);
+    addTab(frame, tr("Behavior"));
+    frame->setContentsMargins(10, 25, 10, 10);
     layout = new QGridLayout(frame);
     layout->setSpacing(5);
 
-    layout->setRowMinimumHeight(row, 15);
-    ++row;
+    int row = 0;
 
-    QLabel *gsLabel = new QLabel(tr("Graphics performance"));
-    layout->addWidget(gsLabel, row, 0);
-
-    m_graphicsSystem = new QComboBox(frame);
-    connect(m_graphicsSystem, SIGNAL(activated(int)), this, SLOT(slotModified()));
-    m_graphicsSystem->addItem(tr("Fast"));   // raster
-    m_graphicsSystem->addItem(tr("Safe"));   // native
-    // I decided to give up on this after all.  I only know of one person for
-    // whom OpenGL actively crashes, but dealing with that possibility in terms
-    // of the wording of user-visible warnings and advisories is an annoying
-    // PITA, so I've dumped this for the time being, and limited this to only
-    // two options.  I've also changed "normal" to be the new "fast" to
-    // encourage users to pick that one.  Stupid users, always foiling the
-    // best-intentioned plans with their bumbling.  Alas.
-//    m_graphicsSystem->addItem(tr("Unstable"));   // opengl
-    m_lastGraphicsSystemIndex = settings.value("graphics_system", Raster).toInt();
-    m_graphicsSystem->setCurrentIndex(m_lastGraphicsSystemIndex);
-    layout->addWidget(m_graphicsSystem, row, 1, 1, 2);
-    ++row;
-
-    QString graphicsSystemTip(tr("<qt><p>Qt offers you the choice of two graphics systems. The fast (raster) graphics system offers the best tradeoff between performance and stability, but may cause problems for some users.  If you experience frequent crashes, or distorted graphics, you should try the safe (native) graphics system instead.</p></qt>"));
-    gsLabel->setToolTip(graphicsSystemTip);
-    m_graphicsSystem->setToolTip(graphicsSystemTip);
-
+    // Double-click opens segment in
     layout->addWidget(new QLabel(tr("Double-click opens segment in"),
                                  frame), row, 0);
 
@@ -128,7 +104,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenDocument *doc,
     ++row;
 
     layout->addWidget(new QLabel(tr("Auto-save interval"), frame), row, 0);
-    
+
     m_autoSave = new QComboBox(frame);
     connect(m_autoSave, SIGNAL(activated(int)), this, SLOT(slotModified()));
     m_autoSave->addItem(tr("Every 30 seconds"));
@@ -170,11 +146,11 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenDocument *doc,
     layout->addWidget(label, row, 0);
 
     m_useTrackName = new QCheckBox(frame);
-    QString useTrackNameTip(tr(
+    QString tipText = tr(
             "<qt><p>If checked, the label for new segments will always be the "
-            "same as the track name.</p></qt>"));
-    label->setToolTip(useTrackNameTip);
-    m_useTrackName->setToolTip(useTrackNameTip);
+            "same as the track name.</p></qt>");
+    label->setToolTip(tipText);
+    m_useTrackName->setToolTip(tipText);
 
     connect(m_useTrackName, &QCheckBox::stateChanged, this, &GeneralConfigurationPage::slotModified);
 
@@ -221,6 +197,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenDocument *doc,
 #endif
     settings.beginGroup(GeneralOptionsConfigGroup);
 
+    // Skip a row.  Leave some space for the next field.
     layout->setRowMinimumHeight(row, 20);
     ++row;
 
@@ -257,12 +234,11 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenDocument *doc,
 
     layout->setRowStretch(row, 10);
 
-    addTab(frame, tr("Behavior"));
 
-    //
-    // "Presentation" tab
-    //
+    // *** Presentation tab
+
     frame = new QFrame(m_tabWidget);
+    addTab(frame, tr("Presentation"));
     frame->setContentsMargins(10, 10, 10, 10);
     layout = new QGridLayout(frame);
     layout->setSpacing(5);
@@ -335,14 +311,11 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenDocument *doc,
     ++row;
     layout->setRowStretch(row, 10);
 
-    addTab(frame, tr("Presentation"));
 
-
-    //
-    // "External Applications" tab
-    //
+    // *** External Applications tab
 
     frame = new QFrame(m_tabWidget);
+    addTab(frame, tr("External Applications"));
     frame->setContentsMargins(10, 10, 10, 10);
     layout = new QGridLayout(frame);
     layout->setSpacing(5);
@@ -397,11 +370,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenDocument *doc,
 
     ++row;
 
-
-
     layout->setRowStretch(row, 10);
-
-    addTab(frame, tr("External Applications"));
 
 }
 
@@ -434,13 +403,6 @@ void GeneralConfigurationPage::apply()
 
     int countIn = getCountInSpin();
     settings.setValue("countinbars", countIn);
-
-    int graphicsSystem = getGraphicsSystem();
-    settings.setValue("graphics_system", graphicsSystem);
-    bool graphicsSystemChanged = false;
-    // !!! This comparison is suspicious.  Need to clarify the role,
-    // if any, of negative values.
-    if (graphicsSystem != m_lastGraphicsSystemIndex) graphicsSystemChanged = true;
 
     int client = getDblClickClient();
     settings.setValue("doubleclickclient", client);
@@ -573,10 +535,6 @@ void GeneralConfigurationPage::apply()
 
     if (mainTextureChanged) {
         QMessageBox::information(this, tr("Rosegarden"), tr("Changes to the textured background in the main window will not take effect until you restart Rosegarden."));
-    }
-
-    if (graphicsSystemChanged) {
-        QMessageBox::information(this, tr("Rosegarden"), tr("You must restart Rosegarden for the graphics system change to take effect."));
     }
 
     if (thornChanged) {

@@ -63,7 +63,6 @@ public:
     void setMidiWarning(const bool status);
     void setAudioWarning(const bool status);
     void setTimerWarning(const bool status);
-    void setGraphicsAdvisory(const bool status);
 
     /** Add a message (consisting of a text and an informative text) to the
      * queue.  These will be displayed via displayMessageQueue() when the user
@@ -83,7 +82,6 @@ protected:
     QLabel *m_timerIcon;
 
     QToolButton *m_warningButton;
-    QToolButton *m_graphicsButton;
     QToolButton *m_infoButton;
 
     QString m_text;
@@ -100,13 +98,6 @@ protected slots:
     /** Display the message queue in a suitable dialog, on demand
      */
     void displayMessageQueue();
-
-    /** Display the graphics advisory.  This is not treated as a warning, and
-     * not added to the queue, because running in "safe" (native) graphics mode
-     * is not considered a real "performance problem" in the same way as a slow
-     * kernel timer and so on.
-     */
-    void displayGraphicsAdvisory();
 };
 
 

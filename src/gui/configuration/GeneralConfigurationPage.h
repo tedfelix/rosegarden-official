@@ -107,7 +107,6 @@ protected:
     int getUseTrackName()           { return m_useTrackName->isChecked(); }
     int getPdfViewer()              { return m_pdfViewer->currentIndex(); }
     int getFilePrinter()            { return m_filePrinter->currentIndex(); }
-    int getGraphicsSystem()         { return m_graphicsSystem->currentIndex(); }
     
     //--------------- Data members ---------------------------------
     RosegardenDocument* m_doc;
@@ -129,9 +128,6 @@ protected:
 
     QComboBox *m_pdfViewer;
     QComboBox *m_filePrinter;
-    QComboBox *m_graphicsSystem;
-
-    int m_lastGraphicsSystemIndex;
 };
 
 }

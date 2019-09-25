@@ -900,25 +900,6 @@ RosegardenMainWindow::initStatusBar()
 
     // status warning widget replaces a glob of annoying startup dialogs
     m_warningWidget = new WarningWidget(this);
-
-    // since the graphics warning doesn't make use of the usual plumbing, go
-    // ahead and set that up right here
-    //
-    //!!! Must put this enum someplace central as this is the third or fourth
-    // time I've pasted the code
-    enum GraphicsSystem
-    {
-        Raster,
-        Native,
-        OpenGL
-    };
-
-    QSettings settings;
-    settings.beginGroup(GeneralOptionsConfigGroup);
-    bool safeGraphics = (settings.value("graphics_system", Native).toInt() == Native);
-    settings.endGroup();
-    m_warningWidget->setGraphicsAdvisory(safeGraphics);
-
     statusBar()->addPermanentWidget(m_warningWidget);
     statusBar()->setContentsMargins(0, 0, 0, 0);
 }
