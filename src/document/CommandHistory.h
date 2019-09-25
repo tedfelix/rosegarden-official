@@ -124,6 +124,9 @@ public:
     /// Finish recording commands and store the compound command.
     void endCompoundOperation();
 
+    /// Enable/Disable undo (during playback).
+    void enableUndo(bool enable);
+
 public slots:
     /**
      * Checkpoint function that should be called when the document is
@@ -234,6 +237,9 @@ protected:
     int m_bundleTimeout;
     void addToBundle(Command *command, bool execute);
     void closeBundle();
+
+    /// Enable/Disable undo (during playback).
+    bool m_enableUndo;
     
 };
 

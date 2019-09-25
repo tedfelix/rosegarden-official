@@ -20,6 +20,7 @@
 #include "SegmentSplitter.h"
 
 #include "misc/Debug.h"
+#include "misc/ConfigGroups.h"
 #include "base/Segment.h"
 #include "base/SnapGrid.h"
 #include "commands/segment/AudioSegmentSplitCommand.h"
@@ -37,6 +38,7 @@
 
 #include <QPoint>
 #include <QRect>
+#include <QSettings>
 #include <QString>
 #include <QMouseEvent>
 
@@ -47,10 +49,11 @@ namespace Rosegarden
 
 QString SegmentSplitter::ToolName() { return "segmentsplitter"; }
 
-SegmentSplitter::SegmentSplitter(CompositionView *c, RosegardenDocument *d)
-        : SegmentTool(c, d),
-        m_prevX(0),
-        m_prevY(0)
+SegmentSplitter::SegmentSplitter(CompositionView *c, RosegardenDocument *d) :
+    SegmentTool(c, d),
+    m_enableSegmentSplitting(true),
+    m_prevX(0),
+    m_prevY(0)
 {
     RG_DEBUG << "SegmentSplitter()\n";
 }
@@ -74,8 +77,15 @@ SegmentSplitter::mousePressEvent(QMouseEvent *e)
     if (e->button() != Qt::LeftButton)
         return;
 
+    QSettings settings;
+    settings.beginGroup(GeneralOptionsConfigGroup);
+    m_enableSegmentSplitting =
+            settings.value("enableSegmentSplitting", false).toBool();
+
     // Can't split a segment while playing.
-    if (RosegardenMainWindow::self()->getSequenceManager()->
+    // ??? What about recording?
+    if (!m_enableSegmentSplitting  &&
+        RosegardenMainWindow::self()->getSequenceManager()->
             getTransportStatus() == PLAYING)
         return;
 
@@ -108,7 +118,9 @@ SegmentSplitter::mouseReleaseEvent(QMouseEvent *e)
         return;
 
     // Can't split a segment while playing.
-    if (RosegardenMainWindow::self()->getSequenceManager()->
+    // ??? What about recording?
+    if (!m_enableSegmentSplitting  &&
+        RosegardenMainWindow::self()->getSequenceManager()->
             getTransportStatus() == PLAYING)
         return;
 
@@ -149,7 +161,9 @@ int
 SegmentSplitter::mouseMoveEvent(QMouseEvent *e)
 {
     // Can't split a segment while playing.
-    if (RosegardenMainWindow::self()->getSequenceManager()->
+    // ??? What about recording?
+    if (!m_enableSegmentSplitting  &&
+        RosegardenMainWindow::self()->getSequenceManager()->
             getTransportStatus() == PLAYING)
         return NO_FOLLOW;
 

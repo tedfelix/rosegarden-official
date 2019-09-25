@@ -162,6 +162,42 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
 
     ++row;
 
+    // Enable undo during playback
+    label = new QLabel(tr("Enable undo during playback"), frame);
+    tipText = tr(
+            "<qt><p>WARNING: Using undo during playback can lead to "
+            "instability, crashes, and data loss.  Save frequently.</p></qt>");
+    label->setToolTip(tipText);
+    layout->addWidget(label, row, 0);
+
+    m_enableUndoDuringPlayback = new QCheckBox(frame);
+    m_enableUndoDuringPlayback->setToolTip(tipText);
+    m_enableUndoDuringPlayback->setChecked(
+            settings.value("enableUndoDuringPlayback", false).toBool());
+    connect(m_enableUndoDuringPlayback, &QCheckBox::stateChanged,
+            this, &GeneralConfigurationPage::slotModified);
+    layout->addWidget(m_enableUndoDuringPlayback, row, 1, 1, 2);
+
+    ++row;
+
+    // Enable segment splitting during playback
+    label = new QLabel(tr("Enable segment splitting during playback"), frame);
+    tipText = tr(
+            "<qt><p>WARNING: Splitting segments during playback can lead to "
+            "instability, crashes, and data loss.  Save frequently.</p></qt>");
+    label->setToolTip(tipText);
+    layout->addWidget(label, row, 0);
+
+    m_enableSegmentSplitting = new QCheckBox(frame);
+    m_enableSegmentSplitting->setToolTip(tipText);
+    m_enableSegmentSplitting->setChecked(
+            settings.value("enableSegmentSplitting", false).toBool());
+    connect(m_enableSegmentSplitting, &QCheckBox::stateChanged,
+            this, &GeneralConfigurationPage::slotModified);
+    layout->addWidget(m_enableSegmentSplitting, row, 1, 1, 2);
+
+    ++row;
+
     settings.endGroup();
 
 #ifdef HAVE_LIBJACK
@@ -422,6 +458,10 @@ void GeneralConfigurationPage::apply()
 
     settings.setValue("appendlabel", m_appendSuffixes->isChecked());
     settings.setValue("usetrackname", m_useTrackName->isChecked());
+    settings.setValue("enableUndoDuringPlayback",
+            m_enableUndoDuringPlayback->isChecked());
+    settings.setValue("enableSegmentSplitting",
+            m_enableSegmentSplitting->isChecked());
 
     settings.endGroup();
 

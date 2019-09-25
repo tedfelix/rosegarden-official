@@ -45,7 +45,8 @@ CommandHistory::CommandHistory() :
     m_executeCompound(false),
     m_currentBundle(nullptr),
     m_bundleTimer(nullptr),
-    m_bundleTimeout(5000)
+    m_bundleTimeout(5000),
+    m_enableUndo(true)
 {
     // All Edit > Undo menu items share this QAction object.
     m_undoAction = new QAction(QIcon(":/icons/undo.png"), tr("&Undo"), this);
@@ -510,6 +511,7 @@ CommandHistory::updateActions()
 {
     m_actionCounts.clear();
 
+    // for undo then redo
     for (int undo = 0; undo <= 1; ++undo) {
 
         QAction *action(undo ? m_undoAction : m_redoAction);
@@ -530,17 +532,17 @@ CommandHistory::updateActions()
 
         } else {
 
-            action->setEnabled(true);
-            menuAction->setEnabled(true);
-
             QString commandName = stack.top()->getName();
             commandName.replace(QRegExp("&"), "");
 
             QString text = (undo ? tr("&Undo %1") : tr("Re&do %1"))
                 .arg(commandName);
 
+            action->setEnabled(m_enableUndo);
             action->setText(text);
             action->setToolTip(strippedText(text));
+
+            menuAction->setEnabled(m_enableUndo);
             menuAction->setText(text);
         }
 
@@ -571,6 +573,13 @@ CommandHistory::updateActions()
             tempStack.pop();
         }
     }
+}
+
+void
+CommandHistory::enableUndo(bool enable)
+{
+    m_enableUndo = enable;
+    updateActions();
 }
 
 

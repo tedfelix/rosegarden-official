@@ -6099,18 +6099,29 @@ RosegardenMainWindow::slotStateChanged(QString s,
 void
 RosegardenMainWindow::updateActions()
 {
+    QSettings settings;
+    settings.beginGroup(GeneralOptionsConfigGroup);
+    bool enableSegmentSplitting =
+            settings.value("enableSegmentSplitting", false).toBool();
+
+
     // not_playing && have_selection
 
     findAction("delete")->setEnabled(m_notPlaying  &&  m_haveSelection);
     findAction("edit_cut")->setEnabled(m_notPlaying  &&  m_haveSelection);
     // ??? This doesn't prevent Ctrl+Resize on the edges of a Segment.  CRASH.
     findAction("rescale")->setEnabled(m_notPlaying  &&  m_haveSelection);
-    findAction("auto_split")->setEnabled(m_notPlaying  &&  m_haveSelection);
-    findAction("split_by_pitch")->setEnabled(m_notPlaying  &&  m_haveSelection);
-    findAction("split_by_recording")->setEnabled(m_notPlaying  &&  m_haveSelection);
+    findAction("auto_split")->setEnabled(
+            (enableSegmentSplitting || m_notPlaying)  &&  m_haveSelection);
+    findAction("split_by_pitch")->setEnabled(
+            (enableSegmentSplitting || m_notPlaying)  &&  m_haveSelection);
+    findAction("split_by_recording")->setEnabled(
+            (enableSegmentSplitting || m_notPlaying)  &&  m_haveSelection);
     // ??? This doesn't prevent the split tool from causing a CRASH.
-    findAction("split_at_time")->setEnabled(m_notPlaying  &&  m_haveSelection);
-    findAction("split_by_drum")->setEnabled(m_notPlaying  &&  m_haveSelection);
+    findAction("split_at_time")->setEnabled(
+            (enableSegmentSplitting || m_notPlaying)  &&  m_haveSelection);
+    findAction("split_by_drum")->setEnabled(
+            (enableSegmentSplitting || m_notPlaying)  &&  m_haveSelection);
     findAction("join_segments")->setEnabled(m_notPlaying  &&  m_haveSelection);
 
 
@@ -6122,8 +6133,11 @@ RosegardenMainWindow::updateActions()
 void
 RosegardenMainWindow::enterActionState(QString stateName)
 {
-   if (stateName == "not_playing")
+   if (stateName == "not_playing") {
       m_notPlaying = true;
+      CommandHistory::getInstance()->enableUndo(true);
+   }
+
    if (stateName == "have_selection")
       m_haveSelection = true;
    if (stateName == "have_range")
@@ -6138,8 +6152,18 @@ RosegardenMainWindow::enterActionState(QString stateName)
 void
 RosegardenMainWindow::leaveActionState(QString stateName)
 {
-   if (stateName == "not_playing")
+   if (stateName == "not_playing") {
       m_notPlaying = false;
+
+      QSettings settings;
+      settings.beginGroup(GeneralOptionsConfigGroup);
+      bool enableUndoDuringPlayback =
+              settings.value("enableUndoDuringPlayback", false).toBool();
+
+      if (!enableUndoDuringPlayback)
+          CommandHistory::getInstance()->enableUndo(false);
+   }
+
    if (stateName == "have_selection")
       m_haveSelection = false;
    if (stateName == "have_range")

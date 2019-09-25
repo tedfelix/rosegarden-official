@@ -511,8 +511,6 @@
     <Action name="file_merge_musicxml" />
     <Action name="file_close" />
     <Action name="file_quit" />
-    <Action name="edit_undo" />
-    <Action name="edit_redo" />
     <Action name="delete_track" />
     <!-- There are probably others, like split and resize. -->
 

@@ -63,7 +63,8 @@ protected:
     void splitSegment(Segment *segment,
                       timeT &splitTime);
 
-    //--------------- Data members ---------------------------------
+    bool m_enableSegmentSplitting;
+
     // ??? unused
     int m_prevX;
     // ??? unused

@@ -96,6 +96,8 @@ private:
     QComboBox *m_autoSaveInterval;
     QCheckBox *m_appendSuffixes;
     QCheckBox *m_useTrackName;
+    QCheckBox *m_enableUndoDuringPlayback;
+    QCheckBox *m_enableSegmentSplitting;
     QCheckBox *m_useJackTransport;
 
     // Presentation tab
