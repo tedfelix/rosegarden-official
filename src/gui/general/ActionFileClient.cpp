@@ -84,13 +84,12 @@ ActionFileClient::findAction(QString actionName)
 {
     QObject *obj = dynamic_cast<QObject *>(this);
     if (!obj) {
-        RG_WARNING << "ERROR: ActionFileClient::findAction: ActionFileClient subclass is not a QObject";
+        RG_WARNING << "ERROR: findAction(): ActionFileClient subclass is not a QObject";
         return DecoyAction::getInstance();
     }
     QAction *a = obj->findChild<QAction *>(actionName);
     if (!a) {
-        RG_WARNING << "WARNING: ActionFileClient(\"" << obj->objectName()
-                  << "\")::findAction: No such action as \"" << actionName << "\"";
+        RG_WARNING << "WARNING: ActionFileClient(" << obj->objectName() << ")::findAction(): No such action as " << actionName;
         return DecoyAction::getInstance();
     }
     return a;
