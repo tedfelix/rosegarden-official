@@ -48,42 +48,66 @@ ConfigureDialog::ConfigureDialog(RosegardenDocument *doc,
     : ConfigureDialogBase(parent, tr("Rosegarden - Preferences"), name )
 {
     
-    QWidget* page = nullptr;
-    
-    // General Page
-    //
     IconLoader il;
     
-    
-    page = new GeneralConfigurationPage(this);
-    connect(page,SIGNAL(modified()),this,SLOT(slotActivateApply()));
-    addPage(GeneralConfigurationPage::iconLabel(),GeneralConfigurationPage::title(),il.loadPixmap(GeneralConfigurationPage::iconName()),page);    
-    m_configurationPages.push_back((ConfigurationPage*)page);
+    // General
+    GeneralConfigurationPage *generalConfigurationPage =
+            new GeneralConfigurationPage(this);
+    connect(generalConfigurationPage, &GeneralConfigurationPage::modified,
+            this, &ConfigureDialog::slotActivateApply);
+    connect(generalConfigurationPage,
+                &GeneralConfigurationPage::updateAutoSaveInterval,
+            this, &ConfigureDialog::updateAutoSaveInterval);
+    addPage(GeneralConfigurationPage::iconLabel(),
+            GeneralConfigurationPage::title(),
+            il.loadPixmap(GeneralConfigurationPage::iconName()),
+            generalConfigurationPage);
+    m_configurationPages.push_back(generalConfigurationPage);
 
-    connect(page, SIGNAL(updateAutoSaveInterval(unsigned int)),
-            this, SIGNAL(updateAutoSaveInterval(unsigned int)));
+    // MIDI
+    MIDIConfigurationPage *midiConfigurationPage =
+            new MIDIConfigurationPage(doc, this);
+    connect(midiConfigurationPage, &MIDIConfigurationPage::modified,
+            this, &ConfigureDialog::slotActivateApply);
+    addPage(MIDIConfigurationPage::iconLabel(),
+            MIDIConfigurationPage::title(),
+            il.loadPixmap(MIDIConfigurationPage::iconName()),
+            midiConfigurationPage);
+    m_configurationPages.push_back(midiConfigurationPage);
 
-    page = new MIDIConfigurationPage(doc, this);
-    connect(page,SIGNAL(modified()),this,SLOT(slotActivateApply()));
-    addPage(MIDIConfigurationPage::iconLabel(),MIDIConfigurationPage::title(),il.loadPixmap( MIDIConfigurationPage::iconName()),page);
-    m_configurationPages.push_back((ConfigurationPage*)page);
-
-    page = new AudioConfigurationPage(doc, this);
-    connect(page,SIGNAL(modified()),this,SLOT(slotActivateApply()));
-    addPage(AudioConfigurationPage::iconLabel(),AudioConfigurationPage::title(),il.loadPixmap(AudioConfigurationPage::iconName()),page);
-    m_configurationPages.push_back((ConfigurationPage*)page);
+    // Audio
+    AudioConfigurationPage *audioConfigurationPage =
+            new AudioConfigurationPage(doc, this);
+    connect(audioConfigurationPage, &AudioConfigurationPage::modified,
+            this, &ConfigureDialog::slotActivateApply);
+    addPage(AudioConfigurationPage::iconLabel(),
+            AudioConfigurationPage::title(),
+            il.loadPixmap(AudioConfigurationPage::iconName()),
+            audioConfigurationPage);
+    m_configurationPages.push_back(audioConfigurationPage);
 
     // Notation Page
-    page = new NotationConfigurationPage(this);
-    connect(page,SIGNAL(modified()),this,SLOT(slotActivateApply()));
-    addPage(NotationConfigurationPage::iconLabel(),NotationConfigurationPage::title(),il.loadPixmap(NotationConfigurationPage::iconName()),page);
-    m_configurationPages.push_back((ConfigurationPage*)page);
+    NotationConfigurationPage *notationConfigurationPage =
+            new NotationConfigurationPage(this);
+    connect(notationConfigurationPage, &NotationConfigurationPage::modified,
+            this, &ConfigureDialog::slotActivateApply);
+    addPage(NotationConfigurationPage::iconLabel(),
+            NotationConfigurationPage::title(),
+            il.loadPixmap(NotationConfigurationPage::iconName()),
+            notationConfigurationPage);
+    m_configurationPages.push_back(notationConfigurationPage);
 
     // Pitch Tracker Page
-    page = new PitchTrackerConfigurationPage(this);
-    connect(page,SIGNAL(modified()),this,SLOT(slotActivateApply()));
-    addPage(PitchTrackerConfigurationPage::iconLabel(),PitchTrackerConfigurationPage::title(),il.loadPixmap(PitchTrackerConfigurationPage::iconName()),page);
-    m_configurationPages.push_back((ConfigurationPage*)page);
+    PitchTrackerConfigurationPage *pitchTrackerConfigurationPage =
+            new PitchTrackerConfigurationPage(this);
+    connect(pitchTrackerConfigurationPage,
+                &PitchTrackerConfigurationPage::modified,
+            this, &ConfigureDialog::slotActivateApply);
+    addPage(PitchTrackerConfigurationPage::iconLabel(),
+            PitchTrackerConfigurationPage::title(),
+            il.loadPixmap(PitchTrackerConfigurationPage::iconName()),
+            pitchTrackerConfigurationPage);
+    m_configurationPages.push_back(pitchTrackerConfigurationPage);
 
 }
 

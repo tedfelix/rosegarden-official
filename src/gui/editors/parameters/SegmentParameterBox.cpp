@@ -136,6 +136,7 @@ SegmentParameterBox::SegmentParameterBox(QWidget *parent) :
                                     "control in <b>Track Parameters</b> under <b>Create segments with</b> to pre-select this   "
                                     "setting before drawing or recording new segments.</i></p></qt>"));
     // QComboBox::activated() is overloaded, so we have to use SIGNAL().
+    // ??? Actually, search on "QComboBox::*" and that might be the solution.
     connect(m_transpose, SIGNAL(activated(int)),
             SLOT(slotTransposeSelected(int)));
 
@@ -157,6 +158,7 @@ SegmentParameterBox::SegmentParameterBox(QWidget *parent) :
             "This quantization can be removed at any time in "
             "the future by setting it to off.</p></qt>"));
     // QComboBox::activated() is overloaded, so we have to use SIGNAL().
+    // ??? Actually, search on "QComboBox::*" and that might be the solution.
     connect(m_quantize, SIGNAL(activated(int)),
             SLOT(slotQuantizeSelected(int)));
 
@@ -184,6 +186,7 @@ SegmentParameterBox::SegmentParameterBox(QWidget *parent) :
                                 " while doing this for fine-grained control, though doing so will have harsh effects on music"
                                 " notation rendering as viewed in the notation editor.</i></p></qt>"));
     // QComboBox::activated() is overloaded, so we have to use SIGNAL().
+    // ??? Actually, search on "QComboBox::*" and that might be the solution.
     connect(m_delay, SIGNAL(activated(int)),
             SLOT(slotDelaySelected(int)));
     // ??? The combobox is not editable.  This will never be called.
@@ -234,6 +237,7 @@ SegmentParameterBox::SegmentParameterBox(QWidget *parent) :
     m_color->setFont(m_font);
     m_color->setToolTip(tr("<qt><p>Change the color of any selected segments</p></qt>"));
     // QComboBox::activated() is overloaded, so we have to use SIGNAL().
+    // ??? Actually, search on "QComboBox::*" and that might be the solution.
     connect(m_color, SIGNAL(activated(int)),
             SLOT(slotColourChanged(int)));
     // slotNewDocument() will finish the initialization.

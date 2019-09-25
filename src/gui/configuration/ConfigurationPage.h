@@ -72,6 +72,7 @@ public:
     int pageIndex() const { return m_pageIndex; }
 
 signals:
+    // ConfigureDialog and others use this to enable the Apply button.
     void modified();
 
 protected slots:

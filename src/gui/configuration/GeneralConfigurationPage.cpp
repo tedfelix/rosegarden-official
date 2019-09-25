@@ -75,9 +75,11 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
     m_openSegmentsIn->addItem(tr("Event List editor"));
     m_openSegmentsIn->setCurrentIndex(
             settings.value("doubleclickclient", NotationView).toUInt());
-    connect(m_openSegmentsIn, SIGNAL(activated(int)), this, SLOT(slotModified()));
-
+    connect(m_openSegmentsIn, static_cast<void(QComboBox::*)(int)>(
+                &QComboBox::activated),
+            this, &GeneralConfigurationPage::slotModified);
     layout->addWidget(m_openSegmentsIn, row, 1, 1, 2);
+
     ++row;
 
     // Number of count-in measures when recording
@@ -91,8 +93,8 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
     m_countIn->setMaximum(10);
     m_countIn->setValue(settings.value("countinbars", 0).toUInt());
     connect(m_countIn, SIGNAL(valueChanged(int)), this, SLOT(slotModified()));
-
     layout->addWidget(m_countIn, row, 1, 1, 2);
+
     ++row;
 
     // Auto-save interval
@@ -120,10 +122,11 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
         m_autoSaveInterval->setCurrentIndex(3);  // Every half an hour
     }
 
-    connect(m_autoSaveInterval, SIGNAL(activated(int)), this,
-            SLOT(slotModified()));
-
+    connect(m_autoSaveInterval, static_cast<void(QComboBox::*)(int)>(
+            &QComboBox::activated),
+        this, &GeneralConfigurationPage::slotModified);
     layout->addWidget(m_autoSaveInterval, row, 1, 1, 2);
+
     ++row;
 
     // Append suffixes to segment labels
@@ -137,8 +140,8 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
     m_appendSuffixes->setChecked(settings.value("appendlabel", false).toBool());
     connect(m_appendSuffixes, &QCheckBox::stateChanged,
             this, &GeneralConfigurationPage::slotModified);
-
     layout->addWidget(m_appendSuffixes, row, 1, 1, 2);
+
     ++row;
 
     // Use track name for new segments
@@ -155,8 +158,8 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
     m_useTrackName->setChecked(settings.value("usetrackname", false).toBool());
     connect(m_useTrackName, &QCheckBox::stateChanged,
             this, &GeneralConfigurationPage::slotModified);
-
     layout->addWidget(m_useTrackName, row, 1, 1, 2);
+
     ++row;
 
     settings.endGroup();
@@ -178,8 +181,8 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
             settings.value("jacktransport", false).toBool());
     connect(m_useJackTransport, &QCheckBox::stateChanged,
             this, &GeneralConfigurationPage::slotModified);
-
     layout->addWidget(m_useJackTransport, row, 1, row- row+1, 2);
+
     ++row;
 
     settings.endGroup();
@@ -262,8 +265,9 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
     m_nameStyle->addItem(tr("Localized (where available)"));
     m_nameStyle->setCurrentIndex(
             settings.value("notenamestyle", Local).toUInt());
-    connect(m_nameStyle, SIGNAL(activated(int)),
-            this, SLOT(slotModified()));
+    connect(m_nameStyle, static_cast<void(QComboBox::*)(int)>(
+            &QComboBox::activated),
+        this, &GeneralConfigurationPage::slotModified);
     layout->addWidget(m_nameStyle, row, 1, 1, 3);
 
     ++row;
@@ -322,55 +326,62 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
 
     row = 0;
 
-    QLabel *explanation = new QLabel(tr("<qt>Rosegarden relies on external applications to provide certain features.  Each selected application must be installed and available on your path.  When choosing an application to use, please ensure that it can run from a \"run command\" box (typically <b>Alt+F2</b>) which should allow Rosegarden to make use of it when necessary.<br></qt>"), frame);
-    explanation->setWordWrap(true);
-    layout->addWidget(explanation, row, 0, 1, 4);
+    // Explanation
+    label = new QLabel(tr("<qt>Rosegarden relies on external applications to provide certain features.  Each selected application must be installed and available on your path.  When choosing an application to use, please ensure that it can run from a \"run command\" box (typically <b>Alt+F2</b>) which should allow Rosegarden to make use of it when necessary.<br></qt>"),
+                       frame);
+    label->setWordWrap(true);
+    layout->addWidget(label, row, 0, 1, 4);
 
     ++row;
 
-    layout->addWidget(new QLabel(tr("PDF viewer"),
-                      frame), row, 0);
+    // PDF viewer
+    label = new QLabel(tr("PDF viewer"), frame);
+    tipText = tr("Used to preview generated LilyPond output");
+    label->setToolTip(tipText);
+    layout->addWidget(label, row, 0);
 
     m_pdfViewer = new QComboBox(frame);
-    connect(m_pdfViewer, SIGNAL(activated(int)), this, SLOT(slotModified()));
+    m_pdfViewer->setToolTip(tipText);
     m_pdfViewer->addItem(tr("Okular (KDE 4.x)"));
     m_pdfViewer->addItem(tr("Evince (GNOME)"));
     m_pdfViewer->addItem(tr("Adobe Acrobat Reader (non-free)"));
     m_pdfViewer->addItem(tr("MuPDF"));
     m_pdfViewer->addItem(tr("ePDFView"));
     m_pdfViewer->addItem(tr("xdg-open (recommended)"));
-    m_pdfViewer->setToolTip(tr("Used to preview generated LilyPond output"));
+    settings.endGroup();
+    settings.beginGroup(ExternalApplicationsConfigGroup);
+    m_pdfViewer->setCurrentIndex(settings.value("pdfviewer", xdgOpen).toUInt());
+    connect(m_pdfViewer, static_cast<void(QComboBox::*)(int)>(
+            &QComboBox::activated),
+        this, &GeneralConfigurationPage::slotModified);
     layout->addWidget(m_pdfViewer, row, 1, 1, 3);
 
     ++row;
 
-    layout->addWidget(new QLabel(tr("Command-line file printing utility"),
-                      frame), row, 0);
+    // Command-line file printing utility
+    label = new QLabel(tr("Command-line file printing utility"), frame);
+    tipText = tr("Used to print generated LilyPond output without previewing it");
+    label->setToolTip(tipText);
+    layout->addWidget(label, row, 0);
 
     m_filePrinter = new QComboBox(frame);
-    connect(m_filePrinter, SIGNAL(activated(int)), this, SLOT(slotModified()));
+    m_filePrinter->setToolTip(tipText);
     m_filePrinter->addItem(tr("Gtk-LP (GNOME)"),1);
     m_filePrinter->addItem(tr("lpr (no GUI)"),2);
     m_filePrinter->addItem(tr("lp (no GUI)"),3);
     m_filePrinter->addItem(tr("HPLIP (Qt 4)"),4);
-    m_filePrinter->setToolTip(tr("Used to print generated LilyPond output without previewing it"));
-    layout->addWidget(m_filePrinter, row, 1, 1, 3);
-
-    ++row;
-
-    settings.endGroup();
-    settings.beginGroup(ExternalApplicationsConfigGroup);
-    m_pdfViewer->setCurrentIndex(settings.value("pdfviewer", xdgOpen).toUInt());
-
     // now that I'm actually on KDE 4.2, I see no more KPrinter.  I'll default
     // to Lpr instead.
     m_filePrinter->setCurrentIndex(settings.value("fileprinter", Lpr).toUInt());
+    connect(m_filePrinter, static_cast<void(QComboBox::*)(int)>(
+            &QComboBox::activated),
+        this, &GeneralConfigurationPage::slotModified);
+    layout->addWidget(m_filePrinter, row, 1, 1, 3);
 
     ++row;
 
     // Make the last row stretch to fill the rest of the space.
     layout->setRowStretch(row, 10);
-
 }
 
 void
