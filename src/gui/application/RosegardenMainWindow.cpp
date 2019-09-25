@@ -4512,10 +4512,15 @@ RosegardenMainWindow::slotHandleInputs()
     TransportStatus status = RosegardenSequencer::getInstance()->
         getStatus();
 
+    // ??? Wouldn't it make more sense to do this when playback or
+    //     recording is started/stopped?  E.g. in stop(), play(), and
+    //     record().  That would avoid constantly polling this.
     if (status == PLAYING || status == RECORDING) { //@@@ JAS orig ? KXMLGUIClient::StateReverse : KXMLGUIClient::StateNoReverse
-        leaveActionState("not_playing");
+        if (m_notPlaying)
+            leaveActionState("not_playing");
     } else {
-        enterActionState("not_playing");
+        if (!m_notPlaying)
+            enterActionState("not_playing");
     }
 
     if (m_seqManager) {
@@ -5552,6 +5557,10 @@ RosegardenMainWindow::isSequencerRunning()
 void
 RosegardenMainWindow::alive()
 {
+    // ??? This routine appears to never be called.
+
+    //RG_DEBUG << "alive()";
+
     if (m_doc) m_doc->checkSequencerTimer();
 
     if (m_doc && m_doc->getStudio().haveMidiDevices()) {
