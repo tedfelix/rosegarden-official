@@ -51,14 +51,11 @@
 namespace Rosegarden
 {
 
-GeneralConfigurationPage::GeneralConfigurationPage(RosegardenDocument *doc,
-        QWidget *parent)
-        : TabbedConfigurationPage(parent),
-        m_doc(doc),
-        m_client(nullptr),
-        m_countIn(nullptr),
-        m_nameStyle(nullptr),
-        m_appendLabel(nullptr)
+GeneralConfigurationPage::GeneralConfigurationPage(
+        RosegardenDocument *doc,
+        QWidget *parent) :
+    TabbedConfigurationPage(parent),
+    m_doc(doc)
 {
     QSettings settings;
     settings.beginGroup(GeneralOptionsConfigGroup);
@@ -82,125 +79,124 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenDocument *doc,
     layout->addWidget(new QLabel(tr("Double-click opens segment in"),
                                  frame), row, 0);
 
-    m_client = new QComboBox(frame);
-    connect(m_client, SIGNAL(activated(int)), this, SLOT(slotModified()));
-    m_client->addItem(tr("Notation editor"));
-    m_client->addItem(tr("Matrix editor"));
-    m_client->addItem(tr("Event List editor"));
-    m_client->setCurrentIndex(settings.value("doubleclickclient", NotationView).toUInt());
+    m_openSegmentsIn = new QComboBox(frame);
+    m_openSegmentsIn->addItem(tr("Notation editor"));
+    m_openSegmentsIn->addItem(tr("Matrix editor"));
+    m_openSegmentsIn->addItem(tr("Event List editor"));
+    m_openSegmentsIn->setCurrentIndex(settings.value("doubleclickclient", NotationView).toUInt());
+    connect(m_openSegmentsIn, SIGNAL(activated(int)), this, SLOT(slotModified()));
 
-    layout->addWidget(m_client, row, 1, 1, 2);
+    layout->addWidget(m_openSegmentsIn, row, 1, 1, 2);
     ++row;
 
+    // Number of count-in measures when recording
     layout->addWidget(new QLabel(tr("Number of count-in measures when recording"),
                                  frame), row, 0);
 
     m_countIn = new QSpinBox(frame);
-    connect(m_countIn, SIGNAL(valueChanged(int)), this, SLOT(slotModified()));
-    m_countIn->setValue(settings.value("countinbars", 0).toUInt());
-    m_countIn->setMaximum(10);
     m_countIn->setMinimum(0);
-    layout->addWidget(m_countIn, row, 1, row- row+1, 2);
+    m_countIn->setMaximum(10);
+    m_countIn->setValue(settings.value("countinbars", 0).toUInt());
+    connect(m_countIn, SIGNAL(valueChanged(int)), this, SLOT(slotModified()));
+
+    layout->addWidget(m_countIn, row, 1, 1, 2);
     ++row;
 
+    // Auto-save interval
     layout->addWidget(new QLabel(tr("Auto-save interval"), frame), row, 0);
 
-    m_autoSave = new QComboBox(frame);
-    connect(m_autoSave, SIGNAL(activated(int)), this, SLOT(slotModified()));
-    m_autoSave->addItem(tr("Every 30 seconds"));
-    m_autoSave->addItem(tr("Every minute"));
-    m_autoSave->addItem(tr("Every five minutes"));
-    m_autoSave->addItem(tr("Every half an hour"));
-    m_autoSave->addItem(tr("Never"));
+    m_autoSaveInterval = new QComboBox(frame);
+    m_autoSaveInterval->addItem(tr("Every 30 seconds"));
+    m_autoSaveInterval->addItem(tr("Every minute"));
+    m_autoSaveInterval->addItem(tr("Every five minutes"));
+    m_autoSaveInterval->addItem(tr("Every half an hour"));
+    m_autoSaveInterval->addItem(tr("Never"));
 
     bool doAutoSave = settings.value("autosave", true).toBool();
-    int autoSaveInterval = settings.value("autosaveinterval", 300).toUInt() ;
-    if (!doAutoSave || autoSaveInterval == 0) {
-        m_autoSave->setCurrentIndex(4); // off
+    int autoSaveInterval = settings.value("autosaveinterval", 300).toUInt();
+
+    if (!doAutoSave  ||  autoSaveInterval == 0) {
+        m_autoSaveInterval->setCurrentIndex(4);  // Never
     } else if (autoSaveInterval < 45) {
-        m_autoSave->setCurrentIndex(0);
+        m_autoSaveInterval->setCurrentIndex(0);  // Every 30 seconds
     } else if (autoSaveInterval < 150) {
-        m_autoSave->setCurrentIndex(1);
+        m_autoSaveInterval->setCurrentIndex(1);  // Every minute
     } else if (autoSaveInterval < 900) {
-        m_autoSave->setCurrentIndex(2);
+        m_autoSaveInterval->setCurrentIndex(2);  // Every five minutes
     } else {
-        m_autoSave->setCurrentIndex(3);
+        m_autoSaveInterval->setCurrentIndex(3);  // Every half an hour
     }
 
-    layout->addWidget(m_autoSave, row, 1, row- row+1, 2);
+    connect(m_autoSaveInterval, SIGNAL(activated(int)), this, SLOT(slotModified()));
+
+    layout->addWidget(m_autoSaveInterval, row, 1, 1, 2);
     ++row;
 
-    label = new QLabel(tr("Append suffixes to segment labels"), frame);
-    layout->addWidget(label, row, 0);
+    // Append suffixes to segment labels
+    layout->addWidget(
+            new QLabel(tr("Append suffixes to segment labels"), frame),
+            row, 0);
 
-    m_appendLabel = new QCheckBox(frame);
-    connect(m_appendLabel, &QCheckBox::stateChanged, this, &GeneralConfigurationPage::slotModified);
+    m_appendSuffixes = new QCheckBox(frame);
     // I traditionally had these turned off, and when they reappeared, I found
     // them incredibly annoying, so I'm making false the default:
-    m_appendLabel->setChecked(settings.value("appendlabel", false).toBool());
-    layout->addWidget(m_appendLabel, row, 1, row- row+1, 2);
-    row++;
+    m_appendSuffixes->setChecked(settings.value("appendlabel", false).toBool());
+    connect(m_appendSuffixes, &QCheckBox::stateChanged,
+            this, &GeneralConfigurationPage::slotModified);
 
-    // Option to use track name as new segments label.
+    layout->addWidget(m_appendSuffixes, row, 1, 1, 2);
+    ++row;
+
+    // Use track name for new segments
     label = new QLabel(tr("Use track name for new segments"), frame);
-    layout->addWidget(label, row, 0);
-
-    m_useTrackName = new QCheckBox(frame);
     QString tipText = tr(
             "<qt><p>If checked, the label for new segments will always be the "
             "same as the track name.</p></qt>");
     label->setToolTip(tipText);
+    layout->addWidget(label, row, 0);
+
+    m_useTrackName = new QCheckBox(frame);
     m_useTrackName->setToolTip(tipText);
-
-    connect(m_useTrackName, &QCheckBox::stateChanged, this, &GeneralConfigurationPage::slotModified);
-
     // Leaving unchecked by default to remain compatible with earlier behaviour
     m_useTrackName->setChecked(settings.value("usetrackname", false).toBool());
-    layout->addWidget(m_useTrackName, row, 1, 1, 2);
+    connect(m_useTrackName, &QCheckBox::stateChanged,
+            this, &GeneralConfigurationPage::slotModified);
 
+    layout->addWidget(m_useTrackName, row, 1, 1, 2);
     ++row;
 
     settings.endGroup();
 
-    // JACK Transport
-    //
 #ifdef HAVE_LIBJACK
     settings.beginGroup(SequencerOptionsConfigGroup);
 
-    label = new QLabel(tr("Use JACK transport"), frame);
-    layout->addWidget(label, row, 0);
+    // Use JACK transport
+    layout->addWidget(new QLabel(tr("Use JACK transport"), frame), row, 0);
 
-    m_jackTransport = new QCheckBox(frame);
-    connect(m_jackTransport, &QCheckBox::stateChanged, this, &GeneralConfigurationPage::slotModified);
-    layout->addWidget(m_jackTransport, row, 1, row- row+1, 2);
+    // ??? Just a checkbox for now.  Originally, three settings were
+    //     proposed for this:
+    //       - Ignore JACK transport
+    //       - Sync
+    //       - Sync, and offer timebase master
+    //     Not sure whether those are still relevant.  Capturing here in case.
+    m_useJackTransport = new QCheckBox(frame);
+    m_useJackTransport->setChecked(
+            settings.value("jacktransport", false).toBool());
+    connect(m_useJackTransport, &QCheckBox::stateChanged, this, &GeneralConfigurationPage::slotModified);
 
-//    m_jackTransport->addItem(tr("Ignore JACK transport"));
-//    m_jackTransport->addItem(tr("Sync"));
-
-    /*!!! Removed as not yet implemented
-        m_jackTransport->addItem(tr("Sync, and offer timebase master"));
-    */
-
-    // bool jackMaster = settings.value("jackmaster", false).toBool();
-    bool jackTransport = settings.value("jacktransport", false).toBool();
-/*
-    if (jackTransport)
-        m_jackTransport->setCurrentIndex(1);
-    else
-        m_jackTransport->setCurrentIndex(0);
-*/
-    m_jackTransport->setChecked(jackTransport);
-
+    layout->addWidget(m_useJackTransport, row, 1, row- row+1, 2);
     ++row;
 
     settings.endGroup();
 #endif
+
     settings.beginGroup(GeneralOptionsConfigGroup);
 
     // Skip a row.  Leave some space for the next field.
     layout->setRowMinimumHeight(row, 20);
     ++row;
 
+    // Sequencer status
     layout->addWidget(new QLabel(tr("Sequencer status"), frame), row, 0);
 
     QString status(tr("Unknown"));
@@ -222,16 +218,15 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenDocument *doc,
             break;
         }
     }
-
     layout->addWidget(new QLabel(status, frame), row, 1);
 
-    QPushButton *showStatusButton = new QPushButton(tr("Details..."),
-                                    frame);
-    QObject::connect(showStatusButton, &QAbstractButton::clicked,
+    QPushButton *detailsButton =
+            new QPushButton(tr("Details..."), frame);
+    QObject::connect(detailsButton, &QAbstractButton::clicked,
                      this, &GeneralConfigurationPage::slotShowStatus);
-    layout->addWidget(showStatusButton, row, 2, Qt::AlignRight);
-    ++row;
+    layout->addWidget(detailsButton, row, 2, Qt::AlignRight);
 
+    ++row;
     layout->setRowStretch(row, 10);
 
 
@@ -456,15 +451,15 @@ void GeneralConfigurationPage::apply()
 
     unsigned int interval = 0;
 
-    if (m_autoSave->currentIndex() == 4) {
+    if (m_autoSaveInterval->currentIndex() == 4) {
         settings.setValue("autosave", false);
     } else {
         settings.setValue("autosave", true);
-        if (m_autoSave->currentIndex() == 0) {
+        if (m_autoSaveInterval->currentIndex() == 0) {
             interval = 30;
-        } else if (m_autoSave->currentIndex() == 1) {
+        } else if (m_autoSaveInterval->currentIndex() == 1) {
             interval = 60;
-        } else if (m_autoSave->currentIndex() == 2) {
+        } else if (m_autoSaveInterval->currentIndex() == 2) {
             interval = 300;
         } else {
             interval = 1800;
@@ -511,7 +506,7 @@ void GeneralConfigurationPage::apply()
     }
 */
 
-    bool jackTransport = m_jackTransport->isChecked();
+    bool jackTransport = m_useJackTransport->isChecked();
     bool jackMaster = false;
 
     int jackValue = 0; // 0 -> nothing, 1 -> sync, 2 -> master

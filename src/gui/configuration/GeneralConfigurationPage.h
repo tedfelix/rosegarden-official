@@ -96,33 +96,35 @@ public:
 signals:
     void updateAutoSaveInterval(unsigned int);
 
-protected slots:
+private slots:
     void slotShowStatus();
 
-protected:
-    int getCountInSpin()            { return m_countIn->value(); }
-    int getDblClickClient()         { return m_client->currentIndex(); }
+private:
+    int getDblClickClient()         { return m_openSegmentsIn->currentIndex(); }
     int getNoteNameStyle()          { return m_nameStyle->currentIndex(); }
-    int getAppendLabel()            { return m_appendLabel->isChecked(); }
-    int getUseTrackName()           { return m_useTrackName->isChecked(); }
     int getPdfViewer()              { return m_pdfViewer->currentIndex(); }
     int getFilePrinter()            { return m_filePrinter->currentIndex(); }
     
     //--------------- Data members ---------------------------------
-    RosegardenDocument* m_doc;
+    RosegardenDocument *m_doc;
 
-    QComboBox* m_client;
+    // Behavior tab
+    QComboBox *m_openSegmentsIn;
     QSpinBox  *m_countIn;
+    int getCountInSpin()  { return m_countIn->value(); }
+    QComboBox *m_autoSaveInterval;
+    QCheckBox *m_appendSuffixes;
+    int getAppendLabel()  { return m_appendSuffixes->isChecked(); }
+    QCheckBox *m_useTrackName;
+    int getUseTrackName()  { return m_useTrackName->isChecked(); }
+    QCheckBox *m_useJackTransport;
+
     QCheckBox *m_toolContextHelp;
     QCheckBox *m_backgroundTextures;
     QCheckBox *m_notationBackgroundTextures;
     QCheckBox *m_matrixBackgroundTextures;
-    QComboBox *m_autoSave;
     QComboBox *m_nameStyle;
     QComboBox *m_globalStyle;
-    QCheckBox *m_appendLabel;
-    QCheckBox *m_useTrackName;
-    QCheckBox *m_jackTransport;
     QCheckBox *m_Thorn;
     QCheckBox *m_longTitles;
 
