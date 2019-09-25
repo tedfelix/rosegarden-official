@@ -540,15 +540,6 @@ MatrixSelector::getSelection(EventSelection *&selection)
 void
 MatrixSelector::setContextHelpFor(const MatrixMouseEvent *e, bool ctrlPressed)
 {
-    QSettings settings;
-    settings.beginGroup( GeneralOptionsConfigGroup );
-
-    if (! qStrToBool( settings.value("toolcontexthelp", "true" ) ) ) {
-        settings.endGroup();
-        return;
-    }
-    settings.endGroup();
-
     MatrixElement *element = e->element;
 
     if (!element) {

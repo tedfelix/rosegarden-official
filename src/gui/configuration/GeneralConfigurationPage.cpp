@@ -58,8 +58,8 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
 
     frame = new QFrame(m_tabWidget);
     addTab(frame, tr("Behavior"));
-    frame->setContentsMargins(10, 25, 10, 10);
     layout = new QGridLayout(frame);
+    layout->setContentsMargins(15, 25, 15, 10);
     layout->setSpacing(5);
 
     int row = 0;
@@ -223,6 +223,8 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
     layout->addWidget(detailsButton, row, 2, Qt::AlignRight);
 
     ++row;
+
+    // Make the last row stretch to fill the rest of the space.
     layout->setRowStretch(row, 10);
 
 
@@ -230,76 +232,83 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
 
     frame = new QFrame(m_tabWidget);
     addTab(frame, tr("Presentation"));
-    frame->setContentsMargins(10, 10, 10, 10);
     layout = new QGridLayout(frame);
+    layout->setContentsMargins(15, 25, 15, 10);
     layout->setSpacing(5);
 
     row = 0;
 
-    layout->setRowMinimumHeight(row, 15);
-    ++row;
-
-    layout->addWidget(new QLabel(tr("Use Thorn style"),
-                                 frame), row, 0);
+    // Use Thorn style
+    label = new QLabel(tr("Use Thorn style"), frame);
+    tipText = tr("<qt>When checked, Rosegarden will use the Thorn look and feel, otherwise default system preferences will be used the next time Rosegarden starts.</qt>");
+    label->setToolTip(tipText);
+    layout->addWidget(label, row, 0);
 
     m_Thorn = new QCheckBox;
-    connect(m_Thorn, &QCheckBox::stateChanged, this, &GeneralConfigurationPage::slotModified);
-    layout->addWidget(m_Thorn, row, 1, 1, 3);
-    m_Thorn->setToolTip(tr("<qt>When checked, Rosegarden will use the Thorn look and feel, otherwise default system preferences will be used the next time Rosegarden starts.</qt>"));
+    m_Thorn->setToolTip(tipText);
     m_Thorn->setChecked(settings.value("use_thorn_style", true).toBool());
+    connect(m_Thorn, &QCheckBox::stateChanged,
+            this, &GeneralConfigurationPage::slotModified);
+    layout->addWidget(m_Thorn, row, 1, 1, 3);
+
     ++row;
 
+    // Note name style
     layout->addWidget(new QLabel(tr("Note name style"),
                                  frame), row, 0);
 
     m_nameStyle = new QComboBox(frame);
-    connect(m_nameStyle, SIGNAL(activated(int)), this, SLOT(slotModified()));
     m_nameStyle->addItem(tr("Always use US names (e.g. quarter, 8th)"));
     m_nameStyle->addItem(tr("Localized (where available)"));
-    m_nameStyle->setCurrentIndex(settings.value("notenamestyle", Local).toUInt());
+    m_nameStyle->setCurrentIndex(
+            settings.value("notenamestyle", Local).toUInt());
+    connect(m_nameStyle, SIGNAL(activated(int)),
+            this, SLOT(slotModified()));
     layout->addWidget(m_nameStyle, row, 1, 1, 3);
-    ++row;
-/*
-    layout->addWidget(new QLabel(tr("Show tool context help in status bar"), frame), row, 0);
 
-    m_toolContextHelp = new QCheckBox(frame);
-    layout->addWidget(m_toolContextHelp, row, 1);
-    m_toolContextHelp->setChecked(settings->readBoolEntry
-                                  ("toolcontexthelp", true));
     ++row;
-*/
 
-    layout->addWidget(new QLabel(tr("Show textured background on"), frame), row, 0);
+    // Show textured background on
+    layout->addWidget(
+            new QLabel(tr("Show textured background on"), frame), row, 0);
 
     m_backgroundTextures = new QCheckBox(tr("Main window"), frame);
-    connect(m_backgroundTextures, &QCheckBox::stateChanged, this, &GeneralConfigurationPage::slotModified);
+    m_backgroundTextures->setChecked(
+            settings.value("backgroundtextures", true).toBool());
+    connect(m_backgroundTextures, &QCheckBox::stateChanged,
+            this, &GeneralConfigurationPage::slotModified);
     layout->addWidget(m_backgroundTextures, row, 1);
 
     m_notationBackgroundTextures = new QCheckBox(tr("Notation"), frame);
-    connect(m_notationBackgroundTextures, &QCheckBox::stateChanged, this, &GeneralConfigurationPage::slotModified);
+    // ??? Wow this is cumbersome.  Maybe we should just prepend the
+    //     group for each call?
+    settings.endGroup();
+    settings.beginGroup(NotationViewConfigGroup);
+    m_notationBackgroundTextures->setChecked(
+            settings.value("backgroundtextures", true).toBool());
+    settings.endGroup();
+    settings.beginGroup(GeneralOptionsConfigGroup);
+    connect(m_notationBackgroundTextures, &QCheckBox::stateChanged,
+            this, &GeneralConfigurationPage::slotModified);
     layout->addWidget(m_notationBackgroundTextures, row, 2);
 
-    m_backgroundTextures->setChecked(settings.value("backgroundtextures", true).toBool());
-
-    settings.endGroup();
-
-    settings.beginGroup(NotationViewConfigGroup);
-    m_notationBackgroundTextures->setChecked(settings.value("backgroundtextures", true).toBool());
-    settings.endGroup();
-
     ++row;
 
-    layout->addWidget(new QLabel(tr("Show full path in window titles")), row, 0);
+    // Show full path in window titles
+    layout->addWidget(
+            new QLabel(tr("Show full path in window titles")),
+            row, 0);
 
     m_longTitles = new QCheckBox;
-    connect(m_longTitles, &QCheckBox::stateChanged, this, &GeneralConfigurationPage::slotModified);
+    m_longTitles->setChecked(
+            settings.value("long_window_titles", false).toBool());
+    connect(m_longTitles, &QCheckBox::stateChanged,
+            this, &GeneralConfigurationPage::slotModified);
     layout->addWidget(m_longTitles, row, 1);
 
-    settings.beginGroup(GeneralOptionsConfigGroup);
-    m_longTitles->setChecked(settings.value("long_window_titles", false).toBool());
-    settings.endGroup();
-
     ++row;
+
+    // Make the last row stretch to fill the rest of the space.
     layout->setRowStretch(row, 10);
 
 
@@ -307,18 +316,16 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
 
     frame = new QFrame(m_tabWidget);
     addTab(frame, tr("External Applications"));
-    frame->setContentsMargins(10, 10, 10, 10);
     layout = new QGridLayout(frame);
+    layout->setContentsMargins(15, 25, 15, 10);
     layout->setSpacing(5);
 
     row = 0;
 
-    layout->setRowMinimumHeight(row, 15);
-    ++row;
-
     QLabel *explanation = new QLabel(tr("<qt>Rosegarden relies on external applications to provide certain features.  Each selected application must be installed and available on your path.  When choosing an application to use, please ensure that it can run from a \"run command\" box (typically <b>Alt+F2</b>) which should allow Rosegarden to make use of it when necessary.<br></qt>"), frame);
     explanation->setWordWrap(true);
     layout->addWidget(explanation, row, 0, 1, 4);
+
     ++row;
 
     layout->addWidget(new QLabel(tr("PDF viewer"),
@@ -333,8 +340,8 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
     m_pdfViewer->addItem(tr("ePDFView"));
     m_pdfViewer->addItem(tr("xdg-open (recommended)"));
     m_pdfViewer->setToolTip(tr("Used to preview generated LilyPond output"));
-
     layout->addWidget(m_pdfViewer, row, 1, 1, 3);
+
     ++row;
 
     layout->addWidget(new QLabel(tr("Command-line file printing utility"),
@@ -347,20 +354,21 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
     m_filePrinter->addItem(tr("lp (no GUI)"),3);
     m_filePrinter->addItem(tr("HPLIP (Qt 4)"),4);
     m_filePrinter->setToolTip(tr("Used to print generated LilyPond output without previewing it"));
-
     layout->addWidget(m_filePrinter, row, 1, 1, 3);
+
     ++row;
 
+    settings.endGroup();
     settings.beginGroup(ExternalApplicationsConfigGroup);
     m_pdfViewer->setCurrentIndex(settings.value("pdfviewer", xdgOpen).toUInt());
 
     // now that I'm actually on KDE 4.2, I see no more KPrinter.  I'll default
     // to Lpr instead.
     m_filePrinter->setCurrentIndex(settings.value("fileprinter", Lpr).toUInt());
-    settings.endGroup();
 
     ++row;
 
+    // Make the last row stretch to fill the rest of the space.
     layout->setRowStretch(row, 10);
 
 }
