@@ -55,7 +55,7 @@ ConfigureDialog::ConfigureDialog(RosegardenDocument *doc,
     IconLoader il;
     
     
-    page = new GeneralConfigurationPage(doc, this);
+    page = new GeneralConfigurationPage(this);
     connect(page,SIGNAL(modified()),this,SLOT(slotActivateApply()));
     addPage(GeneralConfigurationPage::iconLabel(),GeneralConfigurationPage::title(),il.loadPixmap(GeneralConfigurationPage::iconName()),page);    
     m_configurationPages.push_back((ConfigurationPage*)page);

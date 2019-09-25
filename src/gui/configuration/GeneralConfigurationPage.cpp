@@ -15,47 +15,36 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[GeneralConfigurationPage]"
 
 #include "GeneralConfigurationPage.h"
-#include "TabbedConfigurationPage.h"
-#include "ConfigurationPage.h"
 
 #include "misc/Debug.h"
 #include "misc/Strings.h"
 #include "misc/ConfigGroups.h"
 #include "document/RosegardenDocument.h"
-#include "gui/editors/eventlist/EventView.h"
-#include "gui/editors/parameters/RosegardenParameterArea.h"
+#include "gui/application/RosegardenMainWindow.h"
 #include "gui/studio/StudioControl.h"
 #include "gui/dialogs/ShowSequencerStatusDialog.h"
 #include "gui/seqmanager/SequenceManager.h"
-#include "sound/SoundDriver.h"
 
-#include <QComboBox>
-#include <QSettings>
-#include <QMessageBox>
 #include <QCheckBox>
 #include <QComboBox>
-#include <QFileInfo>
 #include <QFrame>
+#include <QGridLayout>
 #include <QLabel>
+#include <QMessageBox>
 #include <QPushButton>
+#include <QSettings>
 #include <QSpinBox>
-#include <QString>
-#include <QTabWidget>
-#include <QWidget>
-#include <QVBoxLayout>
-#include <QLayout>
 
 
 namespace Rosegarden
 {
 
-GeneralConfigurationPage::GeneralConfigurationPage(
-        RosegardenDocument *doc,
-        QWidget *parent) :
-    TabbedConfigurationPage(parent),
-    m_doc(doc)
+
+GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
+    TabbedConfigurationPage(parent)
 {
     QSettings settings;
     settings.beginGroup(GeneralOptionsConfigGroup);
@@ -76,22 +65,26 @@ GeneralConfigurationPage::GeneralConfigurationPage(
     int row = 0;
 
     // Double-click opens segment in
-    layout->addWidget(new QLabel(tr("Double-click opens segment in"),
-                                 frame), row, 0);
+    layout->addWidget(
+            new QLabel(tr("Double-click opens segment in"), frame),
+            row, 0);
 
     m_openSegmentsIn = new QComboBox(frame);
     m_openSegmentsIn->addItem(tr("Notation editor"));
     m_openSegmentsIn->addItem(tr("Matrix editor"));
     m_openSegmentsIn->addItem(tr("Event List editor"));
-    m_openSegmentsIn->setCurrentIndex(settings.value("doubleclickclient", NotationView).toUInt());
+    m_openSegmentsIn->setCurrentIndex(
+            settings.value("doubleclickclient", NotationView).toUInt());
     connect(m_openSegmentsIn, SIGNAL(activated(int)), this, SLOT(slotModified()));
 
     layout->addWidget(m_openSegmentsIn, row, 1, 1, 2);
     ++row;
 
     // Number of count-in measures when recording
-    layout->addWidget(new QLabel(tr("Number of count-in measures when recording"),
-                                 frame), row, 0);
+    layout->addWidget(
+            new QLabel(tr("Number of count-in measures when recording"),
+                       frame),
+            row, 0);
 
     m_countIn = new QSpinBox(frame);
     m_countIn->setMinimum(0);
@@ -127,7 +120,8 @@ GeneralConfigurationPage::GeneralConfigurationPage(
         m_autoSaveInterval->setCurrentIndex(3);  // Every half an hour
     }
 
-    connect(m_autoSaveInterval, SIGNAL(activated(int)), this, SLOT(slotModified()));
+    connect(m_autoSaveInterval, SIGNAL(activated(int)), this,
+            SLOT(slotModified()));
 
     layout->addWidget(m_autoSaveInterval, row, 1, 1, 2);
     ++row;
@@ -182,7 +176,8 @@ GeneralConfigurationPage::GeneralConfigurationPage(
     m_useJackTransport = new QCheckBox(frame);
     m_useJackTransport->setChecked(
             settings.value("jacktransport", false).toBool());
-    connect(m_useJackTransport, &QCheckBox::stateChanged, this, &GeneralConfigurationPage::slotModified);
+    connect(m_useJackTransport, &QCheckBox::stateChanged,
+            this, &GeneralConfigurationPage::slotModified);
 
     layout->addWidget(m_useJackTransport, row, 1, row- row+1, 2);
     ++row;
@@ -200,6 +195,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(
     layout->addWidget(new QLabel(tr("Sequencer status"), frame), row, 0);
 
     QString status(tr("Unknown"));
+    RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
     SequenceManager *mgr = doc->getSequenceManager();
     if (mgr) {
         int driverStatus = mgr->getSoundDriverStatus() & (AUDIO_OK | MIDI_OK);
@@ -385,25 +381,20 @@ void GeneralConfigurationPage::apply()
     // relocate this code if this offends your sensibilities
     settings.beginGroup(ExternalApplicationsConfigGroup);
 
-    int pdfViewerIndex = getPdfViewer();
-    settings.setValue("pdfviewer", pdfViewerIndex);
+    settings.setValue("pdfviewer", m_pdfViewer->currentIndex());
 
-    int filePrinterIndex = getFilePrinter();
-    settings.setValue("fileprinter", filePrinterIndex);
+    settings.setValue("fileprinter", m_filePrinter->currentIndex());
 
     settings.endGroup();
 
 
     settings.beginGroup(GeneralOptionsConfigGroup);
 
-    int countIn = getCountInSpin();
-    settings.setValue("countinbars", countIn);
+    settings.setValue("countinbars", m_countIn->value());
 
-    int client = getDblClickClient();
-    settings.setValue("doubleclickclient", client);
+    settings.setValue("doubleclickclient", m_openSegmentsIn->currentIndex());
 
-    int namestyle = getNoteNameStyle();
-    settings.setValue("notenamestyle", namestyle);
+    settings.setValue("notenamestyle", m_nameStyle->currentIndex());
     
     // bool texturesChanged = false;
     bool mainTextureChanged = false;
@@ -468,11 +459,9 @@ void GeneralConfigurationPage::apply()
         emit updateAutoSaveInterval(interval);
     }
 
-    bool appendLabel = getAppendLabel();
-    settings.setValue("appendlabel", appendLabel);
+    settings.setValue("appendlabel", m_appendSuffixes->isChecked());
 
-    bool useTrackName = getUseTrackName();
-    settings.setValue("usetrackname", useTrackName);
+    settings.setValue("usetrackname", m_useTrackName->isChecked());
 
     settings.endGroup();
 

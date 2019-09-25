@@ -19,21 +19,17 @@
 #define RG_GENERALCONFIGURATIONPAGE_H
 
 #include "TabbedConfigurationPage.h"
-#include "gui/editors/eventlist/EventView.h"
 
 #include <QString>
-#include <QCheckBox>
-#include <QSpinBox>
-#include <QComboBox>
 
-
+class QCheckBox;
+class QComboBox;
+class QSpinBox;
 class QWidget;
 
 
 namespace Rosegarden
 {
-
-class RosegardenDocument;
 
 
 /**
@@ -46,6 +42,8 @@ class GeneralConfigurationPage : public TabbedConfigurationPage
     Q_OBJECT
 
 public:
+    GeneralConfigurationPage(QWidget *parent);
+
     enum DoubleClickClient
     {
         NotationView,
@@ -78,17 +76,9 @@ public:
         HPLIP
     };
 
-    enum GraphicsSystem
-    {
-        Raster,
-        Native,
-        OpenGL
-    };
-
-    GeneralConfigurationPage(RosegardenDocument *doc, QWidget *parent = nullptr);
-
     void apply() override;
 
+    // For ConfigureDialog
     static QString iconLabel() { return tr("General"); }
     static QString title()     { return tr("General Configuration"); }
     static QString iconName()  { return "configure-general"; }
@@ -100,37 +90,27 @@ private slots:
     void slotShowStatus();
 
 private:
-    int getDblClickClient()         { return m_openSegmentsIn->currentIndex(); }
-    int getNoteNameStyle()          { return m_nameStyle->currentIndex(); }
-    int getPdfViewer()              { return m_pdfViewer->currentIndex(); }
-    int getFilePrinter()            { return m_filePrinter->currentIndex(); }
-    
-    //--------------- Data members ---------------------------------
-    RosegardenDocument *m_doc;
-
     // Behavior tab
     QComboBox *m_openSegmentsIn;
-    QSpinBox  *m_countIn;
-    int getCountInSpin()  { return m_countIn->value(); }
+    QSpinBox *m_countIn;
     QComboBox *m_autoSaveInterval;
     QCheckBox *m_appendSuffixes;
-    int getAppendLabel()  { return m_appendSuffixes->isChecked(); }
     QCheckBox *m_useTrackName;
-    int getUseTrackName()  { return m_useTrackName->isChecked(); }
     QCheckBox *m_useJackTransport;
 
-    QCheckBox *m_toolContextHelp;
+    // Presentation tab
+    QCheckBox *m_Thorn;
+    QComboBox *m_nameStyle;
     QCheckBox *m_backgroundTextures;
     QCheckBox *m_notationBackgroundTextures;
-    QCheckBox *m_matrixBackgroundTextures;
-    QComboBox *m_nameStyle;
-    QComboBox *m_globalStyle;
-    QCheckBox *m_Thorn;
     QCheckBox *m_longTitles;
 
+    // External Applications tab
     QComboBox *m_pdfViewer;
     QComboBox *m_filePrinter;
+
 };
+
 
 }
 
