@@ -395,75 +395,17 @@ void GeneralConfigurationPage::apply()
 {
     QSettings settings;
 
-    // tacking the newest external applications settings up here at the top so
-    // they're easier to keep track of while putting this together--feel free to
-    // relocate this code if this offends your sensibilities
-    settings.beginGroup(ExternalApplicationsConfigGroup);
-
-    settings.setValue("pdfviewer", m_pdfViewer->currentIndex());
-
-    settings.setValue("fileprinter", m_filePrinter->currentIndex());
-
-    settings.endGroup();
-
+    // Behavior tab
 
     settings.beginGroup(GeneralOptionsConfigGroup);
-
-    settings.setValue("countinbars", m_countIn->value());
 
     settings.setValue("doubleclickclient", m_openSegmentsIn->currentIndex());
-
-    settings.setValue("notenamestyle", m_nameStyle->currentIndex());
-    
-    // bool texturesChanged = false;
-    bool mainTextureChanged = false;
-
-    if (settings.value("backgroundtextures", true).toBool() !=
-        m_backgroundTextures->isChecked()) {
-        // texturesChanged = true;
-        mainTextureChanged = true;
-        settings.endGroup();
-    } else {
-        settings.endGroup();
-        settings.beginGroup(NotationViewConfigGroup);
-        if (settings.value("backgroundtextures", true).toBool() !=
-            m_notationBackgroundTextures->isChecked()) {
-            // texturesChanged = true;
-        }
-        settings.endGroup();
-    }
-
-    settings.beginGroup(GeneralOptionsConfigGroup);
-
-    settings.setValue("backgroundtextures", m_backgroundTextures->isChecked());
-    settings.endGroup();
-
-    settings.beginGroup(NotationViewConfigGroup);
-
-    settings.setValue("backgroundtextures", m_notationBackgroundTextures->isChecked());
-    settings.endGroup();
-
-    settings.beginGroup(GeneralOptionsConfigGroup);
-
-    bool thornChanged = false;
-    if (settings.value("use_thorn_style", true).toBool()
-        != m_Thorn->isChecked()) {
-        thornChanged = true;
-    }
-
-    std::cerr << "NB. use_thorn_style = " <<
-        settings.value("use_thorn_style", true).toBool()
-              << ", m_Thorn->isChecked() = " << m_Thorn->isChecked() << std::endl;
-
-    settings.setValue("use_thorn_style", m_Thorn->isChecked());
-
-    settings.setValue("long_window_titles", m_longTitles->isChecked());
-
-    unsigned int interval = 0;
+    settings.setValue("countinbars", m_countIn->value());
 
     if (m_autoSaveInterval->currentIndex() == 4) {
         settings.setValue("autosave", false);
     } else {
+        unsigned interval = 0;
         settings.setValue("autosave", true);
         if (m_autoSaveInterval->currentIndex() == 0) {
             interval = 30;
@@ -479,7 +421,6 @@ void GeneralConfigurationPage::apply()
     }
 
     settings.setValue("appendlabel", m_appendSuffixes->isChecked());
-
     settings.setValue("usetrackname", m_useTrackName->isChecked());
 
     settings.endGroup();
@@ -487,61 +428,65 @@ void GeneralConfigurationPage::apply()
 #ifdef HAVE_LIBJACK
     settings.beginGroup(SequencerOptionsConfigGroup);
 
-    // Write the JACK entry
-    //
-/*
-    int jackValue = m_jackTransport->currentIndex();
-    bool jackTransport, jackMaster;
-
-    switch (jackValue) {
-    case 2:
-        jackTransport = true;
-        jackMaster = true;
-        break;
-
-    case 1:
-        jackTransport = true;
-        jackMaster = false;
-        break;
-
-    default:
-        jackValue = 0;
-
-    case 0:
-        jackTransport = false;
-        jackMaster = false;
-        break;
-    }
-*/
-
     bool jackTransport = m_useJackTransport->isChecked();
-    bool jackMaster = false;
 
-    int jackValue = 0; // 0 -> nothing, 1 -> sync, 2 -> master
-    if (jackTransport) jackValue = 1;
+    // 0 -> nothing, 1 -> sync, 2 -> master
+    int jackValue = jackTransport ? 1 : 0;
 
-    // Write the items
-    //
     settings.setValue("jacktransport", jackTransport);
-    settings.setValue("jackmaster", jackMaster);
 
-    // Now send it
-    //
     MappedEvent mEjackValue(MidiInstrumentBase,  // InstrumentId
                             MappedEvent::SystemJackTransport,
                             MidiByte(jackValue));
-
     StudioControl::sendMappedEvent(mEjackValue);
 
     settings.endGroup();
 #endif // HAVE_LIBJACK
 
+    // Presentation tab
+
+    settings.beginGroup(GeneralOptionsConfigGroup);
+
+    bool thornChanged =
+            (settings.value("use_thorn_style", true).toBool() !=
+             m_Thorn->isChecked());
+    //RG_DEBUG << "apply(): NB. use_thorn_style = " << settings.value("use_thorn_style", true).toBool() << ", m_Thorn->isChecked() = " << m_Thorn->isChecked();
+    settings.setValue("use_thorn_style", m_Thorn->isChecked());
+    settings.setValue("notenamestyle", m_nameStyle->currentIndex());
+    bool mainTextureChanged =
+            (settings.value("backgroundtextures", true).toBool() !=
+             m_backgroundTextures->isChecked());
+    settings.setValue("backgroundtextures", m_backgroundTextures->isChecked());
+
+    settings.endGroup();
+
+    settings.beginGroup(NotationViewConfigGroup);
+    settings.setValue("backgroundtextures", m_notationBackgroundTextures->isChecked());
+    settings.endGroup();
+
+    settings.beginGroup(GeneralOptionsConfigGroup);
+    settings.setValue("long_window_titles", m_longTitles->isChecked());
+    settings.endGroup();
+
+    // External Applications tab
+
+    settings.beginGroup(ExternalApplicationsConfigGroup);
+
+    settings.setValue("pdfviewer", m_pdfViewer->currentIndex());
+    settings.setValue("fileprinter", m_filePrinter->currentIndex());
+
+    settings.endGroup();
+
+    // Restart Warnings
+
     if (mainTextureChanged) {
-        QMessageBox::information(this, tr("Rosegarden"), tr("Changes to the textured background in the main window will not take effect until you restart Rosegarden."));
+        QMessageBox::information(this, tr("Rosegarden"),
+                tr("Changes to the textured background in the main window will not take effect until you restart Rosegarden."));
     }
 
     if (thornChanged) {
-        QMessageBox::information(this, tr("Rosegarden"), tr("You must restart Rosegarden for the presentation change to take effect."));
+        QMessageBox::information(this, tr("Rosegarden"),
+                tr("You must restart Rosegarden for the presentation change to take effect."));
     }
 }
 
