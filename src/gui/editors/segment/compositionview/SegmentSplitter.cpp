@@ -51,7 +51,7 @@ QString SegmentSplitter::ToolName() { return "segmentsplitter"; }
 
 SegmentSplitter::SegmentSplitter(CompositionView *c, RosegardenDocument *d) :
     SegmentTool(c, d),
-    m_enableSegmentSplitting(true),
+    m_enableEditingDuringPlayback(true),
     m_prevX(0),
     m_prevY(0)
 {
@@ -79,12 +79,12 @@ SegmentSplitter::mousePressEvent(QMouseEvent *e)
 
     QSettings settings;
     settings.beginGroup(GeneralOptionsConfigGroup);
-    m_enableSegmentSplitting =
-            settings.value("enableSegmentSplitting", false).toBool();
+    m_enableEditingDuringPlayback =
+            settings.value("enableEditingDuringPlayback", false).toBool();
 
     // Can't split a segment while playing.
     // ??? What about recording?
-    if (!m_enableSegmentSplitting  &&
+    if (!m_enableEditingDuringPlayback  &&
         RosegardenMainWindow::self()->getSequenceManager()->
             getTransportStatus() == PLAYING)
         return;
@@ -119,7 +119,7 @@ SegmentSplitter::mouseReleaseEvent(QMouseEvent *e)
 
     // Can't split a segment while playing.
     // ??? What about recording?
-    if (!m_enableSegmentSplitting  &&
+    if (!m_enableEditingDuringPlayback  &&
         RosegardenMainWindow::self()->getSequenceManager()->
             getTransportStatus() == PLAYING)
         return;
@@ -162,7 +162,7 @@ SegmentSplitter::mouseMoveEvent(QMouseEvent *e)
 {
     // Can't split a segment while playing.
     // ??? What about recording?
-    if (!m_enableSegmentSplitting  &&
+    if (!m_enableEditingDuringPlayback  &&
         RosegardenMainWindow::self()->getSequenceManager()->
             getTransportStatus() == PLAYING)
         return NO_FOLLOW;

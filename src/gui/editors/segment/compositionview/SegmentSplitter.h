@@ -63,7 +63,7 @@ protected:
     void splitSegment(Segment *segment,
                       timeT &splitTime);
 
-    bool m_enableSegmentSplitting;
+    bool m_enableEditingDuringPlayback;
 
     // ??? unused
     int m_prevX;

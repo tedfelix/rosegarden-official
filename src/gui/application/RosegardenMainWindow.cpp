@@ -6101,8 +6101,8 @@ RosegardenMainWindow::updateActions()
 {
     QSettings settings;
     settings.beginGroup(GeneralOptionsConfigGroup);
-    bool enableSegmentSplitting =
-            settings.value("enableSegmentSplitting", false).toBool();
+    bool enableEditingDuringPlayback =
+            settings.value("enableEditingDuringPlayback", false).toBool();
 
 
     // not_playing && have_selection
@@ -6112,16 +6112,16 @@ RosegardenMainWindow::updateActions()
     // ??? This doesn't prevent Ctrl+Resize on the edges of a Segment.  CRASH.
     findAction("rescale")->setEnabled(m_notPlaying  &&  m_haveSelection);
     findAction("auto_split")->setEnabled(
-            (enableSegmentSplitting || m_notPlaying)  &&  m_haveSelection);
+            (enableEditingDuringPlayback || m_notPlaying)  &&  m_haveSelection);
     findAction("split_by_pitch")->setEnabled(
-            (enableSegmentSplitting || m_notPlaying)  &&  m_haveSelection);
+            (enableEditingDuringPlayback || m_notPlaying)  &&  m_haveSelection);
     findAction("split_by_recording")->setEnabled(
-            (enableSegmentSplitting || m_notPlaying)  &&  m_haveSelection);
+            (enableEditingDuringPlayback || m_notPlaying)  &&  m_haveSelection);
     // ??? This doesn't prevent the split tool from causing a CRASH.
     findAction("split_at_time")->setEnabled(
-            (enableSegmentSplitting || m_notPlaying)  &&  m_haveSelection);
+            (enableEditingDuringPlayback || m_notPlaying)  &&  m_haveSelection);
     findAction("split_by_drum")->setEnabled(
-            (enableSegmentSplitting || m_notPlaying)  &&  m_haveSelection);
+            (enableEditingDuringPlayback || m_notPlaying)  &&  m_haveSelection);
     findAction("join_segments")->setEnabled(m_notPlaying  &&  m_haveSelection);
 
 
@@ -6157,10 +6157,10 @@ RosegardenMainWindow::leaveActionState(QString stateName)
 
       QSettings settings;
       settings.beginGroup(GeneralOptionsConfigGroup);
-      bool enableUndoDuringPlayback =
-              settings.value("enableUndoDuringPlayback", false).toBool();
+      bool enableEditingDuringPlayback =
+              settings.value("enableEditingDuringPlayback", false).toBool();
 
-      if (!enableUndoDuringPlayback)
+      if (!enableEditingDuringPlayback)
           CommandHistory::getInstance()->enableUndo(false);
    }
 
