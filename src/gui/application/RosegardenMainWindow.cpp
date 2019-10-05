@@ -6107,8 +6107,10 @@ RosegardenMainWindow::updateActions()
 
     // not_playing && have_selection
 
-    findAction("delete")->setEnabled(m_notPlaying  &&  m_haveSelection);
-    findAction("edit_cut")->setEnabled(m_notPlaying  &&  m_haveSelection);
+    findAction("delete")->setEnabled(
+            (enableEditingDuringPlayback || m_notPlaying)  &&  m_haveSelection);
+    findAction("edit_cut")->setEnabled(
+            (enableEditingDuringPlayback || m_notPlaying)  &&  m_haveSelection);
     // ??? This doesn't prevent Ctrl+Resize on the edges of a Segment.  CRASH.
     findAction("rescale")->setEnabled(m_notPlaying  &&  m_haveSelection);
     findAction("auto_split")->setEnabled(
