@@ -57,7 +57,7 @@
       <release type="stable" version="19.06" date="2019-06-05">
         <url>https://rosegardenmusic.com/wiki/dev:19.06</url>
         <description>
-          <p>This version includue bug fix these bugs:</p>
+          <p>This version includes the following bug fixes:</p>
           <ul>
             <li>Fix potential crashes during playback</li>
             <li>Fix crash when rescaling during playback</li>
@@ -74,7 +74,7 @@
             <li>SegmentParameterBox: Fix invalid memory access (Bug #1568)</li>
             <li>Fix Qt 5.7 QSharedPointer/nullptr build issue</li>
           </ul>
-          <p>This version add this new feature:</p>
+          <p>This version adds the following new feature:</p>
           <ul>
             <li>Add Ctrl+Space shortcut for record</li>
           </ul>
