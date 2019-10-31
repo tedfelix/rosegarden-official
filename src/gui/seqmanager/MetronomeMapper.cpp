@@ -30,6 +30,8 @@
 #include "sound/ControlBlock.h"
 #include "sound/MappedEvent.h"
 #include "sound/Midi.h"
+#include "gui/application/TransportStatus.h"
+#include "gui/seqmanager/SequenceManager.h"
 
 #include <QSettings>
 
@@ -82,7 +84,12 @@ MetronomeMapper::MetronomeMapper(RosegardenDocument *doc) :
         //     Composition expansion one bar prior to hitting the end.
         //     And add a "moreTicks(newEndTime)" function to this class.
         //     Beware that it will need to increase the buffer's capacity.
-        for (timeT barTime = composition.getBarStart(-20);
+
+        timeT sbt = composition.getBarStart(-20);
+        RealTime rt = composition.getElapsedRealTime(sbt);
+        m_start = rt;
+
+        for (timeT barTime = sbt;
              barTime < composition.getEndMarker();
              barTime = composition.getBarEndForTime(barTime)) {
 
@@ -284,6 +291,12 @@ makeReady(MappedInserterBase &inserter, RealTime time)
             time,
             m_instrument->getStaticControllers(),
             inserter);
+
+    QSettings settings;
+    settings.beginGroup(GeneralOptionsConfigGroup);
+    m_recOpt = static_cast<GeneralConfigurationPage::RecordPlayOn>
+        (settings.value("metronomeonrecord", 2).toUInt());
+    settings.endGroup();
 }
 
 bool
@@ -298,6 +311,19 @@ shouldPlay(MappedEvent *evt, RealTime sliceStart)
     if (evt->getType() == MappedEvent::MidiSystemMessage  &&
         evt->getData1() == MIDI_TIMING_CLOCK) {
         return true;
+    }
+
+    TransportStatus ts = m_doc->getSequenceManager()->getTransportStatus();
+    if (ts == RECORDING || ts == STARTING_TO_RECORD) {
+        if (m_doc->getSequenceManager()->inCountIn(evt->getEventTime() + evt->getDuration())) {
+            if (m_recOpt == GeneralConfigurationPage::RecordPlayRecord) {
+                return false;
+            }
+        } else {
+            if (m_recOpt == GeneralConfigurationPage::RecordPlayLeadIn) {
+                return false;
+            }
+        }
     }
 
     // It's a metronome event.  Play it if the metronome isn't muted.

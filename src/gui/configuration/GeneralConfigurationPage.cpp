@@ -97,6 +97,20 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
 
     ++row;
 
+    layout->addWidget(new QLabel(tr("Metronome on record in"),
+                                 frame), row, 0);
+
+    m_recordMetronomeOption = new QComboBox(frame);
+    connect(m_recordMetronomeOption, SIGNAL(activated(int)), this, SLOT(slotModified()));
+    m_recordMetronomeOption->addItem(tr("Count-in"));
+    m_recordMetronomeOption->addItem(tr("Recording"));
+    m_recordMetronomeOption->addItem(tr("Count-in and Recording"));
+    m_recordMetronomeOption->setCurrentIndex
+        (settings.value("metronomeonrecord", RecordPlayBoth).toUInt());
+
+    layout->addWidget(m_recordMetronomeOption, row, 1, 1, 2);
+    ++row;
+
     // Auto-save interval
     layout->addWidget(new QLabel(tr("Auto-save interval"), frame), row, 0);
 
@@ -421,6 +435,8 @@ void GeneralConfigurationPage::apply()
 
     settings.setValue("doubleclickclient", m_openSegmentsIn->currentIndex());
     settings.setValue("countinbars", m_countIn->value());
+    settings.setValue("metronomeonrecord", m_recordMetronomeOption->currentIndex());
+
 
     if (m_autoSaveInterval->currentIndex() == 4) {
         settings.setValue("autosave", false);

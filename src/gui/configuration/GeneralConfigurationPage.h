@@ -76,6 +76,13 @@ public:
         HPLIP
     };
 
+    enum RecordPlayOn
+    {
+        RecordPlayLeadIn,
+        RecordPlayRecord,
+        RecordPlayBoth
+    };
+
     void apply() override;
 
     // For ConfigureDialog
@@ -93,6 +100,7 @@ private:
     // Behavior tab
     QComboBox *m_openSegmentsIn;
     QSpinBox *m_countIn;
+    QComboBox *m_recordMetronomeOption;
     QComboBox *m_autoSaveInterval;
     QCheckBox *m_appendSuffixes;
     QCheckBox *m_useTrackName;

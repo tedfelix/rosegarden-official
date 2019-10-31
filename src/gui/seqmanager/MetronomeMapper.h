@@ -23,6 +23,7 @@
 #include "base/TimeT.h"
 #include "gui/seqmanager/ChannelManager.h"
 #include "gui/seqmanager/MappedEventBuffer.h"
+#include "gui/configuration/GeneralConfigurationPage.h"
 
 #include <QString>
 
@@ -76,6 +77,9 @@ private:
     const MidiMetronome *m_metronome;
 
     ChannelManager m_channelManager;
+
+    GeneralConfigurationPage::RecordPlayOn m_recOpt;
+
 };
 
 

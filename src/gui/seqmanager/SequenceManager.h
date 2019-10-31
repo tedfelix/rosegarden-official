@@ -148,6 +148,8 @@ public:
             { m_transportStatus = status; }
     TransportStatus getTransportStatus() const  { return m_transportStatus; }
 
+    bool inCountIn(const RealTime &time) const;
+
     /**
      * Sends tempo to RosegardenSequencer::setQuarterNoteLength().
      *
@@ -479,6 +481,9 @@ private:
 
     /// Used by stop() to return to the last start position.
     timeT m_lastTransportStartPosition;
+
+    /// used to determine whether we are in count in
+    RealTime m_realRecordStart;
 
     /// Cache used by getSampleRate() to avoid locks.
     mutable int m_sampleRate;

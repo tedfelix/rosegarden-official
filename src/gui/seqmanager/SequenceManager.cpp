@@ -91,6 +91,7 @@ SequenceManager::SequenceManager() :
     m_countdownTimer(nullptr),
     m_recordTime(new QTime()),
     m_lastTransportStartPosition(0),
+    m_realRecordStart(RealTime::zeroTime),
     m_sampleRate(0),
     m_tempo(0)
 {
@@ -357,6 +358,8 @@ SequenceManager::record(bool toggled)
 {
     if (!m_doc) return;
 
+    m_realRecordStart = RealTime::zeroTime;
+
     RG_DEBUG << "record(" << toggled << ")";
     Composition &comp = m_doc->getComposition();
     Studio &studio = m_doc->getStudio();
@@ -514,6 +517,7 @@ punchin:
         else {
             if (m_transportStatus != RECORDING_ARMED && punchIn == false) {
                 int startBar = comp.getBarNumber(comp.getPosition());
+                m_realRecordStart = comp.getElapsedRealTime(comp.getBarRange(startBar).first);
                 startBar -= settings.value("countinbars", 0).toUInt();
                 m_doc->slotSetPointerPosition(comp.getBarRange(startBar).first);
             }
@@ -1058,6 +1062,14 @@ SequenceManager::setLoop(const timeT &lhs, const timeT &rhs)
         m_doc->getComposition().getElapsedRealTime(rhs);
 
     RosegardenSequencer::getInstance()->setLoop(loopStart, loopEnd);
+}
+
+bool SequenceManager::inCountIn(const RealTime &time) const
+{
+    if (m_transportStatus == RECORDING || m_transportStatus == STARTING_TO_RECORD) {
+        if (time < m_realRecordStart) return true;
+    }
+    return false;
 }
 
 void
