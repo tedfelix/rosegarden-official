@@ -44,7 +44,8 @@ namespace Rosegarden
 MetronomeMapper::MetronomeMapper(RosegardenDocument *doc) :
     MappedEventBuffer(doc),
     m_metronome(nullptr),
-    m_channelManager(nullptr) // We will set this below after we find instrument.
+    m_channelManager(nullptr), // We will set this below after we find instrument.
+    m_metronomeDuring(GeneralConfigurationPage::DuringBoth)
 {
     //RG_DEBUG << "ctor: " << this;
 
@@ -76,20 +77,14 @@ MetronomeMapper::MetronomeMapper(RosegardenDocument *doc) :
     // If the metronome has bars at the very least, generate the metronome
     // ticks.
     if (depth > 0) {
-        // For each bar, starting at a somewhat arbitrary time prior to the
-        // beginning of the composition.
-        // ??? To avoid dropping a tick when expanding the Composition, we
-        //     could simply generate one bar too many of these.  Though that
-        //     might cause duplicate events.  Might be better to perform the
-        //     Composition expansion one bar prior to hitting the end.
-        //     And add a "moreTicks(newEndTime)" function to this class.
-        //     Beware that it will need to increase the buffer's capacity.
 
-        timeT sbt = composition.getBarStart(-20);
-        RealTime rt = composition.getElapsedRealTime(sbt);
-        m_start = rt;
+        // Start at a somewhat arbitrary time (-20) prior to the beginning
+        // of the composition.
+        timeT barStart = composition.getBarStart(-20);
+        m_start = composition.getElapsedRealTime(barStart);
 
-        for (timeT barTime = sbt;
+        // For each bar
+        for (timeT barTime = barStart;
              barTime < composition.getEndMarker();
              barTime = composition.getBarEndForTime(barTime)) {
 
@@ -294,8 +289,11 @@ makeReady(MappedInserterBase &inserter, RealTime time)
 
     QSettings settings;
     settings.beginGroup(GeneralOptionsConfigGroup);
-    m_recOpt = static_cast<GeneralConfigurationPage::RecordPlayOn>
-        (settings.value("metronomeonrecord", 2).toUInt());
+    m_metronomeDuring =
+            static_cast<GeneralConfigurationPage::MetronomeDuring>(
+                    settings.value(
+                            "enableMetronomeDuring",
+                            GeneralConfigurationPage::DuringBoth).toUInt());
     settings.endGroup();
 }
 
@@ -313,16 +311,23 @@ shouldPlay(MappedEvent *evt, RealTime sliceStart)
         return true;
     }
 
-    TransportStatus ts = m_doc->getSequenceManager()->getTransportStatus();
-    if (ts == RECORDING || ts == STARTING_TO_RECORD) {
-        if (m_doc->getSequenceManager()->inCountIn(evt->getEventTime() + evt->getDuration())) {
-            if (m_recOpt == GeneralConfigurationPage::RecordPlayRecord) {
+    TransportStatus transportStatus =
+            m_doc->getSequenceManager()->getTransportStatus();
+
+    if (transportStatus == RECORDING  ||
+        transportStatus == STARTING_TO_RECORD) {
+        // If we're in the count-in
+        if (m_doc->getSequenceManager()->inCountIn(
+                evt->getEventTime() + evt->getDuration())) {
+            // If we're only supposed to play the metronome during record,
+            // indicate that we shouldn't be playing the metronome.
+            if (m_metronomeDuring == GeneralConfigurationPage::DuringRecord)
                 return false;
-            }
-        } else {
-            if (m_recOpt == GeneralConfigurationPage::RecordPlayLeadIn) {
+        } else {  // We're recording
+            // If we're only supposed to play the metronome during count-in,
+            // indicate that we shouldn't be playing the metronome.
+            if (m_metronomeDuring == GeneralConfigurationPage::DuringCountIn)
                 return false;
-            }
         }
     }
 

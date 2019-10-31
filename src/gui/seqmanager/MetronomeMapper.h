@@ -78,7 +78,7 @@ private:
 
     ChannelManager m_channelManager;
 
-    GeneralConfigurationPage::RecordPlayOn m_recOpt;
+    GeneralConfigurationPage::MetronomeDuring m_metronomeDuring;
 
 };
 

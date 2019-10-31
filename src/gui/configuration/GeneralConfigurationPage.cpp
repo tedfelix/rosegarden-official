@@ -97,18 +97,21 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
 
     ++row;
 
-    layout->addWidget(new QLabel(tr("Metronome on record in"),
+    layout->addWidget(new QLabel(tr("Enable metronome during"),
                                  frame), row, 0);
 
-    m_recordMetronomeOption = new QComboBox(frame);
-    connect(m_recordMetronomeOption, SIGNAL(activated(int)), this, SLOT(slotModified()));
-    m_recordMetronomeOption->addItem(tr("Count-in"));
-    m_recordMetronomeOption->addItem(tr("Recording"));
-    m_recordMetronomeOption->addItem(tr("Count-in and Recording"));
-    m_recordMetronomeOption->setCurrentIndex
-        (settings.value("metronomeonrecord", RecordPlayBoth).toUInt());
+    m_enableMetronomeDuring = new QComboBox(frame);
+    connect(m_enableMetronomeDuring,
+                static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
+            this, &GeneralConfigurationPage::slotModified);
+    m_enableMetronomeDuring->addItem(tr("Count-in"));
+    m_enableMetronomeDuring->addItem(tr("Recording"));
+    m_enableMetronomeDuring->addItem(tr("Count-in and Recording"));
+    m_enableMetronomeDuring->setCurrentIndex(
+            settings.value("enableMetronomeDuring", DuringBoth).toUInt());
 
-    layout->addWidget(m_recordMetronomeOption, row, 1, 1, 2);
+    layout->addWidget(m_enableMetronomeDuring, row, 1, 1, 2);
+
     ++row;
 
     // Auto-save interval
@@ -136,9 +139,9 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
         m_autoSaveInterval->setCurrentIndex(3);  // Every half an hour
     }
 
-    connect(m_autoSaveInterval, static_cast<void(QComboBox::*)(int)>(
-            &QComboBox::activated),
-        this, &GeneralConfigurationPage::slotModified);
+    connect(m_autoSaveInterval,
+                static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
+            this, &GeneralConfigurationPage::slotModified);
     layout->addWidget(m_autoSaveInterval, row, 1, 1, 2);
 
     ++row;
@@ -435,8 +438,8 @@ void GeneralConfigurationPage::apply()
 
     settings.setValue("doubleclickclient", m_openSegmentsIn->currentIndex());
     settings.setValue("countinbars", m_countIn->value());
-    settings.setValue("metronomeonrecord", m_recordMetronomeOption->currentIndex());
-
+    settings.setValue("enableMetronomeDuring",
+                      m_enableMetronomeDuring->currentIndex());
 
     if (m_autoSaveInterval->currentIndex() == 4) {
         settings.setValue("autosave", false);

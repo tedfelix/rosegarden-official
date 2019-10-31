@@ -517,7 +517,8 @@ punchin:
         else {
             if (m_transportStatus != RECORDING_ARMED && punchIn == false) {
                 int startBar = comp.getBarNumber(comp.getPosition());
-                m_realRecordStart = comp.getElapsedRealTime(comp.getBarRange(startBar).first);
+                m_realRecordStart = comp.getElapsedRealTime(
+                        comp.getBarRange(startBar).first);
                 startBar -= settings.value("countinbars", 0).toUInt();
                 m_doc->slotSetPointerPosition(comp.getBarRange(startBar).first);
             }
@@ -1066,8 +1067,10 @@ SequenceManager::setLoop(const timeT &lhs, const timeT &rhs)
 
 bool SequenceManager::inCountIn(const RealTime &time) const
 {
-    if (m_transportStatus == RECORDING || m_transportStatus == STARTING_TO_RECORD) {
-        if (time < m_realRecordStart) return true;
+    if (m_transportStatus == RECORDING  ||
+        m_transportStatus == STARTING_TO_RECORD) {
+        if (time < m_realRecordStart)
+            return true;
     }
     return false;
 }

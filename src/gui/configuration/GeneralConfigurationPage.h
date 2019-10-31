@@ -76,11 +76,11 @@ public:
         HPLIP
     };
 
-    enum RecordPlayOn
+    enum MetronomeDuring
     {
-        RecordPlayLeadIn,
-        RecordPlayRecord,
-        RecordPlayBoth
+        DuringCountIn,
+        DuringRecord,
+        DuringBoth
     };
 
     void apply() override;
@@ -100,7 +100,7 @@ private:
     // Behavior tab
     QComboBox *m_openSegmentsIn;
     QSpinBox *m_countIn;
-    QComboBox *m_recordMetronomeOption;
+    QComboBox *m_enableMetronomeDuring;
     QComboBox *m_autoSaveInterval;
     QCheckBox *m_appendSuffixes;
     QCheckBox *m_useTrackName;
