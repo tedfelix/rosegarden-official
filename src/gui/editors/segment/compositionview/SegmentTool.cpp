@@ -20,16 +20,19 @@
 #include "SegmentTool.h"
 
 #include "misc/Debug.h"
+#include "misc/ConfigGroups.h"
 #include "CompositionView.h"
 #include "document/RosegardenDocument.h"
 #include "document/CommandHistory.h"
 #include "gui/application/RosegardenMainWindow.h"
 #include "gui/general/BaseTool.h"
+#include "gui/seqmanager/SequenceManager.h"
 #include "SegmentToolBox.h"
 #include "document/Command.h"
 
 #include <QMenu>
 #include <QMouseEvent>
+#include <QSettings>
 
 
 namespace Rosegarden
@@ -113,6 +116,24 @@ SegmentTool::mousePressEvent(QMouseEvent *e)
         }
     }
 
+    // Update context menu items before displaying them.
+
+    QSettings settings;
+    settings.beginGroup(GeneralOptionsConfigGroup);
+    bool enableEditingDuringPlayback =
+            settings.value("enableEditingDuringPlayback", false).toBool();
+
+    bool playing = (RosegardenMainWindow::self()->getSequenceManager()->
+                getTransportStatus() == PLAYING);
+
+    bool haveSelection = m_canvas->getModel()->haveSelection();
+
+    findAction("delete")->setEnabled(
+            (enableEditingDuringPlayback || !playing)  &&  haveSelection);
+    findAction("edit_cut")->setEnabled(
+            (enableEditingDuringPlayback || !playing)  &&  haveSelection);
+
+    // Display the context menu.
     showMenu();
 
     setChangingSegment(ChangingSegmentPtr());
@@ -123,22 +144,17 @@ SegmentTool::createMenu()
 {
     // New version based on the one in MatrixTool.
 
-    const QString rcFileName = "segmenttool.rc";
-
     //RG_DEBUG << "SegmentTool::createMenu() " << rcFileName << " - " << m_menuName;
 
-    if (!createMenusAndToolbars(rcFileName)) {
-        RG_WARNING << "SegmentTool::createMenu(" << rcFileName
-                  << "): menu creation failed";
+    if (!createMenusAndToolbars("segmenttool.rc")) {
+        RG_WARNING << "createMenu(): menu creation failed";
         m_menu = nullptr;
         return;
     }
 
     QMenu *menu = findMenu(m_menuName);
     if (!menu) {
-        RG_WARNING << "SegmentTool::createMenu(" << rcFileName
-                  << "): menu name "
-                  << m_menuName << " not created by RC file";
+        RG_WARNING << "createMenu(): menu name " << m_menuName << " not created by RC file";
         return;
     }
 
