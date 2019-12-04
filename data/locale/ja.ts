@@ -8310,7 +8310,7 @@
     </message>
     <message>
         <location filename="../../src/sound/AlsaDriver.cpp" line="+684"/>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="+1086"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="+1057"/>
         <location filename="../../src/base/Studio.cpp" line="+65"/>
         <location filename="../AutoloadStrings.cpp" line="-189"/>
         <source>Synth plugin</source>
@@ -10482,10 +10482,10 @@
         <translation>%1 (%2)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="+1018"/>
+        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="+1039"/>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="+472"/>
-        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="+1662"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="+915"/>
+        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="+1670"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="+917"/>
         <source>%1 Controller %2 %3</source>
         <translation>%1 コントローラ %2 %3</translation>
     </message>
@@ -10494,12 +10494,12 @@
         <translation type="obsolete">Rosegarden - シーケンサと譜面エディタ</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/main.cpp" line="+392"/>
+        <location filename="../../src/gui/application/main.cpp" line="+430"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location line="+283"/>
+        <location line="+286"/>
         <source>Welcome!</source>
         <translation>ようこそ!</translation>
     </message>
@@ -10597,7 +10597,7 @@
         <translation>B</translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="+384"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="+387"/>
         <source>Audio subsystem is not available - can&apos;t record audio</source>
         <translation>オーディオサブシステムが無効   オーディオを録音できません</translation>
     </message>
@@ -10607,7 +10607,7 @@
         <translation>&lt;qt&gt;&lt;p&gt;どのとラックも録音のために有効化されていません。&lt;/p&gt;&lt;p&gt;録音LEDのどれかを少なくとも有効にして&lt;img src=&quot;:pixmaps/tooltip/record-leds.png&quot;&gt; 再度実行してください。&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+141"/>
+        <location line="+143"/>
         <source>&lt;qt&gt;&lt;p&gt;Couldn&apos;t start recording audio.&lt;/p&gt;&lt;p&gt;Please set a valid recording path in &lt;b&gt;Composition -&gt; Edit Document Properties... -&gt; Audio&lt;/b&gt;&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;オーディオの録音が開始できません。&lt;/p&gt;&lt;p&gt;Please set a valid recording path in &lt;b&gt;コンポジション -&gt; ドキュメントプロパティの編集... -&gt; オーディオ&lt;/b&gt;中で有効な録音パスを設定してください。&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
@@ -12049,7 +12049,7 @@ Please select the ones you wish to delete permanently from the hard disk.
 <context>
     <name>Rosegarden::AudioPluginOSCGUIManager</name>
     <message>
-        <location filename="../../src/gui/studio/AudioPluginOSCGUIManager.cpp" line="+434"/>
+        <location filename="../../src/gui/studio/AudioPluginOSCGUIManager.cpp" line="+416"/>
         <source>Rosegarden Plugin</source>
         <translation>Rosegardenプラグイン</translation>
     </message>
@@ -12972,6 +12972,19 @@ Please select the ones you wish to delete permanently from the hard disk.
     </message>
 </context>
 <context>
+    <name>Rosegarden::ColorCombo</name>
+    <message>
+        <location filename="../../src/gui/widgets/ColorCombo.cpp" line="+82"/>
+        <source>Default</source>
+        <translation type="unfinished">既定値</translation>
+    </message>
+    <message>
+        <location line="+16"/>
+        <source>Add New Color</source>
+        <translation type="unfinished">新しいカラーの追加</translation>
+    </message>
+</context>
+<context>
     <name>Rosegarden::ColourConfigurationPage</name>
     <message>
         <location filename="../../src/gui/configuration/ColourConfigurationPage.h" line="+52"/>
@@ -13045,7 +13058,7 @@ Please select the ones you wish to delete permanently from the hard disk.
 <context>
     <name>Rosegarden::CommandHistory</name>
     <message>
-        <location filename="../../src/document/CommandHistory.cpp" line="+51"/>
+        <location filename="../../src/document/CommandHistory.cpp" line="+52"/>
         <location line="+7"/>
         <location line="+4"/>
         <source>&amp;Undo</source>
@@ -13079,7 +13092,7 @@ Please select the ones you wish to delete permanently from the hard disk.
         <translation>最後に戻した編集作業をもう一度行う</translation>
     </message>
     <message>
-        <location line="+451"/>
+        <location line="+452"/>
         <source>Nothing to undo</source>
         <translation>アンドゥできません</translation>
     </message>
@@ -13089,14 +13102,14 @@ Please select the ones you wish to delete permanently from the hard disk.
         <translation>リドゥできません</translation>
     </message>
     <message>
-        <location line="+17"/>
-        <location line="+23"/>
+        <location line="+14"/>
+        <location line="+26"/>
         <source>&amp;Undo %1</source>
         <translation>アンドゥ(&amp;U) %1</translation>
     </message>
     <message>
-        <location line="-23"/>
-        <location line="+24"/>
+        <location line="-26"/>
+        <location line="+27"/>
         <source>Re&amp;do %1</source>
         <translation>%1のリドゥ(&amp;d)</translation>
     </message>
@@ -13493,7 +13506,7 @@ Please select the ones you wish to delete permanently from the hard disk.
 <context>
     <name>Rosegarden::ControlRulerWidget</name>
     <message>
-        <location filename="../../src/gui/rulers/ControlRulerWidget.cpp" line="+326"/>
+        <location filename="../../src/gui/rulers/ControlRulerWidget.cpp" line="+334"/>
         <source>Velocity</source>
         <translation>ベロシティ(Velocity)</translation>
     </message>
@@ -13509,7 +13522,7 @@ Please select the ones you wish to delete permanently from the hard disk.
 <context>
     <name>Rosegarden::ControllerEventsRuler</name>
     <message>
-        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="+284"/>
+        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="+287"/>
         <source>Unsupported Event Type</source>
         <translation>未サポートのイベントタイプ</translation>
     </message>
@@ -13530,7 +13543,7 @@ Please select the ones you wish to delete permanently from the hard disk.
         <translation>コントローラのラインを挿入</translation>
     </message>
     <message>
-        <location line="+117"/>
+        <location line="+116"/>
         <source>Controller Event Number</source>
         <translation>コントローライベント番号</translation>
     </message>
@@ -14813,7 +14826,7 @@ Would you like to try and locate this file or skip it?</source>
 <context>
     <name>Rosegarden::GeneralConfigurationPage</name>
     <message>
-        <location filename="../../src/gui/configuration/GeneralConfigurationPage.h" line="+92"/>
+        <location filename="../../src/gui/configuration/GeneralConfigurationPage.h" line="+89"/>
         <source>General</source>
         <translation>一般</translation>
     </message>
@@ -14823,17 +14836,12 @@ Would you like to try and locate this file or skip it?</source>
         <translation>一般の設定</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="+102"/>
-        <source>&lt;qt&gt;&lt;p&gt;Qt offers you the choice of two graphics systems. The fast (raster) graphics system offers the best tradeoff between performance and stability, but may cause problems for some users.  If you experience frequent crashes, or distorted graphics, you should try the safe (native) graphics system instead.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+4"/>
+        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="+69"/>
         <source>Double-click opens segment in</source>
         <translation>ダブルクリックでセグメントをオープン </translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location line="+4"/>
         <source>Notation editor</source>
         <translation>譜面エディタ</translation>
     </message>
@@ -14848,17 +14856,37 @@ Would you like to try and locate this file or skip it?</source>
         <translation>イベントリストエディタ</translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+12"/>
         <source>Number of count-in measures when recording</source>
         <translation>録音に入るまでのカウントの拍数</translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location line="+13"/>
+        <source>Enable metronome during</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Count-in</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Recording</source>
+        <translation type="unfinished">録音</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Count-in and Recording</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+9"/>
         <source>Auto-save interval</source>
         <translation>自動セーブの間隔</translation>
     </message>
     <message>
-        <location line="+4"/>
+        <location line="+3"/>
         <source>Every 30 seconds</source>
         <translation>30秒毎</translation>
     </message>
@@ -14883,27 +14911,37 @@ Would you like to try and locate this file or skip it?</source>
         <translation>行わない</translation>
     </message>
     <message>
-        <location line="+19"/>
+        <location line="+26"/>
         <source>Append suffixes to segment labels</source>
         <translation>セグメントラベルにサフィックスを追加</translation>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="+14"/>
         <source>Use track name for new segments</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+4"/>
+        <location line="+1"/>
         <source>&lt;qt&gt;&lt;p&gt;If checked, the label for new segments will always be the same as the track name.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+21"/>
+        <location line="+19"/>
+        <source>Enable editing during playback</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>&lt;qt&gt;&lt;p&gt;WARNING: Editing during playback can lead to instability, crashes, and data loss.  Save frequently.&lt;/p&gt;&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+22"/>
         <source>Use JACK transport</source>
         <translation>JACKトランスポートを使用</translation>
     </message>
     <message>
-        <location line="+33"/>
+        <location line="+27"/>
         <source>Sequencer status</source>
         <translation>シーケンサステータス</translation>
     </message>
@@ -14913,7 +14951,7 @@ Would you like to try and locate this file or skip it?</source>
         <translation>不明</translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+7"/>
         <source>No MIDI, audio OK</source>
         <translation>MIDI無効, オーディオ有効</translation>
     </message>
@@ -14938,27 +14976,27 @@ Would you like to try and locate this file or skip it?</source>
         <translation>詳細...</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="-200"/>
         <source>Behavior</source>
         <translation>振る舞い</translation>
     </message>
     <message>
-        <location line="+15"/>
+        <location line="+222"/>
         <source>Use Thorn style</source>
         <translation>Thornスタイルの使用</translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+1"/>
         <source>&lt;qt&gt;When checked, Rosegarden will use the Thorn look and feel, otherwise default system preferences will be used the next time Rosegarden starts.&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;チェックすると、次回Rosegardenを起動したとき、RosegardenはThornのルックアンドフィールを使い、それ以外は、既定値のシステム設定を使います。&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+44"/>
+        <location line="+57"/>
         <source>Show full path in window titles</source>
         <translation>ウィンドウタイトル中にフルパスで表示</translation>
     </message>
     <message>
-        <location line="+43"/>
+        <location line="+45"/>
         <source>MuPDF</source>
         <translation type="unfinished"></translation>
     </message>
@@ -14973,53 +15011,48 @@ Would you like to try and locate this file or skip it?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+14"/>
+        <location line="+22"/>
         <source>HPLIP (Qt 4)</source>
         <translation>HPLIP (Qt 4)</translation>
     </message>
     <message>
-        <location line="+191"/>
-        <location line="+4"/>
-        <location line="+4"/>
+        <location line="+115"/>
+        <location line="+5"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location line="-4"/>
         <source>You must restart Rosegarden for the graphics system change to take effect.</source>
-        <translation>グラフィックシステムへの変更効果を反映するために、Rosegardenを再起動しなければなりません。</translation>
+        <translation type="vanished">グラフィックシステムへの変更効果を反映するために、Rosegardenを再起動しなければなりません。</translation>
     </message>
     <message>
-        <location line="+4"/>
+        <location line="+1"/>
         <source>You must restart Rosegarden for the presentation change to take effect.</source>
         <translation>表示形式の変更を反映させるためにはRosegardenを再起動する必要がある。</translation>
     </message>
     <message>
-        <location line="-298"/>
+        <location line="-233"/>
         <source>Note name style</source>
         <translation>音符名スタイル</translation>
     </message>
     <message>
-        <location line="-203"/>
         <source>Graphics performance</source>
-        <translation>グラフィクスパフォーマンス</translation>
+        <translation type="vanished">グラフィクスパフォーマンス</translation>
     </message>
     <message>
-        <location line="+5"/>
         <source>Fast</source>
-        <translation>高速</translation>
+        <translation type="vanished">高速</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Safe</source>
-        <translation>安全</translation>
+        <translation type="vanished">安全</translation>
     </message>
     <message>
         <source>&lt;qt&gt;&lt;p&gt;Qt offers you the choice of three graphics systems. The fast (raster) graphics system offers the best tradeoff between performance and stability, but may cause problems for some users.  If you experience frequent crashes, or distorted graphics, you should try the safe (native) graphics system instead.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Qtは3つのグラフィックシステムが選択できるように用意しています。最速の（ラスタ)グラフィックシステムはパフォーマンスと安定性の間の最適なトレードオフを提供します。しかし、特定のシステムでは問題を引き起こすかもしれません。もしも、しばしばクラッシュするか、グラフィックスが壊れるようであれば、その代わりに、安全な（ネイティブな）グラフィックスを試みるべきです。&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+202"/>
+        <location line="+4"/>
         <source>Always use US names (e.g. quarter, 8th)</source>
         <translation>常時英語名を使う(例: quarter,8th)</translation>
     </message>
@@ -15029,7 +15062,7 @@ Would you like to try and locate this file or skip it?</source>
         <translation>ローカライズ(有効な所)</translation>
     </message>
     <message>
-        <location line="+14"/>
+        <location line="+12"/>
         <source>Show textured background on</source>
         <translation>キャンバスエリアの背景にテクスチャを使う</translation>
     </message>
@@ -15039,27 +15072,27 @@ Would you like to try and locate this file or skip it?</source>
         <translation>メインウィンドウ</translation>
     </message>
     <message>
-        <location line="+4"/>
+        <location line="+7"/>
         <source>Notation</source>
         <translation>譜面</translation>
     </message>
     <message>
-        <location line="+27"/>
+        <location line="-49"/>
         <source>Presentation</source>
         <translation>プレゼンテーション</translation>
     </message>
     <message>
-        <location line="+17"/>
+        <location line="+93"/>
         <source>&lt;qt&gt;Rosegarden relies on external applications to provide certain features.  Each selected application must be installed and available on your path.  When choosing an application to use, please ensure that it can run from a &quot;run command&quot; box (typically &lt;b&gt;Alt+F2&lt;/b&gt;) which should allow Rosegarden to make use of it when necessary.&lt;br&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Rosegardenは特定の機能を提供するための外部アプリケーションに依存しています。  各アプリケーションはインストール済みで,使用しているパス上で有効でなければなりません。  アプリケーションを使うために選択するとき、Rosegardenが必要時にそれを使うことができるよう、通常(&lt;b&gt;Alt+F2&lt;/b&gt;)である&quot;コマンド実行&quot;ボックスから動作させることができるようにしておいてください。&lt;br&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location line="+8"/>
         <source>PDF viewer</source>
         <translation>PDFビューワ</translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location line="+7"/>
         <source>Okular (KDE 4.x)</source>
         <translation>Okular (KDE 4.x)</translation>
     </message>
@@ -15074,17 +15107,17 @@ Would you like to try and locate this file or skip it?</source>
         <translation>Adobe Acrobat Reader (自由ではない)</translation>
     </message>
     <message>
-        <location line="+4"/>
+        <location line="-8"/>
         <source>Used to preview generated LilyPond output</source>
         <translation>生成されたLilyPond出力をプレビューするのに使用</translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location line="+23"/>
         <source>Command-line file printing utility</source>
         <translation>コマンドラインファイル印刷ユーティリティ</translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location line="+7"/>
         <source>Gtk-LP (GNOME)</source>
         <translation>Gtk-LP (GNOME)</translation>
     </message>
@@ -15099,17 +15132,17 @@ Would you like to try and locate this file or skip it?</source>
         <translation>lp (非GUI)</translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location line="-8"/>
         <source>Used to print generated LilyPond output without previewing it</source>
         <translation>プレビューなしで生成されたLilyPond出力を印刷するのに使う</translation>
     </message>
     <message>
-        <location line="+19"/>
+        <location line="-41"/>
         <source>External Applications</source>
         <translation>外部アプリケーション</translation>
     </message>
     <message>
-        <location line="+171"/>
+        <location line="+166"/>
         <source>Changes to the textured background in the main window will not take effect until you restart Rosegarden.</source>
         <translation>Rosegardenを再起動するまでメインウィンドウ背景のテクスチャは変更されません。</translation>
     </message>
@@ -17369,12 +17402,12 @@ Double-click to open the marker editor.</source>
 <context>
     <name>Rosegarden::MatrixMover</name>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixMover.cpp" line="+191"/>
+        <location filename="../../src/gui/editors/matrix/MatrixMover.cpp" line="+192"/>
         <source>Hold Shift to avoid snapping to beat grid</source>
         <translation>SHIFTキーを押しながらで拍グリッドにスナップを無効にできます</translation>
     </message>
     <message>
-        <location line="+114"/>
+        <location line="+113"/>
         <source>Copy and Move Event</source>
         <translation>イベントのコピーと移動</translation>
     </message>
@@ -17417,12 +17450,12 @@ Double-click to open the marker editor.</source>
 <context>
     <name>Rosegarden::MatrixPainter</name>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixPainter.cpp" line="+193"/>
+        <location filename="../../src/gui/editors/matrix/MatrixPainter.cpp" line="+187"/>
         <source>Hold Shift to avoid snapping to beat grid</source>
         <translation>SHIFTキーを押しながらで拍グリッドにスナップを無効にできます</translation>
     </message>
     <message>
-        <location line="+151"/>
+        <location line="+150"/>
         <source>Click and drag to draw a note; Shift to avoid snapping to grid</source>
         <translation>クリックしてドラッグで音符を置きます; SHIFTを押しながらでグリッドのスナップを無効にできます</translation>
     </message>
@@ -17471,8 +17504,8 @@ Double-click to open the marker editor.</source>
 <context>
     <name>Rosegarden::MatrixSelector</name>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixSelector.cpp" line="+404"/>
-        <location line="+151"/>
+        <location filename="../../src/gui/editors/matrix/MatrixSelector.cpp" line="+406"/>
+        <location line="+142"/>
         <source>Click and drag to select; middle-click and drag to draw new note</source>
         <translation>クリックしてドラッグすると選択; 中ボタンでクリックしてドラッグすると音符を描画</translation>
     </message>
@@ -17681,7 +17714,7 @@ Double-click to open the marker editor.</source>
 <context>
     <name>Rosegarden::MatrixWidget</name>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="-816"/>
+        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="-833"/>
         <source>Zoom</source>
         <translation>ズーム</translation>
     </message>
@@ -17701,7 +17734,7 @@ Double-click to open the marker editor.</source>
         <translation>ズームをリセット</translation>
     </message>
     <message>
-        <location line="+1064"/>
+        <location line="+1143"/>
         <source>&lt;qt&gt;Rotate wheel to change the active segment&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;アクティブなセグメントを変更するためにホイールを回転&lt;/qt&gt;</translation>
     </message>
@@ -19055,7 +19088,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
 <context>
     <name>Rosegarden::NotationWidget</name>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="-1437"/>
+        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="-1447"/>
         <source>Zoom</source>
         <translation>ズーム</translation>
     </message>
@@ -19080,7 +19113,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
         <translation>トラックヘッダのクローズ</translation>
     </message>
     <message>
-        <location line="+1440"/>
+        <location line="+1459"/>
         <location line="+1"/>
         <source>&lt;qt&gt;Rotate wheel to change the active segment&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;アクティブなセグメントを変更するためにホイールを回転&lt;/qt&gt;</translation>
@@ -19287,7 +19320,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
 <context>
     <name>Rosegarden::PercussionPitchRuler</name>
     <message>
-        <location filename="../../src/gui/rulers/PercussionPitchRuler.cpp" line="+56"/>
+        <location filename="../../src/gui/rulers/PercussionPitchRuler.cpp" line="+57"/>
         <source>  A#2   Acoustic Bass Drum  </source>
         <extracomment>Note to the translators: Don&apos;t translate literally. This string is never displayed but defines the largest width of the text (pitch and intrument name) in the percussion ruler.</extracomment>
         <translation></translation>
@@ -20116,7 +20149,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
 <context>
     <name>Rosegarden::QuantizeParameters</name>
     <message>
-        <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="+66"/>
+        <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="+63"/>
         <source>Quantizer</source>
         <translation>クォンタイザ</translation>
     </message>
@@ -20141,28 +20174,28 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
         <translation>ヒューリスティック音符クォンタイザ</translation>
     </message>
     <message>
-        <location line="+4"/>
+        <location line="+8"/>
         <source>Quantize for notation only (leave performance unchanged)</source>
         <translation>記号のみクォンタイズ(パフォーマンスをそのままにする)</translation>
     </message>
     <message>
-        <location line="+8"/>
+        <location line="+12"/>
         <source>Notation parameters</source>
         <translation>ノーテーションパラメータ</translation>
     </message>
     <message>
-        <location line="+6"/>
-        <location line="+33"/>
+        <location line="+7"/>
+        <location line="+43"/>
         <source>Base grid unit:</source>
         <translation>ベースグリッドユニット:</translation>
     </message>
     <message>
-        <location line="-29"/>
+        <location line="-37"/>
         <source>Complexity:</source>
         <translation>複雑度:</translation>
     </message>
     <message>
-        <location line="+3"/>
+        <location line="+2"/>
         <source>Very high</source>
         <translation>特高</translation>
     </message>
@@ -20187,18 +20220,18 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
         <translation>超低</translation>
     </message>
     <message>
-        <location line="+3"/>
+        <location line="+6"/>
         <source>Tuplet level:</source>
         <translation>連符のレベル:</translation>
     </message>
     <message>
         <location line="+2"/>
-        <location line="+118"/>
+        <location line="+49"/>
         <source>None</source>
         <translation>なし</translation>
     </message>
     <message>
-        <location line="-117"/>
+        <location line="-48"/>
         <source>2-in-the-time-of-3</source>
         <translation type="unfinished"></translation>
     </message>
@@ -20213,14 +20246,19 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
         <translation>任意の</translation>
     </message>
     <message>
-        <location line="+3"/>
+        <location line="+6"/>
         <source>Permit counterpoint</source>
         <translation>カウンタ位置を許可</translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location line="+7"/>
         <source>Grid parameters</source>
         <translation>グリッドパラメータ</translation>
+    </message>
+    <message>
+        <location line="+16"/>
+        <source>Arbitrary grid unit:</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+10"/>
@@ -20228,42 +20266,42 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
         <translation>スィング:</translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location line="+17"/>
         <source>Iterative amount:</source>
         <translation>繰り返しの量:</translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+19"/>
         <source>Quantize durations as well as start times</source>
         <translation>開始時間と同じようにデュレーションをクォンタイズ</translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location line="+8"/>
         <source>After quantization</source>
         <translation>クォンタイズ後</translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+7"/>
         <source>Re-beam</source>
         <translation>再連桁</translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location line="+6"/>
         <source>Add articulations (staccato, tenuto, slurs)</source>
         <translation>アーティキュレーションの追加(スタッカート、テヌート、スラー)</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="+7"/>
         <source>Tie notes at barlines etc</source>
         <translation>小節線で音符をタイでつなげるなど</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="+6"/>
         <source>Split-and-tie overlapping chords</source>
         <translation>和音上の音符を分割してタイでつなぐ</translation>
     </message>
     <message>
-        <location line="+77"/>
+        <location line="-45"/>
         <source>Full quantize</source>
         <translation>完全クォンタイズ</translation>
     </message>
@@ -20604,7 +20642,7 @@ There may be some incompatibilities with the file format.</source>
         <location line="+66"/>
         <location line="+32"/>
         <location line="+405"/>
-        <location line="+624"/>
+        <location line="+625"/>
         <location line="+11"/>
         <location line="+22"/>
         <location line="+3"/>
@@ -20623,7 +20661,7 @@ There may be some incompatibilities with the file format.</source>
         <translation type="obsolete">ドキュメントを %1 に保存できません</translation>
     </message>
     <message numerus="yes">
-        <location line="-2615"/>
+        <location line="-2616"/>
         <source>Delete the %n audio file(s) recorded during the unsaved session?</source>
         <translation>
             <numerusform>未保存のセッション中で録音された %n オーディオファイルを削除しますか?</numerusform>
@@ -20712,7 +20750,7 @@ Please select any you wish to delete permanently from the hard disk.
         <translation>一時出力ファイル &apos;%1&apos; を目的のファイル &apos;%2&apos; に改名するのに失敗しました</translation>
     </message>
     <message>
-        <location line="+1768"/>
+        <location line="+1769"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
@@ -20762,8 +20800,8 @@ editing this file, delete the lock file and try again.
         <translation>&apos;%1&apos;に書き込み中にエラー</translation>
     </message>
     <message>
-        <location line="-815"/>
-        <location line="+2243"/>
+        <location line="-816"/>
+        <location line="+2244"/>
         <source>Cancel</source>
         <translation type="unfinished">キャンセル</translation>
     </message>
@@ -20841,7 +20879,7 @@ We recommend you re-save this file from this version of Rosegarden to ensure tha
 <context>
     <name>Rosegarden::RosegardenMainViewWidget</name>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="+291"/>
+        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="+293"/>
         <source>Selection must contain only audio or non-audio segments</source>
         <translation>オーディオまたは非オーディオセグメントのみ選択してください</translation>
     </message>
@@ -20851,8 +20889,8 @@ We recommend you re-save this file from this version of Rosegarden to ensure tha
         <location line="+305"/>
         <location line="+39"/>
         <location line="+127"/>
-        <location line="+77"/>
-        <location line="+678"/>
+        <location line="+75"/>
+        <location line="+663"/>
         <location line="+3"/>
         <location line="+30"/>
         <location line="+31"/>
@@ -20862,7 +20900,7 @@ We recommend you re-save this file from this version of Rosegarden to ensure tha
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location line="-1303"/>
+        <location line="-1286"/>
         <location line="+133"/>
         <location line="+172"/>
         <location line="+39"/>
@@ -20876,14 +20914,14 @@ We recommend you re-save this file from this version of Rosegarden to ensure tha
         <translation>ピッチトラッカーは1セグメントのみ含むことが出来る。</translation>
     </message>
     <message>
-        <location line="+409"/>
+        <location line="+407"/>
         <source>You&apos;ve not yet defined an audio editor for Rosegarden to use.
 See Edit -&gt; Preferences -&gt; Audio.</source>
         <translation>Rosegardenが使うためのオーディオエディタをまだ定義していません。
 編集 -&gt; 設定 -&gt; オーディオを参照してください。</translation>
     </message>
     <message>
-        <location line="+678"/>
+        <location line="+663"/>
         <source>Cannot add dropped file.  JACK audio server is not available.</source>
         <translation>ドロップしたファイルをついか出来ない。  JACKオーディオサーバは無効。</translation>
     </message>
@@ -20964,7 +21002,7 @@ See Edit -&gt; Preferences -&gt; Audio.</source>
         <translation type="obsolete">%1 - %2</translation>
     </message>
     <message>
-        <location line="+519"/>
+        <location line="+496"/>
         <source>File &quot;%1&quot; does not exist</source>
         <translation>ファイル &quot;%1&quot;がありません</translation>
     </message>
@@ -20987,12 +21025,12 @@ Do you want to open it instead ?</source>
     </message>
     <message>
         <location line="+145"/>
-        <location line="+4715"/>
+        <location line="+4761"/>
         <source>Untitled</source>
         <translation>未タイトル</translation>
     </message>
     <message>
-        <location line="-4702"/>
+        <location line="-4748"/>
         <location line="+342"/>
         <location line="+157"/>
         <source>Could not save document at %1
@@ -21004,7 +21042,7 @@ Error was : %2</source>
         <location line="-497"/>
         <location line="+343"/>
         <location line="+157"/>
-        <location line="+6217"/>
+        <location line="+6263"/>
         <source>Could not save document at %1</source>
         <translation>%1 にドキュメントをセーブできません</translation>
     </message>
@@ -21013,7 +21051,7 @@ Error was : %2</source>
         <translation type="obsolete">新しいアプリケーションウィンドウをオープン...</translation>
     </message>
     <message>
-        <location line="-6649"/>
+        <location line="-6695"/>
         <source>Creating new document...</source>
         <translation>新しいドキュメントを作成...</translation>
     </message>
@@ -21032,12 +21070,12 @@ Error was : %2</source>
     </message>
     <message>
         <location line="-102"/>
-        <location line="+6069"/>
+        <location line="+6115"/>
         <source>All supported files</source>
         <translation>すべてのサポートされているファイル</translation>
     </message>
     <message>
-        <location line="-6068"/>
+        <location line="-6114"/>
         <location line="+71"/>
         <location line="+193"/>
         <source>Rosegarden files</source>
@@ -21063,29 +21101,29 @@ Error was : %2</source>
         <location line="+22"/>
         <location line="+76"/>
         <location line="+23"/>
-        <location line="+625"/>
+        <location line="+641"/>
         <location line="+36"/>
         <location line="+46"/>
         <location line="+53"/>
         <location line="+48"/>
         <location line="+122"/>
-        <location line="+2629"/>
+        <location line="+2659"/>
         <source>All files</source>
         <translation>すべてのファイル</translation>
     </message>
     <message>
-        <location line="-6071"/>
+        <location line="-6117"/>
         <location line="+72"/>
         <source>Open File</source>
         <translation>ファイルのオープン</translation>
     </message>
     <message>
-        <location line="-1095"/>
+        <location line="-1072"/>
         <source>Ctrl+R</source>
         <translation>Ctrl+R</translation>
     </message>
     <message>
-        <location line="+936"/>
+        <location line="+913"/>
         <source>%1%2 - %3</source>
         <translation>%1%2 - %3</translation>
     </message>
@@ -21190,12 +21228,12 @@ Error was : %2</source>
     </message>
     <message>
         <location line="+55"/>
-        <location line="+2816"/>
+        <location line="+2832"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location line="-2815"/>
+        <location line="-2831"/>
         <source>The audio file path does not exist or is not writable.
 You must set the audio file path to a valid directory in Document Properties before %1.
 Would you like to set it now?</source>
@@ -21322,12 +21360,12 @@ Would you like to set it now?</source>
     </message>
     <message>
         <location line="+1"/>
-        <location line="+1162"/>
+        <location line="+1178"/>
         <source>Rosegarden Project files</source>
         <translation>Rosegardenプロジェクトファイル</translation>
     </message>
     <message>
-        <location line="+1669"/>
+        <location line="+1699"/>
         <source>Input</source>
         <translation>入力</translation>
     </message>
@@ -21337,8 +21375,8 @@ Would you like to set it now?</source>
         <translation>http://rosegardenmusic.com/wiki/doc:manual-ja</translation>
     </message>
     <message>
-        <location line="-6685"/>
-        <location line="+336"/>
+        <location line="-6727"/>
+        <location line="+332"/>
         <location line="+8"/>
         <location line="+10"/>
         <location line="+26"/>
@@ -21370,7 +21408,7 @@ Would you like to set it now?</source>
         <location line="+19"/>
         <location line="+79"/>
         <location line="+19"/>
-        <location line="+311"/>
+        <location line="+327"/>
         <location line="+250"/>
         <location line="+4"/>
         <location line="+34"/>
@@ -21390,10 +21428,10 @@ Would you like to set it now?</source>
         <location line="+25"/>
         <location line="+13"/>
         <location line="+22"/>
-        <location line="+58"/>
+        <location line="+62"/>
         <location line="+2"/>
         <location line="+34"/>
-        <location line="+718"/>
+        <location line="+744"/>
         <location line="+95"/>
         <location line="+120"/>
         <location line="+13"/>
@@ -21423,7 +21461,7 @@ Would you like to set it now?</source>
         <translation>&lt;p&gt;%1.というバージョンを使用しています  バージョン %2 が新たに公開されています。&lt;/p&gt;&lt;p&gt;&lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/getting/&quot;&gt;Rosegarden webサイト&lt;/a&gt;により詳細な情報がありますのでそちらを見てください。&lt;/p&gt;</translation>
     </message>
     <message>
-        <location line="-4304"/>
+        <location line="-4350"/>
         <source>Open MIDI File</source>
         <translation>MIDIファイルのオープン</translation>
     </message>
@@ -21470,7 +21508,7 @@ Would you like to set it now?</source>
         <translation>ファイルが壊れているのでX11 Rosegardenファイルはロードできません。</translation>
     </message>
     <message>
-        <location line="+1009"/>
+        <location line="+1025"/>
         <source>&lt;qt&gt;&lt;p&gt;Failed to open a temporary file for LilyPond export.&lt;/p&gt;&lt;p&gt;This probably means you have run out of disk space on &lt;pre&gt;%1&lt;/pre&gt;&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;LilyPondエクスポートのための一時ファイルをオープンするのに失敗しました。&lt;/p&gt;&lt;p&gt;これはおそらく&lt;pre&gt;%1&lt;/pre&gt;上のディスクスペースがないことを意味しています。&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
@@ -21482,12 +21520,12 @@ Please exit and restart Rosegarden to restore sound capability.</source>
 Rosegardenを再起動してサウンド機能を有効にしてください。</translation>
     </message>
     <message>
-        <location line="-4652"/>
+        <location line="-4645"/>
         <source>Starting sequencer...</source>
         <translation>シーケンサを起動中...</translation>
     </message>
     <message>
-        <location line="+1092"/>
+        <location line="+1069"/>
         <source>File &quot;%1&quot; is a Rosegarden Device, and must be imported using the MIDI device manager.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -21513,7 +21551,7 @@ Rosegardenを再起動してサウンド機能を有効にしてください。<
         <location line="+191"/>
         <location line="+97"/>
         <location line="+98"/>
-        <location line="+654"/>
+        <location line="+670"/>
         <location line="+50"/>
         <location line="+48"/>
         <location line="+116"/>
@@ -21522,7 +21560,7 @@ Rosegardenを再起動してサウンド機能を有効にしてください。<
         <translation type="unfinished">キャンセル</translation>
     </message>
     <message>
-        <location line="-2414"/>
+        <location line="-2430"/>
         <source>Split time is not within a selected segment.
 No segment will be split.</source>
         <translation type="unfinished"></translation>
@@ -21569,7 +21607,7 @@ No segment will be split.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+662"/>
+        <location line="+678"/>
         <source>The Rosegarden sequencer could not be started, so sound and recording will be unavailable for this session.
 For assistance with correct audio and MIDI configuration, go to http://rosegardenmusic.com.</source>
         <translation>Rosegardenのシーケンサを起動できませんでした。セッションのサウンドや録音したものは使うことができません。
@@ -21673,14 +21711,14 @@ http://rosegardenmusic.com を参照してオーディオとMIDIの設定を修�
         <translation>MusicXMLファイルをエクスポート...</translation>
     </message>
     <message>
-        <location line="-950"/>
+        <location line="-966"/>
         <location line="+23"/>
-        <location line="+930"/>
+        <location line="+946"/>
         <source>XML files</source>
         <translation>XMLファイル</translation>
     </message>
     <message numerus="yes">
-        <location line="-2376"/>
+        <location line="-2392"/>
         <location line="+54"/>
         <source>Split %n Segment(s) by Drum</source>
         <translation type="unfinished">
@@ -21711,7 +21749,7 @@ http://rosegardenmusic.com を参照してオーディオとMIDIの設定を修�
 </translation>
     </message>
     <message>
-        <location line="+1057"/>
+        <location line="+1073"/>
         <source>The audio file path does not exist or is not writable.
 Please set the audio file path to a valid directory in Document Properties before recording audio.
 Would you like to set it now?</source>
@@ -21734,7 +21772,7 @@ Would you like to set it now?</source>
 今すぐ設定しますか?</translation>
     </message>
     <message>
-        <location line="+487"/>
+        <location line="+491"/>
         <source>Move playback pointer to time</source>
         <translation type="unfinished"></translation>
     </message>
@@ -21766,7 +21804,7 @@ Would you like to set it now?</source>
         <translation>説明なし</translation>
     </message>
     <message>
-        <location line="+302"/>
+        <location line="+328"/>
         <source>&lt;qt&gt;&lt;p&gt;You must choose a filename for this composition before recording audio.&lt;/p&gt;&lt;p&gt;Audio files will be saved to &lt;b&gt;%1&lt;/b&gt; as &lt;b&gt;rg-[&lt;i&gt;filename&lt;/i&gt;]-[&lt;i&gt;instrument&lt;/i&gt;]-&lt;i&gt;date&lt;/i&gt;_&lt;i&gt;time&lt;/i&gt;-&lt;i&gt;n&lt;/i&gt;.wav&lt;/b&gt;.  You may wish to rename audio instruments before recording as well.  For more information, please see the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/wiki/doc:audio-filenames-en&quot;&gt;Rosegarden Wiki&lt;/a&gt;.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;オーディオを録音する前にこのコンポジション用のファイル名を選択しなければなりません。&lt;/p&gt;&lt;p&gt;オーディオファイルはAudio files will be saved to &lt;b&gt;%1&lt;/b&gt; に &lt;b&gt;rg-[&lt;i&gt;filename&lt;/i&gt;]-[&lt;i&gt;instrument&lt;/i&gt;]-&lt;i&gt;date&lt;/i&gt;_&lt;i&gt;time&lt;/i&gt;-&lt;i&gt;n&lt;/i&gt;.wav&lt;/b&gt;という形式でセーブされます。録音する前に、オーディオインストゥルメントを改名してもよいでしょう。さらなる情報は&lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/wiki/doc:audio-filenames-en&quot;&gt;Rosegarden Wiki&lt;/a&gt;を参照してください。&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
@@ -22090,7 +22128,7 @@ Error was : %2</source>
         <translation>セグメントの移動</translation>
     </message>
     <message>
-        <location line="+170"/>
+        <location line="+169"/>
         <source>Hold Shift to avoid snapping to beat grid</source>
         <translation>SHIFTキーを押しながらで拍グリッドにスナップを無効にできます</translation>
     </message>
@@ -22107,78 +22145,81 @@ Error was : %2</source>
         <translation type="obsolete">セグメント</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="+91"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="+87"/>
         <source>Segment Parameters</source>
         <translation>セグメントパラメータ</translation>
     </message>
     <message>
-        <location line="+32"/>
+        <location line="+7"/>
         <source>Label</source>
         <translation>ラベル</translation>
     </message>
     <message>
-        <location line="+21"/>
+        <location line="+19"/>
         <source>Repeat</source>
         <translation>リピート</translation>
     </message>
     <message>
-        <location line="+29"/>
+        <location line="+38"/>
         <source>Quantize</source>
         <translation>クォンタイズ</translation>
     </message>
     <message>
-        <location line="-15"/>
-        <location line="+81"/>
+        <location line="-22"/>
+        <location line="+133"/>
         <source>Transpose</source>
         <translation>トランスポーズ</translation>
     </message>
     <message>
-        <location line="-47"/>
+        <location line="-84"/>
         <source>Delay</source>
         <translation>ディレイ</translation>
     </message>
     <message>
-        <location line="+16"/>
+        <location line="+55"/>
         <source>Color</source>
         <translation>カラー</translation>
     </message>
     <message>
-        <location line="-76"/>
+        <location line="-126"/>
         <source>&lt;qt&gt;Click to edit the segment label for any selected segments&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+6"/>
         <source>Edit</source>
-        <translation>編集</translation>
+        <translation type="vanished">編集</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>&lt;qt&gt;Edit the segment label for any selected segments&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;任意の選択されたセグメントのセグメントラベルを編集&lt;/qt&gt;</translation>
+        <translation type="vanished">&lt;qt&gt;任意の選択されたセグメントのセグメントラベルを編集&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+11"/>
         <source>&lt;qt&gt;&lt;p&gt;When checked,     any selected segments will repeat until they run into another segment,  or the end of the composition.&lt;/p&gt;&lt;p&gt;When viewed in the notation editor or printed via LilyPond, the segments will be bracketed by repeat signs.&lt;/p&gt;&lt;p&gt;&lt;center&gt;&lt;img src=&quot;:pixmaps/tooltip/repeats.png&quot;&gt;&lt;/img&gt;&lt;/center&gt;&lt;/p&gt;&lt;br&gt;These can be used in conjunction with special LilyPond export directives to create repeats with first and second alternate endings. See rosegardenmusic.com for a tutorial. [Ctrl+Shift+R] &lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;これをチェックすると、選択された任意のセグメントは、他のセグメントの中に入るまでか、コンポジションの終端に来るまで繰り返します。&lt;/p&gt;&lt;p&gt;譜面エディタ中で見るか、　LilyPond経由で印刷する時、セグメントは繰り返しサインによって囲まれます(bracketed)。&lt;/p&gt;&lt;p&gt;&lt;center&gt;&lt;img src=&quot;:pixmaps/tooltip/repeats.png&quot;&gt;&lt;/img&gt;&lt;/center&gt;&lt;/p&gt;&lt;br&gt;These can be used in conjunction with special LilyPond export directives to create repeats with first and second alternate endings. rosegardenmusic.comにあるチュートリアルを参照してください。 [Ctrl+Shift+R] &lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+14"/>
+        <location line="+16"/>
         <source>&lt;qt&gt;&lt;p&gt;Raise or lower playback of any selected segments by this number of semitones&lt;/p&gt;&lt;p&gt;&lt;i&gt;NOTE: This control changes segments that already exist.&lt;/i&gt;&lt;/p&gt;&lt;p&gt;&lt;i&gt;Use the transpose control in &lt;b&gt;Track Parameters&lt;/b&gt; under &lt;b&gt;Create segments with&lt;/b&gt; to pre-select this   setting before drawing or recording new segments.&lt;/i&gt;&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;この半音の数値で選択された任意のセグメントの再生を上げたり下げたりします。&lt;/p&gt;&lt;p&gt;&lt;i&gt;注意:このコントロールは既に存在するセグメントを変更します。&lt;/i&gt;&lt;/p&gt;&lt;p&gt;&lt;i&gt;新しいセグメントの描画か録音設定の前に、これをあらかじめ選択するため、&lt;b&gt;セグメントの作成&lt;/b&gt;配下の&lt;b&gt;トラックパラメータ&lt;/b&gt;中のトランスポーズコントロールを使ってください。&lt;/i&gt;&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+34"/>
+        <location line="+22"/>
+        <source>&lt;qt&gt;&lt;p&gt;Quantize the selected segments using the Grid quantizer.  This quantization can be removed at any time in the future by setting it to off.&lt;/p&gt;&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+27"/>
         <source>&lt;qt&gt;&lt;p&gt;Delay playback of any selected segments by this number of miliseconds&lt;/p&gt;&lt;p&gt;&lt;i&gt;NOTE: Rosegarden does not support negative delay.  If you need a negative delay effect, set the   composition to start before bar 1, and move segments to the left.  You can hold &lt;b&gt;shift&lt;/b&gt; while doing this for fine-grained control, though doing so will have harsh effects on music notation rendering as viewed in the notation editor.&lt;/i&gt;&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;ここで指定したミリ秒単位で選択された任意のセグメントの再生を遅延します。&lt;/p&gt;&lt;p&gt;&lt;i&gt;注意: Rosegardenは負のディレイをサポートしません。  もしも、負のディレイ効果が必要ならば、第一小節の前にコンポジションを設定し,セグメントを左に移動します。きめの細かい制御をするのには&lt;b&gt;シフト&lt;/b&gt; キーを押しながら行います。これを行うと,譜面エディタ中で表示されるような、楽譜のレンダリングにおいて、ぎざぎざした効果が得られるでしょう。&lt;/i&gt;&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+17"/>
+        <location line="+55"/>
         <source>&lt;qt&gt;&lt;p&gt;Change the color of any selected segments&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;任意の選択されたセグメントの色を変更&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="+11"/>
         <source>Linked segment parameters</source>
         <translation type="unfinished"></translation>
     </message>
@@ -22203,28 +22244,31 @@ Error was : %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+57"/>
+        <location line="+655"/>
+        <source>Enter new name:</source>
+        <translation type="unfinished">新しい名前を入力:</translation>
+    </message>
+    <message>
+        <location line="-756"/>
         <source>Off</source>
         <translation>Off</translation>
     </message>
     <message>
-        <location line="+42"/>
-        <location line="+364"/>
+        <location line="+54"/>
+        <location line="+367"/>
         <source>%1 ms</source>
         <translation>%1ミリ秒</translation>
     </message>
     <message>
-        <location line="-298"/>
         <source>Default</source>
-        <translation>既定値</translation>
+        <translation type="vanished">既定値</translation>
     </message>
     <message>
-        <location line="+16"/>
         <source>Add New Color</source>
-        <translation>新しいカラーの追加</translation>
+        <translation type="vanished">新しいカラーの追加</translation>
     </message>
     <message>
-        <location line="+419"/>
+        <location line="+409"/>
         <location line="+46"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
@@ -22241,42 +22285,39 @@ before new transposition can be applied.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+93"/>
+        <location line="-122"/>
         <source>New Color Name</source>
         <translation>新しいカラー名</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Enter new name</source>
-        <translation>名前を入力</translation>
+        <translation type="vanished">名前を入力</translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location line="+3"/>
         <source>New</source>
         <translation>新規</translation>
     </message>
     <message>
-        <location line="+37"/>
         <source>Highest playable note</source>
-        <translation>再生可能な最高の音符</translation>
+        <translation type="vanished">再生可能な最高の音符</translation>
     </message>
     <message>
-        <location line="+20"/>
         <source>Lowest playable note</source>
-        <translation>再生可能な最低の音符</translation>
+        <translation type="vanished">再生可能な最低の音符</translation>
     </message>
     <message>
-        <location line="+31"/>
+        <location line="-200"/>
         <source>Modify Segment label</source>
         <translation>セグメントラベルの変更</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="+2"/>
         <source>Modify Segments label</source>
         <translation>セグメントラベルの変更</translation>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="+13"/>
         <source>Enter new label:</source>
         <translation>新しいラベルを入力:</translation>
     </message>
@@ -22439,14 +22480,14 @@ Would you like to set it now?</source>
         <translation type="obsolete">クリックしてドラッグでセングメント選択</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/gui/editors/segment/compositionview/SegmentSelector.cpp" line="+314"/>
+        <location filename="../../src/gui/editors/segment/compositionview/SegmentSelector.cpp" line="+312"/>
         <source>Move %n Segment(s)</source>
         <translation type="unfinished">
             <numerusform></numerusform>
         </translation>
     </message>
     <message>
-        <location line="+344"/>
+        <location line="+342"/>
         <source>Hold Shift to avoid snapping to beat grid</source>
         <translation>SHIFTキーを押しながらで拍グリッドにスナップを無効にできます</translation>
     </message>
@@ -22481,7 +22522,7 @@ Would you like to set it now?</source>
         <translation>クリックしてドラッグでセグメントのコピー</translation>
     </message>
     <message numerus="yes">
-        <location line="-385"/>
+        <location line="-383"/>
         <source>Copy %n Segment(s) as link(s)</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -22495,7 +22536,7 @@ Would you like to set it now?</source>
         </translation>
     </message>
     <message>
-        <location line="+388"/>
+        <location line="+386"/>
         <source>Click and drag to copy segment</source>
         <translation>セグメントのコピーのためにクリックとドラッグ</translation>
     </message>
@@ -22585,7 +22626,7 @@ Would you like to set it now?</source>
 <context>
     <name>Rosegarden::SegmentSplitter</name>
     <message>
-        <location filename="../../src/gui/editors/segment/compositionview/SegmentSplitter.cpp" line="+64"/>
+        <location filename="../../src/gui/editors/segment/compositionview/SegmentSplitter.cpp" line="+67"/>
         <source>Click on a segment to split it in two; hold Shift to avoid snapping to beat grid</source>
         <translation>２つに分割するためにセグメントをクリックし、拍子グリッドにスナップしないようにシフトを押したままにする</translation>
     </message>
@@ -22763,7 +22804,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
         <translation>&lt;p&gt;Rosegardenは、MIDIパフォーマンスのための高解像度タイミングソースを見つけられませんでした。&lt;/p&gt;&lt;p&gt;この問題を解決するために、RTCタイマkernelモジュールをロードすることができます。これを行うために、ターミナルウィンドウ中で &lt;b&gt;sudo modprobe snd-rtctimer&lt;/b&gt;を実行することを試し、Rosegardenを再起動する事を試してください。&lt;/p&gt;&lt;p&gt;その代わりに,使用しているディストリビュータが、マルチメディアに最適化されたkernelを提供しているかを確認してください。この件に関しては、&lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/wiki/low-latency_kernels&quot;&gt;Rosegarden webサイト&lt;/a&gt;を見てください。&lt;/p&gt;</translation>
     </message>
     <message>
-        <location line="+124"/>
+        <location line="+134"/>
         <source>&lt;h3&gt;Sequencer engine unavailable!&lt;/h3&gt;</source>
         <translation>&lt;h3&gt;シーケンサエンジンが無効!&lt;/h3&gt;</translation>
     </message>
@@ -22797,7 +22838,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
         <translation>&lt;p&gt;RosegardenはJACKオーディオサーバに接続できませんでした。これは、設定の問題で、Rosegardenがオーディオサーバを起動できなかったか、システムのインストールの問題か、あるいは両方であることを意味します。&lt;/p&gt;&lt;p&gt;もしも、オーディオファイルの録音再生か、プラグインを使いたい場合、Rosegardenを終了し,JACK制御ユーティリティ(qjackctl)を使って、JACKが起動できる設定になるまで、設定を変更してみることを推奨します。また、リアルタイムkernelをインストールしたり、システムセキュリティの設定を変更したりなどをしてもよいでしょう。残念なことに、これはとても複雑です。&lt;/p&gt;&lt;p&gt;一度JACKが動く設定ができれば、Rosegardenはその先自動的にオーディオサーバを起動出来るようになります。&lt;/p&gt;</translation>
     </message>
     <message>
-        <location line="-255"/>
+        <location line="-265"/>
         <source>The audio mixing subsystem is failing to keep up.</source>
         <translation>オーディオミキシングサブシステムが起動に失敗した。</translation>
     </message>
@@ -23552,7 +23593,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
 <context>
     <name>Rosegarden::TempoRuler</name>
     <message>
-        <location filename="../../src/gui/rulers/TempoRuler.cpp" line="+481"/>
+        <location filename="../../src/gui/rulers/TempoRuler.cpp" line="+485"/>
         <source>%1.%2%3 (%4.%5%6 bpm)</source>
         <translation>%1.%2%3 (%4.%5%6 bpm)</translation>
     </message>
@@ -24289,12 +24330,12 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
 <context>
     <name>Rosegarden::TrackEditor</name>
     <message>
-        <location filename="../../src/gui/editors/segment/TrackEditor.cpp" line="+359"/>
+        <location filename="../../src/gui/editors/segment/TrackEditor.cpp" line="+362"/>
         <source>Delete Tracks</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+196"/>
+        <location line="+183"/>
         <source>Delete Segments</source>
         <translation type="unfinished"></translation>
     </message>
@@ -24363,18 +24404,18 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
         <translation type="obsolete">トラック</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="-1010"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="-980"/>
         <source>Track Parameters</source>
         <translation>トラックパラメータ</translation>
     </message>
     <message>
         <location line="+16"/>
-        <location line="+1139"/>
+        <location line="+1109"/>
         <source>&lt;untitled&gt;</source>
         <translation>&lt; 無題 &gt;</translation>
     </message>
     <message>
-        <location line="-1131"/>
+        <location line="-1101"/>
         <source>Playback parameters</source>
         <translation>再生パラメータ</translation>
     </message>
@@ -24782,7 +24823,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
         <translation>カラー</translation>
     </message>
     <message>
-        <location line="+4"/>
+        <location line="+5"/>
         <source>&lt;qt&gt;&lt;p&gt;New segments will be created using this color&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;新しいセグメントはこの色で作成されます&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
@@ -24791,8 +24832,8 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
         <translation type="obsolete">オーディオ</translation>
     </message>
     <message>
-        <location line="-198"/>
-        <location line="+974"/>
+        <location line="-199"/>
+        <location line="+944"/>
         <source>All</source>
         <translation>すべて</translation>
     </message>
@@ -24808,22 +24849,20 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
         <translation>[ トラック%1 - %2 ]</translation>
     </message>
     <message>
-        <location line="-846"/>
+        <location line="-817"/>
         <source>Reset to Defaults</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+344"/>
         <source>Default</source>
-        <translation>既定値</translation>
+        <translation type="vanished">既定値</translation>
     </message>
     <message>
-        <location line="+16"/>
         <source>Add New Color</source>
-        <translation>新しいカラーの追加</translation>
+        <translation type="vanished">新しいカラーの追加</translation>
     </message>
     <message>
-        <location line="+35"/>
+        <location line="+363"/>
         <source>New Color Name</source>
         <translation>新しいカラー名</translation>
     </message>
@@ -24838,7 +24877,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
         <translation>新規</translation>
     </message>
     <message>
-        <location line="+29"/>
+        <location line="+32"/>
         <source>Highest playable note</source>
         <translation>再生可能な最高の音符</translation>
     </message>
@@ -25383,12 +25422,12 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
         <translation>&lt;qt&gt;&lt;p&gt;パフォーマンスの問題が検出されました!&lt;/p&gt;&lt;p&gt;詳細を表示するためにクリックしてください&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+21"/>
+        <location line="+11"/>
         <source>&lt;qt&gt;&lt;p&gt;Information available.&lt;/p&gt;&lt;p&gt;Click to display details&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;情報が有効。&lt;/p&gt;&lt;p&gt;クリックして詳細を参照。&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+24"/>
+        <location line="+23"/>
         <source>MIDI OK</source>
         <translation>MIDI OK</translation>
     </message>
@@ -25403,19 +25442,16 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
         <translation>timer OK</translation>
     </message>
     <message>
-        <location line="+9"/>
         <source>&lt;qt&gt;Safe graphics mode&lt;br&gt;Click for more information&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;安全なグラフィックモード&lt;br&gt;詳細はクリック&lt;/qt&gt;</translation>
+        <translation type="vanished">&lt;qt&gt;安全なグラフィックモード&lt;br&gt;詳細はクリック&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+53"/>
         <source>Rosegarden</source>
-        <translation>Rosegarden</translation>
+        <translation type="vanished">Rosegarden</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>&lt;qt&gt;&lt;p&gt;Rosegarden is using safe graphics mode.  This provides the greatest stability, but graphics performance is very slow.&lt;/p&gt;&lt;p&gt;You may wish to visit &lt;b&gt;Edit -&gt; Preferences -&gt; Behavior -&gt; Graphics performance&lt;/b&gt; and try &quot;Normal&quot; or &quot;Fast&quot; for better performance.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;Rosegardenは安全なグラフィックモードを使っています。  これは、とても安定していますが、画面描画能力はとても劣ります。&lt;/p&gt;&lt;p&gt;You may wish to visit &lt;b&gt;編集 -&gt; 設定 -&gt; 振る舞い -&gt; グラフィクスパフォーマンス&lt;/b&gt;を選び、よりパフォーマンスを向上させるために、&quot;通常&quot; か &quot;高速&quot; を選んでもよいでしょう。&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation type="vanished">&lt;qt&gt;&lt;p&gt;Rosegardenは安全なグラフィックモードを使っています。  これは、とても安定していますが、画面描画能力はとても劣ります。&lt;/p&gt;&lt;p&gt;You may wish to visit &lt;b&gt;編集 -&gt; 設定 -&gt; 振る舞い -&gt; グラフィクスパフォーマンス&lt;/b&gt;を選び、よりパフォーマンスを向上させるために、&quot;通常&quot; か &quot;高速&quot; を選んでもよいでしょう。&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
 </context>
 <context>
