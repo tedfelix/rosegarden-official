@@ -12706,12 +12706,12 @@ Veuillez sélectionner ceux que vous souhaitez effacer définitivement du disque
     <message>
         <location filename="../../src/gui/widgets/ColorCombo.cpp" line="+82"/>
         <source>Default</source>
-        <translation type="unfinished">Par défaut</translation>
+        <translation>Par défaut</translation>
     </message>
     <message>
         <location line="+16"/>
         <source>Add New Color</source>
-        <translation type="unfinished">Ajouter une nouvelle couleur</translation>
+        <translation>Ajouter une nouvelle couleur</translation>
     </message>
 </context>
 <context>
@@ -14571,22 +14571,22 @@ Voulez-vous essayer de localiser ce fichier?</translation>
     <message>
         <location line="+13"/>
         <source>Enable metronome during</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Count-in</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Recording</source>
-        <translation type="unfinished">Enregistrement</translation>
+        <translation>Enregistrement</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Count-in and Recording</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+9"/>
@@ -14636,12 +14636,12 @@ Voulez-vous essayer de localiser ce fichier?</translation>
     <message>
         <location line="+19"/>
         <source>Enable editing during playback</source>
-        <translation type="unfinished"></translation>
+        <translation>Autoriser l&apos;édition en cours d&apos;exécution</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>&lt;qt&gt;&lt;p&gt;WARNING: Editing during playback can lead to instability, crashes, and data loss.  Save frequently.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;ATTENTION : Editer pendant l&apos;exécution peut conduire à des instabilités, des plantages et des pertes de données.  Pensez à sauvegarder fréquemment.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+22"/>
@@ -19901,7 +19901,7 @@ Veuillez vérifier que le périphérique est configuré correctement dans le dia
     <message>
         <location line="+16"/>
         <source>Arbitrary grid unit:</source>
-        <translation type="unfinished"></translation>
+        <translation>Unité de grille arbitraire:</translation>
     </message>
     <message>
         <location line="+10"/>
@@ -21802,7 +21802,7 @@ Erreur obtenue : %2</translation>
     <message>
         <location line="+22"/>
         <source>&lt;qt&gt;&lt;p&gt;Quantize the selected segments using the Grid quantizer.  This quantization can be removed at any time in the future by setting it to off.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Quantifie le segment sélectionné en utilisant le quantifieur grille.  Cette quantification pourra être supprimée à tout moment en arrêtant le quantifieur.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+27"/>
@@ -21842,7 +21842,7 @@ Erreur obtenue : %2</translation>
     <message>
         <location line="+655"/>
         <source>Enter new name:</source>
-        <translation type="unfinished">Entrer un nouveau nom:</translation>
+        <translation>Entrer un nouveau nom:</translation>
     </message>
     <message>
         <location line="-756"/>
