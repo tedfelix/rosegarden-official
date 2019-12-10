@@ -12704,12 +12704,12 @@ Por favor, seleccione cuáles de ellos quiere borrar permanentemente del disco d
     <message>
         <location filename="../../src/gui/widgets/ColorCombo.cpp" line="+82"/>
         <source>Default</source>
-        <translation type="unfinished">Predeterminado</translation>
+        <translation>Predeterminado</translation>
     </message>
     <message>
         <location line="+16"/>
         <source>Add New Color</source>
-        <translation type="unfinished"></translation>
+        <translation>Añadir Nuevo Color</translation>
     </message>
 </context>
 <context>
@@ -14569,22 +14569,22 @@ Would you like to try and locate this file or skip it?</source>
     <message>
         <location line="+13"/>
         <source>Enable metronome during</source>
-        <translation type="unfinished"></translation>
+        <translation>Habilitar metrónomo durante</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Count-in</source>
-        <translation type="unfinished"></translation>
+        <translation>Compases previos</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Recording</source>
-        <translation type="unfinished">Grabación</translation>
+        <translation>Grabación</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Count-in and Recording</source>
-        <translation type="unfinished"></translation>
+        <translation>Compases previos y grabación</translation>
     </message>
     <message>
         <location line="+9"/>
@@ -14634,12 +14634,12 @@ Would you like to try and locate this file or skip it?</source>
     <message>
         <location line="+19"/>
         <source>Enable editing during playback</source>
-        <translation type="unfinished"></translation>
+        <translation>Habilitar edición durante reproducción</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>&lt;qt&gt;&lt;p&gt;WARNING: Editing during playback can lead to instability, crashes, and data loss.  Save frequently.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;ATENCIÓN: Edición durante reproducción es INESTABLE.</translation>
     </message>
     <message>
         <location line="+22"/>
@@ -19894,7 +19894,7 @@ Por favor, asegúrese de que está correctamente configurado en el cuadro de di�
     <message>
         <location line="+16"/>
         <source>Arbitrary grid unit:</source>
-        <translation type="unfinished"></translation>
+        <translation>Unidad de rejilla arbitraria</translation>
     </message>
     <message>
         <location line="+10"/>
@@ -21800,7 +21800,7 @@ Error fue : %2</translation>
     <message>
         <location line="+22"/>
         <source>&lt;qt&gt;&lt;p&gt;Quantize the selected segments using the Grid quantizer.  This quantization can be removed at any time in the future by setting it to off.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+27"/>
@@ -21840,7 +21840,7 @@ Error fue : %2</translation>
     <message>
         <location line="+655"/>
         <source>Enter new name:</source>
-        <translation type="unfinished">Introducir nuevo nombre:</translation>
+        <translation>Introducir nuevo nombre:</translation>
     </message>
     <message>
         <location line="-756"/>
