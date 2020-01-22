@@ -20,7 +20,7 @@
 
 #include <QDialog>
 
-#include "base/Event.h"
+#include "base/TimeT.h"
 
 class QComboBox;
 class QDoubleSpinBox;
@@ -44,8 +44,8 @@ class Segment;
  *   - etc...
  *
  * Though called PitchBendSequenceDialog for historical reasons, this
- * dialog deals with either pitchbend events or controller events,
- * according to the "m_control" parameter.  It inserts, erases, or
+ * dialog deals with either pitchbend events or controller events
+ * based on m_controlParameter.  It inserts, erases, or
  * replaces a series of such events in a given segment.  It now
  * supplies the functionality for several menu items.
  *
@@ -61,32 +61,13 @@ class PitchBendSequenceDialog : public QDialog
 {
     Q_OBJECT
 
-    enum PresetStyles {
-      LinearRamp,
-      FastVibratoArmRelease,
-      Vibrato,
-      EndBuiltIns,
-    };
-    enum ReplaceMode {
-      OnlyAdd,   // Only add new events.
-      Replace,   // Replace old controller events here with new ones.
-      OnlyErase, // Just erase old controller events here.
-    };
-    enum RampMode {
-      Linear,
-      Logarithmic,
-      HalfSine,
-      QuarterSine,
-    };
-    enum StepSizeCalculation {
-      StepSizeDirect,
-      StepSizeByCount,
-    };
-
 public:
-    PitchBendSequenceDialog(QWidget *parent, Segment *segment,
-                            const ControlParameter &control,
-                            timeT startTime, timeT endTime);
+    PitchBendSequenceDialog(
+            QWidget *parent,
+            Segment *segment,
+            const ControlParameter &controlParameter,
+            timeT startTime,
+            timeT endTime);
 
 public slots:
     void accept() override;
@@ -95,9 +76,9 @@ public slots:
 
 protected slots:
     void slotOnlyEraseClicked(bool checked);
-    void slotLinearRampClicked(bool /*checked*/);
+    void slotLinearRampClicked(bool checked);
     void slotStepSizeStyleChanged(bool checked);
-    
+
 protected:
     /** Methods dealing with transforming to or from spinbox values **/
 
@@ -109,14 +90,22 @@ protected:
     double getSmallestSpinboxStep() const;
     double valueDeltaToPercent(int valueDelta) const;
     int percentToValueDelta(double) const;
-    double getElapsedSeconds();
-    int numVibratoCycles();
 
     /** Methods dealing with setting and reading radiobutton groups **/
 
-    ReplaceMode getReplaceMode();
+    enum RampMode {
+      Linear,
+      Logarithmic,
+      HalfSine,
+      QuarterSine,
+    };
     void setRampMode(RampMode rampMode);
     RampMode getRampMode();
+
+    enum StepSizeCalculation {
+      StepSizeDirect,
+      StepSizeByCount,
+    };
     void setStepSizeCalculation(StepSizeCalculation stepSizeCalculation);
     StepSizeCalculation getStepSizeCalculation();
 
@@ -129,21 +118,20 @@ protected:
     void saveSettings();
     void savePreset(int preset);
     void restorePreset(int preset);
-    
-    /** Methods filling the macrocommand with commands **/
+
+    /** Methods filling the MacroCommand with commands **/
 
     void addLinearCountedEvents(MacroCommand *macro);
     void addStepwiseEvents(MacroCommand *macro);
 
-    /**** Data members ****/
-    
     Segment *m_segment;
-    const ControlParameter &m_control;
+    const ControlParameter &m_controlParameter;
 
-    // How many of the built-in presets we are accepting.  In
-    // practice, either 0 or EndBuiltIns.
-    const int  m_numBuiltins;
-  
+    // How many of the PresetStyles we are accepting.  In
+    // practice, either 0 for non-pitchbend controllers or EndBuiltIns
+    // (all three) for the pitchbend controller.
+    const int m_numPresetStyles;
+
     QDoubleSpinBox *m_prebendValue;
     QDoubleSpinBox *m_prebendDuration;
     QDoubleSpinBox *m_sequenceRampDuration;
@@ -153,7 +141,8 @@ protected:
     QDoubleSpinBox *m_vibratoStartAmplitude;
     QDoubleSpinBox *m_vibratoEndAmplitude;
     QDoubleSpinBox *m_vibratoFrequency;
-    QGroupBox      *m_vibratoBox;
+    int numVibratoCycles();
+    QGroupBox *m_vibratoBox;
 
     QComboBox *m_sequencePreset;
 
@@ -162,6 +151,12 @@ protected:
     QRadioButton *m_radioOnlyAdd;
     QRadioButton *m_radioReplace;
     QRadioButton *m_radioOnlyErase;
+    enum ReplaceMode {
+      OnlyAdd,   // Only add new events.
+      Replace,   // Replace old controller events here with new ones.
+      OnlyErase, // Just erase old controller events here.
+    };
+    ReplaceMode getReplaceMode();
 
     /** StepSizeCalculation group **/
 
@@ -174,9 +169,10 @@ protected:
     QRadioButton *m_radioRampLogarithmic;
     QRadioButton *m_radioRampHalfSine;
     QRadioButton *m_radioRampQuarterSine;
-    
+
     timeT m_startTime;
     timeT m_endTime;
+    double getElapsedSeconds();
 
 };
 

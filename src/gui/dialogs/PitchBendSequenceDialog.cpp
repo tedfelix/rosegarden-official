@@ -50,12 +50,19 @@
 namespace Rosegarden
 {
 
+enum PresetStyles {
+  LinearRamp,
+  FastVibratoArmRelease,
+  Vibrato,
+  EndBuiltIns,  // EndPresetStyles
+};
+
 PitchBendSequenceDialog::PitchBendSequenceDialog(QWidget *parent,
     Segment *segment, const ControlParameter &control, timeT startTime, timeT endTime) :
     QDialog(parent),
     m_segment(segment),
-    m_control(control),
-    m_numBuiltins((control.getName() == control.getPitchBend().getName()) ?
+    m_controlParameter(control),
+    m_numPresetStyles((control.getName() == control.getPitchBend().getName()) ?
                   EndBuiltIns :
                   0),
     m_startTime(startTime),
@@ -83,9 +90,9 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(QWidget *parent,
         Pitch, Volume, Other
     };
     WhatVaries whatVaries =
-        (m_control.getType() == PitchBend::EventType) ? Pitch :
-        (m_control.getControllerValue() == 7)         ? Volume :
-        (m_control.getControllerValue() == 11)        ? Volume :
+        (m_controlParameter.getType() == PitchBend::EventType) ? Pitch :
+        (m_controlParameter.getControllerValue() == 7)         ? Volume :
+        (m_controlParameter.getControllerValue() == 11)        ? Volume :
         Other;
     const double maxSpinboxValue = getMaxSpinboxValue();
     const double minSpinboxValue = getMinSpinboxValue();
@@ -94,7 +101,7 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(QWidget *parent,
     const int valueSpinboxDecimals = useTrueValues() ? 0 : 2;
 
     const int numSavedSettings = 10;
-    const int startSavedSettings = m_numBuiltins;
+    const int startSavedSettings = m_numPresetStyles;
     const int endSavedSettings   = startSavedSettings + numSavedSettings;
 
     /** The replace-mode group comes first because one of its settings
@@ -144,7 +151,7 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(QWidget *parent,
 
     // Hack: We psychically know that this adds the right number
     // of builtin presets in the right places.
-    if (m_numBuiltins > 0) {
+    if (m_numPresetStyles > 0) {
         m_sequencePreset->addItem(tr("Linear ramp"), LinearRamp);
         m_sequencePreset->addItem(tr("Fast vibrato arm release"), FastVibratoArmRelease);
         m_sequencePreset->addItem(tr("Vibrato"), Vibrato);
@@ -464,7 +471,7 @@ PitchBendSequenceDialog::slotStepSizeStyleChanged(bool checked)
 void
 PitchBendSequenceDialog::slotSequencePresetChanged(int index) {
     // Get built-in or saved settings for the new preset.
-    if (index >= m_numBuiltins) {
+    if (index >= m_numPresetStyles) {
         restorePreset(index);
     } else {
         switch (index) {
@@ -514,21 +521,21 @@ bool
 PitchBendSequenceDialog::
 useTrueValues() const
 {
-    return m_control.getType() == Controller::EventType;
+    return m_controlParameter.getType() == Controller::EventType;
 }
 
 double
 PitchBendSequenceDialog::
 valueDeltaToPercent(int valueDelta) const
 {
-    const int range  = m_control.getMax() - m_control.getMin();
+    const int range  = m_controlParameter.getMax() - m_controlParameter.getMin();
     return 100.0 * valueDelta / range;
 }
 int
 PitchBendSequenceDialog::
 percentToValueDelta(double percent) const
 {
-    const int range  = m_control.getMax() - m_control.getMin();
+    const int range  = m_controlParameter.getMax() - m_controlParameter.getMin();
     return (percent/100.0) * range;
 }
 
@@ -536,7 +543,7 @@ double
 PitchBendSequenceDialog::
 getMaxSpinboxValue() const
 {
-    const int rangeAboveDefault = m_control.getMax() - m_control.getDefault();
+    const int rangeAboveDefault = m_controlParameter.getMax() - m_controlParameter.getDefault();
     if (useTrueValues()) {
         return rangeAboveDefault;
     } else {
@@ -548,7 +555,7 @@ PitchBendSequenceDialog::
 getMinSpinboxValue() const
 {
     /* rangeBelowDefault and return value will be negative or zero. */
-    const int rangeBelowDefault = m_control.getMin() - m_control.getDefault();
+    const int rangeBelowDefault = m_controlParameter.getMin() - m_controlParameter.getDefault();
     if (useTrueValues()) {
         return rangeBelowDefault;
     } else {
@@ -585,8 +592,8 @@ int
 PitchBendSequenceDialog::
 spinboxToControl(const QDoubleSpinBox *spinbox) const
 {
-    int value = spinboxToControlDelta(spinbox) + m_control.getDefault();
-    return m_control.clamp(value);
+    int value = spinboxToControlDelta(spinbox) + m_controlParameter.getDefault();
+    return m_controlParameter.clamp(value);
 }
 
 
@@ -674,7 +681,7 @@ PitchBendSequenceDialog::saveSettings()
         settings.endGroup();
     }
 
-    if (preset >= m_numBuiltins) {
+    if (preset >= m_numPresetStyles) {
         savePreset(preset);
     }
 }
@@ -685,7 +692,7 @@ PitchBendSequenceDialog::savePreset(int preset)
        different array for each controller or pitchbend.  */
     QSettings settings;
     settings.beginGroup(PitchBendSequenceConfigGroup);
-    settings.beginWriteArray(m_control.getName().data());
+    settings.beginWriteArray(m_controlParameter.getName().data());
     settings.setArrayIndex(preset);
     settings.setValue("pre_bend_value", m_prebendValue->value());
     settings.setValue("pre_bend_duration_value", m_prebendDuration->value());
@@ -709,7 +716,7 @@ PitchBendSequenceDialog::restorePreset(int preset)
        different array for each controller or pitchbend.  */
     QSettings settings;
     settings.beginGroup(PitchBendSequenceConfigGroup);
-    settings.beginReadArray(m_control.getName().data());
+    settings.beginReadArray(m_controlParameter.getName().data());
     settings.setArrayIndex(preset);
     m_prebendValue->setValue(settings.value("pre_bend_value", 0).toFloat());
     m_prebendDuration->setValue(settings.value("pre_bend_duration_value", 0).toFloat());
@@ -749,7 +756,7 @@ PitchBendSequenceDialog::accept()
     // TRANSLATORS: The arg value will be either a controller name or
     // PitchBend, so the resulting text is like "PitchBend Sequence",
     // "Expression Sequence", etc.
-    QString controllerName(m_control.getName().data());
+    QString controllerName(m_controlParameter.getName().data());
     QString commandName(tr("%1 Sequence").arg(controllerName));
     MacroCommand *macro = new MacroCommand(commandName);
 
@@ -762,7 +769,7 @@ PitchBendSequenceDialog::accept()
              ++i) {
             Event *e = *i;
             // If this is a relevant event, add it to the selection.
-            if (m_control.matches(e)) {
+            if (m_controlParameter.matches(e)) {
                 selection->addEvent(e, false);
             }
         }
@@ -853,7 +860,7 @@ PitchBendSequenceDialog::addLinearCountedEvents(MacroCommand *macro)
 
 
     /* Always put an event at the start of the sequence.  */
-    Event *event = m_control.newEvent(m_startTime, startValue);
+    Event *event = m_controlParameter.newEvent(m_startTime, startValue);
     
     macro->addCommand(new EventInsertionCommand (*m_segment, event));
 
@@ -877,8 +884,8 @@ PitchBendSequenceDialog::addLinearCountedEvents(MacroCommand *macro)
         const int amplitude = (vibratoEA - vibratoSA)*i/steps+ vibratoSA;
 
         value = value + int(amplitudeRatio * amplitude);
-        value = m_control.clamp(value);
-        Event *event = m_control.newEvent(eventTime, value);
+        value = m_controlParameter.clamp(value);
+        Event *event = m_controlParameter.newEvent(eventTime, value);
         macro->addCommand(new EventInsertionCommand (*m_segment, event));
 
         /* Keep going if we are adding vibrato events, because those
@@ -943,7 +950,7 @@ PitchBendSequenceDialog::addStepwiseEvents(MacroCommand *macro)
     const RampMode rampMode = getRampMode();
     
     /* Always put an event at the start of the sequence.  */
-    Event *event = m_control.newEvent(m_startTime, startValue);
+    Event *event = m_controlParameter.newEvent(m_startTime, startValue);
     
     macro->addCommand(new EventInsertionCommand (*m_segment, event));
 
@@ -965,7 +972,7 @@ PitchBendSequenceDialog::addStepwiseEvents(MacroCommand *macro)
             // is deliberate: we want it to be the exact integer that
             // we will use.
             int value = startValue + (stepSize * i + 0.5);
-            value = m_control.clamp(value);
+            value = m_controlParameter.clamp(value);
 
             // Skip events that wouldn't change anything or that reach
             // the end prematurely.
@@ -1040,7 +1047,7 @@ PitchBendSequenceDialog::addStepwiseEvents(MacroCommand *macro)
             }
             const timeT eventTime = sequenceStartTime + (timeRatio * rampDuration);
 
-            Event *event = m_control.newEvent(eventTime, value);
+            Event *event = m_controlParameter.newEvent(eventTime, value);
 
             macro->addCommand(new EventInsertionCommand (*m_segment, event));
             if (eventTime >= rampEndTime) { break; }
@@ -1051,7 +1058,7 @@ PitchBendSequenceDialog::addStepwiseEvents(MacroCommand *macro)
            final value.  Its time is one less than end-time so that we
            are only writing into the time interval we were given.  */
         Event *finalEvent =
-            m_control.newEvent(m_endTime - 1, endValue);
+            m_controlParameter.newEvent(m_endTime - 1, endValue);
         macro->addCommand(new EventInsertionCommand (*m_segment,
                                                      finalEvent));
     }

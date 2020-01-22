@@ -19,6 +19,7 @@
 
 #include "PropertyMap.h"
 #include "Exception.h"
+#include "TimeT.h"
 
 #include <rosegardenprivate_export.h>
 
@@ -30,8 +31,6 @@
 
 namespace Rosegarden
 {
-
-typedef long timeT;
 
 /**
  * The Event class represents an event with some basic attributes and
