@@ -61,8 +61,12 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(QWidget *parent,
     m_startTime(startTime),
     m_endTime(endTime)
 {
+    Q_ASSERT_X(
+            m_startTime < m_endTime,
+            "PitchBendSequenceDialog ctor",
+            "Time range invalid.");
+
     setModal(true);
-    bool sensible = m_startTime < m_endTime;
 
     QString controllerName(control.getName().data());
     setWindowTitle(tr("%1 Sequence").arg(controllerName));
@@ -75,326 +79,320 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(QWidget *parent,
     QVBoxLayout *vboxLayout = new QVBoxLayout;
     vbox->setLayout(vboxLayout);
 
-    if (sensible) {
-        enum WhatVaries {
-            Pitch, Volume, Other
-        };
-        WhatVaries whatVaries =
-            (m_control.getType() == PitchBend::EventType) ? Pitch :
-            (m_control.getControllerValue() == 7)         ? Volume :
-            (m_control.getControllerValue() == 11)        ? Volume :
-            Other;
-        const double maxSpinboxValue = getMaxSpinboxValue();
-        const double minSpinboxValue = getMinSpinboxValue();
-        const double maxSpinboxAbsValue =
-            std::max (maxSpinboxValue, -minSpinboxValue);
-        const int valueSpinboxDecimals = useTrueValues() ? 0 : 2;
+    enum WhatVaries {
+        Pitch, Volume, Other
+    };
+    WhatVaries whatVaries =
+        (m_control.getType() == PitchBend::EventType) ? Pitch :
+        (m_control.getControllerValue() == 7)         ? Volume :
+        (m_control.getControllerValue() == 11)        ? Volume :
+        Other;
+    const double maxSpinboxValue = getMaxSpinboxValue();
+    const double minSpinboxValue = getMinSpinboxValue();
+    const double maxSpinboxAbsValue =
+        std::max (maxSpinboxValue, -minSpinboxValue);
+    const int valueSpinboxDecimals = useTrueValues() ? 0 : 2;
 
-        const int numSavedSettings = 10;
-        const int startSavedSettings = m_numBuiltins;
-        const int endSavedSettings   = startSavedSettings + numSavedSettings;
-        
-        /** The replace-mode group comes first because one of its settings
-            (OnlyErase) invalidates the rest of the dialog. **/
-        QGroupBox *replaceModeGroupBox = new QGroupBox(tr("Replacement mode"));
-        QVBoxLayout *replaceModeGroupLayoutBox = new QVBoxLayout();
+    const int numSavedSettings = 10;
+    const int startSavedSettings = m_numBuiltins;
+    const int endSavedSettings   = startSavedSettings + numSavedSettings;
 
-        vboxLayout->addWidget(replaceModeGroupBox);
-        replaceModeGroupBox->setLayout(replaceModeGroupLayoutBox);
+    /** The replace-mode group comes first because one of its settings
+        (OnlyErase) invalidates the rest of the dialog. **/
+    QGroupBox *replaceModeGroupBox = new QGroupBox(tr("Replacement mode"));
+    QVBoxLayout *replaceModeGroupLayoutBox = new QVBoxLayout();
 
-        m_radioReplace = new QRadioButton(tr("Replace old events"));
-        m_radioReplace->setToolTip(tr("<qt>Erase existing pitchbends or controllers of this type in this range before adding new ones</qt>"));
-        
-        m_radioOnlyAdd = new QRadioButton(tr("Add new events to old ones"));
-        m_radioOnlyAdd->setToolTip(tr("<qt>Add new pitchbends or controllers without affecting existing ones.</qt>"));
+    vboxLayout->addWidget(replaceModeGroupBox);
+    replaceModeGroupBox->setLayout(replaceModeGroupLayoutBox);
 
-        m_radioOnlyErase = new QRadioButton(tr("Just erase old events"));
-        m_radioOnlyErase->setToolTip(tr("<qt>Don't add any events, just erase existing pitchbends or controllers of this type in this range.</qt>"));
+    m_radioReplace = new QRadioButton(tr("Replace old events"));
+    m_radioReplace->setToolTip(tr("<qt>Erase existing pitchbends or controllers of this type in this range before adding new ones</qt>"));
 
-        
-        QHBoxLayout *replaceModeBox = new QHBoxLayout();
-        replaceModeGroupLayoutBox->addLayout(replaceModeBox);
-        replaceModeBox->addStretch(0);
-        replaceModeBox->addWidget(m_radioReplace);
-        replaceModeBox->addWidget(m_radioOnlyAdd);
-        replaceModeBox->addWidget(m_radioOnlyErase);
+    m_radioOnlyAdd = new QRadioButton(tr("Add new events to old ones"));
+    m_radioOnlyAdd->setToolTip(tr("<qt>Add new pitchbends or controllers without affecting existing ones.</qt>"));
 
-        vboxLayout->addSpacing(15);
+    m_radioOnlyErase = new QRadioButton(tr("Just erase old events"));
+    m_radioOnlyErase->setToolTip(tr("<qt>Don't add any events, just erase existing pitchbends or controllers of this type in this range.</qt>"));
 
-        // Preset can change what's shown, which normally stretches
-        // the layout and thus moves preset out from under the user's
-        // mouse.  To avoid this, we call `vboxLayout->addStretch'
-        // generously after this point in the layout and never call it
-        // before this point.
 
-        QGroupBox *presetBox = new QGroupBox(tr("Preset"));
-        QGridLayout *presetGrid = new QGridLayout;
-        presetBox->setLayout(presetGrid);
-        presetGrid->setSpacing(5);
-        vboxLayout->addWidget(presetBox);
-        QLabel *presetLabel = new QLabel(tr("Preset:"));
-        presetLabel->
-            setToolTip(tr("<qt>Use this saved, user editable setting.</qt>"));
-        presetGrid->addWidget(presetLabel, 0, 0);
-        m_sequencePreset = new QComboBox;
-        presetGrid->addWidget(m_sequencePreset, 0, 1);
+    QHBoxLayout *replaceModeBox = new QHBoxLayout();
+    replaceModeGroupLayoutBox->addLayout(replaceModeBox);
+    replaceModeBox->addStretch(0);
+    replaceModeBox->addWidget(m_radioReplace);
+    replaceModeBox->addWidget(m_radioOnlyAdd);
+    replaceModeBox->addWidget(m_radioOnlyErase);
 
-        // Hack: We psychically know that this adds the right number
-        // of builtin presets in the right places.
-        if (m_numBuiltins > 0) {
-            m_sequencePreset->addItem(tr("Linear ramp"), LinearRamp);
-            m_sequencePreset->addItem(tr("Fast vibrato arm release"), FastVibratoArmRelease);
-            m_sequencePreset->addItem(tr("Vibrato"), Vibrato);
-        }
-        
-        for (int i = startSavedSettings; i <= endSavedSettings; ++i)
-            {
-                int apparentIndex = i + 1 - startSavedSettings;
-                m_sequencePreset->addItem(tr("Saved setting %1").arg(apparentIndex), i);
-            }
-        m_sequencePreset->setCurrentIndex(settings.value("sequence_preset", int(startSavedSettings)).toInt());
+    vboxLayout->addSpacing(15);
 
-        vboxLayout->addStretch(15);
+    // Preset can change what's shown, which normally stretches
+    // the layout and thus moves preset out from under the user's
+    // mouse.  To avoid this, we call `vboxLayout->addStretch'
+    // generously after this point in the layout and never call it
+    // before this point.
 
-        QString prebendText =
-            (whatVaries == Pitch) ?
-            tr("Pre Bend") :
-            tr("Pre Ramp");
-        QGroupBox *prebendBox = new QGroupBox(prebendText);
-        prebendBox->setContentsMargins(5, 5, 5, 5);
-        QGridLayout *prebendGrid = new QGridLayout;
-        prebendGrid->setSpacing(5);
-        vboxLayout->addWidget(prebendBox);
+    QGroupBox *presetBox = new QGroupBox(tr("Preset"));
+    QGridLayout *presetGrid = new QGridLayout;
+    presetBox->setLayout(presetGrid);
+    presetGrid->setSpacing(5);
+    vboxLayout->addWidget(presetBox);
+    QLabel *presetLabel = new QLabel(tr("Preset:"));
+    presetLabel->
+        setToolTip(tr("<qt>Use this saved, user editable setting.</qt>"));
+    presetGrid->addWidget(presetLabel, 0, 0);
+    m_sequencePreset = new QComboBox;
+    presetGrid->addWidget(m_sequencePreset, 0, 1);
 
-        QString prebendValueText =
-            useTrueValues() ?
-            tr("Start at value:") :
-            tr("Start at value (%):");
-        prebendGrid->addWidget(new QLabel(prebendValueText), 0, 0);
-        m_prebendValue = new QDoubleSpinBox();
-        m_prebendValue->setAccelerated(true);
-        m_prebendValue->setMaximum(maxSpinboxValue);
-        m_prebendValue->setMinimum(minSpinboxValue);
-        m_prebendValue->setDecimals(valueSpinboxDecimals);
-        m_prebendValue->setSingleStep(5);
-        prebendGrid->addWidget(m_prebendValue, 0 , 1);
-    
-        prebendBox->setLayout(prebendGrid);
-
-        QLabel *durationLabel = new QLabel(tr("Wait (%):"));
-        durationLabel->
-            setToolTip(tr("<qt>How long to wait before starting the bend or ramp, as a percentage of the total time</qt>"));
-        prebendGrid->addWidget(durationLabel, 1, 0);
-        m_prebendDuration = new QDoubleSpinBox();
-        m_prebendDuration->setAccelerated(true);
-        m_prebendDuration->setMaximum(100);
-        m_prebendDuration->setMinimum(0);
-        m_prebendDuration->setSingleStep(5);
-        prebendGrid->addWidget(m_prebendDuration, 1 , 1);
-
-        vboxLayout->addStretch(15);
-
-        QString sequenceText =
-            (whatVaries == Pitch) ?
-            tr("Bend Sequence") :
-            tr("Ramp Sequence");
-        QGroupBox *sequencebox = new QGroupBox(sequenceText);
-        sequencebox->setContentsMargins(5, 5, 5, 5);
-        QGridLayout *sequencegrid = new QGridLayout;
-        sequencegrid->setSpacing(5);
-        vboxLayout->addWidget(sequencebox);
-        sequencebox->setLayout(sequencegrid);
-
-        QString sequenceDurationText =
-            (whatVaries == Pitch) ?
-            tr("Bend duration (%):") :
-            tr("Ramp duration (%):");
-        QLabel *sequenceDurationLabel =
-            new QLabel(sequenceDurationText);
-        sequenceDurationLabel->
-            setToolTip(tr("<qt>How long the bend or ramp lasts, as a percentage of the remaining time</qt>"));
-        sequencegrid->addWidget(sequenceDurationLabel, 1, 0);
-        m_sequenceRampDuration = new QDoubleSpinBox();
-        m_sequenceRampDuration->setAccelerated(true);
-        m_sequenceRampDuration->setMaximum(100);
-        m_sequenceRampDuration->setMinimum(0);
-        m_sequenceRampDuration->setSingleStep(5);
-        sequencegrid->addWidget(m_sequenceRampDuration, 1, 1);
-
-        QString sequenceEndValueText =
-            useTrueValues() ?
-            tr("End value:") :
-            tr("End value (%):");
-        sequencegrid->addWidget(new QLabel(sequenceEndValueText), 2, 0);
-        m_sequenceEndValue = new QDoubleSpinBox();
-        m_sequenceEndValue->setAccelerated(true);
-        m_sequenceEndValue->setMaximum(maxSpinboxValue);
-        m_sequenceEndValue->setMinimum(minSpinboxValue);
-        m_sequenceEndValue->setDecimals(valueSpinboxDecimals);
-        m_sequenceEndValue->setSingleStep(5);
-        sequencegrid->addWidget(m_sequenceEndValue, 2, 1);
-
-        vboxLayout->addStretch(15);
-
-        /*** Sub-group vibrato ****/
-
-        QString vibratoBoxText =
-            (whatVaries == Pitch)  ? tr("Vibrato") :
-            (whatVaries == Volume) ? tr("Tremolo") :
-            tr("LFO");
-        m_vibratoBox = new QGroupBox(vibratoBoxText);
-        m_vibratoBox->
-            setToolTip(tr("<qt>Low-frequency oscillation for this controller. This is only possible when Ramp mode is linear and <i>Use this many steps</i> is set.</qt>"));
-        m_vibratoBox->setContentsMargins(5, 5, 5, 5);
-        QGridLayout *vibratoGrid = new QGridLayout;
-        vibratoGrid->setSpacing(5);
-        vboxLayout->addWidget(m_vibratoBox);
-        m_vibratoBox->setLayout(vibratoGrid);
-
-        QString vibratoStartAmplitudeText =
-            useTrueValues() ?
-            tr("Start amplitude:") :
-            tr("Start amplitude (%):");
-        vibratoGrid->addWidget(new QLabel(vibratoStartAmplitudeText), 3, 0);
-        m_vibratoStartAmplitude = new QDoubleSpinBox();
-        m_vibratoStartAmplitude->setAccelerated(true);
-        m_vibratoStartAmplitude->setMaximum(maxSpinboxAbsValue);
-        m_vibratoStartAmplitude->setMinimum(0);
-        m_vibratoStartAmplitude->setSingleStep(10);
-        vibratoGrid->addWidget(m_vibratoStartAmplitude, 3, 1);
-
-        QString vibratoEndAmplitudeText =
-            useTrueValues() ?
-            tr("End amplitude:") :
-            tr("End amplitude (%):");
-        vibratoGrid->addWidget(new QLabel(vibratoEndAmplitudeText), 4, 0);
-        m_vibratoEndAmplitude = new QDoubleSpinBox();
-        m_vibratoEndAmplitude->setAccelerated(true);
-        m_vibratoEndAmplitude->setMaximum(maxSpinboxAbsValue);
-        m_vibratoEndAmplitude->setMinimum(0);
-        m_vibratoEndAmplitude->setSingleStep(10);
-        vibratoGrid->addWidget(m_vibratoEndAmplitude, 4, 1);
-
-        QLabel * vibratoFrequencyLabel =
-            new QLabel(tr("Hertz (Hz):"));
-        vibratoFrequencyLabel->
-            setToolTip(tr("<qt>Frequency in hertz (cycles per second)</qt>"));
-        vibratoGrid->addWidget(vibratoFrequencyLabel, 5, 0);
-        m_vibratoFrequency = new QDoubleSpinBox();
-        m_vibratoFrequency->setAccelerated(true);
-        m_vibratoFrequency->setMaximum(200);
-        m_vibratoFrequency->setMinimum(0.1);
-        m_vibratoFrequency->setSingleStep(1.0);
-        m_vibratoFrequency->setDecimals(2);
-        vibratoGrid->addWidget(m_vibratoFrequency, 5, 1);
-        
-        vboxLayout->addStretch(15);
-
-        /*** Sub-group the contour of the ramp ****/
-        
-        QGroupBox *rampModeGroupBox = new QGroupBox(tr("Ramp mode"));
-        QHBoxLayout *rampModeGroupLayoutBox = new QHBoxLayout();
-        vboxLayout->addWidget(rampModeGroupBox);
-        rampModeGroupBox->setLayout(rampModeGroupLayoutBox);
-
-        m_radioRampLinear = new QRadioButton(tr("Linear"));
-        m_radioRampLinear->
-            setToolTip(tr("<qt>Ramp slopes linearly. Vibrato is possible if <i>Use this many steps</i> is set</qt>"));
-        m_radioRampLogarithmic = new QRadioButton(tr("Logarithmic"));
-        m_radioRampLogarithmic->
-            setToolTip(tr("<qt>Ramp slopes logarithmically</qt>"));
-        m_radioRampHalfSine = new QRadioButton(tr("Half sine"));
-        m_radioRampHalfSine->
-            setToolTip(tr("<qt>Ramp slopes like one half of a sine wave (trough to peak)</qt>"));
-        m_radioRampQuarterSine = new QRadioButton(tr("Quarter sine"));
-        m_radioRampQuarterSine->
-            setToolTip(tr("<qt>Ramp slopes like one quarter of a sine wave (zero to peak)</qt>"));
-
-        rampModeGroupLayoutBox->addWidget(m_radioRampLinear);
-        rampModeGroupLayoutBox->addWidget(m_radioRampLogarithmic);
-        rampModeGroupLayoutBox->addWidget(m_radioRampQuarterSine);
-        rampModeGroupLayoutBox->addWidget(m_radioRampHalfSine);
-        
-        vboxLayout->addStretch(15);
-
-        /*** Sub-group how we set step size or step count ****/
-
-        QGroupBox *stepSizeStyleGroupBox =
-            new QGroupBox(tr("How many steps"));
-        QVBoxLayout *stepSizeStyleGroupLayoutBox = new QVBoxLayout();
-
-        /* Stepsize -> SELECT */
-        m_radioStepSizeDirect = new QRadioButton(tr("Use step size (%):"));
-        m_radioStepSizeDirect->
-            setToolTip(tr("<qt>Each step in the ramp will be as close to this size as possible. Vibrato is not possible with this setting</qt>"));
-        m_radioStepSizeByCount = new QRadioButton(tr("Use this many steps:"));
-        m_radioStepSizeByCount->
-            setToolTip(tr("<qt>The sequence will have exactly this many steps.  Vibrato is possible if Ramp mode is linear</qt>"));
-        
-        /* Stepsize -> direct -> step size */
-        m_stepSize = new QDoubleSpinBox();
-        m_stepSize->setAccelerated(true);
-        m_stepSize->setMaximum(maxSpinboxAbsValue);
-        m_stepSize->setMinimum(getSmallestSpinboxStep());
-        m_stepSize->setSingleStep(4.0);
-        m_stepSize->setDecimals(valueSpinboxDecimals);
-        
-        /* Stepsize -> direct */        
-        QHBoxLayout *stepSizeManualHBox = new QHBoxLayout();
-        stepSizeManualHBox->addWidget(m_radioStepSizeDirect);
-        stepSizeManualHBox->addWidget(m_stepSize);
-
-        /* Stepsize -> by count -> Resolution */        
-        m_resolution = new QDoubleSpinBox();
-        m_resolution->setAccelerated(true);
-        m_resolution->setMaximum(300);
-        m_resolution->setMinimum(2);
-        m_resolution->setSingleStep(10);
-        m_resolution->setDecimals(0);
-
-        /* Stepsize -> by count */        
-        QHBoxLayout *stepSizeByCountHBox = new QHBoxLayout();
-        stepSizeByCountHBox->addWidget(m_radioStepSizeByCount);
-        stepSizeByCountHBox->addWidget(m_resolution);
-        
-        /* Stepsize itself */        
-        vboxLayout->addWidget(stepSizeStyleGroupBox);
-        stepSizeStyleGroupBox->setLayout(stepSizeStyleGroupLayoutBox);
-
-        stepSizeStyleGroupLayoutBox->addLayout(stepSizeManualHBox);
-        stepSizeStyleGroupLayoutBox->addLayout(stepSizeByCountHBox);
-
-        vboxLayout->addStretch(15);
-
-        
-        slotSequencePresetChanged(m_sequencePreset->currentIndex());
-        // the above called slotStepSizeStyleChanged() which called
-        // maybeEnableVibratoFields()
-        m_radioReplace->setChecked(true);
-
-        connect(m_sequencePreset, SIGNAL(activated(int)), this,
-                SLOT(slotSequencePresetChanged(int)));
-        connect(m_radioOnlyErase, &QAbstractButton::toggled,
-                this, &PitchBendSequenceDialog::slotOnlyEraseClicked);
-        connect(m_radioRampLinear, &QAbstractButton::toggled,
-                this, &PitchBendSequenceDialog::slotLinearRampClicked);
-        
-        // We connect all these buttons to slotStepSizeStyleChanged,
-        // which will react only to the current selected one.
-        connect(m_radioStepSizeDirect, &QAbstractButton::toggled,
-                this, &PitchBendSequenceDialog::slotStepSizeStyleChanged);
-        connect(m_radioStepSizeByCount, &QAbstractButton::toggled,
-                this, &PitchBendSequenceDialog::slotStepSizeStyleChanged);
-    } else {
-        vboxLayout->addWidget(new QLabel(tr("Invalid end time. Have you selected some events?")));
+    // Hack: We psychically know that this adds the right number
+    // of builtin presets in the right places.
+    if (m_numBuiltins > 0) {
+        m_sequencePreset->addItem(tr("Linear ramp"), LinearRamp);
+        m_sequencePreset->addItem(tr("Fast vibrato arm release"), FastVibratoArmRelease);
+        m_sequencePreset->addItem(tr("Vibrato"), Vibrato);
     }
-    QFlags<QDialogButtonBox::StandardButton> flags =
-        sensible ?
-        (QDialogButtonBox::Ok | QDialogButtonBox::Cancel |
-         QDialogButtonBox::Help) :
-        (QDialogButtonBox::Cancel | QDialogButtonBox::Help);
-        
-    QDialogButtonBox *buttonBox = new QDialogButtonBox(flags);
+
+    for (int i = startSavedSettings; i <= endSavedSettings; ++i)
+        {
+            int apparentIndex = i + 1 - startSavedSettings;
+            m_sequencePreset->addItem(tr("Saved setting %1").arg(apparentIndex), i);
+        }
+    m_sequencePreset->setCurrentIndex(settings.value("sequence_preset", int(startSavedSettings)).toInt());
+
+    vboxLayout->addStretch(15);
+
+    QString prebendText =
+        (whatVaries == Pitch) ?
+        tr("Pre Bend") :
+        tr("Pre Ramp");
+    QGroupBox *prebendBox = new QGroupBox(prebendText);
+    prebendBox->setContentsMargins(5, 5, 5, 5);
+    QGridLayout *prebendGrid = new QGridLayout;
+    prebendGrid->setSpacing(5);
+    vboxLayout->addWidget(prebendBox);
+
+    QString prebendValueText =
+        useTrueValues() ?
+        tr("Start at value:") :
+        tr("Start at value (%):");
+    prebendGrid->addWidget(new QLabel(prebendValueText), 0, 0);
+    m_prebendValue = new QDoubleSpinBox();
+    m_prebendValue->setAccelerated(true);
+    m_prebendValue->setMaximum(maxSpinboxValue);
+    m_prebendValue->setMinimum(minSpinboxValue);
+    m_prebendValue->setDecimals(valueSpinboxDecimals);
+    m_prebendValue->setSingleStep(5);
+    prebendGrid->addWidget(m_prebendValue, 0 , 1);
+
+    prebendBox->setLayout(prebendGrid);
+
+    QLabel *durationLabel = new QLabel(tr("Wait (%):"));
+    durationLabel->
+        setToolTip(tr("<qt>How long to wait before starting the bend or ramp, as a percentage of the total time</qt>"));
+    prebendGrid->addWidget(durationLabel, 1, 0);
+    m_prebendDuration = new QDoubleSpinBox();
+    m_prebendDuration->setAccelerated(true);
+    m_prebendDuration->setMaximum(100);
+    m_prebendDuration->setMinimum(0);
+    m_prebendDuration->setSingleStep(5);
+    prebendGrid->addWidget(m_prebendDuration, 1 , 1);
+
+    vboxLayout->addStretch(15);
+
+    QString sequenceText =
+        (whatVaries == Pitch) ?
+        tr("Bend Sequence") :
+        tr("Ramp Sequence");
+    QGroupBox *sequencebox = new QGroupBox(sequenceText);
+    sequencebox->setContentsMargins(5, 5, 5, 5);
+    QGridLayout *sequencegrid = new QGridLayout;
+    sequencegrid->setSpacing(5);
+    vboxLayout->addWidget(sequencebox);
+    sequencebox->setLayout(sequencegrid);
+
+    QString sequenceDurationText =
+        (whatVaries == Pitch) ?
+        tr("Bend duration (%):") :
+        tr("Ramp duration (%):");
+    QLabel *sequenceDurationLabel =
+        new QLabel(sequenceDurationText);
+    sequenceDurationLabel->
+        setToolTip(tr("<qt>How long the bend or ramp lasts, as a percentage of the remaining time</qt>"));
+    sequencegrid->addWidget(sequenceDurationLabel, 1, 0);
+    m_sequenceRampDuration = new QDoubleSpinBox();
+    m_sequenceRampDuration->setAccelerated(true);
+    m_sequenceRampDuration->setMaximum(100);
+    m_sequenceRampDuration->setMinimum(0);
+    m_sequenceRampDuration->setSingleStep(5);
+    sequencegrid->addWidget(m_sequenceRampDuration, 1, 1);
+
+    QString sequenceEndValueText =
+        useTrueValues() ?
+        tr("End value:") :
+        tr("End value (%):");
+    sequencegrid->addWidget(new QLabel(sequenceEndValueText), 2, 0);
+    m_sequenceEndValue = new QDoubleSpinBox();
+    m_sequenceEndValue->setAccelerated(true);
+    m_sequenceEndValue->setMaximum(maxSpinboxValue);
+    m_sequenceEndValue->setMinimum(minSpinboxValue);
+    m_sequenceEndValue->setDecimals(valueSpinboxDecimals);
+    m_sequenceEndValue->setSingleStep(5);
+    sequencegrid->addWidget(m_sequenceEndValue, 2, 1);
+
+    vboxLayout->addStretch(15);
+
+    /*** Sub-group vibrato ****/
+
+    QString vibratoBoxText =
+        (whatVaries == Pitch)  ? tr("Vibrato") :
+        (whatVaries == Volume) ? tr("Tremolo") :
+        tr("LFO");
+    m_vibratoBox = new QGroupBox(vibratoBoxText);
+    m_vibratoBox->
+        setToolTip(tr("<qt>Low-frequency oscillation for this controller. This is only possible when Ramp mode is linear and <i>Use this many steps</i> is set.</qt>"));
+    m_vibratoBox->setContentsMargins(5, 5, 5, 5);
+    QGridLayout *vibratoGrid = new QGridLayout;
+    vibratoGrid->setSpacing(5);
+    vboxLayout->addWidget(m_vibratoBox);
+    m_vibratoBox->setLayout(vibratoGrid);
+
+    QString vibratoStartAmplitudeText =
+        useTrueValues() ?
+        tr("Start amplitude:") :
+        tr("Start amplitude (%):");
+    vibratoGrid->addWidget(new QLabel(vibratoStartAmplitudeText), 3, 0);
+    m_vibratoStartAmplitude = new QDoubleSpinBox();
+    m_vibratoStartAmplitude->setAccelerated(true);
+    m_vibratoStartAmplitude->setMaximum(maxSpinboxAbsValue);
+    m_vibratoStartAmplitude->setMinimum(0);
+    m_vibratoStartAmplitude->setSingleStep(10);
+    vibratoGrid->addWidget(m_vibratoStartAmplitude, 3, 1);
+
+    QString vibratoEndAmplitudeText =
+        useTrueValues() ?
+        tr("End amplitude:") :
+        tr("End amplitude (%):");
+    vibratoGrid->addWidget(new QLabel(vibratoEndAmplitudeText), 4, 0);
+    m_vibratoEndAmplitude = new QDoubleSpinBox();
+    m_vibratoEndAmplitude->setAccelerated(true);
+    m_vibratoEndAmplitude->setMaximum(maxSpinboxAbsValue);
+    m_vibratoEndAmplitude->setMinimum(0);
+    m_vibratoEndAmplitude->setSingleStep(10);
+    vibratoGrid->addWidget(m_vibratoEndAmplitude, 4, 1);
+
+    QLabel * vibratoFrequencyLabel =
+        new QLabel(tr("Hertz (Hz):"));
+    vibratoFrequencyLabel->
+        setToolTip(tr("<qt>Frequency in hertz (cycles per second)</qt>"));
+    vibratoGrid->addWidget(vibratoFrequencyLabel, 5, 0);
+    m_vibratoFrequency = new QDoubleSpinBox();
+    m_vibratoFrequency->setAccelerated(true);
+    m_vibratoFrequency->setMaximum(200);
+    m_vibratoFrequency->setMinimum(0.1);
+    m_vibratoFrequency->setSingleStep(1.0);
+    m_vibratoFrequency->setDecimals(2);
+    vibratoGrid->addWidget(m_vibratoFrequency, 5, 1);
+
+    vboxLayout->addStretch(15);
+
+    /*** Sub-group the contour of the ramp ****/
+
+    QGroupBox *rampModeGroupBox = new QGroupBox(tr("Ramp mode"));
+    QHBoxLayout *rampModeGroupLayoutBox = new QHBoxLayout();
+    vboxLayout->addWidget(rampModeGroupBox);
+    rampModeGroupBox->setLayout(rampModeGroupLayoutBox);
+
+    m_radioRampLinear = new QRadioButton(tr("Linear"));
+    m_radioRampLinear->
+        setToolTip(tr("<qt>Ramp slopes linearly. Vibrato is possible if <i>Use this many steps</i> is set</qt>"));
+    m_radioRampLogarithmic = new QRadioButton(tr("Logarithmic"));
+    m_radioRampLogarithmic->
+        setToolTip(tr("<qt>Ramp slopes logarithmically</qt>"));
+    m_radioRampHalfSine = new QRadioButton(tr("Half sine"));
+    m_radioRampHalfSine->
+        setToolTip(tr("<qt>Ramp slopes like one half of a sine wave (trough to peak)</qt>"));
+    m_radioRampQuarterSine = new QRadioButton(tr("Quarter sine"));
+    m_radioRampQuarterSine->
+        setToolTip(tr("<qt>Ramp slopes like one quarter of a sine wave (zero to peak)</qt>"));
+
+    rampModeGroupLayoutBox->addWidget(m_radioRampLinear);
+    rampModeGroupLayoutBox->addWidget(m_radioRampLogarithmic);
+    rampModeGroupLayoutBox->addWidget(m_radioRampQuarterSine);
+    rampModeGroupLayoutBox->addWidget(m_radioRampHalfSine);
+
+    vboxLayout->addStretch(15);
+
+    /*** Sub-group how we set step size or step count ****/
+
+    QGroupBox *stepSizeStyleGroupBox =
+        new QGroupBox(tr("How many steps"));
+    QVBoxLayout *stepSizeStyleGroupLayoutBox = new QVBoxLayout();
+
+    /* Stepsize -> SELECT */
+    m_radioStepSizeDirect = new QRadioButton(tr("Use step size (%):"));
+    m_radioStepSizeDirect->
+        setToolTip(tr("<qt>Each step in the ramp will be as close to this size as possible. Vibrato is not possible with this setting</qt>"));
+    m_radioStepSizeByCount = new QRadioButton(tr("Use this many steps:"));
+    m_radioStepSizeByCount->
+        setToolTip(tr("<qt>The sequence will have exactly this many steps.  Vibrato is possible if Ramp mode is linear</qt>"));
+
+    /* Stepsize -> direct -> step size */
+    m_stepSize = new QDoubleSpinBox();
+    m_stepSize->setAccelerated(true);
+    m_stepSize->setMaximum(maxSpinboxAbsValue);
+    m_stepSize->setMinimum(getSmallestSpinboxStep());
+    m_stepSize->setSingleStep(4.0);
+    m_stepSize->setDecimals(valueSpinboxDecimals);
+
+    /* Stepsize -> direct */
+    QHBoxLayout *stepSizeManualHBox = new QHBoxLayout();
+    stepSizeManualHBox->addWidget(m_radioStepSizeDirect);
+    stepSizeManualHBox->addWidget(m_stepSize);
+
+    /* Stepsize -> by count -> Resolution */
+    m_resolution = new QDoubleSpinBox();
+    m_resolution->setAccelerated(true);
+    m_resolution->setMaximum(300);
+    m_resolution->setMinimum(2);
+    m_resolution->setSingleStep(10);
+    m_resolution->setDecimals(0);
+
+    /* Stepsize -> by count */
+    QHBoxLayout *stepSizeByCountHBox = new QHBoxLayout();
+    stepSizeByCountHBox->addWidget(m_radioStepSizeByCount);
+    stepSizeByCountHBox->addWidget(m_resolution);
+
+    /* Stepsize itself */
+    vboxLayout->addWidget(stepSizeStyleGroupBox);
+    stepSizeStyleGroupBox->setLayout(stepSizeStyleGroupLayoutBox);
+
+    stepSizeStyleGroupLayoutBox->addLayout(stepSizeManualHBox);
+    stepSizeStyleGroupLayoutBox->addLayout(stepSizeByCountHBox);
+
+    vboxLayout->addStretch(15);
+
+
+    slotSequencePresetChanged(m_sequencePreset->currentIndex());
+    // the above called slotStepSizeStyleChanged() which called
+    // maybeEnableVibratoFields()
+    m_radioReplace->setChecked(true);
+
+    connect(m_sequencePreset, SIGNAL(activated(int)), this,
+            SLOT(slotSequencePresetChanged(int)));
+    connect(m_radioOnlyErase, &QAbstractButton::toggled,
+            this, &PitchBendSequenceDialog::slotOnlyEraseClicked);
+    connect(m_radioRampLinear, &QAbstractButton::toggled,
+            this, &PitchBendSequenceDialog::slotLinearRampClicked);
+
+    // We connect all these buttons to slotStepSizeStyleChanged,
+    // which will react only to the current selected one.
+    connect(m_radioStepSizeDirect, &QAbstractButton::toggled,
+            this, &PitchBendSequenceDialog::slotStepSizeStyleChanged);
+    connect(m_radioStepSizeByCount, &QAbstractButton::toggled,
+            this, &PitchBendSequenceDialog::slotStepSizeStyleChanged);
+
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(
+            QDialogButtonBox::Ok |
+                QDialogButtonBox::Cancel |
+                QDialogButtonBox::Help);
     vboxLayout->addWidget(buttonBox, 1, nullptr);
 
     connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));

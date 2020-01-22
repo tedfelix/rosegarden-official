@@ -2587,20 +2587,28 @@ NotationView::slotControllerSequence()
 
 void
 NotationView::
-insertControllerSequence(const ControlParameter &cp)
+insertControllerSequence(const ControlParameter &controlParameter)
 {
-    timeT startTime=0;
-    timeT endTime=0;
+    EventSelection *selection = getSelection();
 
-    if (getSelection()) {
-        startTime=getSelection()->getStartTime();
-        endTime=getSelection()->getEndTime();
-    } else {
-        startTime = getInsertionTime();
-    }
+    // No selection?  Bail.
+    if (!selection)
+        return;
 
-    PitchBendSequenceDialog dialog(this, getCurrentSegment(), cp, startTime,
-                                   endTime);
+    const timeT startTime = selection->getStartTime();
+    const timeT endTime = selection->getEndTime();
+
+    // Times make no sense?  Bail.
+    if (startTime >= endTime)
+        return;
+
+    PitchBendSequenceDialog dialog(
+            this,  // parent
+            getCurrentSegment(),
+            controlParameter,
+            startTime,
+            endTime);
+
     dialog.exec();
 }
 

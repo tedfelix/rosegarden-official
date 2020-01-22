@@ -402,6 +402,7 @@
     <Action name="clear_selection"/>
     <Action name="filter_selection"/>
     <Action name="pitch_bend_sequence"/>
+    <Action name="controller_sequence" />
     <Action name="place_controllers"/>
     <Action name="tie_notes"/>
     <Action name="untie_notes"/>

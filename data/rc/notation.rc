@@ -1073,9 +1073,6 @@
     <Action name="toggle_pitchbend_ruler"/>
     <Action name="add_control_ruler"/>
   </enable>
-  <visible>
-    <Action name="pitch_bend_sequence"/>
-  </visible>
 </State>
 
 <State name="have_note_events_in_segment">
