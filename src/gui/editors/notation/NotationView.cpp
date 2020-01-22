@@ -2568,12 +2568,19 @@ void
 NotationView::slotControllerSequence()
 {
     ControlRulerWidget *cr = m_notationWidget->getControlsWidget();
-    // ??? We should pop up a message: No ruler is visible/selected.
-    if (!cr) { return; }
+    if (!cr)
+        return;
     
     const ControlParameter *cp = cr->getControlParameter();
-    // ??? We should pop up a message: Selected ruler is not a controller ruler.
-    if (!cp) { return; }
+    if (!cp)
+    {
+        QMessageBox::information(
+                this,
+                tr("Rosegarden"),
+                tr("Please select a control ruler first."));
+
+        return;
+    }
 
     insertControllerSequence(*cp);
 }

@@ -17,6 +17,7 @@
 
 
 #include "PitchBendSequenceDialog.h"
+
 #include "base/ControlParameter.h"
 #include "base/MidiTypes.h"
 #include "base/RealTime.h"

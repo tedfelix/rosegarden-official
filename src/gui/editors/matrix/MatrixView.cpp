@@ -1776,10 +1776,19 @@ void
 MatrixView::slotControllerSequence()
 {
     ControlRulerWidget *cr = m_matrixWidget->getControlsWidget();
-    if (!cr) { return; }
-    
+    if (!cr)
+        return;
+
     const ControlParameter *cp = cr->getControlParameter();
-    if (!cp) { return; }
+    if (!cp)
+    {
+        QMessageBox::information(
+                this,
+                tr("Rosegarden"),
+                tr("Please select a control ruler first."));
+
+        return;
+    }
 
     insertControllerSequence(*cp);
 }

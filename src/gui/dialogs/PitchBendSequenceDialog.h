@@ -36,13 +36,22 @@ class Segment;
 
 /// Dialog for inserting a controller sequence.
 /**
+ * This class provides the various controller sequence dialogs, including:
+ *
+ *   - PitchBend Sequence
+ *   - Volume Sequence
+ *   - Pan Sequence
+ *   - etc...
+ *
  * Though called PitchBendSequenceDialog for historical reasons, this
  * dialog deals with either pitchbend events or controller events,
- * according the "m_control" parameter.  It inserts, erases, or
+ * according to the "m_control" parameter.  It inserts, erases, or
  * replaces a series of such events in a given segment.  It now
  * supplies the functionality for several menu items.
  *
  * Used by both the NotationView and the MatrixView.
+ *
+ * ??? Rename: ControllerSequenceDialog
  *
  * @authors Jani (original author?),
  *          Tom Breton (Tehom),
