@@ -57,16 +57,20 @@ enum PresetStyles {
   EndBuiltIns,  // EndPresetStyles
 };
 
-PitchBendSequenceDialog::PitchBendSequenceDialog(QWidget *parent,
-    Segment *segment, const ControlParameter &control, timeT startTime, timeT endTime) :
+PitchBendSequenceDialog::PitchBendSequenceDialog(
+        QWidget *parent,
+        Segment *segment,
+        const ControlParameter &control,
+        timeT startTime,
+        timeT endTime) :
     QDialog(parent),
     m_segment(segment),
     m_controlParameter(control),
+    m_startTime(startTime),
+    m_endTime(endTime),
     m_numPresetStyles((control.getName() == control.getPitchBend().getName()) ?
                   EndBuiltIns :
-                  0),
-    m_startTime(startTime),
-    m_endTime(endTime)
+                  0)
 {
     Q_ASSERT_X(
             m_startTime < m_endTime,

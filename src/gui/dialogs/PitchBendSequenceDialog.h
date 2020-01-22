@@ -74,12 +74,18 @@ public slots:
     void slotSequencePresetChanged(int);
     void slotHelpRequested();
 
-protected slots:
+private slots:
     void slotOnlyEraseClicked(bool checked);
     void slotLinearRampClicked(bool checked);
     void slotStepSizeStyleChanged(bool checked);
 
-protected:
+private:
+    Segment *m_segment;
+    const ControlParameter &m_controlParameter;
+    timeT m_startTime;
+    timeT m_endTime;
+    double getElapsedSeconds();
+
     /** Methods dealing with transforming to or from spinbox values **/
 
     bool useTrueValues() const;
@@ -119,38 +125,11 @@ protected:
     void savePreset(int preset);
     void restorePreset(int preset);
 
-    /** Methods filling the MacroCommand with commands **/
+    // Replacement Mode
 
-    void addLinearCountedEvents(MacroCommand *macro);
-    void addStepwiseEvents(MacroCommand *macro);
-
-    Segment *m_segment;
-    const ControlParameter &m_controlParameter;
-
-    // How many of the PresetStyles we are accepting.  In
-    // practice, either 0 for non-pitchbend controllers or EndBuiltIns
-    // (all three) for the pitchbend controller.
-    const int m_numPresetStyles;
-
-    QDoubleSpinBox *m_prebendValue;
-    QDoubleSpinBox *m_prebendDuration;
-    QDoubleSpinBox *m_sequenceRampDuration;
-    QDoubleSpinBox *m_sequenceEndValue;
-    QDoubleSpinBox *m_stepSize;
-    QDoubleSpinBox *m_resolution;
-    QDoubleSpinBox *m_vibratoStartAmplitude;
-    QDoubleSpinBox *m_vibratoEndAmplitude;
-    QDoubleSpinBox *m_vibratoFrequency;
-    int numVibratoCycles();
-    QGroupBox *m_vibratoBox;
-
-    QComboBox *m_sequencePreset;
-
-    /** ReplaceMode group **/
-
-    QRadioButton *m_radioOnlyAdd;
-    QRadioButton *m_radioReplace;
-    QRadioButton *m_radioOnlyErase;
+    QRadioButton *m_radioReplace;  // Replace old events
+    QRadioButton *m_radioOnlyAdd;  // Add new events to old ones
+    QRadioButton *m_radioOnlyErase;  // Just erase old events
     enum ReplaceMode {
       OnlyAdd,   // Only add new events.
       Replace,   // Replace old controller events here with new ones.
@@ -158,21 +137,51 @@ protected:
     };
     ReplaceMode getReplaceMode();
 
-    /** StepSizeCalculation group **/
+    // Preset
 
-    QRadioButton *m_radioStepSizeDirect;
-    QRadioButton *m_radioStepSizeByCount;
+    // How many of the PresetStyles we are accepting.  In
+    // practice, either 0 for non-pitchbend controllers or EndBuiltIns
+    // (all three) for the pitchbend controller.
+    const int m_numPresetStyles;
+    QComboBox *m_sequencePreset;  // Preset
 
-    /** RampMode group **/
+    // Pre Bend
+
+    QDoubleSpinBox *m_prebendValue;  // Start at Value
+    QDoubleSpinBox *m_prebendDuration;  // Wait
+
+    // Bend Sequence
+
+    QDoubleSpinBox *m_sequenceRampDuration;  // Bend Duration
+    QDoubleSpinBox *m_sequenceEndValue;  // End Value
+
+    // Vibrato
+
+    QGroupBox *m_vibratoBox;
+    QDoubleSpinBox *m_vibratoStartAmplitude;  // Start Amplitude
+    QDoubleSpinBox *m_vibratoEndAmplitude;  // End Amplitude
+    QDoubleSpinBox *m_vibratoFrequency;  // Hertz
+    int numVibratoCycles();
+
+    // Ramp mode
 
     QRadioButton *m_radioRampLinear;
     QRadioButton *m_radioRampLogarithmic;
-    QRadioButton *m_radioRampHalfSine;
     QRadioButton *m_radioRampQuarterSine;
+    QRadioButton *m_radioRampHalfSine;
 
-    timeT m_startTime;
-    timeT m_endTime;
-    double getElapsedSeconds();
+    // How many steps
+
+    QRadioButton *m_radioStepSizeDirect;  // Use step size
+    QDoubleSpinBox *m_stepSize;
+    QRadioButton *m_radioStepSizeByCount;  // Use this many steps
+    QDoubleSpinBox *m_resolution;
+
+
+    /// Generate EventInsertionCommand objects for the Linear/Step Size By Count case.
+    void addLinearCountedEvents(MacroCommand *macro);
+    /// Generate EventInsertionCommand objects for all other cases.
+    void addStepwiseEvents(MacroCommand *macro);
 
 };
 
