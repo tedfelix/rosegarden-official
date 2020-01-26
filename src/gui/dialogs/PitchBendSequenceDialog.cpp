@@ -319,23 +319,23 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(
     vboxLayout->addWidget(rampModeGroupBox);
     rampModeGroupBox->setLayout(rampModeGroupLayoutBox);
 
-    m_rampLinear = new QRadioButton(tr("Linear"));
-    m_rampLinear->
+    m_linear = new QRadioButton(tr("Linear"));
+    m_linear->
         setToolTip(tr("<qt>Ramp slopes linearly. Vibrato is possible if <i>Use this many steps</i> is set</qt>"));
-    m_radioRampLogarithmic = new QRadioButton(tr("Logarithmic"));
-    m_radioRampLogarithmic->
+    m_logarithmic = new QRadioButton(tr("Logarithmic"));
+    m_logarithmic->
         setToolTip(tr("<qt>Ramp slopes logarithmically</qt>"));
-    m_radioRampHalfSine = new QRadioButton(tr("Half sine"));
-    m_radioRampHalfSine->
+    m_halfSine = new QRadioButton(tr("Half sine"));
+    m_halfSine->
         setToolTip(tr("<qt>Ramp slopes like one half of a sine wave (trough to peak)</qt>"));
-    m_radioRampQuarterSine = new QRadioButton(tr("Quarter sine"));
-    m_radioRampQuarterSine->
+    m_quarterSine = new QRadioButton(tr("Quarter sine"));
+    m_quarterSine->
         setToolTip(tr("<qt>Ramp slopes like one quarter of a sine wave (zero to peak)</qt>"));
 
-    rampModeGroupLayoutBox->addWidget(m_rampLinear);
-    rampModeGroupLayoutBox->addWidget(m_radioRampLogarithmic);
-    rampModeGroupLayoutBox->addWidget(m_radioRampQuarterSine);
-    rampModeGroupLayoutBox->addWidget(m_radioRampHalfSine);
+    rampModeGroupLayoutBox->addWidget(m_linear);
+    rampModeGroupLayoutBox->addWidget(m_logarithmic);
+    rampModeGroupLayoutBox->addWidget(m_quarterSine);
+    rampModeGroupLayoutBox->addWidget(m_halfSine);
 
     vboxLayout->addStretch(15);
 
@@ -404,7 +404,7 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(
     //     setChecked() is called which then leads to the need to
     //     block signals in certain situations.  Would clicked() be
     //     a better signal to use here?
-    connect(m_rampLinear, &QAbstractButton::toggled,
+    connect(m_linear, &QAbstractButton::toggled,
             this, &PitchBendSequenceDialog::slotRampLinearClicked);
 
     // We connect all these buttons to slotStepStyleChanged,
@@ -459,10 +459,10 @@ PitchBendSequenceDialog::updateWidgets()
         m_endAmplitude->setEnabled(false);
         m_hertz->setEnabled(false);
 
-        m_rampLinear->setEnabled(false);
-        m_radioRampLogarithmic->setEnabled(false);
-        m_radioRampQuarterSine->setEnabled(false);
-        m_radioRampHalfSine->setEnabled(false);
+        m_linear->setEnabled(false);
+        m_logarithmic->setEnabled(false);
+        m_quarterSine->setEnabled(false);
+        m_halfSine->setEnabled(false);
 
         m_useStepSizePercent->setEnabled(false);
         m_stepSize->setEnabled(false);
@@ -483,17 +483,17 @@ PitchBendSequenceDialog::updateWidgets()
     m_endValue->setEnabled(true);
 
     bool enableVibrato =
-            m_rampLinear->isChecked()  &&
+            m_linear->isChecked()  &&
             m_useThisManySteps->isChecked();
     //m_vibratoBox;
     m_startAmplitude->setEnabled(enableVibrato);
     m_endAmplitude->setEnabled(enableVibrato);
     m_hertz->setEnabled(enableVibrato);
 
-    m_rampLinear->setEnabled(true);
-    m_radioRampLogarithmic->setEnabled(true);
-    m_radioRampQuarterSine->setEnabled(true);
-    m_radioRampHalfSine->setEnabled(true);
+    m_linear->setEnabled(true);
+    m_logarithmic->setEnabled(true);
+    m_quarterSine->setEnabled(true);
+    m_halfSine->setEnabled(true);
 
     m_useStepSizePercent->setEnabled(true);
     m_stepSize->setEnabled(m_useStepSizePercent->isChecked());
@@ -537,7 +537,7 @@ PitchBendSequenceDialog::slotPresetChanged(int index) {
             m_bendDuration->setValue(100);
             m_startAmplitude->setValue(0);
             m_endAmplitude->setValue(0);
-            m_rampLinear->setChecked(true);
+            m_linear->setChecked(true);
             m_useThisManySteps->setChecked(true);
             break;
         case FastVibratoArmRelease:
@@ -549,7 +549,7 @@ PitchBendSequenceDialog::slotPresetChanged(int index) {
             m_endAmplitude->setValue(0);
             m_hertz->setValue(14);
             m_stepCount->setValue(getElapsedSeconds() * 20);
-            m_rampLinear->setChecked(true);
+            m_linear->setChecked(true);
             m_useThisManySteps->setChecked(true);
             break;
         case Vibrato:
@@ -561,7 +561,7 @@ PitchBendSequenceDialog::slotPresetChanged(int index) {
             m_endAmplitude->setValue(10);
             m_hertz->setValue(6);
             m_stepCount->setValue(getElapsedSeconds() * 20);
-            m_rampLinear->setChecked(true);
+            m_linear->setChecked(true);
             m_useThisManySteps->setChecked(true);
             break;
         default:
@@ -668,10 +668,10 @@ PitchBendSequenceDialog::RampMode
 PitchBendSequenceDialog::getRampMode()
 {
     return
-        m_rampLinear      ->isChecked() ? Linear       :
-        m_radioRampLogarithmic ->isChecked() ? Logarithmic  :
-        m_radioRampHalfSine    ->isChecked() ? HalfSine     :
-        m_radioRampQuarterSine ->isChecked() ? QuarterSine  :
+        m_linear      ->isChecked() ? Linear       :
+        m_logarithmic ->isChecked() ? Logarithmic  :
+        m_halfSine    ->isChecked() ? HalfSine     :
+        m_quarterSine ->isChecked() ? QuarterSine  :
         Logarithmic;
 }
 
@@ -680,16 +680,16 @@ PitchBendSequenceDialog::setRampMode(RampMode rampMode)
 {
     switch (rampMode) {
     case Linear:
-        m_rampLinear      ->setChecked(true);
+        m_linear      ->setChecked(true);
         break;
     case Logarithmic:
-        m_radioRampLogarithmic ->setChecked(true);
+        m_logarithmic ->setChecked(true);
         break;
     case HalfSine:
-        m_radioRampHalfSine    ->setChecked(true);
+        m_halfSine    ->setChecked(true);
         break;
     case QuarterSine:
-        m_radioRampQuarterSine ->setChecked(true);
+        m_quarterSine ->setChecked(true);
         break;
     default:
         break;
@@ -700,9 +700,9 @@ PitchBendSequenceDialog::StepSizeCalculation
 PitchBendSequenceDialog::getStepSizeCalculation()
 {
     return
-        m_useStepSizePercent  ->isChecked() ? StepSizeDirect  :
-        m_useThisManySteps ->isChecked() ? StepSizeByCount :
-        StepSizeDirect;
+        m_useStepSizePercent  ->isChecked() ? StepSizePercent  :
+        m_useThisManySteps ->isChecked() ? StepCount :
+        StepSizePercent;
 }
 
 void
@@ -710,10 +710,10 @@ PitchBendSequenceDialog::setStepSizeCalculation
 (StepSizeCalculation stepSizeCalculation)
 {
     switch (stepSizeCalculation) {
-    case StepSizeDirect:
+    case StepSizePercent:
         m_useStepSizePercent  ->setChecked(true);
         break; 
-    case StepSizeByCount:
+    case StepCount:
         m_useThisManySteps ->setChecked(true);
         break;
     default:
@@ -790,7 +790,7 @@ PitchBendSequenceDialog::restorePreset(int preset)
          (settings.value("ramp_mode", Logarithmic).toInt()));
     setStepSizeCalculation
         (StepSizeCalculation
-         (settings.value("step_size_calculation", StepSizeDirect).toInt()));
+         (settings.value("step_size_calculation", StepSizePercent).toInt()));
 
     settings.endArray();
     settings.endGroup();
@@ -846,7 +846,7 @@ PitchBendSequenceDialog::accept()
     // In Replace and OnlyAdd modes, add the requested controller events.
     if (getReplaceMode() != JustErase) {
         if ((getRampMode() == Linear) &&
-            (getStepSizeCalculation() == StepSizeByCount)) {
+            (getStepSizeCalculation() == StepCount)) {
             addLinearCountedEvents(macro);
         } else {
             addStepwiseEvents(macro);
@@ -970,14 +970,14 @@ PitchBendSequenceDialog::addStepwiseEvents(MacroCommand *macro)
     // numSteps = 2.
     int numSteps;
     switch (getStepSizeCalculation()) {
-    case StepSizeByCount:
+    case StepCount:
         numSteps = m_stepCount->value();
         break;
 
     default:
         // Default shouldn't happen, but we'll just let it fall
         // thru to the base case.
-    case StepSizeDirect:
+    case StepSizePercent:
         {
             const int rawStepSize = spinboxToControlDelta(m_stepSize);
             if (rawStepSize == 0) { return; }

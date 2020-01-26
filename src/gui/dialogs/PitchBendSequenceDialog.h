@@ -170,15 +170,15 @@ private:
 
     // Ramp mode
 
-    QRadioButton *m_rampLinear;
-    QRadioButton *m_radioRampLogarithmic;
-    QRadioButton *m_radioRampQuarterSine;
-    QRadioButton *m_radioRampHalfSine;
+    QRadioButton *m_linear;
+    QRadioButton *m_logarithmic;
+    QRadioButton *m_quarterSine;
+    QRadioButton *m_halfSine;
     enum RampMode {
-      Linear,
-      Logarithmic,
-      HalfSine,
-      QuarterSine,
+            Linear,
+            Logarithmic,
+            QuarterSine,
+            HalfSine
     };
     void setRampMode(RampMode rampMode);
     RampMode getRampMode();
@@ -192,11 +192,12 @@ private:
     QRadioButton *m_useThisManySteps;
     QDoubleSpinBox *m_stepCount;
     enum StepSizeCalculation {  // ??? rename: StepMode
-      StepSizeDirect,  // Use step size (%).  ??? rename: StepSizePercent
-      StepSizeByCount,  // Use this many steps.  ??? rename: StepCount
+            StepSizePercent,  // Use step size (%).
+            StepCount,  // Use this many steps.
     };
     void setStepSizeCalculation(StepSizeCalculation stepSizeCalculation);
     StepSizeCalculation getStepSizeCalculation();
+
 
     void updateWidgets();
 
