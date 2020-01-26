@@ -338,11 +338,11 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(
     QVBoxLayout *stepSizeStyleGroupLayoutBox = new QVBoxLayout();
 
     /* Stepsize -> SELECT */
-    m_radioStepSizeDirect = new QRadioButton(tr("Use step size (%):"));
-    m_radioStepSizeDirect->
+    m_useStepSizePercent = new QRadioButton(tr("Use step size (%):"));
+    m_useStepSizePercent->
         setToolTip(tr("<qt>Each step in the ramp will be as close to this size as possible. Vibrato is not possible with this setting</qt>"));
-    m_radioStepSizeByCount = new QRadioButton(tr("Use this many steps:"));
-    m_radioStepSizeByCount->
+    m_useThisManySteps = new QRadioButton(tr("Use this many steps:"));
+    m_useThisManySteps->
         setToolTip(tr("<qt>The sequence will have exactly this many steps.  Vibrato is possible if Ramp mode is linear</qt>"));
 
     /* Stepsize -> direct -> step size */
@@ -355,21 +355,21 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(
 
     /* Stepsize -> direct */
     QHBoxLayout *stepSizeManualHBox = new QHBoxLayout();
-    stepSizeManualHBox->addWidget(m_radioStepSizeDirect);
+    stepSizeManualHBox->addWidget(m_useStepSizePercent);
     stepSizeManualHBox->addWidget(m_stepSize);
 
     /* Stepsize -> by count -> Resolution */
-    m_resolution = new QDoubleSpinBox();
-    m_resolution->setAccelerated(true);
-    m_resolution->setMaximum(300);
-    m_resolution->setMinimum(2);
-    m_resolution->setSingleStep(10);
-    m_resolution->setDecimals(0);
+    m_stepCount = new QDoubleSpinBox();
+    m_stepCount->setAccelerated(true);
+    m_stepCount->setMaximum(300);
+    m_stepCount->setMinimum(2);
+    m_stepCount->setSingleStep(10);
+    m_stepCount->setDecimals(0);
 
     /* Stepsize -> by count */
     QHBoxLayout *stepSizeByCountHBox = new QHBoxLayout();
-    stepSizeByCountHBox->addWidget(m_radioStepSizeByCount);
-    stepSizeByCountHBox->addWidget(m_resolution);
+    stepSizeByCountHBox->addWidget(m_useThisManySteps);
+    stepSizeByCountHBox->addWidget(m_stepCount);
 
     /* Stepsize itself */
     vboxLayout->addWidget(stepSizeStyleGroupBox);
@@ -381,13 +381,13 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(
     vboxLayout->addStretch(15);
 
 
-    slotSequencePresetChanged(m_sequencePreset->currentIndex());
-    // the above called slotStepSizeStyleChanged() which called
+    slotPresetChanged(m_sequencePreset->currentIndex());
+    // the above called slotStepStyleChanged() which called
     // maybeEnableVibratoFields()
     m_radioReplace->setChecked(true);
 
     connect(m_sequencePreset, SIGNAL(activated(int)), this,
-            SLOT(slotSequencePresetChanged(int)));
+            SLOT(slotPresetChanged(int)));
     // ??? toggled() is rarely a good idea since it is also emitted when
     //     setChecked() is called which then leads to the need to
     //     block signals in certain situations.  Would clicked() be
@@ -401,20 +401,20 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(
     connect(m_rampLinear, &QAbstractButton::toggled,
             this, &PitchBendSequenceDialog::slotRampLinearClicked);
 
-    // We connect all these buttons to slotStepSizeStyleChanged,
+    // We connect all these buttons to slotStepStyleChanged,
     // which will react only to the current selected one.
     // ??? toggled() is rarely a good idea since it is also emitted when
     //     setChecked() is called which then leads to the need to
     //     block signals in certain situations.  Would clicked() be
     //     a better signal to use here?
-    connect(m_radioStepSizeDirect, &QAbstractButton::toggled,
-            this, &PitchBendSequenceDialog::slotStepSizeStyleChanged);
+    connect(m_useStepSizePercent, &QAbstractButton::toggled,
+            this, &PitchBendSequenceDialog::slotStepStyleChanged);
     // ??? toggled() is rarely a good idea since it is also emitted when
     //     setChecked() is called which then leads to the need to
     //     block signals in certain situations.  Would clicked() be
     //     a better signal to use here?
-    connect(m_radioStepSizeByCount, &QAbstractButton::toggled,
-            this, &PitchBendSequenceDialog::slotStepSizeStyleChanged);
+    connect(m_useThisManySteps, &QAbstractButton::toggled,
+            this, &PitchBendSequenceDialog::slotStepStyleChanged);
 
     QDialogButtonBox *buttonBox = new QDialogButtonBox(
             QDialogButtonBox::Ok |
@@ -438,8 +438,8 @@ PitchBendSequenceDialog::slotJustEraseClicked(bool checked)
     m_sequenceEndValue->setEnabled(!checked);
     m_sequencePreset->setEnabled(!checked);
 
-    m_radioStepSizeDirect->setEnabled(!checked);
-    m_radioStepSizeByCount->setEnabled(!checked);
+    m_useStepSizePercent->setEnabled(!checked);
+    m_useThisManySteps->setEnabled(!checked);
 
     m_rampLinear->setEnabled(!checked);
     m_radioRampLogarithmic->setEnabled(!checked);
@@ -448,14 +448,17 @@ PitchBendSequenceDialog::slotJustEraseClicked(bool checked)
 
     // Handle these specially because they can also be disabled by
     // step size style or unchecking linear ramp.
+    // ??? If this were all combined into a single updateWidgets()
+    //     used by all, the various dependencies could be clearly
+    //     called out.
     if (checked) {
-        m_resolution->setEnabled(false);
+        m_stepCount->setEnabled(false);
         m_stepSize->setEnabled(false);
         m_vibratoStartAmplitude->setEnabled(false);
         m_vibratoEndAmplitude->setEnabled(false);
         m_vibratoFrequency->setEnabled(false);
     } else {
-        slotStepSizeStyleChanged(true);
+        slotStepStyleChanged(true);
         //maybeEnableVibratoFields();
     }
 }
@@ -465,7 +468,7 @@ PitchBendSequenceDialog::maybeEnableVibratoFields()
 {
     bool enable =
         m_rampLinear->isChecked() &&
-        m_radioStepSizeByCount->isChecked();
+        m_useThisManySteps->isChecked();
     
     m_vibratoBox->setVisible(enable);
 }
@@ -477,20 +480,20 @@ PitchBendSequenceDialog::slotRampLinearClicked(bool /*checked*/)
 }
 
 void
-PitchBendSequenceDialog::slotStepSizeStyleChanged(bool checked)
+PitchBendSequenceDialog::slotStepStyleChanged(bool checked)
 {
     // We get multiple signals here for each radio change, one for
     // each radio button.  Since we only want to react once, return
     // immediately except on the single checked button.
     if (!checked) { return; }
     
-    m_stepSize->setEnabled(m_radioStepSizeDirect->isChecked());
-    m_resolution->setEnabled(m_radioStepSizeByCount->isChecked());
+    m_stepSize->setEnabled(m_useStepSizePercent->isChecked());
+    m_stepCount->setEnabled(m_useThisManySteps->isChecked());
     maybeEnableVibratoFields();
 }
 
 void
-PitchBendSequenceDialog::slotSequencePresetChanged(int index) {
+PitchBendSequenceDialog::slotPresetChanged(int index) {
     // Get built-in or saved settings for the new preset.
     if (index >= m_numPresetStyles) {
         restorePreset(index);
@@ -511,9 +514,9 @@ PitchBendSequenceDialog::slotSequencePresetChanged(int index) {
             m_vibratoStartAmplitude->setValue(30);
             m_vibratoEndAmplitude->setValue(0);
             m_vibratoFrequency->setValue(14);
-            m_resolution->setValue(getElapsedSeconds() * 20);
+            m_stepCount->setValue(getElapsedSeconds() * 20);
             m_rampLinear->setChecked(true);
-            m_radioStepSizeByCount->setChecked(true);
+            m_useThisManySteps->setChecked(true);
             break;
         case Vibrato:
             m_prebendValue->setValue(0);
@@ -523,9 +526,9 @@ PitchBendSequenceDialog::slotSequencePresetChanged(int index) {
             m_vibratoStartAmplitude->setValue(10);
             m_vibratoEndAmplitude->setValue(10);
             m_vibratoFrequency->setValue(6);
-            m_resolution->setValue(getElapsedSeconds() * 20);
+            m_stepCount->setValue(getElapsedSeconds() * 20);
             m_rampLinear->setChecked(true);
-            m_radioStepSizeByCount->setChecked(true);
+            m_useThisManySteps->setChecked(true);
             break;
         default:
             /* This can't be reached, but just in case we're wrong, we
@@ -534,7 +537,7 @@ PitchBendSequenceDialog::slotSequencePresetChanged(int index) {
             break;
         }
     }
-    slotStepSizeStyleChanged(true);
+    slotStepStyleChanged(true);
     // the above called maybeEnableVibratoFields();
 }
 
@@ -664,8 +667,8 @@ PitchBendSequenceDialog::StepSizeCalculation
 PitchBendSequenceDialog::getStepSizeCalculation()
 {
     return
-        m_radioStepSizeDirect  ->isChecked() ? StepSizeDirect  : 
-        m_radioStepSizeByCount ->isChecked() ? StepSizeByCount :
+        m_useStepSizePercent  ->isChecked() ? StepSizeDirect  :
+        m_useThisManySteps ->isChecked() ? StepSizeByCount :
         StepSizeDirect;
 }
 
@@ -675,10 +678,10 @@ PitchBendSequenceDialog::setStepSizeCalculation
 {
     switch (stepSizeCalculation) {
     case StepSizeDirect:
-        m_radioStepSizeDirect  ->setChecked(true);
+        m_useStepSizePercent  ->setChecked(true);
         break; 
     case StepSizeByCount:
-        m_radioStepSizeByCount ->setChecked(true);
+        m_useThisManySteps ->setChecked(true);
         break;
     default:
         break;
@@ -722,7 +725,7 @@ PitchBendSequenceDialog::savePreset(int preset)
     settings.setValue("vibrato_start_amplitude", m_vibratoStartAmplitude->value());
     settings.setValue("vibrato_end_amplitude", m_vibratoEndAmplitude->value());
     settings.setValue("vibrato_frequency", m_vibratoFrequency->value());
-    settings.setValue("step_count", m_resolution->value());
+    settings.setValue("step_count", m_stepCount->value());
     settings.setValue("step_size", m_stepSize->value());
     settings.setValue("ramp_mode", getRampMode());
     settings.setValue("step_size_calculation", getStepSizeCalculation());
@@ -746,7 +749,7 @@ PitchBendSequenceDialog::restorePreset(int preset)
     m_vibratoStartAmplitude->setValue(settings.value("vibrato_start_amplitude", 0).toFloat());
     m_vibratoEndAmplitude->setValue(settings.value("vibrato_end_amplitude", 0).toFloat());
     m_vibratoFrequency->setValue(settings.value("vibrato_frequency", 10).toFloat());
-    m_resolution->setValue(settings.value("step_count", 40).toInt());
+    m_stepCount->setValue(settings.value("step_count", 40).toInt());
     m_stepSize->setValue(settings.value("step_size", 2.0).toFloat());
 
     setRampMode
@@ -862,7 +865,7 @@ PitchBendSequenceDialog::addLinearCountedEvents(MacroCommand *macro)
     // numSteps doesn't include the initial event in the
     // total.  Eg if we ramp from 92 to 100 as {92, 96, 100}, we
     // have numSteps = 2.
-    int numSteps = m_resolution->value();
+    int numSteps = m_stepCount->value();
     if (numSteps < 1) { numSteps = 1; }
     const int steps = numSteps;
 
@@ -938,7 +941,7 @@ PitchBendSequenceDialog::addStepwiseEvents(MacroCommand *macro)
     int numSteps;
     switch (getStepSizeCalculation()) {
     case StepSizeByCount:
-        numSteps = m_resolution->value();
+        numSteps = m_stepCount->value();
         break;
 
     default:

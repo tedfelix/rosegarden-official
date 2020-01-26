@@ -74,10 +74,33 @@ public slots:
     void accept() override;
 
 private slots:
+    /// Enable/disable widgets for JustErase mode.
+    /**
+     * Replacement mode > Just erase old events
+     *
+     * ??? This should all be handled in a single updateWidgets().
+     */
     void slotJustEraseClicked(bool checked);
+
+    /// Fill in values when the preset is changed.
+    void slotPresetChanged(int);
+
+    /// Enable/Disable widgets for Linear mode.
+    /**
+     * Ramp mode > Linear
+     *
+     * ??? This should all be handled in a single updateWidgets().
+     */
     void slotRampLinearClicked(bool checked);
-    void slotStepSizeStyleChanged(bool checked);
-    void slotSequencePresetChanged(int);
+
+    /// Enable/disable widgets based on "How many steps" mode.
+    /**
+     * How many steps > Use step size (%)
+     * How many steps > Use this many steps
+     *
+     * ??? This should all be handled in a single updateWidgets().
+     */
+    void slotStepStyleChanged(bool checked);
 
     void slotHelp();
 
@@ -174,10 +197,10 @@ private:
 
     // How many steps
 
-    QRadioButton *m_radioStepSizeDirect;  // Use step size
+    QRadioButton *m_useStepSizePercent;  // Use step size (%)
     QDoubleSpinBox *m_stepSize;
-    QRadioButton *m_radioStepSizeByCount;  // Use this many steps
-    QDoubleSpinBox *m_resolution;
+    QRadioButton *m_useThisManySteps;  // Use this many steps
+    QDoubleSpinBox *m_stepCount;
 
 
     /// Generate EventInsertionCommand objects for the Linear/Step Size By Count case.
