@@ -390,8 +390,6 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(
 
 
     slotPresetChanged(m_sequencePreset->currentIndex());
-    // the above called slotStepStyleChanged() which called
-    // maybeEnableVibratoFields()
     m_radioReplace->setChecked(true);
 
     connect(m_sequencePreset, SIGNAL(activated(int)), this,
@@ -437,67 +435,94 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(
 }
 
 void
-PitchBendSequenceDialog::slotJustEraseClicked(bool checked)
+PitchBendSequenceDialog::updateWidgets()
 {
-    // (De)activate controls that are meaningless for "JustErase"
-    m_prebendValue->setEnabled(!checked);
-    m_prebendDuration->setEnabled(!checked);
-    m_sequenceRampDuration->setEnabled(!checked);
-    m_sequenceEndValue->setEnabled(!checked);
-    m_sequencePreset->setEnabled(!checked);
+    // Due to the use of toggled() we may end up in an endless loop here.
+    // This should help confirm that situation.  Remove when all toggled()
+    // have been changed to clicked().
+    RG_DEBUG << "updateWidgets()";
 
-    m_useStepSizePercent->setEnabled(!checked);
-    m_useThisManySteps->setEnabled(!checked);
+    // If we're in JustErase mode, disable everything since all we are doing
+    // is deleting events.
+    if (getReplaceMode() == JustErase) {
 
-    m_rampLinear->setEnabled(!checked);
-    m_radioRampLogarithmic->setEnabled(!checked);
-    m_radioRampHalfSine->setEnabled(!checked);
-    m_radioRampQuarterSine->setEnabled(!checked);
+        m_sequencePreset->setEnabled(false);
 
-    // Handle these specially because they can also be disabled by
-    // step size style or unchecking linear ramp.
-    // ??? If this were all combined into a single updateWidgets()
-    //     used by all, the various dependencies could be clearly
-    //     called out.
-    if (checked) {
-        m_stepCount->setEnabled(false);
-        m_stepSize->setEnabled(false);
+        m_prebendValue->setEnabled(false);
+        m_prebendDuration->setEnabled(false);
+
+        m_sequenceRampDuration->setEnabled(false);
+        m_sequenceEndValue->setEnabled(false);
+
+        //m_vibratoBox;
         m_vibratoStartAmplitude->setEnabled(false);
         m_vibratoEndAmplitude->setEnabled(false);
         m_vibratoFrequency->setEnabled(false);
-    } else {
-        slotStepStyleChanged(true);
-        //maybeEnableVibratoFields();
+
+        m_rampLinear->setEnabled(false);
+        m_radioRampLogarithmic->setEnabled(false);
+        m_radioRampQuarterSine->setEnabled(false);
+        m_radioRampHalfSine->setEnabled(false);
+
+        m_useStepSizePercent->setEnabled(false);
+        m_stepSize->setEnabled(false);
+        m_useThisManySteps->setEnabled(false);
+        m_stepCount->setEnabled(false);
+
+        return;
     }
+
+    // Enable everything as appropriate.
+
+    m_sequencePreset->setEnabled(true);
+
+    m_prebendValue->setEnabled(true);
+    m_prebendDuration->setEnabled(true);
+
+    m_sequenceRampDuration->setEnabled(true);
+    m_sequenceEndValue->setEnabled(true);
+
+    bool enableVibrato =
+            m_rampLinear->isChecked()  &&
+            m_useThisManySteps->isChecked();
+    //m_vibratoBox;
+    m_vibratoStartAmplitude->setEnabled(enableVibrato);
+    m_vibratoEndAmplitude->setEnabled(enableVibrato);
+    m_vibratoFrequency->setEnabled(enableVibrato);
+
+    m_rampLinear->setEnabled(true);
+    m_radioRampLogarithmic->setEnabled(true);
+    m_radioRampQuarterSine->setEnabled(true);
+    m_radioRampHalfSine->setEnabled(true);
+
+    m_useStepSizePercent->setEnabled(true);
+    m_stepSize->setEnabled(m_useStepSizePercent->isChecked());
+    m_useThisManySteps->setEnabled(true);
+    m_stepCount->setEnabled(m_useThisManySteps->isChecked());
 }
 
 void
-PitchBendSequenceDialog::maybeEnableVibratoFields()
+PitchBendSequenceDialog::slotJustEraseClicked(bool /*checked*/)
 {
-    bool enable =
-        m_rampLinear->isChecked() &&
-        m_useThisManySteps->isChecked();
-    
-    m_vibratoBox->setVisible(enable);
+    // ??? Should we handle clicked() instead of toggled() for each radio
+    //     button and do this?  slotModeChanged() or something like that?
+    updateWidgets();
 }
 
 void
 PitchBendSequenceDialog::slotRampLinearClicked(bool /*checked*/)
 {
-    maybeEnableVibratoFields();
+    // ??? Should we handle clicked() instead of toggled() for each radio
+    //     button and do this?  slotRampChanged() or something like that?
+    updateWidgets();
 }
 
 void
-PitchBendSequenceDialog::slotStepStyleChanged(bool checked)
+PitchBendSequenceDialog::slotStepStyleChanged(bool /*checked*/)
 {
-    // We get multiple signals here for each radio change, one for
-    // each radio button.  Since we only want to react once, return
-    // immediately except on the single checked button.
-    if (!checked) { return; }
-    
-    m_stepSize->setEnabled(m_useStepSizePercent->isChecked());
-    m_stepCount->setEnabled(m_useThisManySteps->isChecked());
-    maybeEnableVibratoFields();
+    // ??? Should we handle clicked() instead of toggled() for each radio
+    //     button?
+    updateWidgets();
 }
 
 void
@@ -513,6 +538,7 @@ PitchBendSequenceDialog::slotPresetChanged(int index) {
             m_vibratoStartAmplitude->setValue(0);
             m_vibratoEndAmplitude->setValue(0);
             m_rampLinear->setChecked(true);
+            m_useThisManySteps->setChecked(true);
             break;
         case FastVibratoArmRelease:
             m_prebendValue->setValue(-20);
@@ -546,7 +572,6 @@ PitchBendSequenceDialog::slotPresetChanged(int index) {
         }
     }
     slotStepStyleChanged(true);
-    // the above called maybeEnableVibratoFields();
 }
 
 bool

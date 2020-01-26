@@ -148,14 +148,6 @@ private:
     double getSmallestSpinboxStep() const;
 
 
-    /// Enable vibrato box only in Linear and StepCount modes.
-    /**
-     * ??? rename: updateVibratoWidgets()
-     * ??? Fold this into an updateWidgets().
-     */
-    void maybeEnableVibratoFields();
-
-
     // Replacement Mode
 
     QRadioButton *m_radioReplace;  // Replace old events
@@ -226,6 +218,8 @@ private:
     };
     void setStepSizeCalculation(StepSizeCalculation stepSizeCalculation);
     StepSizeCalculation getStepSizeCalculation();
+
+    void updateWidgets();
 
     /// Generate EventInsertionCommand objects for the Linear/Step Size By Count case.
     void addLinearCountedEvents(MacroCommand *macro);
