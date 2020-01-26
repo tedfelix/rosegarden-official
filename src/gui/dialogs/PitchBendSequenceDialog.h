@@ -151,20 +151,21 @@ private:
 
     // Pre Bend
 
-    QDoubleSpinBox *m_prebendValue;  // Start at Value
-    QDoubleSpinBox *m_prebendDuration;  // Wait
+    QDoubleSpinBox *m_startAtValue;
+    QDoubleSpinBox *m_wait;
 
     // Bend Sequence
 
-    QDoubleSpinBox *m_sequenceRampDuration;  // Bend Duration
-    QDoubleSpinBox *m_sequenceEndValue;  // End Value
+    QDoubleSpinBox *m_bendDuration;
+    QDoubleSpinBox *m_endValue;
 
     // Vibrato
 
-    QGroupBox *m_vibratoBox;
-    QDoubleSpinBox *m_vibratoStartAmplitude;  // Start Amplitude
-    QDoubleSpinBox *m_vibratoEndAmplitude;  // End Amplitude
-    QDoubleSpinBox *m_vibratoFrequency;  // Hertz
+    // ??? This is no longer needed.  Remove it.
+    QGroupBox *m_vibrato;
+    QDoubleSpinBox *m_startAmplitude;
+    QDoubleSpinBox *m_endAmplitude;
+    QDoubleSpinBox *m_hertz;
     int numVibratoCycles();
 
     // Ramp mode

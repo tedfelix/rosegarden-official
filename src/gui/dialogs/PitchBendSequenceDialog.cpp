@@ -193,13 +193,13 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(
         tr("Start at value:") :
         tr("Start at value (%):");
     prebendGrid->addWidget(new QLabel(prebendValueText), 0, 0);
-    m_prebendValue = new QDoubleSpinBox();
-    m_prebendValue->setAccelerated(true);
-    m_prebendValue->setMaximum(maxSpinboxValue);
-    m_prebendValue->setMinimum(minSpinboxValue);
-    m_prebendValue->setDecimals(valueSpinboxDecimals);
-    m_prebendValue->setSingleStep(5);
-    prebendGrid->addWidget(m_prebendValue, 0 , 1);
+    m_startAtValue = new QDoubleSpinBox();
+    m_startAtValue->setAccelerated(true);
+    m_startAtValue->setMaximum(maxSpinboxValue);
+    m_startAtValue->setMinimum(minSpinboxValue);
+    m_startAtValue->setDecimals(valueSpinboxDecimals);
+    m_startAtValue->setSingleStep(5);
+    prebendGrid->addWidget(m_startAtValue, 0 , 1);
 
     prebendBox->setLayout(prebendGrid);
 
@@ -207,12 +207,12 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(
     durationLabel->
         setToolTip(tr("<qt>How long to wait before starting the bend or ramp, as a percentage of the total time</qt>"));
     prebendGrid->addWidget(durationLabel, 1, 0);
-    m_prebendDuration = new QDoubleSpinBox();
-    m_prebendDuration->setAccelerated(true);
-    m_prebendDuration->setMaximum(100);
-    m_prebendDuration->setMinimum(0);
-    m_prebendDuration->setSingleStep(5);
-    prebendGrid->addWidget(m_prebendDuration, 1 , 1);
+    m_wait = new QDoubleSpinBox();
+    m_wait->setAccelerated(true);
+    m_wait->setMaximum(100);
+    m_wait->setMinimum(0);
+    m_wait->setSingleStep(5);
+    prebendGrid->addWidget(m_wait, 1 , 1);
 
     vboxLayout->addStretch(15);
 
@@ -236,25 +236,25 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(
     sequenceDurationLabel->
         setToolTip(tr("<qt>How long the bend or ramp lasts, as a percentage of the remaining time</qt>"));
     sequencegrid->addWidget(sequenceDurationLabel, 1, 0);
-    m_sequenceRampDuration = new QDoubleSpinBox();
-    m_sequenceRampDuration->setAccelerated(true);
-    m_sequenceRampDuration->setMaximum(100);
-    m_sequenceRampDuration->setMinimum(0);
-    m_sequenceRampDuration->setSingleStep(5);
-    sequencegrid->addWidget(m_sequenceRampDuration, 1, 1);
+    m_bendDuration = new QDoubleSpinBox();
+    m_bendDuration->setAccelerated(true);
+    m_bendDuration->setMaximum(100);
+    m_bendDuration->setMinimum(0);
+    m_bendDuration->setSingleStep(5);
+    sequencegrid->addWidget(m_bendDuration, 1, 1);
 
     QString sequenceEndValueText =
         useTrueValues() ?
         tr("End value:") :
         tr("End value (%):");
     sequencegrid->addWidget(new QLabel(sequenceEndValueText), 2, 0);
-    m_sequenceEndValue = new QDoubleSpinBox();
-    m_sequenceEndValue->setAccelerated(true);
-    m_sequenceEndValue->setMaximum(maxSpinboxValue);
-    m_sequenceEndValue->setMinimum(minSpinboxValue);
-    m_sequenceEndValue->setDecimals(valueSpinboxDecimals);
-    m_sequenceEndValue->setSingleStep(5);
-    sequencegrid->addWidget(m_sequenceEndValue, 2, 1);
+    m_endValue = new QDoubleSpinBox();
+    m_endValue->setAccelerated(true);
+    m_endValue->setMaximum(maxSpinboxValue);
+    m_endValue->setMinimum(minSpinboxValue);
+    m_endValue->setDecimals(valueSpinboxDecimals);
+    m_endValue->setSingleStep(5);
+    sequencegrid->addWidget(m_endValue, 2, 1);
 
     vboxLayout->addStretch(15);
 
@@ -264,51 +264,51 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(
         (whatVaries == Pitch)  ? tr("Vibrato") :
         (whatVaries == Volume) ? tr("Tremolo") :
         tr("LFO");
-    m_vibratoBox = new QGroupBox(vibratoBoxText);
-    m_vibratoBox->
+    m_vibrato = new QGroupBox(vibratoBoxText);
+    m_vibrato->
         setToolTip(tr("<qt>Low-frequency oscillation for this controller. This is only possible when Ramp mode is linear and <i>Use this many steps</i> is set.</qt>"));
-    m_vibratoBox->setContentsMargins(5, 5, 5, 5);
+    m_vibrato->setContentsMargins(5, 5, 5, 5);
     QGridLayout *vibratoGrid = new QGridLayout;
     vibratoGrid->setSpacing(5);
-    vboxLayout->addWidget(m_vibratoBox);
-    m_vibratoBox->setLayout(vibratoGrid);
+    vboxLayout->addWidget(m_vibrato);
+    m_vibrato->setLayout(vibratoGrid);
 
     QString vibratoStartAmplitudeText =
         useTrueValues() ?
         tr("Start amplitude:") :
         tr("Start amplitude (%):");
     vibratoGrid->addWidget(new QLabel(vibratoStartAmplitudeText), 3, 0);
-    m_vibratoStartAmplitude = new QDoubleSpinBox();
-    m_vibratoStartAmplitude->setAccelerated(true);
-    m_vibratoStartAmplitude->setMaximum(maxSpinboxAbsValue);
-    m_vibratoStartAmplitude->setMinimum(0);
-    m_vibratoStartAmplitude->setSingleStep(10);
-    vibratoGrid->addWidget(m_vibratoStartAmplitude, 3, 1);
+    m_startAmplitude = new QDoubleSpinBox();
+    m_startAmplitude->setAccelerated(true);
+    m_startAmplitude->setMaximum(maxSpinboxAbsValue);
+    m_startAmplitude->setMinimum(0);
+    m_startAmplitude->setSingleStep(10);
+    vibratoGrid->addWidget(m_startAmplitude, 3, 1);
 
     QString vibratoEndAmplitudeText =
         useTrueValues() ?
         tr("End amplitude:") :
         tr("End amplitude (%):");
     vibratoGrid->addWidget(new QLabel(vibratoEndAmplitudeText), 4, 0);
-    m_vibratoEndAmplitude = new QDoubleSpinBox();
-    m_vibratoEndAmplitude->setAccelerated(true);
-    m_vibratoEndAmplitude->setMaximum(maxSpinboxAbsValue);
-    m_vibratoEndAmplitude->setMinimum(0);
-    m_vibratoEndAmplitude->setSingleStep(10);
-    vibratoGrid->addWidget(m_vibratoEndAmplitude, 4, 1);
+    m_endAmplitude = new QDoubleSpinBox();
+    m_endAmplitude->setAccelerated(true);
+    m_endAmplitude->setMaximum(maxSpinboxAbsValue);
+    m_endAmplitude->setMinimum(0);
+    m_endAmplitude->setSingleStep(10);
+    vibratoGrid->addWidget(m_endAmplitude, 4, 1);
 
     QLabel * vibratoFrequencyLabel =
         new QLabel(tr("Hertz (Hz):"));
     vibratoFrequencyLabel->
         setToolTip(tr("<qt>Frequency in hertz (cycles per second)</qt>"));
     vibratoGrid->addWidget(vibratoFrequencyLabel, 5, 0);
-    m_vibratoFrequency = new QDoubleSpinBox();
-    m_vibratoFrequency->setAccelerated(true);
-    m_vibratoFrequency->setMaximum(200);
-    m_vibratoFrequency->setMinimum(0.1);
-    m_vibratoFrequency->setSingleStep(1.0);
-    m_vibratoFrequency->setDecimals(2);
-    vibratoGrid->addWidget(m_vibratoFrequency, 5, 1);
+    m_hertz = new QDoubleSpinBox();
+    m_hertz->setAccelerated(true);
+    m_hertz->setMaximum(200);
+    m_hertz->setMinimum(0.1);
+    m_hertz->setSingleStep(1.0);
+    m_hertz->setDecimals(2);
+    vibratoGrid->addWidget(m_hertz, 5, 1);
 
     vboxLayout->addStretch(15);
 
@@ -448,16 +448,16 @@ PitchBendSequenceDialog::updateWidgets()
 
         m_preset->setEnabled(false);
 
-        m_prebendValue->setEnabled(false);
-        m_prebendDuration->setEnabled(false);
+        m_startAtValue->setEnabled(false);
+        m_wait->setEnabled(false);
 
-        m_sequenceRampDuration->setEnabled(false);
-        m_sequenceEndValue->setEnabled(false);
+        m_bendDuration->setEnabled(false);
+        m_endValue->setEnabled(false);
 
         //m_vibratoBox;
-        m_vibratoStartAmplitude->setEnabled(false);
-        m_vibratoEndAmplitude->setEnabled(false);
-        m_vibratoFrequency->setEnabled(false);
+        m_startAmplitude->setEnabled(false);
+        m_endAmplitude->setEnabled(false);
+        m_hertz->setEnabled(false);
 
         m_rampLinear->setEnabled(false);
         m_radioRampLogarithmic->setEnabled(false);
@@ -476,19 +476,19 @@ PitchBendSequenceDialog::updateWidgets()
 
     m_preset->setEnabled(true);
 
-    m_prebendValue->setEnabled(true);
-    m_prebendDuration->setEnabled(true);
+    m_startAtValue->setEnabled(true);
+    m_wait->setEnabled(true);
 
-    m_sequenceRampDuration->setEnabled(true);
-    m_sequenceEndValue->setEnabled(true);
+    m_bendDuration->setEnabled(true);
+    m_endValue->setEnabled(true);
 
     bool enableVibrato =
             m_rampLinear->isChecked()  &&
             m_useThisManySteps->isChecked();
     //m_vibratoBox;
-    m_vibratoStartAmplitude->setEnabled(enableVibrato);
-    m_vibratoEndAmplitude->setEnabled(enableVibrato);
-    m_vibratoFrequency->setEnabled(enableVibrato);
+    m_startAmplitude->setEnabled(enableVibrato);
+    m_endAmplitude->setEnabled(enableVibrato);
+    m_hertz->setEnabled(enableVibrato);
 
     m_rampLinear->setEnabled(true);
     m_radioRampLogarithmic->setEnabled(true);
@@ -533,33 +533,33 @@ PitchBendSequenceDialog::slotPresetChanged(int index) {
     } else {
         switch (index) {
         case LinearRamp:
-            m_prebendDuration->setValue(0);
-            m_sequenceRampDuration->setValue(100);
-            m_vibratoStartAmplitude->setValue(0);
-            m_vibratoEndAmplitude->setValue(0);
+            m_wait->setValue(0);
+            m_bendDuration->setValue(100);
+            m_startAmplitude->setValue(0);
+            m_endAmplitude->setValue(0);
             m_rampLinear->setChecked(true);
             m_useThisManySteps->setChecked(true);
             break;
         case FastVibratoArmRelease:
-            m_prebendValue->setValue(-20);
-            m_prebendDuration->setValue(5);
-            m_sequenceRampDuration->setValue(0);
-            m_sequenceEndValue->setValue(0);
-            m_vibratoStartAmplitude->setValue(30);
-            m_vibratoEndAmplitude->setValue(0);
-            m_vibratoFrequency->setValue(14);
+            m_startAtValue->setValue(-20);
+            m_wait->setValue(5);
+            m_bendDuration->setValue(0);
+            m_endValue->setValue(0);
+            m_startAmplitude->setValue(30);
+            m_endAmplitude->setValue(0);
+            m_hertz->setValue(14);
             m_stepCount->setValue(getElapsedSeconds() * 20);
             m_rampLinear->setChecked(true);
             m_useThisManySteps->setChecked(true);
             break;
         case Vibrato:
-            m_prebendValue->setValue(0);
-            m_prebendDuration->setValue(0);
-            m_sequenceRampDuration->setValue(0);
-            m_sequenceEndValue->setValue(0);
-            m_vibratoStartAmplitude->setValue(10);
-            m_vibratoEndAmplitude->setValue(10);
-            m_vibratoFrequency->setValue(6);
+            m_startAtValue->setValue(0);
+            m_wait->setValue(0);
+            m_bendDuration->setValue(0);
+            m_endValue->setValue(0);
+            m_startAmplitude->setValue(10);
+            m_endAmplitude->setValue(10);
+            m_hertz->setValue(6);
             m_stepCount->setValue(getElapsedSeconds() * 20);
             m_rampLinear->setChecked(true);
             m_useThisManySteps->setChecked(true);
@@ -751,13 +751,13 @@ PitchBendSequenceDialog::savePreset(int preset)
     settings.beginGroup(PitchBendSequenceConfigGroup);
     settings.beginWriteArray(m_controlParameter.getName().data());
     settings.setArrayIndex(preset);
-    settings.setValue("pre_bend_value", m_prebendValue->value());
-    settings.setValue("pre_bend_duration_value", m_prebendDuration->value());
-    settings.setValue("sequence_ramp_duration", m_sequenceRampDuration->value());
-    settings.setValue("sequence_ramp_end_value", m_sequenceEndValue->value());
-    settings.setValue("vibrato_start_amplitude", m_vibratoStartAmplitude->value());
-    settings.setValue("vibrato_end_amplitude", m_vibratoEndAmplitude->value());
-    settings.setValue("vibrato_frequency", m_vibratoFrequency->value());
+    settings.setValue("pre_bend_value", m_startAtValue->value());
+    settings.setValue("pre_bend_duration_value", m_wait->value());
+    settings.setValue("sequence_ramp_duration", m_bendDuration->value());
+    settings.setValue("sequence_ramp_end_value", m_endValue->value());
+    settings.setValue("vibrato_start_amplitude", m_startAmplitude->value());
+    settings.setValue("vibrato_end_amplitude", m_endAmplitude->value());
+    settings.setValue("vibrato_frequency", m_hertz->value());
     settings.setValue("step_count", m_stepCount->value());
     settings.setValue("step_size", m_stepSize->value());
     settings.setValue("ramp_mode", getRampMode());
@@ -775,13 +775,13 @@ PitchBendSequenceDialog::restorePreset(int preset)
     settings.beginGroup(PitchBendSequenceConfigGroup);
     settings.beginReadArray(m_controlParameter.getName().data());
     settings.setArrayIndex(preset);
-    m_prebendValue->setValue(settings.value("pre_bend_value", 0).toFloat());
-    m_prebendDuration->setValue(settings.value("pre_bend_duration_value", 0).toFloat());
-    m_sequenceRampDuration->setValue(settings.value("sequence_ramp_duration", 100).toFloat());
-    m_sequenceEndValue->setValue(settings.value("sequence_ramp_end_value", 0).toFloat());
-    m_vibratoStartAmplitude->setValue(settings.value("vibrato_start_amplitude", 0).toFloat());
-    m_vibratoEndAmplitude->setValue(settings.value("vibrato_end_amplitude", 0).toFloat());
-    m_vibratoFrequency->setValue(settings.value("vibrato_frequency", 10).toFloat());
+    m_startAtValue->setValue(settings.value("pre_bend_value", 0).toFloat());
+    m_wait->setValue(settings.value("pre_bend_duration_value", 0).toFloat());
+    m_bendDuration->setValue(settings.value("sequence_ramp_duration", 100).toFloat());
+    m_endValue->setValue(settings.value("sequence_ramp_end_value", 0).toFloat());
+    m_startAmplitude->setValue(settings.value("vibrato_start_amplitude", 0).toFloat());
+    m_endAmplitude->setValue(settings.value("vibrato_end_amplitude", 0).toFloat());
+    m_hertz->setValue(settings.value("vibrato_frequency", 10).toFloat());
     m_stepCount->setValue(settings.value("step_count", 40).toInt());
     m_stepSize->setValue(settings.value("step_size", 2.0).toFloat());
 
@@ -874,7 +874,7 @@ PitchBendSequenceDialog::getElapsedSeconds() const
 int
 PitchBendSequenceDialog::numVibratoCycles()
 {
-    const int vibratoFrequency  = m_vibratoFrequency->value();
+    const int vibratoFrequency  = m_hertz->value();
     const double totalCyclesExact =
         vibratoFrequency * getElapsedSeconds();
     // We round so that the interval gets an exact number of cycles.
@@ -889,8 +889,8 @@ void
 PitchBendSequenceDialog::addLinearCountedEvents(MacroCommand *macro)
 {
     /* Ramp calculations. */
-    const int startValue = spinboxToControl(m_prebendValue);
-    const int endValue   = spinboxToControl(m_sequenceEndValue);
+    const int startValue = spinboxToControl(m_startAtValue);
+    const int endValue   = spinboxToControl(m_endValue);
     const int valueChange = endValue - startValue;
 
     // numSteps doesn't include the initial event in the
@@ -903,17 +903,17 @@ PitchBendSequenceDialog::addLinearCountedEvents(MacroCommand *macro)
     /* Compute values used to step thru multiple timesteps. */ 
     const timeT fullDuration = m_endTime - m_startTime;
     const timeT prerampDuration =
-        (m_prebendDuration->value() * fullDuration)/100;
+        (m_wait->value() * fullDuration)/100;
     const timeT sequenceStartTime = m_startTime + prerampDuration;
     const timeT sequenceDuration = m_endTime - sequenceStartTime;
     const timeT rampDuration =
-        (m_sequenceRampDuration->value() * sequenceDuration)/100;
+        (m_bendDuration->value() * sequenceDuration)/100;
     const timeT rampEndTime = sequenceStartTime + rampDuration;
     
     const int totalCycles = numVibratoCycles();
     const float stepsPerCycle  = float(steps) / float (totalCycles);
-    const int vibratoSA = spinboxToControlDelta(m_vibratoStartAmplitude);
-    const int vibratoEA = spinboxToControlDelta(m_vibratoEndAmplitude);
+    const int vibratoSA = spinboxToControlDelta(m_startAmplitude);
+    const int vibratoEA = spinboxToControlDelta(m_endAmplitude);
 
 
     /* Always put an event at the start of the sequence.  */
@@ -961,8 +961,8 @@ PitchBendSequenceDialog::addStepwiseEvents(MacroCommand *macro)
     static const float epsilon = 0.01;
 
     /* Ramp calculations. */
-    const int startValue = spinboxToControl(m_prebendValue);
-    const int endValue   = spinboxToControl(m_sequenceEndValue);
+    const int startValue = spinboxToControl(m_startAtValue);
+    const int endValue   = spinboxToControl(m_endValue);
     const int valueChange = endValue - startValue;
     
     // numSteps is one less than the number of ramp events we
@@ -997,11 +997,11 @@ PitchBendSequenceDialog::addStepwiseEvents(MacroCommand *macro)
     /* Compute values used to step thru multiple timesteps. */
     const timeT fullDuration = m_endTime - m_startTime;
     const timeT prerampDuration =
-        (m_prebendDuration->value() * fullDuration)/100;
+        (m_wait->value() * fullDuration)/100;
     const timeT sequenceStartTime = m_startTime + prerampDuration;
     const timeT sequenceDuration = m_endTime - sequenceStartTime;
     const timeT rampDuration =
-        (m_sequenceRampDuration->value() * sequenceDuration)/100;
+        (m_bendDuration->value() * sequenceDuration)/100;
     const timeT rampEndTime = sequenceStartTime + rampDuration;
     const RampMode rampMode = getRampMode();
     
