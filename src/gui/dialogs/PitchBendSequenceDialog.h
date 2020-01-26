@@ -114,16 +114,17 @@ private:
      *       display control change values, not percents.
      * false: Pitchbend only.  Display percent.
      *
-     * ??? Confusing.  Maybe just simplify to isPitchbend() or usePercent()
-     *     both of which have the opposite meaning to this?
+     * ??? Confusing.  Maybe deprecate this and use isController() and
+     *     isPitchbend() instead?
      * ??? rename: useValue()?
      */
-    bool useTrueValues() const;
+    bool useTrueValues() const;  // Same as isController()
+    bool isController() const;
+    bool isPitchbend() const;
 
     const timeT m_startTime;
     const timeT m_endTime;
-    /// ??? rename: getTimeSpan()
-    double getElapsedSeconds() const;
+    double getTimeSpan() const;
 
 
     // Replacement Mode
@@ -188,6 +189,11 @@ private:
     // Use step size (%)
     QRadioButton *m_useStepSizePercent;
     QDoubleSpinBox *m_stepSize;
+    /// Min limit for m_stepSize only.
+    /**
+     * ??? rename: getMinStepSize()?
+     */
+    double getSmallestSpinboxStep() const;
     // Use this many steps
     QRadioButton *m_useThisManySteps;
     QDoubleSpinBox *m_stepCount;
@@ -219,9 +225,11 @@ private:
 
     /// Convert pitch bend value delta to percent.
     double valueDeltaToPercent(int valueDelta) const;
+
+    /// Min limit for start/end values.
     double getMinSpinboxValue() const;
+    /// Max limit for start/end values.
     double getMaxSpinboxValue() const;
-    double getSmallestSpinboxStep() const;
 
 
     // Insert the pb/cc events.

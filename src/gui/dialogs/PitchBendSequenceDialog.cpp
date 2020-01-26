@@ -531,39 +531,59 @@ PitchBendSequenceDialog::slotPresetChanged(int index) {
     if (index >= m_numPresetStyles) {
         restorePreset(index);
     } else {
+        // Pitchbend.  Handle the presets.
         switch (index) {
         case LinearRamp:
+            m_startAtValue->setValue(0);
             m_wait->setValue(0);
+
             m_bendDuration->setValue(100);
+            m_endValue->setValue(0);
+
             m_startAmplitude->setValue(0);
             m_endAmplitude->setValue(0);
+            m_hertz->setValue(1);
+
             m_linear->setChecked(true);
+
             m_useThisManySteps->setChecked(true);
+            m_stepCount->setValue(getTimeSpan() * 20);
             break;
+
         case FastVibratoArmRelease:
             m_startAtValue->setValue(-20);
             m_wait->setValue(5);
+
             m_bendDuration->setValue(0);
             m_endValue->setValue(0);
+
             m_startAmplitude->setValue(30);
             m_endAmplitude->setValue(0);
             m_hertz->setValue(14);
-            m_stepCount->setValue(getElapsedSeconds() * 20);
+
             m_linear->setChecked(true);
+
             m_useThisManySteps->setChecked(true);
+            m_stepCount->setValue(getTimeSpan() * 20);
             break;
+
         case Vibrato:
             m_startAtValue->setValue(0);
             m_wait->setValue(0);
+
             m_bendDuration->setValue(0);
             m_endValue->setValue(0);
+
             m_startAmplitude->setValue(10);
             m_endAmplitude->setValue(10);
             m_hertz->setValue(6);
-            m_stepCount->setValue(getElapsedSeconds() * 20);
+
             m_linear->setChecked(true);
+
             m_useThisManySteps->setChecked(true);
+            m_stepCount->setValue(getTimeSpan() * 20);
             break;
+
         default:
             /* This can't be reached, but just in case we're wrong, we
                give it a way to make a valid preset. */
@@ -571,14 +591,26 @@ PitchBendSequenceDialog::slotPresetChanged(int index) {
             break;
         }
     }
-    slotStepStyleChanged(true);
+
+    updateWidgets();
 }
 
 bool
 PitchBendSequenceDialog::
 useTrueValues() const
 {
+    // As opposed to PitchBend::EventType.
     return m_controlParameter.getType() == Controller::EventType;
+}
+
+bool PitchBendSequenceDialog::isController() const
+{
+    return m_controlParameter.getType() == Controller::EventType;
+}
+
+bool PitchBendSequenceDialog::isPitchbend() const
+{
+    return m_controlParameter.getType() == PitchBend::EventType;
 }
 
 double
@@ -859,7 +891,7 @@ PitchBendSequenceDialog::accept()
 }
 
 double
-PitchBendSequenceDialog::getElapsedSeconds() const
+PitchBendSequenceDialog::getTimeSpan() const
 {
     const Composition *composition = m_segment->getComposition();
     const RealTime realTimeDifference =
@@ -876,7 +908,7 @@ PitchBendSequenceDialog::numVibratoCycles()
 {
     const int vibratoFrequency  = m_hertz->value();
     const double totalCyclesExact =
-        vibratoFrequency * getElapsedSeconds();
+        vibratoFrequency * getTimeSpan();
     // We round so that the interval gets an exact number of cycles.
     const int totalCycles = int(totalCyclesExact + 0.5);
 
