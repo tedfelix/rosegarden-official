@@ -106,49 +106,55 @@ private slots:
 
 private:
     Segment *m_segment;
+
     const ControlParameter &m_controlParameter;
+    /// Use value or percent.
+    /**
+     * true: We're working with a controller like volume and we need to
+     *       display control change values, not percents.
+     * false: Pitchbend only.  Display percent.
+     *
+     * ??? Confusing.  Maybe just simplify to isPitchbend() or usePercent()
+     *     both of which have the opposite meaning to this?
+     * ??? rename: useValue()?
+     */
+    bool useTrueValues() const;
+
     const timeT m_startTime;
     const timeT m_endTime;
+    /// ??? rename: getTimeSpan()
     double getElapsedSeconds() const;
 
-    /** Methods dealing with transforming to or from spinbox values **/
 
-    bool useTrueValues() const;
-    int spinboxToControl(const QDoubleSpinBox *spinbox) const;
+    // Helpers for working with spinbox values.
+
+    /// Convert pitch bend percent to a value delta.
+    int percentToValueDelta(double percent) const;
+    /// Get control value delta consistently even in percent (pitchbend) mode.
+    /**
+     * ??? rename: spinboxToValueDelta()?
+     */
     int spinboxToControlDelta(const QDoubleSpinBox *spinbox) const;
-    double getMaxSpinboxValue() const;
-    double getMinSpinboxValue() const;
-    double getSmallestSpinboxStep() const;
+    /// Get control value consistently even in percent (pitchbend) mode.
+    /**
+     * ??? rename: spinboxToValue()?
+     */
+    int spinboxToControl(const QDoubleSpinBox *spinbox) const;
+
+    /// Convert pitch bend value delta to percent.
     double valueDeltaToPercent(int valueDelta) const;
-    int percentToValueDelta(double) const;
+    double getMinSpinboxValue() const;
+    double getMaxSpinboxValue() const;
+    double getSmallestSpinboxStep() const;
 
-    /** Methods dealing with setting and reading radiobutton groups **/
 
-    enum RampMode {
-      Linear,
-      Logarithmic,
-      HalfSine,
-      QuarterSine,
-    };
-    void setRampMode(RampMode rampMode);
-    RampMode getRampMode();
-
-    enum StepSizeCalculation {
-      StepSizeDirect,
-      StepSizeByCount,
-    };
-    void setStepSizeCalculation(StepSizeCalculation stepSizeCalculation);
-    StepSizeCalculation getStepSizeCalculation();
-
-    /** Methods to help manage which widgets are enabled **/
-
+    /// Enable vibrato box only in Linear and StepCount modes.
+    /**
+     * ??? rename: updateVibratoWidgets()
+     * ??? Fold this into an updateWidgets().
+     */
     void maybeEnableVibratoFields();
 
-    /** Methods dealing with saving/restoring presets **/
-
-    void saveSettings();
-    void savePreset(int preset);
-    void restorePreset(int preset);
 
     // Replacement Mode
 
@@ -169,6 +175,9 @@ private:
     // (all three) for the pitchbend controller.
     const int m_numPresetStyles;
     QComboBox *m_sequencePreset;  // Preset
+    void saveSettings();
+    void savePreset(int preset);
+    void restorePreset(int preset);
 
     // Pre Bend
 
@@ -194,14 +203,29 @@ private:
     QRadioButton *m_radioRampLogarithmic;
     QRadioButton *m_radioRampQuarterSine;
     QRadioButton *m_radioRampHalfSine;
+    enum RampMode {
+      Linear,
+      Logarithmic,
+      HalfSine,
+      QuarterSine,
+    };
+    void setRampMode(RampMode rampMode);
+    RampMode getRampMode();
 
     // How many steps
 
-    QRadioButton *m_useStepSizePercent;  // Use step size (%)
+    // Use step size (%)
+    QRadioButton *m_useStepSizePercent;
     QDoubleSpinBox *m_stepSize;
-    QRadioButton *m_useThisManySteps;  // Use this many steps
+    // Use this many steps
+    QRadioButton *m_useThisManySteps;
     QDoubleSpinBox *m_stepCount;
-
+    enum StepSizeCalculation {  // ??? rename: StepMode
+      StepSizeDirect,  // Use step size (%).  ??? rename: StepSizePercent
+      StepSizeByCount,  // Use this many steps.  ??? rename: StepCount
+    };
+    void setStepSizeCalculation(StepSizeCalculation stepSizeCalculation);
+    StepSizeCalculation getStepSizeCalculation();
 
     /// Generate EventInsertionCommand objects for the Linear/Step Size By Count case.
     void addLinearCountedEvents(MacroCommand *macro);

@@ -47,6 +47,14 @@
 
 #include <cmath>
 
+namespace
+{
+    // ??? This needs to be someplace global.
+    //     Search on acos( to find other places where we compute
+    //     pi.  2 * acos(0) is pi.  acos(0) is pi/2.
+    constexpr double pi = 3.14159265358979;
+}
+
 namespace Rosegarden
 {
 
@@ -595,7 +603,7 @@ getSmallestSpinboxStep() const
         return 1;
     } else {
         const int fullRange = percentToValueDelta(200.0);
-        const float smallestStep = 1.000001 / float(fullRange);
+        const double smallestStep = 1.000001 / fullRange;
         return 100.0 * smallestStep;
     }
 }
@@ -842,8 +850,8 @@ int
 PitchBendSequenceDialog::numVibratoCycles()
 {
     const int vibratoFrequency  = m_vibratoFrequency->value();
-    const float totalCyclesExact =
-        float(vibratoFrequency) * getElapsedSeconds();
+    const double totalCyclesExact =
+        vibratoFrequency * getElapsedSeconds();
     // We round so that the interval gets an exact number of cycles.
     const int totalCycles = int(totalCyclesExact + 0.5);
 
@@ -855,8 +863,6 @@ PitchBendSequenceDialog::numVibratoCycles()
 void
 PitchBendSequenceDialog::addLinearCountedEvents(MacroCommand *macro)
 {
-    static const float pi = acos(0.0) * 2.0;
-    
     /* Ramp calculations. */
     const int startValue = spinboxToControl(m_prebendValue);
     const int endValue   = spinboxToControl(m_sequenceEndValue);
@@ -926,7 +932,6 @@ PitchBendSequenceDialog::addLinearCountedEvents(MacroCommand *macro)
 void
 PitchBendSequenceDialog::addStepwiseEvents(MacroCommand *macro)
 {
-    static const float pi = acos(0.0) * 2.0;
     // Needed when rampMode is logarithmic. 
     static const float epsilon = 0.01;
 
