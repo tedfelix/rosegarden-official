@@ -109,7 +109,7 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(
     const int endSavedSettings   = startSavedSettings + numSavedSettings;
 
     /** The replace-mode group comes first because one of its settings
-        (OnlyErase) invalidates the rest of the dialog. **/
+        (JustErase) invalidates the rest of the dialog. **/
     QGroupBox *replaceModeGroupBox = new QGroupBox(tr("Replacement mode"));
     QVBoxLayout *replaceModeGroupLayoutBox = new QVBoxLayout();
 
@@ -122,8 +122,8 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(
     m_radioOnlyAdd = new QRadioButton(tr("Add new events to old ones"));
     m_radioOnlyAdd->setToolTip(tr("<qt>Add new pitchbends or controllers without affecting existing ones.</qt>"));
 
-    m_radioOnlyErase = new QRadioButton(tr("Just erase old events"));
-    m_radioOnlyErase->setToolTip(tr("<qt>Don't add any events, just erase existing pitchbends or controllers of this type in this range.</qt>"));
+    m_justErase = new QRadioButton(tr("Just erase old events"));
+    m_justErase->setToolTip(tr("<qt>Don't add any events, just erase existing pitchbends or controllers of this type in this range.</qt>"));
 
 
     QHBoxLayout *replaceModeBox = new QHBoxLayout();
@@ -131,7 +131,7 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(
     replaceModeBox->addStretch(0);
     replaceModeBox->addWidget(m_radioReplace);
     replaceModeBox->addWidget(m_radioOnlyAdd);
-    replaceModeBox->addWidget(m_radioOnlyErase);
+    replaceModeBox->addWidget(m_justErase);
 
     vboxLayout->addSpacing(15);
 
@@ -311,8 +311,8 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(
     vboxLayout->addWidget(rampModeGroupBox);
     rampModeGroupBox->setLayout(rampModeGroupLayoutBox);
 
-    m_radioRampLinear = new QRadioButton(tr("Linear"));
-    m_radioRampLinear->
+    m_rampLinear = new QRadioButton(tr("Linear"));
+    m_rampLinear->
         setToolTip(tr("<qt>Ramp slopes linearly. Vibrato is possible if <i>Use this many steps</i> is set</qt>"));
     m_radioRampLogarithmic = new QRadioButton(tr("Logarithmic"));
     m_radioRampLogarithmic->
@@ -324,7 +324,7 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(
     m_radioRampQuarterSine->
         setToolTip(tr("<qt>Ramp slopes like one quarter of a sine wave (zero to peak)</qt>"));
 
-    rampModeGroupLayoutBox->addWidget(m_radioRampLinear);
+    rampModeGroupLayoutBox->addWidget(m_rampLinear);
     rampModeGroupLayoutBox->addWidget(m_radioRampLogarithmic);
     rampModeGroupLayoutBox->addWidget(m_radioRampQuarterSine);
     rampModeGroupLayoutBox->addWidget(m_radioRampHalfSine);
@@ -388,15 +388,31 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(
 
     connect(m_sequencePreset, SIGNAL(activated(int)), this,
             SLOT(slotSequencePresetChanged(int)));
-    connect(m_radioOnlyErase, &QAbstractButton::toggled,
-            this, &PitchBendSequenceDialog::slotOnlyEraseClicked);
-    connect(m_radioRampLinear, &QAbstractButton::toggled,
-            this, &PitchBendSequenceDialog::slotLinearRampClicked);
+    // ??? toggled() is rarely a good idea since it is also emitted when
+    //     setChecked() is called which then leads to the need to
+    //     block signals in certain situations.  Would clicked() be
+    //     a better signal to use here?
+    connect(m_justErase, &QAbstractButton::toggled,
+            this, &PitchBendSequenceDialog::slotJustEraseClicked);
+    // ??? toggled() is rarely a good idea since it is also emitted when
+    //     setChecked() is called which then leads to the need to
+    //     block signals in certain situations.  Would clicked() be
+    //     a better signal to use here?
+    connect(m_rampLinear, &QAbstractButton::toggled,
+            this, &PitchBendSequenceDialog::slotRampLinearClicked);
 
     // We connect all these buttons to slotStepSizeStyleChanged,
     // which will react only to the current selected one.
+    // ??? toggled() is rarely a good idea since it is also emitted when
+    //     setChecked() is called which then leads to the need to
+    //     block signals in certain situations.  Would clicked() be
+    //     a better signal to use here?
     connect(m_radioStepSizeDirect, &QAbstractButton::toggled,
             this, &PitchBendSequenceDialog::slotStepSizeStyleChanged);
+    // ??? toggled() is rarely a good idea since it is also emitted when
+    //     setChecked() is called which then leads to the need to
+    //     block signals in certain situations.  Would clicked() be
+    //     a better signal to use here?
     connect(m_radioStepSizeByCount, &QAbstractButton::toggled,
             this, &PitchBendSequenceDialog::slotStepSizeStyleChanged);
 
@@ -408,13 +424,14 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(
 
     connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
-    connect(buttonBox, &QDialogButtonBox::helpRequested, this, &PitchBendSequenceDialog::slotHelpRequested);
+    connect(buttonBox, &QDialogButtonBox::helpRequested,
+            this, &PitchBendSequenceDialog::slotHelp);
 }
 
 void
-PitchBendSequenceDialog::slotOnlyEraseClicked(bool checked)
+PitchBendSequenceDialog::slotJustEraseClicked(bool checked)
 {
-    // (De)activate controls that are meaningless for "OnlyErase"
+    // (De)activate controls that are meaningless for "JustErase"
     m_prebendValue->setEnabled(!checked);
     m_prebendDuration->setEnabled(!checked);
     m_sequenceRampDuration->setEnabled(!checked);
@@ -424,7 +441,7 @@ PitchBendSequenceDialog::slotOnlyEraseClicked(bool checked)
     m_radioStepSizeDirect->setEnabled(!checked);
     m_radioStepSizeByCount->setEnabled(!checked);
 
-    m_radioRampLinear->setEnabled(!checked);
+    m_rampLinear->setEnabled(!checked);
     m_radioRampLogarithmic->setEnabled(!checked);
     m_radioRampHalfSine->setEnabled(!checked);
     m_radioRampQuarterSine->setEnabled(!checked);
@@ -447,14 +464,14 @@ void
 PitchBendSequenceDialog::maybeEnableVibratoFields()
 {
     bool enable =
-        m_radioRampLinear->isChecked() &&
+        m_rampLinear->isChecked() &&
         m_radioStepSizeByCount->isChecked();
     
     m_vibratoBox->setVisible(enable);
 }
 
 void
-PitchBendSequenceDialog::slotLinearRampClicked(bool /*checked*/)
+PitchBendSequenceDialog::slotRampLinearClicked(bool /*checked*/)
 {
     maybeEnableVibratoFields();
 }
@@ -484,7 +501,7 @@ PitchBendSequenceDialog::slotSequencePresetChanged(int index) {
             m_sequenceRampDuration->setValue(100);
             m_vibratoStartAmplitude->setValue(0);
             m_vibratoEndAmplitude->setValue(0);
-            m_radioRampLinear->setChecked(true);
+            m_rampLinear->setChecked(true);
             break;
         case FastVibratoArmRelease:
             m_prebendValue->setValue(-20);
@@ -495,7 +512,7 @@ PitchBendSequenceDialog::slotSequencePresetChanged(int index) {
             m_vibratoEndAmplitude->setValue(0);
             m_vibratoFrequency->setValue(14);
             m_resolution->setValue(getElapsedSeconds() * 20);
-            m_radioRampLinear->setChecked(true);
+            m_rampLinear->setChecked(true);
             m_radioStepSizeByCount->setChecked(true);
             break;
         case Vibrato:
@@ -507,7 +524,7 @@ PitchBendSequenceDialog::slotSequencePresetChanged(int index) {
             m_vibratoEndAmplitude->setValue(10);
             m_vibratoFrequency->setValue(6);
             m_resolution->setValue(getElapsedSeconds() * 20);
-            m_radioRampLinear->setChecked(true);
+            m_rampLinear->setChecked(true);
             m_radioStepSizeByCount->setChecked(true);
             break;
         default:
@@ -605,7 +622,7 @@ PitchBendSequenceDialog::ReplaceMode
 PitchBendSequenceDialog::getReplaceMode()
 {
     return
-        m_radioOnlyErase ->isChecked() ? OnlyErase :
+        m_justErase ->isChecked() ? JustErase :
         m_radioReplace   ->isChecked() ? Replace   :
         m_radioOnlyAdd   ->isChecked() ? OnlyAdd   :
         Replace;
@@ -615,7 +632,7 @@ PitchBendSequenceDialog::RampMode
 PitchBendSequenceDialog::getRampMode()
 {
     return
-        m_radioRampLinear      ->isChecked() ? Linear       :
+        m_rampLinear      ->isChecked() ? Linear       :
         m_radioRampLogarithmic ->isChecked() ? Logarithmic  :
         m_radioRampHalfSine    ->isChecked() ? HalfSine     :
         m_radioRampQuarterSine ->isChecked() ? QuarterSine  :
@@ -627,7 +644,7 @@ PitchBendSequenceDialog::setRampMode(RampMode rampMode)
 {
     switch (rampMode) {
     case Linear:
-        m_radioRampLinear      ->setChecked(true);
+        m_rampLinear      ->setChecked(true);
         break;
     case Logarithmic:
         m_radioRampLogarithmic ->setChecked(true);
@@ -764,7 +781,7 @@ PitchBendSequenceDialog::accept()
     QString commandName(tr("%1 Sequence").arg(controllerName));
     MacroCommand *macro = new MacroCommand(commandName);
 
-    // In Replace and OnlyErase modes, erase the events in the time range.
+    // In Replace and JustErase modes, erase the events in the time range.
     if (getReplaceMode() != OnlyAdd) {
         EventSelection *selection = new EventSelection(*m_segment);
         // For each event in the time range
@@ -791,7 +808,7 @@ PitchBendSequenceDialog::accept()
     }
 
     // In Replace and OnlyAdd modes, add the requested controller events.
-    if (getReplaceMode() != OnlyErase) {
+    if (getReplaceMode() != JustErase) {
         if ((getRampMode() == Linear) &&
             (getStepSizeCalculation() == StepSizeByCount)) {
             addLinearCountedEvents(macro);
@@ -806,12 +823,14 @@ PitchBendSequenceDialog::accept()
 }
 
 double
-PitchBendSequenceDialog::getElapsedSeconds()
+PitchBendSequenceDialog::getElapsedSeconds() const
 {
     const Composition *composition = m_segment->getComposition();
     const RealTime realTimeDifference =
         composition->getRealTimeDifference(m_startTime, m_endTime);
     static const RealTime oneSecond(1,0);
+    // ??? Why divide by 1?  Seems like that should do nothing.
+    //     What does it really do?
     const double elapsedSeconds = realTimeDifference / oneSecond;
     return elapsedSeconds;
 }
@@ -1069,7 +1088,7 @@ PitchBendSequenceDialog::addStepwiseEvents(MacroCommand *macro)
 }
 
 void
-PitchBendSequenceDialog::slotHelpRequested()
+PitchBendSequenceDialog::slotHelp()
 {
     // TRANSLATORS: if the manual is translated into your language, you can
     // change the two-letter language code in this URL to point to your language

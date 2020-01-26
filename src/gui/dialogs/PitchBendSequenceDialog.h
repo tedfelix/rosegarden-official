@@ -70,21 +70,23 @@ public:
             timeT endTime);
 
 public slots:
+    // QDialog override
     void accept() override;
-    void slotSequencePresetChanged(int);
-    void slotHelpRequested();
 
 private slots:
-    void slotOnlyEraseClicked(bool checked);
-    void slotLinearRampClicked(bool checked);
+    void slotJustEraseClicked(bool checked);
+    void slotRampLinearClicked(bool checked);
     void slotStepSizeStyleChanged(bool checked);
+    void slotSequencePresetChanged(int);
+
+    void slotHelp();
 
 private:
     Segment *m_segment;
     const ControlParameter &m_controlParameter;
-    timeT m_startTime;
-    timeT m_endTime;
-    double getElapsedSeconds();
+    const timeT m_startTime;
+    const timeT m_endTime;
+    double getElapsedSeconds() const;
 
     /** Methods dealing with transforming to or from spinbox values **/
 
@@ -129,11 +131,11 @@ private:
 
     QRadioButton *m_radioReplace;  // Replace old events
     QRadioButton *m_radioOnlyAdd;  // Add new events to old ones
-    QRadioButton *m_radioOnlyErase;  // Just erase old events
+    QRadioButton *m_justErase;  // Just erase old events
     enum ReplaceMode {
       OnlyAdd,   // Only add new events.
       Replace,   // Replace old controller events here with new ones.
-      OnlyErase, // Just erase old controller events here.
+      JustErase, // Just erase old events
     };
     ReplaceMode getReplaceMode();
 
@@ -165,7 +167,7 @@ private:
 
     // Ramp mode
 
-    QRadioButton *m_radioRampLinear;
+    QRadioButton *m_rampLinear;
     QRadioButton *m_radioRampLogarithmic;
     QRadioButton *m_radioRampQuarterSine;
     QRadioButton *m_radioRampHalfSine;
