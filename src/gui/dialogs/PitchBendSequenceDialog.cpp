@@ -124,11 +124,11 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(
     vboxLayout->addWidget(replaceModeGroupBox);
     replaceModeGroupBox->setLayout(replaceModeGroupLayoutBox);
 
-    m_radioReplace = new QRadioButton(tr("Replace old events"));
-    m_radioReplace->setToolTip(tr("<qt>Erase existing pitchbends or controllers of this type in this range before adding new ones</qt>"));
+    m_replaceOldEvents = new QRadioButton(tr("Replace old events"));
+    m_replaceOldEvents->setToolTip(tr("<qt>Erase existing pitchbends or controllers of this type in this range before adding new ones</qt>"));
 
-    m_radioOnlyAdd = new QRadioButton(tr("Add new events to old ones"));
-    m_radioOnlyAdd->setToolTip(tr("<qt>Add new pitchbends or controllers without affecting existing ones.</qt>"));
+    m_addNewEvents = new QRadioButton(tr("Add new events to old ones"));
+    m_addNewEvents->setToolTip(tr("<qt>Add new pitchbends or controllers without affecting existing ones.</qt>"));
 
     m_justErase = new QRadioButton(tr("Just erase old events"));
     m_justErase->setToolTip(tr("<qt>Don't add any events, just erase existing pitchbends or controllers of this type in this range.</qt>"));
@@ -137,8 +137,8 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(
     QHBoxLayout *replaceModeBox = new QHBoxLayout();
     replaceModeGroupLayoutBox->addLayout(replaceModeBox);
     replaceModeBox->addStretch(0);
-    replaceModeBox->addWidget(m_radioReplace);
-    replaceModeBox->addWidget(m_radioOnlyAdd);
+    replaceModeBox->addWidget(m_replaceOldEvents);
+    replaceModeBox->addWidget(m_addNewEvents);
     replaceModeBox->addWidget(m_justErase);
 
     vboxLayout->addSpacing(15);
@@ -158,23 +158,23 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(
     presetLabel->
         setToolTip(tr("<qt>Use this saved, user editable setting.</qt>"));
     presetGrid->addWidget(presetLabel, 0, 0);
-    m_sequencePreset = new QComboBox;
-    presetGrid->addWidget(m_sequencePreset, 0, 1);
+    m_preset = new QComboBox;
+    presetGrid->addWidget(m_preset, 0, 1);
 
     // Hack: We psychically know that this adds the right number
     // of builtin presets in the right places.
     if (m_numPresetStyles > 0) {
-        m_sequencePreset->addItem(tr("Linear ramp"), LinearRamp);
-        m_sequencePreset->addItem(tr("Fast vibrato arm release"), FastVibratoArmRelease);
-        m_sequencePreset->addItem(tr("Vibrato"), Vibrato);
+        m_preset->addItem(tr("Linear ramp"), LinearRamp);
+        m_preset->addItem(tr("Fast vibrato arm release"), FastVibratoArmRelease);
+        m_preset->addItem(tr("Vibrato"), Vibrato);
     }
 
     for (int i = startSavedSettings; i <= endSavedSettings; ++i)
         {
             int apparentIndex = i + 1 - startSavedSettings;
-            m_sequencePreset->addItem(tr("Saved setting %1").arg(apparentIndex), i);
+            m_preset->addItem(tr("Saved setting %1").arg(apparentIndex), i);
         }
-    m_sequencePreset->setCurrentIndex(settings.value("sequence_preset", int(startSavedSettings)).toInt());
+    m_preset->setCurrentIndex(settings.value("sequence_preset", int(startSavedSettings)).toInt());
 
     vboxLayout->addStretch(15);
 
@@ -389,10 +389,10 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(
     vboxLayout->addStretch(15);
 
 
-    slotPresetChanged(m_sequencePreset->currentIndex());
-    m_radioReplace->setChecked(true);
+    slotPresetChanged(m_preset->currentIndex());
+    m_replaceOldEvents->setChecked(true);
 
-    connect(m_sequencePreset, SIGNAL(activated(int)), this,
+    connect(m_preset, SIGNAL(activated(int)), this,
             SLOT(slotPresetChanged(int)));
     // ??? toggled() is rarely a good idea since it is also emitted when
     //     setChecked() is called which then leads to the need to
@@ -446,7 +446,7 @@ PitchBendSequenceDialog::updateWidgets()
     // is deleting events.
     if (getReplaceMode() == JustErase) {
 
-        m_sequencePreset->setEnabled(false);
+        m_preset->setEnabled(false);
 
         m_prebendValue->setEnabled(false);
         m_prebendDuration->setEnabled(false);
@@ -474,7 +474,7 @@ PitchBendSequenceDialog::updateWidgets()
 
     // Enable everything as appropriate.
 
-    m_sequencePreset->setEnabled(true);
+    m_preset->setEnabled(true);
 
     m_prebendValue->setEnabled(true);
     m_prebendDuration->setEnabled(true);
@@ -659,9 +659,9 @@ PitchBendSequenceDialog::getReplaceMode()
 {
     return
         m_justErase ->isChecked() ? JustErase :
-        m_radioReplace   ->isChecked() ? Replace   :
-        m_radioOnlyAdd   ->isChecked() ? OnlyAdd   :
-        Replace;
+        m_replaceOldEvents   ->isChecked() ? ReplaceOldEvents   :
+        m_addNewEvents   ->isChecked() ? AddNewEvents   :
+        ReplaceOldEvents;
 }
 
 PitchBendSequenceDialog::RampMode
@@ -725,7 +725,7 @@ PitchBendSequenceDialog::setStepSizeCalculation
 void
 PitchBendSequenceDialog::saveSettings()
 {
-    const int preset = m_sequencePreset->currentIndex();
+    const int preset = m_preset->currentIndex();
     
     /* Only one setting (sequence_preset) is global; the other
        settings pertain to one specific preset. */
@@ -818,7 +818,7 @@ PitchBendSequenceDialog::accept()
     MacroCommand *macro = new MacroCommand(commandName);
 
     // In Replace and JustErase modes, erase the events in the time range.
-    if (getReplaceMode() != OnlyAdd) {
+    if (getReplaceMode() != AddNewEvents) {
         EventSelection *selection = new EventSelection(*m_segment);
         // For each event in the time range
         for (Segment::const_iterator i = m_segment->findTime(m_startTime);

@@ -126,37 +126,15 @@ private:
     double getElapsedSeconds() const;
 
 
-    // Helpers for working with spinbox values.
-
-    /// Convert pitch bend percent to a value delta.
-    int percentToValueDelta(double percent) const;
-    /// Get control value delta consistently even in percent (pitchbend) mode.
-    /**
-     * ??? rename: spinboxToValueDelta()?
-     */
-    int spinboxToControlDelta(const QDoubleSpinBox *spinbox) const;
-    /// Get control value consistently even in percent (pitchbend) mode.
-    /**
-     * ??? rename: spinboxToValue()?
-     */
-    int spinboxToControl(const QDoubleSpinBox *spinbox) const;
-
-    /// Convert pitch bend value delta to percent.
-    double valueDeltaToPercent(int valueDelta) const;
-    double getMinSpinboxValue() const;
-    double getMaxSpinboxValue() const;
-    double getSmallestSpinboxStep() const;
-
-
     // Replacement Mode
 
-    QRadioButton *m_radioReplace;  // Replace old events
-    QRadioButton *m_radioOnlyAdd;  // Add new events to old ones
-    QRadioButton *m_justErase;  // Just erase old events
+    QRadioButton *m_replaceOldEvents;
+    QRadioButton *m_addNewEvents;
+    QRadioButton *m_justErase;
     enum ReplaceMode {
-      OnlyAdd,   // Only add new events.
-      Replace,   // Replace old controller events here with new ones.
-      JustErase, // Just erase old events
+            ReplaceOldEvents,
+            AddNewEvents,
+            JustErase,
     };
     ReplaceMode getReplaceMode();
 
@@ -166,7 +144,7 @@ private:
     // practice, either 0 for non-pitchbend controllers or EndBuiltIns
     // (all three) for the pitchbend controller.
     const int m_numPresetStyles;
-    QComboBox *m_sequencePreset;  // Preset
+    QComboBox *m_preset;
     void saveSettings();
     void savePreset(int preset);
     void restorePreset(int preset);
@@ -220,6 +198,34 @@ private:
     StepSizeCalculation getStepSizeCalculation();
 
     void updateWidgets();
+
+
+    // Helpers for working with spinbox values.
+
+    /// Convert pitch bend percent to a value delta.
+    int percentToValueDelta(double percent) const;
+    /// Get control value delta consistently even in percent (pitchbend) mode.
+    /**
+     * ??? rename: spinboxToValueDelta()?
+     */
+    int spinboxToControlDelta(const QDoubleSpinBox *spinbox) const;
+    /// Get control value consistently even in percent (pitchbend) mode.
+    /**
+     * ??? rename: spinboxToValue()?
+     */
+    int spinboxToControl(const QDoubleSpinBox *spinbox) const;
+
+    /// Convert pitch bend value delta to percent.
+    double valueDeltaToPercent(int valueDelta) const;
+    double getMinSpinboxValue() const;
+    double getMaxSpinboxValue() const;
+    double getSmallestSpinboxStep() const;
+
+
+    // Insert the pb/cc events.
+
+    // ??? Pull these two out into command object(s) so that others can
+    //     reuse them.
 
     /// Generate EventInsertionCommand objects for the Linear/Step Size By Count case.
     void addLinearCountedEvents(MacroCommand *macro);
