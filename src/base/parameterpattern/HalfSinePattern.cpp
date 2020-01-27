@@ -16,7 +16,10 @@
 */
 
 #include "HalfSinePattern.h"
+
 #include "gui/dialogs/EventParameterDialog.h"
+#include "misc/Constants.h"
+
 #include <cmath>
 
 namespace Rosegarden
@@ -48,12 +51,11 @@ getValueDelta(double valueChange, double timeRatio) const
      Using sin(x-pi/2) = -cos(x)
 
      value delta = (-cos(pi * ratio)/2 + 0.5) * valueChange
-
-     To calculate pi, acos(0.0) = pi/2
   **/
   
-    const double cosArg = 2 * acos(0.0) * timeRatio;
+    const double cosArg = pi * timeRatio;
     return (-cos(cosArg)/2 + 0.5) * valueChange;
 }
+
 
 }

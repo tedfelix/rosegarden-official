@@ -15,54 +15,46 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[PitchBendSequenceDialog]"
 
 #include "PitchBendSequenceDialog.h"
 
 #include "base/ControlParameter.h"
-#include "base/MidiTypes.h"
+#include "base/MidiTypes.h"  // EventType
 #include "base/RealTime.h"
-#include "base/Selection.h"
+#include "base/Selection.h"  // EventSelection
 #include "commands/edit/EventInsertionCommand.h"
 #include "commands/edit/EraseCommand.h"
 #include "document/CommandHistory.h"
-#include "document/Command.h"
-#include "misc/ConfigGroups.h"
+#include "misc/ConfigGroups.h"  // PitchBendSequenceConfigGroup
+#include "misc/Debug.h"
+#include "misc/Constants.h"  // pi
 
-#include <QDialog>
 #include <QDialogButtonBox>
 #include <QString>
 #include <QWidget>
 #include <QVBoxLayout>
 #include <QRadioButton>
-#include <QPushButton>
 #include <QGroupBox>
 #include <QLabel>
 #include <QDoubleSpinBox>
 #include <QComboBox>
 #include <QSettings>
-#include <QCloseEvent>
 #include <QUrl>
 #include <QDesktopServices>
-#include <QtGlobal>
+#include <QtGlobal>  // Q_ASSERT_X, etc...
 
 #include <cmath>
 
-namespace
-{
-    // ??? This needs to be someplace global.
-    //     Search on acos( to find other places where we compute
-    //     pi.  2 * acos(0) is pi.  acos(0) is pi/2.
-    constexpr double pi = 3.14159265358979;
-}
-
 namespace Rosegarden
 {
+
 
 enum PresetStyles {
   LinearRamp,
   FastVibratoArmRelease,
   Vibrato,
-  EndBuiltIns,  // EndPresetStyles
+  EndPresetStyles
 };
 
 PitchBendSequenceDialog::PitchBendSequenceDialog(
@@ -76,72 +68,58 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(
     m_controlParameter(control),
     m_startTime(startTime),
     m_endTime(endTime),
-    m_numPresetStyles((control.getName() == control.getPitchBend().getName()) ?
-                  EndBuiltIns :
-                  0)
+    m_numPresetStyles(isPitchbend() ? EndPresetStyles : 0)
 {
-    Q_ASSERT_X(
-            m_startTime < m_endTime,
-            "PitchBendSequenceDialog ctor",
-            "Time range invalid.");
+    Q_ASSERT_X(m_startTime < m_endTime,
+               "PitchBendSequenceDialog ctor",
+               "Time range invalid.");
 
     setModal(true);
 
-    QString controllerName(control.getName().data());
-    setWindowTitle(tr("%1 Sequence").arg(controllerName));
+    setWindowTitle(tr("%1 Sequence").arg(
+            QString(m_controlParameter.getName().data())));
 
-    QSettings settings;
-    settings.beginGroup(PitchBendSequenceConfigGroup);
+    // Main dialog layout
+    QVBoxLayout *mainLayout = new QVBoxLayout;
+    setLayout(mainLayout);
 
-    
-    QWidget* vbox = dynamic_cast<QWidget*>( this );
-    QVBoxLayout *vboxLayout = new QVBoxLayout;
-    vbox->setLayout(vboxLayout);
+    // Replacement mode
 
-    enum WhatVaries {
-        Pitch, Volume, Other
-    };
-    WhatVaries whatVaries =
-        (m_controlParameter.getType() == PitchBend::EventType) ? Pitch :
-        (m_controlParameter.getControllerValue() == 7)         ? Volume :
-        (m_controlParameter.getControllerValue() == 11)        ? Volume :
-        Other;
-    const double maxSpinboxValue = getMaxSpinboxValue();
-    const double minSpinboxValue = getMinSpinboxValue();
-    const double maxSpinboxAbsValue =
-        std::max (maxSpinboxValue, -minSpinboxValue);
-    const int valueSpinboxDecimals = useTrueValues() ? 0 : 2;
+    // The replacement modes appear at the top of the dialog because
+    // "Just erase old events" disables the rest of the dialog.
+
+    QGroupBox *replacementModeGroup = new QGroupBox(tr("Replacement mode"));
+    QHBoxLayout *replacementModeLayout = new QHBoxLayout();
+
+    mainLayout->addWidget(replacementModeGroup);
+    replacementModeGroup->setLayout(replacementModeLayout);
+
+    // Replace old events
+    m_replaceOldEvents = new QRadioButton(tr("Replace old events"));
+    m_replaceOldEvents->setToolTip(tr("<qt>Erase existing pitchbends or controllers of this type in this range before adding new ones</qt>"));
+
+    // Add new events to old ones
+    m_addNewEvents = new QRadioButton(tr("Add new events to old ones"));
+    m_addNewEvents->setToolTip(tr("<qt>Add new pitchbends or controllers without affecting existing ones.</qt>"));
+
+    // Just erase old events
+    m_justErase = new QRadioButton(tr("Just erase old events"));
+    m_justErase->setToolTip(tr("<qt>Don't add any events, just erase existing pitchbends or controllers of this type in this range.</qt>"));
+
+    // ??? Why?
+    replacementModeLayout->addStretch(0);
+    // ??? Could use a little space between these.
+    replacementModeLayout->addWidget(m_replaceOldEvents);
+    replacementModeLayout->addWidget(m_addNewEvents);
+    replacementModeLayout->addWidget(m_justErase);
+
+    mainLayout->addSpacing(15);
+
+    // Preset
 
     const int numSavedSettings = 10;
     const int startSavedSettings = m_numPresetStyles;
     const int endSavedSettings   = startSavedSettings + numSavedSettings;
-
-    /** The replace-mode group comes first because one of its settings
-        (JustErase) invalidates the rest of the dialog. **/
-    QGroupBox *replaceModeGroupBox = new QGroupBox(tr("Replacement mode"));
-    QVBoxLayout *replaceModeGroupLayoutBox = new QVBoxLayout();
-
-    vboxLayout->addWidget(replaceModeGroupBox);
-    replaceModeGroupBox->setLayout(replaceModeGroupLayoutBox);
-
-    m_replaceOldEvents = new QRadioButton(tr("Replace old events"));
-    m_replaceOldEvents->setToolTip(tr("<qt>Erase existing pitchbends or controllers of this type in this range before adding new ones</qt>"));
-
-    m_addNewEvents = new QRadioButton(tr("Add new events to old ones"));
-    m_addNewEvents->setToolTip(tr("<qt>Add new pitchbends or controllers without affecting existing ones.</qt>"));
-
-    m_justErase = new QRadioButton(tr("Just erase old events"));
-    m_justErase->setToolTip(tr("<qt>Don't add any events, just erase existing pitchbends or controllers of this type in this range.</qt>"));
-
-
-    QHBoxLayout *replaceModeBox = new QHBoxLayout();
-    replaceModeGroupLayoutBox->addLayout(replaceModeBox);
-    replaceModeBox->addStretch(0);
-    replaceModeBox->addWidget(m_replaceOldEvents);
-    replaceModeBox->addWidget(m_addNewEvents);
-    replaceModeBox->addWidget(m_justErase);
-
-    vboxLayout->addSpacing(15);
 
     // Preset can change what's shown, which normally stretches
     // the layout and thus moves preset out from under the user's
@@ -153,7 +131,7 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(
     QGridLayout *presetGrid = new QGridLayout;
     presetBox->setLayout(presetGrid);
     presetGrid->setSpacing(5);
-    vboxLayout->addWidget(presetBox);
+    mainLayout->addWidget(presetBox);
     QLabel *presetLabel = new QLabel(tr("Preset:"));
     presetLabel->
         setToolTip(tr("<qt>Use this saved, user editable setting.</qt>"));
@@ -174,9 +152,31 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(
             int apparentIndex = i + 1 - startSavedSettings;
             m_preset->addItem(tr("Saved setting %1").arg(apparentIndex), i);
         }
-    m_preset->setCurrentIndex(settings.value("sequence_preset", int(startSavedSettings)).toInt());
 
-    vboxLayout->addStretch(15);
+    QSettings settings;
+    settings.beginGroup(PitchBendSequenceConfigGroup);
+    m_preset->setCurrentIndex(
+            settings.value("sequence_preset", startSavedSettings).toInt());
+
+    mainLayout->addStretch(15);
+
+    // Modulation parameter type.
+    enum WhatVaries {
+        Pitch,  // Bend/Vibrato
+        Volume,  // Ramp/Tremolo
+        Other  // Ramp/LFO
+    };
+    const WhatVaries whatVaries =
+        isPitchbend() ? Pitch :
+        // Volume
+        (m_controlParameter.getControllerValue() == 7) ? Volume :
+        // Expression
+        (m_controlParameter.getControllerValue() == 11) ? Volume :
+        Other;
+
+    const double minSpinboxValue = getMinSpinboxValue();
+    const double maxSpinboxValue = getMaxSpinboxValue();
+    const int valueSpinboxDecimals = useTrueValues() ? 0 : 2;
 
     QString prebendText =
         (whatVaries == Pitch) ?
@@ -186,7 +186,7 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(
     prebendBox->setContentsMargins(5, 5, 5, 5);
     QGridLayout *prebendGrid = new QGridLayout;
     prebendGrid->setSpacing(5);
-    vboxLayout->addWidget(prebendBox);
+    mainLayout->addWidget(prebendBox);
 
     QString prebendValueText =
         useTrueValues() ?
@@ -214,7 +214,7 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(
     m_wait->setSingleStep(5);
     prebendGrid->addWidget(m_wait, 1 , 1);
 
-    vboxLayout->addStretch(15);
+    mainLayout->addStretch(15);
 
     QString sequenceText =
         (whatVaries == Pitch) ?
@@ -224,7 +224,7 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(
     sequencebox->setContentsMargins(5, 5, 5, 5);
     QGridLayout *sequencegrid = new QGridLayout;
     sequencegrid->setSpacing(5);
-    vboxLayout->addWidget(sequencebox);
+    mainLayout->addWidget(sequencebox);
     sequencebox->setLayout(sequencegrid);
 
     QString sequenceDurationText =
@@ -256,7 +256,7 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(
     m_endValue->setSingleStep(5);
     sequencegrid->addWidget(m_endValue, 2, 1);
 
-    vboxLayout->addStretch(15);
+    mainLayout->addStretch(15);
 
     /*** Sub-group vibrato ****/
 
@@ -270,8 +270,11 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(
     m_vibrato->setContentsMargins(5, 5, 5, 5);
     QGridLayout *vibratoGrid = new QGridLayout;
     vibratoGrid->setSpacing(5);
-    vboxLayout->addWidget(m_vibrato);
+    mainLayout->addWidget(m_vibrato);
     m_vibrato->setLayout(vibratoGrid);
+
+    const double maxSpinboxAbsValue =
+        std::max (maxSpinboxValue, -minSpinboxValue);
 
     QString vibratoStartAmplitudeText =
         useTrueValues() ?
@@ -310,13 +313,13 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(
     m_hertz->setDecimals(2);
     vibratoGrid->addWidget(m_hertz, 5, 1);
 
-    vboxLayout->addStretch(15);
+    mainLayout->addStretch(15);
 
     /*** Sub-group the contour of the ramp ****/
 
     QGroupBox *rampModeGroupBox = new QGroupBox(tr("Ramp mode"));
     QHBoxLayout *rampModeGroupLayoutBox = new QHBoxLayout();
-    vboxLayout->addWidget(rampModeGroupBox);
+    mainLayout->addWidget(rampModeGroupBox);
     rampModeGroupBox->setLayout(rampModeGroupLayoutBox);
 
     m_linear = new QRadioButton(tr("Linear"));
@@ -337,7 +340,7 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(
     rampModeGroupLayoutBox->addWidget(m_quarterSine);
     rampModeGroupLayoutBox->addWidget(m_halfSine);
 
-    vboxLayout->addStretch(15);
+    mainLayout->addStretch(15);
 
     /*** Sub-group how we set step size or step count ****/
 
@@ -380,13 +383,13 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(
     stepSizeByCountHBox->addWidget(m_stepCount);
 
     /* Stepsize itself */
-    vboxLayout->addWidget(stepSizeStyleGroupBox);
+    mainLayout->addWidget(stepSizeStyleGroupBox);
     stepSizeStyleGroupBox->setLayout(stepSizeStyleGroupLayoutBox);
 
     stepSizeStyleGroupLayoutBox->addLayout(stepSizeManualHBox);
     stepSizeStyleGroupLayoutBox->addLayout(stepSizeByCountHBox);
 
-    vboxLayout->addStretch(15);
+    mainLayout->addStretch(15);
 
 
     slotPresetChanged(m_preset->currentIndex());
@@ -426,7 +429,7 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(
             QDialogButtonBox::Ok |
                 QDialogButtonBox::Cancel |
                 QDialogButtonBox::Help);
-    vboxLayout->addWidget(buttonBox, 1, nullptr);
+    mainLayout->addWidget(buttonBox, 1, nullptr);
 
     connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);

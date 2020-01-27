@@ -16,7 +16,10 @@
 */
 
 #include "QuarterSinePattern.h"
+
 #include "gui/dialogs/EventParameterDialog.h"
+#include "misc/Constants.h"
+
 #include <cmath>
 
 namespace Rosegarden
@@ -43,10 +46,8 @@ getValueDelta(double valueChange, double timeRatio) const
        For a quarter-sine, range is 0 to pi/2, giving 0 to 1
 
        value delta = sin(pi * ratio/2) * valueChange
-
-       Use acos(0.0) = pi/2
     **/
-    const double sinArg = acos(0.0) * timeRatio;
+    const double sinArg = pi/2 * timeRatio;
     return sin(sinArg) * valueChange;
 }
 
