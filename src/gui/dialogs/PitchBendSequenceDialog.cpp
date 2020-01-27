@@ -67,8 +67,7 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(
     m_segment(segment),
     m_controlParameter(control),
     m_startTime(startTime),
-    m_endTime(endTime),
-    m_numPresetStyles(isPitchbend() ? EndPresetStyles : 0)
+    m_endTime(endTime)
 {
     Q_ASSERT_X(m_startTime < m_endTime,
                "PitchBendSequenceDialog ctor",
@@ -89,6 +88,12 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(
     // "Just erase old events" disables the rest of the dialog.
 
     QGroupBox *replacementModeGroup = new QGroupBox(tr("Replacement mode"));
+    // ??? Why hbox?  This makes the dialog super-wide.  vbox might be better.
+    //     Problem with vbox is that the dialog ends up very tall.  Too tall
+    //     for 768 vertical displays.  We could combine Pre bend/ramp,
+    //     Bend/Ramp sequence, and Ramp mode into one Ramp/Bend group.
+    //     That would reduce the required vertical space.  We should probably
+    //     combine all those anyway.
     QHBoxLayout *replacementModeLayout = new QHBoxLayout();
 
     mainLayout->addWidget(replacementModeGroup);
@@ -96,19 +101,20 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(
 
     // Replace old events
     m_replaceOldEvents = new QRadioButton(tr("Replace old events"));
-    m_replaceOldEvents->setToolTip(tr("<qt>Erase existing pitchbends or controllers of this type in this range before adding new ones</qt>"));
+    m_replaceOldEvents->setToolTip(
+            tr("<qt>Erase existing pitchbends or controllers of this type in this range before adding new ones</qt>"));
 
     // Add new events to old ones
     m_addNewEvents = new QRadioButton(tr("Add new events to old ones"));
-    m_addNewEvents->setToolTip(tr("<qt>Add new pitchbends or controllers without affecting existing ones.</qt>"));
+    m_addNewEvents->setToolTip(
+            tr("<qt>Add new pitchbends or controllers without affecting existing ones.</qt>"));
 
     // Just erase old events
     m_justErase = new QRadioButton(tr("Just erase old events"));
-    m_justErase->setToolTip(tr("<qt>Don't add any events, just erase existing pitchbends or controllers of this type in this range.</qt>"));
+    m_justErase->setToolTip(
+            tr("<qt>Don't add any events, just erase existing pitchbends or controllers of this type in this range.</qt>"));
 
-    // ??? Why?
-    replacementModeLayout->addStretch(0);
-    // ??? Could use a little space between these.
+    replacementModeLayout->setSpacing(20);  // ok for hbox, not vbox
     replacementModeLayout->addWidget(m_replaceOldEvents);
     replacementModeLayout->addWidget(m_addNewEvents);
     replacementModeLayout->addWidget(m_justErase);
@@ -117,48 +123,47 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(
 
     // Preset
 
-    const int numSavedSettings = 10;
-    const int startSavedSettings = m_numPresetStyles;
-    const int endSavedSettings   = startSavedSettings + numSavedSettings;
-
-    // Preset can change what's shown, which normally stretches
-    // the layout and thus moves preset out from under the user's
-    // mouse.  To avoid this, we call `vboxLayout->addStretch'
-    // generously after this point in the layout and never call it
-    // before this point.
-
     QGroupBox *presetBox = new QGroupBox(tr("Preset"));
+    // ??? Grid?  Why not HBox?  There's only one row.
     QGridLayout *presetGrid = new QGridLayout;
     presetBox->setLayout(presetGrid);
     presetGrid->setSpacing(5);
     mainLayout->addWidget(presetBox);
+
+    // Preset:
     QLabel *presetLabel = new QLabel(tr("Preset:"));
-    presetLabel->
-        setToolTip(tr("<qt>Use this saved, user editable setting.</qt>"));
+    presetLabel->setToolTip(
+            tr("<qt>Use this saved, user editable setting.</qt>"));
     presetGrid->addWidget(presetLabel, 0, 0);
+
     m_preset = new QComboBox;
     presetGrid->addWidget(m_preset, 0, 1);
 
-    // Hack: We psychically know that this adds the right number
-    // of builtin presets in the right places.
-    if (m_numPresetStyles > 0) {
+    if (isPitchbend()) {
         m_preset->addItem(tr("Linear ramp"), LinearRamp);
         m_preset->addItem(tr("Fast vibrato arm release"), FastVibratoArmRelease);
         m_preset->addItem(tr("Vibrato"), Vibrato);
+        m_numPresetStyles = 3;
+    } else {
+        m_numPresetStyles = 0;
     }
 
-    for (int i = startSavedSettings; i <= endSavedSettings; ++i)
-        {
-            int apparentIndex = i + 1 - startSavedSettings;
-            m_preset->addItem(tr("Saved setting %1").arg(apparentIndex), i);
-        }
+    // Historically, a bug in the for-loop provided one extra setting.
+    // To avoid anyone losing that setting, the "11" is now a feature
+    // instead of a bug.
+    const int numSavedSettings = 11;
+    const int startSavedSettings = m_numPresetStyles;
+    const int endSavedSettings = startSavedSettings + numSavedSettings;
+
+    for (int i = startSavedSettings; i < endSavedSettings; ++i) {
+        int settingNumber = i + 1 - startSavedSettings;
+        m_preset->addItem(tr("Saved setting %1").arg(settingNumber), i);
+    }
 
     QSettings settings;
     settings.beginGroup(PitchBendSequenceConfigGroup);
     m_preset->setCurrentIndex(
             settings.value("sequence_preset", startSavedSettings).toInt());
-
-    mainLayout->addStretch(15);
 
     // Modulation parameter type.
     enum WhatVaries {
@@ -214,8 +219,6 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(
     m_wait->setSingleStep(5);
     prebendGrid->addWidget(m_wait, 1 , 1);
 
-    mainLayout->addStretch(15);
-
     QString sequenceText =
         (whatVaries == Pitch) ?
         tr("Bend Sequence") :
@@ -236,12 +239,12 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(
     sequenceDurationLabel->
         setToolTip(tr("<qt>How long the bend or ramp lasts, as a percentage of the remaining time</qt>"));
     sequencegrid->addWidget(sequenceDurationLabel, 1, 0);
-    m_bendDuration = new QDoubleSpinBox();
-    m_bendDuration->setAccelerated(true);
-    m_bendDuration->setMaximum(100);
-    m_bendDuration->setMinimum(0);
-    m_bendDuration->setSingleStep(5);
-    sequencegrid->addWidget(m_bendDuration, 1, 1);
+    m_rampDuration = new QDoubleSpinBox();
+    m_rampDuration->setAccelerated(true);
+    m_rampDuration->setMaximum(100);
+    m_rampDuration->setMinimum(0);
+    m_rampDuration->setSingleStep(5);
+    sequencegrid->addWidget(m_rampDuration, 1, 1);
 
     QString sequenceEndValueText =
         useTrueValues() ?
@@ -255,8 +258,6 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(
     m_endValue->setDecimals(valueSpinboxDecimals);
     m_endValue->setSingleStep(5);
     sequencegrid->addWidget(m_endValue, 2, 1);
-
-    mainLayout->addStretch(15);
 
     /*** Sub-group vibrato ****/
 
@@ -313,9 +314,7 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(
     m_hertz->setDecimals(2);
     vibratoGrid->addWidget(m_hertz, 5, 1);
 
-    mainLayout->addStretch(15);
-
-    /*** Sub-group the contour of the ramp ****/
+    // Ramp mode
 
     QGroupBox *rampModeGroupBox = new QGroupBox(tr("Ramp mode"));
     QHBoxLayout *rampModeGroupLayoutBox = new QHBoxLayout();
@@ -339,8 +338,6 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(
     rampModeGroupLayoutBox->addWidget(m_logarithmic);
     rampModeGroupLayoutBox->addWidget(m_quarterSine);
     rampModeGroupLayoutBox->addWidget(m_halfSine);
-
-    mainLayout->addStretch(15);
 
     /*** Sub-group how we set step size or step count ****/
 
@@ -388,8 +385,6 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(
 
     stepSizeStyleGroupLayoutBox->addLayout(stepSizeManualHBox);
     stepSizeStyleGroupLayoutBox->addLayout(stepSizeByCountHBox);
-
-    mainLayout->addStretch(15);
 
 
     slotPresetChanged(m_preset->currentIndex());
@@ -454,7 +449,7 @@ PitchBendSequenceDialog::updateWidgets()
         m_startAtValue->setEnabled(false);
         m_wait->setEnabled(false);
 
-        m_bendDuration->setEnabled(false);
+        m_rampDuration->setEnabled(false);
         m_endValue->setEnabled(false);
 
         //m_vibratoBox;
@@ -482,7 +477,7 @@ PitchBendSequenceDialog::updateWidgets()
     m_startAtValue->setEnabled(true);
     m_wait->setEnabled(true);
 
-    m_bendDuration->setEnabled(true);
+    m_rampDuration->setEnabled(true);
     m_endValue->setEnabled(true);
 
     bool enableVibrato =
@@ -537,10 +532,10 @@ PitchBendSequenceDialog::slotPresetChanged(int index) {
         // Pitchbend.  Handle the presets.
         switch (index) {
         case LinearRamp:
-            m_startAtValue->setValue(0);
+            m_startAtValue->setValue(-20);
             m_wait->setValue(0);
 
-            m_bendDuration->setValue(100);
+            m_rampDuration->setValue(100);
             m_endValue->setValue(0);
 
             m_startAmplitude->setValue(0);
@@ -557,7 +552,7 @@ PitchBendSequenceDialog::slotPresetChanged(int index) {
             m_startAtValue->setValue(-20);
             m_wait->setValue(5);
 
-            m_bendDuration->setValue(0);
+            m_rampDuration->setValue(0);
             m_endValue->setValue(0);
 
             m_startAmplitude->setValue(30);
@@ -574,9 +569,11 @@ PitchBendSequenceDialog::slotPresetChanged(int index) {
             m_startAtValue->setValue(0);
             m_wait->setValue(0);
 
-            m_bendDuration->setValue(0);
+            m_rampDuration->setValue(0);
             m_endValue->setValue(0);
 
+            // ??? There's no guarantee we will end up back at 0.
+            //     Probably need to make that part of the algorithm.
             m_startAmplitude->setValue(10);
             m_endAmplitude->setValue(10);
             m_hertz->setValue(6);
@@ -767,6 +764,9 @@ PitchBendSequenceDialog::saveSettings()
 
     {  // Put "settings" in its own scope to prevent accidental use
         // after endGroup.
+        // ??? What?  The scope is not necessary.  No one else is using
+        //     the settings object after this.  In fact, the endGroup() isn't
+        //     necessary either.
         QSettings settings;
         settings.beginGroup(PitchBendSequenceConfigGroup);
         settings.setValue("sequence_preset", preset);
@@ -788,7 +788,7 @@ PitchBendSequenceDialog::savePreset(int preset)
     settings.setArrayIndex(preset);
     settings.setValue("pre_bend_value", m_startAtValue->value());
     settings.setValue("pre_bend_duration_value", m_wait->value());
-    settings.setValue("sequence_ramp_duration", m_bendDuration->value());
+    settings.setValue("sequence_ramp_duration", m_rampDuration->value());
     settings.setValue("sequence_ramp_end_value", m_endValue->value());
     settings.setValue("vibrato_start_amplitude", m_startAmplitude->value());
     settings.setValue("vibrato_end_amplitude", m_endAmplitude->value());
@@ -812,7 +812,7 @@ PitchBendSequenceDialog::restorePreset(int preset)
     settings.setArrayIndex(preset);
     m_startAtValue->setValue(settings.value("pre_bend_value", 0).toFloat());
     m_wait->setValue(settings.value("pre_bend_duration_value", 0).toFloat());
-    m_bendDuration->setValue(settings.value("sequence_ramp_duration", 100).toFloat());
+    m_rampDuration->setValue(settings.value("sequence_ramp_duration", 100).toFloat());
     m_endValue->setValue(settings.value("sequence_ramp_end_value", 0).toFloat());
     m_startAmplitude->setValue(settings.value("vibrato_start_amplitude", 0).toFloat());
     m_endAmplitude->setValue(settings.value("vibrato_end_amplitude", 0).toFloat());
@@ -942,7 +942,7 @@ PitchBendSequenceDialog::addLinearCountedEvents(MacroCommand *macro)
     const timeT sequenceStartTime = m_startTime + prerampDuration;
     const timeT sequenceDuration = m_endTime - sequenceStartTime;
     const timeT rampDuration =
-        (m_bendDuration->value() * sequenceDuration)/100;
+        (m_rampDuration->value() * sequenceDuration)/100;
     const timeT rampEndTime = sequenceStartTime + rampDuration;
     
     const int totalCycles = numVibratoCycles();
@@ -1036,7 +1036,7 @@ PitchBendSequenceDialog::addStepwiseEvents(MacroCommand *macro)
     const timeT sequenceStartTime = m_startTime + prerampDuration;
     const timeT sequenceDuration = m_endTime - sequenceStartTime;
     const timeT rampDuration =
-        (m_bendDuration->value() * sequenceDuration)/100;
+        (m_rampDuration->value() * sequenceDuration)/100;
     const timeT rampEndTime = sequenceStartTime + rampDuration;
     const RampMode rampMode = getRampMode();
     

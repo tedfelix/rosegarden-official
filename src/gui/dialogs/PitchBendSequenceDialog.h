@@ -142,22 +142,22 @@ private:
     // Preset
 
     // How many of the PresetStyles we are accepting.  In
-    // practice, either 0 for non-pitchbend controllers or EndBuiltIns
+    // practice, either 0 for non-pitchbend controllers or EndPresetStyles
     // (all three) for the pitchbend controller.
-    const int m_numPresetStyles;
+    int m_numPresetStyles;
     QComboBox *m_preset;
     void saveSettings();
     void savePreset(int preset);
     void restorePreset(int preset);
 
-    // Pre Bend
+    // Pre Ramp/Bend
 
     QDoubleSpinBox *m_startAtValue;
     QDoubleSpinBox *m_wait;
 
-    // Bend Sequence
+    // Ramp/Bend Sequence
 
-    QDoubleSpinBox *m_bendDuration;
+    QDoubleSpinBox *m_rampDuration;
     QDoubleSpinBox *m_endValue;
 
     // Vibrato
