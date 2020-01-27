@@ -82,6 +82,7 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(
     QVBoxLayout *mainLayout = new QVBoxLayout;
     setLayout(mainLayout);
 
+    // --------------------------------------
     // Replacement mode
 
     // The replacement modes appear at the top of the dialog because
@@ -103,16 +104,22 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(
     m_replaceOldEvents = new QRadioButton(tr("Replace old events"));
     m_replaceOldEvents->setToolTip(
             tr("<qt>Erase existing pitchbends or controllers of this type in this range before adding new ones</qt>"));
+    connect(m_replaceOldEvents, &QAbstractButton::clicked,
+            this, &PitchBendSequenceDialog::slotReplacementModeChanged);
 
     // Add new events to old ones
     m_addNewEvents = new QRadioButton(tr("Add new events to old ones"));
     m_addNewEvents->setToolTip(
             tr("<qt>Add new pitchbends or controllers without affecting existing ones.</qt>"));
+    connect(m_addNewEvents, &QAbstractButton::clicked,
+            this, &PitchBendSequenceDialog::slotReplacementModeChanged);
 
     // Just erase old events
     m_justErase = new QRadioButton(tr("Just erase old events"));
     m_justErase->setToolTip(
             tr("<qt>Don't add any events, just erase existing pitchbends or controllers of this type in this range.</qt>"));
+    connect(m_justErase, &QAbstractButton::clicked,
+            this, &PitchBendSequenceDialog::slotReplacementModeChanged);
 
     replacementModeLayout->setSpacing(20);  // ok for hbox, not vbox
     replacementModeLayout->addWidget(m_replaceOldEvents);
@@ -121,6 +128,7 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(
 
     mainLayout->addSpacing(15);
 
+    // --------------------------------------
     // Preset
 
     QGroupBox *presetBox = new QGroupBox(tr("Preset"));
@@ -160,10 +168,18 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(
         m_preset->addItem(tr("Saved setting %1").arg(settingNumber), i);
     }
 
+    // Get the saved preset and select it.
     QSettings settings;
     settings.beginGroup(PitchBendSequenceConfigGroup);
     m_preset->setCurrentIndex(
             settings.value("sequence_preset", startSavedSettings).toInt());
+
+    connect(m_preset,
+                static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
+            this, &PitchBendSequenceDialog::slotPresetChanged);
+
+    // --------------------------------------
+    // Pre Ramp/Bend
 
     // Modulation parameter type.
     enum WhatVaries {
@@ -219,6 +235,9 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(
     m_wait->setSingleStep(5);
     prebendGrid->addWidget(m_wait, 1 , 1);
 
+    // --------------------------------------
+    // Ramp/Bend Sequence
+
     QString sequenceText =
         (whatVaries == Pitch) ?
         tr("Bend Sequence") :
@@ -259,7 +278,8 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(
     m_endValue->setSingleStep(5);
     sequencegrid->addWidget(m_endValue, 2, 1);
 
-    /*** Sub-group vibrato ****/
+    // --------------------------------------
+    // Vibrato/Tremolo/LFO
 
     QString vibratoBoxText =
         (whatVaries == Pitch)  ? tr("Vibrato") :
@@ -314,6 +334,7 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(
     m_hertz->setDecimals(2);
     vibratoGrid->addWidget(m_hertz, 5, 1);
 
+    // --------------------------------------
     // Ramp mode
 
     QGroupBox *rampModeGroupBox = new QGroupBox(tr("Ramp mode"));
@@ -339,7 +360,8 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(
     rampModeGroupLayoutBox->addWidget(m_quarterSine);
     rampModeGroupLayoutBox->addWidget(m_halfSine);
 
-    /*** Sub-group how we set step size or step count ****/
+    // --------------------------------------
+    // How many steps
 
     QGroupBox *stepSizeStyleGroupBox =
         new QGroupBox(tr("How many steps"));
@@ -386,18 +408,29 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(
     stepSizeStyleGroupLayoutBox->addLayout(stepSizeManualHBox);
     stepSizeStyleGroupLayoutBox->addLayout(stepSizeByCountHBox);
 
+    // --------------------------------------
+    // OK/Cancel/Help
 
-    slotPresetChanged(m_preset->currentIndex());
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(
+            QDialogButtonBox::Ok |
+                QDialogButtonBox::Cancel |
+                QDialogButtonBox::Help);
+    mainLayout->addWidget(buttonBox, 1, nullptr);
+
+    // ??? Use the static_cast<> trick here.  See QComboBox::activated above.
+    //     I'm assuming QDialogButtonBox::accepted() is overridden and we
+    //     want the one with 0 parameters.
+    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
+    connect(buttonBox, &QDialogButtonBox::helpRequested,
+            this, &PitchBendSequenceDialog::slotHelp);
+
+    // --------------------------------------
+
+    // Default to Replace old events and the last selected preset
     m_replaceOldEvents->setChecked(true);
+    slotPresetChanged(m_preset->currentIndex());
 
-    connect(m_preset, SIGNAL(activated(int)), this,
-            SLOT(slotPresetChanged(int)));
-    // ??? toggled() is rarely a good idea since it is also emitted when
-    //     setChecked() is called which then leads to the need to
-    //     block signals in certain situations.  Would clicked() be
-    //     a better signal to use here?
-    connect(m_justErase, &QAbstractButton::toggled,
-            this, &PitchBendSequenceDialog::slotJustEraseClicked);
     // ??? toggled() is rarely a good idea since it is also emitted when
     //     setChecked() is called which then leads to the need to
     //     block signals in certain situations.  Would clicked() be
@@ -420,16 +453,6 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(
     connect(m_useThisManySteps, &QAbstractButton::toggled,
             this, &PitchBendSequenceDialog::slotStepStyleChanged);
 
-    QDialogButtonBox *buttonBox = new QDialogButtonBox(
-            QDialogButtonBox::Ok |
-                QDialogButtonBox::Cancel |
-                QDialogButtonBox::Help);
-    mainLayout->addWidget(buttonBox, 1, nullptr);
-
-    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
-    connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
-    connect(buttonBox, &QDialogButtonBox::helpRequested,
-            this, &PitchBendSequenceDialog::slotHelp);
 }
 
 void
@@ -500,10 +523,8 @@ PitchBendSequenceDialog::updateWidgets()
 }
 
 void
-PitchBendSequenceDialog::slotJustEraseClicked(bool /*checked*/)
+PitchBendSequenceDialog::slotReplacementModeChanged(bool /*checked*/)
 {
-    // ??? Should we handle clicked() instead of toggled() for each radio
-    //     button and do this?  slotModeChanged() or something like that?
     updateWidgets();
 }
 
@@ -758,24 +779,15 @@ void
 PitchBendSequenceDialog::saveSettings()
 {
     const int preset = m_preset->currentIndex();
-    
-    /* Only one setting (sequence_preset) is global; the other
-       settings pertain to one specific preset. */
 
-    {  // Put "settings" in its own scope to prevent accidental use
-        // after endGroup.
-        // ??? What?  The scope is not necessary.  No one else is using
-        //     the settings object after this.  In fact, the endGroup() isn't
-        //     necessary either.
-        QSettings settings;
-        settings.beginGroup(PitchBendSequenceConfigGroup);
-        settings.setValue("sequence_preset", preset);
-        settings.endGroup();
-    }
+    // Save the current preset.
+    QSettings settings;
+    settings.beginGroup(PitchBendSequenceConfigGroup);
+    settings.setValue("sequence_preset", preset);
 
-    if (preset >= m_numPresetStyles) {
+    // If this is a "Saved setting", save it.
+    if (preset >= m_numPresetStyles)
         savePreset(preset);
-    }
 }
 void
 PitchBendSequenceDialog::savePreset(int preset)

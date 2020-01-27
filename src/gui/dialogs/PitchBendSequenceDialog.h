@@ -74,13 +74,8 @@ public slots:
     void accept() override;
 
 private slots:
-    /// Enable/disable widgets for JustErase mode.
-    /**
-     * Replacement mode > Just erase old events
-     *
-     * ??? This should all be handled in a single updateWidgets().
-     */
-    void slotJustEraseClicked(bool checked);
+    /// Update UI for a change in Replacement Mode
+    void slotReplacementModeChanged(bool checked);
 
     /// Fill in values when the preset is changed.
     void slotPresetChanged(int);
