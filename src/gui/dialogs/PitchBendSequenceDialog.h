@@ -83,14 +83,8 @@ private slots:
     /// Update UI for a change in ramp mode
     void slotRampModeChanged(bool checked);
 
-    /// Enable/disable widgets based on "How many steps" mode.
-    /**
-     * How many steps > Use step size (%)
-     * How many steps > Use this many steps
-     *
-     * ??? This should all be handled in a single updateWidgets().
-     */
-    void slotStepStyleChanged(bool checked);
+    /// Update UI for a change in "How many steps" mode.
+    void slotStepModeChanged(bool checked);
 
     void slotHelp();
 

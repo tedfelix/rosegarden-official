@@ -96,21 +96,21 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(
     m_replaceOldEvents = new QRadioButton(tr("Replace old events"));
     m_replaceOldEvents->setToolTip(
             tr("<qt>Erase existing pitchbends or controllers of this type in this range before adding new ones</qt>"));
-    connect(m_replaceOldEvents, &QAbstractButton::clicked,
+    connect(m_replaceOldEvents, &QRadioButton::clicked,
             this, &PitchBendSequenceDialog::slotReplacementModeChanged);
 
     // Add new events to old ones
     m_addNewEvents = new QRadioButton(tr("Add new events to old ones"));
     m_addNewEvents->setToolTip(
             tr("<qt>Add new pitchbends or controllers without affecting existing ones.</qt>"));
-    connect(m_addNewEvents, &QAbstractButton::clicked,
+    connect(m_addNewEvents, &QRadioButton::clicked,
             this, &PitchBendSequenceDialog::slotReplacementModeChanged);
 
     // Just erase old events
     m_justErase = new QRadioButton(tr("Just erase old events"));
     m_justErase->setToolTip(
             tr("<qt>Don't add any events, just erase existing pitchbends or controllers of this type in this range.</qt>"));
-    connect(m_justErase, &QAbstractButton::clicked,
+    connect(m_justErase, &QRadioButton::clicked,
             this, &PitchBendSequenceDialog::slotReplacementModeChanged);
 
     // ??? Why hbox?  This makes the dialog super-wide.  vbox might be better.
@@ -167,6 +167,9 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(
     }
 
     // Get the saved preset and select it.
+    // ??? This isn't correct.  We need to store two presets.  One for
+    //     pitchbend mode and one for controller mode.  Otherwise we
+    //     end up in the wrong preset when going between modes.
     QSettings settings;
     settings.beginGroup(PitchBendSequenceConfigGroup);
     m_preset->setCurrentIndex(
@@ -352,28 +355,28 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(
     m_linear = new QRadioButton(tr("Linear"));
     m_linear->
         setToolTip(tr("<qt>Ramp slopes linearly. Vibrato is possible if <i>Use this many steps</i> is set</qt>"));
-    connect(m_linear, &QAbstractButton::clicked,
+    connect(m_linear, &QRadioButton::clicked,
             this, &PitchBendSequenceDialog::slotRampModeChanged);
 
     // Logarithmic
     m_logarithmic = new QRadioButton(tr("Logarithmic"));
     m_logarithmic->
         setToolTip(tr("<qt>Ramp slopes logarithmically</qt>"));
-    connect(m_logarithmic, &QAbstractButton::clicked,
+    connect(m_logarithmic, &QRadioButton::clicked,
             this, &PitchBendSequenceDialog::slotRampModeChanged);
 
     // Half sine
     m_halfSine = new QRadioButton(tr("Half sine"));
     m_halfSine->
         setToolTip(tr("<qt>Ramp slopes like one half of a sine wave (trough to peak)</qt>"));
-    connect(m_halfSine, &QAbstractButton::clicked,
+    connect(m_halfSine, &QRadioButton::clicked,
             this, &PitchBendSequenceDialog::slotRampModeChanged);
 
     // Quarter sine
     m_quarterSine = new QRadioButton(tr("Quarter sine"));
     m_quarterSine->
         setToolTip(tr("<qt>Ramp slopes like one quarter of a sine wave (zero to peak)</qt>"));
-    connect(m_quarterSine, &QAbstractButton::clicked,
+    connect(m_quarterSine, &QRadioButton::clicked,
             this, &PitchBendSequenceDialog::slotRampModeChanged);
 
     QHBoxLayout *rampModeLayout = new QHBoxLayout(rampModeGroupBox);
@@ -395,6 +398,8 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(
     m_useStepSizePercent->
         setToolTip(tr("<qt>Each step in the ramp will be as close to this size as possible. Vibrato is not possible with this setting</qt>"));
     howManyStepsLayout->addWidget(m_useStepSizePercent, 0, 0);
+    connect(m_useStepSizePercent, &QRadioButton::clicked,
+            this, &PitchBendSequenceDialog::slotStepModeChanged);
 
     m_stepSize = new QDoubleSpinBox();
     m_stepSize->setAccelerated(true);
@@ -409,6 +414,8 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(
     m_useThisManySteps->
         setToolTip(tr("<qt>The sequence will have exactly this many steps.  Vibrato is possible if Ramp mode is linear</qt>"));
     howManyStepsLayout->addWidget(m_useThisManySteps, 1, 0);
+    connect(m_useThisManySteps, &QRadioButton::clicked,
+            this, &PitchBendSequenceDialog::slotStepModeChanged);
 
     m_stepCount = new QDoubleSpinBox();
     m_stepCount->setAccelerated(true);
@@ -439,31 +446,11 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(
     m_replaceOldEvents->setChecked(true);
     slotPresetChanged(m_preset->currentIndex());
 
-    // We connect all these buttons to slotStepStyleChanged,
-    // which will react only to the current selected one.
-    // ??? toggled() is rarely a good idea since it is also emitted when
-    //     setChecked() is called which then leads to the need to
-    //     block signals in certain situations.  Would clicked() be
-    //     a better signal to use here?
-    connect(m_useStepSizePercent, &QAbstractButton::toggled,
-            this, &PitchBendSequenceDialog::slotStepStyleChanged);
-    // ??? toggled() is rarely a good idea since it is also emitted when
-    //     setChecked() is called which then leads to the need to
-    //     block signals in certain situations.  Would clicked() be
-    //     a better signal to use here?
-    connect(m_useThisManySteps, &QAbstractButton::toggled,
-            this, &PitchBendSequenceDialog::slotStepStyleChanged);
-
 }
 
 void
 PitchBendSequenceDialog::updateWidgets()
 {
-    // Due to the use of toggled() we may end up in an endless loop here.
-    // This should help confirm that situation.  Remove when all toggled()
-    // have been changed to clicked().
-    RG_DEBUG << "updateWidgets()";
-
     // If we're in JustErase mode, disable everything since all we are doing
     // is deleting events.
     if (getReplaceMode() == JustErase) {
@@ -536,153 +523,159 @@ PitchBendSequenceDialog::slotRampModeChanged(bool /*checked*/)
 }
 
 void
-PitchBendSequenceDialog::slotStepStyleChanged(bool /*checked*/)
+PitchBendSequenceDialog::slotStepModeChanged(bool /*checked*/)
 {
-    // ??? Should we handle clicked() instead of toggled() for each radio
-    //     button?
     updateWidgets();
 }
 
 void
 PitchBendSequenceDialog::slotPresetChanged(int index) {
-    // Get built-in or saved settings for the new preset.
-    if (index >= m_numPresetStyles) {
+
+    if (isController()) {
         restorePreset(index);
-    } else {
-        // Pitchbend.  Handle the presets.
-        switch (index) {
-        case LinearRamp:
-            m_startAtValue->setValue(-20);
-            m_wait->setValue(0);
+        updateWidgets();
+        return;
+    }
 
-            m_rampDuration->setValue(100);
-            m_endValue->setValue(0);
+    // Pitchbend.  Handle the presets.
 
-            m_startAmplitude->setValue(0);
-            m_endAmplitude->setValue(0);
-            m_hertz->setValue(1);
+    // ??? Would it make any sense to move this into restorePreset()?
+    //     That would reduce this routine to the above.  That gets
+    //     rid of the "if" and the double calls to updateWidgets().
+    //     Then we could pull this out into a function that restorePreset()
+    //     can call.  restoreBuiltInPreset(index).  That might look a
+    //     little better.
 
-            m_linear->setChecked(true);
+    switch (index) {
+    case LinearRamp:
+        m_startAtValue->setValue(-20);
+        m_wait->setValue(0);
 
-            m_useThisManySteps->setChecked(true);
-            m_stepCount->setValue(getTimeSpan() * 20);
-            break;
+        m_rampDuration->setValue(100);
+        m_endValue->setValue(0);
 
-        case FastVibratoArmRelease:
-            m_startAtValue->setValue(-20);
-            m_wait->setValue(5);
+        m_startAmplitude->setValue(0);
+        m_endAmplitude->setValue(0);
+        m_hertz->setValue(1);
 
-            m_rampDuration->setValue(0);
-            m_endValue->setValue(0);
+        m_linear->setChecked(true);
 
-            m_startAmplitude->setValue(30);
-            m_endAmplitude->setValue(0);
-            m_hertz->setValue(14);
+        m_useThisManySteps->setChecked(true);
+        m_stepCount->setValue(getTimeSpan() * 20);
+        break;
 
-            m_linear->setChecked(true);
+    case FastVibratoArmRelease:
+        m_startAtValue->setValue(-20);
+        m_wait->setValue(5);
 
-            m_useThisManySteps->setChecked(true);
-            m_stepCount->setValue(getTimeSpan() * 20);
-            break;
+        m_rampDuration->setValue(0);
+        m_endValue->setValue(0);
 
-        case Vibrato:
-            m_startAtValue->setValue(0);
-            m_wait->setValue(0);
+        m_startAmplitude->setValue(30);
+        m_endAmplitude->setValue(0);
+        m_hertz->setValue(14);
 
-            m_rampDuration->setValue(0);
-            m_endValue->setValue(0);
+        m_linear->setChecked(true);
 
-            // ??? There's no guarantee we will end up back at 0.
-            //     Probably need to make that part of the algorithm.
-            m_startAmplitude->setValue(10);
-            m_endAmplitude->setValue(10);
-            m_hertz->setValue(6);
+        m_useThisManySteps->setChecked(true);
+        m_stepCount->setValue(getTimeSpan() * 20);
+        break;
 
-            m_linear->setChecked(true);
+    case Vibrato:
+        m_startAtValue->setValue(0);
+        m_wait->setValue(0);
 
-            m_useThisManySteps->setChecked(true);
-            m_stepCount->setValue(getTimeSpan() * 20);
-            break;
+        m_rampDuration->setValue(0);
+        m_endValue->setValue(0);
 
-        default:
-            /* This can't be reached, but just in case we're wrong, we
-               give it a way to make a valid preset. */
-            restorePreset(index);
-            break;
-        }
+        // ??? There's no guarantee we will end up back at 0.
+        //     Probably need to make that part of the algorithm.
+        m_startAmplitude->setValue(10);
+        m_endAmplitude->setValue(10);
+        m_hertz->setValue(6);
+
+        m_linear->setChecked(true);
+
+        m_useThisManySteps->setChecked(true);
+        m_stepCount->setValue(getTimeSpan() * 20);
+        break;
+
+    default:
+        restorePreset(index);
+        break;
     }
 
     updateWidgets();
 }
 
 bool
-PitchBendSequenceDialog::
-useValue() const
+PitchBendSequenceDialog::useValue() const
 {
     // As opposed to PitchBend::EventType.
     return m_controlParameter.getType() == Controller::EventType;
 }
 
-bool PitchBendSequenceDialog::isController() const
+bool
+PitchBendSequenceDialog::isController() const
 {
     return m_controlParameter.getType() == Controller::EventType;
 }
 
-bool PitchBendSequenceDialog::isPitchbend() const
+bool
+PitchBendSequenceDialog::isPitchbend() const
 {
     return m_controlParameter.getType() == PitchBend::EventType;
 }
 
 double
-PitchBendSequenceDialog::
-valueDeltaToPercent(int valueDelta) const
+PitchBendSequenceDialog::valueDeltaToPercent(int valueDelta) const
 {
-    const int range  = m_controlParameter.getMax() - m_controlParameter.getMin();
+    const int range = m_controlParameter.getMax() - m_controlParameter.getMin();
     return 100.0 * valueDelta / range;
 }
+
 int
-PitchBendSequenceDialog::
-percentToValueDelta(double percent) const
+PitchBendSequenceDialog::percentToValueDelta(double percent) const
 {
-    const int range  = m_controlParameter.getMax() - m_controlParameter.getMin();
-    return (percent/100.0) * range;
+    const int range = m_controlParameter.getMax() - m_controlParameter.getMin();
+    return percent / 100.0 * range;
 }
 
 double
-PitchBendSequenceDialog::
-getMaxSpinboxValue() const
+PitchBendSequenceDialog::getMaxSpinboxValue() const
 {
-    const int rangeAboveDefault = m_controlParameter.getMax() - m_controlParameter.getDefault();
-    if (useValue()) {
+    const int rangeAboveDefault =
+            m_controlParameter.getMax() - m_controlParameter.getDefault();
+
+    if (useValue())
         return rangeAboveDefault;
-    } else {
+    else
         return valueDeltaToPercent(rangeAboveDefault * 2);
-    }
 }
+
 double
-PitchBendSequenceDialog::
-getMinSpinboxValue() const
+PitchBendSequenceDialog::getMinSpinboxValue() const
 {
     /* rangeBelowDefault and return value will be negative or zero. */
-    const int rangeBelowDefault = m_controlParameter.getMin() - m_controlParameter.getDefault();
-    if (useValue()) {
+    const int rangeBelowDefault =
+            m_controlParameter.getMin() - m_controlParameter.getDefault();
+
+    if (useValue())
         return rangeBelowDefault;
-    } else {
+    else
         return valueDeltaToPercent(rangeBelowDefault * 2);
-    }
 }
 
 double
-PitchBendSequenceDialog::
-getSmallestSpinboxStep() const
+PitchBendSequenceDialog::getSmallestSpinboxStep() const
 {
-    if (useValue()) {
+    if (useValue())
         return 1;
-    } else {
-        const int fullRange = percentToValueDelta(200.0);
-        const double smallestStep = 1.000001 / fullRange;
-        return 100.0 * smallestStep;
-    }
+
+    const int fullRange = percentToValueDelta(200.0);
+    const double smallestStep = 1.000001 / fullRange;
+
+    return 100.0 * smallestStep;
 }
 
 
@@ -690,29 +683,28 @@ int
 PitchBendSequenceDialog::
 spinboxToControlDelta(const QDoubleSpinBox *spinbox) const
 {
-    if (useValue()) {
+    if (useValue())
         return spinbox->value();
-    } else {
+    else
         return percentToValueDelta(spinbox->value() / 2);
-    }        
 }
 
 int
 PitchBendSequenceDialog::
 spinboxToControl(const QDoubleSpinBox *spinbox) const
 {
-    int value = spinboxToControlDelta(spinbox) + m_controlParameter.getDefault();
+    int value =
+            spinboxToControlDelta(spinbox) + m_controlParameter.getDefault();
     return m_controlParameter.clamp(value);
 }
-
 
 PitchBendSequenceDialog::ReplaceMode
 PitchBendSequenceDialog::getReplaceMode()
 {
     return
-        m_justErase ->isChecked() ? JustErase :
-        m_replaceOldEvents   ->isChecked() ? ReplaceOldEvents   :
-        m_addNewEvents   ->isChecked() ? AddNewEvents   :
+        m_justErase->isChecked() ? JustErase :
+        m_replaceOldEvents->isChecked() ? ReplaceOldEvents :
+        m_addNewEvents->isChecked() ? AddNewEvents :
         ReplaceOldEvents;
 }
 
@@ -720,10 +712,10 @@ PitchBendSequenceDialog::RampMode
 PitchBendSequenceDialog::getRampMode()
 {
     return
-        m_linear      ->isChecked() ? Linear       :
-        m_logarithmic ->isChecked() ? Logarithmic  :
-        m_halfSine    ->isChecked() ? HalfSine     :
-        m_quarterSine ->isChecked() ? QuarterSine  :
+        m_linear->isChecked() ? Linear :
+        m_logarithmic->isChecked() ? Logarithmic :
+        m_halfSine->isChecked() ? HalfSine :
+        m_quarterSine->isChecked() ? QuarterSine :
         Logarithmic;
 }
 
@@ -732,16 +724,16 @@ PitchBendSequenceDialog::setRampMode(RampMode rampMode)
 {
     switch (rampMode) {
     case Linear:
-        m_linear      ->setChecked(true);
+        m_linear->setChecked(true);
         break;
     case Logarithmic:
-        m_logarithmic ->setChecked(true);
+        m_logarithmic->setChecked(true);
         break;
     case HalfSine:
-        m_halfSine    ->setChecked(true);
+        m_halfSine->setChecked(true);
         break;
     case QuarterSine:
-        m_quarterSine ->setChecked(true);
+        m_quarterSine->setChecked(true);
         break;
     default:
         break;
@@ -752,8 +744,8 @@ PitchBendSequenceDialog::StepSizeCalculation
 PitchBendSequenceDialog::getStepSizeCalculation()
 {
     return
-        m_useStepSizePercent  ->isChecked() ? StepSizePercent  :
-        m_useThisManySteps ->isChecked() ? StepCount :
+        m_useStepSizePercent->isChecked() ? StepSizePercent :
+        m_useThisManySteps->isChecked() ? StepCount :
         StepSizePercent;
 }
 
@@ -763,10 +755,10 @@ PitchBendSequenceDialog::setStepSizeCalculation
 {
     switch (stepSizeCalculation) {
     case StepSizePercent:
-        m_useStepSizePercent  ->setChecked(true);
-        break; 
+        m_useStepSizePercent->setChecked(true);
+        break;
     case StepCount:
-        m_useThisManySteps ->setChecked(true);
+        m_useThisManySteps->setChecked(true);
         break;
     default:
         break;
@@ -780,6 +772,9 @@ PitchBendSequenceDialog::saveSettings()
     const int preset = m_preset->currentIndex();
 
     // Save the current preset.
+    // ??? This isn't correct.  We need to store two presets.  One for
+    //     pitchbend mode and one for controller mode.  Otherwise we
+    //     end up in the wrong preset when going between modes.
     QSettings settings;
     settings.beginGroup(PitchBendSequenceConfigGroup);
     settings.setValue("sequence_preset", preset);
@@ -821,6 +816,7 @@ PitchBendSequenceDialog::restorePreset(int preset)
     settings.beginGroup(PitchBendSequenceConfigGroup);
     settings.beginReadArray(m_controlParameter.getName().data());
     settings.setArrayIndex(preset);
+
     m_startAtValue->setValue(settings.value("pre_bend_value", 0).toFloat());
     m_wait->setValue(settings.value("pre_bend_duration_value", 0).toFloat());
     m_rampDuration->setValue(settings.value("sequence_ramp_duration", 100).toFloat());
