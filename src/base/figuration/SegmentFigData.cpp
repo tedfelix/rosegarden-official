@@ -446,8 +446,14 @@ addTag(Segment* s, MacroCommand* command, std::string type, int id)
 {
   timeT t = s->getStartTime();
   SegmentID segmentID(type, id);
-  Event * e = segmentID.getAsEvent(t);
+  Event *e = segmentID.getAsEvent(t);
+
+  // EventInsertionCommand does not take ownership of the event.
+  // It makes a copy.
   command->addCommand(new EventInsertionCommand(*s, e));
+
+  delete e;
+  e = nullptr;
 }
 
 void
