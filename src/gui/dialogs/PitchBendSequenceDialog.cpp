@@ -150,14 +150,12 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(
         m_preset->addItem(tr("Fast vibrato arm release"), FastVibratoArmRelease);
         m_preset->addItem(tr("Vibrato"), Vibrato);
         m_numPresetStyles = 3;
-        m_presetKey = "sequence_preset_pb";
     } else {
         m_numPresetStyles = 0;
-        // ??? As a further refinement, we could also use the CC number
-        //     so that different presets might be used for different CCs.
-        //     E.g. sequence_preset_7 for volume.
-        m_presetKey = "sequence_preset";
     }
+
+    // Save a separate preset for each kind of controller.
+    m_presetKey = QString(m_controlParameter.getName().data()) + "_preset";
 
     // Historically, a bug in the for-loop provided one extra setting.
     // To avoid anyone losing that setting, the "11" is now a feature
@@ -802,10 +800,18 @@ PitchBendSequenceDialog::saveSettings()
 void
 PitchBendSequenceDialog::savePreset(int preset)
 {
-    /* A preset is stored in one element in an array.  There is a
-       different array for each controller or pitchbend.  */
     QSettings settings;
     settings.beginGroup(PitchBendSequenceConfigGroup);
+
+    // A preset is stored in one element in an array.  There is a
+    // different array for each controller or pitchbend.  E.g. for
+    // the first preset for the Volume CC, we would have entries
+    // like this:
+    //
+    //     Volume\1\pre_bend_value
+    //     Volume\1\pre_bend_duration_value
+    //     ...
+
     settings.beginWriteArray(m_controlParameter.getName().data());
     settings.setArrayIndex(preset);
     settings.setValue("pre_bend_value", m_startAtValue->value());
