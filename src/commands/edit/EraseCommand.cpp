@@ -25,11 +25,13 @@
 #include "base/BaseProperties.h"
 #include "document/BasicSelectionCommand.h"
 #include "gui/editors/notation/NotationProperties.h"
+
 #include <QString>
 
 
 namespace Rosegarden
 {
+
 
 EraseCommand::EraseCommand(EventSelection &selection) :
         BasicSelectionCommand(getGlobalName(), selection, true),
@@ -37,6 +39,12 @@ EraseCommand::EraseCommand(EventSelection &selection) :
         m_relayoutEndTime(getEndTime())
 {
     // nothing else
+}
+
+EraseCommand::~EraseCommand()
+{
+    // QSharedPointer would be nice.
+    delete m_selection;
 }
 
 void

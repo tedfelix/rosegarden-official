@@ -814,64 +814,57 @@ PitchBendSequenceDialog::savePreset(int preset)
 
     settings.beginWriteArray(m_controlParameter.getName().data());
     settings.setArrayIndex(preset);
+
     settings.setValue("pre_bend_value", m_startAtValue->value());
     settings.setValue("pre_bend_duration_value", m_wait->value());
     settings.setValue("sequence_ramp_duration", m_rampDuration->value());
     settings.setValue("sequence_ramp_end_value", m_endValue->value());
+
     settings.setValue("vibrato_start_amplitude", m_startAmplitude->value());
     settings.setValue("vibrato_end_amplitude", m_endAmplitude->value());
     settings.setValue("vibrato_frequency", m_hertz->value());
-    settings.setValue("step_count", m_stepCount->value());
-    settings.setValue("step_size", m_stepSize->value());
+
     settings.setValue("ramp_mode", getRampMode());
+
     settings.setValue("step_size_calculation", getStepMode());
-    settings.endArray();
-    settings.endGroup();
+    settings.setValue("step_size", m_stepSize->value());
+    settings.setValue("step_count", m_stepCount->value());
 }
 
 void
 PitchBendSequenceDialog::restorePreset(int preset)
 {
-    /* A preset is stored in one element in an array.  There is a
-       different array for each controller or pitchbend.  */
     QSettings settings;
     settings.beginGroup(PitchBendSequenceConfigGroup);
+
     settings.beginReadArray(m_controlParameter.getName().data());
     settings.setArrayIndex(preset);
 
-    m_startAtValue->setValue(settings.value("pre_bend_value", 0).toFloat());
-    m_wait->setValue(settings.value("pre_bend_duration_value", 0).toFloat());
-    m_rampDuration->setValue(settings.value("sequence_ramp_duration", 100).toFloat());
-    m_endValue->setValue(settings.value("sequence_ramp_end_value", 0).toFloat());
-    m_startAmplitude->setValue(settings.value("vibrato_start_amplitude", 0).toFloat());
-    m_endAmplitude->setValue(settings.value("vibrato_end_amplitude", 0).toFloat());
-    m_hertz->setValue(settings.value("vibrato_frequency", 10).toFloat());
+    m_startAtValue->setValue(settings.value("pre_bend_value", 0).toDouble());
+    m_wait->setValue(settings.value("pre_bend_duration_value", 0).toDouble());
+    m_rampDuration->setValue(
+            settings.value("sequence_ramp_duration", 100).toDouble());
+    m_endValue->setValue(
+            settings.value("sequence_ramp_end_value", 0).toDouble());
+
+    m_startAmplitude->setValue(
+            settings.value("vibrato_start_amplitude", 0).toDouble());
+    m_endAmplitude->setValue(
+            settings.value("vibrato_end_amplitude", 0).toDouble());
+    m_hertz->setValue(settings.value("vibrato_frequency", 10).toDouble());
+
+    setRampMode(RampMode(settings.value("ramp_mode", Logarithmic).toInt()));
+
+    setStepMode(StepMode(
+            settings.value("step_size_calculation", StepSizePercent).toInt()));
     m_stepCount->setValue(settings.value("step_count", 40).toInt());
-    m_stepSize->setValue(settings.value("step_size", 2.0).toFloat());
-
-    setRampMode
-        (RampMode
-         (settings.value("ramp_mode", Logarithmic).toInt()));
-    setStepMode
-        (StepMode
-         (settings.value("step_size_calculation", StepSizePercent).toInt()));
-
-    settings.endArray();
-    settings.endGroup();
+    m_stepSize->setValue(settings.value("step_size", 2.0).toDouble());
 }
 
-    
 void
 PitchBendSequenceDialog::accept()
 {
-    /* The user has finished the dialog, other than aborting. */
-
-    // We don't enable "OK" if the interval isn't sensible, so
-    // something's badly wrong if this test fails.
-    Q_ASSERT_X(m_startTime < m_endTime, "accept",
-             "got a zero or negative time interval");
-
-    /* Save current settings.  They'll be the defaults next time. */
+    // Save current settings.  They'll be the defaults next time.
     saveSettings();
 
     // TRANSLATORS: The arg value will be either a controller name or
@@ -883,28 +876,30 @@ PitchBendSequenceDialog::accept()
 
     // In Replace and JustErase modes, erase the events in the time range.
     if (getReplaceMode() != AddNewEvents) {
+
         EventSelection *selection = new EventSelection(*m_segment);
+
         // For each event in the time range
         for (Segment::const_iterator i = m_segment->findTime(m_startTime);
              i != m_segment->findTime(m_endTime);
              ++i) {
             Event *e = *i;
+
             // If this is a relevant event, add it to the selection.
-            if (m_controlParameter.matches(e)) {
+            if (m_controlParameter.matches(e))
                 selection->addEvent(e, false);
-            }
         }
 
-        // Only perform the erase if there is something in the selection.
+        // If there is something in the selection, add the EraseCommand.
+        // EraseCommand takes ownership of selection, so there is no need
+        // to delete.
         // For some reason, if we perform the erase with an empty selection,
         // we end up with the segment expanded to the beginning of the
         // composition.
         if (selection->getAddedEvents() != 0)
-        {
-            // Erase the events.
-            // (EraseCommand takes ownership of "selection".)
             macro->addCommand(new EraseCommand(*selection));
-        }
+        else
+            delete selection;
     }
 
     // In Replace and OnlyAdd modes, add the requested controller events.
@@ -981,6 +976,7 @@ PitchBendSequenceDialog::addLinearCountedEvents(MacroCommand *macro)
 
 
     /* Always put an event at the start of the sequence.  */
+    // ??? MEMORY LEAK.  CONFIRMED.
     Event *event = m_controlParameter.newEvent(m_startTime, startValue);
     
     macro->addCommand(new EventInsertionCommand (*m_segment, event));
@@ -1006,6 +1002,7 @@ PitchBendSequenceDialog::addLinearCountedEvents(MacroCommand *macro)
 
         value = value + int(amplitudeRatio * amplitude);
         value = m_controlParameter.clamp(value);
+        // ??? MEMORY LEAK.  CONFIRMED.
         Event *event = m_controlParameter.newEvent(eventTime, value);
         macro->addCommand(new EventInsertionCommand (*m_segment, event));
 
@@ -1070,6 +1067,7 @@ PitchBendSequenceDialog::addStepwiseEvents(MacroCommand *macro)
     const RampMode rampMode = getRampMode();
     
     /* Always put an event at the start of the sequence.  */
+    // ??? MEMORY LEAK?
     Event *event = m_controlParameter.newEvent(m_startTime, startValue);
     
     macro->addCommand(new EventInsertionCommand (*m_segment, event));
@@ -1167,6 +1165,7 @@ PitchBendSequenceDialog::addStepwiseEvents(MacroCommand *macro)
             }
             const timeT eventTime = sequenceStartTime + (timeRatio * rampDuration);
 
+            // ??? MEMORY LEAK?
             Event *event = m_controlParameter.newEvent(eventTime, value);
 
             macro->addCommand(new EventInsertionCommand (*m_segment, event));
@@ -1177,6 +1176,7 @@ PitchBendSequenceDialog::addStepwiseEvents(MacroCommand *macro)
         /* If we have changed value at all, place an event for the
            final value.  Its time is one less than end-time so that we
            are only writing into the time interval we were given.  */
+        // ??? MEMORY LEAK?
         Event *finalEvent =
             m_controlParameter.newEvent(m_endTime - 1, endValue);
         macro->addCommand(new EventInsertionCommand (*m_segment,
