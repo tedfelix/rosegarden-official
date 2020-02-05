@@ -89,16 +89,8 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(
     // "Just erase old events" disables the rest of the dialog.
 
     QGroupBox *replacementModeGroup = new QGroupBox(tr("Replacement mode"));
-    // ??? Why hbox?  This makes the dialog super-wide.  vbox might be better.
-    //     Problem with vbox is that the dialog ends up very tall.  Too tall
-    //     for 768 vertical displays.  We could combine Pre bend/ramp,
-    //     Bend/Ramp sequence, and Ramp mode into one Ramp/Bend group.
-    //     That would reduce the required vertical space.  We should probably
-    //     combine all those anyway.
-    QHBoxLayout *replacementModeLayout = new QHBoxLayout();
 
     mainLayout->addWidget(replacementModeGroup);
-    replacementModeGroup->setLayout(replacementModeLayout);
 
     // Replace old events
     m_replaceOldEvents = new QRadioButton(tr("Replace old events"));
@@ -121,6 +113,13 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(
     connect(m_justErase, &QAbstractButton::clicked,
             this, &PitchBendSequenceDialog::slotReplacementModeChanged);
 
+    // ??? Why hbox?  This makes the dialog super-wide.  vbox might be better.
+    //     Problem with vbox is that the dialog ends up very tall.  Too tall
+    //     for 768 vertical displays.  We could combine Pre bend/ramp,
+    //     Bend/Ramp sequence, and Ramp mode into one Ramp/Bend group.
+    //     That would reduce the required vertical space.  We should probably
+    //     combine all those anyway.
+    QHBoxLayout *replacementModeLayout = new QHBoxLayout(replacementModeGroup);
     replacementModeLayout->setSpacing(20);  // ok for hbox, not vbox
     replacementModeLayout->addWidget(m_replaceOldEvents);
     replacementModeLayout->addWidget(m_addNewEvents);
@@ -133,19 +132,18 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(
 
     QGroupBox *presetBox = new QGroupBox(tr("Preset"));
     // ??? Grid?  Why not HBox?  There's only one row.
-    QGridLayout *presetGrid = new QGridLayout;
-    presetBox->setLayout(presetGrid);
-    presetGrid->setSpacing(5);
+    QGridLayout *presetLayout = new QGridLayout(presetBox);
+    presetLayout->setSpacing(5);
     mainLayout->addWidget(presetBox);
 
     // Preset:
     QLabel *presetLabel = new QLabel(tr("Preset:"));
     presetLabel->setToolTip(
             tr("<qt>Use this saved, user editable setting.</qt>"));
-    presetGrid->addWidget(presetLabel, 0, 0);
+    presetLayout->addWidget(presetLabel, 0, 0);
 
     m_preset = new QComboBox;
-    presetGrid->addWidget(m_preset, 0, 1);
+    presetLayout->addWidget(m_preset, 0, 1);
 
     if (isPitchbend()) {
         m_preset->addItem(tr("Linear ramp"), LinearRamp);
@@ -197,7 +195,8 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(
 
     const double minSpinboxValue = getMinSpinboxValue();
     const double maxSpinboxValue = getMaxSpinboxValue();
-    const int valueSpinboxDecimals = useTrueValues() ? 0 : 2;
+    // Whole numbers for controllers, two decimals for pitchbend percent.
+    const int valueSpinboxDecimals = useValue() ? 0 : 2;
 
     QString prebendText =
         (whatVaries == Pitch) ?
@@ -205,35 +204,38 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(
         tr("Pre Ramp");
     QGroupBox *prebendBox = new QGroupBox(prebendText);
     prebendBox->setContentsMargins(5, 5, 5, 5);
-    QGridLayout *prebendGrid = new QGridLayout;
-    prebendGrid->setSpacing(5);
+    QGridLayout *prebendLayout = new QGridLayout(prebendBox);
+    prebendLayout->setSpacing(5);
     mainLayout->addWidget(prebendBox);
 
+    // Start at value
     QString prebendValueText =
-        useTrueValues() ?
+        useValue() ?
         tr("Start at value:") :
         tr("Start at value (%):");
-    prebendGrid->addWidget(new QLabel(prebendValueText), 0, 0);
+    prebendLayout->addWidget(new QLabel(prebendValueText), 0, 0);
+
     m_startAtValue = new QDoubleSpinBox();
+    // Allow up/down arrow keys.
     m_startAtValue->setAccelerated(true);
-    m_startAtValue->setMaximum(maxSpinboxValue);
-    m_startAtValue->setMinimum(minSpinboxValue);
     m_startAtValue->setDecimals(valueSpinboxDecimals);
+    m_startAtValue->setMinimum(minSpinboxValue);
+    m_startAtValue->setMaximum(maxSpinboxValue);
     m_startAtValue->setSingleStep(5);
-    prebendGrid->addWidget(m_startAtValue, 0 , 1);
+    prebendLayout->addWidget(m_startAtValue, 0 , 1);
 
-    prebendBox->setLayout(prebendGrid);
-
+    // Wait
     QLabel *durationLabel = new QLabel(tr("Wait (%):"));
     durationLabel->
         setToolTip(tr("<qt>How long to wait before starting the bend or ramp, as a percentage of the total time</qt>"));
-    prebendGrid->addWidget(durationLabel, 1, 0);
+    prebendLayout->addWidget(durationLabel, 1, 0);
+
     m_wait = new QDoubleSpinBox();
     m_wait->setAccelerated(true);
-    m_wait->setMaximum(100);
     m_wait->setMinimum(0);
+    m_wait->setMaximum(100);
     m_wait->setSingleStep(5);
-    prebendGrid->addWidget(m_wait, 1 , 1);
+    prebendLayout->addWidget(m_wait, 1 , 1);
 
     // --------------------------------------
     // Ramp/Bend Sequence
@@ -242,97 +244,103 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(
         (whatVaries == Pitch) ?
         tr("Bend Sequence") :
         tr("Ramp Sequence");
-    QGroupBox *sequencebox = new QGroupBox(sequenceText);
-    sequencebox->setContentsMargins(5, 5, 5, 5);
-    QGridLayout *sequencegrid = new QGridLayout;
-    sequencegrid->setSpacing(5);
-    mainLayout->addWidget(sequencebox);
-    sequencebox->setLayout(sequencegrid);
+    QGroupBox *sequenceBox = new QGroupBox(sequenceText);
+    sequenceBox->setContentsMargins(5, 5, 5, 5);
+    QGridLayout *sequenceLayout = new QGridLayout(sequenceBox);
+    sequenceLayout->setSpacing(5);
+    mainLayout->addWidget(sequenceBox);
 
-    QString sequenceDurationText =
+    // Ramp duration
+    QString rampDurationText =
         (whatVaries == Pitch) ?
         tr("Bend duration (%):") :
         tr("Ramp duration (%):");
-    QLabel *sequenceDurationLabel =
-        new QLabel(sequenceDurationText);
-    sequenceDurationLabel->
+    QLabel *rampDurationLabel = new QLabel(rampDurationText);
+    rampDurationLabel->
         setToolTip(tr("<qt>How long the bend or ramp lasts, as a percentage of the remaining time</qt>"));
-    sequencegrid->addWidget(sequenceDurationLabel, 1, 0);
+    sequenceLayout->addWidget(rampDurationLabel, 1, 0);
+
     m_rampDuration = new QDoubleSpinBox();
     m_rampDuration->setAccelerated(true);
-    m_rampDuration->setMaximum(100);
     m_rampDuration->setMinimum(0);
+    m_rampDuration->setMaximum(100);
     m_rampDuration->setSingleStep(5);
-    sequencegrid->addWidget(m_rampDuration, 1, 1);
+    sequenceLayout->addWidget(m_rampDuration, 1, 1);
 
-    QString sequenceEndValueText =
-        useTrueValues() ?
+    // End value
+    QString endValueText =
+        useValue() ?
         tr("End value:") :
         tr("End value (%):");
-    sequencegrid->addWidget(new QLabel(sequenceEndValueText), 2, 0);
+    sequenceLayout->addWidget(new QLabel(endValueText), 2, 0);
+
     m_endValue = new QDoubleSpinBox();
     m_endValue->setAccelerated(true);
-    m_endValue->setMaximum(maxSpinboxValue);
-    m_endValue->setMinimum(minSpinboxValue);
     m_endValue->setDecimals(valueSpinboxDecimals);
+    m_endValue->setMinimum(minSpinboxValue);
+    m_endValue->setMaximum(maxSpinboxValue);
     m_endValue->setSingleStep(5);
-    sequencegrid->addWidget(m_endValue, 2, 1);
+    sequenceLayout->addWidget(m_endValue, 2, 1);
 
     // --------------------------------------
     // Vibrato/Tremolo/LFO
 
-    QString vibratoBoxText =
+    QString vibratoText =
         (whatVaries == Pitch)  ? tr("Vibrato") :
         (whatVaries == Volume) ? tr("Tremolo") :
         tr("LFO");
-    m_vibrato = new QGroupBox(vibratoBoxText);
+    m_vibrato = new QGroupBox(vibratoText);
     m_vibrato->
         setToolTip(tr("<qt>Low-frequency oscillation for this controller. This is only possible when Ramp mode is linear and <i>Use this many steps</i> is set.</qt>"));
     m_vibrato->setContentsMargins(5, 5, 5, 5);
-    QGridLayout *vibratoGrid = new QGridLayout;
-    vibratoGrid->setSpacing(5);
+    QGridLayout *vibratoLayout = new QGridLayout(m_vibrato);
+    vibratoLayout->setSpacing(5);
     mainLayout->addWidget(m_vibrato);
-    m_vibrato->setLayout(vibratoGrid);
 
     const double maxSpinboxAbsValue =
-        std::max (maxSpinboxValue, -minSpinboxValue);
+        std::max(maxSpinboxValue, -minSpinboxValue);
 
-    QString vibratoStartAmplitudeText =
-        useTrueValues() ?
+    // Start amplitude
+    QString startAmplitudeText =
+        useValue() ?
         tr("Start amplitude:") :
         tr("Start amplitude (%):");
-    vibratoGrid->addWidget(new QLabel(vibratoStartAmplitudeText), 3, 0);
+    vibratoLayout->addWidget(new QLabel(startAmplitudeText), 3, 0);
+
     m_startAmplitude = new QDoubleSpinBox();
     m_startAmplitude->setAccelerated(true);
     m_startAmplitude->setMaximum(maxSpinboxAbsValue);
     m_startAmplitude->setMinimum(0);
     m_startAmplitude->setSingleStep(10);
-    vibratoGrid->addWidget(m_startAmplitude, 3, 1);
+    vibratoLayout->addWidget(m_startAmplitude, 3, 1);
 
-    QString vibratoEndAmplitudeText =
-        useTrueValues() ?
+    // End amplitude
+    QString endAmplitudeText =
+        useValue() ?
         tr("End amplitude:") :
         tr("End amplitude (%):");
-    vibratoGrid->addWidget(new QLabel(vibratoEndAmplitudeText), 4, 0);
+    vibratoLayout->addWidget(new QLabel(endAmplitudeText), 4, 0);
+
     m_endAmplitude = new QDoubleSpinBox();
     m_endAmplitude->setAccelerated(true);
-    m_endAmplitude->setMaximum(maxSpinboxAbsValue);
     m_endAmplitude->setMinimum(0);
+    m_endAmplitude->setMaximum(maxSpinboxAbsValue);
     m_endAmplitude->setSingleStep(10);
-    vibratoGrid->addWidget(m_endAmplitude, 4, 1);
+    vibratoLayout->addWidget(m_endAmplitude, 4, 1);
 
-    QLabel * vibratoFrequencyLabel =
-        new QLabel(tr("Hertz (Hz):"));
-    vibratoFrequencyLabel->
+    // Hertz
+    QLabel *hertzLabel = new QLabel(tr("Hertz (Hz):"));
+    hertzLabel->
         setToolTip(tr("<qt>Frequency in hertz (cycles per second)</qt>"));
-    vibratoGrid->addWidget(vibratoFrequencyLabel, 5, 0);
+    vibratoLayout->addWidget(hertzLabel, 5, 0);
+
     m_hertz = new QDoubleSpinBox();
     m_hertz->setAccelerated(true);
-    m_hertz->setMaximum(200);
-    m_hertz->setMinimum(0.1);
-    m_hertz->setSingleStep(1.0);
     m_hertz->setDecimals(2);
-    vibratoGrid->addWidget(m_hertz, 5, 1);
+    m_hertz->setMinimum(0.1);
+    m_hertz->setMaximum(200);
+    m_hertz->setSingleStep(1.0);
+    vibratoLayout->addWidget(m_hertz, 5, 1);
 
     // --------------------------------------
     // Ramp mode
@@ -618,7 +626,7 @@ PitchBendSequenceDialog::slotPresetChanged(int index) {
 
 bool
 PitchBendSequenceDialog::
-useTrueValues() const
+useValue() const
 {
     // As opposed to PitchBend::EventType.
     return m_controlParameter.getType() == Controller::EventType;
@@ -654,7 +662,7 @@ PitchBendSequenceDialog::
 getMaxSpinboxValue() const
 {
     const int rangeAboveDefault = m_controlParameter.getMax() - m_controlParameter.getDefault();
-    if (useTrueValues()) {
+    if (useValue()) {
         return rangeAboveDefault;
     } else {
         return valueDeltaToPercent(rangeAboveDefault * 2);
@@ -666,7 +674,7 @@ getMinSpinboxValue() const
 {
     /* rangeBelowDefault and return value will be negative or zero. */
     const int rangeBelowDefault = m_controlParameter.getMin() - m_controlParameter.getDefault();
-    if (useTrueValues()) {
+    if (useValue()) {
         return rangeBelowDefault;
     } else {
         return valueDeltaToPercent(rangeBelowDefault * 2);
@@ -677,7 +685,7 @@ double
 PitchBendSequenceDialog::
 getSmallestSpinboxStep() const
 {
-    if (useTrueValues()) {
+    if (useValue()) {
         return 1;
     } else {
         const int fullRange = percentToValueDelta(200.0);
@@ -691,7 +699,7 @@ int
 PitchBendSequenceDialog::
 spinboxToControlDelta(const QDoubleSpinBox *spinbox) const
 {
-    if (useTrueValues()) {
+    if (useValue()) {
         return spinbox->value();
     } else {
         return percentToValueDelta(spinbox->value() / 2);

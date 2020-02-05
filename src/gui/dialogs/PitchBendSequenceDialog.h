@@ -103,7 +103,7 @@ private:
     Segment *m_segment;
 
     const ControlParameter &m_controlParameter;
-    /// Use value or percent.
+    /// Use value instead of percent.
     /**
      * true: We're working with a controller like volume and we need to
      *       display control change values, not percents.
@@ -111,10 +111,11 @@ private:
      *
      * ??? Confusing.  Maybe deprecate this and use isController() and
      *     isPitchbend() instead?
-     * ??? rename: useValue()?
      */
-    bool useTrueValues() const;  // Same as isController()
+    bool useValue() const;  // Same as isController()
+    // ??? Promote to ControlParameter.
     bool isController() const;
+    // ??? Promote to ControlParameter.
     bool isPitchbend() const;
 
     const timeT m_startTime;
@@ -222,8 +223,16 @@ private:
     double valueDeltaToPercent(int valueDelta) const;
 
     /// Min limit for start/end values.
+    /**
+     * Use by m_startAtValue, m_endValue, m_startAmplitude, m_endAmplitude,
+     * and m_stepSize.
+     */
     double getMinSpinboxValue() const;
     /// Max limit for start/end values.
+    /**
+     * Use by m_startAtValue, m_endValue, m_startAmplitude, m_endAmplitude,
+     * and m_stepSize.
+     */
     double getMaxSpinboxValue() const;
 
 
