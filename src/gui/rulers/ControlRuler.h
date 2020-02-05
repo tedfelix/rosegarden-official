@@ -218,6 +218,9 @@ protected:
     NotationStaff *m_notationStaff;
     Segment *m_segment;
 
+    // ??? MEMORY LEAK.
+    //     This map stores pointers and never deletes them.
+    //     Recommend switching to QSharedPointer.
     ControlItemMap m_controlItemMap;
     
     // Iterators to the first visible and the last visible item

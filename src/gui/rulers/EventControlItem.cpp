@@ -37,6 +37,8 @@ EventControlItem::EventControlItem(ControlRuler *controlRuler,
 
 EventControlItem::~EventControlItem()
 {
+    delete m_eventAdapter;
+    m_eventAdapter = nullptr;
 }
 
 void EventControlItem::update()

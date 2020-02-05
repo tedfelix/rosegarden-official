@@ -92,6 +92,8 @@ ControlRuler::ControlRuler(ViewSegment * /*viewsegment*/,
 
 ControlRuler::~ControlRuler()
 {
+    delete m_eventSelection;
+    m_eventSelection = nullptr;
 }
 
 void ControlRuler::setSegment(Segment *segment)

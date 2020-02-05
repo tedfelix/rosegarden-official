@@ -162,10 +162,15 @@ void PropertyControlRuler::addControlItem2(ViewElement *el)
 //    size_t s = sizeof(MatrixElement);
 //    RG_DEBUG << "addControlItem2(): sizeof(MatrixElement): " << s;
 
-    PropertyControlItem *controlItem = new PropertyControlItem(this, getPropertyName(), el, QPolygonF());
+    // ??? MEMORY LEAK?
+    PropertyControlItem *controlItem =
+            new PropertyControlItem(this, getPropertyName(), el, QPolygonF());
     controlItem->update();
 
+    // ??? This adds controlItem to a map.  It should take ownership, but
+    //     apparently it doesn't.
     ControlRuler::addControlItem(controlItem);
+
 //    m_controlItemList.push_back(controlItem);
 }
 

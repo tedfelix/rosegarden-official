@@ -333,10 +333,22 @@ void ControllerEventsRuler::segmentDeleted(const Segment *)
 
 ControlItem* ControllerEventsRuler::addControlItem2(Event *event)
 {
-    EventControlItem *controlItem = new EventControlItem(this, new ControllerEventAdapter(event), QPolygonF());
+    ControllerEventAdapter *controllerEventAdapter =
+            new ControllerEventAdapter(event);
+
+    // ??? MEMORY LEAK
+    EventControlItem *controlItem = new EventControlItem(
+            this,
+            controllerEventAdapter,
+            QPolygonF());
+
     controlItem->updateFromEvent();
 
+    // ??? This adds controlItem to a map.  It should take ownership, but
+    //     apparently it doesn't.
     ControlRuler::addControlItem(controlItem);
+
+    // ??? Neither caller actually does anything with this.
     return controlItem;
 }
 
@@ -344,9 +356,15 @@ ControlItem* ControllerEventsRuler::addControlItem2(float x, float y)
 {
     // Adds a ControlItem in the absence of an event (used by ControlPainter)
     clearSelectedItems();
-    EventControlItem *item = new EventControlItem(this, new ControllerEventAdapter(nullptr), QPolygonF());
+
+    // ??? MEMORY LEAK?
+    EventControlItem *item = new EventControlItem(
+            this, new ControllerEventAdapter(nullptr), QPolygonF());
     item->reconfigure(x,y);
     item->setSelected(true);
+
+    // ??? This adds item to a map.  It should take ownership, but
+    //     apparently it doesn't.
     ControlRuler::addControlItem(item);
     
     return item;
