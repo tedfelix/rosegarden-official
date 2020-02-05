@@ -404,7 +404,7 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(
     m_stepSize = new QDoubleSpinBox();
     m_stepSize->setAccelerated(true);
     m_stepSize->setDecimals(valueSpinboxDecimals);
-    m_stepSize->setMinimum(getSmallestSpinboxStep());
+    m_stepSize->setMinimum(getMinStepSize());
     m_stepSize->setMaximum(maxSpinboxAbsValue);
     m_stepSize->setSingleStep(4.0);
     howManyStepsLayout->addWidget(m_stepSize, 0, 1);
@@ -630,15 +630,13 @@ PitchBendSequenceDialog::isPitchbend() const
 double
 PitchBendSequenceDialog::valueDeltaToPercent(int valueDelta) const
 {
-    const int range = m_controlParameter.getMax() - m_controlParameter.getMin();
-    return 100.0 * valueDelta / range;
+    return 100.0 * valueDelta / m_controlParameter.getRange();
 }
 
 int
 PitchBendSequenceDialog::percentToValueDelta(double percent) const
 {
-    const int range = m_controlParameter.getMax() - m_controlParameter.getMin();
-    return percent / 100.0 * range;
+    return percent / 100.0 * m_controlParameter.getRange();
 }
 
 double
@@ -649,52 +647,72 @@ PitchBendSequenceDialog::getMaxSpinboxValue() const
 
     if (useValue())
         return rangeAboveDefault;
-    else
+    else  // pitchbend uses double percent (-100 to 100)
         return valueDeltaToPercent(rangeAboveDefault * 2);
 }
 
 double
 PitchBendSequenceDialog::getMinSpinboxValue() const
 {
-    /* rangeBelowDefault and return value will be negative or zero. */
+    // rangeBelowDefault and return value will be negative or zero.
     const int rangeBelowDefault =
             m_controlParameter.getMin() - m_controlParameter.getDefault();
 
     if (useValue())
         return rangeBelowDefault;
-    else
+    else  // pitchbend uses double percent (-100 to 100)
         return valueDeltaToPercent(rangeBelowDefault * 2);
 }
 
 double
-PitchBendSequenceDialog::getSmallestSpinboxStep() const
+PitchBendSequenceDialog::getMinStepSize() const
 {
     if (useValue())
         return 1;
 
+    // Pitchbend
+
+#if 1
+    // Simplified math.
+
+    // Compute the (double) percentage for a change of 100 in pitchbend value.
+    // Pitchbend uses double percent (-100 to 100).
+    // ??? Why the .0001 epsilon?  What effect does that have later?
+    //     We're working with incredibly inaccurate % here, so not
+    //     sure how the epsilon would make any difference.  Need to
+    //     do some experiments.
+    // ??? This essentially returns 0.00305195 which cannot actually
+    //     be displayed in the field.  So it appears as 0.00.
+    //     100.0001 / 32766 = 0.00305195
+    return 100.0001 / percentToValueDelta(200.0);
+#else
+    // Older version with intermediate calculations.
+
+    // Pitchbend uses double percent (-100 to 100)
     const int fullRange = percentToValueDelta(200.0);
     const double smallestStep = 1.000001 / fullRange;
-
-    return 100.0 * smallestStep;
+    // Return percent for a change of pitchbend by 100.
+    return 100 * smallestStep;
+#endif
 }
-
 
 int
 PitchBendSequenceDialog::
-spinboxToControlDelta(const QDoubleSpinBox *spinbox) const
+spinboxToValueDelta(const QDoubleSpinBox *spinbox) const
 {
     if (useValue())
         return spinbox->value();
-    else
+    else  // pitchbend uses double percent (-100 to 100)
         return percentToValueDelta(spinbox->value() / 2);
 }
 
 int
 PitchBendSequenceDialog::
-spinboxToControl(const QDoubleSpinBox *spinbox) const
+spinboxToValue(const QDoubleSpinBox *spinbox) const
 {
     int value =
-            spinboxToControlDelta(spinbox) + m_controlParameter.getDefault();
+            spinboxToValueDelta(spinbox) + m_controlParameter.getDefault();
+
     return m_controlParameter.clamp(value);
 }
 
@@ -740,8 +758,8 @@ PitchBendSequenceDialog::setRampMode(RampMode rampMode)
     }
 }
 
-PitchBendSequenceDialog::StepSizeCalculation
-PitchBendSequenceDialog::getStepSizeCalculation()
+PitchBendSequenceDialog::StepMode
+PitchBendSequenceDialog::getStepMode() const
 {
     return
         m_useStepSizePercent->isChecked() ? StepSizePercent :
@@ -750,10 +768,9 @@ PitchBendSequenceDialog::getStepSizeCalculation()
 }
 
 void
-PitchBendSequenceDialog::setStepSizeCalculation
-(StepSizeCalculation stepSizeCalculation)
+PitchBendSequenceDialog::setStepMode(StepMode stepMode)
 {
-    switch (stepSizeCalculation) {
+    switch (stepMode) {
     case StepSizePercent:
         m_useStepSizePercent->setChecked(true);
         break;
@@ -764,7 +781,6 @@ PitchBendSequenceDialog::setStepSizeCalculation
         break;
     }
 }
-
 
 void
 PitchBendSequenceDialog::saveSettings()
@@ -802,7 +818,7 @@ PitchBendSequenceDialog::savePreset(int preset)
     settings.setValue("step_count", m_stepCount->value());
     settings.setValue("step_size", m_stepSize->value());
     settings.setValue("ramp_mode", getRampMode());
-    settings.setValue("step_size_calculation", getStepSizeCalculation());
+    settings.setValue("step_size_calculation", getStepMode());
     settings.endArray();
     settings.endGroup();
 }
@@ -830,8 +846,8 @@ PitchBendSequenceDialog::restorePreset(int preset)
     setRampMode
         (RampMode
          (settings.value("ramp_mode", Logarithmic).toInt()));
-    setStepSizeCalculation
-        (StepSizeCalculation
+    setStepMode
+        (StepMode
          (settings.value("step_size_calculation", StepSizePercent).toInt()));
 
     settings.endArray();
@@ -888,7 +904,7 @@ PitchBendSequenceDialog::accept()
     // In Replace and OnlyAdd modes, add the requested controller events.
     if (getReplaceMode() != JustErase) {
         if ((getRampMode() == Linear) &&
-            (getStepSizeCalculation() == StepCount)) {
+            (getStepMode() == StepCount)) {
             addLinearCountedEvents(macro);
         } else {
             addStepwiseEvents(macro);
@@ -931,8 +947,8 @@ void
 PitchBendSequenceDialog::addLinearCountedEvents(MacroCommand *macro)
 {
     /* Ramp calculations. */
-    const int startValue = spinboxToControl(m_startAtValue);
-    const int endValue   = spinboxToControl(m_endValue);
+    const int startValue = spinboxToValue(m_startAtValue);
+    const int endValue   = spinboxToValue(m_endValue);
     const int valueChange = endValue - startValue;
 
     // numSteps doesn't include the initial event in the
@@ -954,8 +970,8 @@ PitchBendSequenceDialog::addLinearCountedEvents(MacroCommand *macro)
     
     const int totalCycles = numVibratoCycles();
     const float stepsPerCycle  = float(steps) / float (totalCycles);
-    const int vibratoSA = spinboxToControlDelta(m_startAmplitude);
-    const int vibratoEA = spinboxToControlDelta(m_endAmplitude);
+    const int vibratoSA = spinboxToValueDelta(m_startAmplitude);
+    const int vibratoEA = spinboxToValueDelta(m_endAmplitude);
 
 
     /* Always put an event at the start of the sequence.  */
@@ -1003,15 +1019,15 @@ PitchBendSequenceDialog::addStepwiseEvents(MacroCommand *macro)
     static const float epsilon = 0.01;
 
     /* Ramp calculations. */
-    const int startValue = spinboxToControl(m_startAtValue);
-    const int endValue   = spinboxToControl(m_endValue);
+    const int startValue = spinboxToValue(m_startAtValue);
+    const int endValue   = spinboxToValue(m_endValue);
     const int valueChange = endValue - startValue;
     
     // numSteps is one less than the number of ramp events we
     // place.  Eg if we ramp from 92 to 100 as {92, 96, 100}, we have
     // numSteps = 2.
     int numSteps;
-    switch (getStepSizeCalculation()) {
+    switch (getStepMode()) {
     case StepCount:
         numSteps = m_stepCount->value();
         break;
@@ -1021,7 +1037,7 @@ PitchBendSequenceDialog::addStepwiseEvents(MacroCommand *macro)
         // thru to the base case.
     case StepSizePercent:
         {
-            const int rawStepSize = spinboxToControlDelta(m_stepSize);
+            const int rawStepSize = spinboxToValueDelta(m_stepSize);
             if (rawStepSize == 0) { return; }
             numSteps = fabs(float(valueChange) / float(rawStepSize) + 0.5);
             break;
@@ -1176,5 +1192,7 @@ PitchBendSequenceDialog::slotHelp()
     QString helpURL = tr("http://rosegardenmusic.com/wiki/doc:pitchbendsequencedialog-controllerbranch-en");
     QDesktopServices::openUrl(QUrl(helpURL));
 }
+
+
 }
 

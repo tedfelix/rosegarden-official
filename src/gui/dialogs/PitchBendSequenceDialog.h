@@ -175,19 +175,16 @@ private:
     QRadioButton *m_useStepSizePercent;
     QDoubleSpinBox *m_stepSize;
     /// Min limit for m_stepSize only.
-    /**
-     * ??? rename: getMinStepSize()?
-     */
-    double getSmallestSpinboxStep() const;
+    double getMinStepSize() const;
     // Use this many steps
     QRadioButton *m_useThisManySteps;
     QDoubleSpinBox *m_stepCount;
-    enum StepSizeCalculation {  // ??? rename: StepMode
+    enum StepMode {
             StepSizePercent,  // Use step size (%).
             StepCount,  // Use this many steps.
     };
-    void setStepSizeCalculation(StepSizeCalculation stepSizeCalculation);
-    StepSizeCalculation getStepSizeCalculation();
+    void setStepMode(StepMode stepMode);
+    StepMode getStepMode() const;
 
 
     void updateWidgets();
@@ -198,15 +195,9 @@ private:
     /// Convert pitch bend percent to a value delta.
     int percentToValueDelta(double percent) const;
     /// Get control value delta consistently even in percent (pitchbend) mode.
-    /**
-     * ??? rename: spinboxToValueDelta()?
-     */
-    int spinboxToControlDelta(const QDoubleSpinBox *spinbox) const;
+    int spinboxToValueDelta(const QDoubleSpinBox *spinbox) const;
     /// Get control value consistently even in percent (pitchbend) mode.
-    /**
-     * ??? rename: spinboxToValue()?
-     */
-    int spinboxToControl(const QDoubleSpinBox *spinbox) const;
+    int spinboxToValue(const QDoubleSpinBox *spinbox) const;
 
     /// Convert pitch bend value delta to percent.
     double valueDeltaToPercent(int valueDelta) const;

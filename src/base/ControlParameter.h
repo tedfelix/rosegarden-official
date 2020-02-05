@@ -68,6 +68,7 @@ public:
 
     int getMin() const { return m_min; }
     int getMax() const { return m_max; }
+    int getRange() const { return m_max - m_min; }
     int getDefault() const { return m_default; }
     int clamp(int value) const {
         if (value < m_min) { return m_min; }
