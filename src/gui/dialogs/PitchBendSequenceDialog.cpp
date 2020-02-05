@@ -346,75 +346,77 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(
     // Ramp mode
 
     QGroupBox *rampModeGroupBox = new QGroupBox(tr("Ramp mode"));
-    QHBoxLayout *rampModeGroupLayoutBox = new QHBoxLayout();
     mainLayout->addWidget(rampModeGroupBox);
-    rampModeGroupBox->setLayout(rampModeGroupLayoutBox);
 
+    // Linear
     m_linear = new QRadioButton(tr("Linear"));
     m_linear->
         setToolTip(tr("<qt>Ramp slopes linearly. Vibrato is possible if <i>Use this many steps</i> is set</qt>"));
+    connect(m_linear, &QAbstractButton::clicked,
+            this, &PitchBendSequenceDialog::slotRampModeChanged);
+
+    // Logarithmic
     m_logarithmic = new QRadioButton(tr("Logarithmic"));
     m_logarithmic->
         setToolTip(tr("<qt>Ramp slopes logarithmically</qt>"));
+    connect(m_logarithmic, &QAbstractButton::clicked,
+            this, &PitchBendSequenceDialog::slotRampModeChanged);
+
+    // Half sine
     m_halfSine = new QRadioButton(tr("Half sine"));
     m_halfSine->
         setToolTip(tr("<qt>Ramp slopes like one half of a sine wave (trough to peak)</qt>"));
+    connect(m_halfSine, &QAbstractButton::clicked,
+            this, &PitchBendSequenceDialog::slotRampModeChanged);
+
+    // Quarter sine
     m_quarterSine = new QRadioButton(tr("Quarter sine"));
     m_quarterSine->
         setToolTip(tr("<qt>Ramp slopes like one quarter of a sine wave (zero to peak)</qt>"));
+    connect(m_quarterSine, &QAbstractButton::clicked,
+            this, &PitchBendSequenceDialog::slotRampModeChanged);
 
-    rampModeGroupLayoutBox->addWidget(m_linear);
-    rampModeGroupLayoutBox->addWidget(m_logarithmic);
-    rampModeGroupLayoutBox->addWidget(m_quarterSine);
-    rampModeGroupLayoutBox->addWidget(m_halfSine);
+    QHBoxLayout *rampModeLayout = new QHBoxLayout(rampModeGroupBox);
+    rampModeLayout->addWidget(m_linear);
+    rampModeLayout->addWidget(m_logarithmic);
+    rampModeLayout->addWidget(m_quarterSine);
+    rampModeLayout->addWidget(m_halfSine);
 
     // --------------------------------------
     // How many steps
 
-    QGroupBox *stepSizeStyleGroupBox =
+    QGroupBox *howManyStepsGroup =
         new QGroupBox(tr("How many steps"));
-    QVBoxLayout *stepSizeStyleGroupLayoutBox = new QVBoxLayout();
+    mainLayout->addWidget(howManyStepsGroup);
+    QGridLayout *howManyStepsLayout = new QGridLayout(howManyStepsGroup);
 
-    /* Stepsize -> SELECT */
+    // Use step size
     m_useStepSizePercent = new QRadioButton(tr("Use step size (%):"));
     m_useStepSizePercent->
         setToolTip(tr("<qt>Each step in the ramp will be as close to this size as possible. Vibrato is not possible with this setting</qt>"));
+    howManyStepsLayout->addWidget(m_useStepSizePercent, 0, 0);
+
+    m_stepSize = new QDoubleSpinBox();
+    m_stepSize->setAccelerated(true);
+    m_stepSize->setDecimals(valueSpinboxDecimals);
+    m_stepSize->setMinimum(getSmallestSpinboxStep());
+    m_stepSize->setMaximum(maxSpinboxAbsValue);
+    m_stepSize->setSingleStep(4.0);
+    howManyStepsLayout->addWidget(m_stepSize, 0, 1);
+
+    // Use this many steps
     m_useThisManySteps = new QRadioButton(tr("Use this many steps:"));
     m_useThisManySteps->
         setToolTip(tr("<qt>The sequence will have exactly this many steps.  Vibrato is possible if Ramp mode is linear</qt>"));
+    howManyStepsLayout->addWidget(m_useThisManySteps, 1, 0);
 
-    /* Stepsize -> direct -> step size */
-    m_stepSize = new QDoubleSpinBox();
-    m_stepSize->setAccelerated(true);
-    m_stepSize->setMaximum(maxSpinboxAbsValue);
-    m_stepSize->setMinimum(getSmallestSpinboxStep());
-    m_stepSize->setSingleStep(4.0);
-    m_stepSize->setDecimals(valueSpinboxDecimals);
-
-    /* Stepsize -> direct */
-    QHBoxLayout *stepSizeManualHBox = new QHBoxLayout();
-    stepSizeManualHBox->addWidget(m_useStepSizePercent);
-    stepSizeManualHBox->addWidget(m_stepSize);
-
-    /* Stepsize -> by count -> Resolution */
     m_stepCount = new QDoubleSpinBox();
     m_stepCount->setAccelerated(true);
-    m_stepCount->setMaximum(300);
-    m_stepCount->setMinimum(2);
-    m_stepCount->setSingleStep(10);
     m_stepCount->setDecimals(0);
-
-    /* Stepsize -> by count */
-    QHBoxLayout *stepSizeByCountHBox = new QHBoxLayout();
-    stepSizeByCountHBox->addWidget(m_useThisManySteps);
-    stepSizeByCountHBox->addWidget(m_stepCount);
-
-    /* Stepsize itself */
-    mainLayout->addWidget(stepSizeStyleGroupBox);
-    stepSizeStyleGroupBox->setLayout(stepSizeStyleGroupLayoutBox);
-
-    stepSizeStyleGroupLayoutBox->addLayout(stepSizeManualHBox);
-    stepSizeStyleGroupLayoutBox->addLayout(stepSizeByCountHBox);
+    m_stepCount->setMinimum(2);
+    m_stepCount->setMaximum(300);
+    m_stepCount->setSingleStep(10);
+    howManyStepsLayout->addWidget(m_stepCount, 1, 1);
 
     // --------------------------------------
     // OK/Cancel/Help
@@ -425,10 +427,8 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(
                 QDialogButtonBox::Help);
     mainLayout->addWidget(buttonBox, 1, nullptr);
 
-    // ??? Use the static_cast<> trick here.  See QComboBox::activated above.
-    //     I'm assuming QDialogButtonBox::accepted() is overridden and we
-    //     want the one with 0 parameters.
-    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, &QDialogButtonBox::accepted,
+            this, &PitchBendSequenceDialog::accept);
     connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
     connect(buttonBox, &QDialogButtonBox::helpRequested,
             this, &PitchBendSequenceDialog::slotHelp);
@@ -438,13 +438,6 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(
     // Default to Replace old events and the last selected preset
     m_replaceOldEvents->setChecked(true);
     slotPresetChanged(m_preset->currentIndex());
-
-    // ??? toggled() is rarely a good idea since it is also emitted when
-    //     setChecked() is called which then leads to the need to
-    //     block signals in certain situations.  Would clicked() be
-    //     a better signal to use here?
-    connect(m_linear, &QAbstractButton::toggled,
-            this, &PitchBendSequenceDialog::slotRampLinearClicked);
 
     // We connect all these buttons to slotStepStyleChanged,
     // which will react only to the current selected one.
@@ -537,10 +530,8 @@ PitchBendSequenceDialog::slotReplacementModeChanged(bool /*checked*/)
 }
 
 void
-PitchBendSequenceDialog::slotRampLinearClicked(bool /*checked*/)
+PitchBendSequenceDialog::slotRampModeChanged(bool /*checked*/)
 {
-    // ??? Should we handle clicked() instead of toggled() for each radio
-    //     button and do this?  slotRampChanged() or something like that?
     updateWidgets();
 }
 

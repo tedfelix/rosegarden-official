@@ -80,13 +80,8 @@ private slots:
     /// Fill in values when the preset is changed.
     void slotPresetChanged(int);
 
-    /// Enable/Disable widgets for Linear mode.
-    /**
-     * Ramp mode > Linear
-     *
-     * ??? This should all be handled in a single updateWidgets().
-     */
-    void slotRampLinearClicked(bool checked);
+    /// Update UI for a change in ramp mode
+    void slotRampModeChanged(bool checked);
 
     /// Enable/disable widgets based on "How many steps" mode.
     /**
