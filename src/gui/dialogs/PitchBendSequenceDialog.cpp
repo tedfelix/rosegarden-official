@@ -975,11 +975,15 @@ PitchBendSequenceDialog::addLinearCountedEvents(MacroCommand *macro)
     const int vibratoEA = spinboxToValueDelta(m_endAmplitude);
 
 
-    /* Always put an event at the start of the sequence.  */
-    // ??? MEMORY LEAK.  CONFIRMED.
+    // Always put an event at the start of the sequence.
     Event *event = m_controlParameter.newEvent(m_startTime, startValue);
-    
-    macro->addCommand(new EventInsertionCommand (*m_segment, event));
+
+    // EventInsertionCommand does not take ownership of event.  It makes
+    // a copy.
+    macro->addCommand(new EventInsertionCommand(*m_segment, event));
+
+    delete event;
+    event = nullptr;
 
     for ( int i = 1 ; i < steps ; i++) {
         const timeT elapsedTime = (timeT) i * sequenceDuration/(timeT) steps;
@@ -1002,9 +1006,15 @@ PitchBendSequenceDialog::addLinearCountedEvents(MacroCommand *macro)
 
         value = value + int(amplitudeRatio * amplitude);
         value = m_controlParameter.clamp(value);
-        // ??? MEMORY LEAK.  CONFIRMED.
+
         Event *event = m_controlParameter.newEvent(eventTime, value);
-        macro->addCommand(new EventInsertionCommand (*m_segment, event));
+
+        // EventInsertionCommand does not take ownership of the event.
+        // It makes a copy.
+        macro->addCommand(new EventInsertionCommand(*m_segment, event));
+
+        delete event;
+        event = nullptr;
 
         /* Keep going if we are adding vibrato events, because those
            are inserted even after the ramp. */
@@ -1067,10 +1077,14 @@ PitchBendSequenceDialog::addStepwiseEvents(MacroCommand *macro)
     const RampMode rampMode = getRampMode();
     
     /* Always put an event at the start of the sequence.  */
-    // ??? MEMORY LEAK?
     Event *event = m_controlParameter.newEvent(m_startTime, startValue);
     
-    macro->addCommand(new EventInsertionCommand (*m_segment, event));
+    // EventInsertionCommand does not take ownership of the event.
+    // It makes a copy.
+    macro->addCommand(new EventInsertionCommand(*m_segment, event));
+
+    delete event;
+    event = nullptr;
 
     // Remember the most recent value so we can avoid inserting it
     // twice.
@@ -1165,10 +1179,15 @@ PitchBendSequenceDialog::addStepwiseEvents(MacroCommand *macro)
             }
             const timeT eventTime = sequenceStartTime + (timeRatio * rampDuration);
 
-            // ??? MEMORY LEAK?
             Event *event = m_controlParameter.newEvent(eventTime, value);
 
-            macro->addCommand(new EventInsertionCommand (*m_segment, event));
+            // EventInsertionCommand does not take ownership of the event.
+            // It makes a copy.
+            macro->addCommand(new EventInsertionCommand(*m_segment, event));
+
+            delete event;
+            event = nullptr;
+
             if (eventTime >= rampEndTime) { break; }
         }
     }
@@ -1176,11 +1195,15 @@ PitchBendSequenceDialog::addStepwiseEvents(MacroCommand *macro)
         /* If we have changed value at all, place an event for the
            final value.  Its time is one less than end-time so that we
            are only writing into the time interval we were given.  */
-        // ??? MEMORY LEAK?
         Event *finalEvent =
             m_controlParameter.newEvent(m_endTime - 1, endValue);
-        macro->addCommand(new EventInsertionCommand (*m_segment,
-                                                     finalEvent));
+
+        // EventInsertionCommand does not take ownership of the event.
+        // It makes a copy.
+        macro->addCommand(new EventInsertionCommand(*m_segment, finalEvent));
+
+        delete finalEvent;
+        finalEvent = nullptr;
     }
 }
 

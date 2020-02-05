@@ -40,7 +40,7 @@ class EraseCommand : public BasicSelectionCommand
 
 public:
     EraseCommand(EventSelection &selection);
-    ~EraseCommand();
+    virtual ~EraseCommand();
 
     static QString getGlobalName() { return tr("&Erase"); }
 

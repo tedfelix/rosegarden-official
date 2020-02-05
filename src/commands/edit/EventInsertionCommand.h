@@ -38,10 +38,15 @@ class EventInsertionCommand : public BasicCommand
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::EventInsertionCommand)
 
 public:
+    /**
+     * !!! NOTE: This makes a COPY of the event.  It does not take
+     *           ownership.  The client is responsible for deleting
+     *           any memory that was allocated.
+     */
     EventInsertionCommand(Segment &segment,
                           Event *event);
 
-    ~EventInsertionCommand() override;
+    virtual ~EventInsertionCommand();
 
     Event *getLastInsertedEvent() { return m_lastInsertedEvent; }
     
