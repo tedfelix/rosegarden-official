@@ -29,10 +29,13 @@ const unsigned int ControlItem::DefaultWidth    = 20;
 
 ControlItem::ControlItem(ControlRuler *controlRuler,
         Event *event,
-        QPolygonF polygon)
-: QPolygonF(polygon),
+        QPolygonF polygon) :
+    QPolygonF(polygon),
     m_xstart(-1.0),
+    m_xend(0),
+    m_lastxstart(0),
     m_y(0),
+    m_handlingMouseMove(false),
     m_selected(false),
     m_data(0),
     m_controlRuler(controlRuler),
