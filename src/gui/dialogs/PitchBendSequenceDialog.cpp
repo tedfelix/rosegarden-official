@@ -150,8 +150,13 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(
         m_preset->addItem(tr("Fast vibrato arm release"), FastVibratoArmRelease);
         m_preset->addItem(tr("Vibrato"), Vibrato);
         m_numPresetStyles = 3;
+        m_presetKey = "sequence_preset_pb";
     } else {
         m_numPresetStyles = 0;
+        // ??? As a further refinement, we could also use the CC number
+        //     so that different presets might be used for different CCs.
+        //     E.g. sequence_preset_7 for volume.
+        m_presetKey = "sequence_preset";
     }
 
     // Historically, a bug in the for-loop provided one extra setting.
@@ -167,13 +172,10 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(
     }
 
     // Get the saved preset and select it.
-    // ??? This isn't correct.  We need to store two presets.  One for
-    //     pitchbend mode and one for controller mode.  Otherwise we
-    //     end up in the wrong preset when going between modes.
     QSettings settings;
     settings.beginGroup(PitchBendSequenceConfigGroup);
     m_preset->setCurrentIndex(
-            settings.value("sequence_preset", startSavedSettings).toInt());
+            settings.value(m_presetKey, startSavedSettings).toInt());
 
     connect(m_preset,
                 static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
@@ -788,17 +790,15 @@ PitchBendSequenceDialog::saveSettings()
     const int preset = m_preset->currentIndex();
 
     // Save the current preset.
-    // ??? This isn't correct.  We need to store two presets.  One for
-    //     pitchbend mode and one for controller mode.  Otherwise we
-    //     end up in the wrong preset when going between modes.
     QSettings settings;
     settings.beginGroup(PitchBendSequenceConfigGroup);
-    settings.setValue("sequence_preset", preset);
+    settings.setValue(m_presetKey, preset);
 
     // If this is a "Saved setting", save it.
     if (preset >= m_numPresetStyles)
         savePreset(preset);
 }
+
 void
 PitchBendSequenceDialog::savePreset(int preset)
 {

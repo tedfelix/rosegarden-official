@@ -126,11 +126,15 @@ private:
 
     // Preset
 
-    // How many of the PresetStyles we are accepting.  In
-    // practice, either 0 for non-pitchbend controllers or EndPresetStyles
-    // (all three) for the pitchbend controller.
+    /// How many of the PresetStyles we are accepting.
+    /**
+     * In practice, either 0 for non-pitchbend controllers or
+     * EndPresetStyles (all three) for the pitchbend controller.
+     */
     int m_numPresetStyles;
     QComboBox *m_preset;
+    /// Settings key to use when saving/restoring the selected preset.
+    QString m_presetKey;
     void saveSettings();
     void savePreset(int preset);
     void restorePreset(int preset);
