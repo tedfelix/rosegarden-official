@@ -46,7 +46,7 @@ public:
     EventInsertionCommand(Segment &segment,
                           Event *event);
 
-    virtual ~EventInsertionCommand();
+    ~EventInsertionCommand() override;
 
     Event *getLastInsertedEvent() { return m_lastInsertedEvent; }
     
