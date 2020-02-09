@@ -300,8 +300,8 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(
     vibratoLayout->setSpacing(5);
     mainLayout->addWidget(m_vibrato);
 
-    const double maxSpinboxAbsValue =
-        std::max(maxSpinboxValue, -minSpinboxValue);
+    // Up to 200% for pitchbend, 127 for other controllers.
+    const double maxSpinboxAbsValue = isPitchbend() ? 200 : 127;
 
     // Start amplitude
     QString startAmplitudeText =
@@ -312,8 +312,8 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(
 
     m_startAmplitude = new QDoubleSpinBox();
     m_startAmplitude->setAccelerated(true);
-    m_startAmplitude->setMaximum(maxSpinboxAbsValue);
     m_startAmplitude->setMinimum(0);
+    m_startAmplitude->setMaximum(maxSpinboxAbsValue);
     m_startAmplitude->setSingleStep(10);
     vibratoLayout->addWidget(m_startAmplitude, 3, 1);
 
@@ -405,7 +405,7 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(
     m_stepSize->setAccelerated(true);
     m_stepSize->setDecimals(valueSpinboxDecimals);
     m_stepSize->setMinimum(getMinStepSize());
-    m_stepSize->setMaximum(maxSpinboxAbsValue);
+    m_stepSize->setMaximum(maxSpinboxAbsValue / 2);
     m_stepSize->setSingleStep(4.0);
     howManyStepsLayout->addWidget(m_stepSize, 0, 1);
 
@@ -571,7 +571,7 @@ PitchBendSequenceDialog::slotPresetChanged(int index) {
         m_rampDuration->setValue(0);
         m_endValue->setValue(0);
 
-        m_startAmplitude->setValue(30);
+        m_startAmplitude->setValue(20);
         m_endAmplitude->setValue(0);
         m_hertz->setValue(14);
 
@@ -588,10 +588,8 @@ PitchBendSequenceDialog::slotPresetChanged(int index) {
         m_rampDuration->setValue(0);
         m_endValue->setValue(0);
 
-        // ??? There's no guarantee we will end up back at 0.
-        //     Probably need to make that part of the algorithm.
-        m_startAmplitude->setValue(10);
-        m_endAmplitude->setValue(10);
+        m_startAmplitude->setValue(6);
+        m_endAmplitude->setValue(6);
         m_hertz->setValue(6);
 
         m_linear->setChecked(true);
@@ -997,10 +995,9 @@ PitchBendSequenceDialog::addLinearCountedEvents(MacroCommand *macro)
             value = endValue;
 
         // Modulation Amplitude (Vibrato/Tremolo/LFO Modulation)
-        // The division by pi is done only to bring it into line with
-        // amplitude's historical meaning in this dialog.
-        const double amplitudeRatio =
-            sin(2.0 * pi * i / stepsPerCycle) / pi;
+        // Divide by 2 for peak-to-peak.  So, 200% total peak-to-peak for
+        // pitchbend, and 127 total peak-to-peak for controllers.
+        const double amplitudeRatio = sin(2.0 * pi * i / stepsPerCycle) / 2;
 
         // Modulation Ramp Amplitude
         const int amplitude =
