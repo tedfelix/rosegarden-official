@@ -178,8 +178,6 @@ private:
     // Use step size (%)
     QRadioButton *m_useStepSizePercent;
     QDoubleSpinBox *m_stepSize;
-    /// Min limit for m_stepSize only.
-    double getMinStepSize() const;
     // Use this many steps
     QRadioButton *m_useThisManySteps;
     QDoubleSpinBox *m_stepCount;

@@ -404,7 +404,7 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(
     m_stepSize = new QDoubleSpinBox();
     m_stepSize->setAccelerated(true);
     m_stepSize->setDecimals(valueSpinboxDecimals);
-    m_stepSize->setMinimum(getMinStepSize());
+    m_stepSize->setMinimum(useValue() ? 1 : .1);
     m_stepSize->setMaximum(maxSpinboxAbsValue / 2);
     m_stepSize->setSingleStep(4.0);
     howManyStepsLayout->addWidget(m_stepSize, 0, 1);
@@ -660,38 +660,6 @@ PitchBendSequenceDialog::getMinSpinboxValue() const
         return rangeBelowDefault;
     else  // pitchbend uses double percent (-100 to 100)
         return valueDeltaToPercent(rangeBelowDefault * 2);
-}
-
-double
-PitchBendSequenceDialog::getMinStepSize() const
-{
-    if (useValue())
-        return 1;
-
-    // Pitchbend
-
-#if 1
-    // Simplified math.
-
-    // Compute the (double) percentage for a change of 100 in pitchbend value.
-    // Pitchbend uses double percent (-100 to 100).
-    // ??? Why the .0001 epsilon?  What effect does that have later?
-    //     We're working with incredibly inaccurate % here, so not
-    //     sure how the epsilon would make any difference.  Need to
-    //     do some experiments.
-    // ??? This essentially returns 0.00305195 which cannot actually
-    //     be displayed in the field.  So it appears as 0.00.
-    //     100.0001 / 32766 = 0.00305195
-    return 100.0001 / percentToValueDelta(200.0);
-#else
-    // Older version with intermediate calculations.
-
-    // Pitchbend uses double percent (-100 to 100)
-    const int fullRange = percentToValueDelta(200.0);
-    const double smallestStep = 1.000001 / fullRange;
-    // Return percent for a change of pitchbend by 100.
-    return 100 * smallestStep;
-#endif
 }
 
 int
