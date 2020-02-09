@@ -73,7 +73,18 @@ MatrixSelector::handleEventRemoved(Event *event)
 {
     if (m_dispatchTool)
         m_dispatchTool->handleEventRemoved(event);
-    if (m_clickedElement && m_clickedElement->event() == event) {
+    // ??? INVALID READ (confirmed)  m_clickedElement was already freed.
+    //
+    //     Steps:
+    //       - In the Matrix editor, add two notes with the pencil tool.
+    //       - Switch to the selection tool.
+    //       - Select the first note and press delete.
+    //       - Select the second note and press delete.
+    //
+    //     There was only ever exactly one invalid read.  It appears to only
+    //     happen for the very first select and delete key.  After that it
+    //     never happensagain.
+    if (m_clickedElement  &&  m_clickedElement->event() == event) {
         m_clickedElement = nullptr;
     }
 }

@@ -55,9 +55,9 @@ MatrixResizer::MatrixResizer(MatrixWidget *parent) :
 void
 MatrixResizer::handleEventRemoved(Event *event)
 {
-    if (m_currentElement && m_currentElement->event() == event) {
+    // ??? INVALID READ (confirmed)  m_currentElement was already freed.
+    if (m_currentElement  &&  m_currentElement->event() == event)
         m_currentElement = nullptr;
-    }
 }
 
 void
