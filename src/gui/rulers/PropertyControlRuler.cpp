@@ -23,6 +23,7 @@
 #include "ControlRuler.h"
 #include "ControlTool.h"
 #include "ControlToolBox.h"
+#include "ControlItem.h"
 #include "PropertyControlItem.h"
 #include "misc/Debug.h"
 #include "misc/Strings.h"
@@ -38,6 +39,7 @@
 #include "gui/general/EditViewBase.h"
 #include "gui/general/GUIPalette.h"
 #include "gui/widgets/TextFloat.h"
+
 #include <QColor>
 #include <QPoint>
 #include <QString>
@@ -98,33 +100,38 @@ void PropertyControlRuler::paintEvent(QPaintEvent *event)
     QPen pen(GUIPalette::getColour(GUIPalette::MatrixElementBorder),
             0.5, Qt::SolidLine, Qt::SquareCap, Qt::MiterJoin);
 
-    // Use a fast vector list to record selected items that are currently visible so that they
-    //  can be drawn last - can't use m_selectedItems as this covers all selected, visible or not
-    std::vector<ControlItem*> selectedvector;
+    // Selected items that are currently visible so that they can be drawn
+    // last - can't use m_selectedItems as this covers all selected, visible
+    // or not
+    ControlItemVector selectedVector;
 
-    for (ControlItemList::iterator it = m_visibleItems.begin(); it != m_visibleItems.end(); ++it) {
+    for (ControlItemList::iterator it = m_visibleItems.begin();
+         it != m_visibleItems.end();
+         ++it) {
         if (!(*it)->isSelected()) {
             brush.setColor((*it)->getColour().lighter());
             painter.setBrush(brush);
             painter.setPen(Qt::NoPen);
-            painter.drawPolygon(mapItemToWidget(*it));
+            painter.drawPolygon(mapItemToWidget((*it).data()));
 
             painter.setPen(pen);
-            painter.drawPolyline(mapItemToWidget(*it));
+            painter.drawPolyline(mapItemToWidget((*it).data()));
         } else {
-            selectedvector.push_back(*it);
+            selectedVector.push_back(*it);
         }
     }
 
-    for (std::vector<ControlItem*>::iterator it = selectedvector.begin(); it != selectedvector.end(); ++it)
+    for (ControlItemVector::iterator it = selectedVector.begin();
+         it != selectedVector.end();
+         ++it)
     {
         brush.setColor(((*it)->getColour()));
         painter.setBrush(brush);
         painter.setPen(Qt::NoPen);
-        painter.drawPolygon(mapItemToWidget(*it));
+        painter.drawPolygon(mapItemToWidget((*it).data()));
 
         painter.setPen(highlightPen);
-        painter.drawPolyline(mapItemToWidget(*it));
+        painter.drawPolyline(mapItemToWidget((*it).data()));
     }
 }
 
@@ -162,13 +169,10 @@ void PropertyControlRuler::addControlItem2(ViewElement *el)
 //    size_t s = sizeof(MatrixElement);
 //    RG_DEBUG << "addControlItem2(): sizeof(MatrixElement): " << s;
 
-    // ??? MEMORY LEAK?
-    PropertyControlItem *controlItem =
-            new PropertyControlItem(this, getPropertyName(), el, QPolygonF());
+    QSharedPointer<PropertyControlItem> controlItem(
+            new PropertyControlItem(this, getPropertyName(), el, QPolygonF()));
     controlItem->update();
 
-    // ??? This adds controlItem to a map.  It should take ownership, but
-    //     apparently it doesn't.
     ControlRuler::addControlItem(controlItem);
 
 //    m_controlItemList.push_back(controlItem);
@@ -235,7 +239,7 @@ void PropertyControlRuler::updateSelection(std::vector <ViewElement*> *elementLi
     clearSelectedItems();
 
     // For now, simply clear the selected items list and build it afresh
-    PropertyControlItem *item = nullptr;
+    QSharedPointer<PropertyControlItem> item;
 
 //    for (ControlItemList::iterator it = m_selectedItems.begin(); it != m_selectedItems.end(); ++it) {
 //        item = dynamic_cast <PropertyControlItem *> (*it);
@@ -243,9 +247,14 @@ void PropertyControlRuler::updateSelection(std::vector <ViewElement*> *elementLi
 //    }
 //
 //    m_selectedItems.clear();
-    for (std::vector<ViewElement*>::iterator elit = elementList->begin(); elit != elementList->end();++elit) {
-        for (ControlItemMap::iterator it = m_controlItemMap.begin(); it != m_controlItemMap.end(); ++it) {
-            item = dynamic_cast<PropertyControlItem*>(it->second);
+    for (std::vector<ViewElement*>::iterator elit = elementList->begin();
+         elit != elementList->end();
+         ++elit) {
+        for (ControlItemMap::iterator it = m_controlItemMap.begin();
+             it != m_controlItemMap.end();
+             ++it) {
+            item = qSharedPointerDynamicCast<PropertyControlItem>(it->second);
+
             if (item) {
                 if (item->getElement() == (*elit)) {
                     break;
@@ -321,8 +330,13 @@ void PropertyControlRuler::elementRemoved(const ViewSegment *, ViewElement *el)
 
     RG_DEBUG << "elementRemoved()";
 
-    for (ControlItemMap::iterator it = m_controlItemMap.begin(); it != m_controlItemMap.end(); ++it) {
-        if (PropertyControlItem *item = dynamic_cast<PropertyControlItem*>(it->second)) {
+    for (ControlItemMap::iterator it = m_controlItemMap.begin();
+         it != m_controlItemMap.end();
+         ++it) {
+        QSharedPointer<PropertyControlItem> item =
+                qSharedPointerDynamicCast<PropertyControlItem>(it->second);
+
+        if (item) {
             if (item->getEvent() == el->event()) {
 //                m_controlItemList.erase(it);
 //                m_selectedItems.remove(item);
@@ -418,8 +432,10 @@ void PropertyControlRuler::contextMenuEvent(QContextMenuEvent* e)
     // check if we actually have some control items
     bool haveItems = false;
 
-    for (ControlItemMap::iterator it = m_controlItemMap.begin(); it != m_controlItemMap.end(); ++it) {
-        if (dynamic_cast<ControlItem*>(it->second)) {
+    for (ControlItemMap::iterator it = m_controlItemMap.begin();
+         it != m_controlItemMap.end();
+         ++it) {
+        if (it->second) {
             haveItems = true;
             break;
         }

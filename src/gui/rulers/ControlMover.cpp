@@ -55,7 +55,7 @@ ControlMover::handleLeftButtonPress(const ControlMouseEvent *e)
     if (m_overItem) {
         m_ruler->setCursor(Qt::BlankCursor);
 
-        std::vector<ControlItem*>::const_iterator it = e->itemList.begin();
+        ControlItemVector::const_iterator it = e->itemList.begin();
         if ((*it)->isSelected()) {
             if (e->modifiers & (Qt::ShiftModifier))
                 m_ruler->removeFromSelection(*it);
@@ -128,11 +128,14 @@ ControlMover::handleMouseMove(const ControlMouseEvent *e)
         m_lastDScreenX = dScreenX;
         m_lastDScreenY = dScreenY;
         
-        EventControlItem *item;
         ControlItemList *selected = m_ruler->getSelectedItems();
         std::vector<QPointF>::iterator pIt = m_startPointList.begin();
-        for (ControlItemList::iterator it = selected->begin(); it != selected->end(); ++it) {
-            item = dynamic_cast <EventControlItem*> (*it);
+        for (ControlItemList::iterator it = selected->begin();
+             it != selected->end();
+             ++it) {
+            // Downcast required to call reconfigure(float,float).
+            QSharedPointer<EventControlItem> item =
+                    qSharedPointerDynamicCast<EventControlItem>(*it);
 
             float x = pIt->x()+deltaX;
             float xmin = m_ruler->getXMin() * xscale;

@@ -25,15 +25,17 @@
 namespace Rosegarden
 {
 
-ControlRulerEventEraseCommand::ControlRulerEventEraseCommand(ControlItemList selectedItems,
-                                                         Segment &segment,
-                                                         Rosegarden::timeT start, Rosegarden::timeT end)
-    : BasicCommand(tr("Erase Controller Event(s)"),
-                   segment,
-                   start,
-                   (start == end) ? start + 10 : end,
-                   true),
-      m_selectedItems(selectedItems)
+ControlRulerEventEraseCommand::ControlRulerEventEraseCommand(
+        ControlItemList selectedItems,
+        Segment &segment,
+        Rosegarden::timeT start,
+        Rosegarden::timeT end) :
+    BasicCommand(tr("Erase Controller Event(s)"),
+                 segment,
+                 start,
+                 (start == end) ? start + 10 : end,
+                 true),
+    m_selectedItems(selectedItems)
 {
     RG_DEBUG << "ControllerEventEraseCommand : from " << start << " to " << end;
 }
@@ -43,10 +45,15 @@ void ControlRulerEventEraseCommand::modifySegment()
 {
     Segment &segment(getSegment());
 
-    // This command expects the SegmentObserver mechanism to delete the associated items
-    for (ControlItemList::iterator it=m_selectedItems.begin(); it!=m_selectedItems.end(); ++it) {
-        if (ControlItem *item = dynamic_cast<ControlItem*>(*it))
-            segment.eraseSingle(item->getEvent());
+    // This command expects the SegmentObserver mechanism to delete the
+    // associated items
+    for (ControlItemList::iterator it = m_selectedItems.begin();
+         it != m_selectedItems.end();
+         ++it) {
+        // If the pointer is valid, remove the event from the segment.
+        // ??? Invalid pointers come in all the time.  Why?
+        if (*it)
+            segment.eraseSingle((*it)->getEvent());
     }
 }
 

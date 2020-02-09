@@ -129,8 +129,10 @@ void
 PropertyAdjuster::setCursor(const ControlMouseEvent *e)
 {
     bool isOverItem = false;
-    std::vector<ControlItem*>::const_iterator it = e->itemList.begin();
-    for (; it != e->itemList.end(); ++it) {
+
+    for (ControlItemVector::const_iterator it = e->itemList.begin();
+         it != e->itemList.end();
+         ++it) {
         if ((*it)->isSelected() || m_canSelect) {
             isOverItem = true;
             break;

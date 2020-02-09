@@ -19,6 +19,7 @@
 
 #include "ControllerEventsRuler.h"
 #include "ControlRuler.h"
+#include "ControlItem.h"
 #include "EventControlItem.h"
 #include "ControlTool.h"
 #include "ControlToolBox.h"
@@ -92,6 +93,12 @@ ControllerEventsRuler::~ControllerEventsRuler()
     RG_DEBUG << "dtor";
 
     if (m_segment) m_segment->removeObserver(this);
+
+    delete m_controller;
+    m_controller = nullptr;
+
+    delete m_rubberBand;
+    m_rubberBand = nullptr;
 }
 
 bool ControllerEventsRuler::isOnThisRuler(Event *event)
@@ -165,10 +172,10 @@ void ControllerEventsRuler::paintEvent(QPaintEvent *event)
     //  come out the right size
     ///@TODO Only reconfigure all items if zoom has changed
     if (m_lastDrawnRect != m_pannedRect) {
-        EventControlItem *item;
-        for (ControlItemMap::iterator it = m_controlItemMap.begin(); it != m_controlItemMap.end(); ++it) {
-            item = static_cast <EventControlItem *> (it->second);
-            item->reconfigure();
+        for (ControlItemMap::iterator it = m_controlItemMap.begin();
+             it != m_controlItemMap.end();
+             ++it) {
+            it->second->reconfigure();
         }
         m_lastDrawnRect = m_pannedRect;
     }
@@ -191,15 +198,15 @@ void ControllerEventsRuler::paintEvent(QPaintEvent *event)
     lastX = m_rulerScale->getXForTime(m_segment->getStartTime())*m_xScale;
 
     if (m_nextItemLeft != m_controlItemMap.end()) {
-        EventControlItem *item = static_cast<EventControlItem*> (m_nextItemLeft->second);
-        lastY = item->y();
+        lastY = m_nextItemLeft->second->y();
     } else {
         lastY = valueToY(m_controller->getDefault());
     }
     
     mapIt = m_firstVisibleItem;
     while (mapIt != m_controlItemMap.end()) {
-        EventControlItem *item = static_cast<EventControlItem*> (mapIt->second);
+        QSharedPointer<ControlItem> item = mapIt->second;
+
         painter.drawLine(mapXToWidget(lastX),mapYToWidget(lastY),
                 mapXToWidget(item->xStart()),mapYToWidget(lastY));
         painter.drawLine(mapXToWidget(item->xStart()),mapYToWidget(lastY),
@@ -219,13 +226,13 @@ void ControllerEventsRuler::paintEvent(QPaintEvent *event)
     
     // Use a fast vector list to record selected items that are currently visible so that they
     // can be drawn last - can't use m_selectedItems as this covers all selected, visible or not
-    std::vector<ControlItem*> selectedvector;
+    ControlItemVector selectedVector;
 
     for (ControlItemList::iterator it = m_visibleItems.begin(); it != m_visibleItems.end(); ++it) {
         if (!(*it)->isSelected()) {
-            painter.drawPolygon(mapItemToWidget(*it));
+            painter.drawPolygon(mapItemToWidget((*it).data()));
         } else {
-            selectedvector.push_back(*it);
+            selectedVector.push_back(*it);
         }
     }
 
@@ -236,10 +243,12 @@ void ControllerEventsRuler::paintEvent(QPaintEvent *event)
     int fontHeight = fontMetrics.height();
     int fontOffset = fontMetrics.width('+');
     
-    for (std::vector<ControlItem*>::iterator it = selectedvector.begin(); it != selectedvector.end(); ++it)
+    for (ControlItemVector::iterator it = selectedVector.begin();
+         it != selectedVector.end();
+         ++it)
     {
         // Draw the marker
-        painter.drawPolygon(mapItemToWidget(*it));
+        painter.drawPolygon(mapItemToWidget((*it).data()));
 
         // For selected items, draw the value in text alongside the marker
         // By preference, this should sit on top of the new line that represents this value change
@@ -331,40 +340,36 @@ void ControllerEventsRuler::segmentDeleted(const Segment *)
     m_segment = nullptr;
 }
 
-ControlItem* ControllerEventsRuler::addControlItem2(Event *event)
+QSharedPointer<ControlItem>
+ControllerEventsRuler::addControlItem2(Event *event)
 {
     ControllerEventAdapter *controllerEventAdapter =
             new ControllerEventAdapter(event);
 
-    // ??? MEMORY LEAK
-    EventControlItem *controlItem = new EventControlItem(
+    QSharedPointer<EventControlItem> controlItem(new EventControlItem(
             this,
             controllerEventAdapter,
-            QPolygonF());
+            QPolygonF()));
 
     controlItem->updateFromEvent();
 
-    // ??? This adds controlItem to a map.  It should take ownership, but
-    //     apparently it doesn't.
     ControlRuler::addControlItem(controlItem);
 
     // ??? Neither caller actually does anything with this.
     return controlItem;
 }
 
-ControlItem* ControllerEventsRuler::addControlItem2(float x, float y)
+QSharedPointer<ControlItem>
+ControllerEventsRuler::addControlItem2(float x, float y)
 {
     // Adds a ControlItem in the absence of an event (used by ControlPainter)
     clearSelectedItems();
 
-    // ??? MEMORY LEAK?
-    EventControlItem *item = new EventControlItem(
-            this, new ControllerEventAdapter(nullptr), QPolygonF());
+    QSharedPointer<EventControlItem> item(new EventControlItem(
+            this, new ControllerEventAdapter(nullptr), QPolygonF()));
     item->reconfigure(x,y);
     item->setSelected(true);
 
-    // ??? This adds item to a map.  It should take ownership, but
-    //     apparently it doesn't.
     ControlRuler::addControlItem(item);
     
     return item;
@@ -493,6 +498,7 @@ ControllerEventsRuler::addControlLine(float x1, float y1, float x2, float y2, bo
 //        RG_DEBUG << "addControlLine(): creating event at time: " << i << " of value: " << intermediateValue;
 //        continue;
 
+        // ??? MEMORY LEAK (confirmed)  Probably due to the "continue" below.
         Event *controllerEvent = new Event(m_controller->getType(), (timeT) i);
 
         if (m_controller->getType() == Rosegarden::Controller::EventType) {

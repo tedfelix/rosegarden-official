@@ -58,7 +58,7 @@ ControlPainter::handleLeftButtonPress(const ControlMouseEvent *e)
 {
     if (e->itemList.size()) {
         ControllerEventsRuler *ruler = static_cast <ControllerEventsRuler*> (m_ruler);
-        std::vector <ControlItem*>::const_iterator it = e->itemList.begin();
+        ControlItemVector::const_iterator it = e->itemList.begin();
         ruler->clearSelectedItems();
         ruler->addToSelection(*it);
         ruler->eraseControllerEvent();
@@ -99,7 +99,9 @@ ControlPainter::handleLeftButtonPress(const ControlMouseEvent *e)
                 }
             } else {
 
-                ControlItem *item = ruler->addControlItem2(x,e->y);
+                QSharedPointer<ControlItem> item =
+                        ruler->addControlItem2(x,e->y);
+                // ??? MEMORY LEAK (confirmed)
                 ControlMouseEvent *newevent = new ControlMouseEvent(e);
                 newevent->itemList.push_back(item);
                 m_overItem = true;

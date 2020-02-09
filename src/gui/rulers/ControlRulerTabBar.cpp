@@ -70,6 +70,7 @@ void ControlRulerTabBar::tabLayoutChange()
     QRect *newButton, rect;
     for (int index = 0; index < count(); ++index) {
         rect = tabRect(index);
+        // ??? MEMORY LEAK (confirmed)
         newButton = new QRect(rect.right()-hMargin-m_closeIcon.width(),
                 rect.top()+(rect.height()-m_closeIcon.height())/2,
                 m_closeIcon.width(),

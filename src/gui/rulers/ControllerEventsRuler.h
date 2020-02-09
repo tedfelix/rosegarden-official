@@ -67,8 +67,8 @@ public:
     void eventRemoved(const Segment *, Event *) override;
     void segmentDeleted(const Segment *) override;
 
-    virtual ControlItem* addControlItem2(float, float);
-    virtual ControlItem* addControlItem2(Event *);
+    virtual QSharedPointer<ControlItem> addControlItem2(float, float);
+    virtual QSharedPointer<ControlItem> addControlItem2(Event *);
 
     /** Draw a line of controllers from (x1, y1) to (x2, y2).  If
      * eraseExistingControllers is true, any existing controllers falling within

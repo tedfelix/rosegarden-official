@@ -112,8 +112,8 @@ public:
     float getXMin();
     
     void clearSelectedItems();
-    void addToSelection(ControlItem*);
-    void removeFromSelection(ControlItem*);
+    void addToSelection(QSharedPointer<ControlItem>);
+    void removeFromSelection(QSharedPointer<ControlItem>);
     EventSelection *getEventSelection()
     { return m_eventSelection; }
 
@@ -174,7 +174,7 @@ protected:
 //    virtual void layoutItem(ControlItem*);
     virtual ControlItemMap::iterator findControlItem(const ControlItem*);
     virtual ControlItemMap::iterator findControlItem(const Event*);
-    virtual void addControlItem(ControlItem*);
+    virtual void addControlItem(QSharedPointer<ControlItem>);
     virtual void addCheckVisibleLimits(ControlItemMap::iterator);
     virtual void removeControlItem(ControlItem*);
     virtual void removeControlItem(const Event*);
@@ -182,7 +182,7 @@ protected:
     virtual void removeCheckVisibleLimits(const ControlItemMap::iterator&);
     virtual void eraseControlItem(const Event*);
     virtual void eraseControlItem(const ControlItemMap::iterator&);
-    virtual int visiblePosition(ControlItem*);
+    virtual int visiblePosition(QSharedPointer<ControlItem>);
 
     // Stacking of the SegmentItems on the canvas
     //

@@ -30,7 +30,7 @@ class ControlItem;
 class ControlMouseEvent
 {
 public:
-    std::vector<ControlItem*> itemList; // list of items under the cursor, if any
+    ControlItemVector itemList; // list of items under the cursor, if any
 
 //    timeT time; // un-snapped and un-cropped
 //    float value;

@@ -20,7 +20,10 @@
 
 #include <QPolygonF>
 #include <QColor>
+#include <QSharedPointer>
+
 #include <map>
+
 class QPainter;
 class QMouseEvent;
 class QWheelEvent;
@@ -84,8 +87,9 @@ public:
     void setData(long data) { m_data = data; }
     long getData() { return m_data; }
 
-protected:
     virtual void reconfigure();
+
+protected:
     
     //--------------- Data members ---------------------------------
 
@@ -107,9 +111,12 @@ protected:
     static const unsigned int DefaultWidth;
 };
 
-typedef std::multimap<double /* xStart */, ControlItem *> ControlItemMap;
-typedef std::list<ControlItem *> ControlItemList;
+typedef std::multimap<double /* xStart */, QSharedPointer<ControlItem>>
+        ControlItemMap;
 
+typedef std::list<QSharedPointer<ControlItem>> ControlItemList;
+
+typedef std::vector<QSharedPointer<ControlItem>> ControlItemVector;
 
 }
 

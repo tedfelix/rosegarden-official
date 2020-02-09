@@ -153,16 +153,21 @@ ControlItemMap::iterator ControlRuler::findControlItem(const ControlItem* item)
     return it;
 }
 
-void ControlRuler::addControlItem(ControlItem* item)
+void ControlRuler::addControlItem(QSharedPointer<ControlItem> item)
 {
     // Add a ControlItem to the ruler
 
-    RG_DEBUG << "addControlItem(): ControlItem added: " << hex << (long)item;
+    //RG_DEBUG << "addControlItem(): ControlItem added: " << hex << (long)item;
     
     // ControlItem may not have an assigned event but must have x position
-    ControlItemMap::iterator it = m_controlItemMap.insert(ControlItemMap::value_type(item->xStart(),item));
+    ControlItemMap::iterator it =
+            m_controlItemMap.insert(
+                    ControlItemMap::value_type(item->xStart(), item));
+
     addCheckVisibleLimits(it);    
-    if (it->second->isSelected()) m_selectedItems.push_back(it->second);
+
+    if (it->second->isSelected())
+        m_selectedItems.push_back(it->second);
 
 }
 
@@ -171,7 +176,7 @@ void ControlRuler::addCheckVisibleLimits(ControlItemMap::iterator it)
     // Referenced item is has just been added to m_controlItemMap
     // If it is visible, add it to the list and correct first/last
     // visible item iterators
-    ControlItem *item = it->second;
+    QSharedPointer<ControlItem> item = it->second;
     
     // If this new item is visible
     if (visiblePosition(item)==0) {
@@ -225,8 +230,8 @@ void ControlRuler::removeControlItem(const Event *event)
 
 void ControlRuler::removeControlItem(const ControlItemMap::iterator &it)
 {
-    RG_DEBUG << "removeControlItem(): iterator->item: " << hex << (long) it->second;
-    RG_DEBUG << "  m_selectedItems.front(): " << hex << (long) m_selectedItems.front();
+    //RG_DEBUG << "removeControlItem(): iterator->item: " << hex << (long) it->second;
+    //RG_DEBUG << "  m_selectedItems.front(): " << hex << (long) m_selectedItems.front();
     
     if (it->second->isSelected()) m_selectedItems.remove(it->second);
     removeCheckVisibleLimits(it);
@@ -287,26 +292,37 @@ void ControlRuler::eraseControlItem(const Event *event)
 
 void ControlRuler::eraseControlItem(const ControlItemMap::iterator &it)
 {
-    ControlItem *item = it->second;
     removeControlItem(it);
-    delete item;
 }
 
-void ControlRuler::moveItem(ControlItem* item)
+void ControlRuler::moveItem(ControlItem *item)
 {
+    // ??? This is pretty ugly.  A naked pointer being used to find
+    //     a shared pointer.  It's as if the three callers of this
+    //     function also need to pass in the shared pointer.  That
+    //     would look a bit funny:
+    //
+    //         item->reconfigure(item);
+
     // Move the item within m_controlItemMap
     // Need to check changes in visibility
     // DO NOT change isSelected or m_selectedItems as this is used to loop this
     ControlItemMap::iterator it = findControlItem(item);
-    if (it == m_controlItemMap.end()) return;
+    // Not found?  Bail.
+    if (it == m_controlItemMap.end())
+        return;
+
+    // Copy the shared pointer so that the item isn't deleted.
+    QSharedPointer<ControlItem> item2 = it->second;
 
     removeCheckVisibleLimits(it);
     m_controlItemMap.erase(it);
-    it = static_cast <ControlItemMap::iterator> (m_controlItemMap.insert(ControlItemMap::value_type(item->xStart(),item)));
+    it = m_controlItemMap.insert(
+            ControlItemMap::value_type(item2->xStart(), item2));
     addCheckVisibleLimits(it);
 }
 
-int ControlRuler::visiblePosition(ControlItem* item)
+int ControlRuler::visiblePosition(QSharedPointer<ControlItem> item)
 {
     // Check visibility of an item
     // Returns: -1 - item is off screen left
@@ -343,6 +359,7 @@ void ControlRuler::updateSegment()
 
     QString commandLabel = "Adjust control/property";
 
+    // ??? MEMORY LEAK (confirmed) Probably due to return from middle.
     MacroCommand *macro = new MacroCommand(commandLabel);
 
     // Find the extent of the selected items
@@ -419,7 +436,7 @@ void ControlRuler::notationLayoutUpdated(timeT startTime, timeT /*endTime*/)
     // For this reason, we need to collect items into a separate list otherwise we get the
     // dreaded 'modifying a list within a loop of the list' problem which can take quite a long
     // time to fix!
-    std::vector<ControlItem*> itemsToUpdate;
+    ControlItemVector itemsToUpdate;
     ControlItemMap::iterator it = m_controlItemMap.begin();
     while (it != m_controlItemMap.end() && it->first == 0) {
         itemsToUpdate.push_back(it->second);
@@ -435,9 +452,11 @@ void ControlRuler::notationLayoutUpdated(timeT startTime, timeT /*endTime*/)
         ++it;
     }
     
-    for (std::vector<ControlItem*>::iterator vit = itemsToUpdate.begin(); vit != itemsToUpdate.end(); ++vit) {
+    for (ControlItemVector::iterator vit = itemsToUpdate.begin();
+         vit != itemsToUpdate.end();
+         ++vit) {
         (*vit)->update();
-        RG_DEBUG << "notationLayoutUpdated(): Updated item: " << hex << (long)(*vit);
+        //RG_DEBUG << "notationLayoutUpdated(): Updated item: " << hex << (long)(*vit);
     }
     
     update();
@@ -702,7 +721,7 @@ void ControlRuler::updateSelection()
     emit rulerSelectionChanged(m_eventSelection);
 }
 
-void ControlRuler::addToSelection(ControlItem *item)
+void ControlRuler::addToSelection(QSharedPointer<ControlItem> item)
 {
     ControlItemList::iterator found = 
         std::find (m_selectedItems.begin(),
@@ -718,7 +737,7 @@ void ControlRuler::addToSelection(ControlItem *item)
     RG_DEBUG << "addToSelection() done";
 }
 
-void ControlRuler::removeFromSelection(ControlItem*item)
+void ControlRuler::removeFromSelection(QSharedPointer<ControlItem> item)
 {
     m_selectedItems.remove(item);
     item->setSelected(false);
@@ -730,12 +749,6 @@ void ControlRuler::clear()
 {
     RG_DEBUG << "clear() - m_controlItemMap.size(): " << m_controlItemMap.size();
 
-    for (ControlItemMap::iterator it = m_controlItemMap.begin(); it != m_controlItemMap.end(); ++it) {
-        if (ControlItem *item = dynamic_cast<ControlItem*>(it->second)) {
-            RG_DEBUG << "  Deleting controlItem";
-            delete item;
-        }
-    }
     m_controlItemMap.clear();
     m_firstVisibleItem = m_controlItemMap.end();
     m_lastVisibleItem = m_controlItemMap.end();

@@ -36,9 +36,13 @@ ControlChangeCommand::ControlChangeCommand(ControlItemList selectedItems,
 
 void ControlChangeCommand::modifySegment()
 {
-    for (ControlItemList::iterator it = m_selectedItems.begin(); it!=m_selectedItems.end(); ++it) {
-        if (ControlItem *item = dynamic_cast<ControlItem*>(*it))
-            item->updateSegment();
+    for (ControlItemList::iterator it = m_selectedItems.begin();
+         it != m_selectedItems.end();
+         ++it) {
+        // If the pointer is valid, update that ControlItem's Segment.
+        // ??? Invalid pointers are normal.  Why?
+        if (*it)
+            (*it)->updateSegment();
     }
 
     ///@TODO As this method can now add events, we need to use Normalise rests

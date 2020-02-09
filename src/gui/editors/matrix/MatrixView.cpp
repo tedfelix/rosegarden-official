@@ -137,6 +137,7 @@ MatrixView::MatrixView(RosegardenDocument *doc,
     m_matrixWidget->setSegments(doc, segments);
        
     // Many actions are created here
+    // ??? MEMORY LEAK (confirmed)
     m_commandRegistry = new MatrixCommandRegistry(this);
     
     setupActions();
