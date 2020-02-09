@@ -1077,15 +1077,16 @@ PitchBendSequenceDialog::addStepwiseEvents(MacroCommand *macro)
     // Step size is floating-point so we can find exactly correct
     // fractional values and then round each one to the nearest
     // integer.  Since we want it to exactly divide the interval, we
-    // recalculate it even if StepSizeDirect provided it
+    // recalculate it even if StepSizePercent provided it.
     const double stepSize = static_cast<double>(rampDelta) / numSteps;
 
-    /* Compute values used to step thru multiple timesteps. */
     const timeT fullDuration = m_endTime - m_startTime;
     const timeT prerampDuration =
         m_wait->value() * fullDuration / 100;
+
     const timeT sequenceStartTime = m_startTime + prerampDuration;
     const timeT sequenceDuration = m_endTime - sequenceStartTime;
+
     const timeT rampDuration =
         m_rampDuration->value() * sequenceDuration / 100;
     const timeT rampEndTime = sequenceStartTime + rampDuration;
@@ -1103,10 +1104,14 @@ PitchBendSequenceDialog::addStepwiseEvents(MacroCommand *macro)
     // Remember the most recent value so we can avoid inserting it
     // twice.
     int lastValue = rampStartValue;
-    
+
+    // For each step
     for (int i = 1; i < numSteps; ++i) {
 
-        /** Figure out the event's value. **/
+        // Value
+
+        // The value changes linearly.  It is the time that makes the
+        // different shapes, e.g. log and half sine.
 
         // We first calculate an exact float value, then round it
         // to int.  The loss of precision vs later use as a float
@@ -1122,11 +1127,10 @@ PitchBendSequenceDialog::addStepwiseEvents(MacroCommand *macro)
 
         lastValue = value;
 
-        /** Figure out the time of the event. **/
-        // timeRatio is when to place the event, between the start
-        // of the time interval (0.0) and the end (1.0).  Each
-        // branch of "switch" sets timeRatio's value.
-        double timeRatio = 0;
+        // Time
+
+        // Time of the event, normalized to between 0 and 1.
+        double time = 0;
 
         switch (rampMode) {
         case QuarterSine: {
@@ -1143,7 +1147,7 @@ PitchBendSequenceDialog::addStepwiseEvents(MacroCommand *macro)
             const double valueRatio =
                 static_cast<double>(value - rampStartValue) / rampDelta;
 
-            timeRatio = 2.0 * asin(valueRatio) / pi;
+            time = 2.0 * asin(valueRatio) / pi;
 
             break;
         }
@@ -1166,36 +1170,36 @@ PitchBendSequenceDialog::addStepwiseEvents(MacroCommand *macro)
             const double valueRatio =
                 static_cast<double>(value - rampStartValue) / rampDelta;
 
-            timeRatio = (acos(1.0 - 2 * valueRatio)) / pi;
+            time = (acos(1.0 - 2 * valueRatio)) / pi;
 
             break;
         }
+
         case Logarithmic: {
             static const double epsilon = 0.01;
 
             const double denominator =
                 log(rampEndValue + epsilon) - log(rampStartValue + epsilon);
 
-            // Now it should be impossible for denominator to be
-            // exactly zero, but since that once caused a serious
-            // bug let's always check it (If it's not exactly 0.0
-            // it wouldn't cause a divide-by-zero)
-            Q_ASSERT_X(denominator != 0.0, "addStepwiseEvents",
-                       "got a denominator of exactly zero");
+            // Avoid divide by zero.
+            if (denominator == 0)
+                return;
 
-            timeRatio = (log(rampStartValue + epsilon + i * stepSize) -
-                         log(rampStartValue + epsilon)) / denominator;
+            time = (log(rampStartValue + epsilon + i * stepSize) -
+                    log(rampStartValue + epsilon)) / denominator;
 
             break;
         }
 
         default: // Fall thru to the simple case.
         case Linear:
-            timeRatio = static_cast<double>(i) / numSteps;
+            time = static_cast<double>(i) / numSteps;
             break;
+
         }
 
-        const timeT eventTime = sequenceStartTime + (timeRatio * rampDuration);
+        // Convert normalized time to MIDI clocks.
+        const timeT eventTime = sequenceStartTime + (time * rampDuration);
 
         // Add the event to the MacroCommand.
         macro->addCommand(new EventInsertionCommand(
