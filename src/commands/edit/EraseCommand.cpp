@@ -43,8 +43,8 @@ EraseCommand::EraseCommand(EventSelection &selection) :
 
 EraseCommand::~EraseCommand()
 {
-    // QSharedPointer would be nice.
-    delete m_selection;
+    // ??? MEMORY LEAK (confirmed)  delete here isn't a reliable solution.
+    //delete m_selection;
 }
 
 void
