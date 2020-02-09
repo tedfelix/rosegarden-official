@@ -931,95 +931,96 @@ PitchBendSequenceDialog::getTimeSpan() const
 int
 PitchBendSequenceDialog::numVibratoCycles()
 {
-    const int vibratoFrequency  = m_hertz->value();
-    const double totalCyclesExact =
-        vibratoFrequency * getTimeSpan();
+    const double totalCyclesExact = m_hertz->value() * getTimeSpan();
+
     // We round so that the interval gets an exact number of cycles.
-    const int totalCycles = int(totalCyclesExact + 0.5);
+    const int totalCycles = lround(totalCyclesExact);
 
     // Since the user wanted vibrato, provide at least one cycle.
-    if (totalCycles > 1) { return totalCycles; }
-    else { return 1; }
+    if (totalCycles < 1)
+        return 1;
+
+    return totalCycles;
 }
 
 void
 PitchBendSequenceDialog::addLinearCountedEvents(MacroCommand *macro)
 {
-    /* Ramp calculations. */
-    const int startValue = spinboxToValue(m_startAtValue);
-    const int endValue   = spinboxToValue(m_endValue);
-    const int valueChange = endValue - startValue;
-
     // numSteps doesn't include the initial event in the
     // total.  Eg if we ramp from 92 to 100 as {92, 96, 100}, we
     // have numSteps = 2.
     int numSteps = m_stepCount->value();
-    if (numSteps < 1) { numSteps = 1; }
-    const int steps = numSteps;
+    if (numSteps < 1)
+        numSteps = 1;
 
-    /* Compute values used to step thru multiple timesteps. */ 
     const timeT fullDuration = m_endTime - m_startTime;
-    const timeT prerampDuration =
-        (m_wait->value() * fullDuration)/100;
-    const timeT sequenceStartTime = m_startTime + prerampDuration;
+    const timeT waitTime = m_wait->value() * fullDuration / 100;
+
+    const timeT sequenceStartTime = m_startTime + waitTime;
     const timeT sequenceDuration = m_endTime - sequenceStartTime;
+
     const timeT rampDuration =
-        (m_rampDuration->value() * sequenceDuration)/100;
+        m_rampDuration->value() * sequenceDuration / 100;
     const timeT rampEndTime = sequenceStartTime + rampDuration;
-    
+
+    // Ramp
+    const int startValue = spinboxToValue(m_startAtValue);
+    const int endValue = spinboxToValue(m_endValue);
+    const int valueChange = endValue - startValue;
+
+    // LFO/vibrato
+    // ??? Although an attempt is made here to ensure we have a whole
+    //     number of LFO cycles, there is no attempt made to land on
+    //     0 at the end.  So we end up off by quite a bit.
     const int totalCycles = numVibratoCycles();
-    const float stepsPerCycle  = float(steps) / float (totalCycles);
+    const double stepsPerCycle = static_cast<double>(numSteps) / totalCycles;
     const int vibratoSA = spinboxToValueDelta(m_startAmplitude);
     const int vibratoEA = spinboxToValueDelta(m_endAmplitude);
 
+    // Add the first Event to the MacroCommand.
+    macro->addCommand(new EventInsertionCommand(
+            *m_segment,
+            m_controlParameter.newEvent(m_startTime, startValue)));
 
-    // Always put an event at the start of the sequence.
-    Event *event = m_controlParameter.newEvent(m_startTime, startValue);
-
-    // EventInsertionCommand does not take ownership of event.  It makes
-    // a copy.
-    macro->addCommand(new EventInsertionCommand(*m_segment, event));
-
-    delete event;
-    event = nullptr;
-
-    for ( int i = 1 ; i < steps ; i++) {
-        const timeT elapsedTime = (timeT) i * sequenceDuration/(timeT) steps;
+    // For each step
+    for (int i = 1; i < numSteps; ++i) {
+        const timeT elapsedTime = i * sequenceDuration / numSteps;
         timeT eventTime = sequenceStartTime + elapsedTime;
-        if (eventTime >= m_endTime) { eventTime = m_endTime; }
+        if (eventTime >= m_endTime)
+            eventTime = m_endTime;
 
-        int value = endValue;
-        if (eventTime >= rampEndTime) {
+        int value = 0;
+        // If we are in the ramp, compute the ramp value.
+        if (eventTime < rampEndTime)
+            value = startValue + valueChange * elapsedTime / rampDuration;
+        else  // ramp has ended
             value = endValue;
-        } else {
-            value = startValue + (valueChange*elapsedTime/rampDuration);
-        }
 
+        // Modulation Amplitude (Vibrato/Tremolo/LFO Modulation)
         // The division by pi is done only to bring it into line with
         // amplitude's historical meaning in this dialog.
-        const float amplitudeRatio =
-            sin(float(i) * 2.0 * pi / float(stepsPerCycle)) / pi;
-        
-        const int amplitude = (vibratoEA - vibratoSA)*i/steps+ vibratoSA;
+        const double amplitudeRatio =
+            sin(2.0 * pi * i / stepsPerCycle) / pi;
 
-        value = value + int(amplitudeRatio * amplitude);
+        // Modulation Ramp Amplitude
+        const int amplitude =
+                (vibratoEA - vibratoSA) * i / numSteps + vibratoSA;
+
+        // Add in the modulation.
+        value = value + lround(amplitudeRatio * amplitude);
         value = m_controlParameter.clamp(value);
 
-        Event *event = m_controlParameter.newEvent(eventTime, value);
+        // Add the event to the MacroCommand.
+        macro->addCommand(new EventInsertionCommand(
+                *m_segment,
+                m_controlParameter.newEvent(eventTime, value)));
 
-        // EventInsertionCommand does not take ownership of the event.
-        // It makes a copy.
-        macro->addCommand(new EventInsertionCommand(*m_segment, event));
-
-        delete event;
-        event = nullptr;
-
-        /* Keep going if we are adding vibrato events, because those
-           are inserted even after the ramp. */
-        if ((eventTime >= rampEndTime) &&
-            (vibratoEA == 0) &&
-            (vibratoSA == 0))
-            { break; }
+        // If we're past the ramp end time, and there is no vibrato, bail.
+        // We keep going if we are adding vibrato events, because those
+        // are inserted even after the ramp.
+        if (eventTime >= rampEndTime  &&
+            vibratoEA == 0  &&  vibratoSA == 0)
+            break;
     }
 }
 
@@ -1074,15 +1075,10 @@ PitchBendSequenceDialog::addStepwiseEvents(MacroCommand *macro)
     const timeT rampEndTime = sequenceStartTime + rampDuration;
     const RampMode rampMode = getRampMode();
     
-    /* Always put an event at the start of the sequence.  */
-    Event *event = m_controlParameter.newEvent(m_startTime, startValue);
-    
-    // EventInsertionCommand does not take ownership of the event.
-    // It makes a copy.
-    macro->addCommand(new EventInsertionCommand(*m_segment, event));
-
-    delete event;
-    event = nullptr;
+    // Add the first Event to the MacroCommand.
+    macro->addCommand(new EventInsertionCommand(
+            *m_segment,
+            m_controlParameter.newEvent(m_startTime, startValue)));
 
     // Remember the most recent value so we can avoid inserting it
     // twice.
@@ -1177,31 +1173,23 @@ PitchBendSequenceDialog::addStepwiseEvents(MacroCommand *macro)
             }
             const timeT eventTime = sequenceStartTime + (timeRatio * rampDuration);
 
-            Event *event = m_controlParameter.newEvent(eventTime, value);
-
-            // EventInsertionCommand does not take ownership of the event.
-            // It makes a copy.
-            macro->addCommand(new EventInsertionCommand(*m_segment, event));
-
-            delete event;
-            event = nullptr;
+            // Add the event to the MacroCommand.
+            macro->addCommand(new EventInsertionCommand(
+                    *m_segment,
+                    m_controlParameter.newEvent(eventTime, value)));
 
             if (eventTime >= rampEndTime) { break; }
         }
     }
+
+    // If the value changed
     if (valueChange != 0) {
-        /* If we have changed value at all, place an event for the
-           final value.  Its time is one less than end-time so that we
-           are only writing into the time interval we were given.  */
-        Event *finalEvent =
-            m_controlParameter.newEvent(m_endTime - 1, endValue);
-
-        // EventInsertionCommand does not take ownership of the event.
-        // It makes a copy.
-        macro->addCommand(new EventInsertionCommand(*m_segment, finalEvent));
-
-        delete finalEvent;
-        finalEvent = nullptr;
+        // Add an event for the final value.  Its time is one less than
+        // end-time so that we are only writing into the time interval we
+        // were given.
+        macro->addCommand(new EventInsertionCommand(
+                *m_segment,
+                m_controlParameter.newEvent(m_endTime - 1, endValue)));
     }
 }
 

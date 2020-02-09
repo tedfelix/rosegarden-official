@@ -39,12 +39,10 @@ class EventInsertionCommand : public BasicCommand
 
 public:
     /**
-     * !!! NOTE: This makes a COPY of the event.  It does not take
-     *           ownership.  The client is responsible for deleting
-     *           any memory that was allocated.
+     * NOTE: This class takes ownership of event and will delete
+     *       it upon destruction.
      */
-    EventInsertionCommand(Segment &segment,
-                          Event *event);
+    EventInsertionCommand(Segment &segment, Event *event);
 
     ~EventInsertionCommand() override;
 
