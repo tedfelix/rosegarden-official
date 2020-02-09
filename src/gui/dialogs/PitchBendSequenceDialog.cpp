@@ -965,9 +965,9 @@ PitchBendSequenceDialog::addLinearCountedEvents(MacroCommand *macro)
     const timeT rampEndTime = sequenceStartTime + rampDuration;
 
     // Ramp
-    const int startValue = spinboxToValue(m_startAtValue);
-    const int endValue = spinboxToValue(m_endValue);
-    const int valueChange = endValue - startValue;
+    const int rampStartValue = spinboxToValue(m_startAtValue);
+    const int rampEndValue = spinboxToValue(m_endValue);
+    const int rampDelta = rampEndValue - rampStartValue;
 
     // Modulation (vibrato/tremolo/LFO)
     // We don't necessarily honor the user's modulation frequency
@@ -981,7 +981,7 @@ PitchBendSequenceDialog::addLinearCountedEvents(MacroCommand *macro)
     // Add the first Event to the MacroCommand.
     macro->addCommand(new EventInsertionCommand(
             *m_segment,
-            m_controlParameter.newEvent(m_startTime, startValue)));
+            m_controlParameter.newEvent(m_startTime, rampStartValue)));
 
     // For each step
     for (int i = 1; i < numSteps; ++i) {
@@ -996,9 +996,9 @@ PitchBendSequenceDialog::addLinearCountedEvents(MacroCommand *macro)
 
         // If we are in the ramp, compute the ramp value.
         if (eventTime < rampEndTime)
-            value = startValue + valueChange * elapsedTime / rampDuration;
+            value = rampStartValue + rampDelta * elapsedTime / rampDuration;
         else  // ramp has ended
-            value = endValue;
+            value = rampEndValue;
 
         // Modulation
 
@@ -1033,25 +1033,24 @@ PitchBendSequenceDialog::addLinearCountedEvents(MacroCommand *macro)
         // Add a final event to ensure that we land where we expect to.
         macro->addCommand(new EventInsertionCommand(
                 *m_segment,
-                m_controlParameter.newEvent(m_endTime - 1, endValue)));
+                m_controlParameter.newEvent(m_endTime - 1, rampEndValue)));
     }
 }
 
 void
 PitchBendSequenceDialog::addStepwiseEvents(MacroCommand *macro)
 {
-    // Needed when rampMode is logarithmic. 
-    static const float epsilon = 0.01;
+    const int rampStartValue = spinboxToValue(m_startAtValue);
+    const int rampEndValue = spinboxToValue(m_endValue);
+    const int rampDelta = rampEndValue - rampStartValue;
 
-    /* Ramp calculations. */
-    const int startValue = spinboxToValue(m_startAtValue);
-    const int endValue   = spinboxToValue(m_endValue);
-    const int valueChange = endValue - startValue;
-    
+    // Compute the number of steps required.
+
     // numSteps is one less than the number of ramp events we
     // place.  Eg if we ramp from 92 to 100 as {92, 96, 100}, we have
     // numSteps = 2.
-    int numSteps;
+    int numSteps = 0;
+
     switch (getStepMode()) {
     case StepCount:
         numSteps = m_stepCount->value();
@@ -1063,147 +1062,157 @@ PitchBendSequenceDialog::addStepwiseEvents(MacroCommand *macro)
     case StepSizePercent:
         {
             const int rawStepSize = spinboxToValueDelta(m_stepSize);
-            if (rawStepSize == 0) { return; }
-            numSteps = fabs(float(valueChange) / float(rawStepSize) + 0.5);
+            if (rawStepSize == 0)
+                return;
+
+            numSteps = lround(fabs(
+                    static_cast<double>(rampDelta) / rawStepSize));
             break;
         }
     }
 
-    if (numSteps < 1) { numSteps = 1; }
+    if (numSteps < 1)
+        numSteps = 1;
 
     // Step size is floating-point so we can find exactly correct
     // fractional values and then round each one to the nearest
     // integer.  Since we want it to exactly divide the interval, we
     // recalculate it even if StepSizeDirect provided it
-    const float stepSize = float(valueChange) / float(numSteps);
+    const double stepSize = static_cast<double>(rampDelta) / numSteps;
 
     /* Compute values used to step thru multiple timesteps. */
     const timeT fullDuration = m_endTime - m_startTime;
     const timeT prerampDuration =
-        (m_wait->value() * fullDuration)/100;
+        m_wait->value() * fullDuration / 100;
     const timeT sequenceStartTime = m_startTime + prerampDuration;
     const timeT sequenceDuration = m_endTime - sequenceStartTime;
     const timeT rampDuration =
-        (m_rampDuration->value() * sequenceDuration)/100;
+        m_rampDuration->value() * sequenceDuration / 100;
     const timeT rampEndTime = sequenceStartTime + rampDuration;
     const RampMode rampMode = getRampMode();
     
     // Add the first Event to the MacroCommand.
     macro->addCommand(new EventInsertionCommand(
             *m_segment,
-            m_controlParameter.newEvent(m_startTime, startValue)));
+            m_controlParameter.newEvent(m_startTime, rampStartValue)));
+
+    // No ramp?  Bail.
+    if (rampDelta == 0)
+        return;
 
     // Remember the most recent value so we can avoid inserting it
     // twice.
-    int lastValue = startValue;
+    int lastValue = rampStartValue;
     
-    // Don't loop if we are not changing value.  It's wasteful and for
-    // some settings it causes a divide-by-zero, which on some systems
-    // leads to events inserted at a very large negative value
-    // resulting in a weird behaviour of rthe GUI.
-    if (valueChange != 0) {
-        for (int i = 1 ; i < numSteps ; ++i) {
+    for (int i = 1; i < numSteps; ++i) {
 
-            /** Figure out the event's value. **/
+        /** Figure out the event's value. **/
 
-            // We first calculate an exact float value, then round it
-            // to int.  The loss of precision vs later use as a float
-            // is deliberate: we want it to be the exact integer that
-            // we will use.
-            int value = startValue + (stepSize * i + 0.5);
-            value = m_controlParameter.clamp(value);
+        // We first calculate an exact float value, then round it
+        // to int.  The loss of precision vs later use as a float
+        // is deliberate: we want it to be the exact integer that
+        // we will use.
+        int value = rampStartValue + lround(stepSize * i);
+        value = m_controlParameter.clamp(value);
 
-            // Skip events that wouldn't change anything or that reach
-            // the end prematurely.
-            if ((value == lastValue) || (value == endValue)) {
-                continue;
-            } else {
-                lastValue = value;
-            }
+        // Skip events that wouldn't change anything or that reach
+        // the end prematurely.
+        if (value == lastValue  ||  value == rampEndValue)
+            continue;
 
-            /** Figure out the time of the event. **/
-            // timeRatio is when to place the event, between the start
-            // of the time interval (0.0) and the end (1.0).  Each
-            // branch of "switch" sets timeRatio's value.
-            float timeRatio; 
-            switch (rampMode) {
-            case QuarterSine: {
-                /* For a quarter-sine, range is 0 to pi/2, giving 0 to 1
+        lastValue = value;
 
-                   value = startValue + sin(pi * ratio/2) * valueChange
-                 
-                   so to get time as a ratio of ramp time:
+        /** Figure out the time of the event. **/
+        // timeRatio is when to place the event, between the start
+        // of the time interval (0.0) and the end (1.0).  Each
+        // branch of "switch" sets timeRatio's value.
+        double timeRatio = 0;
 
-                   ratio = 2 sin^-1((value - startValue)/valueChange)/pi
+        switch (rampMode) {
+        case QuarterSine: {
+            /* For a quarter-sine, range is 0 to pi/2, giving 0 to 1
 
-                */
-                const float valueRatio =
-                    float(value - startValue)/float(valueChange);
-                timeRatio = 2.0 * asin(valueRatio) / pi;
-                break;
-            }
-            
-            case HalfSine: {
-                /* For a half-sine, range is -pi/2 to pi/2, giving -1 to 1.
+               value = startValue + sin(pi * ratio/2) * valueChange
 
-                   value = startValue + (sin(pi * ratio - pi/2)/2 + 0.5) * valueChange
+               so to get time as a ratio of ramp time:
 
-                   Using sin(x-pi/2) = -cos(x)
+               ratio = 2 arcsin((value - startValue)/valueChange)/pi
 
-                   value = startValue + (-cos(pi * ratio)/2 + 0.5) * valueChange
+            */
 
-                   so to get time as a ratio of ramp time:
+            const double valueRatio =
+                static_cast<double>(value - rampStartValue) / rampDelta;
 
-                   ratio = arccos (1.0 - 2 ((value - startValue)/valueChange))/ pi
+            timeRatio = 2.0 * asin(valueRatio) / pi;
 
-                */
-                const float valueRatio =
-                    float(value - startValue)/float(valueChange);
-                timeRatio = (acos(1.0 - 2 * valueRatio)) / pi;
-                break;
-            }
-            case Logarithmic: {
-                const float denominator =
-                    (log(endValue + epsilon) - log(startValue + epsilon));
-                // Now it should be impossible for denominator to be
-                // exactly zero, but since that once caused a serious
-                // bug let's always check it (If it's not exactly 0.0
-                // it wouldn't cause a divide-by-zero)
-                Q_ASSERT_X(denominator != 0.0, "addStepwiseEvents",
-                           "got a denominator of exactly zero");
-                timeRatio = (
-                             (log(startValue + epsilon + i * stepSize) - log(startValue + epsilon))
-                             / denominator);
-                
-                break;
-            }
-
-            default: // Fall thru to the simple case.
-            case Linear: {
-                timeRatio = float(i) / float(numSteps);
-            }
-                break;
-            }
-            const timeT eventTime = sequenceStartTime + (timeRatio * rampDuration);
-
-            // Add the event to the MacroCommand.
-            macro->addCommand(new EventInsertionCommand(
-                    *m_segment,
-                    m_controlParameter.newEvent(eventTime, value)));
-
-            if (eventTime >= rampEndTime) { break; }
+            break;
         }
-    }
 
-    // If the value changed
-    if (valueChange != 0) {
-        // Add an event for the final value.  Its time is one less than
-        // end-time so that we are only writing into the time interval we
-        // were given.
+        case HalfSine: {
+            /* For a half-sine, range is -pi/2 to pi/2, giving -1 to 1.
+
+               value = startValue + (sin(pi * ratio - pi/2)/2 + 0.5) * valueChange
+
+               Using sin(x-pi/2) = -cos(x)
+
+               value = startValue + (-cos(pi * ratio)/2 + 0.5) * valueChange
+
+               so to get time as a ratio of ramp time:
+
+               ratio = arccos (1.0 - 2 ((value - startValue)/valueChange))/ pi
+
+            */
+
+            const double valueRatio =
+                static_cast<double>(value - rampStartValue) / rampDelta;
+
+            timeRatio = (acos(1.0 - 2 * valueRatio)) / pi;
+
+            break;
+        }
+        case Logarithmic: {
+            static const double epsilon = 0.01;
+
+            const double denominator =
+                log(rampEndValue + epsilon) - log(rampStartValue + epsilon);
+
+            // Now it should be impossible for denominator to be
+            // exactly zero, but since that once caused a serious
+            // bug let's always check it (If it's not exactly 0.0
+            // it wouldn't cause a divide-by-zero)
+            Q_ASSERT_X(denominator != 0.0, "addStepwiseEvents",
+                       "got a denominator of exactly zero");
+
+            timeRatio = (log(rampStartValue + epsilon + i * stepSize) -
+                         log(rampStartValue + epsilon)) / denominator;
+
+            break;
+        }
+
+        default: // Fall thru to the simple case.
+        case Linear:
+            timeRatio = static_cast<double>(i) / numSteps;
+            break;
+        }
+
+        const timeT eventTime = sequenceStartTime + (timeRatio * rampDuration);
+
+        // Add the event to the MacroCommand.
         macro->addCommand(new EventInsertionCommand(
                 *m_segment,
-                m_controlParameter.newEvent(m_endTime - 1, endValue)));
+                m_controlParameter.newEvent(eventTime, value)));
+
+        // Done with the ramp?  Bail.
+        if (eventTime >= rampEndTime)
+            break;
     }
+
+    // Add an event for the final value.  Its time is one less than
+    // end-time so that we are only writing into the time interval we
+    // were given.
+    macro->addCommand(new EventInsertionCommand(
+            *m_segment,
+            m_controlParameter.newEvent(m_endTime - 1, rampEndValue)));
 }
 
 void
