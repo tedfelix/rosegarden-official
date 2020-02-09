@@ -927,14 +927,17 @@ PitchBendSequenceDialog::getTimeSpan() const
 }
 
 int
-PitchBendSequenceDialog::numVibratoCycles()
+PitchBendSequenceDialog::numModulationCycles()
 {
+    // We don't necessarily honor the user's modulation frequency
+    // request.  Instead, we try to provide a whole number of cycles.
+
     const double totalCyclesExact = m_hertz->value() * getTimeSpan();
 
     // We round so that the interval gets an exact number of cycles.
     const int totalCycles = lround(totalCyclesExact);
 
-    // Since the user wanted vibrato, provide at least one cycle.
+    // Since the user wanted modulation, provide at least one cycle.
     if (totalCycles < 1)
         return 1;
 
@@ -966,13 +969,14 @@ PitchBendSequenceDialog::addLinearCountedEvents(MacroCommand *macro)
     const int endValue = spinboxToValue(m_endValue);
     const int valueChange = endValue - startValue;
 
-    // LFO/vibrato
-    // Do not necessarily honor the user's frequency request.  Instead,
-    // try to make sure we have a whole number of cycles.
-    const int totalCycles = numVibratoCycles();
-    const double stepsPerCycle = static_cast<double>(numSteps) / totalCycles;
-    const int vibratoSA = spinboxToValueDelta(m_startAmplitude);
-    const int vibratoEA = spinboxToValueDelta(m_endAmplitude);
+    // Modulation (vibrato/tremolo/LFO)
+    // We don't necessarily honor the user's modulation frequency
+    // request.  Instead, we try to provide a whole number of cycles.
+    const int totalModulationCycles = numModulationCycles();
+    const double stepsPerCycle =
+            static_cast<double>(numSteps) / totalModulationCycles;
+    const int modStartAmp = spinboxToValueDelta(m_startAmplitude);
+    const int modEndAmp = spinboxToValueDelta(m_endAmplitude);
 
     // Add the first Event to the MacroCommand.
     macro->addCommand(new EventInsertionCommand(
@@ -987,23 +991,28 @@ PitchBendSequenceDialog::addLinearCountedEvents(MacroCommand *macro)
             eventTime = m_endTime;
 
         int value = 0;
+
+        // Ramp
+
         // If we are in the ramp, compute the ramp value.
         if (eventTime < rampEndTime)
             value = startValue + valueChange * elapsedTime / rampDuration;
         else  // ramp has ended
             value = endValue;
 
-        // Modulation Amplitude (Vibrato/Tremolo/LFO Modulation)
+        // Modulation
+
+        // Modulation Amplitude (vibrato/tremolo/LFO)
         // Divide by 2 for peak-to-peak.  So, 200% total peak-to-peak for
         // pitchbend, and 127 total peak-to-peak for controllers.
-        const double amplitudeRatio = sin(2.0 * pi * i / stepsPerCycle) / 2;
+        const double modAmplitude = sin(2.0 * pi * i / stepsPerCycle) / 2;
 
         // Modulation Ramp Amplitude
-        const int amplitude =
-                (vibratoEA - vibratoSA) * i / numSteps + vibratoSA;
+        const int modRampAmplitude =
+                (modEndAmp - modStartAmp) * i / numSteps + modStartAmp;
 
         // Add in the modulation.
-        value = value + lround(amplitudeRatio * amplitude);
+        value = value + lround(modAmplitude * modRampAmplitude);
         value = m_controlParameter.clamp(value);
 
         // Add the event to the MacroCommand.
@@ -1011,16 +1020,16 @@ PitchBendSequenceDialog::addLinearCountedEvents(MacroCommand *macro)
                 *m_segment,
                 m_controlParameter.newEvent(eventTime, value)));
 
-        // If we're past the ramp end time, and there is no vibrato, bail.
-        // We keep going if we are adding vibrato events, because those
+        // If we're past the ramp end time, and there is no modulation, bail.
+        // We keep going if we are adding modulation events, because those
         // are inserted even after the ramp.
         if (eventTime >= rampEndTime  &&
-            vibratoEA == 0  &&  vibratoSA == 0)
+            modEndAmp == 0  &&  modStartAmp == 0)
             break;
     }
 
-    // If there was vibrato
-    if (vibratoSA != 0  ||  vibratoEA != 0) {
+    // If there was modulation
+    if (modStartAmp != 0  ||  modEndAmp != 0) {
         // Add a final event to ensure that we land where we expect to.
         macro->addCommand(new EventInsertionCommand(
                 *m_segment,

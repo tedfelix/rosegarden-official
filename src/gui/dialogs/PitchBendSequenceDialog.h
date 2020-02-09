@@ -156,7 +156,7 @@ private:
     QDoubleSpinBox *m_startAmplitude;
     QDoubleSpinBox *m_endAmplitude;
     QDoubleSpinBox *m_hertz;
-    int numVibratoCycles();
+    int numModulationCycles();
 
     // Ramp mode
 
