@@ -967,9 +967,8 @@ PitchBendSequenceDialog::addLinearCountedEvents(MacroCommand *macro)
     const int valueChange = endValue - startValue;
 
     // LFO/vibrato
-    // ??? Although an attempt is made here to ensure we have a whole
-    //     number of LFO cycles, there is no attempt made to land on
-    //     0 at the end.  So we end up off by quite a bit.
+    // Do not necessarily honor the user's frequency request.  Instead,
+    // try to make sure we have a whole number of cycles.
     const int totalCycles = numVibratoCycles();
     const double stepsPerCycle = static_cast<double>(numSteps) / totalCycles;
     const int vibratoSA = spinboxToValueDelta(m_startAmplitude);
@@ -1018,6 +1017,14 @@ PitchBendSequenceDialog::addLinearCountedEvents(MacroCommand *macro)
         if (eventTime >= rampEndTime  &&
             vibratoEA == 0  &&  vibratoSA == 0)
             break;
+    }
+
+    // If there was vibrato
+    if (vibratoSA != 0  ||  vibratoEA != 0) {
+        // Add a final event to ensure that we land where we expect to.
+        macro->addCommand(new EventInsertionCommand(
+                *m_segment,
+                m_controlParameter.newEvent(m_endTime - 1, endValue)));
     }
 }
 
