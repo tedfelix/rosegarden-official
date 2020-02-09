@@ -1111,10 +1111,10 @@ EventView::slotEditInsert()
     SimpleEventEditDialog dialog(this, getDocument(), event, true);
 
     if (dialog.exec() == QDialog::Accepted) {
-        event = dialog.getEvent();
         EventInsertionCommand *command =
-            new EventInsertionCommand(*m_segments[0],
-                                      &event);
+            new EventInsertionCommand(
+                    *m_segments[0],
+                    new Event(dialog.getEvent()));
         addCommandToHistory(command);
     }
 }

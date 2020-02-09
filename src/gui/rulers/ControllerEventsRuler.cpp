@@ -528,13 +528,8 @@ ControllerEventsRuler::addControlLine(float x1, float y1, float x2, float y2, bo
 
         if (failsafe) RG_DEBUG << "addControlLine(): intermediate value: " << intermediateValue << " exceeded target: " << destinationValue;
 
-        // EventInsertionCommand does not take ownership of the event.
-        // It makes a copy.
         macro->addCommand(new EventInsertionCommand(
                 *m_segment, controllerEvent));
-
-        delete controllerEvent;
-        controllerEvent = nullptr;
     }
 
     m_moddingSegment = true;
