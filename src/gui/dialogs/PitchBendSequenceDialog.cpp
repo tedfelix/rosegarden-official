@@ -921,13 +921,11 @@ double
 PitchBendSequenceDialog::getTimeSpan() const
 {
     const Composition *composition = m_segment->getComposition();
+
     const RealTime realTimeDifference =
         composition->getRealTimeDifference(m_startTime, m_endTime);
-    static const RealTime oneSecond(1,0);
-    // ??? Why divide by 1?  Seems like that should do nothing.
-    //     What does it really do?
-    const double elapsedSeconds = realTimeDifference / oneSecond;
-    return elapsedSeconds;
+
+    return realTimeDifference.toSeconds();
 }
 
 int

@@ -188,7 +188,7 @@ PitchGraphWidget::paintEvent(QPaintEvent */* event */)
         const RealTime pointTime = m_history.m_detectRealTimes[i];
         // Work out how far (in milliseconds) to the right of the graph
         const double timeToLastPoint_msec =
-            1000.0 * ((lastPointTime-pointTime)/RealTime(1, 0));
+            1000.0 * (lastPointTime - pointTime).toSeconds();
         const int x = width() * (1.0 -  timeToLastPoint_msec/m_graphWidth);
         // if this is past the left end of the graph, it's the last
         // line segment we'll bother with

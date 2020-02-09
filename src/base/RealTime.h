@@ -37,6 +37,7 @@ struct ROSEGARDENPRIVATE_EXPORT RealTime
     RealTime(int s, int n);
 
     static RealTime fromSeconds(double sec);
+    double toSeconds() const;
     static RealTime fromMilliseconds(int msec);
     static RealTime fromTimeval(const struct timeval &);
 
