@@ -194,8 +194,8 @@ protected:
     int xMapToWidget(double x) {return (x-m_pannedRect.left())*width()/m_pannedRect.width();};
     int mapXToWidget(float);
     int mapYToWidget(float);
-    QRect mapItemToWidget(QRectF*);
-    QPolygon mapItemToWidget(QPolygonF*);
+    QRect mapRectToWidget(QRectF *);
+    QPolygon mapItemToWidget(QSharedPointer<ControlItem>);
     QPointF mapWidgetToItem(QPoint*);
 
     QColor valueToColour(int max, int val);

@@ -512,7 +512,7 @@ int ControlRuler::mapYToWidget(float y)
     return (0.5+(-y+1.0f) / m_yScale);
 }
 
-QRect ControlRuler::mapItemToWidget(QRectF *rect)
+QRect ControlRuler::mapRectToWidget(QRectF *rect)
 {
     QRect newrect;
 
@@ -522,7 +522,7 @@ QRect ControlRuler::mapItemToWidget(QRectF *rect)
     return newrect;
 }
 
-QPolygon ControlRuler::mapItemToWidget(QPolygonF *poly)
+QPolygon ControlRuler::mapItemToWidget(QSharedPointer<ControlItem> poly)
 {
 
     QPolygon newpoly;

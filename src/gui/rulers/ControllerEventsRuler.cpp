@@ -230,7 +230,7 @@ void ControllerEventsRuler::paintEvent(QPaintEvent *event)
 
     for (ControlItemList::iterator it = m_visibleItems.begin(); it != m_visibleItems.end(); ++it) {
         if (!(*it)->isSelected()) {
-            painter.drawPolygon(mapItemToWidget((*it).data()));
+            painter.drawPolygon(mapItemToWidget(*it));
         } else {
             selectedVector.push_back(*it);
         }
@@ -248,7 +248,7 @@ void ControllerEventsRuler::paintEvent(QPaintEvent *event)
          ++it)
     {
         // Draw the marker
-        painter.drawPolygon(mapItemToWidget((*it).data()));
+        painter.drawPolygon(mapItemToWidget(*it));
 
         // For selected items, draw the value in text alongside the marker
         // By preference, this should sit on top of the new line that represents this value change
@@ -276,7 +276,7 @@ void ControllerEventsRuler::paintEvent(QPaintEvent *event)
         painter.setPen(pen);
         brush.setStyle(Qt::NoBrush);
         painter.setBrush(brush);
-        painter.drawRect(mapItemToWidget(m_selectionRect));
+        painter.drawRect(mapRectToWidget(m_selectionRect));
     }
 
     // draw the rubber band indicating where a line of controllers will go

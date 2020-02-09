@@ -112,10 +112,10 @@ void PropertyControlRuler::paintEvent(QPaintEvent *event)
             brush.setColor((*it)->getColour().lighter());
             painter.setBrush(brush);
             painter.setPen(Qt::NoPen);
-            painter.drawPolygon(mapItemToWidget((*it).data()));
+            painter.drawPolygon(mapItemToWidget(*it));
 
             painter.setPen(pen);
-            painter.drawPolyline(mapItemToWidget((*it).data()));
+            painter.drawPolyline(mapItemToWidget(*it));
         } else {
             selectedVector.push_back(*it);
         }
@@ -128,10 +128,10 @@ void PropertyControlRuler::paintEvent(QPaintEvent *event)
         brush.setColor(((*it)->getColour()));
         painter.setBrush(brush);
         painter.setPen(Qt::NoPen);
-        painter.drawPolygon(mapItemToWidget((*it).data()));
+        painter.drawPolygon(mapItemToWidget(*it));
 
         painter.setPen(highlightPen);
-        painter.drawPolyline(mapItemToWidget((*it).data()));
+        painter.drawPolyline(mapItemToWidget(*it));
     }
 }
 
