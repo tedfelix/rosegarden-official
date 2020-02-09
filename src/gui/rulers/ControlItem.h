@@ -107,8 +107,9 @@ protected:
     static const unsigned int DefaultWidth;
 };
 
-class ControlItemMap : public std::multimap<double, ControlItem*> {};
-class ControlItemList : public std::list<ControlItem*> {};
+typedef std::multimap<double /* xStart */, ControlItem *> ControlItemMap;
+typedef std::list<ControlItem *> ControlItemList;
+
 
 }
 
