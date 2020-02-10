@@ -110,6 +110,7 @@ protected:
 
     ControlParameter  *m_controller;
     QRectF m_lastDrawnRect;
+    // ??? See if we can remove this.
     bool m_moddingSegment;
     QLineF *m_rubberBand;
     bool m_rubberBandVisible;
