@@ -55,6 +55,7 @@
 #include <QWidget>
 #include <QPainter>
 
+#include <utility>  // for std::swap()
 
 namespace Rosegarden
 {
@@ -376,72 +377,65 @@ ControllerEventsRuler::addControlItem2(float x, float y)
 }
 
 void
-ControllerEventsRuler::addControlLine(float x1, float y1, float x2, float y2, bool eraseExistingControllers)
+ControllerEventsRuler::addControlLine(
+        double x1, double y1,
+        double x2, double y2,
+        bool eraseExistingControllers)
 {
     RG_DEBUG << "addControlLine()";
 
     clearSelectedItems();
 
-    // get a timeT for one end point of our line
-    timeT originTime = m_rulerScale->getTimeForX(x1);
+    timeT startTime = m_rulerScale->getTimeForX(x1);
+    timeT stopTime = m_rulerScale->getTimeForX(x2);
 
-    // get a timeT for the other end point of our line
-    timeT destinationTime = m_rulerScale->getTimeForX(x2);
+    long startValue = yToValue(y1);
+    long stopValue = yToValue(y2);
 
-    // get a value for one end point of our line
-    long originValue = yToValue(y1);
-    
-    // get a value for the other end point
-    long destinationValue = yToValue(y2);
+    // If there's nothing to do, bail.
+    if (startTime == stopTime  ||  startValue == stopValue)
+        return;
 
-    if (originTime == destinationTime || originValue == destinationValue) return;
-
-    // If the "anchor point" was to the right of the newly clicked destination
-    // point, we're drawing a line from right to left.  We simply swap origin
-    // for destination and calculate all lines as drawn from left to right, for
-    // convenience and sanity.
-    if (originTime > destinationTime) {
-        timeT swapTime = originTime;
-        originTime = destinationTime;
-        destinationTime = swapTime;
-
-        long swapValue = originValue;
-        originValue = destinationValue;
-        destinationValue = swapValue;
+    // Make sure start is before stop.
+    if (startTime > stopTime) {
+        std::swap(startTime, stopTime);
+        std::swap(startValue, stopValue);
     }
 
-    // save a list of existing events that occur within the span of the new line
-    // for later deletion, if desired
-    std::vector<Event*> eventsToClear;
+    // Save a list of existing events that occur within the span of the
+    // new line for later deletion, if desired.
+
+    std::vector<Event *> eventsToClear;
 
     if (eraseExistingControllers) {
+        // For each Event in the Segment
         for (Segment::iterator si = m_segment->begin();
-             si != m_segment->end(); ++si) {
+             si != m_segment->end();
+             ++si) {
 
             timeT t = (*si)->getNotationAbsoluteTime();
-            if (t >= originTime && t <= destinationTime) {
+
+            // If t is in range, add the event to the list.
+            if (startTime <= t  &&  t <= stopTime)
                 eventsToClear.push_back(*si);
-            }
         }
     }
 
-    // rise and run
-    long rise = destinationValue - originValue;
-    timeT run = destinationTime - originTime;
+    const long rise = stopValue - startValue;
+    const timeT run = stopTime - startTime;
 
-    RG_DEBUG << "addControlLine(): Drawing a line from origin time: " << originTime << " to " << destinationTime
-             << " rising from: " << originValue << " to " << destinationValue
+    RG_DEBUG << "addControlLine(): Drawing a line from start time: " << startTime << " to " << stopTime
+             << " rising from: " << startValue << " to " << stopValue
              << " with a rise of: " << rise << " and run of: " << run;
 
-    // avoid divide by 0 potential, rise is always at least 1
-    if (rise == 0) rise = 1;
-
     // are we rising or falling?
-    bool rising = (rise > 0);
+    const bool rising = (rise > 0);
 
     // always calculate step on a positive value for rise, and make sure it's at
     // least 1
-    float step = run / (float)(rising ? rise : rise * -1);
+    // ??? use fabs()
+    //double step = fabs(static_cast<double>(run) / rise);
+    double step = static_cast<double>(run) / (rising ? rise : rise * -1);
 
     // Trying this with pitch bend with a rise approaching the maximum over a
     // span of around four bars generated over 15,000 pitch bend events!  That's
@@ -450,15 +444,14 @@ ControllerEventsRuler::addControlLine(float x1, float y1, float x2, float y2, bo
     // bool isPitchBend = (m_controller->getType() == Rosegarden::PitchBend::EventType);
     int thinningHackCounter = 1;
     
-    long intermediateValue = originValue;    
-    long controllerNumber = 0;
+    long intermediateValue = startValue;
 
-    if (m_controller) {
-        controllerNumber = m_controller->getControllerValue();
-    } else {
+    if (!m_controller) {
         RG_WARNING << "addControlLine(): No controller number set.  Time to panic!  Line drawing aborted.";
         return;
     }
+
+    const long controllerNumber = m_controller->getControllerValue();
 
     MacroCommand *macro = new MacroCommand(tr("Insert Line of Controllers"));
 
@@ -485,15 +478,15 @@ ControllerEventsRuler::addControlLine(float x1, float y1, float x2, float y2, bo
         macro = new MacroCommand(tr("Insert Line of Controllers"));
     }
 
-    for (float i = originTime; i <= destinationTime; i += step) {
+    for (float i = startTime; i <= stopTime; i += step) {
 
         if (failsafe) continue;
 
         if (rising) intermediateValue++;
         else intermediateValue--;
 
-        if (rising && intermediateValue > destinationValue) failsafe = true;
-        else if (!rising && intermediateValue < destinationValue) failsafe = true;
+        if (rising && intermediateValue > stopValue) failsafe = true;
+        else if (!rising && intermediateValue < stopValue) failsafe = true;
 
 //        RG_DEBUG << "addControlLine(): creating event at time: " << i << " of value: " << intermediateValue;
 //        continue;
@@ -514,8 +507,8 @@ ControllerEventsRuler::addControlLine(float x1, float y1, float x2, float y2, bo
             if (thinningHackCounter != 25 &&
                 thinningHackCounter != 50 &&
                 thinningHackCounter != 75 &&
-                i != originTime           &&
-                i != destinationTime) continue;
+                i != startTime           &&
+                i != stopTime) continue;
 
             RG_DEBUG << "addControlLine(): intermediate value: " << intermediateValue;
 
@@ -526,7 +519,7 @@ ControllerEventsRuler::addControlLine(float x1, float y1, float x2, float y2, bo
             controllerEvent->set<Rosegarden::Int>(Rosegarden::PitchBend::LSB, lsb);
         }
 
-        if (failsafe) RG_DEBUG << "addControlLine(): intermediate value: " << intermediateValue << " exceeded target: " << destinationValue;
+        if (failsafe) RG_DEBUG << "addControlLine(): intermediate value: " << intermediateValue << " exceeded target: " << stopValue;
 
         macro->addCommand(new EventInsertionCommand(
                 *m_segment, controllerEvent));
