@@ -151,8 +151,6 @@ private:
 
     // Vibrato
 
-    // ??? This is no longer needed.  Remove it.
-    QGroupBox *m_vibrato;
     QDoubleSpinBox *m_startAmplitude;
     QDoubleSpinBox *m_endAmplitude;
     QDoubleSpinBox *m_hertz;
@@ -218,10 +216,7 @@ private:
     double getMaxSpinboxValue() const;
 
 
-    // Insert the pb/cc events.
-
-    // ??? Pull these two out into command object(s) so that others can
-    //     reuse them.
+    // Insert the pitch bend/control change events.
 
     /// Generate EventInsertionCommand objects for the Linear/Step Size By Count case.
     void addLinearCountedEvents(MacroCommand *macro);

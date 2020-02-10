@@ -288,17 +288,17 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(
     // --------------------------------------
     // Vibrato/Tremolo/LFO
 
-    QString vibratoText =
+    QString modulationText =
         (whatVaries == Pitch)  ? tr("Vibrato") :
         (whatVaries == Volume) ? tr("Tremolo") :
         tr("LFO");
-    m_vibrato = new QGroupBox(vibratoText);
-    m_vibrato->
+    QGroupBox *modulation = new QGroupBox(modulationText);
+    modulation->
         setToolTip(tr("<qt>Low-frequency oscillation for this controller. This is only possible when Ramp mode is linear and <i>Use this many steps</i> is set.</qt>"));
-    m_vibrato->setContentsMargins(5, 5, 5, 5);
-    QGridLayout *vibratoLayout = new QGridLayout(m_vibrato);
-    vibratoLayout->setSpacing(5);
-    mainLayout->addWidget(m_vibrato);
+    modulation->setContentsMargins(5, 5, 5, 5);
+    QGridLayout *modulationLayout = new QGridLayout(modulation);
+    modulationLayout->setSpacing(5);
+    mainLayout->addWidget(modulation);
 
     // Up to 200% for pitchbend, 127 for other controllers.
     const double maxSpinboxAbsValue = isPitchbend() ? 200 : 127;
@@ -308,34 +308,34 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(
         useValue() ?
         tr("Start amplitude:") :
         tr("Start amplitude (%):");
-    vibratoLayout->addWidget(new QLabel(startAmplitudeText), 3, 0);
+    modulationLayout->addWidget(new QLabel(startAmplitudeText), 3, 0);
 
     m_startAmplitude = new QDoubleSpinBox();
     m_startAmplitude->setAccelerated(true);
     m_startAmplitude->setMinimum(0);
     m_startAmplitude->setMaximum(maxSpinboxAbsValue);
     m_startAmplitude->setSingleStep(10);
-    vibratoLayout->addWidget(m_startAmplitude, 3, 1);
+    modulationLayout->addWidget(m_startAmplitude, 3, 1);
 
     // End amplitude
     QString endAmplitudeText =
         useValue() ?
         tr("End amplitude:") :
         tr("End amplitude (%):");
-    vibratoLayout->addWidget(new QLabel(endAmplitudeText), 4, 0);
+    modulationLayout->addWidget(new QLabel(endAmplitudeText), 4, 0);
 
     m_endAmplitude = new QDoubleSpinBox();
     m_endAmplitude->setAccelerated(true);
     m_endAmplitude->setMinimum(0);
     m_endAmplitude->setMaximum(maxSpinboxAbsValue);
     m_endAmplitude->setSingleStep(10);
-    vibratoLayout->addWidget(m_endAmplitude, 4, 1);
+    modulationLayout->addWidget(m_endAmplitude, 4, 1);
 
     // Hertz
     QLabel *hertzLabel = new QLabel(tr("Hertz (Hz):"));
     hertzLabel->
         setToolTip(tr("<qt>Frequency in hertz (cycles per second)</qt>"));
-    vibratoLayout->addWidget(hertzLabel, 5, 0);
+    modulationLayout->addWidget(hertzLabel, 5, 0);
 
     m_hertz = new QDoubleSpinBox();
     m_hertz->setAccelerated(true);
@@ -343,7 +343,7 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(
     m_hertz->setMinimum(0.1);
     m_hertz->setMaximum(200);
     m_hertz->setSingleStep(1.0);
-    vibratoLayout->addWidget(m_hertz, 5, 1);
+    modulationLayout->addWidget(m_hertz, 5, 1);
 
     // --------------------------------------
     // Ramp mode
@@ -463,7 +463,6 @@ PitchBendSequenceDialog::updateWidgets()
         m_rampDuration->setEnabled(false);
         m_endValue->setEnabled(false);
 
-        //m_vibratoBox;
         m_startAmplitude->setEnabled(false);
         m_endAmplitude->setEnabled(false);
         m_hertz->setEnabled(false);
@@ -491,13 +490,12 @@ PitchBendSequenceDialog::updateWidgets()
     m_rampDuration->setEnabled(true);
     m_endValue->setEnabled(true);
 
-    bool enableVibrato =
+    bool enableModulation =
             m_linear->isChecked()  &&
             m_useThisManySteps->isChecked();
-    //m_vibratoBox;
-    m_startAmplitude->setEnabled(enableVibrato);
-    m_endAmplitude->setEnabled(enableVibrato);
-    m_hertz->setEnabled(enableVibrato);
+    m_startAmplitude->setEnabled(enableModulation);
+    m_endAmplitude->setEnabled(enableModulation);
+    m_hertz->setEnabled(enableModulation);
 
     m_linear->setEnabled(true);
     m_logarithmic->setEnabled(true);
