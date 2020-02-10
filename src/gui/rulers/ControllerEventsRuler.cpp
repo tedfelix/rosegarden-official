@@ -57,6 +57,8 @@
 
 #include <utility>  // for std::swap()
 
+#include <cmath>  // For lround()
+
 namespace Rosegarden
 {
 
@@ -330,10 +332,10 @@ void ControllerEventsRuler::eventAdded(const Segment*, Event *event)
 
 void ControllerEventsRuler::eventRemoved(const Segment*, Event *event)
 {
-    // Avoid handling this while we are adding events.
+    // Avoid handling this while we are deleting events.
     // ??? Why not?  Just let this routine handle the update.
-    if (m_moddingSegment)
-        return;
+    //if (m_moddingSegment)
+    //    return;
 
     // Segment observer notification of a removed event
     // Could be an erase action on the ruler or an undo/redo event
@@ -343,7 +345,11 @@ void ControllerEventsRuler::eventRemoved(const Segment*, Event *event)
     //
     if (isOnThisRuler(event)) {
         eraseControlItem(event);
-        update();
+
+        // If we are doing this, an update is coming.  No need to
+        // do an update for every delete.
+        if (!m_moddingSegment)
+            update();
     }
 }
 
@@ -393,9 +399,12 @@ ControllerEventsRuler::addControlLine(
         double x2, double y2,
         bool eraseExistingControllers)
 {
-    RG_DEBUG << "addControlLine()";
-
     clearSelectedItems();
+
+    if (!m_controller) {
+        RG_WARNING << "addControlLine(): No controller number set.  Line drawing aborted.";
+        return;
+    }
 
     timeT startTime = m_rulerScale->getTimeForX(x1);
     timeT stopTime = m_rulerScale->getTimeForX(x2);
@@ -413,163 +422,82 @@ ControllerEventsRuler::addControlLine(
         std::swap(startValue, stopValue);
     }
 
-    // Save a list of existing events that occur within the span of the
-    // new line for later deletion, if desired.
+    const long deltaValue = stopValue - startValue;
+    const timeT duration = stopTime - startTime;
 
-    std::vector<Event *> eventsToClear;
+    double timeStep = 30;
 
-    if (eraseExistingControllers) {
-        // For each Event in the Segment
-        for (Segment::iterator si = m_segment->begin();
-             si != m_segment->end();
-             ++si) {
+    // If it's going to take more than 200 steps, adjust the step so that
+    // there will be no more than 200 steps.
+    if (duration / timeStep > 200)
+        timeStep = duration / 200;
 
-            timeT t = (*si)->getNotationAbsoluteTime();
+    const double totalSteps = duration / timeStep;
+    const double valueStep = deltaValue / totalSteps;
 
-            // If t is in range, add the event to the list.
-            if (startTime <= t  &&  t <= stopTime)
-                eventsToClear.push_back(*si);
-        }
-    }
-
-    const long rise = stopValue - startValue;
-    const timeT run = stopTime - startTime;
-
-    RG_DEBUG << "addControlLine(): Drawing a line from start time: " << startTime << " to " << stopTime
-             << " rising from: " << startValue << " to " << stopValue
-             << " with a rise of: " << rise << " and run of: " << run;
-
-    // are we rising or falling?
-    const bool rising = (rise > 0);
-
-    // always calculate step on a positive value for rise, and make sure it's at
-    // least 1
-    // Units: time/value, MIDI clocks
-    // ??? use fabs()
-    //double step = fabs(static_cast<double>(run) / rise);
-    // ??? Why is step determined by run/rise?  It should be fixed
-    //     based on human perception.  Admittedly, it can be increased
-    //     for shallower ramps, but that would be the only change.
-    //     Convert, say 10ms to MIDI clocks and use that for the step.
-    //     See Composition::getElapsedTimeForRealTime() and
-    //     getElapsedRealTime() which can be used to do this.  Not
-    //     sure that's the best approach, but it will work.
-    // ??? How about some small number of MIDI clocks, or 200 steps,
-    //     whichever is smallest?
-    double step = static_cast<double>(run) / (rising ? rise : rise * -1);
-
-    // Trying this with pitch bend with a rise approaching the maximum over a
-    // span of around four bars generated over 15,000 pitch bend events!  That's
-    // super duper fine resolution, but it's too much for anything to handle.
-    // Let's try to do some sensible thinning without getting too complicated...
-    // bool isPitchBend = (m_controller->getType() == Rosegarden::PitchBend::EventType);
-    int thinningHackCounter = 1;
-    
-    long currentValue = startValue;
-
-    if (!m_controller) {
-        RG_WARNING << "addControlLine(): No controller number set.  Time to panic!  Line drawing aborted.";
-        return;
-    }
-
-    const long controllerNumber = m_controller->getControllerValue();
-
-    // ??? Should be called "Clear Controllers" and should be deleted
-    //     if it isn't used in the end.
     MacroCommand *macro = new MacroCommand(tr("Insert Line of Controllers"));
 
-    // For each event to clear, add it to the macro command.
-    for (std::vector<Event *>::iterator ei = eventsToClear.begin();
-         ei != eventsToClear.end();
-         ++ei) {
+    // If Ctrl was not pressed
+    if (eraseExistingControllers) {
 
-        // if the event was a controller or pitch bend, and it is on this ruler,
-        // add it to the list
-        if (((*ei)->isa(Controller::EventType)  ||
-             (*ei)->isa(PitchBend::EventType))  &&
-            isOnThisRuler(*ei)) {
+        // ??? MEMORY LEAK (confirmed)  EraseCommand doesn't take ownership.
+        EventSelection *selection = new EventSelection(*m_segment);
 
-            macro->addCommand(new EraseEventCommand(
-                    *m_segment,
-                    *ei,
-                    true));  // collapseRest
-       }
-    }
+        // For each event in the time range
+        for (Segment::const_iterator i = m_segment->findTime(startTime);
+             i != m_segment->findTime(stopTime);
+             ++i) {
+            Event *e = *i;
 
-    if (macro->haveCommands()) {
-        CommandHistory::getInstance()->addCommand(macro);
-        macro = new MacroCommand(tr("Insert Line of Controllers"));
-    }
-
-    // ??? So long as we create a final event after the loop, we should be
-    //     able to use timeT here instead of double.  Otherwise, we need
-    //     to use multiplication instead of accumulation to avoid roundoff
-    //     errors.
-    for (double time = startTime; time <= stopTime; time += step) {
-
-        // ??? It appears as if we are trying to create an event for
-        //     each possible controller value.  That's a lot more than
-        //     we likely need.
-        if (rising)
-            ++currentValue;
-        else
-            --currentValue;
-
-        // If we're past max, we're done.
-        if (rising  &&  currentValue > stopValue)
-            break;
-        // If we're past min, we're done.
-        if (!rising  &&  currentValue < stopValue)
-            break;
-
-        // Create the Event
-
-        //RG_DEBUG << "addControlLine(): creating event at time: " << i << " of value: " << currentValue;
-        //continue;
-
-        // ??? MEMORY LEAK (confirmed)  Probably due to the "continue" below.
-        Event *controllerEvent = new Event(m_controller->getType(), (timeT) time);
-
-        if (m_controller->getType() == Rosegarden::Controller::EventType) {
-
-            controllerEvent->set<Rosegarden::Int>(Rosegarden::Controller::VALUE, currentValue);
-            controllerEvent->set<Rosegarden::Int>(Rosegarden::Controller::NUMBER, controllerNumber);
-
-        } else if (m_controller->getType() == Rosegarden::PitchBend::EventType)   {
-
-            // always set the first and last events, then only set every 25th,
-            // 50th, and 75th event for pitch bend
-            if (thinningHackCounter++ > 100) thinningHackCounter = 1;
-            if (thinningHackCounter != 25 &&
-                thinningHackCounter != 50 &&
-                thinningHackCounter != 75 &&
-                time != startTime           &&
-                time != stopTime) continue;
-
-            RG_DEBUG << "addControlLine(): current value: " << currentValue;
-
-            // Convert to PitchBend MSB/LSB
-            int lsb = currentValue & 0x7f;
-            int msb = (currentValue >> 7) & 0x7f;
-            controllerEvent->set<Rosegarden::Int>(Rosegarden::PitchBend::MSB, msb);
-            controllerEvent->set<Rosegarden::Int>(Rosegarden::PitchBend::LSB, lsb);
+            // If this is a relevant event, add it to the selection.
+            if (m_controller->matches(e))
+                selection->addEvent(e, false);
         }
 
-        // Add the Event to the Command
+        // If there is something in the selection, add the EraseCommand.
+        // For some reason, if we perform the erase with an empty selection,
+        // we end up with the segment expanded to the beginning of the
+        // composition.
+        if (selection->getAddedEvents() != 0)
+            macro->addCommand(new EraseCommand(*selection));
+        else
+            delete selection;
 
-        //RG_DEBUG << "addControlLine(): current value: " << currentValue << " exceeded target: " << stopValue;
+    }
 
+    // Pick something outrageous to make sure the first event is always added.
+    long lastValue = 999999;
+
+    // For each time step
+    for (int i = 0; /* see break below */; ++i) {
+
+        timeT time2 = std::lround(startTime + i * timeStep);
+        if (time2 > stopTime)
+            break;
+
+        long value = startValue + i * valueStep;
+
+        // No change?  Try the next time step.
+        if (value == lastValue)
+            continue;
+
+        lastValue = value;
+
+        // Add an Event to the MacroCommand
         macro->addCommand(new EventInsertionCommand(
-                *m_segment, controllerEvent));
+                *m_segment,
+                m_controller->newEvent(time2, value)));
+
     }
 
     m_moddingSegment = true;
     CommandHistory::getInstance()->addCommand(macro);
     m_moddingSegment = false;
-    
+
     // How else to re-initialize and bring things into view?  I'm missing
     // something, but this works...
     init();
+
 }
 
 void
