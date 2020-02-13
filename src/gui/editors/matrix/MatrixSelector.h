@@ -112,6 +112,8 @@ protected:
 
     MatrixViewSegment *m_currentViewSegment;
     MatrixElement *m_clickedElement;
+    /// Event associated with m_clickedElement.
+    Event *m_event;
 
     // tool to delegate to
     MatrixTool *m_dispatchTool;

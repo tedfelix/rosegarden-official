@@ -42,6 +42,7 @@ namespace Rosegarden
 MatrixResizer::MatrixResizer(MatrixWidget *parent) :
     MatrixTool("matrixresizer.rc", "MatrixResizer", parent),
     m_currentElement(nullptr),
+    m_event(nullptr),
     m_currentViewSegment(nullptr)
 {
     createAction("select", SLOT(slotSelectSelected()));
@@ -55,9 +56,14 @@ MatrixResizer::MatrixResizer(MatrixWidget *parent) :
 void
 MatrixResizer::handleEventRemoved(Event *event)
 {
-    // ??? INVALID READ (confirmed)  m_currentElement was already freed.
-    if (m_currentElement  &&  m_currentElement->event() == event)
+    // NOTE: Do not use m_currentElement in here as it was freed by
+    //       ViewSegment::eventRemoved() before we get here.
+
+    // Is it the event we are holding on to?
+    if (m_event == event) {
         m_currentElement = nullptr;
+        m_event = nullptr;
+    }
 }
 
 void
@@ -70,23 +76,23 @@ MatrixResizer::handleLeftButtonPress(const MatrixMouseEvent *e)
 
     m_currentViewSegment = e->viewSegment;
     m_currentElement = e->element;
+    m_event = m_currentElement->event();
 
     // Add this element and allow movement
     //
     EventSelection* selection = m_scene->getSelection();
-    Event *event = m_currentElement->event();
 
     if (selection) {
         EventSelection *newSelection;
 
         if ((e->modifiers & Qt::ShiftModifier) ||
-            selection->contains(event)) {
+            selection->contains(m_event)) {
             newSelection = new EventSelection(*selection);
         } else {
             newSelection = new EventSelection(m_currentViewSegment->getSegment());
         }
 
-        newSelection->addEvent(event);
+        newSelection->addEvent(m_event);
         m_scene->setSelection(newSelection, true);
 //        m_mParentView->canvas()->update();
     } else {
@@ -237,6 +243,7 @@ MatrixResizer::handleMouseRelease(const MatrixMouseEvent *e)
 
 //    m_mParentView->update();
     m_currentElement = nullptr;
+    m_event = nullptr;
     setBasicContextHelp();
 }
 

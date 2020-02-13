@@ -77,7 +77,12 @@ void
 MatrixViewSegment::eventRemoved(const Segment *segment,
                                 Event *event)
 {
+    // !!! This deletes the associated MatrixElement.
     ViewSegment::eventRemoved(segment, event);
+
+    // At this point, the MatrixElement is gone.  See ViewElement::erase().
+    // Any clients that respond to the following and any handlers of
+    // signals emitted by the following must not try to use the MatrixElement.
     m_scene->handleEventRemoved(event);
 }
 

@@ -63,6 +63,8 @@ protected:
     void setBasicContextHelp();
 
     MatrixElement *m_currentElement;
+    /// The Event associated with m_currentElement.
+    Event *m_event;
     MatrixViewSegment *m_currentViewSegment;
 };
 

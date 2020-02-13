@@ -65,6 +65,8 @@ protected:
     void setBasicContextHelp(bool ctrlPressed = false);
 
     MatrixElement *m_currentElement;
+    /// The Event associated with m_currentElement.
+    Event *m_event;
     MatrixViewSegment *m_currentViewSegment;
     timeT m_clickSnappedLeftDeltaTime;
 

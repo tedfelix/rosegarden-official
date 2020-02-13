@@ -51,11 +51,15 @@ namespace Rosegarden
 MatrixSelector::MatrixSelector(MatrixWidget *widget) :
     MatrixTool("matrixselector.rc", "MatrixSelector", widget),
     m_selectionRect(nullptr),
+    m_selectionOrigin(),
     m_updateRect(false),
+    m_currentViewSegment(nullptr),
     m_clickedElement(nullptr),
+    m_event(nullptr),
     m_dispatchTool(nullptr),
     m_justSelectedBar(false),
-    m_selectionToMerge(nullptr)
+    m_selectionToMerge(nullptr),
+    m_previousCollisions()
 {
     //connect(m_widget, SIGNAL(usedSelection()),
     //        this, SLOT(slotHideSelection()));
@@ -71,25 +75,20 @@ MatrixSelector::MatrixSelector(MatrixWidget *widget) :
 void
 MatrixSelector::handleEventRemoved(Event *event)
 {
+    // NOTE: Do not use m_clickedElement in here as it was freed by
+    //       ViewSegment::eventRemoved() before we get here.
+
     if (m_dispatchTool)
         m_dispatchTool->handleEventRemoved(event);
-    // ??? INVALID READ (confirmed)  m_clickedElement was already freed.
-    //
-    //     Steps:
-    //       - In the Matrix editor, add two notes with the pencil tool.
-    //       - Switch to the selection tool.
-    //       - Select the first note and press delete.
-    //       - Select the second note and press delete.
-    //
-    //     There was only ever exactly one invalid read.  It appears to only
-    //     happen for the very first select and delete key.  After that it
-    //     never happensagain.
-    if (m_clickedElement  &&  m_clickedElement->event() == event) {
+
+    // Is it the event we are holding on to?
+    if (m_event == event) {
         m_clickedElement = nullptr;
+        m_event = nullptr;
     }
 }
 
-void 
+void
 MatrixSelector::slotClickTimeout()
 {
     m_justSelectedBar = false;
@@ -126,6 +125,7 @@ MatrixSelector::handleLeftButtonPress(const MatrixMouseEvent *e)
     m_clickedElement = e->element;
 
     if (m_clickedElement) {
+        m_event = m_clickedElement->event();
 
         float x = m_clickedElement->getLayoutX();
         float width = m_clickedElement->getWidth();
@@ -194,6 +194,7 @@ MatrixSelector::handleMidButtonPress(const MatrixMouseEvent *e)
     // Middle button press draws a new event via MatrixPainter.
 
     m_clickedElement = nullptr; // should be used for left-button clicks only
+    m_event = nullptr;
 
     // Don't allow overlapping elements on the same channel
     if (e->element) return;
@@ -389,6 +390,7 @@ MatrixSelector::handleMouseRelease(const MatrixMouseEvent *e)
                                         false);
 //        m_widget->canvas()->update();
         m_clickedElement = nullptr;
+        m_event = nullptr;
 
     } else if (m_selectionRect) {
         setViewCurrentSelection(true);

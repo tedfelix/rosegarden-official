@@ -46,7 +46,11 @@ namespace Rosegarden
 MatrixMover::MatrixMover(MatrixWidget *parent) :
     MatrixTool("matrixmover.rc", "MatrixMover", parent),
     m_currentElement(nullptr),
+    m_event(nullptr),
     m_currentViewSegment(nullptr),
+    m_clickSnappedLeftDeltaTime(0),
+    m_duplicateElements(),
+    m_quickCopy(false),
     m_lastPlayedPitch(-1)
 {
     createAction("select", SLOT(slotSelectSelected()));
@@ -60,8 +64,13 @@ MatrixMover::MatrixMover(MatrixWidget *parent) :
 void
 MatrixMover::handleEventRemoved(Event *event)
 {
-    if (m_currentElement && m_currentElement->event() == event) {
+    // NOTE: Do not use m_currentElement in here as it was freed by
+    //       ViewSegment::eventRemoved() before we get here.
+
+    // Is it the event we are holding on to?
+    if (m_event == event) {
         m_currentElement = nullptr;
+        m_event = nullptr;
     }
 }
 
@@ -98,6 +107,7 @@ MatrixMover::handleLeftButtonPress(const MatrixMouseEvent *e)
     m_currentViewSegment = e->viewSegment;
 
     m_currentElement = e->element;
+    m_event = m_currentElement->event();
 
     timeT snappedAbsoluteLeftTime =
         getSnapGrid()->snapTime(m_currentElement->getViewAbsoluteTime());
@@ -116,13 +126,12 @@ MatrixMover::handleLeftButtonPress(const MatrixMouseEvent *e)
     // Add this element and allow movement
     //
     EventSelection* selection = m_scene->getSelection();
-    Event *event = m_currentElement->event();
 
     if (selection) {
         EventSelection *newSelection;
         
         if ((e->modifiers & Qt::ShiftModifier) ||
-            selection->contains(event)) {
+            selection->contains(m_event)) {
             newSelection = new EventSelection(*selection);
         } else {
             newSelection = new EventSelection(m_currentViewSegment->getSegment());
@@ -130,12 +139,12 @@ MatrixMover::handleLeftButtonPress(const MatrixMouseEvent *e)
 
         // if the selection already contains the event, remove it from the
         // selection if shift is pressed
-        if (selection->contains(event)) {
+        if (selection->contains(m_event)) {
             if (e->modifiers & Qt::ShiftModifier) {
-                newSelection->removeEvent(event);
+                newSelection->removeEvent(m_event);
             }
         } else {
-            newSelection->addEvent(event);
+            newSelection->addEvent(m_event);
         }
 
         m_scene->setSelection(newSelection, true);
@@ -146,12 +155,12 @@ MatrixMover::handleLeftButtonPress(const MatrixMouseEvent *e)
     }
     
     long velocity = m_widget->getCurrentVelocity();
-    event->get<Int>(BaseProperties::VELOCITY, velocity);
+    m_event->get<Int>(BaseProperties::VELOCITY, velocity);
 
     long pitchOffset = m_currentViewSegment->getSegment().getTranspose();
 
     long pitch = 60;
-    event->get<Int>(BaseProperties::PITCH, pitch);
+    m_event->get<Int>(BaseProperties::PITCH, pitch);
 
     // We used to m_scene->playNote() here, but the new concert pitch matrix was
     // playing chords the first time I clicked a note.  Investigation with
@@ -205,8 +214,8 @@ MatrixMover::handleMouseMove(const MatrixMouseEvent *e)
     // semitones too low)
     using BaseProperties::PITCH;
     int diffPitch = 0;
-    if (m_currentElement->event()->has(PITCH)) {
-        diffPitch = newPitch - m_currentElement->event()->get<Int>(PITCH);
+    if (m_event->has(PITCH)) {
+        diffPitch = newPitch - m_event->get<Int>(PITCH);
     }
 
     EventSelection* selection = m_scene->getSelection();
@@ -243,7 +252,7 @@ MatrixMover::handleMouseMove(const MatrixMouseEvent *e)
 
     if (newPitch != m_lastPlayedPitch) {
         long velocity = m_widget->getCurrentVelocity();
-        m_currentElement->event()->get<Int>(BaseProperties::VELOCITY, velocity);
+        m_event->get<Int>(BaseProperties::VELOCITY, velocity);
         m_scene->playNote(m_currentViewSegment->getSegment(), newPitch + (pitchOffset * -1), velocity);
         m_lastPlayedPitch = newPitch;
     }
@@ -272,8 +281,8 @@ MatrixMover::handleMouseRelease(const MatrixMouseEvent *e)
     using BaseProperties::PITCH;
     timeT diffTime = newTime - m_currentElement->getViewAbsoluteTime();
     int diffPitch = 0;
-    if (m_currentElement->event()->has(PITCH)) {
-        diffPitch = newPitch - m_currentElement->event()->get<Int>(PITCH);
+    if (m_event->has(PITCH)) {
+        diffPitch = newPitch - m_event->get<Int>(PITCH);
     }
 
     EventSelection* selection = m_scene->getSelection();
@@ -289,12 +298,13 @@ MatrixMover::handleMouseRelease(const MatrixMouseEvent *e)
         }
         m_duplicateElements.clear();
         m_currentElement = nullptr;
+        m_event = nullptr;
         return;
     }
 
     if (newPitch != m_lastPlayedPitch) {
         long velocity = m_widget->getCurrentVelocity();
-        m_currentElement->event()->get<Int>(BaseProperties::VELOCITY, velocity);
+        m_event->get<Int>(BaseProperties::VELOCITY, velocity);
         m_scene->playNote(m_currentViewSegment->getSegment(), newPitch + (pitchOffset * -1), velocity);
         m_lastPlayedPitch = newPitch;
     }
@@ -391,6 +401,7 @@ MatrixMover::handleMouseRelease(const MatrixMouseEvent *e)
 
 //    m_mParentView->canvas()->update();
     m_currentElement = nullptr;
+    m_event = nullptr;
 
     setBasicContextHelp();
 }
