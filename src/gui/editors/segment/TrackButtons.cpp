@@ -1180,21 +1180,15 @@ TrackButtons::makeButton(Track *track)
     // *** Track Label ***
 
     TrackLabel *trackLabel = new TrackLabel(
-            trackId, track->getPosition(), m_trackCellHeight, trackHBox);
+            trackId,
+            track->getPosition(),
+            m_trackCellHeight - buttonGap,
+            trackHBox);
     hblayout->addWidget(trackLabel);
 
     hblayout->addSpacing(vuSpacing);
 
     trackLabel->setDisplayMode(m_labelDisplayMode);
-
-    // ??? Ideally the width should be based on the size of some string in
-    //     the target font.  But we can only get that info in TrackLabel and
-    //     by then it's probably too late.  This works for now.  We might
-    //     add a "TrackLabel::getWidth()" that provides a width based on a
-    //     built-in reference string.
-    trackLabel->setFixedSize(
-            m_trackCellHeight * 6,  // w
-            m_trackCellHeight - buttonGap);  // h
     trackLabel->setIndent(7);
 
     connect(trackLabel, &TrackLabel::renameTrack,

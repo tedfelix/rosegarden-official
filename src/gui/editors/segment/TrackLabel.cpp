@@ -44,8 +44,12 @@ TrackLabel::TrackLabel(TrackId id,
     setObjectName("TrackLabel");
 
     QFont font;
-    font.setPixelSize(trackHeight * 55 / 100);
+    font.setPixelSize(trackHeight * 85 / 100);
     setFont(font);
+
+    QFontMetrics fontMetrics(font);
+    setFixedWidth(fontMetrics.width("XXXXXXXXXXXXXXXXXX"));
+    setFixedHeight(trackHeight);
 
     setFrameShape(QFrame::NoFrame);
 
