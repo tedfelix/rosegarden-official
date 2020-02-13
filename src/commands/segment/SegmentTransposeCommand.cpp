@@ -15,6 +15,7 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[SegmentTransposeCommand]"
 
 #include "SegmentTransposeCommand.h"
 
@@ -25,92 +26,114 @@
 
 namespace Rosegarden
 {
-SegmentTransposeCommand::SegmentTransposeCommand(Segment &segment, bool changeKey, int steps, int semitones, bool transposeSegmentBack) :
-        MacroCommand(tr("Change segment transposition"))
+
+
+SegmentTransposeCommand::SegmentTransposeCommand(
+        Segment &segment,
+        bool changeKey,
+        int steps,
+        int semitones,
+        bool transposeSegmentBack) :
+    MacroCommand(tr("Change segment transposition"))
 {
     processSegment(segment, changeKey, steps, semitones, transposeSegmentBack);
 }
 
-SegmentTransposeCommand::SegmentTransposeCommand(SegmentSelection selection, bool changeKey, int steps, int semitones, bool transposeSegmentBack) :
-        MacroCommand(tr("Change segment transposition"))
+SegmentTransposeCommand::SegmentTransposeCommand(
+        SegmentSelection selection,
+        bool changeKey,
+        int steps,
+        int semitones,
+        bool transposeSegmentBack) :
+    MacroCommand(tr("Change segment transposition"))
 {
-    //SegmentSelection selection(m_view->getSelection());
+    // For each Segment in the SegmentSelection
     for (SegmentSelection::iterator i = selection.begin();
-            i != selection.end(); ++i) 
-    {
+         i != selection.end();
+         ++i) {
         Segment &segment = **i;    
-        processSegment(segment, changeKey, steps, semitones, transposeSegmentBack);
+        processSegment(segment,
+                       changeKey,
+                       steps,
+                       semitones,
+                       transposeSegmentBack);
     }
 }
-     
-void 
-SegmentTransposeCommand::processSegment(Segment &segment, bool changeKey, int steps, int semitones, bool transposeSegmentBack)
-{
-    MacroCommand * macroCommand = this;
 
-    // TODO delete it somewhere.
-    EventSelection * wholeSegment = new EventSelection(segment, segment.getStartTime(), segment.getEndMarkerTime());
-    macroCommand->addCommand(new TransposeCommand
-        (semitones, steps, *wholeSegment));
-    
+SegmentTransposeCommand::~SegmentTransposeCommand()
+{
+}
+
+void 
+SegmentTransposeCommand::processSegment(
+        Segment &segment,
+        bool changeKey,
+        int steps,
+        int semitones,
+        bool transposeSegmentBack)
+{
+    MacroCommand *macroCommand = this;
+
+    // ??? MEMORY LEAK?
+    EventSelection *wholeSegment = new EventSelection(
+            segment, segment.getStartTime(), segment.getEndMarkerTime());
+
+    // Transpose the notes.
+    macroCommand->addCommand(new TransposeCommand(
+            semitones, steps, *wholeSegment));
+
     // Key insertion can do transposition, but a C4 to D becomes a D4, while
     //  a C4 to G becomes a G3. Because we let the user specify an explicit number
     //  of octaves to move the notes up/down, we add the keys without transposing
-    //  and handle the transposition seperately:
-    if (changeKey)
-    {
-        Rosegarden::Key initialKey = segment.getKeyAtTime(segment.getStartTime());
+    //  and handle the transposition separately:
+    if (changeKey) {
+
+        Rosegarden::Key initialKey =
+                segment.getKeyAtTime(segment.getStartTime());
         Rosegarden::Key newInitialKey = initialKey.transpose(semitones, steps);
 
-        EventSelection::eventcontainer::iterator i;
-        //std::list<KeyInsertionCommand*> commands;
+        // For each Event in the Segment
+        for (EventSelection::eventcontainer::iterator i =
+                     wholeSegment->getSegmentEvents().begin();
+             i != wholeSegment->getSegmentEvents().end();
+             ++i) {
 
-        for (i = wholeSegment->getSegmentEvents().begin();
-            i != wholeSegment->getSegmentEvents().end(); ++i) {
-                // transpose key
-                if ((*i)->isa(Rosegarden::Key::EventType)) {
-                    Rosegarden::Key trKey = (Rosegarden::Key (**i)).transpose(semitones, steps); 
-                    //commands.push_front
-                    macroCommand->addCommand
-                        (new KeyInsertionCommand
-                         (segment,
-                           (*i)->getAbsoluteTime(),
-                           trKey,
-                          false,
-                          false,
-                          false,
-			  true));
-                    }
-            }
-        std::list<KeyInsertionCommand*>::iterator ci;
-        //for (ci=commands.begin(); ci!=commands.end(); ci++)
-        //{
-        //    commandHistory->addCommand(*ci);
-        //}
-            
-        KeyInsertionCommand *firstKeyCommand = new KeyInsertionCommand
-             (segment,
-              segment.getStartTime(),
-              newInitialKey,
-              false,
-              false,
-              false,
-	      true);
-        //commandHistory->addCommand(firstKeyCommand);
+            // Not a Key event?  Try the next.
+            if (!(*i)->isa(Rosegarden::Key::EventType))
+                continue;
+
+            Rosegarden::Key transposedKey =
+                    (Rosegarden::Key(**i)).transpose(semitones, steps);
+
+            macroCommand->addCommand(new KeyInsertionCommand(
+                    segment,
+                    (*i)->getAbsoluteTime(),  // time
+                    transposedKey,
+                    false,  // shouldConvert
+                    false,  // shouldTranspose
+                    false,  // shouldTransposeKey
+                    true));  // shouldIgnorePercussion
+        }
+
+        KeyInsertionCommand *firstKeyCommand = new KeyInsertionCommand(
+                segment,
+                segment.getStartTime(),  // time
+                newInitialKey,
+                false,  // shouldConvert
+                false,  // shouldTranspose
+                false,  // shouldTransposeKey
+                true);  // shouldIgnorePercussion
+
         macroCommand->addCommand(firstKeyCommand);
     }
-        
-    if (transposeSegmentBack)
-    {
+
+    if (transposeSegmentBack) {
         // Transpose segment in opposite direction
         int newTranspose = segment.getTranspose() - semitones;
-        macroCommand->addCommand(new SegmentChangeTransposeCommand(newTranspose, &segment));
+        macroCommand->addCommand(new SegmentChangeTransposeCommand(
+                newTranspose, &segment));
     }
 }
-
-
-SegmentTransposeCommand::~SegmentTransposeCommand()
-{}
 
 
 }
