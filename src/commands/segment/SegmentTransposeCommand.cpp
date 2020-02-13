@@ -74,7 +74,9 @@ SegmentTransposeCommand::processSegment(
 {
     MacroCommand *macroCommand = this;
 
-    // ??? MEMORY LEAK?
+    // ??? MEMORY LEAK (confirmed)
+    //     TransposeCommand holds on to a pointer.
+    //     Need to make TransposeCommand take a QSharedPointer.
     EventSelection *wholeSegment = new EventSelection(
             segment, segment.getStartTime(), segment.getEndMarkerTime());
 
