@@ -236,6 +236,7 @@
 #include <QFontDialog>
 #include <QPageSetupDialog>
 #include <QSharedPointer>
+#include <QInputDialog>
 
 // Ladish lv1 support
 #include <cerrno>   // for errno
@@ -727,6 +728,7 @@ RosegardenMainWindow::setupActions()
     createAction("quantize_selection", SLOT(slotQuantizeSelection()));
     createAction("relabel_segment", SLOT(slotRelabelSegments()));
     createAction("transpose", SLOT(slotTransposeSegments()));
+    createAction("transpose_semitones", SLOT(slotTransposeSemitones()));
     createAction("switch_preset", SLOT(slotSwitchPreset()));
     createAction("repeat_quantize", SLOT(slotRepeatQuantizeSelection()));
     createAction("rescale", SLOT(slotRescaleSelection()));
@@ -6705,8 +6707,66 @@ RosegardenMainWindow::slotTransposeSegments()
     
     if (!ok || (semitones == 0 && steps == 0)) return;
     
-    CommandHistory::getInstance()->addCommand
-            (new SegmentTransposeCommand(m_view->getSelection(), intervalDialog.getChangeKey(), steps, semitones, intervalDialog.getTransposeSegmentBack()));
+    CommandHistory::getInstance()->addCommand(
+            new SegmentTransposeCommand(
+                    m_view->getSelection(),
+                    intervalDialog.getChangeKey(),
+                    steps,
+                    semitones,
+                    intervalDialog.getTransposeSegmentBack()));
+}
+
+void
+RosegardenMainWindow::slotTransposeSemitones()
+{
+    QSettings settings;
+    settings.beginGroup(GeneralOptionsConfigGroup);
+
+    int lastTranspose = settings.value("main_last_transpose", 0).toInt() ;
+
+    bool ok = false;
+    int semitones = QInputDialog::getInt(
+            this,  // parent
+            tr("Transpose"),  // title
+            tr("By number of semitones: "),  // label
+            lastTranspose,  // value
+            -127,  // minValue
+            127,  // maxValue
+            1,  // step
+            &ok);
+
+    if (!ok  ||  semitones == 0)
+        return;
+
+    settings.setValue("main_last_transpose", semitones);
+
+    SegmentSelection selection = m_view->getSelection();
+
+    MacroCommand *command = new MacroCommand(TransposeCommand::getGlobalName());
+
+    // for each selected Segment
+    for (SegmentSelection::iterator i = selection.begin();
+         i != selection.end();
+         ++i) {
+
+        Segment &segment = **i;
+
+        // Create an EventSelection with all events in the Segment.
+        // ??? MEMORY LEAK (confirmed)  TransposeCommand stores a pointer
+        //     to this, so we can't delete it.  Annoying.
+        //     Make TransposeCommand take a QSharedPointer<EventSelection>.
+        //     Then it could hang on to it as long as it likes.  It can even
+        //     call reset() when it is really finished if it wants.
+        EventSelection *eventSelection = new EventSelection(
+                    segment,
+                    segment.getStartTime(),
+                    segment.getEndMarkerTime());
+
+        command->addCommand(new TransposeCommand(semitones, *eventSelection));
+
+    }
+
+    m_view->slotAddCommandToHistory(command);
 }
 
 void

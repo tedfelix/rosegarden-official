@@ -1432,6 +1432,7 @@ public slots:
     void slotLinksToCopies();
     void slotRelabelSegments();
     void slotTransposeSegments();
+    void slotTransposeSemitones();
     void slotSwitchPreset();
     
     /// Panic button pressed

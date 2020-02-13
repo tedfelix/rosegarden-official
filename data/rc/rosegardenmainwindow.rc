@@ -183,6 +183,7 @@
     <Action name="quantize_selection" text="&amp;Quantize..." icon="quantize" shortcut="=" />
     <Action name="repeat_quantize" text="Repe&amp;at Last Quantize" shortcut="+" />
     <Action name="transpose" text="Transpose by &amp;Interval..." />
+    <Action name="transpose_semitones" text="Transp&amp;ose by Semitones..." />
     <Action name="switch_preset" text="&amp;Convert Notation for..." />
   <Separator/>
     <Action name="rescale" text="Stretch &amp;or Squash..." />
@@ -410,6 +411,7 @@
     <Action name="expand_figuration"/>
     <Action name="relabel_segment"/>
     <Action name="transpose"/>
+    <Action name="transpose_semitones"/>
     <Action name="create_anacrusis"/>
     <Action name="set_segment_start"/>
     <Action name="set_segment_duration"/>
