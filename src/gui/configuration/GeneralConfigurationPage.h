@@ -113,6 +113,7 @@ private:
     QCheckBox *m_backgroundTextures;
     QCheckBox *m_notationBackgroundTextures;
     QCheckBox *m_longTitles;
+    QComboBox *m_trackSize;
 
     // External Applications tab
     QComboBox *m_pdfViewer;

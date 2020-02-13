@@ -116,8 +116,18 @@ TrackEditor::TrackEditor(RosegardenDocument *doc,
 void
 TrackEditor::init(RosegardenMainViewWidget *mainViewWidget)
 {
-    // 150 (1.5) is pretty massive.
-    constexpr int sizeFactor = 100;
+    QSettings settings;
+    settings.beginGroup(GeneralOptionsConfigGroup);
+    int trackSize = settings.value("track_size", 0).toInt();
+    // Write it back out so we can find it.
+    settings.setValue("track_size", trackSize);
+
+    int sizeFactor = 100;  // 0: small
+    if (trackSize == 1)  // 1: medium
+        sizeFactor = 125;
+    else if (trackSize == 2)  // 2: large
+        sizeFactor = 150;
+
     m_trackCellHeight = 24 * sizeFactor / 100;
 
     QGridLayout *grid = new QGridLayout(this);

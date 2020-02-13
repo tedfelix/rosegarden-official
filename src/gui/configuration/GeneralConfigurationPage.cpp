@@ -349,6 +349,22 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
 
     ++row;
 
+    // Track size
+    layout->addWidget(new QLabel(tr("Track size"), frame), row, 0);
+
+    m_trackSize = new QComboBox(frame);
+    m_trackSize->addItem(tr("Small"));
+    m_trackSize->addItem(tr("Medium"));
+    m_trackSize->addItem(tr("Large"));
+    m_trackSize->setCurrentIndex(
+            settings.value("track_size", 0).toUInt());
+    connect(m_trackSize, static_cast<void(QComboBox::*)(int)>(
+                    &QComboBox::activated),
+            this, &GeneralConfigurationPage::slotModified);
+    layout->addWidget(m_trackSize, row, 1, 1, 3);
+
+    ++row;
+
     // Make the last row stretch to fill the rest of the space.
     layout->setRowStretch(row, 10);
 
@@ -507,6 +523,7 @@ void GeneralConfigurationPage::apply()
 
     settings.beginGroup(GeneralOptionsConfigGroup);
     settings.setValue("long_window_titles", m_longTitles->isChecked());
+    settings.setValue("track_size", m_trackSize->currentIndex());
     settings.endGroup();
 
     // External Applications tab
