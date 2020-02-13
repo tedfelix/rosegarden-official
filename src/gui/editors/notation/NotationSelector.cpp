@@ -385,6 +385,12 @@ void NotationSelector::drag(int x, int y, bool final)
 {
     RG_DEBUG << "NotationSelector::drag " << x << ", " << y;
 
+    // ??? INVALID READ (confirmed, m_clickedElement pointing to freed memory)
+    //     Select a note, drag it slightly and without releasing the
+    //     mouse button, press the delete key.  Now release the mouse button.
+    //     This routine is entered with m_clickedElement pointing to
+    //     freed memory.  It's a rare case, so not critical to fix.
+
     if (!m_clickedElement || !m_selectedStaff) return ;
 
     EventSelection *selection = m_scene->getSelection();
