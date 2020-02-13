@@ -57,12 +57,18 @@ MatrixPainter::MatrixPainter(MatrixWidget *widget) :
     createMenu();
 }
 
-void MatrixPainter::handleEventRemoved(Event *event)
+void MatrixPainter::handleEventRemoved(Event * /*event*/)
 {
-    if (m_currentElement && m_currentElement->event() == event) {
-        delete m_currentElement;
-        m_currentElement = nullptr;
-    }
+    // Unlike all the other handleEventRemoved() handlers, when we
+    // get into this one, m_currentElement is either nullptr or
+    // points to something completely valid.  However, it is never
+    // pointing to the event that comes in.  I assume this is
+    // because m_currentElement always points to the temporary
+    // MatrixElement that is used while drawing.  And that one is
+    // never selected and therefore can never be deleted.
+
+    // Nothing to do here.  The incoming Event is never related
+    // to m_currentElement.
 }
 
 void MatrixPainter::handleMidButtonPress(const MatrixMouseEvent * /*event*/)

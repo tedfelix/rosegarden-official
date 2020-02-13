@@ -47,6 +47,7 @@ MatrixVelocity::MatrixVelocity(MatrixWidget *widget) :
     m_screenPixelsScale(100),
     m_velocityScale(0),
     m_currentElement(nullptr),
+    m_event(nullptr),
     m_currentViewSegment(nullptr),
     m_start(false)
 {
@@ -62,8 +63,13 @@ MatrixVelocity::MatrixVelocity(MatrixWidget *widget) :
 void
 MatrixVelocity::handleEventRemoved(Event *event)
 {
-    if (m_currentElement && m_currentElement->event() == event) {
+    // NOTE: Do not use m_currentElement in here as it was freed by
+    //       ViewSegment::eventRemoved() before we get here.
+
+    // Is it the event we are holding on to?
+    if (m_event == event) {
         m_currentElement = nullptr;
+        m_event = nullptr;
     }
 }
 
@@ -77,6 +83,7 @@ MatrixVelocity::handleLeftButtonPress(const MatrixMouseEvent *e)
 
     m_currentViewSegment = e->viewSegment;
     m_currentElement = e->element;
+    m_event = m_currentElement->event();
 
     // Get mouse pointer
     m_mouseStartY = e->sceneY;
@@ -88,13 +95,13 @@ MatrixVelocity::handleLeftButtonPress(const MatrixMouseEvent *e)
         EventSelection *newSelection;
 
         if ((e->modifiers & Qt::ShiftModifier) ||
-            selection->contains(m_currentElement->event())) {
+            selection->contains(m_event)) {
             newSelection = new EventSelection(*selection);
         } else {
             newSelection = new EventSelection(m_currentViewSegment->getSegment());
         }
 
-        newSelection->addEvent(m_currentElement->event());
+        newSelection->addEvent(m_event);
         m_scene->setSelection(newSelection, true);
 
     } else {
@@ -259,6 +266,7 @@ MatrixVelocity::handleMouseRelease(const MatrixMouseEvent *e)
     m_start = false;
     m_velocityDelta = m_mouseStartY = 0;
     m_currentElement = nullptr;
+    m_event = nullptr;
     setBasicContextHelp();
 
     // Mouse position is again related to pitch
