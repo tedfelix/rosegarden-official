@@ -85,7 +85,6 @@ public:
      */
     TrackButtons(RosegardenDocument* doc,
                  int trackCellHeight,
-                 int trackLabelWidth,
                  bool showTrackLabels,
                  int overallHeight,
                  QWidget* parent = nullptr);
@@ -299,7 +298,6 @@ protected:
     void trackSelectionChanged(const Composition *, TrackId trackId) override;
     void segmentRemoved(const Composition *, Segment *) override;
 
-    int labelWidth();
     int trackHeight(TrackId trackId);
 
 
@@ -343,9 +341,7 @@ protected:
 //    int                               m_offset;
 
     /// The height of the cells
-    int                               m_cellSize;
-
-    int                               m_trackLabelWidth;
+    int                               m_trackCellHeight;
 
     /// Position of the track that is showing the instrument popup menu.
     int                               m_popupTrackPos;
@@ -354,13 +350,6 @@ protected:
 
     /// Position of the last selected track.
     int m_lastSelected;
-
-    // Constants
-    /// gaps between elements vertically
-    static const int m_borderGap;
-    static const int m_buttonGap;
-    static const int m_vuWidth;
-    static const int m_vuSpacing;
 
 private slots:
     /// Called when the document is modified in some way.

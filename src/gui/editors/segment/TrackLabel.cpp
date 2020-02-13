@@ -33,6 +33,7 @@ namespace Rosegarden
 
 TrackLabel::TrackLabel(TrackId id,
                        int position,
+                       int trackHeight,
                        QWidget *parent) :
         QLabel(parent),
         m_mode(ShowTrack),
@@ -41,12 +42,9 @@ TrackLabel::TrackLabel(TrackId id,
         m_position(position)
 {
     setObjectName("TrackLabel");
-    
+
     QFont font;
-    font.setPointSize(font.pointSize() * 95 / 100);
-    if (font.pixelSize() > 14)
-        font.setPixelSize(14);
-    font.setBold(false);
+    font.setPixelSize(trackHeight * 55 / 100);
     setFont(font);
 
     setFrameShape(QFrame::NoFrame);

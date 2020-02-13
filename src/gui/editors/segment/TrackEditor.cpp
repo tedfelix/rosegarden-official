@@ -116,8 +116,9 @@ TrackEditor::TrackEditor(RosegardenDocument *doc,
 void
 TrackEditor::init(RosegardenMainViewWidget *mainViewWidget)
 {
-    QFontMetrics fontMetrics(QApplication::font(this));
-    m_trackCellHeight = std::min(fontMetrics.height() + 9, 24);
+    // 150 (1.5) is pretty massive.
+    constexpr int sizeFactor = 100;
+    m_trackCellHeight = 24 * sizeFactor / 100;
 
     QGridLayout *grid = new QGridLayout(this);
     grid->setMargin(0);
@@ -193,16 +194,14 @@ TrackEditor::init(RosegardenMainViewWidget *mainViewWidget)
     m_trackButtonScroll->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     grid->addWidget(m_trackButtonScroll, 3, 0);
 
-    const int trackLabelWidth = 200;
     const int canvasHeight = m_trackCellHeight *
                        std::max(40u, m_doc->getComposition().getNbTracks());
 
     m_trackButtons = new TrackButtons(m_doc,
                                       m_trackCellHeight,
-                                      trackLabelWidth,
                                       m_showTrackLabels,
-                                      canvasHeight,
-                                      m_trackButtonScroll);
+                                      canvasHeight,  // overall height
+                                      m_trackButtonScroll);  // parent
 
     m_trackButtonScroll->setWidget(m_trackButtons);
 

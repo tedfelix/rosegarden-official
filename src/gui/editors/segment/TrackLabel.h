@@ -45,6 +45,7 @@ public:
 
     TrackLabel(TrackId id,
                int position,
+               int trackHeight,
                QWidget *parent);
 
     /// Sets the track name (e.g. "Wicked Solo").

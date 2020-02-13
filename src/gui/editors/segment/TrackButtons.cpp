@@ -64,20 +64,21 @@
 #include <QToolTip>
 
 
+namespace
+{
+// Constants
+constexpr int borderGap = 1;
+constexpr int buttonGap = 8;
+constexpr int vuSpacing = 2;
+constexpr int minWidth = 200;
+}
+
 namespace Rosegarden
 {
 
 
-// Constants
-const int TrackButtons::m_borderGap = 1;
-const int TrackButtons::m_buttonGap = 8;
-const int TrackButtons::m_vuWidth = 20;
-const int TrackButtons::m_vuSpacing = 2;
-
-
 TrackButtons::TrackButtons(RosegardenDocument* doc,
                            int trackCellHeight,
-                           int trackLabelWidth,
                            bool showTrackLabels,
                            int overallHeight,
                            QWidget* parent) :
@@ -91,8 +92,7 @@ TrackButtons::TrackButtons(RosegardenDocument* doc,
         m_instListSigMapper(new QSignalMapper(this)),
         m_tracks(doc->getComposition().getNbTracks()),
 //        m_offset(4),
-        m_cellSize(trackCellHeight),
-        m_trackLabelWidth(trackLabelWidth),
+        m_trackCellHeight(trackCellHeight),
         m_popupTrackPos(0),
         m_lastSelected(-1)
 {
@@ -112,7 +112,7 @@ TrackButtons::TrackButtons(RosegardenDocument* doc,
 
     m_layout->setMargin(0);
     // Set the spacing between vertical elements
-    m_layout->setSpacing(m_borderGap);
+    m_layout->setSpacing(borderGap);
 
     // Now draw the buttons and labels and meters
     //
@@ -511,7 +511,7 @@ TrackButtons::slotUpdateTracks()
         // Track height can change when the user moves segments around and
         // they overlap.
 
-        m_trackHBoxes[i]->setMinimumSize(labelWidth(), trackHeight(track->getId()));
+        m_trackHBoxes[i]->setMinimumSize(minWidth, trackHeight(track->getId()));
         m_trackHBoxes[i]->setFixedHeight(trackHeight(track->getId()));
 
     }
@@ -1069,13 +1069,6 @@ TrackButtons::slotTPBInstrumentSelected(TrackId trackId, int instrumentIndex)
 }
 
 int
-TrackButtons::labelWidth()
-{
-    return m_trackLabelWidth -
-           ((m_cellSize - m_buttonGap) * 2 + m_vuSpacing * 2 + m_vuWidth);
-}
-
-int
 TrackButtons::trackHeight(TrackId trackId)
 {
     int multiple = m_doc->
@@ -1083,7 +1076,7 @@ TrackButtons::trackHeight(TrackId trackId)
     if (multiple == 0)
         multiple = 1;
 
-    return m_cellSize * multiple - m_borderGap;
+    return m_trackCellHeight * multiple - borderGap;
 }
 
 QFrame*
@@ -1102,7 +1095,7 @@ TrackButtons::makeButton(Track *track)
     hblayout->setMargin(0);
     hblayout->setSpacing(0);
 
-    trackHBox->setMinimumSize(labelWidth(), trackHeight(trackId));
+    trackHBox->setMinimumSize(minWidth, trackHeight(trackId));
     trackHBox->setFixedHeight(trackHeight(trackId));
 
     trackHBox->setFrameShape(QFrame::StyledPanel);
@@ -1112,23 +1105,26 @@ TrackButtons::makeButton(Track *track)
     trackHBox->setAutoFillBackground(true);
 
     // Insert a little gap
-    hblayout->addSpacing(m_vuSpacing);
+    hblayout->addSpacing(vuSpacing);
 
 
     // *** VU Meter ***
 
-    TrackVUMeter *vuMeter = new TrackVUMeter(trackHBox,
-                                             VUMeter::PeakHold,
-                                             m_vuWidth,
-                                             m_buttonGap,
-                                             track->getPosition());
+    const int vuHeight = m_trackCellHeight * 40 / 100;
+
+    TrackVUMeter *vuMeter = new TrackVUMeter(
+            trackHBox,  // parent
+            VUMeter::PeakHold,  // type
+            vuHeight * 3,  // width
+            vuHeight,  // height
+            track->getPosition());  // position
 
     m_trackMeters.push_back(vuMeter);
 
     hblayout->addWidget(vuMeter);
 
     // Insert a little gap
-    hblayout->addSpacing(m_vuSpacing);
+    hblayout->addSpacing(vuSpacing);
 
 
     // *** Mute LED ***
@@ -1144,7 +1140,7 @@ TrackButtons::makeButton(Track *track)
 
     m_muteLeds.push_back(mute);
 
-    mute->setFixedSize(m_cellSize - m_buttonGap, m_cellSize - m_buttonGap);
+    mute->setFixedSize(m_trackCellHeight - buttonGap, m_trackCellHeight - buttonGap);
 
 
     // *** Record LED ***
@@ -1162,7 +1158,7 @@ TrackButtons::makeButton(Track *track)
 
     m_recordLeds.push_back(record);
 
-    record->setFixedSize(m_cellSize - m_buttonGap, m_cellSize - m_buttonGap);
+    record->setFixedSize(m_trackCellHeight - buttonGap, m_trackCellHeight - buttonGap);
 
 
     // *** Solo LED ***
@@ -1178,21 +1174,27 @@ TrackButtons::makeButton(Track *track)
 
     m_soloLeds.push_back(solo);
 
-    solo->setFixedSize(m_cellSize - m_buttonGap, m_cellSize - m_buttonGap);
+    solo->setFixedSize(m_trackCellHeight - buttonGap, m_trackCellHeight - buttonGap);
 
 
     // *** Track Label ***
 
-    TrackLabel *trackLabel =
-            new TrackLabel(trackId, track->getPosition(), trackHBox);
+    TrackLabel *trackLabel = new TrackLabel(
+            trackId, track->getPosition(), m_trackCellHeight, trackHBox);
     hblayout->addWidget(trackLabel);
 
-    hblayout->addSpacing(m_vuSpacing);
+    hblayout->addSpacing(vuSpacing);
 
     trackLabel->setDisplayMode(m_labelDisplayMode);
 
-    trackLabel->setFixedSize(labelWidth(), m_cellSize - m_buttonGap);
-    trackLabel->setFixedHeight(m_cellSize - m_buttonGap);
+    // ??? Ideally the width should be based on the size of some string in
+    //     the target font.  But we can only get that info in TrackLabel and
+    //     by then it's probably too late.  This works for now.  We might
+    //     add a "TrackLabel::getWidth()" that provides a width based on a
+    //     built-in reference string.
+    trackLabel->setFixedSize(
+            m_trackCellHeight * 6,  // w
+            m_trackCellHeight - buttonGap);  // h
     trackLabel->setIndent(7);
 
     connect(trackLabel, &TrackLabel::renameTrack,
