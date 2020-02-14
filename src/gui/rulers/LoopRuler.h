@@ -42,7 +42,7 @@ class RosegardenDocument;
  * LoopRuler is a widget that shows bar and beat durations on a
  * ruler-like scale, and reacts to mouse clicks by sending relevant
  * signals to modify position pointer and playback/looping states.
-*/
+ */
 class LoopRuler : public QWidget
 {
     Q_OBJECT
@@ -70,27 +70,7 @@ public:
 
     bool getLoopingMode() { return m_loopingMode; }
     
-public slots:
-    void slotSetLoopMarker(timeT startLoop,
-                           timeT endLoop);
-
-protected:
-    double mouseEventToSceneX(QMouseEvent *mE);
-
-    void mousePressEvent       (QMouseEvent*) override;
-    void mouseReleaseEvent     (QMouseEvent*) override;
-    void mouseDoubleClickEvent (QMouseEvent*) override;
-    void mouseMoveEvent        (QMouseEvent*) override;
-
-    void paintEvent(QPaintEvent*) override;
-
-    void setLoopingMode(bool value) { m_loopingMode = value; }
-    void drawBarSections(QPainter*);
-    void drawLoopMarker(QPainter*);  // between loop positions
-
 signals:
-    // The three main functions that this class performs
-    //
     /// Set the pointer position on mouse single click
     void setPointerPosition(timeT);
 
@@ -110,7 +90,23 @@ signals:
     void stopMouseMove();
     void mouseMove();
 
+public slots:
+    void slotSetLoopMarker(timeT startLoop,
+                           timeT endLoop);
+
 protected:
+    // QWidget overrides
+    void mousePressEvent(QMouseEvent *) override;
+    void mouseReleaseEvent(QMouseEvent *) override;
+    void mouseDoubleClickEvent(QMouseEvent *) override;
+    void mouseMoveEvent(QMouseEvent *) override;
+    void paintEvent(QPaintEvent *) override;
+
+private:
+    double mouseEventToSceneX(QMouseEvent *mouseEvent);
+
+    void drawBarSections(QPainter*);
+    void drawLoopMarker(QPainter*);  // between loop positions
 
     //--------------- Data members ---------------------------------
     int  m_height;
