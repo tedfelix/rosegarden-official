@@ -71,7 +71,7 @@ LoopRuler::LoopRuler(RosegardenDocument *doc,
     m_defaultGrid.setSnapTime(SnapGrid::NoSnap);
     m_loopGrid->setSnapTime(SnapGrid::SnapToBeat);
 
-    setToolTip(tr("<qt><p>Click and drag to move the playback pointer.</p><p>Shift-click and drag to set a range for looping or editing.</p><p>Shift-click to clear the loop or range.</p><p>Ctrl-click and drag to move the playback pointer with snap to beat.</p><p>Double-click to start playback.</p></qt>"));
+    setToolTip(tr("<qt><p>Click and drag to move the playback pointer.</p><p>Right-click and drag to set a range for looping or editing.</p><p>Right-click to clear the loop or range.</p><p>Ctrl-click and drag to move the playback pointer with snap to beat.</p><p>Double-click to start playback.</p></qt>"));
 }
 
 LoopRuler::~LoopRuler()
@@ -257,41 +257,49 @@ LoopRuler::mousePressEvent(QMouseEvent *mouseEvent)
 {
     //RG_DEBUG << "LoopRuler::mousePressEvent: x = " << mouseEvent->x();
 
-    if (mouseEvent->button() == Qt::LeftButton) {
+    const double x = mouseEventToSceneX(mouseEvent);
 
-        // Shift + Left click => loop mode
-        // ??? We need to do right click as well.
-        m_loopingMode = ((mouseEvent->modifiers() & Qt::ShiftModifier) != 0);
+    const bool leftButton = (mouseEvent->button() == Qt::LeftButton);
+    const bool rightButton = (mouseEvent->button() == Qt::RightButton);
+    const bool shift = ((mouseEvent->modifiers() & Qt::ShiftModifier) != 0);
 
-        double x = mouseEventToSceneX(mouseEvent);
+    // If loop mode has been requested
+    if ((shift  &&  leftButton)  ||  rightButton) {
+        // Loop mode
+        m_loopingMode = true;
+        m_startLoop = m_loopGrid->snapX(x);
+        m_endLoop = m_startLoop;
+        m_activeMousePress = true;
 
-        if (m_loopingMode) {
-            m_startLoop = m_loopGrid->snapX(x);
-            m_endLoop = m_startLoop;
-        } else {
-            // If we are still using the default grid, that means we are being
-            // used by the TrackEditor (instead of the MatrixEditor).
-            if (m_grid == &m_defaultGrid) {
-                // If the ctrl key is pressed, enable snap to beat
-                if ((mouseEvent->modifiers() & Qt::ControlModifier) != 0)
-                    m_defaultGrid.setSnapTime(SnapGrid::SnapToBeat);
-                else
-                    m_defaultGrid.setSnapTime(SnapGrid::NoSnap);
-            }
+        emit startMouseMove(FOLLOW_HORIZONTAL);
 
-            // No -- now that we're emitting when the button is
-            // released, we _don't_ want to emit here as well --
-            // otherwise we get an irritating stutter when simply
-            // clicking on the ruler during playback
-            //emit setPointerPosition(m_rulerScale->getTimeForX(x));
+        return;
+    }
 
-            // But we want to see the pointer under the mouse as soon as the
-            // button is pressed, before we begin to drag it.
-            emit dragPointerToPosition(m_grid->snapX(x));
+    // Left button pointer drag
+    if (leftButton) {
 
-            m_lastMouseXPos = x;
-
+        // If we are still using the default grid, that means we are being
+        // used by the TrackEditor (instead of the MatrixEditor).
+        if (m_grid == &m_defaultGrid) {
+            // If the ctrl key is pressed, enable snap to beat
+            if ((mouseEvent->modifiers() & Qt::ControlModifier) != 0)
+                m_defaultGrid.setSnapTime(SnapGrid::SnapToBeat);
+            else
+                m_defaultGrid.setSnapTime(SnapGrid::NoSnap);
         }
+
+        // No -- now that we're emitting when the button is
+        // released, we _don't_ want to emit here as well --
+        // otherwise we get an irritating stutter when simply
+        // clicking on the ruler during playback
+        //emit setPointerPosition(m_rulerScale->getTimeForX(x));
+
+        // But we want to see the pointer under the mouse as soon as the
+        // button is pressed, before we begin to drag it.
+        emit dragPointerToPosition(m_grid->snapX(x));
+
+        m_lastMouseXPos = x;
 
         m_activeMousePress = true;
 
@@ -301,38 +309,47 @@ LoopRuler::mousePressEvent(QMouseEvent *mouseEvent)
         //     sources.  It would probably be best to connect this signal
         //     to a slot in the client that is specific to LoopRuler.
         emit startMouseMove(FOLLOW_HORIZONTAL);
+
     }
+
 }
 
 void
 LoopRuler::mouseReleaseEvent(QMouseEvent *mouseEvent)
 {
-	if (mouseEvent->button() == Qt::LeftButton) {
-        if (m_loopingMode) {
-            // If there was no drag, cancel the loop.
-            if (m_endLoop == m_startLoop) {
-                m_startLoop = 0;
-                m_endLoop = 0;
+    // If we were in looping mode
+    if (m_loopingMode) {
+        m_loopingMode = false;
 
-                // to clear any other loop rulers
-                emit setLoop(m_startLoop, m_endLoop);
-                update();
-            }
+        // If there was no drag, cancel the loop.
+        if (m_endLoop == m_startLoop) {
+            m_startLoop = 0;
+            m_endLoop = 0;
 
+            // to clear any other loop rulers
+            emit setLoop(m_startLoop, m_endLoop);
+            update();
+        } else {  // There was drag
             // Make sure start < end
             if (m_endLoop < m_startLoop)
                 std::swap(m_startLoop, m_endLoop);
 
             emit setLoop(m_startLoop, m_endLoop);
-        } else {
-
-            // we need to re-emit this signal so that when the user releases
-            // the button after dragging the pointer, the pointer's position
-            // is updated again in the other views (typically, in the seg.
-            // canvas while the user has dragged the pointer in an edit view)
-            emit setPointerPosition(m_grid->snapX(m_lastMouseXPos));
-
         }
+
+        emit stopMouseMove();
+        m_activeMousePress = false;
+
+        return;
+    }
+
+	if (mouseEvent->button() == Qt::LeftButton) {
+        // we need to re-emit this signal so that when the user releases
+        // the button after dragging the pointer, the pointer's position
+        // is updated again in the other views (typically, in the seg.
+        // canvas while the user has dragged the pointer in an edit view)
+        emit setPointerPosition(m_grid->snapX(m_lastMouseXPos));
+
         emit stopMouseMove();
         m_activeMousePress = false;
     }
