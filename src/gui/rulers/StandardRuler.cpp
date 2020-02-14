@@ -46,7 +46,6 @@ StandardRuler::StandardRuler(RosegardenDocument *doc,
         QWidget(parent),
         m_invert(invert),
         m_isForMainWindow(isForMainWindow),
-        m_loopRulerHeight(10),
         m_currentXOffset(0),
         m_doc(doc),
         m_rulerScale(rulerScale),
@@ -58,15 +57,20 @@ StandardRuler::StandardRuler(RosegardenDocument *doc,
     layout->setMargin(0);
     layout->setSpacing(0);
     setLayout(layout);
-	
+
     if (!m_invert) {
         m_markerRuler = new MarkerRuler
                        (m_doc, m_rulerScale, this);
         layout->addWidget(m_markerRuler);
     }
 
-    m_loopRuler = new LoopRuler
-                  (m_doc, m_rulerScale, m_loopRulerHeight, m_invert, m_isForMainWindow, this);
+    m_loopRuler = new LoopRuler(
+            m_doc,
+            m_rulerScale,
+            15,  // height, 15 is the same height as the MarkerRuler
+            m_invert,
+            m_isForMainWindow,
+            this);  // parent
     layout->addWidget(m_loopRuler);
 
     if (m_invert) {

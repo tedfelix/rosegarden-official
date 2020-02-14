@@ -78,7 +78,6 @@ private:
     //--------------- Data members ---------------------------------
     bool m_invert;
     bool m_isForMainWindow;
-    int m_loopRulerHeight;
     int m_currentXOffset;
 
     RosegardenDocument       *m_doc;
