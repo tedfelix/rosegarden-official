@@ -25,8 +25,8 @@
 #include "gui/seqmanager/MEBIterator.h"
 #include "sound/ControlBlock.h"
 
-#include <queue>
-#include <functional>
+#include <queue>  // std::priority_queue
+#include <functional>  // std::greater
 
 //#define DEBUG_META_ITERATOR 1
 //#define DEBUG_PLAYING_AUDIO_FILES 1
@@ -152,53 +152,76 @@ MappedBufMetaIterator::fetchEvents(MappedInserterBase &inserter,
     // fetchEventsNoncompeting.  We could re-slice it smarter but this
     // suffices.
 
+    // Test Case?  I suspect that two Segment's that butt up against
+    // each other and that trigger resending of channel setup would
+    // be the test case here.  Thing is that I don't think we do that
+    // anymore.
+
+    // Note that the slices are about 160msecs.  It's very unlikely that
+    // there will be anything interesting ever going on in this routine.
+
     // Make a queue of all segment starts that occur during the slice.
-    // ??? Why not use std::set instead?  All this is doing is sorting
-    //     the start times.  std::vector and std::sort() should be another
-    //     option.  Using std::priority_queue implies there will be a
-    //     Compare predicate that is more interesting than std::greater.
+    // Use a priority_queue to sort from earliest time to latest.
+    // ??? A std::set is likely faster.  It has logarithmic insertion, and
+    //     there is no need to remove elements.  Plus it can't have dupes
+    //     which simplifies the second loop.
+    // ??? It's very unlikely that there will be any more than 2 entries
+    //     in this queue.  Consequently it makes no difference speed-wise
+    //     which container is used.  For that reason, I would suggest
+    //     std::set for simplicity.
     std::priority_queue<RealTime,
                         std::vector<RealTime>,
-                        std::greater<RealTime> >
-        segStarts;
+                        std::greater<RealTime> >  // smaller first
+        bufferStarts;
 
-    for (IteratorVector::iterator i = m_iterators.begin();
-         i != m_iterators.end();
+    // For each buffer.
+    for (BufferSet::iterator i = m_buffers.begin();
+         i != m_buffers.end();
          ++i) {
         RealTime start;
         RealTime end;
-        (*i)->getMappedEventBuffer()->getStartEnd(start, end);
+        (*i)->getStartEnd(start, end);
         // If this segment's start is within the timeslice, add it
-        // to segStarts.
-        if (start >= startTime  &&  start < endTime)
-            segStarts.push(start);
+        // to bufferStarts.
+        if (start >= startTime  &&  start < endTime) {
+            bufferStarts.push(start);
+            //RG_DEBUG << "sub-slice: " << start;
+        }
     }
+
+    //if (!bufferStarts.empty()) {
+    //    RG_DEBUG << "  fetchEvents()" << startTime << "-" << endTime;
+    //    RG_DEBUG << "  bufferStarts.size(): " << bufferStarts.size();
+    //}
 
     // The progressive starting time, updated each iteration.
     RealTime innerStart = startTime;
 
-    // For each distinct gap, do a slice.
-    while (!segStarts.empty()) {
+    // For each sub-slice
+    while (!bufferStarts.empty()) {
         // We're at innerStart.  Get a mapper that didn't start yet.
-        RealTime innerEnd = segStarts.top();
+        RealTime innerEnd = bufferStarts.top();
         // Remove it from the queue.
-        segStarts.pop();
+        bufferStarts.pop();
         // If it starts exactly at innerStart, it doesn't need its own
-        // slice.
+        // slice.  (IOW, drop dupes.  std::set would probably be better.)
         if (innerEnd == innerStart)
             continue;
-        // Get a slice from the previous end-time (or startTime) to
+
+        //RG_DEBUG << "  fetchEventsNoncompeting(): " << innerStart << "-" << innerEnd;
+
+        // Get a sub-slice from the previous end-time (or startTime) to
         // this new start-time.
         fetchEventsNoncompeting(inserter, innerStart, innerEnd);
+
         innerStart = innerEnd;
     }
 
     // Do one more slice to take us to the end time.  This is always
-    // correct to do, since segStarts can't contain a start equal to
+    // correct to do, since bufferStarts can't contain a start equal to
     // endTime.
     fetchEventsNoncompeting(inserter, innerStart, endTime);
 
-    return;
 }
 
 void
@@ -355,8 +378,8 @@ fetchEventsNoncompeting(MappedInserterBase &inserter,
 }
 
 void
-MappedBufMetaIterator::
-resetIteratorForSegment(QSharedPointer<MappedEventBuffer> mappedEventBuffer, bool immediate)
+MappedBufMetaIterator::resetIteratorForBuffer(
+        QSharedPointer<MappedEventBuffer> mappedEventBuffer, bool immediate)
 {
     // For each segment
     for (IteratorVector::iterator i = m_iterators.begin();

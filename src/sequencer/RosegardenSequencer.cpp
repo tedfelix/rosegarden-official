@@ -1014,7 +1014,7 @@ void RosegardenSequencer::dumpFirstSegment()
 
     unsigned int i = 0;
     
-    std::set<QSharedPointer<MappedEventBuffer> > segs = m_metaIterator.getSegments();
+    std::set<QSharedPointer<MappedEventBuffer> > segs = m_metaIterator.getBuffers();
     if (segs.empty()) {
         SEQUENCER_DEBUG << "(no segments)";
         return;
@@ -1057,7 +1057,7 @@ RosegardenSequencer::segmentModified(QSharedPointer<MappedEventBuffer> mapper)
       there's been no demand and nobody knows what subtle problems
       might be introduced. */
    bool immediate = (m_transportStatus == PLAYING);
-   m_metaIterator.resetIteratorForSegment(mapper, immediate);
+   m_metaIterator.resetIteratorForBuffer(mapper, immediate);
 }
 
 void

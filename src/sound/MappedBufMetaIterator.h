@@ -22,6 +22,8 @@
 #include "sound/MappedEvent.h"
 #include "base/RealTime.h"
 
+#include <QSharedPointer>
+
 #include <set>
 #include <vector>
 
@@ -58,12 +60,10 @@ class MEBIterator;
 class MappedBufMetaIterator
 {
 public:
-    MappedBufMetaIterator()  { }
-
     void addBuffer(QSharedPointer<MappedEventBuffer>);
     void removeBuffer(QSharedPointer<MappedEventBuffer>);
 
-    /// Delete all iterators and forget all segments
+    /// Delete all iterators and forget all buffers
     void clear();
 
     void fetchFixedChannelSetup(MappedInserterBase &inserter);
@@ -88,12 +88,15 @@ public:
      * @param immediate means to reset it right away, presumably because
      *   we are playing right now.
      */
-    void resetIteratorForSegment(QSharedPointer<MappedEventBuffer> s, bool immediate);
+    void resetIteratorForBuffer(
+            QSharedPointer<MappedEventBuffer> mappedEventBuffer,
+            bool immediate);
 
     void getAudioEvents(std::vector<MappedEvent> &);
 
     // For debugging.
-    std::set<QSharedPointer<MappedEventBuffer> > getSegments() const { return m_buffers; }
+    std::set<QSharedPointer<MappedEventBuffer> > getBuffers() const
+            { return m_buffers; }
 
 private:
     RealTime m_currentTime;
@@ -109,10 +112,10 @@ private:
     /// Reset all iterators to beginning
     void reset();
 
-    /// Fetch events during an interval, with non-competing mappers.
+    /// Fetch events during an interval, with non-competing buffers.
     /**
-     * Caller guarantees that the mappers are non-competing, meaning
-     * that no active mappers use the same channel during this slice
+     * Caller guarantees that the buffers are non-competing, meaning
+     * that no active buffers use the same channel during this slice
      * (except for fixed instruments, for which that guarantee is
      * impossible).
     */
