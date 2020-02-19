@@ -93,13 +93,13 @@ MappedEventBuffer::refresh()
 int
 MappedEventBuffer::capacity() const
 {
-    return m_capacity.fetchAndAddRelaxed(0);
+    return m_capacity.load();
 }
 
 int
 MappedEventBuffer::size() const
 {
-    return m_size.fetchAndAddRelaxed(0);
+    return m_size.load();
 }
 
 void
@@ -111,7 +111,7 @@ MappedEventBuffer::reserve(int newSize)
     MappedEvent *newBuffer = new MappedEvent[newSize];
 
     if (oldBuffer) {
-        for (int i = 0; i < m_size.fetchAndAddRelaxed(0); ++i) {
+        for (int i = 0; i < m_size.load(); ++i) {
             newBuffer[i] = m_buffer[i];
         }
     }
@@ -119,7 +119,7 @@ MappedEventBuffer::reserve(int newSize)
     {
         QWriteLocker locker(&m_lock);
         m_buffer = newBuffer;
-        m_capacity.fetchAndStoreRelease(newSize);
+        m_capacity.storeRelease(newSize);
     }
 
 #ifdef DEBUG_MAPPED_EVENT_BUFFER
@@ -132,7 +132,7 @@ MappedEventBuffer::reserve(int newSize)
 void
 MappedEventBuffer::resize(int newFill)
 {
-    m_size.fetchAndStoreRelaxed(newFill);
+    m_size.store(newFill);
 }
 
 void

@@ -422,9 +422,19 @@ private:
     MappedEvent *m_buffer;
 
     /// Capacity of the buffer.
+    /**
+     * ??? While storeRelease() is used with this, it's somewhat dubious
+     *     as to whether that is necessary.  There are no other uses
+     *     of m_capacity anywhere near that one.  It's very likely that
+     *     QAtomicInt is not needed here.
+     */
     mutable QAtomicInt m_capacity;
 
     /// Number of events in the buffer.
+    /**
+     * ??? We only use load() and store().  This doesn't need to be a
+     *     QAtomicInt.
+     */
     mutable QAtomicInt m_size;
 
     /// Lock for reserve() and callers to iterator::peek()
