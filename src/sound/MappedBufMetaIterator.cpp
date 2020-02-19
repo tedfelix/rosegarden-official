@@ -145,34 +145,25 @@ MappedBufMetaIterator::fetchEvents(MappedInserterBase &inserter,
     RG_DEBUG << "fetchEvents() " << startTime << " -> " << endTime;
 #endif
 
-    // To keep mappers on the same channel from interfering, for
+    // To keep buffers on the same channel from interfering, for
     // instance sending their initializations while another is playing
     // on the channel, we divide the timeslice into sub-slices during which
-    // no new mappers start and pass each sub-slice to
-    // fetchEventsNoncompeting.  We could re-slice it smarter but this
+    // no buffers start and pass each sub-slice to
+    // fetchEventsNoncompeting().  We could re-slice it smarter but this
     // suffices.
 
     // Test Case?  I suspect that two Segment's that butt up against
     // each other and that trigger resending of channel setup would
     // be the test case here.  Thing is that I don't think we do that
-    // anymore.
+    // anymore.  All this sub-slicing might be pointless now.
 
     // Note that the slices are about 160msecs.  It's very unlikely that
     // there will be anything interesting ever going on in this routine.
 
-    // Make a queue of all segment starts that occur during the slice.
-    // Use a priority_queue to sort from earliest time to latest.
-    // ??? A std::set is likely faster.  It has logarithmic insertion, and
-    //     there is no need to remove elements.  Plus it can't have dupes
-    //     which simplifies the second loop.
-    // ??? It's very unlikely that there will be any more than 2 entries
-    //     in this queue.  Consequently it makes no difference speed-wise
-    //     which container is used.  For that reason, I would suggest
-    //     std::set for simplicity.
-    std::priority_queue<RealTime,
-                        std::vector<RealTime>,
-                        std::greater<RealTime> >  // smaller first
-        bufferStarts;
+    // Make a set of all buffer starts that occur during the slice sorted
+    // from earliest to latest.
+    typedef std::set<RealTime> TimeSet;
+    TimeSet bufferStarts;
 
     // For each buffer.
     for (BufferSet::iterator i = m_buffers.begin();
@@ -184,7 +175,7 @@ MappedBufMetaIterator::fetchEvents(MappedInserterBase &inserter,
         // If this segment's start is within the timeslice, add it
         // to bufferStarts.
         if (start >= startTime  &&  start < endTime) {
-            bufferStarts.push(start);
+            bufferStarts.insert(start);
             //RG_DEBUG << "sub-slice: " << start;
         }
     }
@@ -198,22 +189,18 @@ MappedBufMetaIterator::fetchEvents(MappedInserterBase &inserter,
     RealTime innerStart = startTime;
 
     // For each sub-slice
-    while (!bufferStarts.empty()) {
-        // We're at innerStart.  Get a mapper that didn't start yet.
-        RealTime innerEnd = bufferStarts.top();
-        // Remove it from the queue.
-        bufferStarts.pop();
-        // If it starts exactly at innerStart, it doesn't need its own
-        // slice.  (IOW, drop dupes.  std::set would probably be better.)
-        if (innerEnd == innerStart)
-            continue;
+    for (TimeSet::const_iterator i = bufferStarts.begin();
+         i != bufferStarts.end();
+         ++i) {
+        // Get the end of the current sub-slice.
+        RealTime innerEnd = *i;
 
         //RG_DEBUG << "  fetchEventsNoncompeting(): " << innerStart << "-" << innerEnd;
 
-        // Get a sub-slice from the previous end-time (or startTime) to
-        // this new start-time.
+        // Get the sub-slice
         fetchEventsNoncompeting(inserter, innerStart, innerEnd);
 
+        // Move to the next sub-slice
         innerStart = innerEnd;
     }
 
