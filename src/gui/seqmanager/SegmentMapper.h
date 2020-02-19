@@ -35,7 +35,8 @@ public:
     ~SegmentMapper() override;
 
     /// Create the appropriate mapper for the segment type.  Factory function.
-    static QSharedPointer<SegmentMapper> makeMapperForSegment(RosegardenDocument *, Segment *);
+    static QSharedPointer<SegmentMapper> makeMapperForSegment(
+            RosegardenDocument *, Segment *);
 
     int getSegmentRepeatCount() override;
     TrackId getTrackID() const override;

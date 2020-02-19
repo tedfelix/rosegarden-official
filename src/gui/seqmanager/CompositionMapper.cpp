@@ -30,6 +30,7 @@
 namespace Rosegarden
 {
 
+
 CompositionMapper::CompositionMapper(RosegardenDocument *doc) :
     m_doc(doc)
 {
@@ -37,15 +38,19 @@ CompositionMapper::CompositionMapper(RosegardenDocument *doc) :
 
     Composition &comp = m_doc->getComposition();
 
-    for (Composition::iterator it = comp.begin(); it != comp.end(); ++it) {
+    // For each Segment in the Composition
+    for (Composition::iterator segmentIter = comp.begin();
+         segmentIter != comp.end();
+         ++segmentIter) {
 
-        Track *track = comp.getTrackById((*it)->getTrack());
+        Track *track = comp.getTrackById((*segmentIter)->getTrack());
 
-        // check to see if track actually exists
-        //
-        if (track == nullptr) continue;
+        // If the Track does not exist, try the next Segment...
+        if (!track)
+            continue;
 
-        mapSegment(*it);
+        // Create a SegmentMapper for this Segment.
+        mapSegment(*segmentIter);
     }
 }
 

@@ -149,16 +149,6 @@ public:
      */
     virtual int calculateSize() = 0;
 
-    /// Fill buffer with data from the segment
-    /**
-     * This is provided by derivers to handle whatever sort of data is
-     * specific to each of them.  E.g. InternalSegmentMapper::fillBuffer()
-     * processes note events while TempoSegmentMapper processes tempo
-     * change events.
-     *
-     */
-    virtual void fillBuffer() = 0;
-
     /// Insert a MappedEvent with appropriate setup for channel.
     /**
      * InternalSegmentMapper and MetronomeMapper override this to bring
@@ -389,6 +379,16 @@ public:
 protected:
     friend class iterator;
 
+    /// Fill buffer with data from the segment
+    /**
+     * This is provided by derivers to handle whatever sort of data is
+     * specific to each of them.  E.g. InternalSegmentMapper::fillBuffer()
+     * processes note events while TempoSegmentMapper processes tempo
+     * change events.
+     *
+     */
+    virtual void fillBuffer() = 0;
+
     /// The Mapped Event Buffer
     MappedEvent *m_buffer;
 
@@ -463,6 +463,7 @@ private:
     /// Hidden and not implemented as dtor is non-trivial.
     MappedEventBuffer &operator=(const MappedEventBuffer &);
 };
+
 
 }
 

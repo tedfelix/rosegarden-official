@@ -61,6 +61,27 @@ public:
     InternalSegmentMapper(RosegardenDocument *doc, Segment *segment);
     ~InternalSegmentMapper() override;
 
+protected:
+    // MappedEventBuffer Overrides
+
+    /// dump all segment data in the file
+    void fillBuffer() override;
+
+    // Return whether the event should be played.
+    bool shouldPlay(MappedEvent *evt, RealTime startTime) override;
+
+    int calculateSize() override;
+
+    // Do channel-setup for Auto channel mode.
+    void makeReady(MappedInserterBase &inserter, RealTime time) override;
+
+    // Do channel-setup for Fixed channel mode.
+    void insertChannelSetup(MappedInserterBase &) override;
+
+    // Insert the event "evt"
+    void doInsert(MappedInserterBase &inserter, MappedEvent &evt,
+                         RealTime start, bool firstOutput) override;
+
 private:
     // Hide copy ctor and op= since dtor is non-trivial.
     InternalSegmentMapper(const InternalSegmentMapper &);
@@ -89,31 +110,12 @@ private:
     };
     // This wants to be a priority_queue but we need to sometimes
     // filter noteoffs so it can't be.
-    typedef std::multiset<Noteoff, NoteoffCmp>
-        NoteoffContainer;
-
-    // Do channel-setup for Auto channel mode.
-    void makeReady(MappedInserterBase &inserter, RealTime time) override;
-
-    // Do channel-setup for Fixed channel mode.
-    void insertChannelSetup(MappedInserterBase &) override;
-
-    // Insert the event "evt"
-    void doInsert(MappedInserterBase &inserter, MappedEvent &evt,
-                         RealTime start, bool firstOutput) override;
-
-    // Return whether the event should be played.
-    bool shouldPlay(MappedEvent *evt, RealTime startTime) override;
-
-    int calculateSize() override;
+    typedef std::multiset<Noteoff, NoteoffCmp> NoteoffContainer;
 
     int addSize(int size, Segment *);
 
-    /// dump all segment data in the file
-    void fillBuffer() override;
-
     Instrument *getInstrument() const
-    { return m_channelManager.getInstrument(); }
+        { return m_channelManager.getInstrument(); }
 
     void popInsertNoteoff(int trackid, Composition &comp);
     void enqueueNoteoff(timeT time, int pitch);
@@ -128,17 +130,20 @@ private:
 
     ChannelManager m_channelManager;
 
-    // Separate storage for triggered events.  This storage, like
-    // original segment, contains just one time thru; logic in "fillBuffer"
-    // turns it into repeats as needed.
-    Segment               *m_triggeredEvents;
+    /// Separate storage for triggered events.
+    /**
+     * This storage, like the original segment, contains just one time thru.
+     * Logic in "fillBuffer" turns it into repeats as needed.
+     */
+    Segment *m_triggeredEvents;
     
-    ControllerContextMap   m_controllerCache;
+    ControllerContextMap m_controllerCache;
 
-    // Queue of noteoffs.
-    NoteoffContainer       m_noteOffs;
+    /// Queue of noteoffs.
+    NoteoffContainer m_noteOffs;
 };
-  
+
+
 }
 
 #endif /* ifndef RG_INTERNALSEGMENTMAPPER_H */
