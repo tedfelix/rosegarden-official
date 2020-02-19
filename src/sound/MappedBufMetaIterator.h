@@ -29,6 +29,7 @@ namespace Rosegarden {
 
 
 class MappedInserterBase;
+class MEBIterator;
 
 
 /// Combines MappedEvent objects from a number of MappedEventBuffer objects.
@@ -122,7 +123,7 @@ private:
                                  const RealTime &start,
                                  const RealTime &end);
 
-    void moveIteratorToTime(MappedEventBuffer::iterator &,
+    void moveIteratorToTime(MEBIterator &,
                             const RealTime &);
 
     //--------------- Data members ---------------------------------
@@ -132,7 +133,7 @@ private:
     typedef std::set<QSharedPointer<MappedEventBuffer> > MappedSegments;
     MappedSegments m_segments;
 
-    typedef std::vector<MappedEventBuffer::iterator *> SegmentIterators;
+    typedef std::vector<MEBIterator *> SegmentIterators;
     SegmentIterators m_iterators;
 
     std::vector<MappedEvent> m_playingAudioSegments;

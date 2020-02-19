@@ -22,6 +22,7 @@
 #include "base/Profiler.h"
 #include "misc/Debug.h"
 #include "sound/MappedInserterBase.h"
+#include "gui/seqmanager/MEBIterator.h"
 #include "sound/ControlBlock.h"
 
 #include <queue>
@@ -40,7 +41,8 @@ MappedBufMetaIterator::~MappedBufMetaIterator()
 }
 
 void
-MappedBufMetaIterator::addSegment(QSharedPointer<MappedEventBuffer> mappedEventBuffer)
+MappedBufMetaIterator::addSegment(
+        QSharedPointer<MappedEventBuffer> mappedEventBuffer)
 {
     // BUG #1349 (was #3546135)
     // If we already have this segment, bail, or else we'll have two
@@ -53,8 +55,8 @@ MappedBufMetaIterator::addSegment(QSharedPointer<MappedEventBuffer> mappedEventB
 
     m_segments.insert(mappedEventBuffer);
 
-    MappedEventBuffer::iterator *iter =
-            new MappedEventBuffer::iterator(mappedEventBuffer);
+    MEBIterator *iter =
+            new MEBIterator(mappedEventBuffer);
     moveIteratorToTime(*iter, m_currentTime);
     m_iterators.push_back(iter);
 }
@@ -69,7 +71,7 @@ MappedBufMetaIterator::removeSegment(QSharedPointer<MappedEventBuffer> mappedEve
             delete (*i);
             // Now mappedEventBuffer may not be a valid address since the
             // iterator we just deleted may have been the last "owner" of
-            // the MappedEventBuffer.  See MappedEventBuffer::iterator's
+            // the MappedEventBuffer.  See MEBIterator's
             // dtor and MappedEventBuffer::removeOwner().
             m_iterators.erase(i);
             break;
@@ -119,10 +121,10 @@ MappedBufMetaIterator::jumpToTime(const RealTime &time)
 }
 
 void
-MappedBufMetaIterator::moveIteratorToTime(MappedEventBuffer::iterator &iter,
+MappedBufMetaIterator::moveIteratorToTime(MEBIterator &iter,
                                           const RealTime &time)
 {
-    // ??? Move this routine to MappedEventBuffer::iterator::moveTo(time).
+    // ??? Move this routine to MEBIterator::moveTo(time).
 
     // Rather than briefly unlock and immediately relock each
     // iteration, we leave the lock on until we're done.
@@ -301,7 +303,7 @@ fetchEventsNoncompeting(MappedInserterBase &inserter,
 
         // For each segment, process only the first event.
         for (size_t i = 0; i < m_iterators.size(); ++i) {
-            MappedEventBuffer::iterator *iter = m_iterators[i];
+            MEBIterator *iter = m_iterators[i];
 
 #ifdef DEBUG_META_ITERATOR
             RG_DEBUG << "fetchEventsNoncompeting() : checking segment #" << i;
@@ -409,7 +411,7 @@ resetIteratorForSegment(QSharedPointer<MappedEventBuffer> mappedEventBuffer, boo
     for (SegmentIterators::iterator i = m_iterators.begin();
          i != m_iterators.end(); ++i) {
 
-        MappedEventBuffer::iterator *iter = *i;
+        MEBIterator *iter = *i;
 
         // If we found it
         if (iter->getSegment() == mappedEventBuffer) {
@@ -441,7 +443,7 @@ MappedBufMetaIterator::getAudioEvents(std::vector<MappedEvent> &audioEvents)
     for (MappedSegments::iterator i = m_segments.begin();
          i != m_segments.end(); ++i) {
 
-        MappedEventBuffer::iterator iter(*i);
+        MEBIterator iter(*i);
 
         // For each event
         while (!iter.atEnd()) {
@@ -496,7 +498,7 @@ MappedBufMetaIterator::getPlayingAudioFiles(const RealTime &songPosition)
     for (MappedSegments::iterator i = m_segments.begin();
          i != m_segments.end(); ++i) {
 
-        MappedEventBuffer::iterator iter(*i);
+        MEBIterator iter(*i);
 
         while (!iter.atEnd()) {
             if ((*iter).getType() != MappedEvent::Audio) {

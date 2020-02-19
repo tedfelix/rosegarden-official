@@ -35,6 +35,7 @@
 #include "sound/SoundDriverFactory.h"
 #include "sound/MappedInstrument.h"
 #include "sound/MappedEventInserter.h"
+#include "gui/seqmanager/MEBIterator.h"
 #include "base/Profiler.h"
 #include "sound/PluginFactory.h"
 #include "base/Instrument.h"
@@ -1021,7 +1022,7 @@ void RosegardenSequencer::dumpFirstSegment()
 
     QSharedPointer<MappedEventBuffer> firstMappedEventBuffer = *segs.begin();
 
-    MappedEventBuffer::iterator it(firstMappedEventBuffer);
+    MEBIterator it(firstMappedEventBuffer);
 
     for (; !it.atEnd(); ++it) {
 

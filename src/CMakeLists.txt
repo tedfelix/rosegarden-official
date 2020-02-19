@@ -415,6 +415,7 @@ set(rg_CPPS
   gui/seqmanager/MetronomeMapper.cpp
   gui/seqmanager/TempoSegmentMapper.cpp
   gui/seqmanager/MappedEventBuffer.cpp
+  gui/seqmanager/MEBIterator.cpp
   gui/seqmanager/SequenceManager.cpp
   gui/seqmanager/MarkerMapper.cpp
   gui/seqmanager/SegmentMapper.cpp
