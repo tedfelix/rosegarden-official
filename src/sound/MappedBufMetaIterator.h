@@ -36,7 +36,7 @@ class MEBIterator;
 /**
  * MappedBufMetaIterator.  What's in a name?  "MappedBuf" refers to
  * the MappedEventBuffer-derived classes that this class takes as input
- * (see addSegment()).  The most important MappedEventBuffer-derived class is
+ * (see addBuffer()).  The most important MappedEventBuffer-derived class is
  * InternalSegmentMapper.  "MetaIterator" describes the main function of this
  * class.  It is an iterator that coordinates other iterators.  Specifically,
  * MappedEventBuffer::iterator objects.  fillCompositionWithEventsUntil()
@@ -59,10 +59,9 @@ class MappedBufMetaIterator
 {
 public:
     MappedBufMetaIterator()  { }
-    ~MappedBufMetaIterator();
 
-    void addSegment(QSharedPointer<MappedEventBuffer>);
-    void removeSegment(QSharedPointer<MappedEventBuffer>);
+    void addBuffer(QSharedPointer<MappedEventBuffer>);
+    void removeBuffer(QSharedPointer<MappedEventBuffer>);
 
     /// Delete all iterators and forget all segments
     void clear();
@@ -97,9 +96,15 @@ public:
     std::set<QSharedPointer<MappedEventBuffer> > getSegments() const { return m_buffers; }
 
 private:
-    // Dtor is non-trivial.  Hide copy ctor and op=.
-    MappedBufMetaIterator(const MappedBufMetaIterator &);
-    MappedBufMetaIterator &operator=(const MappedBufMetaIterator &);
+    RealTime m_currentTime;
+
+    typedef std::set<QSharedPointer<MappedEventBuffer>> BufferSet;
+    BufferSet m_buffers;
+
+    // ??? std::map<QSP<MappedEventBuffer>, QSP<MEBIterator>> would make the
+    //     remove easier and faster.
+    typedef std::vector<QSharedPointer<MEBIterator>> IteratorVector;
+    IteratorVector m_iterators;
 
     /// Reset all iterators to beginning
     void reset();
@@ -115,25 +120,6 @@ private:
                                  const RealTime &start,
                                  const RealTime &end);
 
-    //--------------- Data members ---------------------------------
-
-    RealTime m_currentTime;
-
-    typedef std::set<QSharedPointer<MappedEventBuffer>> BufferSet;
-    BufferSet m_buffers;
-
-    // ??? std::set might be better since we need to delete out of the middle.
-    typedef std::vector<QSharedPointer<MEBIterator>> IteratorVector;
-    IteratorVector m_iterators;
-
-    // Manipulate a vector of currently mapped audio segments so that we
-    // can cross check them against PlayableAudioFiles (and stop if
-    // necessary).  This will account for muting/soloing too I should
-    // hope.
-    //
-    // !!! to be obsoleted, hopefully
-    //std::vector<MappedEvent> &getPlayingAudioFiles(const RealTime &songPosition);
-    //std::vector<MappedEvent> m_playingAudioSegments;
 };
 
 

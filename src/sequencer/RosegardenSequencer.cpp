@@ -1072,7 +1072,7 @@ RosegardenSequencer::segmentAdded(QSharedPointer<MappedEventBuffer> mapper)
 #endif
     // m_metaIterator takes ownership of the mapper, shared with other
     // MappedBufMetaIterators
-    m_metaIterator.addSegment(mapper);
+    m_metaIterator.addBuffer(mapper);
 }
 
 void
@@ -1089,7 +1089,7 @@ RosegardenSequencer::segmentAboutToBeDeleted(
 #endif
     
     // This deletes mapper just if no other metaiterator owns it.
-    m_metaIterator.removeSegment(mapper);
+    m_metaIterator.removeBuffer(mapper);
 }
 
 void

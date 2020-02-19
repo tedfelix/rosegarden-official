@@ -1876,18 +1876,18 @@ makeTempMetaiterator()
     MappedBufMetaIterator *metaiterator = new MappedBufMetaIterator;
     // Add the mappers we know of.  Not the metronome because we don't
     // export that.
-    metaiterator->addSegment(m_tempoSegmentMapper);
-    metaiterator->addSegment(m_timeSigSegmentMapper);
+    metaiterator->addBuffer(m_tempoSegmentMapper);
+    metaiterator->addBuffer(m_timeSigSegmentMapper);
     // We don't hold on to the marker mapper because we only use it
     // when exporting.
-    metaiterator->addSegment(QSharedPointer<MarkerMapper>(new MarkerMapper(m_doc)));
+    metaiterator->addBuffer(QSharedPointer<MarkerMapper>(new MarkerMapper(m_doc)));
     typedef CompositionMapper::SegmentMappers container;
     typedef container::iterator iterator;
     container &mapperContainer = m_compositionMapper->m_segmentMappers;
     for (iterator i = mapperContainer.begin();
          i != mapperContainer.end();
          ++i) {
-        metaiterator->addSegment(i->second);
+        metaiterator->addBuffer(i->second);
     }
     return metaiterator;
 }

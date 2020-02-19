@@ -35,13 +35,8 @@ namespace Rosegarden
 {
 
 
-MappedBufMetaIterator::~MappedBufMetaIterator()
-{
-    clear();
-}
-
 void
-MappedBufMetaIterator::addSegment(
+MappedBufMetaIterator::addBuffer(
         QSharedPointer<MappedEventBuffer> mappedEventBuffer)
 {
     // BUG #1349 (was #3546135)
@@ -61,7 +56,8 @@ MappedBufMetaIterator::addSegment(
 }
 
 void
-MappedBufMetaIterator::removeSegment(QSharedPointer<MappedEventBuffer> mappedEventBuffer)
+MappedBufMetaIterator::removeBuffer(
+        QSharedPointer<MappedEventBuffer> mappedEventBuffer)
 {
     // Remove from m_iterators
     for (IteratorVector::iterator i = m_iterators.begin();
@@ -92,7 +88,8 @@ MappedBufMetaIterator::reset()
 
     // Reset each iterator.
     for (IteratorVector::iterator i = m_iterators.begin();
-         i != m_iterators.end(); ++i) {
+         i != m_iterators.end();
+         ++i) {
         (*i)->reset();
     }
 }
@@ -107,7 +104,8 @@ MappedBufMetaIterator::jumpToTime(const RealTime &time)
     m_currentTime = time;
 
     for (IteratorVector::iterator i = m_iterators.begin();
-         i != m_iterators.end(); ++i) {
+         i != m_iterators.end();
+         ++i) {
         (*i)->moveTo(time);
     }
 }
@@ -253,8 +251,10 @@ fetchEventsNoncompeting(MappedInserterBase &inserter,
         segmentsHaveMore = false;
 
         // For each segment, process only the first event.
-        for (size_t i = 0; i < m_iterators.size(); ++i) {
-            QSharedPointer<MEBIterator> iter = m_iterators[i];
+        for (IteratorVector::iterator i = m_iterators.begin();
+             i != m_iterators.end();
+             ++i) {
+            QSharedPointer<MEBIterator> iter = (*i);
 
 #ifdef DEBUG_META_ITERATOR
             RG_DEBUG << "fetchEventsNoncompeting() : checking segment #" << i;
@@ -360,7 +360,8 @@ resetIteratorForSegment(QSharedPointer<MappedEventBuffer> mappedEventBuffer, boo
 {
     // For each segment
     for (IteratorVector::iterator i = m_iterators.begin();
-         i != m_iterators.end(); ++i) {
+         i != m_iterators.end();
+         ++i) {
 
         QSharedPointer<MEBIterator> iter = *i;
 
@@ -433,77 +434,6 @@ MappedBufMetaIterator::getAudioEvents(std::vector<MappedEvent> &audioEvents)
         }
     }
 }
-
-#if 0
-std::vector<MappedEvent> &
-MappedBufMetaIterator::getPlayingAudioFiles(const RealTime &songPosition)
-{
-    // Clear playing audio segments
-    //
-    m_playingAudioSegments.clear();
-
-#ifdef DEBUG_PLAYING_AUDIO_FILES
-    RG_DEBUG << "getPlayingAudioFiles()...";
-#endif
-
-    for (BufferSet::iterator i = m_buffers.begin();
-         i != m_buffers.end(); ++i) {
-
-        MEBIterator iter(*i);
-
-        while (!iter.atEnd()) {
-            if ((*iter).getType() != MappedEvent::Audio) {
-                ++iter;
-                continue;
-            }
-
-            MappedEvent evt(*iter);
-
-            // Check for this track being muted or soloed
-            //
-            if (ControlBlock::getInstance()->isTrackMuted(evt.getTrackId()) == true) {
-#ifdef DEBUG_PLAYING_AUDIO_FILES
-                RG_DEBUG << "  track " << evt.getTrackId() << " is muted";
-#endif
-
-                ++iter;
-                continue;
-            }
-
-            if (ControlBlock::getInstance()->isSolo() == true &&
-                evt.getTrackId() != ControlBlock::getInstance()->getSelectedTrack()) {
-#ifdef DEBUG_PLAYING_AUDIO_FILES
-                RG_DEBUG << "  track " << evt.getTrackId() << " is not solo track";
-#endif
-
-                ++iter;
-                continue;
-            }
-
-            // If there's an audio event and it should be playing at this time
-            // then flag as such.
-            //
-            if (songPosition > evt.getEventTime() - RealTime(1, 0) &&
-                songPosition < evt.getEventTime() + evt.getDuration()) {
-
-#ifdef DEBUG_PLAYING_AUDIO_FILES
-                RG_DEBUG << "  instrument id = " << evt.getInstrument();
-                RG_DEBUG << "  id " << evt.getRuntimeSegmentId() << ", audio event time     = " << evt.getEventTime();
-                RG_DEBUG << "  audio event duration = " << evt.getDuration();
-#endif // DEBUG_PLAYING_AUDIO_FILES
-
-                m_playingAudioSegments.push_back(evt);
-            }
-
-            ++iter;
-        }
-
-        //RG_DEBUG << "END OF ITERATOR\n";
-    }
-
-    return m_playingAudioSegments;
-}
-#endif
 
 
 }
