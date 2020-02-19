@@ -18,12 +18,13 @@
 #ifndef RG_SEGMENTMAPPER_H
 #define RG_SEGMENTMAPPER_H
 
-#include <QString>
-#include "base/Event.h"
 #include "gui/seqmanager/MappedEventBuffer.h"
+
+#include <QString>
 
 namespace Rosegarden
 {
+
 
 class Segment;
 class RosegardenDocument;
@@ -38,20 +39,18 @@ public:
     static QSharedPointer<SegmentMapper> makeMapperForSegment(
             RosegardenDocument *, Segment *);
 
-    int getSegmentRepeatCount() override;
+    // MappedEventBuffer override
     TrackId getTrackID() const override;
-
-    void initSpecial() override;
 
 protected:
     SegmentMapper(RosegardenDocument *, Segment *);
 
-    bool mutedEtc();
-
-    //--------------- Data members ---------------------------------
     Segment *m_segment;
-};
 
+    int getSegmentRepeatCount();
+
+    bool mutedEtc();
+};
 
 
 }

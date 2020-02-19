@@ -40,16 +40,6 @@ SegmentMapper::SegmentMapper(RosegardenDocument *doc,
 }
 
 
-void
-SegmentMapper::
-initSpecial()
-{
-    if (m_segment != nullptr) {
-        RG_DEBUG << "initSpecial()  for segment " << m_segment->getLabel();
-    }    
-};
-
-
 SegmentMapper::~SegmentMapper()
 {
     RG_DEBUG << "dtor: " << this;

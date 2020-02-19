@@ -252,12 +252,6 @@ MetronomeMapper::calculateSize()
     return static_cast<int>(m_ticks.size());
 }
 
-int
-MetronomeMapper::getSegmentRepeatCount()
-{
-    return 1;
-}
-
 void
 MetronomeMapper::doInsert(MappedInserterBase &inserter, MappedEvent &evt,
                           RealTime start, bool firstOutput)

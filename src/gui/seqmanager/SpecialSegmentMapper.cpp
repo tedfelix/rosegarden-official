@@ -26,10 +26,4 @@ SpecialSegmentMapper::SpecialSegmentMapper(RosegardenDocument *doc) :
 {
 }
 
-int
-SpecialSegmentMapper::getSegmentRepeatCount()
-{
-    return 1;
-}
-
 }

@@ -77,12 +77,6 @@ public:
      */
     void init();
 
-    /// Initialization particular to various classes.  (UNUSED)
-    /**
-     * The only overrider is SegmentMapper and it just debug-prints.
-     */
-    virtual void initSpecial()  { }
-
     /// Access to the internal buffer of events.  NOT LOCKED
     /**
      * un-locked, use only from write/resize thread
@@ -127,67 +121,6 @@ public:
      * needs to be told about it).
      */
     bool refresh();
-
-    /* Virtual functions */
-
-    /**
-     * Only SegmentMapper::getSegmentRepeatCount() does something interesting,
-     * the other derivers just return 1.
-     */
-    virtual int getSegmentRepeatCount() = 0;
-
-    /// Calculates the required capacity based on the current document.
-    /**
-     * Overridden by each deriver to compute the number of MappedEvent's
-     * needed to hold the contents of the current segment.
-     *
-     * Used by init() and refresh() to adjust the buffer capacity to be
-     * big enough to hold all the events in the current segment.
-     *
-     * @see m_doc
-     * @see reserve()
-     */
-    virtual int calculateSize() = 0;
-
-    /// Insert a MappedEvent with appropriate setup for channel.
-    /**
-     * InternalSegmentMapper and MetronomeMapper override this to bring
-     * ChannelManager into the picture to dynamically allocate a channel
-     * for the event before inserting.
-     *
-     * The inserter can be as simple as a MappedEventInserter which just
-     * adds the events to a MappedEventList.  See MappedInserterBase and its
-     * derivers for more.
-     *
-     * refTime is not necessarily the same as MappedEvent's
-     * getEventTime() because we might jump into the middle of a long
-     * note.
-     *
-     * Only used by MappedEventBuffer::iterator::doInsert().
-     */
-    virtual void doInsert(MappedInserterBase &inserter, MappedEvent &evt,
-                          RealTime refTime, bool firstOutput);
-
-    /// Return whether the event would even sound.
-    /**
-     * For instance, it might be on a muted track and shouldn't be
-     * played, or it might have already ended by startTime.  The exact
-     * logic differs across derived classes.
-     */
-    virtual bool shouldPlay(MappedEvent *evt, RealTime startTime)=0;
-
-    /// Make the channel, if any, ready to be played on.
-    /**
-     * InternalSegmentMapper and MetronomeMapper override this to bring
-     * ChannelManager into the picture.
-     *
-     * @param time is the reference time in case we need to calculate
-     * something time-dependent, which can happen if we jump into the
-     * middle of playing.
-     *
-     * @see isReady
-     */
-    virtual void makeReady(MappedInserterBase &inserter, RealTime time);
 
     /// Get the earliest and latest sounding times.
     /**
@@ -377,7 +310,52 @@ public:
 
         
 protected:
-    friend class iterator;
+    /* Virtual functions */
+
+    /// Calculates the required capacity based on the current document.
+    /**
+     * Overridden by each deriver to compute the number of MappedEvent's
+     * needed to hold the contents of the current segment.
+     *
+     * Used by init() and refresh() to adjust the buffer capacity to be
+     * big enough to hold all the events in the current segment.
+     *
+     * @see m_doc
+     * @see reserve()
+     */
+    virtual int calculateSize() = 0;
+
+    /// Insert a MappedEvent with appropriate setup for channel.
+    /**
+     * InternalSegmentMapper and MetronomeMapper override this to bring
+     * ChannelManager into the picture to dynamically allocate a channel
+     * for the event before inserting.
+     *
+     * The inserter can be as simple as a MappedEventInserter which just
+     * adds the events to a MappedEventList.  See MappedInserterBase and its
+     * derivers for more.
+     *
+     * refTime is not necessarily the same as MappedEvent's
+     * getEventTime() because we might jump into the middle of a long
+     * note.
+     *
+     * Only used by MappedEventBuffer::iterator::doInsert().
+     */
+    virtual void doInsert(MappedInserterBase &inserter, MappedEvent &evt,
+                          RealTime refTime, bool firstOutput);
+
+    /// Make the channel, if any, ready to be played on.
+    /**
+     * InternalSegmentMapper and MetronomeMapper override this to bring
+     * ChannelManager into the picture.
+     *
+     * @param time is the reference time in case we need to calculate
+     * something time-dependent, which can happen if we jump into the
+     * middle of playing.
+     *
+     * @see isReady
+     */
+    virtual void makeReady(MappedInserterBase &inserter, RealTime time);
 
     /// Fill buffer with data from the segment
     /**
@@ -388,6 +366,14 @@ protected:
      *
      */
     virtual void fillBuffer() = 0;
+
+    /// Return whether the event would even sound.
+    /**
+     * For instance, it might be on a muted track and shouldn't be
+     * played, or it might have already ended by startTime.  The exact
+     * logic differs across derived classes.
+     */
+    virtual bool shouldPlay(MappedEvent *evt, RealTime startTime)=0;
 
     /// The Mapped Event Buffer
     MappedEvent *m_buffer;
@@ -458,6 +444,8 @@ protected:
     }
 
 private:
+    friend class iterator;
+
     /// Hidden and not implemented as dtor is non-trivial.
     MappedEventBuffer(const MappedEventBuffer &);
     /// Hidden and not implemented as dtor is non-trivial.

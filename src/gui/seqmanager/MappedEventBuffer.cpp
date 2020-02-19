@@ -56,7 +56,6 @@ MappedEventBuffer::init()
 
         RG_DEBUG << "init() : size = " << size;
 
-        initSpecial();
         fillBuffer();
     } else {
         RG_DEBUG << "init() : mmap size = 0 - skipping mmapping for now";

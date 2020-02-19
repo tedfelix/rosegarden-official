@@ -49,7 +49,6 @@ public:
 
     // *** MappedEventBuffer overrides.
 
-    int getSegmentRepeatCount() override;
     // Do channel-setup
     void doInsert(MappedInserterBase &inserter, MappedEvent &evt,
                           RealTime start, bool firstOutput) override;

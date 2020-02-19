@@ -28,11 +28,6 @@ class RosegardenDocument;
 
 class SpecialSegmentMapper : public MappedEventBuffer
 {
-public:
-    // overrides from MappedEventBuffer.  Exists only for historical
-    // reasons.
-    int getSegmentRepeatCount() override;
-
 protected:
     SpecialSegmentMapper(RosegardenDocument *doc);
 };
