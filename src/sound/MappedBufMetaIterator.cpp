@@ -50,13 +50,12 @@ MappedBufMetaIterator::addSegment(
     // cause an access to freed memory and a subsequent crash.
     // This seems to happen when recording and we pass the end of the
     // composition.
-    if (m_segments.find(mappedEventBuffer) != m_segments.end())
+    if (m_buffers.find(mappedEventBuffer) != m_buffers.end())
         return;
 
-    m_segments.insert(mappedEventBuffer);
+    m_buffers.insert(mappedEventBuffer);
 
-    MEBIterator *iter =
-            new MEBIterator(mappedEventBuffer);
+    QSharedPointer<MEBIterator> iter(new MEBIterator(mappedEventBuffer));
     iter->moveTo(m_currentTime);
     m_iterators.push_back(iter);
 }
@@ -65,32 +64,25 @@ void
 MappedBufMetaIterator::removeSegment(QSharedPointer<MappedEventBuffer> mappedEventBuffer)
 {
     // Remove from m_iterators
-    for (SegmentIterators::iterator i = m_iterators.begin();
-         i != m_iterators.end(); ++i) {
+    for (IteratorVector::iterator i = m_iterators.begin();
+         i != m_iterators.end();
+         ++i) {
+        // Found it?  Delete it.
         if ((*i)->getMappedEventBuffer() == mappedEventBuffer) {
-            delete (*i);
-            // Now mappedEventBuffer may not be a valid address since the
-            // iterator we just deleted may have been the last "owner" of
-            // the MappedEventBuffer.  See MEBIterator's
-            // dtor and MappedEventBuffer::removeOwner().
             m_iterators.erase(i);
             break;
         }
     }
 
     // Remove from m_segments
-    m_segments.erase(mappedEventBuffer);
+    m_buffers.erase(mappedEventBuffer);
 }
 
 void
 MappedBufMetaIterator::clear()
 {
-    for (size_t i = 0; i < m_iterators.size(); ++i) {
-        delete m_iterators[i];
-    }
     m_iterators.clear();
-
-    m_segments.clear();
+    m_buffers.clear();
 }
 
 void
@@ -99,7 +91,7 @@ MappedBufMetaIterator::reset()
     m_currentTime = RealTime::zeroTime;
 
     // Reset each iterator.
-    for (SegmentIterators::iterator i = m_iterators.begin();
+    for (IteratorVector::iterator i = m_iterators.begin();
          i != m_iterators.end(); ++i) {
         (*i)->reset();
     }
@@ -114,7 +106,7 @@ MappedBufMetaIterator::jumpToTime(const RealTime &time)
 
     m_currentTime = time;
 
-    for (SegmentIterators::iterator i = m_iterators.begin();
+    for (IteratorVector::iterator i = m_iterators.begin();
          i != m_iterators.end(); ++i) {
         (*i)->moveTo(time);
     }
@@ -127,8 +119,8 @@ MappedBufMetaIterator::fetchFixedChannelSetup(MappedInserterBase &inserter)
     std::set<TrackId> tracks;
 
     // for each MappedEventBuffer/segment in m_segments
-    for (MappedSegments::iterator i = m_segments.begin();
-         i != m_segments.end(); ++i) {
+    for (BufferSet::iterator i = m_buffers.begin();
+         i != m_buffers.end(); ++i) {
         QSharedPointer<MappedEventBuffer> mappedEventBuffer = *i;
 
         TrackId trackID = mappedEventBuffer->getTrackID();
@@ -172,7 +164,7 @@ MappedBufMetaIterator::fetchEvents(MappedInserterBase &inserter,
                         std::greater<RealTime> >
         segStarts;
 
-    for (SegmentIterators::iterator i = m_iterators.begin();
+    for (IteratorVector::iterator i = m_iterators.begin();
          i != m_iterators.end();
          ++i) {
         RealTime start;
@@ -226,7 +218,7 @@ fetchEventsNoncompeting(MappedInserterBase &inserter,
     m_currentTime = endTime;
     
     // For each segment, activate segments that have anything playing.
-    for (SegmentIterators::iterator i = m_iterators.begin();
+    for (IteratorVector::iterator i = m_iterators.begin();
          i != m_iterators.end();
          ++i) { 
         RealTime start;
@@ -262,7 +254,7 @@ fetchEventsNoncompeting(MappedInserterBase &inserter,
 
         // For each segment, process only the first event.
         for (size_t i = 0; i < m_iterators.size(); ++i) {
-            MEBIterator *iter = m_iterators[i];
+            QSharedPointer<MEBIterator> iter = m_iterators[i];
 
 #ifdef DEBUG_META_ITERATOR
             RG_DEBUG << "fetchEventsNoncompeting() : checking segment #" << i;
@@ -367,10 +359,10 @@ MappedBufMetaIterator::
 resetIteratorForSegment(QSharedPointer<MappedEventBuffer> mappedEventBuffer, bool immediate)
 {
     // For each segment
-    for (SegmentIterators::iterator i = m_iterators.begin();
+    for (IteratorVector::iterator i = m_iterators.begin();
          i != m_iterators.end(); ++i) {
 
-        MEBIterator *iter = *i;
+        QSharedPointer<MEBIterator> iter = *i;
 
         // If we found it
         if (iter->getMappedEventBuffer() == mappedEventBuffer) {
@@ -399,8 +391,8 @@ MappedBufMetaIterator::getAudioEvents(std::vector<MappedEvent> &audioEvents)
     audioEvents.clear();
 
     // For each segment
-    for (MappedSegments::iterator i = m_segments.begin();
-         i != m_segments.end(); ++i) {
+    for (BufferSet::iterator i = m_buffers.begin();
+         i != m_buffers.end(); ++i) {
 
         MEBIterator iter(*i);
 
@@ -454,8 +446,8 @@ MappedBufMetaIterator::getPlayingAudioFiles(const RealTime &songPosition)
     RG_DEBUG << "getPlayingAudioFiles()...";
 #endif
 
-    for (MappedSegments::iterator i = m_segments.begin();
-         i != m_segments.end(); ++i) {
+    for (BufferSet::iterator i = m_buffers.begin();
+         i != m_buffers.end(); ++i) {
 
         MEBIterator iter(*i);
 

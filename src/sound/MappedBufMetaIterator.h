@@ -93,16 +93,8 @@ public:
 
     void getAudioEvents(std::vector<MappedEvent> &);
 
-    // Manipulate a vector of currently mapped audio segments so that we
-    // can cross check them against PlayableAudioFiles (and stop if
-    // necessary).  This will account for muting/soloing too I should
-    // hope.
-    //
-    // !!! to be obsoleted, hopefully
-    //std::vector<MappedEvent> &getPlayingAudioFiles(const RealTime &songPosition);
-
     // For debugging.
-    std::set<QSharedPointer<MappedEventBuffer> > getSegments() const { return m_segments; }
+    std::set<QSharedPointer<MappedEventBuffer> > getSegments() const { return m_buffers; }
 
 private:
     // Dtor is non-trivial.  Hide copy ctor and op=.
@@ -127,13 +119,21 @@ private:
 
     RealTime m_currentTime;
 
-    typedef std::set<QSharedPointer<MappedEventBuffer> > MappedSegments;
-    MappedSegments m_segments;
+    typedef std::set<QSharedPointer<MappedEventBuffer>> BufferSet;
+    BufferSet m_buffers;
 
-    typedef std::vector<MEBIterator *> SegmentIterators;
-    SegmentIterators m_iterators;
+    // ??? std::set might be better since we need to delete out of the middle.
+    typedef std::vector<QSharedPointer<MEBIterator>> IteratorVector;
+    IteratorVector m_iterators;
 
-    std::vector<MappedEvent> m_playingAudioSegments;
+    // Manipulate a vector of currently mapped audio segments so that we
+    // can cross check them against PlayableAudioFiles (and stop if
+    // necessary).  This will account for muting/soloing too I should
+    // hope.
+    //
+    // !!! to be obsoleted, hopefully
+    //std::vector<MappedEvent> &getPlayingAudioFiles(const RealTime &songPosition);
+    //std::vector<MappedEvent> m_playingAudioSegments;
 };
 
 
