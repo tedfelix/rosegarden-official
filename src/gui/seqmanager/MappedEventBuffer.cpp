@@ -30,12 +30,13 @@ namespace Rosegarden
 {
 
 MappedEventBuffer::MappedEventBuffer(RosegardenDocument *doc) :
-    m_buffer(nullptr),
-    m_capacity(0),
-    m_size(0),
     m_doc(doc),
     m_start(RealTime::zeroTime),
     m_end(RealTime::beforeMaxTime),
+    m_buffer(nullptr),
+    m_capacity(0),
+    m_size(0),
+    m_lock(),
     m_refCount(0)
 {
 }
@@ -168,8 +169,9 @@ makeReady(MappedInserterBase &/*inserter*/, RealTime /*time*/) {}
 
     /*** MappedEventBuffer::iterator ***/
 
-MappedEventBuffer::iterator::iterator(QSharedPointer<MappedEventBuffer> s) :
-    m_s(s),
+MappedEventBuffer::iterator::iterator(
+        QSharedPointer<MappedEventBuffer> mappedEventBuffer) :
+    m_mappedEventBuffer(mappedEventBuffer),
     m_index(0),
     m_ready(false),
     m_active(false)
@@ -182,7 +184,7 @@ MappedEventBuffer::iterator::iterator(QSharedPointer<MappedEventBuffer> s) :
 MappedEventBuffer::iterator &
 MappedEventBuffer::iterator::operator++()
 {
-    int fill = m_s->size();
+    int fill = m_mappedEventBuffer->size();
     if (m_index < fill)  ++m_index;
     return *this;
 }
@@ -193,7 +195,7 @@ MappedEventBuffer::iterator::operator++(int)
 {
     // This line is the main reason we need a copy ctor.
     iterator r = *this;
-    int fill = m_s->size();
+    int fill = m_mappedEventBuffer->size();
     if (m_index < fill)  ++m_index;
     return r;
 }
@@ -201,7 +203,7 @@ MappedEventBuffer::iterator::operator++(int)
 MappedEventBuffer::iterator &
 MappedEventBuffer::iterator::operator+=(int offset)
 {
-    int fill = m_s->size();
+    int fill = m_mappedEventBuffer->size();
     if (m_index + offset <= fill) {
         m_index += offset;
     } else {
@@ -223,7 +225,7 @@ MappedEventBuffer::iterator::operator-=(int offset)
 
 bool MappedEventBuffer::iterator::operator==(const iterator& it)
 {
-    return (m_index == it.m_index) && (m_s == it.m_s);
+    return (m_index == it.m_index) && (m_mappedEventBuffer == it.m_mappedEventBuffer);
 }
 
 void MappedEventBuffer::iterator::reset()
@@ -248,17 +250,17 @@ MappedEventBuffer::iterator::peek() const
     // The lock formerly here has moved out to callers.
 
     // If we're at the end, return nullptr
-    if (m_index >= m_s->size())
+    if (m_index >= m_mappedEventBuffer->size())
         return nullptr;
 
     // Otherwise return a pointer into the buffer.
-    return &m_s->m_buffer[m_index];
+    return &m_mappedEventBuffer->m_buffer[m_index];
 }
 
 bool
 MappedEventBuffer::iterator::atEnd() const
 {
-    int size = m_s->size();
+    int size = m_mappedEventBuffer->size();
     return (m_index >= size);
 }
 

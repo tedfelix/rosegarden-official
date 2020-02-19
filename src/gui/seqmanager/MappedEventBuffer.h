@@ -140,11 +140,11 @@ public:
     class iterator 
     {
     public:
-        iterator(QSharedPointer<MappedEventBuffer> s);
+        iterator(QSharedPointer<MappedEventBuffer> mappedEventBuffer);
 
         /// Equality
         /**
-         * Only checks m_s (the iterator's MappedEventBuffer) and m_index.
+         * Only checks m_mappedEventBuffer (the iterator's MappedEventBuffer) and m_index.
          */
         bool operator==(const iterator&);
         bool operator!=(const iterator& it) { return !operator==(it); }
@@ -192,9 +192,9 @@ public:
         MappedEvent *peek() const;
 
         /// Access to the segment the iterator is connected to.
-        QSharedPointer<MappedEventBuffer> getSegment() { return m_s; }
+        QSharedPointer<MappedEventBuffer> getSegment() { return m_mappedEventBuffer; }
         /// Access to the segment the iterator is connected to.
-        QSharedPointer<const MappedEventBuffer> getSegment() const { return m_s; }
+        QSharedPointer<const MappedEventBuffer> getSegment() const { return m_mappedEventBuffer; }
 
         /**
          * Called by MappedBufMetaIterator::fetchEventsNoncompeting().
@@ -258,7 +258,7 @@ public:
          * @see setReady() and isReady()
          */
         void makeReady(MappedInserterBase &inserter, RealTime time) {
-            m_s->makeReady(inserter, time);
+            m_mappedEventBuffer->makeReady(inserter, time);
             setReady(true);
         }
         
@@ -268,15 +268,15 @@ public:
          * actually sound.  Delegates to MappedEventBuffer::shouldPlay().
          */
         bool shouldPlay(MappedEvent *evt, RealTime startTime)
-        { return m_s->shouldPlay(evt, startTime); }
+        { return m_mappedEventBuffer->shouldPlay(evt, startTime); }
 
         // Get a pointer to the MappedEventBuffer's lock.
         QReadWriteLock* getLock() const
-        { return &m_s->m_lock; }
+        { return &m_mappedEventBuffer->m_lock; }
 
     protected:
         /// The buffer this iterator points into.
-        QSharedPointer<MappedEventBuffer> m_s;
+        QSharedPointer<MappedEventBuffer> m_mappedEventBuffer;
 
         /// Position of the iterator in the buffer.
         int m_index;
@@ -301,11 +301,6 @@ public:
          * controllers
          */
         RealTime m_currentTime;
-
-        // !!! WARNING !!!
-        // If any member objects are added to this class, the ctor, copy ctor,
-        // and op= must be updated.
-        // !!! WARNING !!!
     };
 
         
@@ -375,27 +370,6 @@ protected:
      */
     virtual bool shouldPlay(MappedEvent *evt, RealTime startTime)=0;
 
-    /// The Mapped Event Buffer
-    MappedEvent *m_buffer;
-
-    /// Capacity of the buffer.
-    mutable QAtomicInt m_capacity;
-
-    /// Number of events in the buffer.
-    mutable QAtomicInt m_size;
-
-    /// Lock for reserve() and callers to iterator::peek()
-    /**
-     * Used by reserve() to lock the swapping of the old for the new
-     * and the changing of the buffer capacity.
-     *
-     * Used by callers to MappedEventBuffer::iterator::peek() to
-     * ensure that buffer isn't reallocated while the caller is
-     * holding the current item.  Doing so avoids the scenario where
-     * peek() gets a pointer to the element and then reserve() swaps
-     * the entire buffer out from under it.
-     */
-    QReadWriteLock m_lock;
 
     /// Not used here.  Convenience for derivers.
     /**
@@ -422,13 +396,6 @@ protected:
      */
     RealTime m_end;
 
-    /// How many metaiterators share this mapper.
-    /**
-     * We won't delete while it has any owner.  This is changed just in
-     * owner's ctors and dtors.
-     */
-    int m_refCount;
-
     /// Add an event to the buffer.
     void mapAnEvent(MappedEvent *e);
 
@@ -450,6 +417,36 @@ private:
     MappedEventBuffer(const MappedEventBuffer &);
     /// Hidden and not implemented as dtor is non-trivial.
     MappedEventBuffer &operator=(const MappedEventBuffer &);
+
+    /// The Mapped Event Buffer
+    MappedEvent *m_buffer;
+
+    /// Capacity of the buffer.
+    mutable QAtomicInt m_capacity;
+
+    /// Number of events in the buffer.
+    mutable QAtomicInt m_size;
+
+    /// Lock for reserve() and callers to iterator::peek()
+    /**
+     * Used by reserve() to lock the swapping of the old for the new
+     * and the changing of the buffer capacity.
+     *
+     * Used by callers to MappedEventBuffer::iterator::peek() to
+     * ensure that buffer isn't reallocated while the caller is
+     * holding the current item.  Doing so avoids the scenario where
+     * peek() gets a pointer to the element and then reserve() swaps
+     * the entire buffer out from under it.
+     */
+    QReadWriteLock m_lock;
+
+    /// How many metaiterators share this mapper.
+    /**
+     * We won't delete while it has any owner.  This is changed just in
+     * owner's ctors and dtors.
+     */
+    int m_refCount;
+
 };
 
 

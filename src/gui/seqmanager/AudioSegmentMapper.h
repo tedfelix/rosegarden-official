@@ -32,6 +32,8 @@ public:
     AudioSegmentMapper(RosegardenDocument *, Segment *);
 
 protected:
+    // MappedEventBuffer Overrides
+
     int calculateSize() override;
 
     /// dump all segment data in the file
