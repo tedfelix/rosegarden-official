@@ -81,17 +81,17 @@ public:
     /**
      * un-locked, use only from write/resize thread
      *
+     * This is always used along with [] to access a specific MappedEvent.
+     *
      * ??? Unsafe.  This allows direct access to the buffer without any
      *     sort of range checking.  Recommend adding an operator[] and/or an
      *     at() that asserts on range problems.
      */
-    MappedEvent *getBuffer() { return m_buffer; }
+    MappedEvent *getBuffer()  { return m_buffer; }
 
-    /// Capacity of the buffer in MappedEvent's.  (STL's capacity().)
-    /* Was getBufferSize() */
+    /// Capacity of the buffer in MappedEvent's.
     int capacity() const;
-    /// Number of MappedEvent's in the buffer.  (STL's size().)
-    /* Was getBufferFill() */
+    /// Number of MappedEvent objects in the buffer.
     int size() const;
 
     /// Sets the buffer capacity.
@@ -244,12 +244,20 @@ protected:
     }
 
 private:
-    friend class MEBIterator;
-
     /// Hidden and not implemented as dtor is non-trivial.
     MappedEventBuffer(const MappedEventBuffer &);
     /// Hidden and not implemented as dtor is non-trivial.
     MappedEventBuffer &operator=(const MappedEventBuffer &);
+
+    // MEBIterator needs:
+    //   m_buffer
+    //   m_lock
+    //   makeReady()
+    //   shouldPlay()
+    //   doInsert()
+    // ??? MappedEventBuffer is mostly a data class.  We should probably
+    //     just make those public and get rid of this.
+    friend class MEBIterator;
 
     /// The Mapped Event Buffer
     MappedEvent *m_buffer;

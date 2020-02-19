@@ -25,17 +25,15 @@
 namespace Rosegarden {
 
 
+/// MappedEventBuffer iterator.
+/**
+ * MappedBufMetaIterator creates and manages these.
+ * MappedBufMetaIterator::m_iterators is a std::vector of these.
+ */
 class MEBIterator
 {
 public:
     MEBIterator(QSharedPointer<MappedEventBuffer> mappedEventBuffer);
-
-    /// Equality
-    /**
-     * Only checks m_mappedEventBuffer (the iterator's MappedEventBuffer) and m_index.
-     */
-    bool operator==(const MEBIterator&);
-    bool operator!=(const MEBIterator& it) { return !operator==(it); }
 
     bool atEnd() const;
 
@@ -44,15 +42,6 @@ public:
 
     /// Prefix operator++
     MEBIterator& operator++();
-
-    /// Postfix operator++  (UNTESTED)
-    /**
-     * UNTESTED.  Use carefully.
-     */
-    MEBIterator  operator++(int);
-
-    MEBIterator& operator+=(int);
-    MEBIterator& operator-=(int);
 
     /// Dereference operator
     /**
@@ -79,10 +68,9 @@ public:
      */
     MappedEvent *peek() const;
 
-    /// Access to the segment the iterator is connected to.
-    QSharedPointer<MappedEventBuffer> getSegment() { return m_mappedEventBuffer; }
-    /// Access to the segment the iterator is connected to.
-    QSharedPointer<const MappedEventBuffer> getSegment() const { return m_mappedEventBuffer; }
+    /// Access to the MappedEventBuffer the MEBIterator is connected to.
+    QSharedPointer<MappedEventBuffer> getMappedEventBuffer()
+            { return m_mappedEventBuffer; }
 
     /**
      * Called by MappedBufMetaIterator::fetchEventsNoncompeting().
@@ -162,7 +150,7 @@ public:
     QReadWriteLock* getLock() const
         { return &m_mappedEventBuffer->m_lock; }
 
-protected:
+private:
     /// The buffer this iterator points into.
     QSharedPointer<MappedEventBuffer> m_mappedEventBuffer;
 

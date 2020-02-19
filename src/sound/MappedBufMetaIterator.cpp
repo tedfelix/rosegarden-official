@@ -67,7 +67,7 @@ MappedBufMetaIterator::removeSegment(QSharedPointer<MappedEventBuffer> mappedEve
     // Remove from m_iterators
     for (SegmentIterators::iterator i = m_iterators.begin();
          i != m_iterators.end(); ++i) {
-        if ((*i)->getSegment() == mappedEventBuffer) {
+        if ((*i)->getMappedEventBuffer() == mappedEventBuffer) {
             delete (*i);
             // Now mappedEventBuffer may not be a valid address since the
             // iterator we just deleted may have been the last "owner" of
@@ -218,7 +218,7 @@ MappedBufMetaIterator::fetchEvents(MappedInserterBase &inserter,
          ++i) {
         RealTime start;
         RealTime end;
-        (*i)->getSegment()->getStartEnd(start, end);
+        (*i)->getMappedEventBuffer()->getStartEnd(start, end);
         // If this segment's start is within the timeslice, add it
         // to segStarts.
         if (start >= startTime  &&  start < endTime)
@@ -272,7 +272,7 @@ fetchEventsNoncompeting(MappedInserterBase &inserter,
          ++i) { 
         RealTime start;
         RealTime end;
-        (*i)->getSegment()->getStartEnd(start, end);
+        (*i)->getMappedEventBuffer()->getStartEnd(start, end);
 
         // Activate segments that have anything playing during this
         // slice.  We include segments that end exactly when we start, but
@@ -414,7 +414,7 @@ resetIteratorForSegment(QSharedPointer<MappedEventBuffer> mappedEventBuffer, boo
         MEBIterator *iter = *i;
 
         // If we found it
-        if (iter->getSegment() == mappedEventBuffer) {
+        if (iter->getMappedEventBuffer() == mappedEventBuffer) {
 
 #ifdef DEBUG_META_ITERATOR
             RG_DEBUG << "resetIteratorForSegment(" << mappedEventBuffer << ") : found iterator";

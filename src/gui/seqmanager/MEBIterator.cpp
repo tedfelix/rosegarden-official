@@ -29,10 +29,9 @@ MEBIterator::MEBIterator(
     m_mappedEventBuffer(mappedEventBuffer),
     m_index(0),
     m_ready(false),
-    m_active(false)
-    //m_currentTime
+    m_active(false),
+    m_currentTime()
 {
-    //RG_DEBUG << "iterator ctor";
 }
 
 // ++prefix
@@ -42,47 +41,6 @@ MEBIterator::operator++()
     int fill = m_mappedEventBuffer->size();
     if (m_index < fill)  ++m_index;
     return *this;
-}
-
-// postfix++
-MEBIterator
-MEBIterator::operator++(int)
-{
-    // This line is the main reason we need a copy ctor.
-    MEBIterator r = *this;
-    int fill = m_mappedEventBuffer->size();
-    if (m_index < fill)  ++m_index;
-    return r;
-}
-
-MEBIterator &
-MEBIterator::operator+=(int offset)
-{
-    int fill = m_mappedEventBuffer->size();
-    if (m_index + offset <= fill) {
-        m_index += offset;
-    } else {
-        m_index = fill;
-    }
-    return *this;
-}
-
-MEBIterator &
-MEBIterator::operator-=(int offset)
-{
-    if (m_index > offset)
-        m_index -= offset;
-    else
-        m_index = 0;
-
-    return *this;
-}
-
-bool
-MEBIterator::operator==(const MEBIterator& it)
-{
-    return (m_index == it.m_index)  &&
-           (m_mappedEventBuffer == it.m_mappedEventBuffer);
 }
 
 void
@@ -133,7 +91,7 @@ MEBIterator::doInsert(MappedInserterBase &inserter, MappedEvent &evt)
         m_currentTime = evt.getEventTime();
 
     // Mapper does the actual insertion.
-    getSegment()->doInsert(inserter, evt, m_currentTime, !isReady());
+    getMappedEventBuffer()->doInsert(inserter, evt, m_currentTime, !isReady());
     setReady(true);
 }
 
