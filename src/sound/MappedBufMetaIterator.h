@@ -123,9 +123,6 @@ private:
                                  const RealTime &start,
                                  const RealTime &end);
 
-    void moveIteratorToTime(MEBIterator &,
-                            const RealTime &);
-
     //--------------- Data members ---------------------------------
 
     RealTime m_currentTime;

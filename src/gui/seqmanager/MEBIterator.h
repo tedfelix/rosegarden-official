@@ -35,13 +35,16 @@ class MEBIterator
 public:
     MEBIterator(QSharedPointer<MappedEventBuffer> mappedEventBuffer);
 
-    bool atEnd() const;
-
     /// Go back to the beginning of the MappedEventBuffer
-    void reset();
+    void reset()  { m_index = 0; }
+
+    bool atEnd() const
+        { return (m_index >= m_mappedEventBuffer->size()); }
 
     /// Prefix operator++
     MEBIterator& operator++();
+
+    void moveTo(const RealTime &time);
 
     /// Dereference operator
     /**
@@ -67,6 +70,19 @@ public:
      * @see operator*()
      */
     MappedEvent *peek() const;
+
+    /// Insert the MappedEvent into the MappedInserterBase.
+    /**
+     * Adjusts the MEBIterator's m_currentTime.
+     * Sets the MEBIterator as ready.
+     *
+     * Delegates to MappedEventBuffer::doInsert().
+     *
+     * Guarantees the caller that appropriate preparation will be
+     * done for evt, such as first inserting other events to set
+     * the program.
+     */
+    void doInsert(MappedInserterBase &inserter, MappedEvent &evt);
 
     /// Access to the MappedEventBuffer the MEBIterator is connected to.
     QSharedPointer<MappedEventBuffer> getMappedEventBuffer()
@@ -116,15 +132,6 @@ public:
      */
     bool isReady() const  { return m_ready; }
 
-    /**
-     * Delegates to MappedEventBuffer::doInsert().
-     *
-     * Guarantees the caller that appropriate preparation will be
-     * done for evt, such as first inserting other events to set
-     * the program.
-     */
-    void doInsert(MappedInserterBase &inserter, MappedEvent &evt);
-
     /// Prepares an Instrument for playback.
     /**
      * Only InternalSegmentMapper and MetronomeMapper handle this.
@@ -138,7 +145,7 @@ public:
         setReady(true);
     }
 
-    // Return whether the event should be played at all
+    /// Return whether the event should be played at all
     /**
      * For instance, it might be on a muted track and shouldn't
      * actually sound.  Delegates to MappedEventBuffer::shouldPlay().
@@ -146,8 +153,12 @@ public:
     bool shouldPlay(MappedEvent *evt, RealTime startTime)
         { return m_mappedEventBuffer->shouldPlay(evt, startTime); }
 
-    // Get a pointer to the MappedEventBuffer's lock.
-    QReadWriteLock* getLock() const
+    /// Get a pointer to the MappedEventBuffer's lock.
+    /**
+     * This is used when reading to prevent MappedEventBuffer from
+     * reallocating the buffer while we are holding a pointer.
+     */
+    QReadWriteLock *getLock() const
         { return &m_mappedEventBuffer->m_lock; }
 
 private:
@@ -156,6 +167,8 @@ private:
 
     /// Position of the iterator in the buffer.
     int m_index;
+
+    // Additional non-iterator information.
 
     /// Whether we are ready with regard to performance time.
     /**

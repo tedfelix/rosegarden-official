@@ -38,15 +38,49 @@ MEBIterator::MEBIterator(
 MEBIterator &
 MEBIterator::operator++()
 {
-    int fill = m_mappedEventBuffer->size();
-    if (m_index < fill)  ++m_index;
+    if (m_index < m_mappedEventBuffer->size())
+        ++m_index;
+
     return *this;
 }
 
 void
-MEBIterator::reset()
+MEBIterator::moveTo(const RealTime &time)
 {
-    m_index = 0;
+    // Rather than briefly unlock and immediately relock each
+    // iteration, we leave the lock on until we're done.
+    QReadLocker locker(getLock());
+
+    // For each event from the current iterator position
+    while (1) {
+        if (atEnd())
+            break;
+
+        // We use peek because it's safe even if we have not fully
+        // filled the buffer yet.  That means we can get nullptr.
+        const MappedEvent *event = peek();
+
+        // We know nothing about the event yet.  Stop here.
+        if (!event)
+            break;
+
+#if 1
+        // If the event sounds past time, stop here.
+        // This will cause re-firing of events in progress.
+        if (event->getEventTime() + event->getDuration() >= time)
+            break;
+#else
+        // If the event starts on or after time, stop here.
+        // This will cause events in progress to be skipped.
+        if (event->getEventTime() >= time)
+            break;
+#endif
+
+        operator++();
+    }
+
+    // Since we moved, we need to send a channel setup again.
+    setReady(false);
 }
 
 MappedEvent
@@ -71,13 +105,6 @@ MEBIterator::peek() const
 
     // Otherwise return a pointer into the buffer.
     return &m_mappedEventBuffer->m_buffer[m_index];
-}
-
-bool
-MEBIterator::atEnd() const
-{
-    int size = m_mappedEventBuffer->size();
-    return (m_index >= size);
 }
 
 void

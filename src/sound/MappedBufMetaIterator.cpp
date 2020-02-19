@@ -57,7 +57,7 @@ MappedBufMetaIterator::addSegment(
 
     MEBIterator *iter =
             new MEBIterator(mappedEventBuffer);
-    moveIteratorToTime(*iter, m_currentTime);
+    iter->moveTo(m_currentTime);
     m_iterators.push_back(iter);
 }
 
@@ -116,49 +116,8 @@ MappedBufMetaIterator::jumpToTime(const RealTime &time)
 
     for (SegmentIterators::iterator i = m_iterators.begin();
          i != m_iterators.end(); ++i) {
-        moveIteratorToTime(**i, time);
+        (*i)->moveTo(time);
     }
-}
-
-void
-MappedBufMetaIterator::moveIteratorToTime(MEBIterator &iter,
-                                          const RealTime &time)
-{
-    // ??? Move this routine to MEBIterator::moveTo(time).
-
-    // Rather than briefly unlock and immediately relock each
-    // iteration, we leave the lock on until we're done.
-    QReadLocker locker(iter.getLock());
-
-    // For each event from the current iterator position
-    while (1) {
-        if (iter.atEnd())
-            break;
-
-        // We use peek because it's safe even if we have not fully
-        // filled the buffer yet.  That means we can get nullptr.
-        const MappedEvent *event = iter.peek();
-
-        // We know nothing about the event yet.  Stop here.
-        if (!event)
-            break;
-
-#if 1
-        // If the event sounds past time, stop here.
-        // This will cause re-firing of events in progress.
-        if (event->getEventTime() + event->getDuration() >= time)
-            break;
-#else
-        // If the event starts on or after time, stop here.
-        // This will cause events in progress to be skipped.
-        if (event->getEventTime() >= time)
-            break;
-#endif
-
-        ++iter;
-    }
-
-    iter.setReady(false);
 }
 
 void
@@ -422,7 +381,7 @@ resetIteratorForSegment(QSharedPointer<MappedEventBuffer> mappedEventBuffer, boo
 
             if (immediate) {
                 iter->reset();
-                moveIteratorToTime(*iter, m_currentTime);
+                iter->moveTo(m_currentTime);
             } else {
                 iter->setReady(false);
             }
