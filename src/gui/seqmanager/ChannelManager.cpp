@@ -30,6 +30,14 @@
 
 #include <QSettings>
 
+namespace
+{
+    // Config settings
+    // Keeping these at the file level since one of the users is static.
+    bool allowReset;
+    bool forceChannelSetups;
+}
+
 namespace Rosegarden
 {
 
@@ -47,6 +55,27 @@ ChannelManager::ChannelManager(Instrument *instrument) :
 {
     // Safe even for nullptr.
     connectInstrument(instrument);
+
+    QSettings settings;
+    settings.beginGroup(SequencerOptionsConfigGroup);
+
+    // This is still desirable for some users.
+    allowReset =
+            settings.value("allowresetallcontrollers", "true").toBool();
+    // Write back out so it is easy to find.
+    settings.setValue("allowresetallcontrollers", allowReset);
+
+    // Related to Bug #1560
+    // When set to true, makeReady() will attempt to send the proper CCs
+    // when playback is started in the middle of a Segment.  An unfortunate
+    // side-effect (which we need to eliminate) is that this also causes
+    // MIPP channel setups to be sent at the beginning of each Segment
+    // for fixed channel Segments.
+    forceChannelSetups =
+            settings.value("forceChannelSetups", "false").toBool();
+    // Write back out so it is easy to find.
+    settings.setValue("forceChannelSetups", forceChannelSetups);
+
 }
 
 void
@@ -146,13 +175,6 @@ void ChannelManager::insertChannelSetup(
     }
 
     // Reset All Controllers
-
-    // This is still desirable for some users.
-    QSettings settings;
-    settings.beginGroup(SequencerOptionsConfigGroup);
-    const bool allowReset =
-            settings.value("allowresetallcontrollers", "true").toBool();
-    settings.endGroup();
 
     if (allowReset) {
         // In case some controllers are on that we don't know about, turn
@@ -280,9 +302,12 @@ bool ChannelManager::makeReady(
         if (!m_channelInterval.validChannel())
             return false;
     }
-    
+
     // If this instrument is in auto channels mode
-    if (!m_instrument->hasFixedChannel()) {
+    // ??? Ideally, we should also do this for a fixed channel Track when
+    //     playback is pressed or a jump happens.  We should not do this
+    //     at the beginning of every Segment.  Bug #1560.
+    if (!m_instrument->hasFixedChannel()  ||  forceChannelSetups) {
         insertChannelSetup(
                 trackId,
                 time,
