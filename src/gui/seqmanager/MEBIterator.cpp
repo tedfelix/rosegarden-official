@@ -80,7 +80,7 @@ MEBIterator::moveTo(const RealTime &time)
     }
 
     // Since we moved, we need to send a channel setup again.
-    setReady(false);
+    m_ready = false;
 }
 
 MappedEvent
@@ -108,19 +108,24 @@ MEBIterator::peek() const
 }
 
 void
-MEBIterator::doInsert(MappedInserterBase &inserter, MappedEvent &evt)
+MEBIterator::doInsert(MappedInserterBase &inserter, MappedEvent &event)
 {
     // Get time when note starts sounding, eg for finding the correct
     // controllers.  It can't simply be event time, because if we
     // jumped into the middle of a long note, we'd wrongly find the
     // controller values as they are at the time the note starts.
-    if (evt.getEventTime() > m_currentTime)
-        m_currentTime = evt.getEventTime();
+    if (event.getEventTime() > m_currentTime)
+        m_currentTime = event.getEventTime();
 
     // Mapper does the actual insertion.
-    getMappedEventBuffer()->doInsert(inserter, evt, m_currentTime, !isReady());
-    setReady(true);
+    m_mappedEventBuffer->doInsert(
+            inserter,
+            event,
+            m_currentTime,  // start
+            !m_ready);  // firstOutput
+
+    m_ready = true;
 }
 
-}
 
+}

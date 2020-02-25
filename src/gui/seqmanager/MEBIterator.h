@@ -81,6 +81,8 @@ public:
      * Guarantees the caller that appropriate preparation will be
      * done for evt, such as first inserting other events to set
      * the program.
+     *
+     * ??? Only one caller.  Inline?
      */
     void doInsert(MappedInserterBase &inserter, MappedEvent &evt);
 
@@ -138,11 +140,13 @@ public:
      * They send out a channel setup (BS/PC/CCs) when asked to make
      * an Instrument ready.
      *
+     * ??? Only one caller.  Inline?
+     *
      * @see setReady() and isReady()
      */
     void makeReady(MappedInserterBase &inserter, RealTime time) {
         m_mappedEventBuffer->makeReady(inserter, time);
-        setReady(true);
+        m_ready = true;
     }
 
     /// Return whether the event should be played at all
