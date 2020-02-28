@@ -13,8 +13,8 @@
     COPYING included with this distribution for more information.
 */
 
-#include <string>
-#include <vector>
+#ifndef RG_STUDIO_H
+#define RG_STUDIO_H
 
 #include "XmlExportable.h"
 #include "Instrument.h"
@@ -22,18 +22,11 @@
 #include "MidiProgram.h"
 #include "MidiMetronome.h"
 #include "ControlParameter.h"
+
 #include <QCoreApplication>
 
-// The Studio is where Midi and Audio devices live.  We can query
-// them for a list of Instruments, connect them together or to
-// effects units (eventually) and generally do real studio-type
-// stuff to them.
-//
-//
-
-
-#ifndef RG_STUDIO_H
-#define RG_STUDIO_H
+#include <string>
+#include <vector>
 
 namespace Rosegarden
 {
@@ -46,11 +39,19 @@ typedef std::vector<Device*>::iterator DeviceListIterator;
 typedef std::vector<Device*>::const_iterator DeviceListConstIterator;
 
 class MidiDevice;
-
 class Segment;
 class Track;
 
-
+/// Holds Device objects.
+/**
+ * The Studio is where Midi and Audio devices live.  We can query
+ * them for a list of Instruments, connect them together or to
+ * effects units (eventually) and generally do real studio-type
+ * stuff to them.
+ *
+ * RosegardenDocument has an instance of Studio.  A reference can be obtained
+ * using RosegardenDocument::getStudio().
+ */
 class Studio : public XmlExportable
 {
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::Studio)
