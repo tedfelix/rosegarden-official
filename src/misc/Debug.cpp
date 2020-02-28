@@ -24,6 +24,8 @@
 #include "gui/editors/guitar/Chord.h"
 #include "gui/editors/guitar/Fingering.h"
 
+#include <QSettings>
+
 namespace Rosegarden
 {
 
@@ -116,5 +118,26 @@ ROSEGARDENPRIVATE_EXPORT QDebug &operator<<(QDebug &dbg, const Rosegarden::Guita
     }        
     return dbg;
 }
+
+bool bug1560Logging()
+{
+    // Only check on the first call.
+    static bool checked = false;
+    static bool enabled = false;
+
+    // If this is the first call, check...
+    if (!checked) {
+        checked = true;
+
+        QSettings settings;
+        QString key = "Logging/bug1560";
+        enabled = settings.value(key, "false").toBool();
+        // Write back out so it is easy to find.
+        settings.setValue(key, enabled);
+    }
+
+    return enabled;
+}
+
 
 }

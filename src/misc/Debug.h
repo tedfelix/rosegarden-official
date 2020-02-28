@@ -101,6 +101,7 @@ public:
 // used for this.
 #define RG_WARNING QDebug(QtDebugMsg) << RG_MODULE_STRING
 
+extern bool bug1560Logging();
 
 }
 
