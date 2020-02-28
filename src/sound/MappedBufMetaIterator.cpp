@@ -50,6 +50,9 @@ MappedBufMetaIterator::addBuffer(
 
     m_buffers.insert(mappedEventBuffer);
 
+    if (bug1560Logging())
+        RG_DEBUG << "addBuffer(): About to create a new MEBIterator...";
+
     QSharedPointer<MEBIterator> iter(new MEBIterator(mappedEventBuffer));
     iter->moveTo(m_currentTime);
     m_iterators.push_back(iter);
@@ -401,10 +404,18 @@ MappedBufMetaIterator::getAudioEvents(std::vector<MappedEvent> &audioEvents)
 
     audioEvents.clear();
 
+    if (bug1560Logging())
+        RG_DEBUG << "getAudioEvents(): Creating MEBIterators to find audio events...";
+
     // For each segment
     for (BufferSet::iterator i = m_buffers.begin();
          i != m_buffers.end(); ++i) {
 
+        // ??? The various features of MEBIterator are not needed here.
+        //     Instead, we should probably lock the buffer for read
+        //     (MappedEventBuffer::m_lock which should probably be
+        //     public) and get at it directly via
+        //     MappedEventBuffer::getBuffer() (or just make m_buffer public).
         MEBIterator iter(*i);
 
         // For each event
@@ -439,10 +450,14 @@ MappedBufMetaIterator::getAudioEvents(std::vector<MappedEvent> &audioEvents)
             }
 
             // ??? Why does this need to contain copies?  Can we simplify
-            //     to pointers to the originals?
+            //     to pointers to the originals?  Maybe switch to
+            //     QSharedPointer?
             audioEvents.push_back(event);
         }
     }
+
+    if (bug1560Logging())
+        RG_DEBUG << "getAudioEvents(): done...";
 }
 
 

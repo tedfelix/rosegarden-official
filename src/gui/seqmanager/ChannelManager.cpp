@@ -59,18 +59,16 @@ ChannelManager::ChannelManager(Instrument *instrument) :
     QSettings settings;
     settings.beginGroup(SequencerOptionsConfigGroup);
 
-    // This is still desirable for some users.
+    // Allow CC 121 to be sent out to clear out CCs.
+    // Edit > Preferences... > MIDI > General > Allow Reset All Controllers
     allowReset =
             settings.value("allowresetallcontrollers", "true").toBool();
     // Write back out so it is easy to find.
     settings.setValue("allowresetallcontrollers", allowReset);
 
     // Related to Bug #1560
-    // When set to true, makeReady() will attempt to send the proper CCs
-    // when playback is started in the middle of a Segment.  An unfortunate
-    // side-effect (which we need to eliminate) is that this also causes
-    // MIPP channel setups to be sent at the beginning of each Segment
-    // for fixed channel Segments.
+    // When set to true, this causes MIPP channel setups to be sent at the
+    // beginning of each Segment for fixed channel Segments.
     forceChannelSetups =
             settings.value("forceChannelSetups", "false").toBool();
     // Write back out so it is easy to find.
@@ -259,6 +257,8 @@ void ChannelManager::insertEvent(
     // if a track becomes unmuted, until the meta-iterator gets around
     // to initting.
     if (!m_ready) {
+        if (bug1560Logging())
+            RG_DEBUG << "insertEvent(): Calling makeReady()...";
         makeReady(trackId, reftime, controllerAndPBList, inserter);
         // If we're still not ready, we can't do much.
         if (!m_ready)
@@ -289,6 +289,9 @@ bool ChannelManager::makeReady(
     if (!m_instrument)
         return false;
 
+    if (bug1560Logging())
+        RG_DEBUG << "makeReady() for" << (m_instrument ? m_instrument->getPresentationName().c_str() : "nothing") << "at" << time;
+
     // Try to get a valid channel if we lack one.
     if (!m_channelInterval.validChannel()) {
         // We already tried to get one and failed; don't keep trying.
@@ -303,11 +306,27 @@ bool ChannelManager::makeReady(
             return false;
     }
 
-    // If this instrument is in auto channels mode
-    // ??? Ideally, we should also do this for a fixed channel Track when
-    //     playback is pressed or a jump happens.  We should not do this
-    //     at the beginning of every Segment.  Bug #1560.
-    if (!m_instrument->hasFixedChannel()  ||  forceChannelSetups) {
+    // Figure out whether playback is starting in the middle of a
+    // Segment.  Bug #1560.
+    // Note: This also causes channel setups on channel 10 due to the
+    //       MetronomeMapper.  Not sure if that's an issue, but might be.
+    bool startingInMiddle =
+            m_instrument->hasFixedChannel()  &&
+            (m_start < time  &&  time <= m_end);
+
+    if (bug1560Logging()) {
+        RG_DEBUG << "makeReady()";
+        RG_DEBUG << "  m_start =" << m_start;
+        RG_DEBUG << "  m_end =" << m_end;
+        RG_DEBUG << "  time =" << time;
+        RG_DEBUG << "  startingInMiddle =" << startingInMiddle;
+    }
+
+    // If this instrument is in auto channels mode or we are starting
+    // in the middle of a Segment.
+    if (!m_instrument->hasFixedChannel()  ||  forceChannelSetups  ||
+        startingInMiddle) {
+
         insertChannelSetup(
                 trackId,
                 time,

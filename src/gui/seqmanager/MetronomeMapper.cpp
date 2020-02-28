@@ -275,6 +275,9 @@ makeReady(MappedInserterBase &inserter, RealTime time)
     if (!m_instrument)
         return;
 
+    if (bug1560Logging())
+        RG_DEBUG << "makeReady(): Calling makeReady()...";
+
     m_channelManager.makeReady(
             NO_TRACK,  // trackId
             time,
