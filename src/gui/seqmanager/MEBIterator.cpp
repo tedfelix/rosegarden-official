@@ -20,8 +20,6 @@
 #include "MEBIterator.h"
 
 #include "sound/MappedEvent.h"
-#include "gui/application/RosegardenMainWindow.h"
-#include "document/RosegardenDocument.h"
 
 namespace Rosegarden
 {
