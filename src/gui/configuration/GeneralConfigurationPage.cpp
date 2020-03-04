@@ -357,7 +357,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
     m_trackSize->addItem(tr("Medium"));
     m_trackSize->addItem(tr("Large"));
     m_trackSize->setCurrentIndex(
-            settings.value("track_size", 0).toUInt());
+            settings.value("track_size", 0).toInt());
     connect(m_trackSize, static_cast<void(QComboBox::*)(int)>(
                     &QComboBox::activated),
             this, &GeneralConfigurationPage::slotModified);
@@ -504,13 +504,13 @@ void GeneralConfigurationPage::apply()
 
     settings.beginGroup(GeneralOptionsConfigGroup);
 
-    bool thornChanged =
+    const bool thornChanged =
             (settings.value("use_thorn_style", true).toBool() !=
              m_Thorn->isChecked());
     //RG_DEBUG << "apply(): NB. use_thorn_style = " << settings.value("use_thorn_style", true).toBool() << ", m_Thorn->isChecked() = " << m_Thorn->isChecked();
     settings.setValue("use_thorn_style", m_Thorn->isChecked());
     settings.setValue("notenamestyle", m_nameStyle->currentIndex());
-    bool mainTextureChanged =
+    const bool mainTextureChanged =
             (settings.value("backgroundtextures", true).toBool() !=
              m_backgroundTextures->isChecked());
     settings.setValue("backgroundtextures", m_backgroundTextures->isChecked());
@@ -523,6 +523,9 @@ void GeneralConfigurationPage::apply()
 
     settings.beginGroup(GeneralOptionsConfigGroup);
     settings.setValue("long_window_titles", m_longTitles->isChecked());
+    const bool trackSizeChanged =
+            (settings.value("track_size", 0).toInt() !=
+             m_trackSize->currentIndex());
     settings.setValue("track_size", m_trackSize->currentIndex());
     settings.endGroup();
 
@@ -545,6 +548,11 @@ void GeneralConfigurationPage::apply()
     if (thornChanged) {
         QMessageBox::information(this, tr("Rosegarden"),
                 tr("You must restart Rosegarden for the presentation change to take effect."));
+    }
+
+    if (trackSizeChanged) {
+        QMessageBox::information(this, tr("Rosegarden"),
+                tr("You must restart Rosegarden or open a file for the track size change to take effect."));
     }
 }
 
