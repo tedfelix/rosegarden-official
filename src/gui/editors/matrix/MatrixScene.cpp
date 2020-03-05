@@ -24,6 +24,7 @@
 #include "MatrixWidget.h"
 #include "MatrixElement.h"
 
+#include "gui/application/RosegardenMainWindow.h"
 #include "document/RosegardenDocument.h"
 #include "document/CommandHistory.h"
 #include "misc/ConfigGroups.h"
@@ -44,6 +45,8 @@
 #include <QSettings>
 #include <QPointF>
 #include <QRectF>
+
+#include <algorithm>  // for std::sort
 
 //#define DEBUG_MOUSE
 
@@ -87,6 +90,31 @@ MatrixScene::~MatrixScene()
     RG_DEBUG << "MatrixScene::~MatrixScene() - end";
 }
 
+namespace
+{
+    // Functor for std::sort that compares the track positions of two Segments.
+    struct TrackPositionLess {
+        TrackPositionLess() :
+            m_composition(RosegardenMainWindow::self()->getDocument()->
+                              getComposition())
+        {
+        }
+
+        bool operator()(const Segment *lhs, const Segment *rhs)
+        {
+            // ??? Could also sort by Segment name and Segment start time.
+            const int lPos =
+                    m_composition.getTrackById(lhs->getTrack())->getPosition();
+            const int rPos =
+                    m_composition.getTrackById(rhs->getTrack())->getPosition();
+            return (lPos < rPos);
+        }
+
+    private:
+        const Composition &m_composition;
+    };
+}
+
 void
 MatrixScene::setSegments(RosegardenDocument *document,
                          std::vector<Segment *> segments)
@@ -97,6 +125,11 @@ MatrixScene::setSegments(RosegardenDocument *document,
 
     m_document = document;
     m_segments = segments;
+
+    // Sort the Segments into TrackPosition order.  This makes the
+    // Segment changer wheel in the Matrix editor
+    // (MatrixWidget::m_segmentChanger) easier to understand.
+    std::sort(m_segments.begin(), m_segments.end(), TrackPositionLess());
 
     m_document->getComposition().addObserver(this);
 
