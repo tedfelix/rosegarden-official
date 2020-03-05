@@ -32,6 +32,7 @@
 
 class QGraphicsScene;
 class QGridLayout;
+class QLabel;
 class QPushButton;
 
 namespace Rosegarden
@@ -72,10 +73,12 @@ class Thumbwheel;
  *   - The top standard ruler
  *   - The pitch ruler, m_pianoView (to the left of the matrix)
  *   - The matrix itself, m_view and m_scene
- *   - The bottom standard ruler
- *   - The controls widget (optional)
+ *   - The bottom standard ruler, m_bottomStandardRuler
+ *   - The controls widget, m_controlsWidget (optional)
+ *   - The Segment label, m_segmentLabel
+ *   - The Segment changer, m_segmentChanger (knob in the bottom left corner)
  *   - The panner, m_hpanner (navigation area)
- *   - The zoom area (knobs in the bottom right corner)
+ *   - The zoom area, m_HVzoom et al. (knobs in the bottom right corner)
  *
  * This class also owns the editing tools.
  */
@@ -334,6 +337,7 @@ private:
     Thumbwheel *m_segmentChanger;
     int m_lastSegmentChangerValue;
     void updateSegmentChangerBackground();
+    QLabel *m_segmentLabel;
 
 
     // Pitch Ruler

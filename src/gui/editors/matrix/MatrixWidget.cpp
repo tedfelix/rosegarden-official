@@ -74,6 +74,7 @@
 #include <QDesktopWidget>
 #include <QGraphicsView>
 #include <QGridLayout>
+#include <QLabel>
 #include <QScrollBar>
 #include <QTimer>
 #include <QGraphicsScene>
@@ -94,6 +95,7 @@ enum {
     BOTTOMRULER_ROW,
     CONTROLS_ROW,
     HSCROLLBAR_ROW,
+    SEGMENTLABEL_ROW,
     PANNER_ROW  // Navigation area
 };
 
@@ -156,6 +158,10 @@ MatrixWidget::MatrixWidget(bool drumMode) :
     m_controlsWidget = new ControlRulerWidget;
     m_layout->addWidget(m_controlsWidget, CONTROLS_ROW, MAIN_COL, 1, 1);
 
+    m_segmentLabel = new QLabel("Segment Label");
+    m_segmentLabel->setAlignment(Qt::AlignHCenter);
+    m_layout->addWidget(m_segmentLabel, SEGMENTLABEL_ROW, MAIN_COL, 1, 1);
+
     // the panner along with zoom controls in one strip at one grid location
     QWidget *panner = new QWidget;
     QHBoxLayout *pannerLayout = new QHBoxLayout;
@@ -171,6 +177,7 @@ MatrixWidget::MatrixWidget(bool drumMode) :
 
     bool useRed = true;
     m_segmentChanger = new Thumbwheel(Qt::Vertical, useRed);
+    m_segmentChanger->setToolTip(tr("<qt>Rotate wheel to change the active segment</qt>"));
     m_segmentChanger->setFixedWidth(18);
     m_segmentChanger->setMinimumValue(-120);
     m_segmentChanger->setMaximumValue(120);
@@ -500,8 +507,12 @@ MatrixWidget::setSegments(RosegardenDocument *document,
 
     updateSegmentChangerBackground();
 
-    // hide the changer widget if only one segment
-    if (segments.size() == 1) m_changerWidget->hide();
+    // If there is only one Segment, hide the widgets that are only needed
+    // for multiple Segments.
+    if (segments.size() == 1) {
+        m_segmentLabel->hide();
+        m_changerWidget->hide();
+    }
 }
 
 void
@@ -1367,31 +1378,34 @@ MatrixWidget::slotSegmentChangerMoved(int v)
 void
 MatrixWidget::updateSegmentChangerBackground()
 {
+    const Composition &composition = m_document->getComposition();
+
     // set the changer widget background to the now current segment's
     // background, and reset the tooltip style to compensate
-    Colour c = m_document->getComposition().getSegmentColourMap().
+    Colour c = composition.getSegmentColourMap().
             getColourByIndex(m_scene->getCurrentSegment()->getColourIndex());
 
     QPalette palette = m_changerWidget->palette();
     palette.setColor(QPalette::Window, c.toQColor());
     m_changerWidget->setPalette(palette);
 
-    // have to deal with all this ruckus to get a few pieces of info about the
-    // track:
-    Track *track = m_document->getComposition().getTrackById(
+    const Track *track = composition.getTrackById(
             m_scene->getCurrentSegment()->getTrack());
-    int trackPosition = m_document->getComposition().getTrackPositionById(
-            track->getId());
-    QString trackLabel = QString::fromStdString(track->getLabel());
 
-    // set up some tooltips...  I don't like this much, and it wants some kind
-    // of dedicated float thing eventually, but let's not go nuts on a
-    // last-minute feature
-    m_segmentChanger->setToolTip(tr("<qt>Rotate wheel to change the active segment</qt>"));
-    m_changerWidget->setToolTip(tr("<qt>Segment: \"%1\"<br>Track: %2 \"%3\"</qt>")
-                                .arg(QString::fromStdString(m_scene->getCurrentSegment()->getLabel()))
-                                .arg(trackPosition)
-                                .arg(trackLabel));
+    const int trackPosition =
+            composition.getTrackPositionById(track->getId());
+
+    QString trackLabel = QString::fromStdString(track->getLabel());
+    if (trackLabel == "")
+        trackLabel = tr("<untitled>");
+
+    const QString segmentText = tr("Track %1 (%2) | %3").
+            arg(trackPosition + 1).
+            arg(trackLabel).
+            arg(QString::fromStdString(m_scene->getCurrentSegment()->getLabel()));
+
+    //m_changerWidget->setToolTip(segmentText);
+    m_segmentLabel->setText(segmentText);
 }
 
 void
