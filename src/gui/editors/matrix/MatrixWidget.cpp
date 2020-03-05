@@ -160,6 +160,7 @@ MatrixWidget::MatrixWidget(bool drumMode) :
 
     m_segmentLabel = new QLabel("Segment Label");
     m_segmentLabel->setAlignment(Qt::AlignHCenter);
+    m_segmentLabel->setAutoFillBackground(true);
     m_layout->addWidget(m_segmentLabel, SEGMENTLABEL_ROW, MAIN_COL, 1, 1);
 
     // the panner along with zoom controls in one strip at one grid location
@@ -1379,33 +1380,39 @@ void
 MatrixWidget::updateSegmentChangerBackground()
 {
     const Composition &composition = m_document->getComposition();
+    const Segment *segment = m_scene->getCurrentSegment();
 
     // set the changer widget background to the now current segment's
     // background, and reset the tooltip style to compensate
-    Colour c = composition.getSegmentColourMap().
-            getColourByIndex(m_scene->getCurrentSegment()->getColourIndex());
+    Colour segmentColor = composition.getSegmentColourMap().
+            getColourByIndex(segment->getColourIndex());
 
     QPalette palette = m_changerWidget->palette();
-    palette.setColor(QPalette::Window, c.toQColor());
+    palette.setColor(QPalette::Window, segmentColor.toQColor());
     m_changerWidget->setPalette(palette);
 
-    const Track *track = composition.getTrackById(
-            m_scene->getCurrentSegment()->getTrack());
-
-    const int trackPosition =
-            composition.getTrackPositionById(track->getId());
+    const Track *track = composition.getTrackById(segment->getTrack());
+    if (!track)
+        return;
 
     QString trackLabel = QString::fromStdString(track->getLabel());
     if (trackLabel == "")
         trackLabel = tr("<untitled>");
 
     const QString segmentText = tr("Track %1 (%2) | %3").
-            arg(trackPosition + 1).
+            arg(track->getPosition() + 1).
             arg(trackLabel).
-            arg(QString::fromStdString(m_scene->getCurrentSegment()->getLabel()));
+            arg(QString::fromStdString(segment->getLabel()));
 
-    //m_changerWidget->setToolTip(segmentText);
     m_segmentLabel->setText(segmentText);
+
+    // Segment label colors
+    palette = m_segmentLabel->palette();
+    // Background
+    palette.setColor(QPalette::Window, segmentColor.toQColor());
+    // Foreground/Text
+    palette.setColor(QPalette::WindowText, segment->getPreviewColour());
+    m_segmentLabel->setPalette(palette);
 }
 
 void
