@@ -16,6 +16,7 @@
 #ifndef RG_INSTRUMENT_H
 #define RG_INSTRUMENT_H
 
+#include "PluginContainer.h"
 #include "InstrumentStaticSignals.h"
 #include "XmlExportable.h"
 #include "MidiProgram.h"
@@ -30,41 +31,6 @@
 
 namespace Rosegarden
 {
-
-
-class AudioPluginInstance;
-typedef std::vector<AudioPluginInstance *> AudioPluginVector;
-
-class PluginContainer
-{
-public:
-    static constexpr unsigned PLUGIN_COUNT = 5; // for non-synth plugins
-
-    AudioPluginVector::iterator beginPlugins() { return m_audioPlugins.begin(); }
-    AudioPluginVector::iterator endPlugins() { return m_audioPlugins.end(); }
-
-    // Plugin management
-    //
-    void addPlugin(AudioPluginInstance *instance);
-    bool removePlugin(unsigned int position);
-    void clearPlugins();
-    void emptyPlugins(); // empty the plugins but don't clear them down
-
-    // Get a plugin for this container
-    //
-    AudioPluginInstance *getPlugin(unsigned int position) const;
-
-    virtual unsigned int getId() const = 0;
-    virtual std::string getName() const = 0;
-    virtual std::string getPresentationName() const = 0;
-    virtual std::string getAlias() const = 0;
-
-protected:
-    PluginContainer(bool havePlugins);
-    virtual ~PluginContainer();
-
-    AudioPluginVector m_audioPlugins;
-};
 
 
 typedef unsigned int BussId;
@@ -129,7 +95,7 @@ class Instrument : public QObject, public XmlExportable, public PluginContainer
     Q_OBJECT
 
 public:
-    static const unsigned int SYNTH_PLUGIN_POSITION;
+    static constexpr unsigned SYNTH_PLUGIN_POSITION = 999;
 
     enum InstrumentType { Midi, Audio, SoftSynth, InvalidInstrument = -1 };
 
