@@ -40,8 +40,6 @@
 namespace Rosegarden
 {
 
-const unsigned int PluginContainer::PLUGIN_COUNT = 5;
-
 PluginContainer::PluginContainer(bool havePlugins)
 {
     if (havePlugins) {
@@ -870,25 +868,6 @@ std::string
 Buss::getAlias() const
 {
     return getName();
-}
-
-/***** RecordIn *****/
-
-RecordIn::RecordIn() :
-    m_mappedId(0)
-{
-}
-
-RecordIn::~RecordIn()
-{
-}
-
-std::string
-RecordIn::toXmlString() const
-{
-    // We don't actually save these, as they have nothing persistent
-    // in them.  The studio just remembers how many there should be.
-    return "";
 }
 
 

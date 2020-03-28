@@ -23,6 +23,7 @@
 #include "document/RosegardenDocument.h"
 #include "gui/widgets/WheelyButton.h"
 #include "base/Instrument.h"
+#include "base/RecordIn.h"
 #include "base/Studio.h"
 #include "gui/studio/StudioControl.h"
 #include "sound/MappedCommon.h"  // MappedObjectId, MappedObjectValue
@@ -352,7 +353,7 @@ AudioRouteMenu::slotEntrySelected(int i)
             } else {
                 RecordIn *in = studio.getRecordIn(oldInput);
                 if (in)
-                    oldMappedId = in->getMappedId();
+                    oldMappedId = in->mappedId;
             }
 
             // Compute selected (new) entry's input and channel.
@@ -395,7 +396,7 @@ AudioRouteMenu::slotEntrySelected(int i)
                 RecordIn *in = studio.getRecordIn(newInput);
                 if (!in)
                     return;
-                newMappedId = in->getMappedId();
+                newMappedId = in->mappedId;
             }
 
             // Update the Studio

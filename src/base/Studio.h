@@ -31,6 +31,12 @@
 namespace Rosegarden
 {
 
+
+class RecordIn;
+class MidiDevice;
+class Segment;
+class Track;
+
 typedef std::vector<Instrument *> InstrumentList;
 typedef std::vector<Device*> DeviceList;
 typedef std::vector<Buss *> BussList;
@@ -38,9 +44,6 @@ typedef std::vector<RecordIn *> RecordInList;
 typedef std::vector<Device*>::iterator DeviceListIterator;
 typedef std::vector<Device*>::const_iterator DeviceListConstIterator;
 
-class MidiDevice;
-class Segment;
-class Track;
 
 /// Holds Device objects.
 /**

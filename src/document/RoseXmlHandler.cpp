@@ -40,6 +40,7 @@
 #include "base/MidiTypes.h"
 #include "base/NotationTypes.h"
 #include "base/RealTime.h"
+#include "base/RecordIn.h"
 #include "base/Segment.h"
 #include "base/SegmentLinker.h"
 #include "base/Studio.h"

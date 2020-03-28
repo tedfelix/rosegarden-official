@@ -23,6 +23,7 @@
 #include "SoftSynthDevice.h"
 #include "Instrument.h"
 
+#include "base/RecordIn.h"
 #include "base/Segment.h"
 #include "misc/Strings.h"
 #include "Track.h"

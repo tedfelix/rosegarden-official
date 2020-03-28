@@ -38,7 +38,7 @@ typedef std::vector<AudioPluginInstance *> AudioPluginVector;
 class PluginContainer
 {
 public:
-    static const unsigned int PLUGIN_COUNT; // for non-synth plugins
+    static constexpr unsigned PLUGIN_COUNT = 5; // for non-synth plugins
 
     AudioPluginVector::iterator beginPlugins() { return m_audioPlugins.begin(); }
     AudioPluginVector::iterator endPlugins() { return m_audioPlugins.end(); }
@@ -423,24 +423,6 @@ private:
     StaticControllers m_staticControllers;
 };
 
-
-// audio record input of a sort that can be connected to
-
-class RecordIn : public XmlExportable
-{
-public:
-    RecordIn();
-    ~RecordIn() override;
-
-    int getMappedId() const { return m_mappedId; }
-    void setMappedId(int id) { m_mappedId = id; }
-
-    std::string toXmlString() const override;
-
-private:
-    int m_mappedId;
-};
-    
 
 }
 

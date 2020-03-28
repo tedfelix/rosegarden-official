@@ -41,6 +41,7 @@
 #include "base/NotationTypes.h"
 #include "base/Profiler.h"
 #include "base/RealTime.h"
+#include "base/RecordIn.h"
 #include "base/Segment.h"
 #include "base/SoftSynthDevice.h"
 #include "base/Studio.h"
@@ -836,7 +837,7 @@ void RosegardenDocument::initialiseStudio()
                                                MappedAudioInput::InputNumber,
                                                MappedObjectValue(i));
 
-        recordIns[i]->setMappedId(mappedId);
+        recordIns[i]->mappedId = mappedId;
     }
 
     InstrumentList list = m_studio.getAllInstruments();
@@ -908,7 +909,7 @@ void RosegardenDocument::initialiseStudio()
                     inputMappedId = busses[input]->getMappedId();
             } else {
                 if (input < static_cast<int>(recordIns.size()))
-                    inputMappedId = recordIns[input]->getMappedId();
+                    inputMappedId = recordIns[input]->mappedId;
             }
 
             ids.push_back(mappedId);
