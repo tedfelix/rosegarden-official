@@ -32,6 +32,8 @@
 #include "base/SegmentNotationHelper.h"
 #include "base/Sets.h"
 #include "base/Track.h"
+
+#include <QCoreApplication>
 #include <QObject>
 
 using std::string;

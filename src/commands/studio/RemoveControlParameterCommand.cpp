@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2018 the Rosegarden development team.
+    Copyright 2000-2020 the Rosegarden development team.
  
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -15,54 +15,50 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[RemoveControlParameterCommand]"
 
 #include "RemoveControlParameterCommand.h"
 
-#include "base/ControlParameter.h"
-#include "base/Device.h"
 #include "base/MidiDevice.h"
 #include "base/Studio.h"
-#include <QString>
+#include "misc/Debug.h"
+
 #include <iostream>
 
 
 namespace Rosegarden
 {
 
-RemoveControlParameterCommand::~RemoveControlParameterCommand()
-{}
 
 void
 RemoveControlParameterCommand::execute()
 {
-    MidiDevice *md = dynamic_cast<MidiDevice *>
-                     (m_studio->getDevice(m_device));
-    if (!md) {
-        std::cerr << "WARNING: RemoveControlParameterCommand::execute: device "
-        << m_device << " is not a MidiDevice in current studio"
-        << std::endl;
-        return ;
+    MidiDevice *midiDevice =
+            dynamic_cast<MidiDevice *>(m_studio->getDevice(m_device));
+    if (!midiDevice) {
+        RG_WARNING << "execute(): WARNING: device " << m_device << " is not a MidiDevice in current studio";
+        return;
     }
 
-    ControlParameter *param = md->getControlParameter(m_id);
+    ControlParameter *param = midiDevice->getControlParameter(m_controllerIndex);
     if (param)
         m_oldControl = *param;
-    md->removeControlParameter(m_id);
+
+    midiDevice->removeControlParameter(m_controllerIndex);
 }
 
 void
 RemoveControlParameterCommand::unexecute()
 {
-    MidiDevice *md = dynamic_cast<MidiDevice *>
-                     (m_studio->getDevice(m_device));
-    if (!md) {
-        std::cerr << "WARNING: RemoveControlParameterCommand::execute: device "
-        << m_device << " is not a MidiDevice in current studio"
-        << std::endl;
-        return ;
+    MidiDevice *midiDevice =
+            dynamic_cast<MidiDevice *>(m_studio->getDevice(m_device));
+    if (!midiDevice) {
+        RG_WARNING << "unexecute(): WARNING: device " << m_device << " is not a MidiDevice in current studio";
+        return;
     }
 
-    md->addControlParameter(m_oldControl, m_id, true);
+    midiDevice->addControlParameter(m_oldControl, m_controllerIndex, true);
 }
+
 
 }

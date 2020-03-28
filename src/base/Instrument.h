@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2018 the Rosegarden development team.
+    Copyright 2000-2020 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -16,15 +16,14 @@
 #ifndef RG_INSTRUMENT_H
 #define RG_INSTRUMENT_H
 
+#include "XmlExportable.h"
 #include "PluginContainer.h"
 #include "Buss.h"
 #include "InstrumentStaticSignals.h"
-#include "XmlExportable.h"
-#include "MidiProgram.h"
+#include "MidiProgram.h"  // for MidiByte
 
 #include <QString>
 #include <QSharedPointer>
-#include <QCoreApplication>
 
 #include <climits>  // UINT_MAX
 #include <string>
@@ -35,6 +34,7 @@ namespace Rosegarden
 
 
 class Device;
+
 
 typedef unsigned int InstrumentId;
 constexpr InstrumentId NoInstrument = UINT_MAX;
@@ -48,7 +48,10 @@ constexpr InstrumentId SoftSynthInstrumentBase  = 10000;
 constexpr unsigned int AudioInstrumentCount     = 16;
 constexpr unsigned int SoftSynthInstrumentCount = 24;
 
-typedef std::vector<std::pair<MidiByte, MidiByte> > StaticControllers;
+// ??? std::map anyone?
+typedef std::vector<std::pair<MidiByte /*controller*/, MidiByte /*value*/> >
+        StaticControllers;
+
 
 /// Typically represents a channel on a Device.
 /**
@@ -116,8 +119,6 @@ public:
     void releaseFixedChannel();
     bool hasFixedChannel() const { return m_fixed; }
 
-    //void setMidiInputChannel(char ic) { m_input_channel = ic; }
-    //char getMidiInputChannel() const { return m_input_channel; }
 
     // ---------------- MIDI Controllers -----------------
     //
@@ -217,13 +218,12 @@ public:
     void setAudioOutput(BussId buss) { m_audioOutput = buss; }
     BussId getAudioOutput() const { return m_audioOutput; }
 
-    // Implementation of virtual function
-    //
+    // XmlExportable override
     std::string toXmlString() const override;
 
     // Get and set the parent device
     //
-    Device* getDevice() const { return m_device; }
+    Device *getDevice() const { return m_device; }
     void setDevice(Device* dev) { m_device = dev; }
 
     // Return a string describing the current program for
@@ -252,8 +252,7 @@ public:
     //
     void removeStaticController(MidiByte controller);
 
-    void sendWholeDeviceDestroyed()
-    { emit wholeDeviceDestroyed(); }
+    void sendWholeDeviceDestroyed()  { emit wholeDeviceDestroyed(); }
 
     /// Send out program changes, etc..., for fixed channels.
     /**
@@ -271,7 +270,7 @@ public:
 
     /// Emit InstrumentStaticSignals::controlChange().
     static void emitControlChange(Instrument *instrument, int cc)
-        { getStaticSignals()->emitControlChange(instrument, cc); }
+            { getStaticSignals()->emitControlChange(instrument, cc); }
 
  signals:
     // Like QObject::destroyed, but implies that the whole device is
@@ -305,9 +304,7 @@ private:
     InstrumentType  m_type;
     
     // Standard MIDI controllers and parameters
-    //
     MidiByte        m_channel;
-    //char            m_input_channel;
     MidiProgram     m_program;
     MidiByte        m_transpose;
     MidiByte        m_pan;  // required by audio

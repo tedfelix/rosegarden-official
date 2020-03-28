@@ -4,7 +4,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2018 the Rosegarden development team.
+    Copyright 2000-2020 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -21,19 +21,18 @@
 
 #include "base/ControlParameter.h"
 #include "base/Device.h"
-#include "document/Command.h"
+#include "document/Command.h"  // for NamedCommand
+
 #include <QString>
-#include <QCoreApplication>
-
-
 
 
 namespace Rosegarden
 {
 
+
 class Studio;
 
-
+/// Remove a Controller (CC) from a MidiDevice.
 class RemoveControlParameterCommand : public NamedCommand
 {
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::RemoveControlParameterCommand)
@@ -41,24 +40,24 @@ class RemoveControlParameterCommand : public NamedCommand
 public:
     RemoveControlParameterCommand(Studio *studio,
                                   DeviceId device,
-                                  int id):
-        NamedCommand(getGlobalName()),
-        m_studio(studio),
-        m_device(device),
-        m_id(id) { }
+                                  int controllerIndex) :
+    NamedCommand(tr("&Remove Control Parameter")),
+    m_studio(studio),
+    m_device(device),
+    m_controllerIndex(controllerIndex)
+    { }
 
-    ~RemoveControlParameterCommand() override;
-
+    // Command overrides.
     void execute() override;
     void unexecute() override;
 
-    static QString getGlobalName() { return tr("&Remove Control Parameter"); }
+private:
+    Studio *m_studio;
+    DeviceId m_device;
+    /// Index into the Device's list of controllers.
+    int m_controllerIndex;
 
-protected:
-    Studio              *m_studio;
-    DeviceId             m_device;
-    int                              m_id;
-    ControlParameter     m_oldControl;
+    ControlParameter m_oldControl;
 
 };
 

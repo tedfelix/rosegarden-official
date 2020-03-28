@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2018 the Rosegarden development team.
+    Copyright 2000-2020 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -17,25 +17,19 @@
 
 #include "Instrument.h"
 
-#include "sound/Midi.h"
-#include "MidiDevice.h"
 #include "base/AllocateChannels.h"
 #include "base/AudioPluginInstance.h"
-#include "base/AudioLevel.h"
-#include "gui/studio/StudioControl.h"
 #include "sound/ControlBlock.h"
 #include "misc/Debug.h"
+#include "sound/Midi.h"  // for MIDI_CONTROLLER_VOLUME, etc...
+#include "MidiDevice.h"
+#include "gui/studio/StudioControl.h"
 
-#include <cassert>
-
-#include <algorithm>  // std::find()
+#include <ostream>  // for std::endl
 #include <sstream>
-#include <cstdio>
-#include <iostream>
+#include <utility>  // for std::pair
 
-#include <QString>
-#include <QCoreApplication>
-#include <QtGlobal>
+#include <QtGlobal>  // for Q_ASSERT()
 
 namespace Rosegarden
 {
