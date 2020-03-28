@@ -46,7 +46,7 @@ SoftSynthDevice::SoftSynthDevice(DeviceId id, const std::string &name) :
     checkControlList();
 }
 
-
+#if 0
 SoftSynthDevice::SoftSynthDevice(const SoftSynthDevice &dev) :
     Device(dev.getId(), dev.getName(), dev.getType()),
     Controllable(),
@@ -60,6 +60,7 @@ SoftSynthDevice::SoftSynthDevice(const SoftSynthDevice &dev) :
         m_instruments.push_back(new Instrument(**iIt));
     if (dev.m_metronome) m_metronome = new MidiMetronome(*dev.m_metronome);
 }
+#endif
 
 SoftSynthDevice::~SoftSynthDevice()
 {

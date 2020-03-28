@@ -34,10 +34,6 @@ public:
     SoftSynthDevice(DeviceId id, const std::string &name);
     ~SoftSynthDevice() override;
 
-    // Copy constructor
-    //
-    SoftSynthDevice(const SoftSynthDevice &);
-
     bool isOutput() const  override { return true; }
     bool isInput() const  override { return false; }
 
@@ -61,6 +57,10 @@ public:
     const MidiMetronome* getMetronome() const { return m_metronome; }
 
 private:
+    // Hide copy constructor and op=
+    SoftSynthDevice(const SoftSynthDevice &);
+    SoftSynthDevice &operator=(const SoftSynthDevice &);
+
     MidiMetronome *m_metronome;
     static ControlList m_controlList;
     static void checkControlList();

@@ -33,10 +33,6 @@ public:
     AudioDevice(DeviceId id, const std::string &name);
     ~AudioDevice() override;
 
-    // Copy constructor
-    //
-    AudioDevice(const AudioDevice &);
-
     bool isOutput() const  override { return true; }
     bool isInput() const  override { return false; }
 
@@ -55,6 +51,10 @@ public:
         { return m_instruments; }
 
 private:
+    // Hide copy constructor and op=
+    AudioDevice(const AudioDevice &);
+    AudioDevice &operator=(const AudioDevice &);
+
     void createInstruments();
     void renameInstruments() override;
 };

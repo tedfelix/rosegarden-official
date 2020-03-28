@@ -218,6 +218,8 @@ protected:
     BankList       m_bankList;
     ControlList    m_controlList;
     KeyMappingList m_keyMappingList;
+    // ??? This should be easy to change to an object which would simplify
+    //     copying of MidiDevice.
     MidiMetronome *m_metronome;
     
     // used when we're presenting the instruments
@@ -236,6 +238,7 @@ protected:
     std::pair<std::string, std::string> m_librarian; // name. email
 
     // The channel allocator.
+    // ??? Lifespan is same as class.  Make this an object.
     AllocateChannels  *m_allocator;
 
 private:

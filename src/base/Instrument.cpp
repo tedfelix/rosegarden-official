@@ -281,6 +281,8 @@ Instrument::Instrument(const Instrument &ins):
         addPlugin(new AudioPluginInstance(SYNTH_PLUGIN_POSITION));
     }
     
+    // ??? How is this different from std::vector's copy ctor?
+    //     Remove this and do the copy above.
     StaticControllerConstIterator cIt = ins.m_staticControllers.begin();
     for (; cIt != ins.m_staticControllers.end(); ++cIt) {
         m_staticControllers.push_back(*cIt);

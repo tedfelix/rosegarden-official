@@ -36,7 +36,7 @@ AudioDevice::AudioDevice(DeviceId id, const std::string &name) :
     createInstruments();
 }
 
-
+#if 0
 AudioDevice::AudioDevice(const AudioDevice &dev):
     Device(dev.getId(), dev.getName(), dev.getType())
 {
@@ -47,6 +47,7 @@ AudioDevice::AudioDevice(const AudioDevice &dev):
     for (; iIt != insList.end(); ++iIt)
         m_instruments.push_back(new Instrument(**iIt));
 }
+#endif
 
 AudioDevice::~AudioDevice()
 {
