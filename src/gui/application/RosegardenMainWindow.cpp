@@ -7635,7 +7635,7 @@ RosegardenMainWindow::slotChangePluginConfiguration(InstrumentId instrumentId,
             for (InstrumentList::iterator i = il.begin();
                     i != il.end(); ++i) {
 
-                for (PluginInstanceIterator pli =
+                for (AudioPluginVector::iterator pli =
                             (*i)->beginPlugins();
                         pli != (*i)->endPlugins(); ++pli) {
 

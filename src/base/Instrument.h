@@ -16,10 +16,6 @@
 #ifndef RG_INSTRUMENT_H
 #define RG_INSTRUMENT_H
 
-#include <climits>  // UINT_MAX
-#include <string>
-#include <vector>
-
 #include "InstrumentStaticSignals.h"
 #include "XmlExportable.h"
 #include "MidiProgram.h"
@@ -28,57 +24,24 @@
 #include <QSharedPointer>
 #include <QCoreApplication>
 
-// An Instrument connects a Track (which itself contains
-// a list of Segments) to a device that can play that
-// Track.  
-//
-// An Instrument is either MIDI or Audio (or whatever else
-// we decide to implement).
-//
-//
+#include <climits>  // UINT_MAX
+#include <string>
+#include <vector>
 
 namespace Rosegarden
 {
 
-// plugins
+
 class AudioPluginInstance;
-typedef std::vector<AudioPluginInstance*>::iterator PluginInstanceIterator;
-typedef std::vector<AudioPluginInstance*>::const_iterator PluginInstanceConstIterator;
-
-typedef std::vector<std::pair<MidiByte, MidiByte> > StaticControllers;
-typedef std::vector<std::pair<MidiByte, MidiByte> >::iterator StaticControllerIterator;
-typedef std::vector<std::pair<MidiByte, MidiByte> >::const_iterator StaticControllerConstIterator;
-
-typedef unsigned int InstrumentId;
-const InstrumentId NoInstrument = UINT_MAX;
-
-// Instrument number groups
-//
-const InstrumentId SystemInstrumentBase     = 0;
-const InstrumentId AudioInstrumentBase      = 1000;
-const InstrumentId MidiInstrumentBase       = 2000;
-const InstrumentId SoftSynthInstrumentBase  = 10000;
-
-const unsigned int AudioInstrumentCount     = 16;
-const unsigned int SoftSynthInstrumentCount = 24;
-
-const MidiByte MidiMaxValue = 127;
-const MidiByte MidiMidValue = 64;
-const MidiByte MidiMinValue = 0;
-
-typedef unsigned int BussId;
-
-// Predeclare Device
-//
-class Device;
+typedef std::vector<AudioPluginInstance *> AudioPluginVector;
 
 class PluginContainer
 {
 public:
     static const unsigned int PLUGIN_COUNT; // for non-synth plugins
 
-    PluginInstanceIterator beginPlugins() { return m_audioPlugins.begin(); }
-    PluginInstanceIterator endPlugins() { return m_audioPlugins.end(); }
+    AudioPluginVector::iterator beginPlugins() { return m_audioPlugins.begin(); }
+    AudioPluginVector::iterator endPlugins() { return m_audioPlugins.end(); }
 
     // Plugin management
     //
@@ -100,9 +63,67 @@ protected:
     PluginContainer(bool havePlugins);
     virtual ~PluginContainer();
 
-    std::vector<AudioPluginInstance*> m_audioPlugins;
+    AudioPluginVector m_audioPlugins;
 };
 
+
+typedef unsigned int BussId;
+
+class Buss : public XmlExportable, public PluginContainer
+{
+public:
+    Buss(BussId id);
+    ~Buss() override;
+
+    void setId(BussId id) { m_id = id; }
+    BussId getId() const override { return m_id; }
+
+    void setLevel(float dB) { m_level = dB; }
+    float getLevel() const { return m_level; }
+
+    void setPan(MidiByte pan) { m_pan = pan; }
+    MidiByte getPan() const { return m_pan; }
+
+    int getMappedId() const { return m_mappedId; }
+    void setMappedId(int id) { m_mappedId = id; }
+
+    std::string toXmlString() const override;
+    std::string getName() const override;
+    std::string getPresentationName() const override;
+    std::string getAlias() const override;
+
+private:
+    BussId m_id;
+    float m_level;
+    MidiByte m_pan;
+    int m_mappedId;
+};
+
+
+class Device;
+
+typedef unsigned int InstrumentId;
+constexpr InstrumentId NoInstrument = UINT_MAX;
+
+// Instrument number groups
+constexpr InstrumentId SystemInstrumentBase     = 0;
+constexpr InstrumentId AudioInstrumentBase      = 1000;
+constexpr InstrumentId MidiInstrumentBase       = 2000;
+constexpr InstrumentId SoftSynthInstrumentBase  = 10000;
+
+constexpr unsigned int AudioInstrumentCount     = 16;
+constexpr unsigned int SoftSynthInstrumentCount = 24;
+
+typedef std::vector<std::pair<MidiByte, MidiByte> > StaticControllers;
+
+/// Typically represents a channel on a Device.
+/**
+ * An Instrument connects a Track (which itself contains a list of Segments)
+ * to a Device that can play that Track.
+ *
+ * An Instrument is either MIDI or Audio (or whatever else we decide to
+ * implement).
+ */
 class Instrument : public QObject, public XmlExportable, public PluginContainer
 {
     Q_OBJECT
@@ -402,37 +423,6 @@ private:
     StaticControllers m_staticControllers;
 };
 
-
-class Buss : public XmlExportable, public PluginContainer
-{
-public:
-    Buss(BussId id);
-    ~Buss() override;
-
-    void setId(BussId id) { m_id = id; }
-    BussId getId() const override { return m_id; }
-
-    void setLevel(float dB) { m_level = dB; }
-    float getLevel() const { return m_level; }
-    
-    void setPan(MidiByte pan) { m_pan = pan; }
-    MidiByte getPan() const { return m_pan; }
-
-    int getMappedId() const { return m_mappedId; }
-    void setMappedId(int id) { m_mappedId = id; }
-
-    std::string toXmlString() const override;
-    std::string getName() const override;
-    std::string getPresentationName() const override;
-    std::string getAlias() const override;
-
-private:
-    BussId m_id;
-    float m_level;
-    MidiByte m_pan;
-    int m_mappedId;
-};
-  
 
 // audio record input of a sort that can be connected to
 

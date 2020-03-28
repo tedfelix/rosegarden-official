@@ -921,7 +921,7 @@ conformInstrumentControllers(void)
         StaticControllers staticControllers = 
             (*iIt)->getStaticControllers();
 
-        for (StaticControllerIterator it = staticControllers.begin();
+        for (StaticControllers::iterator it = staticControllers.begin();
              it != staticControllers.end();
              ++it) {
             MidiByte conNumber = it->first;

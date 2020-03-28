@@ -65,7 +65,7 @@ PluginContainer::addPlugin(AudioPluginInstance *instance)
 bool
 PluginContainer::removePlugin(unsigned int position)
 {
-    PluginInstanceIterator it = m_audioPlugins.begin();
+    AudioPluginVector::iterator it = m_audioPlugins.begin();
 
     for (; it != m_audioPlugins.end(); ++it)
     {
@@ -84,7 +84,7 @@ PluginContainer::removePlugin(unsigned int position)
 void
 PluginContainer::clearPlugins()
 {
-    PluginInstanceIterator it = m_audioPlugins.begin();
+    AudioPluginVector::iterator it = m_audioPlugins.begin();
     for (; it != m_audioPlugins.end(); ++it)
         delete (*it);
 
@@ -94,7 +94,7 @@ PluginContainer::clearPlugins()
 void 
 PluginContainer::emptyPlugins()
 {
-    PluginInstanceIterator it = m_audioPlugins.begin();
+    AudioPluginVector::iterator it = m_audioPlugins.begin();
     for (; it != m_audioPlugins.end(); ++it)
     {
         (*it)->setAssigned(false);
@@ -110,7 +110,7 @@ AudioPluginInstance *
 PluginContainer::getPlugin(unsigned int position) const
 {
     // For each plugin
-    for (PluginInstanceConstIterator it = m_audioPlugins.begin();
+    for (AudioPluginVector::const_iterator it = m_audioPlugins.begin();
          it != m_audioPlugins.end();
          ++it) {
         // Found?  Return it.
@@ -283,7 +283,7 @@ Instrument::Instrument(const Instrument &ins):
     
     // ??? How is this different from std::vector's copy ctor?
     //     Remove this and do the copy above.
-    StaticControllerConstIterator cIt = ins.m_staticControllers.begin();
+    StaticControllers::const_iterator cIt = ins.m_staticControllers.begin();
     for (; cIt != ins.m_staticControllers.end(); ++cIt) {
         m_staticControllers.push_back(*cIt);
     }
@@ -319,7 +319,7 @@ Instrument::operator=(const Instrument &ins)
     m_audioInputChannel = ins.m_audioInputChannel;
     m_audioOutput = ins.m_audioOutput;
 
-    StaticControllerConstIterator cIt = ins.m_staticControllers.begin();
+    StaticControllers::const_iterator cIt = ins.m_staticControllers.begin();
     for (; cIt != ins.m_staticControllers.end(); ++cIt) {
         m_staticControllers.push_back(*cIt);
     }
@@ -609,7 +609,7 @@ Instrument::toXmlString() const
         instrument << "            <volume value=\""
                    << (int)m_volume << "\"/>" << std::endl;
 
-        for (StaticControllerConstIterator it = m_staticControllers.begin();
+        for (StaticControllers::const_iterator it = m_staticControllers.begin();
              it != m_staticControllers.end(); ++it)
         {
             instrument << "            <controlchange type=\"" << int(it->first)
@@ -651,7 +651,7 @@ Instrument::toXmlString() const
         instrument << "            <alias value=\""
                    << m_alias << "\"/>" << std::endl;
 
-        std::vector<AudioPluginInstance*>::const_iterator it = m_audioPlugins.begin();
+        AudioPluginVector::const_iterator it = m_audioPlugins.begin();
         for (; it != m_audioPlugins.end(); ++it)
         {
             instrument << (*it)->toXmlString();
@@ -700,7 +700,7 @@ Instrument::setControllerValue(MidiByte controller, MidiByte value)
         setVolume(value);
     }
 
-    for (StaticControllerIterator it = m_staticControllers.begin();
+    for (StaticControllers::iterator it = m_staticControllers.begin();
          it != m_staticControllers.end(); ++it)
     {
         if (it->first == controller)
@@ -719,7 +719,7 @@ Instrument::setControllerValue(MidiByte controller, MidiByte value)
 MidiByte
 Instrument::getControllerValue(MidiByte controller) const
 {
-    for (StaticControllerConstIterator it = m_staticControllers.begin();
+    for (StaticControllers::const_iterator it = m_staticControllers.begin();
          it != m_staticControllers.end(); ++it)
     {
         if (it->first == controller) {
@@ -733,7 +733,7 @@ Instrument::getControllerValue(MidiByte controller) const
 void
 Instrument::removeStaticController(MidiByte controller)
 {
-    for (StaticControllerIterator it = m_staticControllers.begin();
+    for (StaticControllers::iterator it = m_staticControllers.begin();
          it != m_staticControllers.end(); ++it)
     {
         if (it->first == controller) {
@@ -842,7 +842,7 @@ Buss::toXmlString() const
     buss << "       <pan value=\"" << (int)m_pan << "\"/>" << std::endl;
     buss << "       <level value=\"" << m_level << "\"/>" << std::endl;
 
-    std::vector<AudioPluginInstance*>::const_iterator it = m_audioPlugins.begin();
+    AudioPluginVector::const_iterator it = m_audioPlugins.begin();
     for (; it != m_audioPlugins.end(); ++it) {
         buss << (*it)->toXmlString();
     }

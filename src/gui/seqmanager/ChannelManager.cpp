@@ -196,7 +196,7 @@ void ChannelManager::insertChannelSetup(
     const StaticControllers &list = controllerAndPBList.m_controllers;
 
     // For each controller
-    for (StaticControllerConstIterator cIt = list.begin();
+    for (StaticControllers::const_iterator cIt = list.begin();
          cIt != list.end(); ++cIt) {
         const MidiByte controlId = cIt->first;
         const MidiByte controlValue = cIt->second;

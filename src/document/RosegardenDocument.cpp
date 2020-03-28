@@ -982,7 +982,7 @@ void RosegardenDocument::initialiseStudio()
         // Initialise all the plugins for this Instrument or Buss
 
         // For each plugin within this instrument or buss
-        for (PluginInstanceIterator pli = pluginContainer.beginPlugins();
+        for (AudioPluginVector::iterator pli = pluginContainer.beginPlugins();
              pli != pluginContainer.endPlugins();
              ++pli) {
 
@@ -2888,7 +2888,7 @@ RosegardenDocument::clearAllPlugins()
     InstrumentList::iterator it = list.begin();
     for (; it != list.end(); ++it) {
         if ((*it)->getType() == Instrument::Audio) {
-            PluginInstanceIterator pIt = (*it)->beginPlugins();
+            AudioPluginVector::iterator pIt = (*it)->beginPlugins();
 
             for (; pIt != (*it)->endPlugins(); pIt++) {
                 if ((*pIt)->getMappedId() != -1) {

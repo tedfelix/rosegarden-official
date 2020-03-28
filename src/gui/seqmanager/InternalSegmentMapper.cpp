@@ -503,7 +503,7 @@ InternalSegmentMapper::getControllers(Instrument *instrument, RealTime start)
     // Get a value for each controller type.  Always get a value, just
     // in case the controller used to be set on this channel.
     StaticControllers &list = instrument->getStaticControllers();
-    for (StaticControllerConstIterator cIt = list.begin();
+    for (StaticControllers::const_iterator cIt = list.begin();
          cIt != list.end(); ++cIt) {
         MidiByte controlId = cIt->first;
         MidiByte controlValue =

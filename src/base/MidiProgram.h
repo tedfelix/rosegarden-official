@@ -22,7 +22,12 @@
 
 namespace Rosegarden
 {
+
+
 typedef unsigned char MidiByte;
+constexpr MidiByte MidiMinValue = 0;
+constexpr MidiByte MidiMidValue = 64;
+constexpr MidiByte MidiMaxValue = 127;
 
 /**
  * ??? This data structure doesn't match the concept of a bank.  A bank
