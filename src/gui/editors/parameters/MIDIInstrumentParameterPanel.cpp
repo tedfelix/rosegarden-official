@@ -408,7 +408,7 @@ MIDIInstrumentParameterPanel::setupControllers(MidiDevice *md)
             // Update the controller number that is associated with the
             // existing rotary widget.
 
-            rotaryIter->controller = it->getControllerValue();
+            rotaryIter->controller = it->getControllerNumber();
 
             // Update the properties of the existing rotary widget.
 
@@ -474,7 +474,7 @@ MIDIInstrumentParameterPanel::setupControllers(MidiDevice *md)
             RotaryInfo ri;
             ri.rotary = rotary;
             ri.label = label;
-            ri.controller = it->getControllerValue();
+            ri.controller = it->getControllerNumber();
             m_rotaries.push_back(ri);
 
             // Connect for changes to the Rotary by the user.
@@ -487,7 +487,7 @@ MIDIInstrumentParameterPanel::setupControllers(MidiDevice *md)
         // Add signal mapping
         //
         m_rotaryMapper->setMapping(rotary,
-                                   int(it->getControllerValue()));
+                                   int(it->getControllerNumber()));
 
         ++count;
     }

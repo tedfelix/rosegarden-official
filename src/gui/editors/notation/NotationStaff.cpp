@@ -1110,7 +1110,7 @@ NotationStaff::renderSingleElement(ViewElementList::iterator &vli,
                                     device->getControlParameters().begin();
                                 i != device->getControlParameters().end(); ++i) {
                             if (i->getType() == Controller::EventType &&
-                                    i->getControllerValue() == controlNumber) {
+                                    i->getControllerNumber() == controlNumber) {
                                 if (i->getName() == "Sustain" ||
                                         strtoqstr(i->getName()) == tr("Sustain")) {
                                     isSustain = true;

@@ -33,7 +33,7 @@ PlaceControllersCommand::PlaceControllersCommand
   BasicSelectionCommand(globalName, selection, true),
     m_selection(&selection),
     m_eventType(cp->getType()),
-    m_controllerId(cp->getControllerValue()),
+    m_controllerId(cp->getControllerNumber()),
     m_controllerValue(getDefaultValue(instrument, cp))
 { }
                                     
@@ -49,7 +49,7 @@ PlaceControllersCommand::getDefaultValue(const Instrument *instrument,
         {
             try {
                 return
-                    instrument->getControllerValue(cp->getControllerValue()); }
+                    instrument->getControllerValue(cp->getControllerNumber()); }
             catch (...) { return cp->getDefault(); }
         }
     else

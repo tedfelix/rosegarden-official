@@ -467,12 +467,12 @@ MatrixView::setupActions()
             if (it->getType() != Controller::EventType) continue;
 
             QString hexValue;
-            hexValue.sprintf("(0x%x)", it->getControllerValue());
+            hexValue.sprintf("(0x%x)", it->getControllerNumber());
 
             // strings extracted from data files must be QObject::tr()
             itemStr = QObject::tr("%1 Controller %2 %3")
                 .arg(QObject::tr(it->getName().c_str()))
-                .arg(it->getControllerValue())
+                .arg(it->getControllerNumber())
                 .arg(hexValue);
 
             addControlRulerMenu->addAction(itemStr);

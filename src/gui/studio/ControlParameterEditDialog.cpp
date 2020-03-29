@@ -222,10 +222,10 @@ ControlParameterEditDialog::populate()
     m_nameEdit->setText(strtoqstr(m_control->getName()));
 
     m_description->setText(strtoqstr(m_control->getDescription()));
-    m_controllerBox->setValue(int(m_control->getControllerValue()));
+    m_controllerBox->setValue(int(m_control->getControllerNumber()));
 
     QString hexValue;
-    hexValue.sprintf("(0x%x)", m_control->getControllerValue());
+    hexValue.sprintf("(0x%x)", m_control->getControllerNumber());
     m_hexValue->setText(hexValue);
 
     m_minBox->setValue(m_control->getMin());
@@ -302,7 +302,7 @@ void
 ControlParameterEditDialog::slotControllerChanged(int value)
 {
     RG_DEBUG << "ControlParameterEditDialog::slotControllerChanged";
-    m_dialogControl.setControllerValue(value);
+    m_dialogControl.setControllerNumber(value);
 
     // set hex value
     QString hexValue;

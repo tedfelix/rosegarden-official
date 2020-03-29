@@ -228,7 +228,7 @@ MidiMixerWindow::setupTabs()
                     //
                     m_faders[faderCount]->m_controllerRotaries.push_back(
                         std::pair<MidiByte, Rotary*>
-                        (controls[i].getControllerValue(), controller));
+                        (controls[i].getControllerNumber(), controller));
                 }
 
                 // VU meter
@@ -489,13 +489,13 @@ MidiMixerWindow::updateWidgets(Instrument *instrument)
                     //
                     try {
                         value = float((*iIt)->getControllerValue
-                                      (controls[i].getControllerValue()));
+                                      (controls[i].getControllerNumber()));
                     } catch (std::string s) {
-                        //RG_DEBUG << "slotUpdateInstrument - can't match controller " << int(controls[i].getControllerValue()) << " - \"" << s << "\"";
+                        //RG_DEBUG << "slotUpdateInstrument - can't match controller " << int(controls[i].getControllerNumber()) << " - \"" << s << "\"";
                         continue;
                     }
 
-                    //RG_DEBUG << "MidiMixerWindow::slotUpdateInstrument - MATCHED " << int(controls[i].getControllerValue());
+                    //RG_DEBUG << "MidiMixerWindow::slotUpdateInstrument - MATCHED " << int(controls[i].getControllerNumber());
 
                     m_faders[count]->m_controllerRotaries[i].second->setPosition(value);
                 }
@@ -594,7 +594,7 @@ MidiMixerWindow::slotControlChange(Instrument *instrument, int cc)
         // For each controller
         for (size_t i = 0; i < controls.size(); ++i) {
             // If this is the one...
-            if (cc == controls[i].getControllerValue()) {
+            if (cc == controls[i].getControllerNumber()) {
 
                 // The ControllerValues might not yet be set on
                 // the actual Instrument so don't always expect
@@ -695,7 +695,7 @@ MidiMixerWindow::slotControllerDeviceEventReceived(MappedEvent *e,
             ControlList cl = dev->getControlParameters();
             for (ControlList::const_iterator controlIter = cl.begin();
                     controlIter != cl.end(); ++controlIter) {
-                if ((*controlIter).getControllerValue() == controller) {
+                if ((*controlIter).getControllerNumber() == controller) {
                     RG_DEBUG << "slotControllerDeviceEventReceived(): Setting controller " << controller << " for instrument " << instrument->getId() << " to " << value;
                     instrument->setControllerValue(controller, value);
                     Instrument::emitControlChange(instrument, controller);
@@ -766,7 +766,7 @@ MidiMixerWindow::sendControllerRefresh()
             for (ControlList::const_iterator cIt =
                         controls.begin(); cIt != controls.end(); ++cIt) {
 
-                int controller = (*cIt).getControllerValue();
+                int controller = (*cIt).getControllerNumber();
                 int value;
                 try {
                     value = instrument->getControllerValue(controller);
@@ -836,7 +836,7 @@ MidiMixerWindow::getIPBForMidiMixer(MidiDevice *dev) const
          it != controlList.end(); ++it)
     {
         if (it->getIPBPosition() != -1 && 
-            it->getControllerValue() != MIDI_CONTROLLER_VOLUME)
+            it->getControllerNumber() != MIDI_CONTROLLER_VOLUME)
             retList.push_back(*it);
     }
 

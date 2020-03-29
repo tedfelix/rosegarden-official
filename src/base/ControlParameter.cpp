@@ -30,7 +30,7 @@ ControlParameter::ControlParameter():
     m_min(0),
     m_max(127),
     m_default(0),
-    m_controllerValue(0),
+    m_controllerNumber(0),
     m_colourIndex(0),
     m_ipbPosition(-1)  // doesn't appear on IPB by default
 {
@@ -43,18 +43,18 @@ ControlParameter::ControlParameter(const std::string &name,
                                    int min,
                                    int max,
                                    int def,
-                                   MidiByte controllerValue,
+                                   MidiByte controllerNumber,
                                    unsigned int colour,
-                                   int ipbPosition):
-        m_name(name),
-        m_type(type),
-        m_description(description),
-        m_min(min),
-        m_max(max),
-        m_default(def),
-        m_controllerValue(controllerValue),
-        m_colourIndex(colour),
-        m_ipbPosition(ipbPosition)
+                                   int ipbPosition) :
+    m_name(name),
+    m_type(type),
+    m_description(description),
+    m_min(min),
+    m_max(max),
+    m_default(def),
+    m_controllerNumber(controllerNumber),
+    m_colourIndex(colour),
+    m_ipbPosition(ipbPosition)
 {
 }
 
@@ -67,7 +67,7 @@ ControlParameter::ControlParameter(const ControlParameter &control):
         m_min(control.getMin()),
         m_max(control.getMax()),
         m_default(control.getDefault()),
-        m_controllerValue(control.getControllerValue()),
+        m_controllerNumber(control.getControllerNumber()),
         m_colourIndex(control.getColourIndex()),
         m_ipbPosition(control.getIPBPosition())
 {
@@ -82,7 +82,7 @@ ControlParameter::operator=(const ControlParameter &control)
     m_min = control.getMin();
     m_max = control.getMax();
     m_default = control.getDefault();
-    m_controllerValue = control.getControllerValue();
+    m_controllerNumber = control.getControllerNumber();
     m_colourIndex = control.getColourIndex();
     m_ipbPosition = control.getIPBPosition();
 
@@ -92,7 +92,7 @@ ControlParameter::operator=(const ControlParameter &control)
 bool ControlParameter::operator==(const ControlParameter &control)
 {
     return m_type == control.getType() &&
-        m_controllerValue == control.getControllerValue() &&
+        m_controllerNumber == control.getControllerNumber() &&
         m_min == control.getMin() &&
         m_max == control.getMax();
 }
@@ -101,8 +101,8 @@ bool operator<(const ControlParameter &a, const ControlParameter &b)
 {
     if (a.m_type != b.m_type)
         return a.m_type < b.m_type;
-    else if (a.m_controllerValue != b.m_controllerValue)
-        return a.m_controllerValue < b.m_controllerValue;
+    else if (a.m_controllerNumber != b.m_controllerNumber)
+        return a.m_controllerNumber < b.m_controllerNumber;
     else
 	return false;
 }
@@ -119,7 +119,7 @@ ControlParameter::toXmlString() const
             << "\" min=\"" << m_min
             << "\" max=\"" << m_max
             << "\" default=\"" << m_default
-            << "\" controllervalue=\"" << int(m_controllerValue)
+            << "\" controllervalue=\"" << int(m_controllerNumber)
             << "\" colourindex=\"" << m_colourIndex
             << "\" ipbposition=\"" << m_ipbPosition;
 
@@ -138,7 +138,7 @@ newEvent(timeT time, int value) const
     ControllerEventAdapter(event).setValue(value);
     
     if (getType() == Controller::EventType) {
-        event->set<Int>(Controller::NUMBER, m_controllerValue);
+        event->set<Int>(Controller::NUMBER, m_controllerNumber);
     }
     return event;
 }
@@ -153,7 +153,7 @@ matches(Event *e) const
         e->isa(m_type) &&
         ((m_type != Controller::EventType) ||
          (e->has(Controller::NUMBER) &&
-          e->get <Int>(Controller::NUMBER) == m_controllerValue));    
+          e->get <Int>(Controller::NUMBER) == m_controllerNumber));
 }
 
     

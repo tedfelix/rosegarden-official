@@ -1602,7 +1602,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             QString min = atts.value("min");
             QString max = atts.value("max");
             QString def = atts.value("default");
-            QString conVal = atts.value("controllervalue");
+            QString controllerNumber = atts.value("controllervalue");
             QString colour = atts.value("colourindex");
             QString ipbPosition = atts.value("ipbposition");
 
@@ -1612,7 +1612,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
                                  min.toInt(),
                                  max.toInt(),
                                  def.toInt(),
-                                 MidiByte(conVal.toInt()),
+                                 MidiByte(controllerNumber.toInt()),
                                  colour.toInt(),
                                  ipbPosition.toInt());
 

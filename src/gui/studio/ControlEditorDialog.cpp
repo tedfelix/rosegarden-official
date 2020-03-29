@@ -247,8 +247,8 @@ ControlEditorDialog::slotUpdate(bool added)
             position = tr("<not showing>");
 
         QString value;
-        value.sprintf("%d (0x%x)", it->getControllerValue(),
-                      it->getControllerValue());
+        value.sprintf("%d (0x%x)", it->getControllerNumber(),
+                      it->getControllerNumber());
 
         if (it->getType() == PitchBend::EventType) {
             item = new ControlParameterItem(

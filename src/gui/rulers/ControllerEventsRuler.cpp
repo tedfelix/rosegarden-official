@@ -111,7 +111,7 @@ bool ControllerEventsRuler::isOnThisRuler(Event *event)
     if (event->getType() == m_controller->getType()) {
         if (event->getType() == Controller::EventType) {
             try {
-                if (event->get<Int>(Controller::NUMBER) == m_controller->getControllerValue()) result = true;
+                if (event->get<Int>(Controller::NUMBER) == m_controller->getControllerNumber()) result = true;
             } catch (...) {
                 //
             }
@@ -300,10 +300,10 @@ QString ControllerEventsRuler::getName()
 
         if (m_controller->getType() == Controller::EventType) {
             QString hexValue;
-            hexValue.sprintf("0x%x", m_controller->getControllerValue());
+            hexValue.sprintf("0x%x", m_controller->getControllerNumber());
 
             name = QString("%1 (%2 / %3)").arg(strtoqstr(m_controller->getName()))
-                   .arg(int(m_controller->getControllerValue()))
+                   .arg(int(m_controller->getControllerNumber()))
                    .arg(hexValue);
         } else if (m_controller->getType() == PitchBend::EventType) {
             name = tr("Pitch Bend");
@@ -547,7 +547,7 @@ Event *ControllerEventsRuler::insertEvent(float x, float y)
     long number = 0;
 
     if (m_controller) {
-        number = m_controller->getControllerValue();
+        number = m_controller->getControllerNumber();
     } else {
 
         //!!!

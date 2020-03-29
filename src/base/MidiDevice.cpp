@@ -301,7 +301,7 @@ MidiDevice::deviceToInstrControllerPush()
         {
             // It appears -1 means not to display an IPB controller
             if (isVisibleControlParameter(*cIt)) {
-                MidiByte controllerValue = cIt->getControllerValue();
+                MidiByte controllerValue = cIt->getControllerNumber();
                 int defaultValue = cIt->getDefault();
                 (*iIt)->setControllerValue(controllerValue, defaultValue);
             }
@@ -683,7 +683,7 @@ MidiDevice::addInstrument(Instrument *instrument)
          it != m_controlList.end(); ++it)
     {
         if (isVisibleControlParameter(*it)) {
-            int controller = (*it).getControllerValue();
+            int controller = (*it).getControllerNumber();
             try {
                 instrument->getControllerValue(controller);
             } catch(...) {
@@ -924,21 +924,21 @@ conformInstrumentControllers(void)
         for (StaticControllers::iterator it = staticControllers.begin();
              it != staticControllers.end();
              ++it) {
-            MidiByte conNumber = it->first;
+            MidiByte controllerNumber = it->first;
 
             const ControlParameter * con =
                 findControlParameter(Rosegarden::Controller::EventType,
-                                     conNumber);
+                        controllerNumber);
             if (!con) {
                 // It doesn't exist in device, so remove it from
                 // instrument.
-                (*iIt)->removeStaticController(conNumber);
+                (*iIt)->removeStaticController(controllerNumber);
             }
-            else if ((*iIt)->getControllerValue(conNumber) == 0) {
+            else if ((*iIt)->getControllerNumber(controllerNumber) == 0) {
                 // Controller value probably has an old default value,
                 // so set it to the new default.
                 MidiByte value = con->getDefault();
-                (*iIt)->setControllerValue(conNumber, value);
+                (*iIt)->setControllerValue(controllerNumber, value);
             } 
         }
     }
@@ -956,12 +956,12 @@ bool
 MidiDevice::isUniqueControlParameter(const ControlParameter &con) const
 {
     return
-        findControlParameter(con.getType(), con.getControllerValue()) == nullptr;
+        findControlParameter(con.getType(), con.getControllerNumber()) == nullptr;
 }
 
 const ControlParameter *
 MidiDevice::
-findControlParameter(std::string type, MidiByte conNumber) const
+findControlParameter(std::string type, MidiByte controllerNumber) const
 {
     ControlList::const_iterator it = m_controlList.begin();
 
@@ -970,7 +970,7 @@ findControlParameter(std::string type, MidiByte conNumber) const
         if (it->getType() == type)
         {
             if (it->getType() == Rosegarden::Controller::EventType &&
-                it->getControllerValue() != conNumber)
+                it->getControllerNumber() != controllerNumber)
                 { continue; }
             return &*it;
         }
@@ -997,20 +997,23 @@ MidiDevice::addControlToInstrument(const ControlParameter &con)
     InstrumentList::iterator iIt = insList.begin();
 
     for(; iIt != insList.end(); ++iIt) {
-        MidiByte conNumber = con.getControllerValue();
-        MidiByte conValue = con.getDefault();
-        (*iIt)->setControllerValue(conNumber, conValue);
+        MidiByte controllerNumber = con.getControllerNumber();
+        MidiByte controllerValue = con.getDefault();
+        (*iIt)->setControllerValue(controllerNumber, controllerValue);
     }    
 }
 
 void
-MidiDevice::removeControlFromInstrument(const ControlParameter &con)
+MidiDevice::removeControlFromInstrument(
+        const ControlParameter &controlParameter)
 {
-    InstrumentList insList = getAllInstruments();
-    InstrumentList::iterator iIt = insList.begin();
+    InstrumentList instrumentList = getAllInstruments();
 
-    for(; iIt != insList.end(); ++iIt) {
-        (*iIt)->removeStaticController(con.getControllerValue());
+    for (InstrumentList::iterator instrumentIter = instrumentList.begin();
+         instrumentIter != instrumentList.end();
+         ++instrumentIter) {
+        (*instrumentIter)->removeStaticController(
+                controlParameter.getControllerNumber());
     }
 }
 
@@ -1025,7 +1028,7 @@ MidiDevice::getIPBControlParameters() const
          it != m_controlList.end(); ++it)
     {
         if (it->getIPBPosition() != -1 && 
-            it->getControllerValue() != MIDI_CONTROLLER_VOLUME)
+            it->getControllerNumber() != MIDI_CONTROLLER_VOLUME)
             retList.push_back(*it);
     }
 
@@ -1063,7 +1066,7 @@ MidiDevice::getControlParameter(const std::string &type, Rosegarden::MidiByte co
             
             // Also match controller value for Controller events
             //
-            if (it->getControllerValue() == controllerValue)
+            if (it->getControllerNumber() == controllerValue)
                 return  &*it;
         }
     }

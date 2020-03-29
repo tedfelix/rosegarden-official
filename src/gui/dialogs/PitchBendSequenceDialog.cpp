@@ -191,9 +191,9 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(
     const WhatVaries whatVaries =
         isPitchbend() ? Pitch :
         // Volume
-        (m_controlParameter.getControllerValue() == 7) ? Volume :
+        (m_controlParameter.getControllerNumber() == 7) ? Volume :
         // Expression
-        (m_controlParameter.getControllerValue() == 11) ? Volume :
+        (m_controlParameter.getControllerNumber() == 11) ? Volume :
         Other;
 
     const double minSpinboxValue = getMinSpinboxValue();

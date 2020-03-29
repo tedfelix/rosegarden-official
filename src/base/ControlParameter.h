@@ -36,13 +36,21 @@ public:
                      int min = 0,
                      int max = 127,
                      int def = 0,
-                     MidiByte controllerValue = 0,  // ??? rename: controllerNumber
+                     MidiByte controllerNumber = 0,
                      unsigned int colour = 0,
                      int ipbPositon = -1);
+
+    // ??? UGH!  Get rid of this!!!  There is no dtor here, and XmlExportable
+    //     has no dtor.  Implementation is bitwise.  This can *just go away*!
     ControlParameter(const ControlParameter &control);
+    // ??? UGH!  Get rid of this!!!  There is no dtor here, and XmlExportable
+    //     has no dtor.  Implementation is bitwise.  This can *just go away*!
     ControlParameter& operator=(const ControlParameter &control);
+
+    // ??? Appears to be unused.  Confirm and remove.
     bool operator==(const ControlParameter &control);
 
+    // ??? Appears to be unused.  Confirm and remove.
     friend bool operator<(const ControlParameter &a, const ControlParameter &b);
 
     // ControlParameter comparison on IPB position
@@ -76,11 +84,10 @@ public:
         return value;
     }
 
-    /// Controller number.  E.g. 7 for volume, 10 for pan.
-    /**
-     * ??? rename: getControllerNumber()
-     */
-    MidiByte getControllerValue() const { return m_controllerValue; }
+    /// Controller (CC) number.  E.g. 7 for volume, 10 for pan.
+    void setControllerNumber(MidiByte con)  { m_controllerNumber = con; }
+    /// Controller (CC) number.  E.g. 7 for volume, 10 for pan.
+    MidiByte getControllerNumber() const  { return m_controllerNumber; }
 
     unsigned int getColourIndex() const { return m_colourIndex; }
 
@@ -93,12 +100,6 @@ public:
     void setMin(int min) { m_min = min; }
     void setMax(int max) { m_max = max; }
     void setDefault(int def) { m_default = def; }
-
-    /// Controller number.  E.g. 7 for volume, 10 for pan.
-    /**
-     * ??? rename: setControllerNumber()
-     */
-    void setControllerValue(MidiByte con) { m_controllerValue = con; }
 
     void setColourIndex(unsigned int colour) { m_colourIndex = colour; }
 
@@ -130,11 +131,8 @@ protected:
     int            m_max;
     int            m_default;
 
-    /// Controller number.  E.g. 7 for volume, 10 for pan.
-    /**
-     * ??? rename: m_controllerNumber
-     */
-    MidiByte       m_controllerValue;
+    /// Controller (CC) number.  E.g. 7 for volume, 10 for pan.
+    MidiByte       m_controllerNumber;
 
     unsigned int   m_colourIndex;
 

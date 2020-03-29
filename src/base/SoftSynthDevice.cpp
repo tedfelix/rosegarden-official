@@ -147,7 +147,7 @@ SoftSynthDevice::getControlParameter(const std::string &type,
             
             // Also match controller value for Controller events
             //
-            if (it->getControllerValue() == controllerValue)
+            if (it->getControllerNumber() == controllerValue)
                 return  &*it;
         }
     }

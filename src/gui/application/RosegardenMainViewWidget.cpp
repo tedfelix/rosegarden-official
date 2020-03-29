@@ -1988,7 +1988,7 @@ RosegardenMainViewWidget::slotControllerDeviceEventReceived(MappedEvent *e, cons
 
             ControlList cl = md->getControlParameters();
             for (ControlList::const_iterator i = cl.begin(); i != cl.end(); ++i) {
-                if ((*i).getControllerValue() == controller) {
+                if ((*i).getControllerNumber() == controller) {
                     //RG_DEBUG << "  Setting controller " << controller << " for instrument " << instrument->getId() << " to " << value;
                     instrument->setControllerValue(controller, value);
                     Instrument::emitControlChange(instrument, controller);
