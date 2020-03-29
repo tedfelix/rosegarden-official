@@ -486,46 +486,59 @@ shouldPlay(MappedEvent *evt, RealTime sliceStart)
 ControllerAndPBList
 InternalSegmentMapper::getControllers(Instrument *instrument, RealTime start)
 {
-    Profiler profiler("InternalSegmentMapper::getControllers()", false);
+    //Profiler profiler("InternalSegmentMapper::getControllers()", false);
 
     if (!instrument)
         return ControllerAndPBList();
+
+#ifndef NDEBUG
+    RG_DEBUG << "getcontrollers()...";
+
+    StaticControllers &controllers2 = instrument->getStaticControllers();
+    // for each controller...
+    for (const ControllerValuePair &controller : controllers2) {
+        RG_DEBUG << "  controller/value:" << controller.first << "/" << controller.second;
+    }
+#endif
 
     timeT startTime =
         m_doc->getComposition().getElapsedTimeForRealTime(start);
 
     // If time is at or before all events, we can just use static values.
-    if (startTime <= m_segment->getStartTime()) {
+    if (startTime <= m_segment->getStartTime())
         return ControllerAndPBList(instrument->getStaticControllers());
-    }
 
     ControllerAndPBList returnValue;
-    // Get a value for each controller type.  Always get a value, just
-    // in case the controller used to be set on this channel.
-    StaticControllers &list = instrument->getStaticControllers();
-    for (StaticControllers::const_iterator cIt = list.begin();
-         cIt != list.end(); ++cIt) {
-        MidiByte controlId = cIt->first;
+
+    StaticControllers &controllers = instrument->getStaticControllers();
+
+    // For each controller
+    for (StaticControllers::const_iterator controllerIter = controllers.begin();
+         controllerIter != controllers.end();
+         ++controllerIter) {
+        // Always get a value for every controller type, just in case the
+        // controller used to be set on this channel.
+
+        MidiByte controllerId = controllerIter->first;
+
         MidiByte controlValue =
-            getControllerValue(startTime,
-                               Controller::EventType,
-                               controlId);
-        returnValue.m_controllers.
-            push_back(std::pair<MidiByte, MidiByte>(controlId,
-                                                    controlValue));
+                getControllerValue(startTime,
+                                   Controller::EventType,
+                                   controllerId);
+
+        returnValue.m_controllers.push_back(
+                ControllerValuePair(controllerId, controlValue));
     }
 
     // Do the same for PitchBend, of which we only treat one (ie, we
     // ignore GM2's other PitchBend types)
-    {
-        MidiByte controlValue =
-            getControllerValue(startTime,
-                               PitchBend::EventType,
-                               0);
 
-        returnValue.m_havePitchbend = true;
-        returnValue.m_pitchbend     = controlValue;
-    }
+    returnValue.m_havePitchbend = true;
+    returnValue.m_pitchbend =
+            getControllerValue(startTime,  // searchTime
+                               PitchBend::EventType,  // eventType
+                               0);  // controllerId
+
     return returnValue;
 }
 

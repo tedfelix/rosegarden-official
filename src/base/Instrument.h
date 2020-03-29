@@ -49,8 +49,9 @@ constexpr unsigned int AudioInstrumentCount     = 16;
 constexpr unsigned int SoftSynthInstrumentCount = 24;
 
 // ??? std::map anyone?
-typedef std::vector<std::pair<MidiByte /*controller*/, MidiByte /*value*/> >
-        StaticControllers;
+typedef std::pair<MidiByte /*controller*/, MidiByte /*value*/>
+        ControllerValuePair;
+typedef std::vector<ControllerValuePair> StaticControllers;
 
 
 /// Typically represents a channel on a Device.
@@ -248,9 +249,8 @@ public:
     //
     void clearStaticControllers() { m_staticControllers.clear(); };
 
-    // Removes the given controller from the list of Static Controllers.
-    //
-    void removeStaticController(MidiByte controller);
+    /// Removes the given controller from the list of Static Controllers.
+    void removeStaticController(MidiByte controllerNumber);
 
     void sendWholeDeviceDestroyed()  { emit wholeDeviceDestroyed(); }
 

@@ -621,7 +621,7 @@ Instrument::setControllerValue(MidiByte controller, MidiByte value)
         }
     }
 
-    m_staticControllers.push_back(std::pair<MidiByte, MidiByte>(controller, value));
+    m_staticControllers.push_back(ControllerValuePair(controller, value));
 
     emit changedChannelSetup();
 }
@@ -641,12 +641,12 @@ Instrument::getControllerValue(MidiByte controller) const
 }
 
 void
-Instrument::removeStaticController(MidiByte controller)
+Instrument::removeStaticController(MidiByte controllerNumber)
 {
     for (StaticControllers::iterator it = m_staticControllers.begin();
          it != m_staticControllers.end(); ++it)
     {
-        if (it->first == controller) {
+        if (it->first == controllerNumber) {
             m_staticControllers.erase(it);
             return;
         }
