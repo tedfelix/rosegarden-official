@@ -1732,7 +1732,10 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         MidiByte value = atts.value("value").toInt();
 
         if (m_section == InInstrument) {
-            if (m_instrument) {
+            // Don't use the "pan" tag to drive MIDI Instruments.  This is
+            // handled separately by controllers (<controlchange>).
+            if (m_instrument  &&
+                m_instrument->getType() != Instrument::Midi) {
                 m_instrument->setControllerValue(MIDI_CONTROLLER_PAN, value);
                 m_instrument->setSendPan(true);
             }
@@ -1759,7 +1762,10 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         MidiByte value = atts.value("value").toInt();
 
         if (m_instrument) {
-            if (m_instrument->getType() == Instrument::Audio ||
+            // <volume> is only valid for Audio and SoftSynth Instruments.
+            // For MIDI Instruments, volume is handled by controllers
+            // (<controlchange>).
+            if (m_instrument->getType() == Instrument::Audio  ||
                 m_instrument->getType() == Instrument::SoftSynth) {
                 // Backward compatibility: "volume" was in a 0-127
                 // range and we now store "level" (float dB) instead.
@@ -1770,9 +1776,6 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
                 m_deprecation = true;
                 m_instrument->setLevel
                     (AudioLevel::multiplier_to_dB(float(value) / 100.0));
-            } else {
-                m_instrument->setControllerValue(MIDI_CONTROLLER_VOLUME, value);
-                m_instrument->setSendVolume(true);
             }
         }
 

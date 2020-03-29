@@ -513,12 +513,6 @@ Instrument::toXmlString() const
                    << (m_sendProgramChange ? "true" : "false") << "\"/>"
                    << std::endl;
     
-        instrument << "            <pan value=\""
-                   << (int)m_pan << "\"/>" << std::endl;
-
-        instrument << "            <volume value=\""
-                   << (int)m_volume << "\"/>" << std::endl;
-
         for (StaticControllers::const_iterator it = m_staticControllers.begin();
              it != m_staticControllers.end(); ++it)
         {
