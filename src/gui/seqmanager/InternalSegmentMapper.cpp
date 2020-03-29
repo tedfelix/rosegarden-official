@@ -492,7 +492,7 @@ InternalSegmentMapper::getControllers(Instrument *instrument, RealTime start)
         return ControllerAndPBList();
 
 #ifndef NDEBUG
-    RG_DEBUG << "getcontrollers()...";
+    RG_DEBUG << "getControllers()...";
 
     StaticControllers &controllers2 = instrument->getStaticControllers();
     // for each controller...
@@ -513,13 +513,11 @@ InternalSegmentMapper::getControllers(Instrument *instrument, RealTime start)
     StaticControllers &controllers = instrument->getStaticControllers();
 
     // For each controller
-    for (StaticControllers::const_iterator controllerIter = controllers.begin();
-         controllerIter != controllers.end();
-         ++controllerIter) {
+    for (const ControllerValuePair &controller : controllers) {
         // Always get a value for every controller type, just in case the
         // controller used to be set on this channel.
 
-        MidiByte controllerId = controllerIter->first;
+        MidiByte controllerId = controller.first;
 
         MidiByte controlValue =
                 getControllerValue(startTime,
