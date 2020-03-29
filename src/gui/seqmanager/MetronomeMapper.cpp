@@ -275,6 +275,10 @@ makeReady(MappedInserterBase &inserter, RealTime time)
     if (!m_instrument)
         return;
 
+    // No sense sending out a channel setup if the metronome is muted.
+    if (ControlBlock::getInstance()->isMetronomeMuted())
+        return;
+
     if (bug1560Logging())
         RG_DEBUG << "makeReady(): Calling makeReady()...";
 
