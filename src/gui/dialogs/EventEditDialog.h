@@ -38,7 +38,12 @@ namespace Rosegarden
 
 class PropertyName;
 
-
+/// "Advanced Event Edit" dialog
+/**
+ * AKA the "Expert Event Editor".
+ *
+ * See also SimpleEventEditDialog.
+ */
 class EventEditDialog : public QDialog
 {
     Q_OBJECT

@@ -43,7 +43,12 @@ namespace Rosegarden
 
 class RosegardenDocument;
 
-
+/// "Edit Event" dialog
+/**
+ * AKA the "Event Editor".
+ *
+ * See also EventEditDialog.
+ */
 class SimpleEventEditDialog : public QDialog
 {
     Q_OBJECT
