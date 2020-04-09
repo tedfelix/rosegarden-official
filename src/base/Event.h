@@ -26,7 +26,7 @@
 
 #include <string>
 #include <vector>
-#include <iostream> // TODO remove (after changing the dump() signature)
+#include <iostream>
 
 
 namespace Rosegarden
@@ -364,15 +364,6 @@ public:
 
     /// Approximate.  For debugging and inspection purposes.
     size_t getStorageSize() const;
-
-#ifndef NDEBUG
-    // ??? DEPRECATED.
-    //     Switch all callers to RG_DEBUG and op<< (see below).
-    //     Remove this when complete.
-    void dump(std::ostream &) const;
-#else
-    void dump(std::ostream &) const  { }
-#endif
 
     // UNUSED
     static void dumpStats(std::ostream &);

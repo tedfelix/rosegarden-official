@@ -293,35 +293,6 @@ Event::toXmlString(timeT expectedTime) const
 
 
 #ifndef NDEBUG
-void
-Event::dump(ostream& out) const
-{
-    out << "Event type : " << m_data->m_type.c_str() << '\n';
-
-    out << "\tAbsolute Time : " << m_data->m_absoluteTime
-        << "\n\tDuration : " << m_data->m_duration
-        << "\n\tSub-ordering : " << m_data->m_subOrdering
-        << "\n\tPersistent properties : \n";
-
-    if (m_data->m_properties) {
-        for (PropertyMap::const_iterator i = m_data->m_properties->begin();
-             i != m_data->m_properties->end(); ++i) {
-            out << "\t\t" << i->first.getName() << " [" << i->first.getValue() << "] \t" << *(i->second) << "\n";
-        }
-    }
-
-    if (m_nonPersistentProperties) {
-        out << "\n\tNon-persistent properties : \n";
-
-        for (PropertyMap::const_iterator i = m_nonPersistentProperties->begin();
-             i != m_nonPersistentProperties->end(); ++i) {
-            out << "\t\t" << i->first.getName() << " [" << i->first.getValue() << "] \t" << *(i->second) << '\n';
-        }
-    }
-
-    out << "Event storage size : " << getStorageSize() << '\n';
-}
-
 
 int Event::m_getCount = 0;
 int Event::m_setCount = 0;

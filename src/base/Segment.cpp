@@ -24,7 +24,7 @@
 #include "base/SegmentLinker.h"
 #include "document/DocumentGet.h"
 #include "gui/general/GUIPalette.h"
-//#include "misc/Debug.h"
+#include "misc/Debug.h"
 
 #include <QtGlobal>
 
@@ -40,8 +40,6 @@
 
 namespace Rosegarden
 {
-using std::cerr;
-using std::endl;
 using std::string;
 
 //#define DEBUG_NORMALIZE_RESTS 1
@@ -156,15 +154,12 @@ Segment::cloneImpl() const
 Segment::~Segment()
 {
     if (!m_observers.empty()) {
-        cerr << "Warning: Segment::~Segment() with " << m_observers.size()
-             << " observers still extant" << endl;
-        cerr << "Observers are:";
+        RG_WARNING << "dtor: Warning: " << m_observers.size() << " observers still extant";
+        RG_WARNING << "Observers are:";
         for (ObserverSet::const_iterator i = m_observers.begin();
              i != m_observers.end(); ++i) {
-            cerr << " " << (void *)(*i);
-            cerr << " [" << typeid(**i).name() << "]";
+            RG_WARNING << " " << (void *)(*i) << " [" << typeid(**i).name() << "]";
         }
-        cerr << endl;
     }
 
     //unlink it
@@ -1255,10 +1250,9 @@ Segment::getClefAtTime(timeT time, timeT &ctime) const
         ctime = (*i)->getAbsoluteTime();
         return Clef(**i);
     } catch (const Exception &e) {
-        std::cerr << "Segment::getClefAtTime(" << time
-                  << "): bogus clef in ClefKeyList: event dump follows:"
-                  << std::endl;
-        (*i)->dump(std::cerr);
+        RG_WARNING << "getClefAtTime(" << time << "): bogus clef in ClefKeyList: event dump follows:";
+        RG_WARNING << (*i);
+
         return Clef();
     }
 }
@@ -1313,13 +1307,12 @@ Segment::getKeyAtTime(timeT time, timeT &ktime) const
     try {
         ktime = (*i)->getAbsoluteTime();
         Key k(**i);
-//        std::cerr << "Segment::getKeyAtTime: Requested time " << time << ", found key " << k.getName() << " at time " << ktime << std::endl;
+        //RG_DEBUG << "getKeyAtTime(): Requested time " << time << ", found key " << k.getName() << " at time " << ktime;
         return k;
     } catch (const Exception &e) {
-        std::cerr << "Segment::getClefAtTime(" << time
-                  << "): bogus key in ClefKeyList: event dump follows:"
-                  << std::endl;
-        (*i)->dump(std::cerr);
+        RG_WARNING << "getKeyAtTime(" << time << "): bogus key in ClefKeyList: event dump follows:";
+        RG_WARNING << (*i);
+
         return Key();
     }
 }
@@ -1736,20 +1729,20 @@ SegmentRefreshStatus::push(timeT from, timeT to)
 void
 Segment::dumpObservers()
 {
-    std::cerr << "Observers of segment " << this << " are:\n";
+    RG_DEBUG << "Observers of segment " << this << " are:";
      for (ObserverSet::const_iterator i = m_observers.begin();
           i != m_observers.end(); ++i) {
-        std::cerr << " " << (*i);
+        RG_DEBUG << "  " << (*i);
     }
-    std::cerr << "\n";
     for (ObserverSet::const_iterator i = m_observers.begin();
           i != m_observers.end(); ++i) {
-              Segment * seg = dynamic_cast<Segment *>(*i);
-              StaffHeader * sh = dynamic_cast<StaffHeader *>(*i);
-        std::cerr << "        " << (*i);
-        if (seg) std::cerr << " ==> Segment " << seg;
-        if (sh) std::cerr << " ==> StaffHeader " << sh;
-        std::cerr << "\n";
+        Segment *seg = dynamic_cast<Segment *>(*i);
+        if (seg)
+            RG_DEBUG << "  " << (*i) << " ==> Segment " << seg;
+
+        StaffHeader *sh = dynamic_cast<StaffHeader *>(*i);
+        if (sh)
+            RG_DEBUG << "  " << (*i) << " ==> StaffHeader " << sh;
     }
 }
 
