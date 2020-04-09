@@ -72,6 +72,9 @@ namespace Rosegarden
 class ROSEGARDENPRIVATE_EXPORT Event
 {
 public:
+
+    // *** Exceptions
+
     /// Attempt to access a property that is not present in the Event
     class NoData : public Exception {
     public:
@@ -97,9 +100,7 @@ public:
         { }
     };
 
-    ///////////////////////////////////////////////////////////
-    ////////////////////// CONSTRUCTORS ///////////////////////
-    ///////////////////////////////////////////////////////////
+    // *** Constructors
 
     Event(const std::string &type,
           timeT absoluteTime, timeT duration = 0, short subOrdering = 0) :
@@ -285,12 +286,6 @@ public:
     /**
      * \throws NoData
      */
-    //template <PropertyType P>
-    //void setPersistence(const PropertyName &name, bool persistent);
-
-    /**
-     * \throws NoData
-     */
     PropertyType getPropertyType(const PropertyName &name) const;
 
     /**
@@ -377,46 +372,8 @@ public:
 #endif
     static void dumpStats(std::ostream&);
 
-    // UNUSED
-
-    //PropertyNames getPropertyNames() const;
-
-    /// Set the value for a property from a std::string.
-    /**
-     * If the property/data already exists, this function just modifies the
-     * stored value, and if not, it creates the association.
-     *
-     * \param name the name of the property/data
-     * \param value the value of the property/data in a string form.  This
-     *              string will be parsed to compute the actual value stored
-     *              in the property/data.
-     *
-     * \throws BadType
-     */
-    //template <PropertyType P>
-    //void setFromString(const PropertyName &name, std::string value,
-    //                   bool persistent = true);
-
-    /// Does the Event start before (strict) time t?
-    //static bool compareEvent2Time(const Event *e, timeT t)
-    //{
-    //    return e->getAbsoluteTime() < t;
-    //}
-
-    /**
-     * Tests if the input Event starts after (strict) the time in parameter
-     */
-    //static bool compareTime2Event(timeT t, const Event *e) {
-    //    return t <  e->getAbsoluteTime();
-    //}
-
-    /**
-     * Get the XML string representing the object.
-     */
-    //std::string toXmlString() const;
-
-
 protected:
+
     // Interface for subclasses such as XmlStorableEvent.
 
     Event() :
@@ -472,7 +429,11 @@ private:
         void setTime(const PropertyName &name, timeT value, timeT deft);
     };
 
+    // ??? This is a reference counted smart pointer.  We should be able
+    //     to replace it with QSharedPointer and get rid of all the
+    //     reference counting.
     EventData *m_data;
+    // ??? QSharedPointer shoudl simplify managing this.
     PropertyMap *m_nonPersistentProperties; // Unique to an instance
 
     void share(const Event &e) {
@@ -606,25 +567,6 @@ Event::isPersistent(const PropertyName &name) const
     }
 }
 
-#if 0
-template <PropertyType P>
-void
-Event::setPersistence(const PropertyName &name, bool persistent)
-    // throw (NoData)
-{
-    unshare();
-    PropertyMap::iterator i;
-    PropertyMap *map = find(name, i);
-
-    if (map) {
-        insert(*i, persistent);
-        map->erase(i);
-    } else {
-        throw NoData(name.getName(), __FILE__, __LINE__);
-    }
-}
-#endif
-
 
 template <PropertyType P>
 void
@@ -665,16 +607,15 @@ Event::set(const PropertyName &name, typename PropertyDefn<P>::basic_type value,
 }
 
 
-
-// setMaybe<> is actually called rather more frequently than set<>, so
-// it makes sense for best performance to implement it separately
-// rather than through calls to has, isPersistent and set<>
-
 template <PropertyType P>
 void
 Event::setMaybe(const PropertyName &name, typename PropertyDefn<P>::basic_type value)
     // throw (BadType)
 {
+    // setMaybe<> is actually called rather more frequently than set<>, so
+    // it makes sense for best performance to implement it separately
+    // rather than through calls to has, isPersistent and set<>
+
 #ifndef NDEBUG
     ++m_setMaybeCount;
 #endif
@@ -701,17 +642,6 @@ Event::setMaybe(const PropertyName &name, typename PropertyDefn<P>::basic_type v
     }
 }
 
-#if 0
-template <PropertyType P>
-void
-Event::setFromString(const PropertyName &name, std::string value, bool persistent)
-    // throw (BadType)
-{
-    set<P>(name, PropertyDefn<P>::parse(value), persistent);
-}
-#endif
-
-//////////////////////////////////////////////////////////////////////
 
 }
 

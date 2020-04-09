@@ -206,20 +206,6 @@ Event::getAsString(const PropertyName &name) const
     }
 }
 
-// We could derive from XmlExportable and make this a virtual method
-// overriding XmlExportable's pure virtual.  We don't, because this
-// class has no other virtual methods and for such a core class we
-// could do without the overhead (given that it wouldn't really gain
-// us anything anyway).
-
-#if 0
-string
-Event::toXmlString() const
-{
-    return toXmlString(0);
-}
-#endif
-
 string
 Event::toXmlString(timeT expectedTime) const
 {
@@ -380,27 +366,6 @@ Event::maskedInTrigger() const
     if (!has(TRIGGER_EXPAND)) { return false; }
     return !get<Bool>(TRIGGER_EXPAND);
 }
-
-#if 0
-Event::PropertyNames
-Event::getPropertyNames() const
-{
-    PropertyNames v;
-    if (m_data->m_properties) {
-        for (PropertyMap::const_iterator i = m_data->m_properties->begin();
-             i != m_data->m_properties->end(); ++i) {
-            v.push_back(i->first);
-        }
-    }
-    if (m_nonPersistentProperties) {
-        for (PropertyMap::const_iterator i = m_nonPersistentProperties->begin();
-             i != m_nonPersistentProperties->end(); ++i) {
-            v.push_back(i->first);
-        }
-    }
-    return v;
-}
-#endif
 
 Event::PropertyNames
 Event::getPersistentPropertyNames() const
