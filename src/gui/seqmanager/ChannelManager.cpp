@@ -217,9 +217,9 @@ void ChannelManager::insertChannelSetup(
     // If there's a pitch bend, insert it...
     // We only do one type of pitchbend, though GM2 allows others.
     if (controllerAndPBList.m_havePitchbend) {
-        const int raised = controllerAndPBList.m_pitchbend + 8192;
-        const int d1 = (raised >> 7) & 0x7f;
-        const int d2 = raised & 0x7f;
+        const int pitchbend = controllerAndPBList.m_pitchbend;
+        const int d1 = (pitchbend >> 7) & 0x7f;
+        const int d2 = pitchbend & 0x7f;
 
         try {
             MappedEvent mE(instrument->getId(),
