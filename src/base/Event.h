@@ -352,25 +352,30 @@ public:
         }
     };
 
+    /// Get the XML string representing the object.
     /**
-     * Get the XML string representing the object.  If the absolute
-     * time of the event differs from the given absolute time, include
-     * the difference between the two as a timeOffset attribute.
+     * If the absolute time of the event differs from the expected time,
+     * include the difference between the two as a timeOffset attribute.
      * If expectedTime == 0, include an absoluteTime attribute instead.
      */
     std::string toXmlString(timeT expectedTime) const;
 
     // *** DEBUG
 
-    /// approximate, for debugging and inspection purposes
+    /// Approximate.  For debugging and inspection purposes.
     size_t getStorageSize() const;
 
 #ifndef NDEBUG
-    void dump(std::ostream&) const;
+    // ??? DEPRECATED.
+    //     Switch all callers to RG_DEBUG and op<< (see below).
+    //     Remove this when complete.
+    void dump(std::ostream &) const;
 #else
-    void dump(std::ostream&) const {}
+    void dump(std::ostream &) const  { }
 #endif
-    static void dumpStats(std::ostream&);
+
+    // UNUSED
+    static void dumpStats(std::ostream &);
 
 protected:
 
@@ -389,6 +394,7 @@ protected:
     void setNotationDuration(timeT d) { unshare(); m_data->setNotationDuration(d); }
 
 private:
+    friend QDebug &operator<<(QDebug &dbg, const Event &event);
 
     /// Data that are shared between shallow-copied instances
     struct EventData
@@ -429,11 +435,14 @@ private:
         void setTime(const PropertyName &name, timeT value, timeT deft);
     };
 
-    // ??? This is a reference counted smart pointer.  We should be able
-    //     to replace it with QSharedPointer and get rid of all the
-    //     reference counting.
+    // ??? This is a reference counted smart pointer supporting Copy
+    //     On Write.  We probably can't replace it with a QSharedPointer.
+    //     It would be more interesting to make Copy On Write disable-able
+    //     and see if it makes any sort of performance or memory difference.
+    //     Might also be a good idea to see if C++11 move semantics would help.
     EventData *m_data;
-    // ??? QSharedPointer shoudl simplify managing this.
+    // ??? This doesn't seem to participate in Copy On Write, so a
+    //     QSharedPointer should simplify managing this.
     PropertyMap *m_nonPersistentProperties; // Unique to an instance
 
     void share(const Event &e) {
@@ -441,7 +450,11 @@ private:
         m_data->m_refCount++;
     }
 
-    bool unshare() { // returns true if unshare was necessary
+    /// Makes a copy.  Used for Copy On Write.
+    /**
+     * Returns true if unshare was actually necessary.
+     */
+    bool unshare() {
         if (m_data->m_refCount > 1) {
             m_data = m_data->unshare();
             return true;
@@ -484,6 +497,7 @@ private:
 #endif
 };
 
+extern QDebug &operator<<(QDebug &dbg, const Event &event);
 
 template <PropertyType P>
 bool

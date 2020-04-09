@@ -331,7 +331,7 @@ int Event::m_unsetCount = 0;
 clock_t Event::m_lastStats = clock();
 
 void
-Event::dumpStats(ostream& out)
+Event::dumpStats(ostream &out)
 {
     clock_t now = clock();
     int ms = (now - m_lastStats) * 1000 / CLOCKS_PER_SEC;
@@ -439,5 +439,38 @@ operator<(const Event &a, const Event &b)
     if (at != bt) return at < bt;
     else return a.getSubOrdering() < b.getSubOrdering();
 }
+
+QDebug &operator<<(QDebug &dbg, const Event &event)
+{
+    dbg << "Event type :" << event.m_data->m_type << "\n";
+    dbg << "  Absolute Time :" << event.m_data->m_absoluteTime << "\n";
+    dbg << "  Duration :" << event.m_data->m_duration << "\n";
+    dbg << "  Sub-ordering :" << event.m_data->m_subOrdering << "\n";
+    dbg << "  Persistent properties :\n";
+
+    if (event.m_data->m_properties) {
+        for (const PropertyMap::value_type &property :
+                 *(event.m_data->m_properties)) {
+            dbg << "    " << property.first.getName() << "[" <<
+                   property.first.getValue() << "] :" << *(property.second) <<
+                   "\n";
+        }
+    }
+
+    if (event.m_nonPersistentProperties) {
+        dbg << "  Non-persistent properties :\n";
+        for (const PropertyMap::value_type &property :
+                 *(event.m_nonPersistentProperties)) {
+            dbg << "    " << property.first.getName() << "[" <<
+                   property.first.getValue() << "] :" << *(property.second) <<
+                   "\n";
+        }
+    }
+
+    dbg << "  Approximate storage size :" << event.getStorageSize();
+
+    return dbg;
+}
+
 
 }

@@ -37,23 +37,6 @@ ROSEGARDENPRIVATE_EXPORT QDebug &operator<<(QDebug &dbg, const std::string &s)
     return dbg;
 }
 
-ROSEGARDENPRIVATE_EXPORT QDebug &operator<<(QDebug &dbg, const Rosegarden::Event &e)
-{
-    dbg << "Event type : " << e.getType() << '\n';
-    dbg << "\tDuration : " << e.getDuration() << '\n';
-    dbg << "\tAbsolute Time : " << e.getAbsoluteTime() << '\n';
-
-    //     for (Event::PropertyMap::const_iterator i = e.properties().begin();
-    //          i != e.properties().end(); ++i) {
-    //         dbg << "\t\t" << (*i).first << " : "
-    //             << ((*i).second)->unparse() << '\n';
-    //     }
-
-    //     e.dump(std::cerr);
-
-    return dbg;
-}
-
 ROSEGARDENPRIVATE_EXPORT QDebug &operator<<(QDebug &dbg, const Rosegarden::Segment &t)
 {
 //    dbg << "Segment for instrument " << t.getTrack()

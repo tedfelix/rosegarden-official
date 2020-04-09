@@ -17,9 +17,11 @@
 #ifndef RG_PROPERTY_H
 #define RG_PROPERTY_H
 
-#include <string>
-
 #include "RealTime.h"
+
+#include <QDebug>
+
+#include <string>
 
 #include <rosegardenprivate_export.h>
 
@@ -127,6 +129,12 @@ public:
 inline std::ostream& operator<<(std::ostream &out, PropertyStoreBase &e)
 { e.dump(out); return out; }
 #endif
+
+inline QDebug &operator<<(QDebug &dbg, const PropertyStoreBase &psb)
+{
+    dbg << psb.getTypeName().c_str() << "-" << psb.unparse().c_str();
+    return dbg;
+}
 
 template <PropertyType P>
 class ROSEGARDENPRIVATE_EXPORT PropertyStore : public PropertyStoreBase

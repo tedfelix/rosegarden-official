@@ -15,6 +15,7 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[SimpleEventEditDialog]"
 
 #include "SimpleEventEditDialog.h"
 #include "base/BaseProperties.h"
@@ -24,6 +25,7 @@
 #include "document/RosegardenDocument.h"
 #include "gui/editors/guitar/Chord.h"
 #include "misc/Strings.h"
+#include "misc/Debug.h"
 #include "PitchDialog.h"
 #include "TimeDialog.h"
 #include "gui/widgets/LineEdit.h"
