@@ -34,7 +34,7 @@ PropertyName Event::EventData::NotationDuration = "!notationduration";
 
 
 Event::EventData::EventData(const std::string &type, timeT absoluteTime,
-			    timeT duration, short subOrdering) :
+                            timeT duration, short subOrdering) :
     m_refCount(1),
     m_type(type),
     m_absoluteTime(absoluteTime),
@@ -46,8 +46,8 @@ Event::EventData::EventData(const std::string &type, timeT absoluteTime,
 }
 
 Event::EventData::EventData(const std::string &type, timeT absoluteTime,
-			    timeT duration, short subOrdering,
-			    const PropertyMap *properties) :
+                            timeT duration, short subOrdering,
+                            const PropertyMap *properties) :
     m_refCount(1),
     m_type(type),
     m_absoluteTime(absoluteTime),
@@ -63,7 +63,7 @@ Event::EventData *Event::EventData::unshare()
     --m_refCount;
 
     EventData *newData = new EventData
-	(m_type, m_absoluteTime, m_duration, m_subOrdering, m_properties);
+        (m_type, m_absoluteTime, m_duration, m_subOrdering, m_properties);
 
     return newData;
 }
@@ -107,14 +107,14 @@ Event::EventData::setTime(const PropertyName &name, timeT t, timeT deft)
     PropertyMap::iterator i = m_properties->find(name);
 
     if (t != deft) {
-	if (i == m_properties->end()) {
-	    m_properties->insert(PropertyPair(name, new PropertyStore<Int>(t)));
-	} else {
-	    static_cast<PropertyStore<Int> *>(i->second)->setData(t);
-	}
+        if (i == m_properties->end()) {
+            m_properties->insert(PropertyPair(name, new PropertyStore<Int>(t)));
+        } else {
+            static_cast<PropertyStore<Int> *>(i->second)->setData(t);
+        }
     } else if (i != m_properties->end()) {
-	delete i->second;
-	m_properties->erase(i);
+        delete i->second;
+        m_properties->erase(i);
     }
 }
 
@@ -125,11 +125,11 @@ Event::find(const PropertyName &name, PropertyMap::iterator &i)
 
     if (!map || ((i = map->find(name)) == map->end())) {
 
-	map = m_nonPersistentProperties;
-	if (!map) return nullptr;
+        map = m_nonPersistentProperties;
+        if (!map) return nullptr;
 
-	i = map->find(name);
-	if (i == map->end()) return nullptr;
+        i = map->find(name);
+        if (i == map->end()) return nullptr;
     }
 
     return map;
@@ -159,8 +159,8 @@ Event::unset(const PropertyName &name)
     PropertyMap::iterator i;
     PropertyMap *map = find(name, i);
     if (map) {
-	delete i->second;
-	map->erase(i);
+        delete i->second;
+        map->erase(i);
     }
 }
     
@@ -228,7 +228,7 @@ Event::toXmlString(timeT expectedTime) const
     out << "<event";
     
     if (getType().length() != 0) {
-	out << " type=\"" << getType() << "\"";
+        out << " type=\"" << getType() << "\"";
     }
 
     // Check for zero note durations and fix it (fixing in setters and
@@ -244,17 +244,17 @@ Event::toXmlString(timeT expectedTime) const
     }
     
     if (duration != 0) {
-	out << " duration=\"" << duration << "\"";
+        out << " duration=\"" << duration << "\"";
     }
 
     if (getSubOrdering() != 0) {
-	out << " subordering=\"" << getSubOrdering() << "\"";
+        out << " subordering=\"" << getSubOrdering() << "\"";
     }
 
     if (expectedTime == 0) {
-	out << " absoluteTime=\"" << getAbsoluteTime() << "\"";
+        out << " absoluteTime=\"" << getAbsoluteTime() << "\"";
     } else if (getAbsoluteTime() != expectedTime) {
-	out << " timeOffset=\"" << (getAbsoluteTime() - expectedTime) << "\"";
+        out << " timeOffset=\"" << (getAbsoluteTime() - expectedTime) << "\"";
     }
 
     out << ">";
@@ -265,16 +265,16 @@ Event::toXmlString(timeT expectedTime) const
     for (PropertyNames::const_iterator i = propertyNames.begin();
          i != propertyNames.end(); ++i) {
 
-    out << "<property name=\""
-	    << XmlExportable::encode(i->getName()) << "\" ";
-	string type = getPropertyTypeAsString(*i);
-	for (size_t j = 0; j < type.size(); ++j) {
-	    type[j] = (isupper(type[j]) ? tolower(type[j]) : type[j]);
-	}
+        out << "<property name=\""
+            << XmlExportable::encode(i->getName()) << "\" ";
+        string type = getPropertyTypeAsString(*i);
+        for (size_t j = 0; j < type.size(); ++j) {
+            type[j] = (isupper(type[j]) ? tolower(type[j]) : type[j]);
+        }
 
-	out << type << "=\""
-	    << XmlExportable::encode(getAsString(*i))
-	    << "\"/>";
+        out << type << "=\""
+            << XmlExportable::encode(getAsString(*i))
+            << "\"/>";
     }
 
     // Save non-persistent properties (the persistence applies to
@@ -286,18 +286,18 @@ Event::toXmlString(timeT expectedTime) const
     for (PropertyNames::const_iterator i = propertyNames.begin();
          i != propertyNames.end(); ++i) {
 
-	std::string s(i->getName());
-	if (s.find("::") != std::string::npos) continue;
+        std::string s(i->getName());
+        if (s.find("::") != std::string::npos) continue;
 
-    out << "<nproperty name=\""
-	    << XmlExportable::encode(s) << "\" ";
-	string type = getPropertyTypeAsString(*i);
-	for (size_t j = 0; j < type.size(); ++j) {
-	    type[j] = (isupper(type[j]) ? tolower(type[j]) : type[j]);
-	}
-	out << type << "=\""
-	    << XmlExportable::encode(getAsString(*i))
-	    << "\"/>";
+        out << "<nproperty name=\""
+            << XmlExportable::encode(s) << "\" ";
+        string type = getPropertyTypeAsString(*i);
+        for (size_t j = 0; j < type.size(); ++j) {
+            type[j] = (isupper(type[j]) ? tolower(type[j]) : type[j]);
+        }
+        out << type << "=\""
+            << XmlExportable::encode(getAsString(*i))
+            << "\"/>";
     }
   
     out << "</event>";
@@ -313,24 +313,24 @@ Event::dump(ostream& out) const
     out << "Event type : " << m_data->m_type.c_str() << '\n';
 
     out << "\tAbsolute Time : " << m_data->m_absoluteTime
-	<< "\n\tDuration : " << m_data->m_duration
+        << "\n\tDuration : " << m_data->m_duration
         << "\n\tSub-ordering : " << m_data->m_subOrdering
         << "\n\tPersistent properties : \n";
 
     if (m_data->m_properties) {
-	for (PropertyMap::const_iterator i = m_data->m_properties->begin();
-	     i != m_data->m_properties->end(); ++i) {
-	    out << "\t\t" << i->first.getName() << " [" << i->first.getValue() << "] \t" << *(i->second) << "\n";
-	}
+        for (PropertyMap::const_iterator i = m_data->m_properties->begin();
+             i != m_data->m_properties->end(); ++i) {
+            out << "\t\t" << i->first.getName() << " [" << i->first.getValue() << "] \t" << *(i->second) << "\n";
+        }
     }
 
     if (m_nonPersistentProperties) {
-	out << "\n\tNon-persistent properties : \n";
+        out << "\n\tNon-persistent properties : \n";
 
-	for (PropertyMap::const_iterator i = m_nonPersistentProperties->begin();
-	     i != m_nonPersistentProperties->end(); ++i) {
-	    out << "\t\t" << i->first.getName() << " [" << i->first.getValue() << "] \t" << *(i->second) << '\n';
-	}
+        for (PropertyMap::const_iterator i = m_nonPersistentProperties->begin();
+             i != m_nonPersistentProperties->end(); ++i) {
+            out << "\t\t" << i->first.getName() << " [" << i->first.getValue() << "] \t" << *(i->second) << '\n';
+        }
     }
 
     out << "Event storage size : " << getStorageSize() << '\n';
@@ -350,7 +350,7 @@ Event::dumpStats(ostream& out)
     clock_t now = clock();
     int ms = (now - m_lastStats) * 1000 / CLOCKS_PER_SEC;
     out << "\nEvent stats, since start of run or last report ("
-	<< ms << "ms ago):" << std::endl;
+        << ms << "ms ago):" << std::endl;
 
     out << "Calls to get<>: " << m_getCount << std::endl;
     out << "Calls to set<>: " << m_setCount << std::endl;
@@ -387,16 +387,16 @@ Event::getPropertyNames() const
 {
     PropertyNames v;
     if (m_data->m_properties) {
-	for (PropertyMap::const_iterator i = m_data->m_properties->begin();
-	     i != m_data->m_properties->end(); ++i) {
-	    v.push_back(i->first);
-	}
+        for (PropertyMap::const_iterator i = m_data->m_properties->begin();
+             i != m_data->m_properties->end(); ++i) {
+            v.push_back(i->first);
+        }
     }
     if (m_nonPersistentProperties) {
-	for (PropertyMap::const_iterator i = m_nonPersistentProperties->begin();
-	     i != m_nonPersistentProperties->end(); ++i) {
-	    v.push_back(i->first);
-	}
+        for (PropertyMap::const_iterator i = m_nonPersistentProperties->begin();
+             i != m_nonPersistentProperties->end(); ++i) {
+            v.push_back(i->first);
+        }
     }
     return v;
 }
@@ -407,10 +407,10 @@ Event::getPersistentPropertyNames() const
 {
     PropertyNames v;
     if (m_data->m_properties) {
-	for (PropertyMap::const_iterator i = m_data->m_properties->begin();
-	     i != m_data->m_properties->end(); ++i) {
-	    v.push_back(i->first);
-	}
+        for (PropertyMap::const_iterator i = m_data->m_properties->begin();
+             i != m_data->m_properties->end(); ++i) {
+            v.push_back(i->first);
+        }
     }
     return v;
 }
@@ -420,10 +420,10 @@ Event::getNonPersistentPropertyNames() const
 {
     PropertyNames v;
     if (m_nonPersistentProperties) {
-	for (PropertyMap::const_iterator i = m_nonPersistentProperties->begin();
-	     i != m_nonPersistentProperties->end(); ++i) {
-	    v.push_back(i->first);
-	}
+        for (PropertyMap::const_iterator i = m_nonPersistentProperties->begin();
+             i != m_nonPersistentProperties->end(); ++i) {
+            v.push_back(i->first);
+        }
     }
     return v;
 }
@@ -450,18 +450,18 @@ Event::getStorageSize() const
 {
     size_t s = sizeof(Event) + sizeof(EventData) + m_data->m_type.size();
     if (m_data->m_properties) {
-	for (PropertyMap::const_iterator i = m_data->m_properties->begin();
-	     i != m_data->m_properties->end(); ++i) {
-	    s += sizeof(i->first);
-	    s += i->second->getStorageSize();
-	}
+        for (PropertyMap::const_iterator i = m_data->m_properties->begin();
+             i != m_data->m_properties->end(); ++i) {
+            s += sizeof(i->first);
+            s += i->second->getStorageSize();
+        }
     }
     if (m_nonPersistentProperties) {
-	for (PropertyMap::const_iterator i = m_nonPersistentProperties->begin();
-	     i != m_nonPersistentProperties->end(); ++i) {
-	    s += sizeof(i->first);
-	    s += i->second->getStorageSize();
-	}
+        for (PropertyMap::const_iterator i = m_nonPersistentProperties->begin();
+             i != m_nonPersistentProperties->end(); ++i) {
+            s += sizeof(i->first);
+            s += i->second->getStorageSize();
+        }
     }
     return s;
 }
