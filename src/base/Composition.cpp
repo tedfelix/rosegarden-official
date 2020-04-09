@@ -1548,7 +1548,7 @@ Composition::timeRatioToTempo(RealTime &realTime,
                                   timeT beatTime, tempoT)
 {
     static const timeT cdur = Note(Note::Crotchet).getDuration();
-    const double beatsPerMinute = realTime.toPerMinute();
+    const double beatsPerMinute = 60 / realTime.toSeconds();
     const double qpm = beatsPerMinute * double(beatTime) / double(cdur);
     tempoT averageTempo = Composition::getTempoForQpm(qpm);
     return averageTempo;

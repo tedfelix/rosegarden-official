@@ -13,55 +13,48 @@
     COPYING included with this distribution for more information.
 */
 
-#include <iostream>
-
-#include <sstream>
 
 #include "RealTime.h"
-#include "sys/time.h"
+
+#include <sys/time.h>
 #include <limits>
+#include <cmath>
+#include <iostream>
+#include <sstream>
 
 namespace Rosegarden {
 
-// A RealTime consists of two ints that must be at least 32 bits each.
-// A signed 32-bit int can store values exceeding +/- 2 billion.  This
-// means we can safely use our lower int for nanoseconds, as there are
-// 1 billion nanoseconds in a second and we need to handle double that
-// because of the implementations of addition etc that we use.
-//
-// The maximum valid RealTime on a 32-bit system is somewhere around
-// 68 years: 999999999 nanoseconds longer than the classic Unix epoch.
-
-#define ONE_BILLION 1000000000
+// Statics
+const RealTime RealTime::zeroTime(0,0);
+const RealTime RealTime::beforeMaxTime(std::numeric_limits<int>::max(),0);
 
 RealTime::RealTime(int s, int n) :
-    sec(s), nsec(n)
+    sec(s),
+    nsec(n)
 {
-    // Normalize so that -ONE_BILLION < nsec < ONE_BILLION.
-    sec += nsec / ONE_BILLION;
-    nsec %= ONE_BILLION;
+    // Normalize so that -nanoSecondsPerSecond < nsec < nanoSecondsPerSecond.
+    sec += nsec / nanoSecondsPerSecond;
+    nsec %= nanoSecondsPerSecond;
 
     // Check signs and make sure they match.
     if (sec < 0  &&  nsec > 0) {
         ++sec;
-        nsec -= ONE_BILLION;
+        nsec -= nanoSecondsPerSecond;
     }
     if (sec > 0  &&  nsec < 0) {
         --sec;
-        nsec += ONE_BILLION;
+        nsec += nanoSecondsPerSecond;
     }
 }
 
 RealTime
 RealTime::fromSeconds(double sec)
 {
-    return RealTime(int(sec), int((sec - int(sec)) * ONE_BILLION + 0.5));
-}
+    const int wholeSeconds = static_cast<int>(std::trunc(sec));
 
-double
-RealTime::toSeconds() const
-{
-    return static_cast<double>(sec) + nsec / ONE_BILLION;
+    return RealTime(
+            wholeSeconds,
+            std::lround((sec - wholeSeconds) * nanoSecondsPerSecond));
 }
 
 RealTime
@@ -84,18 +77,24 @@ std::ostream &operator<<(std::ostream &out, const RealTime &rt)
         out << " ";
     }
 
+    // ??? abs()?
     int s = (rt.sec < 0 ? -rt.sec : rt.sec);
     int n = (rt.nsec < 0 ? -rt.nsec : rt.nsec);
 
     out << s << ".";
 
     int nn(n);
-    if (nn == 0) out << "00000000";
-    else while (nn < (ONE_BILLION / 10)) {
-        out << "0";
-        nn *= 10;
+    if (nn == 0) {
+        out << "00000000";
+    } else {
+        // Add leading zeroes as needed.
+        // ??? Why not use setfill() and setw() instead?
+        while (nn < (nanoSecondsPerSecond / 10)) {
+            out << "0";
+            nn *= 10;
+        }
     }
-    
+
     out << n << "R";
     return out;
 }
@@ -167,7 +166,7 @@ RealTime::toText(bool fixedDp) const
 RealTime
 RealTime::operator*(double m) const
 {
-    double t = (double(nsec) / ONE_BILLION) * m;
+    double t = (double(nsec) / nanoSecondsPerSecond) * m;
     t += sec * m;
     return fromSeconds(t);
 }
@@ -178,7 +177,8 @@ RealTime::operator/(int d) const
     int secdiv = sec / d;
     int secrem = sec % d;
 
-    double nsecdiv = (double(nsec) + ONE_BILLION * double(secrem)) / d;
+    double nsecdiv =
+            (double(nsec) + nanoSecondsPerSecond * double(secrem)) / d;
     
     return RealTime(secdiv, int(nsecdiv + 0.5));
 }
@@ -186,8 +186,8 @@ RealTime::operator/(int d) const
 double 
 RealTime::operator/(const RealTime &r) const
 {
-    double lTotal = double(sec) * ONE_BILLION + double(nsec);
-    double rTotal = double(r.sec) * ONE_BILLION + double(r.nsec);
+    double lTotal = double(sec) * nanoSecondsPerSecond + double(nsec);
+    double rTotal = double(r.sec) * nanoSecondsPerSecond + double(r.nsec);
     
     if (rTotal == 0) return 0.0;
     else return lTotal/rTotal;
@@ -213,21 +213,5 @@ RealTime::frame2RealTime(long frame, unsigned int sampleRate)
     return rt;
 }
 
-// @param A RealTime corresponding to one beat,
-// @returns corresponding beats per minute.
-// @author Tom Breton
-double
-RealTime::toPerMinute()
-{
-    const double nsecsPerSec = ONE_BILLION;
-    const double secondsPerBeat = double(sec) + double(nsec) / nsecsPerSec;
-    const double beatsPerSecond = 1.0 / secondsPerBeat;
-    const double beatsPerMinute = beatsPerSecond * 60;
-    return beatsPerMinute;
-}
-
-const RealTime RealTime::zeroTime(0,0);
-const RealTime
-RealTime::beforeMaxTime(std::numeric_limits<int>::max(),0);
 
 }
