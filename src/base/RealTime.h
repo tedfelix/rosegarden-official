@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2018 the Rosegarden development team.
+    Copyright 2000-2020 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -47,13 +47,11 @@ struct ROSEGARDENPRIVATE_EXPORT RealTime
     int nsec;
 
     static const RealTime zeroTime;
-    // Max seconds and 0 nanoseconds.
-    static const RealTime beforeMaxTime;
 
     // Conversions
 
-    int usec() const { return nsec / 1000; }
-    int msec() const { return nsec / 1000000; }
+    int usec() const  { return nsec / 1000; }
+    int msec() const  { return nsec / 1000000; }
 
     static RealTime fromSeconds(double sec);
     double toSeconds() const
@@ -80,15 +78,12 @@ struct ROSEGARDENPRIVATE_EXPORT RealTime
 
     // Math
 
-    RealTime operator+(const RealTime &r) const {
-        return RealTime(sec + r.sec, nsec + r.nsec);
-    }
-    RealTime operator-(const RealTime &r) const {
-        return RealTime(sec - r.sec, nsec - r.nsec);
-    }
-    RealTime operator-() const {
-        return RealTime(-sec, -nsec);
-    }
+    RealTime operator+(const RealTime &r) const
+            { return RealTime(sec + r.sec, nsec + r.nsec); }
+    RealTime operator-(const RealTime &r) const
+            { return RealTime(sec - r.sec, nsec - r.nsec); }
+    RealTime operator-() const
+            { return RealTime(-sec, -nsec); }
     RealTime operator*(double m) const;
     RealTime operator/(int d) const;
 
@@ -97,36 +92,42 @@ struct ROSEGARDENPRIVATE_EXPORT RealTime
 
     // Comparison
 
-    bool operator<(const RealTime &r) const {
+    bool operator<(const RealTime &r) const
+    {
         if (sec == r.sec)
             return (nsec < r.nsec);
         else
             return (sec < r.sec);
     }
 
-    bool operator>(const RealTime &r) const {
-        if (sec == r.sec) return nsec > r.nsec;
-        else return sec > r.sec;
+    bool operator>(const RealTime &r) const
+    {
+        if (sec == r.sec)
+            return (nsec > r.nsec);
+        else
+            return (sec > r.sec);
     }
 
-    bool operator==(const RealTime &r) const {
-        return (sec == r.sec  &&  nsec == r.nsec);
-    }
+    bool operator==(const RealTime &r) const
+            { return (sec == r.sec  &&  nsec == r.nsec); }
  
-    bool operator!=(const RealTime &r) const {
-        return !(r == *this);
-    }
+    bool operator!=(const RealTime &r) const
+            { return !(r == *this); }
  
-    bool operator>=(const RealTime &r) const {
+    bool operator>=(const RealTime &r) const
+    {
         if (sec == r.sec)
             return (nsec >= r.nsec);
         else
             return (sec >= r.sec);
     }
 
-    bool operator<=(const RealTime &r) const {
-        if (sec == r.sec) return nsec <= r.nsec;
-        else return sec <= r.sec;
+    bool operator<=(const RealTime &r) const
+    {
+        if (sec == r.sec)
+            return (nsec <= r.nsec);
+        else
+            return (sec <= r.sec);
     }
 
 };

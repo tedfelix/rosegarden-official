@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2018 the Rosegarden development team.
+    Copyright 2000-2020 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -12,7 +12,6 @@
     License, or (at your option) any later version.  See the file
     COPYING included with this distribution for more information.
 */
-
 
 #include "RealTime.h"
 
@@ -24,9 +23,8 @@
 
 namespace Rosegarden {
 
-// Statics
+// Static
 const RealTime RealTime::zeroTime(0,0);
-const RealTime RealTime::beforeMaxTime(std::numeric_limits<int>::max(),0);
 
 RealTime::RealTime(int s, int n) :
     sec(s),

@@ -24,6 +24,8 @@
 #include "sound/MappedEvent.h"
 #include "sound/MappedInserterBase.h"
 
+#include <limits>  // for std::numeric_limits
+
 // #define DEBUG_MAPPED_EVENT_BUFFER 1
 
 namespace Rosegarden
@@ -32,7 +34,7 @@ namespace Rosegarden
 MappedEventBuffer::MappedEventBuffer(RosegardenDocument *doc) :
     m_doc(doc),
     m_start(RealTime::zeroTime),
-    m_end(RealTime::beforeMaxTime),
+    m_end(std::numeric_limits<int>::max(), 0),  // 68 years
     m_buffer(nullptr),
     m_capacity(0),
     m_size(0),
