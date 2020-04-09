@@ -20,6 +20,7 @@
 #include "XmlExportable.h"
 #include "NotationTypes.h"
 #include "BaseProperties.h"
+#include "misc/Debug.h"
 
 #include <sstream>
 

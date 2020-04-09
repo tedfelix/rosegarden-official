@@ -20,17 +20,18 @@
 #include "PropertyMap.h"
 #include "Exception.h"
 #include "TimeT.h"
+#include "misc/Debug.h"
 
 #include <rosegardenprivate_export.h>
 
 #include <string>
 #include <vector>
 #include <iostream> // TODO remove (after changing the dump() signature)
-#include "misc/Debug.h"
 
 
 namespace Rosegarden
 {
+
 
 /// A generic Event.
 /**
@@ -58,7 +59,10 @@ namespace Rosegarden
  * would lead to an easier to understand and faster implementation of
  * Event.  The concrete types like Note would inherit directly from Event
  * and would provide member objects without using properties and a
- * PropertyMap.
+ * PropertyMap.  One key downside is that older versions of rg would then
+ * be unable to preserve properties that they do not understand.
+ * Not sure that's a very big deal given that the properties have been
+ * pretty stable for quite a while.
  *
  * There are concrete types such as Note (in NotationTypes.h) and
  * ProgramChange (in MidiTypes.h) which can create Event objects as
@@ -72,21 +76,25 @@ public:
     class NoData : public Exception {
     public:
         NoData(const std::string &property) :
-            Exception("No data found for property " + property) { }
+            Exception("No data found for property " + property)
+        { }
         NoData(const std::string &property, const std::string &file, int line) :
-            Exception("No data found for property " + property, file, line) { }
+            Exception("No data found for property " + property, file, line)
+        { }
     };
 
     /// Attempt to access a property with the wrong type
     class BadType : public Exception {
     public:
-        BadType(const std::string &property, const std::string &expected, const std::string &actl) :
+        BadType(const std::string &property, const std::string &expected, const std::string &actual) :
             Exception("Bad type for " + property + " (expected " +
-                      expected + ", found " + actl + ")") { }
+                      expected + ", found " + actual + ")")
+        { }
         BadType(const std::string &property, const std::string &expected, const std::string &actual,
                 const std::string &file, int line) :
             Exception("Bad type for " + property + " (expected " +
-                      expected + ", found " + actual + ")", file, line) { }
+                      expected + ", found " + actual + ")", file, line)
+        { }
     };
 
     ///////////////////////////////////////////////////////////
@@ -202,22 +210,42 @@ public:
 
     friend bool operator<(const Event&, const Event&);
 
-    ///////////////////////////////////////////////////////////
-    /////////////////////// ACCESSORS /////////////////////////
-    ///////////////////////////////////////////////////////////
-
     /**
-     * Returns the type of the Event (usually a Note, an Accidental, a
-     * Key ... see NotationTypes.h and MidiTypes.h for more examples)
+     * Returns the type of the Event (E.g. Note, Accidental, Key, etc...)
+     * See NotationTypes.h and MidiTypes.h for more examples.
      */
     const std::string &getType() const  { return  m_data->m_type; }
-
     /// Check Event type.
     bool isa(const std::string &type) const  { return (m_data->m_type == type); }
 
     timeT getAbsoluteTime() const  { return m_data->m_absoluteTime; }
+    timeT getNotationAbsoluteTime() const  { return m_data->getNotationTime(); }
+    /// Move Event in time without any ancillary coordination.
+    /**
+     * UNSAFE.  Don't call this unless you know exactly what you're doing.
+     */
+    void unsafeChangeTime(timeT offset);
+
     timeT getDuration() const  { return m_data->m_duration; }
+    timeT getNotationDuration() const  { return m_data->getNotationDuration(); }
+    /**
+     * Returns the greater of getDuration() or getNotationDuration() for Note
+     * Events.  Returns getDuration() for all other Event types.
+     *
+     * \author Tito Latini
+     */
+    timeT getGreaterDuration();
+
     short getSubOrdering() const  { return m_data->m_subOrdering; }
+
+    /**
+     * Return whether this Event's section of a triggered ornament
+     * is masked, for use when the Event is part of a multiple-tied-note
+     * ornament trigger.  Uses the TRIGGER_EXPAND property.
+     */
+    bool maskedInTrigger() const;
+
+    // *** Properties (name/value pairs)
 
     /**
      * Tests if the Event has the property/data in parameter
@@ -294,26 +322,7 @@ public:
      */
     void unset(const PropertyName &name);
 
-    timeT getNotationAbsoluteTime() const  { return m_data->getNotationTime(); }
-    timeT getNotationDuration() const  { return m_data->getNotationDuration(); }
-
-    /**
-     * Returns the greater of getDuration() or getNotationDuration() for Note
-     * Events.  Returns getDuration() for all other Event types.
-     *
-     * \author Tito Latini
-     */
-    timeT getGreaterDuration();
-
-    /**
-     * Return whether this Event's section of a triggered ornament
-     * is masked, for use when the Event is part of a multiple-tied-note
-     * ornament trigger.
-     **/
-    bool maskedInTrigger() const;
-    
     typedef std::vector<PropertyName> PropertyNames;
-    //PropertyNames getPropertyNames() const;
     PropertyNames getPersistentPropertyNames() const;
     PropertyNames getNonPersistentPropertyNames() const;
 
@@ -322,23 +331,12 @@ public:
      */
     void clearNonPersistentProperties();
 
-    /// Move Event in time without any ancillary co-ordination.
-    /**
-     * UNSAFE.  Don't call this unless you know exactly what you're
-     * doing.
-     */
-    void unsafeChangeTime(timeT offset);
-
     /// Compare Event objects using Event::operator<.
     /**
      * Used when creating sets and multisets of Event objects, like Segment.
      */
     struct EventCmp
     {
-        //bool operator()(const Event &e1, const Event &e2) const
-        //{
-        //    return e1 < e2;
-        //}
         bool operator()(const Event *e1, const Event *e2) const
         {
             return *e1 < *e2;
@@ -352,20 +350,12 @@ public:
      */
     struct EventEndCmp
     {
-        //bool operator()(const Event &e1, const Event &e2) const
-        //{
-        //    return e1.getAbsoluteTime() + e1.getDuration() <=
-        //        e2.getAbsoluteTime() + e2.getDuration();
-        //}
         bool operator()(const Event *e1, const Event *e2) const
         {
             return e1->getAbsoluteTime() + e1->getDuration() <=
                 e2->getAbsoluteTime() + e2->getDuration();
         }
     };
-
-    /// approximate, for debugging and inspection purposes
-    size_t getStorageSize() const;
 
     /**
      * Get the XML string representing the object.  If the absolute
@@ -375,6 +365,11 @@ public:
      */
     std::string toXmlString(timeT expectedTime) const;
 
+    // *** DEBUG
+
+    /// approximate, for debugging and inspection purposes
+    size_t getStorageSize() const;
+
 #ifndef NDEBUG
     void dump(std::ostream&) const;
 #else
@@ -383,6 +378,8 @@ public:
     static void dumpStats(std::ostream&);
 
     // UNUSED
+
+    //PropertyNames getPropertyNames() const;
 
     /// Set the value for a property from a std::string.
     /**
@@ -420,11 +417,12 @@ public:
 
 
 protected:
-    // these are for subclasses such as XmlStorableEvent
+    // Interface for subclasses such as XmlStorableEvent.
 
     Event() :
         m_data(new EventData("", 0, 0, 0)),
-        m_nonPersistentProperties(nullptr) { }
+        m_nonPersistentProperties(nullptr)
+    { }
 
     void setType(const std::string &t) { unshare(); m_data->m_type = t; }
     void setAbsoluteTime(timeT t)      { unshare(); m_data->m_absoluteTime = t; }
@@ -434,9 +432,9 @@ protected:
     void setNotationDuration(timeT d) { unshare(); m_data->setNotationDuration(d); }
 
 private:
-    bool operator==(const Event &); // not implemented
 
-    struct EventData // Data that are shared between shallow-copied instances
+    /// Data that are shared between shallow-copied instances
+    struct EventData
     {
         EventData(const std::string &type,
                   timeT absoluteTime, timeT duration, short subOrdering);
