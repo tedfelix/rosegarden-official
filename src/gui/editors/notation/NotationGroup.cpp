@@ -491,9 +491,9 @@ NotationGroup::calculateBeam(NotationStaff &staff)
     long shortestNoteType = Note::Quaver;
     if (!(*getShortestElement())->event()->get<Int>(BaseProperties::NOTE_TYPE,
                                                     shortestNoteType)) {
-        RG_DEBUG << "calculateBeam: WARNING: Shortest element has no note-type; should this be possible?";
+        RG_DEBUG << "calculateBeam(): WARNING: Shortest element has no note-type; should this be possible?";
         RG_DEBUG << "(Event dump follows)";
-        (*getShortestElement())->event()->dump(std::cerr);
+        RG_DEBUG << (*getShortestElement())->event();
     }
 
     // minimal stem lengths at start, middle-extreme and end of beam

@@ -15,6 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[NotationVLayout]"
+
 #include <cmath>
 #include "NotationVLayout.h"
 #include "misc/Debug.h"
@@ -40,8 +42,6 @@
 #include <QSettings>
 #include <QString>
 #include <QWidget>
-
-#include <iostream>
 
 namespace Rosegarden
 {
@@ -231,8 +231,8 @@ NotationVLayout::scanViewSegment(ViewSegment &staffBase, timeT, timeT, bool)
                 long height = 0;
                 if (!(*chord[j])->event()->get<Int>
                     (m_properties.HEIGHT_ON_STAFF, height)) {
-                    RG_WARNING << QString("ERROR: Event in chord at %1 has no HEIGHT_ON_STAFF property!\nThis is a bug (the program would previously have crashed by now)").arg((*chord[j])->getViewAbsoluteTime());
-                    (*chord[j])->event()->dump(std::cerr);
+                    RG_WARNING << QString("scanViewSegment(): ERROR: Event in chord at %1 has no HEIGHT_ON_STAFF property!\nThis is a bug (the program would previously have crashed by now)").arg((*chord[j])->getViewAbsoluteTime());
+                    RG_WARNING << (*chord[j])->event();
                 }
                 h.push_back(height);
             }
@@ -508,7 +508,7 @@ NotationVLayout::positionSlur(NotationStaff &staff,
 					"", 
 	 				tr("Spanned note at %1 has no HEIGHT_ON_STAFF property!\nThis is a bug (the program would previously have crashed by now)").arg((*scooter)->getViewAbsoluteTime())
 					);
-                event->dump(std::cerr);
+                RG_WARNING << event;
             }
 
             bool stemUp = rules.isStemUp(h);

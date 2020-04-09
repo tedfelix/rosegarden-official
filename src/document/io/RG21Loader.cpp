@@ -389,8 +389,8 @@ bool RG21Loader::parseIndicationStart()
 
         m_currentSegment->insert(e);
 
-        RG_DEBUG << "rg21io: Indication start: it's a real indication; id is " << indicationId << ", event is:";
-        e->dump(std::cerr);
+        RG_DEBUG << "rg21io: parseIndicationStart(): it's a real indication; id is " << indicationId << ", event is:";
+        RG_DEBUG << e;
 
     }
 

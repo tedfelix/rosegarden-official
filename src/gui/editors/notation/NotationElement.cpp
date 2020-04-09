@@ -15,6 +15,7 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[NotationElement]"
 
 #include <QGraphicsItem>
 #include "NotationElement.h"
@@ -27,8 +28,6 @@
 #include "base/ViewElement.h"
 #include "base/Profiler.h"
 
-#include <iostream>
-
 namespace Rosegarden
 {
 
@@ -36,13 +35,14 @@ static const int NotationElementData = 1;
 
 NotationElement::NotationElement(Event *event) :
     ViewElement(event),
+    m_airX(0),
+    m_airWidth(0),
     m_recentlyRegenerated(false),
     m_isColliding(false),
     m_item(nullptr),
     m_extraItems(nullptr)
 {
-    //     NOTATION_DEBUG << "new NotationElement "
-    //                          << this << " wrapping " << event << endl;
+    //RG_DEBUG << "ctor: " << this << " wrapping " << event;
 }
 
 NotationElement::~NotationElement()
@@ -68,8 +68,9 @@ NotationElement::getSceneX()
     if (m_item)
         return m_item->x();
     else {
-        std::cerr << "ERROR: No scene item for this notation element:";
-        event()->dump(std::cerr);
+        RG_WARNING << "getSceneX(): ERROR: No scene item for this notation element:";
+        RG_WARNING << event();
+
         throw NoGraphicsItem("No scene item for notation element of type " +
                              event()->getType(), __FILE__, __LINE__);
     }
@@ -81,8 +82,9 @@ NotationElement::getSceneY()
     if (m_item)
         return m_item->y();
     else {
-        std::cerr << "ERROR: No scene item for this notation element:";
-        event()->dump(std::cerr);
+        RG_WARNING << "getSceneY(): ERROR: No scene item for this notation element:";
+        RG_WARNING << event();
+
         throw NoGraphicsItem("No scene item for notation element of type " +
                              event()->getType(), __FILE__, __LINE__);
     }
@@ -132,8 +134,9 @@ NotationElement::addItem(QGraphicsItem *e, double sceneX, double sceneY)
     Profiler p("NotationElement::addItem");
 
     if (!m_item) {
-        std::cerr << "ERROR: Attempt to add extra scene item to element without main scene item:";
-        event()->dump(std::cerr);
+        RG_WARNING << "addItem(): ERROR: Attempt to add extra scene item to element without main scene item:";
+        RG_WARNING << event();
+
         throw NoGraphicsItem("No scene item for notation element of type " +
                              event()->getType(), __FILE__, __LINE__);
     }
@@ -152,7 +155,7 @@ NotationElement::removeItem()
 
     m_recentlyRegenerated = false;
 
-//    NOTATION_DEBUG << "NotationElement::removeItem";
+    //RG_DEBUG << "removeItem()";
 
     delete m_item;
     m_item = nullptr;

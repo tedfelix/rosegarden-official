@@ -558,8 +558,8 @@ Event::get(const PropertyName &name) const
     } else {
 
 #ifndef NDEBUG
-        RG_DEBUG << "get(): Error dump follows:";
-        dump(std::cerr);
+        RG_DEBUG << "Event::get(): Property" << name.getName().c_str() << "not found for Event:";
+        RG_DEBUG << *this;
 #endif
         throw NoData(name.getName(), __FILE__, __LINE__);
     }

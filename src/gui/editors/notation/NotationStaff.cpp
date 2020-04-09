@@ -1185,8 +1185,8 @@ NotationStaff::renderSingleElement(ViewElementList::iterator &vli,
         }
 
     } catch (...) {
-        RG_WARNING << "Event lacks the proper properties: ";
-        elt->event()->dump(std::cerr);
+        RG_WARNING << "renderSingleElement(): Event lacks the proper properties:";
+        RG_WARNING << elt->event();
     }
 
     m_notePixmapFactory->setSelected(false);
