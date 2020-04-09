@@ -491,7 +491,7 @@ InternalSegmentMapper::getControllers(Instrument *instrument, RealTime start)
     if (!instrument)
         return ControllerAndPBList();
 
-#ifndef NDEBUG
+#ifdef DEBUG_INTERNAL_SEGMENT_MAPPER
     RG_DEBUG << "getControllers()...";
 
     StaticControllers &controllers2 = instrument->getStaticControllers();
