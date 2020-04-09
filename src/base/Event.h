@@ -32,10 +32,11 @@
 namespace Rosegarden
 {
 
+/// A generic Event.
 /**
- * The Event class represents an event with some basic attributes and
- * an arbitrary number of properties of dynamically-determined name
- * and type.
+ * The Event class represents an event of arbitrary type with some basic
+ * common attributes and an arbitrary number of properties of dynamically-
+ * determined name and type.
  *
  * An Event has a type; a duration, often zero for events other than
  * notes; an absolute time, the time at which the event begins, which
@@ -48,15 +49,26 @@ namespace Rosegarden
  * depending on whether they are saved to file with the rest of the
  * event data or are considered to be only cached values that can be
  * recomputed at will if necessary.
+ *
+ * Segment is the primary container of Event objects.
+ *
+ * This class is both generic and polymorphic without using C++ language
+ * features (templates and inheritance) to implement those qualities.
+ * It would be interesting to explore whether inheritance/polymorphism
+ * would lead to an easier to understand and faster implementation of
+ * Event.  The concrete types like Note would inherit directly from Event
+ * and would provide member objects without using properties and a
+ * PropertyMap.
+ *
+ * There are concrete types such as Note (in NotationTypes.h) and
+ * ProgramChange (in MidiTypes.h) which can create Event objects as
+ * needed.  Generally, the concrete types provide a "getAs*Event()" routine
+ * to create a corresponding Event object.
  */
-
 class ROSEGARDENPRIVATE_EXPORT Event
 {
 public:
-    /**
-     * Exception raised when the user tries to acess a property/data
-     * that is not present in the event
-     */
+    /// Attempt to access a property that is not present in the Event
     class NoData : public Exception {
     public:
         NoData(const std::string &property) :
@@ -65,10 +77,7 @@ public:
             Exception("No data found for property " + property, file, line) { }
     };
 
-    /**
-     * Exception raised when the user tries to access a property/data
-     * with the wrong type
-     */
+    /// Attempt to access a property with the wrong type
     class BadType : public Exception {
     public:
         BadType(const std::string &property, const std::string &expected, const std::string &actl) :
@@ -87,24 +96,24 @@ public:
     Event(const std::string &type,
           timeT absoluteTime, timeT duration = 0, short subOrdering = 0) :
         m_data(new EventData(type, absoluteTime, duration, subOrdering)),
-        m_nonPersistentProperties(nullptr) { }
+        m_nonPersistentProperties(nullptr)
+    { }
 
     Event(const std::string &type,
           timeT absoluteTime, timeT duration, short subOrdering,
           timeT notationAbsoluteTime, timeT notationDuration) :
         m_data(new EventData(type, absoluteTime, duration, subOrdering)),
-        m_nonPersistentProperties(nullptr) {
+        m_nonPersistentProperties(nullptr)
+    {
         setNotationAbsoluteTime(notationAbsoluteTime);
         setNotationDuration(notationDuration);
     }
 
-    Event(const Event &e) :
-        m_nonPersistentProperties(nullptr) { share(e); }
-
     // these ctors can't use default args: default has to be obtained from e
 
     Event(const Event &e, timeT absoluteTime) :
-        m_nonPersistentProperties(nullptr) {
+        m_nonPersistentProperties(nullptr)
+    {
         share(e);
         unshare();
         m_data->m_absoluteTime = absoluteTime;
@@ -113,7 +122,8 @@ public:
     }
 
     Event(const Event &e, timeT absoluteTime, timeT duration) :
-        m_nonPersistentProperties(nullptr) {
+        m_nonPersistentProperties(nullptr)
+    {
         share(e);
         unshare();
         m_data->m_absoluteTime = absoluteTime;
@@ -122,8 +132,10 @@ public:
         setNotationDuration(duration);
     }
 
-    Event(const Event &e, timeT absoluteTime, timeT duration, short subOrdering):
-        m_nonPersistentProperties(nullptr) {
+    Event(const Event &e, timeT absoluteTime,
+          timeT duration, short subOrdering):
+        m_nonPersistentProperties(nullptr)
+    {
         share(e);
         unshare();
         m_data->m_absoluteTime = absoluteTime;
@@ -135,7 +147,8 @@ public:
 
     Event(const Event &e, timeT absoluteTime, timeT duration, short subOrdering,
           timeT notationAbsoluteTime) :
-        m_nonPersistentProperties(nullptr) {
+        m_nonPersistentProperties(nullptr)
+    {
         share(e);
         unshare();
         m_data->m_absoluteTime = absoluteTime;
@@ -147,7 +160,8 @@ public:
 
     Event(const Event &e, timeT absoluteTime, timeT duration, short subOrdering,
           timeT notationAbsoluteTime, timeT notationDuration) :
-        m_nonPersistentProperties(nullptr) {
+        m_nonPersistentProperties(nullptr)
+    {
         share(e);
         unshare();
         m_data->m_absoluteTime = absoluteTime;
@@ -157,20 +171,33 @@ public:
         setNotationDuration(notationDuration);
     }
 
-    ~Event() { lose(); }
+    ~Event()  { lose(); }
 
-    Event *copyMoving(timeT offset) const {
+    Event(const Event &e) :
+        m_nonPersistentProperties(nullptr)
+    {
+        share(e);
+    }
+
+    Event &operator=(const Event &e)
+    {
+        // If they aren't the same...
+        if (&e != this) {
+            lose();
+            share(e);
+        }
+
+        return *this;
+    }
+
+    Event *copyMoving(timeT offset) const
+    {
         return new Event(*this,
                          m_data->m_absoluteTime + offset,
                          m_data->m_duration,
                          m_data->m_subOrdering,
                          getNotationAbsoluteTime() + offset,
                          getNotationDuration());
-    }
-
-    Event &operator=(const Event &e) {
-        if (&e != this) { lose(); share(e); }
-        return *this;
     }
 
     friend bool operator<(const Event&, const Event&);
@@ -181,202 +208,164 @@ public:
 
     /**
      * Returns the type of the Event (usually a Note, an Accidental, a
-     * Key ... see NotationTypes.h for more examples)
+     * Key ... see NotationTypes.h and MidiTypes.h for more examples)
      */
-    const std::string &getType() const    { return  m_data->m_type; }
+    const std::string &getType() const  { return  m_data->m_type; }
 
-    /**
-     * Tests if the Event is of the type in parameter
-     */
-    bool  isa(const std::string &t) const { return (m_data->m_type == t); }
-    timeT getAbsoluteTime() const    { return m_data->m_absoluteTime; }
-    timeT getDuration()     const    { return m_data->m_duration; }
-    short getSubOrdering()  const    { return m_data->m_subOrdering; }
+    /// Check Event type.
+    bool isa(const std::string &type) const  { return (m_data->m_type == type); }
+
+    timeT getAbsoluteTime() const  { return m_data->m_absoluteTime; }
+    timeT getDuration() const  { return m_data->m_duration; }
+    short getSubOrdering() const  { return m_data->m_subOrdering; }
 
     /**
      * Tests if the Event has the property/data in parameter
      */
-    bool  has(const PropertyName &name) const;
+    bool has(const PropertyName &name) const;
 
+    /// Get the value for a property
     /**
-     * Returns the value stored in the property/data in parameter
-     * \throws NoData when the specified property/data does not exist in the Event
-     * \throws BadType when the specified type does not correspond to the one of the stored value
+     * \returns The value of the property.
+     * \throws NoData
+     * \throws BadType
      */
     template <PropertyType P>
     typename PropertyDefn<P>::basic_type get(const PropertyName &name) const;
 
+    /// Get the value for a property
     /**
-     * Put in the parameter val the value stored in the property/data in parameter
-     * \param name the name of the property/data
-     * \param val the returned value
-     * \returns the property/data exists and have the specified type. If the returned value is false, then val is not set.
+     * \returns true if the property value was successfully retrieved.
      */
     template <PropertyType P>
     bool get(const PropertyName &name, typename PropertyDefn<P>::basic_type &val) const;
 
+    /// Get the value for a property as a std::string
+    /**
+     * \throws NoData
+     */
+    std::string getAsString(const PropertyName &name) const;
+
     /**
      * Tests if the specified property/data is persistent (is copied
-     * when duplicating the event) or not
-     * \throws NoData if the property/data is not present in the Event
+     * when duplicating the Event) or not
+     * \throws NoData
      */
     template <PropertyType P>
     bool isPersistent(const PropertyName &name) const;
 
     /**
-     * Set if the specified property/data is persistent or not
-     * \throws NoData if the property/data is not present in the Event
+     * \throws NoData
      */
-    template <PropertyType P>
-    void setPersistence(const PropertyName &name, bool persistent);
+    //template <PropertyType P>
+    //void setPersistence(const PropertyName &name, bool persistent);
 
     /**
-     * Returns the type of the value stored in the property/data in parameter
-     * \throws NoData when the specified property/data does not exist in the Event
+     * \throws NoData
      */
     PropertyType getPropertyType(const PropertyName &name) const;
 
     /**
-     * Returns the string corresponding to the type of the value stored in the property/data in parameter
-     * \throws NoData when the specified property/data does not exist in the Event
+     * \throws NoData
      */
     std::string getPropertyTypeAsString(const PropertyName &name) const;
 
+    /// Set the value for a property.
     /**
-     * Returns the string corresponding to the value stored in the property/data in parameter
-     * \throws NoData when the specified property/data does not exist in the Event
-     */
-    std::string getAsString(const PropertyName &name) const;
-
-    /**
-     * Define the value of the specified property/data. If the
-     * property/data already exists, this function just modifies the
+     * If the property/data already exists, this function just modifies the
      * stored value, and if not, it creates the association.
-     * \param name the name of the property/data
-     * \param value the value of the property/data
-     * \throws BadType if the specified type does not correspond to the type of the value
+     *
+     * \throws BadType
      */
     template <PropertyType P>
     void set(const PropertyName &name, typename PropertyDefn<P>::basic_type value,
              bool persistent = true);
 
+    /// Set the value for a property if it doesn't exist as a persistent value.
     /**
-     * Stores the specified value in the property/data only if it
-     * doesn't already exists as a persistent value
-     * \param name the name of the property/data
-     * \param value the value of the property/data
-     * \throws BadType if the specified type does not correspond to the type of the value
+     * \throws BadType
      */
     template <PropertyType P>
     void setMaybe(const PropertyName &name, typename PropertyDefn<P>::basic_type value);
 
+    /// Destroy a property.
     /**
-     * Define the value of the specified property/data. If the
-     * property/data already exists, this function just modifies the
-     * stored value, and if not, it creates the association.
-     * \param name the name of the property/data
-     * \param value the value of the property/data in a string form. This string will be parsed to compute the actual value stored in the property/data
-     * \throws BadType if the parsing does not goes well (i.e. the string does not correspond to a value of the specified type)
-     */
-    template <PropertyType P>
-    void setFromString(const PropertyName &name, std::string value,
-                       bool persistent = true);
-
-    /**
-     * Destroy the specified property/data
-     *
-     * If the property/data does not exist in the Event, this
-     * function does nothing
+     * Does nothing if the property does not exist.
      */
     void unset(const PropertyName &name);
 
-    timeT getNotationAbsoluteTime() const { return m_data->getNotationTime(); }
-    timeT getNotationDuration() const { return m_data->getNotationDuration(); }
+    timeT getNotationAbsoluteTime() const  { return m_data->getNotationTime(); }
+    timeT getNotationDuration() const  { return m_data->getNotationDuration(); }
 
     /**
-     * Return the greater of getDuration() or getNotationDuration() for note
-     * events.  Return getDuration() for all other event types.
+     * Returns the greater of getDuration() or getNotationDuration() for Note
+     * Events.  Returns getDuration() for all other Event types.
      *
      * \author Tito Latini
      */
     timeT getGreaterDuration();
 
     /**
-     * Return whether this event's section of a triggered ornament
-     * is masked, for use when the event is part of a multiple-tied-note
+     * Return whether this Event's section of a triggered ornament
+     * is masked, for use when the Event is part of a multiple-tied-note
      * ornament trigger.
      **/
     bool maskedInTrigger() const;
     
     typedef std::vector<PropertyName> PropertyNames;
-    PropertyNames getPropertyNames() const;
+    //PropertyNames getPropertyNames() const;
     PropertyNames getPersistentPropertyNames() const;
     PropertyNames getNonPersistentPropertyNames() const;
 
     /**
-     * Destroy the all the non persistent properties/data
+     * Destroy all the non persistent properties.
      */
     void clearNonPersistentProperties();
 
-    // Move Event in time without any ancillary co-ordination.
+    /// Move Event in time without any ancillary co-ordination.
     /**
      * UNSAFE.  Don't call this unless you know exactly what you're
      * doing.
      */
     void unsafeChangeTime(timeT offset);
 
+    /// Compare Event objects using Event::operator<.
     /**
-     * Comparator structure used when creating sets and multisets of
-     * Event, like Segment
+     * Used when creating sets and multisets of Event objects, like Segment.
      */
     struct EventCmp
     {
-        bool operator()(const Event &e1, const Event &e2) const {
-            return e1 < e2;
-        }
-        bool operator()(const Event *e1, const Event *e2) const {
+        //bool operator()(const Event &e1, const Event &e2) const
+        //{
+        //    return e1 < e2;
+        //}
+        bool operator()(const Event *e1, const Event *e2) const
+        {
             return *e1 < *e2;
         }
     };
 
+    /// Compare Event objects based on their end times.
     /**
-     * Comparator structure used to compare end times of events, used
-     * for example in classes that export to other formats, like
-     * MusicXML or Lilypond
+     * Used for example in classes that export to other formats, like
+     * Lilypond.
      */
     struct EventEndCmp
     {
-        bool operator()(const Event &e1, const Event &e2) const {
-            return e1.getAbsoluteTime() + e1.getDuration() <=
-                e2.getAbsoluteTime() + e2.getDuration();
-        }
-        bool operator()(const Event *e1, const Event *e2) const {
+        //bool operator()(const Event &e1, const Event &e2) const
+        //{
+        //    return e1.getAbsoluteTime() + e1.getDuration() <=
+        //        e2.getAbsoluteTime() + e2.getDuration();
+        //}
+        bool operator()(const Event *e1, const Event *e2) const
+        {
             return e1->getAbsoluteTime() + e1->getDuration() <=
                 e2->getAbsoluteTime() + e2->getDuration();
         }
     };
 
-    /**
-     * Tests if the input Event starts before (strict) the time in parameter
-     */
-    static bool compareEvent2Time(const Event *e, timeT t) {
-        return e->getAbsoluteTime() < t;
-    }
-
-    /**
-     * Tests if the input Event starts after (strict) the time in parameter
-     */
-    static bool compareTime2Event(timeT t, const Event *e) {
-        return t <  e->getAbsoluteTime();
-    }
-
-    // approximate, for debugging and inspection purposes
+    /// approximate, for debugging and inspection purposes
     size_t getStorageSize() const;
-
-    /**
-     * Get the XML string representing the object.
-     */
-    std::string toXmlString() const;
 
     /**
      * Get the XML string representing the object.  If the absolute
@@ -392,6 +381,43 @@ public:
     void dump(std::ostream&) const {}
 #endif
     static void dumpStats(std::ostream&);
+
+    // UNUSED
+
+    /// Set the value for a property from a std::string.
+    /**
+     * If the property/data already exists, this function just modifies the
+     * stored value, and if not, it creates the association.
+     *
+     * \param name the name of the property/data
+     * \param value the value of the property/data in a string form.  This
+     *              string will be parsed to compute the actual value stored
+     *              in the property/data.
+     *
+     * \throws BadType
+     */
+    //template <PropertyType P>
+    //void setFromString(const PropertyName &name, std::string value,
+    //                   bool persistent = true);
+
+    /// Does the Event start before (strict) time t?
+    //static bool compareEvent2Time(const Event *e, timeT t)
+    //{
+    //    return e->getAbsoluteTime() < t;
+    //}
+
+    /**
+     * Tests if the input Event starts after (strict) the time in parameter
+     */
+    //static bool compareTime2Event(timeT t, const Event *e) {
+    //    return t <  e->getAbsoluteTime();
+    //}
+
+    /**
+     * Get the XML string representing the object.
+     */
+    //std::string toXmlString() const;
+
 
 protected:
     // these are for subclasses such as XmlStorableEvent
@@ -582,7 +608,7 @@ Event::isPersistent(const PropertyName &name) const
     }
 }
 
-
+#if 0
 template <PropertyType P>
 void
 Event::setPersistence(const PropertyName &name, bool persistent)
@@ -599,6 +625,7 @@ Event::setPersistence(const PropertyName &name, bool persistent)
         throw NoData(name.getName(), __FILE__, __LINE__);
     }
 }
+#endif
 
 
 template <PropertyType P>
@@ -676,7 +703,7 @@ Event::setMaybe(const PropertyName &name, typename PropertyDefn<P>::basic_type v
     }
 }
 
-
+#if 0
 template <PropertyType P>
 void
 Event::setFromString(const PropertyName &name, std::string value, bool persistent)
@@ -684,7 +711,7 @@ Event::setFromString(const PropertyName &name, std::string value, bool persisten
 {
     set<P>(name, PropertyDefn<P>::parse(value), persistent);
 }
-
+#endif
 
 //////////////////////////////////////////////////////////////////////
 

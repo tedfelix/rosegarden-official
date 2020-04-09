@@ -211,11 +211,13 @@ Event::getAsString(const PropertyName &name) const
 // could do without the overhead (given that it wouldn't really gain
 // us anything anyway).
 
+#if 0
 string
 Event::toXmlString() const
 {
     return toXmlString(0);
 }
+#endif
 
 string
 Event::toXmlString(timeT expectedTime) const
@@ -378,6 +380,7 @@ Event::maskedInTrigger() const
     return !get<Bool>(TRIGGER_EXPAND);
 }
 
+#if 0
 Event::PropertyNames
 Event::getPropertyNames() const
 {
@@ -396,6 +399,7 @@ Event::getPropertyNames() const
     }
     return v;
 }
+#endif
 
 Event::PropertyNames
 Event::getPersistentPropertyNames() const
