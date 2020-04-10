@@ -232,6 +232,11 @@ RoseXmlHandler::RoseXmlHandler(RosegardenDocument *doc,
     m_msb(0),
     m_lsb(0),
     m_instrument(nullptr),
+    m_controlChangeEncountered(false),
+    m_volumeEncountered(false),
+    m_volume(100),
+    m_panEncountered(false),
+    m_pan(64),
     m_buss(nullptr),
     m_plugin(nullptr),
     m_pluginInBuss(false),
@@ -1732,12 +1737,18 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         MidiByte value = atts.value("value").toInt();
 
         if (m_section == InInstrument) {
-            // Don't use the "pan" tag to drive MIDI Instruments.  This is
-            // handled separately by controllers (<controlchange>).
-            if (m_instrument  &&
-                m_instrument->getType() != Instrument::Midi) {
-                m_instrument->setControllerValue(MIDI_CONTROLLER_PAN, value);
-                m_instrument->setSendPan(true);
+            if (m_instrument) {
+                if (m_instrument->getType() == Instrument::Midi) {
+                    // For MIDI Instruments, hold onto this in case we don't
+                    // run into any <controlchange> tags.
+                    m_pan = value;
+                    m_panEncountered = true;
+                } else {
+                    // For softsynth and audio Instruments, just set the
+                    // pan as usual.
+                    m_instrument->setControllerValue(MIDI_CONTROLLER_PAN, value);
+                    m_instrument->setSendPan(true);
+                }
             }
         } else if (m_section == InBuss) {
             if (m_buss) {
@@ -1762,11 +1773,13 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         MidiByte value = atts.value("value").toInt();
 
         if (m_instrument) {
-            // <volume> is only valid for Audio and SoftSynth Instruments.
-            // For MIDI Instruments, volume is handled by controllers
-            // (<controlchange>).
-            if (m_instrument->getType() == Instrument::Audio  ||
-                m_instrument->getType() == Instrument::SoftSynth) {
+            if (m_instrument->getType() == Instrument::Midi) {
+                // For MIDI Instruments, hold onto this in case we don't
+                // run into any <controlchange> tags.
+                m_volume = value;
+                m_volumeEncountered = true;
+            } else {
+                // For Audio and SoftSynth Instruments, translate into level.
                 // Backward compatibility: "volume" was in a 0-127
                 // range and we now store "level" (float dB) instead.
                 // Note that we have no such compatibility for
@@ -1813,6 +1826,9 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         if (m_instrument) {
             m_instrument->setControllerValue(type, value);
         }
+
+        // No need to fall back on the old <volume> and <pan> tags.
+        m_controlChangeEncountered = true;
 
     } else if (lcName == "plugin" || lcName == "synth") {
 
@@ -2030,6 +2046,12 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         }
 
         m_section = InInstrument;
+
+        m_controlChangeEncountered = false;
+        m_volumeEncountered = false;
+        m_volume = 100;  // A nominal default.
+        m_panEncountered = false;
+        m_pan = 64;  // A nominal default.
 
         InstrumentId id = mapToActualInstrument(atts.value("id").toInt());
 
@@ -2400,6 +2422,21 @@ RoseXmlHandler::endElement(const QString& namespaceURI,
         m_buss = nullptr;
 
     } else if (lcName == "instrument") {
+
+        // If there were no <controlchange> tags within the <instrument>
+        if (!m_controlChangeEncountered) {
+            // Use the deprecated <volume> and <pan> tags instead.
+
+            if (m_volumeEncountered) {
+                m_instrument->setControllerValue(MIDI_CONTROLLER_VOLUME, m_volume);
+                m_instrument->setSendVolume(true);
+            }
+
+            if (m_panEncountered) {
+                m_instrument->setControllerValue(MIDI_CONTROLLER_PAN, m_pan);
+                m_instrument->setSendPan(true);
+            }
+        }
 
         m_section = InStudio;
         m_instrument = nullptr;

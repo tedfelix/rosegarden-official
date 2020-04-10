@@ -174,6 +174,13 @@ protected:
     MidiByte                          m_msb;
     MidiByte                          m_lsb;
     Instrument                       *m_instrument;
+
+    bool m_controlChangeEncountered;
+    bool m_volumeEncountered;
+    MidiByte m_volume;
+    bool m_panEncountered;
+    MidiByte m_pan;
+
     Buss                             *m_buss;
     AudioPluginInstance              *m_plugin;
     bool                              m_pluginInBuss;
