@@ -317,7 +317,7 @@ QString ControllerEventsRuler::getName()
 void ControllerEventsRuler::eventAdded(const Segment*, Event *event)
 {
     // Avoid handling this while we are adding events.
-    // ??? Why not?  Just let this routine handle the update.
+    // Otherwise when moving an event, this might creating a duplicate.
     if (m_moddingSegment)
         return;
 
@@ -333,9 +333,10 @@ void ControllerEventsRuler::eventAdded(const Segment*, Event *event)
 void ControllerEventsRuler::eventRemoved(const Segment*, Event *event)
 {
     // Avoid handling this while we are deleting events.
-    // ??? Why not?  Just let this routine handle the update.
-    //if (m_moddingSegment)
-    //    return;
+    // Otherwise when moving an event, this would cause the event to
+    // disappear.  See bug #1573.
+    if (m_moddingSegment)
+        return;
 
     // Segment observer notification of a removed event
     // Could be an erase action on the ruler or an undo/redo event
