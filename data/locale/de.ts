@@ -10933,7 +10933,7 @@ Wollen Sie stattdessen
     <message>
         <location line="+16"/>
         <source>&lt;h2&gt;Rosegarden - &quot;%1&quot;&lt;/h2&gt;&lt;h3&gt;A sequencer and musical notation editor&lt;/h3&gt;</source>
-        <translation>&lt;h2&gt;Rosegarden - &quot;%1&quot;&lt;/h2&gt;&lt;h3&gt;Ein Squenzer und Editor für musikalische Notation&lt;/h3&gt;</translation>
+        <translation>&lt;h2&gt;Rosegarden - &quot;%1&quot;&lt;/h2&gt;&lt;h3&gt;Ein Sequenzer und Editor für musikalische Notation&lt;/h3&gt;</translation>
     </message>
     <message>
         <location line="+6"/>
