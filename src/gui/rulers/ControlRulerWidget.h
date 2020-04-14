@@ -78,9 +78,12 @@ public:
      */
     PropertyControlRuler *getActivePropertyRuler();
 
+    // ??? This is not a slot and it is only used for pitchbend.
+    //     rename: TogglePitchBendRuler(void)
+    void slotToggleControlRuler(std::string);
+
 public slots:
     void slotTogglePropertyRuler(const PropertyName &);
-    void slotToggleControlRuler(std::string);
 
     void slotAddControlRuler(const ControlParameter &);
     void slotAddPropertyRuler(const PropertyName &);

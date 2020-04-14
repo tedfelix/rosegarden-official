@@ -216,39 +216,50 @@ ControlRulerWidget::slotTogglePropertyRuler(const PropertyName &propertyName)
 void
 ControlRulerWidget::slotToggleControlRuler(std::string controlName)
 {
-    if (!m_controlList) return;
+    if (!m_controlList)
+        return;
 
-    ControlList::const_iterator it;
+    ControlList::const_iterator controlIter;
+
     // Check that the device supports a control parameter of this name
-    for (it = m_controlList->begin();
-        it != m_controlList->end(); ++it) {
-        if ((*it).getName() == controlName) {
+    for (controlIter = m_controlList->begin();
+         controlIter != m_controlList->end();
+         ++controlIter) {
+        if (controlIter->getName() == controlName)
             break;
+    }
+
+    // Not found?  Bail.
+    if (controlIter == m_controlList->end())
+        return;
+
+    // Check whether we already have a control ruler for a control parameter
+    // of this name.
+    std::list<ControlRuler *>::iterator rulerIter;
+
+    // For each ruler
+    for (rulerIter = m_controlRulerList.begin();
+         rulerIter != m_controlRulerList.end();
+         ++rulerIter) {
+        ControllerEventsRuler *eventRuler =
+                dynamic_cast<ControllerEventsRuler*>(*rulerIter);
+
+        // Not a ControllerEventsRuler?  Try the next one.
+        if (!eventRuler)
+            continue;
+
+        // If we already have a ruler for this controller, remove it.
+        // ??? But there's already an "X" button to close.  Why toggle?
+        if (eventRuler->getControlParameter()->getName() == controlName)
+        {
+            removeRuler(rulerIter);
+            return;
         }
     }
 
-    // If we found this control name in the list for this device
-    if (it != m_controlList->end()) {
-        // Check whether we already have a control ruler for a control parameter of this name
-        ControllerEventsRuler *eventruler;
-        std::list<ControlRuler*>::iterator jt;
-        for (jt = m_controlRulerList.begin(); jt != m_controlRulerList.end(); ++jt) {
-            eventruler = dynamic_cast <ControllerEventsRuler*> (*jt);
-            if (eventruler) {
-                if (eventruler->getControlParameter()->getName() == controlName)
-                {
-                    // We already have a ruler for this control
-                    // Delete it
-                    removeRuler(jt);
-                    break;
-                }
-            }
-        }
-        // If we don't have a control ruler, make one now
-        if (jt == m_controlRulerList.end()) {
-            slotAddControlRuler(*it);
-        }
-    }
+    // If we don't have a control ruler, make one now
+    if (rulerIter == m_controlRulerList.end())
+        slotAddControlRuler(*controlIter);
 }
 
 void
