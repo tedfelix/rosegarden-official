@@ -395,6 +395,7 @@ private:
         EventData(const std::string &type,
                   timeT absoluteTime, timeT duration, short subOrdering,
                   const PropertyMap *properties);
+        /// Make a unique copy.  Used for Copy On Write.
         EventData *unshare();
         ~EventData();
         unsigned int m_refCount;
@@ -409,21 +410,22 @@ private:
         // These are properties because we don't care so much about
         // raw speed in get/set, but we do care about storage size for
         // events that don't have them or that have zero values:
+        void setNotationTime(timeT t)
+            { setTime(NotationTime, t, m_absoluteTime); }
         timeT getNotationTime() const;
+        void setNotationDuration(timeT d)
+            { setTime(NotationDuration, d, m_duration); }
         timeT getNotationDuration() const;
-        void setNotationTime(timeT t) {
-            setTime(NotationTime, t, m_absoluteTime);
-        }
-        void setNotationDuration(timeT d) {
-            setTime(NotationDuration, d, m_duration);
-        }
 
     private:
         EventData(const EventData &);
         EventData &operator=(const EventData &);
+
         static PropertyName NotationTime;
         static PropertyName NotationDuration;
-        void setTime(const PropertyName &name, timeT value, timeT deft);
+
+        /// Add the time property unless (t == deft).
+        void setTime(const PropertyName &name, timeT t, timeT deft);
     };
 
     // ??? This is a reference counted smart pointer supporting Copy
@@ -436,7 +438,8 @@ private:
     //     QSharedPointer should simplify managing this.
     PropertyMap *m_nonPersistentProperties; // Unique to an instance
 
-    void share(const Event &e) {
+    void share(const Event &e)
+    {
         m_data = e.m_data;
         m_data->m_refCount++;
     }
@@ -445,7 +448,8 @@ private:
     /**
      * Returns true if unshare was actually necessary.
      */
-    bool unshare() {
+    bool unshare()
+    {
         if (m_data->m_refCount > 1) {
             m_data = m_data->unshare();
             return true;
@@ -454,27 +458,51 @@ private:
         }
     }
 
-    void lose() {
-        if (--m_data->m_refCount == 0) delete m_data;
+    /// Dereference and delete.
+    void lose()
+    {
+        if (--m_data->m_refCount == 0)
+            delete m_data;
         delete m_nonPersistentProperties;
         m_nonPersistentProperties = nullptr;
     }
 
-    // returned iterator (in i) only valid if return map value is non-zero
+    /// Find a property in both the persistent and non-persistent properties.
+    /**
+     * @param[in]  name The property to find.
+     * @param[out] i    An iterator pointing to the property that was found.
+     *                  Invalid if the function return value is nullptr.
+     * \return The map in which the property was found.  Returns nullptr
+     *         otherwise.
+     */
     PropertyMap *find(const PropertyName &name, PropertyMap::iterator &i);
 
+    /// Find a property in both the persistent and non-persistent properties.
+    /**
+     * @param[in]  name The property to find.
+     * @param[out] i    An iterator pointing to the property that was found.
+     *                  Invalid if the function return value is nullptr.
+     * \return The map in which the property was found.  Returns nullptr
+     *         otherwise.
+     */
     const PropertyMap *find(const PropertyName &name,
-                            PropertyMap::const_iterator &i) const {
+                            PropertyMap::const_iterator &i) const
+    {
         PropertyMap::iterator j;
         PropertyMap *map = const_cast<Event *>(this)->find(name, j);
         i = j;
         return map;
     }
 
-    PropertyMap::iterator insert(const PropertyPair &pair, bool persistent) {
+    PropertyMap::iterator insert(const PropertyPair &pair, bool persistent)
+    {
         PropertyMap **map =
             (persistent ? &m_data->m_properties : &m_nonPersistentProperties);
-        if (!*map) *map = new PropertyMap();
+
+        // If the map hasn't been created yet, create it.
+        if (!*map)
+            *map = new PropertyMap();
+
         return (*map)->insert(pair).first;
     }
 
@@ -492,7 +520,8 @@ extern QDebug &operator<<(QDebug &dbg, const Event &event);
 
 template <PropertyType P>
 bool
-Event::get(const PropertyName &name, typename PropertyDefn<P>::basic_type &val) const
+Event::get(const PropertyName &name,
+           typename PropertyDefn<P>::basic_type &val) const
 {
 #ifndef NDEBUG
     ++m_getCount;
@@ -501,27 +530,21 @@ Event::get(const PropertyName &name, typename PropertyDefn<P>::basic_type &val) 
     PropertyMap::const_iterator i;
     const PropertyMap *map = find(name, i);
 
-    if (map) {
+    // Not found?  Bail.
+    if (!map)
+        return false;
 
-        PropertyStoreBase *sb = i->second;
-        if (sb->getType() == P) {
-            val = (static_cast<PropertyStore<P> *>(sb))->getData();
-            return true;
-        }
-        else {
-#ifndef NDEBUG
-            RG_DEBUG << "get() Error: Attempt to get property \"" << name.getName()
-                 << "\" as" << PropertyDefn<P>::typeName() <<", actual type is"
-                 << sb->getTypeName();
-#endif
-            return false;
-        }
-
+    PropertyStoreBase *sb = i->second;
+    if (sb->getType() == P) {
+        val = (static_cast<PropertyStore<P> *>(sb))->getData();
+        return true;
     } else {
+#ifndef NDEBUG
+        RG_DEBUG << "get() Error: Attempt to get property \"" << name.getName() << "\" as" << PropertyDefn<P>::typeName() <<", actual type is" << sb->getTypeName();
+#endif
         return false;
     }
 }
-
 
 template <PropertyType P>
 typename PropertyDefn<P>::basic_type
@@ -565,11 +588,10 @@ Event::isPersistent(const PropertyName &name) const
     PropertyMap::const_iterator i;
     const PropertyMap *map = find(name, i);
 
-    if (map) {
-        return (map == m_data->m_properties);
-    } else {
+    if (!map)
         throw NoData(name.getName(), __FILE__, __LINE__);
-    }
+
+    return (map == m_data->m_properties);
 }
 
 
@@ -585,10 +607,13 @@ Event::set(const PropertyName &name, typename PropertyDefn<P>::basic_type value,
 
     // this is a little slow, could bear improvement
 
+    // Copy on Write
     unshare();
+
     PropertyMap::iterator i;
     PropertyMap *map = find(name, i);
 
+    // If found, update.
     if (map) {
         bool persistentBefore = (map == m_data->m_properties);
         if (persistentBefore != persistent) {
@@ -605,7 +630,7 @@ Event::set(const PropertyName &name, typename PropertyDefn<P>::basic_type value,
                           __FILE__, __LINE__);
         }
 
-    } else {
+    } else {  // Create
         PropertyStoreBase *p = new PropertyStore<P>(value);
         insert(PropertyPair(name, p), persistent);
     }
@@ -625,12 +650,17 @@ Event::setMaybe(const PropertyName &name, typename PropertyDefn<P>::basic_type v
     ++m_setMaybeCount;
 #endif
 
+    // Copy On Write
     unshare();
+
     PropertyMap::iterator i;
     PropertyMap *map = find(name, i);
 
+    // If found, update only if not persistent
     if (map) {
-        if (map == m_data->m_properties) return; // persistent, so ignore it
+        // If persistent, bail.
+        if (map == m_data->m_properties)
+            return;
 
         PropertyStoreBase *sb = i->second;
 
@@ -641,9 +671,10 @@ Event::setMaybe(const PropertyName &name, typename PropertyDefn<P>::basic_type v
                           PropertyDefn<P>::typeName(), sb->getTypeName(),
                           __FILE__, __LINE__);
         }
-    } else {
+    } else {  // Create
         PropertyStoreBase *p = new PropertyStore<P>(value);
-        insert(PropertyPair(name, p), false);
+        insert(PropertyPair(name, p),
+               false);  // persistent
     }
 }
 
