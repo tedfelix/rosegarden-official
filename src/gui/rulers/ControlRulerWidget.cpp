@@ -51,10 +51,16 @@ namespace Rosegarden
 {
 
 ControlRulerWidget::ControlRulerWidget() :
-m_controlList(nullptr),
-m_segment(nullptr),
-m_viewSegment(nullptr),
-m_scale(nullptr)
+    m_document(nullptr),
+    m_controlRulerList(),
+    m_controlList(nullptr),
+    m_segment(nullptr),
+    m_viewSegment(nullptr),
+    m_scale(nullptr),
+    m_gutter(0),
+    m_currentToolName(),
+    m_pannedRect(),
+    m_selectedElements()
 {
     m_tabBar = new ControlRulerTabBar;
 
@@ -137,7 +143,7 @@ ControlRulerWidget::setSegment(Segment *segment)
     RG_DEBUG << "ControlRulerWidget::setSegments Widget contains" << m_controlRulerList.size() << "rulers.";
 
     if (m_controlRulerList.size()) {
-        std::list<ControlRuler *>::iterator it;
+        ControlRulerList::iterator it;
         for (it = m_controlRulerList.begin(); it != m_controlRulerList.end(); ++it) {
             (*it)->setSegment(m_segment);
         }
@@ -155,7 +161,7 @@ ControlRulerWidget::setViewSegment(ViewSegment *viewSegment)
 
 //    PropertyControlRuler *propertyruler;
 //    if (m_controlRulerList.size()) {
-    for (std::list<ControlRuler *>::iterator it = m_controlRulerList.begin(); it != m_controlRulerList.end(); ++it) {
+    for (ControlRulerList::iterator it = m_controlRulerList.begin(); it != m_controlRulerList.end(); ++it) {
         (*it)->setViewSegment(viewSegment);
     }
 //            propertyruler = dynamic_cast<PropertyControlRuler *> (*it);
@@ -186,7 +192,7 @@ ControlRulerWidget::setRulerScale(RulerScale *scale, int gutter)
     m_scale = scale;
     m_gutter = gutter;
     if (m_controlRulerList.size()) {
-        std::list<ControlRuler *>::iterator it;
+        ControlRulerList::iterator it;
         for (it = m_controlRulerList.begin(); it != m_controlRulerList.end(); ++it) {
             (*it)->setRulerScale(m_scale);
         }
@@ -197,7 +203,7 @@ void
 ControlRulerWidget::slotTogglePropertyRuler(const PropertyName &propertyName)
 {
     PropertyControlRuler *propruler;
-    std::list<ControlRuler*>::iterator it;
+    ControlRulerList::iterator it;
     for (it = m_controlRulerList.begin(); it != m_controlRulerList.end(); ++it) {
         propruler = dynamic_cast <PropertyControlRuler*> (*it);
         if (propruler) {
@@ -214,10 +220,14 @@ ControlRulerWidget::slotTogglePropertyRuler(const PropertyName &propertyName)
 }
 
 void
-ControlRulerWidget::slotToggleControlRuler(std::string controlName)
+ControlRulerWidget::togglePitchBendRuler()
 {
     if (!m_controlList)
         return;
+
+    // ??? This means that if the user renames this, it will not be found.
+    //     Need to search on controller type or number instead.
+    const std::string controlName = "PitchBend";
 
     ControlList::const_iterator controlIter;
 
@@ -235,7 +245,7 @@ ControlRulerWidget::slotToggleControlRuler(std::string controlName)
 
     // Check whether we already have a control ruler for a control parameter
     // of this name.
-    std::list<ControlRuler *>::iterator rulerIter;
+    ControlRulerList::iterator rulerIter;
 
     // For each ruler
     for (rulerIter = m_controlRulerList.begin();
@@ -263,7 +273,7 @@ ControlRulerWidget::slotToggleControlRuler(std::string controlName)
 }
 
 void
-ControlRulerWidget::removeRuler(std::list<ControlRuler*>::iterator it)
+ControlRulerWidget::removeRuler(ControlRulerList::iterator it)
 {
     int index = m_stackedWidget->indexOf(*it);
     m_stackedWidget->removeWidget(*it);
@@ -360,7 +370,7 @@ ControlRulerWidget::slotSetPannedRect(QRectF pr)
     m_pannedRect = pr;
 
     if (m_controlRulerList.size()) {
-        std::list<ControlRuler *>::iterator it;
+        ControlRulerList::iterator it;
         for (it = m_controlRulerList.begin(); it != m_controlRulerList.end(); ++it) {
             (*it)->slotSetPannedRect(pr);
         }
@@ -407,7 +417,7 @@ ControlRulerWidget::slotSelectionChanged(EventSelection *s)
     }
     // Should be dispatched to all PropertyControlRulers
     if (m_controlRulerList.size()) {
-        std::list<ControlRuler *>::iterator it;
+        ControlRulerList::iterator it;
         for (it = m_controlRulerList.begin(); it != m_controlRulerList.end(); ++it) {
             PropertyControlRuler *pr = dynamic_cast <PropertyControlRuler *> (*it);
             if (pr) {
@@ -427,7 +437,7 @@ void
 ControlRulerWidget::slotHoveredOverNoteChanged()
 {
     if (m_controlRulerList.size()) {
-        std::list<ControlRuler *>::iterator it;
+        ControlRulerList::iterator it;
         for (it = m_controlRulerList.begin(); it != m_controlRulerList.end(); ++it) {
             PropertyControlRuler *pr = dynamic_cast <PropertyControlRuler *> (*it);
             if (pr) pr->updateSelectedItems();
@@ -439,7 +449,7 @@ void
 ControlRulerWidget::slotUpdateRulers(timeT startTime, timeT endTime)
 {
     if (m_controlRulerList.size()) {
-        std::list<ControlRuler *>::iterator it;
+        ControlRulerList::iterator it;
         for (it = m_controlRulerList.begin(); it != m_controlRulerList.end(); ++it) {
             (*it)->notationLayoutUpdated(startTime,endTime);
         }
@@ -459,7 +469,7 @@ ControlRulerWidget::slotSetToolName(const QString &toolname)
     m_currentToolName = rulertoolname;
     // Should be dispatched to all PropertyControlRulers
     if (m_controlRulerList.size()) {
-        std::list<ControlRuler *>::iterator it;
+        ControlRulerList::iterator it;
         for (it = m_controlRulerList.begin(); it != m_controlRulerList.end(); ++it) {
             (*it)->slotSetTool(rulertoolname);
         }

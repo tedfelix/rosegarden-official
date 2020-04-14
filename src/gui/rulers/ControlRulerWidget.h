@@ -61,7 +61,6 @@ public:
     void setRulerScale(RulerScale *,int);
     
     QString getCurrentToolName() { return m_currentToolName; }
-    void removeRuler(std::list<ControlRuler*>::iterator);
 
     /** Returns true if we're showing any one of the myriad possible rulers we
      * might be showing.  This allows our parent to show() or hide() this entire
@@ -78,9 +77,7 @@ public:
      */
     PropertyControlRuler *getActivePropertyRuler();
 
-    // ??? This is not a slot and it is only used for pitchbend.
-    //     rename: TogglePitchBendRuler(void)
-    void slotToggleControlRuler(std::string);
+    void togglePitchBendRuler();
 
 public slots:
     void slotTogglePropertyRuler(const PropertyName &);
@@ -109,15 +106,19 @@ signals:
     void showContextHelp(const QString &);
 
 protected:
+    RosegardenDocument *m_document;
+
     ControllerEventsRuler *getActiveRuler();
     
     QStackedWidget *m_stackedWidget;
     ControlRulerTabBar *m_tabBar;
-    
-    std::list<ControlRuler *> m_controlRulerList;
+
+    typedef std::list<ControlRuler *> ControlRulerList;
+    ControlRulerList m_controlRulerList;
+    void removeRuler(ControlRulerList::iterator rulerIter);
+
     const ControlList *m_controlList;
 
-    RosegardenDocument *m_document;
     Segment *m_segment;
     ViewSegment *m_viewSegment;
     RulerScale *m_scale;

@@ -1003,7 +1003,7 @@ MatrixWidget::showVelocityRuler()
 void
 MatrixWidget::showPitchBendRuler()
 {
-    m_controlsWidget->slotToggleControlRuler("PitchBend");
+    m_controlsWidget->togglePitchBendRuler();
 }
 
 void

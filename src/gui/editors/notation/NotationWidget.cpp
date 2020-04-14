@@ -15,6 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[NotationWidget]"
+
 #include "NotationWidget.h"
 #define RG_NO_DEBUG_PRINT 1
 
@@ -1620,7 +1622,7 @@ NotationWidget::slotToggleVelocityRuler()
 void
 NotationWidget::slotTogglePitchbendRuler()
 {
-    m_controlRulerWidget->slotToggleControlRuler("PitchBend");
+    m_controlRulerWidget->togglePitchBendRuler();
 }
 
 void
