@@ -34,6 +34,7 @@
 #include "base/Controllable.h"
 #include "base/Event.h"
 #include "base/MidiDevice.h"
+#include "base/MidiTypes.h"  // for PitchBend::EventType
 #include "base/PropertyName.h"
 #include "base/RulerScale.h"
 #include "base/Selection.h"
@@ -225,17 +226,13 @@ ControlRulerWidget::togglePitchBendRuler()
     if (!m_controlList)
         return;
 
-    // ??? This means that if the user renames this, it will not be found.
-    //     Need to search on controller type or number instead.
-    const std::string controlName = "PitchBend";
-
     ControlList::const_iterator controlIter;
 
-    // Check that the device supports a control parameter of this name
+    // Check that the device has a pitchbend controller
     for (controlIter = m_controlList->begin();
          controlIter != m_controlList->end();
          ++controlIter) {
-        if (controlIter->getName() == controlName)
+        if (controlIter->getType() == PitchBend::EventType)
             break;
     }
 
@@ -243,12 +240,10 @@ ControlRulerWidget::togglePitchBendRuler()
     if (controlIter == m_controlList->end())
         return;
 
-    // Check whether we already have a control ruler for a control parameter
-    // of this name.
-    ControlRulerList::iterator rulerIter;
+    // Check whether we already have a pitchbend ruler
 
     // For each ruler
-    for (rulerIter = m_controlRulerList.begin();
+    for (ControlRulerList::iterator rulerIter = m_controlRulerList.begin();
          rulerIter != m_controlRulerList.end();
          ++rulerIter) {
         ControllerEventsRuler *eventRuler =
@@ -258,18 +253,18 @@ ControlRulerWidget::togglePitchBendRuler()
         if (!eventRuler)
             continue;
 
-        // If we already have a ruler for this controller, remove it.
+        // If we already have a pitchbend ruler, remove it.
         // ??? But there's already an "X" button to close.  Why toggle?
-        if (eventRuler->getControlParameter()->getName() == controlName)
+        if (eventRuler->getControlParameter()->getType() ==
+                PitchBend::EventType)
         {
             removeRuler(rulerIter);
             return;
         }
     }
 
-    // If we don't have a control ruler, make one now
-    if (rulerIter == m_controlRulerList.end())
-        slotAddControlRuler(*controlIter);
+    // If we don't have a pitchbend ruler, make one now
+    slotAddControlRuler(*controlIter);
 }
 
 void
