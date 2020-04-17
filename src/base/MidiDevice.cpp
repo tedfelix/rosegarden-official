@@ -266,7 +266,7 @@ MidiDevice::generateDefaultControllers()
         { "Volume", Rosegarden::Controller::EventType, "<none>", "0", "127", "100", "7", "1", "2" },
         { "Reverb", Rosegarden::Controller::EventType, "<none>", "0", "127", "0", "91", "3", "3" },
         { "Sustain", Rosegarden::Controller::EventType, "<none>", "0", "127", "0", "64", "4", "-1" },
-        { "Expression", Rosegarden::Controller::EventType, "<none>", "0", "127", "100", "11", "2", "-1" },
+        { "Expression", Rosegarden::Controller::EventType, "<none>", "0", "127", "127", "11", "2", "-1" },
         { "Modulation", Rosegarden::Controller::EventType, "<none>", "0", "127", "0", "1", "4", "-1" },
         { "PitchBend", Rosegarden::PitchBend::EventType, "<none>", "0", "16383", "8192", "1", "4", "-1" }
     };
