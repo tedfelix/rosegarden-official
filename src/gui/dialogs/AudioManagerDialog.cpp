@@ -584,60 +584,55 @@ AudioManagerDialog::slotExportAudio()
 void
 AudioManagerDialog::slotRemove()
 {
-    AudioFile *audioFile = getCurrentSelection();
-    QList<QTreeWidgetItem*> til = m_fileList->selectedItems();
-    if (til.isEmpty()) {
-        RG_WARNING << "AudioManagerDialog::slotRemove() - nothing selected!";
+    QList<QTreeWidgetItem *> selectedTreeItems = m_fileList->selectedItems();
+
+    // If nothing is selected, bail.
+    // ??? Why not disable the action when there is no selection?
+    //     Then this will never happen.
+    if (selectedTreeItems.isEmpty())
         return;
-    }
-    AudioListItem *item = dynamic_cast<AudioListItem*>(til[0]);
 
-    if (audioFile == nullptr || item == nullptr)
-        return ;
+    AudioListItem *item = dynamic_cast<AudioListItem *>(selectedTreeItems[0]);
+    if (!item)
+        return;
 
-    // If we're on a Segment then delete it at the Composition
+    // If we're on a Segment then delete it from the Composition
     // and refresh the list.
-    //
     if (item->getSegment()) {
         // Get the next item to highlight
-        //
-        QTreeWidgetItem *newItem = m_fileList->itemBelow(item);
+        QTreeWidgetItem *newTreeItem = m_fileList->itemBelow(item);
         
-        // Or try above
-        //
-        if (newItem == nullptr)
-            newItem = m_fileList->itemAbove(item);
+        // Nothing below?  Try above.
+        if (!newTreeItem)
+            newTreeItem = m_fileList->itemAbove(item);
 
-        // Or the parent
-        //
-        if (newItem == nullptr)
-            newItem = item->parent();
+        // Nothing above?  Go with the parent.
+        if (!newTreeItem)
+            newTreeItem = item->parent();
 
-        // Get the id and segment of the next item so that we can
-        // match against it
-        //
-        AudioFileId id = 0;
-        Segment *segment = nullptr;
-        AudioListItem *aItem = dynamic_cast<AudioListItem*>(newItem);
+        const AudioListItem *newAudioItem =
+                dynamic_cast<const AudioListItem *>(newTreeItem);
 
-        if (aItem) {
-            segment = aItem->getSegment();
-            id = aItem->getId();
+        if (newAudioItem) {
+            // Jump to new selection
+            setSelected(newAudioItem->getId(),
+                        newAudioItem->getSegment(),
+                        true);  // propagate
         }
 
-        // Jump to new selection
-        //
-        if (newItem)
-            setSelected(id, segment, true); // propagate
-
-        // Do it - will force update
-        //
+        // Delete the Segment from the Composition.
         SegmentSelection selection;
         selection.insert(item->getSegment());
         emit deleteSegments(selection);
 
-        return ;
+        return;
     }
+
+    // An audio file item is selected in the tree...
+
+    const AudioFile *audioFile = getCurrentSelection();
+    if (!audioFile)
+        return;
 
     // remove segments along with audio file
     //
@@ -1065,43 +1060,45 @@ AudioManagerDialog::setSelected(AudioFileId id,
                                 const Segment *segment,
                                 bool propagate)
 {
-    QTreeWidgetItem *it = nullptr;    //m_fileList->topLevelItem(0);
-    AudioListItem *aItem = nullptr;
-    //int itCount = m_fileList->topLevelItemCount();
-    
-    QTreeWidgetItemIterator twIt( m_fileList, QTreeWidgetItemIterator::All );
-    
     // note: this iterates over topLevelItems and childItems too.
     // I hope that's what we want to do (?)
     // otherwise re-code to iterate over topLevelItems only.
+    QTreeWidgetItemIterator treeItemIter(m_fileList,
+                                         QTreeWidgetItemIterator::All);
     
-    it = *twIt;
-    while( it ) {
-                
-                aItem = dynamic_cast<AudioListItem*>( it );
-                
-                if (aItem) {
-                    if    ((aItem->getId() == id) 
-                        && (aItem->getSegment() == segment))
-                    {
-                        selectFileListItemNoSignal( it );
-                        // Only propagate to compositionview if asked to
-                        if (propagate) {
-                            SegmentSelection selection;
-                            selection.insert(aItem->getSegment());
-                            emit segmentsSelected(selection);
-                        }
-                        return ;
-                    }
-                    
-                }// end if(aItem)
-        
-        twIt++;
-        it = *twIt;
-        
-    }// end while
+    QTreeWidgetItem *treeItem = *treeItemIter;
+
+    while (treeItem) {
+
+        AudioListItem *audioItem = dynamic_cast<AudioListItem *>(treeItem);
+
+        if (audioItem) {
+            if ((audioItem->getId() == id)  &&
+                (audioItem->getSegment() == segment)) {
+
+                selectFileListItemNoSignal(treeItem);
+
+                // Only propagate to compositionview if asked to
+                if (propagate) {
+                    RG_DEBUG << "setSelected(): Emitting segmentsSelected()...";
+                    // ??? Appear to be crashing here.  Bug #1576.
+                    SegmentSelection selection;
+                    selection.insert(audioItem->getSegment());
+                    emit segmentsSelected(selection);
+                }
+
+                return;
+
+            }
+
+        }
+
+        ++treeItemIter;
+        treeItem = *treeItemIter;
+
+    }
     
-}// end setSelected()
+}
 
 
 void

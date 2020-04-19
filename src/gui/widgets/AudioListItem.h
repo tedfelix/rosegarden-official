@@ -73,7 +73,7 @@ public:
                                     m_segment(0) {;}
 
 */
-    AudioFileId getId() { return m_id; }
+    AudioFileId getId() const  { return m_id; }
 
     void setStartTime(const RealTime &time)
         { m_startTime = time; }
@@ -85,7 +85,8 @@ public:
 
     void setSegment(Segment *segment)
         { m_segment = segment; }
-    Segment *getSegment() { return m_segment; }
+    Segment *getSegment()  { return m_segment; }
+    const Segment *getSegment() const  { return m_segment; }
 
 protected:
     AudioFileId m_id;
