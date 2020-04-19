@@ -20,14 +20,12 @@
 #include "ControlEditorDialog.h"
 
 #include "misc/Debug.h"
-#include "misc/Strings.h"
+#include "misc/Strings.h"  // for strtoqstr() etc...
 #include "base/Colour.h"
 #include "base/Composition.h"
 #include "base/ControlParameter.h"
-#include "base/Device.h"
-#include "base/Event.h"
 #include "base/MidiDevice.h"
-#include "base/MidiTypes.h"
+#include "base/MidiTypes.h"  // for PitchBend::EventType
 #include "base/Studio.h"
 #include "commands/studio/AddControlParameterCommand.h"
 #include "commands/studio/ModifyControlParameterCommand.h"
@@ -35,30 +33,22 @@
 #include "ControlParameterEditDialog.h"
 #include "ControlParameterItem.h"
 #include "document/RosegardenDocument.h"
-#include "misc/ConfigGroups.h"
+#include "misc/ConfigGroups.h"  // for WindowGeometryConfigGroup
 #include "document/Command.h"
 #include "document/CommandHistory.h"
 #include "gui/dialogs/AboutDialog.h"
 
-#include <QShortcut>
-#include <QMainWindow>
-#include <QLayout>
-#include <QApplication>
-#include <QAction>
 #include <QTreeWidget>
 #include <QColor>
 #include <QDialog>
 #include <QFrame>
 #include <QLabel>
-#include <QTreeWidget>
 #include <QPixmap>
 #include <QPushButton>
 #include <QSizePolicy>
 #include <QString>
-#include <QToolTip>
 #include <QWidget>
 #include <QVBoxLayout>
-#include <QList>
 #include <QSettings>
 #include <QDesktopServices>
 
@@ -67,17 +57,14 @@ namespace Rosegarden
 {
 
 
-ControlEditorDialog::ControlEditorDialog
-        (
-            QWidget *parent,
-            RosegardenDocument *doc,
-            DeviceId device
-       ):
-        QMainWindow(parent),
-        m_studio(&doc->getStudio()),
-        m_doc(doc),
-        m_device(device),
-        m_modified(false)
+ControlEditorDialog::ControlEditorDialog(QWidget *parent,
+                                         RosegardenDocument *doc,
+                                         DeviceId device) :
+    QMainWindow(parent),
+    m_doc(doc),
+    m_studio(&doc->getStudio()),
+    m_device(device),
+    m_modified(false)
 {
     RG_DEBUG << "ControlEditorDialog::ControlEditorDialog: device is " << m_device;
 
@@ -335,20 +322,6 @@ ControlEditorDialog::slotUpdate(bool added)
     }
 }
 
-/*
-void
-ControlEditorDialog::slotEditCopy()
-{
-    RG_DEBUG << "ControlEditorDialog::slotEditCopy";
-}
-
-void
-ControlEditorDialog::slotEditPaste()
-{
-    RG_DEBUG << "ControlEditorDialog::slotEditPaste";
-}
-*/
-
 void
 ControlEditorDialog::slotAdd()
 {
@@ -422,14 +395,6 @@ ControlEditorDialog::setModified(bool modified)
 }
 
 void
-ControlEditorDialog::checkModified()
-{
-    RG_DEBUG << "ControlEditorDialog::checkModified(" << m_modified << ")"
-    << endl;
-
-}
-
-void
 ControlEditorDialog::slotEdit(QTreeWidgetItem *i, int)
 {
     RG_DEBUG << "ControlEditorDialog::slotEdit";
@@ -463,18 +428,6 @@ ControlEditorDialog::closeEvent(QCloseEvent*)
     emit closing();
     close();
 }
-
-void
-ControlEditorDialog::setDocument(RosegardenDocument *doc)
-{
-    // reset our pointers
-    m_doc = doc;
-    m_studio = &doc->getStudio();
-    m_modified = false;
-
-    slotUpdate();
-}
-
 
 void
 ControlEditorDialog::slotHelpRequested()

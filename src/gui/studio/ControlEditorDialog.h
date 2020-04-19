@@ -19,12 +19,10 @@
 #ifndef RG_CONTROLEDITORDIALOG_H
 #define RG_CONTROLEDITORDIALOG_H
 
-#include "base/Device.h"
-#include "base/MidiDevice.h"
+#include "base/Device.h"  // for DeviceId
 #include "gui/general/ActionFileClient.h"
 
 #include <QMainWindow>
-
 
 class QWidget;
 class QPushButton;
@@ -39,9 +37,13 @@ namespace Rosegarden
 class Command;
 class Studio;
 class RosegardenDocument;
-class CommandHistory;
 
 
+/// Manage Controllers dialog
+/**
+ * Launched from the "Controllers..." button on the Manage MIDI Devices dialog
+ * (DeviceManagerDialog).
+ */
 class ControlEditorDialog : public QMainWindow, public ActionFileClient
 {
     Q_OBJECT
@@ -50,30 +52,13 @@ public:
     ControlEditorDialog(QWidget *parent,
                         RosegardenDocument *doc,
                         DeviceId device);
-
     ~ControlEditorDialog() override;
 
-    void initDialog();
-
-    void addCommandToHistory(Command *command);
-    CommandHistory* getCommandHistory();
-
-    void setModified(bool value);
-    void checkModified();
-
-    // reset the document
-    void setDocument(RosegardenDocument *doc);
-
-    DeviceId getDevice() { return m_device; }
+    DeviceId getDevice()  { return m_device; }
 
 public slots:
     void slotUpdate(bool added);
-    void slotUpdate() { slotUpdate(false); }
-
-/*
-    void slotEditCopy();
-    void slotEditPaste();
-*/
+    void slotUpdate()  { slotUpdate(false); }
 
     void slotAdd();
     void slotDelete();
@@ -86,30 +71,27 @@ public slots:
 signals:
     void closing();
 
-
 protected:
     void closeEvent(QCloseEvent *) override;
 
+private:
+    RosegardenDocument *m_doc;
+    Studio *m_studio;
+    DeviceId m_device;
+
     void setupActions();
+    void initDialog();
 
-    //--------------- Data members ---------------------------------
-    Studio                  *m_studio;
-    RosegardenDocument      *m_doc;
-    DeviceId                 m_device;
+    QTreeWidget *m_treeWidget;
 
-    QPushButton             *m_closeButton;
+    QPushButton *m_addButton;
+    QPushButton *m_deleteButton;
+    QPushButton *m_closeButton;
 
-    QPushButton             *m_copyButton;
-    QPushButton             *m_pasteButton;
+    bool m_modified;
 
-    QPushButton             *m_addButton;
-    QPushButton             *m_deleteButton;
-
-    QTreeWidget             *m_treeWidget;
-
-    bool                     m_modified;
-
-    ControlList  m_clipboard; // local clipboard only
+    void setModified(bool value);
+    void addCommandToHistory(Command *command);
 
 };
 
