@@ -606,14 +606,11 @@ AudioManagerDialog::slotRemove()
         if (!newTreeItem)
             newTreeItem = m_fileList->itemAbove(item);
 
-        // Nothing above?  Go with the parent.
-        if (!newTreeItem)
-            newTreeItem = item->parent();
-
         const AudioListItem *newAudioItem =
                 dynamic_cast<const AudioListItem *>(newTreeItem);
 
-        if (newAudioItem) {
+        // If the item was an AudioListItem, and it is a Segment item...
+        if (newAudioItem  &&  newAudioItem->getSegment()) {
             // Jump to new selection
             setSelected(newAudioItem->getId(),
                         newAudioItem->getSegment(),

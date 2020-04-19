@@ -158,9 +158,13 @@ signals:
     void cancelPlayingAudioFile(AudioFileId);
     void deleteAllAudioFiles();
 
-    // We've selected a segment here, make the canvas select it too
-    //
+    /// We've selected a segment here, make the canvas select it too
+    /**
+     * RosegardenMainWindow::slotAudioManager() connects this to
+     * RosegardenMainViewWidget::slotPropagateSegmentSelection().
+     */
     void segmentsSelected(const SegmentSelection&);
+
     void deleteSegments(const SegmentSelection&);
     void insertAudioSegment(AudioFileId,
                             const RealTime &,
