@@ -510,7 +510,7 @@ InternalSegmentMapper::getControllers(Instrument *instrument, RealTime start)
 
     ControllerAndPBList returnValue;
 
-    StaticControllers &controllers = instrument->getStaticControllers();
+    const StaticControllers &controllers = instrument->getStaticControllers();
 
     // For each controller
     for (const ControllerValuePair &controller : controllers) {

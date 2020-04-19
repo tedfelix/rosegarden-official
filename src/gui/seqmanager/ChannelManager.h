@@ -41,7 +41,7 @@ struct ControllerAndPBList
         m_pitchbend(0)
     { }
 
-    ControllerAndPBList(StaticControllers &controllers) :
+    ControllerAndPBList(const StaticControllers &controllers) :
         m_controllers(controllers),
         m_havePitchbend(false),
         m_pitchbend(0)
