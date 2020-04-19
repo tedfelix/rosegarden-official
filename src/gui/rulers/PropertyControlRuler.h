@@ -40,10 +40,10 @@ class ViewSegment;
 class Segment;
 class RulerScale;
 
-
+/// The Velocity Ruler
 /**
- * PropertyControlRuler : edit a property on events on a staff (only
- * events with a ViewElement attached, mostly notes)
+ * ??? rename: PropertyRuler?  Or simplify to only handle velocity and
+ *             call it VelocityRuler.
  */
 class PropertyControlRuler :  public ControlRuler, public ViewSegmentObserver
 {

@@ -36,9 +36,9 @@ class Event;
 class ControlParameter;
 class ControlItem;
 
-
+/// Controller Ruler (volume, pan, pitchbend, etc...)
 /**
- * ControllerEventsRuler : edit Controller events
+ * ??? rename: ControllerRuler
  */
 class ControllerEventsRuler : public ControlRuler, public SegmentObserver
 {
