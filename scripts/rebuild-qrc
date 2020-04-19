@@ -28,14 +28,19 @@ cd data||exit 1
 
 writeEntries() {
     echo "  assembling files of type $1..."
+    # If we're in an svn repo
     if (svn info > /dev/null 2>&1); then
+        # for each file with the extension of interest
         for f in $(find . -name \*.$1 | sort --ignore-case --dictionary-order); do
+            # If the file is in the svn repo
             if (svn info $f > /dev/null 2>&1); then
                 # skip rosegarden.ts
                 [ "$(basename $f)" == "rosegarden.ts" ] && continue
                 # change .ts extension to .qm, which are the files we actually
                 # need to bundle for every .ts we eventually have
                 f=$(echo $f|sed "s/\.ts/\.qm/g")
+
+                # Generate the <file> tag.
                 cat >> $ofile << EOF
 <file>$f</file>
 EOF
