@@ -45,6 +45,7 @@ namespace Rosegarden
 {
 
 
+class AudioListView;
 class Segment;
 class RosegardenDocument;
 class RealTime;
@@ -52,7 +53,7 @@ class AudioPlayingDialog;
 class AudioFile;
 class Command;
 
-
+/// Audio File Manager
 class AudioManagerDialog : public QMainWindow, public ActionFileClient
 {
     Q_OBJECT
@@ -185,7 +186,7 @@ protected:
 
     //--------------- Data members ---------------------------------
 
-    QTreeWidget        *m_fileList;         // (==AudioListView)
+    AudioListView *m_fileList;
     WarningGroupBox    *m_wrongSampleRates;
     RosegardenDocument *m_doc;
 
