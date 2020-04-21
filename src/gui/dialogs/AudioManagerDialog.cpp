@@ -191,8 +191,8 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
     
     connect(m_fileList, SIGNAL(dropped(QDropEvent*, QTreeWidget*, QList<QUrl>)),
             SLOT(slotDropped(QDropEvent*, QTreeWidget*, QList<QUrl>)));
-    
-    
+
+
     //
     // setup local shortcuts
     //
@@ -252,7 +252,8 @@ AudioManagerDialog::slotPopulateFileList()
 
     // Store last selected item if we have one
     //
-    AudioListItem *selectedItem = dynamic_cast<AudioListItem*>(m_fileList->currentItem());
+    AudioListItem *selectedItem =
+            dynamic_cast<AudioListItem *>(m_fileList->currentItem());
     
     AudioFileId lastId = 0;
     Segment *lastSegment = nullptr;
@@ -1073,8 +1074,6 @@ AudioManagerDialog::setSelected(AudioFileId id,
 
                 // Only propagate to compositionview if asked to
                 if (propagate) {
-                    RG_DEBUG << "setSelected(): Emitting segmentsSelected()...";
-                    // ??? Appear to be crashing here.  Bug #1576.
                     SegmentSelection selection;
                     selection.insert(audioItem->getSegment());
                     emit segmentsSelected(selection);
@@ -1104,6 +1103,7 @@ AudioManagerDialog::selectFileListItemNoSignal(QTreeWidgetItem* it)
         m_fileList->scrollToItem(it, QAbstractItemView::PositionAtTop);
 //        m_fileList->setSelected(it, true);
         m_fileList->setCurrentItem(it);
+        updateActionState(true);
     } else {
         m_fileList->clearSelection();
     }
