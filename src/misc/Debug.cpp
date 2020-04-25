@@ -15,10 +15,10 @@
 
 #include "Debug.h"
 
-#include "Strings.h"
+#include "Strings.h"  // for strtoqstr()
 
 #include "base/Event.h"
-#include "base/Segment.h"
+//#include "base/Segment.h"
 #include "base/RealTime.h"
 #include "base/Colour.h"
 #include "gui/editors/guitar/Chord.h"
@@ -33,37 +33,6 @@ namespace Rosegarden
 ROSEGARDENPRIVATE_EXPORT QDebug &operator<<(QDebug &dbg, const std::string &s)
 {
     dbg << strtoqstr(s);
-
-    return dbg;
-}
-
-ROSEGARDENPRIVATE_EXPORT QDebug &operator<<(QDebug &dbg, const Rosegarden::Segment &t)
-{
-//    dbg << "Segment for instrument " << t.getTrack()
-//        << " starting at " << t.getStartTime() << '\n';
-
-    dbg << "Segment Object\n";
-    dbg << "  Label: " << t.getLabel() << '\n';
-    dbg << "  Track: " << t.getTrack() << '\n';
-    // Assume 4/4 time and provide a potentially helpful bar number.
-    dbg << "  Start Time: " << t.getStartTime() << 
-        "(4/4 bar" << t.getStartTime() / (960.0*4.0) + 1 << ")\n";
-    dbg << "  End Time: " << t.getEndTime() << 
-        "(4/4 bar" << t.getEndTime() / (960.0*4.0) + 1 << ")\n";
-    dbg << "  End Marker Time: " << t.getEndMarkerTime() << 
-        "(4/4 bar" << t.getEndMarkerTime() / (960.0*4.0) + 1 << ")\n";
-
-    dbg << "Events:\n";
-
-    for (Rosegarden::Segment::const_iterator i = t.begin();
-            i != t.end(); ++i) {
-        if (!(*i)) {
-            dbg << "WARNING : skipping null event ptr\n";
-            continue;
-        }
-
-        dbg << *(*i) << endl;
-    }
 
     return dbg;
 }

@@ -1009,6 +1009,8 @@ private:
     int m_verse;       // Used to distribute lyrics among repeated segments
 };
 
+ROSEGARDENPRIVATE_EXPORT QDebug &operator<<(QDebug &, const Rosegarden::Segment &);
+
 // Make it a global name.
 typedef Segment::SegmentMultiSet SegmentMultiSet;
 
