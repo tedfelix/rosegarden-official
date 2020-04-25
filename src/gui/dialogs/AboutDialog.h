@@ -18,19 +18,22 @@
 #ifndef RG_ABOUTDIALOG_H
 #define RG_ABOUTDIALOG_H
 
-//#include "base/NotationTypes.h"
 #include <QDialog>
 
 namespace Rosegarden
 {
+
+
 class AboutDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    AboutDialog(QWidget *parent = nullptr);
+    AboutDialog(QWidget *parent);
 
 };
+
+
 }
 
 #endif

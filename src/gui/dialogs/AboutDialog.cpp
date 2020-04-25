@@ -33,44 +33,46 @@ namespace Rosegarden
 AboutDialog::AboutDialog(QWidget *parent) :
     QDialog(parent, nullptr)
 {
-    this->setModal(true);
-    this->setWindowTitle(tr("About Rosegarden"));
+    setWindowTitle(tr("About Rosegarden"));
+    setModal(true);
 
-    QGridLayout *metagrid = new QGridLayout;
-    this->setLayout(metagrid);
+    // Layout
+    QGridLayout *layout = new QGridLayout(this);
+    layout->setSizeConstraint(QLayout::SetFixedSize);
+    layout->setContentsMargins(20, 20, 20, 20);
+    layout->setVerticalSpacing(20);
 
-    QWidget *hb = new QWidget;
-    QVBoxLayout *mainLayout = new QVBoxLayout;
-    QHBoxLayout *headerLayout = new QHBoxLayout;
-    metagrid->addWidget(hb, 0, 0);
+    // Icon
     QLabel *image = new QLabel;
-    headerLayout->addWidget(image);
     image->setAlignment(Qt::AlignTop);
-
     image->setPixmap(IconLoader().loadPixmap("welcome-icon"));
 
+    layout->addWidget(image, 0, 0);
+
+    // Header Text
     QLabel *label = new QLabel;
-    headerLayout->addWidget(label);
     label->setText(tr("<h2>Rosegarden</h2><h3>A sequencer and musical notation editor</h3>"));
     label->setWordWrap(false);
 
-    mainLayout->addLayout(headerLayout);
+    layout->addWidget(label, 0, 1);
 
+    // Body Text
     QLabel *label2 = new QLabel;
-    label2->setText(tr("<p>Copyright 2000-2020 the Rosegarden development team</p><p>Version: %1 &nbsp; (%4)<br>Build key: %3<br>Qt version: %2</p><p>Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit<br><a style=\"color:gold\" href=\"http://www.rosegardenmusic.com/resources/authors\">http://www.rosegardenmusic.com/resources/authors</a></p><p>For more information about Rosegarden, visit<br><a style=\"color:gold\" href=\"http://www.rosegardenmusic.com\">http://www.rosegardenmusic.com</a></p><p>License: GNU General Public License Version 2 or later</p>").arg(VERSION).arg(QT_VERSION_STR).arg(BUILDKEY).arg(CODENAME));
+    label2->setText(tr("<p>Copyright 2000-2020 the Rosegarden development team</p><p>Version: %1 &nbsp; \"%4\"<br>Build key: %3<br>Qt version: %2</p><p>Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit<br><a style=\"color:gold\" href=\"http://www.rosegardenmusic.com/resources/authors\">http://www.rosegardenmusic.com/resources/authors</a></p><p>For more information about Rosegarden, visit<br><a style=\"color:gold\" href=\"http://www.rosegardenmusic.com\">http://www.rosegardenmusic.com</a></p><p>License: GNU General Public License Version 2 or later</p>").arg(VERSION).arg(QT_VERSION_STR).arg(BUILDKEY).arg(CODENAME));
     label2->setWordWrap(true);
     label2->setAlignment(Qt::AlignHCenter);
     label2->setOpenExternalLinks(true);
-    mainLayout->addWidget(label2);
-    hb->setLayout(mainLayout);
+
+    layout->addWidget(label2, 1, 0, 1, 2);
 
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok);
-    metagrid->addWidget(buttonBox, 1, 0);
-    metagrid->setRowStretch(0, 10);
-    QObject::connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
-    QObject::connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
+    QObject::connect(buttonBox, &QDialogButtonBox::accepted,
+                     this, &QDialog::accept);
 
-    this->exec();
+    layout->addWidget(buttonBox, 2, 0, 1, 2);
+
+    // Display the dialog.
+    exec();
 }
 
 
