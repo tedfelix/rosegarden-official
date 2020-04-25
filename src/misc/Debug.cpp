@@ -102,6 +102,8 @@ ROSEGARDENPRIVATE_EXPORT QDebug &operator<<(QDebug &dbg, const Rosegarden::Guita
     return dbg;
 }
 
+#if 0
+// Handy logging switcher.  Repurpose when needed in the future.
 bool bug1560Logging()
 {
     // Only check on the first call.
@@ -121,6 +123,7 @@ bool bug1560Logging()
 
     return enabled;
 }
+#endif
 
 
 }

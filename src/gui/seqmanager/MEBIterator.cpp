@@ -32,8 +32,6 @@ MEBIterator::MEBIterator(
     m_active(false),
     m_currentTime()
 {
-    if (bug1560Logging())
-        RG_DEBUG << "ctor: Clearing the m_ready flag.";
 }
 
 // ++prefix
@@ -83,9 +81,6 @@ MEBIterator::moveTo(const RealTime &time)
 
     // Since we moved, we need to send a channel setup again.
     m_ready = false;
-
-    if (bug1560Logging())
-        RG_DEBUG << "moveTo(): done...  m_ready is" << m_ready;
 }
 
 MappedEvent

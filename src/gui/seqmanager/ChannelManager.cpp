@@ -257,8 +257,6 @@ void ChannelManager::insertEvent(
     // if a track becomes unmuted, until the meta-iterator gets around
     // to initting.
     if (!m_ready) {
-        if (bug1560Logging())
-            RG_DEBUG << "insertEvent(): Calling makeReady()...";
         makeReady(trackId, reftime, controllerAndPBList, inserter);
         // If we're still not ready, we can't do much.
         if (!m_ready)
@@ -289,9 +287,6 @@ bool ChannelManager::makeReady(
     if (!m_instrument)
         return false;
 
-    if (bug1560Logging())
-        RG_DEBUG << "makeReady() for" << (m_instrument ? m_instrument->getPresentationName().c_str() : "nothing") << "at" << time;
-
     // Try to get a valid channel if we lack one.
     if (!m_channelInterval.validChannel()) {
         // We already tried to get one and failed; don't keep trying.
@@ -313,14 +308,6 @@ bool ChannelManager::makeReady(
     bool startingInMiddle =
             m_instrument->hasFixedChannel()  &&
             (m_start < time  &&  time <= m_end);
-
-    if (bug1560Logging()) {
-        RG_DEBUG << "makeReady()";
-        RG_DEBUG << "  m_start =" << m_start;
-        RG_DEBUG << "  m_end =" << m_end;
-        RG_DEBUG << "  time =" << time;
-        RG_DEBUG << "  startingInMiddle =" << startingInMiddle;
-    }
 
     // If this instrument is in auto channels mode or we are starting
     // in the middle of a Segment.

@@ -50,9 +50,6 @@ MappedBufMetaIterator::addBuffer(
 
     m_buffers.insert(mappedEventBuffer);
 
-    if (bug1560Logging())
-        RG_DEBUG << "addBuffer(): About to create a new MEBIterator...";
-
     QSharedPointer<MEBIterator> iter(new MEBIterator(mappedEventBuffer));
     iter->moveTo(m_currentTime);
     m_iterators.push_back(iter);
@@ -404,9 +401,6 @@ MappedBufMetaIterator::getAudioEvents(std::vector<MappedEvent> &audioEvents)
 
     audioEvents.clear();
 
-    if (bug1560Logging())
-        RG_DEBUG << "getAudioEvents(): Creating MEBIterators to find audio events...";
-
     // For each segment
     for (BufferSet::iterator i = m_buffers.begin();
          i != m_buffers.end(); ++i) {
@@ -455,9 +449,6 @@ MappedBufMetaIterator::getAudioEvents(std::vector<MappedEvent> &audioEvents)
             audioEvents.push_back(event);
         }
     }
-
-    if (bug1560Logging())
-        RG_DEBUG << "getAudioEvents(): done...";
 }
 
 

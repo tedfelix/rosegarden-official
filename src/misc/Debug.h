@@ -100,7 +100,8 @@ public:
 // used for this.
 #define RG_WARNING QDebug(QtDebugMsg) << RG_MODULE_STRING
 
-extern bool bug1560Logging();
+// Handy logging switcher.  Repurpose when needed in the future.
+//extern bool bug1560Logging();
 
 }
 

@@ -279,9 +279,6 @@ makeReady(MappedInserterBase &inserter, RealTime time)
     if (ControlBlock::getInstance()->isMetronomeMuted())
         return;
 
-    if (bug1560Logging())
-        RG_DEBUG << "makeReady(): Calling makeReady()...";
-
     m_channelManager.makeReady(
             NO_TRACK,  // trackId
             time,

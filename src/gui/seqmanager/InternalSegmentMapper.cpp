@@ -404,8 +404,7 @@ makeReady(MappedInserterBase &inserter, RealTime time)
         return;
 
     m_channelManager.setInstrument(instrument);
-    if (bug1560Logging())
-        RG_DEBUG << "makeReady(): Calling makeReady()...";
+
     m_channelManager.makeReady(
             m_segment->getTrack(),
             time,
