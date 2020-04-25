@@ -17,13 +17,6 @@
 
 #include "Strings.h"  // for strtoqstr()
 
-#include "base/Event.h"
-//#include "base/Segment.h"
-#include "base/RealTime.h"
-#include "base/Colour.h"
-#include "gui/editors/guitar/Chord.h"
-#include "gui/editors/guitar/Fingering.h"
-
 #include <QSettings>
 
 namespace Rosegarden
@@ -34,40 +27,6 @@ ROSEGARDENPRIVATE_EXPORT QDebug &operator<<(QDebug &dbg, const std::string &s)
 {
     dbg << strtoqstr(s);
 
-    return dbg;
-}
-
-ROSEGARDENPRIVATE_EXPORT QDebug &operator<<(QDebug &dbg, const Rosegarden::RealTime &t)
-{
-    dbg << t.toString();
-    return dbg;
-}
-
-ROSEGARDENPRIVATE_EXPORT QDebug &operator<<(QDebug &dbg, const Rosegarden::Colour &c)
-{
-    dbg << "Colour : rgb = " << c.getRed() << "," << c.getGreen() << "," << c.getBlue();
-    return dbg;
-}
-
-ROSEGARDENPRIVATE_EXPORT QDebug &operator<<(QDebug &dbg, const Rosegarden::Guitar::Chord &c)
-{
-    dbg << "Chord root = " << c.getRoot() << ", ext = '" << c.getExt() << "'";
-
-//    for(unsigned int i = 0; i < c.getNbFingerings(); ++i) {
-//        dbg << "\nFingering " << i << " : " << c.getFingering(i).toString().c_str();
-//    }
-    
-     Rosegarden::Guitar::Fingering f = c.getFingering();
-
-     dbg << ", fingering : ";
-
-     for(unsigned int j = 0; j < 6; ++j) {
-         int pos = f[j];
-         if (pos >= 0)
-             dbg << pos << ' ';
-         else
-             dbg << "x ";
-    }        
     return dbg;
 }
 

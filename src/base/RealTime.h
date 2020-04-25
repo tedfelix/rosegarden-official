@@ -134,7 +134,9 @@ struct ROSEGARDENPRIVATE_EXPORT RealTime
 
 // I/O
 std::ostream &operator<<(std::ostream &out, const RealTime &rt);
-    
+
+ROSEGARDENPRIVATE_EXPORT QDebug &operator<<(QDebug &, const Rosegarden::RealTime &);
+
 }
 
 #endif

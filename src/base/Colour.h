@@ -21,7 +21,10 @@
 #define RG_COLOUR_H
 
 #include <QColor>
+
 #include <string>
+
+#include <rosegardenprivate_export.h>
 
 namespace Rosegarden 
 {
@@ -78,5 +81,7 @@ private:
 //    Colour getCombinationColour(const Colour &input1, const Colour &input2);
 
 }
+
+ROSEGARDENPRIVATE_EXPORT QDebug &operator<<(QDebug &, const Rosegarden::Colour &);
 
 #endif

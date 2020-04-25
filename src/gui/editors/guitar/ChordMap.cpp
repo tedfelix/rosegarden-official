@@ -221,7 +221,7 @@ bool ChordMap::saveDocument(
             inChord = true;
         }
 
-        outStream << "   <fingering>" << chord.getFingering().toString() <<
+        outStream << "   <fingering>" << chord.getFingering().toString().c_str() <<
             "</fingering>\n";
     }
 

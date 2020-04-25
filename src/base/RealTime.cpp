@@ -15,6 +15,8 @@
 
 #include "RealTime.h"
 
+#include "misc/Debug.h"
+
 #include <sys/time.h>
 #include <limits>
 #include <cmath>
@@ -209,6 +211,12 @@ RealTime::frame2RealTime(long frame, unsigned int sampleRate)
     frame -= rt.sec * sampleRate;
     rt.nsec = (int)(((double(frame) * 1000000.0) / sampleRate) * 1000.0);
     return rt;
+}
+
+ROSEGARDENPRIVATE_EXPORT QDebug &operator<<(QDebug &dbg, const Rosegarden::RealTime &t)
+{
+    dbg << t.toString();
+    return dbg;
 }
 
 

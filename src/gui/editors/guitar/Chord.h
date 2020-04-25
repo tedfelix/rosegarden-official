@@ -24,6 +24,8 @@
 
 #include <QString>
 
+#include <rosegardenprivate_export.h>
+
 namespace Rosegarden
 {
 
@@ -86,6 +88,8 @@ protected:
 bool operator<(const Chord&, const Chord&);    
 
 }
+
+ROSEGARDENPRIVATE_EXPORT QDebug &operator<<(QDebug &, const Rosegarden::Guitar::Chord &);
 
 }
 

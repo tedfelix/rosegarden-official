@@ -25,18 +25,7 @@
 namespace Rosegarden {
 
 
-class Event;
-//class Segment;
-class RealTime;
-class Colour;
-namespace Guitar {
-    class Chord;
-}
-
 ROSEGARDENPRIVATE_EXPORT QDebug &operator<<(QDebug &, const std::string &);
-ROSEGARDENPRIVATE_EXPORT QDebug &operator<<(QDebug &, const Rosegarden::RealTime &);
-ROSEGARDENPRIVATE_EXPORT QDebug &operator<<(QDebug &, const Rosegarden::Colour &);
-ROSEGARDENPRIVATE_EXPORT QDebug &operator<<(QDebug &, const Rosegarden::Guitar::Chord &);
 
 class RGNoDebug
 {

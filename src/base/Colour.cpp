@@ -19,6 +19,8 @@
 
 #include "Colour.h"
 
+#include "misc/Debug.h"
+
 #include <sstream>
 
 namespace Rosegarden 
@@ -73,6 +75,12 @@ Colour::dataToXmlString() const
            << "\"";
 
     return output.str();
+}
+
+ROSEGARDENPRIVATE_EXPORT QDebug &operator<<(QDebug &dbg, const Rosegarden::Colour &c)
+{
+    dbg << "Colour : rgb = " << c.getRed() << "," << c.getGreen() << "," << c.getBlue();
+    return dbg;
 }
 
 #if 0

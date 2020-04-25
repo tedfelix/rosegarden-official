@@ -109,4 +109,26 @@ bool operator<(const Chord& a, const Chord& b)
 
 }
 
+ROSEGARDENPRIVATE_EXPORT QDebug &operator<<(QDebug &dbg, const Rosegarden::Guitar::Chord &c)
+{
+    dbg << "Chord root = " << c.getRoot() << ", ext = '" << c.getExt() << "'";
+
+//    for(unsigned int i = 0; i < c.getNbFingerings(); ++i) {
+//        dbg << "\nFingering " << i << " : " << c.getFingering(i).toString().c_str();
+//    }
+
+     Rosegarden::Guitar::Fingering f = c.getFingering();
+
+     dbg << ", fingering : ";
+
+     for(unsigned int j = 0; j < 6; ++j) {
+         int pos = f[j];
+         if (pos >= 0)
+             dbg << pos << ' ';
+         else
+             dbg << "x ";
+    }
+    return dbg;
+}
+
 }
