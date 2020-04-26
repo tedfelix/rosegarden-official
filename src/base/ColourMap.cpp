@@ -1,11 +1,9 @@
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
-
 /*
     Rosegarden
-    A sequencer and musical notation editor.
-    Copyright 2000-2018 the Rosegarden development team.
-    See the AUTHORS file for more details.
+    A MIDI and audio sequencer and musical notation editor.
+    Copyright 2000-2020 the Rosegarden development team.
 
     This file is Copyright 2003
         Mark Hymers         <markh@linuxfromscratch.org>
@@ -17,15 +15,15 @@
     COPYING included with this distribution for more information.
 */
 
-#include <string>
+#include "ColourMap.h"
+
+#include "XmlExportable.h"
 
 #include <sstream>
 
-#include "ColourMap.h"
-#include "XmlExportable.h"
-
 namespace Rosegarden 
 {
+
 
 const QColor ColourMap::defaultSegmentColor(255, 234, 182);
 
@@ -38,13 +36,7 @@ ColourMap::ColourMap()
     //     make any difference.
     colours[0] = Entry();
 }
-#if 0
-ColourMap::ColourMap(const QColor &color)
-{
-    // Set up the default colour based on the input
-    colours[0] = Entry(color, "");
-}
-#endif
+
 bool
 ColourMap::deleteItemByIndex(unsigned int item_num)
 {
@@ -152,70 +144,6 @@ ColourMap::modifyColourByIndex(unsigned int item_num, QColor colour)
     // We didn't find the element
     return false;
 }
-
-#if 0
-bool
-ColourMap::swapItems(unsigned int item_1, unsigned int item_2)
-{
-    // It would make no difference but we return false because 
-    //  we haven't altered the iterator (see docs in ColourMap.h)
-    if (item_1 == item_2)
-        return false; 
-
-    // We refuse to swap the default colour for something else
-    // Basically because what would we do with the strings?
-    if ((item_1 == 0) || (item_2 == 0))
-        return false; 
-
-    unsigned int one = 0, two = 0;
-
-    // Check that both elements exist
-    // It's not worth bothering about optimising this
-    for (MapType::iterator position = colours.begin(); position != colours.end(); ++position)
-    {
-        if (position->first == item_1) one = position->first;
-        if (position->first == item_2) two = position->first;
-    }
-
-    // If they both exist, do it
-    // There's probably a nicer way to do this
-    if ((one != 0) && (two != 0))
-    {
-        QColor tempC = colours[one].color;
-        std::string tempS = colours[one].name;
-        colours[one].color = colours[two].color;
-        colours[one].name = colours[two].name;
-        colours[two].color = tempC;
-        colours[two].name = tempS;
-
-        return true;
-    }
-
-    // Else they didn't
-    return false;
-}
-#endif
-#if 0
-ColourMap::MapType::const_iterator
-ColourMap::begin()
-{
-    MapType::const_iterator ret = colours.begin();
-    return ret;
-}
-
-ColourMap::MapType::const_iterator
-ColourMap::end()
-{
-    MapType::const_iterator ret = colours.end();
-    return ret;
-}
-
-unsigned int
-ColourMap::size() const
-{
-    return (unsigned int)colours.size();
-}
-#endif
 
 std::string
 ColourMap::toXmlString(std::string name) const

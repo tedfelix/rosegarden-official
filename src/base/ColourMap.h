@@ -2,9 +2,8 @@
 
 /*
     Rosegarden
-    A sequencer and musical notation editor.
-    Copyright 2000-2018 the Rosegarden development team.
-    See the AUTHORS file for more details.
+    A MIDI and audio sequencer and musical notation editor.
+    Copyright 2000-2020 the Rosegarden development team.
 
     This file is Copyright 2003
         Mark Hymers         <markh@linuxfromscratch.org>
@@ -34,12 +33,6 @@ class ColourMap
 public:
     /// Create a ColourMap with only the default segment color.
     ColourMap();
-
-    /**
-     * Initialises an ColourMap with a default element set to
-     * the value of the QColor passed in.
-     */
-    //ColourMap(const QColor& input);
 
     static const QColor defaultSegmentColor;
 
@@ -106,18 +99,8 @@ public:
     typedef std::map<unsigned /* colorIndex */, Entry> MapType;
     MapType colours;
 
-private:
-    // unused
-    /**
-     * If both items exist, swap them.
-     */
-    //bool swapItems(unsigned int item_1, unsigned int item_2);
-    //void replace(ColourMap &input);
-    //MapType::const_iterator begin();
-    //MapType::const_iterator end();
-    //unsigned int size() const;
-
 };
+
 
 }
 
