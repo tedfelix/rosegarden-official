@@ -227,9 +227,16 @@ ColourMap::toXmlString(std::string name) const
 
     for (RCMap::const_iterator pos = m_map.begin(); pos != m_map.end(); ++pos)
     {
+        const Colour &color = pos->second.first;
+
         output << "  " << "            <colourpair id=\"" << pos->first
                << "\" name=\"" << XmlExportable::encode(pos->second.second)
-               << "\" " << pos->second.first.dataToXmlString() << "/>" << std::endl;
+               << "\" "
+               << "red=\"" << color.red()
+               << "\" green=\"" << color.green()
+               << "\" blue=\"" << color.blue()
+               << "\""
+               << "/>" << std::endl;
     }
 
     output << "        </colourmap>" << std::endl;

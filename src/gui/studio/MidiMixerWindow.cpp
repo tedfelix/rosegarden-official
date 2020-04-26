@@ -200,8 +200,8 @@ MidiMixerWindow::setupTabs()
                             m_document->getComposition().getGeneralColourMap().
                             getColourByIndex(controls[i].getColourIndex());
 
-                        knobColour = QColor(c.getRed(),
-                                            c.getGreen(), c.getBlue());
+                        knobColour = QColor(c.red(),
+                                            c.green(), c.blue());
                     }
 
                     Rotary *controller =

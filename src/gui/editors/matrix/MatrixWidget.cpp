@@ -1388,7 +1388,7 @@ MatrixWidget::updateSegmentChangerBackground()
             getColourByIndex(segment->getColourIndex());
 
     QPalette palette = m_changerWidget->palette();
-    palette.setColor(QPalette::Window, segmentColor.toQColor());
+    palette.setColor(QPalette::Window, segmentColor);
     m_changerWidget->setPalette(palette);
 
     const Track *track = composition.getTrackById(segment->getTrack());
@@ -1409,7 +1409,7 @@ MatrixWidget::updateSegmentChangerBackground()
     // Segment label colors
     palette = m_segmentLabel->palette();
     // Background
-    palette.setColor(QPalette::Window, segmentColor.toQColor());
+    palette.setColor(QPalette::Window, segmentColor);
     // Foreground/Text
     palette.setColor(QPalette::WindowText, segment->getPreviewColour());
     m_segmentLabel->setPalette(palette);

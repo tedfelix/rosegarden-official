@@ -278,7 +278,7 @@ ControlEditorDialog::slotUpdate(bool added)
         //
         QPixmap colourPixmap(16, 16);
         Colour c = comp.getGeneralColourMap().getColourByIndex(it->getColourIndex());
-        colourPixmap.fill(QColor(c.getRed(), c.getGreen(), c.getBlue()));
+        colourPixmap.fill(QColor(c.red(), c.green(), c.blue()));
         
         item->setIcon(7, QIcon(colourPixmap));
 

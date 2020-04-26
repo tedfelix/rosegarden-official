@@ -21,8 +21,7 @@
 #define RG_COLOUR_H
 
 #include <QColor>
-
-#include <string>
+#include <QDebug>
 
 #include <rosegardenprivate_export.h>
 
@@ -37,51 +36,35 @@ namespace Rosegarden
 class Colour
 {
 public:
-    /**
-     * Create a Colour with values initialised to r=0, g=0, b=0
-     * i.e. Black. 
-     */
-    Colour();
+    Colour() :
+        m_r(0),
+        m_g(0),
+        m_b(0)
+    {
+    }
 
-    /**
-     * Create a Colour with the specified red, green, blue values.
-     * If out of specification (i.e. < 0 || > 255 the value will be set to 0.
-     */
-    Colour(unsigned int red, unsigned int green, unsigned int blue);
-    ~Colour();
+    Colour(int red, int green, int blue) :
+        m_r(red),
+        m_g(green),
+        m_b(blue)
+    {
+    }
 
-    /**
-     * Returns the current Red value of the colour as an integer.
-     */
-    unsigned int getRed() const;
+    int red() const  { return m_r; }
+    int green() const  { return m_g; }
+    int blue() const  { return m_b; }
 
-    /**
-     * Returns the current Blue value of the colour as an integer.
-     */
-    unsigned int getBlue() const;
-
-    /**
-     * Returns the current Green value of the colour as an integer.
-     */
-    unsigned int getGreen() const;
-
-    /// Called by ColourMap::toXmlString().  INLINE and REMOVE.
-    std::string dataToXmlString() const;
-
-    QColor toQColor() const { return QColor(m_r, m_g, m_b); }
+    operator QColor() const  { return QColor(m_r, m_g, m_b); }
 
 private:
-    unsigned int m_r, m_g, m_b;
+    int m_r;
+    int m_g;
+    int m_b;
 };
 
-    /**
-     * This works out a colour which is directly in between the two inputs.
-     * Useful for working out what overlapping Segments should be coloured as
-     */
-//    Colour getCombinationColour(const Colour &input1, const Colour &input2);
 
 }
 
-ROSEGARDENPRIVATE_EXPORT QDebug &operator<<(QDebug &, const Rosegarden::Colour &);
+//ROSEGARDENPRIVATE_EXPORT QDebug &operator<<(QDebug &, const Rosegarden::Colour &);
 
 #endif

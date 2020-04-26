@@ -59,7 +59,7 @@ Colour GUIPalette::convertColour(const QColor &input)
 
 QColor GUIPalette::convertColour(const Colour& input)
 {
-    return QColor(input.getRed(), input.getGreen(), input.getBlue());
+    return QColor(input.red(), input.green(), input.blue());
 }
 
 GUIPalette::GUIPalette()

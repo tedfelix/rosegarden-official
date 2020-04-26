@@ -182,7 +182,7 @@ ControlParameterEditDialog::ControlParameterEditDialog(
 
     for (it = colourMap.begin(); it != colourMap.end(); ++it) {
         Colour c = it->second.first;
-        colourPixmap.fill(QColor(c.getRed(), c.getGreen(), c.getBlue()));
+        colourPixmap.fill(QColor(c.red(), c.green(), c.blue()));
         m_colourCombo->addItem(colourPixmap, strtoqstr(it->second.second));
     }
 

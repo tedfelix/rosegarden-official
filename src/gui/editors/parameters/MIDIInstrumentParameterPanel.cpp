@@ -398,7 +398,7 @@ MIDIInstrumentParameterPanel::setupControllers(MidiDevice *md)
         //
         const Colour c = comp.getGeneralColourMap().getColourByIndex(
                 it->getColourIndex());
-        const QColor knobColour = QColor(c.getRed(), c.getGreen(), c.getBlue());
+        const QColor knobColour = QColor(c.red(), c.green(), c.blue());
 
         Rotary *rotary = nullptr;
 

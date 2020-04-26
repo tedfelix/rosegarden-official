@@ -1749,7 +1749,7 @@ NotationWidget::slotUpdateSegmentChangerBackground()
     Colour c = m_document->getComposition().getSegmentColourMap().getColourByIndex(m_scene->getCurrentSegment()->getColourIndex());
 
     QPalette palette = m_changerWidget->palette();
-    palette.setColor(QPalette::Window, c.toQColor());
+    palette.setColor(QPalette::Window, c);
     m_changerWidget->setPalette(palette);
 
     // have to deal with all this ruckus to get a few pieces of info about the
