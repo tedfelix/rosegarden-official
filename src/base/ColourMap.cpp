@@ -55,7 +55,7 @@ ColourMap::getColour(unsigned colourID) const
 }
 
 std::string
-ColourMap::getName(unsigned int colourID) const
+ColourMap::getName(unsigned colourID) const
 {
     // If the map is empty, return the default.
     if (colours.empty())
@@ -71,59 +71,61 @@ ColourMap::getName(unsigned int colourID) const
     return colourIter->second.name;
 }
 
-bool
+void
 ColourMap::addEntry(QColor colour, std::string name)
 {
-    // If we want to limit the number of colours, here's the place to do it
-    unsigned int highest=0;
+    // Find the first unused ID.
 
-    for (MapType::iterator position = colours.begin();
-         position != colours.end();
-         ++position)
+    // ??? It would be easier and faster to keep track of the largest/next
+    //     ID we can assign in a member variable, and use/increment that.
+    //     It's perfectly OK to have gaps in the IDs.
+    //     However, since there is no way to test this routine, I'm leaving
+    //     it as-is for now.
+
+    unsigned highest = 0;
+
+    // For each colour in the map
+    for (MapType::const_iterator colourIter = colours.begin();
+         colourIter != colours.end();
+         ++colourIter)
     {
-        if (position->first != highest)
+        if (colourIter->first != highest)
             break;
 
         ++highest;
     }
 
     colours[highest] = Entry(colour, name);
-
-    return true;
 }
 
-bool
-ColourMap::modifyName(unsigned int item_num, std::string name)
+void
+ColourMap::modifyName(unsigned colourID, std::string name)
 {
     // We don't allow a name to be given to the default colour
-    if (item_num == 0)
-        return false;
+    if (colourID == 0)
+        return;
 
-    for (MapType::iterator position = colours.begin(); position != colours.end(); ++position)
-        if (position->first == item_num)
-        {
-            position->second.name = name;
-            return true;
-        }
+    // Find the colourID in the map.
+    MapType::iterator colourIter = colours.find(colourID);
 
-    // We didn't find the element
-    return false;
+    // Not found?  Bail.
+    if (colourIter == colours.end())
+        return;
+
+    colourIter->second.name = name;
 }
 
-bool
-ColourMap::modifyColour(unsigned int item_num, QColor colour)
+void
+ColourMap::modifyColour(unsigned colourID, QColor colour)
 {
-    for (MapType::iterator position = colours.begin();
-         position != colours.end();
-         ++position)
-        if (position->first == item_num)
-        {
-            position->second.colour = colour;
-            return true;
-        }
+    // Find the colourID in the map.
+    MapType::iterator colourIter = colours.find(colourID);
 
-    // We didn't find the element
-    return false;
+    // Not found?  Bail.
+    if (colourIter == colours.end())
+        return;
+
+    colourIter->second.colour = colour;
 }
 
 void
@@ -144,12 +146,15 @@ ColourMap::toXmlString(std::string name) const
     output << "        <colourmap name=\"" << XmlExportable::encode(name)
            << "\">" << std::endl;
 
-    for (MapType::const_iterator pos = colours.begin(); pos != colours.end(); ++pos)
-    {
-        const QColor &color = pos->second.colour;
+    // For each colour in the map
+    for (MapType::const_iterator colourIter = colours.begin();
+         colourIter != colours.end();
+         ++colourIter) {
 
-        output << "  " << "            <colourpair id=\"" << pos->first
-               << "\" name=\"" << XmlExportable::encode(pos->second.name)
+        const QColor &color = colourIter->second.colour;
+
+        output << "  " << "            <colourpair id=\"" << colourIter->first
+               << "\" name=\"" << XmlExportable::encode(colourIter->second.name)
                << "\" "
                << "red=\"" << color.red()
                << "\" green=\"" << color.green()

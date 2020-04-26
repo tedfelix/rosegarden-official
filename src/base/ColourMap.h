@@ -90,15 +90,9 @@ public:
     // launch the ColourConfigurationPage.
 
     /// Add a colour entry using the lowest available ID.
-    bool addEntry(QColor colour, std::string name);
-
-    /// Returns false if colourID not found.
-    bool modifyName(unsigned colourID, std::string name);
-
-    /// Returns false if colourID not found.
-    bool modifyColour(unsigned colourID, QColor colour);
-
-    /// Delete colourID from the map.
+    void addEntry(QColor colour, std::string name);
+    void modifyName(unsigned colourID, std::string name);
+    void modifyColour(unsigned colourID, QColor colour);
     void deleteEntry(unsigned colourID);
 
 };
