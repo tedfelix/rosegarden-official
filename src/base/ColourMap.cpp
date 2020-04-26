@@ -37,55 +37,38 @@ ColourMap::ColourMap()
     colours[0] = Entry();
 }
 
-bool
-ColourMap::deleteEntry(unsigned int item_num)
-{
-    // We explicitly refuse to delete the default colour
-    if (item_num == 0) 
-        return false;
-
-    unsigned int n_e = colours.erase(item_num);
-    if (n_e != 0)
-    {
-        return true;
-    }
-
-    // Otherwise we didn't find the right item
-    return false;
-}
-
 QColor
-ColourMap::getColour(unsigned int item_num) const
+ColourMap::getColour(unsigned colourID) const
 {
-    // Iterate over the m_map and if we find a match, return the
-    // QColor.  If we don't match, return the default colour.  m_map
-    // was initialised with at least one item in the ctor, so this is
-    // safe.
-    QColor ret = (*colours.begin()).second.colour;
+    // If the map is empty, return the default.
+    if (colours.empty())
+        return defaultSegmentColour;
 
-    for (MapType::const_iterator position = colours.begin();
-	 position != colours.end(); ++position)
-        if (position->first == item_num)
-            ret = position->second.colour;
+    // Find the colourID in the map.
+    MapType::const_iterator colourIter = colours.find(colourID);
 
-    return ret;
+    // Not found?  Return the first entry.
+    if (colourIter == colours.end())
+        return colours.begin()->second.colour;
+
+    return colourIter->second.colour;
 }
 
 std::string
-ColourMap::getName(unsigned int item_num) const
+ColourMap::getName(unsigned int colourID) const
 {
-    // Iterate over the m_map and if we find a match, return the name.
-    // If we don't match, return the default colour's name.  m_map was
-    // initialised with at least one item in the ctor, so this is
-    // safe.
-    std::string ret = (*colours.begin()).second.name;
+    // If the map is empty, return the default.
+    if (colours.empty())
+        return "";
 
-    for (MapType::const_iterator position = colours.begin();
-	 position != colours.end(); ++position)
-        if (position->first == item_num)
-            ret = position->second.name;
+    // Find the colourID in the map.
+    MapType::const_iterator colourIter = colours.find(colourID);
 
-    return ret;
+    // Not found?  Return the first entry.
+    if (colourIter == colours.end())
+        return colours.begin()->second.name;
+
+    return colourIter->second.name;
 }
 
 bool
@@ -107,12 +90,6 @@ ColourMap::addEntry(QColor colour, std::string name)
     colours[highest] = Entry(colour, name);
 
     return true;
-}
-
-void
-ColourMap::addEntry(unsigned colorIndex, QColor colour, std::string name)
-{
-    colours[colorIndex] = Entry(colour, name);
 }
 
 bool
@@ -147,6 +124,16 @@ ColourMap::modifyColour(unsigned int item_num, QColor colour)
 
     // We didn't find the element
     return false;
+}
+
+void
+ColourMap::deleteEntry(unsigned colourID)
+{
+    // We explicitly refuse to delete the default colour
+    if (colourID == 0)
+        return;
+
+    colours.erase(colourID);
 }
 
 std::string

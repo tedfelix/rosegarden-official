@@ -28,6 +28,10 @@ namespace Rosegarden
 
 
 /// Maps a colour ID to a QColor and a name.
+/**
+ * ??? Quite a bit of this is actually unused as there is no way to launch
+ *     the color table editor (ColourConfigurationPage).
+ */
 class ColourMap
 {
 public:
@@ -51,28 +55,11 @@ public:
      */
     std::string getName(unsigned colourID) const;
 
-    /// Delete colourID from the map.
-    bool deleteEntry(unsigned colourID);
-
-    /// Add a colour entry using the lowest available ID.
-    bool addEntry(QColor colour, std::string name);
-
-    /// Add a colour map entry given colourID, colour, and name.
-    /**
-     * !!! ONLY FOR USE IN rosexmlhandler.cpp !!!
-     *
-     * ??? Inline this into the only caller.
-     */
-    void addEntry(unsigned colourID, QColor colour, std::string name);
-
-    /// Returns false if colourID not found.
-    bool modifyName(unsigned colourID, std::string name);
-
-    /// Returns false if colourID not found.
-    bool modifyColour(unsigned colourID, QColor colour);
-
+    /// For RosegardenDocument.
     std::string toXmlString(std::string name) const;
 
+
+    // *** Data
 
     struct Entry
     {
@@ -93,7 +80,26 @@ public:
     };
 
     typedef std::map<unsigned /* colourID */, Entry> MapType;
+    // Note: Use the helper functions above (and below) if possible.
     MapType colours;
+
+
+    // *** Interface for ColourConfigurationPage.
+
+    // These functions are essentially unused as there is no way to
+    // launch the ColourConfigurationPage.
+
+    /// Add a colour entry using the lowest available ID.
+    bool addEntry(QColor colour, std::string name);
+
+    /// Returns false if colourID not found.
+    bool modifyName(unsigned colourID, std::string name);
+
+    /// Returns false if colourID not found.
+    bool modifyColour(unsigned colourID, QColor colour);
+
+    /// Delete colourID from the map.
+    void deleteEntry(unsigned colourID);
 
 };
 

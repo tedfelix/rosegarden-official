@@ -2254,7 +2254,8 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             unsigned int blue = atts.value("blue").toInt();
             unsigned int green = atts.value("green").toInt();
             QColor colour(red, green, blue);
-            m_colourMap->addEntry(id, colour, qstrtostr(name));
+            m_colourMap->colours[id] =
+                    ColourMap::Entry(colour, qstrtostr(name));
         } else {
             m_errorString = "Found colourpair outside ColourMap";
             return false;
