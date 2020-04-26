@@ -20,10 +20,11 @@
 #ifndef RG_COLOURMAP_H
 #define RG_COLOURMAP_H
 
+#include <QColor>
+
 #include <utility>
 #include <map>
 #include <string>
-#include "Colour.h"
 
 // These are the default, default colour
 #define COLOUR_DEF_R 255
@@ -32,11 +33,11 @@
 
 namespace Rosegarden 
 {
-    typedef std::map<unsigned int, std::pair<Colour, std::string>, std::less<unsigned int> > RCMap;
+    typedef std::map<unsigned int, std::pair<QColor, std::string>, std::less<unsigned int> > RCMap;
 
 /**
  * ColourMap is our table which maps the unsigned integer keys stored in
- *  segments to both a Colour and a String containing the 'name'
+ *  segments to both a QColor and a String containing the 'name'
  */
 
 class ColourMap
@@ -51,19 +52,19 @@ public:
     ColourMap();
     /**
      * Initialises an ColourMap with a default element set to
-     * the value of the Colour passed in.
+     * the value of the QColor passed in.
      */
-    ColourMap(const Colour& input);
+    ColourMap(const QColor& input);
     ~ColourMap();
 
     /**
-     * Returns the Colour associated with the item_num passed in.  Note that
+     * Returns the QColor associated with the item_num passed in.  Note that
      * if the item_num doesn't represent a valid item, the routine returns
      * the value of the Default colour.  This means that if somehow some of
      * the Segments get out of sync with the ColourMap and have invalid
      * colour values, they'll be set to the Composition default colour.
      */
-    Colour getColourByIndex(unsigned int item_num) const;
+    QColor getColourByIndex(unsigned int item_num) const;
 
     /**
      * Returns the string associated with the item_num passed in.  If the
@@ -80,13 +81,13 @@ public:
     /**
      * This routine adds a Colour using the lowest possible index.
      */
-    bool addItem(Colour colour, std::string name);
+    bool addItem(QColor colour, std::string name);
 
     /**
      * This routine adds a Colour using the given id.  ONLY FOR USE IN
      * rosexmlhandler.cpp
      */
-    bool addItem(Colour colour, std::string name, unsigned int id);
+    bool addItem(QColor colour, std::string name, unsigned int id);
 
     /**
      * If the item with item_num exists and isn't the default, this
@@ -98,7 +99,7 @@ public:
      * If the item with item_num exists, this routine modifies the 
      * Colour associated with it
      */
-    bool modifyColourByIndex(unsigned int item_num, Colour colour);
+    bool modifyColourByIndex(unsigned int item_num, QColor colour);
 
     /**
      * If both items exist, swap them.  

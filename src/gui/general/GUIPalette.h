@@ -18,8 +18,6 @@
 #ifndef RG_GUIPALETTE_H
 #define RG_GUIPALETTE_H
 
-#include "base/Colour.h"
-
 #include <QColor>
 
 #include <map>
@@ -54,9 +52,6 @@ public:
 
 public:
     static QColor getColour(const char* const colourName);
-
-    static Colour convertColour(const QColor &input);
-    static QColor convertColour(const Colour &input);
 
     static const char* const ActiveRecordTrack;
 

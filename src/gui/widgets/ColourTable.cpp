@@ -126,7 +126,7 @@ ColourTable::populate_table(ColourMap &input, ColourList &list)
         setItem(i, 0, text);
 
         list[i] = it->first;
-        m_colours[i] = GUIPalette::convertColour(it->second.first);
+        m_colours[i] = it->second.first;
 
         ColourTableItem *temp = new ColourTableItem(this, m_colours[i]);
         setItem(i, 1, temp);

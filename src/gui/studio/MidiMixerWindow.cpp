@@ -25,7 +25,6 @@
 #include "sound/Midi.h"
 #include "misc/Debug.h"
 #include "misc/Strings.h"
-#include "base/Colour.h"
 #include "base/Device.h"
 #include "base/Instrument.h"
 #include "base/InstrumentStaticSignals.h"
@@ -196,7 +195,7 @@ MidiMixerWindow::setupTabs()
                     QColor knobColour = QColor(Qt::white);
 
                     if (controls[i].getColourIndex() > 0) {
-                        Colour c =
+                        QColor c =
                             m_document->getComposition().getGeneralColourMap().
                             getColourByIndex(controls[i].getColourIndex());
 

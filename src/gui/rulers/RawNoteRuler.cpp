@@ -489,8 +489,8 @@ RawNoteRuler::paintEvent(QPaintEvent* e)
 
     // draw the extent of the segment using its color
 
-    QColor brushColor = GUIPalette::convertColour(m_segment->getComposition()->
-                        getSegmentColourMap().getColourByIndex(m_segment->getColourIndex()));
+    QColor brushColor = m_segment->getComposition()->
+                        getSegmentColourMap().getColourByIndex(m_segment->getColourIndex());
     paint.setPen(brushColor);
     paint.setBrush(brushColor);
     int x0 = int(m_rulerScale->getXForTime(m_segment->getStartTime()) + 

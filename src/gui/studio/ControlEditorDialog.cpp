@@ -21,7 +21,6 @@
 
 #include "misc/Debug.h"
 #include "misc/Strings.h"  // for strtoqstr() etc...
-#include "base/Colour.h"
 #include "base/Composition.h"
 #include "base/ControlParameter.h"
 #include "base/MidiDevice.h"
@@ -277,7 +276,7 @@ ControlEditorDialog::slotUpdate(bool added)
         // create and set a colour pixmap
         //
         QPixmap colourPixmap(16, 16);
-        Colour c = comp.getGeneralColourMap().getColourByIndex(it->getColourIndex());
+        QColor c = comp.getGeneralColourMap().getColourByIndex(it->getColourIndex());
         colourPixmap.fill(QColor(c.red(), c.green(), c.blue()));
         
         item->setIcon(7, QIcon(colourPixmap));

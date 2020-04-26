@@ -17,10 +17,10 @@
 
 
 #include "GUIPalette.h"
-#include <QApplication>
 
-#include "base/Colour.h"
 #include "misc/ConfigGroups.h"
+
+#include <QApplication>
 #include <QSettings>
 #include <QColor>
 
@@ -48,18 +48,6 @@ QColor GUIPalette::getColour(const char* const colourName)
 
     config.endGroup();
     return color;
-}
-
-Colour GUIPalette::convertColour(const QColor &input)
-{
-    int r, g, b;
-    input.getRgb(&r, &g, &b);
-    return Colour(r, g, b);
-}
-
-QColor GUIPalette::convertColour(const Colour& input)
-{
-    return QColor(input.red(), input.green(), input.blue());
 }
 
 GUIPalette::GUIPalette()

@@ -32,7 +32,6 @@
 #include "gui/widgets/Rotary.h"
 #include "sequencer/RosegardenSequencer.h"
 #include "misc/Debug.h"
-#include "base/Colour.h"
 #include "base/Composition.h"
 #include "base/ControlParameter.h"
 #include "base/Instrument.h"
@@ -396,7 +395,7 @@ MIDIInstrumentParameterPanel::setupControllers(MidiDevice *md)
         // black instead of the default color from the map!  it was here the
         // whole time, this simple!)
         //
-        const Colour c = comp.getGeneralColourMap().getColourByIndex(
+        const QColor c = comp.getGeneralColourMap().getColourByIndex(
                 it->getColourIndex());
         const QColor knobColour = QColor(c.red(), c.green(), c.blue());
 

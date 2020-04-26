@@ -30,11 +30,11 @@ namespace Rosegarden
 ColourMap::ColourMap()
 {
     // Set up the default colour.  The #defines can be found in ColourMap.h
-    Colour tempcolour(COLOUR_DEF_R, COLOUR_DEF_G, COLOUR_DEF_B);
+    QColor tempcolour(COLOUR_DEF_R, COLOUR_DEF_G, COLOUR_DEF_B);
     m_map[0] = make_pair(tempcolour, std::string(""));
 }
 
-ColourMap::ColourMap(const Colour& input)
+ColourMap::ColourMap(const QColor &input)
 {
     // Set up the default colour based on the input
     m_map[0] = make_pair(input, std::string(""));
@@ -62,14 +62,14 @@ ColourMap::deleteItemByIndex(unsigned int item_num)
     return false;
 }
 
-Colour
+QColor
 ColourMap::getColourByIndex(unsigned int item_num) const
 {
     // Iterate over the m_map and if we find a match, return the
-    // Colour.  If we don't match, return the default colour.  m_map
+    // QColor.  If we don't match, return the default colour.  m_map
     // was initialised with at least one item in the ctor, so this is
     // safe.
-    Colour ret = (*m_map.begin()).second.first;
+    QColor ret = (*m_map.begin()).second.first;
 
     for (RCMap::const_iterator position = m_map.begin();
 	 position != m_map.end(); ++position)
@@ -97,7 +97,7 @@ ColourMap::getNameByIndex(unsigned int item_num) const
 }
 
 bool
-ColourMap::addItem(Colour colour, std::string name)
+ColourMap::addItem(QColor colour, std::string name)
 {
     // If we want to limit the number of colours, here's the place to do it
     unsigned int highest=0;
@@ -117,7 +117,7 @@ ColourMap::addItem(Colour colour, std::string name)
 
 // WARNING: This version of addItem is only for use by rosexmlhandler.cpp
 bool
-ColourMap::addItem(Colour colour, std::string name, unsigned int id)
+ColourMap::addItem(QColor colour, std::string name, unsigned int id)
 {
     m_map[id] = make_pair(colour, name);
 
@@ -143,7 +143,7 @@ ColourMap::modifyNameByIndex(unsigned int item_num, std::string name)
 }
 
 bool
-ColourMap::modifyColourByIndex(unsigned int item_num, Colour colour)
+ColourMap::modifyColourByIndex(unsigned int item_num, QColor colour)
 {
     for (RCMap::iterator position = m_map.begin(); position != m_map.end(); ++position)
         if (position->first == item_num)
@@ -183,7 +183,7 @@ ColourMap::swapItems(unsigned int item_1, unsigned int item_2)
     // There's probably a nicer way to do this
     if ((one != 0) && (two != 0))
     {
-        Colour tempC = m_map[one].first;
+        QColor tempC = m_map[one].first;
         std::string tempS = m_map[one].second;
         m_map[one].first = m_map[two].first;
         m_map[one].second = m_map[two].second;
@@ -227,7 +227,7 @@ ColourMap::toXmlString(std::string name) const
 
     for (RCMap::const_iterator pos = m_map.begin(); pos != m_map.end(); ++pos)
     {
-        const Colour &color = pos->second.first;
+        const QColor &color = pos->second.first;
 
         output << "  " << "            <colourpair id=\"" << pos->first
                << "\" name=\"" << XmlExportable::encode(pos->second.second)

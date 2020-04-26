@@ -21,7 +21,6 @@
 
 #include "misc/Debug.h"
 #include "misc/Strings.h"  // qstrtostr() etc...
-#include "base/Colour.h"
 #include "base/ColourMap.h"
 //#include "base/NotationTypes.h"
 #include "base/BasicQuantizer.h"
@@ -939,7 +938,7 @@ SegmentParameterBox::slotColourChanged(int index)
             QColor newColor = QColorDialog::getColor(Qt::white, this);
 
             if (newColor.isValid()) {
-                Colour newRColour = GUIPalette::convertColour(newColour);
+                Colour newRColour = newColour;
                 newMap.addItem(newRColour, qstrtostr(newName));
                 SegmentColourMapCommand *command =
                         new SegmentColourMapCommand(RosegardenMainWindow::self()->getDocument(), newMap);

@@ -443,7 +443,6 @@ set(rg_CPPS
   base/parameterpattern/FlatParameterPattern.cpp
   base/parameterpattern/RingingParameterPattern.cpp
   base/parameterpattern/HalfSinePattern.cpp
-  base/Colour.cpp
   base/InstrumentStaticSignals.cpp
   base/Selection.cpp
   base/BaseProperties.cpp

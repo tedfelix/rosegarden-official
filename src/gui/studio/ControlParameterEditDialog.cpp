@@ -22,7 +22,6 @@
 #include "gui/widgets/LineEdit.h"
 #include "misc/Debug.h"
 #include "misc/Strings.h"
-#include "base/Colour.h"
 #include "base/ColourMap.h"
 #include "base/ControlParameter.h"
 #include "base/Event.h"
@@ -181,7 +180,7 @@ ControlParameterEditDialog::ControlParameterEditDialog(
     QPixmap colourPixmap(16, 16);
 
     for (it = colourMap.begin(); it != colourMap.end(); ++it) {
-        Colour c = it->second.first;
+        QColor c = it->second.first;
         colourPixmap.fill(QColor(c.red(), c.green(), c.blue()));
         m_colourCombo->addItem(colourPixmap, strtoqstr(it->second.second));
     }

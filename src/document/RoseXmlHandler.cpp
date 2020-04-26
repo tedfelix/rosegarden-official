@@ -27,7 +27,6 @@
 #include "base/AudioLevel.h"
 #include "base/AudioPluginInstance.h"
 #include "base/BaseProperties.h"
-#include "base/Colour.h"
 #include "base/ColourMap.h"
 #include "base/Composition.h"
 #include "base/ControlParameter.h"
@@ -60,6 +59,7 @@
 
 #include <QMessageBox>
 #include <QByteArray>
+#include <QColor>
 #include <QDataStream>
 #include <QDialog>
 #include <QFileInfo>
@@ -2253,7 +2253,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             unsigned int red = atts.value("red").toInt();
             unsigned int blue = atts.value("blue").toInt();
             unsigned int green = atts.value("green").toInt();
-            Colour colour(red, green, blue);
+            QColor colour(red, green, blue);
             m_colourMap->addItem(colour, qstrtostr(name), id);
         } else {
             m_errorString = "Found colourpair outside ColourMap";

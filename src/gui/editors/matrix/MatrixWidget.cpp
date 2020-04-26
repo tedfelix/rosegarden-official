@@ -68,9 +68,9 @@
 #include "base/MidiDevice.h"
 #include "base/SoftSynthDevice.h"
 #include "base/ColourMap.h"
-#include "base/Colour.h"
 
 #include <QApplication>
+#include <QColor>
 #include <QDesktopWidget>
 #include <QGraphicsView>
 #include <QGridLayout>
@@ -1384,7 +1384,7 @@ MatrixWidget::updateSegmentChangerBackground()
 
     // set the changer widget background to the now current segment's
     // background, and reset the tooltip style to compensate
-    Colour segmentColor = composition.getSegmentColourMap().
+    QColor segmentColor = composition.getSegmentColourMap().
             getColourByIndex(segment->getColourIndex());
 
     QPalette palette = m_changerWidget->palette();

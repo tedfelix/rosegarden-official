@@ -49,7 +49,6 @@
 #include "base/SoftSynthDevice.h"
 #include "base/MidiTypes.h"
 #include "base/ColourMap.h"
-#include "base/Colour.h"
 #include "base/Segment.h"
 
 #include "document/RosegardenDocument.h"
@@ -77,6 +76,7 @@
 #include "misc/ConfigGroups.h"
 
 #include <QApplication>
+#include <QColor>
 #include <QGraphicsView>
 #include <QGridLayout>
 #include <QBoxLayout>
@@ -1746,7 +1746,7 @@ NotationWidget::slotUpdateSegmentChangerBackground()
 {
     // set the changer widget background to the now current segment's
     // background, and reset the tooltip style to compensate
-    Colour c = m_document->getComposition().getSegmentColourMap().getColourByIndex(m_scene->getCurrentSegment()->getColourIndex());
+    QColor c = m_document->getComposition().getSegmentColourMap().getColourByIndex(m_scene->getCurrentSegment()->getColourIndex());
 
     QPalette palette = m_changerWidget->palette();
     palette.setColor(QPalette::Window, c);

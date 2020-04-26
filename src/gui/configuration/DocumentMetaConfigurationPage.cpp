@@ -24,7 +24,6 @@
 #include "base/Event.h"
 #include "base/BaseProperties.h"
 #include "misc/Strings.h"
-#include "base/Colour.h"
 #include "base/Composition.h"
 #include "base/Configuration.h"
 #include "base/NotationTypes.h"
@@ -41,6 +40,7 @@
 #include "gui/general/GUIPalette.h"
 #include "misc/Debug.h"
 
+#include <QColor>
 #include <QSettings>
 #include <QFrame>
 #include <QLabel>
@@ -209,9 +209,9 @@ DocumentMetaConfigurationPage::DocumentMetaConfigurationPage(
                         QString("%1").arg(s->getTrack() + 1)));
 
         QPixmap colourPixmap(16, 16);
-        Colour colour =
+        QColor colour =
             comp.getSegmentColourMap().getColourByIndex(s->getColourIndex());
-        colourPixmap.fill(GUIPalette::convertColour(colour));
+        colourPixmap.fill(colour);
 
         table->setItem(i, 2,
                        new QTableWidgetItem( colourPixmap, strtoqstr(s->getLabel())) );

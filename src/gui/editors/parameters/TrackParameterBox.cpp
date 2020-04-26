@@ -26,7 +26,6 @@
 #include "base/AudioPluginInstance.h"
 #include "gui/general/ClefIndex.h"  // Clef enum
 #include "gui/widgets/CollapsingFrame.h"
-#include "base/Colour.h"
 #include "base/ColourMap.h"
 #include "base/Composition.h"
 #include "misc/ConfigGroups.h"
@@ -764,7 +763,7 @@ TrackParameterBox::slotColorChanged(int index)
             QColor newColor = QColorDialog::getColor(Qt::white, this);
 
             if (newColor.isValid()) {
-                Colour newRColour = GUIPalette::convertColour(newColour);
+                Colour newRColour = newColour;
                 newMap.addItem(newRColour, qstrtostr(newName));
                 SegmentColourMapCommand *command =
                         new SegmentColourMapCommand(m_doc, newMap);

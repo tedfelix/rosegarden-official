@@ -21,7 +21,6 @@
 
 #include "misc/Debug.h"
 #include "misc/Strings.h"
-#include "base/Colour.h"
 #include "base/ColourMap.h"
 #include "commands/segment/SegmentColourMapCommand.h"
 #include "ConfigurationPage.h"
@@ -108,7 +107,7 @@ ColourConfigurationPage::slotTextChanged(unsigned int index, QString string)
 void
 ColourConfigurationPage::slotColourChanged(unsigned int index, QColor color)
 {
-    m_map.modifyColourByIndex(m_listmap[index], GUIPalette::convertColour(color));
+    m_map.modifyColourByIndex(m_listmap[index], color);
     m_colourtable->populate_table(m_map, m_listmap);
 }
 
@@ -141,7 +140,7 @@ ColourConfigurationPage::slotAddNew()
         //QColor col = QColorDialog::getColor();
         // QRgb rgba = QColorDialog::getRgba( 0xFFFFFFFF, &c_ok, 0 );    // 0 == parent
         
-        Colour temp2 = GUIPalette::convertColour(temp);
+        QColor temp2 = temp;
         m_map.addItem(temp2, qstrtostr(newName));
         m_colourtable->populate_table(m_map, m_listmap);
         // Else we don't do anything as they either didn't give a name

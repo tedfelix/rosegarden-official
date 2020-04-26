@@ -150,9 +150,9 @@ void SegmentPencil::mousePressEvent(QMouseEvent *e)
     tmpRect.setY(snapGrid.getYBinCoordinate(trackPosition) + 1);
     tmpRect.setHeight(snapGrid.getYSnap() * multiple - 2);
 
-    m_canvas->setNewSegmentColor(GUIPalette::convertColour(
+    m_canvas->setNewSegmentColor(
             m_doc->getComposition().getSegmentColourMap().
-            getColourByIndex(t->getColor())));
+            getColourByIndex(t->getColor()));
     m_canvas->drawNewSegment(tmpRect);
 
     m_newRect = true;

@@ -1600,8 +1600,8 @@ Segment::getPreviewColour() const
         return Qt::black;
     }
 
-    QColor segmentColour = GUIPalette::convertColour(
-            m_composition->getSegmentColourMap().getColourByIndex(m_colourIndex));
+    QColor segmentColour =
+            m_composition->getSegmentColourMap().getColourByIndex(m_colourIndex);
 
     int intensity = qGray(segmentColour.rgb());
 

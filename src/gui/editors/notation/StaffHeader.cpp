@@ -23,7 +23,6 @@
 #include "base/Composition.h"
 #include "base/NotationTypes.h"
 #include "base/StaffExportTypes.h"
-#include "base/Colour.h"
 #include "base/ColourMap.h"
 #include "base/Track.h"
 #include "base/Overlaps.h"
@@ -45,6 +44,7 @@
 #include <utility>
 
 #include <QApplication>
+#include <QColor>
 #include <QSize>
 #include <QWidget>
 #include <QHBoxLayout>
@@ -766,9 +766,9 @@ StaffHeader::updateHeader(int width)
         NotePixmapFactory * npf = m_scene->getNotePixmapFactory();
 
         // Get background colour from colour index
-        m_background = GUIPalette::convertColour(m_headersGroup->getComposition()
+        m_background = m_headersGroup->getComposition()
                            ->getSegmentColourMap()
-                               .getColourByIndex(m_colourIndex));
+                               .getColourByIndex(m_colourIndex);
 
         // Select foreground colour (black or white) to get the better
         // visibility
