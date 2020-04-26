@@ -21,88 +21,74 @@
 
 #include <QColor>
 
-#include <utility>
 #include <map>
 #include <string>
-
-// Default Segment color.
-#define COLOUR_DEF_R 255
-#define COLOUR_DEF_G 234
-#define COLOUR_DEF_B 182 
 
 namespace Rosegarden 
 {
 
 
-/**
- * ColourMap is our table which maps the unsigned integer keys stored in
- *  segments to both a QColor and a String containing the 'name'
- */
-
+/// Maps a color ID to a QColor and a name.
 class ColourMap
 {
 public:
-    // Functions:
-
-    /**
-     * Initialises an ColourMap with a default element set to
-     * whatever COLOUR_DEF_X defines the colour to be (see the source file)
-     */
+    /// Create a ColourMap with only the default segment color.
     ColourMap();
+
     /**
      * Initialises an ColourMap with a default element set to
      * the value of the QColor passed in.
      */
-    ColourMap(const QColor& input);
+    //ColourMap(const QColor& input);
+
+    static const QColor defaultSegmentColor;
+
+    // ??? colorIndex should probably be colorID.  "id" is used in the
+    //     xml to refer to this.  And it's a more accurate description
+    //     than index.
 
     /**
-     * Returns the QColor associated with the item_num passed in.  Note that
-     * if the item_num doesn't represent a valid item, the routine returns
-     * the value of the Default colour.  This means that if somehow some of
-     * the Segments get out of sync with the ColourMap and have invalid
-     * colour values, they'll be set to the Composition default colour.
+     * If the colorIndex isn't in the map, the routine returns the value of
+     * the default colour (at index 0 in the table).  This means that if
+     * somehow some of the Segments get out of sync with the ColourMap and
+     * have invalid colour values, they'll be set to the Composition default
+     * colour.
      */
     QColor getColourByIndex(unsigned int colorIndex) const;
 
     /**
-     * Returns the string associated with the item_num passed in.  If the
-     * item_num doesn't exist, it'll return "" (the same name as the default
-     * colour has - for internationalization reasons).
+     * If the colorIndex isn't in the map, the name of the entry at index 0 is
+     * returned.  Usually this is "", for internationalization reasons.
      */
     std::string getNameByIndex(unsigned int colorIndex) const;
 
-    /**
-     * If item_num exists, this routine deletes it from the map.
-     */
+    /// Delete colorIndex from the map.
     bool deleteItemByIndex(unsigned int colorIndex);
 
-    /**
-     * This routine adds a Colour using the lowest possible index.
-     */
+    /// Add a colour entry using the lowest available index.
     bool addItem(QColor colour, std::string name);
 
+    /// Add a colour map entry given index, colour, and name.
     /**
-     * This routine adds a Colour using the given id.  ONLY FOR USE IN
-     * rosexmlhandler.cpp
+     * !!! ONLY FOR USE IN rosexmlhandler.cpp !!!
+     *
+     * ??? Inline this into the only caller.
      */
-    bool addItem(QColor colour, std::string name, unsigned int id);
+    void addItem(unsigned colorIndex, QColor colour, std::string name);
 
-    /**
-     * If the item with item_num exists and isn't the default, this
-     * routine modifies the string associated with it
-     */
-    bool modifyNameByIndex(unsigned int colorIndex, std::string name);
+    /// Returns false if colorIndex not found.
+    bool modifyNameByIndex(unsigned colorIndex, std::string name);
 
-    /**
-     * If the item with item_num exists, this routine modifies the 
-     * Colour associated with it
-     */
-    bool modifyColourByIndex(unsigned int colorIndex, QColor colour);
+    /// Returns false if colorIndex not found.
+    bool modifyColourByIndex(unsigned colorIndex, QColor colour);
+
+    std::string toXmlString(std::string name) const;
+
 
     struct Entry
     {
         Entry() :
-            color(COLOUR_DEF_R, COLOUR_DEF_G, COLOUR_DEF_B),
+            color(defaultSegmentColor),
             name()
         {
         }
@@ -118,9 +104,6 @@ public:
     };
 
     typedef std::map<unsigned /* colorIndex */, Entry> MapType;
-
-    std::string toXmlString(std::string name) const;
-
     MapType colours;
 
 private:

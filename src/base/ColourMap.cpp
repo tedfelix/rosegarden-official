@@ -27,19 +27,24 @@
 namespace Rosegarden 
 {
 
+const QColor ColourMap::defaultSegmentColor(255, 234, 182);
+
 ColourMap::ColourMap()
 {
-    // Set up the default colour.  The #defines can be found in ColourMap.h
-    QColor tempcolour(COLOUR_DEF_R, COLOUR_DEF_G, COLOUR_DEF_B);
+    // Set up entry 0 as the default colour.
+    // ??? Does this really matter?  I suspect this is clobbered by
+    //     RoseXmlHandler, so it's not needed.  Might be worth doing
+    //     some comprehensive testing to see if removing this would
+    //     make any difference.
     colours[0] = Entry();
 }
-
+#if 0
 ColourMap::ColourMap(const QColor &color)
 {
     // Set up the default colour based on the input
     colours[0] = Entry(color, "");
 }
-
+#endif
 bool
 ColourMap::deleteItemByIndex(unsigned int item_num)
 {
@@ -110,13 +115,10 @@ ColourMap::addItem(QColor colour, std::string name)
     return true;
 }
 
-// WARNING: This version of addItem is only for use by rosexmlhandler.cpp
-bool
-ColourMap::addItem(QColor colour, std::string name, unsigned int id)
+void
+ColourMap::addItem(unsigned colorIndex, QColor colour, std::string name)
 {
-    colours[id] = Entry(colour, name);
-
-    return true;
+    colours[colorIndex] = Entry(colour, name);
 }
 
 bool
