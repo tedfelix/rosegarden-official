@@ -73,10 +73,10 @@ ColorCombo::updateColors()
          ++colourIter) {
         // Wrap in a tr() call in case the color is on the list of translated
         // color names we're including since 09.10.
-        QString colourName(QObject::tr(colourIter->second.second.c_str()));
+        QString colourName(QObject::tr(colourIter->second.name.c_str()));
 
         QPixmap colourIcon(15, 15);
-        colourIcon.fill(colourIter->second.first);
+        colourIcon.fill(colourIter->second.color);
 
         if (colourName == "") {
             addItem(colourIcon, tr("Default"));

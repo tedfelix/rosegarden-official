@@ -182,9 +182,9 @@ ControlParameterEditDialog::ControlParameterEditDialog(
     for (it = colourMap.colours.begin();
          it != colourMap.colours.end();
          ++it) {
-        QColor c = it->second.first;
+        QColor c = it->second.color;
         colourPixmap.fill(QColor(c.red(), c.green(), c.blue()));
-        m_colourCombo->addItem(colourPixmap, strtoqstr(it->second.second));
+        m_colourCombo->addItem(colourPixmap, strtoqstr(it->second.name));
     }
 
     // Populate IPB position combo

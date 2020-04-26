@@ -54,7 +54,6 @@ public:
      * the value of the QColor passed in.
      */
     ColourMap(const QColor& input);
-    ~ColourMap();
 
     /**
      * Returns the QColor associated with the item_num passed in.  Note that
@@ -63,19 +62,19 @@ public:
      * the Segments get out of sync with the ColourMap and have invalid
      * colour values, they'll be set to the Composition default colour.
      */
-    QColor getColourByIndex(unsigned int item_num) const;
+    QColor getColourByIndex(unsigned int colorIndex) const;
 
     /**
      * Returns the string associated with the item_num passed in.  If the
      * item_num doesn't exist, it'll return "" (the same name as the default
      * colour has - for internationalization reasons).
      */
-    std::string getNameByIndex(unsigned int item_num) const;
+    std::string getNameByIndex(unsigned int colorIndex) const;
 
     /**
      * If item_num exists, this routine deletes it from the map.
      */
-    bool deleteItemByIndex(unsigned int item_num);
+    bool deleteItemByIndex(unsigned int colorIndex);
 
     /**
      * This routine adds a Colour using the lowest possible index.
@@ -92,23 +91,33 @@ public:
      * If the item with item_num exists and isn't the default, this
      * routine modifies the string associated with it
      */
-    bool modifyNameByIndex(unsigned int item_num, std::string name);
+    bool modifyNameByIndex(unsigned int colorIndex, std::string name);
 
     /**
      * If the item with item_num exists, this routine modifies the 
      * Colour associated with it
      */
-    bool modifyColourByIndex(unsigned int item_num, QColor colour);
+    bool modifyColourByIndex(unsigned int colorIndex, QColor colour);
 
-    /**
-     * If both items exist, swap them.  
-     */
-    bool swapItems(unsigned int item_1, unsigned int item_2);
+    struct Entry
+    {
+        Entry() :
+            color(COLOUR_DEF_R, COLOUR_DEF_G, COLOUR_DEF_B),
+            name()
+        {
+        }
 
-//    void replace(ColourMap &input);
+        Entry(const QColor &i_color, const std::string &i_name) :
+            color(i_color),
+            name(i_name)
+        {
+        }
 
-    typedef std::map<unsigned /* item_num */,
-                     std::pair<QColor, std::string /* name */> > MapType;
+        QColor color;
+        std::string name;
+    };
+
+    typedef std::map<unsigned /* colorIndex */, Entry> MapType;
 
     std::string toXmlString(std::string name) const;
 
@@ -116,9 +125,14 @@ public:
 
 private:
     // unused
-    MapType::const_iterator begin();
-    MapType::const_iterator end();
-    unsigned int size() const;
+    /**
+     * If both items exist, swap them.
+     */
+    //bool swapItems(unsigned int item_1, unsigned int item_2);
+    //void replace(ColourMap &input);
+    //MapType::const_iterator begin();
+    //MapType::const_iterator end();
+    //unsigned int size() const;
 
 };
 

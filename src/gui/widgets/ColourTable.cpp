@@ -115,10 +115,10 @@ ColourTable::populate_table(ColourMap &input, ColourList &list)
     for (ColourMap::MapType::const_iterator it = input.colours.begin();
          it != input.colours.end();
          ++it) {
-        if (it->second.second == std::string(""))
+        if (it->second.name == "")
             name = tr("Default Color");
         else
-            name = strtoqstr(it->second.second);
+            name = strtoqstr(it->second.name);
 
 //         QTableWidgetItem *text = new QTableWidgetItem(
 //                 dynamic_cast<QTableWidget *>(this),
@@ -128,7 +128,7 @@ ColourTable::populate_table(ColourMap &input, ColourList &list)
         setItem(i, 0, text);
 
         list[i] = it->first;
-        m_colours[i] = it->second.first;
+        m_colours[i] = it->second.color;
 
         ColourTableItem *temp = new ColourTableItem(this, m_colours[i]);
         setItem(i, 1, temp);

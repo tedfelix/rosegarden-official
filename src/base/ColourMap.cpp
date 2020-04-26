@@ -31,18 +31,13 @@ ColourMap::ColourMap()
 {
     // Set up the default colour.  The #defines can be found in ColourMap.h
     QColor tempcolour(COLOUR_DEF_R, COLOUR_DEF_G, COLOUR_DEF_B);
-    colours[0] = make_pair(tempcolour, std::string(""));
+    colours[0] = Entry();
 }
 
-ColourMap::ColourMap(const QColor &input)
+ColourMap::ColourMap(const QColor &color)
 {
     // Set up the default colour based on the input
-    colours[0] = make_pair(input, std::string(""));
-}
-
-ColourMap::~ColourMap()
-{
-    // Everything should destroy itself automatically
+    colours[0] = Entry(color, "");
 }
 
 bool
@@ -69,12 +64,12 @@ ColourMap::getColourByIndex(unsigned int item_num) const
     // QColor.  If we don't match, return the default colour.  m_map
     // was initialised with at least one item in the ctor, so this is
     // safe.
-    QColor ret = (*colours.begin()).second.first;
+    QColor ret = (*colours.begin()).second.color;
 
     for (MapType::const_iterator position = colours.begin();
 	 position != colours.end(); ++position)
         if (position->first == item_num)
-            ret = position->second.first;
+            ret = position->second.color;
 
     return ret;
 }
@@ -86,12 +81,12 @@ ColourMap::getNameByIndex(unsigned int item_num) const
     // If we don't match, return the default colour's name.  m_map was
     // initialised with at least one item in the ctor, so this is
     // safe.
-    std::string ret = (*colours.begin()).second.second;
+    std::string ret = (*colours.begin()).second.name;
 
     for (MapType::const_iterator position = colours.begin();
 	 position != colours.end(); ++position)
         if (position->first == item_num)
-            ret = position->second.second;
+            ret = position->second.name;
 
     return ret;
 }
@@ -110,7 +105,7 @@ ColourMap::addItem(QColor colour, std::string name)
         ++highest;
     }
 
-    colours[highest] = make_pair(colour, name);
+    colours[highest] = Entry(colour, name);
 
     return true;
 }
@@ -119,7 +114,7 @@ ColourMap::addItem(QColor colour, std::string name)
 bool
 ColourMap::addItem(QColor colour, std::string name, unsigned int id)
 {
-    colours[id] = make_pair(colour, name);
+    colours[id] = Entry(colour, name);
 
     return true;
 }
@@ -134,7 +129,7 @@ ColourMap::modifyNameByIndex(unsigned int item_num, std::string name)
     for (MapType::iterator position = colours.begin(); position != colours.end(); ++position)
         if (position->first == item_num)
         {
-            position->second.second = name;
+            position->second.name = name;
             return true;
         }
 
@@ -148,7 +143,7 @@ ColourMap::modifyColourByIndex(unsigned int item_num, QColor colour)
     for (MapType::iterator position = colours.begin(); position != colours.end(); ++position)
         if (position->first == item_num)
         {
-            position->second.first = colour;
+            position->second.color = colour;
             return true;
         }
 
@@ -156,6 +151,7 @@ ColourMap::modifyColourByIndex(unsigned int item_num, QColor colour)
     return false;
 }
 
+#if 0
 bool
 ColourMap::swapItems(unsigned int item_1, unsigned int item_2)
 {
@@ -183,12 +179,12 @@ ColourMap::swapItems(unsigned int item_1, unsigned int item_2)
     // There's probably a nicer way to do this
     if ((one != 0) && (two != 0))
     {
-        QColor tempC = colours[one].first;
-        std::string tempS = colours[one].second;
-        colours[one].first = colours[two].first;
-        colours[one].second = colours[two].second;
-        colours[two].first = tempC;
-        colours[two].second = tempS;
+        QColor tempC = colours[one].color;
+        std::string tempS = colours[one].name;
+        colours[one].color = colours[two].color;
+        colours[one].name = colours[two].name;
+        colours[two].color = tempC;
+        colours[two].name = tempS;
 
         return true;
     }
@@ -196,7 +192,8 @@ ColourMap::swapItems(unsigned int item_1, unsigned int item_2)
     // Else they didn't
     return false;
 }
-
+#endif
+#if 0
 ColourMap::MapType::const_iterator
 ColourMap::begin()
 {
@@ -216,6 +213,7 @@ ColourMap::size() const
 {
     return (unsigned int)colours.size();
 }
+#endif
 
 std::string
 ColourMap::toXmlString(std::string name) const
@@ -227,10 +225,10 @@ ColourMap::toXmlString(std::string name) const
 
     for (MapType::const_iterator pos = colours.begin(); pos != colours.end(); ++pos)
     {
-        const QColor &color = pos->second.first;
+        const QColor &color = pos->second.color;
 
         output << "  " << "            <colourpair id=\"" << pos->first
-               << "\" name=\"" << XmlExportable::encode(pos->second.second)
+               << "\" name=\"" << XmlExportable::encode(pos->second.name)
                << "\" "
                << "red=\"" << color.red()
                << "\" green=\"" << color.green()
@@ -241,9 +239,9 @@ ColourMap::toXmlString(std::string name) const
 
     output << "        </colourmap>" << std::endl;
 
-
     return output.str();
 
 }
+
 
 }
