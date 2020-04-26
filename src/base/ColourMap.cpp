@@ -25,7 +25,7 @@ namespace Rosegarden
 {
 
 
-const QColor ColourMap::defaultSegmentColor(255, 234, 182);
+const QColor ColourMap::defaultSegmentColour(255, 234, 182);
 
 ColourMap::ColourMap()
 {
@@ -38,7 +38,7 @@ ColourMap::ColourMap()
 }
 
 bool
-ColourMap::deleteItemByIndex(unsigned int item_num)
+ColourMap::deleteEntry(unsigned int item_num)
 {
     // We explicitly refuse to delete the default colour
     if (item_num == 0) 
@@ -55,24 +55,24 @@ ColourMap::deleteItemByIndex(unsigned int item_num)
 }
 
 QColor
-ColourMap::getColourByIndex(unsigned int item_num) const
+ColourMap::getColour(unsigned int item_num) const
 {
     // Iterate over the m_map and if we find a match, return the
     // QColor.  If we don't match, return the default colour.  m_map
     // was initialised with at least one item in the ctor, so this is
     // safe.
-    QColor ret = (*colours.begin()).second.color;
+    QColor ret = (*colours.begin()).second.colour;
 
     for (MapType::const_iterator position = colours.begin();
 	 position != colours.end(); ++position)
         if (position->first == item_num)
-            ret = position->second.color;
+            ret = position->second.colour;
 
     return ret;
 }
 
 std::string
-ColourMap::getNameByIndex(unsigned int item_num) const
+ColourMap::getName(unsigned int item_num) const
 {
     // Iterate over the m_map and if we find a match, return the name.
     // If we don't match, return the default colour's name.  m_map was
@@ -89,12 +89,14 @@ ColourMap::getNameByIndex(unsigned int item_num) const
 }
 
 bool
-ColourMap::addItem(QColor colour, std::string name)
+ColourMap::addEntry(QColor colour, std::string name)
 {
     // If we want to limit the number of colours, here's the place to do it
     unsigned int highest=0;
 
-    for (MapType::iterator position = colours.begin(); position != colours.end(); ++position)
+    for (MapType::iterator position = colours.begin();
+         position != colours.end();
+         ++position)
     {
         if (position->first != highest)
             break;
@@ -108,13 +110,13 @@ ColourMap::addItem(QColor colour, std::string name)
 }
 
 void
-ColourMap::addItem(unsigned colorIndex, QColor colour, std::string name)
+ColourMap::addEntry(unsigned colorIndex, QColor colour, std::string name)
 {
     colours[colorIndex] = Entry(colour, name);
 }
 
 bool
-ColourMap::modifyNameByIndex(unsigned int item_num, std::string name)
+ColourMap::modifyName(unsigned int item_num, std::string name)
 {
     // We don't allow a name to be given to the default colour
     if (item_num == 0)
@@ -132,12 +134,14 @@ ColourMap::modifyNameByIndex(unsigned int item_num, std::string name)
 }
 
 bool
-ColourMap::modifyColourByIndex(unsigned int item_num, QColor colour)
+ColourMap::modifyColour(unsigned int item_num, QColor colour)
 {
-    for (MapType::iterator position = colours.begin(); position != colours.end(); ++position)
+    for (MapType::iterator position = colours.begin();
+         position != colours.end();
+         ++position)
         if (position->first == item_num)
         {
-            position->second.color = colour;
+            position->second.colour = colour;
             return true;
         }
 
@@ -155,7 +159,7 @@ ColourMap::toXmlString(std::string name) const
 
     for (MapType::const_iterator pos = colours.begin(); pos != colours.end(); ++pos)
     {
-        const QColor &color = pos->second.color;
+        const QColor &color = pos->second.colour;
 
         output << "  " << "            <colourpair id=\"" << pos->first
                << "\" name=\"" << XmlExportable::encode(pos->second.name)

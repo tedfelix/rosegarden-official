@@ -210,7 +210,7 @@ DocumentMetaConfigurationPage::DocumentMetaConfigurationPage(
 
         QPixmap colourPixmap(16, 16);
         QColor colour =
-            comp.getSegmentColourMap().getColourByIndex(s->getColourIndex());
+            comp.getSegmentColourMap().getColour(s->getColourIndex());
         colourPixmap.fill(colour);
 
         table->setItem(i, 2,

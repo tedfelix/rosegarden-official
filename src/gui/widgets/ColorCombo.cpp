@@ -76,7 +76,7 @@ ColorCombo::updateColors()
         QString colourName(QObject::tr(colourIter->second.name.c_str()));
 
         QPixmap colourIcon(15, 15);
-        colourIcon.fill(colourIter->second.color);
+        colourIcon.fill(colourIter->second.colour);
 
         if (colourName == "") {
             addItem(colourIcon, tr("Default"));

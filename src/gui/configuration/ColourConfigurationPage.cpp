@@ -100,14 +100,14 @@ ColourConfigurationPage::ColourConfigurationPage(RosegardenDocument *doc, QWidge
 void
 ColourConfigurationPage::slotTextChanged(unsigned int index, QString string)
 {
-    m_map.modifyNameByIndex(m_listmap[index], std::string(string.toLatin1()));
+    m_map.modifyName(m_listmap[index], std::string(string.toLatin1()));
     m_colourtable->populate_table(m_map, m_listmap);
 }
 
 void
 ColourConfigurationPage::slotColourChanged(unsigned int index, QColor color)
 {
-    m_map.modifyColourByIndex(m_listmap[index], color);
+    m_map.modifyColour(m_listmap[index], color);
     m_colourtable->populate_table(m_map, m_listmap);
 }
 
@@ -141,7 +141,7 @@ ColourConfigurationPage::slotAddNew()
         // QRgb rgba = QColorDialog::getRgba( 0xFFFFFFFF, &c_ok, 0 );    // 0 == parent
         
         QColor temp2 = temp;
-        m_map.addItem(temp2, qstrtostr(newName));
+        m_map.addEntry(temp2, qstrtostr(newName));
         m_colourtable->populate_table(m_map, m_listmap);
         // Else we don't do anything as they either didn't give a name
         //  or didn't give a colour
@@ -165,7 +165,7 @@ ColourConfigurationPage::slotDelete()
 
     unsigned int toDel = (*temp[0]).row();
 
-    m_map.deleteItemByIndex(m_listmap[toDel]);
+    m_map.deleteEntry(m_listmap[toDel]);
     m_colourtable->populate_table(m_map, m_listmap);
 
 }

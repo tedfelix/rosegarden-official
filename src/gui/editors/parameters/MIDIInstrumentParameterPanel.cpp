@@ -395,7 +395,7 @@ MIDIInstrumentParameterPanel::setupControllers(MidiDevice *md)
         // black instead of the default color from the map!  it was here the
         // whole time, this simple!)
         //
-        const QColor c = comp.getGeneralColourMap().getColourByIndex(
+        const QColor c = comp.getGeneralColourMap().getColour(
                 it->getColourIndex());
         const QColor knobColour = QColor(c.red(), c.green(), c.blue());
 

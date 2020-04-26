@@ -34,7 +34,7 @@ namespace Rosegarden
 
 const QColor SegmentRect::DefaultPenColor = QColor(Qt::black);
 const QColor SegmentRect::DefaultBrushColor =
-        QColor(ColourMap::defaultSegmentColor);
+        QColor(ColourMap::defaultSegmentColour);
 
 SegmentRect SegmentRect::intersected(const SegmentRect &other) const
 {

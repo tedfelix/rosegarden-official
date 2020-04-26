@@ -223,7 +223,7 @@ ControlEditorDialog::slotUpdate(bool added)
         Composition &comp = m_doc->getComposition();
 
         QString colour =
-            strtoqstr(comp.getGeneralColourMap().getNameByIndex(it->getColourIndex()));
+            strtoqstr(comp.getGeneralColourMap().getName(it->getColourIndex()));
 
         if (colour == "")
             colour = tr("<default>");
@@ -276,7 +276,7 @@ ControlEditorDialog::slotUpdate(bool added)
         // create and set a colour pixmap
         //
         QPixmap colourPixmap(16, 16);
-        QColor c = comp.getGeneralColourMap().getColourByIndex(it->getColourIndex());
+        QColor c = comp.getGeneralColourMap().getColour(it->getColourIndex());
         colourPixmap.fill(QColor(c.red(), c.green(), c.blue()));
         
         item->setIcon(7, QIcon(colourPixmap));

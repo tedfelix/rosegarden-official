@@ -1601,7 +1601,7 @@ Segment::getPreviewColour() const
     }
 
     QColor segmentColour =
-            m_composition->getSegmentColourMap().getColourByIndex(m_colourIndex);
+            m_composition->getSegmentColourMap().getColour(m_colourIndex);
 
     int intensity = qGray(segmentColour.rgb());
 

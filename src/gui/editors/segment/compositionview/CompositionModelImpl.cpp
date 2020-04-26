@@ -206,7 +206,7 @@ void CompositionModelImpl::getSegmentRects(
 
             // Brush
             QColor brushColor =
-                    m_composition.getSegmentColourMap().getColourByIndex(
+                    m_composition.getSegmentColourMap().getColour(
                             segment->getColourIndex());
             Qt::BrushStyle brushPattern =
                     segment->isTrulyLinked() ?
@@ -257,7 +257,7 @@ void CompositionModelImpl::getSegmentRects(
         // Brush
         Segment *segment = (*i)->getSegment();
         QColor segmentColour =
-                m_composition.getSegmentColourMap().getColourByIndex(
+                m_composition.getSegmentColourMap().getColour(
                         segment->getColourIndex());
         segmentRect.brush = segmentColour;
 

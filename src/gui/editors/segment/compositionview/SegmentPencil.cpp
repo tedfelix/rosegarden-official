@@ -152,7 +152,7 @@ void SegmentPencil::mousePressEvent(QMouseEvent *e)
 
     m_canvas->setNewSegmentColor(
             m_doc->getComposition().getSegmentColourMap().
-            getColourByIndex(t->getColor()));
+            getColour(t->getColor()));
     m_canvas->drawNewSegment(tmpRect);
 
     m_newRect = true;

@@ -768,7 +768,7 @@ StaffHeader::updateHeader(int width)
         // Get background colour from colour index
         m_background = m_headersGroup->getComposition()
                            ->getSegmentColourMap()
-                               .getColourByIndex(m_colourIndex);
+                               .getColour(m_colourIndex);
 
         // Select foreground colour (black or white) to get the better
         // visibility

@@ -27,53 +27,49 @@ namespace Rosegarden
 {
 
 
-/// Maps a color ID to a QColor and a name.
+/// Maps a colour ID to a QColor and a name.
 class ColourMap
 {
 public:
-    /// Create a ColourMap with only the default segment color.
+    /// Create a ColourMap with only the default segment colour.
     ColourMap();
 
-    static const QColor defaultSegmentColor;
-
-    // ??? colorIndex should probably be colorID.  "id" is used in the
-    //     xml to refer to this.  And it's a more accurate description
-    //     than index.
+    static const QColor defaultSegmentColour;
 
     /**
-     * If the colorIndex isn't in the map, the routine returns the value of
-     * the default colour (at index 0 in the table).  This means that if
+     * If the colourID isn't in the map, the routine returns the value of
+     * the default colour (at ID 0 in the table).  This means that if
      * somehow some of the Segments get out of sync with the ColourMap and
      * have invalid colour values, they'll be set to the Composition default
      * colour.
      */
-    QColor getColourByIndex(unsigned int colorIndex) const;
+    QColor getColour(unsigned colourID) const;
 
     /**
-     * If the colorIndex isn't in the map, the name of the entry at index 0 is
+     * If the colourID isn't in the map, the name of the entry at ID 0 is
      * returned.  Usually this is "", for internationalization reasons.
      */
-    std::string getNameByIndex(unsigned int colorIndex) const;
+    std::string getName(unsigned colourID) const;
 
-    /// Delete colorIndex from the map.
-    bool deleteItemByIndex(unsigned int colorIndex);
+    /// Delete colourID from the map.
+    bool deleteEntry(unsigned colourID);
 
-    /// Add a colour entry using the lowest available index.
-    bool addItem(QColor colour, std::string name);
+    /// Add a colour entry using the lowest available ID.
+    bool addEntry(QColor colour, std::string name);
 
-    /// Add a colour map entry given index, colour, and name.
+    /// Add a colour map entry given colourID, colour, and name.
     /**
      * !!! ONLY FOR USE IN rosexmlhandler.cpp !!!
      *
      * ??? Inline this into the only caller.
      */
-    void addItem(unsigned colorIndex, QColor colour, std::string name);
+    void addEntry(unsigned colourID, QColor colour, std::string name);
 
-    /// Returns false if colorIndex not found.
-    bool modifyNameByIndex(unsigned colorIndex, std::string name);
+    /// Returns false if colourID not found.
+    bool modifyName(unsigned colourID, std::string name);
 
-    /// Returns false if colorIndex not found.
-    bool modifyColourByIndex(unsigned colorIndex, QColor colour);
+    /// Returns false if colourID not found.
+    bool modifyColour(unsigned colourID, QColor colour);
 
     std::string toXmlString(std::string name) const;
 
@@ -81,22 +77,22 @@ public:
     struct Entry
     {
         Entry() :
-            color(defaultSegmentColor),
+            colour(defaultSegmentColour),
             name()
         {
         }
 
-        Entry(const QColor &i_color, const std::string &i_name) :
-            color(i_color),
+        Entry(const QColor &i_colour, const std::string &i_name) :
+            colour(i_colour),
             name(i_name)
         {
         }
 
-        QColor color;
+        QColor colour;
         std::string name;
     };
 
-    typedef std::map<unsigned /* colorIndex */, Entry> MapType;
+    typedef std::map<unsigned /* colourID */, Entry> MapType;
     MapType colours;
 
 };

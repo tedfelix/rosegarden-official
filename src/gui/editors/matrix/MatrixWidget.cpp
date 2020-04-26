@@ -1385,7 +1385,7 @@ MatrixWidget::updateSegmentChangerBackground()
     // set the changer widget background to the now current segment's
     // background, and reset the tooltip style to compensate
     QColor segmentColor = composition.getSegmentColourMap().
-            getColourByIndex(segment->getColourIndex());
+            getColour(segment->getColourIndex());
 
     QPalette palette = m_changerWidget->palette();
     palette.setColor(QPalette::Window, segmentColor);

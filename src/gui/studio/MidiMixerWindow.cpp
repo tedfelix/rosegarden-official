@@ -197,7 +197,7 @@ MidiMixerWindow::setupTabs()
                     if (controls[i].getColourIndex() > 0) {
                         QColor c =
                             m_document->getComposition().getGeneralColourMap().
-                            getColourByIndex(controls[i].getColourIndex());
+                            getColour(controls[i].getColourIndex());
 
                         knobColour = QColor(c.red(),
                                             c.green(), c.blue());
