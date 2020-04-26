@@ -176,10 +176,12 @@ ControlParameterEditDialog::ControlParameterEditDialog(
     //
     //
     ColourMap &colourMap = m_doc->getComposition().getGeneralColourMap();
-    RCMap::const_iterator it;
+    ColourMap::MapType::const_iterator it;
     QPixmap colourPixmap(16, 16);
 
-    for (it = colourMap.begin(); it != colourMap.end(); ++it) {
+    for (it = colourMap.colours.begin();
+         it != colourMap.colours.end();
+         ++it) {
         QColor c = it->second.first;
         colourPixmap.fill(QColor(c.red(), c.green(), c.blue()));
         m_colourCombo->addItem(colourPixmap, strtoqstr(it->second.second));
@@ -233,13 +235,15 @@ ControlParameterEditDialog::populate()
 
     int pos = 0, setItem = 0;
     ColourMap &colourMap = m_doc->getComposition().getGeneralColourMap();
-    RCMap::const_iterator it;
+    ColourMap::MapType::const_iterator it;
 
     // I can't believe we never fixed this in all these years.  The way this was
     // structured, it was impossible for setItem to increment in order to arrive
     // at any useful value, so the color always came out "Default" 100% of the
     // time.
-    for (it = colourMap.begin(); it != colourMap.end(); ++it) {
+    for (it = colourMap.colours.begin();
+         it != colourMap.colours.end();
+         ++it) {
         pos++;
         if (m_control->getColourIndex() == it->first) setItem = (pos - 1);
     }

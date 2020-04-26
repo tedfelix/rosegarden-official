@@ -69,7 +69,7 @@ SegmentSplitByDrumCommand::execute()
         Segment *s = nullptr;
 
         // get the total number of colors in the map; only do this once
-        int maxColors = m_composition->getSegmentColourMap().size();
+        int maxColors = m_composition->getSegmentColourMap().colours.size();
 
         // get the color index for the template segment, so we can make the new
         // segments have contrasting colors for layer indication purposes

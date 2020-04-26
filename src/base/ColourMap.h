@@ -1,6 +1,5 @@
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
-
 /*
     Rosegarden
     A sequencer and musical notation editor.
@@ -26,14 +25,14 @@
 #include <map>
 #include <string>
 
-// These are the default, default colour
+// Default Segment color.
 #define COLOUR_DEF_R 255
 #define COLOUR_DEF_G 234
 #define COLOUR_DEF_B 182 
 
 namespace Rosegarden 
 {
-    typedef std::map<unsigned int, std::pair<QColor, std::string>, std::less<unsigned int> > RCMap;
+
 
 /**
  * ColourMap is our table which maps the unsigned integer keys stored in
@@ -108,22 +107,19 @@ public:
 
 //    void replace(ColourMap &input);
 
-    /**
-     * This returns a const iterator pointing to m_map.begin()
-     */
-    RCMap::const_iterator begin();
-
-    /**
-     * This returns a const iterator pointing to m_map.end()
-     */
-    RCMap::const_iterator end();
+    typedef std::map<unsigned /* item_num */,
+                     std::pair<QColor, std::string /* name */> > MapType;
 
     std::string toXmlString(std::string name) const;
 
-    unsigned int size() const;
+    MapType colours;
 
 private:
-    RCMap m_map;
+    // unused
+    MapType::const_iterator begin();
+    MapType::const_iterator end();
+    unsigned int size() const;
+
 };
 
 }

@@ -68,8 +68,8 @@ ColorCombo::updateColors()
     ColourMap temp = doc->getComposition().getSegmentColourMap();
 
     // For each color in the segment color map
-    for (RCMap::const_iterator colourIter = temp.begin();
-         colourIter != temp.end();
+    for (ColourMap::MapType::const_iterator colourIter = temp.colours.begin();
+         colourIter != temp.colours.end();
          ++colourIter) {
         // Wrap in a tr() call in case the color is on the list of translated
         // color names we're including since 09.10.

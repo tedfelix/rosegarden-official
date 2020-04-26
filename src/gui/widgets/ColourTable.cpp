@@ -104,15 +104,17 @@ ColourTable::slotEditEntry(int row, int col)
 void
 ColourTable::populate_table(ColourMap &input, ColourList &list)
 {
-    m_colours.reserve(input.size());
-    setRowCount(input.size());
+    m_colours.reserve(input.colours.size());
+    setRowCount(input.colours.size());
 
     QString name;
 
     unsigned int i = 0;
     QStringList vHeaderLabels;
 
-    for (RCMap::const_iterator it = input.begin(); it != input.end(); ++it) {
+    for (ColourMap::MapType::const_iterator it = input.colours.begin();
+         it != input.colours.end();
+         ++it) {
         if (it->second.second == std::string(""))
             name = tr("Default Color");
         else

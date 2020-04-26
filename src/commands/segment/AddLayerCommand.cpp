@@ -96,7 +96,7 @@ AddLayerCommand::execute()
     }
 
     // get the total number of colors in the map
-    int maxColors = m_composition.getSegmentColourMap().size();
+    int maxColors = m_composition.getSegmentColourMap().colours.size();
 
     // get the color index for the segment used as the template for the new
     // empty one we're creating
