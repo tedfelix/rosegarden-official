@@ -18,6 +18,7 @@ RG_UNIT_TESTS(
    test_notationview_selection
    transpose
    reference_segment
+   utf8
 )
 
 add_subdirectory(lilypond)

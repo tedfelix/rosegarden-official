@@ -18,6 +18,8 @@
 
 #include <string>
 
+#include <rosegardenprivate_export.h>
+
 namespace Rosegarden
 {
 
@@ -32,7 +34,7 @@ namespace Rosegarden
  *
  * \author rwb
  */
-class XmlExportable
+class ROSEGARDENPRIVATE_EXPORT XmlExportable
 {
 public:
     XmlExportable() {;}
