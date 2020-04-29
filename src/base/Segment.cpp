@@ -84,7 +84,8 @@ Segment::Segment(SegmentType segmentType, timeT startTime) :
     m_isTmp(0),
     m_participation(normal),
     m_verseCount(-1),   // -1 => computation needed
-    m_verse(0)
+    m_verse(0),
+    m_forNotation(true)
 {
 }
 
@@ -204,6 +205,16 @@ const Segment *
 Segment::getRealSegment() const {
     if (isLinked()) return getLinker()->getReference();
     return this;
+}
+
+void
+Segment::setForNotation(bool f) {
+    m_forNotation = f;
+}
+
+bool
+Segment::getForNotation() const {
+    return m_forNotation;
 }
 
 void
@@ -1800,7 +1811,6 @@ EventContainer::findEventOfType(EventContainer::iterator i,
     }
     return i;
 }
-
 
 }
 

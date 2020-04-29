@@ -32,6 +32,7 @@
 #include "commands/segment/SegmentCommandRepeat.h"
 #include "commands/segment/SegmentLabelCommand.h"
 #include "commands/segment/SegmentLinkTransposeCommand.h"
+#include "commands/segment/SegmentForNotationCommand.h"
 #include "document/CommandHistory.h"
 #include "document/RosegardenDocument.h"
 #include "gui/dialogs/IntervalDialog.h"
@@ -241,6 +242,17 @@ SegmentParameterBox::SegmentParameterBox(QWidget *parent) :
             SLOT(slotColourChanged(int)));
     // slotNewDocument() will finish the initialization.
 
+    // * ForNotation
+
+    QLabel *forNotationLabel = new QLabel(tr("For Notation"), this);
+    forNotationLabel->setFont(m_font);
+
+    m_forNotation = new TristateCheckBox(this);
+    m_forNotation->setFont(m_font);
+    m_forNotation->setToolTip(tr("<qt><p>When checked, any selected segments will not be used for notation</p></qt>"));
+    connect(m_forNotation, &QCheckBox::clicked,
+            this, &SegmentParameterBox::slotForNotationClicked);
+
     // * Linked segment parameters (hidden)
 
     // Outer collapsing frame
@@ -306,8 +318,11 @@ SegmentParameterBox::SegmentParameterBox(QWidget *parent) :
     // Row 3: Color
     gridLayout->addWidget(colourLabel, 3, 0);
     gridLayout->addWidget(m_color, 3, 1, 1, 5);
-    // Row 4: Linked segment parameters
-    gridLayout->addWidget(linkedSegmentParametersFrame, 4, 0, 1, 5);
+    // Row 4: ForNotation
+    gridLayout->addWidget(forNotationLabel, 4, 0);
+    gridLayout->addWidget(m_forNotation, 4, 1, 1, 5);
+    // Row 5: Linked segment parameters
+    gridLayout->addWidget(linkedSegmentParametersFrame, 5, 0, 1, 5);
 
     // SegmentParameterBox
 
@@ -692,6 +707,49 @@ SegmentParameterBox::updateColor()
 }
 
 void
+SegmentParameterBox::updateForNotation()
+{
+    SegmentSelection segmentSelection = getSelectedSegments();
+    
+    // No Segments selected?  Disable/uncheck.
+    if (segmentSelection.empty()) {
+        m_forNotation->setEnabled(false);
+        m_forNotation->setCheckState(Qt::Unchecked);
+        return;
+    }
+
+    // One or more Segments selected
+    m_forNotation->setEnabled(true);
+
+    SegmentSelection::const_iterator i = segmentSelection.begin();
+    // Just one?  Set and bail.
+    if (segmentSelection.size() == 1) {
+        m_forNotation->setCheckState(
+                (*i)->getForNotation() ? Qt::Checked : Qt::Unchecked);
+        return;
+    }
+
+    // More than one Segment selected.
+
+    std::size_t forNotationCount = 0;
+
+    // For each Segment, count the forNotation ones
+    for (/* Starting with the first... */;
+         i != segmentSelection.end();
+         ++i) {
+        if ((*i)->getForNotation())
+            ++forNotationCount;
+    }
+
+    if (forNotationCount == 0)  // none
+        m_forNotation->setCheckState(Qt::Unchecked);
+    else if (forNotationCount == segmentSelection.size())  // all
+        m_forNotation->setCheckState(Qt::Checked);
+    else  // some
+        m_forNotation->setCheckState(Qt::PartiallyChecked);
+}
+
+void
 SegmentParameterBox::updateWidgets()
 {
     updateLabel();
@@ -700,6 +758,7 @@ SegmentParameterBox::updateWidgets()
     updateQuantize();
     updateDelay();
     updateColor();
+    updateForNotation();
 }
 
 void
@@ -972,6 +1031,19 @@ SegmentParameterBox::slotDocColoursChanged()
 
     m_color->updateColors();
     m_color->setCurrentIndex(0);
+}
+
+void
+SegmentParameterBox::slotForNotationClicked(bool checked)
+{
+    SegmentSelection segmentSelection = getSelectedSegments();
+    
+    // No selected Segments?  Bail.
+    if (segmentSelection.empty())
+        return;
+    
+    CommandHistory::getInstance()->addCommand(
+            new SegmentForNotationCommand(segmentSelection, checked));
 }
 
 void

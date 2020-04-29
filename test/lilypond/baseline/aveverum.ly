@@ -425,18 +425,6 @@ globalTempo = {
                      "A" "ve," _ "a" _ "ve" "ve" _ "rum" _ "cor" _ "pus," "na" "tum" "de" "Ma" "ri" "a" "vir" _ "gi" "ne," "ve" "re" "pas" _ "sum" "im" _ "mo" "la" _ "tum" "in" "cru" _ "ce" "pro" "ho" _ "mi" "ne," "Cu" "jus" "la" _ "tus" "per" _ "fo" _ "ra" _ "tum" "un" "da" "flu" _ "xit" "et" "san" _ _ "gui" "ne," "es" "to" "no" _ "bis" _ "prae" "gus" "ta" _ "tum" "in" "mor" _ "tis" "ex" "a" _ "mi" "ne," "in" "mor" _ _ _ _ _ _ _ _ _ "tis" "ex" "a" _ "mi" "ne." 
                     \unset ignoreMelismata
                 } % Lyrics 1
-
-                \context Voice = "voice 6" {
-                    % Segment: Expression Ramp (linked)
-                    \override Voice.TextScript #'padding = #2.0
-                    \override MultiMeasureRest #'expand-limit = 1
-
-                    \skip 1 
-                    \clef "treble"
-                    \key c \major
-                    r2 r4 r  |
-                    r2 r8 r r4  |
-                } % Voice
             >> % Staff ends
 
             \context Staff = "track 6, Alto" << 
@@ -448,7 +436,7 @@ globalTempo = {
                 \new Voice \globalTempo
                 \set Staff.autoBeaming = ##f % turns off all autobeaming
 
-                \context Voice = "voice 7" {
+                \context Voice = "voice 6" {
                     % Segment: Choir
                     \override Voice.TextScript #'padding = #2.0
                     \override MultiMeasureRest #'expand-limit = 1
@@ -511,24 +499,12 @@ globalTempo = {
                     r32  |
                     \bar "|."
                 } % Voice
-                \new Lyrics \with {alignBelowContext="track 6"} \lyricsto "voice 7" \lyricmode {
+                \new Lyrics \with {alignBelowContext="track 6"} \lyricsto "voice 6" \lyricmode {
                     \override LyricText #'self-alignment-X = #LEFT
                     \set ignoreMelismata = ##t
                      "A" "ve," "a" "ve" "ve" _ "rum" _ "cor" _ "pus," "na" "tum" "de" "Ma" "ri" "a" "vir" _ "gi" "ne," "ve" "re" "pas" "sum" "im" "mo" "la" _ "tum" "in" "cru" "ce" "pro" "ho" "mi" "ne," "Cu" "jus" "la" "tus" "per" "fo" "ra" _ "tum" "un" "da" "flu" _ "xit" "et" "san" _ _ "gui" "ne," "es" "to" "no" _ "bis" _ "prae" "gus" "ta" _ "tum" "in" "mor" _ "tis" "ex" "a" _ "mi" "ne," "in" "mor" _ _ _ _ "tis" "ex" "a" _ "mi" "ne." 
                     \unset ignoreMelismata
                 } % Lyrics 1
-
-                \context Voice = "voice 8" {
-                    % Segment: Expression Ramp
-                    \override Voice.TextScript #'padding = #2.0
-                    \override MultiMeasureRest #'expand-limit = 1
-
-                    \skip 1 
-                    \clef "treble"
-                    \key c \major
-                    r2 r4 r  |
-                    r2 r8 r r4  |
-                } % Voice
             >> % Staff ends
 
             \context Staff = "track 7, Tenore" << 
@@ -540,7 +516,7 @@ globalTempo = {
                 \new Voice \globalTempo
                 \set Staff.autoBeaming = ##f % turns off all autobeaming
 
-                \context Voice = "voice 9" {
+                \context Voice = "voice 7" {
                     % Segment: Choir
                     \override Voice.TextScript #'padding = #2.0
                     \override MultiMeasureRest #'expand-limit = 1
@@ -599,24 +575,12 @@ globalTempo = {
                     R1*3  |
                     \bar "|."
                 } % Voice
-                \new Lyrics \with {alignBelowContext="track 7"} \lyricsto "voice 9" \lyricmode {
+                \new Lyrics \with {alignBelowContext="track 7"} \lyricsto "voice 7" \lyricmode {
                     \override LyricText #'self-alignment-X = #LEFT
                     \set ignoreMelismata = ##t
                      "A" "ve," "a" "ve" "ve" "rum" "cor" "pus," "na" "tum" "de" "Ma" "ri" "a" "vir" "gi" "ne," "ve" "re" "pas" _ "sum" "im" "mo" "la" _ "tum" "in" "cru" "ce" "pro" "ho" "mi" "ne," "Cu" "jus" "la" "tus" _ "per" _ _ "fo" "ra" _ "tum" "un" "da" "flu" _ "xit" "et" "san" _ "gui" "ne," "es" "to" "no" _ "bis" _ "prae" "gus" "ta" _ "tum" "in" "mor" "tis" "ex" "a" "mi" "ne," "in" "mor" _ _ _ _ _ _ "tis" "ex" "a" _ "mi" "ne." 
                     \unset ignoreMelismata
                 } % Lyrics 1
-
-                \context Voice = "voice 10" {
-                    % Segment: Expression Ramp (linked)
-                    \override Voice.TextScript #'padding = #2.0
-                    \override MultiMeasureRest #'expand-limit = 1
-
-                    \skip 1 
-                    \clef "treble"
-                    \key c \major
-                    r2 r4 r  |
-                    r2 r8 r r4  |
-                } % Voice
             >> % Staff ends
 
             \context Staff = "track 8, Basso" << 
@@ -628,7 +592,7 @@ globalTempo = {
                 \new Voice \globalTempo
                 \set Staff.autoBeaming = ##f % turns off all autobeaming
 
-                \context Voice = "voice 11" {
+                \context Voice = "voice 8" {
                     % Segment: Choir
                     \override Voice.TextScript #'padding = #2.0
                     \override MultiMeasureRest #'expand-limit = 1
@@ -687,24 +651,12 @@ globalTempo = {
                     R1*3  |
                     \bar "|."
                 } % Voice
-                \new Lyrics \with {alignBelowContext="track 8"} \lyricsto "voice 11" \lyricmode {
+                \new Lyrics \with {alignBelowContext="track 8"} \lyricsto "voice 8" \lyricmode {
                     \override LyricText #'self-alignment-X = #LEFT
                     \set ignoreMelismata = ##t
                      "A" "ve," "a" "ve" "ve" "rum" "cor" "pus," "na" "tum" "de" "Ma" "ri" "a" "vir" "gi" "ne," "ve" "re" "pas" _ "sum" "im" "mo" "la" _ "tum" "in" "cru" "ce" "pro" "ho" "mi" "ne," "Cu" "jus" "la" _ "tus" "per" "fo" "ra" _ "tum" "un" "da" "flu" _ "xit" "et" "san" _ "gui" "ne," "es" "to" "no" _ "bis" _ "prae" "gus" "ta" _ "tum" "in" "mor" "tis" "ex" "a" "mi" "ne," "in" "mor" _ _ _ "tis" "ex" "a" "mi" "ne." 
                     \unset ignoreMelismata
                 } % Lyrics 1
-
-                \context Voice = "voice 12" {
-                    % Segment: Expression Ramp (linked)
-                    \override Voice.TextScript #'padding = #2.0
-                    \override MultiMeasureRest #'expand-limit = 1
-
-                    \skip 1 
-                    \clef "treble"
-                    \key c \major
-                    r2 r4 r  |
-                    r2 r8 r r4  |
-                } % Voice
             >> % Staff ends
         >> % StaffGroup 2
         \context GrandStaff = "1" <<
@@ -718,7 +670,7 @@ globalTempo = {
                 \new Voice \globalTempo
                 \set Staff.autoBeaming = ##f % turns off all autobeaming
 
-                \context Voice = "voice 13" {
+                \context Voice = "voice 9" {
                     % Segment: Organ
                     \override Voice.TextScript #'padding = #2.0
                     \override MultiMeasureRest #'expand-limit = 1
@@ -794,7 +746,7 @@ globalTempo = {
                 \new Voice \globalTempo
                 \set Staff.autoBeaming = ##f % turns off all autobeaming
 
-                \context Voice = "voice 14" {
+                \context Voice = "voice 10" {
                     % Segment: Organ
                     \override Voice.TextScript #'padding = #2.0
                     \override MultiMeasureRest #'expand-limit = 1

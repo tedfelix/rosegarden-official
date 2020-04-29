@@ -888,7 +888,15 @@ public:
      */
     const Segment * getRealSegment() const;
     
+    /**
+     * Set the flag for using this segment in notation
+     */
+    void setForNotation(bool f);
 
+    /**
+     * Get the flag for using this segment in notation
+     */
+    bool getForNotation() const;
 
 private:
     void checkInsertAsClefKey(Event *e) const;
@@ -1007,6 +1015,9 @@ private:
     Participation m_participation;
     int m_verseCount;  // -1 means not computed still
     int m_verse;       // Used to distribute lyrics among repeated segments
+
+    bool m_forNotation;
+
 };
 
 ROSEGARDENPRIVATE_EXPORT QDebug &operator<<(QDebug &, const Rosegarden::Segment &);

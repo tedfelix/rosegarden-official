@@ -89,6 +89,8 @@ private slots:
     void slotColourChanged(int);
     void slotDocColoursChanged();
 
+    void slotForNotationClicked(bool checked);
+
     void slotChangeLinkTranspose();
     void slotResetLinkTranspose();
 
@@ -135,6 +137,9 @@ private:
 
     ColorCombo *m_color;
     void updateColor();
+
+    TristateCheckBox *m_forNotation;
+    void updateForNotation();
 
 };
 

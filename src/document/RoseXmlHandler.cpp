@@ -1000,6 +1000,12 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             m_currentSegment->setViewFeatures(viewFeaturesStr.toInt());
         }
 
+        QString forNotationStr = atts.value("fornotation");
+        if (!forNotationStr.isEmpty()) {
+            bool forNotation = (forNotationStr.toUpper() == "TRUE");
+            m_currentSegment->setForNotation(forNotation);
+        }
+
         m_currentTime = startTime;
 
         QString triggerIdStr = atts.value("triggerid");

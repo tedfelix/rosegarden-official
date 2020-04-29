@@ -249,6 +249,9 @@ LilyPondExporter::isSegmentToPrint(Segment *seg)
     InstrumentId instrumentId = track->getInstrument();
     bool isMidiTrack = instrumentId >= MidiInstrumentBase;
 
+    // Check for notation flag
+    bool isForNotation = (seg->getForNotation());
+
     // Look for various printing selection modes
     bool ok1 = m_exportSelection == EXPORT_ALL_TRACKS;
     bool ok2 = (m_exportSelection == EXPORT_NONMUTED_TRACKS) && (!track->isMuted());
@@ -258,7 +261,7 @@ LilyPondExporter::isSegmentToPrint(Segment *seg)
     bool ok5 = (m_exportSelection == EXPORT_EDITED_SEGMENTS) && currentSegmentSelected;
 
     // Skip non-midi tracks and return true if segment is selected
-    return isMidiTrack && (ok1 || ok2 || ok3 || ok4 || ok5);
+    return isForNotation && isMidiTrack && (ok1 || ok2 || ok3 || ok4 || ok5);
 }
 
 

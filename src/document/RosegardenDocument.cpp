@@ -1464,6 +1464,10 @@ void RosegardenDocument::saveSegment(QTextStream& outStream, Segment *segment,
         outStream << "\" viewfeatures=\"" << segment->getViewFeatures();
     }
 
+    if (segment->getForNotation() != true) {
+        outStream << "\" fornotation=\"" << "false";
+    }
+
     const timeT *endMarker = segment->getRawEndMarkerTime();
     if (endMarker) {
         outStream << "\" endmarker=\"" << *endMarker;
