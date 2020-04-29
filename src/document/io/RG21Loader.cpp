@@ -31,17 +31,12 @@
 #include "base/Studio.h"
 #include "base/Track.h"
 #include "gui/editors/notation/NotationStrings.h"
+
 #include <QFile>
-#include <QObject>
-#include <QString>
-#include <QStringList>
 #include <QTextStream>
+
 #include <string>
 #include <vector>
-#include <iostream>
-
-using std::vector;
-using std::string;
 
 
 namespace Rosegarden
@@ -51,8 +46,7 @@ using namespace BaseProperties;
 using namespace Accidentals;
 using namespace Marks;
 
-RG21Loader::RG21Loader(Studio *studio)
-        :
+RG21Loader::RG21Loader(Studio *studio) :
         m_stream(nullptr),
         m_studio(studio),
         m_composition(nullptr),
@@ -60,13 +54,22 @@ RG21Loader::RG21Loader(Studio *studio)
         m_currentSegmentTime(0),
         m_currentSegmentNb(0),
         m_currentClef(Clef::Treble),
+        m_currentKey(),
         m_currentInstrumentId(MidiInstrumentBase),
+        m_indicationsExtant(),
         m_inGroup(false),
+        m_groupId(0),
+        m_groupType(),
+        m_groupStartTime(0),
+        m_groupTupledLength(0),
+        m_groupTupledCount(0),
+        m_groupUntupledLength(0),
+        m_groupUntupledCount(0),
         m_tieStatus(0),
+        m_currentLine(),
+        m_currentStaffName(),
+        m_tokens(),
         m_nbStaves(0)
-{}
-
-RG21Loader::~RG21Loader()
 {}
 
 bool RG21Loader::parseClef()
@@ -147,7 +150,7 @@ bool RG21Loader::parseChordItem()
     /*int nbNotes   = (*i).toInt();*/
     ++i;
 
-    vector<string> marks = convertRG21ChordMods(chordMods);
+    StringVector marks = convertRG21ChordMods(chordMods);
 
     // now get notes
     for (;i != m_tokens.end(); ++i) {
@@ -427,8 +430,8 @@ void RG21Loader::closeGroup()
     if (m_groupType == GROUP_TYPE_TUPLED) {
 
         Segment::iterator i = m_currentSegment->end();
-        vector<Event *> toInsert;
-        vector<Segment::iterator> toErase;
+        std::vector<Event *> toInsert;
+        std::vector<Segment::iterator> toErase;
 
         if (i != m_currentSegment->begin()) {
 
@@ -781,9 +784,10 @@ bool RG21Loader::load(const QString &fileName, Composition &comp)
     return true;
 }
 
-vector<string> RG21Loader::convertRG21ChordMods(int chordMods)
+RG21Loader::StringVector
+RG21Loader::convertRG21ChordMods(int chordMods)
 {
-    vector<string> marks;
+    StringVector marks;
 
     // bit laborious!
     if (chordMods & ModDot)    marks.push_back(Staccato);

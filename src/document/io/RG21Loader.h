@@ -22,21 +22,20 @@
 #include "base/Instrument.h"
 #include "base/MidiProgram.h"
 #include "base/NotationTypes.h"
-#include <map>
-#include <string>
+
 #include <QString>
 #include <QStringList>
-#include <vector>
-#include "base/Event.h"
 
+#include <map>
+#include <string>
+#include <vector>
 
 class QTextStream;
-class QObject;
-class Iterator;
 
 
 namespace Rosegarden
 {
+
 
 class Studio;
 class Segment;
@@ -44,14 +43,11 @@ class Event;
 class Composition;
 
 
-/**
- * Rosegarden 2.1 file import
- */
+/// Rosegarden 2.1 file import
 class RG21Loader
 {
 public:
     RG21Loader(Studio *);
-    ~RG21Loader();
     
     /**
      * Load and parse the RG2.1 file \a fileName, and write it into the
@@ -60,7 +56,7 @@ public:
      */
     bool load(const QString& fileName, Composition &);
 
-protected:
+private:
 
     // RG21 note mods
     enum { ModSharp   = (1<<0),
@@ -108,7 +104,8 @@ protected:
 
     long convertRG21Pitch(long rg21pitch, int noteModifier);
     timeT convertRG21Duration(QStringList::Iterator&);
-    std::vector<std::string> convertRG21ChordMods(int chordMod);
+    typedef std::vector<std::string> StringVector;
+    StringVector convertRG21ChordMods(int chordMod);
 
     bool readNextLine();
 
