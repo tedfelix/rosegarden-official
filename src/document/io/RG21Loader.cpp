@@ -774,6 +774,10 @@ bool RG21Loader::load(const QString &fileName, Composition &comp)
     delete m_stream;
     m_stream = nullptr;
 
+    // No tracks?  Then we failed to load this file.
+    if (m_composition->getNbTracks() == 0)
+        return false;
+
     return true;
 }
 
