@@ -249,7 +249,7 @@ SegmentParameterBox::SegmentParameterBox(QWidget *parent) :
 
     m_forNotation = new TristateCheckBox(this);
     m_forNotation->setFont(m_font);
-    m_forNotation->setToolTip(tr("<qt><p>When checked, any selected segments will not be used for notation</p></qt>"));
+    m_forNotation->setToolTip(tr("<qt><p>Use this segment when generating notation (LilyPond).</p></qt>"));
     connect(m_forNotation, &QCheckBox::clicked,
             this, &SegmentParameterBox::slotForNotationClicked);
 
