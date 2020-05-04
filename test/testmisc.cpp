@@ -453,29 +453,6 @@ void TestMisc::testNotationTypes() {
 }
 
 #if 0
-// Move this to a standalone program.
-
-        basic_string<wchar_t> widestring(L"This is a test");
-        widestring += L" of wide character strings";
-        for (size_t i = 0; i < widestring.length(); ++i) {
-            if (widestring[i] == L'w' ||
-                widestring[i] == L'c') {
-                widestring[i] = toupper(widestring[i]);
-            }
-        }
-        qDebug() << "Testing wide string: string value is \"" << widestring << "\"";
-        qDebug() << "String's length is " << widestring.length();
-        qDebug() << "and storage space is "
-             << (widestring.length() * sizeof(widestring[0]));
-        qDebug() << "Characters are: ";
-        for (size_t i = 0; i < widestring.length(); ++i) {
-            qDebug() << widestring[i];
-            if (i < widestring.length()-1) qDebug() << " ";
-            else qDebug();
-        }
-#endif
-
-#if 0
 // Probably no longer relevant.  Could be moved to standalone.
 
 // Some attempts at reproducing the func-template-within-template problem
