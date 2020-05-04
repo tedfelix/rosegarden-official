@@ -116,26 +116,26 @@ int main(int argc, char **argv)
         struct tms spare;
 
 #ifdef TEST_WIDE_STRING
-	basic_string<wchar_t> widestring(L"This is a test");
-	widestring += L" of wide character strings";
-	for (size_t i = 0; i < widestring.length(); ++i) {
-	    if (widestring[i] == L'w' ||
-		widestring[i] == L'c') {
-		widestring[i] = toupper(widestring[i]);
-	    }
-	}
-	cout << "Testing wide string: string value is \"" << widestring << "\""
-	     << endl;
-	cout << "String's length is " << widestring.length() << endl;
-	cout << "and storage space is " 
-	     << (widestring.length() * sizeof(widestring[0]))
-	     << endl;
-	cout << "Characters are: ";
-	for (size_t i = 0; i < widestring.length(); ++i) {
-	    cout << widestring[i];
-	    if (i < widestring.length()-1) cout << " ";
-	    else cout << endl;
-	}
+        basic_string<wchar_t> widestring(L"This is a test");
+        widestring += L" of wide character strings";
+        for (size_t i = 0; i < widestring.length(); ++i) {
+            if (widestring[i] == L'w' ||
+                widestring[i] == L'c') {
+                widestring[i] = toupper(widestring[i]);
+            }
+        }
+        cout << "Testing wide string: string value is \"" << widestring << "\""
+             << endl;
+        cout << "String's length is " << widestring.length() << endl;
+        cout << "and storage space is "
+             << (widestring.length() * sizeof(widestring[0]))
+             << endl;
+        cout << "Characters are: ";
+        for (size_t i = 0; i < widestring.length(); ++i) {
+            cout << widestring[i];
+            if (i < widestring.length()-1) cout << " ";
+            else cout << endl;
+        }
 #endif
 
         cout << "\nTesting Event..." << endl
@@ -195,30 +195,30 @@ int main(int argc, char **argv)
         else
                 cerr << "ERROR AT " << __LINE__ << endl;
 
-	cout << "\nTesting persistence & setMaybe..." << endl;
+        cout << "\nTesting persistence & setMaybe..." << endl;
 
-	e.setMaybe<Int>(SOME_INT_PROPERTY, 1);
-	if (e.get<Int>(SOME_INT_PROPERTY) == 1) {
-	    cout << "a. Correct: 1" << endl;
-	} else {
-	    cout << "a. ERROR: " << e.get<Int>(SOME_INT_PROPERTY) << endl;
-	}
+        e.setMaybe<Int>(SOME_INT_PROPERTY, 1);
+        if (e.get<Int>(SOME_INT_PROPERTY) == 1) {
+            cout << "a. Correct: 1" << endl;
+        } else {
+            cout << "a. ERROR: " << e.get<Int>(SOME_INT_PROPERTY) << endl;
+        }
 
-	e.set<Int>(SOME_INT_PROPERTY, 2, false);
-	e.setMaybe<Int>(SOME_INT_PROPERTY, 3);
-	if (e.get<Int>(SOME_INT_PROPERTY) == 3) {
-	    cout << "b. Correct: 3" << endl;
-	} else {
-	    cout << "b. ERROR: " << e.get<Int>(SOME_INT_PROPERTY) << endl;
-	}
+        e.set<Int>(SOME_INT_PROPERTY, 2, false);
+        e.setMaybe<Int>(SOME_INT_PROPERTY, 3);
+        if (e.get<Int>(SOME_INT_PROPERTY) == 3) {
+            cout << "b. Correct: 3" << endl;
+        } else {
+            cout << "b. ERROR: " << e.get<Int>(SOME_INT_PROPERTY) << endl;
+        }
 
-	e.set<Int>(SOME_INT_PROPERTY, 4);
-	e.setMaybe<Int>(SOME_INT_PROPERTY, 5);
-	if (e.get<Int>(SOME_INT_PROPERTY) == 4) {
-	    cout << "c. Correct: 4" << endl;
-	} else {
-	    cout << "c. ERROR: " << e.get<Int>(SOME_INT_PROPERTY) << endl;
-	}
+        e.set<Int>(SOME_INT_PROPERTY, 4);
+        e.setMaybe<Int>(SOME_INT_PROPERTY, 5);
+        if (e.get<Int>(SOME_INT_PROPERTY) == 4) {
+            cout << "c. Correct: 4" << endl;
+        } else {
+            cout << "c. ERROR: " << e.get<Int>(SOME_INT_PROPERTY) << endl;
+        }
 
         cout << "\nTesting debug dump : " << endl;
         e.dump(cout);
@@ -304,34 +304,34 @@ int main(int argc, char **argv)
         for (i = 0; i < 1000; ++i) {
                 Event e11(e1);
                 (void)e11.get<String>(names[i % NAME_COUNT]);
-		(void)e11.set<String>(names[i % NAME_COUNT], "blah");
+                (void)e11.set<String>(names[i % NAME_COUNT], "blah");
         }
         et = times(&spare);
         cout << "Event: 1000 copy ctors plus set<String> of " << e1.getStorageSize() << "-byte element: "
              << (et-st)*10 << "ms\n";
 
-//	gsCount = 1000000;
+//        gsCount = 1000000;
 
         st = times(&spare);
         for (i = 0; i < gsCount; ++i) {
-	        Event e21("dummy", i, 0, MIN_SUBORDERING);
+                Event e21("dummy", i, 0, MIN_SUBORDERING);
         }
         et = times(&spare);
         cout << "Event: " << gsCount << " event ctors alone: "
              << (et-st)*10 << "ms\n";
-	
+
         st = times(&spare);
         for (i = 0; i < gsCount; ++i) {
-	    std::string s0("dummy");
-	    std::string s1 = s0;
+            std::string s0("dummy");
+            std::string s1 = s0;
         }
         et = times(&spare);
         cout << "Event: " << gsCount << " string ctors+assignents: "
              << (et-st)*10 << "ms\n";
-	
+
         st = times(&spare);
         for (i = 0; i < gsCount; ++i) {
-	        Event e21("dummy", i, 0, MIN_SUBORDERING);
+                Event e21("dummy", i, 0, MIN_SUBORDERING);
                 (void)e21.getAbsoluteTime();
                 (void)e21.getDuration();
                 (void)e21.getSubOrdering();
@@ -339,20 +339,20 @@ int main(int argc, char **argv)
         et = times(&spare);
         cout << "Event: " << gsCount << " event ctors plus getAbsTime/Duration/SubOrdering: "
              << (et-st)*10 << "ms\n";
-	
+
         st = times(&spare);
         for (i = 0; i < gsCount; ++i) {
-	        Event e21("dummy", i, 0, MIN_SUBORDERING);
+                Event e21("dummy", i, 0, MIN_SUBORDERING);
                 (void)e21.getAbsoluteTime();
                 (void)e21.getDuration();
                 (void)e21.getSubOrdering();
-		e21.set<Int>(names[0], 40);
-		(void)e21.get<Int>(names[0]);
+                e21.set<Int>(names[0], 40);
+                (void)e21.get<Int>(names[0]);
         }
         et = times(&spare);
         cout << "Event: " << gsCount << " event ctors plus one get/set and getAbsTime/Duration/SubOrdering: "
              << (et-st)*10 << "ms\n";
-	
+
 
 #else
         cout << "Skipping test speed of Event\n";
@@ -479,9 +479,9 @@ int main(int argc, char **argv)
 
         cout << "Testing Segment::splitIntoTie() - splitting 384 -> 2*192\n";
 
-	Composition c;
-	Segment *ht = new Segment();
-	c.addSegment(ht);
+        Composition c;
+        Segment *ht = new Segment();
+        c.addSegment(ht);
         Segment &t(*ht);
         SegmentNotationHelper nh(t);
         SegmentPerformanceHelper ph(t);
@@ -490,7 +490,7 @@ int main(int argc, char **argv)
         ev->set<Int>("pitch", 60);
         t.insert(ev);
 
-	Segment::iterator sb(t.begin());
+        Segment::iterator sb(t.begin());
         nh.splitIntoTie(sb, 384/2);
 
         for(Segment::iterator i = t.begin(); i != t.end(); ++i) {
@@ -503,7 +503,7 @@ int main(int argc, char **argv)
         
         cout << "Splitting 192 -> (48 + 144) : \n";
 
-	sb = t.begin();
+        sb = t.begin();
         nh.splitIntoTie(sb, 48);
 
         for(Segment::iterator i = t.begin(); i != t.end(); ++i) {
@@ -523,12 +523,12 @@ int main(int argc, char **argv)
                      << " - performance duration : " <<
                     ph.getSoundingDuration(i) << endl;
 
-		cout << endl;
-		(*i)->dump(cout);
-		cout << endl;
+                cout << endl;
+                (*i)->dump(cout);
+                cout << endl;
         }
 
-	nh.autoBeam(t.begin(), t.end(), "beamed");
+        nh.autoBeam(t.begin(), t.end(), "beamed");
 
 #endif // TEST_NOTATION_TYPES
 };
