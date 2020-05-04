@@ -63,7 +63,7 @@ main(int argc, char **argv)
 	perror("failed to set high-priority scheduler");
     }
 
-    printf("ready\n", npfd);
+    printf("ready... npfd: %d\n", npfd);
 
     while (1) {
 	if (poll(pfd, npfd, 100000) > 0) {

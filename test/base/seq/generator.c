@@ -85,7 +85,7 @@ main(int argc, char **argv)
 
 	gettimeofday(&tv, 0);
 
-	fprintf(stderr, " real time: %ld sec, %ld usec\nqueue time: %ld sec, %ld usec (diff to real time %ld sec %ld usec)\n",
+	fprintf(stderr, " real time: %ld sec, %ld usec\nqueue time: %u sec, %u usec (diff to real time %ld sec %ld usec)\n",
 		tv.tv_sec, tv.tv_usec,
 		rtime->tv_sec, rtime->tv_nsec / 1000,
 		tv.tv_sec - rtime->tv_sec, tv.tv_usec - (rtime->tv_nsec / 1000));

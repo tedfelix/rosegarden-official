@@ -54,6 +54,7 @@ main(int argc, char **argv)
     jack_client_t *jclient;
     jack_nframes_t sample_rate;
     
+    // ??? jack_client_new() deprecated.
     if ((jclient = jack_client_new("queue-timer-jack")) == 0) {
 	fprintf(stderr, "failed to connect to JACK server\n");
 	return 1;
@@ -128,7 +129,7 @@ main(int argc, char **argv)
 	gettimeofday(&tv, 0);
 
 	frames_now = sample_frames;
-	fprintf(stderr, "    frames: %ld\n", frames_now);
+	fprintf(stderr, "    frames: %u\n", frames_now);
 
 	qtv.tv_sec = rtime->tv_sec;
 	qtv.tv_usec = rtime->tv_nsec / 1000;
@@ -149,7 +150,7 @@ main(int argc, char **argv)
 	jdiff.tv_usec = jtv.tv_usec - qtv.tv_usec;
 	normalize(&jdiff);
 
-	fprintf(stderr, " real time: %12ld sec %8ld usec /%12ld frames\nqueue time: %12ld sec %8ld usec /%12ld frames\n jack time: %12ld sec %8ld usec /%12ld frames\n   rq diff: %12ld sec %8ld usec /%12ld frames\n   jq diff: %12ld sec %8ld usec /%12ld frames\n",
+	fprintf(stderr, " real time: %12ld sec %8ld usec /%12u frames\nqueue time: %12ld sec %8ld usec /%12u frames\n jack time: %12ld sec %8ld usec /%12u frames\n   rq diff: %12ld sec %8ld usec /%12u frames\n   jq diff: %12ld sec %8ld usec /%12u frames\n",
 		tv.tv_sec, tv.tv_usec, rt_to_frame(tv, sample_rate),
 		qtv.tv_sec, qtv.tv_usec, rt_to_frame(qtv, sample_rate),
 		jtv.tv_sec, jtv.tv_usec, rt_to_frame(jtv, sample_rate),

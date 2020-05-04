@@ -95,7 +95,7 @@ main(int argc, char **argv)
 	normalize(&diffdiff);
 	prevdiff = diff;
 
-	fprintf(stderr, " real time: %12ld sec %8ld usec\nqueue time: %12ld sec %8ld usec\n      diff: %12ld sec %8ld usec\n  diffdiff: %12ld sec %8ld usec\n",
+	fprintf(stderr, " real time: %12ld sec %8ld usec\nqueue time: %12u sec %8u usec\n      diff: %12ld sec %8ld usec\n  diffdiff: %12ld sec %8ld usec\n",
 		tv.tv_sec, tv.tv_usec,
 		rtime->tv_sec, rtime->tv_nsec / 1000,
 		diff.tv_sec, diff.tv_usec,
