@@ -22,7 +22,7 @@
 namespace Rosegarden 
 {
 
-class SegmentNotationHelper : protected SegmentHelper
+class ROSEGARDENPRIVATE_EXPORT SegmentNotationHelper : protected SegmentHelper
 {
 public:
     SegmentNotationHelper(Segment &t) : SegmentHelper(t) { }

@@ -23,7 +23,7 @@
 namespace Rosegarden 
 {
 
-class SegmentPerformanceHelper : protected SegmentHelper
+class ROSEGARDENPRIVATE_EXPORT SegmentPerformanceHelper : protected SegmentHelper
 {
 public:
     SegmentPerformanceHelper(Segment &t) : SegmentHelper(t) { }

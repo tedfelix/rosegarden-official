@@ -1,7 +1,11 @@
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 // -*- c-file-style:  "bsd" -*-
 
+#include "base/Composition.h"
 #include "base/Event.h"
+#include "base/NotationTypes.h"
+#include "base/SegmentNotationHelper.h"
+#include "base/SegmentPerformanceHelper.h"
 
 #include <QtGlobal>
 #include <QDebug>
@@ -21,6 +25,7 @@ class TestMisc : public QObject
 private Q_SLOTS:
     void testEvent();
     void testEventPerformance();
+    void testNotationTypes();
 };
 
 void TestMisc::testEvent() try
@@ -247,18 +252,157 @@ void TestMisc::testEventPerformance()
          << (et-st)*10 << "ms";
 }
 
+void TestMisc::testNotationTypes() {
+    qDebug() << "Testing duration-list stuff";
+
+    qDebug() << "2/4...";
+    TimeSignature ts(2,4);
+    DurationList dlist;
+    ts.getDurationListForInterval(
+            dlist, 1209,
+            ts.getBarDuration() - Note(Note::Semiquaver, true).getDuration());
+    int acc = 0;
+    for (DurationList::iterator i = dlist.begin(); i != dlist.end(); ++i) {
+            qDebug() << "duration: " << *i;
+            acc += *i;
+    }
+    qDebug() << "total: " << acc << " (on bar duration of " << ts.getBarDuration() << ")";
+
+
+    qDebug() << "4/4 96/96...";
+    ts = TimeSignature(4,4);
+    dlist = DurationList();
+    ts.getDurationListForInterval(dlist, 96, 96);
+    acc = 0;
+    for (DurationList::iterator i = dlist.begin(); i != dlist.end(); ++i) {
+            qDebug() << "duration: " << *i;
+            acc += *i;
+    }
+    qDebug() << "total: " << acc << " (on bar duration of " << ts.getBarDuration() << ")";
+
+
+    qDebug() << "6/8...";
+    ts = TimeSignature(6,8);
+    dlist = DurationList();
+    ts.getDurationListForInterval
+            (dlist, 1209,
+             ts.getBarDuration() - Note(Note::Semiquaver, true).getDuration());
+    acc = 0;
+    for (DurationList::iterator i = dlist.begin(); i != dlist.end(); ++i) {
+            qDebug() << "duration: " << *i;
+            acc += *i;
+    }
+    qDebug() << "total: " << acc << " (on bar duration of " << ts.getBarDuration() << ")";
+
+    qDebug() << "3/4...";
+    ts = TimeSignature(3,4);
+    dlist = DurationList();
+    ts.getDurationListForInterval
+            (dlist, 1209,
+             ts.getBarDuration() - Note(Note::Semiquaver, true).getDuration());
+    acc = 0;
+    for (DurationList::iterator i = dlist.begin(); i != dlist.end(); ++i) {
+            qDebug() << "duration: " << *i;
+            acc += *i;
+    }
+    qDebug() << "total: " << acc << " (on bar duration of " << ts.getBarDuration() << ")";
+
+    qDebug() << "4/4...";
+    ts = TimeSignature(4,4);
+    dlist = DurationList();
+    ts.getDurationListForInterval
+            (dlist, 1209,
+             ts.getBarDuration() - Note(Note::Semiquaver, true).getDuration());
+    acc = 0;
+    for (DurationList::iterator i = dlist.begin(); i != dlist.end(); ++i) {
+        qDebug() << "duration: " << *i;
+        acc += *i;
+    }
+    qDebug() << "total: " << acc << " (on bar duration of " << ts.getBarDuration() << ")";
+
+    qDebug() << "3/8...";
+    ts = TimeSignature(3,8);
+    dlist = DurationList();
+    ts.getDurationListForInterval
+            (dlist, 1209,
+             ts.getBarDuration() - Note(Note::Semiquaver, true).getDuration());
+    acc = 0;
+    for (DurationList::iterator i = dlist.begin(); i != dlist.end(); ++i) {
+        qDebug() << "duration: " << *i;
+        acc += *i;
+    }
+    qDebug() << "total: " << acc << " (on bar duration of " << ts.getBarDuration() << ")";
+
+    qDebug() << "4/4 wacky placement...";
+    ts = TimeSignature(4,4);
+    dlist = DurationList();
+    ts.getDurationListForInterval(dlist, 160, 1280);
+    acc = 0;
+    for (DurationList::iterator i = dlist.begin(); i != dlist.end(); ++i) {
+            qDebug() << "duration: " << *i;
+            acc += *i;
+    }
+    qDebug() << "total: " << acc << " (on bar duration of " << ts.getBarDuration() << ")";
+
+    qDebug() << "Testing Segment::splitIntoTie() - splitting 384 -> 2*192\n";
+
+    Composition c;
+    Segment *ht = new Segment();
+    c.addSegment(ht);
+    Segment &t(*ht);
+    SegmentNotationHelper nh(t);
+    SegmentPerformanceHelper ph(t);
+
+    Event *ev = new Event("note", 0, 384);
+    ev->set<Int>("pitch", 60);
+    t.insert(ev);
+
+    Segment::iterator sb(t.begin());
+    nh.splitIntoTie(sb, 384/2);
+
+    for(Segment::iterator i = t.begin(); i != t.end(); ++i) {
+            qDebug() << "Event at " << (*i)->getAbsoluteTime()
+                 << " - duration : " << (*i)->getDuration();
+    }
+
+    Segment::iterator half2 = t.begin(); ++half2;
+
+    qDebug() << "Splitting 192 -> (48 + 144) : \n";
+
+    sb = t.begin();
+    nh.splitIntoTie(sb, 48);
+
+    for(Segment::iterator i = t.begin(); i != t.end(); ++i) {
+            qDebug() << "Event at " << (*i)->getAbsoluteTime()
+                 << " - duration : " << (*i)->getDuration();
+    }
+
+    qDebug() << "Splitting 192 -> (144 + 48) : \n";
+
+    nh.splitIntoTie(half2, 144);
+
+
+    for(Segment::iterator i = t.begin(); i != t.end(); ++i) {
+            qDebug() << "Event at " << (*i)->getAbsoluteTime()
+                 << " - duration : " << (*i)->getDuration()
+                 << " - performance duration : " <<
+                ph.getSoundingDuration(i);
+
+            qDebug() << (*i);
+    }
+
+    nh.autoBeam(t.begin(), t.end(), "beamed");
+}
+
+
 #if 0
 
 #include "base/Segment.h"
-#include "base/Composition.h"
 
 #define TEST_NOTATION_TYPES 1
 #define TEST_SPEED 1
 
 #ifdef TEST_NOTATION_TYPES
-#include "base/NotationTypes.h"
-#include "base/SegmentNotationHelper.h"
-#include "base/SegmentPerformanceHelper.h"
 #endif
 
 #include "base/MidiTypes.h"
@@ -275,179 +419,7 @@ using namespace Rosegarden;
 int main(int argc, char **argv)
 {
 
-#ifdef NOT_DEFINED
-        cout << "Testing segment shrinking\n";
-        
-        Segment segment(5, 0);
-        unsigned int nbBars = segment.getNbBars();
 
-        cout << "Segment nbBars : " << nbBars << endl;
-        if (nbBars != 5) {
-                cerr << "%%%ERROR : segment nbBars should be 5\n";
-        }
-
-        Segment::iterator iter = segment.end();
-        --iter;
-        cout << "Last segment el. time : " << (*iter)->getAbsoluteTime() << endl;
-
-        cout << "Shrinking segment to 3 bars : \n";
-        segment.setNbBars(3);
-        nbBars = segment.getNbBars();
-
-        cout << "Segment new nbBars : " << nbBars << endl;
-        if (nbBars != 3) {
-                cerr << "%%%ERROR : segment new nbBars should be 3\n";
-        }
-#endif // NOT_DEFINED
-
-#ifdef TEST_NOTATION_TYPES
-        cout << "Testing duration-list stuff\n";
-
-        cout << "2/4..." << endl;
-        TimeSignature ts(2,4);
-        DurationList dlist;
-        ts.getDurationListForInterval
-                (dlist, 1209,
-                 ts.getBarDuration() - Note(Note::Semiquaver, true).getDuration());
-        int acc = 0;
-        for (DurationList::iterator i = dlist.begin(); i != dlist.end(); ++i) {
-                cout << "duration: " << *i << endl;
-                acc += *i;
-        }
-        cout << "total: " << acc << " (on bar duration of " << ts.getBarDuration() << ")" << endl;
-
-
-
-        cout << "4/4 96/96..." << endl;
-        ts = TimeSignature(4,4);
-        dlist = DurationList();
-        ts.getDurationListForInterval(dlist, 96, 96);
-        acc = 0;
-        for (DurationList::iterator i = dlist.begin(); i != dlist.end(); ++i) {
-                cout << "duration: " << *i << endl;
-                acc += *i;
-        }
-        cout << "total: " << acc << " (on bar duration of " << ts.getBarDuration() << ")" << endl;
-        
-
-
-        cout << "6/8..." << endl;
-        ts = TimeSignature(6,8);
-        dlist = DurationList();
-        ts.getDurationListForInterval
-                (dlist, 1209,
-                 ts.getBarDuration() - Note(Note::Semiquaver, true).getDuration());
-        acc = 0;
-        for (DurationList::iterator i = dlist.begin(); i != dlist.end(); ++i) {
-                cout << "duration: " << *i << endl;
-                acc += *i;
-        }
-        cout << "total: " << acc << " (on bar duration of " << ts.getBarDuration() << ")" << endl;
-
-        cout << "3/4..." << endl;
-        ts = TimeSignature(3,4);
-        dlist = DurationList();
-        ts.getDurationListForInterval
-                (dlist, 1209,
-                 ts.getBarDuration() - Note(Note::Semiquaver, true).getDuration());
-        acc = 0;
-        for (DurationList::iterator i = dlist.begin(); i != dlist.end(); ++i) {
-                cout << "duration: " << *i << endl;
-                acc += *i;
-        }
-        cout << "total: " << acc << " (on bar duration of " << ts.getBarDuration() << ")" << endl;
-
-        cout << "4/4..." << endl;
-        ts = TimeSignature(4,4);
-        dlist = DurationList();
-        ts.getDurationListForInterval
-                (dlist, 1209,
-                 ts.getBarDuration() - Note(Note::Semiquaver, true).getDuration());
-        acc = 0;
-        for (DurationList::iterator i = dlist.begin(); i != dlist.end(); ++i) {
-                cout << "duration: " << *i << endl;
-                acc += *i;
-        }
-        cout << "total: " << acc << " (on bar duration of " << ts.getBarDuration() << ")" << endl;
-
-        cout << "3/8..." << endl;
-        ts = TimeSignature(3,8);
-        dlist = DurationList();
-        ts.getDurationListForInterval
-                (dlist, 1209,
-                 ts.getBarDuration() - Note(Note::Semiquaver, true).getDuration());
-        acc = 0;
-        for (DurationList::iterator i = dlist.begin(); i != dlist.end(); ++i) {
-                cout << "duration: " << *i << endl;
-                acc += *i;
-        }
-        cout << "total: " << acc << " (on bar duration of " << ts.getBarDuration() << ")" << endl;
-
-        cout << "4/4 wacky placement..." << endl;
-        ts = TimeSignature(4,4);
-        dlist = DurationList();
-        ts.getDurationListForInterval(dlist, 160, 1280);
-        acc = 0;
-        for (DurationList::iterator i = dlist.begin(); i != dlist.end(); ++i) {
-                cout << "duration: " << *i << endl;
-                acc += *i;
-        }
-        cout << "total: " << acc << " (on bar duration of " << ts.getBarDuration() << ")" << endl;
-
-        cout << "Testing Segment::splitIntoTie() - splitting 384 -> 2*192\n";
-
-        Composition c;
-        Segment *ht = new Segment();
-        c.addSegment(ht);
-        Segment &t(*ht);
-        SegmentNotationHelper nh(t);
-        SegmentPerformanceHelper ph(t);
-
-        Event *ev = new Event("note", 0, 384);
-        ev->set<Int>("pitch", 60);
-        t.insert(ev);
-
-        Segment::iterator sb(t.begin());
-        nh.splitIntoTie(sb, 384/2);
-
-        for(Segment::iterator i = t.begin(); i != t.end(); ++i) {
-                cout << "Event at " << (*i)->getAbsoluteTime()
-                     << " - duration : " << (*i)->getDuration()
-                     << endl;
-        }
-
-        Segment::iterator half2 = t.begin(); ++half2;
-        
-        cout << "Splitting 192 -> (48 + 144) : \n";
-
-        sb = t.begin();
-        nh.splitIntoTie(sb, 48);
-
-        for(Segment::iterator i = t.begin(); i != t.end(); ++i) {
-                cout << "Event at " << (*i)->getAbsoluteTime()
-                     << " - duration : " << (*i)->getDuration()
-                     << endl;
-        }
-        
-        cout << "Splitting 192 -> (144 + 48) : \n";
-
-        nh.splitIntoTie(half2, 144);
-
-
-        for(Segment::iterator i = t.begin(); i != t.end(); ++i) {
-                cout << "Event at " << (*i)->getAbsoluteTime()
-                     << " - duration : " << (*i)->getDuration()
-                     << " - performance duration : " <<
-                    ph.getSoundingDuration(i) << endl;
-
-                cout << endl;
-                qDebug() << (*i);
-                cout << endl;
-        }
-
-        nh.autoBeam(t.begin(), t.end(), "beamed");
-
-#endif // TEST_NOTATION_TYPES
 };
 
 #endif
@@ -461,17 +433,15 @@ int main(int argc, char **argv)
                 widestring[i] = toupper(widestring[i]);
             }
         }
-        cout << "Testing wide string: string value is \"" << widestring << "\""
-             << endl;
-        cout << "String's length is " << widestring.length() << endl;
-        cout << "and storage space is "
-             << (widestring.length() * sizeof(widestring[0]))
-             << endl;
-        cout << "Characters are: ";
+        qDebug() << "Testing wide string: string value is \"" << widestring << "\"";
+        qDebug() << "String's length is " << widestring.length();
+        qDebug() << "and storage space is "
+             << (widestring.length() * sizeof(widestring[0]));
+        qDebug() << "Characters are: ";
         for (size_t i = 0; i < widestring.length(); ++i) {
-            cout << widestring[i];
-            if (i < widestring.length()-1) cout << " ";
-            else cout << endl;
+            qDebug() << widestring[i];
+            if (i < widestring.length()-1) qDebug() << " ";
+            else qDebug();
         }
 #endif
 

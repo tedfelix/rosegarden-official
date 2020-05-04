@@ -1075,7 +1075,7 @@ public:
 };
 
 
-class SegmentHelper
+class ROSEGARDENPRIVATE_EXPORT SegmentHelper
 {
 protected:
     SegmentHelper(Segment &t) : m_segment(t) { }
