@@ -349,29 +349,35 @@ void TestMisc::testNotationTypes() {
 
     qDebug() << "3/8...";
     ts = TimeSignature(3,8);
+    QCOMPARE(ts.getBarDuration(), 1440l);
+
     dlist = DurationList();
     ts.getDurationListForInterval
             (dlist, 1209,
              ts.getBarDuration() - Note(Note::Semiquaver, 1).getDuration());
-    int acc = 0;
-    for (DurationList::iterator i = dlist.begin(); i != dlist.end(); ++i) {
-        qDebug() << "duration: " << *i;
-        acc += *i;
-    }
-    qDebug() << "total: " << acc << " (on bar duration of " << ts.getBarDuration() << ")";
+
+    durationIter = dlist.begin();
+    QCOMPARE(*durationIter++, 120);
+    QCOMPARE(*durationIter++, 240);
+    QCOMPARE(*durationIter++, 480);
+    QCOMPARE(*durationIter++, 240);
+    QCOMPARE(*durationIter++, 120);
+    QCOMPARE(*durationIter++, 9);
+    QVERIFY(durationIter == dlist.end());
+
 
     qDebug() << "4/4 wacky placement...";
     ts = TimeSignature(4,4);
+
     dlist = DurationList();
     ts.getDurationListForInterval(dlist, 160, 1280);
-    acc = 0;
-    for (DurationList::iterator i = dlist.begin(); i != dlist.end(); ++i) {
-            qDebug() << "duration: " << *i;
-            acc += *i;
-    }
-    qDebug() << "total: " << acc << " (on bar duration of " << ts.getBarDuration() << ")";
 
-    qDebug() << "Testing Segment::splitIntoTie() - splitting 384 -> 2*192\n";
+    durationIter = dlist.begin();
+    QCOMPARE(*durationIter++, 160);
+    QVERIFY(durationIter == dlist.end());
+
+
+    qDebug() << "Testing Segment::splitIntoTie() - splitting 384 -> 2*192";
 
     Composition c;
     Segment *ht = new Segment();
@@ -387,71 +393,68 @@ void TestMisc::testNotationTypes() {
     Segment::iterator sb(t.begin());
     nh.splitIntoTie(sb, 384/2);
 
-    for(Segment::iterator i = t.begin(); i != t.end(); ++i) {
-            qDebug() << "Event at " << (*i)->getAbsoluteTime()
-                 << " - duration : " << (*i)->getDuration();
-    }
+    Segment::const_iterator eventIter = t.cbegin();
+    QCOMPARE((*eventIter)->getAbsoluteTime(), 0l);
+    QCOMPARE((*eventIter)->getDuration(), 192l);
+    ++eventIter;
+    QCOMPARE((*eventIter)->getAbsoluteTime(), 192l);
+    QCOMPARE((*eventIter)->getDuration(), 192l);
+    ++eventIter;
+    QVERIFY(eventIter == t.cend());
 
-    Segment::iterator half2 = t.begin(); ++half2;
 
-    qDebug() << "Splitting 192 -> (48 + 144) : \n";
+    qDebug() << "Splitting 192 -> (48 + 144)";
+
+    Segment::iterator half2 = t.begin();
+    ++half2;
 
     sb = t.begin();
     nh.splitIntoTie(sb, 48);
 
-    for(Segment::iterator i = t.begin(); i != t.end(); ++i) {
-            qDebug() << "Event at " << (*i)->getAbsoluteTime()
-                 << " - duration : " << (*i)->getDuration();
-    }
+    eventIter = t.cbegin();
+    QCOMPARE((*eventIter)->getAbsoluteTime(), 0l);
+    QCOMPARE((*eventIter)->getDuration(), 48l);
+    ++eventIter;
+    QCOMPARE((*eventIter)->getAbsoluteTime(), 48l);
+    QCOMPARE((*eventIter)->getDuration(), 144l);
+    ++eventIter;
+    QCOMPARE((*eventIter)->getAbsoluteTime(), 192l);
+    QCOMPARE((*eventIter)->getDuration(), 192l);
+    ++eventIter;
+    QVERIFY(eventIter == t.cend());
 
-    qDebug() << "Splitting 192 -> (144 + 48) : \n";
+
+    qDebug() << "Splitting 192 -> (144 + 48)";
 
     nh.splitIntoTie(half2, 144);
 
-
-    for(Segment::iterator i = t.begin(); i != t.end(); ++i) {
-            qDebug() << "Event at " << (*i)->getAbsoluteTime()
-                 << " - duration : " << (*i)->getDuration()
-                 << " - performance duration : " <<
-                ph.getSoundingDuration(i);
-
-            qDebug() << (*i);
-    }
+    eventIter = t.cbegin();
+    QCOMPARE((*eventIter)->getAbsoluteTime(), 0l);
+    QCOMPARE((*eventIter)->getDuration(), 48l);
+    QCOMPARE(ph.getSoundingDuration(eventIter), 384l);
+    ++eventIter;
+    QCOMPARE((*eventIter)->getAbsoluteTime(), 48l);
+    QCOMPARE((*eventIter)->getDuration(), 144l);
+    QCOMPARE(ph.getSoundingDuration(eventIter), 0l);
+    ++eventIter;
+    QCOMPARE((*eventIter)->getAbsoluteTime(), 192l);
+    QCOMPARE((*eventIter)->getDuration(), 144l);
+    QCOMPARE(ph.getSoundingDuration(eventIter), 0l);
+    ++eventIter;
+    QCOMPARE((*eventIter)->getAbsoluteTime(), 336l);
+    QCOMPARE((*eventIter)->getDuration(), 48l);
+    QCOMPARE(ph.getSoundingDuration(eventIter), 0l);
+    ++eventIter;
+    QVERIFY(eventIter == t.cend());
 
     nh.autoBeam(t.begin(), t.end(), "beamed");
+
+    // ??? Do we need to test something here?
 }
 
-
 #if 0
+// Move this to a standalone program.
 
-#include "base/Segment.h"
-
-#define TEST_NOTATION_TYPES 1
-#define TEST_SPEED 1
-
-#ifdef TEST_NOTATION_TYPES
-#endif
-
-#include "base/MidiTypes.h"
-
-#include <cstdio>
-
-#include <iostream>
-
-using namespace std;
-using namespace Rosegarden;
-
-
-
-int main(int argc, char **argv)
-{
-
-
-};
-
-#endif
-
-#if 0
         basic_string<wchar_t> widestring(L"This is a test");
         widestring += L" of wide character strings";
         for (size_t i = 0; i < widestring.length(); ++i) {
@@ -473,6 +476,8 @@ int main(int argc, char **argv)
 #endif
 
 #if 0
+// Probably no longer relevant.  Could be moved to standalone.
+
 // Some attempts at reproducing the func-template-within-template problem
 //
 enum FooType {A, B, C};
