@@ -516,7 +516,7 @@ private:
 #endif
 };
 
-extern QDebug &operator<<(QDebug &dbg, const Event &event);
+extern ROSEGARDENPRIVATE_EXPORT QDebug &operator<<(QDebug &dbg, const Event &event);
 
 template <PropertyType P>
 bool
