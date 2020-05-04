@@ -255,78 +255,105 @@ void TestMisc::testEventPerformance()
 void TestMisc::testNotationTypes() {
     qDebug() << "Testing duration-list stuff";
 
+    Note note(Note::Semiquaver, 1);
+    QCOMPARE((int)note.getNoteType(), (int)Note::Semiquaver);
+    QCOMPARE(note.getDots(), 1);
+
     qDebug() << "2/4...";
     TimeSignature ts(2,4);
+    QCOMPARE(ts.getBarDuration(), 1920l);
+
     DurationList dlist;
     ts.getDurationListForInterval(
             dlist, 1209,
-            ts.getBarDuration() - Note(Note::Semiquaver, true).getDuration());
-    int acc = 0;
-    for (DurationList::iterator i = dlist.begin(); i != dlist.end(); ++i) {
-            qDebug() << "duration: " << *i;
-            acc += *i;
-    }
-    qDebug() << "total: " << acc << " (on bar duration of " << ts.getBarDuration() << ")";
+            ts.getBarDuration() - Note(Note::Semiquaver, 1).getDuration());
+
+    DurationList::const_iterator durationIter = dlist.begin();
+    QCOMPARE(*durationIter++, 120);
+    QCOMPARE(*durationIter++, 240);
+    QCOMPARE(*durationIter++, 480);
+    QCOMPARE(*durationIter++, 240);
+    QCOMPARE(*durationIter++, 120);
+    QCOMPARE(*durationIter++, 9);
+    QVERIFY(durationIter == dlist.end());
 
 
     qDebug() << "4/4 96/96...";
     ts = TimeSignature(4,4);
+    QCOMPARE(ts.getBarDuration(), 3840l);
+
     dlist = DurationList();
     ts.getDurationListForInterval(dlist, 96, 96);
-    acc = 0;
-    for (DurationList::iterator i = dlist.begin(); i != dlist.end(); ++i) {
-            qDebug() << "duration: " << *i;
-            acc += *i;
-    }
-    qDebug() << "total: " << acc << " (on bar duration of " << ts.getBarDuration() << ")";
+
+    durationIter = dlist.begin();
+    QCOMPARE(*durationIter++, 96);
+    QVERIFY(durationIter == dlist.end());
 
 
     qDebug() << "6/8...";
     ts = TimeSignature(6,8);
+    QCOMPARE(ts.getBarDuration(), 2880l);
+
     dlist = DurationList();
     ts.getDurationListForInterval
             (dlist, 1209,
-             ts.getBarDuration() - Note(Note::Semiquaver, true).getDuration());
-    acc = 0;
-    for (DurationList::iterator i = dlist.begin(); i != dlist.end(); ++i) {
-            qDebug() << "duration: " << *i;
-            acc += *i;
-    }
-    qDebug() << "total: " << acc << " (on bar duration of " << ts.getBarDuration() << ")";
+             ts.getBarDuration() - Note(Note::Semiquaver, 1).getDuration());
+
+    durationIter = dlist.begin();
+    QCOMPARE(*durationIter++, 120);
+    QCOMPARE(*durationIter++, 240);
+    QCOMPARE(*durationIter++, 480);
+    QCOMPARE(*durationIter++, 240);
+    QCOMPARE(*durationIter++, 120);
+    QCOMPARE(*durationIter++, 9);
+    QVERIFY(durationIter == dlist.end());
+
 
     qDebug() << "3/4...";
     ts = TimeSignature(3,4);
+    QCOMPARE(ts.getBarDuration(), 2880l);
+
     dlist = DurationList();
     ts.getDurationListForInterval
             (dlist, 1209,
-             ts.getBarDuration() - Note(Note::Semiquaver, true).getDuration());
-    acc = 0;
-    for (DurationList::iterator i = dlist.begin(); i != dlist.end(); ++i) {
-            qDebug() << "duration: " << *i;
-            acc += *i;
-    }
-    qDebug() << "total: " << acc << " (on bar duration of " << ts.getBarDuration() << ")";
+             ts.getBarDuration() - Note(Note::Semiquaver, 1).getDuration());
+
+    durationIter = dlist.begin();
+    QCOMPARE(*durationIter++, 120);
+    QCOMPARE(*durationIter++, 240);
+    QCOMPARE(*durationIter++, 480);
+    QCOMPARE(*durationIter++, 240);
+    QCOMPARE(*durationIter++, 120);
+    QCOMPARE(*durationIter++, 9);
+    QVERIFY(durationIter == dlist.end());
+
 
     qDebug() << "4/4...";
     ts = TimeSignature(4,4);
+    QCOMPARE(ts.getBarDuration(), 3840l);
+
     dlist = DurationList();
     ts.getDurationListForInterval
             (dlist, 1209,
-             ts.getBarDuration() - Note(Note::Semiquaver, true).getDuration());
-    acc = 0;
-    for (DurationList::iterator i = dlist.begin(); i != dlist.end(); ++i) {
-        qDebug() << "duration: " << *i;
-        acc += *i;
-    }
-    qDebug() << "total: " << acc << " (on bar duration of " << ts.getBarDuration() << ")";
+             ts.getBarDuration() - Note(Note::Semiquaver, 1).getDuration());
+
+    durationIter = dlist.begin();
+    QCOMPARE(*durationIter++, 120);
+    QCOMPARE(*durationIter++, 240);
+    QCOMPARE(*durationIter++, 480);
+    QCOMPARE(*durationIter++, 240);
+    QCOMPARE(*durationIter++, 120);
+    QCOMPARE(*durationIter++, 9);
+    QVERIFY(durationIter == dlist.end());
+
 
     qDebug() << "3/8...";
     ts = TimeSignature(3,8);
     dlist = DurationList();
     ts.getDurationListForInterval
             (dlist, 1209,
-             ts.getBarDuration() - Note(Note::Semiquaver, true).getDuration());
-    acc = 0;
+             ts.getBarDuration() - Note(Note::Semiquaver, 1).getDuration());
+    int acc = 0;
     for (DurationList::iterator i = dlist.begin(); i != dlist.end(); ++i) {
         qDebug() << "duration: " << *i;
         acc += *i;
