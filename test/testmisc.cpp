@@ -3,20 +3,24 @@
 
 #include "base/Event.h"
 
+#include <QtGlobal>
 #include <QDebug>
 #include <QTest>
 
 #include <string>
 
+#include <sys/times.h>
+
 using namespace Rosegarden;
 
-/// Unit test for RealTime
+/// Miscellaneous unit tests.
 class TestMisc : public QObject
 {
     Q_OBJECT
 
 private Q_SLOTS:
     void testEvent();
+    void testEventPerformance();
 };
 
 void TestMisc::testEvent() try
@@ -26,7 +30,7 @@ void TestMisc::testEvent() try
     Event e("note", 0);
     static const PropertyName DURATION_PROPERTY = "duration";
     e.set<Int>(DURATION_PROPERTY, 20);
-    QCOMPARE(static_cast<int>(e.get<Int>(DURATION_PROPERTY)), 20);
+    QCOMPARE(e.get<Int>(DURATION_PROPERTY), 20l);
 
     static const PropertyName SOME_BOOL_PROPERTY = "someBoolProp";
     static const PropertyName SOME_STRING_PROPERTY = "someStringProp";
@@ -51,62 +55,45 @@ void TestMisc::testEvent() try
     QVERIFY(!e.get<String>(DURATION_PROPERTY, s));
 
     static const PropertyName NONEXISTENT_PROPERTY = "nonexistentprop";
+
+    thrown = false;
+
     try {
-        qDebug() << "dummy prop is " << e.get<String>(NONEXISTENT_PROPERTY);
+        s = e.get<String>(NONEXISTENT_PROPERTY);
+
+        qDebug() << "NoData was not thrown.";
+        QVERIFY(false);
     } catch (Event::NoData &bt) {
-        qDebug() << "Correctly caught NoData when trying to get non existent property";
+        thrown = true;
     }
 
-    if (!e.get<String>(NONEXISTENT_PROPERTY, s)) {
-        qDebug() << "Correctly got error when trying to get<String> of non existent property";
-    } else {
-        qDebug() << "ERROR AT " << __LINE__;
-    }
+    QVERIFY(thrown);
 
+    QVERIFY(!e.get<String>(NONEXISTENT_PROPERTY, s));
 
     e.set<Int>(DURATION_PROPERTY, 30);
-    qDebug() << "duration is " << e.get<Int>(DURATION_PROPERTY);
+    long duration;
+    QVERIFY(e.get<Int>(DURATION_PROPERTY, duration));
+    QCOMPARE(duration, 30l);
 
     static const PropertyName ANNOTATION_PROPERTY = "annotation";
     e.set<String>(ANNOTATION_PROPERTY, "This is my house");
-    qDebug() << "annotation is " << e.get<String>(ANNOTATION_PROPERTY);
-
-    long durationVal;
-    if (e.get<Int>(DURATION_PROPERTY, durationVal))
-        qDebug() << "duration is " << durationVal;
-    else
-        qDebug() << "ERROR AT " << __LINE__;
-
-    if (e.get<String>(ANNOTATION_PROPERTY, s))
-        qDebug() << "annotation is " << s;
-    else
-        qDebug() << "ERROR AT " << __LINE__;
+    QVERIFY(e.get<String>(ANNOTATION_PROPERTY, s));
+    QCOMPARE(s.c_str(), "This is my house");
 
     qDebug() << "Testing persistence & setMaybe...";
 
     static const PropertyName SOME_INT_PROPERTY = "someIntProp";
     e.setMaybe<Int>(SOME_INT_PROPERTY, 1);
-    if (e.get<Int>(SOME_INT_PROPERTY) == 1) {
-        qDebug() << "a. Correct: 1";
-    } else {
-        qDebug() << "a. ERROR: " << e.get<Int>(SOME_INT_PROPERTY);
-    }
+    QCOMPARE(e.get<Int>(SOME_INT_PROPERTY), 1l);
 
     e.set<Int>(SOME_INT_PROPERTY, 2, false);
     e.setMaybe<Int>(SOME_INT_PROPERTY, 3);
-    if (e.get<Int>(SOME_INT_PROPERTY) == 3) {
-        qDebug() << "b. Correct: 3";
-    } else {
-        qDebug() << "b. ERROR: " << e.get<Int>(SOME_INT_PROPERTY);
-    }
+    QCOMPARE(e.get<Int>(SOME_INT_PROPERTY), 3l);
 
     e.set<Int>(SOME_INT_PROPERTY, 4);
     e.setMaybe<Int>(SOME_INT_PROPERTY, 5);
-    if (e.get<Int>(SOME_INT_PROPERTY) == 4) {
-        qDebug() << "c. Correct: 4";
-    } else {
-        qDebug() << "c. ERROR: " << e.get<Int>(SOME_INT_PROPERTY);
-    }
+    QCOMPARE(e.get<Int>(SOME_INT_PROPERTY), 4l);
 
     qDebug() << "Testing debug dump : ";
     // ??? Will not compile.
@@ -114,148 +101,150 @@ void TestMisc::testEvent() try
     //                             type ‘QDebug&’ to an rvalue of type ‘QDebug’
     //     Sure enough, this doesn't work either:
     //         QDebug &qd = qDebug();
+    //     But why does this work in the app?  What is different there?
     //qDebug() << e;
+    //QDebug(QtDebugMsg) << e;
+    // This works fine, of course.  It's the temporaries that it doesn't
+    // like.  But they are ok in the app.  Hmmm.
+    QDebug qd(QtDebugMsg);
+    qd << e;
     qDebug() << "dump finished";
 
-#if 0
-    // Performance testing probably belongs in the code itself.
-
-        cout << "Testing speed of Event..." << endl;
-        int i;
-        long j;
-
-        char b[20];
-        strcpy(b, "test");
-
-#define NAME_COUNT 500
-
-        PropertyName names[NAME_COUNT];
-        for (i = 0; i < NAME_COUNT; ++i) {
-            sprintf(b+4, "%d", i);
-            names[i] = b;
-        }
-
-        Event e1("note", 0);
-        int gsCount = 200000;
-
-        struct tms spare;
-        clock_t st = times(&spare);
-        for (i = 0; i < gsCount; ++i) {
-                e1.set<Int>(names[i % NAME_COUNT], i);
-        }
-        clock_t et = times(&spare);
-        cout << "Event: " << gsCount << " setInts: " << (et-st)*10 << "ms\n";
-
-        st = times(&spare);
-        j = 0;
-        for (i = 0; i < gsCount; ++i) {
-                if (i%4==0) sprintf(b+4, "%d", i);
-                j += e1.get<Int>(names[i % NAME_COUNT]);
-        }
-        et = times(&spare);
-        cout << "Event: " << gsCount << " getInts: " << (et-st)*10 << "ms (result: " << j << ")\n";
-        
-        st = times(&spare);
-        for (i = 0; i < 1000; ++i) {
-                Event e11(e1);
-                (void)e11.get<Int>(names[i % NAME_COUNT]);
-        }
-        et = times(&spare);
-        cout << "Event: 1000 copy ctors of " << e1.getStorageSize() << "-byte element: "
-             << (et-st)*10 << "ms\n";
-
-//        gsCount = 100000;
-
-        for (i = 0; i < NAME_COUNT; ++i) {
-            sprintf(b+4, "%ds", i);
-            names[i] = b;
-        }
-
-        st = times(&spare);
-        for (i = 0; i < gsCount; ++i) {
-                e1.set<String>(names[i % NAME_COUNT], b);
-        }
-        et = times(&spare);
-        cout << "Event: " << gsCount << " setStrings: " << (et-st)*10 << "ms\n";
-        
-        st = times(&spare);
-        j = 0;
-        for (i = 0; i < gsCount; ++i) {
-                if (i%4==0) sprintf(b+4, "%ds", i);
-                j += e1.get<String>(names[i % NAME_COUNT]).size();
-        }
-        et = times(&spare);
-        cout << "Event: " << gsCount << " getStrings: " << (et-st)*10 << "ms (result: " << j << ")\n";
-        
-        st = times(&spare);
-        for (i = 0; i < 1000; ++i) {
-                Event e11(e1);
-                (void)e11.get<String>(names[i % NAME_COUNT]);
-        }
-        et = times(&spare);
-        cout << "Event: 1000 copy ctors of " << e1.getStorageSize() << "-byte element: "
-             << (et-st)*10 << "ms\n";
-
-        st = times(&spare);
-        for (i = 0; i < 1000; ++i) {
-                Event e11(e1);
-                (void)e11.get<String>(names[i % NAME_COUNT]);
-                (void)e11.set<String>(names[i % NAME_COUNT], "blah");
-        }
-        et = times(&spare);
-        cout << "Event: 1000 copy ctors plus set<String> of " << e1.getStorageSize() << "-byte element: "
-             << (et-st)*10 << "ms\n";
-
-//        gsCount = 1000000;
-
-        st = times(&spare);
-        for (i = 0; i < gsCount; ++i) {
-                Event e21("dummy", i, 0, MIN_SUBORDERING);
-        }
-        et = times(&spare);
-        cout << "Event: " << gsCount << " event ctors alone: "
-             << (et-st)*10 << "ms\n";
-
-        st = times(&spare);
-        for (i = 0; i < gsCount; ++i) {
-            std::string s0("dummy");
-            std::string s1 = s0;
-        }
-        et = times(&spare);
-        cout << "Event: " << gsCount << " string ctors+assignents: "
-             << (et-st)*10 << "ms\n";
-
-        st = times(&spare);
-        for (i = 0; i < gsCount; ++i) {
-                Event e21("dummy", i, 0, MIN_SUBORDERING);
-                (void)e21.getAbsoluteTime();
-                (void)e21.getDuration();
-                (void)e21.getSubOrdering();
-        }
-        et = times(&spare);
-        cout << "Event: " << gsCount << " event ctors plus getAbsTime/Duration/SubOrdering: "
-             << (et-st)*10 << "ms\n";
-
-        st = times(&spare);
-        for (i = 0; i < gsCount; ++i) {
-                Event e21("dummy", i, 0, MIN_SUBORDERING);
-                (void)e21.getAbsoluteTime();
-                (void)e21.getDuration();
-                (void)e21.getSubOrdering();
-                e21.set<Int>(names[0], 40);
-                (void)e21.get<Int>(names[0]);
-        }
-        et = times(&spare);
-        cout << "Event: " << gsCount << " event ctors plus one get/set and getAbsTime/Duration/SubOrdering: "
-             << (et-st)*10 << "ms\n";
-
-
-#else
-        qDebug() << "Skipping test speed of Event";
-#endif // TEST_SPEED
 } catch(...) {
     qDebug() << "Unexpected exception caught";
     QVERIFY(false);
+}
+
+void TestMisc::testEventPerformance()
+{
+    // Performance testing probably belongs in the code itself.
+
+    qDebug() << "Testing speed of Event...";
+
+    constexpr int NAME_COUNT = 500;
+
+    char b[20];
+    strcpy(b, "test");
+
+    int i;
+    PropertyName names[NAME_COUNT];
+    for (i = 0; i < NAME_COUNT; ++i) {
+        sprintf(b+4, "%d", i);
+        names[i] = b;
+    }
+
+    Event e1("note", 0);
+    int gsCount = 200000;
+
+    struct tms spare;
+    clock_t st = times(&spare);
+    for (i = 0; i < gsCount; ++i) {
+            e1.set<Int>(names[i % NAME_COUNT], i);
+    }
+    clock_t et = times(&spare);
+    qDebug() << "Event: " << gsCount << " setInts: " << (et-st)*10 << "ms";
+
+    st = times(&spare);
+    long j = 0;
+    for (i = 0; i < gsCount; ++i) {
+            if (i%4==0) sprintf(b+4, "%d", i);
+            j += e1.get<Int>(names[i % NAME_COUNT]);
+    }
+    et = times(&spare);
+    qDebug() << "Event: " << gsCount << " getInts: " << (et-st)*10 << "ms (result: " << j << ")";
+
+    st = times(&spare);
+    for (i = 0; i < 1000; ++i) {
+            Event e11(e1);
+            (void)e11.get<Int>(names[i % NAME_COUNT]);
+    }
+    et = times(&spare);
+    qDebug() << "Event: 1000 copy ctors of " << e1.getStorageSize() << "-byte element: "
+         << (et-st)*10 << "ms";
+
+    for (i = 0; i < NAME_COUNT; ++i) {
+        sprintf(b+4, "%ds", i);
+        names[i] = b;
+    }
+
+    st = times(&spare);
+    for (i = 0; i < gsCount; ++i) {
+            e1.set<String>(names[i % NAME_COUNT], b);
+    }
+    et = times(&spare);
+    qDebug() << "Event: " << gsCount << " setStrings: " << (et-st)*10 << "ms";
+
+    st = times(&spare);
+    j = 0;
+    for (i = 0; i < gsCount; ++i) {
+            if (i%4==0) sprintf(b+4, "%ds", i);
+            j += e1.get<String>(names[i % NAME_COUNT]).size();
+    }
+    et = times(&spare);
+    qDebug() << "Event: " << gsCount << " getStrings: " << (et-st)*10 << "ms (result: " << j << ")";
+
+    st = times(&spare);
+    for (i = 0; i < 1000; ++i) {
+            Event e11(e1);
+            (void)e11.get<String>(names[i % NAME_COUNT]);
+    }
+    et = times(&spare);
+    qDebug() << "Event: 1000 copy ctors of " << e1.getStorageSize() << "-byte element: "
+         << (et-st)*10 << "ms";
+
+    st = times(&spare);
+    for (i = 0; i < 1000; ++i) {
+            Event e11(e1);
+            (void)e11.get<String>(names[i % NAME_COUNT]);
+            (void)e11.set<String>(names[i % NAME_COUNT], "blah");
+    }
+    et = times(&spare);
+    qDebug() << "Event: 1000 copy ctors plus set<String> of " << e1.getStorageSize() << "-byte element: "
+         << (et-st)*10 << "ms";
+
+    // ??? Is this correct?
+    constexpr short MIN_SUBORDERING = 0;
+
+    st = times(&spare);
+    for (i = 0; i < gsCount; ++i) {
+            Event e21("dummy", i, 0, MIN_SUBORDERING);
+    }
+    et = times(&spare);
+    qDebug() << "Event: " << gsCount << " event ctors alone: "
+         << (et-st)*10 << "ms";
+
+    st = times(&spare);
+    for (i = 0; i < gsCount; ++i) {
+        std::string s0("dummy");
+        std::string s1 = s0;
+    }
+    et = times(&spare);
+    qDebug() << "Event: " << gsCount << " string ctors+assignents: "
+         << (et-st)*10 << "ms";
+
+    st = times(&spare);
+    for (i = 0; i < gsCount; ++i) {
+            Event e21("dummy", i, 0, MIN_SUBORDERING);
+            (void)e21.getAbsoluteTime();
+            (void)e21.getDuration();
+            (void)e21.getSubOrdering();
+    }
+    et = times(&spare);
+    qDebug() << "Event: " << gsCount << " event ctors plus getAbsTime/Duration/SubOrdering: "
+         << (et-st)*10 << "ms";
+
+    st = times(&spare);
+    for (i = 0; i < gsCount; ++i) {
+            Event e21("dummy", i, 0, MIN_SUBORDERING);
+            (void)e21.getAbsoluteTime();
+            (void)e21.getDuration();
+            (void)e21.getSubOrdering();
+            e21.set<Int>(names[0], 40);
+            (void)e21.get<Int>(names[0]);
+    }
+    et = times(&spare);
+    qDebug() << "Event: " << gsCount << " event ctors plus one get/set and getAbsTime/Duration/SubOrdering: "
+         << (et-st)*10 << "ms";
 }
 
 #if 0
@@ -276,7 +265,6 @@ void TestMisc::testEvent() try
 
 #include <cstdio>
 
-#include <sys/times.h>
 #include <iostream>
 
 using namespace std;
