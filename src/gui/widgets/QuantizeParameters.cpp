@@ -280,7 +280,7 @@ QuantizeParameters::initBaseGridUnit(QString settingsKey, QComboBox *comboBox)
         }
     }
 
-    comboBox->addItem(noMap, "Arbitrary grid unit");
+    comboBox->addItem(noMap, tr("Arbitrary grid unit"));
     // Save the index for future reference.
     m_arbitraryGridUnitIndex = comboBox->count() - 1;
 

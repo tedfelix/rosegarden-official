@@ -27,7 +27,7 @@ QString
 FlatParameterPattern::getText(QString propertyName) const
 {
     return
-        EventParameterDialog::tr("Flat - set %1 to value").arg(propertyName);
+        QObject::tr("Flat - set %1 to value").arg(propertyName);
 }
 
 
@@ -36,7 +36,7 @@ FlatParameterPattern::getSliderSpec(const SelectionSituation *situation) const
 {
     SliderSpecVector result;
     int defaultVelocity = situation->getFlatValue();
-    result.push_back(SliderSpec(EventParameterDialog::tr("Value"),
+    result.push_back(SliderSpec(QObject::tr("Value"),
                                 defaultVelocity, situation));
     return result;
 }

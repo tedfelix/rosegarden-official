@@ -24,15 +24,15 @@ namespace Rosegarden
 IncreaseParameterPattern
 IncreaseParameterPattern::
 increase(
-	 EventParameterDialog::tr("Increase - raise each %1 by value"),
-	 EventParameterDialog::tr("Increase by"),
+	 QObject::tr("Increase - raise each %1 by value"),
+	 QObject::tr("Increase by"),
 	 true);
 
 IncreaseParameterPattern
 IncreaseParameterPattern::
 decrease(
-	 EventParameterDialog::tr("Decrease - lower each %1 by value"),
-	 EventParameterDialog::tr("Decrease by"),
+	 QObject::tr("Decrease - lower each %1 by value"),
+	 QObject::tr("Decrease by"),
 	 false);
 
 QString

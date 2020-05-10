@@ -27,7 +27,7 @@ QString
 AlternatingParameterPattern::getText(QString propertyName) const
 {
     return
-        EventParameterDialog::tr("Alternating - set %1 to max and min on alternate events").arg(propertyName);
+        QObject::tr("Alternating - set %1 to max and min on alternate events").arg(propertyName);
 }
 
 ParameterPattern::SliderSpecVector
@@ -38,9 +38,9 @@ AlternatingParameterPattern::getSliderSpec(const SelectionSituation *situation) 
         situation->getMinMax();
 
     // First is high value, second is low.
-    result.push_back(SliderSpec(EventParameterDialog::tr("First Value"),  
+    result.push_back(SliderSpec(QObject::tr("First Value"),
                                 minMax.second, situation));
-    result.push_back(SliderSpec(EventParameterDialog::tr("Second Value"), 
+    result.push_back(SliderSpec(QObject::tr("Second Value"),
                                 minMax.first, situation));
     return result;
 }

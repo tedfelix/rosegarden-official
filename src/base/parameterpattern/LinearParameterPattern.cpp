@@ -47,9 +47,9 @@ LinearParameterPattern::getSliderSpec(const SelectionSituation *situation) const
     std::pair<int,int> minMax =
         situation->getMinMax();
 
-    SliderSpec lowArg = SliderSpec(EventParameterDialog::tr("Low Value"), 
+    SliderSpec lowArg = SliderSpec(QObject::tr("Low Value"),
                                     minMax.first, situation);
-    SliderSpec highArg = SliderSpec(EventParameterDialog::tr("High Value"), 
+    SliderSpec highArg = SliderSpec(QObject::tr("High Value"),
                                     minMax.second, situation);
 
     if(m_isDiminuendo) {

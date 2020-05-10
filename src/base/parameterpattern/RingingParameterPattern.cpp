@@ -27,7 +27,7 @@ QString
 RingingParameterPattern::getText(QString propertyName) const
 {
     return
-        EventParameterDialog::tr("Ringing - set %1 alternating from max to min with both dying to zero").arg(propertyName);
+        QObject::tr("Ringing - set %1 alternating from max to min with both dying to zero").arg(propertyName);
 }
 
 ParameterPattern::SliderSpecVector
@@ -36,9 +36,9 @@ RingingParameterPattern::getSliderSpec(const SelectionSituation *situation) cons
     SliderSpecVector result;
     std::pair<int,int> minMax = situation->getMinMax();
 
-    result.push_back(SliderSpec(EventParameterDialog::tr("First Value"),  
+    result.push_back(SliderSpec(QObject::tr("First Value"),
                                 minMax.second, situation));
-    result.push_back(SliderSpec(EventParameterDialog::tr("Second Value"), 
+    result.push_back(SliderSpec(QObject::tr("Second Value"),
                                 minMax.first, situation));
     return result;
 }
