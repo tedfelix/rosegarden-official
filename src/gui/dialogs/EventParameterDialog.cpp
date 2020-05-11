@@ -38,7 +38,6 @@ namespace Rosegarden
 
     /******** Nested class EventParameterDialog::ParamWidget ********/
 
-// Construct a ParamWidget
 EventParameterDialog::ParamWidget::ParamWidget(QLayout *parent)
 {
     QWidget *box = new QWidget;
@@ -51,16 +50,15 @@ EventParameterDialog::ParamWidget::ParamWidget(QLayout *parent)
     box->setLayout(boxLayout);
 }
 
-// Get the result value when done
 int
 EventParameterDialog::ParamWidget::getValue()
 {
     return m_spinBox->value();
 }
 
-// Show the widget in accordance with args 
 void
-EventParameterDialog::ParamWidget::showByArgs(const SliderSpec* args)
+EventParameterDialog::ParamWidget::showByArgs(
+        const ParameterPattern::SliderSpec *args)
 {
     m_label->setText(args->m_label);
     m_spinBox->setMinimum(args->m_minValue);
@@ -71,7 +69,6 @@ EventParameterDialog::ParamWidget::showByArgs(const SliderSpec* args)
     m_spinBox->show();
 }
 
-// Hide the widget
 void
 EventParameterDialog::ParamWidget::hide()
 {
@@ -81,13 +78,11 @@ EventParameterDialog::ParamWidget::hide()
 
     /******** Main class EventParameterDialog ********/
 
-// @author Tom Breton (Tehom) (some)
-// @author Chris Cannam (most)
 EventParameterDialog::EventParameterDialog(
     QWidget *parent,
     const QString &name,
     SelectionSituation *situation,
-    const ParameterPatternVec *patterns):
+    const ParameterPattern::ParameterPatternVec *patterns):
         QDialog(parent),
         m_situation(situation),
         m_patterns(patterns),
@@ -130,7 +125,7 @@ EventParameterDialog::EventParameterDialog(
     patternBoxLayout->addWidget(child_10);
     patternBoxLayout->addWidget(m_patternCombo);
 
-    initializePatternBox();
+    initPatternCombo();
 
     connect(m_patternCombo, SIGNAL(activated(int)),
             this, SLOT(slotPatternSelected(int)));
@@ -148,9 +143,8 @@ EventParameterDialog::EventParameterDialog(
     connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 }
 
-// Initialize the widget that selects a pattern
 void
-EventParameterDialog::initializePatternBox()
+EventParameterDialog::initPatternCombo()
 {
     typedef ParameterPattern::ParameterPatternVec::const_iterator iterator;
     QString propertyName = m_situation->getPropertyNameQString();
@@ -163,8 +157,6 @@ EventParameterDialog::initializePatternBox()
     }
 }
 
-// React to selecting a pattern: Set up the parameter widgets in
-// accordance with what the pattern tells us it needs.
 void
 EventParameterDialog::slotPatternSelected(int value)
 {
@@ -177,7 +169,7 @@ EventParameterDialog::slotPatternSelected(int value)
     // m_controlsLayout is a member, we could add widgets just-in-time.
     if (sliderArgs.size() > 2) { return; }
     m_NbParameters = sliderArgs.size();
-    WidIterator widgetBox = m_paramVec.begin();
+    ParamWidgetVec::iterator widgetBox = m_paramVec.begin();
     for (ArgIterator i = sliderArgs.begin();
          i != sliderArgs.end();
          ++i, ++widgetBox) {
@@ -191,12 +183,10 @@ EventParameterDialog::slotPatternSelected(int value)
     adjustSize();
 }
 
-// Get a vector of the current parameters.  This makes part of our
-// final result object.
 ParameterPattern::BareParams
 EventParameterDialog::getBareParams()
 {
-    BareParams result;
+    ParameterPattern::BareParams result;
     for (int i = 0; i < m_NbParameters; ++i) {
         ParamWidget &widgetBox = m_paramVec[i];
         result.push_back(widgetBox.getValue());
@@ -204,7 +194,6 @@ EventParameterDialog::getBareParams()
     return result;
 }
 
-// Get the final result object.
 ParameterPattern::Result
 EventParameterDialog::getResult()
 {
@@ -214,5 +203,6 @@ EventParameterDialog::getResult()
                                  getPattern(patternIndex),
                                  getBareParams());
 }
+
 
 }
