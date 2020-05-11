@@ -38,18 +38,14 @@ class IncreaseParameterPattern : public ParameterPattern
     void
         setEventProperties(iterator begin, iterator end,
                            Result *result) const override;
-    QString m_patternText;
-    QString m_valueText;
+
     bool    m_isIncrease;
 
 public:
-    IncreaseParameterPattern(QString patternText,
-			     QString valueText,
-			     bool isIncrease)
-      : m_patternText(patternText),
-      m_valueText(valueText),
-      m_isIncrease(isIncrease)
-    {};    
+    IncreaseParameterPattern(bool isIncrease) :
+        m_isIncrease(isIncrease)
+    {}
+
     static IncreaseParameterPattern increase;
     static IncreaseParameterPattern decrease;
 };

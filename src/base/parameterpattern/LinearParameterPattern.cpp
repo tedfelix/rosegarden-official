@@ -22,22 +22,20 @@ namespace Rosegarden
 {
 
 
-LinearParameterPattern
-LinearParameterPattern::
-crescendo(EventParameterDialog::
-          tr("Crescendo - set %1 rising from min to max"),
-          false);
+LinearParameterPattern LinearParameterPattern::crescendo(false);
 
-LinearParameterPattern
-LinearParameterPattern::
-diminuendo(EventParameterDialog::
-           tr("Diminuendo - set %1 falling from max to min"),
-           true);
+LinearParameterPattern LinearParameterPattern::diminuendo(true);
 
 QString
 LinearParameterPattern::getText(QString propertyName) const
 {
-    return m_patternText.arg(propertyName);
+    QString text;
+    if (m_isDiminuendo) {
+        text = QObject::tr("Diminuendo - set %1 falling from max to min");
+    } else {
+        text = QObject::tr("Crescendo - set %1 rising from min to max");
+    }
+    return text.arg(propertyName);
 }
 
 ParameterPattern::SliderSpecVector

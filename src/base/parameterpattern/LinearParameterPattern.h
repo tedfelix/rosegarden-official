@@ -42,13 +42,11 @@ class LinearParameterPattern : public ParameterPattern
     virtual double getValueDelta(double valueChange, double timeRatio)
         const;
     
-    QString m_patternText;
-    bool    m_isDiminuendo;
+protected:
+    bool m_isDiminuendo;
 
 public:
-    LinearParameterPattern(QString patternText,
-                           bool isDiminuendo) :
-        m_patternText(patternText),
+    LinearParameterPattern(bool isDiminuendo) :
         m_isDiminuendo(isDiminuendo)
     {};
     static LinearParameterPattern crescendo;

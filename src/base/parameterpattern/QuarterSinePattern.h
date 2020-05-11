@@ -28,13 +28,15 @@ namespace Rosegarden
 // @author Tom Breton (Tehom)
 class QuarterSinePattern : public LinearParameterPattern
 {
+    QString getText(QString propertyName) const override;
+
     double getValueDelta(double valueChange, double timeRatio) const override;
 
 public:
-    QuarterSinePattern(QString patternText,
-		       bool isDiminuendo) :
-    LinearParameterPattern(patternText,isDiminuendo)
-    {};
+    QuarterSinePattern(bool isDiminuendo) :
+        LinearParameterPattern(isDiminuendo)
+    {}
+
     static QuarterSinePattern crescendo;
     static QuarterSinePattern diminuendo;
 };

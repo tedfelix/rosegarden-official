@@ -21,32 +21,38 @@
 namespace Rosegarden
 {
 
-IncreaseParameterPattern
-IncreaseParameterPattern::
-increase(
-	 QObject::tr("Increase - raise each %1 by value"),
-	 QObject::tr("Increase by"),
-	 true);
+IncreaseParameterPattern IncreaseParameterPattern::increase(true);
 
-IncreaseParameterPattern
-IncreaseParameterPattern::
-decrease(
-	 QObject::tr("Decrease - lower each %1 by value"),
-	 QObject::tr("Decrease by"),
-	 false);
+IncreaseParameterPattern IncreaseParameterPattern::decrease(false);
 
 QString
 IncreaseParameterPattern::getText(QString propertyName) const
 {
-    return m_patternText.arg(propertyName);
+    QString text;
+    if (m_isIncrease) {
+        text = QObject::tr("Increase - raise each %1 by value");
+    } else {
+        text = QObject::tr("Decrease - lower each %1 by value");
+    }
+    return text.arg(propertyName);
 }
 
 ParameterPattern::SliderSpecVector
 IncreaseParameterPattern::getSliderSpec(const SelectionSituation * situation) const
 {
+    QString valueText;
+    if (m_isIncrease) {
+        valueText = QObject::tr("Increase by");
+    } else {
+        valueText = QObject::tr("Decrease by");
+    }
+
     SliderSpecVector result;
-    int defaultValue = 10;
-    result.push_back(SliderSpec(m_valueText, defaultValue, situation));
+    result.push_back(SliderSpec(
+            valueText,  // label
+            10,  // defaultValue
+            situation));
+
     return result;
 }
     

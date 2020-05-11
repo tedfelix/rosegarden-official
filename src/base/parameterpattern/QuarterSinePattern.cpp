@@ -26,17 +26,20 @@ namespace Rosegarden
 {
 
 
-QuarterSinePattern
-QuarterSinePattern::
-crescendo(EventParameterDialog::
-          tr("Quarter-wave crescendo - set %1 rising from min to max in a quarter sine wave contour"),
-          false);
+QuarterSinePattern QuarterSinePattern::crescendo(false);
+QuarterSinePattern QuarterSinePattern::diminuendo(true);
 
-QuarterSinePattern
-QuarterSinePattern::
-diminuendo(EventParameterDialog::
-           tr("Quarter-wave diminuendo - set %1 falling from max to min in a quarter sine wave contour"),
-           true);
+QString
+QuarterSinePattern::getText(QString propertyName) const
+{
+    QString text;
+    if (m_isDiminuendo) {
+        text = QObject::tr("Quarter-wave diminuendo - set %1 falling from max to min in a quarter sine wave contour");
+    } else {
+        text = QObject::tr("Quarter-wave crescendo - set %1 rising from min to max in a quarter sine wave contour");
+    }
+    return text.arg(propertyName);
+}
 
 double
 QuarterSinePattern::

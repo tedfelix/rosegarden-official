@@ -25,17 +25,20 @@
 namespace Rosegarden
 {
 
-HalfSinePattern
-HalfSinePattern::
-crescendo(EventParameterDialog::
-          tr("Half-wave crescendo - set %1 rising from min to max in a half sine wave contour"),
-          false);
+HalfSinePattern HalfSinePattern::crescendo(false);
+HalfSinePattern HalfSinePattern::diminuendo(true);
 
-HalfSinePattern
-HalfSinePattern::
-diminuendo(EventParameterDialog::
-           tr("Half-wave diminuendo - set %1 falling from max to min in a half sine wave contour"),
-           true);
+QString
+HalfSinePattern::getText(QString propertyName) const
+{
+    QString text;
+    if (m_isDiminuendo) {
+        text = QObject::tr("Half-wave diminuendo - set %1 falling from max to min in a half sine wave contour");
+    } else {
+        text = QObject::tr("Half-wave crescendo - set %1 rising from min to max in a half sine wave contour");
+    }
+    return text.arg(propertyName);
+}
 
 double
 HalfSinePattern::
