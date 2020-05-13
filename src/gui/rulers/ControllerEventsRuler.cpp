@@ -491,9 +491,7 @@ ControllerEventsRuler::addControlLine(
 
     }
 
-    m_moddingSegment = true;
     CommandHistory::getInstance()->addCommand(macro);
-    m_moddingSegment = false;
 
     // How else to re-initialize and bring things into view?  I'm missing
     // something, but this works...
