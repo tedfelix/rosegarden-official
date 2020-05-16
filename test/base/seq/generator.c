@@ -8,14 +8,14 @@ main(int argc, char **argv)
 {
     snd_seq_t *handle;
     int portid;
-    int npfd;
-    struct pollfd *pfd;
+    //int npfd;
+    //struct pollfd *pfd;
     int queue;
     int i;
     int rval;
     int target;
-    snd_seq_queue_timer_t *timer;
-    snd_timer_id_t *timerid;
+    //snd_seq_queue_timer_t *timer;
+    //snd_timer_id_t *timerid;
 
     if (argc != 2) {
         fprintf(stderr, "usage: generator <target-client-id>\n");

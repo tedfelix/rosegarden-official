@@ -23,7 +23,9 @@ void normalize(struct timeval *tv)
 int
 jack_process(jack_nframes_t nframes, void *arg)
 {
+    (void)arg;
     sample_frames += nframes;
+    return 0;
 }
 
 jack_nframes_t
@@ -38,15 +40,15 @@ rt_to_frame(struct timeval tv, jack_nframes_t sample_rate)
 }
 
 int
-main(int argc, char **argv)
+main()
 {
     snd_seq_t *handle;
     int portid;
-    int npfd;
-    struct pollfd *pfd;
+    //int npfd;
+    //struct pollfd *pfd;
     int queue;
-    int i;
-    int rval;
+    //int i;
+    //int rval;
     struct timeval starttv;
     int countdown = -1;
     snd_seq_queue_timer_t *timer;

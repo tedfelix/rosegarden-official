@@ -18,19 +18,19 @@ void normalize(struct timeval *tv)
 }
 
 int
-main(int argc, char **argv)
+main()
 {
     snd_seq_t *handle;
     int portid;
-    int npfd;
-    struct pollfd *pfd;
+    //int npfd;
+    //struct pollfd *pfd;
     int queue;
-    int i;
-    int rval;
+    //int i;
+    //int rval;
     struct timeval starttv, prevdiff;
     int countdown = -1;
-    snd_seq_queue_timer_t *timer;
-    snd_timer_id_t *timerid;
+    //snd_seq_queue_timer_t *timer;
+    //snd_timer_id_t *timerid;
 
     if (snd_seq_open(&handle, "hw", SND_SEQ_OPEN_DUPLEX, 0) < 0) {
         fprintf(stderr, "failed to open ALSA sequencer interface\n");

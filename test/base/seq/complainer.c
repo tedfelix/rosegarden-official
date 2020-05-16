@@ -18,7 +18,7 @@ callback(snd_seq_t *handle)
                 static long last_usec = 0;
                 int pitch = ev->data.note.note;
 
-                snd_seq_timestamp_t evt = ev->time;
+                //snd_seq_timestamp_t evt = ev->time;
 
                 gettimeofday(&tv, 0);
                 printf("pitch %d at %ld sec %ld usec, off by %ld usec\n",
@@ -32,7 +32,7 @@ callback(snd_seq_t *handle)
 }
 
 int
-main(int argc, char **argv)
+main()
 {
     snd_seq_t *handle;
     int portid;

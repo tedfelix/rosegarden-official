@@ -1,10 +1,13 @@
+CFLAGS = -Wall -Wextra -Wundef
 
-all:	complainer generator queue-timer queue-timer-jack
+targets = complainer generator queue-timer queue-timer-jack
 
-%:	%.c
-	cc $< -o $@ -ljack -lasound
+all : $(targets)
+
+% : %.c
+	cc $(CFLAGS) $< -o $@ -ljack -lasound
 
 .PHONY : clean
 clean :
-	rm complainer generator queue-timer queue-timer-jack
+	rm $(targets)
 
