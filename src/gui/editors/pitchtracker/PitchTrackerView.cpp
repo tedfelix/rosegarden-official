@@ -384,7 +384,11 @@ PitchTrackerView::slotUpdateValues(timeT time)
     // in the our element list
     const ViewElementList::iterator score_event_itr =
         m_notes->findNearestTime(time);
-        
+
+    // Not found?  Bail.
+    if (score_event_itr == m_notes->end())
+        return;
+
     // Gracefully handle repositioning of the play cursor by the user
     if (m_transport_posn_change) {
         RG_DEBUG << "User changed transport position\n";
