@@ -5285,7 +5285,7 @@
     <message>
         <location line="-299"/>
         <source>Transp&amp;ose by Semitones...</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Transporte por semitonos...</translation>
     </message>
     <message>
         <location line="+37"/>
@@ -10609,104 +10609,104 @@ Would you like to use
     <message>
         <location filename="../../src/base/parameterpattern/QuarterSinePattern.cpp" line="+37"/>
         <source>Quarter-wave diminuendo - set %1 falling from max to min in a quarter sine wave contour</source>
-        <translation type="unfinished">Diminuendo de cuarta onda - establecer %1cayendo desde el  máximo al mínimo en contorno de onda cuarta sinusoidal</translation>
+        <translation>Diminuendo de cuarta onda - establecer %1cayendo desde el  máximo al mínimo en contorno de onda cuarta sinusoidal</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Quarter-wave crescendo - set %1 rising from min to max in a quarter sine wave contour</source>
-        <translation type="unfinished">Crescendo de cuarta onda - establecer %1creciendo desde el mínimo al máximo en contorno de onda cuarta sinusoidal</translation>
+        <translation>Crescendo de cuarta onda - establecer %1creciendo desde el mínimo al máximo en contorno de onda cuarta sinusoidal</translation>
     </message>
     <message>
         <location filename="../../src/base/parameterpattern/HalfSinePattern.cpp" line="+36"/>
         <source>Half-wave diminuendo - set %1 falling from max to min in a half sine wave contour</source>
-        <translation type="unfinished">Diminuendo de cuarta onda - establecer %1cayendo desde el  mínimo al máximo en contorno de onda media sinusoidal</translation>
+        <translation>Diminuendo de cuarta onda - establecer %1cayendo desde el  mínimo al máximo en contorno de onda media sinusoidal</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Half-wave crescendo - set %1 rising from min to max in a half sine wave contour</source>
-        <translation type="unfinished">Crescendo de media onda - establecer %1creciendo desde el mínimo al máximo en contorno de onda media sinusoidal</translation>
+        <translation>Crescendo de media onda - establecer %1creciendo desde el mínimo al máximo en contorno de onda media sinusoidal</translation>
     </message>
     <message>
         <location filename="../../src/base/parameterpattern/FlatParameterPattern.cpp" line="+30"/>
         <source>Flat - set %1 to value</source>
-        <translation type="unfinished">Llano - establecer %1 al valor</translation>
+        <translation>Llano - establecer %1 al valor</translation>
     </message>
     <message>
         <location line="+9"/>
         <source>Value</source>
-        <translation type="unfinished">Valor</translation>
+        <translation>Valor</translation>
     </message>
     <message>
         <location filename="../../src/base/parameterpattern/IncreaseParameterPattern.cpp" line="+33"/>
         <source>Increase - raise each %1 by value</source>
-        <translation type="unfinished">Aumentar - crescer cada %1 por valor</translation>
+        <translation>Aumentar - crescer cada %1 por valor</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Decrease - lower each %1 by value</source>
-        <translation type="unfinished">Diminuir - bajar cada %1 por valor</translation>
+        <translation>Diminuir - bajar cada %1 por valor</translation>
     </message>
     <message>
         <location line="+10"/>
         <source>Increase by</source>
-        <translation type="unfinished">Crescer por</translation>
+        <translation>Crescer por</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Decrease by</source>
-        <translation type="unfinished">Diminuir por</translation>
+        <translation>Diminuir por</translation>
     </message>
     <message>
         <location filename="../../src/base/parameterpattern/ParameterPattern.cpp" line="+158"/>
         <source>Setting Velocities...</source>
-        <translation type="unfinished">Estableciendo velocidades...</translation>
+        <translation>Estableciendo velocidades...</translation>
     </message>
     <message>
         <location line="+27"/>
         <source>Set Event Velocities</source>
-        <translation type="unfinished">Establecer velocidades de los eventos</translation>
+        <translation>Establecer velocidades de los eventos</translation>
     </message>
     <message>
         <location filename="../../src/base/parameterpattern/AlternatingParameterPattern.cpp" line="+30"/>
         <source>Alternating - set %1 to max and min on alternate events</source>
-        <translation type="unfinished">Alternar - establecer %1 al máximo y mínimo en eventos alternos</translation>
+        <translation>Alternar - establecer %1 al máximo y mínimo en eventos alternos</translation>
     </message>
     <message>
         <location line="+11"/>
         <location filename="../../src/base/parameterpattern/RingingParameterPattern.cpp" line="+39"/>
         <source>First Value</source>
-        <translation type="unfinished">Velocidad primera</translation>
+        <translation>Velocidad primera</translation>
     </message>
     <message>
         <location line="+2"/>
         <location filename="../../src/base/parameterpattern/RingingParameterPattern.cpp" line="+2"/>
         <source>Second Value</source>
-        <translation type="unfinished">Velocidad segunda</translation>
+        <translation>Velocidad segunda</translation>
     </message>
     <message>
         <location filename="../../src/base/parameterpattern/LinearParameterPattern.cpp" line="+34"/>
         <source>Diminuendo - set %1 falling from max to min</source>
-        <translation type="unfinished">Diminuendo - establecer %1 descendiendo desde el máximo hasta el mínimo</translation>
+        <translation>Diminuendo - establecer %1 descendiendo desde el máximo hasta el mínimo</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Crescendo - set %1 rising from min to max</source>
-        <translation type="unfinished">Crescendo - establecer %1 creciendo desde el mínimo al máximo</translation>
+        <translation>Crescendo - establecer %1 creciendo desde el mínimo al máximo</translation>
     </message>
     <message>
         <location line="+12"/>
         <source>Low Value</source>
-        <translation type="unfinished">Velocidad baja</translation>
+        <translation>Velocidad baja</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>High Value</source>
-        <translation type="unfinished">Velocidad alta</translation>
+        <translation>Velocidad alta</translation>
     </message>
     <message>
         <location filename="../../src/base/parameterpattern/RingingParameterPattern.cpp" line="-11"/>
         <source>Ringing - set %1 alternating from max to min with both dying to zero</source>
-        <translation type="unfinished">Repique - establecer %1 alternando desde el máximo al mínimo con ambos cayendo hacia cero</translation>
+        <translation>Repique - establecer %1 alternando desde el máximo al mínimo con ambos cayendo hacia cero</translation>
     </message>
 </context>
 <context>
@@ -10719,12 +10719,12 @@ Would you like to use
     <message>
         <location line="+18"/>
         <source>&lt;h2&gt;Rosegarden&lt;/h2&gt;&lt;h3&gt;A sequencer and musical notation editor&lt;/h3&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;h2&gt;Rosegarden&lt;/h2&gt;&lt;h3&gt;Un secuenciador y editor de partituras&lt;/h3&gt;</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>&lt;p&gt;Copyright 2000-2020 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; &quot;%4&quot;&lt;br&gt;Build key: %3&lt;br&gt;Qt version: %2&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit&lt;br&gt;&lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;&lt;/p&gt;&lt;p&gt;For more information about Rosegarden, visit&lt;br&gt;&lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2 or later&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;p&gt;Copyright 2000-2020 el equipo de Rosegarden&lt;/p&gt;&lt;p&gt;Versión: %1 &amp;nbsp;%4&lt;br&gt;Versión de Qt: %2&lt;br&gt;Clave: %3&lt;/p&gt;&lt;p&gt;Rosegarden se realizó por un equipo de voluntarios ubicado por todas partes del mundo.  Para aprender quíen desarolló Rosegarden, consulte el &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;sitio Rosegarden&lt;/a&gt;&lt;br&gt;Para más información acerda de Rosegarden, consulte &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;Licencia: GNU General Public License Version 2 or later&lt;/p&gt;</translation>
     </message>
     <message>
         <source>&lt;h2&gt;Rosegarden - &quot;%1&quot;&lt;/h2&gt;&lt;h3&gt;A sequencer and musical notation editor&lt;/h3&gt;</source>
@@ -14746,7 +14746,7 @@ Would you like to try and locate this file or skip it?</source>
     <message>
         <location line="+295"/>
         <source>You must restart Rosegarden or open a file for the track size change to take effect.</source>
-        <translation type="unfinished"></translation>
+        <translation>Es necesario reiniciar Rosegarden para realizar el cambio del tamaño de la pista.</translation>
     </message>
     <message>
         <location line="-495"/>
@@ -14766,22 +14766,22 @@ Would you like to try and locate this file or skip it?</source>
     <message>
         <location line="+70"/>
         <source>Track size</source>
-        <translation type="unfinished"></translation>
+        <translation>Tamaño de la pista</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Small</source>
-        <translation type="unfinished">Pequeño</translation>
+        <translation>Pequeño</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Medium</source>
-        <translation type="unfinished"></translation>
+        <translation>Intermedio</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Large</source>
-        <translation type="unfinished"></translation>
+        <translation>Grande</translation>
     </message>
     <message>
         <location line="+43"/>
@@ -15886,44 +15886,44 @@ Would you like to use
  %1
 
  instead?</source>
-        <translation type="unfinished">LilyPond no permite espacios o barras invertidas en los nombres de archivo.
+        <translation>LilyPond no permite espacios o barras invertidas en los nombres de archivo.
 
 ¿Quiere usar «%1» en su lugar?</translation>
     </message>
     <message>
         <location line="+11"/>
         <source>Export failed.  The file could not be opened for writing.</source>
-        <translation type="unfinished">Ha fallado la exportación. El archivo no se ha podido abrir para escritura.</translation>
+        <translation>Ha fallado la exportación. El archivo no se ha podido abrir para escritura.</translation>
     </message>
     <message>
         <location line="+169"/>
         <source>Export succeeded, but the composition was empty.</source>
-        <translation type="unfinished">Éxito al exportar, pero la composición fue vacía.</translation>
+        <translation>Éxito al exportar, pero la composición fue vacía.</translation>
     </message>
     <message>
         <location line="+42"/>
         <source>Export of unmuted tracks failed.  There are no unmuted tracks or no segments on them.</source>
-        <translation type="unfinished">Fallo al exportar pistas no silenciadas.  No hay pistas no silenciadas, o no hay segmentos en ellas.</translation>
+        <translation>Fallo al exportar pistas no silenciadas.  No hay pistas no silenciadas, o no hay segmentos en ellas.</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>Export of selected track failed.  There are no segments on the selected track.</source>
-        <translation type="unfinished">Fallo al exportar pista seleccionada.  No hay segmentos en las pista seleccionada.</translation>
+        <translation>Fallo al exportar pista seleccionada.  No hay segmentos en las pista seleccionada.</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Export of selected segments failed.  No segments are selected.</source>
-        <translation type="unfinished">Fallo al exportar segmentos seleccionadas.  Ningún segmento seleccionado.</translation>
+        <translation>Fallo al exportar segmentos seleccionadas.  Ningún segmento seleccionado.</translation>
     </message>
     <message>
         <location line="+1882"/>
         <source>warning: overlong bar truncated here</source>
-        <translation type="unfinished">aviso: compás demasiado largo truncado aquí</translation>
+        <translation>aviso: compás demasiado largo truncado aquí</translation>
     </message>
     <message>
         <location line="+11"/>
         <source>warning: bar too short, padding with rests</source>
-        <translation type="unfinished">aviso: compás demasiado corto; rellenando con silencios</translation>
+        <translation>aviso: compás demasiado corto; rellenando con silencios</translation>
     </message>
 </context>
 <context>
@@ -16441,7 +16441,7 @@ Would you like to use
     <message>
         <location filename="../../src/gui/rulers/LoopRuler.cpp" line="+74"/>
         <source>&lt;qt&gt;&lt;p&gt;Click and drag to move the playback pointer.&lt;/p&gt;&lt;p&gt;Right-click and drag to set a range for looping or editing.&lt;/p&gt;&lt;p&gt;Right-click to clear the loop or range.&lt;/p&gt;&lt;p&gt;Ctrl-click and drag to move the playback pointer with snap to beat.&lt;/p&gt;&lt;p&gt;Double-click to start playback.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Haga clic y arrastre para establecer puntero de reproducción.&lt;/p&gt;&lt;p&gt;Mayúsculas+clic y arrastre para establecer bucle o ámbito.&lt;/p&gt;&lt;p&gt;Mayúsculas+clic para deshacer bucle o ámbito &lt;/p&gt;&lt;p&gt;&lt;p&gt;Ctrl+clic y arrastre para establecer puntero de reproducción con ajustamiento a la parte.&lt;/p&gt;Doble click para iniciar reproducción &lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
 </context>
 <context>
@@ -17440,7 +17440,7 @@ Doble clic para abrir el editor de marcadores.</translation>
     <message>
         <location line="+400"/>
         <source>Set Controller Values</source>
-        <translation type="unfinished"></translation>
+        <translation>Establecer valores de controlador</translation>
     </message>
     <message>
         <location line="+278"/>
@@ -17460,7 +17460,7 @@ Doble clic para abrir el editor de marcadores.</translation>
     <message>
         <location line="+348"/>
         <source>Please select a control ruler first.</source>
-        <translation type="unfinished"></translation>
+        <translation>Favor de seleccionar una regla de controlador.</translation>
     </message>
     <message>
         <location line="+448"/>
@@ -17530,12 +17530,12 @@ Doble clic para abrir el editor de marcadores.</translation>
     <message>
         <location line="+1145"/>
         <source>&lt;untitled&gt;</source>
-        <translation type="unfinished">&lt;sin título&gt;</translation>
+        <translation>&lt;sin título&gt;</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Track %1 (%2) | %3</source>
-        <translation type="unfinished"></translation>
+        <translation>Pista %1 (%2) | %3</translation>
     </message>
     <message>
         <location line="-1221"/>
@@ -17583,54 +17583,54 @@ Doble clic para abrir el editor de marcadores.</translation>
     <message>
         <location filename="../../src/sound/MidiFile.cpp" line="+81"/>
         <source>Wrong length for long data in MIDI stream</source>
-        <translation type="unfinished">Tamaño erróneo por dato «long» en flujo de datos MIDI</translation>
+        <translation>Tamaño erróneo por dato «long» en flujo de datos MIDI</translation>
     </message>
     <message>
         <location line="+20"/>
         <source>Wrong length for int data in MIDI stream</source>
-        <translation type="unfinished">Tamaño erróneo por dato «int» en flujo de datos MIDI</translation>
+        <translation>Tamaño erróneo por dato «int» en flujo de datos MIDI</translation>
     </message>
     <message>
         <location line="+19"/>
         <source>End of MIDI file encountered while reading</source>
-        <translation type="unfinished">Se encontró fin de archivo (EOF) mientras leyendo</translation>
+        <translation>Se encontró fin de archivo (EOF) mientras leyendo</translation>
     </message>
     <message>
         <location line="+9"/>
         <source>Attempt to get more bytes than expected on Track</source>
-        <translation type="unfinished">Se intentó leer más bytes que fue posible en pista</translation>
+        <translation>Se intentó leer más bytes que fue posible en pista</translation>
     </message>
     <message>
         <location line="+21"/>
         <source>Attempt to read past MIDI file end</source>
-        <translation type="unfinished">Se intentó leer más allá del fin del archivo de MIDI</translation>
+        <translation>Se intentó leer más allá del fin del archivo de MIDI</translation>
     </message>
     <message>
         <location line="+15"/>
         <location line="+535"/>
         <source>Cancelled by user</source>
-        <translation type="unfinished">Abortado por usuario</translation>
+        <translation>Abortado por usuario</translation>
     </message>
     <message>
         <location line="-459"/>
         <source>File corrupted or in non-standard format</source>
-        <translation type="unfinished">Archivo dañado o en formato no estándar</translation>
+        <translation>Archivo dañado o en formato no estándar</translation>
     </message>
     <message>
         <location line="+68"/>
         <location line="+5"/>
         <source>Not a MIDI file</source>
-        <translation type="unfinished">No es archivo MIDI</translation>
+        <translation>No es archivo MIDI</translation>
     </message>
     <message>
         <location line="+12"/>
         <source>Unexpected MIDI file format</source>
-        <translation type="unfinished">Archivo MIDI de formato inesperado</translation>
+        <translation>Archivo MIDI de formato inesperado</translation>
     </message>
     <message>
         <location line="+97"/>
         <source>Running status used for first event in track</source>
-        <translation type="unfinished">Estado de ejecución usado por primero evento en pista</translation>
+        <translation>Estado de ejecución usado por primero evento en pista</translation>
     </message>
 </context>
 <context>
@@ -18758,12 +18758,12 @@ Esto es un bug (el programa debería haber fallado ya)</translation>
     <message>
         <location line="+39"/>
         <source>Set Controller Values</source>
-        <translation type="unfinished"></translation>
+        <translation>Establecer valores de controlador</translation>
     </message>
     <message>
         <location line="+638"/>
         <source>Please select a control ruler first.</source>
-        <translation type="unfinished"></translation>
+        <translation>Favor de seleccionar una regla de controlador.</translation>
     </message>
     <message>
         <location line="+80"/>
@@ -20167,7 +20167,7 @@ Por favor, asegúrese de que está correctamente configurado en el cuadro de di�
     <message>
         <location line="+52"/>
         <source>Arbitrary grid unit</source>
-        <translation type="unfinished"></translation>
+        <translation>Unidad de rejilla arbitraria</translation>
     </message>
     <message>
         <location line="-97"/>
@@ -20180,42 +20180,42 @@ Por favor, asegúrese de que está correctamente configurado en el cuadro de di�
     <message>
         <location filename="../../src/sound/RIFFAudioFile.cpp" line="+64"/>
         <source>Rosegarden currently only supports 16 or 32-bit PCM or IEEE floating-point RIFF files for writing</source>
-        <translation type="unfinished">Actualmente sólo soporta Rosegarden los archivos de audio de RIFF de PCM de 8, 16, o 24 bits para escribir</translation>
+        <translation>Actualmente sólo soporta Rosegarden los archivos de audio de RIFF de PCM de 8, 16, o 24 bits para escribir</translation>
     </message>
     <message>
         <location line="+310"/>
         <source>Can&apos;t find RIFF identifier</source>
-        <translation type="unfinished">No se encontró el identificador de RIFF</translation>
+        <translation>No se encontró el identificador de RIFF</translation>
     </message>
     <message>
         <location line="+10"/>
         <source>Can&apos;t find WAV identifier</source>
-        <translation type="unfinished">No se encontró el identificador de WAV</translation>
+        <translation>No se encontró el identificador de WAV</translation>
     </message>
     <message>
         <location line="+13"/>
         <source>Can&apos;t find FORMAT identifier</source>
-        <translation type="unfinished">No se encontró el identificador de FORMAT</translation>
+        <translation>No se encontró el identificador de FORMAT</translation>
     </message>
     <message>
         <location line="+50"/>
         <source>Rosegarden currently only supports PCM or IEEE floating-point RIFF files</source>
-        <translation type="unfinished">Actualmente sólo soporta Rosegarden los archivos de RIFF de PCM o de IEEE coma flotante</translation>
+        <translation>Actualmente sólo soporta Rosegarden los archivos de RIFF de PCM o de IEEE coma flotante</translation>
     </message>
     <message>
         <location line="+15"/>
         <source>Unsupported number of channels</source>
-        <translation type="unfinished">Número de canales no soportado</translation>
+        <translation>Número de canales no soportado</translation>
     </message>
     <message>
         <location line="+14"/>
         <source>Rosegarden currently only supports 8-, 16- or 24-bit PCM in RIFF files</source>
-        <translation type="unfinished">Actualmente sólo soporta Rosegarden los archivos de audio de RIFF de PCM de 8, 16, o 24 bits</translation>
+        <translation>Actualmente sólo soporta Rosegarden los archivos de audio de RIFF de PCM de 8, 16, o 24 bits</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Rosegarden currently only supports 32-bit floating-point in RIFF files</source>
-        <translation type="unfinished">Actualmente sólo soporta Rosegarden los archivos de RIFF de coma flotante de 32 bits</translation>
+        <translation>Actualmente sólo soporta Rosegarden los archivos de RIFF de coma flotante de 32 bits</translation>
     </message>
 </context>
 <context>
@@ -21660,7 +21660,7 @@ Please set the audio file path to a valid directory in Document Properties befor
 Would you like to set it now?</source>
         <translation>El directorio de archivos de audio no existe o no es escribible.
 Por favor, configura el directorio de archivos de audio hacia un directorio válido desde Propiedades del Documento antes de grabar audio.
-¿Quiere configurarlo ahora? </translation>
+¿Quiere configurarlo ahora?</translation>
     </message>
     <message>
         <location line="+491"/>
@@ -21715,12 +21715,12 @@ Por favor, configura el directorio de archivos de audio hacia un directorio vál
     <message>
         <location line="+42"/>
         <source>Transpose</source>
-        <translation type="unfinished">Transportar</translation>
+        <translation>Transportar</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>By number of semitones: </source>
-        <translation type="unfinished">Por número de semitonos: </translation>
+        <translation>Por número de semitonos: </translation>
     </message>
     <message>
         <location line="+1034"/>
@@ -21930,12 +21930,12 @@ Error fue : %2</translation>
     <message>
         <location filename="../../src/commands/segment/SegmentForNotationCommand.cpp" line="+32"/>
         <source>Toggle For Notation</source>
-        <translation type="unfinished"></translation>
+        <translation>Para partitura sí o no</translation>
     </message>
     <message>
         <location filename="../../src/commands/segment/SegmentForNotationCommand.h" line="+44"/>
         <source>Change Segment Notation flag...</source>
-        <translation type="unfinished"></translation>
+        <translation>Cambiar flag de partitura del segmento...</translation>
     </message>
 </context>
 <context>
@@ -22114,12 +22114,12 @@ Error fue : %2</translation>
     <message>
         <location line="+9"/>
         <source>For Notation</source>
-        <translation type="unfinished"></translation>
+        <translation>Para partitura</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>&lt;qt&gt;&lt;p&gt;Use this segment when generating notation (LilyPond).&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Utilizar este segmento al imprimir partitura (LilyPond).&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+8"/>
@@ -23060,12 +23060,12 @@ Cerrando otras aplicaciones en ejecución puede mejorar el rendimiento de Rosega
     <message>
         <location line="-25"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location line="+0"/>
         <source>Could not load SysEx file.</source>
-        <translation type="unfinished"></translation>
+        <translation>No se ha podido abrir archivo de SysEx</translation>
     </message>
     <message>
         <source>*.syx|System exclusive files (*.syx)</source>
@@ -24692,7 +24692,7 @@ Cerrando otras aplicaciones en ejecución puede mejorar el rendimiento de Rosega
     <message>
         <location line="-73"/>
         <source>Synth plugin</source>
-        <translation type="unfinished">Plugin sinte</translation>
+        <translation>Plugin sinte</translation>
     </message>
     <message>
         <location line="+261"/>
