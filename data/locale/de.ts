@@ -8305,16 +8305,15 @@
         <translation>&amp;lt;keine&amp;gt;</translation>
     </message>
     <message>
-        <location filename="../../src/base/Studio.cpp" line="+66"/>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="+1056"/>
         <location filename="../../src/sound/AlsaDriver.cpp" line="+684"/>
+        <location filename="../../src/base/Studio.cpp" line="+66"/>
         <location filename="../AutoloadStrings.cpp" line="-189"/>
         <source>Synth plugin</source>
         <translation>Synthesizer-Plugin</translation>
     </message>
     <message>
-        <location line="-3"/>
-        <location filename="../../src/sound/AlsaDriver.cpp" line="+37"/>
+        <location line="+37"/>
+        <location filename="../../src/base/Studio.cpp" line="-3"/>
         <location filename="../AutoloadStrings.cpp" line="-1"/>
         <source>Audio</source>
         <translation>Audio</translation>
@@ -10478,10 +10477,10 @@
         <translation>%1 (%2)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="+1672"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="+917"/>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="+473"/>
         <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="+1051"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="+473"/>
+        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="+1672"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="+953"/>
         <source>%1 Controller %2 %3</source>
         <translation>%1 Kontroller %2 %3</translation>
     </message>
@@ -10615,100 +10614,80 @@
         <translation>Ungültige Sounddatei </translation>
     </message>
     <message>
-        <location filename="../../src/sound/MidiFile.cpp" line="+81"/>
         <source>Wrong length for long data in MIDI stream</source>
-        <translation>Daten im &apos;long&apos;-Format haben die falsche Länge im MIDI-Strom</translation>
+        <translation type="vanished">Daten im &apos;long&apos;-Format haben die falsche Länge im MIDI-Strom</translation>
     </message>
     <message>
-        <location line="+20"/>
         <source>Wrong length for int data in MIDI stream</source>
-        <translation>Daten im &apos;int&apos;-Format haben die falsche Länge im MIDI-Strom</translation>
+        <translation type="vanished">Daten im &apos;int&apos;-Format haben die falsche Länge im MIDI-Strom</translation>
     </message>
     <message>
-        <location line="+19"/>
         <source>End of MIDI file encountered while reading</source>
-        <translation>Das Ende der MIDI-Datei wurde beim Lesen erreicht</translation>
+        <translation type="vanished">Das Ende der MIDI-Datei wurde beim Lesen erreicht</translation>
     </message>
     <message>
-        <location line="+9"/>
         <source>Attempt to get more bytes than expected on Track</source>
-        <translation>Es wurde versucht mehr Bytes als erwartet von der Spur zu erhalten</translation>
+        <translation type="vanished">Es wurde versucht mehr Bytes als erwartet von der Spur zu erhalten</translation>
     </message>
     <message>
-        <location line="+21"/>
         <source>Attempt to read past MIDI file end</source>
-        <translation>Es wurde versucht über das Ende der MIDI-Datei zu lesen</translation>
+        <translation type="vanished">Es wurde versucht über das Ende der MIDI-Datei zu lesen</translation>
     </message>
     <message>
-        <location line="+15"/>
-        <location line="+535"/>
         <source>Cancelled by user</source>
-        <translation>Vom Benutzer abgebrochen</translation>
+        <translation type="vanished">Vom Benutzer abgebrochen</translation>
     </message>
     <message>
-        <location line="-459"/>
         <source>File corrupted or in non-standard format</source>
-        <translation>Datei beschädigt oder in keinem Standardformat</translation>
+        <translation type="vanished">Datei beschädigt oder in keinem Standardformat</translation>
     </message>
     <message>
-        <location line="+68"/>
-        <location line="+5"/>
         <source>Not a MIDI file</source>
-        <translation>Keine MIDI-Datei</translation>
+        <translation type="vanished">Keine MIDI-Datei</translation>
     </message>
     <message>
-        <location line="+12"/>
         <source>Unexpected MIDI file format</source>
-        <translation>Unerwartetes MIDI-Dateiformat</translation>
+        <translation type="vanished">Unerwartetes MIDI-Dateiformat</translation>
     </message>
     <message>
         <source>Invalid event code found</source>
         <translation type="obsolete">Ungültiges Event gefunden</translation>
     </message>
     <message>
-        <location line="+97"/>
         <source>Running status used for first event in track</source>
-        <translation>Running-Status beim ersten Event der Spur benutzt</translation>
+        <translation type="vanished">Running-Status beim ersten Event der Spur benutzt</translation>
     </message>
     <message>
-        <location filename="../../src/sound/RIFFAudioFile.cpp" line="+64"/>
         <source>Rosegarden currently only supports 16 or 32-bit PCM or IEEE floating-point RIFF files for writing</source>
-        <translation>Momentan unterstützt Rosegarden nur 16 oder 32-bit PCM oder IEEE Fließkomma RIFF Dateien bei der Ausgabe</translation>
+        <translation type="vanished">Momentan unterstützt Rosegarden nur 16 oder 32-bit PCM oder IEEE Fließkomma RIFF Dateien bei der Ausgabe</translation>
     </message>
     <message>
-        <location line="+310"/>
         <source>Can&apos;t find RIFF identifier</source>
-        <translation>RIFF Identifier nicht gefunden</translation>
+        <translation type="vanished">RIFF Identifier nicht gefunden</translation>
     </message>
     <message>
-        <location line="+10"/>
         <source>Can&apos;t find WAV identifier</source>
-        <translation>WAV Identifier nicht gefunden</translation>
+        <translation type="vanished">WAV Identifier nicht gefunden</translation>
     </message>
     <message>
-        <location line="+13"/>
         <source>Can&apos;t find FORMAT identifier</source>
-        <translation>FORMAT Identifier nicht gefunden</translation>
+        <translation type="vanished">FORMAT Identifier nicht gefunden</translation>
     </message>
     <message>
-        <location line="+50"/>
         <source>Rosegarden currently only supports PCM or IEEE floating-point RIFF files</source>
-        <translation>Momentan unterstützt Rosegarden nur PCM oder IEEE Fließkomma RIFF-Dateien</translation>
+        <translation type="vanished">Momentan unterstützt Rosegarden nur PCM oder IEEE Fließkomma RIFF-Dateien</translation>
     </message>
     <message>
-        <location line="+15"/>
         <source>Unsupported number of channels</source>
-        <translation>Nicht unterstützte Anzahl von Kanälen</translation>
+        <translation type="vanished">Nicht unterstützte Anzahl von Kanälen</translation>
     </message>
     <message>
-        <location line="+14"/>
         <source>Rosegarden currently only supports 8-, 16- or 24-bit PCM in RIFF files</source>
-        <translation>Momentan unterstützt Rosegarden nur 8-, 16- oder 24-bit PCM in RIFF-Dateien</translation>
+        <translation type="vanished">Momentan unterstützt Rosegarden nur 8-, 16- oder 24-bit PCM in RIFF-Dateien</translation>
     </message>
     <message>
-        <location line="+4"/>
         <source>Rosegarden currently only supports 32-bit floating-point in RIFF files</source>
-        <translation>Momentan unterstützt Rosegarden nur 32 bit Fließkomma in RIFF-Dateien</translation>
+        <translation type="vanished">Momentan unterstützt Rosegarden nur 32 bit Fließkomma in RIFF-Dateien</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/TranzportClient.cpp" line="+62"/>
@@ -10854,7 +10833,6 @@
         <translation>Figurationen aktualisieren</translation>
     </message>
     <message>
-        <location filename="../../src/document/io/LilyPondExporter.cpp" line="+702"/>
         <source>LilyPond does not allow spaces or backslashes in filenames.
 
 Would you like to use
@@ -10862,7 +10840,7 @@ Would you like to use
  %1
 
  instead?</source>
-        <translation>Lilyond erlaubt weder Leerräume noch Rückstriche in Dateinamen.
+        <translation type="vanished">Lilyond erlaubt weder Leerräume noch Rückstriche in Dateinamen.
 
 Wollen Sie stattdessen
 
@@ -10871,39 +10849,32 @@ Wollen Sie stattdessen
  benutzen?</translation>
     </message>
     <message>
-        <location line="+11"/>
         <source>Export failed.  The file could not be opened for writing.</source>
-        <translation>Export ist fehlgeschlagen. Datei konnte nicht zum Schreiben geöffnet werden.</translation>
+        <translation type="vanished">Export ist fehlgeschlagen. Datei konnte nicht zum Schreiben geöffnet werden.</translation>
     </message>
     <message>
-        <location line="+169"/>
         <source>Export succeeded, but the composition was empty.</source>
-        <translation>Export war erfolgreich, aber Komposition war leer.</translation>
+        <translation type="vanished">Export war erfolgreich, aber Komposition war leer.</translation>
     </message>
     <message>
-        <location line="+42"/>
         <source>Export of unmuted tracks failed.  There are no unmuted tracks or no segments on them.</source>
-        <translation>Export nicht stummgeschalteter Spuren fehlgeschlagen.  Es gibt keine nicht stummgeschaltetet Spuren oder sie beinhalten keine Segmente.</translation>
+        <translation type="vanished">Export nicht stummgeschalteter Spuren fehlgeschlagen.  Es gibt keine nicht stummgeschaltetet Spuren oder sie beinhalten keine Segmente.</translation>
     </message>
     <message>
-        <location line="+6"/>
         <source>Export of selected track failed.  There are no segments on the selected track.</source>
-        <translation>Export der ausgewählten Spuren fehlgeschlagen.  Es gibt keine Segmente auf den ausgewählten Spuren.</translation>
+        <translation type="vanished">Export der ausgewählten Spuren fehlgeschlagen.  Es gibt keine Segmente auf den ausgewählten Spuren.</translation>
     </message>
     <message>
-        <location line="+5"/>
         <source>Export of selected segments failed.  No segments are selected.</source>
-        <translation>Export der ausgewählten Segmente fehlgeschlagen.  Es wurden keine Segmente ausgewählt.</translation>
+        <translation type="vanished">Export der ausgewählten Segmente fehlgeschlagen.  Es wurden keine Segmente ausgewählt.</translation>
     </message>
     <message>
-        <location line="+1882"/>
         <source>warning: overlong bar truncated here</source>
-        <translation>Warnung: Überlanger Takt hier abgeschnitten</translation>
+        <translation type="vanished">Warnung: Überlanger Takt hier abgeschnitten</translation>
     </message>
     <message>
-        <location line="+11"/>
         <source>warning: bar too short, padding with rests</source>
-        <translation>Warnung: Takt zu kurz, wird mit Pausen aufgefüllt</translation>
+        <translation type="vanished">Warnung: Takt zu kurz, wird mit Pausen aufgefüllt</translation>
     </message>
     <message>
         <location filename="../../src/base/parameterpattern/FlatParameterPattern.cpp" line="+30"/>
@@ -10933,12 +10904,12 @@ Wollen Sie stattdessen
         <translation>Minimum</translation>
     </message>
     <message>
-        <location filename="../../src/base/parameterpattern/ParameterPattern.cpp" line="+153"/>
+        <location filename="../../src/base/parameterpattern/ParameterPattern.cpp" line="+185"/>
         <source>Set Event Velocities</source>
         <translation>Anschlagstärken der Events setzen</translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location line="-27"/>
         <source>Setting Velocities...</source>
         <translation>Anschlagstärken setzen...</translation>
     </message>
@@ -12418,7 +12389,7 @@ Bitte wählen Sie diejenigen aus, die permanent von der Festplatte gelöscht wer
         <translation>Pan</translation>
     </message>
     <message>
-        <location line="+31"/>
+        <location line="+30"/>
         <source>Mono or stereo</source>
         <translation>Mono oder Stereo</translation>
     </message>
@@ -13397,7 +13368,7 @@ Bitte wählen Sie diejenigen aus, die permanent von der Festplatte gelöscht wer
 <context>
     <name>Rosegarden::CompositionView</name>
     <message>
-        <location filename="../../src/gui/editors/segment/compositionview/CompositionView.cpp" line="+290"/>
+        <location filename="../../src/gui/editors/segment/compositionview/CompositionView.cpp" line="+289"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
@@ -13814,7 +13785,7 @@ Bitte wählen Sie diejenigen aus, die permanent von der Festplatte gelöscht wer
         <translation>[ kein Anschluß ]</translation>
     </message>
     <message>
-        <location line="+702"/>
+        <location line="+700"/>
         <location line="+11"/>
         <location line="+16"/>
         <source>New Device</source>
@@ -14456,12 +14427,11 @@ Dies könnte Probleme verursachen, wenn so später ein berechneter Wert übersch
 <context>
     <name>Rosegarden::EventParameterDialog</name>
     <message>
-        <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="+92"/>
         <source>Rosegarden</source>
-        <translation>Rosegarden</translation>
+        <translation type="vanished">Rosegarden</translation>
     </message>
     <message>
-        <location line="+20"/>
+        <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="+108"/>
         <source>Set the %1 property of the event selection:</source>
         <translation>Das %1-Verhalten für die ausgewählten Events setzen:</translation>
     </message>
@@ -14471,7 +14441,7 @@ Dies könnte Probleme verursachen, wenn so später ein berechneter Wert übersch
         <translation>Muster</translation>
     </message>
     <message>
-        <location line="-77"/>
+        <location line="-68"/>
         <source>Value</source>
         <translation>Wert</translation>
     </message>
@@ -16234,6 +16204,7 @@ Beispieltext aus Datei:</translation>
 <context>
     <name>Rosegarden::LilyPondExporter</name>
     <message>
+        <location filename="../../src/document/io/LilyPondExporter.cpp" line="+702"/>
         <source>LilyPond does not allow spaces or backslashes in filenames.
 
 Would you like to use
@@ -16241,7 +16212,7 @@ Would you like to use
  %1
 
  instead?</source>
-        <translation type="obsolete">Lilyond erlaubt weder Leerräume noch Rückstriche in Dateinamen. 
+        <translation type="unfinished">Lilyond erlaubt weder Leerräume noch Rückstriche in Dateinamen. 
  
 Wollen Sie stattdessen
 
@@ -16250,32 +16221,39 @@ Wollen Sie stattdessen
  benutzen?</translation>
     </message>
     <message>
+        <location line="+11"/>
         <source>Export failed.  The file could not be opened for writing.</source>
-        <translation type="obsolete">Der Export ist fehlgeschlagen. Die Datei konnte nicht zum Schreiben geöffnet werden.</translation>
+        <translation type="unfinished">Der Export ist fehlgeschlagen. Die Datei konnte nicht zum Schreiben geöffnet werden.</translation>
     </message>
     <message>
+        <location line="+169"/>
         <source>Export succeeded, but the composition was empty.</source>
-        <translation type="obsolete">Export war erfolgreich, aber die Komposition war leer.</translation>
+        <translation type="unfinished">Export war erfolgreich, aber die Komposition war leer.</translation>
     </message>
     <message>
+        <location line="+42"/>
         <source>Export of unmuted tracks failed.  There are no unmuted tracks or no segments on them.</source>
-        <translation type="obsolete">Export nicht stummgeschalteter Spuren fehlgeschlagen.  Es gibt keine nicht stummgeschaltetet Spuren oder sie beinhalten keine Segmente. </translation>
+        <translation type="unfinished">Export nicht stummgeschalteter Spuren fehlgeschlagen.  Es gibt keine nicht stummgeschaltetet Spuren oder sie beinhalten keine Segmente. </translation>
     </message>
     <message>
+        <location line="+6"/>
         <source>Export of selected track failed.  There are no segments on the selected track.</source>
-        <translation type="obsolete">Export der ausgewählten Spuren fehlgeschlagen-  Es gibt keine Segmente auf den ausgewählten Spuren.</translation>
+        <translation type="unfinished">Export der ausgewählten Spuren fehlgeschlagen-  Es gibt keine Segmente auf den ausgewählten Spuren.</translation>
     </message>
     <message>
+        <location line="+5"/>
         <source>Export of selected segments failed.  No segments are selected.</source>
-        <translation type="obsolete">Export der ausgewählten Segmente fehlgeschlagen.  Es wurde keine Segmente ausgewählt.</translation>
+        <translation type="unfinished">Export der ausgewählten Segmente fehlgeschlagen.  Es wurde keine Segmente ausgewählt.</translation>
     </message>
     <message>
+        <location line="+1882"/>
         <source>warning: overlong bar truncated here</source>
-        <translation type="obsolete">Warnung: Überlanger Takt hier abgeschnitten</translation>
+        <translation type="unfinished">Warnung: Überlanger Takt hier abgeschnitten</translation>
     </message>
     <message>
+        <location line="+11"/>
         <source>warning: bar too short, padding with rests</source>
-        <translation type="obsolete">Warnung: Takt zu kurz, wird mit Pausen aufgefüllt</translation>
+        <translation type="unfinished">Warnung: Takt zu kurz, wird mit Pausen aufgefüllt</translation>
     </message>
 </context>
 <context>
@@ -17363,7 +17341,7 @@ verursacht.</translation>
 <context>
     <name>Rosegarden::MarkerEditor</name>
     <message>
-        <location filename="../../src/gui/editors/segment/MarkerEditor.cpp" line="+81"/>
+        <location filename="../../src/gui/editors/segment/MarkerEditor.cpp" line="+80"/>
         <source>Manage Markers</source>
         <translation>Markierungen verwalten</translation>
     </message>
@@ -17752,12 +17730,12 @@ Doppelklicken um den Markierungs-Editor zu öffnen.</translation>
 <context>
     <name>Rosegarden::MatrixView</name>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="+1379"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="+1381"/>
         <source>Unknown note insert action %1</source>
         <translation>Unbekannte Noten-Einfügeaktion %1</translation>
     </message>
     <message>
-        <location line="-1521"/>
+        <location line="-1523"/>
         <source>&lt;untitled&gt;</source>
         <translation>&lt;ohne Titel&gt;</translation>
     </message>
@@ -17820,7 +17798,12 @@ Doppelklicken um den Markierungs-Editor zu öffnen.</translation>
         <translation>Aus</translation>
     </message>
     <message>
-        <location line="+885"/>
+        <location line="+400"/>
+        <source>Set Controller Values</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+487"/>
         <source>http://rosegardenmusic.com/wiki/doc:matrix-en</source>
         <translation>http://rosegardenmusic.com/wiki/doc:matrix-en</translation>
     </message>
@@ -17877,7 +17860,7 @@ Doppelklicken um den Markierungs-Editor zu öffnen.</translation>
         <translation>Trigger entfernen</translation>
     </message>
     <message>
-        <location line="-819"/>
+        <location line="-821"/>
         <source>Matrix</source>
         <translation>Matrix</translation>
     </message>
@@ -17953,6 +17936,61 @@ Doppelklicken um den Markierungs-Editor zu öffnen.</translation>
         <location line="+10"/>
         <source>Key Mapping</source>
         <translation>Tastenzuordnung</translation>
+    </message>
+</context>
+<context>
+    <name>Rosegarden::MidiFile</name>
+    <message>
+        <location filename="../../src/sound/MidiFile.cpp" line="+81"/>
+        <source>Wrong length for long data in MIDI stream</source>
+        <translation type="unfinished">Daten im &apos;long&apos;-Format haben die falsche Länge im MIDI-Strom</translation>
+    </message>
+    <message>
+        <location line="+20"/>
+        <source>Wrong length for int data in MIDI stream</source>
+        <translation type="unfinished">Daten im &apos;int&apos;-Format haben die falsche Länge im MIDI-Strom</translation>
+    </message>
+    <message>
+        <location line="+19"/>
+        <source>End of MIDI file encountered while reading</source>
+        <translation type="unfinished">Das Ende der MIDI-Datei wurde beim Lesen erreicht</translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <source>Attempt to get more bytes than expected on Track</source>
+        <translation type="unfinished">Es wurde versucht mehr Bytes als erwartet von der Spur zu erhalten</translation>
+    </message>
+    <message>
+        <location line="+21"/>
+        <source>Attempt to read past MIDI file end</source>
+        <translation type="unfinished">Es wurde versucht über das Ende der MIDI-Datei zu lesen</translation>
+    </message>
+    <message>
+        <location line="+15"/>
+        <location line="+535"/>
+        <source>Cancelled by user</source>
+        <translation type="unfinished">Vom Benutzer abgebrochen</translation>
+    </message>
+    <message>
+        <location line="-459"/>
+        <source>File corrupted or in non-standard format</source>
+        <translation type="unfinished">Datei beschädigt oder in keinem Standardformat</translation>
+    </message>
+    <message>
+        <location line="+68"/>
+        <location line="+5"/>
+        <source>Not a MIDI file</source>
+        <translation type="unfinished">Keine MIDI-Datei</translation>
+    </message>
+    <message>
+        <location line="+12"/>
+        <source>Unexpected MIDI file format</source>
+        <translation type="unfinished">Unerwartetes MIDI-Dateiformat</translation>
+    </message>
+    <message>
+        <location line="+97"/>
+        <source>Running status used for first event in track</source>
+        <translation type="unfinished">Running-Status beim ersten Event der Spur benutzt</translation>
     </message>
 </context>
 <context>
@@ -18094,13 +18132,13 @@ Doppelklicken um den Markierungs-Editor zu öffnen.</translation>
         <translation>LSB-Wert</translation>
     </message>
     <message>
-        <location line="+139"/>
-        <location line="+333"/>
+        <location line="+138"/>
+        <location line="+332"/>
         <source>Key Mapping: %1</source>
         <translation>Tastenzuordnung: %1</translation>
     </message>
     <message>
-        <location line="-82"/>
+        <location line="-81"/>
         <source>&lt;no key mapping&gt;</source>
         <translation>&lt;keine Tastenzuordnung&gt;</translation>
     </message>
@@ -18974,7 +19012,7 @@ Dies ist ein Fehler (das Programm ist vermutlich inzwischen abgestürzt)</transl
         <translation>  Keine Auswahl </translation>
     </message>
     <message>
-        <location line="+2662"/>
+        <location line="+2664"/>
         <source>Chord</source>
         <translation>Akkord</translation>
     </message>
@@ -18991,7 +19029,7 @@ Dies ist ein Fehler (das Programm ist vermutlich inzwischen abgestürzt)</transl
         <translation>%1 %2</translation>
     </message>
     <message>
-        <location line="-2269"/>
+        <location line="-2271"/>
         <source>Unknown spacing action %1</source>
         <translation>Abstandsaktion %1 ist unbekannt</translation>
     </message>
@@ -19039,7 +19077,7 @@ Dies ist ein Fehler (das Programm ist vermutlich inzwischen abgestürzt)</transl
         <location line="+25"/>
         <location line="+103"/>
         <location line="+58"/>
-        <location line="+830"/>
+        <location line="+832"/>
         <location line="+81"/>
         <location line="+730"/>
         <location line="+1081"/>
@@ -19047,7 +19085,7 @@ Dies ist ein Fehler (das Programm ist vermutlich inzwischen abgestürzt)</transl
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location line="-3033"/>
+        <location line="-3035"/>
         <source>Printing with LilyPond...</source>
         <translation>Drucken mit LilyPond...</translation>
     </message>
@@ -19079,12 +19117,12 @@ Dies ist ein Fehler (das Programm ist vermutlich inzwischen abgestürzt)</transl
         <translation>Kein Einfügen an diesem Punkt möglich.</translation>
     </message>
     <message>
-        <location line="+2807"/>
+        <location line="+2809"/>
         <source>Move Events to Staff Above</source>
         <translation>Events auf Notensystem oberhalb verschieben</translation>
     </message>
     <message>
-        <location line="-2664"/>
+        <location line="-2666"/>
         <source>Raising velocities...</source>
         <translation>Anschlagstärke erhöhen...</translation>
     </message>
@@ -19094,7 +19132,7 @@ Dies ist ein Fehler (das Programm ist vermutlich inzwischen abgestürzt)</transl
         <translation>Anschlagstärke verringern...</translation>
     </message>
     <message>
-        <location line="+2811"/>
+        <location line="+2813"/>
         <source>Edit Text Event</source>
         <translation>Text-Event bearbeiten</translation>
     </message>
@@ -19130,7 +19168,12 @@ Dies ist ein Fehler (das Programm ist vermutlich inzwischen abgestürzt)</transl
         <translation>Verzierung auf Spur %1 Takt %2</translation>
     </message>
     <message>
-        <location line="-473"/>
+        <location line="-1111"/>
+        <source>Set Controller Values</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+638"/>
         <source>Please select a control ruler first.</source>
         <translation>Bitte zuerst einen Kontroller wählen.</translation>
     </message>
@@ -19381,7 +19424,7 @@ Bitte überprüfen Sie die Einstellungen im Dialog &quot;MIDI-Geräte verwalten&
 <context>
     <name>Rosegarden::NoteStyleFileReader</name>
     <message>
-        <location filename="../../src/gui/editors/notation/NoteStyleFileReader.cpp" line="+54"/>
+        <location filename="../../src/gui/editors/notation/NoteStyleFileReader.cpp" line="+53"/>
         <source>Can&apos;t open style file &quot;%1&quot; for style &quot;%2&quot;</source>
         <translation>Stildatei &quot;%1&quot; kann nicht als Ersatz für &quot;%2&quot; geöffnet werden</translation>
     </message>
@@ -20501,6 +20544,49 @@ Bitte überprüfen Sie die Einstellungen im Dialog &quot;MIDI-Geräte verwalten&
     </message>
 </context>
 <context>
+    <name>Rosegarden::RIFFAudioFile</name>
+    <message>
+        <location filename="../../src/sound/RIFFAudioFile.cpp" line="+64"/>
+        <source>Rosegarden currently only supports 16 or 32-bit PCM or IEEE floating-point RIFF files for writing</source>
+        <translation type="unfinished">Momentan unterstützt Rosegarden nur 16 oder 32-bit PCM oder IEEE Fließkomma RIFF Dateien bei der Ausgabe</translation>
+    </message>
+    <message>
+        <location line="+310"/>
+        <source>Can&apos;t find RIFF identifier</source>
+        <translation type="unfinished">RIFF Identifier nicht gefunden</translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>Can&apos;t find WAV identifier</source>
+        <translation type="unfinished">WAV Identifier nicht gefunden</translation>
+    </message>
+    <message>
+        <location line="+13"/>
+        <source>Can&apos;t find FORMAT identifier</source>
+        <translation type="unfinished">FORMAT Identifier nicht gefunden</translation>
+    </message>
+    <message>
+        <location line="+50"/>
+        <source>Rosegarden currently only supports PCM or IEEE floating-point RIFF files</source>
+        <translation type="unfinished">Momentan unterstützt Rosegarden nur PCM oder IEEE Fließkomma RIFF-Dateien</translation>
+    </message>
+    <message>
+        <location line="+15"/>
+        <source>Unsupported number of channels</source>
+        <translation type="unfinished">Nicht unterstützte Anzahl von Kanälen</translation>
+    </message>
+    <message>
+        <location line="+14"/>
+        <source>Rosegarden currently only supports 8-, 16- or 24-bit PCM in RIFF files</source>
+        <translation type="unfinished">Momentan unterstützt Rosegarden nur 8-, 16- oder 24-bit PCM in RIFF-Dateien</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Rosegarden currently only supports 32-bit floating-point in RIFF files</source>
+        <translation type="unfinished">Momentan unterstützt Rosegarden nur 32 bit Fließkomma in RIFF-Dateien</translation>
+    </message>
+</context>
+<context>
     <name>Rosegarden::RawNoteRuler</name>
     <message>
         <location filename="../../src/gui/rulers/RawNoteRuler.cpp" line="+467"/>
@@ -20844,7 +20930,7 @@ Möglicherweise gibt es Inkompatibilitäten zwischen den Dateiformaten.</transla
         <location line="+8"/>
         <location line="+27"/>
         <location line="+11"/>
-        <location line="+999"/>
+        <location line="+1009"/>
         <location line="+16"/>
         <location line="+238"/>
         <source>Rosegarden</source>
@@ -20855,7 +20941,7 @@ Möglicherweise gibt es Inkompatibilitäten zwischen den Dateiformaten.</transla
         <translation type="obsolete">Kann Dokument nicht unter %1 speichern</translation>
     </message>
     <message numerus="yes">
-        <location line="-2620"/>
+        <location line="-2630"/>
         <source>Delete the %n audio file(s) recorded during the unsaved session?</source>
         <translation>
             <numerusform>Soll %n Audio-Datei gelöscht werden, die während der nicht abgespeicherten Sitzung aufgenommen wurde?</numerusform>
@@ -20948,7 +21034,7 @@ Bitte wählen diejenigen aus, die Sie permanent von der Festplatte entfernen mö
         <translation>Fehler bei der Umbenennung der temporären Ausgabedatei %1&apos; in %2&apos;</translation>
     </message>
     <message>
-        <location line="+1773"/>
+        <location line="+1783"/>
         <source>Warning</source>
         <translation>Warnung</translation>
     </message>
@@ -21000,18 +21086,18 @@ die Datei bearbeitet, die Sperrdatei löschen und neu bversuchen.
         <translation>Host: </translation>
     </message>
     <message>
-        <location line="-1681"/>
+        <location line="-1691"/>
         <source>Error while writing on &apos;%1&apos;</source>
         <translation>Fehler beim Schreiben auf %1&apos;</translation>
     </message>
     <message>
         <location line="-816"/>
-        <location line="+2248"/>
+        <location line="+2258"/>
         <source>Cancel</source>
         <translation>Abbrechen</translation>
     </message>
     <message>
-        <location line="-1387"/>
+        <location line="-1397"/>
         <source>Could not open file &apos;%1&apos; for writing</source>
         <translation>Kann Datei %1 nicht zum Schreiben öffnen</translation>
     </message>
@@ -21067,7 +21153,7 @@ Empfehlung: speichern Sie diese Datei aus dieser Version von Rosegarden heraus
 um sicherzustellen, daß sie auch in Zukunft gelesen werden kann.</translation>
     </message>
     <message>
-        <location line="+640"/>
+        <location line="+650"/>
         <source>Insert Recorded MIDI</source>
         <translation>MIDI-Aufnahme einfügen</translation>
     </message>
@@ -21170,7 +21256,7 @@ Siehe: Bearbeiten -&gt; Einstellungen -&gt; Audio.</translation>
 <context>
     <name>Rosegarden::RosegardenMainWindow</name>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="+330"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="+329"/>
         <source>Initializing plugin manager...</source>
         <translation>Plugin-Manager wird initialisiert...</translation>
     </message>
@@ -22933,7 +23019,7 @@ Möchten Sie den Pfad jetzt setzen?</translation>
 <context>
     <name>Rosegarden::SelectDialog</name>
     <message>
-        <location filename="../../src/gui/dialogs/SelectDialog.cpp" line="+49"/>
+        <location filename="../../src/gui/dialogs/SelectDialog.cpp" line="+47"/>
         <source>Search and Select</source>
         <translation>Suchen und Auswählen</translation>
     </message>
@@ -23187,7 +23273,7 @@ Das Beenden anderer laufender Anwendung könnte u.U. die Leistung von Rosegarden
 <context>
     <name>Rosegarden::SimpleEventEditDialog</name>
     <message>
-        <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="+68"/>
+        <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="+72"/>
         <source>Insert Event</source>
         <translation>Event einfügen</translation>
     </message>
@@ -23240,7 +23326,7 @@ Das Beenden anderer laufender Anwendung könnte u.U. die Leistung von Rosegarden
     </message>
     <message>
         <location line="-196"/>
-        <location line="+418"/>
+        <location line="+419"/>
         <location line="+34"/>
         <location line="+1"/>
         <location line="+43"/>
@@ -23249,7 +23335,7 @@ Das Beenden anderer laufender Anwendung könnte u.U. die Leistung von Rosegarden
         <translation>&lt;keine&gt;</translation>
     </message>
     <message>
-        <location line="-521"/>
+        <location line="-522"/>
         <source>Velocity:</source>
         <translation>Anschlagstärke:</translation>
     </message>
@@ -23339,7 +23425,7 @@ Das Beenden anderer laufender Anwendung könnte u.U. die Leistung von Rosegarden
         <translation>Daten:</translation>
     </message>
     <message>
-        <location line="+20"/>
+        <location line="+21"/>
         <source>Pitchbend MSB:</source>
         <translation>Tonhöhenbeugung MSB:</translation>
     </message>
@@ -23404,27 +23490,38 @@ Das Beenden anderer laufender Anwendung könnte u.U. die Leistung von Rosegarden
         <translation>Tonhöhe bearbeiten</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+16"/>
         <source>Load System Exclusive data in File</source>
         <translation>Lade systemexklusive (SYSEX) Daten aus Datei</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="+2"/>
+        <location line="+50"/>
         <source>System exclusive files</source>
         <translation>Systemexklusive (SYSEX) Daten</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="-49"/>
+        <location line="+50"/>
         <source>All files</source>
         <translation>Alle Dateien</translation>
     </message>
     <message>
-        <location line="+29"/>
-        <source>*.syx|System exclusive files (*.syx)</source>
-        <translation>*.syx|Systemexklusive Daten (*.syx)</translation>
+        <location line="-25"/>
+        <source>Rosegarden</source>
+        <translation type="unfinished">Rosegarden</translation>
     </message>
     <message>
-        <location line="-1"/>
+        <location line="+0"/>
+        <source>Could not load SysEx file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>*.syx|System exclusive files (*.syx)</source>
+        <translation type="vanished">*.syx|Systemexklusive Daten (*.syx)</translation>
+    </message>
+    <message>
+        <location line="+21"/>
         <source>Save System Exclusive data to...</source>
         <translation>Speichere exklusive System Daten nach...</translation>
     </message>
@@ -23881,7 +23978,7 @@ Das Beenden anderer laufender Anwendung könnte u.U. die Leistung von Rosegarden
 <context>
     <name>Rosegarden::TempoView</name>
     <message>
-        <location filename="../../src/gui/editors/tempo/TempoView.cpp" line="+75"/>
+        <location filename="../../src/gui/editors/tempo/TempoView.cpp" line="+74"/>
         <source>Filter</source>
         <translation>Filter</translation>
     </message>
@@ -24582,7 +24679,7 @@ Das Beenden anderer laufender Anwendung könnte u.U. die Leistung von Rosegarden
         <translation>&lt;ohne Titel&gt;</translation>
     </message>
     <message>
-        <location line="+900"/>
+        <location line="+898"/>
         <source>Mute track</source>
         <translation>Spur stumm schalten</translation>
     </message>
@@ -24676,7 +24773,7 @@ Das Beenden anderer laufender Anwendung könnte u.U. die Leistung von Rosegarden
         <translation type="obsolete">Spur</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="-980"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="+76"/>
         <source>Track Parameters</source>
         <translation>Spur-Parameter</translation>
     </message>
@@ -25110,7 +25207,12 @@ Das Beenden anderer laufender Anwendung könnte u.U. die Leistung von Rosegarden
         <translation>Alle</translation>
     </message>
     <message>
-        <location line="+188"/>
+        <location line="-73"/>
+        <source>Synth plugin</source>
+        <translation type="unfinished">Synthesizer-Plugin</translation>
+    </message>
+    <message>
+        <location line="+261"/>
         <location line="+8"/>
         <source> %1</source>
         <translation> %1</translation>
@@ -25296,7 +25398,7 @@ Das Beenden anderer laufender Anwendung könnte u.U. die Leistung von Rosegarden
 <context>
     <name>Rosegarden::TriggerSegmentManager</name>
     <message>
-        <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="+85"/>
+        <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="+84"/>
         <source>Manage Triggered Segments</source>
         <translation>Verwalte getriggerte Segmente</translation>
     </message>
@@ -25931,7 +26033,7 @@ Das Beenden anderer laufender Anwendung könnte u.U. die Leistung von Rosegarden
     <name>S:</name>
     <message>
         <source></source>
-        <comment>if the manual is translated into your language, you can</comment>
+        <comment>the pixmap in this error string contains no English</comment>
         <translation></translation>
     </message>
 </context>
