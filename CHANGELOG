@@ -1,0 +1,224 @@
+====== ROSEGARDEN 20.06, codename "Zepherine Drouhin" RELEASED ======
+
+The Rosegarden team is proud to announce the release of version 20.06
+of Rosegarden, a MIDI sequencer that features a rich understanding of
+music notation along with basic support for digital audio.
+
+  http://www.rosegardenmusic.com/
+
+Included in this release...
+
+===== Bug Fixes =====
+
+  * Fixed multiple memory leaks (r15684, r15685, etc...)
+  * Fixed 100% CPU usage when drawing lines in the controller rulers,
+    bug #1571 (r15705)
+  * Fixed multiple invalid reads (r15707, r15708)
+  * Increased the height of the loop ruler, feature #481 (r15718)
+  * Fixed CCs not going out when playback begins in the middle of
+    a segment, bug #1560 (r15735)
+  * Fixed volume and pan CCs always going out even if the controllers
+    were removed from the Device, feature #482 (r15750)
+  * Stop sending CCs on ch10 when metronome muted, feature #482
+    (r15751)
+  * Fixed a problem with showing pitchbend ruler (r15771)
+  * Made default for expression CC 127 instead of 100 (r15773)
+  * Fixed a crash in Audio File Manager, bug #1576 (r15786)
+  * Fixed a crash when importing .ly as X11/RG21, bug #1579 (r15806)
+  * Fixed a crash on chords in pitch tracker, bug #1582 (r15835)
+
+===== New Features =====
+
+  * Track height can now be adjusted in the preferences, feature #479
+    (r15710-r15712, r15737)
+  * New Segment > Transpose by Semitones... available in the Segment
+    Canvas, feature #480 (r15715)
+  * Right-click can now be used in the loop ruler to set the loop,
+    feature #481 (r15717)
+  * The current segment label is now displayed in the Matrix editor
+    when multiple segments have been selected for editing, feature
+    #470 (r15738-r15740)
+  * Segment "For Notation" feature, bug #1578 (r15805)
+  * Source distribution now includes these release notes in a
+    CHANGELOG file.  The release notes will continue to be available
+    on the wiki as well:
+    https://www.rosegardenmusic.com/wiki/start#release_notes
+
+===== Significant Code Cleanups =====
+
+  * PitchBend and Controller Sequence Dialog cleanup (r15662-r15684,
+    r15696-r15701, etc...)
+  * MappedEventBuffer cleanup (r15719-r15730)
+  * Colour removal and ColourMap cleanup (r15795-r15803)
+
+===== Additional Contributors =====
+
+  * Michael Stockinger (www.stockinger.org) - German Translation
+  * Juan Carlos Pineda Arredondo - Roland-D5.rgd and ZynAddSubFX.rgd
+  * Philip Leishman (lman) - Segment "For Notation" feature
+
+
+====== ROSEGARDEN 19.12, codename "Yesterday" RELEASED ======
+
+The Rosegarden team is proud to announce the release of version 19.12
+of Rosegarden, a MIDI sequencer that features a rich understanding of
+music notation along with basic support for digital audio.
+
+  http://www.rosegardenmusic.com/
+
+Included in this release...
+
+===== Bug Fixes =====
+
+  * Fix synth plugin Send Test Note button (r15502)
+  * Plugin Editor: Fix Send Test Note not sustaining (r15511)
+  * Treat Left + Right mouse buttons as Middle button in Matrix and
+    Notation editors (r15522)
+  * Matrix: Fix no update on delete.  Bug #1569.  (r15616)
+  * Fix missing metronome beat when expanding end during recording
+    (r15621)
+  * Style: Make QLineEdit text gray when disabled (r15631)
+  * Fix transposing keys by interval (r15632)
+  * RMW: Reduce calls to leave/enterActionState() (r15641)
+
+===== New Features =====
+
+  * Matrix Editor: Implement new auto-scroll behavior (r15525 - r15544)
+  * Segment Canvas: Implement new auto-scroll behavior
+    (r15546 - r15551)
+  * Notation Editor: Implement new auto-scroll behavior
+    (r15553 - r15555)
+  * Add --convert command line option (r15607)
+  * Add quaver triplet to standard quantizations (r15613)
+  * Quantize: Add arbitrary quantization units.  Feature #477. (r15630)
+  * Preferences: Allow dangerous operations during playback.
+    Feature #478. (r15643, r15646, r15647, r15651)
+  * Add ability to enable metronome during count-in and enable/disable
+    during recording.  Feature #453. (r15649)
+
+===== Significant Code Cleanups =====
+
+  * Segment Parameters box cleanup (r15562 - r15597, r15604)
+  * Replace FastVector with std::vector (r15609)
+  * Quantize dialog cleanup (r15611 - r15614, r15617 - r15620,
+    r15623 - r15629)
+  * Preferences cleanup (r15634 - r15640)
+
+===== Additional Contributors =====
+
+  * Hubert Figuiere
+  * lman
+  * David P. Sicilia
+
+
+====== ROSEGARDEN 19.06, codename "Xerxes" RELEASED ======
+
+The Rosegarden team is proud to announce the release of version 19.06
+of Rosegarden, a MIDI sequencer that features a rich understanding of
+music notation along with basic support for digital audio.
+
+http://www.rosegardenmusic.com/
+
+Highlights of 19.06 include cleanup and bug fixes.
+
+===== Bug Fixes =====
+
+  * Fix potential crashes during playback (r15422)
+  * Fix crash when rescaling during playback (r15423)
+  * Fix crash when splitting during playback (r15424)
+  * Fix horizontal wheel scrolling on segment canvas
+    (Bug #1561, r15430)
+  * Fix horizontal wheel scrolling on Matrix and Notation editors
+    (Bug #1561, r15432)
+  * Enable High DPI Scaling (Bug #1565, r15444)
+  * Roland-CM-64.rgd: Fix SN-U110-02 perc mappings (r15448)
+  * Avoid using null pointers (Bug #1566, r15453)
+  * Fix broken right edge auto scroll (Bug #1567, r15462, r15464)
+  * Fix crash when adding a Track with no Devices (r15463)
+  * Fix numerous memory leaks
+    (r15466, r15470-5, r15477, r15479, r15481, etc...)
+  * Fix build with Qt 5.7, which doesn't have QSharedPointer(nullptr)
+    (r15476)
+  * SegmentParameterBox: Fix invalid memory access (Bug #1568, r15492)
+  * Fix Qt 5.7 QSharedPointer/nullptr build issue (r15493)
+
+===== New Features =====
+
+  * Add Ctrl+Space shortcut for record (r15482)
+
+===== Other people who contributed to Rosegarden development: =====
+
+  * Hubert Figuiere
+  * Lucas
+
+
+====== ROSEGARDEN 18.12, codename "Worcestershire" RELEASED ======
+
+The Rosegarden team is proud to announce the release of version 18.12 of
+Rosegarden, a MIDI sequencer that features a rich understanding of music
+notation along with basic support for digital audio.
+
+http://www.rosegardenmusic.com/
+
+Highlights of 18.12 include cleanup and migration to newer technologies
+(Qt5 and C++11).
+
+Bug Fixes
+
+  * Fixed stuck notes on matrix editor (r15283)
+  * Fixed some double-gzipped .rgd file (r15344, r15345)
+  * Removed support for Qt4 (r15347)
+  * Improved support for HiDPI displays (r15349, r15352)
+  * Fixed crash when loading composition (r15355)
+  * cmake 3.1 or above is now required (r15357)
+  * Migrate to C++11 (r15361)
+  * Use QLockFile for the document lock file, reducing leftover lock
+    file warnings (r15373)
+  * Fixed --nosound to not create AlsaDriver.  This makes gdb usable.
+    (r15379)
+  * Show pointer position on new staff when clicking on a different
+    staff (r15382)
+  * Fixed wrong warning about "lyric" text type during export. (r15392)
+  * Fixed some range checks in SequencerDataBlock (r15402)
+
+Other people who contributed to Rosegarden development:
+
+  * Daniel Glöckner
+
+====== ROSEGARDEN 18.06, codename "Vesper" RELEASED ======
+
+The Rosegarden team is proud to announce the release of version 18.06 of Rosegarden, a MIDI sequencer that features a rich understanding of music notation along with basic support for digital audio.
+
+http://www.rosegardenmusic.com/
+
+18.06 brings more simplification of the code and further progress toward simplifying the UI notification mechanisms that keep the UI in sync with the underlying Composition.
+
+===== Bug Fixes =====
+
+  * Fix misc spelling errors flagged by lintian (Bug #1556, r15149)
+  * Fix soft synth tracks not responding to volume fader changes.  (Bug #1557, r15189)
+  * Fix Receive External checkbox not cleared.  (r15194)
+  * Fix key map popup menu position on the Manage MIDI Banks and Programs window.  Current key map is now under the mouse as it should be.  (r15221)
+  * Fix a memory leak.  (r15235)
+  * Fix gray leftovers when going out of Archive.  (r15240)
+  * Fix Track preset name not loaded from .rg file.  (r15242)
+  * Fix TrackButtons flicker when switching files.  (r15244)
+  * Fix vertical zoom reset on the Matrix editor.  (r15267)
+  * Fix vertical zoom reset on the Notation editor.  (r15268)
+
+===== New Features =====
+
+  * Manage MIDI Banks and Programs window now uses a scroll area instead of tabs.  (r15227)
+  * Add "Reset to Defaults" button to Track Parameters.  (r15241)
+  * Standardized scroll wheel behavior.  (Feature #445, r15245, r15246, r15248, r15265)
+  * Notation: Offer spacing up to 400%.  (r15266)
+  * Notation spacing is now saved to the .rg file.  (r15269)
+
+=====Other people who contributed to Rosegarden development:=====
+
+  * Stuart Prescott
+
+=====People who contributed device files to the Rosegarden Library=====
+
+  * Henk de Groot
+
