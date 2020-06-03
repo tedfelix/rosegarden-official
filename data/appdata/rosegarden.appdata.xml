@@ -54,6 +54,35 @@
         <mimetype>audio/x-flac</mimetype>
     </mimetypes>
     <releases>
+      <release type="stable" version="20.06" date="2020-06-03">
+        <url>https://rosegardenmusic.com/wiki/dev:20.06</url>
+        <description>
+          <p>This version includes the following bug fixes:</p>
+          <ul>
+            <li>Fixed multiple memory leaks (r15684, r15685, etc...)</li>
+            <li>Fixed 100% CPU usage when drawing lines in the controller rulers, bug #1571 (r15705)</li>
+            <li>Fixed multiple invalid reads (r15707, r15708)</li>
+            <li>Increased the height of the loop ruler, feature #481 (r15718)</li>
+            <li>Fixed CCs not going out when playback begins in the middle of a segment, bug #1560 (r15735)</li>
+            <li>Fixed volume and pan CCs always going out even if the controllers were removed from the Device, feature #482 (r15750)</li>
+            <li>Stop sending CCs on ch10 when metronome muted, feature #482 (r15751)</li>
+            <li>Fixed a problem with showing pitchbend ruler (r15771)</li>
+            <li>Made default for expression CC 127 instead of 100 (r15773)</li>
+            <li>Fixed a crash in Audio File Manager, bug #1576 (r15786)</li>
+            <li>Fixed a crash when importing .ly as X11/RG21, bug #1579 (r15806)</li>
+            <li>Fixed a crash on chords in pitch tracker, bug #1582 (r15835)</li>
+          </ul>
+          <p>This version adds the following new features:</p>
+          <ul>
+            <li>Track height can now be adjusted in the preferences, feature #479 (r15710-r15712, r15737)</li>
+            <li>New Segment > Transpose by Semitones... available in the Segment Canvas, feature #480 (r15715)</li>
+            <li>Right-click can now be used in the loop ruler to set the loop, feature #481 (r15717)</li>
+            <li>The current segment label is now displayed in the Matrix editor when multiple segments have been selected for editing, feature #470 (r15738-r15740)</li>
+            <li>Segment "For Notation" feature, bug #1578 (r15805)</li>
+            <li>Source distribution now includes these release notes in a CHANGELOG file.  The release notes will continue to be available on the wiki as well.</li>
+          </ul>
+        </description>
+      </release>
       <release type="stable" version="19.12" date="2019-12-11">
         <url>https://rosegardenmusic.com/wiki/dev:19.12</url>
         <description>

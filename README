@@ -15,9 +15,7 @@ has been released yet; if not, please continue on to:
 
   http://rosegardenmusic.com/tutorials/bug-guidelines.html
 
-Release notes are available on the wiki:
-
-  http://www.rosegardenmusic.com/wiki/start
+Release notes can be found in the CHANGELOG.
 
 
 Build requirements
@@ -36,7 +34,7 @@ and compile the code there. Here are the commands to do so:
 
     mkdir build
     cd build
-    cmake .. -DCMAKE_INSTALL_PREFIX=[PREFIX] [-DCMAKE_BUILD_TYPE=Debug]
+    cmake .. [-DCMAKE_INSTALL_PREFIX=[PREFIX]] [-DCMAKE_BUILD_TYPE=Debug]
     make
     make install
 
@@ -53,7 +51,7 @@ directories under [PREFIX]:
     [PREFIX]/share/applications                    .desktop file
     [PREFIX]/share/icons/hicolor/32x32/apps        application icon
 
-For a debug build, specify:
+For a debug build, pass the following option to cmake:
 
     -DCMAKE_BUILD_TYPE=Debug
 
@@ -141,7 +139,7 @@ data/appdata.  It is named rosegarden.appdata-old.xml.
 Authors and copyright
 ---------------------
 
-Rosegarden is Copyright 2000-2019 The Rosegarden Development Team
+Rosegarden is Copyright 2000-2020 The Rosegarden Development Team
 
 See http://rosegardenmusic.com/resources/authors/ for a complete list of
 developers past and present, and to learn something about the history of our
