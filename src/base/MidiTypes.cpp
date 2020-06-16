@@ -124,9 +124,8 @@ ProgramChange::makeEvent(timeT absoluteTime, MidiByte program)
 namespace
 {
 
-    // ??? rename: hexDigitToRaw()
     unsigned char
-    toRawNibble(char c)
+    hexDigitToRaw(char c)
     {
         if (islower(c))
             c = toupper(c);
@@ -140,55 +139,18 @@ namespace
         throw SystemExclusive::BadEncoding();
     }
 
-    // ??? rename: hexToRaw()
-    std::string
-    toRaw(std::string rh)
-    {
-        std::string r;
-        std::string h;
-
-        // remove whitespace
-        for (size_t i = 0; i < rh.size(); ++i) {
-            if (!isspace(rh[i]))
-                h += rh[i];
-        }
-
-        for (size_t i = 0; i < h.size()/2; ++i) {
-            unsigned char b = toRawNibble(h[2*i]) * 16 + toRawNibble(h[2*i+1]);
-            r += b;
-        }
-
-        return r;
-    }
 
 }
 
 const std::string SystemExclusive::EventType = "systemexclusive";
-const int SystemExclusive::EventSubOrdering = -5;
 
 const PropertyName SystemExclusive::DATABLOCK = "datablock";
 
-SystemExclusive::SystemExclusive(std::string rawData) :
-    m_rawData(rawData)
-{
-}
-
-SystemExclusive::SystemExclusive(const Event &e)
-{
-    if (e.getType() != EventType)
-        throw Event::BadType("SystemExclusive model event", EventType, e.getType());
-
-    std::string datablock;
-    e.get<String>(DATABLOCK, datablock);
-    m_rawData = toRaw(datablock);
-}
-
 Event *
-SystemExclusive::getAsEvent(timeT absoluteTime) const
+SystemExclusive::makeEvent(timeT absoluteTime, const std::string &rawData)
 {
     Event *e = new Event(EventType, absoluteTime, 0, EventSubOrdering);
-    std::string hex(toHex(m_rawData));
-    e->set<String>(DATABLOCK, hex);
+    e->set<String>(DATABLOCK, toHex(rawData));
 
     return e;
 }
@@ -207,6 +169,27 @@ SystemExclusive::toHex(std::string r)
         h += hexchars[b % 16];
     }
     return h;
+}
+
+std::string
+SystemExclusive::toRaw(std::string hexData)
+{
+    std::string h;
+
+    // remove whitespace
+    for (size_t i = 0; i < hexData.size(); ++i) {
+        if (!isspace(hexData[i]))
+            h += hexData[i];
+    }
+
+    std::string rawData;
+
+    for (size_t i = 0; i < h.size()/2; ++i) {
+        unsigned char b = hexDigitToRaw(h[2*i]) * 16 + hexDigitToRaw(h[2*i+1]);
+        rawData += b;
+    }
+
+    return rawData;
 }
 
 

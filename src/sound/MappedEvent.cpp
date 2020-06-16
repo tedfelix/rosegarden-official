@@ -87,8 +87,9 @@ MappedEvent::MappedEvent(InstrumentId id,
         } else if (e.isa(SystemExclusive::EventType)) {
             m_type = MidiSystemMessage;
             m_data1 = MIDI_SYSTEM_EXCLUSIVE;
-            SystemExclusive s(e);
-            std::string dataBlock = s.getRawData();
+            std::string dataBlock;
+            e.get<String>(SystemExclusive::DATABLOCK, dataBlock);
+            dataBlock = SystemExclusive::toRaw(dataBlock);
             DataBlockRepository::getInstance()->registerDataBlockForEvent(dataBlock, this);
         } else if (e.isa(Text::EventType)) {
             const Rosegarden::Text text(e);

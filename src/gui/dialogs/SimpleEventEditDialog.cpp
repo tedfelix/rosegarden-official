@@ -26,6 +26,7 @@
 #include "gui/editors/guitar/Chord.h"
 #include "misc/Strings.h"
 #include "misc/Debug.h"
+#include "misc/ConfigGroups.h"  // for LastUsedPathsConfigGroup
 #include "PitchDialog.h"
 #include "TimeDialog.h"
 #include "gui/widgets/LineEdit.h"
@@ -45,6 +46,7 @@
 #include <QWidget>
 #include <QVBoxLayout>
 #include <QLayout>
+#include <QSettings>
 
 
 
@@ -511,10 +513,11 @@ SimpleEventEditDialog::setupForEvent()
         m_controllerLabel->setText(tr("Data length:"));
         m_metaLabel->setText(tr("Data:"));
         try {
-            SystemExclusive sysEx(m_event);
+            std::string datablock;
+            m_event.get<String>(SystemExclusive::DATABLOCK, datablock);
             m_controllerLabelValue->setText(QString("%1").
-                                            arg(sysEx.getRawData().length()));
-            m_metaEdit->setText(strtoqstr(sysEx.getHexData()));
+                    arg(SystemExclusive::toRaw(datablock).length()));
+            m_metaEdit->setText(strtoqstr(datablock));
         } catch (...) {
             m_controllerLabelValue->setText("0");
         }
@@ -1055,48 +1058,91 @@ SimpleEventEditDialog::slotEditPitch()
 void
 SimpleEventEditDialog::slotSysexLoad()
 {
-    QString path = FileDialog::getOpenFileName( this, tr("Load System Exclusive data in File"), QDir::currentPath(),
-                   tr("System exclusive files") + " (*.syx *.SYX)" + ";;" +
-                   tr("All files") + " (*)"); //":SYSTEMEXCLUSIVE",
+    QSettings settings;
+    settings.beginGroup(LastUsedPathsConfigGroup);
+    const QString pathKey = "load_sysex";
+    QString directory = settings.value(pathKey, QDir::homePath()).toString();
 
-    if (path.isNull())
+    QString name = FileDialog::getOpenFileName(
+            this,  // parent
+            tr("Load System Exclusive data in File"),  // caption
+            directory,  // dir
+            tr("System exclusive files") + " (*.syx *.SYX)" + ";;" +
+                tr("All files") + " (*)");  // filter
+
+    if (name.isNull())
         return ;
 
-    QFile file(path);
+    QFile file(name);
     file.open(QIODevice::ReadOnly);
     std::string s;
     char c;
-    bool ioOk;
+    bool ioOk = true;
 
-    while ((ioOk = file.getChar(&c))) {
-        if (c == static_cast<char>(0xf0)) break;
-    }
+    // Discard leading bytes up to and including the first F0.
     while (ioOk) {
-        s += c;
+        ioOk = file.getChar(&c);
+        if (c == static_cast<char>(0xf0))
+            break;
+    }
+    // Copy up to but not including F7.
+    while (ioOk) {
+        ioOk = file.getChar(&c);
+        // End of SysEx?  Bail.
         if (c == static_cast<char>(0xf7))
             break;
-        ioOk = file.getChar(&c);
+        s += c;
     }
+
     file.close();
+
     m_metaEdit->setText(strtoqstr(SystemExclusive::toHex(s)));
+
+    // Write the directory to the settings
+    QDir d = QFileInfo(name).dir();
+    directory = d.canonicalPath();
+    settings.setValue(pathKey, directory);
+    settings.endGroup();
 }
 
 void
 SimpleEventEditDialog::slotSysexSave()
 {
-    QString path = FileDialog::getSaveFileName( this, //":SYSTEMEXCLUSIVE",
-			tr("Save System Exclusive data to..."),
-					tr("*.syx|System exclusive files (*.syx)")
-					);
-    if (path.isNull())
-        return ;
+    QSettings settings;
+    settings.beginGroup(LastUsedPathsConfigGroup);
+    const QString pathKey = "save_sysex";
+    QString directory = settings.value(pathKey, QDir::homePath()).toString();
 
-    QFile file(path);
+    QString name = FileDialog::getSaveFileName(
+            this,  // parent
+            tr("Save System Exclusive data to..."),  // caption
+            directory,  // dir
+            "",  // defaultName
+            tr("System exclusive files") + " (*.syx *.SYX)" + ";;" +
+                tr("All files") + " (*)");  // filter
+            //tr("*.syx|System exclusive files (*.syx)"));  // filter
+    if (name.isNull())
+        return;
+
+    QFile file(name);
     file.open(QIODevice::WriteOnly);
-    SystemExclusive sysEx(m_event);
-    file.write(sysEx.getRawData().c_str(),
-               static_cast<qint64>(sysEx.getRawData().length()));
+
+    std::string datablock;
+    m_event.get<String>(SystemExclusive::DATABLOCK, datablock);
+    // Add SysEx and End SysEx status bytes.
+    datablock = "F0 " + datablock + " F7";
+    datablock = SystemExclusive::toRaw(datablock);
+    file.write(datablock.c_str(),
+               static_cast<qint64>(datablock.length()));
+
     file.close();
+
+    // Write the directory to the settings
+    QDir d = QFileInfo(name).dir();
+    directory = d.canonicalPath();
+    settings.setValue(pathKey, directory);
+    settings.endGroup();
 }
+
 
 }

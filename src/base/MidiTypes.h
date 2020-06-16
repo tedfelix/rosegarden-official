@@ -105,36 +105,25 @@ namespace ProgramChange
 
 //////////////////////////////////////////////////////////////////////
 
-class SystemExclusive
+namespace SystemExclusive
 {
-public:
-    static const std::string EventType;
-    static const int EventSubOrdering;
+    extern const std::string EventType;
+    constexpr int EventSubOrdering = -5;
 
     struct BadEncoding : public Exception {
         BadEncoding() : Exception("Bad SysEx encoding") { }
     };
 
-    static const PropertyName DATABLOCK;
+    extern const PropertyName DATABLOCK;
 
-    // Event -> Data
-    SystemExclusive(const Event &event);
-    // Playback (MappedEvent) uses this.
-    // SimpleEventEditDialog uses this for the data and the length.
-    std::string getRawData() const { return m_rawData; }
-    // SimpleEventEditDialog uses this.
-    std::string getHexData() const { return toHex(m_rawData); }
-
-    // Data -> Event
-    SystemExclusive(std::string rawData);
     /// Returned Event is on heap; caller takes responsibility for ownership.
-    Event *getAsEvent(timeT absoluteTime) const;
+    Event *makeEvent(timeT absoluteTime, const std::string &rawData);
 
-    static std::string toHex(std::string rawData);
-
-private:
-    std::string m_rawData;
-};
+    // ??? rename: rawToHex()
+    std::string toHex(std::string rawData);
+    // ??? rename: hexToRaw()
+    std::string toRaw(std::string hexData);
+}
 
 
 }

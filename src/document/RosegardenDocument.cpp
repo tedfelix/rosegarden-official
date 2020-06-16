@@ -2020,8 +2020,9 @@ RosegardenDocument::insertRecordedMidi(const MappedEventList &mC)
         case MappedEvent::MidiSystemMessage:
             channel = -1;
             if ((*i)->getData1() == MIDI_SYSTEM_EXCLUSIVE) {
-                rEvent = SystemExclusive
-                         (DataBlockRepository::getDataBlockForEvent((*i))).getAsEvent(absTime);
+                rEvent = SystemExclusive::makeEvent(
+                        absTime,
+                        DataBlockRepository::getDataBlockForEvent(*i));
             }
 
             // Ignore other SystemMessage events for the moment

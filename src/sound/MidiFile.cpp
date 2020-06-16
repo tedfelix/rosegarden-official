@@ -1029,9 +1029,9 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
                     break;
 
                 case MIDI_SYSTEM_EXCLUSIVE:
-                    rosegardenEvent =
-                            SystemExclusive(midiEvent.getMetaMessage()).
-                                getAsEvent(rosegardenTime);
+                    rosegardenEvent = SystemExclusive::makeEvent(
+                            rosegardenTime,
+                            midiEvent.getMetaMessage());  // rawData
                     break;
 
                 case MIDI_POLY_AFTERTOUCH:
