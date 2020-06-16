@@ -149,18 +149,19 @@ ParameterPattern::setProperties(QMainWindow *parent,
                                 SelectionSituation *situation,
                                 const ParameterPatternVec *patterns)
 {
-    EventParameterDialog
-        dialog(parent,
-               windowName,
-               situation,
-               patterns);
+    EventParameterDialog dialog(parent,
+                                windowName,
+                                situation,
+                                patterns);
 
     if (dialog.exec() == QDialog::Accepted) {
         TmpStatusMsg msg(QObject::tr("Setting Velocities..."),
                          parent);
-        CommandHistory::getInstance()->addCommand
-            (new SelectionPropertyCommand(dialog.getResult()));
-    } else { delete situation; }
+        CommandHistory::getInstance()->addCommand(
+                new SelectionPropertyCommand(dialog.getResult()));
+    } else {
+        delete situation;
+    }
 }
 
 ParameterPattern::~ParameterPattern()

@@ -71,8 +71,6 @@ public slots:
     void slotPatternSelected(int value);
 
 private:
-    // Helper containing non-gui data, which will outlive
-    // EventParameterDialog.
     const SelectionSituation *m_situation;
 
     // The available patterns.
