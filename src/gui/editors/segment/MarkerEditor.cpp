@@ -35,7 +35,6 @@
 #include "gui/dialogs/MarkerModifyDialog.h"
 #include "gui/dialogs/AboutDialog.h"
 #include "gui/widgets/TmpStatusMsg.h"
-#include "gui/general/IconLoader.h"
 
 #include <QApplication>
 #include <QMainWindow>

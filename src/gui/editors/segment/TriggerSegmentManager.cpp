@@ -37,7 +37,6 @@
 #include "misc/ConfigGroups.h"
 #include "gui/dialogs/TimeDialog.h"
 #include "gui/general/MidiPitchLabel.h"
-#include "gui/general/IconLoader.h"
 #include "gui/widgets/TmpStatusMsg.h"
 #include "gui/dialogs/AboutDialog.h"
 #include "document/Command.h"

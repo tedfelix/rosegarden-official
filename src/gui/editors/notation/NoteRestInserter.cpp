@@ -33,7 +33,6 @@
 #include "commands/notation/TupletCommand.h"
 #include "document/CommandHistory.h"
 #include "gui/general/GUIPalette.h"
-#include "gui/general/IconLoader.h"
 #include "gui/widgets/Panned.h"
 #include "NotationProperties.h"
 #include "NotationMouseEvent.h"

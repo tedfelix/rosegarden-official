@@ -35,7 +35,7 @@ CheckButton::CheckButton(QString iconName, bool wantsMemory,  QWidget *parent) :
     setFixedSize(QSize(32,32));
     setIconSize(QSize(32,32));
     setCheckable(true);
-    setIcon(IconLoader().load(m_iconName));
+    setIcon(IconLoader::load(m_iconName));
 
     if (m_wantsMemory) { 
         RG_DEBUG << "CheckButton: recall for: " << iconName;

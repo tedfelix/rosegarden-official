@@ -593,8 +593,6 @@ DeviceManagerDialog::updateCheckStatesOfPortsList(QTreeWidget *treeWid_ports,
         }
     }
     
-    IconLoader il;
-
 //    RG_DEBUG << "DeviceManagerDialog: outPort: " << outPort
 //             << " id: " << mdev->getId();
 
@@ -610,10 +608,10 @@ DeviceManagerDialog::updateCheckStatesOfPortsList(QTreeWidget *treeWid_ports,
             treeWid_ports->setCurrentItem(twItem);
             font.setWeight(QFont::Bold);
             twItem->setFont(0, font); // 0=column
-            twItem->setIcon(0, il.load("icon-plugged-in.png"));
+            twItem->setIcon(0, IconLoader::load("icon-plugged-in.png"));
         } else {
             // Make it appear not selected
-            twItem->setIcon(0, il.load("icon-plugged-out.png"));
+            twItem->setIcon(0, IconLoader::load("icon-plugged-out.png"));
             font = twItem->font(0);
             font.setWeight(QFont::Normal);
             twItem->setFont(0, font); // 0=column

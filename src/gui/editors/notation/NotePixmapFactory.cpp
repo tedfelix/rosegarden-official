@@ -2017,7 +2017,7 @@ NotePixmapFactory::makeToolbarPixmap(QString name, bool menuSize)
         QPixmap menuMap = makeToolbarPixmap("menu-" + name, false);
         if (!menuMap.isNull()) return menuMap;
     }
-    return IconLoader().loadPixmap(name);
+    return IconLoader::loadPixmap(name);
 }
 
 QPixmap

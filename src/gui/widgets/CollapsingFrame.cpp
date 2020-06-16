@@ -67,7 +67,7 @@ CollapsingFrame::CollapsingFrame(
     font.setBold(true);
     m_toggleButton->setFont(font);
 
-    m_toggleButton->setIcon(IconLoader().load("style/arrow-down-small-inverted"));
+    m_toggleButton->setIcon(IconLoader::load("style/arrow-down-small-inverted"));
 
     connect(m_toggleButton, &QAbstractButton::clicked, this, &CollapsingFrame::toggle);
 
@@ -130,9 +130,9 @@ CollapsingFrame::toggle()
     QPixmap pixmap;
 
     if (m_collapsed) {
-        pixmap = IconLoader().loadPixmap("style/arrow-right-small-inverted");
+        pixmap = IconLoader::loadPixmap("style/arrow-right-small-inverted");
     } else {
-        pixmap = IconLoader().loadPixmap("style/arrow-down-small-inverted");
+        pixmap = IconLoader::loadPixmap("style/arrow-down-small-inverted");
     }
 
     if (!objectName().isEmpty()) {

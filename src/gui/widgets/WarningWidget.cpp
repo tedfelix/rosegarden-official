@@ -59,7 +59,7 @@ WarningWidget::WarningWidget(QWidget *parent) :
     m_warningButton = new QToolButton();
     layout->addWidget(m_warningButton);
     m_warningButton->setIconSize(QSize(16, 16));
-    m_warningButton->setIcon(IconLoader().loadPixmap("warning"));
+    m_warningButton->setIcon(IconLoader::loadPixmap("warning"));
     connect(m_warningButton,
             &QAbstractButton::clicked,
             this,
@@ -70,7 +70,7 @@ WarningWidget::WarningWidget(QWidget *parent) :
     m_infoButton = new QToolButton();
     layout->addWidget(m_infoButton);
     m_infoButton->setIconSize(QSize(16, 16));
-    m_infoButton->setIcon(IconLoader().loadPixmap("messagebox-information"));
+    m_infoButton->setIcon(IconLoader::loadPixmap("messagebox-information"));
     connect(m_infoButton,
             &QAbstractButton::clicked,
             this,
@@ -96,7 +96,7 @@ WarningWidget::setMidiWarning(const bool status)
     if (status) {
         m_midiIcon->hide();
     } else {
-        m_midiIcon->setPixmap(IconLoader().loadPixmap("midi-ok"));
+        m_midiIcon->setPixmap(IconLoader::loadPixmap("midi-ok"));
         m_midiIcon->show();
         m_midiIcon->setToolTip(tr("MIDI OK"));
     }
@@ -108,7 +108,7 @@ WarningWidget::setAudioWarning(const bool status)
     if (status) {
         m_audioIcon->hide();
     } else {
-        m_audioIcon->setPixmap(IconLoader().loadPixmap("audio-ok"));
+        m_audioIcon->setPixmap(IconLoader::loadPixmap("audio-ok"));
         m_audioIcon->show();
         m_audioIcon->setToolTip(tr("audio OK"));
     }
@@ -120,7 +120,7 @@ WarningWidget::setTimerWarning(const bool status)
     if (status) {
         m_timerIcon->hide();
     } else {
-        m_timerIcon->setPixmap(IconLoader().loadPixmap("timer-ok"));
+        m_timerIcon->setPixmap(IconLoader::loadPixmap("timer-ok"));
         m_timerIcon->show();
         m_timerIcon->setToolTip(tr("timer OK"));
     }

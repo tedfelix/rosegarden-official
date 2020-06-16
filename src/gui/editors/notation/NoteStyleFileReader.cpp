@@ -37,10 +37,9 @@ NoteStyleFileReader::NoteStyleFileReader(QString name) :
     m_haveNote(false)
 {
 /*!!!
-    IconLoader il;
     //QString styleDirectory =
     //    KGlobal::dirs()->findResource("appdata", "styles/");
-    QString styleDirectory = il.getResourcePath( "styles" );
+    QString styleDirectory = IconLoader::getResourcePath( "styles" );
 
     QString styleFileName =
         QString("%1/%2.xml").arg(styleDirectory).arg(name);

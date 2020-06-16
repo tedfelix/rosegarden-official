@@ -23,24 +23,30 @@
 #include <QString>
 
 #include <map>
+
 #include <rosegardenprivate_export.h>
 
 namespace Rosegarden {
 
+
 class ROSEGARDENPRIVATE_EXPORT IconLoader
 {
 public:
-    QIcon load(QString name);
-    QPixmap loadPixmap(QString name);
+    static QIcon load(QString name);
+    static QPixmap loadPixmap(QString name);
 
-    // process the given pixmap so as to try to make it visible if the
-    // background is very dark
+    /// Invert pixmap for dark backgrounds.
+    /**
+     * This is only used by NotationView::setCurrentNotePixmap() to
+     * display the small inverted note symbol in the status bar to the
+     * far right.  You have to change note value to get it to appear at
+     * first.
+     *
+     * ??? This should be moved to NotationView.
+     */
     static QPixmap invert(QPixmap);
-
-protected:
-    static QPixmap loadPixmap(QString dir, QString name);
-    std::map<QString, QPixmap> m_cache;
 };
+
 
 }
 

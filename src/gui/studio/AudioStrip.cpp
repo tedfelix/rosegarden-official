@@ -230,9 +230,8 @@ void AudioStrip::createWidgets()
 
     if (isInput()) {
 
-        IconLoader iconLoader;
-        m_monoPixmap = iconLoader.loadPixmap("mono-tiny");
-        m_stereoPixmap = iconLoader.loadPixmap("stereo-tiny");
+        m_monoPixmap = IconLoader::loadPixmap("mono-tiny");
+        m_stereoPixmap = IconLoader::loadPixmap("stereo-tiny");
 
         m_stereoButton = new QPushButton(this);
         m_stereoButton->setIcon(m_monoPixmap);

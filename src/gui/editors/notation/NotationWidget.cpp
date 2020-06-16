@@ -151,7 +151,7 @@ NotationWidget::NotationWidget() :
     settings.endGroup();
 
     QBrush bg = (texture ?
-                QBrush(IconLoader().loadPixmap("bg-paper-grey"))
+                QBrush(IconLoader::loadPixmap("bg-paper-grey"))
                 :
                 Qt::white);
     m_view->setBackgroundBrush(bg);
@@ -300,7 +300,7 @@ NotationWidget::NotationWidget() :
     // It doesn't hover correctly, but it doesn't look too bad, and seems as
     // close as I'm going to get to what I wanted.
     QToolButton *headersCloseButton = new QToolButton;
-    headersCloseButton->setIcon(IconLoader().loadPixmap("header-close-button"));
+    headersCloseButton->setIcon(IconLoader::loadPixmap("header-close-button"));
     headersCloseButton->setIconSize(QSize(14, 14));
     headersCloseButton->setToolTip(tr("Close track headers"));
     connect(headersCloseButton, &QAbstractButton::clicked,

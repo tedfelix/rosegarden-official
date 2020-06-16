@@ -18,8 +18,6 @@
 #ifndef RG_THORN_STYLE_H
 #define RG_THORN_STYLE_H
 
-#include "IconLoader.h"
-
 #include <QProxyStyle>
 #include <QIcon>
 #include <rosegardenprivate_export.h>
@@ -64,7 +62,6 @@ private:
     QSize pixmapSize(const QPixmap &pixmap) const;
 
 
-    mutable IconLoader m_iconLoader;
     QPalette m_standardPalette;
 
     QPixmap m_horizontalToolbarSeparatorPixmap;

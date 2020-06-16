@@ -50,7 +50,7 @@ AudioMixerWindow2::AudioMixerWindow2(QWidget *parent) :
     setObjectName("AudioMixerWindow2");
 
     setWindowTitle(tr("Audio Mixer"));
-    setWindowIcon(IconLoader().loadPixmap("window-audiomixer"));
+    setWindowIcon(IconLoader::loadPixmap("window-audiomixer"));
 
     // This avoids using CPU when we're "closed".  Normally with Qt,
     // "closed" really just means "hidden".

@@ -218,9 +218,8 @@ MidiProgramsEditor::populate(QTreeWidgetItem* item)
 
     QPixmap noKeyPixmap, keyPixmap;
 
-    IconLoader il;
-    noKeyPixmap = il.loadPixmap("key-white");
-    keyPixmap = il.loadPixmap("key-green");
+    noKeyPixmap = IconLoader::loadPixmap("key-white");
+    keyPixmap = IconLoader::loadPixmap("key-green");
 
     bool haveKeyMappings = m_device->getKeyMappings().size() > 0;
 
@@ -562,21 +561,20 @@ MidiProgramsEditor::slotKeyMapMenuItemSelected(int i)
 
     m_device->setKeyMappingForProgram(*program, newMapping);
 //     QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
-    IconLoader il;
     QIcon icon;
 
     bool haveKeyMappings = (m_device->getKeyMappings().size() > 0);  //@@@ JAS restored from before port/
     QToolButton *btn = getKeyMapButton(m_currentMenuProgram);
 
     if (newMapping.empty()) {
-        icon = il.load( "key-white" );
+        icon = IconLoader::load( "key-white" );
         if( ! icon.isNull() ) {
             btn->setIcon( icon );
         }
         // QToolTip::remove(btn);
         btn->setToolTip(QString(""));       //@@@ Usefull ?
     } else {
-        icon = il.load( "key-green" );
+        icon = IconLoader::load( "key-green" );
         if( ! icon.isNull() ){
             btn->setIcon( icon );
         }

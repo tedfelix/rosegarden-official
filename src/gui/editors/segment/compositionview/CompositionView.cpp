@@ -127,8 +127,7 @@ CompositionView::CompositionView(RosegardenDocument *doc,
             QString(GeneralOptionsConfigGroup) + "/backgroundtextures",
             "true").toBool()) {
 
-        IconLoader il;
-        m_backgroundPixmap = il.loadPixmap("bg-segmentcanvas");
+        m_backgroundPixmap = IconLoader::loadPixmap("bg-segmentcanvas");
     }
 
     slotUpdateSize();

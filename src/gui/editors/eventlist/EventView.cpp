@@ -1554,7 +1554,7 @@ EventView::updateWindowTitle(bool m)
                        .arg(m_segments.size()));
     }
 
-    setWindowIcon(IconLoader().loadPixmap("window-eventlist"));
+    setWindowIcon(IconLoader::loadPixmap("window-eventlist"));
 
 }
 

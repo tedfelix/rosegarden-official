@@ -125,7 +125,7 @@ MidiMixerWindow::setupTabs()
             this, &MidiMixerWindow::slotCurrentTabChanged);
     m_tabWidget->setTabPosition(QTabWidget::South);
     setWindowTitle(tr("MIDI Mixer"));
-    setWindowIcon(IconLoader().loadPixmap("window-midimixer"));
+    setWindowIcon(IconLoader::loadPixmap("window-midimixer"));
 
 
     for (it = m_studio->begin(); it != m_studio->end(); ++it) {

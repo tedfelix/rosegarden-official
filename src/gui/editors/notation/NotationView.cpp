@@ -215,7 +215,7 @@ NotationView::NotationView(RosegardenDocument *doc,
     slotUpdateMenuStates();
     slotTestClipboard();
 
-    setWindowIcon(IconLoader().loadPixmap("window-notation"));
+    setWindowIcon(IconLoader::loadPixmap("window-notation"));
 
     connect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
             this, SLOT(slotUpdateMenuStates()));
@@ -1387,7 +1387,7 @@ void
 NotationView::setCurrentNotePixmap(QPixmap p)
 {
     if (!m_currentNotePixmap) return;
-    QPixmap ip = IconLoader().invert(p);
+    QPixmap ip = IconLoader::invert(p);
     if (ip.height() > 16) {
         ip = ip.scaledToHeight(16, Qt::SmoothTransformation);
     }

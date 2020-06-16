@@ -107,7 +107,7 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
 {
     setWindowTitle(tr("Audio File Manager"));
     this->setAttribute(Qt::WA_DeleteOnClose);
-    setWindowIcon(IconLoader().loadPixmap("window-audio-manager"));
+    setWindowIcon(IconLoader::loadPixmap("window-audio-manager"));
     setMinimumWidth(800);
 
     QWidget *centralWidget = new QWidget;

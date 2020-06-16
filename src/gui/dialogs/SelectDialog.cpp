@@ -21,8 +21,6 @@
 #include "misc/Debug.h"
 #include "misc/ConfigGroups.h"
 
-#include "gui/general/IconLoader.h"
-
 #include "gui/widgets/CheckButton.h"
 
 // Qt includes

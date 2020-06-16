@@ -54,13 +54,13 @@ LilyPondProcessor::LilyPondProcessor(QWidget *parent, int mode, QString filename
 
     this->setModal(false);
 
-    setWindowIcon(IconLoader().loadPixmap("window-lilypond"));
+    setWindowIcon(IconLoader::loadPixmap("window-lilypond"));
 
     QGridLayout *layout = new QGridLayout;
     this->setLayout(layout);
 
     QLabel *icon = new QLabel(this);
-    icon->setPixmap(IconLoader().loadPixmap("rosegarden-lilypond"));
+    icon->setPixmap(IconLoader::loadPixmap("rosegarden-lilypond"));
     layout->addWidget(icon, 0, 0);
 
     QString modeStr;

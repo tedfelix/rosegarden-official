@@ -132,8 +132,8 @@ AudioFaderBox::AudioFaderBox(QWidget *parent,
 
     m_fader->setOutlineColour(GUIPalette::getColour(GUIPalette::PlaybackFaderOutline));
 
-    m_monoPixmap = IconLoader().loadPixmap("mono");
-    m_stereoPixmap = IconLoader().loadPixmap("stereo");
+    m_monoPixmap = IconLoader::loadPixmap("mono");
+    m_stereoPixmap = IconLoader::loadPixmap("stereo");
 
     m_pan = new Rotary(this, -100.0, 100.0, 1.0, 5.0, 0.0, 22,
                        Rotary::NoTicks, false, true);

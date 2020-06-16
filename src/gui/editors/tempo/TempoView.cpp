@@ -37,7 +37,6 @@
 #include "gui/dialogs/AboutDialog.h"
 #include "gui/general/EditTempoController.h"
 #include "gui/general/ListEditView.h"
-#include "gui/general/IconLoader.h"
 #include "gui/widgets/TmpStatusMsg.h"
 #include "misc/Strings.h"
 

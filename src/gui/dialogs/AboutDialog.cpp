@@ -45,7 +45,7 @@ AboutDialog::AboutDialog(QWidget *parent) :
     // Icon
     QLabel *image = new QLabel;
     image->setAlignment(Qt::AlignTop);
-    image->setPixmap(IconLoader().loadPixmap("welcome-icon"));
+    image->setPixmap(IconLoader::loadPixmap("welcome-icon"));
 
     layout->addWidget(image, 0, 0);
 

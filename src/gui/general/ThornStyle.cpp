@@ -312,16 +312,16 @@ QIcon ThornStyle::standardIcon(QStyle::StandardPixmap standardIcon, const QStyle
 
     // custom icons for QMessageBox
     case SP_MessageBoxInformation:
-        return m_iconLoader.loadPixmap("messagebox-information");
+        return IconLoader::loadPixmap("messagebox-information");
 
     case SP_MessageBoxWarning:
-        return m_iconLoader.loadPixmap("warning");
+        return IconLoader::loadPixmap("warning");
 
     case SP_MessageBoxCritical:
-        return m_iconLoader.loadPixmap("messagebox-critical");
+        return IconLoader::loadPixmap("messagebox-critical");
 
     case SP_MessageBoxQuestion:
-        return m_iconLoader.loadPixmap("messagebox-question");
+        return IconLoader::loadPixmap("messagebox-question");
 
     case SP_TitleBarNormalButton:
         return m_titleUndockPixmap;

@@ -30,7 +30,7 @@ namespace Rosegarden
 
 ControlRulerTabBar::ControlRulerTabBar():QTabBar()
 {
-    m_closeIcon = QPixmap(IconLoader().loadPixmap("tab-close"));
+    m_closeIcon = QPixmap(IconLoader::loadPixmap("tab-close"));
 }
 
 void ControlRulerTabBar::paintEvent(QPaintEvent *event)

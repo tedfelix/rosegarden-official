@@ -464,7 +464,7 @@ ActionFileParser::setActionIcon(QString actionName, QString icon)
     QAction *action = findAction(actionName);
     if (!action) action = findStandardAction(actionName);
     if (!action) return false;
-    action->setIcon(IconLoader().load(icon));
+    action->setIcon(IconLoader::load(icon));
     return true;
 }
 

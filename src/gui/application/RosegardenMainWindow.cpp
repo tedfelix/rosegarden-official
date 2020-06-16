@@ -143,7 +143,6 @@
 #include "gui/editors/tempo/TempoView.h"
 #include "gui/general/EditViewBase.h"
 #include "gui/general/EditTempoController.h"
-#include "gui/general/IconLoader.h"
 #include "gui/general/FileSource.h"
 #include "gui/general/ResourceFinder.h"
 #include "gui/general/AutoSaveFinder.h"

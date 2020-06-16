@@ -28,6 +28,28 @@ namespace Rosegarden
 {
 
 
+namespace {
+
+    std::map<QString, QPixmap> iconCache;
+
+    QPixmap
+    loadPixmap2(QString dir, QString name)
+    {
+        // Try to load assuming extension is included.
+        QPixmap pmap(QString("%1/%2").arg(dir).arg(name));
+
+        // Not found?  Try .png.
+        if (pmap.isNull())
+            pmap = QPixmap(QString("%1/%2.png").arg(dir).arg(name));
+        // Not found?  Try .xpm.
+        if (pmap.isNull())
+            pmap = QPixmap(QString("%1/%2.xpm").arg(dir).arg(name));
+
+        return pmap;
+    }
+
+}
+
 QIcon
 IconLoader::load(QString name)
 {
@@ -42,46 +64,30 @@ QPixmap
 IconLoader::loadPixmap(QString name)
 {
     // Check the cache.
-    std::map<QString, QPixmap>::const_iterator it = m_cache.find(name);
+    std::map<QString, QPixmap>::const_iterator it = iconCache.find(name);
     // If found in the cache, return it.
-    if (it != m_cache.end())
+    if (it != iconCache.end())
         return it->second;
 
     // Try the various possible directories in :pixmaps.
-    QPixmap pixmap = loadPixmap(":pixmaps/toolbar", name);
+    QPixmap pixmap = loadPixmap2(":pixmaps/toolbar", name);
     if (pixmap.isNull())
-        pixmap = loadPixmap(":pixmaps/transport", name);
+        pixmap = loadPixmap2(":pixmaps/transport", name);
     if (pixmap.isNull())
-        pixmap = loadPixmap(":pixmaps/misc", name);
+        pixmap = loadPixmap2(":pixmaps/misc", name);
     if (pixmap.isNull())
-        pixmap = loadPixmap(":pixmaps/stock", name);
+        pixmap = loadPixmap2(":pixmaps/stock", name);
     if (pixmap.isNull())
-        pixmap = loadPixmap(":pixmaps/icons", name);
+        pixmap = loadPixmap2(":pixmaps/icons", name);
     if (pixmap.isNull())
-        pixmap = loadPixmap(":pixmaps/style", name);
+        pixmap = loadPixmap2(":pixmaps/style", name);
     if (pixmap.isNull())
-        pixmap = loadPixmap(":pixmaps", name);
+        pixmap = loadPixmap2(":pixmaps", name);
 
     // Store whatever we found, or didn't, in the cache.
-    m_cache[name] = pixmap;
+    iconCache[name] = pixmap;
 
     return pixmap;
-}
-
-QPixmap
-IconLoader::loadPixmap(QString dir, QString name)
-{
-    // Try to load assuming extension is included.
-    QPixmap pmap(QString("%1/%2").arg(dir).arg(name));
-
-    // Not found?  Try .png.
-    if (pmap.isNull())
-        pmap = QPixmap(QString("%1/%2.png").arg(dir).arg(name));
-    // Not found?  Try .xpm.
-    if (pmap.isNull())
-        pmap = QPixmap(QString("%1/%2.xpm").arg(dir).arg(name));
-
-    return pmap;
 }
 
 QPixmap

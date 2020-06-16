@@ -506,7 +506,7 @@ int main(int argc, char *argv[])
     static const int sizes[] = { 16, 22, 24, 32, 48, 64, 128 };
     for (size_t i = 0; i < sizeof(sizes)/sizeof(sizes[0]); ++i) {
         QString name = QString("rg-rwb-rose3-%1x%2").arg(sizes[i]).arg(sizes[i]);
-        QPixmap pixmap = IconLoader().loadPixmap(name);
+        QPixmap pixmap = IconLoader::loadPixmap(name);
         if (!pixmap.isNull()) {
             RG_DEBUG << "Loaded application icon \"" << name << "\"";
             icon.addPixmap(pixmap);
@@ -725,7 +725,7 @@ int main(int argc, char *argv[])
         hbLayout->addWidget(image);
         image->setAlignment(Qt::AlignTop);
 
-        image->setPixmap(IconLoader().loadPixmap("welcome-icon"));
+        image->setPixmap(IconLoader::loadPixmap("welcome-icon"));
 
         QLabel *label = new QLabel;
         hbLayout->addWidget(label);

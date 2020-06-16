@@ -45,12 +45,11 @@ DocumentConfigureDialog::DocumentConfigureDialog(RosegardenDocument *doc,
 
     // Document Meta Page
     //
-    IconLoader il;
     page = new DocumentMetaConfigurationPage(doc, this);
     connect(page, SIGNAL(modified()), this, SLOT(slotActivateApply()));
     addPage(DocumentMetaConfigurationPage::iconLabel(),
             DocumentMetaConfigurationPage::title(),
-            il.loadPixmap( DocumentMetaConfigurationPage::iconName()), page);
+            IconLoader::loadPixmap( DocumentMetaConfigurationPage::iconName()), page);
     m_configurationPages.push_back((ConfigurationPage *)page);
 
     // Audio Page
@@ -59,7 +58,7 @@ DocumentConfigureDialog::DocumentConfigureDialog(RosegardenDocument *doc,
     connect(page, SIGNAL(modified()), this, SLOT(slotActivateApply()));
     addPage(AudioPropertiesPage::iconLabel(),
             AudioPropertiesPage::title(),
-            il.loadPixmap(AudioPropertiesPage::iconName()),page);
+            IconLoader::loadPixmap(AudioPropertiesPage::iconName()),page);
     m_configurationPages.push_back((ConfigurationPage *)page);
 }
 

@@ -48,8 +48,6 @@ ConfigureDialog::ConfigureDialog(RosegardenDocument *doc,
     : ConfigureDialogBase(parent, tr("Rosegarden - Preferences"), name )
 {
     
-    IconLoader il;
-    
     // General
     GeneralConfigurationPage *generalConfigurationPage =
             new GeneralConfigurationPage(this);
@@ -60,7 +58,7 @@ ConfigureDialog::ConfigureDialog(RosegardenDocument *doc,
             this, &ConfigureDialog::updateAutoSaveInterval);
     addPage(GeneralConfigurationPage::iconLabel(),
             GeneralConfigurationPage::title(),
-            il.loadPixmap(GeneralConfigurationPage::iconName()),
+            IconLoader::loadPixmap(GeneralConfigurationPage::iconName()),
             generalConfigurationPage);
     m_configurationPages.push_back(generalConfigurationPage);
 
@@ -71,7 +69,7 @@ ConfigureDialog::ConfigureDialog(RosegardenDocument *doc,
             this, &ConfigureDialog::slotActivateApply);
     addPage(MIDIConfigurationPage::iconLabel(),
             MIDIConfigurationPage::title(),
-            il.loadPixmap(MIDIConfigurationPage::iconName()),
+            IconLoader::loadPixmap(MIDIConfigurationPage::iconName()),
             midiConfigurationPage);
     m_configurationPages.push_back(midiConfigurationPage);
 
@@ -82,7 +80,7 @@ ConfigureDialog::ConfigureDialog(RosegardenDocument *doc,
             this, &ConfigureDialog::slotActivateApply);
     addPage(AudioConfigurationPage::iconLabel(),
             AudioConfigurationPage::title(),
-            il.loadPixmap(AudioConfigurationPage::iconName()),
+            IconLoader::loadPixmap(AudioConfigurationPage::iconName()),
             audioConfigurationPage);
     m_configurationPages.push_back(audioConfigurationPage);
 
@@ -93,7 +91,7 @@ ConfigureDialog::ConfigureDialog(RosegardenDocument *doc,
             this, &ConfigureDialog::slotActivateApply);
     addPage(NotationConfigurationPage::iconLabel(),
             NotationConfigurationPage::title(),
-            il.loadPixmap(NotationConfigurationPage::iconName()),
+            IconLoader::loadPixmap(NotationConfigurationPage::iconName()),
             notationConfigurationPage);
     m_configurationPages.push_back(notationConfigurationPage);
 
@@ -105,7 +103,7 @@ ConfigureDialog::ConfigureDialog(RosegardenDocument *doc,
             this, &ConfigureDialog::slotActivateApply);
     addPage(PitchTrackerConfigurationPage::iconLabel(),
             PitchTrackerConfigurationPage::title(),
-            il.loadPixmap(PitchTrackerConfigurationPage::iconName()),
+            IconLoader::loadPixmap(PitchTrackerConfigurationPage::iconName()),
             pitchTrackerConfigurationPage);
     m_configurationPages.push_back(pitchTrackerConfigurationPage);
 

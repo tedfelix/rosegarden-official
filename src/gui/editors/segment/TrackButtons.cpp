@@ -704,14 +704,12 @@ TrackButtons::populateInstrumentPopup(Instrument *thisTrackInstr, QMenu* instrum
         
     if (!havePixmaps) {
 
-        IconLoader il;
-        
-        connectedPixmap = il.loadPixmap("connected");
-        connectedUsedPixmap = il.loadPixmap("connected-used");
-        connectedSelectedPixmap = il.loadPixmap("connected-selected");
-        unconnectedPixmap = il.loadPixmap("unconnected");
-        unconnectedUsedPixmap = il.loadPixmap("unconnected-used");
-        unconnectedSelectedPixmap = il.loadPixmap("unconnected-selected");
+        connectedPixmap = IconLoader::loadPixmap("connected");
+        connectedUsedPixmap = IconLoader::loadPixmap("connected-used");
+        connectedSelectedPixmap = IconLoader::loadPixmap("connected-selected");
+        unconnectedPixmap = IconLoader::loadPixmap("unconnected");
+        unconnectedUsedPixmap = IconLoader::loadPixmap("unconnected-used");
+        unconnectedSelectedPixmap = IconLoader::loadPixmap("unconnected-selected");
 
         havePixmaps = true;
     }

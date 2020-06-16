@@ -120,7 +120,7 @@ TransportDialog::TransportDialog(QWidget *parent):
     ui->setupUi(frame);
 	
     setWindowTitle(tr("Rosegarden Transport"));
-    setWindowIcon(IconLoader().loadPixmap("window-transport"));
+    setWindowIcon(IconLoader::loadPixmap("window-transport"));
 
     resetFonts();
 
@@ -398,7 +398,7 @@ TransportDialog::loadPixmaps()
     m_lcdListDefault.clear();
 
     for (int i = 0; i < 10; i++) {
-        m_lcdList[i] = IconLoader().loadPixmap(QString("led-%1").arg(i));
+        m_lcdList[i] = IconLoader::loadPixmap(QString("led-%1").arg(i));
         QImage im(m_lcdList[i].size(), QImage::Format_RGB32);
         im.fill(0);
         QPainter p(&im);
@@ -408,7 +408,7 @@ TransportDialog::loadPixmaps()
 
     // Load the "negative" sign pixmap
     //
-    m_lcdNegative = IconLoader().loadPixmap("led--");
+    m_lcdNegative = IconLoader::loadPixmap("led--");
 }
 
 void

@@ -45,9 +45,9 @@ StartupLogo::StartupLogo(QWidget * parent) :
 {
 
 #ifdef STABLE
-    m_pixmap = IconLoader().loadPixmap("splash");
+    m_pixmap = IconLoader::loadPixmap("splash");
 #else
-    m_pixmap = IconLoader().loadPixmap("splash-devel");
+    m_pixmap = IconLoader::loadPixmap("splash-devel");
 #endif
 
     setGeometry(QApplication::desktop()->width() / 2 - m_pixmap.width() / 2,

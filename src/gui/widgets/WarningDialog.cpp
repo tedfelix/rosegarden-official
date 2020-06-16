@@ -46,7 +46,7 @@ WarningDialog::WarningDialog(QWidget *parent) :
     connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
 
     setWindowTitle(tr("Performance Problems Detected"));
-    setWindowIcon(IconLoader().load("warning"));
+    setWindowIcon(IconLoader::load("warning"));
 }
 
 WarningDialog::~WarningDialog()
@@ -71,24 +71,24 @@ WarningDialog::addWarning(Message message)
 
     informativeText->setOpenExternalLinks(true);
 
-    QIcon icon = IconLoader().load("warning");
+    QIcon icon = IconLoader::load("warning");
     QString headline(tr("Warning"));
 
     switch (message.second) {
     case Midi:
-        icon = IconLoader().load("midi-nok");
+        icon = IconLoader::load("midi-nok");
         headline = tr("MIDI");
         break;
     case Audio:
-        icon = IconLoader().load("audio-nok");
+        icon = IconLoader::load("audio-nok");
         headline = tr("Audio");
         break;
     case Timer:
-        icon = IconLoader().load("timer-nok");
+        icon = IconLoader::load("timer-nok");
         headline = tr("System timer");
         break;
     case Info:
-        icon = IconLoader().load("messagebox-information");
+        icon = IconLoader::load("messagebox-information");
         headline = tr("Information");
         break;
     case Other:

@@ -45,7 +45,7 @@ GuitarChordSelectorDialog::GuitarChordSelectorDialog(QWidget *parent)
 {
     setModal(true);
     setWindowTitle(tr("Guitar Chord Selector"));
-    setWindowIcon(IconLoader().loadPixmap("window-guitar"));
+    setWindowIcon(IconLoader::loadPixmap("window-guitar"));
 
     QGridLayout *metagrid = new QGridLayout;
     setLayout(metagrid);

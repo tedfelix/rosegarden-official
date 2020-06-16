@@ -357,7 +357,7 @@ MatrixView::slotUpdateWindowTitle(bool m)
                       .arg(view));
     }
 
-    setWindowIcon(IconLoader().loadPixmap("window-matrix"));
+    setWindowIcon(IconLoader::loadPixmap("window-matrix"));
 }
 
 void
