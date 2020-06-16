@@ -1021,10 +1021,10 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
                     break;
 
                 case MIDI_PITCH_BEND:
-                    rosegardenEvent =
-                            PitchBend(midiEvent.getData2(),
-                                      midiEvent.getData1()).
-                                getAsEvent(rosegardenTime);
+                    rosegardenEvent = PitchBend::makeEvent(
+                            rosegardenTime,
+                            midiEvent.getData2(),  // msb
+                            midiEvent.getData1());  // lsb
                     break;
 
                 case MIDI_SYSTEM_EXCLUSIVE:

@@ -46,33 +46,15 @@ namespace
 //////////////////////////////////////////////////////////////////////
 
 const std::string PitchBend::EventType = "pitchbend";
-const int PitchBend::EventSubOrdering = -5;
 
 const PropertyName PitchBend::MSB = "msb";
 const PropertyName PitchBend::LSB = "lsb";
 
-PitchBend::PitchBend(MidiByte msb,
-                     MidiByte lsb) :
-    m_msb(msb),
-    m_lsb(lsb)
-{
-}
-
-PitchBend::PitchBend(const Event &e)
-{
-    if (e.getType() != EventType)
-        throw Event::BadType("PitchBend model event", EventType, e.getType());
-
-    m_msb = getByte(e, MSB);
-    m_lsb = getByte(e, LSB);
-}
-
-Event *
-PitchBend::getAsEvent(timeT absoluteTime) const
+Event *PitchBend::makeEvent(timeT absoluteTime, MidiByte msb, MidiByte lsb)
 {
     Event *e = new Event(EventType, absoluteTime, 0, EventSubOrdering);
-    e->set<Int>(MSB, (long)m_msb);
-    e->set<Int>(LSB, (long)m_lsb);
+    e->set<Int>(MSB, msb);
+    e->set<Int>(LSB, lsb);
 
     return e;
 }

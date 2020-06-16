@@ -1984,8 +1984,11 @@ RosegardenDocument::insertRecordedMidi(const MappedEventList &mC)
             break;
 
         case MappedEvent::MidiPitchBend:
-            rEvent = PitchBend
-                     ((*i)->getData1(), (*i)->getData2()).getAsEvent(absTime);
+            rEvent = PitchBend::makeEvent(
+                    absTime,
+                    (*i)->getData1(),  // msb
+                    (*i)->getData2());  // lsb
+
             break;
 
         case MappedEvent::MidiController:

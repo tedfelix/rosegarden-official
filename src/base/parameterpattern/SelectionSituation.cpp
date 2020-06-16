@@ -21,7 +21,9 @@
 #include "base/MidiTypes.h"
 #include "gui/rulers/ControllerEventAdapter.h"
 #include "misc/Strings.h"
+
 #include <limits>
+#include <utility>  // for std::pair
 
 namespace Rosegarden
 {

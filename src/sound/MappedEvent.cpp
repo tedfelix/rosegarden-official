@@ -68,9 +68,8 @@ MappedEvent::MappedEvent(InstrumentId id,
             m_data1 = e.get<Int>(BaseProperties::PITCH);
         } else if (e.isa(PitchBend::EventType)) {
             m_type = MidiPitchBend;
-            PitchBend pb(e);
-            m_data1 = pb.getMSB();
-            m_data2 = pb.getLSB();
+            m_data1 = e.get<Int>(PitchBend::MSB);
+            m_data2 = e.get<Int>(PitchBend::LSB);
         } else if (e.isa(Controller::EventType)) {
             m_type = MidiController;
             Controller c(e);

@@ -45,28 +45,17 @@ public:
 
 //////////////////////////////////////////////////////////////////////
 
-class PitchBend
+namespace PitchBend
 {
-public:
-    static const std::string EventType;
-    static const int EventSubOrdering;
+    extern const std::string EventType;
+    constexpr int EventSubOrdering = -5;
 
-    static const PropertyName MSB;
-    static const PropertyName LSB;
+    extern const PropertyName MSB;
+    extern const PropertyName LSB;
 
-    PitchBend(MidiByte msb, MidiByte lsb);
-    PitchBend(const Event &);
-
-    MidiByte getMSB() const { return m_msb; }
-    MidiByte getLSB() const { return m_lsb; }
-    
-    /// Returned event is on heap; caller takes responsibility for ownership
-    Event *getAsEvent(timeT absoluteTime) const;
-
-private:
-    MidiByte m_msb;
-    MidiByte m_lsb;
-};
+    /// Returned Event is on heap; caller takes responsibility for ownership.
+    Event *makeEvent(timeT absoluteTime, MidiByte msb, MidiByte lsb);
+}
 
 //////////////////////////////////////////////////////////////////////
 
