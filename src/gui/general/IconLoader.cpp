@@ -38,6 +38,9 @@ namespace {
         // Not found?  Try .png.
         if (pmap.isNull())
             pmap = QPixmap(QString("%1/%2.png").arg(dir).arg(name));
+        // Not found?  Try .jpg.
+        if (pmap.isNull())
+            pmap = QPixmap(QString("%1/%2.jpg").arg(dir).arg(name));
         // Not found?  Try .xpm.
         if (pmap.isNull())
             pmap = QPixmap(QString("%1/%2.xpm").arg(dir).arg(name));
