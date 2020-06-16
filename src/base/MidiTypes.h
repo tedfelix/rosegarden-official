@@ -1,10 +1,9 @@
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
-
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2018 the Rosegarden development team.
+    Copyright 2000-2020 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -14,22 +13,27 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef RG_MIDI_TYPES_H
-#define RG_MIDI_TYPES_H
+#ifndef RG_MIDITYPES_H
+#define RG_MIDITYPES_H
 
-#include <list>
+#include "Exception.h"
+#include "MidiProgram.h"  // For MidiByte
+#include "PropertyName.h"
+#include "TimeT.h"
 
-#include "Event.h"
-#include "Instrument.h"
+#include <string>
 
-// Internal representation of some very MIDI specific event types
+// Internal representation of some very MIDI-specific event types
 // that fall clearly outside of NotationTypes and still require
 // representation.
-//
 
 
 namespace Rosegarden 
 {
+
+
+class Event;
+
 
 class MIDIValueOutOfRange : public Exception {
 public:
@@ -39,9 +43,8 @@ public:
         Exception("Value of " + name + " out of byte range", file, line) { }
 };
 
+//////////////////////////////////////////////////////////////////////
 
-// Rosegarden's internal represetation of MIDI PitchBend
-//
 class PitchBend
 {
 public:
@@ -53,7 +56,6 @@ public:
 
     PitchBend(MidiByte msb, MidiByte lsb);
     PitchBend(const Event &);
-    ~PitchBend();
 
     MidiByte getMSB() const { return m_msb; }
     MidiByte getLSB() const { return m_lsb; }
@@ -66,9 +68,7 @@ private:
     MidiByte m_lsb;
 };
 
-
-// Controller
-//
+//////////////////////////////////////////////////////////////////////
 
 class Controller
 {
@@ -83,7 +83,6 @@ public:
                MidiByte value);
 
     Controller(const Event &);
-    ~Controller();
 
     MidiByte getNumber() const { return m_number; }
     MidiByte getValue() const { return m_value; }
@@ -92,14 +91,12 @@ public:
     Event *getAsEvent(timeT absoluteTime) const;
 
 private:
-    MidiByte    m_number;
-    MidiByte    m_value;
+    MidiByte m_number;
+    MidiByte m_value;
 
 };
 
-
-// Key pressure
-//
+//////////////////////////////////////////////////////////////////////
 
 class KeyPressure
 {
@@ -112,7 +109,6 @@ public:
 
     KeyPressure(MidiByte pitch, MidiByte pressure);
     KeyPressure(const Event &event);
-    ~KeyPressure();
 
     MidiByte getPitch() const { return m_pitch; }
     MidiByte getPressure() const { return m_pressure; }
@@ -125,9 +121,7 @@ private:
     MidiByte m_pressure;
 };
 
-
-// Channel pressure
-//
+//////////////////////////////////////////////////////////////////////
 
 class ChannelPressure
 {
@@ -139,7 +133,6 @@ public:
 
     ChannelPressure(MidiByte pressure);
     ChannelPressure(const Event &event);
-    ~ChannelPressure();
 
     MidiByte getPressure() const { return m_pressure; }
 
@@ -150,9 +143,7 @@ private:
     MidiByte m_pressure;
 };
 
-
-// Program Change
-//
+//////////////////////////////////////////////////////////////////////
 
 class ProgramChange
 {
@@ -164,7 +155,6 @@ public:
 
     ProgramChange(MidiByte program);
     ProgramChange(const Event &event);
-    ~ProgramChange();
 
     MidiByte getProgram() const { return m_program; }
 
@@ -175,9 +165,7 @@ private:
     MidiByte m_program;
 };
 
-
-// System exclusive
-//
+//////////////////////////////////////////////////////////////////////
 
 class SystemExclusive
 {
@@ -193,7 +181,6 @@ public:
 
     SystemExclusive(std::string rawData);
     SystemExclusive(const Event &event);
-    ~SystemExclusive();
 
     std::string getRawData() const { return m_rawData; }
     std::string getHexData() const { return toHex(m_rawData); }
