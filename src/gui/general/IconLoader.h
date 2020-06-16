@@ -32,22 +32,9 @@ namespace IconLoader
 {
     QIcon load(QString name);
     QPixmap ROSEGARDENPRIVATE_EXPORT loadPixmap(QString name);
-
-    /// Invert pixmap for dark backgrounds.
-    /**
-     * This is only used by NotationView::setCurrentNotePixmap() to
-     * display the small inverted note symbol in the status bar to the
-     * far right.  You have to change note value to get it to appear at
-     * first.
-     *
-     * ??? This should be moved to NotationView.
-     */
-    QPixmap invert(QPixmap);
 }
 
 
 }
 
 #endif
-
-	

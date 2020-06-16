@@ -25,10 +25,6 @@
 
 #include <map>
 
-namespace Rosegarden
-{
-
-
 namespace {
 
     std::map<QString, QPixmap> pixmapCache;
@@ -50,6 +46,10 @@ namespace {
     }
 
 }
+
+namespace Rosegarden
+{
+
 
 QIcon
 IconLoader::load(QString name)
@@ -89,40 +89,6 @@ IconLoader::loadPixmap(QString name)
     pixmapCache[name] = pixmap;
 
     return pixmap;
-}
-
-QPixmap
-IconLoader::invert(QPixmap pmap)
-{
-    QImage img = pmap.toImage().convertToFormat(QImage::Format_ARGB32);
-
-    for (int y = 0; y < img.height(); ++y) {
-        for (int x = 0; x < img.width(); ++x) {
-
-            QRgb rgba = img.pixel(x, y);
-            QColor colour = QColor
-                (qRed(rgba), qGreen(rgba), qBlue(rgba), qAlpha(rgba));
-
-            const int alpha = colour.alpha();
-
-            // If this is a shade of gray that is relatively opaque,
-            // invert the V component.
-            if (colour.saturation() < 5 && colour.alpha() > 10) {
-                colour.setHsv(colour.hue(),
-                              colour.saturation(),
-                              255 - colour.value());
-                // ??? This should be unnecessary as it is merely being
-                //     set to itself.
-                colour.setAlpha(alpha);
-
-                img.setPixel(x, y, colour.rgba());
-            }
-        }
-    }
-
-    pmap = QPixmap::fromImage(img);
-
-    return pmap;
 }
 
 
