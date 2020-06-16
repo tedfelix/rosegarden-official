@@ -73,28 +73,17 @@ namespace Controller
 
 //////////////////////////////////////////////////////////////////////
 
-class KeyPressure
+namespace KeyPressure
 {
-public:
-    static const std::string EventType;
-    static const int EventSubOrdering;
+    extern const std::string EventType;
+    constexpr int EventSubOrdering = -5;
 
-    static const PropertyName PITCH;
-    static const PropertyName PRESSURE;
-
-    KeyPressure(MidiByte pitch, MidiByte pressure);
-    KeyPressure(const Event &event);
-
-    MidiByte getPitch() const { return m_pitch; }
-    MidiByte getPressure() const { return m_pressure; }
+    extern const PropertyName PITCH;
+    extern const PropertyName PRESSURE;
 
     /// Returned event is on heap; caller takes responsibility for ownership
-    Event *getAsEvent(timeT absoluteTime) const;
-
-private:
-    MidiByte m_pitch;
-    MidiByte m_pressure;
-};
+    Event *makeEvent(timeT absoluteTime, MidiByte pitch, MidiByte pressure);
+}
 
 //////////////////////////////////////////////////////////////////////
 

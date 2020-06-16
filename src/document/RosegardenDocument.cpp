@@ -2004,8 +2004,10 @@ RosegardenDocument::insertRecordedMidi(const MappedEventList &mC)
             break;
 
         case MappedEvent::MidiKeyPressure:
-            rEvent = KeyPressure
-                     ((*i)->getData1(), (*i)->getData2()).getAsEvent(absTime);
+            rEvent = KeyPressure::makeEvent(
+                    absTime,
+                    (*i)->getData1(),  // pitch
+                    (*i)->getData2());  // pressure
             break;
 
         case MappedEvent::MidiChannelPressure:

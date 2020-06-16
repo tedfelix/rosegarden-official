@@ -85,33 +85,16 @@ Controller::makeEvent(timeT absoluteTime, MidiByte number, MidiByte value)
 //////////////////////////////////////////////////////////////////////
 
 const std::string KeyPressure::EventType = "keypressure";
-const int KeyPressure::EventSubOrdering = -5;
 
 const PropertyName KeyPressure::PITCH = "pitch";
 const PropertyName KeyPressure::PRESSURE = "pressure";
 
-KeyPressure::KeyPressure(MidiByte pitch,
-                         MidiByte pressure) :
-    m_pitch(pitch),
-    m_pressure(pressure)
-{
-}
-
-KeyPressure::KeyPressure(const Event &e)
-{
-    if (e.getType() != EventType)
-        throw Event::BadType("KeyPressure model event", EventType, e.getType());
-
-    m_pitch = getByte(e, PITCH);
-    m_pressure = getByte(e, PRESSURE);
-}
-
 Event *
-KeyPressure::getAsEvent(timeT absoluteTime) const
+KeyPressure::makeEvent(timeT absoluteTime, MidiByte pitch, MidiByte pressure)
 {
     Event *e = new Event(EventType, absoluteTime, 0, EventSubOrdering);
-    e->set<Int>(PITCH, (long)m_pitch);
-    e->set<Int>(PRESSURE, (long)m_pressure);
+    e->set<Int>(PITCH, pitch);
+    e->set<Int>(PRESSURE, pressure);
 
     return e;
 }

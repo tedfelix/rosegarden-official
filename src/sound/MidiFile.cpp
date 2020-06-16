@@ -1034,10 +1034,10 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
                     break;
 
                 case MIDI_POLY_AFTERTOUCH:
-                    rosegardenEvent =
-                            KeyPressure(midiEvent.getData1(),
-                                        midiEvent.getData2()).
-                                getAsEvent(rosegardenTime);
+                    rosegardenEvent = KeyPressure::makeEvent(
+                            rosegardenTime,
+                            midiEvent.getData1(),  // pitch
+                            midiEvent.getData2());  // pressure
                     break;
 
                 case MIDI_CHNL_AFTERTOUCH:

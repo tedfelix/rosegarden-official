@@ -80,9 +80,8 @@ MappedEvent::MappedEvent(InstrumentId id,
             m_data1 = pc.getProgram();
         } else if (e.isa(KeyPressure::EventType)) {
             m_type = MidiKeyPressure;
-            KeyPressure kp(e);
-            m_data1 = kp.getPitch();
-            m_data2 = kp.getPressure();
+            m_data1 = e.get<Int>(KeyPressure::PITCH);
+            m_data2 = e.get<Int>(KeyPressure::PRESSURE);
         } else if (e.isa(ChannelPressure::EventType)) {
             m_type = MidiChannelPressure;
             ChannelPressure cp(e);
