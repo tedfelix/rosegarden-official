@@ -46,7 +46,41 @@ class EventParameterDialog : public QDialog
 {
     Q_OBJECT
 
+public:
+    // @author Tom Breton (Tehom) (some)
+    // @author Chris Cannam (most)
+    EventParameterDialog(
+            QWidget *parent,
+            const QString &name,
+            SelectionSituation *situation,
+            const ParameterPattern::ParameterPatternVec *patterns);
+
+    ParameterPattern::Result getResult();
+
+public slots:
+    // React to selecting a pattern: Set up the parameter widgets in
+    // accordance with what the pattern tells us it needs.
+    void slotPatternSelected(int value);
+
 private:
+    // Helper containing non-gui data, which will outlive
+    // EventParameterDialog.
+    const SelectionSituation  *m_situation;
+
+    // The available patterns.
+    const ParameterPattern::ParameterPatternVec *m_patterns;
+    // Get the current pattern index.
+    const ParameterPattern * getPattern(int index) const
+    { return m_patterns->at(index); }
+
+    // The widget that chooses the current pattern.
+    QComboBox *m_patternCombo;
+    // Initialize m_patternCombo.
+    void initPatternCombo();
+
+    // The control layout which holds the individual parameter widgets.
+    QLayout             *m_controlsLayout;
+
     /// A QLabel and a QSpinBox.
     /**
      * @author Tom Breton (Tehom)
@@ -67,55 +101,16 @@ private:
         QSpinBox *m_spinBox;
         QLabel *m_label;
     };
-
     typedef std::vector<ParamWidget> ParamWidgetVec;
-
-public:
-    // @author Tom Breton (Tehom) (some)
-    // @author Chris Cannam (most)
-    EventParameterDialog(
-            QWidget *parent,
-            const QString &name,
-            SelectionSituation *situation,
-            const ParameterPattern::ParameterPatternVec *patterns);
-
-public:
-    // Get the entire result
-    ParameterPattern::Result getResult();
-
-private:
-    // Get a vector of the current parameters.  This makes part of our
-    // final result object.
-    ParameterPattern::BareParams getBareParams();
-
-    // Get the current pattern index.
-    const ParameterPattern * getPattern(int index) const
-    { return m_patterns->at(index); }
-    
-public slots:
-    // React to selecting a pattern: Set up the parameter widgets in
-    // accordance with what the pattern tells us it needs.
-    void slotPatternSelected(int value);
-
-private:
-    // The widget that chooses the current pattern.
-    QComboBox *m_patternCombo;
-    // Initialize m_patternCombo.
-    void initPatternCombo();
-
-    // The control layout which holds the individual parameter widgets.
-    QLayout             *m_controlsLayout;
     // All the parameter widgets.  Not all are used with
     // all patterns.
     ParamWidgetVec       m_paramVec;
-    // Helper containing non-gui data, which will outlive
-    // EventParameterDialog.
-    const SelectionSituation  *m_situation;
-    // The available patterns.
-    const ParameterPattern::ParameterPatternVec *m_patterns;
     // Number of parameters currently in use.  Not always the same as
     // m_paramVec.size().
     int                  m_NbParameters;
+    // Get a vector of the current parameters.  This makes part of our
+    // final result object.
+    ParameterPattern::BareParams getBareParams();
 };
 
 

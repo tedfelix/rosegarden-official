@@ -79,14 +79,14 @@ EventParameterDialog::ParamWidget::hide()
     /******** Main class EventParameterDialog ********/
 
 EventParameterDialog::EventParameterDialog(
-    QWidget *parent,
-    const QString &name,
-    SelectionSituation *situation,
-    const ParameterPattern::ParameterPatternVec *patterns):
-        QDialog(parent),
-        m_situation(situation),
-        m_patterns(patterns),
-        m_NbParameters(0)
+        QWidget *parent,
+        const QString &name,
+        SelectionSituation *situation,
+        const ParameterPattern::ParameterPatternVec *patterns) :
+    QDialog(parent),
+    m_situation(situation),
+    m_patterns(patterns),
+    m_NbParameters(0)
 {
     setModal(true);
     setWindowTitle(tr("Rosegarden"));
