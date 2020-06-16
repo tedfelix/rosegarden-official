@@ -22,25 +22,6 @@ namespace Rosegarden
 {
 
 
-namespace
-{
-    MidiByte getByte(const Event &e, const PropertyName &name)
-    {
-        long value = -1;
-
-        try {
-            value = e.get<Int>(name);
-        } catch (...) {
-
-        }
-
-        if (value < 0  ||  value > 255)
-            throw MIDIValueOutOfRange(name.getName());
-
-        return MidiByte(value);
-    }
-}
-
 //////////////////////////////////////////////////////////////////////
 // PitchBend
 //////////////////////////////////////////////////////////////////////
@@ -105,28 +86,14 @@ KeyPressure::makeEvent(timeT absoluteTime, MidiByte pitch, MidiByte pressure)
 //////////////////////////////////////////////////////////////////////
 
 const std::string ChannelPressure::EventType = "channelpressure";
-const int ChannelPressure::EventSubOrdering = -5;
 
 const PropertyName ChannelPressure::PRESSURE = "pressure";
 
-ChannelPressure::ChannelPressure(MidiByte pressure) :
-    m_pressure(pressure)
-{
-}
-
-ChannelPressure::ChannelPressure(const Event &e)
-{
-    if (e.getType() != EventType)
-        throw Event::BadType("ChannelPressure model event", EventType, e.getType());
-
-    m_pressure = getByte(e, PRESSURE);
-}
-
 Event *
-ChannelPressure::getAsEvent(timeT absoluteTime) const
+ChannelPressure::makeEvent(timeT absoluteTime, MidiByte pressure)
 {
     Event *e = new Event(EventType, absoluteTime, 0, EventSubOrdering);
-    e->set<Int>(PRESSURE, (long)m_pressure);
+    e->set<Int>(PRESSURE, pressure);
 
     return e;
 }

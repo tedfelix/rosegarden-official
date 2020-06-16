@@ -464,10 +464,6 @@ insertCopy(const MappedEvent &evt)
             default:
                 break;
             }
-    } catch (const MIDIValueOutOfRange &r) {
-#ifdef MIDI_DEBUG
-        RG_DEBUG << "MIDI value out of range at " << midiEventAbsoluteTime;
-#endif
 
     } catch (const Event::NoData &d) {
 #ifdef MIDI_DEBUG

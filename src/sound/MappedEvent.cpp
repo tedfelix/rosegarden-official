@@ -83,8 +83,7 @@ MappedEvent::MappedEvent(InstrumentId id,
             m_data2 = e.get<Int>(KeyPressure::PRESSURE);
         } else if (e.isa(ChannelPressure::EventType)) {
             m_type = MidiChannelPressure;
-            ChannelPressure cp(e);
-            m_data1 = cp.getPressure();
+            m_data1 = e.get<Int>(ChannelPressure::PRESSURE);
         } else if (e.isa(SystemExclusive::EventType)) {
             m_type = MidiSystemMessage;
             m_data1 = MIDI_SYSTEM_EXCLUSIVE;
@@ -115,11 +114,6 @@ MappedEvent::MappedEvent(InstrumentId id,
         } else {
             m_type = InvalidMappedEvent;
         }
-    } catch (const MIDIValueOutOfRange &r) {
-
-#ifdef DEBUG_MAPPEDEVENT
-        RG_WARNING << "MIDI value out of range in MappedEvent ctor";
-#endif
 
     } catch (const Event::NoData &d) {
 

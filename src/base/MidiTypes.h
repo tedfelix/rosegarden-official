@@ -35,14 +35,6 @@ namespace Rosegarden
 class Event;
 
 
-class MIDIValueOutOfRange : public Exception {
-public:
-    MIDIValueOutOfRange(std::string name) :
-        Exception("Value of " + name + " out of byte range") { }
-    MIDIValueOutOfRange(std::string name, std::string file, int line) :
-        Exception("Value of " + name + " out of byte range", file, line) { }
-};
-
 //////////////////////////////////////////////////////////////////////
 
 namespace PitchBend
@@ -87,25 +79,15 @@ namespace KeyPressure
 
 //////////////////////////////////////////////////////////////////////
 
-class ChannelPressure
+namespace ChannelPressure
 {
-public:
-    static const std::string EventType;
-    static const int EventSubOrdering;
+    extern const std::string EventType;
+    constexpr int EventSubOrdering = -5;
 
-    static const PropertyName PRESSURE;
+    extern const PropertyName PRESSURE;
 
-    /// Event -> Data
-    ChannelPressure(const Event &event);
-    MidiByte getPressure() const { return m_pressure; }
-
-    /// Data -> Event
-    ChannelPressure(MidiByte pressure);
-    /// Returned event is on heap; caller takes responsibility for ownership
-    Event *getAsEvent(timeT absoluteTime) const;
-
-private:
-    MidiByte m_pressure;
+    /// Returned Event is on heap; caller takes responsibility for ownership.
+    Event *makeEvent(timeT absoluteTime, MidiByte pressure);
 };
 
 //////////////////////////////////////////////////////////////////////

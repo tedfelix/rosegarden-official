@@ -2012,8 +2012,9 @@ RosegardenDocument::insertRecordedMidi(const MappedEventList &mC)
             break;
 
         case MappedEvent::MidiChannelPressure:
-            rEvent = ChannelPressure
-                     ((*i)->getData1()).getAsEvent(absTime);
+            rEvent = ChannelPressure::makeEvent(
+                    absTime,
+                    (*i)->getData1());  // pressure
             break;
 
         case MappedEvent::MidiSystemMessage:
