@@ -1053,7 +1053,7 @@ TrackParameterBox::updateInstrument(const Instrument *instrument)
 
         if (loopInstrument.getType() == Instrument::SoftSynth) {
 
-            instrumentName.replace(QObject::tr("Synth plugin"), "");
+            instrumentName.replace(tr("Synth plugin"), "");
 
             programName = "";
 

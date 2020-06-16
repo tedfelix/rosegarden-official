@@ -40,6 +40,7 @@
 #include <string>
 #include <utility>
 
+#include <QCoreApplication>
 #include <QPointer>
 
 class QObject;
@@ -89,6 +90,8 @@ const char* headerTagline();
 
 class ROSEGARDENPRIVATE_EXPORT LilyPondExporter
 {
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::LilyPondExporter)
+
 public:
     typedef EventContainer eventstartlist;
     typedef std::multiset<Event*, Event::EventEndCmp> eventendlist;

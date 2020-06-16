@@ -699,8 +699,8 @@ LilyPondExporter::write()
         int reply = QMessageBox::question(
                 dynamic_cast<QWidget*>(qApp),
                 baseName, 
-                QObject::tr("LilyPond does not allow spaces or backslashes in filenames.\n\n"
-                            "Would you like to use\n\n %1\n\n instead?").arg(tmpName),
+                tr("LilyPond does not allow spaces or backslashes in filenames.\n\n"
+                   "Would you like to use\n\n %1\n\n instead?").arg(tmpName),
                 QMessageBox::Yes |QMessageBox::Cancel,
                 QMessageBox::Cancel);
         if (reply != QMessageBox::Yes)
@@ -710,7 +710,7 @@ LilyPondExporter::write()
     std::ofstream str(qstrtostr(tmpName).c_str(), std::ios::out);
     if (!str) {
         RG_WARNING << "LilyPondExporter::write() - can't write file " << tmpName;
-        m_warningMessage = QObject::tr("Export failed.  The file could not be opened for writing.");
+        m_warningMessage = tr("Export failed.  The file could not be opened for writing.");
         return false;
     }
 
@@ -879,7 +879,7 @@ LilyPondExporter::write()
             << "<<" << " s4 " << ">>" << std::endl;
         str << indent(col) << "\\layout { }" << std::endl;
         str << indent(--col) << "}" << std::endl;
-        m_warningMessage = QObject::tr("Export succeeded, but the composition was empty.");
+        m_warningMessage = tr("Export succeeded, but the composition was empty.");
         return false;
     }
     timeT compositionStartTime = (*i)->getStartTime();
@@ -921,18 +921,18 @@ LilyPondExporter::write()
                 break;
                 
             case EXPORT_NONMUTED_TRACKS :
-                m_warningMessage = QObject::tr("Export of unmuted tracks failed.  There"
+                m_warningMessage = tr("Export of unmuted tracks failed.  There"
                                       " are no unmuted tracks or no segments on"
                                       " them.");
                 break;
                 
             case EXPORT_SELECTED_TRACK :
-                m_warningMessage = QObject::tr("Export of selected track failed.  There"
+                m_warningMessage = tr("Export of selected track failed.  There"
                                       " are no segments on the selected track.");
                 break;
                 
             case EXPORT_SELECTED_SEGMENTS :
-                m_warningMessage = QObject::tr("Export of selected segments failed.  No"
+                m_warningMessage = tr("Export of selected segments failed.  No"
                                       " segments are selected.");
                 break;
                 
@@ -2814,7 +2814,7 @@ LilyPondExporter::writeBar(Segment *s,
     if (overlong) {
         str << std::endl << indent(col) <<
             qstrtostr(QString("% %1").
-                      arg(QObject::tr("warning: overlong bar truncated here")));
+                      arg(tr("warning: overlong bar truncated here")));
     }
 
     //
@@ -2825,7 +2825,7 @@ LilyPondExporter::writeBar(Segment *s,
         fractionSmaller(durationRatioSum, barDurationRatio)) {
         str << std::endl << indent(col) <<
             qstrtostr(QString("% %1").
-                      arg(QObject::tr("warning: bar too short, padding with rests")));
+                      arg(tr("warning: bar too short, padding with rests")));
         str << std::endl << indent(col) <<
             qstrtostr(QString("% %1 + %2 < %3  &&  %4/%5 < %6/%7").
                       arg(barStart).

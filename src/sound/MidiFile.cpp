@@ -78,7 +78,7 @@ MidiFile::midiBytesToLong(const std::string &bytes)
         RG_WARNING << "midiBytesToLong(): WARNING: Wrong length for long data (" << bytes.length() << ", should be 4)";
 
         // TRANSLATOR: "long" is a C++ data type
-        throw Exception(qstrtostr(QObject::tr("Wrong length for long data in MIDI stream")));
+        throw Exception(qstrtostr(tr("Wrong length for long data in MIDI stream")));
     }
 
     long longRet = static_cast<long>(static_cast<MidiByte>(bytes[0])) << 24 |
@@ -98,7 +98,7 @@ MidiFile::midiBytesToInt(const std::string &bytes)
         RG_WARNING << "midiBytesToInt(): WARNING: Wrong length for int data (" << bytes.length() << ", should be 2)";
 
         // TRANSLATOR: "int" is a C++ data type
-        throw Exception(qstrtostr(QObject::tr("Wrong length for int data in MIDI stream")));
+        throw Exception(qstrtostr(tr("Wrong length for int data in MIDI stream")));
     }
 
     return static_cast<int>(static_cast<MidiByte>(bytes[0])) << 8 |
@@ -117,7 +117,7 @@ MidiFile::read(std::ifstream *midiFile, unsigned long numberOfBytes)
     if (midiFile->eof()) {
         RG_WARNING << "read(): MIDI file EOF - got 0 bytes out of " << numberOfBytes;
 
-        throw Exception(qstrtostr(QObject::tr("End of MIDI file encountered while reading")));
+        throw Exception(qstrtostr(tr("End of MIDI file encountered while reading")));
     }
 
     // For each track section we can read only m_trackByteCount bytes.
@@ -126,7 +126,7 @@ MidiFile::read(std::ifstream *midiFile, unsigned long numberOfBytes)
 
         RG_WARNING << "read(): Attempt to get more bytes than allowed on Track (" << numberOfBytes << " > " << m_trackByteCount << ")";
 
-        throw Exception(qstrtostr(QObject::tr("Attempt to get more bytes than expected on Track")));
+        throw Exception(qstrtostr(tr("Attempt to get more bytes than expected on Track")));
     }
 
     char fileMidiByte;
@@ -147,7 +147,7 @@ MidiFile::read(std::ifstream *midiFile, unsigned long numberOfBytes)
     if (stringRet.length() < numberOfBytes) {
         RG_WARNING << "read(): Attempt to read past file end - got " << stringRet.length() << " bytes out of " << numberOfBytes;
 
-        throw Exception(qstrtostr(QObject::tr("Attempt to read past MIDI file end")));
+        throw Exception(qstrtostr(tr("Attempt to read past MIDI file end")));
     }
 
     if (m_decrementCount)
@@ -162,7 +162,7 @@ MidiFile::read(std::ifstream *midiFile, unsigned long numberOfBytes)
         // Update the progress dialog if one is connected.
         if (m_progressDialog) {
             if (m_progressDialog->wasCanceled())
-                throw Exception(qstrtostr(QObject::tr("Cancelled by user")));
+                throw Exception(qstrtostr(tr("Cancelled by user")));
 
             // This is the first 20% of the "reading" process.
             int progressValue = static_cast<int>(
@@ -238,7 +238,7 @@ MidiFile::findNextTrack(std::ifstream *midiFile)
 
     // Track not found.
     RG_WARNING << "findNextTrack(): Couldn't find Track";
-    throw Exception(qstrtostr(QObject::tr("File corrupted or in non-standard format")));
+    throw Exception(qstrtostr(tr("File corrupted or in non-standard format")));
 }
 
 bool
@@ -306,12 +306,12 @@ MidiFile::parseHeader(std::ifstream *midiFile)
 
     if (midiHeader.size() < 14) {
         RG_WARNING << "parseHeader() - file header undersized";
-        throw Exception(qstrtostr(QObject::tr("Not a MIDI file")));
+        throw Exception(qstrtostr(tr("Not a MIDI file")));
     }
 
     if (midiHeader.compare(0, 4, MIDI_FILE_HEADER) != 0) {
         RG_WARNING << "parseHeader() - file header not found or malformed";
-        throw Exception(qstrtostr(QObject::tr("Not a MIDI file")));
+        throw Exception(qstrtostr(tr("Not a MIDI file")));
     }
 
     long chunkSize = midiBytesToLong(midiHeader.substr(4, 4));
@@ -323,7 +323,7 @@ MidiFile::parseHeader(std::ifstream *midiFile)
 
     if (m_format == MIDI_SEQUENTIAL_TRACK_FILE) {
         RG_WARNING << "parseHeader() - can't load sequential track (Format 2) MIDI file";
-        throw Exception(qstrtostr(QObject::tr("Unexpected MIDI file format")));
+        throw Exception(qstrtostr(tr("Unexpected MIDI file format")));
     }
 
     if (m_timingDivision > 32767) {
@@ -420,7 +420,7 @@ MidiFile::parseTrack(std::ifstream *midiFile)
         } else {  // Use running status.
             // If we haven't seen a status byte yet, fail.
             if (runningStatus < 0)
-                throw Exception(qstrtostr(QObject::tr("Running status used for first event in track")));
+                throw Exception(qstrtostr(tr("Running status used for first event in track")));
 
             statusByte = static_cast<MidiByte>(runningStatus);
             data1 = midiByte;
@@ -697,7 +697,7 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
 
         if (m_progressDialog) {
             if (m_progressDialog->wasCanceled()) {
-                m_error = qstrtostr(QObject::tr("Cancelled by user"));
+                m_error = qstrtostr(tr("Cancelled by user"));
                 return false;
             }
 
