@@ -24,6 +24,7 @@
 #include "misc/Debug.h"
 #include "base/Profiler.h"
 
+#include <QPainterPath>
 #include <QPolygon>
 #include <QMouseEvent>
 

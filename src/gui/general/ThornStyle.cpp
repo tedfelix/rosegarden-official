@@ -34,6 +34,7 @@
 #include <QLabel>
 #include <QLayout>
 #include <QPainter>
+#include <QPainterPath>
 #include <QRadioButton>
 #include <QStyleFactory>
 #include <QStyleOption>
