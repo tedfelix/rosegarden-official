@@ -24,14 +24,22 @@
 #include "misc/Debug.h"
 #include "base/Profiler.h"
 
-#include <QPainterPath>
-#include <QPolygon>
+#include <QColor>
+#include <QGraphicsScene>
 #include <QMouseEvent>
+#include <QPainter>
+#include <QPainterPath>
+#include <QPaintEvent>
+#include <QPen>
+#include <QPoint>
+#include <QPolygon>
+#include <QTransform>
+#include <QWheelEvent>
 
-#include <iostream>
 
 namespace Rosegarden
 {
+
 
 class PannerScene : public QGraphicsScene
 {
@@ -40,6 +48,7 @@ public:
 };
 
 Panner::Panner() :
+    m_pointerHeight(0),
     m_pointerVisible(false),
     m_clicked(false)
 {
@@ -285,6 +294,6 @@ Panner::moveTo(QPoint p)
     emit pannedRectChanged(m_pannedRect);
     viewport()->update();
 }
-   
-}
 
+
+}

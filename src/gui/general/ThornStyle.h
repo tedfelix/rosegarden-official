@@ -18,8 +18,18 @@
 #ifndef RG_THORN_STYLE_H
 #define RG_THORN_STYLE_H
 
-#include <QProxyStyle>
 #include <QIcon>
+#include <QPalette>
+#include <QPixmap>
+#include <QProxyStyle>
+#include <QSize>
+#include <QStyle>
+
+class QPainter;
+class QStyleOption;
+class QStyleOptionComplex;
+class QWidget;
+
 #include <rosegardenprivate_export.h>
 
 namespace Rosegarden

@@ -19,6 +19,19 @@
 #define RG_PANNER_H
 
 #include <QGraphicsView>
+#include <QRectF>
+#include <QPixmap>
+#include <QPointF>
+
+class QGraphicsItem;
+class QGraphicsScene;
+class QMouseEvent;
+class QPainter;
+class QPaintEvent;
+class QResizeEvent;
+class QStyleOptionGraphicsItem;
+class QWheelEvent;
+
 
 namespace Rosegarden
 {
@@ -87,7 +100,7 @@ protected:
     QPixmap m_cache;
 };
 
+
 }
 
 #endif
-

@@ -19,33 +19,33 @@
 
 #include "ThornStyle.h"
 
-#include "ResourceFinder.h"
 #include "gui/general/IconLoader.h"
 #include "misc/Debug.h"
 
-#include <QApplication>
+#include <QApplication>  // qApp
 #include <QAbstractItemView>
+#include <QAbstractSpinBox>
 #include <QCheckBox>
+#include <QColor>
+#include <QComboBox>
 #include <QDebug>
-#include <qdrawutil.h>
+#include <QDialogButtonBox>
 #include <QEvent>
-#include <QFile>
 #include <QFileDialog>
 #include <QLabel>
-#include <QLayout>
+#include <QLinearGradient>
+#include <QObject>
 #include <QPainter>
 #include <QPainterPath>
+#include <QPen>
+#include <QPoint>
+#include <QPushButton>
 #include <QRadioButton>
+#include <QRect>
 #include <QStyleFactory>
-#include <QStyleOption>
+#include <QStyleOption>  // QStyleOption* classes
 #include <QToolBar>
 #include <QWidget>
-#include <QDialogButtonBox>
-#include <QPushButton>
-#include <QComboBox>
-#include <QSpinBox>
-#include <QScrollBar>
-#include <QAbstractScrollArea>
 
 using namespace Rosegarden;
 
