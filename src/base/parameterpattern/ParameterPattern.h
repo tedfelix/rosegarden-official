@@ -143,7 +143,8 @@ public:
                               int normValue = -1);
 
     static void setProperties(QMainWindow *parent,
-                              SelectionSituation   *situation,
+                              QString windowName,
+                              SelectionSituation *situation,
                               const ParameterPatternVec *patterns);
 
     /*** The abstract virtual methods ***/

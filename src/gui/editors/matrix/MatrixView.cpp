@@ -1069,9 +1069,11 @@ void
 MatrixView::slotSetControllers()
 {
     ControlRulerWidget * cr = m_matrixWidget->getControlsWidget();
-    ParameterPattern::
-        setProperties(this, cr->getSituation(),
-                      &ParameterPattern::VelocityPatterns);
+    ParameterPattern::setProperties(
+            this,
+            tr("Set Controller Values"),
+            cr->getSituation(),
+            &ParameterPattern::VelocityPatterns);
 }
 
 void

@@ -29,7 +29,7 @@ class QSpinBox;
 class QString;
 class QLabel;
 class QComboBox;
-class QLayout;
+
 
 namespace Rosegarden
 {
@@ -37,11 +37,19 @@ namespace Rosegarden
 
 class ParameterPattern;
 
-// @class EventParameterDialog Dialog about setting a property for a group of
-//        events.  Ultimately makes a ParameterPattern::Result to be passed
-//        to SelectionPropertyCommand.
-// @author Tom Breton (Tehom) (adapted)
-// @author Chris Cannam (originally)
+/// Set Event Velocities and Set Controller Values dialogs.
+/**
+ * Sets a property for a group of events.  Ultimately makes a
+ * ParameterPattern::Result to be passed to SelectionPropertyCommand.
+ *
+ * Launched from the Matrix and Notation editors by:
+ *
+ *   - Adjust > Set Event Velocities...
+ *   - Controllers > Set Controller Values...
+ *
+ * @author Chris Cannam (originally)
+ * @author Tom Breton (Tehom) (adapted)
+ */
 class EventParameterDialog : public QDialog
 {
     Q_OBJECT
@@ -65,21 +73,18 @@ public slots:
 private:
     // Helper containing non-gui data, which will outlive
     // EventParameterDialog.
-    const SelectionSituation  *m_situation;
+    const SelectionSituation *m_situation;
 
     // The available patterns.
     const ParameterPattern::ParameterPatternVec *m_patterns;
     // Get the current pattern index.
-    const ParameterPattern * getPattern(int index) const
+    const ParameterPattern *getPattern(int index) const
     { return m_patterns->at(index); }
 
     // The widget that chooses the current pattern.
     QComboBox *m_patternCombo;
     // Initialize m_patternCombo.
     void initPatternCombo();
-
-    // The control layout which holds the individual parameter widgets.
-    QLayout             *m_controlsLayout;
 
     /// A QLabel and a QSpinBox.
     /**
@@ -93,7 +98,7 @@ private:
         void showByArgs(const ParameterPattern::SliderSpec *args);
         void hide();
 
-        int getValue();
+        int getValue() const;
 
     private:
         // We only include the widgets that we may want to interact with
@@ -104,10 +109,10 @@ private:
     typedef std::vector<ParamWidget> ParamWidgetVec;
     // All the parameter widgets.  Not all are used with
     // all patterns.
-    ParamWidgetVec       m_paramVec;
+    ParamWidgetVec m_paramVec;
     // Number of parameters currently in use.  Not always the same as
     // m_paramVec.size().
-    int                  m_NbParameters;
+    int m_NbParameters;
     // Get a vector of the current parameters.  This makes part of our
     // final result object.
     ParameterPattern::BareParams getBareParams();

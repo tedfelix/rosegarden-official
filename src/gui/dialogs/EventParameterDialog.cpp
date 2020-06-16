@@ -15,14 +15,15 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[EventParameterDialog]"
 
 #include "EventParameterDialog.h"
 
 #include "misc/Debug.h"
 #include "misc/Strings.h"
 #include "base/PropertyName.h"
+
 #include <QComboBox>
-#include <QDialog>
 #include <QDialogButtonBox>
 #include <QLabel>
 #include <QSpinBox>
@@ -40,18 +41,25 @@ namespace Rosegarden
 
 EventParameterDialog::ParamWidget::ParamWidget(QLayout *parent)
 {
+    // ??? Derive from QWidget?  Might be clearer.
     QWidget *box = new QWidget;
     parent->addWidget(box);
+
     QHBoxLayout *boxLayout = new QHBoxLayout;
+
+    // Label
     m_label = new QLabel(tr("Value"));
     boxLayout->addWidget(m_label);
+
+    // SpinBox
     m_spinBox = new QSpinBox;
     boxLayout->addWidget(m_spinBox);
+
     box->setLayout(boxLayout);
 }
 
 int
-EventParameterDialog::ParamWidget::getValue()
+EventParameterDialog::ParamWidget::getValue() const
 {
     return m_spinBox->value();
 }
@@ -89,36 +97,24 @@ EventParameterDialog::EventParameterDialog(
     m_NbParameters(0)
 {
     setModal(true);
-    setWindowTitle(tr("Rosegarden"));
+    setWindowTitle(name);
     setSizePolicy(QSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum));
 
-    QVBoxLayout *mainLayout = new QVBoxLayout;
-    setLayout(mainLayout);
-
-    QGroupBox *controls = new QGroupBox(name);
-    m_controlsLayout = new QVBoxLayout;
-    m_controlsLayout->setSpacing(0);    
-    controls->setLayout(m_controlsLayout);
-    mainLayout->addWidget(controls);
-    
-    QWidget *topBox = new QWidget;
-    QVBoxLayout *topBoxLayout = new QVBoxLayout;
-    topBox->setLayout(topBoxLayout);
-    m_controlsLayout->addWidget(topBox);
-    
+    QVBoxLayout *mainLayout = new QVBoxLayout(this);
+    mainLayout->setSpacing(0);
 
     QLabel *explainLabel = new QLabel;
     QString propertyName = m_situation->getPropertyNameQString();
     QString text = tr("Set the %1 property of the event selection:")
                    .arg(propertyName);
     explainLabel->setText(text);
-    topBoxLayout->addWidget(explainLabel);
+    mainLayout->addWidget(explainLabel);
 
     
     QWidget *patternBox = new QWidget;
     QHBoxLayout *patternBoxLayout = new QHBoxLayout;
     patternBox->setLayout(patternBoxLayout);
-    m_controlsLayout->addWidget(patternBox);
+    mainLayout->addWidget(patternBox);
     
     QLabel *child_10 = new QLabel(tr("Pattern"));
     m_patternCombo = new QComboBox;
@@ -131,8 +127,8 @@ EventParameterDialog::EventParameterDialog(
             this, SLOT(slotPatternSelected(int)));
 
     // Instead of looping for 2 we just call twice.
-    m_paramVec.push_back(ParamWidget(m_controlsLayout));
-    m_paramVec.push_back(ParamWidget(m_controlsLayout));
+    m_paramVec.push_back(ParamWidget(mainLayout));
+    m_paramVec.push_back(ParamWidget(mainLayout));
 
     slotPatternSelected(0);
 
@@ -165,8 +161,7 @@ EventParameterDialog::slotPatternSelected(int value)
     typedef ParameterPattern::SliderSpecVector::const_iterator
         ArgIterator;
 
-    // We don't try to handle more than 2 parameters.  But now that
-    // m_controlsLayout is a member, we could add widgets just-in-time.
+    // We don't try to handle more than 2 parameters.
     if (sliderArgs.size() > 2) { return; }
     m_NbParameters = sliderArgs.size();
     ParamWidgetVec::iterator widgetBox = m_paramVec.begin();

@@ -145,12 +145,13 @@ ParameterPattern::getTimes (iterator begin, iterator end)
 // @param situation This call will take ownership of situation.
 void
 ParameterPattern::setProperties(QMainWindow *parent,
-                                SelectionSituation   *situation,
+                                QString windowName,
+                                SelectionSituation *situation,
                                 const ParameterPatternVec *patterns)
 {
     EventParameterDialog
         dialog(parent,
-               QObject::tr("Set Event Velocities"),
+               windowName,
                situation,
                patterns);
 
@@ -180,6 +181,7 @@ setProperties(QMainWindow *parent,
     // situation will ultimately be owned by SelectionPropertyCommand via
     // dialog result
     setProperties(parent,
+                  QObject::tr("Set Event Velocities"),
                   new SelectionSituation(eventType, selection, normValue),
                   patterns);
 }
