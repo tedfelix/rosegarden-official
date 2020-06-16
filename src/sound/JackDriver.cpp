@@ -52,7 +52,7 @@ JackDriver::JackDriver(AlsaDriver *alsaDriver) :
         m_sampleRate(0),
         m_tempOutBuffer(nullptr),
         m_jackTransportEnabled(false),
-        m_jackTransportMaster(false),
+        m_jackTransportSource(false),
         m_waiting(false),
         m_waitingState(JackTransportStopped),
         m_waitingToken(0),

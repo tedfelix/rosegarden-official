@@ -48,10 +48,10 @@ public:
     bool isOK() const { return m_ok; }
 
     bool isTransportEnabled() { return m_jackTransportEnabled; }
-    bool isTransportMaster () { return m_jackTransportMaster; }
+    bool isTransportSource () { return m_jackTransportSource; }
 
     void setTransportEnabled(bool e) { m_jackTransportEnabled = e; }
-    void setTransportMaster (bool m) { m_jackTransportMaster  = m; }
+    void setTransportSource (bool m) { m_jackTransportSource  = m; }
 
     // These methods call back on the sound driver if necessary to
     // establish the current transport location to start at or
@@ -248,7 +248,7 @@ protected:
     sample_t                    *m_tempOutBuffer;
 
     bool                         m_jackTransportEnabled;
-    bool                         m_jackTransportMaster;
+    bool                         m_jackTransportSource;
 
     bool                         m_waiting;
     jack_transport_state_t       m_waitingState;

@@ -250,8 +250,8 @@ MIDIConfigurationPage::MIDIConfigurationPage(
     layout->addWidget(m_mmcTransport, row, 1); //, Qt::AlignHCenter);
 
     m_mmcTransport->addItem(tr("Off"));
-    m_mmcTransport->addItem(tr("MMC Master"));
-    m_mmcTransport->addItem(tr("MMC Slave"));
+    m_mmcTransport->addItem(tr("MMC Source"));
+    m_mmcTransport->addItem(tr("MMC Follower"));
 
     int mmcMode = settings.value("mmcmode", 0).toInt() ;
     if (mmcMode < 0 || mmcMode > 2)
@@ -270,8 +270,8 @@ MIDIConfigurationPage::MIDIConfigurationPage(
     layout->addWidget(m_mtcTransport, row, 1);
 
     m_mtcTransport->addItem(tr("Off"));
-    m_mtcTransport->addItem(tr("MTC Master"));
-    m_mtcTransport->addItem(tr("MTC Slave"));
+    m_mtcTransport->addItem(tr("MTC Source"));
+    m_mtcTransport->addItem(tr("MTC Follower"));
 
     int mtcMode = settings.value("mtcmode", 0).toInt() ;
     if (mtcMode < 0 || mtcMode > 2)

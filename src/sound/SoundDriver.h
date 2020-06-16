@@ -64,8 +64,8 @@ enum
 typedef enum
 {
     TRANSPORT_OFF,
-    TRANSPORT_MASTER,
-    TRANSPORT_SLAVE
+    TRANSPORT_SOURCE,
+    TRANSPORT_FOLLOWER
 } TransportSyncStatus;
 
 
@@ -390,12 +390,12 @@ public:
     TransportSyncStatus getMIDISyncStatus() const { return m_midiSyncStatus; }
     void setMIDISyncStatus(TransportSyncStatus status) { m_midiSyncStatus = status; }
 
-    // MMC master/slave setting
+    // MMC source/follower setting
     //
     TransportSyncStatus getMMCStatus() const { return m_mmcStatus; }
     void setMMCStatus(TransportSyncStatus status) { m_mmcStatus = status; }
 
-    // MTC master/slave setting
+    // MTC source/follower setting
     //
     TransportSyncStatus getMTCStatus() const { return m_mtcStatus; }
     void setMTCStatus(TransportSyncStatus status) { m_mtcStatus = status; }

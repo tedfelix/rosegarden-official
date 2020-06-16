@@ -128,9 +128,9 @@ public:
 
         // Update Instruments - new ALSA client detected
         SystemUpdateInstruments  = 1 << 13,
-        // Set RG as JACK master/slave
+        // Set RG as JACK source/follower
         SystemJackTransport      = 1 << 14,
-        // Set RG as MMC master/slave
+        // Set RG as MMC source/follower
         SystemMMCTransport       = 1 << 15,
         // Set System Messages and MIDI Clock
         SystemMIDIClock          = 1 << 16,
@@ -152,7 +152,7 @@ public:
         // Panic function
         Panic                    = 1 << 24,
 
-        // Set RG as MTC master/slave
+        // Set RG as MTC source/follower
         SystemMTCTransport       = 1 << 25,
         // Auto-connect sync outputs
         SystemMIDISyncAuto       = 1 << 26,
