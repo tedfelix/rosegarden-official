@@ -59,31 +59,17 @@ namespace PitchBend
 
 //////////////////////////////////////////////////////////////////////
 
-class Controller
+namespace Controller
 {
-public:
-    static const std::string EventType;
-    static const int EventSubOrdering;
+    extern const std::string EventType;
+    constexpr int EventSubOrdering = -5;
 
-    static const PropertyName NUMBER;  // controller number
-    static const PropertyName VALUE;   // and value
+    extern const PropertyName NUMBER;
+    extern const PropertyName VALUE;
 
-    Controller(MidiByte number,
-               MidiByte value);
-
-    Controller(const Event &);
-
-    MidiByte getNumber() const { return m_number; }
-    MidiByte getValue() const { return m_value; }
-
-    /// Returned event is on heap; caller takes responsibility for ownership
-    Event *getAsEvent(timeT absoluteTime) const;
-
-private:
-    MidiByte m_number;
-    MidiByte m_value;
-
-};
+    /// Returned Event is on heap; caller takes responsibility for ownership.
+    Event *makeEvent(timeT absoluteTime, MidiByte number, MidiByte value);
+}
 
 //////////////////////////////////////////////////////////////////////
 

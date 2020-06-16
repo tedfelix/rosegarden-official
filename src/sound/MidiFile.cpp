@@ -1014,10 +1014,10 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
                     break;
 
                 case MIDI_CTRL_CHANGE:
-                    rosegardenEvent =
-                            Controller(midiEvent.getData1(),
-                                       midiEvent.getData2()).
-                                getAsEvent(rosegardenTime);
+                    rosegardenEvent = Controller::makeEvent(
+                            rosegardenTime,
+                            midiEvent.getData1(),  // number
+                            midiEvent.getData2());  // value
                     break;
 
                 case MIDI_PITCH_BEND:

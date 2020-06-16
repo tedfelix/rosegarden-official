@@ -1992,8 +1992,10 @@ RosegardenDocument::insertRecordedMidi(const MappedEventList &mC)
             break;
 
         case MappedEvent::MidiController:
-            rEvent = Controller
-                     ((*i)->getData1(), (*i)->getData2()).getAsEvent(absTime);
+            rEvent = Controller::makeEvent(
+                    absTime,
+                    (*i)->getData1(),  // number
+                    (*i)->getData2());  // value
             break;
 
         case MappedEvent::MidiProgramChange:

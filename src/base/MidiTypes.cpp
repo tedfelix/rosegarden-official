@@ -65,33 +65,16 @@ Event *PitchBend::makeEvent(timeT absoluteTime, MidiByte msb, MidiByte lsb)
 //////////////////////////////////////////////////////////////////////
 
 const std::string Controller::EventType = "controller";
-const int Controller::EventSubOrdering = -5;
 
 const PropertyName Controller::NUMBER = "number";
 const PropertyName Controller::VALUE  = "value";
 
-Controller::Controller(MidiByte number,
-                       MidiByte value) :
-    m_number(number),
-    m_value(value)
-{
-}
-
-Controller::Controller(const Event &e)
-{
-    if (e.getType() != EventType)
-        throw Event::BadType("Controller model event", EventType, e.getType());
-
-    m_number = getByte(e, NUMBER);
-    m_value = getByte(e, VALUE);
-}
-
 Event *
-Controller::getAsEvent(timeT absoluteTime) const
+Controller::makeEvent(timeT absoluteTime, MidiByte number, MidiByte value)
 {
     Event *e = new Event(EventType, absoluteTime, 0, EventSubOrdering);
-    e->set<Int>(NUMBER, (long)m_number);
-    e->set<Int>(VALUE, (long)m_value);
+    e->set<Int>(NUMBER, number);
+    e->set<Int>(VALUE, value);
 
     return e;
 }
