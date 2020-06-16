@@ -31,6 +31,7 @@
 #include "TimeDialog.h"
 #include "gui/widgets/LineEdit.h"
 #include "gui/widgets/FileDialog.h"
+#include "sound/Midi.h"
 
 #include <QComboBox>
 #include <QDialog>
@@ -40,6 +41,7 @@
 #include <QGroupBox>
 #include <QGridLayout>
 #include <QLabel>
+#include <QMessageBox>
 #include <QPushButton>
 #include <QSpinBox>
 #include <QString>
@@ -1077,24 +1079,23 @@ SimpleEventEditDialog::slotSysexLoad()
     file.open(QIODevice::ReadOnly);
     std::string s;
     char c;
-    bool ioOk = true;
 
-    // Discard leading bytes up to and including the first F0.
-    while (ioOk) {
-        ioOk = file.getChar(&c);
-        if (c == static_cast<char>(0xf0))
+    // Discard leading bytes up to and including the first SysEx Start (F0).
+    while (file.getChar(&c)) {
+        if (c == static_cast<char>(MIDI_SYSTEM_EXCLUSIVE))
             break;
     }
-    // Copy up to but not including F7.
-    while (ioOk) {
-        ioOk = file.getChar(&c);
-        // End of SysEx?  Bail.
-        if (c == static_cast<char>(0xf7))
+    // Copy up to but not including SysEx End (F7).
+    while (file.getChar(&c)) {
+        if (c == static_cast<char>(MIDI_END_OF_EXCLUSIVE))
             break;
         s += c;
     }
 
     file.close();
+
+    if (s.empty())
+        QMessageBox::critical(this, tr("Rosegarden"), tr("Could not load SysEx file."));
 
     m_metaEdit->setText(strtoqstr(SystemExclusive::toHex(s)));
 
