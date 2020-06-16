@@ -15,6 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[IconLoader]"
+
 #include "IconLoader.h"
 
 #include <QPixmap>
@@ -25,67 +27,61 @@
 namespace Rosegarden
 {
 
+
 QIcon
 IconLoader::load(QString name)
 {
     QPixmap pmap(loadPixmap(name));
-    if (pmap.isNull()) return QIcon();
-    else return QIcon(pmap);
+    if (pmap.isNull())
+        return QIcon();
+
+    return QIcon(pmap);
 }
 
 QPixmap
 IconLoader::loadPixmap(QString name)
 {
+    // Check the cache.
     std::map<QString, QPixmap>::const_iterator it = m_cache.find(name);
-    if (it != m_cache.end()) return it->second;
+    // If found in the cache, return it.
+    if (it != m_cache.end())
+        return it->second;
+
+    // Try the various possible directories in :pixmaps.
     QPixmap pixmap = loadPixmap(":pixmaps/toolbar", name);
-    if (pixmap.isNull()) pixmap = loadPixmap(":pixmaps/transport", name);
-    if (pixmap.isNull()) pixmap = loadPixmap(":pixmaps/misc", name);
-    if (pixmap.isNull()) pixmap = loadPixmap(":pixmaps/stock", name);
-    if (pixmap.isNull()) pixmap = loadPixmap(":pixmaps/icons", name);
-    if (pixmap.isNull()) pixmap = loadPixmap(":pixmaps/style", name);
-    if (pixmap.isNull()) pixmap = loadPixmap(":pixmaps", name);
+    if (pixmap.isNull())
+        pixmap = loadPixmap(":pixmaps/transport", name);
+    if (pixmap.isNull())
+        pixmap = loadPixmap(":pixmaps/misc", name);
+    if (pixmap.isNull())
+        pixmap = loadPixmap(":pixmaps/stock", name);
+    if (pixmap.isNull())
+        pixmap = loadPixmap(":pixmaps/icons", name);
+    if (pixmap.isNull())
+        pixmap = loadPixmap(":pixmaps/style", name);
+    if (pixmap.isNull())
+        pixmap = loadPixmap(":pixmaps", name);
+
+    // Store whatever we found, or didn't, in the cache.
     m_cache[name] = pixmap;
+
     return pixmap;
 }
 
 QPixmap
 IconLoader::loadPixmap(QString dir, QString name)
 {
-/*
-    bool light = false;
-    QColor bg = QApplication::palette().window().color();
-    if (bg.red() + bg.green() + bg.blue() > 384) light = true;
-*/    
-    bool light = true; // do not invert any icons
-
-    if (light) {
-        QPixmap pmap(QString("%1/%2").arg(dir).arg(name));
-        if (pmap.isNull()) {
-            pmap = QPixmap(QString("%1/%2.png").arg(dir).arg(name));
-        }
-        if (pmap.isNull()) {
-            pmap = QPixmap(QString("%1/%2.xpm").arg(dir).arg(name));
-        }
-        return pmap;
-    }
-
+    // Try to load assuming extension is included.
     QPixmap pmap(QString("%1/%2").arg(dir).arg(name));
-    if (pmap.isNull()) {
-        pmap = QPixmap(QString("%1/%2_inverse.png").arg(dir).arg(name));
-        if (pmap.isNull()) {
-            pmap = QPixmap(QString("%1/%2.png").arg(dir).arg(name));
-        }
-        if (pmap.isNull()) {
-            pmap = QPixmap(QString("%1/%2.xpm").arg(dir).arg(name));
-        }
-    }
-    if (pmap.isNull()) return pmap;
 
-    // No suitable inverted icon found for black background; try to
-    // auto-invert the default one
+    // Not found?  Try .png.
+    if (pmap.isNull())
+        pmap = QPixmap(QString("%1/%2.png").arg(dir).arg(name));
+    // Not found?  Try .xpm.
+    if (pmap.isNull())
+        pmap = QPixmap(QString("%1/%2.xpm").arg(dir).arg(name));
 
-    return invert(pmap);
+    return pmap;
 }
 
 QPixmap
@@ -100,24 +96,27 @@ IconLoader::invert(QPixmap pmap)
             QColor colour = QColor
                 (qRed(rgba), qGreen(rgba), qBlue(rgba), qAlpha(rgba));
 
-            int alpha = colour.alpha();
+            const int alpha = colour.alpha();
+
+            // If this is a shade of gray that is relatively opaque,
+            // invert the V component.
             if (colour.saturation() < 5 && colour.alpha() > 10) {
                 colour.setHsv(colour.hue(),
                               colour.saturation(),
                               255 - colour.value());
+                // ??? This should be unnecessary as it is merely being
+                //     set to itself.
                 colour.setAlpha(alpha);
+
                 img.setPixel(x, y, colour.rgba());
             }
         }
     }
 
     pmap = QPixmap::fromImage(img);
+
     return pmap;
 }
 
 
-}// end namespace Rosegarden
-
-
-
-
+}

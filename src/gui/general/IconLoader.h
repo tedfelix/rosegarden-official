@@ -30,18 +30,15 @@ namespace Rosegarden {
 class ROSEGARDENPRIVATE_EXPORT IconLoader
 {
 public:
-    IconLoader() { }
-    virtual ~IconLoader() { }
-
     QIcon load(QString name);
     QPixmap loadPixmap(QString name);
 
     // process the given pixmap so as to try to make it visible if the
     // background is very dark
-    QPixmap invert(QPixmap);
+    static QPixmap invert(QPixmap);
 
 protected:
-    QPixmap loadPixmap(QString dir, QString name);
+    static QPixmap loadPixmap(QString dir, QString name);
     std::map<QString, QPixmap> m_cache;
 };
 
