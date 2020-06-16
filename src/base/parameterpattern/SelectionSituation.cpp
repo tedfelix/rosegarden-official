@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2018 the Rosegarden development team.
+    Copyright 2000-2020 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -31,27 +31,23 @@ namespace Rosegarden
 
 SelectionSituation::
 SelectionSituation(std::string eventType,
-          EventSelection *selection,
-          int currentFlatValue)
-    : m_eventType(eventType),
-      m_property(derivePropertyName(eventType)),
-      m_selection(selection),
-      m_currentFlatValue((currentFlatValue < 0) ?
-                         calcMeanValue() :
-                         currentFlatValue)
+                   EventSelection *selection,
+                   int currentFlatValue) :
+    m_eventType(eventType),
+    m_property(),
+    m_selection(selection),
+    m_currentFlatValue((currentFlatValue < 0) ?
+                       calcMeanValue() :
+                       currentFlatValue)
 {
-
+    // For PitchBend there is no single property name, so we leave it as
+    // controller value.
+    if (m_eventType == Note::EventType)
+        m_property = BaseProperties::VELOCITY;
+    else
+        m_property = Controller::VALUE;
 }
 
-PropertyName
-SelectionSituation::
-derivePropertyName(std::string eventType)
-{
-  // For PitchBend there is no single property name, so we leave it as
-  // controller value.
-  if (eventType == Note::EventType) { return BaseProperties::VELOCITY; }
-  else { return Controller::VALUE; }
-}
 // Return the largest value that the relevant property may have
 int
 SelectionSituation::
@@ -97,8 +93,9 @@ getMinMax() const
     // them.
     int min = std::numeric_limits<int>::max(),
         max = std::numeric_limits<int>::min();
-    const eventcontainer &events = m_selection->getSegmentEvents();
-    for (eventcontainer::iterator i = events.begin();
+    const EventSelection::eventcontainer &events =
+            m_selection->getSegmentEvents();
+    for (EventSelection::eventcontainer::const_iterator i = events.begin();
          i != events.end();
          ++i) {
         if (isSuitable(*i)) { 
@@ -119,8 +116,9 @@ calcMeanValue() const
 {
     float total = 0;
     int count = 0;
-    const eventcontainer &events = m_selection->getSegmentEvents();
-    for (eventcontainer::iterator i = events.begin();
+    const EventSelection::eventcontainer &events =
+            m_selection->getSegmentEvents();
+    for (EventSelection::eventcontainer::const_iterator i = events.begin();
          i != events.end();
          ++i) {
         if (isSuitable(*i)) {
