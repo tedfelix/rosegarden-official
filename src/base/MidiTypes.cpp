@@ -168,6 +168,48 @@ ProgramChange::getAsEvent(timeT absoluteTime) const
 // SystemExclusive
 //////////////////////////////////////////////////////////////////////
 
+namespace
+{
+
+    // ??? rename: hexDigitToRaw()
+    unsigned char
+    toRawNibble(char c)
+    {
+        if (islower(c))
+            c = toupper(c);
+
+        if (isdigit(c))
+            return c - '0';
+
+        if (c >= 'A' && c <= 'F')
+            return c - 'A' + 10;
+
+        throw SystemExclusive::BadEncoding();
+    }
+
+    // ??? rename: hexToRaw()
+    std::string
+    toRaw(std::string rh)
+    {
+        std::string r;
+        std::string h;
+
+        // remove whitespace
+        for (size_t i = 0; i < rh.size(); ++i) {
+            if (!isspace(rh[i]))
+                h += rh[i];
+        }
+
+        for (size_t i = 0; i < h.size()/2; ++i) {
+            unsigned char b = toRawNibble(h[2*i]) * 16 + toRawNibble(h[2*i+1]);
+            r += b;
+        }
+
+        return r;
+    }
+
+}
+
 const std::string SystemExclusive::EventType = "systemexclusive";
 const int SystemExclusive::EventSubOrdering = -5;
 
@@ -212,52 +254,6 @@ SystemExclusive::toHex(std::string r)
         h += hexchars[b % 16];
     }
     return h;
-}
-
-std::string
-SystemExclusive::toRaw(std::string rh)
-{
-    std::string r;
-    std::string h;
-
-    // remove whitespace
-    for (size_t i = 0; i < rh.size(); ++i) {
-        if (!isspace(rh[i]))
-            h += rh[i];
-    }
-
-    for (size_t i = 0; i < h.size()/2; ++i) {
-        unsigned char b = toRawNibble(h[2*i]) * 16 + toRawNibble(h[2*i+1]);
-        r += b;
-    }
-
-    return r;
-}
-
-unsigned char
-SystemExclusive::toRawNibble(char c)
-{
-    if (islower(c))
-        c = toupper(c);
-
-    if (isdigit(c))
-        return c - '0';
-
-    if (c >= 'A' && c <= 'F')
-        return c - 'A' + 10;
-
-    throw BadEncoding();
-}
-
-bool
-SystemExclusive::isHex(std::string rh)
-{
-    try {
-        std::string r = toRaw(rh);
-    } catch (const BadEncoding &) {
-        return false;
-    }
-    return true;
 }
 
 

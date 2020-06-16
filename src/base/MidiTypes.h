@@ -95,11 +95,12 @@ public:
 
     static const PropertyName PRESSURE;
 
-    ChannelPressure(MidiByte pressure);
+    /// Event -> Data
     ChannelPressure(const Event &event);
-
     MidiByte getPressure() const { return m_pressure; }
 
+    /// Data -> Event
+    ChannelPressure(MidiByte pressure);
     /// Returned event is on heap; caller takes responsibility for ownership
     Event *getAsEvent(timeT absoluteTime) const;
 
@@ -117,11 +118,12 @@ public:
 
     static const PropertyName PROGRAM;
 
-    ProgramChange(MidiByte program);
+    /// Event -> Data
     ProgramChange(const Event &event);
-
     MidiByte getProgram() const { return m_program; }
 
+    /// Data -> Event
+    ProgramChange(MidiByte program);
     /// Returned event is on heap; caller takes responsibility for ownership
     Event *getAsEvent(timeT absoluteTime) const;
 
@@ -143,24 +145,24 @@ public:
 
     static const PropertyName DATABLOCK;
 
-    SystemExclusive(std::string rawData);
+    // Event -> Data
     SystemExclusive(const Event &event);
-
+    // Playback (MappedEvent) uses this.
+    // SimpleEventEditDialog uses this for the data and the length.
     std::string getRawData() const { return m_rawData; }
+    // SimpleEventEditDialog uses this.
     std::string getHexData() const { return toHex(m_rawData); }
 
+    // Data -> Event
+    SystemExclusive(std::string rawData);
     /// Returned event is on heap; caller takes responsibility for ownership
     Event *getAsEvent(timeT absoluteTime) const;
 
     static std::string toHex(std::string rawData);
-    static std::string toRaw(std::string hexData);
-    static bool isHex(std::string data);
 
 private:
     std::string m_rawData;
-    static unsigned char toRawNibble(char);
 };
-
 
 
 }
