@@ -15,6 +15,7 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[MatrixPercussionInsertionCommand]"
 
 #include "MatrixPercussionInsertionCommand.h"
 
@@ -134,51 +135,72 @@ MatrixPercussionInsertionCommand::getEffectiveStartTime(Segment &segment,
 }
 
 timeT
-MatrixPercussionInsertionCommand::getEndTime(Segment &segment,
+MatrixPercussionInsertionCommand::getEndTime(
+        const Segment &segment,
         timeT time,
-        Event &event)
+        const Event &event)
 {
-    timeT endTime =
-        time + Note(Note::Semibreve,
-                    0).getDuration();
-    timeT barEndTime = segment.getBarEndForTime(time);
-    timeT segmentEndTime = segment.getEndMarkerTime();
+    timeT endTime = time + Note(Note::Semibreve, 0).getDuration();
 
+    // Expand to the bar end.
+    const timeT barEndTime = segment.getBarEndForTime(time);
     if (barEndTime > endTime)
         endTime = barEndTime;
+
+    // Limit to the Segment end.
+    const timeT segmentEndTime = segment.getEndMarkerTime();
     if (endTime > segmentEndTime)
         endTime = segmentEndTime;
 
-    int pitch = 0;
-    if (event.has(PITCH)) {
-        pitch = event.get<Int>(PITCH);
-    }
+    // No pitch?  We've done enough.  Bail.
+    // This should never happen as there is no way to insert a non-pitched
+    // Event in the percussion matrix.  This is more to avoid an exception
+    // from get<Int>(PITCH) if things go wrong.
+    if (!event.has(PITCH))
+        return endTime;
 
+    const int pitch = event.get<Int>(PITCH);
+
+    // For each Event in the Segment from time to the end of the Segment
     for (Segment::iterator i = segment.findTime(time);
-            segment.isBeforeEndMarker(i); ++i) {
+         segment.isBeforeEndMarker(i);
+         ++i) {
 
-        if ((*i)->has(PITCH) &&
-                (*i)->get
-                <Int>(PITCH) == pitch) {
+        // Not a note?  Skip.
+        if (!(*i)->isa(Note::EventType))
+            continue;
 
-            if ((*i)->getAbsoluteTime() > time &&
-                    (*i)->isa(Note::EventType)) {
-                endTime = (*i)->getAbsoluteTime();
-            }
-        }
+        // No pitch?  Skip.
+        if (!(*i)->has(PITCH))
+            continue;
+
+        // Wrong pitch?  Skip.
+        if ((*i)->get<Int>(PITCH) != pitch)
+            continue;
+
+        // Same time?  Skip.
+        if ((*i)->getAbsoluteTime() == time)
+            continue;
+
+        // This Event is after the time of the Event to be added and
+        // has the same pitch.  Use the time of this Event as the end
+        // time for the Event to be added.  This will avoid unnecessary
+        // rests in the notation.
+        endTime = (*i)->getAbsoluteTime();
+
+        break;
     }
 
-    Composition *comp = segment.getComposition();
-    std::pair<timeT, timeT> barRange =
-        comp->getBarRangeForTime(time);
-    timeT barDuration = barRange.second - barRange.first;
+    const Composition *comp = segment.getComposition();
+    std::pair<timeT, timeT> barRange = comp->getBarRangeForTime(time);
+    const timeT barDuration = barRange.second - barRange.first;
 
-
-    if (endTime > time + barDuration) {
+    // Limit to bar duration
+    if (endTime > time + barDuration)
         endTime = time + barDuration;
-    }
 
     return endTime;
 }
+
 
 }

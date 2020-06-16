@@ -51,16 +51,22 @@ protected:
     timeT getEffectiveStartTime(Segment &segment,
                                             timeT startTime,
                                             Event &event);
-    timeT getEndTime(Segment &segment,
-                                 timeT endTime,
-                                 Event &event);
+
+    /// Compute the end time for a percussion event.
+    /**
+     * We try to make percussion notes contiguous so that they will look
+     * correct in notation.  Unfortunately, this wreaks some havoc on
+     * the velocity ruler.  Perhaps the velocity ruler needs a percussion mode
+     * where it would show each note as if it were a 64th?
+     */
+    timeT getEndTime(const Segment &segment,
+                     timeT endTime,
+                     const Event &event);
 
     Event *m_event;
     timeT m_time;
     Event *m_lastInsertedEvent; // an alias for another event
 };
-
-//------------------------------
 
 
 }
