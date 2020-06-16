@@ -22,18 +22,16 @@
 #include <QPixmap>
 #include <QString>
 
-#include <map>
-
+// Needed because loadPixmap() is called by main().
 #include <rosegardenprivate_export.h>
 
 namespace Rosegarden {
 
 
-class ROSEGARDENPRIVATE_EXPORT IconLoader
+namespace IconLoader
 {
-public:
-    static QIcon load(QString name);
-    static QPixmap loadPixmap(QString name);
+    QIcon load(QString name);
+    QPixmap ROSEGARDENPRIVATE_EXPORT loadPixmap(QString name);
 
     /// Invert pixmap for dark backgrounds.
     /**
@@ -44,8 +42,8 @@ public:
      *
      * ??? This should be moved to NotationView.
      */
-    static QPixmap invert(QPixmap);
-};
+    QPixmap invert(QPixmap);
+}
 
 
 }

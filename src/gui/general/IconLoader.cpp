@@ -19,10 +19,11 @@
 
 #include "IconLoader.h"
 
-#include <QPixmap>
-#include <QApplication>
-#include <QPainter>
-#include <QPalette>
+#include <QColor>
+#include <QImage>
+#include <QRgb>
+
+#include <map>
 
 namespace Rosegarden
 {
@@ -30,7 +31,7 @@ namespace Rosegarden
 
 namespace {
 
-    std::map<QString, QPixmap> iconCache;
+    std::map<QString, QPixmap> pixmapCache;
 
     QPixmap
     loadPixmap2(QString dir, QString name)
@@ -64,9 +65,9 @@ QPixmap
 IconLoader::loadPixmap(QString name)
 {
     // Check the cache.
-    std::map<QString, QPixmap>::const_iterator it = iconCache.find(name);
+    std::map<QString, QPixmap>::const_iterator it = pixmapCache.find(name);
     // If found in the cache, return it.
-    if (it != iconCache.end())
+    if (it != pixmapCache.end())
         return it->second;
 
     // Try the various possible directories in :pixmaps.
@@ -85,7 +86,7 @@ IconLoader::loadPixmap(QString name)
         pixmap = loadPixmap2(":pixmaps", name);
 
     // Store whatever we found, or didn't, in the cache.
-    iconCache[name] = pixmap;
+    pixmapCache[name] = pixmap;
 
     return pixmap;
 }
