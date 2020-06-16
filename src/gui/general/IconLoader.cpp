@@ -32,20 +32,29 @@ namespace {
     QPixmap
     loadPixmap2(QString dir, QString name)
     {
+        QPixmap pixmap;
+
+        QString pathName = QString("%1/%2").arg(dir).arg(name);
+
         // Try to load assuming extension is included.
-        QPixmap pmap(QString("%1/%2").arg(dir).arg(name));
+        pixmap.load(pathName);
+        if (!pixmap.isNull())
+            return pixmap;
 
-        // Not found?  Try .png.
-        if (pmap.isNull())
-            pmap = QPixmap(QString("%1/%2.png").arg(dir).arg(name));
-        // Not found?  Try .jpg.
-        if (pmap.isNull())
-            pmap = QPixmap(QString("%1/%2.jpg").arg(dir).arg(name));
-        // Not found?  Try .xpm.
-        if (pmap.isNull())
-            pmap = QPixmap(QString("%1/%2.xpm").arg(dir).arg(name));
+        // Try .png.
+        pixmap.load(pathName + ".png");
+        if (!pixmap.isNull())
+            return pixmap;
 
-        return pmap;
+        // Try .jpg.
+        pixmap.load(pathName + ".jpg");
+        if (!pixmap.isNull())
+            return pixmap;
+
+        // Try .xpm.
+        pixmap.load(pathName + ".xpm");
+
+        return pixmap;
     }
 
 }
