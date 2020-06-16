@@ -443,11 +443,15 @@ ControlRulerWidget::slotHoveredOverNoteChanged()
 void
 ControlRulerWidget::slotUpdateRulers(timeT startTime, timeT endTime)
 {
-    if (m_controlRulerList.size()) {
-        ControlRulerList::iterator it;
-        for (it = m_controlRulerList.begin(); it != m_controlRulerList.end(); ++it) {
-            (*it)->notationLayoutUpdated(startTime,endTime);
-        }
+    // No rulers to update?  Bail.
+    if (m_controlRulerList.empty())
+        return;
+
+    // For each ruler, ask for an update.
+    for (ControlRulerList::iterator it = m_controlRulerList.begin();
+         it != m_controlRulerList.end();
+         ++it) {
+        (*it)->notationLayoutUpdated(startTime, endTime);
     }
 }
 

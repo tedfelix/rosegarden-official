@@ -58,28 +58,38 @@ namespace Rosegarden
 ControlRuler::ControlRuler(ViewSegment * /*viewsegment*/,
                            RulerScale* rulerScale,
                            QWidget* parent) :
-        QWidget(parent),
-        m_rulerScale(rulerScale),
-        m_eventSelection(nullptr),
-        m_viewSegment(nullptr),
-        m_notationStaff(nullptr),
-        m_segment(nullptr),
-        m_firstVisibleItem(m_controlItemMap.end()),
-        m_lastVisibleItem(m_controlItemMap.end()),
-        m_nextItemLeft(m_controlItemMap.end()),
-        m_currentIndex(nullptr),
-        m_currentTool(nullptr),
-        m_xScale(1.0),
-        m_yScale(1.0),
-        m_maxItemValue(127),
-        m_minItemValue(0),
-        m_viewSegmentOffset(0),
-        m_xOffset(0),
-        m_currentX(0.0),
-        m_itemMoved(false),
-        m_selecting(false),
-        m_selectionRect(nullptr),
-        m_menu(nullptr)
+    QWidget(parent),
+    m_rulerScale(rulerScale),
+    m_eventSelection(nullptr),
+    m_viewSegment(nullptr),
+    m_notationStaff(nullptr),
+    m_segment(nullptr),
+    m_controlItemMap(),
+    m_firstVisibleItem(m_controlItemMap.end()),
+    m_lastVisibleItem(m_controlItemMap.end()),
+    m_nextItemLeft(m_controlItemMap.end()),
+    m_selectedItems(),
+    m_visibleItems(),
+    m_currentIndex(nullptr),
+    m_currentTool(nullptr),
+    m_currentToolName(),
+    m_pannedRect(),
+    m_xScale(1.0),
+    m_yScale(1.0),
+    m_maxItemValue(127),
+    m_minItemValue(0),
+    m_viewSegmentOffset(0),
+    m_xOffset(0),
+    m_currentX(0.0),
+    m_lastEventPos(),
+    m_itemMoved(false),
+    m_selecting(false),
+    m_selector(nullptr),
+    m_selectionRect(nullptr),
+    m_menuName(),
+    m_menu(nullptr),
+    //m_hposUpdatePending(false),
+    m_selectedEvents()
 {
 
     setFixedHeight(sizeHint().height());
@@ -809,5 +819,6 @@ std::pair<int, int> ControlRuler::getZMinMax()
 
     return std::pair<int, int>(zList[0], zList[zList.size() - 1]);
 }
+
 
 }

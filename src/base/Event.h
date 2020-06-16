@@ -211,11 +211,18 @@ public:
 
     friend bool operator<(const Event&, const Event&);
 
+    /// Type of the Event (E.g. Note, Accidental, Key, etc...)
     /**
-     * Returns the type of the Event (E.g. Note, Accidental, Key, etc...)
      * See NotationTypes.h and MidiTypes.h for more examples.
      */
-    const std::string &getType() const  { return  m_data->m_type; }
+    std::string getType() const
+    {
+        if (!m_data) {
+            RG_DEBUG << "Event::getType(): FATAL: m_data == nullptr.  Crash likely.";
+            return "";
+        }
+        return m_data->m_type;
+    }
     /// Check Event type.
     bool isa(const std::string &type) const  { return (m_data->m_type == type); }
 
@@ -461,8 +468,10 @@ private:
     /// Dereference and delete.
     void lose()
     {
-        if (--m_data->m_refCount == 0)
+        if (--m_data->m_refCount == 0) {
             delete m_data;
+            m_data = nullptr;
+        }
         delete m_nonPersistentProperties;
         m_nonPersistentProperties = nullptr;
     }

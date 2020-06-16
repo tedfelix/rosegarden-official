@@ -70,7 +70,10 @@ Event::EventData *Event::EventData::unshare()
 
 Event::EventData::~EventData()
 {
-    if (m_properties) delete m_properties;
+    if (m_properties) {
+        delete m_properties;
+        m_properties = nullptr;
+    }
 }
 
 timeT

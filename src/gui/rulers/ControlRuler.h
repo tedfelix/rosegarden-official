@@ -235,7 +235,7 @@ protected:
     ControlItemList m_selectedItems;
     ControlItemList m_visibleItems;
 
-    ControlItem* m_currentIndex;
+    ControlItem *m_currentIndex;
 
     ControlTool *m_currentTool;
     ControlToolBox *m_toolBox;
@@ -264,7 +264,7 @@ protected:
     QString m_menuName;
     QMenu* 	m_menu;
 
-    bool m_hposUpdatePending;
+    //bool m_hposUpdatePending;
 
     typedef std::list<Event *> SelectionSet;
     SelectionSet m_selectedEvents;
