@@ -65,9 +65,6 @@ public:
     /// Adjust the item to reflect the given values, not those of our event
     void reconfigure(timeT time, timeT duration, int pitch);
 
-    /// Adjust the item to reflect the given values, not those of our event
-    void reconfigure(timeT time, timeT duration, int pitch, int velocity);
-
     static MatrixElement *getMatrixElement(QGraphicsItem *);
 
 protected:
@@ -85,6 +82,11 @@ protected:
      * parameter, and use it appropriately when doing height calculations
      */
     long m_pitchOffset;
+
+private:
+    /// Adjust the item to reflect the given values, not those of our event
+    void reconfigure(timeT time, timeT duration, int pitch, int velocity);
+
 };
 
 

@@ -331,7 +331,11 @@ ControlRulerWidget::slotAddPropertyRuler(const PropertyName &propertyName)
 {
     if (!m_viewSegment) return;
 
-    PropertyControlRuler *controlruler = new PropertyControlRuler(propertyName, m_viewSegment, m_scale, this);
+    PropertyControlRuler *controlruler = new PropertyControlRuler(
+            propertyName,
+            m_viewSegment,  // viewSegment
+            m_scale,  // scale
+            this);  // parent
 
     connect(controlruler, &ControlRuler::rulerSelectionChanged,
             this, &ControlRulerWidget::slotChildRulerSelectionChanged);

@@ -50,18 +50,22 @@
 namespace Rosegarden
 {
 
+
 PropertyControlRuler::PropertyControlRuler(PropertyName propertyName,
-                                           ViewSegment *segment,
+                                           ViewSegment *viewSegment,
                                            RulerScale *rulerScale,
-                                           QWidget *parent,
-                                           const char */* name */) :
-    ControlRuler(segment, rulerScale,
-                 parent),
+                                           QWidget *parent) :
+    ControlRuler(viewSegment, rulerScale, parent),
     m_propertyName(propertyName)
 {
-
     setMenuName("property_ruler_menu");
-    setViewSegment(segment);
+    setViewSegment(viewSegment);
+}
+
+PropertyControlRuler::~PropertyControlRuler()
+{
+    if (m_viewSegment)
+        m_viewSegment->removeObserver(this);
 }
 
 void PropertyControlRuler::update()
@@ -105,15 +109,18 @@ void PropertyControlRuler::paintEvent(QPaintEvent *event)
     // or not
     ControlItemVector selectedVector;
 
+    // For each visible control item, draw the unselected ones.
     for (ControlItemList::iterator it = m_visibleItems.begin();
          it != m_visibleItems.end();
          ++it) {
         if (!(*it)->isSelected()) {
+            // Draw the inside.
             brush.setColor((*it)->getColour().lighter());
             painter.setBrush(brush);
             painter.setPen(Qt::NoPen);
             painter.drawPolygon(mapItemToWidget(*it));
 
+            // Draw the outline.
             painter.setPen(pen);
             painter.drawPolyline(mapItemToWidget(*it));
         } else {
@@ -121,15 +128,18 @@ void PropertyControlRuler::paintEvent(QPaintEvent *event)
         }
     }
 
+    // For each selected control item, draw it.
     for (ControlItemVector::iterator it = selectedVector.begin();
          it != selectedVector.end();
          ++it)
     {
+        // Draw the inside.
         brush.setColor(((*it)->getColour()));
         painter.setBrush(brush);
         painter.setPen(Qt::NoPen);
         painter.drawPolygon(mapItemToWidget(*it));
 
+        // Draw the outline.
         painter.setPen(highlightPen);
         painter.drawPolyline(mapItemToWidget(*it));
     }
@@ -144,13 +154,6 @@ PropertyControlRuler::setViewSegment(ViewSegment *segment)
     ControlRuler::setViewSegment(segment);
 
     init();
-}
-
-PropertyControlRuler::~PropertyControlRuler()
-{
-    if (m_viewSegment) {
-        m_viewSegment->removeObserver(this);
-    }
 }
 
 QString PropertyControlRuler::getName()

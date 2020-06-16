@@ -49,14 +49,14 @@ class PropertyControlRuler :  public ControlRuler, public ViewSegmentObserver
 {
 public:
     PropertyControlRuler(PropertyName propertyName,
-                        ViewSegment*,
-                        RulerScale*,
-                        QWidget* parent=nullptr, const char* name=nullptr);
+                        ViewSegment *viewSegment,
+                        RulerScale *scale,
+                        QWidget *parent);
 
     ~PropertyControlRuler() override;
 
     virtual void update();
-    
+
     void paintEvent(QPaintEvent *) override;
 
     QString getName() override;
