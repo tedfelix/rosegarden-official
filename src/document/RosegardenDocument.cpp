@@ -1999,8 +1999,9 @@ RosegardenDocument::insertRecordedMidi(const MappedEventList &mC)
             break;
 
         case MappedEvent::MidiProgramChange:
-            rEvent = ProgramChange
-                     ((*i)->getData1()).getAsEvent(absTime);
+            rEvent = ProgramChange::makeEvent(
+                    absTime,
+                    (*i)->getData1());  // program
             break;
 
         case MappedEvent::MidiKeyPressure:

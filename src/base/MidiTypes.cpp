@@ -137,28 +137,14 @@ ChannelPressure::getAsEvent(timeT absoluteTime) const
 //////////////////////////////////////////////////////////////////////
 
 const std::string ProgramChange::EventType = "programchange";
-const int ProgramChange::EventSubOrdering = -5;
 
 const PropertyName ProgramChange::PROGRAM = "program";
 
-ProgramChange::ProgramChange(MidiByte program) :
-    m_program(program)
-{
-}
-
-ProgramChange::ProgramChange(const Event &e)
-{
-    if (e.getType() != EventType)
-        throw Event::BadType("ProgramChange model event", EventType, e.getType());
-
-    m_program = getByte(e, PROGRAM);
-}
-
 Event *
-ProgramChange::getAsEvent(timeT absoluteTime) const
+ProgramChange::makeEvent(timeT absoluteTime, MidiByte program)
 {
     Event *e = new Event(EventType, absoluteTime, 0, EventSubOrdering);
-    e->set<Int>(PROGRAM, (long)m_program);
+    e->set<Int>(PROGRAM, program);
 
     return e;
 }

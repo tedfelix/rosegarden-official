@@ -76,8 +76,7 @@ MappedEvent::MappedEvent(InstrumentId id,
             m_data2 = e.get<Int>(Controller::VALUE);
         } else if (e.isa(ProgramChange::EventType)) {
             m_type = MidiProgramChange;
-            ProgramChange pc(e);
-            m_data1 = pc.getProgram();
+            m_data1 = e.get<Int>(ProgramChange::PROGRAM);
         } else if (e.isa(KeyPressure::EventType)) {
             m_type = MidiKeyPressure;
             m_data1 = e.get<Int>(KeyPressure::PITCH);

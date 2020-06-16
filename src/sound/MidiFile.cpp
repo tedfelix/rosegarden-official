@@ -1009,8 +1009,9 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
                     break;
 
                 case MIDI_PROG_CHANGE:
-                    rosegardenEvent = ProgramChange(midiEvent.getData1()).
-                                          getAsEvent(rosegardenTime);
+                    rosegardenEvent = ProgramChange::makeEvent(
+                            rosegardenTime,
+                            midiEvent.getData1());  // program
                     break;
 
                 case MIDI_CTRL_CHANGE:

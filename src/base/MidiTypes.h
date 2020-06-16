@@ -81,7 +81,7 @@ namespace KeyPressure
     extern const PropertyName PITCH;
     extern const PropertyName PRESSURE;
 
-    /// Returned event is on heap; caller takes responsibility for ownership
+    /// Returned Event is on heap; caller takes responsibility for ownership.
     Event *makeEvent(timeT absoluteTime, MidiByte pitch, MidiByte pressure);
 }
 
@@ -110,26 +110,16 @@ private:
 
 //////////////////////////////////////////////////////////////////////
 
-class ProgramChange
+namespace ProgramChange
 {
-public:
-    static const std::string EventType;
-    static const int EventSubOrdering;
+    extern const std::string EventType;
+    constexpr int EventSubOrdering = -5;
 
-    static const PropertyName PROGRAM;
+    extern const PropertyName PROGRAM;
 
-    /// Event -> Data
-    ProgramChange(const Event &event);
-    MidiByte getProgram() const { return m_program; }
-
-    /// Data -> Event
-    ProgramChange(MidiByte program);
-    /// Returned event is on heap; caller takes responsibility for ownership
-    Event *getAsEvent(timeT absoluteTime) const;
-
-private:
-    MidiByte m_program;
-};
+    /// Returned Event is on heap; caller takes responsibility for ownership.
+    Event *makeEvent(timeT absoluteTime, MidiByte program);
+}
 
 //////////////////////////////////////////////////////////////////////
 
@@ -155,7 +145,7 @@ public:
 
     // Data -> Event
     SystemExclusive(std::string rawData);
-    /// Returned event is on heap; caller takes responsibility for ownership
+    /// Returned Event is on heap; caller takes responsibility for ownership.
     Event *getAsEvent(timeT absoluteTime) const;
 
     static std::string toHex(std::string rawData);
