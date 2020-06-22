@@ -346,7 +346,7 @@ static void convert(const QStringList &args)
 
     RosegardenDocument doc(
             nullptr,  // parent
-            nullptr,  // audioPluginManager
+            {},  // audioPluginManager
             true,  // skipAutoload
             true,  // clearCommandHistory
             false);  // m_useSequencer
