@@ -22,19 +22,6 @@
 namespace Rosegarden
 {
 
-Audit::~Audit()
-{
-    std::string s = str();
-    m_audit += s;
-}
-
-std::string
-Audit::getAudit()
-{
-    return m_audit;
-}
-
-std::string Audit::m_audit;
+    std::stringstream AUDIT;
 
 }
-

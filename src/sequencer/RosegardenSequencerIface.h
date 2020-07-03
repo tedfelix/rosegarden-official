@@ -308,10 +308,6 @@ public:
     //
     virtual void setQuarterNoteLength(RealTime) = 0;
 
-    // Return a (potentially lengthy) human-readable status log
-    //
-    virtual QString getStatusLog() = 0;
-
     // Debug stuff, to check MmappedSegment::iterator
     virtual void dumpFirstSegment() = 0;
 

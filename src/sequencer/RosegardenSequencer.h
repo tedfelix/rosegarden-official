@@ -346,9 +346,6 @@ public:
      */
     void setQuarterNoteLength(RealTime rt);
 
-    /// Return a (potentially lengthy) human-readable status log
-    QString getStatusLog();
-
     bool getNextTransportRequest(TransportRequest &request, RealTime &time);
 
     MappedEventList pullAsynchronousMidiQueue();

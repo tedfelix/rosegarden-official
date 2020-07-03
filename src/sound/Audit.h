@@ -16,13 +16,11 @@
 #ifndef RG_AUDIT_H
 #define RG_AUDIT_H
 
-#include <string>
 #include <sstream>
 
 namespace Rosegarden {
 
-
-/// Logging class that makes it easier for users to get debug info.
+/// Logging object that makes it easier for users to get debug info.
 /**
  * This is used at startup to log information that could be helpful for
  * diagnosing certain problems related to audio and MIDI.  The contents
@@ -38,24 +36,12 @@ namespace Rosegarden {
  * Now, if you want logging to RG_DEBUG/RG_WARNING and Audit, you have
  * to explicitly use both.  E.g.:
  *
- *   audit << "AlsaDriver::initialiseMidi(): initialised MIDI subsystem\n";
+ *   AUDIT << "AlsaDriver::initialiseMidi(): initialised MIDI subsystem\n";
  *   RG_DEBUG << "initialiseMidi(): initialised MIDI subsystem";
  *
  * It's redundant, but there's no easy way around this.
  */
-class Audit : public std::stringstream
-{
-public:
-    Audit() { }
-
-    ~Audit() override;
-
-    static std::string getAudit();
-
-protected:
-    static std::string m_audit;
-};
-
+extern std::stringstream AUDIT;
 
 }
 

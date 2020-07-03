@@ -997,15 +997,6 @@ RosegardenSequencer::setQuarterNoteLength(RealTime rt)
     m_driver->setMIDIClockInterval(rt / 24);
 }
 
-QString
-RosegardenSequencer::getStatusLog()
-{
-    LOCKED;
-
-    return m_driver->getStatusLog();
-}
-
-
 void RosegardenSequencer::dumpFirstSegment()
 {
     LOCKED;

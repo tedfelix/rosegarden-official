@@ -18,6 +18,9 @@
 
 #include "ShowSequencerStatusDialog.h"
 
+#include "sound/Audit.h"
+#include "misc/Strings.h"
+
 #include <QDialog>
 #include <QDialogButtonBox>
 #include <QByteArray>
@@ -27,7 +30,6 @@
 #include <QTextEdit>
 #include <QWidget>
 #include <QVBoxLayout>
-#include "sequencer/RosegardenSequencer.h"
 
 
 namespace Rosegarden
@@ -46,7 +48,7 @@ ShowSequencerStatusDialog::ShowSequencerStatusDialog(QWidget *parent) :
 
     layout->addWidget(new QLabel(tr("Sequencer status:")), row, 0);
 
-    QString status = RosegardenSequencer::getInstance()->getStatusLog();
+    QString status = strtoqstr(AUDIT.str());
 
     QTextEdit *text = new QTextEdit;
     text->setReadOnly(true);

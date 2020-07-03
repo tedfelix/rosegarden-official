@@ -127,8 +127,7 @@ AlsaDriver::AlsaDriver(MappedStudio *studio):
 {
     // Create a log that the user can easily see through the preferences
     // even in a release build.
-    Audit audit;
-    audit << "Rosegarden " << VERSION << " - AlsaDriver " << m_name << '\n';
+    AUDIT << "Rosegarden " << VERSION << " - AlsaDriver " << m_name << '\n';
     RG_DEBUG << "ctor: Rosegarden " << VERSION << " - AlsaDriver " << m_name;
 
     m_pendSysExcMap = new DeviceEventMap();
@@ -358,8 +357,6 @@ AlsaDriver::generateTimerList()
 std::string
 AlsaDriver::getAutoTimer(bool &wantTimerChecks)
 {
-    Audit audit;
-
     // Look for the apparent best-choice timer.
 
     if (m_timers.empty())
@@ -469,7 +466,7 @@ AlsaDriver::getAutoTimer(bool &wantTimerChecks)
                         wantTimerChecks = false; // pointless with PCM timer
                         return i->name;
                     } else {
-                        audit << "PCM timer: inadequate resolution " << i->resolution << '\n';
+                        AUDIT << "PCM timer: inadequate resolution " << i->resolution << '\n';
                         RG_DEBUG << "getAutoTimer(): PCM timer: inadequate resolution " << i->resolution;
                     }
                 }
@@ -485,7 +482,7 @@ AlsaDriver::getAutoTimer(bool &wantTimerChecks)
             continue;
         if (i->clas == SND_TIMER_CLASS_GLOBAL) {
             if (i->device == SND_TIMER_GLOBAL_SYSTEM) {
-                audit << "Using low-resolution system timer, sending a warning" << '\n';
+                AUDIT << "Using low-resolution system timer, sending a warning" << '\n';
                 RG_DEBUG << "getAutoTimer(): Using low-resolution system timer, sending a warning";
                 if (rtcCouldBeOK) {
                     reportFailure(MappedEvent::WarningImpreciseTimerTryRTC);
@@ -512,7 +509,6 @@ AlsaDriver::getAutoTimer(bool &wantTimerChecks)
 void
 AlsaDriver::generatePortList(AlsaPortVector *newPorts)
 {
-    Audit audit;
     AlsaPortVector alsaPorts;
 
     snd_seq_client_info_t *cinfo;
@@ -524,9 +520,9 @@ AlsaDriver::generatePortList(AlsaPortVector *newPorts)
     snd_seq_client_info_alloca(&cinfo);
     snd_seq_client_info_set_client(cinfo, -1);
 
-    audit << '\n';
-    audit << "  ALSA Client information:\n";
-    audit << '\n';
+    AUDIT << '\n';
+    AUDIT << "  ALSA Client information:\n";
+    AUDIT << '\n';
     RG_DEBUG << "generatePortList(): ALSA Client information:";
 
     // Get only the client ports we're interested in and store them
@@ -554,7 +550,7 @@ AlsaDriver::generatePortList(AlsaPortVector *newPorts)
             if ((((capability & writeCap) == writeCap) ||
                  ((capability & readCap) == readCap)) &&
                 ((capability & SND_SEQ_PORT_CAP_NO_EXPORT) == 0)) {
-                audit << "    "
+                AUDIT << "    "
                       << client << ","
                       << port << " - ("
                       << snd_seq_client_info_get_name(cinfo) << ", "
@@ -571,19 +567,19 @@ AlsaDriver::generatePortList(AlsaPortVector *newPorts)
                     ((capability & SND_SEQ_PORT_CAP_WRITE) &&
                      (capability & SND_SEQ_PORT_CAP_READ))) {
                     direction = Duplex;
-                    audit << "\t\t\t(DUPLEX)";
+                    AUDIT << "\t\t\t(DUPLEX)";
                     RG_DEBUG << "        (DUPLEX)";
                 } else if (capability & SND_SEQ_PORT_CAP_WRITE) {
                     direction = WriteOnly;
-                    audit << "\t\t(WRITE ONLY)";
+                    AUDIT << "\t\t(WRITE ONLY)";
                     RG_DEBUG << "        (WRITE ONLY)";
                 } else {
                     direction = ReadOnly;
-                    audit << "\t\t(READ ONLY)";
+                    AUDIT << "\t\t(READ ONLY)";
                     RG_DEBUG << "        (READ ONLY)";
                 }
 
-                audit << " [ctype " << clientType << ", ptype " << portType << ", cap " << capability << "]";
+                AUDIT << " [ctype " << clientType << ", ptype " << portType << ", cap " << capability << "]";
                 RG_DEBUG << "        [ctype " << clientType << ", ptype " << portType << ", cap " << capability << "]";
 
                 // Generate a unique name using the client id
@@ -650,12 +646,12 @@ AlsaDriver::generatePortList(AlsaPortVector *newPorts)
 
                 alsaPorts.push_back(portDescription);
 
-                audit << '\n';
+                AUDIT << '\n';
             }
         }
     }
 
-    audit << '\n';
+    AUDIT << '\n';
 
     // Ok now sort by duplexicity
     //
@@ -939,16 +935,14 @@ AlsaDriver::renameDevice(DeviceId id, QString name)
 ClientPortPair
 AlsaDriver::getPortByName(std::string name)
 {
-    Audit audit;
-
-    audit << "AlsaDriver::getPortByName(" << name << ")\n";
-    RG_DEBUG << "getPortByName(\"" << name << "\")";
+    AUDIT << "AlsaDriver::getPortByName(\"" << name << "\")\n";
+    RG_DEBUG << "getPortByName(" << name << ")";
 
     // For each ALSA port...
     for (size_t i = 0; i < m_alsaPorts.size(); ++i) {
-        audit << "  Comparing\n";
-        audit << "    \"" << name << "\" with\n";
-        audit << "    \"" << m_alsaPorts[i]->m_name << "\"\n";
+        AUDIT << "  Comparing\n";
+        AUDIT << "    \"" << name << "\" with\n";
+        AUDIT << "    \"" << m_alsaPorts[i]->m_name << "\"\n";
         RG_DEBUG << "  Comparing" << name << "with";
         RG_DEBUG << "           " << m_alsaPorts[i]->m_name;
 
@@ -1147,11 +1141,9 @@ AlsaDriver::setConnection(DeviceId id, QString connection)
 void
 AlsaDriver::setPlausibleConnection(DeviceId id, QString idealConnection, bool recordDevice)
 {
-    Audit audit;
-
-    audit << "----------\n";
-    audit << "AlsaDriver::setPlausibleConnection()\n";
-    audit << "  Connection like \"" << idealConnection << "\" requested for device " << id << '\n';
+    AUDIT << "----------\n";
+    AUDIT << "AlsaDriver::setPlausibleConnection()\n";
+    AUDIT << "  Connection like \"" << idealConnection << "\" requested for device " << id << '\n';
     RG_DEBUG << "----------";
     RG_DEBUG << "setPlausibleConnection()";
     RG_DEBUG << "  Connection like" << idealConnection << "requested for device " << id;
@@ -1160,7 +1152,7 @@ AlsaDriver::setPlausibleConnection(DeviceId id, QString idealConnection, bool re
 
         ClientPortPair port(getPortByName(qstrtostr(idealConnection)));
 
-        audit << "AlsaDriver::setPlausibleConnection(): getPortByName(\"" << idealConnection << "\") returned " << port.first << ":" << port.second << '\n';
+        AUDIT << "AlsaDriver::setPlausibleConnection(): getPortByName(\"" << idealConnection << "\") returned " << port.first << ":" << port.second << '\n';
         RG_DEBUG << "setPlausibleConnection(): getPortByName(\"" << idealConnection << "\") returned " << port.first << ":" << port.second;
 
         // If a client and port were found...
@@ -1173,7 +1165,7 @@ AlsaDriver::setPlausibleConnection(DeviceId id, QString idealConnection, bool re
                 }
             }
 
-            audit << "AlsaDriver::setPlausibleConnection: exact match available\n";
+            AUDIT << "AlsaDriver::setPlausibleConnection(): exact match available\n";
             RG_DEBUG << "setPlausibleConnection(): exact match available";
 
             return;
@@ -1184,7 +1176,7 @@ AlsaDriver::setPlausibleConnection(DeviceId id, QString idealConnection, bool re
 
     // Inexact Matching
 
-    audit << "AlsaDriver::setPlausibleConnection(): Performing inexact matching...\n";
+    AUDIT << "AlsaDriver::setPlausibleConnection(): Performing inexact matching...\n";
     RG_DEBUG << "setPlausibleConnection(): Performing inexact matching...";
 
     // What we want is a connection that:
@@ -1238,10 +1230,10 @@ AlsaDriver::setPlausibleConnection(DeviceId id, QString idealConnection, bool re
         }
     }
 
-    audit << "AlsaDriver::setPlausibleConnection()\n";
-    audit << "  client: " << client << '\n';
-    audit << "  portNo: " << portNo << '\n';
-    audit << "  portName: " << portName << '\n';
+    AUDIT << "AlsaDriver::setPlausibleConnection()\n";
+    AUDIT << "  client: " << client << '\n';
+    AUDIT << "  portNo: " << portNo << '\n';
+    AUDIT << "  portName: " << portName << '\n';
     RG_DEBUG << "setPlausibleConnection()";
     RG_DEBUG << "  client: " << client;
     RG_DEBUG << "  portNo: " << portNo;
@@ -1433,12 +1425,8 @@ AlsaDriver::setPlausibleConnection(DeviceId id, QString idealConnection, bool re
 
     if (port) {
 
-        audit << "AlsaDriver::setPlausibleConnection: fuzzy match "
-              << port->m_name << " available with fitness "
-              << fitness << '\n';
-        RG_DEBUG << "setPlausibleConnection(): fuzzy match "
-              << port->m_name << " available with fitness "
-              << fitness;
+        AUDIT << "AlsaDriver::setPlausibleConnection(): fuzzy match \"" << port->m_name << "\" available with fitness " << fitness << '\n';
+        RG_DEBUG << "setPlausibleConnection(): fuzzy match" << port->m_name << "available with fitness" << fitness;
 
         for (size_t j = 0; j < m_devices.size(); ++j) {
 
@@ -1456,7 +1444,7 @@ AlsaDriver::setPlausibleConnection(DeviceId id, QString idealConnection, bool re
             }
         }
     } else {
-        audit << "AlsaDriver::setPlausibleConnection: nothing suitable available\n";
+        AUDIT << "AlsaDriver::setPlausibleConnection(): nothing suitable available\n";
         RG_DEBUG << "setPlausibleConnection(): nothing suitable available";
     }
 }
@@ -1613,8 +1601,6 @@ AlsaDriver::getCurrentTimer()
 void
 AlsaDriver::setCurrentTimer(QString timer)
 {
-    Audit audit;
-
     QSettings settings;
     bool skip = settings.value("ALSA/SkipSetCurrentTimer", false).toBool();
     // Write back out so we can find it.
@@ -1674,10 +1660,10 @@ AlsaDriver::setCurrentTimer(QString timer)
             snd_seq_set_queue_timer(m_midiHandle, m_queue, timer);
 
             if (m_doTimerChecks) {
-                audit << "    Current timer set to \"" << name << "\" with timer checks\n";
+                AUDIT << "    Current timer set to \"" << name << "\" with timer checks\n";
                 RG_DEBUG << "setCurrentTimer(): Current timer set to \"" << name << "\" with timer checks";
             } else {
-                audit << "    Current timer set to \"" << name << "\"\n";
+                AUDIT << "    Current timer set to \"" << name << "\"\n";
                 RG_DEBUG << "setCurrentTimer(): Current timer set to \"" << name << "\"";
             }
 
@@ -1685,7 +1671,7 @@ AlsaDriver::setCurrentTimer(QString timer)
                 m_timers[i].device == SND_TIMER_GLOBAL_SYSTEM) {
                 long hz = 1000000000 / m_timers[i].resolution;
                 if (hz < 900) {
-                    audit << "    WARNING: using system timer with only " << hz << "Hz resolution!\n";
+                    AUDIT << "    WARNING: using system timer with only " << hz << "Hz resolution!\n";
                     RG_WARNING << "setCurrentTimer(): WARNING: using system timer with only " << hz << "Hz resolution!";
                 }
             }
@@ -1724,15 +1710,13 @@ AlsaDriver::initialise()
 bool
 AlsaDriver::initialiseMidi()
 {
-    Audit audit;
-
     // Create a non-blocking handle.
     //
     if (snd_seq_open(&m_midiHandle,
                      "default",
                      SND_SEQ_OPEN_DUPLEX,
                      SND_SEQ_NONBLOCK) < 0) {
-        audit << "AlsaDriver::initialiseMidi - "
+        AUDIT << "AlsaDriver::initialiseMidi() - "
               << "couldn't open sequencer - " << snd_strerror(errno)
               << " - perhaps you need to modprobe snd-seq-midi.\n";
         RG_WARNING << "initialiseMidi(): WARNING: couldn't open sequencer - "
@@ -1877,7 +1861,7 @@ AlsaDriver::initialiseMidi()
     // process anything pending
     checkAlsaError(snd_seq_drain_output(m_midiHandle), "initialiseMidi(): couldn't drain output");
 
-    audit << "AlsaDriver::initialiseMidi -  initialised MIDI subsystem\n\n";
+    AUDIT << "AlsaDriver::initialiseMidi() -  initialised MIDI subsystem\n\n";
     RG_DEBUG << "initialiseMidi() - initialised MIDI subsystem";
 
     return true;
@@ -4998,8 +4982,6 @@ AlsaDriver::checkForNewClients()
 void
 AlsaDriver::setRecordDevice(DeviceId id, bool connectAction)
 {
-    Audit audit;
-
     RG_DEBUG << "setRecordDevice(): device " << id << ", action " << connectAction;
 
     // Locate a suitable port
@@ -5070,7 +5052,7 @@ AlsaDriver::setRecordDevice(DeviceId id, bool connectAction)
             // Not the end of the world if this fails but we
             // have to flag it internally.
             //
-            audit << "AlsaDriver::setRecordDevice - "
+            AUDIT << "AlsaDriver::setRecordDevice() - "
                   << int(sender.client) << ":" << int(sender.port)
                   << " failed to subscribe device "
                   << id << " as record port\n";
@@ -5080,14 +5062,14 @@ AlsaDriver::setRecordDevice(DeviceId id, bool connectAction)
                   << id << " as record port";
         } else {
             m_midiInputPortConnected = true;
-            audit << "AlsaDriver::setRecordDevice - successfully subscribed device " << id << " as record port\n";
+            AUDIT << "AlsaDriver::setRecordDevice() - successfully subscribed device " << id << " as record port\n";
             RG_DEBUG << "setRecordDevice() - successfully subscribed device " << id << " as record port";
             device->setRecording(true);
         }
     } else {
         if (checkAlsaError(snd_seq_unsubscribe_port(m_midiHandle, subs),
                            "setRecordDevice - failed to unsubscribe a device") == 0) {
-            audit << "AlsaDriver::setRecordDevice - "
+            AUDIT << "AlsaDriver::setRecordDevice() - "
                   << "successfully unsubscribed device "
                   << id << " as record port\n";
             RG_DEBUG << "setRecordDevice() - "
@@ -5280,11 +5262,10 @@ AlsaDriver::scavengePlugins()
     m_pluginScavenger.scavenge();
 }
 
-
 QString
 AlsaDriver::getStatusLog()
 {
-    return strtoqstr(Audit::getAudit());
+    return strtoqstr(AUDIT.str());
 }
 
 void
