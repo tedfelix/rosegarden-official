@@ -939,12 +939,25 @@ AlsaDriver::renameDevice(DeviceId id, QString name)
 ClientPortPair
 AlsaDriver::getPortByName(std::string name)
 {
+    Audit audit;
+
+    audit << "AlsaDriver::getPortByName(" << name << ")\n";
+    RG_DEBUG << "getPortByName(\"" << name << "\")";
+
+    // For each ALSA port...
     for (size_t i = 0; i < m_alsaPorts.size(); ++i) {
+        audit << "  Comparing\n";
+        audit << "    \"" << name << "\" with\n";
+        audit << "    \"" << m_alsaPorts[i]->m_name << "\"\n";
+        RG_DEBUG << "  Comparing" << name << "with";
+        RG_DEBUG << "           " << m_alsaPorts[i]->m_name;
+
         if (m_alsaPorts[i]->m_name == name) {
             return ClientPortPair(m_alsaPorts[i]->m_client,
                                   m_alsaPorts[i]->m_port);
         }
     }
+
     return ClientPortPair(-1, -1);
 }
 
@@ -1136,19 +1149,24 @@ AlsaDriver::setPlausibleConnection(DeviceId id, QString idealConnection, bool re
 {
     Audit audit;
 
-    audit << "AlsaDriver::setPlausibleConnection: connection like \""
-          << idealConnection << "\" requested for device " << id << '\n';
-    RG_DEBUG << "setPlausibleConnection(): connection like \""
-             << idealConnection << "\" requested for device " << id;
+    audit << "----------\n";
+    audit << "AlsaDriver::setPlausibleConnection()\n";
+    audit << "  Connection like \"" << idealConnection << "\" requested for device " << id << '\n';
+    RG_DEBUG << "----------";
+    RG_DEBUG << "setPlausibleConnection()";
+    RG_DEBUG << "  Connection like" << idealConnection << "requested for device " << id;
 
     if (idealConnection != "") {
 
         ClientPortPair port(getPortByName(qstrtostr(idealConnection)));
 
-        if (port.first != -1 && port.second != -1) {
+        audit << "AlsaDriver::setPlausibleConnection(): getPortByName(\"" << idealConnection << "\") returned " << port.first << ":" << port.second << '\n';
+        RG_DEBUG << "setPlausibleConnection(): getPortByName(\"" << idealConnection << "\") returned " << port.first << ":" << port.second;
+
+        // If a client and port were found...
+        if (port.first != -1  &&  port.second != -1) {
 
             for (size_t i = 0; i < m_devices.size(); ++i) {
-
                 if (m_devices[i]->getId() == id) {
                     setConnectionToDevice(*m_devices[i], idealConnection, port);
                     break;
@@ -1157,9 +1175,17 @@ AlsaDriver::setPlausibleConnection(DeviceId id, QString idealConnection, bool re
 
             audit << "AlsaDriver::setPlausibleConnection: exact match available\n";
             RG_DEBUG << "setPlausibleConnection(): exact match available";
+
             return;
+
         }
+
     }
+
+    // Inexact Matching
+
+    audit << "AlsaDriver::setPlausibleConnection(): Performing inexact matching...\n";
+    RG_DEBUG << "setPlausibleConnection(): Performing inexact matching...";
 
     // What we want is a connection that:
     //
@@ -1179,30 +1205,47 @@ AlsaDriver::setPlausibleConnection(DeviceId id, QString idealConnection, bool re
 
     int client = -1;
     int portNo = -1;
-    QString text;
+    QString portName;
 
     if (idealConnection != "") {
 
+        // Extract the client, the number prior to the first colon.
         int colon = idealConnection.indexOf(":");
-        if (colon >= 0) {
+        if (colon >= 0)
             client = idealConnection.leftRef(colon).toInt();
-        }
 
+        // If the client number was found...
         if (client > 0) {
+            // Extract the port, the number after the first colon.
             QString remainder = idealConnection.mid(colon + 1);
             int space = remainder.indexOf(" ");
-            if (space >= 0) portNo = remainder.leftRef(space).toInt();
+            if (space >= 0)
+                portNo = remainder.leftRef(space).toInt();
         }
-    
+
+        // Extract the port name.
+
+        // Port name starts after the first space.
         int firstSpace = idealConnection.indexOf(" ");
+        // Port name ends at the first character that is not a word character
+        // (\w) or a space.  This strips off the "(write)" and anything else.
         int endOfText = idealConnection.indexOf(QRegExp("[^\\w ]"), firstSpace);
 
         if (endOfText < 2) {
-            text = idealConnection.mid(firstSpace + 1);
+            portName = idealConnection.mid(firstSpace + 1);
         } else {
-            text = idealConnection.mid(firstSpace + 1, endOfText - firstSpace - 2);
+            portName = idealConnection.mid(firstSpace + 1, endOfText - firstSpace - 2);
         }
     }
+
+    audit << "AlsaDriver::setPlausibleConnection()\n";
+    audit << "  client: " << client << '\n';
+    audit << "  portNo: " << portNo << '\n';
+    audit << "  portName: " << portName << '\n';
+    RG_DEBUG << "setPlausibleConnection()";
+    RG_DEBUG << "  client: " << client;
+    RG_DEBUG << "  portNo: " << portNo;
+    RG_DEBUG << "  portName: " << portName;
 
     QSharedPointer<AlsaPortDescription> viableHardwarePort;
     QSharedPointer<AlsaPortDescription> viableSoftwarePort;
@@ -1210,13 +1253,48 @@ AlsaDriver::setPlausibleConnection(DeviceId id, QString idealConnection, bool re
     int fitness = 0;
 
     // Try to find one viable hardware and one viable software port, if
-    // possible.  Use software preferentially.  Iterate through everything until
-    // we've exausted all possibilities for collecting one of each, then sort it
-    // out afterwards.
+    // possible.  Use software preferentially.  Iterate through everything
+    // until we've exhausted all possibilities for collecting one of each,
+    // then sort it out afterwards.
+
+    // ??? Combinations?  Why?  Why not just do each test and assign a
+    //     value to each success.  Add the values up to get the final
+    //     fitness score.  And we should be doing that for each possible
+    //     port and taking the highest fitness score we find.
+    //
+    //     highScore = 0
+    //     for currentPort in ports
+    //     {
+    //         score = computeFitnessScore()
+    //         if score > highScore
+    //         {
+    //             highScore = score
+    //             bestPort = currentPort
+    //         }
+    //     }
+    //
+    //     computeFitnessScore()
+    //     {
+    //         score = 0
+    //         if port is unused
+    //             score += 100
+    //         if client number is same class
+    //             score += 10
+    //         if port number matches
+    //             score += 10
+    //         if name matches exactly
+    //             score += 1000
+    //         else
+    //             score = fuzzyNameMatch()
+    //     }
+
+    // Check whether the port is used...
     for (int testUsed = 1; testUsed >= 0; --testUsed) {
 
+        // Check whether the client:port numbers match...
         for (int testNumbers = 1; testNumbers >= 0; --testNumbers) {
 
+            // Check whether the port name matches...
             for (int testName = 1; testName >= 0; --testName) {
 
                 fitness =
@@ -1228,26 +1306,26 @@ AlsaDriver::setPlausibleConnection(DeviceId id, QString idealConnection, bool re
 
                     QSharedPointer<AlsaPortDescription> port = m_alsaPorts[i];
 
-                    if (!port->isReadable() && recordDevice) {
-                        // We're looking for a record device, so if this isn't
-                        // readable, skip it.  This logic is tacked onto a
-                        // function originally written only to consider playback
-                        // devices, but I think this will work.  If we skip
-                        // play-only devices here, the rest of the logic should
-                        // net us a software record device preferentially,
-                        // falling back on hardware.  That should catch, eg.
-                        // VMPK first.  The user wouldn't need VMPK if they had
-                        // a working hardware keyboard, so this seems sound.
+                    // We're looking for a record device, so if this isn't
+                    // readable, skip it.  This logic is tacked onto a
+                    // function originally written only to consider playback
+                    // devices, but I think this will work.  If we skip
+                    // play-only devices here, the rest of the logic should
+                    // net us a software record device preferentially,
+                    // falling back on hardware.  That should catch, e.g.
+                    // VMPK first.  The user wouldn't need VMPK if they had
+                    // a working hardware keyboard, so this seems sound.
+                    if (recordDevice  &&  !port->isReadable())
                         continue;
-                    }
 
-                    if (port->m_client < 16) {
-                        // system port: never use
+                    // If system port, never use.
+                    if (port->m_client < 16)
                         continue;
-                    }
 
                     if (client > 0) {
 
+                        // If the classes (highest two bits) do not match,
+                        // try the next.
                         if (port->m_client / 64 != client / 64)
                             continue;
 
@@ -1264,22 +1342,34 @@ AlsaDriver::setPlausibleConnection(DeviceId id, QString idealConnection, bool re
                             // multi-port soundcard) and the client
                             // otherwise.
                             if (portNo > 0) {
-                                if (port->m_port != portNo) continue;
+                                if (port->m_port != portNo)
+                                    continue;
                             } else {
-                                if (port->m_client != client) continue;
+                                // ??? This seems wrong.  The client number
+                                //     is assigned randomly at startup and
+                                //     cannot be depended on for a match.
+                                //     This check needs to be removed.
+                                //     Only the port check makes sense.
+                                //     And the port check should be done even
+                                //     when the port is 0.
+                                if (port->m_client != client)
+                                    continue;
                             }
                         }
                     }
 
-                    if (testName && text != "" &&
-                        !strtoqstr(port->m_name).contains(text))
+                    if (testName  &&  portName != ""  &&
+                        !strtoqstr(port->m_name).contains(portName))
                         continue;
 
                     if (testUsed) {
                         bool used = false;
-                        for (DevicePortMap::iterator dpmi = m_devicePortMap.begin();
-                             dpmi != m_devicePortMap.end(); ++dpmi) {
-                            if (dpmi->second.first == port->m_client &&
+
+                        for (DevicePortMap::iterator dpmi =
+                                 m_devicePortMap.begin();
+                             dpmi != m_devicePortMap.end();
+                             ++dpmi) {
+                            if (dpmi->second.first == port->m_client  &&
                                 dpmi->second.second == port->m_port) {
                                 // a little hack here...  if this is a record
                                 // device, we don't really care if it's already
@@ -1287,12 +1377,17 @@ AlsaDriver::setPlausibleConnection(DeviceId id, QString idealConnection, bool re
                                 // device, and if more than one record device
                                 // uses the same port, it doesn't have any
                                 // particularly dire consequences)
-                                if (!recordDevice) used = true;
+                                if (!recordDevice)
+                                    used = true;
+
                                 break;
                             }
                         }
-                        if (used) continue;
+
+                        if (used)
+                            continue;
                     }
+
                     if (idealConnection == "" &&
                         strtoqstr(port->m_name).contains("osegarden")) {
                         // Don't connect to any of our own ports per
@@ -1311,11 +1406,15 @@ AlsaDriver::setPlausibleConnection(DeviceId id, QString idealConnection, bool re
                             // we already filter out all play-only ports if
                             // recordDevice is true, so we only need special
                             // handling if it's false
-                            if ((!recordDevice && port->isWriteable()) || recordDevice) viableHardwarePort = port;
+                            if ((!recordDevice  &&  port->isWriteable())  ||
+                                recordDevice)
+                                viableHardwarePort = port;
                         }
                     } else {
                         if (!viableSoftwarePort) {
-                            if ((!recordDevice && port->isWriteable()) || recordDevice) viableSoftwarePort = port;
+                            if ((!recordDevice  &&  port->isWriteable())  ||
+                                recordDevice)
+                                viableSoftwarePort = port;
                         }
                     }
                 }
@@ -1326,8 +1425,11 @@ AlsaDriver::setPlausibleConnection(DeviceId id, QString idealConnection, bool re
     // If we found a viable software port, use it.  If we didn't find a viable
     // software port, but did find a viable hardware port, use it. 
     QSharedPointer<AlsaPortDescription> port;
-    if (viableSoftwarePort) port = viableSoftwarePort;
-    else if (viableHardwarePort) port = viableHardwarePort;
+
+    if (viableSoftwarePort)
+        port = viableSoftwarePort;
+    else if (viableHardwarePort)
+        port = viableHardwarePort;
 
     if (port) {
 
