@@ -940,11 +940,15 @@ AlsaDriver::getPortByName(std::string name)
 
     // For each ALSA port...
     for (size_t i = 0; i < m_alsaPorts.size(); ++i) {
-        AUDIT << "  Comparing\n";
-        AUDIT << "    \"" << name << "\" with\n";
-        AUDIT << "    \"" << m_alsaPorts[i]->m_name << "\"\n";
-        RG_DEBUG << "  Comparing" << name << "with";
-        RG_DEBUG << "           " << m_alsaPorts[i]->m_name;
+        //AUDIT << "  Comparing\n";
+        //AUDIT << "    \"" << name << "\" with\n";
+        //AUDIT << "    \"" << m_alsaPorts[i]->m_name << "\"\n";
+        //RG_DEBUG << "  Comparing" << name << "with";
+        //RG_DEBUG << "           " << m_alsaPorts[i]->m_name;
+
+        // ??? This comparison is unrealistic.  Client numbers can
+        //     change.  We should probably remove the client number from
+        //     the front of each before doing the comparison.
 
         if (m_alsaPorts[i]->m_name == name) {
             return ClientPortPair(m_alsaPorts[i]->m_client,
@@ -1153,7 +1157,7 @@ AlsaDriver::setPlausibleConnection(DeviceId id, QString idealConnection, bool re
         ClientPortPair port(getPortByName(qstrtostr(idealConnection)));
 
         AUDIT << "AlsaDriver::setPlausibleConnection(): getPortByName(\"" << idealConnection << "\") returned " << port.first << ":" << port.second << '\n';
-        RG_DEBUG << "setPlausibleConnection(): getPortByName(\"" << idealConnection << "\") returned " << port.first << ":" << port.second;
+        RG_DEBUG << "setPlausibleConnection(): getPortByName(" << idealConnection << ") returned " << port.first << ":" << port.second;
 
         // If a client and port were found...
         if (port.first != -1  &&  port.second != -1) {
@@ -1220,8 +1224,11 @@ AlsaDriver::setPlausibleConnection(DeviceId id, QString idealConnection, bool re
         // Port name starts after the first space.
         int firstSpace = idealConnection.indexOf(" ");
         // Port name ends at the first character that is not a word character
-        // (\w) or a space.  This strips off the "(write)" and anything else.
-        int endOfText = idealConnection.indexOf(QRegExp("[^\\w ]"), firstSpace);
+        // (\w), hyphen, or a space.  This strips off the "(write)" and
+        // anything else.
+        // ??? Would it make more sense to just search for a left paren?
+        int endOfText =
+                idealConnection.indexOf(QRegExp("[^\\w- ]"), firstSpace + 1);
 
         if (endOfText < 2) {
             portName = idealConnection.mid(firstSpace + 1);
@@ -1242,15 +1249,13 @@ AlsaDriver::setPlausibleConnection(DeviceId id, QString idealConnection, bool re
     QSharedPointer<AlsaPortDescription> viableHardwarePort;
     QSharedPointer<AlsaPortDescription> viableSoftwarePort;
 
-    int fitness = 0;
-
     // Try to find one viable hardware and one viable software port, if
     // possible.  Use software preferentially.  Iterate through everything
     // until we've exhausted all possibilities for collecting one of each,
     // then sort it out afterwards.
 
     // ??? Combinations?  Why?  Why not just do each test and assign a
-    //     value to each success.  Add the values up to get the final
+    //     value to each success?  Add the values up to get the final
     //     fitness score.  And we should be doing that for each possible
     //     port and taking the highest fitness score we find.
     //
@@ -1277,7 +1282,7 @@ AlsaDriver::setPlausibleConnection(DeviceId id, QString idealConnection, bool re
     //         if name matches exactly
     //             score += 1000
     //         else
-    //             score = fuzzyNameMatch()
+    //             score += fuzzyNameMatch()
     //     }
 
     // Check whether the port is used...
@@ -1288,11 +1293,6 @@ AlsaDriver::setPlausibleConnection(DeviceId id, QString idealConnection, bool re
 
             // Check whether the port name matches...
             for (int testName = 1; testName >= 0; --testName) {
-
-                fitness =
-                    (testName << 3) +
-                    (testNumbers << 2) +
-                    (testUsed << 1) + 1;
 
                 for (size_t i = 0; i < m_alsaPorts.size(); ++i) {
 
@@ -1393,20 +1393,32 @@ AlsaDriver::setPlausibleConnection(DeviceId id, QString idealConnection, bool re
                     }
 
                     // OK, this one will do
+
+                    // If hardware port...
                     if (port->m_client < 128) {
+                        // If we don't have a hardware port yet...
                         if (!viableHardwarePort) {
                             // we already filter out all play-only ports if
                             // recordDevice is true, so we only need special
                             // handling if it's false
                             if ((!recordDevice  &&  port->isWriteable())  ||
-                                recordDevice)
+                                recordDevice) {
                                 viableHardwarePort = port;
+
+                                AUDIT << "AlsaDriver::setPlausibleConnection(): found hardware port: \"" << viableHardwarePort->m_name << "\"\n";
+                                RG_DEBUG << "setPlausibleConnection(): found hardware port:" << viableHardwarePort->m_name;
+                            }
                         }
                     } else {
+                        // If we don't have a software port yet...
                         if (!viableSoftwarePort) {
                             if ((!recordDevice  &&  port->isWriteable())  ||
-                                recordDevice)
+                                recordDevice) {
                                 viableSoftwarePort = port;
+
+                                AUDIT << "AlsaDriver::setPlausibleConnection(): found software port: \"" << viableSoftwarePort->m_name << "\"\n";
+                                RG_DEBUG << "setPlausibleConnection(): found software port:" << viableSoftwarePort->m_name;
+                            }
                         }
                     }
                 }
@@ -1424,10 +1436,6 @@ AlsaDriver::setPlausibleConnection(DeviceId id, QString idealConnection, bool re
         port = viableHardwarePort;
 
     if (port) {
-
-        AUDIT << "AlsaDriver::setPlausibleConnection(): fuzzy match \"" << port->m_name << "\" available with fitness " << fitness << '\n';
-        RG_DEBUG << "setPlausibleConnection(): fuzzy match" << port->m_name << "available with fitness" << fitness;
-
         for (size_t j = 0; j < m_devices.size(); ++j) {
 
             if (m_devices[j]->getId() == id) {
