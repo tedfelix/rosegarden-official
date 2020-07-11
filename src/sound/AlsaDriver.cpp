@@ -1306,34 +1306,10 @@ AlsaDriver::setPlausibleConnection(
                             continue;
 
                         if (testNumbers) {
-                            // We always check the client class (above).
-                            // But we also prefer to have something in
-                            // common with client or port number, at least
-                            // for ports that aren't used elsewhere
-                            // already.  We don't check both because the
-                            // chances are the entire string would already
-                            // have matched if both figures did; instead
-                            // we check the port if it's > 0 (handy for
-                            // e.g. matching the MIDI synth port on a
-                            // multi-port soundcard) and the client
-                            // otherwise.
-                            if (portNo > 0) {
-                                if (port->m_port != portNo)
-                                    continue;
-                            } else {
-                                // For port 0, make sure the client numbers
-                                // match.
-                                // ??? This seems wrong.  The client number
-                                //     is assigned randomly at startup and
-                                //     cannot be depended on for a match.
-                                //     This check needs to be removed.
-                                //     Only the port check makes sense.
-                                //     And the port check should be done even
-                                //     when the port is 0.
-                                if (port->m_client != client)
-                                    continue;
-                            }
+                            if (port->m_port != portNo)
+                                continue;
                         }
+
                     }
 
                     // If we're testing the name, and the name we are looking
