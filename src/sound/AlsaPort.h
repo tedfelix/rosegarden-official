@@ -28,6 +28,7 @@
 namespace Rosegarden
 {
 
+
 struct ClientPortPair
 {
     ClientPortPair() :
@@ -54,12 +55,13 @@ struct ClientPortPair
     }
 };
 
-// Use this to hold all client information so that we can sort it
-// before generating devices - we want to put non-duplex devices
-// at the front of any device list (makes thing much easier at the
-// GUI and we already have some backwards compatability issues with
-// this).
-//
+/**
+ * Use this to hold all client information so that we can sort it
+ * before generating devices - we want to put non-duplex devices
+ * at the front of any device list (makes thing much easier at the
+ * GUI and we already have some backwards compatibility issues with
+ * this).
+ */
 class AlsaPortDescription
 {
 public:
@@ -89,8 +91,7 @@ public:
 
 };
 
-// Sort by checking direction
-//
+/// Sort by checking direction
 struct AlsaPortCmp
 {
     bool operator()(QSharedPointer<AlsaPortDescription> a1,

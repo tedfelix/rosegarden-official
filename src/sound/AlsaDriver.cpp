@@ -1142,14 +1142,15 @@ AlsaDriver::setConnection(DeviceId id, QString connection)
 }
 
 void
-AlsaDriver::setPlausibleConnection(DeviceId id, QString idealConnection, bool recordDevice)
+AlsaDriver::setPlausibleConnection(
+        DeviceId deviceId, QString idealConnection, bool recordDevice)
 {
     AUDIT << "----------\n";
     AUDIT << "AlsaDriver::setPlausibleConnection()\n";
-    AUDIT << "  Connection like \"" << idealConnection << "\" requested for device " << id << '\n';
+    AUDIT << "  Connection like \"" << idealConnection << "\" requested for device " << deviceId << '\n';
     RG_DEBUG << "----------";
     RG_DEBUG << "setPlausibleConnection()";
-    RG_DEBUG << "  Connection like" << idealConnection << "requested for device " << id;
+    RG_DEBUG << "  Connection like" << idealConnection << "requested for device " << deviceId;
 
     if (idealConnection != "") {
 
@@ -1161,8 +1162,14 @@ AlsaDriver::setPlausibleConnection(DeviceId id, QString idealConnection, bool re
         // If a client and port were found...
         if (port.client != -1  &&  port.port != -1) {
 
+            // Find the device and make the connection.
+            // ??? We should separate connecting from the port matching.
+            //     Rename this routine to findPlausibleConnection() and have
+            //     it return what we need to make the connection.  Probably
+            //     the port.  Maybe findPlausiblePort()?  This would make it
+            //     easier to unit test this process.
             for (size_t i = 0; i < m_devices.size(); ++i) {
-                if (m_devices[i]->getId() == id) {
+                if (m_devices[i]->getId() == deviceId) {
                     setConnectionToDevice(*m_devices[i], idealConnection, port);
                     break;
                 }
@@ -1229,11 +1236,11 @@ AlsaDriver::setPlausibleConnection(DeviceId id, QString idealConnection, bool re
         int endOfText =
                 idealConnection.indexOf(QRegExp("[^\\w- ]"), firstSpace + 1);
 
-        if (endOfText < 2) {
+        // No end point found?  Just take the whole thing.
+        if (endOfText < 2)
             portName = idealConnection.mid(firstSpace + 1);
-        } else {
+        else  // End point found, take only up to the end point.
             portName = idealConnection.mid(firstSpace + 1, endOfText - firstSpace - 2);
-        }
     }
 
     AUDIT << "AlsaDriver::setPlausibleConnection()\n";
@@ -1253,36 +1260,11 @@ AlsaDriver::setPlausibleConnection(DeviceId id, QString idealConnection, bool re
     // until we've exhausted all possibilities for collecting one of each,
     // then sort it out afterwards.
 
-    // ??? Combinations?  Why?  Why not just do each test and assign a
-    //     value to each success?  Add the values up to get the final
-    //     fitness score.  And we should be doing that for each possible
-    //     port and taking the highest fitness score we find.
-    //
-    //     highScore = 0
-    //     for currentPort in ports
-    //     {
-    //         score = computeFitnessScore()
-    //         if score > highScore
-    //         {
-    //             highScore = score
-    //             bestPort = currentPort
-    //         }
-    //     }
-    //
-    //     computeFitnessScore()
-    //     {
-    //         score = 0
-    //         if port is unused
-    //             score += 100
-    //         if client number is same class
-    //             score += 10
-    //         if port number matches
-    //             score += 10
-    //         if name matches exactly
-    //             score += 1000
-    //         else
-    //             score += fuzzyNameMatch()
-    //     }
+    // ??? Combinations are interesting, but I think we can do better.
+    //     If we can do two passes, we can look for the best matches, then
+    //     connect them in order from best to worst.  Focus on the port names
+    //     and port numbers.  Do record/playback separately.  Use Levenshtein
+    //     Distance for port name fuzzy comparison.
 
     // Check whether the port is used...
     for (int testUsed = 1; testUsed >= 0; --testUsed) {
@@ -1293,6 +1275,7 @@ AlsaDriver::setPlausibleConnection(DeviceId id, QString idealConnection, bool re
             // Check whether the port name matches...
             for (int testName = 1; testName >= 0; --testName) {
 
+                // For each ALSA port...
                 for (size_t i = 0; i < m_alsaPorts.size(); ++i) {
 
                     QSharedPointer<AlsaPortDescription> port = m_alsaPorts[i];
@@ -1310,6 +1293,8 @@ AlsaDriver::setPlausibleConnection(DeviceId id, QString idealConnection, bool re
                         continue;
 
                     // If system port, never use.
+                    // ??? What about synths that require the virtual MIDI
+                    //     thru ports?  E.g. GrandOrgue.
                     if (port->m_client < 16)
                         continue;
 
@@ -1336,6 +1321,8 @@ AlsaDriver::setPlausibleConnection(DeviceId id, QString idealConnection, bool re
                                 if (port->m_port != portNo)
                                     continue;
                             } else {
+                                // For port 0, make sure the client numbers
+                                // match.
                                 // ??? This seems wrong.  The client number
                                 //     is assigned randomly at startup and
                                 //     cannot be depended on for a match.
@@ -1349,12 +1336,17 @@ AlsaDriver::setPlausibleConnection(DeviceId id, QString idealConnection, bool re
                         }
                     }
 
+                    // If we're testing the name, and the name we are looking
+                    // for isn't in the ALSA port name, skip.
                     if (testName  &&  portName != ""  &&
                         !strtoqstr(port->m_name).contains(portName))
                         continue;
 
                     if (testUsed) {
                         bool used = false;
+
+                        // If the client/port is in m_devicePortMap, then it
+                        // is in use.  See setConnectionToDevice().
 
                         for (DevicePortMap::iterator dpmi =
                                  m_devicePortMap.begin();
@@ -1379,15 +1371,15 @@ AlsaDriver::setPlausibleConnection(DeviceId id, QString idealConnection, bool re
                             continue;
                     }
 
-                    if (idealConnection == "" &&
+                    // Don't connect to any of our own ports per
+                    // default!  Note that our client name is set
+                    // to "rosegarden" in initialiseMidi -- this
+                    // string is not translated, and we'd have to
+                    // change this if ever it were.  We don't have
+                    // a capital R, but let's omit the R from the
+                    // test just in case...
+                    if (idealConnection == ""  &&
                         strtoqstr(port->m_name).contains("osegarden")) {
-                        // Don't connect to any of our own ports per
-                        // default!  Note that our client name is set
-                        // to "rosegarden" in initialiseMidi -- this
-                        // string is not translated, and we'd have to
-                        // change this if ever it were.  We don't have
-                        // a capital R, but let's omit the R from the
-                        // test just in case...
                         continue;
                     }
 
@@ -1437,7 +1429,7 @@ AlsaDriver::setPlausibleConnection(DeviceId id, QString idealConnection, bool re
     if (port) {
         for (size_t j = 0; j < m_devices.size(); ++j) {
 
-            if (m_devices[j]->getId() == id) {
+            if (m_devices[j]->getId() == deviceId) {
                 setConnectionToDevice(*m_devices[j],
                                       strtoqstr(port->m_name),
                                       ClientPortPair(port->m_client, port->m_port));
