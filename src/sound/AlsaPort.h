@@ -28,7 +28,31 @@
 namespace Rosegarden
 {
 
-typedef std::pair<int, int> ClientPortPair;
+struct ClientPortPair
+{
+    ClientPortPair() :
+        client(0),
+        port(0)
+    { }
+
+    ClientPortPair(int i_client, int i_port) :
+        client(i_client),
+        port(i_port)
+    { }
+
+    int client;
+    int port;
+
+    bool operator==(const ClientPortPair &rhs)
+    {
+        return (client == rhs.client  &&  port == rhs.port);
+    }
+
+    bool operator!=(const ClientPortPair &rhs)
+    {
+        return (client != rhs.client  ||  port != rhs.port);
+    }
+};
 
 // Use this to hold all client information so that we can sort it
 // before generating devices - we want to put non-duplex devices

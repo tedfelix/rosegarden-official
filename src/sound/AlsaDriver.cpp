@@ -950,10 +950,9 @@ AlsaDriver::getPortByName(std::string name)
         //     change.  We should probably remove the client number from
         //     the front of each before doing the comparison.
 
-        if (m_alsaPorts[i]->m_name == name) {
+        if (m_alsaPorts[i]->m_name == name)
             return ClientPortPair(m_alsaPorts[i]->m_client,
                                   m_alsaPorts[i]->m_port);
-        }
     }
 
     return ClientPortPair(-1, -1);
@@ -963,8 +962,8 @@ std::string
 AlsaDriver::getPortName(ClientPortPair port)
 {
     for (size_t i = 0; i < m_alsaPorts.size(); ++i) {
-        if (m_alsaPorts[i]->m_client == port.first &&
-            m_alsaPorts[i]->m_port == port.second) {
+        if (m_alsaPorts[i]->m_client == port.client &&
+            m_alsaPorts[i]->m_port == port.port) {
             return m_alsaPorts[i]->m_name;
         }
     }
@@ -1056,13 +1055,13 @@ AlsaDriver::setConnectionToDevice(MappedDevice &device, QString connection,
 
             if (prevConnection != "") {
                 ClientPortPair prevPair = getPortByName(qstrtostr(prevConnection));
-                if (prevPair.first >= 0 && prevPair.second >= 0) {
+                if (prevPair.client >= 0 && prevPair.port >= 0) {
 
-                    RG_DEBUG << "setConnectionToDevice(): Disconnecting my port " << j->second << " from " << prevPair.first << ":" << prevPair.second << " on reconnection";
+                    RG_DEBUG << "setConnectionToDevice(): Disconnecting my port " << j->second << " from " << prevPair.client << ":" << prevPair.port << " on reconnection";
                     snd_seq_disconnect_to(m_midiHandle,
                                           j->second,
-                                          prevPair.first,
-                                          prevPair.second);
+                                          prevPair.client,
+                                          prevPair.port);
 
                     if (m_midiSyncAutoConnect) {
                         bool foundElsewhere = false;
@@ -1079,24 +1078,24 @@ AlsaDriver::setConnectionToDevice(MappedDevice &device, QString connection,
                         if (!foundElsewhere) {
                             snd_seq_disconnect_to(m_midiHandle,
                                                   m_syncOutputPort,
-                                                  pair.first,
-                                                  pair.second);
+                                                  pair.client,
+                                                  pair.port);
                         }
                     }
                 }
             }
 
-            if (pair.first >= 0 && pair.second >= 0) {
-                RG_DEBUG << "setConnectionToDevice(): Connecting my port " << j->second << " to " << pair.first << ":" << pair.second << " on reconnection";
+            if (pair.client >= 0  &&  pair.port >= 0) {
+                RG_DEBUG << "setConnectionToDevice(): Connecting my port " << j->second << " to " << pair.client << ":" << pair.port << " on reconnection";
                 snd_seq_connect_to(m_midiHandle,
                                    j->second,
-                                   pair.first,
-                                   pair.second);
+                                   pair.client,
+                                   pair.port);
                 if (m_midiSyncAutoConnect) {
                     snd_seq_connect_to(m_midiHandle,
                                        m_syncOutputPort,
-                                       pair.first,
-                                       pair.second);
+                                       pair.client,
+                                       pair.port);
                 }
             }
         }
@@ -1115,7 +1114,7 @@ AlsaDriver::setConnection(DeviceId id, QString connection)
     RG_DEBUG << "setConnection(" << id << "," << connection << ")";
 #endif
 
-    if ((connection == "") || (port.first != -1 && port.second != -1)) {
+    if ((connection == "") || (port.client != -1 && port.port != -1)) {
 
 #ifdef DEBUG_ALSA
         if (connection == "") {
@@ -1156,11 +1155,11 @@ AlsaDriver::setPlausibleConnection(DeviceId id, QString idealConnection, bool re
 
         ClientPortPair port(getPortByName(qstrtostr(idealConnection)));
 
-        AUDIT << "AlsaDriver::setPlausibleConnection(): getPortByName(\"" << idealConnection << "\") returned " << port.first << ":" << port.second << '\n';
-        RG_DEBUG << "setPlausibleConnection(): getPortByName(" << idealConnection << ") returned " << port.first << ":" << port.second;
+        AUDIT << "AlsaDriver::setPlausibleConnection(): getPortByName(\"" << idealConnection << "\") returned " << port.client << ":" << port.port << '\n';
+        RG_DEBUG << "setPlausibleConnection(): getPortByName(" << idealConnection << ") returned " << port.client << ":" << port.port;
 
         // If a client and port were found...
-        if (port.first != -1  &&  port.second != -1) {
+        if (port.client != -1  &&  port.port != -1) {
 
             for (size_t i = 0; i < m_devices.size(); ++i) {
                 if (m_devices[i]->getId() == id) {
@@ -1361,8 +1360,8 @@ AlsaDriver::setPlausibleConnection(DeviceId id, QString idealConnection, bool re
                                  m_devicePortMap.begin();
                              dpmi != m_devicePortMap.end();
                              ++dpmi) {
-                            if (dpmi->second.first == port->m_client  &&
-                                dpmi->second.second == port->m_port) {
+                            if (dpmi->second.client == port->m_client  &&
+                                dpmi->second.port == port->m_port) {
                                 // a little hack here...  if this is a record
                                 // device, we don't really care if it's already
                                 // used or not (it might be used by a play
@@ -2360,7 +2359,7 @@ AlsaDriver::allNotesOff()
         // Set destination according to connection for instrument
         //
         outputDevice = getPairForMappedInstrument((*it)->getInstrument());
-        if (outputDevice.first < 0 || outputDevice.second < 0)
+        if (outputDevice.client < 0  ||  outputDevice.port < 0)
             continue;
 
         snd_seq_ev_set_subs(&event);
@@ -2612,8 +2611,8 @@ AlsaDriver::getMappedEventList(MappedEventList &mappedEventList)
                  i != m_devices.end(); ++i) {
                 ClientPortPair pair(m_devicePortMap[(*i)->getId()]);
                 if (((*i)->getDirection() == MidiDevice::Record) &&
-                    ( pair.first == event->source.client ) &&
-                    ( pair.second == event->source.port )) {
+                    ( pair.client == event->source.client ) &&
+                    ( pair.port == event->source.port )) {
                     deviceId = (*i)->getId();
                     break;
                 }
@@ -4467,8 +4466,8 @@ AlsaDriver::processEventsOut(const MappedEventList &mC,
                      dpmi != m_devicePortMap.end(); ++dpmi) {
                     snd_seq_connect_to(m_midiHandle,
                                        m_syncOutputPort,
-                                       dpmi->second.first,
-                                       dpmi->second.second);
+                                       dpmi->second.client,
+                                       dpmi->second.port);
                 }
             } else {
                 m_midiSyncAutoConnect = false;
@@ -4730,8 +4729,8 @@ AlsaDriver::getFirstDestination(bool duplex)
     AlsaPortVector::iterator it;
 
     for (it = m_alsaPorts.begin(); it != m_alsaPorts.end(); ++it) {
-        destPair.first = (*it)->m_client;
-        destPair.second = (*it)->m_port;
+        destPair.client = (*it)->m_client;
+        destPair.port = (*it)->m_port;
 
         // If duplex port is required then choose first one
         //
@@ -4942,8 +4941,8 @@ AlsaDriver::checkForNewClients()
             if (!otherEnd) continue;
 
             if (j != m_devicePortMap.end() &&
-                otherEnd->client == j->second.first &&
-                otherEnd->port == j->second.second) {
+                otherEnd->client == j->second.client &&
+                otherEnd->port == j->second.port) {
                 haveOurs = true;
             } else {
                 ++others;
@@ -4967,8 +4966,8 @@ AlsaDriver::checkForNewClients()
             } else {
                 for (AlsaPortVector::iterator k = m_alsaPorts.begin();
                      k != m_alsaPorts.end(); ++k) {
-                    if ((*k)->m_client == firstOther.first &&
-                        (*k)->m_port == firstOther.second) {
+                    if ((*k)->m_client == firstOther.client &&
+                        (*k)->m_port == firstOther.port) {
                         m_devicePortMap[(*i)->getId()] = firstOther;
                         setConnectionToDevice(**i, (*k)->m_name.c_str(), firstOther);
                         // madeChange = true;
@@ -5004,11 +5003,11 @@ AlsaDriver::setRecordDevice(DeviceId id, bool connectAction)
 
     ClientPortPair pair = m_devicePortMap[id];
 
-    RG_DEBUG << "setRecordDevice(): port is " << pair.first << ":" << pair.second;
+    RG_DEBUG << "setRecordDevice(): port is " << pair.client << ":" << pair.port;
 
     snd_seq_addr_t sender, dest;
-    sender.client = pair.first;
-    sender.port = pair.second;
+    sender.client = pair.client;
+    sender.port = pair.port;
 
     MappedDevice *device = nullptr;
 
