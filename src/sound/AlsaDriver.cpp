@@ -1378,12 +1378,15 @@ AlsaDriver::setPlausibleConnection(
                     // change this if ever it were.  We don't have
                     // a capital R, but let's omit the R from the
                     // test just in case...
+                    // ??? This appears to be unnecessary.  The rosegarden
+                    //     ports never appear in m_alsaPorts.
                     if (idealConnection == ""  &&
                         strtoqstr(port->m_name).contains("osegarden")) {
+                        RG_DEBUG << "Found rosegarden port:" << port->m_name;
                         continue;
                     }
 
-                    // OK, this one will do
+                    // OK, this port will do.
 
                     // If hardware port...
                     if (port->m_client < 128) {
