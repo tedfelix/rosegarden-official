@@ -554,7 +554,7 @@ MidiDevice::toXmlString() const
     std::stringstream midiDevice;
 
     midiDevice << "    <device id=\""  << m_id 
-               << "\" name=\""         << m_name 
+               << "\" name=\""         << encode(m_name)
                << "\" direction=\""    << (m_direction == Play ?
                                            "play" : "record")
                << "\" variation=\""    << (m_variationType == VariationFromLSB ?
