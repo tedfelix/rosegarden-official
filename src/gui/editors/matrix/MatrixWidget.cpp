@@ -1011,6 +1011,11 @@ MatrixWidget::addControlRuler(QAction *action)
 {
     QString name = action->text();
 
+    // FIX #1543: If name happens to come to us with an & included somewhere,
+    // strip the & so the string will match the one we are comparing later on.
+    //
+    name.replace(QRegExp("&"), "");
+
     //RG_DEBUG << "addControlRuler()";
     //RG_DEBUG << "  my name is " << name;
 
