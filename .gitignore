@@ -8,6 +8,7 @@ dependencies
 dependencies.bak
 rosegarden
 .cproject
+.metadata
 .project
 .settings
 .svn
