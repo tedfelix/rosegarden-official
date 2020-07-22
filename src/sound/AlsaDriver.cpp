@@ -1416,19 +1416,22 @@ AlsaDriver::setPlausibleConnection(
         port = viableHardwarePort;
 
     if (port) {
+        // Find the device and make the connection.
+        // ??? We need to remove the connecting from this routine.  That
+        //     should make it easier to unit test.
+
+        // ??? Every single caller to setConnectionToDevice() in here does
+        //     this device ID search.  Can we either make
+        //     the device ID the parameter or at least make another overloaded
+        //     version?
         for (size_t j = 0; j < m_devices.size(); ++j) {
 
             if (m_devices[j]->getId() == deviceId) {
-                setConnectionToDevice(*m_devices[j],
-                                      strtoqstr(port->m_name),
-                                      ClientPortPair(port->m_client, port->m_port));
-
-                // in this case we don't request a device resync,
-                // because this is only invoked at times such as
-                // file load when the GUI is well aware that the
-                // whole situation is in upheaval anyway
-
-                return ;
+                setConnectionToDevice(
+                        *m_devices[j],
+                        strtoqstr(port->m_name),
+                        ClientPortPair(port->m_client, port->m_port));
+                return;
             }
         }
     } else {

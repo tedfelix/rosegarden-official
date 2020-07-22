@@ -504,10 +504,6 @@ protected:
 
     virtual void processAudioQueue(bool /* now */) { }
 
-    virtual void setConnectionToDevice(MappedDevice &device, QString connection);
-    virtual void setConnectionToDevice(MappedDevice &device, QString connection,
-                                       const ClientPortPair &pair);
-
 private:
     RealTime getAlsaTime();
 
@@ -599,6 +595,9 @@ private:
 
     typedef std::map<DeviceId, ClientPortPair> DevicePortMap;
     DevicePortMap m_devicePortMap;
+    void setConnectionToDevice(MappedDevice &device, QString connection);
+    void setConnectionToDevice(MappedDevice &device, QString connection,
+                               const ClientPortPair &pair);
     /// Return whether the client/port is in m_devicePortMap.
     bool portInUse(int client, int port) const;
 
