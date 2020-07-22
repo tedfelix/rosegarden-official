@@ -877,6 +877,7 @@ AlsaDriver::removeDevice(DeviceId id)
                     "removeDevice");
     m_outputPorts.erase(i1);
 
+    // ??? Consider using findDevice() instead.
     for (MappedDeviceList::iterator i = m_devices.end();
          i != m_devices.begin(); ) {
 
@@ -884,6 +885,11 @@ AlsaDriver::removeDevice(DeviceId id)
 
         if ((*i)->getId() == id) {
             delete *i;
+            // ??? This invalidates i, but then we keep using it in this
+            //     loop.  There should be a break after this.  Or if we
+            //     really want to continue looking for matches, then we
+            //     need to use the "decrement before use" idiom.  A reverse
+            //     iterator should simplify.
             m_devices.erase(i);
         }
     }
@@ -895,6 +901,11 @@ AlsaDriver::removeDevice(DeviceId id)
 
         if ((*i)->getDevice() == id) {
             delete *i;
+            // ??? This invalidates i, but then we keep using it in this
+            //     loop.  There should be a break after this.  Or if we
+            //     really want to continue looking for matches, then we
+            //     need to use the "decrement before use" idiom.  A reverse
+            //     iterator should simplify.
             m_instruments.erase(i);
         }
     }
@@ -940,12 +951,9 @@ AlsaDriver::renameDevice(DeviceId id, QString name)
     checkAlsaError(snd_seq_set_port_info(m_midiHandle, i->second, pinfo),
                    "renameDevice");
 
-    for (size_t i = 0; i < m_devices.size(); ++i) {
-        if (m_devices[i]->getId() == id) {
-            m_devices[i]->setName(qstrtostr(newName));
-            break;
-        }
-    }
+    MappedDevice *device = findDevice(id);
+    if (device)
+        device->setName(qstrtostr(newName));
 
     RG_DEBUG << "renameDevice(): Renamed " << m_client << ":" << i->second << " to " << name;
 }
@@ -1142,21 +1150,11 @@ AlsaDriver::setConnection(DeviceId id, QString connection)
         }
 #endif
 
-        for (size_t i = 0; i < m_devices.size(); ++i) {
+        MappedDevice *device = findDevice(id);
+        if (device)
+            setConnectionToDevice(*device, connection, port);
 
-            if (m_devices[i]->getId() == id) {
-#ifdef DEBUG_ALSA
-                RG_DEBUG << "setConnection(): and found device -- connecting";
-#endif
-
-                setConnectionToDevice(*m_devices[i], connection, port);
-                return;
-            }
-        }
     }
-#ifdef DEBUG_ALSA
-    RG_DEBUG << "setConnection(): port or device not found";
-#endif
 }
 
 void
@@ -1186,12 +1184,9 @@ AlsaDriver::setPlausibleConnection(
             //     it return what we need to make the connection.  Probably
             //     the port.  Maybe findPlausiblePort()?  This would make it
             //     easier to unit test this process.
-            for (size_t i = 0; i < m_devices.size(); ++i) {
-                if (m_devices[i]->getId() == deviceId) {
-                    setConnectionToDevice(*m_devices[i], idealConnection, port);
-                    break;
-                }
-            }
+            MappedDevice *device = findDevice(deviceId);
+            if (device)
+                setConnectionToDevice(*device, idealConnection, port);
 
             AUDIT << "AlsaDriver::setPlausibleConnection(): exact match available\n";
             RG_DEBUG << "setPlausibleConnection(): exact match available";
@@ -1420,20 +1415,12 @@ AlsaDriver::setPlausibleConnection(
         // ??? We need to remove the connecting from this routine.  That
         //     should make it easier to unit test.
 
-        // ??? Every single caller to setConnectionToDevice() in here does
-        //     this device ID search.  Can we either make
-        //     the device ID the parameter or at least make another overloaded
-        //     version?
-        for (size_t j = 0; j < m_devices.size(); ++j) {
-
-            if (m_devices[j]->getId() == deviceId) {
-                setConnectionToDevice(
-                        *m_devices[j],
-                        strtoqstr(port->m_name),
-                        ClientPortPair(port->m_client, port->m_port));
-                return;
-            }
-        }
+        MappedDevice *device = findDevice(deviceId);
+        if (device)
+            setConnectionToDevice(
+                    *device,
+                    strtoqstr(port->m_name),
+                    ClientPortPair(port->m_client, port->m_port));
     } else {
         AUDIT << "AlsaDriver::setPlausibleConnection(): nothing suitable available\n";
         RG_DEBUG << "setPlausibleConnection(): nothing suitable available";
@@ -4993,36 +4980,29 @@ AlsaDriver::setRecordDevice(DeviceId id, bool connectAction)
     sender.client = pair.client;
     sender.port = pair.port;
 
-    MappedDevice *device = nullptr;
+    MappedDevice *device = findDevice(id);
+    if (!device)
+        return;
 
-    for (MappedDeviceList::iterator i = m_devices.begin();
-         i != m_devices.end(); ++i) {
-        if ((*i)->getId() == id) {
-            device = *i;
-            if (device->getDirection() == MidiDevice::Record) {
-                if (device->isRecording() && connectAction) {
+    if (device->getDirection() == MidiDevice::Record) {
+        if (device->isRecording() && connectAction) {
 #ifdef DEBUG_ALSA
-                    RG_DEBUG << "setRecordDevice() - attempting to subscribe (" << id << ") already subscribed";
+            RG_DEBUG << "setRecordDevice() - attempting to subscribe (" << id << ") already subscribed";
 #endif
-                    return ;
-                }
-                if (!device->isRecording() && !connectAction) {
-#ifdef DEBUG_ALSA
-                    RG_DEBUG << "setRecordDevice() - attempting to unsubscribe (" << id << ") already unsubscribed";
-#endif
-                    return ;
-                }
-            } else {
-#ifdef DEBUG_ALSA
-                RG_DEBUG << "setRecordDevice() - attempting to set play device (" << id << ") to record device";
-#endif
-                return ;
-            }
-            break;
+            return ;
         }
+        if (!device->isRecording() && !connectAction) {
+#ifdef DEBUG_ALSA
+            RG_DEBUG << "setRecordDevice() - attempting to unsubscribe (" << id << ") already unsubscribed";
+#endif
+            return ;
+        }
+    } else {
+#ifdef DEBUG_ALSA
+        RG_DEBUG << "setRecordDevice() - attempting to set play device (" << id << ") to record device";
+#endif
+        return ;
     }
-
-    if (!device) return;
 
     snd_seq_port_subscribe_t *subs;
     snd_seq_port_subscribe_alloca(&subs);

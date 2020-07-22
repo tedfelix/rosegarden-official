@@ -297,6 +297,16 @@ SoundDriver::getMappedDevice(DeviceId id)
 }
 */
 
+MappedDevice *
+SoundDriver::findDevice(DeviceId deviceId)
+{
+    for (size_t i = 0; i < m_devices.size(); ++i) {
+        if (m_devices[i]->getId() == deviceId)
+            return m_devices[i];
+    }
+
+    return nullptr;
+}
 
 
 bool

@@ -457,8 +457,9 @@ protected:
     typedef std::vector<MappedInstrument*> MappedInstrumentList;
     MappedInstrumentList m_instruments;
 
-    typedef std::vector<MappedDevice*> MappedDeviceList;
+    typedef std::vector<MappedDevice *> MappedDeviceList;
     MappedDeviceList m_devices;
+    MappedDevice *findDevice(DeviceId deviceId);
 
     DeviceId                                    m_midiRecordDevice;
 
