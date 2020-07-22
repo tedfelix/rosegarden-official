@@ -599,6 +599,8 @@ private:
 
     typedef std::map<DeviceId, ClientPortPair> DevicePortMap;
     DevicePortMap m_devicePortMap;
+    /// Return whether the client/port is in m_devicePortMap.
+    bool portInUse(int client, int port) const;
 
     std::string getPortName(ClientPortPair port);
     ClientPortPair getPortByName(std::string name);

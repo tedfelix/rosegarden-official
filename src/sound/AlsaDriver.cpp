@@ -86,6 +86,24 @@ static MappedEvent::FailureCode failureReports[FAILURE_REPORT_COUNT];
 static int failureReportWriteIndex = 0;
 static int failureReportReadIndex = 0;
 
+namespace {
+    enum ClientClass { Internal, Hardware, Software };
+
+    ClientClass getClass(int clientId)
+    {
+        // From https://alsa.opensrc.org/Aconnect
+        //   0..63: for internal use (0 = system, 63 = OSS sequencer emulation)
+        //   64..127: device drivers (up to 8 for each card)
+        //   128..?: user applications
+
+        if (clientId < 64)
+            return Internal;
+        if (clientId < 128)
+            return Hardware;
+        return Software;
+    }
+}
+
 AlsaDriver::AlsaDriver(MappedStudio *studio):
     SoundDriver(studio,
                 std::string("[ALSA library version ") +
@@ -1252,6 +1270,13 @@ AlsaDriver::setPlausibleConnection(
     RG_DEBUG << "  portNo: " << portNo;
     RG_DEBUG << "  portName: " << portName;
 
+    // If we are connecting to the system client, bail.
+    // ??? This should never happen.
+    if (client == 0) {
+        RG_WARNING << "setPlausibleConnection(): WARNING: Cannot connect to the system client.";
+        return;
+    }
+
     QSharedPointer<AlsaPortDescription> viableHardwarePort;
     QSharedPointer<AlsaPortDescription> viableSoftwarePort;
 
@@ -1280,8 +1305,23 @@ AlsaDriver::setPlausibleConnection(
 
                     QSharedPointer<AlsaPortDescription> port = m_alsaPorts[i];
 
-                    // We're looking for a record device, so if this isn't
-                    // readable, skip it.  This logic is tacked onto a
+                    // If system port, never use.
+                    // ??? I bet we never see this because it is already
+                    //     filtered out of m_alsaPorts.
+                    if (port->m_client == 0) {
+                        RG_DEBUG << "setPlausibleConnection(): Found client 0.  Skipping.";
+                        continue;
+                    }
+
+                    // If there was a client in the idealConnection and the
+                    // client classes do not match, try the next.
+                    if (client != -1  &&
+                        getClass(port->m_client) != getClass(client))
+                        continue;
+
+                    // If we're looking for a record device and this port
+                    // isn't readable, skip it.
+                    // This logic is tacked onto a
                     // function originally written only to consider playback
                     // devices, but I think this will work.  If we skip
                     // play-only devices here, the rest of the logic should
@@ -1292,24 +1332,9 @@ AlsaDriver::setPlausibleConnection(
                     if (recordDevice  &&  !port->isReadable())
                         continue;
 
-                    // If system port, never use.
-                    // ??? What about synths that require the virtual MIDI
-                    //     thru ports?  E.g. GrandOrgue.
-                    if (port->m_client < 16)
-                        continue;
-
-                    if (client > 0) {
-
-                        // If the classes (highest two bits) do not match,
-                        // try the next.
-                        if (port->m_client / 64 != client / 64)
+                    if (testNumbers) {
+                        if (port->m_port != portNo)
                             continue;
-
-                        if (testNumbers) {
-                            if (port->m_port != portNo)
-                                continue;
-                        }
-
                     }
 
                     // If we're testing the name, and the name we are looking
@@ -1318,32 +1343,16 @@ AlsaDriver::setPlausibleConnection(
                         !strtoqstr(port->m_name).contains(portName))
                         continue;
 
-                    if (testUsed) {
-                        bool used = false;
-
-                        // If the client/port is in m_devicePortMap, then it
-                        // is in use.  See setConnectionToDevice().
-
-                        for (DevicePortMap::iterator dpmi =
-                                 m_devicePortMap.begin();
-                             dpmi != m_devicePortMap.end();
-                             ++dpmi) {
-                            if (dpmi->second.client == port->m_client  &&
-                                dpmi->second.port == port->m_port) {
-                                // a little hack here...  if this is a record
-                                // device, we don't really care if it's already
-                                // used or not (it might be used by a play
-                                // device, and if more than one record device
-                                // uses the same port, it doesn't have any
-                                // particularly dire consequences)
-                                if (!recordDevice)
-                                    used = true;
-
-                                break;
-                            }
-                        }
-
-                        if (used)
+                    // If we are testing for used, and we aren't looking
+                    // for a record device...
+                    // a little hack here...  if this is a record
+                    // device, we don't really care if it's already
+                    // used or not (it might be used by a play
+                    // device, and if more than one record device
+                    // uses the same port, it doesn't have any
+                    // particularly dire consequences)
+                    if (testUsed  &&  !recordDevice) {
+                        if (portInUse(port->m_client, port->m_port))
                             continue;
                     }
 
@@ -1358,14 +1367,15 @@ AlsaDriver::setPlausibleConnection(
                     //     ports never appear in m_alsaPorts.
                     if (idealConnection == ""  &&
                         strtoqstr(port->m_name).contains("osegarden")) {
-                        RG_DEBUG << "Found rosegarden port:" << port->m_name;
+                        RG_DEBUG << "setPlausibleConnection(): Found rosegarden port:" << port->m_name;
                         continue;
                     }
 
                     // OK, this port will do.
 
-                    // If hardware port...
-                    if (port->m_client < 128) {
+                    // If hardware or internal port...
+                    if (getClass(port->m_client) == Hardware  ||
+                        getClass(port->m_client) == Internal) {
                         // If we don't have a hardware port yet...
                         if (!viableHardwarePort) {
                             // we already filter out all play-only ports if
@@ -1379,7 +1389,7 @@ AlsaDriver::setPlausibleConnection(
                                 RG_DEBUG << "setPlausibleConnection(): found hardware port:" << viableHardwarePort->m_name;
                             }
                         }
-                    } else {
+                    } else {  // Software port
                         // If we don't have a software port yet...
                         if (!viableSoftwarePort) {
                             if ((!recordDevice  &&  port->isWriteable())  ||
@@ -5484,6 +5494,26 @@ AlsaDriver::throttledDebug() const
         return false;
     }
 
+    return false;
+}
+
+bool
+AlsaDriver::portInUse(int client, int port) const
+{
+    // If the client/port is in m_devicePortMap, then it
+    // is in use.  See setConnectionToDevice().
+
+    for (DevicePortMap::const_iterator dpmi =
+             m_devicePortMap.begin();
+         dpmi != m_devicePortMap.end();
+         ++dpmi) {
+        if (dpmi->second.client == client  &&
+            dpmi->second.port == port) {
+            return true;
+        }
+    }
+
+    // Not found, so not in use.
     return false;
 }
 
