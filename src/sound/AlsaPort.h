@@ -44,12 +44,12 @@ struct ClientPortPair
     int client;
     int port;
 
-    bool operator==(const ClientPortPair &rhs)
+    bool operator==(const ClientPortPair &rhs) const
     {
         return (client == rhs.client  &&  port == rhs.port);
     }
 
-    bool operator!=(const ClientPortPair &rhs)
+    bool operator!=(const ClientPortPair &rhs) const
     {
         return (client != rhs.client  ||  port != rhs.port);
     }

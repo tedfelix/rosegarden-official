@@ -36,7 +36,8 @@ public:
     ~TriggerSegmentRec();
     TriggerSegmentRec(const TriggerSegmentRec &);
     TriggerSegmentRec &operator=(const TriggerSegmentRec &);
-    bool operator==(const TriggerSegmentRec &rec) { return rec.m_id == m_id; }
+    bool operator==(const TriggerSegmentRec &rec) const
+            { return rec.m_id == m_id; }
 
     TriggerSegmentId getId() const { return m_id; }
 

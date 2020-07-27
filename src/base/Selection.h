@@ -61,7 +61,7 @@ public:
 
     ~EventSelection() override;
 
-    bool operator==(const EventSelection &);
+    bool operator==(const EventSelection &) const;
 
     /**
      *

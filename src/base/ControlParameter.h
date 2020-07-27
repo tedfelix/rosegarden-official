@@ -48,7 +48,7 @@ public:
     ControlParameter& operator=(const ControlParameter &control);
 
     // ??? Appears to be unused.  Confirm and remove.
-    bool operator==(const ControlParameter &control);
+    bool operator==(const ControlParameter &control) const;
 
     // ??? Appears to be unused.  Confirm and remove.
     friend bool operator<(const ControlParameter &a, const ControlParameter &b);

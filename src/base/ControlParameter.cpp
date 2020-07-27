@@ -89,7 +89,7 @@ ControlParameter::operator=(const ControlParameter &control)
     return *this;
 }
 
-bool ControlParameter::operator==(const ControlParameter &control)
+bool ControlParameter::operator==(const ControlParameter &control) const
 {
     return m_type == control.getType() &&
         m_controllerNumber == control.getControllerNumber() &&

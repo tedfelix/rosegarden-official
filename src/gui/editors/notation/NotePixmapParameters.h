@@ -116,7 +116,7 @@ public:
     // always be drawn *below* the note, and we get it wrong, and/or there are
     // some things we treat as normal marks and shouldn't.  Hrm.
 
-    bool operator==(const NotePixmapParameters &p) {
+    bool operator==(const NotePixmapParameters &p) const {
 	return (m_noteType == p.m_noteType &&
 		m_dots == p.m_dots &&
 		m_accidental == p.m_accidental &&

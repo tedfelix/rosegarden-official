@@ -97,7 +97,7 @@ EventSelection::~EventSelection()
 }
 
 bool
-EventSelection::operator==(const EventSelection &s)
+EventSelection::operator==(const EventSelection &s) const
 {
     if (&m_originalSegment != &s.m_originalSegment) return false;
     if (m_beginTime != s.m_beginTime) return false;
