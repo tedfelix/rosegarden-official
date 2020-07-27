@@ -972,10 +972,6 @@ AlsaDriver::getPortByName(std::string name)
         //RG_DEBUG << "  Comparing" << name << "with";
         //RG_DEBUG << "           " << m_alsaPorts[i]->m_name;
 
-        // ??? This comparison is unrealistic.  Client numbers can
-        //     change.  We should probably remove the client number from
-        //     the front of each before doing the comparison.
-
         if (m_alsaPorts[i]->m_name == name)
             return ClientPortPair(m_alsaPorts[i]->m_client,
                                   m_alsaPorts[i]->m_port);
@@ -1170,6 +1166,9 @@ AlsaDriver::setPlausibleConnection(
 
     if (idealConnection != "") {
 
+        // ??? getPortByName() includes the client number.  This is
+        //     unrealistic as client numbers change.  It would probably be
+        //     better to do a search that ignores client number here.
         ClientPortPair port(getPortByName(qstrtostr(idealConnection)));
 
         AUDIT << "AlsaDriver::setPlausibleConnection(): getPortByName(\"" << idealConnection << "\") returned " << port.client << ":" << port.port << '\n';
@@ -1210,7 +1209,7 @@ AlsaDriver::setPlausibleConnection(
     //
     // To do this, we exploit our privileged position as part of AlsaDriver
     // and use our knowledge of how connection strings are made (see
-    // AlsaDriver::generatePortList above) to pick out the relevant parts
+    // AlsaDriver::generatePortList() above) to pick out the relevant parts
     // of the requested string.
     //
     // If the idealConnection string is empty, then we should pick the
@@ -1289,7 +1288,7 @@ AlsaDriver::setPlausibleConnection(
     // Check whether the port is used...
     for (int testUsed = 1; testUsed >= 0; --testUsed) {
 
-        // Check whether the client:port numbers match...
+        // Check whether the port number matches...
         for (int testNumbers = 1; testNumbers >= 0; --testNumbers) {
 
             // Check whether the port name matches...
