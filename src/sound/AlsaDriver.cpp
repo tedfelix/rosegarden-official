@@ -47,6 +47,7 @@
 #include "Audit.h"
 #include "AudioPlayQueue.h"
 #include "ExternalTransport.h"
+#include "base/levenshtein.hpp"
 
 #include <QMutex>
 #include <QRegExp>
@@ -1153,6 +1154,208 @@ AlsaDriver::setConnection(DeviceId id, QString connection)
     }
 }
 
+namespace
+{
+    // Remove the client:port pair from the front of a name.
+    QString removeClientPort(QString name)
+    {
+        // 0123456789
+        // 123:456 hello
+
+        int colon = name.indexOf(":");
+        // If the colon is not found or too far into the name, bail.
+        if (colon < 0  ||  colon > 3)
+            return name;
+
+        int space = name.indexOf(" ");
+        // If the space is not found or too far into the name, bail.
+        if (space < 0  ||  space > 7)
+            return name;
+
+        return name.mid(space + 1);
+    }
+
+    // Parse a port name in the format: "client:port name" into client number,
+    // port number, and name.
+    void parsePortName(const QString &portName,
+                       int &clientNumber,
+                       int &portNumber,
+                       QString &name)
+    {
+        // Assume not parseable.
+        clientNumber = -1;
+        portNumber = -1;
+        name = "";
+
+        if (portName == "")
+            return;
+
+        // Extract the client, the number prior to the first colon.
+        int colon = portName.indexOf(":");
+        if (colon >= 0)
+            clientNumber = portName.leftRef(colon).toInt();
+
+        // If the client number was found...
+        if (clientNumber > 0) {
+            // Extract the port, the number after the first colon.
+            QString remainder = portName.mid(colon + 1);
+            int space = remainder.indexOf(" ");
+            if (space >= 0)
+                portNumber = remainder.leftRef(space).toInt();
+        }
+
+        // Extract the name.
+
+        // Port name starts after the first space.
+        int firstSpace = portName.indexOf(" ");
+        if (firstSpace >= 0)
+            name = portName.mid(firstSpace + 1);
+    }
+}
+
+void
+AlsaDriver::setFirstConnection(DeviceId deviceId, bool recordDevice)
+{
+    RG_DEBUG << "setFirstConnection()";
+
+    QSharedPointer<AlsaPortDescription> firstPort;
+
+    // For each ALSA port...
+    for (QSharedPointer<AlsaPortDescription> currentPort : m_alsaPorts) {
+
+        RG_DEBUG << "  Trying" << currentPort->m_name;
+
+        // If we're looking for a record device and this port isn't
+        // readable, skip.
+        if (recordDevice  &&  !currentPort->isReadable())
+            continue;
+        // If we're looking for a playback device and this port isn't
+        // writeable, skip.
+        if (!recordDevice  &&  !currentPort->isWriteable())
+            continue;
+
+        RG_DEBUG << "  Going with it...";
+
+        // Take the first one we find.
+        firstPort = currentPort;
+        break;
+    }
+
+    // Connect to the firstPort
+
+    if (firstPort) {
+        // Find the device and make the connection.
+        // ??? We need to remove the connecting from this routine.  Instead
+        //     it should be called findPlausibleConnection() and return
+        //     bestPort.  That should make it easier to unit test.
+
+        MappedDevice *device = findDevice(deviceId);
+        if (device)
+            setConnectionToDevice(
+                    *device,
+                    strtoqstr(firstPort->m_name),
+                    ClientPortPair(firstPort->m_client, firstPort->m_port));
+    }
+}
+
+#if 1
+void
+AlsaDriver::setPlausibleConnection(
+        DeviceId deviceId, QString idealConnection, bool recordDevice)
+{
+    // ??? Proposed simplified version that searches for the best fit and
+    //     connects to it.
+
+    AUDIT << "----------\n";
+    AUDIT << "AlsaDriver::setPlausibleConnection()\n";
+    AUDIT << "  Connection like \"" << idealConnection << "\" requested for device " << deviceId << '\n';
+    RG_DEBUG << "----------";
+    RG_DEBUG << "setPlausibleConnection()";
+    RG_DEBUG << "  Connection like" << idealConnection << "requested for device " << deviceId;
+
+    // If we are looking for "", bail.  connectSomething() will take over.
+    if (idealConnection == "")
+        return;
+
+    int bestScore = 0;
+    QSharedPointer<AlsaPortDescription> bestPort;
+
+    int clientNumber;
+    int portNumber;
+    QString name;
+    parsePortName(idealConnection, clientNumber, portNumber, name);
+
+    // For each ALSA port...
+    for (QSharedPointer<AlsaPortDescription> currentPort : m_alsaPorts) {
+        AUDIT << "AlsaDriver::setPlausibleConnection(): Checking \"" << currentPort->m_name << "\"\n";
+        RG_DEBUG << "setPlausibleConnection(): Checking" << currentPort->m_name;
+
+        // If we're looking for a record device and this port isn't
+        // readable, skip.
+        if (recordDevice  &&  !currentPort->isReadable())
+            continue;
+        // If we're looking for a playback device and this port isn't
+        // writeable, skip.
+        if (!recordDevice  &&  !currentPort->isWriteable())
+            continue;
+
+        // Strip client:port from the front of the name.
+        QString currentName = removeClientPort(strtoqstr(currentPort->m_name));
+
+        int score = 25 - levenshtein_distance(
+                qstrtostr(currentName).size(),
+                qstrtostr(currentName),
+                qstrtostr(name).size(),
+                qstrtostr(name));
+
+        // Same class: +25
+        if (getClass(currentPort->m_client) == getClass(clientNumber))
+            score += 25;
+
+        // Same port: +25
+        if (currentPort->m_port == portNumber)
+            score += 25;
+
+        // Not connected to anything: +25
+        if (!portInUse(currentPort->m_client, currentPort->m_port))
+            score += 25;
+
+        // The original routine prioritized software ports.
+        //if (getClass(currentPort->m_client) == Software)
+        //    score += 25;
+
+        AUDIT << "  Final score: " << score << "\n";
+        RG_DEBUG << "  Final score:" << score;
+
+        if (score > bestScore) {
+            bestScore = score;
+            bestPort = currentPort;
+        }
+    }
+
+    // Connect to the bestPort
+
+    if (bestPort) {
+        AUDIT << "Going with \"" << bestPort->m_name << "\"\n";
+        RG_DEBUG << "Going with" << bestPort->m_name;
+
+        // Find the device and make the connection.
+        // ??? We need to remove the connecting from this routine.  Instead
+        //     it should be called findPlausibleConnection() and return
+        //     bestPort.  That should make it easier to unit test.
+
+        MappedDevice *device = findDevice(deviceId);
+        if (device)
+            setConnectionToDevice(
+                    *device,
+                    strtoqstr(bestPort->m_name),
+                    ClientPortPair(bestPort->m_client, bestPort->m_port));
+    } else {
+        AUDIT << "AlsaDriver::setPlausibleConnection(): nothing suitable available\n";
+        RG_DEBUG << "setPlausibleConnection(): nothing suitable available";
+    }
+}
+#else
 void
 AlsaDriver::setPlausibleConnection(
         DeviceId deviceId, QString idealConnection, bool recordDevice)
@@ -1295,9 +1498,7 @@ AlsaDriver::setPlausibleConnection(
             for (int testName = 1; testName >= 0; --testName) {
 
                 // For each ALSA port...
-                for (size_t i = 0; i < m_alsaPorts.size(); ++i) {
-
-                    QSharedPointer<AlsaPortDescription> port = m_alsaPorts[i];
+                for (QSharedPointer<AlsaPortDescription> port : m_alsaPorts) {
 
                     // If system port, never use.
                     // ??? I bet we never see this because it is already
@@ -1425,10 +1626,13 @@ AlsaDriver::setPlausibleConnection(
         RG_DEBUG << "setPlausibleConnection(): nothing suitable available";
     }
 }
+#endif
 
 void
 AlsaDriver::connectSomething()
 {
+    RG_DEBUG << "connectSomething()...";
+
     // Called after document load, if there are devices in the document but none
     // of them has managed to get itself connected to anything.  Tries to find
     // something suitable to connect one play, and one record device to, and
@@ -1460,9 +1664,9 @@ AlsaDriver::connectSomething()
     // Connect something for playback.  Worst case, we'll probably connect
     // to a virtual MIDI through port.
     if (playbackDevice)
-        setPlausibleConnection(
+        setFirstConnection(
                 playbackDevice->getId(),  // deviceId
-                "");  // idealConnection
+                false);  // recordDevice
 
 
     // *** Record connection.
@@ -1490,9 +1694,8 @@ AlsaDriver::connectSomething()
     // Connect something for record.    Worst case, we'll probably connect
     // to a virtual MIDI through port.
     if (recordDevice)
-        setPlausibleConnection(
+        setFirstConnection(
                 recordDevice->getId(),  // deviceId
-                "",  // idealConnection
                 true);  // recordDevice
 }
 

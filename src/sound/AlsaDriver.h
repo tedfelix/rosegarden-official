@@ -516,6 +516,7 @@ private:
     int checkAlsaError(int rc, const char *message);
 
     AlsaPortVector m_alsaPorts;
+    void setFirstConnection(DeviceId deviceId, bool recordDevice);
 
     // ALSA MIDI/Sequencer stuff
     //

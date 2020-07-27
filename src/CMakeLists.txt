@@ -496,6 +496,7 @@ set(rg_CPPS
   base/CompositionTimeSliceAdapter.cpp
   base/PluginContainer.cpp
   base/Buss.cpp
+  base/levenshtein.cpp
   sound/LADSPAPluginFactory.cpp
   sound/ControlBlock.cpp
   sound/WAVAudioFile.cpp
