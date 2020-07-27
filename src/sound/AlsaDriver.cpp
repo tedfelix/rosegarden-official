@@ -1380,8 +1380,8 @@ AlsaDriver::setPlausibleConnection(
                                 recordDevice) {
                                 viableHardwarePort = port;
 
-                                AUDIT << "AlsaDriver::setPlausibleConnection(): found hardware port: \"" << viableHardwarePort->m_name << "\"\n";
-                                RG_DEBUG << "setPlausibleConnection(): found hardware port:" << viableHardwarePort->m_name;
+                                AUDIT << "AlsaDriver::setPlausibleConnection(): found internal or hardware port: \"" << viableHardwarePort->m_name << "\"\n";
+                                RG_DEBUG << "setPlausibleConnection(): found internal or hardware port:" << viableHardwarePort->m_name;
                             }
                         }
                     } else {  // Software port
@@ -1436,6 +1436,19 @@ AlsaDriver::connectSomething()
     // something suitable to connect one play, and one record device to, and
     // connects it.  If nothing very appropriate beckons, leaves unconnected.
 
+    // ??? Rewrite this so that it works on a playback connection first, then
+    //     record.  This way if there is a playback connection, but no record
+    //     connection, it will try to connect something for record, and vice
+    //     versa.
+    //
+    //       for each playback device
+    //         if there's a connection, clear toConnect and break.
+    //         if !toConnect, toConnect = device (take the first)
+    //       rof
+    //       if toConnect, setPlausibleConnection()
+    //
+    //       Same for record.
+
     MappedDevice *toConnect = nullptr;
     MappedDevice *toConnectRecord = nullptr;
 
@@ -1461,17 +1474,24 @@ AlsaDriver::connectSomething()
             toConnectRecord = device;
     }            
 
-    // If the studio was absolutely empty, we'll make it to here with
+    // If the Studio was absolutely empty, we'll make it to here with
     // toConnect and toConnectRecord still null, so in that case we'll
-    // simply move along without doing anything.
+    // simply move along without doing anything.  More likely, the Studio
+    // will at least have one MIDI through port and that will be used to
+    // make both connections.
 
+    // Connect something for playback.
     if (toConnect)
-        setPlausibleConnection(toConnect->getId(), "");
+        setPlausibleConnection(
+                toConnect->getId(),  // deviceId
+                "");  // idealConnection
 
-    if (toConnectRecord) {
-        bool recordDevice = true;
-        setPlausibleConnection(toConnectRecord->getId(), "", recordDevice);
-    }
+    // Connect something for record.
+    if (toConnectRecord)
+        setPlausibleConnection(
+                toConnectRecord->getId(),  // deviceId
+                "",  // idealConnection
+                true);  // recordDevice
 }
 
 void
