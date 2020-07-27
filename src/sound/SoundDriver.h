@@ -129,10 +129,8 @@ class AudioPlayQueue;
 typedef std::vector<PlayableAudioFile *> PlayableAudioFileList;
 
 
-/// The abstract SoundDriver
+/// Abstract Base Class (ABC) to support sound drivers, such as ALSA.
 /**
- * Abstract Base Class (ABC) to support SoundDrivers, such as ALSA.
- *
  * This ABC provides the generic driver support for
  * these drivers with the Sequencer class owning an instance
  * of a sub class of this class and directing it as required
@@ -308,8 +306,14 @@ public:
                                   MidiDevice::DeviceDirection,
                                   unsigned int) { return ""; }
     virtual QString getConnection(DeviceId) { return ""; }
-    virtual void setConnection(DeviceId, QString) { }
-    virtual void setPlausibleConnection(DeviceId id, QString c, bool) { setConnection(id, c); }
+    virtual void setConnection(
+            DeviceId /* deviceId */,
+            QString /* idealConnection */) { }
+    virtual void setPlausibleConnection(
+            DeviceId deviceId,
+            QString idealConnection,
+            bool /* recordDevice */)
+                    { setConnection(deviceId, idealConnection); }
     virtual void connectSomething() { }
 
     virtual unsigned int getTimers() { return 0; }

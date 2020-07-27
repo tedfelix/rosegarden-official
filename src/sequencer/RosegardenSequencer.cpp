@@ -599,12 +599,14 @@ RosegardenSequencer::setConnection(unsigned int deviceId,
 
 void
 RosegardenSequencer::setPlausibleConnection(unsigned int deviceId,
-                                            QString connection)
+                                            QString idealConnection)
 {
     LOCKED;
 
-    bool recordDevice = false; // we only want this from connectSomething()
-    m_driver->setPlausibleConnection(deviceId, connection, recordDevice);
+    m_driver->setPlausibleConnection(
+            deviceId,
+            idealConnection,
+            false);  // recordDevice
 }
 
 void

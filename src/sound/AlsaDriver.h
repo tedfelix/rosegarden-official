@@ -410,8 +410,8 @@ public:
     QString getConnection(DeviceId id) override;
     void setConnection(DeviceId deviceId, QString connection) override;
     void setPlausibleConnection(DeviceId deviceId,
-                                        QString connection,
-                                        bool recordDevice = false) override;
+                                QString idealConnection,
+                                bool recordDevice = false) override;
     void connectSomething() override;
 
     unsigned int getTimers() override;
