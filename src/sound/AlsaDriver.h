@@ -600,6 +600,8 @@ private:
                                const ClientPortPair &pair);
     /// Return whether the client/port is in m_devicePortMap.
     bool portInUse(int client, int port) const;
+    /// Is the given deviceId within m_devicePortMap connected?
+    bool isConnected(DeviceId deviceId) const;
 
     std::string getPortName(ClientPortPair port);
     ClientPortPair getPortByName(std::string name);

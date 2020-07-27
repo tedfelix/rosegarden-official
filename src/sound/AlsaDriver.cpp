@@ -1427,7 +1427,6 @@ AlsaDriver::setPlausibleConnection(
     }
 }
 
-
 void
 AlsaDriver::connectSomething()
 {
@@ -1436,60 +1435,64 @@ AlsaDriver::connectSomething()
     // something suitable to connect one play, and one record device to, and
     // connects it.  If nothing very appropriate beckons, leaves unconnected.
 
-    // ??? Rewrite this so that it works on a playback connection first, then
-    //     record.  This way if there is a playback connection, but no record
-    //     connection, it will try to connect something for record, and vice
-    //     versa.
-    //
-    //       for each playback device
-    //         if there's a connection, clear toConnect and break.
-    //         if !toConnect, toConnect = device (take the first)
-    //       rof
-    //       if toConnect, setPlausibleConnection()
-    //
-    //       Same for record.
 
-    MappedDevice *toConnect = nullptr;
-    MappedDevice *toConnectRecord = nullptr;
+    // *** Playback connection.
 
-    // Check whether anything is connected.
+    MappedDevice *playbackDevice = nullptr;
 
     // For each device
-    for (size_t i = 0; i < m_devices.size(); ++i) {
-        MappedDevice *device = m_devices[i];
+    for (MappedDevice *device : m_devices) {
 
-        // If something is connected, bail.
-        // ??? We need a getPairForDevice(DeviceId) so we can code this as:
-        //     if (getPairForDevice(device->getId()) != ClientPortPair(-1,-1))
-        if (m_devicePortMap.find(device->getId()) != m_devicePortMap.end()  &&
-            m_devicePortMap[device->getId()] != ClientPortPair()  &&
-            m_devicePortMap[device->getId()] != ClientPortPair(-1,-1)) {
-            return;
+        // Not playback?  Try the next.
+        if (device->getDirection() != MidiDevice::Play)
+            continue;
+
+        // If something is connected, give up.
+        if (isConnected(device->getId())) {
+            playbackDevice = nullptr;
+            break;
         }
 
-        if (device->getDirection() == MidiDevice::Play  &&  !toConnect)
-            toConnect = device;
+        // Take the first one we find.
+        if (!playbackDevice)
+            playbackDevice = device;
+    }
 
-        if (device->getDirection() == MidiDevice::Record  &&  !toConnectRecord)
-            toConnectRecord = device;
-    }            
-
-    // If the Studio was absolutely empty, we'll make it to here with
-    // toConnect and toConnectRecord still null, so in that case we'll
-    // simply move along without doing anything.  More likely, the Studio
-    // will at least have one MIDI through port and that will be used to
-    // make both connections.
-
-    // Connect something for playback.
-    if (toConnect)
+    // Connect something for playback.  Worst case, we'll probably connect
+    // to a virtual MIDI through port.
+    if (playbackDevice)
         setPlausibleConnection(
-                toConnect->getId(),  // deviceId
+                playbackDevice->getId(),  // deviceId
                 "");  // idealConnection
 
-    // Connect something for record.
-    if (toConnectRecord)
+
+    // *** Record connection.
+
+    MappedDevice *recordDevice = nullptr;
+
+    // For each device
+    for (MappedDevice *device : m_devices) {
+
+        // Not a record device?  Try the next.
+        if (device->getDirection() != MidiDevice::Record)
+            continue;
+
+        // If something is connected, give up.
+        if (isConnected(device->getId())) {
+            recordDevice = nullptr;
+            break;
+        }
+
+        // Take the first one we find.
+        if (!recordDevice)
+            recordDevice = device;
+    }
+
+    // Connect something for record.    Worst case, we'll probably connect
+    // to a virtual MIDI through port.
+    if (recordDevice)
         setPlausibleConnection(
-                toConnectRecord->getId(),  // deviceId
+                recordDevice->getId(),  // deviceId
                 "",  // idealConnection
                 true);  // recordDevice
 }
@@ -5518,6 +5521,20 @@ AlsaDriver::portInUse(int client, int port) const
 
     // Not found, so not in use.
     return false;
+}
+
+bool
+AlsaDriver::isConnected(DeviceId deviceId) const
+{
+    DevicePortMap::const_iterator deviceIter = m_devicePortMap.find(deviceId);
+
+    // Device not found?  Bail.
+    if (deviceIter == m_devicePortMap.end())
+        return false;
+
+    // Return true if the client/port are valid.
+    return (deviceIter->second != ClientPortPair()  &&
+            deviceIter->second != ClientPortPair(-1,-1));
 }
 
 
