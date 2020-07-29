@@ -88,7 +88,8 @@ static int failureReportWriteIndex = 0;
 static int failureReportReadIndex = 0;
 
 namespace {
-    enum ClientClass { Internal, Hardware, Software };
+    enum ClientClass {
+        System, Internal, OSSSequencer, Hardware, Software, Invalid };
 
     ClientClass getClass(int clientId)
     {
@@ -97,11 +98,20 @@ namespace {
         //   64..127: device drivers (up to 8 for each card)
         //   128..?: user applications
 
-        if (clientId < 64)
+        if (clientId < 0)
+            return Invalid;
+        if (clientId == 0)
+            return System;
+        if (clientId < 63)
             return Internal;
+        if (clientId == 63)
+            return OSSSequencer;
         if (clientId < 128)
             return Hardware;
-        return Software;
+        if (clientId < 256)
+            return Software;
+
+        return Invalid;
     }
 }
 
@@ -1299,6 +1309,16 @@ AlsaDriver::setPlausibleConnection(
         if (!recordDevice  &&  !currentPort->isWriteable())
             continue;
 
+        // Class mismatch, skip.
+        if (getClass(currentPort->m_client) != getClass(clientNumber))
+            continue;
+
+        // If we're looking for a playback device and this one is already
+        // connected, skip.
+        if (!recordDevice  &&
+            portInUse(currentPort->m_client, currentPort->m_port))
+            continue;
+
         // Strip client:port from the front of the name.
         QString currentName = removeClientPort(strtoqstr(currentPort->m_name));
 
@@ -1308,10 +1328,6 @@ AlsaDriver::setPlausibleConnection(
                 qstrtostr(name).size(),
                 qstrtostr(name));
 
-        // Same class: +25
-        if (getClass(currentPort->m_client) == getClass(clientNumber))
-            score += 25;
-
         // Same port: +25
         if (currentPort->m_port == portNumber)
             score += 25;
@@ -1319,10 +1335,6 @@ AlsaDriver::setPlausibleConnection(
         // Not connected to anything: +25
         if (!portInUse(currentPort->m_client, currentPort->m_port))
             score += 25;
-
-        // The original routine prioritized software ports.
-        //if (getClass(currentPort->m_client) == Software)
-        //    score += 25;
 
         AUDIT << "  Final score: " << score << "\n";
         RG_DEBUG << "  Final score:" << score;
