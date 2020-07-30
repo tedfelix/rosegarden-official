@@ -1226,6 +1226,7 @@ namespace
 void
 AlsaDriver::setFirstConnection(DeviceId deviceId, bool recordDevice)
 {
+    AUDIT << "AlsaDriver::setFirstConnection()\n";
     RG_DEBUG << "setFirstConnection()";
 
     QSharedPointer<AlsaPortDescription> firstPort;
@@ -1233,6 +1234,7 @@ AlsaDriver::setFirstConnection(DeviceId deviceId, bool recordDevice)
     // For each ALSA port...
     for (QSharedPointer<AlsaPortDescription> currentPort : m_alsaPorts) {
 
+        AUDIT << "  Trying \"" << currentPort->m_name << "\"\n";
         RG_DEBUG << "  Trying" << currentPort->m_name;
 
         // If we're looking for a record device and this port isn't
@@ -1244,6 +1246,7 @@ AlsaDriver::setFirstConnection(DeviceId deviceId, bool recordDevice)
         if (!recordDevice  &&  !currentPort->isWriteable())
             continue;
 
+        AUDIT << "  Going with it...\n";
         RG_DEBUG << "  Going with it...";
 
         // Take the first one we find.
@@ -1327,6 +1330,10 @@ AlsaDriver::setPlausibleConnection(
                 qstrtostr(currentName),
                 qstrtostr(name).size(),
                 qstrtostr(name));
+
+        // No sense connecting to something with a wildly different name.
+        if (score < 20)
+            continue;
 
         // Same port: +25
         if (currentPort->m_port == portNumber)
@@ -1643,6 +1650,7 @@ AlsaDriver::setPlausibleConnection(
 void
 AlsaDriver::connectSomething()
 {
+    AUDIT << "AlsaDriver::connectSomething()\n";
     RG_DEBUG << "connectSomething()...";
 
     // Called after document load, if there are devices in the document but none
@@ -1703,7 +1711,7 @@ AlsaDriver::connectSomething()
             recordDevice = device;
     }
 
-    // Connect something for record.    Worst case, we'll probably connect
+    // Connect something for record.  Worst case, we'll probably connect
     // to a virtual MIDI through port.
     if (recordDevice)
         setFirstConnection(
