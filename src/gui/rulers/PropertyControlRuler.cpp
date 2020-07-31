@@ -262,7 +262,11 @@ void PropertyControlRuler::updateSelection(std::vector <ViewElement*> *elementLi
                 if (item->getElement() == (*elit)) {
                     break;
                 } else {
-                    item = nullptr;
+                    // ??? Simplify: Use an inner item pointer and an
+                    //     outer "itemFound" pointer.  Set the itemFound
+                    //     pointer when found and break.  That eliminates
+                    //     this constant resetting of the pointer.
+                    item.reset();
                 }
             }
         }
