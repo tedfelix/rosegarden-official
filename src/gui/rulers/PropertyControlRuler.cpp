@@ -235,33 +235,33 @@ void PropertyControlRuler::init()
     update();
 }
 
-void PropertyControlRuler::updateSelection(std::vector <ViewElement*> *elementList)
+void PropertyControlRuler::updateSelection(
+        std::vector<ViewElement *> *elementList)
 {
-    // Use base class fcn to set each item as not selected, clear the m_selectedItems lsit
-    //  and create a new m_eventSelection member
+    // For now, simply clear the selected items list and build it afresh
+
+    // Set each item as not selected, clear m_selectedItems and create a new
+    // m_eventSelection member.
     clearSelectedItems();
 
-    // For now, simply clear the selected items list and build it afresh
     QSharedPointer<PropertyControlItem> item;
 
-//    for (ControlItemList::iterator it = m_selectedItems.begin(); it != m_selectedItems.end(); ++it) {
-//        item = dynamic_cast <PropertyControlItem *> (*it);
-//        if (item) item->setSelected(false);
-//    }
-//
-//    m_selectedItems.clear();
-    for (std::vector<ViewElement*>::iterator elit = elementList->begin();
+    // For each item in the new selection
+    for (std::vector<ViewElement *>::const_iterator elit = elementList->begin();
          elit != elementList->end();
          ++elit) {
+        // For each item on the ruler
         for (ControlItemMap::iterator it = m_controlItemMap.begin();
              it != m_controlItemMap.end();
              ++it) {
             item = qSharedPointerDynamicCast<PropertyControlItem>(it->second);
 
             if (item) {
+                // If we found a match, select it.
                 if (item->getElement() == (*elit)) {
                     break;
                 } else {
+                    // Indicate no match to prevent selecting the last item.
                     // ??? Simplify: Use an inner item pointer and an
                     //     outer "itemFound" pointer.  Set the itemFound
                     //     pointer when found and break.  That eliminates
@@ -270,8 +270,12 @@ void PropertyControlRuler::updateSelection(std::vector <ViewElement*> *elementLi
                 }
             }
         }
-        if (!item) continue;
 
+        // No match found?  Try the next.
+        if (!item)
+            continue;
+
+        // Match was found.  Select the item.
         item->setSelected(true);
         m_selectedItems.push_back(item);
         m_eventSelection->addEvent(item->getEvent());

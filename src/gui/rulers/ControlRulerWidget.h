@@ -125,7 +125,7 @@ protected:
     int m_gutter;
     QString m_currentToolName;
     QRectF m_pannedRect;
-    std::vector <ViewElement*> m_selectedElements;
+    std::vector<ViewElement *> m_selectedElements;
     
     void addRuler(ControlRuler *, QString);
 

@@ -78,7 +78,8 @@ public:
     /// SegmentObserver interface
     virtual void endMarkerTimeChanged(const Segment *, bool shorten);
 
-    void updateSelection(std::vector<ViewElement*>*);
+    /// Keep selection in sync with the matrix and notation editors.
+    void updateSelection(std::vector<ViewElement *> *elementList);
     void updateSelectedItems();
 
 public slots:
