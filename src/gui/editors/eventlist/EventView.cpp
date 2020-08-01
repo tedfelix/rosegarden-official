@@ -1391,25 +1391,52 @@ EventView::slotRawTime()
 }
 
 void
-EventView::slotPopupEventEditor(QTreeWidgetItem *item, int)
+EventView::slotPopupEventEditor(QTreeWidgetItem *item, int /* column */)
 {
-    EventViewItem *eItem = dynamic_cast<EventViewItem*>(item);
+    EventViewItem *eventViewItem = dynamic_cast<EventViewItem *>(item);
+    if (!eventViewItem) {
+        RG_WARNING << "slotPopupEventEditor(): WARNING: No EventViewItem.";
+        return;
+    }
 
-    //!!! trigger events
+    // Get the Segment pointer immediately.
+    // If we don't do this now, the QTreeWidgetItem might end up getting
+    // freed and we will crash.
+    // ??? Why is the QTreeWidgetItem going away?  It appears to be
+    //     happening as a result of the call to exec() below.  Is someone
+    //     refreshing the list?
+    Segment *segment = eventViewItem->getSegment();
+    if (!segment) {
+        RG_WARNING << "slotPopupEventEditor(): WARNING: No Segment.";
+        return;
+    }
 
-    if (eItem) {
-        Event *event = eItem->getEvent();
-        SimpleEventEditDialog *dialog =
-            new SimpleEventEditDialog(this, getDocument(), *event, false);
+    // !!! trigger events
 
-        if (dialog->exec() == QDialog::Accepted && dialog->isModified()) {
-            EventEditCommand *command =
-                new EventEditCommand(*(eItem->getSegment()),
+    Event *event = eventViewItem->getEvent();
+    if (!event) {
+        RG_WARNING << "slotPopupEventEditor(): WARNING: No Event.";
+        return;
+    }
+
+    SimpleEventEditDialog *dialog =
+            new SimpleEventEditDialog(
+                    this,  // parent
+                    getDocument(),
+                    *event,
+                    false);  // inserting
+
+    if (dialog->exec() == QDialog::Accepted  &&  dialog->isModified()) {
+
+        // Note: At this point, item and eventViewItem may be invalid.
+        //       Do not use them.
+
+        EventEditCommand *command =
+                new EventEditCommand(*segment,
                                      event,
                                      dialog->getEvent());
 
-            addCommandToHistory(command);
-        }
+        addCommandToHistory(command);
 
     }
 }

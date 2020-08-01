@@ -130,10 +130,6 @@ public slots:
     void slotPopupMenu(const QPoint&);
     void slotMenuActivated(int);
 
-    // on double click on the event list
-    //
-    void slotPopupEventEditor(QTreeWidgetItem*, int);
-
     // Change filter parameters
     //
     void slotModifyFilter();
@@ -149,8 +145,11 @@ public slots:
 signals:
     void editTriggerSegment(int);
 
-protected slots:
+private slots:
     void slotSaveOptions() override;
+
+    /// Handle double-click on an event in the event list.
+    void slotPopupEventEditor(QTreeWidgetItem *item, int column);
 
     void slotEditTriggerName();
     void slotEditTriggerPitch();
@@ -161,7 +160,7 @@ protected slots:
     /// slot connected to signal RosegardenDocument::setModified(bool)
     void updateWindowTitle(bool m = false);
 
-protected:
+private:
 
     /// virtual function inherited from the base class, this implementation just
     /// calls updateWindowTitle() and avoids a refactoring job, even though

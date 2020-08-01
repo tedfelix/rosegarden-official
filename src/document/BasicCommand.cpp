@@ -24,6 +24,10 @@
 #include "misc/Debug.h"
 #include <QString>
 
+// Getting a NULL reference.  Need to track down.  See Q_ASSERT_X()
+// calls below.
+#pragma GCC diagnostic ignored "-Waddress"
+
 
 namespace Rosegarden
 {
@@ -72,6 +76,12 @@ BasicCommand::~BasicCommand()
 timeT
 BasicCommand::calculateStartTime(timeT given, Segment &segment)
 {
+    // This assertion was firing.  Fixed.  Will leave this here
+    // in case this happens again.
+    Q_ASSERT_X(&segment != nullptr,
+               "BasicCommand::calculateStartTime()",
+               "Segment pointer is null.");
+
     timeT actual = given;
     Segment::iterator i = segment.findTime(given);
 
@@ -87,6 +97,12 @@ BasicCommand::calculateStartTime(timeT given, Segment &segment)
 timeT
 BasicCommand::calculateEndTime(timeT given, Segment &segment)
 {
+    // This assertion was firing.  Fixed.  Will leave this here
+    // in case this happens again.
+    Q_ASSERT_X(&segment != nullptr,
+               "BasicCommand::calculateEndTime()",
+               "Segment pointer is null.");
+
     timeT actual = given;
     Segment::iterator i = segment.findTime(given);
 
