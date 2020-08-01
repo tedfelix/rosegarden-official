@@ -344,7 +344,7 @@ ControlRulerWidget::slotAddPropertyRuler(const PropertyName &propertyName)
             this,  &ControlRulerWidget::showContextHelp);
 
     controlruler->setXOffset(m_gutter);
-    controlruler->updateSelection(&m_selectedElements);
+    controlruler->updateSelection(m_selectedElements);
 
     // little kludge here, we only have the one property ruler, and the string
     // "velocity" wasn't already in a context (any context) where it could be
@@ -420,7 +420,7 @@ ControlRulerWidget::slotSelectionChanged(EventSelection *s)
         for (it = m_controlRulerList.begin(); it != m_controlRulerList.end(); ++it) {
             PropertyControlRuler *pr = dynamic_cast <PropertyControlRuler *> (*it);
             if (pr) {
-                pr->updateSelection(&m_selectedElements);
+                pr->updateSelection(m_selectedElements);
             }
         }
     }

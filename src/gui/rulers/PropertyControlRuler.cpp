@@ -236,7 +236,7 @@ void PropertyControlRuler::init()
 }
 
 void PropertyControlRuler::updateSelection(
-        std::vector<ViewElement *> *elementList)
+        const std::vector<ViewElement *> &elementList)
 {
     // For now, simply clear the selected items list and build it afresh
 
@@ -244,41 +244,25 @@ void PropertyControlRuler::updateSelection(
     // m_eventSelection member.
     clearSelectedItems();
 
-    QSharedPointer<PropertyControlItem> item;
-
     // For each item in the new selection
-    for (std::vector<ViewElement *>::const_iterator elit = elementList->begin();
-         elit != elementList->end();
-         ++elit) {
+    for (const ViewElement *element : elementList) {
         // For each item on the ruler
-        for (ControlItemMap::iterator it = m_controlItemMap.begin();
-             it != m_controlItemMap.end();
-             ++it) {
-            item = qSharedPointerDynamicCast<PropertyControlItem>(it->second);
+        for (ControlItemMap::value_type &rControlItemPair : m_controlItemMap) {
+            // Downcast so we can call getElement().
+            QSharedPointer<PropertyControlItem> item =
+                    qSharedPointerDynamicCast<PropertyControlItem>(
+                            rControlItemPair.second);
 
-            if (item) {
-                // If we found a match, select it.
-                if (item->getElement() == (*elit)) {
-                    break;
-                } else {
-                    // Indicate no match to prevent selecting the last item.
-                    // ??? Simplify: Use an inner item pointer and an
-                    //     outer "itemFound" pointer.  Set the itemFound
-                    //     pointer when found and break.  That eliminates
-                    //     this constant resetting of the pointer.
-                    item.reset();
-                }
+            // If we found a match, select it.
+            if (item  &&  item->getElement() == element) {
+                item->setSelected(true);
+                m_selectedItems.push_back(item);
+                m_eventSelection->addEvent(item->getEvent());
+
+                // Move on to the next selected item.
+                break;
             }
         }
-
-        // No match found?  Try the next.
-        if (!item)
-            continue;
-
-        // Match was found.  Select the item.
-        item->setSelected(true);
-        m_selectedItems.push_back(item);
-        m_eventSelection->addEvent(item->getEvent());
     }
 
     update();

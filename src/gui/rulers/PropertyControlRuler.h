@@ -79,7 +79,7 @@ public:
     virtual void endMarkerTimeChanged(const Segment *, bool shorten);
 
     /// Keep selection in sync with the matrix and notation editors.
-    void updateSelection(std::vector<ViewElement *> *elementList);
+    void updateSelection(const std::vector<ViewElement *> &elementList);
     void updateSelectedItems();
 
 public slots:
