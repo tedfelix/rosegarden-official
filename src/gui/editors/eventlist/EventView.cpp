@@ -86,6 +86,12 @@
 
 #include <algorithm>
 
+namespace
+{
+    // Context menu actions.
+    const int OPEN_IN_EVENT_EDITOR = 0;
+    const int OPEN_IN_EXPERT_EVENT_EDITOR = 1;
+}
 
 namespace Rosegarden
 {
@@ -1466,17 +1472,24 @@ EventView::slotPopupMenu(const QPoint& pos)
 void
 EventView::createMenu()
 {
-    //m_menu = new QPopupMenu(this);
     m_menu = new QMenu(this);
-    QAction *eventEditorAction = m_menu->addAction( tr("Open in Event Editor") );
-    QAction *expertEventEditorAction = m_menu->addAction( tr("Open in Expert Event Editor") );
 
+    QAction *eventEditorAction =
+            m_menu->addAction(tr("Open in Event Editor"));
+    QAction *expertEventEditorAction =
+            m_menu->addAction(tr("Open in Expert Event Editor"));
+
+    // ??? Why?  It's only two items.  Just make two handlers.  It'll
+    //     be easier to read.
     QSignalMapper *signalMapper = new QSignalMapper(this);
-    signalMapper->setMapping(eventEditorAction, 0);
-    signalMapper->setMapping(expertEventEditorAction, 1);
 
+    signalMapper->setMapping(
+            eventEditorAction, OPEN_IN_EVENT_EDITOR);
     connect(eventEditorAction, SIGNAL(triggered()),
             signalMapper, SLOT(map()));
+
+    signalMapper->setMapping(
+            expertEventEditorAction, OPEN_IN_EXPERT_EVENT_EDITOR);
     connect(expertEventEditorAction, SIGNAL(triggered()),
             signalMapper, SLOT(map()));
 
@@ -1487,46 +1500,72 @@ EventView::createMenu()
 void
 EventView::slotMenuActivated(int value)
 {
-    RG_DEBUG << "EventView::slotMenuActivated - value = " << value;
+    //RG_DEBUG << "EventView::slotMenuActivated - value = " << value;
 
-    if (value == 0) {
-        EventViewItem *eItem = dynamic_cast<EventViewItem*>(m_eventList->currentItem());
+    // Open in Event Editor
+    if (value == OPEN_IN_EVENT_EDITOR) {
+        EventViewItem *eventViewItem =
+                dynamic_cast<EventViewItem *>(m_eventList->currentItem());
+        if (!eventViewItem)
+            return;
 
-        if (eItem) {
-            Event *event = eItem->getEvent();
-            SimpleEventEditDialog *dialog =
-                new SimpleEventEditDialog(this, getDocument(), *event, false);
+        // Get the Event.  Have to do this before launching
+        // SimpleEventEditDialog since eventViewItem might become invalid.
+        Event *event = eventViewItem->getEvent();
+        if (!event)
+            return;
 
-            if (dialog->exec() == QDialog::Accepted && dialog->isModified()) {
-                EventEditCommand *command =
-                    new EventEditCommand(*(eItem->getSegment()),
-                                         event,
-                                         dialog->getEvent());
+        // Get the Segment.  Have to do this before launching
+        // SimpleEventEditDialog since eventViewItem might become invalid.
+        Segment *segment = eventViewItem->getSegment();
+        if (!segment)
+            return;
 
-                addCommandToHistory(command);
-            }
+        SimpleEventEditDialog *dialog =
+            new SimpleEventEditDialog(this, getDocument(), *event, false);
 
+        if (dialog->exec() == QDialog::Accepted  &&  dialog->isModified()) {
+            EventEditCommand *command =
+                new EventEditCommand(*segment,
+                                     event,
+                                     dialog->getEvent());
+
+            addCommandToHistory(command);
         }
-    } else if (value == 1) {
-        EventViewItem *eItem = dynamic_cast<EventViewItem*>(m_eventList->currentItem());
 
-        if (eItem) {
-            Event *event = eItem->getEvent();
-            EventEditDialog *dialog = new EventEditDialog(this, *event);
-
-            if (dialog->exec() == QDialog::Accepted && dialog->isModified()) {
-                EventEditCommand *command =
-                    new EventEditCommand(*(eItem->getSegment()),
-                                         event,
-                                         dialog->getEvent());
-
-                addCommandToHistory(command);
-            }
-
-        }
+        return;
     }
 
-    return ;
+    // Open in Expert Event Editor
+    if (value == OPEN_IN_EXPERT_EVENT_EDITOR) {
+        EventViewItem *eItem =
+                dynamic_cast<EventViewItem *>(m_eventList->currentItem());
+        if (!eItem)
+            return;
+
+        Event *event = eItem->getEvent();
+        if (!event)
+            return;
+
+        Segment *segment = eItem->getSegment();
+        if (!segment)
+            return;
+
+        EventEditDialog *dialog = new EventEditDialog(this, *event);
+
+        if (dialog->exec() == QDialog::Accepted  &&  dialog->isModified()) {
+            EventEditCommand *command =
+                new EventEditCommand(*segment,
+                                     event,
+                                     dialog->getEvent());
+
+            addCommandToHistory(command);
+        }
+
+        return;
+    }
+
+    return;
 }
 
 void
