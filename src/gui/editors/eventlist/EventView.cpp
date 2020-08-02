@@ -1126,34 +1126,51 @@ EventView::slotEditInsert()
 void
 EventView::slotEditEvent()
 {
-    // ??? See slotOpenInEventEditor().  Can this be combined?
+    // See slotOpenInEventEditor().
 
+    // ??? Why not use currentItem()?
     QList<QTreeWidgetItem *> selection = m_eventList->selectedItems();
 
-    if (selection.count() > 0) {
-        EventViewItem *item =
-            dynamic_cast<EventViewItem*>(selection.first());
+    if (selection.isEmpty())
+        return;
 
-        if (item) {
-            Event *event = item->getEvent();
-            SimpleEventEditDialog dialog(this, getDocument(), *event, false);
+    EventViewItem *eventViewItem =
+            dynamic_cast<EventViewItem *>(selection.first());
+    if (!eventViewItem)
+        return;
 
-            if (dialog.exec() == QDialog::Accepted && dialog.isModified()) {
-                EventEditCommand *command =
-                    new EventEditCommand(*(item->getSegment()),
-                                         event,
-                                         dialog.getEvent());
+    // Get the Segment.  Have to do this before launching
+    // the dialog since eventViewItem might become invalid.
+    Segment *segment = eventViewItem->getSegment();
+    if (!segment)
+        return;
 
-                addCommandToHistory(command);
-            }
-        }
-    }
+    // Get the Event.  Have to do this before launching
+    // the dialog since eventViewItem might become invalid.
+    Event *event = eventViewItem->getEvent();
+    if (!event)
+        return;
+
+    SimpleEventEditDialog dialog(this, getDocument(), *event, false);
+
+    if (dialog.exec() != QDialog::Accepted)
+        return;
+
+    if (!dialog.isModified())
+        return;
+
+    EventEditCommand *command =
+            new EventEditCommand(*segment,
+                                 event,
+                                 dialog.getEvent());
+
+    addCommandToHistory(command);
 }
 
 void
 EventView::slotEditEventAdvanced()
 {
-    // ??? See slotOpenInExpertEventEditor().  Can this be combined?
+    // See slotOpenInExpertEventEditor().
 
     QList<QTreeWidgetItem*> selection = m_eventList->selectedItems();
 
@@ -1403,9 +1420,8 @@ EventView::slotPopupEventEditor(QTreeWidgetItem *item, int /* column */)
         return;
     }
 
-    // Get the Segment pointer immediately.
-    // If we don't do this now, the QTreeWidgetItem might end up getting
-    // freed and we will crash.
+    // Get the Segment.  Have to do this before launching
+    // the dialog since eventViewItem might become invalid.
     // ??? Why is the QTreeWidgetItem going away?  It appears to be
     //     happening as a result of the call to exec() below.  Is someone
     //     refreshing the list?
@@ -1417,6 +1433,8 @@ EventView::slotPopupEventEditor(QTreeWidgetItem *item, int /* column */)
 
     // !!! trigger events
 
+    // Get the Event.  Have to do this before launching
+    // the dialog since eventViewItem might become invalid.
     Event *event = eventViewItem->getEvent();
     if (!event) {
         RG_WARNING << "slotPopupEventEditor(): WARNING: No Event.";
@@ -1430,19 +1448,23 @@ EventView::slotPopupEventEditor(QTreeWidgetItem *item, int /* column */)
                     *event,
                     false);  // inserting
 
-    if (dialog->exec() == QDialog::Accepted  &&  dialog->isModified()) {
+    // Launch dialog.  Bail if canceled.
+    if (dialog->exec() != QDialog::Accepted)
+        return;
 
-        // Note: At this point, item and eventViewItem may be invalid.
-        //       Do not use them.
+    // Not modified?  Bail.
+    if (!dialog->isModified())
+        return;
 
-        EventEditCommand *command =
-                new EventEditCommand(*segment,
-                                     event,
-                                     dialog->getEvent());
+    // Note: At this point, item and eventViewItem may be invalid.
+    //       Do not use them.
 
-        addCommandToHistory(command);
+    EventEditCommand *command =
+            new EventEditCommand(*segment,
+                                 event,
+                                 dialog->getEvent());
 
-    }
+    addCommandToHistory(command);
 }
 
 void
@@ -1491,16 +1513,16 @@ EventView::slotOpenInEventEditor(bool /* checked */)
     if (!eventViewItem)
         return;
 
-    // Get the Event.  Have to do this before launching
-    // tje dialog since eventViewItem might become invalid.
-    Event *event = eventViewItem->getEvent();
-    if (!event)
-        return;
-
     // Get the Segment.  Have to do this before launching
     // the dialog since eventViewItem might become invalid.
     Segment *segment = eventViewItem->getSegment();
     if (!segment)
+        return;
+
+    // Get the Event.  Have to do this before launching
+    // the dialog since eventViewItem might become invalid.
+    Event *event = eventViewItem->getEvent();
+    if (!event)
         return;
 
     SimpleEventEditDialog *dialog =
@@ -1530,16 +1552,16 @@ EventView::slotOpenInExpertEventEditor(bool /* checked */)
     if (!eventViewItem)
         return;
 
-    // Get the Event.  Have to do this before launching
-    // the dialog since eventViewItem might become invalid.
-    Event *event = eventViewItem->getEvent();
-    if (!event)
-        return;
-
     // Get the Segment.  Have to do this before launching
     // the dialog since eventViewItem might become invalid.
     Segment *segment = eventViewItem->getSegment();
     if (!segment)
+        return;
+
+    // Get the Event.  Have to do this before launching
+    // the dialog since eventViewItem might become invalid.
+    Event *event = eventViewItem->getEvent();
+    if (!event)
         return;
 
     EventEditDialog *dialog = new EventEditDialog(this, *event);
