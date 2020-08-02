@@ -115,8 +115,6 @@ public slots:
     // other edit slots
     void slotEditDelete();
     void slotEditInsert();
-    void slotEditEvent();
-    void slotEditEventAdvanced();
 
     void slotSelectAll();
     void slotClearSelection();
@@ -142,6 +140,13 @@ signals:
 
 private slots:
     void slotSaveOptions() override;
+
+    // Menu Handlers
+
+    /// Edit > Edit Event
+    void slotEditEvent();
+    /// Edit > Advanced Event Editor
+    void slotEditEventAdvanced();
 
     /// Handle double-click on an event in the event list.
     void slotPopupEventEditor(QTreeWidgetItem *item, int column);

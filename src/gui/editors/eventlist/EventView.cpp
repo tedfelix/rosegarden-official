@@ -1089,20 +1089,23 @@ EventView::slotEditDelete()
 void
 EventView::slotEditInsert()
 {
-    RG_DEBUG << "EventView::slotEditInsert";
-
     timeT insertTime = m_segments[0]->getStartTime();
+    // Go with a crotchet by default.
     timeT insertDuration = 960;
 
-    QList<QTreeWidgetItem*> selection = m_eventList->selectedItems();
+    QList<QTreeWidgetItem *> selection = m_eventList->selectedItems();
 
-    if (selection.count() > 0) {
+    // If something is selected, use the time and duration from the
+    // first selected event.
+    if (!selection.isEmpty()) {
         EventViewItem *item =
-            dynamic_cast<EventViewItem*>(selection.first());
+            dynamic_cast<EventViewItem *>(selection.first());
 
         if (item) {
             insertTime = item->getEvent()->getAbsoluteTime();
             insertDuration = item->getEvent()->getDuration();
+
+            // ??? Could check for a note event and copy pitch and velocity.
         }
     }
 
@@ -1118,13 +1121,16 @@ EventView::slotEditInsert()
             event,
             true);  // inserting
 
-    if (dialog.exec() == QDialog::Accepted) {
-        EventInsertionCommand *command =
+    // Launch dialog.  Bail if canceled.
+    if (dialog.exec() != QDialog::Accepted)
+        return;
+
+    EventInsertionCommand *command =
             new EventInsertionCommand(
                     *m_segments[0],
                     new Event(dialog.getEvent()));
-        addCommandToHistory(command);
-    }
+
+    addCommandToHistory(command);
 }
 
 void
