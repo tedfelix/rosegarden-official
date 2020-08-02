@@ -1112,7 +1112,11 @@ EventView::slotEditInsert()
     event.set<Int>(BaseProperties::PITCH, 70);
     event.set<Int>(BaseProperties::VELOCITY, 100);
 
-    SimpleEventEditDialog dialog(this, getDocument(), event, true);
+    SimpleEventEditDialog dialog(
+            this,
+            getDocument(),
+            event,
+            true);  // inserting
 
     if (dialog.exec() == QDialog::Accepted) {
         EventInsertionCommand *command =
@@ -1151,11 +1155,17 @@ EventView::slotEditEvent()
     if (!event)
         return;
 
-    SimpleEventEditDialog dialog(this, getDocument(), *event, false);
+    SimpleEventEditDialog dialog(
+            this,
+            getDocument(),
+            *event,
+            false);  // inserting
 
+    // Launch dialog.  Bail if canceled.
     if (dialog.exec() != QDialog::Accepted)
         return;
 
+    // Not modified?  Bail.
     if (!dialog.isModified())
         return;
 
@@ -1172,26 +1182,44 @@ EventView::slotEditEventAdvanced()
 {
     // See slotOpenInExpertEventEditor().
 
-    QList<QTreeWidgetItem*> selection = m_eventList->selectedItems();
+    QList<QTreeWidgetItem *> selection = m_eventList->selectedItems();
 
-    if (selection.count() > 0) {
-        EventViewItem *item =
-            dynamic_cast<EventViewItem*>(selection.first());
+    if (selection.isEmpty())
+        return;
 
-        if (item) {
-            Event *event = item->getEvent();
-            EventEditDialog dialog(this, *event);
+    EventViewItem *eventViewItem =
+            dynamic_cast<EventViewItem *>(selection.first());
+    if (!eventViewItem)
+        return;
 
-            if (dialog.exec() == QDialog::Accepted && dialog.isModified()) {
-                EventEditCommand *command =
-                    new EventEditCommand(*(item->getSegment()),
-                                         event,
-                                         dialog.getEvent());
+    // Get the Segment.  Have to do this before launching
+    // the dialog since eventViewItem might become invalid.
+    Segment *segment = eventViewItem->getSegment();
+    if (!segment)
+        return;
 
-                addCommandToHistory(command);
-            }
-        }
-    }
+    // Get the Event.  Have to do this before launching
+    // the dialog since eventViewItem might become invalid.
+    Event *event = eventViewItem->getEvent();
+    if (!event)
+        return;
+
+    EventEditDialog dialog(this, *event);
+
+    // Launch dialog.  Bail if canceled.
+    if (dialog.exec() != QDialog::Accepted)
+        return;
+
+    // Not modified?  Bail.
+    if (!dialog.isModified())
+        return;
+
+    EventEditCommand *command =
+            new EventEditCommand(*segment,
+                                 event,
+                                 dialog.getEvent());
+
+    addCommandToHistory(command);
 }
 
 void
@@ -1441,19 +1469,18 @@ EventView::slotPopupEventEditor(QTreeWidgetItem *item, int /* column */)
         return;
     }
 
-    SimpleEventEditDialog *dialog =
-            new SimpleEventEditDialog(
+    SimpleEventEditDialog dialog(
                     this,  // parent
                     getDocument(),
                     *event,
                     false);  // inserting
 
     // Launch dialog.  Bail if canceled.
-    if (dialog->exec() != QDialog::Accepted)
+    if (dialog.exec() != QDialog::Accepted)
         return;
 
     // Not modified?  Bail.
-    if (!dialog->isModified())
+    if (!dialog.isModified())
         return;
 
     // Note: At this point, item and eventViewItem may be invalid.
@@ -1462,7 +1489,7 @@ EventView::slotPopupEventEditor(QTreeWidgetItem *item, int /* column */)
     EventEditCommand *command =
             new EventEditCommand(*segment,
                                  event,
-                                 dialog->getEvent());
+                                 dialog.getEvent());
 
     addCommandToHistory(command);
 }
@@ -1525,21 +1552,24 @@ EventView::slotOpenInEventEditor(bool /* checked */)
     if (!event)
         return;
 
-    SimpleEventEditDialog *dialog =
-        new SimpleEventEditDialog(this, getDocument(), *event, false);
+    SimpleEventEditDialog dialog(
+            this,
+            getDocument(),
+            *event,
+            false);  // inserting
 
     // Launch dialog.  Bail if canceled.
-    if (dialog->exec() != QDialog::Accepted)
+    if (dialog.exec() != QDialog::Accepted)
         return;
 
     // Not modified?  Bail.
-    if (!dialog->isModified())
+    if (!dialog.isModified())
         return;
 
     EventEditCommand *command =
             new EventEditCommand(*segment,
                                  event,
-                                 dialog->getEvent());
+                                 dialog.getEvent());
 
     addCommandToHistory(command);
 }
@@ -1564,20 +1594,20 @@ EventView::slotOpenInExpertEventEditor(bool /* checked */)
     if (!event)
         return;
 
-    EventEditDialog *dialog = new EventEditDialog(this, *event);
+    EventEditDialog dialog(this, *event);
 
     // Launch dialog.  Bail if canceled.
-    if (dialog->exec() != QDialog::Accepted)
+    if (dialog.exec() != QDialog::Accepted)
         return;
 
     // Not modified?  Bail.
-    if (!dialog->isModified())
+    if (!dialog.isModified())
         return;
 
     EventEditCommand *command =
             new EventEditCommand(*segment,
                                  event,
-                                 dialog->getEvent());
+                                 dialog.getEvent());
 
     addCommandToHistory(command);
 }
