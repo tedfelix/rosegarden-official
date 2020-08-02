@@ -86,15 +86,10 @@
 
 #include <algorithm>
 
-namespace
-{
-    // Context menu actions.
-    const int OPEN_IN_EVENT_EDITOR = 0;
-    const int OPEN_IN_EXPERT_EVENT_EDITOR = 1;
-}
 
 namespace Rosegarden
 {
+
 
 EventView::EventView(RosegardenDocument *doc,
                      std::vector<Segment *> segments,
@@ -184,21 +179,24 @@ EventView::EventView(RosegardenDocument *doc,
         layout->addWidget(m_triggerName, 0, 1);
         QPushButton *editButton = new QPushButton(tr("edit"), frame);
         layout->addWidget(editButton, 0, 2);
-        connect(editButton, &QAbstractButton::clicked, this, &EventView::slotEditTriggerName);
+        connect(editButton, &QAbstractButton::clicked,
+                this, &EventView::slotEditTriggerName);
 
         layout->addWidget(new QLabel(tr("Base pitch:  "), frame), 1, 0);
         m_triggerPitch = new QLabel(QString("%1").arg(rec->getBasePitch()), frame);
         layout->addWidget(m_triggerPitch, 1, 1);
         editButton = new QPushButton(tr("edit"), frame);
         layout->addWidget(editButton, 1, 2);
-        connect(editButton, &QAbstractButton::clicked, this, &EventView::slotEditTriggerPitch);
+        connect(editButton, &QAbstractButton::clicked,
+                this, &EventView::slotEditTriggerPitch);
 
         layout->addWidget(new QLabel(tr("Base velocity:  "), frame), 2, 0);
         m_triggerVelocity = new QLabel(QString("%1").arg(rec->getBaseVelocity()), frame);
         layout->addWidget(m_triggerVelocity, 2, 1);
         editButton = new QPushButton(tr("edit"), frame);
         layout->addWidget(editButton, 2, 2);
-        connect(editButton, &QAbstractButton::clicked, this, &EventView::slotEditTriggerVelocity);
+        connect(editButton, &QAbstractButton::clicked,
+                this, &EventView::slotEditTriggerVelocity);
 
         /*!!! Comment out these two options, which are not yet used
           anywhere else -- intended for use with library ornaments, not
@@ -1128,9 +1126,9 @@ EventView::slotEditInsert()
 void
 EventView::slotEditEvent()
 {
-    RG_DEBUG << "EventView::slotEditEvent";
+    // ??? See slotOpenInEventEditor().  Can this be combined?
 
-    QList<QTreeWidgetItem*> selection = m_eventList->selectedItems();
+    QList<QTreeWidgetItem *> selection = m_eventList->selectedItems();
 
     if (selection.count() > 0) {
         EventViewItem *item =
@@ -1155,7 +1153,7 @@ EventView::slotEditEvent()
 void
 EventView::slotEditEventAdvanced()
 {
-    RG_DEBUG << "EventView::slotEditEventAdvanced";
+    // ??? See slotOpenInExpertEventEditor().  Can this be combined?
 
     QList<QTreeWidgetItem*> selection = m_eventList->selectedItems();
 
@@ -1476,96 +1474,90 @@ EventView::createMenu()
 
     QAction *eventEditorAction =
             m_menu->addAction(tr("Open in Event Editor"));
+    connect(eventEditorAction, &QAction::triggered,
+            this, &EventView::slotOpenInEventEditor);
+
     QAction *expertEventEditorAction =
             m_menu->addAction(tr("Open in Expert Event Editor"));
-
-    // ??? Why?  It's only two items.  Just make two handlers.  It'll
-    //     be easier to read.
-    QSignalMapper *signalMapper = new QSignalMapper(this);
-
-    signalMapper->setMapping(
-            eventEditorAction, OPEN_IN_EVENT_EDITOR);
-    connect(eventEditorAction, SIGNAL(triggered()),
-            signalMapper, SLOT(map()));
-
-    signalMapper->setMapping(
-            expertEventEditorAction, OPEN_IN_EXPERT_EVENT_EDITOR);
-    connect(expertEventEditorAction, SIGNAL(triggered()),
-            signalMapper, SLOT(map()));
-
-    connect(signalMapper, SIGNAL(mapped(int)),
-            SLOT(slotMenuActivated(int)));
+    connect(expertEventEditorAction, &QAction::triggered,
+            this, &EventView::slotOpenInExpertEventEditor);
 }
 
 void
-EventView::slotMenuActivated(int value)
+EventView::slotOpenInEventEditor(bool /* checked */)
 {
-    //RG_DEBUG << "EventView::slotMenuActivated - value = " << value;
-
-    // Open in Event Editor
-    if (value == OPEN_IN_EVENT_EDITOR) {
-        EventViewItem *eventViewItem =
-                dynamic_cast<EventViewItem *>(m_eventList->currentItem());
-        if (!eventViewItem)
-            return;
-
-        // Get the Event.  Have to do this before launching
-        // SimpleEventEditDialog since eventViewItem might become invalid.
-        Event *event = eventViewItem->getEvent();
-        if (!event)
-            return;
-
-        // Get the Segment.  Have to do this before launching
-        // SimpleEventEditDialog since eventViewItem might become invalid.
-        Segment *segment = eventViewItem->getSegment();
-        if (!segment)
-            return;
-
-        SimpleEventEditDialog *dialog =
-            new SimpleEventEditDialog(this, getDocument(), *event, false);
-
-        if (dialog->exec() == QDialog::Accepted  &&  dialog->isModified()) {
-            EventEditCommand *command =
-                new EventEditCommand(*segment,
-                                     event,
-                                     dialog->getEvent());
-
-            addCommandToHistory(command);
-        }
-
+    EventViewItem *eventViewItem =
+            dynamic_cast<EventViewItem *>(m_eventList->currentItem());
+    if (!eventViewItem)
         return;
-    }
 
-    // Open in Expert Event Editor
-    if (value == OPEN_IN_EXPERT_EVENT_EDITOR) {
-        EventViewItem *eItem =
-                dynamic_cast<EventViewItem *>(m_eventList->currentItem());
-        if (!eItem)
-            return;
-
-        Event *event = eItem->getEvent();
-        if (!event)
-            return;
-
-        Segment *segment = eItem->getSegment();
-        if (!segment)
-            return;
-
-        EventEditDialog *dialog = new EventEditDialog(this, *event);
-
-        if (dialog->exec() == QDialog::Accepted  &&  dialog->isModified()) {
-            EventEditCommand *command =
-                new EventEditCommand(*segment,
-                                     event,
-                                     dialog->getEvent());
-
-            addCommandToHistory(command);
-        }
-
+    // Get the Event.  Have to do this before launching
+    // tje dialog since eventViewItem might become invalid.
+    Event *event = eventViewItem->getEvent();
+    if (!event)
         return;
-    }
 
-    return;
+    // Get the Segment.  Have to do this before launching
+    // the dialog since eventViewItem might become invalid.
+    Segment *segment = eventViewItem->getSegment();
+    if (!segment)
+        return;
+
+    SimpleEventEditDialog *dialog =
+        new SimpleEventEditDialog(this, getDocument(), *event, false);
+
+    // Launch dialog.  Bail if canceled.
+    if (dialog->exec() != QDialog::Accepted)
+        return;
+
+    // Not modified?  Bail.
+    if (!dialog->isModified())
+        return;
+
+    EventEditCommand *command =
+            new EventEditCommand(*segment,
+                                 event,
+                                 dialog->getEvent());
+
+    addCommandToHistory(command);
+}
+
+void
+EventView::slotOpenInExpertEventEditor(bool /* checked */)
+{
+    EventViewItem *eventViewItem =
+            dynamic_cast<EventViewItem *>(m_eventList->currentItem());
+    if (!eventViewItem)
+        return;
+
+    // Get the Event.  Have to do this before launching
+    // the dialog since eventViewItem might become invalid.
+    Event *event = eventViewItem->getEvent();
+    if (!event)
+        return;
+
+    // Get the Segment.  Have to do this before launching
+    // the dialog since eventViewItem might become invalid.
+    Segment *segment = eventViewItem->getSegment();
+    if (!segment)
+        return;
+
+    EventEditDialog *dialog = new EventEditDialog(this, *event);
+
+    // Launch dialog.  Bail if canceled.
+    if (dialog->exec() != QDialog::Accepted)
+        return;
+
+    // Not modified?  Bail.
+    if (!dialog->isModified())
+        return;
+
+    EventEditCommand *command =
+            new EventEditCommand(*segment,
+                                 event,
+                                 dialog->getEvent());
+
+    addCommandToHistory(command);
 }
 
 void

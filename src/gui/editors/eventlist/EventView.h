@@ -125,11 +125,6 @@ public slots:
     void slotRealTime();
     void slotRawTime();
 
-    // Show RMB menu
-    //
-    void slotPopupMenu(const QPoint&);
-    void slotMenuActivated(int);
-
     // Change filter parameters
     //
     void slotModifyFilter();
@@ -150,6 +145,13 @@ private slots:
 
     /// Handle double-click on an event in the event list.
     void slotPopupEventEditor(QTreeWidgetItem *item, int column);
+
+    /// Right-click context menu.
+    void slotPopupMenu(const QPoint&);
+    /// Right-click context menu handler.
+    void slotOpenInEventEditor(bool checked);
+    /// Right-click context menu handler.
+    void slotOpenInExpertEventEditor(bool checked);
 
     void slotEditTriggerName();
     void slotEditTriggerPitch();

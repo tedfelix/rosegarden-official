@@ -235,6 +235,8 @@ protected:
     int getConfigDialogPageIndex()       { return m_configDialogPageIndex; }
 
     RosegardenDocument* m_doc;
+
+    /// The Segment(s) that are being edited.
     std::vector<Segment *> m_segments;
 
     int m_configDialogPageIndex;
