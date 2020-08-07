@@ -1407,41 +1407,56 @@ RosegardenSequencer::processRecordedAudio()
 void
 RosegardenSequencer::processAsynchronousEvents()
 {
-    // outgoing ad-hoc async events
-    std::deque<MappedEvent *> q;
+    // *** Outgoing ad-hoc async events
+
+    std::deque<MappedEvent *> outQueue;
+
     m_asyncQueueMutex.lock();
+
+    // If there's something to send out
     if (!m_asyncOutQueue.empty()) {
-        q = m_asyncOutQueue;
+        // MOVE to local queue.
+        // ??? std::move() should be faster.
+        outQueue = m_asyncOutQueue;
         m_asyncOutQueue.clear();
-#ifdef DEBUG_ROSEGARDEN_SEQUENCER        
-        SEQUENCER_DEBUG << "processAsynchronousEvents: Have " << q.size()
-                        << " events in async out queue" << endl;
-#endif
-    }
-    m_asyncQueueMutex.unlock();
-    MappedEventList mC;
-    while (!q.empty()) {
-        mC.insert(q.front());
-        m_driver->processEventsOut(mC);
-        q.pop_front();
-        mC.clear();
+
+        //RG_DEBUG << "processAsynchronousEvents(): Have " << outQueue.size() << " events in async out queue";
     }
 
-    // incoming ad-hoc async events
-    m_driver->getMappedEventList(mC);
-    if (!mC.empty()) {
+    m_asyncQueueMutex.unlock();
+
+    MappedEventList mappedEventList;
+
+    // For each event, send to AlsaDriver
+    while (!outQueue.empty()) {
+        // ??? Why one at a time?  This is a lot of processing.
+        mappedEventList.insert(outQueue.front());
+        m_driver->processEventsOut(mappedEventList);
+        outQueue.pop_front();
+        mappedEventList.clear();
+    }
+
+    // *** Incoming ad-hoc async events
+
+    m_driver->getMappedEventList(mappedEventList);
+
+    if (!mappedEventList.empty()) {
         m_asyncQueueMutex.lock();
-        m_asyncInQueue.merge(mC);
+        m_asyncInQueue.merge(mappedEventList);
         m_asyncQueueMutex.unlock();
-        applyFiltering(&mC, ControlBlock::getInstance()->getThruFilter(), true);
+
+        applyFiltering(
+                &mappedEventList,
+                ControlBlock::getInstance()->getThruFilter(),  // filter
+                true);  // filterControlDevice
+
         // Send the incoming events back out using the instrument and
         // track for the selected track.
-        routeEvents(&mC, false);
+        routeEvents(&mappedEventList,
+                    false);  // recording
     }
 
-    // Process any pending events (Note Offs or Audio) as part of same
-    // procedure.
-    //
+    // Process any pending events (Note Offs or Audio).
     m_driver->processPending();
 }
 
