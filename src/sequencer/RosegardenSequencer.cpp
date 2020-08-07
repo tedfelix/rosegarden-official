@@ -35,6 +35,7 @@
 #include "sound/SoundDriverFactory.h"
 #include "sound/MappedInstrument.h"
 #include "sound/MappedEventInserter.h"
+#include "sound/SequencerDataBlock.h"
 #include "gui/seqmanager/MEBIterator.h"
 #include "base/Profiler.h"
 #include "sound/PluginFactory.h"

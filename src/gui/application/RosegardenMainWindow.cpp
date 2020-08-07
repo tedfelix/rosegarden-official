@@ -181,6 +181,7 @@
 #include "sound/MappedStudio.h"
 #include "sound/MidiFile.h"
 #include "sound/PluginIdentifier.h"
+#include "sound/SequencerDataBlock.h"
 #include "sound/SoundDriver.h"
 #include "StartupTester.h"
 #include "gui/widgets/TmpStatusMsg.h"

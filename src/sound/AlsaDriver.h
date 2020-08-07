@@ -21,6 +21,7 @@
 #include "base/Instrument.h"
 #include "base/Device.h"
 #include "AlsaPort.h"
+#include "MappedEventList.h"
 #include "Scavenger.h"
 #include "RunnablePluginInstance.h"
 
@@ -61,7 +62,7 @@ public:
 
     RealTime getSequencerTime() override;
 
-    /// Get MIDI data from ALSA
+    /// Get all pending input events from ALSA as a MappedEventList.
     /**
      * Called by RosegardenSequencer::processRecordedMidi() when recording and
      * RosegardenSequencer::processAsynchronousEvents() when playing or
@@ -515,6 +516,7 @@ private:
                               
     int checkAlsaError(int rc, const char *message);
 
+    /// The ALSA ports.
     AlsaPortVector m_alsaPorts;
     void setFirstConnection(DeviceId deviceId, bool recordDevice);
 
@@ -594,7 +596,12 @@ private:
     typedef std::set<InstrumentId> InstrumentSet;
     InstrumentSet m_recordingInstruments;
 
+    // ??? rename: ConnectionMap
     typedef std::map<DeviceId, ClientPortPair> DevicePortMap;
+    /// Connections between MappedDevice's from the Composition to ALSA port.
+    /**
+     * ??? rename: m_connectionMap
+     */
     DevicePortMap m_devicePortMap;
     void setConnectionToDevice(MappedDevice &device, QString connection);
     void setConnectionToDevice(MappedDevice &device, QString connection,

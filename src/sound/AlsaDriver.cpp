@@ -48,6 +48,8 @@
 #include "AudioPlayQueue.h"
 #include "ExternalTransport.h"
 #include "base/levenshtein.hpp"
+#include "SequencerDataBlock.h"
+#include "PlayableAudioFile.h"
 
 #include <QMutex>
 #include <QRegExp>
@@ -1246,6 +1248,16 @@ AlsaDriver::setFirstConnection(DeviceId deviceId, bool recordDevice)
         if (!recordDevice  &&  !currentPort->isWriteable())
             continue;
 
+        QString lcName = strtoqstr(currentPort->m_name).toLower();
+
+        // Avoid "through" or "thru" ports so that we don't end up creating
+        // a feedback loop.
+        // ??? Might want to do this only in the record case.  That way
+        //     a synth waiting on the other side of a thru port will be
+        //     picked up.
+        if (lcName.contains(" through ")  ||  lcName.contains(" thru "))
+            continue;
+
         AUDIT << "  Going with it...\n";
         RG_DEBUG << "  Going with it...";
 
@@ -1258,9 +1270,6 @@ AlsaDriver::setFirstConnection(DeviceId deviceId, bool recordDevice)
 
     if (firstPort) {
         // Find the device and make the connection.
-        // ??? We need to remove the connecting from this routine.  Instead
-        //     it should be called findPlausibleConnection() and return
-        //     bestPort.  That should make it easier to unit test.
 
         MappedDevice *device = findDevice(deviceId);
         if (device)
@@ -1663,7 +1672,7 @@ AlsaDriver::connectSomething()
 
     MappedDevice *playbackDevice = nullptr;
 
-    // For each device
+    // For each Device in the Composition
     for (MappedDevice *device : m_devices) {
 
         // Not playback?  Try the next.
@@ -1693,7 +1702,7 @@ AlsaDriver::connectSomething()
 
     MappedDevice *recordDevice = nullptr;
 
-    // For each device
+    // For each Device in the Composition
     for (MappedDevice *device : m_devices) {
 
         // Not a record device?  Try the next.
@@ -2752,9 +2761,6 @@ AlsaDriver::getAlsaTime()
 }
 
 
-// Get all pending input events and turn them into a MappedEventList.
-//
-//
 bool
 AlsaDriver::getMappedEventList(MappedEventList &mappedEventList)
 {

@@ -22,6 +22,7 @@
 #include "WAVAudioFile.h"
 #include "MappedStudio.h"
 #include "AudioPlayQueue.h"
+#include "PlayableAudioFile.h"
 
 #include <unistd.h>
 #include <sys/time.h>

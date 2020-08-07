@@ -23,6 +23,7 @@
 #include "base/AudioLevel.h"
 #include "Audit.h"
 #include "PluginFactory.h"
+#include "SequencerDataBlock.h"
 
 #include "misc/ConfigGroups.h"
 #include "misc/Debug.h"

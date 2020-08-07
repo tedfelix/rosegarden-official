@@ -16,35 +16,33 @@
 #ifndef RG_SOUNDDRIVER_H
 #define RG_SOUNDDRIVER_H
 
-#include <string>
-#include <vector>
-#include <list>
-#include <QStringList>
-
 #include "base/Device.h"
-#include "MappedEventList.h"
+#include "base/Instrument.h"  // For InstrumentId...
+#include "base/MidiProgram.h"  // For MidiByte...
+#include "base/RealTime.h"
+#include "MappedEvent.h"
 #include "MappedInstrument.h"
 #include "MappedDevice.h"
-#include "SequencerDataBlock.h"
-#include "PlayableAudioFile.h"
 #include "Scavenger.h"
+#include "AudioPlayQueue.h"
 
-// For SubFormat enum
-#include "RIFFAudioFile.h"
+#include "RIFFAudioFile.h"  // For SubFormat enum
+
+#include <QString>
+#include <QStringList>
+
+#include <set>
+#include <string>
+#include <vector>
 
 
 namespace Rosegarden
 {
 
+
 // Current recording status - whether we're monitoring anything
 // or recording.
-//
-typedef enum
-{
-    RECORD_OFF,
-    RECORD_ON
-} RecordStatus;
-
+enum RecordStatus  { RECORD_OFF, RECORD_ON };
 
 // Status of a SoundDriver - whether we're got an audio and
 // MIDI subsystem or not.  This is reported right up to the
@@ -58,22 +56,25 @@ enum
     VERSION_OK = 0x04           // GUI and sequencer versions match
 };
 
-
-// Used for MMC and MTC, not for JACK transport
-//
-typedef enum
+/// Used for MMC and MTC, not for JACK transport
+enum TransportSyncStatus
 {
     TRANSPORT_OFF,
     TRANSPORT_SOURCE,
     TRANSPORT_FOLLOWER
-} TransportSyncStatus;
+};
 
 
 /// Pending Note Off event for the NoteOffQueue
 class NoteOffEvent
 {
 public:
-    NoteOffEvent() {;}
+    NoteOffEvent() :
+        m_realTime(),
+        m_pitch(0),
+        m_channel(0),
+        m_instrument(0)
+    { }
     NoteOffEvent(const RealTime &realTime,
                  unsigned int pitch,
                  MidiByte channel,
@@ -122,11 +123,9 @@ private:
 };
 
 
-class MappedStudio;
 class ExternalTransport;
-class AudioPlayQueue;
-
-typedef std::vector<PlayableAudioFile *> PlayableAudioFileList;
+class MappedEventList;
+class MappedStudio;
 
 
 /// Abstract Base Class (ABC) to support sound drivers, such as ALSA.
@@ -458,10 +457,11 @@ protected:
     // free and only index each other - the Devices hold information only like
     // name, id and if the device is duplex capable.
     //
-    typedef std::vector<MappedInstrument*> MappedInstrumentList;
+    typedef std::vector<MappedInstrument *> MappedInstrumentList;
     MappedInstrumentList m_instruments;
 
     typedef std::vector<MappedDevice *> MappedDeviceList;
+    /// The devices in the Composition.
     MappedDeviceList m_devices;
     MappedDevice *findDevice(DeviceId deviceId);
 

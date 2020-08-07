@@ -24,6 +24,10 @@
 namespace Rosegarden
 {
 
+
+class PlayableAudioFile;
+
+
 class DummyDriver : public SoundDriver
 {
 public:

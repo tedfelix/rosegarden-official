@@ -24,6 +24,7 @@
 #include "base/AudioLevel.h"
 #include "AudioPlayQueue.h"
 #include "PluginFactory.h"
+#include "ControlBlock.h"
 
 #include "misc/Strings.h"
 #include <sys/time.h>
