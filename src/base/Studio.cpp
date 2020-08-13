@@ -149,6 +149,14 @@ Studio::resyncDeviceConnections()
                 RosegardenSequencer::getInstance()->getConnection(deviceId);
 
         midiDevice->setCurrentConnection(qstrtostr(connection));
+
+        // If we are connected to something, but the user didn't ask for
+        // anything, we must have been connected up by
+        // AlsaDriver::connectSomething().  In that case, we'd better store
+        // the connection as the user selection in case the user actually
+        // likes it.
+        if (connection != ""  &&  midiDevice->getUserConnection() == "")
+            midiDevice->setUserConnection(qstrtostr(connection));
     }
 }
 

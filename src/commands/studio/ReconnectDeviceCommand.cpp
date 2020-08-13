@@ -46,10 +46,21 @@ ReconnectDeviceCommand::execute()
 
     RosegardenSequencer *sequencer = RosegardenSequencer::getInstance();
 
+    if (!sequencer)
+        return;
+
+    // Preserve the old values for undo.
+    m_oldUserConnection = midiDevice->getUserConnection();
+    // We don't trust MidiDevice::m_currentConnection as that may
+    // not be in sync.  Get the actual connection direct from the source.
     m_oldConnection = qstrtostr(
             sequencer->getConnection(midiDevice->getId()));
 
+    // Make the actual connection.
     sequencer->setConnection(m_deviceId, strtoqstr(m_newConnection));
+
+    // Update the MidiDevice
+    midiDevice->setUserConnection(m_newConnection);
     midiDevice->setCurrentConnection(m_newConnection);
     midiDevice->sendChannelSetups();
 
@@ -70,8 +81,12 @@ ReconnectDeviceCommand::unexecute()
     if (!midiDevice)
         return;
 
+    // Make the actual connection.
     RosegardenSequencer::getInstance()->setConnection(
             m_deviceId, strtoqstr(m_oldConnection));
+
+    // Update the MidiDevice
+    midiDevice->setUserConnection(m_oldUserConnection);
     midiDevice->setCurrentConnection(m_oldConnection);
     midiDevice->sendChannelSetups();
 

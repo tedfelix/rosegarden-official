@@ -98,6 +98,7 @@ CreateOrDeleteDeviceCommand::execute()
             MidiDevice *midiDevice = dynamic_cast<MidiDevice *>(device);
             if (midiDevice) {
                 midiDevice->setDirection(m_direction);
+                midiDevice->setUserConnection(m_connection);
                 midiDevice->setCurrentConnection(m_connection);
             }
         }

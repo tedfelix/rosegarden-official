@@ -561,7 +561,7 @@ MidiDevice::toXmlString() const
                                            "LSB" :
                                            m_variationType == VariationFromMSB ?
                                            "MSB" : "")
-               << "\" connection=\""   << encode(m_currentConnection)
+               << "\" connection=\""   << encode(m_userConnection)
                << "\" type=\"midi\">"  << std::endl << std::endl;
 
     midiDevice << "        <librarian name=\"" << encode(m_librarian.first)

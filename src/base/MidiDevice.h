@@ -51,6 +51,7 @@ public:
     // Copy ctor.
     // ??? Switch pointers to objects and rely on bitwise copy to take
     //     care of this.  If that's workable, then this can go.
+    // ??? Only used by ImportDeviceDialog.
     MidiDevice(const MidiDevice &);
 
     //MidiDevice();
@@ -195,6 +196,12 @@ public:
     static bool isPercussionNumber(int channel)
     { return channel == 9; }
 
+    /// See m_userConnection.
+    void setUserConnection(std::string connection)
+            { m_userConnection = connection; }
+    std::string getUserConnection() const
+            { return m_userConnection; }
+    /// See m_currentConnection.
     void setCurrentConnection(std::string connection)
             { m_currentConnection = connection; }
 
@@ -217,7 +224,20 @@ protected:
     //
     void removeControlFromInstrument(const ControlParameter &con);
 
-    std::string    m_currentConnection;
+    /// The connection the user has asked for.
+    /**
+     * This can only be changed by the user.  It is used when attempting
+     * to make a connection.  It is stored in the .rg file.
+     */
+    std::string m_userConnection;
+
+    /// The connection that was actually made.
+    /**
+     * Since the necessary ALSA device might not exist (e.g. it isn't
+     * plugged in), this might be very different from m_userConnection.
+     * This is not stored in the .rg file.
+     */
+    std::string m_currentConnection;
 
     ProgramList    m_programList;
     BankList       m_bankList;

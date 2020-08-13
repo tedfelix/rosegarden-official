@@ -56,6 +56,7 @@ protected:
     Studio *m_studio;
     DeviceId m_deviceId;
     std::string m_newConnection;
+    std::string m_oldUserConnection;
     std::string m_oldConnection;
 };
 
