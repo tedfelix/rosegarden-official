@@ -181,7 +181,7 @@ public:
      *     -> PitchTrackerView::slotInsertableNoteOnReceived()
      *     -> MatrixView::slotInsertableNoteOnReceived()
      *   - controllerDeviceEventReceived()
-     *     -> RMVW::slotControllerDeviceEventReceived()
+     *     -> RMVW::slotExternalControllerMain()
      *
      * This routine also performs extensive error checking and displays
      * error messages when a problem is detected.
@@ -322,8 +322,10 @@ signals:
      * Emitted by processAsynchronousMidi().
      *
      * Connected to
-     * RosegardenMainViewWindow::slotControllerDeviceEventReceived().  These
+     * RosegardenMainViewWindow::slotExternalControllerMain().  These
      * are events from the "external controller" port.
+     *
+     * ??? rename: externalController()
      */
     void controllerDeviceEventReceived(MappedEvent *event);
 

@@ -1017,8 +1017,8 @@ RosegardenMainWindow::initView()
             QMessageBox::critical(dynamic_cast<QWidget*>(this), tr("Rosegarden"), s, QMessageBox::Ok, QMessageBox::Ok);
         }
 
-        connect(m_seqManager, SIGNAL(controllerDeviceEventReceived(MappedEvent *)),
-                m_view, SLOT(slotControllerDeviceEventReceived(MappedEvent *)));
+        connect(m_seqManager, &SequenceManager::controllerDeviceEventReceived,
+                m_view, &RosegardenMainViewWidget::slotExternalControllerMain);
     }
 
     //    delete m_playList;
@@ -8510,7 +8510,24 @@ RosegardenDocument *RosegardenMainWindow::newDocument(bool skipAutoload)
                                   m_useSequencer);
 }
 
+void
+RosegardenMainWindow::changeEvent(QEvent *event)
+{
+    // ??? There's no point in doing this.  RMVW::slotExternalControllerMain()
+    //     clobbers the pointer we send.
+
+    // Let baseclass handle first.
+    QWidget::changeEvent(event);
+
+    if (event->type() == QEvent::ActivationChange) {
+        RG_DEBUG << "changeEvent(): Received activation change.";
+        if (isActiveWindow())
+            emit windowActivated();
+    }
+}
+
 RosegardenMainWindow *RosegardenMainWindow::m_myself = nullptr;
+
 
 }// end namespace Rosegarden
 

@@ -359,6 +359,8 @@ public:
 
 protected:
 
+    void changeEvent(QEvent *event) override;
+
     RosegardenDocument* newDocument(bool skipAutoload = false);
 
     /**** File handling code that we don't want the outside world to use ****/
@@ -538,6 +540,8 @@ protected:
     void leaveActionState(QString stateName);
 
 signals:
+    void windowActivated();
+
     void startupStatusMessage(QString message);
 
     /// emitted just before the document is changed

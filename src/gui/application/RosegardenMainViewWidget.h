@@ -252,7 +252,7 @@ public slots:
      * This routine handles controller 81 which opens or
      * brings to the top various windows based on the value.
      */
-    void slotControllerDeviceEventReceived(MappedEvent *);
+    void slotExternalControllerMain(MappedEvent *);
 
     /// Handle events from the external controller port.
     /**
@@ -313,7 +313,6 @@ signals:
                                        const void *);
 
 protected:
-    void activeMainWindowChanged(const QWidget *);
 
     NotationView *createNotationView(std::vector<Segment *>);
     MatrixView   *createMatrixView  (std::vector<Segment *>, bool drumMode);

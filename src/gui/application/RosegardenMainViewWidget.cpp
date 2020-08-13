@@ -207,6 +207,10 @@ RosegardenMainViewWidget::RosegardenMainViewWidget(bool showTrackLabels,
     connect(this, SIGNAL(controllerDeviceEventReceived(MappedEvent *, const void *)),
             this, SLOT(slotControllerDeviceEventReceived(MappedEvent *, const void *)));
 
+    connect(RosegardenMainWindow::self(),
+                &RosegardenMainWindow::windowActivated,
+            this, &RosegardenMainViewWidget::slotActiveMainWindowChanged);
+
     if (doc) {
         /* signal no longer exists
         	connect(doc, SIGNAL(recordingSegmentUpdated(Segment *,
@@ -409,6 +413,7 @@ RosegardenMainViewWidget::createNotationView(std::vector<Segment *> segmentsToEd
     NotationView *notationView =
         new NotationView(getDocument(), segmentsToEdit, this);
 
+    // ??? No such signal.
     connect(notationView, SIGNAL(windowActivated()),
             this, SLOT(slotActiveMainWindowChanged()));
 
@@ -561,6 +566,7 @@ RosegardenMainViewWidget::createPitchTrackerView(std::vector<Segment *> segments
     PitchTrackerView *pitchTrackerView =
         new PitchTrackerView(getDocument(), segmentsToEdit, this);
 
+    // ??? No such signal.
     connect(pitchTrackerView, SIGNAL(windowActivated()),
             this, SLOT(slotActiveMainWindowChanged()));
 
@@ -762,6 +768,7 @@ RosegardenMainViewWidget::createMatrixView(std::vector<Segment *> segmentsToEdit
                                                   drumMode,
                                                   this);
 
+    // ??? No such signal.
     connect(matrixView, SIGNAL(windowActivated()),
             this, SLOT(slotActiveMainWindowChanged()));
 
@@ -1807,23 +1814,19 @@ RosegardenMainViewWidget::slotSynchroniseWithComposition()
 }
 
 void
-RosegardenMainViewWidget::activeMainWindowChanged(const QWidget *w)
-{
-    m_lastActiveMainWindow = w;
-}
-
-void
 RosegardenMainViewWidget::slotActiveMainWindowChanged()
 {
+    RG_DEBUG << "slotActiveMainWindowChanged()";
+
     const QWidget *w = dynamic_cast<const QWidget *>(sender());
     if (w)
-        activeMainWindowChanged(w);
+        m_lastActiveMainWindow = w;
 }
 
 void
-RosegardenMainViewWidget::slotControllerDeviceEventReceived(MappedEvent *e)
+RosegardenMainViewWidget::slotExternalControllerMain(MappedEvent *e)
 {
-    //RG_DEBUG << "slotControllerDeviceEventReceived() - send to " << (void *)m_lastActiveMainWindow << " (I am " << this << ")";
+    //RG_DEBUG << "slotExternalControllerMain() - send to " << (void *)m_lastActiveMainWindow << " (I am " << this << ")";
 
     //!!! So, what _should_ we do with these?
 
@@ -1859,7 +1862,7 @@ RosegardenMainViewWidget::slotControllerDeviceEventReceived(MappedEvent *e)
             // select window
             int window = e->getData2();
 
-            if (window < 10) { // me
+            if (window < 42) {  // Main Window
 
                 show();
 
@@ -1869,11 +1872,17 @@ RosegardenMainViewWidget::slotControllerDeviceEventReceived(MappedEvent *e)
                 activateWindow();
                 raise();
 
-            } else if (window < 20) {
+                // ??? In this case, RMW will inform us that it is active,
+                //     but it will provide a pointer to RMW.  RMW is not
+                //     the one responsible for handling external controller
+                //     events for the main window.  RMVW is.  So...
+                m_lastActiveMainWindow = this;
+
+            } else if (window < 84) {
 
                 RosegardenMainWindow::self()->slotOpenAudioMixer();
 
-            } else if (window < 30) {
+            } else {
 
                 RosegardenMainWindow::self()->slotOpenMidiMixer();
             }
@@ -1894,7 +1903,8 @@ RosegardenMainViewWidget::slotControllerDeviceEventReceived(MappedEvent *e)
 }
 
 void
-RosegardenMainViewWidget::slotControllerDeviceEventReceived(MappedEvent *e, const void *preferredCustomer)
+RosegardenMainViewWidget::slotControllerDeviceEventReceived(
+        MappedEvent *e, const void *preferredCustomer)
 {
     if (preferredCustomer != this)
         return ;
@@ -2049,6 +2059,7 @@ RosegardenMainViewWidget::createEventView(std::vector<Segment *> segmentsToEdit)
                                          segmentsToEdit,
                                          this);
 
+    // ??? No such signal.
     connect(eventView, SIGNAL(windowActivated()),
         this, SLOT(slotActiveMainWindowChanged()));
 

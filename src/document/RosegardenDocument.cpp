@@ -1886,7 +1886,7 @@ RosegardenDocument::insertRecordedMidi(const MappedEventList &mC)
             for (int k = 0; k < viewCount; ++k) {
                 RosegardenMainViewWidget *v = m_viewList.value(k);
                 // Send the event to the view
-                v->slotControllerDeviceEventReceived(*i);
+                v->slotExternalControllerMain(*i);
             }
 
             // No further processing is required for this event.
