@@ -158,8 +158,8 @@ SequencerThread::run()
             atLeisure = false;
         }
 
-        // Every 3 seconds
-        if (timer.elapsed() > 3000) {
+        // Every second
+        if (timer.elapsed() > 1000) {
             seq.checkForNewClients();
             timer.restart();
         }
