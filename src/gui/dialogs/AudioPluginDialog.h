@@ -108,8 +108,6 @@ protected slots:
     //virtual void slotClose();
 
 protected:
-    virtual void windowActivationChange(bool);
-
     void makePluginParamsBox(QWidget*);
     QStringList getProgramsForInstance(AudioPluginInstance *inst, int &current);
 

@@ -53,7 +53,6 @@ protected slots:
 
 protected:
     void closeEvent(QCloseEvent *) override;
-    virtual void windowActivationChange(bool);
 
     /// Send MIDI volume and pan messages to the "external controller" port.
     /**

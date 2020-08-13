@@ -1807,15 +1807,7 @@ RosegardenMainViewWidget::slotSynchroniseWithComposition()
 }
 
 void
-RosegardenMainViewWidget::windowActivationChange(bool)
-{
-    if (isActiveWindow()) {
-        slotActiveMainWindowChanged(this);
-    }
-}
-
-void
-RosegardenMainViewWidget::slotActiveMainWindowChanged(const QWidget *w)
+RosegardenMainViewWidget::activeMainWindowChanged(const QWidget *w)
 {
     m_lastActiveMainWindow = w;
 }
@@ -1825,7 +1817,7 @@ RosegardenMainViewWidget::slotActiveMainWindowChanged()
 {
     const QWidget *w = dynamic_cast<const QWidget *>(sender());
     if (w)
-        slotActiveMainWindowChanged(w);
+        activeMainWindowChanged(w);
 }
 
 void

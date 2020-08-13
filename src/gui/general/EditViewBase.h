@@ -180,8 +180,6 @@ public slots:
     
 protected:
 
-    virtual void windowActivationChange(bool);
-
     /**
      * @see #setInCtor
      */

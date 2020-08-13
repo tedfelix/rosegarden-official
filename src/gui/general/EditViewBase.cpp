@@ -334,14 +334,6 @@ EditViewBase::slotCompositionStateUpdate()
 }
 
 void
-EditViewBase::windowActivationChange(bool /* oldState */)
-{
-    if (isActiveWindow()) {
-        emit windowActivated();
-    }
-}
-
-void
 EditViewBase::handleEventRemoved(Event */* event */)
 {
 }

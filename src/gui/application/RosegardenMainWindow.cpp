@@ -6906,8 +6906,8 @@ RosegardenMainWindow::slotOpenMidiMixer()
 
     m_midiMixer = new MidiMixerWindow(this, m_doc);
 
-    connect(m_midiMixer, SIGNAL(windowActivated()),
-            m_view, SLOT(slotActiveMainWindowChanged()));
+    connect(m_midiMixer, &MidiMixerWindow::windowActivated,
+            m_view, &RosegardenMainViewWidget::slotActiveMainWindowChanged);
 
     connect(m_view, &RosegardenMainViewWidget::controllerDeviceEventReceived,
             m_midiMixer, &MidiMixerWindow::slotControllerDeviceEventReceived);

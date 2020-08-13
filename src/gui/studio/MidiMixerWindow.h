@@ -95,6 +95,8 @@ protected slots:
     void slotControllerChanged(float);
 
 protected:
+    void changeEvent(QEvent *event) override;
+
     void addTab(QWidget *tab, const QString &title);
 
     void sendControllerRefresh() override;

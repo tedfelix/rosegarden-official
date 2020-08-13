@@ -242,8 +242,7 @@ public slots:
      * another application entirely but still receiving MIDI etc in
      * Rosegarden.)
      */
-    void slotActiveMainWindowChanged(const QWidget *);
-    void slotActiveMainWindowChanged(); // uses sender()
+    void slotActiveMainWindowChanged();
 
     /// Handle events from the external controller port.
     /**
@@ -314,12 +313,12 @@ signals:
                                        const void *);
 
 protected:
+    void activeMainWindowChanged(const QWidget *);
+
     NotationView *createNotationView(std::vector<Segment *>);
     MatrixView   *createMatrixView  (std::vector<Segment *>, bool drumMode);
     EventView    *createEventView   (std::vector<Segment *>);
     PitchTrackerView *createPitchTrackerView (std::vector<Segment *>);
-
-    virtual void windowActivationChange(bool);
 
     static bool hasNonAudioSegment(const SegmentSelection &segments);
 

@@ -52,15 +52,6 @@ MixerWindow::closeEvent(QCloseEvent *e)
 }
 
 void
-MixerWindow::windowActivationChange(bool)
-{
-    if (isActiveWindow()) {
-        emit windowActivated();
-        sendControllerRefresh();
-    }
-}
-
-void
 MixerWindow::slotClose()
 {
     RG_DEBUG << "MixerWindow::slotClose()\n";

@@ -842,5 +842,20 @@ MidiMixerWindow::getIPBForMidiMixer(MidiDevice *dev) const
     return retList;
 }
 
+void
+MidiMixerWindow::changeEvent(QEvent *event)
+{
+    // Let baseclass handle first.
+    QWidget::changeEvent(event);
+
+    if (event->type() == QEvent::ActivationChange) {
+        //RG_DEBUG << "changeEvent(): Received activation change.";
+        if (isActiveWindow()) {
+            emit windowActivated();
+            sendControllerRefresh();
+        }
+    }
+}
+
 
 }
