@@ -2711,14 +2711,17 @@ RoseXmlHandler::setMIDIDeviceConnection(QString connection)
 {
     RG_DEBUG << "setMIDIDeviceConnection(" << connection << ")";
 
-    MidiDevice *md = dynamic_cast<MidiDevice *>(m_device);
-    if (!md) return;
+    MidiDevice *midiDevice = dynamic_cast<MidiDevice *>(m_device);
+    if (!midiDevice)
+        return;
 
-    RosegardenSequencer::getInstance()->setPlausibleConnection
-        (md->getId(), connection);
-    // We sync connection now, otherwise we'll confuse
-    // MidiDevice::setConnection.
-    md->setConnection(qstrtostr(connection));
+    RosegardenSequencer::getInstance()->setPlausibleConnection(
+            midiDevice->getId(), connection);
+
+    // ??? This might not be the actual connection.  I'm guessing
+    //     Studio::resyncDeviceConnections() is called at some point
+    //     and this is corrected.
+    midiDevice->setCurrentConnection(qstrtostr(connection));
 }
 
 void

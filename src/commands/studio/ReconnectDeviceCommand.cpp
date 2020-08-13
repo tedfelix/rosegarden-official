@@ -50,7 +50,7 @@ ReconnectDeviceCommand::execute()
             sequencer->getConnection(midiDevice->getId()));
 
     sequencer->setConnection(m_deviceId, strtoqstr(m_newConnection));
-    midiDevice->setConnection(m_newConnection);
+    midiDevice->setCurrentConnection(m_newConnection);
     midiDevice->sendChannelSetups();
 
     //RG_DEBUG << "execute(): reconnected device " << m_deviceId << " to " << m_newConnection;
@@ -72,7 +72,7 @@ ReconnectDeviceCommand::unexecute()
 
     RosegardenSequencer::getInstance()->setConnection(
             m_deviceId, strtoqstr(m_oldConnection));
-    midiDevice->setConnection(m_oldConnection);
+    midiDevice->setCurrentConnection(m_oldConnection);
     midiDevice->sendChannelSetups();
 
     //RG_DEBUG << "unexecute(): reconnected device " << m_deviceId << " to " << m_oldConnection;

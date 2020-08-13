@@ -148,7 +148,7 @@ Studio::resyncDeviceConnections()
         QString connection =
                 RosegardenSequencer::getInstance()->getConnection(deviceId);
 
-        midiDevice->setConnection(qstrtostr(connection));
+        midiDevice->setCurrentConnection(qstrtostr(connection));
     }
 }
 

@@ -195,7 +195,8 @@ public:
     static bool isPercussionNumber(int channel)
     { return channel == 9; }
 
-    void setConnection(std::string connection)  { m_connection = connection; }
+    void setCurrentConnection(std::string connection)
+            { m_currentConnection = connection; }
 
 protected:
     void createInstruments(InstrumentId);
@@ -216,7 +217,7 @@ protected:
     //
     void removeControlFromInstrument(const ControlParameter &con);
 
-    std::string    m_connection;
+    std::string    m_currentConnection;
 
     ProgramList    m_programList;
     BankList       m_bankList;
