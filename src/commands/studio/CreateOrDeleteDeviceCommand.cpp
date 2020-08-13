@@ -95,9 +95,11 @@ CreateOrDeleteDeviceCommand::execute()
         m_studio->addDevice(m_name, m_deviceId, m_baseInstrumentId, m_type);
         Device *device = m_studio->getDevice(m_deviceId);
         if (device) {
-            device->setConnection(m_connection);
-            MidiDevice *md = dynamic_cast<MidiDevice *>(device);
-            if (md) md->setDirection(m_direction);
+            MidiDevice *midiDevice = dynamic_cast<MidiDevice *>(device);
+            if (midiDevice) {
+                midiDevice->setDirection(m_direction);
+                midiDevice->setConnection(m_connection);
+            }
         }
 
         /* update view automatically (without pressing refresh button) */

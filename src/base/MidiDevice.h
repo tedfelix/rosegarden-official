@@ -195,6 +195,8 @@ public:
     static bool isPercussionNumber(int channel)
     { return channel == 9; }
 
+    void setConnection(std::string connection)  { m_connection = connection; }
+
 protected:
     void createInstruments(InstrumentId);
     void renameInstruments() override;
@@ -213,6 +215,8 @@ protected:
     // Remove a control from all of the device's Instruments.
     //
     void removeControlFromInstrument(const ControlParameter &con);
+
+    std::string    m_connection;
 
     ProgramList    m_programList;
     BankList       m_bankList;

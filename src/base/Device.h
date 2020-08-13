@@ -96,8 +96,6 @@ public:
      */
     void sendChannelSetups();
 
-    void setConnection(std::string connection)  { m_connection = connection; }
-
 protected:
     virtual void addInstrument(Instrument *) = 0;
     virtual void renameInstruments() = 0;
@@ -106,7 +104,6 @@ protected:
     std::string        m_name;
     DeviceType         m_type;
     DeviceId           m_id;
-    std::string        m_connection;
 };
 
 }

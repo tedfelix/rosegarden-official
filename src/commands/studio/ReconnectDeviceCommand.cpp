@@ -39,19 +39,21 @@ void
 ReconnectDeviceCommand::execute()
 {
     Device *device = m_studio->getDevice(m_deviceId);
+    MidiDevice *midiDevice = dynamic_cast<MidiDevice *>(device);
 
-    if (device) {
-        RosegardenSequencer *sequencer = RosegardenSequencer::getInstance();
+    if (!midiDevice)
+        return;
 
-        m_oldConnection = qstrtostr(
-                sequencer->getConnection(device->getId()));
+    RosegardenSequencer *sequencer = RosegardenSequencer::getInstance();
 
-        sequencer->setConnection(m_deviceId, strtoqstr(m_newConnection));
-        device->setConnection(m_newConnection);
-        device->sendChannelSetups();
+    m_oldConnection = qstrtostr(
+            sequencer->getConnection(midiDevice->getId()));
 
-        //RG_DEBUG << "execute(): reconnected device " << m_deviceId << " to " << m_newConnection;
-    }
+    sequencer->setConnection(m_deviceId, strtoqstr(m_newConnection));
+    midiDevice->setConnection(m_newConnection);
+    midiDevice->sendChannelSetups();
+
+    //RG_DEBUG << "execute(): reconnected device " << m_deviceId << " to " << m_newConnection;
 
     // ??? Instead of this kludge, we should be calling a Studio::hasChanged()
     //     which would then notify all observers (e.g. MIPP) who, in turn,
@@ -63,15 +65,17 @@ void
 ReconnectDeviceCommand::unexecute()
 {
     Device *device = m_studio->getDevice(m_deviceId);
+    MidiDevice *midiDevice = dynamic_cast<MidiDevice *>(device);
 
-    if (device) {
-        RosegardenSequencer::getInstance()->setConnection(
-                m_deviceId, strtoqstr(m_oldConnection));
-        device->setConnection(m_oldConnection);
-        device->sendChannelSetups();
+    if (!midiDevice)
+        return;
 
-        //RG_DEBUG << "unexecute(): reconnected device " << m_deviceId << " to " << m_oldConnection;
-    }
+    RosegardenSequencer::getInstance()->setConnection(
+            m_deviceId, strtoqstr(m_oldConnection));
+    midiDevice->setConnection(m_oldConnection);
+    midiDevice->sendChannelSetups();
+
+    //RG_DEBUG << "unexecute(): reconnected device " << m_deviceId << " to " << m_oldConnection;
 
     // ??? Instead of this kludge, we should be calling a Studio::hasChanged()
     //     which would then notify all observers (e.g. MIPP) who, in turn,

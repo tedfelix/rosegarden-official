@@ -130,15 +130,25 @@ Studio::removeDevice(DeviceId id)
 }
 
 void
-Studio::
-resyncDeviceConnections()
+Studio::resyncDeviceConnections()
 {
-    // Sync all the device connections
+    // Sync all the MidiDevice connections to the current connections
+    // according to RosegardenSequencer.
+
     DeviceList *devices = getDevices();
-    for (uint i = 0; i < devices->size(); ++i) {
-        DeviceId id = (*devices)[i]->getId();
-        QString connection = RosegardenSequencer::getInstance()->getConnection(id);
-        (*devices)[i]->setConnection(qstrtostr(connection));
+
+    // For each Device
+    for (unsigned i = 0; i < devices->size(); ++i) {
+        // Only MidiDevice's have connections.
+        MidiDevice *midiDevice = dynamic_cast<MidiDevice *>((*devices)[i]);
+        if (!midiDevice)
+            continue;
+
+        DeviceId deviceId = midiDevice->getId();
+        QString connection =
+                RosegardenSequencer::getInstance()->getConnection(deviceId);
+
+        midiDevice->setConnection(qstrtostr(connection));
     }
 }
 
