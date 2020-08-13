@@ -19,17 +19,17 @@
 #ifndef RG_RECONNECTDEVICECOMMAND_H
 #define RG_RECONNECTDEVICECOMMAND_H
 
-#include "base/Device.h"
-#include <string>
-#include "document/Command.h"
+#include "document/Command.h"  // For NamedCommand
+#include "base/Device.h"  // For DeviceId
+
 #include <QString>
-#include <QCoreApplication>
 
-
+#include <string>
 
 
 namespace Rosegarden
 {
+
 
 class Studio;
 
@@ -47,7 +47,7 @@ public:
         m_deviceId(deviceId),
         m_newConnection(newConnection) { }
 
-    static QString getGlobalName() { return tr("Reconnect Device"); }
+    static QString getGlobalName()  { return tr("Reconnect Device"); }
 
     void execute() override;
     void unexecute() override;

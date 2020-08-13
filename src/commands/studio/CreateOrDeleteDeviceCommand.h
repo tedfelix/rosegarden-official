@@ -20,17 +20,18 @@
 
 #include "base/Device.h"
 #include "base/MidiDevice.h"
-#include <string>
-#include "document/Command.h"
+#include "document/Command.h"  // For NamedCommand
+
 #include <QString>
-#include <QCoreApplication>
+
+#include <string>
 
 
 namespace Rosegarden
 {
 
+
 class Studio;
-class RosegardenMainWindow;
 
 
 class CreateOrDeleteDeviceCommand : public NamedCommand
@@ -63,16 +64,18 @@ public:
     }
     
     void execute() override;
-    void unexecute() override { execute(); }
+    void unexecute() override  { execute(); }
     
-protected:
+private:
     Studio *m_studio;
     std::string m_name;
     Device::DeviceType m_type;
     MidiDevice::DeviceDirection m_direction;
     std::string m_connection;
+
     DeviceId m_deviceId;
     InstrumentId m_baseInstrumentId;
+    /// true: Delete, false: Create
     bool m_deviceCreated;
 };
 

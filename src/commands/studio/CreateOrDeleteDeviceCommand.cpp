@@ -20,17 +20,13 @@
 #include "CreateOrDeleteDeviceCommand.h"
 
 #include "misc/Debug.h"
-#include "misc/Strings.h"
 #include "base/Device.h"
-#include "base/MidiDevice.h"
-#include "base/Studio.h"
-#include "sequencer/RosegardenSequencer.h"
 #include "gui/studio/DeviceManagerDialog.h"
+#include "base/MidiDevice.h"
 #include "gui/application/RosegardenMainWindow.h"
-
-#include <QByteArray>
-#include <QDataStream>
-#include <QString>
+#include "sequencer/RosegardenSequencer.h"
+#include "misc/Strings.h"  // For qstrtostr()...
+#include "base/Studio.h"
 
 
 namespace Rosegarden
@@ -41,32 +37,38 @@ CreateOrDeleteDeviceCommand::CreateOrDeleteDeviceCommand(Studio *studio,
     NamedCommand(getGlobalName(true)),
     m_studio(studio),
     m_deviceId(id),
-    m_deviceCreated(true)
+    m_deviceCreated(true)  // We are doing delete.
 {
     Device *device = m_studio->getDevice(m_deviceId);
 
-    if (device) {
-        m_name = device->getName();
-        m_type = device->getType();
-        m_direction = MidiDevice::Play;
-        MidiDevice *md = dynamic_cast<MidiDevice *>(device);
-        if (md) m_direction = md->getDirection();
-        m_connection = qstrtostr(RosegardenSequencer::getInstance()
-                                 ->getConnection(md->getId()));
-    } else {
-        RG_DEBUG << "CreateOrDeleteDeviceCommand: No such device as "
-                 << m_deviceId << endl;
+    if (!device) {
+        RG_WARNING << "CreateOrDeleteDeviceCommand(): WARNING: No such device as " << m_deviceId;
+        return;
     }
+
+    // Save for undo.
+
+    m_name = device->getName();
+    m_type = device->getType();
+    m_direction = MidiDevice::Play;
+
+    MidiDevice *midiDevice = dynamic_cast<MidiDevice *>(device);
+    if (midiDevice)
+        m_direction = midiDevice->getDirection();
+
+    m_connection = qstrtostr(RosegardenSequencer::getInstance()->
+            getConnection(midiDevice->getId()));
 }
 
 void
 CreateOrDeleteDeviceCommand::execute()
 {
+    // Create
     if (!m_deviceCreated) {
 
-        //!DEVPUSH: Not ideal; we probably just want to add it to the studio (and then trigger a re-push) rather than add it twice to studio and sequencer
-
-        // Create
+        // !DEVPUSH: Not ideal; we probably just want to add it to the
+        //           studio (and then trigger a re-push) rather than add
+        //           it twice to studio and sequencer
 
         // don't want to do this again on undo even if it fails -- only on redo
         m_deviceCreated = true;
@@ -77,22 +79,21 @@ CreateOrDeleteDeviceCommand::execute()
             addDevice(m_type, m_deviceId, m_baseInstrumentId, m_direction);
 
         if (!success) {
-            RG_DEBUG << "execute() - sequencer addDevice failed";
-            return ;
+            RG_WARNING << "execute(): WARNING: addDevice() failed";
+            return;
         }
 
-        RG_DEBUG << "execute() - "
-                     << " added device " << m_deviceId
-                     << " with base instrument id " << m_baseInstrumentId;
+        //RG_DEBUG << "execute() - added device " << m_deviceId << " with base instrument id " << m_baseInstrumentId;
 
-        RosegardenSequencer::getInstance()->setConnection
-            (m_deviceId, strtoqstr(m_connection));
+        // Make the connection.
+        RosegardenSequencer::getInstance()->setConnection(
+                m_deviceId, strtoqstr(m_connection));
 
-        RG_DEBUG << "execute() - "
-                     << " reconnected device " << m_deviceId
-                     << " to " << m_connection;
+        //RG_DEBUG << "execute() - reconnected device " << m_deviceId << " to " << m_connection;
 
+        // Add to Studio.
         m_studio->addDevice(m_name, m_deviceId, m_baseInstrumentId, m_type);
+
         Device *device = m_studio->getDevice(m_deviceId);
         if (device) {
             MidiDevice *midiDevice = dynamic_cast<MidiDevice *>(device);
@@ -103,22 +104,24 @@ CreateOrDeleteDeviceCommand::execute()
             }
         }
 
-        /* update view automatically (without pressing refresh button) */
-        DeviceManagerDialog *dmd=RosegardenMainWindow::self()->getDeviceManager();
-        if (dmd!=nullptr) {
-          dmd->slotResyncDevicesReceived();
-        }
-    } else {
+        // Update view automatically (without pressing refresh button).
+        DeviceManagerDialog *deviceManagerDialog =
+                RosegardenMainWindow::self()->getDeviceManager();
+        if (deviceManagerDialog)
+            deviceManagerDialog->slotResyncDevicesReceived();
 
-        // Delete
+    } else {  // Delete
 
+        // Delete the device from the sequencer.
         RosegardenSequencer::getInstance()->removeDevice(m_deviceId);
 
-        RG_DEBUG << "execute() - removed device " << m_deviceId;
+        //RG_DEBUG << "execute() - removed device " << m_deviceId;
 
+        // Delete the device from the Studio.
         m_studio->removeDevice(m_deviceId);
 
         m_deviceId = Device::NO_DEVICE;
+
         m_deviceCreated = false;
     }
 
@@ -127,5 +130,6 @@ CreateOrDeleteDeviceCommand::execute()
     //     would update themselves.
     RosegardenMainWindow::self()->uiUpdateKludge();
 }
+
 
 }

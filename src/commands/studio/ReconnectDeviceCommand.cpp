@@ -15,20 +15,17 @@
     COPYING included with this distribution for more information.
 */
 
-
 #define RG_MODULE_STRING "[ReconnectDeviceCommand]"
 
 #include "ReconnectDeviceCommand.h"
 
-#include "misc/Strings.h"
 #include "misc/Debug.h"
 #include "base/Device.h"
-#include "base/Studio.h"
-#include <QByteArray>
-#include <QDataStream>
-#include <QString>
-#include "sequencer/RosegardenSequencer.h"
+#include "base/MidiDevice.h"
 #include "gui/application/RosegardenMainWindow.h"
+#include "sequencer/RosegardenSequencer.h"
+#include "misc/Strings.h"  // For strtoqstr()...
+#include "base/Studio.h"
 
 
 namespace Rosegarden
