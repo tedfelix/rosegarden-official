@@ -244,7 +244,7 @@ public:
 
     // Poll for new clients (for new Devices/Instruments)
     //
-    virtual bool checkForNewClients() = 0;
+    virtual void checkForNewClients() = 0;
 
     // Set a loop position at the driver (used for transport)
     //

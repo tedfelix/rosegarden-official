@@ -533,12 +533,8 @@ AlsaDriver::getAutoTimer(bool &wantTimerChecks)
 
 
 
-/* generatePortList: called from initialiseMidi and
- * checkForNewClients.  This just polls ALSA ports and should continue
- * to be called regularly. */
-
 void
-AlsaDriver::generatePortList(AlsaPortVector *newPorts)
+AlsaDriver::generatePortList()
 {
     AlsaPortVector alsaPorts;
 
@@ -670,10 +666,10 @@ AlsaDriver::generatePortList(AlsaPortVector *newPorts)
                                             capability,
                                             direction));
 
-                if (newPorts &&
-                    (getPortName(ClientPortPair(client, port)) == "")) {
-                    newPorts->push_back(portDescription);
-                }
+                //if (newPorts  &&
+                //    (getPortName(ClientPortPair(client, port)) == "")) {
+                //    newPorts->push_back(portDescription);
+                //}
 
                 alsaPorts.push_back(portDescription);
 
@@ -2071,6 +2067,7 @@ AlsaDriver::initialiseMidi()
 
     getSystemInfo();
 
+    // Update m_alsaPorts.
     generatePortList();
     generateFixedInstruments();
 
@@ -5113,95 +5110,112 @@ AlsaDriver::isRecording(AlsaPortDescription *port)
     return false;
 }
 
-bool
+void
 AlsaDriver::checkForNewClients()
 {
-    // bool madeChange = false; 
+    //RG_DEBUG << "checkForNewClients() begin...";
 
-#ifdef DEBUG_ALSA
-    RG_DEBUG << "checkForNewClients() begin...";
-#endif
+    // If no ALSA client or port events have come in, bail.
+    if (!m_portCheckNeeded)
+        return;
 
-    if (!m_portCheckNeeded) return false;
+    //RG_DEBUG << "checkForNewClients(): port check needed";
 
-#ifdef DEBUG_ALSA
-    RG_DEBUG << "checkForNewClients(): port check needed";
-#endif
+    // Update m_alsaPorts.
+    // ??? Rename: updateALSAPorts()?
+    generatePortList();
 
-    AlsaPortVector newPorts;
-    generatePortList(&newPorts); // updates m_alsaPorts, returns new ports as well
+    // From this point on,
+    // this routine appears to be checking the connections (subscribers)
+    // that are out there and making sure our list of connections is in
+    // sync.  It appears to be more of a syncConnections().
 
     // If one of our ports is connected to a single other port and
-    // it isn't the one we thought, we should update our connection
+    // it isn't the one we thought, we should update our connection.
+    // ??? That comment appears to be describing what this code is
+    //     doing.  However, the use of the word "should" isn't comforting.
 
-    for (MappedDeviceList::iterator i = m_devices.begin();
-         i != m_devices.end(); ++i) {
+    // For each MappedDevice in the Studio/Composition.
+    for (MappedDevice *device : m_devices) {
 
-        DevicePortMap::iterator j = m_devicePortMap.find((*i)->getId());
+        DevicePortMap::iterator connectionIter =
+                m_devicePortMap.find(device->getId());
+
+        // Assemble the ALSA address (client and port numbers) for
+        // this MappedDevice.
 
         snd_seq_addr_t addr;
+
+        // Rosegarden's ALSA client number.
         addr.client = m_client;
 
-        DeviceIntMap::iterator ii = m_outputPorts.find((*i)->getId());
-        if (ii == m_outputPorts.end()) continue;
-        addr.port = ii->second;
+        // Get the current MappedDevice's ALSA port number.
+        DeviceIntMap::iterator portIter =
+                m_outputPorts.find(device->getId());
+        // Not found?  Try the next.
+        if (portIter == m_outputPorts.end())
+            continue;
+
+        addr.port = portIter->second;
+
+        // ??? Prepare to query subscribers?
 
         snd_seq_query_subscribe_t *subs;
         snd_seq_query_subscribe_alloca(&subs);
         snd_seq_query_subscribe_set_root(subs, &addr);
+        // Start at subscriber number 0.
         snd_seq_query_subscribe_set_index(subs, 0);
 
         bool haveOurs = false;
         int others = 0;
         ClientPortPair firstOther;
 
+        // For each port subscriber
         while (!snd_seq_query_port_subscribers(m_midiHandle, subs)) {
 
             const snd_seq_addr_t *otherEnd =
                 snd_seq_query_subscribe_get_addr(subs);
 
-            if (!otherEnd) continue;
+            if (!otherEnd)
+                continue;
 
-            if (j != m_devicePortMap.end() &&
-                otherEnd->client == j->second.client &&
-                otherEnd->port == j->second.port) {
+            if (connectionIter != m_devicePortMap.end() &&
+                otherEnd->client == connectionIter->second.client &&
+                otherEnd->port == connectionIter->second.port) {
                 haveOurs = true;
             } else {
                 ++others;
                 firstOther = ClientPortPair(otherEnd->client, otherEnd->port);
             }
 
-            snd_seq_query_subscribe_set_index
-                (subs, snd_seq_query_subscribe_get_index(subs) + 1);
+            // Move to the next subscriber.
+            snd_seq_query_subscribe_set_index(
+                    subs, snd_seq_query_subscribe_get_index(subs) + 1);
         }
 
-        if (haveOurs) { // leave our own connection alone, and stop worrying
+        // leave our own connection alone, and stop worrying
+        if (haveOurs)
             continue;
 
+        if (others == 0) {
+            if (connectionIter != m_devicePortMap.end()) {
+                connectionIter->second = ClientPortPair( -1, -1);
+                setConnectionToDevice(*device, "");
+            }
         } else {
-            if (others == 0) {
-                if (j != m_devicePortMap.end()) {
-                    j->second = ClientPortPair( -1, -1);
-                    setConnectionToDevice(**i, "");
-                    // madeChange = true;
-                }
-            } else {
-                for (AlsaPortVector::iterator k = m_alsaPorts.begin();
-                     k != m_alsaPorts.end(); ++k) {
-                    if ((*k)->m_client == firstOther.client &&
-                        (*k)->m_port == firstOther.port) {
-                        m_devicePortMap[(*i)->getId()] = firstOther;
-                        setConnectionToDevice(**i, (*k)->m_name.c_str(), firstOther);
-                        // madeChange = true;
-                        break;
-                    }
+            for (AlsaPortVector::iterator k = m_alsaPorts.begin();
+                 k != m_alsaPorts.end(); ++k) {
+                if ((*k)->m_client == firstOther.client &&
+                    (*k)->m_port == firstOther.port) {
+                    m_devicePortMap[device->getId()] = firstOther;
+                    setConnectionToDevice(*device, (*k)->m_name.c_str(), firstOther);
+                    break;
                 }
             }
         }
     }
 
     m_portCheckNeeded = false;
-    return true;
 }
 
 

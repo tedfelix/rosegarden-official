@@ -128,7 +128,7 @@ public:
                                           float,
                                           float) override { }
 
-    bool checkForNewClients() override { return false; }
+    void checkForNewClients() override  { }
 
     void setLoop(const RealTime &/*loopStart*/,
                          const RealTime &/*loopEnd*/) override { }

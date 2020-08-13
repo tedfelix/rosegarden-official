@@ -1507,11 +1507,7 @@ RosegardenSequencer::checkForNewClients()
         m_transportStatus == RECORDING)
         return ;
 
-    if (m_driver->checkForNewClients()) {
-#ifdef DEBUG_ROSEGARDEN_SEQUENCER        
-        SEQUENCER_DEBUG << "client list changed";
-#endif
-    }
+    m_driver->checkForNewClients();
 }
 
 

@@ -331,7 +331,7 @@ public:
     void claimUnwantedPlugin(void *plugin) override;
     void scavengePlugins() override;
 
-    bool checkForNewClients() override;
+    void checkForNewClients() override;
 
     void setLoop(const RealTime &loopStart, const RealTime &loopEnd) override;
 
@@ -471,11 +471,14 @@ protected:
 
     typedef std::vector<QSharedPointer<AlsaPortDescription> > AlsaPortVector;
 
+    /// Bring m_alsaPorts up-to-date.
     /**
-     * Bring m_alsaPorts up-to-date; if newPorts is non-null, also
-     * return the new ports (not previously in m_alsaPorts) through it
+     * Polls ALSA ports and should be called when a client or port event
+     * arrives from ALSA.
+     *
+     * Called from initialiseMidi() and checkForNewClients().
      */
-    virtual void generatePortList(AlsaPortVector *newPorts = nullptr);
+    virtual void generatePortList();
     void generateFixedInstruments() override;
 
     virtual void generateTimerList();
@@ -527,8 +530,10 @@ private:
 
     int                          m_inputPort;
     
-    typedef std::map<DeviceId, int> DeviceIntMap;
-    DeviceIntMap                 m_outputPorts;
+    typedef std::map<DeviceId, int /* portNumber */> DeviceIntMap;
+    // ??? The ports that are created for each output device in the
+    //     Composition/Studio?
+    DeviceIntMap m_outputPorts;
 
     int                          m_syncOutputPort;
     int                          m_controllerPort;
@@ -598,7 +603,7 @@ private:
 
     // ??? rename: ConnectionMap
     typedef std::map<DeviceId, ClientPortPair> DevicePortMap;
-    /// Connections between MappedDevice's from the Composition to ALSA port.
+    /// Composition/Studio MappedDevice -> ALSA ClientPortPair connections.
     /**
      * ??? rename: m_connectionMap
      */
@@ -654,6 +659,10 @@ private:
 
     bool m_queueRunning;
     
+    /// An ALSA client or port event was received.
+    /**
+     * checkForNewClients() will handle.
+     */
     bool m_portCheckNeeded;
 
     enum { NeedNoJackStart, NeedJackReposition, NeedJackStart } m_needJackStart;
