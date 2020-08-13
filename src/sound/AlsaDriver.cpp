@@ -5276,9 +5276,9 @@ AlsaDriver::checkForNewClients()
         //
         //     We would need to track the user changing the connection
         //     (setConnection()) and update the user connection in
-        //     MappedDevice.
-        //
-        //     Feels like that should work.
+        //     MappedDevice.  Problem here is that setConnection() is used
+        //     for automatic *and* user connections.  We would need a way
+        //     to differentiate.
 
         // Try to make a connection.
         setPlausibleConnection(
