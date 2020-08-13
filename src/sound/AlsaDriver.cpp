@@ -5125,18 +5125,16 @@ AlsaDriver::checkForNewClients()
     // ??? Rename: updateALSAPorts()?
     generatePortList();
 
-    // From this point on,
-    // this routine appears to be checking the connections (subscribers)
-    // that are out there and making sure our list of connections is in
-    // sync.  It appears to be more of a syncConnections().
+    // Update Connections (m_devicePortMap)
 
-    // If one of our ports is connected to a single other port and
-    // it isn't the one we thought, we should update our connection.
-    // ??? That comment appears to be describing what this code is
-    //     doing.  However, the use of the word "should" isn't comforting.
+    // From this point on, this routine checks the connections (ALSA
+    // port subscribers) that are out there and makes sure our list of
+    // connections (m_devicePortMap) is in sync.
 
-    // For each MappedDevice in the Studio/Composition.
+    // For each device in the Studio/Composition.
     for (MappedDevice *device : m_devices) {
+
+        //RG_DEBUG << "  Device:" << device->getName();
 
         DevicePortMap::iterator connectionIter =
                 m_devicePortMap.find(device->getId());
@@ -5158,7 +5156,7 @@ AlsaDriver::checkForNewClients()
 
         addr.port = portIter->second;
 
-        // ??? Prepare to query subscribers?
+        // Prepare to query subscribers.
 
         snd_seq_query_subscribe_t *subs;
         snd_seq_query_subscribe_alloca(&subs);
@@ -5173,18 +5171,27 @@ AlsaDriver::checkForNewClients()
         // For each port subscriber
         while (!snd_seq_query_port_subscribers(m_midiHandle, subs)) {
 
+            // Get the subscriber's client:port address.
             const snd_seq_addr_t *otherEnd =
-                snd_seq_query_subscribe_get_addr(subs);
+                    snd_seq_query_subscribe_get_addr(subs);
 
             if (!otherEnd)
                 continue;
 
-            if (connectionIter != m_devicePortMap.end() &&
-                otherEnd->client == connectionIter->second.client &&
+            //RG_DEBUG << "    " << otherEnd->client << ":" << otherEnd->port;
+
+            // If this MidiDevice is connected to something, and it matches
+            // the subscriber that ALSA has, try the next MidiDevice.
+            if (connectionIter != m_devicePortMap.end()  &&
+                otherEnd->client == connectionIter->second.client  &&
                 otherEnd->port == connectionIter->second.port) {
                 haveOurs = true;
-            } else {
+                break;
+            } else {  // We are not aware of a connection to this MidiDevice.
+                // Keep a count of the subscribers per ALSA.
                 ++others;
+                // ??? Doesn't this end up being last other since it gets
+                //     clobbered every time?
                 firstOther = ClientPortPair(otherEnd->client, otherEnd->port);
             }
 
@@ -5197,25 +5204,90 @@ AlsaDriver::checkForNewClients()
         if (haveOurs)
             continue;
 
+        // No subscribers?
         if (others == 0) {
+            // If there is a connection in m_devicePortMap, disconnect it.
             if (connectionIter != m_devicePortMap.end()) {
                 connectionIter->second = ClientPortPair( -1, -1);
+                // ??? This also redundantly disconnects the "connection"
+                //     via ALSA.  Need to separate the maintenance of
+                //     data structures from the maintenance of actual
+                //     connections.
                 setConnectionToDevice(*device, "");
             }
-        } else {
-            for (AlsaPortVector::iterator k = m_alsaPorts.begin();
-                 k != m_alsaPorts.end(); ++k) {
-                if ((*k)->m_client == firstOther.client &&
-                    (*k)->m_port == firstOther.port) {
+        } else {  // ALSA indicates unexpected subscribers.
+            // For each ALSA port
+            for (QSharedPointer<const AlsaPortDescription> port : m_alsaPorts) {
+                // If this one matches the "first" subscriber.
+                if (port->m_client == firstOther.client  &&
+                    port->m_port == firstOther.port) {
+                    // Make the connection.
                     m_devicePortMap[device->getId()] = firstOther;
-                    setConnectionToDevice(*device, (*k)->m_name.c_str(), firstOther);
+                    // ??? This also redundantly reconnects the connection
+                    //     via ALSA.  Need to separate the maintenance of
+                    //     data structures from the maintenance of actual
+                    //     connections.
+                    setConnectionToDevice(
+                            *device, port->m_name.c_str(), firstOther);
                     break;
                 }
             }
         }
     }
 
+    // Port check is complete.
     m_portCheckNeeded = false;
+
+#if 0
+    // ??? At this point, we should check to see if we can connect any
+    //     devices that aren't connected to whatever is in their
+    //     m_userConnection/getUserConnection().  It might be worth
+    //     pulling out a function to do this and reusing as the main
+    //     function for making connections after file load.
+    // For each device in the Studio/Composition
+    for (MappedDevice *device : m_devices) {
+
+        // If this MappedDevice is connected, try the next.
+        if (isConnected(device->getId()))
+            continue;
+
+        // If this device does not want a connection, try the next.
+        if (device->getUserconnection() == "")
+            continue;
+
+        // ??? We need the "user connection" from MidiDevice.
+        //
+        //     How do we get the MidiDevice to get the user connection?
+        //     I think the MidiDevice's live in Studio, which we are not
+        //     privy to at this point.  So, MidiDevice is out of the
+        //     question.
+        //
+        //     Can we maintain our own MappedDevice::m_userConnection?
+        //
+        //     RoseXmlHandler calls addDevice() to add devices to m_devices.
+        //     At that point we might be able to take in a "user connection"
+        //     and add it to MappedDevice.
+        //
+        //     But it wouldn't be kept in sync with the user's wishes and
+        //     connections might get made that shouldn't.  E.g. if the user
+        //     disconnects a device, then introduces a new synth, the old
+        //     user connection from the .rg file will still be in here and
+        //     might cause a connection.
+        //
+        //     We would need to track the user changing the connection
+        //     (setConnection()) and update the user connection in
+        //     MappedDevice.
+        //
+        //     Feels like that should work.
+
+        // Try to make a connection.
+        setPlausibleConnection(
+                device->getId(),
+                device->getUserConnection(),  // idealConnection
+                device->getDirection() == MidiDevice::Record)  // recordDevice
+
+    }
+#endif
 }
 
 

@@ -331,6 +331,13 @@ public:
     void claimUnwantedPlugin(void *plugin) override;
     void scavengePlugins() override;
 
+    /// Update Ports and Connections
+    /**
+     * Updates m_alsaPorts and m_devicePortMap to match the ports and
+     * connections that are out there.
+     *
+     * ??? rename: updatePortsAndConnections() or just update()?
+     */
     void checkForNewClients() override;
 
     void setLoop(const RealTime &loopStart, const RealTime &loopEnd) override;
