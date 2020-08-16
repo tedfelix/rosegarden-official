@@ -8509,6 +8509,32 @@ RosegardenMainWindow::changeEvent(QEvent *event)
     }
 }
 
+void
+RosegardenMainWindow::openWindow(
+        RosegardenMainViewWidget::ExternalControllerWindow window)
+{
+    switch(window) {
+    case RosegardenMainViewWidget::Main:
+        show();
+        activateWindow();
+        raise();
+        break;
+
+    case RosegardenMainViewWidget::AudioMixer:
+        slotOpenAudioMixer();
+        break;
+
+    case RosegardenMainViewWidget::MidiMixer:
+        slotOpenMidiMixer();
+        break;
+
+    default:
+        RG_WARNING << "openwindow(): Unexpected window.";
+        break;
+    }
+}
+
+
 RosegardenMainWindow *RosegardenMainWindow::m_myself = nullptr;
 
 

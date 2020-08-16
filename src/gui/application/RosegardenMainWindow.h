@@ -355,7 +355,7 @@ public:
 
     void uiUpdateKludge();
 
-
+    void openWindow(RosegardenMainViewWidget::ExternalControllerWindow window);
 
 protected:
 

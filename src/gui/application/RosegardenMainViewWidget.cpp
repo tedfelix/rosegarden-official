@@ -1838,21 +1838,22 @@ RosegardenMainViewWidget::slotExternalControllerMain(MappedEvent *e)
 
             if (value < 42) {  // Main Window
 
-                RosegardenMainWindow::self()->show();
-                RosegardenMainWindow::self()->activateWindow();
-                RosegardenMainWindow::self()->raise();
+                RosegardenMainWindow::self()->openWindow(
+                        RosegardenMainViewWidget::Main);
 
                 return;
 
             } else if (value < 84) {  // Audio Mixer
 
-                RosegardenMainWindow::self()->slotOpenAudioMixer();
+                RosegardenMainWindow::self()->openWindow(
+                        RosegardenMainViewWidget::AudioMixer);
 
                 return;
 
             } else {  // MIDI Mixer
 
-                RosegardenMainWindow::self()->slotOpenMidiMixer();
+                RosegardenMainWindow::self()->openWindow(
+                        RosegardenMainViewWidget::MidiMixer);
 
                 return;
 
