@@ -101,8 +101,6 @@ signals:
     void bypassed(InstrumentId, int pluginIndex, bool bp);
     void destroyed(InstrumentId, int index);
 
-    //void windowActivated();
-
 protected slots:
     // Unused
     //virtual void slotClose();

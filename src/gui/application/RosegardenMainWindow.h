@@ -547,9 +547,6 @@ protected:
     void leaveActionState(QString stateName);
 
 signals:
-    void windowActivated(
-            RosegardenMainViewWidget::ExternalControllerWindow window);
-
     void startupStatusMessage(QString message);
 
     /// emitted just before the document is changed

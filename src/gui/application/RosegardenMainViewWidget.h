@@ -129,7 +129,17 @@ public:
     TrackParameterBox *getTrackParameterBox()
             { return m_trackParameterBox; }
 
+    /// The three windows that currently handle external controller events.
     enum ExternalControllerWindow { Main, AudioMixer, MidiMixer };
+    /// Set which external controller window is currently the active window.
+    /**
+     * External controller events are forwarded to the currently active
+     * window.
+     *
+     * Called by the three windows that can handle external controller event.
+     */
+    static void setActiveWindow(ExternalControllerWindow window)
+            { m_lastActiveMainWindow = window; }
 
 public slots:
     void slotEditSegment(Segment*);
@@ -230,17 +240,6 @@ public slots:
      * semi-static data (devices/instrument labels mainly)
      */
     void slotSynchroniseWithComposition();
-
-    /**
-     * To indicate that an edit view, mixer, etc (something that might
-     * want to receive MIDI input) has become active.  We only send
-     * inputs such as MIDI to a single one of these, in most cases,
-     * and it's whichever was most recently made active.  (It doesn't
-     * have to still _be_ active -- we want to allow moving focus to
-     * another application entirely but still receiving MIDI etc in
-     * Rosegarden.)
-     */
-    void slotActiveMainWindowChanged(ExternalControllerWindow window);
 
     /// Handle events from the external controller port.
     /**

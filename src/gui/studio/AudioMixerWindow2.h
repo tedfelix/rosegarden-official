@@ -45,14 +45,6 @@ public:
     AudioMixerWindow2(QWidget *parent);
     ~AudioMixerWindow2() override;
 
-signals:
-    /// Let RMVW know we are now the active window for external controller events.
-    /**
-     * Connected to RosegardenMainViewWidget::slotActiveMainWindowChanged().
-     */
-    void windowActivated(
-            RosegardenMainViewWidget::ExternalControllerWindow window);
-
 protected:
     void changeEvent(QEvent *event) override;
 

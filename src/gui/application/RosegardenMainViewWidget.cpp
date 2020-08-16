@@ -209,10 +209,6 @@ RosegardenMainViewWidget::RosegardenMainViewWidget(bool showTrackLabels,
     connect(this, &RosegardenMainViewWidget::externalController,
             this, &RosegardenMainViewWidget::slotExternalController);
 
-    connect(RosegardenMainWindow::self(),
-                &RosegardenMainWindow::windowActivated,
-            this, &RosegardenMainViewWidget::slotActiveMainWindowChanged);
-
     if (doc) {
         /* signal no longer exists
         	connect(doc, SIGNAL(recordingSegmentUpdated(Segment *,
@@ -415,10 +411,6 @@ RosegardenMainViewWidget::createNotationView(std::vector<Segment *> segmentsToEd
     NotationView *notationView =
         new NotationView(getDocument(), segmentsToEdit, this);
 
-    // ??? No such signal ever emitted.
-    //connect(notationView, &NotationView::windowActivated,
-    //        this, &RosegardenMainViewWidget::slotActiveMainWindowChanged);
-
     connect(notationView, &EditViewBase::selectTrack,
             this, &RosegardenMainViewWidget::slotSelectTrackSegments);
 
@@ -566,10 +558,6 @@ RosegardenMainViewWidget::createPitchTrackerView(std::vector<Segment *> segments
 {
     PitchTrackerView *pitchTrackerView =
         new PitchTrackerView(getDocument(), segmentsToEdit, this);
-
-    // ??? No such signal.
-    //connect(pitchTrackerView, &NotationView::windowActivated,
-    //        this, &RosegardenMainViewWidget::slotActiveMainWindowChanged);
 
     connect(pitchTrackerView, &EditViewBase::selectTrack,
             this, &RosegardenMainViewWidget::slotSelectTrackSegments);
@@ -768,10 +756,6 @@ RosegardenMainViewWidget::createMatrixView(std::vector<Segment *> segmentsToEdit
                                                   segmentsToEdit,
                                                   drumMode,
                                                   this);
-
-    // ??? No such signal.
-    //connect(matrixView, &MatrixView::windowActivated,
-    //        this, &RosegardenMainViewWidget::slotActiveMainWindowChanged);
 
     connect(matrixView, &EditViewBase::selectTrack,
             this, &RosegardenMainViewWidget::slotSelectTrackSegments);
@@ -1815,15 +1799,6 @@ RosegardenMainViewWidget::slotSynchroniseWithComposition()
 }
 
 void
-RosegardenMainViewWidget::slotActiveMainWindowChanged(
-        ExternalControllerWindow window)
-{
-    //RG_DEBUG << "slotActiveMainWindowChanged(): " << window;
-
-    m_lastActiveMainWindow = window;
-}
-
-void
 RosegardenMainViewWidget::slotExternalControllerMain(MappedEvent *e)
 {
     //RG_DEBUG << "slotExternalControllerMain() - send to " << (void *)m_lastActiveMainWindow << " (I am " << this << ")";
@@ -2056,10 +2031,6 @@ RosegardenMainViewWidget::createEventView(std::vector<Segment *> segmentsToEdit)
     EventView *eventView = new EventView(getDocument(),
                                          segmentsToEdit,
                                          this);
-
-    // ??? No such signal.
-    //connect(eventView, &EditViewBase::windowActivated,
-    //        this, &RosegardenMainViewWidget::slotActiveMainWindowChanged);
 
     connect(eventView, &EditViewBase::selectTrack,
             this, &RosegardenMainViewWidget::slotSelectTrackSegments);

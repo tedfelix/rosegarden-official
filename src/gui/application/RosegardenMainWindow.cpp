@@ -6906,9 +6906,6 @@ RosegardenMainWindow::slotOpenMidiMixer()
 
     m_midiMixer = new MidiMixerWindow(this, m_doc);
 
-    connect(m_midiMixer, &MidiMixerWindow::windowActivated,
-            m_view, &RosegardenMainViewWidget::slotActiveMainWindowChanged);
-
     connect(m_view, &RosegardenMainViewWidget::externalController,
             m_midiMixer, &MidiMixerWindow::slotExternalController);
 
@@ -7091,10 +7088,6 @@ RosegardenMainWindow::slotEditTempos(timeT t)
     connect(m_tempoView, &TempoView::closing,
             this, &RosegardenMainWindow::slotTempoViewClosed);
 
-    // ??? No such signal.
-    //connect(m_tempoView, &TempoView::windowActivated,
-    //        getView(), &RosegardenMainViewWidget::slotActiveMainWindowChanged);
-
     connect(m_tempoView, &EditViewBase::saveFile, this, &RosegardenMainWindow::slotFileSave);
 
     plugShortcuts(m_tempoView, m_tempoView->getShortcuts());
@@ -7188,10 +7181,6 @@ RosegardenMainWindow::slotShowPluginDialog(QWidget *parent,
                               m_pluginGUIManager,
                               container,
                               index);
-
-    // ??? No such signal.
-    //connect(dialog, &AudioPluginDialog::windowActivated,
-    //        m_view, &RosegardenMainViewWidget::slotActiveMainWindowChanged);
 
     // Plug the new dialog into the standard keyboard shortcuts so
     // that we can use them still while the plugin has focus.
@@ -8515,7 +8504,8 @@ RosegardenMainWindow::changeEvent(QEvent *event)
 
     if (event->type() == QEvent::ActivationChange) {
         if (isActiveWindow())
-            emit windowActivated(RosegardenMainViewWidget::Main);
+            RosegardenMainViewWidget::setActiveWindow(
+                    RosegardenMainViewWidget::Main);
     }
 }
 

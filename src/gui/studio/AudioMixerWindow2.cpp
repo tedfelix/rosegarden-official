@@ -67,11 +67,6 @@ AudioMixerWindow2::AudioMixerWindow2(QWidget *parent) :
     connect(RosegardenMainWindow::self()->getView(),
                 &RosegardenMainViewWidget::externalController,
             this, &AudioMixerWindow2::slotExternalController);
-    // Connect to make sure "external controller" events get here when
-    // we are the active window.
-    connect(this, &AudioMixerWindow2::windowActivated,
-            RosegardenMainWindow::self()->getView(),
-                &RosegardenMainViewWidget::slotActiveMainWindowChanged);
 
     // Connect for high-frequency control change notifications.
     connect(Instrument::getStaticSignals().data(),
@@ -612,7 +607,8 @@ AudioMixerWindow2::changeEvent(QEvent *event)
     if (event->type() == QEvent::ActivationChange) {
         //RG_DEBUG << "changeEvent(): Received activation change.";
         if (isActiveWindow()) {
-            emit windowActivated(RosegardenMainViewWidget::AudioMixer);
+            RosegardenMainViewWidget::setActiveWindow(
+                    RosegardenMainViewWidget::AudioMixer);
 
             size_t count = m_inputStrips.size();
             if (count > 16)

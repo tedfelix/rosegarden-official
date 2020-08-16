@@ -40,6 +40,7 @@
 #include "gui/general/ActionFileClient.h"
 #include "gui/widgets/TmpStatusMsg.h"
 #include "gui/dialogs/AboutDialog.h"
+#include "gui/application/RosegardenMainViewWidget.h"
 #include "MidiMixerVUMeter.h"
 #include "MixerWindow.h"
 #include "sound/MappedEvent.h"
@@ -852,7 +853,9 @@ MidiMixerWindow::changeEvent(QEvent *event)
     if (event->type() == QEvent::ActivationChange) {
         //RG_DEBUG << "changeEvent(): Received activation change.";
         if (isActiveWindow()) {
-            emit windowActivated(RosegardenMainViewWidget::MidiMixer);
+            RosegardenMainViewWidget::setActiveWindow(
+                    RosegardenMainViewWidget::MidiMixer);
+
             sendControllerRefresh();
         }
     }
