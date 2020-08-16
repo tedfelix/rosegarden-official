@@ -130,7 +130,7 @@ AlsaDriver::AlsaDriver(MappedStudio *studio):
     m_client( -1),
     m_inputPort( -1),
     m_syncOutputPort( -1),
-    m_controllerPort( -1),
+    m_externalControllerPort( -1),
     m_queue( -1),
     m_maxClients( -1),
     m_maxPorts( -1),
@@ -2052,18 +2052,16 @@ AlsaDriver::initialiseMidi()
                                        SND_SEQ_PORT_TYPE_MIDI_GENERIC),
                                       "initialiseMidi - can't create sync output port");
 
-    // and port for hardware controller
-    m_controllerPort = checkAlsaError(snd_seq_create_simple_port
-                                      (m_midiHandle,
-                                       "external controller",
-                                       SND_SEQ_PORT_CAP_READ |
-                                       SND_SEQ_PORT_CAP_WRITE |
-                                       SND_SEQ_PORT_CAP_SUBS_READ |
-                                       SND_SEQ_PORT_CAP_SUBS_WRITE,
-                                       SND_SEQ_PORT_TYPE_APPLICATION |
-                                       SND_SEQ_PORT_TYPE_SOFTWARE |
-                                       SND_SEQ_PORT_TYPE_MIDI_GENERIC),
-                                      "initialiseMidi - can't create controller port");
+    // Create external controller port.
+    m_externalControllerPort = checkAlsaError(
+            snd_seq_create_simple_port(
+                m_midiHandle,
+                "external controller",
+                SND_SEQ_PORT_CAP_READ | SND_SEQ_PORT_CAP_WRITE |
+                    SND_SEQ_PORT_CAP_SUBS_READ | SND_SEQ_PORT_CAP_SUBS_WRITE,
+                SND_SEQ_PORT_TYPE_APPLICATION | SND_SEQ_PORT_TYPE_SOFTWARE |
+                    SND_SEQ_PORT_TYPE_MIDI_GENERIC),
+            "initialiseMidi - can't create controller port");
 
     getSystemInfo();
 
@@ -2813,7 +2811,7 @@ AlsaDriver::getMappedEventList(MappedEventList &mappedEventList)
         bool fromController = false;
 
         if (event->dest.client == m_client &&
-            event->dest.port == m_controllerPort) {
+            event->dest.port == m_externalControllerPort) {
 #ifdef DEBUG_ALSA
             RG_DEBUG << "getMappedEventList(): Received an external controller event";
 #endif
@@ -2824,7 +2822,7 @@ AlsaDriver::getMappedEventList(MappedEventList &mappedEventList)
         unsigned int deviceId = Device::NO_DEVICE;
 
         if (fromController) {
-            deviceId = Device::CONTROL_DEVICE;
+            deviceId = Device::EXTERNAL_CONTROLLER;
         } else {
             for (MappedDeviceList::iterator i = m_devices.begin();
                  i != m_devices.end(); ++i) {
@@ -3918,10 +3916,10 @@ AlsaDriver::processMidiOut(const MappedEventList &mC,
         snd_seq_event_t event;
         snd_seq_ev_clear(&event);
     
-        bool isControllerOut = ((*i)->getRecordedDevice() ==
-                                Device::CONTROL_DEVICE);
+        const bool isExternalController =
+                ((*i)->getRecordedDevice() == Device::EXTERNAL_CONTROLLER);
 
-        bool isSoftSynth = (!isControllerOut &&
+        bool isSoftSynth = (!isExternalController &&
                             ((*i)->getInstrument() >= SoftSynthInstrumentBase));
 
         RealTime outputTime = (*i)->getEventTime() - m_playStartPosition +
@@ -4010,8 +4008,8 @@ AlsaDriver::processMidiOut(const MappedEventList &mC,
             //
             int src;
 
-            if (isControllerOut) {
-                src = m_controllerPort;
+            if (isExternalController) {
+                src = m_externalControllerPort;
             } else {
                 src = getOutputPortForMappedInstrument((*i)->getInstrument());
             }
@@ -4037,7 +4035,7 @@ AlsaDriver::processMidiOut(const MappedEventList &mC,
 
         MidiByte channel = 0;
 
-        if (isControllerOut) {
+        if (isExternalController) {
             channel = (*i)->getRecordedChannel();
 #ifdef DEBUG_ALSA
             RG_DEBUG << "processMidiOut() - Event of type " << (int)((*i)->getType()) << " (data1 " << (int)(*i)->getData1() << ", data2 " << (int)(*i)->getData2() << ") for external controller channel " << (int)channel;

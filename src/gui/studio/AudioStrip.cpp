@@ -548,7 +548,7 @@ AudioStrip::slotFaderLevelChanged(float dB)
                            MIDI_CONTROLLER_VOLUME,
                            MidiByte(value));
             mE.setRecordedChannel(m_externalControllerChannel);
-            mE.setRecordedDevice(Device::CONTROL_DEVICE);
+            mE.setRecordedDevice(Device::EXTERNAL_CONTROLLER);
 
             StudioControl::sendMappedEvent(mE);
         }
@@ -611,7 +611,7 @@ AudioStrip::slotPanChanged(float pan)
                            MIDI_CONTROLLER_PAN,
                            MidiByte(ipan));
             mE.setRecordedChannel(m_externalControllerChannel);
-            mE.setRecordedDevice(Device::CONTROL_DEVICE);
+            mE.setRecordedDevice(Device::EXTERNAL_CONTROLLER);
 
             StudioControl::sendMappedEvent(mE);
         }
@@ -665,7 +665,7 @@ AudioStrip::updateExternalController()
                             MIDI_CONTROLLER_VOLUME,
                             MidiByte(value));
     volumeEvent.setRecordedChannel(m_externalControllerChannel);
-    volumeEvent.setRecordedDevice(Device::CONTROL_DEVICE);
+    volumeEvent.setRecordedDevice(Device::EXTERNAL_CONTROLLER);
 
     StudioControl::sendMappedEvent(volumeEvent);
 
@@ -682,7 +682,7 @@ AudioStrip::updateExternalController()
                          MIDI_CONTROLLER_PAN,
                          MidiByte(ipan));
     panEvent.setRecordedChannel(m_externalControllerChannel);
-    panEvent.setRecordedDevice(Device::CONTROL_DEVICE);
+    panEvent.setRecordedDevice(Device::EXTERNAL_CONTROLLER);
 
     StudioControl::sendMappedEvent(panEvent);
 }

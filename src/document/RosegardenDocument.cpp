@@ -1875,8 +1875,11 @@ RosegardenDocument::insertRecordedMidi(const MappedEventList &mC)
     // For each incoming event
     for (i = mC.begin(); i != mC.end(); ++i) {
 
-        // Send events from the control device to the views
-        if ((*i)->getRecordedDevice() == Device::CONTROL_DEVICE) {
+        // Send events from the external controller port to the views
+        // ??? Is this how we handle external controller events during record?
+        //     Or is this unnecessary?  Need to remove and see if it affects
+        //     external controller functionality during record.
+        if ((*i)->getRecordedDevice() == Device::EXTERNAL_CONTROLLER) {
             const int viewCount = m_viewList.size();
 
             //QList<RosegardenMainViewWidget *>::iterator v;

@@ -1827,8 +1827,6 @@ RosegardenMainViewWidget::slotExternalControllerMain(MappedEvent *e)
 {
     //RG_DEBUG << "slotExternalControllerMain() - send to " << (void *)m_lastActiveMainWindow << " (I am " << this << ")";
 
-    //!!! So, what _should_ we do with these?
-
     // -- external controller that sends e.g. volume control for each
     // of a number of channels -> if mixer present, use control to adjust
     // tracks on mixer
@@ -1847,15 +1845,17 @@ RosegardenMainViewWidget::slotExternalControllerMain(MappedEvent *e)
 
     // -- then we need to send back out to device.
 
-    //!!! special cases: controller 81 received by any window ->
-    // select window 0->main, 1->audio mix, 2->midi mix
+    // CC 81: select window
+    // CC 82: select track (see slotExternalController())
+    // CC  7: Adjust volume on current track (see slotExternalController())
+    // CC 10: Adjust pan on current track (see slotExternalController())
+    // CC  x: Adjust that CC on current track (see slotExternalController())
 
-    //!!! controller 82 received by main window -> select track
-
-    //!!! these obviously should be configurable
+    // These obviously should be configurable.
 
     if (e->getType() == MappedEvent::MidiController) {
 
+        // If switch window CC (CONTROLLER_SWITCH_WINDOW)
         if (e->getData1() == 81) {
 
             // select window
@@ -1953,7 +1953,8 @@ RosegardenMainViewWidget::slotExternalController(
     MidiByte controller = e->getData1();
     MidiByte value = e->getData2();
 
-    if (controller == 82) { // !!! magic select-track controller
+    // CONTROLLER_SELECT_TRACK
+    if (controller == 82) {
         int tracks = comp.getNbTracks();
         Track *track = comp.getTrackByPosition(value * tracks / 128);
         if (track) {

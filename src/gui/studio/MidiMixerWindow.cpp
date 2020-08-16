@@ -337,7 +337,7 @@ MidiMixerWindow::slotFaderLevelChanged(float value)
                                            MidiByte(value));
 
                             mE.setRecordedChannel(instrument->getNaturalChannel());
-                            mE.setRecordedDevice(Device::CONTROL_DEVICE);
+                            mE.setRecordedDevice(Device::EXTERNAL_CONTROLLER);
                             StudioControl::sendMappedEvent(mE);
                         }
                         break;
@@ -412,14 +412,14 @@ MidiMixerWindow::slotControllerChanged(float value)
                 RG_DEBUG << "slotControllerChanged: device id = " << instrument->getDevice()->getId() << ", visible device id " << (*dit)->getId();
                 if (instrument->getDevice()->getId() == (*dit)->getId()) {
                     RG_DEBUG << "slotControllerChanged: sending control device mapped event for channel " << instrument->getNaturalChannel();
-                    // send out to external controllers as well.
+                    // send out to external controller port as well.
                     //!!! really want some notification of whether we have any!
                     MappedEvent mE(m_faders[i]->m_id,
                                    MappedEvent::MidiController,
                                    m_faders[i]->m_controllerRotaries[j].first,
                                    MidiByte(value));
                     mE.setRecordedChannel(instrument->getNaturalChannel());
-                    mE.setRecordedDevice(Device::CONTROL_DEVICE);
+                    mE.setRecordedDevice(Device::EXTERNAL_CONTROLLER);
                     StudioControl::sendMappedEvent(mE);
                 }
             }
@@ -779,7 +779,7 @@ MidiMixerWindow::sendControllerRefresh()
                                MappedEvent::MidiController,
                                controller, value);
                 mE.setRecordedChannel(channel);
-                mE.setRecordedDevice(Device::CONTROL_DEVICE);
+                mE.setRecordedDevice(Device::EXTERNAL_CONTROLLER);
                 StudioControl::sendMappedEvent(mE);
             }
 
@@ -788,7 +788,7 @@ MidiMixerWindow::sendControllerRefresh()
                            MIDI_CONTROLLER_VOLUME,
                            instrument->getVolume());
             mE.setRecordedChannel(channel);
-            mE.setRecordedDevice(Device::CONTROL_DEVICE);
+            mE.setRecordedDevice(Device::EXTERNAL_CONTROLLER);
             RG_DEBUG << "sending controller mapped event for channel " << channel << ", volume " << instrument->getVolume();
             StudioControl::sendMappedEvent(mE);
         }
