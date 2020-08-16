@@ -204,8 +204,8 @@ RosegardenMainViewWidget::RosegardenMainViewWidget(bool showTrackLabels,
             m_trackEditor->getTrackButtons(),
             &TrackButtons::slotTPBInstrumentSelected);
 
-    connect(this, SIGNAL(controllerDeviceEventReceived(MappedEvent *, const void *)),
-            this, SLOT(slotControllerDeviceEventReceived(MappedEvent *, const void *)));
+    connect(this, &RosegardenMainViewWidget::externalController,
+            this, &RosegardenMainViewWidget::slotExternalController);
 
     connect(RosegardenMainWindow::self(),
                 &RosegardenMainWindow::windowActivated,
@@ -559,7 +559,6 @@ void RosegardenMainViewWidget::slotEditSegmentsPitchTracker(std::vector<Segment 
     }
 }
 
-//!!! copied (+ renamed vars) blindly from NotationView, but it works.  -gp
 PitchTrackerView *
 RosegardenMainViewWidget::createPitchTrackerView(std::vector<Segment *> segmentsToEdit)
 {
@@ -1899,17 +1898,18 @@ RosegardenMainViewWidget::slotExternalControllerMain(MappedEvent *e)
     // The main window uses controller 82 to select a track while
     // the other two use the incoming MIDI channel to select which
     // track will be modified.
-    emit controllerDeviceEventReceived(e, m_lastActiveMainWindow);
+    emit externalController(e, m_lastActiveMainWindow);
 }
 
 void
-RosegardenMainViewWidget::slotControllerDeviceEventReceived(
+RosegardenMainViewWidget::slotExternalController(
         MappedEvent *e, const void *preferredCustomer)
 {
+    // Not for me?  Bail.
     if (preferredCustomer != this)
-        return ;
+        return;
 
-    //RG_DEBUG << "slotControllerDeviceEventReceived(): this one's for me";
+    //RG_DEBUG << "slotExternalController(): this one's for me";
 
     // Some window managers (e.g. GNOME) do not allow the application to
     // change focus on the user.  So, this might not work.
@@ -1984,8 +1984,8 @@ RosegardenMainViewWidget::slotControllerDeviceEventReceived(
     case Instrument::Midi: {
             MidiDevice *md = dynamic_cast<MidiDevice *>(instrument->getDevice());
             if (!md) {
-                RG_WARNING << "slotControllerDeviceEventReceived(): WARNING: MIDI instrument has no MIDI device in slotControllerDeviceEventReceived";
-                return ;
+                RG_WARNING << "slotExternalController(): WARNING: MIDI instrument has no MIDI device";
+                return;
             }
 
             ControlList cl = md->getControlParameters();

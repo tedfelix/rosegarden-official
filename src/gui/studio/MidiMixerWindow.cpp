@@ -642,13 +642,14 @@ MidiMixerWindow::updateMonitorMeter()
 }
 
 void
-MidiMixerWindow::slotControllerDeviceEventReceived(MappedEvent *e,
+MidiMixerWindow::slotExternalController(MappedEvent *e,
         const void *preferredCustomer)
 {
+    // Not for me?  Bail.
     if (preferredCustomer != this)
-        return ;
+        return;
 
-    RG_DEBUG << "slotControllerDeviceEventReceived(): this one's for me";
+    RG_DEBUG << "slotExternalController(): this one's for me";
 
     // Some window managers (e.g. GNOME) do not allow the application to
     // change focus on the user.  So, this might not work.
@@ -695,7 +696,7 @@ MidiMixerWindow::slotControllerDeviceEventReceived(MappedEvent *e,
             for (ControlList::const_iterator controlIter = cl.begin();
                     controlIter != cl.end(); ++controlIter) {
                 if ((*controlIter).getControllerNumber() == controller) {
-                    RG_DEBUG << "slotControllerDeviceEventReceived(): Setting controller " << controller << " for instrument " << instrument->getId() << " to " << value;
+                    RG_DEBUG << "slotExternalController(): Setting controller " << controller << " for instrument " << instrument->getId() << " to " << value;
                     instrument->setControllerValue(controller, value);
                     Instrument::emitControlChange(instrument, controller);
                     m_document->setModified();

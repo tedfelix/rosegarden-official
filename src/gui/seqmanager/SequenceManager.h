@@ -180,7 +180,7 @@ public:
      *     -> NotationView::slotInsertableNoteOnReceived()
      *     -> PitchTrackerView::slotInsertableNoteOnReceived()
      *     -> MatrixView::slotInsertableNoteOnReceived()
-     *   - controllerDeviceEventReceived()
+     *   - externalController()
      *     -> RMVW::slotExternalControllerMain()
      *
      * This routine also performs extensive error checking and displays
@@ -324,10 +324,8 @@ signals:
      * Connected to
      * RosegardenMainViewWindow::slotExternalControllerMain().  These
      * are events from the "external controller" port.
-     *
-     * ??? rename: externalController()
      */
-    void controllerDeviceEventReceived(MappedEvent *event);
+    void externalController(MappedEvent *event);
 
     /// Signal RosegardenMainWindow to display a warning.
     /**

@@ -125,13 +125,8 @@ public:
     SegmentSelection getSelection();
     void updateSelectedSegments();
 
-    static bool isMainWindowLastActive(const QWidget *w) {
-        return w == m_lastActiveMainWindow;
-    }
-
-    TrackParameterBox *getTrackParameterBox() {
-        return m_trackParameterBox;
-    }
+    TrackParameterBox *getTrackParameterBox()
+            { return m_trackParameterBox; }
 
 public slots:
     void slotEditSegment(Segment*);
@@ -266,10 +261,10 @@ public slots:
      * for the current track.  For audio tracks, MIDI volume and pan
      * controllers control the track's volume and pan.
      *
-     * @see MidiMixerWindow::slotControllerDeviceEventReceived()
-     * @see AudioMixerWindow2::slotExternalControllerEvent()
+     * @see MidiMixerWindow::slotExternalController()
+     * @see AudioMixerWindow2::slotExternalController()
      */
-    void slotControllerDeviceEventReceived(
+    void slotExternalController(
             MappedEvent *, const void *preferredCustomer);
 
 signals:
@@ -309,15 +304,15 @@ signals:
     void instrumentLevelsChanged(InstrumentId,
                                  const LevelInfo &);
 
-    void controllerDeviceEventReceived(MappedEvent *,
-                                       const void *);
+    void externalController(MappedEvent *event,
+                            const void *preferredCustomer);
 
-protected:
+private:
 
     NotationView *createNotationView(std::vector<Segment *>);
-    MatrixView   *createMatrixView  (std::vector<Segment *>, bool drumMode);
-    EventView    *createEventView   (std::vector<Segment *>);
-    PitchTrackerView *createPitchTrackerView (std::vector<Segment *>);
+    MatrixView *createMatrixView(std::vector<Segment *>, bool drumMode);
+    EventView *createEventView(std::vector<Segment *>);
+    PitchTrackerView *createPitchTrackerView(std::vector<Segment *>);
 
     static bool hasNonAudioSegment(const SegmentSelection &segments);
 
@@ -330,7 +325,7 @@ protected:
     InstrumentParameterBox        *m_instrumentParameterBox;
     TrackParameterBox             *m_trackParameterBox;
 
-    static const QWidget          *m_lastActiveMainWindow;
+    static const QWidget *m_lastActiveMainWindow;
 };
 
 

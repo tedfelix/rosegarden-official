@@ -1014,8 +1014,8 @@ SequenceManager::processAsynchronousMidi(const MappedEventList &mC,
             }
         }
         if ((*i)->getRecordedDevice() == Device::CONTROL_DEVICE) {
-            RG_DEBUG << "processAsynchronousMidi(): Emitting controllerDeviceEventReceived()...";
-            emit controllerDeviceEventReceived(*i);
+            RG_DEBUG << "processAsynchronousMidi(): Emitting externalController()...";
+            emit externalController(*i);
         }
     }
 }

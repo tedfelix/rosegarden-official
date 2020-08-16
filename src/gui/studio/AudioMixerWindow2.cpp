@@ -65,8 +65,8 @@ AudioMixerWindow2::AudioMixerWindow2(QWidget *parent) :
             this, &AudioMixerWindow2::slotDocumentModified);
     // Connect for "external controller" events.
     connect(RosegardenMainWindow::self()->getView(),
-                &RosegardenMainViewWidget::controllerDeviceEventReceived,
-            this, &AudioMixerWindow2::slotExternalControllerEvent);
+                &RosegardenMainViewWidget::externalController,
+            this, &AudioMixerWindow2::slotExternalController);
     // Connect to make sure "external controller" events get here when
     // we are the active window.
     connect(this, &AudioMixerWindow2::windowActivated,
@@ -517,14 +517,15 @@ AudioMixerWindow2::slotAboutRosegarden()
 }
 
 void
-AudioMixerWindow2::slotExternalControllerEvent(
+AudioMixerWindow2::slotExternalController(
         MappedEvent *event,
         const void *preferredCustomer)
 {
+    // Not for me?  Bail.
     if (preferredCustomer != this)
         return;
 
-    //RG_DEBUG << "slotExternalControllerEvent(): this one's for me";
+    //RG_DEBUG << "slotExternalController(): this one's for me";
 
     // Some window managers (e.g. GNOME) do not allow the application to
     // change focus on the user.  So, this might not work.

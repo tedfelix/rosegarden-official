@@ -1017,7 +1017,7 @@ RosegardenMainWindow::initView()
             QMessageBox::critical(dynamic_cast<QWidget*>(this), tr("Rosegarden"), s, QMessageBox::Ok, QMessageBox::Ok);
         }
 
-        connect(m_seqManager, &SequenceManager::controllerDeviceEventReceived,
+        connect(m_seqManager, &SequenceManager::externalController,
                 m_view, &RosegardenMainViewWidget::slotExternalControllerMain);
     }
 
@@ -6909,8 +6909,8 @@ RosegardenMainWindow::slotOpenMidiMixer()
     connect(m_midiMixer, &MidiMixerWindow::windowActivated,
             m_view, &RosegardenMainViewWidget::slotActiveMainWindowChanged);
 
-    connect(m_view, &RosegardenMainViewWidget::controllerDeviceEventReceived,
-            m_midiMixer, &MidiMixerWindow::slotControllerDeviceEventReceived);
+    connect(m_view, &RosegardenMainViewWidget::externalController,
+            m_midiMixer, &MidiMixerWindow::slotExternalController);
 
     connect(m_midiMixer, &MixerWindow::closing,
             this, &RosegardenMainWindow::slotMidiMixerClosed);
@@ -7190,11 +7190,6 @@ RosegardenMainWindow::slotShowPluginDialog(QWidget *parent,
 
     connect(dialog, SIGNAL(windowActivated()),
             m_view, SLOT(slotActiveMainWindowChanged()));
-
-/* This feature isn't provided by the plugin dialog
-    connect(m_view, SIGNAL(controllerDeviceEventReceived(MappedEvent *, const void *)),
-            dialog, SLOT(slotControllerDeviceEventReceived(MappedEvent *, const void *)));
-*/
 
     // Plug the new dialog into the standard keyboard shortcuts so
     // that we can use them still while the plugin has focus.

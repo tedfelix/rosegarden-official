@@ -89,7 +89,7 @@ private slots:
     void slotAboutRosegarden();
 
     /// Event received on the "external controller" port.
-    void slotExternalControllerEvent(
+    void slotExternalController(
             MappedEvent *event,
             const void *preferredCustomer);
 
