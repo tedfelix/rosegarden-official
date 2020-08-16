@@ -18,6 +18,7 @@
 #ifndef RG_AUDIOMIXERWINDOW2_H
 #define RG_AUDIOMIXERWINDOW2_H
 
+#include "gui/application/RosegardenMainViewWidget.h"
 #include "gui/general/ActionFileClient.h"
 
 #include <QMainWindow>
@@ -49,7 +50,8 @@ signals:
     /**
      * Connected to RosegardenMainViewWidget::slotActiveMainWindowChanged().
      */
-    void windowActivated();
+    void windowActivated(
+            RosegardenMainViewWidget::ExternalControllerWindow window);
 
 protected:
     void changeEvent(QEvent *event) override;
@@ -91,7 +93,7 @@ private slots:
     /// Event received on the "external controller" port.
     void slotExternalController(
             MappedEvent *event,
-            const void *preferredCustomer);
+            RosegardenMainViewWidget::ExternalControllerWindow window);
 
     /// Connected to InstrumentStaticSignals::controlChange().
     void slotControlChange(Instrument *instrument, int cc);

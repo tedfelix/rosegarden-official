@@ -18,6 +18,7 @@
 #ifndef RG_ROSEGARDENMAINWINDOW_H
 #define RG_ROSEGARDENMAINWINDOW_H
 
+#include "gui/application/RosegardenMainViewWidget.h"
 #include "base/MidiProgram.h"
 #include "gui/dialogs/TempoDialog.h"
 #include "gui/widgets/ZoomSlider.h"
@@ -67,7 +68,6 @@ class StartupTester;
 class SequenceManager;
 class SegmentParameterBox;
 class RosegardenParameterArea;
-class RosegardenMainViewWidget;
 class RosegardenDocument;
 class RealTime;
 class ProgressBar;
@@ -359,6 +359,13 @@ public:
 
 protected:
 
+    /// Handle activation change.
+    /**
+     * We do this to make sure external controller is connected to the
+     * current window.  Otherwise if the user clicks on the main window,
+     * external controller events might still be controlling one of the
+     * other windows.
+     */
     void changeEvent(QEvent *event) override;
 
     RosegardenDocument* newDocument(bool skipAutoload = false);
@@ -540,7 +547,8 @@ protected:
     void leaveActionState(QString stateName);
 
 signals:
-    void windowActivated();
+    void windowActivated(
+            RosegardenMainViewWidget::ExternalControllerWindow window);
 
     void startupStatusMessage(QString message);
 

@@ -38,6 +38,7 @@ namespace Rosegarden
 {
 
 class RosegardenDocument;
+class RosegardenMainWindow;
 class Key;
 class Clef;
 class AccidentalTable;

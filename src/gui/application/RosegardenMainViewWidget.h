@@ -44,6 +44,7 @@ class SimpleRulerScale;
 class SegmentParameterBox;
 class Segment;
 class RosegardenDocument;
+class RosegardenParameterArea;
 class RealTime;
 class NotationView;
 class PitchTrackerView;
@@ -127,6 +128,8 @@ public:
 
     TrackParameterBox *getTrackParameterBox()
             { return m_trackParameterBox; }
+
+    enum ExternalControllerWindow { Main, AudioMixer, MidiMixer };
 
 public slots:
     void slotEditSegment(Segment*);
@@ -237,7 +240,7 @@ public slots:
      * another application entirely but still receiving MIDI etc in
      * Rosegarden.)
      */
-    void slotActiveMainWindowChanged();
+    void slotActiveMainWindowChanged(ExternalControllerWindow window);
 
     /// Handle events from the external controller port.
     /**
@@ -265,7 +268,7 @@ public slots:
      * @see AudioMixerWindow2::slotExternalController()
      */
     void slotExternalController(
-            MappedEvent *, const void *preferredCustomer);
+            MappedEvent *, ExternalControllerWindow window);
 
 signals:
     void activateTool(QString toolName);
@@ -304,8 +307,9 @@ signals:
     void instrumentLevelsChanged(InstrumentId,
                                  const LevelInfo &);
 
-    void externalController(MappedEvent *event,
-                            const void *preferredCustomer);
+    void externalController(
+            MappedEvent *event,
+            ExternalControllerWindow window);
 
 private:
 
@@ -325,7 +329,7 @@ private:
     InstrumentParameterBox        *m_instrumentParameterBox;
     TrackParameterBox             *m_trackParameterBox;
 
-    static const QWidget *m_lastActiveMainWindow;
+    static ExternalControllerWindow m_lastActiveMainWindow;
 };
 
 

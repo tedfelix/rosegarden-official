@@ -44,6 +44,7 @@ class TempoRuler;
 class Segment;
 class SimpleRulerScale;
 class RosegardenDocument;
+class RosegardenMainViewWidget;
 class DeferScrollArea;
 class CompositionView;
 class CompositionModelImpl;

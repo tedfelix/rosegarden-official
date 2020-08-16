@@ -643,10 +643,10 @@ MidiMixerWindow::updateMonitorMeter()
 
 void
 MidiMixerWindow::slotExternalController(MappedEvent *e,
-        const void *preferredCustomer)
+        RosegardenMainViewWidget::ExternalControllerWindow window)
 {
     // Not for me?  Bail.
-    if (preferredCustomer != this)
+    if (window != RosegardenMainViewWidget::MidiMixer)
         return;
 
     RG_DEBUG << "slotExternalController(): this one's for me";
@@ -852,7 +852,7 @@ MidiMixerWindow::changeEvent(QEvent *event)
     if (event->type() == QEvent::ActivationChange) {
         //RG_DEBUG << "changeEvent(): Received activation change.";
         if (isActiveWindow()) {
-            emit windowActivated();
+            emit windowActivated(RosegardenMainViewWidget::MidiMixer);
             sendControllerRefresh();
         }
     }

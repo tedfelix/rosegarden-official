@@ -92,7 +92,7 @@ signals:
      */
     void toggleSolo(bool);
 
-    void windowActivated();
+    //void windowActivated();
 
 public slots:
     /**

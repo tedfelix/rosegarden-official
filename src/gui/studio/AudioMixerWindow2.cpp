@@ -519,10 +519,10 @@ AudioMixerWindow2::slotAboutRosegarden()
 void
 AudioMixerWindow2::slotExternalController(
         MappedEvent *event,
-        const void *preferredCustomer)
+        RosegardenMainViewWidget::ExternalControllerWindow window)
 {
     // Not for me?  Bail.
-    if (preferredCustomer != this)
+    if (window != RosegardenMainViewWidget::AudioMixer)
         return;
 
     //RG_DEBUG << "slotExternalController(): this one's for me";
@@ -612,7 +612,7 @@ AudioMixerWindow2::changeEvent(QEvent *event)
     if (event->type() == QEvent::ActivationChange) {
         //RG_DEBUG << "changeEvent(): Received activation change.";
         if (isActiveWindow()) {
-            emit windowActivated();
+            emit windowActivated(RosegardenMainViewWidget::AudioMixer);
 
             size_t count = m_inputStrips.size();
             if (count > 16)

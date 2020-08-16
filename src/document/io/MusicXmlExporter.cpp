@@ -29,6 +29,7 @@
 #include "misc/ConfigGroups.h"
 #include "misc/Debug.h"
 #include "base/StaffExportTypes.h"
+#include "gui/application/RosegardenMainWindow.h"
 
 #include "rosegarden-version.h"
 
@@ -40,6 +41,7 @@
 
 namespace Rosegarden
 {
+
 
 using namespace BaseProperties;
 

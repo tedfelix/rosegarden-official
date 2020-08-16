@@ -107,7 +107,9 @@ namespace Rosegarden
 //
 static double barWidth44 = 100.0;
 
-const QWidget *RosegardenMainViewWidget::m_lastActiveMainWindow = nullptr;
+RosegardenMainViewWidget::ExternalControllerWindow
+        RosegardenMainViewWidget::m_lastActiveMainWindow =
+                RosegardenMainViewWidget::Main;
 
 // This is the maximum number of matrix, event view or percussion
 // matrix editors to open in a single operation (not the maximum that
@@ -413,9 +415,9 @@ RosegardenMainViewWidget::createNotationView(std::vector<Segment *> segmentsToEd
     NotationView *notationView =
         new NotationView(getDocument(), segmentsToEdit, this);
 
-    // ??? No such signal.
-    connect(notationView, SIGNAL(windowActivated()),
-            this, SLOT(slotActiveMainWindowChanged()));
+    // ??? No such signal ever emitted.
+    //connect(notationView, &NotationView::windowActivated,
+    //        this, &RosegardenMainViewWidget::slotActiveMainWindowChanged);
 
     connect(notationView, &EditViewBase::selectTrack,
             this, &RosegardenMainViewWidget::slotSelectTrackSegments);
@@ -566,8 +568,8 @@ RosegardenMainViewWidget::createPitchTrackerView(std::vector<Segment *> segments
         new PitchTrackerView(getDocument(), segmentsToEdit, this);
 
     // ??? No such signal.
-    connect(pitchTrackerView, SIGNAL(windowActivated()),
-            this, SLOT(slotActiveMainWindowChanged()));
+    //connect(pitchTrackerView, &NotationView::windowActivated,
+    //        this, &RosegardenMainViewWidget::slotActiveMainWindowChanged);
 
     connect(pitchTrackerView, &EditViewBase::selectTrack,
             this, &RosegardenMainViewWidget::slotSelectTrackSegments);
@@ -768,8 +770,8 @@ RosegardenMainViewWidget::createMatrixView(std::vector<Segment *> segmentsToEdit
                                                   this);
 
     // ??? No such signal.
-    connect(matrixView, SIGNAL(windowActivated()),
-            this, SLOT(slotActiveMainWindowChanged()));
+    //connect(matrixView, &MatrixView::windowActivated,
+    //        this, &RosegardenMainViewWidget::slotActiveMainWindowChanged);
 
     connect(matrixView, &EditViewBase::selectTrack,
             this, &RosegardenMainViewWidget::slotSelectTrackSegments);
@@ -1813,13 +1815,12 @@ RosegardenMainViewWidget::slotSynchroniseWithComposition()
 }
 
 void
-RosegardenMainViewWidget::slotActiveMainWindowChanged()
+RosegardenMainViewWidget::slotActiveMainWindowChanged(
+        ExternalControllerWindow window)
 {
-    RG_DEBUG << "slotActiveMainWindowChanged()";
+    //RG_DEBUG << "slotActiveMainWindowChanged(): " << window;
 
-    const QWidget *w = dynamic_cast<const QWidget *>(sender());
-    if (w)
-        m_lastActiveMainWindow = w;
+    m_lastActiveMainWindow = window;
 }
 
 void
@@ -1858,32 +1859,28 @@ RosegardenMainViewWidget::slotExternalControllerMain(MappedEvent *e)
         // If switch window CC (CONTROLLER_SWITCH_WINDOW)
         if (e->getData1() == 81) {
 
-            // select window
-            int window = e->getData2();
+            const int value = e->getData2();
 
-            if (window < 42) {  // Main Window
+            if (value < 42) {  // Main Window
 
-                show();
+                RosegardenMainWindow::self()->show();
+                RosegardenMainWindow::self()->activateWindow();
+                RosegardenMainWindow::self()->raise();
 
-                // Some window managers (e.g. GNOME) do not allow the
-                // application to change focus on the user.  So, this
-                // might not work.
-                activateWindow();
-                raise();
+                return;
 
-                // ??? In this case, RMW will inform us that it is active,
-                //     but it will provide a pointer to RMW.  RMW is not
-                //     the one responsible for handling external controller
-                //     events for the main window.  RMVW is.  So...
-                m_lastActiveMainWindow = this;
-
-            } else if (window < 84) {
+            } else if (value < 84) {  // Audio Mixer
 
                 RosegardenMainWindow::self()->slotOpenAudioMixer();
 
-            } else {
+                return;
+
+            } else {  // MIDI Mixer
 
                 RosegardenMainWindow::self()->slotOpenMidiMixer();
+
+                return;
+
             }
         }
     }
@@ -1903,10 +1900,10 @@ RosegardenMainViewWidget::slotExternalControllerMain(MappedEvent *e)
 
 void
 RosegardenMainViewWidget::slotExternalController(
-        MappedEvent *e, const void *preferredCustomer)
+        MappedEvent *e, ExternalControllerWindow window)
 {
     // Not for me?  Bail.
-    if (preferredCustomer != this)
+    if (window != Main)
         return;
 
     //RG_DEBUG << "slotExternalController(): this one's for me";
@@ -2061,8 +2058,8 @@ RosegardenMainViewWidget::createEventView(std::vector<Segment *> segmentsToEdit)
                                          this);
 
     // ??? No such signal.
-    connect(eventView, SIGNAL(windowActivated()),
-        this, SLOT(slotActiveMainWindowChanged()));
+    //connect(eventView, &EditViewBase::windowActivated,
+    //        this, &RosegardenMainViewWidget::slotActiveMainWindowChanged);
 
     connect(eventView, &EditViewBase::selectTrack,
             this, &RosegardenMainViewWidget::slotSelectTrackSegments);

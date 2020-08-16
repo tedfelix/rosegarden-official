@@ -7091,8 +7091,9 @@ RosegardenMainWindow::slotEditTempos(timeT t)
     connect(m_tempoView, &TempoView::closing,
             this, &RosegardenMainWindow::slotTempoViewClosed);
 
-    connect(m_tempoView, SIGNAL(windowActivated()),
-            getView(), SLOT(slotActiveMainWindowChanged()));
+    // ??? No such signal.
+    //connect(m_tempoView, &TempoView::windowActivated,
+    //        getView(), &RosegardenMainViewWidget::slotActiveMainWindowChanged);
 
     connect(m_tempoView, &EditViewBase::saveFile, this, &RosegardenMainWindow::slotFileSave);
 
@@ -7188,8 +7189,9 @@ RosegardenMainWindow::slotShowPluginDialog(QWidget *parent,
                               container,
                               index);
 
-    connect(dialog, SIGNAL(windowActivated()),
-            m_view, SLOT(slotActiveMainWindowChanged()));
+    // ??? No such signal.
+    //connect(dialog, &AudioPluginDialog::windowActivated,
+    //        m_view, &RosegardenMainViewWidget::slotActiveMainWindowChanged);
 
     // Plug the new dialog into the standard keyboard shortcuts so
     // that we can use them still while the plugin has focus.
@@ -8508,16 +8510,12 @@ RosegardenDocument *RosegardenMainWindow::newDocument(bool skipAutoload)
 void
 RosegardenMainWindow::changeEvent(QEvent *event)
 {
-    // ??? There's no point in doing this.  RMVW::slotExternalControllerMain()
-    //     clobbers the pointer we send.
-
     // Let baseclass handle first.
     QWidget::changeEvent(event);
 
     if (event->type() == QEvent::ActivationChange) {
-        RG_DEBUG << "changeEvent(): Received activation change.";
         if (isActiveWindow())
-            emit windowActivated();
+            emit windowActivated(RosegardenMainViewWidget::Main);
     }
 }
 

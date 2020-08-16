@@ -21,7 +21,6 @@
 #include "base/Composition.h"
 #include "base/MidiProgram.h"
 #include "base/Track.h"
-#include "gui/application/RosegardenMainWindow.h"
 #include "TrackLabel.h"
 #include <QFrame>
 #include <QString>
@@ -34,6 +33,7 @@ class QVBoxLayout;
 class QSignalMapper;
 class QPopupMenu;
 class QObject;
+class QMenu;
 
 
 namespace Rosegarden
