@@ -167,7 +167,7 @@ ListEditView::paintEvent(QPaintEvent* e)
     */ 
     //!!!    m_inPaintEvent = true;
 
-    RG_DEBUG << "ListEditView::paintEvent";
+    //RG_DEBUG << "paintEvent()";
 
     if (isCompositionModified()) {
 
@@ -257,7 +257,7 @@ ListEditView::paintEvent(QPaintEvent* e)
     // any time signatures have changed)
     setCompositionModified(false);
 
-    //!!!    m_inPaintEvent = false;
+    // !!! m_inPaintEvent = false;
     /*
         if (m_havePendingPaintEvent) {
     	e = m_pendingPaintEvent;
