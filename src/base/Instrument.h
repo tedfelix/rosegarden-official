@@ -139,12 +139,28 @@ public:
     //
     void setPan(MidiByte pan) { m_pan = pan; }
     MidiByte getPan() const { return m_pan; }
+    /// Get a 0-127 pan for both MIDI and Audio Instrument's.
+    /**
+     * For a MIDI Instrument, this is the same as calling getPan().  For
+     * an Audio Instrument, this performs the math that is necessary to return
+     * a value between 0 and 127 representing the level as returned by
+     * getPan().
+     */
+    MidiByte getPanCC() const;
 
     // Volume is 0-127 for MIDI instruments.  It's not used for
     // audio instruments -- see "level" instead.
     // 
     void setVolume(MidiByte volume) { m_volume = volume; }
     MidiByte getVolume() const { return m_volume; }
+    /// Get a 0-127 volume for both MIDI and Audio Instrument's.
+    /**
+     * For a MIDI Instrument, this is the same as calling getVolume().  For
+     * an Audio Instrument, this performs the math that is necessary to return
+     * a value between 0 and 127 representing the level as returned by
+     * getLevel().
+     */
+    MidiByte getVolumeCC() const;
 
     void setProgram(const MidiProgram &program);
     const MidiProgram &getProgram() const { return m_program; }

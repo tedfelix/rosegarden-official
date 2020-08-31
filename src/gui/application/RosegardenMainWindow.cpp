@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2018 the Rosegarden development team.
+    Copyright 2000-2020 the Rosegarden development team.
  
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -8496,10 +8496,51 @@ RosegardenMainWindow::changeEvent(QEvent *event)
     // Let baseclass handle first.
     QWidget::changeEvent(event);
 
-    if (event->type() == QEvent::ActivationChange) {
-        if (isActiveWindow())
-            ExternalController::self()->m_activeWindow =
-                    ExternalController::Main;
+    // We only care about activation changes.
+    if (event->type() != QEvent::ActivationChange)
+        return;
+
+    // If we aren't the active window, bail.
+    if (!isActiveWindow())
+        return;
+
+    ExternalController::self()->m_activeWindow =
+            ExternalController::Main;
+
+    // Send CCs for current Track to external controller.
+
+    // Get the selected Track's Instrument.
+    InstrumentId instrumentId =
+            m_doc->getComposition().getSelectedInstrumentId();
+
+    Instrument *instrument = nullptr;
+
+    // If an instrument has been selected.
+    if (instrumentId != NoInstrument)
+        instrument = m_doc->getStudio().getInstrumentById(instrumentId);
+
+    if (!instrument)
+        return;
+
+    ExternalController::send(
+            0,
+            MIDI_CONTROLLER_VOLUME,
+            instrument->getVolumeCC());
+
+    ExternalController::send(
+            0,
+            MIDI_CONTROLLER_PAN,
+            instrument->getPanCC());
+
+    //if (instrument->getInstrumentType() == Instrument::Midi) {
+        // ??? Should we send the other CCs for MIDI?  I think MMW does.
+    //}
+
+    // Clear out channels 1-15 for external controller.
+    for (MidiByte channel = 1; channel < 16; ++channel) {
+        ExternalController::send(channel, MIDI_CONTROLLER_VOLUME, 0);
+        ExternalController::send(
+                channel, MIDI_CONTROLLER_PAN, MidiMidValue);
     }
 }
 

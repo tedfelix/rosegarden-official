@@ -18,6 +18,7 @@
 #include "Instrument.h"
 
 #include "base/AllocateChannels.h"
+#include "base/AudioLevel.h"
 #include "base/AudioPluginInstance.h"
 #include "sound/ControlBlock.h"
 #include "misc/Debug.h"
@@ -719,6 +720,36 @@ Instrument::getStaticSignals()
     // Still, it's a good habit.
 
     return instrumentStaticSignals;
+}
+
+MidiByte Instrument::getVolumeCC() const
+{
+    // MIDI
+    if (m_type == Midi) {
+        return m_volume;
+    } else {  // Audio
+        return static_cast<MidiByte>(AudioLevel::dB_to_fader(
+                m_level,  // dB
+                127,  // maxLevel
+                AudioLevel::LongFader));  // type
+    }
+}
+
+MidiByte Instrument::getPanCC() const
+{
+    // MIDI
+    if (m_type == Midi) {
+        return m_pan;
+    } else {  // Audio
+        // Scale 0-200 to 0-127.
+        int pan = (int(m_pan) * 64) / 100;
+        // Clamp to between 0 and 127.
+        if (pan < 0)
+            pan = 0;
+        if (pan > 127)
+            pan = 127;
+        return pan;
+    }
 }
 
 

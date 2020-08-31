@@ -644,27 +644,16 @@ AudioStrip::updateExternalController()
         return;
 
     // Send a volume controller message to the external controller port.
-
-    float dB = instrument->getLevel();
-
-    int value = AudioLevel::dB_to_fader(
-            dB, 127, AudioLevel::LongFader);
-
     ExternalController::send(
             m_externalControllerChannel,
-            MIDI_CONTROLLER_VOLUME, MidiByte(value));
+            MIDI_CONTROLLER_VOLUME,
+            instrument->getVolumeCC());
 
     // Send a pan controller message to the external controller port.
-
-    int ipan = (int(instrument->getPan()) * 64) / 100;
-    if (ipan < 0)
-        ipan = 0;
-    if (ipan > 127)
-        ipan = 127;
-
     ExternalController::send(
             m_externalControllerChannel,
-            MIDI_CONTROLLER_PAN, MidiByte(ipan));
+            MIDI_CONTROLLER_PAN,
+            instrument->getPanCC());
 }
 
 void
