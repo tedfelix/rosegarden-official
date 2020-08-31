@@ -766,8 +766,8 @@ MidiMixerWindow::sendControllerRefresh()
                 int value;
                 try {
                     value = instrument->getControllerValue(controller);
-                } catch (std::string s) {
-                    RG_WARNING << "Exception in MidiMixerWindow::currentChanged: " << s << " (controller " << controller << ", instrument " << instrument->getId() << ")";
+                } catch (const std::string &s) {
+                    RG_WARNING << "Exception in MidiMixerWindow::currentChanged: " << s << " (controller " << controller << ", instrument " << instrument->getId() << ")  Exception:" << s;
                     value = 0;
                 }
 
