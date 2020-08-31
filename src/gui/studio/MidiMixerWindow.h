@@ -23,6 +23,8 @@
 #include "gui/general/ActionFileClient.h"
 #include "MixerWindow.h"
 #include "gui/application/RosegardenMainViewWidget.h"
+#include "sound/ExternalController.h"
+
 
 #include <QSharedPointer>
 #include <vector>
@@ -71,8 +73,9 @@ public slots:
      * @see RosegardenMainViewWidget::slotExternalController()
      * @see AudioMixerWindow2::slotExternalController()
      */
-    void slotExternalController(MappedEvent *,
-            RosegardenMainViewWidget::ExternalControllerWindow window);
+    void slotExternalController(
+            const MappedEvent *event,
+            ExternalController::Window window);
 
     void slotCurrentTabChanged(int);
     void slotHelpRequested();

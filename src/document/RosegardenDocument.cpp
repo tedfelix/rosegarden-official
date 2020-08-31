@@ -73,6 +73,7 @@
 #include "sequencer/RosegardenSequencer.h"
 #include "sound/AudioFile.h"
 #include "sound/AudioFileManager.h"
+#include "sound/ExternalController.h"
 #include "sound/MappedCommon.h"
 #include "sound/MappedEventList.h"
 #include "sound/MappedDevice.h"
@@ -1880,17 +1881,8 @@ RosegardenDocument::insertRecordedMidi(const MappedEventList &mC)
         //     Or is this unnecessary?  Need to remove and see if it affects
         //     external controller functionality during record.
         if ((*i)->getRecordedDevice() == Device::EXTERNAL_CONTROLLER) {
-            const int viewCount = m_viewList.size();
 
-            //QList<RosegardenMainViewWidget *>::iterator v;
-            //for (v = m_viewList.begin(); v != m_viewList.end(); ++v) {
-
-            // For each view
-            for (int k = 0; k < viewCount; ++k) {
-                RosegardenMainViewWidget *v = m_viewList.value(k);
-                // Send the event to the view
-                v->slotExternalControllerMain(*i);
-            }
+            ExternalController::self()->processEvent(*i);
 
             // No further processing is required for this event.
             continue;

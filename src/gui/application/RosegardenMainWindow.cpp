@@ -1016,9 +1016,6 @@ RosegardenMainWindow::initView()
             StartupLogo::hideIfStillThere();
             QMessageBox::critical(dynamic_cast<QWidget*>(this), tr("Rosegarden"), s, QMessageBox::Ok, QMessageBox::Ok);
         }
-
-        connect(m_seqManager, &SequenceManager::externalController,
-                m_view, &RosegardenMainViewWidget::slotExternalControllerMain);
     }
 
     //    delete m_playList;
@@ -6906,9 +6903,6 @@ RosegardenMainWindow::slotOpenMidiMixer()
 
     m_midiMixer = new MidiMixerWindow(this, m_doc);
 
-    connect(m_view, &RosegardenMainViewWidget::externalController,
-            m_midiMixer, &MidiMixerWindow::slotExternalController);
-
     connect(m_midiMixer, &MixerWindow::closing,
             this, &RosegardenMainWindow::slotMidiMixerClosed);
 
@@ -8504,27 +8498,26 @@ RosegardenMainWindow::changeEvent(QEvent *event)
 
     if (event->type() == QEvent::ActivationChange) {
         if (isActiveWindow())
-            RosegardenMainViewWidget::setActiveWindow(
-                    RosegardenMainViewWidget::Main);
+            ExternalController::self()->m_activeWindow =
+                    ExternalController::Main;
     }
 }
 
 void
-RosegardenMainWindow::openWindow(
-        RosegardenMainViewWidget::ExternalControllerWindow window)
+RosegardenMainWindow::openWindow(ExternalController::Window window)
 {
     switch(window) {
-    case RosegardenMainViewWidget::Main:
+    case ExternalController::Main:
         show();
         activateWindow();
         raise();
         break;
 
-    case RosegardenMainViewWidget::AudioMixer:
+    case ExternalController::AudioMixer:
         slotOpenAudioMixer();
         break;
 
-    case RosegardenMainViewWidget::MidiMixer:
+    case ExternalController::MidiMixer:
         slotOpenMidiMixer();
         break;
 

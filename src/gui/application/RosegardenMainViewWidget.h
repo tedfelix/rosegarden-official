@@ -23,7 +23,9 @@
 #include "base/Selection.h"
 #include "base/Track.h"
 #include "sound/AudioFile.h"
+#include "sound/ExternalController.h"
 #include "gui/editors/segment/TrackEditor.h"
+
 #include <QString>
 #include <QWidget>
 #include <QVBoxLayout>
@@ -128,18 +130,6 @@ public:
 
     TrackParameterBox *getTrackParameterBox()
             { return m_trackParameterBox; }
-
-    /// The three windows that currently handle external controller events.
-    enum ExternalControllerWindow { Main, AudioMixer, MidiMixer };
-    /// Set which external controller window is currently the active window.
-    /**
-     * External controller events are forwarded to the currently active
-     * window.
-     *
-     * Called by the three windows that can handle external controller event.
-     */
-    static void setActiveWindow(ExternalControllerWindow window)
-            { m_lastActiveMainWindow = window; }
 
 public slots:
     void slotEditSegment(Segment*);
@@ -246,16 +236,6 @@ public slots:
      * This routine handles remote control events received from a
      * device connected to the "external controller" port.
      *
-     * This routine handles controller 81 which opens or
-     * brings to the top various windows based on the value.
-     */
-    void slotExternalControllerMain(MappedEvent *);
-
-    /// Handle events from the external controller port.
-    /**
-     * This routine handles remote control events received from a
-     * device connected to the "external controller" port.
-     *
      * This routine handles various controllers and Program Changes.
      * Controller 82 selects the current track.  Other controllers,
      * like volume and pan, cause changes to the corresponding controller
@@ -267,7 +247,7 @@ public slots:
      * @see AudioMixerWindow2::slotExternalController()
      */
     void slotExternalController(
-            MappedEvent *, ExternalControllerWindow window);
+            const MappedEvent *event, ExternalController::Window window);
 
 signals:
     void activateTool(QString toolName);
@@ -306,10 +286,6 @@ signals:
     void instrumentLevelsChanged(InstrumentId,
                                  const LevelInfo &);
 
-    void externalController(
-            MappedEvent *event,
-            ExternalControllerWindow window);
-
 private:
 
     NotationView *createNotationView(std::vector<Segment *>);
@@ -328,7 +304,6 @@ private:
     InstrumentParameterBox        *m_instrumentParameterBox;
     TrackParameterBox             *m_trackParameterBox;
 
-    static ExternalControllerWindow m_lastActiveMainWindow;
 };
 
 

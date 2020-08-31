@@ -180,8 +180,6 @@ public:
      *     -> NotationView::slotInsertableNoteOnReceived()
      *     -> PitchTrackerView::slotInsertableNoteOnReceived()
      *     -> MatrixView::slotInsertableNoteOnReceived()
-     *   - externalController()
-     *     -> RMVW::slotExternalControllerMain()
      *
      * This routine also performs extensive error checking and displays
      * error messages when a problem is detected.
@@ -316,16 +314,6 @@ signals:
      * step editing features.
      */
     void insertableNoteOffReceived(int pitch, int velocity);
-
-    /// An event was received from the "external controller" port.
-    /**
-     * Emitted by processAsynchronousMidi().
-     *
-     * Connected to
-     * RosegardenMainViewWindow::slotExternalControllerMain().  These
-     * are events from the "external controller" port.
-     */
-    void externalController(MappedEvent *event);
 
     /// Signal RosegardenMainWindow to display a warning.
     /**

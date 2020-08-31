@@ -107,10 +107,6 @@ namespace Rosegarden
 //
 static double barWidth44 = 100.0;
 
-RosegardenMainViewWidget::ExternalControllerWindow
-        RosegardenMainViewWidget::m_lastActiveMainWindow =
-                RosegardenMainViewWidget::Main;
-
 // This is the maximum number of matrix, event view or percussion
 // matrix editors to open in a single operation (not the maximum that
 // can be open at a time -- there isn't one)
@@ -206,7 +202,8 @@ RosegardenMainViewWidget::RosegardenMainViewWidget(bool showTrackLabels,
             m_trackEditor->getTrackButtons(),
             &TrackButtons::slotTPBInstrumentSelected);
 
-    connect(this, &RosegardenMainViewWidget::externalController,
+    connect(ExternalController::self().get(),
+                &ExternalController::externalController,
             this, &RosegardenMainViewWidget::slotExternalController);
 
     if (doc) {
@@ -1799,87 +1796,11 @@ RosegardenMainViewWidget::slotSynchroniseWithComposition()
 }
 
 void
-RosegardenMainViewWidget::slotExternalControllerMain(MappedEvent *e)
-{
-    //RG_DEBUG << "slotExternalControllerMain() - send to " << (void *)m_lastActiveMainWindow << " (I am " << this << ")";
-
-    // -- external controller that sends e.g. volume control for each
-    // of a number of channels -> if mixer present, use control to adjust
-    // tracks on mixer
-
-    // -- external controller that sends e.g. separate controllers on
-    // the same channel for adjusting various parameters -> if IPB
-    // visible, adjust it.  Should we use the channel to select the
-    // track? maybe as an option
-
-    // do we actually need the last active main window for either of
-    // these? -- yes, to determine whether to send to mixer or to IPB
-    // in the first place.  Send to audio mixer if active, midi mixer
-    // if active, plugin dialog if active, otherwise keep it for
-    // ourselves for the IPB.  But, we'll do that by having the edit
-    // views pass it back to us.
-
-    // -- then we need to send back out to device.
-
-    // CC 81: select window
-    // CC 82: select track (see slotExternalController())
-    // CC  7: Adjust volume on current track (see slotExternalController())
-    // CC 10: Adjust pan on current track (see slotExternalController())
-    // CC  x: Adjust that CC on current track (see slotExternalController())
-
-    // These obviously should be configurable.
-
-    if (e->getType() == MappedEvent::MidiController) {
-
-        // If switch window CC (CONTROLLER_SWITCH_WINDOW)
-        if (e->getData1() == 81) {
-
-            const int value = e->getData2();
-
-            if (value < 42) {  // Main Window
-
-                RosegardenMainWindow::self()->openWindow(
-                        RosegardenMainViewWidget::Main);
-
-                return;
-
-            } else if (value < 84) {  // Audio Mixer
-
-                RosegardenMainWindow::self()->openWindow(
-                        RosegardenMainViewWidget::AudioMixer);
-
-                return;
-
-            } else {  // MIDI Mixer
-
-                RosegardenMainWindow::self()->openWindow(
-                        RosegardenMainViewWidget::MidiMixer);
-
-                return;
-
-            }
-        }
-    }
-
-    // Delegate to the currently active track-related window.
-    // The idea here is that the user can remotely switch between the
-    // three track-related windows (rg main, MIDI Mixer, and Audio Mixer)
-    // via controller 81 (above).  Then they can control the tracks
-    // on that window via other controllers.
-
-    // The behavior is slightly different between the three windows.
-    // The main window uses controller 82 to select a track while
-    // the other two use the incoming MIDI channel to select which
-    // track will be modified.
-    emit externalController(e, m_lastActiveMainWindow);
-}
-
-void
 RosegardenMainViewWidget::slotExternalController(
-        MappedEvent *e, ExternalControllerWindow window)
+        const MappedEvent *e, ExternalController::Window window)
 {
     // Not for me?  Bail.
-    if (window != Main)
+    if (window != ExternalController::Main)
         return;
 
     //RG_DEBUG << "slotExternalController(): this one's for me";

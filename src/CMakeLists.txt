@@ -551,6 +551,7 @@ set(rg_CPPS
   sound/AudioPlayQueue.cpp
   sound/PitchDetector.cpp
   sound/Resampler.cpp
+  sound/ExternalController.cpp
   commands/notation/ResetDisplacementsCommand.cpp
   commands/notation/RemoveNotationQuantizeCommand.cpp
   commands/notation/AddMarkCommand.cpp

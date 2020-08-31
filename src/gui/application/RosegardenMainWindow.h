@@ -26,6 +26,7 @@
 #include "base/Event.h"
 #include "base/Selection.h"
 #include "sound/AudioFile.h"
+#include "sound/ExternalController.h"
 #include "sound/Midi.h"
 #include "gui/general/ActionFileClient.h"
 
@@ -355,7 +356,7 @@ public:
 
     void uiUpdateKludge();
 
-    void openWindow(RosegardenMainViewWidget::ExternalControllerWindow window);
+    void openWindow(ExternalController::Window window);
 
 protected:
 

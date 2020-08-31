@@ -40,7 +40,6 @@
 #include "gui/general/ActionFileClient.h"
 #include "gui/widgets/TmpStatusMsg.h"
 #include "gui/dialogs/AboutDialog.h"
-#include "gui/application/RosegardenMainViewWidget.h"
 #include "MidiMixerVUMeter.h"
 #include "MixerWindow.h"
 #include "sound/MappedEvent.h"
@@ -97,6 +96,11 @@ MidiMixerWindow::MidiMixerWindow(QWidget *parent,
     connect(Instrument::getStaticSignals().data(),
                 &InstrumentStaticSignals::controlChange,
             this, &MidiMixerWindow::slotControlChange);
+
+    connect(ExternalController::self().get(),
+                &ExternalController::externalController,
+            this, &MidiMixerWindow::slotExternalController);
+
 }
 
 void
@@ -643,11 +647,11 @@ MidiMixerWindow::updateMonitorMeter()
 }
 
 void
-MidiMixerWindow::slotExternalController(MappedEvent *e,
-        RosegardenMainViewWidget::ExternalControllerWindow window)
+MidiMixerWindow::slotExternalController(const MappedEvent *e,
+        ExternalController::Window window)
 {
     // Not for me?  Bail.
-    if (window != RosegardenMainViewWidget::MidiMixer)
+    if (window != ExternalController::MidiMixer)
         return;
 
     RG_DEBUG << "slotExternalController(): this one's for me";
@@ -853,8 +857,8 @@ MidiMixerWindow::changeEvent(QEvent *event)
     if (event->type() == QEvent::ActivationChange) {
         //RG_DEBUG << "changeEvent(): Received activation change.";
         if (isActiveWindow()) {
-            RosegardenMainViewWidget::setActiveWindow(
-                    RosegardenMainViewWidget::MidiMixer);
+            ExternalController::self()->m_activeWindow =
+                    ExternalController::MidiMixer;
 
             sendControllerRefresh();
         }

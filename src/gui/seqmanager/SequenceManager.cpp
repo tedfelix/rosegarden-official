@@ -23,6 +23,7 @@
 
 #include "sound/Midi.h"  // for MIDI_SYSTEM_RESET
 #include "sound/ControlBlock.h"
+#include "sound/ExternalController.h"
 #include "misc/Debug.h"
 #include "misc/Strings.h"  // for qStrToBool()
 #include "misc/ConfigGroups.h"
@@ -1014,8 +1015,8 @@ SequenceManager::processAsynchronousMidi(const MappedEventList &mC,
             }
         }
         if ((*i)->getRecordedDevice() == Device::EXTERNAL_CONTROLLER) {
-            RG_DEBUG << "processAsynchronousMidi(): Emitting externalController()...";
-            emit externalController(*i);
+            RG_DEBUG << "processAsynchronousMidi(): Calling ExternalController::processEvent()...";
+            ExternalController::self()->processEvent(*i);
         }
     }
 }
