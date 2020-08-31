@@ -543,14 +543,9 @@ AudioStrip::slotFaderLevelChanged(float dB)
             int value = AudioLevel::dB_to_fader(
                     dB, 127, AudioLevel::LongFader);
 
-            MappedEvent mE(m_id,
-                           MappedEvent::MidiController,
-                           MIDI_CONTROLLER_VOLUME,
-                           MidiByte(value));
-            mE.setRecordedChannel(m_externalControllerChannel);
-            mE.setRecordedDevice(Device::EXTERNAL_CONTROLLER);
-
-            StudioControl::sendMappedEvent(mE);
+            ExternalController::send(
+                    m_externalControllerChannel,
+                    MIDI_CONTROLLER_VOLUME, MidiByte(value));
         }
 
         return;
@@ -606,14 +601,9 @@ AudioStrip::slotPanChanged(float pan)
             if (ipan > 127)
                 ipan = 127;
 
-            MappedEvent mE(m_id,
-                           MappedEvent::MidiController,
-                           MIDI_CONTROLLER_PAN,
-                           MidiByte(ipan));
-            mE.setRecordedChannel(m_externalControllerChannel);
-            mE.setRecordedDevice(Device::EXTERNAL_CONTROLLER);
-
-            StudioControl::sendMappedEvent(mE);
+            ExternalController::send(
+                    m_externalControllerChannel,
+                    MIDI_CONTROLLER_PAN, MidiByte(ipan));
         }
 
         return;
@@ -660,14 +650,9 @@ AudioStrip::updateExternalController()
     int value = AudioLevel::dB_to_fader(
             dB, 127, AudioLevel::LongFader);
 
-    MappedEvent volumeEvent(m_id,
-                            MappedEvent::MidiController,
-                            MIDI_CONTROLLER_VOLUME,
-                            MidiByte(value));
-    volumeEvent.setRecordedChannel(m_externalControllerChannel);
-    volumeEvent.setRecordedDevice(Device::EXTERNAL_CONTROLLER);
-
-    StudioControl::sendMappedEvent(volumeEvent);
+    ExternalController::send(
+            m_externalControllerChannel,
+            MIDI_CONTROLLER_VOLUME, MidiByte(value));
 
     // Send a pan controller message to the external controller port.
 
@@ -677,14 +662,9 @@ AudioStrip::updateExternalController()
     if (ipan > 127)
         ipan = 127;
 
-    MappedEvent panEvent(m_id,
-                         MappedEvent::MidiController,
-                         MIDI_CONTROLLER_PAN,
-                         MidiByte(ipan));
-    panEvent.setRecordedChannel(m_externalControllerChannel);
-    panEvent.setRecordedDevice(Device::EXTERNAL_CONTROLLER);
-
-    StudioControl::sendMappedEvent(panEvent);
+    ExternalController::send(
+            m_externalControllerChannel,
+            MIDI_CONTROLLER_PAN, MidiByte(ipan));
 }
 
 void

@@ -18,6 +18,7 @@
 #include "misc/Debug.h"
 #include "MappedEvent.h"
 #include "gui/application/RosegardenMainWindow.h"
+#include "gui/studio/StudioControl.h"
 
 
 namespace Rosegarden
@@ -110,6 +111,19 @@ void ExternalController::processEvent(const MappedEvent *event)
     // the other two use the incoming MIDI channel to select which
     // track will be modified.
     emit externalController(event, m_activeWindow);
+}
+
+void ExternalController::send(
+        MidiByte channel, MidiByte controlNumber, MidiByte value)
+{
+    MappedEvent event(0,  // instrumentId is ignored
+                      MappedEvent::MidiController,
+                      controlNumber,
+                      MidiByte(value));
+    event.setRecordedChannel(channel);
+    event.setRecordedDevice(Device::EXTERNAL_CONTROLLER);
+
+    StudioControl::sendMappedEvent(event);
 }
 
 

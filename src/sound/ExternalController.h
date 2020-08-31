@@ -13,6 +13,9 @@
 
 #pragma once
 
+#include "base/Instrument.h"  // For InstrumentId
+#include "base/MidiProgram.h"  // For MidiByte
+
 #include <QObject>
 #include <QSharedPointer>
 
@@ -56,6 +59,9 @@ public:
      * See m_activeWindow.
      */
     void processEvent(const MappedEvent *event);
+
+    /// Send a control change message out the external controller port.
+    static void send(MidiByte channel, MidiByte controlNumber, MidiByte value);
 
 signals:
     /// External controller port events for the windows that handle them.

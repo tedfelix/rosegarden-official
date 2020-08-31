@@ -604,6 +604,9 @@ AudioMixerWindow2::changeEvent(QEvent *event)
     // Let baseclass handle first.
     QWidget::changeEvent(event);
 
+    // ??? Double updates seem to go out so we might want to be a little
+    //     more picky about the event we react to.
+
     if (event->type() == QEvent::ActivationChange) {
         //RG_DEBUG << "changeEvent(): Received activation change.";
         if (isActiveWindow()) {

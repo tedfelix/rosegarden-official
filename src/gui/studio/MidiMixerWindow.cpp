@@ -44,7 +44,6 @@
 #include "MixerWindow.h"
 #include "sound/MappedEvent.h"
 #include "sound/SequencerDataBlock.h"
-#include "StudioControl.h"
 
 #include <QAction>
 #include <QColor>
@@ -336,14 +335,9 @@ MidiMixerWindow::slotFaderLevelChanged(float value)
                         if (instrument->getDevice()->getId() == (*dit)->getId()) {
                             RG_DEBUG << "slotFaderLevelChanged: sending control device mapped event for channel " << instrument->getNaturalChannel();
 
-                            MappedEvent mE((*it)->m_id,
-                                           MappedEvent::MidiController,
-                                           MIDI_CONTROLLER_VOLUME,
-                                           MidiByte(value));
-
-                            mE.setRecordedChannel(instrument->getNaturalChannel());
-                            mE.setRecordedDevice(Device::EXTERNAL_CONTROLLER);
-                            StudioControl::sendMappedEvent(mE);
+                            ExternalController::send(
+                                    instrument->getNaturalChannel(),
+                                    MIDI_CONTROLLER_VOLUME, MidiByte(value));
                         }
                         break;
                     }
@@ -418,14 +412,11 @@ MidiMixerWindow::slotControllerChanged(float value)
                 if (instrument->getDevice()->getId() == (*dit)->getId()) {
                     RG_DEBUG << "slotControllerChanged: sending control device mapped event for channel " << instrument->getNaturalChannel();
                     // send out to external controller port as well.
-                    //!!! really want some notification of whether we have any!
-                    MappedEvent mE(m_faders[i]->m_id,
-                                   MappedEvent::MidiController,
-                                   m_faders[i]->m_controllerRotaries[j].first,
-                                   MidiByte(value));
-                    mE.setRecordedChannel(instrument->getNaturalChannel());
-                    mE.setRecordedDevice(Device::EXTERNAL_CONTROLLER);
-                    StudioControl::sendMappedEvent(mE);
+                    // !!! really want some notification of whether we have any!
+                    ExternalController::send(
+                            instrument->getNaturalChannel(),
+                            m_faders[i]->m_controllerRotaries[j].first,
+                            MidiByte(value));
                 }
             }
         }
@@ -780,22 +771,16 @@ MidiMixerWindow::sendControllerRefresh()
                     value = 0;
                 }
 
-                MappedEvent mE(instrument->getId(),
-                               MappedEvent::MidiController,
-                               controller, value);
-                mE.setRecordedChannel(channel);
-                mE.setRecordedDevice(Device::EXTERNAL_CONTROLLER);
-                StudioControl::sendMappedEvent(mE);
+                ExternalController::send(
+                        channel,
+                        controller,
+                        MidiByte(value));
             }
 
-            MappedEvent mE(instrument->getId(),
-                           MappedEvent::MidiController,
-                           MIDI_CONTROLLER_VOLUME,
-                           instrument->getVolume());
-            mE.setRecordedChannel(channel);
-            mE.setRecordedDevice(Device::EXTERNAL_CONTROLLER);
-            RG_DEBUG << "sending controller mapped event for channel " << channel << ", volume " << instrument->getVolume();
-            StudioControl::sendMappedEvent(mE);
+            ExternalController::send(
+                    channel,
+                    MIDI_CONTROLLER_VOLUME,
+                    instrument->getVolume());
         }
 
         break;
@@ -853,6 +838,9 @@ MidiMixerWindow::changeEvent(QEvent *event)
 {
     // Let baseclass handle first.
     QWidget::changeEvent(event);
+
+    // ??? Double updates seem to go out so we might want to be a little
+    //     more picky about the event we react to.
 
     if (event->type() == QEvent::ActivationChange) {
         //RG_DEBUG << "changeEvent(): Received activation change.";
