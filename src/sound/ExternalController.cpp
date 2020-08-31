@@ -116,7 +116,7 @@ void ExternalController::processEvent(const MappedEvent *event)
 void ExternalController::send(
         MidiByte channel, MidiByte controlNumber, MidiByte value)
 {
-    MappedEvent event(0,  // instrumentId is ignored
+    MappedEvent event(NoInstrument,  // instrumentId is ignored
                       MappedEvent::MidiController,
                       controlNumber,
                       MidiByte(value));
