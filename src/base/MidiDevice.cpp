@@ -16,7 +16,7 @@
 #define RG_MODULE_STRING "[MidiDevice]"
 
 #include "MidiDevice.h"
-#include "sound/Midi.h"
+#include "sound/Midi.h"  // For MIDI_CONTROLLER_VOLUME, etc...
 #include "base/AllocateChannels.h"
 #include "base/ControlParameter.h"
 #include "base/Instrument.h"
@@ -1021,8 +1021,6 @@ ControlList
 MidiDevice::getIPBControlParameters() const
 {
     ControlList retList;
-
-    Rosegarden::MidiByte MIDI_CONTROLLER_VOLUME = 0x07;
 
     for (ControlList::const_iterator it = m_controlList.begin();
          it != m_controlList.end(); ++it)

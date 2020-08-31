@@ -22,7 +22,7 @@
 
 #include "MidiMixerWindow.h"
 
-#include "sound/Midi.h"
+#include "sound/Midi.h"  // For MIDI_CONTROLLER_VOLUME, etc...
 #include "misc/Debug.h"
 #include "misc/Strings.h"
 #include "base/Device.h"
@@ -819,8 +819,6 @@ MidiMixerWindow::getIPBForMidiMixer(MidiDevice *dev) const
 {
     ControlList controlList = dev->getIPBControlParameters();
     ControlList retList;
-
-    Rosegarden::MidiByte MIDI_CONTROLLER_VOLUME = 0x07;
 
     for (ControlList::const_iterator it = controlList.begin();
          it != controlList.end(); ++it)
