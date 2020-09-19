@@ -59,9 +59,9 @@ MIDIConfigurationPage::MIDIConfigurationPage(RosegardenDocument *doc,
     // ---------------- General tab ------------------
 
     // We need this QWidget for the addTab() call later on.
-    QWidget *frame = new QWidget;
+    QWidget *widget = new QWidget;
 
-    QGridLayout *layout = new QGridLayout(frame);
+    QGridLayout *layout = new QGridLayout(widget);
     layout->setContentsMargins(20, 20, 20, 20);
     layout->setSpacing(5);
 
@@ -80,11 +80,11 @@ MIDIConfigurationPage::MIDIConfigurationPage(RosegardenDocument *doc,
     m_baseOctaveNumber->setMaximum(10);
     m_baseOctaveNumber->setValue(
             settings.value("midipitchoctave", -2).toInt());
-    // ??? Switch to Qt5 syntax.  That will require a new
-    //     slotBaseOctaveNumberChanged(int) that delegates to slotModified().
-    connect(m_baseOctaveNumber, SIGNAL(valueChanged(int)),
-            this, SLOT(slotModified()));
+    connect(m_baseOctaveNumber,
+                static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),
+            this, &MIDIConfigurationPage::slotModified);
     layout->addWidget(m_baseOctaveNumber, row, 2, 1, 2);
+
     ++row;
 
     // Spacer
@@ -96,12 +96,13 @@ MIDIConfigurationPage::MIDIConfigurationPage(RosegardenDocument *doc,
             new QLabel(tr("Always use default studio when loading files")),
             row, 0, 1, 2);
 
-    m_studio = new QCheckBox;
-    connect(m_studio, &QCheckBox::stateChanged,
-            this, &MIDIConfigurationPage::slotModified);
-    m_studio->setChecked(qStrToBool(
+    m_useDefaultStudio = new QCheckBox;
+    m_useDefaultStudio->setChecked(qStrToBool(
             settings.value("alwaysusedefaultstudio", "false")));
-    layout->addWidget(m_studio, row, 2);
+    connect(m_useDefaultStudio, &QCheckBox::stateChanged,
+            this, &MIDIConfigurationPage::slotModified);
+    layout->addWidget(m_useDefaultStudio, row, 2);
+
     ++row;
 
     settings.endGroup();
@@ -109,38 +110,41 @@ MIDIConfigurationPage::MIDIConfigurationPage(RosegardenDocument *doc,
 
     // Allow Reset All Controllers
     QLabel *label = new QLabel(tr("Allow Reset All Controllers (CC 121)"));
-
     QString resetTip = tr("Rosegarden can send a MIDI Reset All Controllers event when setting up a channel.");
     label->setToolTip(resetTip);
-    layout->addWidget(label, row, 0, row- row+1, 1- 0+1);
+    layout->addWidget(label, row, 0, 1, 2);
 
     m_allowResetAllControllers = new QCheckBox;
-    connect(m_allowResetAllControllers, &QCheckBox::stateChanged, this, &MIDIConfigurationPage::slotModified);
-    const bool sendResetAllControllers = qStrToBool( settings.value("allowresetallcontrollers", "true" ) ) ;
-    m_allowResetAllControllers->setChecked(sendResetAllControllers);
     m_allowResetAllControllers->setToolTip(resetTip);
+    const bool sendResetAllControllers =
+            qStrToBool(settings.value("allowresetallcontrollers", "true"));
+    m_allowResetAllControllers->setChecked(sendResetAllControllers);
+    connect(m_allowResetAllControllers, &QCheckBox::stateChanged,
+            this, &MIDIConfigurationPage::slotModified);
     layout->addWidget(m_allowResetAllControllers, row, 2);
+
     ++row;
 
-    // Timer selection
-    //
-
+    // Sequencer timing source
     label = new QLabel(tr("Sequencer timing source"));
-    layout->addWidget(label, row, 0, row- row+1, 1- 0+1);
+    layout->addWidget(label, row, 0, 1, 2);
 
-    m_timer = new QComboBox;
-    connect(m_timer, SIGNAL(activated(int)), this, SLOT(slotModified()));
-    layout->addWidget(m_timer, row, 2, row- row+1, 3-2+1);
+    m_sequencerTimingSource = new QComboBox;
 
-    QStringList timers = m_doc->getTimers();
-    m_origTimer = m_doc->getCurrentTimer();
-    QString currentTimer = settings.value("timer", m_origTimer).toString();
+    const QStringList timers = m_doc->getTimers();
+    m_originalTimingSource = m_doc->getCurrentTimer();
+    const QString currentTimer =
+            settings.value("timer", m_originalTimingSource).toString();
 
     for (int i = 0; i < timers.size(); ++i) {
-        m_timer->addItem(timers[i]);
+        m_sequencerTimingSource->addItem(timers[i]);
         if (timers[i] == currentTimer)
-            m_timer->setCurrentIndex(i);
+            m_sequencerTimingSource->setCurrentIndex(i);
     }
+
+    connect(m_sequencerTimingSource, SIGNAL(activated(int)),
+            this, SLOT(slotModified()));
+    layout->addWidget(m_sequencerTimingSource, row, 2, 1, 2);
 
     ++row;
 
@@ -150,7 +154,7 @@ MIDIConfigurationPage::MIDIConfigurationPage(RosegardenDocument *doc,
 
     // SoundFont loading
     //
-    QLabel* lbl = new QLabel(tr("Load SoundFont to SoundBlaster card at startup"), frame);
+    QLabel* lbl = new QLabel(tr("Load SoundFont to SoundBlaster card at startup"), widget);
     QString tooltip = tr("Check this box to enable soundfont loading on EMU10K-based cards when Rosegarden is launched");
     lbl->setToolTip(tooltip);
     layout->addWidget(lbl, row, 0, row- row+1, 1- 0+1);
@@ -161,15 +165,15 @@ MIDIConfigurationPage::MIDIConfigurationPage(RosegardenDocument *doc,
     m_sfxLoadEnabled->setToolTip(tooltip);
     ++row;
 
-    layout->addWidget(new QLabel(tr("Path to 'asfxload' or 'sfxload' command"), frame), row, 0);
-    m_sfxLoadPath = new LineEdit(settings.value("sfxloadpath", "/usr/bin/asfxload").toString() , frame);
+    layout->addWidget(new QLabel(tr("Path to 'asfxload' or 'sfxload' command"), widget), row, 0);
+    m_sfxLoadPath = new LineEdit(settings.value("sfxloadpath", "/usr/bin/asfxload").toString() , widget);
     layout->addWidget(m_sfxLoadPath, row, 1, row- row+1, 2);
     m_sfxLoadChoose = new QPushButton(tr("Choose..."));
     layout->addWidget(m_sfxLoadChoose, row, 3);
     ++row;
 
     layout->addWidget(new QLabel(tr("SoundFont")), row, 0);
-    m_soundFontPath = new LineEdit(settings.value("soundfontpath", "").toString() , frame);
+    m_soundFontPath = new LineEdit(settings.value("soundfontpath", "").toString() , widget);
     layout->addWidget(m_soundFontPath, row, 1, row- row+1, 2);
     m_soundFontChoose = new QPushButton(tr("Choose..."));
     layout->addWidget(m_soundFontChoose, row, 3);
@@ -195,27 +199,23 @@ MIDIConfigurationPage::MIDIConfigurationPage(RosegardenDocument *doc,
 
     layout->setRowStretch(row, 10);
 
-    addTab(frame, tr("General"));
+    addTab(widget, tr("General"));
 
 
     //  -------------- MIDI Sync tab -----------------
 
-    frame = new QFrame;
-    frame->setContentsMargins(10, 10, 10, 10);
-    layout = new QGridLayout(frame);
+    widget = new QWidget;
+
+    layout = new QGridLayout(widget);
+    layout->setContentsMargins(20, 20, 20, 20);
     layout->setSpacing(5);
 
     row = 0;
 
-    // Spacer
-    layout->setRowMinimumHeight(row, 15);
-    ++row;
-
-    // MIDI Clock and System Realtime Messages
-    //
-    label = new QLabel(tr("MIDI Clock and System messages"), frame);
+    // MIDI Clock and System messages
+    label = new QLabel(tr("MIDI Clock and System messages"), widget);
     layout->addWidget(label, row, 0);
-    m_midiSync = new QComboBox(frame);
+    m_midiSync = new QComboBox(widget);
     connect(m_midiSync, SIGNAL(activated(int)), this, SLOT(slotModified()));
     layout->addWidget(m_midiSync, row, 1);
 
@@ -232,10 +232,10 @@ MIDIConfigurationPage::MIDIConfigurationPage(RosegardenDocument *doc,
 
     // MMC Transport
     //
-    label = new QLabel(tr("MIDI Machine Control mode"), frame);
+    label = new QLabel(tr("MIDI Machine Control mode"), widget);
     layout->addWidget(label, row, 0);
 
-    m_mmcTransport = new QComboBox(frame);
+    m_mmcTransport = new QComboBox(widget);
     connect(m_mmcTransport, SIGNAL(activated(int)), this, SLOT(slotModified()));
     layout->addWidget(m_mmcTransport, row, 1); //, Qt::AlignHCenter);
 
@@ -252,10 +252,10 @@ MIDIConfigurationPage::MIDIConfigurationPage(RosegardenDocument *doc,
 
     // MTC transport
     //
-    label = new QLabel(tr("MIDI Time Code mode"), frame);
+    label = new QLabel(tr("MIDI Time Code mode"), widget);
     layout->addWidget(label, row, 0);
 
-    m_mtcTransport = new QComboBox(frame);
+    m_mtcTransport = new QComboBox(widget);
     connect(m_mtcTransport, SIGNAL(activated(int)), this, SLOT(slotModified()));
     layout->addWidget(m_mtcTransport, row, 1);
 
@@ -270,7 +270,7 @@ MIDIConfigurationPage::MIDIConfigurationPage(RosegardenDocument *doc,
 
     ++row;
 
-    QWidget *hbox = new QWidget(frame);
+    QWidget *hbox = new QWidget(widget);
     QHBoxLayout *hboxLayout = new QHBoxLayout;
     hboxLayout->setSpacing(5);
     layout->addWidget(hbox, row, 0, row- row+1, 1- 0+1);
@@ -290,7 +290,7 @@ MIDIConfigurationPage::MIDIConfigurationPage(RosegardenDocument *doc,
 
     layout->setRowStretch(row, 10);
 
-    addTab(frame, tr("MIDI Sync"));
+    addTab(widget, tr("MIDI Sync"));
 
     settings.endGroup();
 }
@@ -337,10 +337,10 @@ MIDIConfigurationPage::apply()
     settings.setValue("sfxloadpath", m_sfxLoadPath->text());
     settings.setValue("soundfontpath", m_soundFontPath->text());
 
-    settings.setValue("timer", m_timer->currentText());
-    if (m_timer->currentText() != m_origTimer) {
-        m_doc->setCurrentTimer(m_timer->currentText());
-    }
+    settings.setValue("timer", m_sequencerTimingSource->currentText());
+    // If the timer setting has actually changed
+    if (m_sequencerTimingSource->currentText() != m_originalTimingSource)
+        m_doc->setCurrentTimer(m_sequencerTimingSource->currentText());
 
     // Write the entries
     //

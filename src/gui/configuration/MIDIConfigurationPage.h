@@ -66,11 +66,12 @@ private:
     /// Base octave number for MIDI pitch display.
     QSpinBox *m_baseOctaveNumber;
 
-    QCheckBox *m_studio;
-    bool getUseDefaultStudio() const  { return m_studio->isChecked(); }
+    QCheckBox *m_useDefaultStudio;
+    bool getUseDefaultStudio() const  { return m_useDefaultStudio->isChecked(); }
     QCheckBox *m_allowResetAllControllers;
-    QString m_origTimer;
-    QComboBox *m_timer;
+    /// Timer value at the beginning to detect changes.
+    QString m_originalTimingSource;
+    QComboBox *m_sequencerTimingSource;
 
     QCheckBox *m_sfxLoadEnabled;
     LineEdit *m_sfxLoadPath;
