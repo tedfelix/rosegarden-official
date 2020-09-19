@@ -8522,6 +8522,10 @@ RosegardenMainWindow::changeEvent(QEvent *event)
     if (!instrument)
         return;
 
+    // ??? Consider factoring out to ExternalController as
+    //     sendAllCCs(instrument).  MidiMixerWindow could use it
+    //     as well.
+
     ExternalController::send(
             0,
             MIDI_CONTROLLER_VOLUME,
@@ -8532,65 +8536,34 @@ RosegardenMainWindow::changeEvent(QEvent *event)
             MIDI_CONTROLLER_PAN,
             instrument->getPanCC());
 
-    // Code stolen from MidiMixerWindow::sendControllerRefresh().
-    // ??? Consider factoring out to ExternalController as sendAllCCs().
-    //     Consider some sort of pulling out as this is crawling a bit too
-    //     far to the right.
-
     // For MIDI instruments...
     if (instrument->getInstrumentType() == Instrument::Midi) {
 
         // Also send all the other CCs in case the surface can handle them.
 
-#if 0
-        // ??? It looks like Instrument::getStaticControllers() has exactly
-        //     what we need.  Only the visible knobs.  This would be
-        //     less code as we wouldn't need to get the device.
-        RG_DEBUG << "changeEvent(): Examining getStaticControllers()";
-        StaticControllers sc = instrument->getStaticControllers();
-        for (const ControllerValuePair &cvPair : sc) {
-            RG_DEBUG << "  Controller Number: " << cvPair.first;
+        StaticControllers staticControllers =
+                instrument->getStaticControllers();
+
+        // For each Control Change...
+        for (const ControllerValuePair &pair : staticControllers) {
+
+            const MidiByte controlNumber = pair.first;
+
+            // Volume and Pan were already covered above.  Skip.
+            if (controlNumber == MIDI_CONTROLLER_VOLUME)
+                continue;
+            if (controlNumber == MIDI_CONTROLLER_PAN)
+                continue;
+
+            const MidiByte controlValue = pair.second;
+
+            ExternalController::send(
+                    0,  // channel
+                    controlNumber,
+                    controlValue);
+
         }
-#endif
 
-        MidiDevice *midiDevice =
-                dynamic_cast<MidiDevice *>(instrument->getDevice());
-
-        if (midiDevice) {
-
-            ControlList controls(midiDevice->getControlParameters());
-
-            // For each Control Change...
-            for (const ControlParameter &controlParameter : controls) {
-
-                // If the knob is not available, the value will be bogus.
-                // Skip.
-                if (controlParameter.getIPBPosition() == -1)
-                    continue;
-
-                const int controller = controlParameter.getControllerNumber();
-
-                // Volume and Pan were already covered above.  Skip
-                if (controller == MIDI_CONTROLLER_VOLUME)
-                    continue;
-                if (controller == MIDI_CONTROLLER_PAN)
-                    continue;
-
-                int value = 0;
-                try {
-                    value = instrument->getControllerValue(controller);
-                } catch (const std::string &s) {
-                    RG_WARNING << "changeEvent(): WARNING: Exception caught " << s << " (controller " << controller << ", instrument " << instrument->getId() << ")  Exception: " << s;
-                    value = 0;
-                }
-
-                ExternalController::send(
-                        0,
-                        controller,
-                        MidiByte(value));
-
-            }
-        }
     }
 
     // Clear out channels 1-15 for external controller.

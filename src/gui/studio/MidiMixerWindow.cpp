@@ -817,6 +817,9 @@ MidiMixerWindow::slotHelpAbout()
 ControlList
 MidiMixerWindow::getIPBForMidiMixer(MidiDevice *dev) const
 {
+    // ??? Instrument::getStaticControllers() might simplify all
+    //     this quite a bit.  See RosegardenMainWindow::changeEvent().
+
     ControlList controlList = dev->getIPBControlParameters();
     ControlList retList;
 
