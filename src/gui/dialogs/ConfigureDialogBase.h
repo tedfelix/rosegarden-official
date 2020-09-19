@@ -32,7 +32,8 @@ class IconStackedWidget;
 namespace Rosegarden
 {
 
-class ConfigurationPage;
+
+class TabbedConfigurationPage;
 
 
 class ConfigureDialogBase : public QDialog
@@ -43,7 +44,7 @@ public:
 
     ~ConfigureDialogBase() override;
 
-    typedef std::vector<ConfigurationPage*> configurationpages;
+    typedef std::vector<TabbedConfigurationPage *> configurationpages;
 
     void addPage( const QString& name, const QString& title, const QPixmap& icon, QWidget *page );
 

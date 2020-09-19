@@ -24,7 +24,6 @@
 #include "base/Exception.h"
 #include "base/NotationTypes.h"
 #include "commands/edit/PasteEventsCommand.h"
-#include "ConfigurationPage.h"
 #include "document/RosegardenDocument.h"
 #include "gui/editors/notation/HeadersGroup.h"
 #include "gui/editors/notation/NotationHLayout.h"

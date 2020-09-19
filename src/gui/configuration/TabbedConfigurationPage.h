@@ -19,16 +19,14 @@
 #define RG_TABBEDCONFIGURATIONPAGE_H
 
 #include "ConfigurationPage.h"
-#include <QString>
 
-class QWidget;
+class QString;
 class QTabWidget;
+class QWidget;
 
 
 namespace Rosegarden
 {
-
-class RosegardenDocument;
 
 
 /**
@@ -40,15 +38,16 @@ class TabbedConfigurationPage : public ConfigurationPage
     Q_OBJECT
 
 public:
+
     TabbedConfigurationPage(QWidget *parent);
 
-    static QString iconName()  { return "misc"; }
-    
 protected:
-    void init();
-    void addTab(QWidget *tab, const QString &title);
+
+    // ??? Clients should get this themselves.
+    RosegardenDocument *m_doc;
 
     QTabWidget *m_tabWidget;
+    void addTab(QWidget *tab, const QString &title);
 
 };
 

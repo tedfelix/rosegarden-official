@@ -15,23 +15,3 @@
     COPYING included with this distribution for more information.
 */
 
-
-#include "ConfigurationPage.h"
-
-#include "document/RosegardenDocument.h"
-
-#include <QSettings>
-#include <QWidget>
-
-#include <algorithm>
-
-
-namespace Rosegarden
-{
-void
-ConfigurationPage::slotModified()
-{
-    emit modified();
-}
-
-}

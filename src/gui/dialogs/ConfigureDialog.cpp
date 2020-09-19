@@ -20,7 +20,6 @@
 #include "ConfigureDialogBase.h"
 
 #include "document/RosegardenDocument.h"
-#include "gui/configuration/ConfigurationPage.h"
 #include "gui/configuration/GeneralConfigurationPage.h"
 #include "gui/configuration/NotationConfigurationPage.h"
 #include "gui/configuration/PitchTrackerConfigurationPage.h"

@@ -40,12 +40,11 @@ class ConfigurationPage : public QWidget
 
 public:
     ConfigurationPage(QWidget *parent) :
-        QWidget(parent),
-        m_doc(nullptr)
+        QWidget(parent)
     {
     }
 
-    ~ConfigurationPage() override {};
+    ~ConfigurationPage() override  { }
 
     /**
      * Should apply the changed settings (ie. read the settings from
@@ -68,11 +67,7 @@ signals:
 
 protected slots:
 
-    virtual void slotModified();
-
-protected:
-
-    RosegardenDocument* m_doc;
+    virtual void slotModified()  { emit modified(); }
 
 };
 

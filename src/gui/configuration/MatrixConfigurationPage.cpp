@@ -19,7 +19,6 @@
 #include "MatrixConfigurationPage.h"
 
 #include "misc/ConfigGroups.h"
-#include "ConfigurationPage.h"
 #include "document/RosegardenDocument.h"
 #include "misc/ConfigGroups.h"
 #include "gui/editors/matrix/MatrixView.h"

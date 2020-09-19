@@ -49,7 +49,7 @@ DocumentConfigureDialog::DocumentConfigureDialog(QWidget *parent,
     addPage(DocumentMetaConfigurationPage::iconLabel(),
             DocumentMetaConfigurationPage::title(),
             IconLoader::loadPixmap( DocumentMetaConfigurationPage::iconName()), page);
-    m_configurationPages.push_back((ConfigurationPage *)page);
+    m_configurationPages.push_back((TabbedConfigurationPage *)page);
 
     // Audio Page
     //
@@ -58,7 +58,7 @@ DocumentConfigureDialog::DocumentConfigureDialog(QWidget *parent,
     addPage(AudioPropertiesPage::iconLabel(),
             AudioPropertiesPage::title(),
             IconLoader::loadPixmap(AudioPropertiesPage::iconName()),page);
-    m_configurationPages.push_back((ConfigurationPage *)page);
+    m_configurationPages.push_back((TabbedConfigurationPage *)page);
 }
 
 void

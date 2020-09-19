@@ -23,7 +23,6 @@
 #include "misc/ConfigGroups.h"
 #include "base/MidiProgram.h"
 #include "base/Studio.h"
-#include "ConfigurationPage.h"
 #include "document/RosegardenDocument.h"
 #include "gui/dialogs/ShowSequencerStatusDialog.h"
 #include "gui/seqmanager/SequenceManager.h"

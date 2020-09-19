@@ -15,42 +15,33 @@
     COPYING included with this distribution for more information.
 */
 
-
 #include "TabbedConfigurationPage.h"
 
-#include "ConfigurationPage.h"
-#include "document/RosegardenDocument.h"
 #include "gui/application/RosegardenMainWindow.h"
 
-#include <QSettings>
 #include <QString>
 #include <QTabWidget>
-#include <QWidget>
-#include <QLayout>
+#include <QVBoxLayout>
 
 
 namespace Rosegarden
 {
+
 
 TabbedConfigurationPage::TabbedConfigurationPage(QWidget *parent) :
     ConfigurationPage(parent)
 {
     m_doc = RosegardenMainWindow::self()->getDocument();
 
-    init();
-}
-
-void TabbedConfigurationPage::init()
-{
-//@@@    QVBoxLayout *vlay = new QVBoxLayout(this, 0, KDialog::spacingHint());
-    QVBoxLayout *vlay = new QVBoxLayout(this);
+    QVBoxLayout *layout = new QVBoxLayout(this);
     m_tabWidget = new QTabWidget(this);
-    vlay->addWidget(m_tabWidget);
+    layout->addWidget(m_tabWidget);
 }
 
 void TabbedConfigurationPage::addTab(QWidget *tab, const QString &title)
 {
     m_tabWidget->addTab(tab, title);
 }
+
 
 }

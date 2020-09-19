@@ -31,7 +31,6 @@
 #include "base/BasicQuantizer.h"
 #include "base/RealTime.h"
 #include "base/Segment.h"
-#include "ConfigurationPage.h"
 #include "document/RosegardenDocument.h"
 #include "gui/editors/notation/NotationStrings.h"
 #include "gui/configuration/HeadersConfigurationPage.h"

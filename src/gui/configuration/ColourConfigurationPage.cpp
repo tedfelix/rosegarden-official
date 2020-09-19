@@ -23,7 +23,6 @@
 #include "misc/Strings.h"
 #include "base/ColourMap.h"
 #include "commands/segment/SegmentColourMapCommand.h"
-#include "ConfigurationPage.h"
 #include "document/RosegardenDocument.h"
 #include "document/CommandHistory.h"
 #include "gui/general/GUIPalette.h"

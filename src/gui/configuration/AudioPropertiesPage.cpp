@@ -19,7 +19,6 @@
 #include "AudioPropertiesPage.h"
 #include "misc/Strings.h"
 #include "misc/Debug.h"
-#include "ConfigurationPage.h"
 #include "document/RosegardenDocument.h"
 #include "sequencer/RosegardenSequencer.h"
 #include "gui/studio/AudioPluginManager.h"

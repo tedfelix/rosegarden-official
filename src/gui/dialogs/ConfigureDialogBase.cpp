@@ -19,7 +19,7 @@
 
 #include "ConfigureDialogBase.h"
 
-#include "gui/configuration/ConfigurationPage.h"
+#include "gui/configuration/TabbedConfigurationPage.h"
 #include "gui/widgets/IconStackedWidget.h"
 #include "misc/Debug.h"
 
