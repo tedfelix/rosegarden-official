@@ -314,7 +314,6 @@ set(rg_CPPS
   gui/configuration/PitchTrackerConfigurationPage.cpp
   gui/configuration/HeadersConfigurationPage.cpp
   gui/configuration/CommentsConfigurationPage.cpp
-  gui/configuration/ConfigurationPage.cpp
   gui/configuration/GeneralConfigurationPage.cpp
   gui/application/RosegardenApplication.cpp
   gui/application/TranzportClient.cpp

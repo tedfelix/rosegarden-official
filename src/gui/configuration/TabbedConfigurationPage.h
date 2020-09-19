@@ -18,28 +18,49 @@
 #ifndef RG_TABBEDCONFIGURATIONPAGE_H
 #define RG_TABBEDCONFIGURATIONPAGE_H
 
-#include "ConfigurationPage.h"
+#include <QWidget>
 
 class QString;
 class QTabWidget;
-class QWidget;
 
 
 namespace Rosegarden
 {
 
 
-/**
- * This class borrowed from KMail
- * (c) 2000 The KMail Development Team
- */
-class TabbedConfigurationPage : public ConfigurationPage
+class RosegardenDocument;
+
+class TabbedConfigurationPage : public QWidget
 {
     Q_OBJECT
 
 public:
 
     TabbedConfigurationPage(QWidget *parent);
+    virtual ~TabbedConfigurationPage() override  { }
+
+    /**
+     * Should apply the changed settings (ie. read the settings from
+     * the widgets into the @ref KConfig object). Called from @ref
+     * ConfigureDialog.
+     */
+    virtual void apply() = 0;
+
+    /**
+     * Should cleanup any temporaries after cancel. The default
+     * implementation does nothing. Called from @ref
+     * ConfigureDialog.
+     */
+    virtual void dismiss() {}
+
+signals:
+
+    // ConfigureDialog and others use this to enable the Apply button.
+    void modified();
+
+protected slots:
+
+    virtual void slotModified()  { emit modified(); }
 
 protected:
 

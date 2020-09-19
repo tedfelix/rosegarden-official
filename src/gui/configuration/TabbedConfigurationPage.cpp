@@ -29,7 +29,7 @@ namespace Rosegarden
 
 
 TabbedConfigurationPage::TabbedConfigurationPage(QWidget *parent) :
-    ConfigurationPage(parent)
+    QWidget(parent)
 {
     m_doc = RosegardenMainWindow::self()->getDocument();
 
