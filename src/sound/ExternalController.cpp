@@ -207,7 +207,7 @@ void ExternalController::sendAllCCs(
             const MidiByte controlValue = pair.second;
 
             ExternalController::send(
-                    0,  // channel
+                    channel,
                     controlNumber,
                     controlValue);
 

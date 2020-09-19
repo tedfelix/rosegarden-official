@@ -643,17 +643,7 @@ AudioStrip::updateExternalController()
     if (!instrument)
         return;
 
-    // Send a volume controller message to the external controller port.
-    ExternalController::send(
-            m_externalControllerChannel,
-            MIDI_CONTROLLER_VOLUME,
-            instrument->getVolumeCC());
-
-    // Send a pan controller message to the external controller port.
-    ExternalController::send(
-            m_externalControllerChannel,
-            MIDI_CONTROLLER_PAN,
-            instrument->getPanCC());
+    ExternalController::sendAllCCs(instrument, m_externalControllerChannel);
 }
 
 void

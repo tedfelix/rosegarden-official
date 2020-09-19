@@ -736,51 +736,34 @@ MidiMixerWindow::sendControllerRefresh()
             dit != m_studio->end(); ++dit) {
 
         MidiDevice *dev = dynamic_cast<MidiDevice*>(*dit);
+
         RG_DEBUG << "device is " << (*dit)->getId() << ", dev " << dev;
 
+        // Not a MIDI device?  Then try the next.
         if (!dev)
             continue;
+
         if (i != tabIndex) {
+            // Keep count of the MidiDevice's.
             ++i;
             continue;
         }
 
+        // Found the MidiDevice for this tab.
+
         InstrumentList instruments = dev->getPresentationInstruments();
-        ControlList controls = getIPBForMidiMixer(dev);
 
         RG_DEBUG << "device has" << instruments.size() << "presentation instruments," << dev->getAllInstruments().size() << " instruments";
 
-        for (InstrumentList::const_iterator iIt =
-                    instruments.begin(); iIt != instruments.end(); ++iIt) {
+        // For each Instrument
+        for (const Instrument *instrument : instruments) {
 
-            Instrument *instrument = *iIt;
-            if (!instrument->hasFixedChannel()) { continue; }
-            int channel = instrument->getNaturalChannel();
+            // No fixed channel?  Try the next.
+            if (!instrument->hasFixedChannel())
+                continue;
 
-            RG_DEBUG << "instrument is " << instrument->getId();
+            ExternalController::sendAllCCs(instrument);
 
-            for (ControlList::const_iterator cIt =
-                        controls.begin(); cIt != controls.end(); ++cIt) {
-
-                int controller = (*cIt).getControllerNumber();
-                int value;
-                try {
-                    value = instrument->getControllerValue(controller);
-                } catch (const std::string &s) {
-                    RG_WARNING << "Exception in MidiMixerWindow::currentChanged: " << s << " (controller " << controller << ", instrument " << instrument->getId() << ")  Exception:" << s;
-                    value = 0;
-                }
-
-                ExternalController::send(
-                        channel,
-                        controller,
-                        MidiByte(value));
-            }
-
-            ExternalController::send(
-                    channel,
-                    MIDI_CONTROLLER_VOLUME,
-                    instrument->getVolume());
         }
 
         break;
