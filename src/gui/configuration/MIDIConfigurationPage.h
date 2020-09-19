@@ -19,75 +19,72 @@
 #define RG_MIDICONFIGURATIONPAGE_H
 
 #include "TabbedConfigurationPage.h"
-#include "gui/widgets/LineEdit.h"
 
 #include <QString>
-#include <QSlider>
 #include <QCheckBox>
 
-
-class QWidget;
-class QSpinBox;
-class QSlider;
+class QComboBox;
 class QPushButton;
-class QLabel;
-class QComboBox;
-class QComboBox;
-class LineEdit;
+class QSpinBox;
+class QWidget;
 
 
 namespace Rosegarden
 {
 
+
 class RosegardenDocument;
+class LineEdit;
 
 
 class MIDIConfigurationPage : public TabbedConfigurationPage
 {
     Q_OBJECT
+
 public:
-    MIDIConfigurationPage(RosegardenDocument *doc, QWidget *parent = nullptr);
+    MIDIConfigurationPage(RosegardenDocument *doc, QWidget *parent);
 
     void apply() override;
 
-    static QString iconLabel() { return tr("MIDI"); }
-    static QString title()     { return tr("MIDI Settings"); }
+    // Info for ConfigureDialog.
+    static QString iconLabel()  { return tr("MIDI"); }
+    static QString title()  { return tr("MIDI Settings"); }
     static QString iconName()  { return "configure-midi"; }
 
-protected slots:
+private slots:
+
     void slotSoundFontToggled(bool);
     void slotSfxLoadPathChoose();
     void slotSoundFontChoose();
 
-protected:
-    bool getUseDefaultStudio()      { return m_studio->isChecked(); }
+private:
 
-    //--------------- Data members ---------------------------------
+    // *** General tab
 
-    // General
+    QSpinBox *m_midiPitchOctave;
+
+    QCheckBox *m_studio;
+    bool getUseDefaultStudio() const  { return m_studio->isChecked(); }
     QCheckBox *m_allowResetAllControllers;
+    QString m_origTimer;
+    QComboBox *m_timer;
 
-    QCheckBox   *m_sfxLoadEnabled;
-    LineEdit    *m_sfxLoadPath;
+    QCheckBox *m_sfxLoadEnabled;
+    LineEdit *m_sfxLoadPath;
     QPushButton *m_sfxLoadChoose;
-    LineEdit    *m_soundFontPath;
+    LineEdit *m_soundFontPath;
     QPushButton *m_soundFontChoose;
 
-    // Sync and timing
-    //
-    //QCheckBox *m_midiClockEnabled;
+
+    // *** MIDI Sync tab
+
     QComboBox *m_midiSync;
-    QString    m_origTimer;
-    QComboBox *m_timer;
     QComboBox *m_mmcTransport;
     QComboBox *m_mtcTransport;
     QCheckBox *m_midiSyncAuto;
 
-    QCheckBox* m_studio;
-    QSpinBox*  m_midiPitchOctave;
 
 };
- 
 
 
 }

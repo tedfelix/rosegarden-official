@@ -19,60 +19,45 @@
 
 #include "MIDIConfigurationPage.h"
 
-#include "misc/Strings.h"
-#include "sound/Midi.h"
-#include "sound/SoundDriver.h"
-#include "misc/ConfigGroups.h"
-#include "base/MidiProgram.h"
-#include "base/Studio.h"
-#include "ConfigurationPage.h"
-#include "document/RosegardenDocument.h"
-#include "gui/dialogs/ShowSequencerStatusDialog.h"
-#include "gui/seqmanager/SequenceManager.h"
-#include "gui/application/RosegardenApplication.h"
-#include "gui/studio/StudioControl.h"
-#include "sound/MappedEvent.h"
-#include "TabbedConfigurationPage.h"
+#include "misc/ConfigGroups.h"  // For GeneralOptionsConfigGroup...
 #include "misc/Debug.h"
-#include "gui/widgets/LineEdit.h"
 #include "gui/widgets/FileDialog.h"
+#include "gui/widgets/LineEdit.h"
+#include "sound/MappedEvent.h"
+#include "document/RosegardenDocument.h"
+#include "gui/seqmanager/SequenceManager.h"
+#include "misc/Strings.h"   // For qStrToBool()...
+#include "base/Studio.h"
+#include "gui/studio/StudioControl.h"
 
 #include <QComboBox>
-#include <QSettings>
-#include <QCheckBox>
-#include <QComboBox>
-#include <QByteArray>
-#include <QDataStream>
 #include <QFrame>
-#include <QLabel>
-#include <QObject>
-#include <QPushButton>
-#include <QLayout>
-#include <QSlider>
-#include <QSpinBox>
-#include <QString>
-#include <QStringList>
-#include <QTabWidget>
-#include <QToolTip>
-#include <QWidget>
+#include <QGridLayout>
 #include <QHBoxLayout>
-#include <QCheckBox>
+#include <QLabel>
+#include <QPushButton>
+#include <QSettings>
+#include <QSpinBox>
+#include <QStringList>
+#include <QWidget>
+
 
 namespace Rosegarden
 {
 
-MIDIConfigurationPage::MIDIConfigurationPage(
-    RosegardenDocument *doc,
-    QWidget *parent):
-        TabbedConfigurationPage(parent),
-        m_midiPitchOctave(nullptr)
+
+MIDIConfigurationPage::MIDIConfigurationPage(RosegardenDocument *doc,
+                                             QWidget *parent):
+    TabbedConfigurationPage(parent),
+    m_midiPitchOctave(nullptr)
 {
-//    RG_DEBUG << "MIDI CONFIGURATION PAGE CTOR";
-    // set the document in the super class
+    // ??? Get the document directly instead.  Need to do that in
+    //     TabbedConfigurationPage first, then in the derivers.
     m_doc = doc;
 
+
     // ---------------- General tab ------------------
-    //
+
     QFrame *frame = new QFrame(m_tabWidget);
     frame->setContentsMargins(10, 10, 10, 10);
     QGridLayout *layout = new QGridLayout(frame);
@@ -102,7 +87,6 @@ MIDIConfigurationPage::MIDIConfigurationPage(
     layout->setRowMinimumHeight(row, 20);
     ++row;
 
-    //### settings.beginGroup( GeneralOptionsConfigGroup );
     layout->addWidget(new QLabel(tr("Always use default studio when loading files"),
                                       frame), row, 0, 1, 2);
 
@@ -156,8 +140,6 @@ MIDIConfigurationPage::MIDIConfigurationPage(
     layout->setRowMinimumHeight(row, 20);
     ++row;
 
-    //### settings.beginGroup( SequencerOptionsConfigGroup );
-
     // SoundFont loading
     //
     QLabel* lbl = new QLabel(tr("Load SoundFont to SoundBlaster card at startup"), frame);
@@ -207,10 +189,9 @@ MIDIConfigurationPage::MIDIConfigurationPage(
 
     addTab(frame, tr("General"));
 
-    //### settings.beginGroup( SequencerOptionsConfigGroup );
 
-    //  -------------- Synchronisation tab -----------------
-    //
+    //  -------------- MIDI Sync tab -----------------
+
     frame = new QFrame(m_tabWidget);
     frame->setContentsMargins(10, 10, 10, 10);
     layout = new QGridLayout(frame);
