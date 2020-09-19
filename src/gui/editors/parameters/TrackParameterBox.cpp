@@ -1218,7 +1218,7 @@ TrackParameterBox::updateWidgets2()
     m_archive->setChecked(track->isArchived());
 
     // If the current Instrument is an Audio Instrument...
-    if (instrument->getInstrumentType() == Instrument::Audio) {
+    if (instrument->getType() == Instrument::Audio) {
 
         // Hide irrelevant portions.
 

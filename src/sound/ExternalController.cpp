@@ -171,6 +171,51 @@ void ExternalController::send(
     StudioControl::sendMappedEvent(event);
 }
 
+void ExternalController::sendAllCCs(
+        const Instrument *instrument, MidiByte channel)
+{
+    if (channel == MidiMaxValue)
+        channel = instrument->getNaturalChannel();
+
+    send(channel,
+         MIDI_CONTROLLER_VOLUME,
+         instrument->getVolumeCC());
+
+    send(channel,
+         MIDI_CONTROLLER_PAN,
+         instrument->getPanCC());
+
+    // For MIDI instruments...
+    if (instrument->getType() == Instrument::Midi) {
+
+        // Also send all the other CCs in case the surface can handle them.
+
+        StaticControllers staticControllers =
+                instrument->getStaticControllers();
+
+        // For each Control Change...
+        for (const ControllerValuePair &pair : staticControllers) {
+
+            const MidiByte controlNumber = pair.first;
+
+            // Volume and Pan were already covered above.  Skip.
+            if (controlNumber == MIDI_CONTROLLER_VOLUME)
+                continue;
+            if (controlNumber == MIDI_CONTROLLER_PAN)
+                continue;
+
+            const MidiByte controlValue = pair.second;
+
+            ExternalController::send(
+                    0,  // channel
+                    controlNumber,
+                    controlValue);
+
+        }
+
+    }
+}
+
 void
 ExternalController::slotDocumentLoaded(RosegardenDocument *doc)
 {
@@ -201,17 +246,24 @@ ExternalController::slotDocumentModified(bool)
     InstrumentId instrumentId =
             doc->getComposition().getSelectedInstrumentId();
 
+    if (instrumentId == NoInstrument)
+        return;
+
     // No change to the Track/Instrument?  Bail.
     if (instrumentId == m_instrumentId)
         return;
 
     m_instrumentId = instrumentId;
 
+    Instrument *instrument = doc->getStudio().getInstrumentById(instrumentId);
+
+    if (!instrument)
+        return;
+
     //RG_DEBUG << "slotDocumentModified(): Track change detected.";
 
-    // ??? Send out the CCs for the current Track.  RMW::changeEvent()
-    //     does the same.  Probably want to pull out a function to use
-    //     in both places.
+    // Send out the CCs for the current Track on channel 0.
+    sendAllCCs(instrument, 0);
 }
 
 

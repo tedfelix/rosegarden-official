@@ -8511,58 +8511,16 @@ RosegardenMainWindow::changeEvent(QEvent *event)
     InstrumentId instrumentId =
             m_doc->getComposition().getSelectedInstrumentId();
 
-    Instrument *instrument = nullptr;
+    if (instrumentId == NoInstrument)
+        return;
 
-    // If an instrument has been selected.
-    if (instrumentId != NoInstrument)
-        instrument = m_doc->getStudio().getInstrumentById(instrumentId);
+    Instrument *instrument =
+            m_doc->getStudio().getInstrumentById(instrumentId);
 
     if (!instrument)
         return;
 
-    // ??? Consider factoring out to ExternalController as
-    //     sendAllCCs(instrument).  MidiMixerWindow could use it
-    //     as well.
-
-    ExternalController::send(
-            0,
-            MIDI_CONTROLLER_VOLUME,
-            instrument->getVolumeCC());
-
-    ExternalController::send(
-            0,
-            MIDI_CONTROLLER_PAN,
-            instrument->getPanCC());
-
-    // For MIDI instruments...
-    if (instrument->getInstrumentType() == Instrument::Midi) {
-
-        // Also send all the other CCs in case the surface can handle them.
-
-        StaticControllers staticControllers =
-                instrument->getStaticControllers();
-
-        // For each Control Change...
-        for (const ControllerValuePair &pair : staticControllers) {
-
-            const MidiByte controlNumber = pair.first;
-
-            // Volume and Pan were already covered above.  Skip.
-            if (controlNumber == MIDI_CONTROLLER_VOLUME)
-                continue;
-            if (controlNumber == MIDI_CONTROLLER_PAN)
-                continue;
-
-            const MidiByte controlValue = pair.second;
-
-            ExternalController::send(
-                    0,  // channel
-                    controlNumber,
-                    controlValue);
-
-        }
-
-    }
+    ExternalController::sendAllCCs(instrument, 0);
 
     // Clear out channels 1-15 for external controller.
     for (MidiByte channel = 1; channel < 16; ++channel) {

@@ -253,7 +253,7 @@ ChordNameRuler::recalculate(timeT from, timeT to)
                                     (m_composition->getTrackById(ti)->getInstrument());
 
                 if (instr &&
-                        instr->getInstrumentType() == Instrument::Midi &&
+                        instr->getType() == Instrument::Midi &&
                         instr->isPercussion()) {
                     continue;
                 }

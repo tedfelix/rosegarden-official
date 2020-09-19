@@ -110,7 +110,6 @@ public:
     InstrumentType getType() const { return m_type; }
 
     void setType(InstrumentType type) { m_type = type; }
-    InstrumentType getInstrumentType() { return m_type; }
 
 
     // ---------------- Fixed channels -----------------

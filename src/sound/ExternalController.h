@@ -76,6 +76,9 @@ public:
 
     /// Send a control change message out the external controller port.
     static void send(MidiByte channel, MidiByte controlNumber, MidiByte value);
+    static void sendAllCCs(
+            const Instrument *instrument, MidiByte channel = MidiMaxValue);
+
 
 signals:
     /// External controller port events for the windows that handle them.
