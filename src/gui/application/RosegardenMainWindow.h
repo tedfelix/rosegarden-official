@@ -513,7 +513,7 @@ protected:
      * Set the current document
      *
      * Do all the needed housework when the current document changes
-     * (like closing edit views, emitting documentChanged signal, etc...)
+     * (like closing edit views, emitting documentLoaded signal, etc...)
      */
     void setDocument(RosegardenDocument*);
 
@@ -553,13 +553,8 @@ signals:
     /// emitted just before the document is changed
     void documentAboutToChange();
 
-    /// emitted when the current document changes
-    /**
-     * ??? This is a poor choice of name.  It is hard to tell the difference
-     *     between this and RosegardenDocument::documentModified().  A better
-     *     name might be documentLoaded()?
-     */
-    void documentChanged(RosegardenDocument *);
+    /// Emitted when a new document is loaded.
+    void documentLoaded(RosegardenDocument *);
 
     /// emitted when the set of selected segments changes (relayed from RosegardenMainViewWidget)
     void segmentsSelected(const SegmentSelection &);

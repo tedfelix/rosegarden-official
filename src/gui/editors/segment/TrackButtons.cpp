@@ -142,19 +142,20 @@ TrackButtons::TrackButtons(RosegardenDocument* doc,
 
     m_doc->getComposition().addObserver(this);
 
-    // We do not care about documentChanged() because if the
-    // document is changing, we are going away.  A new TrackButtons
-    // is created for each new document.
+    // We do not care about RWM::documentLoaded() because if a new
+    // document is being loaded, we are going away.  A new TrackButtons
+    // instance is created for each new document.
     //connect(RosegardenMainWindow::self(),
-    //            SIGNAL(documentChanged(RosegardenDocument *)),
-    //        SLOT(slotNewDocument(RosegardenDocument *)));
+    //            &RosegardenMainWindow::documentLoaded,
+    //        this, &TrackButtons::slotDocumentLoaded);
 }
 
-TrackButtons::~TrackButtons() {
+TrackButtons::~TrackButtons()
+{
     // CRASH!  Probably m_doc is gone...
     // Probably don't need to disconnect as we only go away when the
     // doc and composition do.  shared_ptr would help here.
-//    m_doc->getComposition().removeObserver(this);
+    //m_doc->getComposition().removeObserver(this);
 }
 
 void

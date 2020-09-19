@@ -425,8 +425,8 @@ TrackParameterBox::TrackParameterBox(QWidget *parent) :
     // Connections
 
     connect(RosegardenMainWindow::self(),
-                &RosegardenMainWindow::documentChanged,
-            this, &TrackParameterBox::slotNewDocument);
+                &RosegardenMainWindow::documentLoaded,
+            this, &TrackParameterBox::slotDocumentLoaded);
 
     // Layout
 
@@ -1332,7 +1332,7 @@ TrackParameterBox::updateWidgets2()
 }
 
 void
-TrackParameterBox::slotNewDocument(RosegardenDocument *doc)
+TrackParameterBox::slotDocumentLoaded(RosegardenDocument *doc)
 {
     connect(doc, &RosegardenDocument::documentModified,
             this, &TrackParameterBox::slotDocumentModified);

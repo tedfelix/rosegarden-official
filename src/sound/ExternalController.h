@@ -43,7 +43,7 @@ public:
     /// Call this from RosegardenMainWindow's ctor.
     /**
      * This has to be called at the right moment, before the autoload
-     * occurs.  Otherwise the very first documentChanged() will not get
+     * occurs.  Otherwise the very first RMW::documentLoaded() will not get
      * in here.
      */
     void connectRMW(RosegardenMainWindow *rmw);
@@ -85,7 +85,7 @@ signals:
 
 private slots:
 
-    /// Connected to RMW::documentChanged()
+    /// Connected to RMW::documentLoaded()
     void slotDocumentLoaded(RosegardenDocument *doc);
     /// Connected to RD::documentModified()
     void slotDocumentModified(bool);

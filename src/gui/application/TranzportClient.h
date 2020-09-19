@@ -54,7 +54,7 @@ public:
 public slots:
     void readData();
       
-    void documentChanged(RosegardenDocument*);
+    void slotDocumentLoaded(RosegardenDocument *doc);
       
     void writeCommandQueue();
 

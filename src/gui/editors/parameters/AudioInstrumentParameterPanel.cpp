@@ -134,8 +134,8 @@ AudioInstrumentParameterPanel::AudioInstrumentParameterPanel(QWidget *parent) :
     // Connections
 
     connect(RosegardenMainWindow::self(),
-                &RosegardenMainWindow::documentChanged,
-            this, &AudioInstrumentParameterPanel::slotNewDocument);
+                &RosegardenMainWindow::documentLoaded,
+            this, &AudioInstrumentParameterPanel::slotDocumentLoaded);
 
     // Connect for high-frequency control change notifications.
     connect(Instrument::getStaticSignals().data(),
@@ -480,7 +480,7 @@ AudioInstrumentParameterPanel::slotAliasChanged()
 }
 
 void
-AudioInstrumentParameterPanel::slotNewDocument(RosegardenDocument *doc)
+AudioInstrumentParameterPanel::slotDocumentLoaded(RosegardenDocument *doc)
 {
     connect(doc, &RosegardenDocument::documentModified,
             this, &AudioInstrumentParameterPanel::slotDocumentModified);

@@ -68,7 +68,7 @@ public slots:
     void slotToggleRepeat();
 
 private slots:
-    void slotNewDocument(RosegardenDocument *doc);
+    void slotDocumentLoaded(RosegardenDocument *doc);
 
     void slotDocumentModified(bool);
 

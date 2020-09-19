@@ -331,8 +331,8 @@ SegmentParameterBox::SegmentParameterBox(QWidget *parent) :
     //RG_DEBUG << "ctor: " << this << ": font() size is " << (this->font()).pixelSize() << "px (" << (this->font()).pointSize() << "pt)";
 
     connect(RosegardenMainWindow::self(),
-                &RosegardenMainWindow::documentChanged,
-            this, &SegmentParameterBox::slotNewDocument);
+                &RosegardenMainWindow::documentLoaded,
+            this, &SegmentParameterBox::slotDocumentLoaded);
 }
 
 namespace
@@ -1129,7 +1129,7 @@ SegmentParameterBox::slotResetLinkTranspose()
 }
 
 void
-SegmentParameterBox::slotNewDocument(RosegardenDocument *doc)
+SegmentParameterBox::slotDocumentLoaded(RosegardenDocument *doc)
 {
     connect(doc, &RosegardenDocument::documentModified,
             this, &SegmentParameterBox::slotDocumentModified);

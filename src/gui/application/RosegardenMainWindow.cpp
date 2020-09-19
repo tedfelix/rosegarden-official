@@ -1246,7 +1246,7 @@ RosegardenMainWindow::setDocument(RosegardenDocument* newDocument)
     if (m_seqManager)
         m_doc->setLoop(comp.getLoopStart(), comp.getLoopEnd());
 
-    emit documentChanged(m_doc);
+    emit documentLoaded(m_doc);
 
     // Restore the document's original modified status.
     if (modified)

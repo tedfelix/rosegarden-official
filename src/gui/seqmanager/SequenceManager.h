@@ -92,7 +92,7 @@ public:
      * SequenceManager is not designed to operate without a document;
      * you must call setDocument() before you do anything with it.
      *
-     * ??? Subscribe for RMW::documentChanged() instead of this.
+     * ??? Subscribe for RMW::documentLoaded() instead of this.
      *     parentWidget is just RMW::self().  No need to pass it in.
      */
     void setDocument(RosegardenDocument *doc);

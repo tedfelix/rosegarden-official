@@ -65,8 +65,8 @@ InstrumentParameterBox::InstrumentParameterBox(QWidget *parent) :
     setLayout(layout);
 
     connect(RosegardenMainWindow::self(),
-                &RosegardenMainWindow::documentChanged,
-            this, &InstrumentParameterBox::slotNewDocument);
+                &RosegardenMainWindow::documentLoaded,
+            this, &InstrumentParameterBox::slotDocumentLoaded);
 }
 
 InstrumentParameterBox::~InstrumentParameterBox()
@@ -79,7 +79,7 @@ InstrumentParameterBox::setAudioMeter(float ch1, float ch2, float ch1r, float ch
     m_aipp->setAudioMeter(ch1, ch2, ch1r, ch2r);
 }
 
-void InstrumentParameterBox::slotNewDocument(RosegardenDocument *doc)
+void InstrumentParameterBox::slotDocumentLoaded(RosegardenDocument *doc)
 {
     connect(doc, &RosegardenDocument::documentModified,
             this, &InstrumentParameterBox::slotDocumentModified);

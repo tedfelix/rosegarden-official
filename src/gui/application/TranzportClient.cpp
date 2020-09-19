@@ -104,8 +104,8 @@ TranzportClient::TranzportClient(RosegardenMainWindow* rgGUIApp) :
     connect(this, &TranzportClient::solo,
             m_rgGUIApp, &RosegardenMainWindow::slotToggleSolo);
 
-    connect(m_rgGUIApp, &RosegardenMainWindow::documentChanged,
-            this, &TranzportClient::documentChanged);
+    connect(m_rgGUIApp, &RosegardenMainWindow::documentLoaded,
+            this, &TranzportClient::slotDocumentLoaded);
 
     connect(m_rgDocument, &RosegardenDocument::pointerPositionChanged,
             this, &TranzportClient::pointerPositionChanged);
@@ -149,7 +149,7 @@ TranzportClient::pointerPositionChanged(timeT time)
 }
 
 void
-TranzportClient::documentChanged(RosegardenDocument* doc)
+TranzportClient::slotDocumentLoaded(RosegardenDocument *doc)
 {
     RG_DEBUG << "TranzportClient::DocumentChanged ";
 

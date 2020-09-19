@@ -348,7 +348,7 @@ public slots:
 
 private slots:
     /// Called when a new document is loaded.
-    void slotNewDocument(RosegardenDocument *);
+    void slotDocumentLoaded(RosegardenDocument *);
     /// Called when the document is modified in some way.
     void slotDocumentModified(bool);
 

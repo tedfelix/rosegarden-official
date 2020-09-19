@@ -105,8 +105,8 @@ CompositionModelImpl::CompositionModelImpl(
     }
 
     connect(RosegardenMainWindow::self(),
-                &RosegardenMainWindow::documentChanged,
-            this, &CompositionModelImpl::slotNewDocument);
+                &RosegardenMainWindow::documentLoaded,
+            this, &CompositionModelImpl::slotDocumentLoaded);
 
     connect(&m_updateTimer, &QTimer::timeout, this, &CompositionModelImpl::slotUpdateTimer);
 }
@@ -1113,7 +1113,7 @@ void CompositionModelImpl::slotAudioPeaksComplete(
 // --- Previews -----------------------------------------------------
 
 void
-CompositionModelImpl::slotNewDocument(RosegardenDocument *doc)
+CompositionModelImpl::slotDocumentLoaded(RosegardenDocument *doc)
 {
     connect(doc, &RosegardenDocument::documentModified,
             this, &CompositionModelImpl::slotDocumentModified);

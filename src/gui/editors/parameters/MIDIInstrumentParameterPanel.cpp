@@ -272,8 +272,8 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(QWidget *parent) :
     // Connections
 
     connect(RosegardenMainWindow::self(),
-                &RosegardenMainWindow::documentChanged,
-            this, &MIDIInstrumentParameterPanel::slotNewDocument);
+                &RosegardenMainWindow::documentLoaded,
+            this, &MIDIInstrumentParameterPanel::slotDocumentLoaded);
 
     connect(Instrument::getStaticSignals().data(),
                 &InstrumentStaticSignals::controlChange,
@@ -863,7 +863,7 @@ MIDIInstrumentParameterPanel::updateVariationComboBox()
 }
 
 void
-MIDIInstrumentParameterPanel::slotNewDocument(RosegardenDocument *doc)
+MIDIInstrumentParameterPanel::slotDocumentLoaded(RosegardenDocument *doc)
 {
     connect(doc, &RosegardenDocument::documentModified,
             this, &MIDIInstrumentParameterPanel::slotDocumentModified);

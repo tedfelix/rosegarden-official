@@ -49,7 +49,7 @@ void ExternalController::connectRMW(RosegardenMainWindow *rmw)
     // was called before Qt was up.  That will make it impossible for this
     // object to receive signals.
 
-    connect(rmw, &RosegardenMainWindow::documentChanged,
+    connect(rmw, &RosegardenMainWindow::documentLoaded,
             this, &ExternalController::slotDocumentLoaded);
 }
 
