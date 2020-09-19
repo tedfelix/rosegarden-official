@@ -572,8 +572,10 @@ LADSPAPluginFactory::getPluginPath()
         path = cpath;
 
     if (path == "") {
-//      path = "/usr/local/lib/ladspa:/usr/lib/ladspa";
-        path = "/usr/local/lib/ladspa:/usr/lib/ladspa:/usr/local/lib64/ladspa:/usr/lib64/ladspa";
+        // ??? Probably should offer "Additional LADSPA search paths" in the
+        //     preferences.
+        path = "/usr/local/lib/ladspa:/usr/lib/ladspa:/usr/local/lib64/ladspa:"
+               "/usr/lib64/ladspa:/usr/lib/x86_64-linux-gnu/ladspa";
         char *home = getenv("HOME");
         if (home)
             path = std::string(home) + "/.ladspa:" + path;
