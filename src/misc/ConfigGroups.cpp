@@ -22,7 +22,7 @@ namespace Rosegarden
     //
     const char* const GeneralOptionsConfigGroup = "General_Options";
     const char* const LatencyOptionsConfigGroup = "Latency_Options";
-    const char* const SequencerOptionsConfigGroup = "Sequencer_Options";
+    const QString SequencerOptionsConfigGroup = "Sequencer_Options";
     const char* const NotationViewConfigGroup = "Notation_Options";
     const char* const PitchTrackerConfigGroup = "Pitch_Tracker_Options";
     const char* const AudioManagerDialogConfigGroup = "AudioManagerDialog";

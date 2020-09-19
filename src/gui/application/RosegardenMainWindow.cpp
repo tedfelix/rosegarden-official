@@ -1215,8 +1215,6 @@ RosegardenMainWindow::setDocument(RosegardenDocument* newDocument)
     // Make sure the view and the new document match.
     m_view->slotSynchroniseWithComposition();
 
-    m_doc->checkSequencerTimer();
-
     if (newDocument->getStudio().haveMidiDevices()) {
         enterActionState("got_midi_devices"); //@@@ JAS orig. 0
     } else {
@@ -4936,8 +4934,6 @@ RosegardenMainWindow::launchSequencer()
     RG_DEBUG << "RosegardenMainWindow::launchSequencer: Sequencer thread is "
              << m_sequencerThread << endl;
 
-    if (m_doc) m_doc->checkSequencerTimer();
-
     if (m_doc && m_doc->getStudio().haveMidiDevices()) {
         enterActionState("got_midi_devices"); //@@@ JAS orig. 0
     } else {
@@ -5559,8 +5555,6 @@ RosegardenMainWindow::alive()
     // ??? This routine appears to never be called.
 
     //RG_DEBUG << "alive()";
-
-    if (m_doc) m_doc->checkSequencerTimer();
 
     if (m_doc && m_doc->getStudio().haveMidiDevices()) {
         enterActionState("got_midi_devices"); //@@@ JAS orig. 0

@@ -350,11 +350,6 @@ public:
     void setRecordStartTime(timeT t) { m_recordStartTime = t; }
 
     /*
-    * Sync device information with sequencer
-    */
-    void checkSequencerTimer();
-
-    /*
      * Get a MappedDevice from the sequencer and add the
      * results to our Studio
      */
@@ -444,10 +439,6 @@ public:
      * Set the sequence manager (called by SequenceManager itself)
      */
     void setSequenceManager(SequenceManager *sm);
-
-    QStringList getTimers();
-    QString getCurrentTimer();
-    void setCurrentTimer(QString);
 
     /**
      * return the list of the views currently connected to the document

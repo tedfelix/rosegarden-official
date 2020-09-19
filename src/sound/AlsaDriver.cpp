@@ -1823,7 +1823,7 @@ AlsaDriver::getTimer(unsigned int n)
 QString
 AlsaDriver::getCurrentTimer()
 {
-    return strtoqstr(m_currentTimer);
+    return m_currentTimer;
 }
 
 void
@@ -1836,8 +1836,13 @@ AlsaDriver::setCurrentTimer(QString timer)
     if (skip)
         return;
 
-    if (timer == getCurrentTimer())
-        return ;
+    // No change?  Bail.
+    if (timer == m_currentTimer)
+        return;
+
+    m_currentTimer = timer;
+    settings.setValue(SequencerOptionsConfigGroup + "/" + "timer",
+                      m_currentTimer);
 
     RG_DEBUG << "setCurrentTimer(" << timer << ")";
 
@@ -2076,7 +2081,13 @@ AlsaDriver::initialiseMidi()
     m_driverStatus |= MIDI_OK;
 
     generateTimerList();
-    setCurrentTimer(AUTO_TIMER_NAME);
+
+    QSettings settings;
+    const QString timer = settings.value(
+            SequencerOptionsConfigGroup + "/" + "timer",
+            AUTO_TIMER_NAME).toString();
+
+    setCurrentTimer(timer);
 
     // Start the timer
     if (checkAlsaError(snd_seq_start_queue(m_midiHandle, m_queue, nullptr),

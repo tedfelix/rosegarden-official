@@ -636,7 +636,7 @@ private:
         long resolution;
     };
     std::vector<AlsaTimerInfo> m_timers;
-    std::string m_currentTimer;
+    QString m_currentTimer;
 
     /// Send out the note-off events in m_noteOffQueue
     /**

@@ -21,13 +21,15 @@
 #ifndef RG_CONFIG_GROUPS_H
 #define RG_CONFIG_GROUPS_H
 
+#include <QString>
+
 #include <rosegardenprivate_export.h>
 
 namespace Rosegarden 
 {
     extern ROSEGARDENPRIVATE_EXPORT const char* const GeneralOptionsConfigGroup;
     extern const char* const LatencyOptionsConfigGroup;
-    extern ROSEGARDENPRIVATE_EXPORT const char* const SequencerOptionsConfigGroup;
+    extern ROSEGARDENPRIVATE_EXPORT const QString SequencerOptionsConfigGroup;
     extern const char* const NotationViewConfigGroup;
     extern const char* const PitchTrackerConfigGroup;
     extern const char* const AudioManagerDialogConfigGroup;

@@ -1858,14 +1858,14 @@ SequenceManager::getSampleRate() const
 bool
 SequenceManager::shouldWarnForImpreciseTimer()
 {
-    QSettings settings;
-    settings.beginGroup( SequencerOptionsConfigGroup );
+    const QString timer =
+            RosegardenSequencer::getInstance()->getCurrentTimer();
 
-    QString timer = settings.value("timer").toString();
-    settings.endGroup();
-
-    if (timer == "(auto)" || timer == "") return true;
-    else return false; // if the user has chosen the timer, leave them alone
+    // If no specific timer has been chosen by the user, do warnings
+    if (timer == "(auto)"  ||  timer == "")
+        return true;
+    else  // The user has chosen a specific timer, leave them alone.
+        return false;
 }
 
 // Return a new metaiterator on the current composition (suitable

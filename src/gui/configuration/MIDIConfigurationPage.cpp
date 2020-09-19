@@ -25,6 +25,7 @@
 #include "gui/widgets/LineEdit.h"
 #include "sound/MappedEvent.h"
 #include "document/RosegardenDocument.h"
+#include "sequencer/RosegardenSequencer.h"
 #include "gui/seqmanager/SequenceManager.h"
 #include "misc/Strings.h"   // For qStrToBool()...
 #include "base/Studio.h"
@@ -131,14 +132,20 @@ MIDIConfigurationPage::MIDIConfigurationPage(RosegardenDocument *doc,
 
     m_sequencerTimingSource = new QComboBox;
 
-    const QStringList timers = m_doc->getTimers();
-    m_originalTimingSource = m_doc->getCurrentTimer();
-    const QString currentTimer =
-            settings.value("timer", m_originalTimingSource).toString();
+    m_originalTimingSource =
+            RosegardenSequencer::getInstance()->getCurrentTimer();
 
-    for (int i = 0; i < timers.size(); ++i) {
-        m_sequencerTimingSource->addItem(timers[i]);
-        if (timers[i] == currentTimer)
+    unsigned timerCount = RosegardenSequencer::getInstance()->getTimers();
+
+    for (unsigned i = 0; i < timerCount; ++i) {
+        QString timer = RosegardenSequencer::getInstance()->getTimer(i);
+
+        // Skip the HR timer which causes a hard-lock of the computer.
+        if (timer == "HR timer")
+            continue;
+
+        m_sequencerTimingSource->addItem(timer);
+        if (timer == m_originalTimingSource)
             m_sequencerTimingSource->setCurrentIndex(i);
     }
 
@@ -295,7 +302,6 @@ MIDIConfigurationPage::MIDIConfigurationPage(RosegardenDocument *doc,
     settings.endGroup();
 }
 
-
 void
 MIDIConfigurationPage::slotSoundFontToggled(bool isChecked)
 {
@@ -327,6 +333,7 @@ void
 MIDIConfigurationPage::apply()
 {
     RG_DEBUG << "MIDI CONFIGURATION PAGE SETTINGS APPLIED";
+
     QSettings settings;
     settings.beginGroup( SequencerOptionsConfigGroup );
 
@@ -337,10 +344,13 @@ MIDIConfigurationPage::apply()
     settings.setValue("sfxloadpath", m_sfxLoadPath->text());
     settings.setValue("soundfontpath", m_soundFontPath->text());
 
-    settings.setValue("timer", m_sequencerTimingSource->currentText());
     // If the timer setting has actually changed
-    if (m_sequencerTimingSource->currentText() != m_originalTimingSource)
-        m_doc->setCurrentTimer(m_sequencerTimingSource->currentText());
+    if (m_sequencerTimingSource->currentText() != m_originalTimingSource) {
+        RosegardenSequencer::getInstance()->setCurrentTimer(
+                m_sequencerTimingSource->currentText());
+        // In case this is an Apply without exit.
+        m_originalTimingSource = m_sequencerTimingSource->currentText();
+    }
 
     // Write the entries
     //

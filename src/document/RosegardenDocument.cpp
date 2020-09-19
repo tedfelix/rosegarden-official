@@ -135,8 +135,6 @@ RosegardenDocument::RosegardenDocument(
     m_clearCommandHistory(clearCommandHistory),
     m_soundEnabled(enableSound)
 {
-    checkSequencerTimer();
-
     connect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
             this, SLOT(slotDocumentModified()));
 
@@ -2516,28 +2514,6 @@ RosegardenDocument::setLoop(timeT t0, timeT t1)
 }
 
 void
-RosegardenDocument::checkSequencerTimer()
-{
-    //Profiler profiler("RosegardenDocument::checkSequencerTimer", true);
-
-    if (!m_soundEnabled) return;
-
-    // Set the default timer.  We only do this first time and when
-    // changed in the configuration dialog.
-    static bool setTimer = false;
-    if (!setTimer) {
-        QSettings settings;
-        settings.beginGroup( SequencerOptionsConfigGroup );
-
-        QString currentTimer = getCurrentTimer();
-        currentTimer = settings.value("timer", currentTimer).toString();
-        setCurrentTimer(currentTimer);
-        setTimer = true;
-        settings.endGroup();
-    }
-}
-
-void
 RosegardenDocument::addRecordMIDISegment(TrackId tid)
 {
     RG_DEBUG << "RosegardenDocument::addRecordMIDISegment(" << tid << ")";
@@ -2859,32 +2835,6 @@ void
 RosegardenDocument::updateAudioRecordLatency()
 {
     m_audioRecordLatency = getAudioRecordLatency();
-}
-
-QStringList
-RosegardenDocument::getTimers()
-{
-    QStringList list;
-
-    unsigned int count = RosegardenSequencer::getInstance()->getTimers();
-
-    for (unsigned int i = 0; i < count; ++i) {
-        list.push_back(RosegardenSequencer::getInstance()->getTimer(i));
-    }
-
-    return list;
-}
-
-QString
-RosegardenDocument::getCurrentTimer()
-{
-    return RosegardenSequencer::getInstance()->getCurrentTimer();
-}
-
-void
-RosegardenDocument::setCurrentTimer(QString name)
-{
-    RosegardenSequencer::getInstance()->setCurrentTimer(name);
 }
 
 void
