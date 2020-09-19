@@ -42,7 +42,16 @@ extern ROSEGARDENPRIVATE_EXPORT std::string qstrtostr(const QString &);
 extern ROSEGARDENPRIVATE_EXPORT double strtodouble(const std::string &);
 extern ROSEGARDENPRIVATE_EXPORT double qstrtodouble(const QString &);
 
-extern ROSEGARDENPRIVATE_EXPORT bool qStrToBool(const QString &s);
+/// Convert a QVariant (string) to bool.
+/**
+ * This is a tad more comprehensive than QVariant::toBool().  This recognizes
+ * "1", "yes", and "on" as true.  Everything else is false.  In most cases,
+ * we should be using QVariant::toBool().  Since this is pretty much only used
+ * for settings in the .conf file, that's probably every case.  See
+ * MIDIConfigurationPage which uses toBool() instead.
+ *
+ * ??? Use QVariant::toBool() instead of this.
+ */
 extern ROSEGARDENPRIVATE_EXPORT bool qStrToBool(const QVariant &v);
 
 extern ROSEGARDENPRIVATE_EXPORT std::string qStrToStrLocal8(const QString &qstr);

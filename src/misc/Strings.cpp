@@ -107,24 +107,15 @@ ROSEGARDENPRIVATE_EXPORT double qstrtodouble(const QString &s)
     return strtodouble(qstrtostr(s));
 }
 
-
-ROSEGARDENPRIVATE_EXPORT bool qStrToBool(const QString &s)
-{
-    QString tt = s.toLower();
-    tt = tt.trimmed();
-    if ( (tt == "1") || (tt == "true") || (tt == "yes") || (tt == "on") ){
-        return true;
-    }
-    return false;
-}
-
 ROSEGARDENPRIVATE_EXPORT bool qStrToBool(const QVariant &v)
 {
-    return qStrToBool( v.toString() );
+    QString tt = v.toString().toLower().trimmed();
+
+    if (tt == "1"  ||  tt == "true"  ||  tt == "yes"  ||  tt == "on")
+        return true;
+
+    return false;
 }
-
-
-
 
 ROSEGARDENPRIVATE_EXPORT std::string convertFromCodec(std::string text, QTextCodec *codec)
 {
