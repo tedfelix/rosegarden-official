@@ -89,19 +89,18 @@ public:
 };
 
 DocumentMetaConfigurationPage::DocumentMetaConfigurationPage(
-        RosegardenDocument *doc,
         QWidget *parent) :
-    TabbedConfigurationPage(doc, parent)
+    TabbedConfigurationPage(parent)
 {
-    m_headersPage = new HeadersConfigurationPage(this, doc,
+    m_headersPage = new HeadersConfigurationPage(this, m_doc,
                             static_cast<ConfigureDialogBase * >(parent));
     addTab(m_headersPage, tr("Headers"));
     
-    m_commentsPage = new CommentsConfigurationPage(this, doc,
+    m_commentsPage = new CommentsConfigurationPage(this, m_doc,
                             static_cast<ConfigureDialogBase * >(parent));
     addTab(m_commentsPage, tr("Notes"));
 
-    Composition &comp = doc->getComposition();
+    Composition &comp = m_doc->getComposition();
     std::set
         <TrackId> usedTracks;
 
@@ -121,7 +120,7 @@ DocumentMetaConfigurationPage::DocumentMetaConfigurationPage(
     layout->setSpacing(5);
 
     layout->addWidget(new QLabel(tr("Filename:"), frame), 0, 0);
-    layout->addWidget(new QLabel(doc->getTitle(), frame), 0, 1);
+    layout->addWidget(new QLabel(m_doc->getTitle(), frame), 0, 1);
 
     layout->addWidget(new QLabel(tr("Formal duration (to end marker):"), frame), 1, 0);
     timeT d = comp.getEndMarker();

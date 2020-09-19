@@ -5879,7 +5879,7 @@ RosegardenMainWindow::slotEditDocumentProperties()
 
     // Don't create a dialog if there is already one
     if (!m_docConfigDlg) {
-        m_docConfigDlg = new DocumentConfigureDialog(m_doc, this);
+        m_docConfigDlg = new DocumentConfigureDialog(this);
 
         // Close the dialog if the document is changed : fix #1462
         connect(this, SIGNAL(documentAboutToChange()),
@@ -5900,7 +5900,7 @@ RosegardenMainWindow::slotOpenAudioPathSettings()
 
     // Don't create a dialog if there is already one
     if (!m_docConfigDlg) {
-        m_docConfigDlg = new DocumentConfigureDialog(m_doc, this);
+        m_docConfigDlg = new DocumentConfigureDialog(this);
 
         // Close the dialog if the document is changed : fix #1462
         connect(this, SIGNAL(documentAboutToChange()),

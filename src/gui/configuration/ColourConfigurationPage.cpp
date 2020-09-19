@@ -49,8 +49,8 @@
 namespace Rosegarden
 {
 
-ColourConfigurationPage::ColourConfigurationPage(RosegardenDocument *doc, QWidget *parent)
-        : TabbedConfigurationPage(doc, parent)
+ColourConfigurationPage::ColourConfigurationPage(QWidget *parent) :
+    TabbedConfigurationPage(parent)
 {
     QFrame *frame = new QFrame(m_tabWidget);
     frame->setContentsMargins(10, 10, 10, 10);

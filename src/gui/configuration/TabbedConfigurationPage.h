@@ -40,17 +40,13 @@ class TabbedConfigurationPage : public ConfigurationPage
     Q_OBJECT
 
 public:
-    TabbedConfigurationPage(RosegardenDocument *doc, QWidget *parent = nullptr);
+    TabbedConfigurationPage(QWidget *parent);
 
-    TabbedConfigurationPage(QWidget *parent = nullptr);
-
-    static QString iconName() { return "misc"; }
+    static QString iconName()  { return "misc"; }
     
 protected:
     void init();
     void addTab(QWidget *tab, const QString &title);
-
-    //--------------- Data members ---------------------------------
 
     QTabWidget *m_tabWidget;
 

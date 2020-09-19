@@ -51,10 +51,10 @@
 namespace Rosegarden
 {
 
-AudioPropertiesPage::AudioPropertiesPage(RosegardenDocument *doc,  QWidget *parent)
-        : TabbedConfigurationPage(doc, parent)
+AudioPropertiesPage::AudioPropertiesPage(QWidget *parent) :
+    TabbedConfigurationPage(parent)
 {
-    AudioFileManager &afm = doc->getAudioFileManager();
+    AudioFileManager &afm = m_doc->getAudioFileManager();
 
     QFrame *frame = new QFrame(m_tabWidget);
     frame->setContentsMargins(10, 10, 10, 10);

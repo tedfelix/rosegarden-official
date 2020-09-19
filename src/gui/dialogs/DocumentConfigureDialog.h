@@ -35,9 +35,8 @@ class DocumentConfigureDialog : public ConfigureDialogBase
 {
     //Q_OBJECT
 public:
-    DocumentConfigureDialog(RosegardenDocument *doc,
-                            QWidget *parent=nullptr,
-                            const char *name=nullptr);
+    DocumentConfigureDialog(QWidget *parent,
+                            const char *name = nullptr);
 
     void showAudioPage();
 

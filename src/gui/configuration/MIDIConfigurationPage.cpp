@@ -306,6 +306,7 @@ MIDIConfigurationPage::MIDIConfigurationPage(RosegardenDocument *doc,
 
     ++row;
 
+    // Fill out the rest of the space so that we do not end up centered.
     layout->setRowStretch(row, 10);
 
 }

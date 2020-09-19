@@ -36,16 +36,15 @@
 namespace Rosegarden
 {
 
-DocumentConfigureDialog::DocumentConfigureDialog(RosegardenDocument *doc,
-        QWidget *parent,
-        const char *name)
-    : ConfigureDialogBase(parent, tr("Document Properties"), name )//, QMessageBox::StandardButtons buttons )
+DocumentConfigureDialog::DocumentConfigureDialog(QWidget *parent,
+                                                 const char *name) :
+    ConfigureDialogBase(parent, tr("Document Properties"), name)//, QMessageBox::StandardButtons buttons )
 {
     QWidget *page = nullptr;
 
     // Document Meta Page
     //
-    page = new DocumentMetaConfigurationPage(doc, this);
+    page = new DocumentMetaConfigurationPage(this);
     connect(page, SIGNAL(modified()), this, SLOT(slotActivateApply()));
     addPage(DocumentMetaConfigurationPage::iconLabel(),
             DocumentMetaConfigurationPage::title(),
@@ -54,7 +53,7 @@ DocumentConfigureDialog::DocumentConfigureDialog(RosegardenDocument *doc,
 
     // Audio Page
     //
-    page = new AudioPropertiesPage(doc, this);
+    page = new AudioPropertiesPage(this);
     connect(page, SIGNAL(modified()), this, SLOT(slotActivateApply()));
     addPage(AudioPropertiesPage::iconLabel(),
             AudioPropertiesPage::title(),

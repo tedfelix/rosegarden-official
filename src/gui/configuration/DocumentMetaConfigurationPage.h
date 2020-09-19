@@ -43,7 +43,7 @@ class DocumentMetaConfigurationPage : public TabbedConfigurationPage
 {
     Q_OBJECT
 public:
-    DocumentMetaConfigurationPage(RosegardenDocument *doc, QWidget *parent = nullptr);
+    DocumentMetaConfigurationPage(QWidget *parent);
     void apply() override;
 
     static QString iconLabel() { return tr("About"); }

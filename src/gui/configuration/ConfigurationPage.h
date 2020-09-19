@@ -39,20 +39,13 @@ class ConfigurationPage : public QWidget
     Q_OBJECT
 
 public:
-    ConfigurationPage(QWidget *parent = nullptr)
-        : QWidget(parent), m_doc(nullptr), m_pageIndex(0) {}
-
-    ConfigurationPage(RosegardenDocument *doc, QWidget *parent = nullptr)
-        : QWidget(parent), m_doc(doc), m_pageIndex(0) {}
+    ConfigurationPage(QWidget *parent) :
+        QWidget(parent),
+        m_doc(nullptr)
+    {
+    }
 
     ~ConfigurationPage() override {};
-
-    /**
-     * Should set the page up (ie. read the setting from the @ref
-     * KConfig object into the widgets) after creating it in the
-     * constructor. Called from @ref ConfigureDialog.
-    */
-//     virtual void setup() = 0;
 
     /**
      * Should apply the changed settings (ie. read the settings from
@@ -68,23 +61,19 @@ public:
      */
     virtual void dismiss() {}
 
-    void setPageIndex( int aPageIndex ) { m_pageIndex = aPageIndex; }
-    int pageIndex() const { return m_pageIndex; }
-
 signals:
+
     // ConfigureDialog and others use this to enable the Apply button.
     void modified();
 
 protected slots:
+
     virtual void slotModified();
 
 protected:
 
-    //--------------- Data members ---------------------------------
-
     RosegardenDocument* m_doc;
 
-    int m_pageIndex;
 };
 
 

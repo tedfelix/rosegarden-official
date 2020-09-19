@@ -44,7 +44,7 @@ class ColourConfigurationPage : public TabbedConfigurationPage
     Q_OBJECT
 
 public:
-    ColourConfigurationPage(RosegardenDocument *doc, QWidget *parent = nullptr);
+    ColourConfigurationPage(QWidget *parent);
     void apply() override;
 
     void populate_table();

@@ -20,6 +20,8 @@
 
 #include "ConfigurationPage.h"
 #include "document/RosegardenDocument.h"
+#include "gui/application/RosegardenMainWindow.h"
+
 #include <QSettings>
 #include <QString>
 #include <QTabWidget>
@@ -30,16 +32,11 @@
 namespace Rosegarden
 {
 
-TabbedConfigurationPage::TabbedConfigurationPage(RosegardenDocument *doc,
-                                                 QWidget *parent)
-    : ConfigurationPage(doc, parent)
+TabbedConfigurationPage::TabbedConfigurationPage(QWidget *parent) :
+    ConfigurationPage(parent)
 {
-    init();
-}
+    m_doc = RosegardenMainWindow::self()->getDocument();
 
-TabbedConfigurationPage::TabbedConfigurationPage(QWidget *parent)
-    : ConfigurationPage(parent)
-{
     init();
 }
 
