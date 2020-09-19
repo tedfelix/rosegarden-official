@@ -176,7 +176,7 @@ MIDIConfigurationPage::MIDIConfigurationPage(RosegardenDocument *doc,
     connect(m_loadSoundFont, &QCheckBox::stateChanged,
             this, &MIDIConfigurationPage::slotModified);
     connect(m_loadSoundFont, &QAbstractButton::clicked,
-            this, &MIDIConfigurationPage::slotSoundFontToggled);
+            this, &MIDIConfigurationPage::slotLoadSoundFontClicked);
     layout->addWidget(m_loadSoundFont, row, 2);
 
     ++row;
@@ -194,7 +194,7 @@ MIDIConfigurationPage::MIDIConfigurationPage(RosegardenDocument *doc,
     m_pathToLoadChoose = new QPushButton(tr("Choose..."));
     m_pathToLoadChoose->setEnabled(sfxLoadEnabled);
     connect(m_pathToLoadChoose, &QAbstractButton::clicked,
-            this, &MIDIConfigurationPage::slotSfxLoadPathChoose);
+            this, &MIDIConfigurationPage::slotPathToLoadChoose);
     layout->addWidget(m_pathToLoadChoose, row, 3);
 
     ++row;
@@ -231,9 +231,9 @@ MIDIConfigurationPage::MIDIConfigurationPage(RosegardenDocument *doc,
     row = 0;
 
     // MIDI Clock and System messages
-    label = new QLabel(tr("MIDI Clock and System messages"), widget);
+    label = new QLabel(tr("MIDI Clock and System messages"));
     layout->addWidget(label, row, 0);
-    m_midiSync = new QComboBox(widget);
+    m_midiSync = new QComboBox;
     connect(m_midiSync, SIGNAL(activated(int)), this, SLOT(slotModified()));
     layout->addWidget(m_midiSync, row, 1);
 
@@ -250,10 +250,10 @@ MIDIConfigurationPage::MIDIConfigurationPage(RosegardenDocument *doc,
 
     // MMC Transport
     //
-    label = new QLabel(tr("MIDI Machine Control mode"), widget);
+    label = new QLabel(tr("MIDI Machine Control mode"));
     layout->addWidget(label, row, 0);
 
-    m_mmcTransport = new QComboBox(widget);
+    m_mmcTransport = new QComboBox;
     connect(m_mmcTransport, SIGNAL(activated(int)), this, SLOT(slotModified()));
     layout->addWidget(m_mmcTransport, row, 1); //, Qt::AlignHCenter);
 
@@ -270,10 +270,10 @@ MIDIConfigurationPage::MIDIConfigurationPage(RosegardenDocument *doc,
 
     // MTC transport
     //
-    label = new QLabel(tr("MIDI Time Code mode"), widget);
+    label = new QLabel(tr("MIDI Time Code mode"));
     layout->addWidget(label, row, 0);
 
-    m_mtcTransport = new QComboBox(widget);
+    m_mtcTransport = new QComboBox;
     connect(m_mtcTransport, SIGNAL(activated(int)), this, SLOT(slotModified()));
     layout->addWidget(m_mtcTransport, row, 1);
 
@@ -288,10 +288,13 @@ MIDIConfigurationPage::MIDIConfigurationPage(RosegardenDocument *doc,
 
     ++row;
 
-    QWidget *hbox = new QWidget(widget);
+    QWidget *hbox = new QWidget;
+    layout->addWidget(hbox, row, 0, row- row+1, 1- 0+1);
+
+    // ??? Why?  Use the grid instead.
     QHBoxLayout *hboxLayout = new QHBoxLayout;
     hboxLayout->setSpacing(5);
-    layout->addWidget(hbox, row, 0, row- row+1, 1- 0+1);
+    hbox->setLayout(hboxLayout);
 
     label = new QLabel(tr("Automatically connect sync output to all devices in use"), hbox );
     hboxLayout->addWidget(label);
@@ -299,7 +302,6 @@ MIDIConfigurationPage::MIDIConfigurationPage(RosegardenDocument *doc,
     m_midiSyncAuto = new QCheckBox( hbox );
     connect(m_midiSyncAuto, &QCheckBox::stateChanged, this, &MIDIConfigurationPage::slotModified);
     hboxLayout->addWidget(m_midiSyncAuto);
-    hbox->setLayout(hboxLayout);
 //    layout->addWidget(m_midiSyncAuto, row, 1);
 
     m_midiSyncAuto->setChecked( qStrToBool( settings.value("midisyncautoconnect", "false" ) ) );
@@ -312,8 +314,11 @@ MIDIConfigurationPage::MIDIConfigurationPage(RosegardenDocument *doc,
 }
 
 void
-MIDIConfigurationPage::slotSoundFontToggled(bool isChecked)
+MIDIConfigurationPage::slotLoadSoundFontClicked(bool isChecked)
 {
+    // ??? This same code is in the ctor.  Probably need
+    //     an updateWidgets() routine for both to use.
+
     m_pathToLoadCommand->setEnabled(isChecked);
     m_pathToLoadChoose->setEnabled(isChecked);
     m_soundFont->setEnabled(isChecked);
@@ -321,7 +326,7 @@ MIDIConfigurationPage::slotSoundFontToggled(bool isChecked)
 }
 
 void
-MIDIConfigurationPage::slotSfxLoadPathChoose()
+MIDIConfigurationPage::slotPathToLoadChoose()
 {
     QString path = FileDialog::getOpenFileName(this, tr("sfxload path"), QDir::currentPath() ); //":SFXLOAD"
 

@@ -53,8 +53,8 @@ public:
 
 private slots:
 
-    void slotSoundFontToggled(bool);
-    void slotSfxLoadPathChoose();
+    void slotLoadSoundFontClicked(bool);
+    void slotPathToLoadChoose();
     void slotSoundFontChoose();
 
 private:
@@ -86,7 +86,6 @@ private:
     QComboBox *m_mmcTransport;
     QComboBox *m_mtcTransport;
     QCheckBox *m_midiSyncAuto;
-
 
 };
 

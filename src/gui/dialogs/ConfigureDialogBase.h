@@ -44,7 +44,7 @@ public:
 
     ~ConfigureDialogBase() override;
 
-    typedef std::vector<TabbedConfigurationPage *> configurationpages;
+    typedef std::vector<TabbedConfigurationPage *> ConfigurationPages;
 
     void addPage( const QString& name, const QString& title, const QPixmap& icon, QWidget *page );
 
@@ -64,7 +64,7 @@ public:
 
 protected:
 
-    configurationpages m_configurationPages;
+    ConfigurationPages m_configurationPages;
     
     QPushButton       *m_applyButton;
     QDialogButtonBox  *m_dialogButtonBox;

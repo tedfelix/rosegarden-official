@@ -118,7 +118,7 @@ ConfigureDialog::setNotationPage()
 {
     int index = 0;
 
-    for (configurationpages::iterator i = m_configurationPages.begin();
+    for (ConfigurationPages::iterator i = m_configurationPages.begin();
             i != m_configurationPages.end(); ++i) {
 
         NotationConfigurationPage *page =

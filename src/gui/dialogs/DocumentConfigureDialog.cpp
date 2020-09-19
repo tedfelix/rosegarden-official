@@ -38,27 +38,33 @@ namespace Rosegarden
 
 DocumentConfigureDialog::DocumentConfigureDialog(QWidget *parent,
                                                  const char *name) :
-    ConfigureDialogBase(parent, tr("Document Properties"), name)//, QMessageBox::StandardButtons buttons )
+    ConfigureDialogBase(parent, tr("Document Properties"), name)
 {
-    QWidget *page = nullptr;
-
     // Document Meta Page
     //
-    page = new DocumentMetaConfigurationPage(this);
-    connect(page, SIGNAL(modified()), this, SLOT(slotActivateApply()));
+    DocumentMetaConfigurationPage *documentMetaConfigurationPage =
+            new DocumentMetaConfigurationPage(this);
+    connect(documentMetaConfigurationPage,
+                &DocumentMetaConfigurationPage::modified,
+            this, &DocumentConfigureDialog::slotActivateApply);
     addPage(DocumentMetaConfigurationPage::iconLabel(),
             DocumentMetaConfigurationPage::title(),
-            IconLoader::loadPixmap( DocumentMetaConfigurationPage::iconName()), page);
-    m_configurationPages.push_back((TabbedConfigurationPage *)page);
+            IconLoader::loadPixmap( DocumentMetaConfigurationPage::iconName()),
+            documentMetaConfigurationPage);
+    m_configurationPages.push_back(
+            static_cast<TabbedConfigurationPage *>(documentMetaConfigurationPage));
 
     // Audio Page
     //
-    page = new AudioPropertiesPage(this);
-    connect(page, SIGNAL(modified()), this, SLOT(slotActivateApply()));
+    AudioPropertiesPage *audioPropertiesPage = new AudioPropertiesPage(this);
+    connect(audioPropertiesPage, &AudioPropertiesPage::modified,
+            this, &DocumentConfigureDialog::slotActivateApply);
     addPage(AudioPropertiesPage::iconLabel(),
             AudioPropertiesPage::title(),
-            IconLoader::loadPixmap(AudioPropertiesPage::iconName()),page);
-    m_configurationPages.push_back((TabbedConfigurationPage *)page);
+            IconLoader::loadPixmap(AudioPropertiesPage::iconName()),
+            audioPropertiesPage);
+    m_configurationPages.push_back(
+            static_cast<TabbedConfigurationPage *>(audioPropertiesPage));
 }
 
 void
@@ -66,7 +72,7 @@ DocumentConfigureDialog::showAudioPage()
 {
     int index = 0;
 
-    for (configurationpages::iterator i = m_configurationPages.begin();
+    for (ConfigurationPages::iterator i = m_configurationPages.begin();
             i != m_configurationPages.end(); ++i) {
 
         AudioPropertiesPage *page =

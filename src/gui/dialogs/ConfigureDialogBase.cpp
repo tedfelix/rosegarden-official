@@ -113,7 +113,7 @@ void
 ConfigureDialogBase::slotApply()
 {
     RG_DEBUG << "CONFIGUREDIALOGBASE SLOTAPPLY()";
-    for (configurationpages::iterator i = m_configurationPages.begin();
+    for (ConfigurationPages::iterator i = m_configurationPages.begin();
             i != m_configurationPages.end(); ++i)
         (*i)->apply();
 

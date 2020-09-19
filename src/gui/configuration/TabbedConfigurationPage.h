@@ -39,23 +39,19 @@ public:
     TabbedConfigurationPage(QWidget *parent);
     virtual ~TabbedConfigurationPage() override  { }
 
+    /// Apply the changes by copying from the widgets to the .conf file.
     /**
-     * Should apply the changed settings (ie. read the settings from
-     * the widgets into the @ref KConfig object). Called from @ref
-     * ConfigureDialog.
+     * Called by ConfigureDialogBase::slotApply() when the user presses either
+     * Apply or Ok.
      */
     virtual void apply() = 0;
 
-    /**
-     * Should cleanup any temporaries after cancel. The default
-     * implementation does nothing. Called from @ref
-     * ConfigureDialog.
-     */
-    virtual void dismiss() {}
-
 signals:
 
-    // ConfigureDialog and others use this to enable the Apply button.
+    /**
+     * ConfigureDialog and DocumentConfigureDialog use this to enable
+     * the Apply button.
+     */
     void modified();
 
 protected slots:
