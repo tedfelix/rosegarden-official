@@ -59,9 +59,12 @@ private slots:
 
 private:
 
+    // ??? These widget names need to match the UI.
+
     // *** General tab
 
-    QSpinBox *m_midiPitchOctave;
+    /// Base octave number for MIDI pitch display.
+    QSpinBox *m_baseOctaveNumber;
 
     QCheckBox *m_studio;
     bool getUseDefaultStudio() const  { return m_studio->isChecked(); }

@@ -49,7 +49,7 @@ namespace Rosegarden
 MIDIConfigurationPage::MIDIConfigurationPage(RosegardenDocument *doc,
                                              QWidget *parent):
     TabbedConfigurationPage(parent),
-    m_midiPitchOctave(nullptr)
+    m_baseOctaveNumber(nullptr)
 {
     // ??? Get the document directly instead.  Need to do that in
     //     TabbedConfigurationPage first, then in the derivers.
@@ -58,55 +58,63 @@ MIDIConfigurationPage::MIDIConfigurationPage(RosegardenDocument *doc,
 
     // ---------------- General tab ------------------
 
-    QFrame *frame = new QFrame(m_tabWidget);
-    frame->setContentsMargins(10, 10, 10, 10);
+    // We need this QWidget for the addTab() call later on.
+    QWidget *frame = new QWidget;
+
     QGridLayout *layout = new QGridLayout(frame);
+    layout->setContentsMargins(20, 20, 20, 20);
     layout->setSpacing(5);
 
     int row = 0;
 
-    layout->setRowMinimumHeight(row, 15);
-    ++row;
-
-    QLabel *label = nullptr;
-
     QSettings settings;
-    settings.beginGroup( GeneralOptionsConfigGroup );
+    settings.beginGroup(GeneralOptionsConfigGroup);
 
-    layout->addWidget(new QLabel(tr("Base octave number for MIDI pitch display"),
-                                 frame), row, 0, 1, 2);
-    
-    m_midiPitchOctave = new QSpinBox(frame);
-    connect(m_midiPitchOctave, SIGNAL(valueChanged(int)), this, SLOT(slotModified()));
-    m_midiPitchOctave->setMaximum(10);
-    m_midiPitchOctave->setMinimum( -10);
-    m_midiPitchOctave->setValue( settings.value("midipitchoctave", -2).toInt() );
-    layout->addWidget(m_midiPitchOctave, row, 2, row- row+1, 3- 2+1);
+    // Base octave number
+    layout->addWidget(
+            new QLabel(tr("Base octave number for MIDI pitch display")),
+            row, 0, 1, 2);
+
+    m_baseOctaveNumber = new QSpinBox;
+    m_baseOctaveNumber->setMinimum(-10);
+    m_baseOctaveNumber->setMaximum(10);
+    m_baseOctaveNumber->setValue(
+            settings.value("midipitchoctave", -2).toInt());
+    // ??? Switch to Qt5 syntax.  That will require a new
+    //     slotBaseOctaveNumberChanged(int) that delegates to slotModified().
+    connect(m_baseOctaveNumber, SIGNAL(valueChanged(int)),
+            this, SLOT(slotModified()));
+    layout->addWidget(m_baseOctaveNumber, row, 2, 1, 2);
     ++row;
 
+    // Spacer
     layout->setRowMinimumHeight(row, 20);
     ++row;
 
-    layout->addWidget(new QLabel(tr("Always use default studio when loading files"),
-                                      frame), row, 0, 1, 2);
+    // Always use default studio
+    layout->addWidget(
+            new QLabel(tr("Always use default studio when loading files")),
+            row, 0, 1, 2);
 
-    m_studio = new QCheckBox(frame);
-    connect(m_studio, &QCheckBox::stateChanged, this, &MIDIConfigurationPage::slotModified);
-    m_studio->setChecked( qStrToBool( settings.value("alwaysusedefaultstudio", "false" ) ) );
+    m_studio = new QCheckBox;
+    connect(m_studio, &QCheckBox::stateChanged,
+            this, &MIDIConfigurationPage::slotModified);
+    m_studio->setChecked(qStrToBool(
+            settings.value("alwaysusedefaultstudio", "false")));
     layout->addWidget(m_studio, row, 2);
     ++row;
-    settings.endGroup();
 
-    // Send Controllers
-    //
-    settings.beginGroup( SequencerOptionsConfigGroup );
-    label = new QLabel(tr("Allow Reset All Controllers (CC 121)"), frame);
+    settings.endGroup();
+    settings.beginGroup(SequencerOptionsConfigGroup);
+
+    // Allow Reset All Controllers
+    QLabel *label = new QLabel(tr("Allow Reset All Controllers (CC 121)"));
 
     QString resetTip = tr("Rosegarden can send a MIDI Reset All Controllers event when setting up a channel.");
     label->setToolTip(resetTip);
     layout->addWidget(label, row, 0, row- row+1, 1- 0+1);
 
-    m_allowResetAllControllers = new QCheckBox(frame);
+    m_allowResetAllControllers = new QCheckBox;
     connect(m_allowResetAllControllers, &QCheckBox::stateChanged, this, &MIDIConfigurationPage::slotModified);
     const bool sendResetAllControllers = qStrToBool( settings.value("allowresetallcontrollers", "true" ) ) ;
     m_allowResetAllControllers->setChecked(sendResetAllControllers);
@@ -117,11 +125,10 @@ MIDIConfigurationPage::MIDIConfigurationPage(RosegardenDocument *doc,
     // Timer selection
     //
 
-    //### settings.beginGroup( SequencerOptionsConfigGroup );
-    label = new QLabel(tr("Sequencer timing source"), frame);
+    label = new QLabel(tr("Sequencer timing source"));
     layout->addWidget(label, row, 0, row- row+1, 1- 0+1);
 
-    m_timer = new QComboBox(frame);
+    m_timer = new QComboBox;
     connect(m_timer, SIGNAL(activated(int)), this, SLOT(slotModified()));
     layout->addWidget(m_timer, row, 2, row- row+1, 3-2+1);
 
@@ -137,6 +144,7 @@ MIDIConfigurationPage::MIDIConfigurationPage(RosegardenDocument *doc,
 
     ++row;
 
+    // Spacer
     layout->setRowMinimumHeight(row, 20);
     ++row;
 
@@ -147,7 +155,7 @@ MIDIConfigurationPage::MIDIConfigurationPage(RosegardenDocument *doc,
     lbl->setToolTip(tooltip);
     layout->addWidget(lbl, row, 0, row- row+1, 1- 0+1);
 
-    m_sfxLoadEnabled = new QCheckBox(frame);
+    m_sfxLoadEnabled = new QCheckBox;
     connect(m_sfxLoadEnabled, &QCheckBox::stateChanged, this, &MIDIConfigurationPage::slotModified);
     layout->addWidget(m_sfxLoadEnabled, row, 2);
     m_sfxLoadEnabled->setToolTip(tooltip);
@@ -156,14 +164,14 @@ MIDIConfigurationPage::MIDIConfigurationPage(RosegardenDocument *doc,
     layout->addWidget(new QLabel(tr("Path to 'asfxload' or 'sfxload' command"), frame), row, 0);
     m_sfxLoadPath = new LineEdit(settings.value("sfxloadpath", "/usr/bin/asfxload").toString() , frame);
     layout->addWidget(m_sfxLoadPath, row, 1, row- row+1, 2);
-    m_sfxLoadChoose = new QPushButton(tr("Choose..."), frame);
+    m_sfxLoadChoose = new QPushButton(tr("Choose..."));
     layout->addWidget(m_sfxLoadChoose, row, 3);
     ++row;
 
-    layout->addWidget(new QLabel(tr("SoundFont"), frame), row, 0);
+    layout->addWidget(new QLabel(tr("SoundFont")), row, 0);
     m_soundFontPath = new LineEdit(settings.value("soundfontpath", "").toString() , frame);
     layout->addWidget(m_soundFontPath, row, 1, row- row+1, 2);
-    m_soundFontChoose = new QPushButton(tr("Choose..."), frame);
+    m_soundFontChoose = new QPushButton(tr("Choose..."));
     layout->addWidget(m_soundFontChoose, row, 3);
     ++row;
 
@@ -192,13 +200,14 @@ MIDIConfigurationPage::MIDIConfigurationPage(RosegardenDocument *doc,
 
     //  -------------- MIDI Sync tab -----------------
 
-    frame = new QFrame(m_tabWidget);
+    frame = new QFrame;
     frame->setContentsMargins(10, 10, 10, 10);
     layout = new QGridLayout(frame);
     layout->setSpacing(5);
 
     row = 0;
 
+    // Spacer
     layout->setRowMinimumHeight(row, 15);
     ++row;
 
@@ -392,7 +401,7 @@ MIDIConfigurationPage::apply()
     bool deftstudio = getUseDefaultStudio();
     settings.setValue("alwaysusedefaultstudio", deftstudio);
 
-    int octave = m_midiPitchOctave->value();
+    int octave = m_baseOctaveNumber->value();
     settings.setValue("midipitchoctave", octave);
 
     settings.endGroup();
