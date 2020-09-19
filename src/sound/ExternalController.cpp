@@ -15,11 +15,13 @@
 
 #include "ExternalController.h"
 
+#include "misc/ConfigGroups.h"
 #include "misc/Debug.h"
 #include "MappedEvent.h"
 #include "gui/application/RosegardenMainWindow.h"
 #include "gui/studio/StudioControl.h"
 
+#include <QSettings>
 
 namespace Rosegarden
 {
@@ -38,7 +40,26 @@ QSharedPointer<ExternalController> ExternalController::self()
 ExternalController::ExternalController() :
     m_activeWindow(Main)
 {
+}
 
+bool ExternalController::isEnabled()
+{
+    static bool cacheValid = false;
+    static bool enabled = false;
+
+    if (cacheValid)
+        return enabled;
+
+    // Cache is not valid.  Prime it.
+
+    QSettings settings;
+    settings.beginGroup(GeneralOptionsConfigGroup);
+    // ??? Default to false once we have the preference in the GUI.
+    enabled = settings.value("external_controller", true).toBool();
+
+    cacheValid = true;
+
+    return enabled;
 }
 
 void ExternalController::processEvent(const MappedEvent *event)
@@ -116,6 +137,10 @@ void ExternalController::processEvent(const MappedEvent *event)
 void ExternalController::send(
         MidiByte channel, MidiByte controlNumber, MidiByte value)
 {
+    // Not enabled?  Bail.
+    if (!isEnabled())
+        return;
+
     MappedEvent event(NoInstrument,  // instrumentId is ignored
                       MappedEvent::MidiController,
                       controlNumber,

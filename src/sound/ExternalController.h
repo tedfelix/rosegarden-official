@@ -36,6 +36,8 @@ public:
     // The global instance.
     static QSharedPointer<ExternalController> self();
 
+    static bool isEnabled();
+
     /// The three windows that currently handle external controller events.
     enum Window { Main, AudioMixer, MidiMixer };
     /// The currently active window for external controller events.

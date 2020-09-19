@@ -46,10 +46,10 @@
 #include "MappedEvent.h"
 #include "Audit.h"
 #include "AudioPlayQueue.h"
-#include "ExternalTransport.h"
 #include "base/levenshtein.hpp"
 #include "SequencerDataBlock.h"
 #include "PlayableAudioFile.h"
+#include "ExternalController.h"
 
 #include <QMutex>
 #include <QRegExp>
@@ -2052,16 +2052,18 @@ AlsaDriver::initialiseMidi()
                                        SND_SEQ_PORT_TYPE_MIDI_GENERIC),
                                       "initialiseMidi - can't create sync output port");
 
-    // Create external controller port.
-    m_externalControllerPort = checkAlsaError(
-            snd_seq_create_simple_port(
-                m_midiHandle,
-                "external controller",
-                SND_SEQ_PORT_CAP_READ | SND_SEQ_PORT_CAP_WRITE |
-                    SND_SEQ_PORT_CAP_SUBS_READ | SND_SEQ_PORT_CAP_SUBS_WRITE,
-                SND_SEQ_PORT_TYPE_APPLICATION | SND_SEQ_PORT_TYPE_SOFTWARE |
-                    SND_SEQ_PORT_TYPE_MIDI_GENERIC),
-            "initialiseMidi - can't create controller port");
+    if (ExternalController::self()->isEnabled()) {
+        // Create external controller port.
+        m_externalControllerPort = checkAlsaError(
+                snd_seq_create_simple_port(
+                    m_midiHandle,
+                    "external controller",
+                    SND_SEQ_PORT_CAP_READ | SND_SEQ_PORT_CAP_WRITE |
+                        SND_SEQ_PORT_CAP_SUBS_READ | SND_SEQ_PORT_CAP_SUBS_WRITE,
+                    SND_SEQ_PORT_TYPE_APPLICATION | SND_SEQ_PORT_TYPE_SOFTWARE |
+                        SND_SEQ_PORT_TYPE_MIDI_GENERIC),
+                "initialiseMidi - can't create controller port");
+    }
 
     getSystemInfo();
 
@@ -4014,7 +4016,9 @@ AlsaDriver::processMidiOut(const MappedEventList &mC,
                 src = getOutputPortForMappedInstrument((*i)->getInstrument());
             }
 
-            if (src < 0) continue;
+            if (src < 0)
+                continue;
+
             snd_seq_ev_set_source(&event, src);
 
             snd_seq_ev_schedule_real(&event, m_queue, 0, &time);
