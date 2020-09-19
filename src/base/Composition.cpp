@@ -1756,7 +1756,7 @@ void Composition::resetTrackIdAndPosition(TrackId oldId, TrackId newId,
 
 InstrumentId Composition::getSelectedInstrumentId() const
 {
-    if (m_selectedTrackId == NO_TRACK)
+    if (m_selectedTrackId == NoTrack)
         return NoInstrument;
 
     Track *track = getTrackById(m_selectedTrackId);

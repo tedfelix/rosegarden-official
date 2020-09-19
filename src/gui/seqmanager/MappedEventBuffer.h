@@ -134,7 +134,7 @@ public:
         end   = m_end;
     }
 
-    virtual TrackId getTrackID() const  { return NO_TRACK; }
+    virtual TrackId getTrackID() const  { return NoTrack; }
     virtual void insertChannelSetup(MappedInserterBase &)  { }
 
 protected:

@@ -32,7 +32,7 @@ namespace Rosegarden
 class Composition;
 
 typedef unsigned int TrackId;
-extern const TrackId NO_TRACK;
+constexpr TrackId NoTrack = 0xDEADBEEF;
 
 /// Representation of a Track.
 /**

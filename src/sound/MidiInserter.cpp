@@ -154,7 +154,7 @@ getTrackData(TrackId RGTrackPos, int channelNb)
 #endif
     // Some events like TimeSig and Tempo have invalid trackId and
     // should be written on the conductor track.
-    if (RGTrackPos == NO_TRACK)
+    if (RGTrackPos == NoTrack)
         { return m_conductorTrack; }
     // Otherwise we're looking it up.
     TrackKey key = TrackKey(RGTrackPos, channelNb);

@@ -260,7 +260,7 @@ MetronomeMapper::doInsert(MappedInserterBase &inserter, MappedEvent &evt,
         return;
 
     m_channelManager.insertEvent(
-            NO_TRACK,  // trackId
+            NoTrack,  // trackId
             m_instrument->getStaticControllers(),
             start,
             evt,
@@ -280,7 +280,7 @@ makeReady(MappedInserterBase &inserter, RealTime time)
         return;
 
     m_channelManager.makeReady(
-            NO_TRACK,  // trackId
+            NoTrack,  // trackId
             time,
             m_instrument->getStaticControllers(),
             inserter);

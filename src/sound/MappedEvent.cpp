@@ -36,7 +36,7 @@ MappedEvent::MappedEvent(InstrumentId id,
                          const Event &e,
                          const RealTime &eventTime,
                          const RealTime &duration):
-        m_trackId((int)NO_TRACK),
+        m_trackId((int)NoTrack),
         m_instrument(id),
         m_type(MidiNote),
         m_data1(0),
@@ -188,7 +188,7 @@ operator<<(QDebug &dbg, const MappedEvent &mE)
 
     dbg << "  Track ID:";
 
-    if (mE.m_trackId != NO_TRACK)
+    if (mE.m_trackId != NoTrack)
         dbg << static_cast<int>(mE.m_trackId);
     else
         dbg << "NO_TRACK";

@@ -206,7 +206,7 @@ public:
         WarningImpreciseTimerTryRTC = 11
     } FailureCode;
 
-    MappedEvent(): m_trackId((int)NO_TRACK),
+    MappedEvent(): m_trackId((int)NoTrack),
                    m_instrument(0),
                    m_type(InvalidMappedEvent),
                    m_data1(0),
@@ -241,7 +241,7 @@ public:
                 const RealTime &absTime,
                 const RealTime &duration,
                 const RealTime &audioStartMarker):
-        m_trackId((int)NO_TRACK),
+        m_trackId((int)NoTrack),
         m_instrument(id),
         m_type(type),
         m_data1(pitch),
@@ -264,7 +264,7 @@ public:
                 const RealTime &eventTime,
                 const RealTime &duration,
                 const RealTime &audioStartMarker):
-         m_trackId((int)NO_TRACK),
+         m_trackId((int)NoTrack),
          m_instrument(id),
          m_type(Audio),
          m_data1(audioID % 256),
@@ -287,7 +287,7 @@ public:
                 MappedEventType type,
                 MidiByte data1,
                 MidiByte data2):
-         m_trackId((int)NO_TRACK),
+         m_trackId((int)NoTrack),
          m_instrument(id),
          m_type(type),
          m_data1(data1),
@@ -306,7 +306,7 @@ public:
     MappedEvent(InstrumentId id,
                 MappedEventType type,
                 MidiByte data1):
-        m_trackId((int)NO_TRACK),
+        m_trackId((int)NoTrack),
         m_instrument(id),
         m_type(type),
         m_data1(data1),
@@ -327,7 +327,7 @@ public:
     //
     MappedEvent(InstrumentId id,
                 MappedEventType type):
-        m_trackId((int)NO_TRACK),
+        m_trackId((int)NoTrack),
         m_instrument(id),
         m_type(type),
         m_data1(0),

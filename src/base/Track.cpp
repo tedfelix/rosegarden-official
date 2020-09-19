@@ -25,8 +25,6 @@ namespace Rosegarden
 {
 
 
-const TrackId NO_TRACK = 0xDEADBEEF;
-
 Track::Track(TrackId id,
              InstrumentId instrument,
              int position,
