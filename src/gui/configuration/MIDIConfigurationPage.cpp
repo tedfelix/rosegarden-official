@@ -164,9 +164,8 @@ MIDIConfigurationPage::MIDIConfigurationPage(QWidget *parent):
 
     m_loadSoundFont = new QCheckBox;
     m_loadSoundFont->setToolTip(toolTip);
-    const bool sfxLoadEnabled =
-            qStrToBool(settings.value("sfxloadenabled", "false"));
-    m_loadSoundFont->setChecked(sfxLoadEnabled);
+    m_loadSoundFont->setChecked(
+            qStrToBool(settings.value("sfxloadenabled", "false")));
     connect(m_loadSoundFont, &QCheckBox::stateChanged,
             this, &MIDIConfigurationPage::slotModified);
     connect(m_loadSoundFont, &QAbstractButton::clicked,
@@ -182,11 +181,9 @@ MIDIConfigurationPage::MIDIConfigurationPage(QWidget *parent):
 
     m_pathToLoadCommand = new LineEdit(
             settings.value("sfxloadpath", "/usr/bin/asfxload").toString());
-    m_pathToLoadCommand->setEnabled(sfxLoadEnabled);
     layout->addWidget(m_pathToLoadCommand, row, 1, 1, 2);
 
     m_pathToLoadChoose = new QPushButton(tr("Choose..."));
-    m_pathToLoadChoose->setEnabled(sfxLoadEnabled);
     connect(m_pathToLoadChoose, &QAbstractButton::clicked,
             this, &MIDIConfigurationPage::slotPathToLoadChoose);
     layout->addWidget(m_pathToLoadChoose, row, 3);
@@ -198,11 +195,9 @@ MIDIConfigurationPage::MIDIConfigurationPage(QWidget *parent):
 
     m_soundFont = new LineEdit(
             settings.value("soundfontpath", "").toString());
-    m_soundFont->setEnabled(sfxLoadEnabled);
     layout->addWidget(m_soundFont, row, 1, 1, 2);
 
     m_soundFontChoose = new QPushButton(tr("Choose..."));
-    m_soundFontChoose->setEnabled(sfxLoadEnabled);
     connect(m_soundFontChoose, &QAbstractButton::clicked,
             this, &MIDIConfigurationPage::slotSoundFontChoose);
     layout->addWidget(m_soundFontChoose, row, 3);
@@ -309,26 +304,38 @@ MIDIConfigurationPage::MIDIConfigurationPage(QWidget *parent):
     // Fill out the rest of the space so that we do not end up centered.
     layout->setRowStretch(row, 10);
 
+    updateWidgets();
+
 }
 
 void
-MIDIConfigurationPage::slotLoadSoundFontClicked(bool isChecked)
+MIDIConfigurationPage::updateWidgets()
 {
-    // ??? This same code is in the ctor.  Probably need
-    //     an updateWidgets() routine for both to use.
+    const bool soundFontChecked = m_loadSoundFont->isChecked();
 
-    m_pathToLoadCommand->setEnabled(isChecked);
-    m_pathToLoadChoose->setEnabled(isChecked);
-    m_soundFont->setEnabled(isChecked);
-    m_soundFontChoose->setEnabled(isChecked);
+    m_pathToLoadCommand->setEnabled(soundFontChecked);
+    m_pathToLoadChoose->setEnabled(soundFontChecked);
+    m_soundFont->setEnabled(soundFontChecked);
+    m_soundFontChoose->setEnabled(soundFontChecked);
+}
+
+void
+MIDIConfigurationPage::slotLoadSoundFontClicked(bool /*isChecked*/)
+{
+    updateWidgets();
 }
 
 void
 MIDIConfigurationPage::slotPathToLoadChoose()
 {
-    QString path = FileDialog::getOpenFileName(this, tr("sfxload path"), QDir::currentPath() ); //":SFXLOAD"
+    QString path = FileDialog::getOpenFileName(
+            this,  // parent
+            tr("sfxload path"),  // caption
+            QDir::currentPath());  // dir
 
-    // ??? Need to handle Cancel properly!
+    // Canceled?  Bail.
+    if (path == "")
+        return;
 
     m_pathToLoadCommand->setText(path);
 }
@@ -336,11 +343,16 @@ MIDIConfigurationPage::slotPathToLoadChoose()
 void
 MIDIConfigurationPage::slotSoundFontChoose()
 {
-    QString path = FileDialog::getOpenFileName(this, tr("Soundfont path"), QDir::currentPath(),
-                   tr("Sound fonts") + " (*.sb *.sf2 *.SF2 *.SB)" + ";;" +
-                   tr("All files") + " (*)" ); // ":SOUNDFONTS"
+    QString path = FileDialog::getOpenFileName(
+            this,  // parent
+            tr("Soundfont path"),  // caption
+            QDir::currentPath(),  // dir
+            tr("Sound fonts") + " (*.sb *.sf2 *.SF2 *.SB)" + ";;" +
+                tr("All files") + " (*)");  // filter
 
-    // ??? Need to handle Cancel properly!
+    // Canceled?  Bail.
+    if (path == "")
+        return;
 
     m_soundFont->setText(path);
 }
@@ -348,90 +360,89 @@ MIDIConfigurationPage::slotSoundFontChoose()
 void
 MIDIConfigurationPage::apply()
 {
-    RG_DEBUG << "MIDI CONFIGURATION PAGE SETTINGS APPLIED";
+    //RG_DEBUG << "apply()...";
+
+    // Copy from controls to .conf file.  Send update messages as needed.
+
+
+    // *** General tab
 
     QSettings settings;
-    settings.beginGroup( SequencerOptionsConfigGroup );
+    settings.beginGroup(GeneralOptionsConfigGroup);
+
+    settings.setValue("midipitchoctave", m_baseOctaveNumber->value());
+    settings.setValue("alwaysusedefaultstudio",
+                      m_useDefaultStudio->isChecked());
+
+    settings.endGroup();
+
+    settings.beginGroup(SequencerOptionsConfigGroup);
 
     settings.setValue("allowresetallcontrollers",
                       m_allowResetAllControllers->isChecked());
-
-    settings.setValue("sfxloadenabled", m_loadSoundFont->isChecked());
-    settings.setValue("sfxloadpath", m_pathToLoadCommand->text());
-    settings.setValue("soundfontpath", m_soundFont->text());
 
     // If the timer setting has actually changed
     if (m_sequencerTimingSource->currentText() != m_originalTimingSource) {
         RosegardenSequencer::getInstance()->setCurrentTimer(
                 m_sequencerTimingSource->currentText());
-        // In case this is an Apply without exit.
+        // In case this is an Apply without exit, update the cache
+        // so that we detect any further changes.
         m_originalTimingSource = m_sequencerTimingSource->currentText();
     }
 
-    // Write the entries
-    //
-    settings.setValue("mmcmode", m_midiMachineControlMode->currentIndex());
-    settings.setValue("mtcmode", m_midiTimeCodeMode->currentIndex());
-    settings.setValue("midisyncautoconnect", m_autoConnectSyncOut->isChecked());
+    settings.setValue("sfxloadenabled", m_loadSoundFont->isChecked());
 
-    // Now send
-    //
-    MappedEvent mEmccValue(MidiInstrumentBase,  // InstrumentId
-                           MappedEvent::SystemMMCTransport,
-                           MidiByte(m_midiMachineControlMode->currentIndex()));
-
-    StudioControl::sendMappedEvent(mEmccValue);
-
-    MappedEvent mEmtcValue(MidiInstrumentBase,  // InstrumentId
-                           MappedEvent::SystemMTCTransport,
-                           MidiByte(m_midiTimeCodeMode->currentIndex()));
-
-    StudioControl::sendMappedEvent(mEmtcValue);
-
-    MappedEvent mEmsaValue(MidiInstrumentBase,  // InstrumentId
-                           MappedEvent::SystemMIDISyncAuto,
-                           MidiByte(m_autoConnectSyncOut->isChecked() ? 1 : 0));
-
-    StudioControl::sendMappedEvent(mEmsaValue);
+    settings.setValue("sfxloadpath", m_pathToLoadCommand->text());
+    settings.setValue("soundfontpath", m_soundFont->text());
 
 
-    // ------------- MIDI Clock and System messages ------------
-    //
-    int midiClock = m_midiClock->currentIndex();
+    // *** MIDI Sync tab
+
+    // MIDI Clock and System messages
+    const int midiClock = m_midiClock->currentIndex();
     settings.setValue("midiclock", midiClock);
 
     // Now send it (OLD METHOD - to be removed)
-    //!!! No, don't remove -- this controls SPP as well doesn't it?
-    //
-    MappedEvent mEMIDIClock(MidiInstrumentBase,  // InstrumentId
-                            MappedEvent::SystemMIDIClock,
-                            MidiByte(midiClock));
+    // !!! No, don't remove -- this controls SPP as well doesn't it?
+    MappedEvent midiClockEvent(MidiInstrumentBase,  // InstrumentId
+                               MappedEvent::SystemMIDIClock,
+                               MidiByte(midiClock));
+    StudioControl::sendMappedEvent(midiClockEvent);
 
-    StudioControl::sendMappedEvent(mEMIDIClock);
+    settings.setValue("mmcmode", m_midiMachineControlMode->currentIndex());
+    MappedEvent mmcModeEvent(MidiInstrumentBase,  // InstrumentId
+                             MappedEvent::SystemMMCTransport,
+                             MidiByte(m_midiMachineControlMode->currentIndex()));
+    StudioControl::sendMappedEvent(mmcModeEvent);
+
+    settings.setValue("mtcmode", m_midiTimeCodeMode->currentIndex());
+    MappedEvent mtcModeEvent(MidiInstrumentBase,  // InstrumentId
+                             MappedEvent::SystemMTCTransport,
+                             MidiByte(m_midiTimeCodeMode->currentIndex()));
+    StudioControl::sendMappedEvent(mtcModeEvent);
+
+    settings.setValue("midisyncautoconnect", m_autoConnectSyncOut->isChecked());
+    MappedEvent autoConnectSyncOutEvent(
+            MidiInstrumentBase,  // InstrumentId
+            MappedEvent::SystemMIDISyncAuto,
+            MidiByte(m_autoConnectSyncOut->isChecked() ? 1 : 0));
+    StudioControl::sendMappedEvent(autoConnectSyncOutEvent);
+
+    settings.endGroup();
 
 
-    // Now update the metronome mapped segment with new clock ticks
-    // if needed.
-    //
+    // Update the metronome mapped segment with new clock ticks if needed.
+
     RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
     Studio &studio = doc->getStudio();
-    const MidiMetronome *metronome = studio.
-                                     getMetronomeFromDevice(studio.getMetronomeDevice());
+    const MidiMetronome *metronome = studio.getMetronomeFromDevice(
+            studio.getMetronomeDevice());
 
     if (metronome) {
         InstrumentId instrument = metronome->getInstrument();
         doc->getSequenceManager()->metronomeChanged(instrument, true);
     }
-    settings.endGroup();
-    settings.beginGroup( GeneralOptionsConfigGroup );
 
-    bool deftstudio = getUseDefaultStudio();
-    settings.setValue("alwaysusedefaultstudio", deftstudio);
-
-    int octave = m_baseOctaveNumber->value();
-    settings.setValue("midipitchoctave", octave);
-
-    settings.endGroup();
 }
 
 

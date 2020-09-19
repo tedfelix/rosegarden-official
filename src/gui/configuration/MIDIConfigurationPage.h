@@ -53,13 +53,11 @@ public:
 
 private slots:
 
-    void slotLoadSoundFontClicked(bool);
+    void slotLoadSoundFontClicked(bool isChecked);
     void slotPathToLoadChoose();
     void slotSoundFontChoose();
 
 private:
-
-    // ??? These widget names need to match the UI.
 
     // *** General tab
 
@@ -67,7 +65,6 @@ private:
     QSpinBox *m_baseOctaveNumber;
 
     QCheckBox *m_useDefaultStudio;
-    bool getUseDefaultStudio() const  { return m_useDefaultStudio->isChecked(); }
     QCheckBox *m_allowResetAllControllers;
     /// Timer value at the beginning to detect changes.
     QString m_originalTimingSource;
@@ -86,6 +83,8 @@ private:
     QComboBox *m_midiMachineControlMode;
     QComboBox *m_midiTimeCodeMode;
     QCheckBox *m_autoConnectSyncOut;
+
+    void updateWidgets();
 
 };
 
