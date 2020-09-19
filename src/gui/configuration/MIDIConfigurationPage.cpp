@@ -59,8 +59,8 @@ MIDIConfigurationPage::MIDIConfigurationPage(RosegardenDocument *doc,
 
     // ---------------- General tab ------------------
 
-    // We need this QWidget for the addTab() call later on.
     QWidget *widget = new QWidget;
+    addTab(widget, tr("General"));
 
     QGridLayout *layout = new QGridLayout(widget);
     layout->setContentsMargins(20, 20, 20, 20);
@@ -111,12 +111,12 @@ MIDIConfigurationPage::MIDIConfigurationPage(RosegardenDocument *doc,
 
     // Allow Reset All Controllers
     QLabel *label = new QLabel(tr("Allow Reset All Controllers (CC 121)"));
-    QString resetTip = tr("Rosegarden can send a MIDI Reset All Controllers event when setting up a channel.");
-    label->setToolTip(resetTip);
+    QString toolTip = tr("Rosegarden can send a MIDI Reset All Controllers event when setting up a channel.");
+    label->setToolTip(toolTip);
     layout->addWidget(label, row, 0, 1, 2);
 
     m_allowResetAllControllers = new QCheckBox;
-    m_allowResetAllControllers->setToolTip(resetTip);
+    m_allowResetAllControllers->setToolTip(toolTip);
     const bool sendResetAllControllers =
             qStrToBool(settings.value("allowresetallcontrollers", "true"));
     m_allowResetAllControllers->setChecked(sendResetAllControllers);
@@ -151,6 +151,9 @@ MIDIConfigurationPage::MIDIConfigurationPage(RosegardenDocument *doc,
 
     connect(m_sequencerTimingSource, SIGNAL(activated(int)),
             this, SLOT(slotModified()));
+    connect(m_sequencerTimingSource,
+                static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
+            this, &MIDIConfigurationPage::slotModified);
     layout->addWidget(m_sequencerTimingSource, row, 2, 1, 2);
 
     ++row;
@@ -159,59 +162,67 @@ MIDIConfigurationPage::MIDIConfigurationPage(RosegardenDocument *doc,
     layout->setRowMinimumHeight(row, 20);
     ++row;
 
-    // SoundFont loading
-    //
-    QLabel* lbl = new QLabel(tr("Load SoundFont to SoundBlaster card at startup"), widget);
-    QString tooltip = tr("Check this box to enable soundfont loading on EMU10K-based cards when Rosegarden is launched");
-    lbl->setToolTip(tooltip);
-    layout->addWidget(lbl, row, 0, row- row+1, 1- 0+1);
+    // Load SoundFont to SoundBlaster
+    label = new QLabel(tr("Load SoundFont to SoundBlaster card at startup"));
+    toolTip = tr("Check this box to enable soundfont loading on EMU10K-based cards when Rosegarden is launched");
+    label->setToolTip(toolTip);
+    layout->addWidget(label, row, 0, 1, 2);
 
-    m_sfxLoadEnabled = new QCheckBox;
-    connect(m_sfxLoadEnabled, &QCheckBox::stateChanged, this, &MIDIConfigurationPage::slotModified);
-    layout->addWidget(m_sfxLoadEnabled, row, 2);
-    m_sfxLoadEnabled->setToolTip(tooltip);
-    ++row;
-
-    layout->addWidget(new QLabel(tr("Path to 'asfxload' or 'sfxload' command"), widget), row, 0);
-    m_sfxLoadPath = new LineEdit(settings.value("sfxloadpath", "/usr/bin/asfxload").toString() , widget);
-    layout->addWidget(m_sfxLoadPath, row, 1, row- row+1, 2);
-    m_sfxLoadChoose = new QPushButton(tr("Choose..."));
-    layout->addWidget(m_sfxLoadChoose, row, 3);
-    ++row;
-
-    layout->addWidget(new QLabel(tr("SoundFont")), row, 0);
-    m_soundFontPath = new LineEdit(settings.value("soundfontpath", "").toString() , widget);
-    layout->addWidget(m_soundFontPath, row, 1, row- row+1, 2);
-    m_soundFontChoose = new QPushButton(tr("Choose..."));
-    layout->addWidget(m_soundFontChoose, row, 3);
-    ++row;
-
-    bool sfxLoadEnabled = qStrToBool( settings.value("sfxloadenabled", "false" ) ) ;
-    m_sfxLoadEnabled->setChecked(sfxLoadEnabled);
-    if (!sfxLoadEnabled) {
-        m_sfxLoadPath->setEnabled(false);
-        m_sfxLoadChoose->setEnabled(false);
-        m_soundFontPath->setEnabled(false);
-        m_soundFontChoose->setEnabled(false);
-    }
-
-    connect(m_sfxLoadEnabled, &QAbstractButton::toggled,
+    m_loadSoundFont = new QCheckBox;
+    m_loadSoundFont->setToolTip(toolTip);
+    const bool sfxLoadEnabled =
+            qStrToBool(settings.value("sfxloadenabled", "false"));
+    m_loadSoundFont->setChecked(sfxLoadEnabled);
+    connect(m_loadSoundFont, &QCheckBox::stateChanged,
+            this, &MIDIConfigurationPage::slotModified);
+    connect(m_loadSoundFont, &QAbstractButton::clicked,
             this, &MIDIConfigurationPage::slotSoundFontToggled);
+    layout->addWidget(m_loadSoundFont, row, 2);
 
-    connect(m_sfxLoadChoose, &QAbstractButton::clicked,
+    ++row;
+
+    // Path to 'asfxload'
+    layout->addWidget(
+            new QLabel(tr("Path to 'asfxload' or 'sfxload' command")),
+            row, 0);
+
+    m_pathToLoadCommand = new LineEdit(
+            settings.value("sfxloadpath", "/usr/bin/asfxload").toString());
+    m_pathToLoadCommand->setEnabled(sfxLoadEnabled);
+    layout->addWidget(m_pathToLoadCommand, row, 1, 1, 2);
+
+    m_pathToLoadChoose = new QPushButton(tr("Choose..."));
+    m_pathToLoadChoose->setEnabled(sfxLoadEnabled);
+    connect(m_pathToLoadChoose, &QAbstractButton::clicked,
             this, &MIDIConfigurationPage::slotSfxLoadPathChoose);
+    layout->addWidget(m_pathToLoadChoose, row, 3);
 
+    ++row;
+
+    // SoundFont
+    layout->addWidget(new QLabel(tr("SoundFont")), row, 0);
+
+    m_soundFont = new LineEdit(
+            settings.value("soundfontpath", "").toString());
+    m_soundFont->setEnabled(sfxLoadEnabled);
+    layout->addWidget(m_soundFont, row, 1, 1, 2);
+
+    m_soundFontChoose = new QPushButton(tr("Choose..."));
+    m_soundFontChoose->setEnabled(sfxLoadEnabled);
     connect(m_soundFontChoose, &QAbstractButton::clicked,
             this, &MIDIConfigurationPage::slotSoundFontChoose);
+    layout->addWidget(m_soundFontChoose, row, 3);
 
+    ++row;
+
+    // Fill out the rest of the space so that we do not end up centered.
     layout->setRowStretch(row, 10);
-
-    addTab(widget, tr("General"));
 
 
     //  -------------- MIDI Sync tab -----------------
 
     widget = new QWidget;
+    addTab(widget, tr("MIDI Sync"));
 
     layout = new QGridLayout(widget);
     layout->setContentsMargins(20, 20, 20, 20);
@@ -297,17 +308,14 @@ MIDIConfigurationPage::MIDIConfigurationPage(RosegardenDocument *doc,
 
     layout->setRowStretch(row, 10);
 
-    addTab(widget, tr("MIDI Sync"));
-
-    settings.endGroup();
 }
 
 void
 MIDIConfigurationPage::slotSoundFontToggled(bool isChecked)
 {
-    m_sfxLoadPath->setEnabled(isChecked);
-    m_sfxLoadChoose->setEnabled(isChecked);
-    m_soundFontPath->setEnabled(isChecked);
+    m_pathToLoadCommand->setEnabled(isChecked);
+    m_pathToLoadChoose->setEnabled(isChecked);
+    m_soundFont->setEnabled(isChecked);
     m_soundFontChoose->setEnabled(isChecked);
 }
 
@@ -316,7 +324,9 @@ MIDIConfigurationPage::slotSfxLoadPathChoose()
 {
     QString path = FileDialog::getOpenFileName(this, tr("sfxload path"), QDir::currentPath() ); //":SFXLOAD"
 
-    m_sfxLoadPath->setText(path);
+    // ??? Need to handle Cancel properly!
+
+    m_pathToLoadCommand->setText(path);
 }
 
 void
@@ -326,7 +336,9 @@ MIDIConfigurationPage::slotSoundFontChoose()
                    tr("Sound fonts") + " (*.sb *.sf2 *.SF2 *.SB)" + ";;" +
                    tr("All files") + " (*)" ); // ":SOUNDFONTS"
 
-    m_soundFontPath->setText(path);
+    // ??? Need to handle Cancel properly!
+
+    m_soundFont->setText(path);
 }
 
 void
@@ -340,9 +352,9 @@ MIDIConfigurationPage::apply()
     settings.setValue("allowresetallcontrollers",
                       m_allowResetAllControllers->isChecked());
 
-    settings.setValue("sfxloadenabled", m_sfxLoadEnabled->isChecked());
-    settings.setValue("sfxloadpath", m_sfxLoadPath->text());
-    settings.setValue("soundfontpath", m_soundFontPath->text());
+    settings.setValue("sfxloadenabled", m_loadSoundFont->isChecked());
+    settings.setValue("sfxloadpath", m_pathToLoadCommand->text());
+    settings.setValue("soundfontpath", m_soundFont->text());
 
     // If the timer setting has actually changed
     if (m_sequencerTimingSource->currentText() != m_originalTimingSource) {

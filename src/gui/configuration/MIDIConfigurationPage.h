@@ -73,10 +73,10 @@ private:
     QString m_originalTimingSource;
     QComboBox *m_sequencerTimingSource;
 
-    QCheckBox *m_sfxLoadEnabled;
-    LineEdit *m_sfxLoadPath;
-    QPushButton *m_sfxLoadChoose;
-    LineEdit *m_soundFontPath;
+    QCheckBox *m_loadSoundFont;
+    LineEdit *m_pathToLoadCommand;
+    QPushButton *m_pathToLoadChoose;
+    LineEdit *m_soundFont;
     QPushButton *m_soundFontChoose;
 
 
