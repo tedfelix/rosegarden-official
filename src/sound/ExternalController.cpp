@@ -39,7 +39,8 @@ QSharedPointer<ExternalController> ExternalController::self()
 }
 
 ExternalController::ExternalController() :
-    m_activeWindow(Main)
+    m_activeWindow(Main),
+    m_instrumentId(NoInstrument)
 {
 }
 
@@ -181,6 +182,10 @@ ExternalController::slotDocumentLoaded(RosegardenDocument *doc)
     // Connect to the new document for change notifications.
     connect(doc, &RosegardenDocument::documentModified,
             this, &ExternalController::slotDocumentModified);
+
+    // Force an update to make sure we are in sync with the new document.
+    m_instrumentId = NoInstrument;
+    slotDocumentModified(true);
 }
 
 void
@@ -190,7 +195,23 @@ ExternalController::slotDocumentModified(bool)
     if (m_activeWindow != Main)
         return;
 
-    RG_DEBUG << "slotDocumentModified()";
+    RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
+
+    // Get the selected Track's Instrument.
+    InstrumentId instrumentId =
+            doc->getComposition().getSelectedInstrumentId();
+
+    // No change to the Track/Instrument?  Bail.
+    if (instrumentId == m_instrumentId)
+        return;
+
+    m_instrumentId = instrumentId;
+
+    //RG_DEBUG << "slotDocumentModified(): Track change detected.";
+
+    // ??? Send out the CCs for the current Track.  RMW::changeEvent()
+    //     does the same.  Probably want to pull out a function to use
+    //     in both places.
 }
 
 

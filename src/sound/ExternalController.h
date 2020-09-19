@@ -56,6 +56,8 @@ public:
      * window.
      *
      * Set by the three windows that can handle external controller events.
+     *
+     * ??? Since this is public, drop the "m_".
      */
     Window m_activeWindow;
 
@@ -93,6 +95,9 @@ private slots:
 private:
     // Access through self() only.
     ExternalController();
+
+    /// Cache of the last Instrument we were tracking for RosegardenMainWindow.
+    InstrumentId m_instrumentId;
 
 };
 
