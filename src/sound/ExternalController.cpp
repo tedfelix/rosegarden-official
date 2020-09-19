@@ -54,8 +54,16 @@ bool ExternalController::isEnabled()
 
     QSettings settings;
     settings.beginGroup(GeneralOptionsConfigGroup);
-    // ??? Default to false once we have the preference in the GUI.
-    enabled = settings.value("external_controller", true).toBool();
+    // We default to disabling the external controller port because some
+    // software synths are very aggressive about making connections and
+    // can end up connecting to the external controller port.  When that
+    // happens, typically only channel 1 can be heard since
+    // RosegardenMainWindow will send volume 0 to all other channels.
+    // External controller can be re-enabled via the preferences.  When
+    // enabled, be sure to look closely at the connections being made
+    // and make sure external controller is only being connected to an
+    // appropriate control surface.
+    enabled = settings.value("external_controller", false).toBool();
 
     cacheValid = true;
 

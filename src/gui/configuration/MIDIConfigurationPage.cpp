@@ -28,7 +28,6 @@
 #include "sequencer/RosegardenSequencer.h"
 #include "gui/application/RosegardenMainWindow.h"
 #include "gui/seqmanager/SequenceManager.h"
-#include "misc/Strings.h"   // For qStrToBool()...
 #include "base/Studio.h"
 #include "gui/studio/StudioControl.h"
 
@@ -94,11 +93,27 @@ MIDIConfigurationPage::MIDIConfigurationPage(QWidget *parent):
             row, 0, 1, 2);
 
     m_useDefaultStudio = new QCheckBox;
-    m_useDefaultStudio->setChecked(qStrToBool(
-            settings.value("alwaysusedefaultstudio", "false")));
+    m_useDefaultStudio->setChecked(
+            settings.value("alwaysusedefaultstudio", false).toBool());
     connect(m_useDefaultStudio, &QCheckBox::stateChanged,
             this, &MIDIConfigurationPage::slotModified);
     layout->addWidget(m_useDefaultStudio, row, 2);
+
+    ++row;
+
+    // External controller port
+    QLabel *label = new QLabel(tr("External controller port"));
+    QString toolTip = tr("Enable the external controller port for control surfaces.");
+    label->setToolTip(toolTip);
+    layout->addWidget(label, row, 0, 1, 2);
+
+    m_externalControllerPort = new QCheckBox;
+    m_externalControllerPort->setToolTip(toolTip);
+    m_externalControllerPort->setChecked(
+            settings.value("external_controller", false).toBool());
+    connect(m_externalControllerPort, &QCheckBox::stateChanged,
+            this, &MIDIConfigurationPage::slotModified);
+    layout->addWidget(m_externalControllerPort, row, 2);
 
     ++row;
 
@@ -106,15 +121,15 @@ MIDIConfigurationPage::MIDIConfigurationPage(QWidget *parent):
     settings.beginGroup(SequencerOptionsConfigGroup);
 
     // Allow Reset All Controllers
-    QLabel *label = new QLabel(tr("Allow Reset All Controllers (CC 121)"));
-    QString toolTip = tr("Rosegarden can send a MIDI Reset All Controllers event when setting up a channel.");
+    label = new QLabel(tr("Allow Reset All Controllers (CC 121)"));
+    toolTip = tr("Rosegarden can send a MIDI Reset All Controllers event when setting up a channel.");
     label->setToolTip(toolTip);
     layout->addWidget(label, row, 0, 1, 2);
 
     m_allowResetAllControllers = new QCheckBox;
     m_allowResetAllControllers->setToolTip(toolTip);
     const bool sendResetAllControllers =
-            qStrToBool(settings.value("allowresetallcontrollers", "true"));
+            settings.value("allowresetallcontrollers", true).toBool();
     m_allowResetAllControllers->setChecked(sendResetAllControllers);
     connect(m_allowResetAllControllers, &QCheckBox::stateChanged,
             this, &MIDIConfigurationPage::slotModified);
@@ -165,7 +180,7 @@ MIDIConfigurationPage::MIDIConfigurationPage(QWidget *parent):
     m_loadSoundFont = new QCheckBox;
     m_loadSoundFont->setToolTip(toolTip);
     m_loadSoundFont->setChecked(
-            qStrToBool(settings.value("sfxloadenabled", "false")));
+            settings.value("sfxloadenabled", false).toBool());
     connect(m_loadSoundFont, &QCheckBox::stateChanged,
             this, &MIDIConfigurationPage::slotModified);
     connect(m_loadSoundFont, &QAbstractButton::clicked,
@@ -292,7 +307,7 @@ MIDIConfigurationPage::MIDIConfigurationPage(QWidget *parent):
 
     m_autoConnectSyncOut = new QCheckBox;
     m_autoConnectSyncOut->setChecked(
-            qStrToBool(settings.value("midisyncautoconnect", "false" )));
+            settings.value("midisyncautoconnect", false).toBool());
 
     connect(m_autoConnectSyncOut, &QCheckBox::stateChanged,
             this, &MIDIConfigurationPage::slotModified);
@@ -373,6 +388,8 @@ MIDIConfigurationPage::apply()
     settings.setValue("midipitchoctave", m_baseOctaveNumber->value());
     settings.setValue("alwaysusedefaultstudio",
                       m_useDefaultStudio->isChecked());
+    settings.setValue("external_controller",
+                      m_externalControllerPort->isChecked());
 
     settings.endGroup();
 

@@ -65,6 +65,7 @@ private:
     QSpinBox *m_baseOctaveNumber;
 
     QCheckBox *m_useDefaultStudio;
+    QCheckBox *m_externalControllerPort;
     QCheckBox *m_allowResetAllControllers;
     /// Timer value at the beginning to detect changes.
     QString m_originalTimingSource;
