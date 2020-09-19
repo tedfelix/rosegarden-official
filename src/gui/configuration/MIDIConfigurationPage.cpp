@@ -26,6 +26,7 @@
 #include "sound/MappedEvent.h"
 #include "document/RosegardenDocument.h"
 #include "sequencer/RosegardenSequencer.h"
+#include "gui/application/RosegardenMainWindow.h"
 #include "gui/seqmanager/SequenceManager.h"
 #include "misc/Strings.h"   // For qStrToBool()...
 #include "base/Studio.h"
@@ -47,15 +48,10 @@ namespace Rosegarden
 {
 
 
-MIDIConfigurationPage::MIDIConfigurationPage(RosegardenDocument *doc,
-                                             QWidget *parent):
+MIDIConfigurationPage::MIDIConfigurationPage(QWidget *parent):
     TabbedConfigurationPage(parent),
     m_baseOctaveNumber(nullptr)
 {
-    // ??? Get the document directly instead.  Need to do that in
-    //     TabbedConfigurationPage first, then in the derivers.
-    m_doc = doc;
-
 
     // ---------------- General tab ------------------
 
@@ -149,8 +145,6 @@ MIDIConfigurationPage::MIDIConfigurationPage(RosegardenDocument *doc,
             m_sequencerTimingSource->setCurrentIndex(i);
     }
 
-    connect(m_sequencerTimingSource, SIGNAL(activated(int)),
-            this, SLOT(slotModified()));
     connect(m_sequencerTimingSource,
                 static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
             this, &MIDIConfigurationPage::slotModified);
@@ -233,78 +227,82 @@ MIDIConfigurationPage::MIDIConfigurationPage(RosegardenDocument *doc,
     // MIDI Clock and System messages
     label = new QLabel(tr("MIDI Clock and System messages"));
     layout->addWidget(label, row, 0);
-    m_midiSync = new QComboBox;
-    connect(m_midiSync, SIGNAL(activated(int)), this, SLOT(slotModified()));
-    layout->addWidget(m_midiSync, row, 1);
 
-    m_midiSync->addItem(tr("Off"));
-    m_midiSync->addItem(tr("Send MIDI Clock, Start and Stop"));
-    m_midiSync->addItem(tr("Accept Start, Stop and Continue"));
+    m_midiClock = new QComboBox;
+    m_midiClock->addItem(tr("Off"));
+    m_midiClock->addItem(tr("Send MIDI Clock, Start and Stop"));
+    m_midiClock->addItem(tr("Accept Start, Stop and Continue"));
 
-    int midiClock = settings.value("midiclock", 0).toInt() ;
-    if (midiClock < 0 || midiClock > 2)
+    int midiClock = settings.value("midiclock", 0).toInt();
+    if (midiClock < 0  ||  midiClock > 2)
         midiClock = 0;
-    m_midiSync->setCurrentIndex(midiClock);
+    m_midiClock->setCurrentIndex(midiClock);
+
+    connect(m_midiClock,
+                static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
+            this, &MIDIConfigurationPage::slotModified);
+
+    layout->addWidget(m_midiClock, row, 1);
 
     ++row;
 
-    // MMC Transport
-    //
+    // MIDI Machine Control mode
     label = new QLabel(tr("MIDI Machine Control mode"));
     layout->addWidget(label, row, 0);
 
-    m_mmcTransport = new QComboBox;
-    connect(m_mmcTransport, SIGNAL(activated(int)), this, SLOT(slotModified()));
-    layout->addWidget(m_mmcTransport, row, 1); //, Qt::AlignHCenter);
+    m_midiMachineControlMode = new QComboBox;
+    m_midiMachineControlMode->addItem(tr("Off"));
+    m_midiMachineControlMode->addItem(tr("MMC Source"));
+    m_midiMachineControlMode->addItem(tr("MMC Follower"));
 
-    m_mmcTransport->addItem(tr("Off"));
-    m_mmcTransport->addItem(tr("MMC Source"));
-    m_mmcTransport->addItem(tr("MMC Follower"));
-
-    int mmcMode = settings.value("mmcmode", 0).toInt() ;
-    if (mmcMode < 0 || mmcMode > 2)
+    int mmcMode = settings.value("mmcmode", 0).toInt();
+    if (mmcMode < 0  ||  mmcMode > 2)
         mmcMode = 0;
-    m_mmcTransport->setCurrentIndex(mmcMode);
+    m_midiMachineControlMode->setCurrentIndex(mmcMode);
+
+    connect(m_midiMachineControlMode,
+                static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
+            this, &MIDIConfigurationPage::slotModified);
+
+    layout->addWidget(m_midiMachineControlMode, row, 1);
     
     ++row;
 
-    // MTC transport
-    //
+    // MIDI Time Code mode
     label = new QLabel(tr("MIDI Time Code mode"));
     layout->addWidget(label, row, 0);
 
-    m_mtcTransport = new QComboBox;
-    connect(m_mtcTransport, SIGNAL(activated(int)), this, SLOT(slotModified()));
-    layout->addWidget(m_mtcTransport, row, 1);
+    m_midiTimeCodeMode = new QComboBox;
+    m_midiTimeCodeMode->addItem(tr("Off"));
+    m_midiTimeCodeMode->addItem(tr("MTC Source"));
+    m_midiTimeCodeMode->addItem(tr("MTC Follower"));
 
-    m_mtcTransport->addItem(tr("Off"));
-    m_mtcTransport->addItem(tr("MTC Source"));
-    m_mtcTransport->addItem(tr("MTC Follower"));
-
-    int mtcMode = settings.value("mtcmode", 0).toInt() ;
-    if (mtcMode < 0 || mtcMode > 2)
+    int mtcMode = settings.value("mtcmode", 0).toInt();
+    if (mtcMode < 0  ||  mtcMode > 2)
         mtcMode = 0;
-    m_mtcTransport->setCurrentIndex(mtcMode);
+    m_midiTimeCodeMode->setCurrentIndex(mtcMode);
+
+    connect(m_midiTimeCodeMode,
+                static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
+            this, &MIDIConfigurationPage::slotModified);
+
+    layout->addWidget(m_midiTimeCodeMode, row, 1);
 
     ++row;
 
-    QWidget *hbox = new QWidget;
-    layout->addWidget(hbox, row, 0, row- row+1, 1- 0+1);
+    label = new QLabel(
+            tr("Automatically connect sync output to all devices in use"));
+    label->setWordWrap(true);
+    layout->addWidget(label, row, 0);
 
-    // ??? Why?  Use the grid instead.
-    QHBoxLayout *hboxLayout = new QHBoxLayout;
-    hboxLayout->setSpacing(5);
-    hbox->setLayout(hboxLayout);
+    m_autoConnectSyncOut = new QCheckBox;
+    m_autoConnectSyncOut->setChecked(
+            qStrToBool(settings.value("midisyncautoconnect", "false" )));
 
-    label = new QLabel(tr("Automatically connect sync output to all devices in use"), hbox );
-    hboxLayout->addWidget(label);
-//    layout->addWidget(label, row, 0);
-    m_midiSyncAuto = new QCheckBox( hbox );
-    connect(m_midiSyncAuto, &QCheckBox::stateChanged, this, &MIDIConfigurationPage::slotModified);
-    hboxLayout->addWidget(m_midiSyncAuto);
-//    layout->addWidget(m_midiSyncAuto, row, 1);
+    connect(m_autoConnectSyncOut, &QCheckBox::stateChanged,
+            this, &MIDIConfigurationPage::slotModified);
 
-    m_midiSyncAuto->setChecked( qStrToBool( settings.value("midisyncautoconnect", "false" ) ) );
+    layout->addWidget(m_autoConnectSyncOut, row, 1);
 
     ++row;
 
@@ -372,34 +370,34 @@ MIDIConfigurationPage::apply()
 
     // Write the entries
     //
-    settings.setValue("mmcmode", m_mmcTransport->currentIndex());
-    settings.setValue("mtcmode", m_mtcTransport->currentIndex());
-    settings.setValue("midisyncautoconnect", m_midiSyncAuto->isChecked());
+    settings.setValue("mmcmode", m_midiMachineControlMode->currentIndex());
+    settings.setValue("mtcmode", m_midiTimeCodeMode->currentIndex());
+    settings.setValue("midisyncautoconnect", m_autoConnectSyncOut->isChecked());
 
     // Now send
     //
     MappedEvent mEmccValue(MidiInstrumentBase,  // InstrumentId
                            MappedEvent::SystemMMCTransport,
-                           MidiByte(m_mmcTransport->currentIndex()));
+                           MidiByte(m_midiMachineControlMode->currentIndex()));
 
     StudioControl::sendMappedEvent(mEmccValue);
 
     MappedEvent mEmtcValue(MidiInstrumentBase,  // InstrumentId
                            MappedEvent::SystemMTCTransport,
-                           MidiByte(m_mtcTransport->currentIndex()));
+                           MidiByte(m_midiTimeCodeMode->currentIndex()));
 
     StudioControl::sendMappedEvent(mEmtcValue);
 
     MappedEvent mEmsaValue(MidiInstrumentBase,  // InstrumentId
                            MappedEvent::SystemMIDISyncAuto,
-                           MidiByte(m_midiSyncAuto->isChecked() ? 1 : 0));
+                           MidiByte(m_autoConnectSyncOut->isChecked() ? 1 : 0));
 
     StudioControl::sendMappedEvent(mEmsaValue);
 
 
     // ------------- MIDI Clock and System messages ------------
     //
-    int midiClock = m_midiSync->currentIndex();
+    int midiClock = m_midiClock->currentIndex();
     settings.setValue("midiclock", midiClock);
 
     // Now send it (OLD METHOD - to be removed)
@@ -415,13 +413,14 @@ MIDIConfigurationPage::apply()
     // Now update the metronome mapped segment with new clock ticks
     // if needed.
     //
-    Studio &studio = m_doc->getStudio();
+    RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
+    Studio &studio = doc->getStudio();
     const MidiMetronome *metronome = studio.
                                      getMetronomeFromDevice(studio.getMetronomeDevice());
 
     if (metronome) {
         InstrumentId instrument = metronome->getInstrument();
-        m_doc->getSequenceManager()->metronomeChanged(instrument, true);
+        doc->getSequenceManager()->metronomeChanged(instrument, true);
     }
     settings.endGroup();
     settings.beginGroup( GeneralOptionsConfigGroup );
@@ -434,5 +433,6 @@ MIDIConfigurationPage::apply()
 
     settings.endGroup();
 }
+
 
 }

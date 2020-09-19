@@ -42,7 +42,7 @@ class MIDIConfigurationPage : public TabbedConfigurationPage
     Q_OBJECT
 
 public:
-    MIDIConfigurationPage(RosegardenDocument *doc, QWidget *parent);
+    MIDIConfigurationPage(QWidget *parent);
 
     void apply() override;
 
@@ -82,10 +82,10 @@ private:
 
     // *** MIDI Sync tab
 
-    QComboBox *m_midiSync;
-    QComboBox *m_mmcTransport;
-    QComboBox *m_mtcTransport;
-    QCheckBox *m_midiSyncAuto;
+    QComboBox *m_midiClock;
+    QComboBox *m_midiMachineControlMode;
+    QComboBox *m_midiTimeCodeMode;
+    QCheckBox *m_autoConnectSyncOut;
 
 };
 

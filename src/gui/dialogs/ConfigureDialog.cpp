@@ -63,7 +63,7 @@ ConfigureDialog::ConfigureDialog(RosegardenDocument *doc,
 
     // MIDI
     MIDIConfigurationPage *midiConfigurationPage =
-            new MIDIConfigurationPage(doc, this);
+            new MIDIConfigurationPage(this);
     connect(midiConfigurationPage, &MIDIConfigurationPage::modified,
             this, &ConfigureDialog::slotActivateApply);
     addPage(MIDIConfigurationPage::iconLabel(),
