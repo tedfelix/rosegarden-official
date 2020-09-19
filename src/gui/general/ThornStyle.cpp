@@ -291,6 +291,8 @@ ThornStyle::ThornStyle()
     const QColor buttonColor = QColor(0xEE, 0xEE, 0xEE);
     m_standardPalette.setColor(QPalette::Button, buttonColor);
     m_standardPalette.setColor(QPalette::ButtonText, Qt::black); // enabled button texts and menu items
+    m_standardPalette.setColor(
+            QPalette::Disabled, QPalette::ButtonText, Qt::darkGray);
 
     // alternate-background-color: #EEEEFF;
     m_standardPalette.setColor(QPalette::AlternateBase, QColor(0xEE, 0xEE, 0xFF));
