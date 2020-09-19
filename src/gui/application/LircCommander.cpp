@@ -63,9 +63,9 @@ LircCommander::LircCommander(LircClient *lirc, RosegardenMainWindow *rgGUIApp)
     connect(this, &LircCommander::toggleRecord,
             m_rgGUIApp, &RosegardenMainWindow::slotToggleRecord );
     connect(this, &LircCommander::trackDown,
-            m_rgGUIApp, &RosegardenMainWindow::slotTrackDown );
+            m_rgGUIApp, &RosegardenMainWindow::slotSelectNextTrack);
     connect(this, &LircCommander::trackUp,
-            m_rgGUIApp, &RosegardenMainWindow::slotTrackUp );
+            m_rgGUIApp, &RosegardenMainWindow::slotSelectPreviousTrack);
     connect(this, SIGNAL(trackMute()),
             m_rgGUIApp, SLOT(slotToggleMute()) );
     connect(this, &LircCommander::trackRecord,

@@ -758,8 +758,8 @@ RosegardenMainWindow::setupActions()
     createAction("delete_track", SLOT(slotDeleteTrack()));
     createAction("move_track_down", SLOT(slotMoveTrackDown()));
     createAction("move_track_up", SLOT(slotMoveTrackUp()));
-    createAction("select_next_track", SLOT(slotTrackDown()));
-    createAction("select_previous_track", SLOT(slotTrackUp()));
+    createAction("select_next_track", SLOT(slotSelectNextTrack()));
+    createAction("select_previous_track", SLOT(slotSelectPreviousTrack()));
     createAction("toggle_mute_track", SLOT(slotToggleMute()));
     createAction("toggle_arm_track", SLOT(slotToggleRecordCurrentTrack()));
     createAction("mute_all_tracks", SLOT(slotMuteAllTracks()));
@@ -5712,7 +5712,7 @@ RosegardenMainWindow::slotToggleSolo(bool)
 }
 
 void
-RosegardenMainWindow::slotTrackUp()
+RosegardenMainWindow::slotSelectPreviousTrack()
 {
     if (!m_doc)
         return;
@@ -5740,7 +5740,7 @@ RosegardenMainWindow::slotTrackUp()
 }
 
 void
-RosegardenMainWindow::slotTrackDown()
+RosegardenMainWindow::slotSelectNextTrack()
 {
     if (!m_doc)
         return;

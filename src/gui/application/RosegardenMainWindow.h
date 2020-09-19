@@ -266,11 +266,11 @@ public:
     virtual void fastForwardToEnd()   { slotFastForwardToEnd(); }
     virtual void jumpToTime(RealTime rt) { slotJumpToTime(rt); }
     virtual void startAtTime(RealTime rt) { slotStartAtTime(rt); }
-    
-    virtual void trackUp()            { slotTrackUp(); }
-    virtual void trackDown()          { slotTrackDown(); }
+
+    virtual void trackUp()  { slotSelectPreviousTrack(); }
+    virtual void trackDown()  { slotSelectNextTrack(); }
 //    virtual void toggleRecordCurrentTrack() { slotToggleRecordCurrentTrack(); }
-       
+
     /**
      * Create some new audio files for the sequencer and return the
      * paths for them as QStrings.
@@ -1321,11 +1321,8 @@ public slots:
      */
     void slotShowTip();
 
-    /*
-     * Select Track up or down
-     */
-    void slotTrackUp();
-    void slotTrackDown();
+    void slotSelectPreviousTrack();
+    void slotSelectNextTrack();
 
     /**
      * Toggle arm (record) current track
