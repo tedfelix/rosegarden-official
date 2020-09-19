@@ -369,7 +369,7 @@ protected:
      */
     void changeEvent(QEvent *event) override;
 
-    RosegardenDocument* newDocument(bool skipAutoload = false);
+    RosegardenDocument *newDocument(bool skipAutoload = false);
 
     /**** File handling code that we don't want the outside world to use ****/
     /**/
@@ -554,7 +554,12 @@ signals:
     void documentAboutToChange();
 
     /// emitted when the current document changes
-    void documentChanged(RosegardenDocument*);
+    /**
+     * ??? This is a poor choice of name.  It is hard to tell the difference
+     *     between this and RosegardenDocument::documentModified().  A better
+     *     name might be documentLoaded()?
+     */
+    void documentChanged(RosegardenDocument *);
 
     /// emitted when the set of selected segments changes (relayed from RosegardenMainViewWidget)
     void segmentsSelected(const SegmentSelection &);

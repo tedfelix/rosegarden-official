@@ -372,6 +372,9 @@ RosegardenMainWindow::RosegardenMainWindow(bool enableSound,
     connect(m_seqManager, &SequenceManager::signalMetronomeActivated,
             m_transport, &TransportDialog::slotMetronomeActivated);
 
+    // Set up external controller.
+    ExternalController::self()->connectRMW(this);
+
     // Load the initial document (this includes doc's own autoload)
     //
     setDocument(doc);
@@ -485,6 +488,7 @@ RosegardenMainWindow::RosegardenMainWindow(bool enableSound,
     connect(m_autoSaveTimer, &QTimer::timeout, this, &RosegardenMainWindow::slotAutoSave);
     connect(m_cpuMeterTimer, &QTimer::timeout, this, &RosegardenMainWindow::slotUpdateCPUMeter);
     m_cpuMeterTimer->start(1000);
+
 }
 
 RosegardenMainWindow::~RosegardenMainWindow()

@@ -2057,7 +2057,7 @@ AlsaDriver::initialiseMidi()
                                        SND_SEQ_PORT_TYPE_MIDI_GENERIC),
                                       "initialiseMidi - can't create sync output port");
 
-    if (ExternalController::self()->isEnabled()) {
+    if (ExternalController::isEnabled()) {
         // Create external controller port.
         m_externalControllerPort = checkAlsaError(
                 snd_seq_create_simple_port(

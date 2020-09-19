@@ -25,6 +25,8 @@ namespace Rosegarden
 
 
 class MappedEvent;
+class RosegardenDocument;
+class RosegardenMainWindow;
 
 
 /// Support for the "external controller" port.
@@ -37,6 +39,14 @@ public:
     static QSharedPointer<ExternalController> self();
 
     static bool isEnabled();
+
+    /// Call this from RosegardenMainWindow's ctor.
+    /**
+     * This has to be called at the right moment, before the autoload
+     * occurs.  Otherwise the very first documentChanged() will not get
+     * in here.
+     */
+    void connectRMW(RosegardenMainWindow *rmw);
 
     /// The three windows that currently handle external controller events.
     enum Window { Main, AudioMixer, MidiMixer };
@@ -72,6 +82,13 @@ signals:
      */
     void externalController(const MappedEvent *event,
                             Window m_activeWindow);
+
+private slots:
+
+    /// Connected to RMW::documentChanged()
+    void slotDocumentLoaded(RosegardenDocument *doc);
+    /// Connected to RD::documentModified()
+    void slotDocumentModified(bool);
 
 private:
     // Access through self() only.

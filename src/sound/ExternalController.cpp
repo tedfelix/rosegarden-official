@@ -18,6 +18,7 @@
 #include "misc/ConfigGroups.h"
 #include "misc/Debug.h"
 #include "MappedEvent.h"
+#include "document/RosegardenDocument.h"
 #include "gui/application/RosegardenMainWindow.h"
 #include "gui/studio/StudioControl.h"
 
@@ -40,6 +41,16 @@ QSharedPointer<ExternalController> ExternalController::self()
 ExternalController::ExternalController() :
     m_activeWindow(Main)
 {
+}
+
+void ExternalController::connectRMW(RosegardenMainWindow *rmw)
+{
+    // If it seems like this isn't connecting, it's possible that self()
+    // was called before Qt was up.  That will make it impossible for this
+    // object to receive signals.
+
+    connect(rmw, &RosegardenMainWindow::documentChanged,
+            this, &ExternalController::slotDocumentLoaded);
 }
 
 bool ExternalController::isEnabled()
@@ -157,6 +168,29 @@ void ExternalController::send(
     event.setRecordedDevice(Device::EXTERNAL_CONTROLLER);
 
     StudioControl::sendMappedEvent(event);
+}
+
+void
+ExternalController::slotDocumentLoaded(RosegardenDocument *doc)
+{
+    if (!doc)
+        return;
+
+    // If this is never happening, see the comments in connectRMW() above.
+
+    // Connect to the new document for change notifications.
+    connect(doc, &RosegardenDocument::documentModified,
+            this, &ExternalController::slotDocumentModified);
+}
+
+void
+ExternalController::slotDocumentModified(bool)
+{
+    // We only handle updates for RosegardenMainWindow.
+    if (m_activeWindow != Main)
+        return;
+
+    RG_DEBUG << "slotDocumentModified()";
 }
 
 
