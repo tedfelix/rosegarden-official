@@ -13,7 +13,7 @@
 
 #pragma once
 
-#include "base/Instrument.h"  // For InstrumentId
+#include "base/Instrument.h"
 #include "base/MidiProgram.h"  // For MidiByte
 
 #include <QObject>
@@ -30,12 +30,46 @@ class RosegardenMainWindow;
 
 
 /// Support for the "external controller" port.
+/**
+ * The external controller port allows MIDI control surfaces to control
+ * the main window, MIDI Mixer window, and Audio Mixer window.
+ *
+ * To use, be sure to enable the external controller port in the preferences:
+ *
+ *   Edit > Preferences... > MIDI > General tab > External controller port
+ *   checkbox.
+ *
+ * After a restart of Rosegarden, an "external controller" port will
+ * appear for MIDI control surfaces to connect to.
+ *
+ * The current window can be selected via CC81.  See processEvent().
+ *
+ * Depending on the current active window, the behavior of the external
+ * controller port will change.  For the main window, the following features
+ * are available via control changes on *channel 1*:
+ *
+ *   CC 82: select Track
+ *   CC  7: Adjust volume on current Track
+ *   CC 10: Adjust pan on current track
+ *   CC  x: Adjust that CC on current track
+ *
+ * See RosegardenMainViewWidget::slotExternalController() for details.
+ *
+ * For the MIDI Mixer window and Audio Mixer window, CCs can be sent on
+ * any of the 16 channels to control those channels on the mixer.  See
+ * MidiMixerWindow::slotExternalController() and
+ * AudioMixerWindow2::slotExternalController() for details.
+ *
+ * CCs are also sent out the external controller port to allow motorized
+ * control surfaces to stay in sync with the current state of the CCs.
+ *
+ */
 class ExternalController : public QObject
 {
     Q_OBJECT
 
 public:
-    // The global instance.
+    /// The global instance.
     static QSharedPointer<ExternalController> self();
 
     static bool isEnabled();
@@ -79,10 +113,14 @@ public:
     static void sendAllCCs(
             const Instrument *instrument, MidiByte channel = MidiMaxValue);
 
-
 signals:
+
     /// External controller port events for the windows that handle them.
     /**
+     * Connected to RosegardenMainViewWidget::slotExternalController(),
+     * MidiMixerWindow::slotExternalController(), and
+     * AudioMixerWindow2::slotExternalController().
+     *
      * ??? Split into three signals, one for each window.
      */
     void externalController(const MappedEvent *event,
@@ -95,7 +133,11 @@ private slots:
     /// Connected to RD::documentModified()
     void slotDocumentModified(bool);
 
+    /// Connected to InstrumentStaticSignals::controlChange().
+    void slotControlChange(Instrument *instrument, int cc);
+
 private:
+
     // Access through self() only.
     ExternalController();
 

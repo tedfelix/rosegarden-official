@@ -48,6 +48,13 @@ signals:
      *
      * To connect:
      *
+     *   // Qt5 style (preferred, compile-time checking)
+     *   connect(Instrument::getStaticSignals().data(),
+     *               &InstrumentStaticSignals::controlChange,
+     *           this,  // or whomever
+     *           &CLASSNAME::slotControlChange);
+     *
+     *   // Qt4 style (discouraged, runtime checking only)
      *   connect(Instrument::getStaticSignals().data(),
      *               SIGNAL(controlChange(Instrument *, int)),
      *           SLOT(slotControlChange(Instrument *, int)));

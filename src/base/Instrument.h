@@ -234,6 +234,9 @@ public:
     void setAudioOutput(BussId buss) { m_audioOutput = buss; }
     BussId getAudioOutput() const { return m_audioOutput; }
 
+
+    // -------------- Miscellaneous -----------------------
+
     // XmlExportable override
     std::string toXmlString() const override;
 

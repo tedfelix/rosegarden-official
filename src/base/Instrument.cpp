@@ -98,7 +98,7 @@ Instrument::Instrument(InstrumentId id,
     m_transpose(MidiMidValue),
     m_pan(MidiMidValue),
     m_volume(100),
-    m_fixed(false), // However, this ctor isn't used for MIDI.
+    m_fixed(true),  // Always fixed channel for audio/softsynth.
     m_level(0.0),
     m_recordLevel(0.0),
     m_device(device),
