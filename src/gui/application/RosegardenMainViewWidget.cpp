@@ -202,7 +202,7 @@ RosegardenMainViewWidget::RosegardenMainViewWidget(bool showTrackLabels,
             m_trackEditor->getTrackButtons(),
             &TrackButtons::slotTPBInstrumentSelected);
 
-    connect(ExternalController::self().get(),
+    connect(ExternalController::self().data(),
                 &ExternalController::externalController,
             this, &RosegardenMainViewWidget::slotExternalController);
 
