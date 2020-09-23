@@ -8502,7 +8502,7 @@ RosegardenMainWindow::changeEvent(QEvent *event)
     if (!isActiveWindow())
         return;
 
-    ExternalController::self()->m_activeWindow =
+    ExternalController::self()->activeWindow =
             ExternalController::Main;
 
     // Send CCs for current Track to external controller.

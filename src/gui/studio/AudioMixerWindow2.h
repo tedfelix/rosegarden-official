@@ -83,9 +83,7 @@ private slots:
     void slotAboutRosegarden();
 
     /// Event received on the "external controller" port.
-    void slotExternalController(
-            const MappedEvent *event,
-            ExternalController::Window window);
+    void slotExternalController(const MappedEvent *event);
 
     /// Connected to InstrumentStaticSignals::controlChange().
     void slotControlChange(Instrument *instrument, int cc);

@@ -39,7 +39,7 @@ QSharedPointer<ExternalController> ExternalController::self()
 }
 
 ExternalController::ExternalController() :
-    m_activeWindow(Main),
+    activeWindow(Main),
     m_instrumentId(NoInstrument)
 {
 }
@@ -120,7 +120,18 @@ void ExternalController::processEvent(const MappedEvent *event)
     }
 
     // Delegate to the currently active window.
-    emit externalController(event, m_activeWindow);
+    switch (activeWindow)
+    {
+    case Main:
+        emit externalControllerRMVW(event);
+        break;
+    case MidiMixer:
+        emit externalControllerMMW(event);
+        break;
+    case AudioMixer:
+        emit externalControllerAMW2(event);
+        break;
+    }
 }
 
 void ExternalController::send(
@@ -203,7 +214,7 @@ void
 ExternalController::slotDocumentModified(bool)
 {
     // We only handle updates for RosegardenMainWindow.
-    if (m_activeWindow != Main)
+    if (activeWindow != Main)
         return;
 
     RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
@@ -234,7 +245,7 @@ void
 ExternalController::slotControlChange(Instrument *instrument, int cc)
 {
     // We only handle updates for RosegardenMainWindow.
-    if (m_activeWindow != Main)
+    if (activeWindow != Main)
         return;
 
     // Not our Instrument?  Bail.

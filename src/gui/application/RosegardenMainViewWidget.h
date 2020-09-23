@@ -246,8 +246,7 @@ public slots:
      * @see MidiMixerWindow::slotExternalController()
      * @see AudioMixerWindow2::slotExternalController()
      */
-    void slotExternalController(
-            const MappedEvent *event, ExternalController::Window window);
+    void slotExternalController(const MappedEvent *event);
 
 signals:
     void activateTool(QString toolName);

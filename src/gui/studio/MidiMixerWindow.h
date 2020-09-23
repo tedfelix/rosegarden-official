@@ -73,9 +73,7 @@ public slots:
      * @see RosegardenMainViewWidget::slotExternalController()
      * @see AudioMixerWindow2::slotExternalController()
      */
-    void slotExternalController(
-            const MappedEvent *event,
-            ExternalController::Window window);
+    void slotExternalController(const MappedEvent *event);
 
     void slotCurrentTabChanged(int);
     void slotHelpRequested();

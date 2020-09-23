@@ -90,10 +90,8 @@ public:
      * window.
      *
      * Set by the three windows that can handle external controller events.
-     *
-     * ??? Since this is public, drop the "m_".
      */
-    Window m_activeWindow;
+    Window activeWindow;
 
     /// Handle MappedEvent's from the external controller port.
     /**
@@ -115,16 +113,12 @@ public:
 
 signals:
 
-    /// External controller port events for the windows that handle them.
-    /**
-     * Connected to RosegardenMainViewWidget::slotExternalController(),
-     * MidiMixerWindow::slotExternalController(), and
-     * AudioMixerWindow2::slotExternalController().
-     *
-     * ??? Split into three signals, one for each window.
-     */
-    void externalController(const MappedEvent *event,
-                            Window m_activeWindow);
+    /// Connected to RosegardenMainViewWidget::slotExternalController().
+    void externalControllerRMVW(const MappedEvent *event);
+    /// Connected to MidiMixerWindow::slotExternalController().
+    void externalControllerMMW(const MappedEvent *event);
+    /// Connected to AudioMixerWindow::slotExternalController().
+    void externalControllerAMW2(const MappedEvent *event);
 
 private slots:
 

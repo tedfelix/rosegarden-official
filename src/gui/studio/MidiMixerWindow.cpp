@@ -97,7 +97,7 @@ MidiMixerWindow::MidiMixerWindow(QWidget *parent,
             this, &MidiMixerWindow::slotControlChange);
 
     connect(ExternalController::self().get(),
-                &ExternalController::externalController,
+                &ExternalController::externalControllerMMW,
             this, &MidiMixerWindow::slotExternalController);
 
 }
@@ -638,14 +638,9 @@ MidiMixerWindow::updateMonitorMeter()
 }
 
 void
-MidiMixerWindow::slotExternalController(const MappedEvent *e,
-        ExternalController::Window window)
+MidiMixerWindow::slotExternalController(const MappedEvent *e)
 {
-    // Not for me?  Bail.
-    if (window != ExternalController::MidiMixer)
-        return;
-
-    RG_DEBUG << "slotExternalController(): this one's for me";
+    //RG_DEBUG << "slotExternalController()...";
 
     // Some window managers (e.g. GNOME) do not allow the application to
     // change focus on the user.  So, this might not work.
@@ -829,7 +824,7 @@ MidiMixerWindow::changeEvent(QEvent *event)
     if (event->type() == QEvent::ActivationChange) {
         //RG_DEBUG << "changeEvent(): Received activation change.";
         if (isActiveWindow()) {
-            ExternalController::self()->m_activeWindow =
+            ExternalController::self()->activeWindow =
                     ExternalController::MidiMixer;
 
             sendControllerRefresh();

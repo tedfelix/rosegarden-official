@@ -65,7 +65,7 @@ AudioMixerWindow2::AudioMixerWindow2(QWidget *parent) :
             this, &AudioMixerWindow2::slotDocumentModified);
     // Connect for "external controller" events.
     connect(ExternalController::self().get(),
-                &ExternalController::externalController,
+                &ExternalController::externalControllerAMW2,
             this, &AudioMixerWindow2::slotExternalController);
 
     // Connect for high-frequency control change notifications.
@@ -512,15 +512,9 @@ AudioMixerWindow2::slotAboutRosegarden()
 }
 
 void
-AudioMixerWindow2::slotExternalController(
-        const MappedEvent *event,
-        ExternalController::Window window)
+AudioMixerWindow2::slotExternalController(const MappedEvent *event)
 {
-    // Not for me?  Bail.
-    if (window != ExternalController::AudioMixer)
-        return;
-
-    //RG_DEBUG << "slotExternalController(): this one's for me";
+    //RG_DEBUG << "slotExternalController()...";
 
     // Some window managers (e.g. GNOME) do not allow the application to
     // change focus on the user.  So, this might not work.
@@ -610,7 +604,7 @@ AudioMixerWindow2::changeEvent(QEvent *event)
     if (event->type() == QEvent::ActivationChange) {
         //RG_DEBUG << "changeEvent(): Received activation change.";
         if (isActiveWindow()) {
-            ExternalController::self()->m_activeWindow =
+            ExternalController::self()->activeWindow =
                     ExternalController::AudioMixer;
 
             size_t count = m_inputStrips.size();
