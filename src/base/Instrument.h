@@ -192,6 +192,8 @@ public:
 
     void setControllerValue(MidiByte controller, MidiByte value);
     MidiByte getControllerValue(MidiByte controller) const;
+    bool hasController(MidiByte controlNumber) const;
+
     void sendController(MidiByte controller, MidiByte value);
 
     // This is retrieved from the reference MidiProgram in the Device

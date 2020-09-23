@@ -621,6 +621,17 @@ Instrument::setControllerValue(MidiByte controller, MidiByte value)
     emit changedChannelSetup();
 }
 
+bool
+Instrument::hasController(MidiByte controlNumber) const
+{
+    for (const StaticControllers::value_type &pair : m_staticControllers) {
+        if (pair.first == controlNumber)
+            return true;
+    }
+
+    return false;
+}
+
 MidiByte
 Instrument::getControllerValue(MidiByte controller) const
 {

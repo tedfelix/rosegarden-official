@@ -1796,12 +1796,10 @@ RosegardenMainViewWidget::slotSynchroniseWithComposition()
 }
 
 void
-RosegardenMainViewWidget::slotExternalController(const MappedEvent *e)
+RosegardenMainViewWidget::slotExternalController(const MappedEvent *event)
 {
     //RG_DEBUG << "slotExternalController()...";
 
-    // Some window managers (e.g. GNOME) do not allow the application to
-    // change focus on the user.  So, this might not work.
     activateWindow();
     raise();
 
@@ -1810,130 +1808,105 @@ RosegardenMainViewWidget::slotExternalController(const MappedEvent *e)
     Composition &comp = getDocument()->getComposition();
     Studio &studio = getDocument()->getStudio();
 
-    TrackId currentTrackId = comp.getSelectedTrack();
-    Track *track = comp.getTrackById(currentTrackId);
+    // Program Change?  Adjust Track PC to match.
+    // ??? This is odd.  I don't think control surfaces typically provide
+    //     a Program Change control.  That's more a keyboard thing.
+    //     And if we handle this, we should also handle Bank Select.
+    //     But we don't.  I suspect this can be removed.
+    if (event->getType() == MappedEvent::MidiProgramChange) {
+        const Track *track = comp.getTrackById(comp.getSelectedTrack());
+        if (!track)
+            return;
 
-    // If the event is a control change on channel n, then (if
-    // follow-channel is on) switch to the nth track of the same type
-    // as the current track -- or the first track of the given
-    // channel?, and set the control appropriately.  Any controls in
-    // IPB are supported for a MIDI device plus program and bank; only
-    // volume and pan are supported for audio/synth devices.
-    //!!! complete this
+        Instrument *instrument =
+                studio.getInstrumentById(track->getInstrument());
+        if (!instrument)
+            return;
 
-    if (e->getType() != MappedEvent::MidiController) {
+        instrument->setProgramChange(event->getData1());
+        instrument->sendChannelSetup();
+        RosegardenMainWindow::self()->getDocument()->slotDocumentModified();
 
-        if (e->getType() == MappedEvent::MidiProgramChange) {
-            int program = e->getData1();
-            if (!track)
-                return ;
-            InstrumentId ii = track->getInstrument();
-            Instrument *instrument = studio.getInstrumentById(ii);
-            if (!instrument)
-                return ;
-            instrument->setProgramChange(program);
-            instrument->sendChannelSetup();
-            RosegardenMainWindow::self()->getDocument()->slotDocumentModified();
-        }
-        return ;
+        return;
     }
 
-    // unsigned int channel = e->getRecordedChannel();
-    MidiByte controller = e->getData1();
-    MidiByte value = e->getData2();
+    if (event->getType() != MappedEvent::MidiController)
+        return;
+
+    // We have a CC coming in...
+
+    const MidiByte controlNumber = event->getData1();
+    const MidiByte value = event->getData2();
 
     // CONTROLLER_SELECT_TRACK
-    if (controller == 82) {
-        int tracks = comp.getNbTracks();
+    if (controlNumber == 82) {
+        const unsigned tracks = comp.getNbTracks();
+
+        // Get the track to select based on CC value.
         Track *track = comp.getTrackByPosition(value * tracks / 128);
-        if (track) {
-            comp.setSelectedTrack(track->getId());
-            comp.notifyTrackSelectionChanged(track->getId());
+        if (!track)
+            return;
 
-            slotSelectTrackSegments(track->getId());
+        comp.setSelectedTrack(track->getId());
+        comp.notifyTrackSelectionChanged(track->getId());
 
-            // Emit a documentModified(), but don't set the document
-            // modified flag.  This refreshes the UI but doesn't make
-            // the star appear in the titlebar.
-            RosegardenMainWindow::self()->getDocument()->emitDocumentModified();
-        }
-        return ;
+        slotSelectTrackSegments(track->getId());
+
+        // Emit a documentModified(), but don't set the document
+        // modified flag.  This refreshes the UI but doesn't make
+        // the star appear in the titlebar.
+        RosegardenMainWindow::self()->getDocument()->emitDocumentModified();
+
+        return;
     }
 
+    const Track *track = comp.getTrackById(comp.getSelectedTrack());
     if (!track)
-        return ;
+        return;
 
-    InstrumentId ii = track->getInstrument();
-    Instrument *instrument = studio.getInstrumentById(ii);
-
+    Instrument *instrument = studio.getInstrumentById(track->getInstrument());
     if (!instrument)
-        return ;
+        return;
 
-    switch (instrument->getType()) {
-
-    case Instrument::Midi: {
-            MidiDevice *md = dynamic_cast<MidiDevice *>(instrument->getDevice());
-            if (!md) {
-                RG_WARNING << "slotExternalController(): WARNING: MIDI instrument has no MIDI device";
-                return;
-            }
-
-            ControlList cl = md->getControlParameters();
-            for (ControlList::const_iterator i = cl.begin(); i != cl.end(); ++i) {
-                if ((*i).getControllerNumber() == controller) {
-                    //RG_DEBUG << "  Setting controller " << controller << " for instrument " << instrument->getId() << " to " << value;
-                    instrument->setControllerValue(controller, value);
-                    Instrument::emitControlChange(instrument, controller);
-                    getDocument()->setModified();
-
-                    break;
-                }
-            }
-            break;
-        }
-
-    case Instrument::SoftSynth:
-    case Instrument::Audio:
-
-        switch (controller) {
-
-        case MIDI_CONTROLLER_VOLUME:  {
-            //RG_DEBUG << "  Setting volume for instrument " << instrument->getId() << " to " << value;
-
-            float dB = AudioLevel::fader_to_dB(
-                    value, 127, AudioLevel::ShortFader);
-
-            instrument->setLevel(dB);
-            Instrument::emitControlChange(instrument, MIDI_CONTROLLER_VOLUME);
+    if (instrument->getType() == Instrument::Midi) {
+        // If the incoming control number is valid for the Instrument...
+        if (instrument->hasController(controlNumber)) {
+            // Adjust the Instrument and update everyone.
+            instrument->setControllerValue(controlNumber, value);
+            Instrument::emitControlChange(instrument, controlNumber);
             getDocument()->setModified();
-
-            break;
         }
 
-        case MIDI_CONTROLLER_PAN:  {
-            //RG_DEBUG << "  Setting pan for instrument " << instrument->getId() << " to " << value;
-
-            float pan = (value / 64.0) * 100.0 + 0.01;
-
-            // This wants 0 to 200.
-            instrument->setControllerValue(MIDI_CONTROLLER_PAN, MidiByte(pan));
-            Instrument::emitControlChange(instrument, MIDI_CONTROLLER_PAN);
-            getDocument()->setModified();
-
-            break;
-        }
-
-        default:
-            break;
-        }
-        break;
-
-    case Instrument::InvalidInstrument:
-    default:
-        break;
+        return;
     }
 
-    //!!! send out updates via MIDI
+    // We have an audio instrument or a softsynth...
+
+    if (controlNumber == MIDI_CONTROLLER_VOLUME) {
+        //RG_DEBUG << "  Setting volume for instrument " << instrument->getId() << " to " << value;
+
+        const float dB = AudioLevel::fader_to_dB(
+                value, 127, AudioLevel::ShortFader);
+
+        instrument->setLevel(dB);
+        Instrument::emitControlChange(instrument, MIDI_CONTROLLER_VOLUME);
+        getDocument()->setModified();
+
+        return;
+    }
+
+    if (controlNumber == MIDI_CONTROLLER_PAN) {
+        //RG_DEBUG << "  Setting pan for instrument " << instrument->getId() << " to " << value;
+
+        const float pan = (value / 64.0) * 100.0 + 0.01;
+
+        // This wants 0 to 200.
+        instrument->setControllerValue(MIDI_CONTROLLER_PAN, MidiByte(pan));
+        Instrument::emitControlChange(instrument, MIDI_CONTROLLER_PAN);
+        getDocument()->setModified();
+
+        return;
+    }
 }
 
 void
