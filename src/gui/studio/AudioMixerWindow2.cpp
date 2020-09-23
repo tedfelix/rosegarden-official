@@ -546,27 +546,8 @@ AudioMixerWindow2::slotExternalController(const MappedEvent *event)
 
     case MIDI_CONTROLLER_PAN:
         {
-            // Convert to approximately (-100, 100).
-            // ??? Why the epsilon (.01)?  To avoid -100?
-            double pan = static_cast<double>(value) / 64 * 100 + .01 - 100;
-
-            // ??? This gives -100 to 100:
-            //
-            //      double pan = 0;
-            //      if (value <= 64)
-            //          pan = static_cast<double>(value) / 64 * 100 - 100;
-            //      else
-            //          pan = (static_cast<double>(value) - 64) / 63 * 100;
-            //
-            //     Might be a good idea to factor out some standard
-            //     pan math functions to be reused everywhere.  The AudioLevel
-            //     class might be a good place to put them.
-            //
-            //     // Normal is [-1,1].  -1 = left, 0 = center, 1 = right.
-            //     MidiByte panNormalToMidi(double pan);
-            //     double panMidiToNormal(MidiByte pan);
-
-            m_inputStrips[channel]->panChanged(static_cast<float>(pan));
+            m_inputStrips[channel]->panChanged(
+                    static_cast<float>(AudioLevel::AudioPanD(value) - 100.0));
 
             break;
         }

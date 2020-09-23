@@ -753,12 +753,9 @@ MidiByte Instrument::getPanCC() const
         return m_pan;
     } else {  // Audio
         // Scale 0-200 to 0-127.
-        int pan = (int(m_pan) * 64) / 100;
-        // Clamp to between 0 and 127.
-        if (pan < 0)
-            pan = 0;
+        MidiByte pan = AudioLevel::MIDIPanI(m_pan);
         if (pan > 127)
-            pan = 127;
+            return 127;
         return pan;
     }
 }

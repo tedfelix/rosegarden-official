@@ -16,20 +16,23 @@
 #ifndef RG_AUDIO_LEVEL_H
 #define RG_AUDIO_LEVEL_H
 
+#include "base/MidiProgram.h"  // for MidiByte
+
 namespace Rosegarden {
 
+
+/// Audio math utility class.
 /**
  * We need to represent audio levels in three different ways: as dB
  * values; as a floating-point multiplier for gain; and as an integer
  * on a scale for fader position and vu level.  This class does the
  * necessary conversions.
  */
-
 class AudioLevel
 {
 public:
 
-    static const float DB_FLOOR;
+    static constexpr float DB_FLOOR = -1000.0;
 
     enum FaderType {
              ShortFader = 0, // -40 -> +6  dB
@@ -57,14 +60,27 @@ public:
     static void setPanLaw(int panLaw) { m_panLaw = panLaw; }
     static int getPanLaw() { return m_panLaw; }
 
-    // Apply pan law
+    /// Apply pan law.  Assumes pan range 0 - 100 - 200.
     static float panGainLeft(float pan);
     static float panGainRight(float pan);
+
+    /// Convert MIDI pan (0 - 64 - 127) to Audio pan (0 - 100 - 200).
+    /**
+     * You may need to subtract 100 from this as some parts of the system deal
+     * in -100 - 100 pan.  E.g. the pan knobs in the UI.
+     */
+    static double AudioPanD(MidiByte midiPan);
+    /// Integer version of AudioPanD().
+    static int AudioPanI(MidiByte midiPan);
+
+    /// Convert Audio pan (0 - 100 - 200) to MIDI pan (0 - 64 - 127).
+    static MidiByte MIDIPanI(int audioPan);
 
 private:
 
     static int m_panLaw;  // number of pan law currently in use
 };
+
 
 }
 

@@ -584,7 +584,7 @@ AudioStrip::slotPanChanged(float pan)
         if (!instrument)
             return;
 
-        instrument->setPan(MidiByte(pan + 100.0));
+        instrument->setPan(MidiByte(lround(pan + 100.0)));
         Instrument::emitControlChange(instrument, MIDI_CONTROLLER_PAN);
         doc->setModified();
 
@@ -595,15 +595,13 @@ AudioStrip::slotPanChanged(float pan)
         //     update such as this.
 
         if (m_externalControllerChannel < 16) {
-            int ipan = (int(instrument->getPan()) * 64) / 100;
-            if (ipan < 0)
-                ipan = 0;
-            if (ipan > 127)
-                ipan = 127;
+            MidiByte pan = AudioLevel::MIDIPanI(instrument->getPan());
+            if (pan > 127)
+                pan = 127;
 
             ExternalController::send(
                     m_externalControllerChannel,
-                    MIDI_CONTROLLER_PAN, MidiByte(ipan));
+                    MIDI_CONTROLLER_PAN, pan);
         }
 
         return;

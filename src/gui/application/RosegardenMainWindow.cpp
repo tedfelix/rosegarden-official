@@ -8523,6 +8523,9 @@ RosegardenMainWindow::changeEvent(QEvent *event)
     ExternalController::sendAllCCs(instrument, 0);
 
     // Clear out channels 1-15 for external controller.
+    // ??? Why not provide the next 15 tracks here?  Then the user can
+    //     always have control of 16 out of the full set of tracks.
+    //     Sounds potentially handy.
     for (MidiByte channel = 1; channel < 16; ++channel) {
         ExternalController::send(channel, MIDI_CONTROLLER_VOLUME, 0);
         ExternalController::send(

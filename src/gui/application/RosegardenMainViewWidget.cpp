@@ -1898,10 +1898,9 @@ RosegardenMainViewWidget::slotExternalController(const MappedEvent *event)
     if (controlNumber == MIDI_CONTROLLER_PAN) {
         //RG_DEBUG << "  Setting pan for instrument " << instrument->getId() << " to " << value;
 
-        const float pan = (value / 64.0) * 100.0 + 0.01;
-
-        // This wants 0 to 200.
-        instrument->setControllerValue(MIDI_CONTROLLER_PAN, MidiByte(pan));
+        instrument->setControllerValue(
+                MIDI_CONTROLLER_PAN,
+                AudioLevel::AudioPanI(value));
         Instrument::emitControlChange(instrument, MIDI_CONTROLLER_PAN);
         getDocument()->setModified();
 

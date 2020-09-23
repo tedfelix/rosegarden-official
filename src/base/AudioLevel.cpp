@@ -21,8 +21,6 @@
 
 namespace Rosegarden {
 
-const float AudioLevel::DB_FLOOR = -1000.0;
-
 struct FaderDescription
 {
     FaderDescription(float i_minDb, float i_maxDb, float i_zeroPoint) :
@@ -331,5 +329,41 @@ AudioLevel::panGainRight(float pan)  // Apply panning law to right channel
 
     }
 }
+
+double AudioLevel::AudioPanD(MidiByte midiPan)
+{
+    // Scale 0-64 from 0 to 100.
+    if (midiPan <= 64)
+        return static_cast<double>(midiPan) / 64.0 * 100.0;
+
+    // Scale 64-127 from 100 to 200.
+    return static_cast<double>(midiPan - 1) / 63.0 * 100.0;
+}
+
+int AudioLevel::AudioPanI(MidiByte midiPan)
+{
+    // ??? A table would be faster.
+
+    // Scale 0-64 from 0 to 100.
+    if (midiPan <= 64) {
+        // Adding 32 (half of 64) to get proper rounding.
+        return (midiPan * 100 + 32) / 64;
+    }
+
+    // Scale 64-127 from 100 to 200.
+    // Adding 31 (half of 63 truncated) to get proper rounding.
+    return ((midiPan - 1) * 100 + 31) / 63;
+}
+
+MidiByte AudioLevel::MIDIPanI(int audioPan)
+{
+    // Scale 0-100 to 0-64.  (Add 50 to get proper rounding.)
+    if (audioPan <= 100)
+        return (audioPan * 64 + 50) / 100;
+
+    // Scale 100-200 to 64-127.  (Add 50 to get proper rounding.)
+    return (audioPan * 63 + 50) / 100 + 1;
+}
+
 
 }
