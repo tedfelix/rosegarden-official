@@ -981,7 +981,28 @@ findControlParameter(std::string type, MidiByte controllerNumber) const
 bool 
 MidiDevice::isVisibleControlParameter(const ControlParameter &con) const
 {
+    // ??? Inline this and get rid of it.  It is a one-liner that is only
+    //     used internally.
+
     return (con.getIPBPosition() > -1);
+}
+
+bool
+MidiDevice::isVisibleControlParameter(MidiByte controlNumber) const
+{
+    // For each CC...
+    for (const ControlParameter &controlParameter : m_controlList)
+    {
+        // Not a CC?  Skip.
+        if (controlParameter.getType() != Controller::EventType)
+            continue;
+
+        // If we found it...
+        if (controlParameter.getControllerNumber() == controlNumber)
+            return (controlParameter.getIPBPosition() > -1 );
+    }
+
+    return false;
 }
 
 void

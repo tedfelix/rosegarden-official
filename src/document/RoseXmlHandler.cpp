@@ -2429,19 +2429,45 @@ RoseXmlHandler::endElement(const QString& namespaceURI,
 
     } else if (lcName == "instrument") {
 
-        // If there were no <controlchange> tags within the <instrument>
+        // If there were no <controlchange> tags within the <instrument>.
         if (!m_controlChangeEncountered) {
-            // Use the deprecated <volume> and <pan> tags instead.
+            // Fall back on the deprecated <volume> and <pan> tags if they
+            // are available.
+
+            // This only happens with MIDI instruments.  Audio instruments
+            // are taken care of immediately when their <pan> and <level>
+            // tags are encountered.
 
             if (m_volumeEncountered) {
-                m_instrument->setControllerValue(MIDI_CONTROLLER_VOLUME, m_volume);
+                MidiDevice *midiDevice = dynamic_cast<MidiDevice *>(m_device);
+                if (midiDevice) {
+                    // If volume has a knob in the MIPP, go ahead and set the
+                    // CC value in the Instrument.  (If we do this when there
+                    // is no knob, CCs go out when they shouldn't.)
+                    if (midiDevice->isVisibleControlParameter(
+                            MIDI_CONTROLLER_VOLUME)) {
+                        m_instrument->setControllerValue(
+                                MIDI_CONTROLLER_VOLUME, m_volume);
+                    }
+                }
             }
 
             if (m_panEncountered) {
-                m_instrument->setControllerValue(MIDI_CONTROLLER_PAN, m_pan);
+                MidiDevice *midiDevice = dynamic_cast<MidiDevice *>(m_device);
+                if (midiDevice) {
+                    // If pan has a knob in the MIPP, go ahead and set the
+                    // CC value in the Instrument.  (If we do this when there
+                    // is no knob, CCs go out when they shouldn't.)
+                    if (midiDevice->isVisibleControlParameter(
+                            MIDI_CONTROLLER_PAN)) {
+                        m_instrument->setControllerValue(
+                                MIDI_CONTROLLER_PAN, m_pan);
+                    }
+                }
             }
         }
 
+        // Exit the <instrument> section.
         m_section = InStudio;
         m_instrument = nullptr;
 

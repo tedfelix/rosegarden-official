@@ -597,6 +597,8 @@ Instrument::setControllerValue(MidiByte controller, MidiByte value)
         setVolume(value);
     }
 
+    // If it's in m_staticControllers, update it.
+
     for (StaticControllers::iterator it = m_staticControllers.begin();
          it != m_staticControllers.end(); ++it)
     {
@@ -607,6 +609,8 @@ Instrument::setControllerValue(MidiByte controller, MidiByte value)
             return;
         }
     }
+
+    // It's not in m_staticControllers, add it.
 
     m_staticControllers.push_back(ControllerValuePair(controller, value));
 

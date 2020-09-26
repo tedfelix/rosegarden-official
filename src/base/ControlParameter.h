@@ -91,6 +91,14 @@ public:
 
     unsigned int getColourIndex() const { return m_colourIndex; }
 
+    /// Position of the knob on the MIPP.  -1 == <not showing>
+    /**
+     * Only CCs can have knobs.  Other controllers (e.g. pitchbend)
+     * cannot.  Do not set this to anything other than -1 for non-CC
+     * controllers.
+     */
+    void setIPBPosition(int position) { m_ipbPosition = position; }
+    /// Position of the knob on the MIPP.  -1 == <not showing>
     int getIPBPosition() const { return m_ipbPosition; }
 
     void setName(const std::string &name) { m_name = name; }
@@ -102,8 +110,6 @@ public:
     void setDefault(int def) { m_default = def; }
 
     void setColourIndex(unsigned int colour) { m_colourIndex = colour; }
-
-    void setIPBPosition(int position) { m_ipbPosition = position; }
 
     std::string toXmlString() const override;
 
@@ -136,7 +142,8 @@ protected:
 
     unsigned int   m_colourIndex;
 
-    int            m_ipbPosition; // position on Instrument Parameter Box
+    /// Position of the knob on the MIPP.  -1 == <not showing>
+    int m_ipbPosition;
 
 
 };

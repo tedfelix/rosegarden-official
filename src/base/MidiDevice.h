@@ -183,9 +183,16 @@ public:
     const ControlParameter *
         findControlParameter(std::string type, MidiByte conNumber) const;
     
-    // Check if controller is visible.
-    //
+    /// The CC or other controller has a knob on the MIPP.
+    /**
+     * ??? Only CCs can have knobs.  It's misleading to allow a complete
+     *     ControlParameter here.  Perhaps remove this routine.  Certainly
+     *     move it to private as it is only called internally (like most
+     *     of the routines in this class).
+     */
     bool isVisibleControlParameter(const ControlParameter &con) const;
+    /// The CC has a knob on the MIPP.
+    bool isVisibleControlParameter(MidiByte controlNumber) const;
 
     // Generate some default controllers for the MidiDevice
     //
