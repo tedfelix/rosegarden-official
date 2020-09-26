@@ -165,7 +165,7 @@ AlsaDriver::AlsaDriver(MappedStudio *studio):
 
     QSettings settings;
     settings.beginGroup(GeneralOptionsConfigGroup);
-    // Accept transport CCs (116-118, etc...)
+    // Accept transport CCs (116-118)
     m_acceptTransportCCs = settings.value("acceptTransportCCs", true).toBool();
     settings.endGroup();
 

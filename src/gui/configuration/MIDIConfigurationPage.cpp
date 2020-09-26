@@ -117,6 +117,23 @@ MIDIConfigurationPage::MIDIConfigurationPage(QWidget *parent):
 
     ++row;
 
+    // Accept transport CCs (116-118)
+    label = new QLabel(tr("Accept transport CCs (116-118)"));
+    toolTip = tr("Rosegarden will discard these CCs, so disable this if you need CCs in this range for other things.");
+    label->setToolTip(toolTip);
+    layout->addWidget(label, row, 0, 1, 2);
+
+    m_acceptTransportCCs = new QCheckBox;
+    m_acceptTransportCCs->setToolTip(toolTip);
+    const bool acceptTransportCCs =
+            settings.value("acceptTransportCCs", true).toBool();
+    m_acceptTransportCCs->setChecked(acceptTransportCCs);
+    connect(m_acceptTransportCCs, &QCheckBox::stateChanged,
+            this, &MIDIConfigurationPage::slotModified);
+    layout->addWidget(m_acceptTransportCCs, row, 2);
+
+    ++row;
+
     settings.endGroup();
     settings.beginGroup(SequencerOptionsConfigGroup);
 
@@ -128,9 +145,9 @@ MIDIConfigurationPage::MIDIConfigurationPage(QWidget *parent):
 
     m_allowResetAllControllers = new QCheckBox;
     m_allowResetAllControllers->setToolTip(toolTip);
-    const bool sendResetAllControllers =
+    const bool allowResetAllControllers =
             settings.value("allowresetallcontrollers", true).toBool();
-    m_allowResetAllControllers->setChecked(sendResetAllControllers);
+    m_allowResetAllControllers->setChecked(allowResetAllControllers);
     connect(m_allowResetAllControllers, &QCheckBox::stateChanged,
             this, &MIDIConfigurationPage::slotModified);
     layout->addWidget(m_allowResetAllControllers, row, 2);
@@ -390,6 +407,8 @@ MIDIConfigurationPage::apply()
                       m_useDefaultStudio->isChecked());
     settings.setValue("external_controller",
                       m_externalControllerPort->isChecked());
+    settings.setValue("acceptTransportCCs",
+                      m_acceptTransportCCs->isChecked());
 
     settings.endGroup();
 
