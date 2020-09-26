@@ -163,9 +163,14 @@ AlsaDriver::AlsaDriver(MappedStudio *studio):
 
     m_pendSysExcMap = new DeviceEventMap();
 
+    QSettings settings;
+    settings.beginGroup(GeneralOptionsConfigGroup);
+    // Accept transport CCs (116-118, etc...)
+    m_acceptTransportCCs = settings.value("acceptTransportCCs", true).toBool();
+    settings.endGroup();
+
 #ifndef NDEBUG
     // Debugging Mode
-    QSettings settings;
     settings.beginGroup(GeneralOptionsConfigGroup);
     const QString debugAlsaDriver = "debug_AlsaDriver";
     m_debug = settings.value(debugAlsaDriver, false).toBool();
@@ -2702,6 +2707,11 @@ AlsaDriver::getMappedEventList(MappedEventList &mappedEventList)
             break;
 
         case SND_SEQ_EVENT_CONTROLLER: {
+            if (handleTransportCCs(event->data.control.param,
+                                   event->data.control.value))
+                break;
+
+            // Convert to MappedEvent and add to list.
             MappedEvent *mE = new MappedEvent();
             mE->setType(MappedEvent::MidiController);
             mE->setEventTime(eventTime);
@@ -2985,8 +2995,6 @@ AlsaDriver::getMappedEventList(MappedEventList &mappedEventList)
 
             break;
 
-            // these cases are handled by checkForNewClients
-            //
         case SND_SEQ_EVENT_CLIENT_START:
         case SND_SEQ_EVENT_CLIENT_EXIT:
         case SND_SEQ_EVENT_CLIENT_CHANGE:
@@ -2995,6 +3003,7 @@ AlsaDriver::getMappedEventList(MappedEventList &mappedEventList)
         case SND_SEQ_EVENT_PORT_CHANGE:
         case SND_SEQ_EVENT_PORT_SUBSCRIBED:
         case SND_SEQ_EVENT_PORT_UNSUBSCRIBED:
+            // These cases are handled by checkForNewClients().
             m_portCheckNeeded = true;
 #ifdef DEBUG_ALSA
             RG_DEBUG << "getMappedEventList() - got announce event (" << int(event->type) << ")";
@@ -5589,6 +5598,62 @@ AlsaDriver::isConnected(DeviceId deviceId) const
     // Return true if the client/port are valid.
     return (deviceIter->second != ClientPortPair()  &&
             deviceIter->second != ClientPortPair(-1,-1));
+}
+
+bool AlsaDriver::handleTransportCCs(unsigned controlNumber, int value)
+{
+    // If transport CCs are not enabled, bail.
+    if (!m_acceptTransportCCs)
+        return false;
+
+    // No external transport available?  Bail.
+    if (!m_externalTransport)
+        return false;
+
+    // Play
+    if (controlNumber == 117) {
+        // Press
+        if (value == 127) {
+            if (!isPlaying()) {
+                m_externalTransport->transportChange(
+                        ExternalTransport::TransportPlay);
+            }
+        }
+
+        // We've recognized and handled this.  Do not process it further.
+        return true;
+    }
+
+    // Record
+    if (controlNumber == 118) {
+        // Press
+        if (value == 127) {
+            if (!isPlaying()) {
+                m_externalTransport->transportChange(
+                        ExternalTransport::TransportRecord);
+            }
+        }
+
+        // We've recognized and handled this.  Do not process it further.
+        return true;
+    }
+
+    // Stop
+    if (controlNumber == 116) {
+        // Press
+        if (value == 127) {
+            if (isPlaying()) {
+                m_externalTransport->transportChange(
+                        ExternalTransport::TransportStop);
+            }
+        }
+
+        // We've recognized and handled this.  Do not process it further.
+        return true;
+    }
+
+    // Don't know what this is.  Continue processing.
+    return false;
 }
 
 

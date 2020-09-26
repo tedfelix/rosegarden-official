@@ -739,6 +739,15 @@ private:
 
     /// Compute SPP at or prior to time.
     int songPositionPointer(const RealTime &time);
+
+    /// See handleTransportCCs().
+    bool m_acceptTransportCCs;
+    /// Handle CCs like 117 for play, 116 for stop, etc...
+    /**
+     * Returns true if handled and the CC can be discarded.
+     */
+    bool handleTransportCCs(unsigned controlNumber, int value);
+
 };
 
 }
