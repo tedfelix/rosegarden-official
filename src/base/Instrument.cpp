@@ -56,8 +56,6 @@ Instrument::Instrument(InstrumentId id,
     m_device(device),
     m_sendBankSelect(false),
     m_sendProgramChange(false),
-    m_sendPan(false),
-    m_sendVolume(false),
     m_mappedId(0),
     m_audioInput(1000),
     m_audioInputChannel(0),
@@ -104,8 +102,6 @@ Instrument::Instrument(InstrumentId id,
     m_device(device),
     m_sendBankSelect(false),
     m_sendProgramChange(false),
-    m_sendPan(false),
-    m_sendVolume(false),
     m_mappedId(0),
     m_audioInput(1000),
     m_audioInputChannel(0),
@@ -172,8 +168,6 @@ Instrument::Instrument(const Instrument &ins):
     m_device(ins.getDevice()),
     m_sendBankSelect(ins.sendsBankSelect()),
     m_sendProgramChange(ins.sendsProgramChange()),
-    m_sendPan(ins.sendsPan()),
-    m_sendVolume(ins.sendsVolume()),
     m_mappedId(ins.getMappedId()),
     m_audioInput(ins.m_audioInput),
     m_audioInputChannel(ins.m_audioInputChannel),
@@ -223,8 +217,6 @@ Instrument::operator=(const Instrument &ins)
     m_device = ins.getDevice();
     m_sendBankSelect = ins.sendsBankSelect();
     m_sendProgramChange = ins.sendsProgramChange();
-    m_sendPan = ins.sendsPan();
-    m_sendVolume = ins.sendsVolume();
     m_mappedId = ins.getMappedId();
     m_audioInput = ins.m_audioInput;
     m_audioInputChannel = ins.m_audioInputChannel;

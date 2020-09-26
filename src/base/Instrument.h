@@ -178,18 +178,6 @@ public:
     }
     bool sendsProgramChange() const { return m_sendProgramChange; }
 
-    void setSendPan(bool value) {
-        m_sendPan = value;
-        if (value) { emit changedChannelSetup(); }
-    }
-    bool sendsPan() const { return m_sendPan; }
-
-    void setSendVolume(bool value) {
-        m_sendVolume = value;
-        if (value) { emit changedChannelSetup(); }
-    }
-    bool sendsVolume() const { return m_sendVolume; } 
-
     void setControllerValue(MidiByte controller, MidiByte value);
     MidiByte getControllerValue(MidiByte controller) const;
     bool hasController(MidiByte controlNumber) const;
@@ -346,8 +334,6 @@ private:
     // 
     bool             m_sendBankSelect;
     bool             m_sendProgramChange;
-    bool             m_sendPan;
-    bool             m_sendVolume;
 
     // Instruments are directly related to faders for volume
     // control.  Here we can store the remote fader id.

@@ -1753,7 +1753,6 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
                     // For softsynth and audio Instruments, just set the
                     // pan as usual.
                     m_instrument->setControllerValue(MIDI_CONTROLLER_PAN, value);
-                    m_instrument->setSendPan(true);
                 }
             }
         } else if (m_section == InBuss) {
@@ -2436,12 +2435,10 @@ RoseXmlHandler::endElement(const QString& namespaceURI,
 
             if (m_volumeEncountered) {
                 m_instrument->setControllerValue(MIDI_CONTROLLER_VOLUME, m_volume);
-                m_instrument->setSendVolume(true);
             }
 
             if (m_panEncountered) {
                 m_instrument->setControllerValue(MIDI_CONTROLLER_PAN, m_pan);
-                m_instrument->setSendPan(true);
             }
         }
 

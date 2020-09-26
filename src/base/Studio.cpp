@@ -706,8 +706,6 @@ Studio::unassignAllInstruments()
                     //     default values.
                     //(*iit)->sendChannelSetup();
 
-                    (*iit)->setSendPan(false);
-                    (*iit)->setSendVolume(false);
                     (*iit)->setPan(MidiMidValue);
                     (*iit)->setVolume(100);
 
