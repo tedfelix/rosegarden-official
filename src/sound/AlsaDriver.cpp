@@ -50,7 +50,10 @@
 #include "SequencerDataBlock.h"
 #include "PlayableAudioFile.h"
 #include "ExternalController.h"
+#include "gui/application/RosegardenMainWindow.h"
+#include "base/QEvents.h"
 
+#include <QCoreApplication>
 #include <QMutex>
 #include <QRegExp>
 #include <QSettings>
@@ -5650,6 +5653,20 @@ bool AlsaDriver::handleTransportCCs(unsigned controlNumber, int value)
 
         // We've recognized and handled this.  Do not process it further.
         return true;
+    }
+
+    // Previous track
+    if (controlNumber == 110  &&  value == 127) {
+        QEvent *event = new QEvent(PreviousTrack);
+        QCoreApplication::postEvent(
+                RosegardenMainWindow::self(), event, Qt::HighEventPriority);
+    }
+
+    // Next track
+    if (controlNumber == 111  &&  value == 127) {
+        QEvent *event = new QEvent(NextTrack);
+        QCoreApplication::postEvent(
+                RosegardenMainWindow::self(), event, Qt::HighEventPriority);
     }
 
     // Don't know what this is.  Continue processing.

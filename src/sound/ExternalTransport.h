@@ -26,8 +26,16 @@ namespace Rosegarden {
  *
  * (Each of the transportXX functions returns a token which can then
  * be passed to isTransportSyncComplete.)
+ *
+ * ??? Investigate whether we can replace this with
+ *     QCoreApplication::postEvent() and post events directly to
+ *     RosegardenMainWindow's event loop.  postEvent() is thread-safe.  See
+ *     AlsaDriver::handleTransportCCs() and RosegardenMainWindow::customEvent()
+ *     which talk to each other this way.
+ *
+ * SequencerDataBlock is another class that supports communication between
+ * the Sequencer and GUI threads.
  */
-
 class ExternalTransport
 {
 public:

@@ -37,6 +37,7 @@
 #include "base/MidiProgram.h"
 #include "base/NotationTypes.h"
 #include "base/Profiler.h"
+#include "base/QEvents.h"
 #include "base/RealTime.h"
 #include "base/Segment.h"
 #include "base/SegmentNotationHelper.h"
@@ -8555,6 +8556,16 @@ RosegardenMainWindow::openWindow(ExternalController::Window window)
         RG_WARNING << "openwindow(): Unexpected window.";
         break;
     }
+}
+
+void
+RosegardenMainWindow::customEvent(QEvent *event)
+{
+    // Events from AlsaDriver...
+    if (event->type() == PreviousTrack)
+        slotSelectPreviousTrack();
+    if (event->type() == NextTrack)
+        slotSelectNextTrack();
 }
 
 

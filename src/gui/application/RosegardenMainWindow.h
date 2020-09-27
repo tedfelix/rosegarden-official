@@ -135,16 +135,6 @@ public:
 
     ~RosegardenMainWindow() override;
 
-    /** Qt generates a QCloseEvent when the user clicks the close button on the
-     * title bar.  We also get a close event when slotQuit() calls close().
-     *
-     * Control passes here where we call queryClose() to ask if the user wants
-     * to save a modified document.  If queryClose() returns true, we accept the
-     * close event.  Otherwise we ignore it, the closing breaks, and we keep
-     * running.
-     */
-    void closeEvent(QCloseEvent *event) override;
-
     /// Global access to the single instance of this class.
     static RosegardenMainWindow *self() { return m_myself; }
     
@@ -368,6 +358,19 @@ protected:
      * other windows.
      */
     void changeEvent(QEvent *event) override;
+
+    /** Qt generates a QCloseEvent when the user clicks the close button on the
+     * title bar.  We also get a close event when slotQuit() calls close().
+     *
+     * Control passes here where we call queryClose() to ask if the user wants
+     * to save a modified document.  If queryClose() returns true, we accept the
+     * close event.  Otherwise we ignore it, the closing breaks, and we keep
+     * running.
+     */
+    void closeEvent(QCloseEvent *event) override;
+
+    /// Handle Rosegarden-specific events.  Usually from the sequencer thread.
+    void customEvent(QEvent *event) override;
 
     RosegardenDocument *newDocument(bool skipAutoload = false);
 
