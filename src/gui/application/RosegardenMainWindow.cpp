@@ -4491,7 +4491,25 @@ void RosegardenMainWindow::processRecordedEvents()
 void
 RosegardenMainWindow::slotHandleInputs()
 {
+    // ??? This routine does more than handle inputs.  How much of this
+    //     is critical?  This routine is constantly called, so some
+    //     parts of the system might depend on all of this.
+
+    // Update the document from incoming data.
     processRecordedEvents();
+
+    // Handle transport requests
+
+    // ??? These could be implemented more directly as QEvents sent to
+    //     RosegardenMainWindow's event queue.  See customEvent().
+    //     We would need to analyze each caller of
+    //     RosegardenSequencer::transportChange() and
+    //     RosegardenSequencer::transportJump() and have them call
+    //     postEvent() instead.  See AlsaDriver::handleTransportCCs()
+    //     which uses both approaches right now.  Transitioning AlsaDriver
+    //     to QEvent should be relatively smooth.  JackDriver requires
+    //     the ability to wait on completion, so it might require
+    //     additional work to transition to QEvent.
 
     ExternalTransport::TransportRequest req;
     RealTime rt;
@@ -4500,14 +4518,30 @@ RosegardenMainWindow::slotHandleInputs()
 
     if (have) {
         switch (req) {
-        case ExternalTransport::TransportNoChange:    break;
-        case ExternalTransport::TransportStop:        stop(); break;
-        case ExternalTransport::TransportStart:       play(); break;
-        case ExternalTransport::TransportPlay:        play(); break;
-        case ExternalTransport::TransportRecord:      record(); break;
-        case ExternalTransport::TransportJumpToTime:  jumpToTime(rt); break;
-        case ExternalTransport::TransportStartAtTime: startAtTime(rt); break;
-        case ExternalTransport::TransportStopAtTime:  stop(); jumpToTime(rt); break;
+        case ExternalTransport::TransportNoChange:
+            break;
+        case ExternalTransport::TransportStop:
+            slotStop();
+            break;
+        case ExternalTransport::TransportStart:
+            slotPlay();
+            break;
+        case ExternalTransport::TransportPlay:
+            slotPlay();
+            break;
+        case ExternalTransport::TransportRecord:
+            slotRecord();
+            break;
+        case ExternalTransport::TransportJumpToTime:
+            slotJumpToTime(rt);
+            break;
+        case ExternalTransport::TransportStartAtTime:
+            slotStartAtTime(rt);
+            break;
+        case ExternalTransport::TransportStopAtTime:
+            slotStop();
+            slotJumpToTime(rt);
+            break;
         }
     }
 
@@ -4515,8 +4549,8 @@ RosegardenMainWindow::slotHandleInputs()
         getStatus();
 
     // ??? Wouldn't it make more sense to do this when playback or
-    //     recording is started/stopped?  E.g. in stop(), play(), and
-    //     record().  That would avoid constantly polling this.
+    //     recording is started/stopped?  E.g. in slotStop(), slotPlay(), and
+    //     slotRecord().  That would avoid constantly polling this.
     if (status == PLAYING || status == RECORDING) { //@@@ JAS orig ? KXMLGUIClient::StateReverse : KXMLGUIClient::StateNoReverse
         if (m_notPlaying)
             leaveActionState("not_playing");
@@ -4527,20 +4561,21 @@ RosegardenMainWindow::slotHandleInputs()
 
     if (m_seqManager) {
 
+        // ??? Why are we constantly setting this?  Why are we a conduit
+        //     from RosegardenSequencer to SequenceManager?  Isn't there
+        //     a more direct route?
         m_seqManager->setTransportStatus(status);
+
+        // ??? Again, why are we a conduit from RosegardenSequencer to
+        //     SequenceManager?  This also incurs a lock.  Would it be
+        //     possible to keep this in the sequencer thread and avoid
+        //     the lock?
 
         MappedEventList asynchronousQueue =
             RosegardenSequencer::getInstance()->pullAsynchronousMidiQueue();
 
-        if (!asynchronousQueue.empty()) {
-
+        if (!asynchronousQueue.empty())
             m_seqManager->processAsynchronousMidi(asynchronousQueue, nullptr);
-
-            // ??? These already have their own timer.  See slotUpdateUI().
-//            if (m_view) {
-//                m_view->updateMeters();
-//            }
-        }
     }
 }
 

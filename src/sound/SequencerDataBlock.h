@@ -77,8 +77,8 @@ class MappedEventList;
  * sure things like placement new were replaced with conventional new.
  * From a maintenance standpoint, this should improve the code significantly.
  *
- * ExternalTransport is another class that supports communication between
- * the Sequencer and GUI threads.
+ * RosegardenMainWindow::slotHandleInputs() supports communication between
+ * the Sequencer and GUI threads using RosegardenSequencer::m_transportRequests.
  *
  * AlsaDriver::handleTransportCCs() talks across threads to
  * RosegardenMainWindow::customEvent() using QCoreApplication::postEvent().

@@ -237,30 +237,6 @@ public:
      */
     QPointer<DeviceManagerDialog> getDeviceManager()  { return m_deviceManager; }
 
-
-
-    /**
-     * Equivalents of the GUI slots, for DCOP use
-     */
-    virtual void fileNew()    { slotFileNew(); }
-    virtual void fileSave()   { slotFileSave(); }
-    virtual void fileClose()  { slotFileClose(); }
-    virtual void quit()       { slotQuit(); }
-
-    virtual void play()               { slotPlay(); }
-    virtual void stop()               { slotStop(); }
-    virtual void rewind()             { slotRewind(); }
-    virtual void fastForward()        { slotFastforward(); }
-    virtual void record()             { slotRecord(); }
-    virtual void rewindToBeginning()  { slotRewindToBeginning(); }
-    virtual void fastForwardToEnd()   { slotFastForwardToEnd(); }
-    virtual void jumpToTime(RealTime rt) { slotJumpToTime(rt); }
-    virtual void startAtTime(RealTime rt) { slotStartAtTime(rt); }
-
-    virtual void trackUp()  { slotSelectPreviousTrack(); }
-    virtual void trackDown()  { slotSelectNextTrack(); }
-//    virtual void toggleRecordCurrentTrack() { slotToggleRecordCurrentTrack(); }
-
     /**
      * Create some new audio files for the sequencer and return the
      * paths for them as QStrings.
@@ -370,6 +346,10 @@ protected:
     void closeEvent(QCloseEvent *event) override;
 
     /// Handle Rosegarden-specific events.  Usually from the sequencer thread.
+    /**
+     * See SequencerDataBlock and slotHandleInputs() which also support
+     * communication between the threads.
+     */
     void customEvent(QEvent *event) override;
 
     RosegardenDocument *newDocument(bool skipAutoload = false);
