@@ -2,7 +2,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2018 the Rosegarden development team.
+    Copyright 2000-2020 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -17,6 +17,8 @@
 
 namespace Rosegarden {
 
+
+/// Interface for transport changes.  RosegardenSequencer is the only deriver.
 /**
  * Simple interface that we can pass to low-level audio code and on
  * which it can call back when something external requests a transport
@@ -27,14 +29,8 @@ namespace Rosegarden {
  * (Each of the transportXX functions returns a token which can then
  * be passed to isTransportSyncComplete.)
  *
- * ??? Investigate whether we can replace this with
- *     QCoreApplication::postEvent() and post events directly to
- *     RosegardenMainWindow's event loop.  postEvent() is thread-safe.  See
- *     AlsaDriver::handleTransportCCs() and RosegardenMainWindow::customEvent()
- *     which talk to each other this way.
- *
- * SequencerDataBlock is another class that supports communication between
- * the Sequencer and GUI threads.
+ * ??? Since there is exactly one deriver (RosegardenSequencer), absorb this
+ *     class into that deriver and get rid of this class.
  */
 class ExternalTransport
 {
@@ -65,7 +61,7 @@ public:
     virtual TransportToken getInvalidTransportToken() const = 0;
 };
 
+
 }
 
 #endif
-
