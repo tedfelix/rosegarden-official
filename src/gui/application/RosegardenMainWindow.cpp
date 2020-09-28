@@ -5739,6 +5739,16 @@ RosegardenMainWindow::slotSetLoopStop()
 }
 
 void
+RosegardenMainWindow::toggleLoop()
+{
+    // if a loop is set
+    if (m_doc->getComposition().isLooping())
+        slotUnsetLoop();
+    else
+        slotSetLoop();
+}
+
+void
 RosegardenMainWindow::slotToggleSolo(bool)
 {
     // Delegate to TrackButtons.
@@ -8601,6 +8611,12 @@ RosegardenMainWindow::customEvent(QEvent *event)
         slotSelectPreviousTrack();
     if (event->type() == NextTrack)
         slotSelectNextTrack();
+    if (event->type() == Loop)
+        toggleLoop();
+    if (event->type() == Rewind)
+        slotRewind();
+    if (event->type() == FastForward)
+        slotFastforward();
 }
 
 

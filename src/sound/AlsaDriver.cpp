@@ -5656,17 +5656,69 @@ bool AlsaDriver::handleTransportCCs(unsigned controlNumber, int value)
     }
 
     // Previous track
-    if (controlNumber == 110  &&  value == 127) {
-        QEvent *event = new QEvent(PreviousTrack);
-        QCoreApplication::postEvent(
-                RosegardenMainWindow::self(), event, Qt::HighEventPriority);
+    if (controlNumber == 110) {
+        // Press
+        if (value == 127) {
+            QEvent *event = new QEvent(PreviousTrack);
+            QCoreApplication::postEvent(
+                    RosegardenMainWindow::self(), event);
+        }
+
+        // We've recognized and handled this.  Do not process it further.
+        return true;
     }
 
     // Next track
-    if (controlNumber == 111  &&  value == 127) {
-        QEvent *event = new QEvent(NextTrack);
-        QCoreApplication::postEvent(
-                RosegardenMainWindow::self(), event, Qt::HighEventPriority);
+    if (controlNumber == 111) {
+        if (value == 127) {
+            QEvent *event = new QEvent(NextTrack);
+            QCoreApplication::postEvent(
+                    RosegardenMainWindow::self(), event);
+        }
+
+        // We've recognized and handled this.  Do not process it further.
+        return true;
+    }
+
+    // Loop
+    if (controlNumber == 113) {
+        if (value == 127) {
+            QEvent *event = new QEvent(Loop);
+            QCoreApplication::postEvent(
+                    RosegardenMainWindow::self(), event);
+        }
+
+        // We've recognized and handled this.  Do not process it further.
+        return true;
+    }
+
+    // Rewind
+    // ??? This desperately needs typematic.  AlsaDriver is not the right
+    //     place for that, and neither is RMW, though RMW very likely has
+    //     the current typematic logic.  Recommend creating a new ButtonEvent
+    //     derived from QEvent that contains the press/release state.
+    if (controlNumber == 114) {
+        if (value == 127) {
+            QEvent *event = new QEvent(Rewind);
+            QCoreApplication::postEvent(
+                    RosegardenMainWindow::self(), event);
+        }
+
+        // We've recognized and handled this.  Do not process it further.
+        return true;
+    }
+
+    // Fast Forward
+    // ??? Typematic?  See Rewind above.
+    if (controlNumber == 115) {
+        if (value == 127) {
+            QEvent *event = new QEvent(FastForward);
+            QCoreApplication::postEvent(
+                    RosegardenMainWindow::self(), event);
+        }
+
+        // We've recognized and handled this.  Do not process it further.
+        return true;
     }
 
     // Don't know what this is.  Continue processing.

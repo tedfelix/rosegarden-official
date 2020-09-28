@@ -25,4 +25,7 @@ namespace Rosegarden
     // See ExternalTransport and SequencerDataBlock.
     constexpr QEvent::Type PreviousTrack = QEvent::User;
     constexpr QEvent::Type NextTrack = QEvent::Type(QEvent::User + 1);
+    constexpr QEvent::Type Loop = QEvent::Type(QEvent::User + 2);
+    constexpr QEvent::Type Rewind = QEvent::Type(QEvent::User + 3);
+    constexpr QEvent::Type FastForward = QEvent::Type(QEvent::User + 4);
 }

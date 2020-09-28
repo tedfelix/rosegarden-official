@@ -1651,6 +1651,7 @@ private:
     // remember where a loop was if we've ever set one.
     timeT m_storedLoopStart;
     timeT m_storedLoopEnd;
+    void toggleLoop();
 
     bool m_useSequencer;
 
