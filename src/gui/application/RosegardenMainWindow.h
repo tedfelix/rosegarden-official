@@ -25,6 +25,7 @@
 #include "gui/general/RecentFiles.h"
 #include "base/Event.h"
 #include "base/Selection.h"
+#include "base/Typematic.h"
 #include "sound/AudioFile.h"
 #include "sound/ExternalController.h"
 #include "sound/Midi.h"
@@ -1719,6 +1720,11 @@ private:
     void muteAllTracks(bool mute = true);
 
     void updateTitle();
+
+    /// For the rewind button on a control surface.
+    Typematic m_rewindTypematic;
+    /// For the fast-forward button on a control surface.
+    Typematic m_fastForwardTypematic;
 
 private slots:
     void signalAction(int);

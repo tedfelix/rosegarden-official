@@ -490,6 +490,12 @@ RosegardenMainWindow::RosegardenMainWindow(bool enableSound,
     connect(m_cpuMeterTimer, &QTimer::timeout, this, &RosegardenMainWindow::slotUpdateCPUMeter);
     m_cpuMeterTimer->start(1000);
 
+    // Connect Typematic objects.
+    connect(&m_rewindTypematic, &Typematic::click,
+            this, &RosegardenMainWindow::slotRewind);
+    connect(&m_fastForwardTypematic, &Typematic::click,
+            this, &RosegardenMainWindow::slotFastforward);
+
 }
 
 RosegardenMainWindow::~RosegardenMainWindow()
@@ -8622,16 +8628,14 @@ RosegardenMainWindow::customEvent(QEvent *event)
         if (!buttonEvent)
             return;
 
-        if (buttonEvent->pressed)
-            slotRewind();
+        m_rewindTypematic.press(buttonEvent->pressed);
     }
     if (event->type() == FastForward) {
         ButtonEvent *buttonEvent = dynamic_cast<ButtonEvent *>(event);
         if (!buttonEvent)
             return;
 
-        if (buttonEvent->pressed)
-            slotFastforward();
+        m_fastForwardTypematic.press(buttonEvent->pressed);
     }
 }
 
