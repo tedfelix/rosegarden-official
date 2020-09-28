@@ -96,7 +96,7 @@ MidiMixerWindow::MidiMixerWindow(QWidget *parent,
                 &InstrumentStaticSignals::controlChange,
             this, &MidiMixerWindow::slotControlChange);
 
-    connect(ExternalController::self().get(),
+    connect(ExternalController::self().data(),
                 &ExternalController::externalControllerMMW,
             this, &MidiMixerWindow::slotExternalController);
 

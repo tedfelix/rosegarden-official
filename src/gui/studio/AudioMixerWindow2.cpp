@@ -64,7 +64,7 @@ AudioMixerWindow2::AudioMixerWindow2(QWidget *parent) :
                 &RosegardenDocument::documentModified,
             this, &AudioMixerWindow2::slotDocumentModified);
     // Connect for "external controller" events.
-    connect(ExternalController::self().get(),
+    connect(ExternalController::self().data(),
                 &ExternalController::externalControllerAMW2,
             this, &AudioMixerWindow2::slotExternalController);
 
