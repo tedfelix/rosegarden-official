@@ -5693,13 +5693,14 @@ bool AlsaDriver::handleTransportCCs(unsigned controlNumber, int value)
     }
 
     // Rewind
-    // ??? This desperately needs typematic.  AlsaDriver is not the right
-    //     place for that, and neither is RMW, though RMW very likely has
-    //     the current typematic logic.  Recommend creating a new ButtonEvent
-    //     derived from QEvent that contains the press/release state.
     if (controlNumber == 114) {
         if (value == 127) {
-            QEvent *event = new QEvent(Rewind);
+            QEvent *event = new ButtonEvent(Rewind, true);
+            QCoreApplication::postEvent(
+                    RosegardenMainWindow::self(), event);
+        }
+        if (value == 0) {
+            QEvent *event = new ButtonEvent(Rewind, false);
             QCoreApplication::postEvent(
                     RosegardenMainWindow::self(), event);
         }
@@ -5709,10 +5710,14 @@ bool AlsaDriver::handleTransportCCs(unsigned controlNumber, int value)
     }
 
     // Fast Forward
-    // ??? Typematic?  See Rewind above.
     if (controlNumber == 115) {
         if (value == 127) {
-            QEvent *event = new QEvent(FastForward);
+            QEvent *event = new ButtonEvent(FastForward, true);
+            QCoreApplication::postEvent(
+                    RosegardenMainWindow::self(), event);
+        }
+        if (value == 0) {
+            QEvent *event = new ButtonEvent(FastForward, false);
             QCoreApplication::postEvent(
                     RosegardenMainWindow::self(), event);
         }

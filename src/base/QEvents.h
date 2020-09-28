@@ -28,4 +28,16 @@ namespace Rosegarden
     constexpr QEvent::Type Loop = QEvent::Type(QEvent::User + 2);
     constexpr QEvent::Type Rewind = QEvent::Type(QEvent::User + 3);
     constexpr QEvent::Type FastForward = QEvent::Type(QEvent::User + 4);
+
+    class ButtonEvent : public QEvent
+    {
+    public:
+        explicit ButtonEvent(QEvent::Type type, bool i_pressed) :
+            QEvent(type),
+            pressed(i_pressed)
+        {
+        }
+
+        bool pressed;
+    };
 }

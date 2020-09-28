@@ -8613,10 +8613,26 @@ RosegardenMainWindow::customEvent(QEvent *event)
         slotSelectNextTrack();
     if (event->type() == Loop)
         toggleLoop();
-    if (event->type() == Rewind)
-        slotRewind();
-    if (event->type() == FastForward)
-        slotFastforward();
+
+    // ??? These desperately need typematic.  RMW is not the right place
+    //     for that as it is far too large.  Recommend creating a Typematic
+    //     class to manage typematic behavior.
+    if (event->type() == Rewind) {
+        ButtonEvent *buttonEvent = dynamic_cast<ButtonEvent *>(event);
+        if (!buttonEvent)
+            return;
+
+        if (buttonEvent->pressed)
+            slotRewind();
+    }
+    if (event->type() == FastForward) {
+        ButtonEvent *buttonEvent = dynamic_cast<ButtonEvent *>(event);
+        if (!buttonEvent)
+            return;
+
+        if (buttonEvent->pressed)
+            slotFastforward();
+    }
 }
 
 
