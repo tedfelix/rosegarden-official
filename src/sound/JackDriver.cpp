@@ -24,7 +24,6 @@
 #include "Audit.h"
 #include "PluginFactory.h"
 #include "SequencerDataBlock.h"
-#include "sequencer/RosegardenSequencer.h"
 
 #include "misc/ConfigGroups.h"
 #include "misc/Debug.h"
@@ -894,7 +893,7 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 #endif
 
                     m_waitingToken = sequencer->transportJump(
-                            ExternalTransport::TransportStopAtTime,
+                            RosegardenSequencer::TransportStopAtTime,
                             RealTime::frame2RealTime(position.frame,
                                                      position.frame_rate));
                 }
@@ -1555,30 +1554,30 @@ JackDriver::jackSyncCallback(jack_transport_state_t state,
 
 #endif
 
-    ExternalTransport::TransportRequest request =
-        ExternalTransport::TransportNoChange;
+    RosegardenSequencer::TransportRequest request =
+            RosegardenSequencer::TransportNoChange;
 
     if (inst->m_alsaDriver->isPlaying()) {
 
         if (state == JackTransportStarting) {
-            request = ExternalTransport::TransportJumpToTime;
+            request = RosegardenSequencer::TransportJumpToTime;
         } else if (state == JackTransportStopped) {
-            request = ExternalTransport::TransportStop;
+            request = RosegardenSequencer::TransportStop;
         }
 
     } else {
 
         if (state == JackTransportStarting) {
-            request = ExternalTransport::TransportStartAtTime;
+            request = RosegardenSequencer::TransportStartAtTime;
         } else if (state == JackTransportStopped) {
-            request = ExternalTransport::TransportNoChange;
+            request = RosegardenSequencer::TransportNoChange;
         }
     }
 
     if (!inst->m_waiting || inst->m_waitingState != state) {
 
-        if (request == ExternalTransport::TransportJumpToTime ||
-                request == ExternalTransport::TransportStartAtTime) {
+        if (request == RosegardenSequencer::TransportJumpToTime ||
+                request == RosegardenSequencer::TransportStartAtTime) {
 
             RealTime rt = RealTime::frame2RealTime(position->frame,
                                                    position->frame_rate);
@@ -1593,7 +1592,7 @@ JackDriver::jackSyncCallback(jack_transport_state_t state,
             RG_DEBUG << "jackSyncCallback(): My token is " << inst->m_waitingToken;
 #endif
 
-        } else if (request == ExternalTransport::TransportStop) {
+        } else if (request == RosegardenSequencer::TransportStop) {
 
 #ifdef DEBUG_JACK_TRANSPORT
             RG_DEBUG << "jackSyncCallback(): Requesting state change to " << request;
@@ -1605,7 +1604,7 @@ JackDriver::jackSyncCallback(jack_transport_state_t state,
             RG_DEBUG << "jackSyncCallback(): My token is " << inst->m_waitingToken;
 #endif
 
-        } else if (request == ExternalTransport::TransportNoChange) {
+        } else if (request == RosegardenSequencer::TransportNoChange) {
 
 #ifdef DEBUG_JACK_TRANSPORT
             RG_DEBUG << "jackSyncCallback(): Requesting no state change!";

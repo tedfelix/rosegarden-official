@@ -1522,7 +1522,7 @@ RosegardenSequencer::rationalisePlayingAudio()
 }
 
 
-ExternalTransport::TransportToken
+RosegardenSequencer::TransportToken
 RosegardenSequencer::transportChange(TransportRequest request)
 {
     QMutexLocker locker(&m_transportRequestMutex);
@@ -1539,7 +1539,7 @@ RosegardenSequencer::transportChange(TransportRequest request)
         return m_transportToken + 1;
 }
 
-ExternalTransport::TransportToken
+RosegardenSequencer::TransportToken
 RosegardenSequencer::transportJump(TransportRequest request,
                                       RealTime rt)
 {

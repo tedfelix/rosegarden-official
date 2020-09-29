@@ -22,7 +22,9 @@
 namespace Rosegarden
 {
     // QEvents from AlsaDriver to RosegardenMainWindow.
-    // See ExternalTransport and SequencerDataBlock.
+    // See RosegardenSequencer::getNextTransportRequest() and
+    // SequencerDataBlock which also enable communication between the
+    // two threads.
     constexpr QEvent::Type PreviousTrack = QEvent::User;
     constexpr QEvent::Type NextTrack = QEvent::Type(QEvent::User + 1);
     constexpr QEvent::Type Loop = QEvent::Type(QEvent::User + 2);

@@ -36,7 +36,6 @@
 
 #include "AlsaDriver.h"
 #include "AlsaPort.h"
-#include "ExternalTransport.h"
 #include "MappedInstrument.h"
 #include "Midi.h"
 #include "MappedStudio.h"
@@ -2958,9 +2957,9 @@ AlsaDriver::getMappedEventList(MappedEventList &mappedEventList)
             if ((getMIDISyncStatus() == TRANSPORT_FOLLOWER) && !isPlaying()) {
                 RosegardenSequencer *sequencer = getSequencer();
                 if (sequencer) {
-                    sequencer->transportJump(ExternalTransport::TransportStopAtTime,
+                    sequencer->transportJump(RosegardenSequencer::TransportStopAtTime,
                                              RealTime::zeroTime);
-                    sequencer->transportChange(ExternalTransport::TransportStart);
+                    sequencer->transportChange(RosegardenSequencer::TransportStart);
                 }
             }
 #ifdef DEBUG_ALSA
@@ -2972,7 +2971,7 @@ AlsaDriver::getMappedEventList(MappedEventList &mappedEventList)
             if ((getMIDISyncStatus() == TRANSPORT_FOLLOWER) && !isPlaying()) {
                 RosegardenSequencer *sequencer = getSequencer();
                 if (sequencer) {
-                    sequencer->transportChange(ExternalTransport::TransportPlay);
+                    sequencer->transportChange(RosegardenSequencer::TransportPlay);
                 }
             }
 #ifdef DEBUG_ALSA
@@ -2984,7 +2983,7 @@ AlsaDriver::getMappedEventList(MappedEventList &mappedEventList)
             if ((getMIDISyncStatus() == TRANSPORT_FOLLOWER) && isPlaying()) {
                 RosegardenSequencer *sequencer = getSequencer();
                 if (sequencer) {
-                    sequencer->transportChange(ExternalTransport::TransportStop);
+                    sequencer->transportChange(RosegardenSequencer::TransportStop);
                 }
             }
 #ifdef DEBUG_ALSA
@@ -3038,7 +3037,7 @@ AlsaDriver::getMappedEventList(MappedEventList &mappedEventList)
                 seqTime - m_mtcLastReceive > RealTime(0, 500000000L)) {
                 RosegardenSequencer *sequencer = getSequencer();
                 if (sequencer) {
-                    sequencer->transportJump(ExternalTransport::TransportStopAtTime,
+                    sequencer->transportJump(RosegardenSequencer::TransportStopAtTime,
                                              m_mtcLastEncoded);
                 }
             }
@@ -3208,7 +3207,7 @@ AlsaDriver::handleMTCQFrame(unsigned int data_byte, RealTime the_time)
             if (sequencer) {
                 tweakSkewForMTC(0);  /* JPM - reset it on start of playback, to be sure */
                 sequencer->transportJump
-                    (ExternalTransport::TransportStartAtTime,
+                    (RosegardenSequencer::TransportStartAtTime,
                      m_mtcEncodedTime);
             }
         }
@@ -3459,7 +3458,7 @@ AlsaDriver::testForMTCSysex(const snd_seq_event_t *event)
     RosegardenSequencer *sequencer = getSequencer();
     if (sequencer) {
         sequencer->transportJump
-            (ExternalTransport::TransportJumpToTime,
+            (RosegardenSequencer::TransportJumpToTime,
              m_mtcEncodedTime);
     }
 
@@ -3581,12 +3580,12 @@ AlsaDriver::testForMMCSysex(const snd_seq_event_t *event)
         instruction == MIDI_MMC_DEFERRED_PLAY) {
         RosegardenSequencer *sequencer = getSequencer();
         if (sequencer) {
-            sequencer->transportChange(ExternalTransport::TransportPlay);
+            sequencer->transportChange(RosegardenSequencer::TransportPlay);
         }
     } else if (instruction == MIDI_MMC_STOP) {
         RosegardenSequencer *sequencer = getSequencer();
         if (sequencer) {
-            sequencer->transportChange(ExternalTransport::TransportStop);
+            sequencer->transportChange(RosegardenSequencer::TransportStop);
         }
     }
 
@@ -5620,7 +5619,7 @@ bool AlsaDriver::handleTransportCCs(unsigned controlNumber, int value)
         if (value == 127) {
             if (!isPlaying()) {
                 m_sequencer->transportChange(
-                        ExternalTransport::TransportPlay);
+                        RosegardenSequencer::TransportPlay);
             }
         }
 
@@ -5634,7 +5633,7 @@ bool AlsaDriver::handleTransportCCs(unsigned controlNumber, int value)
         if (value == 127) {
             if (!isPlaying()) {
                 m_sequencer->transportChange(
-                        ExternalTransport::TransportRecord);
+                        RosegardenSequencer::TransportRecord);
             }
         }
 
@@ -5648,7 +5647,7 @@ bool AlsaDriver::handleTransportCCs(unsigned controlNumber, int value)
         if (value == 127) {
             if (isPlaying()) {
                 m_sequencer->transportChange(
-                        ExternalTransport::TransportStop);
+                        RosegardenSequencer::TransportStop);
             }
         }
 

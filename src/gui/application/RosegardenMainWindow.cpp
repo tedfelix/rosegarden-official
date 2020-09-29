@@ -4517,34 +4517,34 @@ RosegardenMainWindow::slotHandleInputs()
     //     the ability to wait on completion, so it might require
     //     additional work to transition to QEvent.
 
-    ExternalTransport::TransportRequest req;
+    RosegardenSequencer::TransportRequest req;
     RealTime rt;
     bool have = RosegardenSequencer::getInstance()->
         getNextTransportRequest(req, rt);
 
     if (have) {
         switch (req) {
-        case ExternalTransport::TransportNoChange:
+        case RosegardenSequencer::TransportNoChange:
             break;
-        case ExternalTransport::TransportStop:
+        case RosegardenSequencer::TransportStop:
             slotStop();
             break;
-        case ExternalTransport::TransportStart:
+        case RosegardenSequencer::TransportStart:
             slotPlay();
             break;
-        case ExternalTransport::TransportPlay:
+        case RosegardenSequencer::TransportPlay:
             slotPlay();
             break;
-        case ExternalTransport::TransportRecord:
+        case RosegardenSequencer::TransportRecord:
             slotRecord();
             break;
-        case ExternalTransport::TransportJumpToTime:
+        case RosegardenSequencer::TransportJumpToTime:
             slotJumpToTime(rt);
             break;
-        case ExternalTransport::TransportStartAtTime:
+        case RosegardenSequencer::TransportStartAtTime:
             slotStartAtTime(rt);
             break;
-        case ExternalTransport::TransportStopAtTime:
+        case RosegardenSequencer::TransportStopAtTime:
             slotStop();
             slotJumpToTime(rt);
             break;

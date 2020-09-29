@@ -19,7 +19,6 @@
 
 #include "sound/MappedEventList.h"
 #include "sound/MappedStudio.h"
-#include "sound/ExternalTransport.h"
 #include "sound/MappedBufMetaIterator.h"
 
 #include "base/MidiDevice.h"
@@ -43,10 +42,10 @@ class SoundDriver;
  *
  * RosegardenSequencer owns a SoundDriver object (m_driver) which wraps the
  * ALSA and JACK functionality.  At this level we deal with communication with
- * the Rosegarden GUI application, the high level marshalling of data,
+ * the Rosegarden GUI application, the high level marshaling of data,
  * and the main event loop of the sequencer.
  */
-class RosegardenSequencer : public QObject, public ExternalTransport
+class RosegardenSequencer : public QObject
 {
     Q_OBJECT
 
@@ -346,6 +345,26 @@ public:
      */
     void setQuarterNoteLength(RealTime rt);
 
+    enum TransportRequest {
+        TransportNoChange,
+        TransportStop,
+        TransportStart,
+        TransportPlay,
+        TransportRecord,
+        TransportJumpToTime, // time arg required
+        TransportStartAtTime, // time arg required
+        TransportStopAtTime // time arg required
+    };
+
+    /// Called by RosegardenMainWindow::slotHandleInputs().
+    /**
+     * Get the next transport request from the thread-safe request queue
+     * (m_transportRequests).
+     *
+     * ??? Instead of this, we should send QEvents over to
+     *     RosegardenMainWindow.  See RosegardenMainWindow::customEvent()
+     *     which is already used for this.
+     */
     bool getNextTransportRequest(TransportRequest &request, RealTime &time);
 
     MappedEventList pullAsynchronousMidiQueue();
@@ -424,19 +443,24 @@ public:
     void initialiseStudio();
 
 
-    // --------- ExternalTransport Interface --------
+    // --------- Transport Interface --------
     //
     // Whereas the interface (above) is for the GUI to call to
     // make the sequencer follow its wishes, this interface is for
     // external clients to call (via some low-level audio callback)
-    // and requires sychronising with the GUI.
-    
-    TransportToken transportChange(TransportRequest) override;
-    TransportToken transportJump(TransportRequest, RealTime) override;
-    bool isTransportSyncComplete(TransportToken token) override;
-    TransportToken getInvalidTransportToken() const override { return 0; }
+    // and requires synchronising with the GUI.
 
-    // ---------- End of ExternalTransport Interface -----------
+    typedef unsigned long TransportToken;
+
+    TransportToken transportChange(TransportRequest);
+    TransportToken transportJump(TransportRequest, RealTime);
+    bool isTransportSyncComplete(TransportToken token);
+
+    // The value returned here is a constant that is guaranteed never
+    // to be returned by any of the transport request methods.
+    TransportToken getInvalidTransportToken() const  { return 0; }
+
+    // ---------- End of Transport Interface -----------
 
 private slots:
     /// Connected to InstrumentStaticSignals::controlChange().
