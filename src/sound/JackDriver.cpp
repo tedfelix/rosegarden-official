@@ -24,6 +24,7 @@
 #include "Audit.h"
 #include "PluginFactory.h"
 #include "SequencerDataBlock.h"
+#include "sequencer/RosegardenSequencer.h"
 
 #include "misc/ConfigGroups.h"
 #include "misc/Debug.h"
@@ -885,14 +886,14 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 
         if (state == JackTransportStopped) {
             if (playing && clocksRunning && !m_waiting) {
-                ExternalTransport *transport =
-                    m_alsaDriver->getExternalTransportControl();
-                if (transport) {
+                RosegardenSequencer *sequencer =
+                    m_alsaDriver->getSequencer();
+                if (sequencer) {
 #ifdef DEBUG_JACK_TRANSPORT
                     RG_DEBUG << "jackProcess(): JACK transport stopped externally at " << position.frame;
 #endif
 
-                    m_waitingToken = transport->transportJump(
+                    m_waitingToken = sequencer->transportJump(
                             ExternalTransport::TransportStopAtTime,
                             RealTime::frame2RealTime(position.frame,
                                                      position.frame_rate));
@@ -1541,9 +1542,9 @@ JackDriver::jackSyncCallback(jack_transport_state_t state,
     if (!inst->m_jackTransportEnabled)
         return true; // ignore
 
-    ExternalTransport *transport =
-        inst->m_alsaDriver->getExternalTransportControl();
-    if (!transport)
+    RosegardenSequencer *sequencer =
+        inst->m_alsaDriver->getSequencer();
+    if (!sequencer)
         return true;
 
 #ifdef DEBUG_JACK_TRANSPORT
@@ -1586,7 +1587,7 @@ JackDriver::jackSyncCallback(jack_transport_state_t state,
             RG_DEBUG << "jackSyncCallback(): Requesting jump to " << rt;
 #endif
 
-            inst->m_waitingToken = transport->transportJump(request, rt);
+            inst->m_waitingToken = sequencer->transportJump(request, rt);
 
 #ifdef DEBUG_JACK_TRANSPORT
             RG_DEBUG << "jackSyncCallback(): My token is " << inst->m_waitingToken;
@@ -1598,7 +1599,7 @@ JackDriver::jackSyncCallback(jack_transport_state_t state,
             RG_DEBUG << "jackSyncCallback(): Requesting state change to " << request;
 #endif
 
-            inst->m_waitingToken = transport->transportChange(request);
+            inst->m_waitingToken = sequencer->transportChange(request);
 
 #ifdef DEBUG_JACK_TRANSPORT
             RG_DEBUG << "jackSyncCallback(): My token is " << inst->m_waitingToken;
@@ -1610,7 +1611,7 @@ JackDriver::jackSyncCallback(jack_transport_state_t state,
             RG_DEBUG << "jackSyncCallback(): Requesting no state change!";
 #endif
 
-            inst->m_waitingToken = transport->transportChange(request);
+            inst->m_waitingToken = sequencer->transportChange(request);
 
 #ifdef DEBUG_JACK_TRANSPORT
             RG_DEBUG << "jackSyncCallback(): My token is " << inst->m_waitingToken;
@@ -1629,7 +1630,7 @@ JackDriver::jackSyncCallback(jack_transport_state_t state,
 
     } else {
 
-        if (transport->isTransportSyncComplete(inst->m_waitingToken)) {
+        if (sequencer->isTransportSyncComplete(inst->m_waitingToken)) {
 #ifdef DEBUG_JACK_TRANSPORT
             RG_DEBUG << "jackSyncCallback(): Sync complete";
 #endif
@@ -1678,11 +1679,11 @@ JackDriver::relocateTransportInternal(bool alsoStart)
         // Where did this request come from?  Are we just responding
         // to an external sync?
 
-        ExternalTransport *transport =
-            m_alsaDriver->getExternalTransportControl();
+        RosegardenSequencer *sequencer =
+            m_alsaDriver->getSequencer();
 
-        if (transport) {
-            if (transport->isTransportSyncComplete(m_waitingToken)) {
+        if (sequencer) {
+            if (sequencer->isTransportSyncComplete(m_waitingToken)) {
 
                 // Nope, this came from Rosegarden
 
@@ -1773,11 +1774,11 @@ JackDriver::stopTransport()
         // Where did this request come from?  Is this a result of our
         // sync to a transport that has in fact already stopped?
 
-        ExternalTransport *transport =
-            m_alsaDriver->getExternalTransportControl();
+        RosegardenSequencer *sequencer =
+            m_alsaDriver->getSequencer();
 
-        if (transport) {
-            if (transport->isTransportSyncComplete(m_waitingToken)) {
+        if (sequencer) {
+            if (sequencer->isTransportSyncComplete(m_waitingToken)) {
 
                 // No, we have no outstanding external requests; this
                 // must have genuinely been requested from within

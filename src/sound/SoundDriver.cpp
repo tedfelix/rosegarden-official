@@ -52,7 +52,7 @@ SoundDriver::SoundDriver(MappedStudio *studio, const std::string &name):
         m_lowLatencyMode(true),
         m_audioRecFileFormat(RIFFAudioFile::FLOAT),
         m_studio(studio),
-        m_externalTransport(nullptr),
+        m_sequencer(nullptr),
         m_mmcStatus(TRANSPORT_OFF),
         m_mtcStatus(TRANSPORT_OFF),
         m_mmcId(0),            // default MMC id of 0

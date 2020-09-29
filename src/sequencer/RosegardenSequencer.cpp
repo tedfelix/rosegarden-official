@@ -105,7 +105,9 @@ RosegardenSequencer::RosegardenSequencer() :
     m_driver->setAudioBufferSizes(m_audioMix, m_audioRead, m_audioWrite,
                                   m_smallFileSize);
 
-    m_driver->setExternalTransportControl(this);
+    // ??? Have AlsaDriver use getInstance() instead.  Should be safe, but
+    //     confirm creation order is ok.
+    m_driver->setSequencer(this);
 
     // Connect for high-frequency control change notifications.
     // Note that we must use a DirectConnection or else the signals may

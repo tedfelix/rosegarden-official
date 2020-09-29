@@ -123,7 +123,7 @@ private:
 };
 
 
-class ExternalTransport;
+class RosegardenSequencer;
 class MappedEventList;
 class MappedStudio;
 
@@ -414,11 +414,13 @@ public:
     virtual void setMIDIClockInterval(RealTime interval) 
         { m_midiClockInterval = interval; }
 
-    ExternalTransport *getExternalTransportControl() const {
-        return m_externalTransport;
+    // ??? Remove these and use RosegardenSequencer::getInstance() instead.
+    //     Should be safe, but confirm creation order is ok.
+    RosegardenSequencer *getSequencer() const {
+        return m_sequencer;
     }
-    void setExternalTransportControl(ExternalTransport *transport) {
-        m_externalTransport = transport;
+    void setSequencer(RosegardenSequencer *transport) {
+        m_sequencer = transport;
     }
 
     // Do any bits and bobs of work that need to be done continuously
@@ -492,10 +494,9 @@ protected:
     // Virtual studio hook
     //
     MappedStudio                *m_studio;
-    
-    // Controller to make externally originated transport requests on
-    //
-    ExternalTransport           *m_externalTransport;
+
+    // For transport requests.
+    RosegardenSequencer *m_sequencer;
 
     // MMC and MTC status and ID
     //
