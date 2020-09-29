@@ -1721,9 +1721,9 @@ private:
 
     void updateTitle();
 
-    /// For the rewind button on a control surface.
+    /// For the rewind button on a keyboard controller.
     Typematic m_rewindTypematic;
-    /// For the fast-forward button on a control surface.
+    /// For the fast-forward button on a keyboard controller.
     Typematic m_fastForwardTypematic;
 
 private slots:

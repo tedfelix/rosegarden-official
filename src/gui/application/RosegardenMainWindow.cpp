@@ -8620,9 +8620,6 @@ RosegardenMainWindow::customEvent(QEvent *event)
     if (event->type() == Loop)
         toggleLoop();
 
-    // ??? These desperately need typematic.  RMW is not the right place
-    //     for that as it is far too large.  Recommend creating a Typematic
-    //     class to manage typematic behavior.
     if (event->type() == Rewind) {
         ButtonEvent *buttonEvent = dynamic_cast<ButtonEvent *>(event);
         if (!buttonEvent)
