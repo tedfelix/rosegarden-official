@@ -141,6 +141,25 @@ public:
     SoundDriver(MappedStudio *studio, const std::string &name);
     virtual ~SoundDriver();
 
+    void setAudioBufferSizes(RealTime mix, RealTime read, RealTime write,
+                             int smallFileSize) {
+        m_audioMixBufferLength = mix;
+        m_audioReadBufferLength = read;
+        m_audioWriteBufferLength = write;
+        m_smallFileSize = smallFileSize;
+    }
+
+    /// Store a local copy at construction time.
+    /**
+     * This lets us avoid calling RosegardenSequencer::getInstance() which
+     * uses a mutex.
+     */
+    void setSequencer(RosegardenSequencer *sequencer) {
+        m_sequencer = sequencer;
+    }
+    /// Use instead of RosegardenSequencer::getInstance() to avoid mutex.
+    RosegardenSequencer *getSequencer() const  { return m_sequencer; }
+
     virtual bool initialise() = 0;
     virtual void shutdown() { }
 
@@ -356,14 +375,6 @@ public:
 
     // Buffer sizes
     //
-    void setAudioBufferSizes(RealTime mix, RealTime read, RealTime write,
-                             int smallFileSize) {
-        m_audioMixBufferLength = mix;
-        m_audioReadBufferLength = read;
-        m_audioWriteBufferLength = write;
-        m_smallFileSize = smallFileSize;
-    }
-
     RealTime getAudioMixBufferLength() { return m_audioMixBufferLength; }
     RealTime getAudioReadBufferLength() { return m_audioReadBufferLength; }
     RealTime getAudioWriteBufferLength() { return m_audioWriteBufferLength; }
@@ -413,15 +424,6 @@ public:
     //
     virtual void setMIDIClockInterval(RealTime interval) 
         { m_midiClockInterval = interval; }
-
-    // ??? Remove these and use RosegardenSequencer::getInstance() instead.
-    //     Should be safe, but confirm creation order is ok.
-    RosegardenSequencer *getSequencer() const {
-        return m_sequencer;
-    }
-    void setSequencer(RosegardenSequencer *transport) {
-        m_sequencer = transport;
-    }
 
     // Do any bits and bobs of work that need to be done continuously
     // (this is called repeatedly whether playing or not).

@@ -105,8 +105,8 @@ RosegardenSequencer::RosegardenSequencer() :
     m_driver->setAudioBufferSizes(m_audioMix, m_audioRead, m_audioWrite,
                                   m_smallFileSize);
 
-    // ??? Have AlsaDriver use getInstance() instead.  Should be safe, but
-    //     confirm creation order is ok.
+    // Pass the RosegardenSequencer to AlsaDriver to avoid the need to
+    // call getInstance() and incur the overhead of a mutex.
     m_driver->setSequencer(this);
 
     // Connect for high-frequency control change notifications.
