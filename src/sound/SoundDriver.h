@@ -158,6 +158,9 @@ public:
         m_sequencer = sequencer;
     }
     /// Use instead of RosegardenSequencer::getInstance() to avoid mutex.
+    /**
+     * JackDriver uses this for transport requests.
+     */
     RosegardenSequencer *getSequencer() const  { return m_sequencer; }
 
     virtual bool initialise() = 0;
@@ -497,7 +500,10 @@ protected:
     //
     MappedStudio                *m_studio;
 
-    // For transport requests.
+    /// For transport requests.
+    /*
+     * Use instead of RosegardenSequencer::getInstance() to avoid mutex.
+     */
     RosegardenSequencer *m_sequencer;
 
     // MMC and MTC status and ID

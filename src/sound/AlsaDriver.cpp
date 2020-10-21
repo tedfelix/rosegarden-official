@@ -2955,11 +2955,10 @@ AlsaDriver::getMappedEventList(MappedEventList &mappedEventList)
 
         case SND_SEQ_EVENT_START:
             if ((getMIDISyncStatus() == TRANSPORT_FOLLOWER) && !isPlaying()) {
-                RosegardenSequencer *sequencer = getSequencer();
-                if (sequencer) {
-                    sequencer->transportJump(RosegardenSequencer::TransportStopAtTime,
+                if (m_sequencer) {
+                    m_sequencer->transportJump(RosegardenSequencer::TransportStopAtTime,
                                              RealTime::zeroTime);
-                    sequencer->transportChange(RosegardenSequencer::TransportStart);
+                    m_sequencer->transportChange(RosegardenSequencer::TransportStart);
                 }
             }
 #ifdef DEBUG_ALSA
@@ -2969,9 +2968,8 @@ AlsaDriver::getMappedEventList(MappedEventList &mappedEventList)
 
         case SND_SEQ_EVENT_CONTINUE:
             if ((getMIDISyncStatus() == TRANSPORT_FOLLOWER) && !isPlaying()) {
-                RosegardenSequencer *sequencer = getSequencer();
-                if (sequencer) {
-                    sequencer->transportChange(RosegardenSequencer::TransportPlay);
+                if (m_sequencer) {
+                    m_sequencer->transportChange(RosegardenSequencer::TransportPlay);
                 }
             }
 #ifdef DEBUG_ALSA
@@ -2981,9 +2979,8 @@ AlsaDriver::getMappedEventList(MappedEventList &mappedEventList)
 
         case SND_SEQ_EVENT_STOP:
             if ((getMIDISyncStatus() == TRANSPORT_FOLLOWER) && isPlaying()) {
-                RosegardenSequencer *sequencer = getSequencer();
-                if (sequencer) {
-                    sequencer->transportChange(RosegardenSequencer::TransportStop);
+                if (m_sequencer) {
+                    m_sequencer->transportChange(RosegardenSequencer::TransportStop);
                 }
             }
 #ifdef DEBUG_ALSA
@@ -3035,9 +3032,8 @@ AlsaDriver::getMappedEventList(MappedEventList &mappedEventList)
             RealTime seqTime = getSequencerTime();
             if (m_mtcLastReceive < seqTime &&
                 seqTime - m_mtcLastReceive > RealTime(0, 500000000L)) {
-                RosegardenSequencer *sequencer = getSequencer();
-                if (sequencer) {
-                    sequencer->transportJump(RosegardenSequencer::TransportStopAtTime,
+                if (m_sequencer) {
+                    m_sequencer->transportJump(RosegardenSequencer::TransportStopAtTime,
                                              m_mtcLastEncoded);
                 }
             }
@@ -3203,10 +3199,9 @@ AlsaDriver::handleMTCQFrame(unsigned int data_byte, RealTime the_time)
             RG_DEBUG << "handleMTCQFrame(): MTC: Received quarter frame while not playing - starting now";
 #endif
 
-            RosegardenSequencer *sequencer = getSequencer();
-            if (sequencer) {
+            if (m_sequencer) {
                 tweakSkewForMTC(0);  /* JPM - reset it on start of playback, to be sure */
-                sequencer->transportJump
+                m_sequencer->transportJump
                     (RosegardenSequencer::TransportStartAtTime,
                      m_mtcEncodedTime);
             }
@@ -3455,9 +3450,8 @@ AlsaDriver::testForMTCSysex(const snd_seq_event_t *event)
     RG_DEBUG << "testForMTCSysex(): MTC: MTC sysex found (frame type " << type << "), jumping to " << m_mtcEncodedTime;
 #endif
 
-    RosegardenSequencer *sequencer = getSequencer();
-    if (sequencer) {
-        sequencer->transportJump
+    if (m_sequencer) {
+        m_sequencer->transportJump
             (RosegardenSequencer::TransportJumpToTime,
              m_mtcEncodedTime);
     }
@@ -3578,14 +3572,12 @@ AlsaDriver::testForMMCSysex(const snd_seq_event_t *event)
 
     if (instruction == MIDI_MMC_PLAY ||
         instruction == MIDI_MMC_DEFERRED_PLAY) {
-        RosegardenSequencer *sequencer = getSequencer();
-        if (sequencer) {
-            sequencer->transportChange(RosegardenSequencer::TransportPlay);
+        if (m_sequencer) {
+            m_sequencer->transportChange(RosegardenSequencer::TransportPlay);
         }
     } else if (instruction == MIDI_MMC_STOP) {
-        RosegardenSequencer *sequencer = getSequencer();
-        if (sequencer) {
-            sequencer->transportChange(RosegardenSequencer::TransportStop);
+        if (m_sequencer) {
+            m_sequencer->transportChange(RosegardenSequencer::TransportStop);
         }
     }
 

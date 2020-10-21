@@ -141,14 +141,12 @@ RosegardenSequencer::cleanup()
 RosegardenSequencer *
 RosegardenSequencer::getInstance()
 {
+    // Lock required as both threads might get in here at the same time.
     m_instanceMutex.lock();
-    if (!m_instance) {
-#ifdef DEBUG_ROSEGARDEN_SEQUENCER        
-        SEQUENCER_DEBUG << "RosegardenSequencer::getInstance: Creating";
-#endif
+    if (!m_instance)
         m_instance = new RosegardenSequencer();
-    }
     m_instanceMutex.unlock();
+
     return m_instance;
 }
 
