@@ -2157,14 +2157,14 @@ AlsaDriver::resetPlayback(const RealTime &oldPosition, const RealTime &position)
         // if we're fast forwarding then we bring the note off closer
         if (jump >= RealTime::zeroTime) {
 
-            RealTime endTime = formerStartPosition + (*i)->getRealTime();
+            RealTime endTime = formerStartPosition + (*i)->realTime;
 
 #ifdef DEBUG_PROCESS_MIDI_OUT
             RG_DEBUG << "resetPlayback(): Forward jump of " << jump << ": adjusting note off from "
                       << (*i)->getRealTime() << " (absolute " << endTime
                       << ") to:";
 #endif
-            (*i)->setRealTime(endTime - position);
+            (*i)->realTime = endTime - position;
 #ifdef DEBUG_PROCESS_MIDI_OUT
             RG_DEBUG << "resetPlayback():     " << (*i)->getRealTime();
 #endif
@@ -2173,7 +2173,7 @@ AlsaDriver::resetPlayback(const RealTime &oldPosition, const RealTime &position)
 #ifdef DEBUG_PROCESS_MIDI_OUT
                 RG_DEBUG << "resetPlayback(): Rewind by " << jump << ": setting note off to zero";
 #endif
-                (*i)->setRealTime(RealTime::zeroTime);
+                (*i)->realTime = RealTime::zeroTime;
             }
     }
 
@@ -2266,7 +2266,7 @@ AlsaDriver::pushRecentNoteOffs()
 
     for (NoteOffQueue::iterator i = m_recentNoteOffs.begin();
          i != m_recentNoteOffs.end(); ++i) {
-        (*i)->setRealTime(RealTime::zeroTime);
+        (*i)->realTime = RealTime::zeroTime;
         m_noteOffQueue.insert(*i);
     }
 
@@ -2282,7 +2282,7 @@ AlsaDriver::cropRecentNoteOffs(const RealTime &t)
 #ifdef DEBUG_PROCESS_MIDI_OUT
         RG_DEBUG << "cropRecentNoteOffs(): " << ev->getRealTime() << " vs " << t;
 #endif
-        if (ev->getRealTime() >= t) break;
+        if (ev->realTime >= t) break;
         delete ev;
         m_recentNoteOffs.erase(m_recentNoteOffs.begin());
     }
@@ -2294,9 +2294,9 @@ AlsaDriver::weedRecentNoteOffs(unsigned int pitch, MidiByte channel,
 {
     for (NoteOffQueue::iterator i = m_recentNoteOffs.begin();
          i != m_recentNoteOffs.end(); ++i) {
-        if ((*i)->getPitch() == pitch &&
-            (*i)->getChannel() == channel && 
-            (*i)->getInstrument() == instrument) {
+        if ((*i)->pitch == pitch &&
+            (*i)->channel == channel &&
+            (*i)->instrumentId == instrument) {
 #ifdef DEBUG_PROCESS_MIDI_OUT
             RG_DEBUG << "weedRecentNoteOffs(): deleting one";
 #endif
@@ -2326,7 +2326,7 @@ AlsaDriver::allNotesOff()
          it != m_noteOffQueue.end(); ++it) {
         // Set destination according to connection for instrument
         //
-        outputDevice = getPairForMappedInstrument((*it)->getInstrument());
+        outputDevice = getPairForMappedInstrument((*it)->instrumentId);
         if (outputDevice.client < 0  ||  outputDevice.port < 0)
             continue;
 
@@ -2334,14 +2334,14 @@ AlsaDriver::allNotesOff()
 
         // Set source according to port for device
         //
-        int src = getOutputPortForMappedInstrument((*it)->getInstrument());
+        int src = getOutputPortForMappedInstrument((*it)->instrumentId);
         if (src < 0)
             continue;
         snd_seq_ev_set_source(&event, src);
 
         snd_seq_ev_set_noteoff(&event,
-                               (*it)->getChannel(),
-                               (*it)->getPitch(),
+                               (*it)->channel,
+                               (*it)->pitch,
                                NOTE_OFF_VELOCITY);
 
         //snd_seq_event_output(m_midiHandle, &event);
@@ -2388,7 +2388,7 @@ AlsaDriver::processNotesOff(const RealTime &time, bool now, bool everything)
 
         NoteOffEvent *noteOff = *m_noteOffQueue.begin();
 
-        if (noteOff->getRealTime() > time) {
+        if (noteOff->realTime > time) {
 #ifdef DEBUG_PROCESS_MIDI_OUT
             RG_DEBUG << "processNotesOff(): Note off time " << noteOff->getRealTime() << " is beyond current time " << time;
 #endif
@@ -2399,7 +2399,7 @@ AlsaDriver::processNotesOff(const RealTime &time, bool now, bool everything)
         RG_DEBUG << "processNotesOff(" << time << "): found event at " << noteOff->getRealTime() << ", instr " << noteOff->getInstrument() << ", channel " << int(noteOff->getChannel()) << ", pitch " << int(noteOff->getPitch());
 #endif
 
-        RealTime offTime = noteOff->getRealTime();
+        RealTime offTime = noteOff->realTime;
         if (offTime < RealTime::zeroTime) offTime = RealTime::zeroTime;
         bool scheduled = (offTime > alsaTime) && !now;
         if (!scheduled) offTime = RealTime::zeroTime;
@@ -2408,11 +2408,11 @@ AlsaDriver::processNotesOff(const RealTime &time, bool now, bool everything)
                                             (unsigned int)offTime.nsec };
 
         snd_seq_ev_set_noteoff(&alsaEvent,
-                               noteOff->getChannel(),
-                               noteOff->getPitch(),
+                               noteOff->channel,
+                               noteOff->pitch,
                                NOTE_OFF_VELOCITY);
 
-        bool isSoftSynth = (noteOff->getInstrument() >= SoftSynthInstrumentBase);
+        bool isSoftSynth = (noteOff->instrumentId >= SoftSynthInstrumentBase);
 
         if (!isSoftSynth) {
 
@@ -2420,9 +2420,9 @@ AlsaDriver::processNotesOff(const RealTime &time, bool now, bool everything)
 
             // Set source according to instrument
             //
-            int src = getOutputPortForMappedInstrument(noteOff->getInstrument());
+            int src = getOutputPortForMappedInstrument(noteOff->instrumentId);
             if (src < 0) {
-                RG_WARNING << "processNotesOff(): WARNING: Note off has no output port (instr = " << noteOff->getInstrument() << ")";
+                RG_WARNING << "processNotesOff(): WARNING: Note off has no output port (instr = " << noteOff->instrumentId << ")";
                 delete noteOff;
                 m_noteOffQueue.erase(m_noteOffQueue.begin());
                 continue;
@@ -2444,7 +2444,7 @@ AlsaDriver::processNotesOff(const RealTime &time, bool now, bool everything)
 
             alsaEvent.time.time = alsaOffTime;
 
-            processSoftSynthEventOut(noteOff->getInstrument(), &alsaEvent, now);
+            processSoftSynthEventOut(noteOff->instrumentId, &alsaEvent, now);
         }
 
         if (!now) {

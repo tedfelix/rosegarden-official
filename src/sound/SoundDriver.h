@@ -66,60 +66,37 @@ enum TransportSyncStatus
 
 
 /// Pending Note Off event for the NoteOffQueue
-class NoteOffEvent
+struct NoteOffEvent
 {
-public:
     NoteOffEvent() :
-        m_realTime(),
-        m_pitch(0),
-        m_channel(0),
-        m_instrument(0)
+        realTime(),
+        pitch(0),
+        channel(0),
+        instrumentId(0)
     { }
+
     NoteOffEvent(const RealTime &realTime,
-                 unsigned int pitch,
+                 MidiByte pitch,
                  MidiByte channel,
-                 InstrumentId instrument):
-        m_realTime(realTime),
-        m_pitch(pitch),
-        m_channel(channel),
-        m_instrument(instrument) {;}
-    ~NoteOffEvent() {;}
+                 InstrumentId instrumentId) :
+        realTime(realTime),
+        pitch(pitch),
+        channel(channel),
+        instrumentId(instrumentId)
+    { }
 
-    struct NoteOffEventCmp
-    {
-        bool operator()(NoteOffEvent *nO1, NoteOffEvent *nO2)
-        {
-            return nO1->getRealTime() < nO2->getRealTime();
-        }
-    };
-
-    void setRealTime(const RealTime &time) { m_realTime = time; }
-    RealTime getRealTime() const { return m_realTime; }
-
-    MidiByte getPitch() const { return m_pitch; }
-    MidiByte getChannel() const { return m_channel; }
-    InstrumentId getInstrument() const { return m_instrument; }
-
-private:
-    RealTime     m_realTime;
-    MidiByte     m_pitch;
-    MidiByte     m_channel;
-    InstrumentId m_instrument;
+    RealTime realTime;
+    MidiByte pitch;
+    MidiByte channel;
+    InstrumentId instrumentId;
 };
 
-
-/// The queue itself
-/**
- * The NoteOffQueue holds a time ordered set of
- * pending MIDI NoteOffEvent objects.
- */
-class NoteOffQueue : public std::multiset<NoteOffEvent *,
-                     NoteOffEvent::NoteOffEventCmp>
+struct NoteOffEventCmp
 {
-public:
-    NoteOffQueue() {;}
-    ~NoteOffQueue() {;}
-private:
+    bool operator()(const NoteOffEvent *lhs, const NoteOffEvent *rhs)
+    {
+        return (lhs->realTime < rhs->realTime);
+    }
 };
 
 
@@ -455,9 +432,14 @@ protected:
     bool                                        m_startPlayback;
     bool                                        m_playing;
 
-    // MIDI Note-off handling
-    //
-    NoteOffQueue                                m_noteOffQueue;
+    typedef std::multiset<NoteOffEvent *, NoteOffEventCmp> NoteOffQueue;
+    /// A time ordered set of pending MIDI NoteOffEvent objects.
+    /**
+     * This is used to turn off all notes when Stop is pressed.
+     *
+     * See AlsaDriver::processNotesOff().
+     */
+    NoteOffQueue m_noteOffQueue;
 
     // This is our driver's own list of MappedInstruments and MappedDevices.  
     // These are uncoupled at this level - the Instruments and Devices float
