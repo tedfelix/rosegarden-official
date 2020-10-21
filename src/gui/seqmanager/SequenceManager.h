@@ -357,9 +357,15 @@ private slots:
     void slotScheduledCompositionMapperReset();
     
 private:
-    // ??? Get rid of this and go through RMW.
+    /// Cache to avoid lock?
+    /**
+     * ??? Get rid of this and go through RMW.  Or is that dangerous since
+     *     that would cross thread boundaries and require a lock which is
+     *     not there at the moment?
+     */
     RosegardenDocument *m_doc;
 
+    /// Cache to avoid lock.
     /**
      * @see RosegardenSequencer::getSoundDriverStatus()
      */
@@ -367,7 +373,7 @@ private:
 
     // *** CompositionMapper
 
-    QSharedPointer<CompositionMapper> m_compositionMapper;  // owned
+    QSharedPointer<CompositionMapper> m_compositionMapper;
     /// Add each Segment from the Composition to the CompositionMapper.
     void populateCompositionMapper();
     /**
@@ -389,13 +395,13 @@ private:
 
     // *** Other Mappers
 
-    QSharedPointer<MetronomeMapper> m_metronomeMapper;  // owned
+    QSharedPointer<MetronomeMapper> m_metronomeMapper;
     void resetMetronomeMapper();
 
-    QSharedPointer<TempoSegmentMapper> m_tempoSegmentMapper;  // owned
+    QSharedPointer<TempoSegmentMapper> m_tempoSegmentMapper;
     void resetTempoSegmentMapper();
 
-    QSharedPointer<TimeSigSegmentMapper> m_timeSigSegmentMapper;  // owned
+    QSharedPointer<TimeSigSegmentMapper> m_timeSigSegmentMapper;
     void resetTimeSigSegmentMapper();
 
     // *** Refresh Mappers and RosegardenSequencer

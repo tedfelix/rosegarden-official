@@ -1079,37 +1079,30 @@ bool SequenceManager::inCountIn(const RealTime &time) const
 void
 SequenceManager::checkSoundDriverStatus(bool warnUser)
 {
-    // Update local copy of status.
-    // ??? Can we get rid of this member?  Only record() uses it.  Why
-    //     not just let record() call getSoundDriverStatus(VERSION) directly?
-    //     Then we can get rid of all the callers that call this with warnUser
-    //     set to false.  Then we can get rid of warnUser.  No, it's worse
-    //     than that.  There's also a getSoundDriverStatus() in here that
-    //     provides access to this copy.  We would have to that over to
-    //     providing RosegardenSequencer::getSoundDriverStatus().  Then
-    //     probably inline that into each caller.  It's doable, but a bit
-    //     more involved than it appears at first glance.  I'm also a little
-    //     worried that this local status has more values than the
-    //     RosegardenSequencer one.  Or perhaps it is out of sync and there's
-    //     a reason.
-    m_soundDriverStatus = RosegardenSequencer::getInstance()->
-        getSoundDriverStatus(VERSION);
+    // Keep a local copy of the status to avoid calling
+    // RosegardenSequencer::getSoundDriverStatus() which uses a lock.
+    m_soundDriverStatus =
+            RosegardenSequencer::getInstance()->getSoundDriverStatus();
 
     RG_DEBUG << "checkSoundDriverStatus(): Sound driver status:" <<
             "MIDI" << (((m_soundDriverStatus & MIDI_OK) != 0) ? "ok" : "NOT OK") << "|" <<
-            "Audio" << (((m_soundDriverStatus & AUDIO_OK) != 0) ? "ok" : "NOT OK") << "|" <<
-            "Version" << (((m_soundDriverStatus & VERSION_OK) != 0) ? "ok" : "NOT OK");
+            "Audio" << (((m_soundDriverStatus & AUDIO_OK) != 0) ? "ok" : "NOT OK");
 
     if (!warnUser)
         return;
 
 #ifdef HAVE_LIBJACK
-    if ((m_soundDriverStatus & (AUDIO_OK | MIDI_OK | VERSION_OK)) ==
-        (AUDIO_OK | MIDI_OK | VERSION_OK)) return;
+    // Audio and MIDI ok?  Bail.
+    if ((m_soundDriverStatus & AUDIO_OK)  &&
+        (m_soundDriverStatus & MIDI_OK))
+        return;
 #else
-    if ((m_soundDriverStatus & (MIDI_OK | VERSION_OK)) ==
-        (MIDI_OK | VERSION_OK)) return;
+    // MIDI ok?  Bail.
+    if (m_soundDriverStatus & MIDI_OK)
+        return;
 #endif
+
+    // Either MIDI or Audio are not ok...
 
     StartupLogo::hideIfStillThere();
 
@@ -1130,13 +1123,15 @@ SequenceManager::checkSoundDriverStatus(bool warnUser)
     } 
 
 #ifdef HAVE_LIBJACK
-
+    // If audio driver is not ok...
     if (!(m_soundDriverStatus & AUDIO_OK)) {
         // This is to avoid us ever showing the same dialog more than
         // once during a single run of the program -- it's quite
         // separate from the suppression function
-        // ??? But this routine is only ever called with "true" once.  From
-        //     RMW's ctor.  There is no need for this.
+        // ??? But this routine is only ever called once.  From
+        //     RMW's ctor.  There is no need for this.  Plus the warning dialogs
+        //     are now hidden in the warning button in the WarningWidget in
+        //     the status bar.
         static bool showJackWarning = true;
 
         if (showJackWarning) {

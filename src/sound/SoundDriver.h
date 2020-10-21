@@ -44,16 +44,12 @@ namespace Rosegarden
 // or recording.
 enum RecordStatus  { RECORD_OFF, RECORD_ON };
 
-// Status of a SoundDriver - whether we're got an audio and
-// MIDI subsystem or not.  This is reported right up to the
-// gui.
-typedef unsigned int SoundDriverStatus;
+typedef unsigned SoundDriverStatus;
 enum
 {
-    NO_DRIVER  = 0x00,          // Nothing's OK
-    AUDIO_OK   = 0x01,          // AUDIO's OK
-    MIDI_OK    = 0x02,          // MIDI's OK
-    VERSION_OK = 0x04           // GUI and sequencer versions match
+    NO_DRIVER  = 0x00,  // Nothing's OK
+    AUDIO_OK   = 0x01,
+    MIDI_OK    = 0x02
 };
 
 /// Used for MMC and MTC, not for JACK transport
@@ -63,7 +59,6 @@ enum TransportSyncStatus
     TRANSPORT_SOURCE,
     TRANSPORT_FOLLOWER
 };
-
 
 
 class RosegardenSequencer;
@@ -108,6 +103,8 @@ public:
 
     virtual bool initialise() = 0;
     virtual void shutdown() { }
+
+    SoundDriverStatus getStatus() const  { return m_driverStatus; }
 
     virtual void initialisePlayback(const RealTime &position) = 0;
     virtual void stopPlayback() = 0;
@@ -224,10 +221,6 @@ public:
     //
     void setMappedInstrument(MappedInstrument *mI);
     MappedInstrument* getMappedInstrument(InstrumentId id);
-
-    // Return the current status of the driver
-    //
-    unsigned int getStatus() const { return m_driverStatus; }
 
     // Are we playing?
     //
@@ -393,7 +386,7 @@ protected:
     AudioFile* getAudioFile(unsigned int id);
 
     std::string                                 m_name;
-    unsigned int                                m_driverStatus;
+    SoundDriverStatus m_driverStatus;
     RealTime                                    m_playStartPosition;
     bool                                        m_startPlayback;
     bool                                        m_playing;

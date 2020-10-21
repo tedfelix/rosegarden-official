@@ -88,7 +88,7 @@ public:
     void jumpTo(const RealTime &rt);
  
     /// Return the Sound system status (audio/MIDI)
-    unsigned int getSoundDriverStatus(const QString &guiVersion);
+    unsigned getSoundDriverStatus();
 
     /// Add an audio file to the sequencer
     /**
