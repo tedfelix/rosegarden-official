@@ -65,40 +65,6 @@ enum TransportSyncStatus
 };
 
 
-/// Pending Note Off event for the NoteOffQueue
-struct NoteOffEvent
-{
-    NoteOffEvent() :
-        realTime(),
-        pitch(0),
-        channel(0),
-        instrumentId(0)
-    { }
-
-    NoteOffEvent(const RealTime &realTime,
-                 MidiByte pitch,
-                 MidiByte channel,
-                 InstrumentId instrumentId) :
-        realTime(realTime),
-        pitch(pitch),
-        channel(channel),
-        instrumentId(instrumentId)
-    { }
-
-    RealTime realTime;
-    MidiByte pitch;
-    MidiByte channel;
-    InstrumentId instrumentId;
-};
-
-struct NoteOffEventCmp
-{
-    bool operator()(const NoteOffEvent *lhs, const NoteOffEvent *rhs)
-    {
-        return (lhs->realTime < rhs->realTime);
-    }
-};
-
 
 class RosegardenSequencer;
 class MappedEventList;
@@ -431,15 +397,6 @@ protected:
     RealTime                                    m_playStartPosition;
     bool                                        m_startPlayback;
     bool                                        m_playing;
-
-    typedef std::multiset<NoteOffEvent *, NoteOffEventCmp> NoteOffQueue;
-    /// A time ordered set of pending MIDI NoteOffEvent objects.
-    /**
-     * This is used to turn off all notes when Stop is pressed.
-     *
-     * See AlsaDriver::processNotesOff().
-     */
-    NoteOffQueue m_noteOffQueue;
 
     // This is our driver's own list of MappedInstruments and MappedDevices.  
     // These are uncoupled at this level - the Instruments and Devices float

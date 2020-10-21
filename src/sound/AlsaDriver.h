@@ -18,6 +18,7 @@
 #ifdef HAVE_ALSA
 
 #include "SoundDriver.h"
+#include "NoteOffEvent.h"
 #include "base/Instrument.h"
 #include "base/Device.h"
 #include "AlsaPort.h"
@@ -637,6 +638,14 @@ private:
     };
     std::vector<AlsaTimerInfo> m_timers;
     QString m_currentTimer;
+
+    /// A time ordered set of pending MIDI NoteOffEvent objects.
+    /**
+     * This is used to turn off all notes when Stop is pressed.
+     *
+     * See processNotesOff().
+     */
+    NoteOffQueue m_noteOffQueue;
 
     /// Send out the note-off events in m_noteOffQueue
     /**
