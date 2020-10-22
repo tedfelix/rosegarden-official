@@ -47,9 +47,9 @@ enum RecordStatus  { RECORD_OFF, RECORD_ON };
 typedef unsigned SoundDriverStatus;
 enum
 {
-    NO_DRIVER  = 0x00,  // Nothing's OK
-    AUDIO_OK   = 0x01,
-    MIDI_OK    = 0x02
+    NO_DRIVER = 0x00,  // Nothing's OK
+    AUDIO_OK  = 0x01,
+    MIDI_OK   = 0x02
 };
 
 /// Used for MMC and MTC, not for JACK transport
@@ -101,35 +101,36 @@ public:
      */
     RosegardenSequencer *getSequencer() const  { return m_sequencer; }
 
-    virtual bool initialise() = 0;
-    virtual void shutdown() { }
+    virtual bool initialise()  { return true; }
+    virtual void shutdown()  { }
 
     SoundDriverStatus getStatus() const  { return m_driverStatus; }
 
-    virtual void initialisePlayback(const RealTime &position) = 0;
-    virtual void stopPlayback() = 0;
-    virtual void punchOut() = 0; // stop recording, continue playing
-    virtual void resetPlayback(
-            const RealTime &oldPosition, const RealTime &position) = 0;
+    virtual void initialisePlayback(const RealTime & /*position*/)  { }
+    virtual void stopPlayback()  { }
+    /// stop recording, continue playing
+    virtual void punchOut()  { }
+    virtual void resetPlayback(const RealTime & /*oldPosition*/,
+                               const RealTime & /*position*/)  { }
     
-    virtual RealTime getSequencerTime() = 0;
+    virtual RealTime getSequencerTime()  { return RealTime(0, 0); }
 
-    virtual bool getMappedEventList(MappedEventList &) = 0;
+    virtual bool getMappedEventList(MappedEventList &)  { return true; }
 
     virtual void startClocks() { }
     virtual void stopClocks() { }
 
     // Process some asynchronous events
     //
-    virtual void processEventsOut(const MappedEventList &mC) = 0;
+    virtual void processEventsOut(const MappedEventList & /*mC*/)  { }
 
     // Process some scheduled events on the output queue.  The
     // slice times are here so that the driver can interleave
     // note-off events as appropriate.
     //
-    virtual void processEventsOut(const MappedEventList &mC,
-                                  const RealTime &sliceStart,
-                                  const RealTime &sliceEnd) = 0;
+    virtual void processEventsOut(const MappedEventList & /*mC*/,
+                                  const RealTime & /*sliceStart*/,
+                                  const RealTime & /*sliceEnd*/)  { }
 
     virtual bool record(
             RecordStatus /*recordStatus*/,
@@ -137,31 +138,29 @@ public:
             const std::vector<QString> & /*audioFileNames*/)
         { return false; }
 
-    // Process anything that's pending
-    //
-    virtual void processPending() = 0;
+    virtual void processPending()  { }
 
     // Get the driver's operating sample rate
-    //
-    virtual unsigned int getSampleRate() const = 0;
+    virtual unsigned int getSampleRate() const  { return 0; }
 
     // Plugin instance management
-    //
-    virtual void setPluginInstance(InstrumentId id,
-                                   QString identifier,
-                                   int position) = 0;
 
-    virtual void removePluginInstance(InstrumentId id,
-                                      int position) = 0;
+    virtual void setPluginInstance(InstrumentId /*id*/,
+                                   QString /*identifier*/,
+                                   int /*position*/)  { }
 
-    virtual void setPluginInstancePortValue(InstrumentId id,
-                                            int position,
-                                            unsigned long portNumber,
-                                            float value) = 0;
+    virtual void removePluginInstance(InstrumentId /*id*/,
+                                      int /*position*/)  { }
 
-    virtual float getPluginInstancePortValue(InstrumentId id,
-                                             int position,
-                                             unsigned long portNumber) = 0;
+    virtual void setPluginInstancePortValue(InstrumentId /*id*/,
+                                            int /*position*/,
+                                            unsigned long /*portNumber*/,
+                                            float /*value*/)  { }
+
+    virtual float getPluginInstancePortValue(InstrumentId /*id*/,
+                                             int /*position*/,
+                                             unsigned long /*portNumber*/)
+        { return 0; }
 
     virtual void setPluginInstanceBypass(InstrumentId id,
                                          int position,
@@ -381,7 +380,7 @@ protected:
      * the bar/beat/pulse values would need to be pushed in at play and
      * record time.  See RosegardenSequencer::m_songPosition.
      */
-    RealTime                     m_midiClockInterval;
+    RealTime m_midiClockInterval;
 };
 
 

@@ -33,54 +33,6 @@ class DummyDriver : public SoundDriver
 public:
     DummyDriver(MappedStudio *studio);
     DummyDriver(MappedStudio *studio, QString pastLog);
-    ~DummyDriver() override { }
-
-    bool initialise()  override { return true; }
-    void initialisePlayback(const RealTime & /*position*/) override { }
-    void stopPlayback() override { }
-    void punchOut() override { }
-    void resetPlayback(const RealTime & /*old position*/,
-                               const RealTime & /*position*/) override { }
-    
-    RealTime getSequencerTime() override { return RealTime(0, 0);}
-
-    bool getMappedEventList(MappedEventList &) override { return true; }
-
-    void processEventsOut(const MappedEventList & /*mC*/) override { }
-
-    void processEventsOut(const MappedEventList &,
-                                  const RealTime &,
-                                  const RealTime &) override { }
-
-    // Process anything that's pending
-    //
-    void processPending() override { }
-
-    // Sample rate
-    //
-    unsigned int getSampleRate() const override { return 0; }
-
-    // Return the last recorded audio level
-    //
-    virtual float getLastRecordedAudioLevel() { return 0.0; }
-
-    // Plugin instance management
-    //
-    void setPluginInstance(InstrumentId /*id*/,
-                                   QString /*pluginIdent*/,
-                                   int /*position*/) override { }
-
-    void removePluginInstance(InstrumentId /*id*/,
-                                      int /*position*/) override { }
-
-    void setPluginInstancePortValue(InstrumentId /*id*/,
-                                            int /*position*/,
-                                            unsigned long /*portNumber*/,
-                                            float /*value*/) override { }
-
-    float getPluginInstancePortValue(InstrumentId ,
-                                             int ,
-                                             unsigned long ) override { return 0; }
 
     void setPluginInstanceBypass(InstrumentId /*id*/,
                                          int /*position*/,
