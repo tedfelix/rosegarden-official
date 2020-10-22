@@ -202,14 +202,12 @@ public:
                                           float /*dB*/,
                                           float /*pan*/)  { }
 
-    // Poll for new clients (for new Devices/Instruments)
-    //
-    virtual void checkForNewClients() = 0;
+    /// Poll for new clients (for new Devices/Instruments)
+    virtual void checkForNewClients()  { }
 
-    // Set a loop position at the driver (used for transport)
-    //
-    virtual void setLoop(const RealTime &loopStart, const RealTime &loopEnd)
-        = 0;
+    /// Set a loop position at the driver (used for transport)
+    virtual void setLoop(const RealTime & /*start*/,
+                         const RealTime & /*end*/)  { }
 
     virtual void sleep(const RealTime &rt);
 
@@ -223,8 +221,7 @@ public:
 
     // Are we counting?  By default a subclass probably wants to
     // return true, if it doesn't know better.
-    //
-    virtual bool areClocksRunning() const = 0;
+    virtual bool areClocksRunning() const  { return true; }
 
     RealTime getStartPosition() const { return m_playStartPosition; }
     RecordStatus getRecordStatus() const { return m_recordStatus; }
@@ -272,19 +269,19 @@ public:
     virtual QString getCurrentTimer() { return ""; }
     virtual void setCurrentTimer(QString) { }
 
-    virtual void getAudioInstrumentNumbers(InstrumentId &, int &) = 0;
-    virtual void getSoftSynthInstrumentNumbers(InstrumentId &, int &) = 0;
+    virtual void getAudioInstrumentNumbers(InstrumentId &base, int &count)
+        { base = 0; count = 0; }
+    virtual void getSoftSynthInstrumentNumbers(InstrumentId &base, int &count)
+        { base = 0; count = 0; }
 
     // Plugin management -- SoundDrivers should maintain a plugin
     // scavenger which the audio process code can use for defunct
     // plugins.  Ownership of plugin is passed to the SoundDriver.
-    //
-    virtual void claimUnwantedPlugin(void *plugin) = 0;
+    virtual void claimUnwantedPlugin(void * /*plugin*/)  { }
 
     // This causes all scavenged plugins to be destroyed.  It
     // should only be called in non-RT contexts.
-    //
-    virtual void scavengePlugins() = 0;
+    virtual void scavengePlugins()  { }
 
     // Handle audio file references
     //

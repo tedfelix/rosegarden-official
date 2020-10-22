@@ -534,7 +534,6 @@ set(rg_CPPS
   sound/MidiInserter.cpp
   sound/MappedEventInserter.cpp
   sound/PluginFactory.cpp
-  sound/DummyDriver.cpp
   sound/BWFAudioFile.cpp
   sound/PeakFile.cpp
   sound/RIFFAudioFile.cpp

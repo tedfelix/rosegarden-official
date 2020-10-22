@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2018 the Rosegarden development team.
+    Copyright 2000-2020 the Rosegarden development team.
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
@@ -12,50 +12,40 @@
     COPYING included with this distribution for more information.
 */
 
-#include "SoundDriver.h"
-
 #ifndef RG_DUMMYDRIVER_H
 #define RG_DUMMYDRIVER_H
+
+#include "SoundDriver.h"
+
+#include <QObject>
+#include <QString>
 
 namespace Rosegarden
 {
 
 
-class PlayableAudioFile;
-
-
-/// Allow Rosegarden to run without a sound support.
+/// Allow Rosegarden to run without sound support.
 class DummyDriver : public SoundDriver
 {
 public:
-    DummyDriver(MappedStudio *studio);
-    DummyDriver(MappedStudio *studio, QString pastLog);
-
-    void checkForNewClients() override  { }
-
-    void setLoop(const RealTime &/*loopStart*/,
-                         const RealTime &/*loopEnd*/) override { }
-
-    QString getStatusLog() override;
-
-    virtual std::vector<PlayableAudioFile*> getPlayingAudioFiles()
-        { return std::vector<PlayableAudioFile*>(); }
-
-    void getAudioInstrumentNumbers(InstrumentId &i, int &n) override {
-        i = 0; n = 0;
-    }
-    void getSoftSynthInstrumentNumbers(InstrumentId &i, int &n) override {
-        i = 0; n = 0;
+    DummyDriver(MappedStudio *studio, const QString &pastLog = "") :
+        SoundDriver(studio, "DummyDriver - no sound"),
+        m_pastLog(pastLog)
+    {
     }
 
-    void claimUnwantedPlugin(void */* plugin */) override { }
-    void scavengePlugins() override { }
+    QString getStatusLog() override
+    {
+        if (m_pastLog.isEmpty())
+            return QObject::tr("No sound driver available: Application compiled without sound support?");
 
-    bool areClocksRunning() const override { return true; }
+        return QObject::tr("No sound driver available: Sound driver startup failed, log follows: \n\n%1").arg(m_pastLog);
+    }
 
 protected:
     QString m_pastLog;
 };
+
 
 }
 
