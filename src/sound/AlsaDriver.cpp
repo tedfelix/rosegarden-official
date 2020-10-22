@@ -4619,8 +4619,8 @@ AlsaDriver::processEventsOut(const MappedEventList &mC,
 
 bool
 AlsaDriver::record(RecordStatus recordStatus,
-                   const std::vector<InstrumentId> *armedInstruments,
-                   const std::vector<QString> *audioFileNames)
+                   const std::vector<InstrumentId> &armedInstruments,
+                   const std::vector<QString> &audioFileNames)
 {
     m_recordingInstruments.clear();
 
@@ -4633,43 +4633,39 @@ AlsaDriver::record(RecordStatus recordStatus,
 
         unsigned int audioCount = 0;
 
-        if (armedInstruments) {
+        for (size_t i = 0; i < armedInstruments.size(); ++i) {
 
-            for (size_t i = 0; i < armedInstruments->size(); ++i) {
+            const InstrumentId id = armedInstruments[i];
 
-                InstrumentId id = (*armedInstruments)[i];
+            m_recordingInstruments.insert(id);
+            if (audioCount >= (unsigned int)audioFileNames.size())
+                continue;
 
-                m_recordingInstruments.insert(id);
-                if (!audioFileNames || (audioCount >= (unsigned int)audioFileNames->size())) {
-                    continue;
-                }
+            const QString fileName = audioFileNames[audioCount];
 
-                QString fileName = (*audioFileNames)[audioCount];
+            if (id >= AudioInstrumentBase &&
+                id < MidiInstrumentBase) {
 
-                if (id >= AudioInstrumentBase &&
-                    id < MidiInstrumentBase) {
-
-                    bool good = false;
+                bool good = false;
 
 #ifdef DEBUG_ALSA
-                    RG_DEBUG << "record(): Requesting new record file \"" << fileName << "\" for instrument " << id;
+                RG_DEBUG << "record(): Requesting new record file \"" << fileName << "\" for instrument " << id;
 #endif
 
 #ifdef HAVE_LIBJACK
-                    if (m_jackDriver &&
-                        m_jackDriver->openRecordFile(id, fileName)) {
-                        good = true;
-                    }
+                if (m_jackDriver &&
+                    m_jackDriver->openRecordFile(id, fileName)) {
+                    good = true;
+                }
 #endif
 
-                    if (!good) {
-                        m_recordStatus = RECORD_OFF;
-                        RG_WARNING << "record(): No JACK driver, or JACK driver failed to prepare for recording audio";
-                        return false;
-                    }
-
-                    ++audioCount;
+                if (!good) {
+                    m_recordStatus = RECORD_OFF;
+                    RG_WARNING << "record(): No JACK driver, or JACK driver failed to prepare for recording audio";
+                    return false;
                 }
+
+                ++audioCount;
             }
         }
     } else

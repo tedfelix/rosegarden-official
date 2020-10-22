@@ -53,13 +53,6 @@ public:
                                   const RealTime &,
                                   const RealTime &) override { }
 
-    // Activate a recording state
-    //
-    bool record(RecordStatus /*recordStatus*/,
-                        const std::vector<InstrumentId> */*armedInstruments = 0*/,
-                        const std::vector<QString> */*audioFileNames = 0*/) override
-        { return false; }
-
     // Process anything that's pending
     //
     void processPending() override { }

@@ -274,18 +274,22 @@ RosegardenSequencer::record(const RealTime &time,
         QVector<InstrumentId> armedInstruments =
             RosegardenMainWindow::self()->getArmedInstruments();
 
+        // Compute the list of armed audio instruments.
+        // ??? rename: armedAudioIntruments
         QVector<InstrumentId> audioInstruments;
         for (int i = 0; i < armedInstruments.size(); ++i) {
-            if (armedInstruments[i] >= AudioInstrumentBase &&
-                armedInstruments[i] < MidiInstrumentBase) {
+            // Audio Instrument?  Add to audioInstruments.
+            if (armedInstruments[i] >= AudioInstrumentBase  &&
+                armedInstruments[i] < MidiInstrumentBase)
                 audioInstruments.push_back(armedInstruments[i]);
-            }
         }
 
         QVector<QString> audioFileNames;
 
+        // If there are armed audio Instruments
         if (audioInstruments.size() > 0) {
 
+            // Create record audio files for each armed audio Instrument.
             audioFileNames =
                 RosegardenMainWindow::self()->createRecordAudioFiles
                 (audioInstruments);
@@ -299,11 +303,18 @@ RosegardenSequencer::record(const RealTime &time,
             }
         }
 
+        // Convert from QVector to std::vector.
+        // ??? We can probably convert the above functions to use std::vector
+        //     and avoid this conversion.
         std::vector<InstrumentId> armedInstrumentsVec;
-        std::vector<QString> audioFileNamesVec;
         for (int i = 0; i < armedInstruments.size(); ++i) {
             armedInstrumentsVec.push_back(armedInstruments[i]);
         }
+
+        // Convert from QVector to std::vector.
+        // ??? We can probably convert the above functions to use std::vector
+        //     and avoid this conversion.
+        std::vector<QString> audioFileNamesVec;
         for (int i = 0; i < audioFileNames.size(); ++i) {
             audioFileNamesVec.push_back(audioFileNames[i]);
         }
@@ -312,8 +323,8 @@ RosegardenSequencer::record(const RealTime &time,
         // this fails we stop.
         //
         if (m_driver->record(RECORD_ON,
-                             &armedInstrumentsVec,
-                             &audioFileNamesVec) == false) {
+                             armedInstrumentsVec,
+                             audioFileNamesVec) == false) {
             stop();
             return false;
         }

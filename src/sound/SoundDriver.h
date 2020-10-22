@@ -131,12 +131,11 @@ public:
                                   const RealTime &sliceStart,
                                   const RealTime &sliceEnd) = 0;
 
-    // Activate a recording state.  armedInstruments and audioFileNames
-    // can be nullptr if no audio tracks recording.
-    //
-    virtual bool record(RecordStatus recordStatus,
-                        const std::vector<InstrumentId> *armedInstruments = nullptr,
-                        const std::vector<QString> *audioFileNames = nullptr) = 0;
+    virtual bool record(
+            RecordStatus /*recordStatus*/,
+            const std::vector<InstrumentId> & /*armedInstruments*/,
+            const std::vector<QString> & /*audioFileNames*/)
+        { return false; }
 
     // Process anything that's pending
     //

@@ -75,8 +75,8 @@ public:
     bool getMappedEventList(MappedEventList &mappedEventList) override;
     
     bool record(RecordStatus recordStatus,
-                        const std::vector<InstrumentId> *armedInstruments = nullptr,
-                        const std::vector<QString> *audioFileNames = nullptr) override;
+                const std::vector<InstrumentId> &armedInstruments,
+                const std::vector<QString> &audioFileNames) override;
 
     void startClocks() override;
     virtual void startClocksApproved(); // called by JACK driver in sync mode
