@@ -2339,13 +2339,6 @@ JackDriver::removePluginInstance(InstrumentId id, int position)
 }
 
 void
-JackDriver::removePluginInstances()
-{
-    if (m_instrumentMixer)
-        m_instrumentMixer->removeAllPlugins();
-}
-
-void
 JackDriver::setPluginInstancePortValue(InstrumentId id, int position,
                                        unsigned long portNumber,
                                        float value)

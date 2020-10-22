@@ -41,7 +41,6 @@ public:
     void punchOut() override { }
     void resetPlayback(const RealTime & /*old position*/,
                                const RealTime & /*position*/) override { }
-    void allNotesOff()  override { }
     
     RealTime getSequencerTime() override { return RealTime(0, 0);}
 
@@ -73,8 +72,6 @@ public:
 
     void removePluginInstance(InstrumentId /*id*/,
                                       int /*position*/) override { }
-
-    void removePluginInstances() override { }
 
     void setPluginInstancePortValue(InstrumentId /*id*/,
                                             int /*position*/,
@@ -144,8 +141,6 @@ public:
     bool areClocksRunning() const override { return true; }
 
 protected:
-    void processMidiOut(const MappedEventList & /*mC*/,
-                                const RealTime &, const RealTime &) override { }
     void generateFixedInstruments()  override { }
 
     QString m_pastLog;

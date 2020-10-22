@@ -832,12 +832,6 @@ AlsaDriver::addInstrumentsForDevice(MappedDevice *device, InstrumentId base)
     }
 }
 
-bool
-AlsaDriver::canReconnect(Device::DeviceType type)
-{
-    return (type == Device::Midi);
-}
-
 void
 AlsaDriver::clearDevices()
 {

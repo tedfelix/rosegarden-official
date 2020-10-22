@@ -515,14 +515,6 @@ RosegardenSequencer::processMappedEvent(MappedEvent mE)
 //                    << " events in async out queue" << endl;
 }
 
-int
-RosegardenSequencer::canReconnect(Device::DeviceType type)
-{
-    LOCKED;
-
-    return m_driver->canReconnect(type);
-}
-
 bool
 RosegardenSequencer::addDevice(Device::DeviceType type,
                                DeviceId id,

@@ -43,7 +43,6 @@ SoundDriver::SoundDriver(MappedStudio *studio, const std::string &name):
         m_playStartPosition(0, 0),
         m_startPlayback(false),
         m_playing(false),
-        m_midiRecordDevice(0),
         m_recordStatus(RECORD_OFF),
         m_midiRunningId(MidiInstrumentBase),
         m_audioRunningId(AudioInstrumentBase),
@@ -55,7 +54,6 @@ SoundDriver::SoundDriver(MappedStudio *studio, const std::string &name):
         m_sequencer(nullptr),
         m_mmcStatus(TRANSPORT_OFF),
         m_mtcStatus(TRANSPORT_OFF),
-        m_mmcId(0),            // default MMC id of 0
         m_midiClockEnabled(false),
         m_midiClockInterval(0, 0)
 {

@@ -59,7 +59,7 @@ public:
     void stopPlayback() override;
     void punchOut() override;
     void resetPlayback(const RealTime &oldPosition, const RealTime &position) override;
-    void allNotesOff() override;
+    void allNotesOff();
 
     RealTime getSequencerTime() override;
 
@@ -178,14 +178,6 @@ public:
 #else
         Q_UNUSED(id);
         Q_UNUSED(position);
-#endif
-    }
-
-    // Remove all plugin instances
-    //
-    void removePluginInstances() override {
-#ifdef HAVE_LIBJACK
-        if (m_jackDriver) m_jackDriver->removePluginInstances();
 #endif
     }
 
@@ -399,8 +391,6 @@ public:
     void setRecordDevice(DeviceId id, bool connectAction);
     void unsetRecordDevices();
 
-    bool canReconnect(Device::DeviceType type) override;
-
     bool addDevice(Device::DeviceType type,
                            DeviceId id,
                            InstrumentId baseInstrumentId,
@@ -505,8 +495,8 @@ protected:
      * Used by processEventsOut() to send MIDI out via ALSA.
      */
     void processMidiOut(const MappedEventList &mC,
-                                const RealTime &sliceStart,
-                                const RealTime &sliceEnd) override;
+                        const RealTime &sliceStart,
+                        const RealTime &sliceEnd);
 
     virtual void processSoftSynthEventOut(InstrumentId id,
                                           const snd_seq_event_t *event,

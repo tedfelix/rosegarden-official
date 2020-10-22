@@ -109,8 +109,8 @@ public:
     virtual void initialisePlayback(const RealTime &position) = 0;
     virtual void stopPlayback() = 0;
     virtual void punchOut() = 0; // stop recording, continue playing
-    virtual void resetPlayback(const RealTime &oldPosition, const RealTime &position) = 0;
-    virtual void allNotesOff() = 0;
+    virtual void resetPlayback(
+            const RealTime &oldPosition, const RealTime &position) = 0;
     
     virtual RealTime getSequencerTime() = 0;
 
@@ -153,10 +153,6 @@ public:
 
     virtual void removePluginInstance(InstrumentId id,
                                       int position) = 0;
-
-    // Clear down and remove all plugin instances
-    //
-    virtual void removePluginInstances() = 0;
 
     virtual void setPluginInstancePortValue(InstrumentId id,
                                             int position,
@@ -244,7 +240,6 @@ public:
     //
     unsigned int getDevices();
 */
-    virtual bool canReconnect(Device::DeviceType) { return false; }
 
     virtual bool addDevice(Device::DeviceType,
                            DeviceId,
@@ -327,15 +322,7 @@ public:
     //
     void cancelAudioFile(MappedEvent *mE);
 
-    // Studio linkage
-    //
-    MappedStudio* getMappedStudio() { return m_studio; }
-    void setMappedStudio(MappedStudio *studio) { m_studio = studio; }
-
-    // Modify MIDI record device
-    //
-    void setMidiRecordDevice(DeviceId id) { m_midiRecordDevice = id; }
-    DeviceId getMIDIRecordDevice() const { return m_midiRecordDevice; }
+    MappedStudio *getMappedStudio() { return m_studio; }
 
     // MIDI Realtime Sync setting
     //
@@ -351,11 +338,6 @@ public:
     //
     TransportSyncStatus getMTCStatus() const { return m_mtcStatus; }
     void setMTCStatus(TransportSyncStatus status) { m_mtcStatus = status; }
-
-    // MMC Id
-    //
-    int getMMCId() const { return ((int)(m_mmcId)); }
-    void setMMCId(int id) { m_mmcId = (MidiByte)(id); }
 
     // Set MIDI clock interval - allow redefinition above to ensure
     // we handle this reset correctly.
@@ -375,9 +357,6 @@ public:
 protected:
     // Helper functions to be implemented by subclasses
     //
-    virtual void processMidiOut(const MappedEventList &mC,
-                                const RealTime &sliceStart,
-                                const RealTime &sliceEnd) = 0;
     virtual void generateFixedInstruments() = 0;
 
     // Audio
@@ -402,8 +381,6 @@ protected:
     /// The devices in the Composition.
     MappedDeviceList m_devices;
     MappedDevice *findDevice(DeviceId deviceId);
-
-    DeviceId                                    m_midiRecordDevice;
 
     RecordStatus                                m_recordStatus;
 
@@ -442,7 +419,6 @@ protected:
     TransportSyncStatus          m_midiSyncStatus;
     TransportSyncStatus          m_mmcStatus;
     TransportSyncStatus          m_mtcStatus;
-    MidiByte                     m_mmcId;      // device id
 
     /// Whether we are sending MIDI Clocks (transport master).
     /**

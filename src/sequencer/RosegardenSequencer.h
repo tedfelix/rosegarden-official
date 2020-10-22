@@ -133,21 +133,11 @@ public:
     MappedDevice getMappedDevice(unsigned int id);
 #endif
 
-    /// Query whether the driver implements device reconnection.
-    /**
-     * Returns a non-zero value if the addDevice, removeDevice,
-     * getConnections, getConnection and setConnection methods
-     * may be used with devices of the given type.
-     */
-    int canReconnect(Device::DeviceType deviceType);
-
     /**
      * Create a device of the given type and direction (corresponding
      * to MidiDevice::DeviceDirection enum) and return its id.
      * The device will have no connection by default.  Direction is
      * currently ignored for non-MIDI devices.
-     *
-     * Do not use this unless canReconnect(type) returned true.
      */
     bool addDevice(Device::DeviceType type,
                    DeviceId id,
@@ -157,8 +147,6 @@ public:
     /// Remove the device of the given id.
     /**
      * Ignored if driver does not permit changing the number of devices
-     * (i.e. if canReconnect(type) would return false when given the
-     * type of the supplied device).
      */
     void removeDevice(unsigned int id);
     /// Remove all of the devices (of types that can be added or removed).
@@ -176,7 +164,6 @@ public:
      * the given type and direction (corresponding to MidiDevice::
      * DeviceDirection enum).  Direction is ignored for non-MIDI devices.
      * Returns zero if devices of this type are non-reconnectable
-     * (i.e. if canReconnect(type) would return false).
      */
     unsigned int getConnections(Device::DeviceType type,
                                 MidiDevice::DeviceDirection direction);

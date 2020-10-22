@@ -77,10 +77,6 @@ public:
 
     virtual void removePluginInstance(InstrumentId id, int position);
 
-    // Remove all plugin instances
-    //
-    virtual void removePluginInstances();
-
     virtual void setPluginInstancePortValue(InstrumentId id,
                                             int position,
                                             unsigned long portNumber,
