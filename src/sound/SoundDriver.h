@@ -79,13 +79,16 @@ public:
     SoundDriver(MappedStudio *studio, const std::string &name);
     virtual ~SoundDriver();
 
-    void setAudioBufferSizes(RealTime mix, RealTime read, RealTime write,
-                             int smallFileSize) {
-        m_audioMixBufferLength = mix;
-        m_audioReadBufferLength = read;
-        m_audioWriteBufferLength = write;
-        m_smallFileSize = smallFileSize;
-    }
+
+    // *** General ***
+
+    virtual bool initialise()  { return true; }
+    SoundDriverStatus getStatus() const  { return m_driverStatus; }
+    virtual QString getStatusLog()  { return ""; }
+    virtual void shutdown()  { }
+
+
+    // *** Sequencer ***
 
     /// Store a local copy at construction time.
     /**
@@ -101,49 +104,127 @@ public:
      */
     RosegardenSequencer *getSequencer() const  { return m_sequencer; }
 
-    virtual bool initialise()  { return true; }
-    virtual void shutdown()  { }
-
-    SoundDriverStatus getStatus() const  { return m_driverStatus; }
+    virtual unsigned int getTimers() { return 0; }
+    virtual QString getTimer(unsigned int) { return ""; }
+    virtual QString getCurrentTimer() { return ""; }
+    virtual void setCurrentTimer(QString) { }
 
     virtual void initialisePlayback(const RealTime & /*position*/)  { }
+    void setMappedInstrument(MappedInstrument *mI);
     virtual void stopPlayback()  { }
-    /// stop recording, continue playing
-    virtual void punchOut()  { }
-    virtual void resetPlayback(const RealTime & /*oldPosition*/,
-                               const RealTime & /*position*/)  { }
-    
-    virtual RealTime getSequencerTime()  { return RealTime(0, 0); }
-
-    virtual bool getMappedEventList(MappedEventList &)  { return true; }
-
-    virtual void startClocks() { }
-    virtual void stopClocks() { }
-
-    // Process some asynchronous events
-    //
-    virtual void processEventsOut(const MappedEventList & /*mC*/)  { }
-
-    // Process some scheduled events on the output queue.  The
-    // slice times are here so that the driver can interleave
-    // note-off events as appropriate.
-    //
-    virtual void processEventsOut(const MappedEventList & /*mC*/,
-                                  const RealTime & /*sliceStart*/,
-                                  const RealTime & /*sliceEnd*/)  { }
-
     virtual bool record(
             RecordStatus /*recordStatus*/,
             const std::vector<InstrumentId> & /*armedInstruments*/,
             const std::vector<QString> & /*audioFileNames*/)
         { return false; }
+    /// stop recording, continue playing
+    virtual void punchOut()  { }
+    virtual void resetPlayback(const RealTime & /*oldPosition*/,
+                               const RealTime & /*position*/)  { }
+
+    bool isPlaying() const  { return m_playing; }
+    RealTime getStartPosition() const { return m_playStartPosition; }
+    RecordStatus getRecordStatus() const { return m_recordStatus; }
+
+    virtual RealTime getSequencerTime()  { return RealTime(0, 0); }
+
+    /// Get incoming MIDI events from ALSA.
+    virtual bool getMappedEventList(MappedEventList &)  { return true; }
+
+    virtual void startClocks() { }
+    virtual void stopClocks() { }
+    // Are we counting?  By default a subclass probably wants to
+    // return true, if it doesn't know better.
+    virtual bool areClocksRunning() const  { return true; }
+
+    // Process some asynchronous events
+    virtual void processEventsOut(const MappedEventList & /*mC*/)  { }
+
+    // Process some scheduled events on the output queue.  The
+    // slice times are here so that the driver can interleave
+    // note-off events as appropriate.
+    virtual void processEventsOut(const MappedEventList & /*mC*/,
+                                  const RealTime & /*sliceStart*/,
+                                  const RealTime & /*sliceEnd*/)  { }
 
     virtual void processPending()  { }
+
+    /// Set a loop position at the driver (used for transport)
+    virtual void setLoop(const RealTime & /*start*/,
+                         const RealTime & /*end*/)  { }
+
+    virtual void sleep(const RealTime &rt);
+
+    // Set MIDI clock interval - allow redefinition above to ensure
+    // we handle this reset correctly.
+    virtual void setMIDIClockInterval(RealTime interval)
+        { m_midiClockInterval = interval; }
+
+    // Do any bits and bobs of work that need to be done continuously
+    // (this is called repeatedly whether playing or not).
+    virtual void runTasks() { }
+
+
+    // *** Audio ***
+
+    void setAudioBufferSizes(RealTime mix, RealTime read, RealTime write,
+                             int smallFileSize) {
+        m_audioMixBufferLength = mix;
+        m_audioReadBufferLength = read;
+        m_audioWriteBufferLength = write;
+        m_smallFileSize = smallFileSize;
+    }
 
     // Get the driver's operating sample rate
     virtual unsigned int getSampleRate() const  { return 0; }
 
-    // Plugin instance management
+    virtual void setAudioBussLevels(int /*bussId*/,
+                                    float /*dB*/,
+                                    float /*pan*/)  { }
+
+    virtual void setAudioInstrumentLevels(InstrumentId /*id*/,
+                                          float /*dB*/,
+                                          float /*pan*/)  { }
+
+    // Handle audio file references
+    //
+    void clearAudioFiles();
+    bool addAudioFile(const QString &fileName, unsigned int id);
+    bool removeAudioFile(unsigned int id);
+
+    void initialiseAudioQueue(const std::vector<MappedEvent> &audioEvents);
+    const AudioPlayQueue *getAudioQueue() const;
+
+    RIFFAudioFile::SubFormat getAudioRecFileFormat() const
+        { return m_audioRecFileFormat; }
+
+    // Latencies
+    //
+    virtual RealTime getAudioPlayLatency() { return RealTime::zeroTime; }
+    virtual RealTime getAudioRecordLatency() { return RealTime::zeroTime; }
+    virtual RealTime getInstrumentPlayLatency(InstrumentId) { return RealTime::zeroTime; }
+    virtual RealTime getMaximumPlayLatency() { return RealTime::zeroTime; }
+
+    // Buffer sizes
+    //
+    RealTime getAudioMixBufferLength() { return m_audioMixBufferLength; }
+    RealTime getAudioReadBufferLength() { return m_audioReadBufferLength; }
+    RealTime getAudioWriteBufferLength() { return m_audioWriteBufferLength; }
+
+    bool getLowLatencyMode() const  { return true; }
+
+    virtual void getAudioInstrumentNumbers(InstrumentId &base, int &count)
+        { base = 0; count = 0; }
+    virtual void getSoftSynthInstrumentNumbers(InstrumentId &base, int &count)
+        { base = 0; count = 0; }
+
+    MappedStudio *getMappedStudio() { return m_studio; }
+
+    // Report a failure back to the GUI - ideally.  Default does nothing.
+    virtual void reportFailure(MappedEvent::FailureCode) { }
+
+
+    // *** Plugins ***
 
     virtual void setPluginInstance(InstrumentId /*id*/,
                                    QString /*identifier*/,
@@ -194,50 +275,17 @@ public:
                                     QString /*key*/,
                                     QString /*value*/)  { return QString(); }
 
-    virtual void setAudioBussLevels(int /*bussId*/,
-                                    float /*dB*/,
-                                    float /*pan*/)  { }
+    // Plugin management -- SoundDrivers should maintain a plugin
+    // scavenger which the audio process code can use for defunct
+    // plugins.  Ownership of plugin is passed to the SoundDriver.
+    virtual void claimUnwantedPlugin(void * /*plugin*/)  { }
 
-    virtual void setAudioInstrumentLevels(InstrumentId /*id*/,
-                                          float /*dB*/,
-                                          float /*pan*/)  { }
+    // This causes all scavenged plugins to be destroyed.  It
+    // should only be called in non-RT contexts.
+    virtual void scavengePlugins()  { }
 
-    /// Poll for new clients (for new Devices/Instruments)
-    virtual void checkForNewClients()  { }
 
-    /// Set a loop position at the driver (used for transport)
-    virtual void setLoop(const RealTime & /*start*/,
-                         const RealTime & /*end*/)  { }
-
-    virtual void sleep(const RealTime &rt);
-
-    virtual QString getStatusLog() = 0;
-
-    // Mapped Instruments
-    //
-    void setMappedInstrument(MappedInstrument *mI);
-
-    bool isPlaying() const  { return m_playing; }
-
-    // Are we counting?  By default a subclass probably wants to
-    // return true, if it doesn't know better.
-    virtual bool areClocksRunning() const  { return true; }
-
-    RealTime getStartPosition() const { return m_playStartPosition; }
-    RecordStatus getRecordStatus() const { return m_recordStatus; }
-
-/*!DEVPUSH
-    // Return a MappedDevice full of the Instrument mappings
-    // that the driver has discovered.  The gui can then use
-    // this list (complete with names) to generate its proper
-    // Instruments under the MidiDevice and AudioDevice.
-    //
-    MappedDevice getMappedDevice(DeviceId id);
-
-    // Return the number of devices we've found
-    //
-    unsigned int getDevices();
-*/
+    // *** Devices and Connections ***
 
     virtual bool addDevice(Device::DeviceType,
                            DeviceId,
@@ -247,6 +295,9 @@ public:
     virtual void removeDevice(DeviceId) { }
     virtual void removeAllDevices() { }
     virtual void renameDevice(DeviceId, QString) { }
+
+    /// Poll for new clients (for new Devices/Instruments)
+    virtual void checkForNewClients()  { }
 
     virtual unsigned int getConnections(Device::DeviceType,
                                         MidiDevice::DeviceDirection) { return 0; }
@@ -264,69 +315,25 @@ public:
                     { setConnection(deviceId, idealConnection); }
     virtual void connectSomething() { }
 
-    virtual unsigned int getTimers() { return 0; }
-    virtual QString getTimer(unsigned int) { return ""; }
-    virtual QString getCurrentTimer() { return ""; }
-    virtual void setCurrentTimer(QString) { }
 
-    virtual void getAudioInstrumentNumbers(InstrumentId &base, int &count)
-        { base = 0; count = 0; }
-    virtual void getSoftSynthInstrumentNumbers(InstrumentId &base, int &count)
-        { base = 0; count = 0; }
+    // *** Miscellaneous ***
 
-    // Plugin management -- SoundDrivers should maintain a plugin
-    // scavenger which the audio process code can use for defunct
-    // plugins.  Ownership of plugin is passed to the SoundDriver.
-    virtual void claimUnwantedPlugin(void * /*plugin*/)  { }
+/*!DEVPUSH
 
-    // This causes all scavenged plugins to be destroyed.  It
-    // should only be called in non-RT contexts.
-    virtual void scavengePlugins()  { }
+    // ??? The m_devices that these two functions used has been moved
+    //     down to AlsaDriver.
 
-    // Handle audio file references
+    // Return a MappedDevice full of the Instrument mappings
+    // that the driver has discovered.  The gui can then use
+    // this list (complete with names) to generate its proper
+    // Instruments under the MidiDevice and AudioDevice.
     //
-    void clearAudioFiles();
-    bool addAudioFile(const QString &fileName, unsigned int id);
-    bool removeAudioFile(unsigned int id);
-                    
-    void initialiseAudioQueue(const std::vector<MappedEvent> &audioEvents);
-    const AudioPlayQueue *getAudioQueue() const;
+    MappedDevice getMappedDevice(DeviceId id);
 
-    RIFFAudioFile::SubFormat getAudioRecFileFormat() const
-        { return m_audioRecFileFormat; }
-
-
-    // Latencies
+    // Return the number of devices we've found
     //
-    virtual RealTime getAudioPlayLatency() { return RealTime::zeroTime; }
-    virtual RealTime getAudioRecordLatency() { return RealTime::zeroTime; }
-    virtual RealTime getInstrumentPlayLatency(InstrumentId) { return RealTime::zeroTime; }
-    virtual RealTime getMaximumPlayLatency() { return RealTime::zeroTime; }
-
-    // Buffer sizes
-    //
-    RealTime getAudioMixBufferLength() { return m_audioMixBufferLength; }
-    RealTime getAudioReadBufferLength() { return m_audioReadBufferLength; }
-    RealTime getAudioWriteBufferLength() { return m_audioWriteBufferLength; }
-
-    bool getLowLatencyMode() const  { return true; }
-
-    MappedStudio *getMappedStudio() { return m_studio; }
-
-    // Set MIDI clock interval - allow redefinition above to ensure
-    // we handle this reset correctly.
-    //
-    virtual void setMIDIClockInterval(RealTime interval) 
-        { m_midiClockInterval = interval; }
-
-    // Do any bits and bobs of work that need to be done continuously
-    // (this is called repeatedly whether playing or not).
-    //
-    virtual void runTasks() { }
-
-    // Report a failure back to the GUI - ideally.  Default does nothing.
-    //
-    virtual void reportFailure(MappedEvent::FailureCode) { }
+    unsigned int getDevices();
+*/
 
 protected:
 
