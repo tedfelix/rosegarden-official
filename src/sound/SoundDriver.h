@@ -330,6 +330,12 @@ public:
 
 protected:
 
+    /// For transport requests.
+    /*
+     * Use instead of RosegardenSequencer::getInstance() to avoid mutex.
+     */
+    RosegardenSequencer *m_sequencer;
+
     /// Driver name for the audit log.
     std::string m_name;
 
@@ -361,31 +367,11 @@ protected:
     RealTime m_audioWriteBufferLength;
 
     int m_smallFileSize;
-    int getSmallFileSize() const  { return m_smallFileSize; }
 
     RIFFAudioFile::SubFormat m_audioRecFileFormat;
     
     // Virtual studio hook
-    //
-    MappedStudio                *m_studio;
-
-    /// For transport requests.
-    /*
-     * Use instead of RosegardenSequencer::getInstance() to avoid mutex.
-     */
-    RosegardenSequencer *m_sequencer;
-
-    TransportSyncStatus m_midiSyncStatus;
-    TransportSyncStatus getMIDISyncStatus() const { return m_midiSyncStatus; }
-    void setMIDISyncStatus(TransportSyncStatus status) { m_midiSyncStatus = status; }
-
-    TransportSyncStatus          m_mmcStatus;
-    TransportSyncStatus getMMCStatus() const { return m_mmcStatus; }
-    void setMMCStatus(TransportSyncStatus status) { m_mmcStatus = status; }
-
-    TransportSyncStatus          m_mtcStatus;
-    TransportSyncStatus getMTCStatus() const { return m_mtcStatus; }
-    void setMTCStatus(TransportSyncStatus status) { m_mtcStatus = status; }
+    MappedStudio *m_studio;
 
     /// 24 MIDI clocks per quarter note.  MIDI Spec section 2, page 30.
     /**

@@ -771,7 +771,12 @@ private:
 
     void clearAudioQueue();
 
+    TransportSyncStatus m_midiSyncStatus;
+    TransportSyncStatus m_mmcStatus;
+    TransportSyncStatus m_mtcStatus;
+
 };
+
 
 }
 

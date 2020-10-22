@@ -159,7 +159,10 @@ AlsaDriver::AlsaDriver(MappedStudio *studio):
     m_timerRatio(0),
     m_timerRatioCalculated(false),
     m_debug(false),
-    m_midiClockEnabled(false)
+    m_midiClockEnabled(false),
+    m_midiSyncStatus(TRANSPORT_OFF),
+    m_mmcStatus(TRANSPORT_OFF),
+    m_mtcStatus(TRANSPORT_OFF)
 {
     // Create a log that the user can easily see through the preferences
     // even in a release build.
@@ -1464,7 +1467,7 @@ AlsaDriver::checkTimerSync(size_t frames)
 #ifdef HAVE_LIBJACK
 
     if (!m_jackDriver || !m_queueRunning || frames == 0 ||
-        (getMTCStatus() == TRANSPORT_FOLLOWER)) {
+        (m_mtcStatus == TRANSPORT_FOLLOWER)) {
         m_firstTimerCheck = true;
         return ;
     }
@@ -1893,7 +1896,7 @@ AlsaDriver::initialisePlayback(const RealTime &position)
     m_mtcSigmaE = 0;
     m_mtcSigmaC = 0;
 
-    if (getMMCStatus() == TRANSPORT_SOURCE) {
+    if (m_mmcStatus == TRANSPORT_SOURCE) {
         sendMMC(127, MIDI_MMC_PLAY, true, "");
         m_eat_mtc = 0;
     }
@@ -1901,7 +1904,7 @@ AlsaDriver::initialisePlayback(const RealTime &position)
     // If MIDI Sync is enabled then adjust for the MIDI Clock to
     // synchronise the sequencer with the clock.
     //
-    if (getMIDISyncStatus() == TRANSPORT_SOURCE) {
+    if (m_midiSyncStatus == TRANSPORT_SOURCE) {
 
         // Note: CakeWalk PA 9.03 doesn't like this.  This causes it to go out
         //       of "Waiting for MIDI sync" mode, rendering MIDI sync
@@ -1959,7 +1962,7 @@ AlsaDriver::initialisePlayback(const RealTime &position)
     // m_alsaPlayStartTime may have been modified by MIDI sync above.
     // So, we handle it after MIDI sync.
 
-    if (getMTCStatus() == TRANSPORT_SOURCE) {
+    if (m_mtcStatus == TRANSPORT_SOURCE) {
         // Queue up the MTC message.
         insertMTCFullFrame(position);
     }
@@ -1983,11 +1986,11 @@ AlsaDriver::stopPlayback()
     RG_DEBUG << "stopPlayback() begin...";
 #endif
 
-    if (getMIDISyncStatus() == TRANSPORT_SOURCE) {
+    if (m_midiSyncStatus == TRANSPORT_SOURCE) {
         sendSystemDirect(SND_SEQ_EVENT_STOP, nullptr);
     }
 
-    if (getMMCStatus() == TRANSPORT_SOURCE) {
+    if (m_mmcStatus == TRANSPORT_SOURCE) {
         sendMMC(127, MIDI_MMC_STOP, true, "");
         //<VN> need to throw away the next MTC event
         m_eat_mtc = 3;
@@ -2101,7 +2104,7 @@ AlsaDriver::resetPlayback(const RealTime &oldPosition, const RealTime &position)
     RG_DEBUG << "resetPlayback(" << oldPosition << "," << position << ")";
 #endif
 
-    if (getMMCStatus() == TRANSPORT_SOURCE) {
+    if (m_mmcStatus == TRANSPORT_SOURCE) {
         unsigned char t_sec = (unsigned char) position.sec % 60;
         unsigned char t_min = (unsigned char) (position.sec / 60) % 60;
         unsigned char t_hrs = (unsigned char) (position.sec / 3600);
@@ -2186,7 +2189,7 @@ AlsaDriver::resetPlayback(const RealTime &oldPosition, const RealTime &position)
     snd_seq_remove_events_set_condition(info, SND_SEQ_REMOVE_OUTPUT);
     snd_seq_remove_events(m_midiHandle, info);
 
-    if (getMTCStatus() == TRANSPORT_SOURCE) {
+    if (m_mtcStatus == TRANSPORT_SOURCE) {
         m_mtcFirstTime = -1;
         m_mtcSigmaE = 0;
         m_mtcSigmaC = 0;
@@ -2938,7 +2941,7 @@ AlsaDriver::getMappedEventList(MappedEventList &mappedEventList)
         case SND_SEQ_EVENT_QFRAME:
             if (fromController)
                 continue;
-            if (getMTCStatus() == TRANSPORT_FOLLOWER) {
+            if (m_mtcStatus == TRANSPORT_FOLLOWER) {
                 handleMTCQFrame(event->data.control.value, eventTime);
             }
             break;
@@ -2950,7 +2953,7 @@ AlsaDriver::getMappedEventList(MappedEventList &mappedEventList)
             break;
 
         case SND_SEQ_EVENT_START:
-            if ((getMIDISyncStatus() == TRANSPORT_FOLLOWER) && !isPlaying()) {
+            if (m_midiSyncStatus == TRANSPORT_FOLLOWER  &&  !isPlaying()) {
                 if (m_sequencer) {
                     m_sequencer->transportJump(RosegardenSequencer::TransportStopAtTime,
                                              RealTime::zeroTime);
@@ -2963,7 +2966,7 @@ AlsaDriver::getMappedEventList(MappedEventList &mappedEventList)
             break;
 
         case SND_SEQ_EVENT_CONTINUE:
-            if ((getMIDISyncStatus() == TRANSPORT_FOLLOWER) && !isPlaying()) {
+            if (m_midiSyncStatus == TRANSPORT_FOLLOWER  &&  !isPlaying()) {
                 if (m_sequencer) {
                     m_sequencer->transportChange(RosegardenSequencer::TransportPlay);
                 }
@@ -2974,7 +2977,7 @@ AlsaDriver::getMappedEventList(MappedEventList &mappedEventList)
             break;
 
         case SND_SEQ_EVENT_STOP:
-            if ((getMIDISyncStatus() == TRANSPORT_FOLLOWER) && isPlaying()) {
+            if (m_midiSyncStatus == TRANSPORT_FOLLOWER  &&  isPlaying()) {
                 if (m_sequencer) {
                     m_sequencer->transportChange(RosegardenSequencer::TransportStop);
                 }
@@ -3018,7 +3021,7 @@ AlsaDriver::getMappedEventList(MappedEventList &mappedEventList)
         }
     }
 
-    if (getMTCStatus() == TRANSPORT_FOLLOWER && isPlaying()) {
+    if (m_mtcStatus == TRANSPORT_FOLLOWER && isPlaying()) {
 #ifdef MTC_DEBUG
         RG_DEBUG << "getMappedEventList(): seq time is " << getSequencerTime() << ", last MTC receive "
                  << m_mtcLastReceive << ", first time " << m_mtcFirstTime;
@@ -3044,7 +3047,7 @@ static int lock_count = 0;
 void
 AlsaDriver::handleMTCQFrame(unsigned int data_byte, RealTime the_time)
 {
-    if (getMTCStatus() != TRANSPORT_FOLLOWER)
+    if (m_mtcStatus != TRANSPORT_FOLLOWER)
         return ;
 
     switch (data_byte & 0xF0) {
@@ -3369,7 +3372,7 @@ AlsaDriver::insertMTCQFrames(RealTime sliceStart, RealTime sliceEnd)
 bool
 AlsaDriver::testForMTCSysex(const snd_seq_event_t *event)
 {
-    if (getMTCStatus() != TRANSPORT_FOLLOWER)
+    if (m_mtcStatus != TRANSPORT_FOLLOWER)
         return false;
 
     // At this point, and possibly for the foreseeable future, the only
@@ -3544,7 +3547,7 @@ restarted.  Reset it to a sane default when called with factor of 0
 bool
 AlsaDriver::testForMMCSysex(const snd_seq_event_t *event)
 {
-    if (getMMCStatus() != TRANSPORT_FOLLOWER)
+    if (m_mmcStatus != TRANSPORT_FOLLOWER)
         return false;
 
     if (event->data.ext.len != 6)
@@ -4018,7 +4021,7 @@ AlsaDriver::processMidiOut(const MappedEventList &mC,
 
     processNotesOff(sliceEnd - m_playStartPosition + m_alsaPlayStartTime, now);
 
-    if (getMTCStatus() == TRANSPORT_SOURCE) {
+    if (m_mtcStatus == TRANSPORT_SOURCE) {
         insertMTCQFrames(sliceStart, sliceEnd);
     }
 
@@ -4258,7 +4261,7 @@ AlsaDriver::processEventsOut(const MappedEventList &mC,
         // we're really rolling.
         m_playing = true;
 
-        if (getMTCStatus() == TRANSPORT_FOLLOWER) {
+        if (m_mtcStatus == TRANSPORT_FOLLOWER) {
             tweakSkewForMTC(0);
         }
     }
@@ -4330,7 +4333,7 @@ AlsaDriver::processEventsOut(const MappedEventList &mC,
                                                 (*i)->getAudioStartMarker(),
                                                 (*i)->getDuration(),
                                                 bufferFrames,
-                                                getSmallFileSize() * 1024,
+                                                m_smallFileSize * 1024,
                                                 channels,
                                                 m_jackDriver->getSampleRate());
                 } catch (...) {
@@ -4391,7 +4394,7 @@ AlsaDriver::processEventsOut(const MappedEventList &mC,
                 RG_DEBUG << "processEventsOut(): Rosegarden MIDI CLOCK, START and STOP DISABLED";
 #endif
 
-                setMIDISyncStatus(TRANSPORT_OFF);
+                m_midiSyncStatus = TRANSPORT_OFF;
                 break;
 
             case 1:  // MIDI Clock and System messages: Send MIDI Clock, Start and Stop
@@ -4400,7 +4403,7 @@ AlsaDriver::processEventsOut(const MappedEventList &mC,
                 RG_DEBUG << "processEventsOut(): Rosegarden send MIDI CLOCK, START and STOP ENABLED";
 #endif
 
-                setMIDISyncStatus(TRANSPORT_SOURCE);
+                m_midiSyncStatus = TRANSPORT_SOURCE;
                 break;
 
             case 2:  // MIDI Clock and System messages: Accept Start, Stop and Continue
@@ -4409,7 +4412,7 @@ AlsaDriver::processEventsOut(const MappedEventList &mC,
                 RG_DEBUG << "processEventsOut(): Rosegarden accept START and STOP ENABLED";
 #endif
 
-                setMIDISyncStatus(TRANSPORT_FOLLOWER);
+                m_midiSyncStatus = TRANSPORT_FOLLOWER;
                 break;
             }
         }
@@ -4481,14 +4484,14 @@ AlsaDriver::processEventsOut(const MappedEventList &mC,
                 RG_DEBUG << "processEventsOut(): Rosegarden is MMC SOURCE";
 #endif
 
-                setMMCStatus(TRANSPORT_SOURCE);
+                m_mmcStatus = TRANSPORT_SOURCE;
                 break;
 
             case 2:
 #ifdef DEBUG_ALSA
                 RG_DEBUG << "processEventsOut(): Rosegarden is MMC FOLLOWER";
 #endif
-                setMMCStatus(TRANSPORT_FOLLOWER);
+                m_mmcStatus = TRANSPORT_FOLLOWER;
                 break;
 
             case 0:
@@ -4497,7 +4500,7 @@ AlsaDriver::processEventsOut(const MappedEventList &mC,
                 RG_DEBUG << "processEventsOut(): Rosegarden MMC Transport DISABLED";
 #endif
 
-                setMMCStatus(TRANSPORT_OFF);
+                m_mmcStatus = TRANSPORT_OFF;
                 break;
             }
         }
@@ -4509,7 +4512,7 @@ AlsaDriver::processEventsOut(const MappedEventList &mC,
                 RG_DEBUG << "processEventsOut(): Rosegarden is MTC SOURCE";
 #endif
 
-                setMTCStatus(TRANSPORT_SOURCE);
+                m_mtcStatus = TRANSPORT_SOURCE;
                 tweakSkewForMTC(0);
                 m_mtcFirstTime = -1;
                 break;
@@ -4519,7 +4522,7 @@ AlsaDriver::processEventsOut(const MappedEventList &mC,
                 RG_DEBUG << "processEventsOut(): Rosegarden is MTC FOLLOWER";
 #endif
 
-                setMTCStatus(TRANSPORT_FOLLOWER);
+                m_mtcStatus = TRANSPORT_FOLLOWER;
                 m_mtcFirstTime = -1;
                 break;
 
@@ -4529,7 +4532,7 @@ AlsaDriver::processEventsOut(const MappedEventList &mC,
                 RG_DEBUG << "processEventsOut(): Rosegarden MTC Transport DISABLED";
 #endif
 
-                setMTCStatus(TRANSPORT_OFF);
+                m_mtcStatus = TRANSPORT_OFF;
                 m_mtcFirstTime = -1;
                 break;
             }

@@ -38,6 +38,7 @@ namespace Rosegarden
 
 
 SoundDriver::SoundDriver(MappedStudio *studio, const std::string &name):
+        m_sequencer(nullptr),
         m_name(name),
         m_driverStatus(NO_DRIVER),
         m_playStartPosition(0, 0),
@@ -45,11 +46,9 @@ SoundDriver::SoundDriver(MappedStudio *studio, const std::string &name):
         m_recordStatus(RECORD_OFF),
         //m_audioQueueScavenger(4, 50),
         m_audioQueue(nullptr),
+        m_smallFileSize(0),
         m_audioRecFileFormat(RIFFAudioFile::FLOAT),
         m_studio(studio),
-        m_sequencer(nullptr),
-        m_mmcStatus(TRANSPORT_OFF),
-        m_mtcStatus(TRANSPORT_OFF),
         m_midiClockInterval(0, 0)
 {
     m_audioQueue = new AudioPlayQueue();
@@ -110,7 +109,7 @@ SoundDriver::initialiseAudioQueue(const std::vector<MappedEvent> &events)
                                             i->getAudioStartMarker(),
                                             i->getDuration(),
                                             bufferFrames,
-                                            size_t(getSmallFileSize()) * 1024,
+                                            size_t(m_smallFileSize) * 1024,
                                             channels,
                                             int(getSampleRate()));
             } catch (...) {
