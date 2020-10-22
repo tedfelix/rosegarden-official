@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2018 the Rosegarden development team.
+    Copyright 2000-2020 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -215,6 +215,7 @@ public:
     // Mapped Instruments
     //
     void setMappedInstrument(MappedInstrument *mI);
+    // ??? Only called by AlsaDriver.
     MappedInstrument* getMappedInstrument(InstrumentId id);
 
     // Are we playing?
@@ -293,10 +294,10 @@ public:
     bool removeAudioFile(unsigned int id);
                     
     void initialiseAudioQueue(const std::vector<MappedEvent> &audioEvents);
-    void clearAudioQueue();
     const AudioPlayQueue *getAudioQueue() const;
 
-    RIFFAudioFile::SubFormat getAudioRecFileFormat() const { return m_audioRecFileFormat; }
+    RIFFAudioFile::SubFormat getAudioRecFileFormat() const
+        { return m_audioRecFileFormat; }
 
 
     // Latencies
@@ -313,9 +314,7 @@ public:
     RealTime getAudioWriteBufferLength() { return m_audioWriteBufferLength; }
     int getSmallFileSize() { return m_smallFileSize; }
 
-    // ??? Always true.
-    //void setLowLatencyMode(bool ll) { m_lowLatencyMode = ll; }
-    bool getLowLatencyMode() const { return m_lowLatencyMode; }
+    bool getLowLatencyMode() const  { return true; }
 
     // Cancel the playback of an audio file - either by instrument and audio file id
     // or by audio segment id.
@@ -355,10 +354,6 @@ public:
     virtual void reportFailure(MappedEvent::FailureCode) { }
 
 protected:
-    // Helper functions to be implemented by subclasses
-    //
-    virtual void generateFixedInstruments() = 0;
-
     // Audio
     //
     AudioFile* getAudioFile(unsigned int id);
@@ -366,7 +361,6 @@ protected:
     std::string                                 m_name;
     SoundDriverStatus m_driverStatus;
     RealTime                                    m_playStartPosition;
-    bool                                        m_startPlayback;
     bool                                        m_playing;
 
     // This is our driver's own list of MappedInstruments and MappedDevices.  
@@ -377,20 +371,12 @@ protected:
     typedef std::vector<MappedInstrument *> MappedInstrumentList;
     MappedInstrumentList m_instruments;
 
-    typedef std::vector<MappedDevice *> MappedDeviceList;
-    /// The devices in the Composition.
-    MappedDeviceList m_devices;
-    MappedDevice *findDevice(DeviceId deviceId);
-
     RecordStatus                                m_recordStatus;
-
-
-    InstrumentId                                m_midiRunningId;
-    InstrumentId                                m_audioRunningId;
 
     // Subclass _MUST_ scavenge this regularly:
     Scavenger<AudioPlayQueue>                   m_audioQueueScavenger;
     AudioPlayQueue                             *m_audioQueue;
+    void clearAudioQueue();
 
     // A list of AudioFiles that we can play.
     //
@@ -400,7 +386,6 @@ protected:
     RealTime m_audioReadBufferLength;
     RealTime m_audioWriteBufferLength;
     int m_smallFileSize;
-    bool m_lowLatencyMode;
 
     RIFFAudioFile::SubFormat m_audioRecFileFormat;
     
@@ -420,12 +405,6 @@ protected:
     TransportSyncStatus          m_mmcStatus;
     TransportSyncStatus          m_mtcStatus;
 
-    /// Whether we are sending MIDI Clocks (transport master).
-    /**
-     * ??? This is basically (m_midiSyncStatus == TRANSPORT_MASTER).  It is
-     *     likely redundant and m_midiSyncStatus can be used instead.
-     */
-    bool                         m_midiClockEnabled;
     /// 24 MIDI clocks per quarter note.  MIDI Spec section 2, page 30.
     /**
      * If the Composition has tempo changes, this single interval is
@@ -436,6 +415,7 @@ protected:
      */
     RealTime                     m_midiClockInterval;
 };
+
 
 }
 

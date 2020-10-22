@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2018 the Rosegarden development team.
+    Copyright 2000-2020 the Rosegarden development team.
     See the AUTHORS file for more details.
  
     This program is free software; you can redistribute it and/or
@@ -41,20 +41,15 @@ SoundDriver::SoundDriver(MappedStudio *studio, const std::string &name):
         m_name(name),
         m_driverStatus(NO_DRIVER),
         m_playStartPosition(0, 0),
-        m_startPlayback(false),
         m_playing(false),
         m_recordStatus(RECORD_OFF),
-        m_midiRunningId(MidiInstrumentBase),
-        m_audioRunningId(AudioInstrumentBase),
-        //    m_audioQueueScavenger(4, 50),
+        //m_audioQueueScavenger(4, 50),
         m_audioQueue(nullptr),
-        m_lowLatencyMode(true),
         m_audioRecFileFormat(RIFFAudioFile::FLOAT),
         m_studio(studio),
         m_sequencer(nullptr),
         m_mmcStatus(TRANSPORT_OFF),
         m_mtcStatus(TRANSPORT_OFF),
-        m_midiClockEnabled(false),
         m_midiClockInterval(0, 0)
 {
     m_audioQueue = new AudioPlayQueue();
@@ -295,17 +290,6 @@ SoundDriver::getMappedDevice(DeviceId id)
     return retDevice;
 }
 */
-
-MappedDevice *
-SoundDriver::findDevice(DeviceId deviceId)
-{
-    for (size_t i = 0; i < m_devices.size(); ++i) {
-        if (m_devices[i]->getId() == deviceId)
-            return m_devices[i];
-    }
-
-    return nullptr;
-}
 
 
 bool

@@ -3,9 +3,9 @@
 /*
   Rosegarden
   A sequencer and musical notation editor.
-  Copyright 2000-2018 the Rosegarden development team.
+  Copyright 2000-2020 the Rosegarden development team.
   See the AUTHORS file for more details.
- 
+
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
   published by the Free Software Foundation; either version 2 of the
@@ -129,6 +129,7 @@ AlsaDriver::AlsaDriver(MappedStudio *studio):
                 std::string(", kernel version ") +
                 getKernelVersionString() +
                 "]"),
+    m_startPlayback(false),
     m_midiHandle(nullptr),
     m_client( -1),
     m_inputPort( -1),
@@ -157,7 +158,8 @@ AlsaDriver::AlsaDriver(MappedStudio *studio):
     m_firstTimerCheck(true),
     m_timerRatio(0),
     m_timerRatioCalculated(false),
-    m_debug(false)
+    m_debug(false),
+    m_midiClockEnabled(false)
 {
     // Create a log that the user can easily see through the preferences
     // even in a release build.
@@ -5710,6 +5712,17 @@ bool AlsaDriver::handleTransportCCs(unsigned controlNumber, int value)
 
     // Don't know what this is.  Continue processing.
     return false;
+}
+
+MappedDevice *
+AlsaDriver::findDevice(DeviceId deviceId)
+{
+    for (size_t i = 0; i < m_devices.size(); ++i) {
+        if (m_devices[i]->getId() == deviceId)
+            return m_devices[i];
+    }
+
+    return nullptr;
 }
 
 

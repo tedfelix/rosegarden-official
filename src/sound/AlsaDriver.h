@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2018 the Rosegarden development team.
+    Copyright 2000-2020 the Rosegarden development team.
  
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
@@ -477,7 +477,7 @@ protected:
      * Called from initialiseMidi() and checkForNewClients().
      */
     virtual void generatePortList();
-    void generateFixedInstruments() override;
+    void generateFixedInstruments();
 
     virtual void generateTimerList();
     virtual std::string getAutoTimer(bool &wantTimerChecks);
@@ -520,6 +520,8 @@ private:
     /// The ALSA ports.
     AlsaPortVector m_alsaPorts;
     void setFirstConnection(DeviceId deviceId, bool recordDevice);
+
+    bool m_startPlayback;
 
     // ALSA MIDI/Sequencer stuff
     //
@@ -598,6 +600,11 @@ private:
     //!!! -- hoist to SoundDriver w/setter?
     typedef std::set<InstrumentId> InstrumentSet;
     InstrumentSet m_recordingInstruments;
+
+    typedef std::vector<MappedDevice *> MappedDeviceList;
+    /// The devices in the Composition.
+    MappedDeviceList m_devices;
+    MappedDevice *findDevice(DeviceId deviceId);
 
     // ??? rename: ConnectionMap
     typedef std::map<DeviceId, ClientPortPair> DevicePortMap;
@@ -746,6 +753,13 @@ private:
      * Returns true if handled and the CC can be discarded.
      */
     bool handleTransportCCs(unsigned controlNumber, int value);
+
+    /// Whether we are sending MIDI Clocks (transport master).
+    /**
+     * ??? This is basically (m_midiSyncStatus == TRANSPORT_MASTER).  It is
+     *     likely redundant and m_midiSyncStatus can be used instead.
+     */
+    bool                         m_midiClockEnabled;
 
 };
 

@@ -141,8 +141,6 @@ public:
     bool areClocksRunning() const override { return true; }
 
 protected:
-    void generateFixedInstruments()  override { }
-
     QString m_pastLog;
 };
 
