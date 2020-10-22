@@ -215,12 +215,8 @@ public:
     // Mapped Instruments
     //
     void setMappedInstrument(MappedInstrument *mI);
-    // ??? Only called by AlsaDriver.
-    MappedInstrument* getMappedInstrument(InstrumentId id);
 
-    // Are we playing?
-    //
-    bool isPlaying() const { return m_playing; }
+    bool isPlaying() const  { return m_playing; }
 
     // Are we counting?  By default a subclass probably wants to
     // return true, if it doesn't know better.
@@ -229,6 +225,7 @@ public:
 
     RealTime getStartPosition() const { return m_playStartPosition; }
     RecordStatus getRecordStatus() const { return m_recordStatus; }
+
 /*!DEVPUSH
     // Return a MappedDevice full of the Instrument mappings
     // that the driver has discovered.  The gui can then use
@@ -245,9 +242,8 @@ public:
     virtual bool addDevice(Device::DeviceType,
                            DeviceId,
                            InstrumentId,
-                           MidiDevice::DeviceDirection) {
-        return false;
-    }
+                           MidiDevice::DeviceDirection)
+        { return false; }
     virtual void removeDevice(DeviceId) { }
     virtual void removeAllDevices() { }
     virtual void renameDevice(DeviceId, QString) { }
@@ -312,31 +308,10 @@ public:
     RealTime getAudioMixBufferLength() { return m_audioMixBufferLength; }
     RealTime getAudioReadBufferLength() { return m_audioReadBufferLength; }
     RealTime getAudioWriteBufferLength() { return m_audioWriteBufferLength; }
-    int getSmallFileSize() { return m_smallFileSize; }
 
     bool getLowLatencyMode() const  { return true; }
 
-    // Cancel the playback of an audio file - either by instrument and audio file id
-    // or by audio segment id.
-    //
-    void cancelAudioFile(MappedEvent *mE);
-
     MappedStudio *getMappedStudio() { return m_studio; }
-
-    // MIDI Realtime Sync setting
-    //
-    TransportSyncStatus getMIDISyncStatus() const { return m_midiSyncStatus; }
-    void setMIDISyncStatus(TransportSyncStatus status) { m_midiSyncStatus = status; }
-
-    // MMC source/follower setting
-    //
-    TransportSyncStatus getMMCStatus() const { return m_mmcStatus; }
-    void setMMCStatus(TransportSyncStatus status) { m_mmcStatus = status; }
-
-    // MTC source/follower setting
-    //
-    TransportSyncStatus getMTCStatus() const { return m_mtcStatus; }
-    void setMTCStatus(TransportSyncStatus status) { m_mtcStatus = status; }
 
     // Set MIDI clock interval - allow redefinition above to ensure
     // we handle this reset correctly.
@@ -354,38 +329,45 @@ public:
     virtual void reportFailure(MappedEvent::FailureCode) { }
 
 protected:
-    // Audio
-    //
-    AudioFile* getAudioFile(unsigned int id);
 
-    std::string                                 m_name;
+    /// Driver name for the audit log.
+    std::string m_name;
+
     SoundDriverStatus m_driverStatus;
-    RealTime                                    m_playStartPosition;
-    bool                                        m_playing;
 
-    // This is our driver's own list of MappedInstruments and MappedDevices.  
+    RealTime m_playStartPosition;
+    bool m_playing;
+
+    typedef std::vector<MappedInstrument *> MappedInstrumentList;
+    // This is our driver's own list of MappedInstruments and MappedDevices.
     // These are uncoupled at this level - the Instruments and Devices float
     // free and only index each other - the Devices hold information only like
     // name, id and if the device is duplex capable.
-    //
-    typedef std::vector<MappedInstrument *> MappedInstrumentList;
     MappedInstrumentList m_instruments;
 
-    RecordStatus                                m_recordStatus;
+    RecordStatus m_recordStatus;
 
-    // Subclass _MUST_ scavenge this regularly:
-    Scavenger<AudioPlayQueue>                   m_audioQueueScavenger;
-    AudioPlayQueue                             *m_audioQueue;
+    // Subclass _MUST_ scavenge this regularly.
+    Scavenger<AudioPlayQueue> m_audioQueueScavenger;
+
+    AudioPlayQueue *m_audioQueue;
+    /// Cancel the playback of an audio file.
+    /**
+     * Either by instrument and audio file id or by audio segment id.
+     */
+    void cancelAudioFile(MappedEvent *mE);
     void clearAudioQueue();
 
-    // A list of AudioFiles that we can play.
-    //
-    std::vector<AudioFile*>                     m_audioFiles;
+    /// A list of AudioFile's that we can play.
+    std::vector<AudioFile *> m_audioFiles;
+    AudioFile *getAudioFile(unsigned int id);
 
     RealTime m_audioMixBufferLength;
     RealTime m_audioReadBufferLength;
     RealTime m_audioWriteBufferLength;
+
     int m_smallFileSize;
+    int getSmallFileSize() const  { return m_smallFileSize; }
 
     RIFFAudioFile::SubFormat m_audioRecFileFormat;
     
@@ -399,11 +381,17 @@ protected:
      */
     RosegardenSequencer *m_sequencer;
 
-    // MMC and MTC status and ID
-    //
-    TransportSyncStatus          m_midiSyncStatus;
+    TransportSyncStatus m_midiSyncStatus;
+    TransportSyncStatus getMIDISyncStatus() const { return m_midiSyncStatus; }
+    void setMIDISyncStatus(TransportSyncStatus status) { m_midiSyncStatus = status; }
+
     TransportSyncStatus          m_mmcStatus;
+    TransportSyncStatus getMMCStatus() const { return m_mmcStatus; }
+    void setMMCStatus(TransportSyncStatus status) { m_mmcStatus = status; }
+
     TransportSyncStatus          m_mtcStatus;
+    TransportSyncStatus getMTCStatus() const { return m_mtcStatus; }
+    void setMTCStatus(TransportSyncStatus status) { m_mtcStatus = status; }
 
     /// 24 MIDI clocks per quarter note.  MIDI Spec section 2, page 30.
     /**

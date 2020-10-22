@@ -62,19 +62,6 @@ SoundDriver::~SoundDriver()
     delete m_audioQueue;
 }
 
-MappedInstrument*
-SoundDriver::getMappedInstrument(InstrumentId id)
-{
-    std::vector<MappedInstrument*>::const_iterator it;
-
-    for (it = m_instruments.begin(); it != m_instruments.end(); ++it) {
-        if ((*it)->getId() == id)
-            return (*it);
-    }
-
-    return nullptr;
-}
-
 void
 SoundDriver::initialiseAudioQueue(const std::vector<MappedEvent> &events)
 {
@@ -253,6 +240,7 @@ SoundDriver::setMappedInstrument(MappedInstrument *mI)
     << "id = " << mI->getId();
 
 }
+
 /*!DEVPUSH
 unsigned int
 SoundDriver::getDevices()

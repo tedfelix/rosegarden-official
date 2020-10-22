@@ -5725,6 +5725,19 @@ AlsaDriver::findDevice(DeviceId deviceId)
     return nullptr;
 }
 
+MappedInstrument*
+AlsaDriver::getMappedInstrument(InstrumentId id)
+{
+    std::vector<MappedInstrument*>::const_iterator it;
+
+    for (it = m_instruments.begin(); it != m_instruments.end(); ++it) {
+        if ((*it)->getId() == id)
+            return (*it);
+    }
+
+    return nullptr;
+}
+
 
 }
 

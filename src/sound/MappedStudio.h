@@ -145,11 +145,12 @@ class MappedAudioFader;
 class MappedAudioBuss;
 class MappedAudioInput;
 
-// Works as a factory and virtual plug-board for all our other
-// objects whether they be MIDI or audio.
-//
-//
-//
+/// Factory and virtual plug-board for MIDI and Audio objects.
+/**
+ * ??? Why is this called a "studio".  It appears to be unrelated to
+ *     the Studio class.  It's related to SoundDriver.  So maybe it
+ *     is more of a MappedSoundDriver?
+ */
 class MappedStudio : public MappedObject
 {
 public:

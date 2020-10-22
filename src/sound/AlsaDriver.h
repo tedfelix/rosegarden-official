@@ -761,6 +761,8 @@ private:
      */
     bool                         m_midiClockEnabled;
 
+    MappedInstrument *getMappedInstrument(InstrumentId id);
+
 };
 
 }
