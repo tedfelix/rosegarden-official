@@ -33,27 +33,22 @@
 namespace Rosegarden
 {
 
-// ---------- SoundDriver -----------
-//
 
-
-SoundDriver::SoundDriver(MappedStudio *studio, const std::string &name):
-        m_sequencer(nullptr),
+SoundDriver::SoundDriver(MappedStudio *studio, const std::string &name) :
         m_name(name),
         m_driverStatus(NO_DRIVER),
+        m_sequencer(nullptr),
         m_playStartPosition(0, 0),
         m_playing(false),
         m_recordStatus(RECORD_OFF),
-        //m_audioQueueScavenger(4, 50),
+        m_midiClockInterval(0, 0),
         m_audioQueue(nullptr),
         m_smallFileSize(0),
         m_audioRecFileFormat(RIFFAudioFile::FLOAT),
-        m_studio(studio),
-        m_midiClockInterval(0, 0)
+        m_studio(studio)
 {
     m_audioQueue = new AudioPlayQueue();
 }
-
 
 SoundDriver::~SoundDriver()
 {

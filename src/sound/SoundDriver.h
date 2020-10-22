@@ -88,6 +88,37 @@ public:
     virtual void shutdown()  { }
 
 
+    // *** Devices and Connections ***
+
+    virtual bool addDevice(Device::DeviceType,
+                           DeviceId,
+                           InstrumentId,
+                           MidiDevice::DeviceDirection)
+        { return false; }
+    virtual void removeDevice(DeviceId) { }
+    virtual void removeAllDevices() { }
+    virtual void renameDevice(DeviceId, QString) { }
+
+    /// Poll for new clients (for new Devices/Instruments)
+    virtual void checkForNewClients()  { }
+
+    virtual unsigned int getConnections(Device::DeviceType,
+                                        MidiDevice::DeviceDirection) { return 0; }
+    virtual QString getConnection(Device::DeviceType,
+                                  MidiDevice::DeviceDirection,
+                                  unsigned int) { return ""; }
+    virtual QString getConnection(DeviceId) { return ""; }
+    virtual void setConnection(
+            DeviceId /* deviceId */,
+            QString /* idealConnection */) { }
+    virtual void setPlausibleConnection(
+            DeviceId deviceId,
+            QString idealConnection,
+            bool /* recordDevice */)
+                    { setConnection(deviceId, idealConnection); }
+    virtual void connectSomething() { }
+
+
     // *** Sequencer ***
 
     /// Store a local copy at construction time.
@@ -285,37 +316,6 @@ public:
     virtual void scavengePlugins()  { }
 
 
-    // *** Devices and Connections ***
-
-    virtual bool addDevice(Device::DeviceType,
-                           DeviceId,
-                           InstrumentId,
-                           MidiDevice::DeviceDirection)
-        { return false; }
-    virtual void removeDevice(DeviceId) { }
-    virtual void removeAllDevices() { }
-    virtual void renameDevice(DeviceId, QString) { }
-
-    /// Poll for new clients (for new Devices/Instruments)
-    virtual void checkForNewClients()  { }
-
-    virtual unsigned int getConnections(Device::DeviceType,
-                                        MidiDevice::DeviceDirection) { return 0; }
-    virtual QString getConnection(Device::DeviceType,
-                                  MidiDevice::DeviceDirection,
-                                  unsigned int) { return ""; }
-    virtual QString getConnection(DeviceId) { return ""; }
-    virtual void setConnection(
-            DeviceId /* deviceId */,
-            QString /* idealConnection */) { }
-    virtual void setPlausibleConnection(
-            DeviceId deviceId,
-            QString idealConnection,
-            bool /* recordDevice */)
-                    { setConnection(deviceId, idealConnection); }
-    virtual void connectSomething() { }
-
-
     // *** Miscellaneous ***
 
 /*!DEVPUSH
@@ -337,19 +337,21 @@ public:
 
 protected:
 
-    /// For transport requests.
-    /*
-     * Use instead of RosegardenSequencer::getInstance() to avoid mutex.
-     */
-    RosegardenSequencer *m_sequencer;
+    // *** General ***
 
     /// Driver name for the audit log.
     std::string m_name;
 
     SoundDriverStatus m_driverStatus;
 
-    RealTime m_playStartPosition;
-    bool m_playing;
+
+    // *** Sequencer ***
+
+    /// For transport requests.
+    /*
+     * Use instead of RosegardenSequencer::getInstance() to avoid mutex.
+     */
+    RosegardenSequencer *m_sequencer;
 
     typedef std::vector<MappedInstrument *> MappedInstrumentList;
     // This is our driver's own list of MappedInstruments and MappedDevices.
@@ -358,7 +360,22 @@ protected:
     // name, id and if the device is duplex capable.
     MappedInstrumentList m_instruments;
 
+    RealTime m_playStartPosition;
+    bool m_playing;
     RecordStatus m_recordStatus;
+
+    /// 24 MIDI clocks per quarter note.  MIDI Spec section 2, page 30.
+    /**
+     * If the Composition has tempo changes, this single interval is
+     * insufficient.  We should instead compute SPP based on bar/beat/pulse
+     * from the Composition.  Since the GUI and sequencer are separated,
+     * the bar/beat/pulse values would need to be pushed in at play and
+     * record time.  See RosegardenSequencer::m_songPosition.
+     */
+    RealTime m_midiClockInterval;
+
+
+    // *** Audio ***
 
     // Subclass _MUST_ scavenge this regularly.
     Scavenger<AudioPlayQueue> m_audioQueueScavenger;
@@ -376,19 +393,10 @@ protected:
     int m_smallFileSize;
 
     RIFFAudioFile::SubFormat m_audioRecFileFormat;
-    
+
     // Virtual studio hook
     MappedStudio *m_studio;
 
-    /// 24 MIDI clocks per quarter note.  MIDI Spec section 2, page 30.
-    /**
-     * If the Composition has tempo changes, this single interval is
-     * insufficient.  We should instead compute SPP based on bar/beat/pulse
-     * from the Composition.  Since the GUI and sequencer are separated,
-     * the bar/beat/pulse values would need to be pushed in at play and
-     * record time.  See RosegardenSequencer::m_songPosition.
-     */
-    RealTime m_midiClockInterval;
 };
 
 
