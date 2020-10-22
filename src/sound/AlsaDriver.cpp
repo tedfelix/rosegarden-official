@@ -5738,6 +5738,52 @@ AlsaDriver::getMappedInstrument(InstrumentId id)
     return nullptr;
 }
 
+void
+AlsaDriver::cancelAudioFile(MappedEvent *mE)
+{
+    RG_DEBUG << "cancelAudioFile()";
+
+    if (!m_audioQueue)
+        return ;
+
+    // For now we only permit cancelling unscheduled files.
+
+    const AudioPlayQueue::FileList &files = m_audioQueue->getAllUnscheduledFiles();
+    for (AudioPlayQueue::FileList::const_iterator fi = files.begin();
+            fi != files.end(); ++fi) {
+        PlayableAudioFile *file = *fi;
+        if (mE->getRuntimeSegmentId() == -1) {
+
+            // ERROR? The comparison between file->getAudioFile()->getId() of type unsigned int
+            //        and mE->getAudioID() of type int.
+            if (file->getInstrument() == mE->getInstrument() &&
+                    int(file->getAudioFile()->getId()) == mE->getAudioID()) {
+                file->cancel();
+            }
+        } else {
+            if (file->getRuntimeSegmentId() == mE->getRuntimeSegmentId() &&
+                    file->getStartTime() == mE->getEventTime()) {
+                file->cancel();
+            }
+        }
+    }
+}
+
+void
+AlsaDriver::clearAudioQueue()
+{
+    RG_DEBUG << "clearAudioQueue()";
+
+    if (m_audioQueue->empty())
+        return ;
+
+    AudioPlayQueue *newQueue = new AudioPlayQueue();
+    AudioPlayQueue *oldQueue = m_audioQueue;
+    m_audioQueue = newQueue;
+    if (oldQueue)
+        m_audioQueueScavenger.claim(oldQueue);
+}
+
 
 }
 

@@ -351,12 +351,6 @@ protected:
     Scavenger<AudioPlayQueue> m_audioQueueScavenger;
 
     AudioPlayQueue *m_audioQueue;
-    /// Cancel the playback of an audio file.
-    /**
-     * Either by instrument and audio file id or by audio segment id.
-     */
-    void cancelAudioFile(MappedEvent *mE);
-    void clearAudioQueue();
 
     /// A list of AudioFile's that we can play.
     std::vector<AudioFile *> m_audioFiles;

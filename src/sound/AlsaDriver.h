@@ -763,6 +763,14 @@ private:
 
     MappedInstrument *getMappedInstrument(InstrumentId id);
 
+    /// Cancel the playback of an audio file.
+    /**
+     * Either by instrument and audio file id or by audio segment id.
+     */
+    void cancelAudioFile(MappedEvent *mE);
+
+    void clearAudioQueue();
+
 };
 
 }
