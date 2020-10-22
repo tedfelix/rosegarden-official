@@ -155,6 +155,11 @@ class MappedAudioInput;
  *
  * Thread-safe so that the UI and sequencer threads can freely work
  * with this.
+ *
+ * ??? A better name for this might be SequencerStudio.  Throughout
+ *     Rosegarden, the software term "Mapped" is overused in class names.
+ *     "Mapped" should either be dropped or something related to the problem
+ *     domain should be used in its place.
  */
 class MappedStudio : public MappedObject
 {

@@ -122,12 +122,12 @@ namespace {
 
 AlsaDriver::AlsaDriver(MappedStudio *studio):
     SoundDriver(studio,
-                std::string("[ALSA library version ") +
-                std::string(SND_LIB_VERSION_STR) + 
-                std::string(", module version ") +
-                getAlsaModuleVersionString() + 
-                std::string(", kernel version ") +
-                getKernelVersionString() +
+                QString("[ALSA library version ") +
+                SND_LIB_VERSION_STR +
+                ", module version " +
+                strtoqstr(getAlsaVersion()) +
+                ", kernel version " +
+                strtoqstr(getKernelVersionString()) +
                 "]"),
     m_startPlayback(false),
     m_midiHandle(nullptr),
@@ -476,7 +476,7 @@ AlsaDriver::getAutoTimer(bool &wantTimerChecks)
     // recent kernels are OK.  Avoid if the kernel is older than
     // 2.6.20 or the ALSA driver is older than 1.0.14.
 
-    if (versionIsAtLeast(getAlsaModuleVersionString(),
+    if (versionIsAtLeast(getAlsaVersion(),
                          1, 0, 14) &&
         versionIsAtLeast(getKernelVersionString(),
                          2, 6, 20)) {
@@ -5397,38 +5397,58 @@ AlsaDriver::reportFailure(MappedEvent::FailureCode code)
 }
 
 std::string
-AlsaDriver::getAlsaModuleVersionString()
+AlsaDriver::getAlsaVersion()
 {
-    FILE *v = fopen("/proc/asound/version", "r");
+    FILE *versionFile = fopen("/proc/asound/version", "r");
+
+    if (!versionFile)
+        return "(unknown)";
 
     // Examples:
     // Advanced Linux Sound Architecture Driver Version 1.0.14rc3.
+    //   "1.0.14rc3"
     // Advanced Linux Sound Architecture Driver Version 1.0.14 (Thu May 31 09:03:25 2008 UTC).
+    //   "1.0.14 (Thu May 31 09:03:25 2008 UTC)"
+    // Advanced Linux Sound Architecture Driver Version k5.4.0-51-lowlatency.
+    //   "5.4.0-52-lowlatency"
 
-    if (v) {
-        char buf[256];
-        if (fgets(buf, 256, v) == nullptr) {
-            fclose(v);
-            return "(unknown)"; /* check fgets result */
-        }
-        fclose(v);
+    const int bufSize = 256;
+    char buf[bufSize];
+    // Get the version line.  If it fails...
+    if (fgets(buf, bufSize, versionFile) == nullptr) {
+        fclose(versionFile);
+        return "(unknown)";
+    }
 
-        std::string vs(buf);
-        std::string::size_type sp = vs.find_first_of('.');
-        if (sp > 0 && sp != std::string::npos) {
-            while (sp > 0 && isdigit(vs[sp-1])) --sp;
-            vs = vs.substr(sp);
-            if (vs.length() > 0 && vs[vs.length()-1] == '\n') {
-                vs = vs.substr(0, vs.length()-1);
-            }
-            if (vs.length() > 0 && vs[vs.length()-1] == '.') {
-                vs = vs.substr(0, vs.length()-1);
-            }
-            return vs;
-        }
+    fclose(versionFile);
+
+    std::string versionString(buf);
+
+    // Find the decimal.
+    std::string::size_type startPos = versionString.find_first_of('.');
+
+    if (startPos > 0  &&  startPos != std::string::npos) {
+        // Scan for digits backwards to find the beginning of the version
+        // number.  We scan for digits because extractVersion() requires
+        // that the version string starts with the major version number.
+        while (startPos > 0  &&  isdigit(versionString[startPos-1]))
+            --startPos;
+
+        versionString = versionString.substr(startPos);
+
+        // Remove trailing LF
+        if (versionString.length() > 0  &&  versionString[versionString.length()-1] == '\n')
+            versionString = versionString.substr(0, versionString.length()-1);
+
+        // Remove trailing "."
+        if (versionString.length() > 0  &&  versionString[versionString.length()-1] == '.')
+            versionString = versionString.substr(0, versionString.length()-1);
+
+        return versionString;
     }
 
     return "(unknown)";
+
 }
 
 std::string
@@ -5511,6 +5531,10 @@ AlsaDriver::versionIsAtLeast(std::string v, int major, int minor, int subminor)
             if (actualSubminor > subminor) {
                 ok = true;
             } else if (actualSubminor == subminor) {
+                // If the ALSA driver's version does not include "rc" or "pre",
+                // then we are ok.
+                // ??? So this is "versionIsAtLeastAndNotPreOrRC()".  I'm
+                //     guessing we can remove this.
                 if (strncmp(actualSuffix.c_str(), "rc", 2) &&
                     strncmp(actualSuffix.c_str(), "pre", 3)) {
                     ok = true;

@@ -685,7 +685,7 @@ private:
     double m_timerRatio;
     bool m_timerRatioCalculated;
 
-    std::string getAlsaModuleVersionString();
+    std::string getAlsaVersion();
     std::string getKernelVersionString();
     void extractVersion(std::string vstr, int &major, int &minor, int &subminor, std::string &suffix);
     bool versionIsAtLeast(std::string vstr, int major, int minor, int subminor);

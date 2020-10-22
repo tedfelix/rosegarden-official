@@ -32,7 +32,6 @@
 #include <QStringList>
 
 #include <set>
-#include <string>
 #include <vector>
 
 
@@ -76,7 +75,7 @@ class MappedStudio;
 class SoundDriver
 {
 public:
-    SoundDriver(MappedStudio *studio, const std::string &name);
+    SoundDriver(MappedStudio *studio, const QString &name);
     virtual ~SoundDriver();
 
 
@@ -340,7 +339,7 @@ protected:
     // *** General ***
 
     /// Driver name for the audit log.
-    std::string m_name;
+    QString m_name;
 
     SoundDriverStatus m_driverStatus;
 
@@ -394,14 +393,7 @@ protected:
 
     RIFFAudioFile::SubFormat m_audioRecFileFormat;
 
-    /// Holds audio faders, inputs, and busses.
-    /*
-     * Internally, this is mainly used for creating and getting
-     * MappedAudioFader instances.
-     *
-     * Externally, this is used for MappedAudioFader, MappedAudioInput, and
-     * MappedAudioBuss instances.  See JackDriver::updateAudioData().
-     */
+    /// Sequencer-side representation of the audio portion of the Studio.
     MappedStudio *m_studio;
 
 };
