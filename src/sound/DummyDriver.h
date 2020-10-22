@@ -14,10 +14,6 @@
 
 #include "SoundDriver.h"
 
-// An empty sound driver for when we don't want sound support
-// but still want to build the sequencer.
-//
-
 #ifndef RG_DUMMYDRIVER_H
 #define RG_DUMMYDRIVER_H
 
@@ -28,47 +24,12 @@ namespace Rosegarden
 class PlayableAudioFile;
 
 
+/// Allow Rosegarden to run without a sound support.
 class DummyDriver : public SoundDriver
 {
 public:
     DummyDriver(MappedStudio *studio);
     DummyDriver(MappedStudio *studio, QString pastLog);
-
-    void setPluginInstanceBypass(InstrumentId /*id*/,
-                                         int /*position*/,
-                                         bool /*value*/) override { }
-
-    QStringList getPluginInstancePrograms(InstrumentId ,
-                                                  int ) override { return QStringList(); }
-
-    QString getPluginInstanceProgram(InstrumentId,
-                                             int ) override { return QString(); }
-
-    QString getPluginInstanceProgram(InstrumentId,
-                                             int,
-                                             int,
-                                             int) override { return QString(); }
-
-    unsigned long getPluginInstanceProgram(InstrumentId,
-                                                   int ,
-                                                   QString) override { return 0; }
-    
-    void setPluginInstanceProgram(InstrumentId,
-                                          int ,
-                                          QString ) override { }
-
-    QString configurePlugin(InstrumentId,
-                                    int,
-                                    QString ,
-                                    QString ) override { return QString(); }
-
-    void setAudioBussLevels(int ,
-                                    float ,
-                                    float ) override { }
-
-    void setAudioInstrumentLevels(InstrumentId,
-                                          float,
-                                          float) override { }
 
     void checkForNewClients() override  { }
 

@@ -162,41 +162,45 @@ public:
                                              unsigned long /*portNumber*/)
         { return 0; }
 
-    virtual void setPluginInstanceBypass(InstrumentId id,
-                                         int position,
-                                         bool value) = 0;
+    virtual void setPluginInstanceBypass(InstrumentId /*id*/,
+                                         int /*position*/,
+                                         bool /*value*/)  { }
 
-    virtual QStringList getPluginInstancePrograms(InstrumentId id,
-                                                  int position) = 0;
+    virtual QStringList getPluginInstancePrograms(InstrumentId /*id*/,
+                                                  int /*position*/)
+        { return QStringList(); }
 
-    virtual QString getPluginInstanceProgram(InstrumentId id,
-                                             int position) = 0;
+    virtual QString getPluginInstanceProgram(InstrumentId /*id*/,
+                                             int /*position*/)
+        { return QString(); }
 
-    virtual QString getPluginInstanceProgram(InstrumentId id,
-                                             int position,
-                                             int bank,
-                                             int program) = 0;
+    virtual QString getPluginInstanceProgram(InstrumentId /*id*/,
+                                             int /*position*/,
+                                             int /*bank*/,
+                                             int /*program*/)
+        { return QString(); }
 
-    virtual unsigned long getPluginInstanceProgram(InstrumentId id,
-                                                   int position,
-                                                   QString name) = 0;
+    virtual unsigned long getPluginInstanceProgram(InstrumentId /*id*/,
+                                                   int /*position*/,
+                                                   QString /*name*/)
+        { return 0; }
     
-    virtual void setPluginInstanceProgram(InstrumentId id,
-                                          int position,
-                                          QString program) = 0;
+    virtual void setPluginInstanceProgram(InstrumentId /*id*/,
+                                          int /*position*/,
+                                          QString /*program*/)  { }
 
-    virtual QString configurePlugin(InstrumentId id,
-                                    int position,
-                                    QString key,
-                                    QString value) = 0;
+    virtual QString configurePlugin(InstrumentId /*id*/,
+                                    int /*position*/,
+                                    QString /*key*/,
+                                    QString /*value*/)  { return QString(); }
 
-    virtual void setAudioBussLevels(int bussId,
-                                    float dB,
-                                    float pan) = 0;
+    virtual void setAudioBussLevels(int /*bussId*/,
+                                    float /*dB*/,
+                                    float /*pan*/)  { }
 
-    virtual void setAudioInstrumentLevels(InstrumentId id,
-                                          float dB,
-                                          float pan) = 0;
+    virtual void setAudioInstrumentLevels(InstrumentId /*id*/,
+                                          float /*dB*/,
+                                          float /*pan*/)  { }
 
     // Poll for new clients (for new Devices/Instruments)
     //
