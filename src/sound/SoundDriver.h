@@ -394,7 +394,14 @@ protected:
 
     RIFFAudioFile::SubFormat m_audioRecFileFormat;
 
-    // Virtual studio hook
+    /// Holds audio faders, inputs, and busses.
+    /*
+     * Internally, this is mainly used for creating and getting
+     * MappedAudioFader instances.
+     *
+     * Externally, this is used for MappedAudioFader, MappedAudioInput, and
+     * MappedAudioBuss instances.  See JackDriver::updateAudioData().
+     */
     MappedStudio *m_studio;
 
 };

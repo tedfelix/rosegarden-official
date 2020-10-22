@@ -24,7 +24,7 @@
 #include "AudioPlayQueue.h"
 #include "PlayableAudioFile.h"
 
-#include <unistd.h>
+#include <unistd.h>  // for usleep()
 #include <sys/time.h>
 #include <pthread.h> // for mutex
 
@@ -75,7 +75,7 @@ SoundDriver::initialiseAudioQueue(const std::vector<MappedEvent> &events)
         if (audioFile) {
             MappedAudioFader *fader =
                 dynamic_cast<MappedAudioFader*>
-                (getMappedStudio()->getAudioFader(i->getInstrument()));
+                (m_studio->getAudioFader(i->getInstrument()));
 
             if (!fader) {
                 RG_DEBUG << "WARNING: SoundDriver::initialiseAudioQueue: no fader for audio instrument " << i->getInstrument();

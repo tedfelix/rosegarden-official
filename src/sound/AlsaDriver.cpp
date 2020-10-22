@@ -4298,7 +4298,7 @@ AlsaDriver::processEventsOut(const MappedEventList &mC,
             if (audioFile) {
                 MappedAudioFader *fader =
                     dynamic_cast<MappedAudioFader*>
-                    (getMappedStudio()->getAudioFader((*i)->getInstrument()));
+                    (m_studio->getAudioFader((*i)->getInstrument()));
 
                 if (!fader) {
                     RG_WARNING << "processEventsOut(): WARNING: No fader for audio instrument " << (*i)->getInstrument();

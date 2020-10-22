@@ -145,11 +145,16 @@ class MappedAudioFader;
 class MappedAudioBuss;
 class MappedAudioInput;
 
-/// Factory and virtual plug-board for MIDI and Audio objects.
+
+/// Sequencer-side representation of the audio portion of the Studio.
 /**
- * ??? Why is this called a "studio".  It appears to be unrelated to
- *     the Studio class.  It's related to SoundDriver.  So maybe it
- *     is more of a MappedSoundDriver?
+ * Factory and virtual plug-board for Audio (and MIDI?) objects.
+ *
+ * Container of MappedAudioFader, MappedAudioInput, MappedAudioBuss,
+ * MappedPluginPort, and MappedPluginSlot instances.
+ *
+ * Thread-safe so that the UI and sequencer threads can freely work
+ * with this.
  */
 class MappedStudio : public MappedObject
 {
@@ -157,58 +162,51 @@ public:
     MappedStudio();
     ~MappedStudio() override;
 
-    // Create a new slider of a certain type for a certain
-    // type of device.
-    //
-    MappedObject* createObject(MappedObjectType type);
+    // *** Create
 
-    // And create an object with a specified id
-    //
-    MappedObject* createObject(MappedObjectType type, 
+    MappedObject *createObject(MappedObjectType type);
+
+    MappedObject *createObject(MappedObjectType type,
                                MappedObjectId id);
 
-    bool connectObjects(MappedObjectId mId1, MappedObjectId mId2);
-    bool disconnectObjects(MappedObjectId mId1, MappedObjectId mId2);
-    bool disconnectObject(MappedObjectId mId);
+    // *** Destroy
 
-    // Destroy a MappedObject by ID
-    //
+    /// Call destroy() on the object.
     bool destroyObject(MappedObjectId id);
+    // Clear a MappedObject reference from the Studio
+    bool clearObject(MappedObjectId id);
+    // Empty the studio of everything
+    void clear();
 
-    // Get an object by ID only
-    //
-    MappedObject* getObjectById(MappedObjectId);
+    // *** Get
+
+    MappedObject *getObjectById(MappedObjectId id);
 
     // Get an object by ID and type.  (Returns 0 if the ID does not
     // exist or exists but is not of the correct type.)  This is
     // faster than getObjectById if you know the type already.
-    //
-    MappedObject* getObjectByIdAndType(MappedObjectId, MappedObjectType);
+    MappedObject *getObjectByIdAndType(MappedObjectId id,
+                                       MappedObjectType type);
 
     // Get an arbitrary object of a given type - to see if any exist
-    //
-    MappedObject* getObjectOfType(MappedObjectType type);
+    MappedObject *getObjectOfType(MappedObjectType type);
+
+    // Get an audio fader for an InstrumentId.  Convenience function.
+    MappedAudioFader *getAudioFader(InstrumentId id);
+    MappedAudioBuss *getAudioBuss(int bussNumber); // not buss no., not object id
+    MappedAudioInput *getAudioInput(int inputNumber); // likewise
 
     // Find out how many objects there are of a certain type
-    //
     unsigned int getObjectCount(MappedObjectType type);
 
     // iterators
-    MappedObject* getFirst(MappedObjectType type);
-    MappedObject* getNext(MappedObject *object);
+    MappedObject *getFirst(MappedObjectType type);
+    MappedObject *getNext(MappedObject *object);
 
     std::vector<MappedObject *> getObjectsOfType(MappedObjectType type);
 
-    // Empty the studio of everything
-    //
-    void clear();
+    // *** Properties
 
-    // Clear a MappedObject reference from the Studio
-    //
-    bool clearObject(MappedObjectId id);
-
-    // Property list
-    //
     MappedObjectPropertyList getPropertyList(
             const MappedObjectProperty &property) override;
 
@@ -218,41 +216,24 @@ public:
     void setProperty(const MappedObjectProperty &property,
                              MappedObjectValue value) override;
 
-    // Get an audio fader for an InstrumentId.  Convenience function.
-    //
-    MappedAudioFader *getAudioFader(InstrumentId id);
-    MappedAudioBuss *getAudioBuss(int bussNumber); // not buss no., not object id
-    MappedAudioInput *getAudioInput(int inputNumber); // likewise
+    // *** Connections
 
-    // Return the object vector
-    //
-    //std::vector<MappedObject*>* getObjects() const { return &m_objects; }
+    bool connectObjects(MappedObjectId mId1, MappedObjectId mId2);
+    bool disconnectObjects(MappedObjectId mId1, MappedObjectId mId2);
+    bool disconnectObject(MappedObjectId mId);
 
-    // DCOP streaming
-    //
-    /* dunno if we need this
-    friend QDataStream& operator>>(QDataStream &dS, MappedStudio *mS);
-    friend QDataStream& operator<<(QDataStream &dS, MappedStudio *mS);
-    friend QDataStream& operator>>(QDataStream &dS, MappedStudio &mS);
-    friend QDataStream& operator<<(QDataStream &dS, const MappedStudio &mS);
-    */
-
+    // *** SoundDriver
 
     // Set the driver object so that we can do things like
     // initialise plugins etc.
-    //
-    SoundDriver* getSoundDriver() { return m_soundDriver; }
-    const SoundDriver* getSoundDriver() const { return m_soundDriver; }
-    void setSoundDriver(SoundDriver *driver) { m_soundDriver = driver; }
-
-protected:
+    void setSoundDriver(SoundDriver *driver)  { m_soundDriver = driver; }
+    SoundDriver *getSoundDriver()  { return m_soundDriver; }
+    const SoundDriver *getSoundDriver() const  { return m_soundDriver; }
 
 private:
 
-    // We give everything we create a unique MappedObjectId for
-    // this session.  So store the running total in here.
-    //
-    MappedObjectId             m_runningObjectId;
+    /// Next object ID for assigning unique IDs to each object.
+    MappedObjectId m_runningObjectId;
 
     // All of our mapped (virtual) studio resides in this container as
     // well as having all their parent/child relationships.  Because
@@ -266,8 +247,6 @@ private:
     typedef std::map<MappedObjectType, MappedObjectCategory> MappedObjectMap;
     MappedObjectMap m_objects;
     
-    // Driver object
-    //
     SoundDriver *m_soundDriver;
 };
 
