@@ -551,6 +551,7 @@ set(rg_CPPS
   sound/PitchDetector.cpp
   sound/Resampler.cpp
   sound/ExternalController.cpp
+  sound/KorgNanoKontrol2.cpp
   commands/notation/ResetDisplacementsCommand.cpp
   commands/notation/RemoveNotationQuantizeCommand.cpp
   commands/notation/AddMarkCommand.cpp

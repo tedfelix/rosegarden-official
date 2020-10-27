@@ -14,6 +14,7 @@
 #pragma once
 
 #include "base/Instrument.h"
+#include "KorgNanoKontrol2.h"
 #include "base/MidiProgram.h"  // For MidiByte
 
 #include <QObject>
@@ -95,14 +96,11 @@ public:
 
     /// Handle MappedEvent's from the external controller port.
     /**
-     * This routine handles remote control events received from a
-     * device connected to the "external controller" port.
+     * This routine doesn't handle the events directly.  Instead
+     * it passes the events on to the appropriate handler based
+     * on which control surface has been selected in the preferences.
      *
-     * This routine handles controller 81 which opens or
-     * brings to the top various windows based on the value.
-     *
-     * All other events are forwarded to the active window.
-     * See m_activeWindow.
+     * See processRGNative() and KorgNanoKontrol2.
      */
     void processEvent(const MappedEvent *event);
 
@@ -135,8 +133,26 @@ private:
     // Access through self() only.
     ExternalController();
 
+    enum ControllerType { CT_RosegardenNative, CT_KorgNanoKontrol2 };
+    ControllerType m_controllerType;
+
     /// Cache of the last Instrument we were tracking for RosegardenMainWindow.
     InstrumentId m_instrumentId;
+
+    /// Handle Rosegarden's native control surface.
+    /**
+     * This routine handles remote control events received from a
+     * device connected to the "external controller" port.
+     *
+     * This routine handles controller 81 which opens or
+     * brings to the top various windows based on the value.
+     *
+     * All other events are forwarded to the active window.
+     * See m_activeWindow.
+     */
+    void processRGNative(const MappedEvent *event);
+
+    KorgNanoKontrol2 korgNanoKontrol2;
 
 };
 

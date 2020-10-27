@@ -42,6 +42,10 @@ ExternalController::ExternalController() :
     activeWindow(Main),
     m_instrumentId(NoInstrument)
 {
+    QSettings settings;
+    settings.beginGroup(GeneralOptionsConfigGroup);
+    m_controllerType = static_cast<ControllerType>(
+            settings.value("controller_type", CT_RosegardenNative).toInt());
 }
 
 void ExternalController::connectRMW(RosegardenMainWindow *rmw)
@@ -89,6 +93,18 @@ bool ExternalController::isEnabled()
 }
 
 void ExternalController::processEvent(const MappedEvent *event)
+{
+    switch (m_controllerType) {
+    case CT_RosegardenNative:
+        processRGNative(event);
+        break;
+    case CT_KorgNanoKontrol2:
+        korgNanoKontrol2.processEvent(event);
+        break;
+    }
+}
+
+void ExternalController::processRGNative(const MappedEvent *event)
 {
     if (event->getType() == MappedEvent::MidiController) {
 
