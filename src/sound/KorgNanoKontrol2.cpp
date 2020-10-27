@@ -43,8 +43,6 @@ KorgNanoKontrol2::KorgNanoKontrol2() :
 {
 }
 
-typedef std::vector<unsigned char> SysExBuffer;
-
 SysExBuffer inquiryMessageRequest = {
     0xF0,  // SOX
     0x7E,  // Non Realtime Message
@@ -61,12 +59,19 @@ void KorgNanoKontrol2::init()
 {
     // Configure the device.
 
-    // ??? We have to be connected bi-directional for this to work.
-
 #if 0
-    // Confirm expected device.  Send inquiry and confirm reply.
-    sendSysEx(inquiryMessageRequest);
+    // Confirm expected device.
+
+    // Send Inquiry Message Request.
+    // ??? For these short messages, we could provide a string of
+    //     hex and ExternalController could offer a sendSysEx() that
+    //     takes a string and uses MappedEvent::addDataString().
+    //ExternalController::sendSysEx(inquiryMessageRequest);
+    ExternalController::sendSysEx("F07E7F0601F7");
+
     SysExBuffer buffer;
+
+    // Get Device Inquiry Reply.
     // We need a synchronous getSysEx() with 500msec(?) timeout.
     // Using QEventLoop might be best since we are in the UI thread
     // and MIDI data is obtained via a polling timer.
@@ -88,17 +93,22 @@ void KorgNanoKontrol2::init()
     if (compareSysEx(buffer, rosegardenScene))
         return;
 
-    // Ask user if it is ok to reconfigure the device.
-    QMessageBox::StandardButton reply = QMessageBox::warning(
-            0,
-            tr("Rosegarden"),
-            tr("The connected Korg nanoKONTROL2 is not configured optimally for Rosegarden.  Reconfiguring it will lose any custom settings you've made with the nanoKONTROL2 editor.  Reconfigure?"),
-            QMessageBox::Yes | QMessageBox::No,
-            QMessageBox::Yes);
+    // If the user appears to have customized the scene, ask if it is
+    // ok to clobber it.
+    if (!compareSysEx(buffer, defaultScene))
+    {
+        // Ask user if it is ok to reconfigure the device.
+        QMessageBox::StandardButton reply = QMessageBox::warning(
+                0,
+                tr("Rosegarden"),
+                tr("The connected Korg nanoKONTROL2 is not configured optimally for Rosegarden.  Reconfiguring it will lose any custom settings you've made with the nanoKONTROL2 editor.  Reconfigure?"),
+                QMessageBox::Yes | QMessageBox::No,
+                QMessageBox::Yes);
 
-    // If not, return.
-    if (reply == QMessageBox::No)
-        return;
+        // If not, return.
+        if (reply == QMessageBox::No)
+            return;
+    }
 
     // Send "Current Scene Data Dump" with Rosegarden scene.
     sendSysEx(rosegardenScene);
@@ -126,16 +136,6 @@ void KorgNanoKontrol2::init()
 
 void KorgNanoKontrol2::processEvent(const MappedEvent *event)
 {
-#if 0
-    // TEST
-    // This works so long as we configure the nanoKONTROL2 for "external"
-    // LED mode.
-    ExternalController::self()->send(
-            0, // channel
-            64, // controlNumber (64 is the first record button)
-            127);  // value
-#endif
-
     // Not a CC?  Bail.
     if (event->getType() != MappedEvent::MidiController)
         return;
@@ -434,8 +434,69 @@ void KorgNanoKontrol2::processRecord(MidiByte controlNumber)
     doc->setModified();
 }
 
+void KorgNanoKontrol2::testLEDs(bool on)
+{
+    const MidiByte value = on ? 127 : 0;
+
+    for (int i = 0; i < 8; ++i) {
+        // Record
+        ExternalController::send(
+                0, // channel
+                64+i, // controlNumber
+                value);  // value
+        // Mute
+        ExternalController::send(
+                0, // channel
+                48+i, // controlNumber
+                value);  // value
+        // Solo
+        ExternalController::send(
+                0, // channel
+                32+i, // controlNumber
+                value);  // value
+    }
+
+    ExternalController::send(
+            0, // channel
+            41, // controlNumber
+            value);  // value
+    ExternalController::send(
+            0, // channel
+            42, // controlNumber
+            value);  // value
+    ExternalController::send(
+            0, // channel
+            43, // controlNumber
+            value);  // value
+    ExternalController::send(
+            0, // channel
+            44, // controlNumber
+            value);  // value
+    ExternalController::send(
+            0, // channel
+            45, // controlNumber
+            value);  // value
+    ExternalController::send(
+            0, // channel
+            46, // controlNumber
+            value);  // value
+
+    // The following buttons have no LED:
+    // - Track Left (58)
+    // - Track Right (59)
+    // - Marker Set (60)
+    // - Marker Left (61)
+    // - Marker Left (62)
+}
+
 void KorgNanoKontrol2::refreshLEDs()
 {
+#if 0
+    static bool on = false;
+    on = !on;
+    testLEDs(on);
+#endif
+
     // Iterate over the Track's in the Composition and copy the
     // Solo/Mute/Record state to the LEDs.
     // ???

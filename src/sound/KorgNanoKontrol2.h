@@ -32,6 +32,10 @@ class MappedEvent;
  *
  *   Hold down the PREV TRACK, NEXT TRACK, and CYCLE buttons and then
  *   connect the nanoKONTROL2 to USB.
+ *
+ * More support for the nanoKONTROL2 is present in AlsaDriver and elsewhere.
+ * Search the sourcebase on "nanokontrol2" (case insensitive, non-whole-word)
+ * to find it.
  */
 class KorgNanoKontrol2
 {
@@ -54,6 +58,7 @@ private:
     void processMute(MidiByte controlNumber);
     void processRecord(MidiByte controlNumber);
 
+    void testLEDs(bool on);
     void refreshLEDs();
 
 };

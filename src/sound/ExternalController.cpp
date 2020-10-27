@@ -220,6 +220,33 @@ void ExternalController::sendAllCCs(
 }
 
 void
+ExternalController::sendSysEx(const SysExBuffer &buffer)
+{
+    // Not enabled?  Bail.
+    if (!isEnabled())
+        return;
+
+#if 0
+    MappedEvent event(NoInstrument,  // instrumentId is ignored
+                      MappedEvent::MidiSystemMessage);
+    event.setRecordedDevice(Device::EXTERNAL_CONTROLLER);
+
+    // Add SysEx Data.
+    // ??? Do we need F0/F7 or not?  We need to test and document.
+    // ??? Use addDataByte() to add each byte.  Might want to add
+    //     an addData(SysExBuffer) to MappedEvent.  Promote SysExBuffer.
+    // ??? addDataByte() assumes we've already added a data block.
+    //     addDataString() does not and will create one for us if needed.
+    //     We should probably make this consistent.  Especially if we add
+    //     a new AddData(SysExBuffer) to MappedEvent.  All three should
+    //     behave identically.
+    event.addData(buffer);
+
+    StudioControl::sendMappedEvent(event);
+#endif
+}
+
+void
 ExternalController::slotDocumentLoaded(RosegardenDocument *doc)
 {
     if (!doc)

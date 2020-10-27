@@ -30,6 +30,9 @@ class RosegardenDocument;
 class RosegardenMainWindow;
 
 
+typedef std::vector<unsigned char> SysExBuffer;
+
+
 /// Support for the "external controller" port.
 /**
  * The external controller port allows MIDI control surfaces to control
@@ -111,6 +114,8 @@ public:
     static void send(MidiByte channel, MidiByte controlNumber, MidiByte value);
     static void sendAllCCs(
             const Instrument *instrument, MidiByte channel = MidiMaxValue);
+
+    static void sendSysEx(const SysExBuffer &buffer);
 
 signals:
 
