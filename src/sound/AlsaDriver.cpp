@@ -1674,10 +1674,64 @@ AlsaDriver::initialise()
     return result;
 }
 
+void
+AlsaDriver::createExternalControllerPort()
+{
+    if (ExternalController::isEnabled()) {
+        // Create external controller port.
+        m_externalControllerPort = checkAlsaError(
+                snd_seq_create_simple_port(
+                    m_midiHandle,
+                    "external controller",
+                    SND_SEQ_PORT_CAP_READ | SND_SEQ_PORT_CAP_WRITE |
+                        SND_SEQ_PORT_CAP_SUBS_READ | SND_SEQ_PORT_CAP_SUBS_WRITE,
+                    SND_SEQ_PORT_TYPE_APPLICATION | SND_SEQ_PORT_TYPE_SOFTWARE |
+                        SND_SEQ_PORT_TYPE_MIDI_GENERIC),
+                "initialiseMidi() - Can't create \"external controller\" port.");
 
+        // For each ALSA port, look for a control surface...
+        for (QSharedPointer<AlsaPortDescription> currentPort : m_alsaPorts) {
 
-// Set up queue, client and port
-//
+            // Skip ports we cannot read from.
+            if (!currentPort->isReadable())
+                continue;
+
+            // Check if the port is already connected to something.
+            snd_seq_addr_t addr;
+            addr.client = currentPort->m_client;
+            addr.port = currentPort->m_port;
+            snd_seq_query_subscribe_t *subscribers;
+            // On stack, so no need to free.
+            snd_seq_query_subscribe_alloca(&subscribers);
+            snd_seq_query_subscribe_set_root(subscribers, &addr);
+            snd_seq_query_subscribe_set_type(subscribers, SND_SEQ_QUERY_SUBS_READ);
+            snd_seq_query_subscribe_set_index(subscribers, 0);
+            // Perform the query.  We have to at least query once for
+            // num_subs to be valid.
+            snd_seq_query_port_subscribers(m_midiHandle, subscribers);
+            // Already connected to something?  Try the next.
+            if (snd_seq_query_subscribe_get_num_subs(subscribers) != 0)
+                continue;
+
+            QString lcName = strtoqstr(currentPort->m_name).toLower();
+
+            // Found the Korg nanoKONTROL2?
+            if (lcName.contains("nanokontrol2")) {
+                // Connect it to the external controller port.
+                snd_seq_connect_from(m_midiHandle,
+                        m_externalControllerPort,  // my_port
+                        currentPort->m_client,  // src_client
+                        currentPort->m_port);  // src_port
+
+                ExternalController::self()->setType(
+                        ExternalController::CT_KorgNanoKontrol2);
+
+                break;
+            }
+        }
+    }
+}
+
 bool
 AlsaDriver::initialiseMidi()
 {
@@ -1801,42 +1855,7 @@ AlsaDriver::initialiseMidi()
     generatePortList();
     generateFixedInstruments();
 
-    if (ExternalController::isEnabled()) {
-        // Create external controller port.
-        m_externalControllerPort = checkAlsaError(
-                snd_seq_create_simple_port(
-                    m_midiHandle,
-                    "external controller",
-                    SND_SEQ_PORT_CAP_READ | SND_SEQ_PORT_CAP_WRITE |
-                        SND_SEQ_PORT_CAP_SUBS_READ | SND_SEQ_PORT_CAP_SUBS_WRITE,
-                    SND_SEQ_PORT_TYPE_APPLICATION | SND_SEQ_PORT_TYPE_SOFTWARE |
-                        SND_SEQ_PORT_TYPE_MIDI_GENERIC),
-                "initialiseMidi() - Can't create \"external controller\" port.");
-
-        // For each ALSA port, look for a control surface...
-        for (QSharedPointer<AlsaPortDescription> currentPort : m_alsaPorts) {
-
-            // Skip ports we cannot read from.
-            if (!currentPort->isReadable())
-                continue;
-
-            QString lcName = strtoqstr(currentPort->m_name).toLower();
-
-            // Found the Korg nanoKONTROL2?
-            if (lcName.contains("nanokontrol2")) {
-                // Connect it to the external controller port.
-                snd_seq_connect_from(m_midiHandle,
-                        m_externalControllerPort,  // my_port
-                        currentPort->m_client,  // src_client
-                        currentPort->m_port);  // src_port
-
-                ExternalController::self()->setType(
-                        ExternalController::CT_KorgNanoKontrol2);
-
-                break;
-            }
-        }
-    }
+    createExternalControllerPort();
 
     // Modify status with MIDI success
     //
@@ -4926,6 +4945,7 @@ AlsaDriver::checkForNewClients()
         // Prepare to query subscribers.
 
         snd_seq_query_subscribe_t *subs;
+        // On stack, so no need to free.
         snd_seq_query_subscribe_alloca(&subs);
         snd_seq_query_subscribe_set_root(subs, &addr);
         // Start at subscriber number 0.

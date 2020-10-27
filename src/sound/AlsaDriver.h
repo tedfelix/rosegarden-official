@@ -114,7 +114,8 @@ public:
     void setMIDIClockInterval(RealTime interval) override;
 
     // initialise subsystems
-    //
+
+    // Set up queue, client and port
     bool initialiseMidi();
     void initialiseAudio();
 
@@ -536,7 +537,9 @@ private:
     DeviceIntMap m_outputPorts;
 
     int                          m_syncOutputPort;
-    int                          m_externalControllerPort;
+
+    int m_externalControllerPort;
+    void createExternalControllerPort();
 
     int                          m_queue;
     int                          m_maxClients;
