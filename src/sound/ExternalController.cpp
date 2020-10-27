@@ -64,6 +64,16 @@ void ExternalController::connectRMW(RosegardenMainWindow *rmw)
             &ExternalController::slotControlChange);
 }
 
+void ExternalController::setType(ControllerType controllerType)
+{
+    m_controllerType = controllerType;
+
+    // Write to .conf so this becomes the default.
+    QSettings settings;
+    settings.beginGroup(GeneralOptionsConfigGroup);
+    settings.setValue("controller_type", static_cast<int>(m_controllerType));
+}
+
 bool ExternalController::isEnabled()
 {
     static bool cacheValid = false;

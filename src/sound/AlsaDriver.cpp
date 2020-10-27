@@ -1261,6 +1261,10 @@ AlsaDriver::setFirstConnection(DeviceId deviceId, bool recordDevice)
         if (lcName.contains(" through ")  ||  lcName.contains(" thru "))
             continue;
 
+        // No sense connecting to a control surface.
+        if (lcName.contains("nanokontrol2"))
+            continue;
+
         AUDIT << "  Going with it...\n";
         RG_DEBUG << "  Going with it...";
 
@@ -1791,6 +1795,12 @@ AlsaDriver::initialiseMidi()
                                        SND_SEQ_PORT_TYPE_MIDI_GENERIC),
                                       "initialiseMidi - can't create sync output port");
 
+    getSystemInfo();
+
+    // Update m_alsaPorts.
+    generatePortList();
+    generateFixedInstruments();
+
     if (ExternalController::isEnabled()) {
         // Create external controller port.
         m_externalControllerPort = checkAlsaError(
@@ -1801,14 +1811,32 @@ AlsaDriver::initialiseMidi()
                         SND_SEQ_PORT_CAP_SUBS_READ | SND_SEQ_PORT_CAP_SUBS_WRITE,
                     SND_SEQ_PORT_TYPE_APPLICATION | SND_SEQ_PORT_TYPE_SOFTWARE |
                         SND_SEQ_PORT_TYPE_MIDI_GENERIC),
-                "initialiseMidi - can't create controller port");
+                "initialiseMidi() - Can't create \"external controller\" port.");
+
+        // For each ALSA port, look for a control surface...
+        for (QSharedPointer<AlsaPortDescription> currentPort : m_alsaPorts) {
+
+            // Skip ports we cannot read from.
+            if (!currentPort->isReadable())
+                continue;
+
+            QString lcName = strtoqstr(currentPort->m_name).toLower();
+
+            // Found the Korg nanoKONTROL2?
+            if (lcName.contains("nanokontrol2")) {
+                // Connect it to the external controller port.
+                snd_seq_connect_from(m_midiHandle,
+                        m_externalControllerPort,  // my_port
+                        currentPort->m_client,  // src_client
+                        currentPort->m_port);  // src_port
+
+                ExternalController::self()->setType(
+                        ExternalController::CT_KorgNanoKontrol2);
+
+                break;
+            }
+        }
     }
-
-    getSystemInfo();
-
-    // Update m_alsaPorts.
-    generatePortList();
-    generateFixedInstruments();
 
     // Modify status with MIDI success
     //

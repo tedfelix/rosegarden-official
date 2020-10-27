@@ -76,8 +76,7 @@ public:
     static bool isEnabled();
 
     enum ControllerType { CT_RosegardenNative, CT_KorgNanoKontrol2 };
-    void setType(ControllerType controllerType)
-        { m_controllerType = controllerType; }
+    void setType(ControllerType controllerType);
 
     /// Call this from RosegardenMainWindow's ctor.
     /**
