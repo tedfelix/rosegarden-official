@@ -20,11 +20,15 @@
 #include "misc/Debug.h"
 #include "base/Instrument.h"
 #include "MappedEvent.h"
+#include "base/QEvents.h"
 #include "document/RosegardenDocument.h"
 #include "gui/application/RosegardenMainWindow.h"
 #include "base/Studio.h"
 #include "base/Track.h"
 
+#include <QCoreApplication>
+#include <QEvent>
+#include <QObject>
 
 namespace Rosegarden
 {
@@ -33,6 +37,14 @@ namespace Rosegarden
 KorgNanoKontrol2::KorgNanoKontrol2() :
     m_page(0)
 {
+    QObject::connect(
+            &m_rewindTypematic, &Typematic::click,
+            RosegardenMainWindow::self(), &RosegardenMainWindow::slotRewind);
+
+    QObject::connect(
+            &m_fastForwardTypematic, &Typematic::click,
+            RosegardenMainWindow::self(),
+                &RosegardenMainWindow::slotFastforward);
 }
 
 void KorgNanoKontrol2::processEvent(const MappedEvent *event)
@@ -44,7 +56,19 @@ void KorgNanoKontrol2::processEvent(const MappedEvent *event)
     const MidiByte controlNumber = event->getData1();
     const MidiByte value = event->getData2();
 
-    // ??? Probably should handle "play" first to "maximize" responsiveness.
+    // Record
+    // Handle this first for "speed".
+    if (controlNumber == 45  &&  value == 127) {
+        RosegardenMainWindow::self()->slotRecord();
+        return;
+    }
+
+    // Play
+    // Handle this second for "speed".
+    if (controlNumber == 41  &&  value == 127) {
+        RosegardenMainWindow::self()->slotPlay();
+        return;
+    }
 
     // Volume Faders
     if (controlNumber <= 7) {
@@ -79,6 +103,40 @@ void KorgNanoKontrol2::processEvent(const MappedEvent *event)
 
         ++m_page;
     }
+
+    // Stop
+    if (controlNumber == 42  &&  value == 127) {
+        // We cannot call this in the middle of processing incoming MIDI.
+        // The system is not ready for recording to stop.
+        //RosegardenMainWindow::self()->slotStop();
+
+        // Instead, we queue up a request for
+        // RosegardenMainWindow::customEvent().
+        QEvent *event = new QEvent(Stop);
+        QCoreApplication::postEvent(
+                RosegardenMainWindow::self(), event);
+
+        return;
+    }
+
+    // Rewind
+    if (controlNumber == 43) {
+        m_rewindTypematic.press(value == 127);
+        return;
+    }
+
+    // Fast-forward
+    if (controlNumber == 44) {
+        m_fastForwardTypematic.press(value == 127);
+        return;
+    }
+
+    // Cycle (Loop)
+    if (controlNumber == 46  &&  value == 127) {
+        RosegardenMainWindow::self()->toggleLoop();
+        return;
+    }
+
 }
 
 void KorgNanoKontrol2::processFader(MidiByte controlNumber, MidiByte value)

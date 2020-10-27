@@ -8619,6 +8619,8 @@ RosegardenMainWindow::customEvent(QEvent *event)
         slotSelectNextTrack();
     if (event->type() == Loop)
         toggleLoop();
+    if (event->type() == Stop)
+        slotStop();
 
     if (event->type() == Rewind) {
         ButtonEvent *buttonEvent = dynamic_cast<ButtonEvent *>(event);
