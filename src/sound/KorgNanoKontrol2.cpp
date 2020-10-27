@@ -50,7 +50,7 @@ void KorgNanoKontrol2::init()
     // Confirm expected device.
 
     // Send Inquiry Message Request.
-    ExternalController::sendSysEx("7E7F0601");
+    ExternalController::sendSysExHex("7E7F0601");
 
 #if 0
     SysExBuffer buffer;
@@ -70,7 +70,7 @@ void KorgNanoKontrol2::init()
     }
 
     // Get a dump of the scene.
-    sendSysEx(currentSceneDataDumpRequest);
+    sendSysExRaw(currentSceneDataDumpRequest);
     getSysEx(buffer);
 
     // Compare with Rosegarden scene, bail if same.
@@ -95,7 +95,7 @@ void KorgNanoKontrol2::init()
     }
 
     // Send "Current Scene Data Dump" with Rosegarden scene.
-    sendSysEx(rosegardenScene);
+    sendSysExRaw(rosegardenScene);
 
     // Confirm ACK
     getSysEx(buffer);
@@ -106,7 +106,7 @@ void KorgNanoKontrol2::init()
     }
 
     // Send Scene Write Request.
-    sendSysEx(sceneWriteRequest);
+    sendSysExRaw(sceneWriteRequest);
 
     // Confirm Write Completed.
     getSysEx(buffer);

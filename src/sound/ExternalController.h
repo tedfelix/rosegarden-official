@@ -31,9 +31,6 @@ class RosegardenDocument;
 class RosegardenMainWindow;
 
 
-typedef std::vector<unsigned char> SysExBuffer;
-
-
 /// Support for the "external controller" port.
 /**
  * The external controller port allows MIDI control surfaces to control
@@ -116,8 +113,10 @@ public:
     static void sendAllCCs(
             const Instrument *instrument, MidiByte channel = MidiMaxValue);
 
-    static void sendSysEx(const QString &hexString);
-    static void sendSysEx(const SysExBuffer &buffer);
+    /// Send SysEx from hex string.  DO NOT include F0/F7.
+    static void sendSysExHex(const QString &hexString);
+    /// Send SysEx from raw string.  DO NOT include F0/F7.
+    static void sendSysExRaw(const std::string &rawString);
 
 signals:
 

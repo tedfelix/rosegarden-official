@@ -223,13 +223,13 @@ void ExternalController::sendAllCCs(
     }
 }
 
-void ExternalController::sendSysEx(const QString &hexString)
+void ExternalController::sendSysExHex(const QString &hexString)
 {
     // Not enabled?  Bail.
     if (!isEnabled())
         return;
 
-    // Translate the hex string to bytes
+    // Translate the hex string to bytes.
 
     std::string rawString;
     // For each hex byte (two characters)...
@@ -238,42 +238,29 @@ void ExternalController::sendSysEx(const QString &hexString)
                 hexString.mid(i, 2).toInt(nullptr, 16)));
     }
 
-    // Assemble the SysEx MappedEvent
+    // Send it out.
 
-    MappedEvent event(NoInstrument,  // instrumentId is ignored
-                      MappedEvent::MidiSystemMessage);
-    event.setData1(MIDI_SYSTEM_EXCLUSIVE);
-    event.setRecordedDevice(Device::EXTERNAL_CONTROLLER);
-    event.addDataString(rawString);
-
-    RosegardenSequencer::getInstance()->processMappedEvent(event);
+    sendSysExRaw(rawString);
 }
 
 void
-ExternalController::sendSysEx(const SysExBuffer & /*buffer*/)
+ExternalController::sendSysExRaw(const std::string &rawString)
 {
     // Not enabled?  Bail.
     if (!isEnabled())
         return;
 
-#if 0
-    MappedEvent event(NoInstrument,  // instrumentId is ignored
-                      MappedEvent::MidiSystemMessage);
-    event.setRecordedDevice(Device::EXTERNAL_CONTROLLER);
+    // Assemble the SysEx MappedEvent.
 
-    // Add SysEx Data.
-    // ??? Do we need F0/F7 or not?  We need to test and document.
-    // ??? Use addDataByte() to add each byte.  Might want to add
-    //     an addData(SysExBuffer) to MappedEvent.  Promote SysExBuffer.
-    // ??? addDataByte() assumes we've already added a data block.
-    //     addDataString() does not and will create one for us if needed.
-    //     We should probably make this consistent.  Especially if we add
-    //     a new AddData(SysExBuffer) to MappedEvent.  All three should
-    //     behave identically.
-    event.addData(buffer);
+    MappedEvent event(NoInstrument,  // instrumentId is ignored
+                      MappedEvent::MidiSystemMessage,
+                      MIDI_SYSTEM_EXCLUSIVE);
+    event.setRecordedDevice(Device::EXTERNAL_CONTROLLER);
+    event.addDataString(rawString);
+
+    // Send it out.
 
     RosegardenSequencer::getInstance()->processMappedEvent(event);
-#endif
 }
 
 void

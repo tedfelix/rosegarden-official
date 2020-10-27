@@ -51,9 +51,6 @@ protected:
 
     std::string getDataBlock(blockid);
 
-    void addDataByteForEvent(MidiByte byte, MappedEvent*);
-
-
     blockid registerDataBlock(const std::string&);
     void unregisterDataBlock(blockid);
 
@@ -303,6 +300,14 @@ public:
          m_recordedChannel(0),
          m_recordedDevice(0) {}
 
+    /**
+     * For SysEx...
+     *   - Set instrumentId to NoInstrument.
+     *   - Set type to MidiSystemMessage.
+     *   - Set data1 to MIDI_SYSTEM_EXCLUSIVE.
+     *   - Set recorded device with the destination device.
+     *   - Call addDataString() to add the SysEx data.
+     */
     MappedEvent(InstrumentId id,
                 MappedEventType type,
                 MidiByte data1):
@@ -322,13 +327,10 @@ public:
         m_recordedChannel(0),
         m_recordedDevice(0) {}
 
-
-    // Construct SysExs say
-    //
-    MappedEvent(InstrumentId id,
+    MappedEvent(InstrumentId instrumentId,
                 MappedEventType type):
         m_trackId((int)NoTrack),
-        m_instrument(id),
+        m_instrument(instrumentId),
         m_type(type),
         m_data1(0),
         m_data2(0),
@@ -474,15 +476,15 @@ public:
 
     MappedEvent& operator=(const MappedEvent &mE);
 
-    /// Add a single byte to the event's datablock (for SysExs)
-    void addDataByte(MidiByte byte);
-    /// Add several raw bytes to the event's datablock.
+    /// Add several raw bytes to the event's SysEx datablock.
     /*
-     * For SysEx...
-     *   - Set type to MidiSystemMessage.
-     *   - Set data1 to MIDI_SYSTEM_EXCLUSIVE.
-     *   - Make sure you do not include the F0/F7 SOX/EOX in the block.
-     *     They will be added by AlsaDriver::processMidiOut().
+     * If the block doesn't exist, it is created.
+     *
+     * To set up a SysEx message, see the comments on the ctor that
+     * takes three parameters.
+     *
+     * DO NOT include the F0/F7 SOX/EOX in the block.  Those will be
+     * added by AlsaDriver::processMidiOut().
      */
     void addDataString(const std::string &rawData);
 

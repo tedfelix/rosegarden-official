@@ -169,12 +169,6 @@ MappedEvent::operator=(const MappedEvent &mE)
 }
 
 void
-MappedEvent::addDataByte(MidiByte byte)
-{
-    DataBlockRepository::getInstance()->addDataByteForEvent(byte, this);
-}
-
-void
 MappedEvent::addDataString(const std::string& data)
 {
     DataBlockRepository::getInstance()->
@@ -329,7 +323,6 @@ public:
         return m_fileName;
     }
 
-    void addDataByte(MidiByte);
     void addDataString(const std::string&);
 
     void clear()
@@ -397,12 +390,6 @@ std::string DataBlockFile::getData()
     delete[] tmp;
 
     return res;
-}
-
-void DataBlockFile::addDataByte(MidiByte byte)
-{
-    prepareToWrite();
-    m_file.putChar(byte);
 }
 
 void DataBlockFile::addDataString(const std::string& s)
@@ -550,14 +537,6 @@ void DataBlockRepository::clear()
         QFile::remove
             (segmentName);
     }
-}
-
-// !!! We assume there is already a datablock
-void DataBlockRepository::addDataByteForEvent(MidiByte byte, MappedEvent* e)
-{
-    DataBlockFile dataBlockFile(e->getDataBlockId());
-    dataBlockFile.addDataByte(byte);
-
 }
 
 // setDataBlockForEvent does what addDataStringForEvent used to do.
