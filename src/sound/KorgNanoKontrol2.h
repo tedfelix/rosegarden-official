@@ -36,11 +36,18 @@ class MappedEvent;
 class KorgNanoKontrol2
 {
 public:
+    KorgNanoKontrol2();
+
     /// Handle MappedEvent's from the external controller port.
     void processEvent(const MappedEvent *event);
 
 private:
+    // Current 8-channel page.
+    unsigned m_page;
+
     void processFader(MidiByte controlNumber, MidiByte value);
+    void processKnob(MidiByte controlNumber, MidiByte value);
+
 
 };
 
