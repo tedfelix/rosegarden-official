@@ -15,7 +15,6 @@
 
 
 #include "base/MidiProgram.h"  // For MidiByte
-#include "base/Typematic.h"
 
 
 namespace Rosegarden
@@ -48,11 +47,9 @@ private:
 
     void processFader(MidiByte controlNumber, MidiByte value);
     void processKnob(MidiByte controlNumber, MidiByte value);
-
-    /// For the rewind button.
-    Typematic m_rewindTypematic;
-    /// For the fast-forward button.
-    Typematic m_fastForwardTypematic;
+    void processSolo(MidiByte controlNumber);
+    void processMute(MidiByte controlNumber);
+    void processRecord(MidiByte controlNumber);
 
 };
 

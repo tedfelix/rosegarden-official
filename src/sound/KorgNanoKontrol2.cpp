@@ -22,13 +22,15 @@
 #include "MappedEvent.h"
 #include "base/QEvents.h"
 #include "document/RosegardenDocument.h"
+//#include "gui/application/RosegardenMainViewWidget.h"
 #include "gui/application/RosegardenMainWindow.h"
 #include "base/Studio.h"
 #include "base/Track.h"
+//#include "gui/editors/segment/TrackButtons.h"
+//#include "gui/editors/segment/TrackEditor.h"
 
 #include <QCoreApplication>
 #include <QEvent>
-#include <QObject>
 
 namespace Rosegarden
 {
@@ -37,14 +39,6 @@ namespace Rosegarden
 KorgNanoKontrol2::KorgNanoKontrol2() :
     m_page(0)
 {
-    QObject::connect(
-            &m_rewindTypematic, &Typematic::click,
-            RosegardenMainWindow::self(), &RosegardenMainWindow::slotRewind);
-
-    QObject::connect(
-            &m_fastForwardTypematic, &Typematic::click,
-            RosegardenMainWindow::self(),
-                &RosegardenMainWindow::slotFastforward);
 }
 
 void KorgNanoKontrol2::processEvent(const MappedEvent *event)
@@ -91,6 +85,10 @@ void KorgNanoKontrol2::processEvent(const MappedEvent *event)
 
         // ??? Would be nice to have some feedback in the UI.  E.g. a
         //     range indicator on the tracks.
+        //TrackButtons *trackButtons = RosegardenMainWindow::self()->
+        //        getView()->getTrackEditor()->getTrackButtons();
+        //trackButtons->setSurfaceRange(m_page * 8, 8);
+        //trackButtons->slotUpdateTracks();
 
         return;
     }
@@ -125,19 +123,47 @@ void KorgNanoKontrol2::processEvent(const MappedEvent *event)
 
     // Rewind
     if (controlNumber == 43) {
-        m_rewindTypematic.press(value == 127);
+        // Note: We tried doing this locally, but it crosses threads.
+        //       Using the event queue is thread-safe.
+
+        QEvent *event = new ButtonEvent(Rewind, (value == 127));
+        QCoreApplication::postEvent(
+                RosegardenMainWindow::self(), event);
         return;
     }
 
     // Fast-forward
     if (controlNumber == 44) {
-        m_fastForwardTypematic.press(value == 127);
+        // Note: We tried doing this locally, but it crosses threads.
+        //       Using the event queue is thread-safe.
+
+        QEvent *event = new ButtonEvent(FastForward, (value == 127));
+        QCoreApplication::postEvent(
+                RosegardenMainWindow::self(), event);
         return;
     }
 
     // Cycle (Loop)
     if (controlNumber == 46  &&  value == 127) {
         RosegardenMainWindow::self()->toggleLoop();
+        return;
+    }
+
+    // "S" solo buttons
+    if (32 <= controlNumber  &&  controlNumber <= 39  &&  value == 127) {
+        processSolo(controlNumber);
+        return;
+    }
+
+    // "M" mute buttons
+    if (48 <= controlNumber  &&  controlNumber <= 55  &&  value == 127) {
+        processMute(controlNumber);
+        return;
+    }
+
+    // "R" record buttons
+    if (64 <= controlNumber  &&  controlNumber <= 71  &&  value == 127) {
+        processRecord(controlNumber);
         return;
     }
 
@@ -149,12 +175,6 @@ void KorgNanoKontrol2::processFader(MidiByte controlNumber, MidiByte value)
 
     RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
     Composition &comp = doc->getComposition();
-
-    // ??? Should we use the selected Track to indicate track 1 on the
-    //     surface?  That would provide some potentially helpful feedback.
-    //     OTOH it would cause the surface's position to jump around if
-    //     the user is doing some editing.
-    //const Track *track = comp.getTrackById(comp.getSelectedTrack());
 
     const Track *track = comp.getTrackByPosition(trackNumber);
     if (!track)
@@ -189,18 +209,10 @@ void KorgNanoKontrol2::processFader(MidiByte controlNumber, MidiByte value)
 
 void KorgNanoKontrol2::processKnob(MidiByte controlNumber, MidiByte value)
 {
-    //RG_DEBUG << "processKnob(): Knob " << controlNumber - 15 << " value " << value;
-
     const int trackNumber = controlNumber - 16 + m_page*8;
 
     RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
     Composition &comp = doc->getComposition();
-
-    // ??? Should we use the selected Track to indicate track 1 on the
-    //     surface?  That would provide some potentially helpful feedback.
-    //     OTOH it would cause the surface's position to jump around if
-    //     the user is doing some editing.
-    //const Track *track = comp.getTrackById(comp.getSelectedTrack());
 
     const Track *track = comp.getTrackByPosition(trackNumber);
     if (!track)
@@ -225,12 +237,69 @@ void KorgNanoKontrol2::processKnob(MidiByte controlNumber, MidiByte value)
 
     // We have an audio instrument or a softsynth...
 
-    //RG_DEBUG << "  Setting pan for instrument " << instrument->getId() << " to " << value;
-
     instrument->setControllerValue(
             MIDI_CONTROLLER_PAN,
             AudioLevel::AudioPanI(value));
     Instrument::emitControlChange(instrument, MIDI_CONTROLLER_PAN);
+    doc->setModified();
+}
+
+void KorgNanoKontrol2::processSolo(MidiByte controlNumber)
+{
+    const int trackNumber = controlNumber - 32 + m_page*8;
+
+    RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
+    Composition &comp = doc->getComposition();
+
+    Track *track = comp.getTrackByPosition(trackNumber);
+    if (!track)
+        return;
+
+    // Toggle solo
+    track->setSolo(!track->isSolo());
+    comp.notifyTrackChanged(track);
+
+    doc->setModified();
+}
+
+void KorgNanoKontrol2::processMute(MidiByte controlNumber)
+{
+    const int trackNumber = controlNumber - 48 + m_page*8;
+
+    RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
+    Composition &comp = doc->getComposition();
+
+    Track *track = comp.getTrackByPosition(trackNumber);
+    if (!track)
+        return;
+
+    // Toggle mute
+    track->setMuted(!track->isMuted());
+    comp.notifyTrackChanged(track);
+
+    doc->setModified();
+}
+
+void KorgNanoKontrol2::processRecord(MidiByte controlNumber)
+{
+    const int trackNumber = controlNumber - 64 + m_page*8;
+
+    RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
+    Composition &comp = doc->getComposition();
+
+    Track *track = comp.getTrackByPosition(trackNumber);
+    if (!track)
+        return;
+
+    // Toggle
+    bool state = !comp.isTrackRecording(track->getId());
+
+    // Update the Track
+    comp.setTrackRecording(track->getId(), state);
+    comp.notifyTrackChanged(track);
+
+    doc->checkAudioPath(track);
+
     doc->setModified();
 }
 
