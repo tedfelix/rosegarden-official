@@ -786,6 +786,7 @@ RosegardenMainWindow::setupActions()
     createAction("load_default_studio", SLOT(slotImportDefaultStudio()));
     createAction("load_studio", SLOT(slotImportStudio()));
     createAction("reset_midi_network", SLOT(slotResetMidiNetwork()));
+    createAction("add_marker", SLOT(slotAddMarker2()));
     createAction("set_quick_marker", SLOT(slotSetQuickMarker()));
     createAction("jump_to_quick_marker", SLOT(slotJumpToQuickMarker()));
 
@@ -8290,6 +8291,18 @@ RosegardenMainWindow::slotNewerVersionAvailable(QString v)
 }
 
 void
+RosegardenMainWindow::slotAddMarker2()
+{
+    AddMarkerCommand *command =
+        new AddMarkerCommand(&m_doc->getComposition(),
+                             m_doc->getComposition().getPosition(),
+                             "new marker",
+                             "no description");
+
+    m_view->slotAddCommandToHistory(command);
+}
+
+void
 RosegardenMainWindow::slotSetQuickMarker()
 {
     RG_DEBUG << "RosegardenMainWindow::slotSetQuickMarker";
@@ -8636,6 +8649,9 @@ RosegardenMainWindow::customEvent(QEvent *event)
 
         m_fastForwardTypematic.press(buttonEvent->pressed);
     }
+
+    if (event->type() == AddMarker)
+        slotAddMarker2();
 }
 
 

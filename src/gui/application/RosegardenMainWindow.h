@@ -1556,6 +1556,8 @@ public slots:
 
     void slotNewerVersionAvailable(QString);
     
+    void slotAddMarker2();
+
     void slotSetQuickMarker();
     
     void slotJumpToQuickMarker();    

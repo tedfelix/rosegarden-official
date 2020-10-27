@@ -40,10 +40,12 @@ class QShortcut;
 namespace Rosegarden
 {
 
+
 class Command;
 class RosegardenDocument;
 
 
+/// Manage Markers window.
 class MarkerEditor : public QMainWindow, public ActionFileClient
 {
     Q_OBJECT

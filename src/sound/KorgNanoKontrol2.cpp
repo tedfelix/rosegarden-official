@@ -167,6 +167,24 @@ void KorgNanoKontrol2::processEvent(const MappedEvent *event)
         return;
     }
 
+    // Marker Set
+    if (controlNumber == 60  &&  value == 127) {
+        QEvent *event = new QEvent(AddMarker);
+        QCoreApplication::postEvent(
+                RosegardenMainWindow::self(), event);
+        return;
+    }
+
+    // Marker Left
+    if (controlNumber == 61  &&  value == 127) {
+        return;
+    }
+
+    // Marker Right
+    if (controlNumber == 62  &&  value == 127) {
+        return;
+    }
+
 }
 
 void KorgNanoKontrol2::processFader(MidiByte controlNumber, MidiByte value)
