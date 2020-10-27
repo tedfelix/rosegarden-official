@@ -43,32 +43,16 @@ KorgNanoKontrol2::KorgNanoKontrol2() :
 {
 }
 
-SysExBuffer inquiryMessageRequest = {
-    0xF0,  // SOX
-    0x7E,  // Non Realtime Message
-    0x7F,  // Global MIDI Channel  ??? What does this actually do?
-           //   00~0F : Global Channel
-           //   7F    : Any Channel
-           // Is this sent back in the channel field in the reply?
-    0x06,  // General Information
-    0x01,  // Identity Request
-    0xF7   // EOX
-};
-
 void KorgNanoKontrol2::init()
 {
     // Configure the device.
 
-#if 0
     // Confirm expected device.
 
     // Send Inquiry Message Request.
-    // ??? For these short messages, we could provide a string of
-    //     hex and ExternalController could offer a sendSysEx() that
-    //     takes a string and uses MappedEvent::addDataString().
-    //ExternalController::sendSysEx(inquiryMessageRequest);
-    ExternalController::sendSysEx("F07E7F0601F7");
+    ExternalController::sendSysEx("7E7F0601");
 
+#if 0
     SysExBuffer buffer;
 
     // Get Device Inquiry Reply.
@@ -131,6 +115,8 @@ void KorgNanoKontrol2::init()
         RG_WARNING << "init(): Did not receive expected Write Completed";
         return;
     }
+
+    // ??? Do an LED test?  testLEDs() and ask the user to confirm.
 #endif
 }
 
@@ -492,14 +478,47 @@ void KorgNanoKontrol2::testLEDs(bool on)
 void KorgNanoKontrol2::refreshLEDs()
 {
 #if 0
+    // Do another init for testing purposes.  We should be able to
+    // connect to aseqdump and watch the messages go back and forth.
+    init();
+#endif
+#if 0
     static bool on = false;
     on = !on;
     testLEDs(on);
 #endif
 
-    // Iterate over the Track's in the Composition and copy the
-    // Solo/Mute/Record state to the LEDs.
-    // ???
+#if 0
+    RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
+    Composition &comp = doc->getComposition();
+
+    // For each Track
+    for (int i = 0; i < 8; ++i) {
+        const int trackNumber = i + m_page*8;
+
+        Track *track = comp.getTrackByPosition(trackNumber);
+        if (!track)
+            return;
+
+        // Solo
+        ExternalController::send(
+                0, // channel
+                32+i, // controlNumber
+                track->isSolo() ? 127 : 0);  // value
+
+        // Mute
+        ExternalController::send(
+                0, // channel
+                48+i, // controlNumber
+                track->isMuted() ? 0 : 127);  // value
+
+        // Record
+        ExternalController::send(
+                0, // channel
+                64+i, // controlNumber
+                comp.isTrackRecording(track->getId()) ? 127 : 0);  // value
+    }
+#endif
 
     // Also update the local state cache (if we go that route).
 }

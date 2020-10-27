@@ -19,6 +19,7 @@
 
 #include <QObject>
 #include <QSharedPointer>
+#include <QString>
 
 
 namespace Rosegarden
@@ -115,6 +116,7 @@ public:
     static void sendAllCCs(
             const Instrument *instrument, MidiByte channel = MidiMaxValue);
 
+    static void sendSysEx(const QString &hexString);
     static void sendSysEx(const SysExBuffer &buffer);
 
 signals:

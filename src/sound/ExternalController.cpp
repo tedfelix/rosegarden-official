@@ -20,6 +20,7 @@
 #include "MappedEvent.h"
 #include "document/RosegardenDocument.h"
 #include "gui/application/RosegardenMainWindow.h"
+#include "misc/Strings.h"
 #include "gui/studio/StudioControl.h"
 
 #include <QSettings>
@@ -72,6 +73,13 @@ void ExternalController::setType(ControllerType controllerType)
     QSettings settings;
     settings.beginGroup(GeneralOptionsConfigGroup);
     settings.setValue("controller_type", static_cast<int>(m_controllerType));
+
+    // ??? Can't do this or else we end up in deadlock.  RosegardenSequencer
+    //     is already locked when we try to send out the SysEx's.  We
+    //     need to figure out the deadlock and see if we can remove it.
+    //     Otherwise we'll have to move this later.
+    //if (m_controllerType == CT_KorgNanoKontrol2)
+    //    korgNanoKontrol2.init();
 }
 
 bool ExternalController::isEnabled()
@@ -217,6 +225,32 @@ void ExternalController::sendAllCCs(
         }
 
     }
+}
+
+void ExternalController::sendSysEx(const QString &hexString)
+{
+    // Not enabled?  Bail.
+    if (!isEnabled())
+        return;
+
+    // Translate the hex string to bytes
+
+    std::string rawString;
+    // For each hex byte (two characters)...
+    for (int i = 0; i < hexString.size(); i += 2) {
+        rawString.push_back(static_cast<char>(
+                hexString.mid(i, 2).toInt(nullptr, 16)));
+    }
+
+    // Assemble the SysEx MappedEvent
+
+    MappedEvent event(NoInstrument,  // instrumentId is ignored
+                      MappedEvent::MidiSystemMessage);
+    event.setData1(MIDI_SYSTEM_EXCLUSIVE);
+    event.setRecordedDevice(Device::EXTERNAL_CONTROLLER);
+    event.addDataString(rawString);
+
+    StudioControl::sendMappedEvent(event);
 }
 
 void

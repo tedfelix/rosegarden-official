@@ -476,8 +476,15 @@ public:
 
     /// Add a single byte to the event's datablock (for SysExs)
     void addDataByte(MidiByte byte);
-    /// Add several bytes to the event's datablock
-    void addDataString(const std::string& data);
+    /// Add several raw bytes to the event's datablock.
+    /*
+     * For SysEx...
+     *   - Set type to MidiSystemMessage.
+     *   - Set data1 to MIDI_SYSTEM_EXCLUSIVE.
+     *   - Make sure you do not include the F0/F7 SOX/EOX in the block.
+     *     They will be added by AlsaDriver::processMidiOut().
+     */
+    void addDataString(const std::string &rawData);
 
     /// Size of a MappedEvent in a stream
     static const size_t streamedSize;
