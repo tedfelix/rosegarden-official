@@ -38,6 +38,9 @@ class KorgNanoKontrol2
 public:
     KorgNanoKontrol2();
 
+    /// Call this after the device is connected to set it up.
+    void init();
+
     /// Handle MappedEvent's from the external controller port.
     void processEvent(const MappedEvent *event);
 

@@ -32,6 +32,8 @@
 #include <QCoreApplication>
 #include <QEvent>
 
+#include <vector>
+
 namespace Rosegarden
 {
 
@@ -41,8 +43,99 @@ KorgNanoKontrol2::KorgNanoKontrol2() :
 {
 }
 
+typedef std::vector<unsigned> SysExBuffer;
+
+SysExBuffer inquiryMessageRequest = {
+    0xF0,  // SOX
+    0x7E,  // Non Realtime Message
+    0x7F,  // Global MIDI Channel  ??? What does this actually do?
+           //   00~0F : Global Channel
+           //   7F    : Any Channel
+           // Is this sent back in the channel field in the reply?
+    0x06,  // General Information
+    0x01,  // Identity Request
+    0xF7   // EOX
+};
+
+void KorgNanoKontrol2::init()
+{
+    // Configure the device.
+
+    // ??? We have to be connected bi-directional for this to work.
+
+#if 0
+    // Confirm expected device.  Send inquiry and confirm reply.
+    sendSysEx(inquiryMessageRequest);
+    SysExBuffer buffer;
+    // We need a synchronous getSysEx() with 500msec(?) timeout.
+    // Using QEventLoop might be best since we are in the UI thread
+    // and MIDI data is obtained via a polling timer.
+    // It also needs to stitch together multiple packets into one until EOX.
+    // MappedEvent might already handle that if we are lucky.
+    getSysEx(buffer);
+    // Special handling for this since the hardware version can vary.
+    bool success = checkDeviceInquiryReply(buffer);
+    if (!success) {
+        RG_WARNING << "init(): Did not receive expected Device Inquiry Reply";
+        return;
+    }
+
+    // Get a dump of the scene.
+    sendSysEx(currentSceneDataDumpRequest);
+    getSysEx(buffer);
+
+    // Compare with Rosegarden scene, bail if same.
+    if (compareSysEx(buffer, rosegardenScene))
+        return;
+
+    // Ask user if it is ok to reconfigure the device.
+    QMessageBox::StandardButton reply = QMessageBox::warning(
+            0,
+            tr("Rosegarden"),
+            tr("The connected Korg nanoKONTROL2 is not configured optimally for Rosegarden.  Reconfiguring it will lose any custom settings you've made with the nanoKONTROL2 editor.  Reconfigure?"),
+            QMessageBox::Yes | QMessageBox::No,
+            QMessageBox::Yes);
+
+    // If not, return.
+    if (reply == QMessageBox::No)
+        return;
+
+    // Send "Current Scene Data Dump" with Rosegarden scene.
+    sendSysEx(rosegardenScene);
+
+    // Confirm ACK
+    getSysEx(buffer);
+    success = compareSysEx(buffer, dataLoadCompleted);
+    if (!success) {
+        RG_WARNING << "init(): Did not receive expected Data Load Completed ACK";
+        return;
+    }
+
+    // Send Scene Write Request.
+    sendSysEx(sceneWriteRequest);
+
+    // Confirm Write Completed.
+    getSysEx(buffer);
+    success = compareSysEx(buffer, writeCompleted);
+    if (!success) {
+        RG_WARNING << "init(): Did not receive expected Write Completed";
+        return;
+    }
+#endif
+}
+
 void KorgNanoKontrol2::processEvent(const MappedEvent *event)
 {
+#if 0
+    // TEST
+    // ??? Does this light up the light?  No.  I see it going out, but the
+    //     nanoKONTROL2 ignores it.  Need to set the lights to "external".
+    ExternalController::self()->send(
+            0, // channel
+            64, // controlNumber (64 is the first record button)
+            127);  // value
+#endif
+
     // Not a CC?  Bail.
     if (event->getType() != MappedEvent::MidiController)
         return;
