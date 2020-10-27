@@ -1718,10 +1718,16 @@ AlsaDriver::createExternalControllerPort()
             // Found the Korg nanoKONTROL2?
             if (lcName.contains("nanokontrol2")) {
                 // Connect it to the external controller port.
+                // nanoKONTROL2 -> rg
                 snd_seq_connect_from(m_midiHandle,
                         m_externalControllerPort,  // my_port
                         currentPort->m_client,  // src_client
                         currentPort->m_port);  // src_port
+                // rg -> nanoKONTROL2 (for LEDs)
+                snd_seq_connect_to(m_midiHandle,
+                        m_externalControllerPort,  // my_port
+                        currentPort->m_client,  // dest_client
+                        currentPort->m_port);  // dest_port
 
                 ExternalController::self()->setType(
                         ExternalController::CT_KorgNanoKontrol2);

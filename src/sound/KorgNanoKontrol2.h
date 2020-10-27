@@ -54,6 +54,8 @@ private:
     void processMute(MidiByte controlNumber);
     void processRecord(MidiByte controlNumber);
 
+    void refreshLEDs();
+
 };
 
 

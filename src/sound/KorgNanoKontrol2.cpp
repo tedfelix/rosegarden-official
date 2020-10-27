@@ -43,7 +43,7 @@ KorgNanoKontrol2::KorgNanoKontrol2() :
 {
 }
 
-typedef std::vector<unsigned> SysExBuffer;
+typedef std::vector<unsigned char> SysExBuffer;
 
 SysExBuffer inquiryMessageRequest = {
     0xF0,  // SOX
@@ -128,8 +128,8 @@ void KorgNanoKontrol2::processEvent(const MappedEvent *event)
 {
 #if 0
     // TEST
-    // ??? Does this light up the light?  No.  I see it going out, but the
-    //     nanoKONTROL2 ignores it.  Need to set the lights to "external".
+    // This works so long as we configure the nanoKONTROL2 for "external"
+    // LED mode.
     ExternalController::self()->send(
             0, // channel
             64, // controlNumber (64 is the first record button)
@@ -171,10 +171,17 @@ void KorgNanoKontrol2::processEvent(const MappedEvent *event)
 
     // Track Left
     if (controlNumber == 58  &&  value == 127) {
-        if (m_page == 0)
+        if (m_page == 0) {
+            // refresh LEDs regardless in case the user needs to get
+            // them back in sync.
+            refreshLEDs();
+
             return;
+        }
 
         --m_page;
+
+        refreshLEDs();
 
         // ??? Would be nice to have some feedback in the UI.  E.g. a
         //     range indicator on the tracks.
@@ -191,10 +198,17 @@ void KorgNanoKontrol2::processEvent(const MappedEvent *event)
         RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
         Composition &comp = doc->getComposition();
 
-        if ((m_page + 1) * 8 >= comp.getTracks().size())
+        if ((m_page + 1) * 8 >= comp.getTracks().size()) {
+            // refresh LEDs regardless in case the user needs to get
+            // them back in sync.
+            refreshLEDs();
+
             return;
+        }
 
         ++m_page;
+
+        refreshLEDs();
 
         return;
     }
@@ -418,6 +432,15 @@ void KorgNanoKontrol2::processRecord(MidiByte controlNumber)
     doc->checkAudioPath(track);
 
     doc->setModified();
+}
+
+void KorgNanoKontrol2::refreshLEDs()
+{
+    // Iterate over the Track's in the Composition and copy the
+    // Solo/Mute/Record state to the LEDs.
+    // ???
+
+    // Also update the local state cache (if we go that route).
 }
 
 
