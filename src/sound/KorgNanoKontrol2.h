@@ -59,6 +59,7 @@ private:
     void processRecord(MidiByte controlNumber);
 
     void testLEDs(bool on);
+    void initLEDs();
     void refreshLEDs();
 
 };

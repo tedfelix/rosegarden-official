@@ -1675,20 +1675,9 @@ AlsaDriver::initialise()
 }
 
 void
-AlsaDriver::createExternalControllerPort()
+AlsaDriver::configureExternalControllerPort()
 {
     if (ExternalController::isEnabled()) {
-        // Create external controller port.
-        m_externalControllerPort = checkAlsaError(
-                snd_seq_create_simple_port(
-                    m_midiHandle,
-                    "external controller",
-                    SND_SEQ_PORT_CAP_READ | SND_SEQ_PORT_CAP_WRITE |
-                        SND_SEQ_PORT_CAP_SUBS_READ | SND_SEQ_PORT_CAP_SUBS_WRITE,
-                    SND_SEQ_PORT_TYPE_APPLICATION | SND_SEQ_PORT_TYPE_SOFTWARE |
-                        SND_SEQ_PORT_TYPE_MIDI_GENERIC),
-                "initialiseMidi() - Can't create \"external controller\" port.");
-
         // For each ALSA port, look for a control surface...
         for (QSharedPointer<AlsaPortDescription> currentPort : m_alsaPorts) {
 
@@ -1861,7 +1850,19 @@ AlsaDriver::initialiseMidi()
     generatePortList();
     generateFixedInstruments();
 
-    createExternalControllerPort();
+    if (ExternalController::isEnabled()) {
+        // Create external controller port.
+        // See configureExternalControllerPort().
+        m_externalControllerPort = checkAlsaError(
+                snd_seq_create_simple_port(
+                    m_midiHandle,
+                    "external controller",
+                    SND_SEQ_PORT_CAP_READ | SND_SEQ_PORT_CAP_WRITE |
+                        SND_SEQ_PORT_CAP_SUBS_READ | SND_SEQ_PORT_CAP_SUBS_WRITE,
+                    SND_SEQ_PORT_TYPE_APPLICATION | SND_SEQ_PORT_TYPE_SOFTWARE |
+                        SND_SEQ_PORT_TYPE_MIDI_GENERIC),
+                "initialiseMidi() - Can't create \"external controller\" port.");
+    }
 
     // Modify status with MIDI success
     //

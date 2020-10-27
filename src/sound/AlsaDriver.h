@@ -55,6 +55,8 @@ public:
     void shutdown() override;
 
     bool initialise() override;
+    void configureExternalControllerPort();
+
     void initialisePlayback(const RealTime &position) override;
     void stopPlayback() override;
     void punchOut() override;
@@ -539,7 +541,6 @@ private:
     int                          m_syncOutputPort;
 
     int m_externalControllerPort;
-    void createExternalControllerPort();
 
     int                          m_queue;
     int                          m_maxClients;

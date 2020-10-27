@@ -333,6 +333,9 @@ RosegardenMainWindow::RosegardenMainWindow(bool enableSound,
 
     RosegardenDocument* doc = newDocument();
 
+    // We have to call this at this point to avoid deadlock.
+    RosegardenSequencer::getInstance()->configureExternalControllerPort();
+
     m_seqManager = new SequenceManager();
 
     m_parameterArea = new RosegardenParameterArea(this);

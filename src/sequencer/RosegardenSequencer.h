@@ -58,7 +58,9 @@ public:
     /// Locking mechanism used throughout.  See the LOCKED #define.
     void lock();
     void unlock();
-	
+
+    void configureExternalControllerPort();
+
     /// Close the sequencer.
     void quit();
     

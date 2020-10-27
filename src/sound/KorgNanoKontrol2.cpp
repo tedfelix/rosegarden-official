@@ -118,6 +118,8 @@ void KorgNanoKontrol2::init()
 
     // ??? Do an LED test?  testLEDs() and ask the user to confirm.
 #endif
+
+    initLEDs();
 }
 
 void KorgNanoKontrol2::processEvent(const MappedEvent *event)
@@ -391,7 +393,10 @@ void KorgNanoKontrol2::processMute(MidiByte controlNumber)
         return;
 
     // Toggle mute
-    track->setMuted(!track->isMuted());
+    const bool muted = !track->isMuted();
+
+    // Update the Track
+    track->setMuted(muted);
     comp.notifyTrackChanged(track);
 
     doc->setModified();
@@ -475,6 +480,11 @@ void KorgNanoKontrol2::testLEDs(bool on)
     // - Marker Left (62)
 }
 
+void KorgNanoKontrol2::initLEDs()
+{
+    // Turn off all the LEDs and update the cache to match.
+}
+
 void KorgNanoKontrol2::refreshLEDs()
 {
 #if 0
@@ -520,7 +530,7 @@ void KorgNanoKontrol2::refreshLEDs()
     }
 #endif
 
-    // Also update the local state cache (if we go that route).
+    // Also update the local state cache.
 }
 
 
