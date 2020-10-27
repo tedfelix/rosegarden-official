@@ -32,6 +32,8 @@ namespace Rosegarden
     constexpr QEvent::Type FastForward = QEvent::Type(QEvent::User + 4);
     constexpr QEvent::Type Stop = QEvent::Type(QEvent::User + 5);
     constexpr QEvent::Type AddMarker = QEvent::Type(QEvent::User + 6);
+    constexpr QEvent::Type PreviousMarker = QEvent::Type(QEvent::User + 7);
+    constexpr QEvent::Type NextMarker = QEvent::Type(QEvent::User + 8);
 
     class ButtonEvent : public QEvent
     {

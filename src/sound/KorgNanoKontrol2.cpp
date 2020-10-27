@@ -177,11 +177,17 @@ void KorgNanoKontrol2::processEvent(const MappedEvent *event)
 
     // Marker Left
     if (controlNumber == 61  &&  value == 127) {
+        QEvent *event = new QEvent(PreviousMarker);
+        QCoreApplication::postEvent(
+                RosegardenMainWindow::self(), event);
         return;
     }
 
     // Marker Right
     if (controlNumber == 62  &&  value == 127) {
+        QEvent *event = new QEvent(NextMarker);
+        QCoreApplication::postEvent(
+                RosegardenMainWindow::self(), event);
         return;
     }
 

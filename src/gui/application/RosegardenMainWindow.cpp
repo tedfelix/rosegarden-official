@@ -787,6 +787,8 @@ RosegardenMainWindow::setupActions()
     createAction("load_studio", SLOT(slotImportStudio()));
     createAction("reset_midi_network", SLOT(slotResetMidiNetwork()));
     createAction("add_marker", SLOT(slotAddMarker2()));
+    createAction("previous_marker", SLOT(slotPreviousMarker()));
+    createAction("next_marker", SLOT(slotNextMarker()));
     createAction("set_quick_marker", SLOT(slotSetQuickMarker()));
     createAction("jump_to_quick_marker", SLOT(slotJumpToQuickMarker()));
 
@@ -8303,6 +8305,49 @@ RosegardenMainWindow::slotAddMarker2()
 }
 
 void
+RosegardenMainWindow::slotPreviousMarker()
+{
+    const Composition::markercontainer &markers =
+            m_doc->getComposition().getMarkers();
+
+    timeT currentTime = m_doc->getComposition().getPosition();
+    timeT time = currentTime;
+
+    // For each marker...
+    for (const Marker *marker : markers) {
+        if (marker->getTime() >= currentTime)
+            break;
+        time = marker->getTime();
+    }
+
+    // If a jump is needed, jump.
+    if (time != currentTime)
+        m_doc->slotSetPointerPosition(time);
+}
+
+void
+RosegardenMainWindow::slotNextMarker()
+{
+    const Composition::markercontainer &markers =
+            m_doc->getComposition().getMarkers();
+
+    timeT currentTime = m_doc->getComposition().getPosition();
+    timeT time = currentTime;
+
+    // For each marker...
+    for (const Marker *marker : markers) {
+        if (marker->getTime() > currentTime) {
+            time = marker->getTime();
+            break;
+        }
+    }
+
+    // If a jump is needed, jump.
+    if (time != currentTime)
+        m_doc->slotSetPointerPosition(time);
+}
+
+void
 RosegardenMainWindow::slotSetQuickMarker()
 {
     RG_DEBUG << "RosegardenMainWindow::slotSetQuickMarker";
@@ -8625,15 +8670,25 @@ RosegardenMainWindow::openWindow(ExternalController::Window window)
 void
 RosegardenMainWindow::customEvent(QEvent *event)
 {
-    // Events from AlsaDriver...
-    if (event->type() == PreviousTrack)
+    if (event->type() == PreviousTrack) {
         slotSelectPreviousTrack();
-    if (event->type() == NextTrack)
+        return;
+    }
+
+    if (event->type() == NextTrack) {
         slotSelectNextTrack();
-    if (event->type() == Loop)
+        return;
+    }
+
+    if (event->type() == Loop) {
         toggleLoop();
-    if (event->type() == Stop)
+        return;
+    }
+
+    if (event->type() == Stop) {
         slotStop();
+        return;
+    }
 
     if (event->type() == Rewind) {
         ButtonEvent *buttonEvent = dynamic_cast<ButtonEvent *>(event);
@@ -8641,6 +8696,8 @@ RosegardenMainWindow::customEvent(QEvent *event)
             return;
 
         m_rewindTypematic.press(buttonEvent->pressed);
+
+        return;
     }
     if (event->type() == FastForward) {
         ButtonEvent *buttonEvent = dynamic_cast<ButtonEvent *>(event);
@@ -8648,10 +8705,24 @@ RosegardenMainWindow::customEvent(QEvent *event)
             return;
 
         m_fastForwardTypematic.press(buttonEvent->pressed);
+
+        return;
     }
 
-    if (event->type() == AddMarker)
+    if (event->type() == AddMarker) {
         slotAddMarker2();
+        return;
+    }
+
+    if (event->type() == PreviousMarker) {
+        slotPreviousMarker();
+        return;
+    }
+
+    if (event->type() == NextMarker) {
+        slotNextMarker();
+        return;
+    }
 }
 
 

@@ -140,6 +140,8 @@
     <Action name="edit_doc_properties" text="Edit Document P&amp;roperties..." />
   <Separator/>
     <Action name="add_marker" text="&amp;Add Marker at Playback Position" shortcut="Shift+M" />
+    <Action name="previous_marker" text="Jump to &amp;Previous Marker" shortcut="Ctrl+," />
+    <Action name="next_marker" text="Jump to &amp;Next Marker" shortcut="Ctrl+." />
     <Action name="set_quick_marker" text="&amp;Set Quick Marker at Playback Position" shortcut="Ctrl+Shift+M" />
     <Action name="jump_to_quick_marker" text="&amp;Jump to Quick Marker" shortcut="Ctrl+M" />
   </Menu>
