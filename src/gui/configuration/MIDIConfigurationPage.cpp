@@ -117,6 +117,28 @@ MIDIConfigurationPage::MIDIConfigurationPage(QWidget *parent):
 
     ++row;
 
+    label = new QLabel(tr("Controller type"));
+    toolTip = tr("Select the type of control surface connected to the external controller port.");
+    label->setToolTip(toolTip);
+    layout->addWidget(label, row, 0, 1, 2);
+
+    m_controllerType = new QComboBox;
+    m_controllerType->addItem(tr("Rosegarden Native"));
+    m_controllerType->addItem(tr("Korg nanoKONTROL2"));
+
+    int controllerType = settings.value("controller_type", 0).toInt();
+    if (controllerType < 0  ||  controllerType > 1)
+        controllerType = 0;
+    m_controllerType->setCurrentIndex(controllerType);
+
+    connect(m_controllerType,
+                static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
+            this, &MIDIConfigurationPage::slotModified);
+
+    layout->addWidget(m_controllerType, row, 2, 1, 2);
+
+    ++row;
+
     // Accept transport CCs (116-118)
     label = new QLabel(tr("Accept transport CCs (116-118)"));
     toolTip = tr("Rosegarden will discard these CCs, so disable this if you need CCs in this range for other things.");
@@ -407,6 +429,12 @@ MIDIConfigurationPage::apply()
                       m_useDefaultStudio->isChecked());
     settings.setValue("external_controller",
                       m_externalControllerPort->isChecked());
+
+    settings.setValue("controller_type", m_controllerType->currentIndex());
+    ExternalController::self()->setType(
+            static_cast<ExternalController::ControllerType>(
+                    m_controllerType->currentIndex()));
+
     settings.setValue("acceptTransportCCs",
                       m_acceptTransportCCs->isChecked());
 

@@ -91,6 +91,8 @@ void KorgNanoKontrol2::processEvent(const MappedEvent *event)
 
         // ??? Would be nice to have some feedback in the UI.  E.g. a
         //     range indicator on the tracks.
+
+        return;
     }
 
     // Track Right
@@ -102,6 +104,8 @@ void KorgNanoKontrol2::processEvent(const MappedEvent *event)
             return;
 
         ++m_page;
+
+        return;
     }
 
     // Stop

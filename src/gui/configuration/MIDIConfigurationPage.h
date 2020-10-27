@@ -66,6 +66,7 @@ private:
 
     QCheckBox *m_useDefaultStudio;
     QCheckBox *m_externalControllerPort;
+    QComboBox *m_controllerType;
     QCheckBox *m_allowResetAllControllers;
     QCheckBox *m_acceptTransportCCs;
     /// Timer value at the beginning to detect changes.

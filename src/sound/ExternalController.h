@@ -75,6 +75,10 @@ public:
 
     static bool isEnabled();
 
+    enum ControllerType { CT_RosegardenNative, CT_KorgNanoKontrol2 };
+    void setType(ControllerType controllerType)
+        { m_controllerType = controllerType; }
+
     /// Call this from RosegardenMainWindow's ctor.
     /**
      * This has to be called at the right moment, before the autoload
@@ -133,7 +137,6 @@ private:
     // Access through self() only.
     ExternalController();
 
-    enum ControllerType { CT_RosegardenNative, CT_KorgNanoKontrol2 };
     ControllerType m_controllerType;
 
     /// Cache of the last Instrument we were tracking for RosegardenMainWindow.
