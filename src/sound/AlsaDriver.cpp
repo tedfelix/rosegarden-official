@@ -5704,10 +5704,17 @@ bool AlsaDriver::handleTransportCCs(unsigned controlNumber, int value)
     if (controlNumber == 116) {
         // Press
         if (value == 127) {
-            if (isPlaying()) {
-                m_sequencer->transportChange(
-                        RosegardenSequencer::TransportStop);
-            }
+            // This approach works, but you don't get the double-press
+            // stop behavior (return to where playback started).
+            //if (isPlaying()) {
+            //    m_sequencer->transportChange(
+            //            RosegardenSequencer::TransportStop);
+            //}
+
+            // This gives the double-stop behavior.
+            QEvent *event = new QEvent(Stop);
+            QCoreApplication::postEvent(
+                    RosegardenMainWindow::self(), event);
         }
 
         // We've recognized and handled this.  Do not process it further.
@@ -5753,16 +5760,9 @@ bool AlsaDriver::handleTransportCCs(unsigned controlNumber, int value)
 
     // Rewind
     if (controlNumber == 114) {
-        if (value == 127) {
-            QEvent *event = new ButtonEvent(Rewind, true);
-            QCoreApplication::postEvent(
-                    RosegardenMainWindow::self(), event);
-        }
-        if (value == 0) {
-            QEvent *event = new ButtonEvent(Rewind, false);
-            QCoreApplication::postEvent(
-                    RosegardenMainWindow::self(), event);
-        }
+        QEvent *event = new ButtonEvent(Rewind, (value == 127));
+        QCoreApplication::postEvent(
+                RosegardenMainWindow::self(), event);
 
         // We've recognized and handled this.  Do not process it further.
         return true;
@@ -5770,16 +5770,9 @@ bool AlsaDriver::handleTransportCCs(unsigned controlNumber, int value)
 
     // Fast Forward
     if (controlNumber == 115) {
-        if (value == 127) {
-            QEvent *event = new ButtonEvent(FastForward, true);
-            QCoreApplication::postEvent(
-                    RosegardenMainWindow::self(), event);
-        }
-        if (value == 0) {
-            QEvent *event = new ButtonEvent(FastForward, false);
-            QCoreApplication::postEvent(
-                    RosegardenMainWindow::self(), event);
-        }
+        QEvent *event = new ButtonEvent(FastForward, (value == 127));
+        QCoreApplication::postEvent(
+                RosegardenMainWindow::self(), event);
 
         // We've recognized and handled this.  Do not process it further.
         return true;
