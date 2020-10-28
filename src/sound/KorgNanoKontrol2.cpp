@@ -397,10 +397,7 @@ void KorgNanoKontrol2::processMute(MidiByte controlNumber)
         return;
 
     // Toggle mute
-    const bool muted = !track->isMuted();
-
-    // Update the Track
-    track->setMuted(muted);
+    track->setMuted(!track->isMuted());
     comp.notifyTrackChanged(track);
 
     doc->setModified();

@@ -30,7 +30,6 @@
 
 #include "misc/Debug.h"
 #include "misc/Strings.h"
-#include "sound/AlsaDriver.h"
 #include "sound/ControlBlock.h"
 #include "sound/SoundDriver.h"
 #include "sound/SoundDriverFactory.h"
@@ -164,16 +163,6 @@ RosegardenSequencer::unlock()
 }
 
 // "Public" (ex-DCOP, locks required) functions first
-
-void
-RosegardenSequencer::configureExternalControllerPort()
-{
-    LOCKED;
-
-    AlsaDriver *alsaDriver = dynamic_cast<AlsaDriver *>(m_driver);
-    if (alsaDriver)
-        alsaDriver->configureExternalControllerPort();
-}
 
 void
 RosegardenSequencer::quit()

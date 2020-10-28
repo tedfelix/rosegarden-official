@@ -1864,6 +1864,17 @@ AlsaDriver::initialiseMidi()
                 "initialiseMidi() - Can't create \"external controller\" port.");
     }
 
+    // This will cause deadlock if it tries to talk to connected
+    // control surfaces (see KorgNanoKontrol2::init()) using
+    // RosegardenSequencer.  To fix, this can be called just after
+    // the call to newDocument() in RosegardenMainWindow's ctor.
+    // The call will have to be made via RosegardenSequencer since
+    // it owns the AlsaDriver instance.  However, we need to redesign
+    // AlsaDriver's handling of the external controller port, so we
+    // might not need to worry about deadlocks when we are done.  See
+    // the commit entitled "Fix deadlock" around October 2020.
+    configureExternalControllerPort();
+
     // Modify status with MIDI success
     //
     m_driverStatus |= MIDI_OK;

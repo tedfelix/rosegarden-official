@@ -59,8 +59,6 @@ public:
     void lock();
     void unlock();
 
-    void configureExternalControllerPort();
-
     /// Close the sequencer.
     void quit();
     
