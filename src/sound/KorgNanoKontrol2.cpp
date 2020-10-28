@@ -47,21 +47,23 @@ void KorgNanoKontrol2::init()
 {
     // Configure the device.
 
+#if 0
+
     // Confirm expected device.
 
     // Send Inquiry Message Request.
     ExternalController::sendSysExHex("7E7F0601");
 
-#if 0
-    SysExBuffer buffer;
+    std::string buffer;
 
     // Get Device Inquiry Reply.
     // We need a synchronous getSysEx() with 500msec(?) timeout.
-    // Using QEventLoop might be best since we are in the UI thread
-    // and MIDI data is obtained via a polling timer.
     // It also needs to stitch together multiple packets into one until EOX.
-    // MappedEvent might already handle that if we are lucky.
-    getSysEx(buffer);
+    ExternalController::self()->getSysEx(buffer);
+
+    QByteArray byteArray(buffer.c_str());
+    RG_DEBUG << "Response: " << byteArray.toHex();
+
     // Special handling for this since the hardware version can vary.
     bool success = checkDeviceInquiryReply(buffer);
     if (!success) {
@@ -117,9 +119,11 @@ void KorgNanoKontrol2::init()
     }
 
     // ??? Do an LED test?  testLEDs() and ask the user to confirm.
-#endif
 
     initLEDs();
+
+#endif
+
 }
 
 void KorgNanoKontrol2::processEvent(const MappedEvent *event)
@@ -499,6 +503,11 @@ void KorgNanoKontrol2::refreshLEDs()
 #endif
 
 #if 0
+    // LED support removed for now.  The default configuration of the
+    // nanoKONTROL2 does not allow external control of the LEDs.  This
+    // can be remedied by sending a new configuration via sysex.  See
+    // init().
+
     RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
     Composition &comp = doc->getComposition();
 
@@ -509,6 +518,9 @@ void KorgNanoKontrol2::refreshLEDs()
         Track *track = comp.getTrackByPosition(trackNumber);
         if (!track)
             return;
+
+        // ??? We need to keep a cache and avoid updating anything that
+        //     hasn't changed.
 
         // Solo
         ExternalController::send(
@@ -528,9 +540,10 @@ void KorgNanoKontrol2::refreshLEDs()
                 64+i, // controlNumber
                 comp.isTrackRecording(track->getId()) ? 127 : 0);  // value
     }
-#endif
 
-    // Also update the local state cache.
+    // ??? Transport LEDs
+
+#endif
 }
 
 

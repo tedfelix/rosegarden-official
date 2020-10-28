@@ -263,6 +263,24 @@ ExternalController::sendSysExRaw(const std::string &rawString)
     RosegardenSequencer::getInstance()->processMappedEvent(event);
 }
 
+bool ExternalController::getSysEx(std::string & /*rawString*/)
+{
+#if 0
+    // This really didn't work.  We need to do some restructuring of
+    // AlsaDriver before we can successfully have conversations with
+    // MIDI equipment over the external controller port.
+
+    // ??? Need to do a blocking read from the external controller port
+    //     with a 500msec timeout.  How???
+
+    // Copy sysex data from m_sysexEvent to rawString.
+    rawString = DataBlockRepository::getDataBlockForEvent(&sysexEvent);
+
+#endif
+
+    return true;
+}
+
 void
 ExternalController::slotDocumentLoaded(RosegardenDocument *doc)
 {

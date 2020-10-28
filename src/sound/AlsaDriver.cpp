@@ -2609,7 +2609,7 @@ AlsaDriver::getMappedEventList(MappedEventList &mappedEventList)
                  << " on channel " << channel;
 #endif
 
-        bool fromController = false;
+        bool fromExternalController = false;
 
         if (event->dest.client == m_client &&
             event->dest.port == m_externalControllerPort) {
@@ -2617,12 +2617,12 @@ AlsaDriver::getMappedEventList(MappedEventList &mappedEventList)
             RG_DEBUG << "getMappedEventList(): Received an external controller event";
 #endif
 
-            fromController = true;
+            fromExternalController = true;
         }
 
         unsigned int deviceId = Device::NO_DEVICE;
 
-        if (fromController) {
+        if (fromExternalController) {
             deviceId = Device::EXTERNAL_CONTROLLER;
         } else {
             for (MappedDeviceList::iterator i = m_devices.begin();
@@ -2642,7 +2642,7 @@ AlsaDriver::getMappedEventList(MappedEventList &mappedEventList)
         eventTime = eventTime - m_alsaRecordStartTime + m_playStartPosition;
 
 #ifdef DEBUG_ALSA
-        if (!fromController) {
+        if (!fromExternalController) {
             RG_DEBUG << "getMappedEventList(): Received normal event: type " << int(event->type) << ", chan " << channel << ", note " << int(event->data.note.note) << ", time " << eventTime;
         }
 #endif
@@ -2652,7 +2652,7 @@ AlsaDriver::getMappedEventList(MappedEventList &mappedEventList)
         case SND_SEQ_EVENT_NOTEON:
             //RG_DEBUG << "AD::gMEL()  NOTEON channel:" << channel << " pitch:" << event->data.note.note << " velocity:" << event->data.note.velocity;
 
-            if (fromController)
+            if (fromExternalController)
                 continue;
             if (event->data.note.velocity > 0) {
                 MappedEvent *mE = new MappedEvent();
@@ -2688,7 +2688,7 @@ AlsaDriver::getMappedEventList(MappedEventList &mappedEventList)
         case SND_SEQ_EVENT_NOTEOFF: {
             //RG_DEBUG << "AD::gMEL()  NOTEOFF channel:" << channel << " pitch:" << event->data.note.note;
 
-            if (fromController)
+            if (fromExternalController)
                 continue;
 
             // Check the note on map for any note on events to close.
@@ -2746,7 +2746,7 @@ AlsaDriver::getMappedEventList(MappedEventList &mappedEventList)
             break;
 
         case SND_SEQ_EVENT_KEYPRESS: {
-            if (fromController)
+            if (fromExternalController)
                 continue;
 
             // Fix for 632964 by Pedro Lopez-Cabanillas (20030523)
@@ -2792,7 +2792,9 @@ AlsaDriver::getMappedEventList(MappedEventList &mappedEventList)
             break;
 
         case SND_SEQ_EVENT_PITCHBEND: {
-            if (fromController)
+            // ??? This breaks our ability to process high precision
+            //     faders from control surfaces!
+            if (fromExternalController)
                 continue;
 
             // Fix for 711889 by Pedro Lopez-Cabanillas (20030523)
@@ -2812,7 +2814,7 @@ AlsaDriver::getMappedEventList(MappedEventList &mappedEventList)
             break;
 
         case SND_SEQ_EVENT_CHANPRESS: {
-            if (fromController)
+            if (fromExternalController)
                 continue;
 
             // Fixed by Pedro Lopez-Cabanillas (20030523)
@@ -2830,7 +2832,12 @@ AlsaDriver::getMappedEventList(MappedEventList &mappedEventList)
 
         case SND_SEQ_EVENT_SYSEX:
 
-            if (fromController)
+            // ??? This breaks our ability to process sysex from
+            //     control surfaces!  I think it is clear that AlsaDriver
+            //     knows too much about the external controller port.
+            //     It needs to take a more hands-off approach and let the
+            //     ExternalController class do all the work.
+            if (fromExternalController)
                 continue;
 
             if (!testForMTCSysex(event) &&
@@ -2993,7 +3000,7 @@ AlsaDriver::getMappedEventList(MappedEventList &mappedEventList)
             break;
 
         case SND_SEQ_EVENT_QFRAME:
-            if (fromController)
+            if (fromExternalController)
                 continue;
             if (m_mtcStatus == TRANSPORT_FOLLOWER) {
                 handleMTCQFrame(event->data.control.value, eventTime);

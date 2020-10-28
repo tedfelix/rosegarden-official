@@ -333,7 +333,8 @@ RosegardenMainWindow::RosegardenMainWindow(bool enableSound,
 
     RosegardenDocument* doc = newDocument();
 
-    // We have to call this at this point to avoid deadlock.
+    // We have to call this at this point to avoid deadlock if we decide
+    // to talk via SysEx over the external controller port.
     RosegardenSequencer::getInstance()->configureExternalControllerPort();
 
     m_seqManager = new SequenceManager();
@@ -498,7 +499,6 @@ RosegardenMainWindow::RosegardenMainWindow(bool enableSound,
             this, &RosegardenMainWindow::slotRewind);
     connect(&m_fastForwardTypematic, &Typematic::click,
             this, &RosegardenMainWindow::slotFastforward);
-
 }
 
 RosegardenMainWindow::~RosegardenMainWindow()

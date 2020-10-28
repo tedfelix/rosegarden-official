@@ -1445,6 +1445,8 @@ RosegardenSequencer::processAsynchronousEvents()
         m_asyncInQueue.merge(mappedEventList);
         m_asyncQueueMutex.unlock();
 
+        // MIDI THRU handling
+
         applyFiltering(
                 &mappedEventList,
                 ControlBlock::getInstance()->getThruFilter(),  // filter
