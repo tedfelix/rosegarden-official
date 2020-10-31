@@ -2620,16 +2620,9 @@ AlsaDriver::getMappedEventList(MappedEventList &mappedEventList)
                  << " on channel " << channel;
 #endif
 
-        bool fromExternalController = false;
-
-        if (event->dest.client == m_client &&
-            event->dest.port == m_externalControllerPort) {
-#ifdef DEBUG_ALSA
-            RG_DEBUG << "getMappedEventList(): Received an external controller event";
-#endif
-
-            fromExternalController = true;
-        }
+        const bool fromExternalController =
+                (event->dest.client == m_client  &&
+                 event->dest.port == m_externalControllerPort);
 
         unsigned int deviceId = Device::NO_DEVICE;
 
@@ -3692,19 +3685,15 @@ AlsaDriver::processMidiOut(const MappedEventList &mC,
 
     // NB the MappedEventList is implicitly ordered by time (std::multiset)
 
-    // For each incoming mapped event
-    // ??? "i" is a bit hard to follow in this huge 400-line loop.  How about
-    //     we dereference it at the top and never use "(*i)" again:
-    //       const MappedEvent *mappedEvent = (*i);
-    //     Might shave off a CPU cycle or two as a bonus.
-    for (MappedEventList::const_iterator i = mC.begin(); i != mC.end(); ++i) {
+    // For each incoming mapped (Rosegarden) event
+    for (MappedEvent *rgEvent : mC) {
         // Skip all non-MIDI events.
-        if ((*i)->getType() >= MappedEvent::Audio)
+        if (rgEvent->getType() >= MappedEvent::Audio)
             continue;
 
-        if ((*i)->getType() == MappedEvent::MidiNote &&
-            (*i)->getDuration() == RealTime::zeroTime &&
-            (*i)->getVelocity() == 0) {
+        if (rgEvent->getType() == MappedEvent::MidiNote &&
+            rgEvent->getDuration() == RealTime::zeroTime &&
+            rgEvent->getVelocity() == 0) {
             // NOTE OFF with duration zero is scheduled from the
             // internal segment mapper and we don't use that message
             // in realtime otherwise it is a duplicate.
@@ -3718,13 +3707,13 @@ AlsaDriver::processMidiOut(const MappedEventList &mC,
         if (debug) {
             RG_DEBUG << "processMidiOut(): for each event...";
             QString eventType = "unknown";
-            switch ((*i)->getType()) {
+            switch (rgEvent->getType()) {
                 case MappedEvent::MidiNote: eventType = "MidiNote"; break;
                 case MappedEvent::MidiNoteOneShot: eventType = "MidiNoteOneShot"; break;
                 case MappedEvent::MidiController: eventType = "MidiController"; break;
                 default: break;
             }
-            RG_DEBUG << "processMidiOut():   MappedEvent Event Type: " << (*i)->getType() << " (" << eventType << ")";
+            RG_DEBUG << "processMidiOut():   MappedEvent Event Type: " << rgEvent->getType() << " (" << eventType << ")";
         }
 
         // ??? rename: alsaEvent
@@ -3732,12 +3721,12 @@ AlsaDriver::processMidiOut(const MappedEventList &mC,
         snd_seq_ev_clear(&event);
     
         const bool isExternalController =
-                ((*i)->getRecordedDevice() == Device::EXTERNAL_CONTROLLER);
+                (rgEvent->getRecordedDevice() == Device::EXTERNAL_CONTROLLER);
 
         bool isSoftSynth = (!isExternalController &&
-                            ((*i)->getInstrument() >= SoftSynthInstrumentBase));
+                            (rgEvent->getInstrument() >= SoftSynthInstrumentBase));
 
-        RealTime outputTime = (*i)->getEventTime() - m_playStartPosition +
+        RealTime outputTime = rgEvent->getEventTime() - m_playStartPosition +
             m_alsaPlayStartTime;
 
         if (now && !m_playing && m_queueRunning) {
@@ -3765,13 +3754,13 @@ AlsaDriver::processMidiOut(const MappedEventList &mC,
         }
 
 #ifdef DEBUG_PROCESS_MIDI_OUT
-        RG_DEBUG << "processMidiOut[" << now << "]: event is at " << outputTime << " (" << outputTime - alsaTimeNow << " ahead of queue time), type " << int((*i)->getType()) << ", duration " << (*i)->getDuration();
+        RG_DEBUG << "processMidiOut[" << now << "]: event is at " << outputTime << " (" << outputTime - alsaTimeNow << " ahead of queue time), type " << int(rgEvent->getType()) << ", duration " << rgEvent->getDuration();
 #endif
 
         if (!m_queueRunning && outputTime < alsaTimeNow) {
             RealTime adjust = alsaTimeNow - outputTime;
-            if ((*i)->getDuration() > RealTime::zeroTime) {
-                if ((*i)->getDuration() <= adjust) {
+            if (rgEvent->getDuration() > RealTime::zeroTime) {
+                if (rgEvent->getDuration() <= adjust) {
 #ifdef DEBUG_PROCESS_MIDI_OUT
                     RG_DEBUG << "processMidiOut[" << now << "]: too late for this event, abandoning it";
 #endif
@@ -3782,7 +3771,7 @@ AlsaDriver::processMidiOut(const MappedEventList &mC,
                     RG_DEBUG << "processMidiOut[" << now << "]: pushing event forward and reducing duration by " << adjust;
 #endif
 
-                    (*i)->setDuration((*i)->getDuration() - adjust);
+                    rgEvent->setDuration(rgEvent->getDuration() - adjust);
                 }
             } else {
 #ifdef DEBUG_PROCESS_MIDI_OUT
@@ -3813,8 +3802,8 @@ AlsaDriver::processMidiOut(const MappedEventList &mC,
         if (!isSoftSynth) {
 
 #ifdef DEBUG_PROCESS_MIDI_OUT
-            RG_DEBUG << "processMidiOut[" << now << "]: instrument " << (*i)->getInstrument();
-            RG_DEBUG << "processMidiOut():     pitch: " << (int)(*i)->getPitch() << ", velocity " << (int)(*i)->getVelocity() << ", duration " << (*i)->getDuration();
+            RG_DEBUG << "processMidiOut[" << now << "]: instrument " << rgEvent->getInstrument();
+            RG_DEBUG << "processMidiOut():     pitch: " << (int)rgEvent->getPitch() << ", velocity " << (int)rgEvent->getVelocity() << ", duration " << rgEvent->getDuration();
 #endif
 
             snd_seq_ev_set_subs(&event);
@@ -3826,7 +3815,7 @@ AlsaDriver::processMidiOut(const MappedEventList &mC,
             if (isExternalController) {
                 src = m_externalControllerPort;
             } else {
-                src = getOutputPortForMappedInstrument((*i)->getInstrument());
+                src = getOutputPortForMappedInstrument(rgEvent->getInstrument());
             }
 
             if (src < 0)
@@ -3840,11 +3829,11 @@ AlsaDriver::processMidiOut(const MappedEventList &mC,
             event.time.time = time;
         }
 
-        MappedInstrument *instrument = getMappedInstrument((*i)->getInstrument());
+        MappedInstrument *instrument = getMappedInstrument(rgEvent->getInstrument());
 
         // set the stop time for Note Off
         //
-        RealTime outputStopTime = outputTime + (*i)->getDuration()
+        RealTime outputStopTime = outputTime + rgEvent->getDuration()
             - RealTime(0, 1); // notch it back 1nsec just to ensure
         // correct ordering against any other
         // note-ons at the same nominal time
@@ -3853,19 +3842,19 @@ AlsaDriver::processMidiOut(const MappedEventList &mC,
         MidiByte channel = 0;
 
         if (isExternalController) {
-            channel = (*i)->getRecordedChannel();
+            channel = rgEvent->getRecordedChannel();
 #ifdef DEBUG_ALSA
-            RG_DEBUG << "processMidiOut() - Event of type " << (int)((*i)->getType()) << " (data1 " << (int)(*i)->getData1() << ", data2 " << (int)(*i)->getData2() << ") for external controller channel " << (int)channel;
+            RG_DEBUG << "processMidiOut() - Event of type " << (int)(rgEvent->getType()) << " (data1 " << (int)rgEvent->getData1() << ", data2 " << (int)rgEvent->getData2() << ") for external controller channel " << (int)channel;
 #endif
         } else if (instrument != nullptr) {
-            channel = (*i)->getRecordedChannel();
+            channel = rgEvent->getRecordedChannel();
 #ifdef DEBUG_ALSA
-            RG_DEBUG << "processMidiOut() - Non-controller Event of type " << (int)((*i)->getType()) << " (data1 " << (int)(*i)->getData1() << ", data2 " << (int)(*i)->getData2() << ") for channel " << (int)(*i)->getRecordedChannel();
+            RG_DEBUG << "processMidiOut() - Non-controller Event of type " << (int)(rgEvent->getType()) << " (data1 " << (int)rgEvent->getData1() << ", data2 " << (int)rgEvent->getData2() << ") for channel " << (int)rgEvent->getRecordedChannel();
 #endif
         } else {
 #ifdef DEBUG_ALSA
             RG_DEBUG << "processMidiOut() - No instrument for event of type "
-                      << (int)(*i)->getType() << " at " << (*i)->getEventTime();
+                      << (int)rgEvent->getType() << " at " << rgEvent->getEventTime();
 #endif
             channel = 0;
         }
@@ -3873,13 +3862,13 @@ AlsaDriver::processMidiOut(const MappedEventList &mC,
         // channel is a MidiByte which is unsigned.  This will never be true.
         //if (channel < 0) { continue; }
 
-        switch ((*i)->getType()) {
+        switch (rgEvent->getType()) {
 
         case MappedEvent::MidiNote:
-            if ((*i)->getVelocity() == 0) {
+            if (rgEvent->getVelocity() == 0) {
                 snd_seq_ev_set_noteoff(&event,
                                        channel,
-                                       (*i)->getPitch(),
+                                       rgEvent->getPitch(),
                                        NOTE_OFF_VELOCITY);
                 break;
             }
@@ -3898,48 +3887,48 @@ AlsaDriver::processMidiOut(const MappedEventList &mC,
         case MappedEvent::MidiNoteOneShot:
             snd_seq_ev_set_noteon(&event,
                                   channel,
-                                  (*i)->getPitch(),
-                                  (*i)->getVelocity());
+                                  rgEvent->getPitch(),
+                                  rgEvent->getVelocity());
 
             // NOTE ON from MIDI input is scheduled with duration -1
             // and we don't use the NOTE OFF stack for MIDI input.
-            if ((*i)->getDuration() > RealTime(-1, 0)) {
+            if (rgEvent->getDuration() > RealTime(-1, 0)) {
                 needNoteOff = true;
             }
 
             if (!isSoftSynth) {
                 LevelInfo info;
-                info.level = (*i)->getVelocity();
+                info.level = rgEvent->getVelocity();
                 info.levelRight = 0;
                 SequencerDataBlock::getInstance()->setInstrumentLevel
-                    ((*i)->getInstrument(), info);
+                    (rgEvent->getInstrument(), info);
             }
 
-            weedRecentNoteOffs((*i)->getPitch(), channel, (*i)->getInstrument());
+            weedRecentNoteOffs(rgEvent->getPitch(), channel, rgEvent->getInstrument());
             break;
 
         case MappedEvent::MidiProgramChange:
             snd_seq_ev_set_pgmchange(&event,
                                      channel,
-                                     (*i)->getData1());
+                                     rgEvent->getData1());
             break;
 
         case MappedEvent::MidiKeyPressure:
             snd_seq_ev_set_keypress(&event,
                                     channel,
-                                    (*i)->getData1(),
-                                    (*i)->getData2());
+                                    rgEvent->getData1(),
+                                    rgEvent->getData2());
             break;
 
         case MappedEvent::MidiChannelPressure:
             snd_seq_ev_set_chanpress(&event,
                                      channel,
-                                     (*i)->getData1());
+                                     rgEvent->getData1());
             break;
 
         case MappedEvent::MidiPitchBend: {
-            int d1 = (int)((*i)->getData1());
-            int d2 = (int)((*i)->getData2());
+            int d1 = (int)(rgEvent->getData1());
+            int d2 = (int)(rgEvent->getData2());
             int value = ((d1 << 7) | d2) - 8192;
 
             // keep within -8192 to +8192
@@ -3954,13 +3943,13 @@ AlsaDriver::processMidiOut(const MappedEventList &mC,
             break;
 
         case MappedEvent::MidiSystemMessage: {
-            switch ((*i)->getData1()) {
+            switch (rgEvent->getData1()) {
             case MIDI_SYSTEM_EXCLUSIVE: {
                 char out[2];
                 sprintf(out, "%c", MIDI_SYSTEM_EXCLUSIVE);
                 sysExData = out;
 
-                sysExData += DataBlockRepository::getDataBlockForEvent((*i));
+                sysExData += DataBlockRepository::getDataBlockForEvent(rgEvent);
 
                 sprintf(out, "%c", MIDI_END_OF_EXCLUSIVE);
                 sysExData += out;
@@ -3996,8 +3985,8 @@ AlsaDriver::processMidiOut(const MappedEventList &mC,
         case MappedEvent::MidiController:
             snd_seq_ev_set_controller(&event,
                                       channel,
-                                      (*i)->getData1(),
-                                      (*i)->getData2());
+                                      rgEvent->getData1(),
+                                      rgEvent->getData2());
             break;
 
             // These types do nothing here, so go on to the
@@ -4049,7 +4038,7 @@ AlsaDriver::processMidiOut(const MappedEventList &mC,
             if (debug)
                 RG_DEBUG << "  Calling processSoftSynthEventOut()...";
 
-            processSoftSynthEventOut((*i)->getInstrument(), &event, now);
+            processSoftSynthEventOut(rgEvent->getInstrument(), &event, now);
 
         } else {
             if (debug)
@@ -4079,9 +4068,9 @@ AlsaDriver::processMidiOut(const MappedEventList &mC,
         if (needNoteOff) {
             NoteOffEvent *noteOffEvent =
                 new NoteOffEvent(outputStopTime,  // already calculated
-                                 (*i)->getPitch(),
+                                 rgEvent->getPitch(),
                                  channel,
-                                 (*i)->getInstrument());
+                                 rgEvent->getInstrument());
 
 #ifdef DEBUG_ALSA
             RG_DEBUG << "processMidiOut(): Adding NOTE OFF at " << outputStopTime;
