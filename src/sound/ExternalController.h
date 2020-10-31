@@ -149,6 +149,11 @@ private slots:
     /// Connected to InstrumentStaticSignals::controlChange().
     void slotControlChange(Instrument *instrument, int cc);
 
+    /// Connected to SequenceManager::signalPlaying().
+    void slotPlaying(bool checked);
+    /// Connected to SequenceManager::signalRecording().
+    void slotRecording(bool checked);
+
 private:
 
     // Access through self() only.
@@ -171,6 +176,9 @@ private:
      * See m_activeWindow.
      */
     void processRGNative(const MappedEvent *event);
+
+    bool m_playing;
+    bool m_recording;
 
     KorgNanoKontrol2 korgNanoKontrol2;
 

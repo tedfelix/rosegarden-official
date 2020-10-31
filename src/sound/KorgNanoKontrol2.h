@@ -48,6 +48,10 @@ public:
     /// Call when the document is modified to update the LEDs.
     void documentModified();
 
+    void stopped();
+    void playing();
+    void recording();
+
     /// Handle MappedEvent's from the external controller port.
     void processEvent(const MappedEvent *event);
 
@@ -71,10 +75,13 @@ private:
     bool m_recordArmed[8];
 
     bool m_play;
+    bool m_record;
     bool m_stop;
+    void setPlayRecordStopLEDs(bool play, bool record, bool stop);
+
     bool m_rewind;
     bool m_fastForward;
-    bool m_record;
+
     bool m_cycle;
 
 };

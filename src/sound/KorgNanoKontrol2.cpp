@@ -22,12 +22,9 @@
 #include "MappedEvent.h"
 #include "base/QEvents.h"
 #include "document/RosegardenDocument.h"
-//#include "gui/application/RosegardenMainViewWidget.h"
 #include "gui/application/RosegardenMainWindow.h"
 #include "base/Studio.h"
 #include "base/Track.h"
-//#include "gui/editors/segment/TrackButtons.h"
-//#include "gui/editors/segment/TrackEditor.h"
 
 #include <QCoreApplication>
 #include <QEvent>
@@ -42,10 +39,10 @@ KorgNanoKontrol2::KorgNanoKontrol2() :
     m_page(0),
     m_firstRefresh(true),
     m_play(false),
+    m_record(false),
     m_stop(false),
     m_rewind(false),
     m_fastForward(false),
-    m_record(false),
     m_cycle(false)
 {
 }
@@ -136,6 +133,23 @@ void KorgNanoKontrol2::init()
 void KorgNanoKontrol2::documentModified()
 {
     refreshLEDs();
+}
+
+void KorgNanoKontrol2::stopped()
+{
+    setPlayRecordStopLEDs(false, false, true);
+}
+
+void KorgNanoKontrol2::playing()
+{
+    setPlayRecordStopLEDs(true, false, false);
+}
+
+void KorgNanoKontrol2::recording()
+{
+    // ??? This will appear to not work.  See setPlayRecordStopLEDs()
+    //     for an explanation.
+    setPlayRecordStopLEDs(false, true, false);
 }
 
 void KorgNanoKontrol2::processEvent(const MappedEvent *event)
@@ -512,7 +526,14 @@ void KorgNanoKontrol2::initLEDs()
     }
 
     m_play = false;
-    m_stop = false;
+
+    m_stop = true;
+    // Stop
+    ExternalController::send(
+            0, // channel
+            42, // controlNumber
+            127);  // value
+
     m_rewind = false;
     m_fastForward = false;
     m_record = false;
@@ -591,7 +612,55 @@ void KorgNanoKontrol2::refreshLEDs()
         }
     }
 
-    // ??? Transport LEDs
+    // Cycle
+    const bool cycle = doc->getComposition().isLooping();
+    // If there was a change...
+    if (cycle != m_cycle) {
+        ExternalController::send(
+                0, // channel
+                46, // controlNumber
+                cycle ? 127 : 0);  // value
+        // Update the cache.
+        m_cycle = cycle;
+    }
+
+}
+
+void KorgNanoKontrol2::setPlayRecordStopLEDs(bool play, bool record, bool stop)
+{
+    // Note: Tried SequenceManager::getTransportStatus(), but there is no
+    //       way to subscribe for changes to that.
+
+    if (stop != m_stop) {
+        ExternalController::send(
+                0, // channel
+                42, // controlNumber
+                stop ? 127 : 0);  // value
+        m_stop = stop;
+    }
+
+    if (play != m_play) {
+        ExternalController::send(
+                0, // channel
+                41, // controlNumber
+                play ? 127 : 0);  // value
+        m_play = play;
+    }
+
+    if (record != m_record) {
+        // ??? This isn't working.  From watching this with aseqdump, you can
+        //     see that when record begins, the CC's that are sent out the
+        //     external controller port get stuck and are not released until
+        //     we stop recording.  So, when we are in record, sending CCs to
+        //     the external controller port does not work.  Yet another
+        //     argument for separating the external controller port from the
+        //     rest of AlsaDriver.
+        ExternalController::send(
+                0, // channel
+                45, // controlNumber
+                record ? 127 : 0);  // value
+        m_record = record;
+    }
 
 }
 

@@ -21,6 +21,7 @@
 #include "document/RosegardenDocument.h"
 #include "gui/application/RosegardenMainWindow.h"
 #include "sequencer/RosegardenSequencer.h"
+#include "gui/seqmanager/SequenceManager.h"
 #include "misc/Strings.h"
 
 #include <QSettings>
@@ -49,7 +50,9 @@ QSharedPointer<ExternalController> ExternalController::self()
 
 ExternalController::ExternalController() :
     activeWindow(Main),
-    m_instrumentId(NoInstrument)
+    m_instrumentId(NoInstrument),
+    m_playing(false),
+    m_recording(false)
 {
     QSettings settings;
     settings.beginGroup(GeneralOptionsConfigGroup);
@@ -71,6 +74,14 @@ void ExternalController::connectRMW(RosegardenMainWindow *rmw)
                 &InstrumentStaticSignals::controlChange,
             this,
             &ExternalController::slotControlChange);
+
+    SequenceManager *sequenceManager = rmw->getSequenceManager();
+
+    // And transport changes.
+    connect(sequenceManager, &SequenceManager::signalPlaying,
+            this, &ExternalController::slotPlaying);
+    connect(sequenceManager, &SequenceManager::signalRecording,
+            this, &ExternalController::slotRecording);
 }
 
 void ExternalController::setType(ControllerType controllerType)
@@ -352,31 +363,61 @@ ExternalController::slotDocumentModified(bool)
 void
 ExternalController::slotControlChange(Instrument *instrument, int cc)
 {
-    // We only handle updates for RosegardenMainWindow.
-    if (activeWindow != Main)
-        return;
+    if (m_controllerType == CT_RosegardenNative) {
+        // We only handle updates for RosegardenMainWindow.
+        if (activeWindow != Main)
+            return;
 
-    // Not our Instrument?  Bail.
-    if (instrument->getId() != m_instrumentId)
-        return;
+        // Not our Instrument?  Bail.
+        if (instrument->getId() != m_instrumentId)
+            return;
 
-    // Fixed channels only.
-    if (!instrument->hasFixedChannel())
-        return;
+        // Fixed channels only.
+        if (!instrument->hasFixedChannel())
+            return;
 
-    if (cc == MIDI_CONTROLLER_VOLUME) {
-        send(0, MIDI_CONTROLLER_VOLUME, instrument->getVolumeCC());
+        if (cc == MIDI_CONTROLLER_VOLUME) {
+            send(0, MIDI_CONTROLLER_VOLUME, instrument->getVolumeCC());
+            return;
+        }
+
+        if (cc == MIDI_CONTROLLER_PAN) {
+            send(0, MIDI_CONTROLLER_PAN, instrument->getPanCC());
+            return;
+        }
+
+        // All other controllers can use Instrument::getControllerValue().
+
+        send(0, cc, instrument->getControllerValue(cc));
+    }
+}
+
+void
+ExternalController::slotPlaying(bool checked)
+{
+    m_playing = checked;
+
+    if (m_controllerType == CT_KorgNanoKontrol2) {
+        if (m_playing  &&  !m_recording)
+            korgNanoKontrol2.playing();
+        else if (!m_playing  &&  !m_recording)
+            korgNanoKontrol2.stopped();
         return;
     }
+}
 
-    if (cc == MIDI_CONTROLLER_PAN) {
-        send(0, MIDI_CONTROLLER_PAN, instrument->getPanCC());
+void
+ExternalController::slotRecording(bool checked)
+{
+    m_recording = checked;
+
+    if (m_controllerType == CT_KorgNanoKontrol2) {
+        if (m_recording)
+            korgNanoKontrol2.recording();
+        else if (!m_playing  &&  !m_recording)
+            korgNanoKontrol2.stopped();
         return;
     }
-
-    // All other controllers can use Instrument::getControllerValue().
-
-    send(0, cc, instrument->getControllerValue(cc));
 }
 
 
