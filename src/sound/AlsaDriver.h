@@ -84,20 +84,30 @@ public:
     void stopClocks() override;
     bool areClocksRunning() const override { return m_queueRunning; }
 
-    /// Send both MIDI and audio events out, unqueued
+    /// Send both MIDI and audio events out immediately (unqueued).
     /**
      * This version sends MIDI data to ALSA for transmission via MIDI
      * immediately.  (I assume audio events are also sent immediately.)
+     *
+     * RosegardenSequencer::processAsynchronousEvents() uses this to send
+     * out its m_asyncOutQueue.
+     *
+     * RosegardenSequencer::routeEvents() also uses this for async events
+     * and recorded MIDI thru.
      */
     void processEventsOut(const MappedEventList &mC) override;
+
     /// Send both MIDI and audio events out, queued
     /**
      * Used by RosegardenSequencer::keepPlaying() to send events out
      * during playback.
+     *
+     * The slice range is used for generating MIDI Time Code and
+     * processing pending note off events.
      */
-    void processEventsOut(const MappedEventList &mC,
-                                  const RealTime &sliceStart,
-                                  const RealTime &sliceEnd) override;
+    void processEventsOut(const MappedEventList &rgEventList,
+                          const RealTime &sliceStart,
+                          const RealTime &sliceEnd) override;
 
     // Return the sample rate
     //
