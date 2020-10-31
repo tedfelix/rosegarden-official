@@ -313,7 +313,8 @@ MidiMixerWindow::slotFaderLevelChanged(float value)
                 Instrument::emitControlChange(instrument, MIDI_CONTROLLER_VOLUME);
                 m_document->setModified();
 
-                if (instrument->hasFixedChannel())
+                if (ExternalController::self()->isNative()  &&
+                    instrument->hasFixedChannel())
                 {
                     // Send out the external controller port as well.
                     
@@ -391,7 +392,8 @@ MidiMixerWindow::slotControllerChanged(float value)
         Instrument::emitControlChange(instrument, cc);
         m_document->setModified();
 
-        if (instrument->hasFixedChannel()) {
+        if (ExternalController::self()->isNative()  &&
+            instrument->hasFixedChannel()) {
 
             // Send out the external controller port as well.
 
@@ -710,6 +712,11 @@ MidiMixerWindow::slotCurrentTabChanged(int)
 void
 MidiMixerWindow::sendControllerRefresh()
 {
+    // We only do this if the external controller port is
+    // in Rosegarden native mode.
+    if (!ExternalController::self()->isNative())
+        return;
+
     // To keep the device connected to the "external controller" port in
     // sync with the "MIDI Mixer" window, send out MIDI volume and pan
     // messages to it.
@@ -818,18 +825,24 @@ MidiMixerWindow::changeEvent(QEvent *event)
     // Let baseclass handle first.
     QWidget::changeEvent(event);
 
+    // We only care about this if the external controller port is
+    // in Rosegarden native mode.
+    if (!ExternalController::self()->isNative())
+        return;
+
     // ??? Double updates seem to go out so we might want to be a little
     //     more picky about the event we react to.
 
-    if (event->type() == QEvent::ActivationChange) {
-        //RG_DEBUG << "changeEvent(): Received activation change.";
-        if (isActiveWindow()) {
-            ExternalController::self()->activeWindow =
-                    ExternalController::MidiMixer;
+    if (event->type() != QEvent::ActivationChange)
+        return;
 
-            sendControllerRefresh();
-        }
-    }
+    if (!isActiveWindow())
+        return;
+
+    ExternalController::self()->activeWindow =
+            ExternalController::MidiMixer;
+
+    sendControllerRefresh();
 }
 
 

@@ -88,6 +88,8 @@ public:
 
     enum ControllerType { CT_RosegardenNative, CT_KorgNanoKontrol2 };
     void setType(ControllerType controllerType);
+    ControllerType getType() const  { return m_controllerType; }
+    bool isNative() const  { return m_controllerType == CT_RosegardenNative; }
 
     /// Call this from RosegardenMainWindow's ctor.
     /**

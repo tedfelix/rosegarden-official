@@ -8607,6 +8607,11 @@ RosegardenMainWindow::changeEvent(QEvent *event)
     // Let baseclass handle first.
     QWidget::changeEvent(event);
 
+    // We only care about this if the external controller port is
+    // in Rosegarden native mode.
+    if (!ExternalController::self()->isNative())
+        return;
+
     // We only care about activation changes.
     if (event->type() != QEvent::ActivationChange)
         return;

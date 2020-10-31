@@ -579,24 +579,29 @@ AudioMixerWindow2::changeEvent(QEvent *event)
     // Let baseclass handle first.
     QWidget::changeEvent(event);
 
+    // Only handle this for Rosegarden native mode.
+    if (!ExternalController::self()->isNative())
+        return;
+
     // ??? Double updates seem to go out so we might want to be a little
     //     more picky about the event we react to.
 
-    if (event->type() == QEvent::ActivationChange) {
-        //RG_DEBUG << "changeEvent(): Received activation change.";
-        if (isActiveWindow()) {
-            ExternalController::self()->activeWindow =
-                    ExternalController::AudioMixer;
+    if (event->type() != QEvent::ActivationChange)
+        return;
 
-            size_t count = m_inputStrips.size();
-            if (count > 16)
-                count = 16;
+    if (!isActiveWindow())
+        return;
 
-            // For each strip, send vol/pan to the external controller port.
-            for (unsigned i = 0; i < count; i++)
-                m_inputStrips[i]->updateExternalController();
-        }
-    }
+    ExternalController::self()->activeWindow =
+            ExternalController::AudioMixer;
+
+    size_t count = m_inputStrips.size();
+    if (count > 16)
+        count = 16;
+
+    // For each strip, send vol/pan to the external controller port.
+    for (unsigned i = 0; i < count; i++)
+        m_inputStrips[i]->updateExternalController();
 }
 
 
