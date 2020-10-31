@@ -3649,7 +3649,7 @@ AlsaDriver::testForMMCSysex(const snd_seq_event_t *event)
 }
 
 void
-AlsaDriver::processMidiOut(const MappedEventList &mC,
+AlsaDriver::processMidiOut(const MappedEventList &rgEventList,
                            const RealTime &sliceStart,
                            const RealTime &sliceEnd)
 {
@@ -3659,7 +3659,7 @@ AlsaDriver::processMidiOut(const MappedEventList &mC,
     bool now = (sliceStart == RealTime::zeroTime && sliceEnd == RealTime::zeroTime);
 
 #ifdef DEBUG_PROCESS_MIDI_OUT
-    RG_DEBUG << "processMidiOut(" << sliceStart << "," << sliceEnd << "), " << mC.size() << " events, now is " << now;
+    RG_DEBUG << "processMidiOut(" << sliceStart << "," << sliceEnd << "), " << rgEventList.size() << " events, now is " << now;
 #endif
 
     if (!now) {
@@ -3672,8 +3672,8 @@ AlsaDriver::processMidiOut(const MappedEventList &mC,
 
     // These won't change in this slice
     //
-    if ((mC.begin() != mC.end())) {
-        SequencerDataBlock::getInstance()->setVisual(*mC.begin());
+    if ((rgEventList.begin() != rgEventList.end())) {
+        SequencerDataBlock::getInstance()->setVisual(*rgEventList.begin());
     }
 
     // A pointer to this is extracted from it and placed in "event".
@@ -3686,7 +3686,7 @@ AlsaDriver::processMidiOut(const MappedEventList &mC,
     // NB the MappedEventList is implicitly ordered by time (std::multiset)
 
     // For each incoming mapped (Rosegarden) event
-    for (MappedEvent *rgEvent : mC) {
+    for (MappedEvent *rgEvent : rgEventList) {
         // Skip all non-MIDI events.
         if (rgEvent->getType() >= MappedEvent::Audio)
             continue;
@@ -3716,9 +3716,8 @@ AlsaDriver::processMidiOut(const MappedEventList &mC,
             RG_DEBUG << "processMidiOut():   MappedEvent Event Type: " << rgEvent->getType() << " (" << eventType << ")";
         }
 
-        // ??? rename: alsaEvent
-        snd_seq_event_t event;
-        snd_seq_ev_clear(&event);
+        snd_seq_event_t alsaEvent;
+        snd_seq_ev_clear(&alsaEvent);
     
         const bool isExternalController =
                 (rgEvent->getRecordedDevice() == Device::EXTERNAL_CONTROLLER);
@@ -3806,7 +3805,7 @@ AlsaDriver::processMidiOut(const MappedEventList &mC,
             RG_DEBUG << "processMidiOut():     pitch: " << (int)rgEvent->getPitch() << ", velocity " << (int)rgEvent->getVelocity() << ", duration " << rgEvent->getDuration();
 #endif
 
-            snd_seq_ev_set_subs(&event);
+            snd_seq_ev_set_subs(&alsaEvent);
 
             // Set source according to port for device
             //
@@ -3821,12 +3820,12 @@ AlsaDriver::processMidiOut(const MappedEventList &mC,
             if (src < 0)
                 continue;
 
-            snd_seq_ev_set_source(&event, src);
+            snd_seq_ev_set_source(&alsaEvent, src);
 
-            snd_seq_ev_schedule_real(&event, m_queue, 0, &time);
+            snd_seq_ev_schedule_real(&alsaEvent, m_queue, 0, &time);
 
         } else {
-            event.time.time = time;
+            alsaEvent.time.time = time;
         }
 
         MappedInstrument *instrument = getMappedInstrument(rgEvent->getInstrument());
@@ -3866,7 +3865,7 @@ AlsaDriver::processMidiOut(const MappedEventList &mC,
 
         case MappedEvent::MidiNote:
             if (rgEvent->getVelocity() == 0) {
-                snd_seq_ev_set_noteoff(&event,
+                snd_seq_ev_set_noteoff(&alsaEvent,
                                        channel,
                                        rgEvent->getPitch(),
                                        NOTE_OFF_VELOCITY);
@@ -3885,7 +3884,7 @@ AlsaDriver::processMidiOut(const MappedEventList &mC,
             // in a special way.
 
         case MappedEvent::MidiNoteOneShot:
-            snd_seq_ev_set_noteon(&event,
+            snd_seq_ev_set_noteon(&alsaEvent,
                                   channel,
                                   rgEvent->getPitch(),
                                   rgEvent->getVelocity());
@@ -3908,20 +3907,20 @@ AlsaDriver::processMidiOut(const MappedEventList &mC,
             break;
 
         case MappedEvent::MidiProgramChange:
-            snd_seq_ev_set_pgmchange(&event,
+            snd_seq_ev_set_pgmchange(&alsaEvent,
                                      channel,
                                      rgEvent->getData1());
             break;
 
         case MappedEvent::MidiKeyPressure:
-            snd_seq_ev_set_keypress(&event,
+            snd_seq_ev_set_keypress(&alsaEvent,
                                     channel,
                                     rgEvent->getData1(),
                                     rgEvent->getData2());
             break;
 
         case MappedEvent::MidiChannelPressure:
-            snd_seq_ev_set_chanpress(&event,
+            snd_seq_ev_set_chanpress(&alsaEvent,
                                      channel,
                                      rgEvent->getData1());
             break;
@@ -3936,7 +3935,7 @@ AlsaDriver::processMidiOut(const MappedEventList &mC,
             // if (value & 0x4000)
             //    value -= 0x8000;
 
-            snd_seq_ev_set_pitchbend(&event,
+            snd_seq_ev_set_pitchbend(&alsaEvent,
                                      channel,
                                      value);
         }
@@ -3956,7 +3955,7 @@ AlsaDriver::processMidiOut(const MappedEventList &mC,
 
                 // Note: sysExData needs to stay around until this event
                 //   is actually sent.  event has a pointer to its contents.
-                snd_seq_ev_set_sysex(&event,
+                snd_seq_ev_set_sysex(&alsaEvent,
                                      sysExData.length(),
                                      (char*)(sysExData.c_str()));
             }
@@ -3983,7 +3982,7 @@ AlsaDriver::processMidiOut(const MappedEventList &mC,
             break;
 
         case MappedEvent::MidiController:
-            snd_seq_ev_set_controller(&event,
+            snd_seq_ev_set_controller(&alsaEvent,
                                       channel,
                                       rgEvent->getData1(),
                                       rgEvent->getData2());
@@ -4025,26 +4024,26 @@ AlsaDriver::processMidiOut(const MappedEventList &mC,
 
         if (debug) {
             QString eventType = "unknown";
-            switch (event.type) {
+            switch (alsaEvent.type) {
                 case SND_SEQ_EVENT_NOTEON: eventType = "SND_SEQ_EVENT_NOTEON"; break;
                 case SND_SEQ_EVENT_NOTEOFF: eventType = "SND_SEQ_EVENT_NOTEOFF"; break;
                 case SND_SEQ_EVENT_CONTROLLER: eventType = "SND_SEQ_EVENT_CONTROLLER"; break;
                 default: break;
             }
-            RG_DEBUG << "  ALSA event type: " << event.type << " (" << eventType << ")";
+            RG_DEBUG << "  ALSA event type: " << alsaEvent.type << " (" << eventType << ")";
         }
 
         if (isSoftSynth) {
             if (debug)
                 RG_DEBUG << "  Calling processSoftSynthEventOut()...";
 
-            processSoftSynthEventOut(rgEvent->getInstrument(), &event, now);
+            processSoftSynthEventOut(rgEvent->getInstrument(), &alsaEvent, now);
 
         } else {
             if (debug)
                 RG_DEBUG << "  Calling snd_seq_event_output()...";
 
-            int rc = snd_seq_event_output(m_midiHandle, &event);
+            int rc = snd_seq_event_output(m_midiHandle, &alsaEvent);
             checkAlsaError(rc, "processMidiOut(): output queued");
 
             if (debug)
@@ -4297,13 +4296,13 @@ AlsaDriver::stopClocks()
 
 
 void
-AlsaDriver::processEventsOut(const MappedEventList &mC)
+AlsaDriver::processEventsOut(const MappedEventList &rgEventList)
 {
-    processEventsOut(mC, RealTime::zeroTime, RealTime::zeroTime);
+    processEventsOut(rgEventList, RealTime::zeroTime, RealTime::zeroTime);
 }
 
 void
-AlsaDriver::processEventsOut(const MappedEventList &mC,
+AlsaDriver::processEventsOut(const MappedEventList &rgEventList,
                              const RealTime &sliceStart,
                              const RealTime &sliceEnd)
 {
@@ -4331,7 +4330,7 @@ AlsaDriver::processEventsOut(const MappedEventList &mC,
     bool haveNewAudio = false;
 
     // For each incoming event, insert audio events if we find them
-    for (MappedEventList::const_iterator i = mC.begin(); i != mC.end(); ++i) {
+    for (MappedEventList::const_iterator i = rgEventList.begin(); i != rgEventList.end(); ++i) {
 #ifdef HAVE_LIBJACK
 
         // Play an audio file
@@ -4660,7 +4659,7 @@ AlsaDriver::processEventsOut(const MappedEventList &mC,
 
     // Process Midi and Audio
     //
-    processMidiOut(mC, sliceStart, sliceEnd);
+    processMidiOut(rgEventList, sliceStart, sliceEnd);
 
 #ifdef HAVE_LIBJACK
     if (m_jackDriver) {
