@@ -4330,19 +4330,20 @@ AlsaDriver::processEventsOut(const MappedEventList &rgEventList,
     bool haveNewAudio = false;
 
     // For each incoming event, insert audio events if we find them
-    for (MappedEventList::const_iterator i = rgEventList.begin(); i != rgEventList.end(); ++i) {
+    for (const MappedEvent *mappedEvent : rgEventList) {
+
 #ifdef HAVE_LIBJACK
 
         // Play an audio file
         //
-        if ((*i)->getType() == MappedEvent::Audio) {
+        if (mappedEvent->getType() == MappedEvent::Audio) {
             if (!m_jackDriver)
                 continue;
 
             // This is used for handling asynchronous
             // (i.e. unexpected) audio events only
 
-            if ((*i)->getEventTime() > RealTime( -120, 0)) {
+            if (mappedEvent->getEventTime() > RealTime( -120, 0)) {
                 // Not an asynchronous event
                 continue;
             }
@@ -4353,15 +4354,15 @@ AlsaDriver::processEventsOut(const MappedEventList &rgEventList,
             // we could make this just get the gui to reload our files
             // when (or before) this fails.
             //
-            audioFile = getAudioFile((*i)->getAudioID());
+            audioFile = getAudioFile(mappedEvent->getAudioID());
 
             if (audioFile) {
                 MappedAudioFader *fader =
-                    dynamic_cast<MappedAudioFader*>
-                    (m_studio->getAudioFader((*i)->getInstrument()));
+                    dynamic_cast<MappedAudioFader *>
+                    (m_studio->getAudioFader(mappedEvent->getInstrument()));
 
                 if (!fader) {
-                    RG_WARNING << "processEventsOut(): WARNING: No fader for audio instrument " << (*i)->getInstrument();
+                    RG_WARNING << "processEventsOut(): WARNING: No fader for audio instrument " << mappedEvent->getInstrument();
                     continue;
                 }
 
@@ -4379,19 +4380,19 @@ AlsaDriver::processEventsOut(const MappedEventList &rgEventList,
 
                 //#define DEBUG_PLAYING_AUDIO
 #ifdef DEBUG_PLAYING_AUDIO
-                RG_DEBUG << "processEventsOut(): Creating playable audio file: id " << audioFile->getId() << ", event time " << (*i)->getEventTime() << ", time now " << getAlsaTime() << ", start marker " << (*i)->getAudioStartMarker() << ", duration " << (*i)->getDuration() << ", instrument " << (*i)->getInstrument() << " channels " << channels;
+                RG_DEBUG << "processEventsOut(): Creating playable audio file: id " << audioFile->getId() << ", event time " << mappedEvent->getEventTime() << ", time now " << getAlsaTime() << ", start marker " << mappedEvent->getAudioStartMarker() << ", duration " << mappedEvent->getDuration() << ", instrument " << mappedEvent->getInstrument() << " channels " << channels;
                 RG_DEBUG << "processEventsOut(): Read buffer length is " << bufferLength << " (" << bufferFrames << " frames)";
 #endif
 
                 PlayableAudioFile *paf = nullptr;
 
                 try {
-                    paf = new PlayableAudioFile((*i)->getInstrument(),
+                    paf = new PlayableAudioFile(mappedEvent->getInstrument(),
                                                 audioFile,
                                                 getSequencerTime() +
                                                 (RealTime(1, 0) / 4),
-                                                (*i)->getAudioStartMarker(),
-                                                (*i)->getDuration(),
+                                                mappedEvent->getAudioStartMarker(),
+                                                mappedEvent->getDuration(),
                                                 bufferFrames,
                                                 m_smallFileSize * 1024,
                                                 channels,
@@ -4400,17 +4401,17 @@ AlsaDriver::processEventsOut(const MappedEventList &rgEventList,
                     continue;
                 }
 
-                if ((*i)->isAutoFading()) {
+                if (mappedEvent->isAutoFading()) {
                     paf->setAutoFade(true);
-                    paf->setFadeInTime((*i)->getFadeInTime());
-                    paf->setFadeOutTime((*i)->getFadeInTime());
+                    paf->setFadeInTime(mappedEvent->getFadeInTime());
+                    paf->setFadeOutTime(mappedEvent->getFadeInTime());
 
                     //#define DEBUG_AUTOFADING
 #ifdef DEBUG_AUTOFADING
 
                     RG_DEBUG << "processEventsOut(): PlayableAudioFile is AUTOFADING - "
-                             << "in = " << (*i)->getFadeInTime()
-                             << ", out = " << (*i)->getFadeOutTime();
+                             << "in = " << mappedEvent->getFadeInTime()
+                             << ", out = " << mappedEvent->getFadeOutTime();
 #endif
 
                 }
@@ -4422,7 +4423,7 @@ AlsaDriver::processEventsOut(const MappedEventList &rgEventList,
 
 
                 // segment runtime id
-                paf->setRuntimeSegmentId((*i)->getRuntimeSegmentId());
+                paf->setRuntimeSegmentId(mappedEvent->getRuntimeSegmentId());
 
                 m_audioQueue->addUnscheduled(paf);
 
@@ -4441,13 +4442,13 @@ AlsaDriver::processEventsOut(const MappedEventList &rgEventList,
         // Cancel a playing audio file preview (this is predicated on
         // runtime segment ID and optionally start time)
         //
-        if ((*i)->getType() == MappedEvent::AudioCancel) {
-            cancelAudioFile(*i);
+        if (mappedEvent->getType() == MappedEvent::AudioCancel) {
+            cancelAudioFile(mappedEvent);
         }
 #endif // HAVE_LIBJACK
 
-        if ((*i)->getType() == MappedEvent::SystemMIDIClock) {
-            switch ((int)(*i)->getData1()) {
+        if (mappedEvent->getType() == MappedEvent::SystemMIDIClock) {
+            switch ((int)mappedEvent->getData1()) {
             case 0:  // MIDI Clock and System messages: Off
                 m_midiClockEnabled = false;
 #ifdef DEBUG_ALSA
@@ -4477,8 +4478,8 @@ AlsaDriver::processEventsOut(const MappedEventList &rgEventList,
             }
         }
 
-        if ((*i)->getType() == MappedEvent::SystemMIDISyncAuto) {
-            if ((*i)->getData1()) {
+        if (mappedEvent->getType() == MappedEvent::SystemMIDISyncAuto) {
+            if (mappedEvent->getData1()) {
                 m_midiSyncAutoConnect = true;
 #ifdef DEBUG_ALSA
                 RG_DEBUG << "processEventsOut(): Rosegarden MIDI SYNC AUTO ENABLED";
@@ -4501,11 +4502,11 @@ AlsaDriver::processEventsOut(const MappedEventList &rgEventList,
 
 #ifdef HAVE_LIBJACK
         // Set the JACK transport
-        if ((*i)->getType() == MappedEvent::SystemJackTransport) {
+        if (mappedEvent->getType() == MappedEvent::SystemJackTransport) {
             bool enabled = false;
             bool source = false;
 
-            switch ((int)(*i)->getData1()) {
+            switch ((int)mappedEvent->getData1()) {
             case 2:
                 source = true;
                 enabled = true;
@@ -4537,8 +4538,8 @@ AlsaDriver::processEventsOut(const MappedEventList &rgEventList,
 #endif // HAVE_LIBJACK
 
 
-        if ((*i)->getType() == MappedEvent::SystemMMCTransport) {
-            switch ((int)(*i)->getData1()) {
+        if (mappedEvent->getType() == MappedEvent::SystemMMCTransport) {
+            switch ((int)mappedEvent->getData1()) {
             case 1:
 #ifdef DEBUG_ALSA
                 RG_DEBUG << "processEventsOut(): Rosegarden is MMC SOURCE";
@@ -4565,8 +4566,8 @@ AlsaDriver::processEventsOut(const MappedEventList &rgEventList,
             }
         }
 
-        if ((*i)->getType() == MappedEvent::SystemMTCTransport) {
-            switch ((int)(*i)->getData1()) {
+        if (mappedEvent->getType() == MappedEvent::SystemMTCTransport) {
+            switch ((int)mappedEvent->getData1()) {
             case 1:
 #ifdef DEBUG_ALSA
                 RG_DEBUG << "processEventsOut(): Rosegarden is MTC SOURCE";
@@ -4598,14 +4599,14 @@ AlsaDriver::processEventsOut(const MappedEventList &rgEventList,
             }
         }
 
-        //if ((*i)->getType() == MappedEvent::SystemAudioPortCounts) {
+        //if (mappedEvent->getType() == MappedEvent::SystemAudioPortCounts) {
             // never actually used, I think?
         //}
 
-        if ((*i)->getType() == MappedEvent::SystemAudioPorts) {
+        if (mappedEvent->getType() == MappedEvent::SystemAudioPorts) {
 #ifdef HAVE_LIBJACK
             if (m_jackDriver) {
-                int data = (*i)->getData1();
+                int data = mappedEvent->getData1();
                 m_jackDriver->setAudioPorts(data & MappedEvent::FaderOuts,
                                             data & MappedEvent::SubmasterOuts);
             }
@@ -4617,9 +4618,9 @@ AlsaDriver::processEventsOut(const MappedEventList &rgEventList,
 
         }
 
-        if ((*i)->getType() == MappedEvent::SystemAudioFileFormat) {
+        if (mappedEvent->getType() == MappedEvent::SystemAudioFileFormat) {
 #ifdef HAVE_LIBJACK
-            int format = (*i)->getData1();
+            int format = mappedEvent->getData1();
             switch (format) {
             case 0:
                 m_audioRecFileFormat = RIFFAudioFile::PCM;
@@ -4642,15 +4643,14 @@ AlsaDriver::processEventsOut(const MappedEventList &rgEventList,
 
         }
 
-        if ((*i)->getType() == MappedEvent::Panic) {
-            for (MappedDeviceList::iterator i = m_devices.begin();
-                 i != m_devices.end(); ++i) {
-                if ((*i)->getDirection() == MidiDevice::Play) {
-                    sendDeviceController((*i)->getId(),
+        if (mappedEvent->getType() == MappedEvent::Panic) {
+            for (const MappedDevice *device : m_devices) {
+                if (device->getDirection() == MidiDevice::Play) {
+                    sendDeviceController(device->getId(),
                                          MIDI_CONTROLLER_SUSTAIN, 0);
-                    sendDeviceController((*i)->getId(),
+                    sendDeviceController(device->getId(),
                                          MIDI_CONTROLLER_ALL_NOTES_OFF, 0);
-                    sendDeviceController((*i)->getId(),
+                    sendDeviceController(device->getId(),
                                          MIDI_CONTROLLER_RESET, 0);
                 }
             }
@@ -5820,7 +5820,7 @@ AlsaDriver::getMappedInstrument(InstrumentId id)
 }
 
 void
-AlsaDriver::cancelAudioFile(MappedEvent *mE)
+AlsaDriver::cancelAudioFile(const MappedEvent *mE)
 {
     RG_DEBUG << "cancelAudioFile()";
 

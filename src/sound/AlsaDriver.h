@@ -771,7 +771,7 @@ private:
     /**
      * Either by instrument and audio file id or by audio segment id.
      */
-    void cancelAudioFile(MappedEvent *mE);
+    void cancelAudioFile(const MappedEvent *mE);
 
     void clearAudioQueue();
 
