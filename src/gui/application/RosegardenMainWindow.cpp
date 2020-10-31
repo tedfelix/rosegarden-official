@@ -321,6 +321,10 @@ RosegardenMainWindow::RosegardenMainWindow(bool enableSound,
     connect(m_editTempoController, SIGNAL(editTempos(timeT)),
             this, SLOT(slotEditTempos(timeT)));
 
+    // Create ExternalController from the UI thread before we go
+    // multithreaded.
+    ExternalController::create();
+
     // !!! From this point on, we are MULTITHREADED !!!
 
     if (m_useSequencer) {

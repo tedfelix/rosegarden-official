@@ -45,6 +45,9 @@ public:
     /// Call this after the device is connected to set it up.
     void init();
 
+    /// Call when the document is modified to update the LEDs.
+    void documentModified();
+
     /// Handle MappedEvent's from the external controller port.
     void processEvent(const MappedEvent *event);
 
@@ -60,7 +63,19 @@ private:
 
     void testLEDs(bool on);
     void initLEDs();
+    bool m_firstRefresh;
     void refreshLEDs();
+
+    bool m_solo[8];
+    bool m_mute[8];
+    bool m_recordArmed[8];
+
+    bool m_play;
+    bool m_stop;
+    bool m_rewind;
+    bool m_fastForward;
+    bool m_record;
+    bool m_cycle;
 
 };
 

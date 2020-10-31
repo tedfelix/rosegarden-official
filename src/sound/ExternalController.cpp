@@ -29,14 +29,22 @@ namespace Rosegarden
 {
 
 
+namespace
+{
+    QSharedPointer<ExternalController> a_self;
+}
+
+void ExternalController::create()
+{
+    a_self.reset(new ExternalController);
+}
+
 QSharedPointer<ExternalController> ExternalController::self()
 {
-    static QSharedPointer<ExternalController> self;
+    // create() was not called.
+    Q_ASSERT(a_self);
 
-    if (!self)
-        self.reset(new ExternalController);
-
-    return self;
+    return a_self;
 }
 
 ExternalController::ExternalController() :
@@ -51,9 +59,9 @@ ExternalController::ExternalController() :
 
 void ExternalController::connectRMW(RosegardenMainWindow *rmw)
 {
-    // If it seems like this isn't connecting, it's possible that self()
-    // was called before Qt was up.  That will make it impossible for this
-    // object to receive signals.
+    // If it seems like this isn't connecting, make sure the ExternalController
+    // instance was created by the UI thread.  Signals/Slots cannot be
+    // connected across threads.
 
     connect(rmw, &RosegardenMainWindow::documentLoaded,
             this, &ExternalController::slotDocumentLoaded);
@@ -284,10 +292,10 @@ bool ExternalController::getSysEx(std::string & /*rawString*/)
 void
 ExternalController::slotDocumentLoaded(RosegardenDocument *doc)
 {
+    // If this is never happening, see the comments in connectRMW() above.
+
     if (!doc)
         return;
-
-    // If this is never happening, see the comments in connectRMW() above.
 
     // Connect to the new document for change notifications.
     connect(doc, &RosegardenDocument::documentModified,
@@ -301,32 +309,44 @@ ExternalController::slotDocumentLoaded(RosegardenDocument *doc)
 void
 ExternalController::slotDocumentModified(bool)
 {
-    // We only handle updates for RosegardenMainWindow.
-    if (activeWindow != Main)
+    // If this is never happening, see the comments in connectRMW() above.
+
+    if (m_controllerType == CT_RosegardenNative) {
+
+        // We only handle updates for RosegardenMainWindow.
+        if (activeWindow != Main)
+            return;
+
+        RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
+
+        // Get the selected Track's Instrument.
+        InstrumentId instrumentId =
+                doc->getComposition().getSelectedInstrumentId();
+
+        if (instrumentId == NoInstrument)
+            return;
+
+        // No change to the Track/Instrument?  Bail.
+        if (instrumentId == m_instrumentId)
+            return;
+
+        m_instrumentId = instrumentId;
+
+        Instrument *instrument = doc->getStudio().getInstrumentById(instrumentId);
+
+        if (!instrument)
+            return;
+
+        // Send out the CCs for the current Track on channel 0.
+        sendAllCCs(instrument, 0);
+
         return;
+    }
 
-    RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
-
-    // Get the selected Track's Instrument.
-    InstrumentId instrumentId =
-            doc->getComposition().getSelectedInstrumentId();
-
-    if (instrumentId == NoInstrument)
+    if (m_controllerType == CT_KorgNanoKontrol2) {
+        korgNanoKontrol2.documentModified();
         return;
-
-    // No change to the Track/Instrument?  Bail.
-    if (instrumentId == m_instrumentId)
-        return;
-
-    m_instrumentId = instrumentId;
-
-    Instrument *instrument = doc->getStudio().getInstrumentById(instrumentId);
-
-    if (!instrument)
-        return;
-
-    // Send out the CCs for the current Track on channel 0.
-    sendAllCCs(instrument, 0);
+    }
 }
 
 void

@@ -39,7 +39,14 @@ namespace Rosegarden
 
 
 KorgNanoKontrol2::KorgNanoKontrol2() :
-    m_page(0)
+    m_page(0),
+    m_firstRefresh(true),
+    m_play(false),
+    m_stop(false),
+    m_rewind(false),
+    m_fastForward(false),
+    m_record(false),
+    m_cycle(false)
 {
 }
 
@@ -124,6 +131,11 @@ void KorgNanoKontrol2::init()
 
 #endif
 
+}
+
+void KorgNanoKontrol2::documentModified()
+{
+    refreshLEDs();
 }
 
 void KorgNanoKontrol2::processEvent(const MappedEvent *event)
@@ -382,7 +394,7 @@ void KorgNanoKontrol2::processSolo(MidiByte controlNumber)
     track->setSolo(!track->isSolo());
     comp.notifyTrackChanged(track);
 
-    doc->setModified();
+    doc->slotDocumentModified();
 }
 
 void KorgNanoKontrol2::processMute(MidiByte controlNumber)
@@ -400,7 +412,7 @@ void KorgNanoKontrol2::processMute(MidiByte controlNumber)
     track->setMuted(!track->isMuted());
     comp.notifyTrackChanged(track);
 
-    doc->setModified();
+    doc->slotDocumentModified();
 }
 
 void KorgNanoKontrol2::processRecord(MidiByte controlNumber)
@@ -423,7 +435,7 @@ void KorgNanoKontrol2::processRecord(MidiByte controlNumber)
 
     doc->checkAudioPath(track);
 
-    doc->setModified();
+    doc->slotDocumentModified();
 }
 
 void KorgNanoKontrol2::testLEDs(bool on)
@@ -448,26 +460,32 @@ void KorgNanoKontrol2::testLEDs(bool on)
                 value);  // value
     }
 
+    // Play
     ExternalController::send(
             0, // channel
             41, // controlNumber
             value);  // value
+    // Stop
     ExternalController::send(
             0, // channel
             42, // controlNumber
             value);  // value
+    // Rewind
     ExternalController::send(
             0, // channel
             43, // controlNumber
             value);  // value
+    // Fast forward
     ExternalController::send(
             0, // channel
             44, // controlNumber
             value);  // value
+    // Record
     ExternalController::send(
             0, // channel
             45, // controlNumber
             value);  // value
+    // Cycle
     ExternalController::send(
             0, // channel
             46, // controlNumber
@@ -484,6 +502,21 @@ void KorgNanoKontrol2::testLEDs(bool on)
 void KorgNanoKontrol2::initLEDs()
 {
     // Turn off all the LEDs and update the cache to match.
+
+    testLEDs(false);
+
+    for (int i = 0; i < 8; ++i) {
+        m_solo[i] = false;
+        m_mute[i] = true;
+        m_recordArmed[i] = false;
+    }
+
+    m_play = false;
+    m_stop = false;
+    m_rewind = false;
+    m_fastForward = false;
+    m_record = false;
+    m_cycle = false;
 }
 
 void KorgNanoKontrol2::refreshLEDs()
@@ -499,11 +532,16 @@ void KorgNanoKontrol2::refreshLEDs()
     testLEDs(on);
 #endif
 
-#if 0
-    // LED support removed for now.  The default configuration of the
-    // nanoKONTROL2 does not allow external control of the LEDs.  This
-    // can be remedied by sending a new configuration via sysex.  See
-    // init().
+    if (m_firstRefresh) {
+        initLEDs();
+        m_firstRefresh = false;
+    }
+
+    // Note: The LEDs will not work unless they are set to "External" mode.
+    //       This can be adjusted with the nanoKONTROL2 editor for Windows/Mac
+    //       or you can send two sysex messages to the device.  Eventually,
+    //       this class will be able to send the sysex messages.  See
+    //       init().
 
     RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
     Composition &comp = doc->getComposition();
@@ -516,31 +554,45 @@ void KorgNanoKontrol2::refreshLEDs()
         if (!track)
             return;
 
-        // ??? We need to keep a cache and avoid updating anything that
-        //     hasn't changed.
-
         // Solo
-        ExternalController::send(
-                0, // channel
-                32+i, // controlNumber
-                track->isSolo() ? 127 : 0);  // value
+        const bool solo = track->isSolo();
+        // If there was a change...
+        if (solo != m_solo[i]) {
+            ExternalController::send(
+                    0, // channel
+                    32+i, // controlNumber
+                    solo ? 127 : 0);  // value
+            // Update the cache.
+            m_solo[i] = solo;
+        }
 
         // Mute
-        ExternalController::send(
-                0, // channel
-                48+i, // controlNumber
-                track->isMuted() ? 0 : 127);  // value
+        const bool mute = track->isMuted();
+        // If there was a change...
+        if (mute != m_mute[i]) {
+            ExternalController::send(
+                    0, // channel
+                    48+i, // controlNumber
+                    mute ? 0 : 127);  // value
+            // Update the cache.
+            m_mute[i] = mute;
+        }
 
         // Record
-        ExternalController::send(
-                0, // channel
-                64+i, // controlNumber
-                comp.isTrackRecording(track->getId()) ? 127 : 0);  // value
+        const bool recordArmed = comp.isTrackRecording(track->getId());
+        // If there was a change...
+        if (recordArmed != m_recordArmed[i]) {
+            ExternalController::send(
+                    0, // channel
+                    64+i, // controlNumber
+                    recordArmed ? 127 : 0);  // value
+            // Update the cache.
+            m_recordArmed[i] = recordArmed;
+        }
     }
 
     // ??? Transport LEDs
 
-#endif
 }
 
 
