@@ -547,7 +547,10 @@ TrackButtons::slotToggleRecord(int position)
 
     // Update the Track
     comp.setTrackRecording(track->getId(), state);
+
+    // Notify observers
     comp.notifyTrackChanged(track);
+    m_doc->slotDocumentModified();
 
     m_doc->checkAudioPath(track);
 }
