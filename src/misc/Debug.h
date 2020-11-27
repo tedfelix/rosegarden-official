@@ -13,16 +13,18 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef RG_DEBUG_H
-#define RG_DEBUG_H
+#pragma once
 
 #include <QDebug>
 #include <QTextStream>
 
 #include <string>
+
 #include <rosegardenprivate_export.h>
 
-namespace Rosegarden {
+
+namespace Rosegarden
+{
 
 
 ROSEGARDENPRIVATE_EXPORT QDebug &operator<<(QDebug &, const std::string &);
@@ -30,13 +32,10 @@ ROSEGARDENPRIVATE_EXPORT QDebug &operator<<(QDebug &, const std::string &);
 class RGNoDebug
 {
 public:
-    inline RGNoDebug() {}
-    inline ~RGNoDebug(){}
-
     template <typename T>
-    inline RGNoDebug &operator<<(const T &) { return *this; }
+    RGNoDebug &operator<<(const T &)  { return *this; }
 
-    inline RGNoDebug &operator<<(QTextStreamFunction) { return *this; }
+    RGNoDebug &operator<<(QTextStreamFunction)  { return *this; }
 };
 
 #if !defined RG_MODULE_STRING
@@ -53,7 +52,7 @@ public:
 
 #else
 
-    #define RG_INFO RGNoDebug() << RG_MODULE_STRING
+    #define RG_INFO Rosegarden::RGNoDebug() << RG_MODULE_STRING
 
 #endif
 
@@ -61,7 +60,7 @@ public:
 
     // Use RG_DEBUG for general debugging.  Define RG_NO_DEBUG_PRINT at the
     // top of a .cpp to turn off all RG_DEBUG output.
-    #define RG_DEBUG        QDebug(QtDebugMsg) << RG_MODULE_STRING
+    #define RG_DEBUG QDebug(QtDebugMsg) << RG_MODULE_STRING
 
     // !!! The following are deprecated since RG_MODULE_STRING provides more
     //     information.  Define RG_MODULE_STRING and use RG_DEBUG instead.
@@ -71,12 +70,12 @@ public:
 
 #else
 
-    #define RG_DEBUG        RGNoDebug()
+    #define RG_DEBUG Rosegarden::RGNoDebug()
 
     // !!! Deprecated.
-    #define NOTATION_DEBUG  RGNoDebug()
-    #define MATRIX_DEBUG    RGNoDebug()
-    #define SEQUENCER_DEBUG RGNoDebug()
+    #define NOTATION_DEBUG  Rosegarden::RGNoDebug()
+    #define MATRIX_DEBUG    Rosegarden::RGNoDebug()
+    #define SEQUENCER_DEBUG Rosegarden::RGNoDebug()
 
 #endif
 
@@ -91,6 +90,5 @@ public:
 // Handy logging switcher.  Repurpose when needed in the future.
 //extern bool bug1560Logging();
 
-}
 
-#endif
+}

@@ -19,6 +19,7 @@
 
 #include <QSettings>
 
+
 namespace Rosegarden
 {
 
