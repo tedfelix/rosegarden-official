@@ -4865,29 +4865,29 @@
     <message>
         <location line="+1"/>
         <source>&amp;Add Marker at Playback Position</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Añadir marcador en la posición de reproducción</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Shift+M</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Jump to &amp;Previous Marker</source>
-        <translation type="unfinished"></translation>
+        <translation>Saltar a Marca&amp;dor Anterior</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Ctrl+,</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Jump to &amp;Next Marker</source>
-        <translation type="unfinished"></translation>
+        <translation>Saltar a Marca&amp;dor Próximo</translation>
     </message>
     <message>
         <location line="+9"/>
@@ -4989,7 +4989,7 @@
     <message>
         <location line="-5"/>
         <source>Transpos&amp;e by Semitones...</source>
-        <translation type="unfinished"></translation>
+        <translation>Transport&amp;e por semitonos...</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -15912,12 +15912,12 @@ Ejemplo de texto perteneciente del archivo:</translation>
     <message>
         <location filename="../../src/sound/KorgNanoKontrol2.cpp" line="+93"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>The connected Korg nanoKONTROL2 is not configured optimally for Rosegarden.  Reconfiguring it will lose any custom settings you&apos;ve made with the nanoKONTROL2 editor.  Reconfigure?</source>
-        <translation type="unfinished"></translation>
+        <translation>El nanoKONTROL2 de Korg no se ha configurado de una manera usable con Rosegarden. Reconfiguración perderá todos tus preferencias no estándares. ¿Reconfigurar?</translation>
     </message>
 </context>
 <context>
@@ -16577,42 +16577,42 @@ Would you like to use
     <message>
         <location line="+13"/>
         <source>External controller port</source>
-        <translation type="unfinished"></translation>
+        <translation>Puerto de controlador externo</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Enable the external controller port for control surfaces.</source>
-        <translation type="unfinished"></translation>
+        <translation>Habilitar el puerto de superficies controladores externas.</translation>
     </message>
     <message>
         <location line="+14"/>
         <source>Controller type</source>
-        <translation type="unfinished"></translation>
+        <translation>Tipo de controlador</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Select the type of control surface connected to the external controller port.</source>
-        <translation type="unfinished"></translation>
+        <translation>Seleccionar el tipo de controlador.</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Rosegarden Native</source>
-        <translation type="unfinished"></translation>
+        <translation>Nativo de Rosegarden</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Korg nanoKONTROL2</source>
-        <translation type="unfinished"></translation>
+        <translation>Korg nanoKONTROL2</translation>
     </message>
     <message>
         <location line="+16"/>
         <source>Accept transport CCs (116-118)</source>
-        <translation type="unfinished"></translation>
+        <translation>Recibir CCs (cambios de controlador) de transporte</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Rosegarden will discard these CCs, so disable this if you need CCs in this range for other things.</source>
-        <translation type="unfinished"></translation>
+        <translation>Rosegarden descartará estos CCs, pues deactiva esta opción si necesitas CCs en este rango para hacer otras cosas.</translation>
     </message>
     <message>
         <location line="+19"/>
@@ -16721,22 +16721,22 @@ Would you like to use
     <message>
         <location line="+36"/>
         <source>MMC Source</source>
-        <translation type="unfinished"></translation>
+        <translation>Fuente MMC</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>MMC Follower</source>
-        <translation type="unfinished"></translation>
+        <translation>Esclavo MMC</translation>
     </message>
     <message>
         <location line="+21"/>
         <source>MTC Source</source>
-        <translation type="unfinished"></translation>
+        <translation>Maestro MTC</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>MTC Follower</source>
-        <translation type="unfinished"></translation>
+        <translation>Esclavo MTC</translation>
     </message>
     <message>
         <location line="+60"/>
@@ -19293,7 +19293,7 @@ Por favor, asegúrese de que está correctamente configurado en el cuadro de di�
         <location filename="../../src/gui/rulers/PercussionPitchRuler.cpp" line="+57"/>
         <source>  A#2   Acoustic Bass Drum  </source>
         <extracomment>Note to the translators: Don&apos;t translate literally. This string is never displayed but defines the largest width of the text (pitch and intrument name) in the percussion ruler.</extracomment>
-        <translation>mi bemol viola de gamba con churritos</translation>
+        <translation>mi bemol viola de gamba con churritos...</translation>
     </message>
     <message>
         <location line="+35"/>
