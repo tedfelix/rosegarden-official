@@ -1,3 +1,67 @@
+====== ROSEGARDEN 20.12 (Altissimo) RELEASED ======
+
+The Rosegarden team is proud to announce the release of version 20.12
+of Rosegarden, a MIDI sequencer that features a rich understanding of
+music notation along with basic support for digital audio.
+
+  http://www.rosegardenmusic.com/
+
+Included in this release...
+
+===== Bug Fixes =====
+
+  * Fix QPainterPath compilation error (r15845)
+  * Fixed several SysEx-related bugs in the Event editor (r15853)
+    * SysEx load now remembers the last used path.
+    * SysEx load now strips the F0/F7 bytes from the file when reading.
+    * SysEx save now remembers the last used path.
+    * SysEx save now fills in the FileDialog fields correctly.
+    * SysEx save now adds the F0/F7 bytes to the data before saving.
+  * Event Editor: Fix garbage on SysEx load error (r15855)
+  * Event Parameter Dialog: Fix incorrect window title (r15857)
+  * Fix length of notes added in percussion matrix (r15870)
+  * Fix compilation error with Qt < 5.8 (r15872, r15896, others)
+  * Fix issues with ALSA port name matching at file load (r15875,
+    r15879, r15893-r15895, r15906, r15909)
+  * Fix "&" in device name renders file unreadable.  Bug #1586. (r15886)
+  * Matrix editor: Fix control rulers not appearing.  Bug #1543.
+    (r15887)
+  * Event editor: Fix crashes when editing (r15899, r15902, r15903)
+  * Reduce connection check interval to 1 second (r15912)
+  * Fix external controller port not working (r15915, r15916, r15919,
+    r15927, r15929)
+  * Fix ALSA timer selection persistence (r15936)
+  * Fix disabled button text color (r15938)
+  * Fix plugins not found (r15947)
+  * Send proper CCs out the external controller port for motorized
+    control surfaces.  Bug #1587. (r15952, r15954)
+  * Fix unwanted CCs going out with old files.  Feature #482.  (r15961)
+  * Fix slow load time with many segments.  Bug #1589.  (r16026)
+
+===== New Features =====
+
+  * Enable/Disable external controller port in the preferences (r15932,
+    r15946, others)
+  * Transport buttons (play, stop, etc...) on MIDI controllers are now
+    supported so long as they use Pro Tools standard CCs (110-118).
+    Feature #423.  (r15962-r15964)
+  * Korg nanoKONTROL2 support (r15994-r16013, r16015, r16016, r16021)
+
+===== Significant Code Cleanups =====
+
+  * Icon Loader (r15862-r15865, r15868)
+  * New ExternalController class (r15922)
+  * Preferences dialog (r15939-r15944)
+  * ALSA MIDI interface (r15975-r15993)
+
+===== Additional Contributors =====
+
+  * Michael Stockinger (www.stockinger.org) - German Translation
+  * Hugo van Galen - Help with bug #1586 and #1543.
+  * Piotr Golonka - Roland-Fantom-678.rgd
+  * Arthur Baran - Casio-PX-5S.rgd
+
+
 ====== ROSEGARDEN 20.06, codename "Zepherine Drouhin" RELEASED ======
 
 The Rosegarden team is proud to announce the release of version 20.06
