@@ -3984,29 +3984,29 @@
     <message>
         <location line="+12"/>
         <source>&amp;Add Marker at Playback Position</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Insérer un marqueur au pointeur d&apos;exécution</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Shift+M</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Jump to &amp;Previous Marker</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Sauter au marqueur précédent</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Ctrl+,</source>
         <comment>keyboard shortcut</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Jump to &amp;Next Marker</source>
-        <translation type="unfinished"></translation>
+        <translation>Sauter au &amp;marqueur suivant</translation>
     </message>
     <message>
         <location line="+49"/>
@@ -5096,7 +5096,7 @@
     <message>
         <location line="-5"/>
         <source>Transpos&amp;e by Semitones...</source>
-        <translation type="unfinished"></translation>
+        <translation>Transposer par &amp;demi-tons...</translation>
     </message>
     <message>
         <location line="+24"/>
@@ -15914,12 +15914,12 @@ Texte d&apos;exemple depuis le fichier:</translation>
     <message>
         <location filename="../../src/sound/KorgNanoKontrol2.cpp" line="+93"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>The connected Korg nanoKONTROL2 is not configured optimally for Rosegarden.  Reconfiguring it will lose any custom settings you&apos;ve made with the nanoKONTROL2 editor.  Reconfigure?</source>
-        <translation type="unfinished"></translation>
+        <translation>Le nanoKONTROL2 Korgn&apos;est pas configuré de façon optimale pour Rosegarden.  Sa reconfiguration entraînera la perte de tous les règlages précédemment effectués avec l&apos;éditeur nanoKONTROL2.  Reconfigurer quand même ?</translation>
     </message>
 </context>
 <context>
@@ -16584,42 +16584,42 @@ répartis verticalement sur la page)</translation>
     <message>
         <location line="+13"/>
         <source>External controller port</source>
-        <translation type="unfinished"></translation>
+        <translation>Connecteur de contrôle externe</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Enable the external controller port for control surfaces.</source>
-        <translation type="unfinished"></translation>
+        <translation>Valide l&apos;utilisation de surfaces de contrôle reliées au connecteur de contrôle externe.</translation>
     </message>
     <message>
         <location line="+14"/>
         <source>Controller type</source>
-        <translation type="unfinished"></translation>
+        <translation>Type de contrôleur</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Select the type of control surface connected to the external controller port.</source>
-        <translation type="unfinished"></translation>
+        <translation>Sélectionner le modèle de la surface de contrôle reliée au connecteur externe.</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Rosegarden Native</source>
-        <translation type="unfinished"></translation>
+        <translation>Rosegarden interne</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Korg nanoKONTROL2</source>
-        <translation type="unfinished"></translation>
+        <translation>NanoKONTROL2 Korg</translation>
     </message>
     <message>
         <location line="+16"/>
         <source>Accept transport CCs (116-118)</source>
-        <translation type="unfinished"></translation>
+        <translation>Accepte les CCs &quot;transport&quot; (116-118)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Rosegarden will discard these CCs, so disable this if you need CCs in this range for other things.</source>
-        <translation type="unfinished"></translation>
+        <translation>Rosegarden ignorera ces CCs. Il faut donc désactiver cette option si les CCs de cette plage sont nécessaires pour autre chose.</translation>
     </message>
     <message>
         <location line="+19"/>
@@ -16728,22 +16728,23 @@ répartis verticalement sur la page)</translation>
     <message>
         <location line="+36"/>
         <source>MMC Source</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>Rosegarden suit la mode et remplace Master/Slave par Source/Follower. Je suis très tenté de conserver Maitre/Esclave, qui a le mérite d&apos;être compréhensible. Finalement, une traduction littérale de Source/Follower n&apos;étant pas satifaisante, je choisis Emetteur/Récepteur qui correspond exactement à la réalité.</translatorcomment>
+        <translation>Emetteur MMC</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>MMC Follower</source>
-        <translation type="unfinished"></translation>
+        <translation>Récepteur MMC</translation>
     </message>
     <message>
         <location line="+21"/>
         <source>MTC Source</source>
-        <translation type="unfinished"></translation>
+        <translation>Emetteur MTC</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>MTC Follower</source>
-        <translation type="unfinished"></translation>
+        <translation>Récepteur MTC</translation>
     </message>
     <message>
         <location line="+60"/>
