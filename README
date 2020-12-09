@@ -1,19 +1,19 @@
-
-Rosegarden v15.12 and Later
-===========================
+=================
+Rosegarden README
+=================
 
 Rosegarden is a MIDI and audio sequencer and musical notation editor for Linux.
 
-  http://www.rosegardenmusic.com/
+  https://www.rosegardenmusic.com/
 
 Please keep an eye on the FAQ for known problems and workarounds:
 
-  http://rosegardenmusic.com/wiki/frequently_asked_questions
+  https://rosegardenmusic.com/wiki/frequently_asked_questions
 
 When you find bugs, first check whether a newer version of Rosegarden
 has been released yet; if not, please continue on to:
 
-  http://rosegardenmusic.com/tutorials/bug-guidelines.html
+  https://rosegardenmusic.com/tutorials/bug-guidelines.html
 
 Release notes can be found in the CHANGELOG.
 
@@ -23,11 +23,11 @@ Build requirements
 
 For a complete list of build requirements, please see:
 
-http://www.rosegardenmusic.com/wiki/dev:contributing
+  https://www.rosegardenmusic.com/wiki/dev:contributing
 
 
-Installation instructions
--------------------------
+Installation instructions (v15.12 and up)
+-----------------------------------------
 
 In the directory where you found this README file, create a build directory
 and compile the code there. Here are the commands to do so:

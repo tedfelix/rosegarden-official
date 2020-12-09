@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright 2019 Rosegarden development team -->
+<!-- Copyright 2020 Rosegarden development team -->
 <component type="desktop">
     <id>com.rosegardenmusic.rosegarden.desktop</id>
     <name>Rosegarden</name>
@@ -8,10 +8,10 @@
     <summary>MIDI and Audio Sequencer and Notation Editor</summary>
     <summary xml:lang="es">Secuenciador de MIDI y de audio y editor de partitura</summary>
     <summary xml:lang="de">MIDI- und Audio-Sequencer und Notensatzprogramm</summary>
-    <summary xml:lang="ru">MIDI-секвенсер и нотный редактор</summary>
     <metadata_license>CC0</metadata_license>
     <project_license>GPL-2.0+</project_license>
     <content_rating type="oars-1.1" />
+    <summary xml:lang="ru">MIDI-секвенсер и нотный редактор</summary>
     <developer_name>Rosegarden development team</developer_name>
     <update_contact>ted@tedfelix.com</update_contact>
     <!-- It's likely that this translation tag will not work.  We keep
@@ -19,10 +19,10 @@
          to /usr/share/rosegarden/translations/rosegarden_*.qm like other
          apps do.  Is there another way to specify a list of languages? -->
     <translation type="qt">rosegarden</translation>
-    <url type="homepage">http://www.rosegardenmusic.com/</url>
+    <url type="homepage">https://www.rosegardenmusic.com/</url>
     <description>
         <p>
-            Rosegarden is a general-purpose music composition and editing environment that offers a mixture of features inspired by MIDI sequencers, DAWs, and score editors.  Rosegarden offers a variety of extensions that work in conjunction with LilyPond to produce beautiful scores that often require little or no manual editing, and it generally does a good job of rendering human MIDI performances as legible notation.
+            Rosegarden is a general-purpose music composition and editing environment that offers a mixture of features inspired by MIDI sequencers, score editors, and DAWs.  Rosegarden offers a variety of extensions that work in conjunction with LilyPond to produce beautiful scores that often require little or no manual editing, and it generally does a good job of rendering human MIDI performances as legible notation.
         </p>
         <p>
             Rosegarden is ideal for the small scale home artist who wishes to use one tool to handle a music project from start to finish.  For example, you can record your musical idea with a MIDI keyboard, write out transposing parts for the members of a brass band, and record the band playing these parts all in the same document in the same application.  Rosegarden supports a variety of import and export formats, and works well in conjunction with other applications.
@@ -54,6 +54,38 @@
         <mimetype>audio/x-flac</mimetype>
     </mimetypes>
     <releases>
+      <release type="stable" version="20.12" date="2020-12-09">
+        <url>https://rosegardenmusic.com/wiki/dev:20.12</url>
+        <description>
+          <p>This version includes the following bug fixes:</p>
+          <ul>
+            <li>Fix QPainterPath compilation error (r15845)</li>
+            <li>Fixed several SysEx-related bugs in the Event editor (r15853)</li>
+            <li>Event Editor: Fix garbage on SysEx load error (r15855)</li>
+            <li>Event Parameter Dialog: Fix incorrect window title (r15857)</li>
+            <li>Fix length of notes added in percussion matrix (r15870)</li>
+            <li>Fix compilation error with Qt &lt; 5.8 (r15872, r15896, others)</li>
+            <li>Fix issues with ALSA port name matching at file load (r15875, r15879, r15893-r15895, r15906, r15909)</li>
+            <li>Fix "&amp;" in device name renders file unreadable.  Bug #1586. (r15886)</li>
+            <li>Matrix editor: Fix control rulers not appearing.  Bug #1543. (r15887)</li>
+            <li>Event editor: Fix crashes when editing (r15899, r15902, r15903)</li>
+            <li>Reduce connection check interval to 1 second (r15912)</li>
+            <li>Fix external controller port not working (r15915, r15916, r15919, r15927, r15929)</li>
+            <li>Fix ALSA timer selection persistence (r15936)</li>
+            <li>Fix disabled button text color (r15938)</li>
+            <li>Fix plugins not found (r15947)</li>
+            <li>Send proper CCs out the external controller port for motorized control surfaces.  Bug #1587. (r15952, r15954)</li>
+            <li>Fix unwanted CCs going out with old files.  Feature #482.  (r15961)</li>
+            <li>Fix slow load time with many segments.  Bug #1589.  (r16026)</li>
+          </ul>
+          <p>This version adds the following new features:</p>
+          <ul>
+            <li>Enable/Disable external controller port in the preferences (r15932, r15946, others)</li>
+            <li>Transport buttons (play, stop, etc...) on MIDI controllers are now supported so long as they use Pro Tools standard CCs (110-118).  Feature #423.  (r15962-r15964)</li>
+            <li>Korg nanoKONTROL2 support (r15994-r16013, r16015, r16016, r16021)</li>
+          </ul>
+        </description>
+      </release>
       <release type="stable" version="20.06" date="2020-06-03">
         <url>https://rosegardenmusic.com/wiki/dev:20.06</url>
         <description>
@@ -133,6 +165,26 @@
           <p>This version adds the following new feature:</p>
           <ul>
             <li>Add Ctrl+Space shortcut for record</li>
+          </ul>
+        </description>
+      </release>
+      <release type="stable" version="18.12" date="2018-12-12">
+        <url>https://rosegardenmusic.com/wiki/dev:18.12</url>
+        <description>
+          <p>This version includes the following bug fixes:</p>
+          <ul>
+            <li>Fixed stuck notes on matrix editor (r15283)</li>
+            <li>Fixed some double-gzipped .rgd file (r15344, r15345)</li>
+            <li>Removed support for Qt4 (r15347)</li>
+            <li>Improved support for HiDPI displays (r15349, r15352)</li>
+            <li>Fixed crash when loading composition (r15355)</li>
+            <li>cmake 3.1 or above is now required (r15357)</li>
+            <li>Migrate to C++11 (r15361)</li>
+            <li>Use QLockFile for the document lock file, reducing leftover lock file warnings (r15373)</li>
+            <li>Fixed --nosound to not create AlsaDriver.  This makes gdb usable. (r15379)</li>
+            <li>Show pointer position on new staff when clicking on a different staff (r15382)</li>
+            <li>Fixed wrong warning about "lyric" text type during export. (r15392)</li>
+            <li>Fixed some range checks in SequencerDataBlock (r15402)</li>
           </ul>
         </description>
       </release>
