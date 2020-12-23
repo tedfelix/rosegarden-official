@@ -1016,7 +1016,7 @@ SequenceManager::processAsynchronousMidi(const MappedEventList &mC,
         }
         if ((*i)->getRecordedDevice() == Device::EXTERNAL_CONTROLLER) {
             RG_DEBUG << "processAsynchronousMidi(): Calling ExternalController::processEvent()...";
-            ExternalController::self()->processEvent(*i);
+            ExternalController::self().processEvent(*i);
         }
     }
 }

@@ -18,7 +18,6 @@
 #include "base/MidiProgram.h"  // For MidiByte
 
 #include <QObject>
-#include <QSharedPointer>
 #include <QString>
 
 #include <string>
@@ -73,16 +72,8 @@ class ExternalController : public QObject
     Q_OBJECT
 
 public:
-    /// Create the global instance.
-    /**
-     * This must be called from the UI thread to guarantee that signals/slots
-     * work properly with the UI thread.  This also needs to be called before
-     * the Sequencer thread is started to avoid contention.
-     */
-    static void create();
-
     /// The global instance.
-    static QSharedPointer<ExternalController> self();
+    static ExternalController &self();
 
     static bool isEnabled();
 

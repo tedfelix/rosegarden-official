@@ -539,7 +539,7 @@ AudioStrip::slotFaderLevelChanged(float dB)
         //     a waste.  Especially with a potentially very frequent
         //     update such as this.
 
-        if (ExternalController::self()->isNative()  &&
+        if (ExternalController::self().isNative()  &&
             m_externalControllerChannel < 16) {
             int value = AudioLevel::dB_to_fader(
                     dB, 127, AudioLevel::LongFader);
@@ -595,7 +595,7 @@ AudioStrip::slotPanChanged(float pan)
         //     a waste.  Especially with a potentially very frequent
         //     update such as this.
 
-        if (ExternalController::self()->isNative()  &&
+        if (ExternalController::self().isNative()  &&
             m_externalControllerChannel < 16) {
             MidiByte pan = AudioLevel::MIDIPanI(instrument->getPan());
             if (pan > 127)

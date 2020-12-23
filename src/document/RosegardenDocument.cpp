@@ -1880,7 +1880,7 @@ RosegardenDocument::insertRecordedMidi(const MappedEventList &mC)
         //     external controller functionality during record.
         if ((*i)->getRecordedDevice() == Device::EXTERNAL_CONTROLLER) {
 
-            ExternalController::self()->processEvent(*i);
+            ExternalController::self().processEvent(*i);
 
             // No further processing is required for this event.
             continue;

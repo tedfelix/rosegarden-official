@@ -30,22 +30,24 @@ namespace Rosegarden
 {
 
 
-namespace
+ExternalController &
+ExternalController::self()
 {
-    QSharedPointer<ExternalController> a_self;
-}
+    // Guaranteed in C++11 to be lazy initialized and thread-safe.
+    // See ISO/IEC 14882:2011 6.7(4).
+    static ExternalController instance;
 
-void ExternalController::create()
-{
-    a_self.reset(new ExternalController);
-}
+    // ??? To avoid the static destruction order fiasco, we might want to
+    //     switch to keeping and returning a shared_ptr.  That would
+    //     allow callers to hold on to a shared_ptr until they are done.
+    //     For now, hopefully no one else with static lifetime tries to
+    //     access this after it is destroyed.
+    //
+    //     Note that std::shared_ptr is thread-safe, unlike QSharedPointer.
+    //     This means that we can safely return a shared_ptr to any thread
+    //     that asks for one.
 
-QSharedPointer<ExternalController> ExternalController::self()
-{
-    // create() was not called.
-    Q_ASSERT(a_self);
-
-    return a_self;
+    return instance;
 }
 
 ExternalController::ExternalController() :

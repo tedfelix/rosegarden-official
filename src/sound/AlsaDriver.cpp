@@ -1718,7 +1718,7 @@ AlsaDriver::configureExternalControllerPort()
                         currentPort->m_client,  // dest_client
                         currentPort->m_port);  // dest_port
 
-                ExternalController::self()->setType(
+                ExternalController::self().setType(
                         ExternalController::CT_KorgNanoKontrol2);
 
                 break;

@@ -96,7 +96,7 @@ MidiMixerWindow::MidiMixerWindow(QWidget *parent,
                 &InstrumentStaticSignals::controlChange,
             this, &MidiMixerWindow::slotControlChange);
 
-    connect(ExternalController::self().data(),
+    connect(&ExternalController::self(),
                 &ExternalController::externalControllerMMW,
             this, &MidiMixerWindow::slotExternalController);
 
@@ -313,7 +313,7 @@ MidiMixerWindow::slotFaderLevelChanged(float value)
                 Instrument::emitControlChange(instrument, MIDI_CONTROLLER_VOLUME);
                 m_document->setModified();
 
-                if (ExternalController::self()->isNative()  &&
+                if (ExternalController::self().isNative()  &&
                     instrument->hasFixedChannel())
                 {
                     // Send out the external controller port as well.
@@ -392,7 +392,7 @@ MidiMixerWindow::slotControllerChanged(float value)
         Instrument::emitControlChange(instrument, cc);
         m_document->setModified();
 
-        if (ExternalController::self()->isNative()  &&
+        if (ExternalController::self().isNative()  &&
             instrument->hasFixedChannel()) {
 
             // Send out the external controller port as well.
@@ -714,7 +714,7 @@ MidiMixerWindow::sendControllerRefresh()
 {
     // We only do this if the external controller port is
     // in Rosegarden native mode.
-    if (!ExternalController::self()->isNative())
+    if (!ExternalController::self().isNative())
         return;
 
     // To keep the device connected to the "external controller" port in
@@ -827,7 +827,7 @@ MidiMixerWindow::changeEvent(QEvent *event)
 
     // We only care about this if the external controller port is
     // in Rosegarden native mode.
-    if (!ExternalController::self()->isNative())
+    if (!ExternalController::self().isNative())
         return;
 
     // ??? Double updates seem to go out so we might want to be a little
@@ -839,7 +839,7 @@ MidiMixerWindow::changeEvent(QEvent *event)
     if (!isActiveWindow())
         return;
 
-    ExternalController::self()->activeWindow =
+    ExternalController::self().activeWindow =
             ExternalController::MidiMixer;
 
     sendControllerRefresh();

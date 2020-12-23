@@ -431,7 +431,7 @@ MIDIConfigurationPage::apply()
                       m_externalControllerPort->isChecked());
 
     // setType() also writes to .conf so no need to do that here.
-    ExternalController::self()->setType(
+    ExternalController::self().setType(
             static_cast<ExternalController::ControllerType>(
                     m_controllerType->currentIndex()));
 

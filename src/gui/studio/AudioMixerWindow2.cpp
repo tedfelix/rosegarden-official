@@ -64,7 +64,7 @@ AudioMixerWindow2::AudioMixerWindow2(QWidget *parent) :
                 &RosegardenDocument::documentModified,
             this, &AudioMixerWindow2::slotDocumentModified);
     // Connect for "external controller" events.
-    connect(ExternalController::self().data(),
+    connect(&ExternalController::self(),
                 &ExternalController::externalControllerAMW2,
             this, &AudioMixerWindow2::slotExternalController);
 
@@ -580,7 +580,7 @@ AudioMixerWindow2::changeEvent(QEvent *event)
     QWidget::changeEvent(event);
 
     // Only handle this for Rosegarden native mode.
-    if (!ExternalController::self()->isNative())
+    if (!ExternalController::self().isNative())
         return;
 
     // ??? Double updates seem to go out so we might want to be a little
@@ -592,7 +592,7 @@ AudioMixerWindow2::changeEvent(QEvent *event)
     if (!isActiveWindow())
         return;
 
-    ExternalController::self()->activeWindow =
+    ExternalController::self().activeWindow =
             ExternalController::AudioMixer;
 
     size_t count = m_inputStrips.size();

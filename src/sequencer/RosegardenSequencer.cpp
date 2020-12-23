@@ -133,6 +133,7 @@ RosegardenSequencer *
 RosegardenSequencer::getInstance()
 {
     // Guaranteed in C++11 to be lazy initialized and thread-safe.
+    // See ISO/IEC 14882:2011 6.7(4).
     static RosegardenSequencer instance;
 
     // ??? To avoid the static destruction order fiasco, we might want to

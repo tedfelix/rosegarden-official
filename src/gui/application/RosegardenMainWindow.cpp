@@ -321,12 +321,6 @@ RosegardenMainWindow::RosegardenMainWindow(bool enableSound,
     connect(m_editTempoController, SIGNAL(editTempos(timeT)),
             this, SLOT(slotEditTempos(timeT)));
 
-    // Create ExternalController from the UI thread before we go
-    // multithreaded.
-    // ??? Investigate whether the technique used in
-    //     RosegardenSequencer::getInstance() might work for EC as well.
-    ExternalController::create();
-
     if (m_useSequencer) {
         emit startupStatusMessage(tr("Starting sequencer..."));
 
@@ -386,7 +380,7 @@ RosegardenMainWindow::RosegardenMainWindow(bool enableSound,
             m_transport, &TransportDialog::slotMetronomeActivated);
 
     // Set up external controller.
-    ExternalController::self()->connectRMW(this);
+    ExternalController::self().connectRMW(this);
 
     // Load the initial document (this includes doc's own autoload)
     //
@@ -8617,7 +8611,7 @@ RosegardenMainWindow::changeEvent(QEvent *event)
 
     // We only care about this if the external controller port is
     // in Rosegarden native mode.
-    if (!ExternalController::self()->isNative())
+    if (!ExternalController::self().isNative())
         return;
 
     // We only care about activation changes.
@@ -8628,7 +8622,7 @@ RosegardenMainWindow::changeEvent(QEvent *event)
     if (!isActiveWindow())
         return;
 
-    ExternalController::self()->activeWindow =
+    ExternalController::self().activeWindow =
             ExternalController::Main;
 
     // Send CCs for current Track to external controller.
