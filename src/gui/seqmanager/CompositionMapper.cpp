@@ -34,7 +34,7 @@ namespace Rosegarden
 CompositionMapper::CompositionMapper(RosegardenDocument *doc) :
     m_doc(doc)
 {
-    RG_DEBUG << "ctor: doc = " << doc;
+    //RG_DEBUG << "ctor: doc = " << doc;
 
     Composition &comp = m_doc->getComposition();
 
@@ -52,11 +52,6 @@ CompositionMapper::CompositionMapper(RosegardenDocument *doc) :
         // Create a SegmentMapper for this Segment.
         mapSegment(*segmentIter);
     }
-}
-
-CompositionMapper::~CompositionMapper()
-{
-    RG_DEBUG << "dtor";
 }
 
 bool
@@ -80,7 +75,7 @@ CompositionMapper::segmentModified(Segment *segment)
 void
 CompositionMapper::segmentAdded(Segment *segment)
 {
-    RG_DEBUG << "segmentAdded(" << segment << ")";
+    //RG_DEBUG << "segmentAdded(" << segment << ")";
 
     mapSegment(segment);
 }
@@ -88,7 +83,7 @@ CompositionMapper::segmentAdded(Segment *segment)
 void
 CompositionMapper::segmentDeleted(Segment *segment)
 {
-    RG_DEBUG << "segmentDeleted()";
+    //RG_DEBUG << "segmentDeleted()";
 
     // !!! WARNING !!!
     // The segment pointer that is coming in to this routine has already
@@ -114,8 +109,8 @@ CompositionMapper::segmentDeleted(Segment *segment)
 void
 CompositionMapper::mapSegment(Segment *segment)
 {
-    RG_DEBUG << "mapSegment(" << segment << ")";
-    RG_DEBUG << "  We have" << m_segmentMappers.size() << "segment(s)";
+    //RG_DEBUG << "mapSegment(" << segment << ")";
+    //RG_DEBUG << "  We have" << m_segmentMappers.size() << "segment(s)";
 
     SegmentMappers::iterator itMapper = m_segmentMappers.find(segment);
 

@@ -36,13 +36,7 @@ SegmentMapper::SegmentMapper(RosegardenDocument *doc,
     MappedEventBuffer(doc),
     m_segment(segment)
 {
-    RG_DEBUG << "ctor: " << this;
-}
-
-
-SegmentMapper::~SegmentMapper()
-{
-    RG_DEBUG << "dtor: " << this;
+    //RG_DEBUG << "ctor: " << this;
 }
 
 QSharedPointer<SegmentMapper>
@@ -52,7 +46,7 @@ SegmentMapper::makeMapperForSegment(RosegardenDocument *doc,
     QSharedPointer<SegmentMapper> mapper;
 
     if (segment == nullptr) {
-        RG_DEBUG << "makeMapperForSegment() segment == 0";
+        //RG_DEBUG << "makeMapperForSegment() segment == 0";
         return QSharedPointer<SegmentMapper>();
     }
 
@@ -64,7 +58,7 @@ SegmentMapper::makeMapperForSegment(RosegardenDocument *doc,
         mapper = QSharedPointer<SegmentMapper>(new AudioSegmentMapper(doc, segment));
         break;
     default:
-        RG_DEBUG << "makeMapperForSegment(" << segment << ") : can't map, unknown segment type " << segment->getType();
+        //RG_DEBUG << "makeMapperForSegment(" << segment << ") : can't map, unknown segment type " << segment->getType();
         mapper = QSharedPointer<SegmentMapper>();
     }
 

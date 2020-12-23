@@ -38,7 +38,7 @@ BaseTool::BaseTool(const QString& menuName, QObject* parent)
 
 BaseTool::~BaseTool()
 {
-    RG_DEBUG << "BaseTool::~BaseTool()";
+    //RG_DEBUG << "BaseTool::~BaseTool()";
 }
 
 void BaseTool::ready()
@@ -57,8 +57,8 @@ void BaseTool::showMenu()
 
     if (m_menu)
         m_menu->exec(QCursor::pos());
-    else
-        RG_DEBUG << "BaseTool::showMenu() : no menu to show";
+    //else
+        //RG_DEBUG << "BaseTool::showMenu() : no menu to show";
 }
 
 QString BaseTool::getCurrentContextHelp() const

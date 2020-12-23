@@ -29,7 +29,7 @@ const DeviceId Device::EXTERNAL_CONTROLLER = 10002;
 
 Device::~Device()
 {
-    SEQUENCER_DEBUG << "~Device";
+    //SEQUENCER_DEBUG << "~Device";
     InstrumentList::iterator it = m_instruments.begin();
     // For each Instrument
     for (; it != m_instruments.end(); ++it) {

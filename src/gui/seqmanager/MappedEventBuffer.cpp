@@ -57,11 +57,11 @@ MappedEventBuffer::init()
     if (size > 0) {
         reserve(size);
 
-        RG_DEBUG << "init() : size = " << size;
+        //RG_DEBUG << "init() : size = " << size;
 
         fillBuffer();
     } else {
-        RG_DEBUG << "init() : mmap size = 0 - skipping mmapping for now";
+        //RG_DEBUG << "init() : mmap size = 0 - skipping mmapping for now";
     }
 }
 
