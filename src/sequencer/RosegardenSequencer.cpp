@@ -153,6 +153,9 @@ void RosegardenSequencer::create()
 RosegardenSequencer *
 RosegardenSequencer::getInstance()
 {
+    Q_ASSERT_X(instance, "RosegardenSequencer::getInstance()",
+            "instance is NULL.");
+
     // Fast and lock-free since create() is called before we go
     // multithreaded.
     // ??? We should return the shared_ptr from this function.  That would

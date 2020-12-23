@@ -332,15 +332,6 @@ protected:
 
     // *** Sequencer ***
 
-    /// For transport requests.
-    /*
-     * Use instead of RosegardenSequencer::getInstance() to avoid mutex.
-     *
-     * ??? RosegardenSequencer::getInstance() no longer uses a mutex.  We can
-     *     get rid of this cache and just call getInstance() when needed.
-     */
-    RosegardenSequencer *m_sequencer;
-
     typedef std::vector<MappedInstrument *> MappedInstrumentList;
     // This is our driver's own list of MappedInstruments and MappedDevices.
     // These are uncoupled at this level - the Instruments and Devices float

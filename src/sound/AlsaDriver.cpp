@@ -3019,11 +3019,11 @@ AlsaDriver::getMappedEventList(MappedEventList &mappedEventList)
 
         case SND_SEQ_EVENT_START:
             if (m_midiSyncStatus == TRANSPORT_FOLLOWER  &&  !isPlaying()) {
-                if (m_sequencer) {
-                    m_sequencer->transportJump(RosegardenSequencer::TransportStopAtTime,
-                                             RealTime::zeroTime);
-                    m_sequencer->transportChange(RosegardenSequencer::TransportStart);
-                }
+                RosegardenSequencer::getInstance()->transportJump(
+                        RosegardenSequencer::TransportStopAtTime,
+                        RealTime::zeroTime);
+                RosegardenSequencer::getInstance()->transportChange(
+                        RosegardenSequencer::TransportStart);
             }
 #ifdef DEBUG_ALSA
             RG_DEBUG << "getMappedEventList() - START";
@@ -3032,9 +3032,8 @@ AlsaDriver::getMappedEventList(MappedEventList &mappedEventList)
 
         case SND_SEQ_EVENT_CONTINUE:
             if (m_midiSyncStatus == TRANSPORT_FOLLOWER  &&  !isPlaying()) {
-                if (m_sequencer) {
-                    m_sequencer->transportChange(RosegardenSequencer::TransportPlay);
-                }
+                RosegardenSequencer::getInstance()->transportChange(
+                        RosegardenSequencer::TransportPlay);
             }
 #ifdef DEBUG_ALSA
             RG_DEBUG << "getMappedEventList() - CONTINUE";
@@ -3043,9 +3042,8 @@ AlsaDriver::getMappedEventList(MappedEventList &mappedEventList)
 
         case SND_SEQ_EVENT_STOP:
             if (m_midiSyncStatus == TRANSPORT_FOLLOWER  &&  isPlaying()) {
-                if (m_sequencer) {
-                    m_sequencer->transportChange(RosegardenSequencer::TransportStop);
-                }
+                RosegardenSequencer::getInstance()->transportChange(
+                        RosegardenSequencer::TransportStop);
             }
 #ifdef DEBUG_ALSA
             RG_DEBUG << "getMappedEventList() - STOP";
@@ -3096,10 +3094,9 @@ AlsaDriver::getMappedEventList(MappedEventList &mappedEventList)
             RealTime seqTime = getSequencerTime();
             if (m_mtcLastReceive < seqTime &&
                 seqTime - m_mtcLastReceive > RealTime(0, 500000000L)) {
-                if (m_sequencer) {
-                    m_sequencer->transportJump(RosegardenSequencer::TransportStopAtTime,
-                                             m_mtcLastEncoded);
-                }
+                RosegardenSequencer::getInstance()->transportJump(
+                        RosegardenSequencer::TransportStopAtTime,
+                        m_mtcLastEncoded);
             }
         }
     }
@@ -3263,12 +3260,10 @@ AlsaDriver::handleMTCQFrame(unsigned int data_byte, RealTime the_time)
             RG_DEBUG << "handleMTCQFrame(): MTC: Received quarter frame while not playing - starting now";
 #endif
 
-            if (m_sequencer) {
-                tweakSkewForMTC(0);  /* JPM - reset it on start of playback, to be sure */
-                m_sequencer->transportJump
-                    (RosegardenSequencer::TransportStartAtTime,
-                     m_mtcEncodedTime);
-            }
+            tweakSkewForMTC(0);  /* JPM - reset it on start of playback, to be sure */
+            RosegardenSequencer::getInstance()->transportJump(
+                    RosegardenSequencer::TransportStartAtTime,
+                    m_mtcEncodedTime);
         }
 
         break;
@@ -3514,11 +3509,9 @@ AlsaDriver::testForMTCSysex(const snd_seq_event_t *event)
     RG_DEBUG << "testForMTCSysex(): MTC: MTC sysex found (frame type " << type << "), jumping to " << m_mtcEncodedTime;
 #endif
 
-    if (m_sequencer) {
-        m_sequencer->transportJump
-            (RosegardenSequencer::TransportJumpToTime,
-             m_mtcEncodedTime);
-    }
+    RosegardenSequencer::getInstance()->transportJump(
+            RosegardenSequencer::TransportJumpToTime,
+            m_mtcEncodedTime);
 
     return true;
 }
@@ -3636,13 +3629,11 @@ AlsaDriver::testForMMCSysex(const snd_seq_event_t *event)
 
     if (instruction == MIDI_MMC_PLAY ||
         instruction == MIDI_MMC_DEFERRED_PLAY) {
-        if (m_sequencer) {
-            m_sequencer->transportChange(RosegardenSequencer::TransportPlay);
-        }
+        RosegardenSequencer::getInstance()->transportChange(
+                RosegardenSequencer::TransportPlay);
     } else if (instruction == MIDI_MMC_STOP) {
-        if (m_sequencer) {
-            m_sequencer->transportChange(RosegardenSequencer::TransportStop);
-        }
+        RosegardenSequencer::getInstance()->transportChange(
+                RosegardenSequencer::TransportStop);
     }
 
     return true;
@@ -5681,16 +5672,12 @@ bool AlsaDriver::handleTransportCCs(unsigned controlNumber, int value)
     if (!m_acceptTransportCCs)
         return false;
 
-    // No external transport available?  Bail.
-    if (!m_sequencer)
-        return false;
-
     // Play
     if (controlNumber == 117) {
         // Press
         if (value == 127) {
             if (!isPlaying()) {
-                m_sequencer->transportChange(
+                RosegardenSequencer::getInstance()->transportChange(
                         RosegardenSequencer::TransportPlay);
             }
         }
@@ -5704,7 +5691,7 @@ bool AlsaDriver::handleTransportCCs(unsigned controlNumber, int value)
         // Press
         if (value == 127) {
             if (!isPlaying()) {
-                m_sequencer->transportChange(
+                RosegardenSequencer::getInstance()->transportChange(
                         RosegardenSequencer::TransportRecord);
             }
         }
@@ -5720,7 +5707,7 @@ bool AlsaDriver::handleTransportCCs(unsigned controlNumber, int value)
             // This approach works, but you don't get the double-press
             // stop behavior (return to where playback started).
             //if (isPlaying()) {
-            //    m_sequencer->transportChange(
+            //    RosegardenSequencer::getInstance()->transportChange(
             //            RosegardenSequencer::TransportStop);
             //}
 
