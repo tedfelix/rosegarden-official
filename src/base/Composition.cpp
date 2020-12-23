@@ -37,9 +37,6 @@
 
 #include <sstream>
 
-using std::cerr;
-using std::endl;
-
 //#define DEBUG_BAR_STUFF 1
 //#define DEBUG_TEMPO_STUFF 1
 
@@ -1293,7 +1290,7 @@ Composition::getElapsedTimeForRealTime(RealTime t) const
              << elapsed << " (error " << (cfReal - t)
              << " or " << (cfTimeT - elapsed) << ", tempo "
              << (*i)->getAbsoluteTime() << ":"
-             << (tempoT)((*i)->get<Int>(TempoProperty)) << ")" << endl;
+             << (tempoT)((*i)->get<Int>(TempoProperty)) << ")";
     }
 #endif
     return elapsed;
@@ -1418,7 +1415,7 @@ Composition::time2RealTime(timeT time, tempoT tempo,
     if (!DEBUG_silence_recursive_tempo_printout) {
         RG_DEBUG << "time2RealTime(): [2] time " << time << ", tempo "
              << tempo << ", targetTime " << targetTime << ", targetTempo "
-             << targetTempo << ": rt " << rt << endl;
+             << targetTempo << ": rt " << rt;
         DEBUG_silence_recursive_tempo_printout = 1;
 //        RealTime nextRt = time2RealTime(targetTime, tempo, targetTime, targetTempo);
         timeT ct = realTime2Time(rt, tempo, targetTime, targetTempo);
@@ -1788,7 +1785,7 @@ void Composition::deleteTrack(Rosegarden::TrackId track)
 
     if (titerator == m_tracks.end()) {
 
-        std::cerr << "Composition::deleteTrack : no track of id " << track << std::endl;
+        RG_DEBUG << "deleteTrack() : no track of id " << track;
         throw Exception("track id not found");
 
     } else {
@@ -1814,7 +1811,7 @@ bool Composition::detachTrack(Rosegarden::Track *track)
     }
 
     if (it == m_tracks.end()) {
-        std::cerr << "Composition::detachTrack() : no such track " << track << std::endl;
+        RG_DEBUG << "detachTrack() : no such track " << track;
         throw Exception("track id not found");
         return false;
     }
@@ -1996,19 +1993,19 @@ std::string Composition::toXmlString() const
 
     composition << "\" notationspacing=\"" << m_notationSpacing;
 
-    composition << "\">" << endl << endl;
+    composition << "\">" << std::endl << std::endl;
 
-    composition << endl;
+    composition << std::endl;
 
     for (trackconstiterator tit = getTracks().begin();
          tit != getTracks().end();
          ++tit)
         {
             if ((*tit).second)
-                composition << "  " << (*tit).second->toXmlString() << endl;
+                composition << "  " << (*tit).second->toXmlString() << std::endl;
         }
 
-    composition << endl;
+    composition << std::endl;
 
     for (ReferenceSegment::iterator i = m_timeSigSegment.begin();
          i != m_timeSigSegment.end(); ++i) {
@@ -2036,10 +2033,10 @@ std::string Composition::toXmlString() const
         (*i)->get<Bool>(TimeSignature::HasHiddenBarsPropertyName, hiddenBars);
         if (hiddenBars) composition << " hiddenbars=\"true\"";
 
-        composition << "/>" << endl;
+        composition << "/>" << std::endl;
     }
 
-    composition << endl;
+    composition << std::endl;
 
     for (ReferenceSegment::iterator i = m_tempoSegment.begin();
          i != m_tempoSegment.end(); ++i) {
@@ -2055,22 +2052,22 @@ std::string Composition::toXmlString() const
         if (target >= 0) {
             composition << "\" target=\"" << target;
         }
-        composition << "\"/>" << endl;
+        composition << "\"/>" << std::endl;
     }
 
-    composition << endl;
+    composition << std::endl;
 
-    composition << "<metadata>" << endl
-                << m_metadata.toXmlString() << endl
-                << "</metadata>" << endl << endl;
+    composition << "<metadata>" << std::endl
+                << m_metadata.toXmlString() << std::endl
+                << "</metadata>" << std::endl << std::endl;
 
-    composition << "<markers>" << endl;
+    composition << "<markers>" << std::endl;
     for (markerconstiterator mIt = m_markers.begin();
          mIt != m_markers.end(); ++mIt)
     {
         composition << (*mIt)->toXmlString();
     }
-    composition << "</markers>" << endl;
+    composition << "</markers>" << std::endl;
     composition << "</composition>";
 
     return composition.str();
@@ -2446,7 +2443,7 @@ Composition::notifySourceDeletion() const
 
 void breakpoint()
 {
-    //std::cerr << "breakpoint()\n";
+    //RG_DEBUG << "breakpoint()";
 }
 
 // Just empty out the markers
@@ -2558,7 +2555,7 @@ Composition::distributeVerses()
 void
 Composition::dump(std::ostream& out, bool) const
 {
-    out << "Composition segments : " << endl;
+    out << "Composition segments : " << std::endl;
 
     for (const_iterator i = begin(); i != end(); ++i) {
 
@@ -2569,7 +2566,7 @@ Composition::dump(std::ostream& out, bool) const
             << " - track id : " << s->getTrack()
             << " - label : " << s->getLabel()
 //            << " - verse : " << s->getVerse()
-            << endl;
+            << std::endl;
         
     }
     
