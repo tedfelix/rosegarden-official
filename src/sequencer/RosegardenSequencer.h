@@ -37,7 +37,7 @@ class SoundDriver;
 
 /// MIDI and Audio recording and playback
 /**
- * RosegardenSequencer is a Singleton (see getInstance() and m_instance).
+ * RosegardenSequencer is a Singleton (see getInstance()).
  * It runs in its own thread separate from the GUI (see SequencerThread).
  *
  * RosegardenSequencer owns a SoundDriver object (m_driver) which wraps the
@@ -538,9 +538,6 @@ private:
     QMutex m_mutex;
     QMutex m_transportRequestMutex;
     QMutex m_asyncQueueMutex;
-
-    static RosegardenSequencer *m_instance;
-    static QMutex m_instanceMutex;
 };
 
 }

@@ -48,16 +48,13 @@
 
 #include "rosegarden-version.h"
 
+#include <mutex>
+
+
 // #define DEBUG_ROSEGARDEN_SEQUENCER
 
 namespace Rosegarden
 {
-
-RosegardenSequencer *
-RosegardenSequencer::m_instance = nullptr;
-
-QMutex
-RosegardenSequencer::m_instanceMutex;
 
 //#define LOCKED QMutexLocker rgseq_locker(&m_mutex); SEQUENCER_DEBUG << "Locked in " << __PRETTY_FUNCTION__ << " at " << __LINE__
 
@@ -124,7 +121,7 @@ RosegardenSequencer::RosegardenSequencer() :
 
 RosegardenSequencer::~RosegardenSequencer()
 {
-    SEQUENCER_DEBUG << "RosegardenSequencer - shutting down";
+    RG_DEBUG << "dtor: Shutting down...";
     cleanup();
 }
 
@@ -141,13 +138,17 @@ RosegardenSequencer::cleanup()
 RosegardenSequencer *
 RosegardenSequencer::getInstance()
 {
-    // Lock required as both threads might get in here at the same time.
-    m_instanceMutex.lock();
-    if (!m_instance)
-        m_instance = new RosegardenSequencer();
-    m_instanceMutex.unlock();
+    // ??? This should be a QSharedPointer.  Otherwise it is never freed.
+    //     Unfortunately, that will have a ripple effect, so we'll want
+    //     to do that all at once in a single commit.
+    static RosegardenSequencer *instance{};
+    static std::once_flag instanceFlag;
 
-    return m_instance;
+    // Lock required as both threads might get in here at the same time.
+    std::call_once(instanceFlag,
+                   []{ instance = new RosegardenSequencer; } );
+
+    return instance;
 }
 
 void
