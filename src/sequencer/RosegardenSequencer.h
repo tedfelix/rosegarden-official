@@ -40,7 +40,7 @@ class SoundDriver;
  * RosegardenSequencer is a Singleton (see getInstance()).
  * It runs in its own thread separate from the GUI (see SequencerThread).
  *
- * RosegardenSequencer owns a SoundDriver object (m_driver) which wraps the
+ * RosegardenSequencer owns *the* SoundDriver object (m_driver) which wraps the
  * ALSA and JACK functionality.  At this level we deal with communication with
  * the Rosegarden GUI application, the high level marshaling of data,
  * and the main event loop of the sequencer.
@@ -62,9 +62,6 @@ public:
     /// Close the sequencer.
     void quit();
     
-    /// Cleanup before deleting the sequencer
-    void cleanup();
-
     /// Play from a given time with given parameters.
     /**
      *  Based on RealTime timestamps.
@@ -477,7 +474,9 @@ private:
 
     //--------------- Data members ---------------------------------
 
+    /// Created and owned by this class.
     SoundDriver *m_driver;
+
     TransportStatus m_transportStatus;
 
     /// Position pointer

@@ -505,7 +505,7 @@ RosegardenMainWindow::RosegardenMainWindow(bool enableSound,
 
 RosegardenMainWindow::~RosegardenMainWindow()
 {
-    RG_DEBUG << "~RosegardenMainWindow()\n";
+    RG_DEBUG << "dtor...";
 
     if (getView() &&
         getView()->getTrackEditor() &&
@@ -517,8 +517,9 @@ RosegardenMainWindow::~RosegardenMainWindow()
 
     if (isSequencerRunning()) {
         RosegardenSequencer::getInstance()->quit();
+        // ??? Can we do better than this?  Can we wait for the thread to
+        //     end inside of quit()?  QThread::wait()?
         usleep(300000);
-        RosegardenSequencer::getInstance()->cleanup();
         delete m_sequencerThread;
     }
 
@@ -527,12 +528,14 @@ RosegardenMainWindow::~RosegardenMainWindow()
     delete m_seqManager;
 
 #ifdef HAVE_LIRC
-
     delete m_lircCommander;
     delete m_lircClient;
 #endif
-    delete m_tranzport;    
+
+    delete m_tranzport;
+
     delete m_doc;
+
     Profiles::getInstance()->dump();
 }
 

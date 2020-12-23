@@ -28,13 +28,9 @@
 #include "base/AudioPluginInstance.h" // for PluginPort::PortDisplayHint //!!!???
 
 
-// A sequencer-side representation of certain elements in the
-// gui that enables us to control outgoing or incoming audio
-// and MIDI with run-time only persistence.  Placeholders for
-// our Studio elements on the sequencer.
-
 namespace Rosegarden
 {
+
 
 class SoundDriver;
 
@@ -149,6 +145,11 @@ class MappedAudioInput;
 /// Sequencer-side representation of the audio portion of the Studio.
 /**
  * Factory and virtual plug-board for Audio (and MIDI?) objects.
+ *
+ * A sequencer-side representation of certain elements in the
+ * gui that enables us to control outgoing or incoming audio
+ * and MIDI with run-time only persistence.  Placeholders for
+ * our Studio elements on the sequencer.
  *
  * Container of MappedAudioFader, MappedAudioInput, MappedAudioBuss,
  * MappedPluginPort, and MappedPluginSlot instances.

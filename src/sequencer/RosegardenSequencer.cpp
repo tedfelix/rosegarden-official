@@ -121,34 +121,47 @@ RosegardenSequencer::RosegardenSequencer() :
 
 RosegardenSequencer::~RosegardenSequencer()
 {
-    RG_DEBUG << "dtor: Shutting down...";
-    cleanup();
-}
+    RG_DEBUG << "dtor...";
 
-void
-RosegardenSequencer::cleanup()
-{
-    if (m_driver) m_driver->shutdown();
+    // MappedStudio holds a SoundDriver pointer, so it must be destroyed
+    // first.
     delete m_studio;
     m_studio = nullptr;
-    delete m_driver;
-    m_driver = nullptr;
+
+    if (m_driver) {
+        m_driver->shutdown();
+        delete m_driver;
+        m_driver = nullptr;
+    }
 }
 
 RosegardenSequencer *
 RosegardenSequencer::getInstance()
 {
-    // ??? This should be a QSharedPointer.  Otherwise it is never freed.
-    //     Unfortunately, that will have a ripple effect, so we'll want
-    //     to do that all at once in a single commit.
-    static RosegardenSequencer *instance{};
+    // QScopedPointer is used here to make sure the instance is deleted.
+    // Unfortunately, this means the static destruction order fiasco is
+    // in full effect.  Hopefully no one else with static lifetime holds
+    // a pointer to this and tries to access it after it is destroyed.
+    //
+    // Using/returning a QSharedPointer was also considered.  While this
+    // would help manage the static destruction order fiasco, unfortunately,
+    // QSharedPointer is not thread-safe.
+    //
+    // std::shared_ptr *is* thread-safe and should be suitable to use
+    // for managing the static destruction order fiasco.
+    // ??? We very likely need a more disciplined approach to managing this
+    //     object's lifetime.
+    static QScopedPointer<RosegardenSequencer> instance;
     static std::once_flag instanceFlag;
 
-    // Lock required as both threads might get in here at the same time.
+    // Thread safety required.
+    // ??? It would be better to create the instance from a known safe
+    //     location at a known safe moment during startup (e.g. when there
+    //     is only one thread).  That would eliminate the need for this.
     std::call_once(instanceFlag,
-                   []{ instance = new RosegardenSequencer; } );
+                   []{ instance.reset(new RosegardenSequencer); } );
 
-    return instance;
+    return instance.data();
 }
 
 void
