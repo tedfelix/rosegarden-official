@@ -492,16 +492,6 @@ public:
      */
     std::pair<timeT, timeT> getBarRangeForTime(timeT t) const;
 
-    /**
-     * Get the default number of bars in a new empty composition
-     */
-    static int getDefaultNbBars() { return m_defaultNbBars; }
-    
-    /**
-     * Set the default number of bars in a new empty composition
-     */
-    static void setDefaultNbBars(int b) { m_defaultNbBars = b; }
-
 
     //////
     //
@@ -915,7 +905,7 @@ public:
 
     //////
     // DEBUG FACILITIES
-    void dump(std::ostream&, bool full=false) const;
+    void dump() const;
     
 protected:
 
@@ -1088,8 +1078,6 @@ protected:
     timeT                             m_startMarker;
     timeT                             m_endMarker;
     bool                              m_autoExpand;
-
-    static int                        m_defaultNbBars;
 
     // Loop start and end positions.  If they're both the same
     // value (usually 0) then there's no loop set.

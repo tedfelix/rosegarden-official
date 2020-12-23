@@ -184,9 +184,7 @@ SoundDriver::setMappedInstrument(MappedInstrument *mI)
     // else create a new one
     m_instruments.push_back(mI);
 
-    RG_DEBUG << "SoundDriver: setMappedInstrument() : "
-    << "type = " << mI->getType() << " : "
-    << "id = " << mI->getId();
+    //RG_DEBUG << "setMappedInstrument(): type = " << mI->getType() << " : " << "id = " << mI->getId();
 
 }
 

@@ -26,16 +26,17 @@
 #include "NotationQuantizer.h"
 #include "base/AudioLevel.h"
 
-#include <iostream>
-#include <iomanip>
 #include <algorithm>
 #include <cmath>
-#include <typeinfo>
-#include <iterator>
+#include <iomanip>
+#include <iterator>  // for std::distance
 #include <map>
-#include <limits.h>
-
+#include <set>
 #include <sstream>
+
+//#include <iostream>
+//#include <typeinfo>
+//#include <limits.h>
 
 //#define DEBUG_BAR_STUFF 1
 //#define DEBUG_TEMPO_STUFF 1
@@ -44,6 +45,7 @@
 namespace Rosegarden 
 {
 
+
 const PropertyName Composition::NoAbsoluteTimeProperty = "NoAbsoluteTime";
 const PropertyName Composition::BarNumberProperty = "BarNumber";
 
@@ -51,7 +53,6 @@ const std::string Composition::TempoEventType = "tempo";
 const PropertyName Composition::TempoProperty = "Tempo";
 const PropertyName Composition::TargetTempoProperty = "TargetTempo";
 const PropertyName Composition::TempoTimestampProperty = "TimestampSec";
-
 
 
 bool
@@ -215,9 +216,10 @@ Composition::ReferenceSegment::findNearestRealTime(RealTime t)
     return i;
 }
 
-
-
-int Composition::m_defaultNbBars = 100;
+namespace
+{
+    constexpr int defaultNumberOfBars = 100;
+}
 
 Composition::Composition() :
     m_notationSpacing(100),
@@ -233,7 +235,7 @@ Composition::Composition() :
     m_minTempo(0),
     m_maxTempo(0),
     m_startMarker(0),
-    m_endMarker(getBarRange(m_defaultNbBars).first),
+    m_endMarker(getBarRange(defaultNumberOfBars).first),
     m_autoExpand(false),
     m_loopStart(0),
     m_loopEnd(0),
@@ -693,7 +695,7 @@ Composition::clear()
     m_loopEnd = 0;
     m_position = 0;
     m_startMarker = 0;
-    m_endMarker = getBarRange(m_defaultNbBars).first;
+    m_endMarker = getBarRange(defaultNumberOfBars).first;
     m_selectedTrackId = 0;
     updateRefreshStatuses();
 }
@@ -876,19 +878,6 @@ Composition::getBarRange(int n) const
     return std::pair<timeT, timeT>(start, finish);
 }
 
-
-#ifdef RWSTD_NO_CLASS_PARTIAL_SPEC
-  template <class itr> inline int distance(itr first, itr last)
-  {
-    int n = 0;
-    distance(first, last, n);
-    return n;
-  }
-#else
-  using std::distance;
-#endif
-    
-
 int
 Composition::addTimeSignature(timeT t, TimeSignature timeSig)
 {
@@ -903,7 +892,7 @@ Composition::addTimeSignature(timeT t, TimeSignature timeSig)
     updateRefreshStatuses();
     notifyTimeSignatureChanged();
 
-    return distance(m_timeSigSegment.begin(), i);
+    return std::distance(m_timeSigSegment.begin(), i);
 }
 
 TimeSignature
@@ -975,7 +964,7 @@ Composition::getTimeSignatureNumberAt(timeT t) const
 {
     ReferenceSegment::iterator i = getTimeSignatureAtAux(t);
     if (i == m_timeSigSegment.end()) return -1;
-    else return distance(m_timeSigSegment.begin(), i);
+    else return std::distance(m_timeSigSegment.begin(), i);
 }
 
 std::pair<timeT, TimeSignature>
@@ -1114,7 +1103,7 @@ Composition::addTempoAtTime(timeT time, tempoT tempo, tempoT targetTempo)
 #endif
     notifyTempoChanged();
 
-    return distance(m_tempoSegment.begin(), i);
+    return std::distance(m_tempoSegment.begin(), i);
 }
 
 int
@@ -1128,7 +1117,7 @@ Composition::getTempoChangeNumberAt(timeT t) const
 {
     ReferenceSegment::iterator i = m_tempoSegment.findNearestTime(t);
     if (i == m_tempoSegment.end()) return -1;
-    else return distance(m_tempoSegment.begin(), i);
+    else return std::distance(m_tempoSegment.begin(), i);
 }
 
 std::pair<timeT, tempoT>
@@ -1502,7 +1491,7 @@ Composition::realTime2Time(RealTime rt, tempoT tempo,
         return realTime2Time(rt, tempo);
     }
 
-    double term3 = sqrt(term2);
+    double term3 = std::sqrt(term2);
 
     // We only want the positive root
     if (term3 > 0) term3 = -term3;
@@ -2553,27 +2542,21 @@ Composition::distributeVerses()
 }
 
 void
-Composition::dump(std::ostream& out, bool) const
+Composition::dump() const
 {
-    out << "Composition segments : " << std::endl;
+    RG_DEBUG << "dump(): Composition segments";
 
     for (const_iterator i = begin(); i != end(); ++i) {
+        Segment *s = *i;
 
-        Segment* s = *i;
-
-        out << "Segment start : " << s->getStartTime() << " - end : " << s->getEndMarkerTime()
-            << " - repeating : " << s->isRepeating()
-            << " - track id : " << s->getTrack()
-            << " - label : " << s->getLabel()
-//            << " - verse : " << s->getVerse()
-            << std::endl;
-        
+        RG_DEBUG << "Segment start : " << s->getStartTime()
+                << " - end : " << s->getEndMarkerTime()
+                << " - repeating : " << s->isRepeating()
+                << " - track id : " << s->getTrack()
+                << " - label : " << s->getLabel();
+                //<< " - verse : " << s->getVerse()
     }
-    
 }
 
 
-
 }
-
-

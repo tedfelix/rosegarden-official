@@ -4962,8 +4962,7 @@ RosegardenMainWindow::slotTestStartupTester()
 void
 RosegardenMainWindow::slotDebugDump()
 {
-    Composition &comp = m_doc->getComposition();
-    comp.dump(std::cerr);
+    m_doc->getComposition().dump();
 }
 
 bool
