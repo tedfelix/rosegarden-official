@@ -48,8 +48,6 @@
 
 #include "rosegarden-version.h"
 
-#include <memory>  // for shared_ptr
-
 //#define DEBUG_ROSEGARDEN_SEQUENCER
 
 //#define LOCKED QMutexLocker rgseq_locker(&m_mutex); SEQUENCER_DEBUG << "Locked in " << __PRETTY_FUNCTION__ << " at " << __LINE__
@@ -59,17 +57,6 @@
 namespace Rosegarden
 {
 
-
-namespace
-{
-    // The single global instance.  See create() and getInstance().
-    //
-    // std::shared_ptr is used here to make sure the instance is deleted.
-    //
-    // Using/returning a QSharedPointer was also considered.  Unfortunately,
-    // QSharedPointer is not thread-safe.  std::shared_ptr is.
-    std::shared_ptr<RosegardenSequencer> instance;
-}
 
 RosegardenSequencer::RosegardenSequencer() :
     m_driver(nullptr),
@@ -142,32 +129,23 @@ RosegardenSequencer::~RosegardenSequencer()
     }
 }
 
-void RosegardenSequencer::create()
-{
-    if (instance)
-        return;
-
-    instance.reset(new RosegardenSequencer);
-}
-
 RosegardenSequencer *
 RosegardenSequencer::getInstance()
 {
-    Q_ASSERT_X(instance, "RosegardenSequencer::getInstance()",
-            "instance is NULL.");
+    // Guaranteed in C++11 to be lazy initialized and thread-safe.
+    static RosegardenSequencer instance;
 
-    // Fast and lock-free since create() is called before we go
-    // multithreaded.
-    // ??? We should return the shared_ptr from this function.  That would
-    //     allow callers to help avoid the static destruction order fiasco
-    //     by holding on to a shared_ptr until they are done.  For now,
-    //     hopefully no one else with static lifetime holds a pointer to
-    //     this and tries to access it after it is destroyed.
+    // ??? To avoid the static destruction order fiasco, we might want to
+    //     switch to keeping and returning a shared_ptr.  That would
+    //     allow callers to hold on to a shared_ptr until they are done.
+    //     For now, hopefully no one else with static lifetime tries to
+    //     access this after it is destroyed.
     //
     //     Note that std::shared_ptr is thread-safe, unlike QSharedPointer.
     //     This means that we can safely return a shared_ptr to any thread
     //     that asks for one.
-    return instance.get();
+
+    return &instance;
 }
 
 void

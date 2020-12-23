@@ -323,15 +323,18 @@ RosegardenMainWindow::RosegardenMainWindow(bool enableSound,
 
     // Create ExternalController from the UI thread before we go
     // multithreaded.
+    // ??? Investigate whether the technique used in
+    //     RosegardenSequencer::getInstance() might work for EC as well.
     ExternalController::create();
-
-    // Create the RosegardenSequencer instance before we go multithreaded.
-    RosegardenSequencer::create();
-
-    // !!! From this point on, we are MULTITHREADED !!!
 
     if (m_useSequencer) {
         emit startupStatusMessage(tr("Starting sequencer..."));
+
+        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        // !!! From this point on, we are MULTITHREADED! !!!
+        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+        // Launch the SequencerThread.
         launchSequencer();
     }
 
