@@ -124,6 +124,9 @@ public:
     /**
      * This lets us avoid calling RosegardenSequencer::getInstance() which
      * uses a mutex.
+     *
+     * ??? RosegardenSequencer::getInstance() no longer uses a mutex.  We can
+     *     get rid of this cache and just call getInstance() when needed.
      */
     void setSequencer(RosegardenSequencer *sequencer) {
         m_sequencer = sequencer;

@@ -52,6 +52,14 @@ class RosegardenSequencer : public QObject
 public:
     ~RosegardenSequencer() override;
 
+    /// Create the instance.
+    /**
+     * This *MUST* be called before the SequencerThread is created.
+     *
+     * See getInstance().
+     */
+    static void create();
+
     /// Singleton
     static RosegardenSequencer *getInstance();
 

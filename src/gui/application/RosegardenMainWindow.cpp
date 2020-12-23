@@ -325,6 +325,9 @@ RosegardenMainWindow::RosegardenMainWindow(bool enableSound,
     // multithreaded.
     ExternalController::create();
 
+    // Create the RosegardenSequencer instance before we go multithreaded.
+    RosegardenSequencer::create();
+
     // !!! From this point on, we are MULTITHREADED !!!
 
     if (m_useSequencer) {

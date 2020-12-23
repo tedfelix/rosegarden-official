@@ -48,17 +48,28 @@
 
 #include "rosegarden-version.h"
 
-#include <mutex>
+#include <memory>  // for shared_ptr
 
+//#define DEBUG_ROSEGARDEN_SEQUENCER
 
-// #define DEBUG_ROSEGARDEN_SEQUENCER
+//#define LOCKED QMutexLocker rgseq_locker(&m_mutex); SEQUENCER_DEBUG << "Locked in " << __PRETTY_FUNCTION__ << " at " << __LINE__
+#define LOCKED QMutexLocker rgseq_locker(&m_mutex)
+
 
 namespace Rosegarden
 {
 
-//#define LOCKED QMutexLocker rgseq_locker(&m_mutex); SEQUENCER_DEBUG << "Locked in " << __PRETTY_FUNCTION__ << " at " << __LINE__
 
-#define LOCKED QMutexLocker rgseq_locker(&m_mutex)
+namespace
+{
+    // The single global instance.  See create() and getInstance().
+    //
+    // std::shared_ptr is used here to make sure the instance is deleted.
+    //
+    // Using/returning a QSharedPointer was also considered.  Unfortunately,
+    // QSharedPointer is not thread-safe.  std::shared_ptr is.
+    std::shared_ptr<RosegardenSequencer> instance;
+}
 
 RosegardenSequencer::RosegardenSequencer() :
     m_driver(nullptr),
@@ -104,6 +115,8 @@ RosegardenSequencer::RosegardenSequencer() :
 
     // Pass the RosegardenSequencer to AlsaDriver to avoid the need to
     // call getInstance() and incur the overhead of a mutex.
+    // ??? There is no longer the overhead of a mutex.  We can just call
+    //     RosegardenSequencer::getInstance() as much as we like.
     m_driver->setSequencer(this);
 
     // Connect for high-frequency control change notifications.
@@ -135,33 +148,29 @@ RosegardenSequencer::~RosegardenSequencer()
     }
 }
 
+void RosegardenSequencer::create()
+{
+    if (instance)
+        return;
+
+    instance.reset(new RosegardenSequencer);
+}
+
 RosegardenSequencer *
 RosegardenSequencer::getInstance()
 {
-    // QScopedPointer is used here to make sure the instance is deleted.
-    // Unfortunately, this means the static destruction order fiasco is
-    // in full effect.  Hopefully no one else with static lifetime holds
-    // a pointer to this and tries to access it after it is destroyed.
+    // Fast and lock-free since create() is called before we go
+    // multithreaded.
+    // ??? We should return the shared_ptr from this function.  That would
+    //     allow callers to help avoid the static destruction order fiasco
+    //     by holding on to a shared_ptr until they are done.  For now,
+    //     hopefully no one else with static lifetime holds a pointer to
+    //     this and tries to access it after it is destroyed.
     //
-    // Using/returning a QSharedPointer was also considered.  While this
-    // would help manage the static destruction order fiasco, unfortunately,
-    // QSharedPointer is not thread-safe.
-    //
-    // std::shared_ptr *is* thread-safe and should be suitable to use
-    // for managing the static destruction order fiasco.
-    // ??? We very likely need a more disciplined approach to managing this
-    //     object's lifetime.
-    static QScopedPointer<RosegardenSequencer> instance;
-    static std::once_flag instanceFlag;
-
-    // Thread safety required.
-    // ??? It would be better to create the instance from a known safe
-    //     location at a known safe moment during startup (e.g. when there
-    //     is only one thread).  That would eliminate the need for this.
-    std::call_once(instanceFlag,
-                   []{ instance.reset(new RosegardenSequencer); } );
-
-    return instance.data();
+    //     Note that std::shared_ptr is thread-safe, unlike QSharedPointer.
+    //     This means that we can safely return a shared_ptr to any thread
+    //     that asks for one.
+    return instance.get();
 }
 
 void
