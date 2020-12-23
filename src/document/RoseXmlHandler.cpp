@@ -2093,26 +2093,11 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
             m_instrument->setNaturalChannel(channel);
 
-            if (type == Instrument::Midi)
-                {
-                    QString valueText = atts.value("fixed");
-                    // Despite appearances this is not comparing
-                    // addresses, it tests for empty QString.
-                    if ("" == valueText) {
-                        // Old file with no "fixed" attribute.  There is no
-                        // information one way or the other, so default all
-                        // channels to fixed.
-                        //
-                        // NB. We used to default to fixed only for percussion
-                        // instruments, but several long-time users experienced
-                        // annoying problems with this behavior when loading
-                        // old files.
-                        m_instrument->setFixedChannel();
-
-                    } else if (valueText.toLower() == "true") {
-                        // Fixed attribute is set.
-                        m_instrument->setFixedChannel();
-                    } 
+            if (type == Instrument::Midi) {
+                if (atts.value("fixed") == "false")
+                    m_instrument->releaseFixedChannel();
+                else
+                    m_instrument->setFixedChannel();
             }
         }
 
