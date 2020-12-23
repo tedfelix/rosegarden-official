@@ -892,7 +892,7 @@ AudioInstrumentMixer::AudioInstrumentMixer(SoundDriver *driver,
 
 AudioInstrumentMixer::~AudioInstrumentMixer()
 {
-    std::cerr << "AudioInstrumentMixer::~AudioInstrumentMixer" << std::endl;
+    //std::cerr << "AudioInstrumentMixer::~AudioInstrumentMixer" << std::endl;
     // BufferRec dtor will handle the BufferMap
 
     removeAllPlugins();
@@ -902,7 +902,7 @@ AudioInstrumentMixer::~AudioInstrumentMixer()
         delete[] *i;
     }
 
-    std::cerr << "AudioInstrumentMixer::~AudioInstrumentMixer exiting" << std::endl;
+    //std::cerr << "AudioInstrumentMixer::~AudioInstrumentMixer exiting" << std::endl;
 }
 
 AudioInstrumentMixer::BufferRec::~BufferRec()
@@ -917,7 +917,7 @@ AudioInstrumentMixer::setPlugin(InstrumentId id, int position, QString identifie
 {
     // Not RT safe
 
-    std::cerr << "AudioInstrumentMixer::setPlugin(" << id << ", " << position << ", " << identifier << ")" << std::endl;
+    //std::cerr << "AudioInstrumentMixer::setPlugin(" << id << ", " << position << ", " << identifier << ")" << std::endl;
 
     int channels = 2;
     if (m_bufferMap.find(id) != m_bufferMap.end()) {
@@ -979,7 +979,7 @@ AudioInstrumentMixer::removePlugin(InstrumentId id, int position)
 {
     // Not RT safe
 
-    std::cerr << "AudioInstrumentMixer::removePlugin(" << id << ", " << position << ")" << std::endl;
+    //std::cerr << "AudioInstrumentMixer::removePlugin(" << id << ", " << position << ")" << std::endl;
 
     RunnablePluginInstance *oldInstance = nullptr;
 
@@ -1009,7 +1009,7 @@ AudioInstrumentMixer::removeAllPlugins()
 {
     // Not RT safe
 
-    std::cerr << "AudioInstrumentMixer::removeAllPlugins" << std::endl;
+    //std::cerr << "AudioInstrumentMixer::removeAllPlugins" << std::endl;
 
     for (SynthPluginMap::iterator i = m_synths.begin();
             i != m_synths.end(); ++i) {
@@ -1272,7 +1272,7 @@ AudioInstrumentMixer::destroyAllPlugins()
     // Delete immediately, as we're probably exiting here -- don't use
     // the scavenger.
 
-    std::cerr << "AudioInstrumentMixer::destroyAllPlugins" << std::endl;
+    //std::cerr << "AudioInstrumentMixer::destroyAllPlugins" << std::endl;
 
     for (SynthPluginMap::iterator j = m_synths.begin();
             j != m_synths.end(); ++j) {
@@ -1794,7 +1794,7 @@ AudioInstrumentMixer::processBlock(InstrumentId id,
 
         if (!acceptable) {
 
-            std::cerr << "AudioInstrumentMixer::processBlock(" << id << "): file " << file->getAudioFile()->getFilename() << " has " << frames << " frames available, says isBuffered " << file->isBuffered() << std::endl;
+            //std::cerr << "AudioInstrumentMixer::processBlock(" << id << "): file " << file->getAudioFile()->getFilename() << " has " << frames << " frames available, says isBuffered " << file->isBuffered() << std::endl;
 
             if (!m_driver->getLowLatencyMode()) {
 
