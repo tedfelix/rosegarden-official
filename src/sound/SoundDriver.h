@@ -120,23 +120,6 @@ public:
 
     // *** Sequencer ***
 
-    /// Store a local copy at construction time.
-    /**
-     * This lets us avoid calling RosegardenSequencer::getInstance() which
-     * uses a mutex.
-     *
-     * ??? RosegardenSequencer::getInstance() no longer uses a mutex.  We can
-     *     get rid of this cache and just call getInstance() when needed.
-     */
-    void setSequencer(RosegardenSequencer *sequencer) {
-        m_sequencer = sequencer;
-    }
-    /// Use instead of RosegardenSequencer::getInstance() to avoid mutex.
-    /**
-     * JackDriver uses this for transport requests.
-     */
-    RosegardenSequencer *getSequencer() const  { return m_sequencer; }
-
     virtual unsigned int getTimers() { return 0; }
     virtual QString getTimer(unsigned int) { return ""; }
     virtual QString getCurrentTimer() { return ""; }
@@ -352,6 +335,9 @@ protected:
     /// For transport requests.
     /*
      * Use instead of RosegardenSequencer::getInstance() to avoid mutex.
+     *
+     * ??? RosegardenSequencer::getInstance() no longer uses a mutex.  We can
+     *     get rid of this cache and just call getInstance() when needed.
      */
     RosegardenSequencer *m_sequencer;
 

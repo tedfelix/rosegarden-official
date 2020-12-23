@@ -113,12 +113,6 @@ RosegardenSequencer::RosegardenSequencer() :
     m_driver->setAudioBufferSizes(m_audioMix, m_audioRead, m_audioWrite,
                                   m_smallFileSize);
 
-    // Pass the RosegardenSequencer to AlsaDriver to avoid the need to
-    // call getInstance() and incur the overhead of a mutex.
-    // ??? There is no longer the overhead of a mutex.  We can just call
-    //     RosegardenSequencer::getInstance() as much as we like.
-    m_driver->setSequencer(this);
-
     // Connect for high-frequency control change notifications.
     // Note that we must use a DirectConnection or else the signals may
     // get lost.  I assume this is because the sequencer thread doesn't

@@ -886,7 +886,7 @@ JackDriver::jackProcess(jack_nframes_t nframes)
         if (state == JackTransportStopped) {
             if (playing && clocksRunning && !m_waiting) {
                 RosegardenSequencer *sequencer =
-                    m_alsaDriver->getSequencer();
+                        RosegardenSequencer::getInstance();
                 if (sequencer) {
 #ifdef DEBUG_JACK_TRANSPORT
                     RG_DEBUG << "jackProcess(): JACK transport stopped externally at " << position.frame;
@@ -1542,7 +1542,7 @@ JackDriver::jackSyncCallback(jack_transport_state_t state,
         return true; // ignore
 
     RosegardenSequencer *sequencer =
-        inst->m_alsaDriver->getSequencer();
+            RosegardenSequencer::getInstance();
     if (!sequencer)
         return true;
 
@@ -1679,7 +1679,7 @@ JackDriver::relocateTransportInternal(bool alsoStart)
         // to an external sync?
 
         RosegardenSequencer *sequencer =
-            m_alsaDriver->getSequencer();
+                RosegardenSequencer::getInstance();
 
         if (sequencer) {
             if (sequencer->isTransportSyncComplete(m_waitingToken)) {
@@ -1774,7 +1774,7 @@ JackDriver::stopTransport()
         // sync to a transport that has in fact already stopped?
 
         RosegardenSequencer *sequencer =
-            m_alsaDriver->getSequencer();
+                RosegardenSequencer::getInstance();
 
         if (sequencer) {
             if (sequencer->isTransportSyncComplete(m_waitingToken)) {

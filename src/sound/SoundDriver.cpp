@@ -23,6 +23,7 @@
 #include "MappedStudio.h"
 #include "AudioPlayQueue.h"
 #include "PlayableAudioFile.h"
+#include "sequencer/RosegardenSequencer.h"
 
 #include <unistd.h>  // for usleep()
 #include <sys/time.h>
@@ -37,7 +38,7 @@ namespace Rosegarden
 SoundDriver::SoundDriver(MappedStudio *studio, const QString &name) :
         m_name(name),
         m_driverStatus(NO_DRIVER),
-        m_sequencer(nullptr),
+        m_sequencer(RosegardenSequencer::getInstance()),
         m_playStartPosition(0, 0),
         m_playing(false),
         m_recordStatus(RECORD_OFF),
