@@ -659,44 +659,38 @@ EventView::makeInitialSelection(timeT time)
 {
     m_listSelection.clear();
 
+    const int itemCount = m_eventList->topLevelItemCount();
+
     EventViewItem *goodItem = nullptr;
     int goodItemNo = 0;
 
-    int i = 0;
-    QTreeWidgetItem *child = nullptr;
-    
-    for( i=0; i< m_eventList->topLevelItemCount(); i++ ){
-        child = m_eventList->topLevelItem(i);
+    for (int itemNo = 0; itemNo < itemCount; ++itemNo) {
+        EventViewItem *item =
+                dynamic_cast<EventViewItem *>(
+                        m_eventList->topLevelItem(itemNo));
 
-        EventViewItem * item = dynamic_cast<EventViewItem *>(child);
+        // Not an EventViewItem?  Try the next.
+        if (!item)
+            continue;
 
-        if (item) {
-            if (item->getEvent()->getAbsoluteTime() > time)
-                break;
-            goodItem = item;
-            goodItemNo = i;
-        }
+        // If this item is past the playback position pointer, we are
+        // finished searching.
+        if (item->getEvent()->getAbsoluteTime() > time)
+            break;
 
-        ++i;
+        // Remember the last good item.
+        goodItem = item;
+        goodItemNo = itemNo;
     }
-    /*!!!
-        for (int i = 0; m_eventList->itemAtIndex(i); ++i) {
-     
-        EventViewItem *item = dynamic_cast<EventViewItem *>
-            (m_eventList->itemAtIndex(i));
-     
-        if (item) {
-            if (item->getEvent()->getAbsoluteTime() > time) break;
-            goodItem = item;
-            goodItemNo = i;
-        }
-        }
-    */
-    if (goodItem) {
-        m_listSelection.push_back(goodItemNo);
-        m_eventList->setCurrentItem( goodItem );
-        m_eventList->scrollToItem(goodItem);
-    }
+
+    // Nothing found?  Bail.
+    if (!goodItem)
+        return;
+
+    // Select the item prior to the playback position pointer.
+    m_listSelection.push_back(goodItemNo);
+    m_eventList->setCurrentItem(goodItem);
+    m_eventList->scrollToItem(goodItem);
 }
 
 QString
