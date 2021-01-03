@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2018 the Rosegarden development team.
+    Copyright 2000-2021 the Rosegarden development team.
  
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -40,32 +40,20 @@ FileMergeDialog::FileMergeDialog(QWidget *parent,
                                  bool timingsDiffer) :
         QDialog(parent)
 {
-    //###
-    //&&&
-    // This one will take some thought.  We're going to have to figure out some
-    // new help system.  This //setHelp() call is from KDialog, which we are no
-    // longer using.  Until we have the new help system sorted, I don't see
-    // anything useful to do with this, so I'm disabling it for now.
-    //
-    ////setHelp("file-merge");
-
     setModal(true);
     setWindowTitle(tr("Merge File"));
 
-    QGridLayout *metagrid = new QGridLayout;
-    setLayout(metagrid);
-    QWidget *vbox = new QWidget(this);
-    QVBoxLayout *vboxLayout = new QVBoxLayout;
-    metagrid->addWidget(vbox, 0, 0);
+    QVBoxLayout *layout = new QVBoxLayout;
+    setLayout(layout);
 
 
-    QWidget *hbox = new QWidget( vbox );
-    vboxLayout->addWidget(hbox);
+    QWidget *hbox = new QWidget;
     QHBoxLayout *hboxLayout = new QHBoxLayout;
-    QLabel *child_3 = new QLabel(tr("Merge new file  "), hbox );
-    hboxLayout->addWidget(child_3);
+    hbox->setLayout(hboxLayout);
+    layout->addWidget(hbox);
+    hboxLayout->addWidget(new QLabel(tr("Merge new file  ")));
 
-    m_choice = new QComboBox( hbox );
+    m_choice = new QComboBox;
     hboxLayout->addWidget(m_choice);
     hbox->setLayout(hboxLayout);
     m_choice->addItem(tr("At start of existing composition"));
@@ -73,18 +61,16 @@ FileMergeDialog::FileMergeDialog(QWidget *parent,
     m_useTimings = nullptr;
 
     if (timingsDiffer) {
-        new QLabel(tr("The file has different time signatures or tempos."), vbox);
-        m_useTimings = new QCheckBox(tr("Import these as well"), vbox );
-        vboxLayout->addWidget(m_useTimings);
-        vbox->setLayout(vboxLayout);
+        layout->addWidget(new QLabel(tr("The file has different time signatures or tempos.")));
+        m_useTimings = new QCheckBox(tr("Import these as well"));
+        layout->addWidget(m_useTimings);
         m_useTimings->setChecked(false);
     }
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::Help);
-    metagrid->addWidget(buttonBox, 1, 0);
-    metagrid->setRowStretch(0, 10);
     connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
     connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
     connect(buttonBox, &QDialogButtonBox::helpRequested, this, &FileMergeDialog::slotHelpRequested);
+    layout->addWidget(buttonBox);
 }
 
 int
