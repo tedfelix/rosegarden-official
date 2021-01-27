@@ -18,6 +18,7 @@
 
 #include "RecentFiles.h"
 
+#include "misc/ConfigGroups.h"
 #include "misc/Debug.h"
 
 #include <QFileInfo>
@@ -28,7 +29,6 @@
 
 namespace
 {
-    const QString settingsGroup("RecentFiles");
     constexpr size_t maxCount = 20;
 }
 
@@ -49,7 +49,7 @@ RecentFiles::read()
     m_names.clear();
 
     QSettings settings;
-    settings.beginGroup(settingsGroup);
+    settings.beginGroup(RecentFilesConfigGroup);
 
     for (size_t i = 0; i < maxCount; ++i) {
         QString key = QString("recent-%1").arg(i);
@@ -67,7 +67,7 @@ void
 RecentFiles::write()
 {
     QSettings settings;
-    settings.beginGroup(settingsGroup);
+    settings.beginGroup(RecentFilesConfigGroup);
 
     for (size_t i = 0; i < maxCount; ++i) {
         QString key = QString("recent-%1").arg(i);

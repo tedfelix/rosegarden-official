@@ -859,8 +859,8 @@ RosegardenMainWindow::setupRecentFilesMenu()
     // This is problematic as it will cause files to be removed from
     // the recent files list when external storage is unmounted.
     QSettings settings;
-    settings.beginGroup("RecentFiles");
-    if (settings.value("removeNonExistent", "false").toBool())
+    settings.beginGroup(RecentFilesConfigGroup);
+    if (settings.value("cleanRecentFilesList", "false").toBool())
         m_recentFiles.removeNonExistent();
 
     bool first = true;

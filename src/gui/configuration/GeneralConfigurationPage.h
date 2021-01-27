@@ -105,6 +105,7 @@ private:
     QCheckBox *m_appendSuffixes;
     QCheckBox *m_useTrackName;
     QCheckBox *m_enableEditingDuringPlayback;
+    QCheckBox *m_cleanRecentFilesList;
     QCheckBox *m_useJackTransport;
 
     // Presentation tab

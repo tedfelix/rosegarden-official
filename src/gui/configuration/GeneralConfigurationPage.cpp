@@ -201,6 +201,28 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
 
     settings.endGroup();
 
+    settings.beginGroup(RecentFilesConfigGroup);
+
+    // Clean recent files list
+    label = new QLabel(tr("Clean recent files list"), frame);
+    tipText = tr(
+            "<qt><p>Remove entries from the recent files list that no "
+            "longer exist.</p></qt>");
+    label->setToolTip(tipText);
+    layout->addWidget(label, row, 0);
+
+    m_cleanRecentFilesList = new QCheckBox(frame);
+    m_cleanRecentFilesList->setToolTip(tipText);
+    m_cleanRecentFilesList->setChecked(
+            settings.value("cleanRecentFilesList", false).toBool());
+    connect(m_cleanRecentFilesList, &QCheckBox::stateChanged,
+            this, &GeneralConfigurationPage::slotModified);
+    layout->addWidget(m_cleanRecentFilesList, row, 1, 1, 2);
+
+    ++row;
+
+    settings.endGroup();
+
 #ifdef HAVE_LIBJACK
     settings.beginGroup(SequencerOptionsConfigGroup);
 
@@ -480,6 +502,11 @@ void GeneralConfigurationPage::apply()
     settings.setValue("enableEditingDuringPlayback",
             m_enableEditingDuringPlayback->isChecked());
 
+    settings.endGroup();
+
+    settings.beginGroup(RecentFilesConfigGroup);
+    settings.setValue("cleanRecentFilesList",
+            m_cleanRecentFilesList->isChecked());
     settings.endGroup();
 
 #ifdef HAVE_LIBJACK
