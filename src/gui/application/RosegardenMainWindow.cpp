@@ -819,7 +819,7 @@ RosegardenMainWindow::setupActions()
     setupRecentFilesMenu();
     createAndSetupTransport();
 
-    connect(&m_recentFiles, &RecentFiles::recentChanged,
+    connect(&m_recentFiles, &RecentFiles::changed,
             this, &RosegardenMainWindow::setupRecentFilesMenu);
 
     // transport toolbar is hidden by default - TODO : this should be in options

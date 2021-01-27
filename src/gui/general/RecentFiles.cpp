@@ -49,19 +49,15 @@ RecentFiles::read()
     QSettings settings;
     settings.beginGroup(settingsGroup);
 
-    // ??? Why clear up to 100?  I think we can just do up to maxCount.
-    for (size_t i = 0; i < 100; ++i) {
+    for (size_t i = 0; i < maxCount; ++i) {
         QString key = QString("recent-%1").arg(i);
         QString name = settings.value(key, "").toString();
+
+        // Stop at the first empty one.
         if (name == "")
             break;
-        if (i < maxCount) {
-            m_names.push_back(name);
-        } else {
-            // Clear out any beyond maxCount
-            // ??? We could also use remove() to remove these.
-            settings.setValue(key, "");
-        }
+
+        m_names.push_back(name);
     }
 }
 
@@ -73,26 +69,11 @@ RecentFiles::write()
 
     for (size_t i = 0; i < maxCount; ++i) {
         QString key = QString("recent-%1").arg(i);
-        QString name = "";
         if (i < m_names.size())
-            name = m_names[i];
-        // ??? We could also use remove() to remove those that do not
-        //     exist.
-        settings.setValue(key, name);
+            settings.setValue(key, m_names[i]);
+        else
+            settings.remove(key);
     }
-}
-
-void
-RecentFiles::truncateAndWrite()
-{
-    // ??? Inline this routine into its only caller.
-
-    // Truncate m_names to maxCount.
-    while (m_names.size() > maxCount) {
-        m_names.pop_back();
-    }
-
-    write();
 }
 
 void
@@ -107,9 +88,14 @@ RecentFiles::add(QString name)
     // Add it to the top.
     m_names.push_front(name);
 
-    truncateAndWrite();
+    // Truncate m_names to maxCount.
+    while (m_names.size() > maxCount) {
+        m_names.pop_back();
+    }
 
-    emit recentChanged();
+    write();
+
+    emit changed();
 }
 
 

@@ -46,15 +46,13 @@ public:
     const std::deque<QString> &get() const  { return m_names; }
 
 signals:
-    // ??? rename: changed()
-    void recentChanged();
+    void changed();
 
 private:
     std::deque<QString> m_names;
 
     void read();
     void write();
-    void truncateAndWrite();
 };
 
 }
