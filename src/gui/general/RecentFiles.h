@@ -42,11 +42,11 @@ public:
     /// Add a file name to the list of recent files.
     void add(QString name);
 
+    /// Remove any files that don't actually exist on the filesystem.
+    void removeNonExistent();
+
     /// Get the list of recent file names.
     const std::deque<QString> &get() const  { return m_names; }
-
-signals:
-    void changed();
 
 private:
     std::deque<QString> m_names;

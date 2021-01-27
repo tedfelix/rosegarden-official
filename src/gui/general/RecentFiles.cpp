@@ -20,6 +20,7 @@
 
 #include "misc/Debug.h"
 
+#include <QFileInfo>
 #include <QSettings>
 
 #include <algorithm>
@@ -38,6 +39,7 @@ namespace Rosegarden
 
 RecentFiles::RecentFiles()
 {
+    // ??? Only caller.  Inline?
     read();
 }
 
@@ -94,8 +96,30 @@ RecentFiles::add(QString name)
     }
 
     write();
+}
 
-    emit changed();
+void
+RecentFiles::removeNonExistent()
+{
+    for (std::deque<QString>::iterator i = m_names.begin();
+         i != m_names.end();
+         /* Increment before use idiom. */) {
+
+        // Increment before use.  So we can delete as we go.
+        std::deque<QString>::iterator j = i++;
+
+        // If the file doesn't exist, remove it.
+        if (!QFileInfo(*j).exists())
+            m_names.erase(j);
+    }
+
+    // ??? Should we call write() now?  Otherwise we are out of sync.
+    //     If we don't write it out, then the user can switch back
+    //     to not removing non-existent, then restart rg and the
+    //     entries that were removed will reappear.  Not sure that's
+    //     valuable since it's pretty obscure.  Let's avoid calling
+    //     write() for now in the interests of simplicity and speed.
+
 }
 
 

@@ -816,10 +816,12 @@ RosegardenMainWindow::setupActions()
 
     createMenusAndToolbars("rosegardenmainwindow.rc");
 
-    setupRecentFilesMenu();
     createAndSetupTransport();
 
-    connect(&m_recentFiles, &RecentFiles::changed,
+    // Hook up for aboutToShow() so we can set up the menu when it is
+    // needed.
+    QMenu *fileOpenRecentMenu = findMenu("file_open_recent");
+    connect(fileOpenRecentMenu, &QMenu::aboutToShow,
             this, &RosegardenMainWindow::setupRecentFilesMenu);
 
     // transport toolbar is hidden by default - TODO : this should be in options
@@ -852,6 +854,14 @@ RosegardenMainWindow::setupRecentFilesMenu()
 
     // Start with a clean slate.
     fileOpenRecentMenu->clear();
+
+    // Remove non-existent files if configured in the .conf.
+    // This is problematic as it will cause files to be removed from
+    // the recent files list when external storage is unmounted.
+    QSettings settings;
+    settings.beginGroup("RecentFiles");
+    if (settings.value("removeNonExistent", "false").toBool())
+        m_recentFiles.removeNonExistent();
 
     bool first = true;
 
