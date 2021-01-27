@@ -20,9 +20,9 @@
 
 #include "misc/Debug.h"
 
-#include <QFileInfo>
 #include <QSettings>
-#include <QRegExp>
+
+#include <algorithm>
 
 
 namespace
@@ -55,18 +55,19 @@ RecentFiles::read()
         QString name = settings.value(key, "").toString();
         if (name == "")
             break;
-        if (i < maxCount)
+        if (i < maxCount) {
             m_names.push_back(name);
-        else  // Clear out any beyond maxCount
+        } else {
+            // Clear out any beyond maxCount
+            // ??? We could also use remove() to remove these.
             settings.setValue(key, "");
+        }
     }
 }
 
 void
 RecentFiles::write()
 {
-    //RG_DEBUG << "write()...";
-
     QSettings settings;
     settings.beginGroup(settingsGroup);
 
@@ -84,73 +85,31 @@ RecentFiles::write()
 void
 RecentFiles::truncateAndWrite()
 {
+    // ??? Inline this routine into its only caller.
+
+    // Truncate m_names to maxCount.
     while (m_names.size() > maxCount) {
         m_names.pop_back();
     }
+
     write();
 }
-
-#if 0
-std::vector<QString>
-RecentFiles::getRecent() const
-{
-    std::vector<QString> names;
-    for (size_t i = 0; i < maxCount; ++i) {
-        if (i < m_names.size()) {
-            names.push_back(m_names[i]);
-        }
-    }
-    return names;
-}
-#endif
 
 void
 RecentFiles::add(QString name)
 {
-    bool have = false;
-    for (size_t i = 0; i < m_names.size(); ++i) {
-        if (m_names[i] == name) {
-            have = true;
-            break;
-        }
-    }
-    
-    if (!have) {
-        m_names.push_front(name);
-    } else {
-        std::deque<QString> newnames;
-        newnames.push_back(name);
-        for (size_t i = 0; i < m_names.size(); ++i) {
-            if (m_names[i] == name) continue;
-            newnames.push_back(m_names[i]);
-        }
-        m_names = newnames;
-    }
+    // Remove it if it's already in there.
+    std::deque<QString>::iterator iter =
+            std::find(m_names.begin(), m_names.end(), name);
+    if (iter != m_names.end())
+        m_names.erase(iter);
+
+    // Add it to the top.
+    m_names.push_front(name);
 
     truncateAndWrite();
+
     emit recentChanged();
-}
-
-void
-RecentFiles::addFile(QString name)
-{
-    //RG_DEBUG << "addFile(" << name << ")...";
-
-    static QRegExp schemeRE("^[a-zA-Z]{2,5}://");
-    static QRegExp tempRE("[\\/][Tt]e?mp[\\/]");
-    if (schemeRE.indexIn(name) == 0) {
-        add(name);
-    } else {
-        QString absPath = QFileInfo(name).absoluteFilePath();
-        if (tempRE.indexIn(absPath) != -1) {
-//            Preferences *prefs = Preferences::getInstance();
-//            if (prefs && !prefs->getOmitTempsFromRecentFiles()) {
-//                add(absPath);
-//            }
-        } else {
-            add(absPath);
-        }
-    }
 }
 
 

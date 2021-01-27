@@ -856,7 +856,7 @@ RosegardenMainWindow::setupRecentFilesMenu()
     bool first = true;
 
     // For each recent file, make a new action and add it to the menu.
-    for (const QString &name : m_recentFiles.getNames()) {
+    for (const QString &name : m_recentFiles.get()) {
         QAction *action = new QAction(name, this);
         action->setObjectName(name);
         connect(action, &QAction::triggered,

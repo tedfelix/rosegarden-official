@@ -39,25 +39,14 @@ class RecentFiles : public QObject
 public:
     RecentFiles();
 
-    const std::deque<QString> &getNames() const  { return m_names; }
-
-    /**
-     * Add a name that should be treated as a literal string.
-     */
+    /// Add a file name to the list of recent files.
     void add(QString name);
 
-    /**
-     * Add a name that is known to be either a file path or a URL.  If
-     * it looks like a URL, add it literally; otherwise treat it as a
-     * file path and canonicalise it appropriately.  Also takes into
-     * account the user preference for whether to include temporary
-     * files in the recent files menu: the file will not be added if
-     * the preference is set and the file appears to be a temporary
-     * one.
-     */
-    void addFile(QString name);
+    /// Get the list of recent file names.
+    const std::deque<QString> &get() const  { return m_names; }
 
 signals:
+    // ??? rename: changed()
     void recentChanged();
 
 private:
