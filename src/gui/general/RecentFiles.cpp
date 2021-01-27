@@ -18,85 +18,91 @@
 
 #include "RecentFiles.h"
 
-//#include "Preferences.h"
-
 #include "misc/Debug.h"
 
 #include <QFileInfo>
 #include <QSettings>
 #include <QRegExp>
 
+
+namespace
+{
+    const QString settingsGroup("RecentFiles");
+    constexpr size_t maxCount = 20;
+}
+
+
 namespace Rosegarden
 {
 
-RecentFiles::RecentFiles(QString settingsGroup, size_t maxCount) :
-    m_settingsGroup(settingsGroup),
-    m_maxCount(maxCount)
+
+RecentFiles::RecentFiles()
 {
     read();
-}
-
-RecentFiles::~RecentFiles()
-{
-    // nothing
 }
 
 void
 RecentFiles::read()
 {
     m_names.clear();
-    QSettings settings;
-    settings.beginGroup(m_settingsGroup);
 
+    QSettings settings;
+    settings.beginGroup(settingsGroup);
+
+    // ??? Why clear up to 100?  I think we can just do up to maxCount.
     for (size_t i = 0; i < 100; ++i) {
         QString key = QString("recent-%1").arg(i);
         QString name = settings.value(key, "").toString();
-        if (name == "") break;
-        if (i < m_maxCount) m_names.push_back(name);
-        else settings.setValue(key, "");
+        if (name == "")
+            break;
+        if (i < maxCount)
+            m_names.push_back(name);
+        else  // Clear out any beyond maxCount
+            settings.setValue(key, "");
     }
-
-    settings.endGroup();
 }
 
 void
 RecentFiles::write()
 {
-    RG_DEBUG << "RecentFiles::write";
+    //RG_DEBUG << "write()...";
 
     QSettings settings;
-    settings.beginGroup(m_settingsGroup);
+    settings.beginGroup(settingsGroup);
 
-    for (size_t i = 0; i < m_maxCount; ++i) {
+    for (size_t i = 0; i < maxCount; ++i) {
         QString key = QString("recent-%1").arg(i);
         QString name = "";
-        if (i < m_names.size()) name = m_names[i];
+        if (i < m_names.size())
+            name = m_names[i];
+        // ??? We could also use remove() to remove those that do not
+        //     exist.
         settings.setValue(key, name);
     }
-
-    settings.endGroup();
 }
 
 void
 RecentFiles::truncateAndWrite()
 {
-    while (m_names.size() > m_maxCount) {
+    while (m_names.size() > maxCount) {
         m_names.pop_back();
     }
     write();
 }
 
+#if 0
 std::vector<QString>
 RecentFiles::getRecent() const
 {
     std::vector<QString> names;
-    for (size_t i = 0; i < m_maxCount; ++i) {
+    for (size_t i = 0; i < maxCount; ++i) {
         if (i < m_names.size()) {
             names.push_back(m_names[i]);
         }
     }
     return names;
 }
+#endif
 
 void
 RecentFiles::add(QString name)
@@ -128,7 +134,7 @@ RecentFiles::add(QString name)
 void
 RecentFiles::addFile(QString name)
 {
-    RG_DEBUG << "RecentFiles::addFile(" << name << ")";
+    //RG_DEBUG << "addFile(" << name << ")...";
 
     static QRegExp schemeRE("^[a-zA-Z]{2,5}://");
     static QRegExp tempRE("[\\/][Tt]e?mp[\\/]");
@@ -149,5 +155,3 @@ RecentFiles::addFile(QString name)
 
 
 }
-
-

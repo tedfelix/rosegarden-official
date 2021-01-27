@@ -261,7 +261,7 @@ RosegardenMainWindow::RosegardenMainWindow(bool enableSound,
     m_haveRange(false),
     m_view(nullptr),
     m_doc(nullptr),
-    m_recentFiles(nullptr),
+    m_recentFiles(),
     m_sequencerThread(nullptr),
     m_sequencerCheckedIn(false),
 #ifdef HAVE_LIBJACK
@@ -844,19 +844,30 @@ RosegardenMainWindow::setupActions()
 void
 RosegardenMainWindow::setupRecentFilesMenu()
 {
-    QMenu *menu = findMenu("file_open_recent");
-    if (!menu) {
+    QMenu *fileOpenRecentMenu = findMenu("file_open_recent");
+    if (!fileOpenRecentMenu) {
         RG_WARNING << "setupRecentFilesMenu(): WARNING: No recent files menu!";
         return;
     }
-    menu->clear();
-    std::vector<QString> files = m_recentFiles.getRecent();
-    for (size_t i = 0; i < files.size(); ++i) {
-        QAction *action = new QAction(files[i], this);
-        action->setObjectName(files[i]);
-        connect(action, &QAction::triggered, this, &RosegardenMainWindow::slotFileOpenRecent);
-        menu->addAction(action);
-        if (i == 0) action->setShortcut(tr("Ctrl+R"));
+
+    // Start with a clean slate.
+    fileOpenRecentMenu->clear();
+
+    bool first = true;
+
+    // For each recent file, make a new action and add it to the menu.
+    for (const QString &name : m_recentFiles.getNames()) {
+        QAction *action = new QAction(name, this);
+        action->setObjectName(name);
+        connect(action, &QAction::triggered,
+                this, &RosegardenMainWindow::slotFileOpenRecent);
+
+        fileOpenRecentMenu->addAction(action);
+
+        if (first) {
+            first = false;
+            action->setShortcut(tr("Ctrl+R"));
+        }
     }
 }
 

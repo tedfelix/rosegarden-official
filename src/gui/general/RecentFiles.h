@@ -19,43 +19,33 @@
 
 #include <QObject>
 #include <QString>
-#include <vector>
+
 #include <deque>
+
 
 namespace Rosegarden
 {
 
+
+/// Manages a list of recently used files.
 /**
- * RecentFiles manages a list of the names of recently-used objects,
- * saving and restoring that list via QSettings.  The names do not
+ * The list is saved and restored via QSettings.  The names do not
  * actually have to refer to files.
  */
-
 class RecentFiles : public QObject
 {
     Q_OBJECT
 
 public:
-    /**
-     * Construct a RecentFiles object that saves and restores in the
-     * given QSettings group and truncates when the given count of
-     * strings is reached.
-     */
-    RecentFiles(QString settingsGroup = "RecentFiles", size_t maxCount = 20);
+    RecentFiles();
 
-    ~RecentFiles() override;
-
-    QString getSettingsGroup() const { return m_settingsGroup; }
-
-    int getMaxCount() const { return m_maxCount; }
-
-    std::vector<QString> getRecent() const;
+    const std::deque<QString> &getNames() const  { return m_names; }
 
     /**
      * Add a name that should be treated as a literal string.
      */
     void add(QString name);
-    
+
     /**
      * Add a name that is known to be either a file path or a URL.  If
      * it looks like a URL, add it literally; otherwise treat it as a
@@ -70,10 +60,7 @@ public:
 signals:
     void recentChanged();
 
-protected:
-    QString m_settingsGroup;
-    size_t m_maxCount;
-
+private:
     std::deque<QString> m_names;
 
     void read();
