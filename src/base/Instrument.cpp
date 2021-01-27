@@ -365,6 +365,27 @@ Instrument::setProgramChange(MidiByte program)
     setProgram(MidiProgram(m_program.getBank(), program));
 }
 
+bool
+Instrument::sendsProgramChange() const
+{
+    if (isPercussion()) {
+        //RG_DEBUG << "sendsProgramChange() percussion Instrument...";
+        //RG_DEBUG << "  channel:" << getNaturalChannel();
+
+        MidiDevice *midiDevice = dynamic_cast<MidiDevice *>(m_device);
+        if (!midiDevice)
+            return false;
+
+        //RG_DEBUG << "  percussion banks:" << midiDevice->getBanks(true).size();
+
+        // No percussion banks?  Don't send PC.
+        if (midiDevice->getBanks(true).empty())
+            return false;
+    }
+
+    return m_sendProgramChange;
+}
+
 MidiByte
 Instrument::getProgramChange() const
 {

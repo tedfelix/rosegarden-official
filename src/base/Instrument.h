@@ -176,7 +176,7 @@ public:
         m_sendProgramChange = value;
         if (value) { emit changedChannelSetup(); }
     }
-    bool sendsProgramChange() const { return m_sendProgramChange; }
+    bool sendsProgramChange() const;
 
     void setControllerValue(MidiByte controller, MidiByte value);
     MidiByte getControllerValue(MidiByte controller) const;
