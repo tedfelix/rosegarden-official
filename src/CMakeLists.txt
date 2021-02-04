@@ -83,6 +83,7 @@ set(rg_CPPS
   misc/Debug.cpp
   misc/Version.cpp
   misc/Strings.cpp
+  misc/Preferences.cpp
   gui/dialogs/PasteNotationDialog.cpp
   gui/dialogs/ConfigureDialogBase.cpp
   gui/dialogs/PitchDialog.cpp

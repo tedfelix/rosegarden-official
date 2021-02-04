@@ -427,6 +427,7 @@ InternalSegmentMapper::insertChannelSetup(MappedInserterBase &inserter)
     m_channelManager.insertChannelSetup(
             m_segment->getTrack(),
             RealTime::zeroTime,
+            true,  // sendBSPC
             getControllers(instrument, RealTime::zeroTime),
             inserter);
 }

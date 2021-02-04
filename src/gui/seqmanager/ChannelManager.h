@@ -155,8 +155,8 @@ public:
     /**
      * Inserts the following:
      *
-     *   - Bank Select from Instrument
-     *   - Program Change from Instrument
+     *   - Bank Select from Instrument (if sendBSPC == true)
+     *   - Program Change from Instrument (if sendBSPC == true)
      *   - Reset All Controllers (optional based on user preference)
      *   - Control Changes from controllerAndPBList
      *   - Pitchbend from controllerAndPBList
@@ -166,6 +166,7 @@ public:
             const Instrument *instrument,
             ChannelId channel,
             RealTime insertTime,
+            bool sendBSPC,
             const ControllerAndPBList &controllerAndPBList,
             MappedInserterBase &inserter);
 
@@ -202,6 +203,7 @@ public:
     void insertChannelSetup(
             TrackId trackId,
             RealTime insertTime,
+            bool sendBSPC,
             const ControllerAndPBList &controllerAndPBList,
             MappedInserterBase &inserter);
 

@@ -21,12 +21,16 @@
 #include "ChannelManager.h"
 
 #include "base/AllocateChannels.h"
-#include "base/Instrument.h"
-#include "misc/Debug.h"
+#include "base/Composition.h"
 #include "misc/ConfigGroups.h"
+#include "misc/Debug.h"
+#include "base/Instrument.h"
 #include "sound/MappedEvent.h"
 #include "sound/MappedInserterBase.h"
 #include "sound/Midi.h"
+#include "misc/Preferences.h"
+#include "document/RosegardenDocument.h"
+#include "gui/application/RosegardenMainWindow.h"
 
 #include <QSettings>
 
@@ -166,54 +170,62 @@ void ChannelManager::insertChannelSetup(
         const Instrument *instrument,
         ChannelId channel,
         RealTime insertTime,
+        bool sendBSPC,
         const ControllerAndPBList &controllerAndPBList,
         MappedInserterBase &inserter)
 {
-    // Bank Select
+    if (sendBSPC) {
 
-    if (!instrument->hasFixedChannel()  ||
-        instrument->sendsBankSelect()) {
-        {
-            // Bank Select MSB
-            MappedEvent mE(instrument->getId(),
-                           MappedEvent::MidiController,
-                           MIDI_CONTROLLER_BANK_MSB,
-                           instrument->getMSB());
-            mE.setRecordedChannel(channel);
-            mE.setEventTime(insertTime);
-            mE.setTrackId(trackId);
-            inserter.insertCopy(mE);
+        // Bank Select
+
+        if (!instrument->hasFixedChannel()  ||
+            instrument->sendsBankSelect()) {
+            {
+                // Bank Select MSB
+                MappedEvent mE(instrument->getId(),
+                               MappedEvent::MidiController,
+                               MIDI_CONTROLLER_BANK_MSB,
+                               instrument->getMSB());
+                mE.setRecordedChannel(channel);
+                mE.setEventTime(insertTime);
+                mE.setTrackId(trackId);
+                inserter.insertCopy(mE);
+            }
+            {
+                // Bank Select LSB
+                MappedEvent mE(instrument->getId(),
+                               MappedEvent::MidiController,
+                               MIDI_CONTROLLER_BANK_LSB,
+                               instrument->getLSB());
+                mE.setRecordedChannel(channel);
+                mE.setEventTime(insertTime);
+                mE.setTrackId(trackId);
+                inserter.insertCopy(mE);
+            }
         }
-        {
-            // Bank Select LSB
-            MappedEvent mE(instrument->getId(),
-                           MappedEvent::MidiController,
-                           MIDI_CONTROLLER_BANK_LSB,
-                           instrument->getLSB());
-            mE.setRecordedChannel(channel);
-            mE.setEventTime(insertTime);
-            mE.setTrackId(trackId);
-            inserter.insertCopy(mE);
-        }
-    }
 
-    // Program Change
-
-    if (!instrument->hasFixedChannel()  ||
-        instrument->sendsProgramChange()) {
         // Program Change
-        MappedEvent mE(instrument->getId(),
-                       MappedEvent::MidiProgramChange,
-                       instrument->getProgramChange());
-        mE.setRecordedChannel(channel);
-        mE.setEventTime(insertTime);
-        mE.setTrackId(trackId);
-        inserter.insertCopy(mE);
+
+        if (!instrument->hasFixedChannel()  ||
+            instrument->sendsProgramChange()) {
+            // Program Change
+            MappedEvent mE(instrument->getId(),
+                           MappedEvent::MidiProgramChange,
+                           instrument->getProgramChange());
+            mE.setRecordedChannel(channel);
+            mE.setEventTime(insertTime);
+            mE.setTrackId(trackId);
+            inserter.insertCopy(mE);
+        }
+
     }
 
     // Reset All Controllers
 
-    if (allowReset()) {
+    const StaticControllers &ccVector = controllerAndPBList.m_controllers;
+
+    // If reset allowed and there are some CCs to send out
+    if (allowReset()  &&  !ccVector.empty()) {
         // In case some controllers are on that we don't know about, turn
         // all controllers off.  (Reset All Controllers)
         try {
@@ -232,11 +244,9 @@ void ChannelManager::insertChannelSetup(
 
     // Control Changes
 
-    const StaticControllers &list = controllerAndPBList.m_controllers;
-
     // For each controller
-    for (StaticControllers::const_iterator cIt = list.begin();
-         cIt != list.end(); ++cIt) {
+    for (StaticControllers::const_iterator cIt = ccVector.begin();
+         cIt != ccVector.end(); ++cIt) {
         const MidiByte controlId = cIt->first;
         const MidiByte controlValue = cIt->second;
 
@@ -353,13 +363,32 @@ bool ChannelManager::makeReady(
     if (!m_instrument->hasFixedChannel()  ||  forceChannelSetups()  ||
         startingInMiddle) {
 
+        const bool looping =
+                RosegardenMainWindow::self()->getDocument()->
+                    getComposition().isLooping();
+
+        // This is for those who use looping as a compositional tool along
+        // with synths that can't handle program changes immediately prior
+        // to notes coming in.
+        const bool sendBSPC =
+                (Preferences::getSendProgramChangesWhenLooping()  ||
+                 !looping);
+
+        // This is for those who use looping as a compositional tool along
+        // with synths that can't handle control changes immediately prior
+        // to notes coming in.
+        const bool sendCCs =
+                (Preferences::getSendControlChangesWhenLooping()  ||
+                 !looping);
+
         insertChannelSetup(
                 trackId,
                 time,
-                controllerAndPBList,
+                sendBSPC,  // sendBSPC
+                sendCCs ? controllerAndPBList : ControllerAndPBList(),
                 inserter);
     }
-    
+
     m_ready = true;
 
     return true;
@@ -369,6 +398,7 @@ void
 ChannelManager::insertChannelSetup(
         TrackId trackId,
         RealTime insertTime,
+        bool sendBSPC,
         const ControllerAndPBList &controllerAndPBList,
         MappedInserterBase &inserter)
 {
@@ -385,7 +415,7 @@ ChannelManager::insertChannelSetup(
     if (m_instrument->getType() == Instrument::Midi) {
         ChannelId channel = m_channelInterval.getChannelId();
         insertChannelSetup(trackId, m_instrument, channel, insertTime,
-                           controllerAndPBList, inserter);
+                           sendBSPC, controllerAndPBList, inserter);
     }
 }
 

@@ -273,6 +273,7 @@ sendChannelSetup(Instrument *instrument, int channel)
             instrument,
             channel,
             RealTime::zeroTime,  // insertTime
+            true,  // sendBSPC
             instrument->getStaticControllers(),
             inserter);
 
