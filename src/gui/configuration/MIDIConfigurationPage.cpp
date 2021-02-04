@@ -24,6 +24,7 @@
 #include "gui/widgets/FileDialog.h"
 #include "gui/widgets/LineEdit.h"
 #include "sound/MappedEvent.h"
+#include "misc/Preferences.h"
 #include "document/RosegardenDocument.h"
 #include "sequencer/RosegardenSequencer.h"
 #include "gui/application/RosegardenMainWindow.h"
@@ -173,6 +174,38 @@ MIDIConfigurationPage::MIDIConfigurationPage(QWidget *parent):
     connect(m_allowResetAllControllers, &QCheckBox::stateChanged,
             this, &MIDIConfigurationPage::slotModified);
     layout->addWidget(m_allowResetAllControllers, row, 2);
+
+    ++row;
+
+    // Send program changes when looping
+    label = new QLabel(tr("Send program changes when looping"));
+    toolTip = tr("Some synths have trouble with program changes coming in repeatedly.  Use this to turn them off when looping.");
+    label->setToolTip(toolTip);
+    layout->addWidget(label, row, 0, 1, 2);
+
+    m_sendProgramChangesWhenLooping = new QCheckBox;
+    m_sendProgramChangesWhenLooping->setToolTip(toolTip);
+    m_sendProgramChangesWhenLooping->setChecked(
+            Preferences::getSendProgramChangesWhenLooping());
+    connect(m_sendProgramChangesWhenLooping, &QCheckBox::stateChanged,
+            this, &MIDIConfigurationPage::slotModified);
+    layout->addWidget(m_sendProgramChangesWhenLooping, row, 2);
+
+    ++row;
+
+    // Send control changes when looping
+    label = new QLabel(tr("Send control changes when looping"));
+    toolTip = tr("Some synths have trouble with control changes coming in repeatedly.  Use this to turn them off when looping.");
+    label->setToolTip(toolTip);
+    layout->addWidget(label, row, 0, 1, 2);
+
+    m_sendControlChangesWhenLooping = new QCheckBox;
+    m_sendControlChangesWhenLooping->setToolTip(toolTip);
+    m_sendControlChangesWhenLooping->setChecked(
+            Preferences::getSendControlChangesWhenLooping());
+    connect(m_sendControlChangesWhenLooping, &QCheckBox::stateChanged,
+            this, &MIDIConfigurationPage::slotModified);
+    layout->addWidget(m_sendControlChangesWhenLooping, row, 2);
 
     ++row;
 
@@ -444,6 +477,11 @@ MIDIConfigurationPage::apply()
 
     settings.setValue("allowresetallcontrollers",
                       m_allowResetAllControllers->isChecked());
+
+    Preferences::setSendProgramChangesWhenLooping(
+            m_sendProgramChangesWhenLooping->isChecked());
+    Preferences::setSendControlChangesWhenLooping(
+            m_sendControlChangesWhenLooping->isChecked());
 
     // If the timer setting has actually changed
     if (m_sequencerTimingSource->currentText() != m_originalTimingSource) {

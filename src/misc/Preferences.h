@@ -25,6 +25,7 @@ namespace Rosegarden
  * a central location has the following benefits:
  *
  *   - Single location for .conf entry names and defaults.
+ *   - Avoids confusing calls to QSettings::beginGroup()/endGroup().
  *   - Performance.  Caching to avoid hitting the .conf file.
  *   - Avoiding restarts.  By calling the setters, the
  *     Preferences dialogs can have a direct effect on cached

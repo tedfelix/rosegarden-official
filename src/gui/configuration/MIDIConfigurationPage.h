@@ -68,6 +68,8 @@ private:
     QCheckBox *m_externalControllerPort;
     QComboBox *m_controllerType;
     QCheckBox *m_allowResetAllControllers;
+    QCheckBox *m_sendProgramChangesWhenLooping;
+    QCheckBox *m_sendControlChangesWhenLooping;
     QCheckBox *m_acceptTransportCCs;
     /// Timer value at the beginning to detect changes.
     QString m_originalTimingSource;
