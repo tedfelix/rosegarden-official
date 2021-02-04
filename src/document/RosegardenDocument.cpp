@@ -776,8 +776,9 @@ RosegardenDocument::mergeDocument(RosegardenDocument *doc,
     emit makeTrackVisible(firstAlteredTrack + yrNrTracks/2 + 1);
 }
 
-void RosegardenDocument::sendChannelSetups()
+void RosegardenDocument::sendChannelSetups(bool reset)
 {
+    std::set<DeviceId> devicesSeen;
     std::set<InstrumentId> instrumentsSeen;
 
     // For each track in the composition, send the channel setup
@@ -789,7 +790,7 @@ void RosegardenDocument::sendChannelSetups()
         //const TrackId trackId = i->first;
         const Track *track = i->second;
 
-        InstrumentId instrumentId = track->getInstrument();
+        const InstrumentId instrumentId = track->getInstrument();
 
         // If we've already seen this instrument, try the next track.
         if (instrumentsSeen.find(instrumentId) != instrumentsSeen.end())
@@ -806,6 +807,34 @@ void RosegardenDocument::sendChannelSetups()
         // If this isn't a MIDI instrument, try the next track.
         if (instrument->getType() != Instrument::Midi)
             continue;
+
+        // The reset feature is experimental and unused (all callers
+        // specify reset == false).  I suspect it might
+        // cause trouble with some synths.  It's probably also
+        // ignored by some.  Might want to make this configurable
+        // via the .conf or maybe pop up a dialog to ask whether
+        // to send resets.
+
+        const DeviceId deviceId = instrument->getDevice()->getId();
+
+        // If we've not seen this Device before
+        if (reset  &&  devicesSeen.find(deviceId) == devicesSeen.end())
+        {
+            // Send a Reset
+            // ??? Would it be better to send the resets, wait a few seconds,
+            //     then send the channel setups?  Some hardware might need
+            //     time to respond to a reset.
+
+            const MappedEvent mappedEvent(
+                    instrumentId,
+                    MappedEvent::MidiSystemMessage,
+                    MIDI_SYSTEM_RESET);
+
+            StudioControl::sendMappedEvent(mappedEvent);
+
+            // Add Device to devices we've seen.
+            devicesSeen.insert(deviceId);
+        }
 
         // If this instrument isn't in fixed channel mode, try the next track.
         if (!instrument->hasFixedChannel())
@@ -972,7 +1001,7 @@ void RosegardenDocument::initialiseStudio()
         }
     }
 
-    sendChannelSetups();
+    sendChannelSetups(false);  // no resets
 
     RG_DEBUG << "initialiseStudio(): Have " << pluginContainers.size() << " plugin container(s)";
 

@@ -193,9 +193,6 @@ public:
     void processAsynchronousMidi(const MappedEventList &mC,
                                  AudioManagerDialog *aMD);
 
-    /// Reset MIDI network.  Send an FF Reset on all devices and channels.
-    void resetMidiNetwork();
-
     /// Send all note offs and resets to MIDI devices.
     /**
      * The actual work appears to be done by AlsaDriver::processEventsOut()

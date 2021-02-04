@@ -8184,17 +8184,11 @@ RosegardenMainWindow::slotImportStudioFromFile(const QString &file)
 void
 RosegardenMainWindow::slotResetMidiNetwork()
 {
-    if (m_seqManager) {
+    if (!m_doc)
+        return;
 
-        // ??? Suspect this is no longer needed.  It used to send out
-        //     program changes, but it doesn't do that anymore.  Instead
-        //     it calls RosegardenSequencer::setMappedInstrument() for each
-        //     Instrument.  That probably does nothing at this point.
-        m_seqManager->preparePlayback();
-
-        m_seqManager->resetMidiNetwork();
-    }
-
+    // Send out BS/PC/CCs for each Track.
+    m_doc->sendChannelSetups(false);  // do not send resets
 }
 
 void

@@ -1167,32 +1167,6 @@ SequenceManager::preparePlayback()
 }
 
 void
-SequenceManager::resetMidiNetwork()
-{
-    MappedEventList mC;
-
-    // ??? This should send resets on all MIDI channels on all MIDI
-    //     Device's.  As it is now, it only does the first Device.
-
-    for (unsigned int i = 0; i < 16; ++i) {
-        MappedEvent *mE =
-            new MappedEvent(MidiInstrumentBase + i,
-                            MappedEvent::MidiController,
-                            MIDI_SYSTEM_RESET,
-                            0);
-
-        mC.insert(mE);
-
-        // Display the first one on the TransportDialog.
-        if (i == 0)
-            emit signalMidiOutLabel(mE);
-    }
-
-    // Send it out.
-    StudioControl::sendMappedEventList(mC);
-}
-
-void
 SequenceManager::reinitialiseSequencerStudio()
 {
     // ??? static function.  What class does this really belong in?
