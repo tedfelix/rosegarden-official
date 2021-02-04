@@ -425,6 +425,9 @@ public:
      */
     void clearAllPlugins();
 
+    /// Send channel setups (BS/PC/CCs) for each Track.
+    void sendChannelSetups();
+
     /**
      * Initialise the Studio with a new document's settings
      */
