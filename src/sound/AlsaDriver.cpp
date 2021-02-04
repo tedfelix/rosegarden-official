@@ -3958,11 +3958,18 @@ AlsaDriver::processMidiOut(const MappedEventList &rgEventList,
 
                 //RG_DEBUG << "processMidiOut() - " << "send clock @ " << rt;
 
+                // Send out the sync port.
                 sendSystemQueued(SND_SEQ_EVENT_CLOCK, "", rt);
 
+                // Skip the usual processing since we aren't using
+                // alsaEvent.
                 continue;
 
             }
+                break;
+
+            case MIDI_SYSTEM_RESET:
+                alsaEvent.type = SND_SEQ_EVENT_RESET;
                 break;
 
             default:
