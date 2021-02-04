@@ -55,36 +55,12 @@ class EventView : public ListEditView, public SegmentObserver
 {
     Q_OBJECT
 
-    // Event filters
-    //
-    enum EventFilter
-    {
-        None               = 0x0000,
-        Note               = 0x0001,
-        Rest               = 0x0002,
-        Text               = 0x0004,
-        SystemExclusive    = 0x0008,
-        Controller         = 0x0010,
-        ProgramChange      = 0x0020,
-        PitchBend          = 0x0040,
-        ChannelPressure    = 0x0080,
-        KeyPressure        = 0x0100,
-        Indication         = 0x0200,
-        Other              = 0x0400,
-        GeneratedRegion    = 0x0800,
-        SegmentID          = 0x1000,
-    };
-
 public:
     EventView(RosegardenDocument *doc,
               std::vector<Segment *> segments,
               QWidget *parent);
 
     ~EventView() override;
-
-    void closeEvent(QCloseEvent *event) override;
-
-    virtual bool applyLayout(int staffNo = -1);
 
     void refreshSegment(Segment *segment,
                                 timeT startTime = 0,
@@ -104,6 +80,12 @@ public:
     // Menu creation and show
     //
     void createMenu();
+
+    // SegmentObserver overrides.
+    void eventAdded(const Segment *, Event *) override { }
+    void eventRemoved(const Segment *, Event *) override;
+    void endMarkerTimeChanged(const Segment *, bool) override { }
+    void segmentDeleted(const Segment *) override;
 
 public slots:
 
@@ -127,16 +109,15 @@ public slots:
     //
     void slotModifyFilter();
 
-    void eventAdded(const Segment *, Event *) override { }
-    void eventRemoved(const Segment *, Event *) override;
-    void endMarkerTimeChanged(const Segment *, bool) override { }
-    void segmentDeleted(const Segment *) override;
-
     void slotHelpRequested();
     void slotHelpAbout();
 
 signals:
     void editTriggerSegment(int);
+
+protected:
+    // QWidget overrides.
+    void closeEvent(QCloseEvent *event) override;
 
 private slots:
     void slotSaveOptions() override;
@@ -169,47 +150,68 @@ private slots:
 
 private:
 
+    bool applyLayout();
+
     /// virtual function inherited from the base class, this implementation just
     /// calls updateWindowTitle() and avoids a refactoring job, even though
     /// updateViewCaption is superfluous
     void updateViewCaption() override;
 
     void readOptions() override;
-    void makeInitialSelection(timeT);
     QString makeTimeString(timeT time, int timeMode);
     QString makeDurationString(timeT time,
                                timeT duration, int timeMode);
     Segment *getCurrentSegment() override;
 
-    //--------------- Data members ---------------------------------
+    QGroupBox   *m_filterGroup;  // Event filters
+    QCheckBox   *m_noteCheckBox;
+    QCheckBox   *m_programCheckBox;
+    QCheckBox   *m_controllerCheckBox;
+    QCheckBox   *m_pitchBendCheckBox;
+    QCheckBox   *m_sysExCheckBox;
+    QCheckBox   *m_keyPressureCheckBox;
+    QCheckBox   *m_channelPressureCheckBox;
+    QCheckBox   *m_restCheckBox;
+    QCheckBox   *m_indicationCheckBox;
+    QCheckBox   *m_textCheckBox;
+    QCheckBox   *m_generatedRegionCheckBox;
+    QCheckBox   *m_segmentIDCheckBox;
+    QCheckBox   *m_otherCheckBox;
+
+    enum EventFilter
+    {
+        None               = 0x0000,
+        Note               = 0x0001,
+        Rest               = 0x0002,
+        Text               = 0x0004,
+        SystemExclusive    = 0x0008,
+        Controller         = 0x0010,
+        ProgramChange      = 0x0020,
+        PitchBend          = 0x0040,
+        ChannelPressure    = 0x0080,
+        KeyPressure        = 0x0100,
+        Indication         = 0x0200,
+        Other              = 0x0400,
+        GeneratedRegion    = 0x0800,
+        SegmentID          = 0x1000,
+    };
+    int          m_eventFilter;
+
+    // ??? Why is this a tree widget?  When are there ever sub-nodes?
+    QTreeWidget *m_eventList;
+
+    std::vector<int> m_listSelection;
+    void makeInitialSelection(timeT);
+
+    std::set<Event *> m_deletedEvents; // deleted since last refresh
+
+    // Pop-up menu for the event list.
+    QMenu       *m_menu;
 
     bool         m_isTriggerSegment;
     QLabel      *m_triggerName;
     QLabel      *m_triggerPitch;
     QLabel      *m_triggerVelocity;
-
-    QTreeWidget *m_eventList;
-    int          m_eventFilter;
-
-    QGroupBox   *m_filterGroup;
-    QCheckBox   *m_noteCheckBox;
-    QCheckBox   *m_textCheckBox;
-    QCheckBox   *m_sysExCheckBox;
-    QCheckBox   *m_programCheckBox;
-    QCheckBox   *m_controllerCheckBox;
-    QCheckBox   *m_restCheckBox;
-    QCheckBox   *m_pitchBendCheckBox;
-    QCheckBox   *m_keyPressureCheckBox;
-    QCheckBox   *m_channelPressureCheckBox;
-    QCheckBox   *m_indicationCheckBox;
-    QCheckBox   *m_generatedRegionCheckBox;
-    QCheckBox   *m_segmentIDCheckBox;
-    QCheckBox   *m_otherCheckBox;
-
-    std::vector<int> m_listSelection;
-    std::set<Event *> m_deletedEvents; // deleted since last refresh
-
-    QMenu       *m_menu;
 
 };
 

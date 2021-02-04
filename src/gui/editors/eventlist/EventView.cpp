@@ -313,7 +313,7 @@ EventView::EventView(RosegardenDocument *doc,
 EventView::~EventView()
 {
     for (unsigned int i = 0; i < m_segments.size(); ++i) {
-        RG_DEBUG << "~EventView - removing this observer from " << m_segments[i];
+        //RG_DEBUG << "dtor - removing this observer from " << m_segments[i];
         m_segments[i]->removeObserver(this);
     }
 }
@@ -354,7 +354,7 @@ EventView::segmentDeleted(const Segment *s)
 }
 
 bool
-EventView::applyLayout(int /*staffNo*/)
+EventView::applyLayout()
 {
     // If no selection has already been set then we copy what's
     // already set and try to replicate this after the rebuild
@@ -376,8 +376,11 @@ EventView::applyLayout(int /*staffNo*/)
         }// end if selection.count()
     }// end if m_listSel..
     
-    // Ok, recreate list
-    //
+    // *** Create the event list.
+
+    // ??? Why is this routine called applyLayout() if it is primarily
+    //     creating the event list?
+
     m_eventList->clear();
 
     QSettings settings;
@@ -664,6 +667,11 @@ EventView::makeInitialSelection(timeT time)
     EventViewItem *goodItem = nullptr;
     int goodItemNo = 0;
 
+    // For each item in the event list.
+    // ??? Performance: LINEAR SEARCH
+    //     While we could speed this up with a binary search, it would be
+    //     smarter to find the appropriate event while we are creating the
+    //     m_eventList in applyLayout().
     for (int itemNo = 0; itemNo < itemCount; ++itemNo) {
         EventViewItem *item =
                 dynamic_cast<EventViewItem *>(
@@ -772,7 +780,7 @@ EventView::refreshSegment(Segment * /*segment*/,
                           timeT /*endTime*/)
 {
     RG_DEBUG << "EventView::refreshSegment";
-    applyLayout(0);
+    applyLayout();
 }
 
 void
@@ -1373,7 +1381,7 @@ EventView::slotModifyFilter()
     
     if (m_otherCheckBox->isChecked()) m_eventFilter |= EventView::Other;
 
-    applyLayout(0);
+    applyLayout();
 }
 
 void
@@ -1686,4 +1694,6 @@ EventView::slotHelpAbout()
 {
     new AboutDialog(this);
 }
+
+
 }
