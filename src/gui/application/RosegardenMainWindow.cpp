@@ -841,6 +841,10 @@ RosegardenMainWindow::setupActions()
     // Set the rewind and fast-forward buttons for auto-repeat.
     enableAutoRepeat("Transport Toolbar", "rewind");
     enableAutoRepeat("Transport Toolbar", "fast_forward");
+
+    // Do an initial setup of the recent files so that Ctrl+R will
+    // work at startup.
+    setupRecentFilesMenu();
 }
 
 void
