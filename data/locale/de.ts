@@ -14652,7 +14652,7 @@ Dies könnte Probleme verursachen, wenn so später ein berechneter Wert übersch
         <translation>Wert (Data2)  </translation>
     </message>
     <message>
-        <location line="+201"/>
+        <location line="+204"/>
         <location line="+8"/>
         <source>&lt;not set&gt;</source>
         <translation>&lt;keine&gt;</translation>
@@ -14673,7 +14673,7 @@ Dies könnte Probleme verursachen, wenn so später ein berechneter Wert übersch
         <translation>&lt;Keine Events&gt;</translation>
     </message>
     <message>
-        <location line="+170"/>
+        <location line="+175"/>
         <source>Segment label</source>
         <translation>Segmentbenennung ändern</translation>
     </message>
@@ -16922,7 +16922,7 @@ Wollen Sie stattdessen
         <translation>MIDI-Einstellungen</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="+71"/>
+        <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="+72"/>
         <source>Base octave number for MIDI pitch display</source>
         <translation>Basis-Oktavennummer für die MIDI-Tonhöhenanzeige</translation>
     </message>
@@ -16956,7 +16956,7 @@ verursacht.</translation>
         <translation>Beim Anlegen eines Kanals kann Rosegarden ein Zurücksetzen-Aller-Kontroller-Event (CC 121) senden.</translation>
     </message>
     <message>
-        <location line="+16"/>
+        <location line="+48"/>
         <source>Sequencer timing source</source>
         <translation>Zeitgeberquelle des Sequencers</translation>
     </message>
@@ -16987,7 +16987,7 @@ verursacht.</translation>
         <translation>SoundFont</translation>
     </message>
     <message>
-        <location line="-190"/>
+        <location line="-222"/>
         <source>General</source>
         <translation>Allgemein</translation>
     </message>
@@ -17032,7 +17032,27 @@ verursacht.</translation>
         <translation>Rosegarden wird diese CCs verwerfen, deshalb hier deaktivieren falls diese CCs für Anderes verwendet werden.</translation>
     </message>
     <message>
-        <location line="+133"/>
+        <location line="+36"/>
+        <source>Send program changes when looping</source>
+        <translation>Programmwechsel während laufender Loop nicht senden</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Some synths have trouble with program changes coming in repeatedly.  Use this to turn them off when looping.</source>
+        <translation>Manche Synthesizer haben Probleme mit wiederholt eingehenden Programmwechsel. Verwende die Option, um diese während laufender Loop abzuschalten.</translation>
+    </message>
+    <message>
+        <location line="+15"/>
+        <source>Send control changes when looping</source>
+        <translation>Kontrollwechsel während laufender Loop nicht senden</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Some synths have trouble with control changes coming in repeatedly.  Use this to turn them off when looping.</source>
+        <translation>Manche Synthesizer haben Probleme mit wiederholt eingehenden Kontrollwechsel. Verwende die Option, um diese während laufender Loop abzuschalten.</translation>
+    </message>
+    <message>
+        <location line="+112"/>
         <source>MIDI Clock and System messages</source>
         <translation>MIDI-Clock- und System-Nachrichten</translation>
     </message>
@@ -20768,7 +20788,7 @@ Bitte überprüfen Sie die Einstellungen im Dialog &quot;MIDI-Geräte verwalten&
     <message>
         <location filename="../../src/commands/studio/RemoveControlParameterCommand.h" line="+44"/>
         <source>&amp;Remove Control Parameter</source>
-        <translation>Kontroll-Parameter entfe&amp;rnen</translation>
+        <translation>Kontroller-Parameter entfe&amp;rnen</translation>
     </message>
 </context>
 <context>
@@ -21033,7 +21053,7 @@ Möglicherweise gibt es Inkompatibilitäten zwischen den Dateiformaten.</transla
         <location line="+12"/>
         <location line="+66"/>
         <location line="+32"/>
-        <location line="+405"/>
+        <location line="+439"/>
         <location line="+629"/>
         <location line="+11"/>
         <location line="+22"/>
@@ -21053,7 +21073,7 @@ Möglicherweise gibt es Inkompatibilitäten zwischen den Dateiformaten.</transla
         <translation type="obsolete">Kann Dokument nicht unter %1 speichern</translation>
     </message>
     <message numerus="yes">
-        <location line="-2576"/>
+        <location line="-2610"/>
         <source>Delete the %n audio file(s) recorded during the unsaved session?</source>
         <translation>
             <numerusform>Soll %n Audio-Datei gelöscht werden, die während der nicht abgespeicherten Sitzung aufgenommen wurde?</numerusform>
@@ -21126,7 +21146,7 @@ Bitte wählen diejenigen aus, die Sie permanent von der Festplatte entfernen mö
         <translation>Zusammenfügen</translation>
     </message>
     <message>
-        <location line="+515"/>
+        <location line="+549"/>
         <source>&apos;%1&apos; is read-only.  Please save to a different file.</source>
         <translation>&apos;%1&apos; ist schreibgesichert.  Bitte in einer anderen Datei speichern.</translation>
     </message>
@@ -21203,8 +21223,8 @@ die Datei bearbeitet, die Sperrdatei löschen und neu bversuchen.
         <translation>Fehler beim Schreiben auf %1&apos;</translation>
     </message>
     <message>
-        <location line="-816"/>
-        <location line="+2230"/>
+        <location line="-850"/>
+        <location line="+2264"/>
         <source>Cancel</source>
         <translation>Abbrechen</translation>
     </message>
@@ -21446,7 +21466,7 @@ Fehler war: %2</translation>
         <location line="-496"/>
         <location line="+342"/>
         <location line="+157"/>
-        <location line="+6398"/>
+        <location line="+6392"/>
         <source>Could not save document at %1</source>
         <translation>Kann Dokument nicht unter %1 speichern</translation>
     </message>
@@ -21455,7 +21475,7 @@ Fehler war: %2</translation>
         <translation type="obsolete">Neues Anwendungsfenster öffnen...</translation>
     </message>
     <message>
-        <location line="-6829"/>
+        <location line="-6823"/>
         <source>Creating new document...</source>
         <translation>Neues Dokument erzeugen...</translation>
     </message>
@@ -21866,18 +21886,18 @@ Segmente-&gt;Segmente zusammenfassen.
         <location line="+18"/>
         <location line="+3"/>
         <location line="+10"/>
-        <location line="+525"/>
+        <location line="+519"/>
         <location line="+2"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location line="-701"/>
+        <location line="-695"/>
         <source>http://rosegardenmusic.com/tutorials/</source>
         <translation>http://rosegardenmusic.com/tutorials/</translation>
     </message>
     <message>
-        <location line="+448"/>
+        <location line="+442"/>
         <source>&lt;h3&gt;Newer version available&lt;/h3&gt;</source>
         <translation>&lt;h3&gt;Neuere Version verfügbar&lt;/h3&gt;</translation>
     </message>
@@ -21887,7 +21907,7 @@ Segmente-&gt;Segmente zusammenfassen.
         <translation>&lt;p&gt;SIe benutzen Version %1.  Version %2 ist nun verfügbar.&lt;/p&gt;&lt;p&gt;Bitte schauen SIe auf der &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/getting/&quot;&gt;Webseite von Rosegarden&lt;/a&gt; nach weiteren Infomationen.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location line="-4430"/>
+        <location line="-4424"/>
         <source>Open MIDI File</source>
         <translation>MIDI-Datei öffnen</translation>
     </message>
@@ -22311,7 +22331,7 @@ Fehler: %2</translation>
         <translation>Studio importieren</translation>
     </message>
     <message>
-        <location line="+373"/>
+        <location line="+367"/>
         <source>&lt;h3&gt;Invalid audio path&lt;/h3&gt;</source>
         <translation>&lt;h3&gt;Ungültiger Audio-Pfad&lt;/h3&gt;</translation>
     </message>
