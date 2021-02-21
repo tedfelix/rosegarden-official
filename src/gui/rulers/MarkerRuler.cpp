@@ -310,6 +310,12 @@ MarkerRuler::paintEvent(QPaintEvent*)
 
         double x = m_rulerScale->getBarPosition(i) + m_currentXOffset;
 
+        // avoid writing bar numbers that will be overwritten
+        if (i < lastBar) {
+            double nextx = m_rulerScale->getBarPosition(i+1) + m_currentXOffset;
+            if ((nextx - x) < 0.0001) continue;
+        }
+
         if (x > clipRect.x() + clipRect.width())
             break;
 
