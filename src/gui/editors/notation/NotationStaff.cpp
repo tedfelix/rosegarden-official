@@ -1983,4 +1983,18 @@ NotationStaff::includesTime(timeT t)
     return (t >= t0 && t < t1);
 }
 
+timeT NotationStaff::getStartTime() const
+{
+    Composition *composition = getSegment().getComposition();
+    return composition->getBarStartForTime
+        (getSegment().getClippedStartTime() + 1);
+}
+
+timeT NotationStaff::getEndTime() const
+{
+    Composition *composition = getSegment().getComposition();
+    return composition->getBarEndForTime
+        (getSegment().getEndMarkerTime() - 1);
+}
+
 }

@@ -534,6 +534,9 @@ private:
     // These Segments are not in Composition, they are dummies for
     // viewing a triggered segment's expansion.
     SegmentVector      m_adoptedSegments;    // I own these
+
+    timeT m_oldPointerPosition;
+    timeT m_cursorPosition;
 };
 
 }

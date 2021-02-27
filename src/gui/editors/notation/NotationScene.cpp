@@ -536,24 +536,31 @@ NotationScene::getStaffbyTrackAndTime(const Track *track, timeT targetTime)
     // Prepare a fallback: If this is the right track but no staff
     // includes time t, we'll return the fallback instead.  We
     // don't try to find the best fallback.
-    bool haveFallback = false;
     NotationStaff * fallback = nullptr;
+    timeT minTime = 1.0e10;
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
         if (m_staffs[i]->getSegment().getTrack() == track->getId()) {
             if(m_staffs[i]->includesTime(targetTime)) {
                 return m_staffs[i];
             } else {
-                haveFallback = true;
-                fallback = m_staffs[i];
+                // find the closest staff to the targetTime
+                timeT dt1 = abs(targetTime - m_staffs[i]->getStartTime());
+                if (dt1 < minTime) {
+                    minTime = dt1;
+                    fallback = m_staffs[i];
+                }
+                timeT dt2 = abs(targetTime - m_staffs[i]->getEndTime());
+                if (dt2 < minTime) {
+                    minTime = dt2;
+                    fallback = m_staffs[i];
+                }
             }
         }
     }
     // We found segments on the track, but none that include time
     // t.  In this circumstance, we still want to return a staff
     // so return the fallback.
-    if (haveFallback) { return fallback; }
-    
-    return nullptr;
+    return fallback;
 }
 
 // @params

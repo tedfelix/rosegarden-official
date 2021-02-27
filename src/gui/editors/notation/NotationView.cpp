@@ -229,7 +229,9 @@ NotationView::NotationView(RosegardenDocument *doc,
     m_fontCombo(nullptr),
     m_fontSizeCombo(nullptr),
     m_spacingCombo(nullptr),
-    m_segments(segments)
+    m_segments(segments),
+    m_oldPointerPosition(0),
+    m_cursorPosition(0)
 {
     m_notationWidget = new NotationWidget();
     setCentralWidget(m_notationWidget);
@@ -2016,10 +2018,17 @@ NotationView::slotCurrentStaffUp()
 {
     NotationScene *scene = m_notationWidget->getScene();
     if (!scene) return;
-    timeT targetTime = m_doc->getComposition().getPosition();
+    timeT pointerPosition = m_doc->getComposition().getPosition();
+    // if the pointer has moved take that time
+    if (pointerPosition != m_oldPointerPosition) {
+        m_oldPointerPosition = pointerPosition;
+        m_cursorPosition = pointerPosition;
+    }
+    timeT targetTime = m_cursorPosition;
     NotationStaff *staff = scene->getStaffAbove(targetTime);
     if (!staff) return;
     setCurrentStaff(staff);
+    slotEditSelectWholeStaff();
 }
 
 void
@@ -2027,10 +2036,17 @@ NotationView::slotCurrentStaffDown()
 {
     NotationScene *scene = m_notationWidget->getScene();
     if (!scene) return;
-    timeT targetTime = m_doc->getComposition().getPosition();
+    timeT pointerPosition = m_doc->getComposition().getPosition();
+    // if the pointer has moved take that time
+    if (pointerPosition != m_oldPointerPosition) {
+        m_oldPointerPosition = pointerPosition;
+        m_cursorPosition = pointerPosition;
+    }
+    timeT targetTime = m_cursorPosition;
     NotationStaff *staff = scene->getStaffBelow(targetTime);
     if (!staff) return;
     setCurrentStaff(staff);
+    slotEditSelectWholeStaff();
 }
 
 void
@@ -2040,6 +2056,7 @@ NotationView::slotCurrentSegmentPrior()
     if (!scene) return;
     NotationStaff *staff = scene->getPriorStaffOnTrack();
     if (!staff) return;
+    m_cursorPosition = staff->getStartTime();
     setCurrentStaff(staff);
     slotEditSelectWholeStaff();
 }
@@ -2051,6 +2068,7 @@ NotationView::slotCurrentSegmentNext()
     if (!scene) return;
     NotationStaff *staff = scene->getNextStaffOnTrack();
     if (!staff) return;
+    m_cursorPosition = staff->getStartTime();
     setCurrentStaff(staff);
     slotEditSelectWholeStaff();
 }

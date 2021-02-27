@@ -261,6 +261,10 @@ public:
     timeT getTimeAtSceneCoords(double x, int y) const;
 
     bool includesTime(timeT t);
+
+    timeT getStartTime() const;
+
+    timeT getEndTime() const;
     
 protected:
 
