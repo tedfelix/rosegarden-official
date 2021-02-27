@@ -716,6 +716,7 @@ NotationWidget::slotSetLinearMode()
     }
     m_scene->setPageMode(StaffLayout::LinearMode);
     hideOrShowRulers();
+    updatePointer(m_document->getComposition().getPosition());
 }
 
 void
@@ -726,6 +727,7 @@ NotationWidget::slotSetContinuousPageMode()
     locatePanner(true);
     m_scene->setPageMode(StaffLayout::ContinuousPageMode);
     hideOrShowRulers();
+    updatePointer(m_document->getComposition().getPosition());
 }
 
 void
@@ -737,6 +739,7 @@ NotationWidget::slotSetMultiPageMode()
     }
     m_scene->setPageMode(StaffLayout::MultiPageMode);
     hideOrShowRulers();
+    updatePointer(m_document->getComposition().getPosition());
 }
 
 void
