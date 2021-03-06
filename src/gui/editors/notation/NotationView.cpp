@@ -2055,7 +2055,18 @@ NotationView::slotCurrentSegmentPrior()
     NotationScene *scene = m_notationWidget->getScene();
     if (!scene) return;
     NotationStaff *staff = scene->getPriorStaffOnTrack();
-    if (!staff) return;
+    if (!staff) {
+        // move to next staff above this one
+        staff = scene->getStaffAbove(0);
+        if (!staff) return;
+        // make sure it is the last
+        NotationStaff *nextRightStaff = staff;
+        while (nextRightStaff) {
+            staff = nextRightStaff;
+            setCurrentStaff(staff);
+            nextRightStaff = scene->getNextStaffOnTrack();
+        }
+    }
     m_cursorPosition = staff->getStartTime();
     setCurrentStaff(staff);
     slotEditSelectWholeStaff();
@@ -2067,7 +2078,18 @@ NotationView::slotCurrentSegmentNext()
     NotationScene *scene = m_notationWidget->getScene();
     if (!scene) return;
     NotationStaff *staff = scene->getNextStaffOnTrack();
-    if (!staff) return;
+    if (!staff) {
+        // move to next staff below this one
+        staff = scene->getStaffBelow(0);
+        if (!staff) return;
+        // make sure it is the first
+        NotationStaff *nextLeftStaff = staff;
+        while (nextLeftStaff) {
+            staff = nextLeftStaff;
+            setCurrentStaff(staff);
+            nextLeftStaff = scene->getPriorStaffOnTrack();
+        }
+    }
     m_cursorPosition = staff->getStartTime();
     setCurrentStaff(staff);
     slotEditSelectWholeStaff();
@@ -5186,6 +5208,8 @@ NotationView::slotMagicLayer()
     setWidgetSegments();
 
     // try to make the new segment active immediately
+    // ??? This doesn't work consistently.  Need something better.
+    //     We have newLayer.  Can we just make that the selection?
     slotCurrentSegmentNext();
 }
 
