@@ -164,6 +164,7 @@
 #include <QToolButton>
 #include <QUrl>
 #include <QDesktopServices>
+#include <QApplication>
 
 #include <algorithm>
 #include <set>
@@ -1855,11 +1856,13 @@ NotationView::slotEditSelectToEnd()
 void
 NotationView::slotEditSelectWholeStaff()
 {
+    QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
     Segment *segment = getCurrentSegment();
     setSelection(new EventSelection(*segment,
                                     segment->getStartTime(),
                                     segment->getEndMarkerTime()),
                  false);
+    QApplication::restoreOverrideCursor();
 }
 
 void
@@ -2028,7 +2031,9 @@ NotationView::slotCurrentStaffUp()
     NotationStaff *staff = scene->getStaffAbove(targetTime);
     if (!staff) return;
     setCurrentStaff(staff);
-    slotEditSelectWholeStaff();
+
+    // This can take a very long time.
+    //slotEditSelectWholeStaff();
 }
 
 void
@@ -2046,7 +2051,9 @@ NotationView::slotCurrentStaffDown()
     NotationStaff *staff = scene->getStaffBelow(targetTime);
     if (!staff) return;
     setCurrentStaff(staff);
-    slotEditSelectWholeStaff();
+
+    // This can take a very long time.
+    //slotEditSelectWholeStaff();
 }
 
 void
@@ -2069,7 +2076,9 @@ NotationView::slotCurrentSegmentPrior()
     }
     m_cursorPosition = staff->getStartTime();
     setCurrentStaff(staff);
-    slotEditSelectWholeStaff();
+
+    // This can take a very long time.
+    //slotEditSelectWholeStaff();
 }
 
 void
@@ -2092,7 +2101,9 @@ NotationView::slotCurrentSegmentNext()
     }
     m_cursorPosition = staff->getStartTime();
     setCurrentStaff(staff);
-    slotEditSelectWholeStaff();
+
+    // This can take a very long time.
+    //slotEditSelectWholeStaff();
 }
 
 void
