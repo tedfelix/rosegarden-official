@@ -2077,8 +2077,11 @@ NotationView::slotCurrentSegmentPrior()
     m_cursorPosition = staff->getStartTime();
     setCurrentStaff(staff);
 
-    // This can take a very long time.
-    //slotEditSelectWholeStaff();
+    // This can take a very long time.  But there is no other indicator
+    // of which notes are in the current Segment.  We should probably
+    // either gray the notes that aren't in the current Segment, or
+    // highlight the notes that are.
+    slotEditSelectWholeStaff();
 }
 
 void
@@ -2102,8 +2105,11 @@ NotationView::slotCurrentSegmentNext()
     m_cursorPosition = staff->getStartTime();
     setCurrentStaff(staff);
 
-    // This can take a very long time.
-    //slotEditSelectWholeStaff();
+    // This can take a very long time.  But there is no other indicator
+    // of which notes are in the current Segment.  We should probably
+    // either gray the notes that aren't in the current Segment, or
+    // highlight the notes that are.
+    slotEditSelectWholeStaff();
 }
 
 void
