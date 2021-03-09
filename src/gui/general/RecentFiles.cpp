@@ -101,12 +101,20 @@ RecentFiles::add(QString name)
 void
 RecentFiles::removeNonExistent()
 {
+    bool done = false;
+
     for (std::deque<QString>::iterator i = m_names.begin();
-         i != m_names.end();
+         !done;
          /* Increment before use idiom. */) {
 
         // Increment before use.  So we can delete as we go.
         std::deque<QString>::iterator j = i++;
+
+        // We have to check against m_names.end() here because the upcoming
+        // erase() might be removing the last element and that invalidates
+        // m_names.end().  This makes sense as a deque's end() must point to
+        // the last element.
+        done = (i == m_names.end());
 
         // If the file doesn't exist, remove it.
         if (!QFileInfo(*j).exists())
