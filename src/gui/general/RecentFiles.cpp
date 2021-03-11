@@ -69,12 +69,18 @@ RecentFiles::write()
     QSettings settings;
     settings.beginGroup(RecentFilesConfigGroup);
 
-    for (size_t i = 0; i < maxCount; ++i) {
-        QString key = QString("recent-%1").arg(i);
-        if (i < m_names.size())
-            settings.setValue(key, m_names[i]);
-        else
-            settings.remove(key);
+    size_t i = 0;
+
+    // Write out the entries.
+    for (const QString &name : m_names) {
+        QString key = QString("recent-%1").arg(i++);
+        settings.setValue(key, name);
+    }
+
+    // Remove any entries beyond the end.
+    for (size_t j = i; j < maxCount; ++j) {
+        QString key = QString("recent-%1").arg(j);
+        settings.remove(key);
     }
 }
 
@@ -82,7 +88,7 @@ void
 RecentFiles::add(QString name)
 {
     // Remove it if it's already in there.
-    std::deque<QString>::iterator iter =
+    std::list<QString>::iterator iter =
             std::find(m_names.begin(), m_names.end(), name);
     if (iter != m_names.end())
         m_names.erase(iter);
@@ -101,20 +107,12 @@ RecentFiles::add(QString name)
 void
 RecentFiles::removeNonExistent()
 {
-    bool done = false;
-
-    for (std::deque<QString>::iterator i = m_names.begin();
-         !done;
+    for (std::list<QString>::iterator i = m_names.begin();
+         i != m_names.end();
          /* Increment before use idiom. */) {
 
         // Increment before use.  So we can delete as we go.
-        std::deque<QString>::iterator j = i++;
-
-        // We have to check against m_names.end() here because the upcoming
-        // erase() might be removing the last element and that invalidates
-        // m_names.end().  This makes sense as a deque's end() must point to
-        // the last element.
-        done = (i == m_names.end());
+        std::list<QString>::iterator j = i++;
 
         // If the file doesn't exist, remove it.
         if (!QFileInfo(*j).exists())
@@ -125,8 +123,17 @@ RecentFiles::removeNonExistent()
     //     If we don't write it out, then the user can switch back
     //     to not removing non-existent, then restart rg and the
     //     entries that were removed will reappear.  Not sure that's
-    //     valuable since it's pretty obscure.  Let's avoid calling
-    //     write() for now in the interests of simplicity and speed.
+    //     valuable since it's pretty obscure.
+    //
+    //     If we don't write it out, then if a file reappears (e.g.
+    //     a flash drive is re-inserted) and rg is restarted, the
+    //     file will reappear in the recent files list.  It would
+    //     be more helpful if rg didn't need to be restarted.
+    //     E.g. if we removed the non-existent only from a temporary
+    //     copy to be returned by get().
+    //
+    //     Let's avoid calling write() for now in the interests of
+    //     simplicity and speed.
 
 }
 

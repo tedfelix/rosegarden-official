@@ -20,7 +20,7 @@
 #include <QObject>
 #include <QString>
 
-#include <deque>
+#include <list>
 
 
 namespace Rosegarden
@@ -46,10 +46,10 @@ public:
     void removeNonExistent();
 
     /// Get the list of recent file names.
-    const std::deque<QString> &get() const  { return m_names; }
+    const std::list<QString> &get() const  { return m_names; }
 
 private:
-    std::deque<QString> m_names;
+    std::list<QString> m_names;
 
     void read();
     void write();
