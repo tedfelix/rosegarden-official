@@ -248,7 +248,38 @@ Panner::mouseMoveEvent(QMouseEvent *e)
     QPointF cp = mapToScene(m_clickedPoint);
     QPointF mp = mapToScene(e->pos());
     QPointF delta = mp - cp;
+    const QRectF sceneRect = scene()->sceneRect();
     QRectF nr = m_clickedRect;
+    if (delta.x() > 0.0) {
+        if (nr.right() + delta.x() > sceneRect.right()) {
+            double dx = sceneRect.right() - nr.right();
+            if (dx < 0.0) dx = 0.0;
+            delta.setX(dx);
+        }
+    }
+    if (delta.x() < 0.0) {
+        if (nr.left() + delta.x() < sceneRect.left()) {
+            double dx = sceneRect.left() - nr.left();
+            if (dx > 0.0) dx = 0.0;
+            delta.setX(dx);
+        }
+    }
+        
+    if (delta.y() > 0.0) {
+        if (nr.bottom() + delta.y() > sceneRect.bottom()) {
+            double dy = sceneRect.bottom() - nr.bottom();
+            if (dy < 0.0) dy = 0.0;
+            delta.setY(dy);
+        }
+    }
+    if (delta.y() < 0.0) {
+        if (nr.top() + delta.y() < sceneRect.top()) {
+            double dy = sceneRect.top() - nr.top();
+            if (dy > 0.0) dy = 0.0;
+            delta.setY(dy);
+        }
+    }
+        
     nr.translate(delta);
     slotSetPannedRect(nr);
     emit pannedRectChanged(m_pannedRect);
