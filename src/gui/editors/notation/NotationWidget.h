@@ -322,6 +322,18 @@ private:
     unsigned short m_tupledCount;
     unsigned short m_untupledCount;
 
+    /// Timer to reduce the number of layout resets that occur while resizing.
+    /**
+     * ??? I can't help but wonder if there is a simpler solution where
+     *     we assume the scene (or whatever) is always at the very least
+     *     big enough to fill the user's screen. So the scrollbars are
+     *     always there and there is always empty space to the right
+     *     and below.  This would then prevent the jumping without the
+     *     need for a timer and a layout reset. (I have no idea what I'm
+     *     talking about, so you might need to translate that into
+     *     whatever is actually going on in the code.)  See Bug #1570 for
+     *     details.
+     */
     QTimer *m_resizeTimer;
 
     bool m_updatesSuspended;

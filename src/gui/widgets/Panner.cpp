@@ -250,29 +250,40 @@ Panner::mouseMoveEvent(QMouseEvent *e)
     QPointF delta = mp - cp;
     const QRectF sceneRect = scene()->sceneRect();
     QRectF nr = m_clickedRect;
+
+    // If we are going right
     if (delta.x() > 0.0) {
+        // If we are going past the right edge, don't.
         if (nr.right() + delta.x() > sceneRect.right()) {
             double dx = sceneRect.right() - nr.right();
             if (dx < 0.0) dx = 0.0;
             delta.setX(dx);
         }
     }
+
+    // If we are going left
     if (delta.x() < 0.0) {
+        // If we are going past the left edge, don't.
         if (nr.left() + delta.x() < sceneRect.left()) {
             double dx = sceneRect.left() - nr.left();
             if (dx > 0.0) dx = 0.0;
             delta.setX(dx);
         }
     }
-        
+
+    // If we are going down
     if (delta.y() > 0.0) {
+        // If we are going past the bottom edge, don't.
         if (nr.bottom() + delta.y() > sceneRect.bottom()) {
             double dy = sceneRect.bottom() - nr.bottom();
             if (dy < 0.0) dy = 0.0;
             delta.setY(dy);
         }
     }
+
+    // If we are going up
     if (delta.y() < 0.0) {
+        // If we are going past the top edge, don't.
         if (nr.top() + delta.y() < sceneRect.top()) {
             double dy = sceneRect.top() - nr.top();
             if (dy > 0.0) dy = 0.0;

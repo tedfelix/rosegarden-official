@@ -1780,9 +1780,11 @@ NotationWidget::slotUpdateSegmentChangerBackground()
 }
 
 void
-NotationWidget::resizeEvent(QResizeEvent *event)
+NotationWidget::resizeEvent(QResizeEvent * /*event*/)
 {
     //RG_DEBUG << "resizeEvent" << event->oldSize() << " " << event->size();
+    // Fire off a NotationScene layout reset using a timer to reduce
+    // the number of calls.
     m_resizeTimer->start(100);
 }
 
