@@ -244,6 +244,8 @@ private slots:
 
     void slotUpdateRawNoteRuler(ViewSegment *);
     void slotUpdateSegmentChangerBackground();
+    void resizeEvent(QResizeEvent *event) override;
+    void slotResizeTimerDone();
 
 signals :
     void adjustNeeded(bool last);
@@ -319,6 +321,8 @@ private:
 
     unsigned short m_tupledCount;
     unsigned short m_untupledCount;
+
+    QTimer *m_resizeTimer;
 
     bool m_updatesSuspended;
 

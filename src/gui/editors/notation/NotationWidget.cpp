@@ -129,6 +129,12 @@ NotationWidget::NotationWidget() :
     m_untupledCount(3),
     m_updatesSuspended(false)
 {
+
+    m_resizeTimer = new QTimer(this);
+    m_resizeTimer->setSingleShot(true);
+    connect(m_resizeTimer, &QTimer::timeout,
+            this, &NotationWidget::slotResizeTimerDone);
+    
     m_layout = new QGridLayout;
     setLayout(m_layout);
 
@@ -1771,6 +1777,19 @@ NotationWidget::slotUpdateSegmentChangerBackground()
                                 .arg(QString::fromStdString(m_scene->getCurrentSegment()->getLabel()))
                                 .arg(trackPosition)
                                 .arg(trackLabel));
+}
+
+void
+NotationWidget::resizeEvent(QResizeEvent *event)
+{
+    //RG_DEBUG << "resizeEvent" << event->oldSize() << " " << event->size();
+    m_resizeTimer->start(100);
+}
+
+void
+NotationWidget::slotResizeTimerDone() {
+    //RG_DEBUG << "updatePageSize";
+    m_scene->updatePageSize();
 }
 
 void

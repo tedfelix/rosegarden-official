@@ -215,6 +215,8 @@ public:
     */
     void updateRefreshStatuses(TrackId track, timeT time);
 
+    void updatePageSize();
+
     /// YG: Only for debug
     void dumpVectors();
     void dumpBarDataMap();

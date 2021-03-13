@@ -2127,6 +2127,12 @@ NotationScene::updateRefreshStatuses(TrackId track, timeT time)
     }
 }
 
+void
+NotationScene::updatePageSize()
+{
+    layout(nullptr, 0, 0);
+}
+
 ///YG: Only for debug
 void
 NotationScene::dumpBarDataMap()
