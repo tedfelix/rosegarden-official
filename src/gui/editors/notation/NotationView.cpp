@@ -1226,6 +1226,15 @@ NotationView::slotUpdateMenuStates()
     }
 
     conformRulerSelectionState();
+
+    // 4. multiple staffs - this can change through er. add layer
+    RG_DEBUG << "segment size" << m_segments.size();
+    if (m_segments.size() > 1) {
+        enterActionState("have_multiple_staffs");
+    } else {
+        leaveActionState("have_multiple_staffs");
+    }
+
 }
 
 void
@@ -3739,6 +3748,7 @@ NotationView::slotRegenerateScene()
                 }
             }
         }
+        slotUpdateMenuStates(); // single <-> multiple
     }
 
     // Fix bug #2960243:
@@ -5144,6 +5154,8 @@ NotationView::slotAddLayer()
     // try to make the new segment active immediately
     slotCurrentSegmentNext();
 
+    enterActionState("have_multiple_staffs");
+
     // Undoing this goes kaboom bigtime.  What to do about that?  Make the
     // command's undo emit a signal or something?  The notation widget needs to
     // pick up the change and reboot itself again on the smaller set of
@@ -5228,6 +5240,8 @@ NotationView::slotMagicLayer()
     // ??? This doesn't work consistently.  Need something better.
     //     We have newLayer.  Can we just make that the selection?
     slotCurrentSegmentNext();
+
+    enterActionState("have_multiple_staffs");
 }
 
 void
