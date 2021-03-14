@@ -71,9 +71,6 @@ AddLayerCommand::execute()
     layer->setLowestPlayable(m_segment->getLowestPlayable());
     layer->setTranspose(m_segment->getTranspose());
 
-    // fill the segment with rests, so we can make them invisible
-    layer->fillWithRests(m_segment->getStartTime(), m_segment->getEndTime());
-
     for (Segment::iterator i = m_segment->begin(); i != m_segment->end(); ++i) {
         // copy over any clefs or key signatures, as these are needed to
         // maintain compatibility between segments
