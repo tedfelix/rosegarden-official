@@ -1365,6 +1365,8 @@ RosegardenMainWindow::openFile(QString filePath, ImportType type)
     // Add to the MRU list
     QFileInfo fileInfo(filePath);
     m_recentFiles.add(fileInfo.absoluteFilePath());
+    // Make sure Ctrl+R is correct.
+    setupRecentFilesMenu();
 
     // As an empty composition can be saved, we need to look if
     // segments exist before enabling print options in menu
@@ -2178,6 +2180,8 @@ RosegardenMainWindow::slotFileSaveAs(bool asTemplate)
     } else {
 
         m_recentFiles.add(newName);
+        // Make sure Ctrl+R is correct.
+        setupRecentFilesMenu();
 
         updateTitle();
 
