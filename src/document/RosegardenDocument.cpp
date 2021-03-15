@@ -563,16 +563,15 @@ bool RosegardenDocument::openDocument(const QString &filename,
     //     to include the additional time.
     //progressDialog.setMinimumDuration(2000);
 
-    // Just force the progress dialog up.
-    // Both Qt4 and Qt5 have bugs related to delayed showing of progress
-    // dialogs.  In Qt4, the dialog sometimes won't show.  In Qt5, KDE
-    // based distros might lock up.  See Bug #1546.
-
     m_progressDialog = &progressDialog;
 
     if (squelchProgressDialog) {
         m_progressDialog = nullptr;
     } else {
+        // Just force the progress dialog up.
+        // Both Qt4 and Qt5 have bugs related to delayed showing of progress
+        // dialogs.  In Qt4, the dialog sometimes won't show.  In Qt5, KDE
+        // based distros might lock up.  See Bug #1546.
         progressDialog.show();
     }
 
