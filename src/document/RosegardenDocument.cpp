@@ -567,15 +567,13 @@ bool RosegardenDocument::openDocument(const QString &filename,
     // Both Qt4 and Qt5 have bugs related to delayed showing of progress
     // dialogs.  In Qt4, the dialog sometimes won't show.  In Qt5, KDE
     // based distros might lock up.  See Bug #1546.
-    progressDialog.show();
 
     m_progressDialog = &progressDialog;
 
-    // For testing, get rid of it.
     if (squelchProgressDialog) {
-        progressDialog.close();
-        // Apparently, close() isn't strong enough...
         m_progressDialog = nullptr;
+    } else {
+        progressDialog.show();
     }
 
     setAbsFilePath(fileInfo.absoluteFilePath());
