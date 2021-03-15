@@ -363,9 +363,12 @@ bool ChannelManager::makeReady(
     if (!m_instrument->hasFixedChannel()  ||  forceChannelSetups()  ||
         startingInMiddle) {
 
-        const bool looping =
-                RosegardenMainWindow::self()->getDocument()->
-                    getComposition().isLooping();
+        bool looping = false;
+        RosegardenMainWindow *mainWindow = RosegardenMainWindow::self();
+        if (mainWindow) {
+            looping = RosegardenMainWindow::self()->getDocument()->
+                getComposition().isLooping();
+        }
 
         // This is for those who use looping as a compositional tool along
         // with synths that can't handle program changes immediately prior
