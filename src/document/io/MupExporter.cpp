@@ -137,8 +137,7 @@ MupExporter::write()
 
             if (writtenDuration < timeSig.getBarDuration()) {
                 RG_DEBUG << "writtenDuration: " << writtenDuration
-                << ", bar duration " << timeSig.getBarDuration()
-                << endl;
+                << ", bar duration " << timeSig.getBarDuration();
                 writeInventedRests(str, timeSig, writtenDuration,
                                    timeSig.getBarDuration() - writtenDuration);
 

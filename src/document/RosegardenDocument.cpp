@@ -494,7 +494,7 @@ RosegardenDocument::deleteOrphanedAudioFiles(bool documentWillNotBeSaved)
 void RosegardenDocument::newDocument()
 {
     m_modified = false;
-    setAbsFilePath(QString::null);
+    setAbsFilePath(QString());
     setTitle(tr("Untitled"));
     if (m_clearCommandHistory) CommandHistory::getInstance()->clear();
 }
@@ -1295,13 +1295,13 @@ bool RosegardenDocument::saveDocumentActual(const QString& filename,
     // and Time Signature changes and any other sub-objects)
     //
     outStream << strtoqstr(getComposition().toXmlString())
-              << endl << endl;
+              << "\n\n";
 
     outStream << strtoqstr(getAudioFileManager().toXmlString())
-              << endl << endl;
+              << "\n\n";
 
     outStream << strtoqstr(getConfiguration().toXmlString())
-              << endl << endl;
+              << "\n\n";
 
     long totalEvents = 0;
     for (Composition::iterator segitr = m_composition.begin();
@@ -1322,7 +1322,7 @@ bool RosegardenDocument::saveDocumentActual(const QString& filename,
 
     // Put a break in the file
     //
-    outStream << endl << endl;
+    outStream << "\n\n";
 
     for (Composition::iterator segitr = m_composition.begin();
          segitr != m_composition.end(); ++segitr) {
@@ -1357,7 +1357,7 @@ bool RosegardenDocument::saveDocumentActual(const QString& filename,
 
     // Put a break in the file
     //
-    outStream << endl << endl;
+    outStream << "\n\n";
 
     for (Composition::triggersegmentcontaineriterator ci =
                 m_composition.getTriggerSegments().begin();
@@ -1377,17 +1377,17 @@ bool RosegardenDocument::saveDocumentActual(const QString& filename,
 
     // Put a break in the file
     //
-    outStream << endl << endl;
+    outStream << "\n\n";
 
     // Send out the studio - a self contained command
     //
-    outStream << strtoqstr(m_studio.toXmlString()) << endl << endl;
+    outStream << strtoqstr(m_studio.toXmlString()) << "\n\n";
 
     // Send out the appearance data
-    outStream << "<appearance>" << endl;
+    outStream << "<appearance>\n";
     outStream << strtoqstr(getComposition().getSegmentColourMap().toXmlString("segmentmap"));
     outStream << strtoqstr(getComposition().getGeneralColourMap().toXmlString("generalmap"));
-    outStream << "</appearance>" << endl << endl << endl;
+    outStream << "</appearance>\n\n\n";
 
     // close the top-level XML tag
     //
@@ -1432,7 +1432,7 @@ bool RosegardenDocument::exportStudio(const QString& filename,
 
     // Send out the studio - a self contained command
     //
-    outStream << strtoqstr(m_studio.toXmlString(devices)) << endl << endl;
+    outStream << strtoqstr(m_studio.toXmlString(devices)) << "\n\n";
 
     // close the top-level XML tag
     //
@@ -1523,30 +1523,53 @@ void RosegardenDocument::saveSegment(QTextStream& outStream, Segment *segment,
         // convert out - should do this as XmlExportable really
         // once all this code is centralised
         //
-        time.sprintf("%d.%06d", segment->getAudioStartTime().sec,
-                     segment->getAudioStartTime().usec());
+        QTextStream tts(&time);
+        tts << segment->getAudioStartTime().sec << ".";
+        tts.setFieldWidth(6);
+        tts.setPadChar('0');
+        tts << segment->getAudioStartTime().usec();
+        //time.sprintf("%d.%06d", segment->getAudioStartTime().sec,
+        //             segment->getAudioStartTime().usec());
 
         outStream << "    <begin index=\""
         << time
         << "\"/>\n";
 
-        time.sprintf("%d.%06d", segment->getAudioEndTime().sec,
-                     segment->getAudioEndTime().usec());
+        time = "";
+        QTextStream tts1(&time);
+        tts1 << segment->getAudioEndTime().sec << ".";
+        tts1.setFieldWidth(6);
+        tts1.setPadChar('0');
+        tts1 << segment->getAudioEndTime().usec();
+        //time.sprintf("%d.%06d", segment->getAudioEndTime().sec,
+        //             segment->getAudioEndTime().usec());
 
         outStream << "    <end index=\""
         << time
         << "\"/>\n";
 
         if (segment->isAutoFading()) {
-            time.sprintf("%d.%06d", segment->getFadeInTime().sec,
-                         segment->getFadeInTime().usec());
+            time = "";
+            QTextStream tts2(&time);
+            tts2 << segment->getFadeInTime().sec << ".";
+            tts2.setFieldWidth(6);
+            tts2.setPadChar('0');
+            tts2 << segment->getFadeInTime().usec();
+            //time.sprintf("%d.%06d", segment->getFadeInTime().sec,
+            //            segment->getFadeInTime().usec());
 
             outStream << "    <fadein time=\""
             << time
             << "\"/>\n";
 
-            time.sprintf("%d.%06d", segment->getFadeOutTime().sec,
-                         segment->getFadeOutTime().usec());
+            time = "";
+            QTextStream tts3(&time);
+            tts3 << segment->getFadeOutTime().sec << ".";
+            tts3.setFieldWidth(6);
+            tts3.setPadChar('0');
+            tts3 << segment->getFadeOutTime().usec();
+            //time.sprintf("%d.%06d", segment->getFadeOutTime().sec,
+            //              segment->getFadeOutTime().usec());
 
             outStream << "    <fadeout time=\""
             << time
@@ -1573,7 +1596,7 @@ void RosegardenDocument::saveSegment(QTextStream& outStream, Segment *segment,
                     (*nextEl)->getAbsoluteTime() == absTime &&
                     (*i)->getDuration() != 0 &&
                     !inChord) {
-                outStream << "<chord>" << endl;
+                outStream << "<chord>\n";
                 inChord = true;
                 chordStart = absTime;
                 chordDuration = 0;
@@ -1584,7 +1607,7 @@ void RosegardenDocument::saveSegment(QTextStream& outStream, Segment *segment,
                     chordDuration = (*i)->getDuration();
 
             outStream << '\t'
-            << strtoqstr((*i)->toXmlString(expectedTime)) << endl;
+            << strtoqstr((*i)->toXmlString(expectedTime)) << "\n";
 
             if (nextEl != segment->end() &&
                     (*nextEl)->getAbsoluteTime() != absTime &&

@@ -42,8 +42,8 @@ public:
     static const std::string EventType;
     static const short EventSubOrdering;
 
-	Chord();
-    Chord(const QString& root, const QString& ext = QString::null);
+    Chord();
+    Chord(const QString& root, const QString& ext = QString());
     Chord(const Event&);
 
     Event* getAsEvent(timeT absoluteTime) const;
