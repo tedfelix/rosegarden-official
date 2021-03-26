@@ -1523,11 +1523,11 @@ void RosegardenDocument::saveSegment(QTextStream& outStream, Segment *segment,
         // convert out - should do this as XmlExportable really
         // once all this code is centralised
         //
-        QTextStream tts(&time);
-        tts << segment->getAudioStartTime().sec << ".";
-        tts.setFieldWidth(6);
-        tts.setPadChar('0');
-        tts << segment->getAudioStartTime().usec();
+        char *buf;
+        asprintf(&buf, "%d.%06d", segment->getAudioStartTime().sec,
+                 segment->getAudioStartTime().usec());
+        time = buf;
+        free(buf);
         //time.sprintf("%d.%06d", segment->getAudioStartTime().sec,
         //             segment->getAudioStartTime().usec());
 
@@ -1535,12 +1535,10 @@ void RosegardenDocument::saveSegment(QTextStream& outStream, Segment *segment,
         << time
         << "\"/>\n";
 
-        time = "";
-        QTextStream tts1(&time);
-        tts1 << segment->getAudioEndTime().sec << ".";
-        tts1.setFieldWidth(6);
-        tts1.setPadChar('0');
-        tts1 << segment->getAudioEndTime().usec();
+        asprintf(&buf, "%d.%06d", segment->getAudioEndTime().sec,
+                 segment->getAudioEndTime().usec());
+        time = buf;
+        free(buf);
         //time.sprintf("%d.%06d", segment->getAudioEndTime().sec,
         //             segment->getAudioEndTime().usec());
 
@@ -1549,12 +1547,10 @@ void RosegardenDocument::saveSegment(QTextStream& outStream, Segment *segment,
         << "\"/>\n";
 
         if (segment->isAutoFading()) {
-            time = "";
-            QTextStream tts2(&time);
-            tts2 << segment->getFadeInTime().sec << ".";
-            tts2.setFieldWidth(6);
-            tts2.setPadChar('0');
-            tts2 << segment->getFadeInTime().usec();
+            asprintf(&buf, "%d.%06d", segment->getFadeInTime().sec,
+                     segment->getFadeInTime().usec());
+            time = buf;
+            free(buf);
             //time.sprintf("%d.%06d", segment->getFadeInTime().sec,
             //            segment->getFadeInTime().usec());
 
@@ -1562,12 +1558,10 @@ void RosegardenDocument::saveSegment(QTextStream& outStream, Segment *segment,
             << time
             << "\"/>\n";
 
-            time = "";
-            QTextStream tts3(&time);
-            tts3 << segment->getFadeOutTime().sec << ".";
-            tts3.setFieldWidth(6);
-            tts3.setPadChar('0');
-            tts3 << segment->getFadeOutTime().usec();
+            asprintf(&buf, "%d.%06d", segment->getFadeOutTime().sec,
+                     segment->getFadeOutTime().usec());
+            time = buf;
+            free(buf);
             //time.sprintf("%d.%06d", segment->getFadeOutTime().sec,
             //              segment->getFadeOutTime().usec());
 
