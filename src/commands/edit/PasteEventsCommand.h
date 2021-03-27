@@ -90,8 +90,6 @@ public:
 
     ~PasteEventsCommand() override;
 
-    EventSelection getPastedEvents();
-
     static QString getGlobalName() { return tr("&Paste"); }
 
     /// Determine whether this paste will succeed (without executing it yet)
@@ -107,7 +105,7 @@ protected:
     timeT m_relayoutEndTime;
     Clipboard *m_clipboard;
     PasteType m_pasteType;
-    EventSelection *m_pastedEvents;
+    EventContainer *m_pastedEvents;
 };
 
 

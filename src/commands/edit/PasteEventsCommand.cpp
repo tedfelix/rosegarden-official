@@ -44,7 +44,7 @@ PasteEventsCommand::PasteEventsCommand(Segment &segment,
     m_relayoutEndTime(getEndTime()),
     m_clipboard(new Clipboard(*clipboard)),
     m_pasteType(pasteType),
-    m_pastedEvents(new EventSelection(segment))
+    m_pastedEvents(new EventContainer)
 {
     if (pasteType != OpenAndPaste) {
 
@@ -102,7 +102,7 @@ PasteEventsCommand::PasteEventsCommand(Segment &segment,
     m_relayoutEndTime(getEndTime()),
     m_clipboard(new Clipboard(*clipboard)),
     m_pasteType(pasteType),
-    m_pastedEvents(new EventSelection(segment))
+    m_pastedEvents(new EventContainer)
 {
 }
 
@@ -231,8 +231,14 @@ PasteEventsCommand::modifySegment()
     requireSegment();
     if (!m_pastedEvents)
         {
-            m_pastedEvents = new EventSelection(*m_segment);
+            m_pastedEvents = new EventContainer;
         }
+
+    EventSelection pastedEvents(*m_segment);
+    for (EventContainer::iterator i = m_pastedEvents->begin();
+	 i != m_pastedEvents->end(); ++i) {
+        pastedEvents.addEvent(*i);
+    }
 
     if (!m_clipboard->isSingleSegment())
         return ;
@@ -319,7 +325,7 @@ PasteEventsCommand::modifySegment()
 
             for (size_t i = 0; i < copies.size(); ++i) {
                 destination->insert(copies[i]);
-                m_pastedEvents->addEvent(copies[i]);
+                pastedEvents.addEvent(copies[i]);
             }
 
             endTime = std::min(destEndTime, destination->getBarEndForTime(endTime));
@@ -344,10 +350,10 @@ PasteEventsCommand::modifySegment()
                 // e is model event: we retain ownership of it
                 Segment::iterator i = helper.insertNote(e);
                 delete e;
-                if (i != destination->end()) m_pastedEvents->addEvent(*i);
+                if (i != destination->end()) pastedEvents.addEvent(*i);
             } else {
                 destination->insert(e);
-                m_pastedEvents->addEvent(e);
+                pastedEvents.addEvent(e);
             }
         }
 
@@ -376,7 +382,7 @@ PasteEventsCommand::modifySegment()
             }
 
             destination->insert(e);
-            m_pastedEvents->addEvent(e);
+            pastedEvents.addEvent(e);
         }
 
         timeT endTime = pasteTime + duration;
@@ -399,16 +405,10 @@ PasteEventsCommand::modifySegment()
                                               <Int>(BEAMED_GROUP_ID)]);
         }
         destination->insert(e);
-        m_pastedEvents->addEvent(e);
+        pastedEvents.addEvent(e);
     }
 
     destination->normalizeRests(pasteTime, pasteTime + duration);
-}
-
-EventSelection
-PasteEventsCommand::getPastedEvents()
-{
-    return *m_pastedEvents;
 }
 
 }
