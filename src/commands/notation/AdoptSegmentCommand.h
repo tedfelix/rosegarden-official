@@ -31,9 +31,9 @@ class NotationView;
 // Needs to be a QObject so it can get a signal if view is destroyed.
 class AdoptSegmentCommand : public QObject, public NamedCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(Rosegarden::AdoptSegmentCommand)
+    Q_OBJECT;
 
-public:
+ public:
     AdoptSegmentCommand(QString name,
                         NotationView &view,
                         Segment *segment,

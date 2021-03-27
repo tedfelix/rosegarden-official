@@ -15,9 +15,13 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[AdoptSegmentCommand]"
+#define RG_NO_DEBUG_PRINT 1
+
 #include "AdoptSegmentCommand.h"
 
 #include "gui/editors/notation/NotationView.h"
+#include "misc/Debug.h"
 
 #include <QString>
 
@@ -38,7 +42,9 @@ AdoptSegmentCommand(QString name, //
   m_inComposition(inComposition),
   m_comp(nullptr)
 {
-    QObject::connect(&view, SIGNAL(destroyed()), this, SLOT(viewDestroyed()));
+    RG_DEBUG << "ctor 1" << getName();
+    QObject::connect(&view, SIGNAL(destroyed()),
+                     this, SLOT(slotViewdestroyed()));
 }
 
 AdoptSegmentCommand::
@@ -58,7 +64,9 @@ AdoptSegmentCommand(QString name,
   m_segmentMarking(segmentMarking),
   m_comp(comp)
 {
-    QObject::connect(&view, SIGNAL(destroyed()), this, SLOT(viewDestroyed()));
+    RG_DEBUG << "ctor 2" << getName();
+    QObject::connect(&view, SIGNAL(destroyed()),
+                     this, SLOT(slotViewdestroyed()));
 }
   
 AdoptSegmentCommand::
@@ -71,11 +79,15 @@ AdoptSegmentCommand::
 }
 void
 AdoptSegmentCommand::slotViewdestroyed()
-{ m_viewDestroyed = true; }
+{
+    RG_DEBUG << "view destroyed";
+    m_viewDestroyed = true;
+}
 
 void
 AdoptSegmentCommand::execute()
 {
+    RG_DEBUG << "execute";
     if (m_into) { adopt(); }
     else { unadopt(); }
 }
@@ -83,6 +95,7 @@ AdoptSegmentCommand::execute()
 void
 AdoptSegmentCommand::unexecute()
 {
+    RG_DEBUG << "unexecute";
     if (m_into) { unadopt(); }
     else { adopt(); }
 }
@@ -90,8 +103,8 @@ AdoptSegmentCommand::unexecute()
 void
 AdoptSegmentCommand::adopt()
 {
-    requireSegment();
     if (m_viewDestroyed) { return; }
+    requireSegment();
     if (m_inComposition) {
         m_view.adoptCompositionSegment(m_segment);
     } else {
