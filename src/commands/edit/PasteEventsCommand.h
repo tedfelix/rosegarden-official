@@ -65,10 +65,10 @@ public:
 
     /**
      * Construct a Paste command from a clipboard that already contains
-     * the events to be pasted. Identify the segment by brand
+     * the events to be pasted. Identify the segment by marking
      */
     PasteEventsCommand(Segment &segment,
-                       const QString& brand,
+                       const QString& marking,
                        Clipboard *clipboard,
                        timeT pasteTime,
                        PasteType pasteType,

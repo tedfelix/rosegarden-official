@@ -36,15 +36,15 @@ namespace Rosegarden
 BasicCommand::BasicCommand(const QString &name, Segment &segment,
                            timeT start, timeT end, bool bruteForceRedo) :
     NamedCommand(name),
+    m_startTime(calculateStartTime(start, segment)),
+    m_endTime(calculateEndTime(end, segment)),
     m_segment(&segment),
-    m_savedEvents(segment.getType(), m_startTime),
+    m_savedEvents(new Segment(segment.getType(), m_startTime)),
     m_doBruteForceRedo(false),
     m_redoEvents(nullptr),
-    m_segmentBrand(""),
+    m_segmentMarking(""),
     m_comp(nullptr)
 {
-    m_startTime = calculateStartTime(start, segment);
-    m_endTime = calculateEndTime(end, segment);
     if (m_endTime == m_startTime) ++m_endTime;
 
     if (bruteForceRedo) {
@@ -58,27 +58,31 @@ BasicCommand::BasicCommand(const QString &name,
                            Segment &segment,
                            Segment *redoEvents) :
     NamedCommand(name),
+    m_startTime(calculateStartTime(redoEvents->getStartTime(), *redoEvents)),
+    m_endTime(calculateEndTime(redoEvents->getEndTime(), *redoEvents)),
     m_segment(&segment),
-    m_savedEvents(segment.getType(), m_startTime),
+    m_savedEvents(new Segment(segment.getType(), m_startTime)),
     m_doBruteForceRedo(true),
     m_redoEvents(redoEvents),
-    m_segmentBrand(""),
+    m_segmentMarking(""),
     m_comp(nullptr)
 {
-    m_startTime = calculateStartTime(redoEvents->getStartTime(), *redoEvents);
-    m_endTime = calculateEndTime(redoEvents->getEndTime(), *redoEvents);
     if (m_endTime == m_startTime) { ++m_endTime; }
 }
 
+// Variant ctor to be used when segment does not exist at creation time
+// Implies brute force redo false.
 BasicCommand::BasicCommand(const QString &name,
-                           const QString& segmentBrand,
-                           Composition* comp,
-                           bool bruteForceRedoRequired) :
+                           timeT start,
+                           const QString& segmentMarking,
+                           Composition* comp) :
     NamedCommand(name),
+    m_startTime(start),
     m_segment(nullptr),
-    m_doBruteForceRedo(bruteForceRedoRequired),
+    m_savedEvents(nullptr),
+    m_doBruteForceRedo(false),
     m_redoEvents(nullptr),
-    m_segmentBrand(segmentBrand),
+    m_segmentMarking(segmentMarking),
     m_comp(comp)
 {
 }    
@@ -86,15 +90,17 @@ BasicCommand::BasicCommand(const QString &name,
 BasicCommand::~BasicCommand()
 {
     requireSegment();
-    m_savedEvents.clear();
-    if (m_redoEvents) m_redoEvents->clear();
-    delete m_redoEvents;
+    m_savedEvents->clear();
+    if (m_redoEvents) {
+        m_redoEvents->clear();
+        delete m_redoEvents;
+    }
+    delete m_savedEvents;
 }
 
 timeT
 BasicCommand::calculateStartTime(timeT given, Segment &segment)
 {
-    requireSegment();
     // This assertion was firing.  Fixed.  Will leave this here
     // in case this happens again.
     Q_ASSERT_X(&segment != nullptr,
@@ -116,7 +122,6 @@ BasicCommand::calculateStartTime(timeT given, Segment &segment)
 timeT
 BasicCommand::calculateEndTime(timeT given, Segment &segment)
 {
-    requireSegment();
     // This assertion was firing.  Fixed.  Will leave this here
     // in case this happens again.
     Q_ASSERT_X(&segment != nullptr,
@@ -151,7 +156,7 @@ void
 BasicCommand::beginExecute()
 {
     requireSegment();
-    copyTo(&m_savedEvents);
+    copyTo(m_savedEvents);
 }
 
 void
@@ -187,7 +192,7 @@ BasicCommand::unexecute()
     // This can take a very long time.  This is because we are adding
     // events to a Segment that has someone to notify of changes.
     // Every single call to Segment::insert() fires off notifications.
-    copyFrom(&m_savedEvents);
+    copyFrom(m_savedEvents);
 
     m_segment->updateRefreshStatuses(getStartTime(), getRelayoutEndTime());
     m_segment->signalChanged(getStartTime(), getRelayoutEndTime());
@@ -246,10 +251,15 @@ BasicCommand::requireSegment()
     Q_ASSERT_X(&m_comp != nullptr,
                "BasicCommand::requireSegment()",
                "Composition pointer is null.");
-    m_segment = m_comp->getSegmentByBrand(m_segmentBrand);
+    m_segment = m_comp->getSegmentByMarking(m_segmentMarking);
     Q_ASSERT_X(&m_segment != nullptr,
                "BasicCommand::requireSegment()",
                "Segment pointer is null.");
+    
+    // adjust start time
+    m_startTime = calculateStartTime(m_startTime, *m_segment);
+    m_endTime = calculateEndTime(m_segment->getEndTime(), *m_segment);
+    m_savedEvents = new Segment(m_segment->getType(), m_startTime);
 }
   
 }

@@ -5148,7 +5148,7 @@ NotationView::slotAddLayer()
     CommandHistory::getInstance()->addCommand(command);
 
     // get the pointer to the segment we just created and add it to m_segments
-    Segment* newLayer = comp.getSegmentByBrand("Added Layer");
+    Segment* newLayer = comp.getSegmentByMarking("Added Layer");
     if (! newLayer) {
         RG_WARNING << "NotationView: new layer not found";
         return;
@@ -5161,7 +5161,7 @@ NotationView::slotAddLayer()
     // make the new segment active immediately
     NotationScene *scene = m_notationWidget->getScene();
     NotationStaff* newLayerStaff =
-        scene->getStaffBySegmentBrand("Added Layer");
+        scene->getStaffBySegmentMarking("Added Layer");
     if (! newLayerStaff) {
         RG_WARNING << "NotationView: new layer staff not found";
         return;
@@ -5202,8 +5202,7 @@ NotationView::slotMagicLayer()
     macro->addCommand(new EraseCommand(*selection));
 
     // use overlay paste to avoid checking for space; paste to new
-    // "layer" identify the layer with the segment brand. Initially
-    // provide the current segment in the paste command
+    // "layer" identify the layer with the segment marking.
     PasteEventsCommand::PasteType type = PasteEventsCommand::NoteOverlay;
     macro->addCommand(new PasteEventsCommand(*currentSegment, "Added Layer", c,
                                              insertionTime, type, comp));
@@ -5213,7 +5212,7 @@ NotationView::slotMagicLayer()
     CommandHistory::getInstance()->addCommand(macro);
 
     // get the pointer to the segment we just created and add it to m_segments
-    Segment* newLayer = comp.getSegmentByBrand("Added Layer");
+    Segment* newLayer = comp.getSegmentByMarking("Added Layer");
     if (! newLayer) {
         RG_WARNING << "NotationView: new layer not found";
         return;
@@ -5225,7 +5224,8 @@ NotationView::slotMagicLayer()
 
     // make the new segment active immediately
     NotationScene *scene = m_notationWidget->getScene();
-    NotationStaff* newLayerStaff = scene->getStaffBySegmentBrand("Added Layer");
+    NotationStaff* newLayerStaff =
+        scene->getStaffBySegmentMarking("Added Layer");
     if (! newLayerStaff) {
         RG_WARNING << "NotationView: new layer staff not found";
         return;

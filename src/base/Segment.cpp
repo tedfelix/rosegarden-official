@@ -218,20 +218,20 @@ Segment::getForNotation() const {
 }
 
 QString
-Segment::getBrand() const
+Segment::getMarking() const
 {
-    return m_brand;
+    return m_marking;
 }
 
 void
-Segment::setBrand(const QString& b)
+Segment::setMarking(const QString& m, Composition* comp)
 {
-    if (b != "") {
-        // remove old brand
-        Segment* oldSeg = m_composition->getSegmentByBrand(b);
-        oldSeg->setBrand("");
+    if (m != "") {
+        // remove old marking
+        Segment* oldSeg = comp->getSegmentByMarking(m);
+        if (oldSeg) oldSeg->setMarking("", comp);
     }
-    m_brand = b;
+    m_marking = m;
 }
 
 void

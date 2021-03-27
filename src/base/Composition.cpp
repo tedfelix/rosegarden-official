@@ -281,9 +281,6 @@ Composition::weakAddSegment(Segment *segment)
     if (!segment) return end();
     clearVoiceCaches();
     
-    RG_DEBUG << "weakAddSegment adding segment with id" <<
-        segment->getRuntimeId();
-
     iterator res = m_segments.insert(segment);
     segment->setComposition(this);
 
@@ -2478,13 +2475,13 @@ Composition::detachMarker(Rosegarden::Marker *marker)
 }
 
 Segment*
-Composition::getSegmentByBrand(const QString& brand) const
+Composition::getSegmentByMarking(const QString& marking) const
 {
     for (SegmentMultiSet::const_iterator i = m_segments.begin();
          i != m_segments.end(); ++i) {
         
         Segment* s = *i;
-        if (s->getBrand() == brand) {
+        if (s->getMarking() == marking) {
             return s;
         }
     }

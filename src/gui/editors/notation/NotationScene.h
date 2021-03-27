@@ -97,7 +97,7 @@ public:
     NotationStaff *getPriorStaffOnTrack();
     NotationStaff *getNextStaffOnTrack();
 
-    NotationStaff *getStaffBySegmentBrand(const QString& brand) const;
+    NotationStaff *getStaffBySegmentMarking(const QString& marking) const;
 
     NotationStaff *getStaffForSceneCoords(double x, int y) const;
 

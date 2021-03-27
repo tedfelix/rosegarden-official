@@ -96,7 +96,7 @@ NotationStaff::NotationStaff(NotationScene *scene, Segment *segment,
     m_hideRedundance(true),
     m_printPainter(nullptr),
     m_refreshStatusId(segment->getNewRefreshStatusId()),
-    m_segmentBrand(segment->getBrand())
+    m_segmentMarking(segment->getMarking())
 {
     QSettings settings;
     settings.beginGroup( NotationViewConfigGroup );

@@ -57,7 +57,7 @@ AddLayerCommand::execute()
     if (!m_segment) return;
 
     Segment *layer = new Segment();
-    layer->setLabel("Added Layer");
+    layer->setMarking("Added Layer", &m_composition);
 
     layer->setTrack(m_segment->getTrack());
     layer->setStartTime(m_segment->getStartTime());

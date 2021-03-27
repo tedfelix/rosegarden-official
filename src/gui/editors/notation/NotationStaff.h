@@ -266,7 +266,7 @@ public:
 
     timeT getEndTime() const;
 
-    QString getBrand() const { return m_segmentBrand; }
+    QString getMarking() const { return m_segmentMarking; }
     
 protected:
 
@@ -372,7 +372,7 @@ protected:
 
     unsigned int m_refreshStatusId;
 
-    QString m_segmentBrand;
+    QString m_segmentMarking;
 };
 
 
