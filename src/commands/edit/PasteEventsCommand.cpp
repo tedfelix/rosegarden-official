@@ -16,7 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[PasteEventsCommand]"
-#define RG_NO_DEBUG_PRINT 1
+//#define RG_NO_DEBUG_PRINT 1
 
 #include "PasteEventsCommand.h"
 
@@ -44,8 +44,7 @@ PasteEventsCommand::PasteEventsCommand(Segment &segment,
                  getEffectiveEndTime(segment, clipboard, pasteTime)),
     m_relayoutEndTime(getEndTime()),
     m_clipboard(new Clipboard(*clipboard)),
-    m_pasteType(pasteType),
-    m_pastedEvents(new EventContainer)
+    m_pasteType(pasteType)
 {
     if (pasteType != OpenAndPaste) {
 
@@ -73,8 +72,7 @@ PasteEventsCommand::PasteEventsCommand(const QString& marking,
     BasicCommand(getGlobalName(), pasteTime, marking, &comp),
     m_relayoutEndTime(getEndTime()),
     m_clipboard(new Clipboard(*clipboard)),
-    m_pasteType(pasteType),
-    m_pastedEvents(nullptr)
+    m_pasteType(pasteType)
 {
     if (pasteType != OpenAndPaste) {
 
@@ -102,15 +100,13 @@ PasteEventsCommand::PasteEventsCommand(Segment &segment,
     BasicCommand(getGlobalName(), segment, pasteTime, pasteEndTime),
     m_relayoutEndTime(getEndTime()),
     m_clipboard(new Clipboard(*clipboard)),
-    m_pasteType(pasteType),
-    m_pastedEvents(new EventContainer)
+    m_pasteType(pasteType)
 {
 }
 
 PasteEventsCommand::~PasteEventsCommand()
 {
     delete m_clipboard;
-    if (m_pastedEvents) delete m_pastedEvents;
 }
 
 PasteEventsCommand::PasteTypeMap
@@ -229,19 +225,8 @@ void
 PasteEventsCommand::modifySegment()
 {
     RG_DEBUG << "PasteEventsCommand::modifySegment" << m_segment;
-    requireSegment();
-    if (!m_pastedEvents)
-        {
-            m_pastedEvents = new EventContainer;
-        }
 
-    EventSelection pastedEvents(*m_segment); // getSegment()
-    //    for (EventContainer::iterator i = m_pastedEvents->begin();
-    //	 i != m_pastedEvents->end(); ++i) {
-        //pastedEvents.addEvent(*i);
-    //}
-
-    RG_DEBUG << "m_pastedEvents size" << m_pastedEvents->size();
+    EventSelection pastedEvents(getSegment());
 
     if (!m_clipboard->isSingleSegment())
         return ;
@@ -360,7 +345,6 @@ PasteEventsCommand::modifySegment()
             }
         }
 
-        *m_pastedEvents = pastedEvents.getSegmentEvents();
         return ;
 
     case MatrixOverlay:
@@ -396,7 +380,6 @@ PasteEventsCommand::modifySegment()
 
         destination->normalizeRests(pasteTime, endTime);
 
-        *m_pastedEvents = pastedEvents.getSegmentEvents();
         return ;
     }
 
@@ -414,7 +397,6 @@ PasteEventsCommand::modifySegment()
     }
 
     destination->normalizeRests(pasteTime, pasteTime + duration);
-    *m_pastedEvents = pastedEvents.getSegmentEvents();
 }
 
 }
