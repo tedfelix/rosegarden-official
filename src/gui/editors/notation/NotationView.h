@@ -84,6 +84,11 @@ public:
     // Unadopt a segment that we previously adopted.
     void unadoptSegment(Segment *s);
 
+    // Adopt a segment that does live in Composition.
+    void adoptCompositionSegment(Segment *s);
+    // Unadopt a segment that we previously adopted.
+    void unadoptCompositionSegment(Segment *s);
+
 signals:
     void play();
     void stop();

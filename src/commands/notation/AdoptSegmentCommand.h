@@ -37,7 +37,16 @@ public:
     AdoptSegmentCommand(QString name,
                         NotationView &view,
                         Segment *segment,
-                        bool into = true);
+                        bool into = true,
+                        bool inComposition = false);
+
+    // Alternative constructor if segment does not exist at creation time
+    AdoptSegmentCommand(QString name,
+                        NotationView &view,
+                        const QString& segmentMarking,
+                        Composition* comp,
+                        bool into = true,
+                        bool inComposition = false);
     ~AdoptSegmentCommand() override;
 
 protected:
@@ -50,11 +59,19 @@ protected slots:
     void slotViewdestroyed();
     
  private:
+
+    void requireSegment();
+
     NotationView &m_view;
     Segment   *m_segment;
     const bool m_into;
     bool       m_detached;
     bool       m_viewDestroyed;
+    bool       m_inComposition;
+    QString    m_segmentMarking;
+
+    /// the composition
+    Composition *m_comp;
 };
  
 }

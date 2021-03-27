@@ -27,13 +27,36 @@ AdoptSegmentCommand::
 AdoptSegmentCommand(QString name, // 
 		    NotationView &view,
 		    Segment *segment,
-		    bool into) :
+		    bool into,
+                    bool inComposition) :
   NamedCommand(name),
   m_view(view),
   m_segment(segment),
   m_into(into),
   m_detached(false),
-  m_viewDestroyed(false)
+  m_viewDestroyed(false),
+  m_inComposition(inComposition),
+  m_comp(nullptr)
+{
+    QObject::connect(&view, SIGNAL(destroyed()), this, SLOT(viewDestroyed()));
+}
+
+AdoptSegmentCommand::
+AdoptSegmentCommand(QString name,
+                    NotationView &view,
+                    const QString& segmentMarking,
+                    Composition* comp,
+                    bool into,
+                    bool inComposition) :
+  NamedCommand(name),
+  m_view(view),
+  m_segment(nullptr),
+  m_into(into),
+  m_detached(false),
+  m_viewDestroyed(false),
+  m_inComposition(inComposition),
+  m_segmentMarking(segmentMarking),
+  m_comp(comp)
 {
     QObject::connect(&view, SIGNAL(destroyed()), this, SLOT(viewDestroyed()));
 }
@@ -41,7 +64,8 @@ AdoptSegmentCommand(QString name, //
 AdoptSegmentCommand::
 ~AdoptSegmentCommand()
 {
-    if (m_detached) {
+    // only delete the segment if it is not in the composition
+    if (m_detached && ! m_inComposition) {
         delete m_segment;
     }
 }
@@ -66,8 +90,13 @@ AdoptSegmentCommand::unexecute()
 void
 AdoptSegmentCommand::adopt()
 {
+    requireSegment();
     if (m_viewDestroyed) { return; }
-    m_view.adoptSegment(m_segment);
+    if (m_inComposition) {
+        m_view.adoptCompositionSegment(m_segment);
+    } else {
+        m_view.adoptSegment(m_segment);
+    }
     m_detached = false;
 }
 
@@ -75,11 +104,30 @@ void
 AdoptSegmentCommand::unadopt()
 {
     if (m_viewDestroyed) { return; }
-    m_view.unadoptSegment(m_segment);
+    if (m_inComposition) {
+        m_view.unadoptCompositionSegment(m_segment);
+    } else {
+        m_view.unadoptSegment(m_segment);
+    }
     m_detached = true;
 }
 
+void
+AdoptSegmentCommand::requireSegment()
+{
+    if (m_segment) {
+        // already got the segment
+        return;
+    }
+    // get the segment from the id
+    Q_ASSERT_X(&m_comp != nullptr,
+               "AdoptSegmentCommand::requireSegment()",
+               "Composition pointer is null.");
+    m_segment = m_comp->getSegmentByMarking(m_segmentMarking);
+    RG_DEBUG << "requireSegment got segment" << m_segment;
+    Q_ASSERT_X(&m_segment != nullptr,
+               "AdoptSegmentCommand::requireSegment()",
+               "Segment pointer is null.");
 }
 
-
-
+}

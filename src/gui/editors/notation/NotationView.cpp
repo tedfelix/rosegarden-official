@@ -496,6 +496,50 @@ unadoptSegment(Segment *s)
     }
 }
 
+// Adopt a segment that does live in Composition. Do not take ownership
+// of s;
+void
+NotationView::
+adoptCompositionSegment(Segment *s)
+{
+    if (std::find(m_segments.begin(),
+                  m_segments.end(), s) != m_segments.end()) {
+        // we already have it
+        return;
+    }
+    Composition& comp = m_doc->getComposition();
+    if (comp.findSegment(s) == comp.end()) {
+        // segment is not in composition
+        RG_WARNING << "segment" << s << "not found in composition";
+        return;
+    }
+    m_segments.push_back(s);
+    // re-invoke setSegments with the amended m_segments
+    setWidgetSegments();
+}
+
+// Unadopt a segment that we adopted earlier.  If s was not adopted
+// earlier, do nothing.
+void
+NotationView::
+unadoptCompositionSegment(Segment *s)
+{
+    SegmentVector::iterator it =
+        std::find(m_segments.begin(), m_segments.end(), s);
+    if (it == m_segments.end()) {
+        // we do not have it
+        return;
+    }
+    Composition& comp = m_doc->getComposition();
+    if (comp.findSegment(s) == comp.end()) {
+        // segment is not in composition
+        RG_WARNING << "segment" << s << "not found in composition";
+        return;
+    }
+    m_segments.erase(it);
+    slotUpdateMenuStates(); // single <-> multiple
+}
+
 NotationView::SegmentVector::iterator
 NotationView::
 findAdopted(Segment *s)
@@ -5144,9 +5188,19 @@ NotationView::slotAddLayer()
     slotSetNoteRestInserter();
 
     Composition& comp = getDocument()->getComposition();
+
+    MacroCommand *macro = new MacroCommand(tr("New Layer"));
+
     AddLayerCommand *command = new AddLayerCommand(getCurrentSegment(),
                                                    comp);
-    CommandHistory::getInstance()->addCommand(command);
+    macro->addCommand(command);
+
+    AdoptSegmentCommand *adoptCommand =
+        new AdoptSegmentCommand("Adopt Layer", *this, "Added Layer",
+                                &comp, true, true);
+    macro->addCommand(adoptCommand);
+    
+    CommandHistory::getInstance()->addCommand(macro);
 
     // get the pointer to the segment we just created and add it to m_segments
     Segment* newLayer = comp.getSegmentByMarking("Added Layer");
@@ -5154,11 +5208,7 @@ NotationView::slotAddLayer()
         RG_WARNING << "NotationView: new layer not found";
         return;
     }
-    m_segments.push_back(newLayer);
-    
-    // re-invoke setSegments with the amended m_segments
-    setWidgetSegments();
-    
+
     // make the new segment active immediately
     NotationScene *scene = m_notationWidget->getScene();
     NotationStaff* newLayerStaff =
@@ -5213,24 +5263,16 @@ NotationView::slotMagicLayer()
     PasteEventsCommand::PasteType type = PasteEventsCommand::NoteOverlay;
     macro->addCommand(new PasteEventsCommand("Added Layer", c,
                                              insertionTime, type, comp));
+
+    // and adopt the segment
+    AdoptSegmentCommand *adoptCommand =
+        new AdoptSegmentCommand("Adopt Layer", *this, "Added Layer",
+                                &comp, true, true);
+    macro->addCommand(adoptCommand);
     
     CommandHistory::getInstance()->addCommand(macro);
 
-    //delete c;
-
-    // get the pointer to the segment we just created and add it to m_segments
-    Segment* newLayer = comp.getSegmentByMarking("Added Layer");
-    if (! newLayer) {
-        RG_WARNING << "NotationView: new layer not found";
-        return;
-    }
-    RG_DEBUG << "newLayer";
-    RG_DEBUG << *newLayer;
-    RG_DEBUG << "newLayer end";
-    m_segments.push_back(newLayer);
-
-    // re-invoke setSegments with the amended m_segments
-    setWidgetSegments();
+    delete c;
 
     // make the new segment active immediately
     NotationScene *scene = m_notationWidget->getScene();
