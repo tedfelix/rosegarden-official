@@ -58,7 +58,7 @@ public:
     void setRoot(QString r) { m_root = r; } 
 
     QString getExt() const { return m_ext; }
-    void setExt(QString r) { m_ext = r.isEmpty() ? QString::null : r; } 
+    void setExt(QString r) { m_ext = r.isEmpty() ? QString() : r; } 
     
     bool hasAltBass() const;
 
