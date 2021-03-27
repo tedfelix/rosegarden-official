@@ -56,7 +56,15 @@ AddLayerCommand::execute()
 { 
     if (!m_segment) return;
 
-    Segment *layer = new Segment();
+    if (m_detached) {
+        // the layer already exists - we just need to re-add it. Note
+        // - we have laready adjusted m_segment to point to the layer
+        m_composition.addSegment(m_segment);
+        return;
+    }
+
+    // create a new layer
+    Segment* layer = new Segment();
     layer->setMarking("Added Layer", &m_composition);
 
     layer->setTrack(m_segment->getTrack());

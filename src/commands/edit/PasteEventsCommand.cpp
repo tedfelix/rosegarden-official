@@ -235,11 +235,13 @@ PasteEventsCommand::modifySegment()
             m_pastedEvents = new EventContainer;
         }
 
-    EventSelection pastedEvents(*m_segment);
-    for (EventContainer::iterator i = m_pastedEvents->begin();
-	 i != m_pastedEvents->end(); ++i) {
-        pastedEvents.addEvent(*i);
-    }
+    EventSelection pastedEvents(*m_segment); // getSegment()
+    //    for (EventContainer::iterator i = m_pastedEvents->begin();
+    //	 i != m_pastedEvents->end(); ++i) {
+        //pastedEvents.addEvent(*i);
+    //}
+
+    RG_DEBUG << "m_pastedEvents size" << m_pastedEvents->size();
 
     if (!m_clipboard->isSingleSegment())
         return ;
@@ -358,6 +360,7 @@ PasteEventsCommand::modifySegment()
             }
         }
 
+        *m_pastedEvents = pastedEvents.getSegmentEvents();
         return ;
 
     case MatrixOverlay:
@@ -393,6 +396,7 @@ PasteEventsCommand::modifySegment()
 
         destination->normalizeRests(pasteTime, endTime);
 
+        *m_pastedEvents = pastedEvents.getSegmentEvents();
         return ;
     }
 
@@ -410,6 +414,7 @@ PasteEventsCommand::modifySegment()
     }
 
     destination->normalizeRests(pasteTime, pasteTime + duration);
+    *m_pastedEvents = pastedEvents.getSegmentEvents();
 }
 
 }

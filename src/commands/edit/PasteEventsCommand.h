@@ -105,7 +105,7 @@ protected:
     timeT m_relayoutEndTime;
     Clipboard *m_clipboard;
     PasteType m_pasteType;
-    EventContainer *m_pastedEvents;
+    EventContainer *m_pastedEvents;  // not needed
 };
 
 
