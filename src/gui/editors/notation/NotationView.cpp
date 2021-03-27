@@ -5204,12 +5204,12 @@ NotationView::slotMagicLayer()
     // use overlay paste to avoid checking for space; paste to new
     // "layer" identify the layer with the segment marking.
     PasteEventsCommand::PasteType type = PasteEventsCommand::NoteOverlay;
-    macro->addCommand(new PasteEventsCommand(*currentSegment, "Added Layer", c,
+    macro->addCommand(new PasteEventsCommand("Added Layer", c,
                                              insertionTime, type, comp));
     
-    delete c;
-
     CommandHistory::getInstance()->addCommand(macro);
+
+    //delete c;
 
     // get the pointer to the segment we just created and add it to m_segments
     Segment* newLayer = comp.getSegmentByMarking("Added Layer");

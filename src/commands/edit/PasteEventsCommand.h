@@ -67,8 +67,7 @@ public:
      * Construct a Paste command from a clipboard that already contains
      * the events to be pasted. Identify the segment by marking
      */
-    PasteEventsCommand(Segment &segment,
-                       const QString& marking,
+    PasteEventsCommand(const QString& marking,
                        Clipboard *clipboard,
                        timeT pasteTime,
                        PasteType pasteType,
@@ -108,7 +107,7 @@ protected:
     timeT m_relayoutEndTime;
     Clipboard *m_clipboard;
     PasteType m_pasteType;
-    EventSelection m_pastedEvents;
+    EventSelection *m_pastedEvents;
 };
 
 
