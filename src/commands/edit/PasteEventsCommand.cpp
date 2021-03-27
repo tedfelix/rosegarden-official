@@ -226,8 +226,6 @@ PasteEventsCommand::modifySegment()
 {
     RG_DEBUG << "PasteEventsCommand::modifySegment" << m_segment;
 
-    EventSelection pastedEvents(getSegment());
-
     if (!m_clipboard->isSingleSegment())
         return ;
 
@@ -313,7 +311,6 @@ PasteEventsCommand::modifySegment()
 
             for (size_t i = 0; i < copies.size(); ++i) {
                 destination->insert(copies[i]);
-                pastedEvents.addEvent(copies[i]);
             }
 
             endTime = std::min(destEndTime, destination->getBarEndForTime(endTime));
@@ -321,7 +318,7 @@ PasteEventsCommand::modifySegment()
             break;
         }
 
-    case NoteOverlay:
+    case NoteOverlay: {
         for (Segment::iterator i = source->begin(); i != source->end(); ++i) {
             if ((*i)->isa(Note::EventRestType)) {
                 continue;
@@ -335,17 +332,18 @@ PasteEventsCommand::modifySegment()
             }
 
             if ((*i)->isa(Note::EventType)) {
+                RG_DEBUG << "NoteOverlay insert" <<
+                    e->getNotationAbsoluteTime();
                 // e is model event: we retain ownership of it
-                Segment::iterator i = helper.insertNote(e);
+                helper.insertNote(e);
                 delete e;
-                if (i != destination->end()) pastedEvents.addEvent(*i);
             } else {
                 destination->insert(e);
-                pastedEvents.addEvent(e);
             }
         }
 
-        return ;
+        return;
+    }
 
     case MatrixOverlay:
 
@@ -370,7 +368,6 @@ PasteEventsCommand::modifySegment()
             }
 
             destination->insert(e);
-            pastedEvents.addEvent(e);
         }
 
         timeT endTime = pasteTime + duration;
@@ -393,7 +390,6 @@ PasteEventsCommand::modifySegment()
                                               <Int>(BEAMED_GROUP_ID)]);
         }
         destination->insert(e);
-        pastedEvents.addEvent(e);
     }
 
     destination->normalizeRests(pasteTime, pasteTime + duration);
