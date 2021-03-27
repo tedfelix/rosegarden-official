@@ -406,6 +406,14 @@ Event::getStorageSize() const
 }
 
 bool
+Event::isCopyOf(const Event &e)
+{
+    if (&e == this) return true;
+    if (e.m_data == m_data) return true;
+    return false;
+}
+
+bool
 operator<(const Event &a, const Event &b)
 {
     timeT at = a.getAbsoluteTime();

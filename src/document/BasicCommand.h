@@ -105,6 +105,9 @@ private:
     /// if the segment is not set yet - get it from the segment marking
     void requireSegment();
 
+    /// find out the range of Events modified by modifySegment
+    void calculateModifiedStartEnd();
+
     timeT m_startTime;
     timeT m_endTime;
 
@@ -126,6 +129,10 @@ private:
 
     /// the composition
     Composition *m_comp;
+
+    /// start and end of the range of events which are modified by modifySegment
+    timeT m_modifiedEventsStart;
+    timeT m_modifiedEventsEnd;
 
 };
 

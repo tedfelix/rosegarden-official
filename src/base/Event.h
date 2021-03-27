@@ -209,6 +209,9 @@ public:
                          getNotationDuration());
     }
 
+    // check if the events are copies
+    bool isCopyOf(const Event &e);
+
     friend bool operator<(const Event&, const Event&);
 
     /// Type of the Event (E.g. Note, Accidental, Key, etc...)

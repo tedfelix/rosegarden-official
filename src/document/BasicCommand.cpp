@@ -43,7 +43,9 @@ BasicCommand::BasicCommand(const QString &name, Segment &segment,
     m_doBruteForceRedo(false),
     m_redoEvents(nullptr),
     m_segmentMarking(""),
-    m_comp(nullptr)
+    m_comp(nullptr),
+    m_modifiedEventsStart(-1),
+    m_modifiedEventsEnd(-1)
 {
     if (m_endTime == m_startTime) ++m_endTime;
 
@@ -65,7 +67,9 @@ BasicCommand::BasicCommand(const QString &name,
     m_doBruteForceRedo(true),
     m_redoEvents(redoEvents),
     m_segmentMarking(""),
-    m_comp(nullptr)
+    m_comp(nullptr),
+    m_modifiedEventsStart(-1),
+    m_modifiedEventsEnd(-1)
 {
     if (m_endTime == m_startTime) { ++m_endTime; }
 }
@@ -83,7 +87,9 @@ BasicCommand::BasicCommand(const QString &name,
     m_doBruteForceRedo(false),
     m_redoEvents(nullptr),
     m_segmentMarking(segmentMarking),
-    m_comp(comp)
+    m_comp(comp),
+    m_modifiedEventsStart(-1),
+    m_modifiedEventsEnd(-1)
 {
 }    
 
@@ -174,6 +180,9 @@ BasicCommand::execute()
     } else {
         copyFrom(m_redoEvents);
     }
+    
+    // calculate the start and end of the modified region
+    calculateModifiedStartEnd();
 
     m_segment->updateRefreshStatuses(getStartTime(), getRelayoutEndTime());
 
@@ -205,7 +214,7 @@ BasicCommand::unexecute()
     // This can take a very long time.  This is because we are adding
     // events to a Segment that has someone to notify of changes.
     // Every single call to Segment::insert() fires off notifications.
-    copyFrom(m_savedEvents, true);
+    copyFrom(m_savedEvents);
 
     m_segment->updateRefreshStatuses(getStartTime(), getRelayoutEndTime());
     m_segment->signalChanged(getStartTime(), getRelayoutEndTime());
@@ -250,16 +259,17 @@ BasicCommand::copyFrom(Rosegarden::Segment *events, bool wholeSegment)
         "to" << m_segment << ", range (" << m_startTime << "," <<
         m_endTime << ")";
 
-    Segment::iterator from = m_segment->findTime(m_startTime);
-    Segment::iterator to   = m_segment->findTime(m_endTime);
+    Segment::iterator from = events->findTime(m_modifiedEventsStart);
+    Segment::iterator to   = events->findTime(m_modifiedEventsEnd);
 
     if (wholeSegment) {
-        from = m_segment->findTime(m_segment->getStartTime());
-        to = m_segment->findTime(m_segment->getEndTime());
+        from = events->findTime(events->getStartTime());
+        to = events->findTime(events->getEndTime());
     }
 
-    m_segment->erase(from, to);
-    for (Segment::iterator i = events->begin(); i != events->end(); ++i) {
+    m_segment->erase(m_segment->findTime(m_modifiedEventsStart),
+                     m_segment->findTime(m_modifiedEventsEnd));
+    for (Segment::iterator i = from; i != to; ++i) {
 
         RG_DEBUG << "copyFrom(): Found event of type" << (*i)->getType() << "and duration" << (*i)->getDuration() << "at time" << (*i)->getAbsoluteTime();
 
@@ -293,4 +303,60 @@ BasicCommand::requireSegment()
     m_savedEvents = new Segment(m_segment->getType(), m_startTime);
 }
   
+void
+BasicCommand::calculateModifiedStartEnd()
+{
+    if (m_modifiedEventsStart != -1 ||
+        m_modifiedEventsEnd != -1) {
+        //already done
+        return;
+    }
+    m_modifiedEventsStart = m_segment->getStartTime();
+    m_modifiedEventsEnd = m_segment->getEndTime();
+    // m_segment has modified events savedEvents has the original
+    // unchanged segment events
+    Segment::iterator j = m_savedEvents->begin();
+    for (Segment::iterator i = m_segment->begin();
+         i != m_segment->end(); ++i) {
+        Event* segEvent = (*i);
+        Event* savedEvent = (*j);
+        m_modifiedEventsStart = segEvent->getAbsoluteTime() - 1;
+        // are they the same ?
+        if (!segEvent->isCopyOf(*savedEvent)) {
+            // found a changed note
+            break;
+        }
+        ++j;
+        if (j == m_savedEvents->end()) {
+            // all done
+            break;
+        }
+    }
+
+    Segment::reverse_iterator rj = m_savedEvents->rbegin();
+    for (Segment::reverse_iterator i = m_segment->rbegin();
+         i != m_segment->rend(); ++i) {
+        Event* segEvent = (*i);
+        Event* savedEvent = (*rj);
+        m_modifiedEventsEnd = segEvent->getAbsoluteTime() + 1;
+        // are they the same ?
+        if (!segEvent->isCopyOf(*savedEvent)) {
+            // found a changed note
+            break;
+        }
+        ++rj;
+        if (rj == m_savedEvents->rend()) {
+            // all done
+            break;
+        }
+    }
+
+    if (m_modifiedEventsEnd < m_modifiedEventsStart) 
+        m_modifiedEventsEnd = m_modifiedEventsStart + 1;
+        
+    RG_DEBUG << "calculateModifiedStartEnd: " << m_modifiedEventsStart <<
+        m_modifiedEventsEnd;
+    
+}
+
 }
