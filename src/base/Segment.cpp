@@ -233,10 +233,20 @@ Segment::setMarking(const QString& m, Composition* comp)
     if (m != "") {
         // remove old marking
         Segment* oldSeg = comp->getSegmentByMarking(m);
-        if (oldSeg) oldSeg->setMarking("", comp);
+        while (oldSeg) {
+            oldSeg->setMarking("", comp);
+            oldSeg = comp->getSegmentByMarking(m);
+        }
     }
     m_marking = m;
 }
+
+void
+Segment::dumpSegment() const
+{
+    RG_DEBUG << *this;
+}
+
 
 void
 Segment::setTmp() {

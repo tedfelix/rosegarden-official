@@ -15,9 +15,12 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_NO_DEBUG_PRINT 1
+#define RG_MODULE_STRING "[AddLayerCommand]"
 
 #include "AddLayerCommand.h"
 
+#include "misc/Debug.h"
 #include "base/Segment.h"
 #include "base/Composition.h"
 #include "base/Track.h"
@@ -60,11 +63,13 @@ AddLayerCommand::execute()
         // the layer already exists - we just need to re-add it. Note
         // - we have laready adjusted m_segment to point to the layer
         m_composition.addSegment(m_segment);
+        RG_DEBUG << "attaching segment" << m_segment;
         return;
     }
 
     // create a new layer
     Segment* layer = new Segment();
+    RG_DEBUG << "creating segment" << layer;
     layer->setMarking("Added Layer", &m_composition);
 
     layer->setTrack(m_segment->getTrack());

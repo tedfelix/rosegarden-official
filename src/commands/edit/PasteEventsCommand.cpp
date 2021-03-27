@@ -16,7 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[PasteEventsCommand]"
-//#define RG_NO_DEBUG_PRINT 1
+#define RG_NO_DEBUG_PRINT 1
 
 #include "PasteEventsCommand.h"
 
@@ -224,7 +224,7 @@ PasteEventsCommand::isPossible()
 void
 PasteEventsCommand::modifySegment()
 {
-    RG_DEBUG << "PasteEventsCommand::modifySegment" << m_segment;
+    RG_DEBUG << "PasteEventsCommand::modifySegment" << getSegment();
 
     if (!m_clipboard->isSingleSegment())
         return ;
@@ -232,12 +232,23 @@ PasteEventsCommand::modifySegment()
     Segment *source = m_clipboard->getSingleSegment();
     Segment *destination(&getSegment());
 
+    RG_DEBUG << "segment source";
+    source->dumpSegment();
+    RG_DEBUG << "segment source end";
+    RG_DEBUG << "segment destination";
+    destination->dumpSegment();
+    RG_DEBUG << "segment destination end";
+
     timeT destEndTime = destination->getEndTime();
     timeT pasteTime = std::max(getStartTime(), destination->getStartTime());
     timeT origin = source->getStartTime();
     timeT duration = source->getEndTime() - origin;
 
+    RG_DEBUG << "pasteTime" << pasteTime << "origin" << origin;
+
     SegmentNotationHelper helper(*destination);
+    bool possible = helper.removeRests(pasteTime, duration, true);
+    if (! possible) RG_WARNING << "pasting when not possible";
 
     RG_DEBUG << "PasteEventsCommand::modifySegment() : paste type = "
     << m_pasteType << " - pasteTime = "

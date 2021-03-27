@@ -102,9 +102,17 @@ private:
     timeT calculateStartTime(timeT given, Segment &segment);
     timeT calculateEndTime(timeT given, Segment &segment);
 
+    /// if the segment is not set yet - get it from the segment marking
+    void requireSegment();
+
     timeT m_startTime;
     timeT m_endTime;
 
+    /// The Segment that this command is being run against.  This is a
+    /// pointer rather than a reference because it is possible to
+    /// create a command before the segment exists and set the segment
+    /// later
+    Segment *m_segment;
     /// Events from m_segment prior to executing the command.
     Segment *m_savedEvents;
 
@@ -119,16 +127,6 @@ private:
     /// the composition
     Composition *m_comp;
 
- protected:
-
-    /// if the segment is not set yet - get it from the segment marking
-    void requireSegment();
-
-    /// The Segment that this command is being run against.  This is a
-    /// pointer rather than a reference because it is possible to
-    /// create a command before the segment exists and set the segment
-    /// later
-    Segment *m_segment;
 };
 
 

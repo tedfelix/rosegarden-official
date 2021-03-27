@@ -5200,6 +5200,12 @@ NotationView::slotMagicLayer()
     CopyCommand *cc = new CopyCommand(*selection, c);
     cc->execute();
 
+    RG_DEBUG << "CopyCommand done";
+    RG_DEBUG << "Clipboard contents";
+    Segment* clipseg = c->getSingleSegment();
+    if (clipseg) clipseg->dumpSegment();
+    RG_DEBUG << "Clipboard contents done";
+
     macro->addCommand(new EraseCommand(*selection));
 
     // use overlay paste to avoid checking for space; paste to new

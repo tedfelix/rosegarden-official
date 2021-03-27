@@ -903,6 +903,9 @@ public:
     QString getMarking() const;
     void setMarking(const QString& m, Composition* comp);
 
+    // for debug
+    void dumpSegment() const;
+
 private:
     void checkInsertAsClefKey(Event *e) const;
 

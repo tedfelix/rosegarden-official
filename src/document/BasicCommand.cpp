@@ -213,9 +213,9 @@ BasicCommand::copyTo(Rosegarden::Segment *events)
 
     for (Segment::iterator i = from; i != m_segment->end() && i != to; ++i) {
 
-       //RG_DEBUG << "copyTo(): Found event of type" << (*i)->getType() << "and duration" << (*i)->getDuration() << "at time" << (*i)->getAbsoluteTime();
+        RG_DEBUG << "copyTo(): Found event of type" << (*i)->getType() << "and duration" << (*i)->getDuration() << "at time" << (*i)->getAbsoluteTime();
 
-       events->insert(new Event(**i));
+        events->insert(new Event(**i));
     }
 }
    
@@ -228,11 +228,11 @@ BasicCommand::copyFrom(Rosegarden::Segment *events)
         m_endTime << ")";
 
     m_segment->erase(m_segment->findTime(m_startTime),
-                    m_segment->findTime(m_endTime));
+                     m_segment->findTime(m_endTime));
 
     for (Segment::iterator i = events->begin(); i != events->end(); ++i) {
 
-        //RG_DEBUG << "copyFrom(): Found event of type" << (*i)->getType() << "and duration" << (*i)->getDuration() << "at time" << (*i)->getAbsoluteTime();
+        RG_DEBUG << "copyFrom(): Found event of type" << (*i)->getType() << "and duration" << (*i)->getDuration() << "at time" << (*i)->getAbsoluteTime();
 
         m_segment->insert(new Event(**i));
     }
@@ -252,6 +252,7 @@ BasicCommand::requireSegment()
                "BasicCommand::requireSegment()",
                "Composition pointer is null.");
     m_segment = m_comp->getSegmentByMarking(m_segmentMarking);
+    RG_DEBUG << "requireSegment got segment" << m_segment;
     Q_ASSERT_X(&m_segment != nullptr,
                "BasicCommand::requireSegment()",
                "Segment pointer is null.");
