@@ -919,7 +919,11 @@ void RosegardenMainViewWidget::slotEditSegmentAudio(Segment *segment)
         application = AudioConfigurationPage::getBestAvailableAudioEditor();
     }
 
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+    QStringList splitCommand = application.split(" ", Qt::SkipEmptyParts);
+#else
     QStringList splitCommand = application.split(" ", QString::SkipEmptyParts);
+#endif
 
     if (splitCommand.size() == 0) {
 

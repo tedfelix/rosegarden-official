@@ -152,7 +152,11 @@ PeakFile::parseHeader()
     //
     QString dateString = QString(header.substr(40, 28).c_str());
 
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+    QStringList dateTime = dateString.split(":", Qt::SkipEmptyParts);
+#else
     QStringList dateTime = dateString.split(":", QString::SkipEmptyParts);
+#endif
 
     m_modificationTime.setDate(QDate(dateTime[0].toInt(),
                                      dateTime[1].toInt(),

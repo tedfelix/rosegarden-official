@@ -235,7 +235,13 @@ AudioConfigurationPage::apply()
 
     QString externalAudioEditor = getExternalAudioEditor();
 
-    QStringList extlist = externalAudioEditor.split(" ", QString::SkipEmptyParts);
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+    QStringList extlist = externalAudioEditor.split(" ",
+        Qt::SkipEmptyParts);
+#else
+    QStringList extlist = externalAudioEditor.split(" ",
+        QString::SkipEmptyParts);
+#endif
     QString extpath = "";
     if (extlist.size() > 0) extpath = extlist[0];
 
@@ -266,7 +272,11 @@ AudioConfigurationPage::getBestAvailableAudioEditor()
     if (cpath) path = cpath;
     else path = "/usr/bin:/bin";
 
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+    QStringList pathList = path.split(":", Qt::SkipEmptyParts);
+#else
     QStringList pathList = path.split(":", QString::SkipEmptyParts);
+#endif
 
     const char *candidates[] = {
         "mhwaveedit",

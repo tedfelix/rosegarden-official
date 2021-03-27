@@ -117,8 +117,13 @@ bool
 StartupTester::isVersionNewerThan(QString a, QString b)
 {
     QRegExp re("[._-]");
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+    QStringList alist = a.split(re, Qt::SkipEmptyParts);
+    QStringList blist = b.split(re, Qt::SkipEmptyParts);
+#else
     QStringList alist = a.split(re, QString::SkipEmptyParts);
     QStringList blist = b.split(re, QString::SkipEmptyParts);
+#endif
     int ae = alist.size();
     int be = blist.size();
     int e = std::max(ae, be);
