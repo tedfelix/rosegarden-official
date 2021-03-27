@@ -227,9 +227,12 @@ PasteEventsCommand::isPossible()
 void
 PasteEventsCommand::modifySegment()
 {
-    RG_DEBUG << "PasteEventsCommand::modifySegment";
+    RG_DEBUG << "PasteEventsCommand::modifySegment" << m_segment;
     requireSegment();
-    m_pastedEvents = new EventSelection(*m_segment);
+    if (!m_pastedEvents)
+        {
+            m_pastedEvents = new EventSelection(*m_segment);
+        }
 
     if (!m_clipboard->isSingleSegment())
         return ;
