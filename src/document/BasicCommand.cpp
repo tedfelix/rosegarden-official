@@ -259,6 +259,7 @@ BasicCommand::requireSegment()
     // adjust start time
     m_startTime = calculateStartTime(m_startTime, *m_segment);
     m_endTime = calculateEndTime(m_segment->getEndTime(), *m_segment);
+    if (m_endTime == m_startTime) ++m_endTime;
     m_savedEvents = new Segment(m_segment->getType(), m_startTime);
 }
   
