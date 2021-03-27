@@ -14,6 +14,7 @@
 */
 
 #define RG_MODULE_STRING "[EventSelection]"
+#define RG_NO_DEBUG_PRINT 1
 
 #include "Selection.h"
 #include "base/Segment.h"

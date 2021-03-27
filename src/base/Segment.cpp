@@ -14,6 +14,7 @@
 */
 
 #define RG_MODULE_STRING "[Segment]"
+#define RG_NO_DEBUG_PRINT 1
 
 #include "base/Segment.h"
 #include "base/NotationTypes.h"
