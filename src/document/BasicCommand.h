@@ -134,6 +134,8 @@ private:
     timeT m_modifiedEventsStart;
     timeT m_modifiedEventsEnd;
 
+    timeT m_originalStartTime;
+
 };
 
 

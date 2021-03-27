@@ -45,7 +45,8 @@ BasicCommand::BasicCommand(const QString &name, Segment &segment,
     m_segmentMarking(""),
     m_comp(nullptr),
     m_modifiedEventsStart(-1),
-    m_modifiedEventsEnd(-1)
+    m_modifiedEventsEnd(-1),
+    m_originalStartTime(segment.getStartTime())
 {
     if (m_endTime == m_startTime) ++m_endTime;
 
@@ -69,7 +70,8 @@ BasicCommand::BasicCommand(const QString &name,
     m_segmentMarking(""),
     m_comp(nullptr),
     m_modifiedEventsStart(-1),
-    m_modifiedEventsEnd(-1)
+    m_modifiedEventsEnd(-1),
+    m_originalStartTime(segment.getStartTime())
 {
     if (m_endTime == m_startTime) { ++m_endTime; }
 }
@@ -89,7 +91,8 @@ BasicCommand::BasicCommand(const QString &name,
     m_segmentMarking(segmentMarking),
     m_comp(comp),
     m_modifiedEventsStart(-1),
-    m_modifiedEventsEnd(-1)
+    m_modifiedEventsEnd(-1),
+    m_originalStartTime(-1)
 {
 }    
 
@@ -170,7 +173,8 @@ BasicCommand::execute()
 {
     requireSegment();
     RG_DEBUG << getName() << "before execute";
-    RG_DEBUG << getName() << "segment";
+    RG_DEBUG << getName() << "segment" <<
+        m_segment->getStartTime() << m_segment->getEndTime();
     RG_DEBUG << *m_segment;
     RG_DEBUG << getName() << "segment end";
     beginExecute();
@@ -191,7 +195,8 @@ BasicCommand::execute()
     m_segment->signalChanged(getStartTime(), getRelayoutEndTime());
     
     RG_DEBUG << getName() << "after execute";
-    RG_DEBUG << getName() << "segment";
+    RG_DEBUG << getName() << "segment" <<
+        m_segment->getStartTime() << m_segment->getEndTime();
     RG_DEBUG << *m_segment;
     RG_DEBUG << getName() << "segment end";
 }
@@ -201,7 +206,8 @@ BasicCommand::unexecute()
 {
     requireSegment();
     RG_DEBUG << getName() << "before unexecute";
-    RG_DEBUG << getName() << "segment";
+    RG_DEBUG << getName() << "segment" <<
+        m_segment->getStartTime() << m_segment->getEndTime();
     RG_DEBUG << *m_segment;
     RG_DEBUG << getName() << "segment end";
     RG_DEBUG << "unexecute() begin...";
@@ -216,12 +222,19 @@ BasicCommand::unexecute()
     // Every single call to Segment::insert() fires off notifications.
     copyFrom(m_savedEvents);
 
+    if (m_segment->getStartTime() > m_originalStartTime) {
+        // this can happen if a segment is shortened from the start
+         m_segment->fillWithRests(m_originalStartTime,
+                                  m_segment->getStartTime());
+    }
+
     m_segment->updateRefreshStatuses(getStartTime(), getRelayoutEndTime());
     m_segment->signalChanged(getStartTime(), getRelayoutEndTime());
 
     RG_DEBUG << "unexecute() end.";
     RG_DEBUG << getName() << "after unexecute";
-    RG_DEBUG << getName() << "segment";
+    RG_DEBUG << getName() << "segment" <<
+        m_segment->getStartTime() << m_segment->getEndTime();
     RG_DEBUG << *m_segment;
     RG_DEBUG << getName() << "segment end";
 }
@@ -301,6 +314,7 @@ BasicCommand::requireSegment()
     m_endTime = calculateEndTime(m_segment->getEndTime(), *m_segment);
     if (m_endTime == m_startTime) ++m_endTime;
     m_savedEvents = new Segment(m_segment->getType(), m_startTime);
+    m_originalStartTime = m_segment->getStartTime();
 }
   
 void

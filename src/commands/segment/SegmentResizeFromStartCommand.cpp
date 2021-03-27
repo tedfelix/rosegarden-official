@@ -15,6 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[SegmentResizeFromStartCommand]"
+#define RG_NO_DEBUG_PRINT 1
 
 #include "SegmentResizeFromStartCommand.h"
 
@@ -35,6 +37,8 @@ SegmentResizeFromStartCommand::SegmentResizeFromStartCommand(Segment *s,
         m_oldStartTime(s->getStartTime()),
         m_newStartTime(time)
 {
+    RG_DEBUG << "ctor Segment start end" <<
+        s->getStartTime() << s->getEndTime();
     // nothing else
 }
 
@@ -46,6 +50,8 @@ SegmentResizeFromStartCommand::~SegmentResizeFromStartCommand()
 void
 SegmentResizeFromStartCommand::modifySegment()
 {
+    RG_DEBUG << "modifySegment start Segment start end" <<
+        m_segment->getStartTime() << m_segment->getEndTime();
     if (m_newStartTime < m_oldStartTime) {
         m_segment->fillWithRests(m_newStartTime, m_oldStartTime);
     } else {
@@ -72,6 +78,8 @@ SegmentResizeFromStartCommand::modifySegment()
             i = j;
         }
     }
+    RG_DEBUG << "modifySegment done Segment start end" <<
+        m_segment->getStartTime() << m_segment->getEndTime();
 }
 
 }
