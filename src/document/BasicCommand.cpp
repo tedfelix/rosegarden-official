@@ -330,6 +330,10 @@ BasicCommand::calculateModifiedStartEnd()
     // m_segment has modified events savedEvents has the original
     // unchanged segment events
     Segment::iterator j = m_savedEvents->begin();
+    if (j == m_savedEvents->end()) {
+        // all done
+        return;
+    }
     for (Segment::iterator i = m_segment->begin();
          i != m_segment->end(); ++i) {
         Event* segEvent = (*i);
