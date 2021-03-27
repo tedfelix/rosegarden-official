@@ -1730,6 +1730,20 @@ getCompositionSegments()
     return composition->getSegments();
 }
 
+void
+Segment::addObserver(SegmentObserver *obs)
+{
+    RG_DEBUG << "addObserver" << this << obs;
+    m_observers.push_back(obs);
+}
+
+void
+Segment::removeObserver(SegmentObserver *obs)
+{
+    RG_DEBUG << "removeObserver" << this << obs;
+    m_observers.remove(obs);
+}
+
 SegmentHelper::~SegmentHelper() { }
 
 

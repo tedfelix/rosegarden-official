@@ -13,6 +13,8 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[EventSelection]"
+
 #include "Selection.h"
 #include "base/Segment.h"
 #include "SegmentNotationHelper.h"
@@ -28,6 +30,7 @@ EventSelection::EventSelection(Segment& t) :
     m_endTime(0),
     m_haveRealStartTime(false)
 {
+    RG_DEBUG << "EventSelection ctor 1" << this;
     t.addObserver(this);
 }
 
@@ -37,6 +40,7 @@ EventSelection::EventSelection(Segment& t, timeT beginTime, timeT endTime, bool 
     m_endTime(0),
     m_haveRealStartTime(false)
 {
+    RG_DEBUG << "EventSelection ctor 2" << this;
     t.addObserver(this);
 
     Segment::iterator i = t.findTime(beginTime);
@@ -82,11 +86,13 @@ EventSelection::EventSelection(const EventSelection &sel) :
     m_endTime(sel.m_endTime),
     m_haveRealStartTime(sel.m_haveRealStartTime)
 {
+    RG_DEBUG << "EventSelection copy ctor" << this;
     m_originalSegment.addObserver(this);
 }
 
 EventSelection::~EventSelection()
 {
+    RG_DEBUG << "EventSelection dtor" << this;
     if (!m_observers.empty()) {
         // Notify observers of deconstruction
         for (ObserverSet::const_iterator i = m_observers.begin(); i != m_observers.end(); ++i) {

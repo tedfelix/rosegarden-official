@@ -745,8 +745,8 @@ public:
     // Get the segments in the current composition.
     static SegmentMultiSet& getCompositionSegments();
     
-    void  addObserver(SegmentObserver *obs) { m_observers.push_back(obs); }
-    void removeObserver(SegmentObserver *obs) { m_observers.remove(obs); }
+    void  addObserver(SegmentObserver *obs);
+    void removeObserver(SegmentObserver *obs);
 
     // List of visible EventRulers attached to this segment
     //
