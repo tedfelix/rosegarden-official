@@ -898,6 +898,11 @@ public:
      */
     bool getForNotation() const;
 
+    /// get and set brand. Setting a brand removes the brand from any
+    /// outher segments
+    QString getBrand() const;
+    void setBrand(const QString& b);
+
 private:
     void checkInsertAsClefKey(Event *e) const;
 
@@ -954,6 +959,8 @@ private:
     // EventRulers currently selected as visible on this segment
     //
     EventRulerList                m_eventRulerList;
+
+    QString m_brand;
 
 private: // stuff to support SegmentObservers
 

@@ -82,6 +82,13 @@ protected:
                  Segment &segment,
 		 Segment *redoEvents);
 
+    // Variant ctor to be used when the segment to be pasted to does
+    // not exist when the command is created
+    BasicCommand(const QString &name,
+                 const QString& segmentBrand,
+                 Composition* comp,
+                 bool bruteForceRedoRequired = false);
+
     virtual void modifySegment() = 0;
 
     virtual void beginExecute();
@@ -95,11 +102,17 @@ private:
     timeT calculateStartTime(timeT given, Segment &segment);
     timeT calculateEndTime(timeT given, Segment &segment);
 
+    /// if the segment is not set yet - get it from the segment id
+    void requireSegment();
+
     timeT m_startTime;
     timeT m_endTime;
 
-    /// The Segment that this command is being run against.
-    Segment &m_segment;
+    /// The Segment that this command is being run against.  This is a
+    /// pointer rather than a reference because it is possible to
+    /// create a command before the segment exists and set the segment
+    /// later
+    Segment *m_segment;
     /// Events from m_segment prior to executing the command.
     Segment m_savedEvents;
 
@@ -107,6 +120,13 @@ private:
     bool m_doBruteForceRedo;
     /// Events for redo, or for the "redoEvents" ctor.
     Segment *m_redoEvents;
+
+    /// The segment brand for delayed acces to segment
+    QString m_segmentBrand;
+
+    /// the composition
+    Composition *m_comp;
+
 };
 
 

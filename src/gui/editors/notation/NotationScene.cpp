@@ -531,6 +531,19 @@ NotationScene::getNextStaffOnTrack()
 }
 
 NotationStaff *
+NotationScene::getStaffBySegmentBrand(const QString& brand) const
+{
+    for (unsigned int i=0; i<m_staffs.size(); ++i) {
+        NotationStaff* staff = m_staffs[i];
+        QString staffBrand = staff->getBrand();
+        if (staffBrand == brand) {
+            return staff;
+        }
+    }
+    return nullptr;
+}
+
+NotationStaff *
 NotationScene::getStaffbyTrackAndTime(const Track *track, timeT targetTime)
 {
     // Prepare a fallback: If this is the right track but no staff

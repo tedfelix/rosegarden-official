@@ -241,6 +241,8 @@ public:
     SegmentMultiSet& getSegments() { return m_segments; }
     const SegmentMultiSet& getSegments() const { return m_segments; }
 
+    Segment* getSegmentByBrand(const QString& label) const;
+
     unsigned int getNbSegments() const { return m_segments.size(); }
 
     /**

@@ -217,6 +217,23 @@ Segment::getForNotation() const {
     return m_forNotation;
 }
 
+QString
+Segment::getBrand() const
+{
+    return m_brand;
+}
+
+void
+Segment::setBrand(const QString& b)
+{
+    if (b != "") {
+        // remove old brand
+        Segment* oldSeg = m_composition->getSegmentByBrand(b);
+        oldSeg->setBrand("");
+    }
+    m_brand = b;
+}
+
 void
 Segment::setTmp() {
     m_isTmp = true;

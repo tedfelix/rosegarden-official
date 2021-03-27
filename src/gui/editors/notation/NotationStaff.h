@@ -265,6 +265,8 @@ public:
     timeT getStartTime() const;
 
     timeT getEndTime() const;
+
+    QString getBrand() const { return m_segmentBrand; }
     
 protected:
 
@@ -369,6 +371,8 @@ protected:
     QPainter *m_printPainter;
 
     unsigned int m_refreshStatusId;
+
+    QString m_segmentBrand;
 };
 
 

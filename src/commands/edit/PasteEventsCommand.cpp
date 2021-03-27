@@ -65,6 +65,36 @@ PasteEventsCommand::PasteEventsCommand(Segment &segment,
 }
 
 PasteEventsCommand::PasteEventsCommand(Segment &segment,
+                                       const QString& brand,
+                                       Clipboard *clipboard,
+                                       timeT,
+                                       PasteType pasteType,
+                                       Composition& comp) :
+    BasicCommand(getGlobalName(), brand, &comp),
+    m_relayoutEndTime(getEndTime()),
+    m_clipboard(new Clipboard(*clipboard)),
+    m_pasteType(pasteType),
+    m_pastedEvents(segment)
+{
+    if (pasteType != OpenAndPaste) {
+
+        // paste clef or key -> relayout to end
+
+        if (clipboard->isSingleSegment()) {
+
+            Segment *s(clipboard->getSingleSegment());
+            for (Segment::iterator i = s->begin(); i != s->end(); ++i) {
+                if ((*i)->isa(Clef::EventType) ||
+                    (*i)->isa(Key::EventType)) {
+                    m_relayoutEndTime = s->getEndTime();
+                    break;
+                }
+            }
+        }
+    }
+}
+
+PasteEventsCommand::PasteEventsCommand(Segment &segment,
                                        Clipboard *clipboard,
                                        timeT pasteTime,
                                        timeT pasteEndTime,
@@ -74,7 +104,8 @@ PasteEventsCommand::PasteEventsCommand(Segment &segment,
     m_clipboard(new Clipboard(*clipboard)),
     m_pasteType(pasteType),
     m_pastedEvents(segment)
-{}
+{
+}
 
 PasteEventsCommand::~PasteEventsCommand()
 {

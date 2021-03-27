@@ -21,6 +21,7 @@
 #include "BasicCommand.h"
 
 #include "base/Segment.h"
+#include "base/Composition.h"
 #include "misc/Debug.h"
 #include <QString>
 
@@ -35,13 +36,15 @@ namespace Rosegarden
 BasicCommand::BasicCommand(const QString &name, Segment &segment,
                            timeT start, timeT end, bool bruteForceRedo) :
     NamedCommand(name),
-    m_startTime(calculateStartTime(start, segment)),
-    m_endTime(calculateEndTime(end, segment)),
-    m_segment(segment),
+    m_segment(&segment),
     m_savedEvents(segment.getType(), m_startTime),
     m_doBruteForceRedo(false),
-    m_redoEvents(nullptr)
+    m_redoEvents(nullptr),
+    m_segmentBrand(""),
+    m_comp(nullptr)
 {
+    m_startTime = calculateStartTime(start, segment);
+    m_endTime = calculateEndTime(end, segment);
     if (m_endTime == m_startTime) ++m_endTime;
 
     if (bruteForceRedo) {
@@ -55,19 +58,34 @@ BasicCommand::BasicCommand(const QString &name,
                            Segment &segment,
                            Segment *redoEvents) :
     NamedCommand(name),
-    m_startTime(calculateStartTime(redoEvents->getStartTime(), *redoEvents)),
-    m_endTime(calculateEndTime(redoEvents->getEndTime(), *redoEvents)),
-    m_segment(segment),
+    m_segment(&segment),
     m_savedEvents(segment.getType(), m_startTime),
     m_doBruteForceRedo(true),
-    m_redoEvents(redoEvents)
+    m_redoEvents(redoEvents),
+    m_segmentBrand(""),
+    m_comp(nullptr)
 {
+    m_startTime = calculateStartTime(redoEvents->getStartTime(), *redoEvents);
+    m_endTime = calculateEndTime(redoEvents->getEndTime(), *redoEvents);
     if (m_endTime == m_startTime) { ++m_endTime; }
 }
 
+BasicCommand::BasicCommand(const QString &name,
+                           const QString& segmentBrand,
+                           Composition* comp,
+                           bool bruteForceRedoRequired) :
+    NamedCommand(name),
+    m_segment(nullptr),
+    m_doBruteForceRedo(bruteForceRedoRequired),
+    m_redoEvents(nullptr),
+    m_segmentBrand(segmentBrand),
+    m_comp(comp)
+{
+}    
 
 BasicCommand::~BasicCommand()
 {
+    requireSegment();
     m_savedEvents.clear();
     if (m_redoEvents) m_redoEvents->clear();
     delete m_redoEvents;
@@ -76,6 +94,7 @@ BasicCommand::~BasicCommand()
 timeT
 BasicCommand::calculateStartTime(timeT given, Segment &segment)
 {
+    requireSegment();
     // This assertion was firing.  Fixed.  Will leave this here
     // in case this happens again.
     Q_ASSERT_X(&segment != nullptr,
@@ -97,6 +116,7 @@ BasicCommand::calculateStartTime(timeT given, Segment &segment)
 timeT
 BasicCommand::calculateEndTime(timeT given, Segment &segment)
 {
+    requireSegment();
     // This assertion was firing.  Fixed.  Will leave this here
     // in case this happens again.
     Q_ASSERT_X(&segment != nullptr,
@@ -117,23 +137,27 @@ BasicCommand::calculateEndTime(timeT given, Segment &segment)
 
 Rosegarden::Segment& BasicCommand::getSegment()
 {
-    return m_segment;
+    requireSegment();
+    return *m_segment;
 }
 
 Rosegarden::timeT BasicCommand::getRelayoutEndTime()
 {
+    requireSegment();
     return getEndTime();
 }
 
 void
 BasicCommand::beginExecute()
 {
+    requireSegment();
     copyTo(&m_savedEvents);
 }
 
 void
 BasicCommand::execute()
 {
+    requireSegment();
     beginExecute();
 
     if (!m_doBruteForceRedo) {
@@ -142,16 +166,17 @@ BasicCommand::execute()
         copyFrom(m_redoEvents);
     }
 
-    m_segment.updateRefreshStatuses(getStartTime(), getRelayoutEndTime());
+    m_segment->updateRefreshStatuses(getStartTime(), getRelayoutEndTime());
 
     RG_DEBUG << "execute() for " << getName() << ": updated refresh statuses "
              << getStartTime() << " -> " << getRelayoutEndTime();
-    m_segment.signalChanged(getStartTime(), getRelayoutEndTime());
+    m_segment->signalChanged(getStartTime(), getRelayoutEndTime());
 }
 
 void
 BasicCommand::unexecute()
 {
+    requireSegment();
     RG_DEBUG << "unexecute() begin...";
 
     if (m_redoEvents) {
@@ -164,8 +189,8 @@ BasicCommand::unexecute()
     // Every single call to Segment::insert() fires off notifications.
     copyFrom(&m_savedEvents);
 
-    m_segment.updateRefreshStatuses(getStartTime(), getRelayoutEndTime());
-    m_segment.signalChanged(getStartTime(), getRelayoutEndTime());
+    m_segment->updateRefreshStatuses(getStartTime(), getRelayoutEndTime());
+    m_segment->signalChanged(getStartTime(), getRelayoutEndTime());
 
     RG_DEBUG << "unexecute() end.";
 }
@@ -173,14 +198,15 @@ BasicCommand::unexecute()
 void
 BasicCommand::copyTo(Rosegarden::Segment *events)
 {
-    RG_DEBUG << "copyTo() for" << getName() << ":" << &m_segment <<
+    requireSegment();
+    RG_DEBUG << "copyTo() for" << getName() << ":" << m_segment <<
         "to" << events << ", range (" << m_startTime << "," << m_endTime <<
         ")";
 
-    Segment::iterator from = m_segment.findTime(m_startTime);
-    Segment::iterator to   = m_segment.findTime(m_endTime);
+    Segment::iterator from = m_segment->findTime(m_startTime);
+    Segment::iterator to   = m_segment->findTime(m_endTime);
 
-    for (Segment::iterator i = from; i != m_segment.end() && i != to; ++i) {
+    for (Segment::iterator i = from; i != m_segment->end() && i != to; ++i) {
 
        //RG_DEBUG << "copyTo(): Found event of type" << (*i)->getType() << "and duration" << (*i)->getDuration() << "at time" << (*i)->getAbsoluteTime();
 
@@ -191,21 +217,39 @@ BasicCommand::copyTo(Rosegarden::Segment *events)
 void
 BasicCommand::copyFrom(Rosegarden::Segment *events)
 {
+    requireSegment();
     RG_DEBUG << "copyFrom() for" << getName() << ":" << events <<
-        "to" << &m_segment << ", range (" << m_startTime << "," <<
+        "to" << m_segment << ", range (" << m_startTime << "," <<
         m_endTime << ")";
 
-    m_segment.erase(m_segment.findTime(m_startTime),
-                    m_segment.findTime(m_endTime));
+    m_segment->erase(m_segment->findTime(m_startTime),
+                    m_segment->findTime(m_endTime));
 
     for (Segment::iterator i = events->begin(); i != events->end(); ++i) {
 
         //RG_DEBUG << "copyFrom(): Found event of type" << (*i)->getType() << "and duration" << (*i)->getDuration() << "at time" << (*i)->getAbsoluteTime();
 
-        m_segment.insert(new Event(**i));
+        m_segment->insert(new Event(**i));
     }
 
     events->clear();
 }
-    
+
+void
+BasicCommand::requireSegment()
+{
+    if (m_segment) {
+        // already got the segment
+        return;
+    }
+    // get the segment from the id
+    Q_ASSERT_X(&m_comp != nullptr,
+               "BasicCommand::requireSegment()",
+               "Composition pointer is null.");
+    m_segment = m_comp->getSegmentByBrand(m_segmentBrand);
+    Q_ASSERT_X(&m_segment != nullptr,
+               "BasicCommand::requireSegment()",
+               "Segment pointer is null.");
+}
+  
 }
