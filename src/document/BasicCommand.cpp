@@ -338,12 +338,12 @@ BasicCommand::calculateModifiedStartEnd()
          i != m_segment->rend(); ++i) {
         Event* segEvent = (*i);
         Event* savedEvent = (*rj);
-        m_modifiedEventsEnd = segEvent->getAbsoluteTime() + 1;
         // are they the same ?
         if (!segEvent->isCopyOf(*savedEvent)) {
             // found a changed note
             break;
         }
+        m_modifiedEventsEnd = segEvent->getAbsoluteTime() - 1;
         ++rj;
         if (rj == m_savedEvents->rend()) {
             // all done
