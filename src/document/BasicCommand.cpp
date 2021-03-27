@@ -213,7 +213,7 @@ BasicCommand::unexecute()
     RG_DEBUG << "unexecute() begin...";
 
     if (m_redoEvents) {
-        copyTo(m_redoEvents);
+        copyTo(m_redoEvents, true);
         m_doBruteForceRedo = true;
     }
 
