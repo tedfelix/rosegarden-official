@@ -238,6 +238,10 @@ void NoteRestInserter::ready()
 
 void NoteRestInserter::stow()
 {
+    // This method is called if a segment has vanished. Clear
+    // m_clickStaff in case it is no longer valid
+    m_clickStaff = nullptr;
+
     // Fix bug #1528: NotationScene::clearPreviewNote() crash
     // This is a hack to avoid calling stow() twice, which causes this crash
     // when notation scene has been removed before the second call to stow().
@@ -548,6 +552,17 @@ bool
 NoteRestInserter::computeLocationAndPreview(const NotationMouseEvent *e,
                                             bool play)
 {
+    // check for valid staffs
+    std::vector<NotationStaff *>* allStaffs = m_scene->getStaffs();
+    std::vector<NotationStaff *>::iterator staffIter =
+        std::find(allStaffs->begin(), allStaffs->end(), e->staff);
+    if (staffIter == allStaffs->end()) return false;
+    if (m_clickStaff != nullptr) {
+        staffIter =
+            std::find(allStaffs->begin(), allStaffs->end(), m_clickStaff);
+        if (staffIter == allStaffs->end()) return false;
+    }
+    
     if (!e->staff || !e->element) {
         NOTATION_DEBUG << "computeLocationAndPreview: staff and/or element not supplied";
         clearPreview();
