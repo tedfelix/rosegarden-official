@@ -15,7 +15,7 @@
 
 #define RG_MODULE_STRING "[SegmentNotationHelper]"
 // Turn off all debugging here.
-//#define RG_NO_DEBUG_PRINT
+#define RG_NO_DEBUG_PRINT
 
 #include "SegmentNotationHelper.h"
 #include "base/NotationTypes.h"
@@ -852,8 +852,13 @@ SegmentNotationHelper::insertNote(timeT absoluteTime, Note note, int pitch,
 Segment::iterator
 SegmentNotationHelper::insertNote(Event *modelEvent)
 {
+    RG_DEBUG << "insertNote";
+    RG_DEBUG << *modelEvent;
+
     timeT absoluteTime = modelEvent->getAbsoluteTime();
     iterator i = segment().findNearestTime(absoluteTime);
+
+    RG_DEBUG << "absoluteTime" << absoluteTime;
 
     // If our insertion time doesn't match up precisely with any
     // existing event, and if we're inserting over a rest, split the
@@ -873,6 +878,7 @@ SegmentNotationHelper::insertNote(Event *modelEvent)
             (*i)->get<Int>(BEAMED_GROUP_UNTUPLED_COUNT);
     }
 
+    RG_DEBUG << "duration" << duration;
     //!!! Deal with end-of-bar issues!
 
     return insertSomething(i, duration, modelEvent, false);

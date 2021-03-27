@@ -156,13 +156,17 @@ void
 BasicCommand::beginExecute()
 {
     requireSegment();
-    copyTo(m_savedEvents);
+    copyTo(m_savedEvents, true);
 }
 
 void
 BasicCommand::execute()
 {
     requireSegment();
+    RG_DEBUG << getName() << "before execute";
+    RG_DEBUG << getName() << "segment";
+    RG_DEBUG << *m_segment;
+    RG_DEBUG << getName() << "segment end";
     beginExecute();
 
     if (!m_doBruteForceRedo) {
@@ -176,12 +180,21 @@ BasicCommand::execute()
     RG_DEBUG << "execute() for " << getName() << ": updated refresh statuses "
              << getStartTime() << " -> " << getRelayoutEndTime();
     m_segment->signalChanged(getStartTime(), getRelayoutEndTime());
+    
+    RG_DEBUG << getName() << "after execute";
+    RG_DEBUG << getName() << "segment";
+    RG_DEBUG << *m_segment;
+    RG_DEBUG << getName() << "segment end";
 }
 
 void
 BasicCommand::unexecute()
 {
     requireSegment();
+    RG_DEBUG << getName() << "before unexecute";
+    RG_DEBUG << getName() << "segment";
+    RG_DEBUG << *m_segment;
+    RG_DEBUG << getName() << "segment end";
     RG_DEBUG << "unexecute() begin...";
 
     if (m_redoEvents) {
@@ -192,16 +205,20 @@ BasicCommand::unexecute()
     // This can take a very long time.  This is because we are adding
     // events to a Segment that has someone to notify of changes.
     // Every single call to Segment::insert() fires off notifications.
-    copyFrom(m_savedEvents);
+    copyFrom(m_savedEvents, true);
 
     m_segment->updateRefreshStatuses(getStartTime(), getRelayoutEndTime());
     m_segment->signalChanged(getStartTime(), getRelayoutEndTime());
 
     RG_DEBUG << "unexecute() end.";
+    RG_DEBUG << getName() << "after unexecute";
+    RG_DEBUG << getName() << "segment";
+    RG_DEBUG << *m_segment;
+    RG_DEBUG << getName() << "segment end";
 }
     
 void
-BasicCommand::copyTo(Rosegarden::Segment *events)
+BasicCommand::copyTo(Rosegarden::Segment *events, bool wholeSegment)
 {
     requireSegment();
     RG_DEBUG << "copyTo() for" << getName() << ":" << m_segment <<
@@ -210,6 +227,12 @@ BasicCommand::copyTo(Rosegarden::Segment *events)
 
     Segment::iterator from = m_segment->findTime(m_startTime);
     Segment::iterator to   = m_segment->findTime(m_endTime);
+
+    if (wholeSegment) {
+        from = m_segment->findTime(m_segment->getStartTime());
+        to = m_segment->findTime(m_segment->getEndTime());
+        events->clear();
+    }
 
     for (Segment::iterator i = from; i != m_segment->end() && i != to; ++i) {
 
@@ -220,16 +243,22 @@ BasicCommand::copyTo(Rosegarden::Segment *events)
 }
    
 void
-BasicCommand::copyFrom(Rosegarden::Segment *events)
+BasicCommand::copyFrom(Rosegarden::Segment *events, bool wholeSegment)
 {
     requireSegment();
     RG_DEBUG << "copyFrom() for" << getName() << ":" << events <<
         "to" << m_segment << ", range (" << m_startTime << "," <<
         m_endTime << ")";
 
-    m_segment->erase(m_segment->findTime(m_startTime),
-                     m_segment->findTime(m_endTime));
+    Segment::iterator from = m_segment->findTime(m_startTime);
+    Segment::iterator to   = m_segment->findTime(m_endTime);
 
+    if (wholeSegment) {
+        from = m_segment->findTime(m_segment->getStartTime());
+        to = m_segment->findTime(m_segment->getEndTime());
+    }
+
+    m_segment->erase(from, to);
     for (Segment::iterator i = events->begin(); i != events->end(); ++i) {
 
         RG_DEBUG << "copyFrom(): Found event of type" << (*i)->getType() << "and duration" << (*i)->getDuration() << "at time" << (*i)->getAbsoluteTime();

@@ -5203,7 +5203,7 @@ NotationView::slotMagicLayer()
     RG_DEBUG << "CopyCommand done";
     RG_DEBUG << "Clipboard contents";
     Segment* clipseg = c->getSingleSegment();
-    if (clipseg) clipseg->dumpSegment();
+    if (clipseg) RG_DEBUG << *clipseg;
     RG_DEBUG << "Clipboard contents done";
 
     macro->addCommand(new EraseCommand(*selection));
@@ -5224,6 +5224,9 @@ NotationView::slotMagicLayer()
         RG_WARNING << "NotationView: new layer not found";
         return;
     }
+    RG_DEBUG << "newLayer";
+    RG_DEBUG << *newLayer;
+    RG_DEBUG << "newLayer end";
     m_segments.push_back(newLayer);
 
     // re-invoke setSegments with the amended m_segments

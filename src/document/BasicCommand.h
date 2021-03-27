@@ -95,9 +95,9 @@ protected:
 
 private:
     /// Copy from m_segment to segment.
-    void copyTo(Segment *segment);
+    void copyTo(Segment *segment, bool wholeSegment = false);
     /// Copy from segment to m_segment replacing events in the time range.
-    void copyFrom(Segment *segment);
+    void copyFrom(Segment *segment, bool wholeSegment = false);
 
     timeT calculateStartTime(timeT given, Segment &segment);
     timeT calculateEndTime(timeT given, Segment &segment);

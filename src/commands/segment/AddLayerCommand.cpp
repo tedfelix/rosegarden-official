@@ -64,6 +64,9 @@ AddLayerCommand::execute()
         // - we have laready adjusted m_segment to point to the layer
         m_composition.addSegment(m_segment);
         RG_DEBUG << "attaching segment" << m_segment;
+        RG_DEBUG << "layer after attatch";
+        RG_DEBUG << *m_segment;
+        RG_DEBUG << "layer after attatch end";
         return;
     }
 
@@ -133,6 +136,9 @@ AddLayerCommand::execute()
     // asked
     m_segment = layer;
     m_detached = false;
+    RG_DEBUG << "layer after creation";
+    RG_DEBUG << *m_segment;
+    RG_DEBUG << "layer after creation end";
 }
 
 void
@@ -140,6 +146,10 @@ AddLayerCommand::unexecute()
 {
     m_composition.detachSegment(m_segment);
     m_detached = true;
+    RG_DEBUG << "layer after detatch";
+    RG_DEBUG << *m_segment;
+    RG_DEBUG << "layer after detatch end";
+
 }
 
 }

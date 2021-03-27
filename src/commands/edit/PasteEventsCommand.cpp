@@ -233,10 +233,10 @@ PasteEventsCommand::modifySegment()
     Segment *destination(&getSegment());
 
     RG_DEBUG << "segment source";
-    source->dumpSegment();
+    RG_DEBUG << *source;
     RG_DEBUG << "segment source end";
     RG_DEBUG << "segment destination";
-    destination->dumpSegment();
+    RG_DEBUG << *destination;
     RG_DEBUG << "segment destination end";
 
     timeT destEndTime = destination->getEndTime();
@@ -352,6 +352,10 @@ PasteEventsCommand::modifySegment()
                 destination->insert(e);
             }
         }
+
+        RG_DEBUG << "segment after modify";
+        RG_DEBUG << *destination;
+        RG_DEBUG << "segment after modify end";
 
         return;
     }

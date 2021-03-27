@@ -242,13 +242,6 @@ Segment::setMarking(const QString& m, Composition* comp)
 }
 
 void
-Segment::dumpSegment() const
-{
-    RG_DEBUG << *this;
-}
-
-
-void
 Segment::setTmp() {
     m_isTmp = true;
     setGreyOut();
