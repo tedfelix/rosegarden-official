@@ -3831,10 +3831,8 @@ NotationView::slotRegenerateScene()
 }
 
 void
-NotationView::slotUpdateWindowTitle(bool m)
+NotationView::slotUpdateWindowTitle(bool)
 {
-    QString indicator = (m ? "*" : "");
-
     if (m_segments.empty()) return;
 
     // Scene may be empty and the editor is about to be closed,
@@ -3844,34 +3842,8 @@ NotationView::slotUpdateWindowTitle(bool m)
     // In such a case, don't do anything (to avoid a crash).
     if (m_notationWidget->getScene()->isSceneEmpty()) return;
 
-    if (m_segments.size() == 1) {
-
-        TrackId trackId = m_segments[0]->getTrack();
-        Track *track =
-            m_segments[0]->getComposition()->getTrackById(trackId);
-
-        int trackPosition = -1;
-        if (track)
-            trackPosition = track->getPosition();
-        //    RG_DEBUG << std::endl << std::endl << "DEBUG TITLE BAR: " << getDocument()->getTitle() << std::endl << std::endl << std::endl;
-        setWindowTitle(tr("%1%2 - Segment Track #%3 - Notation")
-                      .arg(indicator)
-                      .arg(getDocument()->getTitle())
-                      .arg(trackPosition + 1));
-
-    } else if (m_segments.size() == getDocument()->getComposition().getNbSegments()) {
-
-        setWindowTitle(tr("%1%2 - All Segments - Notation")
-                      .arg(indicator)
-                      .arg(getDocument()->getTitle()));
-
-    } else {
-
-        setWindowTitle(tr("%1%2 - %n Segment(s) - Notation", "", m_segments.size())
-                    .arg(indicator)
-                    .arg(getDocument()->getTitle()));
-
-    }
+    QString view = tr("Notation");
+    setWindowTitle(getTitle(view));
 }
 
 void 

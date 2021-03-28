@@ -338,4 +338,56 @@ EditViewBase::handleEventRemoved(Event */* event */)
 {
 }
 
+QString
+EditViewBase::getTitle(const QString& view)
+{
+    QString title;
+    QString indicator = (m_doc->isModified() ? "*" : "");
+    if (m_segments.size() == 1) {
+        
+        TrackId trackId = m_segments[0]->getTrack();
+        Track *track =
+            m_segments[0]->getComposition()->getTrackById(trackId);
+        
+        int trackPosition = -1;
+        if (track)
+            trackPosition = track->getPosition();
+        
+        QString segLabel = strtoqstr(m_segments[0]->getLabel());
+        if (segLabel.isEmpty()) {
+            segLabel = " ";
+        } else {
+            segLabel = QString(" \"%1\" ").arg(segLabel);
+        }
+        
+        QString trkLabel = strtoqstr(track->getLabel());
+        if (trkLabel.isEmpty() || trkLabel == tr("<untitled>")) {
+            trkLabel = " ";
+        } else {
+            trkLabel = QString(" \"%1\" ").arg(trkLabel);
+        }
+        title = tr("%1%2 - Segment%3Track%4#%5 - %6")
+            .arg(indicator)
+            .arg(getDocument()->getTitle())
+            .arg(segLabel)
+            .arg(trkLabel)
+            .arg(trackPosition + 1)
+            .arg(view);
+    } else if (m_segments.size() ==
+               getDocument()->getComposition().getNbSegments()) {
+        title = tr("%1%2 - All Segments - %3")
+            .arg(indicator)
+            .arg(getDocument()->getTitle())
+            .arg(view);
+    } else {
+        title = tr("%1%2 - %3 Segment(s) - %4")
+            .arg(indicator)
+            .arg(getDocument()->getTitle())
+            .arg(m_segments.size())
+            .arg(view);
+    }
+    
+    return title;
+}
+
 }
