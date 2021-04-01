@@ -188,7 +188,8 @@ BasicCommand::execute()
     // calculate the start and end of the modified region
     calculateModifiedStartEnd();
 
-    m_segment->updateRefreshStatuses(getStartTime(), getRelayoutEndTime());
+    m_segment->updateRefreshStatuses(m_modifiedEventsStart,
+                                     m_modifiedEventsEnd);
 
     RG_DEBUG << "execute() for " << getName() << ": updated refresh statuses "
              << getStartTime() << " -> " << getRelayoutEndTime();
@@ -228,7 +229,8 @@ BasicCommand::unexecute()
                                   m_segment->getStartTime());
     }
 
-    m_segment->updateRefreshStatuses(getStartTime(), getRelayoutEndTime());
+    m_segment->updateRefreshStatuses(m_modifiedEventsStart,
+                                     m_modifiedEventsEnd);
     m_segment->signalChanged(getStartTime(), getRelayoutEndTime());
 
     RG_DEBUG << "unexecute() end.";
