@@ -230,6 +230,9 @@ protected:
     void setConfigDialogPageIndex(int p) { m_configDialogPageIndex = p; }
     int getConfigDialogPageIndex()       { return m_configDialogPageIndex; }
 
+    /// form a suitable title string for the window
+    QString getTitle(const QString& view);
+
     RosegardenDocument* m_doc;
 
     /// The Segment(s) that are being edited.
