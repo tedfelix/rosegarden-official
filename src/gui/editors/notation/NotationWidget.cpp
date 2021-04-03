@@ -110,6 +110,7 @@ NotationWidget::NotationWidget() :
     m_chordNameRuler(nullptr),
     m_rawNoteRuler(nullptr),
     m_controlRulerWidget(nullptr),
+    m_segmentLabel(nullptr),
     m_headersGroup(nullptr),
     m_headersView(nullptr),
     m_headersScene(nullptr),
@@ -469,6 +470,7 @@ NotationWidget::setSegments(RosegardenDocument *document,
     if (m_chordNameRuler) delete m_chordNameRuler;
     if (m_rawNoteRuler) delete m_rawNoteRuler;
     if (m_controlRulerWidget) delete m_controlRulerWidget;
+    if (m_segmentLabel) delete m_segmentLabel;
 
     m_controlRulerWidget = new ControlRulerWidget;
     m_layout->addWidget(m_controlRulerWidget, CONTROLS_ROW, MAIN_COL, 1, 1);
@@ -502,6 +504,11 @@ NotationWidget::setSegments(RosegardenDocument *document,
             this, &NotationWidget::slotCRWMouseMove);
     connect(m_controlRulerWidget, &ControlRulerWidget::mouseRelease,
             this, &NotationWidget::slotCRWMouseRelease);
+
+    m_segmentLabel = new QLabel("Segment Label");
+    m_segmentLabel->setAlignment(Qt::AlignHCenter);
+    m_segmentLabel->setAutoFillBackground(true);
+    m_layout->addWidget(m_segmentLabel, SEGMENTLABEL_ROW, MAIN_COL, 1, 1);
 
     m_topStandardRuler = new StandardRuler(document,
                                            m_referenceScale,
@@ -561,9 +568,14 @@ NotationWidget::setSegments(RosegardenDocument *document,
 
     slotUpdateSegmentChangerBackground();
 
-    // hide the segment changer if only one segment
-    if (segments.size() == 1) m_changerWidget->hide();
-    else m_changerWidget->show();
+    // hide the segment changer and segment label if only one segment
+    if (segments.size() == 1) {
+        m_changerWidget->hide();
+        m_segmentLabel->hide();
+    } else {
+        m_changerWidget->show();
+        m_segmentLabel->show();
+    }
 
     slotGenerateHeaders();
 
@@ -600,6 +612,7 @@ NotationWidget::setSegments(RosegardenDocument *document,
 
     connect(m_scene, &NotationScene::currentStaffChanged,
             this, &NotationWidget::slotStaffChanged);
+
 }
 
 void
@@ -1767,7 +1780,9 @@ NotationWidget::slotUpdateSegmentChangerBackground()
     Track *track = m_document->getComposition().getTrackById(m_scene->getCurrentSegment()->getTrack());
     int trackPosition = m_document->getComposition().getTrackPositionById(track->getId());
     QString trackLabel = QString::fromStdString(track->getLabel());
-
+    if (trackLabel == "")
+        trackLabel = tr("<untitled>");
+    
     // set up some tooltips...  I don't like this much, and it wants some kind
     // of dedicated float thing eventually, but let's not go nuts on a
     // last-minute feature
@@ -1777,6 +1792,23 @@ NotationWidget::slotUpdateSegmentChangerBackground()
                                 .arg(QString::fromStdString(m_scene->getCurrentSegment()->getLabel()))
                                 .arg(trackPosition)
                                 .arg(trackLabel));
+
+    Segment* segment = m_scene->getCurrentSegment();
+    const QString segmentText = tr("Track %1 (%2) | %3").
+        arg(track->getPosition() + 1).
+        arg(trackLabel).
+        arg(QString::fromStdString(segment->getLabel()));
+    
+    m_segmentLabel->setText(segmentText);
+
+    // Segment label colors
+    palette = m_segmentLabel->palette();
+    // Background
+    palette.setColor(QPalette::Window, c);
+    // Foreground/Text
+    palette.setColor(QPalette::WindowText, segment->getPreviewColour());
+    m_segmentLabel->setPalette(palette);
+
 }
 
 void
