@@ -1642,34 +1642,19 @@ EventView::updateWindowTitle(bool m)
                        .arg(strtoqstr(m_segments[0]->getLabel())));
 
 
-    } else if (m_segments.size() == 1) {
-
-        // Fix bug #3007112
-        if (!m_segments[0]->getComposition()) {
-            // The segment is no more in the composition.
-            // Nothing to edit : close the editor.
-            close();
-            return;
-        }
-        
-        TrackId trackId = m_segments[0]->getTrack();
-        Track *track =
-            m_segments[0]->getComposition()->getTrackById(trackId);
-
-        int trackPosition = -1;
-        if (track)
-            trackPosition = track->getPosition();
-
-        setWindowTitle(tr("%1%2 - Segment Track #%3 - Event List")
-                       .arg(indicator)
-                       .arg(getDocument()->getTitle())
-                       .arg(trackPosition + 1));
-
     } else {
-
-        setWindowTitle(tr("%1%2 - %3 Segments - Event List")
-                       .arg(getDocument()->getTitle())
-                       .arg(m_segments.size()));
+        if (m_segments.size() == 1) {
+            
+            // Fix bug #3007112
+            if (!m_segments[0]->getComposition()) {
+                // The segment is no more in the composition.
+                // Nothing to edit : close the editor.
+                close();
+                return;
+            }
+        }
+        QString view = tr("Event List");
+        setWindowTitle(getTitle(view));
     }
 
     setWindowIcon(IconLoader::loadPixmap("window-eventlist"));

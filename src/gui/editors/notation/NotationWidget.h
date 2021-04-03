@@ -28,6 +28,7 @@
 #include <QWidget>
 #include <QPushButton>
 #include <QBoxLayout>
+#include <QLabel>
 
 #include <vector>
 
@@ -296,6 +297,8 @@ private:
     RawNoteRuler *m_rawNoteRuler; // I own this
     ControlRulerWidget *m_controlRulerWidget; // I own this
 
+    QLabel *m_segmentLabel;
+
     // Track Headers
     // View > Show Track Headers
 
@@ -352,6 +355,7 @@ private:
         BOTTOMRULER_ROW,
         CONTROLS_ROW,
         HSLIDER_ROW,
+        SEGMENTLABEL_ROW,
         PANNER_ROW,
         BOTTOM_ROW
     };
