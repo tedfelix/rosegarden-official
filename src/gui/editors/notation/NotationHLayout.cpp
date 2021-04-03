@@ -2265,6 +2265,7 @@ NotationHLayout::BarData::dump(std::string indent)
 void
 NotationHLayout::dumpBarDataMap()
 {
+    RG_DEBUG << "dumpBarDataMap begin";
     BarDataMap::iterator i;
     for (i=m_barData.begin(); i!=m_barData.end(); ++i) {
         ViewSegment *vs = (*i).first;
@@ -2278,6 +2279,7 @@ NotationHLayout::dumpBarDataMap()
             (*j).second.dump("       ");
         }
     }
+    RG_DEBUG << "dumpBarDataMap end";
 }
 
 }

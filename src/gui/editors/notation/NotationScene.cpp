@@ -16,6 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[NotationScene]"
+#define RG_NO_DEBUG_PRINT 1
 
 #include "NotationScene.h"
 
@@ -1198,8 +1199,10 @@ NotationScene::checkUpdate()
 void
 NotationScene::dumpVectors()
 {
+    RG_DEBUG << "dumpVectors begin";
     for (unsigned int i=0; i<m_externalSegments.size(); ++i) {
-        RG_DEBUG << "extern" << i << ":" << m_externalSegments[i];
+        RG_DEBUG << "extern" << i << ":" << m_externalSegments[i] <<
+            m_externalSegments[i]->getLabel().c_str();
         if (m_externalSegments[i]->isTmp()) RG_DEBUG << " TMP";
         if (m_externalSegments[i]->isLinked()) RG_DEBUG << " LINKED";
         if (m_externalSegments[i]->isTrulyLinked()) RG_DEBUG << " TRULYLINKED";
@@ -1213,14 +1216,17 @@ NotationScene::dumpVectors()
                   << "endMrkr=" << m_clones[i]->getEndMarkerTime();
     }
     for (unsigned int i=0; i<m_segments.size(); ++i) {
-        RG_DEBUG << "segment" << i << ":" << m_segments[i];
+        RG_DEBUG << "segment" << i << ":" << m_segments[i] <<
+            m_segments[i]->getLabel().c_str();
         if (m_segments[i]->isTmp()) RG_DEBUG << " TMP";
         m_segments[i]->dumpObservers();
     }
     for (unsigned int i=0; i<m_staffs.size(); ++i) {
-        RG_DEBUG << "staff" << i << ":" << &m_staffs[i]->getSegment();
+        RG_DEBUG << "staff" << i << ":" << &m_staffs[i]->getSegment() <<
+            m_staffs[i]->getSegment().getLabel().c_str();
         if (m_staffs[i]->getSegment().isTmp()) RG_DEBUG << " TMP";
     }
+    RG_DEBUG << "dumpVectors end";
 }
 
 void

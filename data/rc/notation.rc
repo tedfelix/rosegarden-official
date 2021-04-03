@@ -120,8 +120,8 @@
 
   <!-- YG - Only for debug
   <Separator/>
-    <Action name="dump_staves" text="Dump staves (debug)" checked="false" />
-    <Action name="dump_bardata" text="Dump BarDataMap (debug)" checked="false" />
+    <Action name="dump_staves" text="Dump staves (debug)" />
+    <Action name="dump_bardata" text="Dump BarDataMap (debug)" />
   -->
 
   </Menu>
