@@ -218,16 +218,34 @@ BasicCommand::unexecute()
         m_doBruteForceRedo = true;
     }
 
+    if (m_segment->getStartTime() > m_originalStartTime) {
+        // this can happen if a segment is shortened from the start
+        m_segment->fillWithRests(m_originalStartTime,
+                                 m_segment->getStartTime());
+    }
+
+    if (m_segment->getStartTime() < m_originalStartTime) {
+        // this can happen if a segment is lengthend from the start
+        for (Segment::iterator i = m_segment->begin();
+             m_segment->isBeforeEndMarker(i); ) {
+            
+            Segment::iterator j = i;
+            ++j;
+
+            if ((*i)->getAbsoluteTime() >= m_originalStartTime)
+                break;
+            if ((*i)->getAbsoluteTime() + (*i)->getDuration() <=
+                m_originalStartTime) {
+                m_segment->erase(i);
+            }
+            i = j;
+        }
+    }
+
     // This can take a very long time.  This is because we are adding
     // events to a Segment that has someone to notify of changes.
     // Every single call to Segment::insert() fires off notifications.
     copyFrom(m_savedEvents);
-
-    if (m_segment->getStartTime() > m_originalStartTime) {
-        // this can happen if a segment is shortened from the start
-         m_segment->fillWithRests(m_originalStartTime,
-                                  m_segment->getStartTime());
-    }
 
     m_segment->updateRefreshStatuses(m_modifiedEventsStart,
                                      m_modifiedEventsEnd);
@@ -327,8 +345,9 @@ BasicCommand::calculateModifiedStartEnd()
         //already done
         return;
     }
-    m_modifiedEventsStart = m_segment->getStartTime();
-    m_modifiedEventsEnd = m_segment->getEndTime();
+    // use savedEvents here in case the segment was shortened
+    m_modifiedEventsStart = m_savedEvents->getStartTime();
+    m_modifiedEventsEnd = m_savedEvents->getEndTime();
     // m_segment has modified events savedEvents has the original
     // unchanged segment events
     Segment::iterator j = m_savedEvents->begin();
@@ -340,7 +359,8 @@ BasicCommand::calculateModifiedStartEnd()
          i != m_segment->end(); ++i) {
         Event* segEvent = (*i);
         Event* savedEvent = (*j);
-        m_modifiedEventsStart = segEvent->getAbsoluteTime() - 1;
+        // use savedEvents here in case the segment was shortened
+        m_modifiedEventsStart = savedEvent->getAbsoluteTime() - 1;
         // are they the same ?
         if (!segEvent->isCopyOf(*savedEvent)) {
             // found a changed note
@@ -363,12 +383,19 @@ BasicCommand::calculateModifiedStartEnd()
             // found a changed note
             break;
         }
-        m_modifiedEventsEnd = segEvent->getAbsoluteTime() - 1;
+        // use savedEvents here in case the segment was shortened
+        m_modifiedEventsEnd = savedEvent->getAbsoluteTime() - 1;
         ++rj;
         if (rj == m_savedEvents->rend()) {
             // all done
             break;
         }
+    }
+
+    if (m_segment->getStartTime() != m_originalStartTime) {
+        // the segment has been shortened or lengthened from the start
+        // alway use the start of m_savedEvents
+        m_modifiedEventsStart = m_savedEvents->getStartTime();
     }
 
     if (m_modifiedEventsEnd < m_modifiedEventsStart) 
