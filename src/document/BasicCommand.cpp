@@ -188,13 +188,15 @@ BasicCommand::execute()
     // calculate the start and end of the modified region
     calculateModifiedStartEnd();
 
-    m_segment->updateRefreshStatuses(m_modifiedEventsStart,
+    timeT updateStartTime = m_modifiedEventsStart;
+    if (m_segment->getStartTime() < updateStartTime)
+        updateStartTime = m_segment->getStartTime();
+    m_segment->updateRefreshStatuses(updateStartTime,
                                      m_modifiedEventsEnd);
-
     RG_DEBUG << "execute() for " << getName() << ": updated refresh statuses "
-             << getStartTime() << " -> " << getRelayoutEndTime();
-    m_segment->signalChanged(getStartTime(), getRelayoutEndTime());
-    
+             << updateStartTime << " -> " << m_modifiedEventsEnd;
+    m_segment->signalChanged(updateStartTime, m_modifiedEventsEnd);
+
     RG_DEBUG << getName() << "after execute";
     RG_DEBUG << getName() << "segment" <<
         m_segment->getStartTime() << m_segment->getEndTime();
@@ -247,9 +249,14 @@ BasicCommand::unexecute()
     // Every single call to Segment::insert() fires off notifications.
     copyFrom(m_savedEvents);
 
-    m_segment->updateRefreshStatuses(m_modifiedEventsStart,
+    timeT updateStartTime = m_modifiedEventsStart;
+    if (m_segment->getStartTime() < updateStartTime)
+        updateStartTime = m_segment->getStartTime();
+    m_segment->updateRefreshStatuses(updateStartTime,
                                      m_modifiedEventsEnd);
-    m_segment->signalChanged(getStartTime(), getRelayoutEndTime());
+    RG_DEBUG << "unexecute() for " << getName() << ": updated refresh statuses "
+             << updateStartTime << " -> " << m_modifiedEventsEnd;
+    m_segment->signalChanged(updateStartTime, m_modifiedEventsEnd);
 
     RG_DEBUG << "unexecute() end.";
     RG_DEBUG << getName() << "after unexecute";
