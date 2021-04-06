@@ -211,15 +211,13 @@ AudioSplitDialog::drawPreview()
 
         if (startY < 0) {
             RG_DEBUG << "AudioSplitDialog::AudioSplitDialog - "
-                     << "startY - out of negative range"
-                     << endl;
+                     << "startY - out of negative range";
             startY = 0;
         }
 
         if (endY < 0) {
             RG_DEBUG << "AudioSplitDialog::AudioSplitDialog - "
-                     << "endY - out of negative range"
-                     << endl;
+                     << "endY - out of negative range";
             endY = 0;
         }
 

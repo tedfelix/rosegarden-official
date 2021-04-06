@@ -487,7 +487,7 @@ EventFilterDialog::keepEvent(Event* const &e)
 	(*e).get<Int>(BaseProperties::PITCH, property);
 	if (!eventInRange(getPitch(), property)) {
 	    RG_DEBUG << "EventFilterDialog::keepEvent(): rejecting event; pitch " << property
-		     << " out of range." << endl;
+		     << " out of range.";
 	    return false;
 	}
 	property = 0;
@@ -496,7 +496,7 @@ EventFilterDialog::keepEvent(Event* const &e)
 	(*e).get<Int>(BaseProperties::VELOCITY, property);
 	if (!EventFilterDialog::eventInRange(getVelocity(), property)) {
 	    RG_DEBUG << "EventFilterDialog::keepEvent(): rejecting event; velocity " << property
-		     << " out of range." << endl;
+		     << " out of range.";
 	    return false;
 	}
 	property = 0;
@@ -506,7 +506,7 @@ EventFilterDialog::keepEvent(Event* const &e)
             
 	if (!EventFilterDialog::eventInRange(getDuration(), property)) {
 	    RG_DEBUG << "EventFilterDialog::keepEvent(): rejecting event; duration " << property
-		     << " out of range." << endl;
+		     << " out of range.";
 	    return false;
 	}
 	property = 0;
@@ -518,7 +518,7 @@ EventFilterDialog::keepEvent(Event* const &e)
                 
             if (!EventFilterDialog::eventInRange(getDuration(), property)) {
                 RG_DEBUG << "EventFilterDialog::keepEvent(): rejecting rest; duration " << property
-                         << " out of range." << endl;
+                         << " out of range.";
                 return false;
             }
             return true;
