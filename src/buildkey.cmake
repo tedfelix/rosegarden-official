@@ -54,27 +54,20 @@ endif()
 
 find_program(GIT_EXE git)
 if (GIT_EXE)
+
    # Get the git commit hash.
-   execute_process(COMMAND ${GIT_EXE} rev-parse --short HEAD
+   execute_process(COMMAND ${GIT_EXE} describe --dirty=*
       OUTPUT_VARIABLE MY_WC_REVISION
       ERROR_VARIABLE git_rev_parse_error
       RESULT_VARIABLE git_rev_parse_result
       OUTPUT_STRIP_TRAILING_WHITESPACE)
 
-   # git status --porcelain
-   execute_process(COMMAND ${GIT_EXE} status --porcelain
-      OUTPUT_VARIABLE MY_WC_STATUS
-      ERROR_VARIABLE git_status_error
-      RESULT_VARIABLE git_status_result
-      OUTPUT_STRIP_TRAILING_WHITESPACE)
-
-   # Working copy not clean?  Add a "*" to the revision.
-   if (NOT ${MY_WC_STATUS} STREQUAL "")
-      SET(MY_WC_REVISION "${MY_WC_REVISION}*")
-   endif()
-
    #message(STATUS "git revision ${MY_WC_REVISION}")
-   SET(RG_BUILDKEY "${RG_BUILDKEY} (git: ${MY_WC_REVISION})")
+
+   # Was a commit hash found?  Add it to BUILDKEY.
+   if (NOT ${MY_WC_REVISION} STREQUAL "")
+      SET(RG_BUILDKEY "${RG_BUILDKEY} (${MY_WC_REVISION})")
+   endif()
 endif()
 
 message(STATUS "Build key ${RG_BUILDKEY}")
