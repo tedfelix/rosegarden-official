@@ -108,9 +108,16 @@ CountdownDialog::setElapsedTime(int elapsedSeconds)
     }
 
     QString h, m, s;
-    h.sprintf("%02d", seconds / 3600);
-    m.sprintf("%02d", seconds / 60);
-    s.sprintf("%02d", seconds % 60);
+    char *buf;
+    asprintf(&buf, "%02d", seconds / 3600);
+    h = buf;
+    free(buf);
+    asprintf(&buf, "%02d", seconds / 60);
+    m = buf;
+    free(buf);
+    asprintf(&buf, "%02d", seconds % 60);
+    s = buf;
+    free(buf);
 
     if (seconds < 3600) // less than an hour
     {

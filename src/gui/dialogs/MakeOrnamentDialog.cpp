@@ -69,7 +69,8 @@ MakeOrnamentDialog::MakeOrnamentDialog(QWidget *parent,
 
     m_name = new LineEdit(defaultName);
     QFontMetrics metrics(m_name->font());
-    int width30 = metrics.width("123456789012345678901234567890");
+    int width30 =
+        metrics.boundingRect("123456789012345678901234567890").width();
     m_name->setFixedWidth(width30);
     hboxLayout->addWidget(m_name);
     hbox->setLayout(hboxLayout);

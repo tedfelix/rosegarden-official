@@ -384,8 +384,7 @@ MusicXMLXMLHandler::startPartList(const QString& qName,
         // For debugging
         RG_DEBUG << "MusicXMLXMLHandler::startPartList: cannot process element \'"
                  << m_currentElement
-                 << "\'"
-                 << endl;
+                 << "\'";
         // I did a test in a clean bash environment (no extra environment
         // variables)  with a clean release build, and Rosegarden crashed on
         // this assert.  I added -DQT_NO_DEBUG_OUTPUT and -dQT_NO_WARNING_OUTPUT
