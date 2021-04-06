@@ -20,6 +20,8 @@ endif()
 # combined with
 # http://stackoverflow.com/questions/17451226/cmake-how-to-get-subversion-revision-but-not-to-fail-if-we-made-an-export?s=1%7C0.1607
 
+#[[
+
 # the FindSubversion.cmake module is part of the standard distribution
 include(FindSubversion)
 
@@ -45,7 +47,7 @@ if(Subversion_FOUND)
       endif()
    endif()
 endif()
-
+]]
 
 message(STATUS "Build key ${RG_BUILDKEY}")
 
