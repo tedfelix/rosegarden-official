@@ -391,7 +391,7 @@ BasicCommand::calculateModifiedStartEnd()
             break;
         }
         // use savedEvents here in case the segment was shortened
-        m_modifiedEventsEnd = savedEvent->getAbsoluteTime() - 1;
+        m_modifiedEventsEnd = savedEvent->getAbsoluteTime() + 1;
         ++rj;
         if (rj == m_savedEvents->rend()) {
             // all done
