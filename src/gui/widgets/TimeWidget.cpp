@@ -720,7 +720,7 @@ TimeWidget::slotTimeTUpdate()
     else
     {
         RG_DEBUG << "slotTimeTUpdate: no m_timeT found, but slotCalled in error "
-                << " noop." << endl;
+                << " noop.";
     }
 }
 
