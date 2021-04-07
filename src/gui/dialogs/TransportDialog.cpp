@@ -363,9 +363,14 @@ TransportDialog::show()
     int x = settings.value("transportx", -1).toInt() ;
     int y = settings.value("transporty", -1).toInt() ;
     if (x >= 0 && y >= 0) {
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
         QScreen* screen = QGuiApplication::screenAt(QPoint(x, y));
         int dw = screen->availableGeometry().width();
         int dh = screen->availableGeometry().height();
+#else
+        int dw = QApplication::desktop()->availableGeometry(QPoint(x, y)).width();
+        int dh = QApplication::desktop()->availableGeometry(QPoint(x, y)).height();
+#endif
         if (x + width() > dw) x = dw - width();
         if (y + height() > dh) y = dh - height();
         move(x, y);
