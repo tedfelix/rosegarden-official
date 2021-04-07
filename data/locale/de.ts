@@ -8334,15 +8334,15 @@
         <translation>&amp;lt;keine&amp;gt;</translation>
     </message>
     <message>
-        <location filename="../../src/base/Studio.cpp" line="+66"/>
         <location filename="../../src/sound/AlsaDriver.cpp" line="+720"/>
+        <location filename="../../src/base/Studio.cpp" line="+66"/>
         <location filename="../AutoloadStrings.cpp" line="-189"/>
         <source>Synth plugin</source>
         <translation>Synthesizer-Plugin</translation>
     </message>
     <message>
-        <location line="-3"/>
-        <location filename="../../src/sound/AlsaDriver.cpp" line="+37"/>
+        <location line="+37"/>
+        <location filename="../../src/base/Studio.cpp" line="-3"/>
         <location filename="../AutoloadStrings.cpp" line="-1"/>
         <source>Audio</source>
         <translation>Audio</translation>
@@ -10489,9 +10489,9 @@
         <translation>%1. %2</translation>
     </message>
     <message>
+        <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="+446"/>
         <location filename="../../src/gui/general/ActionFileParser.cpp" line="+651"/>
         <location line="+7"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="+446"/>
         <source>%1</source>
         <translation>%1</translation>
     </message>
@@ -10506,10 +10506,10 @@
         <translation>%1 (%2)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="+1672"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="+953"/>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="+473"/>
         <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="+1056"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="+473"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="+1001"/>
+        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="+1681"/>
         <source>%1 Controller %2 %3</source>
         <translation>%1 Kontroller %2 %3</translation>
     </message>
@@ -11185,12 +11185,12 @@ Wollen Sie stattdessen
 <context>
     <name>Rosegarden::AddLayerCommand</name>
     <message>
-        <location filename="../../src/commands/segment/AddLayerCommand.cpp" line="+35"/>
+        <location filename="../../src/commands/segment/AddLayerCommand.cpp" line="+38"/>
         <source>Add Layer</source>
         <translation>Ebene hinzufügen</translation>
     </message>
     <message>
-        <location line="+32"/>
+        <location line="+46"/>
         <source> - layer</source>
         <translation> - Ebene</translation>
     </message>
@@ -17464,8 +17464,8 @@ verursacht.</translation>
 <context>
     <name>Rosegarden::MarkParallelCommand</name>
     <message>
-        <location filename="../../src/commands/notation/MarkParallelCommand.h" line="+52"/>
         <location filename="../../src/commands/notation/MarkParallelCommand.cpp" line="+44"/>
+        <location filename="../../src/commands/notation/MarkParallelCommand.h" line="+52"/>
         <source>Mark Parallel</source>
         <translation></translation>
     </message>
@@ -18840,7 +18840,7 @@ Doppelklicken um den Markierungs-Editor zu öffnen.</translation>
 <context>
     <name>Rosegarden::NotationStaff</name>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationStaff.cpp" line="+465"/>
+        <location filename="../../src/gui/editors/notation/NotationStaff.cpp" line="+466"/>
         <source> %1</source>
         <translation> %1</translation>
     </message>
@@ -19111,7 +19111,7 @@ Dies ist ein Fehler (das Programm ist vermutlich inzwischen abgestürzt)</transl
         </translation>
     </message>
     <message>
-        <location line="+146"/>
+        <location line="+155"/>
         <source>  Font:  </source>
         <translation>  Font:  </translation>
     </message>
@@ -19131,7 +19131,7 @@ Dies ist ein Fehler (das Programm ist vermutlich inzwischen abgestürzt)</transl
         <translation>  Abstände:  </translation>
     </message>
     <message numerus="yes">
-        <location line="-105"/>
+        <location line="-114"/>
         <source>  %n event(s) selected </source>
         <translation>
             <numerusform>  %n Event ausgewählt </numerusform>
@@ -19144,7 +19144,7 @@ Dies ist ein Fehler (das Programm ist vermutlich inzwischen abgestürzt)</transl
         <translation>  Keine Auswahl </translation>
     </message>
     <message>
-        <location line="+2664"/>
+        <location line="+2728"/>
         <source>Chord</source>
         <translation>Akkord</translation>
     </message>
@@ -19161,7 +19161,7 @@ Dies ist ein Fehler (das Programm ist vermutlich inzwischen abgestürzt)</transl
         <translation>%1 %2</translation>
     </message>
     <message>
-        <location line="-2271"/>
+        <location line="-2326"/>
         <source>Unknown spacing action %1</source>
         <translation>Abstandsaktion %1 ist unbekannt</translation>
     </message>
@@ -19196,12 +19196,12 @@ Dies ist ein Fehler (das Programm ist vermutlich inzwischen abgestürzt)</transl
         <translation>Mehrere Segmente können nicht in Eines eingefügt werden</translation>
     </message>
     <message>
-        <location line="-776"/>
+        <location line="-785"/>
         <source>&lt;qt&gt;&lt;p&gt;Apply the interpretations selected on this toolbar to the selection.&lt;/p&gt;&lt;p&gt;If there is no selection, interpretations apply to the entire segment automatically.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Entsprechend Auswahl interpretieren (bei keiner Auswahl werden alle Interpretationen angewandt).&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+367"/>
+        <location line="+376"/>
         <location line="+177"/>
         <location line="+52"/>
         <location line="+57"/>
@@ -19209,15 +19209,15 @@ Dies ist ein Fehler (das Programm ist vermutlich inzwischen abgestürzt)</transl
         <location line="+25"/>
         <location line="+103"/>
         <location line="+58"/>
-        <location line="+832"/>
+        <location line="+886"/>
         <location line="+81"/>
         <location line="+730"/>
-        <location line="+1081"/>
+        <location line="+1082"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location line="-3035"/>
+        <location line="-3090"/>
         <source>Printing with LilyPond...</source>
         <translation>Drucken mit LilyPond...</translation>
     </message>
@@ -19249,12 +19249,12 @@ Dies ist ein Fehler (das Programm ist vermutlich inzwischen abgestürzt)</transl
         <translation>Kein Einfügen an diesem Punkt möglich.</translation>
     </message>
     <message>
-        <location line="+2809"/>
+        <location line="+2864"/>
         <source>Move Events to Staff Above</source>
         <translation>Events auf Notensystem oberhalb verschieben</translation>
     </message>
     <message>
-        <location line="-2666"/>
+        <location line="-2719"/>
         <source>Raising velocities...</source>
         <translation>Anschlagstärke erhöhen...</translation>
     </message>
@@ -19264,7 +19264,7 @@ Dies ist ein Fehler (das Programm ist vermutlich inzwischen abgestürzt)</transl
         <translation>Anschlagstärke verringern...</translation>
     </message>
     <message>
-        <location line="+2813"/>
+        <location line="+2866"/>
         <source>Edit Text Event</source>
         <translation>Text-Event bearbeiten</translation>
     </message>
@@ -19279,7 +19279,7 @@ Dies ist ein Fehler (das Programm ist vermutlich inzwischen abgestürzt)</transl
         <translation>Noten zusammenfassen...</translation>
     </message>
     <message>
-        <location line="-2117"/>
+        <location line="-2118"/>
         <source>Unknown note insert action %1</source>
         <translation>Unbekannte Noten-Einfügeaktion %1</translation>
     </message>
@@ -19289,23 +19289,23 @@ Dies ist ein Fehler (das Programm ist vermutlich inzwischen abgestürzt)</transl
         <translation>Note einfügen</translation>
     </message>
     <message>
-        <location line="+2291"/>
+        <location line="+2292"/>
         <location line="+10"/>
         <source>Adding dot...</source>
         <translation>Punktierung setzen...</translation>
     </message>
     <message>
-        <location line="-1912"/>
+        <location line="-1913"/>
         <source>Ornament track %1 bar %2</source>
         <translation>Verzierung auf Spur %1 Takt %2</translation>
     </message>
     <message>
-        <location line="-1111"/>
+        <location line="-1163"/>
         <source>Set Controller Values</source>
         <translation>Kontrollerwerte setzen</translation>
     </message>
     <message>
-        <location line="+638"/>
+        <location line="+690"/>
         <source>Please select a control ruler first.</source>
         <translation>Bitte zuerst einen Kontroller wählen.</translation>
     </message>
@@ -19362,7 +19362,7 @@ Bitte überprüfen Sie die Einstellungen im Dialog &quot;MIDI-Geräte verwalten&
         <translation>Ermittelte Taktart wird angezeigt</translation>
     </message>
     <message>
-        <location line="+169"/>
+        <location line="+170"/>
         <source>%1%2 - Segment Track #%3 - Notation</source>
         <translation>%1%2 - Segment Spur #%3 - Notensatz</translation>
     </message>
@@ -19445,7 +19445,12 @@ Bitte überprüfen Sie die Einstellungen im Dialog &quot;MIDI-Geräte verwalten&
         <translation>Tonwiederholung zyklisch erhöhen...</translation>
     </message>
     <message>
-        <location line="+52"/>
+        <location line="+18"/>
+        <source>New Layer</source>
+        <translation>Neue Ebene</translation>
+    </message>
+    <message>
+        <location line="+47"/>
         <source>New Layer from Selection</source>
         <translation>Neue Ebene aus Auswahl</translation>
     </message>
@@ -19453,7 +19458,7 @@ Bitte überprüfen Sie die Einstellungen im Dialog &quot;MIDI-Geräte verwalten&
 <context>
     <name>Rosegarden::NotationWidget</name>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="-1447"/>
+        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="-1450"/>
         <source>Zoom</source>
         <translation>Zoom</translation>
     </message>
@@ -19478,7 +19483,7 @@ Bitte überprüfen Sie die Einstellungen im Dialog &quot;MIDI-Geräte verwalten&
         <translation>Spur-Beschriftungen schließen</translation>
     </message>
     <message>
-        <location line="+1460"/>
+        <location line="+1463"/>
         <location line="+1"/>
         <source>&lt;qt&gt;Rotate wheel to change the active segment&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Rad rotieren lassen, um das aktive Segment zu ändern&lt;/qt&gt;</translation>
@@ -19548,7 +19553,7 @@ Bitte überprüfen Sie die Einstellungen im Dialog &quot;MIDI-Geräte verwalten&
 <context>
     <name>Rosegarden::NotePixmapFactory</name>
     <message>
-        <location filename="../../src/gui/editors/notation/NotePixmapFactory.cpp" line="+189"/>
+        <location filename="../../src/gui/editors/notation/NotePixmapFactory.cpp" line="+191"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
@@ -19600,12 +19605,12 @@ Bitte überprüfen Sie die Einstellungen im Dialog &quot;MIDI-Geräte verwalten&
 <context>
     <name>Rosegarden::PasteEventsCommand</name>
     <message>
-        <location filename="../../src/commands/edit/PasteEventsCommand.h" line="+85"/>
+        <location filename="../../src/commands/edit/PasteEventsCommand.h" line="+93"/>
         <source>&amp;Paste</source>
         <translation>&amp;Einfügen</translation>
     </message>
     <message>
-        <location filename="../../src/commands/edit/PasteEventsCommand.cpp" line="+92"/>
+        <location filename="../../src/commands/edit/PasteEventsCommand.cpp" line="+120"/>
         <source>Paste into an existing gap [&quot;restricted&quot;]</source>
         <translation>In vorhandene Lücke einfügen [&quot;eingeschränkt&quot;]</translation>
     </message>
@@ -21051,7 +21056,7 @@ Möglicherweise gibt es Inkompatibilitäten zwischen den Dateiformaten.</transla
         <location filename="../../src/document/RosegardenDocument.cpp" line="+482"/>
         <location line="+60"/>
         <location line="+12"/>
-        <location line="+66"/>
+        <location line="+63"/>
         <location line="+32"/>
         <location line="+439"/>
         <location line="+629"/>
@@ -21073,7 +21078,7 @@ Möglicherweise gibt es Inkompatibilitäten zwischen den Dateiformaten.</transla
         <translation type="obsolete">Kann Dokument nicht unter %1 speichern</translation>
     </message>
     <message numerus="yes">
-        <location line="-2610"/>
+        <location line="-2607"/>
         <source>Delete the %n audio file(s) recorded during the unsaved session?</source>
         <translation>
             <numerusform>Soll %n Audio-Datei gelöscht werden, die während der nicht abgespeicherten Sitzung aufgenommen wurde?</numerusform>
@@ -21127,7 +21132,7 @@ Bitte wählen diejenigen aus, die Sie permanent von der Festplatte entfernen mö
         <translation>Datei einlesen...</translation>
     </message>
     <message>
-        <location line="+55"/>
+        <location line="+52"/>
         <source>Could not open Rosegarden file</source>
         <translation>Die Rosegarden-Datei konnte nicht geöffnet werden</translation>
     </message>
@@ -21223,8 +21228,8 @@ die Datei bearbeitet, die Sperrdatei löschen und neu bversuchen.
         <translation>Fehler beim Schreiben auf %1&apos;</translation>
     </message>
     <message>
-        <location line="-850"/>
-        <location line="+2264"/>
+        <location line="-847"/>
+        <location line="+2261"/>
         <source>Cancel</source>
         <translation>Abbrechen</translation>
     </message>
@@ -21417,7 +21422,7 @@ Siehe: Bearbeiten -&gt; Einstellungen -&gt; Audio.</translation>
         <translation>Beginn...</translation>
     </message>
     <message>
-        <location line="+464"/>
+        <location line="+468"/>
         <source>  Zoom:  </source>
         <translation>  Zoom:  </translation>
     </message>
@@ -21426,7 +21431,7 @@ Siehe: Bearbeiten -&gt; Einstellungen -&gt; Audio.</translation>
         <translation type="obsolete">%1 - %2</translation>
     </message>
     <message>
-        <location line="+491"/>
+        <location line="+493"/>
         <source>File &quot;%1&quot; does not exist</source>
         <translation>Die Datei &quot;%1&quot; existiert nicht</translation>
     </message>
@@ -21449,12 +21454,12 @@ Wollen Sie diese stattdessen öffnen?</translation>
     </message>
     <message>
         <location line="+145"/>
-        <location line="+4799"/>
+        <location line="+4801"/>
         <source>Untitled</source>
         <translation>Unbetitelt</translation>
     </message>
     <message>
-        <location line="-4786"/>
+        <location line="-4788"/>
         <location line="+341"/>
         <location line="+157"/>
         <source>Could not save document at %1
@@ -21466,7 +21471,7 @@ Fehler war: %2</translation>
         <location line="-496"/>
         <location line="+342"/>
         <location line="+157"/>
-        <location line="+6392"/>
+        <location line="+6394"/>
         <source>Could not save document at %1</source>
         <translation>Kann Dokument nicht unter %1 speichern</translation>
     </message>
@@ -21475,7 +21480,7 @@ Fehler war: %2</translation>
         <translation type="obsolete">Neues Anwendungsfenster öffnen...</translation>
     </message>
     <message>
-        <location line="-6823"/>
+        <location line="-6825"/>
         <source>Creating new document...</source>
         <translation>Neues Dokument erzeugen...</translation>
     </message>
@@ -21494,12 +21499,12 @@ Fehler war: %2</translation>
     </message>
     <message>
         <location line="-101"/>
-        <location line="+6194"/>
+        <location line="+6196"/>
         <source>All supported files</source>
         <translation>Alle unterstützten Dateien</translation>
     </message>
     <message>
-        <location line="-6193"/>
+        <location line="-6195"/>
         <location line="+71"/>
         <location line="+192"/>
         <source>Rosegarden files</source>
@@ -21507,16 +21512,16 @@ Fehler war: %2</translation>
     </message>
     <message>
         <location line="-262"/>
-        <location line="+2010"/>
+        <location line="+2012"/>
         <location line="+23"/>
         <source>MIDI files</source>
         <translation>MIDI-Dateien</translation>
     </message>
     <message>
-        <location line="-2032"/>
+        <location line="-2034"/>
         <location line="+70"/>
         <location line="+197"/>
-        <location line="+1703"/>
+        <location line="+1705"/>
         <location line="+40"/>
         <location line="+23"/>
         <location line="+256"/>
@@ -21536,18 +21541,18 @@ Fehler war: %2</translation>
         <translation>Alle Dateien</translation>
     </message>
     <message>
-        <location line="-6196"/>
+        <location line="-6198"/>
         <location line="+72"/>
         <source>Open File</source>
         <translation>Datei öffnen</translation>
     </message>
     <message>
-        <location line="-1068"/>
+        <location line="-1070"/>
         <source>Ctrl+R</source>
         <translation>Strg+R</translation>
     </message>
     <message>
-        <location line="+909"/>
+        <location line="+911"/>
         <source>%1%2 - %3</source>
         <translation>%1%2 - %3</translation>
     </message>
@@ -21591,7 +21596,7 @@ Fehler war: %2</translation>
         <translation>Speichern als...</translation>
     </message>
     <message>
-        <location line="+53"/>
+        <location line="+55"/>
         <source>Closing file...</source>
         <translation>Datei wird geschlossen...</translation>
     </message>
@@ -21821,8 +21826,8 @@ Segmente-&gt;Segmente zusammenfassen.
         <translation>http://rosegardenmusic.com/wiki/doc:manual-en</translation>
     </message>
     <message>
-        <location line="-6801"/>
-        <location line="+327"/>
+        <location line="-6805"/>
+        <location line="+329"/>
         <location line="+8"/>
         <location line="+10"/>
         <location line="+26"/>
@@ -21837,7 +21842,7 @@ Segmente-&gt;Segmente zusammenfassen.
         <location line="+8"/>
         <location line="+56"/>
         <location line="+3"/>
-        <location line="+278"/>
+        <location line="+280"/>
         <location line="+17"/>
         <location line="+24"/>
         <location line="+25"/>
@@ -21966,12 +21971,12 @@ Please exit and restart Rosegarden to restore sound capability.</source>
 Bitte Beenden und erneut Starten, damit der Ton wieder funktioniert.</translation>
     </message>
     <message>
-        <location line="-4714"/>
+        <location line="-4722"/>
         <source>Starting sequencer...</source>
         <translation>Sequencer starten...</translation>
     </message>
     <message>
-        <location line="+1107"/>
+        <location line="+1113"/>
         <source>File &quot;%1&quot; is a Rosegarden Device, and must be imported using the MIDI device manager.</source>
         <translatorcomment>Datei &quot;%1&quot; ist ein Rosegardengerät und muss mittels MIDI-Gerätmanager importiert werden.</translatorcomment>
         <translation></translation>
@@ -21988,7 +21993,7 @@ Bitte Beenden und erneut Starten, damit der Ton wieder funktioniert.</translatio
         <translation> als Vorlage </translation>
     </message>
     <message>
-        <location line="+479"/>
+        <location line="+481"/>
         <location line="+1405"/>
         <location line="+191"/>
         <location line="+97"/>
