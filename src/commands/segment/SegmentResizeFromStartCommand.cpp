@@ -54,6 +54,28 @@ SegmentResizeFromStartCommand::modifySegment()
         m_segment->getStartTime() << m_segment->getEndTime();
     if (m_newStartTime < m_oldStartTime) {
         m_segment->fillWithRests(m_newStartTime, m_oldStartTime);
+        // move the first clef to the start of the segment
+        for (Segment::iterator i = m_segment->begin();
+             m_segment->isBeforeEndMarker(i); ) {
+            if ((*i)->getType() == Clef::EventType) {
+                Event *newClef = new Event((**i), m_newStartTime);
+                m_segment->erase(i);
+                m_segment->insert(newClef);
+                break;
+            }
+            ++i;
+        }
+        // move the first key change to the start of the segment
+        for (Segment::iterator i = m_segment->begin();
+             m_segment->isBeforeEndMarker(i); ) {
+            if ((*i)->getType() == Key::EventType) {
+                Event *newKey = new Event((**i), m_newStartTime);
+                m_segment->erase(i);
+                m_segment->insert(newKey);
+                break;
+            }
+            ++i;
+        }
     } else {
 
         for (Segment::iterator i = m_segment->begin();

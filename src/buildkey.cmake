@@ -15,6 +15,10 @@ if (NOT RG_BUILDKEY)
    set(RG_BUILDKEY "Error")
 endif()
 
+#[[
+
+# Old svn stuff.
+
 # Magic for getting the SVN revision at build time
 # http://stackoverflow.com/questions/3780667/use-cmake-to-get-build-time-svn-revision
 # combined with
@@ -46,6 +50,25 @@ if(Subversion_FOUND)
    endif()
 endif()
 
+]]
+
+find_program(GIT_EXE git)
+if (GIT_EXE)
+
+   # Get the git commit hash.
+   execute_process(COMMAND ${GIT_EXE} describe --dirty=*
+      OUTPUT_VARIABLE MY_WC_REVISION
+      ERROR_VARIABLE git_rev_parse_error
+      RESULT_VARIABLE git_rev_parse_result
+      OUTPUT_STRIP_TRAILING_WHITESPACE)
+
+   #message(STATUS "git revision ${MY_WC_REVISION}")
+
+   # Was a commit hash found?  Add it to BUILDKEY.
+   if (NOT ${MY_WC_REVISION} STREQUAL "")
+      SET(RG_BUILDKEY "${RG_BUILDKEY} (${MY_WC_REVISION})")
+   endif()
+endif()
 
 message(STATUS "Build key ${RG_BUILDKEY}")
 
