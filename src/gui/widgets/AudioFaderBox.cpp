@@ -286,7 +286,7 @@ AudioFaderBox::setAudioChannels(int channels)
     default:
         RG_DEBUG << "AudioFaderBox::setAudioChannels - "
         << "unsupported channel numbers (" << channels
-        << ")" << endl;
+        << ")";
         return ;
     }
 
