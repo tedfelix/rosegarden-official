@@ -86,7 +86,7 @@ AudioInstrumentParameterPanel::AudioInstrumentParameterPanel(QWidget *parent) :
 
     // Instrument label
     QFontMetrics metrics(font);
-    int width25 = metrics.width("1234567890123456789012345");
+    int width25 = metrics.boundingRect("1234567890123456789012345").width();
     m_instrumentLabel->setFont(font);
     m_instrumentLabel->setFixedWidth(width25);
     m_instrumentLabel->setAlignment(Qt::AlignCenter);

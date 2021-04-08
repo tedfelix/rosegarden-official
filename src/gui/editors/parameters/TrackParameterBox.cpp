@@ -81,10 +81,10 @@ TrackParameterBox::TrackParameterBox(QWidget *parent) :
     setObjectName("Track Parameter Box");
 
     QFontMetrics metrics(m_font);
-    const int width11 = metrics.width("12345678901");
-    const int width20 = metrics.width("12345678901234567890");
-    const int width22 = metrics.width("1234567890123456789012");
-    const int width25 = metrics.width("1234567890123456789012345");
+    const int width11 = metrics.boundingRect("12345678901").width();
+    const int width20 = metrics.boundingRect("12345678901234567890").width();
+    const int width22 = metrics.boundingRect("1234567890123456789012").width();
+    const int width25 = metrics.boundingRect("1234567890123456789012345").width();
 
     // Widgets
 

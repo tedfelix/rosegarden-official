@@ -85,7 +85,11 @@ void FontViewFrame::setGlyphs(bool glyphs)
 QSize FontViewFrame::sizeHint() const
 {
     int top,right,left,bottom;
-    getContentsMargins( &left, &top, &right, &bottom );
+    QMargins margins = contentsMargins();
+    left = margins.left();
+    right = margins.right();
+    top = margins.top();
+    bottom = margins.bottom();
 	
     return QSize((16 * m_fontSize * 3) / 2 + left + right + 2 * frameWidth(),
                  (16 * m_fontSize * 3) / 2 + top + bottom + 2 * frameWidth());
@@ -108,7 +112,11 @@ void FontViewFrame::paintEvent( QPaintEvent* e )
     QPainter p(this);
 
     int top, right, left, bottom;
-    getContentsMargins(&left, &top, &right, &bottom);
+    QMargins margins = contentsMargins();
+    left = margins.left();
+    right = margins.right();
+    top = margins.top();
+    bottom = margins.bottom();
     p.setClipRect(left, top, right-left, bottom-top);
 	
     int ll = 25;
@@ -136,7 +144,7 @@ void FontViewFrame::paintEvent( QPaintEvent* e )
                 p.setFont(qApp->font());
                 QFontMetrics afm(qApp->font());
                 QString s = QString("%1").arg(m_row * 256 + (j - 1) * 16);
-                p.drawText(x - afm.width(s), y, s);
+                p.drawText(x - afm.boundingRect(s).width(), y, s);
                 p.setPen(QColor(190, 190, 255));
                 p.drawLine(0, y, width(), y);
                 p.setPen(QColor(Qt::black));

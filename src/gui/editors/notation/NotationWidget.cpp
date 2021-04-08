@@ -216,7 +216,7 @@ NotationWidget::NotationWidget() :
     m_hpanner->setMaximumHeight(80);
     m_hpanner->setBackgroundBrush(Qt::white);
     m_hpanner->setOptimizationFlag(QGraphicsView::DontAdjustForAntialiasing, true);
-    m_hpanner->setRenderHints(nullptr);
+    m_hpanner->setRenderHints(QPainter::RenderHints());
 
     m_pannerLayout->addWidget(m_hpanner);
 
@@ -1107,10 +1107,10 @@ NotationWidget::slotZoomInFromPanner()
     m_hZoomFactor /= 1.1;
     m_vZoomFactor /= 1.1;
     if (m_referenceScale) m_referenceScale->setXZoomFactor(m_hZoomFactor);
-    QMatrix m;
+    QTransform m;
     m.scale(m_hZoomFactor, m_vZoomFactor);
-    m_view->setMatrix(m);
-    m_headersView->setMatrix(m);
+    m_view->setTransform(m);
+    m_headersView->setTransform(m);
     m_headersView->setFixedWidth(m_headersGroup->sizeHint().width()
                                                          * m_hZoomFactor);
     slotHScroll();
@@ -1122,10 +1122,10 @@ NotationWidget::slotZoomOutFromPanner()
     m_hZoomFactor *= 1.1;
     m_vZoomFactor *= 1.1;
     if (m_referenceScale) m_referenceScale->setXZoomFactor(m_hZoomFactor);
-    QMatrix m;
+    QTransform m;
     m.scale(m_hZoomFactor, m_vZoomFactor);
-    m_view->setMatrix(m);
-    m_headersView->setMatrix(m);
+    m_view->setTransform(m);
+    m_headersView->setTransform(m);
     m_headersView->setFixedWidth(m_headersGroup->sizeHint().width()
                                                          * m_hZoomFactor);
     slotHScroll();
@@ -1552,12 +1552,12 @@ NotationWidget::slotResetZoomClicked()
         m_referenceScale->setXZoomFactor(m_hZoomFactor);
         m_referenceScale->setYZoomFactor(m_vZoomFactor);
     }
-    m_view->resetMatrix();
-    QMatrix m;
+    m_view->resetTransform();
+    QTransform m;
     m.scale(m_hZoomFactor, m_vZoomFactor);
-    m_view->setMatrix(m);
+    m_view->setTransform(m);
     m_view->scale(m_hZoomFactor, m_vZoomFactor);
-    m_headersView->setMatrix(m);
+    m_headersView->setTransform(m);
     m_headersView->setFixedWidth(m_headersGroup->sizeHint().width());
     slotHScroll();
 
@@ -1601,11 +1601,11 @@ NotationWidget::setHorizontalZoomFactor(double factor)
 
     m_hZoomFactor = factor;
     if (m_referenceScale) m_referenceScale->setXZoomFactor(m_hZoomFactor);
-    m_view->resetMatrix();
+    m_view->resetTransform();
     m_view->scale(m_hZoomFactor, m_vZoomFactor);
-    QMatrix m;
+    QTransform m;
     m.scale(1.0, m_vZoomFactor);
-    m_headersView->setMatrix(m);
+    m_headersView->setTransform(m);
     m_headersView->setFixedWidth(m_headersGroup->sizeHint().width());
     slotHScroll();
 }
@@ -1615,11 +1615,11 @@ NotationWidget::setVerticalZoomFactor(double factor)
 {
     m_vZoomFactor = factor;
     if (m_referenceScale) m_referenceScale->setYZoomFactor(m_vZoomFactor);
-    m_view->resetMatrix();
+    m_view->resetTransform();
     m_view->scale(m_hZoomFactor, m_vZoomFactor);
-    QMatrix m;
+    QTransform m;
     m.scale(1.0, m_vZoomFactor);
-    m_headersView->setMatrix(m);
+    m_headersView->setTransform(m);
     m_headersView->setFixedWidth(m_headersGroup->sizeHint().width());
 }
 
@@ -1688,7 +1688,7 @@ NotationWidget::slotAddControlRuler(QAction *action)
         if (it->getType() != Controller::EventType) continue;
 
         QString hexValue;
-        hexValue.sprintf("(0x%x)", it->getControllerNumber());
+        hexValue.asprintf("(0x%x)", it->getControllerNumber());
 
         // strings extracted from data files must be QObject::tr()
         QString itemStr = QObject::tr("%1 Controller %2 %3")
