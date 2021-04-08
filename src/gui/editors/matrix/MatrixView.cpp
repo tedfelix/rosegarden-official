@@ -1545,8 +1545,8 @@ MatrixView::slotHelpAboutQt()
 void
 MatrixView::slotDonate()
 {
-    QString url("https://sourceforge.net/project/project_donations.php?group_id=4932");
-    QDesktopServices::openUrl(QUrl(url));
+    QDesktopServices::openUrl(QUrl(
+            "https://www.rosegardenmusic.com/wiki/donations"));
 }
 
 void
