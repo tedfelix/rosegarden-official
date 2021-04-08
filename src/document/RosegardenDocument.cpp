@@ -1523,50 +1523,22 @@ void RosegardenDocument::saveSegment(QTextStream& outStream, Segment *segment,
         // convert out - should do this as XmlExportable really
         // once all this code is centralised
         //
-        char *buf;
-        asprintf(&buf, "%d.%06d", segment->getAudioStartTime().sec,
-                 segment->getAudioStartTime().usec());
-        time = buf;
-        free(buf);
-        //time.sprintf("%d.%06d", segment->getAudioStartTime().sec,
-        //             segment->getAudioStartTime().usec());
 
         outStream << "    <begin index=\""
-        << time
+        << segment->getAudioStartTime()
         << "\"/>\n";
 
-        asprintf(&buf, "%d.%06d", segment->getAudioEndTime().sec,
-                 segment->getAudioEndTime().usec());
-        time = buf;
-        free(buf);
-        //time.sprintf("%d.%06d", segment->getAudioEndTime().sec,
-        //             segment->getAudioEndTime().usec());
-
         outStream << "    <end index=\""
-        << time
+        << segment->getAudioEndTime()
         << "\"/>\n";
 
         if (segment->isAutoFading()) {
-            asprintf(&buf, "%d.%06d", segment->getFadeInTime().sec,
-                     segment->getFadeInTime().usec());
-            time = buf;
-            free(buf);
-            //time.sprintf("%d.%06d", segment->getFadeInTime().sec,
-            //            segment->getFadeInTime().usec());
-
             outStream << "    <fadein time=\""
-            << time
+            << segment->getFadeInTime()
             << "\"/>\n";
 
-            asprintf(&buf, "%d.%06d", segment->getFadeOutTime().sec,
-                     segment->getFadeOutTime().usec());
-            time = buf;
-            free(buf);
-            //time.sprintf("%d.%06d", segment->getFadeOutTime().sec,
-            //              segment->getFadeOutTime().usec());
-
             outStream << "    <fadeout time=\""
-            << time
+            << segment->getFadeOutTime()
             << "\"/>\n";
         }
 

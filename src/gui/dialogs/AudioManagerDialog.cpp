@@ -294,7 +294,6 @@ AudioManagerDialog::slotPopulateFileList()
     m_fileList->setSelectionMode(QAbstractItemView::SingleSelection);
 
     // for the sample file length
-    QString msecs, sRate;
     RealTime length;
 
     // Create a vector of audio Segments only
@@ -349,10 +348,8 @@ AudioManagerDialog::slotPopulateFileList()
         length = (*it)->getLength();
         char *buf;
         asprintf(&buf, "%03d", length.nsec / 1000000);
-        msecs = buf;
+        item->setText(1,QString("%1.%2s").arg(length.sec).arg(buf));    // row, col
         free(buf);
-        //item->setText(1, QString("%1.%2s").arg(length.sec).arg(msecs));
-        item->setText(1,QString("%1.%2s").arg(length.sec).arg(msecs));    // row, col
 
         // set start time and duration
         item->setStartTime(RealTime::zeroTime);
@@ -381,16 +378,15 @@ AudioManagerDialog::slotPopulateFileList()
         if (m_sampleRate != 0 && int((*it)->getSampleRate()) != m_sampleRate) {
             asprintf(&buf, "%.1f KHz *",
                      float((*it)->getSampleRate()) / 1000.0);
-            sRate = buf;
-            free(buf);
             wrongSampleRates = true;
+            item->setText(3, buf);
+            free(buf);
         } else {
             asprintf(&buf, "%.1f KHz",
                      float((*it)->getSampleRate()) / 1000.0);
-            sRate = buf;
+            item->setText(3, buf);
             free(buf);
         }
-        item->setText(3, sRate);
 
         // Test audio file element for selection criteria
         //
@@ -420,11 +416,10 @@ AudioManagerDialog::slotPopulateFileList()
                 // Write segment duration
                 //
                 asprintf(&buf, "%03d", segmentDuration.nsec / 1000000);
-                msecs = buf;
-                free(buf);
                 childItem->setText(1, QString("%1.%2s")
                                    .arg(segmentDuration.sec)
-                                   .arg(msecs));
+                                   .arg(buf));
+                free(buf);
 
                 try {
                     m_doc->getAudioFileManager().
