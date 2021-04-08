@@ -353,7 +353,7 @@ Thumbwheel::paintEvent(QPaintEvent *)
 
     QPainter paint(&m_cache);
     paint.setClipRect(rect());
-    QColor bg = (ThornStyle::isEnabled() ? QColor(0xED, 0xED, 0xFF) : palette().background().color());
+    QColor bg = (ThornStyle::isEnabled() ? QColor(0xED, 0xED, 0xFF) : palette().window().color());
     if (!m_bright) bg = bg.darker(125);
     paint.fillRect(subclip, bg);
 

@@ -106,8 +106,14 @@ PitchTrackerView::PitchTrackerView(RosegardenDocument *doc,
         Accidentals::Tuning::getTunings();
     
     if (availableTunings) {
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
         m_availableTunings =
-          QVector<Accidentals::Tuning*>::fromStdVector(*availableTunings);
+            QVector<Accidentals::Tuning*>(availableTunings->begin(),
+                                          availableTunings->end());
+#else
+        m_availableTunings =
+            QVector<Accidentals::Tuning*>::fromStdVector(*availableTunings);
+#endif
           
         if (tuning < 0 ||
             static_cast<unsigned int>(tuning) >= availableTunings->size()) {
