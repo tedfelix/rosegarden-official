@@ -721,6 +721,11 @@ public:
     void setViewFeatures(int features) { m_viewFeatures = features; }
     int getViewFeatures() const { return m_viewFeatures; }
 
+    /// Zoom factor for Matrix.
+    double m_matrixHZoomFactor;
+    /// Zoom factor for Matrix.
+    double m_matrixVZoomFactor;
+
     /**
      * The compare class used by Composition
      */

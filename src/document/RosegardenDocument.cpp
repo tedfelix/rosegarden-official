@@ -1624,6 +1624,24 @@ void RosegardenDocument::saveSegment(QTextStream& outStream, Segment *segment,
             outStream << "</chord>\n";
         }
 
+#if 0
+        outStream << "<matrix>\n";
+        outStream << "  <hzoom factor=\"1.0\" />\n";
+        outStream << "  <vzoom factor=\"2.0\" />\n";
+
+        // For each ruler
+        {
+            outStream << "  <ruler type=\"" << ruler.m_type << "\"";
+
+            if (type == Controller::EventType)
+                outStream << " ccnumber=\"" << ruler.m_ccNumber << "\"";
+
+            outStream << " />\n";
+        }
+
+        outStream << "</matrix>\n";
+#endif
+
     }
 
 

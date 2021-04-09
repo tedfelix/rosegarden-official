@@ -126,6 +126,11 @@ public:
     // SegmentObserver method forwarded from MatrixViewSegment
     void segmentEndMarkerTimeChanged(const Segment *s, bool shorten);
 
+    /// Pass on to all Segments
+    void setHorizontalZoomFactor(double factor);
+    /// Pass on to all Segments
+    void setVerticalZoomFactor(double factor);
+
 signals:
     void mousePressed(const MatrixMouseEvent *e);
     void mouseMoved(const MatrixMouseEvent *e);

@@ -514,6 +514,10 @@ MatrixWidget::setSegments(RosegardenDocument *document,
         m_segmentLabel->hide();
         m_changerWidget->hide();
     }
+
+    // Go with zoom factors from the first.
+    setHorizontalZoomFactor(segments[0]->m_matrixHZoomFactor);
+    setVerticalZoomFactor(segments[0]->m_matrixVZoomFactor);
 }
 
 void
@@ -660,6 +664,10 @@ MatrixWidget::setHorizontalZoomFactor(double factor)
     m_pianoView->setMatrix(m);
     m_pianoView->setFixedWidth(m_pitchRuler->sizeHint().width());
     slotScrollRulers();
+
+    // Store in Segment(s) for next time.
+    if (m_scene)
+        m_scene->setHorizontalZoomFactor(factor);
 }
 
 void
@@ -675,6 +683,10 @@ MatrixWidget::setVerticalZoomFactor(double factor)
     m.scale(1.0, m_vZoomFactor);
     m_pianoView->setMatrix(m);
     m_pianoView->setFixedWidth(m_pitchRuler->sizeHint().width());
+
+    // Store in Segment(s) for next time.
+    if (m_scene)
+        m_scene->setVerticalZoomFactor(factor);
 }
 
 void
@@ -693,6 +705,12 @@ MatrixWidget::zoomInFromPanner()
     m_pianoView->setMatrix(m2);
     m_pianoView->setFixedWidth(m_pitchRuler->sizeHint().width());
     slotScrollRulers();
+
+    // Store in Segment(s) for next time.
+    if (m_scene) {
+        m_scene->setHorizontalZoomFactor(m_hZoomFactor);
+        m_scene->setVerticalZoomFactor(m_vZoomFactor);
+    }
 }
 
 void
@@ -711,6 +729,12 @@ MatrixWidget::zoomOutFromPanner()
     m_pianoView->setMatrix(m2);
     m_pianoView->setFixedWidth(m_pitchRuler->sizeHint().width());
     slotScrollRulers();
+
+    // Store in Segment(s) for next time.
+    if (m_scene) {
+        m_scene->setHorizontalZoomFactor(m_hZoomFactor);
+        m_scene->setVerticalZoomFactor(m_vZoomFactor);
+    }
 }
 
 void
@@ -1326,6 +1350,12 @@ MatrixWidget::slotResetZoomClicked()
     m_lastHVzoomValue = 0;
     m_lastH = 0;
     m_lastV = 0;
+
+    // Store in Segment(s) for next time.
+    if (m_scene) {
+        m_scene->setHorizontalZoomFactor(m_hZoomFactor);
+        m_scene->setVerticalZoomFactor(m_vZoomFactor);
+    }
 }
 
 void

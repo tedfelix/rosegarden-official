@@ -929,6 +929,21 @@ MatrixScene::playNote(Segment &segment, int pitch, int velocity)
                                    RealTime(0, 250000000));
 }
 
+void
+MatrixScene::setHorizontalZoomFactor(double factor)
+{
+    for (Segment *segment : m_segments) {
+        segment->m_matrixHZoomFactor = factor;
+    }
+}
+
+void
+MatrixScene::setVerticalZoomFactor(double factor)
+{
+    for (Segment *segment : m_segments) {
+        segment->m_matrixVZoomFactor = factor;
+    }
 }
 
 
+}
