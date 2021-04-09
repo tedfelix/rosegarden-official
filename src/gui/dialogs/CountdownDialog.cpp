@@ -107,17 +107,9 @@ CountdownDialog::setElapsedTime(int elapsedSeconds)
             setPastEndMode();
     }
 
-    QString h, m, s;
-    char *buf;
-    asprintf(&buf, "%02d", seconds / 3600);
-    h = buf;
-    free(buf);
-    asprintf(&buf, "%02d", seconds / 60);
-    m = buf;
-    free(buf);
-    asprintf(&buf, "%02d", seconds % 60);
-    s = buf;
-    free(buf);
+    const QString h = QString::asprintf("%02d", seconds / 3600);
+    const QString m = QString::asprintf("%02d", seconds / 60);
+    const QString s = QString::asprintf("%02d", seconds % 60);
 
     if (seconds < 3600) // less than an hour
     {

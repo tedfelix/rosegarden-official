@@ -1687,8 +1687,8 @@ NotationWidget::slotAddControlRuler(QAction *action)
         // "unsupported" controllers to the menu, so skip everything else
         if (it->getType() != Controller::EventType) continue;
 
-        QString hexValue;
-        hexValue.asprintf("(0x%x)", it->getControllerNumber());
+        const QString hexValue =
+            QString::asprintf("(0x%x)", it->getControllerNumber());
 
         // strings extracted from data files must be QObject::tr()
         QString itemStr = QObject::tr("%1 Controller %2 %3")

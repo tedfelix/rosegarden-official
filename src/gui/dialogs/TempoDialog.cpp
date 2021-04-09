@@ -290,11 +290,9 @@ TempoDialog::populateTempo()
     }
 
     RealTime tempoTime = comp.getElapsedRealTime(m_tempoTime);
-    char *buf;
-    asprintf(&buf, "%03d", tempoTime.msec());
+    const QString milliSeconds = QString::asprintf("%03d", tempoTime.msec());
     m_tempoTimeLabel->setText(tr("%1.%2 s,").arg(tempoTime.sec)
-                               .arg(buf));
-    free(buf);
+                               .arg(milliSeconds));
 
     int barNo = comp.getBarNumber(m_tempoTime);
     if (comp.getBarStart(barNo) == m_tempoTime) {
@@ -318,13 +316,11 @@ TempoDialog::populateTempo()
         if (lastTempoTime < m_tempoTime) {
 
             RealTime lastRT = comp.getElapsedRealTime(lastTempoTime);
-            char *buf;
-            asprintf(&buf, "%03d", lastRT.msec());
+            const QString lastms = QString::asprintf("%03d", lastRT.msec());
             int lastBar = comp.getBarNumber(lastTempoTime);
             m_tempoChangeBeforeAt->setText
             (tr("        (at %1.%2 s, in measure %3)").arg(lastRT.sec)
-              .arg(buf).arg(lastBar + 1));
-            free(buf);
+              .arg(lastms).arg(lastBar + 1));
             m_tempoChangeBeforeAt->show();
 
             m_tempoChangeBefore->setEnabled(true);

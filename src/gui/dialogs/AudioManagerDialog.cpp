@@ -346,10 +346,8 @@ AudioManagerDialog::slotPopulateFileList()
         // Duration
         //
         length = (*it)->getLength();
-        char *buf;
-        asprintf(&buf, "%03d", length.nsec / 1000000);
-        item->setText(1,QString("%1.%2s").arg(length.sec).arg(buf));    // row, col
-        free(buf);
+        const QString msecs = QString::asprintf("%03d", length.nsec / 1000000);
+        item->setText(1,QString("%1.%2s").arg(length.sec).arg(msecs));    // row, col
 
         // set start time and duration
         item->setStartTime(RealTime::zeroTime);
@@ -376,16 +374,16 @@ AudioManagerDialog::slotPopulateFileList()
         // Sample rate
         //
         if (m_sampleRate != 0 && int((*it)->getSampleRate()) != m_sampleRate) {
-            asprintf(&buf, "%.1f KHz *",
-                     float((*it)->getSampleRate()) / 1000.0);
+            const QString sRate =
+                QString::asprintf("%.1f KHz *",
+                                  float((*it)->getSampleRate()) / 1000.0);
             wrongSampleRates = true;
-            item->setText(3, buf);
-            free(buf);
+            item->setText(3, sRate);
         } else {
-            asprintf(&buf, "%.1f KHz",
-                     float((*it)->getSampleRate()) / 1000.0);
-            item->setText(3, buf);
-            free(buf);
+            const QString sRate =
+                QString::asprintf("%.1f KHz",
+                                  float((*it)->getSampleRate()) / 1000.0);
+            item->setText(3, sRate);
         }
 
         // Test audio file element for selection criteria
@@ -415,11 +413,11 @@ AudioManagerDialog::slotPopulateFileList()
 
                 // Write segment duration
                 //
-                asprintf(&buf, "%03d", segmentDuration.nsec / 1000000);
+                const QString msecs =
+                    QString::asprintf("%03d", segmentDuration.nsec / 1000000);
                 childItem->setText(1, QString("%1.%2s")
                                    .arg(segmentDuration.sec)
-                                   .arg(buf));
-                free(buf);
+                                   .arg(msecs));
 
                 try {
                     m_doc->getAudioFileManager().

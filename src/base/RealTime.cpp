@@ -221,10 +221,7 @@ ROSEGARDENPRIVATE_EXPORT QDebug &operator<<(QDebug &dbg, const Rosegarden::RealT
 
 QTextStream& operator<<(QTextStream& out, const RealTime &rt)
 {
-    char *buf;
-    asprintf(&buf, "%d.%06d", rt.sec, rt.usec());
-    const QString s = buf;
-    free(buf);
+    const QString s = QString::asprintf("%d.%06d", rt.sec, rt.usec());
     out << s;
     return out;
 }
