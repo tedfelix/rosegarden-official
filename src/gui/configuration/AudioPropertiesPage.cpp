@@ -147,8 +147,7 @@ AudioPropertiesPage::slotFoundMountPoint(const QString&,
     //
     float stereoMins = ( float(kBAvail) * 1024.0 ) /
                        ( float(sampleRate) * 2.0 * 2.0 * 60.0 );
-    QString minsStr;
-    minsStr.sprintf("%8.1f", stereoMins);
+    const QString minsStr = QString::asprintf("%8.1f", stereoMins);
 
     m_minutesAtStereo->
     setText(QString("%1 %2 %3Hz").arg(minsStr)

@@ -215,7 +215,7 @@ void LircCommander::slotExecute(const char *command)
     else
     {
         RG_DEBUG <<  "LircCommander::slotExecute: invoking command: " << command
-                 <<  " failed (command not defined in LircCommander::commands[])" << endl;
+                 <<  " failed (command not defined in LircCommander::commands[])";
     };
 }
 
