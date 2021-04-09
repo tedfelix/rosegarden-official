@@ -1924,7 +1924,7 @@ NotePixmapFactory::makeClef(const Clef &clef, const ColourType colourType)
 
     QString text = QString("%1").arg(adjustedOctave);
     int th = m_clefOttavaFontMetrics.height();
-    int tw = m_clefOttavaFontMetrics.width(text);
+    int tw = m_clefOttavaFontMetrics.boundingRect(text).width();
     int ascent = m_clefOttavaFontMetrics.ascent();
 
     createPixmap(plain.getWidth(), plain.getHeight() + th);
@@ -2804,14 +2804,14 @@ NotePixmapFactory::drawSlurAux(int length, int dy, bool above,
                 createPixmap(smooth ? width*2 + 1 : width,
                              smooth ? height*2 + thickness*2 : height + thickness);
 
-                QMatrix m;
+                QTransform m;
                 if (smooth) {
                     m.translate(2 * hotspot.x(), 2 * hotspot.y());
                 } else {
                     m.translate(hotspot.x(), hotspot.y());
                 }
                 m.rotate(theta);
-                m_p->painter().setWorldMatrix(m);
+                m_p->painter().setWorldTransform(m);
             }
 
             if (m_selected)
@@ -2909,11 +2909,11 @@ NotePixmapFactory::drawOttavaAux(int length, int octavesUp,
     if (octavesUp == 2 || octavesUp == -2) {
         if (octavesUp == 2) label = "15ma  ";
         else label = "15mb  ";
-        backpedal = m_ottavaFontMetrics.width("15") / 2;
+        backpedal = m_ottavaFontMetrics.boundingRect("15").width() / 2;
     } else {
         if (octavesUp == 1) label = "8va  ";
         else label = "8vb  ";
-        backpedal = m_ottavaFontMetrics.width("8") / 2;
+        backpedal = m_ottavaFontMetrics.boundingRect("8").width() / 2;
     }
 
     int width = length + backpedal;
@@ -2947,7 +2947,7 @@ NotePixmapFactory::drawOttavaAux(int length, int octavesUp,
     m_p->painter().setPen(pen);
     //    if (!m_inPrinterMethod) m_p->maskPainter().setPen(pen);
 
-    int x0 = m_ottavaFontMetrics.width(label) + thickness;
+    int x0 = m_ottavaFontMetrics.boundingRect(label).width() + thickness;
     int x1 = width - thickness;
     int y0 = m_ottavaFontMetrics.ascent() * 2 / 3 - thickness / 2;
     int y1 = (octavesUp < 0 ? 0 : m_ottavaFontMetrics.ascent());
@@ -3448,7 +3448,7 @@ NotePixmapFactory::drawTextAux(const Text &text,
     QFontMetrics textMetrics(textFont);
 
     int offset = 2;
-    int width = textMetrics.width(s) + 2 * offset;
+    int width = textMetrics.boundingRect(s).width() + 2 * offset;
     int height = textMetrics.height() + 2 * offset;
 
     if (painter) {

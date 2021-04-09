@@ -420,8 +420,8 @@ MatrixView::setupActions()
             // so skip everything else
             if (it->getType() != Controller::EventType) continue;
 
-            QString hexValue;
-            hexValue.sprintf("(0x%x)", it->getControllerNumber());
+            const QString hexValue =
+                QString::asprintf("(0x%x)", it->getControllerNumber());
 
             // strings extracted from data files must be QObject::tr()
             itemStr = QObject::tr("%1 Controller %2 %3")

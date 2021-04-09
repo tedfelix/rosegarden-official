@@ -70,7 +70,7 @@ void
 MatrixResizer::handleLeftButtonPress(const MatrixMouseEvent *e)
 {
     MATRIX_DEBUG << "MatrixResizer::handleLeftButtonPress() : el = "
-                 << e->element << endl;
+                 << e->element;
 
     if (!e->element) return;
 
@@ -201,7 +201,7 @@ MatrixResizer::handleMouseRelease(const MatrixMouseEvent *e)
 
         MATRIX_DEBUG << "MatrixResizer::handleMouseRelease - "
                      << "Time = " << t
-                     << ", Duration = " << d << endl;
+                     << ", Duration = " << d;
 
         d = d + durationDiff;
         if (d < 0) {

@@ -420,7 +420,7 @@ TempoView::slotEditDelete()
     if (selection.count() == 0) return ;
 
     RG_DEBUG << "TempoView::slotEditDelete - deleting "
-    << selection.count() << " items" << endl;
+    << selection.count() << " items";
 
     // QTreeWidgetItem *listItem;
 
