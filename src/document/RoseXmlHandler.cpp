@@ -217,6 +217,7 @@ RoseXmlHandler::RoseXmlHandler(RosegardenDocument *doc,
     m_inGroup(false),
     m_inComposition(false),
     m_inColourMap(false),
+    m_inMatrix(false),
     m_groupId(0),
     m_groupTupletBase(0),
     m_groupTupledCount(0),
@@ -1072,6 +1073,22 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         }
 
         m_groupIdMap.clear();
+
+    } else if (lcName == "matrix") {  // <matrix>
+
+        // If we're in a <segment>, <matrix> is valid.
+        if (m_currentSegment)
+            m_inMatrix = true;
+
+    } else if (lcName == "hzoom") {  // <hzoom>
+
+        if (m_currentSegment && m_inMatrix)
+            m_currentSegment->m_matrixHZoomFactor = atts.value("factor").toDouble();
+
+    } else if (lcName == "vzoom") {  // <vzoom>
+
+        if (m_currentSegment && m_inMatrix)
+            m_currentSegment->m_matrixVZoomFactor = atts.value("factor").toDouble();
 
     } else if (lcName == "gui") {  // <gui>
 
@@ -2491,6 +2508,8 @@ RoseXmlHandler::endElement(const QString& namespaceURI,
     } else if (lcName == "colourmap") {
         m_inColourMap = false;
         m_colourMap = nullptr;
+    } else if (lcName == "matrix") {
+        m_inMatrix = false;
     }
 
     return true;

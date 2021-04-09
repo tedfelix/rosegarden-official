@@ -150,6 +150,7 @@ protected:
     bool m_inGroup;
     bool m_inComposition;
     bool m_inColourMap;
+    bool m_inMatrix;
     std::string m_groupType;
     int m_groupId;
     int m_groupTupletBase;
