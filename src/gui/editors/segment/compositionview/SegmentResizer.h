@@ -60,7 +60,8 @@ public:
 
 protected:
     SegmentResizer(CompositionView*, RosegardenDocument*);
-    void setContextHelp2(Qt::KeyboardModifiers modifiers = nullptr);
+    void setContextHelp2(Qt::KeyboardModifiers modifiers =
+                         Qt::KeyboardModifiers());
 
     void resizeAudioSegment(
             Segment *segment,

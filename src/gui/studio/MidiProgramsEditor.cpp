@@ -195,7 +195,7 @@ MidiProgramsEditor::populate(QTreeWidgetItem* item)
     setBankName(item->text(0));
 
     RG_DEBUG << "MidiProgramsEditor::populate : bankItem->getBank = "
-    << bankItem->getBank() << endl;
+    << bankItem->getBank();
 
     m_currentBank = &(m_bankList[bankItem->getBank()]); // m_device->getBankByIndex(bankItem->getBank());
 
@@ -665,7 +665,8 @@ MidiProgramsEditor::setBankName(const QString& s)
 
 void MidiProgramsEditor::blockAllSignals(bool block)
 {
-    QList<LineEdit *> allChildren = findChildren<LineEdit*>((QRegExp)"[0-9]+");
+    QList<LineEdit *> allChildren =
+        findChildren<LineEdit*>((QRegularExpression)"[0-9]+");
     QList<LineEdit *>::iterator it;
 
     for (it = allChildren.begin(); it != allChildren.end(); ++it) {

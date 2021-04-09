@@ -598,8 +598,7 @@ SegmentSelector::mouseMoveEvent(QMouseEvent *e)
     const timeT guideTime = m_canvas->grid().snapX(guideX);
 
     RealTime time = comp.getElapsedRealTime(guideTime);
-    QString msecs;
-    msecs.sprintf("%03d", time.msec());
+    const QString msecs = QString::asprintf("%03d", time.msec());
 
     int bar;
     int beat;

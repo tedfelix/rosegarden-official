@@ -590,7 +590,7 @@ TempoRuler::paintEvent(QPaintEvent* e)
     // using Thorn, use a nice dark gray that just contrasts with the black
     // horizontal line here
     QColor kuller(0x40, 0x40, 0x40);
-    if (!m_Thorn) kuller = palette().background().color();
+    if (!m_Thorn) kuller = palette().window().color();
     m_buffer.fill(kuller);
 
     QPainter paint(&m_buffer);
