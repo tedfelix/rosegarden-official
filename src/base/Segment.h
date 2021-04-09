@@ -748,29 +748,6 @@ public:
     void  addObserver(SegmentObserver *obs);
     void removeObserver(SegmentObserver *obs);
 
-    // List of visible EventRulers attached to this segment
-    //
-    class EventRuler
-    {
-    public:
-        EventRuler(const std::string &type, int controllerValue, bool active):
-            m_type(type), m_controllerValue(controllerValue), m_active(active) {;}
-
-        std::string m_type;            // Event Type
-        int         m_controllerValue; // if controller event, then which value
-        bool        m_active;          // is this Ruler active?
-    };
-
-    typedef std::vector<EventRuler*> EventRulerList;
-    typedef std::vector<EventRuler*>::iterator EventRulerListIterator;
-    typedef std::vector<EventRuler*>::const_iterator EventRulerListConstIterator;
-
-    EventRulerList& getEventRulerList() { return m_eventRulerList; }
-    EventRuler* getEventRuler(const std::string &type, int controllerValue = -1);
-
-    void addEventRuler(const std::string &type, int controllerValue = -1, bool active = 0);
-    bool deleteEventRuler(const std::string &type, int controllerValue = -1);
-
     //////
     //
     // REFRESH STATUS
@@ -955,10 +932,6 @@ private:
     };
     typedef std::multiset<Event*, ClefKeyCmp> ClefKeyList;
     mutable ClefKeyList *m_clefKeyList;
-
-    // EventRulers currently selected as visible on this segment
-    //
-    EventRulerList                m_eventRulerList;
 
     QString m_marking;
 

@@ -1073,31 +1073,24 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
         m_groupIdMap.clear();
 
-    } else if (lcName == "gui") {
+    } else if (lcName == "gui") {  // <gui>
 
-        if (m_section != InSegment) {
-            m_errorString = "Found GUI element outside Segment";
-            return false;
-        }
+        // This element is no longer supported.  But please don't reuse
+        // the name in case it pops up in an old file.
 
-    } else if (lcName == "controller") {
+        // <gui> elements used to be found in <segment> elements.
+        // <gui> elements contained <controller> elements.
+        // The example file bogus-surf-jam.rg still has this.
+        // However, they never did anything.
 
-        if (m_section != InSegment) {
-            m_errorString = "Found Controller element outside Segment";
-            return false;
-        }
+    } else if (lcName == "controller") {  // <controller>
 
-        QString type = atts.value("type");
-        //RG_DEBUG << "RoseXmlHandler::startElement - controller type = " << type;
+        // This element is no longer supported.  But please don't reuse
+        // the name in case it pops up in an old file.
 
-        if (type == strtoqstr(PitchBend::EventType))
-            m_currentSegment->addEventRuler(PitchBend::EventType);
-        else if (type == strtoqstr(Controller::EventType)) {
-            QString value = atts.value("value");
-
-            if (value != "")
-                m_currentSegment->addEventRuler(Controller::EventType, value.toInt());
-        }
+        // <controller> elements used to be found in <gui> elements.
+        // The example file bogus-surf-jam.rg still has this.
+        // However, they never did anything.
 
     } else if (lcName == "resync") {
 
