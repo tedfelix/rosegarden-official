@@ -112,7 +112,11 @@ Fingering::getBarre() const
 Fingering
 Fingering::parseFingering(const QString& ch, QString& errorString)
 {
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+    QStringList tokens = ch.split(' ', Qt::SkipEmptyParts);
+#else
     QStringList tokens = ch.split(' ', QString::SkipEmptyParts);
+#endif
 
     unsigned int idx = 0;
     Fingering fingering;

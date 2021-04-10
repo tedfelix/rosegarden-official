@@ -142,8 +142,15 @@ KeySignatureDialog::KeySignatureDialog(QWidget *parent,
     redrawKeyPixmap();
     m_explanatoryLabel = explanatoryLabel;
 
-    m_keyPixmap->setMinimumWidth(m_keyPixmap->pixmap()->width());
-    m_keyPixmap->setMinimumHeight(m_keyPixmap->pixmap()->height());
+    QPixmap pm;
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+    pm = m_keyPixmap->pixmap(Qt::ReturnByValue);
+#else
+    pm = *(m_keyPixmap->pixmap());
+#endif
+
+    m_keyPixmap->setMinimumWidth(pm.width());
+    m_keyPixmap->setMinimumHeight(pm.height());
 
     m_yesTransposeButton =
         new QRadioButton(tr("Transpose key according to segment transposition"),

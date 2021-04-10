@@ -609,7 +609,7 @@ private:
      */
     void saveSegment(QTextStream&, Segment*,
                      long totalNbOfEvents, long &count,
-                     QString extraAttributes = QString::null);
+                     QString extraAttributes = QString());
 
     /// Identifies a specific event within a specific segment.
     /**

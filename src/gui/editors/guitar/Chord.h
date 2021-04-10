@@ -42,8 +42,8 @@ public:
     static const std::string EventType;
     static const short EventSubOrdering;
 
-	Chord();
-    Chord(const QString& root, const QString& ext = QString::null);
+    Chord();
+    Chord(const QString& root, const QString& ext = QString());
     Chord(const Event&);
 
     Event* getAsEvent(timeT absoluteTime) const;
@@ -58,7 +58,7 @@ public:
     void setRoot(QString r) { m_root = r; } 
 
     QString getExt() const { return m_ext; }
-    void setExt(QString r) { m_ext = r.isEmpty() ? QString::null : r; } 
+    void setExt(QString r) { m_ext = r.isEmpty() ? QString() : r; } 
     
     bool hasAltBass() const;
 

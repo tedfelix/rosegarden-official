@@ -84,8 +84,13 @@ ChordMap::getRootList() const
     static QStringList rootNotes;
     
     if (rootNotes.count() == 0) {
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+        rootNotes = QString("A,A#/Bb,B,C,C#/Db,D,D#/Eb,E,F,F#/Gb,G,G#/Ab")
+            .split(",", Qt::SkipEmptyParts);
+#else
         rootNotes = QString("A,A#/Bb,B,C,C#/Db,D,D#/Eb,E,F,F#/Gb,G,G#/Ab")
             .split(",", QString::SkipEmptyParts);
+#endif
     }
     
     // extract roots from map itself - not a very good idea

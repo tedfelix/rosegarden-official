@@ -197,7 +197,11 @@ MetadataHelper::setComments(CommentsMap comments)
         QString timeStamp = it->second.timeStamp;
         QString text = it->second.text;
         // Add the text lines
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+        QStringList lines = text.split("\n", Qt::KeepEmptyParts);
+#else
         QStringList lines = text.split("\n", QString::KeepEmptyParts);
+#endif
         bool textExists = false;
         int n = 0;
         for (QStringList::iterator it = lines.begin(); it != lines.end(); ++it) {

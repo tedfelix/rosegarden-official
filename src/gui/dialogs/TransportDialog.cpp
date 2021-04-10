@@ -52,6 +52,7 @@
 #include <QDesktopWidget>
 #include <QPainter>
 #include <QtGlobal>
+#include <QScreen>
 
 
 namespace  // anonymous
@@ -63,7 +64,7 @@ namespace Rosegarden
 {
 
 TransportDialog::TransportDialog(QWidget *parent):
-    QDialog(parent, nullptr),
+    QDialog(parent),
     ui(new Ui_RosegardenTransport()),
     //m_lcdList(),
     //m_lcdListDefault(),
@@ -339,7 +340,7 @@ TransportDialog::getCurrentModeAsString()
 
     // we shouldn't get here unless the map is not well-configured
     RG_DEBUG << "TransportDialog::getCurrentModeAsString: could not map current mode " 
-             << m_currentMode << " to string." << endl;
+             << m_currentMode << " to string.";
     throw Exception("could not map current mode to string.");
 }
 
@@ -362,8 +363,14 @@ TransportDialog::show()
     int x = settings.value("transportx", -1).toInt() ;
     int y = settings.value("transporty", -1).toInt() ;
     if (x >= 0 && y >= 0) {
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+        QScreen* screen = QGuiApplication::screenAt(QPoint(x, y));
+        int dw = screen->availableGeometry().width();
+        int dh = screen->availableGeometry().height();
+#else
         int dw = QApplication::desktop()->availableGeometry(QPoint(x, y)).width();
         int dh = QApplication::desktop()->availableGeometry(QPoint(x, y)).height();
+#endif
         if (x + width() > dw) x = dw - width();
         if (y + height() > dh) y = dh - height();
         move(x, y);
@@ -857,7 +864,10 @@ TransportDialog::setTimeSignature(const TimeSignature &timeSig)
     m_denominator = denominator;
 
     QString timeSigString;
-    timeSigString.sprintf("%d/%d", numerator, denominator);
+    char *buf;
+    asprintf(&buf, "%d/%d", numerator, denominator);
+    timeSigString = buf;
+    free(buf);
     ui->TimeSigDisplay->setText(timeSigString);
 }
 
@@ -1084,7 +1094,10 @@ TransportDialog::slotSetStopLoopingPointAtMarkerPos()
 void TransportDialog::slotTempoChanged(tempoT tempo)
 {
     QString tempoString;
-    tempoString.sprintf("%4.3f", Composition::getTempoQpm(tempo));
+    char *buf;
+    asprintf(&buf, "%4.3f", Composition::getTempoQpm(tempo));
+    tempoString = buf;
+    free(buf);
     ui->TempoDisplay->setText(tempoString);
 }
 

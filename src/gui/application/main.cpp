@@ -599,7 +599,7 @@ int main(int argc, char *argv[])
         startLogo->show();
         startLogo->repaint();
         theApp.processEvents();
-        theApp.flush();
+        QApplication::sendPostedEvents();
     }
 
     struct timeval logoShowTime;
@@ -624,7 +624,7 @@ int main(int argc, char *argv[])
         startLogo->raise();
         startLogo->setHideEnabled(true);
         startLogo->repaint();
-        theApp.flush();
+        QApplication::sendPostedEvents();
     }
 
     for (int i = 1; i < args.size(); ++i) {
@@ -642,7 +642,7 @@ int main(int argc, char *argv[])
     if (startLogo) {
         startLogo->raise();
         startLogo->setHideEnabled(true);
-        theApp.flush();
+        QApplication::sendPostedEvents();
     }
 
     settings.endGroup();
@@ -670,11 +670,11 @@ int main(int argc, char *argv[])
             sfxLoadProcess->start(sfxLoadPath, (QStringList()) << soundFontPath);
         } else {
             RG_DEBUG << "sfxload not executable or soundfont not readable : "
-                     << sfxLoadPath << " " << soundFontPath << endl;
+                     << sfxLoadPath << " " << soundFontPath;
         }
 
     } else {
-        RG_DEBUG << "sfxload disabled\n";
+        RG_DEBUG << "sfxload disabled";
     }
 
 

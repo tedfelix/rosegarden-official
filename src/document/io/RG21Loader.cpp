@@ -325,7 +325,7 @@ bool RG21Loader::parseGroupStart()
 
         RG_DEBUG
         << "RG21Loader::parseGroupStart: WARNING: Unknown group type "
-        << m_groupType << ", ignoring" << endl;
+        << m_groupType << ", ignoring";
         m_inGroup = false;
     }
 
@@ -347,7 +347,7 @@ bool RG21Loader::parseIndicationStart()
         if (m_tieStatus != 0) {
             RG_DEBUG
             << "RG21Loader:: parseIndicationStart: WARNING: Found tie within "
-            << "tie, ignoring" << endl;
+            << "tie, ignoring";
             return true;
         }
         // m_tieStatus = 1;
@@ -460,8 +460,7 @@ void RG21Loader::closeGroup()
                 << ", new absolute time = "
                 << (absoluteTime + intended - offset)
                 << ", new duration = "
-                << (prev - absoluteTime)
-                << endl;
+                << (prev - absoluteTime);
 
                 absoluteTime = absoluteTime + intended - offset;
                 Event *e(new Event(**i, absoluteTime, prev - absoluteTime));
@@ -529,7 +528,7 @@ bool RG21Loader::parseBarType()
     if (staffNo > 0) {
         RG_DEBUG
         << "RG21Loader::parseBarType: We don't support different time\n"
-        << "signatures on different staffs; disregarding time signature for staff " << staffNo << endl;
+        << "signatures on different staffs; disregarding time signature for staff " << staffNo;
         return true;
     }
 
@@ -598,7 +597,7 @@ timeT RG21Loader::convertRG21Duration(QStringList::Iterator& i)
     } catch (const NotationStrings::MalformedNoteName &m) {
 
         RG_DEBUG << "RG21Loader::convertRG21Duration: Bad duration: "
-        << durationString << endl;
+        << durationString;
         return 0;
     }
 
@@ -666,7 +665,11 @@ bool RG21Loader::readNextLine()
             continue; // skip comments
         }
 
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+        m_tokens = m_currentLine.split(' ', Qt::SkipEmptyParts);
+#else
         m_tokens = m_currentLine.split(' ', QString::SkipEmptyParts);
+#endif
 
     } while (inComment);
 

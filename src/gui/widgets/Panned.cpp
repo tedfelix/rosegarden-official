@@ -131,7 +131,7 @@ Panned::drawForeground(QPainter *paint, const QRectF &)
     QPoint bottom = mapFromScene(m_pointerTop + QPointF(0, height));
 
     paint->save();
-    paint->setWorldMatrix(QMatrix());
+    paint->setWorldTransform(QTransform());
     paint->setPen(QPen(GUIPalette::getColour(GUIPalette::Pointer), 2));
     paint->drawLine(top, bottom);
     paint->restore();
@@ -352,6 +352,18 @@ Panned::processWheelEvent(QWheelEvent *e)
         // Create a new event.
         // We remove the Qt::SHIFT modifier otherwise we end up
         // moving left/right a page at a time.
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+        QWheelEvent e2(
+                e->position(),  // pos
+                e->globalPosition(),  // globalPos
+                pixelDelta2,  // pixelDelta
+                angleDelta2,  // angleDelta
+                e->buttons(),  // buttons
+                e->modifiers() & ~Qt::SHIFT,  // modifiers
+                e->phase(),  // phase
+                e->inverted(),  // inverted
+                e->source());  // source
+#else
         QWheelEvent e2(
                 e->pos(),  // pos
                 e->globalPosF(),  // globalPos
@@ -364,7 +376,7 @@ Panned::processWheelEvent(QWheelEvent *e)
                 e->phase(),  // phase
                 e->source(),  // source
                 e->inverted());  // inverted
-
+#endif
         // Let baseclass handle as usual.
         QGraphicsView::wheelEvent(&e2);
 

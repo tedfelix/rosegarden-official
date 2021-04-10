@@ -86,8 +86,13 @@ SetLyricsCommand::execute()
 
     // now parse the new string
 
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+    QStringList barStrings =
+        m_newLyricData.split("/", Qt::KeepEmptyParts); // empties ok
+#else
     QStringList barStrings =
         m_newLyricData.split("/", QString::KeepEmptyParts); // empties ok
+#endif
 
     Composition *comp = m_segment->getComposition();
     int barNo = comp->getBarNumber(m_segment->getStartTime());

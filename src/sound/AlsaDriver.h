@@ -401,7 +401,8 @@ public:
     // Set the record device
     //
     void setRecordDevice(DeviceId id, bool connectAction);
-    void unsetRecordDevices();
+    // Clear any record device connections
+    //void unsetRecordDevices();
 
     bool addDevice(Device::DeviceType type,
                            DeviceId id,
@@ -514,7 +515,8 @@ protected:
                                           const snd_seq_event_t *event,
                                           bool now);
 
-    virtual bool isRecording(AlsaPortDescription *port);
+    // check for recording status on any ALSA Port
+    //virtual bool isRecording(AlsaPortDescription *port);
 
     virtual void processAudioQueue(bool /* now */) { }
 
@@ -535,10 +537,13 @@ private:
 
     bool m_startPlayback;
 
-    // ALSA MIDI/Sequencer stuff
-    //
-    snd_seq_t                   *m_midiHandle;
-    int                          m_client;
+    /// Rosegarden's ALSA sequencer handle for talking to ALSA.
+    /**
+     * See initialiseMidi().
+     */
+    snd_seq_t *m_midiHandle;
+    /// Rosegarden's ALSA client ID.
+    int m_client;
 
     int                          m_inputPort;
     
@@ -621,9 +626,14 @@ private:
     MappedDevice *findDevice(DeviceId deviceId);
 
     // ??? rename: ConnectionMap
-    typedef std::map<DeviceId, ClientPortPair> DevicePortMap;
-    /// Composition/Studio MappedDevice -> ALSA ClientPortPair connections.
+    typedef std::map<DeviceId,  // Rosegarden MIDI out port
+                     ClientPortPair>  // MIDI synth input port
+            DevicePortMap;
+    /// Connections between Rosegarden and MIDI synths.
     /**
+     * A "MappedDevice" is a description of a Rosegarden MIDI output port.
+     * The ClientPortPair is the MIDI synth's input port.
+     *
      * ??? rename: m_connectionMap
      */
     DevicePortMap m_devicePortMap;

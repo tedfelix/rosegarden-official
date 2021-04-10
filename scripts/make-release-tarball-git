@@ -1,0 +1,154 @@
+#!/bin/bash
+#
+# make-release-tarball
+#
+# Copyright 2000-2021 the Rosegarden development team.
+# Copyright 2009, 2015  D. Michael McIntyre <rosegarden.trumpeter@gmail.com>
+#
+# Other copyrights also apply to some parts of this work.  Please
+# see the AUTHORS file and individual file headers for details.
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License as
+# published by the Free Software Foundation; either version 2 of the
+# License, or (at your option) any later version.  See the file
+# COPYING included with this distribution for more information.
+
+# First attempt at a git version.  Don't think this is the right way
+# to go as it might capture some garbage from the user's directory.
+# Going to try this again, but using a snapshot downloaded from sf as
+# the starting point.
+
+# This was lightly tested and probably mostly works.  But it has been
+# abandoned.
+
+readonly myname=$(basename $0)
+
+usage() {
+    cat << EOF
+Usage: $myname
+
+Creates a deliverable release tarball.
+EOF
+
+    exit 1
+}
+
+puke() {
+    echo $1
+    exit 2
+}
+
+if [ ! -d "src" ]; then
+    echo "Cannot find src directory."
+    echo "$myname must be run from a top level directory!"
+    exit 2
+fi
+
+if [ ! -f "Doxyfile" ]; then
+    echo "No Doxyfile!  Is this a top level directory?"
+    echo "$myname must be run from a top level directory!"
+    exit 2
+fi
+
+if [ ! -d ".git" ]; then
+    echo "No .git directory.  Is this a development tree?"
+    exit 2
+fi
+
+readonly srcdir=$(pwd)
+
+# We could confirm a clean working copy at this point.
+# Or we can just make that part of the checklist...
+
+readonly VERSION=$(grep ROSEGARDEN_VERSION CMakeLists.txt|cut -d \" -f 2|sed 's/ //g')
+
+cd ..
+
+readonly tempdir="rosegarden-$VERSION"
+if [ -d "$tempdir" ]; then
+    echo "$tempdir already exists!  Aborting!"
+    exit 2
+fi
+
+mkdir "$tempdir"
+
+# Copy what we need to the tempdir.
+rsync -rl --exclude=".git" --exclude="build" --exclude="core" "$srcdir/" "$tempdir"
+
+# Continue working in the temp dir...
+cd "$tempdir"
+
+pwd
+ls
+
+# Indicate this is now a STABLE build.
+sed -i "s/UNSTABLE/STABLE/" CMakeLists.txt
+
+# ??? Just commit this to the repo.
+cat > CONTRIBUTING << EOF
+If you wish to fix a bug or add a new feature, follow the instructions here:
+
+https://www.rosegardenmusic.com/wiki/dev:building_rosegarden_from_source
+EOF
+
+echo "Purging unwanted files..."
+
+# Eclipse stuff
+rm .cproject
+rm .project
+rm -rf .settings
+
+# ??? There might be more that needs to be deleted.  We should probably add
+#     a directory diff step to this to highlight any unexpected files that
+#     have appeared.  We could diff against a downloaded snapshot.
+
+# ??? An alternative would be to use sourceforge's "Download Snapshot"
+#     feature as the starting point.  Redo this script
+#     to transform a downloaded snapshot into a proper release.
+
+cd ..
+
+readonly tarball="$tempdir.tar.bz2"
+echo "Assembling $tarball..."
+tar cjf $tarball $tempdir || puke "Making tarball failed!"
+
+echo "Cleaning up..."
+
+echo "Removing $tempdir"
+rm -rf $tempdir
+
+# Tag the release.
+
+cd $srcdir
+pwd
+
+tagcmd="git tag -m \"Tag release $VERSION\" $VERSION"
+
+echo "About to tag release with the following command:"
+echo "$tagcmd"
+
+# Not done yet.
+fini=0
+
+# While not done
+while [ $fini -eq 0 ]; do
+    read -p "Do you want to tag this release (Y/n)? " answer
+    # This is pretty wordy.  Can we do better?
+    if [ "$answer" == "Y" ] || [ "$answer" == "y" ] || [ -z "$answer" ]; then
+        #echo we got yes...
+        answer="y"
+        fini=1
+    elif [ "$answer" == "N" ] || [ "$answer" == "n" ]; then
+        #echo we got no...
+        fini=1
+    else
+      echo Please enter y or n...
+    fi
+done
+
+# If they said yes, run the tag command
+if [ "$answer" == "y" ]; then
+    eval "$tagcmd"
+fi
+

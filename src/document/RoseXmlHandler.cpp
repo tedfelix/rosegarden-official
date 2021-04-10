@@ -1162,7 +1162,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             getAudioFileManager().setAudioPath(dirPath);
 
             RG_DEBUG << "Attempting to find audio file " << file
-                     << " in path " << dirPath << endl;
+                     << " in path " << dirPath;
 
             if (getAudioFileManager().insertFile(qstrtostr(label),
                                                  file, id.toInt()) == false) {
@@ -2331,7 +2331,7 @@ RoseXmlHandler::endElement(const QString& namespaceURI,
             InstrumentId iid = i->second->getInstrument();
             InstrumentId aid = mapToActualInstrument(iid);
             RG_DEBUG << "RoseXmlHandler: mapping instrument " << iid
-                     << " to " << aid << " for track " << i->first << endl;
+                     << " to " << aid << " for track " << i->first;
             i->second->setInstrument(aid);
         }
 
@@ -2347,7 +2347,7 @@ RoseXmlHandler::endElement(const QString& namespaceURI,
             InstrumentId iid = mm.getInstrument();
             InstrumentId aid = mapToActualInstrument(iid);
             RG_DEBUG << "RoseXmlHandler: mapping instrument " << iid
-                     << " to " << aid << " for metronome" << endl;
+                     << " to " << aid << " for metronome";
             if (md) md->setMetronome(mm);
             else if (sd) sd->setMetronome(mm);
         }
@@ -2679,7 +2679,7 @@ RoseXmlHandler::mapToActualInstrument(InstrumentId oldId)
 
     RG_DEBUG << "RoseXmlHandler::mapToActualInstrument: instrument " << oldId
              << ", dev read base " << m_deviceReadInstrumentBase
-             << ", dev base " << m_deviceInstrumentBase << " -> " << id << endl;
+             << ", dev base " << m_deviceInstrumentBase << " -> " << id;
 
     m_actualInstrumentIdMap[oldId] = id;
 

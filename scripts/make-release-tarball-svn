@@ -1,0 +1,142 @@
+#!/bin/bash
+#
+# make-release-tarball
+#
+# Copyright (c) 2009, 2015  D. Michael McIntyre <rosegarden.trumpeter@gmail.com>
+# Released under version 2 of the GPL
+#
+
+myname=$(basename $0)
+target=$1
+
+usage() {
+    cat << EOF
+Usage: $myname [TARGET]
+
+Must run from a valid rosegarden/ directory.  Examines the current directory to
+determine where it resides in the Subversion repository, and pulls a clean copy
+from there.  Leaves rosegarden-[VERSION]-[TARGET].tar.bz2 ready for release.
+
+VERSION - extracted from source
+
+TARGET  - assumes that CMakeLists.txt already has the correct ROSEGARDEN_VERSION
+          and ROSEGARDEN_CODENAME set; use the target "RELEASE" for a final
+          release or a release candidate (as opposed to an alpha, beta, pre, etc.)
+
+Example: $myname alpha-2
+         $myname RELEASE
+EOF
+    exit 1
+}
+
+puke() {
+    echo $1
+    exit 2
+}
+
+[ -z "$target" ] && usage
+
+[ -d "src" ] || puke "$myname must be run from a top level directory!"
+[ -f "Doxyfile" ] || puke "No Doxyfile!  Is this a top level directory?"
+[ -d ".svn" ] || puke "No .svn directory.  Is this a development tree?"
+
+VERSION=$(grep ROSEGARDEN_VERSION CMakeLists.txt|cut -d \" -f 2|sed 's/ //g')
+
+URL=$(svn info | grep '^URL' | awk '{print $NF}')
+
+# insert $TARGET for alpha, beta, pre, etc. releases, otherwise use $VERSION
+# straight up
+NEW_VERSION=$VERSION
+[ "$target" != "RELEASE" ] && NEW_VERSION="$VERSION-$target"
+
+outDir="rosegarden-$NEW_VERSION"
+[ -d "$outDir" ] && puke "$outDir already exists!  Aborting!"
+
+echo "Checking out a clean copy of $URL (this will take some time)..."
+svn co $URL $outDir > /dev/null || puke "Unable to check out $URL!"
+cd $outDir || puke "Unable to change to $outDir!"
+
+echo "Rewriting version from $VERSION to $NEW_VERSION in CMakeLists.txt..."
+# NOTE: . is a regex wildcard, but it does match a simple . so I've elected not
+# to bother with some hackery to escape it to \. here
+sed -i "s/$VERSION/$NEW_VERSION/" CMakeLists.txt
+
+# only set this if this is a final release
+if [ "$target" == "RELEASE" ]; then
+    sed -i "s/UNSTABLE/STABLE/" CMakeLists.txt
+fi
+
+echo "Purging unwanted files..."
+# templates/ and test/ are of no value to people doing an end use build
+rm -rf templates
+
+# remove all the .svn directories and their contents 
+find . -name \.svn|xargs rm -rf
+
+cat > CONTRIBUTING << EOF
+This source tree is a release version that has been stripped of version-control
+information in order to reduce its size.  If you wish to submit a patch to fix a
+bug or add a new feature, PLEASE do not begin working from this directory!
+
+It is very difficult to use patches built against a release source tree, and we
+have had to reject some otherwise excellent patches due to their being built
+against a release tree so old and so far removed from the current development
+line that it was almost impossible to do anything with them.
+
+Please don't let this happen to you.  To learn about the recommended way to
+contribute patches, please see:
+
+http://rosegardenmusic.com/wiki/dev:contributing
+EOF
+
+rm -f README.DEVELOPERS
+
+
+cd ..
+
+outFile="$outDir.tar.bz2"
+echo "Assembling $outFile..."
+tar cjf $outFile $outDir || puke "Making tarball failed!"
+
+echo "Cleaning up..."
+rm -rf $outDir
+
+### TAG RELEASE
+# deal with tagging later, but it will be nice to automate this
+# svn copy from trunk/rosegarden to tags/$outDir
+
+user=dmmcintyr
+
+tagcmd="svn copy https://svn.code.sf.net/p/rosegarden/code/trunk/rosegarden https://svn.code.sf.net/p/rosegarden/code/tags/$outDir -m \"Tag release $NEW_VERSION\""
+
+echo "About to tag release with the following command:"
+echo "$tagcmd"
+
+# Not done yet.
+fini=0
+
+# While not done
+while [ $fini -eq 0 ]; do
+    read -p "Do you want to tag this release (Y/n)? " answer
+    # This is pretty wordy.  Can we do better?
+    if [ "$answer" == "Y" ] || [ "$answer" == "y" ] || [ -z "$answer" ]; then
+        #echo we got yes...
+        answer="y"
+        fini=1
+    elif [ "$answer" == "N" ] || [ "$answer" == "n" ]; then
+        #echo we got no...
+        fini=1
+    else
+      echo Please enter y or n...
+    fi
+done
+
+# If they said yes, run the tag command
+if [ "$answer" == "y" ]; then
+    eval "$tagcmd"
+fi
+
+# hack around my personal umask, to ensure files are world readable if I forget
+chmod 644 $outFile
+
+exit 0

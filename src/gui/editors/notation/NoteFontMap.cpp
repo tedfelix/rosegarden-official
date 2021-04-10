@@ -592,7 +592,11 @@ NoteFontMap::startElement(const QString &, const QString &,
 
             bool have = false;
 //            QStringList list = QStringList::split(",", names, false);
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+            QStringList list = names.split(",", Qt::SkipEmptyParts);
+#else
             QStringList list = names.split(",", QString::SkipEmptyParts);
+#endif
             for (QStringList::Iterator i = list.begin(); i != list.end(); ++i) {
                 SystemFont *font = SystemFont::loadSystemFont
                                    (SystemFontSpec(*i, 12));

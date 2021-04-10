@@ -432,7 +432,7 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(
             QDialogButtonBox::Ok |
                 QDialogButtonBox::Cancel |
                 QDialogButtonBox::Help);
-    mainLayout->addWidget(buttonBox, 1, nullptr);
+    mainLayout->addWidget(buttonBox, 1);
 
     connect(buttonBox, &QDialogButtonBox::accepted,
             this, &PitchBendSequenceDialog::accept);

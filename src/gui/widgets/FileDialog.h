@@ -59,7 +59,7 @@ public:
                                    const QString &dir = QString(),
                                    const QString &filter = QString(),
                                    QString *selectedFilter = nullptr,
-                                   QFileDialog::Options options = nullptr);
+                                   QFileDialog::Options options = Options());
 
     /** See documentation for QFileDialog::getOpenFileNames()
      */
@@ -68,7 +68,7 @@ public:
                                         const QString &dir = QString(),
                                         const QString &filter = QString(),
                                         QString *selectedFilter = nullptr,
-                                        QFileDialog::Options options = nullptr);
+                                        QFileDialog::Options options = Options());
 
     /**
      * Based on QFileDialog::getSaveFileName().
@@ -81,7 +81,7 @@ public:
                                    const QString &defaultName = QString(),
                                    const QString &filter = QString(),
                                    QString *selectedFilter = nullptr,
-                                   QFileDialog::Options options = nullptr);
+                                   QFileDialog::Options options = Options());
 
     /**
      * Subclass of QFileDialog::getExistingDirectory() specifically to get an

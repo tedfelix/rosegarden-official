@@ -347,7 +347,10 @@ AudioManagerDialog::slotPopulateFileList()
         // Duration
         //
         length = (*it)->getLength();
-        msecs.sprintf("%03d", length.nsec / 1000000);
+        char *buf;
+        asprintf(&buf, "%03d", length.nsec / 1000000);
+        msecs = buf;
+        free(buf);
         //item->setText(1, QString("%1.%2s").arg(length.sec).arg(msecs));
         item->setText(1,QString("%1.%2s").arg(length.sec).arg(msecs));    // row, col
 
@@ -376,10 +379,16 @@ AudioManagerDialog::slotPopulateFileList()
         // Sample rate
         //
         if (m_sampleRate != 0 && int((*it)->getSampleRate()) != m_sampleRate) {
-            sRate.sprintf("%.1f KHz *", float((*it)->getSampleRate()) / 1000.0);
+            asprintf(&buf, "%.1f KHz *",
+                     float((*it)->getSampleRate()) / 1000.0);
+            sRate = buf;
+            free(buf);
             wrongSampleRates = true;
         } else {
-            sRate.sprintf("%.1f KHz", float((*it)->getSampleRate()) / 1000.0);
+            asprintf(&buf, "%.1f KHz",
+                     float((*it)->getSampleRate()) / 1000.0);
+            sRate = buf;
+            free(buf);
         }
         item->setText(3, sRate);
 
@@ -410,7 +419,9 @@ AudioManagerDialog::slotPopulateFileList()
 
                 // Write segment duration
                 //
-                msecs.sprintf("%03d", segmentDuration.nsec / 1000000);
+                asprintf(&buf, "%03d", segmentDuration.nsec / 1000000);
+                msecs = buf;
+                free(buf);
                 childItem->setText(1, QString("%1.%2s")
                                    .arg(segmentDuration.sec)
                                    .arg(msecs));

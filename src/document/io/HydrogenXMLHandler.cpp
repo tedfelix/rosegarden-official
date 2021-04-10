@@ -200,8 +200,7 @@ HydrogenXMLHandler::endElement_093(const QString& /*namespaceURI*/,
         << ", panL = " << m_panL
         << ", panR = " << m_panR
         << ", pitch = " << m_pitch
-        << ", instrument = " << m_instrument
-        << endl;
+        << ", instrument = " << m_instrument;
 
         timeT barLength = m_composition->getBarEnd(m_currentBar) -
                           m_composition->getBarStart(m_currentBar);
@@ -243,8 +242,7 @@ HydrogenXMLHandler::endElement_093(const QString& /*namespaceURI*/,
         RG_DEBUG << "HydrogenXMLHandler::endElement - Hydrogen Instrument : id = " << m_id
         << ", muted = " << m_muted
         << ", volume = " << m_instrumentVolumes[m_instrument]
-        << ", filename = \"" << m_fileName << "\""
-        << endl;
+        << ", filename = \"" << m_fileName << "\"";
 
         m_inInstrument = false;
 
@@ -322,10 +320,10 @@ HydrogenXMLHandler::endElement_093(const QString& /*namespaceURI*/,
         RG_DEBUG << "HydrogenXMLHandler::endElement version " << m_version;
         RG_DEBUG << "ch_major: " << canHandleVersion.Major() << 
                     "  ch_minor: " << canHandleVersion.Minor() << 
-                    "  ch_micro: " << canHandleVersion.Micro() << endl;
+                    "  ch_micro: " << canHandleVersion.Micro();
         RG_DEBUG << "if_major: " << versionInFile.Major() << 
                     "  if_minor: " << versionInFile.Minor() << 
-                    "  if_micro: " << versionInFile.Micro() << endl;
+                    "  if_micro: " << versionInFile.Micro();
 
         bool bCanHandleFile=(versionInFile<=canHandleVersion);
 
