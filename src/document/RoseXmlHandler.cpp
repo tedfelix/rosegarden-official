@@ -1083,12 +1083,12 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
     } else if (lcName == "hzoom") {  // <hzoom>
 
         if (m_currentSegment && m_inMatrix)
-            m_currentSegment->m_matrixHZoomFactor = atts.value("factor").toDouble();
+            m_currentSegment->matrixHZoomFactor = atts.value("factor").toDouble();
 
     } else if (lcName == "vzoom") {  // <vzoom>
 
         if (m_currentSegment && m_inMatrix)
-            m_currentSegment->m_matrixVZoomFactor = atts.value("factor").toDouble();
+            m_currentSegment->matrixVZoomFactor = atts.value("factor").toDouble();
 
     } else if (lcName == "gui") {  // <gui>
 

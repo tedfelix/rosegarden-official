@@ -49,8 +49,8 @@ static int g_runtimeSegmentId = 0;
 
 Segment::Segment(SegmentType segmentType, timeT startTime) :
     EventContainer(),
-    m_matrixHZoomFactor(1.0),
-    m_matrixVZoomFactor(1.0),
+    matrixHZoomFactor(1.0),
+    matrixVZoomFactor(1.0),
     m_composition(nullptr),
     m_startTime(startTime),
     m_endMarkerTime(nullptr),

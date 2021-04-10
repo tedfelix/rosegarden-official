@@ -722,9 +722,33 @@ public:
     int getViewFeatures() const { return m_viewFeatures; }
 
     /// Zoom factor for Matrix.
-    double m_matrixHZoomFactor;
+    double matrixHZoomFactor;
     /// Zoom factor for Matrix.
-    double m_matrixVZoomFactor;
+    double matrixVZoomFactor;
+
+    struct Ruler
+    {
+      Ruler() : type(), ccNumber(0) { };
+
+      // Values:
+      //   "controller" (Controller::EventType) - Controller ruler.
+      //   "pitchbend" (PitchBend::EventType) - PitchBend ruler.
+      //   "velocity" (BaseProperties::VELOCITY.getName()) - Velocity ruler.
+      std::string type;
+
+      // Specific CC number for Controller::EventType.
+      int ccNumber;
+
+      bool operator<(const Ruler &r) const
+      {
+          if (type == r.type)
+              return (ccNumber < r.ccNumber);
+          else
+              return (type < r.type);
+      }
+    };
+    /// Rulers for the Matrix editor.
+    std::set<Ruler> matrixRulers;
 
     /**
      * The compare class used by Composition

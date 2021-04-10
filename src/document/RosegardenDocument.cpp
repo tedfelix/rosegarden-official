@@ -1625,9 +1625,9 @@ void RosegardenDocument::saveSegment(QTextStream& outStream, Segment *segment,
         }
 
         outStream << "  <matrix>\n";
-        outStream << "    <hzoom factor=\"" << segment->m_matrixHZoomFactor <<
+        outStream << "    <hzoom factor=\"" << segment->matrixHZoomFactor <<
                      "\" />\n";
-        outStream << "    <vzoom factor=\"" << segment->m_matrixVZoomFactor <<
+        outStream << "    <vzoom factor=\"" << segment->matrixVZoomFactor <<
                      "\" />\n";
 
 #if 0

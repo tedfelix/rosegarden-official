@@ -933,7 +933,7 @@ void
 MatrixScene::setHorizontalZoomFactor(double factor)
 {
     for (Segment *segment : m_segments) {
-        segment->m_matrixHZoomFactor = factor;
+        segment->matrixHZoomFactor = factor;
     }
 }
 
@@ -941,7 +941,7 @@ void
 MatrixScene::setVerticalZoomFactor(double factor)
 {
     for (Segment *segment : m_segments) {
-        segment->m_matrixVZoomFactor = factor;
+        segment->matrixVZoomFactor = factor;
     }
 }
 
