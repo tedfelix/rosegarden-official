@@ -50,11 +50,8 @@ namespace Rosegarden
 
 
 ControlRulerWidget::ControlRulerWidget() :
-    m_controlRulerList(),
-    m_controlList(nullptr),
-    m_havePitchBend(false),
-    m_segment(nullptr),
     m_viewSegment(nullptr),
+    m_controlRulerList(),
     m_scale(nullptr),
     m_gutter(0),
     m_currentToolName(),
@@ -91,60 +88,14 @@ ControlRulerWidget::ControlRulerWidget() :
 }
 
 void
-ControlRulerWidget::setSegments(std::vector<Segment *> segments)
+ControlRulerWidget::setSegments(std::vector<Segment *> /*segments*/)
 {
-    // ??? This might be a good idea for the Segment ruler list.  It
-    //     would allow us to update the ruler list for each Segment when
+    // ??? This is needed for the Segment ruler list.  It
+    //     will allow us to update the ruler list for each Segment when
     //     rulers are added or removed.
     //m_segments = segments;
 
-
-    // *** Determine whether the first Segment has pitchbend.
-
-    m_havePitchBend = false;
-
-    RosegardenDocument *document = RosegardenMainWindow::self()->getDocument();
-
-    // ??? Only the first Segment?
-    Track *track =
-            document->getComposition().getTrackById(segments[0]->getTrack());
-
-    Instrument *instr = document->getStudio().
-        getInstrumentById(track->getInstrument());
-
-    if (instr) {
-        Controllable *c = instr->getDevice()->getControllable();
-
-        if (c) {
-            // Check whether the device has a pitchbend controller
-            for (const ControlParameter &cp : c->getControlParameters()) {
-                if (cp.getType() == PitchBend::EventType) {
-                    m_havePitchBend = true;
-                    break;
-                }
-            }
-        }
-    }
-
-
-    // This is single segment code [huh?]
-    // ??? This connects to the Segment for updates so that the rulers
-    //     can be updated.  But it only connects to the "first" Segment.
-    //     This means changes to the other Segments are not reflected
-    //     in the rulers.  setViewSegment() should connect to the Segment
-    //     that is selected instead of this.
-    setSegment(segments[0]);
-}
-
-void
-ControlRulerWidget::setSegment(Segment *segment)
-{
-    m_segment = segment;
-
-    // For each ruler, set the Segment.
-    for (ControlRuler *ruler : m_controlRulerList) {
-        ruler->setSegment(segment);
-    }
+    // ??? Need to launch all rulers from the Segments' ruler lists.
 }
 
 void
@@ -230,12 +181,39 @@ ControlRulerWidget::togglePropertyRuler(const PropertyName &propertyName)
     if (it==m_controlRulerList.end()) addPropertyRuler(propertyName);
 }
 
+bool hasPitchBend(Segment *segment)
+{
+    RosegardenDocument *document = RosegardenMainWindow::self()->getDocument();
+
+    Track *track =
+            document->getComposition().getTrackById(segment->getTrack());
+
+    Instrument *instr = document->getStudio().
+        getInstrumentById(track->getInstrument());
+
+    if (!instr)
+        return false;
+
+    Controllable *c = instr->getDevice()->getControllable();
+
+    if (!c)
+        return false;
+
+    // Check whether the device has a pitchbend controller
+    for (const ControlParameter &cp : c->getControlParameters()) {
+        if (cp.getType() == PitchBend::EventType)
+            return true;
+    }
+
+    return false;
+}
+
 void
 ControlRulerWidget::togglePitchBendRuler()
 {
     // No pitch bend?  Bail.
     // ??? Rude.  We should gray the menu item instead of this.
-    if (!m_havePitchBend)
+    if (!hasPitchBend(&(m_viewSegment->getSegment())))
         return;
 
     // Check whether we already have a pitchbend ruler

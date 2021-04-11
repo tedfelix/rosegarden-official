@@ -62,6 +62,9 @@ public:
      * ??? ControlRuler needs both the Segment and the ViewSegment
      *     in order to function.  Should we get rid of this and
      *     only deal in ViewSegments?  Would that make more sense?
+     *     To a certain extent, it would.  However, we *need* the
+     *     complete list of Segments so that we can maintain the
+     *     ruler lists.  So, I think we need to keep this.
      */
     void setSegments(std::vector<Segment *> segments);
 
@@ -133,6 +136,10 @@ signals:
 
 private:
 
+    /// The Segment we are currently editing.
+    ViewSegment *m_viewSegment;
+
+
     // *** UI
 
     /// The Rulers
@@ -148,18 +155,6 @@ private:
     void addPropertyRuler(const PropertyName &);
     void addRuler(ControlRuler *, QString);
     void removeRuler(ControlRulerList::iterator rulerIter);
-
-    // ??? This is only used to determine whether the device has a pitchbend
-    //     controller.  Replace with an "m_hasPitchBend".
-    const ControlList *m_controlList;
-    bool m_havePitchBend;
-
-    /// ??? The Segment in the document?
-    Segment *m_segment;
-    void setSegment(Segment *segment);
-
-    /// ??? The Segment in the view (NotationScene/MatrixScene)?
-    ViewSegment *m_viewSegment;
 
     RulerScale *m_scale;
 
