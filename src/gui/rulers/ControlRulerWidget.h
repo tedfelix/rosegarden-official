@@ -58,6 +58,10 @@ public:
      * This is only called once when the MatrixView comes up.  So this
      * does not track the currently displayed Segment.  That's
      * setViewSegment().
+     *
+     * ??? ControlRuler needs both the Segment and the ViewSegment
+     *     in order to function.  Should we get rid of this and
+     *     only deal in ViewSegments?  Would that make more sense?
      */
     void setSegments(std::vector<Segment *> segments);
 
@@ -70,6 +74,8 @@ public:
     void setRulerScale(RulerScale *);
     void setRulerScale(RulerScale *, int gutter);
 
+    // ??? This doesn't toggle for the menu.  Consequently we can end
+    //     up with duplicate rulers.  Need to fix this.
     void addControlRuler(const ControlParameter &);
     void togglePitchBendRuler();
     void togglePropertyRuler(const PropertyName &);
@@ -146,6 +152,7 @@ private:
     // ??? This is only used to determine whether the device has a pitchbend
     //     controller.  Replace with an "m_hasPitchBend".
     const ControlList *m_controlList;
+    bool m_havePitchBend;
 
     /// ??? The Segment in the document?
     Segment *m_segment;

@@ -52,6 +52,7 @@ namespace Rosegarden
 ControlRulerWidget::ControlRulerWidget() :
     m_controlRulerList(),
     m_controlList(nullptr),
+    m_havePitchBend(false),
     m_segment(nullptr),
     m_viewSegment(nullptr),
     m_scale(nullptr),
@@ -98,13 +99,13 @@ ControlRulerWidget::setSegments(std::vector<Segment *> segments)
     //m_segments = segments;
 
 
-    // *** Get the ControlList for the first Segment.
+    // *** Determine whether the first Segment has pitchbend.
 
-    // ??? This is only used to determine whether pitchbend should be
-    //     allowed.  Replace m_controlList with m_hasPitchBend.
+    m_havePitchBend = false;
 
     RosegardenDocument *document = RosegardenMainWindow::self()->getDocument();
 
+    // ??? Only the first Segment?
     Track *track =
             document->getComposition().getTrackById(segments[0]->getTrack());
 
@@ -112,51 +113,46 @@ ControlRulerWidget::setSegments(std::vector<Segment *> segments)
         getInstrumentById(track->getInstrument());
 
     if (instr) {
-        Device *device = instr->getDevice();
-
-        // Cast to a Controllable if possible, otherwise leave c nullptr.
-        Controllable *c =
-            dynamic_cast<MidiDevice *>(device);
-        if (!c)
-            { c = dynamic_cast<SoftSynthDevice *>(device); }
+        Controllable *c = instr->getDevice()->getControllable();
 
         if (c) {
-            m_controlList = &(c->getControlParameters());
+            // Check whether the device has a pitchbend controller
+            for (const ControlParameter &cp : c->getControlParameters()) {
+                if (cp.getType() == PitchBend::EventType) {
+                    m_havePitchBend = true;
+                    break;
+                }
+            }
         }
     }
 
 
     // This is single segment code [huh?]
-    // ??? So the other Segments are ignored?  It looks like the only
-    //     thing this does is connect for changes to the Segment.  That
-    //     means changes to Segments other than the first will not be
-    //     reflected on the UI.  Need to test.  This might not be the
-    //     case since the rulers themselves are informed of a ViewSegment
-    //     change and they might subscribe to updates on their own.
+    // ??? This connects to the Segment for updates so that the rulers
+    //     can be updated.  But it only connects to the "first" Segment.
+    //     This means changes to the other Segments are not reflected
+    //     in the rulers.  setViewSegment() should connect to the Segment
+    //     that is selected instead of this.
     setSegment(segments[0]);
 }
 
 void
 ControlRulerWidget::setSegment(Segment *segment)
 {
-    if (m_segment) {
+    if (m_segment)
         disconnect(m_segment, &Segment::contentsChanged,
-                this, &ControlRulerWidget::slotUpdateRulers);
-    }
+                   this, &ControlRulerWidget::slotUpdateRulers);
+
     m_segment = segment;
 
-    //RG_DEBUG << "ControlRulerWidget::setSegments Widget contains" << m_controlRulerList.size() << "rulers.";
+    // For each ruler, set the Segment.
+    for (ControlRuler *ruler : m_controlRulerList) {
+        ruler->setSegment(segment);
+    }
 
-    if (m_controlRulerList.size()) {
-        ControlRulerList::iterator it;
-        for (it = m_controlRulerList.begin(); it != m_controlRulerList.end(); ++it) {
-            (*it)->setSegment(m_segment);
-        }
-    }
-    if (m_segment) {
-        connect(m_segment, &Segment::contentsChanged,
-                   this, &ControlRulerWidget::slotUpdateRulers);
-    }
+    if (segment)
+        connect(segment, &Segment::contentsChanged,
+                this, &ControlRulerWidget::slotUpdateRulers);
 }
 
 void
@@ -164,24 +160,18 @@ ControlRulerWidget::setViewSegment(ViewSegment *viewSegment)
 {
     m_viewSegment = viewSegment;
 
-//    PropertyControlRuler *propertyruler;
-//    if (m_controlRulerList.size()) {
-    for (ControlRulerList::iterator it = m_controlRulerList.begin(); it != m_controlRulerList.end(); ++it) {
-        (*it)->setViewSegment(viewSegment);
+    // For each ruler, set the ViewSegment.
+    for (ControlRuler *ruler : m_controlRulerList) {
+        ruler->setViewSegment(viewSegment);
     }
-//            propertyruler = dynamic_cast<PropertyControlRuler *> (*it);
-//            if (propertyruler) {
-//                propertyruler->setViewSegment(m_viewSegment);
-//            }
-//    }
-//    
-//    slotTogglePropertyRuler(BaseProperties::VELOCITY);
 }
 
 void ControlRulerWidget::slotSetCurrentViewSegment(ViewSegment *viewSegment)
 {
-    if (viewSegment == m_viewSegment) return;
-    
+    // No change?  Bail.
+    if (viewSegment == m_viewSegment)
+        return;
+
     setViewSegment(viewSegment);
 }
 
@@ -227,21 +217,9 @@ ControlRulerWidget::togglePropertyRuler(const PropertyName &propertyName)
 void
 ControlRulerWidget::togglePitchBendRuler()
 {
-    if (!m_controlList)
-        return;
-
-    ControlList::const_iterator controlIter;
-
-    // Check that the device has a pitchbend controller
-    for (controlIter = m_controlList->begin();
-         controlIter != m_controlList->end();
-         ++controlIter) {
-        if (controlIter->getType() == PitchBend::EventType)
-            break;
-    }
-
-    // Not found?  Bail.
-    if (controlIter == m_controlList->end())
+    // No pitch bend?  Bail.
+    // ??? Rude.  We should gray the menu item instead of this.
+    if (!m_havePitchBend)
         return;
 
     // Check whether we already have a pitchbend ruler
@@ -258,7 +236,6 @@ ControlRulerWidget::togglePitchBendRuler()
             continue;
 
         // If we already have a pitchbend ruler, remove it.
-        // ??? But there's already an "X" button to close.  Why toggle?
         if (eventRuler->getControlParameter()->getType() ==
                 PitchBend::EventType)
         {
@@ -267,8 +244,8 @@ ControlRulerWidget::togglePitchBendRuler()
         }
     }
 
-    // If we don't have a pitchbend ruler, make one now
-    addControlRuler(*controlIter);
+    // We don't already have a pitchbend ruler, make one now.
+    addControlRuler(ControlParameter::getPitchBend());
 }
 
 void
