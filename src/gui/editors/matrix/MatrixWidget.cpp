@@ -531,7 +531,7 @@ MatrixWidget::setSegments(RosegardenDocument *document,
             //     we might be in trouble.
             ControlParameter cp("name", ruler.type, "description");
             cp.setControllerNumber(ruler.ccNumber);
-            m_controlsWidget->slotAddControlRuler(cp);
+            m_controlsWidget->addControlRuler(cp);
         } else if (ruler.type == PitchBend::EventType) {
             //showPitchBendRuler();
             // ??? This is a *toggle*.  We don't want a toggle here.
@@ -539,7 +539,7 @@ MatrixWidget::setSegments(RosegardenDocument *document,
         } else if (ruler.type == BaseProperties::VELOCITY.getName()) {
             //showVelocityRuler();
             // ??? This is a *toggle*.  We don't want a toggle here.
-            m_controlsWidget->slotTogglePropertyRuler(BaseProperties::VELOCITY);
+            m_controlsWidget->togglePropertyRuler(BaseProperties::VELOCITY);
         } else {
             RG_WARNING << "setSegments(): WARNING: Unexpected ruler in Segment.";
         }
@@ -1048,7 +1048,7 @@ MatrixWidget::setScrollToFollowPlayback(bool tracking)
 void
 MatrixWidget::showVelocityRuler()
 {
-    m_controlsWidget->slotTogglePropertyRuler(BaseProperties::VELOCITY);
+    m_controlsWidget->togglePropertyRuler(BaseProperties::VELOCITY);
 }
 
 void
@@ -1114,7 +1114,7 @@ MatrixWidget::addControlRuler(QAction *action)
 
         //RG_DEBUG << "addControlRuler(): name: " << name << " should match  itemStr: " << itemStr;
 
-        m_controlsWidget->slotAddControlRuler(*it);
+        m_controlsWidget->addControlRuler(*it);
 
 //      if (i == menuIndex) m_controlsWidget->slotAddControlRuler(*p);
 //      else i++;

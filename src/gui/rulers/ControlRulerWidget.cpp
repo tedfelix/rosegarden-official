@@ -90,10 +90,6 @@ ControlRulerWidget::ControlRulerWidget() :
             this,&ControlRulerWidget::slotRemoveRuler);
 }
 
-ControlRulerWidget::~ControlRulerWidget()
-{
-}
-
 void
 ControlRulerWidget::setSegments(RosegardenDocument *document, std::vector<Segment *> segments)
 {
@@ -201,7 +197,7 @@ ControlRulerWidget::setRulerScale(RulerScale *scale, int gutter)
 }
 
 void
-ControlRulerWidget::slotTogglePropertyRuler(const PropertyName &propertyName)
+ControlRulerWidget::togglePropertyRuler(const PropertyName &propertyName)
 {
     PropertyControlRuler *propruler;
     ControlRulerList::iterator it;
@@ -264,7 +260,7 @@ ControlRulerWidget::togglePitchBendRuler()
     }
 
     // If we don't have a pitchbend ruler, make one now
-    slotAddControlRuler(*controlIter);
+    addControlRuler(*controlIter);
 }
 
 void
@@ -301,7 +297,7 @@ ControlRulerWidget::addRuler(ControlRuler *controlruler, QString name)
 }
 
 void
-ControlRulerWidget::slotAddControlRuler(const ControlParameter &controlParameter)
+ControlRulerWidget::addControlRuler(const ControlParameter &controlParameter)
 {
     if (!m_viewSegment) return;
 

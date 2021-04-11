@@ -15,74 +15,73 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef RG_CONTROLRULERWIDGET_H
-#define RG_CONTROLRULERWIDGET_H
+#pragma once
 
-#include "gui/general/AutoScroller.h"
-#include "base/Event.h"
-#include "base/ViewElement.h"
-#include "base/MidiDevice.h"
-#include "base/parameterpattern/SelectionSituation.h"
+#include "gui/general/AutoScroller.h"  // For FollowMode
+#include "base/Controllable.h"  // For ControlList
 
 #include <QWidget>
 
 class QStackedWidget;
-class QTabBar;
+
 
 namespace Rosegarden
 {
 
-class RosegardenDocument;
-class Segment;
+
+class ControllerEventsRuler;
 class ControlRuler;
 class ControlRulerTabBar;
-class ControlParameter;
-class RulerScale;
-class PropertyName;
-class ViewSegment;
 class EventSelection;
-class ControllerEventsRuler;
 class PropertyControlRuler;
- 
+class PropertyName;
+class RosegardenDocument;
+class RulerScale;
+class Segment;
+class SelectionSituation;
+class ViewElement;
+class ViewSegment;
+
+
 class ControlRulerWidget : public QWidget
 {
-Q_OBJECT
+
+    Q_OBJECT
 
 public:
     ControlRulerWidget();
-    ~ControlRulerWidget() override;
 
     void setSegments(RosegardenDocument *document,
                      std::vector<Segment *> segments);
-    
-    void setSegment(Segment *segment);
-    void setViewSegment(ViewSegment *);
-    void setRulerScale(RulerScale *);
-    void setRulerScale(RulerScale *,int);
-    
-    QString getCurrentToolName() { return m_currentToolName; }
 
-    /** Returns true if we're showing any one of the myriad possible rulers we
+    /// Switch to showing this Segment.
+    void setViewSegment(ViewSegment *);
+
+    void setRulerScale(RulerScale *);
+    void setRulerScale(RulerScale *, int gutter);
+
+    void addControlRuler(const ControlParameter &);
+    void togglePitchBendRuler();
+    void togglePropertyRuler(const PropertyName &);
+
+    /**
+     * Returns true if we're showing any one of the myriad possible rulers we
      * might be showing.  This allows our parent to show() or hide() this entire
      * widget as appropriate for the sort of notation layout in effect.
      */
     bool isAnyRulerVisible();
-    EventSelection *getSelection();
-    bool hasSelection();
-    SelectionSituation *getSituation();
-    ControlParameter   *getControlParameter();
 
-    /**
-     * Returns Velocity ruler if currently shown else return 0
-     */
+    bool hasSelection();
+    EventSelection *getSelection();
+    SelectionSituation *getSituation();
+
+    ControlParameter *getControlParameter();
+
+    /// Returns Velocity ruler if currently shown else return 0
     PropertyControlRuler *getActivePropertyRuler();
 
-    void togglePitchBendRuler();
-
 public slots:
-    void slotTogglePropertyRuler(const PropertyName &);
 
-    void slotAddControlRuler(const ControlParameter &);
     void slotAddPropertyRuler(const PropertyName &);
     void slotRemoveRuler(int);
     void slotSetPannedRect(QRectF pr);
@@ -105,7 +104,10 @@ signals:
     void childRulerSelectionChanged(EventSelection *);
     void showContextHelp(const QString &);
 
-protected:
+private:
+    void setSegment(Segment *segment);
+
+    // ??? Remove this and use the Singleton directly.
     RosegardenDocument *m_document;
 
     ControllerEventsRuler *getActiveRuler();
@@ -129,7 +131,7 @@ protected:
     
     void addRuler(ControlRuler *, QString);
 
-protected slots:
+private slots:
     /** ControlRuler emits rulerSelectionChanged() which is connected to this
      * slot.  This slot picks up child ruler selection changes and emits
      * childRulerSelectionChanged() to be caught by the associated (matrix or
@@ -143,6 +145,6 @@ protected slots:
     void slotChildRulerSelectionChanged(EventSelection *);
 
 };
-}
 
-#endif
+
+}

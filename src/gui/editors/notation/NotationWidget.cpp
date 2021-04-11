@@ -1638,7 +1638,7 @@ NotationWidget::getVerticalZoomFactor() const
 void
 NotationWidget::slotToggleVelocityRuler()
 {
-    m_controlRulerWidget->slotTogglePropertyRuler(BaseProperties::VELOCITY);
+    m_controlRulerWidget->togglePropertyRuler(BaseProperties::VELOCITY);
 }
 
 void
@@ -1700,7 +1700,7 @@ NotationWidget::slotAddControlRuler(QAction *action)
 
         RG_DEBUG << "name: " << name.toStdString() << " should match  itemStr: " << itemStr.toStdString();
 
-        m_controlRulerWidget->slotAddControlRuler(*it);
+        m_controlRulerWidget->addControlRuler(*it);
 
 //      if (i == menuIndex) m_controlsWidget->slotAddControlRuler(*p);
 //      else i++;
