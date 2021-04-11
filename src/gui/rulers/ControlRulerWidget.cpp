@@ -83,11 +83,11 @@ ControlRulerWidget::ControlRulerWidget() :
 
     this->setLayout(layout);
     
-    connect(m_tabBar,&QTabBar::currentChanged,
-            m_stackedWidget,&QStackedWidget::setCurrentIndex);
+    connect(m_tabBar, &QTabBar::currentChanged,
+            m_stackedWidget, &QStackedWidget::setCurrentIndex);
     
-    connect(m_tabBar,&ControlRulerTabBar::tabCloseRequest,
-            this,&ControlRulerWidget::slotRemoveRuler);
+    connect(m_tabBar, &ControlRulerTabBar::tabCloseRequest,
+            this, &ControlRulerWidget::slotRemoveRuler);
 }
 
 void
@@ -137,7 +137,7 @@ ControlRulerWidget::setSegment(Segment *segment)
     }
     m_segment = segment;
 
-    RG_DEBUG << "ControlRulerWidget::setSegments Widget contains" << m_controlRulerList.size() << "rulers.";
+    //RG_DEBUG << "ControlRulerWidget::setSegments Widget contains" << m_controlRulerList.size() << "rulers.";
 
     if (m_controlRulerList.size()) {
         ControlRulerList::iterator it;
@@ -213,7 +213,7 @@ ControlRulerWidget::togglePropertyRuler(const PropertyName &propertyName)
             }
         }
     }
-    if (it==m_controlRulerList.end()) slotAddPropertyRuler(propertyName);
+    if (it==m_controlRulerList.end()) addPropertyRuler(propertyName);
 }
 
 void
@@ -323,7 +323,7 @@ ControlRulerWidget::addControlRuler(const ControlParameter &controlParameter)
 }
 
 void
-ControlRulerWidget::slotAddPropertyRuler(const PropertyName &propertyName)
+ControlRulerWidget::addPropertyRuler(const PropertyName &propertyName)
 {
     if (!m_viewSegment) return;
 
@@ -375,13 +375,14 @@ ControlRulerWidget::slotSetPannedRect(QRectF pr)
 }
 
 void
-ControlRulerWidget::slotDragScroll(timeT t)
+ControlRulerWidget::slotDragScroll(timeT /*t*/)
 {
-    // ??? This is just a forward.  We can do that with connect() and there
-    //     is no need for this slotDragScroll() routine at all.  Simply
-    //     connect the incoming signal to the outgoing signal and delete this.
+    // ??? This is nothing.  Remove whoever was connecting to it.
+    //     ControlRuler::dragScroll() was being connected to this.
+    //     Get rid of the connection and see about getting rid of
+    //     the signal.
 
-    emit dragScroll(t);
+    //emit dragScroll(t);
 }
 
 // comes from the view indicating the view's selection changed, we do NOT emit
@@ -425,12 +426,25 @@ ControlRulerWidget::slotSelectionChanged(EventSelection *s)
 void
 ControlRulerWidget::slotHoveredOverNoteChanged(int /* evPitch */, bool /* haveEvent */, timeT /* evTime */)
 {
-    slotHoveredOverNoteChanged();
-}
+    // ??? Since all parameters are unused, can we change the signal we
+    //     connect to (MatrixMover::hoveredOverNoteChanged) to have no
+    //     parameters?  I think we can.
 
-void
-ControlRulerWidget::slotHoveredOverNoteChanged()
-{
+//    RG_DEBUG << "slotHoveredOverNoteChanged()";
+
+    // ??? What does this routine even do.  At first I thought it made sure
+    //     that the velocity bars would move as the notes are dragged around
+    //     on the matrix.  But it does not.  And that makes sense since the
+    //     dragging is a temporary change to the view that doesn't change
+    //     the underlying Segment until the mouse is released.  So we
+    //     wouldn't expect to see the velocity bars moving around during
+    //     the drag.
+    //
+    //     I've removed the code below for now to see if anyone notices.
+
+#if 0
+    // ??? This code doesn't appear to do anything.  Removing to see if
+    //     anyone notices.
     if (m_controlRulerList.size()) {
         ControlRulerList::iterator it;
         for (it = m_controlRulerList.begin(); it != m_controlRulerList.end(); ++it) {
@@ -438,6 +452,7 @@ ControlRulerWidget::slotHoveredOverNoteChanged()
             if (pr) pr->updateSelectedItems();
         }
     }
+#endif
 }
 
 void

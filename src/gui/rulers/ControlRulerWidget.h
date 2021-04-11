@@ -82,54 +82,81 @@ public:
 
 public slots:
 
-    void slotAddPropertyRuler(const PropertyName &);
+    /// Connected to ControlRulerTabBar::tabCloseRequest().
     void slotRemoveRuler(int);
+    /// Connected to the Matrix Panned and Panner.
     void slotSetPannedRect(QRectF pr);
+    /// Connected to the scenes.
     void slotSetCurrentViewSegment(ViewSegment *);
+    /// Connected to the scenes.
     void slotSelectionChanged(EventSelection *);
-    void slotHoveredOverNoteChanged();
+    /// Connected to MatrixMover::hoveredOverNoteChanged().
     void slotHoveredOverNoteChanged(int evPitch, bool haveEvent, timeT evTime);
-    void slotUpdateRulers(timeT,timeT);
+
+    void slotUpdateRulers(timeT startTime, timeT endTime);
+    /// Connected to toolChanged() signals.
     void slotSetToolName(const QString &);
+
     void slotDragScroll(timeT);
 
 signals:
     /// DEPRECATED.  This is being replaced by the new mouse*() signals.
-    void dragScroll(timeT);
+    //void dragScroll(timeT);
+
+    // These three are used by MatrixWidget and NotationWidget for
+    // autoscrolling when working in the rulers.
 
     void mousePress();
     void mouseMove(FollowMode);
     void mouseRelease();
 
+    /// Connected to MatrixScene::slotRulerSelectionChanged().
     void childRulerSelectionChanged(EventSelection *);
+
     void showContextHelp(const QString &);
 
 private:
-    void setSegment(Segment *segment);
-
     // ??? Remove this and use the Singleton directly.
     RosegardenDocument *m_document;
 
-    ControllerEventsRuler *getActiveRuler();
-    
+
+    // *** UI
+
     QStackedWidget *m_stackedWidget;
+    ControllerEventsRuler *getActiveRuler();
+
     ControlRulerTabBar *m_tabBar;
+
 
     typedef std::list<ControlRuler *> ControlRulerList;
     ControlRulerList m_controlRulerList;
+    void addPropertyRuler(const PropertyName &);
+    void addRuler(ControlRuler *, QString);
     void removeRuler(ControlRulerList::iterator rulerIter);
 
+    // ??? This is only used to determine whether the device has a pitchbend
+    //     controller.  Replace with an "m_hasPitchBend".
     const ControlList *m_controlList;
 
+    /// ??? The Segment in the document?
     Segment *m_segment;
+    void setSegment(Segment *segment);
+
+    /// ??? The Segment in the view (NotationScene/MatrixScene)?
     ViewSegment *m_viewSegment;
+
     RulerScale *m_scale;
+
+    /// Left margin used by NotationWidget to line things up?
     int m_gutter;
+
     QString m_currentToolName;
+
+    /// Passed on to each ControlRuler when it is created.
     QRectF m_pannedRect;
+
+    /// Selection for the property (velocity) ruler only.
     std::vector<ViewElement *> m_selectedElements;
-    
-    void addRuler(ControlRuler *, QString);
 
 private slots:
     /** ControlRuler emits rulerSelectionChanged() which is connected to this
