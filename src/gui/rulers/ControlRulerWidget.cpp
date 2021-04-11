@@ -139,30 +139,46 @@ ControlRulerWidget::setSegments(std::vector<Segment *> segments)
 void
 ControlRulerWidget::setSegment(Segment *segment)
 {
-    if (m_segment)
-        disconnect(m_segment, &Segment::contentsChanged,
-                   this, &ControlRulerWidget::slotUpdateRulers);
-
     m_segment = segment;
 
     // For each ruler, set the Segment.
     for (ControlRuler *ruler : m_controlRulerList) {
         ruler->setSegment(segment);
     }
-
-    if (segment)
-        connect(segment, &Segment::contentsChanged,
-                this, &ControlRulerWidget::slotUpdateRulers);
 }
 
 void
 ControlRulerWidget::setViewSegment(ViewSegment *viewSegment)
 {
+    // No change?  Bail.
+    if (viewSegment == m_viewSegment)
+        return;
+
+    // Disconnect the previous Segment from updates.
+    // ??? Why doesn't the ruler's setViewSegment() do this for us?
+    if (m_viewSegment) {
+        Segment *segment = &(m_viewSegment->getSegment());
+        if (segment) {
+            disconnect(segment, &Segment::contentsChanged,
+                       this, &ControlRulerWidget::slotUpdateRulers);
+        }
+    }
+
     m_viewSegment = viewSegment;
 
     // For each ruler, set the ViewSegment.
     for (ControlRuler *ruler : m_controlRulerList) {
         ruler->setViewSegment(viewSegment);
+    }
+
+    // Connect current Segment for updates.
+    // ??? Why doesn't the ruler's setViewSegment() do this for us?
+    if (viewSegment) {
+        Segment *segment = &(viewSegment->getSegment());
+        if (segment) {
+            connect(segment, &Segment::contentsChanged,
+                    this, &ControlRulerWidget::slotUpdateRulers);
+        }
     }
 }
 
