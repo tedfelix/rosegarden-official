@@ -191,19 +191,19 @@ bool hasPitchBend(Segment *segment)
     Track *track =
             document->getComposition().getTrackById(segment->getTrack());
 
-    Instrument *instr = document->getStudio().
+    Instrument *instrument = document->getStudio().
         getInstrumentById(track->getInstrument());
 
-    if (!instr)
+    if (!instrument)
         return false;
 
-    Controllable *c = instr->getDevice()->getControllable();
+    Controllable *controllable = instrument->getDevice()->getControllable();
 
-    if (!c)
+    if (!controllable)
         return false;
 
     // Check whether the device has a pitchbend controller
-    for (const ControlParameter &cp : c->getControlParameters()) {
+    for (const ControlParameter &cp : controllable->getControlParameters()) {
         if (cp.getType() == PitchBend::EventType)
             return true;
     }
@@ -221,12 +221,10 @@ ControlRulerWidget::togglePitchBendRuler()
 
     // Check whether we already have a pitchbend ruler
 
-    // For each ruler
-    for (ControlRulerList::iterator rulerIter = m_controlRulerList.begin();
-         rulerIter != m_controlRulerList.end();
-         ++rulerIter) {
+    // For each ruler...
+    for (ControlRuler *ruler : m_controlRulerList) {
         ControllerEventsRuler *eventRuler =
-                dynamic_cast<ControllerEventsRuler*>(*rulerIter);
+                dynamic_cast<ControllerEventsRuler*>(ruler);
 
         // Not a ControllerEventsRuler?  Try the next one.
         if (!eventRuler)
@@ -236,30 +234,13 @@ ControlRulerWidget::togglePitchBendRuler()
         if (eventRuler->getControlParameter()->getType() ==
                 PitchBend::EventType)
         {
-            removeRuler(rulerIter);
+            removeRuler(ruler);
             return;
         }
     }
 
     // We don't already have a pitchbend ruler, make one now.
     addControlRuler(ControlParameter::getPitchBend());
-}
-
-void
-ControlRulerWidget::removeRuler(ControlRulerList::iterator it)
-{
-    // Remove from the stacked widget.
-    int index = m_stackedWidget->indexOf(*it);
-    m_stackedWidget->removeWidget(*it);
-
-    // Remove from the tabs.
-    m_tabBar->removeTab(index);
-
-    // Close the ruler window.
-    delete (*it);
-
-    // Remove from the list.
-    m_controlRulerList.erase(it);
 }
 
 void
@@ -282,22 +263,28 @@ ControlRulerWidget::removeRuler(ControlRuler *ruler)
 void
 ControlRulerWidget::slotRemoveRuler(int index)
 {
-    ControlRuler *ruler = (ControlRuler*) m_stackedWidget->widget(index);
-    m_stackedWidget->removeWidget(ruler);
-    m_tabBar->removeTab(index);
-    delete (ruler);
-    m_controlRulerList.remove(ruler);
+    ControlRuler *ruler =
+            dynamic_cast<ControlRuler *>(m_stackedWidget->widget(index));
+
+    removeRuler(ruler);
 }
 
 void
 ControlRulerWidget::addRuler(ControlRuler *controlruler, QString name)
 {
+    // Add to the stacked widget.
     m_stackedWidget->addWidget(controlruler);
-    // controller names (if translatable) come from AutoLoadStrings.cpp and are
-    // in the QObject context/namespace/whatever
-    int index = m_tabBar->addTab(QObject::tr(name.toStdString().c_str()));
+
+    // Add to tabs.
+    // (Controller names, if translatable, come from AutoLoadStrings.cpp and are
+    // in the QObject context/namespace/whatever.)
+    const int index = m_tabBar->addTab(QObject::tr(name.toStdString().c_str()));
     m_tabBar->setCurrentIndex(index);
+
+    // Add to ruler list.
     m_controlRulerList.push_back(controlruler);
+
+    // Configure the ruler.
     controlruler->slotSetPannedRect(m_pannedRect);
     slotSetToolName(m_currentToolName);
 }
@@ -305,33 +292,47 @@ ControlRulerWidget::addRuler(ControlRuler *controlruler, QString name)
 void
 ControlRulerWidget::addControlRuler(const ControlParameter &controlParameter)
 {
-    if (!m_viewSegment) return;
+    // If we're not editing a ViewSegment, bail.
+    if (!m_viewSegment)
+        return;
 
-    ControlRuler *controlruler = new ControllerEventsRuler(m_viewSegment, m_scale, this, &controlParameter);
-    controlruler->setXOffset(m_gutter);
+    ControlRuler *controlRuler = new ControllerEventsRuler(
+            m_viewSegment, m_scale, this, &controlParameter);
 
-    connect(controlruler, &ControlRuler::dragScroll,
+    controlRuler->setXOffset(m_gutter);
+
+    connect(controlRuler, &ControlRuler::dragScroll,
             this, &ControlRulerWidget::slotDragScroll);
 
     // Mouse signals.  Forward them from the current ControlRuler.
-    connect(controlruler, &ControlRuler::mousePress,
+    connect(controlRuler, &ControlRuler::mousePress,
             this, &ControlRulerWidget::mousePress);
-    connect(controlruler, &ControlRuler::mouseMove,
+    connect(controlRuler, &ControlRuler::mouseMove,
             this, &ControlRulerWidget::mouseMove);
-    connect(controlruler, &ControlRuler::mouseRelease,
+    connect(controlRuler, &ControlRuler::mouseRelease,
             this, &ControlRulerWidget::mouseRelease);
 
-    connect(controlruler, &ControlRuler::rulerSelectionChanged,
+    connect(controlRuler, &ControlRuler::rulerSelectionChanged,
             this, &ControlRulerWidget::slotChildRulerSelectionChanged);
 
-    addRuler(controlruler,QString::fromStdString(controlParameter.getName()));
-    controlruler->setViewSegment(m_viewSegment);
+    addRuler(controlRuler, QString::fromStdString(controlParameter.getName()));
+
+    // ??? This is required or else we crash.  But we already passed this in
+    //     in the ctor call.  Can we fix this so that we only pass it once?
+    //     Preferably in the ctor call.  PropertyControlRuler appears to do
+    //     this successfully.  See if we can follow its example.
+    controlRuler->setViewSegment(m_viewSegment);
 }
 
 void
 ControlRulerWidget::addPropertyRuler(const PropertyName &propertyName)
 {
-    if (!m_viewSegment) return;
+    // Note that as of 2021 there is only one property ruler, the
+    // velocity ruler.
+
+    // If we're not editing a ViewSegment, bail.
+    if (!m_viewSegment)
+        return;
 
     PropertyControlRuler *controlruler = new PropertyControlRuler(
             propertyName,
@@ -348,13 +349,16 @@ ControlRulerWidget::addPropertyRuler(const PropertyName &propertyName)
     controlruler->setXOffset(m_gutter);
     controlruler->updateSelection(m_selectedElements);
 
-    // little kludge here, we only have the one property ruler, and the string
-    // "velocity" wasn't already in a context (any context) where it could be
-    // translated, and "velocity" doesn't look good with "PitchBend" or "Reverb"
-    // so we address a number of little problems thus:
+    // Little kludge here.  We only have the one property ruler (velocity),
+    // and the string "velocity" wasn't already in a context (any context)
+    // where it could be translated, and "velocity" doesn't look good with
+    // "PitchBend" or "Reverb", so we ask for an explicit tr() here.
     QString name = QString::fromStdString(propertyName.getName());
-    if (name == "velocity") name = tr("Velocity");
+    if (name == "velocity")
+        name = tr("Velocity");
+
     addRuler(controlruler, name);
+
     // Update selection drawing in matrix view.
     emit childRulerSelectionChanged(nullptr);
 }

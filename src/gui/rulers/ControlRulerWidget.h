@@ -155,7 +155,6 @@ private:
     ControlRulerList m_controlRulerList;
     void addPropertyRuler(const PropertyName &);
     void addRuler(ControlRuler *, QString);
-    void removeRuler(ControlRulerList::iterator rulerIter);
     void removeRuler(ControlRuler *ruler);
 
     RulerScale *m_scale;
