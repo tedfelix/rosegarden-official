@@ -92,7 +92,9 @@ ControlRulerWidget::setSegments(std::vector<Segment *> /*segments*/)
 {
     // ??? This is needed for the Segment ruler list.  It
     //     will allow us to update the ruler list for each Segment when
-    //     rulers are added or removed.
+    //     rulers are added or removed.  I believe the only other part
+    //     of the system that knows this is the scene.  Probably not
+    //     easier to get it from there given where this class is.
     //m_segments = segments;
 
     // ??? Need to launch all rulers from the Segments' ruler lists.
@@ -135,10 +137,6 @@ ControlRulerWidget::setViewSegment(ViewSegment *viewSegment)
 
 void ControlRulerWidget::slotSetCurrentViewSegment(ViewSegment *viewSegment)
 {
-    // No change?  Bail.
-    if (viewSegment == m_viewSegment)
-        return;
-
     setViewSegment(viewSegment);
 }
 
@@ -153,32 +151,37 @@ ControlRulerWidget::setRulerScale(RulerScale *scale, int gutter)
 {
     m_scale = scale;
     m_gutter = gutter;
-    if (m_controlRulerList.size()) {
-        ControlRulerList::iterator it;
-        for (it = m_controlRulerList.begin(); it != m_controlRulerList.end(); ++it) {
-            (*it)->setRulerScale(m_scale);
-        }
+
+    // For each ruler, set the ruler scale.
+    for (ControlRuler *ruler : m_controlRulerList) {
+        ruler->setRulerScale(scale);
     }
 }
 
 void
 ControlRulerWidget::togglePropertyRuler(const PropertyName &propertyName)
 {
-    PropertyControlRuler *propruler;
-    ControlRulerList::iterator it;
-    for (it = m_controlRulerList.begin(); it != m_controlRulerList.end(); ++it) {
-        propruler = dynamic_cast <PropertyControlRuler*> (*it);
-        if (propruler) {
-            if (propruler->getPropertyName() == propertyName)
-            {
-                // We already have a ruler for this property
-                // Delete it
-                removeRuler(it);
-                break;
-            }
+    // Toggle the *velocity* ruler.  As of 2021 there is only one property
+    // ruler, the velocity ruler.
+
+    // For each ruler...
+    for (ControlRuler *ruler : m_controlRulerList) {
+        PropertyControlRuler *propruler =
+                dynamic_cast <PropertyControlRuler *> (ruler);
+        // Not a property ruler?  Try the next one.
+        if (!propruler)
+            continue;
+
+        // Found it?  Remove and bail.
+        if (propruler->getPropertyName() == propertyName)
+        {
+            removeRuler(ruler);
+            return;
         }
     }
-    if (it==m_controlRulerList.end()) addPropertyRuler(propertyName);
+
+    // Not found, add it.
+    addPropertyRuler(propertyName);
 }
 
 bool hasPitchBend(Segment *segment)
@@ -245,11 +248,35 @@ ControlRulerWidget::togglePitchBendRuler()
 void
 ControlRulerWidget::removeRuler(ControlRulerList::iterator it)
 {
+    // Remove from the stacked widget.
     int index = m_stackedWidget->indexOf(*it);
     m_stackedWidget->removeWidget(*it);
+
+    // Remove from the tabs.
     m_tabBar->removeTab(index);
+
+    // Close the ruler window.
     delete (*it);
+
+    // Remove from the list.
     m_controlRulerList.erase(it);
+}
+
+void
+ControlRulerWidget::removeRuler(ControlRuler *ruler)
+{
+    // Remove from the stacked widget.
+    int index = m_stackedWidget->indexOf(ruler);
+    m_stackedWidget->removeWidget(ruler);
+
+    // Remove from the tabs.
+    m_tabBar->removeTab(index);
+
+    // Close the ruler window.
+    delete ruler;
+
+    // Remove from the list.
+    m_controlRulerList.remove(ruler);
 }
 
 void

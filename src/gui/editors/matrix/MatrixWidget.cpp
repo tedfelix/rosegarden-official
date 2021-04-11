@@ -435,7 +435,8 @@ MatrixWidget::setSegments(RosegardenDocument *document,
     generatePitchRuler();
 
     m_controlsWidget->setSegments(segments);
-    m_controlsWidget->setViewSegment((ViewSegment *)m_scene->getCurrentViewSegment());
+    m_controlsWidget->setViewSegment(
+            dynamic_cast<ViewSegment *>(m_scene->getCurrentViewSegment()));
     m_controlsWidget->setRulerScale(m_referenceScale);
 
     // For some reason this doesn't work in the constructor - not looked in detail

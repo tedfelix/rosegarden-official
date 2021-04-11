@@ -475,7 +475,8 @@ NotationWidget::setSegments(RosegardenDocument *document,
     m_controlRulerWidget = new ControlRulerWidget;
     m_layout->addWidget(m_controlRulerWidget, CONTROLS_ROW, MAIN_COL, 1, 1);
     m_controlRulerWidget->setSegments(segments);
-    m_controlRulerWidget->setViewSegment(m_scene->getCurrentStaff());
+    m_controlRulerWidget->setViewSegment(
+            dynamic_cast<ViewSegment *>(m_scene->getCurrentStaff()));
     m_controlRulerWidget->setRulerScale(m_referenceScale, m_leftGutter);
 
     connect(m_view, &Panned::viewportChanged,

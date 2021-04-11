@@ -75,6 +75,7 @@ public:
     void setViewSegment(ViewSegment *);
 
     void setRulerScale(RulerScale *);
+    /// gutter is more of a left margin.  See m_gutter.
     void setRulerScale(RulerScale *, int gutter);
 
     // ??? This doesn't toggle for the menu.  Consequently we can end
@@ -105,7 +106,7 @@ public slots:
     void slotRemoveRuler(int);
     /// Connected to the Matrix Panned and Panner.
     void slotSetPannedRect(QRectF pr);
-    /// Connected to the scenes.
+    /// MatrixScene and NotationScene call this when the current Segment changes.
     void slotSetCurrentViewSegment(ViewSegment *);
     /// Connected to the scenes.
     void slotSelectionChanged(EventSelection *);
@@ -155,10 +156,14 @@ private:
     void addPropertyRuler(const PropertyName &);
     void addRuler(ControlRuler *, QString);
     void removeRuler(ControlRulerList::iterator rulerIter);
+    void removeRuler(ControlRuler *ruler);
 
     RulerScale *m_scale;
 
     /// Left margin used by NotationWidget to line things up?
+    /**
+     * ??? rename: m_leftMargin?
+     */
     int m_gutter;
 
     QString m_currentToolName;
