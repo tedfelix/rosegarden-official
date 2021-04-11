@@ -434,7 +434,7 @@ MatrixWidget::setSegments(RosegardenDocument *document,
 
     generatePitchRuler();
 
-    m_controlsWidget->setSegments(document, segments);
+    m_controlsWidget->setSegments(segments);
     m_controlsWidget->setViewSegment((ViewSegment *)m_scene->getCurrentViewSegment());
     m_controlsWidget->setRulerScale(m_referenceScale);
 

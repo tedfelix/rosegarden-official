@@ -35,14 +35,16 @@ class ControlRulerTabBar;
 class EventSelection;
 class PropertyControlRuler;
 class PropertyName;
-class RosegardenDocument;
 class RulerScale;
 class Segment;
 class SelectionSituation;
 class ViewElement;
 class ViewSegment;
 
-
+/**
+ * The ruler area (m_stackedWidget) and the tabs (m_tabBar) that appear below
+ * the Matrix and Notation editors.
+ */
 class ControlRulerWidget : public QWidget
 {
 
@@ -51,10 +53,18 @@ class ControlRulerWidget : public QWidget
 public:
     ControlRulerWidget();
 
-    void setSegments(RosegardenDocument *document,
-                     std::vector<Segment *> segments);
+    /// Set the Segment(s) from the document that we will be displaying.
+    /**
+     * This is only called once when the MatrixView comes up.  So this
+     * does not track the currently displayed Segment.  That's
+     * setViewSegment().
+     */
+    void setSegments(std::vector<Segment *> segments);
 
     /// Switch to showing this Segment.
+    /**
+     * This is called (by the Scene) when the Segment being edited changes.
+     */
     void setViewSegment(ViewSegment *);
 
     void setRulerScale(RulerScale *);
@@ -116,15 +126,14 @@ signals:
     void showContextHelp(const QString &);
 
 private:
-    // ??? Remove this and use the Singleton directly.
-    RosegardenDocument *m_document;
-
 
     // *** UI
 
+    /// The Rulers
     QStackedWidget *m_stackedWidget;
     ControllerEventsRuler *getActiveRuler();
 
+    /// The tabs under the rulers.
     ControlRulerTabBar *m_tabBar;
 
 
@@ -159,7 +168,8 @@ private:
     std::vector<ViewElement *> m_selectedElements;
 
 private slots:
-    /** ControlRuler emits rulerSelectionChanged() which is connected to this
+    /**
+     * ControlRuler emits rulerSelectionChanged() which is connected to this
      * slot.  This slot picks up child ruler selection changes and emits
      * childRulerSelectionChanged() to be caught by the associated (matrix or
      * notation) scene, so it can add our child ruler's selected events to its

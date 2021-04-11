@@ -24,35 +24,32 @@
 #include "ControllerEventsRuler.h"
 #include "PropertyControlRuler.h"
 
-#include "gui/editors/matrix/MatrixElement.h"
-#include "gui/editors/matrix/MatrixViewSegment.h"
-#include "gui/editors/matrix/MatrixScene.h"
-
 #include "document/RosegardenDocument.h"
-#include "base/BaseProperties.h"
+#include "base/Composition.h"
 #include "base/ControlParameter.h"
 #include "base/Controllable.h"
-#include "base/Event.h"
+#include "base/Device.h"
+#include "base/Instrument.h"
 #include "base/MidiDevice.h"
 #include "base/MidiTypes.h"  // for PitchBend::EventType
 #include "base/PropertyName.h"
-#include "base/RulerScale.h"
-#include "base/Selection.h"
-#include "base/SoftSynthDevice.h"
+#include "gui/application/RosegardenMainWindow.h"
+#include "base/Selection.h"  // for EventSelection
 #include "base/parameterpattern/SelectionSituation.h"
+#include "base/SoftSynthDevice.h"
+#include "base/Track.h"
 
 #include "misc/Debug.h"
 
 #include <QVBoxLayout>
-//#include <QTabBar>
 #include <QStackedWidget>
-#include <QIcon>
+
 
 namespace Rosegarden
 {
 
+
 ControlRulerWidget::ControlRulerWidget() :
-    m_document(nullptr),
     m_controlRulerList(),
     m_controlList(nullptr),
     m_segment(nullptr),
@@ -63,25 +60,27 @@ ControlRulerWidget::ControlRulerWidget() :
     m_pannedRect(),
     m_selectedElements()
 {
+    QVBoxLayout *layout = new QVBoxLayout;
+    layout->setMargin(0);
+    layout->setSpacing(0);
+    setLayout(layout);
+
+    // Stacked Widget
+    m_stackedWidget = new QStackedWidget;
+    layout->addWidget(m_stackedWidget);
+
+    // Tab Bar
     m_tabBar = new ControlRulerTabBar;
 
     // sizeHint() is the maximum allowed, and the widget is still useful if made
     // smaller than this, but should never grow larger
-    m_tabBar->setSizePolicy(QSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum));
+    m_tabBar->setSizePolicy(
+            QSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum));
 
     m_tabBar->setDrawBase(false);
     m_tabBar->setShape(QTabBar::RoundedSouth);
 
-    m_stackedWidget = new QStackedWidget;
-
-    QVBoxLayout *layout = new QVBoxLayout;
-    layout->setMargin(0);
-    layout->setSpacing(0);
-
-    layout->addWidget(m_stackedWidget);
     layout->addWidget(m_tabBar);
-
-    this->setLayout(layout);
     
     connect(m_tabBar, &QTabBar::currentChanged,
             m_stackedWidget, &QStackedWidget::setCurrentIndex);
@@ -91,18 +90,23 @@ ControlRulerWidget::ControlRulerWidget() :
 }
 
 void
-ControlRulerWidget::setSegments(RosegardenDocument *document, std::vector<Segment *> segments)
+ControlRulerWidget::setSegments(std::vector<Segment *> segments)
 {
-    m_document = document;
-//    m_segments = segments;
+    // ??? This might be a good idea for the Segment ruler list.  It
+    //     would allow us to update the ruler list for each Segment when
+    //     rulers are added or removed.
+    //m_segments = segments;
 
-//    connect(m_document, SIGNAL(pointerPositionChanged(timeT)),
-//            this, SLOT(slotPointerPositionChanged(timeT)));
 
-    Composition &comp = document->getComposition();
+    // *** Get the ControlList for the first Segment.
+
+    // ??? This is only used to determine whether pitchbend should be
+    //     allowed.  Replace m_controlList with m_hasPitchBend.
+
+    RosegardenDocument *document = RosegardenMainWindow::self()->getDocument();
 
     Track *track =
-        comp.getTrackById(segments[0]->getTrack());
+            document->getComposition().getTrackById(segments[0]->getTrack());
 
     Instrument *instr = document->getStudio().
         getInstrumentById(track->getInstrument());
@@ -121,10 +125,14 @@ ControlRulerWidget::setSegments(RosegardenDocument *document, std::vector<Segmen
         }
     }
 
-    SegmentSelection selection;
-    selection.insert(segments.begin(), segments.end());
 
-    // This is single segment code
+    // This is single segment code [huh?]
+    // ??? So the other Segments are ignored?  It looks like the only
+    //     thing this does is connect for changes to the Segment.  That
+    //     means changes to Segments other than the first will not be
+    //     reflected on the UI.  Need to test.  This might not be the
+    //     case since the rulers themselves are informed of a ViewSegment
+    //     change and they might subscribe to updates on their own.
     setSegment(segments[0]);
 }
 
@@ -560,5 +568,5 @@ ControlRulerWidget::getSituation()
         new SelectionSituation(cp->getType(), selection);
 }
 
-}
 
+}
