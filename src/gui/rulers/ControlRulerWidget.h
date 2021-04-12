@@ -119,7 +119,7 @@ public slots:
 
     void slotUpdateRulers(timeT startTime, timeT endTime);
     /// Connected to toolChanged() signals.
-    void slotSetToolName(const QString &);
+    void slotSetTool(const QString &);
 
 signals:
     // These three are used by MatrixWidget and NotationWidget for
@@ -130,7 +130,7 @@ signals:
     void mouseMove(FollowMode);
     void mouseRelease();
 
-    /// Connected to MatrixScene::slotRulerSelectionChanged().
+    /// See ControlRuler::rulerSelectionChanged() for details.
     void childRulerSelectionChanged(EventSelection *);
 
     void showContextHelp(const QString &);
@@ -175,15 +175,23 @@ private:
 
 private slots:
     /**
-     * ControlRuler emits rulerSelectionChanged() which is connected to this
+     * ControlRuler::rulerSelectionChanged() is connected to this
      * slot.  This slot picks up child ruler selection changes and emits
      * childRulerSelectionChanged() to be caught by the associated (matrix or
      * notation) scene, so it can add our child ruler's selected events to its
      * own selection for cut/copy/paste operations.  At least that's the theory.
      *
+     * See the comments on ControlRuler::rulerSelectionChanged() for more.
+     *
      * Pitch Bend ruler -> selection changes -> emit rulerSelectionChanged() ->
      * Control Ruler Widget -> this slot -> emit childRulerSelectionChanged ->
      * owning scene -> selection updates
+     *
+     * ??? Can we bypass this and just connect the ruler directly to
+     *     MatrixScene?  I think the original intent was to connect it
+     *     also to NotationScene.  So this would perform the distribution
+     *     to both editors.  Each editor should connect to this on their
+     *     own.
      */
     void slotChildRulerSelectionChanged(EventSelection *);
 

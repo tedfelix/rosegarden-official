@@ -286,7 +286,7 @@ ControlRulerWidget::addRuler(ControlRuler *controlruler, QString name)
 
     // Configure the ruler.
     controlruler->slotSetPannedRect(m_pannedRect);
-    slotSetToolName(m_currentToolName);
+    slotSetTool(m_currentToolName);
 }
 
 void
@@ -337,6 +337,8 @@ ControlRulerWidget::addPropertyRuler(const PropertyName &propertyName)
             m_scale,  // scale
             this);  // parent
 
+    // ??? The velocity ruler does not yet support selection, so this
+    //     actually does nothing right now.
     connect(controlruler, &ControlRuler::rulerSelectionChanged,
             this, &ControlRulerWidget::slotChildRulerSelectionChanged);
 
@@ -440,35 +442,32 @@ ControlRulerWidget::slotHoveredOverNoteChanged(int /* evPitch */, bool /* haveEv
 void
 ControlRulerWidget::slotUpdateRulers(timeT startTime, timeT endTime)
 {
-    // No rulers to update?  Bail.
-    if (m_controlRulerList.empty())
-        return;
-
     // For each ruler, ask for an update.
-    for (ControlRulerList::iterator it = m_controlRulerList.begin();
-         it != m_controlRulerList.end();
-         ++it) {
-        (*it)->notationLayoutUpdated(startTime, endTime);
+    for (ControlRuler *ruler : m_controlRulerList) {
+        ruler->notationLayoutUpdated(startTime, endTime);
     }
 }
 
 void
-ControlRulerWidget::slotSetToolName(const QString &toolname)
+ControlRulerWidget::slotSetTool(const QString &toolName)
 {
-    QString rulertoolname = toolname;
-    // Translate Notation tool names
-    if (toolname == "notationselector") rulertoolname = "selector";
-    if (toolname == "notationselectornoties") rulertoolname = "selector";
-    if (toolname == "noterestinserter") rulertoolname = "painter";
-    if (toolname == "notationeraser") rulertoolname = "eraser";
-    
-    m_currentToolName = rulertoolname;
-    // Should be dispatched to all PropertyControlRulers
-    if (m_controlRulerList.size()) {
-        ControlRulerList::iterator it;
-        for (it = m_controlRulerList.begin(); it != m_controlRulerList.end(); ++it) {
-            (*it)->slotSetTool(rulertoolname);
-        }
+    QString rulerToolName = toolName;
+
+    // Translate Notation tool names to ruler tool names.
+    if (toolName == "notationselector")
+        rulerToolName = "selector";
+    if (toolName == "notationselectornoties")
+        rulerToolName = "selector";
+    if (toolName == "noterestinserter")
+        rulerToolName = "painter";
+    if (toolName == "notationeraser")
+        rulerToolName = "eraser";
+
+    m_currentToolName = rulerToolName;
+
+    // Dispatch to all rulers.
+    for (ControlRuler *ruler : m_controlRulerList) {
+        ruler->slotSetTool(rulerToolName);
     }
 }
 

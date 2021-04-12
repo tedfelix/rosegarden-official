@@ -138,8 +138,18 @@ signals:
     void mouseMove(FollowMode);
     void mouseRelease();
 
-    /** Emitted whenever the ruler changes its selection, so the ruler owner can
-     * update its own selection to include the events selected on the ruler
+    /**
+     * Emitted whenever the ruler changes its selection, so the ruler owner can
+     * update its own selection to include the events selected on the ruler.
+     *
+     * See MatrixScene::slotRulerSelectionChanged().
+     *
+     * This allows the user to add CC events to the selection for copy/cut/paste.
+     * It is a bit confusing, however, since it doesn't affect the move tool.
+     *
+     * ??? This would be even more useful if the PropertyControlRuler (velocity
+     *     ruler) properly implemented selection.  That would then allow selecting
+     *     in the velocity ruler which would make it a lot easier to use.
      */
     void rulerSelectionChanged(EventSelection *);
 

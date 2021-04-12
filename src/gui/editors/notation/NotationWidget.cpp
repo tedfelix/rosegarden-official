@@ -496,7 +496,7 @@ NotationWidget::setSegments(RosegardenDocument *document,
             m_controlRulerWidget, &ControlRulerWidget::slotSetCurrentViewSegment);
 
     connect(this, &NotationWidget::toolChanged,
-            m_controlRulerWidget, &ControlRulerWidget::slotSetToolName);
+            m_controlRulerWidget, &ControlRulerWidget::slotSetTool);
 
     // Connect ControlRulerWidget for Auto-Scroll.
     connect(m_controlRulerWidget, &ControlRulerWidget::mousePress,

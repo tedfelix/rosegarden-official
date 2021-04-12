@@ -340,7 +340,7 @@ MatrixWidget::MatrixWidget(bool drumMode) :
 //    }
 
     connect(this, &MatrixWidget::toolChanged,
-            m_controlsWidget, &ControlRulerWidget::slotSetToolName);
+            m_controlsWidget, &ControlRulerWidget::slotSetTool);
 
     // Make sure MatrixScene always gets mouse move events even when the
     // button isn't pressed.  This way the keys on the piano keyboard
