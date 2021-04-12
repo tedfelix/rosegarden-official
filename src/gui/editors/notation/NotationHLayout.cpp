@@ -834,6 +834,10 @@ NotationHLayout::preSquishBar(int barNo)
     if (!haveSomething)
         return ;
 
+    // experimental change - clear the timeSigMap. This disables the
+    // suppression of redundant time signatures
+    timeSigMap.clear();
+
     // Elimination of redundant time signature in the same bar - Step 2:
     // Scan every memorized bar and when several time signatures (i.e. several
     // bars with the same keys in TimeSigMap) are found keep only one whose
