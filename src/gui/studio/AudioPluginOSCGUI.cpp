@@ -65,7 +65,7 @@ AudioPluginOSCGUI::AudioPluginOSCGUI(AudioPluginInstance *instance,
 
     RG_DEBUG << "AudioPluginOSCGUI::AudioPluginOSCGUI: Starting process "
     << filePath << " " << m_serverUrl << " "
-    << soInfo.fileName() << " " << label << " " << friendlyName << endl;
+    << soInfo.fileName() << " " << label << " " << friendlyName;
 
     m_gui->start(filePath, guiArgs);
     if (!m_gui->waitForStarted()) {  //@@@ JAS Check here first for errors
@@ -119,7 +119,7 @@ AudioPluginOSCGUI::getGUIFilePath(QString identifier)
 
             for (info = list.begin(); info != list.end(); ++info) { //### JAS Check for errors
                 RG_DEBUG << "Looking at " << info->fileName() << " in path "
-                << info->filePath() << " for suffix " << (k == nsuffixes ? "(none)" : suffixes[k]) << ", fuzzy " << fuzzy << endl;
+                << info->filePath() << " for suffix " << (k == nsuffixes ? "(none)" : suffixes[k]) << ", fuzzy " << fuzzy;
 
                 if (!(info->isFile() || info->isSymLink())
                         || !info->isExecutable()) {

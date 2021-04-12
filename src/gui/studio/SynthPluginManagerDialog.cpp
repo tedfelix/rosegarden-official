@@ -238,8 +238,7 @@ void SynthPluginManagerDialog:: setupGuiCreatePluginList(){
 
 
 SynthPluginManagerDialog::~SynthPluginManagerDialog(){
-    RG_DEBUG << "\n*** SynthPluginManagerDialog::~SynthPluginManagerDialog()"
-             << endl;
+    RG_DEBUG << "\n*** SynthPluginManagerDialog::~SynthPluginManagerDialog()";
 }
 
 
@@ -343,7 +342,7 @@ void SynthPluginManagerDialog::slotPluginChanged ( int index ){
     const QObject *s = sender();
 
     RG_DEBUG << "SynthPluginManagerDialog::slotPluginChanged(" << index
-             << ")" << endl;
+             << ")";
 
     int instrumentNo = -1;
 
@@ -361,7 +360,7 @@ void SynthPluginManagerDialog::slotPluginChanged ( int index ){
 
     if ( index >= int ( m_synthPlugins.size() ) ){
         RG_DEBUG << "WARNING: SynthPluginManagerDialog::slotValueChanged: synth "
-                 << index << " out of range" << endl;
+                 << index << " out of range";
         return ;
     }
 
