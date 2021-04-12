@@ -4872,8 +4872,7 @@ AlsaDriver::insertMappedEventForReturn(MappedEvent *mE)
     m_returnComposition.insert(mE);
 }
 
-// check for recording status on any ALSA Port
-//
+#if 0
 bool
 AlsaDriver::isRecording(AlsaPortDescription *port)
 {
@@ -4906,6 +4905,7 @@ AlsaDriver::isRecording(AlsaPortDescription *port)
     RG_DEBUG << "isRecording(): returning false";
     return false;
 }
+#endif
 
 void
 AlsaDriver::checkForNewClients()
@@ -4928,7 +4928,13 @@ AlsaDriver::checkForNewClients()
     // port subscribers) that are out there and makes sure our list of
     // connections (m_devicePortMap) is in sync.
 
-    // For each device in the Studio/Composition.
+    // For each MappedDevice (Rosegarden MIDI output port) in the
+    // Studio/Composition...
+    // ??? The naming here gets confusing.  Perhaps "MappedDevice" should
+    //     be "MIDIPort" and contain a description of the device that it is
+    //     expected to be connected to?  That might be a more realistic
+    //     and easier to understand model.
+    //       for (MIDIPort *midiPort : m_midiPorts)
     for (MappedDevice *device : m_devices) {
 
         //RG_DEBUG << "  Device:" << device->getName();
@@ -4953,11 +4959,17 @@ AlsaDriver::checkForNewClients()
 
         addr.port = portIter->second;
 
-        // Prepare to query subscribers.
+        // Prepare to query subscribers (connected ports).
 
+        // ??? Rename: midiSynthIter
         snd_seq_query_subscribe_t *subs;
         // On stack, so no need to free.
+        // ??? Really?  Then why do we have snd_seq_query_subscribe_free()?
+        //     Note that aconnect never calls snd_seq_*_free() either.
         snd_seq_query_subscribe_alloca(&subs);
+        // Search only for readers (MIDI synths).
+        snd_seq_query_subscribe_set_type(subs, SND_SEQ_QUERY_SUBS_READ);
+        // Connected to the current "device" (MIDI output port).
         snd_seq_query_subscribe_set_root(subs, &addr);
         // Start at subscriber number 0.
         snd_seq_query_subscribe_set_index(subs, 0);
@@ -4966,7 +4978,7 @@ AlsaDriver::checkForNewClients()
         int others = 0;
         ClientPortPair firstOther;
 
-        // For each port subscriber
+        // For each MIDI output port subscriber (connected MIDI synth)
         while (!snd_seq_query_port_subscribers(m_midiHandle, subs)) {
 
             // Get the subscriber's client:port address.
@@ -5186,8 +5198,7 @@ AlsaDriver::setRecordDevice(DeviceId id, bool connectAction)
     }
 }
 
-// Clear any record device connections
-//
+#if 0
 void
 AlsaDriver::unsetRecordDevices()
 {
@@ -5234,6 +5245,7 @@ AlsaDriver::unsetRecordDevices()
                                           snd_seq_query_subscribe_get_index(qSubs) + 1);
     }
 }
+#endif
 
 void
 AlsaDriver::sendMMC(MidiByte deviceArg,
