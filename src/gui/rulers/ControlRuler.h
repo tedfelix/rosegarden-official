@@ -134,9 +134,6 @@ public:
     void flipBackwards();
 
 signals:
-    /// DEPRECATED.  This is being replaced by the new mouse*() signals.
-    void dragScroll(timeT);
-
     void mousePress();
     void mouseMove(FollowMode);
     void mouseRelease();

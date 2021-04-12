@@ -108,7 +108,11 @@ public slots:
     void slotSetPannedRect(QRectF pr);
     /// MatrixScene and NotationScene call this when the current Segment changes.
     void slotSetCurrentViewSegment(ViewSegment *);
-    /// Connected to the scenes.
+    /// Update the velocity ruler selection to match the segment selection.
+    /**
+     * Comes from the view indicating the view's selection changed.  We do NOT
+     * emit childRulerSelectionChanged() here.
+     */
     void slotSelectionChanged(EventSelection *);
     /// Connected to MatrixMover::hoveredOverNoteChanged().
     void slotHoveredOverNoteChanged(int evPitch, bool haveEvent, timeT evTime);
@@ -117,15 +121,11 @@ public slots:
     /// Connected to toolChanged() signals.
     void slotSetToolName(const QString &);
 
-    void slotDragScroll(timeT);
-
 signals:
-    /// DEPRECATED.  This is being replaced by the new mouse*() signals.
-    //void dragScroll(timeT);
-
     // These three are used by MatrixWidget and NotationWidget for
     // autoscrolling when working in the rulers.
-
+    // ??? Auto-scroll does not seem to work with the selection tool.  Works
+    //     with the move tool.  Tested with PitchBend.
     void mousePress();
     void mouseMove(FollowMode);
     void mouseRelease();
@@ -167,7 +167,7 @@ private:
 
     QString m_currentToolName;
 
-    /// Passed on to each ControlRuler when it is created.
+    /// Current pan position in the Segment.
     QRectF m_pannedRect;
 
     /// Selection for the property (velocity) ruler only.

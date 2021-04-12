@@ -301,9 +301,6 @@ ControlRulerWidget::addControlRuler(const ControlParameter &controlParameter)
 
     controlRuler->setXOffset(m_gutter);
 
-    connect(controlRuler, &ControlRuler::dragScroll,
-            this, &ControlRulerWidget::slotDragScroll);
-
     // Mouse signals.  Forward them from the current ControlRuler.
     connect(controlRuler, &ControlRuler::mousePress,
             this, &ControlRulerWidget::mousePress);
@@ -364,72 +361,47 @@ ControlRulerWidget::addPropertyRuler(const PropertyName &propertyName)
 }
 
 void
-ControlRulerWidget::slotSetPannedRect(QRectF pr)
+ControlRulerWidget::slotSetPannedRect(QRectF pannedRect)
 {
-    // Current Panned.cpp code uses QGraphicsView::centreOn this point
-    ///TODO Note these rectangles are currently wrong
-    //RG_DEBUG << "slotSetPannedRect():" << pr;
+    m_pannedRect = pannedRect;
 
-    // Ruler widgets should draw this region (using getTimeForX from the segment) so pass the rectangle on
-    // Provided rectangle should be centered on current widget size
-    m_pannedRect = pr;
-
-    if (m_controlRulerList.size()) {
-        ControlRulerList::iterator it;
-        for (it = m_controlRulerList.begin(); it != m_controlRulerList.end(); ++it) {
-            (*it)->slotSetPannedRect(pr);
-        }
+    // For each ruler, pass on the panned rect.
+    for (ControlRuler *ruler : m_controlRulerList) {
+        ruler->slotSetPannedRect(pannedRect);
     }
 
     update();
 }
 
 void
-ControlRulerWidget::slotDragScroll(timeT /*t*/)
-{
-    // ??? This is nothing.  Remove whoever was connecting to it.
-    //     ControlRuler::dragScroll() was being connected to this.
-    //     Get rid of the connection and see about getting rid of
-    //     the signal.
-
-    //emit dragScroll(t);
-}
-
-// comes from the view indicating the view's selection changed, we do NOT emit
-// childRulerSelectionChanged() here
-void
-ControlRulerWidget::slotSelectionChanged(EventSelection *s)
+ControlRulerWidget::slotSelectionChanged(EventSelection *eventSelection)
 {
     m_selectedElements.clear();
 
-    // If empty selection then we will also clean the selection for control ruler
-    if (s) {
-    //    ViewElementList *selectedElements = new ViewElementList();
+    if (eventSelection) {
+        // Convert the EventSelection into a vector of ViewElement *.
 
-
-        for (EventSelection::eventcontainer::iterator it =
-                s->getSegmentEvents().begin();
-                it != s->getSegmentEvents().end(); ++it) {
-    //        ViewElement *element = 0;
-                    // TODO check if this code is necessary for some reason
-                    // It seems there abundant work done here
-            ViewElementList::iterator vi = m_viewSegment->findEvent(*it);
-    //        if (vi != m_viewSegment->getViewElementList()->end()) {
-    //            element = dynamic_cast<ViewElement *>(*vi);
-    //        }
-    //        if (!element) continue;
-            m_selectedElements.push_back(*vi);
+        // For each event in the new EventSelection...
+        for (Event *event : eventSelection->getSegmentEvents()) {
+            // Find the corresponding ViewElement.
+            // TODO check if this code is necessary for some reason
+            //      It seems there abundant work done here
+            // ??? Performance: Search within for loop.
+            ViewElementList::iterator viewElementIter =
+                    m_viewSegment->findEvent(event);
+            // Add it to m_selectedElements.
+            m_selectedElements.push_back(*viewElementIter);
         }
     }
-    // Should be dispatched to all PropertyControlRulers
-    if (m_controlRulerList.size()) {
-        ControlRulerList::iterator it;
-        for (it = m_controlRulerList.begin(); it != m_controlRulerList.end(); ++it) {
-            PropertyControlRuler *pr = dynamic_cast <PropertyControlRuler *> (*it);
-            if (pr) {
-                pr->updateSelection(m_selectedElements);
-            }
-        }
+
+    // Send new selection to all PropertyControlRulers.  IOW the velocity ruler.
+    // For each ruler...
+    for (ControlRuler *ruler : m_controlRulerList) {
+        PropertyControlRuler *propertyRuler =
+                dynamic_cast<PropertyControlRuler *>(ruler);
+        // Is this the velocity ruler?  Then pass on the selection.
+        if (propertyRuler)
+            propertyRuler->updateSelection(m_selectedElements);
     }
 }
 
