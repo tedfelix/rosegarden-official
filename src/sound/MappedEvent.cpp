@@ -110,8 +110,16 @@ MappedEvent::MappedEvent(InstrumentId id,
                                 
                 std::string metaMessage = text.getText();
                 addDataString(metaMessage);
-            }            
-            
+            }
+        } else if (e.isa(Key::EventType)) {
+            const Rosegarden::Key key(e);
+            m_type = KeySignature;
+            int accidentals = key.getAccidentalCount();
+            if (!key.isSharp()) {
+                accidentals = -accidentals;
+            }
+            m_data1 = accidentals;
+            m_data2 = key.isMinor();
         } else {
             m_type = InvalidMappedEvent;
         }
@@ -285,6 +293,9 @@ operator<<(QDebug &dbg, const MappedEvent &mE)
         break;
     case MappedEvent::Text:
         type = "Text";
+        break;
+    case MappedEvent::KeySignature:
+        type = "KeySignature";
         break;
     default:
         // ??? This is a bitmask, so this might happen with perfectly

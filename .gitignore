@@ -20,4 +20,4 @@ src/gui/studio/DeviceManagerDialogUi.h
 data/AutoloadStrings.cpp
 data/InstrumentStrings.cpp
 data/QMenuStrings.cpp
-
+*.user

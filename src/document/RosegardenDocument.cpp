@@ -2104,6 +2104,7 @@ RosegardenDocument::insertRecordedMidi(const MappedEventList &mC)
         case MappedEvent::SystemMTCTransport:
         case MappedEvent::SystemMIDISyncAuto:
         case MappedEvent::SystemAudioFileFormat:
+        case MappedEvent::KeySignature:
         default:
             RG_DEBUG << "RosegardenDocument::insertRecordedMidi() - "
                      << "GOT UNSUPPORTED MAPPED EVENT";
