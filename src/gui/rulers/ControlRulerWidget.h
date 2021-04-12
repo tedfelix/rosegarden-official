@@ -92,7 +92,18 @@ public:
     bool isAnyRulerVisible();
 
     bool hasSelection();
+
+    /// Return the active ruler's event selection, or nullptr if none.
+    /**
+     * @author Tom Breton (Tehom)
+     */
     EventSelection *getSelection();
+
+    /**
+     * @return the active ruler's parameter situation, or nullptr if none.
+     *         Return is owned by caller.
+     * @author Tom Breton (Tehom)
+     */
     SelectionSituation *getSituation();
 
     ControlParameter *getControlParameter();

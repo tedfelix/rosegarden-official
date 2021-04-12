@@ -480,40 +480,40 @@ ControlRulerWidget::slotChildRulerSelectionChanged(EventSelection *s)
 bool
 ControlRulerWidget::isAnyRulerVisible()
 {
-    return m_controlRulerList.size();
+    return !m_controlRulerList.empty();
 }
 
 ControllerEventsRuler *
 ControlRulerWidget::getActiveRuler()
 {
-    QWidget * widget = m_stackedWidget->currentWidget ();
-    if (!widget) { return nullptr; }
-    return dynamic_cast <ControllerEventsRuler *> (widget);
+    return dynamic_cast <ControllerEventsRuler *>(
+            m_stackedWidget->currentWidget());
 }
 
 PropertyControlRuler *
 ControlRulerWidget::getActivePropertyRuler()
 {
-    QWidget * widget = m_stackedWidget->currentWidget ();
-    if (!widget) { return nullptr; }
-    return dynamic_cast <PropertyControlRuler *> (widget);
+    return dynamic_cast <PropertyControlRuler *>(
+            m_stackedWidget->currentWidget());
 }
 
 bool
 ControlRulerWidget::hasSelection()
 {
     ControllerEventsRuler *ruler = getActiveRuler();
-    if (!ruler) { return false; }
-    return ruler->getEventSelection() ? true : false;
+    if (!ruler)
+        return false;
+
+    return (ruler->getEventSelection() != nullptr);
 }
 
-// Return the active ruler's event selection, or nullptr if none.
-// @author Tom Breton (Tehom)
 EventSelection *
 ControlRulerWidget::getSelection()
 {
     ControllerEventsRuler *ruler = getActiveRuler();
-    if (!ruler) { return nullptr; }
+    if (!ruler)
+        return nullptr;
+
     return ruler->getEventSelection();
 }
 
@@ -521,24 +521,28 @@ ControlParameter *
 ControlRulerWidget::getControlParameter()
 {
     ControllerEventsRuler *ruler = getActiveRuler();
-    if (!ruler) { return nullptr; }
+    if (!ruler)
+        return nullptr;
+
     return ruler->getControlParameter();
 }
 
-// @return the active ruler's parameter situation, or nullptr if none.
-// Return is owned by caller.
-// @author Tom Breton (Tehom)
 SelectionSituation *
 ControlRulerWidget::getSituation()
 {
     ControllerEventsRuler *ruler = getActiveRuler();
-    if (!ruler) { return nullptr; }
-    EventSelection * selection = ruler->getEventSelection();
-    if (!selection) { return nullptr; }
-    ControlParameter * cp = ruler->getControlParameter();
-    if (!cp) { return nullptr; }
-    return
-        new SelectionSituation(cp->getType(), selection);
+    if (!ruler)
+        return nullptr;
+
+    EventSelection *selection = ruler->getEventSelection();
+    if (!selection)
+        return nullptr;
+
+    ControlParameter *cp = ruler->getControlParameter();
+    if (!cp)
+        return nullptr;
+
+    return new SelectionSituation(cp->getType(), selection);
 }
 
 
