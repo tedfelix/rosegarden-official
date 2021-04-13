@@ -151,6 +151,13 @@ signals:
 
 private:
 
+    /// All of the Segments that the parent editor might switch between.
+    /**
+     * We hold on to this so that we can update the ruler lists for all
+     * of these Segments when rulers are opened and closed.
+     */
+    std::vector<Segment *> m_segments;
+
     /// The Segment we are currently editing.
     ViewSegment *m_viewSegment;
 

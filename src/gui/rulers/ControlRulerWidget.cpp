@@ -91,15 +91,9 @@ ControlRulerWidget::ControlRulerWidget() :
 }
 
 void
-ControlRulerWidget::setSegments(std::vector<Segment *> /*segments*/)
+ControlRulerWidget::setSegments(std::vector<Segment *> segments)
 {
-    // ??? This is needed for the Segment ruler list.  It
-    //     will allow us to update the ruler list for each Segment when
-    //     rulers are added or removed.  I believe the only other part
-    //     of the system that knows this is the scene.  Probably not
-    //     easier to get it from there given where this class is.
-    //m_segments = segments;
-
+    m_segments = segments;
 }
 
 void
@@ -209,25 +203,15 @@ ControlRulerWidget::launchMatrixRulers()
     if (!m_scale)
         RG_WARNING << "launchMatrixRulers(): WARNING: No ruler scale.";
 
-    // Make a copy since there's a chance we'll be modifying it.
-    // We shouldn't be modifying it, but better safe than sorry.
-    // ??? See launchNotationRulers() for the notation version.
-    std::set<Segment::Ruler> rulers =
-            m_viewSegment->getSegment().matrixRulers;
+    std::set<Segment::Ruler> rulers;
 
-#if 0
-    // Testing...
-    Segment::Ruler ruler;
-    ruler.type = "pitchbend";
-    rulers.insert(ruler);
-    ruler.type = "velocity";
-    rulers.insert(ruler);
-    ruler.type = "controller";
-    ruler.ccNumber = 7;
-    rulers.insert(ruler);
-#endif
+    // For each segment, compute the union of the ruler lists.
+    for (const Segment *segment : m_segments) {
+        rulers.insert(segment->matrixRulers.cbegin(),
+                      segment->matrixRulers.cend());
+    }
 
-    // For each ruler in the first Segment, bring up that ruler.
+    // For each ruler, bring up that ruler.
     for (const Segment::Ruler &ruler : rulers) {
         if (ruler.type == Controller::EventType) {
             const ControlParameter *cp = getControlParameter2(
@@ -388,11 +372,12 @@ ControlRulerWidget::removeRuler(ControlRuler *ruler)
     // Remove from the list.
     m_controlRulerList.remove(ruler);
 
-    // Remove from Segment's ruler list.
-    // ??? This only affects the current Segment.  Needs to affect all
-    //     Segments in a multi-Segment case.  See setSegments().
-    m_viewSegment->getSegment().matrixRulers.erase(
-            getSegmentRuler(ruler));
+    Segment::Ruler segmentRuler = getSegmentRuler(ruler);
+
+    // Remove from all Segment ruler lists.
+    for (Segment *segment : m_segments) {
+        segment->matrixRulers.erase(segmentRuler);
+    }
 
     // Close the ruler window.
     delete ruler;
@@ -426,11 +411,12 @@ ControlRulerWidget::addRuler(ControlRuler *controlRuler, QString name)
     controlRuler->slotSetPannedRect(m_pannedRect);
     slotSetTool(m_currentToolName);
 
-    // Add to Segment's ruler list.
-    // ??? This only affects the current Segment.  Needs to affect all
-    //     Segments in a multi-Segment case.  See setSegments().
-    m_viewSegment->getSegment().matrixRulers.insert(
-            getSegmentRuler(controlRuler));
+    Segment::Ruler segmentRuler = getSegmentRuler(controlRuler);
+
+    // Add to all Segment ruler lists.
+    for (Segment *segment : m_segments) {
+        segment->matrixRulers.insert(segmentRuler);
+    }
 
 }
 
