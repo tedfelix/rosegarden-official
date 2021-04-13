@@ -91,7 +91,7 @@ ControlRulerWidget::ControlRulerWidget() :
 }
 
 void
-ControlRulerWidget::setSegments(std::vector<Segment *> segments)
+ControlRulerWidget::setSegments(std::vector<Segment *> /*segments*/)
 {
     // ??? This is needed for the Segment ruler list.  It
     //     will allow us to update the ruler list for each Segment when
@@ -279,31 +279,36 @@ ControlRulerWidget::togglePropertyRuler(const PropertyName &propertyName)
     addPropertyRuler(propertyName);
 }
 
-bool hasPitchBend(Segment *segment)
+namespace
 {
-    RosegardenDocument *document = RosegardenMainWindow::self()->getDocument();
+    bool hasPitchBend(Segment *segment)
+    {
+        RosegardenDocument *document = RosegardenMainWindow::self()->getDocument();
 
-    Track *track =
-            document->getComposition().getTrackById(segment->getTrack());
+        Track *track =
+                document->getComposition().getTrackById(segment->getTrack());
 
-    Instrument *instrument = document->getStudio().
-        getInstrumentById(track->getInstrument());
+        Instrument *instrument = document->getStudio().
+            getInstrumentById(track->getInstrument());
 
-    if (!instrument)
+        if (!instrument)
+            return false;
+
+        Controllable *controllable = instrument->getDevice()->getControllable();
+
+        if (!controllable)
+            return false;
+
+        // Check whether the device has a pitchbend controller
+        // ??? Why not use
+        //     Controllable::getControlParameter(type, controllerNumber)?
+        for (const ControlParameter &cp : controllable->getControlParameters()) {
+            if (cp.getType() == PitchBend::EventType)
+                return true;
+        }
+
         return false;
-
-    Controllable *controllable = instrument->getDevice()->getControllable();
-
-    if (!controllable)
-        return false;
-
-    // Check whether the device has a pitchbend controller
-    for (const ControlParameter &cp : controllable->getControlParameters()) {
-        if (cp.getType() == PitchBend::EventType)
-            return true;
     }
-
-    return false;
 }
 
 void
@@ -338,6 +343,38 @@ ControlRulerWidget::togglePitchBendRuler()
     addControlRuler(ControlParameter::getPitchBend());
 }
 
+namespace
+{
+    // Non-O-O approach.  This could be pushed into ControlRuler
+    // and its derivers as getSegmentRuler().
+    Segment::Ruler getSegmentRuler(const ControlRuler *controlRuler)
+    {
+        Segment::Ruler segmentRuler;
+
+        // Is it a PropertyControlRuler?
+        const PropertyControlRuler *pcr =
+                dynamic_cast<const PropertyControlRuler *>(controlRuler);
+        if (pcr) {
+            segmentRuler.type = BaseProperties::VELOCITY.getName();
+            return segmentRuler;
+        }
+
+        // Is it a ControllerEventsRuler?
+        const ControllerEventsRuler *cer =
+                dynamic_cast<const ControllerEventsRuler *>(controlRuler);
+        if (cer) {
+            const ControlParameter *cp = cer->getControlParameter();
+
+            // Handle pitchbend and CCs (and everything else).
+            segmentRuler.type = cp->getType();
+            segmentRuler.ccNumber = cp->getControllerNumber();
+            return segmentRuler;
+        }
+
+        return segmentRuler;
+    }
+}
+
 void
 ControlRulerWidget::removeRuler(ControlRuler *ruler)
 {
@@ -348,11 +385,17 @@ ControlRulerWidget::removeRuler(ControlRuler *ruler)
     // Remove from the tabs.
     m_tabBar->removeTab(index);
 
-    // Close the ruler window.
-    delete ruler;
-
     // Remove from the list.
     m_controlRulerList.remove(ruler);
+
+    // Remove from Segment's ruler list.
+    // ??? This only affects the current Segment.  Needs to affect all
+    //     Segments in a multi-Segment case.  See setSegments().
+    m_viewSegment->getSegment().matrixRulers.erase(
+            getSegmentRuler(ruler));
+
+    // Close the ruler window.
+    delete ruler;
 }
 
 void
@@ -365,10 +408,10 @@ ControlRulerWidget::slotRemoveRuler(int index)
 }
 
 void
-ControlRulerWidget::addRuler(ControlRuler *controlruler, QString name)
+ControlRulerWidget::addRuler(ControlRuler *controlRuler, QString name)
 {
     // Add to the stacked widget.
-    m_stackedWidget->addWidget(controlruler);
+    m_stackedWidget->addWidget(controlRuler);
 
     // Add to tabs.
     // (Controller names, if translatable, come from AutoLoadStrings.cpp and are
@@ -377,11 +420,18 @@ ControlRulerWidget::addRuler(ControlRuler *controlruler, QString name)
     m_tabBar->setCurrentIndex(index);
 
     // Add to ruler list.
-    m_controlRulerList.push_back(controlruler);
+    m_controlRulerList.push_back(controlRuler);
 
     // Configure the ruler.
-    controlruler->slotSetPannedRect(m_pannedRect);
+    controlRuler->slotSetPannedRect(m_pannedRect);
     slotSetTool(m_currentToolName);
+
+    // Add to Segment's ruler list.
+    // ??? This only affects the current Segment.  Needs to affect all
+    //     Segments in a multi-Segment case.  See setSegments().
+    m_viewSegment->getSegment().matrixRulers.insert(
+            getSegmentRuler(controlRuler));
+
 }
 
 void
