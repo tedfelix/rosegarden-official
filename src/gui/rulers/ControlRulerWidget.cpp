@@ -24,7 +24,7 @@
 #include "ControllerEventsRuler.h"
 #include "PropertyControlRuler.h"
 
-#include "document/RosegardenDocument.h"
+#include "base/BaseProperties.h"
 #include "base/Composition.h"
 #include "base/ControlParameter.h"
 #include "base/Controllable.h"
@@ -33,10 +33,13 @@
 #include "base/MidiDevice.h"
 #include "base/MidiTypes.h"  // for PitchBend::EventType
 #include "base/PropertyName.h"
+#include "document/RosegardenDocument.h"
 #include "gui/application/RosegardenMainWindow.h"
+#include "base/Segment.h"
 #include "base/Selection.h"  // for EventSelection
 #include "base/parameterpattern/SelectionSituation.h"
 #include "base/SoftSynthDevice.h"
+#include "base/Studio.h"
 #include "base/Track.h"
 
 #include "misc/Debug.h"
@@ -88,7 +91,7 @@ ControlRulerWidget::ControlRulerWidget() :
 }
 
 void
-ControlRulerWidget::setSegments(std::vector<Segment *> /*segments*/)
+ControlRulerWidget::setSegments(std::vector<Segment *> segments)
 {
     // ??? This is needed for the Segment ruler list.  It
     //     will allow us to update the ruler list for each Segment when
@@ -97,7 +100,6 @@ ControlRulerWidget::setSegments(std::vector<Segment *> /*segments*/)
     //     easier to get it from there given where this class is.
     //m_segments = segments;
 
-    // ??? Need to launch all rulers from the Segments' ruler lists.
 }
 
 void
@@ -156,6 +158,99 @@ ControlRulerWidget::setRulerScale(RulerScale *scale, int gutter)
     for (ControlRuler *ruler : m_controlRulerList) {
         ruler->setRulerScale(scale);
     }
+}
+
+const ControlParameter *
+getControlParameter2(const Segment &segment, int ccNumber)
+{
+    // Get the Device for the Segment.
+
+    // ??? This is just a convoluted mess that seems like it belongs
+    //     somewhere where we can reuse it or a part of it.  Code
+    //     similar to this appears all over the place.
+    //     Segment::getInstrument() might be a place to start.
+    //     Composition already has a getInstrumentId(const Segment *).
+    //     Maybe it could go there.
+
+    RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
+    if (!doc)
+        return nullptr;
+
+    Composition *composition = segment.getComposition();
+    if (!composition)
+        return nullptr;
+
+    InstrumentId instrumentId = composition->getInstrumentId(&segment);
+
+    Instrument *instrument = doc->getStudio().getInstrumentById(instrumentId);
+    if (!instrument)
+        return nullptr;
+
+    Device *device = instrument->getDevice();
+    if (!device)
+        return nullptr;
+
+    Controllable *controllable = device->getControllable();
+    if (!controllable)
+        return nullptr;
+
+    return controllable->getControlParameter(Controller::EventType, ccNumber);
+}
+
+void
+ControlRulerWidget::launchMatrixRulers()
+{
+    // Launch all rulers from the Segments' ruler lists.
+    // As a separate routine this can be called by the parent after everything
+    // is in place.
+
+    if (!m_viewSegment)
+        RG_WARNING << "launchMatrixRulers(): WARNING: No view segment.";
+    if (!m_scale)
+        RG_WARNING << "launchMatrixRulers(): WARNING: No ruler scale.";
+
+    // Make a copy since there's a chance we'll be modifying it.
+    // We shouldn't be modifying it, but better safe than sorry.
+    // ??? See launchNotationRulers() for the notation version.
+    std::set<Segment::Ruler> rulers =
+            m_viewSegment->getSegment().matrixRulers;
+
+#if 0
+    // Testing...
+    Segment::Ruler ruler;
+    ruler.type = "pitchbend";
+    rulers.insert(ruler);
+    ruler.type = "velocity";
+    rulers.insert(ruler);
+    ruler.type = "controller";
+    ruler.ccNumber = 7;
+    rulers.insert(ruler);
+#endif
+
+    // For each ruler in the first Segment, bring up that ruler.
+    for (const Segment::Ruler &ruler : rulers) {
+        if (ruler.type == Controller::EventType) {
+            const ControlParameter *cp = getControlParameter2(
+                    m_viewSegment->getSegment(), ruler.ccNumber);
+            addControlRuler(*cp);
+        } else if (ruler.type == PitchBend::EventType) {
+            RG_DEBUG << "launchInitialRulers(): Launching pitchbend ruler";
+            addControlRuler(ControlParameter::getPitchBend());
+        } else if (ruler.type == BaseProperties::VELOCITY.getName()) {
+            RG_DEBUG << "launchInitialRulers(): Launching velocity ruler";
+            addPropertyRuler(ruler.type);
+        } else {
+            RG_WARNING << "launchInitialRulers(): WARNING: Unexpected ruler in Segment.";
+        }
+    }
+}
+
+void
+ControlRulerWidget::launchNotationRulers()
+{
+    // ??? Probably factor out making a copy of the ruler set into each of
+    //     these then a launchRulers(std::set<Segment::Ruler> rulers) to
+    //     do the rest.
 }
 
 void

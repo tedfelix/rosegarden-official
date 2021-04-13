@@ -450,6 +450,8 @@ MatrixWidget::setSegments(RosegardenDocument *document,
     connect(m_controlsWidget, &ControlRulerWidget::childRulerSelectionChanged,
             m_scene, &MatrixScene::slotRulerSelectionChanged);
 
+    m_controlsWidget->launchMatrixRulers();
+
     connect(m_scene, SIGNAL(selectionChanged()),
             this, SIGNAL(selectionChanged()));
 
@@ -520,32 +522,6 @@ MatrixWidget::setSegments(RosegardenDocument *document,
     setHorizontalZoomFactor(segments[0]->matrixHZoomFactor);
     setVerticalZoomFactor(segments[0]->matrixVZoomFactor);
 
-#if 0
-    // For each ruler in the first Segment, bring up that ruler.
-    // ??? Too early?
-    // ??? Push this down into ControlRulerWidget where it belongs.
-    for (const Segment::Ruler &ruler : segments[0]->matrixRulers) {
-        if (ruler.type == Controller::EventType) {
-            // ??? addControlRuler() is strange.  It takes a QAction.
-            //     We need one that takes just a ccNumber.
-            //     Let's try cheating.  If any of these fields are used,
-            //     we might be in trouble.
-            ControlParameter cp("name", ruler.type, "description");
-            cp.setControllerNumber(ruler.ccNumber);
-            m_controlsWidget->addControlRuler(cp);
-        } else if (ruler.type == PitchBend::EventType) {
-            //showPitchBendRuler();
-            // ??? This is a *toggle*.  We don't want a toggle here.
-            m_controlsWidget->togglePitchBendRuler();
-        } else if (ruler.type == BaseProperties::VELOCITY.getName()) {
-            //showVelocityRuler();
-            // ??? This is a *toggle*.  We don't want a toggle here.
-            m_controlsWidget->togglePropertyRuler(BaseProperties::VELOCITY);
-        } else {
-            RG_WARNING << "setSegments(): WARNING: Unexpected ruler in Segment.";
-        }
-    }
-#endif
 }
 
 void

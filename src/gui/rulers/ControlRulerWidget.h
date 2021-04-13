@@ -78,6 +78,9 @@ public:
     /// gutter is more of a left margin.  See m_gutter.
     void setRulerScale(RulerScale *, int gutter);
 
+    void launchMatrixRulers();
+    void launchNotationRulers();
+
     // ??? This doesn't toggle for the menu.  Consequently we can end
     //     up with duplicate rulers.  Need to fix this.
     void addControlRuler(const ControlParameter &);
