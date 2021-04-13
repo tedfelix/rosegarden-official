@@ -198,8 +198,14 @@ public:
     /**
      * Get the Instrument Id of a given segment.
      **/
-    InstrumentId getInstrumentId(Segment *s) const {
-        Track* track = getTrackById(s->getTrack());
+    InstrumentId getInstrumentId(const Segment *segment) const {
+        if (!segment)
+            return NoInstrument;
+
+        const Track *track = getTrackById(segment->getTrack());
+        if (!track)
+            return NoInstrument;
+
         return track->getInstrument();
     };
 
