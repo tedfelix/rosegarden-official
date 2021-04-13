@@ -1625,22 +1625,23 @@ void RosegardenDocument::saveSegment(QTextStream& outStream, Segment *segment,
         }
 
         outStream << "  <matrix>\n";
+
+        // Zoom factors
         outStream << "    <hzoom factor=\"" << segment->matrixHZoomFactor <<
                      "\" />\n";
         outStream << "    <vzoom factor=\"" << segment->matrixVZoomFactor <<
                      "\" />\n";
 
-#if 0
-        // For each ruler
+        // For each matrix ruler...
+        for (const Segment::Ruler &ruler : segment->matrixRulers)
         {
-            outStream << "    <ruler type=\"" << ruler.m_type << "\"";
+            outStream << "    <ruler type=\"" << ruler.type << "\"";
 
-            if (type == Controller::EventType)
-                outStream << " ccnumber=\"" << ruler.m_ccNumber << "\"";
+            if (ruler.type == Controller::EventType)
+                outStream << " ccnumber=\"" << ruler.ccNumber << "\"";
 
             outStream << " />\n";
         }
-#endif
 
         outStream << "  </matrix>\n";
 

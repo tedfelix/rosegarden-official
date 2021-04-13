@@ -1090,6 +1090,15 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         if (m_currentSegment && m_inMatrix)
             m_currentSegment->matrixVZoomFactor = atts.value("factor").toDouble();
 
+    } else if (lcName == "ruler") {  // <ruler>
+
+        if (m_currentSegment && m_inMatrix) {
+            Segment::Ruler segmentRuler;
+            segmentRuler.type = atts.value("type").toStdString();
+            segmentRuler.ccNumber = atts.value("ccnumber").toInt();
+            m_currentSegment->matrixRulers.insert(segmentRuler);
+        }
+
     } else if (lcName == "gui") {  // <gui>
 
         // This element is no longer supported.  But please don't reuse
