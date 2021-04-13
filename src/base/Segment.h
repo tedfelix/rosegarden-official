@@ -27,6 +27,7 @@
 #include "RefreshStatus.h"
 #include "RealTime.h"
 #include "MidiProgram.h"
+#include "MidiTypes.h"  // for Controller::EventType
 
 #include <QColor>
 #include <QSharedPointer>
@@ -728,27 +729,32 @@ public:
 
     struct Ruler
     {
-      Ruler() : type(), ccNumber(0) { };
+        Ruler() : type(), ccNumber(0) { };
 
-      // Values:
-      //   "controller" (Controller::EventType) - Controller ruler.
-      //   "pitchbend" (PitchBend::EventType) - PitchBend ruler.
-      //   "velocity" (BaseProperties::VELOCITY.getName()) - Velocity ruler.
-      std::string type;
+        // Values:
+        //   "controller" (Controller::EventType) - Controller ruler.
+        //   "pitchbend" (PitchBend::EventType) - PitchBend ruler.
+        //   "velocity" (BaseProperties::VELOCITY.getName()) - Velocity ruler.
+        std::string type;
 
-      // Specific CC number for Controller::EventType.
-      int ccNumber;
+        // Specific CC number for Controller::EventType.
+        int ccNumber;
 
-      bool operator<(const Ruler &r) const
-      {
-          if (type == r.type)
-              return (ccNumber < r.ccNumber);
-          else
-              return (type < r.type);
-      }
+        bool operator<(const Ruler &r) const
+        {
+            if (type == Controller::EventType  &&
+                r.type == Controller::EventType)
+                return (ccNumber < r.ccNumber);
+            else
+                return (type < r.type);
+        }
     };
+    typedef std::set<Ruler> RulerSet;
+
     /// Rulers for the Matrix editor.
-    std::set<Ruler> matrixRulers;
+    RulerSet matrixRulers;
+    /// Rulers for the Matrix editor.
+    RulerSet notationRulers;
 
     /**
      * The compare class used by Composition

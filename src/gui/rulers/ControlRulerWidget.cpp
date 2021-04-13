@@ -91,12 +91,6 @@ ControlRulerWidget::ControlRulerWidget() :
 }
 
 void
-ControlRulerWidget::setSegments(std::vector<Segment *> segments)
-{
-    m_segments = segments;
-}
-
-void
 ControlRulerWidget::setViewSegment(ViewSegment *viewSegment)
 {
     // No change?  Bail.
@@ -192,12 +186,8 @@ getControlParameter2(const Segment &segment, int ccNumber)
 }
 
 void
-ControlRulerWidget::launchMatrixRulers()
+ControlRulerWidget::launchRulers()
 {
-    // Launch all rulers from the Segments' ruler lists.
-    // As a separate routine this can be called by the parent after everything
-    // is in place.
-
     if (!m_viewSegment)
         RG_WARNING << "launchMatrixRulers(): WARNING: No view segment.";
     if (!m_scale)
@@ -205,10 +195,10 @@ ControlRulerWidget::launchMatrixRulers()
 
     std::set<Segment::Ruler> rulers;
 
-    // For each segment, compute the union of the ruler lists.
-    for (const Segment *segment : m_segments) {
-        rulers.insert(segment->matrixRulers.cbegin(),
-                      segment->matrixRulers.cend());
+    // For each segment ruler set, compute the union of the ruler sets.
+    for (const Segment::RulerSet *segmentRulerSet : m_segmentRulerSets) {
+        rulers.insert(segmentRulerSet->cbegin(),
+                      segmentRulerSet->cend());
     }
 
     // For each ruler, bring up that ruler.
@@ -230,11 +220,29 @@ ControlRulerWidget::launchMatrixRulers()
 }
 
 void
-ControlRulerWidget::launchNotationRulers()
+ControlRulerWidget::launchMatrixRulers(std::vector<Segment *> segments)
 {
-    // ??? Probably factor out making a copy of the ruler set into each of
-    //     these then a launchRulers(std::set<Segment::Ruler> rulers) to
-    //     do the rest.
+    // Launch all rulers from the Segments' ruler lists.
+    // As a separate routine this can be called by the parent after everything
+    // is in place.
+
+    // For each Segment, get the ruler lists.
+    for (Segment *segment: segments) {
+        m_segmentRulerSets.push_back(&(segment->matrixRulers));
+    }
+
+    launchRulers();
+}
+
+void
+ControlRulerWidget::launchNotationRulers(std::vector<Segment *> segments)
+{
+    // For each Segment, get the ruler lists.
+    for (Segment *segment: segments) {
+        m_segmentRulerSets.push_back(&(segment->notationRulers));
+    }
+
+    launchRulers();
 }
 
 void
@@ -351,7 +359,8 @@ namespace
 
             // Handle pitchbend and CCs (and everything else).
             segmentRuler.type = cp->getType();
-            segmentRuler.ccNumber = cp->getControllerNumber();
+            if (cp->getType() == Controller::EventType)
+                segmentRuler.ccNumber = cp->getControllerNumber();
             return segmentRuler;
         }
 
@@ -374,9 +383,9 @@ ControlRulerWidget::removeRuler(ControlRuler *ruler)
 
     Segment::Ruler segmentRuler = getSegmentRuler(ruler);
 
-    // Remove from all Segment ruler lists.
-    for (Segment *segment : m_segments) {
-        segment->matrixRulers.erase(segmentRuler);
+    // Remove from all Segment ruler sets.
+    for (Segment::RulerSet *segmentRulerSet : m_segmentRulerSets) {
+        segmentRulerSet->erase(segmentRuler);
     }
 
     // Close the ruler window.
@@ -413,9 +422,9 @@ ControlRulerWidget::addRuler(ControlRuler *controlRuler, QString name)
 
     Segment::Ruler segmentRuler = getSegmentRuler(controlRuler);
 
-    // Add to all Segment ruler lists.
-    for (Segment *segment : m_segments) {
-        segment->matrixRulers.insert(segmentRuler);
+    // Add to all Segment ruler sets.
+    for (Segment::RulerSet *segmentRulerSet : m_segmentRulerSets) {
+        segmentRulerSet->insert(segmentRuler);
     }
 
 }

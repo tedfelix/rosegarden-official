@@ -474,7 +474,6 @@ NotationWidget::setSegments(RosegardenDocument *document,
 
     m_controlRulerWidget = new ControlRulerWidget;
     m_layout->addWidget(m_controlRulerWidget, CONTROLS_ROW, MAIN_COL, 1, 1);
-    m_controlRulerWidget->setSegments(segments);
     m_controlRulerWidget->setViewSegment(
             dynamic_cast<ViewSegment *>(m_scene->getCurrentStaff()));
     m_controlRulerWidget->setRulerScale(m_referenceScale, m_leftGutter);
@@ -506,7 +505,7 @@ NotationWidget::setSegments(RosegardenDocument *document,
     connect(m_controlRulerWidget, &ControlRulerWidget::mouseRelease,
             this, &NotationWidget::slotCRWMouseRelease);
 
-    m_controlRulerWidget->launchNotationRulers();
+    m_controlRulerWidget->launchNotationRulers(segments);
 
     m_segmentLabel = new QLabel("Segment Label");
     m_segmentLabel->setAlignment(Qt::AlignHCenter);

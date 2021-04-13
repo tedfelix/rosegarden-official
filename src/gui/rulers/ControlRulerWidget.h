@@ -19,6 +19,7 @@
 
 #include "gui/general/AutoScroller.h"  // For FollowMode
 #include "base/Controllable.h"  // For ControlList
+#include "base/Segment.h"
 
 #include <QWidget>
 
@@ -53,21 +54,6 @@ class ControlRulerWidget : public QWidget
 public:
     ControlRulerWidget();
 
-    /// Set the Segment(s) from the document that we will be displaying.
-    /**
-     * This is only called once when the MatrixView comes up.  So this
-     * does not track the currently displayed Segment.  That's
-     * setViewSegment().
-     *
-     * ??? ControlRuler needs both the Segment and the ViewSegment
-     *     in order to function.  Should we get rid of this and
-     *     only deal in ViewSegments?  Would that make more sense?
-     *     To a certain extent, it would.  However, we *need* the
-     *     complete list of Segments so that we can maintain the
-     *     ruler lists.  So, I think we need to keep this.
-     */
-    void setSegments(std::vector<Segment *> segments);
-
     /// Switch to showing this Segment.
     /**
      * This is called (by the Scene) when the Segment being edited changes.
@@ -78,8 +64,10 @@ public:
     /// gutter is more of a left margin.  See m_gutter.
     void setRulerScale(RulerScale *, int gutter);
 
-    void launchMatrixRulers();
-    void launchNotationRulers();
+    /// Include all the Segments so that we can update their ruler lists.
+    void launchMatrixRulers(std::vector<Segment *> segments);
+    /// Include all the Segments so that we can update their ruler lists.
+    void launchNotationRulers(std::vector<Segment *> segments);
 
     // ??? This doesn't toggle for the menu.  Consequently we can end
     //     up with duplicate rulers.  Need to fix this.
@@ -151,15 +139,20 @@ signals:
 
 private:
 
-    /// All of the Segments that the parent editor might switch between.
+    /// Pointers to the ruler sets in each of the segments we can display.
     /**
+     * This allows us to treat matrix and notation the same throughout
+     * the code.
+     *
      * We hold on to this so that we can update the ruler lists for all
      * of these Segments when rulers are opened and closed.
      */
-    std::vector<Segment *> m_segments;
+    std::vector<Segment::RulerSet *> m_segmentRulerSets;
 
     /// The Segment we are currently editing.
     ViewSegment *m_viewSegment;
+
+    void launchRulers();
 
 
     // *** UI
