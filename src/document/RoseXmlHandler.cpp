@@ -218,6 +218,7 @@ RoseXmlHandler::RoseXmlHandler(RosegardenDocument *doc,
     m_inComposition(false),
     m_inColourMap(false),
     m_inMatrix(false),
+    m_inNotation(false),
     m_groupId(0),
     m_groupTupletBase(0),
     m_groupTupledCount(0),
@@ -1080,6 +1081,12 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         if (m_currentSegment)
             m_inMatrix = true;
 
+    } else if (lcName == "notation") {  // <notation>
+
+        // If we're in a <segment>, <notation> is valid.
+        if (m_currentSegment)
+            m_inNotation = true;
+
     } else if (lcName == "hzoom") {  // <hzoom>
 
         if (m_currentSegment && m_inMatrix)
@@ -1097,6 +1104,13 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             segmentRuler.type = atts.value("type").toStdString();
             segmentRuler.ccNumber = atts.value("ccnumber").toInt();
             m_currentSegment->matrixRulers.insert(segmentRuler);
+        }
+
+        if (m_currentSegment && m_inNotation) {
+            Segment::Ruler segmentRuler;
+            segmentRuler.type = atts.value("type").toStdString();
+            segmentRuler.ccNumber = atts.value("ccnumber").toInt();
+            m_currentSegment->notationRulers.insert(segmentRuler);
         }
 
     } else if (lcName == "gui") {  // <gui>
@@ -2519,6 +2533,8 @@ RoseXmlHandler::endElement(const QString& namespaceURI,
         m_colourMap = nullptr;
     } else if (lcName == "matrix") {
         m_inMatrix = false;
+    } else if (lcName == "notation") {
+        m_inNotation = false;
     }
 
     return true;

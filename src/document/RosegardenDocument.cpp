@@ -1624,6 +1624,8 @@ void RosegardenDocument::saveSegment(QTextStream& outStream, Segment *segment,
             outStream << "</chord>\n";
         }
 
+        // <matrix>
+
         outStream << "  <matrix>\n";
 
         // Zoom factors
@@ -1644,6 +1646,23 @@ void RosegardenDocument::saveSegment(QTextStream& outStream, Segment *segment,
         }
 
         outStream << "  </matrix>\n";
+
+        // <notation>
+
+        outStream << "  <notation>\n";
+
+        // For each notation ruler...
+        for (const Segment::Ruler &ruler : segment->notationRulers)
+        {
+            outStream << "    <ruler type=\"" << ruler.type << "\"";
+
+            if (ruler.type == Controller::EventType)
+                outStream << " ccnumber=\"" << ruler.ccNumber << "\"";
+
+            outStream << " />\n";
+        }
+
+        outStream << "  </notation>\n";
 
     }
 
