@@ -25,6 +25,10 @@
 
 class QStackedWidget;
 
+#include <vector>
+#include <list>
+#include <memory>
+
 
 namespace Rosegarden
 {
@@ -146,8 +150,12 @@ private:
      *
      * We hold on to this so that we can update the ruler lists for all
      * of these Segments when rulers are opened and closed.
+     *
+     * ??? Could use weak_ptr instead of just hanging on to these
+     *     even if the Segment has gone away.  Probably not worth
+     *     the extra ifs for a few bytes of memory.
      */
-    std::vector<Segment::RulerSet *> m_segmentRulerSets;
+    std::vector<std::shared_ptr<Segment::RulerSet>> m_segmentRulerSets;
 
     /// The Segment we are currently editing.
     ViewSegment *m_viewSegment;

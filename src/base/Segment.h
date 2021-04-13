@@ -20,6 +20,7 @@
 #include <set>
 #include <list>
 #include <string>
+#include <memory>
 
 #include "Track.h"
 #include "Event.h"
@@ -752,9 +753,9 @@ public:
     typedef std::set<Ruler> RulerSet;
 
     /// Rulers for the Matrix editor.
-    RulerSet matrixRulers;
-    /// Rulers for the Matrix editor.
-    RulerSet notationRulers;
+    std::shared_ptr<RulerSet> matrixRulers;
+    /// Rulers for the Notation editor.
+    std::shared_ptr<RulerSet> notationRulers;
 
     /**
      * The compare class used by Composition

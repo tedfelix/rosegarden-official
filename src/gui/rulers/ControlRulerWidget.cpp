@@ -196,7 +196,8 @@ ControlRulerWidget::launchRulers()
     std::set<Segment::Ruler> rulers;
 
     // For each segment ruler set, compute the union of the ruler sets.
-    for (const Segment::RulerSet *segmentRulerSet : m_segmentRulerSets) {
+    for (std::shared_ptr<const Segment::RulerSet> segmentRulerSet :
+             m_segmentRulerSets) {
         rulers.insert(segmentRulerSet->cbegin(),
                       segmentRulerSet->cend());
     }
@@ -228,7 +229,7 @@ ControlRulerWidget::launchMatrixRulers(std::vector<Segment *> segments)
 
     // For each Segment, get the ruler lists.
     for (Segment *segment: segments) {
-        m_segmentRulerSets.push_back(&(segment->matrixRulers));
+        m_segmentRulerSets.push_back(segment->matrixRulers);
     }
 
     launchRulers();
@@ -239,7 +240,7 @@ ControlRulerWidget::launchNotationRulers(std::vector<Segment *> segments)
 {
     // For each Segment, get the ruler lists.
     for (Segment *segment: segments) {
-        m_segmentRulerSets.push_back(&(segment->notationRulers));
+        m_segmentRulerSets.push_back(segment->notationRulers);
     }
 
     launchRulers();
@@ -384,7 +385,8 @@ ControlRulerWidget::removeRuler(ControlRuler *ruler)
     Segment::Ruler segmentRuler = getSegmentRuler(ruler);
 
     // Remove from all Segment ruler sets.
-    for (Segment::RulerSet *segmentRulerSet : m_segmentRulerSets) {
+    for (std::shared_ptr<Segment::RulerSet> segmentRulerSet :
+             m_segmentRulerSets) {
         segmentRulerSet->erase(segmentRuler);
     }
 
@@ -423,7 +425,8 @@ ControlRulerWidget::addRuler(ControlRuler *controlRuler, QString name)
     Segment::Ruler segmentRuler = getSegmentRuler(controlRuler);
 
     // Add to all Segment ruler sets.
-    for (Segment::RulerSet *segmentRulerSet : m_segmentRulerSets) {
+    for (std::shared_ptr<Segment::RulerSet> segmentRulerSet :
+             m_segmentRulerSets) {
         segmentRulerSet->insert(segmentRuler);
     }
 

@@ -1103,14 +1103,14 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             Segment::Ruler segmentRuler;
             segmentRuler.type = atts.value("type").toStdString();
             segmentRuler.ccNumber = atts.value("ccnumber").toInt();
-            m_currentSegment->matrixRulers.insert(segmentRuler);
+            m_currentSegment->matrixRulers->insert(segmentRuler);
         }
 
         if (m_currentSegment && m_inNotation) {
             Segment::Ruler segmentRuler;
             segmentRuler.type = atts.value("type").toStdString();
             segmentRuler.ccNumber = atts.value("ccnumber").toInt();
-            m_currentSegment->notationRulers.insert(segmentRuler);
+            m_currentSegment->notationRulers->insert(segmentRuler);
         }
 
     } else if (lcName == "gui") {  // <gui>

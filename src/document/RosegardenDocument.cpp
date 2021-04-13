@@ -1635,7 +1635,7 @@ void RosegardenDocument::saveSegment(QTextStream& outStream, Segment *segment,
                      "\" />\n";
 
         // For each matrix ruler...
-        for (const Segment::Ruler &ruler : segment->matrixRulers)
+        for (const Segment::Ruler &ruler : *(segment->matrixRulers))
         {
             outStream << "    <ruler type=\"" << ruler.type << "\"";
 
@@ -1652,7 +1652,7 @@ void RosegardenDocument::saveSegment(QTextStream& outStream, Segment *segment,
         outStream << "  <notation>\n";
 
         // For each notation ruler...
-        for (const Segment::Ruler &ruler : segment->notationRulers)
+        for (const Segment::Ruler &ruler : *(segment->notationRulers))
         {
             outStream << "    <ruler type=\"" << ruler.type << "\"";
 
