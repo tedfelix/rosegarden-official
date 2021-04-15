@@ -49,6 +49,10 @@ static int g_runtimeSegmentId = 0;
 
 Segment::Segment(SegmentType segmentType, timeT startTime) :
     EventContainer(),
+    matrixHZoomFactor(1.0),
+    matrixVZoomFactor(1.0),
+    matrixRulers(new RulerSet),
+    notationRulers(new RulerSet),
     m_composition(nullptr),
     m_startTime(startTime),
     m_endMarkerTime(nullptr),
@@ -179,12 +183,6 @@ Segment::~Segment()
         // are just aliases for events in the main segment
         delete m_clefKeyList;
     }
-
-    // Clear EventRulers
-    //
-    EventRulerListIterator it;
-    for (it = m_eventRulerList.begin(); it != m_eventRulerList.end(); ++it) delete *it;
-    m_eventRulerList.clear();
 
     // delete content
     for (iterator it = begin(); it != end(); ++it) delete (*it);
@@ -1648,49 +1646,6 @@ Segment::getPreviewColour() const
     // And white for dark backgrounds
     return Qt::white;
 }
-
-void
-Segment::addEventRuler(const std::string &type, int controllerValue, bool active)
-{
-    EventRulerListConstIterator it;
-
-    for (it = m_eventRulerList.begin(); it != m_eventRulerList.end(); ++it)
-        if ((*it)->m_type == type && (*it)->m_controllerValue == controllerValue)
-            return;
-
-    m_eventRulerList.push_back(new EventRuler(type, controllerValue, active));
-}
-
-bool
-Segment::deleteEventRuler(const std::string &type, int controllerValue)
-{
-    EventRulerListIterator it;
-
-    for (it = m_eventRulerList.begin(); it != m_eventRulerList.end(); ++it)
-    {
-        if ((*it)->m_type == type && (*it)->m_controllerValue == controllerValue)
-        {
-            delete *it;
-            m_eventRulerList.erase(it);
-            return true;
-        }
-    }
-
-    return false;
-}
-
-
-Segment::EventRuler*
-Segment::getEventRuler(const std::string &type, int controllerValue)
-{
-    EventRulerListConstIterator it;
-    for (it = m_eventRulerList.begin(); it != m_eventRulerList.end(); ++it)
-        if ((*it)->m_type == type && (*it)->m_controllerValue == controllerValue)
-            return *it;
-
-    return nullptr;
-}
-
 
 int
 Segment::getVerseCount()

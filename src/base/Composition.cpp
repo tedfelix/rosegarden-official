@@ -2146,17 +2146,20 @@ SegmentMultiSet
 Composition::getInstrumentSegments(Segment *s, timeT t) const
 {
     SegmentMultiSet segments;
-    InstrumentId Instrument = getInstrumentId(s);
+    InstrumentId instrumentId = getInstrumentId(s);
 
+    // For each Segment in the Composition...
     const SegmentMultiSet& allSegments = getSegments();
     for (Composition::iterator i = allSegments.begin();
          i != allSegments.end();
          ++i)
-        {
-            if (((*i)->getStartTime() < t) &&
-                (getInstrumentId(*i) == Instrument))
-                { segments.insert(*i); }
+    {
+        if (((*i)->getStartTime() < t)  &&
+            (getInstrumentId(*i) == instrumentId)) {
+            segments.insert(*i);
         }
+    }
+
     return segments;
 }
 

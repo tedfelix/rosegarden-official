@@ -217,6 +217,8 @@ RoseXmlHandler::RoseXmlHandler(RosegardenDocument *doc,
     m_inGroup(false),
     m_inComposition(false),
     m_inColourMap(false),
+    m_inMatrix(false),
+    m_inNotation(false),
     m_groupId(0),
     m_groupTupletBase(0),
     m_groupTupledCount(0),
@@ -1073,31 +1075,62 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
         m_groupIdMap.clear();
 
-    } else if (lcName == "gui") {
+    } else if (lcName == "matrix") {  // <matrix>
 
-        if (m_section != InSegment) {
-            m_errorString = "Found GUI element outside Segment";
-            return false;
+        // If we're in a <segment>, <matrix> is valid.
+        if (m_currentSegment)
+            m_inMatrix = true;
+
+    } else if (lcName == "notation") {  // <notation>
+
+        // If we're in a <segment>, <notation> is valid.
+        if (m_currentSegment)
+            m_inNotation = true;
+
+    } else if (lcName == "hzoom") {  // <hzoom>
+
+        if (m_currentSegment && m_inMatrix)
+            m_currentSegment->matrixHZoomFactor = atts.value("factor").toDouble();
+
+    } else if (lcName == "vzoom") {  // <vzoom>
+
+        if (m_currentSegment && m_inMatrix)
+            m_currentSegment->matrixVZoomFactor = atts.value("factor").toDouble();
+
+    } else if (lcName == "ruler") {  // <ruler>
+
+        if (m_currentSegment && m_inMatrix) {
+            Segment::Ruler segmentRuler;
+            segmentRuler.type = atts.value("type").toStdString();
+            segmentRuler.ccNumber = atts.value("ccnumber").toInt();
+            m_currentSegment->matrixRulers->insert(segmentRuler);
         }
 
-    } else if (lcName == "controller") {
-
-        if (m_section != InSegment) {
-            m_errorString = "Found Controller element outside Segment";
-            return false;
+        if (m_currentSegment && m_inNotation) {
+            Segment::Ruler segmentRuler;
+            segmentRuler.type = atts.value("type").toStdString();
+            segmentRuler.ccNumber = atts.value("ccnumber").toInt();
+            m_currentSegment->notationRulers->insert(segmentRuler);
         }
 
-        QString type = atts.value("type");
-        //RG_DEBUG << "RoseXmlHandler::startElement - controller type = " << type;
+    } else if (lcName == "gui") {  // <gui>
 
-        if (type == strtoqstr(PitchBend::EventType))
-            m_currentSegment->addEventRuler(PitchBend::EventType);
-        else if (type == strtoqstr(Controller::EventType)) {
-            QString value = atts.value("value");
+        // This element is no longer supported.  But please don't reuse
+        // the name in case it pops up in an old file.
 
-            if (value != "")
-                m_currentSegment->addEventRuler(Controller::EventType, value.toInt());
-        }
+        // <gui> elements used to be found in <segment> elements.
+        // <gui> elements contained <controller> elements.
+        // The example file bogus-surf-jam.rg still has this.
+        // However, they never did anything.
+
+    } else if (lcName == "controller") {  // <controller>
+
+        // This element is no longer supported.  But please don't reuse
+        // the name in case it pops up in an old file.
+
+        // <controller> elements used to be found in <gui> elements.
+        // The example file bogus-surf-jam.rg still has this.
+        // However, they never did anything.
 
     } else if (lcName == "resync") {
 
@@ -2498,6 +2531,10 @@ RoseXmlHandler::endElement(const QString& namespaceURI,
     } else if (lcName == "colourmap") {
         m_inColourMap = false;
         m_colourMap = nullptr;
+    } else if (lcName == "matrix") {
+        m_inMatrix = false;
+    } else if (lcName == "notation") {
+        m_inNotation = false;
     }
 
     return true;

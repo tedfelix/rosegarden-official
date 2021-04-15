@@ -1202,7 +1202,7 @@ void RosegardenDocument::setSequenceManager(SequenceManager *sm)
 //
 int RosegardenDocument::FILE_FORMAT_VERSION_MAJOR = 1;
 int RosegardenDocument::FILE_FORMAT_VERSION_MINOR = 6;
-int RosegardenDocument::FILE_FORMAT_VERSION_POINT = 5;
+int RosegardenDocument::FILE_FORMAT_VERSION_POINT = 6;
 
 bool RosegardenDocument::saveDocument(const QString& filename,
                                     QString& errMsg,
@@ -1624,25 +1624,45 @@ void RosegardenDocument::saveSegment(QTextStream& outStream, Segment *segment,
             outStream << "</chord>\n";
         }
 
-        // Add EventRulers to segment - we call them controllers because of
-        // a historical mistake in naming them.  My bad.  RWB.
-        //
-        Segment::EventRulerList list = segment->getEventRulerList();
+        // <matrix>
 
-        if (list.size()) {
-            outStream << "<gui>\n"; // gui elements
-            Segment::EventRulerListConstIterator it;
-            for (it = list.begin(); it != list.end(); ++it) {
-                outStream << "  <controller type=\"" << strtoqstr((*it)->m_type);
+        outStream << "  <matrix>\n";
 
-                if ((*it)->m_type == Controller::EventType) {
-                    outStream << "\" value =\"" << (*it)->m_controllerValue;
-                }
+        // Zoom factors
+        outStream << "    <hzoom factor=\"" << segment->matrixHZoomFactor <<
+                     "\" />\n";
+        outStream << "    <vzoom factor=\"" << segment->matrixVZoomFactor <<
+                     "\" />\n";
 
-                outStream << "\"/>\n";
-            }
-            outStream << "</gui>\n";
+        // For each matrix ruler...
+        for (const Segment::Ruler &ruler : *(segment->matrixRulers))
+        {
+            outStream << "    <ruler type=\"" << ruler.type << "\"";
+
+            if (ruler.type == Controller::EventType)
+                outStream << " ccnumber=\"" << ruler.ccNumber << "\"";
+
+            outStream << " />\n";
         }
+
+        outStream << "  </matrix>\n";
+
+        // <notation>
+
+        outStream << "  <notation>\n";
+
+        // For each notation ruler...
+        for (const Segment::Ruler &ruler : *(segment->notationRulers))
+        {
+            outStream << "    <ruler type=\"" << ruler.type << "\"";
+
+            if (ruler.type == Controller::EventType)
+                outStream << " ccnumber=\"" << ruler.ccNumber << "\"";
+
+            outStream << " />\n";
+        }
+
+        outStream << "  </notation>\n";
 
     }
 

@@ -96,10 +96,10 @@ public:
     virtual void eraseEvent(Event *event);
     virtual void eraseControllerEvent();
 
-    ControlParameter* getControlParameter() { return m_controller; }
+    ControlParameter *getControlParameter() { return m_controller; }
+    const ControlParameter *getControlParameter() const  { return m_controller; }
 
-public slots:
-    void slotSetTool(const QString&) override;
+    void setTool(const QString &name) override;
 
 protected:
     virtual void init();
