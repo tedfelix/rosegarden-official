@@ -610,7 +610,7 @@ ControlRulerWidget::slotSetTool(const QString &toolName)
 
     // Dispatch to all rulers.
     for (ControlRuler *ruler : m_controlRulerList) {
-        ruler->slotSetTool(rulerToolName);
+        ruler->setTool(rulerToolName);
     }
 }
 

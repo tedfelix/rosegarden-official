@@ -286,16 +286,21 @@ void PropertyControlRuler::updateSelectedItems()
 //    update();
 //}
 
-void PropertyControlRuler::slotSetTool(const QString &/* matrixtoolname */)
+void PropertyControlRuler::setTool(const QString & /* name */)
 {
-    ///TODO Write mechanism to select correct control tool for the given matrix tool
-    QString controltoolname = "adjuster";
-    ControlTool *tool = dynamic_cast<ControlTool *>(m_toolBox->getTool(controltoolname));
-    if (!tool) return;
-    if (m_currentTool) m_currentTool->stow();
+    // ??? Since there's only exactly one tool, why even select it.
+    //     Make it the only one and always selected.
+
+    ControlTool *tool =
+            dynamic_cast<ControlTool *>(m_toolBox->getTool("adjuster"));
+    if (!tool)
+        return;
+
+    if (m_currentTool)
+        m_currentTool->stow();
+
     m_currentTool = tool;
     m_currentTool->ready();
-//    emit toolChanged(name);
 }
 
 void PropertyControlRuler::elementAdded(const ViewSegment *, ViewElement *el)

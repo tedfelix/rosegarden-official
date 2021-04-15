@@ -600,7 +600,7 @@ void ControlRuler::resizeEvent(QResizeEvent *)
     slotSetPannedRect(m_pannedRect);
 }
 
-void ControlRuler::slotSetTool(const QString &/*matrixtoolname*/)
+void ControlRuler::setTool(const QString & /*name*/)
 {
 }
 
