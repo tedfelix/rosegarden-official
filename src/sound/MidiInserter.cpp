@@ -441,7 +441,18 @@ insertCopy(const MappedEvent &evt)
                     break;
                 }
 
-            
+            case MappedEvent::KeySignature:
+                {
+                    std::string metaMessage;
+                    metaMessage += MidiByte(evt.getData1());
+                    metaMessage += MidiByte(evt.getData2());
+
+                    trackData.insertMidiEvent(
+                        new MidiEvent(midiEventAbsoluteTime,
+                                      MIDI_FILE_META_EVENT,
+                                      MIDI_KEY_SIGNATURE,
+                                      metaMessage));
+                }
                 // Pacify compiler warnings about missed cases.
             case MappedEvent::InvalidMappedEvent:
             case MappedEvent::Audio:

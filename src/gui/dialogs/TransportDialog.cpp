@@ -940,6 +940,7 @@ TransportDialog::slotMidiInLabel(const MappedEvent *mE)
     case MappedEvent::TimeSignature:
     case MappedEvent::Tempo:
     case MappedEvent::Text:
+    case MappedEvent::KeySignature:
     default:   // do nothing
         return ;
     }
@@ -1028,6 +1029,7 @@ TransportDialog::slotMidiOutLabel(const MappedEvent *mE)
     case MappedEvent::TimeSignature:
     case MappedEvent::Tempo:
     case MappedEvent::Text:
+    case MappedEvent::KeySignature:
     default:   // do nothing
         return ;
     }

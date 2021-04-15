@@ -162,7 +162,9 @@ public:
         // Marker (for MIDI export, not sound)
         Marker                   = 1 << 28,
         // Text (for MIDI export, not sound)
-        Text                     = 1 << 29
+        Text                     = 1 << 29,
+        // Key signature (for MIDI export, not sound)
+        KeySignature             = 1 << 30
         
     } MappedEventType;
 
