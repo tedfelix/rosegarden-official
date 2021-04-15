@@ -105,7 +105,11 @@ SetLyricsCommand::execute()
         QString syllables = *bsi;
         syllables.replace(QRegExp("\\[\\d+\\] "), " ");
         syllables.replace(QRegExp("\n"), " ");
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+        QStringList syllableList = syllables.split(" ", Qt::SkipEmptyParts); // no empties
+#else
         QStringList syllableList = syllables.split(" ", QString::SkipEmptyParts); // no empties
+#endif
 
         i = m_segment->findTime(barRange.first);
         timeT laterThan = barRange.first - 1;

@@ -149,8 +149,7 @@ AudioSegmentAutoSplitCommand::execute()
             << ", seg start = " << newSegment->getStartTime()
             << ", seg end = " << newSegment->getEndMarkerTime()
             << ", audio start = " << newSegment->getAudioStartTime()
-            << ", audio end = " << newSegment->getAudioEndTime()
-            << endl;
+            << ", audio end = " << newSegment->getAudioEndTime();
 
             m_newSegments.push_back(newSegment);
         }

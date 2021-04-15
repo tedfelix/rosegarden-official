@@ -54,8 +54,7 @@ insertMidiEvent(MidiEvent *event)
     event->setTime(delta);
 #ifdef MIDI_DEBUG
     RG_DEBUG << "Converting absoluteTime" << (int)absoluteTime
-             << "to delta" << (int)delta
-             << endl;
+             << "to delta" << (int)delta;
 #endif
     m_midiTrack.push_back(event);
 }
@@ -119,8 +118,7 @@ getAbsoluteTime(RealTime realtime)
 #ifdef MIDI_DEBUG
     RG_DEBUG << "Converting RealTime" << realtime
              << "to timeT" << retVal
-             << "intermediate" << time
-             << endl;
+             << "intermediate" << time;
 #endif
 
     return retVal;

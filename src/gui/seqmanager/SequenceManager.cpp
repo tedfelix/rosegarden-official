@@ -65,6 +65,7 @@
 #include <QEvent>
 #include <QString>
 #include <QTimer>
+#include <QElapsedTimer>
 
 #include <utility>  // For std::pair.
 
