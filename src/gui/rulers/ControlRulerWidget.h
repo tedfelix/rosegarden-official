@@ -15,134 +15,209 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef RG_CONTROLRULERWIDGET_H
-#define RG_CONTROLRULERWIDGET_H
+#pragma once
 
-#include "gui/general/AutoScroller.h"
-#include "base/Event.h"
-#include "base/ViewElement.h"
-#include "base/MidiDevice.h"
-#include "base/parameterpattern/SelectionSituation.h"
+#include "gui/general/AutoScroller.h"  // For FollowMode
+#include "base/Controllable.h"  // For ControlList
+#include "base/Segment.h"
 
 #include <QWidget>
 
 class QStackedWidget;
-class QTabBar;
+
+#include <vector>
+#include <list>
+#include <memory>
+
 
 namespace Rosegarden
 {
 
-class RosegardenDocument;
-class Segment;
+
+class ControllerEventsRuler;
 class ControlRuler;
 class ControlRulerTabBar;
-class ControlParameter;
-class RulerScale;
-class PropertyName;
-class ViewSegment;
 class EventSelection;
-class ControllerEventsRuler;
 class PropertyControlRuler;
- 
+class PropertyName;
+class RulerScale;
+class Segment;
+class SelectionSituation;
+class ViewElement;
+class ViewSegment;
+
+/**
+ * The ruler area (m_stackedWidget) and the tabs (m_tabBar) that appear below
+ * the Matrix and Notation editors.
+ */
 class ControlRulerWidget : public QWidget
 {
-Q_OBJECT
+
+    Q_OBJECT
 
 public:
     ControlRulerWidget();
-    ~ControlRulerWidget() override;
 
-    void setSegments(RosegardenDocument *document,
-                     std::vector<Segment *> segments);
-    
-    void setSegment(Segment *segment);
+    /// Switch to showing this Segment.
+    /**
+     * This is called (by the Scene) when the Segment being edited changes.
+     */
     void setViewSegment(ViewSegment *);
-    void setRulerScale(RulerScale *);
-    void setRulerScale(RulerScale *,int);
-    
-    QString getCurrentToolName() { return m_currentToolName; }
 
-    /** Returns true if we're showing any one of the myriad possible rulers we
+    void setRulerScale(RulerScale *);
+    /// gutter is more of a left margin.  See m_gutter.
+    void setRulerScale(RulerScale *, int gutter);
+
+    /// Include all the Segments so that we can update their ruler lists.
+    void launchMatrixRulers(std::vector<Segment *> segments);
+    /// Include all the Segments so that we can update their ruler lists.
+    void launchNotationRulers(std::vector<Segment *> segments);
+
+    // ??? This doesn't toggle for the menu.  Consequently we can end
+    //     up with duplicate rulers.  Need to fix this.
+    void addControlRuler(const ControlParameter &);
+    void togglePitchBendRuler();
+    void togglePropertyRuler(const PropertyName &);
+
+    /**
+     * Returns true if we're showing any one of the myriad possible rulers we
      * might be showing.  This allows our parent to show() or hide() this entire
      * widget as appropriate for the sort of notation layout in effect.
      */
     bool isAnyRulerVisible();
-    EventSelection *getSelection();
+
     bool hasSelection();
-    SelectionSituation *getSituation();
-    ControlParameter   *getControlParameter();
+
+    /// Return the active ruler's event selection, or nullptr if none.
+    /**
+     * @author Tom Breton (Tehom)
+     */
+    EventSelection *getSelection();
 
     /**
-     * Returns Velocity ruler if currently shown else return 0
+     * @return the active ruler's parameter situation, or nullptr if none.
+     *         Return is owned by caller.
+     * @author Tom Breton (Tehom)
      */
+    SelectionSituation *getSituation();
+
+    ControlParameter *getControlParameter();
+
+    /// Returns Velocity ruler if currently shown else return 0
     PropertyControlRuler *getActivePropertyRuler();
 
-    void togglePitchBendRuler();
-
 public slots:
-    void slotTogglePropertyRuler(const PropertyName &);
 
-    void slotAddControlRuler(const ControlParameter &);
-    void slotAddPropertyRuler(const PropertyName &);
+    /// Connected to ControlRulerTabBar::tabCloseRequest().
     void slotRemoveRuler(int);
+    /// Connected to the Matrix Panned and Panner.
     void slotSetPannedRect(QRectF pr);
+    /// MatrixScene and NotationScene call this when the current Segment changes.
     void slotSetCurrentViewSegment(ViewSegment *);
+    /// Update the velocity ruler selection to match the segment selection.
+    /**
+     * Comes from the view indicating the view's selection changed.  We do NOT
+     * emit childRulerSelectionChanged() here.
+     */
     void slotSelectionChanged(EventSelection *);
-    void slotHoveredOverNoteChanged();
+    /// Connected to MatrixMover::hoveredOverNoteChanged().
     void slotHoveredOverNoteChanged(int evPitch, bool haveEvent, timeT evTime);
-    void slotUpdateRulers(timeT,timeT);
-    void slotSetToolName(const QString &);
-    void slotDragScroll(timeT);
+
+    void slotUpdateRulers(timeT startTime, timeT endTime);
+    /// Connected to toolChanged() signals.
+    void slotSetTool(const QString &);
 
 signals:
-    /// DEPRECATED.  This is being replaced by the new mouse*() signals.
-    void dragScroll(timeT);
-
+    // These three are used by MatrixWidget and NotationWidget for
+    // autoscrolling when working in the rulers.
+    // ??? Auto-scroll does not seem to work with the selection tool.  Works
+    //     with the move tool.  Tested with PitchBend.
     void mousePress();
     void mouseMove(FollowMode);
     void mouseRelease();
 
+    /// See ControlRuler::rulerSelectionChanged() for details.
     void childRulerSelectionChanged(EventSelection *);
+
     void showContextHelp(const QString &);
 
-protected:
-    RosegardenDocument *m_document;
+private:
 
-    ControllerEventsRuler *getActiveRuler();
-    
+    /// Pointers to the ruler sets in each of the segments we can display.
+    /**
+     * This allows us to treat matrix and notation the same throughout
+     * the code.
+     *
+     * We hold on to this so that we can update the ruler lists for all
+     * of these Segments when rulers are opened and closed.
+     *
+     * ??? Could use weak_ptr instead of just hanging on to these
+     *     even if the Segment has gone away.  Probably not worth
+     *     the extra ifs for a few bytes of memory.
+     */
+    std::vector<std::shared_ptr<Segment::RulerSet>> m_segmentRulerSets;
+
+    /// The Segment we are currently editing.
+    ViewSegment *m_viewSegment;
+
+    void launchRulers();
+
+
+    // *** UI
+
+    /// The Rulers
     QStackedWidget *m_stackedWidget;
+    ControllerEventsRuler *getActiveRuler();
+
+    /// The tabs under the rulers.
     ControlRulerTabBar *m_tabBar;
+
 
     typedef std::list<ControlRuler *> ControlRulerList;
     ControlRulerList m_controlRulerList;
-    void removeRuler(ControlRulerList::iterator rulerIter);
-
-    const ControlList *m_controlList;
-
-    Segment *m_segment;
-    ViewSegment *m_viewSegment;
-    RulerScale *m_scale;
-    int m_gutter;
-    QString m_currentToolName;
-    QRectF m_pannedRect;
-    std::vector<ViewElement *> m_selectedElements;
-    
+    void addPropertyRuler(const PropertyName &);
     void addRuler(ControlRuler *, QString);
+    void removeRuler(ControlRuler *ruler);
 
-protected slots:
-    /** ControlRuler emits rulerSelectionChanged() which is connected to this
+    RulerScale *m_scale;
+
+    /// Left margin used by NotationWidget to line things up?
+    /**
+     * ??? rename: m_leftMargin?
+     */
+    int m_gutter;
+
+    QString m_currentToolName;
+
+    /// Current pan position in the Segment.
+    QRectF m_pannedRect;
+
+    /// Selection for the property (velocity) ruler only.
+    std::vector<ViewElement *> m_selectedElements;
+
+private slots:
+    /**
+     * ControlRuler::rulerSelectionChanged() is connected to this
      * slot.  This slot picks up child ruler selection changes and emits
      * childRulerSelectionChanged() to be caught by the associated (matrix or
      * notation) scene, so it can add our child ruler's selected events to its
      * own selection for cut/copy/paste operations.  At least that's the theory.
      *
+     * See the comments on ControlRuler::rulerSelectionChanged() for more.
+     *
      * Pitch Bend ruler -> selection changes -> emit rulerSelectionChanged() ->
      * Control Ruler Widget -> this slot -> emit childRulerSelectionChanged ->
      * owning scene -> selection updates
+     *
+     * ??? Can we bypass this and just connect the ruler directly to
+     *     MatrixScene?  I think the original intent was to connect it
+     *     also to NotationScene.  So this would perform the distribution
+     *     to both editors.  Each editor should connect to this on their
+     *     own.
      */
     void slotChildRulerSelectionChanged(EventSelection *);
 
 };
-}
 
-#endif
+
+}

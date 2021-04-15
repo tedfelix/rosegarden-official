@@ -20,6 +20,7 @@
 #include <set>
 #include <list>
 #include <string>
+#include <memory>
 
 #include "Track.h"
 #include "Event.h"
@@ -27,6 +28,7 @@
 #include "RefreshStatus.h"
 #include "RealTime.h"
 #include "MidiProgram.h"
+#include "MidiTypes.h"  // for Controller::EventType
 
 #include <QColor>
 #include <QSharedPointer>
@@ -721,6 +723,40 @@ public:
     void setViewFeatures(int features) { m_viewFeatures = features; }
     int getViewFeatures() const { return m_viewFeatures; }
 
+    /// Zoom factor for Matrix.
+    double matrixHZoomFactor;
+    /// Zoom factor for Matrix.
+    double matrixVZoomFactor;
+
+    struct Ruler
+    {
+        Ruler() : type(), ccNumber(0) { };
+
+        // Values:
+        //   "controller" (Controller::EventType) - Controller ruler.
+        //   "pitchbend" (PitchBend::EventType) - PitchBend ruler.
+        //   "velocity" (BaseProperties::VELOCITY.getName()) - Velocity ruler.
+        std::string type;
+
+        // Specific CC number for Controller::EventType.
+        int ccNumber;
+
+        bool operator<(const Ruler &r) const
+        {
+            if (type == Controller::EventType  &&
+                r.type == Controller::EventType)
+                return (ccNumber < r.ccNumber);
+            else
+                return (type < r.type);
+        }
+    };
+    typedef std::set<Ruler> RulerSet;
+
+    /// Rulers for the Matrix editor.
+    std::shared_ptr<RulerSet> matrixRulers;
+    /// Rulers for the Notation editor.
+    std::shared_ptr<RulerSet> notationRulers;
+
     /**
      * The compare class used by Composition
      */
@@ -747,29 +783,6 @@ public:
     
     void  addObserver(SegmentObserver *obs);
     void removeObserver(SegmentObserver *obs);
-
-    // List of visible EventRulers attached to this segment
-    //
-    class EventRuler
-    {
-    public:
-        EventRuler(const std::string &type, int controllerValue, bool active):
-            m_type(type), m_controllerValue(controllerValue), m_active(active) {;}
-
-        std::string m_type;            // Event Type
-        int         m_controllerValue; // if controller event, then which value
-        bool        m_active;          // is this Ruler active?
-    };
-
-    typedef std::vector<EventRuler*> EventRulerList;
-    typedef std::vector<EventRuler*>::iterator EventRulerListIterator;
-    typedef std::vector<EventRuler*>::const_iterator EventRulerListConstIterator;
-
-    EventRulerList& getEventRulerList() { return m_eventRulerList; }
-    EventRuler* getEventRuler(const std::string &type, int controllerValue = -1);
-
-    void addEventRuler(const std::string &type, int controllerValue = -1, bool active = 0);
-    bool deleteEventRuler(const std::string &type, int controllerValue = -1);
 
     //////
     //
@@ -955,10 +968,6 @@ private:
     };
     typedef std::multiset<Event*, ClefKeyCmp> ClefKeyList;
     mutable ClefKeyList *m_clefKeyList;
-
-    // EventRulers currently selected as visible on this segment
-    //
-    EventRulerList                m_eventRulerList;
 
     QString m_marking;
 
