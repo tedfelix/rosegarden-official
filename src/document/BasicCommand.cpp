@@ -36,17 +36,17 @@ namespace Rosegarden
 BasicCommand::BasicCommand(const QString &name, Segment &segment,
                            timeT start, timeT end, bool bruteForceRedo) :
     NamedCommand(name),
+    m_comp(nullptr),
+    m_segment(&segment),
+    m_originalStartTime(segment.getStartTime()),
     m_startTime(calculateStartTime(start, segment)),
     m_endTime(calculateEndTime(end, segment)),
-    m_segment(&segment),
+    m_modifiedEventsStart(-1),
+    m_modifiedEventsEnd(-1),
     m_savedEvents(new Segment(segment.getType(), m_startTime)),
     m_doBruteForceRedo(false),
     m_redoEvents(nullptr),
-    m_segmentMarking(""),
-    m_comp(nullptr),
-    m_modifiedEventsStart(-1),
-    m_modifiedEventsEnd(-1),
-    m_originalStartTime(segment.getStartTime())
+    m_segmentMarking("")
 {
     if (m_endTime == m_startTime) ++m_endTime;
 
@@ -61,17 +61,17 @@ BasicCommand::BasicCommand(const QString &name,
                            Segment &segment,
                            Segment *redoEvents) :
     NamedCommand(name),
+    m_comp(nullptr),
+    m_segment(&segment),
+    m_originalStartTime(segment.getStartTime()),
     m_startTime(calculateStartTime(redoEvents->getStartTime(), *redoEvents)),
     m_endTime(calculateEndTime(redoEvents->getEndTime(), *redoEvents)),
-    m_segment(&segment),
+    m_modifiedEventsStart(-1),
+    m_modifiedEventsEnd(-1),
     m_savedEvents(new Segment(segment.getType(), m_startTime)),
     m_doBruteForceRedo(true),
     m_redoEvents(redoEvents),
-    m_segmentMarking(""),
-    m_comp(nullptr),
-    m_modifiedEventsStart(-1),
-    m_modifiedEventsEnd(-1),
-    m_originalStartTime(segment.getStartTime())
+    m_segmentMarking("")
 {
     if (m_endTime == m_startTime) { ++m_endTime; }
 }
@@ -83,18 +83,19 @@ BasicCommand::BasicCommand(const QString &name,
                            const QString& segmentMarking,
                            Composition* comp) :
     NamedCommand(name),
-    m_startTime(start),
+    m_comp(comp),
     m_segment(nullptr),
+    m_originalStartTime(-1),
+    m_startTime(start),
+    m_endTime(0),
+    m_modifiedEventsStart(-1),
+    m_modifiedEventsEnd(-1),
     m_savedEvents(nullptr),
     m_doBruteForceRedo(false),
     m_redoEvents(nullptr),
-    m_segmentMarking(segmentMarking),
-    m_comp(comp),
-    m_modifiedEventsStart(-1),
-    m_modifiedEventsEnd(-1),
-    m_originalStartTime(-1)
+    m_segmentMarking(segmentMarking)
 {
-}    
+}
 
 BasicCommand::~BasicCommand()
 {
@@ -116,16 +117,35 @@ BasicCommand::calculateStartTime(timeT given, Segment &segment)
                "BasicCommand::calculateStartTime()",
                "Segment pointer is null.");
 
-    timeT actual = given;
+    timeT actualStartTime = given;
+
+#if 1
     Segment::iterator i = segment.findTime(given);
 
+    // For each Event at the given start time
+    // ??? Rewrite with range-based for and a break to simplify.  See below.
     while (i != segment.end()  &&  (*i)->getAbsoluteTime() == given) {
         timeT notation = (*i)->getNotationAbsoluteTime();
-        if (notation < given) actual = notation;
+        if (notation < given)
+            actualStartTime = notation;
+        // Next event.
         ++i;
     }
+#else
+    // For each Event in the Segment
+    for (const Event *event : segment) {
+        // If this event is not at the given start time, bail.
+        if (event->getAbsoluteTime() != given)
+            break;
 
-    return actual;
+        timeT notationTime = event->getNotationAbsoluteTime();
+        // If the notation time is earlier, use it.
+        if (notationTime < given)
+            actualStartTime = notationTime;
+    }
+#endif
+
+    return actualStartTime;
 }
 
 timeT
@@ -267,11 +287,11 @@ BasicCommand::unexecute()
 }
     
 void
-BasicCommand::copyTo(Rosegarden::Segment *events, bool wholeSegment)
+BasicCommand::copyTo(Rosegarden::Segment *dest, bool wholeSegment)
 {
     requireSegment();
     RG_DEBUG << "copyTo() for" << getName() << ":" << m_segment <<
-        "to" << events << ", range (" << m_startTime << "," << m_endTime <<
+        "to" << dest << ", range (" << m_startTime << "," << m_endTime <<
         ")";
 
     Segment::iterator from = m_segment->findTime(m_startTime);
@@ -280,31 +300,31 @@ BasicCommand::copyTo(Rosegarden::Segment *events, bool wholeSegment)
     if (wholeSegment) {
         from = m_segment->findTime(m_segment->getStartTime());
         to = m_segment->findTime(m_segment->getEndTime());
-        events->clear();
+        dest->clear();
     }
 
     for (Segment::iterator i = from; i != m_segment->end() && i != to; ++i) {
 
         RG_DEBUG << "copyTo(): Found event of type" << (*i)->getType() << "and duration" << (*i)->getDuration() << "at time" << (*i)->getAbsoluteTime();
 
-        events->insert(new Event(**i));
+        dest->insert(new Event(**i));
     }
 }
    
 void
-BasicCommand::copyFrom(Rosegarden::Segment *events, bool wholeSegment)
+BasicCommand::copyFrom(Rosegarden::Segment *source, bool wholeSegment)
 {
     requireSegment();
-    RG_DEBUG << "copyFrom() for" << getName() << ":" << events <<
+    RG_DEBUG << "copyFrom() for" << getName() << ":" << source <<
         "to" << m_segment << ", range (" << m_startTime << "," <<
         m_endTime << ")";
 
-    Segment::iterator from = events->findTime(m_modifiedEventsStart);
-    Segment::iterator to   = events->findTime(m_modifiedEventsEnd);
+    Segment::iterator from = source->findTime(m_modifiedEventsStart);
+    Segment::iterator to   = source->findTime(m_modifiedEventsEnd);
 
     if (wholeSegment) {
-        from = events->findTime(events->getStartTime());
-        to = events->findTime(events->getEndTime());
+        from = source->findTime(source->getStartTime());
+        to = source->findTime(source->getEndTime());
     }
 
     m_segment->erase(m_segment->findTime(m_modifiedEventsStart),
@@ -316,7 +336,7 @@ BasicCommand::copyFrom(Rosegarden::Segment *events, bool wholeSegment)
         m_segment->insert(new Event(**i));
     }
 
-    events->clear();
+    source->clear();
 }
 
 void
@@ -340,6 +360,7 @@ BasicCommand::requireSegment()
     m_startTime = calculateStartTime(m_startTime, *m_segment);
     m_endTime = calculateEndTime(m_segment->getEndTime(), *m_segment);
     if (m_endTime == m_startTime) ++m_endTime;
+    // ??? Memory Leak.  m_savedEvents might not be nullptr.
     m_savedEvents = new Segment(m_segment->getType(), m_startTime);
     m_originalStartTime = m_segment->getStartTime();
 }

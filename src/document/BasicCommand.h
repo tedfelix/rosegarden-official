@@ -32,27 +32,33 @@ namespace Rosegarden
 class EventSelection;
 class CommandArgumentQuerier; // forward declaration useful for some subclasses
 
+/// A command with undo/redo functionality.
 /**
- * BasicCommand is an abstract subclass of Command that manages undo,
- * redo and notification of changes within a contiguous region of a
- * single Rosegarden Segment, by brute force.  When a subclass
+ * Derivers provide their own version of modifySegment() which does the
+ * actual work of the command.  This class takes care of undo/redo.
+ *
+ * The obvious way to implement undo is to store the entirety of the original
+ * version of the Segment.  This class attempts to optimize this by storing
+ * only the original Events in the range of time that has been modified
+ * (m_savedEvents).
+ *
+ * "Brute force redo" means redo by copying a list of Events instead of calling
+ * modifySegment() to perform the command again.  Brute force redo requires
+ * more memory, but is more reliable.
+ *
+ * BasicCommand is an abstract subclass of NamedCommand that manages undo,
+ * redo and notification of changes(?) within a contiguous region of a
+ * single Rosegarden Segment, by brute force(?).  When a subclass
  * of BasicCommand executes, it stores a copy of the events that are
  * modified by the command, ready to be restored verbatim on undo.
  */
-
 class BasicCommand : public NamedCommand
 {
 public:
-    ~BasicCommand() override;
+    virtual ~BasicCommand() override;
 
     void execute() override;
     void unexecute() override;
-
-    virtual Segment &getSegment();
-
-    timeT getStartTime() { return m_startTime; }
-    timeT getEndTime() { return m_endTime; }
-    virtual timeT getRelayoutEndTime();
 
     /// events selected after command; 0 if no change / no meaningful selection
     virtual EventSelection *getSubsequentSelection() { return nullptr; }
@@ -89,55 +95,93 @@ protected:
                  const QString& segmentMarking,
                  Composition* comp);
 
+    /// Override this to do your command's actual work.
     virtual void modifySegment() = 0;
 
+    /// Called once the Segment is guaranteed to exist.
+    /**
+     * ??? It appears as if no one overrides this.  Might be removable?
+     */
     virtual void beginExecute();
 
+    // ??? Why virtual?  Does someone override this?
+    virtual Segment &getSegment();
+
+    timeT getStartTime() { return m_startTime; }
+    timeT getEndTime() { return m_endTime; }
+
+    // ??? Not used at the moment.
+    virtual timeT getRelayoutEndTime();
+
 private:
-    /// Copy from m_segment to segment.
-    void copyTo(Segment *segment, bool wholeSegment = false);
-    /// Copy from segment to m_segment replacing events in the time range.
-    void copyFrom(Segment *segment, bool wholeSegment = false);
-
-    timeT calculateStartTime(timeT given, Segment &segment);
-    timeT calculateEndTime(timeT given, Segment &segment);
-
-    /// if the segment is not set yet - get it from the segment marking
-    void requireSegment();
-
-    /// find out the range of Events modified by modifySegment
-    void calculateModifiedStartEnd();
-
-    timeT m_startTime;
-    timeT m_endTime;
+    /// the composition
+    /**
+     * ??? Use the global instance instead of this.
+     */
+    Composition *m_comp;
 
     /// The Segment that this command is being run against.  This is a
     /// pointer rather than a reference because it is possible to
     /// create a command before the segment exists and set the segment
     /// later
     Segment *m_segment;
+    /// if the segment is not set yet - get it from the segment marking
+    void requireSegment();
+    /// Copy Events in the ??? time range from m_segment to dest.
+    void copyTo(Segment *dest, bool wholeSegment = false);
+    /// Copy Events in the modification time range from source to m_segment.
+    /**
+     * Events in m_segment are removed in the time range before the copy.
+     */
+    void copyFrom(Segment *source, bool wholeSegment = false);
+
+    /// Original start time for m_Segment.
+    timeT m_originalStartTime;
+
+    /// Command Start Time adjusted for notation.
+    // ??? rename: m_commandStartTime
+    timeT m_startTime;
+    // ??? Always used to set m_startTime.  Make it return void and do that.
+    //     rename: adjustCommandStartTime()
+    timeT calculateStartTime(timeT given, Segment &segment);
+    /// ??? What end time is this?  Command End Time?
+    timeT m_endTime;
+    // ??? Always used to set m_endTime.  Make it return void and do that.
+    //     rename: setEndTime()
+    timeT calculateEndTime(timeT given, Segment &segment);
+
+    /// start and end of the range of events which are modified by modifySegment
+    // ??? How does this differ from m_startTime and m_endTime?  Can it be
+    //     narrower?  E.g. we've asked to perform a command on bar 1, but there
+    //     is only an Event at beat 2?
+    timeT m_modifiedEventsStart;
+    timeT m_modifiedEventsEnd;
+    /// Compute and store the range of Events modified by modifySegment.
+    void calculateModifiedStartEnd();
+
     /// Events from m_segment prior to executing the command.
+    /**
+     * This is the undo buffer.
+     *
+     * ??? Use QSharedPointer or std::shared_ptr.
+     * ??? Rename: m_undoSegment?
+     */
     Segment *m_savedEvents;
 
-    /// Redo or execute() will be using a list of events (m_redoEvents).
+    /// execute() will either use a list of Events or run segmentModify()
+    /**
+     * Brute-force means to copy Events from m_redoEvents to m_segment.  The
+     * opposite is to perform the modification by calling segmentModify().
+     */
     bool m_doBruteForceRedo;
+
     /// Events for redo, or for the "redoEvents" ctor.
     Segment *m_redoEvents;
 
-    /// The segment marking for delayed acces to segment
+    /// The segment marking for delayed access to segment
     QString m_segmentMarking;
 
-    /// the composition
-    Composition *m_comp;
-
-    /// start and end of the range of events which are modified by modifySegment
-    timeT m_modifiedEventsStart;
-    timeT m_modifiedEventsEnd;
-
-    timeT m_originalStartTime;
-
 };
-
 
 
 }
