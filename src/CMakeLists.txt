@@ -787,7 +787,10 @@ add_library(rosegardenprivate ${RG_LIBRARY_TYPE}
 if(NOT ${CMAKE_VERSION} VERSION_LESS "3.16.0") 
   target_precompile_headers(rosegardenprivate
     PRIVATE
-      # Top Ten
+      # There's definitely a point where gcc slows down with too many
+      # pre-compiled headers.  Twelve seems to be near the limit.
+
+      # Top Ten System Headers
       <QString>
       <QWidget>
       <QCoreApplication>
@@ -802,13 +805,27 @@ if(NOT ${CMAKE_VERSION} VERSION_LESS "3.16.0")
       # Debug.h pulls these in.
       <QDebug>
       <QTextStream>
-      <string>
+      #<string>
 
+      # Top 5 rg headers
       # Can't bring any of these in or we'll get RG_MODULE_STRING
       # redefinition warnings.  Why?
+      # Just bring in the system headers they pull in then.  That
+      # should be similar.
+      # Adding any of these just slows the build down.
       #"misc/Debug.h"
-      #"base/Segment.h"
       #"base/Event.h"
+      #<iostream>
+      #"base/NotationTypes.h"
+      #<list>
+      #<map>
+      #"base/Segment.h"
+      #<set>
+      #<memory>
+      #<QSharedPointer>
+      #"misc/Strings.h"
+      #<QVariant>
+      #<QStringList>
   )
 endif()
 
