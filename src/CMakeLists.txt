@@ -782,6 +782,36 @@ add_library(rosegardenprivate ${RG_LIBRARY_TYPE}
    ${CMAKE_CURRENT_BINARY_DIR}/svnversion.h
 )
 
+# If we've got cmake 3.16.0 or greater, use precompiled headers.
+# Cuts build time almost in half.
+if(NOT ${CMAKE_VERSION} VERSION_LESS "3.16.0") 
+  target_precompile_headers(rosegardenprivate
+    PRIVATE
+      # Top Ten
+      <QString>
+      <QWidget>
+      <QCoreApplication>
+      <vector>
+      <QDialog>
+      <string>
+      <QLabel>
+      <QSettings>
+      <QObject>
+      <QVBoxLayout>
+
+      # Debug.h pulls these in.
+      <QDebug>
+      <QTextStream>
+      <string>
+
+      # Can't bring any of these in or we'll get RG_MODULE_STRING
+      # redefinition warnings.  Why?
+      #"misc/Debug.h"
+      #"base/Segment.h"
+      #"base/Event.h"
+  )
+endif()
+
 # Link to the following libraries
 target_link_libraries(rosegardenprivate
   ${QT_QTCORE_LIBRARY}
