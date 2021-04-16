@@ -213,8 +213,13 @@ Segment::getRealSegment() const {
 }
 
 void
-Segment::setForNotation(bool f) {
-    m_forNotation = f;
+Segment::setForNotation(bool f, bool all) {
+    if (m_segmentLinker && all) {
+        // If the segment is linked, set the flag for each segment
+        m_segmentLinker->setForNotation(f);
+    } else {
+        m_forNotation = f;
+    }
 }
 
 bool

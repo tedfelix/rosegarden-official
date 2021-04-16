@@ -889,9 +889,11 @@ public:
     const Segment * getRealSegment() const;
     
     /**
-     * Set the flag for using this segment in notation
+     * Set the flag f for using this segment in notation.
+     * If all is false, the flag is not set for the linked segments.
+     * The default is to set the flag for each of the linked segments.
      */
-    void setForNotation(bool f);
+    void setForNotation(bool f, bool all = true);
 
     /**
      * Get the flag for using this segment in notation
