@@ -82,18 +82,23 @@ protected:
                  timeT start, timeT end,
                  bool bruteForceRedoRequired = false);
 
-    // Variant ctor to be used when events to insert are known when
-    // the command is cted.  Implies brute force redo.
+    // Brute force execute() ctor.
+    /**
+     * To be used when events to insert are known when the command is
+     * constructed.  Implies brute force redo.
+     */
     BasicCommand(const QString &name,
                  Segment &segment,
-		 Segment *redoEvents);
+                 Segment *redoEvents);
 
-    // Variant ctor to be used when the segment does not exist when
-    // the command is created.  Implies brute force redo false.
+    // Ctor to be used when the Segment does not exist when
+    // the command is created.  Brute force redo is not supported.
+    // ??? Can the marker be reduced to just a bool flag?
+    //       bool markedForCommand;
     BasicCommand(const QString &name,
                  timeT start,
-                 const QString& segmentMarking,
-                 Composition* comp);
+                 const QString &segmentMarking,
+                 Composition *comp);
 
     /// Override this to do your command's actual work.
     virtual void modifySegment() = 0;
@@ -150,20 +155,31 @@ private:
     //     rename: setEndTime()
     timeT calculateEndTime(timeT given, Segment &segment);
 
-    /// start and end of the range of events which are modified by modifySegment
-    // ??? How does this differ from m_startTime and m_endTime?  Can it be
-    //     narrower?  E.g. we've asked to perform a command on bar 1, but there
-    //     is only an Event at beat 2?
+    /// Start time of Events which were modified by modifySegment().
+    /**
+     * Set by calculateModifiedStartEnd().
+     */
     timeT m_modifiedEventsStart;
+    /// End time of Events which were modified by modifySegment().
+    /**
+     * Set by calculateModifiedStartEnd().
+     */
     timeT m_modifiedEventsEnd;
-    /// Compute and store the range of Events modified by modifySegment.
+    /// Compare m_segment and m_saveEvents and find the start/end of the changes.
+    /**
+     * Sets m_modifiedEventsStart and m_modifiedEventsEnd.
+     *
+     * ??? This assumes that m_saveEvents is always a complete copy of the
+     *     original Segment.  Is that always the case?
+     */
     void calculateModifiedStartEnd();
 
     /// Events from m_segment prior to executing the command.
     /**
      * This is the undo buffer.
      *
-     * ??? Use QSharedPointer or std::shared_ptr.
+     * ??? Since this is completely private, use QSharedPointer or
+     *     std::shared_ptr to manage memory.
      * ??? Rename: m_undoSegment?
      */
     Segment *m_savedEvents;

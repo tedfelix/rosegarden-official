@@ -48,6 +48,12 @@ BasicCommand::BasicCommand(const QString &name, Segment &segment,
     m_redoEvents(nullptr),
     m_segmentMarking("")
 {
+    RG_DEBUG << "5 param ctor...";
+    RG_DEBUG << "  start:" << start;
+    RG_DEBUG << "  end:" << end;
+    RG_DEBUG << "  m_startTime:" << m_startTime;
+    RG_DEBUG << "  m_endTime:" << m_endTime;
+
     if (m_endTime == m_startTime) ++m_endTime;
 
     if (bruteForceRedo) {
@@ -73,6 +79,12 @@ BasicCommand::BasicCommand(const QString &name,
     m_redoEvents(redoEvents),
     m_segmentMarking("")
 {
+    RG_DEBUG << "3 param ctor...";
+    RG_DEBUG << "  redoEvents->getStartTime():" << redoEvents->getStartTime();
+    RG_DEBUG << "  redoEvents->getEndTime():" << redoEvents->getEndTime();
+    RG_DEBUG << "  m_startTime:" << m_startTime;
+    RG_DEBUG << "  m_endTime:" << m_endTime;
+
     if (m_endTime == m_startTime) { ++m_endTime; }
 }
 
@@ -95,6 +107,8 @@ BasicCommand::BasicCommand(const QString &name,
     m_redoEvents(nullptr),
     m_segmentMarking(segmentMarking)
 {
+    RG_DEBUG << "4 param ctor...";
+    RG_DEBUG << "  start:" << start;
 }
 
 BasicCommand::~BasicCommand()
@@ -346,25 +360,37 @@ BasicCommand::requireSegment()
         // already got the segment
         return;
     }
-    // get the segment from the id
+
+    RG_DEBUG << "requireSegment()...";
+
     Q_ASSERT_X(&m_comp != nullptr,
                "BasicCommand::requireSegment()",
                "Composition pointer is null.");
+
+    // get the segment from the id
     m_segment = m_comp->getSegmentByMarking(m_segmentMarking);
-    RG_DEBUG << "requireSegment got segment" << m_segment;
+
+    RG_DEBUG << "  m_segment:" << m_segment;
+
     Q_ASSERT_X(&m_segment != nullptr,
                "BasicCommand::requireSegment()",
                "Segment pointer is null.");
-    
+
     // adjust start time
     m_startTime = calculateStartTime(m_startTime, *m_segment);
     m_endTime = calculateEndTime(m_segment->getEndTime(), *m_segment);
     if (m_endTime == m_startTime) ++m_endTime;
-    // ??? Memory Leak.  m_savedEvents might not be nullptr.
+    // ??? Memory Leak?  m_savedEvents might not be nullptr?
     m_savedEvents = new Segment(m_segment->getType(), m_startTime);
     m_originalStartTime = m_segment->getStartTime();
+
+    RG_DEBUG << "  m_segment->getStartTime():" << m_segment->getStartTime();
+    RG_DEBUG << "  m_segment->getEndTime():" << m_segment->getEndTime();
+    RG_DEBUG << "  m_startTime adjusted:" << m_startTime;
+    RG_DEBUG << "  m_endTime:" << m_endTime;
+
 }
-  
+
 void
 BasicCommand::calculateModifiedStartEnd()
 {
@@ -376,8 +402,14 @@ BasicCommand::calculateModifiedStartEnd()
     // use savedEvents here in case the segment was shortened
     m_modifiedEventsStart = m_savedEvents->getStartTime();
     m_modifiedEventsEnd = m_savedEvents->getEndTime();
-    // m_segment has modified events savedEvents has the original
-    // unchanged segment events
+
+    // m_segment has modified events m_savedEvents has the original
+    // unchanged events.
+
+    // Find the start of the modification(s).
+
+    // ??? This will only work if m_savedEvents is a complete copy of
+    //     the original Segment.  Is that always the case?
 
     Segment::iterator i = m_segment->begin();
     Segment::iterator j = m_savedEvents->begin();
@@ -403,6 +435,11 @@ BasicCommand::calculateModifiedStartEnd()
         j++;
     }        
 
+    // Find the end of the modification(s).
+
+    // ??? This will only work if m_savedEvents is a complete copy of
+    //     the original Segment.  Is that always the case?
+
     Segment::reverse_iterator ir = m_segment->rbegin();
     Segment::reverse_iterator jr = m_savedEvents->rbegin();
     while(true) {
@@ -427,12 +464,17 @@ BasicCommand::calculateModifiedStartEnd()
         jr++;
     }        
 
+    // If the segment start time has changed, go with the start of
+    // m_savedEvents.
+    // ??? If this is the case, can we skip the loop above for
+    //     determining m_modifiedEventsStart?  That would save CPU.
     if (m_segment->getStartTime() != m_originalStartTime) {
         // the segment has been shortened or lengthened from the start
         // alway use the start of m_savedEvents
         m_modifiedEventsStart = m_savedEvents->getStartTime();
     }
 
+    // End before start?  Go with a null range.
     if (m_modifiedEventsEnd < m_modifiedEventsStart) 
         m_modifiedEventsEnd = m_modifiedEventsStart;
         
