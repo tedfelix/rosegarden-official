@@ -515,19 +515,25 @@ ControllerEventsRuler::stopRubberBand()
     repaint();
 }
 
-void ControllerEventsRuler::slotSetTool(const QString &matrixtoolname)
+void ControllerEventsRuler::setTool(const QString &name)
 {
-    // Possible matrixtoolnames include:
+    // Possible tool names include:
     // selector, painter, eraser, mover, resizer, velocity
-    QString controltoolname = "selector";
-    if (matrixtoolname == "painter") controltoolname = "painter";
-    if (matrixtoolname == "eraser") controltoolname = "eraser";
-    if (matrixtoolname == "velocity") controltoolname = "adjuster";
-    if (matrixtoolname == "mover") controltoolname = "mover";
 
-    ControlTool *tool = dynamic_cast<ControlTool *>(m_toolBox->getTool(controltoolname));
-    if (!tool) return;
-    if (m_currentTool) m_currentTool->stow();
+    QString controltoolname = "selector";
+
+    if (name == "painter") controltoolname = "painter";
+    if (name == "eraser") controltoolname = "eraser";
+    if (name == "mover") controltoolname = "mover";
+
+    ControlTool *tool =
+            dynamic_cast<ControlTool *>(m_toolBox->getTool(controltoolname));
+    if (!tool)
+        return;
+
+    if (m_currentTool)
+        m_currentTool->stow();
+
     m_currentTool = tool;
     m_currentTool->ready();
 }

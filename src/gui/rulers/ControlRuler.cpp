@@ -600,7 +600,7 @@ void ControlRuler::resizeEvent(QResizeEvent *)
     slotSetPannedRect(m_pannedRect);
 }
 
-void ControlRuler::slotSetTool(const QString &/*matrixtoolname*/)
+void ControlRuler::setTool(const QString & /*name*/)
 {
 }
 
@@ -658,10 +658,6 @@ void ControlRuler::mouseMoveEvent(QMouseEvent* e)
 
     ControlMouseEvent controlMouseEvent = createControlMouseEvent(e);
     FollowMode mode = m_currentTool->handleMouseMove(&controlMouseEvent);
-
-    if (mode != NO_FOLLOW) {
-        emit dragScroll(m_rulerScale->getTimeForX(controlMouseEvent.x/m_xScale));
-    }
 
     emit mouseMove(mode);
 }

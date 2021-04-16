@@ -82,9 +82,10 @@ public:
     void updateSelection(const std::vector<ViewElement *> &elementList);
     void updateSelectedItems();
 
+    void setTool(const QString &name) override;
+
 public slots:
     void slotHoveredOverNoteChanged(int evPitch, bool haveEvent, timeT evTime);
-    void slotSetTool(const QString &) override;
 
 protected:
     void addControlItem2(ViewElement *);

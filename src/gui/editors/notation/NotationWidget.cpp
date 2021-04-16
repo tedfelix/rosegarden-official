@@ -474,8 +474,8 @@ NotationWidget::setSegments(RosegardenDocument *document,
 
     m_controlRulerWidget = new ControlRulerWidget;
     m_layout->addWidget(m_controlRulerWidget, CONTROLS_ROW, MAIN_COL, 1, 1);
-    m_controlRulerWidget->setSegments(document, segments);
-    m_controlRulerWidget->setViewSegment(m_scene->getCurrentStaff());
+    m_controlRulerWidget->setViewSegment(
+            dynamic_cast<ViewSegment *>(m_scene->getCurrentStaff()));
     m_controlRulerWidget->setRulerScale(m_referenceScale, m_leftGutter);
 
     connect(m_view, &Panned::viewportChanged,
@@ -495,7 +495,7 @@ NotationWidget::setSegments(RosegardenDocument *document,
             m_controlRulerWidget, &ControlRulerWidget::slotSetCurrentViewSegment);
 
     connect(this, &NotationWidget::toolChanged,
-            m_controlRulerWidget, &ControlRulerWidget::slotSetToolName);
+            m_controlRulerWidget, &ControlRulerWidget::slotSetTool);
 
     // Connect ControlRulerWidget for Auto-Scroll.
     connect(m_controlRulerWidget, &ControlRulerWidget::mousePress,
@@ -504,6 +504,8 @@ NotationWidget::setSegments(RosegardenDocument *document,
             this, &NotationWidget::slotCRWMouseMove);
     connect(m_controlRulerWidget, &ControlRulerWidget::mouseRelease,
             this, &NotationWidget::slotCRWMouseRelease);
+
+    m_controlRulerWidget->launchNotationRulers(segments);
 
     m_segmentLabel = new QLabel("Segment Label");
     m_segmentLabel->setAlignment(Qt::AlignHCenter);
@@ -1638,7 +1640,7 @@ NotationWidget::getVerticalZoomFactor() const
 void
 NotationWidget::slotToggleVelocityRuler()
 {
-    m_controlRulerWidget->slotTogglePropertyRuler(BaseProperties::VELOCITY);
+    m_controlRulerWidget->togglePropertyRuler(BaseProperties::VELOCITY);
 }
 
 void
@@ -1700,7 +1702,7 @@ NotationWidget::slotAddControlRuler(QAction *action)
 
         RG_DEBUG << "name: " << name.toStdString() << " should match  itemStr: " << itemStr.toStdString();
 
-        m_controlRulerWidget->slotAddControlRuler(*it);
+        m_controlRulerWidget->addControlRuler(*it);
 
 //      if (i == menuIndex) m_controlsWidget->slotAddControlRuler(*p);
 //      else i++;

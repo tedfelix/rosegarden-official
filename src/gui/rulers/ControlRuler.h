@@ -82,9 +82,10 @@ public:
 
     void clear();
 
-    void setControlTool(ControlTool*);
+    //void setControlTool(ControlTool *);
+    //int applyTool(double x, int val);
+    virtual void setTool(const QString &name);
 
-    int applyTool(double x, int val);
     ControlItemList *getSelectedItems() { return &m_selectedItems; }
 
     QRectF* getSelectionRectangle() { return m_selectionRect; }
@@ -134,15 +135,22 @@ public:
     void flipBackwards();
 
 signals:
-    /// DEPRECATED.  This is being replaced by the new mouse*() signals.
-    void dragScroll(timeT);
-
     void mousePress();
     void mouseMove(FollowMode);
     void mouseRelease();
 
-    /** Emitted whenever the ruler changes its selection, so the ruler owner can
-     * update its own selection to include the events selected on the ruler
+    /**
+     * Emitted whenever the ruler changes its selection, so the ruler owner can
+     * update its own selection to include the events selected on the ruler.
+     *
+     * See MatrixScene::slotRulerSelectionChanged().
+     *
+     * This allows the user to add CC events to the selection for copy/cut/paste.
+     * It is a bit confusing, however, since it doesn't affect the move tool.
+     *
+     * ??? This would be even more useful if the PropertyControlRuler (velocity
+     *     ruler) properly implemented selection.  That would then allow selecting
+     *     in the velocity ruler which would make it a lot easier to use.
      */
     void rulerSelectionChanged(EventSelection *);
 
@@ -155,7 +163,6 @@ public slots:
     virtual void slotScrollHorizSmallSteps(int);
     virtual void slotSetPannedRect(QRectF);
 //    virtual void slotSetScale(double);
-    virtual void slotSetTool(const QString&);
 
 protected:
     void mousePressEvent(QMouseEvent*) override;

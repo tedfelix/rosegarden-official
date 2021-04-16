@@ -329,8 +329,8 @@ MatrixWidget::MatrixWidget(bool drumMode) :
 
     MatrixMover *matrixMoverTool = dynamic_cast <MatrixMover *> (m_toolBox->getTool(MatrixMover::ToolName()));
     if (matrixMoverTool) {
-        connect(matrixMoverTool, SIGNAL(hoveredOverNoteChanged(int, bool, timeT)),
-                m_controlsWidget, SLOT(slotHoveredOverNoteChanged(int, bool, timeT)));
+        connect(matrixMoverTool, &MatrixMover::hoveredOverNoteChanged,
+                m_controlsWidget, &ControlRulerWidget::slotHoveredOverNoteChanged);
     }
 
 //    MatrixVelocity *matrixVelocityTool = dynamic_cast <MatrixVelocity *> (m_toolBox->getTool(MatrixVelocity::ToolName()));
@@ -340,7 +340,7 @@ MatrixWidget::MatrixWidget(bool drumMode) :
 //    }
 
     connect(this, &MatrixWidget::toolChanged,
-            m_controlsWidget, &ControlRulerWidget::slotSetToolName);
+            m_controlsWidget, &ControlRulerWidget::slotSetTool);
 
     // Make sure MatrixScene always gets mouse move events even when the
     // button isn't pressed.  This way the keys on the piano keyboard
@@ -434,8 +434,8 @@ MatrixWidget::setSegments(RosegardenDocument *document,
 
     generatePitchRuler();
 
-    m_controlsWidget->setSegments(document, segments);
-    m_controlsWidget->setViewSegment((ViewSegment *)m_scene->getCurrentViewSegment());
+    m_controlsWidget->setViewSegment(
+            dynamic_cast<ViewSegment *>(m_scene->getCurrentViewSegment()));
     m_controlsWidget->setRulerScale(m_referenceScale);
 
     // For some reason this doesn't work in the constructor - not looked in detail
@@ -448,6 +448,8 @@ MatrixWidget::setSegments(RosegardenDocument *document,
 
     connect(m_controlsWidget, &ControlRulerWidget::childRulerSelectionChanged,
             m_scene, &MatrixScene::slotRulerSelectionChanged);
+
+    m_controlsWidget->launchMatrixRulers(segments);
 
     connect(m_scene, SIGNAL(selectionChanged()),
             this, SIGNAL(selectionChanged()));
@@ -514,6 +516,11 @@ MatrixWidget::setSegments(RosegardenDocument *document,
         m_segmentLabel->hide();
         m_changerWidget->hide();
     }
+
+    // Go with zoom factors from the first Segment.
+    setHorizontalZoomFactor(segments[0]->matrixHZoomFactor);
+    setVerticalZoomFactor(segments[0]->matrixVZoomFactor);
+
 }
 
 void
@@ -660,6 +667,10 @@ MatrixWidget::setHorizontalZoomFactor(double factor)
     m_pianoView->setMatrix(m);
     m_pianoView->setFixedWidth(m_pitchRuler->sizeHint().width());
     slotScrollRulers();
+
+    // Store in Segment(s) for next time.
+    if (m_scene)
+        m_scene->setHorizontalZoomFactor(factor);
 }
 
 void
@@ -675,6 +686,10 @@ MatrixWidget::setVerticalZoomFactor(double factor)
     m.scale(1.0, m_vZoomFactor);
     m_pianoView->setMatrix(m);
     m_pianoView->setFixedWidth(m_pitchRuler->sizeHint().width());
+
+    // Store in Segment(s) for next time.
+    if (m_scene)
+        m_scene->setVerticalZoomFactor(factor);
 }
 
 void
@@ -693,6 +708,12 @@ MatrixWidget::zoomInFromPanner()
     m_pianoView->setMatrix(m2);
     m_pianoView->setFixedWidth(m_pitchRuler->sizeHint().width());
     slotScrollRulers();
+
+    // Store in Segment(s) for next time.
+    if (m_scene) {
+        m_scene->setHorizontalZoomFactor(m_hZoomFactor);
+        m_scene->setVerticalZoomFactor(m_vZoomFactor);
+    }
 }
 
 void
@@ -711,6 +732,12 @@ MatrixWidget::zoomOutFromPanner()
     m_pianoView->setMatrix(m2);
     m_pianoView->setFixedWidth(m_pitchRuler->sizeHint().width());
     slotScrollRulers();
+
+    // Store in Segment(s) for next time.
+    if (m_scene) {
+        m_scene->setHorizontalZoomFactor(m_hZoomFactor);
+        m_scene->setVerticalZoomFactor(m_vZoomFactor);
+    }
 }
 
 void
@@ -997,7 +1024,7 @@ MatrixWidget::setScrollToFollowPlayback(bool tracking)
 void
 MatrixWidget::showVelocityRuler()
 {
-    m_controlsWidget->slotTogglePropertyRuler(BaseProperties::VELOCITY);
+    m_controlsWidget->togglePropertyRuler(BaseProperties::VELOCITY);
 }
 
 void
@@ -1063,7 +1090,7 @@ MatrixWidget::addControlRuler(QAction *action)
 
         //RG_DEBUG << "addControlRuler(): name: " << name << " should match  itemStr: " << itemStr;
 
-        m_controlsWidget->slotAddControlRuler(*it);
+        m_controlsWidget->addControlRuler(*it);
 
 //      if (i == menuIndex) m_controlsWidget->slotAddControlRuler(*p);
 //      else i++;
@@ -1326,6 +1353,12 @@ MatrixWidget::slotResetZoomClicked()
     m_lastHVzoomValue = 0;
     m_lastH = 0;
     m_lastV = 0;
+
+    // Store in Segment(s) for next time.
+    if (m_scene) {
+        m_scene->setHorizontalZoomFactor(m_hZoomFactor);
+        m_scene->setVerticalZoomFactor(m_vZoomFactor);
+    }
 }
 
 void
