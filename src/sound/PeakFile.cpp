@@ -283,15 +283,15 @@ PeakFile::close()
     //
     m_modificationTime = m_modificationTime.currentDateTime();
 
-    QString fDate;
-    fDate.sprintf("%04d:%02d:%02d:%02d:%02d:%02d:%03d",
-                  m_modificationTime.date().year(),
-                  m_modificationTime.date().month(),
-                  m_modificationTime.date().day(),
-                  m_modificationTime.time().hour(),
-                  m_modificationTime.time().minute(),
-                  m_modificationTime.time().second(),
-                  m_modificationTime.time().msec());
+    const QString fDate =
+        QString::asprintf("%04d:%02d:%02d:%02d:%02d:%02d:%03d",
+                          m_modificationTime.date().year(),
+                          m_modificationTime.date().month(),
+                          m_modificationTime.date().day(),
+                          m_modificationTime.time().hour(),
+                          m_modificationTime.time().minute(),
+                          m_modificationTime.time().second(),
+                          m_modificationTime.time().msec());
 
     std::string dateString( qStrToStrLocal8( fDate )  );
 

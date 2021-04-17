@@ -60,7 +60,8 @@ public:
 
 protected:
     SegmentPencil(CompositionView*, RosegardenDocument*);
-    void setContextHelpFor(QPoint pos, Qt::KeyboardModifiers modifiers = nullptr);
+    void setContextHelpFor(QPoint pos, Qt::KeyboardModifiers modifiers =
+                           Qt::KeyboardModifiers());
 
     //--------------- Data members ---------------------------------
 

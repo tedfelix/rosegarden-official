@@ -354,8 +354,7 @@ StaffLayout::getWeightedHeightAtSceneCoords(int originalHeight, double x, int y)
 {
     RG_DEBUG << "getWeightedHeightAtSceneCoords: originalHeight: "
                    << originalHeight << " non-weighted height: "
-                   << getHeightAtSceneCoords(x, y)
-                   << endl;
+                   << getHeightAtSceneCoords(x, y);
     
     // return the non-weighted height if it already matches (ie. the user
     // clicked pretty close to the center of the note head)
@@ -923,7 +922,7 @@ StaffLayout::resizeStaffLines()
     RG_DEBUG << "StaffLayout::resizeStaffLines: firstRow "
              << firstRow << ", lastRow " << lastRow
              << " (startLayoutX " << m_startLayoutX
-             << ", endLayoutX " << m_endLayoutX << ")" << endl;
+             << ", endLayoutX " << m_endLayoutX << ")";
 
     Q_ASSERT(lastRow >= firstRow);
 

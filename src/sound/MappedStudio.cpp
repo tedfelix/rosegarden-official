@@ -1383,7 +1383,7 @@ MappedPluginSlot::setStringProperty(const MappedObjectProperty &property,
                                     QString value)
 {
     RG_DEBUG << "MappedPluginSlot::setStringProperty: "
-             << property << " -> " << value << endl;
+             << property << " -> " << value;
 
     if (property == Identifier) {
 

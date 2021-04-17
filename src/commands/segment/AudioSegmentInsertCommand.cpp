@@ -89,7 +89,7 @@ AudioSegmentInsertCommand::execute()
         timeT endTimeT = m_composition->getElapsedTimeForRealTime(endTime);
 
         RG_DEBUG << "AudioSegmentInsertCommand::execute : start timeT "
-        << m_startTime << ", startTime " << startTime << ", audioStartTime " << m_audioStartTime << ", audioEndTime " << m_audioEndTime << ", endTime " << endTime << ", end timeT " << endTimeT << endl;
+        << m_startTime << ", startTime " << startTime << ", audioStartTime " << m_audioStartTime << ", audioEndTime " << m_audioEndTime << ", endTime " << endTime << ", end timeT " << endTimeT;
 
         m_segment->setEndTime(endTimeT);
 

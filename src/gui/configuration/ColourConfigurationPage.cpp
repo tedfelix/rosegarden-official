@@ -130,7 +130,7 @@ ColourConfigurationPage::slotAddNew()
     QString newName = InputDialog::getText(this, tr("New Color Name"),
                                            tr("Enter new name"), LineEdit::Normal,
                                            tr("New"),
-                                           &ok, nullptr);
+                                           &ok);
 
     if ((ok == true) && (!newName.isEmpty())) {
         //QColorDialog box(this, "", true);

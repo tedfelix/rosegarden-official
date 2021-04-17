@@ -611,19 +611,19 @@ MatrixWidget::generatePitchRuler()
         // Set the view's matrix.
         // ??? Why?  Why only in this case?  Why not in the other case?
         //     Why isn't this handled elsewhere?  Is it?
-        QMatrix m;
+        QTransform m;
         m.scale(m_hZoomFactor, m_vZoomFactor);
-        m_view->setMatrix(m);
+        m_view->setTransform(m);
         // Only vertical zoom factor is applied to pitch ruler
-        QMatrix m2;
+        QTransform m2;
         m2.scale(1, m_vZoomFactor);
-        m_pianoView->setMatrix(m2);
+        m_pianoView->setTransform(m2);
         m_pianoView->setFixedWidth(m_pitchRuler->sizeHint().width());
     } else {
         // Only vertical zoom factor is applied to pitch ruler
-        QMatrix m;
+        QTransform m;
         m.scale(1.0, m_vZoomFactor);
-        m_pianoView->setMatrix(m);
+        m_pianoView->setTransform(m);
         m_pianoView->setFixedWidth(m_pitchRuler->sizeHint().width());
     }
 
@@ -659,12 +659,12 @@ MatrixWidget::setHorizontalZoomFactor(double factor)
     m_hZoomFactor = factor;
     if (m_referenceScale)
         m_referenceScale->setXZoomFactor(m_hZoomFactor);
-    m_view->resetMatrix();
+    m_view->resetTransform();
     m_view->scale(m_hZoomFactor, m_vZoomFactor);
     // Only vertical zoom factor is applied to pitch ruler
-    QMatrix m;
+    QTransform m;
     m.scale(1.0, m_vZoomFactor);
-    m_pianoView->setMatrix(m);
+    m_pianoView->setTransform(m);
     m_pianoView->setFixedWidth(m_pitchRuler->sizeHint().width());
     slotScrollRulers();
 
@@ -679,12 +679,12 @@ MatrixWidget::setVerticalZoomFactor(double factor)
     m_vZoomFactor = factor;
     if (m_referenceScale)
         m_referenceScale->setYZoomFactor(m_vZoomFactor);
-    m_view->resetMatrix();
+    m_view->resetTransform();
     m_view->scale(m_hZoomFactor, m_vZoomFactor);
     // Only vertical zoom factor is applied to pitch ruler
-    QMatrix m;
+    QTransform m;
     m.scale(1.0, m_vZoomFactor);
-    m_pianoView->setMatrix(m);
+    m_pianoView->setTransform(m);
     m_pianoView->setFixedWidth(m_pitchRuler->sizeHint().width());
 
     // Store in Segment(s) for next time.
@@ -699,13 +699,13 @@ MatrixWidget::zoomInFromPanner()
     m_vZoomFactor /= 1.1;
     if (m_referenceScale)
         m_referenceScale->setXZoomFactor(m_hZoomFactor);
-    QMatrix m;
+    QTransform m;
     m.scale(m_hZoomFactor, m_vZoomFactor);
-    m_view->setMatrix(m);
+    m_view->setTransform(m);
     // Only vertical zoom factor is applied to pitch ruler
-    QMatrix m2;
+    QTransform m2;
     m2.scale(1, m_vZoomFactor);
-    m_pianoView->setMatrix(m2);
+    m_pianoView->setTransform(m2);
     m_pianoView->setFixedWidth(m_pitchRuler->sizeHint().width());
     slotScrollRulers();
 
@@ -723,13 +723,13 @@ MatrixWidget::zoomOutFromPanner()
     m_vZoomFactor *= 1.1;
     if (m_referenceScale)
         m_referenceScale->setXZoomFactor(m_hZoomFactor);
-    QMatrix m;
+    QTransform m;
     m.scale(m_hZoomFactor, m_vZoomFactor);
-    m_view->setMatrix(m);
+    m_view->setTransform(m);
     // Only vertical zoom factor is applied to pitch ruler
-    QMatrix m2;
+    QTransform m2;
     m2.scale(1, m_vZoomFactor);
-    m_pianoView->setMatrix(m2);
+    m_pianoView->setTransform(m2);
     m_pianoView->setFixedWidth(m_pitchRuler->sizeHint().width());
     slotScrollRulers();
 
@@ -1076,8 +1076,8 @@ MatrixWidget::addControlRuler(QAction *action)
         if (it->getType() != Controller::EventType)
             continue;
 
-        QString hexValue;
-        hexValue.sprintf("(0x%x)", it->getControllerNumber());
+        const QString hexValue =
+            QString::asprintf("(0x%x)", it->getControllerNumber());
 
         // strings extracted from data files must be QObject::tr()
         QString itemStr = QObject::tr("%1 Controller %2 %3")
@@ -1334,15 +1334,15 @@ MatrixWidget::slotResetZoomClicked()
         m_referenceScale->setXZoomFactor(m_hZoomFactor);
         m_referenceScale->setYZoomFactor(m_vZoomFactor);
     }
-    m_view->resetMatrix();
-    QMatrix m;
+    m_view->resetTransform();
+    QTransform m;
     m.scale(m_hZoomFactor, m_vZoomFactor);
-    m_view->setMatrix(m);
+    m_view->setTransform(m);
     m_view->scale(m_hZoomFactor, m_vZoomFactor);
     // Only vertical zoom factor is applied to pitch ruler
-    QMatrix m2;
+    QTransform m2;
     m2.scale(1, m_vZoomFactor);
-    m_pianoView->setMatrix(m2);
+    m_pianoView->setTransform(m2);
     m_pianoView->setFixedWidth(m_pitchRuler->sizeHint().width());
     slotScrollRulers();
 

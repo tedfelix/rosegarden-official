@@ -30,7 +30,7 @@
 #include <QString>
 
 class QTimer;
-class QTime;
+class QElapsedTimer;
 class QEvent;
 
 #include <vector>
@@ -468,7 +468,7 @@ private:
     /// ??? The CountdownDialog has been disabled.  See feature request #453.
     CountdownDialog *m_countdownDialog;
     QTimer *m_countdownTimer;
-    QSharedPointer<QTime> m_recordTime;
+    QSharedPointer<QElapsedTimer> m_recordTime;
 
     /// Used by stop() to return to the last start position.
     timeT m_lastTransportStartPosition;

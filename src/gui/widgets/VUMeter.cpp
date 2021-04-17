@@ -28,7 +28,7 @@
 #include <QTimer>
 #include <QTime>
 #include <QWidget>
-
+#include <QElapsedTimer>
 
 namespace Rosegarden
 {
@@ -102,7 +102,7 @@ VUMeter::VUMeter(QWidget *parent,
                 this, &VUMeter::slotStopShowingPeakLeft);
     }
 
-    m_timeDecayLeft = new QTime();
+    m_timeDecayLeft = new QElapsedTimer();
 
     if (stereo) {
         m_decayTimerRight = new QTimer();
@@ -116,7 +116,7 @@ VUMeter::VUMeter(QWidget *parent,
                     this, &VUMeter::slotStopShowingPeakRight);
         }
 
-        m_timeDecayRight = new QTime();
+        m_timeDecayRight = new QElapsedTimer();
 
     }
 
@@ -367,7 +367,7 @@ VUMeter::paintEvent(QPaintEvent *e)
 
         drawMeterLevel(&paint);
 
-        paint.setPen(palette().background().color());
+        paint.setPen(palette().window().color());
         paint.drawPoint(0, 0);
         paint.drawPoint(w, 0);
         paint.drawPoint(0, h - 1);

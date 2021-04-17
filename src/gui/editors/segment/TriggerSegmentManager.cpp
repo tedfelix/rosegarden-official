@@ -417,8 +417,7 @@ TriggerSegmentManager::setModified(bool modified)
 void
 TriggerSegmentManager::checkModified()
 {
-    RG_DEBUG << "TriggerSegmentManager::checkModified(" << m_modified << ")"
-    << endl;
+    RG_DEBUG << "TriggerSegmentManager::checkModified(" << m_modified << ")";
 
 }
 

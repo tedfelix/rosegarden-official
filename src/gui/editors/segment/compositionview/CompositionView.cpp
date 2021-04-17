@@ -821,11 +821,11 @@ void CompositionView::drawTrackDividers(
         segmentsLayerPainter->drawLine(left, y, right, y);
 
         ++y;
-        segmentsLayerPainter->setPen(m_trackDividerColor.light());
+        segmentsLayerPainter->setPen(m_trackDividerColor.lighter());
         segmentsLayerPainter->drawLine(left, y, right, y);
 
         ++y;
-        segmentsLayerPainter->setPen(m_trackDividerColor.light());
+        segmentsLayerPainter->setPen(m_trackDividerColor.lighter());
         segmentsLayerPainter->drawLine(left, y, right, y);
 
         ++y;
@@ -1022,7 +1022,7 @@ void CompositionView::drawCompRectLabel(
     QRect labelRect = rect.rect;
     // Add a one character left margin.  Add a one pixel top margin to
     // make the text look a little more centered vertically.
-    labelRect.adjust(painter->fontMetrics().width('x'), 1, 0, 0);
+    labelRect.adjust(painter->fontMetrics().boundingRect('x').width(), 1, 0, 0);
 
     QColor backgroundColor = rect.brush.color();
 

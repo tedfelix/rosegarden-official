@@ -232,8 +232,8 @@ ControlEditorDialog::slotUpdate(bool added)
         if (position.toInt() == -1)
             position = tr("<not showing>");
 
-        QString value;
-        value.sprintf("%d (0x%x)", it->getControllerNumber(),
+        const QString value =
+            QString::asprintf("%d (0x%x)", it->getControllerNumber(),
                       it->getControllerNumber());
 
         if (it->getType() == PitchBend::EventType) {

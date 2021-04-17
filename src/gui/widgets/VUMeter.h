@@ -24,7 +24,7 @@
 
 class QWidget;
 class QTimer;
-class QTime;
+class QElapsedTimer;
 class QPaintEvent;
 class QPainter;
 
@@ -121,7 +121,7 @@ private:
     double      m_recordLevelLeft;
     short       m_peakLevelLeft;
     QTimer     *m_decayTimerLeft;
-    QTime      *m_timeDecayLeft;
+    QElapsedTimer *m_timeDecayLeft;
     QTimer     *m_peakTimerLeft;
 
     // The current playback level in pixels.
@@ -129,7 +129,7 @@ private:
     double      m_recordLevelRight;
     short       m_peakLevelRight;
     QTimer     *m_decayTimerRight;
-    QTime      *m_timeDecayRight;
+    QElapsedTimer *m_timeDecayRight;
     QTimer     *m_peakTimerRight;
 
     bool        m_showPeakLevel;

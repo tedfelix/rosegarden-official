@@ -144,8 +144,10 @@ KeySignatureDialog::KeySignatureDialog(QWidget *parent,
 
     QPixmap pm;
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+    // This is not actually a copy as Qt does implicit data sharing.
     pm = m_keyPixmap->pixmap(Qt::ReturnByValue);
 #else
+    // This is not actually a copy as Qt does implicit data sharing.
     pm = *(m_keyPixmap->pixmap());
 #endif
 

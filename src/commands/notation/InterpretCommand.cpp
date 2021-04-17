@@ -570,7 +570,7 @@ InterpretCommand::articulate()
                 NOTATION_DEBUG << "InterpretCommand::modifySegment: Tied "
                                << (e->has(TIED_FORWARD) ? "for" : "back")
                                << "ward note encountered, durationChange is "
-                               << durationChange << endl;
+                               << durationChange;
             }
 
             timeT newDuration = duration + duration * durationChange / 100;

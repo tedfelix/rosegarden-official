@@ -994,8 +994,8 @@ NotationView::setupActions()
             // so skip everything else
             if (it->getType() != Controller::EventType) continue;
 
-            QString hexValue;
-            hexValue.sprintf("(0x%x)", it->getControllerNumber());
+            const QString hexValue =
+                QString::asprintf("(0x%x)", it->getControllerNumber());
 
             // strings extracted from data files must be QObject::tr()
             itemStr = QObject::tr("%1 Controller %2 %3")
@@ -4224,7 +4224,7 @@ NotationView::slotJogRight()
     EventSelection *selection = getSelection();
     if (!selection) return ;
 
-    RG_DEBUG << "NotationView::slotJogRight"<< endl;
+    RG_DEBUG << "NotationView::slotJogRight";
 
     bool useNotationTimings = true;
 
@@ -4543,7 +4543,7 @@ NotationView::slotTogglePitchbendRuler()
 void
 NotationView::slotAddControlRuler(QAction *action)
 {
-    NOTATION_DEBUG << "NotationView::slotAddControlRuler(" << action << ")" << endl;
+    NOTATION_DEBUG << "NotationView::slotAddControlRuler(" << action << ")";
     m_notationWidget->slotAddControlRuler(action);
     conformRulerSelectionState();
 }

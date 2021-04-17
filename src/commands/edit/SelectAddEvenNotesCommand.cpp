@@ -377,8 +377,7 @@ SelectAddEvenNotesCommand::getSubsequentSelection()
     EventSelection *selection = new EventSelection(getSegment());
 
     RG_DEBUG << (int)m_beatEventVector.size()
-             << "elements in m_beatEventVector"
-             << endl;
+             << "elements in m_beatEventVector";
     // Add the beat events we found to the selection
     for (BeatEventVector::iterator i = m_beatEventVector.begin();
          i != m_beatEventVector.end();
@@ -390,8 +389,7 @@ SelectAddEvenNotesCommand::getSubsequentSelection()
 
     // Also add any events that we made.
     RG_DEBUG << (int)m_eventsAdded.size()
-             << "elements in redoEvents"
-             << endl;
+             << "elements in redoEvents";
     for (EventVector::const_iterator i = m_eventsAdded.begin();
          i != m_eventsAdded.end();
          ++i) {

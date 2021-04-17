@@ -1056,8 +1056,7 @@ FigurationVector
 FigurationSourceMap::
 getFigurations(Segment *s)
 {
-    RG_DEBUG << "Looking for figuration in segment " << s->getLabel()
-             << endl;
+    RG_DEBUG << "Looking for figuration in segment " << s->getLabel();
     Q_CHECK_PTR(s);
 
     FigurationVector figs;
@@ -1077,8 +1076,7 @@ getFigurations(Segment *s)
                     // The chord here will parameterize all
                     // figurations until we see another parameter
                     // chord..
-                    RG_DEBUG << "Got a parameter chord"
-                             << endl;
+                    RG_DEBUG << "Got a parameter chord";
                     // Remove any old one.
                     if (parameterChord) { delete parameterChord; }
                     parameterChord = new FigChord(*s, i);
@@ -1086,8 +1084,7 @@ getFigurations(Segment *s)
 
                 // There is a figuration here.  It's relative to
                 // the preceding parameter chord.
-                RG_DEBUG << "Got a figuration"
-                         << endl;
+                RG_DEBUG << "Got a figuration";
             
                 // If there's no parameter chord yet, this is a
                 // proximity-note figuration
@@ -1169,8 +1166,7 @@ getFigurations(Segment *s)
                             { delete relation; }
                     }
                     if (bestRelation) {
-                        RG_DEBUG << "Found a preferred relation"
-                                 << endl;
+                        RG_DEBUG << "Found a preferred relation";
                         events.push_back(bestRelation);
                     }
                 }

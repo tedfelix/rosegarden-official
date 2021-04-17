@@ -33,7 +33,7 @@ namespace Rosegarden
 
 CommentsPopupDialog::CommentsPopupDialog(RosegardenDocument *doc,
                                          QWidget *parent):
-    QDialog(parent, nullptr),
+    QDialog(parent),
     m_doc(doc)
 {
     setModal(false);

@@ -54,7 +54,8 @@ PercussionPitchRuler::PercussionPitchRuler(QWidget *parent,
     //: Note to the translators: Don't translate literally.
     //: This string is never displayed but defines the largest width of the
     //: text (pitch and intrument name) in the percussion ruler.
-    m_width = m_fontMetrics->width(tr("  A#2   Acoustic Bass Drum  "));
+    m_width =
+        m_fontMetrics->boundingRect(tr("  A#2   Acoustic Bass Drum  ")).width();
 
     setMouseTracking(true);
 }
@@ -89,7 +90,7 @@ void PercussionPitchRuler::paintEvent(QPaintEvent*)
     //: Note to the translators: Don't translate literally.
     //: This string is never displayed but defines the largest width of the
     //: pitch name in the percussion ruler text.
-    int lw = m_fontMetrics->width(tr("A#2"));
+    int lw = m_fontMetrics->boundingRect(tr("A#2")).width();
     int offset = m_fontMetrics->ascent() + 1;
 
     for (int i = 0; i < extent; ++i) {

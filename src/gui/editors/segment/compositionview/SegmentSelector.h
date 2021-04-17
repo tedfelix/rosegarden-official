@@ -63,7 +63,9 @@ public:
     //bool isSegmentCopying() const { return m_segmentCopyMode; }
 
 private:
-    void setContextHelpFor(QPoint pos, Qt::KeyboardModifiers modifiers = nullptr);
+    void setContextHelpFor(QPoint pos,
+                           Qt::KeyboardModifiers modifiers =
+                           Qt::KeyboardModifiers());
 
     //--------------- Data members ---------------------------------
 

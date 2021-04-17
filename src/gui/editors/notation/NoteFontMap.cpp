@@ -817,7 +817,7 @@ const
     m_systemFontCache[spec] = font;
 
     NOTATION_DEBUG << "NoteFontMap::getFont: loaded font " << fontName
-                   << " at pixel size " << fontHeight << endl;
+                   << " at pixel size " << fontHeight;
 
     return font;
 }

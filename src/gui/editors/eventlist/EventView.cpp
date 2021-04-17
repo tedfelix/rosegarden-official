@@ -898,7 +898,7 @@ EventView::slotEditCut()
         return ;
 
     RG_DEBUG << "EventView::slotEditCut - cutting "
-    << selection.count() << " items" << endl;
+    << selection.count() << " items";
 
 //    QPtrListIterator<QTreeWidgetItem> it(selection);
     QTreeWidgetItem *listItem;
@@ -947,7 +947,7 @@ EventView::slotEditCopy()
         return ;
 
     RG_DEBUG << "EventView::slotEditCopy - copying "
-    << selection.count() << " items" << endl;
+    << selection.count() << " items";
 
 //    QPtrListIterator<QTreeWidgetItem> it(selection);
     QTreeWidgetItem *listItem;
@@ -1031,7 +1031,7 @@ EventView::slotEditPaste()
         addCommandToHistory(command);
 
     RG_DEBUG << "EventView::slotEditPaste - pasting "
-    << selection.count() << " items" << endl;
+    << selection.count() << " items";
 }
 
 void
@@ -1042,7 +1042,7 @@ EventView::slotEditDelete()
         return ;
 
     RG_DEBUG << "EventView::slotEditDelete - deleting "
-    << selection.count() << " items" << endl;
+    << selection.count() << " items";
 
 //    QPtrListIterator<QTreeWidgetItem> it(selection);
     QTreeWidgetItem *listItem;

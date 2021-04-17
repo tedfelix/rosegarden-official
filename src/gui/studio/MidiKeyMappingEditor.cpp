@@ -182,7 +182,8 @@ MidiKeyMappingEditor::slotKeyMapButtonPressed()
 
 void MidiKeyMappingEditor::blockAllSignals(bool block)
 {
-    QList<LineEdit *> allChildren = findChildren<LineEdit*>((QRegExp)"[0-9]+");
+    QList<LineEdit *> allChildren =
+        findChildren<LineEdit*>((QRegularExpression)"[0-9]+");
     QList<LineEdit *>::iterator it;
 
     for (it = allChildren.begin(); it != allChildren.end(); ++it) {

@@ -91,8 +91,7 @@ RosegardenSequencer::RosegardenSequencer() :
     m_studio->setSoundDriver(m_driver);
 
     if (!m_driver) {
-        SEQUENCER_DEBUG << "RosegardenSequencer object could not be allocated"
-                        << endl;
+        SEQUENCER_DEBUG << "RosegardenSequencer object could not be allocated";
         m_transportStatus = QUIT;
         return;
     }
@@ -1014,8 +1013,7 @@ void RosegardenSequencer::dumpFirstSegment()
                         << " - data2 = " << (unsigned int)evt.getData2()
                         << " - time = " << evt.getEventTime()
                         << " - duration = " << evt.getDuration()
-                        << " - audio mark = " << evt.getAudioStartMarker()
-                        << endl;
+                        << " - audio mark = " << evt.getAudioStartMarker();
         
         ++i;
     }

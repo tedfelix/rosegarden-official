@@ -79,7 +79,7 @@ void StartupLogo::paintEvent(QPaintEvent*)
     paint.setFont(defaultFont);
 
     QFontMetrics metrics(defaultFont);
-    int width = metrics.width(m_statusMessage) + 6;
+    int width = metrics.boundingRect(m_statusMessage).width() + 6;
     if (width > 200)
         width = 200;
 
@@ -97,7 +97,7 @@ void StartupLogo::paintEvent(QPaintEvent*)
     QString versionLabel = QString("%1 \"%2\"").arg(VERSION).arg(CODENAME);
 //    QString versionLabel(VERSION);
     //QString("R%1 v%2").arg(version.left(sepIdx)).arg(version.mid(sepIdx + 1));
-    int versionWidth = metrics.width(versionLabel);
+    int versionWidth = metrics.boundingRect(versionLabel).width();
 
     paint.drawText(m_pixmap.width() - versionWidth - 18,
                    m_pixmap.height() - 28,

@@ -45,7 +45,7 @@ Chord::Chord(const QString& root, const QString& ext)
       m_isUserChord(false)
 {
     if (m_ext.isEmpty())
-        m_ext = QString::null;
+        m_ext = QString();
 }
 
 Chord::Chord(const Event& e)
@@ -61,7 +61,7 @@ Chord::Chord(const Event& e)
     ok = e.get<String>(ExtPropertyName, f);
     if (ok) {
         if (f.length() == 0)
-            m_ext = QString::null;
+            m_ext = QString();
         else
             m_ext = strtoqstr(f);
     }

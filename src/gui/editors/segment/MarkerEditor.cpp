@@ -209,12 +209,12 @@ MarkerEditor::updatePosition()
     long secs = rT.sec;
     long msecs = rT.msec();
 
-    QString realTime, secsStr;
+    QString realTime;
     if (hours)
         realTime += QString("%1h ").arg(hours);
     if (mins)
         realTime += QString("%1m ").arg(mins);
-    secsStr.sprintf("%ld.%03lds", secs, msecs);
+    const QString secsStr = QString::asprintf("%ld.%03lds", secs, msecs);
     realTime += secsStr;
 
     // only update if we need to to try and avoid flickering
@@ -442,9 +442,7 @@ MarkerEditor::setModified(bool modified)
 void
 MarkerEditor::checkModified()
 {
-    RG_DEBUG << "MarkerEditor::checkModified(" << m_modified << ")"
-    << endl;
-
+    RG_DEBUG << "MarkerEditor::checkModified(" << m_modified << ")";
 }
 
 void
@@ -521,7 +519,7 @@ MarkerEditor::slotItemClicked(QTreeWidgetItem *item, int column )
 
     if (ei && !ei->isFake()) {
         RG_DEBUG << "MarkerEditor::slotItemClicked - "
-        << "jump to marker at " << ei->getRawTime() << endl;
+        << "jump to marker at " << ei->getRawTime();
 
         emit jumpToMarker(timeT(ei->getRawTime()));
     }

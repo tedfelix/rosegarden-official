@@ -132,8 +132,7 @@ TextRuler::paintEvent(QPaintEvent* e)
         if (!(*i)->get
                 <String>(Text::TextPropertyName, text)) {
             RG_DEBUG
-            << "Warning: TextRuler::paintEvent: No text in text event"
-            << endl;
+                << "Warning: TextRuler::paintEvent: No text in text event";
             continue;
         }
 

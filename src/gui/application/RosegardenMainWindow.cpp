@@ -459,7 +459,7 @@ RosegardenMainWindow::RosegardenMainWindow(bool enableSound,
     catch (const Exception &e)
     {
         m_tranzport = nullptr;        
-        RG_DEBUG << e.getMessage().c_str() <<endl;        
+        RG_DEBUG << e.getMessage().c_str();
     }
 
     enterActionState("have_project_packager");
@@ -894,7 +894,7 @@ RosegardenMainWindow::initZoomToolbar()
     QToolBar *zoomToolbar = findToolbar("Zoom Toolbar");
     if (!zoomToolbar) {
         RG_DEBUG << "initZoomToolbar() : "
-        << "zoom toolbar not found" << endl;
+        << "zoom toolbar not found";
         return ;
     }
 
@@ -1882,7 +1882,7 @@ RosegardenMainWindow::openFileDialogAt(QString target)
                     tr("All supported files") + " (*.rg *.RG *.rgt *.RGT *.rgp *.RGP *.mid *.MID *.midi *.MIDI)" + ";;" +
                     tr("Rosegarden files") + " (*.rg *.RG *.rgp *.RGP *.rgt *.RGT)" + ";;" +
                     tr("MIDI files") + " (*.mid *.MID *.midi *.MIDI)" + ";;" +
-                    tr("All files") + " (*)", nullptr, nullptr);
+                    tr("All files") + " (*)", nullptr);
 
     // If the user has cancelled, bail.
     if (fname.isEmpty())
@@ -1925,7 +1925,7 @@ RosegardenMainWindow::getDataLocation()
 #else
     QString dataLocation = QDesktopServices::storageLocation(QDesktopServices::HomeLocation) + "/.local/share/";
 #endif
-    RG_DEBUG << "getDataLocation(): returning: " << dataLocation << endl;
+    RG_DEBUG << "getDataLocation(): returning: " << dataLocation;
     return dataLocation;
 }
 
@@ -1952,7 +1952,7 @@ RosegardenMainWindow::slotMerge()
 
     const QString file = FileDialog::getOpenFileName(this, tr("Open File"), directory,
                tr("Rosegarden files") + " (*.rg *.RG)" + ";;" +
-               tr("All files") + " (*)", nullptr, nullptr);
+               tr("All files") + " (*)", nullptr);
 
     if (file.isEmpty()) {
         return ;
@@ -3261,8 +3261,7 @@ RosegardenMainWindow::slotTempoToSegmentLength(QWidget* parent)
 #endif
 
         } else {
-            RG_DEBUG << "slotTempoToSegmentLength - BeatsBarsDialog aborted"
-            << endl;
+            RG_DEBUG << "slotTempoToSegmentLength - BeatsBarsDialog aborted";
             return ;
         }
 
@@ -3727,8 +3726,7 @@ RosegardenMainWindow::slotDeleteTrack()
         trackId = comp.getTrackByPosition(position - 1)->getId();
     else {
         RG_DEBUG << "slotDeleteTrack - "
-        << "can't select a highlighted track after delete"
-        << endl;
+                 << "can't select a highlighted track after delete";
     }
 
     comp.setSelectedTrack(trackId);
@@ -3854,7 +3852,7 @@ RosegardenMainWindow::slotImportProject()
 
     const QString file = FileDialog::getOpenFileName(this, tr("Import Rosegarden Project File"), directory,
                tr("Rosegarden Project files") + " (*.rgp *.RGP)" + ";;" +
-               tr("All files") + " (*)", nullptr, nullptr);
+               tr("All files") + " (*)", nullptr);
 
     if (file.isEmpty()) {
         return ;
@@ -3894,7 +3892,7 @@ RosegardenMainWindow::slotImportMIDI()
 
     const QString file = FileDialog::getOpenFileName(this, tr("Open MIDI File"), directory,
                tr("MIDI files") + " (*.mid *.midi *.MID *.MIDI)" + ";;" +
-               tr("All files") + " (*)", nullptr, nullptr);
+               tr("All files") + " (*)", nullptr);
 
     if (file.isEmpty()) {
         return ;
@@ -3917,7 +3915,7 @@ RosegardenMainWindow::slotMergeMIDI()
 
     const QString file = FileDialog::getOpenFileName(this, tr("Merge MIDI File"), directory,
                tr("MIDI files") + " (*.mid *.midi *.MID *.MIDI)" + ";;" +
-               tr("All files") + " (*)", nullptr, nullptr);
+               tr("All files") + " (*)", nullptr);
 
     if (file.isEmpty()) {
         return ;
@@ -4173,7 +4171,7 @@ RosegardenMainWindow::slotImportRG21()
 
     const QString file = FileDialog::getOpenFileName(this, tr("Open X11 Rosegarden File"), directory,
                tr("X11 Rosegarden files") + " (*.rose)" + ";;" +
-               tr("All files") + " (*)", nullptr, nullptr);
+               tr("All files") + " (*)", nullptr);
 
     if (file.isEmpty()) {
         return ;
@@ -4196,7 +4194,7 @@ RosegardenMainWindow::slotMergeRG21()
 
     const QString file = FileDialog::getOpenFileName(this, tr("Open X11 Rosegarden File"), directory,
                tr("X11 Rosegarden files") + " (*.rose)" + ";;" +
-               tr("All files") + " (*)", nullptr, nullptr);
+               tr("All files") + " (*)", nullptr);
 
     if (file.isEmpty()) {
         return ;
@@ -4368,7 +4366,7 @@ RosegardenMainWindow::slotImportMusicXML()
 
     const QString file = FileDialog::getOpenFileName(this, tr("Open MusicXML File"), directory,
                tr("XML files") + " (*.xml *.XML)" + ";;" +
-               tr("All files") + " (*)", nullptr, nullptr);
+               tr("All files") + " (*)", nullptr);
 
     if (file.isEmpty()) {
         return ;
@@ -4391,7 +4389,7 @@ RosegardenMainWindow::slotMergeMusicXML()
 
     const QString file = FileDialog::getOpenFileName(this, tr("Open MusicXML File"), directory,
                tr("XML files") + " (*.xml *.XML)" + ";;" +
-               tr("All files") + " (*)", nullptr, nullptr);
+               tr("All files") + " (*)", nullptr);
 
     if (file.isEmpty()) {
         return ;
@@ -5016,7 +5014,7 @@ RosegardenMainWindow::launchSequencer()
     m_sequencerThread->start();
 
     RG_DEBUG << "launchSequencer: Sequencer thread is "
-             << m_sequencerThread << endl;
+             << m_sequencerThread;
 
     if (m_doc && m_doc->getStudio().haveMidiDevices()) {
         enterActionState("got_midi_devices"); //@@@ JAS orig. 0
@@ -5077,7 +5075,7 @@ RosegardenMainWindow::slotExportProject()
     // I have a ton of weird files and suspect problems with this, but maybe
     // not:
     RG_DEBUG << "getValidWriteFileName() returned " << fileName.toStdString()
-             << "                         rgFile: " << fileName.toStdString() << endl;
+             << "                         rgFile: " << fileName.toStdString();
 
     QString errMsg;
     if (!m_doc->saveDocument(rgFile, errMsg,
@@ -5628,8 +5626,7 @@ bool
 RosegardenMainWindow::isSequencerRunning()
 {
     RG_DEBUG << "isSequencerRunning: m_useSequencer = "
-             << m_useSequencer << ", m_sequencerThread = " << m_sequencerThread
-             << endl;
+             << m_useSequencer << ", m_sequencerThread = " << m_sequencerThread;
     return m_useSequencer && (m_sequencerThread != nullptr);
 }
 
@@ -6099,7 +6096,7 @@ RosegardenMainWindow::slotChangeZoom(int)
     m_zoomLabel->setText(tr("%1%").arg(duration44 / value));
 
     RG_DEBUG << "slotChangeZoom : zoom size = "
-    << m_zoomSlider->getCurrentSize() << endl;
+    << m_zoomSlider->getCurrentSize();
 
     // initZoomToolbar sets the zoom value. With some old versions of
     // Qt3.0, this can cause slotChangeZoom() to be called while the
@@ -7239,7 +7236,7 @@ RosegardenMainWindow::slotShowPluginDialog(QWidget *parent,
     container = m_doc->getStudio().getContainerById(instrumentId);
     if (!container) {
         RG_DEBUG << "slotShowPluginDialog - "
-        << "no instrument or buss of id " << instrumentId << endl;
+        << "no instrument or buss of id " << instrumentId;
         return ;
     }
 
@@ -7250,7 +7247,7 @@ RosegardenMainWindow::slotShowPluginDialog(QWidget *parent,
     if (!inst) {
         RG_DEBUG << "slotShowPluginDialog - "
         << "no AudioPluginInstance found for index "
-        << index << endl;
+        << index;
         return ;
     }
 
@@ -7334,7 +7331,7 @@ RosegardenMainWindow::slotPluginSelected(InstrumentId instrumentId,
     container = m_doc->getStudio().getContainerById(instrumentId);
     if (!container) {
         RG_DEBUG << "slotPluginSelected - "
-        << "no instrument or buss of id " << instrumentId << endl;
+        << "no instrument or buss of id " << instrumentId;
         return ;
     }
 
@@ -7343,7 +7340,7 @@ RosegardenMainWindow::slotPluginSelected(InstrumentId instrumentId,
 
     if (!inst) {
         RG_DEBUG << "slotPluginSelected - "
-        << "got index of unknown plugin!" << endl;
+        << "got index of unknown plugin!";
         return ;
     }
 
@@ -7355,7 +7352,7 @@ RosegardenMainWindow::slotPluginSelected(InstrumentId instrumentId,
                 destroyStudioObject(inst->getMappedId())) {
             RG_DEBUG << "slotPluginSelected - "
             << "cannot destroy Studio object "
-            << inst->getMappedId() << endl;
+            << inst->getMappedId();
         }
 
         inst->setAssigned(false);
@@ -7366,7 +7363,7 @@ RosegardenMainWindow::slotPluginSelected(InstrumentId instrumentId,
         if (inst->isAssigned()) {
             RG_DEBUG << "slotPluginSelected - "
             << " setting identifier for mapper id " << inst->getMappedId()
-            << " to " << strtoqstr(inst->getIdentifier()) << endl;
+            << " to " << strtoqstr(inst->getIdentifier());
 
             StudioControl::setStudioObjectProperty(inst->getMappedId(),
                                                    MappedPluginSlot::Identifier,
@@ -7378,7 +7375,7 @@ RosegardenMainWindow::slotPluginSelected(InstrumentId instrumentId,
                 (MappedObject::PluginSlot);
 
             RG_DEBUG << "slotPluginSelected - "
-                     << " new MappedObjectId = " << newId << endl;
+                     << " new MappedObjectId = " << newId;
 
             // set the new Mapped ID and that this instance
             // is assigned
@@ -7484,28 +7481,28 @@ RosegardenMainWindow::slotChangePluginPort(InstrumentId instrumentId,
     container = m_doc->getStudio().getContainerById(instrumentId);
     if (!container) {
         RG_DEBUG << "slotChangePluginPort - "
-        << "no instrument or buss of id " << instrumentId << endl;
+        << "no instrument or buss of id " << instrumentId;
         return ;
     }
 
     AudioPluginInstance *inst = container->getPlugin(pluginIndex);
     if (!inst) {
         RG_DEBUG << "slotChangePluginPort - "
-        << "no plugin at index " << pluginIndex << " on " << instrumentId << endl;
+        << "no plugin at index " << pluginIndex << " on " << instrumentId;
         return ;
     }
 
     PluginPortInstance *port = inst->getPort(portIndex);
     if (!port) {
         RG_DEBUG << "slotChangePluginPort - no port "
-        << portIndex << endl;
+        << portIndex;
         return ;
     }
 
     RG_DEBUG << "slotPluginPortChanged - "
              << "setting plugin port (" << inst->getMappedId()
              << ", " << portIndex << ") from " << port->value
-             << " to " << value << endl;
+             << " to " << value;
 
     port->setValue(value);
 
@@ -7531,27 +7528,27 @@ RosegardenMainWindow::slotPluginPortChanged(InstrumentId instrumentId,
     container = m_doc->getStudio().getContainerById(instrumentId);
     if (!container) {
         RG_DEBUG << "slotPluginPortChanged - "
-                 << "no instrument or buss of id " << instrumentId << endl;
+                 << "no instrument or buss of id " << instrumentId;
         return ;
     }
 
     AudioPluginInstance *inst = container->getPlugin(pluginIndex);
     if (!inst) {
         RG_DEBUG << "slotPluginPortChanged - "
-                 << "no plugin at index " << pluginIndex << " on " << instrumentId << endl;
+                 << "no plugin at index " << pluginIndex << " on " << instrumentId;
         return ;
     }
 
     PluginPortInstance *port = inst->getPort(portIndex);
     if (!port) {
         RG_DEBUG << "slotPluginPortChanged - no port "
-                 << portIndex << endl;
+                 << portIndex;
         return ;
     }
 
     RG_DEBUG << "slotPluginPortChanged - "
              << "setting plugin port (" << inst->getMappedId()
-             << ", " << portIndex << ") to " << port->value << endl;
+             << ", " << portIndex << ") to " << port->value;
 
     StudioControl::setStudioPluginPort(inst->getMappedId(),
                                        portIndex, port->value);
@@ -7577,21 +7574,21 @@ RosegardenMainWindow::slotChangePluginProgram(InstrumentId instrumentId,
     container = m_doc->getStudio().getContainerById(instrumentId);
     if (!container) {
         RG_DEBUG << "slotChangePluginProgram - "
-        << "no instrument or buss of id " << instrumentId << endl;
+        << "no instrument or buss of id " << instrumentId;
         return ;
     }
 
     AudioPluginInstance *inst = container->getPlugin(pluginIndex);
     if (!inst) {
         RG_DEBUG << "slotChangePluginProgram - "
-        << "no plugin at index " << pluginIndex << " on " << instrumentId << endl;
+        << "no plugin at index " << pluginIndex << " on " << instrumentId;
         return ;
     }
 
     RG_DEBUG << "slotChangePluginProgram - "
              << "setting plugin program ("
              << inst->getMappedId() << ") from " << strtoqstr(inst->getProgram())
-             << " to " << program << endl;
+             << " to " << program;
 
     inst->setProgram(qstrtostr(program));
 
@@ -7628,14 +7625,14 @@ RosegardenMainWindow::slotPluginProgramChanged(InstrumentId instrumentId,
     container = m_doc->getStudio().getContainerById(instrumentId);
     if (!container) {
         RG_DEBUG << "slotPluginProgramChanged - "
-        << "no instrument or buss of id " << instrumentId << endl;
+        << "no instrument or buss of id " << instrumentId;
         return ;
     }
 
     AudioPluginInstance *inst = container->getPlugin(pluginIndex);
     if (!inst) {
         RG_DEBUG << "slotPluginProgramChanged - "
-        << "no plugin at index " << pluginIndex << " on " << instrumentId << endl;
+        << "no plugin at index " << pluginIndex << " on " << instrumentId;
         return ;
     }
 
@@ -7643,7 +7640,7 @@ RosegardenMainWindow::slotPluginProgramChanged(InstrumentId instrumentId,
 
     RG_DEBUG << "slotPluginProgramChanged - "
     << "setting plugin program ("
-    << inst->getMappedId() << ") to " << program << endl;
+    << inst->getMappedId() << ") to " << program;
 
     StudioControl::
     setStudioObjectProperty(inst->getMappedId(),
@@ -7680,7 +7677,7 @@ RosegardenMainWindow::slotChangePluginConfiguration(InstrumentId instrumentId,
     container = m_doc->getStudio().getContainerById(instrumentId);
     if (!container) {
         RG_DEBUG << "slotChangePluginConfiguration - "
-        << "no instrument or buss of id " << instrumentId << endl;
+        << "no instrument or buss of id " << instrumentId;
         return ;
     }
 
@@ -7778,7 +7775,7 @@ RosegardenMainWindow::slotPluginBypassed(InstrumentId instrumentId,
     container = m_doc->getStudio().getContainerById(instrumentId);
     if (!container) {
         RG_DEBUG << "slotPluginBypassed - "
-        << "no instrument or buss of id " << instrumentId << endl;
+        << "no instrument or buss of id " << instrumentId;
         return ;
     }
 
@@ -8027,7 +8024,7 @@ RosegardenMainWindow::slotSaveDefaultStudio()
     QString autoloadFile = ResourceFinder().getAutoloadSavePath();
     
     RG_DEBUG << "slotSaveDefaultStudio : saving studio in "
-             << autoloadFile << endl;
+             << autoloadFile;
 
     SetWaitCursor waitCursor;
     QString errMsg;
@@ -8058,7 +8055,7 @@ RosegardenMainWindow::slotImportDefaultStudio()
 
     if (!autoloadFileInfo.isReadable()) {
         RG_DEBUG << "RosegardenDocument::slotImportDefaultStudio - "
-        << "can't find autoload file - defaulting" << endl;
+        << "can't find autoload file - defaulting";
         return ;
     }
 
@@ -8076,7 +8073,7 @@ RosegardenMainWindow::slotImportStudio()
 
     const QString file = FileDialog::getOpenFileName(this, tr("Import Studio from File"), directory,
                     tr("All supported files") + " (*.rg *.RG *.rgt *.RGT *.rgp *.RGP)" + ";;" +
-                    tr("All files") + " (*)", nullptr, nullptr);
+                    tr("All files") + " (*)", nullptr);
 
     if (file.isEmpty())
         return ;
@@ -8247,7 +8244,7 @@ void
 RosegardenMainWindow::slotUpdateAutoSaveInterval(unsigned int interval)
 {
     RG_DEBUG << "slotUpdateAutoSaveInterval - "
-    << "changed interval to " << interval << endl;
+    << "changed interval to " << interval;
     m_autoSaveTimer->setInterval(int(interval) * 1000);
 }
 
