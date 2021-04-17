@@ -137,7 +137,8 @@ Segment::Segment(const Segment &segment):
     m_isTmp(segment.isTmp()),
     m_participation(segment.m_participation),
     m_verseCount(-1),   // -1 => computation needed
-    m_verse(0)   // Needs a global recomputation on the whole composition
+    m_verse(0),   // Needs a global recomputation on the whole composition
+    m_forNotation(segment.m_forNotation)
 {
     RG_DEBUG << "cctor" << this;
     for (const_iterator it = segment.begin();
@@ -210,8 +211,13 @@ Segment::getRealSegment() const {
 }
 
 void
-Segment::setForNotation(bool f) {
-    m_forNotation = f;
+Segment::setForNotation(bool f, bool all) {
+    if (m_segmentLinker && all) {
+        // If the segment is linked, set the flag for each segment
+        m_segmentLinker->setForNotation(f);
+    } else {
+        m_forNotation = f;
+    }
 }
 
 bool

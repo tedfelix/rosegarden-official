@@ -456,5 +456,16 @@ SegmentLinker::LinkedSegmentParams::LinkedSegmentParams(Segment *s) :
     
 }
 
+void
+SegmentLinker::setForNotation(bool f)
+{
+    for (LinkedSegmentParamsList::iterator i = m_linkedSegmentParamsList.begin();
+            i != m_linkedSegmentParamsList.end(); ++i) {
+        i->m_linkedSegment->setForNotation(f, false);
+        // Calling setForNotation here with all=true (which is the default)
+        // leads to an infinite recursion.
+    }
+}
+
 }
 

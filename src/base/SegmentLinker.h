@@ -63,6 +63,11 @@ public:
     Segment * getReference() const {
         return m_reference;
     }
+    
+    /**
+     * Set the flag for using a segment in notation for each linked segment
+     */
+    void setForNotation(bool f);
 
 protected slots:
     void slotUpdateLinkedSegments(Command* command);
