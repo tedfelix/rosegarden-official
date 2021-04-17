@@ -98,6 +98,10 @@ Segment::Segment(SegmentType segmentType, timeT startTime) :
 Segment::Segment(const Segment &segment):
     QObject(),
     EventContainer(),
+    matrixHZoomFactor(segment.matrixHZoomFactor),
+    matrixVZoomFactor(segment.matrixVZoomFactor),
+    matrixRulers(new RulerSet(*segment.matrixRulers)),
+    notationRulers(new RulerSet(*segment.notationRulers)),
     m_composition(nullptr), // Composition should decide what's in it and what's not
     m_startTime(segment.getStartTime()),
     m_endMarkerTime(segment.m_endMarkerTime ?

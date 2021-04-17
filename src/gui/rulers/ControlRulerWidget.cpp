@@ -228,8 +228,9 @@ ControlRulerWidget::launchMatrixRulers(std::vector<Segment *> segments)
     // is in place.
 
     // For each Segment, get the ruler lists.
-    for (Segment *segment: segments) {
-        m_segmentRulerSets.push_back(segment->matrixRulers);
+    for (Segment *segment : segments) {
+        if (segment->matrixRulers)
+            m_segmentRulerSets.push_back(segment->matrixRulers);
     }
 
     launchRulers();
@@ -239,8 +240,9 @@ void
 ControlRulerWidget::launchNotationRulers(std::vector<Segment *> segments)
 {
     // For each Segment, get the ruler lists.
-    for (Segment *segment: segments) {
-        m_segmentRulerSets.push_back(segment->notationRulers);
+    for (Segment *segment : segments) {
+        if (segment->notationRulers)
+            m_segmentRulerSets.push_back(segment->notationRulers);
     }
 
     launchRulers();
