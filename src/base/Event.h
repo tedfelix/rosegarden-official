@@ -210,7 +210,7 @@ public:
     }
 
     // check if the events are copies
-    bool isCopyOf(const Event &e);
+    bool isCopyOf(const Event &e) const;
 
     friend bool operator<(const Event&, const Event&);
 
