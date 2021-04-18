@@ -834,10 +834,6 @@ NotationHLayout::preSquishBar(int barNo)
     if (!haveSomething)
         return ;
 
-    // experimental change - clear the timeSigMap. This disables the
-    // suppression of redundant time signatures
-    timeSigMap.clear();
-
     // Elimination of redundant time signature in the same bar - Step 2:
     // Scan every memorized bar and when several time signatures (i.e. several
     // bars with the same keys in TimeSigMap) are found keep only one whose
@@ -847,10 +843,16 @@ NotationHLayout::preSquishBar(int barNo)
     for (TimeSigMap::iterator
             i = timeSigMap.begin(); i != timeSigMap.end(); ++i) {
 
+        // experimental change - continue even with multiple time signatures.
+        // This disables the suppression of redundant time signatures
         // If only one bar keep its time signature and update fixedWidth
-        if (i->second.size() == 1) {
-            BarData *dataPtr = *(i->second.begin());
-            dataPtr->sizeData.fixedWidth = dataPtr->sizeData.timeSigFixedWidth;
+        if (i->second.size() >= 1) {
+            for (BarDataVector::iterator
+                     j = i->second.begin(); j != i->second.end(); ++j) {
+                BarData *dataPtr = *j;
+                dataPtr->sizeData.fixedWidth =
+                    dataPtr->sizeData.timeSigFixedWidth;
+            }
             continue;
         }
 
