@@ -406,10 +406,14 @@ Event::getStorageSize() const
 }
 
 bool
-Event::isCopyOf(const Event &e)
+Event::isCopyOf(const Event &e) const
 {
-    if (&e == this) return true;
-    if (e.m_data == m_data) return true;
+    if (&e == this)
+        return true;
+
+    if (e.m_data == m_data)
+        return true;
+
     return false;
 }
 

@@ -23,6 +23,7 @@
 #include "base/Segment.h"
 #include "base/Composition.h"
 #include "misc/Debug.h"
+
 #include <QString>
 
 // Getting a NULL reference.  Need to track down.  See Q_ASSERT_X()
@@ -54,11 +55,12 @@ BasicCommand::BasicCommand(const QString &name, Segment &segment,
     RG_DEBUG << "  m_startTime:" << m_startTime;
     RG_DEBUG << "  m_endTime:" << m_endTime;
 
-    if (m_endTime == m_startTime) ++m_endTime;
+    if (m_endTime == m_startTime)
+        ++m_endTime;
 
-    if (bruteForceRedo) {
+    if (bruteForceRedo)
         m_redoEvents = new Segment(segment.getType(), m_startTime);
-    }
+
 }
 
 // Variant ctor to be used when events to insert are known when
@@ -85,7 +87,8 @@ BasicCommand::BasicCommand(const QString &name,
     RG_DEBUG << "  m_startTime:" << m_startTime;
     RG_DEBUG << "  m_endTime:" << m_endTime;
 
-    if (m_endTime == m_startTime) { ++m_endTime; }
+    if (m_endTime == m_startTime)
+        ++m_endTime;
 }
 
 // Variant ctor to be used when segment does not exist at creation time
@@ -134,14 +137,14 @@ BasicCommand::calculateStartTime(timeT given, Segment &segment)
     timeT actualStartTime = given;
 
 #if 1
-    Segment::iterator i = segment.findTime(given);
+    Segment::const_iterator i = segment.findTime(given);
 
     // For each Event at the given start time
     // ??? Rewrite with range-based for and a break to simplify.  See below.
     while (i != segment.end()  &&  (*i)->getAbsoluteTime() == given) {
-        timeT notation = (*i)->getNotationAbsoluteTime();
-        if (notation < given)
-            actualStartTime = notation;
+        const timeT notationTime = (*i)->getNotationAbsoluteTime();
+        if (notationTime < given)
+            actualStartTime = notationTime;
         // Next event.
         ++i;
     }
@@ -152,7 +155,7 @@ BasicCommand::calculateStartTime(timeT given, Segment &segment)
         if (event->getAbsoluteTime() != given)
             break;
 
-        timeT notationTime = event->getNotationAbsoluteTime();
+        const timeT notationTime = event->getNotationAbsoluteTime();
         // If the notation time is earlier, use it.
         if (notationTime < given)
             actualStartTime = notationTime;
@@ -172,11 +175,16 @@ BasicCommand::calculateEndTime(timeT given, Segment &segment)
                "Segment pointer is null.");
 
     timeT actual = given;
-    Segment::iterator i = segment.findTime(given);
+    Segment::const_iterator i = segment.findTime(given);
 
+    // ??? Use range-based for.  See above.
     while (i != segment.end()  &&  (*i)->getAbsoluteTime() == given) {
-        timeT notation = (*i)->getNotationAbsoluteTime();
-        if (notation > given) actual = notation;
+        const timeT notationTime = (*i)->getNotationAbsoluteTime();
+        // If the notation time is later, use it.
+        if (notationTime > given)
+            actual = notationTime;
+
+        // Next event.
         ++i;
     }
 
@@ -206,18 +214,19 @@ void
 BasicCommand::execute()
 {
     requireSegment();
+
     RG_DEBUG << getName() << "before execute";
     RG_DEBUG << getName() << "segment" <<
-        m_segment->getStartTime() << m_segment->getEndTime();
+                m_segment->getStartTime() << m_segment->getEndTime();
     RG_DEBUG << *m_segment;
     RG_DEBUG << getName() << "segment end";
+
     beginExecute();
 
-    if (!m_doBruteForceRedo) {
-        modifySegment();
-    } else {
+    if (m_doBruteForceRedo)
         copyFrom(m_redoEvents);
-    }
+     else
+        modifySegment();
     
     // calculate the start and end of the modified region
     calculateModifiedStartEnd();
@@ -227,13 +236,15 @@ BasicCommand::execute()
         updateStartTime = m_segment->getStartTime();
     m_segment->updateRefreshStatuses(updateStartTime,
                                      m_modifiedEventsEnd);
+
     RG_DEBUG << "execute() for " << getName() << ": updated refresh statuses "
              << updateStartTime << " -> " << m_modifiedEventsEnd;
+
     m_segment->signalChanged(updateStartTime, m_modifiedEventsEnd);
 
     RG_DEBUG << getName() << "after execute";
     RG_DEBUG << getName() << "segment" <<
-        m_segment->getStartTime() << m_segment->getEndTime();
+                m_segment->getStartTime() << m_segment->getEndTime();
     RG_DEBUG << *m_segment;
     RG_DEBUG << getName() << "segment end";
 }
@@ -242,9 +253,10 @@ void
 BasicCommand::unexecute()
 {
     requireSegment();
+
     RG_DEBUG << getName() << "before unexecute";
     RG_DEBUG << getName() << "segment" <<
-        m_segment->getStartTime() << m_segment->getEndTime();
+                m_segment->getStartTime() << m_segment->getEndTime();
     RG_DEBUG << *m_segment;
     RG_DEBUG << getName() << "segment end";
     RG_DEBUG << "unexecute() begin...";
@@ -261,11 +273,11 @@ BasicCommand::unexecute()
     }
 
     if (m_segment->getStartTime() < m_originalStartTime) {
-        // this can happen if a segment is lengthend from the start
-        for (Segment::iterator i = m_segment->begin();
+        // this can happen if a segment is lengthened from the start
+        for (Segment::const_iterator i = m_segment->begin();
              m_segment->isBeforeEndMarker(i); ) {
-            
-            Segment::iterator j = i;
+
+            Segment::const_iterator j = i;
             ++j;
 
             if ((*i)->getAbsoluteTime() >= m_originalStartTime)
@@ -281,6 +293,13 @@ BasicCommand::unexecute()
     // This can take a very long time.  This is because we are adding
     // events to a Segment that has someone to notify of changes.
     // Every single call to Segment::insert() fires off notifications.
+    // ??? A better design is to never send notifications from Segment::insert().
+    //     Instead, always rely on the client to trigger a notification when
+    //     they are done.  Have to be careful, though, as some notification
+    //     receivers might be expecting a notification for every single change.
+    //     These cases need to be rewritten if possible, or a separate
+    //     fine grained notification mechanism introduced only to be used by
+    //     those who absolutely need it.
     copyFrom(m_savedEvents);
 
     timeT updateStartTime = m_modifiedEventsStart;
@@ -288,14 +307,16 @@ BasicCommand::unexecute()
         updateStartTime = m_segment->getStartTime();
     m_segment->updateRefreshStatuses(updateStartTime,
                                      m_modifiedEventsEnd);
+
     RG_DEBUG << "unexecute() for " << getName() << ": updated refresh statuses "
              << updateStartTime << " -> " << m_modifiedEventsEnd;
+
     m_segment->signalChanged(updateStartTime, m_modifiedEventsEnd);
 
     RG_DEBUG << "unexecute() end.";
     RG_DEBUG << getName() << "after unexecute";
     RG_DEBUG << getName() << "segment" <<
-        m_segment->getStartTime() << m_segment->getEndTime();
+                m_segment->getStartTime() << m_segment->getEndTime();
     RG_DEBUG << *m_segment;
     RG_DEBUG << getName() << "segment end";
 }
@@ -304,12 +325,13 @@ void
 BasicCommand::copyTo(Rosegarden::Segment *dest, bool wholeSegment)
 {
     requireSegment();
-    RG_DEBUG << "copyTo() for" << getName() << ":" << m_segment <<
-        "to" << dest << ", range (" << m_startTime << "," << m_endTime <<
-        ")";
 
-    Segment::iterator from = m_segment->findTime(m_startTime);
-    Segment::iterator to   = m_segment->findTime(m_endTime);
+    RG_DEBUG << "copyTo() for" << getName() << ":" << m_segment <<
+                "to" << dest << ", range (" << m_startTime << "," << m_endTime <<
+                ")";
+
+    Segment::const_iterator from = m_segment->findTime(m_startTime);
+    Segment::const_iterator to = m_segment->findTime(m_endTime);
 
     if (wholeSegment) {
         from = m_segment->findTime(m_segment->getStartTime());
@@ -317,7 +339,9 @@ BasicCommand::copyTo(Rosegarden::Segment *dest, bool wholeSegment)
         dest->clear();
     }
 
-    for (Segment::iterator i = from; i != m_segment->end() && i != to; ++i) {
+    for (Segment::const_iterator i = from;
+         i != m_segment->end()  &&  i != to;
+         ++i) {
 
         RG_DEBUG << "copyTo(): Found event of type" << (*i)->getType() << "and duration" << (*i)->getDuration() << "at time" << (*i)->getAbsoluteTime();
 
@@ -329,12 +353,13 @@ void
 BasicCommand::copyFrom(Rosegarden::Segment *source, bool wholeSegment)
 {
     requireSegment();
-    RG_DEBUG << "copyFrom() for" << getName() << ":" << source <<
-        "to" << m_segment << ", range (" << m_startTime << "," <<
-        m_endTime << ")";
 
-    Segment::iterator from = source->findTime(m_modifiedEventsStart);
-    Segment::iterator to   = source->findTime(m_modifiedEventsEnd);
+    RG_DEBUG << "copyFrom() for" << getName() << ":" << source <<
+                "to" << m_segment << ", range (" << m_startTime << "," <<
+                m_endTime << ")";
+
+    Segment::const_iterator from = source->findTime(m_modifiedEventsStart);
+    Segment::const_iterator to = source->findTime(m_modifiedEventsEnd);
 
     if (wholeSegment) {
         from = source->findTime(source->getStartTime());
@@ -343,7 +368,7 @@ BasicCommand::copyFrom(Rosegarden::Segment *source, bool wholeSegment)
 
     m_segment->erase(m_segment->findTime(m_modifiedEventsStart),
                      m_segment->findTime(m_modifiedEventsEnd));
-    for (Segment::iterator i = from; i != to; ++i) {
+    for (Segment::const_iterator i = from; i != to; ++i) {
 
         RG_DEBUG << "copyFrom(): Found event of type" << (*i)->getType() << "and duration" << (*i)->getDuration() << "at time" << (*i)->getAbsoluteTime();
 
@@ -356,32 +381,41 @@ BasicCommand::copyFrom(Rosegarden::Segment *source, bool wholeSegment)
 void
 BasicCommand::requireSegment()
 {
-    if (m_segment) {
-        // already got the segment
+    // If we already have a Segment, bail.
+    if (m_segment)
         return;
-    }
 
     RG_DEBUG << "requireSegment()...";
 
-    Q_ASSERT_X(&m_comp != nullptr,
+    Q_ASSERT_X(m_comp != nullptr,
                "BasicCommand::requireSegment()",
                "Composition pointer is null.");
+    if (!m_comp)
+        return;
 
-    // get the segment from the id
+    // Get the marked Segment.
     m_segment = m_comp->getSegmentByMarking(m_segmentMarking);
 
-    RG_DEBUG << "  m_segment:" << m_segment;
-
-    Q_ASSERT_X(&m_segment != nullptr,
+    Q_ASSERT_X(m_segment != nullptr,
                "BasicCommand::requireSegment()",
                "Segment pointer is null.");
+    if (!m_segment)
+        return;
+
+    RG_DEBUG << "  m_segment" << m_segment;
 
     // adjust start time
     m_startTime = calculateStartTime(m_startTime, *m_segment);
     m_endTime = calculateEndTime(m_segment->getEndTime(), *m_segment);
-    if (m_endTime == m_startTime) ++m_endTime;
+
+    if (m_endTime == m_startTime)
+        ++m_endTime;
+
     // ??? Memory Leak?  m_savedEvents might not be nullptr?
+    //     delete m_savedEvents; wouldn't hurt here.  Though really a
+    //     shared pointer would be much better.
     m_savedEvents = new Segment(m_segment->getType(), m_startTime);
+
     m_originalStartTime = m_segment->getStartTime();
 
     RG_DEBUG << "  m_segment->getStartTime():" << m_segment->getStartTime();
@@ -394,11 +428,11 @@ BasicCommand::requireSegment()
 void
 BasicCommand::calculateModifiedStartEnd()
 {
-    if (m_modifiedEventsStart != -1 ||
-        m_modifiedEventsEnd != -1) {
-        //already done
+    // If we've already computed this, bail.
+    if (m_modifiedEventsStart != -1  ||
+        m_modifiedEventsEnd != -1)
         return;
-    }
+
     // use savedEvents here in case the segment was shortened
     m_modifiedEventsStart = m_savedEvents->getStartTime();
     m_modifiedEventsEnd = m_savedEvents->getEndTime();
@@ -411,28 +445,30 @@ BasicCommand::calculateModifiedStartEnd()
     // ??? This will only work if m_savedEvents is a complete copy of
     //     the original Segment.  Is that always the case?
 
-    Segment::iterator i = m_segment->begin();
-    Segment::iterator j = m_savedEvents->begin();
-    while(true) {
-        if (i == m_segment->end()) {
-            // all done
+    Segment::const_iterator i = m_segment->begin();
+    Segment::const_iterator j = m_savedEvents->begin();
+
+    while (true) {
+        // If we are at the end of m_segment, we're done.
+        if (i == m_segment->end())
             break;
-        }
-        if (j == m_savedEvents->end()) {
-            // all done
+
+        // If we are at the end of the undo buffer, we're done.
+        if (j == m_savedEvents->end())
             break;
-        }
-        Event* segEvent = (*i);
-        Event* savedEvent = (*j);
+
+        const Event *segEvent = (*i);
+        const Event *savedEvent = (*j);
+
         m_modifiedEventsStart = std::min(savedEvent->getAbsoluteTime(),
                                          segEvent->getAbsoluteTime()) - 1;
-        // are they the same ?
-        if (!segEvent->isCopyOf(*savedEvent)) {
-            // found a changed note
+        // If we found a changed Event, we're done searching.
+        if (!segEvent->isCopyOf(*savedEvent))
             break;
-        }
-        i++;
-        j++;
+
+        // Try the next Event.
+        ++i;
+        ++j;
     }        
 
     // Find the end of the modification(s).
@@ -440,28 +476,30 @@ BasicCommand::calculateModifiedStartEnd()
     // ??? This will only work if m_savedEvents is a complete copy of
     //     the original Segment.  Is that always the case?
 
-    Segment::reverse_iterator ir = m_segment->rbegin();
-    Segment::reverse_iterator jr = m_savedEvents->rbegin();
-    while(true) {
-        if (ir == m_segment->rend()) {
-            // all done
+    Segment::const_reverse_iterator ir = m_segment->rbegin();
+    Segment::const_reverse_iterator jr = m_savedEvents->rbegin();
+
+    while (true) {
+        // If we are at the beginning of m_segment, we're done.
+        if (ir == m_segment->rend())
             break;
-        }
-        if (jr == m_savedEvents->rend()) {
-            // all done
+
+        // If we are at the beginning of the undo buffer, we're done.
+        if (jr == m_savedEvents->rend())
             break;
-        }
-        Event* segEvent = (*ir);
-        Event* savedEvent = (*jr);
+
+        const Event *segEvent = (*ir);
+        const Event *savedEvent = (*jr);
+
         m_modifiedEventsEnd = std::max(savedEvent->getAbsoluteTime(),
                                        segEvent->getAbsoluteTime()) + 1;
-        // are they the same ?
-        if (!segEvent->isCopyOf(*savedEvent)) {
-            // found a changed note
+        // If we found a changed Event, we're done searching.
+        if (!segEvent->isCopyOf(*savedEvent))
             break;
-        }
-        ir++;
-        jr++;
+
+        // Try the previous Event.
+        ++ir;
+        ++jr;
     }        
 
     // If the segment start time has changed, go with the start of
@@ -470,17 +508,20 @@ BasicCommand::calculateModifiedStartEnd()
     //     determining m_modifiedEventsStart?  That would save CPU.
     if (m_segment->getStartTime() != m_originalStartTime) {
         // the segment has been shortened or lengthened from the start
-        // alway use the start of m_savedEvents
+        // always use the start of m_savedEvents
         m_modifiedEventsStart = m_savedEvents->getStartTime();
     }
+
+    // ??? And why do we not check for a change in end time?
 
     // End before start?  Go with a null range.
     if (m_modifiedEventsEnd < m_modifiedEventsStart) 
         m_modifiedEventsEnd = m_modifiedEventsStart;
         
     RG_DEBUG << "calculateModifiedStartEnd: " << m_modifiedEventsStart <<
-        m_modifiedEventsEnd;
+                m_modifiedEventsEnd;
     
 }
+
 
 }

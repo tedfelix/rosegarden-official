@@ -171,6 +171,9 @@ private:
      *
      * ??? This assumes that m_saveEvents is always a complete copy of the
      *     original Segment.  Is that always the case?
+     *
+     * ??? Passing start and end times into the ctor might now be unnecessary
+     *     since we compute the actual modification time range here.
      */
     void calculateModifiedStartEnd();
 
