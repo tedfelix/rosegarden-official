@@ -114,7 +114,7 @@ void AudioListView::mouseMoveEvent(QMouseEvent *event){
     
     RG_DEBUG << "AudioListView::dragObject - "
             << "file id = " << AuItem->getId()
-            << ", start time = " << AuItem->getStartTime() << endl;
+            << ", start time = " << AuItem->getStartTime();
     
     mimeData->setText( audioDatax ); 
      // ----------------------------------------------------------------------
@@ -125,7 +125,7 @@ void AudioListView::mouseMoveEvent(QMouseEvent *event){
     RG_DEBUG << "Starting drag from AudioListView::mouseMoveEvent() with mime : " << mimeData->formats() << " - " << mimeData->urls()[0];
     
     // start drag
-    drag->start(Qt::CopyAction | Qt::MoveAction);
+    drag->exec(Qt::CopyAction | Qt::MoveAction);
     
     
 }

@@ -157,7 +157,11 @@ StartupTester::slotNetworkFinished(QNetworkReply *reply)
 
     QByteArray responseData = reply->readAll();
     QString str = QString::fromUtf8(responseData.data());
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+    QStringList lines = str.split('\n', Qt::SkipEmptyParts);
+#else
     QStringList lines = str.split('\n', QString::SkipEmptyParts);
+#endif
     if (lines.empty()) return;
 
     QString latestVersion = lines[0];

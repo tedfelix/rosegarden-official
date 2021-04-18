@@ -56,8 +56,7 @@ allocateChannelInterval(RealTime startTime, RealTime endTime,
     // `startTime'
     if (!empty()) {
                     RG_DEBUG
-                        << "Scanning for existing ChannelInterval"
-                        << endl;
+                        << "Scanning for existing ChannelInterval";
 
         ChannelInterval dummy(startTime);
         for (reverse_iterator i(upper_bound(dummy));
@@ -369,8 +368,7 @@ AllocateChannels::
 ~AllocateChannels()
 {
     RG_DEBUG
-        << "~AllocateChannels"
-        << endl;
+        << "~AllocateChannels";
 }
 
 // Re-allocate a ChannelInterval to encompass start and end,
@@ -390,8 +388,7 @@ reallocateToFit(Instrument& instrument, ChannelInterval &ci,
         << "on bank"
         << (int)instrument.getMSB() << ":" << (int)instrument.getLSB() 
         << "channel "
-        << ci.getChannelId()
-        << endl;
+        << ci.getChannelId();
     // If we already have a channel but it's the wrong type or it
     // changed instrument, always free it.
     if (ci.validChannel() &&
@@ -412,8 +409,7 @@ reallocateToFit(Instrument& instrument, ChannelInterval &ci,
     
     RG_DEBUG
         << "Now channel "
-        << ci.getChannelId()
-        << endl;
+        << ci.getChannelId();
 }
 
 // Free the given channel interval appropriately.
@@ -523,8 +519,7 @@ releaseReservedChannel(ChannelId channel, FixedChannelSet& channelSet)
     if (i == channelSet.end()) { return; }
     RG_DEBUG
         << "AllocateChannels: releaseFixedChannel releasing"
-        << (int) channel
-        << endl;
+        << (int) channel;
     
     // Remove from reserved channels.
     channelSet.erase(i);
@@ -546,8 +541,7 @@ reserveChannel(ChannelId channel, FixedChannelSet& channelSet)
     if (!isPercussion(channel)) {
         RG_DEBUG
             << "AllocateChannels: reserveFixedChannel reserving"
-            << (int) channel
-            << endl;
+            << (int) channel;
         m_freeChannels.removeChannel(channel);
     }
     // Record that this channel is reserved.  

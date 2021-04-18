@@ -130,7 +130,7 @@ void
 WarningWidget::queueMessage(const int type, const QString text, const QString informativeText)
 {
     RG_DEBUG << "WarningWidget::queueMessage(" << text
-             << ", " << informativeText << ")" << endl;
+             << ", " << informativeText << ")";
 
     // we'll go ahead and splay this out in a big'ol switch in case there are
     // ever other warning types that have special icons

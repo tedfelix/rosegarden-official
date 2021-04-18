@@ -154,7 +154,7 @@ void LoopRuler::paintEvent(QPaintEvent* e)
     QBrush bg = QBrush(GUIPalette::getColour(GUIPalette::LoopRulerBackground));
     paint.fillRect(e->rect(), bg);
 
-    paint.setBrush(palette().foreground());
+    paint.setBrush(palette().windowText());
     drawBarSections(&paint);
     drawLoopMarker(&paint);
     

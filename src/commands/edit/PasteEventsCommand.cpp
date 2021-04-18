@@ -143,7 +143,7 @@ PasteEventsCommand::getEffectiveEndTime(Segment &segment,
     RG_DEBUG << "PasteEventsCommand::getEffectiveEndTime: clipboard "
     << clipboard->getSingleSegment()->getStartTime()
     << " -> "
-    << clipboard->getSingleSegment()->getEndTime() << endl;
+    << clipboard->getSingleSegment()->getEndTime();
 
     timeT d = clipboard->getSingleSegment()->getEndTime() -
               clipboard->getSingleSegment()->getStartTime();
@@ -252,7 +252,7 @@ PasteEventsCommand::modifySegment()
 
     RG_DEBUG << "PasteEventsCommand::modifySegment() : paste type = "
     << m_pasteType << " - pasteTime = "
-    << pasteTime << " - origin = " << origin << endl;
+    << pasteTime << " - origin = " << origin;
 
     // First check for group IDs, which we want to make unique in the
     // copies in the destination segment

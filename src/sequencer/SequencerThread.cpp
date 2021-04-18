@@ -21,8 +21,7 @@
 #include "RosegardenSequencer.h"
 #include "gui/application/TransportStatus.h"
 
-#include <QDateTime>  // For QTime
-
+#include <QElapsedTimer>
 
 namespace Rosegarden
 {
@@ -39,7 +38,7 @@ SequencerThread::run()
 
     const RealTime sleepTime = RealTime::fromMilliseconds(10);
 
-    QTime timer;
+    QElapsedTimer timer;
     timer.start();
 
     bool exiting = false;

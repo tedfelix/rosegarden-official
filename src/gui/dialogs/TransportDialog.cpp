@@ -863,11 +863,8 @@ TransportDialog::setTimeSignature(const TimeSignature &timeSig)
     m_numerator = numerator;
     m_denominator = denominator;
 
-    QString timeSigString;
-    char *buf;
-    asprintf(&buf, "%d/%d", numerator, denominator);
-    timeSigString = buf;
-    free(buf);
+    const QString timeSigString =
+        QString::asprintf("%d/%d", numerator, denominator);
     ui->TimeSigDisplay->setText(timeSigString);
 }
 
@@ -1095,11 +1092,8 @@ TransportDialog::slotSetStopLoopingPointAtMarkerPos()
 
 void TransportDialog::slotTempoChanged(tempoT tempo)
 {
-    QString tempoString;
-    char *buf;
-    asprintf(&buf, "%4.3f", Composition::getTempoQpm(tempo));
-    tempoString = buf;
-    free(buf);
+    const QString tempoString =
+        QString::asprintf("%4.3f", Composition::getTempoQpm(tempo));
     ui->TempoDisplay->setText(tempoString);
 }
 

@@ -169,8 +169,7 @@ KeyInsertionCommand::modifySegment()
             // to intercept and avoid, so I'm doing this lame failsafe
             // instead, which should never, ever actually run under
             // any conceivable cirumstance anyway
-            RG_DEBUG << "KeyInsertionCommand: by the pricking of my thumbs, something wicked this way comes.  :("
-            << endl;
+            RG_DEBUG << "KeyInsertionCommand: by the pricking of my thumbs, something wicked this way comes.  :(";
             return ;
         }
 
@@ -224,8 +223,8 @@ KeyInsertionCommand::modifySegment()
         // user-specified version
         Key k(newKeyName);
         RG_DEBUG << "KeyInsertCommand: inserting transposed key"
-        << "        user key was: " << m_key.getName() << endl
-        << "    tranposed key is: " << k.getName() << endl;
+        << "        user key was: " << m_key.getName() << "\n"
+        << "    tranposed key is: " << k.getName();
         m_key = k;
     } // if (m_transposeKey)
 

@@ -41,7 +41,8 @@ IconButton::IconButton(QWidget* parent, const QPixmap& icon, const QString & nam
     m_font.setPixelSize(12);
     m_font.setBold(true);
     QFontMetrics metrics(m_font);
-    m_labelSize = QSize(metrics.width(m_labelText),metrics.ascent());
+    m_labelSize = QSize(metrics.boundingRect(m_labelText).width(),
+                        metrics.ascent());
 
     ///@@@ Shouldn't we use contentsmargins instead of a local m_margins member for this?
     setMinimumSize(std::max(icon.width(),m_labelSize.width())+2*m_margin, icon.height()+m_labelSize.height()+3*m_margin);

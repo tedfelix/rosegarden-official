@@ -65,7 +65,7 @@ MoveCommand::modifySegment()
     RG_DEBUG << "MoveCommand::modifySegment: delta is " << m_delta
     << ", useNotationTimings " << m_useNotationTimings
     << ", start time " << m_selection->getStartTime()
-    << ", end time " << m_selection->getEndTime() << endl;
+    << ", end time " << m_selection->getEndTime();
 
     std::vector<Event *> toErase;
     std::vector<Event *> toInsert;

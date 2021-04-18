@@ -293,7 +293,7 @@ Rotary::paintEvent(QPaintEvent *)
     int pos = indent + (width - 2 * indent) / 8;
     int darkWidth = (width - 2 * indent) * 2 / 3;
     while (darkWidth) {
-        c = c.light(101);
+        c = c.lighter(101);
         pen.setColor(c);
         paint.setPen(pen);
         paint.drawEllipse(pos, pos, darkWidth, darkWidth);

@@ -149,7 +149,7 @@ SegmentAutoSplitCommand::execute()
 
                 RG_DEBUG << "Auto-split point " << split - 1 << ": time "
                 << splitPoints[split - 1].time << ", lastSoundTime "
-                << splitPoints[split - 1].lastSoundTime << endl;
+                << splitPoints[split - 1].lastSoundTime;
 
                 startTime = splitPoints[split - 1].time;
                 newSegment->insert(splitPoints[split - 1].clef.getAsEvent(startTime));

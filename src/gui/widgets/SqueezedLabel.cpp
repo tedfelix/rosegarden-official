@@ -21,6 +21,7 @@
 #include <QApplication>
 #include <QMimeData>
 #include <QDesktopWidget>
+#include <QScreen>
 
 
 namespace Rosegarden
@@ -85,10 +86,15 @@ QSize SqueezedLabel::minimumSizeHint() const
 
 QSize SqueezedLabel::sizeHint() const
 {
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+    QScreen* screen = QGuiApplication::screenAt(QPoint(0, 0));
+    int dw = screen->availableGeometry().width();
+#else
     int dw = QApplication::desktop()->availableGeometry(QPoint(0, 0)).width();
+#endif
     int maxWidth = dw * 3 / 4;
     QFontMetrics fm(fontMetrics());
-    int textWidth = fm.width(d->fullText);
+    int textWidth = fm.boundingRect(d->fullText).width();
     if (textWidth > maxWidth) {
         textWidth = maxWidth;
     }
@@ -112,7 +118,7 @@ void SqueezedLabel::squeezeTextToLabel() {
     QStringList squeezedLines;
     bool squeezed = false;
     Q_FOREACH(const QString& line, d->fullText.split('\n')) {
-        int lineWidth = fm.width(line);
+        int lineWidth = fm.boundingRect(line).width();
         if (lineWidth > labelWidth) {
             squeezed = true;
             squeezedLines << fm.elidedText(line, d->elideMode, labelWidth);

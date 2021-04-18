@@ -131,7 +131,7 @@ void PlayListView::mouseMoveEvent(QMouseEvent *event){
     RG_DEBUG << "Starting drag from PlayListView::mouseMoveEvent() with mime : " << mimeData->formats() << " - " << mimeData->urls()[0];
     
     // start drag
-    drag->start(Qt::CopyAction | Qt::MoveAction);
+    drag->exec(Qt::CopyAction | Qt::MoveAction);
     
     
 }

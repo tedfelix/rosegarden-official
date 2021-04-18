@@ -18,6 +18,8 @@
 
 #include <string>
 
+#include <QTextStream>
+
 #include <rosegardenprivate_export.h>
 
 struct timeval;
@@ -136,6 +138,8 @@ struct ROSEGARDENPRIVATE_EXPORT RealTime
 std::ostream &operator<<(std::ostream &out, const RealTime &rt);
 
 ROSEGARDENPRIVATE_EXPORT QDebug &operator<<(QDebug &, const Rosegarden::RealTime &);
+
+QTextStream& operator<<(QTextStream& out, const RealTime &rt);
 
 }
 

@@ -529,7 +529,7 @@ BankEditorDialog::updateDialog()
         QString itemName = strtoqstr(midiDevice->getName());
 
         RG_DEBUG << "BankEditorDialog::updateDialog - adding "
-        << itemName << endl;
+        << itemName;
 
         QTreeWidgetItem* deviceItem = new MidiDeviceTreeWidgetItem
                                     (midiDevice->getId(), m_treeWidget, itemName);
@@ -603,8 +603,7 @@ BankEditorDialog::populateDeviceItem(QTreeWidgetItem* deviceItem, MidiDevice* mi
     // add banks for this device
     for (size_t i = 0; i < banks.size(); ++i) {
         RG_DEBUG << "BankEditorDialog::populateDeviceItem - adding "
-        << itemName << " - " << strtoqstr(banks[i].getName())
-        << endl;
+                 << itemName << " - " << strtoqstr(banks[i].getName());
         new MidiBankTreeWidgetItem(midiDevice->getId(), i, deviceItem,
                                  strtoqstr(banks[i].getName()),
                                  banks[i].isPercussion(),
@@ -614,8 +613,7 @@ BankEditorDialog::populateDeviceItem(QTreeWidgetItem* deviceItem, MidiDevice* mi
     const KeyMappingList &mappings = midiDevice->getKeyMappings();
     for (size_t i = 0; i < mappings.size(); ++i) {
         RG_DEBUG << "BankEditorDialog::populateDeviceItem - adding key mapping "
-        << itemName << " - " << strtoqstr(mappings[i].getName())
-        << endl;
+                 << itemName << " - " << strtoqstr(mappings[i].getName());
         new MidiKeyMapTreeWidgetItem(midiDevice->getId(), deviceItem,
                                    strtoqstr(mappings[i].getName()));
     }
@@ -642,8 +640,7 @@ BankEditorDialog::updateDeviceItem(MidiDeviceTreeWidgetItem* deviceItem)
             continue;
 
         RG_DEBUG << "BankEditorDialog::updateDeviceItem - adding "
-        << itemName << " - " << strtoqstr(banks[i].getName())
-        << endl;
+                 << itemName << " - " << strtoqstr(banks[i].getName());
         new MidiBankTreeWidgetItem(midiDevice->getId(), i, deviceItem,
                                  strtoqstr(banks[i].getName()),
                                  banks[i].isPercussion(),
@@ -676,8 +673,7 @@ BankEditorDialog::updateDeviceItem(MidiDeviceTreeWidgetItem* deviceItem)
             continue;
 
         RG_DEBUG << "BankEditorDialog::updateDeviceItem - adding "
-        << itemName << " - " << strtoqstr(keymaps[i].getName())
-        << endl;
+                 << itemName << " - " << strtoqstr(keymaps[i].getName());
         new MidiKeyMapTreeWidgetItem(midiDevice->getId(), deviceItem,
                                    strtoqstr(keymaps[i].getName()));
     }
@@ -932,7 +928,7 @@ BankEditorDialog::slotApply()
         }
 
         RG_DEBUG << "BankEditorDialog::slotApply() : m_bankList size = "
-        << m_bankList.size() << endl;
+        << m_bankList.size();
 
         command = new ModifyDeviceCommand(m_studio,
                                           m_lastDevice,
@@ -1387,7 +1383,7 @@ BankEditorDialog::slotModifyDeviceOrBankName(QTreeWidgetItem* item, int)
         // renaming a bank item
 
         RG_DEBUG << "BankEditorDialog::slotModifyDeviceOrBankName - "
-        << "modify bank name to " << label << endl;
+        << "modify bank name to " << label;
 
         if (m_bankList[bankItem->getBank()].getName() != qstrtostr(label)) {
             m_bankList[bankItem->getBank()].setName(qstrtostr(label));
@@ -1397,7 +1393,7 @@ BankEditorDialog::slotModifyDeviceOrBankName(QTreeWidgetItem* item, int)
     } else if (keyItem) {
 
         RG_DEBUG << "BankEditorDialog::slotModifyDeviceOrBankName - "
-        << "modify key mapping name to " << label << endl;
+        << "modify key mapping name to " << label;
 
         QString oldName = keyItem->getName();
 
@@ -1436,7 +1432,7 @@ BankEditorDialog::slotModifyDeviceOrBankName(QTreeWidgetItem* item, int)
         // renaming a device item
 
         RG_DEBUG << "BankEditorDialog::slotModifyDeviceOrBankName - "
-        << "modify device name to " << label << endl;
+        << "modify device name to " << label;
 
         if (m_deviceNameMap[deviceItem->getDeviceId()] != qstrtostr(label)) {
             m_deviceNameMap[deviceItem->getDeviceId()] = qstrtostr(label);
@@ -1560,7 +1556,7 @@ BankEditorDialog::slotImport()
                       tr("Rosegarden files") + " (*.rg *.RG)" + ";;" +
                       tr("Sound fonts") + " (*.sf2 *.SF2)" + ";;" +
                       tr("LinuxSampler configuration files") + " (*.lscp *.LSCP)" + ";;" +
-                      tr("All files") + " (*)", nullptr, nullptr); ///!!! Should we allow 'All files' here since LinuxSampler files don't need to have an extension?!
+                      tr("All files") + " (*)", nullptr); ///!!! Should we allow 'All files' here since LinuxSampler files don't need to have an extension?!
 
     QUrl url(url_str);
     

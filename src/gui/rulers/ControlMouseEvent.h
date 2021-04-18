@@ -43,7 +43,8 @@ public:
     ControlMouseEvent() :
         itemList(),
         x(0), y(0), 
-        modifiers(nullptr), buttons(nullptr) { }
+        modifiers(Qt::KeyboardModifiers()),
+        buttons(Qt::MouseButtons()) { }
     
     ControlMouseEvent(const ControlMouseEvent *e) :
         itemList(e->itemList),

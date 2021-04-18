@@ -186,7 +186,7 @@ MappedEvent::addDataString(const std::string& data)
 QDebug &
 operator<<(QDebug &dbg, const MappedEvent &mE)
 {
-    dbg << "MappedEvent" << endl;
+    dbg << "MappedEvent" << "\n";
 
     dbg << "  Track ID:";
 
@@ -195,9 +195,9 @@ operator<<(QDebug &dbg, const MappedEvent &mE)
     else
         dbg << "NO_TRACK";
 
-    dbg << endl;
+    dbg << "\n";
 
-    dbg << "  Instrument ID:" << mE.m_instrument << endl;
+    dbg << "  Instrument ID:" << mE.m_instrument << "\n";
 
     QString type;
 
@@ -304,19 +304,19 @@ operator<<(QDebug &dbg, const MappedEvent &mE)
         break;
     }
 
-    dbg << "  Type:" << type << endl;
+    dbg << "  Type:" << type << "\n";
 
-    dbg << "  Data 1:" << mE.m_data1 << endl;
-    dbg << "  Data 2:" << mE.m_data2 << endl;
-    dbg << "  Event Time:" << mE.m_eventTime << endl;
-    dbg << "  Duration:" << mE.m_duration << endl;
-    dbg << "  Audio Start Marker:" << mE.m_audioStartMarker << endl;
-    dbg << "  Runtime Segment ID:" << mE.m_runtimeSegmentId << endl;
-    dbg << "  Auto Fade:" << mE.m_autoFade << endl;
-    dbg << "  Fade In Time:" << mE.m_fadeInTime << endl;
-    dbg << "  Fade Out Time:" << mE.m_fadeOutTime << endl;
-    dbg << "  Recorded Channel:" << mE.m_recordedChannel << endl;
-    dbg << "  Recorded Device:" << mE.m_recordedDevice << endl;
+    dbg << "  Data 1:" << mE.m_data1 << "\n";
+    dbg << "  Data 2:" << mE.m_data2 << "\n";
+    dbg << "  Event Time:" << mE.m_eventTime << "\n";
+    dbg << "  Duration:" << mE.m_duration << "\n";
+    dbg << "  Audio Start Marker:" << mE.m_audioStartMarker << "\n";
+    dbg << "  Runtime Segment ID:" << mE.m_runtimeSegmentId << "\n";
+    dbg << "  Auto Fade:" << mE.m_autoFade << "\n";
+    dbg << "  Fade In Time:" << mE.m_fadeInTime << "\n";
+    dbg << "  Fade Out Time:" << mE.m_fadeOutTime << "\n";
+    dbg << "  Recorded Channel:" << mE.m_recordedChannel << "\n";
+    dbg << "  Recorded Device:" << mE.m_recordedDevice << "\n";
 
     return dbg;
 }

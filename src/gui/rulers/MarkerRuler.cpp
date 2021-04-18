@@ -240,7 +240,7 @@ MarkerRuler::getMarkerAtClickPosition()
             int x = m_rulerScale->getXForTime((*i)->getTime())
                     + m_currentXOffset;
 
-            int width = metrics.width(name) + 5;
+            int width = metrics.boundingRect(name).width() + 5;
 
             int nextX = -1;
             Composition::markerconstiterator j = i;
@@ -369,7 +369,7 @@ MarkerRuler::paintEvent(QPaintEvent*)
                            + m_currentXOffset;
 
                 painter.fillRect(static_cast<int>(x), 1,
-                                 static_cast<int>(metrics.width(name) + 5),
+                                 static_cast<int>(metrics.boundingRect(name).width() + 5),
                                  barHeight - 2,
                                  QBrush(GUIPalette::getColour(GUIPalette::MarkerBackground)));
 

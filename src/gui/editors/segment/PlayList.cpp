@@ -113,7 +113,7 @@ void PlayList::slotOpenFiles()
                         tr("Rosegarden files") + " (*.rg *.RG)" + ";;" +
                         tr("MIDI files") + " (*.mid *.midi *.MID *.MIDI)" + ";;" +
                         tr("X11 Rosegarden files") + " (*.rose)" + ";;" +
-                        tr("All files") + " (*)", nullptr, nullptr );
+                        tr("All files") + " (*)", nullptr);
     
     QString fname;
     

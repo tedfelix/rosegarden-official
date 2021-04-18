@@ -360,6 +360,18 @@ void RosegardenScrollView::wheelEvent(QWheelEvent *e)
         // Create a new event.
         // We remove the Qt::SHIFT modifier otherwise we end up
         // moving left/right a page at a time.
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+        QWheelEvent e2(
+                e->position(),  // pos
+                e->globalPosition(),  // globalPos
+                pixelDelta2,  // pixelDelta
+                angleDelta2,  // angleDelta
+                e->buttons(),  // buttons
+                e->modifiers() & ~Qt::SHIFT,  // modifiers
+                e->phase(),  // phase
+                e->inverted(),  // inverted
+                e->source());  // source
+#else
         QWheelEvent e2(
                 e->pos(),  // pos
                 e->globalPosF(),  // globalPos
@@ -372,6 +384,7 @@ void RosegardenScrollView::wheelEvent(QWheelEvent *e)
                 e->phase(),  // phase
                 e->source(),  // source
                 e->inverted());  // inverted
+#endif
 
         // Let baseclass handle as usual.
         QAbstractScrollArea::wheelEvent(&e2);

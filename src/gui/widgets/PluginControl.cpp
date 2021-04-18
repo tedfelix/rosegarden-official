@@ -61,7 +61,7 @@ PluginControl::PluginControl(QWidget *parent,
         new QLabel(QString("%1    ").arg(strtoqstr(port->getName())), this);
     controlTitle->setFont(plainFont);
     controlTitle->setMinimumWidth
-        (QFontMetrics(controlTitle->font()).width("Bandwidth 1"));
+        (QFontMetrics(controlTitle->font()).boundingRect("Bandwidth 1").width());
 
     if (type == Rotary) {
         float lowerBound = port->getLowerBound();
@@ -123,7 +123,7 @@ PluginControl::PluginControl(QWidget *parent,
             low = new QLabel(QString("%1").arg(displayLower), this);
         }
         low->setFont(plainFont);
-        low->setMinimumWidth(QFontMetrics(plainFont).width("0.001"));
+        low->setMinimumWidth(QFontMetrics(plainFont).boundingRect("0.001").width());
         low->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
 
 //        std::cerr << "port " << port->getName() << ": lower bound "
@@ -159,7 +159,7 @@ PluginControl::PluginControl(QWidget *parent,
         }
         upp->setFont(plainFont);
         upp->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-        upp->setMinimumWidth(QFontMetrics(plainFont).width("99999"));
+        upp->setMinimumWidth(QFontMetrics(plainFont).boundingRect("99999").width());
 
         int col = 0;
         hbox->setColumnStretch(col++, 10);

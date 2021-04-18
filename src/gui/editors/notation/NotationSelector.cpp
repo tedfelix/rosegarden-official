@@ -255,7 +255,7 @@ NotationSelector::handleMouseMove(const NotationMouseEvent *e)
     int h = int(e->sceneY - m_selectionOrigin.y());
 
     RG_DEBUG << "NotationSelector::handleMouseMove: "
-                   << e->sceneX << "-" << m_selectionOrigin.x() << "=> w: " << w << " h: " << h << endl;
+                   << e->sceneX << "-" << m_selectionOrigin.x() << "=> w: " << w << " h: " << h;
 
     if (m_clickedElement /* && !m_clickedElement->isRest() */) {
 

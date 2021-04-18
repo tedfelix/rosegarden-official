@@ -357,47 +357,54 @@ BasicCommand::calculateModifiedStartEnd()
     m_modifiedEventsEnd = m_savedEvents->getEndTime();
     // m_segment has modified events savedEvents has the original
     // unchanged segment events
+
+    Segment::iterator i = m_segment->begin();
     Segment::iterator j = m_savedEvents->begin();
-    if (j == m_savedEvents->end()) {
-        // all done
-        return;
-    }
-    for (Segment::iterator i = m_segment->begin();
-         i != m_segment->end(); ++i) {
-        Event* segEvent = (*i);
-        Event* savedEvent = (*j);
-        // use savedEvents here in case the segment was shortened
-        m_modifiedEventsStart = savedEvent->getAbsoluteTime() - 1;
-        // are they the same ?
-        if (!segEvent->isCopyOf(*savedEvent)) {
-            // found a changed note
+    while(true) {
+        if (i == m_segment->end()) {
+            // all done
             break;
         }
-        ++j;
         if (j == m_savedEvents->end()) {
             // all done
             break;
         }
-    }
-
-    Segment::reverse_iterator rj = m_savedEvents->rbegin();
-    for (Segment::reverse_iterator i = m_segment->rbegin();
-         i != m_segment->rend(); ++i) {
         Event* segEvent = (*i);
-        Event* savedEvent = (*rj);
+        Event* savedEvent = (*j);
+        m_modifiedEventsStart = std::min(savedEvent->getAbsoluteTime(),
+                                         segEvent->getAbsoluteTime()) - 1;
         // are they the same ?
         if (!segEvent->isCopyOf(*savedEvent)) {
             // found a changed note
             break;
         }
-        // use savedEvents here in case the segment was shortened
-        m_modifiedEventsEnd = savedEvent->getAbsoluteTime() + 1;
-        ++rj;
-        if (rj == m_savedEvents->rend()) {
+        i++;
+        j++;
+    }        
+
+    Segment::reverse_iterator ir = m_segment->rbegin();
+    Segment::reverse_iterator jr = m_savedEvents->rbegin();
+    while(true) {
+        if (ir == m_segment->rend()) {
             // all done
             break;
         }
-    }
+        if (jr == m_savedEvents->rend()) {
+            // all done
+            break;
+        }
+        Event* segEvent = (*ir);
+        Event* savedEvent = (*jr);
+        m_modifiedEventsEnd = std::max(savedEvent->getAbsoluteTime(),
+                                       segEvent->getAbsoluteTime()) + 1;
+        // are they the same ?
+        if (!segEvent->isCopyOf(*savedEvent)) {
+            // found a changed note
+            break;
+        }
+        ir++;
+        jr++;
+    }        
 
     if (m_segment->getStartTime() != m_originalStartTime) {
         // the segment has been shortened or lengthened from the start
@@ -406,7 +413,7 @@ BasicCommand::calculateModifiedStartEnd()
     }
 
     if (m_modifiedEventsEnd < m_modifiedEventsStart) 
-        m_modifiedEventsEnd = m_modifiedEventsStart + 1;
+        m_modifiedEventsEnd = m_modifiedEventsStart;
         
     RG_DEBUG << "calculateModifiedStartEnd: " << m_modifiedEventsStart <<
         m_modifiedEventsEnd;

@@ -65,6 +65,7 @@
 #include <QEvent>
 #include <QString>
 #include <QTimer>
+#include <QElapsedTimer>
 
 #include <utility>  // For std::pair.
 
@@ -90,7 +91,7 @@ SequenceManager::SequenceManager() :
     m_lastRewoundAt(clock()),
     m_countdownDialog(nullptr),
     m_countdownTimer(nullptr),
-    m_recordTime(new QTime()),
+    m_recordTime(new QElapsedTimer()),
     m_lastTransportStartPosition(0),
     m_realRecordStart(RealTime::zeroTime),
     m_sampleRate(0),

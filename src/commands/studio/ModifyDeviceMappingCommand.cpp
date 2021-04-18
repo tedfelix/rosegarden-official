@@ -88,7 +88,7 @@ ModifyDeviceMappingCommand::execute()
 
                 RG_DEBUG << " Track " << it->first
                 << ", setting Instrument to "
-                << (*dIt)->getId() << endl;
+                << (*dIt)->getId();
 
                 // store "to" and "from" values
                 //

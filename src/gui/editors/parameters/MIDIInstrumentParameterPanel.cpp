@@ -78,7 +78,8 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(QWidget *parent) :
     QFontMetrics metrics(f);
     // Compute a width for the labels that will prevent them from becoming
     // so large that they make a mess out of the layout.
-    const int labelWidth = metrics.width("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+    const int labelWidth =
+        metrics.boundingRect("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX").width();
 
     // Widgets
 

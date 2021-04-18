@@ -50,8 +50,7 @@ void MarkerMapper::fillBuffer()
     SEQUENCER_DEBUG
         << "MarkerMapper::fillBuffer inserting marker message"
         << metaMessage
-        << "at" << eventTime
-        << endl;
+        << "at" << eventTime;
 #endif
 
       MappedEvent e;

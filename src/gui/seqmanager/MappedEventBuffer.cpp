@@ -95,13 +95,21 @@ MappedEventBuffer::refresh()
 int
 MappedEventBuffer::capacity() const
 {
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+    return m_capacity.loadRelaxed();
+#else
     return m_capacity.load();
+#endif
 }
 
 int
 MappedEventBuffer::size() const
 {
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+    return m_size.loadRelaxed();
+#else
     return m_size.load();
+#endif
 }
 
 void
@@ -113,7 +121,11 @@ MappedEventBuffer::reserve(int newSize)
     MappedEvent *newBuffer = new MappedEvent[newSize];
 
     if (oldBuffer) {
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+        for (int i = 0; i < m_size.loadRelaxed(); ++i) {
+#else
         for (int i = 0; i < m_size.load(); ++i) {
+#endif
             newBuffer[i] = m_buffer[i];
         }
     }
@@ -134,7 +146,11 @@ MappedEventBuffer::reserve(int newSize)
 void
 MappedEventBuffer::resize(int newFill)
 {
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+    m_size.storeRelaxed(newFill);
+#else
     m_size.store(newFill);
+#endif
 }
 
 void

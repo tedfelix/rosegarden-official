@@ -1471,7 +1471,7 @@ NotationScene::positionStaffs()
             m_title->setDefaultTextColor(Qt::black);
             addItem(m_title);
             m_title->setFont(font);
-            m_title->setPos(m_leftGutter + pageWidth / 2 - metrics.width(title) / 2,
+            m_title->setPos(m_leftGutter + pageWidth / 2 - metrics.boundingRect(title).width() / 2,
                             20 + topMargin / 4 + metrics.ascent());
             m_title->show();
             titleHeight += metrics.height() * 3 / 2 + topMargin / 4;
@@ -1487,7 +1487,7 @@ NotationScene::positionStaffs()
             m_subtitle->setDefaultTextColor(Qt::black);
             addItem(m_subtitle);
             m_subtitle->setFont(font);
-            m_subtitle->setPos(m_leftGutter + pageWidth / 2 - metrics.width(subtitle) / 2,
+            m_subtitle->setPos(m_leftGutter + pageWidth / 2 - metrics.boundingRect(subtitle).width() / 2,
                                20 + titleHeight + metrics.ascent());
             m_subtitle->show();
             titleHeight += metrics.height() * 3 / 2;
@@ -1500,7 +1500,7 @@ NotationScene::positionStaffs()
             m_composer->setDefaultTextColor(Qt::black);
             addItem(m_composer);
             m_composer->setFont(font);
-            m_composer->setPos(m_leftGutter + pageWidth - metrics.width(composer) - leftMargin,
+            m_composer->setPos(m_leftGutter + pageWidth - metrics.boundingRect(composer).width() - leftMargin,
                                20 + titleHeight + metrics.ascent());
             m_composer->show();
             titleHeight += metrics.height() * 3 / 2;

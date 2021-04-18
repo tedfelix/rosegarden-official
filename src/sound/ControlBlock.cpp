@@ -91,8 +91,7 @@ void
 ControlBlock::setDocument(RosegardenDocument *doc)
 {
 #ifdef DEBUG_CONTROL_BLOCK
-    RG_DEBUG << "ControlBlock::setDocument()"
-             << endl;
+    RG_DEBUG << "ControlBlock::setDocument()";
 #endif
     clearTracks();
     m_doc = doc;
@@ -120,8 +119,7 @@ ControlBlock::updateTrackData(Track* t)
     if (t) {
 #ifdef DEBUG_CONTROL_BLOCK
     RG_DEBUG << "Updating track"
-             << t->getId()
-             << endl;
+             << t->getId();
 #endif
         setInstrumentForTrack(t->getId(), t->getInstrument());
         setTrackArmed(t->getId(), t->isArmed());
@@ -336,8 +334,7 @@ setSelectedTrack(TrackId track)
     if (m_selectedTrack < CONTROLBLOCK_MAX_NB_TRACKS) {
 #ifdef DEBUG_CONTROL_BLOCK
     RG_DEBUG << "ControlBlock::setSelectedTrack() deselecting"
-             << m_selectedTrack
-             << endl;
+             << m_selectedTrack;
 #endif
         TrackInfo &oldTrack = m_trackInfo[m_selectedTrack];
         oldTrack.m_selected = false;
@@ -348,8 +345,7 @@ setSelectedTrack(TrackId track)
     if (track < CONTROLBLOCK_MAX_NB_TRACKS) {
 #ifdef DEBUG_CONTROL_BLOCK
     RG_DEBUG << "ControlBlock::setSelectedTrack() selecting"
-             << track
-             << endl;
+             << track;
 #endif
         TrackInfo &newTrack = m_trackInfo[track];
         newTrack.m_selected = true;
@@ -489,8 +485,7 @@ conform(Studio &studio)
                  "should have a thru channel" :
                  "shouldn't have a thru channel")
              << "and"
-             << (m_hasThruChannel ? "does" : "doesn't")
-             << endl;
+             << (m_hasThruChannel ? "does" : "doesn't");
 #endif
     
     if (!m_hasThruChannel && shouldHaveThru) {
@@ -517,8 +512,7 @@ void
 TrackInfo::makeChannelReady(Studio &studio)
 {
 #ifdef DEBUG_CONTROL_BLOCK
-    RG_DEBUG << "TrackInfo::makeChannelReady()"
-             << endl;
+    RG_DEBUG << "TrackInfo::makeChannelReady()";
 #endif
     Instrument *instrument =
         studio.getInstrumentById(m_instrumentId);
@@ -545,8 +539,7 @@ TrackInfo::makeChannelReady(Studio &studio)
             m_hasThruChannel = true;
 #ifdef DEBUG_CONTROL_BLOCK
     RG_DEBUG << "TrackInfo::makeChannelReady() now has channel"
-             << m_hasThruChannel
-             << endl;
+             << m_hasThruChannel;
 #endif
         }
         // This is how Midi instrument readies a fixed channel.
@@ -586,8 +579,7 @@ TrackInfo::allocateThruChannel(Studio &studio)
     RG_DEBUG << "TrackInfo::allocateThruChannel() "
              << (allocator ?
                  "got an allocator" :
-                 "didn't get an allocator")
-             << endl;
+                 "didn't get an allocator");
 #endif
 
     // Device is not a channel-managing device, so instrument's
@@ -605,8 +597,7 @@ TrackInfo::allocateThruChannel(Studio &studio)
 
 #ifdef DEBUG_CONTROL_BLOCK
     RG_DEBUG << "TrackInfo::allocateThruChannel() got channel"
-             << (int)m_thruChannel
-             << endl;
+             << (int)m_thruChannel;
 #endif
     
     // Right now the channel is probably playing the wrong program.

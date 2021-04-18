@@ -564,8 +564,7 @@ SegmentFigData::expand(SourcedFiguration& sourcedFiguration,
             RG_DEBUG << "Got a chord with"
                      << newBlockChord->size()
                      << "notes instead of"
-                     << nbChordNotes
-                     << endl;
+                     << nbChordNotes;
             delete newBlockChord;
             return startTime;
         }

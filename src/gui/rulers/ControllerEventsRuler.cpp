@@ -244,7 +244,7 @@ void ControllerEventsRuler::paintEvent(QPaintEvent *event)
     painter.setPen(pen);
     QFontMetrics fontMetrics(painter.font());
     int fontHeight = fontMetrics.height();
-    int fontOffset = fontMetrics.width('+');
+    int fontOffset = fontMetrics.boundingRect('+').width();
     
     for (ControlItemVector::iterator it = selectedVector.begin();
          it != selectedVector.end();
@@ -267,7 +267,8 @@ void ControllerEventsRuler::paintEvent(QPaintEvent *event)
         
         painter.setPen(QPen(Qt::NoPen));
         painter.setBrush(QBrush(Qt::white));
-        painter.drawRect(QRect(x,y+2,fontMetrics.width(str),-(fontMetrics.height()-2)));
+        painter.drawRect(QRect(x,y+2,fontMetrics.boundingRect(str).width(),
+                               -(fontMetrics.height()-2)));
         painter.setPen(pen);
         painter.setBrush(brush);
         painter.drawText(x,y,str);
@@ -299,8 +300,8 @@ QString ControllerEventsRuler::getName()
         QString name = tr("Unsupported Event Type");
 
         if (m_controller->getType() == Controller::EventType) {
-            QString hexValue;
-            hexValue.sprintf("0x%x", m_controller->getControllerNumber());
+            const QString hexValue =
+                QString::asprintf("0x%x", m_controller->getControllerNumber());
 
             name = QString("%1 (%2 / %3)").arg(strtoqstr(m_controller->getName()))
                    .arg(int(m_controller->getControllerNumber()))

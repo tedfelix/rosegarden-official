@@ -89,7 +89,7 @@ HeadersConfigurationPage::HeadersConfigurationPage(
         std::string header = qstrtostr(value);
         //@@@ dtb: tr() only works with char* now, so I'm going to try
         // using header directly instead of a QString version of header.
-        QString headerStr = QObject::trUtf8(header.c_str());
+        QString headerStr = QObject::tr(header.c_str());
 
         unsigned int row = 0, col = 0, width = 1;
         LineEdit *editHeader = new LineEdit(headerStr, frameHeaders);
