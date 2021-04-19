@@ -242,20 +242,22 @@ Studio::getPresentationInstruments() const
     return list;
 }
 
-Instrument*
-Studio::getInstrumentById(InstrumentId id)
+Instrument *
+Studio::getInstrumentById(InstrumentId id) const
 {
-    std::vector<Device*>::iterator it;
-    InstrumentList list;
-    InstrumentList::iterator iit;
-
-    for (it = m_devices.begin(); it != m_devices.end(); ++it)
+    // For each Device
+    for (std::vector<Device *>::const_iterator deviceIter = m_devices.begin();
+         deviceIter != m_devices.end();
+         ++deviceIter)
     {
-        list = (*it)->getAllInstruments();
+        InstrumentList list = (*deviceIter)->getAllInstruments();
 
-        for (iit = list.begin(); iit != list.end(); ++iit)
-            if ((*iit)->getId() == id)
-                return (*iit);
+        for (InstrumentList::const_iterator instrumentIter = list.begin();
+             instrumentIter != list.end();
+             ++instrumentIter) {
+            if ((*instrumentIter)->getId() == id)
+                return (*instrumentIter);
+        }
     }
 
     return nullptr;
@@ -300,7 +302,7 @@ Studio::getInstrumentFromList(int index)
 }
 
 Instrument *
-Studio::getInstrumentFor(Segment *segment)
+Studio::getInstrumentFor(const Segment *segment) const
 {
     if (!segment) return nullptr;
     if (!segment->getComposition()) return nullptr;
@@ -311,7 +313,7 @@ Studio::getInstrumentFor(Segment *segment)
 }
 
 Instrument *
-Studio::getInstrumentFor(Track *track)
+Studio::getInstrumentFor(const Track *track) const
 {
     if (!track) return nullptr;
     InstrumentId iid = track->getInstrument();

@@ -21,7 +21,7 @@
 
 #include "document/BasicSelectionCommand.h"
 #include <QString>
-#include <QCoreApplication>
+#include <QCoreApplication>  // For Q_DECLARE_TR_FUNCTIONS()
 
 
 

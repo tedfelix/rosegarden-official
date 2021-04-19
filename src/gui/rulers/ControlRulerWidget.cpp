@@ -153,30 +153,19 @@ getControlParameter2(const Segment &segment, int ccNumber)
 {
     // Get the Device for the Segment.
 
-    // ??? This is just a convoluted mess that seems like it belongs
-    //     somewhere where we can reuse it or a part of it.  Code
-    //     similar to this appears all over the place.
-    //     Segment::getInstrument() might be a place to start.
-    //     Composition already has a getInstrumentId(const Segment *).
-    //     Maybe it could go there.
-
     RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
     if (!doc)
         return nullptr;
 
-    Composition *composition = segment.getComposition();
-    if (!composition)
-        return nullptr;
-
-    InstrumentId instrumentId = composition->getInstrumentId(&segment);
-
-    Instrument *instrument = doc->getStudio().getInstrumentById(instrumentId);
+    Instrument *instrument = doc->getStudio().getInstrumentFor(&segment);
     if (!instrument)
         return nullptr;
 
     Device *device = instrument->getDevice();
     if (!device)
         return nullptr;
+
+    // Get the ControlParameter for the ccNumber.
 
     Controllable *controllable = device->getControllable();
     if (!controllable)

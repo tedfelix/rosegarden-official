@@ -85,12 +85,12 @@ public:
     InstrumentList getPresentationInstruments() const;
 
     // Return an Instrument
-    Instrument* getInstrumentById(InstrumentId id);
+    Instrument* getInstrumentById(InstrumentId id) const;
     Instrument* getInstrumentFromList(int index);
 
     // Convenience functions
-    Instrument *getInstrumentFor(Segment *);
-    Instrument *getInstrumentFor(Track *);
+    Instrument *getInstrumentFor(const Segment *) const;
+    Instrument *getInstrumentFor(const Track *) const;
 
     // Return a Buss
     BussList getBusses();
