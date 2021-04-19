@@ -67,9 +67,8 @@ PasteEventsCommand::PasteEventsCommand(Segment &segment,
 PasteEventsCommand::PasteEventsCommand(const QString& marking,
                                        Clipboard *clipboard,
                                        timeT pasteTime,
-                                       PasteType pasteType,
-                                       Composition& comp) :
-    BasicCommand(getGlobalName(), pasteTime, marking, &comp),
+                                       PasteType pasteType) :
+    BasicCommand(getGlobalName(), pasteTime, marking),
     m_relayoutEndTime(getEndTime()),
     m_clipboard(new Clipboard(*clipboard)),
     m_pasteType(pasteType)

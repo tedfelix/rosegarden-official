@@ -37,10 +37,17 @@ class CommandArgumentQuerier; // forward declaration useful for some subclasses
  * Derivers provide their own version of modifySegment() which does the
  * actual work of the command.  This class takes care of undo/redo.
  *
- * The obvious way to implement undo is to store the entirety of the original
- * version of the Segment.  This class attempts to optimize this by storing
- * only the original Events in the range of time that has been modified
- * (m_savedEvents).
+ * The obvious way to implement undo is to store the entirety of the
+ * original version of the Segment.  This class attempts to optimize
+ * this by storing all the original Events but only copying back the
+ * events in the range of time that has been modified (m_savedEvents).
+ *
+ * The times passed to the constructor are no longer used to determine
+ * the range of events to copy. This is now determined by
+ * calculateModifiedStartEnd. The getStartTime and getEndTime methods
+ * are used as a store for the times provided in the constructors. The
+ * use of these methods is deprecated. It is only necessary for the
+ * derivers to override modifySegment()
  *
  * "Brute force redo" means redo by copying a list of Events instead of calling
  * modifySegment() to perform the command again.  Brute force redo requires
@@ -94,36 +101,27 @@ protected:
     // Ctor to be used when the Segment does not exist when
     // the command is created.  Brute force redo is not supported.
     // ??? Can the marker be reduced to just a bool flag?
+    // Yes - at the moment it could but if other commands use this feature
+    // it may be necessary to use a different marking.
     //       bool markedForCommand;
     BasicCommand(const QString &name,
                  timeT start,
-                 const QString &segmentMarking,
-                 Composition *comp);
+                 const QString &segmentMarking);
 
     /// Override this to do your command's actual work.
     virtual void modifySegment() = 0;
 
-    /// Called once the Segment is guaranteed to exist.
-    /**
-     * ??? It appears as if no one overrides this.  Might be removable?
-     */
-    virtual void beginExecute();
-
-    // ??? Why virtual?  Does someone override this?
-    virtual Segment &getSegment();
+    /// Get a reference to the segment
+    Segment &getSegment();
 
     timeT getStartTime() { return m_startTime; }
     timeT getEndTime() { return m_endTime; }
 
-    // ??? Not used at the moment.
+    // ??? Not used at the moment. Should we delete it ??? It is
+    // defined in several derived classes
     virtual timeT getRelayoutEndTime();
 
 private:
-    /// the composition
-    /**
-     * ??? Use the global instance instead of this.
-     */
-    Composition *m_comp;
 
     /// The Segment that this command is being run against.  This is a
     /// pointer rather than a reference because it is possible to
@@ -132,8 +130,8 @@ private:
     Segment *m_segment;
     /// if the segment is not set yet - get it from the segment marking
     void requireSegment();
-    /// Copy Events in the ??? time range from m_segment to dest.
-    void copyTo(Segment *dest, bool wholeSegment = false);
+    /// Copy all Events from m_segment to dest.
+    void copyTo(Segment *dest);
     /// Copy Events in the modification time range from source to m_segment.
     /**
      * Events in m_segment are removed in the time range before the copy.
@@ -144,6 +142,14 @@ private:
     timeT m_originalStartTime;
 
     /// Command Start Time adjusted for notation.
+  
+    // The m_startTime m_endTime and calculateStartTime
+    // calculateEndTime are no longer required for the
+    // functionality. I would prefer to get rid of them entirely but
+    // getStartTime and getEndTime are used by some derived
+    // calsses. Should we try to get rid if them and change the
+    // derived classes ???
+
     // ??? rename: m_commandStartTime
     timeT m_startTime;
     // ??? Always used to set m_startTime.  Make it return void and do that.
@@ -155,7 +161,7 @@ private:
     //     rename: setEndTime()
     timeT calculateEndTime(timeT given, Segment &segment);
 
-    /// Start time of Events which were modified by modifySegment().
+    /// Start and end time of Events which were modified by modifySegment().
     /**
      * Set by calculateModifiedStartEnd().
      */
@@ -170,10 +176,11 @@ private:
      * Sets m_modifiedEventsStart and m_modifiedEventsEnd.
      *
      * ??? This assumes that m_saveEvents is always a complete copy of the
-     *     original Segment.  Is that always the case?
+     *     original Segment.  Is that always the case? - Yes
      *
      * ??? Passing start and end times into the ctor might now be unnecessary
-     *     since we compute the actual modification time range here.
+     *     since we compute the actual modification time range here. Yes but
+     *     see above comments to m_startTime and m_endTime
      */
     void calculateModifiedStartEnd();
 
@@ -182,8 +189,9 @@ private:
      * This is the undo buffer.
      *
      * ??? Since this is completely private, use QSharedPointer or
-     *     std::shared_ptr to manage memory.
-     * ??? Rename: m_undoSegment?
+     *     std::shared_ptr to manage memory.  We could do but there are very
+     *     few places where it is created or destroyed so I think unnecessary
+     * ??? Rename: m_undoSegment? I think m_savedEvents is the better name
      */
     Segment *m_savedEvents;
 
