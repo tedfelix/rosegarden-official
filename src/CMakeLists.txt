@@ -788,31 +788,44 @@ if(NOT ${CMAKE_VERSION} VERSION_LESS "3.16.0")
   target_precompile_headers(rosegardenprivate
     PRIVATE
       # There's definitely a point where gcc slows down with too many
-      # pre-compiled headers.  Twelve seems to be near the limit.
+      # pre-compiled headers.  Eight seems to be near the limit.
+      # I'm seeing huge variability in build times that makes it hard
+      # to measure precisely, though.
 
       # Top Ten System Headers
       <QString>
+        #<string>
+        #<iterator>
       <QWidget>
+        #<QObject>
       <QCoreApplication>
       <vector>
       <QDialog>
-      <string>
-      <QLabel>
-      <QSettings>
-      <QObject>
-      <QVBoxLayout>
+      #<string>
+      #<QLabel>
+      #<QSettings>
+      #<QObject>
+      #<QVBoxLayout>
 
-      # Debug.h pulls these in.
+      # Debug.h pulls these in and almost everyone pulls in Debug.h.
       <QDebug>
       <QTextStream>
       #<string>
 
       # Top 5 rg headers
-      # Can't bring any of these in or we'll get RG_MODULE_STRING
-      # redefinition warnings.  Why?
+      #
+      # Can't bring any of these in or we'll get RG_MODULE_STRING redefinition
+      # warnings.  This is due to the fact that a default RG_MODULE_STRING is
+      # defined in misc/Debug.h and that ends up being #included before
+      # RG_MODULE_STRING is defined in each file.  We could remove the default
+      # from Debug.h which would force all #includers to define
+      # RG_MODULE_STRING.  That idea has some merit.
+      #
       # Just bring in the system headers they pull in then.  That
       # should be similar.
-      # Adding any of these just slows the build down.
+      #
+      # Adding any of these just slows the build down, so no point.  Let's
+      # just stick to the top 10 system headers above.
       #"misc/Debug.h"
       #"base/Event.h"
       #<iostream>
