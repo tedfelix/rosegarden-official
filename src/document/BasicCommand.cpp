@@ -140,6 +140,7 @@ BasicCommand::calculateStartTime(timeT given, Segment &segment)
     // For each Event at the given start time
     // ??? Rewrite with range-based for and a break to simplify.  See below.
     // my preference is to get rid of this entirely
+    // ??? Agreed.  Recommend pursuing that instead.  The less code the better.
     while (i != segment.end()  &&  (*i)->getAbsoluteTime() == given) {
         const timeT notationTime = (*i)->getNotationAbsoluteTime();
         if (notationTime < given)
@@ -319,12 +320,20 @@ BasicCommand::copyTo(Rosegarden::Segment *dest)
     requireSegment();
 
     RG_DEBUG << "copyTo() for" << getName() << ":" << m_segment <<
-        "to" << dest;
+                "to" << dest;
 
-    Segment::iterator from = m_segment->findTime(m_segment->getStartTime());
-    Segment::iterator to = m_segment->findTime(m_segment->getEndTime());
+    // ??? Why not use m_segment->begin() and m_segment->end()?  It seems
+    //     like using start/stop time might drop Events that aren't in the
+    //     Segment's time range.  Is that what we want?
+    // ??? Using const_iterator here since these are not being used to make
+    //     changes to the contents of the container.  We seem to be flipping
+    //     back and forth on this.
+    Segment::const_iterator from = m_segment->findTime(m_segment->getStartTime());
+    Segment::const_iterator to = m_segment->findTime(m_segment->getEndTime());
+
     dest->clear();
 
+    // For each Event in m_segment...
     for (Segment::const_iterator i = from;
          i != m_segment->end()  &&  i != to;
          ++i) {
@@ -399,8 +408,10 @@ BasicCommand::requireSegment()
     //     shared pointer would be much better.
 
     // The logic should mean m_savedEvents is always nullptr here but
-    // added a check
-    if (m_savedEvents) delete m_savedEvents;
+    // added a check.
+    // It's always safe to delete nullptr.  Using a shared_ptr will
+    // make all of this automatic and safe.
+    delete m_savedEvents;
     m_savedEvents = new Segment(m_segment->getType(), m_startTime);
 
     m_originalStartTime = m_segment->getStartTime();
