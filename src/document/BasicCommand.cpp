@@ -23,6 +23,8 @@
 #include "base/Segment.h"
 #include "base/Composition.h"
 #include "misc/Debug.h"
+#include "document/RosegardenDocument.h"
+#include "gui/application/RosegardenMainWindow.h"
 
 #include <QString>
 
@@ -37,7 +39,6 @@ namespace Rosegarden
 BasicCommand::BasicCommand(const QString &name, Segment &segment,
                            timeT start, timeT end, bool bruteForceRedo) :
     NamedCommand(name),
-    m_comp(nullptr),
     m_segment(&segment),
     m_originalStartTime(segment.getStartTime()),
     m_startTime(calculateStartTime(start, segment)),
@@ -69,7 +70,6 @@ BasicCommand::BasicCommand(const QString &name,
                            Segment &segment,
                            Segment *redoEvents) :
     NamedCommand(name),
-    m_comp(nullptr),
     m_segment(&segment),
     m_originalStartTime(segment.getStartTime()),
     m_startTime(calculateStartTime(redoEvents->getStartTime(), *redoEvents)),
@@ -95,10 +95,8 @@ BasicCommand::BasicCommand(const QString &name,
 // Implies brute force redo false.
 BasicCommand::BasicCommand(const QString &name,
                            timeT start,
-                           const QString& segmentMarking,
-                           Composition* comp) :
+                           const QString& segmentMarking) :
     NamedCommand(name),
-    m_comp(comp),
     m_segment(nullptr),
     m_originalStartTime(-1),
     m_startTime(start),
@@ -141,6 +139,8 @@ BasicCommand::calculateStartTime(timeT given, Segment &segment)
 
     // For each Event at the given start time
     // ??? Rewrite with range-based for and a break to simplify.  See below.
+    // my preference is to get rid of this entirely
+    // ??? Agreed.  Recommend pursuing that instead.  The less code the better.
     while (i != segment.end()  &&  (*i)->getAbsoluteTime() == given) {
         const timeT notationTime = (*i)->getNotationAbsoluteTime();
         if (notationTime < given)
@@ -204,13 +204,6 @@ Rosegarden::timeT BasicCommand::getRelayoutEndTime()
 }
 
 void
-BasicCommand::beginExecute()
-{
-    requireSegment();
-    copyTo(m_savedEvents, true);
-}
-
-void
 BasicCommand::execute()
 {
     requireSegment();
@@ -221,7 +214,7 @@ BasicCommand::execute()
     RG_DEBUG << *m_segment;
     RG_DEBUG << getName() << "segment end";
 
-    beginExecute();
+    copyTo(m_savedEvents);
 
     if (m_doBruteForceRedo)
         copyFrom(m_redoEvents);
@@ -262,7 +255,7 @@ BasicCommand::unexecute()
     RG_DEBUG << "unexecute() begin...";
 
     if (m_redoEvents) {
-        copyTo(m_redoEvents, true);
+        copyTo(m_redoEvents);
         m_doBruteForceRedo = true;
     }
 
@@ -322,23 +315,25 @@ BasicCommand::unexecute()
 }
     
 void
-BasicCommand::copyTo(Rosegarden::Segment *dest, bool wholeSegment)
+BasicCommand::copyTo(Rosegarden::Segment *dest)
 {
     requireSegment();
 
     RG_DEBUG << "copyTo() for" << getName() << ":" << m_segment <<
-                "to" << dest << ", range (" << m_startTime << "," << m_endTime <<
-                ")";
+                "to" << dest;
 
-    Segment::const_iterator from = m_segment->findTime(m_startTime);
-    Segment::const_iterator to = m_segment->findTime(m_endTime);
+    // ??? Why not use m_segment->begin() and m_segment->end()?  It seems
+    //     like using start/stop time might drop Events that aren't in the
+    //     Segment's time range.  Is that what we want?
+    // ??? Using const_iterator here since these are not being used to make
+    //     changes to the contents of the container.  We seem to be flipping
+    //     back and forth on this.
+    Segment::const_iterator from = m_segment->findTime(m_segment->getStartTime());
+    Segment::const_iterator to = m_segment->findTime(m_segment->getEndTime());
 
-    if (wholeSegment) {
-        from = m_segment->findTime(m_segment->getStartTime());
-        to = m_segment->findTime(m_segment->getEndTime());
-        dest->clear();
-    }
+    dest->clear();
 
+    // For each Event in m_segment...
     for (Segment::const_iterator i = from;
          i != m_segment->end()  &&  i != to;
          ++i) {
@@ -387,14 +382,11 @@ BasicCommand::requireSegment()
 
     RG_DEBUG << "requireSegment()...";
 
-    Q_ASSERT_X(m_comp != nullptr,
-               "BasicCommand::requireSegment()",
-               "Composition pointer is null.");
-    if (!m_comp)
-        return;
+    RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
+    Composition &composition = doc->getComposition();
 
     // Get the marked Segment.
-    m_segment = m_comp->getSegmentByMarking(m_segmentMarking);
+    m_segment = composition.getSegmentByMarking(m_segmentMarking);
 
     Q_ASSERT_X(m_segment != nullptr,
                "BasicCommand::requireSegment()",
@@ -414,6 +406,12 @@ BasicCommand::requireSegment()
     // ??? Memory Leak?  m_savedEvents might not be nullptr?
     //     delete m_savedEvents; wouldn't hurt here.  Though really a
     //     shared pointer would be much better.
+
+    // The logic should mean m_savedEvents is always nullptr here but
+    // added a check.
+    // It's always safe to delete nullptr.  Using a shared_ptr will
+    // make all of this automatic and safe.
+    delete m_savedEvents;
     m_savedEvents = new Segment(m_segment->getType(), m_startTime);
 
     m_originalStartTime = m_segment->getStartTime();

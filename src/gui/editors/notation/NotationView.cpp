@@ -5234,7 +5234,7 @@ NotationView::slotMagicLayer()
     // "layer" identify the layer with the segment marking.
     PasteEventsCommand::PasteType type = PasteEventsCommand::NoteOverlay;
     macro->addCommand(new PasteEventsCommand("Added Layer", c,
-                                             insertionTime, type, comp));
+                                             insertionTime, type));
 
     // and adopt the segment
     AdoptSegmentCommand *adoptCommand =

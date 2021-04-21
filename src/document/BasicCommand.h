@@ -24,23 +24,43 @@
 #include "base/Event.h"
 #include "misc/Debug.h"
 
+#include <memory>  // for shared_ptr
+
 class QString;
+
 
 namespace Rosegarden
 {
 
+
 class EventSelection;
 class CommandArgumentQuerier; // forward declaration useful for some subclasses
+
 
 /// A command with undo/redo functionality.
 /**
  * Derivers provide their own version of modifySegment() which does the
  * actual work of the command.  This class takes care of undo/redo.
  *
- * The obvious way to implement undo is to store the entirety of the original
- * version of the Segment.  This class attempts to optimize this by storing
- * only the original Events in the range of time that has been modified
- * (m_savedEvents).
+ * This class stores the entirety of the original version of the Segment
+ * in m_savedEvents.
+ *
+ * ??? This is not an ideal use of memory.  Better would be if we could just
+ *     store the Events that were changed.  But that would increase the
+ *     complexity of the code.  Better to simplify as much as possible then
+ *     consider whether space optimization is actually needed.
+ *
+ * On undo (unexecute()), this class only copies back the events in the
+ * range of time that was modified.  This is done primarily because the
+ * UI refresh code is terribly inefficient and refreshes the entire UI for
+ * each and every Event that gets added to a Segment.
+ *
+ * The times passed to the constructor are no longer used to determine
+ * the range of events to copy. This is now determined by
+ * calculateModifiedStartEnd(). The getStartTime() and getEndTime() methods
+ * are used as a store for the times provided in the constructors. The
+ * use of these methods is deprecated. It is only necessary for the
+ * derivers to override modifySegment().
  *
  * "Brute force redo" means redo by copying a list of Events instead of calling
  * modifySegment() to perform the command again.  Brute force redo requires
@@ -51,6 +71,10 @@ class CommandArgumentQuerier; // forward declaration useful for some subclasses
  * single Rosegarden Segment, by brute force(?).  When a subclass
  * of BasicCommand executes, it stores a copy of the events that are
  * modified by the command, ready to be restored verbatim on undo.
+ *
+ * TODO
+ * - Remove the deprecated member functions and variables.
+ * - Have a look at the other minor ??? items in here.
  */
 class BasicCommand : public NamedCommand
 {
@@ -95,35 +119,30 @@ protected:
     // the command is created.  Brute force redo is not supported.
     // ??? Can the marker be reduced to just a bool flag?
     //       bool markedForCommand;
+    //     Yes - at the moment it could but if other commands use this feature
+    //     it may be necessary to add more bool flags.
     BasicCommand(const QString &name,
                  timeT start,
-                 const QString &segmentMarking,
-                 Composition *comp);
+                 const QString &segmentMarking);
 
     /// Override this to do your command's actual work.
     virtual void modifySegment() = 0;
 
-    /// Called once the Segment is guaranteed to exist.
-    /**
-     * ??? It appears as if no one overrides this.  Might be removable?
-     */
-    virtual void beginExecute();
-
-    // ??? Why virtual?  Does someone override this?
-    virtual Segment &getSegment();
+    /// Get a reference to the segment
+    Segment &getSegment();
 
     timeT getStartTime() { return m_startTime; }
     timeT getEndTime() { return m_endTime; }
 
-    // ??? Not used at the moment.
+    // ??? Not used at the moment.  Should we delete it?  It is
+    //     defined in several derived classes.
+    // ??? I would definitely get rid of it.  If you think there might
+    //     be some value to the derived implementations at some point,
+    //     comment them out.  But I prefer deleting unused code.  It's
+    //     always better the second time you write it anyway.
     virtual timeT getRelayoutEndTime();
 
 private:
-    /// the composition
-    /**
-     * ??? Use the global instance instead of this.
-     */
-    Composition *m_comp;
 
     /// The Segment that this command is being run against.  This is a
     /// pointer rather than a reference because it is possible to
@@ -132,8 +151,8 @@ private:
     Segment *m_segment;
     /// if the segment is not set yet - get it from the segment marking
     void requireSegment();
-    /// Copy Events in the ??? time range from m_segment to dest.
-    void copyTo(Segment *dest, bool wholeSegment = false);
+    /// Copy all Events within m_segment's time range from m_segment to dest.
+    void copyTo(Segment *dest);
     /// Copy Events in the modification time range from source to m_segment.
     /**
      * Events in m_segment are removed in the time range before the copy.
@@ -143,16 +162,31 @@ private:
     /// Original start time for m_Segment.
     timeT m_originalStartTime;
 
-    /// Command Start Time adjusted for notation.
-    // ??? rename: m_commandStartTime
+    // ??? m_startTime, m_endTime, calculateStartTime(), and
+    //     calculateEndTime() are no longer required for the
+    //     functionality.  I would prefer to get rid of them entirely but
+    //     getStartTime() and getEndTime() are used by some derived
+    //     classes. Should we try to get rid if them and change the
+    //     derived classes?
+    // ??? I would say yes if you are confident you can test the changes
+    //     thoroughly.  I would at least begin phasing them out on a command-
+    //     by-command basis.  This sounds like a helpful simplification.
+
+    /// Command Start Time adjusted for notation.  [DEPRECATED]
     timeT m_startTime;
-    // ??? Always used to set m_startTime.  Make it return void and do that.
-    //     rename: adjustCommandStartTime()
+    /// Calculate start time for m_startTime.  [DEPRECATED]
+    /**
+     * ??? Always used to set m_startTime.  Make it return void and do that.
+     *     rename: adjustCommandStartTime()
+     */
     timeT calculateStartTime(timeT given, Segment &segment);
-    /// ??? What end time is this?  Command End Time?
+    /// ??? What end time is this?  Command End Time?  [DEPRECATED]
     timeT m_endTime;
-    // ??? Always used to set m_endTime.  Make it return void and do that.
-    //     rename: setEndTime()
+    /// Calculate end time for m_endTime.  [DEPRECATED]
+    /**
+     * ??? Always used to set m_endTime.  Make it return void and do that.
+     *     rename: setEndTime()
+     */
     timeT calculateEndTime(timeT given, Segment &segment);
 
     /// Start time of Events which were modified by modifySegment().
@@ -170,20 +204,33 @@ private:
      * Sets m_modifiedEventsStart and m_modifiedEventsEnd.
      *
      * ??? This assumes that m_saveEvents is always a complete copy of the
-     *     original Segment.  Is that always the case?
+     *     original Segment.  Is that always the case? - Yes
      *
      * ??? Passing start and end times into the ctor might now be unnecessary
-     *     since we compute the actual modification time range here.
+     *     since we compute the actual modification time range here. Yes but
+     *     see above comments to m_startTime and m_endTime
      */
     void calculateModifiedStartEnd();
 
-    /// Events from m_segment prior to executing the command.
+    /// All Events from m_segment prior to executing the command.
     /**
-     * This is the undo buffer.
+     * This is a complete backup of m_segment.
      *
      * ??? Since this is completely private, use QSharedPointer or
-     *     std::shared_ptr to manage memory.
-     * ??? Rename: m_undoSegment?
+     *     std::shared_ptr to manage memory.  We could do but there are very
+     *     few places where it is created or destroyed so I think unnecessary.
+     * ??? The increased safety is worth it.  Makes the code easier to read
+     *     and understand.  I want *all naked pointers* replaced with
+     *     shared_ptr.  Unfortunately, as with most of the pointers in
+     *     Rosegarden, this particular pointer is very difficult to replace
+     *     with shared_ptr.  It would be best to tackle the problem at the
+     *     source: Composition::m_segments.  And while we are at it, introduce
+     *     object IDs for further safety improvements.  Maybe one day we'll
+     *     have that kind of time to burn.
+     * ??? Rename: m_undoSegment?  I think m_savedEvents is the better name.
+     *     I was thinking it only had the Events for undo.  m_savedEvents is
+     *     definitely better.  Since it has the Events before execute(), how
+     *     about m_originalEvents?  That describes exactly what is saved.
      */
     Segment *m_savedEvents;
 

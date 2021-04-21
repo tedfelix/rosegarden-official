@@ -70,8 +70,7 @@ public:
     PasteEventsCommand(const QString& marking,
                        Clipboard *clipboard,
                        timeT pasteTime,
-                       PasteType pasteType,
-                       Composition& comp);
+                       PasteType pasteType);
 
     /**
      * Construct a Paste command from a clipboard that will contain
