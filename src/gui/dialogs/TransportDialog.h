@@ -98,8 +98,23 @@ public:
     QPushButton* TimeDisplayButton() { return ui->TimeDisplayButton; }
     QPushButton* ToEndButton()       { return ui->ToEndButton; }
 
-    virtual void show();
-    virtual void hide();
+    /// Save geometry to .conf.
+    /**
+     * Making these public in an attempt to fix a bug where the window will
+     * crawl upward each time it is hidden and re-shown.  It's moving up by
+     * exactly the height of the titlebar.  It's as if the child window
+     * position is being used for the parent window.  Or perhaps an assumption
+     * is being made that the geometry stored by hide() needs to be adjusted
+     * by the titlebar height.
+     *
+     * At any rate, using these when hiding and showing almost fixes the
+     * problem.  The last failing test case is when you hide the transport,
+     * close rg, launch rg, and show the transport.  It will move up.
+     * Examining the geometry at each point might provide a clue.
+     */
+    void saveGeo();
+    /// Load geometry from .conf.
+    void loadGeo();
 
 protected:
     void closeEvent(QCloseEvent * e) override;

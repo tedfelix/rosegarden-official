@@ -297,6 +297,8 @@ TransportDialog::TransportDialog(QWidget *parent):
     //       to dark gray.  See AppEventFilter::polishWidget() in
     //       ThornStyle.cpp.
 
+    loadGeo();
+
     // Performance Testing
 
     QSettings settings;
@@ -314,15 +316,7 @@ TransportDialog::TransportDialog(QWidget *parent):
 
 TransportDialog::~TransportDialog()
 {
-    if (isVisible()) {
-        QSettings settings;
-        settings.beginGroup( GeneralOptionsConfigGroup );
-
-        settings.setValue("transportx", x());
-        settings.setValue("transporty", y());
-
-        settings.endGroup();
-    }
+    saveGeo();
 }
 
 std::string
@@ -352,50 +346,6 @@ TransportDialog::initModeMap()
     m_modeMap["BarMode"]          = BarMode;
     m_modeMap["BarMetronomeMode"] = BarMetronomeMode;
     m_modeMap["FrameMode"]        = FrameMode;
-}
-
-void
-TransportDialog::show()
-{
-    QSettings settings;
-    settings.beginGroup( GeneralOptionsConfigGroup );
-
-    int x = settings.value("transportx", -1).toInt() ;
-    int y = settings.value("transporty", -1).toInt() ;
-    if (x >= 0 && y >= 0) {
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
-        QScreen* screen = QGuiApplication::screenAt(QPoint(x, y));
-        int dw = screen->availableGeometry().width();
-        int dh = screen->availableGeometry().height();
-#else
-        int dw = QApplication::desktop()->availableGeometry(QPoint(x, y)).width();
-        int dh = QApplication::desktop()->availableGeometry(QPoint(x, y)).height();
-#endif
-        if (x + width() > dw) x = dw - width();
-        if (y + height() > dh) y = dh - height();
-        move(x, y);
-//        std::cerr << "TransportDialog::show(): moved to " << x << "," << y << std::endl;
-        QWidget::show();
-//        std::cerr << "TransportDialog::show(): now at " << this->x() << "," << this->y() << std::endl;
-    } else {
-        QWidget::show();
-    }
-
-    settings.endGroup();
-}
-
-void
-TransportDialog::hide()
-{
-    if (isVisible()) {
-        QSettings settings;
-        settings.beginGroup( GeneralOptionsConfigGroup );
-        settings.setValue("transportx", x());
-        settings.setValue("transporty", y());
-
-        settings.endGroup();
-    }
-    QWidget::hide();
 }
 
 void
@@ -1200,5 +1150,20 @@ TransportDialog::slotResetBackground()
     }
     m_isBackgroundSet = false;
 }
+
+void TransportDialog::saveGeo()
+{
+    QSettings settings;
+    settings.beginGroup(WindowGeometryConfigGroup);
+    settings.setValue("Transport_Geometry", saveGeometry());
+}
+
+void TransportDialog::loadGeo()
+{
+    QSettings settings;
+    settings.beginGroup(WindowGeometryConfigGroup);
+    restoreGeometry(settings.value("Transport_Geometry").toByteArray());
+}
+
 
 }

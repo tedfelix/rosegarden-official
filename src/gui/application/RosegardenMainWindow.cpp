@@ -3428,7 +3428,11 @@ RosegardenMainWindow::slotToggleTransport()
         getTransport()->show();
         getTransport()->raise();
         getTransport()->blockSignals(false);
+        // Put the window where it belongs.
+        getTransport()->loadGeo();
     } else {
+        // Save the window location for when we show it again.
+        getTransport()->saveGeo();
         getTransport()->hide();
         getTransport()->blockSignals(true);
     }
