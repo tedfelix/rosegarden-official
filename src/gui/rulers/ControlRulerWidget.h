@@ -65,8 +65,7 @@ public:
     void setViewSegment(ViewSegment *);
 
     void setRulerScale(RulerScale *);
-    /// gutter is more of a left margin.  See m_gutter.
-    void setRulerScale(RulerScale *, int gutter);
+    void setRulerScale(RulerScale *, int leftMargin);
 
     /// Include all the Segments so that we can update their ruler lists.
     void launchMatrixRulers(std::vector<Segment *> segments);
@@ -182,10 +181,7 @@ private:
     RulerScale *m_scale;
 
     /// Left margin used by NotationWidget to line things up?
-    /**
-     * ??? rename: m_leftMargin?
-     */
-    int m_gutter;
+    int m_leftMargin;
 
     QString m_currentToolName;
 
