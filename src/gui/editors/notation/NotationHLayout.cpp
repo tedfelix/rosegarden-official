@@ -843,34 +843,15 @@ NotationHLayout::preSquishBar(int barNo)
     for (TimeSigMap::iterator
             i = timeSigMap.begin(); i != timeSigMap.end(); ++i) {
 
-        // If only one bar keep its time signature and update fixedWidth
-        if (i->second.size() == 1) {
-            BarData *dataPtr = *(i->second.begin());
-            dataPtr->sizeData.fixedWidth = dataPtr->sizeData.timeSigFixedWidth;
-            continue;
-        }
-
-        // else walk through the bars and find the first segment to exist
-        // (i.e. with the smallest basicData.delayInBar value)
-        timeT delay = std::numeric_limits<timeT>::max();
-        BarData * dataPtr = nullptr;
+        // make space for (possibly) multiple time signatures.
+        // There is no suppression of redundant time signatures
         for (BarDataVector::iterator
-            j = i->second.begin(); j != i->second.end(); ++j) {
-
-            // Hide all the time signatures
-            (*j)->basicData.timeSignature.setHidden(true);  
-
-            // Remember the smallest delayInBar and the associated barData
-            if ((*j)->basicData.delayInBar < delay) {
-                delay = (*j)->basicData.delayInBar;
-                dataPtr = *j;
-            }
+                 j = i->second.begin(); j != i->second.end(); ++j) {
+            BarData *dataPtr = *j;
+            dataPtr->sizeData.fixedWidth =
+                dataPtr->sizeData.timeSigFixedWidth;
         }
 
-        // Set visible again the time sig of the selected bar and update
-        // the bar fixed width
-        dataPtr->basicData.timeSignature.setHidden(false);
-        dataPtr->sizeData.fixedWidth += dataPtr->sizeData.timeSigFixedWidth;
     }
 
     // now modify chunks in-place
@@ -2265,6 +2246,7 @@ NotationHLayout::BarData::dump(std::string indent)
 void
 NotationHLayout::dumpBarDataMap()
 {
+    RG_DEBUG << "dumpBarDataMap begin";
     BarDataMap::iterator i;
     for (i=m_barData.begin(); i!=m_barData.end(); ++i) {
         ViewSegment *vs = (*i).first;
@@ -2278,6 +2260,7 @@ NotationHLayout::dumpBarDataMap()
             (*j).second.dump("       ");
         }
     }
+    RG_DEBUG << "dumpBarDataMap end";
 }
 
 }
