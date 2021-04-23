@@ -704,12 +704,18 @@ int main(int argc, char *argv[])
         // otherwise we have to
 
         if (!newVersion) {
+            // ??? What child dialog are we waiting for if the startLogo
+            //     isn't up?  Can we remove this?
             RosegardenMainWindow::self()->awaitDialogClearance();
         }
     }
 
     if (newVersion) {
         StartupLogo::hideIfStillThere();
+
+        // Welcome Dialog
+
+        // ??? Factor out into a WelcomeDialog class?
 
         QDialog *dialog = new QDialog;
         dialog->setModal(true);
@@ -742,7 +748,9 @@ int main(int argc, char *argv[])
         QObject::connect(buttonBox, &QDialogButtonBox::accepted, dialog, &QDialog::accept);
         QObject::connect(buttonBox, &QDialogButtonBox::rejected, dialog, &QDialog::reject);
 
+        // Wait for the welcome dialog to go away.
         mainWindow->awaitDialogClearance();
+
         dialog->exec();
     }
     settings.endGroup();

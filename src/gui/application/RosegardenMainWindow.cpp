@@ -702,7 +702,7 @@ RosegardenMainWindow::setupActions()
     createAction("show_transport_toolbar", SLOT(slotToggleTransportToolBar()));
     createAction("show_zoom_toolbar", SLOT(slotToggleZoomToolBar()));
     createAction("show_status_bar", SLOT(slotToggleStatusBar()));
-    createAction("show_transport", SLOT(slotToggleTransport()));
+    createAction("show_transport", SLOT(slotUpdateTransportVisibility()));
     createAction("show_tracklabels", SLOT(slotToggleTrackLabels()));
     createAction("show_rulers", SLOT(slotToggleRulers()));
     createAction("show_tempo_ruler", SLOT(slotToggleTempoRuler()));
@@ -1603,7 +1603,7 @@ RosegardenMainWindow::readOptions()
 
     opt = qStrToBool(settings.value("show_transport", "true")) ;
     findAction("show_transport")->setChecked(opt);
-    slotToggleTransport();
+    slotUpdateTransportVisibility();
 
     opt = qStrToBool(settings.value("transport_flap_extended", "true")) ;
 
@@ -3420,20 +3420,28 @@ RosegardenMainWindow::slotToggleZoomToolBar()
 }
 
 void
-RosegardenMainWindow::slotToggleTransport()
+RosegardenMainWindow::slotUpdateTransportVisibility()
 {
+    //RG_DEBUG << "slotUpdateTransportVisibility()...";
+
     TmpStatusMsg msg(tr("Toggle the Transport"), this);
 
     if (findAction("show_transport")->isChecked()) {
+        //RG_DEBUG << "  before show geometry:" << getTransport()->geometry();
         getTransport()->show();
         getTransport()->raise();
         getTransport()->blockSignals(false);
         // Put the window where it belongs.
+        // ??? We shouldn't need to do this, but sometime between hide() and
+        //     show(), the window crawls up by the height of the titlebar.
+        //     Qt bug?
         getTransport()->loadGeo();
     } else {
         // Save the window location for when we show it again.
+        // ??? See comments above.
         getTransport()->saveGeo();
         getTransport()->hide();
+        //RG_DEBUG << "  after hide geometry:" << getTransport()->geometry();
         getTransport()->blockSignals(true);
     }
 }
@@ -3453,7 +3461,7 @@ RosegardenMainWindow::slotToggleTransportVisibility()
     } else {
         a->setChecked(true);
     }
-    slotToggleTransport();
+    slotUpdateTransportVisibility();
 }
 
 void
@@ -5426,7 +5434,7 @@ void
 RosegardenMainWindow::slotCloseTransport()
 {
     findAction("show_transport")->setChecked(false);
-    slotToggleTransport(); // hides the transport
+    slotUpdateTransportVisibility();
 }
 
 void
@@ -8280,37 +8288,31 @@ RosegardenDocument *RosegardenMainWindow::getDocument() const
 }
 
 void
-RosegardenMainWindow::awaitDialogClearance()
+RosegardenMainWindow::awaitDialogClearance() const
 {
-    RG_DEBUG << "awaitDialogClearance(): entering";
-    
     bool haveDialog = true;
-
-    QDialog *c;
-    QList<QDialog*> cl;
-    int i;
 
     while (haveDialog) {
 
-        //RG_DEBUG << "awaitDialogClearance(): looping";
-    
-        cl = findChildren<QDialog*>();
+        QList<QDialog *> childList = findChildren<QDialog *>();
 
         haveDialog = false;
-        for(i=0; i < cl.size(); i++){
-            c = cl.at(i);
-            if(c->isVisible() && c->objectName() != "Rosegarden Transport"){
+
+        // For each child dialog...
+        for (int i = 0; i < childList.size(); ++i) {
+            QDialog *child = childList.at(i);
+            // If it's visible and it's not the TransportDialog, we need
+            // to keep waiting.
+            if (child->isVisible()  &&
+                child->objectName() != "Rosegarden Transport") {
                 haveDialog = true;
                 break;    
             }
         }
-    
-        if (haveDialog) {
-            qApp->processEvents(QEventLoop::AllEvents, 300);
-        }
-    }
 
-    RG_DEBUG << "awaitDialogClearance(): exiting";
+        if (haveDialog)
+            qApp->processEvents(QEventLoop::AllEvents, 300);
+    }
 }
 
 void
