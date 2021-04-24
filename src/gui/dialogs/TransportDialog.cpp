@@ -111,18 +111,14 @@ TransportDialog::TransportDialog(QWidget *parent):
     // So we can identify it in RosegardenMainWindow::awaitDialogClearance().
     // Do not change this string:
     setObjectName("Rosegarden Transport");
-
-    QVBoxLayout *vboxLay = new QVBoxLayout();
-    setLayout( vboxLay );
-    vboxLay->setMargin(0);
-
-    QFrame *frame = new QFrame;
-    vboxLay->addWidget(frame);
-    ui->setupUi(frame);
-	
     setWindowTitle(tr("Rosegarden Transport"));
     setWindowIcon(IconLoader::loadPixmap("window-transport"));
 
+    // The child application area (client area in Windows-speak).
+    QFrame *frame = new QFrame(this);
+
+    ui->setupUi(frame);
+	
     resetFonts();
 
     initModeMap();
@@ -316,7 +312,10 @@ TransportDialog::TransportDialog(QWidget *parent):
 
 TransportDialog::~TransportDialog()
 {
-    saveGeo();
+    // Only save if visible.  RMW::slotUpdateTransportVisibility() has already
+    // saved if we are hidden.
+    if (isVisible())
+        saveGeo();
 }
 
 std::string
@@ -999,10 +998,14 @@ TransportDialog::slotClearMidiOutLabel()
 }
 
 void
-TransportDialog::closeEvent (QCloseEvent * /*e*/)
+TransportDialog::closeEvent(QCloseEvent * /*e*/)
 {
-    //e->accept();  // accept the close event here
     emit closed();
+
+    // We don't actually close.  Instead we hide.
+    // RosegardenMainWindow::slotCloseTransport() handles that and keeping
+    // the menu in sync.
+    //e->accept();
 }
 
 void

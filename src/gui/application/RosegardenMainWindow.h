@@ -291,10 +291,10 @@ public:
     void setIsFirstRun(bool first) { m_firstRun = first; }
 
     /*
-     * Wait in a sub-event-loop until all modal dialogs from the main
-     * window have been cleared
+     * Wait in a sub-event-loop until all child dialogs
+     * have been closed.  Ignores the TransportDialog.
      */
-    void awaitDialogClearance();
+    void awaitDialogClearance() const;
 
     /*
      * Return the clipboard
@@ -1057,17 +1057,10 @@ public slots:
      */
     void slotToggleToolBar();
 
-    /**
-     * toggles the transport window
-     */
-    void slotToggleTransport();
+    /// Update the transport to match the checked status of its menu item.
+    void slotUpdateTransportVisibility();
+    /// Toggle transport between visible and hidden.
     void slotToggleTransportVisibility();
-
-    /**
-     * hides the transport window
-     */
-    //### Not used -- use slotToggleTransport
-    // void slotHideTransport();
 
     /**
      * toggles the tools toolbar
