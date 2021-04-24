@@ -468,7 +468,7 @@ RosegardenMainWindow::RosegardenMainWindow(bool enableSound,
     QTimer::singleShot(1000, this, &RosegardenMainWindow::slotTestStartupTester);
 
     // Restore window geometry and toolbar state
-    RG_DEBUG << "[geometry] RosegardenMainWindow - Restoring saved main window geometry...";
+    //RG_DEBUG << "ctor: Restoring saved main window geometry...";
     QSettings settings;
     settings.beginGroup(WindowGeometryConfigGroup);
     this->restoreGeometry(settings.value("Main_Window_Geometry").toByteArray());
@@ -609,7 +609,7 @@ RosegardenMainWindow::closeEvent(QCloseEvent *event)
 {
     if (queryClose()) {
         // Save window geometry and toolbar state
-        RG_DEBUG << "[geometry] RosegardenMainWindow - Saving main window geometry...";
+        //RG_DEBUG << "closeEvent(): Saving main window geometry...";
         QSettings settings;
         settings.beginGroup(WindowGeometryConfigGroup);
         settings.setValue("Main_Window_Geometry", this->saveGeometry());
@@ -639,8 +639,10 @@ RosegardenMainWindow::closeEvent(QCloseEvent *event)
         settings.setValue("show_inst_segment_parameters", findAction("show_inst_segment_parameters")->isChecked());
         settings.endGroup();
 
+        // Continue closing.
         event->accept();
     } else {
+        // Do not close.
         event->ignore();
     }
 }
