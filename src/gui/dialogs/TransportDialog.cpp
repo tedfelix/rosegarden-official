@@ -312,7 +312,10 @@ TransportDialog::TransportDialog(QWidget *parent):
 
 TransportDialog::~TransportDialog()
 {
-    saveGeo();
+    // Only save if visible.  RMW::slotUpdateTransportVisibility() has already
+    // saved if we are hidden.
+    if (isVisible())
+        saveGeo();
 }
 
 std::string

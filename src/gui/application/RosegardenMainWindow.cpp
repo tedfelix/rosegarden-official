@@ -3422,27 +3422,25 @@ RosegardenMainWindow::slotToggleZoomToolBar()
 void
 RosegardenMainWindow::slotUpdateTransportVisibility()
 {
-    //RG_DEBUG << "slotUpdateTransportVisibility()...";
-
     TmpStatusMsg msg(tr("Toggle the Transport"), this);
 
     if (findAction("show_transport")->isChecked()) {
-        //RG_DEBUG << "  before show geometry:" << getTransport()->geometry();
         getTransport()->show();
         getTransport()->raise();
-        getTransport()->blockSignals(false);
         // Put the window where it belongs.
-        // ??? We shouldn't need to do this, but sometime between hide() and
-        //     show(), the window crawls up by the height of the titlebar.
-        //     Qt bug?
+        // ??? We shouldn't need to do this, but...
+        //     If you hide the transport with the menu item or the "T"
+        //     shortcut, the window crawls up the screen.  This doesn't
+        //     happen if you hide it with its close button.  It appears
+        //     to be some sort of X or window manager problem.
         getTransport()->loadGeo();
-    } else {
+    } else {  // Hide
         // Save the window location for when we show it again.
-        // ??? See comments above.
+        // ??? We shouldn't need to do this.  See comments above.
+        // ??? Also see TransportDialog's dtor which depends on this
+        //     saveGeo() call.
         getTransport()->saveGeo();
         getTransport()->hide();
-        //RG_DEBUG << "  after hide geometry:" << getTransport()->geometry();
-        getTransport()->blockSignals(true);
     }
 }
 
