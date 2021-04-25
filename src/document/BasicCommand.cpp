@@ -79,7 +79,7 @@ BasicCommand::BasicCommand(const QString &name,
     m_modifiedEventsEnd(-1),
     m_originalEvents(new Segment(segment.getType(), m_startTime)),
     m_doBruteForceRedo(true),
-    m_redoEvents(redoEvents),
+    m_redoEvents(redoEvents->clone()), // we do not own redoEvents
     m_segmentMarking("")
 {
     RG_DEBUG << "3 param ctor...";
