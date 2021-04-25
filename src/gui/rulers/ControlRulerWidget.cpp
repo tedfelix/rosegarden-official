@@ -56,7 +56,7 @@ ControlRulerWidget::ControlRulerWidget() :
     m_viewSegment(nullptr),
     m_controlRulerList(),
     m_scale(nullptr),
-    m_gutter(0),
+    m_leftMargin(0),
     m_currentToolName(),
     m_pannedRect(),
     m_selectedElements()
@@ -137,10 +137,10 @@ ControlRulerWidget::setRulerScale(RulerScale *scale)
 }
 
 void
-ControlRulerWidget::setRulerScale(RulerScale *scale, int gutter)
+ControlRulerWidget::setRulerScale(RulerScale *scale, int leftMargin)
 {
     m_scale = scale;
-    m_gutter = gutter;
+    m_leftMargin = leftMargin;
 
     // For each ruler, set the ruler scale.
     for (ControlRuler *ruler : m_controlRulerList) {
@@ -433,7 +433,7 @@ ControlRulerWidget::addControlRuler(const ControlParameter &controlParameter)
     ControlRuler *controlRuler = new ControllerEventsRuler(
             m_viewSegment, m_scale, this, &controlParameter);
 
-    controlRuler->setXOffset(m_gutter);
+    controlRuler->setXOffset(m_leftMargin);
 
     // Mouse signals.  Forward them from the current ControlRuler.
     connect(controlRuler, &ControlRuler::mousePress,
@@ -465,7 +465,7 @@ ControlRulerWidget::addPropertyRuler(const PropertyName &propertyName)
     if (!m_viewSegment)
         return;
 
-    PropertyControlRuler *controlruler = new PropertyControlRuler(
+    PropertyControlRuler *controlRuler = new PropertyControlRuler(
             propertyName,
             m_viewSegment,  // viewSegment
             m_scale,  // scale
@@ -473,14 +473,14 @@ ControlRulerWidget::addPropertyRuler(const PropertyName &propertyName)
 
     // ??? The velocity ruler does not yet support selection, so this
     //     actually does nothing right now.
-    connect(controlruler, &ControlRuler::rulerSelectionChanged,
+    connect(controlRuler, &ControlRuler::rulerSelectionChanged,
             this, &ControlRulerWidget::slotChildRulerSelectionChanged);
 
-    connect(controlruler, &ControlRuler::showContextHelp,
+    connect(controlRuler, &ControlRuler::showContextHelp,
             this,  &ControlRulerWidget::showContextHelp);
 
-    controlruler->setXOffset(m_gutter);
-    controlruler->updateSelection(m_selectedElements);
+    controlRuler->setXOffset(m_leftMargin);
+    controlRuler->updateSelection(m_selectedElements);
 
     // Little kludge here.  We only have the one property ruler (velocity),
     // and the string "velocity" wasn't already in a context (any context)
@@ -490,7 +490,7 @@ ControlRulerWidget::addPropertyRuler(const PropertyName &propertyName)
     if (name == "velocity")
         name = tr("Velocity");
 
-    addRuler(controlruler, name);
+    addRuler(controlRuler, name);
 
     // Update selection drawing in matrix view.
     emit childRulerSelectionChanged(nullptr);

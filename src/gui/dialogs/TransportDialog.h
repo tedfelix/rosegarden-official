@@ -117,7 +117,9 @@ public:
     void loadGeo();
 
 protected:
+    // QDialog override.
     void closeEvent(QCloseEvent * e) override;
+
     void computeSampleRate();
     void cycleThroughModes();
     void displayTime();
