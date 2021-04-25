@@ -18,6 +18,9 @@
 #ifndef RG_XMLREADER_H
 #define RG_XMLREADER_H
 
+class QFile;
+class QXmlStreamReader;
+
 #include <QString>
 #include <rosegardenprivate_export.h>
 
@@ -43,9 +46,15 @@ class ROSEGARDENPRIVATE_EXPORT XMLReader
 
     /// Parse the give string containing XML
     bool parse(const QString& xmlString);
+
+    /// parse the XML file
+    bool parse(QFile& xmlFile);
     
  private:
     XMLHandler* m_handler;
+
+    /// do the work
+    bool doParse(QXmlStreamReader& reader);
 };
  
 }

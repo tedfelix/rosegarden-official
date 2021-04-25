@@ -23,7 +23,7 @@
 
 #include <map>
 
-#include <QXmlDefaultHandler>
+#include "document/io/XMLHandler.h"
 
 namespace Rosegarden
 {
@@ -32,7 +32,7 @@ namespace Rosegarden
  * better solution would be if Rosegarden does support a real percussion
  * notation but for now this will do.
  */
-class PercussionMap : public QXmlDefaultHandler
+class PercussionMap : public XMLHandler
 {
 public:
     /**
@@ -83,7 +83,7 @@ public:
     bool startElement(const QString& namespaceURI,
                               const QString& localName,
                               const QString& qName,
-                              const QXmlAttributes& atts) override;
+                              const QXmlStreamAttributes& atts) override;
 
     bool endElement(const QString& namespaceURI,
                             const QString& localName,

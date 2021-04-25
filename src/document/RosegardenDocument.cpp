@@ -1715,11 +1715,7 @@ RosegardenDocument::xmlParse(QString fileContents, QString &errMsg,
 
     RoseXmlHandler handler(this, elementCount, m_progressDialog, permanent);
 
-    //QXmlInputSource source;
-    //source.setData(fileContents);
     XMLReader reader;
-    //reader.setContentHandler(&handler);
-    //reader.setErrorHandler(&handler);
     reader.setHandler(&handler);
 
     bool ok = reader.parse(fileContents);

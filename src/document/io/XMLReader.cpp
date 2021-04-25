@@ -15,14 +15,15 @@
     COPYING included with this distribution for more information.
 */
 
-#include "document/io/XMLReader.h"
-#include "document/io/XMLHandler.h"
-#include <QXmlStreamReader>
-
 #define RG_MODULE_STRING "[XMLReader]"
 #define RG_NO_DEBUG_PRINT 1
 
 #include "misc/Debug.h"
+#include "document/io/XMLReader.h"
+#include "document/io/XMLHandler.h"
+
+#include <QXmlStreamReader>
+#include <QFile>
 
 namespace Rosegarden
 {
@@ -42,11 +43,29 @@ bool XMLReader::parse(const QString& xmlString)
     if (! m_handler) return false;
     QXmlStreamReader xml;
     xml.addData(xmlString);
+
+    return doParse(xml);
+}
+
+bool XMLReader::parse(QFile& xmlFile)
+{
+    if (!xmlFile.open(QFile::ReadOnly | QFile::Text)) {
+        qWarning() << "XMLReader could not open file" << xmlFile.fileName();
+        return false;
+    }
     
+    QXmlStreamReader xml;
+    xml.setDevice(&xmlFile);
+
+    return doParse(xml);
+}
+
+bool XMLReader::doParse(QXmlStreamReader& reader)
+{
     bool ok = true;
-    while (!xml.atEnd()) {
-        QXmlStreamReader::TokenType token = xml.readNext();
-// Silence gcc compiler warnings due to the switches below not covering all cases, on purpose
+    while (!reader.atEnd()) {
+        QXmlStreamReader::TokenType token = reader.readNext();
+        // Silence gcc compiler warnings due to the switches below not covering all cases, on purpose
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wswitch-enum"
         switch (token) {
@@ -62,22 +81,22 @@ bool XMLReader::parse(const QString& xmlString)
             break;
         case QXmlStreamReader::StartElement:
             {
-                ok = m_handler->startElement(xml.namespaceUri().toString(),
-                                             xml.name().toString(),
-                                             xml.qualifiedName().toString(),
-                                             xml.attributes());
+                ok = m_handler->startElement(reader.namespaceUri().toString(),
+                                             reader.name().toString(),
+                                             reader.qualifiedName().toString(),
+                                             reader.attributes());
             }
             break;
         case QXmlStreamReader::EndElement:
             {
-                ok = m_handler->endElement(xml.namespaceUri().toString(),
-                                           xml.name().toString(),
-                                           xml.qualifiedName().toString());
+                ok = m_handler->endElement(reader.namespaceUri().toString(),
+                                           reader.name().toString(),
+                                           reader.qualifiedName().toString());
             }
             break;
         case QXmlStreamReader::Characters:
             {
-                ok = m_handler->characters(xml.text().toString());
+                ok = m_handler->characters(reader.text().toString());
             }
             break;
         default:
@@ -87,21 +106,17 @@ bool XMLReader::parse(const QString& xmlString)
             break;
         }
 #pragma GCC diagnostic pop
-        
     }
     
-  if (! ok) {
-      qDebug() << m_handler->errorString();
-  }
-  
-  if (xml.hasError()) {
-      RG_DEBUG << "error";
-      m_handler->fatalError(xml.lineNumber(), xml.columnNumber(),
-                            xml.errorString());
-  }
-
-  return ok;
-  
+    if (! ok) {
+        qDebug() << m_handler->errorString();
+    }
+    if (reader.hasError()) {
+        RG_DEBUG << "error";
+        m_handler->fatalError(reader.lineNumber(), reader.columnNumber(),
+                              reader.errorString());
+    }
+    return ok;
 }
-
+    
 }
