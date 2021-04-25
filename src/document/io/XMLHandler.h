@@ -20,16 +20,19 @@
 
 #include <QString>
 #include <QXmlStreamAttributes>
+#include <rosegardenprivate_export.h>
 
 namespace Rosegarden
 {
 
 /**
- * The XMLHandler class provides a simple XML handler similar to the SAX
- * handler. It is used by the XMLReader class
+ * The XMLHandler class provides a simple XML handler similar to the
+ * SAX handler. It is used by the XMLReader class. This class was
+ * introduced as preparation for QT6 in which the SAX classes are no
+ * longer available.
  */
     
-class XMLHandler
+class ROSEGARDENPRIVATE_EXPORT XMLHandler
 {
  public:
     virtual ~XMLHandler();

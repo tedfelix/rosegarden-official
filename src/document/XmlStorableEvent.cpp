@@ -27,20 +27,20 @@
 #include "gui/editors/notation/NotationStrings.h"
 
 #include <QString>
-
+#include <QXmlStreamAttributes>
 
 namespace Rosegarden
 {
 
-XmlStorableEvent::XmlStorableEvent(const QXmlAttributes &attributes,
+XmlStorableEvent::XmlStorableEvent(const QXmlStreamAttributes &attributes,
                                    timeT &absoluteTime)
 {
     setDuration(0);
 
     for (int i = 0; i < attributes.length(); ++i) {
 
-        QString attrName(attributes.qName(i)),
-        attrVal(attributes.value(i));
+        QString attrName(attributes.at(i).name().toString()),
+            attrVal(attributes.at(i).value().toString());
 
         if (attrName == "package") {
 
@@ -147,19 +147,20 @@ XmlStorableEvent::XmlStorableEvent(Event &e) :
 {}
 
 void
-XmlStorableEvent::setPropertyFromAttributes(const QXmlAttributes &attributes,
-        bool persistent)
+XmlStorableEvent::setPropertyFromAttributes
+(const QXmlStreamAttributes &attributes,
+ bool persistent)
 {
     bool have = false;
-    QString name = attributes.value("name");
+    QString name = attributes.value("name").toString();
     if (name == "") {
         RG_DEBUG << "XmlStorableEvent::setProperty: no property name found, ignoring";
         return ;
     }
 
     for (int i = 0; i < attributes.length(); ++i) {
-        QString attrName(attributes.qName(i)),
-        attrVal(attributes.value(i));
+        QString attrName(attributes.at(i).name().toString()),
+            attrVal(attributes.at(i).value().toString());
 
         if (attrName == "name") {
             continue;

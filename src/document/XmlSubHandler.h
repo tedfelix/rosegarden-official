@@ -21,6 +21,8 @@
 #include <QString>
 #include <qxml.h>
 
+class QXmlStreamAttributes;
+
 namespace Rosegarden {
     
 class XmlSubHandler
@@ -32,7 +34,7 @@ public:
     virtual bool startElement(const QString& namespaceURI,
                               const QString& localName,
                               const QString& qName,
-                              const QXmlAttributes& atts) = 0;
+                              const QXmlStreamAttributes& atts) = 0;
 
     /**
      * @param finished : if set to true on return, means that
