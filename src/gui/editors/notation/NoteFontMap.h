@@ -29,9 +29,9 @@
 #include <utility>
 #include <qxml.h>
 #include "gui/editors/notation/NoteCharacterNames.h"
+#include "document/io/XMLHandler.h"
 
-class QXmlParseException;
-class QXmlAttributes;
+class QXmlStreamAttributes;
 
 
 namespace Rosegarden
@@ -39,7 +39,7 @@ namespace Rosegarden
 
 
 
-class NoteFontMap : public QXmlDefaultHandler
+class NoteFontMap : public XMLHandler
 {
 public:
     typedef Exception MappingFileReadFailed;
@@ -90,12 +90,12 @@ public:
 
     bool startElement
     (const QString& namespaceURI, const QString& localName,
-     const QString& qName, const QXmlAttributes& atts) override;
+     const QString& qName, const QXmlStreamAttributes& atts) override;
 
     bool characters(const QString &) override;
 
-    bool error(const QXmlParseException& exception) override;
-    bool fatalError(const QXmlParseException& exception) override;
+    bool fatalError(int lineNumber, int columnNumber,
+                    const QString& msg) override;
 
     void dump() const;
 

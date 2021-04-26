@@ -26,6 +26,7 @@
 #include "base/Track.h"
 #include "base/NotationTypes.h"
 #include "misc/Version.h"
+#include "document/io/XMLHandler.h"
 
 #include <QCoreApplication>
 #include <QString>
@@ -33,10 +34,6 @@
 #include <string>
 #include <vector>
 #include <queue>
-#include <qxml.h>
-
-
-class QXmlAttributes;
 
 
 namespace Rosegarden
@@ -46,7 +43,7 @@ class Segment;
 class Composition;
 
 
-class MusicXMLXMLHandler : public QXmlDefaultHandler
+class MusicXMLXMLHandler : public XMLHandler
 {
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::MusicXMLXMLHandler)
 
@@ -85,14 +82,14 @@ public:
     /**
       * Overloaded handler functions
       */
-    void setDocumentLocator(QXmlLocator * locator) override;
+    //void setDocumentLocator(QXmlLocator * locator) override;
 
     bool startDocument() override;
 
     bool startElement(const QString& namespaceURI,
                               const QString& localName,
                               const QString& qName,
-                              const QXmlAttributes& atts) override;
+                              const QXmlStreamAttributes& atts) override;
 
     bool endElement(const QString& namespaceURI,
                             const QString& localName,
@@ -107,29 +104,27 @@ private:
      * processing based on m_currentState
      */
     
-    bool startHeader(const QString& qName, const QXmlAttributes& atts);
+    bool startHeader(const QString& qName, const QXmlStreamAttributes& atts);
     bool endHeader(const QString& qName);
-    bool startPartList(const QString& qName, const QXmlAttributes& atts);
+    bool startPartList(const QString& qName, const QXmlStreamAttributes& atts);
     bool endPartList(const QString& qNames);
-    bool startMusicData(const QString& qName, const QXmlAttributes& atts);
+    bool startMusicData(const QString& qName, const QXmlStreamAttributes& atts);
     bool endMusicData(const QString& qName);
-    bool startNoteData(const QString& qName, const QXmlAttributes& atts);
+    bool startNoteData(const QString& qName, const QXmlStreamAttributes& atts);
     bool endNoteData(const QString& qName);
-    bool startBackupData(const QString& qName, const QXmlAttributes& atts);
+    bool startBackupData(const QString& qName, const QXmlStreamAttributes& atts);
     bool endBackupData(const QString& qName);
-    bool startDirectionData(const QString& qName, const QXmlAttributes& atts);
+    bool startDirectionData(const QString& qName, const QXmlStreamAttributes& atts);
     bool endDirectionData(const QString& qName);
-    bool startAttributesData(const QString& qName, const QXmlAttributes& atts);
+    bool startAttributesData(const QString& qName, const QXmlStreamAttributes& atts);
     bool endAttributesData(const QString& qName);
-    bool startBarlineData(const QString& qName, const QXmlAttributes& atts);
+    bool startBarlineData(const QString& qName, const QXmlStreamAttributes& atts);
     bool endBarlineData(const QString& qName);
 
 
 public:
-    bool error(const QXmlParseException & exception) override;
-    bool fatalError(const QXmlParseException & exception) override;
-    bool warning(const QXmlParseException & exception) override;
-    QString errorString() const override;
+    bool fatalError(int lineNumber, int columnNumber,
+                    const QString& msg) override;
 
 private:
     void ignoreElement();
@@ -139,9 +134,9 @@ private:
     void cerrWarning(const QString &message);
     void cerrError(const QString &message);
     void cerrElementNotSupported(const QString &element);
-    bool getAttributeString(const QXmlAttributes& atts, const QString &name,
+    bool getAttributeString(const QXmlStreamAttributes& atts, const QString &name,
                             QString &value, bool required=true, const QString &defValue="");
-    bool getAttributeInteger(const QXmlAttributes& atts, const QString &name,
+    bool getAttributeInteger(const QXmlStreamAttributes& atts, const QString &name,
                             int &value, bool required=true, int defValue=0);
     void handleNoteType();
     void handleDynamics();
@@ -164,7 +159,6 @@ protected:
     Studio          *m_studio;
 
     QString         m_errormessage;
-    QXmlLocator     *m_locator;
 
     PartMap         m_parts;
 

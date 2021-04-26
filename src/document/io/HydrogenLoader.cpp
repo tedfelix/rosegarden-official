@@ -24,6 +24,7 @@
 #include "base/Segment.h"
 #include "base/Studio.h"
 #include "HydrogenXMLHandler.h"
+#include "document/io/XMLReader.h"
 #include <QFile>
 #include <QObject>
 #include <QString>
@@ -46,17 +47,16 @@ HydrogenLoader::load(const QString& fileName, Composition &comp)
     if (!file.open(QIODevice::ReadOnly)) {
         return false;
     }
+    file.close();
 
     m_studio->unassignAllInstruments();
 
     HydrogenXMLHandler handler(m_composition);
 
-    QXmlInputSource source(&file);
-    QXmlSimpleReader reader;
-    reader.setContentHandler(&handler);
-    reader.setErrorHandler(&handler);
+    XMLReader reader;
+    reader.setHandler(&handler);
 
-    bool ok = reader.parse(source);
+    bool ok = reader.parse(file);
 
     return ok;
 }

@@ -24,6 +24,7 @@
 #include "gui/general/ResourceFinder.h"
 #include "gui/general/IconLoader.h"
 #include "misc/Strings.h"
+#include "document/io/XMLReader.h"
 
 #include <QListWidget>
 #include <QListWidgetItem>
@@ -34,6 +35,7 @@
 #include <QMessageBox>
 #include <QDialogButtonBox>
 #include <QGroupBox>
+#include <QFile>
 
 //#include <QDir>
 
@@ -499,16 +501,15 @@ GuitarChordSelectorDialog::parseChordFile(const QString& chordFileName)
     bool ok = chordFile.open(QIODevice::ReadOnly);    
     if (!ok)
         QMessageBox::critical(nullptr, tr("Rosegarden"), tr("couldn't open file '%1'").arg(handler.errorString()));
-
-    QXmlInputSource source(&chordFile);
-    QXmlSimpleReader reader;
-    reader.setContentHandler(&handler);
-    reader.setErrorHandler(&handler);
+    
+    chordFile.close();
+    XMLReader reader;
+    reader.setHandler(&handler);
 
 // RG_DEBUG << "GuitarChordSelectorDialog::parseChordFile() parsing " << 
 //   chordFileName;
 
-    reader.parse(source);
+    reader.parse(chordFile);
 
 // RG_DEBUG << "  parsed OK, without crashing!  W00t!";
 
