@@ -5167,29 +5167,48 @@ NotationView::slotAddLayer()
                                                    comp);
     macro->addCommand(command);
 
+    // ??? Couldn't AdoptSegmentCommand take an AddLayerCommand pointer
+    //     and use that to get the new Segment to adopt?  Then it wouldn't
+    //     need to use marking.
     AdoptSegmentCommand *adoptCommand =
-        new AdoptSegmentCommand("Adopt Layer", *this, "Added Layer",
-                                &comp, true, true);
+        new AdoptSegmentCommand(
+                "Adopt Layer",  // name
+                *this,  // view
+                "Added Layer",  // segmentMarking
+                &comp,  // composition
+                true,  // into
+                true);  // inComposition
     macro->addCommand(adoptCommand);
-    
+
     CommandHistory::getInstance()->addCommand(macro);
 
-    // get the pointer to the segment we just created and add it to m_segments
-    Segment* newLayer = comp.getSegmentByMarking("Added Layer");
-    if (! newLayer) {
+    // DEBUG.
+    // If Segment marking is removed, this can be done differently.
+    // E.g. if (!command->getSegment())
+    Segment *newLayer = comp.getSegmentByMarking("Added Layer");
+    if (!newLayer) {
         RG_WARNING << "NotationView: new layer not found";
         return;
     }
 
-    // make the new segment active immediately
+    // Make the new segment active immediately.
+
     NotationScene *scene = m_notationWidget->getScene();
-    NotationStaff* newLayerStaff =
+    // ??? Ok, this appears to be where we really need the Segment marking.
+    //     Without the marking, we have no way of finding the new staff.
+    //     It would be nice if AdoptSegmentCommand would determine the
+    //     specific NotationStaff for the adopted Segment and be able to
+    //     return it.  I.e. the NotationView::adopt*() functions should
+    //     return NotationStaff pointers that AdoptSegmentCommand can
+    //     store for this.  That might make it possible to completely remove
+    //     the Segment marking.
+    NotationStaff *newLayerStaff =
         scene->getStaffBySegmentMarking("Added Layer");
-    if (! newLayerStaff) {
+    if (!newLayerStaff) {
         RG_WARNING << "NotationView: new layer staff not found";
         return;
     }
-    
+
     setCurrentStaff(newLayerStaff);
     slotEditSelectWholeStaff();
     
