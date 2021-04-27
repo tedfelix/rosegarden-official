@@ -1779,7 +1779,7 @@ ROSEGARDENPRIVATE_EXPORT QDebug &operator<<(QDebug &dbg, const Rosegarden::Segme
             continue;
         }
 
-        dbg << *(*i);
+        dbg << *(*i) << "\n";
     }
 
     return dbg;

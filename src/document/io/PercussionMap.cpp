@@ -16,6 +16,9 @@
 */
 
 #include "PercussionMap.h"
+#include "document/io/XMLReader.h"
+
+#include <QFile>
 
 namespace Rosegarden
 {
@@ -67,12 +70,11 @@ PercussionMap::loadPercussionMap(const QString &filename)
 //     if (!ok)
 //         QMessageBox::critical(0, tr("Rosegarden"), tr("couldn't open file '%1'").arg(handler.errorString()));
 
-    QXmlInputSource source(&mapFile);
-    QXmlSimpleReader reader;
-    reader.setContentHandler(this);
-    reader.setErrorHandler(this);
+    //QXmlInputSource source(&mapFile);
+    XMLReader reader;
+    reader.setHandler(this);
 
-    ok = reader.parse(source);
+    ok = reader.parse(mapFile);
 
 //     if (!ok)
 //         QMessageBox::critical(0, tr("Rosegarden"), tr("couldn't parse chord dictionary : %1").arg(handler.errorString()));
@@ -83,7 +85,7 @@ bool
 PercussionMap::startElement(const QString& /*namespaceURI*/,
                             const QString& /*localName*/,
                             const QString& qName,
-                            const QXmlAttributes& atts)
+                            const QXmlStreamAttributes& atts)
 {
     if (qName.toLower() == "percussion-map") {
         m_data.clear();
@@ -93,13 +95,13 @@ PercussionMap::startElement(const QString& /*namespaceURI*/,
         m_xmlNotehead = "normal";
         m_xmlStemUp = true;
     } else if (qName.toLower() == "display") {
-        if (atts.index("pitch") >= 0) {
+        if (atts.hasAttribute("pitch")) {
             m_xmlPitchOut = atts.value("pitch").toInt();
         }
-        if (atts.index("notehead") >= 0) {
-            m_xmlNotehead = atts.value("notehead").toStdString();
+        if (atts.hasAttribute("notehead")) {
+            m_xmlNotehead = atts.value("notehead").toString().toStdString();
         }
-        if (atts.index("stem") >= 0) {
+        if (atts.hasAttribute("stem")) {
             m_xmlStemUp = (atts.value("stem") == "down") ? false : true;
         }
     }

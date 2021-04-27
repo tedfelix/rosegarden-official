@@ -57,6 +57,8 @@ set(rg_CPPS
   document/RoseXmlHandler.cpp
   document/CommandRegistry.cpp
   document/DocumentGet.cpp
+  document/io/XMLReader.cpp
+  document/io/XMLHandler.cpp
   document/io/PercussionMap.cpp
   document/io/MusicXmlExporter.cpp
   document/io/LilyPondLanguage.cpp

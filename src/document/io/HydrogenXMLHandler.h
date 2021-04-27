@@ -27,12 +27,12 @@
 #include <vector>
 #include <qxml.h>
 #include "misc/Version.h"
+#include "document/io/XMLHandler.h"
 
 #include <QCoreApplication>
 
 
-class QXmlAttributes;
-
+class QXmlStreamAttributes;
 
 namespace Rosegarden
 {
@@ -41,7 +41,7 @@ class Segment;
 class Composition;
 
 
-class HydrogenXMLHandler : public QXmlDefaultHandler
+class HydrogenXMLHandler : public XMLHandler
 {
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::HydrogenXMLHandler)
 
@@ -56,7 +56,7 @@ public:
     bool startElement(const QString& namespaceURI,
                               const QString& localName,
                               const QString& qName,
-                              const QXmlAttributes& atts) override;
+                              const QXmlStreamAttributes& atts) override;
 
     bool endElement(const QString& namespaceURI,
                             const QString& localName,
@@ -70,7 +70,7 @@ private:
     virtual bool startElement_093(const QString& namespaceURI,
                                   const QString& localName,
                                   const QString& qName,
-                                  const QXmlAttributes& atts);
+                                  const QXmlStreamAttributes& atts);
     virtual bool endElement_093(const QString& namespaceURI,
                                 const QString& localName,
                                 const QString& qName);

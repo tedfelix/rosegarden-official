@@ -37,23 +37,23 @@ bool ChordXmlHandler::startDocument()
 bool ChordXmlHandler::startElement(const QString& /* namespaceURI */,
                                    const QString& /* localName */,
                                    const QString& qName,
-                                   const QXmlAttributes& atts)
+                                   const QXmlStreamAttributes& atts)
 {
     QString lcName = qName.toLower();
 
     if (lcName == "chordset") {
         // start new chord set
-        m_currentRoot = atts.value("root").trimmed();
+        m_currentRoot = atts.value("root").toString().trimmed();
 
     } else if (lcName == "chord") {
         
         m_currentChord = Guitar::Chord(m_currentRoot);
         
-        if (atts.index("ext") >= 0)
-            m_currentChord.setExt(atts.value("ext").trimmed());
+        if (atts.hasAttribute("ext"))
+            m_currentChord.setExt(atts.value("ext").toString().trimmed());
 
-        if (atts.index("user") >= 0) {
-            QString userVal = atts.value("user").trimmed().toLower();
+        if (atts.hasAttribute("user")) {
+            QString userVal = atts.value("user").toString().trimmed().toLower();
             bool res = (userVal == "yes" || userVal == "1" || userVal == "true");
             m_currentChord.setUserChord(res);
         } else {
@@ -128,23 +128,14 @@ bool ChordXmlHandler::parseFingering(const QString& ch) {
 }
 
 bool
-ChordXmlHandler::error(const QXmlParseException& exception)
+ChordXmlHandler::fatalError(int lineNumber, int columnNumber,
+                            const QString& msg)
 {
     m_errorString = QString("%1 at line %2, column %3")
-                    .arg(exception.message())
-                    .arg(exception.lineNumber())
-                    .arg(exception.columnNumber());
-    return QXmlDefaultHandler::error( exception );
-}
-
-bool
-ChordXmlHandler::fatalError(const QXmlParseException& exception)
-{
-    m_errorString = QString("%1 at line %2, column %3")
-                    .arg(exception.message())
-                    .arg(exception.lineNumber())
-                    .arg(exception.columnNumber());
-    return QXmlDefaultHandler::fatalError( exception );
+                    .arg(msg)
+                    .arg(lineNumber)
+                    .arg(columnNumber);
+    return false;
 }
 
 

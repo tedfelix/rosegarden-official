@@ -21,9 +21,9 @@
 #include "base/Device.h"
 #include "base/MidiProgram.h"
 #include "base/Event.h"
+#include "document/io/XMLHandler.h"
 
 #include <QString>
-#include <QXmlDefaultHandler>
 #include <QtCore/QSharedPointer>
 #include <QPointer>
 #include <QProgressDialog>
@@ -32,10 +32,6 @@
 #include <map>
 #include <set>
 #include <string>
-
-
-class QXmlParseException;
-class QXmlAttributes;
 
 
 namespace Rosegarden
@@ -60,7 +56,7 @@ class AudioFileManager;
 /**
  * Handler for the Rosegarden XML format
  */
-class RoseXmlHandler : public QObject, public QXmlDefaultHandler
+class RoseXmlHandler : public QObject, public XMLHandler
 {
     //Q_OBJECT
 public:
@@ -94,7 +90,7 @@ public:
     bool startElement(const QString& namespaceURI,
                               const QString& localName,
                               const QString& qName,
-                              const QXmlAttributes& atts) override;
+                              const QXmlStreamAttributes& atts) override;
 
     bool endElement(const QString& namespaceURI,
                             const QString& localName,
@@ -112,8 +108,8 @@ public:
     bool hasActiveAudio() const { return m_hasActiveAudio; }
     std::set<QString> &pluginsNotFound() { return m_pluginsNotFound; }
 
-    bool error(const QXmlParseException& exception) override;
-    bool fatalError(const QXmlParseException& exception) override;
+    bool fatalError(int lineNumber, int columnNumber,
+                    const QString& msg) override;
 
 
 protected:

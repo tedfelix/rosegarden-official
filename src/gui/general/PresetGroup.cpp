@@ -28,6 +28,7 @@
 #include "base/Exception.h"
 #include "CategoryElement.h"
 #include "gui/general/ResourceFinder.h"
+#include "document/io/XMLReader.h"
 
 #include <QDir>
 #include <QFile>
@@ -80,12 +81,9 @@ PresetGroup::PresetGroup() :
 
     QFile presetFile(presetFileName);
 
-    QXmlInputSource source(&presetFile);
-    QXmlSimpleReader reader;
-    reader.setContentHandler(this);
-    reader.setErrorHandler(this);
-    bool ok = reader.parse(source);
-    presetFile.close();
+    XMLReader reader;
+    reader.setHandler(this);
+    bool ok = reader.parse(presetFile);
 
     if (!ok) {
         throw PresetFileReadFailed(qstrtostr(m_errorString));
@@ -100,7 +98,7 @@ PresetGroup::~PresetGroup()
 bool
 PresetGroup::startElement(const QString &, const QString &,
                           const QString &qName,
-                          const QXmlAttributes &attributes)
+                          const QXmlStreamAttributes &attributes)
 {
     QString lcName = qName.toLower();
 
@@ -108,7 +106,7 @@ PresetGroup::startElement(const QString &, const QString &,
 
     if (lcName == "category") {
 
-        QString s = attributes.value("name");
+        QString s = attributes.value("name").toString();
         if (!s.isEmpty()) {
             m_elCategoryName = s;
             // increment the current category number
@@ -132,7 +130,7 @@ PresetGroup::startElement(const QString &, const QString &,
 
     } else if (lcName == "instrument") {
 
-        QString s = attributes.value("name");
+        QString s = attributes.value("name").toString();
         if (!s.isEmpty()) {
             m_elInstrumentName = s;
             m_name = true;
@@ -143,29 +141,29 @@ PresetGroup::startElement(const QString &, const QString &,
         }
 
     } else if (lcName == "clef") {
-        QString s = attributes.value("type");
+        QString s = attributes.value("type").toString();
         if (!s.isEmpty()) {
         	m_elClef = clefNameToClefIndex(s);
             m_clef = true;
         }
     } else if (lcName == "transpose") {
-        QString s = attributes.value("value");
+        QString s = attributes.value("value").toString();
         if (!s.isEmpty()) {
             m_elTranspose = s.toInt();
             m_transpose = true;
         }
 
     } else if (lcName == "range") {
-        QString s = attributes.value("class");
+        QString s = attributes.value("class").toString();
 
         if (s == "amateur") {
-            s = attributes.value("low");
+            s = attributes.value("low").toString();
             if (!s.isEmpty()) {
                 m_elLowAm = s.toInt();
                 m_amateur = true;
             }
 
-            s = attributes.value("high");
+            s = attributes.value("high").toString();
             if (!s.isEmpty() && m_amateur) {
                 m_elHighAm = s.toInt();
             } else {
@@ -173,13 +171,13 @@ PresetGroup::startElement(const QString &, const QString &,
             }
 
         } else if (s == "professional") {
-            s = attributes.value("low");
+            s = attributes.value("low").toString();
             if (!s.isEmpty()) {
                 m_pro = true;
                 m_elLowPro = s.toInt();
             }
 
-            s = attributes.value("high");
+            s = attributes.value("high").toString();
             if (!s.isEmpty() && m_pro) {
                 m_elHighPro = s.toInt();
             } else {
@@ -217,28 +215,16 @@ PresetGroup::startElement(const QString &, const QString &,
 } // startElement
 
 bool
-PresetGroup::error(const QXmlParseException& exception)
-{
-    RG_DEBUG << "PresetGroup::error(): jubilation and glee, we have an error, whee!";
-
-    m_errorString = QString("%1 at line %2, column %3: %4")
-                    .arg(exception.message())
-                    .arg(exception.lineNumber())
-                    .arg(exception.columnNumber())
-                    .arg(m_errorString);
-    return QXmlDefaultHandler::error(exception);
-}
-
-bool
-PresetGroup::fatalError(const QXmlParseException& exception)
+PresetGroup::fatalError(int lineNumber, int columnNumber,
+                        const QString& msg)
 {
     RG_DEBUG << "PresetGroup::fatalError(): double your jubilation, and triple your glee, a fatal error doth it be!";
     m_errorString = QString("%1 at line %2, column %3: %4")
-                    .arg(exception.message())
-                    .arg(exception.lineNumber())
-                    .arg(exception.columnNumber())
+                    .arg(msg)
+                    .arg(lineNumber)
+                    .arg(columnNumber)
                     .arg(m_errorString);
-    return QXmlDefaultHandler::fatalError(exception);
+    return false;
 }
 
 }

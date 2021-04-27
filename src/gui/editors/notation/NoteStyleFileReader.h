@@ -18,16 +18,15 @@
 #ifndef RG_NOTESTYLEFILEREADER_H
 #define RG_NOTESTYLEFILEREADER_H
 
-#include <qxml.h>
-
 #include "NoteStyle.h"
+#include "document/io/XMLHandler.h"
 
 #include <QCoreApplication>
 #include <QSharedPointer>
 
 namespace Rosegarden {
 
-class NoteStyleFileReader : public QXmlDefaultHandler
+class NoteStyleFileReader : public XMLHandler
 {
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::NoteStyleFileReader)
 
@@ -42,10 +41,11 @@ public:
 
     bool startElement
     (const QString& namespaceURI, const QString& localName,
-     const QString& qName, const QXmlAttributes& atts) override;
+     const QString& qName, const QXmlStreamAttributes& atts) override;
     
 private:
-    bool setFromAttributes(Note::Type type, const QXmlAttributes &attributes);
+    bool setFromAttributes(Note::Type type,
+                           const QXmlStreamAttributes &attributes);
 
     QString m_errorString;
     QSharedPointer<NoteStyle> m_style;

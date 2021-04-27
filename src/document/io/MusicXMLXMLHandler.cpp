@@ -56,39 +56,14 @@ MusicXMLXMLHandler::~MusicXMLXMLHandler()
 }
 
 bool
-MusicXMLXMLHandler::error(const QXmlParseException & exception)
-{
-    m_errormessage = QString("Error on line %1, column %2: %3")
-                             .arg(exception.lineNumber())
-                             .arg(exception.columnNumber())
-                             .arg(exception.message());
-    return false;
-}
-
-bool
-MusicXMLXMLHandler::fatalError(const QXmlParseException & exception)
+MusicXMLXMLHandler::fatalError(int lineNumber, int columnNumber,
+                               const QString& msg)
 {
     m_errormessage = QString("Fatal error on line %1, column %2: %3")
-                             .arg(exception.lineNumber())
-                             .arg(exception.columnNumber())
-                             .arg(exception.message());
+                             .arg(lineNumber)
+                             .arg(columnNumber)
+                             .arg(msg);
     return false;
-}
-
-bool
-MusicXMLXMLHandler::warning(const QXmlParseException & exception)
-{
-    m_errormessage = QString("Warning on line %1, column %2: %3")
-                             .arg(exception.lineNumber())
-                             .arg(exception.columnNumber())
-                             .arg(exception.message());
-    return true;
-}
-
-QString
-MusicXMLXMLHandler::errorString () const
-{
-    return m_errormessage;
 }
 
 bool
@@ -106,17 +81,11 @@ MusicXMLXMLHandler::startDocument()
     return true;
 }
 
-void
-MusicXMLXMLHandler::setDocumentLocator(QXmlLocator *locator)
-{
-    m_locator = locator;
-}
-
 bool
 MusicXMLXMLHandler::startElement(const QString& /*namespaceURI*/,
                                  const QString& /*localName*/,
                                  const QString& qName,
-                                 const QXmlAttributes& atts)
+                                 const QXmlStreamAttributes& atts)
 {
     qApp->processEvents();
 
@@ -127,7 +96,7 @@ MusicXMLXMLHandler::startElement(const QString& /*namespaceURI*/,
     // Handle all elements lowercase.
     m_currentElement = qName.toLower();
 
-cerrInfo(QString("startElement : \"%1\"").arg(m_currentElement));
+    cerrInfo(QString("startElement : \"%1\"").arg(m_currentElement));
 
     bool ret = true;
     switch (m_currentState) {
@@ -225,7 +194,7 @@ MusicXMLXMLHandler::endElement(const QString& /*namespaceURI*/,
         return true;
     }
 
-cerrInfo(QString("endElement : \"%1\"").arg(m_currentElement));
+    cerrInfo(QString("endElement : \"%1\"").arg(m_currentElement));
 
 
     // Start the real work!
@@ -303,7 +272,7 @@ MusicXMLXMLHandler::endDocument()
 
 bool
 MusicXMLXMLHandler::startHeader(const QString& qName,
-                                const QXmlAttributes& /* atts */)
+                                const QXmlStreamAttributes& /* atts */)
 {
     // Handle all elements lowercase.
     m_currentElement = qName.toLower();
@@ -322,7 +291,7 @@ MusicXMLXMLHandler::endHeader(const QString& qName)
 
 bool
 MusicXMLXMLHandler::startPartList(const QString& qName,
-                                 const QXmlAttributes& atts)
+                                 const QXmlStreamAttributes& atts)
 {
     // Handle all elements lowercase.
     m_currentElement = qName.toLower();
@@ -456,7 +425,7 @@ MusicXMLXMLHandler::endPartList(const QString& qName)
 
 bool
 MusicXMLXMLHandler::startNoteData(const QString& qName,
-                                   const QXmlAttributes& atts)
+                                   const QXmlStreamAttributes& atts)
 {
     // Handle all elements lowercase.
     m_currentElement = qName.toLower();
@@ -1117,7 +1086,7 @@ MusicXMLXMLHandler::endNoteData(const QString& qName)
 
 bool
 MusicXMLXMLHandler::startBackupData(const QString& qName,
-                                   const QXmlAttributes& /* atts */)
+                                   const QXmlStreamAttributes& /* atts */)
 {
     // Handle all elements lowercase.
     m_currentElement = qName.toLower();
@@ -1151,7 +1120,7 @@ MusicXMLXMLHandler::endBackupData(const QString& qName)
 
 bool
 MusicXMLXMLHandler::startDirectionData(const QString& qName,
-                                   const QXmlAttributes& atts)
+                                   const QXmlStreamAttributes& atts)
 {
     // Handle all elements lowercase.
     m_currentElement = qName.toLower();
@@ -1301,7 +1270,7 @@ MusicXMLXMLHandler::endDirectionData(const QString& qName)
 
 bool
 MusicXMLXMLHandler::startAttributesData(const QString& qName,
-                                   const QXmlAttributes& atts)
+                                   const QXmlStreamAttributes& atts)
 {
     // Handle all elements lowercase.
     m_currentElement = qName.toLower();
@@ -1484,7 +1453,7 @@ MusicXMLXMLHandler::endAttributesData(const QString& qName)
 
 bool
 MusicXMLXMLHandler::startBarlineData(const QString& qName,
-                                   const QXmlAttributes& /* atts */)
+                                   const QXmlStreamAttributes& /* atts */)
 {
     // Handle all elements lowercase.
     m_currentElement = qName.toLower();
@@ -1536,52 +1505,48 @@ MusicXMLXMLHandler::checkFloat(const QString &element, float &value)
 void
 MusicXMLXMLHandler::cerrInfo(const QString &message)
 {
-    RG_DEBUG << "**** At line " << m_locator->lineNumber() << "/"
-             << m_locator->columnNumber() << " *** : " << message;
+    RG_DEBUG << message;
 }
 
 void
 MusicXMLXMLHandler::cerrWarning(const QString &message)
 {
-    RG_WARNING << "Warning at line " << m_locator->lineNumber() << "/"
-               << m_locator->columnNumber() << " : " << message;
+    RG_WARNING << message;
 }
 
 void
 MusicXMLXMLHandler::cerrError(const QString &message)
 {
-    RG_WARNING << "Error at line " << m_locator->lineNumber() << "/"
-               << m_locator->columnNumber() << " : " << message;
+    RG_WARNING << message;
 }
 
 void
 MusicXMLXMLHandler::cerrElementNotSupported(const QString &element)
 {
-    RG_WARNING << "Warning at line " << m_locator->lineNumber() << "/"
-               << m_locator->columnNumber() << " : Element \"" << element
+    RG_WARNING << "Element \"" << element
                << "\" not supported, ignored.";
 }
 
 bool
-MusicXMLXMLHandler::getAttributeString(const QXmlAttributes& atts, const QString &name,
+MusicXMLXMLHandler::getAttributeString(const QXmlStreamAttributes& atts, const QString &name,
                     QString &value, bool required, const QString &defValue)
 {
-    if (atts.index(name) < 0) {
+    if (! atts.hasAttribute(name)) {
         if(required) {
             m_errormessage = QString("Required attribute \"%1\" missing.").arg(name);
             return false;
         } else
             value = defValue;
     } else
-        value = atts.value(name);
+        value = atts.value(name).toString();
     return true;
 }
 
 bool
-MusicXMLXMLHandler::getAttributeInteger(const QXmlAttributes& atts, const QString &name,
+MusicXMLXMLHandler::getAttributeInteger(const QXmlStreamAttributes& atts, const QString &name,
                     int &value, bool required, int defValue)
 {
-    if (atts.index(name) < 0) {
+    if (! atts.hasAttribute(name)) {
         if(required) {
             m_errormessage = QString("Required attribute \"%1\" missing.").arg(name);
             return false;
