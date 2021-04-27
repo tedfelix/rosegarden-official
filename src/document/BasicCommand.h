@@ -27,7 +27,7 @@
 #include <memory>  // for shared_ptr
 
 class QString;
-
+#include <QSharedPointer>
 
 namespace Rosegarden
 {
@@ -43,12 +43,7 @@ class CommandArgumentQuerier; // forward declaration useful for some subclasses
  * actual work of the command.  This class takes care of undo/redo.
  *
  * This class stores the entirety of the original version of the Segment
- * in m_savedEvents.
- *
- * ??? This is not an ideal use of memory.  Better would be if we could just
- *     store the Events that were changed.  But that would increase the
- *     complexity of the code.  Better to simplify as much as possible then
- *     consider whether space optimization is actually needed.
+ * in m_originalEvents.
  *
  * On undo (unexecute()), this class only copies back the events in the
  * range of time that was modified.  This is done primarily because the
@@ -74,7 +69,6 @@ class CommandArgumentQuerier; // forward declaration useful for some subclasses
  *
  * TODO
  * - Remove the deprecated member functions and variables.
- * - Have a look at the other minor ??? items in here.
  */
 class BasicCommand : public NamedCommand
 {
@@ -117,10 +111,6 @@ protected:
 
     // Ctor to be used when the Segment does not exist when
     // the command is created.  Brute force redo is not supported.
-    // ??? Can the marker be reduced to just a bool flag?
-    //       bool markedForCommand;
-    //     Yes - at the moment it could but if other commands use this feature
-    //     it may be necessary to add more bool flags.
     BasicCommand(const QString &name,
                  timeT start,
                  const QString &segmentMarking);
@@ -131,15 +121,11 @@ protected:
     /// Get a reference to the segment
     Segment &getSegment();
 
+    /// Thes methods are deprecated
     timeT getStartTime() { return m_startTime; }
     timeT getEndTime() { return m_endTime; }
 
-    // ??? Not used at the moment.  Should we delete it?  It is
-    //     defined in several derived classes.
-    // ??? I would definitely get rid of it.  If you think there might
-    //     be some value to the derived implementations at some point,
-    //     comment them out.  But I prefer deleting unused code.  It's
-    //     always better the second time you write it anyway.
+    // This method is not used. Classes should not override it
     virtual timeT getRelayoutEndTime();
 
 private:
@@ -152,41 +138,27 @@ private:
     /// if the segment is not set yet - get it from the segment marking
     void requireSegment();
     /// Copy all Events within m_segment's time range from m_segment to dest.
-    void copyTo(Segment *dest);
+    void copyTo(QSharedPointer<Segment> dest);
     /// Copy Events in the modification time range from source to m_segment.
     /**
      * Events in m_segment are removed in the time range before the copy.
      */
-    void copyFrom(Segment *source, bool wholeSegment = false);
+    void copyFrom(QSharedPointer<Segment> source, bool wholeSegment = false);
 
     /// Original start time for m_Segment.
     timeT m_originalStartTime;
 
-    // ??? m_startTime, m_endTime, calculateStartTime(), and
-    //     calculateEndTime() are no longer required for the
-    //     functionality.  I would prefer to get rid of them entirely but
-    //     getStartTime() and getEndTime() are used by some derived
-    //     classes. Should we try to get rid if them and change the
-    //     derived classes?
-    // ??? I would say yes if you are confident you can test the changes
-    //     thoroughly.  I would at least begin phasing them out on a command-
-    //     by-command basis.  This sounds like a helpful simplification.
+    // m_startTime, m_endTime, calculateStartTime(), and
+    // calculateEndTime() are no longer required for the
+    // functionality.  These should be phased out on a
+    // command-by-command basis.
 
-    /// Command Start Time adjusted for notation.  [DEPRECATED]
+    /// Command Start Time adjusted for notation. [DEPRECATED]
     timeT m_startTime;
-    /// Calculate start time for m_startTime.  [DEPRECATED]
-    /**
-     * ??? Always used to set m_startTime.  Make it return void and do that.
-     *     rename: adjustCommandStartTime()
-     */
-    timeT calculateStartTime(timeT given, Segment &segment);
-    /// ??? What end time is this?  Command End Time?  [DEPRECATED]
     timeT m_endTime;
+    /// Calculate start time for m_startTime.  [DEPRECATED]
+    timeT calculateStartTime(timeT given, Segment &segment);
     /// Calculate end time for m_endTime.  [DEPRECATED]
-    /**
-     * ??? Always used to set m_endTime.  Make it return void and do that.
-     *     rename: setEndTime()
-     */
     timeT calculateEndTime(timeT given, Segment &segment);
 
     /// Start time of Events which were modified by modifySegment().
@@ -199,16 +171,11 @@ private:
      * Set by calculateModifiedStartEnd().
      */
     timeT m_modifiedEventsEnd;
-    /// Compare m_segment and m_saveEvents and find the start/end of the changes.
+
+    /// Compare m_segment and m_originalEvents and find the start/end
+    /// of the changes.
     /**
      * Sets m_modifiedEventsStart and m_modifiedEventsEnd.
-     *
-     * ??? This assumes that m_saveEvents is always a complete copy of the
-     *     original Segment.  Is that always the case? - Yes
-     *
-     * ??? Passing start and end times into the ctor might now be unnecessary
-     *     since we compute the actual modification time range here. Yes but
-     *     see above comments to m_startTime and m_endTime
      */
     void calculateModifiedStartEnd();
 
@@ -216,23 +183,8 @@ private:
     /**
      * This is a complete backup of m_segment.
      *
-     * ??? Since this is completely private, use QSharedPointer or
-     *     std::shared_ptr to manage memory.  We could do but there are very
-     *     few places where it is created or destroyed so I think unnecessary.
-     * ??? The increased safety is worth it.  Makes the code easier to read
-     *     and understand.  I want *all naked pointers* replaced with
-     *     shared_ptr.  Unfortunately, as with most of the pointers in
-     *     Rosegarden, this particular pointer is very difficult to replace
-     *     with shared_ptr.  It would be best to tackle the problem at the
-     *     source: Composition::m_segments.  And while we are at it, introduce
-     *     object IDs for further safety improvements.  Maybe one day we'll
-     *     have that kind of time to burn.
-     * ??? Rename: m_undoSegment?  I think m_savedEvents is the better name.
-     *     I was thinking it only had the Events for undo.  m_savedEvents is
-     *     definitely better.  Since it has the Events before execute(), how
-     *     about m_originalEvents?  That describes exactly what is saved.
      */
-    Segment *m_savedEvents;
+    QSharedPointer<Segment> m_originalEvents;
 
     /// execute() will either use a list of Events or run segmentModify()
     /**
@@ -242,7 +194,7 @@ private:
     bool m_doBruteForceRedo;
 
     /// Events for redo, or for the "redoEvents" ctor.
-    Segment *m_redoEvents;
+    QSharedPointer<Segment> m_redoEvents;
 
     /// The segment marking for delayed access to segment
     QString m_segmentMarking;
