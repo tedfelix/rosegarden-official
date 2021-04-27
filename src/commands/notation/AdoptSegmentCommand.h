@@ -28,9 +28,14 @@ namespace Rosegarden
 class Segment;
 class NotationView;
 
-// Needs to be a QObject so it can get a signal if view is destroyed.
+/// Adopt a Segment into the NotationView.
+/**
+ * This is a command wrapper around the NotationView::adopt*() functions.
+ * An adopted Segment is one that the NotationView is displaying.
+ */
 class AdoptSegmentCommand : public QObject, public NamedCommand
 {
+    // Needs to be a QObject so it can get a signal if view is destroyed.
     Q_OBJECT;
 
  public:

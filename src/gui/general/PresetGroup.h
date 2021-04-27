@@ -23,16 +23,12 @@
 
 #include "base/Exception.h"
 #include "CategoryElement.h"
+#include "document/io/XMLHandler.h"
 
 #include <QString>
-#include <qxml.h>
-
 #include <QCoreApplication>
 
-
-class QXmlParseException;
-class QXmlAttributes;
-
+class QXmlStreamAttributes;
 
 namespace Rosegarden
 {
@@ -51,7 +47,7 @@ namespace Rosegarden
  * categories (eg. Strings, Brass, Single Reeds, Double Reeds) and the
  * individual PresetElements therein contained.
  */
-class PresetGroup : public QXmlDefaultHandler
+class PresetGroup : public XMLHandler
 {
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::PresetGroup)
 
@@ -72,14 +68,14 @@ public:
 
     // Xml handler methods:
     /** Handle XML starting elements */
-    bool startElement (const QString& namespaceURI, const QString& localName,
-                               const QString& qName, const QXmlAttributes& atts) override;
-
-    /** Handle non-fatal parsing errors */
-    bool error(const QXmlParseException& exception) override;
+    bool startElement (const QString& namespaceURI,
+                       const QString& localName,
+                       const QString& qName,
+                       const QXmlStreamAttributes& atts) override;
 
     /** Handle fatal parsing errors */
-    bool fatalError(const QXmlParseException& exception) override;
+    bool fatalError(int lineNumber, int columnNumber,
+                    const QString& msg) override;
 
     // I don't think I have anything to do with this, but it must return true?
 //    bool characters(const QString &) { return true; }

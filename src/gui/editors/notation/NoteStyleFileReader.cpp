@@ -23,6 +23,7 @@
 #include "misc/Debug.h"
 #include "gui/general/ResourceFinder.h"
 #include "NoteStyle.h"
+#include "document/io/XMLReader.h"
 
 #include <QFileInfo>
 #include <QDir>
@@ -55,11 +56,9 @@ NoteStyleFileReader::NoteStyleFileReader(QString name) :
 
     QFile styleFile(styleFileName);
 
-    QXmlInputSource source(&styleFile);
-    QXmlSimpleReader reader;
-    reader.setContentHandler(this);
-    reader.setErrorHandler(this);
-    bool ok = reader.parse(source);
+    XMLReader reader;
+    reader.setHandler(this);
+    bool ok = reader.parse(styleFile);
     styleFile.close();
 
     if (!ok) {
@@ -70,20 +69,20 @@ NoteStyleFileReader::NoteStyleFileReader(QString name) :
 bool
 NoteStyleFileReader::startElement(const QString &, const QString &,
                                   const QString &qName,
-                                  const QXmlAttributes &attributes)
+                                  const QXmlStreamAttributes &attributes)
 {
     QString lcName = qName.toLower();
 
     if (lcName == "rosegarden-note-style") {
 
-        QString s = attributes.value("base-style");
+        QString s = attributes.value("base-style").toString();
         if ( !s.isEmpty() ) m_style->setBaseStyle(s);
 
     } else if (lcName == "note") {
 
         m_haveNote = true;
 
-        QString s = attributes.value("type");
+        QString s = attributes.value("type").toString();
         if (s.isEmpty() ) {
             m_errorString = tr("type is a required attribute of note");
             return false;
@@ -116,18 +115,18 @@ NoteStyleFileReader::startElement(const QString &, const QString &,
 
 bool
 NoteStyleFileReader::setFromAttributes(Note::Type type,
-                                       const QXmlAttributes &attributes)
+                                       const QXmlStreamAttributes &attributes)
 {
     QString s;
     bool haveShape = false;
 
-    s = attributes.value("shape");
+    s = attributes.value("shape").toString();
     if (!s.isEmpty() ) {
         m_style->setShape(type, s.toLower());
         haveShape = true;
     }
     
-    s = attributes.value("charname");
+    s = attributes.value("charname").toString();
     if (!s.isEmpty() ) {
         if (haveShape) {
             m_errorString = tr("global and note elements may have shape "
@@ -138,16 +137,16 @@ NoteStyleFileReader::setFromAttributes(Note::Type type,
         m_style->setCharName(type, s);
     }
 
-    s = attributes.value("filled");
+    s = attributes.value("filled").toString();
     if (!s.isEmpty() ) m_style->setFilled(type, s.toLower() == "true");
     
-    s = attributes.value("stem");
+    s = attributes.value("stem").toString();
     if (!s.isEmpty() ) m_style->setStem(type, s.toLower() == "true");
     
-    s = attributes.value("flags");
+    s = attributes.value("flags").toString();
     if (!s.isEmpty() ) m_style->setFlagCount(type, s.toInt());
     
-    s = attributes.value("slashes");
+    s = attributes.value("slashes").toString();
     if (!s.isEmpty() ) m_style->setSlashCount(type, s.toInt());
 
     NoteStyle::HFixPoint hfix;
@@ -156,7 +155,7 @@ NoteStyleFileReader::setFromAttributes(Note::Type type,
     bool haveHFix = false;
     bool haveVFix = false;
 
-    s = attributes.value("hfixpoint");
+    s = attributes.value("hfixpoint").toString();
     if (!s.isEmpty() ) {
         s = s.toLower();
         haveHFix = true;
@@ -166,7 +165,7 @@ NoteStyleFileReader::setFromAttributes(Note::Type type,
         else haveHFix = false;
     }
 
-    s = attributes.value("vfixpoint");
+    s = attributes.value("vfixpoint").toString();
     if (!s.isEmpty() ) {
         s = s.toLower();
         haveVFix = true;

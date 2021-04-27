@@ -18,7 +18,6 @@
 #ifndef RG_ACTIONFILEPARSER_H
 #define RG_ACTIONFILEPARSER_H
 
-#include <QXmlDefaultHandler>
 #include <QMap>
 #include <QObject>
 #include <set>
@@ -27,6 +26,8 @@ class QAction;
 class QActionGroup;
 class QMenu;
 class QToolBar;
+
+#include "document/io/XMLHandler.h"
 
 namespace Rosegarden
 {
@@ -38,7 +39,7 @@ namespace Rosegarden
  * from a .rc file and translate them into QMenu and QToolBar objects that
  * are then added as children to the ActionFileClient deriver.
  */
-class ActionFileParser : public QObject, public QXmlDefaultHandler
+class ActionFileParser : public QObject, public XMLHandler
 {
     Q_OBJECT
 
@@ -152,7 +153,7 @@ private:
     bool startElement(const QString& namespaceURI,
                               const QString& localName,
                               const QString& qName,
-                              const QXmlAttributes& atts) override;
+                              const QXmlStreamAttributes& atts) override;
 
     bool endElement(const QString& namespaceURI,
                             const QString& localName,
@@ -162,8 +163,8 @@ private:
 
     bool endDocument() override;
 
-    bool error(const QXmlParseException &exception) override;
-    bool fatalError(const QXmlParseException &exception) override;
+    bool fatalError(int lineNumber, int columnNumber,
+                    const QString& msg) override;
 };
 
 /**

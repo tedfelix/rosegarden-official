@@ -22,13 +22,12 @@
 #include "Chord.h"
 #include "ChordMap.h"
 
-#include <qxml.h>
-
+#include "document/io/XMLHandler.h"
 
 namespace Rosegarden
 {
 
-class ChordXmlHandler : public QXmlDefaultHandler
+class ChordXmlHandler : public XMLHandler
 {
 public:
 	ChordXmlHandler(Guitar::ChordMap&);
@@ -39,7 +38,7 @@ public:
     bool startElement(const QString& namespaceURI,
                               const QString& localName,
                               const QString& qName,
-                              const QXmlAttributes& atts) override;
+                              const QXmlStreamAttributes& atts) override;
 
     bool endElement(const QString& namespaceURI,
                             const QString& localName,
@@ -51,8 +50,8 @@ public:
 
     /// Return the error string set during the parsing (if any)
     QString errorString() const override { return m_errorString; }
-    bool error(const QXmlParseException& exception) override;
-    bool fatalError(const QXmlParseException& exception) override;
+    bool fatalError(int lineNumber, int columnNumber,
+                    const QString& msg) override;
 
 protected:
 

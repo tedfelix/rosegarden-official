@@ -229,12 +229,6 @@ Segment::getForNotation() const {
     return m_forNotation;
 }
 
-QString
-Segment::getMarking() const
-{
-    return m_marking;
-}
-
 void
 Segment::setMarking(const QString& m, Composition* comp)
 {
@@ -1785,7 +1779,7 @@ ROSEGARDENPRIVATE_EXPORT QDebug &operator<<(QDebug &dbg, const Rosegarden::Segme
             continue;
         }
 
-        dbg << *(*i);
+        dbg << *(*i) << "\n";
     }
 
     return dbg;

@@ -913,10 +913,30 @@ public:
      */
     bool getForNotation() const;
 
-    /// get and set marking. Setting a marking removes the marking from any
-    /// outher segments
-    QString getMarking() const;
-    void setMarking(const QString& m, Composition* comp);
+    /// Mark a Segment for AddLayerCommand.
+    /**
+     * This was added to support being able to select the Segment that is
+     * created by AddLayerCommand.  AddLayerCommand marks it and NotationView
+     * then finds it and selects it.
+     *
+     * The marking also allows AddLayerCommand to pass a Segment to
+     * AdoptSegmentCommand to allow the use of a macro which avoids mysterious
+     * steps in the command history.
+     *
+     * Only one Segment can have a marking.  setMarking() enforces this.
+     *
+     * This could be reduced to a bool "markedForAddLayerCommand".
+     *
+     * See NotationView::slotAddLayer() for a possible redesign that might
+     * get rid of this.
+     */
+    void setMarking(const QString &m, Composition *comp);
+    /// Get the marking for AddLayerCommand.
+    /**
+     * This is used (eventually) by NotationView to select the Segment that
+     * was just created by AddLayerCommand.
+     */
+    QString getMarking() const  { return m_marking; }
 
 private:
     void checkInsertAsClefKey(Event *e) const;
@@ -971,6 +991,7 @@ private:
     typedef std::multiset<Event*, ClefKeyCmp> ClefKeyList;
     mutable ClefKeyList *m_clefKeyList;
 
+    /// Marking for AddLayerCommand.  See setMarking().
     QString m_marking;
 
 private: // stuff to support SegmentObservers

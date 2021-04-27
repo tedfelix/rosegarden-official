@@ -130,7 +130,7 @@ HydrogenXMLHandler::startDocument()
 bool HydrogenXMLHandler::startElement_093(const QString& /*namespaceURI*/,
                                           const QString& /*localName*/,
                                           const QString& qName,
-                                          const QXmlAttributes& /*atts*/)
+                                          const QXmlStreamAttributes& /*atts*/)
 {
     QString lcName = qName.toLower();
 
@@ -169,10 +169,10 @@ bool
 HydrogenXMLHandler::startElement(const QString& /*namespaceURI*/,
                                  const QString& /*localName*/,
                                  const QString& qName,
-                                 const QXmlAttributes& /*atts*/)
+                                 const QXmlStreamAttributes& /*atts*/)
 {
  bool rc=false;
- QXmlAttributes DummyAttr;
+ QXmlStreamAttributes DummyAttr;
  QString DummyQString;
 
  if (m_version=="") {

@@ -23,7 +23,7 @@
 #include <qxml.h>
 
 
-class QXmlAttributes;
+class QXmlStreamAttributes;
 
 
 namespace Rosegarden
@@ -47,7 +47,7 @@ public:
      * attributes include absoluteTime or timeOffset, update the given
      * absoluteTime reference accordingly.
      */
-    XmlStorableEvent(const QXmlAttributes& atts,
+    XmlStorableEvent(const QXmlStreamAttributes& atts,
                      timeT &absoluteTime);
 
     /**
@@ -58,7 +58,7 @@ public:
     /**
      * Set a property from the XML attributes \a atts
      */
-    void setPropertyFromAttributes(const QXmlAttributes& atts,
+    void setPropertyFromAttributes(const QXmlStreamAttributes& atts,
                                    bool persistent);
 };
 

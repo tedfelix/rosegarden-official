@@ -24,6 +24,7 @@
 #include "base/Segment.h"
 #include "base/Studio.h"
 #include "document/io/MusicXMLXMLHandler.h"
+#include "document/io/XMLReader.h"
 #include <QFile>
 #include <QObject>
 #include <QString>
@@ -48,17 +49,16 @@ MusicXMLLoader::load(const QString& fileName, Composition &comp, Studio &studio)
     if (!file.open(QIODevice::ReadOnly)) {
         return false;
     }
+    file.close();
 
     m_studio->unassignAllInstruments();
 
     MusicXMLXMLHandler handler(m_composition, m_studio);
 
-    QXmlInputSource source(&file);
-    QXmlSimpleReader reader;
-    reader.setContentHandler(&handler);
-    reader.setErrorHandler(&handler);
+    XMLReader reader;
+    reader.setHandler(&handler);
 
-    bool ok = reader.parse(source);
+    bool ok = reader.parse(file);
     if (!ok)
         m_message = handler.errorString();
 

@@ -35,6 +35,7 @@
 #include "misc/Debug.h"
 #include "base/Profiler.h"
 #include "document/CommandHistory.h"
+#include "document/io/XMLReader.h"
 
 
 namespace Rosegarden
@@ -76,11 +77,9 @@ ActionFileParser::load(QString actionRcFile)
     m_currentFile = location;
 
     QFile f(location);
-    QXmlInputSource is(&f);
-    QXmlSimpleReader reader;
-    reader.setContentHandler(this);
-    reader.setErrorHandler(this);
-    return reader.parse(is);
+    XMLReader reader;
+    reader.setHandler(this);
+    return reader.parse(f);
 }
 
 bool
@@ -93,7 +92,7 @@ bool
 ActionFileParser::startElement(const QString& /* namespaceURI */,
                                const QString& /* localName */,
                                const QString& qName,
-                               const QXmlAttributes& atts)
+                               const QXmlStreamAttributes& atts)
 {
     QString name = qName.toLower();
 
@@ -103,7 +102,7 @@ ActionFileParser::startElement(const QString& /* namespaceURI */,
         
     } else if (name == "menu") {
 
-        QString menuName = atts.value("name");
+        QString menuName = atts.value("name").toString();
         if (menuName == "") {
             RG_WARNING << "WARNING: startElement(" << m_currentFile << "): No menu name provided in menu element";
         }
@@ -122,17 +121,17 @@ ActionFileParser::startElement(const QString& /* namespaceURI */,
 
     } else if (name == "toolbar") {
 
-        QString newline = atts.value("newline");
+        QString newline = atts.value("newline").toString();
         if (newline == "true") addToolbarBreak(m_lastToolbarPosition);
 
         Position position = Default;
-        QString posstr = atts.value("position");
+        QString posstr = atts.value("position").toString();
         if (posstr == "top") position = Top;
         if (posstr == "bottom") position = Bottom;
         if (posstr == "left") position = Left;
         if (posstr == "right") position = Right;
 
-        QString toolbarName = atts.value("name");
+        QString toolbarName = atts.value("name").toString();
         if (toolbarName == "") {
             RG_WARNING << "WARNING: startElement(" << m_currentFile << "): No toolbar name provided in toolbar element";
         }
@@ -152,7 +151,7 @@ ActionFileParser::startElement(const QString& /* namespaceURI */,
 
     } else if (name == "action") {
 
-        QString actionName = atts.value("name");
+        QString actionName = atts.value("name").toString();
         if (actionName == "") {
             RG_WARNING << "WARNING: startElement(" << m_currentFile << "): No action name provided in action element";
         }
@@ -166,13 +165,13 @@ ActionFileParser::startElement(const QString& /* namespaceURI */,
                 << "enable/disable/visible/invisible element";
         }
 
-        QString text = atts.value("text");
-        QString icon = atts.value("icon");
-        QString shortcut = atts.value("shortcut");
-        QString shortcutContext = atts.value("shortcut-context");
-        QString tooltip = atts.value("tooltip");
-        QString group = atts.value("group");
-        QString checked = atts.value("checked");
+        QString text = atts.value("text").toString();
+        QString icon = atts.value("icon").toString();
+        QString shortcut = atts.value("shortcut").toString();
+        QString shortcutContext = atts.value("shortcut-context").toString();
+        QString tooltip = atts.value("tooltip").toString();
+        QString group = atts.value("group").toString();
+        QString checked = atts.value("checked").toString();
 
         //!!! return values
         if (text != "") setActionText(actionName, text);
@@ -208,7 +207,7 @@ ActionFileParser::startElement(const QString& /* namespaceURI */,
 
     } else if (name == "state") {
 
-        QString stateName = atts.value("name");
+        QString stateName = atts.value("name").toString();
         if (stateName == "") {
             RG_WARNING << "WARNING: startElement(" << m_currentFile << "): No state name provided in state element";
         }
@@ -317,33 +316,19 @@ ActionFileParser::endDocument()
 }
 
 bool
-ActionFileParser::error(const QXmlParseException &exception)
-{
-    QString errorString =
-            QString("ERROR: %1 at line %2, column %3 in file %4")
-                .arg(exception.message())
-                .arg(exception.lineNumber())
-                .arg(exception.columnNumber())
-                .arg(m_currentFile);
-
-    RG_WARNING << errorString.toLocal8Bit().data();
-
-    return QXmlDefaultHandler::error(exception);
-}
-
-bool
-ActionFileParser::fatalError(const QXmlParseException &exception)
+ActionFileParser::fatalError(int lineNumber, int columnNumber,
+                             const QString& msg)
 {
     QString errorString =
             QString("FATAL ERROR: %1 at line %2, column %3 in file %4")
-                .arg(exception.message())
-                .arg(exception.lineNumber())
-                .arg(exception.columnNumber())
+                .arg(msg)
+                .arg(lineNumber)
+                .arg(columnNumber)
                 .arg(m_currentFile);
 
     RG_WARNING << errorString.toLocal8Bit().data();
 
-    return QXmlDefaultHandler::fatalError(exception);
+    return false;
 }
 
 QAction *

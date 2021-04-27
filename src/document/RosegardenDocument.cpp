@@ -87,6 +87,7 @@
 #include "misc/Debug.h"
 #include "misc/Strings.h"
 #include "document/Command.h"
+#include "document/io/XMLReader.h"
 #include "misc/ConfigGroups.h"
 
 #include "rosegarden-version.h"
@@ -1714,13 +1715,10 @@ RosegardenDocument::xmlParse(QString fileContents, QString &errMsg,
 
     RoseXmlHandler handler(this, elementCount, m_progressDialog, permanent);
 
-    QXmlInputSource source;
-    source.setData(fileContents);
-    QXmlSimpleReader reader;
-    reader.setContentHandler(&handler);
-    reader.setErrorHandler(&handler);
+    XMLReader reader;
+    reader.setHandler(&handler);
 
-    bool ok = reader.parse(source);
+    bool ok = reader.parse(fileContents);
 
     if (m_progressDialog  &&  m_progressDialog->wasCanceled()) {
         QMessageBox::information(dynamic_cast<QWidget *>(parent()), tr("Rosegarden"), tr("File load cancelled"));
