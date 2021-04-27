@@ -33,9 +33,8 @@ class XMLHandler;
  * The XMLReader class provides a simple XML reader using the qt
  * stream base XML classes. It implements a SAX like interface. This
  * class was introduced as preparation for QT6 in which the SAX
- * classes are no longer available.
+ * classes (QXmlSimpleReader and QXmlDefaultHandler) are deprecated.
  */
-
 class ROSEGARDENPRIVATE_EXPORT XMLReader
 {
  public:
