@@ -1208,7 +1208,7 @@ namespace
         // Extract the client, the number prior to the first colon.
         int colon = portName.indexOf(":");
         if (colon >= 0)
-            clientNumber = portName.leftRef(colon).toInt();
+            clientNumber = portName.left(colon).toInt();
 
         // If the client number was found...
         if (clientNumber > 0) {
@@ -1216,7 +1216,7 @@ namespace
             QString remainder = portName.mid(colon + 1);
             int space = remainder.indexOf(" ");
             if (space >= 0)
-                portNumber = remainder.leftRef(space).toInt();
+                portNumber = remainder.left(space).toInt();
         }
 
         // Extract the name.
