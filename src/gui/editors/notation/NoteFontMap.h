@@ -27,7 +27,6 @@
 #include <QString>
 #include <QStringList>
 #include <utility>
-#include <qxml.h>
 #include "gui/editors/notation/NoteCharacterNames.h"
 #include "document/io/XMLHandler.h"
 

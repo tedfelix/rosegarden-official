@@ -25,7 +25,6 @@
 #include <string>
 #include <QString>
 #include <vector>
-#include <qxml.h>
 #include "misc/Version.h"
 #include "document/io/XMLHandler.h"
 

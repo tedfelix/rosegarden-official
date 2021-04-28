@@ -18,7 +18,6 @@
 
 #include "HydrogenLoader.h"
 
-#include <qxml.h>
 #include "base/Composition.h"
 #include "base/PropertyName.h"
 #include "base/Segment.h"
