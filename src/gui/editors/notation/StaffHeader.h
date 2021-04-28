@@ -203,7 +203,11 @@ signals :
 protected :
     void paintEvent(QPaintEvent *) override;
 //    virtual bool event(QEvent *event);
-    void enterEvent(QEvent *event) override;
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    void enterEvent(QEnterEvent *) override;
+#else
+    void enterEvent(QEvent *) override;
+#endif
     void mouseMoveEvent(QMouseEvent *event) override;
     void leaveEvent(QEvent *event) override;
 //    virtual void mousePressEvent(QMouseEvent *event);

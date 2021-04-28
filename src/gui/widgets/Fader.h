@@ -79,7 +79,11 @@ protected:
     void mouseReleaseEvent(QMouseEvent *) override;
     void mouseMoveEvent(QMouseEvent *) override;
     void wheelEvent(QWheelEvent *) override;
-    void enterEvent(QEvent *e) override;
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    void enterEvent(QEnterEvent *) override;
+#else
+    void enterEvent(QEvent *) override;
+#endif
 
     float position_to_value(int);
     int value_to_position(float);

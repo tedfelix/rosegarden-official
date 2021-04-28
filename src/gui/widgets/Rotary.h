@@ -106,7 +106,11 @@ protected:
     void mouseMoveEvent(QMouseEvent *e) override;
     void mouseDoubleClickEvent(QMouseEvent *e) override;
     void wheelEvent(QWheelEvent *e) override;
-    void enterEvent(QEvent *e) override;
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    void enterEvent(QEnterEvent *) override;
+#else
+    void enterEvent(QEvent *) override;
+#endif
 
     void snapPosition();
     void drawPosition();

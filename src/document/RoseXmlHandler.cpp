@@ -2128,7 +2128,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             m_instrument->setNaturalChannel(channel);
 
             if (type == Instrument::Midi) {
-                if (atts.value("fixed") == "false")
+                if (atts.value("fixed").toString() == "false")
                     m_instrument->releaseFixedChannel();
                 else
                     m_instrument->setFixedChannel();

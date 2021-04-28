@@ -102,7 +102,7 @@ PercussionMap::startElement(const QString& /*namespaceURI*/,
             m_xmlNotehead = atts.value("notehead").toString().toStdString();
         }
         if (atts.hasAttribute("stem")) {
-            m_xmlStemUp = (atts.value("stem") == "down") ? false : true;
+            m_xmlStemUp = (atts.value("stem").toString() == "down") ? false : true;
         }
     }
 
