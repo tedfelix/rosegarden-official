@@ -2,7 +2,7 @@
 Rosegarden README
 =================
 
-Rosegarden is a MIDI and audio sequencer and musical notation editor for Linux.
+Rosegarden is a MIDI sequencer and musical notation editor for Linux.
 
   https://www.rosegardenmusic.com/
 
@@ -29,36 +29,51 @@ For a complete list of build requirements, please see:
 Installation instructions (v15.12 and up)
 -----------------------------------------
 
-In the directory where you found this README file, create a build directory
-and compile the code there. Here are the commands to do so:
+The simplest way to build Rosegarden is to run the following commands from
+within the directory where you found this README file:
 
     mkdir build
     cd build
-    cmake .. [-DCMAKE_INSTALL_PREFIX=[PREFIX]] [-DCMAKE_BUILD_TYPE=Debug]
+    cmake ..
     make
-    make install
+    sudo make install
 
-You can also simply open the CMakeLists.txt file in an IDE (such as QtCreator,
-KDevelop or Eclipse) and trigger the build from there.
+Assuming all goes well, that will build and install Rosegarden to:
 
-New starting with 10.02, most of the application data files are bundled in the
-rosegarden binary.  The install process will only copy a few files to various
-directories under [PREFIX]:
+    /usr/local/bin/rosegarden
 
-    [PREFIX]/bin                                   application binary
-    [PREFIX]/share/icons/hicolor/.../mimetypes     MIME type icons
-    [PREFIX]/share/mime/packages                   MIME type configuration
-    [PREFIX]/share/applications                    .desktop file
-    [PREFIX]/share/icons/hicolor/32x32/apps        application icon
+You can always run Rosegarden directly from the build directory:
 
-For a debug build, pass the following option to cmake:
+    ./rosegarden
 
-    -DCMAKE_BUILD_TYPE=Debug
+If you run into trouble with cmake, you will likely have to hunt down
+missing dependencies.
+
+"make" can take a very long time.  You might want to consider adding the
+following line to your .bashrc to tell make it can use multiple threads.
+This will significantly speed up the build:
+
+    export MAKEFLAGS="-j `nproc`"
+
+You will need to start a new terminal for a change to .bashrc to take effect.
+
+The default install location might not be ideal.  You can override this
+when you run cmake.  E.g. to install Rosegarden to /usr/bin:
+
+    cmake .. -DCMAKE_INSTALL_PREFIX=/usr
+
+This will likely wipe out any existing Rosegarden installation from your
+package manager.
+
+For a debug build, use the CMAKE_BUILD_TYPE variable:
+
+    cmake .. -DCMAKE_BUILD_TYPE=Debug
 
 This will build Rosegarden so that it is useful for debugging, which can
 greatly improve our ability to find and correct bugs by allowing Rosegarden
 to produce useful stack traces when it crashes.  The debug binary will be
-somewhat large: about 200MB as of July 2019.
+somewhat large: about 200MB as of July 2019.  See "Running the Unit Tests"
+below for information on doing a debug build and running the tests.
 
 A debug build results in the use of shared libs and the building of unit
 tests.  Use -DBUILD_TESTING=OFF to disable the shared library and unit
@@ -71,6 +86,16 @@ Flags for the C++ compiler can be added via CMAKE_CXX_FLAGS:
 Support for LIRC (Linux Infrared Remote Control) can be disabled using:
 
     -DDISABLE_LIRC=1
+
+New starting with 10.02, most of the application data files are bundled in the
+rosegarden binary.  The install process will only copy a few files to various
+directories under CMAKE_INSTALL_PREFIX ([PREFIX]):
+
+    [PREFIX]/bin                                   application binary
+    [PREFIX]/share/icons/hicolor/.../mimetypes     MIME type icons
+    [PREFIX]/share/mime/packages                   MIME type configuration
+    [PREFIX]/share/applications                    .desktop file
+    [PREFIX]/share/icons/hicolor/32x32/apps        application icon
 
 
 Runtime requirements
@@ -118,19 +143,21 @@ SPECIAL NOTES FOR PACKAGE MAINTAINERS
 -------------------------------------
 
 As of 10.02 all formerly optional dependencies are now mandatory dependencies.
-We've taken this step because it is a real support hassle working through a set
-of problems to finally uncover the reason something has broken is due to the
-user's distro package being built without a particular feature turned on.
+We've taken this step because it is a real support hassle working through a
+set of problems to finally uncover the reason something has broken is due to
+the user's distro package being built without a particular feature turned on.
 
-Most major distros already carry everything we depend on, so we don't anticipate
-that the build requirements will be a serious irritation for package
-maintainers.
+Most major distros already carry everything we depend on, so we don't
+anticipate that the build requirements will be a serious irritation for
+package maintainers.
 
-Thank you for your cooperation, and thank you for making Rosegarden available to
-our users!  If you need to patch Rosegarden for one reason or another in the
-course of packaging it, please do keep upstream in the loop at
-rosegarden-devel@lists.sourceforge.net or by contacting
-michael.mcintyre@rosegardenmusic.com directly.  Thanks!
+Thank you for your cooperation, and thank you for making Rosegarden available
+to our users!  If you need to patch Rosegarden for one reason or another in
+the course of packaging it, please do keep upstream in the loop at
+
+    rosegarden-devel@lists.sourceforge.net
+
+Thanks!
 
 An older version of the appdata file is kept with the current version in
 data/appdata.  It is named rosegarden.appdata-old.xml.
@@ -139,7 +166,7 @@ data/appdata.  It is named rosegarden.appdata-old.xml.
 Authors and copyright
 ---------------------
 
-Rosegarden is Copyright 2000-2020 The Rosegarden Development Team
+Rosegarden is Copyright 2000-2021 The Rosegarden Development Team
 
 See http://rosegardenmusic.com/resources/authors/ for a complete list of
 developers past and present, and to learn something about the history of our
@@ -149,3 +176,4 @@ Rosegarden is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation; either version 2 of the License, or (at
 your option) any later version.  See the file COPYING for more details.
+
