@@ -37,7 +37,7 @@
 #include <QMenu>
 #include <QMessageBox>
 #include <QPushButton>
-#include <QRegExp>
+#include <QRegularExpression>
 #include <QString>
 #include <QTextEdit>
 #include <QUrl>
@@ -428,7 +428,7 @@ LyricEditDialog::unparse()
             (*i)->get<Int>(Text::LyricVersePropertyName, verse);
 
             QString syllable(strtoqstr(ssyllable));
-            syllable.replace(QRegExp("\\s+"), "~");
+            syllable.replace(QRegularExpression("\\s+"), "~");
 
             m_texts[verse] += " " + syllable;
             haveLyric[verse] = true;

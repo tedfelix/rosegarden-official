@@ -49,7 +49,7 @@
 #include <QAction>
 #include <QSettings>
 #include <QIcon>
-#include <QRegExp>
+#include <QRegularExpression>
 #include <QString>
 #include <QMenu>
 
@@ -1313,7 +1313,7 @@ void NoteRestInserter::slotRestsSelected()
 {
     Note note(m_noteType, m_noteDots);
     QString actionName(NotationStrings::getReferenceName(note, true));
-    actionName.replace(QRegExp("-"), "_");
+    actionName.replace(QRegularExpression("-"), "_");
 
     QAction* action = findActionInParentView(actionName);
 
@@ -1331,7 +1331,7 @@ void NoteRestInserter::slotNotesSelected()
 {
     Note note(m_noteType, m_noteDots);
     QString actionName(NotationStrings::getReferenceName(note));
-    actionName.replace(QRegExp("-"), "_");
+    actionName.replace(QRegularExpression("-"), "_");
 
     QAction *action = findActionInParentView(actionName);
 

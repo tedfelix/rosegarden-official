@@ -214,7 +214,7 @@
 #include <QPixmap>
 #include <QToolTip>
 #include <QPushButton>
-#include <QRegExp>
+#include <QRegularExpression>
 #include <QSlider>
 #include <QString>
 #include <QStringList>
@@ -2034,7 +2034,7 @@ RosegardenMainWindow::getValidWriteFileName(QString descriptiveExtension,
     // "MIDI Files (*.mid *.midi)"
     //
     int left = descriptiveExtension.indexOf("*.");
-    int right = descriptiveExtension.indexOf(QRegExp("[ ]"),left);
+    int right = descriptiveExtension.indexOf(QRegularExpression("[ ]"),left);
     QString extension = descriptiveExtension.mid(left+1,right-left-1);
 
     // keep track of last place used to save, by type of file (this behavior is
@@ -2089,8 +2089,8 @@ RosegardenMainWindow::getValidWriteFileName(QString descriptiveExtension,
     // Append extension if we don't have one
     //
     if (!extension.isEmpty()) {
-        static QRegExp rgFile("\\..{1,4}$");
-        if (rgFile.indexIn(name) == -1) {
+        static QRegularExpression rgFile("\\..{1,4}$");
+        if (! rgFile.match(name).hasMatch()) {
             name += extension;
         }
     }
@@ -5081,8 +5081,8 @@ RosegardenMainWindow::slotExportProject()
         return ;
 
     QString rgFile = fileName;
-    rgFile.replace(QRegExp(".rg.rgp$"), ".rg");
-    rgFile.replace(QRegExp(".rgp$"), ".rg");
+    rgFile.replace(QRegularExpression(".rg.rgp$"), ".rg");
+    rgFile.replace(QRegularExpression(".rgp$"), ".rg");
 
     // I have a ton of weird files and suspect problems with this, but maybe
     // not:

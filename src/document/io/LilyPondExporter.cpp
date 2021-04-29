@@ -65,7 +65,7 @@
 #include <QFileInfo>
 #include <QObject>
 #include <QProgressDialog>
-#include <QRegExp>
+#include <QRegularExpression>
 #include <QString>
 #include <QTextCodec>
 #include <QApplication>
@@ -646,16 +646,16 @@ LilyPondExporter::protectIllegalChars(std::string inStr)
 
     QString tmpStr = strtoqstr(inStr);
 
-    tmpStr.replace(QRegExp("&"), "\\&");
-    tmpStr.replace(QRegExp("\\^"), "\\^");
-    tmpStr.replace(QRegExp("%"), "\\%");
-    tmpStr.replace(QRegExp("<"), "\\<");
-    tmpStr.replace(QRegExp(">"), "\\>");
-    tmpStr.replace(QRegExp("\\["), "");
-    tmpStr.replace(QRegExp("\\]"), "");
-    tmpStr.replace(QRegExp("\\{"), "");
-    tmpStr.replace(QRegExp("\\}"), "");
-    tmpStr.replace(QRegExp("\""), "\\\"");
+    tmpStr.replace(QRegularExpression("&"), "\\&");
+    tmpStr.replace(QRegularExpression("\\^"), "\\^");
+    tmpStr.replace(QRegularExpression("%"), "\\%");
+    tmpStr.replace(QRegularExpression("<"), "\\<");
+    tmpStr.replace(QRegularExpression(">"), "\\>");
+    tmpStr.replace(QRegularExpression("\\["), "");
+    tmpStr.replace(QRegularExpression("\\]"), "");
+    tmpStr.replace(QRegularExpression("\\{"), "");
+    tmpStr.replace(QRegularExpression("\\}"), "");
+    tmpStr.replace(QRegularExpression("\""), "\\\"");
 
     //
     // LilyPond uses utf8 encoding.
@@ -687,10 +687,10 @@ LilyPondExporter::write()
 
     // sed LilyPond-choking chars out of the filename proper
     bool illegalFilename = (baseName.contains(' ') || baseName.contains("\\"));
-    baseName.replace(QRegExp(" "), "");
-    baseName.replace(QRegExp("\\\\"), "");
-    baseName.replace(QRegExp("'"), "");
-    baseName.replace(QRegExp("\""), "");
+    baseName.replace(QRegularExpression(" "), "");
+    baseName.replace(QRegularExpression("\\\\"), "");
+    baseName.replace(QRegularExpression("'"), "");
+    baseName.replace(QRegularExpression("\""), "");
 
     // cat back together
     tmpName = dirName + '/' + baseName;
@@ -1328,16 +1328,16 @@ LilyPondExporter::write()
                                 std::string schord;
                                 (*j)->get<String>(Text::TextPropertyName, schord);
                                 QString chord(strtoqstr(schord));
-                                chord.replace(QRegExp("\\s+"), "");
-                                chord.replace(QRegExp("h"), "b");
+                                chord.replace(QRegularExpression("\\s+"), "");
+                                chord.replace(QRegularExpression("h"), "b");
 
                                 // DEBUG: str << " %{ '" << chord.toUtf8() << "' %} ";
-                                QRegExp rx("^([a-g]([ei]s)?)([:](m|dim|aug|maj|sus|\\d+|[.^]|[+-])*)?(/[+]?[a-g]([ei]s)?)?$");
-                                if (rx.indexIn(chord) != -1) {
+                                QRegularExpression rx("^([a-g]([ei]s)?)([:](m|dim|aug|maj|sus|\\d+|[.^]|[+-])*)?(/[+]?[a-g]([ei]s)?)?$");
+                                if (rx.match(chord).hasMatch()) {
                                     // The chord duration is zero, but the chord
                                     // intervals is given with skips (see below).
-                                    QRegExp rxStart("^([a-g]([ei]s)?)");
-                                    chord.replace(QRegExp(rxStart), QString("\\1") + QString("4*0"));
+                                    QRegularExpression rxStart("^([a-g]([ei]s)?)");
+                                    chord.replace(QRegularExpression(rxStart), QString("\\1") + QString("4*0"));
                                 } else {
                                     // Skip improper chords.
                                     str << (" %{ improper chord: '") << qStrToStrUtf8(chord) << ("' %} ");
@@ -1905,9 +1905,9 @@ LilyPondExporter::write()
                                     text += " ";
             
                                     QString syllable(strtoqstr(ssyllable));
-                                    syllable.replace(QRegExp("^\\s+"), "");
-                                    syllable.replace(QRegExp("\\s+$"), "");
-                                    syllable.replace(QRegExp("\""), "\\\"");
+                                    syllable.replace(QRegularExpression("^\\s+"), "");
+                                    syllable.replace(QRegularExpression("\\s+$"), "");
+                                    syllable.replace(QRegularExpression("\""), "\\\"");
                                     text += "\"" + syllable + "\"";
                                     haveLyric = true;
                                 } else if (verse > lastVerse) {
@@ -1916,14 +1916,14 @@ LilyPondExporter::write()
                             }
                         }
 
-                        text.replace(QRegExp(" _+([^ ])") , " \\1");
+                        text.replace(QRegularExpression(" _+([^ ])") , " \\1");
                         text.replace("\"_\"" , " ");
 
                         // Do not create empty context for lyrics.
                         // Does this save some vertical space, as was written
                         // in earlier comment?
-                        QRegExp rx("\"");
-                        if (rx.indexIn(text) != -1) {
+                        QRegularExpression rx("\"");
+                        if (rx.match(text).hasMatch()) {
         
                             if (m_languageLevel <= LILYPOND_VERSION_2_10) {
                                 str << indent(col) << "\\lyricsto \"" << voiceNumber.str() << "\""

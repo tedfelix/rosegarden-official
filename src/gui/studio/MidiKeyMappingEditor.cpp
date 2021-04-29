@@ -36,7 +36,6 @@
 #include <QList>
 #include <QObjectList>
 #include <QPushButton>
-#include <QRegExp>
 #include <QString>
 #include <QWidget>
 #include <QTreeWidget>

@@ -2353,7 +2353,7 @@ NotationView::slotSwitchToNotes()
             .getNoteType();
         int dots = (currentInserter->getCurrentNote().getDots() ? 1 : 0);
         actionName = NotationStrings::getReferenceName(Note(unitType,dots));
-        actionName.replace(QRegExp("-"), "_");
+        actionName.replace(QRegularExpression("-"), "_");
 
         m_notationWidget->slotSetNoteInserter();
     }
@@ -2411,7 +2411,7 @@ NotationView::slotSwitchToRests()
             .getNoteType();
         int dots = (currentInserter->getCurrentNote().getDots() ? 1 : 0);
         actionName = NotationStrings::getReferenceName(Note(unitType,dots));
-        actionName.replace(QRegExp("-"), "_");
+        actionName.replace(QRegularExpression("-"), "_");
 
         m_notationWidget->slotSetRestInserter();
     }
@@ -2568,7 +2568,7 @@ NotationView::initializeNoteRestInserter()
     Note::Type unitType = sig.getUnit();
 
     QString actionName = NotationStrings::getReferenceName(Note(unitType,0));
-    actionName.replace(QRegExp("-"), "_");
+    actionName.replace(QRegularExpression("-"), "_");
 
     //Initialize Duration Toolbar (hide all buttons)   
     leaveActionState("note_0_dot_mode");
@@ -2895,7 +2895,7 @@ NotationView::slotToggleDot()
         }
 
         QString actionName(NotationStrings::getReferenceName(Note(noteType,noteDots)));
-        actionName.replace(QRegExp("-"), "_");
+        actionName.replace(QRegularExpression("-"), "_");
 
         m_notationWidget->slotSetInsertedNote(noteType, noteDots);
         if (currentInserter->isaRestInserter()) {

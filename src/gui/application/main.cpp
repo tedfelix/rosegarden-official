@@ -45,7 +45,6 @@
 #include <QLocale>
 #include <QLibraryInfo>
 #include <QStringList>
-#include <QRegExp>
 #include <QWidget>
 #include <QVBoxLayout>
 #include <QLabel>

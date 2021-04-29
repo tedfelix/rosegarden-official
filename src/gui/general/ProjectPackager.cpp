@@ -44,6 +44,7 @@
 #include <QFileInfo>
 #include <QDirIterator>
 #include <QSet>
+#include <QRegularExpression>
 
 namespace Rosegarden
 {
@@ -306,7 +307,7 @@ ProjectPackager::getPluginFilesAndRewriteXML(const QString fileToModify, const Q
     // insert \n between tags
     do {
         QString l = preIn.readLine();
-        l.replace(QRegExp("><"), ">\n<");
+        l.replace(QRegularExpression("><"), ">\n<");
         preOut << l << "\n";
     } while (!preIn.atEnd());
 

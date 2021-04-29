@@ -32,7 +32,7 @@
 #include <QProcess>
 #include <QMutex>
 #include <QThread>
-#include <QRegExp>
+#include <QRegularExpression>
 
 
 namespace Rosegarden
@@ -96,9 +96,10 @@ StartupTester::stdoutReceived()
 void
 StartupTester::parseStdoutBuffer(QStringList &target)
 {
-    QRegExp re("Required: ([^\n]*)");
-    if (re.indexIn(m_stdoutBuffer) != -1) {
-        target = re.cap(1).split(", ");
+    QRegularExpression re("Required: ([^\n]*)");
+    QRegularExpressionMatch match = re.match(m_stdoutBuffer);
+    if (match.hasMatch()) {
+        target = match.captured(1).split(", ");
     }
 }
 #endif
@@ -116,7 +117,7 @@ StartupTester::haveAudioFileImporter(QStringList *missing)
 bool
 StartupTester::isVersionNewerThan(QString a, QString b)
 {
-    QRegExp re("[._-]");
+    QRegularExpression re("[._-]");
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
     QStringList alist = a.split(re, Qt::SkipEmptyParts);
     QStringList blist = b.split(re, Qt::SkipEmptyParts);

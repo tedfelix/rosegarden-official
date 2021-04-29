@@ -55,7 +55,6 @@
 
 #include <QCoreApplication>
 #include <QMutex>
-#include <QRegExp>
 #include <QSettings>
 #include <QTime>
 
