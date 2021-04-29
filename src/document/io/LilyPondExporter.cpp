@@ -67,7 +67,6 @@
 #include <QProgressDialog>
 #include <QRegularExpression>
 #include <QString>
-#include <QTextCodec>
 #include <QApplication>
 
 #include <sstream>
