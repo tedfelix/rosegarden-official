@@ -81,7 +81,7 @@ void ConfigureDialogBase::addPage(const QString& name, const QString& title, con
     // New widget to hold the title, dividing line and configuration page
     QWidget * titledPage = new QWidget(this);
     QLayout * pageLayout = new QVBoxLayout(titledPage);
-    pageLayout->setMargin(0);
+    pageLayout->setContentsMargins(0, 0, 0, 0);
 
     // Create the title label widget for the configration page
     QLabel * titleLabel = new QLabel(title, titledPage);
