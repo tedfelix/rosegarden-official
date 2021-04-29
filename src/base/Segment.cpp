@@ -229,12 +229,6 @@ Segment::getForNotation() const {
     return m_forNotation;
 }
 
-QString
-Segment::getMarking() const
-{
-    return m_marking;
-}
-
 void
 Segment::setMarking(const QString& m, Composition* comp)
 {
