@@ -465,9 +465,9 @@ Rotary::mousePressEvent(QMouseEvent *e)
 {
     if (e->button() == Qt::LeftButton) {
         m_buttonPressed = true;
-        m_lastY = e->y();
-        m_lastX = e->x();
-    } else if (e->button() == Qt::MidButton) {  // reset to centre position
+        m_lastY = e->pos().y();
+        m_lastX = e->pos().x();
+    } else if (e->button() == Qt::MiddleButton) {  // reset to centre position
         m_position = (m_maximum + m_minimum) / 2.0;
         snapPosition();
         update();
@@ -494,7 +494,7 @@ Rotary::mousePressEvent(QMouseEvent *e)
 //    std::cerr << "Rotary::mousePressEvent: logarithmic = " << m_logarithmic
 //              << ", position = " << m_position << std::endl;
 
-    if (e->button() == Qt::RightButton || e->button() == Qt::MidButton) {
+    if (e->button() == Qt::RightButton || e->button() == Qt::MiddleButton) {
         // wait 500ms then hide text float
         textFloat->hideAfterDelay(500);
     }
@@ -586,7 +586,8 @@ Rotary::mouseMoveEvent(QMouseEvent *e)
         // Dragging by x or y axis when clicked modifies value
         //
         float newValue = m_position +
-                         (m_lastY - float(e->y()) + float(e->x()) - m_lastX) * m_step;
+            (m_lastY - float(e->pos().y()) + float(e->pos().x()) - m_lastX)
+            * m_step;
 
         if (newValue > m_maximum)
             m_position = m_maximum;
@@ -596,8 +597,8 @@ Rotary::mouseMoveEvent(QMouseEvent *e)
             else
                 m_position = newValue;
 
-        m_lastY = e->y();
-        m_lastX = e->x();
+        m_lastY = e->pos().y();
+        m_lastX = e->pos().x();
 
         snapPosition();
 
@@ -658,7 +659,11 @@ Rotary::wheelEvent(QWheelEvent *e)
 }
 
 void
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+Rotary::enterEvent(QEnterEvent *)
+#else
 Rotary::enterEvent(QEvent *)
+#endif
 {
     TextFloat::getTextFloat()->attach(this);
 }

@@ -862,6 +862,7 @@ endif()
 # Link to the following libraries
 target_link_libraries(rosegardenprivate
   ${QT_QTCORE_LIBRARY}
+  ${QT_QTCORE5COMAPT_LIBRARY}
   ${QT_QTGUI_LIBRARY}
   ${QT_QTXML_LIBRARY}
   ${QT_QTNETWORK_LIBRARY}

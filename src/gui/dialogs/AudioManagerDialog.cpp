@@ -117,7 +117,7 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
     QVBoxLayout *boxLayout = new QVBoxLayout;
     centralWidget->setLayout(boxLayout);
     
-    boxLayout->setMargin(10);
+    boxLayout->setContentsMargins(10, 10, 10, 10);
     boxLayout->setSpacing(5);
     
     m_sampleRate = RosegardenSequencer::getInstance()->getSampleRate();

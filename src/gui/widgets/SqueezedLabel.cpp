@@ -20,7 +20,6 @@
 #include <QClipboard>
 #include <QApplication>
 #include <QMimeData>
-#include <QDesktopWidget>
 #include <QScreen>
 
 

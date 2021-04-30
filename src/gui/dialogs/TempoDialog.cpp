@@ -146,7 +146,7 @@ TempoDialog::TempoDialog(QWidget *parent, RosegardenDocument *doc,
 
         QVBoxLayout * scopeBoxLayout = new QVBoxLayout(scopeGroup);
         scopeBoxLayout->setSpacing(5);
-        scopeBoxLayout->setMargin(5);
+        scopeBoxLayout->setContentsMargins(5, 5, 5, 5);
 
         QVBoxLayout * currentBoxLayout = scopeBoxLayout;
         QWidget * currentBox = scopeGroup;

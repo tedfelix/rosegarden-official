@@ -49,7 +49,6 @@
 #include <QTimer>
 #include <QWidget>
 #include <QHBoxLayout>
-#include <QDesktopWidget>
 #include <QPainter>
 #include <QtGlobal>
 #include <QScreen>
