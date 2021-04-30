@@ -42,7 +42,7 @@ class RosegardenDocument;
 class CompositionMapper
 {
 public:
-    CompositionMapper(RosegardenDocument *doc);
+    CompositionMapper();
 
     /// Get the SegmentMapper for a Segment
     QSharedPointer<MappedEventBuffer> getMappedEventBuffer(Segment *);
@@ -68,9 +68,6 @@ public:
 private:
     /// Creates a SegmentMapper and adds it to the container.
     void mapSegment(Segment *);
-
-    /// Passed to the SegmentMapper objects that are created.
-    RosegardenDocument *m_doc;
 
 };
 

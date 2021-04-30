@@ -1245,7 +1245,7 @@ void SequenceManager::resetCompositionMapper()
     
     RosegardenSequencer::getInstance()->compositionAboutToBeDeleted();
 
-    m_compositionMapper.reset(new CompositionMapper(m_doc));
+    m_compositionMapper.reset(new CompositionMapper);
 
     resetMetronomeMapper();
     resetTempoSegmentMapper();
