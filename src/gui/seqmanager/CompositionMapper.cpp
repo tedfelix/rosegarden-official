@@ -18,12 +18,13 @@
 #define RG_MODULE_STRING "[CompositionMapper]"
 
 #include "CompositionMapper.h"
-#include "misc/Debug.h"
 
 #include "base/Composition.h"
-#include "base/Segment.h"
-#include "document/RosegardenDocument.h"
+#include "misc/Debug.h"
 #include "gui/seqmanager/MappedEventBuffer.h"
+#include "document/RosegardenDocument.h"
+#include "gui/application/RosegardenMainWindow.h"
+#include "base/Segment.h"
 #include "gui/seqmanager/SegmentMapper.h"
 
 
@@ -31,43 +32,39 @@ namespace Rosegarden
 {
 
 
-CompositionMapper::CompositionMapper(RosegardenDocument *doc) :
-    m_doc(doc)
+CompositionMapper::CompositionMapper()
 {
-    //RG_DEBUG << "ctor: doc = " << doc;
+    RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
 
-    Composition &comp = m_doc->getComposition();
+    const Composition &composition = doc->getComposition();
 
     // For each Segment in the Composition
-    for (Composition::iterator segmentIter = comp.begin();
-         segmentIter != comp.end();
-         ++segmentIter) {
-
-        Track *track = comp.getTrackById((*segmentIter)->getTrack());
+    for (Segment *segment : composition) {
+        const Track *track = composition.getTrackById(segment->getTrack());
 
         // If the Track does not exist, try the next Segment...
         if (!track)
             continue;
 
         // Create a SegmentMapper for this Segment.
-        mapSegment(*segmentIter);
+        mapSegment(segment);
     }
 }
 
 bool
 CompositionMapper::segmentModified(Segment *segment)
 {
-    if (m_segmentMappers.find(segment) == m_segmentMappers.end()) return false;
+    // If we don't have a SegmentMapper for this Segment, bail.
+    if (m_segmentMappers.find(segment) == m_segmentMappers.end())
+        return false;
 
     QSharedPointer<SegmentMapper> mapper = m_segmentMappers[segment];
 
-    if (!mapper) {
-        return false; // this can happen with the SegmentSplitCommand,
-                      // where the new segment's transpose is set even
-                      // though it's not mapped yet
-    }
-
-    //RG_DEBUG << "segmentModified(" << segment << ") - mapper = " << mapper;
+    // No mapper?  Bail.
+    // This can happen with the SegmentSplitCommand, where the new segment's
+    // transpose is set even though it's not mapped yet.
+    if (!mapper)
+        return false;
 
     return mapper->refresh();
 }
@@ -75,35 +72,27 @@ CompositionMapper::segmentModified(Segment *segment)
 void
 CompositionMapper::segmentAdded(Segment *segment)
 {
-    //RG_DEBUG << "segmentAdded(" << segment << ")";
-
     mapSegment(segment);
 }
 
 void
 CompositionMapper::segmentDeleted(Segment *segment)
 {
-    //RG_DEBUG << "segmentDeleted()";
-
     // !!! WARNING !!!
     // The segment pointer that is coming in to this routine has already
     // been deleted.  This is a POINTER TO DELETED MEMORY.  It cannot be
     // dereferenced in any way.  Each of the following lines of code will be
     // explained to make it clear that the pointer is not being dereferenced.
 
+    // If we don't have a SegmentMapper for this Segment, bail.
     // "segment" is used here as an index into m_segmentMappers.  It is not
     // dereferenced.
-    if (m_segmentMappers.find(segment) == m_segmentMappers.end()) return;
+    if (m_segmentMappers.find(segment) == m_segmentMappers.end())
+        return;
 
     // "segment" is used here as an index into m_segmentMappers.  It is not
     // dereferenced.
     m_segmentMappers.erase(segment);
-
-    // Given that mapper has a pointer to the deleted segment, this line is
-    // suspect.  However, I believe there is no operator<< for SegmentMapper.
-    // In that case, this should do nothing more than write out the pointer
-    // value.  Uncomment this line of code at your own risk.
-//    RG_DEBUG << "segmentDeleted() : releasing SegmentMapper " << mapper;
 }
 
 void
@@ -112,34 +101,37 @@ CompositionMapper::mapSegment(Segment *segment)
     //RG_DEBUG << "mapSegment(" << segment << ")";
     //RG_DEBUG << "  We have" << m_segmentMappers.size() << "segment(s)";
 
-    SegmentMappers::iterator itMapper = m_segmentMappers.find(segment);
+    SegmentMappers::const_iterator mapperIter = m_segmentMappers.find(segment);
 
     // If it already exists, don't add it but do refresh it.
-    if (itMapper != m_segmentMappers.end()) {
-        itMapper->second->refresh();
+    if (mapperIter != m_segmentMappers.end()) {
+        mapperIter->second->refresh();
         return;
     }
-    QSharedPointer<SegmentMapper> mapper =
-        SegmentMapper::makeMapperForSegment(m_doc, segment);
 
-    if (mapper) {
+    RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
+
+    QSharedPointer<SegmentMapper> mapper =
+        SegmentMapper::makeMapperForSegment(doc, segment);
+
+    if (mapper)
         m_segmentMappers[segment] = mapper;
-    }
 }
 
 QSharedPointer<MappedEventBuffer>
-CompositionMapper::getMappedEventBuffer(Segment *s)
+CompositionMapper::getMappedEventBuffer(Segment *segment)
 {
     // !!! WARNING !!!
-    // The "s" segment pointer that is coming in to this routine may have
+    // The "segment" that is coming in to this routine may have
     // already been deleted.  This may be a POINTER TO DELETED MEMORY.
     // DO NOT DEREFERENCE IN ANY WAY!
 
-    if (m_segmentMappers.find(s) != m_segmentMappers.end()) {
-        return m_segmentMappers[s];
-    } else {
+    // SegmentMapper not found?  Return a null pointer.
+    if (m_segmentMappers.find(segment) == m_segmentMappers.end())
         return QSharedPointer<MappedEventBuffer>();
-    }
+
+    return m_segmentMappers[segment];
 }
+
 
 }
