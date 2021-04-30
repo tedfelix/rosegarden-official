@@ -915,18 +915,14 @@ public:
 
     /// Mark a Segment
     /**
-     * This was added to support being able to access a Segment that
-     * has not yet been created. See for example
-     * NotationView::slotMagicLayer. AddLayerCommand marks the segment
-     * it creates and it is later used in the
-     * PasteEventsCommand. NotationView then finds it and selects it.
+     * Used by NotationView::slotAddLayer() and NotationView::slotMagicLayer().
+     *
+     * This allows a Segment to be passed amongst the various steps of the
+     * add layer and "magic layer" (new layer from selection) processes.
      *
      * Only one Segment can have a given marking. setMarking() enforces this.
      *
-     * This could be reduced to a bool if marking is only used for this purpose
-     *
-     * See NotationView::slotAddLayer() and slotMagicLayer() for a
-     * possible redesign that might get rid of this.
+     * This could be reduced to a bool if marking is only used for this purpose.
      */
     void setMarking(const QString &m, Composition *comp);
     /// Get the marking for AddLayerCommand.
