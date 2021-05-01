@@ -71,7 +71,6 @@
 
 #include <QApplication>
 #include <QColor>
-#include <QDesktopWidget>
 #include <QGraphicsView>
 #include <QGridLayout>
 #include <QLabel>

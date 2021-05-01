@@ -213,7 +213,7 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(QWidget *parent) :
     m_rotaryFrame->setContentsMargins(8, 8, 8, 8);
     m_rotaryGrid = new QGridLayout(m_rotaryFrame);
     m_rotaryGrid->setSpacing(1);
-    m_rotaryGrid->setMargin(0);
+    m_rotaryGrid->setContentsMargins(0, 0, 0, 0);
     m_rotaryGrid->addItem(new QSpacerItem(10, 4), 0, 1);
     m_rotaryFrame->setLayout(m_rotaryGrid);
 
@@ -225,7 +225,7 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(QWidget *parent) :
     // Layout
 
     QGridLayout *mainGrid = new QGridLayout(this);
-    mainGrid->setMargin(0);
+    mainGrid->setContentsMargins(0, 0, 0, 0);
     mainGrid->setSpacing(3);
     mainGrid->setColumnStretch(2, 1);
 
@@ -434,7 +434,7 @@ MIDIInstrumentParameterPanel::setupControllers(MidiDevice *md)
             QWidget *hbox = new QWidget(m_rotaryFrame);
             QHBoxLayout *hboxLayout = new QHBoxLayout;
             hboxLayout->setSpacing(8);
-            hboxLayout->setMargin(0);
+            hboxLayout->setContentsMargins(0, 0, 0, 0);
             hbox->setLayout(hboxLayout);
 
             // Add a Rotary

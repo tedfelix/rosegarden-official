@@ -83,7 +83,7 @@ void RosegardenParameterArea::addRosegardenParameterBox(
     m_boxContainerLayout->insertWidget(m_boxContainerLayout->count() - 1, box); // before the stretch
     
     box->setLayout( new QVBoxLayout(box) );
-    box->layout()->setMargin( 4 ); // about half the default value
+    box->layout()->setContentsMargins(4, 4, 4, 4); // about half the default value
     QFont f;
     f.setBold( true );
     box->setFont( f );

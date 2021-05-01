@@ -431,7 +431,7 @@ TrackParameterBox::TrackParameterBox(QWidget *parent) :
     // Layout
 
     QGridLayout *mainLayout = new QGridLayout(this);
-    mainLayout->setMargin(0);
+    mainLayout->setContentsMargins(0, 0, 0, 0);
     mainLayout->setSpacing(1);
     mainLayout->addWidget(m_trackLabel, 0, 0);
     mainLayout->addWidget(playbackParametersFrame, 1, 0);

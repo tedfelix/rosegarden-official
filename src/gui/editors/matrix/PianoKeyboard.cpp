@@ -168,7 +168,11 @@ void PianoKeyboard::paintEvent(QPaintEvent*)
                        m_blackKeySize.width(), m_blackKeySize.height());
 }
 
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+void PianoKeyboard::enterEvent(QEnterEvent *)
+#else
 void PianoKeyboard::enterEvent(QEvent *)
+#endif
 {
     //showHighlight(e->y());
 }

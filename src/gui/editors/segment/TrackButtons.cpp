@@ -110,7 +110,7 @@ TrackButtons::TrackButtons(RosegardenDocument* doc,
         m_labelDisplayMode = TrackLabel::ShowInstrument;
     }
 
-    m_layout->setMargin(0);
+    m_layout->setContentsMargins(0, 0, 0, 0);
     // Set the spacing between vertical elements
     m_layout->setSpacing(borderGap);
 
@@ -887,7 +887,7 @@ TrackButtons::populateInstrumentPopup(Instrument *thisTrackInstr, QMenu* instrum
         action->setData(QVariant(count));
 
         // QObject object name.
-        action->setObjectName(iname + QString(count));
+        action->setObjectName(iname + QString(QChar(count)));
 
         // Add the action to the current submenu
         if (currentSubMenu)

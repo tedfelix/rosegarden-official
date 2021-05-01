@@ -222,7 +222,11 @@ Thumbwheel::getShowScale() const
 }
 
 void
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+Thumbwheel::enterEvent(QEnterEvent *)
+#else
 Thumbwheel::enterEvent(QEvent *)
+#endif
 {
     emit mouseEntered();
 }
@@ -236,7 +240,7 @@ Thumbwheel::leaveEvent(QEvent *)
 void
 Thumbwheel::mousePressEvent(QMouseEvent *e)
 {
-    if (e->button() == Qt::MidButton ||
+    if (e->button() == Qt::MiddleButton ||
         ((e->button() == Qt::LeftButton) &&
          (e->modifiers() & Qt::ControlModifier))) {
         resetToDefault();

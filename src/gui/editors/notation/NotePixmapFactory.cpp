@@ -67,7 +67,6 @@
 #include <QPoint>
 #include <QRect>
 #include <QString>
-#include <QMatrix>
 
 #include <cmath>
 

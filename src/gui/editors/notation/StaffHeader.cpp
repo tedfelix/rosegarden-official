@@ -860,7 +860,11 @@ StaffHeader::SegmentCmp::operator()(const Segment * s1, const Segment * s2) cons
 
 
 void
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+StaffHeader::enterEvent(QEnterEvent */* event */)
+#else
 StaffHeader::enterEvent(QEvent */* event */)
+#endif
 {
     // Start timer when mouse enters
     m_toolTipTimer->start();
