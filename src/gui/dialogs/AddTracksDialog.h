@@ -35,16 +35,15 @@ class AddTracksDialog : public QDialog
 
 public:
     AddTracksDialog(QWidget *parent);
-    
-    int getTracks();
-    int getInsertPosition();
 
 public slots:
     virtual void accept() override;
 
 private:
-    QSpinBox *m_count;
-    QComboBox *m_position;
+    QSpinBox *m_numberOfTracks;
+    QComboBox *m_location;
+
+    int getInsertPosition();
 };
 
 

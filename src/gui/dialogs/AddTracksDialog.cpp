@@ -41,6 +41,12 @@
 #include <QWidget>
 
 
+namespace
+{
+    const QString AddTracksDialogGroup = "AddTracksDialog";
+}
+
+
 namespace Rosegarden
 {
 
@@ -48,62 +54,59 @@ namespace Rosegarden
 AddTracksDialog::AddTracksDialog(QWidget *parent) :
     QDialog(parent)
 {
-    setModal(true);
     setWindowTitle(tr("Add Tracks"));
+    setModal(true);
 
-    QWidget *vBox = new QWidget(this);
     QVBoxLayout *vBoxLayout = new QVBoxLayout;
     setLayout(vBoxLayout);
 
-    QGroupBox *gbox = new QGroupBox(tr("How many tracks do you want to add?"), vBox);
-    vBoxLayout->addWidget(gbox);
+    QGroupBox *gbox =
+            new QGroupBox(tr("How many tracks do you want to add?"), this);
 
     QVBoxLayout *gboxLayout = new QVBoxLayout;
     gbox->setLayout(gboxLayout);
-    
-    m_count = new QSpinBox();
-    gboxLayout->addWidget(m_count);
-    m_count->setMinimum(1);
-    m_count->setMaximum(256); // why not 256?  32 seemed like a silly upper bound
-    m_count->setValue(1);
 
-    QWidget *posBox = new QWidget(vBox);
+    vBoxLayout->addWidget(gbox);
+
+    m_numberOfTracks = new QSpinBox();
+    m_numberOfTracks->setMinimum(1);
+    m_numberOfTracks->setMaximum(256);
+    m_numberOfTracks->setValue(1);
+    gboxLayout->addWidget(m_numberOfTracks);
+
+    QWidget *posBox = new QWidget(this);
     gboxLayout->addWidget(posBox);
 
     QHBoxLayout *posBoxLayout = new QHBoxLayout;
     posBox->setLayout(posBoxLayout);
 
-    posBoxLayout->addWidget(new QLabel(tr("Add tracks")));
+    posBoxLayout->addWidget(new QLabel(tr("Location")));
 
-    m_position = new QComboBox(posBox);
-    posBoxLayout->addWidget(m_position);
-    m_position->addItem(tr("At the top"));
-    m_position->addItem(tr("Above the current selected track"));
-    m_position->addItem(tr("Below the current selected track"));
-    m_position->addItem(tr("At the bottom"));
+    m_location = new QComboBox(posBox);
+    m_location->addItem(tr("At the top"));
+    m_location->addItem(tr("Above the current selected track"));
+    m_location->addItem(tr("Below the current selected track"));
+    m_location->addItem(tr("At the bottom"));
 
-    QString metric(tr("Above the current selected track"));
-    m_position->setMinimumContentsLength(metric.size());
+    QString biggest(tr("Above the current selected track"));
+    m_location->setMinimumContentsLength(biggest.size());
 
     QSettings settings;
-    settings.beginGroup(GeneralOptionsConfigGroup);
-    m_position->setCurrentIndex(
-            settings.value("lastaddtracksposition", 2).toUInt());
+    settings.beginGroup(AddTracksDialogGroup);
+    m_location->setCurrentIndex(
+            settings.value("Location", 2).toUInt());
+
+    posBoxLayout->addWidget(m_location);
+
+    // Button Box
 
     QDialogButtonBox *buttonBox =
             new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
-    vBoxLayout->addWidget(buttonBox);
 
     connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
     connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 
-    settings.endGroup();
-}
-
-int
-AddTracksDialog::getTracks()
-{
-    return m_count->value();
+    vBoxLayout->addWidget(buttonBox);
 }
 
 int
@@ -117,12 +120,11 @@ AddTracksDialog::getInsertPosition()
     if (track)
         selectedTrackPosition = track->getPosition();
 
-    int opt = m_position->currentIndex();
+    int opt = m_location->currentIndex();
 
     QSettings settings;
-    settings.beginGroup( GeneralOptionsConfigGroup );
-
-    settings.setValue("lastaddtracksposition", opt);
+    settings.beginGroup(AddTracksDialogGroup);
+    settings.setValue("Location", opt);
 
     int pos = 0;
 
@@ -140,8 +142,6 @@ AddTracksDialog::getInsertPosition()
         pos = -1;
         break;
     }
-
-    settings.endGroup();
 
     return pos;
 }
@@ -185,7 +185,9 @@ void AddTracksDialog::accept()
     // Add the tracks.
 
     RosegardenMainWindow::self()->getView()->addTracks(
-            getTracks(), id, getInsertPosition());
+            m_numberOfTracks->value(),
+            id,
+            getInsertPosition());
 
     QDialog::accept();
 }
