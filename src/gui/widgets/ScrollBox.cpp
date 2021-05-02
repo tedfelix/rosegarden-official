@@ -21,7 +21,6 @@
 
 
 #include <QMouseEvent>
-#include <QDesktopWidget>
 #include "ScrollBox.h"
 
 #include <QApplication>
@@ -33,6 +32,7 @@
 #include <QRect>
 #include <QSize>
 #include <QWidget>
+#include <QScreen>
 
 
 namespace Rosegarden
@@ -51,7 +51,7 @@ void ScrollBox::mousePressEvent(QMouseEvent* e)
     m_mouse = e->pos();
     if (e->button() == Qt::RightButton)
         emit button3Pressed();
-    if (e->button() == Qt::MidButton)
+    if (e->button() == Qt::MiddleButton)
         emit button2Pressed();
 }
 
@@ -102,8 +102,11 @@ void ScrollBox::setPageSize(const QSize& s)
     setFixedWidth(100);
     setFixedHeight(100);
 
-    int maxWidth = int(QApplication::desktop()->width() * 0.75);
-    int maxHeight = int(QApplication::desktop()->height() * 0.75);
+    QScreen* screen = QGuiApplication::screenAt(QPoint(0, 0));
+    int dw = screen->availableGeometry().width();
+    int dh = screen->availableGeometry().height();
+    int maxWidth = int(dw * 0.75);
+    int maxHeight = int(dh * 0.75);
 
     if (m_sizeMode == FixWidth) {
         int height = s.height() * width() / s.width();

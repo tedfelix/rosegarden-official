@@ -26,10 +26,10 @@
 #include "rosegarden-version.h"
 
 #include <QApplication>
-#include <QDesktopWidget>
 #include <QPainter>
 #include <QFontMetrics>
 #include <QSettings>
+#include <QScreen>
 
 #include <unistd.h>
 
@@ -50,8 +50,11 @@ StartupLogo::StartupLogo(QWidget * parent) :
     m_pixmap = IconLoader::loadPixmap("splash-devel");
 #endif
 
-    setGeometry(QApplication::desktop()->width() / 2 - m_pixmap.width() / 2,
-                QApplication::desktop()->height() / 2 - m_pixmap.height() / 2,
+    QScreen* screen = QGuiApplication::screenAt(QPoint(0, 0));
+    int dw = screen->availableGeometry().width();
+    int dh = screen->availableGeometry().height();
+    setGeometry(dw / 2 - m_pixmap.width() / 2,
+                dh / 2 - m_pixmap.height() / 2,
                 m_pixmap.width(), m_pixmap.height());
 
     setAttribute(Qt::WA_DeleteOnClose);

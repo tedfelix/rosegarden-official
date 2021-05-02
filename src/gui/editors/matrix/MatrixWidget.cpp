@@ -886,7 +886,7 @@ MatrixWidget::slotDispatchMousePress(const MatrixMouseEvent *e)
         m_currentTool->handleMidButtonPress(e);
     } else if (e->buttons & Qt::LeftButton) {
         m_currentTool->handleLeftButtonPress(e);
-    } else if (e->buttons & Qt::MidButton) {
+    } else if (e->buttons & Qt::MiddleButton) {
         m_currentTool->handleMidButtonPress(e);
     } else if (e->buttons & Qt::RightButton) {
         m_currentTool->handleRightButtonPress(e);

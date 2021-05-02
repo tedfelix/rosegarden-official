@@ -32,7 +32,7 @@ struct CompareForLinkedGroupSameTime
 {
     // We equate only segments from the same link group starting at
     // the same time.
-    bool operator()(const Segment * a, const Segment *b)
+    bool operator()(const Segment * a, const Segment *b) const
     {
         if(a->getLinker() < b->getLinker()) { return true; }
         if(a->getLinker() > b->getLinker()) { return false; }

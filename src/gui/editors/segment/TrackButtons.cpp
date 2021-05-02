@@ -1094,7 +1094,7 @@ TrackButtons::makeButton(Track *track)
     QFrame *trackHBox = new QFrame(this);
     QHBoxLayout *hblayout = new QHBoxLayout(trackHBox);
     trackHBox->setLayout(hblayout);
-    hblayout->setMargin(0);
+    hblayout->setContentsMargins(0, 0, 0, 0);
     hblayout->setSpacing(0);
 
     trackHBox->setMinimumSize(minWidth, trackHeight(trackId));

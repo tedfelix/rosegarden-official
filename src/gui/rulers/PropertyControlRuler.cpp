@@ -374,7 +374,7 @@ PropertyControlRuler::mousePressEvent(QMouseEvent *e)
 {
     RG_DEBUG << "mousePressEvent()";
 
-    if (e->button() == Qt::MidButton)
+    if (e->button() == Qt::MiddleButton)
         m_lastEventPos = e->pos();
 
     ControlRuler::mousePressEvent(e); // send super
@@ -412,7 +412,7 @@ PropertyControlRuler::mouseMoveEvent(QMouseEvent *e)
 
     // Don't send super if we're using the middle button
     //
-    if (e->button() == Qt::MidButton) {
+    if (e->button() == Qt::MiddleButton) {
         m_lastEventPos = e->pos();
         return;
     }

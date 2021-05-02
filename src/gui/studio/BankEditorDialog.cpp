@@ -92,7 +92,7 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     mainFrame->setContentsMargins(1, 1, 1, 1);
     setCentralWidget(mainFrame);
     QVBoxLayout *mainFrameLayout = new QVBoxLayout;
-    mainFrameLayout->setMargin(0);
+    mainFrameLayout->setContentsMargins(0, 0, 0, 0);
     mainFrameLayout->setSpacing(2);
     mainFrame->setLayout(mainFrameLayout);
 
@@ -100,7 +100,7 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
 
     QWidget *splitter = new QWidget;
     QHBoxLayout *splitterLayout = new QHBoxLayout;
-    splitterLayout->setMargin(0);
+    splitterLayout->setContentsMargins(0, 0, 0, 0);
     splitter->setLayout(splitterLayout);
 
     mainFrameLayout->addWidget(splitter);
@@ -110,7 +110,7 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     //
     QWidget *leftPart = new QWidget;
     QVBoxLayout *leftPartLayout = new QVBoxLayout;
-    leftPartLayout->setMargin(2);
+    leftPartLayout->setContentsMargins(2, 2, 2, 2);
     leftPart->setLayout(leftPartLayout);
     splitterLayout->addWidget(leftPart);
     
@@ -193,7 +193,7 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
 
     m_rightSide->setContentsMargins(8, 8, 8, 8);
     QVBoxLayout *rightSideLayout = new QVBoxLayout;
-    rightSideLayout->setMargin(0);
+    rightSideLayout->setContentsMargins(0, 0, 0, 0);
     rightSideLayout->setSpacing(6);
     m_rightSide->setLayout(rightSideLayout);
 
@@ -211,12 +211,12 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
 
     m_optionBox = new QGroupBox(tr("Options"), m_rightSide);
     QVBoxLayout *optionBoxLayout = new QVBoxLayout;
-    optionBoxLayout->setMargin(0);
+    optionBoxLayout->setContentsMargins(0, 0, 0, 0);
     rightSideLayout->addWidget(m_optionBox);
 
     QWidget *variationBox = new QWidget(m_optionBox);
     QHBoxLayout *variationBoxLayout = new QHBoxLayout;
-    variationBoxLayout->setMargin(4);
+    variationBoxLayout->setContentsMargins(4, 4, 4, 4);
     optionBoxLayout->addWidget(variationBox);
 
     m_variationToggle = new QCheckBox(tr("Show Variation list based on "), variationBox);

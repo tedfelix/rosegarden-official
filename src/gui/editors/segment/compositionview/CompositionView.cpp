@@ -1279,7 +1279,11 @@ bool CompositionView::event(QEvent *e)
     return RosegardenScrollView::event(e);
 }
 
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+void CompositionView::enterEvent(QEnterEvent *)
+#else
 void CompositionView::enterEvent(QEvent *)
+#endif
 {
     // Ask RosegardenMainWindow to display the context help in the status bar.
     emit showContextHelp(m_toolContextHelp);
@@ -1317,7 +1321,7 @@ void CompositionView::mousePressEvent(QMouseEvent *e)
     // auto-scroll in those cases and others.
     // ??? Would it be better to push this down into the tools?
     if (e->button() == Qt::LeftButton  ||
-        e->button() == Qt::MidButton)
+        e->button() == Qt::MiddleButton)
         startAutoScroll();
 
     // Delegate to current tool

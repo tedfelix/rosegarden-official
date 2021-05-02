@@ -105,7 +105,7 @@ SegmentSelector::mousePressEvent(QMouseEvent *e)
 
     // We only care about the left and middle mouse buttons.
     if (e->button() != Qt::LeftButton  &&
-        e->button() != Qt::MidButton)
+        e->button() != Qt::MiddleButton)
         return;
 
     // No need to propagate.
@@ -117,7 +117,7 @@ SegmentSelector::mousePressEvent(QMouseEvent *e)
     ChangingSegmentPtr item = m_canvas->getModel()->getSegmentAt(pos);
 
     // If middle button...
-    if (e->button() == Qt::MidButton) {
+    if (e->button() == Qt::MiddleButton) {
         // If clicked on the background, create a new segment.
         if (!item) {
             m_dispatchTool = m_canvas->getToolBox()->getTool(SegmentPencil::ToolName());
@@ -245,7 +245,7 @@ SegmentSelector::mouseReleaseEvent(QMouseEvent *e)
 {
     // We only care about the left and middle mouse buttons.
     if (e->button() != Qt::LeftButton  &&
-        e->button() != Qt::MidButton)
+        e->button() != Qt::MiddleButton)
         return;
 
     // No need to propagate.

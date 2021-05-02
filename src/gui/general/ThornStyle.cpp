@@ -861,7 +861,7 @@ void ThornStyle::drawControl(QStyle::ControlElement element, const QStyleOption 
             const int xpos = menuitem->rect.x() + xm;
             painter->setPen(textColor);
             QRect textRect(xpos, y + itemVMargin,
-                           w - xm - rightBorder - menuitem->tabWidth + 1, h - 2 * itemVMargin);
+                           w - xm - rightBorder + 1, h - 2 * itemVMargin);
             QRect vTextRect = visualRect(option->direction, menuitem->rect, textRect);
             QString s(menuitem->text);
             if (!s.isEmpty()) {                     // draw text

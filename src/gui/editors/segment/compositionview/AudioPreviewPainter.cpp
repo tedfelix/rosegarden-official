@@ -31,7 +31,7 @@
 #include <QImage>
 #include <QApplication>
 #include <QSettings>
-#include <QDesktopWidget>
+#include <QScreen>
 
 namespace Rosegarden {
 
@@ -62,7 +62,9 @@ AudioPreviewPainter::AudioPreviewPainter(CompositionModelImpl& model,
 int AudioPreviewPainter::tileWidth()
 {
     static int tw = -1;
-    if (tw == -1) tw = QApplication::desktop()->width();
+    QScreen* screen = QGuiApplication::screenAt(QPoint(0, 0));
+    int dw = screen->availableGeometry().width();
+    if (tw == -1) tw = dw;
     return tw;
 }
 

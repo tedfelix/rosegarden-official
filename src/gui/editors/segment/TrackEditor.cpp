@@ -131,7 +131,7 @@ TrackEditor::init(RosegardenMainViewWidget *mainViewWidget)
     m_trackCellHeight = 24 * sizeFactor / 100;
 
     QGridLayout *grid = new QGridLayout(this);
-    grid->setMargin(0);
+    grid->setContentsMargins(0, 0, 0, 0);
     grid->setSpacing(0);
 
     // Top Rulers

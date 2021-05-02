@@ -3288,7 +3288,7 @@ NotePixmapFactory::getTextFont(const Text &text) const
      * LilyPondDirective:  Very small sans-serif, in a green box
      */
 
-    int weight = QFont::Normal;
+    QFont::Weight weight = QFont::Normal;
     bool italic = false;
     bool large = false;
     bool tiny = false;

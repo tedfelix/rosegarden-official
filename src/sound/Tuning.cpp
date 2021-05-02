@@ -87,7 +87,7 @@ std::vector<Tuning*> *Tuning::getTunings() {
         QString tuningName, intervalRatio;
         
         stream.readNextStartElement();
-        if (stream.name() != "rosegarden_scales") {
+        if (stream.name().toString() != "rosegarden_scales") {
             qDebug()  << "Tunings configuration file " << tuningsPath
                       << " is not a valid rosegarden scales file. "
                       << "(Root element is " << stream.name() << ")";
@@ -116,19 +116,19 @@ std::vector<Tuning*> *Tuning::getTunings() {
                         
             // Perform state transistions at end elements
             if (stream.isEndElement()) {
-                if (stream.name() == "tuning") {
+                if (stream.name().toString() == "tuning") {
                     // Save the tuning and prepare for a new one
                     saveTuning(tuningName, intervals, spellings);
                     intervals = new IntervalList;
                     spellings = new SpellingList;       
                     state = needTuning;
-                } else if (stream.name() == "name") {
+                } else if (stream.name().toString() == "name") {
                     // End of tuning name: expect intervals
                     state = needInterval;
-                } else if (stream.name() == "interval") {
+                } else if (stream.name().toString() == "interval") {
                     // After an </interval>, we're expecting another interval
                     state = needInterval;
-                } else if (stream.name() == "rosegarden_scales") {
+                } else if (stream.name().toString() == "rosegarden_scales") {
                     // XML's fininshed. Don't need the current tuning
                     // or spelling lists created when the last tuning ended
                     // so let's not leak memory.
@@ -150,7 +150,7 @@ std::vector<Tuning*> *Tuning::getTunings() {
             
             // If we are in the needSpellings state but hit a new interval,
             // we need to process that. So force a state-change here.
-            if (state == needSpellings && stream.name() == "interval") {
+            if (state == needSpellings && stream.name().toString() == "interval") {
                 state = needInterval;
             }
             
@@ -162,7 +162,7 @@ std::vector<Tuning*> *Tuning::getTunings() {
             
             switch (state) {
             case needTuning:
-                if (stream.name() != "tuning") {
+                if (stream.name().toString() != "tuning") {
                     qDebug() << "Reading Tunings. Expected tuning element, "
                              << "found " << stream.name();
                     stream.skipCurrentElement();
@@ -173,7 +173,7 @@ std::vector<Tuning*> *Tuning::getTunings() {
                 break;
                 
             case needName:
-                if (stream.name() != "name") {
+                if (stream.name().toString() != "name") {
                     qDebug() << "Tuning must start with a <name> element, "
                              << "found <" << stream.name() << ">";
                     stream.skipCurrentElement();
@@ -187,7 +187,7 @@ std::vector<Tuning*> *Tuning::getTunings() {
                 break;
                 
             case needInterval:
-                if (stream.name() != "interval") {
+                if (stream.name().toString() != "interval") {
                     qDebug() << "Expecting an <interval> element, "
                              << "found <" << stream.name() << ">";
                     // Bail out
@@ -207,7 +207,7 @@ std::vector<Tuning*> *Tuning::getTunings() {
                 break;
             
             case needSpellings:
-                if (stream.name() != "spelling") {
+                if (stream.name().toString() != "spelling") {
                     qDebug() << "Intervals may contain only spellings. "
                              << "Found <" << stream.name() << ">";
                     // Keep looking for spellings

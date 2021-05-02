@@ -134,7 +134,11 @@ void PercussionPitchRuler::paintEvent(QPaintEvent*)
     }
 }
 
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+void PercussionPitchRuler::enterEvent(QEnterEvent *)
+#else
 void PercussionPitchRuler::enterEvent(QEvent *)
+#endif
 {}
 
 void PercussionPitchRuler::leaveEvent(QEvent*)

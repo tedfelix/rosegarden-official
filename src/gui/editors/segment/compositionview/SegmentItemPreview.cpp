@@ -22,8 +22,6 @@
 #include "base/Segment.h"
 #include <QPainter>
 #include <QRect>
-#include <QMatrix>
-
 
 namespace Rosegarden
 {

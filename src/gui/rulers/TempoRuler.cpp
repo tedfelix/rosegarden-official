@@ -406,7 +406,11 @@ TempoRuler::wheelEvent(QWheelEvent */* e */)
 {}
 
 void
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+TempoRuler::enterEvent(QEnterEvent *)
+#else
 TempoRuler::enterEvent(QEvent *)
+#endif
 {
     TextFloat::getTextFloat()->attach(this);
     setMouseTracking(true);

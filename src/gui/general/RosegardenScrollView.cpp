@@ -24,7 +24,6 @@
 
 #include <QApplication>
 #include <QCursor>
-#include <QDesktopWidget>
 #include <QMouseEvent>
 #include <QRect>
 #include <QScrollBar>
