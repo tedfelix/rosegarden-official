@@ -131,6 +131,8 @@ public:
     TrackParameterBox *getTrackParameterBox()
             { return m_trackParameterBox; }
 
+    void addTracks(unsigned int count, InstrumentId instrument, int position);
+
 public slots:
     void slotEditSegment(Segment*);
     void slotEditSegmentNotation(Segment*);
@@ -179,8 +181,6 @@ public slots:
     void slotShowPreviews(bool);
 
     void slotShowSegmentLabels(bool);
-
-    void slotAddTracks(unsigned int count, InstrumentId instrument, int position);
 
     void slotDeleteTracks(std::vector<TrackId> tracks);
 

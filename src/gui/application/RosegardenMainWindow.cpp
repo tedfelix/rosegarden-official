@@ -3653,54 +3653,66 @@ RosegardenMainWindow::slotAddTrack()
     int pos = -1;
     if (track) pos = track->getPosition() + 1;
 
-    m_view->slotAddTracks(1, id, pos);
+    m_view->addTracks(1, id, pos);
 }
 
 void
 RosegardenMainWindow::slotAddTracks()
 {
     if (!m_view)
-        return ;
+        return;
 
-    // default to the base number - might not actually exist though
-    //
-    InstrumentId id = MidiInstrumentBase;
+    // ??? Move all of this into AddTracksDialog in preparation for doing
+    //     something more flexible and useful.
 
-    // Get the first Internal/MIDI instrument
-    //
-    DeviceList *devices = m_doc->getStudio().getDevices();
-    bool have = false;
+    // Launch the Add Tracks dialog.
 
-    for (DeviceList::iterator it = devices->begin();
-            it != devices->end() && !have; ++it) {
-
-        if ((*it)->getType() != Device::Midi)
-            continue;
-
-        InstrumentList instruments = (*it)->getAllInstruments();
-        for (InstrumentList::iterator iit = instruments.begin();
-                iit != instruments.end(); ++iit) {
-
-            if ((*iit)->getId() >= MidiInstrumentBase) {
-                id = (*iit)->getId();
-                have = true;
-                break;
-            }
-        }
-    }
-
-    Composition &comp = m_doc->getComposition();
-    TrackId trackId = comp.getSelectedTrack();
-    Track *track = comp.getTrackById(trackId);
+    const Composition &comp = m_doc->getComposition();
+    const Track *track = comp.getTrackById(comp.getSelectedTrack());
 
     int pos = 0;
-    if (track) pos = track->getPosition();
+    if (track)
+        pos = track->getPosition();
 
     AddTracksDialog dialog(this, pos);
 
+    // Add the Tracks.
+
     if (dialog.exec() == QDialog::Accepted) {
-        m_view->slotAddTracks(dialog.getTracks(), id, 
-                              dialog.getInsertPosition());
+        // default to the base number
+        // ??? This might not actually exist.  If not, perhaps we should
+        //     let the user know that they need to add a Device first.
+        InstrumentId id = MidiInstrumentBase;
+
+        // Get the first MIDI Instrument.
+
+        const DeviceList &devices = *(m_doc->getStudio().getDevices());
+
+        // For each Device
+        for (const Device *device : devices) {
+
+            // Not a MIDI device?  Try the next.
+            if (device->getType() != Device::Midi)
+                continue;
+
+            InstrumentList instruments = device->getAllInstruments();
+            if (instruments.empty())
+                continue;
+
+            // Just check the first one to make sure it is legit.
+            Instrument *instrument = instruments[0];
+            if (!instrument)
+                continue;
+
+            if (instrument->getId() >= MidiInstrumentBase) {
+                id = instrument->getId();
+                break;
+            }
+        }
+
+        m_view->addTracks(dialog.getTracks(),
+                          id,
+                          dialog.getInsertPosition());
     }
 }
 
