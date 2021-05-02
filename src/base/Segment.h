@@ -915,10 +915,11 @@ public:
 
     /// Mark a Segment
     /**
-     * Used by NotationView::slotAddLayer() and NotationView::slotMagicLayer().
+     * Used by NotationView::slotAddLayer() and
+     * NotationView::slotNewLayerFromSelection().
      *
      * This allows a Segment to be passed amongst the various steps of the
-     * add layer and "magic layer" (new layer from selection) processes.
+     * "add layer" and "new layer from selection" processes.
      *
      * Only one Segment can have a given marking. setMarking() enforces this.
      *

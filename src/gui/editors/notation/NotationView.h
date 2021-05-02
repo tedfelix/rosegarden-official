@@ -379,7 +379,7 @@ protected slots:
     void slotCycleSlashes();
 
     void slotAddLayer();
-    void slotMagicLayer();
+    void slotNewLayerFromSelection();
 
     void slotConfigure() override;
 

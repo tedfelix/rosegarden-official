@@ -626,7 +626,7 @@ NotationView::setupActions()
 
     // "layout" submenu 
     createAction("add_layer", SLOT(slotAddLayer()));
-    createAction("magic_layer", SLOT(slotMagicLayer()));
+    createAction("new_layer_from_selection", SLOT(slotNewLayerFromSelection()));
     createAction("linear_mode", SLOT(slotLinearMode()));
     createAction("continuous_page_mode", SLOT(slotContinuousPageMode()));
     createAction("multi_page_mode", SLOT(slotMultiPageMode()));
@@ -5217,7 +5217,7 @@ NotationView::slotAddLayer()
 }
 
 void
-NotationView::slotMagicLayer()
+NotationView::slotNewLayerFromSelection()
 {
     EventSelection *selection = getSelection();
     if (!selection) return;
