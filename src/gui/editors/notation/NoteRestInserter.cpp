@@ -126,7 +126,9 @@ NoteRestInserter::NoteRestInserter(NotationWidget* widget) :
     m_isaRestInserter(false),
     m_wheelIndex(0),
     m_processingWheelTurned(false),
-    m_ready(false)
+    m_ready(false),
+    m_modifiersTimer(new QTimer(this)),
+    m_lastNotationMouseEventIsValid(false)
 {
     QIcon icon;
 
@@ -180,6 +182,12 @@ NoteRestInserter::NoteRestInserter(NotationWidget* widget) :
 
     // Setup wheelIndex accordingly to m_noteType and m_noteDots
     synchronizeWheel();
+    
+    // Setup a timer to poll the modifier keys when mouse is motionless
+    m_modifiersTimer->setSingleShot(true);
+    m_modifiersTimer->setInterval(200);     // 200 ms
+    connect(m_modifiersTimer, &QTimer::timeout,
+            this, &NoteRestInserter::slotLookAtModifiers);
 }
 
 NoteRestInserter::NoteRestInserter(QString rcFileName, QString menuName,
@@ -196,7 +204,9 @@ NoteRestInserter::NoteRestInserter(QString rcFileName, QString menuName,
     m_isaRestInserter(false),
     m_wheelIndex(0),
     m_processingWheelTurned(false),
-    m_ready(false)
+    m_ready(false),
+    m_modifiersTimer(new QTimer(this)),
+    m_lastNotationMouseEventIsValid(false)
 {
     //connect(m_widget, SIGNAL(changeAccidental(Accidental, bool)),
     //        this, SLOT(slotSetAccidental(Accidental, bool)));
@@ -210,6 +220,12 @@ NoteRestInserter::NoteRestInserter(QString rcFileName, QString menuName,
 
     // Setup wheelIndex accordingly to m_noteType and m_noteDots
     synchronizeWheel();
+    
+    // Setup a timer to poll the modifier keys when mouse is motionless
+    m_modifiersTimer->setSingleShot(true);
+    m_modifiersTimer->setInterval(200);     // 200 ms
+    connect(m_modifiersTimer, &QTimer::timeout,
+            this, &NoteRestInserter::slotLookAtModifiers);
 }
 
 NoteRestInserter::~NoteRestInserter()
@@ -228,6 +244,7 @@ void NoteRestInserter::ready()
     if (m_alwaysPreview) {
         setCursorShape();
         m_widget->getView()->setMouseTracking(true);
+        m_lastNotationMouseEventIsValid = false;
     } else {
         m_widget->setCanvasCursor(Qt::CrossCursor);
     }
@@ -280,7 +297,11 @@ FollowMode
 NoteRestInserter::handleMouseMove(const NotationMouseEvent *e)
 {
     if (m_alwaysPreview) { 
+        m_modifiersTimer->stop();  // Stop the timer if mouse moved
         computeLocationAndPreview(e, (e->buttons & Qt::LeftButton));
+        m_lastNotationMouseEvent = *e;              // Memorize
+        m_lastNotationMouseEventIsValid = true;     // current position
+        m_modifiersTimer->start();          // Then start the timer again
     } else {
         if (m_clickHappened) {
             showPreview(false);
@@ -289,15 +310,35 @@ NoteRestInserter::handleMouseMove(const NotationMouseEvent *e)
     return NO_FOLLOW;
 }
 
+void
+NoteRestInserter::slotLookAtModifiers()
+{
+    Qt::KeyboardModifiers modifiers = QApplication::queryKeyboardModifiers();
+    Qt::KeyboardModifiers lastModifiers = m_lastNotationMouseEvent.modifiers;
+    
+    // If control or shift modifier changed:
+    if ((modifiers ^ lastModifiers) 
+            | Qt::ControlModifier | Qt::ShiftModifier) {
+                 
+        // Then refresh the last NotationMouseEvent
+        m_lastNotationMouseEvent.modifiers = modifiers;
+    
+        // and emulate a mouse move 
+        handleMouseMove(&m_lastNotationMouseEvent);
+    
+    } else {
+        
+        // Else restart the timer
+        m_modifiersTimer->start();
+    }
+}
+
 Accidental
 NoteRestInserter::getAccidentalFromModifierKeys(Qt::KeyboardModifiers modifiers)
 {
     Accidental accidental = Accidentals::NoAccidental;
 
     if (!m_quickEdit) return accidental;
-    
-//     Qt::KeyboardModifiers modifiers;
-//     modifiers = QApplication::queryKeyboardModifiers();
     
     // Use Maj or Ctrl keys to add sharp or flat on the fly
     // Use Maj + Ctrl to add natural  
@@ -1076,6 +1117,7 @@ void NoteRestInserter::showPreview(bool play)
 
 void NoteRestInserter::clearPreview()
 {
+    m_modifiersTimer->stop();   // Stop timer if preview removed
     if (m_scene) {
         m_scene->clearPreviewNote(m_clickStaff);
     }

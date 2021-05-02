@@ -260,6 +260,9 @@ signals:
      */
     void hoveredOverAbsoluteTimeChanged(unsigned int time);
 
+public slots:
+    void slotMouseLeavesView(); 
+
 protected slots:
     void slotCommandExecuted();
 
@@ -371,6 +374,8 @@ private:
     bool m_showRepeated;   // Repeated segments are visible
     bool m_editRepeated;   // Direct edition of repeated segments is allowed
     bool m_haveInittedCurrentStaff;
+
+    NotationStaff * m_previewNoteStaff;  // Remember where the preview note was
 
     // Remember current labels of tracks
     std::map<int, std::string> m_trackLabels;

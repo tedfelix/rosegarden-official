@@ -87,7 +87,8 @@ NotationScene::NotationScene() :
     m_sceneIsEmpty(false),
     m_showRepeated(false),
     m_editRepeated(false),
-    m_haveInittedCurrentStaff(false)
+    m_haveInittedCurrentStaff(false),
+    m_previewNoteStaff(nullptr)
 {
     QString prefix(QString("NotationScene%1::").arg(instanceCount++));
     m_properties.reset(new NotationProperties(qstrtostr(prefix)));
@@ -873,6 +874,12 @@ NotationScene::setupMouseEvent(QPointF scenePos, Qt::MouseButtons buttons,
                    << ", key = " << nme.key.getName()
                    << ", time = " << nme.time
                    << ", height = " << nme.height;*/
+}
+
+void
+NotationScene::slotMouseLeavesView()
+{
+    clearPreviewNote(m_previewNoteStaff);
 }
 
 void
@@ -2001,6 +2008,8 @@ NotationScene::showPreviewNote(NotationStaff *staff, double layoutX,
     if (staff) {
         staff->showPreviewNote(layoutX, height, note, grace,
                                accidental, cautious, color);
+        m_previewNoteStaff = staff;
+
         if (play) playNote(staff->getSegment(), pitch, velocity);
     }
 }
@@ -2010,6 +2019,7 @@ NotationScene::clearPreviewNote(NotationStaff *staff)
 {
     if (staff) {
         staff->clearPreviewNote();
+        m_previewNoteStaff = nullptr;
     }
 }
 

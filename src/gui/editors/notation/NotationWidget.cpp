@@ -463,6 +463,9 @@ NotationWidget::setSegments(RosegardenDocument *document,
 
     m_hpanner->setScene(m_scene);
     m_hpanner->fitInView(m_scene->sceneRect(), Qt::KeepAspectRatio);
+    
+    connect(m_view, &Panned::mouseLeaves,
+            m_scene, &NotationScene::slotMouseLeavesView);
 
     // clean these up if they're left over from a previous run of setSegments
     if (m_topStandardRuler) delete m_topStandardRuler;
