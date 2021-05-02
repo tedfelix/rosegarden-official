@@ -22,8 +22,12 @@
 #include "base/Composition.h"
 #include "misc/ConfigGroups.h"
 #include "misc/Debug.h"
+#include "base/Device.h"
+#include "base/Instrument.h"
 #include "document/RosegardenDocument.h"
+#include "gui/application/RosegardenMainViewWidget.h"
 #include "gui/application/RosegardenMainWindow.h"
+#include "base/Studio.h"
 #include "base/Track.h"
 
 #include <QComboBox>
@@ -144,7 +148,45 @@ AddTracksDialog::getInsertPosition()
 
 void AddTracksDialog::accept()
 {
-    RG_DEBUG << "accept()";
+    //RG_DEBUG << "accept()";
+
+    // default to the base number
+    // ??? This might not actually exist.  If not, perhaps we should
+    //     let the user know that they need to add a Device first.
+    InstrumentId id = MidiInstrumentBase;
+
+    // Get the first MIDI Instrument.
+
+    const DeviceList &devices =
+            *(RosegardenMainWindow::self()->getDocument()->getStudio().getDevices());
+
+    // For each Device
+    for (const Device *device : devices) {
+
+        // Not a MIDI device?  Try the next.
+        if (device->getType() != Device::Midi)
+            continue;
+
+        InstrumentList instruments = device->getAllInstruments();
+        if (instruments.empty())
+            continue;
+
+        // Just check the first one to make sure it is legit.
+        Instrument *instrument = instruments[0];
+        if (!instrument)
+            continue;
+
+        if (instrument->getId() >= MidiInstrumentBase) {
+            id = instrument->getId();
+            break;
+        }
+    }
+
+    // Add the tracks.
+
+    RosegardenMainWindow::self()->getView()->addTracks(
+            getTracks(), id, getInsertPosition());
+
     QDialog::accept();
 }
 

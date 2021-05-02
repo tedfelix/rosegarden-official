@@ -3659,54 +3659,8 @@ RosegardenMainWindow::slotAddTrack()
 void
 RosegardenMainWindow::slotAddTracks()
 {
-    if (!m_view)
-        return;
-
-    // ??? Move all of this into AddTracksDialog in preparation for doing
-    //     something more flexible and useful.
-
-    // Launch the Add Tracks dialog.
-
     AddTracksDialog dialog(this);
-
-    // Add the Tracks.
-
-    if (dialog.exec() == QDialog::Accepted) {
-        // default to the base number
-        // ??? This might not actually exist.  If not, perhaps we should
-        //     let the user know that they need to add a Device first.
-        InstrumentId id = MidiInstrumentBase;
-
-        // Get the first MIDI Instrument.
-
-        const DeviceList &devices = *(m_doc->getStudio().getDevices());
-
-        // For each Device
-        for (const Device *device : devices) {
-
-            // Not a MIDI device?  Try the next.
-            if (device->getType() != Device::Midi)
-                continue;
-
-            InstrumentList instruments = device->getAllInstruments();
-            if (instruments.empty())
-                continue;
-
-            // Just check the first one to make sure it is legit.
-            Instrument *instrument = instruments[0];
-            if (!instrument)
-                continue;
-
-            if (instrument->getId() >= MidiInstrumentBase) {
-                id = instrument->getId();
-                break;
-            }
-        }
-
-        m_view->addTracks(dialog.getTracks(),
-                          id,
-                          dialog.getInsertPosition());
-    }
+    dialog.exec();
 }
 
 void
