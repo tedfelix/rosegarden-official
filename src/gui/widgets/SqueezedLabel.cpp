@@ -20,8 +20,11 @@
 #include <QClipboard>
 #include <QApplication>
 #include <QMimeData>
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
 #include <QScreen>
-
+#else
+#include <QDesktopWidget>
+#endif
 
 namespace Rosegarden
 {

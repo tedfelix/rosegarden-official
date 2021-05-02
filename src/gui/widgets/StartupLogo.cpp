@@ -29,7 +29,11 @@
 #include <QPainter>
 #include <QFontMetrics>
 #include <QSettings>
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
 #include <QScreen>
+#else
+#include <QDesktopWidget>
+#endif
 
 #include <unistd.h>
 
@@ -50,9 +54,14 @@ StartupLogo::StartupLogo(QWidget * parent) :
     m_pixmap = IconLoader::loadPixmap("splash-devel");
 #endif
 
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
     QScreen* screen = QGuiApplication::screenAt(QPoint(0, 0));
     int dw = screen->availableGeometry().width();
     int dh = screen->availableGeometry().height();
+#else
+    int dw = QApplication::desktop()->width();
+    int dh = QApplication::desktop()->height();
+#endif
     setGeometry(dw / 2 - m_pixmap.width() / 2,
                 dh / 2 - m_pixmap.height() / 2,
                 m_pixmap.width(), m_pixmap.height());

@@ -32,7 +32,11 @@
 #include <QRect>
 #include <QSize>
 #include <QWidget>
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
 #include <QScreen>
+#else
+#include <QDesktopWidget>
+#endif
 
 
 namespace Rosegarden
@@ -102,9 +106,14 @@ void ScrollBox::setPageSize(const QSize& s)
     setFixedWidth(100);
     setFixedHeight(100);
 
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
     QScreen* screen = QGuiApplication::screenAt(QPoint(0, 0));
     int dw = screen->availableGeometry().width();
     int dh = screen->availableGeometry().height();
+#else
+    int dw = QApplication::desktop()->width();
+    int dh = QApplication::desktop()->height();
+#endif
     int maxWidth = int(dw * 0.75);
     int maxHeight = int(dh * 0.75);
 
