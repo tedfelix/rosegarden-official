@@ -32,13 +32,10 @@
 
 #include <QComboBox>
 #include <QDialogButtonBox>
-#include <QGroupBox>
-#include <QHBoxLayout>
+#include <QGridLayout>
 #include <QLabel>
 #include <QSettings>
 #include <QSpinBox>
-#include <QVBoxLayout>
-#include <QWidget>
 
 
 namespace
@@ -57,46 +54,37 @@ AddTracksDialog::AddTracksDialog(QWidget *parent) :
     setWindowTitle(tr("Add Tracks"));
     setModal(true);
 
-    QVBoxLayout *vBoxLayout = new QVBoxLayout;
-    setLayout(vBoxLayout);
+    QGridLayout *layout = new QGridLayout(this);
+    layout->setVerticalSpacing(5);
 
-    QGroupBox *gbox =
-            new QGroupBox(tr("How many tracks do you want to add?"), this);
-
-    QVBoxLayout *gboxLayout = new QVBoxLayout;
-    gbox->setLayout(gboxLayout);
-
-    vBoxLayout->addWidget(gbox);
+    // Number of Tracks
+    layout->addWidget(new QLabel(tr("Number of Tracks")), 0, 0);
 
     m_numberOfTracks = new QSpinBox();
     m_numberOfTracks->setMinimum(1);
     m_numberOfTracks->setMaximum(256);
     m_numberOfTracks->setValue(1);
-    gboxLayout->addWidget(m_numberOfTracks);
+    layout->addWidget(m_numberOfTracks, 0, 1);
 
-    QWidget *posBox = new QWidget(this);
-    gboxLayout->addWidget(posBox);
+    // Location
+    layout->addWidget(new QLabel(tr("Location")), 1, 0);
 
-    QHBoxLayout *posBoxLayout = new QHBoxLayout;
-    posBox->setLayout(posBoxLayout);
-
-    posBoxLayout->addWidget(new QLabel(tr("Location")));
-
-    m_location = new QComboBox(posBox);
+    m_location = new QComboBox(this);
     m_location->addItem(tr("At the top"));
     m_location->addItem(tr("Above the current selected track"));
     m_location->addItem(tr("Below the current selected track"));
     m_location->addItem(tr("At the bottom"));
-
-    QString biggest(tr("Above the current selected track"));
-    m_location->setMinimumContentsLength(biggest.size());
 
     QSettings settings;
     settings.beginGroup(AddTracksDialogGroup);
     m_location->setCurrentIndex(
             settings.value("Location", 2).toUInt());
 
-    posBoxLayout->addWidget(m_location);
+    layout->addWidget(m_location, 1, 1);
+
+    // Spacer
+
+    layout->setRowMinimumHeight(2, 10);
 
     // Button Box
 
@@ -106,7 +94,7 @@ AddTracksDialog::AddTracksDialog(QWidget *parent) :
     connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
     connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 
-    vBoxLayout->addWidget(buttonBox);
+    layout->addWidget(buttonBox, 3, 0, 1, 2);
 }
 
 int
