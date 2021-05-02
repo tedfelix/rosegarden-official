@@ -37,7 +37,6 @@
 #include "rosegarden-version.h"
 
 #include <QSettings>
-#include <QDesktopWidget>
 #include <QMessageBox>
 #include <QDir>
 #include <QFile>

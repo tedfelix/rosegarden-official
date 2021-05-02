@@ -24,6 +24,9 @@
 #include "base/MidiDevice.h"
 
 #include <QMutex>
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+#include <QRecursiveMutex>
+#endif
 #include <QObject>
 #include <QString>
 
@@ -534,7 +537,11 @@ private:
      */
     bool m_isEndOfCompReached;
     
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    QRecursiveMutex m_mutex;
+#else
     QMutex m_mutex;
+#endif
     QMutex m_transportRequestMutex;
     QMutex m_asyncQueueMutex;
 };
