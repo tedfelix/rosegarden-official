@@ -24,25 +24,28 @@ class QWidget;
 class QSpinBox;
 class QComboBox;
 
+
 namespace Rosegarden
 {
+
 
 class AddTracksDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    AddTracksDialog(QWidget *parent, int currentTrack = -1);
+    AddTracksDialog(QWidget *parent);
     
     int getTracks();
     int getInsertPosition();
 
-protected:
-    int        m_currentTrack;
-    QSpinBox  *m_count;
+public slots:
+    virtual void accept() override;
+
+private:
+    QSpinBox *m_count;
     QComboBox *m_position;
 };
-
 
 
 }

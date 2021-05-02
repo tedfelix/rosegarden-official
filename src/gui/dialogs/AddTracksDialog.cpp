@@ -15,29 +15,34 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[AddTracksDialog]"
 
 #include "AddTracksDialog.h"
 
+#include "base/Composition.h"
 #include "misc/ConfigGroups.h"
+#include "misc/Debug.h"
+#include "document/RosegardenDocument.h"
+#include "gui/application/RosegardenMainWindow.h"
+#include "base/Track.h"
 
-#include <QDialog>
-#include <QDialogButtonBox>
-#include <QLabel>
-#include <QSpinBox>
 #include <QComboBox>
-#include <QWidget>
-#include <QVBoxLayout>
-#include <QHBoxLayout>
-#include <QSettings>
+#include <QDialogButtonBox>
 #include <QGroupBox>
+#include <QHBoxLayout>
+#include <QLabel>
+#include <QSettings>
+#include <QSpinBox>
+#include <QVBoxLayout>
+#include <QWidget>
 
 
 namespace Rosegarden
 {
 
-AddTracksDialog::AddTracksDialog(QWidget *parent, int currentTrack) :
-    QDialog(parent),
-    m_currentTrack(currentTrack)
+
+AddTracksDialog::AddTracksDialog(QWidget *parent) :
+    QDialog(parent)
 {
     setModal(true);
     setWindowTitle(tr("Add Tracks"));
@@ -45,8 +50,6 @@ AddTracksDialog::AddTracksDialog(QWidget *parent, int currentTrack) :
     QWidget *vBox = new QWidget(this);
     QVBoxLayout *vBoxLayout = new QVBoxLayout;
     setLayout(vBoxLayout);
-
-   // vBoxLayout->addWidget(new QLabel(tr("How many tracks do you want to add?")));
 
     QGroupBox *gbox = new QGroupBox(tr("How many tracks do you want to add?"), vBox);
     vBoxLayout->addWidget(gbox);
@@ -80,9 +83,11 @@ AddTracksDialog::AddTracksDialog(QWidget *parent, int currentTrack) :
 
     QSettings settings;
     settings.beginGroup(GeneralOptionsConfigGroup);
+    m_position->setCurrentIndex(
+            settings.value("lastaddtracksposition", 2).toUInt());
 
-    m_position->setCurrentIndex(settings.value("lastaddtracksposition", 2).toUInt());
-    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+    QDialogButtonBox *buttonBox =
+            new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
     vBoxLayout->addWidget(buttonBox);
 
     connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
@@ -100,6 +105,14 @@ AddTracksDialog::getTracks()
 int
 AddTracksDialog::getInsertPosition()
 {
+    const Composition &comp =
+            RosegardenMainWindow::self()->getDocument()->getComposition();
+    const Track *track = comp.getTrackById(comp.getSelectedTrack());
+
+    int selectedTrackPosition = 0;
+    if (track)
+        selectedTrackPosition = track->getPosition();
+
     int opt = m_position->currentIndex();
 
     QSettings settings;
@@ -114,10 +127,10 @@ AddTracksDialog::getInsertPosition()
         pos = 0;
         break;
     case 1: // above current track
-        pos = m_currentTrack;
+        pos = selectedTrackPosition;
         break;
     case 2: // below current track
-        pos = m_currentTrack + 1;
+        pos = selectedTrackPosition + 1;
         break;
     case 3: // at bottom
         pos = -1;
@@ -128,5 +141,12 @@ AddTracksDialog::getInsertPosition()
 
     return pos;
 }
+
+void AddTracksDialog::accept()
+{
+    RG_DEBUG << "accept()";
+    QDialog::accept();
+}
+
 
 }

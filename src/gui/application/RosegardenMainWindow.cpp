@@ -3667,14 +3667,7 @@ RosegardenMainWindow::slotAddTracks()
 
     // Launch the Add Tracks dialog.
 
-    const Composition &comp = m_doc->getComposition();
-    const Track *track = comp.getTrackById(comp.getSelectedTrack());
-
-    int pos = 0;
-    if (track)
-        pos = track->getPosition();
-
-    AddTracksDialog dialog(this, pos);
+    AddTracksDialog dialog(this);
 
     // Add the Tracks.
 
