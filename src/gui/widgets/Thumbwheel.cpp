@@ -283,9 +283,9 @@ Thumbwheel::mouseMoveEvent(QMouseEvent *e)
     if (!m_clicked) return;
     int dist = 0;
     if (m_orientation == Qt::Horizontal) {
-        dist = e->x() - m_clickPos.x();
+        dist = e->pos().x() - m_clickPos.x();
     } else {
-        dist = e->y() - m_clickPos.y();
+        dist = e->pos().y() - m_clickPos.y();
     }
 
     float rotation = m_clickRotation + (m_speed * dist) / 100;

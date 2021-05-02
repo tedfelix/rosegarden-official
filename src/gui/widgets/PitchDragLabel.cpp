@@ -83,7 +83,7 @@ void
 PitchDragLabel::mousePressEvent(QMouseEvent *e)
 {
     if (e->button() == Qt::LeftButton) {
-        m_clickedY = e->y();
+        m_clickedY = e->pos().y();
         m_clickedPitch = m_pitch;
         m_clicked = true;
         emit preview(m_pitch);
@@ -95,7 +95,7 @@ PitchDragLabel::mouseMoveEvent(QMouseEvent *e)
 {
     if (m_clicked) {
 
-        int y = e->y();
+        int y = e->pos().y();
         int diff = y - m_clickedY;
         int pitchDiff = diff * 4 / m_npf->getLineSpacing();
 

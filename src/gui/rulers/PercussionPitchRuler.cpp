@@ -165,11 +165,11 @@ void PercussionPitchRuler::mouseMoveEvent(QMouseEvent* e)
 {
     if (m_mouseDown)
         if (m_selecting)
-            emit keySelected(e->y(), true);
+            emit keySelected(e->pos().y(), true);
         else
-            emit keyPressed(e->y(), true); // we're swooshing
+            emit keyPressed(e->pos().y(), true); // we're swooshing
     else
-        emit hoveredOverKeyChanged(e->y());
+        emit hoveredOverKeyChanged(e->pos().y());
 }
 
 void PercussionPitchRuler::mousePressEvent(QMouseEvent *e)
@@ -180,9 +180,9 @@ void PercussionPitchRuler::mousePressEvent(QMouseEvent *e)
         m_selecting = (e->modifiers() & Qt::ShiftModifier);
 
         if (m_selecting)
-            emit keySelected(e->y(), false);
+            emit keySelected(e->pos().y(), false);
         else
-            emit keyPressed(e->y(), false);
+            emit keyPressed(e->pos().y(), false);
     }
 }
 
@@ -191,7 +191,7 @@ void PercussionPitchRuler::mouseReleaseEvent(QMouseEvent *e)
     if (e->button() == Qt::LeftButton) {
         m_mouseDown = false;
         m_selecting = false;
-        emit keyReleased(e->y(), false);
+        emit keyReleased(e->pos().y(), false);
     }
 }
 

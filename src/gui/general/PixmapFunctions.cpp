@@ -278,7 +278,7 @@ PixmapFunctions::drawPixmapMasked(QPixmap &dest, QBitmap &destMask,
     }
 
     dest = QPixmap::fromImage(idp);
-    destMask = QPixmap::fromImage(idm);
+    destMask = QBitmap::fromImage(idm);
 }
 
 }

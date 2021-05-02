@@ -419,7 +419,12 @@ int main(int argc, char *argv[])
         }
     }
 
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    // High-DPI scaling is always enabled. This attribute no longer
+    // has any effect.
+#else
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+#endif
 
     RosegardenApplication theApp(argc, argv);
 
@@ -458,12 +463,22 @@ int main(int argc, char *argv[])
 #endif
 
     RG_DEBUG << "System Locale:" << QLocale::system().name();
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    RG_DEBUG << "Qt translations path: " << QLibraryInfo::path(QLibraryInfo::TranslationsPath);
+#else
     RG_DEBUG << "Qt translations path: " << QLibraryInfo::location(QLibraryInfo::TranslationsPath);
+#endif
 
     QTranslator qtTranslator;
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    bool qtTranslationsLoaded = 
+      qtTranslator.load("qt_" + QLocale::system().name(),
+            QLibraryInfo::path(QLibraryInfo::TranslationsPath));
+#else
     bool qtTranslationsLoaded = 
       qtTranslator.load("qt_" + QLocale::system().name(),
             QLibraryInfo::location(QLibraryInfo::TranslationsPath));
+#endif
     if (qtTranslationsLoaded) {
         theApp.installTranslator(&qtTranslator);
         RG_DEBUG << "Qt translations loaded successfully.";

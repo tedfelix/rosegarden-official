@@ -514,7 +514,7 @@ NotationConfigurationPage::NotationConfigurationPage(QWidget *parent) :
     connect(m_textFont, &FontRequester::fontChanged, this, &NotationConfigurationPage::slotModified);
     QFont textFont = defaultTextFont;
     QVariant fv = settings.value("textfont", textFont);
-    if (fv.canConvert(QVariant::Font)) textFont = fv.value<QFont>();
+    if (fv.canConvert<QFont>()) textFont = fv.value<QFont>();
     m_textFont->setFont(textFont);
     layout->addWidget(m_textFont, row, 1, 1, 3);
     ++row;
@@ -525,7 +525,7 @@ NotationConfigurationPage::NotationConfigurationPage(QWidget *parent) :
     connect(m_sansFont, &FontRequester::fontChanged, this, &NotationConfigurationPage::slotModified);
     QFont sansFont = defaultTextFont;
     fv = settings.value("sansfont", sansFont);
-    if (fv.canConvert(QVariant::Font)) sansFont = fv.value<QFont>();
+    if (fv.canConvert<QFont>()) sansFont = fv.value<QFont>();
     m_sansFont->setFont(sansFont);
     layout->addWidget(m_sansFont, row, 1, 1, 3);
     ++row;

@@ -1466,7 +1466,7 @@ NotationScene::positionStaffs()
 
         QVariant fv = settings.value("textfont", defaultFont);
         QFont font(defaultFont);
-        if (fv.canConvert(QVariant::Font)) font = fv.value<QFont>();
+        if (fv.canConvert<QFont>()) font = fv.value<QFont>();
 
         font.setPixelSize(m_notePixmapFactory->getSize() * 5);
         QFontMetrics metrics(font);
