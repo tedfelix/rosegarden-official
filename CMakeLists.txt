@@ -116,7 +116,7 @@ if (USE_QT6)
   set(QT_QTNETWORK_LIBRARY Qt6::Network)
   set(QT_QTTEST_LIBRARY Qt6::Test)
   
-  set(QT_RCC_EXECUTABLE rcc)
+  set(QT_RCC_EXECUTABLE Qt::rcc)
 else()
   # Qt5 is required.
   find_package(Qt5 "5.1.0" REQUIRED COMPONENTS Core Gui Widgets Xml Network PrintSupport Test)
