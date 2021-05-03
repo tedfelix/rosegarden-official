@@ -97,46 +97,45 @@ AddTracksDialog::AddTracksDialog(QWidget *parent) :
     layout->addWidget(buttonBox, 3, 0, 1, 2);
 }
 
+namespace
+{
+    int getSelectedTrackPosition()
+    {
+        const Composition &comp =
+                RosegardenMainWindow::self()->getDocument()->getComposition();
+        const Track *track = comp.getTrackById(comp.getSelectedTrack());
+
+        if (track)
+            return track->getPosition();
+
+        return 0;
+    }
+}
+
 int
 AddTracksDialog::getInsertPosition()
 {
-    const Composition &comp =
-            RosegardenMainWindow::self()->getDocument()->getComposition();
-    const Track *track = comp.getTrackById(comp.getSelectedTrack());
-
-    int selectedTrackPosition = 0;
-    if (track)
-        selectedTrackPosition = track->getPosition();
-
-    int opt = m_location->currentIndex();
-
-    QSettings settings;
-    settings.beginGroup(AddTracksDialogGroup);
-    settings.setValue("Location", opt);
-
-    int pos = 0;
-
-    switch (opt) {
-    case 0: // at top
-        pos = 0;
-        break;
-    case 1: // above current track
-        pos = selectedTrackPosition;
-        break;
-    case 2: // below current track
-        pos = selectedTrackPosition + 1;
-        break;
-    case 3: // at bottom
-        pos = -1;
-        break;
+    switch (m_location->currentIndex()) {
+    case 0: // at the top
+        return 0;
+    case 1: // above the current selected track
+        return getSelectedTrackPosition();
+    case 2: // below the current selected track
+        return getSelectedTrackPosition() + 1;
+    case 3: // at the bottom
+        return -1;
     }
 
-    return pos;
+    return 0;
 }
 
 void AddTracksDialog::accept()
 {
     //RG_DEBUG << "accept()";
+
+    QSettings settings;
+    settings.beginGroup(AddTracksDialogGroup);
+    settings.setValue("Location", m_location->currentIndex());
 
     // default to the base number
     // ??? This might not actually exist.  If not, perhaps we should
@@ -172,6 +171,8 @@ void AddTracksDialog::accept()
 
     // Add the tracks.
 
+    // ??? Why is addTracks() in the view?  Shouldn't we go to the
+    //     Composition for this?
     RosegardenMainWindow::self()->getView()->addTracks(
             m_numberOfTracks->value(),
             id,
