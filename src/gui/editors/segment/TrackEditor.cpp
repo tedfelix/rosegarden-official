@@ -789,7 +789,11 @@ void TrackEditor::dropEvent(QDropEvent *e)
         return;
     }
 
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    QPoint cpoint = m_compositionView->mapFrom(this, e->position().toPoint());
+#else
     QPoint cpoint = m_compositionView->mapFrom(this, e->pos());
+#endif
 
     int trackPos = m_compositionView->grid().getYBin
         (cpoint.y() + m_compositionView->contentsY());
@@ -838,7 +842,11 @@ void TrackEditor::dropEvent(QDropEvent *e)
 
                 RG_DEBUG << "dropEvent() : dropping at track pos = " << trackPos
                          << ", time = " << time
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+                         << ", x = " << e->position().toPoint().x();
+#else
                          << ", x = " << e->pos().x();
+#endif
 
                 QString audioText;
                 QTextStream t(&audioText, QIODevice::ReadWrite);
@@ -910,7 +918,11 @@ void TrackEditor::dropEvent(QDropEvent *e)
                 
                 RG_DEBUG << "dropEvent() : dropping at track pos = " << trackPos
                          << ", time = " << time
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+                         << ", x = " << e->position().toPoint().x();
+#else
                          << ", x = " << e->pos().x();
+#endif
 
                 QString audioText;
                 QTextStream t(&audioText);
