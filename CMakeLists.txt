@@ -110,7 +110,7 @@ if (USE_QT6)
   find_package(Qt6 "6.0.0" REQUIRED COMPONENTS CoreTools Core GuiTools Gui WidgetsTools Widgets Xml Network PrintSupport Test Core5Compat)
   
   set(QT_QTCORE_LIBRARY Qt6::Core)
-  set(QT_QTCORE5COMAPT_LIBRARY Qt6::Core5Compat)
+  set(QT_QTCORE5COMPAT_LIBRARY Qt6::Core5Compat)
   set(QT_QTGUI_LIBRARY Qt6::Widgets Qt6::PrintSupport)
   set(QT_QTXML_LIBRARY Qt6::Xml)
   set(QT_QTNETWORK_LIBRARY Qt6::Network)

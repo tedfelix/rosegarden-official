@@ -66,13 +66,16 @@ AudioPreviewPainter::AudioPreviewPainter(CompositionModelImpl& model,
 int AudioPreviewPainter::tileWidth()
 {
     static int tw = -1;
+    // Cached value available?  Return it.
+    if (tw != -1)
+        return tw;
+
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
     QScreen* screen = QGuiApplication::screenAt(QPoint(0, 0));
-    int dw = screen->availableGeometry().width();
+    tw = screen->availableGeometry().width();
 #else
-    int dw = QApplication::desktop()->width();
+    tw = QApplication::desktop()->width();
 #endif
-    if (tw == -1) tw = dw;
     return tw;
 }
 
