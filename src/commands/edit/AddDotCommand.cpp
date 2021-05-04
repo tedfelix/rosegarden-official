@@ -22,6 +22,7 @@
 #include "base/NotationTypes.h"
 #include "base/SegmentNotationHelper.h"
 #include "base/Selection.h"
+#include "base/BaseProperties.h"
 #include "document/BasicSelectionCommand.h"
 #include <QString>
 
@@ -44,6 +45,12 @@ AddDotCommand::modifySegment()
             i != m_selection->getSegmentEvents().end(); ++i) {
 
         if ((*i)->isa(Note::EventType)) {
+
+            bool tiedNote = ((*i)->has(BaseProperties::TIED_FORWARD) ||
+                             (*i)->has(BaseProperties::TIED_BACKWARD));
+
+            // Never add dots to tied notes
+            if (tiedNote) continue;
 
             Note note = Note::getNearestNote
                         ((*i)->getNotationDuration());
