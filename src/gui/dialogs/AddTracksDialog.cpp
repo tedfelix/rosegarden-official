@@ -56,18 +56,21 @@ AddTracksDialog::AddTracksDialog(QWidget *parent) :
 
     QGridLayout *layout = new QGridLayout(this);
     layout->setVerticalSpacing(5);
+    int row = 0;
 
     // Number of Tracks
-    layout->addWidget(new QLabel(tr("Number of Tracks")), 0, 0);
+    layout->addWidget(new QLabel(tr("Number of Tracks")), row, 0);
 
     m_numberOfTracks = new QSpinBox();
     m_numberOfTracks->setMinimum(1);
     m_numberOfTracks->setMaximum(256);
     m_numberOfTracks->setValue(1);
-    layout->addWidget(m_numberOfTracks, 0, 1);
+    layout->addWidget(m_numberOfTracks, row, 1);
+
+    ++row;
 
     // Location
-    layout->addWidget(new QLabel(tr("Location")), 1, 0);
+    layout->addWidget(new QLabel(tr("Location")), row, 0);
 
     m_location = new QComboBox(this);
     m_location->addItem(tr("At the top"));
@@ -80,11 +83,25 @@ AddTracksDialog::AddTracksDialog(QWidget *parent) :
     m_location->setCurrentIndex(
             settings.value("Location", 2).toUInt());
 
-    layout->addWidget(m_location, 1, 1);
+    layout->addWidget(m_location, row, 1);
+
+    ++row;
+
+    // Device
+    layout->addWidget(new QLabel(tr("Device")), row, 0);
+
+    m_device = new QComboBox(this);
+    initDeviceComboBox();
+
+    layout->addWidget(m_device, row, 1);
+
+    ++row;
 
     // Spacer
 
-    layout->setRowMinimumHeight(2, 10);
+    layout->setRowMinimumHeight(row, 10);
+
+    ++row;
 
     // Button Box
 
@@ -94,7 +111,63 @@ AddTracksDialog::AddTracksDialog(QWidget *parent) :
     connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
     connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 
-    layout->addWidget(buttonBox, 3, 0, 1, 2);
+    layout->addWidget(buttonBox, row, 0, 1, 2);
+}
+
+namespace
+{
+    // Sort the devices in a logic way for the UI.
+    class DeviceLess {
+    public:
+        bool operator()(const Device *lhs, const Device *rhs)
+        {
+            if (lhs->getType() == rhs->getType())
+                return (lhs->getName() < rhs->getName());
+            if (getPriority(lhs) < getPriority(rhs))
+                return true;
+            return false;
+        }
+
+    private:
+        int getPriority(const Device *device)
+        {
+            switch (device->getType()) {
+            case Device::Midi:
+                return 1;
+            case Device::SoftSynth:
+                return 2;
+            case Device::Audio:
+                return 3;
+            default:
+                return 4;
+            }
+        }
+    };
+}
+
+void
+AddTracksDialog::initDeviceComboBox()
+{
+    const DeviceList &deviceList =
+            *(RosegardenMainWindow::self()->getDocument()->getStudio().getDevices());
+
+    // Sort them into this set.
+    std::set<const Device *, DeviceLess> deviceSet;
+
+    // For each output Device, add them to the set.
+    for (const Device *device : deviceList) {
+        // If this is an input device, skip it.
+        if (device->isInput())
+            continue;
+
+        deviceSet.insert(device);
+    }
+
+    // For each Device in the set, add them to the combobox.
+    for (const Device *device : deviceSet) {
+        m_device->addItem(QObject::tr(device->getName().c_str()));
+        m_deviceList.push_back(device);
+    }
 }
 
 namespace
@@ -131,43 +204,25 @@ AddTracksDialog::getInsertPosition()
 
 void AddTracksDialog::accept()
 {
-    //RG_DEBUG << "accept()";
-
     QSettings settings;
     settings.beginGroup(AddTracksDialogGroup);
     settings.setValue("Location", m_location->currentIndex());
 
-    // default to the base number
-    // ??? This might not actually exist.  If not, perhaps we should
-    //     let the user know that they need to add a Device first.
-    InstrumentId id = MidiInstrumentBase;
+    if (m_device->currentIndex() < 0)
+        return;
 
-    // Get the first MIDI Instrument.
+    if ((unsigned)m_device->currentIndex() >= m_deviceList.size())
+        return;
 
-    const DeviceList &devices =
-            *(RosegardenMainWindow::self()->getDocument()->getStudio().getDevices());
+    const Device *device = m_deviceList[m_device->currentIndex()];
 
-    // For each Device
-    for (const Device *device : devices) {
+    InstrumentList instrumentList = device->getPresentationInstruments();
+    if (instrumentList.empty())
+        return;
 
-        // Not a MIDI device?  Try the next.
-        if (device->getType() != Device::Midi)
-            continue;
-
-        InstrumentList instruments = device->getAllInstruments();
-        if (instruments.empty())
-            continue;
-
-        // Just check the first one to make sure it is legit.
-        Instrument *instrument = instruments[0];
-        if (!instrument)
-            continue;
-
-        if (instrument->getId() >= MidiInstrumentBase) {
-            id = instrument->getId();
-            break;
-        }
-    }
+    const Instrument *instrument = instrumentList[0];
+    if (!instrument)
+        return;
 
     // Add the tracks.
 
@@ -175,7 +230,7 @@ void AddTracksDialog::accept()
     //     Composition for this?
     RosegardenMainWindow::self()->getView()->addTracks(
             m_numberOfTracks->value(),
-            id,
+            instrument->getId(),
             getInsertPosition());
 
     QDialog::accept();

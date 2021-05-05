@@ -18,11 +18,15 @@
 #ifndef RG_ADDTRACKSDIALOG_H
 #define RG_ADDTRACKSDIALOG_H
 
+#include "base/Device.h"
+
 #include <QDialog>
 
 class QWidget;
 class QSpinBox;
 class QComboBox;
+
+#include <vector>
 
 
 namespace Rosegarden
@@ -41,9 +45,14 @@ public slots:
 
 private:
     QSpinBox *m_numberOfTracks;
-    QComboBox *m_location;
 
+    QComboBox *m_location;
     int getInsertPosition();
+
+    QComboBox *m_device;
+    void initDeviceComboBox();
+    std::vector<const Device *> m_deviceList;
+
 };
 
 
