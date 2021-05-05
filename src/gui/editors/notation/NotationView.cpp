@@ -1240,6 +1240,32 @@ NotationView::slotUpdateMenuStates()
             enterActionState("have_symbols_in_selection");
         }
 
+        // Special case - the AddDot command does nothing for tied
+        // notes so if the selection contains only tied notes we
+        // should disable the command
+        bool allTied = true;
+        EventSelection::eventcontainer &ec =
+            selection->getSegmentEvents();
+        for (EventSelection::eventcontainer::iterator i =
+                 ec.begin(); i != ec.end(); ++i) {
+            if ((*i)->isa(Note::EventType)) {
+                bool tiedNote = ((*i)->has(BaseProperties::TIED_FORWARD) ||
+                                 (*i)->has(BaseProperties::TIED_BACKWARD));
+                if (! tiedNote) {
+                    // found a note which is not tied
+                    allTied = false;
+                    break;
+                }
+            }
+        }
+        if (allTied) {
+            // all selected notes are tied
+            QAction *addDot = findAction("add_dot");
+            QAction *addDotNotation = findAction("add_notation_dot");
+            addDot->setEnabled(false);
+            addDotNotation->setEnabled(false);
+        }
+
     } else {
         //NOTATION_DEBUG << "Do not have a selection";
     }
