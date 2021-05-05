@@ -951,10 +951,12 @@ NotationScene::processKeyboardEvent(QKeyEvent * keyEvent)
         QPoint pos = m_widget->getView()->viewport()->mapFromGlobal(globalPos);
         QPointF scenePos = m_widget->getView()->mapToScene(pos);
 
-        // Create a NotationMouseEvent related to the QKeyEvent
+        // Create a NotationMouseEvent related to the QKeyEvent.
+        // Use queryKeyboardModifiers() rather than keyboardModifiers()
+        // to ensure the current value of modifiers is read.
         NotationMouseEvent nme;
         setupMouseEvent(scenePos, QApplication::mouseButtons(),
-                        QApplication::keyboardModifiers(), nme);
+                        QApplication::queryKeyboardModifiers(), nme);
 
         // Handle it as a mouse event
         emit mouseMoved(&nme);
