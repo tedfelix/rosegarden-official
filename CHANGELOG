@@ -1,3 +1,73 @@
+====== ROSEGARDEN 21.06 RELEASED ======
+
+The Rosegarden team is proud to announce the release of version 21.06
+of Rosegarden, a MIDI sequencer that features a rich understanding of
+music notation along with basic support for digital audio.
+
+  http://www.rosegardenmusic.com/
+
+Included in this release...
+
+===== Bug Fixes =====
+
+  * Event editor now selects the proper event at launch.  Bug #1588.
+    [cf7d654d4]
+  * Fix restore of channel mode (fixed or auto) on file read.
+    [010246e0a]
+  * File Merge dialog layout improvements.  Bug #1590.
+    [13f40bbef]
+  * Do not send Program Change for drum Instrument without banks.
+    [f27b4f854]
+  * Fix "Studio > Reset MIDI Network".  Now this sends channel setups
+    (BS/PC/CCs) to each Device.  [04ad97659]
+  * Fix overlapping bar numbers in rulers.  Bug #1580.
+    [26e60ef8e]
+  * Notation: Update cursor when switching layout mode.  Bug #1580.
+    [7664b6997]
+  * Notation: Fix inconsistencies when switching between layers and
+    staves using the red thumbwheel.
+  * Refresh the layout on resize.  Bug #1570.  [aa13ac83b]
+  * Limit the Panner to within the scene rectangle.  Bug #1570.
+    [9e8b0b13f]
+  * Fix focus issue after Ctrl+N.  [7bc2c957a]
+  * Notation: Fix "Segment > Add Layer" and "Segment > New Layer From
+    Selection" so that the new Segment's events are selected.
+  * Fix multiple issues with undo/redo when editing.
+  * Fix inconsistent editor title bars.  [28344f0c6]
+  * Fix multiple issues when resizing Segments.
+  * Export key signatures to MIDI file.  Bug #1456.  [8805d3f81]
+  * Fix crash in CC rulers using the velocity tool.  [443a3aacf]
+  * Fix linked segments not exporting to Lilypond.  Bug #1595.
+  * Improve Transport window position persistence.  [05f2e7345]
+  * Improve handling of multiple time signatures.
+  * Fix crash in notation when "View > Size" is changed.  Bug #1596.
+    [460d1bc42]
+  * Fix modifiers not appearing in Notation until the mouse moves.
+    Bug #1597.  [e814dcfbd]
+  * Fixed dots being added to tied notes.  Bug #1555.  [e9b8c293d]
+    [cf1d3dfed]
+
+===== New Features =====
+
+  * Clean Recent Files List in the preferences removes files that
+    aren't present on the filesystem from the recent files list.
+    [b616d42c7]
+  * Preferences: Add send BS/PC/CCs while looping.  [0d2d3a28c]
+  * Added Segment label to Notation editor.  [9ab1ff136]
+  * Matrix editor now preserves zoom factor and rulers for each
+    Segment in the .rg file.  Feature #486.
+  * Notation editor now preserves rulers for each Segment in the .rg
+    file.  Feature #486.
+
+===== Significant Code Cleanups =====
+
+  * Cleanup and preparation for Qt6.
+
+===== Additional Contributors =====
+
+  * Michael Stockinger (www.stockinger.org) - German Translation
+
+
 ====== ROSEGARDEN 20.12 (Altissimo) RELEASED ======
 
 The Rosegarden team is proud to announce the release of version 20.12
