@@ -47,6 +47,7 @@ class SegmentParameterBox;
 class Segment;
 class RosegardenDocument;
 class RosegardenParameterArea;
+class RosegardenMainWindow;
 class RealTime;
 class NotationView;
 class PitchTrackerView;
@@ -87,7 +88,7 @@ public:
                              InstrumentParameterBox*,
                              TrackParameterBox*,
                              RosegardenParameterArea* parameterArea,
-                             QWidget *parent = nullptr);
+                             RosegardenMainWindow *parent);
 
     /**
      * Destructor for the main view

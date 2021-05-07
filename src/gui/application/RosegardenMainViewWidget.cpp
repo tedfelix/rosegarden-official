@@ -118,7 +118,7 @@ RosegardenMainViewWidget::RosegardenMainViewWidget(bool showTrackLabels,
                                                    InstrumentParameterBox* instrumentParameterBox,
                                                    TrackParameterBox* trackParameterBox,
                                                    RosegardenParameterArea* parameterArea,
-                                                   QWidget *parent)
+                                                   RosegardenMainWindow *parent)
         : QWidget(parent),
         m_rulerScale(nullptr),
         m_trackEditor(nullptr),
@@ -182,10 +182,8 @@ RosegardenMainViewWidget::RosegardenMainViewWidget(bool showTrackLabels,
             &CompositionView::setPointerPosition,
             doc, &RosegardenDocument::slotSetPointerPosition);
 
-    connect(m_trackEditor,
-            SIGNAL(droppedDocument(QString)),
-            parent,
-            SLOT(slotOpenDroppedURL(QString)));
+    connect(m_trackEditor, &TrackEditor::droppedDocument,
+            parent, &RosegardenMainWindow::slotOpenDroppedURL);
 
     connect(m_trackEditor,
             &TrackEditor::droppedAudio,
