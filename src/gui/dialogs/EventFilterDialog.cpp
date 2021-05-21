@@ -206,15 +206,17 @@ EventFilterDialog::initDialog()
     m_noteDurationFromComboBox->setEditable(false);
     m_noteDurationFromComboBox->addItem(tr("longest"));
     noteFrameLayout->addWidget(m_noteDurationFromComboBox, 3, 2);
-    connect(m_noteDurationFromComboBox, SIGNAL(activated(int)),
-            SLOT(slotDurationFromChanged(int)));
+    connect(m_noteDurationFromComboBox,
+                static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
+            this, &EventFilterDialog::slotDurationFromChanged);
 
     m_noteDurationToComboBox = new QComboBox(noteFrame);
     m_noteDurationToComboBox->setEditable(false);
     m_noteDurationToComboBox->addItem(tr("longest"));
     noteFrameLayout->addWidget(m_noteDurationToComboBox, 3, 4);
-    connect(m_noteDurationToComboBox, SIGNAL(activated(int)),
-            SLOT(slotDurationToChanged(int)));
+    connect(m_noteDurationToComboBox,
+                static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
+            this, &EventFilterDialog::slotDurationToChanged);
 
     populateDurationCombos();
 

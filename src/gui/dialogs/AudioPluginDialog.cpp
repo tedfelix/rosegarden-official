@@ -158,11 +158,13 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
     pluginDonglesBoxLayout->addWidget(m_pluginId, Qt::AlignRight);
     m_pluginId->setToolTip(tr("Unique ID of plugin"));
 
-    connect(m_pluginList, SIGNAL(activated(int)),
-            this, SLOT(slotPluginSelected(int)));
+    connect(m_pluginList,
+                static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
+            this, &AudioPluginDialog::slotPluginSelected);
 
-    connect(m_pluginCategoryList, SIGNAL(activated(int)),
-            this, SLOT(slotCategorySelected(int)));
+    connect(m_pluginCategoryList,
+                static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
+            this, &AudioPluginDialog::slotCategorySelected);
 
     // the Copy/Paste/Default buttons
     QWidget *pluginButtonsBox = new QWidget(pluginSelectionBox);

@@ -38,14 +38,16 @@ namespace Rosegarden
 
 class Event;
 
-
+/// The Event Filter dialog.
 /**
+ * Launched by Edit > Filter Selection in the Matrix and Notation editors.
+ *
  * Creates a dialog box to allow the user to dial up various selection
  * criteria used for removing events from a selection.  It is up to the caller
  * to actually manipulate the selection.  After the dialog has been accepted,
  * its filterEvent() method can be used to decide whether a particular event
- * should continue to be selected.  See matrixview.cpp slotFilterSelection()
- * for an example of how to use this.
+ * should continue to be selected.  See MatrixView::slotFilterSelection()
+ * and NotationView::slotFilterSelection() for examples of how to use this.
  */
 class EventFilterDialog : public QDialog
 {

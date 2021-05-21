@@ -86,7 +86,9 @@ AudioConfigurationPage::AudioConfigurationPage(
                                  frame), row, 0);
 
     m_previewStyle = new QComboBox(frame);
-    connect(m_previewStyle, SIGNAL(activated(int)), this, SLOT(slotModified()));
+    connect(m_previewStyle,
+                static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
+            this, &AudioConfigurationPage::slotModified);
     m_previewStyle->addItem(tr("Linear - easier to see loud peaks"));
     m_previewStyle->addItem(tr("Meter scaling - easier to see quiet activity"));
     m_previewStyle->setCurrentIndex( settings.value("audiopreviewstyle", 1).toUInt() );
@@ -100,7 +102,9 @@ AudioConfigurationPage::AudioConfigurationPage(
 
     QLabel *label = new QLabel(tr("Record audio files as"), frame);
     m_audioRecFormat = new QComboBox(frame);
-    connect(m_audioRecFormat, SIGNAL(activated(int)), this, SLOT(slotModified()));
+    connect(m_audioRecFormat,
+                static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
+            this, &AudioConfigurationPage::slotModified);
     m_audioRecFormat->addItem(tr("16-bit PCM WAV format (smaller files)"));
     m_audioRecFormat->addItem(tr("32-bit float WAV format (higher quality)"));
     m_audioRecFormat->setCurrentIndex( settings.value("audiorecordfileformat", 1).toUInt() );

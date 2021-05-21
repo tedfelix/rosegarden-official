@@ -66,8 +66,9 @@ PitchTrackerConfigurationPage::PitchTrackerConfigurationPage(QWidget *parent) :
     layout->addWidget(new QLabel(tr("Tuning"), frame), row, 0);
 
     m_tuningMode = new QComboBox(frame);
-    connect(m_tuningMode, SIGNAL(activated(int)),
-            this, SLOT(slotModified()));
+    connect(m_tuningMode,
+                static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
+            this, &PitchTrackerConfigurationPage::slotModified);
     m_tuningMode->setEditable(false);
 
     slotPopulateTuningCombo(true);
@@ -109,8 +110,9 @@ PitchTrackerConfigurationPage::PitchTrackerConfigurationPage(QWidget *parent) :
     // TODO: Add input source combo
     layout->addWidget(new QLabel(tr("Method"), frame), row, 0);
     m_method = new QComboBox(frame);
-    connect(m_method, SIGNAL(activated(int)),
-            this, SLOT(slotModified()));
+    connect(m_method,
+                static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
+            this, &PitchTrackerConfigurationPage::slotModified);
     m_method->setEditable(false);
     const QVector<PitchDetector::Method> *pt_methods =
         PitchDetector::getMethods();

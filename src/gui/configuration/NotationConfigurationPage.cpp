@@ -79,7 +79,9 @@ NotationConfigurationPage::NotationConfigurationPage(QWidget *parent) :
     layout->addWidget(new QLabel(tr("Default layout mode"), frame), row, 0);
 
     m_layoutMode = new QComboBox(frame);
-    connect(m_layoutMode, SIGNAL(activated(int)), this, SLOT(slotModified()));
+    connect(m_layoutMode,
+                static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
+            this, &NotationConfigurationPage::slotModified);
     m_layoutMode->setEditable(false);
     m_layoutMode->addItem(tr("Linear layout"));
     m_layoutMode->addItem(tr("Continuous page layout"));
@@ -95,7 +97,9 @@ NotationConfigurationPage::NotationConfigurationPage(QWidget *parent) :
                                       frame), row, 0);
 
     m_showTrackHeaders = new QComboBox(frame);
-    connect(m_showTrackHeaders, SIGNAL(activated(int)), this, SLOT(slotModified()));
+    connect(m_showTrackHeaders,
+                static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
+            this, &NotationConfigurationPage::slotModified);
     m_showTrackHeaders->setEditable(false);
 
     m_showTrackHeaders->addItem(tr("Never"), HeadersGroup::ShowNever);
@@ -214,7 +218,9 @@ NotationConfigurationPage::NotationConfigurationPage(QWidget *parent) :
     layout->setColumnStretch(2, 10);
 
     m_noteStyle = new QComboBox(frame);
-    connect(m_noteStyle, SIGNAL(activated(int)), this, SLOT(slotModified()));
+    connect(m_noteStyle,
+                static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
+            this, &NotationConfigurationPage::slotModified);
     m_noteStyle->setEditable(false);
     m_untranslatedNoteStyle.clear();
 
@@ -245,7 +251,9 @@ NotationConfigurationPage::NotationConfigurationPage(QWidget *parent) :
     int defaultInsertType = settings.value("inserttype", 0).toInt() ;
 
     m_insertType = new QComboBox(frame);
-    connect(m_insertType, SIGNAL(activated(int)), this, SLOT(slotModified()));
+    connect(m_insertType,
+                static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
+            this, &NotationConfigurationPage::slotModified);
     m_insertType->setEditable(false);
     m_insertType->addItem
     (tr("Split notes into ties to make durations match"));
@@ -301,7 +309,9 @@ NotationConfigurationPage::NotationConfigurationPage(QWidget *parent) :
     (new QLabel(tr("Default paste type"), frame), row, 0);
 
     m_pasteType = new QComboBox(frame);
-    connect(m_pasteType, SIGNAL(activated(int)), this, SLOT(slotModified()));
+    connect(m_pasteType,
+                static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
+            this, &NotationConfigurationPage::slotModified);
     m_pasteType->setEditable(false);
 
     unsigned int defaultPasteType = settings.value("pastetype",
@@ -378,7 +388,9 @@ NotationConfigurationPage::NotationConfigurationPage(QWidget *parent) :
 
     layout->addWidget(new QLabel(tr("Accidentals in one octave..."), frame), row, 0);
     m_accOctavePolicy = new QComboBox(frame);
-    connect(m_accOctavePolicy, SIGNAL(activated(int)), this, SLOT(slotModified()));
+    connect(m_accOctavePolicy,
+                static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
+            this, &NotationConfigurationPage::slotModified);
     m_accOctavePolicy->addItem(tr("Affect only that octave"));
     m_accOctavePolicy->addItem(tr("Require cautionaries in other octaves"));
     m_accOctavePolicy->addItem(tr("Affect all subsequent octaves"));
@@ -391,7 +403,10 @@ NotationConfigurationPage::NotationConfigurationPage(QWidget *parent) :
 
     layout->addWidget(new QLabel(tr("Accidentals in one bar..."), frame), row, 0);
     m_accBarPolicy = new QComboBox(frame);
-    connect(m_accBarPolicy, SIGNAL(activated(int)), this, SLOT(slotModified()));
+    connect(m_accBarPolicy,
+                static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
+            this, &NotationConfigurationPage::slotModified);
+
     m_accBarPolicy->addItem(tr("Affect only that bar"));
     m_accBarPolicy->addItem(tr("Require cautionary resets in following bar"));
     m_accBarPolicy->addItem(tr("Require explicit resets in following bar"));
@@ -404,7 +419,9 @@ NotationConfigurationPage::NotationConfigurationPage(QWidget *parent) :
 
     layout->addWidget(new QLabel(tr("Key signature cancellation style"), frame), row, 0);
     m_keySigCancelMode = new QComboBox(frame);
-    connect(m_keySigCancelMode, SIGNAL(activated(int)), this, SLOT(slotModified()));
+    connect(m_keySigCancelMode,
+                static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
+            this, &NotationConfigurationPage::slotModified);
     m_keySigCancelMode->addItem(tr("Cancel only when entering C major or A minor"));
     m_keySigCancelMode->addItem(tr("Cancel whenever removing sharps or flats"));
     m_keySigCancelMode->addItem(tr("Cancel always"));
@@ -430,12 +447,16 @@ NotationConfigurationPage::NotationConfigurationPage(QWidget *parent) :
     layout->addWidget(new QLabel(tr("Notation font"), frame), 0, 0);
 
     m_font = new QComboBox(frame);
-    connect(m_font, SIGNAL(activated(int)), this, SLOT(slotModified()));
+    connect(m_font,
+                static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
+            this, &NotationConfigurationPage::slotModified);
 
     layout->addWidget(m_font, row, 1, 1, 3);
     m_font->setEditable(false);
-    QObject::connect(m_font, SIGNAL(activated(int)),
-                     this, SLOT(slotFontComboChanged(int)));
+    connect(m_font,
+                static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
+            this, &NotationConfigurationPage::slotFontComboChanged);
+
     ++row;
 
     QFrame *subFrame = new QFrame(frame);
@@ -487,7 +508,9 @@ NotationConfigurationPage::NotationConfigurationPage(QWidget *parent) :
         (new QLabel(tr("Font size for single-staff views"), frame),
          row, 0, 1, 2);
     m_singleStaffSize = new QComboBox(frame);
-    connect(m_singleStaffSize, SIGNAL(activated(int)), this, SLOT(slotModified()));
+    connect(m_singleStaffSize,
+                static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
+            this, &NotationConfigurationPage::slotModified);
     m_singleStaffSize->setEditable(false);
     layout->addWidget(m_singleStaffSize, row, 2, 1, 1);
     ++row;
@@ -496,7 +519,9 @@ NotationConfigurationPage::NotationConfigurationPage(QWidget *parent) :
         (new QLabel(tr("Font size for multi-staff views"), frame),
          row, 0, 1, 2);
     m_multiStaffSize = new QComboBox(frame);
-    connect(m_multiStaffSize, SIGNAL(activated(int)), this, SLOT(slotModified()));
+    connect(m_multiStaffSize,
+                static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
+            this, &NotationConfigurationPage::slotModified);
     m_multiStaffSize->setEditable(false);
     layout->addWidget(m_multiStaffSize, row, 2, 1, 1);
     ++row;
