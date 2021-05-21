@@ -14,12 +14,12 @@
 */
 
 #include "ViewSegment.h"
-#include "base/Profiler.h"
 
 #include <QtGlobal>
 
 namespace Rosegarden 
 {
+
 
 ViewSegment::ViewSegment(Segment &t) :
     m_segment(t),
@@ -42,9 +42,12 @@ ViewSegment::getViewElementList()
 
         m_viewElementList = new ViewElementList;
 
-        for (Segment::const_iterator i = m_segment.begin(); i != m_segment.end(); ++i) {
+        for (Segment::const_iterator i = m_segment.begin();
+             i != m_segment.end();
+             ++i) {
 
-            if (!wrapEvent(*i)) continue;
+            if (!wrapEvent(*i))
+                continue;
 
             ViewElement *el = makeViewElement(*i);
             m_viewElementList->insert(el);
@@ -61,34 +64,33 @@ ViewSegment::wrapEvent(Event *e)
 {
     timeT emt = m_segment.getEndMarkerTime();
     return
-	(e->getAbsoluteTime() <  emt) ||
-	(e->getAbsoluteTime() == emt && e->getDuration() == 0);
+        ((e->getAbsoluteTime() < emt)  ||
+        (e->getAbsoluteTime() == emt  &&  e->getDuration() == 0));
 }
 
 ViewElementList::iterator
 ViewSegment::findEvent(Event *e)
 {
     // Note that we have to create this using the virtual
-    // makeViewElement, because the result of equal_range depends on
+    // makeViewElement(), because the result of equal_range() depends on
     // the value of the view absolute time for the element, which
     // depends on the particular subclass of ViewElement in use.
-    
+
     // (This is also why this method has to be here and not in
     // ViewElementList -- ViewElementList has no equivalent of
     // makeViewElement.)
-    
+
     ViewElement *dummy = makeViewElement(e);
     
     std::pair<ViewElementList::iterator,
-  	      ViewElementList::iterator>
+              ViewElementList::iterator>
         r = m_viewElementList->equal_range(dummy);
  
     delete dummy;
 
     for (ViewElementList::iterator i = r.first; i != r.second; ++i) {
-        if ((*i)->event() == e) {
+        if ((*i)->event() == e)
             return i;
-        }
     }
 
     return m_viewElementList->end();
@@ -97,7 +99,6 @@ ViewSegment::findEvent(Event *e)
 void
 ViewSegment::eventAdded(const Segment *t, Event *e)
 {
-    Profiler profiler("ViewSegment::eventAdded");
     Q_ASSERT(t == &m_segment);
     (void)t; // avoid warnings
 
@@ -111,7 +112,6 @@ ViewSegment::eventAdded(const Segment *t, Event *e)
 void
 ViewSegment::eventRemoved(const Segment *t, Event *e)
 {
-    Profiler profiler("ViewSegment::eventRemoved");
     Q_ASSERT(t == &m_segment);
     (void)t; // avoid warnings
 
@@ -125,7 +125,7 @@ ViewSegment::eventRemoved(const Segment *t, Event *e)
     }
 
 //    std::cerr << "Event at " << e->getAbsoluteTime() << ", notation time " << e->getNotationAbsoluteTime() << ", type " << e->getType()
-//	      << " not found in ViewSegment" << std::endl;
+//              << " not found in ViewSegment" << std::endl;
 }
 
 void
@@ -137,28 +137,28 @@ ViewSegment::endMarkerTimeChanged(const Segment *segment, bool shorten)
 
     if (shorten) {
 
-	m_viewElementList->erase
-	    (m_viewElementList->findTime(s->getEndMarkerTime()),
-	     m_viewElementList->end());
+        m_viewElementList->erase
+            (m_viewElementList->findTime(s->getEndMarkerTime()),
+             m_viewElementList->end());
 
     } else {
 
-	timeT myLastEltTime = s->getStartTime();
-	if (m_viewElementList->end() != m_viewElementList->begin()) {
-	    ViewElementList::iterator i = m_viewElementList->end();
-	    myLastEltTime = (*--i)->event()->getAbsoluteTime();
-	}
-	
-	for (Segment::iterator j = s->findTime(myLastEltTime);
-	     s->isBeforeEndMarker(j); ++j) {
-	    
-	    ViewElementList::iterator newi = findEvent(*j);
-	    if (newi == m_viewElementList->end()) {
-		if (wrapEvent(*j)) {
-		    m_viewElementList->insert(makeViewElement(*j));
-		}
-	    }
-	}
+        timeT myLastEltTime = s->getStartTime();
+        if (m_viewElementList->end() != m_viewElementList->begin()) {
+            ViewElementList::iterator i = m_viewElementList->end();
+            myLastEltTime = (*--i)->event()->getAbsoluteTime();
+        }
+
+        for (Segment::iterator j = s->findTime(myLastEltTime);
+             s->isBeforeEndMarker(j);
+             ++j) {
+
+            ViewElementList::iterator newi = findEvent(*j);
+            if (newi == m_viewElementList->end()) {
+                if (wrapEvent(*j))
+                    m_viewElementList->insert(makeViewElement(*j));
+            }
+        }
     }
 }
 void
@@ -166,38 +166,43 @@ ViewSegment::segmentDeleted(const Segment *s)
 {
     Q_ASSERT(s == &m_segment);
     (void)s; // avoid warnings
+
     /*
     std::cerr << "WARNING: ViewSegment notified of segment deletion: this is probably a bug "
-	      << "(ViewSegment should have been deleted before Segment)" << std::endl;
+              << "(ViewSegment should have been deleted before Segment)" << std::endl;
               */
 }
 
 void
 ViewSegment::notifyAdd(ViewElement *e) const
 {
-    Profiler profiler("ViewSegment::notifyAdd");
+    // Pass on to observers.
     for (ObserverSet::const_iterator i = m_observers.begin();
-	 i != m_observers.end(); ++i) {
-	(*i)->elementAdded(this, e);
+         i != m_observers.end();
+         ++i) {
+        (*i)->elementAdded(this, e);
     }
 }
 
 void
 ViewSegment::notifyRemove(ViewElement *e) const
 {
-    Profiler profiler("ViewSegment::notifyRemove");
+    // Pass on to observers.
     for (ObserverSet::const_iterator i = m_observers.begin();
-	 i != m_observers.end(); ++i) {
-	(*i)->elementRemoved(this, e);
+         i != m_observers.end();
+         ++i) {
+        (*i)->elementRemoved(this, e);
     }
 }
 
 void
 ViewSegment::notifySourceDeletion() const
 {
+    // Pass on to observers.
     for (ObserverSet::const_iterator i = m_observers.begin();
-	 i != m_observers.end(); ++i) {
-	(*i)->viewSegmentDeleted(this);
+         i != m_observers.end();
+         ++i) {
+        (*i)->viewSegmentDeleted(this);
     }
 }
 
