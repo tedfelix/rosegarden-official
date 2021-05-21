@@ -25,7 +25,6 @@
 #include "base/Exception.h"
 #include "base/MidiTypes.h"
 #include "base/NotationTypes.h"
-#include "base/Profiler.h"
 #include "base/RealTime.h"
 #include "base/Segment.h"
 #include "base/SegmentPerformanceHelper.h"
@@ -486,8 +485,6 @@ shouldPlay(MappedEvent *evt, RealTime sliceStart)
 ControllerAndPBList
 InternalSegmentMapper::getControllers(Instrument *instrument, RealTime start)
 {
-    //Profiler profiler("InternalSegmentMapper::getControllers()", false);
-
     if (!instrument)
         return ControllerAndPBList();
 

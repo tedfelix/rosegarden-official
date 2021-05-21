@@ -14,7 +14,6 @@
 #define RG_MODULE_STRING "[SoundFile]"
 
 #include "SoundFile.h"
-#include "base/Profiler.h"
 #include "misc/Debug.h"
 
 //#define DEBUG_SOUNDFILE 1

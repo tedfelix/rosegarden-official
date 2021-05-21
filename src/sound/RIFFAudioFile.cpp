@@ -17,7 +17,6 @@
 
 #include "RIFFAudioFile.h"
 #include "base/RealTime.h"
-#include "base/Profiler.h"
 #include "misc/Strings.h"
 #include "misc/Debug.h"
 

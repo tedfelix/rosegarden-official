@@ -27,7 +27,6 @@
 
 #include "misc/Debug.h"
 #include "misc/Strings.h"
-#include "base/Profiler.h"
 #include "gui/general/ResourceFinder.h"
 #include "NoteFontMap.h"
 
@@ -54,8 +53,6 @@ SystemFont::~SystemFont()
 SystemFont *
 SystemFont::loadSystemFont(const SystemFontSpec &spec)
 {
-    //Profiler profiler("SystemFont::loadSystemFont");
-
     QString name = spec.first;
     int size = spec.second;
 

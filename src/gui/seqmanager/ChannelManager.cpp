@@ -293,8 +293,6 @@ void ChannelManager::insertEvent(
         bool /*firstOutput*/,
         MappedInserterBase &inserter)
 {
-    //Profiler profiler("ChannelManager::insertEvent()", true);
-
     //RG_DEBUG << "insertEvent(): playing on" << (m_instrument ? m_instrument->getPresentationName().c_str() : "nothing") << "at" << reftime << (firstOutput ? "needs init" : "doesn't need init");
 
     // ??? firstOutput was always ignored.  What would happen if we actually

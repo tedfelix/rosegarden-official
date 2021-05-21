@@ -29,7 +29,6 @@
 #include "CompositionTimeSliceAdapter.h"
 #include "base/BaseProperties.h"
 #include "Composition.h"
-#include "base/Profiler.h"
 
 #include "Sets.h"
 #include "Quantizer.h"
@@ -86,8 +85,6 @@ AnalysisHelper::labelChords(CompositionTimeSliceAdapter &c, Segment &s,
     Key key;
     if (c.begin() != c.end()) key = getKeyForEvent(*c.begin(), s);
     else key = getKeyForEvent(nullptr, s);
-
-    //Profiler profiler("AnalysisHelper::labelChords", true);
 
     for (CompositionTimeSliceAdapter::iterator i = c.begin(); i != c.end(); ++i) {
 

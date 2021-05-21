@@ -20,7 +20,6 @@
 #include "RecordableAudioFile.h"
 #include "WAVAudioFile.h"
 #include "MappedStudio.h"
-#include "base/Profiler.h"
 #include "base/AudioLevel.h"
 #include "AudioPlayQueue.h"
 #include "PluginFactory.h"
@@ -1581,8 +1580,6 @@ AudioInstrumentMixer::processBlocks(bool &readSomething)
         std::cerr << "AudioInstrumentMixer::processBlocks" << std::endl;
 #endif
 
-    //    Profiler profiler("processBlocks", true);
-
     const AudioPlayQueue *queue = m_driver->getAudioQueue();
 
     for (BufferMap::iterator i = m_bufferMap.begin();
@@ -1695,8 +1692,6 @@ AudioInstrumentMixer::processBlock(InstrumentId id,
                                    bool &readSomething)
 {
     // Needs to be RT safe
-
-    //    Profiler profiler("processBlock", true);
 
     BufferRec &rec = m_bufferMap[id];
     RealTime bufferTime = rec.filledTo;

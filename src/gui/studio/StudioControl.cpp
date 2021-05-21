@@ -22,7 +22,6 @@
 #include "sound/Midi.h"
 #include "misc/Debug.h"
 #include "base/MidiProgram.h"
-#include "base/Profiler.h"
 #include "base/RealTime.h"
 #include "gui/seqmanager/ChannelManager.h"
 #include "sequencer/RosegardenSequencer.h"

@@ -45,7 +45,6 @@
 #include "base/Studio.h"
 #include "base/Track.h"
 #include "base/TriggerSegment.h"
-#include "base/Profiler.h"
 #include "gui/application/RosegardenMainWindow.h"
 #include "sequencer/RosegardenSequencer.h"
 #include "gui/dialogs/FileLocateDialog.h"

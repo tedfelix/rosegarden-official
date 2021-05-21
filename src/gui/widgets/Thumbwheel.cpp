@@ -19,7 +19,7 @@
 
 #include "Thumbwheel.h"
 
-#include "base/Profiler.h"
+//#include "base/Profiler.h"
 #include "misc/ConfigGroups.h"
 #include "misc/Debug.h"
 #include "gui/general/ThornStyle.h"

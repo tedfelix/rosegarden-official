@@ -19,7 +19,6 @@
 #include "base/NotationTypes.h"
 #include "Selection.h"
 #include "Composition.h"
-#include "base/Profiler.h"
 
 #include <iostream>
 #include <cmath>
