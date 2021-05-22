@@ -113,8 +113,9 @@ TrackParameterBox::TrackParameterBox(QWidget *parent) :
     m_playbackDevice->setToolTip(tr("<qt><p>Choose the device this track will use for playback.</p><p>Click <img src=\":pixmaps/toolbar/manage-midi-devices.xpm\"> to connect this device to a useful output if you do not hear sound</p></qt>"));
     m_playbackDevice->setMinimumWidth(width25);
     m_playbackDevice->setFont(m_font);
-    connect(m_playbackDevice, SIGNAL(activated(int)),
-            this, SLOT(slotPlaybackDeviceChanged(int)));
+    connect(m_playbackDevice,
+                static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
+            this, &TrackParameterBox::slotPlaybackDeviceChanged);
 
     // Instrument
     QLabel *instrumentLabel = new QLabel(tr("Instrument"), playbackParameters);
@@ -124,8 +125,9 @@ TrackParameterBox::TrackParameterBox(QWidget *parent) :
     m_instrument->setToolTip(tr("<qt><p>Choose the instrument this track will use for playback. (Configure the instrument in <b>Instrument Parameters</b>).</p></qt>"));
     m_instrument->setMaxVisibleItems(16);
     m_instrument->setMinimumWidth(width22);
-    connect(m_instrument, SIGNAL(activated(int)),
-            this, SLOT(slotInstrumentChanged(int)));
+    connect(m_instrument,
+                static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
+            this, &TrackParameterBox::slotInstrumentChanged);
 
     // Archive
     QLabel *archiveLabel = new QLabel(tr("Archive"), playbackParameters);
@@ -171,8 +173,9 @@ TrackParameterBox::TrackParameterBox(QWidget *parent) :
     m_recordingDevice->setFont(m_font);
     m_recordingDevice->setToolTip(tr("<qt><p>This track will only record Audio/MIDI from the selected device, filtering anything else out</p></qt>"));
     m_recordingDevice->setMinimumWidth(width25);
-    connect(m_recordingDevice, SIGNAL(activated(int)),
-            this, SLOT(slotRecordingDeviceChanged(int)));
+    connect(m_recordingDevice,
+                static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
+            this, &TrackParameterBox::slotRecordingDeviceChanged);
 
     // Channel
     QLabel *channelLabel = new QLabel(tr("Channel"), recordingFilters);
@@ -186,8 +189,9 @@ TrackParameterBox::TrackParameterBox(QWidget *parent) :
     for (int i = 1; i < 17; ++i) {
         m_recordingChannel->addItem(QString::number(i));
     }
-    connect(m_recordingChannel, SIGNAL(activated(int)),
-            this, SLOT(slotRecordingChannelChanged(int)));
+    connect(m_recordingChannel,
+                static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
+            this, &TrackParameterBox::slotRecordingChannelChanged);
 
     // Thru Routing
     QLabel *thruLabel = new QLabel(tr("Thru Routing"), recordingFilters);
@@ -200,8 +204,9 @@ TrackParameterBox::TrackParameterBox(QWidget *parent) :
     m_thruRouting->addItem(tr("On"), Track::On);
     m_thruRouting->addItem(tr("Off"), Track::Off);
     m_thruRouting->addItem(tr("When Armed"), Track::WhenArmed);
-    connect(m_thruRouting, SIGNAL(activated(int)),
-            this, SLOT(slotThruRoutingChanged(int)));
+    connect(m_thruRouting,
+                static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
+            this, &TrackParameterBox::slotThruRoutingChanged);
 
     // Recording filters layout
 
@@ -246,8 +251,9 @@ TrackParameterBox::TrackParameterBox(QWidget *parent) :
     m_notationSize->addItem(tr("Normal"), StaffTypes::Normal);
     m_notationSize->addItem(tr("Small"), StaffTypes::Small);
     m_notationSize->addItem(tr("Tiny"), StaffTypes::Tiny);
-    connect(m_notationSize, SIGNAL(activated(int)),
-            this, SLOT(slotNotationSizeChanged(int)));
+    connect(m_notationSize,
+                static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
+            this, &TrackParameterBox::slotNotationSizeChanged);
 
     // Bracket type
     // Staff bracketing (export only at the moment, but using this for GUI
@@ -266,8 +272,9 @@ TrackParameterBox::TrackParameterBox(QWidget *parent) :
     m_bracketType->addItem(tr("----}"), Brackets::CurlyOff);
     m_bracketType->addItem(tr("{[---"), Brackets::CurlySquareOn);
     m_bracketType->addItem(tr("---]}"), Brackets::CurlySquareOff);
-    connect(m_bracketType, SIGNAL(activated(int)),
-            this, SLOT(slotBracketTypeChanged(int)));
+    connect(m_bracketType,
+                static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
+            this, &TrackParameterBox::slotBracketTypeChanged);
 
     // Staff export options layout
 
@@ -332,8 +339,9 @@ TrackParameterBox::TrackParameterBox(QWidget *parent) :
     m_clef->addItem(tr("varbaritone", "Clef name"), VarbaritoneClef);
     m_clef->addItem(tr("subbass", "Clef name"), SubbassClef);
     m_clef->addItem(tr("twobar", "Clef name"), TwoBarClef);
-    connect(m_clef, SIGNAL(activated(int)),
-            this, SLOT(slotClefChanged(int)));
+    connect(m_clef,
+                static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
+            this, &TrackParameterBox::slotClefChanged);
 
     // Transpose
     m_transposeLabel = new QLabel(tr("Transpose"), createSegmentsWith);
@@ -341,8 +349,9 @@ TrackParameterBox::TrackParameterBox(QWidget *parent) :
     m_transpose = new QComboBox(createSegmentsWith);
     m_transpose->setFont(m_font);
     m_transpose->setToolTip(tr("<qt><p>New segments will be created with this transpose property set</p></qt>"));
-    connect(m_transpose, SIGNAL(activated(int)),
-            SLOT(slotTransposeChanged(int)));
+    connect(m_transpose,
+                static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
+            this, &TrackParameterBox::slotTransposeChanged);
 
     int transposeRange = 48;
     for (int i = -transposeRange; i < transposeRange + 1; i++) {
@@ -382,8 +391,9 @@ TrackParameterBox::TrackParameterBox(QWidget *parent) :
     m_color = new ColorCombo(createSegmentsWith);
     m_color->setFont(m_font);
     m_color->setToolTip(tr("<qt><p>New segments will be created using this color</p></qt>"));
-    connect(m_color, SIGNAL(activated(int)),
-            SLOT(slotColorChanged(int)));
+    connect(m_color,
+                static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
+            this, &TrackParameterBox::slotColorChanged);
 
     // Reset to Defaults
     m_resetToDefaults = new QPushButton(

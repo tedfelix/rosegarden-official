@@ -120,7 +120,9 @@ ManageMetronomeDialog::ManageMetronomeDialog(QWidget *parent,
     deviceBoxLayout->addWidget(new QLabel(tr("Instrument"), deviceBox), 1, 0);
     m_metronomeInstrument = new QComboBox(deviceBox);
     m_metronomeInstrument->setToolTip(tr("<qt>Choose the instrument you want to use to play the metronome (typically #10)</qt>"));
-    connect(m_metronomeInstrument, SIGNAL(activated(int)), this, SLOT(slotSetModified()));
+    connect(m_metronomeInstrument,
+                static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
+            this, &ManageMetronomeDialog::slotSetModified);
     deviceBoxLayout->addWidget(m_metronomeInstrument, 1, 1);
     deviceBox->setLayout(deviceBoxLayout);
 
@@ -137,7 +139,9 @@ ManageMetronomeDialog::ManageMetronomeDialog(QWidget *parent,
     m_metronomeResolution->addItem(tr("Bars only"));
     m_metronomeResolution->addItem(tr("Bars and beats"));
     m_metronomeResolution->addItem(tr("Bars, beats, and sub-beats"));
-    connect(m_metronomeResolution, SIGNAL(activated(int)), this, SLOT(slotResolutionChanged(int)));
+    connect(m_metronomeResolution,
+                static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
+            this, &ManageMetronomeDialog::slotResolutionChanged);
     beatBoxLayout->addWidget(m_metronomeResolution, 0, 1);
 
     beatBoxLayout->addWidget(new QLabel(tr("Bar velocity"), beatBox), 1, 0);
@@ -184,7 +188,9 @@ ManageMetronomeDialog::ManageMetronomeDialog(QWidget *parent,
     m_metronomePitchSelector->addItem(tr("for Beat"));
     m_metronomePitchSelector->addItem(tr("for Sub-beat"));
     m_metronomePitch->addWidgetToLayout(m_metronomePitchSelector);
-    connect(m_metronomePitchSelector, SIGNAL(activated(int)), this, SLOT(slotPitchSelectorChanged(int)));
+    connect(m_metronomePitchSelector,
+                static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
+            this, &ManageMetronomeDialog::slotPitchSelectorChanged);
 
     QGroupBox *enableBox = new QGroupBox( tr("Metronome Activated"), vbox );
     QVBoxLayout *enableBoxLayout = new QVBoxLayout;
@@ -203,11 +209,13 @@ ManageMetronomeDialog::ManageMetronomeDialog(QWidget *parent,
     populate(m_metronomeDevice->currentIndex());
 
     // connect up the device list
-    connect(m_metronomeDevice, SIGNAL(activated(int)),
-            this, SLOT(populate(int)));
+    connect(m_metronomeDevice,
+                static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
+            this, &ManageMetronomeDialog::populate);
     // connect up the device list
-    connect(m_metronomeDevice, SIGNAL(activated(int)),
-            this, SLOT(slotSetModified()));
+    connect(m_metronomeDevice,
+                static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
+            this, &ManageMetronomeDialog::slotSetModified);
 
     metagrid->addWidget(m_buttonBox, 1, 0);
     metagrid->setRowStretch(0, 10);

@@ -132,8 +132,9 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(QWidget *parent) :
     m_bankComboBox->setToolTip(tr("<qt>Set the MIDI bank from which to select programs</qt>"));
     m_bankComboBox->setMaxVisibleItems(maxVisibleItems);
     m_bankComboBox->setMinimumContentsLength(minimumContentsLength);
-    connect(m_bankComboBox, SIGNAL(activated(int)),
-            SLOT(slotSelectBank(int)));
+    connect(m_bankComboBox,
+                static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
+            this, &MIDIInstrumentParameterPanel::slotSelectBank);
 
     // Program Label
     m_programLabel = new QLabel;
@@ -153,8 +154,9 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(QWidget *parent) :
     m_programComboBox->setToolTip(tr("<qt>Set the MIDI program or &quot;patch&quot;</p></qt>"));
     m_programComboBox->setMaxVisibleItems(maxVisibleItems);
     m_programComboBox->setMinimumContentsLength(minimumContentsLength);
-    connect(m_programComboBox, SIGNAL(activated(int)),
-            SLOT(slotSelectProgram(int)));
+    connect(m_programComboBox,
+                static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
+            this, &MIDIInstrumentParameterPanel::slotSelectProgram);
 
     // Variation Label
     m_variationLabel = new QLabel;
@@ -174,8 +176,9 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(QWidget *parent) :
     m_variationComboBox->setToolTip(tr("<qt>Set variations on the program above, if available in the studio</qt>"));
     m_variationComboBox->setMaxVisibleItems(maxVisibleItems);
     m_variationComboBox->setMinimumContentsLength(minimumContentsLength);
-    connect(m_variationComboBox, SIGNAL(activated(int)),
-            SLOT(slotSelectVariation(int)));
+    connect(m_variationComboBox,
+                static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
+            this, &MIDIInstrumentParameterPanel::slotSelectVariation);
 
     // Channel Label
     QLabel *channelLabel = new QLabel(tr("Channel"), this);
@@ -192,8 +195,9 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(QWidget *parent) :
     m_channelValue->addItem(tr("Auto"));
     m_channelValue->addItem(tr("Fixed"));
     m_channelValue->setMinimumContentsLength(minimumContentsLength);
-    connect(m_channelValue, SIGNAL(activated(int)),
-            SLOT(slotSelectChannel(int)));
+    connect(m_channelValue,
+                static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
+            this, &MIDIInstrumentParameterPanel::slotSelectChannel);
 
     // Receive External Label
     QLabel *receiveExternalLabel = new QLabel(tr("Receive external"), this);

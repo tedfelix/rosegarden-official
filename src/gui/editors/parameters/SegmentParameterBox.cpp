@@ -135,10 +135,9 @@ SegmentParameterBox::SegmentParameterBox(QWidget *parent) :
                                     "<i>NOTE: This control changes segments that already exist.</i></p><p><i>Use the transpose "
                                     "control in <b>Track Parameters</b> under <b>Create segments with</b> to pre-select this   "
                                     "setting before drawing or recording new segments.</i></p></qt>"));
-    // QComboBox::activated() is overloaded, so we have to use SIGNAL().
-    // ??? Actually, search on "QComboBox::*" and that might be the solution.
-    connect(m_transpose, SIGNAL(activated(int)),
-            SLOT(slotTransposeSelected(int)));
+    connect(m_transpose,
+                static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
+            this, &SegmentParameterBox::slotTransposeSelected);
 
     QPixmap noMap = NotePixmapFactory::makeToolbarPixmap("menu-no-note");
 
@@ -157,10 +156,9 @@ SegmentParameterBox::SegmentParameterBox(QWidget *parent) :
             "<qt><p>Quantize the selected segments using the Grid quantizer.  "
             "This quantization can be removed at any time in "
             "the future by setting it to off.</p></qt>"));
-    // QComboBox::activated() is overloaded, so we have to use SIGNAL().
-    // ??? Actually, search on "QComboBox::*" and that might be the solution.
-    connect(m_quantize, SIGNAL(activated(int)),
-            SLOT(slotQuantizeSelected(int)));
+    connect(m_quantize,
+                static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
+            this, &SegmentParameterBox::slotQuantizeSelected);
 
     // For each standard quantization value
     for (unsigned int i = 0; i < m_standardQuantizations.size(); ++i) {
@@ -185,10 +183,10 @@ SegmentParameterBox::SegmentParameterBox(QWidget *parent) :
                                 "composition to start before bar 1, and move segments to the left.  You can hold <b>shift</b>"
                                 " while doing this for fine-grained control, though doing so will have harsh effects on music"
                                 " notation rendering as viewed in the notation editor.</i></p></qt>"));
-    // QComboBox::activated() is overloaded, so we have to use SIGNAL().
-    // ??? Actually, search on "QComboBox::*" and that might be the solution.
-    connect(m_delay, SIGNAL(activated(int)),
-            SLOT(slotDelaySelected(int)));
+    connect(m_delay,
+                static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
+            this, &SegmentParameterBox::slotDelaySelected);
+
     // ??? The combobox is not editable.  This will never be called.
     //     It would be a nice feature, though.
     //connect(m_delay, &QComboBox::editTextChanged,
@@ -236,10 +234,10 @@ SegmentParameterBox::SegmentParameterBox(QWidget *parent) :
     m_color = new ColorCombo(this);
     m_color->setFont(m_font);
     m_color->setToolTip(tr("<qt><p>Change the color of any selected segments</p></qt>"));
-    // QComboBox::activated() is overloaded, so we have to use SIGNAL().
-    // ??? Actually, search on "QComboBox::*" and that might be the solution.
-    connect(m_color, SIGNAL(activated(int)),
-            SLOT(slotColourChanged(int)));
+    connect(m_color,
+                static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
+            this, &SegmentParameterBox::slotColourChanged);
+
     // slotNewDocument() will finish the initialization.
 
     // * ForNotation
