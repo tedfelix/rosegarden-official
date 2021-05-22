@@ -306,11 +306,6 @@ public:
      */
     AudioPluginOSCGUIManager *getPluginGUIManager() { return m_pluginGUIManager; }
 
-    /**
-     * Plug a widget into our common shortcuts
-     */
-    void plugShortcuts(QWidget *widget, QShortcut *shortcut);
-
     /** Query the AudioFileManager to see if the audio path exists, is readable,
      * writable, etc., and offer to dump the user in the document properties
      * editor if some problem is found.  This is older code that simply tests

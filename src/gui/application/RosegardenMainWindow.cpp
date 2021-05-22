@@ -2768,13 +2768,62 @@ RosegardenMainWindow::jogSelection(timeT amount)
 void
 RosegardenMainWindow::createAndSetupTransport()
 {
-    // create the Transport GUI and add the callbacks to the
-    // buttons and keyboard shortcuts
-    //
     m_transport = new TransportDialog(this);
-    
-    plugShortcuts(m_transport, m_transport->getShortcuts());
 
+    // Transport button callbacks.
+    
+    connect(m_transport->PlayButton(),
+            &QAbstractButton::clicked,
+            this,
+            &RosegardenMainWindow::slotPlay);
+
+    connect(m_transport->StopButton(),
+            &QAbstractButton::clicked,
+            this,
+            &RosegardenMainWindow::slotStop);
+
+    connect(m_transport->FfwdButton(),
+            &QAbstractButton::clicked,
+            this, &RosegardenMainWindow::slotFastforward);
+
+    connect(m_transport->RewindButton(),
+            &QAbstractButton::clicked,
+            this,
+            &RosegardenMainWindow::slotRewind);
+
+    connect(m_transport->RecordButton(),
+            &QAbstractButton::clicked,
+            this,
+            &RosegardenMainWindow::slotRecord);
+
+    connect(m_transport->RewindEndButton(),
+            &QAbstractButton::clicked,
+            this,
+            &RosegardenMainWindow::slotRewindToBeginning);
+
+    connect(m_transport->FfwdEndButton(),
+            &QAbstractButton::clicked,
+            this,
+            &RosegardenMainWindow::slotFastForwardToEnd);
+
+    connect(m_transport->MetronomeButton(),
+            &QAbstractButton::clicked,
+            this,
+            &RosegardenMainWindow::slotToggleMetronome);
+
+    connect(m_transport->SoloButton(),
+            &QAbstractButton::clicked,
+            this,
+            &RosegardenMainWindow::slotToggleSolo);
+
+    connect(m_transport->TimeDisplayButton(),
+            &QAbstractButton::clicked,
+            this,
+            &RosegardenMainWindow::slotRefreshTimeDisplay);
+
+    connect(m_transport->ToEndButton(),
+            &QAbstractButton::clicked,
+            this, &RosegardenMainWindow::slotRefreshTimeDisplay);
 
     // Ensure that the checkbox is unchecked if the dialog
     // is closed
@@ -5572,10 +5621,6 @@ RosegardenMainWindow::slotRecord()
         return ;
     }
 
-    // plugin the keyboard shortcuts for focus on this dialog
-    plugShortcuts(m_seqManager->getCountdownDialog(),
-                     m_seqManager->getCountdownDialog()->getShortcuts());
-
     connect(m_seqManager->getCountdownDialog(), &CountdownDialog::stopped,
             this, &RosegardenMainWindow::slotStop);
 }
@@ -6299,162 +6344,6 @@ RosegardenMainWindow::slotTestClipboard()
     }
 }
 
-void
-RosegardenMainWindow::plugShortcuts(QWidget *widget, QShortcut * /*acc*/)
-{
-    // ??? This routine now does nothing other than set up the transport.
-    //     It shouldn't be called by anyone and it should be inlined into
-    //     createAndSetupTransport().
-
-    //
-    // Shortcuts are now defined in *.rc files.
-    //
-    // new qt4: 
-    // QWidget* sc_parent = this;
-    // QShortcut* sc_tmp;
-    
-    // types:Qt::WidgetShortcut, Qt::ApplicationShortcut, Qt::WindowShortcut
-
-    /**
-     * Shortcuts for showing/hiding Transport.
-     */
-    // sc_tmp = new QShortcut(QKeySequence(Qt::Key_T), sc_parent, 0, 0, Qt::ApplicationShortcut); 
-    // connect(sc_tmp, SIGNAL(activated()), this, SLOT(slotToggleTransportVisibility()));
-    
-    /**
-     * Shortcuts for playing.
-     */
-    // sc_tmp = new QShortcut(QKeySequence(Qt::Key_MediaPlay), sc_parent, 0, 0, Qt::ApplicationShortcut); 
-    // connect(sc_tmp, SIGNAL(activated()), this, SLOT(slotPlay()));
-    
-    // sc_tmp = new QShortcut(QKeySequence(Qt::Key_Enter), sc_parent, 0, 0, Qt::ApplicationShortcut); 
-    // connect(sc_tmp, SIGNAL(activated()), this, SLOT(slotPlay()));
-    
-    // sc_tmp = new QShortcut(QKeySequence(Qt::Key_Return + Qt::CTRL), sc_parent, 0, 0, Qt::ApplicationShortcut); 
-    // connect(sc_tmp, SIGNAL(activated()), this, SLOT(slotPlay()));
-
-    /**
-     * Shortcuts for stopping.
-     */
-    // sc_tmp = new QShortcut(QKeySequence(Qt::Key_MediaStop), sc_parent, 0, 0, Qt::ApplicationShortcut); 
-    // connect(sc_tmp, SIGNAL(activated()), this, SLOT(slotStop()));
-    
-    // sc_tmp = new QShortcut(QKeySequence(Qt::Key_Insert), sc_parent, 0, 0, Qt::ApplicationShortcut); 
-    // connect(sc_tmp, SIGNAL(activated()), this, SLOT(slotStop()));
-    
-    /**
-     * Shortcuts for fast forwarding.
-     */
-    // sc_tmp = new QShortcut(QKeySequence(Qt::Key_MediaNext), sc_parent, 0, 0, Qt::ApplicationShortcut); 
-    // connect(sc_tmp, SIGNAL(activated()), this, SLOT(slotFastforward()));
-    
-    // sc_tmp = new QShortcut(QKeySequence(Qt::Key_PageDown), sc_parent, 0, 0, Qt::ApplicationShortcut); 
-    // connect(sc_tmp, SIGNAL(activated()), this, SLOT(slotFastforward()));
-    
-    /**
-     * Shortcuts for rewinding.
-     */
-    // sc_tmp = new QShortcut(QKeySequence(Qt::Key_MediaPrevious), sc_parent, 0, 0, Qt::ApplicationShortcut); 
-    // connect(sc_tmp, SIGNAL(activated()), this, SLOT(slotRewind()));
-    
-    // sc_tmp = new QShortcut(QKeySequence(Qt::Key_PageUp), sc_parent, 0, 0, Qt::ApplicationShortcut); 
-    // connect(sc_tmp, SIGNAL(activated()), this, SLOT(slotRewind()));
-
-    /**
-     * Shortcuts for fast forwarding to end.
-     */
-    // sc_tmp = new QShortcut(QKeySequence(Qt::Key_End), sc_parent, 0, 0, Qt::ApplicationShortcut); 
-    // connect(sc_tmp, SIGNAL(activated()), this, SLOT(slotFastForwardToEnd()));
-
-    /**
-     * Shortcuts for rewinding to beginning.
-     */
-    // sc_tmp = new QShortcut(QKeySequence(Qt::Key_Home), sc_parent, 0, 0, Qt::ApplicationShortcut); 
-    // connect(sc_tmp, SIGNAL(activated()), this, SLOT(slotRewindToBeginning()));
-
-    /**
-     * Shortcuts for recording.
-     */
-
-    // sc_tmp = new QShortcut(QKeySequence(Qt::Key_MediaRecord), sc_parent, 0, 0, Qt::ApplicationShortcut); 
-    // connect(sc_tmp, SIGNAL(activated()), this, SLOT(slotToggleRecord()));
-    
-    // sc_tmp = new QShortcut(QKeySequence(Qt::Key_Space), sc_parent, 0, 0, Qt::ApplicationShortcut); 
-    // connect(sc_tmp, SIGNAL(activated()), this, SLOT(slotToggleRecord()));
-    
-
-
-    TransportDialog *transport =
-        dynamic_cast<TransportDialog*>(widget);
-
-    if (transport) {
-        
-        // Should not use just Qt::Key_M, because it is used for "Open in MatrixView"
-        // Are these needed, because we also have "Ctrl + 1" ... "Ctrl + 9" and "1" ... "9"
-        // sc_tmp = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_M), sc_parent, 0, 0, Qt::ApplicationShortcut);
-        //sc_tmp = m_jumpToQuickMarkerAction->shortcut();
-        // connect(sc_tmp, SIGNAL(activated()), this, SLOT(slotJumpToQuickMarker()));
-        
-        // sc_tmp = new QShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_M), sc_parent, 0, 0, Qt::ApplicationShortcut);
-        //sc_tmp = m_setQuickMarkerAction->shortcut();
-        // connect(sc_tmp, SIGNAL(activated()), this, SLOT(slotSetQuickMarker()));
-        
-
-        connect(transport->PlayButton(),
-                &QAbstractButton::clicked,
-                this,
-                &RosegardenMainWindow::slotPlay);
-
-        connect(transport->StopButton(),
-                &QAbstractButton::clicked,
-                this,
-                &RosegardenMainWindow::slotStop);
-
-        connect(transport->FfwdButton(),
-                &QAbstractButton::clicked,
-                this, &RosegardenMainWindow::slotFastforward);
-
-        connect(transport->RewindButton(),
-                &QAbstractButton::clicked,
-                this,
-                &RosegardenMainWindow::slotRewind);
-
-        connect(transport->RecordButton(),
-                &QAbstractButton::clicked,
-                this,
-                &RosegardenMainWindow::slotRecord);
-
-        connect(transport->RewindEndButton(),
-                &QAbstractButton::clicked,
-                this,
-                &RosegardenMainWindow::slotRewindToBeginning);
-
-        connect(transport->FfwdEndButton(),
-                &QAbstractButton::clicked,
-                this,
-                &RosegardenMainWindow::slotFastForwardToEnd);
-
-        connect(transport->MetronomeButton(),
-                &QAbstractButton::clicked,
-                this,
-                &RosegardenMainWindow::slotToggleMetronome);
-
-        connect(transport->SoloButton(),
-                &QAbstractButton::clicked,
-                this,
-                &RosegardenMainWindow::slotToggleSolo);
-
-        connect(transport->TimeDisplayButton(),
-                &QAbstractButton::clicked,
-                this,
-                &RosegardenMainWindow::slotRefreshTimeDisplay);
-
-        connect(transport->ToEndButton(),
-                &QAbstractButton::clicked,
-                this, &RosegardenMainWindow::slotRefreshTimeDisplay);
-    }
-}
-
 QVector<QString>
 RosegardenMainWindow::createRecordAudioFiles(const QVector<InstrumentId> &recordInstruments)
 {
@@ -6648,9 +6537,6 @@ RosegardenMainWindow::slotAudioManager()
 
     m_audioManagerDialog->setAudioSubsystemStatus(
         m_seqManager->getSoundDriverStatus() & AUDIO_OK);
-
-    plugShortcuts(m_audioManagerDialog,
-                     m_audioManagerDialog->getShortcuts());
 
     m_audioManagerDialog->show();
 }
@@ -7022,8 +6908,6 @@ RosegardenMainWindow::slotOpenMidiMixer()
     connect(m_midiMixer, &MidiMixerWindow::panic,
             this, &RosegardenMainWindow::slotPanic);
 
-    plugShortcuts(m_midiMixer, m_midiMixer->getShortcuts());
-
     m_midiMixer->show();
 }
 
@@ -7150,8 +7034,6 @@ RosegardenMainWindow::slotEditMarkers()
     connect(m_markerEditor, &MarkerEditor::jumpToMarker,
             m_doc, &RosegardenDocument::slotSetPointerPosition);
 
-    plugShortcuts(m_markerEditor, m_markerEditor->getShortcuts());
-
     m_markerEditor->show();
 }
 
@@ -7179,8 +7061,6 @@ RosegardenMainWindow::slotEditTempos(timeT t)
             this, &RosegardenMainWindow::slotTempoViewClosed);
 
     connect(m_tempoView, &EditViewBase::saveFile, this, &RosegardenMainWindow::slotFileSave);
-
-    plugShortcuts(m_tempoView, m_tempoView->getShortcuts());
 
     m_tempoView->show();
 }
@@ -7271,11 +7151,6 @@ RosegardenMainWindow::slotShowPluginDialog(QWidget *parent,
                               m_pluginGUIManager,
                               container,
                               index);
-
-    // Plug the new dialog into the standard keyboard shortcuts so
-    // that we can use them still while the plugin has focus.
-    //
-    plugShortcuts(dialog, dialog->getShortcuts());
 
     connect(dialog,
             &AudioPluginDialog::pluginSelected,

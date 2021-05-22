@@ -1946,14 +1946,6 @@ RosegardenMainViewWidget::createEventView(std::vector<Segment *> segmentsToEdit)
     connect(eventView, &EditViewBase::toggleSolo,
             RosegardenMainWindow::self(), &RosegardenMainWindow::slotToggleSolo);
 
-    // create keyboard shortcuts on view
-    //
-    RosegardenMainWindow *par = dynamic_cast<RosegardenMainWindow*>(parent());
-
-    if (par) {
-        par->plugShortcuts(eventView, eventView->getShortcuts());
-    }
-
     return eventView;
 }
 
