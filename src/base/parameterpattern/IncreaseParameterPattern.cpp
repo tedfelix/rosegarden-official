@@ -16,7 +16,6 @@
 */
 
 #include "IncreaseParameterPattern.h"
-#include "gui/dialogs/EventParameterDialog.h"
 
 namespace Rosegarden
 {

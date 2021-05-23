@@ -115,7 +115,6 @@
 #include "gui/dialogs/LilyPondOptionsDialog.h"
 #include "gui/dialogs/SelectDialog.h"
 #include "gui/dialogs/EventFilterDialog.h"
-#include "gui/dialogs/EventParameterDialog.h"
 #include "gui/dialogs/PitchBendSequenceDialog.h"
 #include "gui/dialogs/KeySignatureDialog.h"
 #include "gui/dialogs/IntervalDialog.h"

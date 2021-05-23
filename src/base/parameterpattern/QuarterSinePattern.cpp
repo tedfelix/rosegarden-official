@@ -17,7 +17,6 @@
 
 #include "QuarterSinePattern.h"
 
-#include "gui/dialogs/EventParameterDialog.h"
 #include "misc/Constants.h"
 
 #include <cmath>

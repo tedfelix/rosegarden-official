@@ -16,7 +16,6 @@
 */
 
 #include "FlatParameterPattern.h"
-#include "gui/dialogs/EventParameterDialog.h"
 
 namespace Rosegarden
 {

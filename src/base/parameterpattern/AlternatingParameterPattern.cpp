@@ -16,7 +16,6 @@
 */
 
 #include "AlternatingParameterPattern.h"
-#include "gui/dialogs/EventParameterDialog.h"
 
 namespace Rosegarden
 {

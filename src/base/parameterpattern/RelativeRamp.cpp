@@ -16,7 +16,6 @@
 */
 
 #include "RelativeRamp.h"
-#include "gui/dialogs/EventParameterDialog.h"
 
 namespace Rosegarden
 {

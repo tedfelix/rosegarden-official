@@ -38,11 +38,24 @@ class SelectionPropertyCommand;
 // there.
 typedef std::vector<int> ParameterPatternBareParameters;
 
-// @class ParameterPattern Base class of parameter patterns.  This
-// class has no data members.  It is used for its static functions,
-// its nested types, and its descendants' vtables.  Only a static
-// instance of each subclass exists.
-// @author Tom Breton (Tehom)
+/// Sets Event parameters based on various patterns.
+/**
+ * This class offers a number of set*() functions that set the parameters of
+ * selected Event's based on patterns.  Sometimes a UI is provided to allow
+ * the user to specify the attributes of the pattern.
+ *
+ * setVelocitiesFlat() is an example of a function that sets Event properties
+ * without a UI.
+ *
+ * setVelocities() is an example of a function that sets Event properties with
+ * a UI.
+ *
+ * Base class of parameter patterns.  This class has no data members.  It is
+ * used for its static functions, its nested types, and its descendants' vtables.
+ * Only a static instance of each subclass exists.
+ *
+ * @author Tom Breton (Tehom)
+ */
 class ParameterPattern
 {
 public:
@@ -121,7 +134,10 @@ protected:
     /*** End-to-end methods that do the complete operation  ***/
 
 public:
-    // Set velocities flat, no dialog. 
+    /// Set velocities flat, no dialog.
+    /**
+     * Matrix: Adjust > Set to Current Velocity
+     */
     static void setVelocitiesFlat(EventSelection *selection,
                                   int targetVelocity);
     
@@ -130,7 +146,10 @@ public:
                                 const std::string eventType,
                                 int targetValue);
     
-    // Set velocities, with a dialog
+    /// Set velocities, with a dialog
+    /**
+     * Matrix/Notation: Adjust > Set Event Velocities...
+     */
     static void setVelocities(QMainWindow *parent,
                               EventSelection *selection,
                               int normVelocity = -1);
@@ -142,6 +161,7 @@ public:
                               const ParameterPatternVec *patterns,
                               int normValue = -1);
 
+    /// Matrix/Notation: Controllers > Set Controller Values...
     static void setProperties(QMainWindow *parent,
                               QString windowName,
                               SelectionSituation *situation,
