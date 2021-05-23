@@ -95,14 +95,17 @@ DiatonicPitchChooser::DiatonicPitchChooser(QString title,
     hbox->setLayout(hboxLayout);
     setLayout(layout);
 
-    connect(m_accidental, SIGNAL(activated(int)),
-            this, SLOT(slotSetAccidental(int)));
+    connect(m_accidental,
+                static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
+            this, &DiatonicPitchChooser::slotSetAccidental);
 
-    connect(m_octave, SIGNAL(activated(int)),
-            this, SLOT(slotSetOctave(int)));
+    connect(m_octave,
+                static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
+            this, &DiatonicPitchChooser::slotSetOctave);
 
-    connect(m_step, SIGNAL(activated(int)),
-            this, SLOT(slotSetStep(int)));
+    connect(m_step,
+                static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
+            this, &DiatonicPitchChooser::slotSetStep);
 
     //connect(m_pitch, SIGNAL(valueChanged(int)),
     //        this, SIGNAL(pitchChanged(int)));

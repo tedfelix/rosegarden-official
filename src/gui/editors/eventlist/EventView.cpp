@@ -222,7 +222,9 @@ EventView::EventView(RosegardenDocument *doc,
             adjust->setCurrentIndex(2);
         }
 
-        connect(adjust, SIGNAL(activated(int)), this, SLOT(slotTriggerTimeAdjustChanged(int)));
+        connect(adjust,
+                    static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
+                this, &EventView::slotTriggerTimeAdjustChanged);
             
         QCheckBox *retune = new QCheckBox(tr("Adjust pitch to trigger note by default"), frame);
         retune->setChecked(rec->getDefaultRetune());

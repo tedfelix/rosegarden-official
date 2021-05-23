@@ -157,7 +157,9 @@ LyricEditDialog::LyricEditDialog(QWidget *parent,
     m_verseNumber = new QComboBox( hbox );
     hboxLayout->addWidget(m_verseNumber);
     m_verseNumber->setEditable(false);
-    connect(m_verseNumber, SIGNAL(activated(int)), this, SLOT(slotVerseNumberChanged(int)));
+    connect(m_verseNumber,
+                static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
+            this, &LyricEditDialog::slotVerseNumberChanged);
     m_verseAddButton = new QPushButton(tr("Add Verse"), hbox );
     hboxLayout->addWidget(m_verseAddButton);
     connect(m_verseAddButton, &QAbstractButton::clicked, this, &LyricEditDialog::slotAddVerse);

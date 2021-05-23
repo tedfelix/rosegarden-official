@@ -130,8 +130,9 @@ TimeWidget::init(bool editable)
                 QPixmap pmap = NotePixmapFactory::makeNoteMenuPixmap(duration, error);
                 m_note->addItem(pmap, label); // ignore error
             }
-            connect(m_note, SIGNAL(activated(int)),
-                    this, SLOT(slotNoteChanged(int)));
+            connect(m_note,
+                        static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
+                    this, &TimeWidget::slotNoteChanged);
             layout->addWidget(m_note, 0, 1, 0-0+ 1, 3);
 
         } else {

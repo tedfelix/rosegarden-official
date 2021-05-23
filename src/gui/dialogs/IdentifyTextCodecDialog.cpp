@@ -201,8 +201,9 @@ IdentifyTextCodecDialog::IdentifyTextCodecDialog(QWidget *parent,
         if (cc == codec) current = i;
     }
 
-    connect(codecs, SIGNAL(activated(int)),
-            this, SLOT(slotCodecSelected(int)));
+    connect(codecs,
+                static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
+            this, &IdentifyTextCodecDialog::slotCodecSelected);
 
     gl->addWidget(new QLabel(tr("\nExample text from file:")));
     m_example = new QLabel;

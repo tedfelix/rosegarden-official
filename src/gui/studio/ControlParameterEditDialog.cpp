@@ -124,8 +124,9 @@ ControlParameterEditDialog::ControlParameterEditDialog(
     connect(m_nameEdit, &QLineEdit::textChanged,
             this, &ControlParameterEditDialog::slotNameChanged);
 
-    connect(m_typeCombo, SIGNAL(activated(int)),
-            SLOT(slotTypeChanged(int)));
+    connect(m_typeCombo,
+                static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
+            this, &ControlParameterEditDialog::slotTypeChanged);
 
     connect(m_description, &QLineEdit::textChanged,
             this, &ControlParameterEditDialog::slotDescriptionChanged);
@@ -142,11 +143,13 @@ ControlParameterEditDialog::ControlParameterEditDialog(
     connect(m_defaultBox, SIGNAL(valueChanged(int)),
             SLOT(slotDefaultChanged(int)));
 
-    connect(m_colourCombo, SIGNAL(activated(int)),
-            SLOT(slotColourChanged(int)));
+    connect(m_colourCombo,
+                static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
+            this, &ControlParameterEditDialog::slotColourChanged);
 
-    connect(m_ipbPosition, SIGNAL(activated(int)),
-            SLOT(slotIPBPositionChanged(int)));
+    connect(m_ipbPosition,
+                static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
+            this, &ControlParameterEditDialog::slotIPBPositionChanged);
 
     //m_nameEdit->selectAll();
     //m_description->selectAll();

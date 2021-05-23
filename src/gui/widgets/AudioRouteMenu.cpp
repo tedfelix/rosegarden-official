@@ -68,8 +68,10 @@ AudioRouteMenu::AudioRouteMenu(QWidget *parent,
     case Regular: {
             m_button = nullptr;
             m_combo = new QComboBox(parent);
-            connect(m_combo, SIGNAL(activated(int)),
-                    SLOT(slotEntrySelected(int)));
+            connect(m_combo,
+                        static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
+                    this,
+                        static_cast<void(AudioRouteMenu::*)(int)>(&AudioRouteMenu::slotEntrySelected));
             break;
         }
 

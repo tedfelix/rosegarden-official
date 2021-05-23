@@ -123,8 +123,9 @@ EventParameterDialog::EventParameterDialog(
 
     initPatternCombo();
 
-    connect(m_patternCombo, SIGNAL(activated(int)),
-            this, SLOT(slotPatternSelected(int)));
+    connect(m_patternCombo,
+                static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
+            this, &EventParameterDialog::slotPatternSelected);
 
     // Instead of looping for 2 we just call twice.
     m_paramVec.push_back(ParamWidget(mainLayout));

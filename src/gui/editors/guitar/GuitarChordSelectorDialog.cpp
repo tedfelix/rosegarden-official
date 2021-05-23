@@ -73,8 +73,9 @@ GuitarChordSelectorDialog::GuitarChordSelectorDialog(QWidget *parent)
     m_chordComplexityCombo->addItem(tr("all"));
     //m_chordComplexityCombo->setMinimumContentsLength(20);
     
-    connect(m_chordComplexityCombo, SIGNAL(activated(int)),
-            this, SLOT(slotComplexityChanged(int)));
+    connect(m_chordComplexityCombo,
+                static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
+            this, &GuitarChordSelectorDialog::slotComplexityChanged);
 
     page->setContentsMargins(5, 5, 5, 5);
     QVBoxLayout* vboxLayout = new QVBoxLayout();

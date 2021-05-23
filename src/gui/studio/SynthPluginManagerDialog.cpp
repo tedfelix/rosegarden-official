@@ -211,8 +211,9 @@ void SynthPluginManagerDialog:: setupGuiCreatePluginList(){
             }
         }
 
-        connect (pluginCombo, SIGNAL(activated(int)),
-                 this, SLOT(slotPluginChanged(int)));
+        connect(pluginCombo,
+                    static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
+                this, &SynthPluginManagerDialog::slotPluginChanged);
 
         m_scrollWidgetLayout->addWidget ( pluginCombo, i, 1 );
 

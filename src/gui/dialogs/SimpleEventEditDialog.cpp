@@ -110,8 +110,9 @@ SimpleEventEditDialog::SimpleEventEditDialog(QWidget *parent,
 
         // Connect up the combos
         //
-        connect(m_typeCombo, SIGNAL(activated(int)),
-                SLOT(slotEventTypeChanged(int)));
+        connect(m_typeCombo,
+                    static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
+                this, &SimpleEventEditDialog::slotEventTypeChanged);
 
     } else {
 

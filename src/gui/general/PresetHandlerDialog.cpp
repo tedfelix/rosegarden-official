@@ -160,8 +160,9 @@ PresetHandlerDialog::initDialog()
         m_convertSegments->setChecked(qStrToBool(settings.value("convert_segments", "0")));
     }
     
-    connect(m_categoryCombo, SIGNAL(activated(int)),
-            SLOT(slotCategoryIndexChanged(int)));
+    connect(m_categoryCombo,
+                static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
+            this, &PresetHandlerDialog::slotCategoryIndexChanged);
 
     settings.endGroup();
 

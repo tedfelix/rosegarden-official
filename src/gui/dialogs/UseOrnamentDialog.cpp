@@ -95,7 +95,9 @@ UseOrnamentDialog::UseOrnamentDialog(QWidget *parent,
     }
     m_mark->addItem(tr("Text mark"));
 
-    connect(m_mark, SIGNAL(activated(int)), this, SLOT(slotMarkChanged(int)));
+    connect(m_mark,
+                static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
+            this, &UseOrnamentDialog::slotMarkChanged);
 
     m_textLabel = new QLabel(tr("   Text:  "));
     layout->addWidget(m_textLabel, 0, 2);

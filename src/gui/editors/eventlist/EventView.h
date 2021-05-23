@@ -51,6 +51,7 @@ class RosegardenDocument;
 class Event;
 
 
+/// The "Event List" window.
 class EventView : public ListEditView, public SegmentObserver
 {
     Q_OBJECT

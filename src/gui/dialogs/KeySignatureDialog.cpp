@@ -15,6 +15,7 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[KeySignatureDialog]"
 
 #include "KeySignatureDialog.h"
 
@@ -214,8 +215,9 @@ KeySignatureDialog::KeySignatureDialog(QWidget *parent,
 
     QObject::connect(keyUp, &QAbstractButton::clicked, this, &KeySignatureDialog::slotKeyUp);
     QObject::connect(keyDown, &QAbstractButton::clicked, this, &KeySignatureDialog::slotKeyDown);
-    QObject::connect(m_keyCombo, SIGNAL(activated(int)),
-                     this, SLOT(slotKeyNameChanged(int)));
+    connect(m_keyCombo,
+                static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
+            this, &KeySignatureDialog::slotKeyNameChanged);
     QObject::connect(m_majorMinorCombo, SIGNAL(activated(const QString &)),
                      this, SLOT(slotMajorMinorChanged(const QString &)));
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::Help);

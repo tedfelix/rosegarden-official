@@ -36,7 +36,6 @@
 #include "gui/dialogs/AboutDialog.h"
 #include "gui/dialogs/QuantizeDialog.h"
 #include "gui/dialogs/EventFilterDialog.h"
-#include "gui/dialogs/EventParameterDialog.h"
 #include "gui/dialogs/TriggerSegmentDialog.h"
 #include "gui/dialogs/PitchBendSequenceDialog.h"
 #include "gui/dialogs/KeySignatureDialog.h"
@@ -586,8 +585,9 @@ MatrixView::initActionsToolbar()
         }
     }
 
-    connect(m_snapGridCombo, SIGNAL(activated(int)),
-            this, SLOT(slotSetSnapFromIndex(int)));
+    connect(m_snapGridCombo,
+                static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
+            this, &MatrixView::slotSetSnapFromIndex);
 
     // Velocity combo.  Not a spin box, because the spin box is too
     // slow to use unless we make it typeable into, and then it takes
@@ -604,8 +604,9 @@ MatrixView::initActionsToolbar()
         m_velocityCombo->addItem(QString("%1").arg(i));
     }
     m_velocityCombo->setCurrentIndex(100); //!!! associate with segment
-    connect(m_velocityCombo, SIGNAL(activated(int)),
-            m_matrixWidget, SLOT(slotSetCurrentVelocity(int)));
+    connect(m_velocityCombo,
+                static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
+            m_matrixWidget, &MatrixWidget::slotSetCurrentVelocity);
 
     // Quantize combo
     //
@@ -632,8 +633,9 @@ MatrixView::initActionsToolbar()
 
     m_quantizeCombo->setSizeAdjustPolicy(QComboBox::AdjustToContents);
 
-    connect(m_quantizeCombo, SIGNAL(activated(int)),
-            this, SLOT(slotQuantizeSelection(int)));
+    connect(m_quantizeCombo,
+                static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
+            this, &MatrixView::slotQuantizeSelection);
 }
 
 void

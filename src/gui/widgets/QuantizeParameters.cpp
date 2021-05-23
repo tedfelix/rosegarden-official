@@ -73,7 +73,9 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
     QuantizerType quantizerType = static_cast<QuantizerType>(
             m_settings.value("quantizetype", defaultQuantizer).toInt());
     m_quantizerType->setCurrentIndex(quantizerType);
-    connect(m_quantizerType, SIGNAL(activated(int)), SLOT(slotTypeChanged(int)));
+    connect(m_quantizerType,
+                static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
+            this, &QuantizeParameters::slotTypeChanged);
     qbLayout->addWidget(m_quantizerType, 0, 1);
 
     m_quantizeNotation = new QCheckBox(

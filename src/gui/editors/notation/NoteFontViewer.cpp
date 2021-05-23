@@ -19,6 +19,7 @@
 #include "NoteFontViewer.h"
 
 #include "FontViewFrame.h"
+
 #include <QComboBox>
 #include <QDialog>
 #include <QDialogButtonBox>
@@ -119,8 +120,9 @@ NoteFontViewer::NoteFontViewer(QWidget *parent, QString noteFontName,
     connect(m_font, SIGNAL(activated(const QString &)),
             this, SLOT(slotFontChanged(const QString &)));
 
-    connect(m_view, SIGNAL(activated(int)),
-            this, SLOT(slotViewChanged(int)));
+    connect(m_view,
+                static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
+            this, &NoteFontViewer::slotViewChanged);
 
     connect(m_rows, SIGNAL(activated(const QString &)),
             this, SLOT(slotRowChanged(const QString &)));

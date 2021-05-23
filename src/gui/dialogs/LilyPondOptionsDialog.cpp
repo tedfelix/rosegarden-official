@@ -324,7 +324,9 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QWidget *parent,
 
     setLayout(metaGridLayout);
 
-    connect(m_lilyLanguage, SIGNAL(activated(int)), m_useShortNames, SLOT(slotCheckVersion(int)));
+    connect(m_lilyLanguage,
+                static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
+            m_useShortNames, &LilyVersionAwareCheckBox::slotCheckVersion);
     connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
     connect(buttonBox, &QDialogButtonBox::helpRequested, this, &LilyPondOptionsDialog::help);

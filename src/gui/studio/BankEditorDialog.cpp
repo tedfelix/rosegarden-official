@@ -261,8 +261,9 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     connect(m_variationToggle, &QAbstractButton::clicked,
             this, &BankEditorDialog::slotVariationToggled);
 
-    connect(m_variationCombo, SIGNAL(activated(int)),
-            this, SLOT(slotVariationChanged(int)));
+    connect(m_variationCombo,
+                static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
+            this, &BankEditorDialog::slotVariationChanged);
 
 //     CommandHistory::getInstance()->attachView(actionCollection());    //&&&
     

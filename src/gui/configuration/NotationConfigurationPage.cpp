@@ -17,7 +17,6 @@
 
 
 #include "NotationConfigurationPage.h"
-#include <QLayout>
 
 #include "misc/Strings.h"
 #include "misc/ConfigGroups.h"
@@ -30,11 +29,11 @@
 #include "gui/editors/notation/NoteFontFactory.h"
 #include "gui/editors/notation/NoteFont.h"
 #include "gui/editors/notation/NoteFontMap.h"
-#include "gui/editors/notation/NoteFontViewer.h"
 #include "gui/editors/notation/NotePixmapFactory.h"
 #include "gui/editors/notation/NoteStyleFactory.h"
 #include "gui/widgets/FontRequester.h"
 #include "TabbedConfigurationPage.h"
+
 #include <QComboBox>
 #include <QSettings>
 #include <QMessageBox>
@@ -52,6 +51,8 @@
 #include <QHBoxLayout>
 #include <QToolTip>
 #include <QGridLayout>
+#include <QLayout>
+
 #include <algorithm>
 
 namespace Rosegarden
