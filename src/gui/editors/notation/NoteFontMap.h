@@ -20,22 +20,21 @@
 #define RG_NOTEFONTMAP_H
 
 #include "base/Exception.h"
-#include <map>
-#include <set>
-#include <string>
 #include "SystemFont.h"
+#include "document/io/XMLHandler.h"
+
 #include <QString>
 #include <QStringList>
+
+#include <map>
+#include <set>
 #include <utility>
-#include "gui/editors/notation/NoteCharacterNames.h"
-#include "document/io/XMLHandler.h"
 
 class QXmlStreamAttributes;
 
 
 namespace Rosegarden
 {
-
 
 
 class NoteFontMap : public XMLHandler
@@ -304,7 +303,6 @@ private:
     CharBaseMap m_bases;
 
     // For use when reading the XML file:
-    bool m_expectingCharacters;
     QString *m_characterDestination;
     QString m_hotspotCharName;
     QString m_errorString;
@@ -313,9 +311,6 @@ private:
 
     bool m_ok;
 };
-
-
-class NoteCharacterDrawRep;
 
 
 }

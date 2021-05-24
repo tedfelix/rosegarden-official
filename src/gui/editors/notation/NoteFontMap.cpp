@@ -16,23 +16,24 @@
 */
 
 #define RG_MODULE_STRING "[NoteFontMap]"
+#define RG_NO_DEBUG_PRINT 1
 
 #include "NoteFontMap.h"
-#include "misc/Debug.h"
 
-#include <QDir>
+#include "misc/Debug.h"
 #include "misc/Strings.h"
 #include "base/Exception.h"
 #include "SystemFont.h"
 #include "gui/general/ResourceFinder.h"
 #include "document/io/XMLReader.h"
+
+#include <QDir>
 #include <QFile>
 #include <QFileInfo>
 #include <QPixmap>
 #include <QRegularExpression>
 #include <QString>
 #include <QStringList>
-#include <iostream>
 
 namespace Rosegarden
 {
@@ -164,7 +165,7 @@ NoteFontMap::startElement(const QString &, const QString &,
 
         s = attributes.value("autocrop").toString();
 		if ( ! s.isEmpty() ) {
-            std::cerr << "Warning: autocrop attribute in note font mapping file is no longer supported\n(all fonts are now always autocropped)" << std::endl;
+            RG_WARNING << "startElement(): WARNING: autocrop attribute in note font mapping file is no longer supported\n(all fonts are now always autocropped)";
         }
 
         s = attributes.value("smooth").toString();
@@ -210,12 +211,12 @@ NoteFontMap::startElement(const QString &, const QString &,
 
         s = attributes.value("border-x").toString();
 		if ( ! s.isEmpty() ) {
-            std::cerr << "Warning: border-x attribute in note font mapping file is no longer supported\n(use hotspot-x for note head or flag)" << std::endl;
+            RG_WARNING << "startElement(): WARNING: border-x attribute in note font mapping file is no longer supported\n(use hotspot-x for note head or flag)";
         }
 
         s = attributes.value("border-y").toString();
 		if ( ! s.isEmpty() ) {
-            std::cerr << "Warning: border-y attribute in note font mapping file is no longer supported" << std::endl;
+            RG_WARNING << "startElement(): WARNING: border-y attribute in note font mapping file is no longer supported";
         }
 
         int fontId = 0;
@@ -582,7 +583,7 @@ NoteFontMap::startElement(const QString &, const QString &,
                 m_systemFontNames[n] = name;
                 delete font;
             } else {
-                std::cerr << QString("Warning: Unable to load font \"%1\"").arg(name) << std::endl;
+                RG_WARNING << "startElement(): WARNING: Unable to load font" << name;
                 m_ok = false;
             }
 
@@ -606,7 +607,7 @@ NoteFontMap::startElement(const QString &, const QString &,
                 }
             }
             if (!have) {
-                RG_WARNING << "startElement(): WARNING: Unable to load any of the fonts in" << names;
+                RG_DEBUG << "startElement(): Unable to load any of the fonts in" << names;
                 m_ok = false;
             }
 
@@ -628,9 +629,9 @@ NoteFontMap::startElement(const QString &, const QString &,
             else if (s == "only-codes")
                 strategy = SystemFont::OnlyCodes;
             else {
-                std::cerr << "Warning: Unknown strategy value " << s
-                << " (known values are prefer-glyphs, prefer-codes,"
-                << " only-glyphs, only-codes)" << std::endl;
+                RG_WARNING << "startElement(): WARNING: Unknown strategy value " << s
+                           << " (known values are prefer-glyphs, prefer-codes,"
+                           << " only-glyphs, only-codes)";
             }
         }
 
@@ -709,12 +710,11 @@ NoteFontMap::checkFile(int size, QString &src) const
 
         if (pixmapFileMixedName == "" || !pixmapFileLowerInfo.isReadable()) {
             if (pixmapFileMixedName != pixmapFileLowerName) {
-                std::cerr << "Warning: Unable to open pixmap file "
-                << pixmapFileMixedName << " or " << pixmapFileLowerName
-                << std::endl;
+                RG_WARNING << "checkFile(): WARNING: Unable to open pixmap file "
+                           << pixmapFileMixedName << " or " << pixmapFileLowerName;
             } else {
-                std::cerr << "Warning: Unable to open pixmap file "
-                << pixmapFileMixedName << std::endl;
+                RG_WARNING << "checkFile(): WARNING: Unable to open pixmap file "
+                           << pixmapFileMixedName;
             }
             return false;
         } else {
@@ -989,10 +989,10 @@ NoteFontMap::dump() const
 {
     // debug code
 
-    std::cout << "Font data:\nName: " << getName() << "\nOrigin: " << getOrigin()
-    << "\nCopyright: " << getCopyright() << "\nMapped by: "
-    << getMappedBy() << "\nType: " << getType()
-    << "\nSmooth: " << isSmooth() << std::endl;
+    RG_DEBUG << "Font data:\nName: " << getName() << "\nOrigin: " << getOrigin()
+             << "\nCopyright: " << getCopyright() << "\nMapped by: "
+             << getMappedBy() << "\nType: " << getType()
+             << "\nSmooth: " << isSmooth();
 
     std::set<int> sizes = getSizes();
     std::set<CharName> names = getCharNames();
@@ -1000,68 +1000,68 @@ NoteFontMap::dump() const
     for (std::set<int>::iterator sizei = sizes.begin(); sizei != sizes.end();
             ++sizei) {
 
-        std::cout << "\nSize: " << *sizei << "\n" << std::endl;
+        RG_DEBUG << "\nSize: " << *sizei << "\n";
 
         unsigned int t = 0;
 
         if (getStaffLineThickness(*sizei, t)) {
-            std::cout << "Staff line thickness: " << t << std::endl;
+            RG_DEBUG << "Staff line thickness: " << t;
         }
 
         if (getLegerLineThickness(*sizei, t)) {
-            std::cout << "Leger line thickness: " << t << std::endl;
+            RG_DEBUG << "Leger line thickness: " << t;
         }
 
         if (getStemThickness(*sizei, t)) {
-            std::cout << "Stem thickness: " << t << std::endl;
+            RG_DEBUG << "Stem thickness: " << t;
         }
 
         if (getBeamThickness(*sizei, t)) {
-            std::cout << "Beam thickness: " << t << std::endl;
+            RG_DEBUG << "Beam thickness: " << t;
         }
 
         if (getStemLength(*sizei, t)) {
-            std::cout << "Stem length: " << t << std::endl;
+            RG_DEBUG << "Stem length: " << t;
         }
 
         if (getFlagSpacing(*sizei, t)) {
-            std::cout << "Flag spacing: " << t << std::endl;
+            RG_DEBUG << "Flag spacing: " << t;
         }
 
         for (std::set<CharName>::iterator namei = names.begin();
              namei != names.end(); ++namei) {
 
-            std::cout << "\nCharacter: " << *namei << std::endl;
+            RG_DEBUG << "\nCharacter: " << *namei;
 
             QString s;
             int x, y, c;
 
             if (getSrc(*sizei, *namei, s)) {
-                std::cout << "Src: " << s << std::endl;
+                RG_DEBUG << "Src: " << s;
             }
 
             if (getInversionSrc(*sizei, *namei, s)) {
-                std::cout << "Inversion src: " << s << std::endl;
+                RG_DEBUG << "Inversion src: " << s;
             }
 
             if (getCode(*sizei, *namei, c)) {
-                std::cout << "Code: " << c << std::endl;
+                RG_DEBUG << "Code: " << c;
             }
 
             if (getInversionCode(*sizei, *namei, c)) {
-                std::cout << "Inversion code: " << c << std::endl;
+                RG_DEBUG << "Inversion code: " << c;
             }
 
             if (getGlyph(*sizei, *namei, c)) {
-                std::cout << "Glyph: " << c << std::endl;
+                RG_DEBUG << "Glyph: " << c;
             }
 
             if (getInversionGlyph(*sizei, *namei, c)) {
-                std::cout << "Inversion glyph: " << c << std::endl;
+                RG_DEBUG << "Inversion glyph: " << c;
             }
 
             if (getHotspot(*sizei, *namei, 1, 1, x, y)) {
-                std::cout << "Hot spot: (" << x << "," << y << ")" << std::endl;
+                RG_DEBUG << "Hot spot: (" << x << "," << y << ")";
             }
         }
     }
