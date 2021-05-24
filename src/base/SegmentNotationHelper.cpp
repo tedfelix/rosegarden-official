@@ -1194,7 +1194,14 @@ SegmentNotationHelper::insertKey(timeT absoluteTime, Key key)
 Segment::iterator
 SegmentNotationHelper::insertText(timeT absoluteTime, Text text)
 {
-    return insert(text.getAsEvent(absoluteTime));
+    Segment::iterator i = insert(text.getAsEvent(absoluteTime));
+
+    // If text is lyric, invalidateVerseCount() have to be called to avoid a
+    // crash when opening the lyric editor if the lyric is on a still
+    // non-existent verse(fix bug #1598)
+    if (text.getTextType() == Text::Lyric) segment().invalidateVerseCount();
+
+    return i;
 }
 
 
