@@ -32,13 +32,15 @@ namespace Rosegarden {
 class DecoyAction : public QAction
 {
 public:
-    ~DecoyAction() override;
+    ~DecoyAction() override  { }
+
     static DecoyAction *getInstance();
 
 private:
-    DecoyAction();
-
-    static DecoyAction *m_instance;
+    DecoyAction() :
+        QAction("Decoy Action", nullptr)
+    {
+    }
 };
 
 }

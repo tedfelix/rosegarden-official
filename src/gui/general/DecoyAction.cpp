@@ -25,22 +25,14 @@ namespace Rosegarden {
 
 
 DecoyAction *
-DecoyAction::m_instance = nullptr;
-
-DecoyAction *
 DecoyAction::getInstance()
 { 
-    if (!m_instance) m_instance = new DecoyAction();
-    RG_WARNING << "getInstance(): WARNING: Using decoy action";
-    return m_instance;
-}
+    static DecoyAction decoyAction;
 
-DecoyAction::~DecoyAction()
-{
-    RG_WARNING << "dtor: ERROR: Deleting the global DecoyAction -- some class has looked up an action that did not exist, and deleted it -- a crash is highly likely now";
-}
+    //RG_WARNING << "getInstance(): WARNING: Using decoy action";
 
-DecoyAction::DecoyAction() : QAction("Decoy Action", nullptr) { }
+    return &decoyAction;
+}
 
 
 }
