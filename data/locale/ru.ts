@@ -253,7 +253,7 @@
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../../src/gui/editors/notation/NoteFontMap.cpp" line="+45"/>
+        <location filename="../../src/gui/editors/notation/NoteFontMap.cpp" line="+46"/>
         <source>unknown error</source>
         <translation>Неизвестная ошибка</translation>
     </message>
@@ -272,7 +272,7 @@
         <location line="+33"/>
         <location line="+61"/>
         <location line="+49"/>
-        <location line="+143"/>
+        <location line="+140"/>
         <location line="+157"/>
         <location line="+1207"/>
         <location line="+48"/>
@@ -284,7 +284,7 @@
         <translation>&amp;Файл</translation>
     </message>
     <message>
-        <location line="-4726"/>
+        <location line="-4723"/>
         <source>&amp;Add Audio File...</source>
         <translation>&amp;Добавить звуковой файл...</translation>
     </message>
@@ -298,7 +298,7 @@
         <location line="+31"/>
         <location line="+70"/>
         <location line="+49"/>
-        <location line="+134"/>
+        <location line="+131"/>
         <location line="+166"/>
         <location line="+1207"/>
         <location line="+48"/>
@@ -310,11 +310,11 @@
         <translation>&amp;Закрыть</translation>
     </message>
     <message>
-        <location line="-4716"/>
+        <location line="-4713"/>
         <location line="+31"/>
         <location line="+70"/>
         <location line="+49"/>
-        <location line="+134"/>
+        <location line="+131"/>
         <location line="+166"/>
         <location line="+1330"/>
         <location line="+2013"/>
@@ -324,7 +324,7 @@
         <translation>&amp;Правка</translation>
     </message>
     <message>
-        <location line="-4724"/>
+        <location line="-4721"/>
         <source>&amp;Unload Audio File</source>
         <translation>&amp;Выгрузить звуковой файл</translation>
     </message>
@@ -351,7 +351,7 @@
         <location line="+1"/>
         <location line="+134"/>
         <location line="+1"/>
-        <location line="+51"/>
+        <location line="+48"/>
         <location line="+1"/>
         <location line="+1193"/>
         <location line="+173"/>
@@ -375,11 +375,11 @@
         <translation>Ру&amp;ководство по сообщению об ошибках</translation>
     </message>
     <message>
-        <location line="-4349"/>
+        <location line="-4346"/>
         <location line="+59"/>
         <location line="+52"/>
         <location line="+135"/>
-        <location line="+52"/>
+        <location line="+49"/>
         <location line="+1196"/>
         <location line="+171"/>
         <location line="+70"/>
@@ -391,16 +391,16 @@
         <translation>&amp;О Rosegarden</translation>
     </message>
     <message>
-        <location line="-4747"/>
-        <location line="+1496"/>
+        <location line="-4744"/>
+        <location line="+1493"/>
         <location line="+1946"/>
         <source>General Toolbar</source>
         <translation>Общая панель</translation>
     </message>
     <message>
-        <location line="-3412"/>
+        <location line="-3409"/>
         <location line="+156"/>
-        <location line="+272"/>
+        <location line="+269"/>
         <location line="+1330"/>
         <location line="+2013"/>
         <location line="+658"/>
@@ -408,9 +408,9 @@
         <translation>&amp;Копировать</translation>
     </message>
     <message>
-        <location line="-4420"/>
+        <location line="-4417"/>
         <location line="+156"/>
-        <location line="+272"/>
+        <location line="+269"/>
         <location line="+1330"/>
         <location line="+2013"/>
         <location line="+658"/>
@@ -418,8 +418,8 @@
         <translation>Вст&amp;авить</translation>
     </message>
     <message>
-        <location line="-4409"/>
-        <location line="+192"/>
+        <location line="-4406"/>
+        <location line="+189"/>
         <location line="+52"/>
         <location line="+36"/>
         <location line="+36"/>
@@ -433,16 +433,16 @@
         <translation>Выделение</translation>
     </message>
     <message>
-        <location line="-4632"/>
-        <location line="+192"/>
+        <location line="-4629"/>
+        <location line="+189"/>
         <location line="+4318"/>
         <location line="+123"/>
         <source>Switch to Inserting Notes</source>
         <translation>Вставка нот</translation>
     </message>
     <message>
-        <location line="-4632"/>
-        <location line="+192"/>
+        <location line="-4629"/>
+        <location line="+189"/>
         <location line="+104"/>
         <location line="+36"/>
         <location line="+1135"/>
@@ -456,9 +456,9 @@
         <translation>Ластик</translation>
     </message>
     <message>
-        <location line="-4631"/>
+        <location line="-4628"/>
         <location line="+49"/>
-        <location line="+300"/>
+        <location line="+297"/>
         <location line="+1207"/>
         <location line="+48"/>
         <location line="+73"/>
@@ -468,7 +468,7 @@
         <translation>Со&amp;хранить</translation>
     </message>
     <message>
-        <location line="-4432"/>
+        <location line="-4429"/>
         <source>&amp;Insert Event</source>
         <translation>&amp;Вставить событие</translation>
     </message>
@@ -489,7 +489,7 @@
     </message>
     <message>
         <location line="+1"/>
-        <location line="+272"/>
+        <location line="+269"/>
         <location line="+1330"/>
         <location line="+2013"/>
         <location line="+658"/>
@@ -497,8 +497,8 @@
         <translation>&amp;Вырезать</translation>
     </message>
     <message>
-        <location line="-4237"/>
-        <location line="+281"/>
+        <location line="-4234"/>
+        <location line="+278"/>
         <source>C&amp;lear Selection</source>
         <translation>&amp;Снять выделение</translation>
     </message>
@@ -509,8 +509,8 @@
         <translation>&amp;Фильтровать выделение</translation>
     </message>
     <message>
-        <location line="-1641"/>
-        <location line="+58"/>
+        <location line="-1638"/>
+        <location line="+55"/>
         <location line="+230"/>
         <location line="+1364"/>
         <location line="+2008"/>
@@ -520,48 +520,48 @@
         <translation>&amp;Вид</translation>
     </message>
     <message>
-        <location line="-4507"/>
-        <location line="+58"/>
+        <location line="-4504"/>
+        <location line="+55"/>
         <location line="+4390"/>
         <location line="+60"/>
         <source>&amp;Musical Times</source>
         <translation>&amp;Музыкальное время</translation>
     </message>
     <message>
-        <location line="-4507"/>
-        <location line="+58"/>
+        <location line="-4504"/>
+        <location line="+55"/>
         <location line="+4390"/>
         <location line="+60"/>
         <source>&amp;Real Times</source>
         <translation>&amp;Реальное время</translation>
     </message>
     <message>
-        <location line="-4507"/>
-        <location line="+58"/>
+        <location line="-4504"/>
+        <location line="+55"/>
         <location line="+4390"/>
         <location line="+60"/>
         <source>Ra&amp;w Times</source>
         <translation type="unfinished">&amp;Грубое время</translation>
     </message>
     <message>
-        <location line="-4505"/>
-        <location line="+397"/>
+        <location line="-4502"/>
+        <location line="+394"/>
         <location line="+1289"/>
         <location line="+2077"/>
         <source>Se&amp;gment</source>
         <translation>Сег&amp;мент</translation>
     </message>
     <message>
-        <location line="-3762"/>
-        <location line="+397"/>
+        <location line="-3759"/>
+        <location line="+394"/>
         <location line="+1289"/>
         <location line="+2086"/>
         <source>Edit &amp;With</source>
         <translation>&amp;Открыть в редакторе...</translation>
     </message>
     <message>
-        <location line="-3771"/>
-        <location line="+399"/>
+        <location line="-3768"/>
+        <location line="+396"/>
         <location line="+1288"/>
         <location line="+2094"/>
         <location line="+373"/>
@@ -569,8 +569,8 @@
         <translation>&amp;Матричный редактор</translation>
     </message>
     <message>
-        <location line="-4153"/>
-        <location line="+397"/>
+        <location line="-4150"/>
+        <location line="+394"/>
         <location line="+3401"/>
         <location line="+373"/>
         <source>Open in &amp;Notation Editor</source>
@@ -686,24 +686,22 @@
         <translation>&amp;Строка состояния</translation>
     </message>
     <message>
-        <location line="-4432"/>
-        <location line="+3"/>
+        <location line="-4429"/>
         <location line="+1250"/>
         <location line="+3191"/>
         <source>Actions Toolbar</source>
         <translation>Панель «Действия»</translation>
     </message>
     <message>
-        <location line="-4443"/>
-        <location line="+51"/>
+        <location line="-4440"/>
+        <location line="+48"/>
         <location line="+4393"/>
         <location line="+57"/>
         <source>Time Toolbar</source>
         <translation>Панель «Время»</translation>
     </message>
     <message>
-        <location line="-4500"/>
-        <location line="+1250"/>
+        <location line="-3250"/>
         <location line="+167"/>
         <location line="+70"/>
         <location line="+1709"/>
@@ -712,8 +710,7 @@
         <translation>Транспорт</translation>
     </message>
     <message>
-        <location line="-4108"/>
-        <location line="+4127"/>
+        <location line="+19"/>
         <source>Zoom Toolbar</source>
         <translation>Панель «Масштаб»</translation>
     </message>
@@ -1367,11 +1364,11 @@
         <translation>Н&amp;оты</translation>
     </message>
     <message>
-        <location line="-1973"/>
+        <location line="-1970"/>
         <location line="+31"/>
         <location line="+70"/>
         <location line="+49"/>
-        <location line="+134"/>
+        <location line="+131"/>
         <location line="+166"/>
         <location line="+1207"/>
         <location line="+48"/>
@@ -1384,11 +1381,11 @@
         <translation>Ctrl+W</translation>
     </message>
     <message>
-        <location line="-4706"/>
+        <location line="-4703"/>
         <location line="+59"/>
         <location line="+52"/>
         <location line="+135"/>
-        <location line="+52"/>
+        <location line="+49"/>
         <location line="+1194"/>
         <location line="+173"/>
         <location line="+70"/>
@@ -1401,10 +1398,10 @@
         <translation>F1</translation>
     </message>
     <message>
-        <location line="-4726"/>
+        <location line="-4723"/>
         <location line="+70"/>
         <location line="+49"/>
-        <location line="+134"/>
+        <location line="+131"/>
         <location line="+166"/>
         <location line="+1330"/>
         <location line="+2013"/>
@@ -1416,10 +1413,10 @@
         <translation>Ctrl+Z</translation>
     </message>
     <message>
-        <location line="-4685"/>
+        <location line="-4682"/>
         <location line="+70"/>
         <location line="+49"/>
-        <location line="+134"/>
+        <location line="+131"/>
         <location line="+166"/>
         <location line="+1330"/>
         <location line="+2013"/>
@@ -1431,9 +1428,9 @@
         <translation>Ctrl+Shift+Z</translation>
     </message>
     <message>
-        <location line="-4685"/>
+        <location line="-4682"/>
         <location line="+156"/>
-        <location line="+272"/>
+        <location line="+269"/>
         <location line="+1330"/>
         <location line="+2013"/>
         <location line="+658"/>
@@ -1442,9 +1439,9 @@
         <translation>Ctrl+C, F16, Ctrl+Ins</translation>
     </message>
     <message>
-        <location line="-4420"/>
+        <location line="-4417"/>
         <location line="+156"/>
-        <location line="+272"/>
+        <location line="+269"/>
         <location line="+1330"/>
         <location line="+2013"/>
         <location line="+658"/>
@@ -1453,9 +1450,9 @@
         <translation>Ctrl+V, F18, Shift+Ins</translation>
     </message>
     <message>
-        <location line="-4405"/>
+        <location line="-4402"/>
         <location line="+49"/>
-        <location line="+300"/>
+        <location line="+297"/>
         <location line="+1207"/>
         <location line="+48"/>
         <location line="+73"/>
@@ -1466,8 +1463,8 @@
         <translation>Ctrl+S</translation>
     </message>
     <message>
-        <location line="-4432"/>
-        <location line="+1132"/>
+        <location line="-4429"/>
+        <location line="+1129"/>
         <location line="+1918"/>
         <location line="+851"/>
         <location line="+373"/>
@@ -1477,8 +1474,8 @@
         <translation>I</translation>
     </message>
     <message>
-        <location line="-4460"/>
-        <location line="+1666"/>
+        <location line="-4457"/>
+        <location line="+1663"/>
         <location line="+2004"/>
         <location line="+649"/>
         <source>Delete</source>
@@ -1486,8 +1483,8 @@
         <translation>Delete</translation>
     </message>
     <message>
-        <location line="-4310"/>
-        <location line="+1051"/>
+        <location line="-4307"/>
+        <location line="+1048"/>
         <location line="+1918"/>
         <location line="+905"/>
         <location line="+373"/>
@@ -1497,8 +1494,8 @@
         <translation>E</translation>
     </message>
     <message>
-        <location line="-4468"/>
-        <location line="+272"/>
+        <location line="-4465"/>
+        <location line="+269"/>
         <location line="+1330"/>
         <location line="+2013"/>
         <location line="+658"/>
@@ -1507,8 +1504,8 @@
         <translation>Ctrl+X, F20, Shift+Del</translation>
     </message>
     <message>
-        <location line="-4246"/>
-        <location line="+281"/>
+        <location line="-4243"/>
+        <location line="+278"/>
         <location line="+1354"/>
         <location line="+2036"/>
         <location line="+779"/>
@@ -1517,8 +1514,8 @@
         <translation>Ctrl+A</translation>
     </message>
     <message>
-        <location line="-4441"/>
-        <location line="+281"/>
+        <location line="-4438"/>
+        <location line="+278"/>
         <location line="+1354"/>
         <location line="+2815"/>
         <source>Escape</source>
@@ -3614,8 +3611,8 @@
         <translation>&amp;Руководство по Rosegarden</translation>
     </message>
     <message>
-        <location line="-4114"/>
-        <location line="+288"/>
+        <location line="-4111"/>
+        <location line="+285"/>
         <source>Preferences...</source>
         <translation>Параметры...</translation>
     </message>
@@ -3648,7 +3645,7 @@
         <translation>Шаг вперёд (вправо)</translation>
     </message>
     <message>
-        <location line="-2683"/>
+        <location line="-2680"/>
         <source>&amp;Action</source>
         <translation>&amp;Действие</translation>
     </message>
@@ -3668,7 +3665,7 @@
         <translation>Справка</translation>
     </message>
     <message>
-        <location line="+810"/>
+        <location line="+807"/>
         <location line="+1734"/>
         <source>Insert C&amp;ontroller Sequence...</source>
         <translation type="unfinished"></translation>
@@ -4459,7 +4456,7 @@
         <translation>Стабильная фаза</translation>
     </message>
     <message>
-        <location filename="../../src/sound/AlsaDriver.cpp" line="+757"/>
+        <location filename="../../src/sound/AlsaDriver.cpp" line="+756"/>
         <location filename="../../src/base/Studio.cpp" line="+63"/>
         <location filename="../AutoloadStrings.cpp" line="-631"/>
         <source>Audio</source>
@@ -4471,13 +4468,13 @@
         <translation>Неизвестно</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="+715"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="+716"/>
         <location line="+131"/>
         <source>%1. %2</source>
         <translation>%1. %2</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="-2082"/>
+        <location filename="../QMenuStrings.cpp" line="-2079"/>
         <source>Play Preview</source>
         <translation>Воспроизвести фрагмент</translation>
     </message>
@@ -4485,24 +4482,24 @@
         <location line="+26"/>
         <location line="+70"/>
         <location line="+49"/>
-        <location line="+134"/>
+        <location line="+131"/>
         <location line="+4335"/>
         <location line="+106"/>
         <source>&amp;Nothing to undo</source>
         <translation>Нет &amp;отменяемых действий</translation>
     </message>
     <message>
-        <location line="-4685"/>
+        <location line="-4682"/>
         <location line="+70"/>
         <location line="+49"/>
-        <location line="+134"/>
+        <location line="+131"/>
         <location line="+4335"/>
         <location line="+106"/>
         <source>N&amp;othing to redo</source>
         <translation>Нет &amp;возвращаемых действий</translation>
     </message>
     <message>
-        <location line="-4511"/>
+        <location line="-4508"/>
         <source>&amp;Select All</source>
         <translation>В&amp;ыделить всё</translation>
     </message>
@@ -4517,7 +4514,7 @@
         <translation>Установить &amp;длительность сегмента...</translation>
     </message>
     <message>
-        <location line="+1670"/>
+        <location line="+1667"/>
         <source>Show &amp;Symbols Toolbar</source>
         <translation>Показать панель си&amp;мволов</translation>
     </message>
@@ -4648,8 +4645,8 @@
         <translation>&amp;Инструменты</translation>
     </message>
     <message>
-        <location line="-365"/>
-        <location line="+369"/>
+        <location line="-362"/>
+        <location line="+366"/>
         <location line="+1301"/>
         <location line="+2019"/>
         <source>Show St&amp;atusbar</source>
@@ -5414,8 +5411,8 @@
         <translation>Вк&amp;лючить или отключить записываемость</translation>
     </message>
     <message>
-        <location line="-3967"/>
-        <location line="+365"/>
+        <location line="-3964"/>
+        <location line="+362"/>
         <location line="+1293"/>
         <location line="+2001"/>
         <source>Show Main &amp;Toolbar</source>
@@ -10202,7 +10199,7 @@
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="+446"/>
-        <location filename="../../src/gui/general/ActionFileParser.cpp" line="+651"/>
+        <location filename="../../src/gui/general/ActionFileParser.cpp" line="+636"/>
         <location line="+7"/>
         <source>%1</source>
         <translation>%1</translation>
@@ -10218,10 +10215,10 @@
         <translation>%1 (%2)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="+1672"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="+953"/>
-        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="+1056"/>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="+473"/>
+        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="+1700"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="+1001"/>
+        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="+1082"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="+427"/>
         <source>%1 Controller %2 %3</source>
         <translation>Контроллер %1 — %2 %3</translation>
     </message>
@@ -10230,12 +10227,12 @@
         <translation type="obsolete">Rosegarden — секвенсер и нотный редактор</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/main.cpp" line="+430"/>
+        <location filename="../../src/gui/application/main.cpp" line="+433"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location line="+286"/>
+        <location line="+302"/>
         <source>Welcome!</source>
         <translation>Добро пожаловать!</translation>
     </message>
@@ -10333,7 +10330,7 @@
         <translation>B</translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="+388"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="+389"/>
         <source>Audio subsystem is not available - can&apos;t record audio</source>
         <translation>Звуковая подсистема недоступна — запись звука невозможна</translation>
     </message>
@@ -10652,7 +10649,7 @@ Would you like to use
     </message>
     <message>
         <location line="+7"/>
-        <source>&lt;p&gt;Copyright 2000-2020 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; &quot;%4&quot;&lt;br&gt;Build key: %3&lt;br&gt;Qt version: %2&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit&lt;br&gt;&lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;&lt;/p&gt;&lt;p&gt;For more information about Rosegarden, visit&lt;br&gt;&lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2 or later&lt;/p&gt;</source>
+        <source>&lt;p&gt;Copyright 2000-2021 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; &quot;%4&quot;&lt;br&gt;Build key: %3&lt;br&gt;Qt version: %2&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit&lt;br&gt;&lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;&lt;/p&gt;&lt;p&gt;For more information about Rosegarden, visit&lt;br&gt;&lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2 or later&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -10791,12 +10788,12 @@ Would you like to use
 <context>
     <name>Rosegarden::AddLayerCommand</name>
     <message>
-        <location filename="../../src/commands/segment/AddLayerCommand.cpp" line="+35"/>
+        <location filename="../../src/commands/segment/AddLayerCommand.cpp" line="+38"/>
         <source>Add Layer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+32"/>
+        <location line="+46"/>
         <source> - layer</source>
         <translation type="unfinished"></translation>
     </message>
@@ -11122,7 +11119,7 @@ Would you like to use
         <translation>Путь к внешнему звуковому редактору</translation>
     </message>
     <message>
-        <location line="+37"/>
+        <location line="+43"/>
         <source>External audio editor &quot;%1&quot; not found or not executable</source>
         <translation>Внешний звуковой редактор &quot;%1&quot; не найден или не является исполняемым файлом</translation>
     </message>
@@ -11203,7 +11200,7 @@ Would you like to use
 <context>
     <name>Rosegarden::AudioFileManager</name>
     <message>
-        <location filename="../../src/sound/AudioFileManager.cpp" line="+618"/>
+        <location filename="../../src/sound/AudioFileManager.cpp" line="+619"/>
         <source>Cannot download file %1</source>
         <translation>Не удаётся загрузить файл %1</translation>
     </message>
@@ -11319,7 +11316,7 @@ Would you like to use
         <translation>Файл</translation>
     </message>
     <message>
-        <location line="+343"/>
+        <location line="+347"/>
         <source>Save File As</source>
         <translation>Сохранить файл как</translation>
     </message>
@@ -11483,7 +11480,7 @@ Please select the ones you wish to delete permanently from the hard disk.
         <translation>http://rosegardenmusic.com/wiki/doc:audioManager-en</translation>
     </message>
     <message>
-        <location line="-1246"/>
+        <location line="-1250"/>
         <source>&lt;qt&gt;&lt;p&gt;&lt;img src=&quot;:pixmaps/tooltip/warning.png&quot;&gt;&lt;/img&gt; &lt;b&gt;Audio files marked with an asterisk (*) are encoded at a sample rate different from that of the JACK audio server.&lt;/b&gt;&lt;/p&gt;&lt;p&gt;Rosegarden will play them at the correct speed, but they will sound terrible.  Please consider resampling these files externally, or adjusting the sample rate of the JACK server.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -11830,7 +11827,7 @@ Please select the ones you wish to delete permanently from the hard disk.
         <translation>%1 КБ из %2 КБ (использовано %3% КБ)</translation>
     </message>
     <message>
-        <location line="+23"/>
+        <location line="+22"/>
         <source>minutes at</source>
         <translation>минут в</translation>
     </message>
@@ -12201,7 +12198,7 @@ Please select the ones you wish to delete permanently from the hard disk.
         <translation>Показать список вариаций на основе </translation>
     </message>
     <message>
-        <location line="+855"/>
+        <location line="+851"/>
         <source>&lt;new bank %1&gt;</source>
         <translation>&lt;новый банк %1&gt;</translation>
     </message>
@@ -13226,7 +13223,7 @@ Please select the ones you wish to delete permanently from the hard disk.
 <context>
     <name>Rosegarden::ControlRulerWidget</name>
     <message>
-        <location filename="../../src/gui/rulers/ControlRulerWidget.cpp" line="+354"/>
+        <location filename="../../src/gui/rulers/ControlRulerWidget.cpp" line="+491"/>
         <source>Velocity</source>
         <translation>Сила нажатия</translation>
     </message>
@@ -13242,7 +13239,7 @@ Please select the ones you wish to delete permanently from the hard disk.
 <context>
     <name>Rosegarden::ControllerEventsRuler</name>
     <message>
-        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="+299"/>
+        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="+300"/>
         <source>Unsupported Event Type</source>
         <translation>Неподдерживаемый тип событий</translation>
     </message>
@@ -13262,7 +13259,7 @@ Please select the ones you wish to delete permanently from the hard disk.
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+122"/>
+        <location line="+128"/>
         <source>Controller Event Number</source>
         <translation type="unfinished">Номер события контроллера:</translation>
     </message>
@@ -13308,7 +13305,7 @@ Please select the ones you wish to delete permanently from the hard disk.
         <translation>Стоп</translation>
     </message>
     <message>
-        <location line="+53"/>
+        <location line="+52"/>
         <source>Just how big is your hard disk?</source>
         <translation>Каков объём жёсткого диска?</translation>
     </message>
@@ -13762,6 +13759,26 @@ Please select the ones you wish to delete permanently from the hard disk.
         <location line="+9"/>
         <source>Set Segment Duration</source>
         <translation>Установить длительность сегмента</translation>
+    </message>
+    <message>
+        <location line="+47"/>
+        <source>&lt;untitled&gt;</source>
+        <translation type="unfinished">&lt;без имени&gt;</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>%1%2 - Segment%3Track%4#%5 - %6</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <source>%1%2 - All Segments - %3</source>
+        <translation type="unfinished">%1%2 — Все сегменты — %3</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>%1%2 - %3 Segment(s) - %4</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -14253,7 +14270,7 @@ This could cause problems if it overrides a different computed value later on.</
         <translation>Значение (Data2)  </translation>
     </message>
     <message>
-        <location line="+201"/>
+        <location line="+204"/>
         <location line="+8"/>
         <source>&lt;not set&gt;</source>
         <translation>&lt;не установлено&gt;</translation>
@@ -14274,7 +14291,7 @@ This could cause problems if it overrides a different computed value later on.</
         <translation>&lt;нет событий&gt;</translation>
     </message>
     <message>
-        <location line="+176"/>
+        <location line="+175"/>
         <source>Segment label</source>
         <translation>Метка сегмента</translation>
     </message>
@@ -14324,17 +14341,20 @@ This could cause problems if it overrides a different computed value later on.</
         <translation>%1%2 — Переключаемый сегмент: %3</translation>
     </message>
     <message>
-        <location line="+24"/>
+        <location line="+17"/>
+        <source>Event List</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>%1%2 - Segment Track #%3 - Event List</source>
-        <translation>%1%2 — Сегмент дорожки #%3 — Редактор событий</translation>
+        <translation type="vanished">%1%2 — Сегмент дорожки #%3 — Редактор событий</translation>
     </message>
     <message>
-        <location line="+7"/>
         <source>%1%2 - %3 Segments - Event List</source>
-        <translation>%1%2 — %3 сегментов — Редактор событий</translation>
+        <translation type="vanished">%1%2 — %3 сегментов — Редактор событий</translation>
     </message>
     <message>
-        <location line="+18"/>
+        <location line="+17"/>
         <source>http://rosegardenmusic.com/wiki/doc:eventView-en</source>
         <translation>http://rosegardenmusic.com/wiki/doc:eventView-en</translation>
     </message>
@@ -14423,17 +14443,17 @@ Would you like to try and locate this file or skip it?</source>
 <context>
     <name>Rosegarden::FileMergeDialog</name>
     <message>
-        <location filename="../../src/gui/dialogs/FileMergeDialog.cpp" line="+53"/>
+        <location filename="../../src/gui/dialogs/FileMergeDialog.cpp" line="+44"/>
         <source>Merge File</source>
         <translation>Объединить с файлом</translation>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="+10"/>
         <source>Merge new file  </source>
         <translation>Вставить новый файл</translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+5"/>
         <source>At start of existing composition</source>
         <translation>в начало текущей композиции</translation>
     </message>
@@ -14453,7 +14473,7 @@ Would you like to try and locate this file or skip it?</source>
         <translation>Импортировать их тоже</translation>
     </message>
     <message>
-        <location line="+38"/>
+        <location line="+36"/>
         <source>http://rosegardenmusic.com/wiki/doc:fileMergeDialog-en</source>
         <translation>http://rosegardenmusic.com/wiki/doc:fileMergeDialog-en</translation>
     </message>
@@ -14461,7 +14481,7 @@ Would you like to try and locate this file or skip it?</source>
 <context>
     <name>Rosegarden::FileSource</name>
     <message>
-        <location filename="../../src/gui/general/FileSource.cpp" line="+106"/>
+        <location filename="../../src/gui/general/FileSource.cpp" line="+107"/>
         <location line="+81"/>
         <location line="+31"/>
         <source>Unsupported scheme in URL</source>
@@ -14490,7 +14510,7 @@ Would you like to try and locate this file or skip it?</source>
 <context>
     <name>Rosegarden::Fingering</name>
     <message>
-        <location filename="../../src/gui/editors/guitar/Fingering.cpp" line="+131"/>
+        <location filename="../../src/gui/editors/guitar/Fingering.cpp" line="+135"/>
         <source>couldn&apos;t parse fingering &apos;%1&apos; in &apos;%2&apos;</source>
         <translation>Не удалось распознать аппликатуру &apos;%1&apos; в &apos;%2&apos;</translation>
     </message>
@@ -14669,6 +14689,16 @@ Would you like to try and locate this file or skip it?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location line="+21"/>
+        <source>Clean recent files list</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>&lt;qt&gt;&lt;p&gt;Remove entries from the recent files list that no longer exist.&lt;/p&gt;&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location line="+22"/>
         <source>Use JACK transport</source>
         <translation>Использовать транспорт JACK</translation>
@@ -14709,17 +14739,17 @@ Would you like to try and locate this file or skip it?</source>
         <translation>Подробнее...</translation>
     </message>
     <message>
-        <location line="+295"/>
+        <location line="+300"/>
         <source>You must restart Rosegarden or open a file for the track size change to take effect.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-495"/>
+        <location line="-522"/>
         <source>Behavior</source>
         <translation>Поведение</translation>
     </message>
     <message>
-        <location line="+222"/>
+        <location line="+244"/>
         <source>Use Thorn style</source>
         <translation>Использовать стиль «Шип»</translation>
     </message>
@@ -14799,7 +14829,7 @@ Would you like to try and locate this file or skip it?</source>
         <translation>HPLIP (Qt 4)</translation>
     </message>
     <message>
-        <location line="+119"/>
+        <location line="+124"/>
         <location line="+5"/>
         <location line="+5"/>
         <source>Rosegarden</source>
@@ -14815,7 +14845,7 @@ Would you like to try and locate this file or skip it?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-227"/>
+        <location line="-232"/>
         <source>Notation</source>
         <translation>Партитура</translation>
     </message>
@@ -14885,7 +14915,7 @@ Would you like to try and locate this file or skip it?</source>
         <translation>Внешние приложения</translation>
     </message>
     <message>
-        <location line="+170"/>
+        <location line="+175"/>
         <source>Changes to the textured background in the main window will not take effect until you restart Rosegarden.</source>
         <translation>Изменения касательно фонового рисунка не возымеют эффекта до перезапуска Rosegarden.</translation>
     </message>
@@ -14950,7 +14980,7 @@ Would you like to try and locate this file or skip it?</source>
 <context>
     <name>Rosegarden::GuitarChordSelectorDialog</name>
     <message>
-        <location filename="../../src/gui/editors/guitar/GuitarChordSelectorDialog.cpp" line="+47"/>
+        <location filename="../../src/gui/editors/guitar/GuitarChordSelectorDialog.cpp" line="+49"/>
         <source>Guitar Chord Selector</source>
         <translation>Выбор гитарного аккорда</translation>
     </message>
@@ -15006,7 +15036,7 @@ Would you like to try and locate this file or skip it?</source>
     </message>
     <message>
         <location line="+0"/>
-        <location line="+15"/>
+        <location line="+14"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
@@ -15132,7 +15162,7 @@ Would you like to try and locate this file or skip it?</source>
 <context>
     <name>Rosegarden::HydrogenXMLHandler</name>
     <message>
-        <location filename="../../src/document/io/HydrogenXMLHandler.cpp" line="+297"/>
+        <location filename="../../src/document/io/HydrogenXMLHandler.cpp" line="+295"/>
         <source> imported from Hydrogen </source>
         <translation> импортировано из Hydrogen </translation>
     </message>
@@ -15781,7 +15811,7 @@ Example text from file:</source>
     </message>
     <message>
         <location line="+1"/>
-        <location line="+292"/>
+        <location line="+301"/>
         <source>Minor</source>
         <translation>Минор</translation>
     </message>
@@ -15852,7 +15882,7 @@ Example text from file:</source>
 <context>
     <name>Rosegarden::LilyPondExporter</name>
     <message>
-        <location filename="../../src/document/io/LilyPondExporter.cpp" line="+702"/>
+        <location filename="../../src/document/io/LilyPondExporter.cpp" line="+701"/>
         <source>LilyPond does not allow spaces or backslashes in filenames.
 
 Would you like to use
@@ -16494,7 +16524,7 @@ Would you like to use
         <translation>Параметры MIDI</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="+71"/>
+        <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="+72"/>
         <source>Base octave number for MIDI pitch display</source>
         <translation>Номер основной октавы для отображения высоты тона в MIDI</translation>
     </message>
@@ -16527,7 +16557,7 @@ delay at the start of playback due to the amount of data being transmitted.</sou
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+16"/>
+        <location line="+48"/>
         <source>Sequencer timing source</source>
         <translation>Таймер секвенсера</translation>
     </message>
@@ -16559,7 +16589,7 @@ delay at the start of playback due to the amount of data being transmitted.</sou
         <translation>Сэмпл SF2</translation>
     </message>
     <message>
-        <location line="-190"/>
+        <location line="-222"/>
         <source>General</source>
         <translation>Общее</translation>
     </message>
@@ -16604,7 +16634,27 @@ delay at the start of playback due to the amount of data being transmitted.</sou
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+133"/>
+        <location line="+36"/>
+        <source>Send program changes when looping</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Some synths have trouble with program changes coming in repeatedly.  Use this to turn them off when looping.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+15"/>
+        <source>Send control changes when looping</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Some synths have trouble with control changes coming in repeatedly.  Use this to turn them off when looping.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+112"/>
         <source>MIDI Clock and System messages</source>
         <translation>Сообщения MIDI Clock и System</translation>
     </message>
@@ -16842,12 +16892,12 @@ delay at the start of playback due to the amount of data being transmitted.</sou
         <translation>Имя:  </translation>
     </message>
     <message>
-        <location line="+10"/>
+        <location line="+11"/>
         <source>Base pitch</source>
         <translation>Базовая высота тона</translation>
     </message>
     <message>
-        <location line="-21"/>
+        <location line="-22"/>
         <source>&lt;qt&gt;The name is used to identify both the ornament and the triggered segment that stores the ornament&apos;s notes.&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -17116,7 +17166,7 @@ delay at the start of playback due to the amount of data being transmitted.</sou
         <translation>Удалить все маркеры</translation>
     </message>
     <message>
-        <location line="+307"/>
+        <location line="+305"/>
         <source>http://rosegardenmusic.com/wiki/doc:markerEditor-en</source>
         <translation>http://rosegardenmusic.com/wiki/doc:markerEditor-en</translation>
     </message>
@@ -17417,31 +17467,23 @@ Double-click to open the marker editor.</source>
         <translation type="unfinished">Неизвестное действие %1 при вставке ноты</translation>
     </message>
     <message>
-        <location line="-1523"/>
         <source>&lt;untitled&gt;</source>
-        <translation type="unfinished">&lt;без имени&gt;</translation>
+        <translation type="obsolete">&lt;без имени&gt;</translation>
     </message>
     <message>
-        <location line="+6"/>
-        <source>%1%2 - Segment%3Track%4#%5 - %6</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+10"/>
         <source>%1%2 - All Segments - %3</source>
-        <translation>%1%2 — Все сегменты — %3</translation>
+        <translation type="vanished">%1%2 — Все сегменты — %3</translation>
     </message>
     <message numerus="yes">
-        <location line="+7"/>
         <source>%1%2 - %n Segment(s) - %3</source>
-        <translation>
+        <translation type="vanished">
             <numerusform>%1%2 — %n сегмент — %3</numerusform>
             <numerusform>%1%2 — %n сегмента — %3</numerusform>
             <numerusform>%1%2 — %n сегментов — %3</numerusform>
         </translation>
     </message>
     <message>
-        <location line="+248"/>
+        <location line="-1252"/>
         <source> Grid: </source>
         <translation> Сетка: </translation>
     </message>
@@ -17543,7 +17585,7 @@ Double-click to open the marker editor.</source>
         <translation>Удалить переключатели</translation>
     </message>
     <message>
-        <location line="-821"/>
+        <location line="-776"/>
         <source>Matrix</source>
         <translation>Матричный редактор</translation>
     </message>
@@ -17551,7 +17593,7 @@ Double-click to open the marker editor.</source>
 <context>
     <name>Rosegarden::MatrixWidget</name>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="-842"/>
+        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="-869"/>
         <source>Zoom</source>
         <translation>Масштаб</translation>
     </message>
@@ -17571,7 +17613,7 @@ Double-click to open the marker editor.</source>
         <translation>Сбросить масштаб</translation>
     </message>
     <message>
-        <location line="+1150"/>
+        <location line="+1183"/>
         <source>&lt;untitled&gt;</source>
         <translation type="unfinished">&lt;без имени&gt;</translation>
     </message>
@@ -17581,7 +17623,7 @@ Double-click to open the marker editor.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-1226"/>
+        <location line="-1259"/>
         <source>&lt;qt&gt;Rotate wheel to change the active segment&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -17744,7 +17786,7 @@ Double-click to open the marker editor.</source>
 <context>
     <name>Rosegarden::MidiKeyMappingEditor</name>
     <message>
-        <location filename="../../src/gui/studio/MidiKeyMappingEditor.cpp" line="+53"/>
+        <location filename="../../src/gui/studio/MidiKeyMappingEditor.cpp" line="+52"/>
         <location line="+25"/>
         <source>Key Mapping details</source>
         <translation>Подробности о компоновке клавиатуры</translation>
@@ -18391,7 +18433,7 @@ Double-click to open the marker editor.</source>
 <context>
     <name>Rosegarden::NotationStaff</name>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationStaff.cpp" line="+465"/>
+        <location filename="../../src/gui/editors/notation/NotationStaff.cpp" line="+466"/>
         <source> %1</source>
         <translation> %1</translation>
     </message>
@@ -18663,7 +18705,7 @@ This is a bug (the program would previously have crashed by now)</source>
         </translation>
     </message>
     <message>
-        <location line="+146"/>
+        <location line="+181"/>
         <source>  Font:  </source>
         <translation>  Шрифт:  </translation>
     </message>
@@ -18684,7 +18726,7 @@ This is a bug (the program would previously have crashed by now)</source>
         <translation type="unfinished">  Промежуток:  </translation>
     </message>
     <message numerus="yes">
-        <location line="-105"/>
+        <location line="-114"/>
         <source>  %n event(s) selected </source>
         <translation>
             <numerusform>  Выделено %n событие </numerusform>
@@ -18698,7 +18740,12 @@ This is a bug (the program would previously have crashed by now)</source>
         <translation>  Нет выделения </translation>
     </message>
     <message>
-        <location line="+2664"/>
+        <location line="+2582"/>
+        <source>Notation</source>
+        <translation type="unfinished">Партитура</translation>
+    </message>
+    <message>
+        <location line="+118"/>
         <source>Chord</source>
         <translation>Аккорд</translation>
     </message>
@@ -18715,7 +18762,7 @@ This is a bug (the program would previously have crashed by now)</source>
         <translation>%1 %2</translation>
     </message>
     <message>
-        <location line="-2271"/>
+        <location line="-2298"/>
         <source>Unknown spacing action %1</source>
         <translation type="unfinished">%1 - неизвестное действие с промежутком</translation>
     </message>
@@ -18750,12 +18797,12 @@ This is a bug (the program would previously have crashed by now)</source>
         <translation>Невозможно вставить нескольких сегментов в один</translation>
     </message>
     <message>
-        <location line="-776"/>
+        <location line="-811"/>
         <source>&lt;qt&gt;&lt;p&gt;Apply the interpretations selected on this toolbar to the selection.&lt;/p&gt;&lt;p&gt;If there is no selection, interpretations apply to the entire segment automatically.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+367"/>
+        <location line="+402"/>
         <location line="+177"/>
         <location line="+52"/>
         <location line="+57"/>
@@ -18763,15 +18810,15 @@ This is a bug (the program would previously have crashed by now)</source>
         <location line="+25"/>
         <location line="+103"/>
         <location line="+58"/>
-        <location line="+832"/>
+        <location line="+886"/>
         <location line="+81"/>
         <location line="+730"/>
-        <location line="+1081"/>
+        <location line="+1054"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location line="-3035"/>
+        <location line="-3062"/>
         <source>Printing with LilyPond...</source>
         <translation>Выполняется печать через LilyPond...</translation>
     </message>
@@ -18803,12 +18850,12 @@ This is a bug (the program would previously have crashed by now)</source>
         <translation type="unfinished">Невозможно осуществить вставку в этой точке.</translation>
     </message>
     <message>
-        <location line="+2809"/>
+        <location line="+2836"/>
         <source>Move Events to Staff Above</source>
         <translation>Переместить события в нотоносец выше</translation>
     </message>
     <message>
-        <location line="-2666"/>
+        <location line="-2691"/>
         <source>Raising velocities...</source>
         <translation>Повышение силы нажатия...</translation>
     </message>
@@ -18818,7 +18865,7 @@ This is a bug (the program would previously have crashed by now)</source>
         <translation>Понижение силы нажатия...</translation>
     </message>
     <message>
-        <location line="+2813"/>
+        <location line="+2838"/>
         <source>Edit Text Event</source>
         <translation type="unfinished"></translation>
     </message>
@@ -18833,7 +18880,7 @@ This is a bug (the program would previously have crashed by now)</source>
         <translation type="unfinished">Ноты сжимаются...</translation>
     </message>
     <message>
-        <location line="-2117"/>
+        <location line="-2090"/>
         <source>Unknown note insert action %1</source>
         <translation type="unfinished">Неизвестное действие %1 при вставке ноты</translation>
     </message>
@@ -18843,23 +18890,23 @@ This is a bug (the program would previously have crashed by now)</source>
         <translation>Вставляется нота</translation>
     </message>
     <message>
-        <location line="+2291"/>
+        <location line="+2264"/>
         <location line="+10"/>
         <source>Adding dot...</source>
         <translation type="unfinished">Добавляется точка...</translation>
     </message>
     <message>
-        <location line="-1912"/>
+        <location line="-1885"/>
         <source>Ornament track %1 bar %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-1111"/>
+        <location line="-1163"/>
         <source>Set Controller Values</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+638"/>
+        <location line="+690"/>
         <source>Please select a control ruler first.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -18916,26 +18963,23 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
         <translation type="unfinished">Вычисленные ключевые знаки альтерации показаны вверху</translation>
     </message>
     <message>
-        <location line="+169"/>
         <source>%1%2 - Segment Track #%3 - Notation</source>
-        <translation>%1%2 — Сегмент дорожки #%3 — Нотный редактор</translation>
+        <translation type="vanished">%1%2 — Сегмент дорожки #%3 — Нотный редактор</translation>
     </message>
     <message>
-        <location line="+7"/>
         <source>%1%2 - All Segments - Notation</source>
-        <translation>%1%2 — Все сегменты — Нотный редактор</translation>
+        <translation type="vanished">%1%2 — Все сегменты — Нотный редактор</translation>
     </message>
     <message numerus="yes">
-        <location line="+6"/>
         <source>%1%2 - %n Segment(s) - Notation</source>
-        <translation>
+        <translation type="vanished">
             <numerusform>%1%2 — %n сегмент — Нотный редактор</numerusform>
             <numerusform>%1%2 — %n сегмента — Нотный редактор</numerusform>
             <numerusform>%1%2 — %n сегментов — Нотный редактор</numerusform>
         </translation>
     </message>
     <message>
-        <location line="+120"/>
+        <location line="+275"/>
         <source>Tuplet</source>
         <translation>Группа</translation>
     </message>
@@ -19000,7 +19044,12 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+52"/>
+        <location line="+18"/>
+        <source>New Layer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+66"/>
         <source>New Layer from Selection</source>
         <translation type="unfinished"></translation>
     </message>
@@ -19008,7 +19057,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
 <context>
     <name>Rosegarden::NotationWidget</name>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="-1447"/>
+        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="-1467"/>
         <source>Zoom</source>
         <translation>Масштаб</translation>
     </message>
@@ -19033,7 +19082,12 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
         <translation>Скрыть заголовки дорожек</translation>
     </message>
     <message>
-        <location line="+1460"/>
+        <location line="+1477"/>
+        <source>&lt;untitled&gt;</source>
+        <translation type="unfinished">&lt;без имени&gt;</translation>
+    </message>
+    <message>
+        <location line="+5"/>
         <location line="+1"/>
         <source>&lt;qt&gt;Rotate wheel to change the active segment&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
@@ -19043,11 +19097,16 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
         <source>&lt;qt&gt;Segment: &quot;%1&quot;&lt;br&gt;Track: %2 &quot;%3&quot;&lt;/qt&gt;</source>
         <translation type="unfinished">&lt;qt&gt;Сегмент: &quot;%1&quot;&lt;br&gt;Дорожка: %2 &quot;%3&quot;&lt;/qt&gt;</translation>
     </message>
+    <message>
+        <location line="+6"/>
+        <source>Track %1 (%2) | %3</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Rosegarden::NoteFontFactory</name>
     <message>
-        <location filename="../../src/gui/editors/notation/NoteFontFactory.cpp" line="+93"/>
+        <location filename="../../src/gui/editors/notation/NoteFontFactory.cpp" line="+97"/>
         <location line="+68"/>
         <location line="+27"/>
         <source>Rosegarden</source>
@@ -19103,7 +19162,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
 <context>
     <name>Rosegarden::NotePixmapFactory</name>
     <message>
-        <location filename="../../src/gui/editors/notation/NotePixmapFactory.cpp" line="+189"/>
+        <location filename="../../src/gui/editors/notation/NotePixmapFactory.cpp" line="+190"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
@@ -19111,7 +19170,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
 <context>
     <name>Rosegarden::NoteStyleFileReader</name>
     <message>
-        <location filename="../../src/gui/editors/notation/NoteStyleFileReader.cpp" line="+88"/>
+        <location filename="../../src/gui/editors/notation/NoteStyleFileReader.cpp" line="+87"/>
         <source>type is a required attribute of note</source>
         <translation type="unfinished">&quot;type&quot; является обязательным атрибутом &quot;note&quot;</translation>
     </message>
@@ -19131,7 +19190,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
         <translation type="unfinished">Элементы global и note могут содержать атрибут shape или charname, но не оба сразу</translation>
     </message>
     <message>
-        <location line="-80"/>
+        <location line="-78"/>
         <source>Can&apos;t open style file &quot;%1&quot; for style &quot;%2&quot;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -19155,12 +19214,12 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
 <context>
     <name>Rosegarden::PasteEventsCommand</name>
     <message>
-        <location filename="../../src/commands/edit/PasteEventsCommand.h" line="+85"/>
+        <location filename="../../src/commands/edit/PasteEventsCommand.h" line="+92"/>
         <source>&amp;Paste</source>
         <translation>Вст&amp;авить</translation>
     </message>
     <message>
-        <location filename="../../src/commands/edit/PasteEventsCommand.cpp" line="+92"/>
+        <location filename="../../src/commands/edit/PasteEventsCommand.cpp" line="+119"/>
         <source>Paste into an existing gap [&quot;restricted&quot;]</source>
         <translation>Вставить в существующий интервал [«ограничено»]</translation>
     </message>
@@ -19240,7 +19299,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
 <context>
     <name>Rosegarden::PercussionPitchRuler</name>
     <message>
-        <location filename="../../src/gui/rulers/PercussionPitchRuler.cpp" line="+57"/>
+        <location filename="../../src/gui/rulers/PercussionPitchRuler.cpp" line="+58"/>
         <source>  A#2   Acoustic Bass Drum  </source>
         <extracomment>Note to the translators: Don&apos;t translate literally. This string is never displayed but defines the largest width of the text (pitch and intrument name) in the percussion ruler.</extracomment>
         <translation type="unfinished"></translation>
@@ -19661,7 +19720,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
 <context>
     <name>Rosegarden::PitchTrackerView</name>
     <message>
-        <location filename="../../src/gui/editors/pitchtracker/PitchTrackerView.cpp" line="+140"/>
+        <location filename="../../src/gui/editors/pitchtracker/PitchTrackerView.cpp" line="+147"/>
         <source>Cannot connect to jack! Ensure jack server is running and no other tracker clients are open.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -19857,7 +19916,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
 <context>
     <name>Rosegarden::ProjectPackager</name>
     <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="+79"/>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="+80"/>
         <source>Unpack</source>
         <translation>Распаковать</translation>
     </message>
@@ -19877,7 +19936,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
         <translation>Отменить</translation>
     </message>
     <message>
-        <location line="+426"/>
+        <location line="+430"/>
         <source>Checking for flac...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -19888,12 +19947,12 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
         <translation>Запаковывается проект...</translation>
     </message>
     <message>
-        <location line="-664"/>
+        <location line="-668"/>
         <source>Rosegarden - Fatal Processing Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+534"/>
+        <location line="+538"/>
         <location line="+46"/>
         <location line="+68"/>
         <source>&lt;qt&gt;Could not copy&lt;br&gt;%1&lt;br&gt;  to&lt;br&gt;%2&lt;br&gt;&lt;br&gt;Processing aborted.&lt;/qt&gt;</source>
@@ -19905,7 +19964,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-475"/>
+        <location line="-479"/>
         <source>&lt;p&gt;Processing aborted&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -19920,7 +19979,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+186"/>
+        <location line="+190"/>
         <source>&lt;qt&gt;&lt;p&gt;Could not write&lt;br&gt;%1.&lt;/p&gt;%2&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -20551,12 +20610,12 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
 <context>
     <name>Rosegarden::RoseXmlHandler</name>
     <message>
-        <location filename="../../src/document/RoseXmlHandler.cpp" line="+291"/>
+        <location filename="../../src/document/RoseXmlHandler.cpp" line="+293"/>
         <source>Reading file...</source>
         <translation type="unfinished">Читается файл...</translation>
     </message>
     <message>
-        <location line="+164"/>
+        <location line="+165"/>
         <source>This file was written by Rosegarden %1, and it uses
 a different file format that cannot be read by this version.</source>
         <translation type="unfinished">Это файл был создан при помощи Rosegarden %1; 
@@ -20577,7 +20636,7 @@ There may be some incompatibilities with the file format.</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location line="+1399"/>
+        <location line="+1430"/>
         <source>Loading plugins...</source>
         <translation>Загружаются эффекты...</translation>
     </message>
@@ -20606,13 +20665,13 @@ There may be some incompatibilities with the file format.</source>
 (%2)</translation>
     </message>
     <message>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="+482"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="+483"/>
         <location line="+60"/>
         <location line="+12"/>
-        <location line="+66"/>
+        <location line="+63"/>
         <location line="+32"/>
-        <location line="+405"/>
-        <location line="+629"/>
+        <location line="+439"/>
+        <location line="+643"/>
         <location line="+11"/>
         <location line="+22"/>
         <location line="+3"/>
@@ -20620,7 +20679,7 @@ There may be some incompatibilities with the file format.</source>
         <location line="+8"/>
         <location line="+27"/>
         <location line="+11"/>
-        <location line="+981"/>
+        <location line="+982"/>
         <location line="+16"/>
         <location line="+212"/>
         <source>Rosegarden</source>
@@ -20631,7 +20690,7 @@ There may be some incompatibilities with the file format.</source>
         <translation type="obsolete">Не удалось сохранить документ в %1</translation>
     </message>
     <message numerus="yes">
-        <location line="-2576"/>
+        <location line="-2622"/>
         <source>Delete the %n audio file(s) recorded during the unsaved session?</source>
         <translation>
             <numerusform>Удалить %n звуковой файл, записанный во время этого несохранённого сеанса?</numerusform>
@@ -20686,7 +20745,7 @@ Please select any you wish to delete permanently from the hard disk.
         <translation type="unfinished">Читается файл...</translation>
     </message>
     <message>
-        <location line="+55"/>
+        <location line="+52"/>
         <source>Could not open Rosegarden file</source>
         <translation>Не удалось открыть файл Rosegarden</translation>
     </message>
@@ -20705,7 +20764,7 @@ Please select any you wish to delete permanently from the hard disk.
         <translation>Объединить</translation>
     </message>
     <message>
-        <location line="+515"/>
+        <location line="+549"/>
         <source>&apos;%1&apos; is read-only.  Please save to a different file.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -20725,7 +20784,7 @@ Please select any you wish to delete permanently from the hard disk.
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+1729"/>
+        <location line="+1744"/>
         <source>Warning</source>
         <translation type="unfinished">Предупреждение</translation>
     </message>
@@ -20770,23 +20829,23 @@ editing this file, delete the lock file and try again.
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-1637"/>
+        <location line="-1648"/>
         <source>Error while writing on &apos;%1&apos;</source>
         <translation>Ошибка при записи &quot;%1&quot;</translation>
     </message>
     <message>
-        <location line="-816"/>
-        <location line="+2230"/>
+        <location line="-851"/>
+        <location line="+2276"/>
         <source>Cancel</source>
         <translation type="unfinished">Отменить</translation>
     </message>
     <message>
-        <location line="-1369"/>
+        <location line="-1376"/>
         <source>Could not open file &apos;%1&apos; for writing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+274"/>
+        <location line="+280"/>
         <location line="+11"/>
         <source>File load cancelled</source>
         <translation>Загрузка файла отменена</translation>
@@ -20838,7 +20897,7 @@ We recommend you re-save this file from this version of Rosegarden to ensure tha
 программы.</translation>
     </message>
     <message>
-        <location line="+644"/>
+        <location line="+645"/>
         <source>Insert Recorded MIDI</source>
         <translation type="unfinished">Вставить записанное MIDI</translation>
     </message>
@@ -20866,7 +20925,7 @@ We recommend you re-save this file from this version of Rosegarden to ensure tha
         <location line="+298"/>
         <location line="+39"/>
         <location line="+124"/>
-        <location line="+75"/>
+        <location line="+79"/>
         <location line="+663"/>
         <location line="+3"/>
         <location line="+30"/>
@@ -20877,7 +20936,7 @@ We recommend you re-save this file from this version of Rosegarden to ensure tha
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location line="-1276"/>
+        <location line="-1280"/>
         <location line="+130"/>
         <location line="+168"/>
         <location line="+39"/>
@@ -20891,7 +20950,7 @@ We recommend you re-save this file from this version of Rosegarden to ensure tha
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+400"/>
+        <location line="+404"/>
         <source>You&apos;ve not yet defined an audio editor for Rosegarden to use.
 See Edit -&gt; Preferences -&gt; Audio.</source>
         <translation type="unfinished"></translation>
@@ -20970,7 +21029,7 @@ See Edit -&gt; Preferences -&gt; Audio.</source>
         <translation>Ключ на старт...</translation>
     </message>
     <message>
-        <location line="+440"/>
+        <location line="+470"/>
         <source>  Zoom:  </source>
         <translation>  Масштаб:  </translation>
     </message>
@@ -20979,7 +21038,7 @@ See Edit -&gt; Preferences -&gt; Audio.</source>
         <translation type="obsolete">%1 - %2</translation>
     </message>
     <message>
-        <location line="+491"/>
+        <location line="+493"/>
         <source>File &quot;%1&quot; does not exist</source>
         <translation>Файл «%1» не существует</translation>
     </message>
@@ -21002,12 +21061,12 @@ Do you want to open it instead ?</source>
     </message>
     <message>
         <location line="+145"/>
-        <location line="+4800"/>
+        <location line="+4808"/>
         <source>Untitled</source>
         <translation>Без названия</translation>
     </message>
     <message>
-        <location line="-4787"/>
+        <location line="-4795"/>
         <location line="+341"/>
         <location line="+157"/>
         <source>Could not save document at %1
@@ -21019,7 +21078,7 @@ Error was : %2</source>
         <location line="-496"/>
         <location line="+342"/>
         <location line="+157"/>
-        <location line="+6399"/>
+        <location line="+6395"/>
         <source>Could not save document at %1</source>
         <translation>Не удалось сохранить документ в %1</translation>
     </message>
@@ -21028,7 +21087,7 @@ Error was : %2</source>
         <translation type="obsolete">Открывается новое окно приложения...</translation>
     </message>
     <message>
-        <location line="-6830"/>
+        <location line="-6826"/>
         <source>Creating new document...</source>
         <translation>Создаётся новый документ...</translation>
     </message>
@@ -21047,12 +21106,12 @@ Error was : %2</source>
     </message>
     <message>
         <location line="-101"/>
-        <location line="+6195"/>
+        <location line="+6203"/>
         <source>All supported files</source>
         <translation>Все поддерживаемые файлы</translation>
     </message>
     <message>
-        <location line="-6194"/>
+        <location line="-6202"/>
         <location line="+71"/>
         <location line="+192"/>
         <source>Rosegarden files</source>
@@ -21060,16 +21119,16 @@ Error was : %2</source>
     </message>
     <message>
         <location line="-262"/>
-        <location line="+2010"/>
+        <location line="+2020"/>
         <location line="+23"/>
         <source>MIDI files</source>
         <translation>Файлы MIDI</translation>
     </message>
     <message>
-        <location line="-2032"/>
+        <location line="-2042"/>
         <location line="+70"/>
         <location line="+197"/>
-        <location line="+1703"/>
+        <location line="+1713"/>
         <location line="+40"/>
         <location line="+23"/>
         <location line="+256"/>
@@ -21078,29 +21137,29 @@ Error was : %2</source>
         <location line="+22"/>
         <location line="+76"/>
         <location line="+23"/>
-        <location line="+674"/>
+        <location line="+673"/>
         <location line="+36"/>
         <location line="+46"/>
         <location line="+53"/>
         <location line="+48"/>
         <location line="+122"/>
-        <location line="+2707"/>
+        <location line="+2706"/>
         <source>All files</source>
         <translation>Все файлы</translation>
     </message>
     <message>
-        <location line="-6197"/>
+        <location line="-6205"/>
         <location line="+72"/>
         <source>Open File</source>
         <translation>Открыть файл</translation>
     </message>
     <message>
-        <location line="-1067"/>
+        <location line="-1070"/>
         <source>Ctrl+R</source>
         <translation>Ctrl+R</translation>
     </message>
     <message>
-        <location line="+908"/>
+        <location line="+911"/>
         <source>%1%2 - %3</source>
         <translation type="unfinished">%1 - %3 {1%2 ?}</translation>
     </message>
@@ -21144,7 +21203,7 @@ Error was : %2</source>
         <translation>Сохранить как...</translation>
     </message>
     <message>
-        <location line="+53"/>
+        <location line="+55"/>
         <source>Closing file...</source>
         <translation>Файл закрывается...</translation>
     </message>
@@ -21210,12 +21269,12 @@ Error was : %2</source>
     </message>
     <message>
         <location line="+55"/>
-        <location line="+2865"/>
+        <location line="+2872"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location line="-2864"/>
+        <location line="-2871"/>
         <source>The audio file path does not exist or is not writable.
 You must set the audio file path to a valid directory in Document Properties before %1.
 Would you like to set it now?</source>
@@ -21257,17 +21316,17 @@ No segment will be split.</source>
         <translation>Установить время начала сегментов</translation>
     </message>
     <message>
-        <location line="-1688"/>
+        <location line="-1690"/>
         <source>File &quot;%1&quot; is a Rosegarden Device, and must be imported using the MIDI device manager.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+1185"/>
-        <location line="+1405"/>
+        <location line="+1187"/>
+        <location line="+1413"/>
         <location line="+191"/>
         <location line="+97"/>
         <location line="+98"/>
-        <location line="+703"/>
+        <location line="+702"/>
         <location line="+50"/>
         <location line="+48"/>
         <location line="+116"/>
@@ -21276,7 +21335,7 @@ No segment will be split.</source>
         <translation type="unfinished">Отменить</translation>
     </message>
     <message numerus="yes">
-        <location line="-2447"/>
+        <location line="-2454"/>
         <location line="+54"/>
         <source>Split %n Segment(s) by Drum</source>
         <translation type="unfinished">
@@ -21312,7 +21371,7 @@ No segment will be split.</source>
         <translation>Установить длительность сегмента</translation>
     </message>
     <message>
-        <location line="+111"/>
+        <location line="+110"/>
         <source>Set Global Tempo</source>
         <translation>Установить темп всей композиции</translation>
     </message>
@@ -21348,7 +21407,7 @@ No segment will be split.</source>
     </message>
     <message>
         <location line="+11"/>
-        <location line="+19"/>
+        <location line="+29"/>
         <source>Toggle the Transport</source>
         <translation type="unfinished">Переключить отображение Транспорта</translation>
     </message>
@@ -21372,7 +21431,7 @@ No segment will be split.</source>
         <translation type="unfinished">Инструмент &quot;Объединение&quot; пока не закончен</translation>
     </message>
     <message>
-        <location line="+242"/>
+        <location line="+241"/>
         <source>Revert modified document to previous saved version?</source>
         <translation type="unfinished">Восстановить изменённый документ до предыдущей версии?</translation>
     </message>
@@ -21383,12 +21442,12 @@ No segment will be split.</source>
     </message>
     <message>
         <location line="+1"/>
-        <location line="+1211"/>
+        <location line="+1210"/>
         <source>Rosegarden Project files</source>
         <translation>Проектные файлы Rosegarden</translation>
     </message>
     <message>
-        <location line="-1172"/>
+        <location line="-1171"/>
         <source>Open MIDI File</source>
         <translation>Открыть файл MIDI</translation>
     </message>
@@ -21468,7 +21527,7 @@ No segment will be split.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+2376"/>
+        <location line="+2374"/>
         <source>Transpose</source>
         <translation type="unfinished">Транспозиция</translation>
     </message>
@@ -21483,7 +21542,7 @@ No segment will be split.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+613"/>
+        <location line="+601"/>
         <source>&lt;h3&gt;Invalid audio path&lt;/h3&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -21530,7 +21589,7 @@ No segment will be split.</source>
 (%2)</translation>
     </message>
     <message>
-        <location line="-3528"/>
+        <location line="-3515"/>
         <source>The Rosegarden sequencer process has exited unexpectedly.  Sound and recording will no longer be available for this session.
 Please exit and restart Rosegarden to restore sound capability.</source>
         <translation type="unfinished">Секвенсер Rosgarden запустить не удалось, поэтому воспроизведение 
@@ -21538,7 +21597,7 @@ Please exit and restart Rosegarden to restore sound capability.</source>
 настройке звука и MIDI обратитесь на www.rosegardenmusic.com.</translation>
     </message>
     <message>
-        <location line="-2016"/>
+        <location line="-2023"/>
         <source>&lt;qt&gt;&lt;p&gt;In order to create anacrusis, at least one of the segments in your selection must start at the beginning of the composition.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -21563,7 +21622,7 @@ Please exit and restart Rosegarden to restore sound capability.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+1955"/>
+        <location line="+1962"/>
         <source>The Rosegarden sequencer could not be started, so sound and recording will be unavailable for this session.
 For assistance with correct audio and MIDI configuration, go to http://rosegardenmusic.com.</source>
         <translation type="unfinished">Секвенсер Rosgarden запустить не удалось, поэтому воспроизведение 
@@ -21668,9 +21727,9 @@ For assistance with correct audio and MIDI configuration, go to http://rosegarde
         <translation>Выполняется экспорт в партитуру MusicXML...</translation>
     </message>
     <message>
-        <location line="-999"/>
+        <location line="-998"/>
         <location line="+23"/>
-        <location line="+979"/>
+        <location line="+978"/>
         <source>XML files</source>
         <translation>Файлы XML</translation>
     </message>
@@ -21698,7 +21757,7 @@ Would you like to set it now?</source>
 Хотите сделать это прямо сейчас?</translation>
     </message>
     <message>
-        <location line="+499"/>
+        <location line="+498"/>
         <source>Move playback pointer to time</source>
         <translation type="unfinished">Переместить указатель точки воспроизведения к позиции</translation>
     </message>
@@ -21785,8 +21844,8 @@ Would you like to set it now?</source>
         <translation>http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html</translation>
     </message>
     <message>
-        <location line="-6816"/>
-        <location line="+327"/>
+        <location line="-6826"/>
+        <location line="+329"/>
         <location line="+8"/>
         <location line="+10"/>
         <location line="+26"/>
@@ -21801,7 +21860,7 @@ Would you like to set it now?</source>
         <location line="+8"/>
         <location line="+56"/>
         <location line="+3"/>
-        <location line="+278"/>
+        <location line="+280"/>
         <location line="+17"/>
         <location line="+24"/>
         <location line="+25"/>
@@ -21809,7 +21868,7 @@ Would you like to set it now?</source>
         <location line="+302"/>
         <location line="+76"/>
         <location line="+25"/>
-        <location line="+804"/>
+        <location line="+812"/>
         <location line="+198"/>
         <location line="+19"/>
         <location line="+172"/>
@@ -21819,7 +21878,7 @@ Would you like to set it now?</source>
         <location line="+79"/>
         <location line="+19"/>
         <location line="+362"/>
-        <location line="+248"/>
+        <location line="+247"/>
         <location line="+4"/>
         <location line="+34"/>
         <location line="+36"/>
@@ -21838,7 +21897,7 @@ Would you like to set it now?</source>
         <location line="+25"/>
         <location line="+13"/>
         <location line="+22"/>
-        <location line="+60"/>
+        <location line="+59"/>
         <location line="+2"/>
         <location line="+34"/>
         <location line="+753"/>
@@ -21850,18 +21909,18 @@ Would you like to set it now?</source>
         <location line="+18"/>
         <location line="+3"/>
         <location line="+10"/>
-        <location line="+525"/>
+        <location line="+513"/>
         <location line="+2"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location line="-8215"/>
+        <location line="-8249"/>
         <source>Starting sequencer...</source>
         <translation>Запускается секвенсер...</translation>
     </message>
     <message>
-        <location line="+1781"/>
+        <location line="+1819"/>
         <source>Saving file%1with a new filename...</source>
         <comment>&apos;file%1with&apos; is correct. %1 will either become &apos; &apos; or &apos; as a template &apos; at runtime</comment>
         <translation type="unfinished"></translation>
@@ -21876,7 +21935,7 @@ Would you like to set it now?</source>
         <translation type="obsolete">В очередь на передачу ставятся события MIDI panic...</translation>
     </message>
     <message>
-        <location line="+5874"/>
+        <location line="+5882"/>
         <source>Are you sure you want to save this as your default studio?</source>
         <translation>Вы действительно хотите сделать этот документ
 описанием студии, используемым по умолчанию?</translation>
@@ -21914,7 +21973,7 @@ Error was : %2</source>
         <translation>Импортировать Студию</translation>
     </message>
     <message>
-        <location line="+208"/>
+        <location line="+196"/>
         <source>&lt;h3&gt;Newer version available&lt;/h3&gt;</source>
         <translation>&lt;h3&gt;Доступная более новая версия&lt;/h3&gt;</translation>
     </message>
@@ -21924,7 +21983,7 @@ Error was : %2</source>
         <translation>&lt;p&gt;Вы используете версию %1. В настоящее время доступна более новая версия %2.&lt;/p&gt;&lt;p&gt;Подробности можно узнать на сайте &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/getting/&quot;&gt;Rosegarden&lt;/a&gt;.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location line="-3024"/>
+        <location line="-3011"/>
         <source>&lt;qt&gt;&lt;p&gt;Failed to open a temporary file for LilyPond export.&lt;/p&gt;&lt;p&gt;This probably means you have run out of disk space on &lt;pre&gt;%1&lt;/pre&gt;&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -22495,7 +22554,7 @@ Would you like to set it now?</source>
         <translation type="obsolete">Выделите сегменты щелчком и перетаскиванием</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/segment/compositionview/SegmentSelector.cpp" line="+654"/>
+        <location filename="../../src/gui/editors/segment/compositionview/SegmentSelector.cpp" line="+653"/>
         <source>Hold Shift to avoid snapping to beat grid</source>
         <translation type="unfinished">Нажмите Shift, чтобы отключить прилипание к тактовой сетке</translation>
     </message>
@@ -22530,7 +22589,7 @@ Would you like to set it now?</source>
         <translation type="unfinished">Скопируйте сегмент щелчком и перетаскиванием</translation>
     </message>
     <message numerus="yes">
-        <location line="-383"/>
+        <location line="-382"/>
         <source>Copy %n Segment(s) as link(s)</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -22557,7 +22616,7 @@ Would you like to set it now?</source>
         </translation>
     </message>
     <message>
-        <location line="+382"/>
+        <location line="+381"/>
         <source>Click and drag to copy segment</source>
         <translation type="unfinished">Скопируйте сегмент щелчком и перетаскиванием</translation>
     </message>
@@ -23318,7 +23377,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
 <context>
     <name>Rosegarden::SqueezedLabel</name>
     <message>
-        <location filename="../../src/gui/widgets/SqueezedLabel.cpp" line="+170"/>
+        <location filename="../../src/gui/widgets/SqueezedLabel.cpp" line="+178"/>
         <source>&amp;Copy Full Text</source>
         <translation type="unfinished"></translation>
     </message>
@@ -23486,7 +23545,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
         <translation>Редактор &gt;&gt;</translation>
     </message>
     <message>
-        <location line="+26"/>
+        <location line="+25"/>
         <source>http://rosegardenmusic.com/wiki/doc:synth-plugin-manager-en</source>
         <translation>http://rosegardenmusic.com/wiki/doc:synth-plugin-manager-en</translation>
     </message>
@@ -23569,7 +23628,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
         <translation>Также использовать этот темп по умолчанию</translation>
     </message>
     <message>
-        <location line="+93"/>
+        <location line="+92"/>
         <source>%1.%2 s,</source>
         <translation>%1.%2 с,</translation>
     </message>
@@ -23584,7 +23643,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
         <translation>в середине такта %1.</translation>
     </message>
     <message>
-        <location line="+19"/>
+        <location line="+18"/>
         <source>        (at %1.%2 s, in measure %3)</source>
         <translation>       (в позиции %1.%2 с, в такте %3)</translation>
     </message>
@@ -23612,7 +23671,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
 <context>
     <name>Rosegarden::TempoRuler</name>
     <message>
-        <location filename="../../src/gui/rulers/TempoRuler.cpp" line="+485"/>
+        <location filename="../../src/gui/rulers/TempoRuler.cpp" line="+489"/>
         <source>%1.%2%3 (%4.%5%6 bpm)</source>
         <translation>%1.%2%3 (%4.%5%6 bpm)   </translation>
     </message>
@@ -24112,7 +24171,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
 <context>
     <name>Rosegarden::Thumbwheel</name>
     <message>
-        <location filename="../../src/gui/widgets/Thumbwheel.cpp" line="+263"/>
+        <location filename="../../src/gui/widgets/Thumbwheel.cpp" line="+267"/>
         <source>Enter new value</source>
         <translation>Введите новое значение</translation>
     </message>
@@ -24377,7 +24436,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
         </translation>
     </message>
     <message>
-        <location line="+328"/>
+        <location line="+340"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
@@ -24928,43 +24987,43 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
 <context>
     <name>Rosegarden::TransportDialog</name>
     <message>
-        <location filename="../../src/gui/dialogs/TransportDialog.cpp" line="+122"/>
+        <location filename="../../src/gui/dialogs/TransportDialog.cpp" line="+113"/>
         <source>Rosegarden Transport</source>
         <translation>Транспорт Rosegarden</translation>
     </message>
     <message>
-        <location line="+768"/>
-        <location line="+88"/>
+        <location line="+732"/>
+        <location line="+89"/>
         <source>PITCH WHEEL</source>
         <translation type="unfinished">PITCH WHEEL</translation>
     </message>
     <message>
-        <location line="-84"/>
-        <location line="+88"/>
+        <location line="-85"/>
+        <location line="+89"/>
         <source>CONTROLLER</source>
         <translation type="unfinished">КОНТРОЛЛЕР</translation>
     </message>
     <message>
-        <location line="-84"/>
-        <location line="+88"/>
+        <location line="-85"/>
+        <location line="+89"/>
         <source>PROG CHNGE</source>
         <translation type="unfinished">PROG CHNGE</translation>
     </message>
     <message>
-        <location line="-83"/>
-        <location line="+88"/>
+        <location line="-84"/>
+        <location line="+89"/>
         <source>PRESSURE</source>
         <translation type="unfinished">PRESSURE</translation>
     </message>
     <message>
-        <location line="-84"/>
-        <location line="+88"/>
+        <location line="-85"/>
+        <location line="+89"/>
         <source>SYS MESSAGE</source>
         <translation type="unfinished">SYS MESSAGE</translation>
     </message>
     <message>
         <location line="-44"/>
-        <location line="+88"/>
+        <location line="+89"/>
         <source>NO EVENTS</source>
         <translation>НЕТ СОБЫТИЙ</translation>
     </message>
@@ -25168,7 +25227,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
         <translation>Буфер обмена пуст</translation>
     </message>
     <message>
-        <location line="+212"/>
+        <location line="+211"/>
         <source>http://rosegardenmusic.com/wiki/doc:triggerSegmentManager-en</source>
         <translation type="unfinished"></translation>
     </message>
@@ -25829,7 +25888,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
         <translation type="unfinished">Вх %1</translation>
     </message>
     <message>
-        <location line="+241"/>
+        <location line="+245"/>
         <source>&lt;h2&gt;Notation Inconsistencies&lt;/h2&gt;</source>
         <translation type="unfinished">&lt;h2&gt;Несогласованности в партитуре&lt;/h2&gt;</translation>
     </message>
