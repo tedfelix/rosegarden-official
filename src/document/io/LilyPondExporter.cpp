@@ -1322,6 +1322,10 @@ LilyPondExporter::write()
                             if (!isNote && !isChord) continue;
 
                             timeT myTime = (*j)->getNotationAbsoluteTime();
+                            // adjust for repeats
+                            timeT segStartDelta = seg->getStartTime() -
+                                lsc.getSegmentStartTime();
+                            myTime -= segStartDelta;
 
                             if (isChord) {
                                 std::string schord;
@@ -1360,7 +1364,7 @@ LilyPondExporter::write()
                             }
                         } // for
                         if (numberOfChords >= 0) {
-                            writeSkip(m_composition->getTimeSignatureAt(lastTime), lastTime, compositionEndTime - lastTime, false, str);
+                            writeSkip(m_composition->getTimeSignatureAt(lastTime), lastTime, lsc.getLastSegmentEndTime() - lastTime, false, str);
                             if (numberOfChords == 1) str << "s8 ";
                             str << std::endl;
                             str << indent(--col) << "} % ChordNames " << std::endl;
