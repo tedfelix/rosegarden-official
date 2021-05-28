@@ -59,13 +59,8 @@ class SegmentParameterBox : public RosegardenParameterBox
 public:
     SegmentParameterBox(QWidget *parent);
 
-public slots:
     /// Segment > Toggle Repeat
-    /**
-     * It would be nice if there were an ActionFileClient::createAction()
-     * that takes a function pointer instead of a QString/SLOT().
-     */
-    void slotToggleRepeat();
+    void toggleRepeat();
 
 private slots:
     void slotDocumentLoaded(RosegardenDocument *doc);

@@ -866,6 +866,9 @@ public slots:
      */
     void slotJoinSegments();
 
+    /// Toggle repeat setting of selected Segment objects.
+    void slotToggleRepeat();
+
     /**
      * Expand block-chord segments by figuration
      */

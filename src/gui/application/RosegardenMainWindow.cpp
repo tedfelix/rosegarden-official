@@ -321,6 +321,12 @@ RosegardenMainWindow::RosegardenMainWindow(bool enableSound,
     connect(m_editTempoController, SIGNAL(editTempos(timeT)),
             this, SLOT(slotEditTempos(timeT)));
 
+    // Need to do this prior to launching the sequencer to
+    // avoid ActionFileClient warnings in the debug log due
+    // to menu actions not existing yet.  This makes sure they
+    // exist.
+    setupActions();
+
     if (m_useSequencer) {
         emit startupStatusMessage(tr("Starting sequencer..."));
 
@@ -360,7 +366,6 @@ RosegardenMainWindow::RosegardenMainWindow(bool enableSound,
     //
     emit startupStatusMessage(tr("Initializing view...")); 
     initStatusBar();
-    setupActions();
     initZoomToolbar();
 
     // ??? TransportDialog should connect itself to SequenceManager.  Move
@@ -813,8 +818,8 @@ RosegardenMainWindow::setupActions()
     createAction("toggle_tracking", SLOT(slotToggleTracking()));
     createAction("panic", SLOT(slotPanic()));
     createAction("debug_dump_segments", SLOT(slotDebugDump()));
-    
-    createAction("repeat_segment_onoff", m_segmentParameterBox, SLOT(slotToggleRepeat()));
+
+    createAction("repeat_segment_onoff", SLOT(slotToggleRepeat()));
 
     createMenusAndToolbars("rosegardenmainwindow.rc");
 
@@ -826,18 +831,14 @@ RosegardenMainWindow::setupActions()
     connect(fileOpenRecentMenu, &QMenu::aboutToShow,
             this, &RosegardenMainWindow::setupRecentFilesMenu);
 
-    // transport toolbar is hidden by default - TODO : this should be in options
-    //
-    //toolBar("Transport Toolbar")->hide();
-
-    // was QPopupMenu
-    QMenu* setTrackInstrumentMenu = this->findChild<QMenu*>("set_track_instrument");
+    QMenu *setTrackInstrumentMenu =
+            findChild<QMenu *>("set_track_instrument");
 
     if (setTrackInstrumentMenu) {
         connect(setTrackInstrumentMenu, &QMenu::aboutToShow,
                 this, &RosegardenMainWindow::slotPopulateTrackInstrumentPopup);
     } else {
-        RG_DEBUG << "setupActions() : couldn't find set_track_instrument menu - check rosegardenui.rcn\n";
+        RG_WARNING << "setupActions() : couldn't find set_track_instrument menu - check rosegardenmainwindow.rc";
     }
 
     // Set the rewind and fast-forward buttons for auto-repeat.
@@ -3241,6 +3242,13 @@ RosegardenMainWindow::slotSetSegmentDurations()
 }
 
 void
+RosegardenMainWindow::slotToggleRepeat()
+{
+    if (m_segmentParameterBox)
+        m_segmentParameterBox->toggleRepeat();
+}
+
+void
 RosegardenMainWindow::slotHarmonizeSelection()
 {
     if (!m_view->haveSelection())
@@ -4965,8 +4973,6 @@ RosegardenMainWindow::slotToggleTracking()
 void
 RosegardenMainWindow::slotTestStartupTester()
 {   
-    RG_DEBUG << "slotTestStartupTester()";
-
     if (!m_startupTester) {
         m_startupTester = new StartupTester();
         connect(m_startupTester, &StartupTester::newerVersionAvailable,

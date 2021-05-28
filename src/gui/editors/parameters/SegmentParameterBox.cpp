@@ -833,7 +833,7 @@ SegmentParameterBox::slotRepeatClicked(bool checked)
 }
 
 void
-SegmentParameterBox::slotToggleRepeat()
+SegmentParameterBox::toggleRepeat()
 {
     SegmentSelection segmentSelection = getSelectedSegments();
 
