@@ -481,7 +481,7 @@ NotationStaff::renderElements(NotationElementList::iterator from,
                               NotationElementList::iterator to)
 {
     //    RG_DEBUG << "NotationStaff " << this << "::renderElements()";
-    Profiler profiler("NotationStaff::renderElements");
+    //Profiler profiler("NotationStaff::renderElements");
 
     timeT endTime =
         (to != getViewElementList()->end() ? (*to)->getViewAbsoluteTime() :
@@ -586,7 +586,7 @@ NotationStaff::positionElements(timeT from, timeT to)
 {
     RG_DEBUG << "NotationStaff " << this << "::positionElements()"
                    << from << " -> " << to;
-    Profiler profiler("NotationStaff::positionElements", true);
+    //Profiler profiler("NotationStaff::positionElements", true);
 
     // Following 4 lines are a workaround to not have m_clefChanges and
     // m_keyChanges truncated when positionElements() is called with
@@ -1678,7 +1678,7 @@ NotationStaff::eventRemoved(const Segment *segment,
 void
 NotationStaff::regenerate(timeT from, timeT to, bool secondary)
 {
-    Profiler profiler("NotationStaff::regenerate", true);
+    //Profiler profiler("NotationStaff::regenerate", true);
 
     // Secondary is true if this regeneration was caused by edits to
     // another staff, and the content of this staff has not itself
@@ -1712,7 +1712,7 @@ NotationStaff::regenerate(timeT from, timeT to, bool secondary)
     }
     RG_DEBUG << "regenerate: explicitly reset items for " << resetCount << " elements";
 
-    Profiler profiler2("NotationStaff::regenerate: repositioning", true);
+    //Profiler profiler2("NotationStaff::regenerate: repositioning", true);
 
     //!!! would be simpler if positionElements could also be called
     //!!! with iterators -- if renderElements/positionElements are

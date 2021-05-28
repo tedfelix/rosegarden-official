@@ -63,7 +63,7 @@ RosegardenParameterArea::RosegardenParameterArea(QWidget *parent)
 void RosegardenParameterArea::addRosegardenParameterBox(
     RosegardenParameterBox *b)
 {
-    RG_DEBUG << "RosegardenParameterArea::addRosegardenParameterBox";
+    //RG_DEBUG << "addRosegardenParameterBox()";
     
     // Check that the box hasn't been added before.
 

@@ -56,7 +56,7 @@ SegmentMover::SegmentMover(CompositionView *c, RosegardenDocument *d)
         m_changeMade(false)
 
 {
-    RG_DEBUG << "SegmentMover()\n";
+    //RG_DEBUG << "ctor";
 }
 
 void SegmentMover::ready()

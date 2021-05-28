@@ -742,7 +742,7 @@ NotationScene::setupMouseEvent(QPointF scenePos, Qt::MouseButtons buttons,
                                Qt::KeyboardModifiers modifiers,
                                NotationMouseEvent &nme)
 {
-    Profiler profiler("NotationScene::setupMouseEvent");
+    //Profiler profiler("NotationScene::setupMouseEvent");
 
     double sx = scenePos.x();
     int sy = lrint(scenePos.y());
@@ -1725,7 +1725,7 @@ NotationScene::positionStaffs()
 void
 NotationScene::layoutAll()
 {
-    Profiler profiler("NotationScene::layoutAll", true);
+    //Profiler profiler("NotationScene::layoutAll", true);
     layout(nullptr, 0, 0);
 }
 
@@ -1733,7 +1733,7 @@ void
 NotationScene::layout(NotationStaff *singleStaff,
                       timeT startTime, timeT endTime)
 {
-    Profiler profiler("NotationScene::layout", true);
+    //Profiler profiler("NotationScene::layout", true);
     NOTATION_DEBUG << "NotationScene::layout: from " << startTime << " to " << endTime;
 
     bool full = (singleStaff == nullptr && startTime == endTime);
@@ -1742,7 +1742,7 @@ NotationScene::layout(NotationStaff *singleStaff,
 
     if (full) {
 
-        Profiler profiler("NotationScene::layout: Reset layouts for full scan", true);
+        //Profiler profiler("NotationScene::layout: Reset layouts for full scan", true);
 
         m_hlayout->reset();
         m_vlayout->reset();
@@ -1764,7 +1764,7 @@ NotationScene::layout(NotationStaff *singleStaff,
     NOTATION_DEBUG << "overall start time =" << startTime << ", end time =" << endTime;
 
     {
-        Profiler profiler("NotationScene::layout: Scan layouts", true);
+        //Profiler profiler("NotationScene::layout: Scan layouts", true);
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
 
         NotationStaff *staff = m_staffs[i];
@@ -1819,7 +1819,7 @@ NotationScene::layout(NotationStaff *singleStaff,
     setSceneRect(QRectF(0, 0, maxWidth, maxHeight));
 
     {
-        Profiler profiler("NotationScene::layout: regeneration", true);
+        //Profiler profiler("NotationScene::layout: regeneration", true);
 
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
 

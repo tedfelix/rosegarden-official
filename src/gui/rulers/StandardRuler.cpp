@@ -109,7 +109,7 @@ void StandardRuler::setSnapGrid(const SnapGrid *grid)
 
 void StandardRuler::connectRulerToDocPointer(RosegardenDocument *doc)
 {
-    RG_DEBUG << "StandardRuler::connectRulerToDocPointer";
+    //RG_DEBUG << "connectRulerToDocPointer()";
 
     Q_ASSERT(m_loopRuler);
     Q_ASSERT(m_markerRuler);

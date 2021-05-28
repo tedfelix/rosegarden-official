@@ -447,7 +447,7 @@ RosegardenMainWindow::RosegardenMainWindow(bool enableSound,
     try {
         m_lircClient = new LircClient();
     } catch (const Exception &e) {
-        RG_DEBUG << e.getMessage().c_str();
+        //RG_DEBUG << e.getMessage().c_str();
         // continue without
         m_lircClient = nullptr;
     }
@@ -464,7 +464,7 @@ RosegardenMainWindow::RosegardenMainWindow(bool enableSound,
     catch (const Exception &e)
     {
         m_tranzport = nullptr;        
-        RG_DEBUG << e.getMessage().c_str();
+        //RG_DEBUG << e.getMessage().c_str();
     }
 
     enterActionState("have_project_packager");
@@ -1723,7 +1723,7 @@ RosegardenMainWindow::readGlobalProperties()
 void
 RosegardenMainWindow::showEvent(QShowEvent* e)
 {
-    RG_DEBUG << "showEvent()";
+    //RG_DEBUG << "showEvent()";
 
     getTransport()->raise();
     
@@ -5080,8 +5080,7 @@ RosegardenMainWindow::launchSequencer()
     connect(m_sequencerThread, &QThread::finished, this, &RosegardenMainWindow::slotSequencerExited);
     m_sequencerThread->start();
 
-    RG_DEBUG << "launchSequencer: Sequencer thread is "
-             << m_sequencerThread;
+    //RG_DEBUG << "launchSequencer: Sequencer thread is" << m_sequencerThread;
 
     if (m_doc && m_doc->getStudio().haveMidiDevices()) {
         enterActionState("got_midi_devices"); //@@@ JAS orig. 0
@@ -5688,8 +5687,8 @@ RosegardenMainWindow::isUsingSequencer()
 bool
 RosegardenMainWindow::isSequencerRunning()
 {
-    RG_DEBUG << "isSequencerRunning: m_useSequencer = "
-             << m_useSequencer << ", m_sequencerThread = " << m_sequencerThread;
+    //RG_DEBUG << "isSequencerRunning: m_useSequencer = "
+    //         << m_useSequencer << ", m_sequencerThread = " << m_sequencerThread;
     return m_useSequencer && (m_sequencerThread != nullptr);
 }
 
@@ -6158,8 +6157,7 @@ RosegardenMainWindow::slotChangeZoom(int)
     double value = double(m_zoomSlider->getCurrentSize());
     m_zoomLabel->setText(tr("%1%").arg(duration44 / value));
 
-    RG_DEBUG << "slotChangeZoom : zoom size = "
-    << m_zoomSlider->getCurrentSize();
+    //RG_DEBUG << "slotChangeZoom(): zoom size = " << m_zoomSlider->getCurrentSize();
 
     // initZoomToolbar sets the zoom value. With some old versions of
     // Qt3.0, this can cause slotChangeZoom() to be called while the

@@ -582,7 +582,7 @@ StaffLayout::getSceneXForLeftOfRow(int row) const
 void
 StaffLayout::sizeStaff(HorizontalLayoutEngine &layout)
 {
-    Profiler profiler("StaffLayout::sizeStaff", true);
+    //Profiler profiler("StaffLayout::sizeStaff", true);
 
     deleteBars();
     deleteRepeatedClefsAndKeys();
@@ -914,7 +914,7 @@ StaffLayout::drawStaffName()
 void
 StaffLayout::resizeStaffLines()
 {
-    Profiler profiler("StaffLayout::resizeStaffLines");
+    //Profiler profiler("StaffLayout::resizeStaffLines");
 
     int firstRow = getRowForLayoutX(m_startLayoutX);
     int lastRow = getRowForLayoutX(m_endLayoutX);
@@ -980,7 +980,7 @@ StaffLayout::clearStaffLineRow(int row)
 void
 StaffLayout::resizeStaffLineRow(int row, double x, double length)
 {
-    Profiler profiler("StaffLayout::resizeStaffLineRow");
+    //Profiler profiler("StaffLayout::resizeStaffLineRow");
 
     //    RG_DEBUG << "StaffLayout::resizeStaffLineRow: row "
     //       << row << ", x " << x << ", length "
