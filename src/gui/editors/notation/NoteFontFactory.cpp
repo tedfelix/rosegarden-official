@@ -15,24 +15,28 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[NoteFontFactory]"
+#define RG_NO_DEBUG_PRINT 1
 
 #include "NoteFontFactory.h"
-#include "misc/Debug.h"
-#include <QApplication>
 
-#include <QDir>
+#include "misc/Debug.h"
 #include "misc/Strings.h"
 #include "misc/ConfigGroups.h"
 #include "base/Exception.h"
 #include "gui/widgets/StartupLogo.h"
 #include "NoteFont.h"
 #include "NoteFontMap.h"
-#include <QSettings>
 #include "gui/general/ResourceFinder.h"
+
+#include <QSettings>
+#include <QApplication>
+#include <QDir>
 #include <QMessageBox>
 #include <QDir>
 #include <QString>
 #include <QStringList>
+
 #include <algorithm>
 
 namespace Rosegarden
@@ -50,7 +54,7 @@ static NoteFontFactory &instance() { return s_staticInstance()->m_instance; }
 std::set<QString>
 NoteFontFactory::getFontNames(bool forceRescan)
 {
-    NOTATION_DEBUG << "NoteFontFactory::getFontNames: forceRescan = " << forceRescan;
+    RG_DEBUG << "getFontNames(): forceRescan = " << forceRescan;
 
     NoteFontFactory &that = instance();
     QMutexLocker locker(&that.m_mutex);
@@ -67,7 +71,7 @@ NoteFontFactory::getFontNames(bool forceRescan)
     }
     settings.endGroup();
 
-    NOTATION_DEBUG << "NoteFontFactory::getFontNames: read from cache: " << fontNameList;
+    RG_DEBUG << "getFontNames(): read from cache: " << fontNameList;
 
     //QStringList names = QStringList::split(",", fontNameList);
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
@@ -80,7 +84,7 @@ NoteFontFactory::getFontNames(bool forceRescan)
 
     if (names.empty()) {
 
-        NOTATION_DEBUG << "NoteFontFactory::getFontNames: No names available, rescanning...";
+        RG_DEBUG << "getFontNames(): No names available, rescanning...";
 
         QStringList files = rf.getResourceFiles("fonts/mappings", "xml");
 
@@ -98,6 +102,10 @@ NoteFontFactory::getFontNames(bool forceRescan)
                 throw;
             }
         }
+    }
+
+    if (names.empty()) {
+        RG_WARNING << "getFontNames(): WARNING: Unable to find any fonts.";
     }
 
     QString savedNames;

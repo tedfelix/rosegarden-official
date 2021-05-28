@@ -16,8 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[SystemFont]"
-
-//#define RG_NO_DEBUG_PRINT 1
+#define RG_NO_DEBUG_PRINT 1
 
 // "qtextstream.h must be included before any header file that defines Status"
 #include <QTextStream>
@@ -101,6 +100,7 @@ SystemFont::loadSystemFont(const SystemFontSpec &spec)
     }
 
     RG_DEBUG << "loadSystemFont(): [Qt]: Wrong family returned, failing";
+
     qFontMap[name] = {};
     return nullptr;
 }
