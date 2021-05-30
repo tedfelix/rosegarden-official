@@ -28,6 +28,7 @@
 */
 
 #define RG_MODULE_STRING "[LilyPondExporter]"
+#define RG_NO_DEBUG_PRINT 1
 
 #include "LilyPondExporter.h"
 #include "LilyPondSegmentsContext.h"
@@ -1211,7 +1212,7 @@ LilyPondExporter::write()
 
             Segment *seg;
             for (seg = lsc.useFirstSegment(); seg; seg = lsc.useNextSegment()) {
-
+                RG_DEBUG << "lsc iterate segment" << seg;
                 if (!lsc.isVolta()) {
                     // handle the bracket(s) for the first track, and if no brackets
                     // present, open with a <<
@@ -1302,65 +1303,98 @@ LilyPondExporter::write()
                         int numberOfChords = -1;
 
                         timeT lastTime = compositionStartTime;
-                        for (Segment::iterator j = seg->begin();
-                            seg->isBeforeEndMarker(j); ++j) {
+                        timeT segLength = seg->getEndTime() -
+                            seg->getStartTime();
 
-                            bool isNote = (*j)->isa(Note::EventType);
-                            bool isChord = false;
-
-                            if (!isNote) {
-                                if ((*j)->isa(Text::EventType)) {
-                                    std::string textType;
-                                    if ((*j)->get
-                                        <String>(Text::TextTypePropertyName, textType) &&
-                                        textType == Text::Chord) {
-                                        isChord = true;
+                        int nRepeats = lsc.getNumberOfRepeats();
+                        RG_DEBUG << "chordNamesMode repeats:" << nRepeats;
+                        if (nRepeats <= 0) nRepeats = 1;
+                        // with REPEAT_VOLTA the segment is only rendered once
+                        if (m_repeatMode == REPEAT_VOLTA) nRepeats = 1;
+                        RG_DEBUG << "chordNamesMode repeats adj:" << nRepeats;
+                        timeT myTime;
+                        for (int iRepeat = 0; iRepeat < nRepeats; ++iRepeat) {
+                            for (Segment::iterator j = seg->begin();
+                                 seg->isBeforeEndMarker(j); ++j) {
+                                
+                                bool isNote = (*j)->isa(Note::EventType);
+                                bool isChord = false;
+                                
+                                if (!isNote) {
+                                    if ((*j)->isa(Text::EventType)) {
+                                        std::string textType;
+                                        if ((*j)->get
+                                            <String>(Text::TextTypePropertyName, textType) &&
+                                            textType == Text::Chord) {
+                                            isChord = true;
+                                        }
                                     }
                                 }
+                                
+                                if (!isNote && !isChord) continue;
+                                
+                                myTime = (*j)->getNotationAbsoluteTime() +
+                                    segLength * iRepeat;
+                                RG_DEBUG << "myTime1" << myTime;
+                                // adjust for repeats note the
+                                // lsc.getSegmentStartTime is relative to
+                                // lsc.getFirstSegmentStartTime
+                                timeT lscStart =
+                                    lsc.getFirstSegmentStartTime() +
+                                    lsc.getSegmentStartTime();
+                                timeT segStartDelta = seg->getStartTime() -
+                                    lscStart;
+                                myTime -= segStartDelta;
+                                RG_DEBUG << "myTime2" << myTime;
+                                
+                                if (isChord) {
+                                    std::string schord;
+                                    (*j)->get<String>(Text::TextPropertyName, schord);
+                                    QString chord(strtoqstr(schord));
+                                    chord.replace(QRegularExpression("\\s+"), "");
+                                    chord.replace(QRegularExpression("h"), "b");
+                                    
+                                    // DEBUG: str << " %{ '" << chord.toUtf8() << "' %} ";
+                                    QRegularExpression rx("^([a-g]([ei]s)?)([:](m|dim|aug|maj|sus|\\d+|[.^]|[+-])*)?(/[+]?[a-g]([ei]s)?)?$");
+                                    if (rx.match(chord).hasMatch()) {
+                                        // The chord duration is zero, but the chord
+                                        // intervals is given with skips (see below).
+                                        QRegularExpression rxStart("^([a-g]([ei]s)?)");
+                                        chord.replace(QRegularExpression(rxStart), QString("\\1") + QString("4*0"));
+                                    } else {
+                                        // Skip improper chords.
+                                        str << (" %{ improper chord: '") << qStrToStrUtf8(chord) << ("' %} ");
+                                        continue;
+                                    }
+                                    
+                                    if (numberOfChords == -1) {
+                                        str << indent(col++) << "\\new ChordNames " << "\\with {alignAboveContext=\"track " <<
+                                            (trackPos + 1) << "\"}" << "\\chordmode {" << std::endl;
+                                        str << indent(col) << "\\set chordNameExceptions = #chExceptions" << std::endl;
+                                        str << indent(col);
+                                        numberOfChords++;
+                                    }
+                                    if (numberOfChords >= 0) {
+                                        // The chord intervals are specified with skips.
+                                        RG_DEBUG << "writing chord" << myTime <<
+                                            lastTime;
+                                        writeSkip(m_composition->getTimeSignatureAt(myTime), lastTime, myTime - lastTime, false, str);
+                                        str << qStrToStrUtf8(chord) << " ";
+                                        numberOfChords++;
+                                    }
+                                    lastTime = myTime;
+                                }
                             }
-
-                            if (!isNote && !isChord) continue;
-
-                            timeT myTime = (*j)->getNotationAbsoluteTime();
-
-                            if (isChord) {
-                                std::string schord;
-                                (*j)->get<String>(Text::TextPropertyName, schord);
-                                QString chord(strtoqstr(schord));
-                                chord.replace(QRegularExpression("\\s+"), "");
-                                chord.replace(QRegularExpression("h"), "b");
-
-                                // DEBUG: str << " %{ '" << chord.toUtf8() << "' %} ";
-                                QRegularExpression rx("^([a-g]([ei]s)?)([:](m|dim|aug|maj|sus|\\d+|[.^]|[+-])*)?(/[+]?[a-g]([ei]s)?)?$");
-                                if (rx.match(chord).hasMatch()) {
-                                    // The chord duration is zero, but the chord
-                                    // intervals is given with skips (see below).
-                                    QRegularExpression rxStart("^([a-g]([ei]s)?)");
-                                    chord.replace(QRegularExpression(rxStart), QString("\\1") + QString("4*0"));
-                                } else {
-                                    // Skip improper chords.
-                                    str << (" %{ improper chord: '") << qStrToStrUtf8(chord) << ("' %} ");
-                                    continue;
-                                }
-
-                                if (numberOfChords == -1) {
-                                    str << indent(col++) << "\\new ChordNames " << "\\with {alignAboveContext=\"track " <<
-                                        (trackPos + 1) << "\"}" << "\\chordmode {" << std::endl;
-                                    str << indent(col) << "\\set chordNameExceptions = #chExceptions" << std::endl;
-                                    str << indent(col);
-                                    numberOfChords++;
-                                }
-                                if (numberOfChords >= 0) {
-                                    // The chord intervals are specified with skips.
-                                    writeSkip(m_composition->getTimeSignatureAt(myTime), lastTime, myTime - lastTime, false, str);
-                                    str << qStrToStrUtf8(chord) << " ";
-                                    numberOfChords++;
-                                }
-                                lastTime = myTime;
-                            }
-                        } // for
+                            // skip to end of segment (start of next segment)
+                            myTime = lsc.getSegmentStartTime() +
+                                (iRepeat + 1.0) * segLength;
+                                RG_DEBUG << "myTime3" << myTime;
+                            writeSkip(m_composition->getTimeSignatureAt(myTime), lastTime, myTime - lastTime, false, str);
+                            lastTime = myTime;
+                            str << std::endl << indent(col);
+                        } // for iRepeat
                         if (numberOfChords >= 0) {
-                            writeSkip(m_composition->getTimeSignatureAt(lastTime), lastTime, compositionEndTime - lastTime, false, str);
+                            writeSkip(m_composition->getTimeSignatureAt(lastTime), lastTime, lsc.getLastSegmentEndTime() - lastTime, false, str);
                             if (numberOfChords == 1) str << "s8 ";
                             str << std::endl;
                             str << indent(--col) << "} % ChordNames " << std::endl;

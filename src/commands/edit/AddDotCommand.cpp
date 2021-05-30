@@ -101,7 +101,12 @@ AddDotCommand::modifySegment()
         m_selection->addEvent(actualEvent);
     }
 
-    m_selection->getSegment().normalizeRests(getStartTime(), endTime);
+    // extend endTime to end of the bar to sort out the rests after
+    // dot reduction
+    Composition* comp = m_selection->getSegment().getComposition();
+    int barNo = comp->getBarNumber(endTime);
+    timeT endBarTime = comp->getBarEnd(barNo);
+    m_selection->getSegment().normalizeRests(getStartTime(), endBarTime);
 }
 
 }
