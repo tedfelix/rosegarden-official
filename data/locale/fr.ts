@@ -13888,7 +13888,7 @@ Veuillez sélectionner ceux que vous souhaitez effacer définitivement du disque
     <message>
         <location line="+5"/>
         <source>%1%2 - %3 Segment(s) - %4</source>
-        <translation type="unfinished"></translation>
+        <translation>%1%2 - %3 Segment(s) - %4</translation>
     </message>
 </context>
 <context>
@@ -14452,7 +14452,7 @@ Cela peut causer des problèmes si elle masque une valeur différente devant êt
     <message>
         <location line="+17"/>
         <source>Event List</source>
-        <translation type="unfinished"></translation>
+        <translation>Liste des événements</translation>
     </message>
     <message>
         <source>%1%2 - Segment Track #%3 - Event List</source>
@@ -14764,12 +14764,12 @@ Voulez-vous essayer de localiser ce fichier?</translation>
     <message>
         <location line="+21"/>
         <source>Clean recent files list</source>
-        <translation type="unfinished"></translation>
+        <translation>Nettoyer la liste des fichiers récents</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>&lt;qt&gt;&lt;p&gt;Remove entries from the recent files list that no longer exist.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Supprime de la liste des fichiers récents ceux qui n&apos;existent plus.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+22"/>
@@ -16668,22 +16668,22 @@ répartis verticalement sur la page)</translation>
     <message>
         <location line="+16"/>
         <source>Send program changes when looping</source>
-        <translation type="unfinished"></translation>
+        <translation>Emettre les codes &quot;program change&quot; pendant une exécution en boucle</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Some synths have trouble with program changes coming in repeatedly.  Use this to turn them off when looping.</source>
-        <translation type="unfinished"></translation>
+        <translation>Certains synthétiseurs fonctionnent mal quand ils reçoivent des codes &quot;program change&quot; répétés.  Décocher cette case pour ne pas les émettre en cas de boucle.</translation>
     </message>
     <message>
         <location line="+15"/>
         <source>Send control changes when looping</source>
-        <translation type="unfinished"></translation>
+        <translation>Emettre les codes MIDI &quot;CC&quot; pendant une exécution en boucle</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Some synths have trouble with control changes coming in repeatedly.  Use this to turn them off when looping.</source>
-        <translation type="unfinished"></translation>
+        <translation>Certains synthétiseurs fonctionnent mal quand ils reçoivent des codes &quot;CC&quot; répétés.  Décocher cette case pour ne pas les émettre en cas de boucle.</translation>
     </message>
     <message>
         <location line="+15"/>
@@ -18812,7 +18812,7 @@ Ceci est un bogue (le programme aurait dû s&apos;arrêter anormalement)</transl
     <message>
         <location line="+2582"/>
         <source>Notation</source>
-        <translation type="unfinished"></translation>
+        <translation>Partition</translation>
     </message>
     <message>
         <location line="+118"/>
@@ -19115,7 +19115,7 @@ Veuillez vérifier que le périphérique est configuré correctement dans le dia
     <message>
         <location line="+18"/>
         <source>New Layer</source>
-        <translation type="unfinished"></translation>
+        <translation>New Layer</translation>
     </message>
     <message>
         <location line="+66"/>
@@ -19169,7 +19169,7 @@ Veuillez vérifier que le périphérique est configuré correctement dans le dia
     <message>
         <location line="+6"/>
         <source>Track %1 (%2) | %3</source>
-        <translation type="unfinished">Piste %1 (%2) | %3</translation>
+        <translation>Piste %1 (%2) | %3</translation>
     </message>
 </context>
 <context>
