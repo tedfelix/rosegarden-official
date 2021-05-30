@@ -46,6 +46,10 @@ Included in this release...
     Bug #1597.  [e814dcfbd]
   * Fixed dots being added to tied notes.  Bug #1555.  [e9b8c293d]
     [cf1d3dfed]
+  * Fixed a crash in the notation lyric editor.  Bug #1598.  [5f52c7c2]
+  * Fix incorrect position of chord names in lilypond.  Bug #1524.
+    [04fc5dd6]
+  * Fix missing chord names in lilypond.  [c35e0fb7]
 
 ===== New Features =====
 
@@ -321,18 +325,25 @@ Other people who contributed to Rosegarden development:
 
 ====== ROSEGARDEN 18.06, codename "Vesper" RELEASED ======
 
-The Rosegarden team is proud to announce the release of version 18.06 of Rosegarden, a MIDI sequencer that features a rich understanding of music notation along with basic support for digital audio.
+The Rosegarden team is proud to announce the release of version 18.06
+of Rosegarden, a MIDI sequencer that features a rich understanding of
+music notation along with basic support for digital audio.
 
 http://www.rosegardenmusic.com/
 
-18.06 brings more simplification of the code and further progress toward simplifying the UI notification mechanisms that keep the UI in sync with the underlying Composition.
+18.06 brings more simplification of the code and further progress
+toward simplifying the UI notification mechanisms that keep the UI in
+sync with the underlying Composition.
 
 ===== Bug Fixes =====
 
   * Fix misc spelling errors flagged by lintian (Bug #1556, r15149)
-  * Fix soft synth tracks not responding to volume fader changes.  (Bug #1557, r15189)
+  * Fix soft synth tracks not responding to volume fader changes.
+    (Bug #1557, r15189)
   * Fix Receive External checkbox not cleared.  (r15194)
-  * Fix key map popup menu position on the Manage MIDI Banks and Programs window.  Current key map is now under the mouse as it should be.  (r15221)
+  * Fix key map popup menu position on the Manage MIDI Banks and
+    Programs window.  Current key map is now under the mouse as it
+    should be.  (r15221)
   * Fix a memory leak.  (r15235)
   * Fix gray leftovers when going out of Archive.  (r15240)
   * Fix Track preset name not loaded from .rg file.  (r15242)
@@ -342,9 +353,11 @@ http://www.rosegardenmusic.com/
 
 ===== New Features =====
 
-  * Manage MIDI Banks and Programs window now uses a scroll area instead of tabs.  (r15227)
+  * Manage MIDI Banks and Programs window now uses a scroll area
+    instead of tabs.  (r15227)
   * Add "Reset to Defaults" button to Track Parameters.  (r15241)
-  * Standardized scroll wheel behavior.  (Feature #445, r15245, r15246, r15248, r15265)
+  * Standardized scroll wheel behavior.  (Feature #445, r15245, r15246,
+    r15248, r15265)
   * Notation: Offer spacing up to 400%.  (r15266)
   * Notation spacing is now saved to the .rg file.  (r15269)
 
@@ -355,4 +368,70 @@ http://www.rosegardenmusic.com/
 =====People who contributed device files to the Rosegarden Library=====
 
   * Henk de Groot
+
+
+====== ROSEGARDEN 17.12, codename "Ultimate Pleasure" RELEASED ======
+
+The Rosegarden team is proud to announce the release of version 17.12
+of Rosegarden, a MIDI sequencer that features a rich understanding of
+music notation along with basic support for digital audio.
+
+http://www.rosegardenmusic.com/
+
+17.12 brings us numerous bug fixes by Yves Guillemot and Ted Felix.
+Ted has also continued his work on cleaning up the source base with a
+rewrite of the Audio Mixer window and simplified handling of the
+volume, pan, etc... control change knobs and faders.
+
+===== Bug Fixes for 17.12.1 =====
+
+  * Fix volume slider having no effect on softsynths.
+    (Bug #1557, r15123)
+
+===== Bug Fixes =====
+
+  * Fix progress dialog lockups in KDE (bug #1546, r15031-r15034)
+  * Fix disappearing lyrics in lyrics editor (bug #1547, r15035-r15036)
+  * Fix bug #1548: Last syllable of lyrics is not copied between two
+    linked segments.  (r15037)
+  * Fix bug #1550: Crash with lyric editor and linked segments (r15038)
+  * Fix bug #1551: No sound from an audio file when pressing rewind
+    then play.  (r15039)
+  * Fix bug #1549: Matrix Editor: Velocity ruler not updated correctly
+    when changing velocity using the velocity tool (r15041-r15046)
+  * Fix alias change not updating label on the audio instrument
+    parameters.  (r15058)
+  * Fix miscellaneous cosmetic issues related to the ThornStyle
+    upgrade. (r15076-r15081)
+  * Fix time mode toolbar buttons on the Event List and other windows.
+    (r15083)
+  * Fix incorrect window titles on the preferences and document
+    properties windows.  (r15084)
+  * Fix garbage property names in Event Edit window.  (r15085)
+  * Display velocities modified from the velocity ruler in the status
+    bar for the notation editor.  (r15088)
+  * Fix bug #1552: Rosegarden fails to build with cmake-3.9.0. (r15089)
+  * Fix crash when launching plugin dialog introduced by r14648.
+    (r15091)
+  * Fix external controller audio volume/pan bug (r15107)
+  * Fix crash in rulers when pressing mouse buttons (r15116)
+  * Export to LilyPond as a repeat sequence several consecutive linked
+    segments is now possible (bug #1470, r15119)
+  * Fix duplicate connection in initial autoload (r15122)
+  * Fix crash when exporting to LilyPond. (bug #1553, r15135)
+  * Fix lilypond options dialog too big. (r15140)
+
+===== New Features =====
+
+  * Add "Use track name for new segments" preference.  (r15090)
+
+=====Other people who contributed to Rosegarden development:=====
+
+  * Stuart Prescott
+  * Lorenzo Sutton
+
+=====People who contributed device files to the Rosegarden Library=====
+
+  * Karl Marksteiner
+  * Lucas
 
