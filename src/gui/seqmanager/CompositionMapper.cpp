@@ -23,7 +23,6 @@
 #include "misc/Debug.h"
 #include "gui/seqmanager/MappedEventBuffer.h"
 #include "document/RosegardenDocument.h"
-#include "gui/application/RosegardenMainWindow.h"
 #include "base/Segment.h"
 #include "gui/seqmanager/SegmentMapper.h"
 
@@ -32,11 +31,10 @@ namespace Rosegarden
 {
 
 
-CompositionMapper::CompositionMapper()
+CompositionMapper::CompositionMapper(RosegardenDocument *doc) :
+    m_doc(doc)
 {
-    RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
-
-    const Composition &composition = doc->getComposition();
+    const Composition &composition = m_doc->getComposition();
 
     // For each Segment in the Composition
     for (Segment *segment : composition) {
@@ -109,10 +107,8 @@ CompositionMapper::mapSegment(Segment *segment)
         return;
     }
 
-    RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
-
     QSharedPointer<SegmentMapper> mapper =
-        SegmentMapper::makeMapperForSegment(doc, segment);
+        SegmentMapper::makeMapperForSegment(m_doc, segment);
 
     if (mapper)
         m_segmentMappers[segment] = mapper;
