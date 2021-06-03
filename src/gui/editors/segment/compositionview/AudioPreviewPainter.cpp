@@ -27,6 +27,7 @@
 #include "base/Studio.h"
 #include "misc/Debug.h"
 #include "misc/ConfigGroups.h"
+#include "gui/application/RosegardenMainWindow.h"
 
 #include <QImage>
 #include <QApplication>
@@ -71,7 +72,7 @@ int AudioPreviewPainter::tileWidth()
         return tw;
 
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
-    QScreen* screen = QGuiApplication::screenAt(QPoint(0, 0));
+    QScreen* screen = RosegardenMainWindow::self()->screen();
     tw = screen->availableGeometry().width();
 #else
     tw = QApplication::desktop()->width();

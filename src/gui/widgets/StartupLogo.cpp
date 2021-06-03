@@ -55,7 +55,7 @@ StartupLogo::StartupLogo(QWidget * parent) :
 #endif
 
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
-    QScreen* screen = QGuiApplication::screenAt(QPoint(0, 0));
+    QScreen* screen = this->screen();
     int dw = screen->availableGeometry().width();
     int dh = screen->availableGeometry().height();
 #else
