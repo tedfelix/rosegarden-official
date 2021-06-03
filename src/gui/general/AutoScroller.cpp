@@ -24,6 +24,7 @@
 #include <QAbstractScrollArea>
 #include <QApplication>
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+#include <QWindow>
 #include <QScreen>
 #else
 #include <QDesktopWidget>
@@ -133,7 +134,7 @@ AutoScroller::doAutoScroll()
             int xOffset = 0;
 
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
-            QScreen* screen = QGuiApplication::screenAt(QPoint(0, 0));
+            QScreen* screen = m_abstractScrollArea->screen();
             const int rightSideOfScreen = screen->geometry().right();
 #else
             const int rightSideOfScreen = QApplication::desktop()->
