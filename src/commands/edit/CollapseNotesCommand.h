@@ -38,9 +38,10 @@ class CollapseNotesCommand : public BasicSelectionCommand
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::CollapseNotesCommand)
 
 public:
-    CollapseNotesCommand(EventSelection &selection) :
+    CollapseNotesCommand(EventSelection &selection, bool splitAtBars) :
         BasicSelectionCommand(getGlobalName(), selection, true),
-        m_selection(&selection) { }
+        m_selection(&selection),
+        m_splitAtBars(splitAtBars) { }
 
     static QString getGlobalName() { return tr("Collapse &Equal-Pitch Notes"); }
 
@@ -49,6 +50,7 @@ protected:
 
 private:
     EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
+    bool m_splitAtBars;
 };
 
 

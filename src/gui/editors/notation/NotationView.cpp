@@ -4924,8 +4924,9 @@ NotationView::slotTransformsCollapseNotes()
         return ;
     TmpStatusMsg msg(tr("Collapsing notes..."), this);
 
+    // in notation editor split notes at bars
     CommandHistory::getInstance()->
-            addCommand(new CollapseNotesCommand(*selection));
+        addCommand(new CollapseNotesCommand(*selection, true));
 }
 
 void NotationView::extendSelectionHelper(bool forward, EventSelection *es, const std::vector<Event *> &eventVec, bool select)

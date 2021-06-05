@@ -949,8 +949,9 @@ void
 MatrixView::slotCollapseNotes()
 {
     if (!getSelection()) return;
+    // in matrix editor do not split notes at bars
     CommandHistory::getInstance()->addCommand
-        (new CollapseNotesCommand(*getSelection()));
+        (new CollapseNotesCommand(*getSelection(), false));
 }
 
 void
