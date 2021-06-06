@@ -115,7 +115,7 @@ AudioInstrumentParameterPanel::AudioInstrumentParameterPanel(QWidget *parent) :
 
     QGridLayout *gridLayout = new QGridLayout(this);
     gridLayout->setSpacing(5);
-    gridLayout->setMargin(0);
+    gridLayout->setContentsMargins(0, 0, 0, 0);
     // The alias button and the label are in 0,0.  The only difference is the
     // alignment.
     gridLayout->addWidget(m_aliasButton, 0, 0, 1, 2, Qt::AlignLeft);

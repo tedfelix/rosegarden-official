@@ -23,7 +23,12 @@
 
 #include <QAbstractScrollArea>
 #include <QApplication>
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+#include <QWindow>
+#include <QScreen>
+#else
 #include <QDesktopWidget>
+#endif
 #include <QScrollBar>
 #include <QWidget>
 
@@ -128,8 +133,13 @@ AutoScroller::doAutoScroll()
             // Assume we can place the auto scroll area outside the window.
             int xOffset = 0;
 
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+            QScreen* screen = m_abstractScrollArea->screen();
+            const int rightSideOfScreen = screen->geometry().right();
+#else
             const int rightSideOfScreen = QApplication::desktop()->
-                    availableGeometry(m_abstractScrollArea).right();
+                availableGeometry(m_abstractScrollArea).right();
+#endif
 
             const int rightSideOfViewport =
                     m_abstractScrollArea->parentWidget()->mapToGlobal(

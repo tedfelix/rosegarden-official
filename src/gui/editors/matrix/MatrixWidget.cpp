@@ -71,7 +71,6 @@
 
 #include <QApplication>
 #include <QColor>
-#include <QDesktopWidget>
 #include <QGraphicsView>
 #include <QGridLayout>
 #include <QLabel>
@@ -80,7 +79,7 @@
 #include <QGraphicsScene>
 #include <QGraphicsProxyWidget>
 #include <QPushButton>
-
+#include <QRegularExpression>
 
 namespace Rosegarden
 {
@@ -887,7 +886,7 @@ MatrixWidget::slotDispatchMousePress(const MatrixMouseEvent *e)
         m_currentTool->handleMidButtonPress(e);
     } else if (e->buttons & Qt::LeftButton) {
         m_currentTool->handleLeftButtonPress(e);
-    } else if (e->buttons & Qt::MidButton) {
+    } else if (e->buttons & Qt::MiddleButton) {
         m_currentTool->handleMidButtonPress(e);
     } else if (e->buttons & Qt::RightButton) {
         m_currentTool->handleRightButtonPress(e);
@@ -1041,7 +1040,7 @@ MatrixWidget::addControlRuler(QAction *action)
     // FIX #1543: If name happens to come to us with an & included somewhere,
     // strip the & so the string will match the one we are comparing later on.
     //
-    name.replace(QRegExp("&"), "");
+    name.replace(QRegularExpression("&"), "");
 
     //RG_DEBUG << "addControlRuler()";
     //RG_DEBUG << "  my name is " << name;

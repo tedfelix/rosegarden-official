@@ -384,7 +384,7 @@ AudioMixerWindow2::slotNumberOfStereoInputs()
         return;
 
     // Extract the number of inputs from the action name.
-    unsigned count = name.midRef(7).toUInt();
+    unsigned count = name.mid(7).toUInt();
 
     RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
     Studio &studio = doc->getStudio();
@@ -413,7 +413,7 @@ AudioMixerWindow2::slotNumberOfSubmasters()
         return;
 
     // Extract the count from the name.
-    int count = name.midRef(11).toInt();
+    int count = name.mid(11).toInt();
 
     RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
     Studio &studio = doc->getStudio();
@@ -440,7 +440,7 @@ AudioMixerWindow2::slotPanningLaw()
     if (name.left(7) != "panlaw_")
         return;
 
-    int panLaw = name.midRef(7).toInt();
+    int panLaw = name.mid(7).toInt();
 
     AudioLevel::setPanLaw(panLaw);
 

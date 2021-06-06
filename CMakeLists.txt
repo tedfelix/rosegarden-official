@@ -5,9 +5,8 @@ cmake_minimum_required(VERSION 3.1)
 project(rosegarden)
 
 # Version
-set(ROSEGARDEN_VERSION "21.06")
-set(ROSEGARDEN_CODENAME "Bouquet d'Or")
-#set(ROSEGARDEN_CODENAME "Cloud Nine")
+set(ROSEGARDEN_VERSION "21.12")
+set(ROSEGARDEN_CODENAME "Cloud Nine")
 #set(ROSEGARDEN_CODENAME "Distant Drums")
 #set(ROSEGARDEN_CODENAME "Enchantress")
 #set(ROSEGARDEN_CODENAME "Flutterbye")
@@ -103,17 +102,32 @@ include(FeatureSummary)
 
 # Required dependencies ---------------------------------------
 
-# Qt5 is required.
-find_package(Qt5 "5.1.0" REQUIRED COMPONENTS Core Gui Widgets Xml Network PrintSupport Test)
+option(USE_QT6 "Compile with Qt6." OFF)
 
-set(QT_QTCORE_LIBRARY Qt5::Core)
-set(QT_QTGUI_LIBRARY Qt5::Widgets Qt5::PrintSupport)
-set(QT_QTXML_LIBRARY Qt5::Xml)
-set(QT_QTNETWORK_LIBRARY Qt5::Network)
-set(QT_QTTEST_LIBRARY Qt5::Test)
-
-set(QT_RCC_EXECUTABLE ${Qt5Core_RCC_EXECUTABLE})
-
+if (USE_QT6)
+  # Qt6 is required.
+  find_package(Qt6 "6.0.0" REQUIRED COMPONENTS CoreTools Core GuiTools Gui WidgetsTools Widgets Xml Network PrintSupport Test Core5Compat)
+  
+  set(QT_QTCORE_LIBRARY Qt6::Core)
+  set(QT_QTCORE5COMPAT_LIBRARY Qt6::Core5Compat)
+  set(QT_QTGUI_LIBRARY Qt6::Widgets Qt6::PrintSupport)
+  set(QT_QTXML_LIBRARY Qt6::Xml)
+  set(QT_QTNETWORK_LIBRARY Qt6::Network)
+  set(QT_QTTEST_LIBRARY Qt6::Test)
+  
+  set(QT_RCC_EXECUTABLE Qt::rcc)
+else()
+  # Qt5 is required.
+  find_package(Qt5 "5.1.0" REQUIRED COMPONENTS Core Gui Widgets Xml Network PrintSupport Test)
+  
+  set(QT_QTCORE_LIBRARY Qt5::Core)
+  set(QT_QTGUI_LIBRARY Qt5::Widgets Qt5::PrintSupport)
+  set(QT_QTXML_LIBRARY Qt5::Xml)
+  set(QT_QTNETWORK_LIBRARY Qt5::Network)
+  set(QT_QTTEST_LIBRARY Qt5::Test)
+  
+  set(QT_RCC_EXECUTABLE ${Qt5Core_RCC_EXECUTABLE})
+endif()
 
 find_path(LADSPA_INCLUDE_DIR ladspa.h)
 if(NOT LADSPA_INCLUDE_DIR)

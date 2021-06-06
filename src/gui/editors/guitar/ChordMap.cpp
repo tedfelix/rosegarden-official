@@ -160,8 +160,11 @@ bool ChordMap::saveDocument(
    
     QTextStream outStream(&file);
     
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    // qt6 default codec is UTF-8
+#else
     outStream.setCodec("UTF-8");
-
+#endif
     
     outStream << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
     << "<!DOCTYPE rosegarden-chord-data>\n"

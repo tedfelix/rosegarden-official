@@ -27,11 +27,16 @@
 #include "base/Studio.h"
 #include "misc/Debug.h"
 #include "misc/ConfigGroups.h"
+#include "gui/application/RosegardenMainWindow.h"
 
 #include <QImage>
 #include <QApplication>
 #include <QSettings>
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+#include <QScreen>
+#else
 #include <QDesktopWidget>
+#endif
 
 namespace Rosegarden {
 
@@ -62,7 +67,16 @@ AudioPreviewPainter::AudioPreviewPainter(CompositionModelImpl& model,
 int AudioPreviewPainter::tileWidth()
 {
     static int tw = -1;
-    if (tw == -1) tw = QApplication::desktop()->width();
+    // Cached value available?  Return it.
+    if (tw != -1)
+        return tw;
+
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+    QScreen* screen = RosegardenMainWindow::self()->screen();
+    tw = screen->availableGeometry().width();
+#else
+    tw = QApplication::desktop()->width();
+#endif
     return tw;
 }
 

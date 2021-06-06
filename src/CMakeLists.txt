@@ -736,13 +736,24 @@ set(rg_UIS
 
 set(rg_SOURCES ${rg_CPPS})
 
-qt5_wrap_ui(rg_SOURCES ${rg_UIS})
+if (USE_QT6)
+  qt6_wrap_ui(rg_SOURCES ${rg_UIS})
+else()
+  qt5_wrap_ui(rg_SOURCES ${rg_UIS})
+endif()
 
 # Compile translations (.ts -> .qm)
 file(GLOB TS_FILES ${CMAKE_CURRENT_SOURCE_DIR}/../data/locale/*.ts)
 list(REMOVE_ITEM TS_FILES ${CMAKE_CURRENT_SOURCE_DIR}/../data/locale/rosegarden.ts)
-find_package(Qt5LinguistTools "5.1.0" REQUIRED)
-qt5_add_translation(QM_FILES ${TS_FILES})
+
+
+if (USE_QT6)
+  find_package(Qt6LinguistTools "6.0.0" REQUIRED)
+  qt6_add_translation(QM_FILES ${TS_FILES})
+else()
+  find_package(Qt5LinguistTools "5.1.0" REQUIRED)
+  qt5_add_translation(QM_FILES ${TS_FILES})
+endif()
 
 # Generate a .qrc for the .qm files
 SET(localeqrc_file locale)
@@ -768,7 +779,11 @@ ADD_CUSTOM_COMMAND(
    DEPENDS ${QM_FILES}
 )
 
+if (USE_QT6)
+qt6_add_resources(rg_SOURCES ../data/data.qrc)
+else()
 qt5_add_resources(rg_SOURCES ../data/data.qrc)
+endif()
 
 # Turn off automoc for generated files.
 set_property(SOURCE ui_RosegardenTransportUi.h PROPERTY SKIP_AUTOMOC ON)
@@ -847,6 +862,7 @@ endif()
 # Link to the following libraries
 target_link_libraries(rosegardenprivate
   ${QT_QTCORE_LIBRARY}
+  ${QT_QTCORE5COMPAT_LIBRARY}
   ${QT_QTGUI_LIBRARY}
   ${QT_QTXML_LIBRARY}
   ${QT_QTNETWORK_LIBRARY}

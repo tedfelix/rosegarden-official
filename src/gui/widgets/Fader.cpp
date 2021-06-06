@@ -358,7 +358,7 @@ Fader::mousePressEvent(QMouseEvent *e)
 
         if (m_vertical) {
             int buttonPosition = value_to_position(m_value);
-            int clickPosition = height() - e->y() - m_sliderMin;
+            int clickPosition = height() - e->pos().y() - m_sliderMin;
 
             if (clickPosition < buttonPosition + buttonPixmap()->height() / 2 &&
                     clickPosition > buttonPosition - buttonPixmap()->height() / 2) {
@@ -367,7 +367,7 @@ Fader::mousePressEvent(QMouseEvent *e)
                 showFloatText();
             }
         }
-    } else if (e->button() == Qt::MidButton) {  // reset to centre position
+    } else if (e->button() == Qt::MiddleButton) {  // reset to centre position
         setFader((m_max + m_min) / 2.0);
         emit faderChanged(m_value);
     } else if (e->button() == Qt::RightButton) {  // reset to default
@@ -389,7 +389,7 @@ Fader::mouseMoveEvent(QMouseEvent *e)
 {
     if (m_clickMousePos >= 0) {
         if (m_vertical) {
-            int mousePosition = height() - e->y() - m_sliderMin;
+            int mousePosition = height() - e->pos().y() - m_sliderMin;
             int delta = mousePosition - m_clickMousePos;
             int buttonPosition = m_clickButtonPos + delta;
             if (buttonPosition < 0)
@@ -433,7 +433,11 @@ Fader::wheelEvent(QWheelEvent *e)
 }
 
 void
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+Fader::enterEvent(QEnterEvent *)
+#else
 Fader::enterEvent(QEvent *)
+#endif
 {
     TextFloat::getTextFloat()->attach(this);
 }

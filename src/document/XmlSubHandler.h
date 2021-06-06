@@ -19,7 +19,6 @@
 #define RG_XMLSUBHANDLER_H
 
 #include <QString>
-#include <qxml.h>
 
 class QXmlStreamAttributes;
 

@@ -300,7 +300,7 @@ SegmentParameterBox::SegmentParameterBox(QWidget *parent) :
     // SegmentParameterBox Layout
 
     QGridLayout *gridLayout = new QGridLayout(this);
-    gridLayout->setMargin(0);
+    gridLayout->setContentsMargins(0, 0, 0, 0);
     gridLayout->setSpacing(2);
     // Row 0: Label
     gridLayout->addWidget(label, 0, 0);

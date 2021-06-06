@@ -147,8 +147,6 @@ protected slots:
     void slotSelectSelected();
     void slotRestsSelected();
     void slotNotesSelected();
-    
-    void slotLookAtModifiers();     // Called by timer when mouse is motionless
 
 protected:
     //--------------- Data members ---------------------------------
@@ -185,11 +183,6 @@ protected:
     bool m_processingWheelTurned;  // Use by synchronizeWheel()
 
     bool m_ready;                  // True when the tool is ready
-    
-    // Timer and associated data to poll the modifier keys while entering notes
-    QTimer * m_modifiersTimer;
-    bool m_lastNotationMouseEventIsValid;
-    NotationMouseEvent m_lastNotationMouseEvent;
 
 // Obsolete ?
 //    static const char* m_actionsAccidental[][4];

@@ -222,7 +222,11 @@ Thumbwheel::getShowScale() const
 }
 
 void
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+Thumbwheel::enterEvent(QEnterEvent *)
+#else
 Thumbwheel::enterEvent(QEvent *)
+#endif
 {
     emit mouseEntered();
 }
@@ -236,7 +240,7 @@ Thumbwheel::leaveEvent(QEvent *)
 void
 Thumbwheel::mousePressEvent(QMouseEvent *e)
 {
-    if (e->button() == Qt::MidButton ||
+    if (e->button() == Qt::MiddleButton ||
         ((e->button() == Qt::LeftButton) &&
          (e->modifiers() & Qt::ControlModifier))) {
         resetToDefault();
@@ -279,9 +283,9 @@ Thumbwheel::mouseMoveEvent(QMouseEvent *e)
     if (!m_clicked) return;
     int dist = 0;
     if (m_orientation == Qt::Horizontal) {
-        dist = e->x() - m_clickPos.x();
+        dist = e->pos().x() - m_clickPos.x();
     } else {
-        dist = e->y() - m_clickPos.y();
+        dist = e->pos().y() - m_clickPos.y();
     }
 
     float rotation = m_clickRotation + (m_speed * dist) / 100;

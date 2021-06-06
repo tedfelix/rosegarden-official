@@ -31,6 +31,8 @@
 #include "gui/editors/notation/NotationProperties.h"
 #include "misc/Debug.h"
 
+#include <QRegularExpression>
+
 #include <sstream>
 
 namespace Rosegarden
@@ -805,33 +807,33 @@ MusicXmlExportHelper::addChord(const Event &event)
     //      Caug7
 
     QString txt = QString::fromStdString(text.getText()).trimmed();
-    QRegExp rx("([A-G])([#b])?(m|M|dim|aug)?(7)?");
-    rx.indexIn(txt, 0);
+    QRegularExpression rx("([A-G])([#b])?(m|M|dim|aug)?(7)?");
+    QRegularExpressionMatch match = rx.match(txt);
 
     std::string kind;
-    if (rx.cap(4) == "") {
-        if (rx.cap(3) == "") kind = "major";
-        else if (rx.cap(3) == "m") kind = "minor";
-        else if (rx.cap(3) == "dim") kind = "diminished";
-        else if (rx.cap(3) == "aug") kind = "augmented";
-    } else if (rx.cap(4) == "7") {
-        if (rx.cap(3) == "") kind = "dominant";
-        else if (rx.cap(3) == "M") kind = "major-seventh";
-        else if (rx.cap(3) == "m") kind = "minor-seventh";
-        else if (rx.cap(3) == "dim") kind = "diminished-seventh";
+    if (match.captured(4) == "") {
+        if (match.captured(3) == "") kind = "major";
+        else if (match.captured(3) == "m") kind = "minor";
+        else if (match.captured(3) == "dim") kind = "diminished";
+        else if (match.captured(3) == "aug") kind = "augmented";
+    } else if (match.captured(4) == "7") {
+        if (match.captured(3) == "") kind = "dominant";
+        else if (match.captured(3) == "M") kind = "major-seventh";
+        else if (match.captured(3) == "m") kind = "minor-seventh";
+        else if (match.captured(3) == "dim") kind = "diminished-seventh";
     }
 
-    if ((rx.cap(1) == "") || (kind == "")) {
+    if ((match.captured(1) == "") || (kind == "")) {
         RG_WARNING << "WARNING: MusicXmlExportHelper::addChord: bad chord \""
                   << text.getText() << "\".";
     } else {
         std::stringstream tmp;
         tmp << "      <harmony>\n";
         tmp << "        <root>\n";
-        tmp << "          <root-step>" << rx.cap(1) << "</root-step>\n";
-        if (rx.cap(2) == "b") {
+        tmp << "          <root-step>" << match.captured(1) << "</root-step>\n";
+        if (match.captured(2) == "b") {
             tmp << "          <root-alter>-1</root-alter>\n";
-        } else if (rx.cap(2) == "#") {
+        } else if (match.captured(2) == "#") {
             tmp << "          <root-alter>1</root-alter>\n";
         }
         tmp << "        </root>\n";
@@ -994,7 +996,7 @@ MusicXmlExportHelper::addLyric(const Event &event)
 
     QString txt = QString::fromStdString(text.getText()).trimmed();
     int verse = text.getVerse();
-    bool single = ! txt.contains(QRegExp(" *-$"));
+    bool single = ! txt.contains(QRegularExpression(" *-$"));
     if (single) {
         if ((m_syllabic[verse] == "begin") ||
             (m_syllabic[verse] == "middle")) {
@@ -1013,7 +1015,7 @@ MusicXmlExportHelper::addLyric(const Event &event)
     std::stringstream tmp;
     tmp << "        <lyric number=\"" << verse+1 << "\">\n"
         << "          <syllabic>" << m_syllabic[verse] << "</syllabic>\n"
-        << "          <text>" << txt.remove(QRegExp(" *-$")) << "</text>\n"
+        << "          <text>" << txt.remove(QRegularExpression(" *-$")) << "</text>\n"
         << "        </lyric>\n";
     m_strLyrics += tmp.str();
 }

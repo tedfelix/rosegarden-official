@@ -29,7 +29,7 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QPixmap>
-#include <QRegExp>
+#include <QRegularExpression>
 #include <QString>
 #include <QStringList>
 #include <iostream>
@@ -58,7 +58,7 @@ NoteFontMap::NoteFontMap(QString name) :
     if (mapFileMixedName == "" || !mapFileMixedInfo.isReadable()) {
 
         QString lowerName = name.toLower();
-        lowerName.replace(QRegExp(" "), "_");
+        lowerName.replace(QRegularExpression(" "), "_");
 
         QString mapFileLowerName =
             rf.getResourcePath("fonts/mappings",

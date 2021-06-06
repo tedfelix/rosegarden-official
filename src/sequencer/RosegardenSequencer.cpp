@@ -76,8 +76,12 @@ RosegardenSequencer::RosegardenSequencer() :
     m_loopEnd(0, 0),
     m_studio(new MappedStudio()),
     m_transportToken(1),
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    m_isEndOfCompReached(false)
+#else
     m_isEndOfCompReached(false),
     m_mutex(QMutex::Recursive) // recursive
+#endif
 {
     // Initialise the MappedStudio
     //
@@ -952,7 +956,11 @@ RosegardenSequencer::disconnectMappedObject(int id)
 unsigned int
 RosegardenSequencer::getSampleRate() const
 {
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    QMutexLocker locker(const_cast<QRecursiveMutex *>(&m_mutex));
+#else
     QMutexLocker locker(const_cast<QMutex *>(&m_mutex));
+#endif
 
     if (m_driver) return m_driver->getSampleRate();
 

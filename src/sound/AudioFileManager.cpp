@@ -29,6 +29,7 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QDir>
+#include <QRegularExpression>
 
 #include "gui/general/FileSource.h"
 #include "AudioFile.h"
@@ -485,7 +486,7 @@ AudioFileManager::createRecordingAudioFile(QString projectName, QString instrume
     RG_DEBUG << "createRecordingAudioFile(): " << projectName;
 
     // Replace invalid filename characters with "_".
-    instrumentAlias.replace(QRegExp("[&\\\\\\/%\\*\\?\"'><\\|~: ]"), "_");
+    instrumentAlias.replace(QRegularExpression("[&\\\\\\/%\\*\\?\"'><\\|~: ]"), "_");
 
     if (instrumentAlias.isEmpty()) instrumentAlias = "not_specified";
 

@@ -386,12 +386,12 @@ MarkerRuler::paintEvent(QPaintEvent*)
 void
 MarkerRuler::mousePressEvent(QMouseEvent *e)
 {
-    RG_DEBUG << "MarkerRuler::mousePressEvent: x = " << e->x();
+    RG_DEBUG << "MarkerRuler::mousePressEvent: x = " << e->pos().x();
 
     if (!m_doc || !e)
         return;
 
-    m_clickX = e->x();
+    m_clickX = e->pos().x();
     Rosegarden::Marker* clickedMarker = getMarkerAtClickPosition();
     
     // if right-click, show popup menu
@@ -418,7 +418,7 @@ MarkerRuler::mousePressEvent(QMouseEvent *e)
     if (shiftPressed) { // set loop
 
         timeT t = m_rulerScale->getTimeForX
-                  (e->x() - m_currentXOffset);
+            (e->pos().x() - m_currentXOffset);
 
         timeT prev = 0;
 

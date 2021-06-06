@@ -135,15 +135,15 @@ TempoRuler::mousePressEvent(QMouseEvent *e)
 
         if (e->type() == QEvent::MouseButtonDblClick) {
             timeT t = m_rulerScale->getTimeForX
-                      (e->x() - m_currentXOffset);
+                (e->pos().x() - m_currentXOffset);
             m_editTempoController->emitEditTempos(t);
             return;
         }
 
         emit mousePress();
 
-        int x = e->x() + 1;
-        int y = e->y();
+        int x = e->pos().x() + 1;
+        int y = e->pos().y();
         timeT t = m_rulerScale->getTimeForX(x - m_currentXOffset);
         int tcn = m_composition->getTempoChangeNumberAt(t);
 
@@ -187,7 +187,7 @@ TempoRuler::mousePressEvent(QMouseEvent *e)
 
     } else if (e->button() == Qt::RightButton) {
 
-        m_clickX = e->x();
+        m_clickX = e->pos().x();
         if (!m_menu)
             createMenu();
         if (m_menu) {
@@ -211,8 +211,8 @@ TempoRuler::mouseReleaseEvent(QMouseEvent *e)
         m_dragVert = false;
         unsetCursor();
 
-        if (e->x() < 0 || e->x() >= width() ||
-                e->y() < 0 || e->y() >= height()) {
+        if (e->pos().x() < 0 || e->pos().x() >= width() ||
+            e->pos().y() < 0 || e->pos().y() >= height()) {
             leaveEvent(nullptr);
         }
 
@@ -239,8 +239,8 @@ TempoRuler::mouseReleaseEvent(QMouseEvent *e)
         m_dragHoriz = false;
         unsetCursor();
 
-        if (e->x() < 0 || e->x() >= width() ||
-                e->y() < 0 || e->y() >= height()) {
+        if (e->pos().x() < 0 || e->pos().x() >= width() ||
+                e->pos().y() < 0 || e->pos().y() >= height()) {
             leaveEvent(nullptr);
         }
 
@@ -270,7 +270,7 @@ TempoRuler::mouseMoveEvent(QMouseEvent *e)
         if (shiftPressed != m_dragFine) {
 
             m_dragFine = shiftPressed;
-            m_dragStartY = e->y();
+            m_dragStartY = e->pos().y();
 
             // reset the start tempi to whatever we last updated them
             // to as we switch into or out of fine mode
@@ -281,7 +281,7 @@ TempoRuler::mouseMoveEvent(QMouseEvent *e)
             m_dragStartTarget = tr.first ? tr.second : -1;
         }
 
-        int diff = m_dragStartY - e->y(); // +ve for upwards drag
+        int diff = m_dragStartY - e->pos().y(); // +ve for upwards drag
         tempoT newTempo = m_dragStartTempo;
         tempoT newTarget = m_dragStartTarget;
 
@@ -322,7 +322,7 @@ TempoRuler::mouseMoveEvent(QMouseEvent *e)
 
     } else if (m_dragHoriz) {
 
-        int x = e->x();
+        int x = e->pos().x();
 
         SnapGrid grid(m_rulerScale);
         if (shiftPressed) {
@@ -355,7 +355,7 @@ TempoRuler::mouseMoveEvent(QMouseEvent *e)
 
     } else {
 
-        int x = e->x() + 1;
+        int x = e->pos().x() + 1;
         timeT t = m_rulerScale->getTimeForX(x - m_currentXOffset);
         int tcn = m_composition->getTempoChangeNumberAt(t);
 
@@ -406,7 +406,11 @@ TempoRuler::wheelEvent(QWheelEvent */* e */)
 {}
 
 void
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+TempoRuler::enterEvent(QEnterEvent *)
+#else
 TempoRuler::enterEvent(QEvent *)
+#endif
 {
     TextFloat::getTextFloat()->attach(this);
     setMouseTracking(true);

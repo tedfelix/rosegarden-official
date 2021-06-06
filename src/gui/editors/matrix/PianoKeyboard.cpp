@@ -168,7 +168,11 @@ void PianoKeyboard::paintEvent(QPaintEvent*)
                        m_blackKeySize.width(), m_blackKeySize.height());
 }
 
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+void PianoKeyboard::enterEvent(QEnterEvent *)
+#else
 void PianoKeyboard::enterEvent(QEvent *)
+#endif
 {
     //showHighlight(e->y());
 }
@@ -263,14 +267,14 @@ void PianoKeyboard::mouseMoveEvent(QMouseEvent* e)
     //
     if (e->buttons() & Qt::LeftButton) {
         if (m_selecting)
-            emit keySelected(e->y(), true);
+            emit keySelected(e->pos().y(), true);
         else
-            emit keyPressed(e->y(), true); // we're swooshing
+            emit keyPressed(e->pos().y(), true); // we're swooshing
 
         emit keyReleased(m_lastKeyPressed, true);
-        m_lastKeyPressed = e->y();
+        m_lastKeyPressed = e->pos().y();
     } else
-        emit hoveredOverKeyChanged(e->y());
+        emit hoveredOverKeyChanged(e->pos().y());
 }
 
 void PianoKeyboard::mousePressEvent(QMouseEvent *e)
@@ -278,12 +282,12 @@ void PianoKeyboard::mousePressEvent(QMouseEvent *e)
     if (e->button() == Qt::LeftButton) {
         m_mouseDown = true;
         m_selecting = (e->modifiers() & Qt::ShiftModifier);
-        m_lastKeyPressed = e->y();
+        m_lastKeyPressed = e->pos().y();
 
         if (m_selecting)
-            emit keySelected(e->y(), false);
+            emit keySelected(e->pos().y(), false);
         else
-            emit keyPressed(e->y(), false);
+            emit keyPressed(e->pos().y(), false);
     }
 }
 
@@ -292,7 +296,7 @@ void PianoKeyboard::mouseReleaseEvent(QMouseEvent *e)
     if (e->button() == Qt::LeftButton) {
         m_mouseDown = false;
         m_selecting = false;
-        emit keyReleased(e->y(), false);
+        emit keyReleased(e->pos().y(), false);
     }
 }
 

@@ -47,6 +47,7 @@
 #include <QToolButton>
 #include <QMenu>
 #include <QVector>
+#include <QActionGroup>
 
 #include <QDebug>
 

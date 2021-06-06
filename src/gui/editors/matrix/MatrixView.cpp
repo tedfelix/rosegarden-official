@@ -797,11 +797,11 @@ MatrixView::slotSetSnapFromAction()
     QString name = s->objectName();
 
     if (name.left(5) == "snap_") {
-        int snap = name.rightRef(name.length() - 5).toInt();
+        int snap = name.right(name.length() - 5).toInt();
         if (snap > 0) {
             slotSetSnap(Note(Note::Semibreve).getDuration() / snap);
         } else if (name.left(12) == "snap_dotted_") {
-            snap = name.rightRef(name.length() - 12).toInt();
+            snap = name.right(name.length() - 12).toInt();
             slotSetSnap((3*Note(Note::Semibreve).getDuration()) / (2*snap));
         } else if (name == "snap_none") {
             slotSetSnap(SnapGrid::NoSnap);
@@ -949,8 +949,9 @@ void
 MatrixView::slotCollapseNotes()
 {
     if (!getSelection()) return;
+    // in matrix editor do not split notes at bars
     CommandHistory::getInstance()->addCommand
-        (new CollapseNotesCommand(*getSelection()));
+        (new CollapseNotesCommand(*getSelection(), false));
 }
 
 void

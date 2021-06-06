@@ -51,7 +51,7 @@ struct NoteOffEvent
 
 struct NoteOffEventCmp
 {
-    bool operator()(const NoteOffEvent *lhs, const NoteOffEvent *rhs)
+    bool operator()(const NoteOffEvent *lhs, const NoteOffEvent *rhs) const
     {
         return (lhs->realTime < rhs->realTime);
     }

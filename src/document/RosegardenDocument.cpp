@@ -1276,7 +1276,11 @@ bool RosegardenDocument::saveDocumentActual(const QString& filename,
     QString outText;
     QTextStream outStream(&outText, QIODevice::WriteOnly);
 //    outStream.setEncoding(QTextStream::UnicodeUTF8); qt3
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    // qt6 default codec is UTF-8
+#else
     outStream.setCodec("UTF-8");
+#endif
 
     // output XML header
     //
@@ -1423,7 +1427,11 @@ bool RosegardenDocument::exportStudio(const QString& filename,
     QString outText;
     QTextStream outStream(&outText, QIODevice::WriteOnly);
 //    outStream.setEncoding(QTextStream::UnicodeUTF8); qt3
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    // qt6 default codec is UTF-8
+#else
     outStream.setCodec("UTF-8");
+#endif
 
     // output XML header
     //

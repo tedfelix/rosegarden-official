@@ -44,6 +44,7 @@
 #include <QFileInfo>
 #include <QDirIterator>
 #include <QSet>
+#include <QRegularExpression>
 
 namespace Rosegarden
 {
@@ -306,7 +307,7 @@ ProjectPackager::getPluginFilesAndRewriteXML(const QString fileToModify, const Q
     // insert \n between tags
     do {
         QString l = preIn.readLine();
-        l.replace(QRegExp("><"), ">\n<");
+        l.replace(QRegularExpression("><"), ">\n<");
         preOut << l << "\n";
     } while (!preIn.atEnd());
 
@@ -316,7 +317,11 @@ ProjectPackager::getPluginFilesAndRewriteXML(const QString fileToModify, const Q
     // the output stream
     QString outText;
     QTextStream outStream(&outText, QIODevice::WriteOnly);
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    // qt6 default codec is UTF-8
+#else
     outStream.setCodec("UTF-8");
+#endif
 
     // synth plugin XML:
     //

@@ -72,7 +72,7 @@ AudioFaderBox::AudioFaderBox(QWidget *parent,
     pluginVbox = new QWidget(this);
     QVBoxLayout *pluginVboxLayout = new QVBoxLayout;
     pluginVboxLayout->setSpacing(2);
-    pluginVboxLayout->setMargin(0);
+    pluginVboxLayout->setContentsMargins(0, 0, 0, 0);
 
     for (int i = 0; i < 5; i++) {
         plugin = new PluginPushButton(pluginVbox);
@@ -96,7 +96,7 @@ AudioFaderBox::AudioFaderBox(QWidget *parent,
     //
     QWidget *faderHbox = new QWidget(this);
     QHBoxLayout *faderHboxLayout = new QHBoxLayout;
-    faderHboxLayout->setMargin(0);
+    faderHboxLayout->setContentsMargins(0, 0, 0, 0);
 
     //@@@ Testing m_vuMeter->height() doesn't work until the meter has
     //actually been shown, in Qt4 -- hardcode this for now
@@ -176,7 +176,7 @@ AudioFaderBox::AudioFaderBox(QWidget *parent,
     setContentsMargins(4, 4, 4, 4);
     QGridLayout *grid = new QGridLayout(this);
     setLayout(grid);
-    grid->setMargin(0);
+    grid->setContentsMargins(0, 0, 0, 0);
     grid->setSpacing(4);
 
     grid->addWidget(m_synthButton, 0, 0, 1, 3);

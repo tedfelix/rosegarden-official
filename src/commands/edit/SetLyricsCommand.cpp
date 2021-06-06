@@ -25,7 +25,7 @@
 #include "base/NotationTypes.h"
 #include "base/Segment.h"
 #include "base/BaseProperties.h"
-#include <QRegExp>
+#include <QRegularExpression>
 #include <QString>
 #include <QStringList>
 
@@ -103,8 +103,8 @@ SetLyricsCommand::execute()
 
         std::pair<timeT, timeT> barRange = comp->getBarRange(barNo++);
         QString syllables = *bsi;
-        syllables.replace(QRegExp("\\[\\d+\\] "), " ");
-        syllables.replace(QRegExp("\n"), " ");
+        syllables.replace(QRegularExpression("\\[\\d+\\] "), " ");
+        syllables.replace(QRegularExpression("\n"), " ");
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
         QStringList syllableList = syllables.split(" ", Qt::SkipEmptyParts); // no empties
 #else
@@ -139,7 +139,7 @@ SetLyricsCommand::execute()
             }
 
             QString syllable = *ssi;
-            syllable.replace(QRegExp("~"), " ");
+            syllable.replace(QRegularExpression("~"), " ");
             syllable = syllable.simplified();
             if (syllable == "")
                 continue;

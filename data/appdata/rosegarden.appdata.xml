@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright 2020 Rosegarden development team -->
+<!-- Copyright 2021 Rosegarden development team -->
 <component type="desktop">
     <id>com.rosegardenmusic.rosegarden.desktop</id>
     <name>Rosegarden</name>
@@ -54,6 +54,51 @@
         <mimetype>audio/x-flac</mimetype>
     </mimetypes>
     <releases>
+
+      <release type="stable" version="21.06" date="2021-06-02">
+        <url>https://rosegardenmusic.com/wiki/dev:21.06</url>
+        <description>
+          <p>This version includes the following bug fixes:</p>
+          <ul>
+            <li>Event editor now selects the proper event at launch.  Bug #1588.  [cf7d654d4]</li>
+            <li>Fix restore of channel mode (fixed or auto) on file read.  [010246e0a]</li>
+            <li>File Merge dialog layout improvements.  Bug #1590.  [13f40bbef]</li>
+            <li>Do not send Program Change for drum Instrument without banks.  [f27b4f854]</li>
+            <li>Fix "Studio > Reset MIDI Network".  Now this sends channel setups (BS/PC/CCs) to each Device.  [04ad97659]</li>
+            <li>Fix overlapping bar numbers in rulers.  Bug #1580. [26e60ef8e]</li>
+            <li>Notation: Update cursor when switching layout mode.  Bug #1580. [7664b6997]</li>
+            <li>Notation: Fix inconsistencies when switching between layers and staves using the red thumbwheel.</li>
+            <li>Refresh the layout on resize.  Bug #1570.  [aa13ac83b]</li>
+            <li>Limit the Panner to within the scene rectangle.  Bug #1570. [9e8b0b13f]</li>
+            <li>Fix focus issue after Ctrl+N.  [7bc2c957a]</li>
+            <li>Notation: Fix "Segment > Add Layer" and "Segment > New Layer From Selection" so that the new Segment's events are selected.</li>
+            <li>Fix multiple issues with undo/redo when editing.</li>
+            <li>Fix inconsistent editor title bars.  [28344f0c6]</li>
+            <li>Fix multiple issues when resizing Segments.</li>
+            <li>Export key signatures to MIDI file.  Bug #1456.  [8805d3f81]</li>
+            <li>Fix crash in CC rulers using the velocity tool.  [443a3aacf]</li>
+            <li>Fix linked segments not exporting to Lilypond.  Bug #1595.</li>
+            <li>Improve Transport window position persistence.  [05f2e7345]</li>
+            <li>Improve handling of multiple time signatures.</li>
+            <li>Fix crash in notation when "View > Size" is changed.  Bug #1596. [460d1bc42]</li>
+            <li>Fix modifiers not appearing in Notation until the mouse moves.  Bug #1597.  [e814dcfbd]</li>
+            <li>Fixed dots being added to tied notes.  Bug #1555.  [e9b8c293d] [cf1d3dfed]</li>
+            <li>Fixed a crash in the notation lyric editor.  Bug #1598.  [5f52c7c2]</li>
+            <li>Fix incorrect position of chord names in lilypond.  Bug #1524.  [04fc5dd6]</li>
+            <li>Fix missing chord names in lilypond.  [c35e0fb7]</li>
+
+          </ul>
+          <p>This version adds the following new features:</p>
+          <ul>
+            <li>Clean Recent Files List in the preferences removes files that aren't present on the filesystem from the recent files list.  [b616d42c7]</li>
+            <li>Preferences: Add send BS/PC/CCs while looping.  [0d2d3a28c]</li>
+            <li>Added Segment label to Notation editor.  [9ab1ff136]</li>
+            <li>Matrix editor now preserves zoom factor and rulers for each Segment in the .rg file.  Feature #486.</li>
+            <li>Notation editor now preserves rulers for each Segment in the .rg file.  Feature #486.</li>
+          </ul>
+        </description>
+      </release>
+
       <release type="stable" version="20.12" date="2020-12-09">
         <url>https://rosegardenmusic.com/wiki/dev:20.12</url>
         <description>

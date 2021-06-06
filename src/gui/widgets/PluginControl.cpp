@@ -52,7 +52,7 @@ PluginControl::PluginControl(QWidget *parent,
 {
     setObjectName("PluginControl");
     QGridLayout *hbox = new QGridLayout(this);
-    hbox->setMargin(0);
+    hbox->setContentsMargins(0, 0, 0, 0);
 
     QFont plainFont;
     plainFont.setPointSize((plainFont.pointSize() * 9 ) / 10);

@@ -64,7 +64,7 @@ NameSetEditor::NameSetEditor(BankEditorDialog *bankEditor,
 
     m_topFrame->setContentsMargins(0, 0, 0, 5);
     m_topLayout->setSpacing(0);
-    m_topLayout->setMargin(0);
+    m_topLayout->setContentsMargins(0, 0, 0, 0);
     m_topFrame->setLayout(m_topLayout);
     mainLayout->addWidget(m_topFrame);
 
@@ -112,7 +112,7 @@ NameSetEditor::NameSetEditor(BankEditorDialog *bankEditor,
         QHBoxLayout *rowLayout = new QHBoxLayout;
         // take out the excess vertical space that was making this
         // dialog two screens tall
-        rowLayout->setMargin(0);
+        rowLayout->setContentsMargins(0, 0, 0, 0);
 
         // If this is the very first number label, make it a button.
         if (index == 0) {

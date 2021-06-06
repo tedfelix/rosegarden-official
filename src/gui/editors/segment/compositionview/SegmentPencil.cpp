@@ -77,7 +77,7 @@ void SegmentPencil::mousePressEvent(QMouseEvent *e)
     // We only care about the left and middle mouse buttons.
     // SegmentSelector might send us a middle press.
     if (e->button() != Qt::LeftButton  &&
-        e->button() != Qt::MidButton)
+        e->button() != Qt::MiddleButton)
         return;
 
     // No need to propagate.
@@ -167,7 +167,7 @@ void SegmentPencil::mouseReleaseEvent(QMouseEvent *e)
     // Have to allow middle button for SegmentSelector's middle
     // button feature to work.
     if (e->button() != Qt::LeftButton  &&
-        e->button() != Qt::MidButton)
+        e->button() != Qt::MiddleButton)
         return;
 
     // No need to propagate.

@@ -61,7 +61,7 @@ InstrumentParameterBox::InstrumentParameterBox(QWidget *parent) :
     QVBoxLayout *layout = new QVBoxLayout(this);
     layout->addWidget(m_stackedWidget);
     // Prevent this layout from introducing even more margin space.
-    layout->setMargin(0);
+    layout->setContentsMargins(0, 0, 0, 0);
     setLayout(layout);
 
     connect(RosegardenMainWindow::self(),

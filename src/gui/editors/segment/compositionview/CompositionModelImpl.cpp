@@ -49,7 +49,7 @@
 #include <QColor>
 #include <QPoint>
 #include <QRect>
-#include <QRegExp>
+#include <QRegularExpression>
 #include <QSize>
 #include <QString>
 #include <QTimer>
@@ -359,8 +359,8 @@ void CompositionModelImpl::getSegmentRect(
     }
     if (segment.isAudio()) {
         // Remove anything in parens and the filename suffix.
-        static QRegExp re1("( *\\([^)]*\\))*$"); // (inserted) (copied) (etc)
-        static QRegExp re2("\\.[^.]+$"); // filename suffix
+        static QRegularExpression re1("( *\\([^)]*\\))*$"); // (inserted) (copied) (etc)
+        static QRegularExpression re2("\\.[^.]+$"); // filename suffix
         label.replace(re1, "").replace(re2, "");
     }
     segmentRect.label = label;

@@ -25,7 +25,6 @@
 class QFile;
 class QTextStream;
 class QString;
-class QStringList;
 
 namespace Rosegarden
 {

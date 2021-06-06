@@ -87,6 +87,7 @@
 #include <QToolButton>
 #include <QSettings>
 #include <QLabel>
+#include <QRegularExpression>
 
 namespace Rosegarden
 {
@@ -1036,7 +1037,7 @@ NotationWidget::slotDispatchMousePress(const NotationMouseEvent *e)
         m_currentTool->handleMidButtonPress(e);
     } else if (e->buttons & Qt::LeftButton) {
         m_currentTool->handleLeftButtonPress(e);
-    } else if (e->buttons & Qt::MidButton) {
+    } else if (e->buttons & Qt::MiddleButton) {
         m_currentTool->handleMidButtonPress(e);
     } else if (e->buttons & Qt::RightButton) {
         m_currentTool->handleRightButtonPress(e);
@@ -1660,7 +1661,7 @@ NotationWidget::slotAddControlRuler(QAction *action)
     // FIX #1543: If name happens to come to us with an & included somewhere,
     // strip the & so the string will match the one we are comparing later on.
     //
-    name.replace(QRegExp("&"), "");
+    name.replace(QRegularExpression("&"), "");
 
 //    RG_DEBUG << "my name is " << name.toStdString();
 

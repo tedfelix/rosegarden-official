@@ -1240,6 +1240,32 @@ NotationView::slotUpdateMenuStates()
             enterActionState("have_symbols_in_selection");
         }
 
+        // Special case - the AddDot command does nothing for tied
+        // notes so if the selection contains only tied notes we
+        // should disable the command
+        bool allTied = true;
+        EventSelection::eventcontainer &ec =
+            selection->getSegmentEvents();
+        for (EventSelection::eventcontainer::iterator i =
+                 ec.begin(); i != ec.end(); ++i) {
+            if ((*i)->isa(Note::EventType)) {
+                bool tiedNote = ((*i)->has(BaseProperties::TIED_FORWARD) ||
+                                 (*i)->has(BaseProperties::TIED_BACKWARD));
+                if (! tiedNote) {
+                    // found a note which is not tied
+                    allTied = false;
+                    break;
+                }
+            }
+        }
+        if (allTied) {
+            // all selected notes are tied
+            QAction *addDot = findAction("add_dot");
+            QAction *addDotNotation = findAction("add_notation_dot");
+            addDot->setEnabled(false);
+            addDotNotation->setEnabled(false);
+        }
+
     } else {
         //NOTATION_DEBUG << "Do not have a selection";
     }
@@ -2353,7 +2379,7 @@ NotationView::slotSwitchToNotes()
             .getNoteType();
         int dots = (currentInserter->getCurrentNote().getDots() ? 1 : 0);
         actionName = NotationStrings::getReferenceName(Note(unitType,dots));
-        actionName.replace(QRegExp("-"), "_");
+        actionName.replace(QRegularExpression("-"), "_");
 
         m_notationWidget->slotSetNoteInserter();
     }
@@ -2411,7 +2437,7 @@ NotationView::slotSwitchToRests()
             .getNoteType();
         int dots = (currentInserter->getCurrentNote().getDots() ? 1 : 0);
         actionName = NotationStrings::getReferenceName(Note(unitType,dots));
-        actionName.replace(QRegExp("-"), "_");
+        actionName.replace(QRegularExpression("-"), "_");
 
         m_notationWidget->slotSetRestInserter();
     }
@@ -2568,7 +2594,7 @@ NotationView::initializeNoteRestInserter()
     Note::Type unitType = sig.getUnit();
 
     QString actionName = NotationStrings::getReferenceName(Note(unitType,0));
-    actionName.replace(QRegExp("-"), "_");
+    actionName.replace(QRegularExpression("-"), "_");
 
     //Initialize Duration Toolbar (hide all buttons)   
     leaveActionState("note_0_dot_mode");
@@ -2895,7 +2921,7 @@ NotationView::slotToggleDot()
         }
 
         QString actionName(NotationStrings::getReferenceName(Note(noteType,noteDots)));
-        actionName.replace(QRegExp("-"), "_");
+        actionName.replace(QRegularExpression("-"), "_");
 
         m_notationWidget->slotSetInsertedNote(noteType, noteDots);
         if (currentInserter->isaRestInserter()) {
@@ -4898,8 +4924,9 @@ NotationView::slotTransformsCollapseNotes()
         return ;
     TmpStatusMsg msg(tr("Collapsing notes..."), this);
 
+    // in notation editor split notes at bars
     CommandHistory::getInstance()->
-            addCommand(new CollapseNotesCommand(*selection));
+        addCommand(new CollapseNotesCommand(*selection, true));
 }
 
 void NotationView::extendSelectionHelper(bool forward, EventSelection *es, const std::vector<Event *> &eventVec, bool select)

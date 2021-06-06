@@ -147,8 +147,8 @@ bool ConfigurationXmlSubHandler::characters(const QString& chars)
         Rosegarden::RealTime rt;
         int sepIdx = ch.indexOf(',');
         
-        rt.sec = ch.leftRef(sepIdx).toInt();
-        rt.nsec = ch.midRef(sepIdx + 1).toInt();
+        rt.sec = ch.left(sepIdx).toInt();
+        rt.nsec = ch.mid(sepIdx + 1).toInt();
 
         //RG_DEBUG << "  setting (RealTimeT) " << m_propertyName << "=" << rt.sec << "(sec) " << rt.nsec << "(nsec)";
 
@@ -2128,7 +2128,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             m_instrument->setNaturalChannel(channel);
 
             if (type == Instrument::Midi) {
-                if (atts.value("fixed") == "false")
+                if (atts.value("fixed").toString() == "false")
                     m_instrument->releaseFixedChannel();
                 else
                     m_instrument->setFixedChannel();

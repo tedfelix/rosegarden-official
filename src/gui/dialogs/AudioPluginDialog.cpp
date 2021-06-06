@@ -89,7 +89,7 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
 
     QWidget *vbox = new QWidget(this);
     QVBoxLayout *vboxLayout = new QVBoxLayout(vbox);
-    vboxLayout->setMargin(0);
+    vboxLayout->setContentsMargins(0, 0, 0, 0);
     metagrid->addWidget(vbox, 0, 0);
   
     // Plugin group box
@@ -105,7 +105,7 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
     // the Category label/combo
     m_pluginCategoryBox = new QWidget(pluginSelectionBox);
     QHBoxLayout *pluginCategoryBoxLayout = new QHBoxLayout(m_pluginCategoryBox);
-    pluginCategoryBoxLayout->setMargin(0);
+    pluginCategoryBoxLayout->setContentsMargins(0, 0, 0, 0);
     pluginSelectionBoxLayout->addWidget(m_pluginCategoryBox);
 
     pluginCategoryBoxLayout->addWidget(new QLabel(tr("Category:"), m_pluginCategoryBox));
@@ -117,7 +117,7 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
     // the Plugin label/combo 
     QWidget *pluginPluginBox = new QWidget(pluginSelectionBox);
     QHBoxLayout *pluginPluginBoxLayout = new QHBoxLayout(pluginPluginBox);
-    pluginPluginBoxLayout->setMargin(0);
+    pluginPluginBoxLayout->setContentsMargins(0, 0, 0, 0);
     pluginSelectionBoxLayout->addWidget(pluginPluginBox);
 
     // Plugin label
@@ -137,7 +137,7 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
     // the Bypass <ports> <id>
     QWidget *pluginDonglesBox = new QWidget(pluginSelectionBox);
     QHBoxLayout *pluginDonglesBoxLayout = new QHBoxLayout(pluginDonglesBox);
-    pluginDonglesBoxLayout->setMargin(0);
+    pluginDonglesBoxLayout->setContentsMargins(0, 0, 0, 0);
     pluginSelectionBoxLayout->addWidget(pluginDonglesBox);
 
     m_bypass = new QCheckBox(tr("Bypass"), pluginDonglesBox);
@@ -167,7 +167,7 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
     // the Copy/Paste/Default buttons
     QWidget *pluginButtonsBox = new QWidget(pluginSelectionBox);
     QHBoxLayout *pluginButtonsBoxLayout = new QHBoxLayout(pluginButtonsBox);
-    pluginButtonsBoxLayout->setMargin(0);
+    pluginButtonsBoxLayout->setContentsMargins(0, 0, 0, 0);
     pluginSelectionBoxLayout->addWidget(pluginButtonsBox);
 
     m_copyButton = new QPushButton(tr("Copy"), pluginButtonsBox);

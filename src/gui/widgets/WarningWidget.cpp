@@ -44,7 +44,7 @@ WarningWidget::WarningWidget(QWidget *parent) :
     setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     QHBoxLayout *layout = new QHBoxLayout();
     setLayout(layout);
-    layout->setMargin(0);
+    layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(2);
 
     m_midiIcon = new QLabel();
