@@ -43,6 +43,9 @@ public:
 public slots:
     virtual void accept() override;
 
+private slots:
+    void slotDeviceChanged(int)  { updateInstrumentComboBox(); }
+
 private:
     QSpinBox *m_numberOfTracks;
 
@@ -51,8 +54,9 @@ private:
 
     QComboBox *m_device;
     void initDeviceComboBox();
-    std::vector<const Device *> m_deviceList;
 
+    QComboBox *m_instrument;
+    void updateInstrumentComboBox();
 };
 
 

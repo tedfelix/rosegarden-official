@@ -37,6 +37,8 @@
 #include <QSettings>
 #include <QSpinBox>
 
+#include <algorithm>  // For std::min()
+
 
 namespace
 {
@@ -97,6 +99,16 @@ AddTracksDialog::AddTracksDialog(QWidget *parent) :
 
     ++row;
 
+    // Instrument
+    layout->addWidget(new QLabel(tr("Instrument")), row, 0);
+
+    m_instrument = new QComboBox(this);
+    updateInstrumentComboBox();
+
+    layout->addWidget(m_instrument, row, 1);
+
+    ++row;
+
     // Spacer
 
     layout->setRowMinimumHeight(row, 10);
@@ -112,6 +124,12 @@ AddTracksDialog::AddTracksDialog(QWidget *parent) :
     connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 
     layout->addWidget(buttonBox, row, 0, 1, 2);
+
+    // Connections
+
+    connect(m_device, static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
+            this, &AddTracksDialog::slotDeviceChanged);
+
 }
 
 namespace
@@ -165,8 +183,30 @@ AddTracksDialog::initDeviceComboBox()
 
     // For each Device in the set, add them to the combobox.
     for (const Device *device : deviceSet) {
-        m_device->addItem(QObject::tr(device->getName().c_str()));
-        m_deviceList.push_back(device);
+        m_device->addItem(QObject::tr(device->getName().c_str()),
+                          device->getId());
+    }
+}
+
+void AddTracksDialog::updateInstrumentComboBox()
+{
+    m_instrument->clear();
+
+    RosegardenMainWindow *rmw = RosegardenMainWindow::self();
+    Studio &studio = rmw->getDocument()->getStudio();
+
+    const Device *device = studio.getDevice(m_device->currentData().toUInt());
+    if (!device)
+        return;
+
+    InstrumentList instrumentList = device->getPresentationInstruments();
+    if (instrumentList.empty())
+        return;
+
+    // For each Instrument, add it to the ComboBox.
+    for (const Instrument *instrument : instrumentList) {
+        m_instrument->addItem(QObject::tr(instrument->getName().c_str()),
+                              instrument->getId());
     }
 }
 
@@ -211,27 +251,49 @@ void AddTracksDialog::accept()
     if (m_device->currentIndex() < 0)
         return;
 
-    if ((unsigned)m_device->currentIndex() >= m_deviceList.size())
+    RosegardenMainWindow *rmw = RosegardenMainWindow::self();
+    Studio &studio = rmw->getDocument()->getStudio();
+
+    const Device *device = studio.getDevice(m_device->currentData().toUInt());
+    if (!device)
         return;
 
-    const Device *device = m_deviceList[m_device->currentIndex()];
+    // Use the instrument IDs in order up to the last.
+
+    InstrumentId startInstrumentId = m_instrument->currentData().toUInt();
 
     InstrumentList instrumentList = device->getPresentationInstruments();
     if (instrumentList.empty())
         return;
 
-    const Instrument *instrument = instrumentList[0];
-    if (!instrument)
-        return;
+    std::vector<InstrumentId> instrumentIds;
 
-    // Add the tracks.
+    // For each Instrument in the Device
+    for (const Instrument *instrument : instrumentList) {
+        InstrumentId instrumentId = instrument->getId();
+        if (instrumentId >= startInstrumentId)
+            instrumentIds.push_back(instrumentId);
+    }
 
-    // ??? Why is addTracks() in the view?  Shouldn't we go to the
-    //     Composition for this?
-    RosegardenMainWindow::self()->getView()->addTracks(
-            m_numberOfTracks->value(),
-            instrument->getId(),
-            getInsertPosition());
+    const size_t numberOfTracks = m_numberOfTracks->value();
+    int position = getInsertPosition();
+
+    // For each track to add...
+    for (size_t i = 0; i < numberOfTracks; ++i) {
+        // Limit to the size of the instrumentIds vector.
+        size_t j = std::min(i, instrumentIds.size() - 1);
+
+        // ??? Why is addTracks() in the view?  Shouldn't we go to the
+        //     Composition for this?
+        rmw->getView()->addTracks(
+                1,
+                instrumentIds[j],
+                position);
+
+        // If we aren't inserting at the bottom, bump the position.
+        if (position != -1)
+            ++position;
+    }
 
     QDialog::accept();
 }
