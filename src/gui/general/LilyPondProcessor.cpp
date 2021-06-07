@@ -249,11 +249,10 @@ LilyPondProcessor::runFinalStage(int exitCode, QProcess::ExitStatus)
     }
 
     switch (filePrinterIndex) {
-        case 0: filePrinter = "kprinter"; break;
-        case 1: filePrinter = "gtklp";    break;
-        case 2: filePrinter = "lpr";      break;
-        case 3: filePrinter = "lp";       break;
-        case 4: filePrinter = "hp-print"; break;
+        case 0: filePrinter = "gtklp";    break;
+        case 1: filePrinter = "lp";      break;
+        case 2: filePrinter = "lpr";       break;
+        case 3: filePrinter = "hp-print"; break;
         default: filePrinter = "lpr";     break;
     }
 

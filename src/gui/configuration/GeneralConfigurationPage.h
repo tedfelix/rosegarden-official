@@ -69,10 +69,9 @@ public:
 
     enum FilePrinter
     {
-        KPrinter,
         GtkLP,
-        Lpr,
         Lp,
+        Lpr,
         HPLIP
     };
 

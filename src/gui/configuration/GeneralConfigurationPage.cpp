@@ -441,10 +441,10 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
 
     m_filePrinter = new QComboBox(frame);
     m_filePrinter->setToolTip(tipText);
-    m_filePrinter->addItem(tr("Gtk-LP (GNOME)"),1);
-    m_filePrinter->addItem(tr("lpr (no GUI)"),2);
-    m_filePrinter->addItem(tr("lp (no GUI)"),3);
-    m_filePrinter->addItem(tr("HPLIP (Qt 4)"),4);
+    m_filePrinter->addItem(tr("Gtk-LP (GNOME)"));
+    m_filePrinter->addItem(tr("lp (no GUI)"));
+    m_filePrinter->addItem(tr("lpr (no GUI)"));
+    m_filePrinter->addItem(tr("HPLIP (HP Printers)"));
     // now that I'm actually on KDE 4.2, I see no more KPrinter.  I'll default
     // to Lpr instead.
     m_filePrinter->setCurrentIndex(settings.value("fileprinter", Lpr).toUInt());
