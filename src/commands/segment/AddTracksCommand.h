@@ -19,20 +19,21 @@
 #ifndef RG_ADDTRACKSCOMMAND_H
 #define RG_ADDTRACKSCOMMAND_H
 
-#include "base/MidiProgram.h"
-#include "base/Composition.h"
-#include "document/Command.h"
+#include "document/Command.h"  // for NamedCommand
+#include "base/Instrument.h"
+#include "base/Track.h"
+
+#include <QCoreApplication>  // for Q_DECLARE_TR_FUNCTIONS()
 #include <QString>
+
 #include <vector>
 #include <map>
-#include <QCoreApplication>
-
 
 
 namespace Rosegarden
 {
 
-class Track;
+
 class Composition;
 
 
@@ -41,29 +42,37 @@ class AddTracksCommand : public NamedCommand
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::AddTracksCommand)
 
 public:
+    // ??? This really needs the entire RosegardenDocument.  Upgrade.
+    // ??? Would it be safe to use the RMW Singleton?  Test CLI --convert.
     AddTracksCommand(Composition *composition,
-                     unsigned int nbTracks,
-                     InstrumentId id,
-                     int position); // -1 -> at end
+                     unsigned int numberOfTracks,
+                     InstrumentId instrumentId,
+                     int trackPosition); // -1 -> at end
     ~AddTracksCommand() override;
-
-    static QString getGlobalName() { return tr("Add Tracks..."); }
 
     void execute() override;
     void unexecute() override;
 
-protected:
-    Composition           *m_composition;
-    unsigned int           m_nbNewTracks;
-    InstrumentId           m_instrumentId;
-    int                    m_position;
+private:
+    Composition *m_composition;
+
+    /// Number of Tracks being added.
+    unsigned int m_numberOfTracks;
+    InstrumentId m_instrumentId;
+    int m_trackPosition;
+
+    /// Tracks created by this command.
+    std::vector<Track *> m_newTracks;
 
     typedef std::map<TrackId, int> TrackPositionMap;
+    TrackPositionMap m_oldPositions;
 
-    std::vector<Track *>   m_newTracks;
-    TrackPositionMap       m_oldPositions;
-
-    bool                   m_detached;
+    /// Tracks are no longer in the Composition (we've been undone).
+    /**
+     * ??? Seems like a concept that many commands might find useful.  Why
+     *     isn't there a Command::m_undone?
+     */
+    bool m_detached;
 };
 
 

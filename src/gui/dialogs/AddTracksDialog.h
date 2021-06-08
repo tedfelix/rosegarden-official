@@ -18,15 +18,11 @@
 #ifndef RG_ADDTRACKSDIALOG_H
 #define RG_ADDTRACKSDIALOG_H
 
-#include "base/Device.h"
-
 #include <QDialog>
 
 class QWidget;
 class QSpinBox;
 class QComboBox;
-
-#include <vector>
 
 
 namespace Rosegarden

@@ -19,40 +19,38 @@
 
 #include "AddTracksCommand.h"
 
-#include "misc/Debug.h"
 #include "base/Composition.h"
-#include "base/MidiProgram.h"
-#include "base/Track.h"
-#include "base/Instrument.h"
-#include "base/Studio.h"
+#include "misc/Debug.h"
 #include "document/RosegardenDocument.h"
 #include "gui/application/RosegardenMainWindow.h"
-
-#include <QString>
+#include "base/Studio.h"
 
 
 namespace Rosegarden
 {
 
-AddTracksCommand::AddTracksCommand(Composition *composition,
-                                   unsigned int nbTracks,
-                                   InstrumentId id,
-                                   int position):
-    NamedCommand(getGlobalName()),
-    m_composition(composition),
-    m_nbNewTracks(nbTracks),
-    m_instrumentId(id),
-    m_position(position),
-    m_detached(false)
 
+AddTracksCommand::AddTracksCommand(Composition *composition,
+                                   unsigned int numberOfTracks,
+                                   InstrumentId instrumentId,
+                                   int trackPosition):
+    NamedCommand(tr("Add Tracks...")),
+    m_composition(composition),
+    m_numberOfTracks(numberOfTracks),
+    m_instrumentId(instrumentId),
+    m_trackPosition(trackPosition),
+    m_detached(false)
 {
 }
 
 AddTracksCommand::~AddTracksCommand()
 {
+    // If the Tracks are no longer in the Composition, we'll have
+    // to delete them ourselves.
     if (m_detached) {
-        for (size_t i = 0; i < m_newTracks.size(); ++i)
+        for (size_t i = 0; i < m_newTracks.size(); ++i) {
             delete m_newTracks[i];
+        }
     }
 }
 
@@ -73,7 +71,7 @@ void AddTracksCommand::execute()
         for (TrackPositionMap::iterator i = m_oldPositions.begin();
              i != m_oldPositions.end(); ++i) {
 
-            int newPosition = i->second + m_nbNewTracks;
+            int newPosition = i->second + m_numberOfTracks;
             Track *track = m_composition->getTrackById(i->first);
             if (track) track->setPosition(newPosition);
         }
@@ -99,18 +97,18 @@ void AddTracksCommand::execute()
         }
     }
 
-    if (m_position == -1) m_position = highPosition + 1;
-    if (m_position < 0) m_position = 0;
-    if (m_position > highPosition + 1) m_position = highPosition + 1;
+    if (m_trackPosition == -1) m_trackPosition = highPosition + 1;
+    if (m_trackPosition < 0) m_trackPosition = 0;
+    if (m_trackPosition > highPosition + 1) m_trackPosition = highPosition + 1;
 
     for (Composition::trackiterator it = m_composition->getTracks().begin();
          it != m_composition->getTracks().end(); ++it) {
 
         int pos = it->second->getPosition();
 
-        if (pos >= m_position) {
+        if (pos >= m_trackPosition) {
             m_oldPositions[it->first] = pos;
-            it->second->setPosition(pos + m_nbNewTracks);
+            it->second->setPosition(pos + m_numberOfTracks);
         }
     }
 
@@ -118,12 +116,12 @@ void AddTracksCommand::execute()
 
     std::vector<TrackId> trackIds;
 
-    for (unsigned int i = 0; i < m_nbNewTracks; ++i) {
+    for (unsigned int i = 0; i < m_numberOfTracks; ++i) {
 
         TrackId trackId = m_composition->getNewTrackId();
         Track *track = new Track(trackId);
 
-        track->setPosition(m_position + i);
+        track->setPosition(m_trackPosition + i);
         track->setInstrument(m_instrumentId);
 
         m_composition->addTrack(track);

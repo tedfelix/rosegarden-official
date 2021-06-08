@@ -19,8 +19,9 @@
 
 #include "AddTracksDialog.h"
 
+#include "commands/segment/AddTracksCommand.h"
+#include "document/CommandHistory.h"
 #include "base/Composition.h"
-#include "misc/ConfigGroups.h"
 #include "misc/Debug.h"
 #include "base/Device.h"
 #include "base/Instrument.h"
@@ -38,6 +39,7 @@
 #include <QSpinBox>
 
 #include <algorithm>  // For std::min()
+#include <vector>
 
 
 namespace
@@ -278,17 +280,25 @@ void AddTracksDialog::accept()
     const size_t numberOfTracks = m_numberOfTracks->value();
     int position = getInsertPosition();
 
+    Composition &composition = rmw->getDocument()->getComposition();
+
     // For each track to add...
     for (size_t i = 0; i < numberOfTracks; ++i) {
         // Limit to the size of the instrumentIds vector.
         size_t j = std::min(i, instrumentIds.size() - 1);
 
-        // ??? Why is addTracks() in the view?  Shouldn't we go to the
-        //     Composition for this?
-        rmw->getView()->addTracks(
-                1,
-                instrumentIds[j],
-                position);
+        // ??? We either need to make this a macro, or add the ability
+        //     to add tracks given a list of Instrument IDs so that this
+        //     becomes a single command to undo.  Probably need a new
+        //     Command class to make this simpler.  Take the list of
+        //     Instrument IDs and move this for-loop into it.
+        //       AddTracksCommand2(comp, instrumentList, position)
+        CommandHistory::getInstance()->addCommand(
+                new AddTracksCommand(
+                        &composition,  // composition
+                        1,  // Number of Tracks
+                        instrumentIds[j],  // Instrument ID
+                        position));  // position
 
         // If we aren't inserting at the bottom, bump the position.
         if (position != -1)
