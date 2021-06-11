@@ -4278,7 +4278,7 @@ NotationView::slotStepBackward()
     Segment *segment = getCurrentSegment();
     if (!segment) return;
 
-    timeT time = getInsertionTime();
+    timeT time = getInsertionTime(true);
     Segment::iterator i = segment->findTime(time);
 
     while (i != segment->begin() &&
@@ -4298,7 +4298,7 @@ NotationView::slotStepForward()
     Segment *segment = getCurrentSegment();
     if (!segment) return;
 
-    timeT time = getInsertionTime();
+    timeT time = getInsertionTime(true);
     Segment::iterator i = segment->findTime(time);
 
     while (i != segment->end() &&
