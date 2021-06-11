@@ -16,7 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[NotationHLayout]"
-#define RG_NO_DEBUG_PRINT 1
+//#define RG_NO_DEBUG_PRINT 1
 
 #include "NotationHLayout.h"
 
@@ -2145,7 +2145,7 @@ NotationHLayout::getXForTime(timeT t) const
 double
 NotationHLayout::getXForTimeByEvent(timeT time) const
 {
-    //    RG_DEBUG << "getXForTime(" << time << ")";
+    RG_DEBUG << "getXForTimeByEvent(" << time << ")";
 
     for (BarDataMap::const_iterator i = m_barData.begin(); i != m_barData.end(); ++i) {
 

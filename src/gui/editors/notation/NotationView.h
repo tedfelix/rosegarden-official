@@ -70,7 +70,7 @@ public:
     virtual void initLayoutToolbar();
     void initRulersToolbar();
     void initStatusBar() override;
-    timeT getInsertionTime() const;
+    timeT getInsertionTime(bool allowEndTime = false) const;
     
     bool hasSegment(Segment * seg) const;
 

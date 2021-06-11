@@ -1072,10 +1072,11 @@ NotationScene::timeSignatureChanged(const Composition *c)
 }
 
 timeT
-NotationScene::getInsertionTime() const
+NotationScene::getInsertionTime(bool allowEndTime) const
 {
     if (!m_document) return 0;
-    return snapTimeToNoteBoundary(m_document->getComposition().getPosition());
+    return snapTimeToNoteBoundary(m_document->getComposition().getPosition(),
+                                  allowEndTime);
 }
 
 NotationScene::CursorCoordinates
@@ -1100,7 +1101,7 @@ NotationScene::getCursorCoordinates(timeT t) const
         currentStaff = m_staffs[m_currentStaff];
     }
 
-    timeT snapped = snapTimeToNoteBoundary(t);
+    timeT snapped = snapTimeToNoteBoundary(t, true);
 
     double x = m_hlayout->getXForTime(t);
     double sx = m_hlayout->getXForTimeByEvent(snapped);
@@ -1134,7 +1135,7 @@ NotationScene::getCursorCoordinates(timeT t) const
 }
 
 timeT
-NotationScene::snapTimeToNoteBoundary(timeT t) const
+NotationScene::snapTimeToNoteBoundary(timeT t, bool allowEndTime) const
 {
     NotationStaff *s = nullptr;
     if (m_currentStaff < (int)m_staffs.size()) {
@@ -1147,7 +1148,13 @@ NotationScene::snapTimeToNoteBoundary(timeT t) const
     if (i == v->end()) i = v->begin();
     if (i == v->end()) return t;
 
-    return (*i)->getViewAbsoluteTime();
+    timeT eventTime = (*i)->getViewAbsoluteTime();
+    if (allowEndTime && t > eventTime) {
+        timeT staffEnd = s->getEndTime();
+        if (t > staffEnd) t = staffEnd;
+        return t;
+    }
+    return eventTime;
 }
 
 void

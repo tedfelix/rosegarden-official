@@ -1101,9 +1101,9 @@ NotationWidget::setSelection(EventSelection *selection, bool preview)
 }
 
 timeT
-NotationWidget::getInsertionTime() const
+NotationWidget::getInsertionTime(bool allowEndTime) const
 {
-    if (m_scene) return m_scene->getInsertionTime();
+    if (m_scene) return m_scene->getInsertionTime(allowEndTime);
     else return 0;
 }
 

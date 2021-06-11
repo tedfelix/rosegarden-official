@@ -87,7 +87,7 @@ public:
     EventSelection *getSelection() const override;
     void setSelection(EventSelection* s, bool preview) override;
 
-    timeT getInsertionTime() const;
+    timeT getInsertionTime(bool allowEndTime = false) const;
 
     bool isInChordMode() { return m_chordMode; }
     bool isInTupletMode() { return m_tupletMode; }

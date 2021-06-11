@@ -116,7 +116,7 @@ public:
     EventSelection *getSelection() const override { return m_selection; }
     void setSelection(EventSelection* s, bool preview) override;
 
-    timeT getInsertionTime() const;
+    timeT getInsertionTime(bool allowEndTime = false) const;
 
     struct CursorCoordinates {
         QLineF currentStaff;
@@ -124,7 +124,7 @@ public:
     };
 
     CursorCoordinates getCursorCoordinates(timeT t) const;
-    timeT snapTimeToNoteBoundary(timeT t) const;
+    timeT snapTimeToNoteBoundary(timeT t, bool allowEndTime = false) const;
 
     void setSingleSelectedEvent(NotationStaff *staff,
                                 NotationElement *e,

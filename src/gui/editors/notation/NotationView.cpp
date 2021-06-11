@@ -1728,9 +1728,11 @@ NotationView::setSelection(EventSelection *selection, bool preview)
 }
 
 timeT
-NotationView::getInsertionTime() const
+NotationView::getInsertionTime(bool allowEndTime) const
 {
-    if (m_notationWidget) return m_notationWidget->getInsertionTime();
+    if (m_notationWidget) {
+        return m_notationWidget->getInsertionTime(allowEndTime);
+    }
     else return 0;
 }
 
@@ -4974,13 +4976,14 @@ void
 NotationView::slotExtendSelectionBackward(bool bar)
 {
     // Move the cursor left and toggle selection between oldTime and newTime
+    // Allow the insertion time to go past the last event
 
-    timeT oldTime = getInsertionTime();
+    timeT oldTime = getInsertionTime(true);
 
     if (bar) emit rewindPlayback();
     else slotStepBackward();
 
-    timeT newTime = getInsertionTime();
+    timeT newTime = getInsertionTime(true);
 
     Segment *segment = getCurrentSegment();
     if (!segment) return;
@@ -5051,12 +5054,12 @@ NotationView::slotExtendSelectionForward(bool bar)
 {
     // Move the cursor right and toggle selection between oldTime and newTime
 
-    timeT oldTime = getInsertionTime();
+    timeT oldTime = getInsertionTime(true);
 
     if (bar) emit fastForwardPlayback();
     else slotStepForward();
 
-    timeT newTime = getInsertionTime();
+    timeT newTime = getInsertionTime(true);
 
     Segment *segment = getCurrentSegment();
     if (!segment) return;
