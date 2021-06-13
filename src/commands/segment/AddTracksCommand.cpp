@@ -56,64 +56,76 @@ AddTracksCommand::~AddTracksCommand()
 
 void AddTracksCommand::execute()
 {
-    // Re-attach tracks (redo)
-    //
+    // If m_newTracks are not part of the Composition, we've been undone
+    // and this is a redo.
     if (m_detached) {
 
+        // Re-attach tracks (redo)
+
+        // Keep a list for Composition notification.
         std::vector<TrackId> trackIds;
 
+        // For each of the new Tracks, re-add them to the Composition.
         for (size_t i = 0; i < m_newTracks.size(); i++) {
             m_composition->addTrack(m_newTracks[i]);
             trackIds.push_back(m_newTracks[i]->getId());
         }
 
-        // Adjust the track positions.
-        for (TrackPositionMap::iterator i = m_oldPositions.begin();
-             i != m_oldPositions.end(); ++i) {
+        // For each Track that needs to be moved down...
+        for (TrackPositionMap::const_iterator i = m_oldPositions.begin();
+             i != m_oldPositions.end();
+             ++i) {
 
-            int newPosition = i->second + m_numberOfTracks;
             Track *track = m_composition->getTrackById(i->first);
-            if (track) track->setPosition(newPosition);
+            if (!track)
+                continue;
+
+            // Move the Track down to make room for the new tracks.
+            track->setPosition(i->second + m_numberOfTracks);
         }
 
         m_composition->notifyTracksAdded(trackIds);
 
+        // Switch back to "done" mode.
         m_detached = false;
 
         return;
     }
 
+    // Zero-based position of the bottom Track on the UI.
+    int bottomTrackPosition = m_composition->getNbTracks() - 1;
+
+    // Make sure m_trackPosition is within limits.
+
+    if (m_trackPosition == -1)
+        m_trackPosition = bottomTrackPosition + 1;
+    if (m_trackPosition < 0)
+        m_trackPosition = 0;
+    if (m_trackPosition > bottomTrackPosition + 1)
+        m_trackPosition = bottomTrackPosition + 1;
+
     // Adjust the track positions
 
-    int highPosition = 0;
+    // For each Track in the Composition
+    for (Composition::trackcontainer::value_type &trackPair :
+         m_composition->getTracks()) {
+        const TrackId trackId = trackPair.first;
+        Track *track = trackPair.second;
 
-    for (Composition::trackiterator it = m_composition->getTracks().begin();
-         it != m_composition->getTracks().end(); ++it) {
+        const int trackPosition = track->getPosition();
 
-        int pos = it->second->getPosition();
-
-        if (pos > highPosition) {
-            highPosition = pos;
-        }
-    }
-
-    if (m_trackPosition == -1) m_trackPosition = highPosition + 1;
-    if (m_trackPosition < 0) m_trackPosition = 0;
-    if (m_trackPosition > highPosition + 1) m_trackPosition = highPosition + 1;
-
-    for (Composition::trackiterator it = m_composition->getTracks().begin();
-         it != m_composition->getTracks().end(); ++it) {
-
-        int pos = it->second->getPosition();
-
-        if (pos >= m_trackPosition) {
-            m_oldPositions[it->first] = pos;
-            it->second->setPosition(pos + m_numberOfTracks);
+        // If this Track is at or past the insertion point.
+        if (trackPosition >= m_trackPosition) {
+            // Store the original Track position.
+            m_oldPositions[trackId] = trackPosition;
+            // Move the Track position down to make room for the new Tracks.
+            track->setPosition(trackPosition + m_numberOfTracks);
         }
     }
 
     // Add the tracks
 
+    // Keep a list for Composition notification.
     std::vector<TrackId> trackIds;
 
     for (unsigned int i = 0; i < m_numberOfTracks; ++i) {

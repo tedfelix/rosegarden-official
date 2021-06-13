@@ -1428,11 +1428,10 @@ void RosegardenMainViewWidget::slotShowSegmentLabels(bool v)
     m_trackEditor->getCompositionView()->slotUpdateAll();
 }
 
-void RosegardenMainViewWidget::addTracks(
-        unsigned int nbTracks, InstrumentId id, int pos)
+void RosegardenMainViewWidget::addTrack(
+        InstrumentId id, int pos)
 {
-    RG_DEBUG << "addTracks(" << nbTracks << ", " << pos << ")";
-    m_trackEditor->addTracks(nbTracks, id, pos);
+    m_trackEditor->addTrack(id, pos);
 }
 
 void RosegardenMainViewWidget::slotDeleteTracks(

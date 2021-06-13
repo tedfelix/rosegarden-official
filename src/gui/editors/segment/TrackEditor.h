@@ -100,7 +100,7 @@ public:
     /// Adjust the canvas size to that required for the composition
     void updateCanvasSize();
 
-    void addTracks(unsigned int nbTracks, InstrumentId id, int position);
+    void addTrack(InstrumentId id, int position);
     void deleteTracks(std::vector<TrackId> tracks);
     void deleteSelectedSegments();
     void turnRepeatingSegmentToRealCopies();

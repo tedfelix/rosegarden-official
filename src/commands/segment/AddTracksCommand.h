@@ -58,16 +58,19 @@ private:
 
     /// Number of Tracks being added.
     unsigned int m_numberOfTracks;
+    /// Instrument to use for each new Track.
     InstrumentId m_instrumentId;
+    /// Where to insert the new Tracks.
     int m_trackPosition;
 
     /// Tracks created by this command.
     std::vector<Track *> m_newTracks;
 
-    typedef std::map<TrackId, int> TrackPositionMap;
+    typedef std::map<TrackId, int /*position*/> TrackPositionMap;
+    /// Track positions prior to the add.
     TrackPositionMap m_oldPositions;
 
-    /// Tracks are no longer in the Composition (we've been undone).
+    /// Tracks in m_newTracks are no longer in the Composition (we've been undone).
     /**
      * ??? Seems like a concept that many commands might find useful.  Why
      *     isn't there a Command::m_undone?

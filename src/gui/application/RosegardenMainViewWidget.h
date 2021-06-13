@@ -131,7 +131,7 @@ public:
     TrackParameterBox *getTrackParameterBox()
             { return m_trackParameterBox; }
 
-    void addTracks(unsigned int count, InstrumentId instrument, int position);
+    void addTrack(InstrumentId instrument, int position);
 
 public slots:
     void slotEditSegment(Segment*);

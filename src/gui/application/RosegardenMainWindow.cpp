@@ -3653,7 +3653,7 @@ RosegardenMainWindow::slotAddTrack()
     int pos = -1;
     if (track) pos = track->getPosition() + 1;
 
-    m_view->addTracks(1, id, pos);
+    m_view->addTrack(id, pos);
 }
 
 void
