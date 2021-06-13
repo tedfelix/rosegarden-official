@@ -6129,7 +6129,7 @@ RosegardenMainWindow::slotDeleteMarker(int id, timeT time, QString name, QString
 void
 RosegardenMainWindow::slotDocumentModified(bool m)
 {
-    RG_DEBUG << "slotDocumentModified(" << m << ") - doc path = " << m_doc->getAbsFilePath();
+    //RG_DEBUG << "slotDocumentModified(" << m << ") - doc path = " << m_doc->getAbsFilePath();
 
     if (!m_doc->getAbsFilePath().isEmpty()) {
         slotStateChanged("saved_file_modified", m);
