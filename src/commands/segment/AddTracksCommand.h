@@ -49,6 +49,12 @@ public:
     AddTracksCommand(unsigned int numberOfTracks,
                      InstrumentId instrumentId,
                      int trackPosition); // -1 -> at end
+    typedef std::vector<InstrumentId> InstrumentIdList;
+    /// Add multiple Tracks with a list of Instrument IDs to use.
+    AddTracksCommand(unsigned int numberOfTracks,
+                     InstrumentIdList instrumentIdList,
+                     int trackPosition); // -1 -> at end
+
     ~AddTracksCommand() override;
 
     void execute() override;
@@ -57,8 +63,8 @@ public:
 private:
     /// Number of Tracks being added.
     unsigned int m_numberOfTracks;
-    /// Instrument to use for each new Track.
-    InstrumentId m_instrumentId;
+    /// Instruments to use for each new Track.
+    InstrumentIdList m_instrumentIdList;
     /// Where to insert the new Tracks.
     int m_trackPosition;
 

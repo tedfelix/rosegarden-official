@@ -25,6 +25,8 @@
 #include "gui/application/RosegardenMainWindow.h"
 #include "base/Studio.h"
 
+#include <algorithm>
+
 
 namespace Rosegarden
 {
@@ -34,7 +36,7 @@ AddTracksCommand::AddTracksCommand(InstrumentId instrumentId,
                                    int trackPosition) :
     NamedCommand(tr("Add Tracks...")),
     m_numberOfTracks(1),
-    m_instrumentId(instrumentId),
+    m_instrumentIdList{instrumentId},
     m_trackPosition(trackPosition),
     m_detached(false)
 {
@@ -45,7 +47,18 @@ AddTracksCommand::AddTracksCommand(unsigned int numberOfTracks,
                                    int trackPosition) :
     NamedCommand(tr("Add Tracks...")),
     m_numberOfTracks(numberOfTracks),
-    m_instrumentId(instrumentId),
+    m_instrumentIdList{instrumentId},
+    m_trackPosition(trackPosition),
+    m_detached(false)
+{
+}
+
+AddTracksCommand::AddTracksCommand(unsigned int numberOfTracks,
+                                   InstrumentIdList instrumentIdList,
+                                   int trackPosition) :
+    NamedCommand(tr("Add Tracks...")),
+    m_numberOfTracks(numberOfTracks),
+    m_instrumentIdList(instrumentIdList),
     m_trackPosition(trackPosition),
     m_detached(false)
 {
@@ -145,31 +158,34 @@ void AddTracksCommand::execute()
     std::vector<TrackId> trackIds;
 
     // For each Track to add...
-    for (unsigned int i = 0; i < m_numberOfTracks; ++i) {
+    for (size_t i = 0; i < m_numberOfTracks; ++i) {
 
         TrackId trackId = composition.getNewTrackId();
         // Create the Track
         Track *track = new Track(trackId);
 
         track->setPosition(m_trackPosition + i);
-        track->setInstrument(m_instrumentId);
+        const size_t instrumentListIndex =
+                std::min(i, m_instrumentIdList.size() - 1);
+        const InstrumentId instrumentId =
+                m_instrumentIdList[instrumentListIndex];
+        track->setInstrument(instrumentId);
 
         // Add it to the Composition.
         composition.addTrack(track);
 
         m_newTracks.push_back(track);
         trackIds.push_back(trackId);
+
+        // Send channel setup in case it hasn't been sent for this instrument.
+        Instrument *instrument =
+                document->getStudio().getInstrumentById(instrumentId);
+        if (instrument)
+            instrument->sendChannelSetup();
     }
 
     composition.notifyTracksAdded(trackIds);
 
-    // Send channel setup in case it hasn't been sent for this instrument.
-    // ??? This should be in the above loop.  Especially when we add the
-    //     ability to use a range of Instruments.
-    Instrument *instrument =
-            document->getStudio().getInstrumentById(m_instrumentId);
-    if (instrument)
-        instrument->sendChannelSetup();
 }
 
 void AddTracksCommand::unexecute()
