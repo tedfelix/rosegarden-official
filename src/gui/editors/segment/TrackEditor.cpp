@@ -358,9 +358,7 @@ void TrackEditor::updateRulers()
 void TrackEditor::addTrack(InstrumentId id,
                            int position)
 {
-    Composition &comp = m_doc->getComposition();
-
-    addCommandToHistory(new AddTracksCommand(&comp, 1, id, position));
+    addCommandToHistory(new AddTracksCommand(id, position));
 
     updateCanvasSize();
 }

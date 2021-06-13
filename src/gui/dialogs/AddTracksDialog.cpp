@@ -280,8 +280,6 @@ void AddTracksDialog::accept()
     const size_t numberOfTracks = m_numberOfTracks->value();
     int position = getInsertPosition();
 
-    Composition &composition = rmw->getDocument()->getComposition();
-
     // For each track to add...
     for (size_t i = 0; i < numberOfTracks; ++i) {
         // Limit to the size of the instrumentIds vector.
@@ -295,8 +293,6 @@ void AddTracksDialog::accept()
         //       AddTracksCommand2(comp, instrumentList, position)
         CommandHistory::getInstance()->addCommand(
                 new AddTracksCommand(
-                        &composition,  // composition
-                        1,  // Number of Tracks
                         instrumentIds[j],  // Instrument ID
                         position));  // position
 

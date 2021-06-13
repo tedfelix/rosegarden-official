@@ -42,10 +42,11 @@ class AddTracksCommand : public NamedCommand
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::AddTracksCommand)
 
 public:
-    // ??? This really needs the entire RosegardenDocument.  Upgrade.
-    // ??? Would it be safe to use the RMW Singleton?  Test CLI --convert.
-    AddTracksCommand(Composition *composition,
-                     unsigned int numberOfTracks,
+    /// Add one Track
+    AddTracksCommand(InstrumentId instrumentId,
+                     int trackPosition); // -1 -> at end
+    /// Add multiple Tracks
+    AddTracksCommand(unsigned int numberOfTracks,
                      InstrumentId instrumentId,
                      int trackPosition); // -1 -> at end
     ~AddTracksCommand() override;
@@ -54,8 +55,6 @@ public:
     void unexecute() override;
 
 private:
-    Composition *m_composition;
-
     /// Number of Tracks being added.
     unsigned int m_numberOfTracks;
     /// Instrument to use for each new Track.

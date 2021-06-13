@@ -30,12 +30,20 @@ namespace Rosegarden
 {
 
 
-AddTracksCommand::AddTracksCommand(Composition *composition,
-                                   unsigned int numberOfTracks,
-                                   InstrumentId instrumentId,
-                                   int trackPosition):
+AddTracksCommand::AddTracksCommand(InstrumentId instrumentId,
+                                   int trackPosition) :
     NamedCommand(tr("Add Tracks...")),
-    m_composition(composition),
+    m_numberOfTracks(1),
+    m_instrumentId(instrumentId),
+    m_trackPosition(trackPosition),
+    m_detached(false)
+{
+}
+
+AddTracksCommand::AddTracksCommand(unsigned int numberOfTracks,
+                                   InstrumentId instrumentId,
+                                   int trackPosition) :
+    NamedCommand(tr("Add Tracks...")),
     m_numberOfTracks(numberOfTracks),
     m_instrumentId(instrumentId),
     m_trackPosition(trackPosition),
@@ -56,6 +64,12 @@ AddTracksCommand::~AddTracksCommand()
 
 void AddTracksCommand::execute()
 {
+    RosegardenDocument *document = RosegardenMainWindow::self()->getDocument();
+    if (!document)
+        return;
+
+    Composition &composition = document->getComposition();
+
     // If m_newTracks are not part of the Composition, we've been undone
     // and this is a redo.
     if (m_detached) {
@@ -67,7 +81,7 @@ void AddTracksCommand::execute()
 
         // For each of the new Tracks, re-add them to the Composition.
         for (size_t i = 0; i < m_newTracks.size(); ++i) {
-            m_composition->addTrack(m_newTracks[i]);
+            composition.addTrack(m_newTracks[i]);
             trackIds.push_back(m_newTracks[i]->getId());
         }
 
@@ -78,7 +92,7 @@ void AddTracksCommand::execute()
             const TrackId trackId = i->first;
             const int trackPosition = i->second;
 
-            Track *track = m_composition->getTrackById(trackId);
+            Track *track = composition.getTrackById(trackId);
             if (!track)
                 continue;
 
@@ -86,7 +100,7 @@ void AddTracksCommand::execute()
             track->setPosition(trackPosition + m_numberOfTracks);
         }
 
-        m_composition->notifyTracksAdded(trackIds);
+        composition.notifyTracksAdded(trackIds);
 
         // Switch back to "done" mode.
         m_detached = false;
@@ -95,7 +109,7 @@ void AddTracksCommand::execute()
     }
 
     // Zero-based position of the bottom Track on the UI.
-    int bottomTrackPosition = m_composition->getNbTracks() - 1;
+    int bottomTrackPosition = composition.getNbTracks() - 1;
 
     // Make sure m_trackPosition is within limits.
 
@@ -110,7 +124,7 @@ void AddTracksCommand::execute()
 
     // For each Track in the Composition
     for (Composition::trackcontainer::value_type &trackPair :
-         m_composition->getTracks()) {
+         composition.getTracks()) {
         const TrackId trackId = trackPair.first;
         Track *track = trackPair.second;
 
@@ -133,7 +147,7 @@ void AddTracksCommand::execute()
     // For each Track to add...
     for (unsigned int i = 0; i < m_numberOfTracks; ++i) {
 
-        TrackId trackId = m_composition->getNewTrackId();
+        TrackId trackId = composition.getNewTrackId();
         // Create the Track
         Track *track = new Track(trackId);
 
@@ -141,19 +155,17 @@ void AddTracksCommand::execute()
         track->setInstrument(m_instrumentId);
 
         // Add it to the Composition.
-        m_composition->addTrack(track);
+        composition.addTrack(track);
 
         m_newTracks.push_back(track);
         trackIds.push_back(trackId);
     }
 
-    m_composition->notifyTracksAdded(trackIds);
+    composition.notifyTracksAdded(trackIds);
 
     // Send channel setup in case it hasn't been sent for this instrument.
-    // ??? Instead of m_composition, we should keep the entire document.
     // ??? This should be in the above loop.  Especially when we add the
     //     ability to use a range of Instruments.
-    RosegardenDocument *document = RosegardenMainWindow::self()->getDocument();
     Instrument *instrument =
             document->getStudio().getInstrumentById(m_instrumentId);
     if (instrument)
@@ -162,12 +174,18 @@ void AddTracksCommand::execute()
 
 void AddTracksCommand::unexecute()
 {
+    RosegardenDocument *document = RosegardenMainWindow::self()->getDocument();
+    if (!document)
+        return;
+
+    Composition &composition = document->getComposition();
+
     // Keep a list for Composition notification.
     std::vector<TrackId> trackIds;
 
     // For each new Track, detach it from the Composition.
     for (size_t i = 0; i < m_newTracks.size(); ++i) {
-        m_composition->detachTrack(m_newTracks[i]);
+        composition.detachTrack(m_newTracks[i]);
         trackIds.push_back(m_newTracks[i]->getId());
     }
 
@@ -177,14 +195,15 @@ void AddTracksCommand::unexecute()
         const TrackId trackId = trackPositionPair.first;
         const int trackPosition = trackPositionPair.second;
 
-        Track *track = m_composition->getTrackById(trackId);
+        Track *track = composition.getTrackById(trackId);
         if (track)
             track->setPosition(trackPosition);
     }
 
-    m_composition->notifyTracksDeleted(trackIds);
+    composition.notifyTracksDeleted(trackIds);
 
     m_detached = true;
 }
+
 
 }
