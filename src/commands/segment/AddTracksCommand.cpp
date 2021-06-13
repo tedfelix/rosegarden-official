@@ -66,7 +66,7 @@ void AddTracksCommand::execute()
         std::vector<TrackId> trackIds;
 
         // For each of the new Tracks, re-add them to the Composition.
-        for (size_t i = 0; i < m_newTracks.size(); i++) {
+        for (size_t i = 0; i < m_newTracks.size(); ++i) {
             m_composition->addTrack(m_newTracks[i]);
             trackIds.push_back(m_newTracks[i]->getId());
         }
@@ -75,13 +75,15 @@ void AddTracksCommand::execute()
         for (TrackPositionMap::const_iterator i = m_oldPositions.begin();
              i != m_oldPositions.end();
              ++i) {
+            const TrackId trackId = i->first;
+            const int trackPosition = i->second;
 
-            Track *track = m_composition->getTrackById(i->first);
+            Track *track = m_composition->getTrackById(trackId);
             if (!track)
                 continue;
 
             // Move the Track down to make room for the new tracks.
-            track->setPosition(i->second + m_numberOfTracks);
+            track->setPosition(trackPosition + m_numberOfTracks);
         }
 
         m_composition->notifyTracksAdded(trackIds);
@@ -128,22 +130,29 @@ void AddTracksCommand::execute()
     // Keep a list for Composition notification.
     std::vector<TrackId> trackIds;
 
+    // For each Track to add...
     for (unsigned int i = 0; i < m_numberOfTracks; ++i) {
 
         TrackId trackId = m_composition->getNewTrackId();
+        // Create the Track
         Track *track = new Track(trackId);
 
         track->setPosition(m_trackPosition + i);
         track->setInstrument(m_instrumentId);
 
+        // Add it to the Composition.
         m_composition->addTrack(track);
-        trackIds.push_back(trackId);
+
         m_newTracks.push_back(track);
+        trackIds.push_back(trackId);
     }
 
     m_composition->notifyTracksAdded(trackIds);
 
     // Send channel setup in case it hasn't been sent for this instrument.
+    // ??? Instead of m_composition, we should keep the entire document.
+    // ??? This should be in the above loop.  Especially when we add the
+    //     ability to use a range of Instruments.
     RosegardenDocument *document = RosegardenMainWindow::self()->getDocument();
     Instrument *instrument =
             document->getStudio().getInstrumentById(m_instrumentId);
@@ -153,20 +162,24 @@ void AddTracksCommand::execute()
 
 void AddTracksCommand::unexecute()
 {
+    // Keep a list for Composition notification.
     std::vector<TrackId> trackIds;
 
-    // Detach the tracks
-    for (size_t i = 0; i < m_newTracks.size(); i++) {
+    // For each new Track, detach it from the Composition.
+    for (size_t i = 0; i < m_newTracks.size(); ++i) {
         m_composition->detachTrack(m_newTracks[i]);
         trackIds.push_back(m_newTracks[i]->getId());
     }
 
-    // Adjust the positions
-    for (TrackPositionMap::iterator i = m_oldPositions.begin();
-         i != m_oldPositions.end(); ++i) {
+    // For each Track that was moved, put it back.
+    for (const TrackPositionMap::value_type &trackPositionPair :
+         m_oldPositions) {
+        const TrackId trackId = trackPositionPair.first;
+        const int trackPosition = trackPositionPair.second;
 
-        Track *track = m_composition->getTrackById(i->first);
-        if (track) track->setPosition(i->second);
+        Track *track = m_composition->getTrackById(trackId);
+        if (track)
+            track->setPosition(trackPosition);
     }
 
     m_composition->notifyTracksDeleted(trackIds);
