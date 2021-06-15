@@ -223,13 +223,15 @@ JackDriver::initialise(bool reinitialise)
     jack_options_t jackOptions = JackNullOption;
     if (!autoStartJack) jackOptions = JackNoStartServer;
 
+    jack_status_t jackStatus;
+
     // attempt connection to JACK server
     //
-    if ((m_client = jack_client_open(jackClientName.c_str(), jackOptions, nullptr)) == nullptr) {
-        RG_WARNING << "initialise() - JACK server not running";
+    if ((m_client = jack_client_open(jackClientName.c_str(), jackOptions, &jackStatus)) == nullptr) {
+        RG_WARNING << "initialise() - JACK server not running.  jackStatus:" << qPrintable(QString::number(jackStatus, 16)) << "(hex)";
         RG_WARNING << "  Attempt to start JACK server was " << (jackOptions & JackNoStartServer ? "NOT " : "") << "made per user config";
         // Also send to user log.
-        AUDIT << "JACK server not running\n";
+        AUDIT << "JACK server not running.  jackStatus: 0x" << QString::number(jackStatus, 16) << "\n";
         AUDIT << "  Attempt to start JACK server was " << (jackOptions & JackNoStartServer ? "NOT " : "") << "made per user config\n";
         return ;
     }
