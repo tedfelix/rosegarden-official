@@ -1846,9 +1846,11 @@ NotationHLayout::positionChord(ViewSegment &staff,
             if (ti != tieMap.end()) {
                 NotationElementList::iterator otherItr(ti->second);
 
-                if ((*otherItr)->getViewAbsoluteTime() +
-                    (*otherItr)->getViewDuration() ==
-                    note->getViewAbsoluteTime()) {
+                timeT oEnd = (*otherItr)->getViewAbsoluteTime() +
+                    (*otherItr)->getViewDuration();
+                timeT nStart = note->getViewAbsoluteTime();
+                NotationElement *elo = static_cast<NotationElement*>(*otherItr);
+                if (oEnd == nStart || (elo->isGrace() && nStart < oEnd)) {
 
                     RG_DEBUG << "Second note in tie at " << note->getViewAbsoluteTime() << ": found first note, it matches";
 

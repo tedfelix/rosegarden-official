@@ -177,6 +177,7 @@ SegmentNotationHelper::getNextAdjacentNote(iterator i,
     if (!isBeforeEndMarker(i)) return i;
     if (!(*i)->isa(Note::EventType)) return end();
 
+    RG_DEBUG << "getNextAdjacentNote" << *(*i);
     timeT iEnd = getNotationEndTime(*i);
     long ip = 0, jp = 0;
     if (!(*i)->get<Int>(PITCH, ip) && matchPitch) return end();
@@ -192,7 +193,13 @@ SegmentNotationHelper::getNextAdjacentNote(iterator i,
             if (!(*j)->get<Int>(PITCH, jp) || (jp != ip)) continue;
         }
 
+        RG_DEBUG << "getNextAdjacentNote" << jStart << iEnd;
         if (allowOverlap || (jStart == iEnd)) return j;
+        // Allow tying of grace notes
+        bool isGrace = (*i)->has(IS_GRACE_NOTE) &&
+            (*i)->get<Bool>(IS_GRACE_NOTE);
+        RG_DEBUG << "getNextAdjacentNote isGrace" << isGrace;
+        if (isGrace && jStart < iEnd) return j;
     }
 }
 
