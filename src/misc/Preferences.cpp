@@ -28,7 +28,7 @@ namespace
     // Cached values for performance...
     bool sendProgramChangesWhenLooping = true;
     bool sendControlChangesWhenLooping = true;
-    bool dontUseNativeDialog = false;
+    bool useNativeFileDialogs = true;
 }
 
 void Preferences::setSendProgramChangesWhenLooping(bool value)
@@ -85,15 +85,15 @@ bool Preferences::getSendControlChangesWhenLooping()
     return sendControlChangesWhenLooping;
 }
 
-void Preferences::setDontUseNativeDialog(bool value)
+void Preferences::setUseNativeFileDialogs(bool value)
 {
     QSettings settings;
     settings.beginGroup("FileDialog");
-    settings.setValue("dontUseNativeDialog", value);
-    dontUseNativeDialog = value;
+    settings.setValue("useNativeFileDialogs", value);
+    useNativeFileDialogs = value;
 }
 
-bool Preferences::getDontUseNativeDialog()
+bool Preferences::getUseNativeFileDialogs()
 {
     static bool firstGet = true;
 
@@ -102,14 +102,14 @@ bool Preferences::getDontUseNativeDialog()
 
         QSettings settings;
         settings.beginGroup("FileDialog");
-        dontUseNativeDialog =
-                settings.value("dontUseNativeDialog", "true").toBool();
+        useNativeFileDialogs =
+                settings.value("useNativeFileDialogs", "true").toBool();
         // Write it back out so we can find it if it wasn't there.
-        settings.setValue("dontUseNativeDialog",
-                          dontUseNativeDialog);
+        settings.setValue("useNativeFileDialogs",
+                useNativeFileDialogs);
     }
 
-    return dontUseNativeDialog;
+    return useNativeFileDialogs;
 }
 
 

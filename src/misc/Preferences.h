@@ -45,8 +45,8 @@ namespace Preferences
 
     // ??? Move ChannelManager.cpp:allowReset() and forceChannelSetups() here.
 
-    void setDontUseNativeDialog(bool value);
-    bool getDontUseNativeDialog();
+    void setUseNativeFileDialogs(bool value);
+    bool getUseNativeFileDialogs();
 
 }
 

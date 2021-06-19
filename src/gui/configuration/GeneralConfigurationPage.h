@@ -114,6 +114,7 @@ private:
     QCheckBox *m_notationBackgroundTextures;
     QCheckBox *m_longTitles;
     QComboBox *m_trackSize;
+    QCheckBox *m_useNativeFileDialogs;
 
     // External Applications tab
     QComboBox *m_pdfViewer;

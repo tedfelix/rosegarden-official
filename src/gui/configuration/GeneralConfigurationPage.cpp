@@ -22,6 +22,7 @@
 #include "misc/Debug.h"
 #include "misc/Strings.h"
 #include "misc/ConfigGroups.h"
+#include "misc/Preferences.h"
 #include "document/RosegardenDocument.h"
 #include "gui/application/RosegardenMainWindow.h"
 #include "gui/studio/StudioControl.h"
@@ -344,7 +345,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
 
     m_notationBackgroundTextures = new QCheckBox(tr("Notation"), frame);
     // ??? Wow this is cumbersome.  Maybe we should just prepend the
-    //     group for each call?
+    //     group for each call?  Or, even better, use Preferences.
     settings.endGroup();
     settings.beginGroup(NotationViewConfigGroup);
     m_notationBackgroundTextures->setChecked(
@@ -384,6 +385,19 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
                     &QComboBox::activated),
             this, &GeneralConfigurationPage::slotModified);
     layout->addWidget(m_trackSize, row, 1, 1, 3);
+
+    ++row;
+
+    // Use native file dialogs
+    layout->addWidget(
+            new QLabel(tr("Use native file dialogs")),
+            row, 0);
+
+    m_useNativeFileDialogs = new QCheckBox;
+    m_useNativeFileDialogs->setChecked(Preferences::getUseNativeFileDialogs());
+    connect(m_useNativeFileDialogs, &QCheckBox::stateChanged,
+            this, &GeneralConfigurationPage::slotModified);
+    layout->addWidget(m_useNativeFileDialogs, row, 1);
 
     ++row;
 
@@ -555,6 +569,8 @@ void GeneralConfigurationPage::apply()
              m_trackSize->currentIndex());
     settings.setValue("track_size", m_trackSize->currentIndex());
     settings.endGroup();
+
+    Preferences::setUseNativeFileDialogs(m_useNativeFileDialogs->isChecked());
 
     // External Applications tab
 

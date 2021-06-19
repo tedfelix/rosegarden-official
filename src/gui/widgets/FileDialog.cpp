@@ -96,7 +96,7 @@ FileDialog::getOpenFileName(QWidget *parent,
                             QString *selectedFilter,
                             QFileDialog::Options options)
 {
-    if (Preferences::getDontUseNativeDialog())
+    if (!Preferences::getUseNativeFileDialogs())
         options |= QFileDialog::DontUseNativeDialog;
 
     if (!ThornStyle::isEnabled()) {
@@ -128,7 +128,7 @@ FileDialog::getOpenFileNames(QWidget *parent,
                              QString *selectedFilter,
                              QFileDialog::Options options)
 {
-    if (Preferences::getDontUseNativeDialog())
+    if (!Preferences::getUseNativeFileDialogs())
         options |= QFileDialog::DontUseNativeDialog;
 
     if (!ThornStyle::isEnabled()) {
@@ -161,7 +161,7 @@ FileDialog::getSaveFileName(QWidget *parent,
                             QString *selectedFilter,
                             QFileDialog::Options options)
 {
-    if (Preferences::getDontUseNativeDialog())
+    if (!Preferences::getUseNativeFileDialogs())
         options |= QFileDialog::DontUseNativeDialog;
 
     if (!ThornStyle::isEnabled()) {
@@ -194,7 +194,7 @@ FileDialog::getExistingDirectory(QWidget *parent,
 {
     QFileDialog::Options options = QFileDialog::ShowDirsOnly;
 
-    if (Preferences::getDontUseNativeDialog())
+    if (!Preferences::getUseNativeFileDialogs())
         options |= QFileDialog::DontUseNativeDialog;
 
     if (!ThornStyle::isEnabled()) {
