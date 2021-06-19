@@ -27,6 +27,7 @@
 #include <QStandardPaths>
 #endif
 #include <QApplication>
+#include <QSettings>
 
 #include "misc/Debug.h"
 #include "misc/ConfigGroups.h"
@@ -95,6 +96,16 @@ FileDialog::getOpenFileName(QWidget *parent,
                             QString *selectedFilter,
                             QFileDialog::Options options)
 {
+    QSettings settings;
+    settings.beginGroup("FileDialog");
+    const bool dontUseNative =
+            settings.value("dontUseNative", "false").toBool();
+    // Write it back out so we can find it if it wasn't there.
+    settings.setValue("dontUseNative", dontUseNative);
+
+    if (dontUseNative)
+        options |= QFileDialog::DontUseNativeDialog;
+
     if (!ThornStyle::isEnabled()) {
         return QFileDialog::getOpenFileName(parent, caption, dir, filter,
                                             selectedFilter, options);
