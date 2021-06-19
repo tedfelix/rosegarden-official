@@ -22,11 +22,13 @@
 namespace Rosegarden
 {
 
+
 namespace
 {
     // Cached values for performance...
     bool sendProgramChangesWhenLooping = true;
     bool sendControlChangesWhenLooping = true;
+    bool dontUseNativeDialog = false;
 }
 
 void Preferences::setSendProgramChangesWhenLooping(bool value)
@@ -81,6 +83,33 @@ bool Preferences::getSendControlChangesWhenLooping()
     }
 
     return sendControlChangesWhenLooping;
+}
+
+void Preferences::setDontUseNativeDialog(bool value)
+{
+    QSettings settings;
+    settings.beginGroup("FileDialog");
+    settings.setValue("dontUseNativeDialog", value);
+    dontUseNativeDialog = value;
+}
+
+bool Preferences::getDontUseNativeDialog()
+{
+    static bool firstGet = true;
+
+    if (firstGet) {
+        firstGet = false;
+
+        QSettings settings;
+        settings.beginGroup("FileDialog");
+        dontUseNativeDialog =
+                settings.value("dontUseNativeDialog", "true").toBool();
+        // Write it back out so we can find it if it wasn't there.
+        settings.setValue("dontUseNativeDialog",
+                          dontUseNativeDialog);
+    }
+
+    return dontUseNativeDialog;
 }
 
 

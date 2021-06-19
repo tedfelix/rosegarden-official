@@ -19,6 +19,11 @@
 
 #include "FileDialog.h"
 
+#include "misc/ConfigGroups.h"
+#include "misc/Debug.h"
+#include "misc/Preferences.h"
+#include "gui/general/ThornStyle.h"
+
 #include <QFileDialog>
 #include <QList>
 #include <QUrl>
@@ -28,10 +33,6 @@
 #endif
 #include <QApplication>
 #include <QSettings>
-
-#include "misc/Debug.h"
-#include "misc/ConfigGroups.h"
-#include "gui/general/ThornStyle.h"
 
 namespace Rosegarden
 {
@@ -87,7 +88,6 @@ FileDialog::~FileDialog()
 {
 }
 
-
 QString
 FileDialog::getOpenFileName(QWidget *parent,
                             const QString &caption,
@@ -96,14 +96,7 @@ FileDialog::getOpenFileName(QWidget *parent,
                             QString *selectedFilter,
                             QFileDialog::Options options)
 {
-    QSettings settings;
-    settings.beginGroup("FileDialog");
-    const bool dontUseNative =
-            settings.value("dontUseNative", "false").toBool();
-    // Write it back out so we can find it if it wasn't there.
-    settings.setValue("dontUseNative", dontUseNative);
-
-    if (dontUseNative)
+    if (Preferences::getDontUseNativeDialog())
         options |= QFileDialog::DontUseNativeDialog;
 
     if (!ThornStyle::isEnabled()) {
@@ -135,6 +128,9 @@ FileDialog::getOpenFileNames(QWidget *parent,
                              QString *selectedFilter,
                              QFileDialog::Options options)
 {
+    if (Preferences::getDontUseNativeDialog())
+        options |= QFileDialog::DontUseNativeDialog;
+
     if (!ThornStyle::isEnabled()) {
         return QFileDialog::getOpenFileNames(parent, caption, dir, filter,
                                              selectedFilter, options);
@@ -165,6 +161,9 @@ FileDialog::getSaveFileName(QWidget *parent,
                             QString *selectedFilter,
                             QFileDialog::Options options)
 {
+    if (Preferences::getDontUseNativeDialog())
+        options |= QFileDialog::DontUseNativeDialog;
+
     if (!ThornStyle::isEnabled()) {
         return QFileDialog::getSaveFileName(parent, caption, dir, filter,
                                             selectedFilter, options);
@@ -193,18 +192,23 @@ FileDialog::getExistingDirectory(QWidget *parent,
                                  const QString &caption,
                                  const QString &dir)
 {
+    QFileDialog::Options options = QFileDialog::ShowDirsOnly;
+
+    if (Preferences::getDontUseNativeDialog())
+        options |= QFileDialog::DontUseNativeDialog;
+
     if (!ThornStyle::isEnabled()) {
-        return QFileDialog::getExistingDirectory(parent, caption, dir, QFileDialog::ShowDirsOnly);
+        return QFileDialog::getExistingDirectory(parent, caption, dir, options);
     }
 
-    // (code adapted from Qt 4 Git repository (c) 2012 Digia)
     FileDialog dialog(parent, caption, dir);
     dialog.setFileMode(QFileDialog::Directory);
-    dialog.setOption(QFileDialog::ShowDirsOnly, true);
+    dialog.setOptions(options);
 
     if (dialog.exec() == QDialog::Accepted) {
         return dialog.selectedFiles().value(0);
     }
+
     return QString();    
 }
 

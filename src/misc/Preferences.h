@@ -44,6 +44,10 @@ namespace Preferences
     bool getSendControlChangesWhenLooping();
 
     // ??? Move ChannelManager.cpp:allowReset() and forceChannelSetups() here.
+
+    void setDontUseNativeDialog(bool value);
+    bool getDontUseNativeDialog();
+
 }
 
 
