@@ -144,6 +144,9 @@ KeySignatureDialog::KeySignatureDialog(QWidget *parent,
     m_explanatoryLabel = explanatoryLabel;
 
     QPixmap pm;
+    // ??? This check might not be quite right.  The Qt docs indicate
+    //     this should be 5.15.  We've had users getting compilation errors
+    //     here.  Not sure exactly how to verify this.
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
     // This is not actually a copy as Qt does implicit data sharing.
     pm = m_keyPixmap->pixmap(Qt::ReturnByValue);
