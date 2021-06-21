@@ -33,7 +33,7 @@ fi
 lupdate $NOOBSOPT `find src -name '*.ui' -o -name '*.cpp' -o -name '*.h'` \
         data/QMenuStrings.cpp data/InstrumentStrings.cpp \
         data/AutoloadStrings.cpp -ts data/locale/rosegarden.ts \
-        $TRANSLATIONS
+        $TRANSLATIONS $@
 
 # Display statistics.
 scripts/ts-stats
