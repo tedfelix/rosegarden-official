@@ -93,8 +93,7 @@ TrackButtons::TrackButtons(RosegardenDocument* doc,
         m_tracks(doc->getComposition().getNbTracks()),
 //        m_offset(4),
         m_trackCellHeight(trackCellHeight),
-        m_popupTrackPos(0),
-        m_lastSelected(-1)
+        m_popupTrackPos(0)
 {
     setFrameStyle(Plain);
 
@@ -242,6 +241,10 @@ TrackButtons::updateUI(Track *track)
     initInstrumentNames(ins, label);
 
     label->updateLabel();
+
+    label->setSelected(
+            track->getId() == m_doc->getComposition().getSelectedTrack());
+
 }
 
 void
@@ -570,18 +573,20 @@ TrackButtons::selectTrack(int position)
     if (position < 0  ||  position >= m_tracks)
         return;
 
-    // No sense doing anything if the selection isn't changing
-    if (position == m_lastSelected)
-        return;
+    // ??? TrackLabel::setSelected() is called in a couple of places.
+    //     We should probably just consolidate into an update routine
+    //     that does the following, but using Composition::getSelectedTrack()
+    //     converted to position, of course.
 
-    // Unselect the previously selected
-    if (m_lastSelected >= 0  &&  m_lastSelected < m_tracks) {
-        m_trackLabels[m_lastSelected]->setSelected(false);
+    // For each Track label, update selection.
+    for (int i = 0; i < m_tracks; ++i)
+    {
+        // Selected one?
+        if (i == position)
+            m_trackLabels[i]->setSelected(true);
+        else  // Not selected.
+            m_trackLabels[i]->setSelected(false);
     }
-
-    // Select the newly selected
-    m_trackLabels[position]->setSelected(true);
-    m_lastSelected = position;
 }
 
 #if 0

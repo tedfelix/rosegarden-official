@@ -348,9 +348,6 @@ protected:
 
     TrackLabel::DisplayMode           m_labelDisplayMode;
 
-    /// Position of the last selected track.
-    int m_lastSelected;
-
 private slots:
     /// Called when the document is modified in some way.
     void slotDocumentModified(bool);
