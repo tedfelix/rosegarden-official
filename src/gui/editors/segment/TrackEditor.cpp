@@ -355,13 +355,10 @@ void TrackEditor::updateRulers()
         m_bottomStandardRuler->update();
 }
 
-void TrackEditor::addTracks(unsigned int nbNewTracks,
-                            InstrumentId id,
-                            int position)
+void TrackEditor::addTrack(InstrumentId id,
+                           int position)
 {
-    Composition &comp = m_doc->getComposition();
-
-    addCommandToHistory(new AddTracksCommand(&comp, nbNewTracks, id, position));
+    addCommandToHistory(new AddTracksCommand(id, position));
 
     updateCanvasSize();
 }

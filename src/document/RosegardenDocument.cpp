@@ -685,8 +685,7 @@ RosegardenDocument::mergeDocument(RosegardenDocument *doc,
 
         //!!! worry about instruments and other studio stuff later... if at all
         command->addCommand(new AddTracksCommand
-                            (&getComposition(),
-                             yrNrTracks,
+                            (yrNrTracks,
                              MidiInstrumentBase,
                              -1));
 
@@ -695,8 +694,7 @@ RosegardenDocument::mergeDocument(RosegardenDocument *doc,
     } else if (yrMaxTrack > myMaxTrack) {
 
         command->addCommand(new AddTracksCommand
-                            (&getComposition(),
-                             yrMaxTrack - myMaxTrack,
+                            (yrMaxTrack - myMaxTrack,
                              MidiInstrumentBase,
                              -1));
     }

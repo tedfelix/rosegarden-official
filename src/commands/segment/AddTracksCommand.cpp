@@ -19,149 +19,207 @@
 
 #include "AddTracksCommand.h"
 
-#include "misc/Debug.h"
 #include "base/Composition.h"
-#include "base/MidiProgram.h"
-#include "base/Track.h"
-#include "base/Instrument.h"
-#include "base/Studio.h"
+#include "misc/Debug.h"
 #include "document/RosegardenDocument.h"
 #include "gui/application/RosegardenMainWindow.h"
+#include "base/Studio.h"
 
-#include <QString>
+#include <algorithm>
 
 
 namespace Rosegarden
 {
 
-AddTracksCommand::AddTracksCommand(Composition *composition,
-                                   unsigned int nbTracks,
-                                   InstrumentId id,
-                                   int position):
-    NamedCommand(getGlobalName()),
-    m_composition(composition),
-    m_nbNewTracks(nbTracks),
-    m_instrumentId(id),
-    m_position(position),
-    m_detached(false)
 
+AddTracksCommand::AddTracksCommand(InstrumentId instrumentId,
+                                   int trackPosition) :
+    NamedCommand(tr("Add Tracks...")),
+    m_numberOfTracks(1),
+    m_instrumentIdList{instrumentId},
+    m_trackPosition(trackPosition),
+    m_detached(false)
+{
+}
+
+AddTracksCommand::AddTracksCommand(unsigned int numberOfTracks,
+                                   InstrumentId instrumentId,
+                                   int trackPosition) :
+    NamedCommand(tr("Add Tracks...")),
+    m_numberOfTracks(numberOfTracks),
+    m_instrumentIdList{instrumentId},
+    m_trackPosition(trackPosition),
+    m_detached(false)
+{
+}
+
+AddTracksCommand::AddTracksCommand(unsigned int numberOfTracks,
+                                   InstrumentIdList instrumentIdList,
+                                   int trackPosition) :
+    NamedCommand(tr("Add Tracks...")),
+    m_numberOfTracks(numberOfTracks),
+    m_instrumentIdList(instrumentIdList),
+    m_trackPosition(trackPosition),
+    m_detached(false)
 {
 }
 
 AddTracksCommand::~AddTracksCommand()
 {
+    // If the Tracks are no longer in the Composition, we'll have
+    // to delete them ourselves.
     if (m_detached) {
-        for (size_t i = 0; i < m_newTracks.size(); ++i)
+        for (size_t i = 0; i < m_newTracks.size(); ++i) {
             delete m_newTracks[i];
+        }
     }
 }
 
 void AddTracksCommand::execute()
 {
-    // Re-attach tracks (redo)
-    //
+    RosegardenDocument *document = RosegardenMainWindow::self()->getDocument();
+    if (!document)
+        return;
+
+    Composition &composition = document->getComposition();
+
+    // If m_newTracks are not part of the Composition, we've been undone
+    // and this is a redo.
     if (m_detached) {
 
+        // Re-attach tracks (redo)
+
+        // Keep a list for Composition notification.
         std::vector<TrackId> trackIds;
 
-        for (size_t i = 0; i < m_newTracks.size(); i++) {
-            m_composition->addTrack(m_newTracks[i]);
+        // For each of the new Tracks, re-add them to the Composition.
+        for (size_t i = 0; i < m_newTracks.size(); ++i) {
+            composition.addTrack(m_newTracks[i]);
             trackIds.push_back(m_newTracks[i]->getId());
         }
 
-        // Adjust the track positions.
-        for (TrackPositionMap::iterator i = m_oldPositions.begin();
-             i != m_oldPositions.end(); ++i) {
+        // For each Track that needs to be moved down...
+        for (TrackPositionMap::const_iterator i = m_oldPositions.begin();
+             i != m_oldPositions.end();
+             ++i) {
+            const TrackId trackId = i->first;
+            const int trackPosition = i->second;
 
-            int newPosition = i->second + m_nbNewTracks;
-            Track *track = m_composition->getTrackById(i->first);
-            if (track) track->setPosition(newPosition);
+            Track *track = composition.getTrackById(trackId);
+            if (!track)
+                continue;
+
+            // Move the Track down to make room for the new tracks.
+            track->setPosition(trackPosition + m_numberOfTracks);
         }
 
-        m_composition->notifyTracksAdded(trackIds);
+        composition.notifyTracksAdded(trackIds);
 
+        // Switch back to "done" mode.
         m_detached = false;
 
         return;
     }
 
+    // Zero-based position of the bottom Track on the UI.
+    int bottomTrackPosition = composition.getNbTracks() - 1;
+
+    // Make sure m_trackPosition is within limits.
+
+    if (m_trackPosition == -1)
+        m_trackPosition = bottomTrackPosition + 1;
+    if (m_trackPosition < 0)
+        m_trackPosition = 0;
+    if (m_trackPosition > bottomTrackPosition + 1)
+        m_trackPosition = bottomTrackPosition + 1;
+
     // Adjust the track positions
 
-    int highPosition = 0;
+    // For each Track in the Composition
+    for (Composition::trackcontainer::value_type &trackPair :
+         composition.getTracks()) {
+        const TrackId trackId = trackPair.first;
+        Track *track = trackPair.second;
 
-    for (Composition::trackiterator it = m_composition->getTracks().begin();
-         it != m_composition->getTracks().end(); ++it) {
+        const int trackPosition = track->getPosition();
 
-        int pos = it->second->getPosition();
-
-        if (pos > highPosition) {
-            highPosition = pos;
-        }
-    }
-
-    if (m_position == -1) m_position = highPosition + 1;
-    if (m_position < 0) m_position = 0;
-    if (m_position > highPosition + 1) m_position = highPosition + 1;
-
-    for (Composition::trackiterator it = m_composition->getTracks().begin();
-         it != m_composition->getTracks().end(); ++it) {
-
-        int pos = it->second->getPosition();
-
-        if (pos >= m_position) {
-            m_oldPositions[it->first] = pos;
-            it->second->setPosition(pos + m_nbNewTracks);
+        // If this Track is at or past the insertion point.
+        if (trackPosition >= m_trackPosition) {
+            // Store the original Track position.
+            m_oldPositions[trackId] = trackPosition;
+            // Move the Track position down to make room for the new Tracks.
+            track->setPosition(trackPosition + m_numberOfTracks);
         }
     }
 
     // Add the tracks
 
+    // Keep a list for Composition notification.
     std::vector<TrackId> trackIds;
 
-    for (unsigned int i = 0; i < m_nbNewTracks; ++i) {
+    // For each Track to add...
+    for (size_t i = 0; i < m_numberOfTracks; ++i) {
 
-        TrackId trackId = m_composition->getNewTrackId();
+        TrackId trackId = composition.getNewTrackId();
+        // Create the Track
         Track *track = new Track(trackId);
 
-        track->setPosition(m_position + i);
-        track->setInstrument(m_instrumentId);
+        track->setPosition(m_trackPosition + i);
+        const size_t instrumentListIndex =
+                std::min(i, m_instrumentIdList.size() - 1);
+        const InstrumentId instrumentId =
+                m_instrumentIdList[instrumentListIndex];
+        track->setInstrument(instrumentId);
 
-        m_composition->addTrack(track);
-        trackIds.push_back(trackId);
+        // Add it to the Composition.
+        composition.addTrack(track);
+
         m_newTracks.push_back(track);
+        trackIds.push_back(trackId);
+
+        // Send channel setup in case it hasn't been sent for this instrument.
+        Instrument *instrument =
+                document->getStudio().getInstrumentById(instrumentId);
+        if (instrument)
+            instrument->sendChannelSetup();
     }
 
-    m_composition->notifyTracksAdded(trackIds);
+    composition.notifyTracksAdded(trackIds);
 
-    // Send channel setup in case it hasn't been sent for this instrument.
-    RosegardenDocument *document = RosegardenMainWindow::self()->getDocument();
-    Instrument *instrument =
-            document->getStudio().getInstrumentById(m_instrumentId);
-    if (instrument)
-        instrument->sendChannelSetup();
 }
 
 void AddTracksCommand::unexecute()
 {
+    RosegardenDocument *document = RosegardenMainWindow::self()->getDocument();
+    if (!document)
+        return;
+
+    Composition &composition = document->getComposition();
+
+    // Keep a list for Composition notification.
     std::vector<TrackId> trackIds;
 
-    // Detach the tracks
-    for (size_t i = 0; i < m_newTracks.size(); i++) {
-        m_composition->detachTrack(m_newTracks[i]);
+    // For each new Track, detach it from the Composition.
+    for (size_t i = 0; i < m_newTracks.size(); ++i) {
+        composition.detachTrack(m_newTracks[i]);
         trackIds.push_back(m_newTracks[i]->getId());
     }
 
-    // Adjust the positions
-    for (TrackPositionMap::iterator i = m_oldPositions.begin();
-         i != m_oldPositions.end(); ++i) {
+    // For each Track that was moved, put it back.
+    for (const TrackPositionMap::value_type &trackPositionPair :
+         m_oldPositions) {
+        const TrackId trackId = trackPositionPair.first;
+        const int trackPosition = trackPositionPair.second;
 
-        Track *track = m_composition->getTrackById(i->first);
-        if (track) track->setPosition(i->second);
+        Track *track = composition.getTrackById(trackId);
+        if (track)
+            track->setPosition(trackPosition);
     }
 
-    m_composition->notifyTracksDeleted(trackIds);
+    composition.notifyTracksDeleted(trackIds);
 
     m_detached = true;
 }
+
 
 }

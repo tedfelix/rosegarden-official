@@ -19,20 +19,21 @@
 #ifndef RG_ADDTRACKSCOMMAND_H
 #define RG_ADDTRACKSCOMMAND_H
 
-#include "base/MidiProgram.h"
-#include "base/Composition.h"
-#include "document/Command.h"
+#include "document/Command.h"  // for NamedCommand
+#include "base/Instrument.h"
+#include "base/Track.h"
+
+#include <QCoreApplication>  // for Q_DECLARE_TR_FUNCTIONS()
 #include <QString>
+
 #include <vector>
 #include <map>
-#include <QCoreApplication>
-
 
 
 namespace Rosegarden
 {
 
-class Track;
+
 class Composition;
 
 
@@ -41,29 +42,45 @@ class AddTracksCommand : public NamedCommand
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::AddTracksCommand)
 
 public:
-    AddTracksCommand(Composition *composition,
-                     unsigned int nbTracks,
-                     InstrumentId id,
-                     int position); // -1 -> at end
-    ~AddTracksCommand() override;
+    /// Add one Track
+    AddTracksCommand(InstrumentId instrumentId,
+                     int trackPosition); // -1 -> at end
+    /// Add multiple Tracks
+    AddTracksCommand(unsigned int numberOfTracks,
+                     InstrumentId instrumentId,
+                     int trackPosition); // -1 -> at end
+    typedef std::vector<InstrumentId> InstrumentIdList;
+    /// Add multiple Tracks with a list of Instrument IDs to use.
+    AddTracksCommand(unsigned int numberOfTracks,
+                     InstrumentIdList instrumentIdList,
+                     int trackPosition); // -1 -> at end
 
-    static QString getGlobalName() { return tr("Add Tracks..."); }
+    ~AddTracksCommand() override;
 
     void execute() override;
     void unexecute() override;
 
-protected:
-    Composition           *m_composition;
-    unsigned int           m_nbNewTracks;
-    InstrumentId           m_instrumentId;
-    int                    m_position;
+private:
+    /// Number of Tracks being added.
+    unsigned int m_numberOfTracks;
+    /// Instruments to use for each new Track.
+    InstrumentIdList m_instrumentIdList;
+    /// Where to insert the new Tracks.
+    int m_trackPosition;
 
-    typedef std::map<TrackId, int> TrackPositionMap;
+    /// Tracks created by this command.
+    std::vector<Track *> m_newTracks;
 
-    std::vector<Track *>   m_newTracks;
-    TrackPositionMap       m_oldPositions;
+    typedef std::map<TrackId, int /*position*/> TrackPositionMap;
+    /// Track positions prior to the add.
+    TrackPositionMap m_oldPositions;
 
-    bool                   m_detached;
+    /// Tracks in m_newTracks are no longer in the Composition (we've been undone).
+    /**
+     * ??? Seems like a concept that many commands might find useful.  Why
+     *     isn't there a Command::m_undone?
+     */
+    bool m_detached;
 };
 
 

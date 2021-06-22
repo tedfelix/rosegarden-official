@@ -68,6 +68,7 @@ public:
     bool isSolo() const  { return m_solo; }
 
     void setPosition(int position) { m_position = position; }
+    /// Zero-based Track position on the UI.
     int getPosition() const { return m_position; }
 
     void setLabel(const std::string &label)  { m_label = label; }
@@ -148,7 +149,8 @@ private:
     std::string    m_label;
     std::string    m_shortLabel;
     std::string    m_presetLabel;
-    int            m_position;
+    /// Zero-based Track position on the UI.
+    int m_position;
     InstrumentId   m_instrument;
 
     Composition   *m_owningComposition;

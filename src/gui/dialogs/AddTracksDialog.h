@@ -24,25 +24,36 @@ class QWidget;
 class QSpinBox;
 class QComboBox;
 
+
 namespace Rosegarden
 {
+
 
 class AddTracksDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    AddTracksDialog(QWidget *parent, int currentTrack = -1);
-    
-    int getTracks();
+    AddTracksDialog(QWidget *parent);
+
+public slots:
+    virtual void accept() override;
+
+private slots:
+    void slotDeviceChanged(int)  { updateInstrumentComboBox(); }
+
+private:
+    QSpinBox *m_numberOfTracks;
+
+    QComboBox *m_location;
     int getInsertPosition();
 
-protected:
-    int        m_currentTrack;
-    QSpinBox  *m_count;
-    QComboBox *m_position;
-};
+    QComboBox *m_device;
+    void initDeviceComboBox();
 
+    QComboBox *m_instrument;
+    void updateInstrumentComboBox();
+};
 
 
 }

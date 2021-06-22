@@ -90,6 +90,10 @@ TrackLabel::updateLabel()
 void
 TrackLabel::setSelected(bool selected)
 {
+    // No change?  Bail.
+    if (selected == m_selected)
+        return;
+
     m_selected = selected;
 
     QPalette pal = palette();

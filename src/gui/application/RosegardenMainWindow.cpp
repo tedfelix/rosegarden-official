@@ -3710,55 +3710,14 @@ RosegardenMainWindow::slotAddTrack()
     int pos = -1;
     if (track) pos = track->getPosition() + 1;
 
-    m_view->slotAddTracks(1, id, pos);
+    m_view->addTrack(id, pos);
 }
 
 void
 RosegardenMainWindow::slotAddTracks()
 {
-    if (!m_view)
-        return ;
-
-    // default to the base number - might not actually exist though
-    //
-    InstrumentId id = MidiInstrumentBase;
-
-    // Get the first Internal/MIDI instrument
-    //
-    DeviceList *devices = m_doc->getStudio().getDevices();
-    bool have = false;
-
-    for (DeviceList::iterator it = devices->begin();
-            it != devices->end() && !have; ++it) {
-
-        if ((*it)->getType() != Device::Midi)
-            continue;
-
-        InstrumentList instruments = (*it)->getAllInstruments();
-        for (InstrumentList::iterator iit = instruments.begin();
-                iit != instruments.end(); ++iit) {
-
-            if ((*iit)->getId() >= MidiInstrumentBase) {
-                id = (*iit)->getId();
-                have = true;
-                break;
-            }
-        }
-    }
-
-    Composition &comp = m_doc->getComposition();
-    TrackId trackId = comp.getSelectedTrack();
-    Track *track = comp.getTrackById(trackId);
-
-    int pos = 0;
-    if (track) pos = track->getPosition();
-
-    AddTracksDialog dialog(this, pos);
-
-    if (dialog.exec() == QDialog::Accepted) {
-        m_view->slotAddTracks(dialog.getTracks(), id, 
-                              dialog.getInsertPosition());
-    }
+    AddTracksDialog dialog(this);
+    dialog.exec();
 }
 
 void
@@ -6219,7 +6178,7 @@ RosegardenMainWindow::slotDeleteMarker(int id, timeT time, QString name, QString
 void
 RosegardenMainWindow::slotDocumentModified(bool m)
 {
-    RG_DEBUG << "slotDocumentModified(" << m << ") - doc path = " << m_doc->getAbsFilePath();
+    //RG_DEBUG << "slotDocumentModified(" << m << ") - doc path = " << m_doc->getAbsFilePath();
 
     if (!m_doc->getAbsFilePath().isEmpty()) {
         slotStateChanged("saved_file_modified", m);
