@@ -101,9 +101,6 @@ void checkFile(const QString &fileName, const QString &baseline)
     
     // Make sure the same number of lines were compared.
     QCOMPARE(actual.count(), expected.count());
-
-    // All good, clean up
-    QFile::remove(fileName);
 }
 
 void TestLilypondExport::testEmptyDocument()
@@ -128,6 +125,9 @@ void TestLilypondExport::testEmptyDocument()
 
     // ... and the output file should match "empty.ly"
     checkFile(fileName, QFINDTESTDATA("baseline/empty.ly"));
+
+    // Clean up.
+    QFile::remove(fileName);
 }
 
 void TestLilypondExport::testExamples_data()
@@ -260,6 +260,9 @@ void TestLilypondExport::testExamples()
 
     // Compare the .ly file that was generated with the baseline file.
     checkFile(fileName, expected);
+
+    // Clean up.
+    QFile::remove(fileName);
 }
 
 QTEST_MAIN(TestLilypondExport)

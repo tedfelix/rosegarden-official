@@ -20,6 +20,7 @@ RG_UNIT_TESTS(
    reference_segment
    utf8
    testmisc
+   convert
 )
 
 add_subdirectory(lilypond)
