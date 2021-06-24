@@ -92,6 +92,9 @@
 
   <Menu name="settings">
     <text>&amp;View</text>
+      <!--
+      <Action name="debug_dump_segments" text="Dump segments" />
+      -->
       <Action name="view_doc_properties" text="Document P&amp;roperties..." />
       <Separator/>
     <Menu name="toolbars" append="show_merge">

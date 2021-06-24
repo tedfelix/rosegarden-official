@@ -2572,6 +2572,7 @@ Composition::dump() const
                 << " - track id : " << s->getTrack()
                 << " - label : " << s->getLabel();
                 //<< " - verse : " << s->getVerse()
+        RG_DEBUG << *s;
     }
 }
 
