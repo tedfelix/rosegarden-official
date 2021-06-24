@@ -13,19 +13,18 @@
 using namespace Rosegarden;
 
 // Unit test for lilypond export
-
 class TestLilypondExport : public QObject
 {
     Q_OBJECT
 
 private Q_SLOTS:
     // QTest special functions...
+    
     // Called once.
     void initTestCase();
-    // Called before every test.
-    void init();
 
     // Our test functions.
+    
     void testEmptyDocument();
 
     // Data-driven testing against the example .rg files.
@@ -41,19 +40,13 @@ void TestLilypondExport::initTestCase()
     // We certainly don't want to mess up the user's QSettings or allow
     // the user's QSettings to affect the tests.  Use a separate file.
     QCoreApplication::setApplicationName("test_lilypond_export");
-}
 
-void TestLilypondExport::init()
-{
     // Change the settings so that they are consistent and not affected
     // by defaults.
-    // ??? Can't we move this to initTestCase() and get the same effect?
-    //     I don't think we need to be doing this for every test case.
     QSettings settings;
     settings.beginGroup(LilyPondExportConfigGroup);
     settings.setValue("lilyfontsize", 12); // the default of 26 is really huge!
-    settings.setValue("lilyexportbeamings", false);
-    settings.endGroup();
+    settings.setValue("lilyexportbeamings", true);
 }
 
 // Read an entire file line-by-line.
@@ -62,14 +55,18 @@ void TestLilypondExport::init()
 QList<QByteArray> readLines(const QString &fileName)
 {
     QList<QByteArray> lines;
+
     QFile file(fileName);
     if (!file.open(QIODevice::ReadOnly)) {
         qWarning() << "Couldn't open" << fileName;
-    } else {
-        while (!file.atEnd()) {
-            lines.append(file.readLine());
-        }
+        return lines;
     }
+
+    // Read the entire file into lines.
+    while (!file.atEnd()) {
+        lines.append(file.readLine());
+    }
+
     return lines;
 }
 
@@ -112,7 +109,12 @@ void checkFile(const QString &fileName, const QString &baseline)
 void TestLilypondExport::testEmptyDocument()
 {
     // GIVEN a document and a lilypond exporter
-    RosegardenDocument doc(nullptr, {}, true /*skip autoload*/, true, false /*no sound*/);
+    RosegardenDocument doc(
+            nullptr,  // parent
+            {},  // audioPluginManager
+            true,  // skipAutoload
+            true,  // clearCommandHistory
+            false);  // enableSound
     const QString fileName = "out.ly";
     LilyPondExporter exporter(&doc, SegmentSelection(), qstrtostr(fileName));
 
@@ -121,22 +123,12 @@ void TestLilypondExport::testEmptyDocument()
 
     // THEN it should produce the file but return false and a warning message
     QVERIFY(!result);
-    QCOMPARE(exporter.getMessage(), QString("Export succeeded, but the composition was empty."));
+    QCOMPARE(exporter.getMessage(),
+             QString("Export succeeded, but the composition was empty."));
 
     // ... and the output file should match "empty.ly"
     checkFile(fileName, QFINDTESTDATA("baseline/empty.ly"));
 }
-
-// ??? Why do we have this?  We never use anything other than
-//     ExportBeaming.  This can be removed.
-enum Option {
-    NoOptions = 0,
-    ExportBeaming
-};
-Q_DECLARE_FLAGS(Options, Option)
-Q_DECLARE_OPERATORS_FOR_FLAGS(Options)
-Q_DECLARE_METATYPE(Options)
-Options defaultOptions(ExportBeaming);
 
 void TestLilypondExport::testExamples_data()
 {
@@ -203,31 +195,45 @@ void TestLilypondExport::testExamples()
     QFETCH(QString, baseDir);
 
     // GIVEN
-    const QString input = QFINDTESTDATA("../../data/" + baseDir + "/" + baseName + ".rg");
+    const QString input =
+            QFINDTESTDATA("../../data/" + baseDir + "/" + baseName + ".rg");
     QVERIFY(!input.isEmpty()); // file not found
+
     const QString expected = QFINDTESTDATA("baseline/" + baseName + ".ly");
 
     const QString fileName = baseName + ".ly";
     qDebug() << "Loading" << input << "and exporting to" << fileName;
 
-    // ??? Again, why over and over.  Why not just at init?
-    QSettings settings;
-    settings.beginGroup(LilyPondExportConfigGroup);
-    settings.setValue("lilyexportbeamings", true);
-    settings.endGroup();
+    // Load the .rg file.
 
-    RosegardenDocument doc(nullptr, {}, true /*skip autoload*/, true, false /*no sequencer*/);
-    doc.openDocument(input, false /*not permanent, i.e. don't create midi devices*/, true /*no progress dlg*/);
-    LilyPondExporter exporter(&doc, SegmentSelection(), qstrtostr(fileName));
+    RosegardenDocument doc(
+            nullptr,  // parent
+            {},  // audioPluginManager
+            true,  // skipAutoload
+            true,  // clearCommandHistory
+            false);  // enableSound
+
+    doc.openDocument(
+            input,  // filename
+            false,  // permanent (false => no MIDI devices)
+            true);  // squelchProgressDialog
+
+    // Export the .ly file.
+
+    LilyPondExporter exporter(
+            &doc,  // doc
+            SegmentSelection(),  // selection
+            qstrtostr(fileName));  // fileName
 
     // WHEN
     QVERIFY(exporter.write());
 
     // THEN
-    if (expected.isEmpty()) {
-        // No baseline yet.
 
-        // Use lilypond to check this file compiles before we add it to our baseline
+    // If there is no baseline yet, create it.
+    if (expected.isEmpty()) {
+        // Use lilypond to check this file compiles before we add it to
+        // our baseline
         QProcess proc;
         proc.start("lilypond", QStringList() << "--ps" << fileName);
         proc.waitForStarted();
@@ -237,7 +243,7 @@ void TestLilypondExport::testExamples()
             qWarning() << "Generated file" << fileName << "does NOT compile!";
         }
 
-        qWarning() << "*********** GENERATING NEW BASELINE FILE (remember to add it to SVN) ***********";
+        qWarning() << "*********** GENERATING NEW BASELINE FILE (remember to add it to git) ***********";
         QFile in(fileName);
         QVERIFY(in.open(QIODevice::ReadOnly));
         QFile out(QFile::decodeName(SRCDIR) + "/baseline/" + baseName + ".ly");
@@ -246,13 +252,17 @@ void TestLilypondExport::testExamples()
         while (!in.atEnd()) {
             out.write(in.readLine());
         }
-        QVERIFY(false); // make the test fail, so developers add the baseline to SVN and try again
+
+        // Make the test fail.  So developers add the baseline to git
+        // and try again.
+        QVERIFY(false);
     }
 
-    // Compare generated file with expected file
+    // Compare the .ly file that was generated with the baseline file.
     checkFile(fileName, expected);
 }
 
 QTEST_MAIN(TestLilypondExport)
 
 #include "lilypond_export_test.moc"
+
