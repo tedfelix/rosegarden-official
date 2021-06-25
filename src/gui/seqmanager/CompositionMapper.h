@@ -75,9 +75,8 @@ private:
 
     /// Passed to the SegmentMapper objects that are created.
     /**
-     * We keep this so that we can have it even if there is no window.
-     * DO NOT be tempted to call RosegardenMainWindow::getDocument() instead.
-     * That will break command line file conversion (--convert).
+     * Now that we have RosegardenDocument::currentDocument and it is properly
+     * set by main.cpp:convert(), we can get rid of this.
      */
     RosegardenDocument *m_doc;
 };

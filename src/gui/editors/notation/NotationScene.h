@@ -110,7 +110,6 @@ public:
     NotationHLayout *getHLayout() { return m_hlayout; }
     NotationVLayout *getVLayout() { return m_vlayout; }
     NotationProperties &getProperties() { return *m_properties; }
-    RosegardenDocument *getDocument() { return m_document; }
     NotePixmapFactory *getNotePixmapFactory() { return m_notePixmapFactory; }
 
     EventSelection *getSelection() const override { return m_selection; }

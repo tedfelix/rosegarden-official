@@ -330,7 +330,7 @@ ExternalController::slotDocumentModified(bool)
         if (activeWindow != Main)
             return;
 
-        RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
+        RosegardenDocument *doc = RosegardenDocument::currentDocument;
 
         // Get the selected Track's Instrument.
         InstrumentId instrumentId =

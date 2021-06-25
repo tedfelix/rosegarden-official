@@ -931,7 +931,7 @@ StaffHeader::slotShowInconsistencies()
     QString str = tr("<h2>Notation Inconsistencies</h2>");
        
     str += tr("<h3>Filename: %1 </h3>")
-             .arg(RosegardenMainWindow::self()->getDocument()->getTitle());
+             .arg(RosegardenDocument::currentDocument->getTitle());
 
     str += tr("<h3>Track %1: \"%2\"</h3>").arg(trackPos + 1)
                                           .arg(strtoqstr(track->getLabel()));

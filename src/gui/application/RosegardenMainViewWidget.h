@@ -95,16 +95,6 @@ public:
      */
     ~RosegardenMainViewWidget() override;
 
-    /**
-     * returns a pointer to the document connected to the view
-     * instance. Mind that this method requires a RosegardenMainWindow
-     * instance as a parent widget to get to the window document
-     * pointer by calling the RosegardenMainWindow::getDocument() method.
-     *
-     * @see RosegardenMainWindow#getDocument
-     */
-    RosegardenDocument* getDocument() const;
-
     TrackEditor* getTrackEditor() { return m_trackEditor; }
 
     // the following aren't slots because they're called from

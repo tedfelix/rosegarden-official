@@ -56,7 +56,6 @@ set(rg_CPPS
   document/BasicCommand.cpp
   document/RoseXmlHandler.cpp
   document/CommandRegistry.cpp
-  document/DocumentGet.cpp
   document/io/XMLReader.cpp
   document/io/XMLHandler.cpp
   document/io/PercussionMap.cpp

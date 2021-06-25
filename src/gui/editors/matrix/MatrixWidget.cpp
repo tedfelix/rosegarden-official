@@ -346,7 +346,7 @@ MatrixWidget::MatrixWidget(bool drumMode) :
     // to the left are always highlighted to show which note we are on.
     m_view->setMouseTracking(true);
 
-    connect(RosegardenMainWindow::self()->getDocument(),
+    connect(RosegardenDocument::currentDocument,
                 &RosegardenDocument::documentModified,
             this, &MatrixWidget::slotDocumentModified);
 

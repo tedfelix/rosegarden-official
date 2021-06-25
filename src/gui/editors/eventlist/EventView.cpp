@@ -239,7 +239,7 @@ EventView::EventView(RosegardenDocument *doc,
     }
 
     updateViewCaption();
-    connect(getDocument(), &RosegardenDocument::documentModified,
+    connect(RosegardenDocument::currentDocument, &RosegardenDocument::documentModified,
             this, &EventView::updateWindowTitle);
 
     for (unsigned int i = 0; i < m_segments.size(); ++i) {
@@ -711,7 +711,7 @@ EventView::makeTimeString(timeT time, int timeMode)
     case 0:  // musical time
         {
             int bar, beat, fraction, remainder;
-            getDocument()->getComposition().getMusicalTimeForAbsoluteTime
+            RosegardenDocument::currentDocument->getComposition().getMusicalTimeForAbsoluteTime
             (time, bar, beat, fraction, remainder);
             ++bar;
             return QString("%1%2%3-%4%5-%6%7-%8%9   ")
@@ -729,7 +729,7 @@ EventView::makeTimeString(timeT time, int timeMode)
     case 1:  // real time
         {
             RealTime rt =
-                getDocument()->getComposition().getElapsedRealTime(time);
+                RosegardenDocument::currentDocument->getComposition().getElapsedRealTime(time);
             //    return QString("%1  ").arg(rt.toString().c_str());
             return QString("%1  ").arg(rt.toText().c_str());
         }
@@ -748,7 +748,7 @@ EventView::makeDurationString(timeT time,
     case 0:  // musical time
         {
             int bar, beat, fraction, remainder;
-            getDocument()->getComposition().getMusicalTimeForDuration
+            RosegardenDocument::currentDocument->getComposition().getMusicalTimeForDuration
             (time, duration, bar, beat, fraction, remainder);
             return QString("%1%2%3-%4%5-%6%7-%8%9   ")
                    .arg(bar / 100)
@@ -765,7 +765,7 @@ EventView::makeDurationString(timeT time,
     case 1:  // real time
         {
             RealTime rt =
-                getDocument()->getComposition().getRealTimeDifference
+                RosegardenDocument::currentDocument->getComposition().getRealTimeDifference
                 (time, time + duration);
             //    return QString("%1  ").arg(rt.toString().c_str());
             return QString("%1  ").arg(rt.toText().c_str());
@@ -823,7 +823,7 @@ EventView::slotEditTriggerPitch()
 
     if (dlg->exec() == QDialog::Accepted) {
         addCommandToHistory(new SetTriggerSegmentBasePitchCommand
-                            (&getDocument()->getComposition(), id, dlg->getPitch()));
+                            (&RosegardenDocument::currentDocument->getComposition(), id, dlg->getPitch()));
         m_triggerPitch->setText(QString("%1").arg(dlg->getPitch()));
     }
 }
@@ -841,7 +841,7 @@ EventView::slotEditTriggerVelocity()
 
     if (dlg->exec() == QDialog::Accepted) {
         addCommandToHistory(new SetTriggerSegmentBaseVelocityCommand
-                            (&getDocument()->getComposition(), id, dlg->getVelocity()));
+                            (&RosegardenDocument::currentDocument->getComposition(), id, dlg->getVelocity()));
         m_triggerVelocity->setText(QString("%1").arg(dlg->getVelocity()));
     }
 }
@@ -876,7 +876,7 @@ EventView::slotTriggerTimeAdjustChanged(int option)
         m_segments[0]->getComposition()->getTriggerSegmentRec(id);
 
     addCommandToHistory(new SetTriggerSegmentDefaultTimeAdjustCommand
-                        (&getDocument()->getComposition(), id, adjust));
+                        (&RosegardenDocument::currentDocument->getComposition(), id, adjust));
 }
 
 void
@@ -888,7 +888,7 @@ EventView::slotTriggerRetuneChanged()
         m_segments[0]->getComposition()->getTriggerSegmentRec(id);
 
     addCommandToHistory(new SetTriggerSegmentDefaultRetuneCommand
-                        (&getDocument()->getComposition(), id, !rec->getDefaultRetune()));
+                        (&RosegardenDocument::currentDocument->getComposition(), id, !rec->getDefaultRetune()));
 }
 
 void
@@ -1121,7 +1121,7 @@ EventView::slotEditInsert()
 
     SimpleEventEditDialog dialog(
             this,
-            getDocument(),
+            RosegardenDocument::currentDocument,
             event,
             true);  // inserting
 
@@ -1167,7 +1167,7 @@ EventView::slotEditEvent()
 
     SimpleEventEditDialog dialog(
             this,
-            getDocument(),
+            RosegardenDocument::currentDocument,
             *event,
             false);  // inserting
 
@@ -1481,7 +1481,7 @@ EventView::slotPopupEventEditor(QTreeWidgetItem *item, int /* column */)
 
     SimpleEventEditDialog dialog(
                     this,  // parent
-                    getDocument(),
+                    RosegardenDocument::currentDocument,
                     *event,
                     false);  // inserting
 
@@ -1564,7 +1564,7 @@ EventView::slotOpenInEventEditor(bool /* checked */)
 
     SimpleEventEditDialog dialog(
             this,
-            getDocument(),
+            RosegardenDocument::currentDocument,
             *event,
             false);  // inserting
 
@@ -1640,7 +1640,7 @@ EventView::updateWindowTitle(bool m)
 
         setWindowTitle(tr("%1%2 - Triggered Segment: %3")
                        .arg(indicator)
-                       .arg(getDocument()->getTitle())
+                       .arg(RosegardenDocument::currentDocument->getTitle())
                        .arg(strtoqstr(m_segments[0]->getLabel())));
 
 

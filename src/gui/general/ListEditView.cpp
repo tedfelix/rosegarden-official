@@ -285,13 +285,13 @@ void ListEditView::initSegmentRefreshStatusIds()
 
 bool ListEditView::isCompositionModified()
 {
-    return getDocument()->getComposition().getRefreshStatus
+    return RosegardenDocument::currentDocument->getComposition().getRefreshStatus
            (m_compositionRefreshStatusId).needsRefresh();
 }
 
 void ListEditView::setCompositionModified(bool c)
 {
-    getDocument()->getComposition().getRefreshStatus
+    RosegardenDocument::currentDocument->getComposition().getRefreshStatus
     (m_compositionRefreshStatusId).setNeedsRefresh(c);
 }
 

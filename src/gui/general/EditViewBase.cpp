@@ -149,7 +149,7 @@ void EditViewBase::setupBaseActions(bool haveClipboard)
 void EditViewBase::slotConfigure()
 {
     ConfigureDialog *configDlg =
-        new ConfigureDialog(getDocument(), this);
+        new ConfigureDialog(RosegardenDocument::currentDocument, this);
 
     configDlg->show();
 }
@@ -260,9 +260,9 @@ void
 EditViewBase::slotToggleSolo()
 {
     // Select the track for this segment.
-    getDocument()->getComposition().setSelectedTrack(
+    RosegardenDocument::currentDocument->getComposition().setSelectedTrack(
             getCurrentSegment()->getTrack());
-    getDocument()->getComposition().notifyTrackSelectionChanged(
+    RosegardenDocument::currentDocument->getComposition().notifyTrackSelectionChanged(
             getCurrentSegment()->getTrack());
     // Old notification mechanism.
     emit selectTrack(getCurrentSegment()->getTrack());
@@ -280,14 +280,14 @@ EditViewBase::slotSetSegmentStartTime()
         return ;
 
     TimeDialog dialog(this, tr("Segment Start Time"),
-                      &getDocument()->getComposition(),
+                      &RosegardenDocument::currentDocument->getComposition(),
                       s->getStartTime(), false);
 
     if (dialog.exec() == QDialog::Accepted) {
 
         SegmentReconfigureCommand *command =
             new SegmentReconfigureCommand(tr("Set Segment Start Time"),
-                    &getDocument()->getComposition());
+                    &RosegardenDocument::currentDocument->getComposition());
 
         command->addSegment
         (s, dialog.getTime(),
@@ -306,7 +306,7 @@ EditViewBase::slotSetSegmentDuration()
         return ;
 
     TimeDialog dialog(this, tr("Segment Duration"),
-                      &getDocument()->getComposition(),
+                      &RosegardenDocument::currentDocument->getComposition(),
                       s->getStartTime(),
                       s->getEndMarkerTime() - s->getStartTime(), 
                       Note(Note::Shortest).getDuration(), false);
@@ -315,7 +315,7 @@ EditViewBase::slotSetSegmentDuration()
 
         SegmentReconfigureCommand *command =
             new SegmentReconfigureCommand(tr("Set Segment Duration"),
-                    &getDocument()->getComposition());
+                    &RosegardenDocument::currentDocument->getComposition());
 
         command->addSegment
         (s, s->getStartTime(),
@@ -368,21 +368,21 @@ EditViewBase::getTitle(const QString& view)
         }
         title = tr("%1%2 - Segment%3Track%4#%5 - %6")
             .arg(indicator)
-            .arg(getDocument()->getTitle())
+            .arg(RosegardenDocument::currentDocument->getTitle())
             .arg(segLabel)
             .arg(trkLabel)
             .arg(trackPosition + 1)
             .arg(view);
     } else if (m_segments.size() ==
-               getDocument()->getComposition().getNbSegments()) {
+               RosegardenDocument::currentDocument->getComposition().getNbSegments()) {
         title = tr("%1%2 - All Segments - %3")
             .arg(indicator)
-            .arg(getDocument()->getTitle())
+            .arg(RosegardenDocument::currentDocument->getTitle())
             .arg(view);
     } else {
         title = tr("%1%2 - %3 Segment(s) - %4")
             .arg(indicator)
-            .arg(getDocument()->getTitle())
+            .arg(RosegardenDocument::currentDocument->getTitle())
             .arg(m_segments.size())
             .arg(view);
     }

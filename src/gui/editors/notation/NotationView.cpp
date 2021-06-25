@@ -1892,7 +1892,7 @@ NotationView::slotPreviewSelection()
     if (!getSelection())
         return ;
 
-    getDocument()->slotSetLoop(getSelection()->getStartTime(),
+    RosegardenDocument::currentDocument->slotSetLoop(getSelection()->getStartTime(),
                                getSelection()->getEndTime());
 }
 
@@ -2081,7 +2081,7 @@ NotationView::slotPlaceControllers()
     if (!cp) { return; }
 
     const Instrument *instrument =
-        getDocument()->getInstrument(getCurrentSegment());
+        RosegardenDocument::currentDocument->getInstrument(getCurrentSegment());
     if (!instrument) { return; }
     
     PlaceControllersCommand *command =
@@ -2094,7 +2094,7 @@ NotationView::slotPlaceControllers()
 void
 NotationView::slotClearLoop()
 {
-    getDocument()->slotSetLoop(0, 0);
+    RosegardenDocument::currentDocument->slotSetLoop(0, 0);
 }
 
 void
@@ -2591,7 +2591,7 @@ NotationView::initializeNoteRestInserter()
     // Set Default Duration based on Time Signature denominator.
     // The default unitType is taken from the denominator of the time signature:
     //   e.g. 4/4 -> 1/4, 6/8 -> 1/8, 2/2 -> 1/2.
-    TimeSignature sig = getDocument()->getComposition().getTimeSignatureAt(getInsertionTime());
+    TimeSignature sig = RosegardenDocument::currentDocument->getComposition().getTimeSignatureAt(getInsertionTime());
     Note::Type unitType = sig.getUnit();
 
     QString actionName = NotationStrings::getReferenceName(Note(unitType,0));
@@ -3182,7 +3182,7 @@ NotationView::slotTransformsInterpret()
         CommandHistory::getInstance()->addCommand
             (new InterpretCommand
              (*selection,
-              getDocument()->getComposition().getNotationQuantizer(),
+              RosegardenDocument::currentDocument->getComposition().getNotationQuantizer(),
               dialog.getInterpretations()));
     }
 }
@@ -3240,7 +3240,7 @@ NotationView::slotMakeOrnament()
 
     CommandHistory::getInstance()->
         addCommand(new CutToTriggerSegmentCommand
-                   (getSelection(), getDocument()->getComposition(),
+                   (getSelection(), RosegardenDocument::currentDocument->getComposition(),
                     name, basePitch, baseVelocity,
                     style->getName(), true,
                     BaseProperties::TRIGGER_SEGMENT_ADJUST_NONE,
@@ -3255,7 +3255,7 @@ NotationView::slotUseOrnament()
     if (!getSelection())
         return ;
 
-    UseOrnamentDialog dialog(this, &getDocument()->getComposition());
+    UseOrnamentDialog dialog(this, &RosegardenDocument::currentDocument->getComposition());
     if (dialog.exec() != QDialog::Accepted)
         return ;
 
@@ -3296,7 +3296,7 @@ void
 NotationView::EditOrnamentInline(Event *trigger, Segment *containing)
 {
     TriggerSegmentRec *rec =
-        getDocument()->getComposition().getTriggerSegmentRec(trigger);
+        RosegardenDocument::currentDocument->getComposition().getTriggerSegmentRec(trigger);
     
     if (!rec) { return; }
     Segment *link = rec->makeLinkedSegment(trigger, containing);
@@ -3308,7 +3308,7 @@ NotationView::EditOrnamentInline(Event *trigger, Segment *containing)
     // The same track the host segment had
     link->setTrack(containing->getTrack());
     // Give it a composition so it doesn't get into trouble.
-    link->setComposition(&getDocument()->getComposition());
+    link->setComposition(&RosegardenDocument::currentDocument->getComposition());
 
     // Adopt it into the view.
     CommandHistory::getInstance()->addCommand
@@ -3321,9 +3321,9 @@ void
 NotationView::ShowOrnamentExpansion(Event *trigger, Segment *containing)
 {
     TriggerSegmentRec *rec =
-        getDocument()->getComposition().getTriggerSegmentRec(trigger);
+        RosegardenDocument::currentDocument->getComposition().getTriggerSegmentRec(trigger);
     if (!rec) { return; }
-    Instrument *instrument = getDocument()->getInstrument(containing);
+    Instrument *instrument = RosegardenDocument::currentDocument->getInstrument(containing);
 
     Segment *s =
         rec->makeExpansion(trigger, containing, instrument);
@@ -3334,7 +3334,7 @@ NotationView::ShowOrnamentExpansion(Event *trigger, Segment *containing)
     s->setGreyOut();
     // The same track the host segment had
     s->setTrack(containing->getTrack());
-    s->setComposition(&getDocument()->getComposition());
+    s->setComposition(&RosegardenDocument::currentDocument->getComposition());
     s->normalizeRests(s->getStartTime(), s->getEndTime());
 
     // Adopt it into the view.
@@ -3504,7 +3504,7 @@ NotationView::slotEditAddKeySignature()
         if (applyToAll) {
             CommandHistory::getInstance()->addCommand(
                     new MultiKeyInsertionCommand(
-                            getDocument(),
+                            RosegardenDocument::currentDocument,
                             insertionTime, dialog.getKey(),
                             conversion == KeySignatureDialog::Convert,
                             conversion == KeySignatureDialog::Transpose,
@@ -3529,7 +3529,7 @@ NotationView::slotEditAddSustain(bool down)
     Segment *segment = getCurrentSegment();
     timeT insertionTime = getInsertionTime();
 
-    Studio *studio = &getDocument()->getStudio();
+    Studio *studio = &RosegardenDocument::currentDocument->getStudio();
     Track *track = segment->getComposition()->getTrackById(segment->getTrack());
 
     if (track) {
@@ -3608,7 +3608,7 @@ NotationView::slotEditSwitchPreset()
     
     if (dialog.getConvertAllSegments()) {
         // get all segments for this track and convert them.
-        Composition& comp = getDocument()->getComposition();
+        Composition& comp = RosegardenDocument::currentDocument->getComposition();
         TrackId selectedTrack = getCurrentSegment()->getTrack();
 
         // satisfy #1885251 the way that seems most reasonble to me at the
@@ -4083,7 +4083,7 @@ NotationView::slotRescale()
 
     RescaleDialog dialog
     (this,
-     &getDocument()->getComposition(),
+     &RosegardenDocument::currentDocument->getComposition(),
      getSelection()->getStartTime(),
      getSelection()->getEndTime() -
          getSelection()->getStartTime(),
@@ -4496,11 +4496,11 @@ NotationView::slotHoveredOverAbsoluteTimeChanged(unsigned int time)
 {
     timeT t = time;
     RealTime rt =
-        getDocument()->getComposition().getElapsedRealTime(t);
+        RosegardenDocument::currentDocument->getComposition().getElapsedRealTime(t);
     long ms = rt.msec();
 
     int bar, beat, fraction, remainder;
-    getDocument()->getComposition().getMusicalTimeForAbsoluteTime
+    RosegardenDocument::currentDocument->getComposition().getMusicalTimeForAbsoluteTime
         (t, bar, beat, fraction, remainder);
 
     //    QString message;
@@ -4887,7 +4887,7 @@ NotationView::slotEditElement(NotationStaff *staff,
 
     } else {
 
-        SimpleEventEditDialog dialog(this, getDocument(), *element->event(), false);
+        SimpleEventEditDialog dialog(this, RosegardenDocument::currentDocument, *element->event(), false);
 
         if (dialog.exec() == QDialog::Accepted &&
             dialog.isModified()) {
@@ -5188,7 +5188,7 @@ NotationView::slotAddLayer()
     // wings.
     slotSetNoteRestInserter();
 
-    Composition& comp = getDocument()->getComposition();
+    Composition& comp = RosegardenDocument::currentDocument->getComposition();
 
     MacroCommand *macro = new MacroCommand(tr("New Layer"));
 
@@ -5258,7 +5258,7 @@ NotationView::slotNewLayerFromSelection()
 
     MacroCommand *macro = new MacroCommand(tr("New Layer from Selection"));
 
-    Composition& comp = getDocument()->getComposition();
+    Composition& comp = RosegardenDocument::currentDocument->getComposition();
     // make a new "layer" segment
     AddLayerCommand *command = new AddLayerCommand(currentSegment, comp);
     macro->addCommand(command);
@@ -5312,7 +5312,7 @@ NotationView::slotNewLayerFromSelection()
 void
 NotationView::slotConfigure()
 {
-    ConfigureDialog *configDlg =  new ConfigureDialog(getDocument(), this);
+    ConfigureDialog *configDlg =  new ConfigureDialog(RosegardenDocument::currentDocument, this);
 
     configDlg->setNotationPage();
     configDlg->show();
@@ -5386,7 +5386,7 @@ NotationView::slotInterpretActivate()
     // though it were the dialog
     CommandHistory::getInstance()->addCommand(new InterpretCommand
          (*selection,
-          getDocument()->getComposition().getNotationQuantizer(),
+          RosegardenDocument::currentDocument->getComposition().getNotationQuantizer(),
           flags));
 }
 

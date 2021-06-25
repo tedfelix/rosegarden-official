@@ -111,10 +111,15 @@
 #include <QHostInfo>
 #include <QLockFile>
 
+// ??? Get rid of this.
+using namespace Rosegarden::BaseProperties;
+
+
 namespace Rosegarden
 {
 
-using namespace BaseProperties;
+
+RosegardenDocument *RosegardenDocument::currentDocument{};
 
 RosegardenDocument::RosegardenDocument(
         QObject *parent,

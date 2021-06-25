@@ -1046,7 +1046,7 @@ MatrixView::slotPlaceControllers()
     if (!cp) { return; }
 
     const Instrument *instrument =
-        getDocument()->getInstrument(getCurrentSegment());
+        RosegardenDocument::currentDocument->getInstrument(getCurrentSegment());
     if (!instrument) { return; }
     
     PlaceControllersCommand *command =
@@ -1258,7 +1258,7 @@ void MatrixView::slotAddTempo()
 {
     timeT insertionTime = getInsertionTime();
 
-    TempoDialog tempoDlg(this, getDocument());
+    TempoDialog tempoDlg(this, RosegardenDocument::currentDocument);
 
     connect(&tempoDlg,
              SIGNAL(changeTempo(timeT,
@@ -1360,7 +1360,7 @@ void MatrixView::slotRescale()
     if (!selection) return;
 
     RescaleDialog dialog(this,
-                         &getDocument()->getComposition(),
+                         &RosegardenDocument::currentDocument->getComposition(),
                          selection->getStartTime(),
                          selection->getEndTime() -
                              selection->getStartTime(),
@@ -2208,7 +2208,7 @@ MatrixView::slotEditAddKeySignature()
         if (applyToAll) {
             CommandHistory::getInstance()->addCommand(
                     new MultiKeyInsertionCommand(
-                            getDocument(),
+                            RosegardenDocument::currentDocument,
                             insertionTime, dialog.getKey(),
                             conversion == KeySignatureDialog::Convert,
                             conversion == KeySignatureDialog::Transpose,

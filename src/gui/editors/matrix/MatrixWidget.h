@@ -295,7 +295,7 @@ private slots:
 
 private:
     // ??? Instead of storing the document, which can change, get the
-    //     document as needed via RosegardenMainWindow::self()->getDocument().
+    //     document as needed via RosegardenDocument::currentDocument.
     RosegardenDocument *m_document; // I do not own this
 
     QGridLayout *m_layout; // I own this

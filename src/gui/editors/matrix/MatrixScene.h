@@ -86,8 +86,6 @@ public:
     void handleEventAdded(Event *);
     void handleEventRemoved(Event *);
 
-    RosegardenDocument *getDocument() { return m_document; }
-
     EventSelection *getSelection() const override { return m_selection; }
     void setSelection(EventSelection* s, bool preview) override;
     void selectAll();

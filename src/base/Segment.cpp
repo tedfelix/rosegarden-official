@@ -23,7 +23,7 @@
 #include "BasicQuantizer.h"
 #include "base/Profiler.h"
 #include "base/SegmentLinker.h"
-#include "document/DocumentGet.h"
+#include "document/RosegardenDocument.h"
 #include "gui/general/GUIPalette.h"
 #include "misc/Debug.h"
 
@@ -1692,7 +1692,7 @@ SegmentMultiSet&
 Segment::
 getCompositionSegments()
 {
-    Composition* composition = DocumentGet::getComposition();
+    Composition* composition = &RosegardenDocument::currentDocument->getComposition();
     return composition->getSegments();
 }
 

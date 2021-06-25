@@ -60,7 +60,7 @@ ColorCombo::updateColors()
 
     clear();
 
-    RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
+    RosegardenDocument *doc = RosegardenDocument::currentDocument;
     if (!doc)
         return;
 

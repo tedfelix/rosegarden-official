@@ -73,12 +73,16 @@ static const int MERGE_KEEP_NEW_TIMINGS = (1 << 3);
   * objects. Also, RosegardenDocument contains the methods for
   * serialization of the document data from and to files.
   *
-  * An instance of RosegardenDocument is owned by RosegardenMainWindow.
-  * The easiest way to get here without passing pointers around:
+  * The easiest way to get the current document is via the currentDocument
+  * global variable:
   *
-  *   RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
+  *   RosegardenDocument *doc = RosegardenDocument::currentDocument;
   *
-  * RosegardenDocument owns the Composition in the document.
+  * This class owns the following key objects:
+  *
+  *   * The Composition (getComposition())
+  *   * The Studio (getStudio())
+  *
   */
 class ROSEGARDENPRIVATE_EXPORT RosegardenDocument : public QObject
 {
@@ -89,6 +93,7 @@ public:
     /**
      * Constructor for the fileclass of the application
      *
+     * clearCommandHistory
      * Our old command history under KDE didn't get wiped out when creating a
      * temporary document to use alongside the application's current one, but
      * that is no longer the case since Thorn.  We need to be able to avoid
@@ -100,6 +105,21 @@ public:
                        bool skipAutoload = false,
                        bool clearCommandHistory = true,
                        bool enableSound = true);
+
+    /// The current document.
+    /**
+     * RosegardenMainWindow is the primary setter of this.  All throughout
+     * the system we need this, so a global makes perfect sense.
+     *
+     * If we are crashing because this is null, be sure that when a document
+     * is created, this pointer is set.  The rest of the system depends on
+     * it.
+     *
+     * Previously we used to have to #include RosegardenMainWindow and
+     * call RosegardenMainWindow::RosegardenDocument::currentDocument.  Now
+     * just use RosegardenDocument::currentDocument.
+     */
+    static RosegardenDocument *currentDocument;
 
 private:
     RosegardenDocument(const RosegardenDocument &doc);
@@ -698,9 +718,7 @@ private:
      */
     QString m_absFilePath;
 
-    /**
-     * absolute file path of the current document
-     */
+    /// Lock file to prevent multiple users editing at the same time.
     QLockFile *m_lockFile;
 
     /**

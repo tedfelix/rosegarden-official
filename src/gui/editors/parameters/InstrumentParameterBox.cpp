@@ -87,7 +87,7 @@ void InstrumentParameterBox::slotDocumentLoaded(RosegardenDocument *doc)
 
 void InstrumentParameterBox::slotDocumentModified(bool)
 {
-    RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
+    RosegardenDocument *doc = RosegardenDocument::currentDocument;
 
     // Get the selected Track's Instrument.
     InstrumentId instrumentId =

@@ -162,7 +162,7 @@ AudioInstrumentParameterPanel::slotSelectAudioLevel(float dB)
         getSelectedInstrument()->setLevel(dB);
         Instrument::emitControlChange(getSelectedInstrument(),
                                       MIDI_CONTROLLER_VOLUME);
-        RosegardenMainWindow::self()->getDocument()->setModified();
+        RosegardenDocument::currentDocument->setModified();
     }
 }
 
@@ -186,7 +186,7 @@ AudioInstrumentParameterPanel::slotSelectAudioRecordLevel(float dB)
         //     would be whoever should do the setStudioObjectProperty()
         //     below.  See the controlChange() signal and handlers for
         //     more ideas.
-        RosegardenMainWindow::self()->getDocument()->slotDocumentModified();
+        RosegardenDocument::currentDocument->slotDocumentModified();
 
         StudioControl::setStudioObjectProperty
         (MappedObjectId(getSelectedInstrument()->getMappedId()),
@@ -214,7 +214,7 @@ AudioInstrumentParameterPanel::slotPluginSelected(InstrumentId instrumentId,
 
     // updates synth gui button &c:
     m_audioFader->slotSetInstrument(
-            &(RosegardenMainWindow::self()->getDocument()->getStudio()),
+            &(RosegardenDocument::currentDocument->getStudio()),
             getSelectedInstrument());
 
     if (index == (int)Instrument::SYNTH_PLUGIN_POSITION) {
@@ -236,7 +236,7 @@ AudioInstrumentParameterPanel::slotPluginSelected(InstrumentId instrumentId,
     } else {
 
         QSharedPointer<AudioPlugin> pluginClass =
-                RosegardenMainWindow::self()->getDocument()->
+                RosegardenDocument::currentDocument->
                     getPluginManager()->getPlugin(plugin);
 
         if (pluginClass) {
@@ -274,7 +274,7 @@ AudioInstrumentParameterPanel::slotPluginBypassed(InstrumentId instrumentId,
 
     if (inst && inst->isAssigned()) {
         QSharedPointer<AudioPluginManager> pluginMgr =
-                RosegardenMainWindow::self()->getDocument()->getPluginManager();
+                RosegardenDocument::currentDocument->getPluginManager();
         QSharedPointer<AudioPlugin> pluginClass = pluginMgr->getPlugin(
                 pluginMgr->getPositionByIdentifier(
                         inst->getIdentifier().c_str()));
@@ -344,7 +344,7 @@ AudioInstrumentParameterPanel::slotSetPan(float pan)
     getSelectedInstrument()->setPan(MidiByte(pan + 100.0));
     Instrument::emitControlChange(getSelectedInstrument(),
                                   MIDI_CONTROLLER_PAN);
-    RosegardenMainWindow::self()->getDocument()->setModified();
+    RosegardenDocument::currentDocument->setModified();
 }
 
 void
@@ -380,7 +380,7 @@ AudioInstrumentParameterPanel::setupForInstrument(Instrument* instrument)
     m_audioFader->m_fader->setFader(instrument->getLevel());
 
     m_audioFader->slotSetInstrument(
-            &(RosegardenMainWindow::self()->getDocument()->getStudio()),
+            &(RosegardenDocument::currentDocument->getStudio()),
             instrument);
 
     int start = 0;
@@ -409,7 +409,7 @@ AudioInstrumentParameterPanel::setupForInstrument(Instrument* instrument)
 
         if (inst && inst->isAssigned()) {
             QSharedPointer<AudioPluginManager> pluginMgr =
-                    RosegardenMainWindow::self()->getDocument()->
+                    RosegardenDocument::currentDocument->
                         getPluginManager();
             QSharedPointer<AudioPlugin> pluginClass = pluginMgr->getPlugin(
                     pluginMgr->getPositionByIdentifier(
@@ -449,7 +449,7 @@ AudioInstrumentParameterPanel::slotAudioChannels(int channels)
     //RG_DEBUG << "slotAudioChannels() " << "channels = " << channels;
 
     getSelectedInstrument()->setAudioChannels(channels);
-    RosegardenMainWindow::self()->getDocument()->slotDocumentModified();
+    RosegardenDocument::currentDocument->slotDocumentModified();
 
     StudioControl::setStudioObjectProperty
     (MappedObjectId(getSelectedInstrument()->getMappedId()),
@@ -471,7 +471,7 @@ AudioInstrumentParameterPanel::slotSelectPlugin(int index)
 void
 AudioInstrumentParameterPanel::slotAliasChanged()
 {
-    RosegardenMainWindow::self()->getDocument()->slotDocumentModified();
+    RosegardenDocument::currentDocument->slotDocumentModified();
 
     // ??? This is wrong.  We should connect to the
     //     RosegardenDocument::documentModified() signal and refresh
@@ -489,7 +489,7 @@ AudioInstrumentParameterPanel::slotDocumentLoaded(RosegardenDocument *doc)
 void
 AudioInstrumentParameterPanel::slotDocumentModified(bool)
 {
-    RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
+    RosegardenDocument *doc = RosegardenDocument::currentDocument;
 
     // Get the selected Track's Instrument.
     InstrumentId instrumentId =

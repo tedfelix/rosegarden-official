@@ -113,7 +113,7 @@ PasteSegmentsCommand::execute()
         // If the segment is an audio segment
         if ((*i)->getType() == Segment::Audio)
             // If the segment's file ID isn't in the audio file manager
-            if (!RosegardenMainWindow::self()->getDocument()->
+            if (!RosegardenDocument::currentDocument->
                 getAudioFileManager().fileExists((*i)->getAudioFileId())) {
                 // Skip pasting it.
                 continue;

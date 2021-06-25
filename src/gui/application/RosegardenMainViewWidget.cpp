@@ -127,7 +127,7 @@ RosegardenMainViewWidget::RosegardenMainViewWidget(bool showTrackLabels,
         m_trackParameterBox(trackParameterBox)
 {
     setObjectName("View");
-    RosegardenDocument* doc = getDocument();
+    RosegardenDocument* doc = RosegardenDocument::currentDocument;
     Composition *comp = &doc->getComposition();
     QHBoxLayout *layout = new QHBoxLayout;
     layout->setContentsMargins(0, 0, 0, 0);
@@ -225,12 +225,6 @@ RosegardenMainViewWidget::~RosegardenMainViewWidget()
     delete m_rulerScale;
 }
 
-RosegardenDocument*
-RosegardenMainViewWidget::getDocument() const
-{
-    return RosegardenMainWindow::self()->getDocument();
-}
-
 void RosegardenMainViewWidget::selectTool(QString toolName)
 {
     m_trackEditor->getCompositionView()->setTool(toolName);
@@ -261,7 +255,7 @@ RosegardenMainViewWidget::slotEditMetadata(QString name)
     QWidget *w = const_cast<QWidget *>(ww);
 
     DocumentConfigureDialog *configDlg =
-        new DocumentConfigureDialog(getDocument(), w ? w : this);
+        new DocumentConfigureDialog(RosegardenDocument::currentDocument, w ? w : this);
 
     configDlg->selectMetadata(name);
 
@@ -316,12 +310,12 @@ void RosegardenMainViewWidget::slotEditSegment(Segment* segment)
         if (client == GeneralConfigurationPage::MatrixView) {
 
             bool isPercussion = false;
-            Track *track = getDocument()->getComposition().getTrackById
+            Track *track = RosegardenDocument::currentDocument->getComposition().getTrackById
                 (segment->getTrack());
             if (track) {
                 InstrumentId iid = track->getInstrument();
                 Instrument *instrument =
-                    getDocument()->getStudio().getInstrumentById(iid);
+                    RosegardenDocument::currentDocument->getStudio().getInstrumentById(iid);
                 if (instrument && instrument->isPercussion()) isPercussion = true;
             }
 
@@ -404,7 +398,7 @@ NotationView *
 RosegardenMainViewWidget::createNotationView(std::vector<Segment *> segmentsToEdit)
 {
     NotationView *notationView =
-        new NotationView(getDocument(), segmentsToEdit, this);
+        new NotationView(RosegardenDocument::currentDocument, segmentsToEdit, this);
 
     connect(notationView, &EditViewBase::selectTrack,
             this, &RosegardenMainViewWidget::slotSelectTrackSegments);
@@ -442,7 +436,7 @@ RosegardenMainViewWidget::createNotationView(std::vector<Segment *> segmentsToEd
     connect(notationView, &EditViewBase::toggleSolo,
             RosegardenMainWindow::self(), &RosegardenMainWindow::slotToggleSolo);
 
-    SequenceManager *sM = getDocument()->getSequenceManager();
+    SequenceManager *sM = RosegardenDocument::currentDocument->getSequenceManager();
 
     connect(sM, SIGNAL(insertableNoteOnReceived(int, int)),
             notationView, SLOT(slotInsertableNoteOnReceived(int, int)));
@@ -552,7 +546,7 @@ PitchTrackerView *
 RosegardenMainViewWidget::createPitchTrackerView(std::vector<Segment *> segmentsToEdit)
 {
     PitchTrackerView *pitchTrackerView =
-        new PitchTrackerView(getDocument(), segmentsToEdit, this);
+        new PitchTrackerView(RosegardenDocument::currentDocument, segmentsToEdit, this);
 
     connect(pitchTrackerView, &EditViewBase::selectTrack,
             this, &RosegardenMainViewWidget::slotSelectTrackSegments);
@@ -576,7 +570,7 @@ RosegardenMainViewWidget::createPitchTrackerView(std::vector<Segment *> segments
             RosegardenMainWindow::self(), &RosegardenMainWindow::slotFileSave);
 //  This probably is obsolete in Thorn.
 //    connect(pitchTrackerView, SIGNAL(jumpPlaybackTo(timeT)),
-//            getDocument(), SLOT(slotSetPointerPosition(timeT)));
+//            RosegardenDocument::currentDocument, SLOT(slotSetPointerPosition(timeT)));
     connect(pitchTrackerView, SIGNAL(openInNotation(std::vector<Segment *>)),
             this, SLOT(slotEditSegmentsNotation(std::vector<Segment *>)));
     connect(pitchTrackerView, SIGNAL(openInMatrix(std::vector<Segment *>)),
@@ -597,7 +591,7 @@ RosegardenMainViewWidget::createPitchTrackerView(std::vector<Segment *> segments
     connect(pitchTrackerView, &EditViewBase::toggleSolo,
             RosegardenMainWindow::self(), &RosegardenMainWindow::slotToggleSolo);
 
-    SequenceManager *sM = getDocument()->getSequenceManager();
+    SequenceManager *sM = RosegardenDocument::currentDocument->getSequenceManager();
 
     connect(sM, SIGNAL(insertableNoteOnReceived(int, int)),
             pitchTrackerView, SLOT(slotInsertableNoteOnReceived(int, int)));
@@ -747,7 +741,7 @@ void RosegardenMainViewWidget::slotEditSegmentsPercussionMatrix(std::vector<Segm
 MatrixView *
 RosegardenMainViewWidget::createMatrixView(std::vector<Segment *> segmentsToEdit, bool drumMode)
 {
-    MatrixView *matrixView = new MatrixView(getDocument(),
+    MatrixView *matrixView = new MatrixView(RosegardenDocument::currentDocument,
                                                   segmentsToEdit,
                                                   drumMode,
                                                   this);
@@ -785,7 +779,7 @@ RosegardenMainViewWidget::createMatrixView(std::vector<Segment *> segmentsToEdit
     connect(matrixView, &EditViewBase::toggleSolo,
             RosegardenMainWindow::self(), &RosegardenMainWindow::slotToggleSolo);
 
-    SequenceManager *sM = getDocument()->getSequenceManager();
+    SequenceManager *sM = RosegardenDocument::currentDocument->getSequenceManager();
 
     connect(sM, SIGNAL(insertableNoteOnReceived(int, int)),
             matrixView, SLOT(slotInsertableNoteOnReceived(int, int)));
@@ -879,7 +873,7 @@ void RosegardenMainViewWidget::slotEditTriggerSegment(int id)
 
     std::vector<Segment *> segmentsToEdit;
 
-    Segment *s = getDocument()->getComposition().getTriggerSegment(id);
+    Segment *s = RosegardenDocument::currentDocument->getComposition().getTriggerSegment(id);
 
     if (s) {
         segmentsToEdit.push_back(s);
@@ -893,11 +887,11 @@ void RosegardenMainViewWidget::slotEditTriggerSegment(int id)
 
 void RosegardenMainViewWidget::slotSegmentAutoSplit(Segment *segment)
 {
-    AudioSplitDialog aSD(this, segment, getDocument());
+    AudioSplitDialog aSD(this, segment, RosegardenDocument::currentDocument);
 
     if (aSD.exec() == QDialog::Accepted) {
         Command *command =
-            new AudioSegmentAutoSplitCommand(getDocument(),
+            new AudioSegmentAutoSplitCommand(RosegardenDocument::currentDocument,
                                              segment, aSD.getThreshold());
         slotAddCommandToHistory(command);
     }
@@ -939,7 +933,7 @@ void RosegardenMainViewWidget::slotEditSegmentAudio(Segment *segment)
         return;
     }
 
-    AudioFile *aF = getDocument()->getAudioFileManager().
+    AudioFile *aF = RosegardenDocument::currentDocument->getAudioFileManager().
                     getAudioFile(segment->getAudioFileId());
     if (aF == nullptr) {
         RG_WARNING << "slotEditSegmentAudio() - can't find audio file";
@@ -990,7 +984,7 @@ void RosegardenMainViewWidget::setZoomSize(double size)
 
     // Redraw the playback position pointer.
     // Move these lines to a new CompositionView::redrawPointer()?
-    timeT pointerTime = getDocument()->getComposition().getPosition();
+    timeT pointerTime = RosegardenDocument::currentDocument->getComposition().getPosition();
     double pointerXPosition = compositionView->
         grid().getRulerScale()->getXForTime(pointerTime);
     compositionView->drawPointer(pointerXPosition);
@@ -1028,7 +1022,7 @@ void RosegardenMainViewWidget::setZoomSize(double size)
 
 void RosegardenMainViewWidget::slotSelectTrackSegments(int trackId)
 {
-    Composition &comp = getDocument()->getComposition();
+    Composition &comp = RosegardenDocument::currentDocument->getComposition();
     Track *track = comp.getTrackById(trackId);
 
     if (track == nullptr)
@@ -1043,8 +1037,8 @@ void RosegardenMainViewWidget::slotSelectTrackSegments(int trackId)
         // Select all segments on the current track
         // (all the other segments will be deselected)
         for (Composition::iterator i =
-                    getDocument()->getComposition().begin();
-                i != getDocument()->getComposition().end(); ++i) {
+                    RosegardenDocument::currentDocument->getComposition().begin();
+                i != RosegardenDocument::currentDocument->getComposition().end(); ++i) {
             if (((int)(*i)->getTrack()) == trackId)
                 segments.insert(*i);
         }
@@ -1063,8 +1057,8 @@ void RosegardenMainViewWidget::slotSelectTrackSegments(int trackId)
         // Look for already selected segments on this track
         bool noSegSelected = true;
         for (Composition::iterator i =
-                  getDocument()->getComposition().begin();
-              i != getDocument()->getComposition().end(); ++i) {
+                  RosegardenDocument::currentDocument->getComposition().begin();
+              i != RosegardenDocument::currentDocument->getComposition().end(); ++i) {
             if (((int)(*i)->getTrack()) == trackId) {
                 if (segments.count(*i)) {
                     // Segment *i is selected
@@ -1078,8 +1072,8 @@ void RosegardenMainViewWidget::slotSelectTrackSegments(int trackId)
             // Some segments are selected :
             // Deselect all selected segments on this track
             for (Composition::iterator i =
-                     getDocument()->getComposition().begin();
-                 i != getDocument()->getComposition().end(); ++i) {
+                     RosegardenDocument::currentDocument->getComposition().begin();
+                 i != RosegardenDocument::currentDocument->getComposition().end(); ++i) {
                 if (((int)(*i)->getTrack()) == trackId) {
                     if (segments.count(*i)) {
                         // Segment *i is selected
@@ -1094,8 +1088,8 @@ void RosegardenMainViewWidget::slotSelectTrackSegments(int trackId)
             // There is no selected segment on this track :
             // Select all segments on this track
             for (Composition::iterator i =
-                     getDocument()->getComposition().begin();
-                 i != getDocument()->getComposition().end(); ++i) {
+                     RosegardenDocument::currentDocument->getComposition().begin();
+                 i != RosegardenDocument::currentDocument->getComposition().end(); ++i) {
                 if (((int)(*i)->getTrack()) == trackId) {
                     segments.insert(*i);
                 }
@@ -1152,7 +1146,7 @@ void RosegardenMainViewWidget::slotSelectAllSegments()
 {
     SegmentSelection segments;
 
-    Composition &comp = getDocument()->getComposition();
+    Composition &comp = RosegardenDocument::currentDocument->getComposition();
 
     // For each Segment in the Composition
     for (Composition::iterator i = comp.begin(); i != comp.end(); ++i) {
@@ -1211,8 +1205,8 @@ RosegardenMainViewWidget::updateMeters()
     }
 
     for (Composition::trackcontainer::iterator i =
-             getDocument()->getComposition().getTracks().begin();
-         i != getDocument()->getComposition().getTracks().end(); ++i) {
+             RosegardenDocument::currentDocument->getComposition().getTracks().begin();
+         i != RosegardenDocument::currentDocument->getComposition().getTracks().end(); ++i) {
 
         Track *track = i->second;
         if (!track) continue;
@@ -1238,7 +1232,7 @@ RosegardenMainViewWidget::updateMeters()
             continue;
 
         Instrument *instrument =
-            getDocument()->getStudio().getInstrumentById(instrumentId);
+            RosegardenDocument::currentDocument->getStudio().getInstrumentById(instrumentId);
         if (!instrument) continue;
 
         // This records the level of this instrument, not necessarily
@@ -1257,7 +1251,7 @@ RosegardenMainViewWidget::updateMeters()
             bool toSet = false;
 
             if (states[instrumentId] == newState &&
-                (getDocument()->getSequenceManager()->getTransportStatus()
+                (RosegardenDocument::currentDocument->getSequenceManager()->getTransportStatus()
                  != STOPPED)) {
 
                 if (info.level != 0 || info.levelRight != 0) {
@@ -1273,7 +1267,7 @@ RosegardenMainViewWidget::updateMeters()
 
             if (recStates[instrumentId] == newState &&
                 instrument->getType() == Instrument::Audio &&
-                (getDocument()->getSequenceManager()->getTransportStatus()
+                (RosegardenDocument::currentDocument->getSequenceManager()->getTransportStatus()
                  != PLAYING)) {
 
                 if (recInfo.level != 0 || recInfo.levelRight != 0) {
@@ -1286,7 +1280,7 @@ RosegardenMainViewWidget::updateMeters()
             }
 
             if (toSet) {
-                RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
+                RosegardenDocument *doc = RosegardenDocument::currentDocument;
                 Composition &comp = doc->getComposition();
 
                 InstrumentId selectedInstrumentId = comp.getSelectedInstrumentId();
@@ -1313,7 +1307,7 @@ RosegardenMainViewWidget::updateMeters()
             if (info.level == 0)
                 continue;
 
-            if (getDocument()->getSequenceManager()->getTransportStatus()
+            if (RosegardenDocument::currentDocument->getSequenceManager()->getTransportStatus()
                 != STOPPED) {
 
                 // The information in 'info' is specific for this instrument, not
@@ -1336,7 +1330,7 @@ RosegardenMainViewWidget::updateMeters()
 void
 RosegardenMainViewWidget::updateMonitorMeters()
 {
-    RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
+    RosegardenDocument *doc = RosegardenDocument::currentDocument;
     Composition &comp = doc->getComposition();
 
     InstrumentId selectedInstrumentId = comp.getSelectedInstrumentId();
@@ -1407,7 +1401,7 @@ void RosegardenMainViewWidget::slotShowTempoRuler(bool v)
 void RosegardenMainViewWidget::slotShowChordNameRuler(bool v)
 {
     if (v) {
-        m_trackEditor->getChordNameRuler()->setStudio(&getDocument()->getStudio());
+        m_trackEditor->getChordNameRuler()->setStudio(&RosegardenDocument::currentDocument->getStudio());
         m_trackEditor->getChordNameRuler()->show();
     } else {
         m_trackEditor->getChordNameRuler()->hide();
@@ -1463,7 +1457,7 @@ RosegardenMainViewWidget::slotAddAudioSegment(AudioFileId audioId,
                                        const RealTime &endTime)
 {
     AudioSegmentInsertCommand *command =
-        new AudioSegmentInsertCommand(getDocument(),
+        new AudioSegmentInsertCommand(RosegardenDocument::currentDocument,
                                       trackId,
                                       position,
                                       audioId,
@@ -1487,10 +1481,10 @@ RosegardenMainViewWidget::slotAddAudioSegmentCurrentPosition(AudioFileId audioFi
 {
     RG_DEBUG << "slotAddAudioSegmentCurrentPosition(...) - slot firing as ordered, sir!";
 
-    Composition &comp = getDocument()->getComposition();
+    Composition &comp = RosegardenDocument::currentDocument->getComposition();
 
     AudioSegmentInsertCommand *command =
-        new AudioSegmentInsertCommand(getDocument(),
+        new AudioSegmentInsertCommand(RosegardenDocument::currentDocument,
                                       comp.getSelectedTrack(),
                                       comp.getPosition(),
                                       audioFileId,
@@ -1521,8 +1515,8 @@ RosegardenMainViewWidget::slotAddAudioSegmentDefaultPosition(AudioFileId audioFi
     // and-drop) but it should save beginners from inserting an audio
     // segment and being quite unable to work out why it won't play
 
-    Composition &comp = getDocument()->getComposition();
-    Studio &studio = getDocument()->getStudio();
+    Composition &comp = RosegardenDocument::currentDocument->getComposition();
+    Studio &studio = RosegardenDocument::currentDocument->getStudio();
 
     TrackId currentTrackId = comp.getSelectedTrack();
     Track *track = comp.getTrackById(currentTrackId);
@@ -1584,8 +1578,8 @@ void
 RosegardenMainViewWidget::slotDroppedNewAudio(QString audioDesc)
 {
     // If audio is not OK
-    if (getDocument()->getSequenceManager()  &&
-        !(getDocument()->getSequenceManager()->getSoundDriverStatus() & 
+    if (RosegardenDocument::currentDocument->getSequenceManager()  &&
+        !(RosegardenDocument::currentDocument->getSequenceManager()->getSoundDriverStatus() & 
           AUDIO_OK)) {
 
 #ifdef HAVE_LIBJACK
@@ -1634,7 +1628,7 @@ RosegardenMainViewWidget::slotDroppedNewAudio(QString audioDesc)
     // based distros might lock up.  See Bug #1546.
     progressDialog.show();
 
-    AudioFileManager &aFM = getDocument()->getAudioFileManager();
+    AudioFileManager &aFM = RosegardenDocument::currentDocument->getAudioFileManager();
 
     aFM.setProgressDialog(&progressDialog);
 
@@ -1646,8 +1640,8 @@ RosegardenMainViewWidget::slotDroppedNewAudio(QString audioDesc)
     QUrl qurl(url);
 
     int sampleRate = 0;
-    if (getDocument()->getSequenceManager())
-        sampleRate = getDocument()->getSequenceManager()->getSampleRate();
+    if (RosegardenDocument::currentDocument->getSequenceManager())
+        sampleRate = RosegardenDocument::currentDocument->getSequenceManager()->getSampleRate();
 
     try {
         audioFileId = aFM.importURL(qurl, sampleRate);
@@ -1727,7 +1721,7 @@ RosegardenMainViewWidget::slotSetRecord(InstrumentId id, bool value)
         m_instrumentParameterBox->setRecord(value);
     */
 #ifdef NOT_DEFINED
-    Composition &comp = getDocument()->getComposition();
+    Composition &comp = RosegardenDocument::currentDocument->getComposition();
     Composition::trackcontainer &tracks = comp.getTracks();
     Composition::trackiterator it;
 
@@ -1738,7 +1732,7 @@ RosegardenMainViewWidget::slotSetRecord(InstrumentId id, bool value)
         }
     }
 #endif
-    // Studio &studio = getDocument()->getStudio();
+    // Studio &studio = RosegardenDocument::currentDocument->getStudio();
     // Instrument *instr = studio.getInstrumentById(id);
 }
 
@@ -1781,7 +1775,7 @@ RosegardenMainViewWidget::slotUpdateRecordingSegment(Segment *segment,
 
     /* signal no longer exists
         QObject::connect
-    	(getDocument(), SIGNAL(recordingSegmentUpdated(Segment *, timeT)),
+    	(RosegardenDocument::currentDocument, SIGNAL(recordingSegmentUpdated(Segment *, timeT)),
     	 view, SLOT(slotUpdateRecordingSegment(Segment *, timeT)));
     */
 
@@ -1806,8 +1800,8 @@ RosegardenMainViewWidget::slotExternalController(const MappedEvent *event)
 
     //RG_DEBUG << "  Event is type: " << int(e->getType()) << ", channel " << int(e->getRecordedChannel()) << ", data1 " << int(e->getData1()) << ", data2 " << int(e->getData2());
 
-    Composition &comp = getDocument()->getComposition();
-    Studio &studio = getDocument()->getStudio();
+    Composition &comp = RosegardenDocument::currentDocument->getComposition();
+    Studio &studio = RosegardenDocument::currentDocument->getStudio();
 
     // Program Change?  Adjust Track PC to match.
     // ??? This is odd.  I don't think control surfaces typically provide
@@ -1826,7 +1820,7 @@ RosegardenMainViewWidget::slotExternalController(const MappedEvent *event)
 
         instrument->setProgramChange(event->getData1());
         instrument->sendChannelSetup();
-        RosegardenMainWindow::self()->getDocument()->slotDocumentModified();
+        RosegardenDocument::currentDocument->slotDocumentModified();
 
         return;
     }
@@ -1856,7 +1850,7 @@ RosegardenMainViewWidget::slotExternalController(const MappedEvent *event)
         // Emit a documentModified(), but don't set the document
         // modified flag.  This refreshes the UI but doesn't make
         // the star appear in the titlebar.
-        RosegardenMainWindow::self()->getDocument()->emitDocumentModified();
+        RosegardenDocument::currentDocument->emitDocumentModified();
 
         return;
     }
@@ -1875,7 +1869,7 @@ RosegardenMainViewWidget::slotExternalController(const MappedEvent *event)
             // Adjust the Instrument and update everyone.
             instrument->setControllerValue(controlNumber, value);
             Instrument::emitControlChange(instrument, controlNumber);
-            getDocument()->setModified();
+            RosegardenDocument::currentDocument->setModified();
         }
 
         return;
@@ -1891,7 +1885,7 @@ RosegardenMainViewWidget::slotExternalController(const MappedEvent *event)
 
         instrument->setLevel(dB);
         Instrument::emitControlChange(instrument, MIDI_CONTROLLER_VOLUME);
-        getDocument()->setModified();
+        RosegardenDocument::currentDocument->setModified();
 
         return;
     }
@@ -1903,7 +1897,7 @@ RosegardenMainViewWidget::slotExternalController(const MappedEvent *event)
                 MIDI_CONTROLLER_PAN,
                 AudioLevel::AudioPanI(value));
         Instrument::emitControlChange(instrument, MIDI_CONTROLLER_PAN);
-        getDocument()->setModified();
+        RosegardenDocument::currentDocument->setModified();
 
         return;
     }
@@ -1918,7 +1912,7 @@ RosegardenMainViewWidget::initChordNameRuler()
 EventView *
 RosegardenMainViewWidget::createEventView(std::vector<Segment *> segmentsToEdit)
 {
-    EventView *eventView = new EventView(getDocument(),
+    EventView *eventView = new EventView(RosegardenDocument::currentDocument,
                                          segmentsToEdit,
                                          this);
 

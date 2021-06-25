@@ -95,7 +95,7 @@ namespace
     // Functor for std::sort that compares the track positions of two Segments.
     struct TrackPositionLess {
         TrackPositionLess() :
-            m_composition(RosegardenMainWindow::self()->getDocument()->
+            m_composition(RosegardenDocument::currentDocument->
                               getComposition())
         {
         }

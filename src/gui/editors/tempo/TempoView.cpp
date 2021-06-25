@@ -135,8 +135,8 @@ TempoView::TempoView(RosegardenDocument *doc, QWidget *parent, EditTempoControll
 
 TempoView::~TempoView()
 {
-    if (!getDocument()->isBeingDestroyed() && !isCompositionDeleted()) {
-        getDocument()->getComposition().removeObserver(this);
+    if (!RosegardenDocument::currentDocument->isBeingDestroyed() && !isCompositionDeleted()) {
+        RosegardenDocument::currentDocument->getComposition().removeObserver(this);
     }
 }
 
@@ -153,7 +153,7 @@ TempoView::tempoChanged(const Composition *comp)
 {
     if (m_ignoreUpdates)
         return ;
-    if (comp == &getDocument()->getComposition()) {
+    if (comp == &RosegardenDocument::currentDocument->getComposition()) {
         applyLayout();
     }
 }
@@ -163,7 +163,7 @@ TempoView::timeSignatureChanged(const Composition *comp)
 {
     if (m_ignoreUpdates)
         return ;
-    if (comp == &getDocument()->getComposition()) {
+    if (comp == &RosegardenDocument::currentDocument->getComposition()) {
         applyLayout();
     }
 }
@@ -180,7 +180,7 @@ TempoView::applyLayout(int /*staffNo*/)
     //
     m_list->clear();
 
-    Composition *comp = &getDocument()->getComposition();
+    Composition *comp = &RosegardenDocument::currentDocument->getComposition();
 
     QSettings settings;
     settings.beginGroup(TempoViewConfigGroup);
@@ -350,7 +350,7 @@ TempoView::makeTimeString(timeT time, int timeMode)
     case 0:  // musical time
         {
             int bar, beat, fraction, remainder;
-            getDocument()->getComposition().getMusicalTimeForAbsoluteTime
+            RosegardenDocument::currentDocument->getComposition().getMusicalTimeForAbsoluteTime
             (time, bar, beat, fraction, remainder);
             ++bar;
             return QString("%1%2%3-%4%5-%6%7-%8%9   ")
@@ -368,7 +368,7 @@ TempoView::makeTimeString(timeT time, int timeMode)
     case 1:  // real time
         {
             RealTime rt =
-                getDocument()->getComposition().getElapsedRealTime(time);
+                RosegardenDocument::currentDocument->getComposition().getElapsedRealTime(time);
             //    return QString("%1   ").arg(rt.toString().c_str());
             return QString("%1   ").arg(rt.toText().c_str());
         }
@@ -721,7 +721,7 @@ TempoView::slotPopupEditor(QTreeWidgetItem *qitem, int)
 
     case TempoListItem::TimeSignature:
     {
-        Composition &composition(getDocument()->getComposition());
+        Composition &composition(RosegardenDocument::currentDocument->getComposition());
         Rosegarden::TimeSignature sig = composition.getTimeSignatureAt(time);
         
         TimeSignatureDialog dialog(this, &composition, time, sig, true);
@@ -751,7 +751,7 @@ void
 TempoView::updateViewCaption()
 {
     setWindowTitle(tr("%1 - Tempo and Time Signature Editor")
-                .arg(getDocument()->getTitle()));
+                .arg(RosegardenDocument::currentDocument->getTitle()));
 }
 
 void

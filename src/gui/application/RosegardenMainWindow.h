@@ -108,7 +108,6 @@ class ConfigureDialog;
   *
   * This class owns many of the key objects in the system, including:
   *
-  *   * getDocument() returns the RosegardenDocument instance.
   *   * m_sequencerThread is the SequencerThread.
   *   * m_segmentParameterBox is the "Segment Parameters" box.
   *   * m_trackParameterBox is the "Track Parameters" box.
@@ -116,6 +115,9 @@ class ConfigureDialog;
   *   * getView() returns the RosegardenMainViewWidget instance which
   *     contains the TrackEditor.
   *   * getTransport() returns the TransportDialog instance.
+  *
+  * Note: The RosegardenDocument instance has moved to
+  *       RosegardenDocument::currentDocument.
   */
 class ROSEGARDENPRIVATE_EXPORT RosegardenMainWindow : public QMainWindow, public ActionFileClient
 {
@@ -142,13 +144,6 @@ public:
     /// Return current Main Toolbar
 //    QToolBar* toolBar( const char* name="\0" );
     
-    /**
-     * returns a pointer to the current document connected to the
-     * QMainWindow instance and is used by * the View class to access
-     * the document object's methods
-     */ 
-    RosegardenDocument *getDocument() const;      
-
     RosegardenMainViewWidget* getView() { return m_view; }
 
     TransportDialog* getTransport();
@@ -1597,14 +1592,6 @@ private:
 
     RosegardenMainViewWidget* m_view;
 
-    /**
-     * doc represents your actual document and is created only
-     * once. It keeps information such as filename and does the
-     * serialization of your files.
-     */
-    RosegardenDocument* m_doc;
-    
-    
     /**
      *    Menus
      */

@@ -153,7 +153,7 @@ getControlParameter2(const Segment &segment, int ccNumber)
 {
     // Get the Device for the Segment.
 
-    RosegardenDocument *doc = RosegardenMainWindow::self()->getDocument();
+    RosegardenDocument *doc = RosegardenDocument::currentDocument;
     if (!doc)
         return nullptr;
 
@@ -267,7 +267,7 @@ namespace
 {
     bool hasPitchBend(Segment *segment)
     {
-        RosegardenDocument *document = RosegardenMainWindow::self()->getDocument();
+        RosegardenDocument *document = RosegardenDocument::currentDocument;
 
         Track *track =
                 document->getComposition().getTrackById(segment->getTrack());

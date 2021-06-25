@@ -26,6 +26,7 @@
 #include "base/SnapGrid.h"
 #include "commands/edit/EventEditCommand.h"
 #include "document/CommandHistory.h"
+#include "document/RosegardenDocument.h"
 #include "misc/ConfigGroups.h"
 #include "gui/dialogs/EventEditDialog.h"
 #include "gui/dialogs/SimpleEventEditDialog.h"
@@ -247,7 +248,7 @@ MatrixSelector::handleMouseDoubleClick(const MatrixMouseEvent *e)
         } else {
 
             SimpleEventEditDialog dialog
-                (m_widget, m_scene->getDocument(), *element->event(), false);
+                (m_widget, RosegardenDocument::currentDocument, *element->event(), false);
 
             if (dialog.exec() == QDialog::Accepted &&
                 dialog.isModified()) {
