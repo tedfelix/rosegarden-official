@@ -111,6 +111,13 @@ public:
      * RosegardenMainWindow is the primary setter of this.  All throughout
      * the system we need this, so a global makes perfect sense.
      *
+     * If you are attaching and detaching from something related to
+     * RosegardenDocument, e.g. Composition, beware that the document may
+     * have changed when your destructor is called.  In these cases, keep a
+     * local copy of the document pointer so that you can detach from the
+     * correct document.  See, e.g. TempoView which uses EditViewBase::m_doc
+     * in this way.
+     *
      * If we are crashing because this is null, be sure that when a document
      * is created, this pointer is set.  The rest of the system depends on
      * it.

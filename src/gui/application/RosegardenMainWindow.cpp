@@ -342,7 +342,7 @@ RosegardenMainWindow::RosegardenMainWindow(bool enableSound,
     emit startupStatusMessage(tr("Initializing plugin manager..."));
     m_pluginManager.reset(new AudioPluginManager(enableSound));
 
-    RosegardenDocument* doc = newDocument();
+    RosegardenDocument *doc = newDocument();
 
     m_seqManager = new SequenceManager();
 
@@ -575,7 +575,7 @@ RosegardenMainWindow::installSignalHandlers()
     }
 
     /*install notifier to handle pipe messages*/
-    QSocketNotifier* signalNotifier = new QSocketNotifier(sigpipe[0],
+    QSocketNotifier *signalNotifier = new QSocketNotifier(sigpipe[0],
             QSocketNotifier::Read, this);
     connect(signalNotifier, &QSocketNotifier::activated,
             this, &RosegardenMainWindow::signalAction);
@@ -1157,7 +1157,7 @@ RosegardenMainWindow::initView()
 }
 
 void
-RosegardenMainWindow::setDocument(RosegardenDocument* newDocument)
+RosegardenMainWindow::setDocument(RosegardenDocument *newDocument)
 {
     if (RosegardenDocument::currentDocument == newDocument) return;
 
@@ -1178,7 +1178,7 @@ RosegardenMainWindow::setDocument(RosegardenDocument* newDocument)
     //     delete m_audioManagerDialog; // TODO : replace this with a connection to documentAboutToChange() sig.
     //     m_audioManagerDialog = 0;
 
-    RosegardenDocument* oldDoc = RosegardenDocument::currentDocument;
+    RosegardenDocument *oldDoc = RosegardenDocument::currentDocument;
 
     RosegardenDocument::currentDocument = newDocument;
 
@@ -1727,7 +1727,7 @@ RosegardenMainWindow::readGlobalProperties()
 #endif
 
 void
-RosegardenMainWindow::showEvent(QShowEvent* e)
+RosegardenMainWindow::showEvent(QShowEvent *e)
 {
     //RG_DEBUG << "showEvent()";
 
@@ -3281,7 +3281,7 @@ RosegardenMainWindow::slotTempoToSegmentLength()
 }
 
 void
-RosegardenMainWindow::slotTempoToSegmentLength(QWidget* parent)
+RosegardenMainWindow::slotTempoToSegmentLength(QWidget *parent)
 {
     RG_DEBUG << "slotTempoToSegmentLength";
 
@@ -3369,7 +3369,7 @@ RosegardenMainWindow::slotTempoToSegmentLength(QWidget* parent)
 void
 RosegardenMainWindow::slotToggleSegmentLabels()
 {
-    QAction* act = this->findAction("show_segment_labels");
+    QAction *act = this->findAction("show_segment_labels");
     
     if (act) {
         m_view->slotShowSegmentLabels(act->isChecked());
@@ -4042,7 +4042,7 @@ RosegardenMainWindow::fixTextEncodings(Composition *c)
     }
 }
 
-RosegardenDocument*
+RosegardenDocument *
 RosegardenMainWindow::createDocumentFromMIDIFile(QString file)
 {
     //if (!merge && !saveIfModified()) return;
@@ -4242,7 +4242,7 @@ RosegardenMainWindow::slotMergeRG21()
     mergeFile(file, ImportRG21);
 }
 
-RosegardenDocument*
+RosegardenDocument *
 RosegardenMainWindow::createDocumentFromRG21File(QString file)
 {
     StartupLogo::hideIfStillThere();
@@ -4339,7 +4339,7 @@ RosegardenMainWindow::slotMergeHydrogen()
 }
 
 
-RosegardenDocument*
+RosegardenDocument *
 RosegardenMainWindow::createDocumentFromHydrogenFile(QString file)
 {
     StartupLogo::hideIfStillThere();
@@ -4437,7 +4437,7 @@ RosegardenMainWindow::slotMergeMusicXML()
     mergeFile(file, ImportMusicXML);
 }
 
-RosegardenDocument*
+RosegardenDocument *
 RosegardenMainWindow::createDocumentFromMusicXMLFile(QString file)
 {
     StartupLogo::hideIfStillThere();
@@ -7839,10 +7839,10 @@ RosegardenMainWindow::slotPopulateTrackInstrumentPopup()
         return ;
     }
 
-    Instrument* instrument = RosegardenDocument::currentDocument->getStudio().getInstrumentById(track->getInstrument());
+    Instrument *instrument = RosegardenDocument::currentDocument->getStudio().getInstrumentById(track->getInstrument());
 
-//    QPopupMenu* popup = dynamic_cast<QPopupMenu*>(factory()->container("set_track_instrument", this));
-    QMenu* popup = this->findChild<QMenu*>("set_track_instrument");
+//    QPopupMenu *popup = dynamic_cast<QPopupMenu*>(factory()->container("set_track_instrument", this));
+    QMenu *popup = this->findChild<QMenu*>("set_track_instrument");
 
     m_view->getTrackEditor()->getTrackButtons()->populateInstrumentPopup(instrument, popup);
 }
@@ -7996,7 +7996,7 @@ RosegardenMainWindow::slotImportStudioFromFile(const QString &file)
                     ProgramList pl(md->getPrograms());
                     ControlList cl(md->getControlParameters());
 
-                    ModifyDeviceCommand* mdCommand =
+                    ModifyDeviceCommand *mdCommand =
                         new ModifyDeviceCommand(&oldStudio,
                                                 *di,
                                                 md->getName(),
@@ -8118,7 +8118,7 @@ void RosegardenMainWindow::slotShowToolHelp(const QString &s)
     slotStatusMsg(msg);
 }
 
-TransportDialog* RosegardenMainWindow::getTransport() 
+TransportDialog *RosegardenMainWindow::getTransport()
 {
     if (m_transport == nullptr)
         createAndSetupTransport();

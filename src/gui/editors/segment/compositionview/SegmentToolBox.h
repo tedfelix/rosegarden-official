@@ -37,17 +37,17 @@ class SegmentToolBox : public BaseToolBox
 {
     Q_OBJECT
 public:
-    SegmentToolBox(CompositionView* parent, RosegardenDocument*);
+    SegmentToolBox(CompositionView *parent, RosegardenDocument *);
 
-    SegmentTool* getTool(QString toolName) override;
+    SegmentTool *getTool(QString toolName) override;
     
 protected:
-    SegmentTool* createTool(QString toolName) override;
+    SegmentTool *createTool(QString toolName) override;
 
     //--------------- Data members ---------------------------------
 
-    CompositionView* m_canvas;
-    RosegardenDocument* m_doc;
+    CompositionView *m_canvas;
+    RosegardenDocument *m_doc;
 };
 
 

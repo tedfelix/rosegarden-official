@@ -127,7 +127,7 @@ RosegardenMainViewWidget::RosegardenMainViewWidget(bool showTrackLabels,
         m_trackParameterBox(trackParameterBox)
 {
     setObjectName("View");
-    RosegardenDocument* doc = RosegardenDocument::currentDocument;
+    RosegardenDocument *doc = RosegardenDocument::currentDocument;
     Composition *comp = &doc->getComposition();
     QHBoxLayout *layout = new QHBoxLayout;
     layout->setContentsMargins(0, 0, 0, 0);
@@ -151,28 +151,28 @@ RosegardenMainViewWidget::RosegardenMainViewWidget(bool showTrackLabels,
             this, &RosegardenMainViewWidget::slotEditSegment);
 
     //connect(m_trackEditor->getCompositionView(),
-    //        SIGNAL(editSegmentNotation(Segment*)),
-    //        SLOT(slotEditSegmentNotation(Segment*)));
+    //        SIGNAL(editSegmentNotation(Segment *)),
+    //        SLOT(slotEditSegmentNotation(Segment *)));
 
     //connect(m_trackEditor->getCompositionView(),
-    //        SIGNAL(editSegmentPitchView(Segment*)),
-    //        SLOT(slotEditSegmentPitchView(Segment*)));
+    //        SIGNAL(editSegmentPitchView(Segment *)),
+    //        SLOT(slotEditSegmentPitchView(Segment *)));
 
     //connect(m_trackEditor->getCompositionView(),
-    //        SIGNAL(editSegmentMatrix(Segment*)),
-    //        SLOT(slotEditSegmentMatrix(Segment*)));
+    //        SIGNAL(editSegmentMatrix(Segment *)),
+    //        SLOT(slotEditSegmentMatrix(Segment *)));
 
     //connect(m_trackEditor->getCompositionView(),
-    //        SIGNAL(editSegmentAudio(Segment*)),
-    //        SLOT(slotEditSegmentAudio(Segment*)));
+    //        SIGNAL(editSegmentAudio(Segment *)),
+    //        SLOT(slotEditSegmentAudio(Segment *)));
 
     //connect(m_trackEditor->getCompositionView(),
-    //        SIGNAL(audioSegmentAutoSplit(Segment*)),
-    //        SLOT(slotSegmentAutoSplit(Segment*)));
+    //        SIGNAL(audioSegmentAutoSplit(Segment *)),
+    //        SLOT(slotSegmentAutoSplit(Segment *)));
 
     //connect(m_trackEditor->getCompositionView(),
-    //        SIGNAL(editSegmentEventList(Segment*)),
-    //        SLOT(slotEditSegmentEventList(Segment*)));
+    //        SIGNAL(editSegmentEventList(Segment *)),
+    //        SLOT(slotEditSegmentEventList(Segment *)));
 
     connect(m_trackEditor->getCompositionView(),
             &CompositionView::editRepeat,
@@ -263,7 +263,7 @@ RosegardenMainViewWidget::slotEditMetadata(QString name)
 }
 */
 
-void RosegardenMainViewWidget::slotEditSegment(Segment* segment)
+void RosegardenMainViewWidget::slotEditSegment(Segment *segment)
 {
     Segment::SegmentType type = Segment::Internal;
 
@@ -342,7 +342,7 @@ void RosegardenMainViewWidget::slotEditRepeat(Segment *segment,
     slotAddCommandToHistory(command);
 }
 
-void RosegardenMainViewWidget::slotEditSegmentNotation(Segment* p)
+void RosegardenMainViewWidget::slotEditSegmentNotation(Segment *p)
 {
     SetWaitCursor waitCursor;
     std::vector<Segment *> segmentsToEdit;
@@ -471,7 +471,7 @@ RosegardenMainViewWidget::createNotationView(std::vector<Segment *> segmentsToEd
 
 // mostly copied from slotEditSegmentNotationView, but some changes
 // marked with CMT
-void RosegardenMainViewWidget::slotEditSegmentPitchTracker(Segment* p)
+void RosegardenMainViewWidget::slotEditSegmentPitchTracker(Segment *p)
 {
 
     SetWaitCursor waitCursor;

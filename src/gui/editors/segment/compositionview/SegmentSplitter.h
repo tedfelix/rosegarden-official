@@ -52,14 +52,14 @@ public:
     void mouseReleaseEvent(QMouseEvent *) override;
 
     // don't do double clicks
-    virtual void contentsMouseDoubleClickEvent(QMouseEvent*);
+    virtual void contentsMouseDoubleClickEvent(QMouseEvent *);
 
     static QString ToolName();
 
 protected:
-    SegmentSplitter(CompositionView*, RosegardenDocument*);
+    SegmentSplitter(CompositionView *, RosegardenDocument *);
     
-    void drawSplitLine(QMouseEvent*);
+    void drawSplitLine(QMouseEvent *);
     void splitSegment(Segment *segment,
                       timeT &splitTime);
 

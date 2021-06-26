@@ -59,7 +59,7 @@ public:
     static QString ToolName();
 
 protected:
-    SegmentPencil(CompositionView*, RosegardenDocument*);
+    SegmentPencil(CompositionView *, RosegardenDocument *);
     void setContextHelpFor(QPoint pos, Qt::KeyboardModifiers modifiers =
                            Qt::KeyboardModifiers());
 

@@ -59,7 +59,7 @@ public:
     static QString ToolName();
 
 protected:
-    SegmentResizer(CompositionView*, RosegardenDocument*);
+    SegmentResizer(CompositionView *, RosegardenDocument *);
     void setContextHelp2(Qt::KeyboardModifiers modifiers =
                          Qt::KeyboardModifiers());
 

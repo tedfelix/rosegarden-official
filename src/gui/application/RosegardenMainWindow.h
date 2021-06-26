@@ -142,11 +142,11 @@ public:
     static RosegardenMainWindow *self() { return m_myself; }
     
     /// Return current Main Toolbar
-//    QToolBar* toolBar( const char* name="\0" );
+//    QToolBar *toolBar( const char *name="\0" );
     
-    RosegardenMainViewWidget* getView() { return m_view; }
+    RosegardenMainViewWidget *getView() { return m_view; }
 
-    TransportDialog* getTransport();
+    TransportDialog *getTransport();
 
     enum ImportType {
         ImportRG4,
@@ -221,7 +221,7 @@ public:
     /**
      * Get the sequence manager object
      */
-    SequenceManager* getSequenceManager() { return m_seqManager; }
+    SequenceManager *getSequenceManager() { return m_seqManager; }
 
     /**
      * Get a value() bar
@@ -294,7 +294,7 @@ public:
     /*
      * Return the clipboard
      */
-    Clipboard* getClipboard() { return m_clipboard; }
+    Clipboard *getClipboard() { return m_clipboard; }
 
     /**
      * Return the plugin native GUI manager, if we have one
@@ -354,40 +354,40 @@ protected:
     /**
      * Create document from a file
      */
-    RosegardenDocument* createDocument(
+    RosegardenDocument *createDocument(
             QString filePath, ImportType type = ImportRG4, bool lock = true);
     
     /**
      * Create a document from RG file
      */
-    RosegardenDocument* createDocumentFromRGFile(
+    RosegardenDocument *createDocumentFromRGFile(
             const QString &filePath, bool lock = true);
 
     /**
      * Create document from MIDI file
      */
-    RosegardenDocument* createDocumentFromMIDIFile(QString filePath);
+    RosegardenDocument *createDocumentFromMIDIFile(QString filePath);
 
     /**
      * Create document from RG21 file
      */
-    RosegardenDocument* createDocumentFromRG21File(QString filePath);
+    RosegardenDocument *createDocumentFromRG21File(QString filePath);
 
     /**
      * Create document from Hydrogen drum machine file
      */
-//    RosegardenDocument* createDocumentFromHydrogenFile(QString filePath);
+//    RosegardenDocument *createDocumentFromHydrogenFile(QString filePath);
 
     /**
      * Create document from MusicXML file
      */
-    RosegardenDocument* createDocumentFromMusicXMLFile(QString filePath);
+    RosegardenDocument *createDocumentFromMusicXMLFile(QString filePath);
 
     /**/
     /**/
     /***********************************************************************/
 
-    static const void* SequencerExternal;
+    static const void *SequencerExternal;
 
     /// Raise the transport along
     void showEvent(QShowEvent*) override;
@@ -464,7 +464,7 @@ protected:
     /*
      * Return AudioManagerDialog
      */
-    AudioManagerDialog* getAudioManagerDialog() { return m_audioManagerDialog; }
+    AudioManagerDialog *getAudioManagerDialog() { return m_audioManagerDialog; }
 
     /**
      * Ask the user for a file to save to, and check that it's
@@ -491,7 +491,7 @@ protected:
      * Do all the needed housework when the current document changes
      * (like closing edit views, emitting documentLoaded signal, etc...)
      */
-    void setDocument(RosegardenDocument*);
+    void setDocument(RosegardenDocument *);
 
     /**
      * Jog a selection of segments by an amount
@@ -878,7 +878,7 @@ public slots:
      * Tempo to Segment length
      */
     void slotTempoToSegmentLength();
-    void slotTempoToSegmentLength(QWidget* parent);
+    void slotTempoToSegmentLength(QWidget *parent);
 
     /**
      * toggle segment labels
@@ -1590,7 +1590,7 @@ private:
     bool m_haveRange;
     void updateActions();
 
-    RosegardenMainViewWidget* m_view;
+    RosegardenMainViewWidget *m_view;
 
     /**
      *    Menus
@@ -1601,7 +1601,7 @@ private:
     bool m_sequencerCheckedIn;
 
 #ifdef HAVE_LIBJACK
-    QProcess* m_jackProcess;
+    QProcess *m_jackProcess;
 #endif // HAVE_LIBJACK
 
     /// CPU meter in the main window status bar.
@@ -1615,7 +1615,7 @@ private:
     QLabel             *m_zoomLabel;
 
     
-//    QLabel* m_statusBarLabel1;
+//    QLabel *m_statusBarLabel1;
     // SequenceManager
     //
     SequenceManager *m_seqManager;
@@ -1641,7 +1641,7 @@ private:
 
     QSharedPointer<AudioPluginManager> m_pluginManager;
 
-    QTimer* m_autoSaveTimer;
+    QTimer *m_autoSaveTimer;
 
     Clipboard *m_clipboard;
 

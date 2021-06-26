@@ -35,15 +35,15 @@
 namespace Rosegarden
 {
 
-SegmentToolBox::SegmentToolBox(CompositionView* parent, RosegardenDocument* doc)
+SegmentToolBox::SegmentToolBox(CompositionView *parent, RosegardenDocument *doc)
         : BaseToolBox(parent),
         m_canvas(parent),
         m_doc(doc)
 {}
 
-SegmentTool* SegmentToolBox::createTool(QString toolName)
+SegmentTool *SegmentToolBox::createTool(QString toolName)
 {
-    SegmentTool* tool = nullptr;
+    SegmentTool *tool = nullptr;
 
     QString toolNamelc = toolName.toLower();
     
@@ -86,9 +86,9 @@ SegmentTool* SegmentToolBox::createTool(QString toolName)
     return tool;
 }
 
-SegmentTool* SegmentToolBox::getTool(QString toolName)
+SegmentTool *SegmentToolBox::getTool(QString toolName)
 {
-    return dynamic_cast<SegmentTool*>(BaseToolBox::getTool(toolName));
+    return dynamic_cast<SegmentTool *>(BaseToolBox::getTool(toolName));
 }
 
 }
